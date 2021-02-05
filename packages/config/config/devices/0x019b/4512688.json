@@ -19,6 +19,7 @@
 	"metadata": {
 		"inclusion": "1. Put the Z-Wave gateway or control panel into Inclusion or Learning mode (please refer to the Z-Wave gateway or control panel manual).\n2. Within 1.5 seconds, press the Function button 3 times. The Smoke Detector will emit a 2-tone beep and the LED will turn on for ~2 seconds. Refer to the operation manual of the Z-Wave gateway or control panel to complete the learn-in process.",
 		"exclusion": "1. Put the Z-Wave gateway or control panel into Exclusion mode (please refer to the Z-Wave gateway or control panel manual).\n2. Within 1.5 seconds, press the Function button 3 times and the Smoke Detector will be removed from the Z-Wave network.",
-		"reset": "(Only use factory reset when network Control Panel/Gateway is missing or inoperable).\nPress and hold the button of the smoke detector for 20 seconds. Release the button when you hear 3 beeps to perform factory reset."
+		"reset": "(Only use factory reset when network Control Panel/Gateway is missing or inoperable).\nPress and hold the button of the smoke detector for 20 seconds. Release the button when you hear 3 beeps to perform factory reset.",
+		"manual": "https://products.z-wavealliance.org/ProductManual/File?folder=&filename=product_documents/4064/Heatit%20Z-Smoke%20Battery%2020201214.pdf"
 	}
 }

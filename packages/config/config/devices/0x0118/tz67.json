@@ -9,12 +9,24 @@
 		{
 			"productType": "0x0003",
 			"productId": "0x0008",
-			"zwaveAllianceId": [1604, 1628, 1660, 1880, 1885, 1949, 1951]
+			"zwaveAllianceId": [
+				1604,
+				1628,
+				1660,
+				1880,
+				1885,
+				1949,
+				1951
+			]
 		},
 		{
 			"productType": "0x0202",
 			"productId": "0x0611",
-			"zwaveAllianceId": [885, 886, 887]
+			"zwaveAllianceId": [
+				885,
+				886,
+				887
+			]
 		}
 	],
 	"firmwareVersion": {
@@ -50,5 +62,8 @@
 				}
 			]
 		}
+	},
+	"metadata": {
+		"manual": "https://products.z-wavealliance.org/ProductManual/File?folder=&filename=MarketCertificationFiles/1951/TZ67%20User%20Manual.pdf"
 	}
 }

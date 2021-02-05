@@ -19,6 +19,7 @@
 	"metadata": {
 		"inclusion": "Start inclusion, per instructions on the existing network controller.\nIn the UI, press the learn button.\nWhen prompted, enter the 5 digit underlined portion of the DSK code.\nVerify secure inclusion completed successfully on the existing network controller per that documentation",
 		"exclusion": "Start exclusion, per instructions on the existing network controller.\nIn the UI, press the learn button.\nVerify exclusion completed successfully on the existing network controller per that documentation",
-		"reset": "In the UI, press Hard Reset."
+		"reset": "In the UI, press Hard Reset.",
+		"manual": "https://products.z-wavealliance.org/ProductManual/File?folder=&filename=product_documents/3441/IOTAS%20Consumer%20Hub%20Manual.pdf"
 	}
 }

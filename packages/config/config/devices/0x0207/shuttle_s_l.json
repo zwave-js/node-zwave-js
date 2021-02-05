@@ -9,7 +9,12 @@
 		{
 			"productType": "0x0027",
 			"productId": "0x0100",
-			"zwaveAllianceId": [1294, 2548, 3184, 3185]
+			"zwaveAllianceId": [
+				1294,
+				2548,
+				3184,
+				3185
+			]
 		}
 	],
 	"firmwareVersion": {
@@ -19,6 +24,7 @@
 	"metadata": {
 		"inclusion": "Press configuration button 3 times. LED3 is ON.\nPress and hold once more for 4 seconds",
 		"exclusion": "Press configuration button 3 times. LED3 is ON.\nPress and hold once more for 4 seconds",
-		"reset": "Press configuration button 25x times. LED 1 is ON. Press and hold once more for 4 seconds to confirm.\nPlease use this procedure only when your network primary controller is missing or otherwise inoperable"
+		"reset": "Press configuration button 25x times. LED 1 is ON. Press and hold once more for 4 seconds to confirm.\nPlease use this procedure only when your network primary controller is missing or otherwise inoperable",
+		"manual": "https://products.z-wavealliance.org/ProductManual/File?folder=&filename=MarketCertificationFiles/3185/Installing_the_FOREST_SHUTTLE_S-M-L%20_Z-wave_V1_6EN.pdf"
 	}
 }

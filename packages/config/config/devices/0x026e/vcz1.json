@@ -17,6 +17,7 @@
 		"max": "255.255"
 	},
 	"metadata": {
-		"reset": "Press and hold the button on the control for approximately 15 seconds (the LED will stop flashing when complete.\n\n\"Please use this procedure only when the network primary controller is missing or otherwise inoperable.\""
+		"reset": "Press and hold the button on the control for approximately 15 seconds (the LED will stop flashing when complete.\n\n\"Please use this procedure only when the network primary controller is missing or otherwise inoperable.\"",
+		"manual": "https://products.z-wavealliance.org/ProductManual/File?folder=&filename=MarketCertificationFiles/1786/Graber%20Virtual%20Cord%20Owner's%20Manual.pdf"
 	}
 }

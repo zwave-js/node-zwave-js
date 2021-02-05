@@ -17,6 +17,7 @@
 		"max": "255.255"
 	},
 	"metadata": {
-		"reset": "RESETTING YOUR Z-WAVE NETWORK\nIn order to factory reset your Z-Wave network,\nnavigate to the Z-Wave Utilities page under Settings.\nSelect “Z-Wave Reset Controller”\nAfter a few seconds, the LifeShield base will beep to indicate that your Z-Wave network has been reset. Any devices which were part of your Z-Wave network will need to be reset before they can be re-added. Use the Z-Wave General Exclusion menu under Z-Wave Utilities to do this.\n\nPlease use this procedure only when the network primary controller is missing or otherwise inoperable"
+		"reset": "RESETTING YOUR Z-WAVE NETWORK\nIn order to factory reset your Z-Wave network,\nnavigate to the Z-Wave Utilities page under Settings.\nSelect “Z-Wave Reset Controller”\nAfter a few seconds, the LifeShield base will beep to indicate that your Z-Wave network has been reset. Any devices which were part of your Z-Wave network will need to be reset before they can be re-added. Use the Z-Wave General Exclusion menu under Z-Wave Utilities to do this.\n\nPlease use this procedure only when the network primary controller is missing or otherwise inoperable",
+		"manual": "https://products.z-wavealliance.org/ProductManual/File?folder=&filename=MarketCertificationFiles/2921/LS%20Z-wave%20User%20Install%20Guide%207.0.pdf"
 	}
 }

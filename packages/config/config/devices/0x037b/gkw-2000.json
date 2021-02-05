@@ -9,7 +9,17 @@
 		{
 			"productType": "0x0002",
 			"productId": "0x0001",
-			"zwaveAllianceId": [2905, 2993, 3029, 3030, 3060, 3061, 3062, 3063, 3064]
+			"zwaveAllianceId": [
+				2905,
+				2993,
+				3029,
+				3030,
+				3060,
+				3061,
+				3062,
+				3063,
+				3064
+			]
 		}
 	],
 	"firmwareVersion": {
@@ -19,6 +29,7 @@
 	"metadata": {
 		"inclusion": "Please proceed with the door lock open.\n1. Set the controller in inclusion mode.\n2. Open the battery cover of the indoor body and press the [REG] button.\n3. Press the Master Pin [1][2][3][4] (Default value) button after pressing the [#] button.\n4. Press the [8][8] button after pressing the [*] button.",
 		"exclusion": "Please proceed with the door lock open.\n1. Set the controller in exclusion mode.\n2. Open the battery cover of the indoor body and press the [REG] button.\n3. Press the Master Pin [1][2][3][4] (Default value) button after pressing the [#] button.\n4. Press the [9][9] button after pressing the [*] button",
-		"reset": "Please proceed with the door lock open.\nPlease use this procedure only when the primary controller is missing or otherwise inoperable.\n\n1. Open the battery cover of the indoor body and press the [REG] button.\n2. Press the Master Pin [1][2][3][4] (Default value) button after pressing the [#] button.\n3. Press the [5] button after pressing the [*] button.\n4. Press the [2] button after pressing the [*] button.\n5. Press the Master Pin [1][2][3][4] (Default value) button after pressing the [#] button\n\n*Master pins can change user settings."
+		"reset": "Please proceed with the door lock open.\nPlease use this procedure only when the primary controller is missing or otherwise inoperable.\n\n1. Open the battery cover of the indoor body and press the [REG] button.\n2. Press the Master Pin [1][2][3][4] (Default value) button after pressing the [#] button.\n3. Press the [5] button after pressing the [*] button.\n4. Press the [2] button after pressing the [*] button.\n5. Press the Master Pin [1][2][3][4] (Default value) button after pressing the [#] button\n\n*Master pins can change user settings.",
+		"manual": "https://products.z-wavealliance.org/ProductManual/File?folder=&filename=MarketCertificationFiles/3064/GKW-2000D%20Z-Wave%20Manual_20180807.pdf"
 	}
 }

@@ -19,6 +19,7 @@
 	"metadata": {
 		"inclusion": "1. Press [SET] for 1 second\n2. Enter 4-8 digits Programing Code\n3. Press the buttons #90#\n4. Include successfully (beep * 1)",
 		"exclusion": "1. Press [SET] for 1 second\n2. Enter 4-8 digits Programing Code\n3. Press the buttons #90#\n4. Exclude successfully (beep * 1)",
-		"reset": "1. Remove one battery.\n2. Press and hold SET button while inserting the battery back. Hold the set button until long beep has finished.\n3. Resotring the lock to factory settings will remove its connection to your network and clear all devices from its assocation group. The reset procedure should only be used when the primary controller is missing or inoperable.\n4. Please re-enter the default Programming Code to set up the lock after restoring to factory settings"
+		"reset": "1. Remove one battery.\n2. Press and hold SET button while inserting the battery back. Hold the set button until long beep has finished.\n3. Resotring the lock to factory settings will remove its connection to your network and clear all devices from its assocation group. The reset procedure should only be used when the primary controller is missing or inoperable.\n4. Please re-enter the default Programming Code to set up the lock after restoring to factory settings",
+		"manual": "https://products.z-wavealliance.org/ProductManual/File?folder=&filename=MarketCertificationFiles/2682/manual-G00-TPDBF19-00.pdf"
 	}
 }

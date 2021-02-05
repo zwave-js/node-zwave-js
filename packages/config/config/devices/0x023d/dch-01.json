@@ -9,7 +9,11 @@
 		{
 			"productType": "0x0043",
 			"productId": "0x0001",
-			"zwaveAllianceId": [1693, 1831, 2457]
+			"zwaveAllianceId": [
+				1693,
+				1831,
+				2457
+			]
 		}
 	],
 	"firmwareVersion": {
@@ -19,6 +23,7 @@
 	"metadata": {
 		"inclusion": "This must be done when the DoorCam is in an excluded status, which means that it is not a part of any Z-Wave network; you will know this because the Z-Wave LED will remain on.\nAfter starting the inclusion process on your Z-Wave controller, please do the following:\na. Press & hold the Z-Wave inclusion button for 5 seconds.\nb. When the Z-Wave LED blinks rapidly, release the Z-Wave inclusion button.\nc. The DoorCam will try inclusion for 30 seconds.\nd. If inclusion was successful, the Z-Wave LED will turn off",
 		"exclusion": "This must be done when the DoorCam is in an included status, which means that it is a part of any Z-Wave network; you will know this because the Z-Wave LED will remain off.\nAfter starting the exclusion process on your Z-Wave Controller, please do the following.\na. Press & hold ‘Z-Wave’ button for 5 seconds when DoorCam is inclusion status.\nb. When Z-Wave LED blinks with 250ms interval, Release ‘Z-Wave’ button to try exclusion.\nc. DoorCam will try exclusion for 30sec.\nd. Z-Wave LED will be turned on if exclusion is successful",
-		"reset": "a. Hold the ‘Z-Wave’ button for 10 seconds.\n(Z-Wave LED will blink after 5 seconds with 250ms interval then Z-Wave LED will be turned off after another 5 seconds.) \nb. When Z-Wave LED stops blinking after 10 seconds, release Z-Wave button.\nc. When factory reset is successful, LED will be on.\n\nPlease use this procedure only if the network primary controller is missing or inoperable"
+		"reset": "a. Hold the ‘Z-Wave’ button for 10 seconds.\n(Z-Wave LED will blink after 5 seconds with 250ms interval then Z-Wave LED will be turned off after another 5 seconds.) \nb. When Z-Wave LED stops blinking after 10 seconds, release Z-Wave button.\nc. When factory reset is successful, LED will be on.\n\nPlease use this procedure only if the network primary controller is missing or inoperable",
+		"manual": "https://products.z-wavealliance.org/ProductManual/File?folder=&filename=MarketCertificationFiles/2457/IoT%20DoorCam_Manual_r03.pdf"
 	}
 }

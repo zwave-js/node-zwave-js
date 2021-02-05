@@ -138,6 +138,7 @@
 	"metadata": {
 		"inclusion": "When the primary controller is in the adding mode, flicks the paddle 3 times in the\n1.5 second. The primary controller will verify the adding, assign a node ID number\nfor the module",
 		"exclusion": "When the primary controller is in the removing mode, flicks the paddle 3 times in\nthe 1.5 second. The primary controller will verify the removing, remove the module\nfrom the current Z-Wave network, and the LED will blink when the module is on\npower",
-		"reset": "Flicks the program button 3 times in the 1.5 second then press once and hold for\n2 second.the device will send a device reset locally notification to controller. Then\nclear all of information for the network, and restore factory defaults, and reset the\nmodule. Use this procedure only in the event that the network primary\ncontroller is missing or otherwise inoperable"
+		"reset": "Flicks the program button 3 times in the 1.5 second then press once and hold for\n2 second.the device will send a device reset locally notification to controller. Then\nclear all of information for the network, and restore factory defaults, and reset the\nmodule. Use this procedure only in the event that the network primary\ncontroller is missing or otherwise inoperable",
+		"manual": "https://products.z-wavealliance.org/ProductManual/File?folder=&filename=MarketCertificationFiles/1848/ZW500DM-CC%202016%205.19.pdf"
 	}
 }

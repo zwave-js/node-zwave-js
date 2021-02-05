@@ -19,6 +19,7 @@
 	"metadata": {
 		"inclusion": "1. Connect the external power supply to the input connector and external devices to the output connector.\n2. Put the Z-Wave Gateway or Control Panel into Inclusion mode (please refer to the Z-Wave Gateway or Control Panel manual).\n3. Within 1.5 seconds, press the Function Button 3 times.\n4. Refer to the operation manual of the Z-Wave Gateway or Control panel to complete the adding process.\n5. If the device has already been added (included) into another Z-Wave Gateway/Control Panel, or if the device is unable to be added into the current Z-Wave Gateway/Control Panel, please exclude it first (see Removing Device) before attempting to include it into the current Z-Wave Gateway/Control Panel.",
 		"exclusion": "1. Put the Z-Wave gateway or control panel into Exclusion mode (please refer to the Z-Wave gateway or control panel manual).\n2. Within 1.5 seconds, press the Function Button 3 times and the device will be removed from the Z-Wave network.",
-		"reset": "(Only use factory reset when network Control Panel/Gateway is missing or inoperable).\n*. Press and hold the Function Button of the device for 10 seconds to factory reset"
+		"reset": "(Only use factory reset when network Control Panel/Gateway is missing or inoperable).\n*. Press and hold the Function Button of the device for 10 seconds to factory reset",
+		"manual": "https://products.z-wavealliance.org/ProductManual/File?folder=&filename=product_documents/3864/PSM-DIN3-ZW-S2_SmartStart_20200423.pdf"
 	}
 }

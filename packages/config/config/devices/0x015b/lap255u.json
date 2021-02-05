@@ -17,6 +17,7 @@
 		"max": "255.255"
 	},
 	"metadata": {
-		"reset": "Run Z-Wave Certification Application in Setting, Select \"Things\" on the left menu, select \"bridge\" on the right list, andd Select factoryReset on the right list, push Send button on the Pop up"
+		"reset": "Run Z-Wave Certification Application in Setting, Select \"Things\" on the left menu, select \"bridge\" on the right list, andd Select factoryReset on the right list, push Send button on the Pop up",
+		"manual": "https://products.z-wavealliance.org/ProductManual/File?folder=&filename=MarketCertificationFiles/1453/ZwaveCertiApp_Guide_0902_new.pdf"
 	}
 }

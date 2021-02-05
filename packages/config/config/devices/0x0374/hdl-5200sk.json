@@ -19,6 +19,7 @@
 	"metadata": {
 		"inclusion": "1. Set the controller in inclusion mode.\n2. Open the battery cover of the indoor body and press the [REG 1] button.\n3. Press the [1][4] button after pressing the [*] button.",
 		"exclusion": "1. Set the controller in exclusion mode.\n2. Open the battery cover of the indoor body and press the [REG 1] button.\n3. Press the [3][6] button after pressing the [*] button.",
-		"reset": "1. Open the battery cover of the indoor body and press the [REG 1] button.\n2. Press the [8][0] button after pressing the [*] button."
+		"reset": "1. Open the battery cover of the indoor body and press the [REG 1] button.\n2. Press the [8][0] button after pressing the [*] button.",
+		"manual": "https://products.z-wavealliance.org/ProductManual/File?folder=&filename=product_documents/3607/HDL-5200SK%20Manual.pdf"
 	}
 }

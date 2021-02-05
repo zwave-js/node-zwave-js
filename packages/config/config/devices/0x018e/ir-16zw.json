@@ -9,7 +9,10 @@
 		{
 			"productType": "0x0001",
 			"productId": "0x0002",
-			"zwaveAllianceId": [1313, 2076]
+			"zwaveAllianceId": [
+				1313,
+				2076
+			]
 		}
 	],
 	"firmwareVersion": {
@@ -19,6 +22,7 @@
 	"metadata": {
 		"inclusion": "This product can be included and operated in any Z-Wave network with other Z-Wave certified devices from other manufactures and/or other applications. All non-battery operated nodes within the network will act as repeaters regardless of vendor to increase reliability of the network.\n- Pull out the battery Insulator steadily.\n- The LED indicator will flash for 30 seconds (The PIR is warming up). During the warm up period, the PIR will not be activated. It is recommended that you stay away from the detection area during this time. After the warming period is over, the LED will turn off and the PIR will be ready for operation.\n- Put the Z-Wave control panel into Inclusion mode (please refer to the Z-Wave control panel manual).\n- Within 1.5 seconds, press the Function Button 3 times.\n- Refer to the operation manual of the Z-Wave gateway or control panel to complete the adding process.\n- Please press and release the Tamper Switch once after inclusion is completed to ensure the Gateway/Control Panel recognizes the current Tamper condition.\n- If the device has already been added (included) into another Z-Wave Gateway/Control Panel, or if the device is unable to be added into the current Z-Wave Gateway/Control Panel, try removing it first (see Removing Device).",
 		"exclusion": "The device must be removed from existing Z-Wave network before being added into another.\nExclusion Mode\n- Put the Z-Wave gateway or control panel into Exclusion mode (please refer to the Z-Wave or control panel manual).\n- Within 1.5 seconds, press the Function Button 3 times and the device will be removed from the Z-Wave network.",
-		"reset": "Factory Reset\nFactory resetting the device will restore it to factory default settings (i.e. not included into any Z-Wave network). Please only use this procedure if the Z-Wave gateway or control panel is lost or otherwise inoperable.\n- Press and hold the Function Button of the device for 12 seconds to factory reset."
+		"reset": "Factory Reset\nFactory resetting the device will restore it to factory default settings (i.e. not included into any Z-Wave network). Please only use this procedure if the Z-Wave gateway or control panel is lost or otherwise inoperable.\n- Press and hold the Function Button of the device for 12 seconds to factory reset.",
+		"manual": "https://products.z-wavealliance.org/ProductManual/File?folder=&filename=MarketCertificationFiles/2076/IR-16SLZW_IRP-16SLZW_20161109.doc"
 	}
 }

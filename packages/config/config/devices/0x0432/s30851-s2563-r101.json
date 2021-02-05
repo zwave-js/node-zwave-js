@@ -19,6 +19,7 @@
 	"metadata": {
 		"inclusion": "- Enter the Z-Wave Portal\n- From the menu choose DEVICES and then + ADD DEVICE\n- Now start the inclusion procedure of your Z-Wave device according to its manual",
 		"exclusion": "- Enter the Z-Wave Portal\n- Choose MORE, then MAINTANACE and then REMOVE DEVICE\n- Now start the removing procedure of your Z-Wave device according to its manual",
-		"reset": "- Enter the Z-Wave Portal\n- Tab on MORE, then MAINTANACE and then RESET\n- Confirm Reset by choosing CONFIRM and after couple of seconds the Reset is finished"
+		"reset": "- Enter the Z-Wave Portal\n- Tab on MORE, then MAINTANACE and then RESET\n- Confirm Reset by choosing CONFIRM and after couple of seconds the Reset is finished",
+		"manual": "https://products.z-wavealliance.org/ProductManual/File?folder=&filename=product_documents/3596/Z-Wave_QSG_Zertifizierung_en_20190919.pdf"
 	}
 }

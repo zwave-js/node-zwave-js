@@ -9,7 +9,10 @@
 		{
 			"productType": "0x4944",
 			"productId": "0x3038",
-			"zwaveAllianceId": [2724, 3751]
+			"zwaveAllianceId": [
+				2724,
+				3751
+			]
 		}
 	],
 	"firmwareVersion": {
@@ -164,6 +167,7 @@
 	"metadata": {
 		"inclusion": "1. Follow the instructions for your Z-Wave certified controller to\ninclude a device to the Z-Wave network.\n2. Once the controller is ready to add your device,\npress and release the top or bottom of the wireless smart\nswitch (rocker) to add it in the network.\nPlease reference the controller’s manual for instructions",
 		"exclusion": "1. Follow the instructions for your Z-Wave certified controller to\nremove a device from the Z-Wave network.\n2. Once the controller is ready to Exclude your device, press\nand release the top or bottom of the wireless smart dimmer\n(rocker) to remove it from the network",
-		"reset": "Quickly press ON (Top) button three (3) times then immediately\npress the OFF (Bottom) button three (3) times. The LED will flash\nON/OFF 5 times when completed successfully.\nNOTE: This should only be used in the event your network’s\nprimary controller is missing or otherwise inoperable"
+		"reset": "Quickly press ON (Top) button three (3) times then immediately\npress the OFF (Bottom) button three (3) times. The LED will flash\nON/OFF 5 times when completed successfully.\nNOTE: This should only be used in the event your network’s\nprimary controller is missing or otherwise inoperable",
+		"manual": "https://products.z-wavealliance.org/ProductManual/File?folder=&filename=product_documents/3751/39458_HQSG_v3.pdf"
 	}
 }

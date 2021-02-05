@@ -9,7 +9,13 @@
 		{
 			"productType": "0x0001",
 			"productId": "0x0080",
-			"zwaveAllianceId": [1502, 1544, 1545, 1546, 1547]
+			"zwaveAllianceId": [
+				1502,
+				1544,
+				1545,
+				1546,
+				1547
+			]
 		}
 	],
 	"firmwareVersion": {
@@ -19,6 +25,7 @@
 	"metadata": {
 		"inclusion": "1. Put your system controller into inclusion mode by following the instructions provided by your controller manufacturer.\n2. Press the push Off/On button located on the front of the device three times within 1.5 seconds.",
 		"exclusion": "1. Put your system controller into exclusion mode by following the instructions provided by your controller manufacturer.\n2. Press the push Off/On button located on the front of the device three times within 1.5 seconds.",
-		"reset": "Note: Use this procedure only in the event that the network primary controller is missing or otherwise inoperable.\n\n1. Press and hold the push button located on the front of the device for approx. 6 seconds until the LED's is steady.\n2. Release the button and press ones again within 3 seconds."
+		"reset": "Note: Use this procedure only in the event that the network primary controller is missing or otherwise inoperable.\n\n1. Press and hold the push button located on the front of the device for approx. 6 seconds until the LED's is steady.\n2. Release the button and press ones again within 3 seconds.",
+		"manual": "https://products.z-wavealliance.org/ProductManual/File?folder=&filename=MarketCertificationFiles/1547/419880-84%20Manual%20Gewa%20Andromeda%20Socket%20SE,%20GB,%20NO,%20DK,%20DE,%20FR,%20NL,%20FI%20%20RevPB12.pdf"
 	}
 }

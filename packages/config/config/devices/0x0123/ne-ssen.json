@@ -19,6 +19,7 @@
 	"metadata": {
 		"inclusion": "Push \"Add/Remove Button\" of this equipment for a short time.\nAlso, if this equipment is NOT Added to any network, it is enable to Add automatically when the battery is connected",
 		"exclusion": "Push \"Add/Remove Button\" of this equipment for a short time",
-		"reset": "Push and hold \"Add/Remove Button\" for a few seconds more than 5 seconds.\nPlease use this procedure only when the network primary controller is missing or otherwise inoperable"
+		"reset": "Push and hold \"Add/Remove Button\" for a few seconds more than 5 seconds.\nPlease use this procedure only when the network primary controller is missing or otherwise inoperable",
+		"manual": "https://products.z-wavealliance.org/ProductManual/File?folder=&filename=MarketCertificationFiles/2177/NE-SSEN_user_manual_ref2.pdf"
 	}
 }

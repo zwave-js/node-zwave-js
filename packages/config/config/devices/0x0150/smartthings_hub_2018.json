@@ -14,7 +14,10 @@
 		{
 			"productType": "0x0007",
 			"productId": "0x0020",
-			"zwaveAllianceId": [3035, 3047]
+			"zwaveAllianceId": [
+				3035,
+				3047
+			]
 		},
 		{
 			"productType": "0x0007",
@@ -27,6 +30,7 @@
 		"max": "255.255"
 	},
 	"metadata": {
-		"reset": "Z-Wave factory reset\nTo reset your Hub's Z-Wave system to factory default settings, you must factory reset the entire Hub. You can factory reset your Hub with steps found below.\n\nNOTE: Resetting the Hub will restore factory settings. All device connections, automations, rules, configurations, and SmartApps associated with that Hub will be lost in the reset. All devices connected to your Hub will have to be reset or excluded before they can be reconnected. The steps for resetting and reconnecting each smart device differ. After resetting, you can visit our Things category, find the devices you wish to set up, and follow the guides provided. Remember that you will likely need to reset or “exclude” every device before connecting.\n\nA physical factory reset is only possible for the Hub v2 with firmware 17.11 and up. If you have a Hub v1 or a Hub with firmware below 17.11, you can reset your Hub by deleting the Location it is connected to with these steps instead. Need to check your Hub’s firmware version? Find out how here.\n\nFollow these instructions to reboot the Hub instead, without doing a full factory reset.\n\n \n\nTo factory reset the Hub:\nMake sure the Hub is plugged in with the included power and network cables\nPress and hold the red recessed button on the back of the Hub for 30 seconds. When the LED on the front switches from flashing yellow to solid yellow, release the button\nNote: If you do not release the button within a few seconds after the LED switches to solid yellow, the Hub may not begin the reset\nThe Hub will take 10-15 minutes to fully factory reset. Once the LEDs on the Hub turn solid green, you should then be able to connect your Hub again. If you lost your original 6-character Welcome Code or are encountering other problems, these articles may help"
+		"reset": "Z-Wave factory reset\nTo reset your Hub's Z-Wave system to factory default settings, you must factory reset the entire Hub. You can factory reset your Hub with steps found below.\n\nNOTE: Resetting the Hub will restore factory settings. All device connections, automations, rules, configurations, and SmartApps associated with that Hub will be lost in the reset. All devices connected to your Hub will have to be reset or excluded before they can be reconnected. The steps for resetting and reconnecting each smart device differ. After resetting, you can visit our Things category, find the devices you wish to set up, and follow the guides provided. Remember that you will likely need to reset or “exclude” every device before connecting.\n\nA physical factory reset is only possible for the Hub v2 with firmware 17.11 and up. If you have a Hub v1 or a Hub with firmware below 17.11, you can reset your Hub by deleting the Location it is connected to with these steps instead. Need to check your Hub’s firmware version? Find out how here.\n\nFollow these instructions to reboot the Hub instead, without doing a full factory reset.\n\n \n\nTo factory reset the Hub:\nMake sure the Hub is plugged in with the included power and network cables\nPress and hold the red recessed button on the back of the Hub for 30 seconds. When the LED on the front switches from flashing yellow to solid yellow, release the button\nNote: If you do not release the button within a few seconds after the LED switches to solid yellow, the Hub may not begin the reset\nThe Hub will take 10-15 minutes to fully factory reset. Once the LEDs on the Hub turn solid green, you should then be able to connect your Hub again. If you lost your original 6-character Welcome Code or are encountering other problems, these articles may help",
+		"manual": "https://products.z-wavealliance.org/ProductManual/File?folder=&filename=MarketCertificationFiles/3171/V3%20Z-Wave%20Manual.pdf"
 	}
 }

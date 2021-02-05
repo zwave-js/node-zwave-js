@@ -9,7 +9,10 @@
 		{
 			"productType": "0x0001",
 			"productId": "0x0003",
-			"zwaveAllianceId": [3263, 3821]
+			"zwaveAllianceId": [
+				3263,
+				3821
+			]
 		}
 	],
 	"firmwareVersion": {
@@ -19,6 +22,7 @@
 	"metadata": {
 		"inclusion": "Swipe down to access “Settings” < Touch “Advanced Settings” < Enter code < Touch “Installation” < Touch “Devices” < Touch “Z-Wave Devices” < Touch “Add Device” < Touch “Pair” < Press pair or learn button on device < Adjust device name as needed < Select “Automation” < Click “Add” to save",
 		"exclusion": "Swipe down to access “Settings” < Touch “Advanced Settings” < Enter code < Touch “Installation” < Touch “Devices” < Touch “Z-Wave Devices” < Touch “Delete failed device from panel” < Check boxes next to devices you want to delete < Touch “Delete”",
-		"reset": "1. On home menu, swipe down from the top of the screen. A pulldown menu should appear.\n2. Press the SETTINGS icon.\n3. Press the ADVANCED SETTINGS icon.\n4. Enter in installer code.\n5. Press the INSTALLATION icon.\n6. Press the DEVICES icon.\n7. Press the Z-WAVE DEVICES icon.\n8. Press the REMOVE ALL DEVICES icon.\n9. Press YES on the confirmation dialog to perform a reset."
+		"reset": "1. On home menu, swipe down from the top of the screen. A pulldown menu should appear.\n2. Press the SETTINGS icon.\n3. Press the ADVANCED SETTINGS icon.\n4. Enter in installer code.\n5. Press the INSTALLATION icon.\n6. Press the DEVICES icon.\n7. Press the Z-WAVE DEVICES icon.\n8. Press the REMOVE ALL DEVICES icon.\n9. Press YES on the confirmation dialog to perform a reset.",
+		"manual": "https://products.z-wavealliance.org/ProductManual/File?folder=&filename=product_documents/3821/IQ%20Panel%20Installation%20Manual%202.5.0%20FINAL.pdf"
 	}
 }

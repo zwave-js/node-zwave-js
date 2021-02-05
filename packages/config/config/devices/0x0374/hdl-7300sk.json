@@ -19,6 +19,7 @@
 	"metadata": {
 		"inclusion": "To add or include the HDL-7300SK into a Z-Wave network\n1. Set the controller in inclusion mode.\n2. Open the battery cover of the indoor body and press the [REG 1] button.\n3. Press the [1][4] button after pressing the [*] button.",
 		"exclusion": "To remove or exclude the HDL-7300SK into a Z-Wave network\n1. Set the controller in exclusion mode.\n2. Open the battery cover of the indoor body and press the [REG 1] button.\n3. Press the [3][6] button after pressing the [*] button.",
-		"reset": "To Factory Reset\n1. Open the battery cover of the indoor body and press the [REG 1] button.\n2. Press the [8][0] button after pressing the [*] button."
+		"reset": "To Factory Reset\n1. Open the battery cover of the indoor body and press the [REG 1] button.\n2. Press the [8][0] button after pressing the [*] button.",
+		"manual": "https://products.z-wavealliance.org/ProductManual/File?folder=&filename=product_documents/3712/H-7300SK%20Manual_Ver1.0_20190925.pdf"
 	}
 }

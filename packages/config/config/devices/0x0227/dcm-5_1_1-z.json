@@ -19,6 +19,7 @@
 	"metadata": {
 		"inclusion": "For adding the device to the Z-Wave network the triple click of the Set button is needed",
 		"exclusion": "To remove the device from the Z-Wave network click the Set button trice again",
-		"reset": "Hold the Set button pushed for 5 seconds, then push it three times shortly. The Z-Wave indicator alternately flashes red and green. After that the triple-click is needed.\nPlease use this procedure only when the network primary controller is missing or otherwise inoperable"
+		"reset": "Hold the Set button pushed for 5 seconds, then push it three times shortly. The Z-Wave indicator alternately flashes red and green. After that the triple-click is needed.\nPlease use this procedure only when the network primary controller is missing or otherwise inoperable",
+		"manual": "https://products.z-wavealliance.org/ProductManual/File?folder=&filename=MarketCertificationFiles/1732/NEVOTON%20DCM-511-Z%20eng%2022-04-2016.pdf"
 	}
 }

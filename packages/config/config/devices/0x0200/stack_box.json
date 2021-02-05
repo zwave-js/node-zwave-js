@@ -17,6 +17,7 @@
 		"max": "255.255"
 	},
 	"metadata": {
-		"reset": "Use this procedure only in the event that the network primary controller is lost or otherwise inoperable.\n\nAt the back of the box, look for \"Reset\" mark. Use a sharp pin to press inside the hole above the mark for more than 4s."
+		"reset": "Use this procedure only in the event that the network primary controller is lost or otherwise inoperable.\n\nAt the back of the box, look for \"Reset\" mark. Use a sharp pin to press inside the hole above the mark for more than 4s.",
+		"manual": "https://products.z-wavealliance.org/ProductManual/File?folder=&filename=MarketCertificationFiles/1093/xuan_documentation_edited_v2_AH_edited_3.pdf"
 	}
 }

@@ -17,6 +17,7 @@
 		"max": "255.255"
 	},
 	"metadata": {
-		"reset": "Please note, that included devices will not be reset and must be excluded previously or reset on their own. The reset can not be reverted. \nIn the TechniSat CONNECT app, tap the \"three horizontal lines\" icon.\nTap the \"gear\" icon button.\nIn the settings menu, select \"Smart Home\".\nFrom the \"advanced Z-Wave settings\" menu select \"Reset central unit\""
+		"reset": "Please note, that included devices will not be reset and must be excluded previously or reset on their own. The reset can not be reverted. \nIn the TechniSat CONNECT app, tap the \"three horizontal lines\" icon.\nTap the \"gear\" icon button.\nIn the settings menu, select \"Smart Home\".\nFrom the \"advanced Z-Wave settings\" menu select \"Reset central unit\"",
+		"manual": "https://products.z-wavealliance.org/ProductManual/File?folder=&filename=MarketCertificationFiles/2033/TechniSat_CONNECT_and_DIGIPAL_SMARTHOME_English_Version.pdf"
 	}
 }

@@ -18,6 +18,7 @@
 	},
 	"metadata": {
 		"inclusion": "Network Health Tool:\nUsing the Z-Wave controller you intend to troubleshoot, begin the inclusion process to add a new generic Z-Wave device. Select LEARN on the Network Health Tool Device List widget. The Z-Wave controller may include the ZWP-TBX as a generic scene controller or similar device; name the device according to your troubleshooting needs",
-		"exclusion": "Network Health Tool:\nSelect RESET on the Network Health Tool Device List widget. Be sure to delete the ToolBox from the Z-Wave controller"
+		"exclusion": "Network Health Tool:\nSelect RESET on the Network Health Tool Device List widget. Be sure to delete the ToolBox from the Z-Wave controller",
+		"manual": "https://products.z-wavealliance.org/ProductManual/File?folder=&filename=MarketCertificationFiles/2098/Z-Wave%20ToolBox%20Instructions.pdf"
 	}
 }

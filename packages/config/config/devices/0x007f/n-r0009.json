@@ -17,6 +17,7 @@
 		"max": "255.255"
 	},
 	"metadata": {
-		"reset": "n/a"
+		"reset": "n/a",
+		"manual": "https://products.z-wavealliance.org/ProductManual/File?folder=&filename=MarketCertificationFiles/1321/PKG0843%20-%20650-020287%20003%20Harmony%20Home%20Hub%20Extender%20Base%20Inside%20CAN%2015%20-%20215.pdf"
 	}
 }

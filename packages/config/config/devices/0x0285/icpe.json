@@ -9,7 +9,15 @@
 		{
 			"productType": "0x0201",
 			"productId": "0x0001",
-			"zwaveAllianceId": [1866, 2337, 2338, 2500, 2507, 2508, 2545]
+			"zwaveAllianceId": [
+				1866,
+				2337,
+				2338,
+				2500,
+				2507,
+				2508,
+				2545
+			]
 		}
 	],
 	"firmwareVersion": {
@@ -17,6 +25,7 @@
 		"max": "255.255"
 	},
 	"metadata": {
-		"reset": "The user can click the \"Reset\" button on the WEB page to return the controller to factory settings.\nNote: \nAll connections with included devices and all configurations and settings will be lost. \nIt takes approximately 90 seconds to finish the process.\nIf this controller is the primary controller for your network, resetting it will result in the nodes in your network being orphaned and it will be necessary after the reset to exclude and re-include all of the nodes in the network. If this controller is being used as a secondary controller in the network, use this procedure to reset this controller only in the event that the network primary controller is missing or otherwise inoperable."
+		"reset": "The user can click the \"Reset\" button on the WEB page to return the controller to factory settings.\nNote: \nAll connections with included devices and all configurations and settings will be lost. \nIt takes approximately 90 seconds to finish the process.\nIf this controller is the primary controller for your network, resetting it will result in the nodes in your network being orphaned and it will be necessary after the reset to exclude and re-include all of the nodes in the network. If this controller is being used as a secondary controller in the network, use this procedure to reset this controller only in the event that the network primary controller is missing or otherwise inoperable.",
+		"manual": "https://products.z-wavealliance.org/ProductManual/File?folder=&filename=MarketCertificationFiles/2545/CTS_iCPE_%20NMS_V0.90_20170413.pdf"
 	}
 }

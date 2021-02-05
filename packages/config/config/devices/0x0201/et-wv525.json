@@ -9,7 +9,10 @@
 		{
 			"productType": "0x0003",
 			"productId": "0x0024",
-			"zwaveAllianceId": [2878, 2952]
+			"zwaveAllianceId": [
+				2878,
+				2952
+			]
 		},
 		{
 			"productType": "0x0003",
@@ -27,6 +30,7 @@
 		"max": "255.255"
 	},
 	"metadata": {
-		"reset": "If the Wi-Fi hub freezes or hangs, disconnect the adapter from the Wi-Fi hub and reconnect it.\nClose the SmartThings app completely on your mobile device and restart it.\nIf your Wi-Fi hub is frozen and unresponsive, insert a pin into the Reset hole for more than 8 seconds.\nIf the tips above do not solve the problem, contact a Samsung Service Center.\nIf this controller is the primary controller for your network, resetting it will result in the nodes in your network being orphaned and it will be necessary after the reset to exclude and re-include all of the nodes in the network. If this controller is being used as a secondary controller in the network, use this procedure to reset this controller only in the event that the network primary controller is missing or otherwise inoperable"
+		"reset": "If the Wi-Fi hub freezes or hangs, disconnect the adapter from the Wi-Fi hub and reconnect it.\nClose the SmartThings app completely on your mobile device and restart it.\nIf your Wi-Fi hub is frozen and unresponsive, insert a pin into the Reset hole for more than 8 seconds.\nIf the tips above do not solve the problem, contact a Samsung Service Center.\nIf this controller is the primary controller for your network, resetting it will result in the nodes in your network being orphaned and it will be necessary after the reset to exclude and re-include all of the nodes in the network. If this controller is being used as a secondary controller in the network, use this procedure to reset this controller only in the event that the network primary controller is missing or otherwise inoperable",
+		"manual": "https://products.z-wavealliance.org/ProductManual/File?folder=&filename=MarketCertificationFiles/3356/180630_2_ET-WV525_UM_USA_Type_Eng_D03.pdf"
 	}
 }

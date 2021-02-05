@@ -9,7 +9,10 @@
 		{
 			"productType": "0x0010",
 			"productId": "0x0010",
-			"zwaveAllianceId": [1318, 2323]
+			"zwaveAllianceId": [
+				1318,
+				2323
+			]
 		}
 	],
 	"firmwareVersion": {
@@ -17,6 +20,7 @@
 		"max": "255.255"
 	},
 	"metadata": {
-		"reset": "Use this procedure only in the event that the network primary controller is missing or otherwise inoperable. If Talk-Z is your primary controller, use of this procedure could result in your Z-Wave devices being orphaned and having no central controller to communicate with; use this procedure with caution.\nThis implies that Z-Wave network back to its factory settings\n1. From the Talk-Z page, press the Reset button.\n2. To confirm reset, press the yes button.\n3. If this process is successful, All node information disappeared in Talk-Z"
+		"reset": "Use this procedure only in the event that the network primary controller is missing or otherwise inoperable. If Talk-Z is your primary controller, use of this procedure could result in your Z-Wave devices being orphaned and having no central controller to communicate with; use this procedure with caution.\nThis implies that Z-Wave network back to its factory settings\n1. From the Talk-Z page, press the Reset button.\n2. To confirm reset, press the yes button.\n3. If this process is successful, All node information disappeared in Talk-Z",
+		"manual": "https://products.z-wavealliance.org/ProductManual/File?folder=&filename=MarketCertificationFiles/2323/Talk%20Z%20User%20Guide_Ver%201%201_2017.pdf"
 	}
 }

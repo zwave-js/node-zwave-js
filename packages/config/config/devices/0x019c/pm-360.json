@@ -17,6 +17,7 @@
 		"max": "255.255"
 	},
 	"metadata": {
-		"reset": "Log in to your Amdocs Connected Home account (via web portal) and go the Devices section (by clicking on the Devices tab). Scroll down to the bottom of the page and expand the Advanced Settings section (collapsed by default). Click on the \"Reset Network Controller\" button"
+		"reset": "Log in to your Amdocs Connected Home account (via web portal) and go the Devices section (by clicking on the Devices tab). Scroll down to the bottom of the page and expand the Advanced Settings section (collapsed by default). Click on the \"Reset Network Controller\" button",
+		"manual": "https://products.z-wavealliance.org/ProductManual/File?folder=&filename=MarketCertificationFiles/1757/Amdocs%20Connected%20Home%20-%20User%20Guide%20Release%2010.1.pdf"
 	}
 }

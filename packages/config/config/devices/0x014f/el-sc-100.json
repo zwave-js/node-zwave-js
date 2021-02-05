@@ -17,6 +17,7 @@
 		"max": "255.255"
 	},
 	"metadata": {
-		"reset": "1. Navigation to the Communication Device: ELAN Z-Wave Network page under Security, Climate, Lighting or Input/Output Tabs in Configurator\n\n2. Management View: Network Management\n\n3. Network Action: Reset\n\n4. Execute (button to right of Network action)"
+		"reset": "1. Navigation to the Communication Device: ELAN Z-Wave Network page under Security, Climate, Lighting or Input/Output Tabs in Configurator\n\n2. Management View: Network Management\n\n3. Network Action: Reset\n\n4. Execute (button to right of Network action)",
+		"manual": "https://products.z-wavealliance.org/ProductManual/File?folder=&filename=product_documents/4030/10024269_Rev-C_Quick_Start_Guide_EL_SC-100_WEB.pdf"
 	}
 }

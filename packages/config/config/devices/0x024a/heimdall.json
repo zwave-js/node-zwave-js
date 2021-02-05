@@ -17,6 +17,7 @@
 		"max": "255.255"
 	},
 	"metadata": {
-		"reset": "Click “Reset” , show “Proccessing…” to reset the Z-Wave network.Refer user manual page 12"
+		"reset": "Click “Reset” , show “Proccessing…” to reset the Z-Wave network.Refer user manual page 12",
+		"manual": "https://products.z-wavealliance.org/ProductManual/File?folder=&filename=MarketCertificationFiles/1832/UM-Heimdall-SUNITEC-en160714.pdf"
 	}
 }

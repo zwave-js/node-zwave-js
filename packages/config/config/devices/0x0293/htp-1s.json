@@ -9,7 +9,11 @@
 		{
 			"productType": "0x0003",
 			"productId": "0x4410",
-			"zwaveAllianceId": [3131, 3205, 3208]
+			"zwaveAllianceId": [
+				3131,
+				3205,
+				3208
+			]
 		}
 	],
 	"firmwareVersion": {
@@ -19,6 +23,7 @@
 	"metadata": {
 		"inclusion": "1. Put the controller into INCLUSION mode. Follow the instructions provided by the controller manufacturer.\n\n2. Touch and hold at the center of touch area for more than 5 seconds. Indication LED blinks blue. At this point release the key, the touch dimmer switch start inclusion process",
 		"exclusion": "1. Put the controller into EXCLUSION mode. Follow the instructions provided by the controller manufacturer.\n\n2. Touch and hold at the center of touch area for more than 5 seconds. Indication LED blinks blue. At this point release the key, the touch dimmer switch start exclusion\nprocess.",
-		"reset": "1. Press the config button 5 time, Indication LED lights will blinks red in color, touch dimmer switch will start local reset. Touch dimmer switch will erase network inclusion state after local reset.\nPlease use this procedure only when the network primary controller is missing or otherwise inoperable."
+		"reset": "1. Press the config button 5 time, Indication LED lights will blinks red in color, touch dimmer switch will start local reset. Touch dimmer switch will erase network inclusion state after local reset.\nPlease use this procedure only when the network primary controller is missing or otherwise inoperable.",
+		"manual": "https://products.z-wavealliance.org/ProductManual/File?folder=&filename=MarketCertificationFiles/3208/Touch_Dimmer-compressed.pdf"
 	}
 }
