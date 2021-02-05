@@ -236,11 +236,11 @@
 					"value": 0
 				},
 				{
-					"label": "DT Disabled, Single Tap last brightness",
+					"label": "Double Tap Disabled, Single Tap to Last Brightness",
 					"value": 1
 				},
 				{
-					"label": "DT Disabled, Single Tap to Full",
+					"label": "Double Tap Disabled, Single Tap to Full Brightness",
 					"value": 2
 				}
 			]
