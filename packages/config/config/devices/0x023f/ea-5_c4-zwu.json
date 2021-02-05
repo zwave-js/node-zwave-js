@@ -9,13 +9,7 @@
 		{
 			"productType": "0x0000",
 			"productId": "0x0025",
-			"zwaveAllianceId": [
-				1828,
-				1834,
-				1868,
-				1929,
-				1932
-			]
+			"zwaveAllianceId": [1828, 1834, 1868, 1929, 1932]
 		},
 		{
 			"productType": "0x0000",

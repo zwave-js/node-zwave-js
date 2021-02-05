@@ -13,10 +13,7 @@
 		{
 			"productType": "0x2004",
 			"productId": "0x04a4",
-			"zwaveAllianceId": [
-				1064,
-				1085
-			]
+			"zwaveAllianceId": [1064, 1085]
 		}
 	],
 	"firmwareVersion": {
