@@ -83,11 +83,11 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "Controlled by Z-wave controller only",
+					"label": "Controlled by Z-Wave controller only",
 					"value": 0
 				},
 				{
-					"label": "Controlled by PIR trigger and Lux level, or by Z-wave controller",
+					"label": "Controlled by PIR trigger and Lux level, or by Z-Wave controller",
 					"value": 1
 				}
 			]
