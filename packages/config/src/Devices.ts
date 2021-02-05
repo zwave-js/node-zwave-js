@@ -1,3 +1,4 @@
+import { ZWaveError, ZWaveErrorCodes } from "@zwave-js/core";
 import {
 	JSONObject,
 	ObjectKeyMap,
@@ -127,18 +128,27 @@ export async function loadDeviceIndexInternal(
 				.replace(/\\/g, "/");
 			const fileContents = await readFile(file, "utf8");
 			// Try parsing the file
-			const config = new DeviceConfig(relativePath, fileContents);
-			// Add the file to the index
-			index.push(
-				...config.devices.map((dev: any) => ({
-					manufacturerId: formatId(
-						config.manufacturerId.toString(16),
-					),
-					...dev,
-					firmwareVersion: config.firmwareVersion,
-					filename: relativePath,
-				})),
-			);
+			try {
+				const config = new DeviceConfig(relativePath, fileContents);
+				// Add the file to the index
+				index.push(
+					...config.devices.map((dev: any) => ({
+						manufacturerId: formatId(
+							config.manufacturerId.toString(16),
+						),
+						...dev,
+						firmwareVersion: config.firmwareVersion,
+						filename: relativePath,
+					})),
+				);
+			} catch (e: unknown) {
+				throw new ZWaveError(
+					`Error parsing config file ${relativePath}: ${
+						(e as Error).message
+					}`,
+					ZWaveErrorCodes.Config_Invalid,
+				);
+			}
 		}
 
 		// Save the index to disk (but not during unit tests)
