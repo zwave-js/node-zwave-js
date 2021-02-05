@@ -417,8 +417,9 @@ export class ConfigManager {
 		} catch (e: unknown) {
 			// If the index file is missing or invalid, don't try to find it again
 			if (
-				e instanceof ZWaveError &&
-				e.code === ZWaveErrorCodes.Config_Invalid
+				(!(e instanceof ZWaveError) && e instanceof Error) ||
+				(e instanceof ZWaveError &&
+					e.code === ZWaveErrorCodes.Config_Invalid)
 			) {
 				// Fall back to no index on production systems
 				if (!this.index) this.index = [];
