@@ -1,7 +1,7 @@
 // NIE Technology Co., Ltd. NZW30S
 // In-Wall Switch (On/Off) Scene Enabled
 {
-	"manufacturer": "NIE Technology Co., Ltd.",
+	"manufacturer": "Inovelli",
 	"manufacturerId": "0x0312",
 	"label": "NZW30S",
 	"description": "In-Wall Switch (On/Off) Scene Enabled",
