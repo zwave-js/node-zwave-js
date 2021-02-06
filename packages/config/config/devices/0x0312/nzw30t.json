@@ -41,7 +41,7 @@
 		"5": {
 			"label": "Countdown",
 			"description": "Countdown to shutoff",
-			"unit": "Seconds",
+			"unit": "seconds",
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 32767,
