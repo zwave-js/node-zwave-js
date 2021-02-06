@@ -1,0 +1,190 @@
+// Wink Inc. WINK MOTION SENSOR
+// Wink Motion Sensor
+{
+	"manufacturer": "Wink Inc.",
+	"manufacturerId": "0x017f",
+	"label": "WINK MOTION SENSOR",
+	"description": "Wink Motion Sensor",
+	"devices": [
+		{
+			"productType": "0x0101",
+			"productId": "0x0001",
+			"zwaveAllianceId": 2482
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"paramInformation": {
+		"1": {
+			"label": "Sensitivity Level",
+			"description": "Sensitivity level",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 12,
+			"defaultValue": 12,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"2": {
+			"label": "Motion Cleared Time Delay",
+			"description": "In seconds",
+			"valueSize": 2,
+			"unit": "seconds",
+			"minValue": 0,
+			"maxValue": 30,
+			"defaultValue": 30,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"3": {
+			"label": "Basic Set Level",
+			"description": "This parameter sets the value sent by the basic_set command to association group 2 (for more information, see “group 2” on page 14.)",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 255,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true,
+			"options": [
+				{
+					"label": "Turn off",
+					"value": 0
+				},
+				{
+					"label": "On",
+					"value": 255
+				}
+			]
+		},
+		"4": {
+			"label": "Enable/Disable Motion Detection",
+			"description": "This setting enables or disables motion detection",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 1,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Motion detection disabled",
+					"value": 0
+				},
+				{
+					"label": "Motion detection enabled",
+					"value": 1
+				}
+			]
+		},
+		"5": {
+			"label": "Group 2 Ambient Light Threshold",
+			"description": "In lux",
+			"valueSize": 2,
+			"minValue": 0,
+			"maxValue": 100,
+			"defaultValue": 100,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"6": {
+			"label": "Retrigger Interval",
+			"description": "In seconds",
+			"valueSize": 1,
+			"unit": "seconds",
+			"minValue": 0,
+			"maxValue": 8,
+			"defaultValue": 8,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"7": {
+			"label": "Light Sensing Interval",
+			"description": "In seconds",
+			"valueSize": 2,
+			"unit": "seconds",
+			"minValue": 0,
+			"maxValue": 180,
+			"defaultValue": 180,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"8": {
+			"label": "Enable/Disable Group 2 Ambient Light Threshold",
+			"description": "If this parameter is enabled, the motion detector will only send Basic Set commands to associon group 2 if the ambient light level is below the value set in parameter 05. for more information, see “group 2” on page 14",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 0,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Group 2 ambient light threshold disabled",
+					"value": 0
+				},
+				{
+					"label": "Group 2 ambient light threshold enabled",
+					"value": 1
+				}
+			]
+		},
+		"9": {
+			"label": "Ambient Light Sensitivity Level",
+			"description": "In lux",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 100,
+			"defaultValue": 100,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"10": {
+			"label": "Enable/Disable LED Indicator",
+			"description": "If this parameter is enabled, the LED indicator will flash everytime there motion is detected. if this is disabled, the LED indicator will not flash to indicate motion events",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 1,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Led disabled",
+					"value": 0
+				},
+				{
+					"label": "Led enabled",
+					"value": 1
+				}
+			]
+		}
+	},
+	"metadata": {
+		"inclusion": "Follow the instructions for your Z-Wave certified Controller to enter inclusion mode.\nWhen prompted by the Controller:\n1. For proper inclusion, bring the Motion Detector within range of your Controller.\n2. Pull the tab on the side of the sensor to power on, or remove then re-install the batteries.\nThe LED indicator will flash five times indicating inclusion",
+		"exclusion": "Follow the instructions for your Z-Wave certified Controller to enter exclusion mode. When prompted by the Controller:\n1. Remove the cover of the Motion Detector and be sure it is powered on.\n2. Press the Connect Button on the bottom of the device quickly 3 times in a row.\nThe LED Indicator will flash five times indicating exclusion/disconnection.",
+		"reset": "To disconnect from the Z-Wave Network and restore factory default settings:\n1. Remove the cover of the Motion Detector and be sure it is powered on.\n2. Hold the Connect Button for 10 seconds until the LED indicator blinks once, then release the button.\nOnly do this if the controller is disconnected or otherwise unreachable!",
+		"manual": "https://products.z-wavealliance.org/ProductManual/File?folder=&filename=MarketCertificationFiles/2482/wink-motion-manual.pdf"
+	}
+}

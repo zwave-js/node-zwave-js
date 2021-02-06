@@ -1,0 +1,165 @@
+// Fantem FT112-K
+// Door/ Window Sensor
+{
+	"manufacturer": "Fantem",
+	"manufacturerId": "0x016a",
+	"label": "FT112-K",
+	"description": "Door/ Window Sensor",
+	"devices": [
+		{
+			"productType": "0x1d02",
+			"productId": "0x0070",
+			"zwaveAllianceId": 2653
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"paramInformation": {
+		"1": {
+			"label": "Which Value of The Sensor Binary Report Or Basic Set Will Be Sent When The Door is Opened/Closed",
+			"description": "To set which value of the sensor binary report or Basic Set will be sent when the door is opened/closed",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 0,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Sensor binary report/Basic Set =0xff when the door is opened, sensor binary report/Basic Set= 0x00 when the door is closed",
+					"value": 0
+				},
+				{
+					"label": "Sensor binary report/Basic Set= 0x00 when the door is opened, sensor binary report/Basic Set=0xff when the door is closed",
+					"value": 1
+				}
+			]
+		},
+		"39": {
+			"label": "Set The Low Battery Value",
+			"description": "The range of low battery value can be set to 10% to 50%",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 20,
+			"defaultValue": 20,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"101": {
+			"label": "Enable/Disable The Function of Parameter 111",
+			"description": "Enable/disable the function of parameter 111.  note: this parameter cannot disable the low battery checking of the sensor itself",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 1,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Disable",
+					"value": 0
+				},
+				{
+					"label": "Enable",
+					"value": 1
+				}
+			]
+		},
+		"111": {
+			"label": "Set The Interval Time of Low Battery Checking",
+			"description": "The range of interval can be set to 0 to 2147483647",
+			"valueSize": 4,
+			"minValue": 0,
+			"maxValue": 86640,
+			"defaultValue": 86640,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"121": {
+			"label": "To Configure Which Sensor Report Will Be Sent When The Door is Opened/Closed",
+			"description": "To configure which sensor report will be sent when the door is opened/closed",
+			"valueSize": 1,
+			"minValue": 1,
+			"maxValue": 3,
+			"defaultValue": 1,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Basic Set cc is selected",
+					"value": 1
+				},
+				{
+					"label": "Sensor binary report cc is selected",
+					"value": 2
+				},
+				{
+					"label": "Basic Set cc and sensor binary report cc are selected",
+					"value": 3
+				}
+			]
+		},
+		"252": {
+			"label": "Lock/Unlock All Configuration Parameters",
+			"description": "Lock/unlock all configuration parameters",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 0,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Unlock",
+					"value": 0
+				},
+				{
+					"label": "Lock",
+					"value": 1
+				}
+			]
+		},
+		"255": {
+			"label": "Reset The Sensor",
+			"description": "Reset the sensor",
+			"valueSize": 4,
+			"minValue": 0,
+			"maxValue": 1431655765,
+			"defaultValue": 0,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Reset to default settings",
+					"value": 0
+				},
+				{
+					"label": "Reset to default settings and excluded from the network",
+					"value": 1431655765
+				}
+			]
+		}
+	},
+	"metadata": {
+		"inclusion": "Turn the primary controller of Z-Wave network into inclusion mode, short press the product’s Action Button that you can find in the back of the product",
+		"exclusion": "Turn the primary controller of Z-Wave network into exclusion mode, short press the product’s Action Button that you can find in back of the product",
+		"reset": "Press the Action Button once that you can find in back of the product for 20 seconds and then release. This procedure should only be used when the primary controller is inoperable",
+		"manual": "https://products.z-wavealliance.org/ProductManual/File?folder=&filename=MarketCertificationFiles/2653/Oomi%20Door%20Window%20Sensor%20manual.pdf"
+	}
+}

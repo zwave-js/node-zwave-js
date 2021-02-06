@@ -1,0 +1,83 @@
+// Nexia Home Intelligence 9125051
+// VeriLock Translator
+{
+	"manufacturer": "Nexia Home Intelligence",
+	"manufacturerId": "0x0178",
+	"label": "9125051",
+	"description": "VeriLock Translator",
+	"devices": [
+		{
+			"productType": "0x5a44",
+			"productId": "0x414e",
+			"zwaveAllianceId": 1173
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"paramInformation": {
+		"1": {
+			"label": "Buzzer Volume",
+			"description": "100 is max volume. 0 is off",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 100,
+			"defaultValue": 100,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"2": {
+			"label": "Discovery Mode",
+			"description": "Start, stop, or get the results of discovery mode. retrieve the configuration parameter to obtain the results of discovery mode: 0=not enabled, 1=enabled, 2=timed out, 3=failure",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 0,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Enable",
+					"value": 1
+				},
+				{
+					"label": "Disable",
+					"value": 0
+				}
+			]
+		},
+		"3": {
+			"label": "Sleep Mode",
+			"description": "Turn sleep mode on or off",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 0,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Off",
+					"value": 0
+				},
+				{
+					"label": "On",
+					"value": 1
+				}
+			]
+		}
+	},
+	"metadata": {
+		"inclusion": "If not included to a Z-Wave network, the device will attempt to be added to the network at power-up following an LED start-up sequence. The controller must be put into include mode before plugging in the device.\n\nDuring normal operation, after putting the controller into include mode, a single press of the round Z-Wave button will add the device to the Z-Wave network.",
+		"exclusion": "After putting the controller in exclude mode, a single press of the round Z-Wave button will remove the device from the Z-Wave network",
+		"reset": "The device is factory reset by pressing and holding both the round (Z-Wave) and square (Multi-Purpose) buttons simultaneously for 15 seconds. Please use this procedure only in emergencies such as when the network primary controller is missing or otherwise inoperable. This should always be used as a last resort",
+		"manual": "https://products.z-wavealliance.org/ProductManual/File?folder=&filename=MarketCertificationFiles/1173/18-HD75D1-1-EN.pdf"
+	}
+}
