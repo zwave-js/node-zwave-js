@@ -19,7 +19,6 @@
 	"paramInformation": {
 		"80": {
 			"label": "Configure Which Command Would Be Sent When The Sensor is Triggered",
-			"description": "To configure which command will be sent when the sensor is triggered",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 1,
@@ -41,7 +40,6 @@
 		},
 		"255": {
 			"label": "Reset Your Touch",
-			"description": "Reset your touch",
 			"valueSize": 4,
 			"minValue": 0,
 			"maxValue": 1431655765,
