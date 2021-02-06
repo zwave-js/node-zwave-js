@@ -1,0 +1,235 @@
+// AEON Labs ZW141
+// Nano Shutter
+{
+	"manufacturer": "AEON Labs",
+	"manufacturerId": "0x0086",
+	"label": "ZW141",
+	"description": "Nano Shutter",
+	"devices": [
+		{
+			"productType": "0x0303",
+			"productId": "0x008d",
+			"zwaveAllianceId": 3132
+		},
+		{
+			"productType": "0x0903",
+			"productId": "0x008d",
+			"zwaveAllianceId": 3269
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"paramInformation": {
+		"35": {
+			"label": "Set The Moving Time From Up (left) to Down (right) For Curtain",
+			"description": "The available range for time set is 1 to 127 seconds",
+			"valueSize": 1,
+			"unit": "seconds",
+			"minValue": 0,
+			"maxValue": 30,
+			"defaultValue": 30,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"80": {
+			"label": "To Set Which Notification Would Be Sent to The Associated Devices (group 1)",
+			"description": "To set which notification would be sent to the associated devices (group 1) when the state of nano shutter is changed",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 0,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Send nothing",
+					"value": 0
+				},
+				{
+					"label": "Send basic cc report",
+					"value": 1
+				}
+			]
+		},
+		"85": {
+			"label": "Set The Operation Mode of External Switch",
+			"description": "Set the operation mode of external switch.  note: for the description of operation mode 1 or 2, please refer to the user manual",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 1,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Operation mode 1",
+					"value": 0
+				},
+				{
+					"label": "Operation mode 2",
+					"value": 1
+				}
+			]
+		},
+		"120": {
+			"label": "Configure The External Switch Mode For S1",
+			"description": "Configure the external switch mode for s1",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 4,
+			"defaultValue": 0,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Unidentified mode",
+					"value": 0
+				},
+				{
+					"label": "Reserved",
+					"value": 1
+				},
+				{
+					"label": "3 way switch mode",
+					"value": 2
+				},
+				{
+					"label": "Momentary push button mode",
+					"value": 3
+				},
+				{
+					"label": "Enter automatic identification mode",
+					"value": 4
+				}
+			]
+		},
+		"121": {
+			"label": "Configure The External Switch Mode For S2",
+			"description": "Configure the external switch mode for s2",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 4,
+			"defaultValue": 0,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Unidentified mode",
+					"value": 0
+				},
+				{
+					"label": "Reserved",
+					"value": 1
+				},
+				{
+					"label": "3 way switch mode",
+					"value": 2
+				},
+				{
+					"label": "Momentary push button mode",
+					"value": 3
+				},
+				{
+					"label": "Enter automatic identification mode",
+					"value": 4
+				}
+			]
+		},
+		"248": {
+			"label": "Set The Function of S1/S2",
+			"description": "Set the function of s1/s2",
+			"valueSize": 1,
+			"minValue": -128,
+			"maxValue": 4,
+			"defaultValue": 83,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "The setting for sending nif, entering rf power level test mode and factory reset are effective",
+					"value": -128
+				},
+				{
+					"label": "The functions of s1 and s2 are disabled",
+					"value": 0
+				},
+				{
+					"label": "The function of sending nif is enabled",
+					"value": 1
+				},
+				{
+					"label": "He function of entering rf power level test mode is enabled",
+					"value": 2
+				},
+				{
+					"label": "The function of factory reset is enabled",
+					"value": 4
+				}
+			]
+		},
+		"252": {
+			"label": "Lock/Unlock Configuration Parameters",
+			"description": "Lock/unlock configuration parameters",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 0,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Unlock",
+					"value": 0
+				},
+				{
+					"label": "Lock",
+					"value": 1
+				}
+			]
+		},
+		"255": {
+			"label": "Reset The Nano Shutter",
+			"description": "Reset the nano shutter to factory default",
+			"valueSize": 4,
+			"minValue": 0,
+			"maxValue": 1431655765,
+			"defaultValue": 0,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Reset all configuration parameters to factory default setting",
+					"value": 0
+				},
+				{
+					"label": "Reset to factory default setting and removed from the Z-Wave network",
+					"value": 1431655765
+				}
+			]
+		}
+	},
+	"metadata": {
+		"inclusion": "Turn the primary controller of Z-Wave network into inclusion mode, short press the product’s Action button that you can find on the product's housing.\n\nIf the Nano Dimmer has been successfully added to your Z-Wave network, its RGB LED will be solid. If unsuccessful, the red LED will be on for 2 seconds and then remain a colorful gradient, repeat the instructions above from step 1.",
+		"exclusion": "Turn the primary controller of Z-Wave network into exclusion mode, quick press the product’s Action button 6 times that you can find on the product's housing or toggle the external manual switch 2 times in fast succession.\n\nIf the Nano Dimmer has been successfully removed from your Z-Wave network, its RGB LED will remain colorful gradient. If the removal was unsuccessful, the RGB LED will still be solid (following the state of the output load), repeat the instructions above from step 1",
+		"reset": "Press and hold the Action button that you can find on the product's housing for 20 seconds and then release. This procedure should only be used when the primary controller is missing or otherwise inoperable",
+		"manual": "https://products.z-wavealliance.org/ProductManual/File?folder=&filename=MarketCertificationFiles/3132/Aeon%20Labs%20Nano%20Shutter%20-manual%20-%202.pdf"
+	}
+}

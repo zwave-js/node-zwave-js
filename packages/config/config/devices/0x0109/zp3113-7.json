@@ -1,0 +1,124 @@
+// Vision Security ZP3113-7
+// 4 in 1 PIR Sensor
+{
+	"manufacturer": "Vision Security",
+	"manufacturerId": "0x0109",
+	"label": "ZP3113-7",
+	"description": "4 in 1 PIR Sensor",
+	"devices": [
+		{
+			"productType": "0x2021",
+			"productId": "0x2112",
+			"zwaveAllianceId": 3806
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"paramInformation": {
+		"1": {
+			"label": "Temperature Unit Selection",
+			"description": "Choose °f",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 0,
+			"defaultValue": 0,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"2": {
+			"label": "Auto Temperature Report Interval",
+			"description": "Auto temperature interval from 0.1°c~5°c",
+			"valueSize": 1,
+			"minValue": 1,
+			"maxValue": 30,
+			"defaultValue": 30,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"3": {
+			"label": "Auto Humidity Report Interval",
+			"description": "Auto humidity report interval from 1% ~ 50%",
+			"valueSize": 1,
+			"minValue": 1,
+			"maxValue": 20,
+			"defaultValue": 20,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"4": {
+			"label": "Auto Light Report Interval",
+			"description": "Auto light report interval from off or 5%~50%",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 25,
+			"defaultValue": 25,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"5": {
+			"label": "Motion Re-triggering Duration",
+			"description": "Motion re-triggering duration (in 1 ~ 127 minutes)",
+			"valueSize": 1,
+			"unit": "minutes",
+			"minValue": 1,
+			"maxValue": 3,
+			"defaultValue": 3,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"6": {
+			"label": "Motion Sensitivity",
+			"description": "Motion sensitivity from level 1 ~ level 7",
+			"valueSize": 1,
+			"minValue": 1,
+			"maxValue": 4,
+			"defaultValue": 4,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"7": {
+			"label": "Led Flash Mode Selection",
+			"description": "Led flash mode selection",
+			"valueSize": 1,
+			"minValue": 1,
+			"maxValue": 1,
+			"defaultValue": 1,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"8": {
+			"label": "Pir Trigger Notification Re-sending Times",
+			"description": "Pir trigger notification re-sending times from 0 time to 10 times",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 3,
+			"defaultValue": 3,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		}
+	},
+	"metadata": {
+		"inclusion": "For “Inclusion” in (adding to) a network: To add the ZP3113 to your Z-Wave network (inclusion), place your Z-Wave primary controller into inclusion mode. Press the Program Switch of ZP3113 once for sending the NIF. After sending NIF, Z-Wave will send the auto inclusion, otherwise, ZP3113 will go to sleep after 30 seconds. The LED indicator will be flashing while the inclusion is continued",
+		"exclusion": "For “Exclusion” from (removing from) a network: To remove the ZP3113 from your Z-Wave network (exclusion), place your Z-Wave primary controller into “exclusion” mode, and following its instruction to delete the ZP3113 to your controller. Press the Program Switch of ZP3113 once to be excluded.",
+		"reset": "Factory Default Reset: \nRemove cover to trigged tamper switch, LED flash once & send out Alarm Report. Press Program Switch 10 times within 10 seconds, ZP3113 will send the “Device Reset Locally Notification” command and reset to the factory default. (Remark: This is to be used only in the case of primary controller being inoperable or otherwise unavailable.)",
+		"manual": "https://products.z-wavealliance.org/ProductManual/File?folder=&filename=product_documents/3806/ZP3113-7_R0_20200803.pdf"
+	}
+}

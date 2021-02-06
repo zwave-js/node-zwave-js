@@ -1,0 +1,48 @@
+// Z-Wave.Me V3
+// Z-Uno
+{
+	"manufacturer": "Z-Wave.Me",
+	"manufacturerId": "0x0115",
+	"label": "V3",
+	"description": "Z-Uno",
+	"devices": [
+		{
+			"productType": "0x0110",
+			"productId": "0x0001",
+			"zwaveAllianceId": 1825
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"paramInformation": {
+		"2": {
+			"label": "Blink With Service LED During Operation",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 0,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Dont blink",
+					"value": 0
+				},
+				{
+					"label": "Blink",
+					"value": 1
+				}
+			]
+		}
+	},
+	"metadata": {
+		"inclusion": "Press Service button three times",
+		"exclusion": "Press Service button three times",
+		"reset": "Hold Service button for five seconds, then press Service button three times.\n\nUse this procedure only if your controller is missing or inoperable.\n\nNote that the user sketch is not erased during exclusion or reset process",
+		"manual": "https://products.z-wavealliance.org/ProductManual/File?folder=&filename=MarketCertificationFiles/1825/Z-Uno%20V3%20Manual.pdf"
+	}
+}
