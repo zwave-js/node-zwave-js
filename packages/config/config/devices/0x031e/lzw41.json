@@ -1,0 +1,77 @@
+// Inovelli LZW41
+// Tunable White Smart Bulb
+{
+	"manufacturer": "Inovelli",
+	"manufacturerId": "0x031e",
+	"label": "LZW41",
+	"description": "Tunable White Smart Bulb",
+	"devices": [
+		{
+			"productType": "0x0006",
+			"productId": "0x0001",
+			"zwaveAllianceId": 3614
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"paramInformation": {
+		"2": {
+			"label": "Memory Function",
+			"description": "This parameter will determine how your bulb behaves after power is restored to it from an outage",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 2,
+			"defaultValue": 0,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Remembers last state",
+					"value": 0
+				},
+				{
+					"label": "Bulb turns on after power outage",
+					"value": 1
+				},
+				{
+					"label": "Bulb turns off after power outage",
+					"value": 2
+				}
+			]
+		},
+		"51": {
+			"label": "Color Adjustment (warm White)",
+			"description": "Changes the kelvin from 2700k (1387) to 4999k (4999)",
+			"valueSize": 2,
+			"minValue": 1387,
+			"maxValue": 1387,
+			"defaultValue": 1387,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"52": {
+			"label": "Color Adjustment (cool White)",
+			"description": "Changes the kelvin from 5000k (5000) to 6500k (6500)",
+			"valueSize": 2,
+			"minValue": 5000,
+			"maxValue": 5000,
+			"defaultValue": 5000,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		}
+	},
+	"metadata": {
+		"inclusion": "Start the inclusion process on your HUB/Gateway.\nOnce the inclusion process has started, turn on and off power to the bulb 3x (ie: Turn On, Turn Off, Turn On, Turn Off, Turn On) and the bulb should flash 3x indicating it’s in inclusion mode. \nIf the bulb was included successfully, it will blink one more time. If it was not included successfully, you may have to run an exclusion as mentioned above. If there’s still issues, please ensure your bulb is within range",
+		"exclusion": "IMPORTANT: If you are having issues pairing/including your device, please ensure your bulb is within range of your HUB (pages 2-3). If you believe you’re within range and it’s still not working, then you may have to run an Exclusion. Put your HUB in Exclusion mode and turn the power on/off/on/off/on/off/on (3x on and 2x off) until your bulb blinks three (3x) and then blinks 1x to confirm. Your HUB should say that the device is excluded. You may then add (include) the bulb per the instructions below",
+		"reset": "You may power on/off the bulb 6x (between 0.5-2 seconds each time) or use a certified controller to remove the device from your network to factory default. Only use this procedure in the event that the network primary controller is missing or otherwise inoperable. Your bulb will flash twice to confirm factory reset",
+		"manual": "https://products.z-wavealliance.org/ProductManual/File?folder=&filename=product_documents/3614/LZW41%20Manual.pdf"
+	}
+}
