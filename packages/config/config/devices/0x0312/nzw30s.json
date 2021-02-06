@@ -18,8 +18,8 @@
 	"supportsZWavePlus": true,
 	"paramInformation": {
 		"3": {
-			"label": "LED ON - Switch ON",
-			"description": "LED Indicator. Default = Switch On / LED Off",
+			"label": "LED Indicator",
+			"description": "Set the LED light behavior",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 2,
@@ -29,22 +29,22 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "Switch On / LED On",
+					"label": "Turn LED indicator on when switch is on",
 					"value": 0
 				},
 				{
-					"label": "Switch Off / LED On",
+					"label": "Turn LED indicator on when switch is off",
 					"value": 1
 				},
 				{
-					"label": "Disable LED",
+					"label": "Indicator LED is always off",
 					"value": 2
 				}
 			]
 		},
 		"4": {
-			"label": "Invert",
-			"description": "Invert switch",
+			"label": "Switch Orientation",
+			"description": "Invert on & off on the physical switch",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 1,
@@ -64,8 +64,8 @@
 			]
 		},
 		"5": {
-			"label": "Countdown",
-			"description": "Countdown Timer",
+			"label": "Countdown Timer",
+			"description": "Automatically turn switch off after this number of seconds",
 			"unit": "seconds",
 			"valueSize": 2,
 			"minValue": 0,
