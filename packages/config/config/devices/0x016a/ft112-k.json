@@ -40,7 +40,7 @@
 		},
 		"39": {
 			"label": "Set The Low Battery Value",
-			"description": "The range of low battery value can be set to 10% to 50%",
+			"description": "The range of low battery value can be set to between 0 (10%) to 20 (50%)",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 20,
@@ -74,10 +74,10 @@
 		},
 		"111": {
 			"label": "Set The Interval Time of Low Battery Checking",
-			"description": "The range of interval can be set to 0 to 86640",
+			"description": "The range of interval can be set to 0 to 606,480 (7 days)",
 			"valueSize": 4,
 			"minValue": 0,
-			"maxValue": 86640,
+			"maxValue": 606,480,
 			"defaultValue": 86640,
 			"unsigned": true,
 			"readOnly": false,
