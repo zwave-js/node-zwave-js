@@ -19,7 +19,7 @@
 	"paramInformation": {
 		"1": {
 			"label": "Dimmer Step Configuration",
-			"description": "Dimmer Speed Setting (On/Off)",
+			"description": "Dimmer speed setting (On/Off)",
 			"valueSize": 1,
 			"minValue": 1,
 			"maxValue": 99,
@@ -41,7 +41,7 @@
 		},
 		"4": {
 			"label": "Switch Orientation",
-			"description": "Invert On/Off from Top/Bottom",
+			"description": "Invert on & off on the physical switch",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 1,
@@ -62,7 +62,7 @@
 		},
 		"5": {
 			"label": "Countdown Timer",
-			"description": "Shutoff Timer",
+			"description": "Automatically turn switch off after this number of seconds",
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 32767,
