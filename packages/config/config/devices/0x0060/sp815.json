@@ -1,0 +1,66 @@
+// Everspring SP815
+// PET IMMUNE PIR MOTION DETECTOR
+{
+	"manufacturer": "Everspring",
+	"manufacturerId": "0x0060",
+	"label": "SP815",
+	"description": "PET IMMUNE PIR MOTION DETECTOR",
+	"devices": [
+		{
+			"productType": "0x0001",
+			"productId": "0x0004",
+			"zwaveAllianceId": 3366
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"paramInformation": {
+		"1": {
+			"label": "Temperature And Humidity Auto Report Period Setting",
+			"description": "Minutes",
+			"valueSize": 2,
+			"unit": "minutes",
+			"minValue": 0,
+			"maxValue": 30,
+			"defaultValue": 30,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"2": {
+			"label": "Re-trigger Interval Setting (for PIR Sensor Only)",
+			"description": "Seconds",
+			"valueSize": 2,
+			"unit": "seconds",
+			"minValue": 0,
+			"maxValue": 15,
+			"defaultValue": 15,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"3": {
+			"label": "Trigger Off Interval Setting",
+			"description": "Seconds",
+			"valueSize": 2,
+			"unit": "seconds",
+			"minValue": 0,
+			"maxValue": 15,
+			"defaultValue": 15,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		}
+	},
+	"metadata": {
+		"inclusion": "1. Put the Z-Wave Controller into inclusion mode.\n2. Press the learn key 3 times within 1.5 seconds to put the unit into inclusion mode.",
+		"exclusion": "1. Put the Z-Wave Controller into exclusion mode.\n2. Press the learn key 3 times within 1.5 seconds to put the unit into exclusion mode.",
+		"reset": "1. Press the learn key 3 times within 1.5 seconds to put the unit into exclusion mode.\n2. Within 1 second of step 1, press the learn key again and hold for 5 seconds.\n3. Node ID is excluded. The device reverts to factory default state.\n(This procedure should only be used when the controller is inoperable.)",
+		"manual": "https://products.z-wavealliance.org/ProductManual/File?folder=&filename=MarketCertificationFiles/3366/SP815%20user%20manual_05102019-A501112752R01.pdf"
+	}
+}
