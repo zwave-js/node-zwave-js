@@ -1,0 +1,63 @@
+// FortrezZ LLC FTS05
+// Flood & Temperature Sensor
+{
+	"manufacturer": "FortrezZ LLC",
+	"manufacturerId": "0x0084",
+	"label": "FTS05",
+	"description": "Flood & Temperature Sensor",
+	"devices": [
+		{
+			"productType": "0x0073",
+			"productId": "0x020b",
+			"zwaveAllianceId": 2524
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"paramInformation": {
+		"1": {
+			"label": "Temperature Low Threshold",
+			"description": "-10 deg to 69 deg c",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 4,
+			"defaultValue": 4,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"2": {
+			"label": "Temperature High Threshold",
+			"description": "-9 deg to 70 deg c",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 70,
+			"defaultValue": 70,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"4": {
+			"label": "Water Alarm Association Mode",
+			"description": "240 or 0",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 240,
+			"defaultValue": 240,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		}
+	},
+	"metadata": {
+		"inclusion": "1) Set up the Add/Inclusion mode at the controller; 2) Briefly press the switch once and the controller will indicate the unit has been added into the network. Also, the LED will blink 2 quick blinks when complete.",
+		"exclusion": "1) Set up the Remove/Exclusion mode at the controller; 2) Press and hold the switch for approx. 2 seconds and then release. The controller will indicates the unit has been removed from the network. The LED will blink 4 quick blinks when complete",
+		"reset": "Reset the device to factory Defaults - Press and hold the program button for longer than 15 seconds. When complete, the LED will flash approx. 30 times. This can be done while the device is either in or out of a network. Please use this procedure only when the network primary controller is missing or otherwise inoperable. Caution – When this is done in-network, the device will no longer be in the network and all configurations and associations will be set to default.",
+		"manual": "https://products.z-wavealliance.org/ProductManual/File?folder=&filename=MarketCertificationFiles/2524/FTS05-usermanual.pdf"
+	}
+}
