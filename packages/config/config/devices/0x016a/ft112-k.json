@@ -40,10 +40,10 @@
 		},
 		"39": {
 			"label": "Set The Low Battery Value",
-			"description": "The range of low battery value can be set to between 0 (10%) to 20 (50%)",
+			"description": "The range of low battery value can be set to between 10% to 50%",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 20,
+			"minValue": 10,
+			"maxValue": 50,
 			"defaultValue": 20,
 			"unsigned": true,
 			"readOnly": false,
