@@ -18,12 +18,11 @@
 	},
 	"paramInformation": {
 		"1": {
-			"label": "Basic_set Off Delay",
-			"description": "In seconds",
+			"label": "Basic_set Off Delay in seconds",
 			"valueSize": 2,
 			"unit": "seconds",
 			"minValue": 0,
-			"maxValue": 30,
+			"maxValue": 65535,
 			"defaultValue": 30,
 			"unsigned": true,
 			"readOnly": false,
@@ -32,7 +31,7 @@
 		},
 		"2": {
 			"label": "Basic_set Level",
-			"description": "This parameter sets the value sent by the basic_set command to association group 2 (for more information, see “association groups”.)",
+			"description": "1 to 99 dim level, 0 for off, 255 on",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 255,
