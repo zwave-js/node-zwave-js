@@ -3,8 +3,7 @@
 {
 	"manufacturer": "Wink Inc.",
 	"manufacturerId": "0x017f",
-	"label": "WINK MOTION SENSOR",
-	"description": "Wink Motion Sensor",
+	"label": "Wink Motion Sensor",
 	"devices": [
 		{
 			"productType": "0x0101",
@@ -19,10 +18,10 @@
 	"paramInformation": {
 		"1": {
 			"label": "Sensitivity Level",
-			"description": "Sensitivity level",
+			"description": "8 to 255",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 12,
+			"minValue": 8,
+			"maxValue": 255,
 			"defaultValue": 12,
 			"unsigned": true,
 			"readOnly": false,
@@ -31,11 +30,11 @@
 		},
 		"2": {
 			"label": "Motion Cleared Time Delay",
-			"description": "In seconds",
+			"description": "5 to 600 in seconds",
 			"valueSize": 2,
 			"unit": "seconds",
-			"minValue": 0,
-			"maxValue": 30,
+			"minValue": 5,
+			"maxValue": 600,
 			"defaultValue": 30,
 			"unsigned": true,
 			"readOnly": false,
@@ -44,7 +43,7 @@
 		},
 		"3": {
 			"label": "Basic Set Level",
-			"description": "This parameter sets the value sent by the basic_set command to association group 2 (for more information, see “group 2” on page 14.)",
+			"description": "0 off, 1 to 99 dim level, 255 off",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 255,
@@ -66,7 +65,6 @@
 		},
 		"4": {
 			"label": "Enable/Disable Motion Detection",
-			"description": "This setting enables or disables motion detection",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 1,
@@ -88,10 +86,10 @@
 		},
 		"5": {
 			"label": "Group 2 Ambient Light Threshold",
-			"description": "In lux",
+			"description": "5 to 1000 in lux",
 			"valueSize": 2,
-			"minValue": 0,
-			"maxValue": 100,
+			"minValue": 5,
+			"maxValue": 1000,
 			"defaultValue": 100,
 			"unsigned": true,
 			"readOnly": false,
@@ -100,10 +98,10 @@
 		},
 		"6": {
 			"label": "Retrigger Interval",
-			"description": "In seconds",
+			"description": "1 to 8 in seconds",
 			"valueSize": 1,
 			"unit": "seconds",
-			"minValue": 0,
+			"minValue": 1,
 			"maxValue": 8,
 			"defaultValue": 8,
 			"unsigned": true,
@@ -113,11 +111,11 @@
 		},
 		"7": {
 			"label": "Light Sensing Interval",
-			"description": "In seconds",
+			"description": "60 to 3600 in seconds",
 			"valueSize": 2,
 			"unit": "seconds",
-			"minValue": 0,
-			"maxValue": 180,
+			"minValue": 60,
+			"maxValue": 3600,
 			"defaultValue": 180,
 			"unsigned": true,
 			"readOnly": false,
@@ -126,7 +124,6 @@
 		},
 		"8": {
 			"label": "Enable/Disable Group 2 Ambient Light Threshold",
-			"description": "If this parameter is enabled, the motion detector will only send Basic Set commands to associon group 2 if the ambient light level is below the value set in parameter 05. for more information, see “group 2” on page 14",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 1,
@@ -148,10 +145,10 @@
 		},
 		"9": {
 			"label": "Ambient Light Sensitivity Level",
-			"description": "In lux",
+			"description": "0 to 255 in lux",
 			"valueSize": 1,
 			"minValue": 0,
-			"maxValue": 100,
+			"maxValue": 255,
 			"defaultValue": 100,
 			"unsigned": true,
 			"readOnly": false,
@@ -160,7 +157,6 @@
 		},
 		"10": {
 			"label": "Enable/Disable LED Indicator",
-			"description": "If this parameter is enabled, the LED indicator will flash everytime there motion is detected. if this is disabled, the LED indicator will not flash to indicate motion events",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 1,
