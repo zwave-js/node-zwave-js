@@ -26,7 +26,6 @@
 	"paramInformation": {
 		"1": {
 			"label": "Set Priority Association Group Number For an Association Source Node",
-			"description": "See above",
 			"valueSize": 1,
 			"minValue": 1,
 			"maxValue": 1,
@@ -38,7 +37,6 @@
 		},
 		"2": {
 			"label": "Function of Remswiid™ Device Key A",
-			"description": "See above",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 1,
@@ -50,7 +48,6 @@
 		},
 		"3": {
 			"label": "Function of Remswiid™ Device Key B",
-			"description": "See above",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 1,
@@ -62,7 +59,6 @@
 		},
 		"4": {
 			"label": "Function of Remswiid™ Device Key C",
-			"description": "See above",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 1,
@@ -74,7 +70,6 @@
 		},
 		"5": {
 			"label": "Function of Remswiid™ Device Key D",
-			"description": "See above",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 1,
@@ -86,7 +81,6 @@
 		},
 		"6": {
 			"label": "Function of Remswiid™ Device Key E",
-			"description": "See above",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 1,
@@ -98,7 +92,6 @@
 		},
 		"7": {
 			"label": "Function of Remswiid™ Device Key F",
-			"description": "See above",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 1,
@@ -110,7 +103,6 @@
 		},
 		"8": {
 			"label": "Function of Remswiid™ Device Key G",
-			"description": "See above",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 1,
@@ -122,7 +114,6 @@
 		},
 		"9": {
 			"label": "Function of Remswiid™ Device Key H",
-			"description": "See above",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 1,
@@ -134,7 +125,6 @@
 		},
 		"10": {
 			"label": "Send Unsolicited Battery Report On Wake Up",
-			"description": "See above",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 0,
@@ -146,7 +136,6 @@
 		},
 		"11": {
 			"label": "Dimming Mode",
-			"description": "See above",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 0,
