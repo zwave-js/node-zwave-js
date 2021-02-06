@@ -1,0 +1,169 @@
+// Zooz ZEN21 VER 3.0
+// Z-WAVE PLUS ON / OFF LIGHT SWITCH
+{
+	"manufacturer": "Zooz",
+	"manufacturerId": "0x027a",
+	"label": "ZEN21 VER 3.0",
+	"description": "Z-WAVE PLUS ON / OFF LIGHT SWITCH",
+	"devices": [
+		{
+			"productType": "0xaa00",
+			"productId": "0xaa01",
+			"zwaveAllianceId": 3667
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"paramInformation": {
+		"1": {
+			"label": "Paddle Control",
+			"description": "0 – upper paddle turns the light on, lower paddle turns the light off (default); 1 – upper paddle turns the light off, lower paddle turns the light on; 2 – any paddle will turn light on / off depending on the status",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 0,
+			"defaultValue": 0,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"2": {
+			"label": "Led Indicator Control",
+			"description": "Choose if you want the LED indicator to turn on when the switch (light) is on or off, or if you want it to remain on or off at all times",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 3,
+			"defaultValue": 0,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Led indicator is on when switch is off, LED indicator is off when switch is on (default)",
+					"value": 0
+				},
+				{
+					"label": "Led indicator is on when switch is on, LED indicator is off when switch is off",
+					"value": 1
+				},
+				{
+					"label": "Led indicator is always off",
+					"value": 2
+				},
+				{
+					"label": "Led indicator is always on",
+					"value": 3
+				}
+			]
+		},
+		"3": {
+			"label": "Enable / Disable Auto Turn-off Timer",
+			"description": "0 – timer disabled (default); 1 – timer enabled",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 0,
+			"defaultValue": 0,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"4": {
+			"label": "Set Auto Turn-off Timer",
+			"description": "Minutes",
+			"valueSize": 4,
+			"unit": "minutes",
+			"minValue": 1,
+			"maxValue": 60,
+			"defaultValue": 60,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"5": {
+			"label": "Enable / Disable Auto Turn-off Timer",
+			"description": "0 – timer disabled (default); 1 – timer enabled",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 0,
+			"defaultValue": 0,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"6": {
+			"label": "Set Auto Turn-on Timer",
+			"description": "Minutes",
+			"valueSize": 4,
+			"unit": "minutes",
+			"minValue": 1,
+			"maxValue": 60,
+			"defaultValue": 60,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"8": {
+			"label": "On Off Status After Power Failure",
+			"description": "Set the on off status for the switch after power failure",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 2,
+			"defaultValue": 2,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "0 – forced to off (regardless of state prior to power outage)",
+					"value": 0
+				},
+				{
+					"label": "Forced to on",
+					"value": 1
+				},
+				{
+					"label": "Remembers and restores on/off status a􀈇er power failure (default)",
+					"value": 2
+				}
+			]
+		},
+		"9": {
+			"label": "Enable/Disable Scene Control",
+			"description": "0 – scene control disabled (default). 1 – scene control enabled",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 0,
+			"defaultValue": 0,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"10": {
+			"label": "Enable/Disable Paddle Control",
+			"description": "0 – local control disabled. 1 – local control enabled (default)",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 1,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		}
+	},
+	"metadata": {
+		"inclusion": "1. Initiate inclusion (pairing) in the app (or web interface).\n2. Tap the upper paddle of the switch 3 times.\n3. The LED indicator will blink to signal communication and stay on/off when communication is concluded",
+		"exclusion": "1. Bring your Z-Wave gateway (hub) close to the switch if possible\n2. Put the Z-Wave hub into exclusion mode \n3. Tap the lower paddle on the switch 3 times quickly\n4. Your hub will confirm exclusion and the device will disappear from your controller's device list",
+		"reset": "If your primary controller is missing or inoperable, you may need to reset the device to factory settings. To complete the reset process manually, tap-tap-tap’n’hold the upper paddle for at least 10 seconds. The LED indicator will flash to confirm successful reset.\nNOTE: All previously recorded activity and custom settings will be erased from the device’s memory",
+		"manual": "https://products.z-wavealliance.org/ProductManual/File?folder=&filename=product_documents/3667/zooz-z-wave-plus-on-off-switch-zen21-ver3.1-manual.pdf"
+	}
+}

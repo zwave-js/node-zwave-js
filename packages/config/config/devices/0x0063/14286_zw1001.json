@@ -1,0 +1,53 @@
+// GE/Jasco 14286 / ZW1001
+// In-Wall Smart Outlet
+{
+	"manufacturer": "GE/Jasco",
+	"manufacturerId": "0x0063",
+	"label": "14286 / ZW1001",
+	"description": "In-Wall Smart Outlet",
+	"devices": [
+		{
+			"productType": "0x4952",
+			"productId": "0x3035",
+			"zwaveAllianceId": 2112
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"paramInformation": {
+		"3": {
+			"label": "Led Light",
+			"description": "0 default 1 LED light on when z‐wave turned on 2 LED always off",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 2,
+			"defaultValue": 1,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Default",
+					"value": 0
+				},
+				{
+					"label": "Led light on when Z-Wave turned on",
+					"value": 1
+				},
+				{
+					"label": "Led always off",
+					"value": 2
+				}
+			]
+		}
+	},
+	"metadata": {
+		"inclusion": "1. Follow the instructions for your Z-Wave certified\ncontroller to add a device to the Z-Wave network.\n2. Once the controller is ready to add your device, press and\nrelease the Program Button to add it in the network",
+		"exclusion": "1. Follow the instructions for your Z-Wave certified controller to\nremove a device from the Z-Wave network.\n2. Once the controller is ready to remove your device, press and\nrelease the manual/program button on the smart dimmer to\nremove it from the network",
+		"reset": "1. Press and hold the button for at least 3 seconds. The LED light\nwill blink 5 times to confirm.\nNOTE: This should only be used in the event your network’s primary\ncontroller is missing or otherwise inoperable",
+		"manual": "https://products.z-wavealliance.org/ProductManual/File?folder=&filename=MarketCertificationFiles/2112/Binder1.pdf"
+	}
+}

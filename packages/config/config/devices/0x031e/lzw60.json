@@ -1,0 +1,200 @@
+// Inovelli LZW60
+// 4-in-1 Sensor
+{
+	"manufacturer": "Inovelli",
+	"manufacturerId": "0x031e",
+	"label": "LZW60",
+	"description": "4-in-1 Sensor",
+	"devices": [
+		{
+			"productType": "0x000d",
+			"productId": "0x0001",
+			"zwaveAllianceId": 3723
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"associations": {
+		"1": {
+			"label": "Lifeline",
+			"maxNodes": 3,
+			"isLifeline": true
+		},
+		"2": {
+			"label": "Lifeline",
+			"maxNodes": 5,
+			"isLifeline": true
+		}
+	},
+	"paramInformation": {
+		"10": {
+			"label": "Low Battery Power Level Alarm",
+			"description": "Value at which the sensor reports low battery to the gateway 10 = 10%, 11 = 11%... 50 = 50%, etc",
+			"valueSize": 1,
+			"minValue": 10,
+			"maxValue": 10,
+			"defaultValue": 10,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"12": {
+			"label": "Pir Sensitivity",
+			"description": "Change the sensitivity of the PIR (motion) sensor 0 = off, 1 = low sensitivity, 10 = high sensitivity",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 10,
+			"defaultValue": 10,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"13": {
+			"label": "Pir Trigger Time (time Between PIR Readings)",
+			"description": "\"the amount of seconds between motion detection (ie: the interval) 5 = 5 seconds, 6 = 6 seconds... 15300 = 15300 seconds\"",
+			"valueSize": 2,
+			"unit": "seconds",
+			"minValue": 5,
+			"maxValue": 30,
+			"defaultValue": 30,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"14": {
+			"label": "Basic Set Command Send After PIR Trigger",
+			"description": "\"should Basic Set command be sent after PIR is triggered: 0 = no, 1 = yes\"",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 0,
+			"defaultValue": 0,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"15": {
+			"label": "Pir Trigger Correspondence Action",
+			"description": "\"ability to reverse the Basic Set behavior for devices associated in group 2. 0 = turn the associated device on when motion is tripped, and off when motion stops. 1 = turn the associated device off when motion is tripped, and on when motion stops.\"",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 0,
+			"defaultValue": 0,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"101": {
+			"label": "Temperature Reporting Interval",
+			"description": "\"the interval between when temperature is reported to the gateway 0 = off, 1 = 1 second, 2 = 2 seconds... 2678400 = 2678400 seconds (note: the sensor reporting time will round to the nearest minute)\"",
+			"valueSize": 4,
+			"unit": "minutes",
+			"minValue": 0,
+			"maxValue": 7200,
+			"defaultValue": 7200,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"102": {
+			"label": "Humidity Reporting Interval",
+			"description": "\"the interval between when humidity is reported to the gateway 0 = off, 1 = 1 second, 2 = 2 seconds... 2678400 = 2678400 seconds (note: the sensor reporting time will round to the nearest minute)\"",
+			"valueSize": 4,
+			"unit": "minutes",
+			"minValue": 0,
+			"maxValue": 7200,
+			"defaultValue": 7200,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"103": {
+			"label": "Luminance Reporting Interval",
+			"description": "\"the interval between when luminance is reported to the gateway 0 = off, 1 = 1 second, 2 = 2 seconds... 2678400 = 2678400 seconds (note: the sensor reporting time will round to the nearest minute)\"",
+			"valueSize": 4,
+			"unit": "minutes",
+			"minValue": 0,
+			"maxValue": 7200,
+			"defaultValue": 7200,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"104": {
+			"label": "Battery Reporting Interval",
+			"description": "\"the interval between when battery is reported to the gateway 0 = off, 1 = 1 second, 2 = 2 seconds... 2678400 = 2678400 seconds (note: the sensor reporting time will round to the nearest minute)\"",
+			"valueSize": 4,
+			"unit": "minutes",
+			"minValue": 0,
+			"maxValue": 86400,
+			"defaultValue": 86400,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"111": {
+			"label": "Temperature Threshold",
+			"description": "\"set the threshold of the temperature for your sensor 1 = 0.1 degree celcius (i know… wish it was farenheit), 500 = 50 degrees celcius \"",
+			"valueSize": 2,
+			"minValue": 1,
+			"maxValue": 10,
+			"defaultValue": 10,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"112": {
+			"label": "Humidity Threshold",
+			"description": "\"set the threshold of the humidity for your sensor 1 = 1%, 2 = 2%... 32 = 32%\"",
+			"valueSize": 1,
+			"minValue": 1,
+			"maxValue": 5,
+			"defaultValue": 5,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"113": {
+			"label": "Luminance Threshold",
+			"description": "\"set the threshold of the luminance for your sensor 1 = 1 unit lux, 2 = 2 unit lux… 65528 = 65528 unit lux\"",
+			"valueSize": 2,
+			"minValue": 1,
+			"maxValue": 2,
+			"defaultValue": 2,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"114": {
+			"label": "Battery Threshold",
+			"description": "\"set the threshold of the battery for your sensor 1 = 1%, 2 = 2%... 100 = 100%\"",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 10,
+			"defaultValue": 10,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		}
+	},
+	"metadata": {
+		"inclusion": "Press the sensor button 1x and the sensor will flash red rapidly. If successful, the sensor will stop flashing and the red light will be solid for 1-2 seconds, followed by the red light turning off. If unsuccessful, the red light will continue to rapidly flash until it times out after 25 seconds",
+		"exclusion": "Put your HUB in Exclusion mode and press the sensor button 1x. Your sensor will rapidly blink, indicating it’s in exclusion mode. When exclusion is successful, the red light will stop blinking, turn solid red and then turn off",
+		"reset": "You may hold the Sensor Button for 5 seconds or use a certified controller to remove the device from your network to factory default. The sensors red LED will blink fast and then if successful, will turn off.\n\n \n\nOnly use this procedure in the event that the network primary controller is missing or otherwise inoperable",
+		"manual": "https://products.z-wavealliance.org/ProductManual/File?folder=&filename=product_documents/3723/Inovelli%204-1%20Sensor%20Manual.pdf"
+	}
+}

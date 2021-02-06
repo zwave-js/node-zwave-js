@@ -1,0 +1,51 @@
+// Willis Electric Co., Ltd. ZW97
+// Outdoor Smart Plug - 2 channel
+{
+	"manufacturer": "Willis Electric Co., Ltd.",
+	"manufacturerId": "0x015d",
+	"label": "ZW97",
+	"description": "Outdoor Smart Plug - 2 channel",
+	"devices": [
+		{
+			"productType": "0x0221",
+			"productId": "0x611c",
+			"zwaveAllianceId": 2693
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"paramInformation": {
+		"1": {
+			"label": "Led",
+			"description": "0----outlet on,led on.1----outlet on ,led off.2-----led no work",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 0,
+			"defaultValue": 0,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"2": {
+			"label": "Timer",
+			"description": "Timer value",
+			"valueSize": 2,
+			"minValue": 0,
+			"maxValue": 0,
+			"defaultValue": 0,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		}
+	},
+	"metadata": {
+		"inclusion": "---Refer to your primary controller instructions to process the inclusion / exclusion setup procedure.\n---When prompted by your primary controller, click the PROG button five times in one second",
+		"exclusion": "---Refer to your primary controller instructions to process the inclusion / exclusion setup procedure.\n---When prompted by your primary controller, click the PROG button five times in one second",
+		"reset": "---Power off ZW97\n---keep holding the PROG button\n---Power on,Press and keep holding the PROG button for no less than 10 seconds.\nPlease use this procedure only when the network primary controller is missing or otherwise inoperable",
+		"manual": "https://products.z-wavealliance.org/ProductManual/File?folder=&filename=MarketCertificationFiles/2693/ZW97-Manual171115.pdf"
+	}
+}
