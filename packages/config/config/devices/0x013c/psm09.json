@@ -1,0 +1,40 @@
+// Philio Technology Corp PSM09
+// Recessed Door Sensor
+{
+	"manufacturer": "Philio Technology Corp",
+	"manufacturerId": "0x013c",
+	"label": "PSM09",
+	"description": "Recessed Door Sensor",
+	"devices": [
+		{
+			"productType": "0x0002",
+			"productId": "0x006a",
+			"zwaveAllianceId": 3462
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"paramInformation": {
+		"1": {
+			"label": "Auto Report State Time",
+			"description": "0 means turn off auto report state. units of 30 minutes",
+			"valueSize": 1,
+			"unit": "minutes",
+			"minValue": 0,
+			"maxValue": 12,
+			"defaultValue": 12,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		}
+	},
+	"metadata": {
+		"inclusion": "Check Z-WaveTM Controller enter inclusion mode. Pressing tamper key three times within 3 seconds to enter the inclusion mode. If the addition is successful, the LED will flash slowly.",
+		"exclusion": "Check Z-WaveTM Controller enter exclusion mode. Pressing tamper key three times within 3 seconds to enter the exclusion mode. If the removal is successful, the code light will flash for 30 seconds.",
+		"reset": "Notice: Use this procedure only in the event that the primary controller is lost or otherwise inoperable.\nPress the button three times in three seconds, then LED will flash for one second slowly. Press the button again and hold, the LED will light up, after about three seconds, the LED will off. Please release the button in two seconds. If the clearing is successful, the LED will flash one time per second. If it fails, the LED will flash quickly.",
+		"manual": "https://products.z-wavealliance.org/ProductManual/File?folder=&filename=MarketCertificationFiles/3462/PSM09_UserManual_0624.pdf"
+	}
+}

@@ -1,0 +1,112 @@
+// Philio Technology Corp PAT12
+// CO2 Sensor-A
+{
+	"manufacturer": "Philio Technology Corp",
+	"manufacturerId": "0x013c",
+	"label": "PAT12",
+	"description": "CO2 Sensor-A",
+	"devices": [
+		{
+			"productType": "0x0002",
+			"productId": "0x006b",
+			"zwaveAllianceId": 3653
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"paramInformation": {
+		"1": {
+			"label": "Auto Report Co2 Concentra- Tion Time",
+			"description": "Units of 1 minute",
+			"valueSize": 2,
+			"unit": "minutes",
+			"minValue": 1,
+			"maxValue": 60,
+			"defaultValue": 60,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"2": {
+			"label": "Co2 Concentration Differen- Tial Report",
+			"description": "Units of 1 %",
+			"valueSize": 1,
+			"minValue": 1,
+			"maxValue": 10,
+			"defaultValue": 10,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"3": {
+			"label": "Baseline Level 1",
+			"description": "Units of 100 ppm",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 0,
+			"defaultValue": 0,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"4": {
+			"label": "Baseline Level 2",
+			"description": "Units of 100 ppm",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 0,
+			"defaultValue": 0,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"5": {
+			"label": "Baseline Level 3",
+			"description": "Units of 100 ppm",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 0,
+			"defaultValue": 0,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"6": {
+			"label": "Baseline Level 4",
+			"description": "Units of 100 ppm",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 0,
+			"defaultValue": 0,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"7": {
+			"label": "Baseline Level 5",
+			"description": "Units of 100 ppm",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 0,
+			"defaultValue": 0,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		}
+	},
+	"metadata": {
+		"inclusion": "1. Set your Z-Wave controller into inclusion mode by following the instructions provided by the controller manufacturer.\n2. Press the include button of the PAT12 three times within 3 seconds to enter inclusion mode",
+		"exclusion": "1. Set your Z-Wave controller into exclusion mode by following the instructions provided by the controller manufacturer.\n2. Press the include button of the PAT12 three times within 3 seconds to enter exclusion mode.\n3. Node ID has been excluded",
+		"reset": "1. Press the include button of the PAT12 three times within 3 seconds to enter inclusion mode.\n2. Within 1 second, again press the include button of the PAT12 for 5 seconds.\n3. IDs will get excluded.\nnotice1:Please use this procedure only when the network primary controller is missing or otherwise inoperable",
+		"manual": "https://products.z-wavealliance.org/ProductManual/File?folder=&filename=product_documents/3653/PAT12_UserManual-V1.pdf"
+	}
+}

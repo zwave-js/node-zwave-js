@@ -1,0 +1,85 @@
+// Philio Technology Corp PSR07
+// Smart Color Button
+{
+	"manufacturer": "Philio Technology Corp",
+	"manufacturerId": "0x013c",
+	"label": "PSR07",
+	"description": "Smart Color Button",
+	"devices": [
+		{
+			"productType": "0x0009",
+			"productId": "0x0039",
+			"zwaveAllianceId": 1988
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"paramInformation": {
+		"1": {
+			"label": "Basic Set Off Level",
+			"description": "Basic Set value of off from 0~99",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 0,
+			"defaultValue": 0,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"2": {
+			"label": "Basic Set On Level",
+			"description": "Basic Set value of on from 0~99",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 99,
+			"defaultValue": 99,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"10": {
+			"label": "Auto Report Battery Time",
+			"description": "Interval time for auto re-porting battery level",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 12,
+			"defaultValue": 12,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"25": {
+			"label": "Percentage Set Method",
+			"description": "Dimmer setting method. 0 : auto send command Basic Set after rotating. 1 : send command Basic Set by touching key after rotating",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 0,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Auto send command Basic Set after rotating",
+					"value": 0
+				},
+				{
+					"label": "Send command Basic Set by touching key after rotating",
+					"value": 1
+				}
+			]
+		}
+	},
+	"metadata": {
+		"inclusion": "1. Have Z-Wave™ Controller entered inclusion mode.\n2. Rotate to area A and then press button three times within 1.5 seconds to enter the inclusion mode.\n3. After add successful, the device will wake to receive the setting command from Z-Wave™ Controller about 20 seconds",
+		"exclusion": "1. Have Z-Wave™ Controller entered exclusion mode.\n2. Rotate to area A and then press button three times within 1.5 seconds to enter the exclusion mode. Node ID has been removed",
+		"reset": "Notice: Use this procedure only in the event that the primary controller is lost or otherwise inoperable.\n1. Rotate to area A and then press button four times within 1.5 seconds and do not release the button in the 4 th pressed, and the red LED will light ON.\n2. After the red LED goes out, release the button within 2 seconds.\n3. IDs are removed and all settings will reset to factory default",
+		"manual": "https://products.z-wavealliance.org/ProductManual/File?folder=&filename=MarketCertificationFiles/1988/PSR07_UserManual.pdf"
+	}
+}

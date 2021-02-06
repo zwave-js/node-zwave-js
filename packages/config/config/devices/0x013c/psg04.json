@@ -1,0 +1,40 @@
+// Philio Technology Corp PSG04
+// Z-Wave CO Sensor
+{
+	"manufacturer": "Philio Technology Corp",
+	"manufacturerId": "0x013c",
+	"label": "PSG04",
+	"description": "Z-Wave CO Sensor",
+	"devices": [
+		{
+			"productType": "0x0002",
+			"productId": "0x0071",
+			"zwaveAllianceId": 3672
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"paramInformation": {
+		"1": {
+			"label": "Auto Report Battery Time",
+			"description": "Units of 30 minute",
+			"valueSize": 1,
+			"unit": "minutes",
+			"minValue": 0,
+			"maxValue": 0,
+			"defaultValue": 0,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		}
+	},
+	"metadata": {
+		"inclusion": "1. Have Z-WaveTM Controller entered inclusion mode.\n2. Pressing button three times within 1.5 seconds to enter the inclusion mode.\n3. After add successful, the device will wake to receive the setting command from Z-WaveTM Controller about 20 seconds",
+		"exclusion": "1. Have Z-WaveTM Controller entered exclusion mode.\n2. Pressing button three times within 1.5 seconds to enter the exclusion mode.\nNode ID has been removed.",
+		"reset": "1. Pressing button four times within 1.5 seconds and do not release the button in the 4th pressed.\n2. After 3 secands and release the button within 2 seconds.\n3. IDs are removed and all settings will reset to factory default",
+		"manual": "https://products.z-wavealliance.org/ProductManual/File?folder=&filename=product_documents/3672/PSG04_UserManual-V1.pdf"
+	}
+}
