@@ -35,9 +35,9 @@ The method either returns the stored value if it was found, and `undefined` othe
 getValueMetadata(valueId: ValueID): ValueMetadata
 ```
 
-Every value in Z-Wave has associated metadata that defines the range of allowed values etc. You can retrieve this metadata using `getValueMetadata`. Like `getValue` this takes a single argument of the type [`ValueMetadata`](/api/valueid.md#ValueMetadata).
+Every value in Z-Wave has associated metadata that defines the range of allowed values etc. You can retrieve this metadata using `getValueMetadata`. Like `getValue` this takes a single argument of the type [`ValueID`](api/valueid.md).
 
-This method is guaranteed to return at least some very basic metadata, even if the value was not found.
+This method is guaranteed to return at least some very basic metadata (in the form of a [`ValueMetadata`](/api/valueid.md#ValueMetadata) object), even if the value was not found.
 
 ### `getDefinedValueIDs`
 
