@@ -29,11 +29,11 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "Send notification report cc",
+					"label": "Notification report",
 					"value": 0
 				},
 				{
-					"label": "Send hail cc",
+					"label": "Hail",
 					"value": 1
 				}
 			]
