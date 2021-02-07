@@ -88,7 +88,9 @@ jobs:
     steps:
     - name: Checkout master branch
       uses: actions/checkout@v2
- 
+      with:
+        path: trusted
+
     - name: Check user's permissions to do this
       id: check-permissions
       uses: actions/github-script@v3
@@ -96,14 +98,14 @@ jobs:
         github-token: ${{secrets.BOT_TOKEN}}
         result-encoding: string
         script: |
-          const bot = require(`${process.env.GITHUB_WORKSPACE}/.github/bot-scripts/index.js`);
+          const bot = require(`${process.env.GITHUB_WORKSPACE}/trusted/.github/bot-scripts/index.js`);
           return bot.checkAuthorized({github, context});
 
     # These steps only run if the check was successful
     - name: Retrieve PR information
       if: steps.check-permissions.outputs.result == 'true'
-      uses: actions/github-script@v3
       id: get-pr
+      uses: actions/github-script@v3
       with:
         script: |
           const request = {
@@ -119,25 +121,14 @@ jobs:
             core.setFailed(`Request failed with error ${err}`)
           }
 
-    - name: Save our CI scripts
-      if: steps.check-permissions.outputs.result == 'true'
-      run: |
-        mkdir -p /tmp/.github
-        cp -r .github/* /tmp/.github
-
-    - name: Checkout pull request
+    - name: Checkout pull request side by side
       if: steps.check-permissions.outputs.result == 'true'
       uses: actions/checkout@v2
       with:
         token: ${{secrets.BOT_TOKEN}}
         repository: ${{ fromJSON(steps.get-pr.outputs.result).head.repo.full_name }}
         ref: ${{ fromJSON(steps.get-pr.outputs.result).head.ref }}
-
-    - name: Restore our CI scripts
-      if: steps.check-permissions.outputs.result == 'true'
-      run: |
-        rm -rf .github
-        cp -r /tmp/.github .
+        path: untrusted
 
     - name: Use Node.js ${{ matrix.node-version }}
       if: steps.check-permissions.outputs.result == 'true'
@@ -156,21 +147,30 @@ jobs:
       id: yarn-cache
       with:
         path: ${{ steps.yarn-cache-dir-path.outputs.dir }}
-        key: ${{ runner.os }}-yarn-${{ matrix.node-version }}-${{ hashFiles('**/yarn.lock') }}
+        key: ${{ runner.os }}-yarn-${{ matrix.node-version }}-${{ hashFiles('trusted/**/yarn.lock') }}
         restore-keys: |
           ${{ runner.os }}-yarn-
 
     - name: Install dependencies
       if: steps.check-permissions.outputs.result == 'true'
+      working-directory: ./trusted
       run: yarn install --prefer-offline --frozen-lockfile
 
+    - name: Copy sources from untrusted repo
+      if: steps.check-permissions.outputs.result == 'true'
+      run: |
+        rm -rf ./trusted/packages
+        cp -r ./untrusted/packages/ ./trusted
+
+      # We need this or the linter will complain about other stuff than the checks
     - name: Compile TypeScript code
       if: steps.check-permissions.outputs.result == 'true'
-      # We need this or the linter will complain about other stuff than the checks
+      working-directory: ./trusted
       run: yarn run build
 
     - name: Do the lint fix
       if: steps.check-permissions.outputs.result == 'true'
+      working-directory: ./trusted
       id: fix
       run: |
         # Run all lint commands and remember if one fails
@@ -179,7 +179,12 @@ jobs:
         if ! yarn run lint:wotan --fix ; then LINT_RESULT=1 ; fi
         if ! yarn run lint:configjson -w ; then LINT_RESULT=1 ; fi
 
-        # Check if something changed
+        # Copy potentially fixed sources back
+        rm -rf ../untrusted/packages
+        cp -r ./packages/ ../untrusted
+
+        # Check if something changed in the untrusted repo
+        cd ../untrusted
         if ! git diff --quiet ; then
           git config user.email "bot@zwave-js.io"
           git config user.name "Z-Wave JS Bot"
@@ -206,7 +211,7 @@ jobs:
       with:
         github-token: ${{secrets.BOT_TOKEN}}
         script: |
-          const bot = require(`${process.env.GITHUB_WORKSPACE}/.github/bot-scripts/index.js`);
+          const bot = require(`${process.env.GITHUB_WORKSPACE}/trusted/.github/bot-scripts/index.js`);
           return bot.fixLintFeedback({github, context});
 
 
