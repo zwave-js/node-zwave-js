@@ -19,7 +19,7 @@
 	"paramInformation": {
 		"1": {
 			"label": "Debounce",
-			"description": "The default should work for most meters. If the meter pulses are more than 100/second, then a lower DEBOUNCE value should be used. If the pulse count is incrementing by more than 1 with each pulse, then the DEBOUNCE parameter should be increased",
+			"description": "If meter pulses are more than 100/second, lower debounce. If incrementing by more than 1 with each pulse, debounce should be increased",
 			"valueSize": 1,
 			"minValue": 1,
 			"maxValue": 255,
@@ -30,8 +30,7 @@
 			"allowManualEntry": true
 		},
 		"2": {
-			"label": "Rate Count",
-			"description": "The maximum rate of reports is once per minute so the pulse count can increment by more than this number. A pulse rate of 0 turns off the automatic reporting feature and the system controller has to poll to get the current pulse count",
+			"label": "Report Rate Interval (Controller)",
 			"valueSize": 1,
 			"unit": "minutes",
 			"minValue": 0,
@@ -49,10 +48,9 @@
 			]
 		},
 		"3": {
-			"label": "Rate Time",
-			"description": "Pulse counts are automatically sent to the Association Group 1 NodeID every 1/10th of an hour times this parameter. A value of 0 turns off the automatic reporting feature and the system controller has to poll to get the current pulse count.",
+			"label": "Report Rate Interval (Association Group 1)",
 			"valueSize": 1,
-			"unit": "hours",
+			"unit": "6 minutes",
 			"minValue": 0,
 			"maxValue": 255,
 			"defaultValue": 0,
