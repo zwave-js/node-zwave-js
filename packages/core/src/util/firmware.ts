@@ -92,7 +92,7 @@ function extractFirmwareAeotec(data: Buffer): Firmware {
 	// The additional firmware data (also 16-byte-aligned), the firmware name (256 bytes)
 	// and some control bytes are added at the end, so we can deduce which kind of information
 	// is included here
-	const numControlBytes = data.length % 16;
+	let numControlBytes = data.length % 16;
 	// The control bytes are as follows:
 	// [2 bytes checksum]? [4 bytes offset] [4 bytes length]
 
@@ -100,11 +100,20 @@ function extractFirmwareAeotec(data: Buffer): Firmware {
 	const firmwareStart = data.readUInt32BE(data.length - 8);
 	const firmwareLength = data.readUInt32BE(data.length - 4);
 
-	if (firmwareStart + firmwareLength > data.length - 256 - numControlBytes) {
-		throw new ZWaveError(
-			"This does not appear to be a valid Aeotec updater (invalid firmware length)!",
-			ZWaveErrorCodes.Argument_Invalid,
-		);
+	// Some files don't have such a strict alignment - in that case fall back to ignoring the non-aligned control bytes
+	switch (true) {
+		case firmwareStart + firmwareLength ===
+			data.length - 256 - numControlBytes:
+			// all good
+			break;
+		case firmwareStart + firmwareLength === data.length - 256 - 8:
+			numControlBytes = 8;
+			break;
+		default:
+			throw new ZWaveError(
+				"This does not appear to be a valid Aeotec updater (invalid firmware length)!",
+				ZWaveErrorCodes.Argument_Invalid,
+			);
 	}
 
 	const firmwareData = data.slice(
