@@ -3,8 +3,8 @@
 {
 	"manufacturer": "Wink Inc.",
 	"manufacturerId": "0x017f",
-	"label": "WINK D/W SENSOR",
-	"description": "Wink Door/Window Sensor",
+	"label": "D/W SENSOR",
+	"description": "Door/Window Sensor",
 	"devices": [
 		{
 			"productType": "0x0100",
@@ -18,7 +18,7 @@
 	},
 	"paramInformation": {
 		"1": {
-			"label": "Basic_set Off Delay in seconds",
+			"label": "Basic Set Off Delay",
 			"valueSize": 2,
 			"unit": "seconds",
 			"minValue": 0,
@@ -30,9 +30,9 @@
 			"allowManualEntry": true
 		},
 		"2": {
-			"label": "Basic_set Level",
-			"description": "1 to 99 dim level, 0 for off, 255 on",
+			"label": "Basic Set Level",
 			"valueSize": 1,
+			"unit": "%",
 			"minValue": 0,
 			"maxValue": 255,
 			"defaultValue": 99,
