@@ -94,7 +94,7 @@
 		},
 		"111": {
 			"label": "Set The Interval Time of Battery Report",
-			"description": "0 = disabled; 1 to 606480 sets interval time in seconds"	
+			"description": "0 = disabled; 1 to 606480 sets interval time in seconds",
 			"valueSize": 4,
 			"minValue": 0,
 			"maxValue": 606,480,
