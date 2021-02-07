@@ -97,7 +97,7 @@
 			"description": "0 = disabled; 1 to 606480 sets interval time in seconds",
 			"valueSize": 4,
 			"minValue": 0,
-			"maxValue": 606,480,
+			"maxValue": 606480,
 			"defaultValue": 86640,
 			"unsigned": true,
 			"readOnly": false,
