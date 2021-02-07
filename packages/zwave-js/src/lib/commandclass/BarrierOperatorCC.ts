@@ -89,6 +89,14 @@ function getTargetStateValueId(endpoint: number | undefined): ValueID {
 	};
 }
 
+function getCurrentStateValueId(endpoint: number | undefined): ValueID {
+	return {
+		commandClass: CommandClasses["Barrier Operator"],
+		endpoint,
+		property: "currentState",
+	};
+}
+
 // All the supported commands
 export enum BarrierOperatorCommand {
 	Set = 0x01,
@@ -233,11 +241,24 @@ export class BarrierOperatorCCAPI extends CCAPI {
 					typeof value,
 				);
 			}
-			await this.set(
+
+			const targetValue =
 				value === BarrierState.Closed
 					? BarrierState.Closed
-					: BarrierState.Open,
-			);
+					: BarrierState.Open;
+			await this.set(targetValue);
+
+			// If the command did not fail, assume that it succeeded and update the currentState accordingly
+			// so UIs have immediate feedback
+			if (this.isSinglecast()) {
+				const valueDB = this.endpoint.getNodeUnsafe()?.valueDB;
+				valueDB?.setValue(
+					getCurrentStateValueId(this.endpoint.index),
+					targetValue === BarrierState.Closed
+						? BarrierState.Closing
+						: BarrierState.Opening,
+				);
+			}
 		} else if (property === "signalingState") {
 			if (propertyKey == undefined) {
 				throwMissingPropertyKey(this.ccId, property);
