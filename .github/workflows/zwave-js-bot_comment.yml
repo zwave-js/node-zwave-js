@@ -217,7 +217,7 @@ jobs:
 
 
   # #########################################################################
-  # Fix lint errors when an authorized person posts "@zwave-js-bot rebase"
+  # Rebase PR onto its target branch when an authorized person posts "@zwave-js-bot rebase"
   rebase:
     if: |
       contains(github.event.issue.html_url, '/pull/') &&
@@ -285,12 +285,15 @@ jobs:
         cp -r /tmp/.github .
 
     - name: Rebase the branch
+      env:
+        # sanitize untrusted input by using an env variable
+        BRANCH: ${{ fromJSON(steps.get-pr.outputs.result).base.ref }}
       if: steps.check-permissions.outputs.result == 'true'
       id: fix
       run: |
         # Try to rebase
         git fetch origin
-        if git rebase "origin/${{ fromJSON(steps.get-pr.outputs.result).base.ref }}" ; then
+        if git rebase "origin/$BRANCH" ; then
           # The rebase worked
           git config user.email "bot@zwave-js.io"
           git config user.name "Z-Wave JS Bot"
@@ -375,13 +378,16 @@ jobs:
         cp -r /tmp/.github .
 
     - name: Rebase the branch
+      env:
+        # sanitize untrusted input by using an env variable
+        TITLE: ${{ fromJSON(steps.get-pr.outputs.result).title }}
       if: steps.check-permissions.outputs.result == 'true'
       id: fix
       run: |
         # Try to reword the commit
         git config user.email "bot@zwave-js.io"
         git config user.name "Z-Wave JS Bot"
-        if git commit --amend -m "${{ fromJSON(steps.get-pr.outputs.result).title }}" ; then
+        if git commit --amend -m "$TITLE" ; then
           # Amending the commit worked
           git push -f
           echo "::set-output name=result::success"
