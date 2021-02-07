@@ -53,6 +53,10 @@ import {
 import { ClockCCReport } from "../commandclass/ClockCC";
 import { CommandClass, getCCValueMetadata } from "../commandclass/CommandClass";
 import {
+	DoorLockMode,
+	getCurrentModeValueId as getCurrentLockModeValueId,
+} from "../commandclass/DoorLockCC";
+import {
 	FirmwareUpdateMetaDataCC,
 	FirmwareUpdateMetaDataCCGet,
 	FirmwareUpdateMetaDataCCStatusReport,
@@ -61,6 +65,7 @@ import {
 } from "../commandclass/FirmwareUpdateMetaDataCC";
 import { HailCC } from "../commandclass/HailCC";
 import { isCommandClassContainer } from "../commandclass/ICommandClassContainer";
+import { getLockedValueId } from "../commandclass/LockCC";
 import {
 	getManufacturerIdValueId,
 	getProductIdValueId,
@@ -2374,6 +2379,8 @@ version:               ${this.version}`;
 					setStateIdle(value),
 				);
 			}
+			// Perform some heuristics on the known notification
+			this.handleKnownNotification(command);
 		} else {
 			// This is an unknown notification
 			const property = `UNKNOWN_${num2hex(command.notificationType)}`;
@@ -2384,6 +2391,38 @@ version:               ${this.version}`;
 			};
 			this.valueDB.setValue(valueId, command.notificationEvent);
 			// We don't know what this notification refers to, so we don't force a reset
+		}
+	}
+
+	private handleKnownNotification(command: NotificationCCReport): void {
+		if (
+			// Access Control, manual (un)lock operation
+			command.notificationType === 0x06 &&
+			(command.notificationEvent === 0x01 ||
+				command.notificationEvent === 0x02) &&
+			(this.supportsCC(CommandClasses["Door Lock"]) ||
+				this.supportsCC(CommandClasses.Lock))
+		) {
+			// The Door Lock Command Class is constrained to the S2 Access Control key,
+			// while the Notification Command Class, in the same device, could use a
+			// different key. This way the device can notify devices which don't belong
+			// to the S2 Access Control key group of changes in its state.
+
+			// Update the current lock status
+			if (this.supportsCC(CommandClasses["Door Lock"])) {
+				this.valueDB.setValue(
+					getCurrentLockModeValueId(command.endpointIndex),
+					command.notificationEvent === 0x01
+						? DoorLockMode.Secured
+						: DoorLockMode.Unsecured,
+				);
+			}
+			if (this.supportsCC(CommandClasses.Lock)) {
+				this.valueDB.setValue(
+					getLockedValueId(command.endpointIndex),
+					command.notificationEvent === 0x01,
+				);
+			}
 		}
 	}
 
