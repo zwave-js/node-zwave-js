@@ -18,7 +18,7 @@
 	},
 	"paramInformation": {
 		"1": {
-			"label": "Which Value of The Sensor Binary Report Will Be Sent When The Sensor is Triggered On/Off\"",
+			"label": "Value to Send When Triggered",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 1,
@@ -29,17 +29,17 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "On=sensor binary report 0xff, off=sensor binary report 0x00\"",
+					"label": "Send 0xff when on, 0x00 when off",
 					"value": 0
 				},
 				{
-					"label": "On=sensor binary report 0x00, off=sensor binary report 0xff",
+					"label": "Send 0x00 when on, 0xff when off",
 					"value": 1
 				}
 			]
 		},
 		"2": {
-			"label": "Enable/Disable Wake-up 10 Minutes When Re-power On The Sensor",
+			"label": "Enable/Disable Wake-up When Re-powered",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 1,
@@ -60,7 +60,7 @@
 			]
 		},
 		"3": {
-			"label": "Which Value of The Basic Set Will Be Sent When The Sensor is Triggered On/Off",
+			"label": "Normal Operation State",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 1,
@@ -71,19 +71,19 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "On=Basic Set 0xff, off=Basic Set 0x00",
+					"label": "Set 0xff when on, 0x00 when off",
 					"value": 0
 				},
 				{
-					"label": "On=Basic Set 0x00, off =Basic Set 0xff",
+					"label": "Set 0x00 when off, 0xff when on",
 					"value": 1
 				}
 			]
 		},
 		"39": {
-			"label": "Set The Low Battery Value",
-			"description": "The range of low battery value is 10% to 50%",
+			"label": "Low Battery Threshold",
 			"valueSize": 1,
+			"unit": "%",
 			"minValue": 10,
 			"maxValue": 50,
 			"defaultValue": 20,
@@ -93,9 +93,9 @@
 			"allowManualEntry": true
 		},
 		"111": {
-			"label": "Set The Interval Time of Battery Report",
-			"description": "0 = disabled; 1 to 606480 sets interval time in seconds",
+			"label": "Battery Report Interval",
 			"valueSize": 4,
+			"unit": "seconds',
 			"minValue": 0,
 			"maxValue": 606480,
 			"defaultValue": 86640,
@@ -105,13 +105,13 @@
 			"allowManualEntry": true,
 			"options": [
 				{
-					"label": "The periodic battery report is disabled",
+					"label": "Disabled",
 					"value": 0
 				}
 			]
 		},
 		"121": {
-			"label": "Configure Which Command Will Be Sent to The Associated Nodes When The Sensor is Triggered On/Off",
+			"label": "Type of Command to Send to Nodes When Triggered",
 			"valueSize": 4,
 			"minValue": 16,
 			"maxValue": 272,
@@ -122,21 +122,21 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "Send sensor binary report to associated nodes when the sensor is triggered on/off",
+					"label": "Binary report",
 					"value": 16
 				},
 				{
-					"label": "Send Basic Set to associated nodes when the sensor is triggered on/off",
+					"label": "Basic Set",
 					"value": 256
 				},
 				{
-					"label": "Send the sensor binary report and Basic Set to associated nodes when the sensor is triggered on/off",
+					"label": "Binary report and Basic Set",
 					"value": 272
 				}
 			]
 		},
 		"122": {
-			"label": "Set a Notification Type For The Device",
+			"label": "Notification Type",
 			"valueSize": 1,
 			"minValue": 1,
 			"maxValue": 11,
@@ -147,47 +147,47 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "The smoke alarm notification type is selected for the sensor",
+					"label": "Smoke alarm",
 					"value": 1
 				},
 				{
-					"label": "The co alarm notification type is selected for the sensor",
+					"label": "CO alarm",
 					"value": 2
 				},
 				{
-					"label": "The co2 alarm notification type is selected for the sensor",
+					"label": "CO2 alarm",
 					"value": 3
 				},
 				{
-					"label": "The heat alarm notification type is selected for the sensor",
+					"label": "Heat alarm",
 					"value": 4
 				},
 				{
-					"label": "The water alarm notification type is selected for the sensor",
+					"label": "Water alarm",
 					"value": 5
 				},
 				{
-					"label": "The access control notification type is selected for the sensor",
+					"label": "Access control notification",
 					"value": 6
 				},
 				{
-					"label": "The home security notification type is selected for the sensor",
+					"label": "Home security notification",
 					"value": 7
 				},
 				{
-					"label": "The power management notification type is selected for the sensor",
+					"label": "Power management notification",
 					"value": 8
 				},
 				{
-					"label": "The system notification type is selected for the sensor",
+					"label": "System notification",
 					"value": 9
 				},
 				{
-					"label": "The emergency alarm notification type is selected for the sensor",
+					"label": "Emergency alarm",
 					"value": 10
 				},
 				{
-					"label": "The clock notification type is selected for the sensor",
+					"label": "Clock notification",
 					"value": 11
 				}
 			]
