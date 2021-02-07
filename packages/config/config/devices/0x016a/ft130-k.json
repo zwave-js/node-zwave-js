@@ -1,5 +1,5 @@
 // Fantem FT130-K
-// Mote
+// Oomi Mote
 {
 	"manufacturer": "Fantem",
 	"manufacturerId": "0x016a",
@@ -18,7 +18,7 @@
 	},
 	"paramInformation": {
 		"1": {
-			"label": "Enable/Disable The Touch Sound",
+			"label": "Enable/Disable Touch Sound",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 1,
@@ -39,7 +39,7 @@
 			]
 		},
 		"2": {
-			"label": "Enable/Disable The Touch Vibration",
+			"label": "Enable/Disable Touch Vibration",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 1,
@@ -60,7 +60,7 @@
 			]
 		},
 		"3": {
-			"label": "Enable/Disable The Function of Button Slide",
+			"label": "Enable/Disable Button Slide",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 1,
@@ -81,7 +81,7 @@
 			]
 		},
 		"4": {
-			"label": "To Configure Which Report Will Be Sent When Pressing The Buttons",
+			"label": "Type of Report When Button Pressed",
 			"valueSize": 1,
 			"minValue": 1,
 			"maxValue": 3,
@@ -92,17 +92,17 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "Send central scene command notification",
+					"label": "Central scene command",
 					"value": 1
 				},
 				{
-					"label": "Send central scene command notification and configuration report",
+					"label": "Central scene command and configuration report",
 					"value": 3
 				}
 			]
 		},
 		"11": {
-			"label": "To Set Which Command Would Be Sent to The Associated Nodes in Association Group 2, 4, 6, 8",
+			"label": "Type of Command to Send to Association Groups 2, 4, 6, 8",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 1,
@@ -123,9 +123,9 @@
 			]
 		},
 		"39": {
-			"label": "Set The Low Battery Value",
-			"description": "The value range is 5% to 50%",
+			"label": "Low Battery Threshold",
 			"valueSize": 1,
+			"unit": "%",
 			"minValue": 5,
 			"maxValue": 50,
 			"defaultValue": 20,
@@ -135,7 +135,7 @@
 			"allowManualEntry": true
 		},
 		"81": {
-			"label": "Enable/ Disable to Blink The Orange LED When Wallmote Sends Out Wake Up Notification",
+			"label": "Enable/Disable LED on Wake Up",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 1,
@@ -156,9 +156,8 @@
 			]
 		},
 		"82": {
-			"label": "Enable/ Disable to Blink The Blue LED (or Yellow LED If Low Battery) For 3 Seconds Before It Changes to Red When The Button Control Message is Failed to Be Sent Out",
+			"label": "Enable/Disable Blinking LED on Command Failure",
 			"valueSize": 1,
-			"unit": "seconds",
 			"minValue": 0,
 			"maxValue": 1,
 			"defaultValue": 1,
@@ -178,7 +177,7 @@
 			]
 		},
 		"83": {
-			"label": "Enable/ Disable to Light On The Orange LED When Wallmote is in Usb Charging",
+			"label": "Enable/Disable LED When Charging",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 1,
@@ -189,7 +188,7 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "Disable, the orange LED will blink 3 times and then be off once the wallmote is usb powered on",
+					"label": "Disable",
 					"value": 0
 				},
 				{
@@ -199,7 +198,7 @@
 			]
 		},
 		"84": {
-			"label": "Enable/ Disable The LED Indication When Pressing The Control Buttons",
+			"label": "Enable/Disable LED on Button Press",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 1,
@@ -220,7 +219,7 @@
 			]
 		},
 		"252": {
-			"label": "Enable/Disable to Lock All Configuration Parameters",
+			"label": "Lock Configuration Parameters",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 1,
@@ -241,7 +240,7 @@
 			]
 		},
 		"255": {
-			"label": "Reset The Mote",
+			"label": "Reset Device",
 			"valueSize": 4,
 			"minValue": 0,
 			"maxValue": 1431655765,
