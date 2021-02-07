@@ -18,7 +18,7 @@
 	},
 	"paramInformation": {
 		"1": {
-			"label": "Reverse Reporting Operation",
+			"label": "Normal Operation State",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 1,
