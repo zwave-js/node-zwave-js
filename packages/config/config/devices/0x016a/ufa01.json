@@ -95,7 +95,7 @@
 		"111": {
 			"label": "Battery Report Interval",
 			"valueSize": 4,
-			"unit": "seconds',
+			"unit": "seconds",
 			"minValue": 0,
 			"maxValue": 606480,
 			"defaultValue": 86640,
