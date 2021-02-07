@@ -1,5 +1,5 @@
 // Fantem FT102
-// Touch
+// Oomi Touch
 {
 	"manufacturer": "Fantem",
 	"manufacturerId": "0x016a",
@@ -18,7 +18,7 @@
 	},
 	"paramInformation": {
 		"80": {
-			"label": "Configure Which Command Would Be Sent When The Sensor is Triggered",
+			"label": "Command Type When Triggered",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 1,
