@@ -19,7 +19,6 @@
 	"paramInformation": {
 		"1": {
 			"label": "Buzzer Volume",
-			"description": "100 is max volume. 0 is off",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 100,
@@ -31,7 +30,7 @@
 		},
 		"2": {
 			"label": "Discovery Mode",
-			"description": "Start, stop, or get the results of discovery mode. retrieve the configuration parameter to obtain the results of discovery mode: 0=not enabled, 1=enabled, 2=timed out, 3=failure",
+			"description": "Start, stop, or get the results of discovery mode. Retrieve the configuration parameter to obtain the results: 0=not enabled, 1=enabled, 2=timed out, 3=failure",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 1,
@@ -53,7 +52,6 @@
 		},
 		"3": {
 			"label": "Sleep Mode",
-			"description": "Turn sleep mode on or off",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 1,
