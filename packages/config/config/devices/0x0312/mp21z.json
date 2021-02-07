@@ -1,57 +1,75 @@
-// NIE Technology Co., Ltd. MP21Z
-// Zwave Plug 1 channel plugin outlet
+// Minoston MP21Z
+// Smart Plug - 1 channel
 {
-	"manufacturer": "NIE Technology Co., Ltd.",
+	"manufacturer": "Minoston",
 	"manufacturerId": "0x0312",
 	"label": "MP21Z",
-	"description": "Zwave Mini Smart Plug",
+	"description": "Smart Plug - 1 channel",
 	"devices": [
 		{
 			"productType": "0xff00",
-			"productId": "0xff0c"
+			"productId": "0xff06",
+			"zwaveAllianceId": 3715
+		},
+		{
+			"productType": "0xff00",
+			"productId": "0xff0c",
+			"zwaveAllianceId": 3973
 		}
 	],
 	"firmwareVersion": {
 		"min": "0.0",
 		"max": "255.255"
 	},
-	"supportsZWavePlus": true,
 	"paramInformation": {
 		"1": {
-			"label": "LED",
-			"description": "Status LED Configuration",
+			"label": "Status LED Configuration",
 			"valueSize": 1,
 			"minValue": 0,
-			"maxValue": 2,
+			"maxValue": 3,
 			"defaultValue": 0,
+			"unsigned": true,
 			"readOnly": false,
 			"writeOnly": false,
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "Outlet on, LED on",
+					"label": "LED on when load off, LED off when load on",
 					"value": 0
 				},
 				{
-					"label": "Outlet on, LED off",
+					"label": "LED on when load on, LED off when load off",
 					"value": 1
 				},
 				{
-					"label": "LED off",
+					"label": "LED always off",
 					"value": 2
 				}
 			]
 		},
 		"2": {
-			"label": "Count Down Configuration",
+			"label": "Auto-Off Timer",
 			"valueSize": 2,
-			"minValue": 0,
-			"maxValue": 32767,
-			"defaultValue": 0,
 			"unit": "seconds",
+			"minValue": 0,
+			"maxValue": 36000,
+			"defaultValue": 0,
+			"unsigned": true,
 			"readOnly": false,
 			"writeOnly": false,
-			"allowManualEntry": true
+			"allowManualEntry": true,
+			"options": [
+				{
+					"label": "Disabled",
+					"value": 0
+				}
+			]
 		}
+	},
+	"metadata": {
+		"inclusion": "ADD the MP21Z from the existing Z-Wave home control network with your primary controller.\n ---Refer to your primary controller instructions to process the inclusion / exclusion setup procedure.\n ---When prompted by your primary controller, click the Up or Down button three times in one second.\nInclude MP21Z to/from a Z-Wave Gateway with supporting Security.The MP21Z can support the Primary Controller that implemented the security S2",
+		"exclusion": "Remove the MP21Z from the existing Z-Wave home control network with your primary controller.\n ---Refer to your primary controller instructions to process the inclusion / exclusion setup procedure.\n ---When prompted by your primary controller, click the Up or Down button three times in one second.\nInclude MP21Z to/from a Z-Wave Gateway with supporting Security.The MP21Z can support the Primary Controller that implemented the security S2",
+		"reset": "MANUAL RESET\n ---Power off MP21Z\n ---keep holding the PROG button\n ---Power on,Press and keep holding the PROG button for no less than 10 seconds.\nPlease use this procedure only when the network primary controller is missing or otherwise inoperable.\"",
+		"manual": "https://products.z-wavealliance.org/ProductManual/File?folder=&filename=product_documents/3715/MP21Z-Manual171102.pdf"
 	}
 }
