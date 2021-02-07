@@ -4,6 +4,7 @@
 	"manufacturer": "Wink Inc.",
 	"manufacturerId": "0x017f",
 	"label": "Wink Motion Sensor",
+	"description": "Wink Motion Sensor",
 	"devices": [
 		{
 			"productType": "0x0101",
