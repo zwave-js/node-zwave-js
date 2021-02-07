@@ -81,6 +81,14 @@ function getSupportedSubsystemTypesValueId(endpoint?: number): ValueID {
 	};
 }
 
+function getTargetStateValueId(endpoint: number | undefined): ValueID {
+	return {
+		commandClass: CommandClasses["Barrier Operator"],
+		endpoint,
+		property: "targetState",
+	};
+}
+
 // All the supported commands
 export enum BarrierOperatorCommand {
 	Set = 0x01,
@@ -134,12 +142,12 @@ export class BarrierOperatorCCAPI extends CCAPI {
 			this.commandOptions,
 		);
 		if (response) {
-			return pick(response, ["state", "position"]);
+			return pick(response, ["currentState", "position"]);
 		}
 	}
 
 	public async set(
-		state: BarrierState.Open | BarrierState.Closed,
+		targetState: BarrierState.Open | BarrierState.Closed,
 	): Promise<void> {
 		this.assertSupportsCommand(
 			BarrierOperatorCommand,
@@ -149,7 +157,7 @@ export class BarrierOperatorCCAPI extends CCAPI {
 		const cc = new BarrierOperatorCCSet(this.driver, {
 			nodeId: this.endpoint.nodeId,
 			endpoint: this.endpoint.index,
-			state,
+			targetState,
 		});
 		await this.driver.sendCommand(cc, this.commandOptions);
 	}
@@ -216,7 +224,7 @@ export class BarrierOperatorCCAPI extends CCAPI {
 		{ property, propertyKey },
 		value,
 	): Promise<void> => {
-		if (property === "state") {
+		if (property === "targetState") {
 			if (typeof value !== "number") {
 				throwWrongValueType(
 					this.ccId,
@@ -225,7 +233,11 @@ export class BarrierOperatorCCAPI extends CCAPI {
 					typeof value,
 				);
 			}
-			await this.set(value);
+			await this.set(
+				value === BarrierState.Closed
+					? BarrierState.Closed
+					: BarrierState.Open,
+			);
 		} else if (property === "signalingState") {
 			if (propertyKey == undefined) {
 				throwMissingPropertyKey(this.ccId, property);
@@ -251,7 +263,7 @@ export class BarrierOperatorCCAPI extends CCAPI {
 		propertyKey,
 	}): Promise<unknown> => {
 		switch (property) {
-			case "state":
+			case "currentState":
 			case "position":
 				return (await this.get())?.[property];
 			case "signalingState":
@@ -289,6 +301,19 @@ export class BarrierOperatorCC extends CommandClass {
 			} interview...`,
 			direction: "none",
 		});
+
+		// Create targetState value if it does not exist
+		const targetStateValueID = getTargetStateValueId(this.endpointIndex);
+		if (!node.valueDB.hasMetadata(targetStateValueID)) {
+			node.valueDB.setMetadata(targetStateValueID, {
+				...ValueMetadata.UInt8,
+				label: "Target Barrier State",
+				states: enumValuesToMetadataStates(BarrierState, [
+					BarrierState.Open,
+					BarrierState.Closed,
+				]),
+			});
+		}
 
 		let supportedSubsystems: readonly SubsystemType[];
 		if (complete) {
@@ -347,7 +372,7 @@ export class BarrierOperatorCC extends CommandClass {
 }
 
 interface BarrierOperatorCCSetOptions extends CCCommandOptions {
-	state: BarrierState.Open | BarrierState.Closed;
+	targetState: BarrierState.Open | BarrierState.Closed;
 }
 
 @CCCommand(BarrierOperatorCommand.Set)
@@ -365,21 +390,21 @@ export class BarrierOperatorCCSet extends BarrierOperatorCC {
 				ZWaveErrorCodes.Deserialization_NotImplemented,
 			);
 		} else {
-			this.state = options.state;
+			this.targetState = options.targetState;
 		}
 	}
 
-	public state: BarrierState.Open | BarrierState.Closed;
+	public targetState: BarrierState.Open | BarrierState.Closed;
 
 	public serialize(): Buffer {
-		this.payload = Buffer.from([this.state]);
+		this.payload = Buffer.from([this.targetState]);
 		return super.serialize();
 	}
 
 	public toLogEntry(): MessageOrCCLogEntry {
 		return {
 			...super.toLogEntry(),
-			message: { "target state": this.state },
+			message: { "target state": this.targetState },
 		};
 	}
 }
@@ -400,16 +425,16 @@ export class BarrierOperatorCCReport extends BarrierOperatorCC {
 		// return undefined position
 
 		const payloadValue = this.payload[0];
-		this.state = payloadValue;
+		this.currentState = payloadValue;
 		this.position = undefined;
 		if (payloadValue <= 99) {
 			this.position = payloadValue;
 			if (payloadValue > 0) {
-				this.state = undefined;
+				this.currentState = undefined;
 			}
 		} else if (payloadValue === 255) {
 			this.position = 100;
-			this.state = payloadValue;
+			this.currentState = payloadValue;
 		}
 
 		this.persistValues();
@@ -417,12 +442,11 @@ export class BarrierOperatorCCReport extends BarrierOperatorCC {
 
 	@ccValue()
 	@ccValueMetadata({
-		...ValueMetadata.UInt8,
-		label: "Barrier State",
+		...ValueMetadata.ReadOnlyUInt8,
+		label: "Current Barrier State",
 		states: enumValuesToMetadataStates(BarrierState),
-		// TODO: When written, this should only accept OPEN and CLOSE
 	})
-	public readonly state: BarrierState | undefined;
+	public readonly currentState: BarrierState | undefined;
 
 	@ccValue()
 	@ccValueMetadata({
@@ -439,8 +463,8 @@ export class BarrierOperatorCCReport extends BarrierOperatorCC {
 			message: {
 				"barrier position": this.position,
 				"barrier state":
-					this.state != undefined
-						? getEnumMemberName(BarrierState, this.state)
+					this.currentState != undefined
+						? getEnumMemberName(BarrierState, this.currentState)
 						: "unknown",
 			},
 		};
