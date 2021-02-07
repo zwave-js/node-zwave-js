@@ -95,7 +95,7 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "Basic Set",
+					"label": "Basic set",
 					"value": 1
 				},
 				{
@@ -103,7 +103,7 @@
 					"value": 2
 				},
 				{
-					"label": "Basic Set and sensor binary report",
+					"label": "Basic set and sensor binary report",
 					"value": 3
 				}
 			]
