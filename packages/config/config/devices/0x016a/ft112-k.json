@@ -77,7 +77,7 @@
 			"description": "The range of interval can be set to 0 to 606,480 (7 days)",
 			"valueSize": 4,
 			"minValue": 0,
-			"maxValue": 606,480,
+			"maxValue": 606480,
 			"defaultValue": 86640,
 			"unsigned": true,
 			"readOnly": false,
