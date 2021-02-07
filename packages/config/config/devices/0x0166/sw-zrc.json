@@ -1,10 +1,10 @@
 // CBCC Domotique SAS SW-ZRC
-// Z-Wave remote control (aka RemSwiid)
+// RemSwiid Z-Wave remote control
 {
 	"manufacturer": "CBCC Domotique SAS",
 	"manufacturerId": "0x0166",
 	"label": "SW-ZRC",
-	"description": "Z-Wave remote control (aka RemSwiid)",
+	"description": "RemSwiid Z-Wave remote control",
 	"devices": [
 		{
 			"productType": "0x0002",
@@ -16,134 +16,302 @@
 		"min": "0.0",
 		"max": "255.255"
 	},
-	"associations": {
-		"9": {
-			"label": "Group 9",
-			"maxNodes": 8,
-			"isLifeline": true
-		}
-	},
 	"paramInformation": {
 		"1": {
-			"label": "Set Priority Association Group Number For an Association Source Node",
+			"label": "Source Node Priority Association Group",
+			"description": "Set priority Association Group number for an Association Source Node",
 			"valueSize": 1,
 			"minValue": 1,
-			"maxValue": 1,
+			"maxValue": 2,
 			"defaultValue": 1,
 			"unsigned": true,
-			"readOnly": true,
-			"writeOnly": true,
-			"allowManualEntry": true
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Association Group 1",
+					"value": 1
+				},
+				{
+					"label": "Association Group 2",
+					"value": 2
+				}
+			]
 		},
 		"2": {
 			"label": "Function of Remswiid™ Device Key A",
 			"valueSize": 1,
 			"minValue": 0,
-			"maxValue": 1,
+			"maxValue": 3,
 			"defaultValue": 1,
 			"unsigned": true,
-			"readOnly": true,
-			"writeOnly": true,
-			"allowManualEntry": true
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Disabled",
+					"value": 0
+				},
+				{
+					"label": "Basic / Multilevel Switch 2",
+					"value": 1
+				},
+				{
+					"label": "Control Central Scene 1",
+					"value": 2
+				},
+				{
+					"label": "Control Scene Activation 1",
+					"value": 3
+				}
+			]
 		},
 		"3": {
 			"label": "Function of Remswiid™ Device Key B",
 			"valueSize": 1,
 			"minValue": 0,
-			"maxValue": 1,
+			"maxValue": 3,
 			"defaultValue": 1,
 			"unsigned": true,
-			"readOnly": true,
-			"writeOnly": true,
-			"allowManualEntry": true
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Disabled",
+					"value": 0
+				},
+				{
+					"label": "Basic / Multilevel Switch 3",
+					"value": 1
+				},
+				{
+					"label": "Control Central Scene 2",
+					"value": 2
+				},
+				{
+					"label": "Control Scene Activation 2",
+					"value": 3
+				}
+			]
 		},
 		"4": {
 			"label": "Function of Remswiid™ Device Key C",
 			"valueSize": 1,
 			"minValue": 0,
-			"maxValue": 1,
+			"maxValue": 3,
 			"defaultValue": 1,
 			"unsigned": true,
-			"readOnly": true,
-			"writeOnly": true,
-			"allowManualEntry": true
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Disabled",
+					"value": 0
+				},
+				{
+					"label": "Basic / Multilevel Switch 4",
+					"value": 1
+				},
+				{
+					"label": "Control Central Scene 3",
+					"value": 2
+				},
+				{
+					"label": "Control Scene Activation 3",
+					"value": 3
+				}
+			]
 		},
 		"5": {
 			"label": "Function of Remswiid™ Device Key D",
 			"valueSize": 1,
 			"minValue": 0,
-			"maxValue": 1,
+			"maxValue": 3,
 			"defaultValue": 1,
 			"unsigned": true,
-			"readOnly": true,
-			"writeOnly": true,
-			"allowManualEntry": true
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Disabled",
+					"value": 0
+				},
+				{
+					"label": "Basic / Multilevel Switch 5",
+					"value": 1
+				},
+				{
+					"label": "Control Central Scene 4",
+					"value": 2
+				},
+				{
+					"label": "Control Scene Activation 4",
+					"value": 3
+				}
+			]
 		},
 		"6": {
 			"label": "Function of Remswiid™ Device Key E",
 			"valueSize": 1,
 			"minValue": 0,
-			"maxValue": 1,
+			"maxValue": 3,
 			"defaultValue": 1,
 			"unsigned": true,
-			"readOnly": true,
-			"writeOnly": true,
-			"allowManualEntry": true
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Disabled",
+					"value": 0
+				},
+				{
+					"label": "Basic / Multilevel Switch 6",
+					"value": 1
+				},
+				{
+					"label": "Control Central Scene 5",
+					"value": 2
+				},
+				{
+					"label": "Control Scene Activation 5",
+					"value": 3
+				}
+			]
 		},
 		"7": {
 			"label": "Function of Remswiid™ Device Key F",
 			"valueSize": 1,
 			"minValue": 0,
-			"maxValue": 1,
+			"maxValue": 3,
 			"defaultValue": 1,
 			"unsigned": true,
-			"readOnly": true,
-			"writeOnly": true,
-			"allowManualEntry": true
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Disabled",
+					"value": 0
+				},
+				{
+					"label": "Basic / Multilevel Switch 7",
+					"value": 1
+				},
+				{
+					"label": "Control Central Scene 6",
+					"value": 2
+				},
+				{
+					"label": "Control Scene Activation 6",
+					"value": 3
+				}
+			]
 		},
 		"8": {
 			"label": "Function of Remswiid™ Device Key G",
 			"valueSize": 1,
 			"minValue": 0,
-			"maxValue": 1,
+			"maxValue": 3,
 			"defaultValue": 1,
 			"unsigned": true,
-			"readOnly": true,
-			"writeOnly": true,
-			"allowManualEntry": true
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Disabled",
+					"value": 0
+				},
+				{
+					"label": "Basic / Multilevel Switch 8",
+					"value": 1
+				},
+				{
+					"label": "Control Central Scene 7",
+					"value": 2
+				},
+				{
+					"label": "Control Scene Activation 7",
+					"value": 3
+				}
+			]
 		},
 		"9": {
 			"label": "Function of Remswiid™ Device Key H",
 			"valueSize": 1,
 			"minValue": 0,
-			"maxValue": 1,
+			"maxValue": 3,
 			"defaultValue": 1,
 			"unsigned": true,
-			"readOnly": true,
-			"writeOnly": true,
-			"allowManualEntry": true
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Disabled",
+					"value": 0
+				},
+				{
+					"label": "Basic / Multilevel Switch 9",
+					"value": 1
+				},
+				{
+					"label": "Control Central Scene 8",
+					"value": 2
+				},
+				{
+					"label": "Control Scene Activation 8",
+					"value": 3
+				}
+			]
 		},
 		"10": {
 			"label": "Send Unsolicited Battery Report On Wake Up",
 			"valueSize": 1,
 			"minValue": 0,
-			"maxValue": 0,
+			"maxValue": 1,
 			"defaultValue": 0,
 			"unsigned": true,
-			"readOnly": true,
-			"writeOnly": true,
-			"allowManualEntry": true
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "To same node as wakeup notification",
+					"value": 0
+				},
+				{
+					"label": "Broadcast to neighbors",
+					"value": 1
+				}
+			]
 		},
 		"11": {
 			"label": "Dimming Mode",
 			"valueSize": 1,
 			"minValue": 0,
-			"maxValue": 0,
+			"maxValue": 1,
 			"defaultValue": 0,
 			"unsigned": true,
-			"readOnly": true,
-			"writeOnly": true,
-			"allowManualEntry": true
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Continue dimming until stop key is pressed",
+					"value": 0
+				},
+				{
+					"label": "Stop dimming when up or down key is released",
+					"value": 1
+				}
+			]
 		}
 	},
 	"metadata": {
