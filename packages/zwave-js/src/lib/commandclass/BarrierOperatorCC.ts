@@ -89,14 +89,6 @@ function getTargetStateValueId(endpoint: number | undefined): ValueID {
 	};
 }
 
-function getCurrentStateValueId(endpoint: number | undefined): ValueID {
-	return {
-		commandClass: CommandClasses["Barrier Operator"],
-		endpoint,
-		property: "currentState",
-	};
-}
-
 // All the supported commands
 export enum BarrierOperatorCommand {
 	Set = 0x01,
