@@ -15,7 +15,7 @@ on:
 
 jobs:
   lint:
-    if: contains(github.event.head_commit.message, '[skip ci]') == false
+    # if: contains(github.event.head_commit.message, '[skip ci]') == false
 
     runs-on: ubuntu-latest
     strategy:
@@ -50,8 +50,32 @@ jobs:
     - name: Compile TypeScript code
       run: yarn run build
 
-    - name: Lint TypeScript code
-      run: yarn run lint
+    - name: Lint
+      id: lint
+      run: |
+        # Run all lint commands and abort if one has unfixable errors
+        yarn run lint:ts --fix
+        yarn run lint:wotan --fix
+        yarn run lint:configjson -w
+
+        if ! git diff --quiet ; then
+          echo "has changes"
+          git diff > fix.patch
+          echo "::set-output name=changed::true"
+        else
+          echo "unchanged"
+          echo "::set-output name=changed::false"
+        fi
+
+
+    - name: Upload Patch
+      if: |
+        github.event_name == 'pull_request' &&
+        steps.lint.outputs.changed == 'true'
+      uses: actions/upload-artifact@v2
+      with:
+        name: lint-fix
+        path: fix.patch
 
   # ===================
 
