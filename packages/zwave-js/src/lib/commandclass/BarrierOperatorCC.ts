@@ -248,16 +248,9 @@ export class BarrierOperatorCCAPI extends CCAPI {
 					: BarrierState.Open;
 			await this.set(targetValue);
 
-			// If the command did not fail, assume that it succeeded and update the currentState accordingly
-			// so UIs have immediate feedback
+			// Verify the change after a delay
 			if (this.isSinglecast()) {
-				const valueDB = this.endpoint.getNodeUnsafe()?.valueDB;
-				valueDB?.setValue(
-					getCurrentStateValueId(this.endpoint.index),
-					targetValue === BarrierState.Closed
-						? BarrierState.Closing
-						: BarrierState.Opening,
-				);
+				this.schedulePoll({ property });
 			}
 		} else if (property === "signalingState") {
 			if (propertyKey == undefined) {
