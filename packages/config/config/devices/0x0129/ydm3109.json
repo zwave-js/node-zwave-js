@@ -1,10 +1,10 @@
-// ASSA ABLOY YDM3109+
-// Digital Door Lock
+// Yale YDM3109
+// Smart Door Lock
 {
-	"manufacturer": "ASSA ABLOY",
+	"manufacturer": "Yale",
 	"manufacturerId": "0x0129",
-	"label": "YDM3109+",
-	"description": "Digital Door Lock",
+	"label": "YDM3109",
+	"description": "Smart Door Lock",
 	"devices": [
 		{
 			"productType": "0xc600",

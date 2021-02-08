@@ -1,10 +1,10 @@
-// ASSA ABLOY YRD446
-// Yale Real Living Key Free Touchscreen Assure Lock with Z-Wave and Bluetooth
+// Yale YRD446
+// Real Living Assure Lock with Z-Wave and Bluetooth
 {
-	"manufacturer": "ASSA ABLOY",
+	"manufacturer": "Yale",
 	"manufacturerId": "0x0129",
 	"label": "YRD446",
-	"description": "Yale Real Living Key Free Touchscreen Assure Lock with Z-Wave and Bluetooth",
+	"description": "Real Living Assure Lock with Z-Wave and Bluetooth",
 	"devices": [
 		{
 			"productType": "0x8002",
@@ -157,11 +157,11 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "Off",
+					"label": "Disable",
 					"value": 0
 				},
 				{
-					"label": "On",
+					"label": "Enable",
 					"value": 255
 				}
 			]
@@ -178,11 +178,11 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "Off",
+					"label": "Disable",
 					"value": 0
 				},
 				{
-					"label": "On",
+					"label": "Enable",
 					"value": 255
 				}
 			]
@@ -199,27 +199,27 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "Off",
+					"label": "Disable",
 					"value": 0
 				},
 				{
-					"label": "On",
+					"label": "Enable",
 					"value": 255
 				}
 			]
 		},
 		"15": {
-			"label": "Reset To Factory Defaults",
+			"label": "Reset to Factory Defaults",
 			"valueSize": 1,
-			"minValue": 0,
+			"minValue": 1,
 			"maxValue": 1,
-			"defaultValue": 0,
+			"defaultValue": 1,
 			"readOnly": false,
 			"writeOnly": false,
-			"allowManualEntry": true,
+			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "Factory Reset",
+					"label": "Reset Device",
 					"value": 1
 				}
 			]

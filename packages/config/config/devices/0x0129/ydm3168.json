@@ -1,9 +1,10 @@
-// ASSA ABLOY YDM3168
+// Yale YDM3168
+// Digital Door Lock
 {
-	"manufacturer": "ASSA ABLOY",
+	"manufacturer": "Yale",
 	"manufacturerId": "0x0129",
 	"label": "YDM3168",
-	"description": "",
+	"description": "Digital Door Lock",
 	"devices": [
 		{
 			"productType": "0x0040",

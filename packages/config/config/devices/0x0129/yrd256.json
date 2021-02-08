@@ -1,10 +1,10 @@
-// ASSA ABLOY YRD256
-// Touchscreen deadbolt without keyway
+// Yale YRD256
+// Touchscreen SL Touchscreen Deadbolt
 {
-	"manufacturer": "ASSA ABLOY",
+	"manufacturer": "Yale",
 	"manufacturerId": "0x0129",
 	"label": "YRD256",
-	"description": "Touchscreen deadbolt without keyway",
+	"description": "Assure SL Touchscreen Deadbolt",
 	"devices": [
 		{
 			"productType": "0x8002",
@@ -148,6 +148,85 @@
 				{
 					"label": "Disable Zwave",
 					"value": 3
+				}
+			]
+		},
+		"11": {
+			"label": "One Touch Locking",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 255,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Disable",
+					"value": 0
+				},
+				{
+					"label": "Enable",
+					"value": 255
+				}
+			]
+		},
+		"12": {
+			"label": "Privacy Button",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 0,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Disable",
+					"value": 0
+				},
+				{
+					"label": "Enable",
+					"value": 255
+				}
+			]
+		},
+		"13": {
+			"label": "Lock Status LED",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 0,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Disable",
+					"value": 0
+				},
+				{
+					"label": "Enable",
+					"value": 255
+				}
+			]
+		},
+		"15": {
+			"label": "Reset to Factory Defaults",
+			"valueSize": 1,
+			"minValue": 1,
+			"maxValue": 1,
+			"defaultValue": 1,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Reset Device",
+					"value": 1
 				}
 			]
 		}

@@ -1,10 +1,10 @@
 // Yale YRL210 / YRL220
-// Yale Real Living Touchscreen Lever Lock
+// Real Living Touchscreen Lever Lock
 {
 	"manufacturer": "Yale",
 	"manufacturerId": "0x0129",
 	"label": "YRL210 / YRL220",
-	"description": "Yale Real Living Touchscreen Lever Lock",
+	"description": "Real Living Touchscreen Lever Lock",
 	"devices": [
 		{
 			"productType": "0x0000",
@@ -181,11 +181,11 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "OFF",
+					"label": "Disable",
 					"value": 0
 				},
 				{
-					"label": "ON",
+					"label": "Enable",
 					"value": 255
 				}
 			]
@@ -202,11 +202,11 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "OFF",
+					"label": "Disable",
 					"value": 0
 				},
 				{
-					"label": "ON",
+					"label": "Enable",
 					"value": 255
 				}
 			]
@@ -223,11 +223,11 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "OFF",
+					"label": "Disable",
 					"value": 0
 				},
 				{
-					"label": "ON",
+					"label": "Enable",
 					"value": 255
 				}
 			]
@@ -236,19 +236,15 @@
 			"label": "Reset to Factory Defaults",
 			"valueSize": 1,
 			"minValue": 1,
-			"maxValue": 2,
-			"defaultValue": 0,
+			"maxValue": 1,
+			"defaultValue": 1,
 			"readOnly": false,
 			"writeOnly": false,
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "Lock will execute Reset To Factory",
+					"label": "Reset Device",
 					"value": 1
-				},
-				{
-					"label": "Reserved for future use",
-					"value": 2
 				}
 			]
 		}
