@@ -39,7 +39,7 @@
 			]
 		},
 		"255": {
-			"label": "Reset Your Touch",
+			"label": "Reset the Device",
 			"valueSize": 4,
 			"minValue": 0,
 			"maxValue": 1431655765,
@@ -54,7 +54,7 @@
 					"value": 0
 				},
 				{
-					"label": "Reset the touch to factory default settings",
+					"label": "Reset the device to factory default settings",
 					"value": 1431655765
 				}
 			]

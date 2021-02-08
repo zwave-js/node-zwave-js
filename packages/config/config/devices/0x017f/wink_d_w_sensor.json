@@ -32,7 +32,6 @@
 		"2": {
 			"label": "Basic Set Level",
 			"valueSize": 1,
-			"unit": "%",
 			"minValue": 0,
 			"maxValue": 255,
 			"defaultValue": 99,

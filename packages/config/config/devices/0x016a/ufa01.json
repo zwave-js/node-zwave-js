@@ -193,7 +193,7 @@
 			]
 		},
 		"255": {
-			"label": "Reset The Sensor",
+			"label": "Reset The Device",
 			"valueSize": 4,
 			"minValue": 0,
 			"maxValue": 1431655765,
