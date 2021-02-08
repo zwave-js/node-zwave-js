@@ -232,7 +232,7 @@
 		},
 		"18": {
 			"label": "Enable/Disable Door Open Timer",
-			"description": "Note: Optional Door Position Switch must hvae been installed with the lock.",
+			"description": "Note: Optional Door Position Switch must have been installed with the lock.",
 			"valueSize": 1,
 			"unit": "10 seconds",
 			"minValue": 0,
@@ -251,7 +251,7 @@
 		},
 		"19": {
 			"label": "Enable/Disable Door Position Alarm",
-			"description": "Optional Door Position Switch must hvae been installed with the lock.",
+			"description": "Optional Door Position Switch must have been installed with the lock.",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 255,
@@ -273,7 +273,7 @@
 		},
 		"24": {
 			"label": "Check Door Position State Before Locking",
-			"description": "Note: Optional Door Position Switch must hvae been installed with the lock.",
+			"description": "Note: Optional Door Position Switch must have been installed with the lock.",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 255,
