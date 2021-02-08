@@ -109,17 +109,8 @@
 		},
 		"6": {
 			"label": "Floor maximum temperature (FHi)",
-<<<<<<< HEAD
-			"description": "Floor maximum temperature (FHi), 1 equals 0.1 °C",
-<<<<<<< HEAD
-			"unit": "°C",
-=======
-			"unit": ".1°C",
->>>>>>> 73f2aa96... fix: remove similar descriptions
-=======
-			"unit": ".1°C",
->>>>>>> b2c8e33f... fix: manual corrections
 			"valueSize": 2,
+			"unit": ".1°C",
 			"minValue": 50,
 			"maxValue": 400,
 			"defaultValue": 400,
