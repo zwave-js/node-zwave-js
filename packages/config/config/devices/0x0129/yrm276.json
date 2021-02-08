@@ -222,7 +222,7 @@
 			"options": [
 				{
 					"label": "Normal Operation",
-					"value": 1
+					"value": 0
 				},
 				{
 					"label": "Reset Device",
