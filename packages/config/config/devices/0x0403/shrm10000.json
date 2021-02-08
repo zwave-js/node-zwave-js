@@ -1,0 +1,31 @@
+{
+	"manufacturer": "ABUS Security-Center GmbH Co. KG",
+	"manufacturerId": "0x0403",
+	"label": "SHRM10000",
+	"description": "Smart Smoke Sensor",
+	"devices": [
+		{
+			"productType": "0x0002",
+			"productId": "0x0003"
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"associations": {
+		"1": {
+			"label": "LifeLine",
+			"maxNodes": 1,
+			"isLifeline": true
+		},
+		"2": {
+			"label": "Binary Sensor",
+			"maxNodes": 5
+		},
+		"3": {
+			"label": "Notification",
+			"maxNodes": 5
+		}
+	}
+}

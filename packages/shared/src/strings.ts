@@ -30,3 +30,7 @@ export function buffer2hex(buffer: Buffer, uppercase: boolean = false): string {
 export function isPrintableASCII(text: string): boolean {
 	return /^[\u0020-\u007e]*$/.test(text);
 }
+
+export function isPrintableASCIIWithNewlines(text: string): boolean {
+	return /^[\r\n]*[\u0020-\u007e]*[\r\n]*$/.test(text);
+}

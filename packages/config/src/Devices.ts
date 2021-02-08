@@ -28,9 +28,11 @@ export interface FirmwareVersionRange {
 
 export interface DeviceConfigIndexEntry {
 	manufacturerId: string;
+	manufacturer: string;
+	label: string;
 	productType: string;
 	productId: string;
-	firmwareVersion: FirmwareVersionRange | false;
+	firmwareVersion: FirmwareVersionRange;
 	filename: string;
 }
 
@@ -136,6 +138,8 @@ export async function loadDeviceIndexInternal(
 						manufacturerId: formatId(
 							config.manufacturerId.toString(16),
 						),
+						manufacturer: config.manufacturer,
+						label: config.label,
 						...dev,
 						firmwareVersion: config.firmwareVersion,
 						filename: relativePath,
