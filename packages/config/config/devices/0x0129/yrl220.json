@@ -235,13 +235,17 @@
 		"15": {
 			"label": "Reset to Factory Defaults",
 			"valueSize": 1,
-			"minValue": 1,
+			"minValue": 0,
 			"maxValue": 1,
-			"defaultValue": 1,
+			"defaultValue": 0,
 			"readOnly": false,
 			"writeOnly": false,
 			"allowManualEntry": false,
 			"options": [
+				{
+					"label": "Normal Operation",
+					"value": 0
+				},
 				{
 					"label": "Reset Device",
 					"value": 1
