@@ -123,6 +123,7 @@
 		},
 		"8": {
 			"label": "Operating Mode",
+			"description": "Normal (default)\nVacation = keypad lockout\nPrivacy = no keypad, RF Unlock will work",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 2,
