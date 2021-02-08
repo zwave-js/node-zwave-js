@@ -1,0 +1,27 @@
+// Dawon DNS SMARTPLUG01
+// Smart 1ch plugin outlet
+{
+	"manufacturer": "Dawon DNS",
+	"manufacturerId": "0x018c",
+	"label": "UEA01A",
+	"description": "Smart Plug",
+	"devices": [
+		{
+			"productType": "0x0043",
+			"productId": "0x0001",
+			"zwaveAllianceId": 2661
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"metadata": {
+		"inclusion": "Press the button on the Smart Plug for more than five seconds after you plug the Smart Plug into a power outlet
+will Inclusion in the network controller, while the flashing red button LED Smart Plug.",
+		"exclusion": "Press the button on the Smart Plug for more than five seconds after you plug the Smart Plug into a power outlet
+will Exclusion in the network controller, while the flashing red button LED Smart Plug",
+		"reset": "Press the button on the Smart Plug for more than 10 seconds after you plug the Smart Plug into a power outlet will
+make a Exclusion in the network controller, while blinking LED Smart Plug LED. And all the variables are initialized"
+	}
+}
