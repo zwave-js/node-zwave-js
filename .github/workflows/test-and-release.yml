@@ -67,7 +67,6 @@ jobs:
           echo "::set-output name=changed::false"
         fi
 
-
     - name: Upload Patch
       if: |
         github.event_name == 'pull_request' &&
@@ -76,6 +75,12 @@ jobs:
       with:
         name: lint-fix
         path: fix.patch
+
+    - name: Fail job
+      if: steps.lint.outputs.changed == 'true'
+      run: |
+        echo "The lint failed"
+        exit 1
 
   # ===================
 
