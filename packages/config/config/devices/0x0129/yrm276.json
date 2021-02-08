@@ -252,7 +252,7 @@
 		},
 		"19": {
 			"label": "Enable/Disable Door Position Alarm",
-			"description": "Optional Door Position Switch must have been installed with the lock.",
+			"description": "Note: Optional Door Position Switch must have been installed with the lock.",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 255,
