@@ -1,10 +1,10 @@
 // Vision Security ZL7435-5
-// In-wall Two Relay
+// In-wall Switch (2 Relays)
 {
 	"manufacturer": "Vision Security",
 	"manufacturerId": "0x0109",
 	"label": "ZL7435-5",
-	"description": "In-wall Two Relay",
+	"description": "In-wall Switch Module (2 Relays)",
 	"devices": [
 		{
 			"productType": "0x2017",
@@ -18,8 +18,7 @@
 	},
 	"paramInformation": {
 		"1": {
-			"label": "Button Mode Switching",
-			"description": "This parameter sets the mode for the wall switch inputs",
+			"label": "Button Mode",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 1,
@@ -30,11 +29,11 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "Switch mode (default)",
+					"label": "Switch (default)",
 					"value": 0
 				},
 				{
-					"label": "Toggle mode",
+					"label": "Toggle",
 					"value": 1
 				}
 			]
