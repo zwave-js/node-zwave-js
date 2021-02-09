@@ -64,7 +64,7 @@ function getSignalingStateMetadata(
 	subsystemType: SubsystemType,
 ): ValueMetadata {
 	return {
-		...ValueMetadata.ReadOnlyUInt8,
+		...ValueMetadata.UInt8,
 		label: `Signaling State (${getEnumMemberName(
 			SubsystemType,
 			subsystemType,
