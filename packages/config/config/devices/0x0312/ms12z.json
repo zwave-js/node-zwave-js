@@ -148,80 +148,91 @@
 			"writeOnly": false,
 			"allowManualEntry": true
 		},
-		"7": {
-			"label": "Association Setting Parameter",
+		"7[0x01]": {
+			"label": "Send Status Change Report: Local Control",
+			"description": "Determine whether a trigger of this type should prompt a status change report to associated devices.",
 			"valueSize": 1,
 			"minValue": 0,
-			"maxValue": 15,
-			"defaultValue": 15,
+			"maxValue": 1,
+			"defaultValue": 1,
 			"unsigned": true,
 			"readOnly": false,
 			"writeOnly": false,
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "None",
+					"label": "Disable",
 					"value": 0
 				},
 				{
-					"label": "Local",
+					"label": "Enable",
 					"value": 1
+				}
+			]
+		},
+		"7[0x02]": {
+			"label": "Send Status Change Report: 3-Way",
+			"description": "Determine whether a trigger of this type should prompt a status change report to associated devices.",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 1,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Disable",
+					"value": 0
 				},
 				{
-					"label": "3-way",
-					"value": 2
+					"label": "Enable",
+					"value": 1
+				}
+			]
+		},
+		"7[0x04]": {
+			"label": "Send Status Change Report: Z-Wave",
+			"description": "Determine whether a trigger of this type should prompt a status change report to associated devices.",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 1,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Disable",
+					"value": 0
 				},
 				{
-					"label": "3-way & Local",
-					"value": 3
+					"label": "Enable",
+					"value": 1
+				}
+			]
+		},
+		"7[0x08]": {
+			"label": "Send Status Change Report: Timer",
+			"description": "Determine whether a trigger of this type should prompt a status change report to associated devices.",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 1,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Disable",
+					"value": 0
 				},
 				{
-					"label": "Z-Wave",
-					"value": 4
-				},
-				{
-					"label": "Z-Wave & Local",
-					"value": 5
-				},
-				{
-					"label": "Z-Wave & 3-way",
-					"value": 6
-				},
-				{
-					"label": "Z-Wave, Local & 3-way",
-					"value": 7
-				},
-				{
-					"label": "Timer",
-					"value": 8
-				},
-				{
-					"label": "Timer & Local",
-					"value": 9
-				},
-				{
-					"label": "Timer & 3-way",
-					"value": 10
-				},
-				{
-					"label": "Timer, 3-way & Local",
-					"value": 11
-				},
-				{
-					"label": "Timer & Z-Wave",
-					"value": 12
-				},
-				{
-					"label": "Timer, Z-Wave & Local",
-					"value": 13
-				},
-				{
-					"label": "Timer, Z-Wave, & 3-way",
-					"value": 14
-				},
-				{
-					"label": "All",
-					"value": 15
+					"label": "Enable",
+					"value": 1
 				}
 			]
 		},
