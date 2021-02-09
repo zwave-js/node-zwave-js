@@ -31,7 +31,6 @@
 	"paramInformation": {
 		"1": {
 			"label": "Siren/Strobe Mode",
-			"description": "User can change value from 0 to 2 to turn either siren sound, strobe light, or both when triggered",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 2,
@@ -42,22 +41,21 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "All enable - default",
+					"label": "Enable all",
 					"value": 0
-				},
-				{
-					"label": "Strobe only",
-					"value": 2
 				},
 				{
 					"label": "Siren only",
 					"value": 1
+				},
+				{
+					"label": "Strobe only",
+					"value": 2
 				}
 			]
 		},
 		"2": {
 			"label": "Alarm Auto Stop Time",
-			"description": "User can change the duration of siren time when triggered",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 3,
@@ -68,20 +66,20 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "30 seconds - default",
+					"label": "30s",
 					"value": 0
 				},
 				{
-					"label": "Will not automatically stop",
-					"value": 3
-				},
-				{
-					"label": "60 seconds",
+					"label": "60s",
 					"value": 1
 				},
 				{
-					"label": "120 seconds",
+					"label": "120s",
 					"value": 2
+				},
+				{
+					"label": "Disable Auto Stop",
+					"value": 3
 				}
 			]
 		}
