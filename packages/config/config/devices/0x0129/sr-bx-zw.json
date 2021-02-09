@@ -18,7 +18,7 @@
 	},
 	"paramInformation": {
 		"1": {
-			"label": "Alarm Length",
+			"label": "Alarm Duration",
 			"valueSize": 1,
 			"unit": "minutes",
 			"minValue": 1,
