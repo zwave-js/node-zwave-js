@@ -3,6 +3,32 @@
 	Placeholder for next release:
 	## __WORK IN PROGRESS__
 -->
+## __WORK IN PROGRESS__
+### Features
+* Added support for `Barrier Operator CC`
+* `Notification CC Reports` with a lock/unlock event are now mapped to `Lock CC` and `Door Lock CC` states.
+
+### Bugfixes
+* `User Code CC V1` reports with a user code that contains only ASCII and newline characters now ignore the newlines
+* `Notification CC Reports` with invalid event parameters are no longer dropped completely
+* Added a workaround for `Notification CC Reports` with embedded `User Code CC Reports` that don't include the user code
+* Added another fallback for Aeotec firmware extraction 
+
+### Config file changes
+* Force Binary Switch support for TKB Home TZ69
+* Add links to device manuals
+* Swap product type and id for Zooz ZEN30
+* Add support for Yale YRM276 lock
+* Reverted the removal of double tap support from some early GE devices
+* Change manufacturer and improve labels for nzw31s and nzw30s
+* Improve Zooz ZEN23 and ZEN24 toggle switch configs
+* Add ABUS SHRM10000
+* Add alternative device id for Heatit Z-Smoke 230V
+* Add support for HomeSeer HS-FLS100-G2
+
+### Changes under the hood
+* Throw better error when parsing a config file fails
+
 ## 6.1.3 (2021-02-05)
 ### Bugfixes
 * The config lint step now correctly fails when a device file cannot be parsed
