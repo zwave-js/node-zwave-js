@@ -1,7 +1,7 @@
-// AEON Labs ZW141
+// Aeotec ZW141
 // Nano Shutter
 {
-	"manufacturer": "AEON Labs",
+	"manufacturer": "Aeotec",
 	"manufacturerId": "0x0086",
 	"label": "ZW141",
 	"description": "Nano Shutter",
@@ -23,21 +23,20 @@
 	},
 	"paramInformation": {
 		"35": {
-			"label": "Set The Moving Time From Up (left) to Down (right) For Curtain",
+			"label": "Moving Time From Up (left) to Down (right) For Curtain",
 			"description": "The available range for time set is 1 to 127 seconds",
 			"valueSize": 1,
 			"unit": "seconds",
-			"minValue": 0,
-			"maxValue": 30,
-			"defaultValue": 30,
+			"minValue": 1,
+			"maxValue": 127,
+			"defaultValue": 127,
 			"unsigned": true,
 			"readOnly": false,
 			"writeOnly": false,
 			"allowManualEntry": true
 		},
 		"80": {
-			"label": "To Set Which Notification Would Be Sent to The Associated Devices (group 1)",
-			"description": "To set which notification would be sent to the associated devices (group 1) when the state of nano shutter is changed",
+			"label": "Notification To Send to The Associated Devices (Group 1) on State Change",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 1,
@@ -58,8 +57,8 @@
 			]
 		},
 		"85": {
-			"label": "Set The Operation Mode of External Switch",
-			"description": "Set the operation mode of external switch.  note: for the description of operation mode 1 or 2, please refer to the user manual",
+			"label": "Operation Mode of External Switch",
+			"description": "Refer to the user manual for the description of operation mode 1 or 2",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 1,
@@ -80,8 +79,7 @@
 			]
 		},
 		"120": {
-			"label": "Configure The External Switch Mode For S1",
-			"description": "Configure the external switch mode for s1",
+			"label": "External Switch Mode For S1",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 4,
@@ -100,7 +98,7 @@
 					"value": 1
 				},
 				{
-					"label": "3 way switch mode",
+					"label": "3-way switch mode",
 					"value": 2
 				},
 				{
@@ -114,8 +112,7 @@
 			]
 		},
 		"121": {
-			"label": "Configure The External Switch Mode For S2",
-			"description": "Configure the external switch mode for s2",
+			"label": "External Switch Mode For S2",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 4,
@@ -134,7 +131,7 @@
 					"value": 1
 				},
 				{
-					"label": "3 way switch mode",
+					"label": "3-way switch mode",
 					"value": 2
 				},
 				{
@@ -148,8 +145,7 @@
 			]
 		},
 		"248": {
-			"label": "Set The Function of S1/S2",
-			"description": "Set the function of s1/s2",
+			"label": "S1/S2 Functionality",
 			"valueSize": 1,
 			"minValue": -128,
 			"maxValue": 4,
@@ -172,7 +168,7 @@
 					"value": 1
 				},
 				{
-					"label": "He function of entering rf power level test mode is enabled",
+					"label": "The function of entering rf power level test mode is enabled",
 					"value": 2
 				},
 				{
@@ -183,7 +179,6 @@
 		},
 		"252": {
 			"label": "Lock/Unlock Configuration Parameters",
-			"description": "Lock/unlock configuration parameters",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 1,
@@ -204,8 +199,7 @@
 			]
 		},
 		"255": {
-			"label": "Reset The Nano Shutter",
-			"description": "Reset the nano shutter to factory default",
+			"label": "Factory Reset",
 			"valueSize": 4,
 			"minValue": 0,
 			"maxValue": 1431655765,
