@@ -54,7 +54,9 @@ jobs:
       run: yarn run lint
 
     - name: Prepare lint auto-fix patch
-      if: ${{ failure() }}
+      if: |
+        failure() &&
+        github.event_name == 'pull_request'
       id: lint
       run: |
         # Run all lint commands and abort if one has unfixable errors
