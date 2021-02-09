@@ -2,7 +2,7 @@
 // KASAIHOUCHIKIADAPTOR01
 {
 	"manufacturer": "KDDI CORPORATION",
-	"manufacturerId": "0x242",
+	"manufacturerId": "0x0242",
 	"label": "UFA01",
 	"description": "Sensor Input device (KASAIHOUCHIKIADAPTOR01)",
 	"devices": [
