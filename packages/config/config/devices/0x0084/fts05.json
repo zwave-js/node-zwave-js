@@ -21,8 +21,8 @@
 			"label": "Temperature Low Threshold",
 			"description": "-10 deg to 69 deg c",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 4,
+			"minValue": -10,
+			"maxValue": 69,
 			"defaultValue": 4,
 			"unsigned": true,
 			"readOnly": false,
@@ -33,7 +33,7 @@
 			"label": "Temperature High Threshold",
 			"description": "-9 deg to 70 deg c",
 			"valueSize": 1,
-			"minValue": 0,
+			"minValue": -9,
 			"maxValue": 70,
 			"defaultValue": 70,
 			"unsigned": true,
@@ -43,7 +43,6 @@
 		},
 		"4": {
 			"label": "Water Alarm Association Mode",
-			"description": "240 or 0",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 240,
@@ -51,7 +50,17 @@
 			"unsigned": true,
 			"readOnly": false,
 			"writeOnly": false,
-			"allowManualEntry": true
+			"allowManualEntry": false
+			"options": [
+				{
+					"label": "On"
+					"value": 240
+				},
+				{
+					"label": "Off"
+					"value": 0
+				}
+				]
 		}
 	},
 	"metadata": {
