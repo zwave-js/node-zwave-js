@@ -53,7 +53,7 @@
 					"value": 2
 				},
 				{
-					"label": "Failure (readOnly)",
+					"label": "Failure (readonly)",
 					"value": 3
 				}
 			]
