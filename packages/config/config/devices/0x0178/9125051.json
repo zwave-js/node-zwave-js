@@ -49,7 +49,7 @@
 					"value": 1
 				},
 				{
-					"label": "Timeout (readOnly)",
+					"label": "Timeout (readonly)",
 					"value": 2
 				},
 				{
