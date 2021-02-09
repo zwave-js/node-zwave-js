@@ -30,7 +30,7 @@
 		},
 		"2": {
 			"label": "Discovery Mode",
-			"description": "Start, stop, or get the results of discovery mode. Retrieve the configuration parameter to obtain the results: 0=disabled, 1=enabled, 2=Timeout, 3=Failure",
+			"description": "Start, stop, or get the results of discovery mode. Retrieve the configuration parameter to obtain the results.",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 3,
