@@ -58,6 +58,7 @@ jobs:
         yarn run lint:wotan --fix
         yarn run lint:configjson -w
 
+        git diff --name-only || true
         if ! git diff --quiet ; then
           echo "has changes"
           git diff > fix.patch
