@@ -21,20 +21,29 @@
 			"label": "Silent Mode On/Off",
 			"description": "Level",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 1,
+			"minValue": 1,
+			"maxValue": 3,
 			"defaultValue": 1,
 			"unsigned": true,
 			"readOnly": false,
 			"writeOnly": false,
-			"allowManualEntry": true
+			"allowManualEntry": false
+			"options": [
+				{
+					"label": "High Volume"
+					"value": 1
+				},
+				{
+					"label": "Silent"
+					"value": 3
+				}
+				]
 		},
 		"2": {
 			"label": "Auto Relock On/Off",
-			"description": "0x00 = off, 0xff = on default is 0x00 or off",
 			"valueSize": 1,
-			"minValue": -128,
-			"maxValue": 0,
+			"minValue": 0,
+			"maxValue": 255,
 			"defaultValue": 0,
 			"unsigned": true,
 			"readOnly": false,
@@ -43,7 +52,7 @@
 			"options": [
 				{
 					"label": "Auto relock on",
-					"value": -128
+					"value": 255
 				},
 				{
 					"label": "Auto relock off",
@@ -53,12 +62,11 @@
 		},
 		"3": {
 			"label": "Auto Relock Time",
-			"description": "Seconds",
 			"valueSize": 1,
 			"unit": "seconds",
-			"minValue": 0,
-			"maxValue": 5,
-			"defaultValue": 5,
+			"minValue": 10,
+			"maxValue": 30,
+			"defaultValue": 30,
 			"unsigned": true,
 			"readOnly": false,
 			"writeOnly": false,
@@ -66,10 +74,10 @@
 		},
 		"4": {
 			"label": "Wrong Code Entry Limit",
-			"description": "Times",
+			"unit": "Times",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 5,
+			"minValue": 3,
+			"maxValue": 10,
 			"defaultValue": 5,
 			"unsigned": true,
 			"readOnly": false,
@@ -78,11 +86,10 @@
 		},
 		"7": {
 			"label": "Shut Down Time (after Wrong Code Entries)",
-			"description": "Seconds",
 			"valueSize": 1,
 			"unit": "seconds",
-			"minValue": 0,
-			"maxValue": 60,
+			"minValue": 10,
+			"maxValue": 180,
 			"defaultValue": 60,
 			"unsigned": true,
 			"readOnly": false,
@@ -91,7 +98,6 @@
 		},
 		"8": {
 			"label": "Operating Mode",
-			"description": "This sets the operating mode for the lock",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 2,
@@ -117,11 +123,10 @@
 		},
 		"11": {
 			"label": "One Touch Locking",
-			"description": "0x00 = off, 0xff = on default is 0xff or on",
 			"valueSize": 1,
-			"minValue": -128,
-			"maxValue": 0,
-			"defaultValue": 0,
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 255,
 			"unsigned": true,
 			"readOnly": false,
 			"writeOnly": false,
@@ -129,7 +134,7 @@
 			"options": [
 				{
 					"label": "One touch locking on",
-					"value": -128
+					"value": 255
 				},
 				{
 					"label": "One touch locking off",
@@ -139,10 +144,9 @@
 		},
 		"12": {
 			"label": "Privacy Button",
-			"description": "0x00 = off, 0xff = on default is 0x00 or off",
 			"valueSize": 1,
-			"minValue": -128,
-			"maxValue": 0,
+			"minValue": 0,
+			"maxValue": 255,
 			"defaultValue": 0,
 			"unsigned": true,
 			"readOnly": false,
@@ -151,7 +155,7 @@
 			"options": [
 				{
 					"label": "Privacy button on",
-					"value": -128
+					"value": 255
 				},
 				{
 					"label": "Privacy button off",
@@ -161,10 +165,9 @@
 		},
 		"13": {
 			"label": "Lock Status Led",
-			"description": "0x00 = off, 0xff = on default is 0x00 or off",
 			"valueSize": 1,
-			"minValue": -128,
-			"maxValue": 0,
+			"minValue": 0,
+			"maxValue": 255,
 			"defaultValue": 0,
 			"unsigned": true,
 			"readOnly": false,
@@ -173,7 +176,7 @@
 			"options": [
 				{
 					"label": "Lock status LED on",
-					"value": -128
+					"value": 255
 				},
 				{
 					"label": "Lock status LED off",
@@ -183,10 +186,9 @@
 		},
 		"15": {
 			"label": "Reset to Factory Defaults",
-			"description": "01 = lock will execute reset to factory. 02 = reserved for future use (lock will currently execute reset to factory same as 01). no default value  please use this procedure only when the network primary controller is missing or otherwise inoperable",
 			"valueSize": 1,
-			"minValue": -128,
-			"maxValue": 0,
+			"minValue": 0,
+			"maxValue": 1,
 			"defaultValue": 0,
 			"unsigned": true,
 			"readOnly": false,
@@ -195,7 +197,7 @@
 			"options": [
 				{
 					"label": "Reset to factory on",
-					"value": -128
+					"value": 1
 				},
 				{
 					"label": "Reset to factory off",
