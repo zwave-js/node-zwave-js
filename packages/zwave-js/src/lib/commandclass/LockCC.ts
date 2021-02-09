@@ -1,4 +1,4 @@
-import type { Maybe, MessageOrCCLogEntry } from "@zwave-js/core";
+import type { Maybe, MessageOrCCLogEntry, ValueID } from "@zwave-js/core";
 import {
 	CommandClasses,
 	validatePayload,
@@ -36,6 +36,14 @@ export enum LockCommand {
 	Set = 0x01,
 	Get = 0x02,
 	Report = 0x03,
+}
+
+export function getLockedValueId(endpoint: number): ValueID {
+	return {
+		commandClass: CommandClasses.Lock,
+		endpoint,
+		property: "locked",
+	};
 }
 
 @API(CommandClasses.Lock)
