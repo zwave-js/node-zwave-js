@@ -52,7 +52,10 @@ import {
 } from "../commandclass/CentralSceneCC";
 import { ClockCCReport } from "../commandclass/ClockCC";
 import { CommandClass, getCCValueMetadata } from "../commandclass/CommandClass";
-import { DoorLockCC } from "../commandclass/DoorLockCC";
+import {
+	DoorLockMode,
+	getCurrentModeValueId as getCurrentLockModeValueId,
+} from "../commandclass/DoorLockCC";
 import {
 	FirmwareUpdateMetaDataCC,
 	FirmwareUpdateMetaDataCCGet,
@@ -62,7 +65,7 @@ import {
 } from "../commandclass/FirmwareUpdateMetaDataCC";
 import { HailCC } from "../commandclass/HailCC";
 import { isCommandClassContainer } from "../commandclass/ICommandClassContainer";
-import { LockCC } from "../commandclass/LockCC";
+import { getLockedValueId } from "../commandclass/LockCC";
 import {
 	getManufacturerIdValueId,
 	getProductIdValueId,
@@ -2414,16 +2417,16 @@ version:               ${this.version}`;
 
 			// Update the current lock status
 			if (this.supportsCC(CommandClasses["Door Lock"])) {
-				const instance = this.getEndpoint(
-					command.endpointIndex,
-				)?.createCCInstanceInternal(DoorLockCC);
-				instance?.handleLockOperationNotification(isLocked);
+				this.valueDB.setValue(
+					getCurrentLockModeValueId(command.endpointIndex),
+					isLocked ? DoorLockMode.Secured : DoorLockMode.Unsecured,
+				);
 			}
 			if (this.supportsCC(CommandClasses.Lock)) {
-				const instance = this.getEndpoint(
-					command.endpointIndex,
-				)?.createCCInstanceInternal(LockCC);
-				instance?.handleLockOperationNotification(isLocked);
+				this.valueDB.setValue(
+					getLockedValueId(command.endpointIndex),
+					isLocked,
+				);
 			}
 		}
 	}

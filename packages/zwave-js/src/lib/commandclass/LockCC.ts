@@ -143,11 +143,6 @@ export class LockCC extends CommandClass {
 		// Remember that the interview is complete
 		this.interviewComplete = true;
 	}
-
-	public handleLockOperationNotification(isLocked: boolean): void {
-		const valueDB = this.getNode()!.valueDB;
-		valueDB.setValue(getLockedValueId(this.endpointIndex), isLocked);
-	}
 }
 
 interface LockCCSetOptions extends CCCommandOptions {

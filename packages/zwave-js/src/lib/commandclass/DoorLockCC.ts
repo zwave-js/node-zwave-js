@@ -98,54 +98,6 @@ function getOperationTypeValueId(endpoint: number): ValueID {
 	};
 }
 
-function getLatchSupportedValueId(endpoint: number): ValueID {
-	return {
-		commandClass: CommandClasses["Door Lock"],
-		endpoint,
-		property: "latchSupported",
-	};
-}
-
-function getBoltSupportedValueId(endpoint: number): ValueID {
-	return {
-		commandClass: CommandClasses["Door Lock"],
-		endpoint,
-		property: "boltSupported",
-	};
-}
-
-function getDoorSupportedValueId(endpoint: number): ValueID {
-	return {
-		commandClass: CommandClasses["Door Lock"],
-		endpoint,
-		property: "doorSupported",
-	};
-}
-
-function getLatchStatusValueId(endpoint: number): ValueID {
-	return {
-		commandClass: CommandClasses["Door Lock"],
-		endpoint,
-		property: "latchStatus",
-	};
-}
-
-function getBoltStatusValueId(endpoint: number): ValueID {
-	return {
-		commandClass: CommandClasses["Door Lock"],
-		endpoint,
-		property: "boltStatus",
-	};
-}
-
-function getDoorStatusValueId(endpoint: number): ValueID {
-	return {
-		commandClass: CommandClasses["Door Lock"],
-		endpoint,
-		property: "doorStatus",
-	};
-}
-
 const configurationSetParameters = [
 	"operationType",
 	"outsideHandlesCanOpenDoorConfiguration",
@@ -534,43 +486,6 @@ latch status:       ${status.latchStatus}`;
 
 		// Remember that the interview is complete
 		if (!hadCriticalTimeout) this.interviewComplete = true;
-	}
-
-	public handleLockOperationNotification(isLocked: boolean): void {
-		const node = this.getNode()!;
-		const endpoint = this.getEndpoint()!;
-		const api = endpoint.commandClasses["Door Lock"].withOptions({
-			priority: MessagePriority.NodeQuery,
-		});
-
-		const valueDB = node.valueDB;
-		valueDB.setValue(
-			getCurrentModeValueId(this.endpointIndex),
-			isLocked ? DoorLockMode.Secured : DoorLockMode.Unsecured,
-		);
-		if (valueDB.getValue(getDoorSupportedValueId(this.endpointIndex))) {
-			valueDB.setValue(
-				getDoorStatusValueId(this.endpointIndex),
-				isLocked ? "closed" : "open",
-			);
-		}
-		if (valueDB.getValue(getBoltSupportedValueId(this.endpointIndex))) {
-			valueDB.setValue(
-				getBoltStatusValueId(this.endpointIndex),
-				isLocked ? "locked" : "unlocked",
-			);
-		}
-		if (valueDB.getValue(getLatchSupportedValueId(this.endpointIndex))) {
-			valueDB.setValue(
-				getLatchStatusValueId(this.endpointIndex),
-				isLocked ? "closed" : "open",
-			);
-		}
-
-		// And since we're really not sure about all these statuses, verify :)
-		api.get().catch(() => {
-			/* ignore */
-		});
 	}
 }
 
