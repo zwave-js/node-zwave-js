@@ -1,10 +1,10 @@
-// Yale YRD256
-// Touchscreen SL Touchscreen Deadbolt
+// Yale YRD226 / YRD256
+// Touchscreen Touchscreen Deadbolt
 {
 	"manufacturer": "Yale",
 	"manufacturerId": "0x0129",
-	"label": "YRD256",
-	"description": "Assure SL Touchscreen Deadbolt",
+	"label": "YRD226 / YRD256",
+	"description": "Assure Touchscreen Deadbolt",
 	"devices": [
 		{
 			"productType": "0x8002",
@@ -19,7 +19,6 @@
 	"paramInformation": {
 		"1": {
 			"label": "Volume",
-			"description": "Volume of voice and beeps",
 			"valueSize": 1,
 			"minValue": 1,
 			"maxValue": 3,
@@ -43,9 +42,8 @@
 			]
 		},
 		"2": {
-			"label": "Auto relock",
-			"description": "Automatic relocking",
-			"unit": "Seconds",
+			"label": "Auto Relock",
+			"unit": "seconds",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 255,
@@ -56,19 +54,18 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "No auto-relock",
+					"label": "Disable",
 					"value": 0
 				},
 				{
-					"label": "Auto relock",
+					"label": "Enable",
 					"value": 255
 				}
 			]
 		},
 		"3": {
 			"label": "Auto relock time",
-			"description": "Time for auto relock",
-			"unit": "Seconds",
+			"unit": "seconds",
 			"valueSize": 1,
 			"minValue": 5,
 			"maxValue": 255,
@@ -90,7 +87,7 @@
 			"allowManualEntry": true
 		},
 		"6": {
-			"label": "Radio event reporting",
+			"label": "Radio Event Reporting",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 255,
@@ -101,11 +98,11 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "Don't report events?",
+					"label": "Disable",
 					"value": 0
 				},
 				{
-					"label": "Do report events?",
+					"label": "Enable",
 					"value": 255
 				}
 			]
@@ -113,7 +110,7 @@
 		"7": {
 			"label": "Keypad lockout time",
 			"description": "Incorrect PINs lockout time",
-			"unit": "Seconds",
+			"unit": "seconds",
 			"valueSize": 1,
 			"minValue": 1,
 			"maxValue": 255,

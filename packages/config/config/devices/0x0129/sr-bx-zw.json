@@ -51,7 +51,8 @@
 			]
 		},
 		"3": {
-			"label": "Comfort LED",
+			"label": "Flashing LED Interval",
+			"description": "Control's the siren's LED flash during non-alarm mode. Note: Setting this parameter will significantly reduce the battery life of your siren.",
 			"valueSize": 1,
 			"unit": "10 seconds",
 			"minValue": 0,
