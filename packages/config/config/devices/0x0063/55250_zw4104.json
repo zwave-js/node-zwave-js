@@ -66,6 +66,7 @@
 	"metadata": {
 		"inclusion": "1. Follow the instructions for your Z-Wave certified controller to add the smart switch to the Z-Wave network.\n2. Once the controller is ready to add your smart switch, press and release the manual/program button on the smart switch",
 		"exclusion": "1. Follow the instructions for your Z-Wave certified controller to remove a smart switch from the Z-Wave network.\n2. Once the controller is ready to remove your smart switch, press and release the manual/program button on the smart switch",
-		"reset": "1. If plugged in, unplug the smart switch from the receptacle.\n2. Press and hold the program button for at least three seconds while you plug the smart switch into a receptacle"
+		"reset": "1. If plugged in, unplug the smart switch from the receptacle.\n2. Press and hold the program button for at least three seconds while you plug the smart switch into a receptacle",
+		"manual": "https://products.z-wavealliance.org/ProductManual/File?folder=&filename=product_documents/3936/55250%20QSG%20v1.pdf"
 	}
 }

@@ -19,6 +19,7 @@
 	"metadata": {
 		"inclusion": "To add (inclusion) the device press and hold the button for 3-8 seconds. When pressing the button, the led will flash short and after 3 seconds when the led has a steady light release the button",
 		"exclusion": "To remove (exclusion) the device press and hold the button for 3-8 seconds. When pressing the button, the led will flash short and after 3 seconds when the led has a steady light release the button",
-		"reset": "Press the button for more than 10 seconds to reset the\ndevice to factory default settings. The led will be released\nafter the device reset to factory defaults has been\nperformed.\nPlease use this procedure only when the network primary\ncontroller is missing or otherwise inoperable"
+		"reset": "Press the button for more than 10 seconds to reset the\ndevice to factory default settings. The led will be released\nafter the device reset to factory defaults has been\nperformed.\nPlease use this procedure only when the network primary\ncontroller is missing or otherwise inoperable",
+		"manual": "https://products.z-wavealliance.org/ProductManual/File?folder=&filename=MarketCertificationFiles/3270/0450000594_1913_IA_heatapp-repeaterS2_EbV_EN.pdf"
 	}
 }

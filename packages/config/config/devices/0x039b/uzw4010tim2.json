@@ -17,6 +17,7 @@
 		"max": "255.255"
 	},
 	"metadata": {
-		"reset": "With the Factory Reset server method it is possible to clear TIM Box device list. This cause z-wave devices removal from mobile and STB application but not their reset. To complete device reset, it is necessary to reset all z-wave devices physically."
+		"reset": "With the Factory Reset server method it is possible to clear TIM Box device list. This cause z-wave devices removal from mobile and STB application but not their reset. To complete device reset, it is necessary to reset all z-wave devices physically.",
+		"manual": "https://products.z-wavealliance.org/ProductManual/File?folder=&filename=product_documents/3781/IoTIM%20-%20Quick%20Guide.pdf"
 	}
 }

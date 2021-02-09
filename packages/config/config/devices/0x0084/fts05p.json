@@ -130,6 +130,7 @@
 	"metadata": {
 		"inclusion": "1) Set up the Add/Inclusion mode at the controller; 2) Briefly press the switch once and the controller will indicate the unit has been added into the network. Also, the LED will blink 2 quick blinks when complete.",
 		"exclusion": "1) Set up the Remove/Exclusion mode at the controller; 2) Press and hold the switch for approx. 2 seconds and then release. The controller will indicates the unit has been removed from the network. The LED will blink 4 quick blinks when complete",
-		"reset": "Reset the device to factory Defaults - Press and hold the program button for longer than 15 seconds. When complete, the LED will flash approx. 30 times. This can be done while the device is either in or out of a network. Please use this procedure only when the network primary controller is missing or otherwise inoperable. Caution – When this is done in-network, the device will no longer be in the network and all configurations and associations will be set to default."
+		"reset": "Reset the device to factory Defaults - Press and hold the program button for longer than 15 seconds. When complete, the LED will flash approx. 30 times. This can be done while the device is either in or out of a network. Please use this procedure only when the network primary controller is missing or otherwise inoperable. Caution – When this is done in-network, the device will no longer be in the network and all configurations and associations will be set to default.",
+		"manual": "https://products.z-wavealliance.org/ProductManual/File?folder=&filename=MarketCertificationFiles/2458/User%20Manual%20FTS05-FTS05P.pdf"
 	}
 }
