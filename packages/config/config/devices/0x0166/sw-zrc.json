@@ -4,7 +4,7 @@
 	"manufacturer": "CBCC Domotique SAS",
 	"manufacturerId": "0x0166",
 	"label": "SW-ZRC",
-	"description": "RemSwiid Z-Wave remote control",
+	"description": "RemSwiid Z-Wave remote controller",
 	"devices": [
 		{
 			"productType": "0x0002",
@@ -40,7 +40,7 @@
 			]
 		},
 		"2": {
-			"label": "Function of Device Key A",
+			"label": "Function Device Key A",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 3,
@@ -69,7 +69,7 @@
 			]
 		},
 		"3": {
-			"label": "Function of Device Key B",
+			"label": "Function Device Key B",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 3,
@@ -98,7 +98,7 @@
 			]
 		},
 		"4": {
-			"label": "Function of Remswiid™ Device Key C",
+			"label": "Function Device Key C",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 3,
@@ -127,7 +127,7 @@
 			]
 		},
 		"5": {
-			"label": "Function of Remswiid™ Device Key D",
+			"label": "Function Device Key D",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 3,
@@ -156,7 +156,7 @@
 			]
 		},
 		"6": {
-			"label": "Function of Remswiid™ Device Key E",
+			"label": "Function Device Key E",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 3,
@@ -185,7 +185,7 @@
 			]
 		},
 		"7": {
-			"label": "Function of Remswiid™ Device Key F",
+			"label": "Function Device Key F",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 3,
@@ -214,7 +214,7 @@
 			]
 		},
 		"8": {
-			"label": "Function of Remswiid™ Device Key G",
+			"label": "Function Device Key G",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 3,
@@ -243,7 +243,7 @@
 			]
 		},
 		"9": {
-			"label": "Function of Remswiid™ Device Key H",
+			"label": "Function Device Key H",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 3,

@@ -50,7 +50,7 @@
 		"3": {
 			"label": "Report Rate Interval (Association Group 1)",
 			"valueSize": 1,
-			"unit": "6 min per count",
+			"unit": "x 6 minutes",
 			"minValue": 0,
 			"maxValue": 255,
 			"defaultValue": 0,
