@@ -18,7 +18,7 @@
 	"supportsZWavePlus": true,
 	"paramInformation": {
 		"1": {
-			"label": "Volune",
+			"label": "Volume",
 			"valueSize": 1,
 			"minValue": 1,
 			"maxValue": 3,
