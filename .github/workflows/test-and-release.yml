@@ -50,7 +50,11 @@ jobs:
     - name: Compile TypeScript code
       run: yarn run build
 
-    - name: Lint
+    - name: Run linters
+      run: yarn run lint
+
+    - name: Prepare lint auto-fix patch
+      if: ${{ failure() }}
       id: lint
       run: |
         # Run all lint commands and abort if one has unfixable errors
@@ -76,12 +80,6 @@ jobs:
       with:
         name: lint-fix
         path: fix.patch
-
-    - name: Fail job
-      if: steps.lint.outputs.changed == 'true'
-      run: |
-        echo "The lint failed"
-        exit 1
 
   # ===================
 
