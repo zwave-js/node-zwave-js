@@ -17,6 +17,7 @@
 		"max": "255.255"
 	},
 	"metadata": {
-		"reset": "Restores the remote back to a factory\nstate by removing all memory of shade\nand remote pairings from the remote.\n1. On the remote, press and hold the\nMENU/RIGHT button to enter the menu.\n2. Select ZWAVE > RESET.\n3. With LIKE NEW? selected, press and\nhold the MENU/RIGHT button until the\nscreen no longer tells you to wait.\n\nPlease use this procedure only when the network primary controller is missing or otherwise inoperable"
+		"reset": "Restores the remote back to a factory\nstate by removing all memory of shade\nand remote pairings from the remote.\n1. On the remote, press and hold the\nMENU/RIGHT button to enter the menu.\n2. Select ZWAVE > RESET.\n3. With LIKE NEW? selected, press and\nhold the MENU/RIGHT button until the\nscreen no longer tells you to wait.\n\nPlease use this procedure only when the network primary controller is missing or otherwise inoperable",
+		"manual": "https://products.z-wavealliance.org/ProductManual/File?folder=&filename=MarketCertificationFiles/2819/P2_79083-01_18-8215_MotorizationManual.pdf"
 	}
 }

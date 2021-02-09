@@ -17,6 +17,7 @@
 		"max": "255.255"
 	},
 	"metadata": {
-		"reset": "A Reboot/Reset button is located on the backside of the AXON™ Home Router. It can easily be identified on the back of the unit by its red color and location directly above the yellow RJ45 Ethernet ports and below the USB ports. Pressing the button will perform one of two functions depending on how long the button is pressed.\n\nA short press will trigger a reboot of the router and will not change any permanent settings.\nA long press (3 second and longer) will trigger a reset operation and then will reboot the AXON™ Home Router. A reset operation will change all router settings including the Z-Wave Controller settings back to its factory default."
+		"reset": "A Reboot/Reset button is located on the backside of the AXON™ Home Router. It can easily be identified on the back of the unit by its red color and location directly above the yellow RJ45 Ethernet ports and below the USB ports. Pressing the button will perform one of two functions depending on how long the button is pressed.\n\nA short press will trigger a reboot of the router and will not change any permanent settings.\nA long press (3 second and longer) will trigger a reset operation and then will reboot the AXON™ Home Router. A reset operation will change all router settings including the Z-Wave Controller settings back to its factory default.",
+		"manual": "https://products.z-wavealliance.org/ProductManual/File?folder=&filename=MarketCertificationFiles/1609/Final%20INS11796-4-UserGuide%20-%202015-12-28.docx"
 	}
 }

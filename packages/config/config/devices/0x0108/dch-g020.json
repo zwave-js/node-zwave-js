@@ -17,6 +17,7 @@
 		"max": "255.255"
 	},
 	"metadata": {
-		"reset": "Press and hold the “Reset button” for 5 seconds on DCH‐G020"
+		"reset": "Press and hold the “Reset button” for 5 seconds on DCH‐G020",
+		"manual": "https://products.z-wavealliance.org/ProductManual/File?folder=&filename=MarketCertificationFiles/1297/DLink_DCH-G020_manual_v1.1.pdf"
 	}
 }
