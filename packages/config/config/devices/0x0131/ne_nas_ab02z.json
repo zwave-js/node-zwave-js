@@ -31,10 +31,9 @@
 	},
 	"paramInformation": {
 		"1": {
-			"label": "Configure alarm volume",
-			"description": "Low, Medium, High",
+			"label": "Alarm Volume",
 			"valueSize": 1,
-			"minValue": 0,
+			"minValue": 1,
 			"maxValue": 3,
 			"defaultValue": 2,
 			"unsigned": true,
@@ -57,10 +56,9 @@
 			]
 		},
 		"2": {
-			"label": "Configure alarm duration time",
-			"description": "30 sec, 1 min, 5 min",
+			"label": "Alarm Duration",
 			"valueSize": 1,
-			"minValue": 0,
+			"minValue": 1,
 			"maxValue": 3,
 			"defaultValue": 2,
 			"unsigned": true,
