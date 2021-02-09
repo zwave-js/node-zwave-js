@@ -72,6 +72,11 @@ jobs:
           echo "::set-output name=changed::false"
         fi
 
+    - name: Debug
+      run: |
+        echo "event name: ${{ github.event_name }}"
+        echo "output: ${{ steps.lint.outputs.changed }}"
+
     - name: Upload Patch
       if: |
         github.event_name == 'pull_request' &&
