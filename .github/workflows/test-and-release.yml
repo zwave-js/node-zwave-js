@@ -73,11 +73,13 @@ jobs:
         fi
 
     - name: Debug
+      if: ${{ failure() }}
       run: |
         echo "event name: ${{ github.event_name }}"
         echo "output: ${{ steps.lint.outputs.changed }}"
 
     - name: Upload Patch
+      if: ${{ failure() }}
       if: |
         github.event_name == 'pull_request' &&
         steps.lint.outputs.changed == 'true'
