@@ -33,7 +33,7 @@
 			"description": "Start, stop, or get the results of discovery mode. Retrieve the configuration parameter to obtain the results: 0=disabled, 1=enabled, 2=Timeout, 3=Failure",
 			"valueSize": 1,
 			"minValue": 0,
-			"maxValue": 1,
+			"maxValue": 3,
 			"defaultValue": 0,
 			"unsigned": true,
 			"readOnly": false,
