@@ -30,7 +30,7 @@
 		},
 		"2": {
 			"label": "Discovery Mode",
-			"description": "Start, stop, or get the results of discovery mode. Retrieve the configuration parameter to obtain the results: 0=not enabled, 1=enabled, 2=timed out, 3=failure",
+			"description": "Start, stop, or get the results of discovery mode. Retrieve the configuration parameter to obtain the results: 0=disabled, 1=enabled, 2=Timeout, 3=Failure",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 1,
@@ -41,12 +41,20 @@
 			"allowManualEntry": false,
 			"options": [
 				{
+					"label": "Disable",
+					"value": 0
+				},
+				{
 					"label": "Enable",
 					"value": 1
 				},
 				{
-					"label": "Disable",
-					"value": 0
+					"label": "Timeout (readOnly)",
+					"value": 2
+				},
+				{
+					"label": "Failure (readOnly)",
+					"value": 3
 				}
 			]
 		},
