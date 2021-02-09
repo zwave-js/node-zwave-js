@@ -1,6 +1,7 @@
 import { getIntegerLimits, getMinimumShiftForBitMask } from "@zwave-js/core";
 import { num2hex } from "@zwave-js/shared";
 import { distinct } from "alcalzone-shared/arrays";
+import { wait } from "alcalzone-shared/async";
 import { green, red, white } from "ansi-colors";
 import { readFile } from "fs-extra";
 import levenshtein from "js-levenshtein";
@@ -530,6 +531,8 @@ The first occurence of this device is in file config/devices/${index[firstIndex]
 					severity: "warn",
 					filename: `packages/config/config/devices/${filename}`,
 					message: lines.join("\n"),
+					// We're likely to have LOTs of warnings - but GitHub only accepts a few annotations
+					annotation: false,
 				});
 			}
 			console.warn();
@@ -569,7 +572,9 @@ The first occurence of this device is in file config/devices/${index[firstIndex]
 		console.log();
 	}
 
-	if (errors.size && !process.env.CI) process.exit(1);
+	if (errors.size) {
+		throw new Error("At least one config file has errors!");
+	}
 }
 
 async function lintNamedScales(): Promise<void> {
@@ -588,10 +593,6 @@ async function lintSensorTypes(): Promise<void> {
 	await configManager.loadSensorTypes();
 	// TODO: Validate that all contents are semantically correct
 }
-
-const logError = !!process.env.CI
-	? console.log.bind(console)
-	: console.error.bind(console);
 
 export async function lintConfigFiles(): Promise<void> {
 	try {
@@ -613,11 +614,14 @@ export async function lintConfigFiles(): Promise<void> {
 				lines.shift();
 			}
 			const message = lines.join("\n");
-			logError(red(message));
+			console.log(red(message));
 		} else {
-			logError(red(e.message));
+			console.log(red(e.message));
 		}
 		console.log();
+
+		// Github actions truncates our logs if we don't wait before exiting the process
+		await wait(5000);
 		return process.exit(1);
 	}
 }
