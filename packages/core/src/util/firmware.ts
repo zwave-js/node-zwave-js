@@ -175,12 +175,21 @@ function extractFirmwareAeotec(data: Buffer): Firmware {
 	return ret;
 }
 
-function extractFirmwareHEX(data: Buffer): Firmware {
+function extractFirmwareHEX(dataHEX: Buffer): Firmware {
 	try {
-		const memMap = MemoryMap.fromHex(data.toString("ascii"));
-		return {
-			data: Buffer.from(memMap.get(0)),
-		};
+		const memMap: Map<number, Uint8Array> = MemoryMap.fromHex(
+			dataHEX.toString("ascii"),
+		);
+		// A memory map can be sparse - we'll have to fill the gaps with 0xFF
+		let data: Buffer = Buffer.from([]);
+		for (const [offset, chunk] of memMap.entries()) {
+			data = Buffer.concat([
+				data,
+				Buffer.alloc(offset - data.length, 0xff),
+				chunk,
+			]);
+		}
+		return { data };
 	} catch (e) {
 		if (/Malformed/.test(e.message)) {
 			throw new ZWaveError(
