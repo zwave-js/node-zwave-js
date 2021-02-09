@@ -21,7 +21,7 @@
 	},
 	"paramInformation": {
 		"1": {
-			"label": "The Synchronic Interval Time",
+			"label": "Synchronic Time Interval",
 			"description": "Value is multiplied by the basic interval time of 16 seconds (2 = 32 seconds)",
 			"valueSize": 1,
 			"unit": "seconds",

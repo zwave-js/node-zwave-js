@@ -18,12 +18,12 @@
 	},
 	"paramInformation": {
 		"1": {
-			"label": "The Synchronic Interval Time",
-			"description": "From 16 seconds to 2032 seconds",
+			"label": "Synchronic Time Interval",
+			"description": "Value is multiplied by the basic interval time of 16 seconds (2 = 32 seconds)",
 			"valueSize": 1,
 			"unit": "seconds",
 			"minValue": 1,
-			"maxValue": 4,
+			"maxValue": 127,
 			"defaultValue": 4,
 			"unsigned": true,
 			"readOnly": false,
