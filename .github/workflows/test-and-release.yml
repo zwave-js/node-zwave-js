@@ -79,8 +79,8 @@ jobs:
         echo "output: ${{ steps.lint.outputs.changed }}"
 
     - name: Upload Patch
-      if: ${{ failure() }}
       if: |
+        failure() &&
         github.event_name == 'pull_request' &&
         steps.lint.outputs.changed == 'true'
       uses: actions/upload-artifact@v2
