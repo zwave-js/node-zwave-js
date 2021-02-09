@@ -32,11 +32,11 @@
 		},
 		"4": {
 			"label": "Control Group C",
-			"maxNodes": 10,
+			"maxNodes": 10
 		},
 		"5": {
 			"label": "Control Group D",
-			"maxNodes": 10,
+			"maxNodes": 10
 		}
 	},
 	"paramInformation": {
@@ -306,7 +306,7 @@
 					"label": "Switch on only",
 					"value": 2
 				},
-								{
+				{
 					"label": "Switch all on and off",
 					"value": 255
 				}
@@ -334,7 +334,7 @@
 			]
 		},
 		"25": {
-			"label": "Blocks Wakeups",
+			"label": "Block Wakeup",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 1,

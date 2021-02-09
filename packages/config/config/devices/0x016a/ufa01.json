@@ -1,10 +1,10 @@
 // Fantem UFA01
 // KASAIHOUCHIKIADAPTOR01
 {
-	"manufacturer": "Fantem",
-	"manufacturerId": "0x016a",
+	"manufacturer": "KDDI CORPORATION",
+	"manufacturerId": "0x242",
 	"label": "UFA01",
-	"description": "KASAIHOUCHIKIADAPTOR01",
+	"description": "Sensor Input device (KASAIHOUCHIKIADAPTOR01)",
 	"devices": [
 		{
 			"productType": "0x0a02",
@@ -29,11 +29,11 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "Send 0xff when on, 0x00 when off",
+					"label": "Send 255 when on, 0 when off",
 					"value": 0
 				},
 				{
-					"label": "Send 0x00 when on, 0xff when off",
+					"label": "Send 0 when on, 255 when off",
 					"value": 1
 				}
 			]
@@ -71,11 +71,11 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "Set 0xff when on, 0x00 when off",
+					"label": "Set 255 when on, 0 when off",
 					"value": 0
 				},
 				{
-					"label": "Set 0x00 when off, 0xff when on",
+					"label": "Set 0 when off, 255 when on",
 					"value": 1
 				}
 			]
@@ -122,15 +122,15 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "Binary report",
+					"label": "Send Binary report",
 					"value": 16
 				},
 				{
-					"label": "Basic Set",
+					"label": "Send Basic Set",
 					"value": 256
 				},
 				{
-					"label": "Binary report and Basic Set",
+					"label": "Send Binary report and Basic Set",
 					"value": 272
 				}
 			]

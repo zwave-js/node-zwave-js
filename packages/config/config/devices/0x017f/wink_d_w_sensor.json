@@ -41,11 +41,15 @@
 			"allowManualEntry": true,
 			"options": [
 				{
-					"label": "Off/cancel alarm/etc",
+					"label": "Off",
 					"value": 0
 				},
 				{
-					"label": "On (for binary switch)",
+					"label": "Dim Level",
+					"value": 99
+				},
+				{
+					"label": "On",
 					"value": 255
 				}
 			]

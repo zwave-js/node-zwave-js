@@ -43,7 +43,6 @@
 		"3": {
 			"label": "Basic Set Level",
 			"valueSize": 1,
-			"unit": "%",
 			"minValue": 0,
 			"maxValue": 255,
 			"defaultValue": 255,
@@ -53,8 +52,12 @@
 			"allowManualEntry": true,
 			"options": [
 				{
-					"label": "Turn off",
+					"label": "Off",
 					"value": 0
+				},
+				{
+					"label": "Dim Level",
+					"value": 99
 				},
 				{
 					"label": "On",
