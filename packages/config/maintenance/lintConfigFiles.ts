@@ -569,7 +569,7 @@ The first occurence of this device is in file config/devices/${index[firstIndex]
 		console.log();
 	}
 
-	if (errors.size) process.exit(1);
+	if (errors.size && !process.env.CI) process.exit(1);
 }
 
 async function lintNamedScales(): Promise<void> {
