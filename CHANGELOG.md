@@ -3,7 +3,7 @@
 	Placeholder for next release:
 	## __WORK IN PROGRESS__
 -->
-## __WORK IN PROGRESS__
+## 6.2.0 (2021-02-09)
 ### Features
 * Added support for `Barrier Operator CC`
 * `Notification CC Reports` with a lock/unlock event are now mapped to `Lock CC` and `Door Lock CC` states.
