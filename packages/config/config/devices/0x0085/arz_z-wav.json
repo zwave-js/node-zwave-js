@@ -1,10 +1,10 @@
-// Fakro ARZ Z-WAV
+// Fakro ARZ Z-Wave
 // ARZ Z-Wave
 {
 	"manufacturer": "Fakro",
 	"manufacturerId": "0x0085",
-	"label": "ARZ Z-WAV",
-	"description": "ARZ Z-Wave",
+	"label": "ARZ Z-Wave",
+	"description": "FAKRO ARZ Z-Wave external roller shutters",
 	"devices": [
 		{
 			"productType": "0x0003",
@@ -22,27 +22,47 @@
 	"paramInformation": {
 		"12": {
 			"label": "Calibrate",
-			"description": "Value 1 – calibrated, value 2 – discalibrated – to enter the calibration mode must first time discalibrate and then calibrate",
+			"description": "Set the calibration status. To enter calibration mode, you must first uncalibrate.",
 			"valueSize": 1,
 			"minValue": 1,
-			"maxValue": 1,
+			"maxValue": 2,
 			"defaultValue": 1,
 			"unsigned": true,
 			"readOnly": false,
 			"writeOnly": false,
-			"allowManualEntry": true
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Calibrate",
+					"value": "1"
+				},
+				{
+					"label": "Uncalibrate",
+					"value": "2"
+				},
+			]
 		},
 		"13": {
 			"label": "End Position",
-			"description": "1 – ff go to max, 2 – ff go to previous position",
+			"description": "Set the ending position of the roller shutter.",
 			"valueSize": 1,
 			"minValue": 1,
-			"maxValue": 1,
+			"maxValue": 2,
 			"defaultValue": 1,
 			"unsigned": true,
 			"readOnly": false,
 			"writeOnly": false,
-			"allowManualEntry": true
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Max",
+					"value": "1"
+				},
+				{
+					"label": "Previous Position",
+					"value": "2"
+				},
+			]
 		}
 	},
 	"metadata": {
