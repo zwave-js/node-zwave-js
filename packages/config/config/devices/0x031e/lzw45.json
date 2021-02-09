@@ -364,7 +364,7 @@
 			"description": "This is the color of Action 1.  0 = Off, 1 = 2700K, 2 = 4500K, 3 = 6500K, 4 = Red, 5 = Orange, 6 = Yellow, 7 = Yellow Green, 8 = Green, 9 = Spring Green, 10 = Cyan, 11 = Azure, 12 = Blue, 13 = Violet, 14 = Magenta, 15 = Random.  Default: 0",
 			"valueSize": 4,
 			"minValue": 0,
-			"maxValue": 4,
+			"maxValue": 15,
 			"defaultValue": 0,
 			"unsigned": true,
 			"readOnly": false,
