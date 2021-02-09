@@ -72,12 +72,6 @@ jobs:
           echo "::set-output name=changed::false"
         fi
 
-    - name: Debug
-      if: ${{ failure() }}
-      run: |
-        echo "event name: ${{ github.event_name }}"
-        echo "output: ${{ steps.lint.outputs.changed }}"
-
     - name: Upload Patch
       if: |
         failure() &&
