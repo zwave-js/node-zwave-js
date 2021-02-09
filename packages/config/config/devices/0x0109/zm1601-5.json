@@ -31,27 +31,57 @@
 	"paramInformation": {
 		"1": {
 			"label": "Siren/Strobe Mode",
-			"description": "0(all enable),1(siren only),2(storbe only)",
 			"valueSize": 1,
 			"minValue": 0,
-			"maxValue": 0,
+			"maxValue": 2,
 			"defaultValue": 0,
 			"unsigned": true,
 			"readOnly": false,
 			"writeOnly": false,
-			"allowManualEntry": true
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Enable all",
+					"value": 0
+				},
+				{
+					"label": "Siren only",
+					"value": 1
+				},
+				{
+					"label": "Strobe only",
+					"value": 2
+				}
+			]
 		},
 		"2": {
 			"label": "Alarm Auto Stop Time",
-			"description": "0(30s),1(60s),2(120s),3(unlimited)",
 			"valueSize": 1,
 			"minValue": 0,
-			"maxValue": 0,
+			"maxValue": 3,
 			"defaultValue": 0,
 			"unsigned": true,
 			"readOnly": false,
 			"writeOnly": false,
-			"allowManualEntry": true
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "30s",
+					"value": 0
+				},
+				{
+					"label": "60s",
+					"value": 1
+				},
+				{
+					"label": "120s",
+					"value": 2
+				},
+				{
+					"label": "Disable Auto Stop",
+					"value": 3
+				}
+			]
 		}
 	},
 	"metadata": {
