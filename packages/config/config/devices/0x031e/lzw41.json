@@ -18,8 +18,7 @@
 	},
 	"paramInformation": {
 		"2": {
-			"label": "Memory Function",
-			"description": "This parameter will determine how your bulb behaves after power is restored to it from an outage",
+			"label": "State After Power Outage",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 2,
@@ -30,25 +29,25 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "Remembers last state",
+					"label": "Prior state",
 					"value": 0
 				},
 				{
-					"label": "Bulb turns on after power outage",
+					"label": "Force on",
 					"value": 1
 				},
 				{
-					"label": "Bulb turns off after power outage",
+					"label": "Force off",
 					"value": 2
 				}
 			]
 		},
 		"51": {
-			"label": "Color Adjustment (warm White)",
+			"label": "Color Adjustment (Warm White)",
 			"description": "Changes the kelvin from 2700k (1387) to 4999k (4999)",
 			"valueSize": 2,
 			"minValue": 1387,
-			"maxValue": 1387,
+			"maxValue": 4999,
 			"defaultValue": 1387,
 			"unsigned": true,
 			"readOnly": false,
@@ -56,11 +55,11 @@
 			"allowManualEntry": true
 		},
 		"52": {
-			"label": "Color Adjustment (cool White)",
+			"label": "Color Adjustment (Cool White)",
 			"description": "Changes the kelvin from 5000k (5000) to 6500k (6500)",
 			"valueSize": 2,
 			"minValue": 5000,
-			"maxValue": 5000,
+			"maxValue": 6500,
 			"defaultValue": 5000,
 			"unsigned": true,
 			"readOnly": false,

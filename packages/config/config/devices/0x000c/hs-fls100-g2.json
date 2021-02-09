@@ -18,12 +18,12 @@
 	},
 	"paramInformation": {
 		"1": {
-			"label": "Time Settings",
-			"description": "Unit is second",
+			"label": "PIR Trigger Off Period",
+			"description": "Period after which to send Trigger Off command after the PIR is triggered.",
 			"valueSize": 2,
 			"unit": "seconds",
 			"minValue": 8,
-			"maxValue": 180,
+			"maxValue": 720,
 			"defaultValue": 180,
 			"unsigned": true,
 			"readOnly": false,
@@ -31,11 +31,12 @@
 			"allowManualEntry": true
 		},
 		"2": {
-			"label": "Lux Settings",
-			"description": "Unit is ambient lux level",
+			"label": "Lux Sensor Threshold",
+			"description": "Ambient light level to turn light on",
 			"valueSize": 2,
+			"unit": "lux",
 			"minValue": 10,
-			"maxValue": 50,
+			"maxValue": 900,
 			"defaultValue": 50,
 			"unsigned": true,
 			"readOnly": false,
@@ -43,10 +44,12 @@
 			"allowManualEntry": true
 		},
 		"3": {
-			"label": "Sensor Report Interval",
+			"label": "Multilevel Srnsor Report Interval",
+			"description": "Sets the interval for periodic lux level and temperature reports",
 			"valueSize": 2,
+			"unit": "minutes",
 			"minValue": 1,
-			"maxValue": 10,
+			"maxValue": 1440,
 			"defaultValue": 10,
 			"unsigned": true,
 			"readOnly": false,
@@ -54,7 +57,7 @@
 			"allowManualEntry": true
 		},
 		"4": {
-			"label": "Pir Alerts",
+			"label": "PIR Trigger Alerts",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 1,
@@ -62,10 +65,20 @@
 			"unsigned": true,
 			"readOnly": false,
 			"writeOnly": false,
-			"allowManualEntry": true
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Disabled",
+					"value": 0
+				},
+				{
+					"label": "Enabled",
+					"value": 1
+				}
+			]
 		},
 		"5": {
-			"label": "Load Control",
+			"label": "Floodlight Control Mode",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 1,
@@ -73,24 +86,45 @@
 			"unsigned": true,
 			"readOnly": false,
 			"writeOnly": false,
-			"allowManualEntry": true
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "PIR, lux, or Z-Wave triggers",
+					"value": 0
+				},
+				{
+					"label": "Z-Wave only",
+					"value": 1
+				}
+			]
 		},
 		"6": {
-			"label": "Sensor Load Control",
+			"label": "Lux Sensor Control Mode",
 			"valueSize": 1,
 			"minValue": 0,
-			"maxValue": 0,
+			"maxValue": 1,
 			"defaultValue": 0,
 			"unsigned": true,
 			"readOnly": false,
 			"writeOnly": false,
-			"allowManualEntry": true
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Control floodlight by lux and PIR triggers",
+					"value": 0
+				},
+				{
+					"label": "Lux level only",
+					"value": 1
+				}
+			]
 		},
 		"7": {
 			"label": "Temperature Sensor Offset",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 0,
+			"unit": "0.1°C",
+			"minValue": -100,
+			"maxValue": 100,
 			"defaultValue": 0,
 			"unsigned": true,
 			"readOnly": false,
@@ -98,7 +132,7 @@
 			"allowManualEntry": true
 		},
 		"8": {
-			"label": "Pir Sensitivity",
+			"label": "PIR Sensitivity",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 2,
@@ -106,7 +140,21 @@
 			"unsigned": true,
 			"readOnly": false,
 			"writeOnly": false,
-			"allowManualEntry": true
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Low - Approximately 6m",
+					"value": 0
+				},
+				{
+					"label": "Medium - Approximately 10m",
+					"value": 1
+				},
+				{
+					"label": "High - Approximately 20m",
+					"value": 2
+				}
+			]
 		}
 	},
 	"metadata": {

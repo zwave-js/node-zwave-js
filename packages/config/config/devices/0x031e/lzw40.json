@@ -18,8 +18,7 @@
 	},
 	"paramInformation": {
 		"2": {
-			"label": "Memory Function",
-			"description": "This parameter will determine how your bulb behaves after power is restored to it from an outage",
+			"label": "State After Power Outage",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 1,
@@ -30,11 +29,11 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "Remembers last state",
+					"label": "Prior state",
 					"value": 0
 				},
 				{
-					"label": "Bulb turns on after power outage",
+					"label": "Force on",
 					"value": 1
 				}
 			]

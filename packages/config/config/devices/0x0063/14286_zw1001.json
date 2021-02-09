@@ -18,8 +18,7 @@
 	},
 	"paramInformation": {
 		"3": {
-			"label": "Led Light",
-			"description": "0 default 1 LED light on when z‐wave turned on 2 LED always off",
+			"label": "LED Light",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 2,
@@ -30,15 +29,15 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "Default",
+					"label": "LED on when light off, LED off when light on",
 					"value": 0
 				},
 				{
-					"label": "Led light on when Z-Wave turned on",
+					"label": "LED on when light on, LED off when light off",
 					"value": 1
 				},
 				{
-					"label": "Led always off",
+					"label": "LED always off",
 					"value": 2
 				}
 			]
