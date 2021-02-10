@@ -123,7 +123,7 @@
 		},
 		"103": {
 			"label": "Luminance Reporting Interval",
-			"description": "Note: The set value will round to the nearest minute.",
+			"description": "Note: The set value will round to the nearest minute. (0 = Off)",
 			"valueSize": 4,
 			"unit": "seconds",
 			"minValue": 0,
