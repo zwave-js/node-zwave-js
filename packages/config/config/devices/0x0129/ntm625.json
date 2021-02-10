@@ -124,7 +124,7 @@
 		},
 		"8": {
 			"label": "Operating Mode",
-			"description": "0 = normal mode (this is the default mode) 1 = vacation mode, keypad lockout 2 = privacy mode, no keypad. RF Unlock will work 3 = passage mode, Lock is permanently unlocked.",
+			"description": "Vacation mode = Keypad lockout; Privacy mode = No keypad, only RF Unlock; Passage mode = permanently unlocked",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 3,
