@@ -19,7 +19,6 @@
 	"paramInformation": {
 		"3": {
 			"label": "Indication LED",
-			"description": "LED indicating the state of the switch according to the setting",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 2,
@@ -30,11 +29,11 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "LED on when the plug turned off",
+					"label": "LED is on when switch is off,
 					"value": 0
 				},
 				{
-					"label": "LED on when plug is turned on",
+					"label": "LED is on when switch is on",
 					"value": 1
 				},
 				{
