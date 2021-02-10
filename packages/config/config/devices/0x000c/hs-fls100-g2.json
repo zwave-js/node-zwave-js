@@ -44,7 +44,7 @@
 			"allowManualEntry": true
 		},
 		"3": {
-			"label": "Multilevel Srnsor Report Interval",
+			"label": "Multilevel Sensor Report Interval",
 			"description": "Sets the interval for periodic lux level and temperature reports",
 			"valueSize": 2,
 			"unit": "minutes",
