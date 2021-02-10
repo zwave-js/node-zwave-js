@@ -418,6 +418,30 @@
 					"label": "Secure Keypad Door Lock",
 					"supportedCCs": ["Basic", "Door Lock", "User Code", "Manufacturer Specific", "Security", "Version"]
 				},
+				"0x04": {
+					"label": "Secure Keypad Door Lock DeadBolt",
+					"supportedCCs": ["Basic", "Door Lock", "Lock", "User Code", "Manufacturer Specific", "Security", "Version"]
+				},
+				"0x05": {
+					"label": "Secure Door",
+					"supportedCCs": ["Basic", "Door Lock", "User Code", "Manufacturer Specific", "Security", "Version"]
+				},
+				"0x06": {
+					"label": "Secure Gate",
+					"supportedCCs": ["Basic", "Door Lock", "User Code", "Manufacturer Specific", "Security", "Version"]
+				},
+				"0x07": {
+					"label": "Secure Barrier AddOn",
+					"supportedCCs": ["Basic", "Door Lock", "User Code", "Manufacturer Specific", "Security", "Version"]
+				},
+				"0x08": {
+					"label": "Secure Barrier Open Only",
+					"supportedCCs": ["Basic", "Door Lock", "User Code", "Manufacturer Specific", "Security", "Version"]
+				},
+				"0x09": {
+					"label": "Secure Barrier Close Only",
+					"supportedCCs": ["Basic", "Door Lock", "User Code", "Manufacturer Specific", "Security", "Version"]
+				},
 				"0x0a": {
 					"label": "Secure Lockbox",
 					"supportedCCs": [
