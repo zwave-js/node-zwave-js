@@ -3,7 +3,13 @@ import MemoryMap from "nrf-intel-hex";
 import { ZWaveError, ZWaveErrorCodes } from "../error/ZWaveError";
 import { CRC16_CCITT } from "./crc";
 
-export type FirmwareFileFormat = "aeotec" | "otz" | "ota" | "hex" | "gecko";
+export type FirmwareFileFormat =
+	| "aeotec"
+	| "otz"
+	| "ota"
+	| "hex"
+	| "gecko"
+	| "bin";
 
 export interface Firmware {
 	data: Buffer;
@@ -27,7 +33,9 @@ export function guessFirmwareFileFormat(
 	filename: string,
 	rawData: Buffer,
 ): FirmwareFileFormat {
-	if (
+	if (filename.endsWith(".bin")) {
+		return "bin";
+	} else if (
 		(filename.endsWith(".exe") || filename.endsWith(".ex_")) &&
 		rawData.includes(firmwareIndicators.aeotec)
 	) {
@@ -75,6 +83,9 @@ export function extractFirmware(
 		case "gecko":
 			// There is no description for the file contents, so we
 			// have to assume this is for firmware target 0
+			return { data: rawData };
+		case "bin":
+			// There is no description for the file contents, so the user has to make sure to select the correct target
 			return { data: rawData };
 	}
 }
