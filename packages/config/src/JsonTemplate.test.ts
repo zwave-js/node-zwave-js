@@ -354,6 +354,35 @@ describe("readJsonWithTemplate", () => {
 		expect(content).toEqual(expected);
 	});
 
+	it("should be able to resolve deep in-file selectors", async () => {
+		const test = {
+			$import: "template.json#we/all/live/in/1/yellow/submarine",
+		};
+		const template = {
+			super: "toll",
+			we: {
+				all: {
+					live: {
+						in: [
+							"nope",
+							{ yellow: { submarine: { template: true } } },
+						],
+					},
+				},
+			},
+		};
+		const expected = { template: true };
+		await mockFs({
+			"/test.json": JSON.stringify(test),
+			"/template.json": JSON.stringify(template),
+		});
+
+		const content = await readJsonWithTemplate(
+			path.join(mockDir, "test.json"),
+		);
+		expect(content).toEqual(expected);
+	});
+
 	it("selector based circular references should throw an error (three-way)", async () => {
 		const test = {
 			$import: "template1.json#foo",
