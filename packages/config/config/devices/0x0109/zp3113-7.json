@@ -29,11 +29,11 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "°C",
+					"label": "Celsius",
 					"value": 0
 				},
 				{
-					"label": "°F",
+					"label": "Fahrenheit",
 					"value": 1
 				}
 			]

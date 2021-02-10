@@ -39,7 +39,7 @@
 				{
 					"label": "Uncalibrate",
 					"value": "2"
-				},
+				}
 			]
 		},
 		"13": {
@@ -61,7 +61,7 @@
 				{
 					"label": "Previous Position",
 					"value": "2"
-				},
+				}
 			]
 		}
 	},

@@ -92,10 +92,6 @@
 					"value": 0
 				},
 				{
-					"label": "Reserved",
-					"value": 1
-				},
-				{
 					"label": "3-way switch mode",
 					"value": 2
 				},
@@ -125,10 +121,6 @@
 					"value": 0
 				},
 				{
-					"label": "Reserved",
-					"value": 1
-				},
-				{
 					"label": "3-way switch mode",
 					"value": 2
 				},
@@ -154,23 +146,23 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "The setting for sending nif, entering rf power level test mode and factory reset are effective",
+					"label": "Sending NIF, RF power level test mode, and factory reset are enabled",
 					"value": -128
 				},
 				{
-					"label": "The functions of s1 and s2 are disabled",
+					"label": "S1 and S2 are disabled",
 					"value": 0
 				},
 				{
-					"label": "The function of sending nif is enabled",
+					"label": "Sending NIF enabled",
 					"value": 1
 				},
 				{
-					"label": "The function of entering rf power level test mode is enabled",
+					"label": "RF power level test mode enabled",
 					"value": 2
 				},
 				{
-					"label": "The function of factory reset is enabled",
+					"label": "Factory reset is enabled",
 					"value": 4
 				}
 			]
@@ -208,11 +200,11 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "Reset all configuration parameters to factory default setting",
+					"label": "Reset to default settings",
 					"value": 0
 				},
 				{
-					"label": "Reset to factory default setting and removed from the Z-Wave network",
+					"label": "Reset to default and remove from network",
 					"value": 1431655765
 				}
 			]
