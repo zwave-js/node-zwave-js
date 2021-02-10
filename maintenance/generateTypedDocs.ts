@@ -105,7 +105,6 @@ function shouldStripPropertySignature(
 function printInterfaceDeclarationStructure(
 	struct: InterfaceDeclarationStructure,
 ): string {
-	if (struct.name === "GenericDeviceClass") debugger;
 	return `
 interface ${struct.name}${
 		struct.typeParameters?.length
