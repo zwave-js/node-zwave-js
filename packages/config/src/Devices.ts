@@ -128,10 +128,9 @@ export async function loadDeviceIndexInternal(
 			const relativePath = path
 				.relative(devicesDir, file)
 				.replace(/\\/g, "/");
-			const fileContents = await readFile(file, "utf8");
 			// Try parsing the file
 			try {
-				const config = new DeviceConfig(relativePath, fileContents);
+				const config = await DeviceConfig.from(file, devicesDir);
 				// Add the file to the index
 				index.push(
 					...config.devices.map((dev: any) => ({
@@ -186,6 +185,18 @@ function isFirmwareVersion(val: any): val is string {
 }
 
 export class DeviceConfig {
+	public static async from(
+		filename: string,
+		relativeTo?: string,
+	): Promise<DeviceConfig> {
+		const relativePath = relativeTo
+			? path.relative(relativeTo, filename).replace(/\\/g, "/")
+			: filename;
+		const fileContents = await readFile(filename, "utf8");
+
+		return new DeviceConfig(relativePath, fileContents);
+	}
+
 	public constructor(filename: string, fileContents: string) {
 		const definition = JSON5.parse(fileContents);
 		if (!isHexKeyWith4Digits(definition.manufacturerId)) {

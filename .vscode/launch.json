@@ -13,6 +13,7 @@
 			"cwd": "${workspaceFolder}",
 			"console": "integratedTerminal",
 			"internalConsoleOptions": "neverOpen",
+			"skipFiles": ["<node_internals>/**"],
 			"disableOptimisticBPs": true
 		},
 		{
