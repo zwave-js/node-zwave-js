@@ -132,14 +132,18 @@ export class GenericDeviceClass {
 			);
 		}
 		this.label = definition.label;
-		if (
-			definition.unit != undefined &&
-			typeof definition.unit !== "string"
-		) {
-			throwInvalidConfig(
-				"device classes",
-				`The unit for scale ${num2hex(key)} is not a string!`,
-			);
+
+		if (definition.zwavePlusDeviceType != undefined) {
+			if (typeof definition.zwavePlusDeviceType !== "string") {
+				throwInvalidConfig(
+					"device classes",
+					`The zwavePlusDeviceType for generic device class ${num2hex(
+						key,
+					)} is not a string!`,
+				);
+			} else {
+				this.zwavePlusDeviceType = definition.zwavePlusDeviceType;
+			}
 		}
 
 		if (definition.supportedCCs != undefined) {
@@ -232,6 +236,8 @@ export class GenericDeviceClass {
 
 	public readonly key: number;
 	public readonly label: string;
+	/** @internal */
+	public readonly zwavePlusDeviceType?: string;
 	public readonly supportedCCs: readonly CommandClasses[];
 	public readonly controlledCCs: readonly CommandClasses[];
 	public readonly specific: ReadonlyMap<number, SpecificDeviceClass>;
@@ -254,6 +260,21 @@ export class SpecificDeviceClass {
 			);
 		}
 		this.label = definition.label;
+
+		if (definition.zwavePlusDeviceType != undefined) {
+			if (typeof definition.zwavePlusDeviceType !== "string") {
+				throwInvalidConfig(
+					"device classes",
+					`The zwavePlusDeviceType for device class ${
+						generic.label
+					} -> ${num2hex(key)} is not a string!`,
+				);
+			} else {
+				this.zwavePlusDeviceType = definition.zwavePlusDeviceType;
+			}
+		} else if (generic.zwavePlusDeviceType != undefined) {
+			this.zwavePlusDeviceType = generic.zwavePlusDeviceType;
+		}
 
 		if (definition.supportedCCs != undefined) {
 			if (
@@ -328,6 +349,7 @@ export class SpecificDeviceClass {
 
 	public readonly key: number;
 	public readonly label: string;
+	public readonly zwavePlusDeviceType?: string;
 	public readonly supportedCCs: readonly CommandClasses[];
 	public readonly controlledCCs: readonly CommandClasses[];
 }
