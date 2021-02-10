@@ -207,7 +207,7 @@
 		"18": {
 			"label": "Door propped timer",
 			"valueSize": 1,
-			"minValue": 10,
+			"minValue": 1,
 			"maxValue": 254,
 			"defaultValue": 0,
 			"unsigned": true,
