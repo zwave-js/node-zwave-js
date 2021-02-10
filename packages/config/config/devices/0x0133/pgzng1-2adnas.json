@@ -17,6 +17,7 @@
 		"max": "255.255"
 	},
 	"metadata": {
-		"reset": "To reset the device, press and hold the reset button on the back of the unit for about 15 seconds. The unit will then restart"
+		"reset": "To reset the device, press and hold the reset button on the back of the unit for about 15 seconds. The unit will then restart",
+		"manual": "https://products.z-wavealliance.org/ProductManual/File?folder=&filename=MarketCertificationFiles/3106/Z-Wave%20Plus%20Guide.pdf"
 	}
 }

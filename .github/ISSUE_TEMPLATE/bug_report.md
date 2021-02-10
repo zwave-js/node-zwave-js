@@ -64,4 +64,16 @@ Steps to reproduce the behavior:
 **Additional context**
 Add any other context about the problem here.
 
-**Logfile:** <!-- ATTACH(!) `zwave-js` logfile with DEBUG or VERBOSE loglevel here. Please no links or gists or embedded logs. -->
+**Logfile:**
+<!--
+  ATTACH(!) `zwave-js` logfile with DEBUG or VERBOSE loglevel here. Please no links or gists or embedded logs.
+  Please make sure to upload the correct log. If you're unsure, the correct one is called `zwave-<number>.log` and starts with
+
+  ███████╗ ██╗    ██╗  █████╗  ██╗   ██╗ ███████╗             ██╗ ███████╗
+  ╚══███╔╝ ██║    ██║ ██╔══██╗ ██║   ██║ ██╔════╝             ██║ ██╔════╝
+    ███╔╝  ██║ █╗ ██║ ███████║ ██║   ██║ █████╗   █████╗      ██║ ███████╗
+   ███╔╝   ██║███╗██║ ██╔══██║ ╚██╗ ██╔╝ ██╔══╝   ╚════╝ ██   ██║ ╚════██║
+  ███████╗ ╚███╔███╔╝ ██║  ██║  ╚████╔╝  ███████╗        ╚█████╔╝ ███████║
+  ╚══════╝  ╚══╝╚══╝  ╚═╝  ╚═╝   ╚═══╝   ╚══════╝         ╚════╝  ╚══════╝
+
+-->

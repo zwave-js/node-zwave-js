@@ -19,6 +19,7 @@
 	"metadata": {
 		"inclusion": "Device ADD for Inclusion\n- Click [Add] icon in Z-Wave Controller .\n- Press the Net_Button for between 2 and 30 seconds, Green LED is Blinking one time every 300 milliseconds.\n- If Inclusion Process is successful, Green led will turn off.",
 		"exclusion": "Device Remove for Exclusion\n- Click [Remove] icon in Z-Wave Controller\n- Press the Net_Button for between 2 and 30 seconds, Green LED is Blinking one time every 300 milliseconds.",
-		"reset": "-Long press Net_Button for more than 30 secounds in the product. \n- Device Reset Locally notification is Transmitted.Green led is turn on for 2.5 seconds，then turn off.\n\n. Please use this procedure only when the network primary controller is missing or otherwise inoperable."
+		"reset": "-Long press Net_Button for more than 30 secounds in the product. \n- Device Reset Locally notification is Transmitted.Green led is turn on for 2.5 seconds，then turn off.\n\n. Please use this procedure only when the network primary controller is missing or otherwise inoperable.",
+		"manual": "https://products.z-wavealliance.org/ProductManual/File?folder=&filename=product_documents/3888/Simon%20smoke%20alarm%20user%20manual.pdf"
 	}
 }

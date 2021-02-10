@@ -290,7 +290,7 @@ export class CommandClass {
 	}
 
 	/** Extracts the CC id from a buffer that contains a serialized CC */
-	private static getCommandClass(data: Buffer): CommandClasses {
+	public static getCommandClass(data: Buffer): CommandClasses {
 		return parseCCId(data).ccId;
 	}
 

@@ -141,6 +141,9 @@ export async function initSentry(
 					} else if (/custom baud rate/i.test(msg)) {
 						// Input/output error setting custom baud rate of 115200
 						ignore = true;
+					} else if (/bindings\.node/i.test(msg)) {
+						// Could not locate the bindings file
+						ignore = true;
 					}
 				}
 			}
