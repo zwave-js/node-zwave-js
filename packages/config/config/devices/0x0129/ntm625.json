@@ -333,35 +333,46 @@
 				}
 			]
 		},
-		"23[0x00]": {
-			"label": "DPS Alarm (AX) (Duplicate of parameter 19. Values should be tied together)",
-			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 1,
-			"defaultValue": 0,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
-		},
 		"23[0x01]": {
-			"label": "Deadbolt Alarm",
+			"label": "Lock Body Alarms: DPS Alarm (AX)",
+			"description": "Duplicate of parameter 19. Values should be tied together",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 1,
-			"defaultValue": 0,
+			"defaultValue": 1,
 			"readOnly": false,
 			"writeOnly": false,
 			"allowManualEntry": true
 		},
 		"23[0x02]": {
-			"label": "Lever Rotated",
+			"label": "Lock Body Alarms: Deadbolt",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 1,
-			"defaultValue": 0,
+			"defaultValue": 1,
 			"readOnly": false,
 			"writeOnly": false,
 			"allowManualEntry": true
+		},
+		"23[0x04]": {
+			"label": "Lock Body Alarms: Lever Rotated",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 1,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Disabled",
+					"value": 0
+				},
+				{
+					"label": "Enabled",
+					"value": 1
+				},
+			]
 		},
 		"23[0xFF]": {
 			"label": "All Alarms On",
