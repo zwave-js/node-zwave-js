@@ -173,7 +173,7 @@ export const applicationCCs: readonly CommandClasses[] = [
 	CommandClasses["Alarm Sensor"],
 	CommandClasses["Alarm Silence"],
 	CommandClasses["All Switch"],
-	CommandClasses["Anti-theft"],
+	CommandClasses["Anti-Theft"],
 	CommandClasses["Barrier Operator"],
 	CommandClasses.Basic,
 	CommandClasses["Basic Tariff Information"],
