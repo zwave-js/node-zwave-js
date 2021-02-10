@@ -21,12 +21,26 @@
 			"label": "Analog Gas/Heat Port Mode",
 			"valueSize": 1,
 			"minValue": 0,
-			"maxValue": 1,
+			"maxValue": 2,
 			"defaultValue": 1,
 			"unsigned": true,
 			"readOnly": false,
 			"writeOnly": false,
-			"allowManualEntry": true
+			"allowManualEntry": false
+			"options": [
+				{
+					"label": "Disabled"
+					"value": 0
+				},
+				{
+					"label": "Gas Enabled"
+					"value": 1
+				},
+				{
+					"label": "Heat Enabled"
+					"value": 2
+				}
+				]
 		},
 		"2": {
 			"label": "Analog Gas/Heat Port Resolution",
@@ -48,7 +62,21 @@
 			"unsigned": true,
 			"readOnly": false,
 			"writeOnly": false,
-			"allowManualEntry": true
+			"allowManualEntry": false
+			"options": [
+				{
+					"label": "Disabled"
+					"value": 0
+				},
+				{
+					"label": "Electricity import enabled"
+					"value": 1
+				},
+				{
+					"label": "Electricity export enabled"
+					"value": 2
+				}
+				]
 		},
 		"4": {
 			"label": "Analog Electricity Port Resolution",
@@ -65,12 +93,26 @@
 			"label": "Restart Device",
 			"valueSize": 1,
 			"minValue": 0,
-			"maxValue": 0,
+			"maxValue": 2,
 			"defaultValue": 0,
 			"unsigned": true,
 			"readOnly": false,
 			"writeOnly": false,
-			"allowManualEntry": true
+			"allowManualEntry": false
+			"options": [
+				{
+					"label": "Off"
+					"value": 0
+				},
+				{
+					"label": "Restart device"
+					"value": 1
+				},
+				{
+					"label": "Restart metering chip"
+					"value": 2
+				}
+				]
 		}
 	},
 	"metadata": {
