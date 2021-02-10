@@ -19,29 +19,27 @@
 	"paramInformation": {
 		"3": {
 			"label": "Beeper",
-			"description": "Config enable snd ff else 00",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 1,
-			"defaultValue": 255,
+			"defaultValue": 1,
 			"unsigned": true,
 			"readOnly": false,
 			"writeOnly": false,
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "Disable beeper",
+					"label": "Disabled",
 					"value": 0
 				},
 				{
-					"label": "Enable beeper",
+					"label": "Enabled",
 					"value": 1
 				}
 			]
 		},
 		"4": {
 			"label": "Vacation_mode",
-			"description": "Config enable snd ff else 00",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 1,
@@ -52,18 +50,17 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "Disable vacation mode",
+					"label": "Disabled",
 					"value": 0
 				},
 				{
-					"label": "Enable vacation mode",
+					"label": "Enabled",
 					"value": 1
 				}
 			]
 		},
 		"5": {
 			"label": "Lock_and_leave",
-			"description": "Config enable snd ff else 00",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 1,
@@ -74,11 +71,11 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "Disable lock & leave",
+					"label": "Disabled",
 					"value": 0
 				},
 				{
-					"label": "Enable lock & leave",
+					"label": "Enabled",
 					"value": 1
 				}
 			]
@@ -92,30 +89,29 @@
 			"defaultValue": 0,
 			"unsigned": true,
 			"readOnly": true,
-			"writeOnly": true,
+			"writeOnly": false,
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "User slots 8 – 1 (msb – lsb) 8,7,6,5,4,3,2,1",
+					"label": "User slots 8 – 1 (msb – lsb)",
 					"value": 1
 				},
 				{
-					"label": "User slots 16 – 9 (msb – lsb) 16,15,14,13,12,11,10,9",
+					"label": "User slots 16 – 9 (msb – lsb)",
 					"value": 2
 				},
 				{
-					"label": "User slots 24 – 17 (msb – lsb) 24,23,22,21,20,19,18,17",
+					"label": "User slots 24 – 17 (msb – lsb)",
 					"value": 3
 				},
 				{
-					"label": "User slots 30 – 25 (msb – lsb) x,x,30,29,28,27,26,25",
+					"label": "User slots 30 – 25 (msb – lsb)",
 					"value": 4
 				}
 			]
 		},
 		"15": {
 			"label": "Auto_lock",
-			"description": "Config enable snd ff else 00",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 1,
@@ -126,21 +122,20 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "Disable auto lock",
+					"label": "Disabled",
 					"value": 0
 				},
 				{
-					"label": "Enable auto lock",
+					"label": "Enabled",
 					"value": 1
 				}
 			]
 		},
 		"16": {
 			"label": "User_code_pin_length",
-			"description": "User code pin length, a value between 4 and 8 (default 4)",
 			"valueSize": 1,
 			"minValue": 4,
-			"maxValue": 4,
+			"maxValue": 8,
 			"defaultValue": 4,
 			"unsigned": true,
 			"readOnly": false,
