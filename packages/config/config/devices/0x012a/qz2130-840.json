@@ -19,7 +19,6 @@
 	"paramInformation": {
 		"3": {
 			"label": "Night Light",
-			"description": "0 = LED indicator will be off when the the connected light is on. 1 = the LED indicator will be on when the connected light is on. 2 = the LED indicator will always be off regardless of the load status",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 2,
@@ -30,15 +29,15 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "Enable"
+					"label": "LED is on when switch is on"
 					"value": 0
 				},
 				{
-					"label": "Disable"
+					"label": "LED is on when switch is off"
 					"value": 1
 				},
 				{
-					"label": "Always off"
+					"label": "LED is always off"
 					"value": 2
 				}
 				]
