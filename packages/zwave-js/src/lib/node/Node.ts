@@ -2447,7 +2447,10 @@ version:               ${this.version}`;
 			command.minute !== minutes
 		) {
 			const endpoint = command.getEndpoint();
-			if (!endpoint) return;
+			if (!endpoint || !endpoint.commandClasses.Clock.isSupported()) {
+				// Make sure the endpoint supports the CC (GH#1704)
+				return;
+			}
 
 			this.driver.controllerLog.logNode(
 				this.nodeId,
