@@ -1,0 +1,321 @@
+// CBCC Domotique SAS SW-ZRC
+// RemSwiid Z-Wave remote control
+{
+	"manufacturer": "CBCC Domotique SAS",
+	"manufacturerId": "0x0166",
+	"label": "SW-ZRC",
+	"description": "RemSwiid Z-Wave remote controller",
+	"devices": [
+		{
+			"productType": "0x0002",
+			"productId": "0x0001",
+			"zwaveAllianceId": 2360
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"paramInformation": {
+		"1": {
+			"label": "Source Node Priority Association Group",
+			"description": "Set priority Association Group number for an Association Source Node",
+			"valueSize": 1,
+			"minValue": 1,
+			"maxValue": 2,
+			"defaultValue": 1,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Association Group 1",
+					"value": 1
+				},
+				{
+					"label": "Association Group 2",
+					"value": 2
+				}
+			]
+		},
+		"2": {
+			"label": "Function Device Key A",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 3,
+			"defaultValue": 1,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Disabled",
+					"value": 0
+				},
+				{
+					"label": "Basic / Multilevel Switch 2",
+					"value": 1
+				},
+				{
+					"label": "Control Central Scene 1",
+					"value": 2
+				},
+				{
+					"label": "Control Scene Activation 1",
+					"value": 3
+				}
+			]
+		},
+		"3": {
+			"label": "Function Device Key B",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 3,
+			"defaultValue": 1,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Disabled",
+					"value": 0
+				},
+				{
+					"label": "Basic / Multilevel Switch 3",
+					"value": 1
+				},
+				{
+					"label": "Control Central Scene 2",
+					"value": 2
+				},
+				{
+					"label": "Control Scene Activation 2",
+					"value": 3
+				}
+			]
+		},
+		"4": {
+			"label": "Function Device Key C",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 3,
+			"defaultValue": 1,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Disabled",
+					"value": 0
+				},
+				{
+					"label": "Basic / Multilevel Switch 4",
+					"value": 1
+				},
+				{
+					"label": "Control Central Scene 3",
+					"value": 2
+				},
+				{
+					"label": "Control Scene Activation 3",
+					"value": 3
+				}
+			]
+		},
+		"5": {
+			"label": "Function Device Key D",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 3,
+			"defaultValue": 1,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Disabled",
+					"value": 0
+				},
+				{
+					"label": "Basic / Multilevel Switch 5",
+					"value": 1
+				},
+				{
+					"label": "Control Central Scene 4",
+					"value": 2
+				},
+				{
+					"label": "Control Scene Activation 4",
+					"value": 3
+				}
+			]
+		},
+		"6": {
+			"label": "Function Device Key E",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 3,
+			"defaultValue": 1,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Disabled",
+					"value": 0
+				},
+				{
+					"label": "Basic / Multilevel Switch 6",
+					"value": 1
+				},
+				{
+					"label": "Control Central Scene 5",
+					"value": 2
+				},
+				{
+					"label": "Control Scene Activation 5",
+					"value": 3
+				}
+			]
+		},
+		"7": {
+			"label": "Function Device Key F",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 3,
+			"defaultValue": 1,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Disabled",
+					"value": 0
+				},
+				{
+					"label": "Basic / Multilevel Switch 7",
+					"value": 1
+				},
+				{
+					"label": "Control Central Scene 6",
+					"value": 2
+				},
+				{
+					"label": "Control Scene Activation 6",
+					"value": 3
+				}
+			]
+		},
+		"8": {
+			"label": "Function Device Key G",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 3,
+			"defaultValue": 1,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Disabled",
+					"value": 0
+				},
+				{
+					"label": "Basic / Multilevel Switch 8",
+					"value": 1
+				},
+				{
+					"label": "Control Central Scene 7",
+					"value": 2
+				},
+				{
+					"label": "Control Scene Activation 7",
+					"value": 3
+				}
+			]
+		},
+		"9": {
+			"label": "Function Device Key H",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 3,
+			"defaultValue": 1,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Disabled",
+					"value": 0
+				},
+				{
+					"label": "Basic / Multilevel Switch 9",
+					"value": 1
+				},
+				{
+					"label": "Control Central Scene 8",
+					"value": 2
+				},
+				{
+					"label": "Control Scene Activation 8",
+					"value": 3
+				}
+			]
+		},
+		"10": {
+			"label": "Send Unsolicited Battery Report On Wake Up",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 0,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "To same node as wakeup notification",
+					"value": 0
+				},
+				{
+					"label": "Broadcast to neighbors",
+					"value": 1
+				}
+			]
+		},
+		"11": {
+			"label": "Dimming Mode",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 0,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Continue dimming until stop key is pressed",
+					"value": 0
+				},
+				{
+					"label": "Stop dimming when up or down key is released",
+					"value": 1
+				}
+			]
+		}
+	},
+	"metadata": {
+		"reset": "1. Press and hold both the “Stop” and “All” keys until the red and green LEDs both start blinking at the same time (after about 3 seconds)\n2. Press three times (3x) on the “Up” command key of the RemSwiid™ remote and the blue Z-Wave LED will also light up. After about 2-3 seconds, the blue and red LEDs will turn off and the green LED will remain lit for 1-2 seconds indicating that the reset has been completed.\nResetting the RemSwiid™ remote will result in its taking on a new randomly generated Home ID. Obviously, if the RemSwiid™ remote is the primary controller in the Z-Wave network, resetting it will result in the nodes in the network being orphaned and it will be necessary after the reset to exclude and re-include all the nodes in a network with a new Home ID. If the RemSwiid™ is being used as a secondary controller in the network, the reset procedure should only be used once it has been excluded from the network, except of course if such exclusion is not feasible (e.g. if the network’s primary controller is missing or otherwise inoperable)",
+		"manual": "https://products.z-wavealliance.org/ProductManual/File?folder=&filename=MarketCertificationFiles/2360/ZRC1%20Users%20manual%20v1.09%20CERTIFIED.pdf"
+	}
+}
