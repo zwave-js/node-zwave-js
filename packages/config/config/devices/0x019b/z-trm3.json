@@ -110,7 +110,7 @@
 		"6": {
 			"label": "Floor maximum temperature (FHi)",
 			"valueSize": 2,
-			"unit": ".1°C",
+			"unit": "0.1°C",
 			"minValue": 50,
 			"maxValue": 400,
 			"defaultValue": 400,
