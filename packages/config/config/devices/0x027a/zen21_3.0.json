@@ -9,6 +9,11 @@
 		{
 			"productType": "0xb111",
 			"productId": "0x1e1c"
+		},
+		{
+			"productType": "0xaa00",
+			"productId": "0xaa01",
+			"zwaveAllianceId": 3667
 		}
 	],
 	"firmwareVersion": {
@@ -18,8 +23,7 @@
 	"supportsZWavePlus": true,
 	"paramInformation": {
 		"1": {
-			"label": "Paddle Control",
-			"description": "Reverse switch direction",
+			"label": "Invert Switch",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 2,
@@ -29,15 +33,15 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "Top-ON, Bottom-OFF",
+					"label": "Normal Orientation",
 					"value": 0
 				},
 				{
-					"label": "Top-OFF, Bottom-ON",
+					"label": "Invert switch",
 					"value": 1
 				},
 				{
-					"label": "Any paddle turns light on/off",
+					"label": "Both paddles toggle",
 					"value": 2
 				}
 			]
@@ -53,26 +57,25 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "LED ON - Switch OFF",
+					"label": "LED on when switch off",
 					"value": 0
 				},
 				{
-					"label": "LED ON - Switch ON",
+					"label": "LED on when switch on",
 					"value": 1
 				},
 				{
-					"label": "LED always OFF",
+					"label": "LED always off",
 					"value": 2
 				},
 				{
-					"label": "LED always ON",
+					"label": "LED always on",
 					"value": 3
 				}
 			]
 		},
 		"3": {
-			"label": "Auto Turn-off enable / disable",
-			"description": "Enable / Disable Auto Turn-off",
+			"label": "Enable/Disable Auto Off",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 1,
@@ -82,17 +85,17 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "Timer disabled",
+					"label": "Disable",
 					"value": 0
 				},
 				{
-					"label": "Timer enabled",
+					"label": "Enable",
 					"value": 1
 				}
 			]
 		},
 		"4": {
-			"label": "Auto-Turn-off time",
+			"label": "Auto-Off Timer",
 			"unit": "minutes",
 			"valueSize": 4,
 			"minValue": 1,
@@ -103,7 +106,7 @@
 			"allowManualEntry": true
 		},
 		"5": {
-			"label": "Auto Turn-on enable/disable",
+			"label": "Enable/Disable Auto On",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 1,
@@ -113,17 +116,17 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "Timer disabled",
+					"label": "Disable",
 					"value": 0
 				},
 				{
-					"label": "Timer enabled",
+					"label": "Enable",
 					"value": 1
 				}
 			]
 		},
 		"6": {
-			"label": "Auto Turn-on timer",
+			"label": "Auto On Timer",
 			"unit": "minutes",
 			"valueSize": 4,
 			"minValue": 1,
@@ -144,21 +147,21 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "Forced to OFF",
+					"label": "Forced to off",
 					"value": 0
 				},
 				{
-					"label": "Forced to ON",
+					"label": "Forced to on",
 					"value": 1
 				},
 				{
-					"label": "Restore prior status (default)",
+					"label": "Prior state",
 					"value": 2
 				}
 			]
 		},
 		"9": {
-			"label": "Scene Control enable/disable",
+			"label": "Enable/Disable Scene Control",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 1,
@@ -168,17 +171,17 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "Scene Control disabled",
+					"label": "Disable",
 					"value": 0
 				},
 				{
-					"label": "Scene Control enabled",
+					"label": "Enable",
 					"value": 1
 				}
 			]
 		},
 		"10": {
-			"label": "Paddle control enable/disable",
+			"label": "Enable/Disable Local Control",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 1,
@@ -188,14 +191,20 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "Local paddle control disabled",
+					"label": "Disable",
 					"value": 0
 				},
 				{
-					"label": "Local paddle control enabled",
+					"label": "Enable",
 					"value": 1
 				}
 			]
 		}
+	},
+	"metadata": {
+		"inclusion": "1. Initiate inclusion (pairing) in the app (or web interface).\n2. Tap the upper paddle of the switch 3 times.\n3. The LED indicator will blink to signal communication and stay on/off when communication is concluded",
+		"exclusion": "1. Bring your Z-Wave gateway (hub) close to the switch if possible\n2. Put the Z-Wave hub into exclusion mode \n3. Tap the lower paddle on the switch 3 times quickly\n4. Your hub will confirm exclusion and the device will disappear from your controller's device list",
+		"reset": "If your primary controller is missing or inoperable, you may need to reset the device to factory settings. To complete the reset process manually, tap-tap-tap’n’hold the upper paddle for at least 10 seconds. The LED indicator will flash to confirm successful reset.\nNOTE: All previously recorded activity and custom settings will be erased from the device’s memory",
+		"manual": "https://products.z-wavealliance.org/ProductManual/File?folder=&filename=product_documents/3667/zooz-z-wave-plus-on-off-switch-zen21-ver3.1-manual.pdf"
 	}
 }

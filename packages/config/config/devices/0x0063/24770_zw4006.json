@@ -19,9 +19,7 @@
 	"paramInformation": {
 		"1": {
 			"label": "Timeout Duration",
-			"description": "0=test(5s) 1=1 minute 5=5 minutes 15=15 minutes 30=30 minutes 0xff=disable timeout",
 			"valueSize": 1,
-			"unit": "minutes",
 			"minValue": 0,
 			"maxValue": 255,
 			"defaultValue": 5,
@@ -58,7 +56,7 @@
 		},
 		"2": {
 			"label": "Change Brightness of Associated Light Bulb(s)",
-			"description": "0xff = last dimming level",
+			"description": "255 = last dimming level",
 			"valueSize": 1,
 			"minValue": 255,
 			"maxValue": 255,
@@ -66,17 +64,10 @@
 			"unsigned": true,
 			"readOnly": false,
 			"writeOnly": false,
-			"allowManualEntry": true,
-			"options": [
-				{
-					"label": "Default",
-					"value": 255
-				}
-			]
+			"allowManualEntry": true
 		},
 		"3": {
 			"label": "Operation Mode",
-			"description": "1 – manual 2 – vacancy 3 – occupancy",
 			"valueSize": 1,
 			"minValue": 1,
 			"maxValue": 3,
@@ -91,18 +82,17 @@
 					"value": 1
 				},
 				{
-					"label": "Occupancy",
-					"value": 3
-				},
-				{
 					"label": "Vacancy",
 					"value": 2
+				},
+				{
+					"label": "Occupancy",
+					"value": 3
 				}
 			]
 		},
 		"4": {
 			"label": "Enable/Disable Association Mode",
-			"description": "0 – disabled 1 – enabled 5 devices max: group 1 – 5 devices lifeline  group 2 – 5 lighting devices group 3 – 5 lighting devices",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 1,
@@ -124,29 +114,26 @@
 		},
 		"5": {
 			"label": "Invert Switch",
-			"description": "In a 3-way configuration, invert the connected add-on switch buttons 0 – disabled 1 – enabled",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 1,
 			"defaultValue": 0,
-			"unsigned": true,
 			"readOnly": false,
 			"writeOnly": false,
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "Disabled",
+					"label": "Normal orientation",
 					"value": 0
 				},
 				{
-					"label": "Enabled",
+					"label": "Inverted switch",
 					"value": 1
 				}
 			]
 		},
 		"6": {
 			"label": "Enable/Disable Motion Sensor",
-			"description": "0 – disabled 1 – enabled",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 1,
@@ -168,7 +155,6 @@
 		},
 		"13": {
 			"label": "Motion Sensor Sensitivity",
-			"description": "1 – high 2 – medium 3 – low",
 			"valueSize": 1,
 			"minValue": 1,
 			"maxValue": 3,
@@ -194,7 +180,6 @@
 		},
 		"14": {
 			"label": "Enable/Disable Light Sensing",
-			"description": "0 – disabled 1 – enabled",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 1,
@@ -216,46 +201,18 @@
 		},
 		"15": {
 			"label": "Reset Cycle",
-			"description": "0 – disable 1 – 10 secs 2 – 20 secs 3 – 30 secs 4 – 45 secs  …  110 – 27 mins 15 secs (+15 seconds each adition, max. 27 mins 15secs)",
 			"valueSize": 1,
-			"unit": "seconds",
+			"unit": "15 seconds",
 			"minValue": 0,
 			"maxValue": 110,
 			"defaultValue": 2,
 			"unsigned": true,
 			"readOnly": false,
 			"writeOnly": false,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "Disable",
-					"value": 0
-				},
-				{
-					"label": "27 mins",
-					"value": 110
-				},
-				{
-					"label": "10 secs",
-					"value": 1
-				},
-				{
-					"label": "20 secs",
-					"value": 2
-				},
-				{
-					"label": "30 secs",
-					"value": 3
-				},
-				{
-					"label": "45 secs",
-					"value": 4
-				}
-			]
+			"allowManualEntry": true
 		},
 		"19": {
 			"label": "Exclusion Mode",
-			"description": "0 = press any button on the switch   1 = press and release “ x” button, then press and release “ on “ button",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 1,
@@ -266,12 +223,12 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "Alternate exclusion",
-					"value": 1
-				},
-				{
 					"label": "Normal exclusion",
 					"value": 0
+				},
+				{
+					"label": "Press and release 'x', then 'on'",
+					"value": 1
 				}
 			]
 		}

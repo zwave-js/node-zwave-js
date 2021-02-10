@@ -18,28 +18,26 @@
 	},
 	"paramInformation": {
 		"3": {
-			"label": "Led Light",
-			"description": "Led light",
+			"label": "LED Light",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 2,
 			"defaultValue": 0,
-			"unsigned": true,
 			"readOnly": false,
 			"writeOnly": false,
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "To make the LED turn on when the light is turned on, change parameter 3’s value to “1”",
+					"label": "LED on when switch is off",
+					"value": 0
+				},
+				{
+					"label": "LED on when switch is on",
 					"value": 1
 				},
 				{
-					"label": "To turn the LED off at all times, change parameter 3’s value to 2",
+					"label": "LED always off",
 					"value": 2
-				},
-				{
-					"label": "Default",
-					"value": 0
 				}
 			]
 		}

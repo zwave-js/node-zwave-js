@@ -18,8 +18,7 @@
 	},
 	"paramInformation": {
 		"1": {
-			"label": "Dim Level",
-			"description": "Dim level when light bulb is turned on",
+			"label": "State With Manual Switch or Power Failure",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 2,
@@ -27,12 +26,26 @@
 			"unsigned": true,
 			"readOnly": false,
 			"writeOnly": false,
-			"allowManualEntry": true
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Full brightness",
+					"value": 0
+				},
+				{
+					"label": "Last dim level",
+					"value": 1
+				},
+				{
+					"label": "Last state",
+					"value": 2
+				}
+			]
 		},
 		"9": {
-			"label": "Dim Level",
-			"description": "Dim level when light bulb is turned on",
+			"label": "Dim Rate Steps",
 			"valueSize": 1,
+			"unit": "%",
 			"minValue": 1,
 			"maxValue": 99,
 			"defaultValue": 99,
@@ -42,8 +55,7 @@
 			"allowManualEntry": true
 		},
 		"10": {
-			"label": "Dimming/Brightening Step Timing",
-			"description": "Dim speed",
+			"label": "Dim Rate Timing",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 10,

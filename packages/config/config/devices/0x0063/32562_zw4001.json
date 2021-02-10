@@ -19,7 +19,6 @@
 	"paramInformation": {
 		"20": {
 			"label": "Change Open/Close Report Method",
-			"description": "Change open/close report method 1. notification 2. Basic Set 3. basic report",
 			"valueSize": 1,
 			"minValue": 1,
 			"maxValue": 3,
