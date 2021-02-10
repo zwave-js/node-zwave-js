@@ -18,23 +18,32 @@
 	},
 	"paramInformation": {
 		"1": {
-			"label": "Temperature Unit Selection",
-			"description": "Choose °f",
+			"label": "Temperature Units",
 			"valueSize": 1,
 			"minValue": 0,
-			"maxValue": 0,
+			"maxValue": 1,
 			"defaultValue": 0,
 			"unsigned": true,
 			"readOnly": false,
 			"writeOnly": false,
-			"allowManualEntry": true
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "°C",
+					"value": 0
+				},
+				{
+					"label": "°F",
+					"value": 1
+				}
+			]
 		},
 		"2": {
-			"label": "Auto Temperature Report Interval",
-			"description": "Auto temperature interval from 0.1°c~5°c",
+			"label": "Temperature Reporting Interval",
+      "description: "0.1°C~5°C",
 			"valueSize": 1,
 			"minValue": 1,
-			"maxValue": 30,
+			"maxValue": 50,
 			"defaultValue": 30,
 			"unsigned": true,
 			"readOnly": false,
@@ -42,11 +51,11 @@
 			"allowManualEntry": true
 		},
 		"3": {
-			"label": "Auto Humidity Report Interval",
-			"description": "Auto humidity report interval from 1% ~ 50%",
+			"label": "Humidity Reporting Interval",
+      "description: "1%~50%",
 			"valueSize": 1,
 			"minValue": 1,
-			"maxValue": 20,
+			"maxValue": 50,
 			"defaultValue": 20,
 			"unsigned": true,
 			"readOnly": false,
@@ -55,10 +64,10 @@
 		},
 		"4": {
 			"label": "Auto Light Report Interval",
-			"description": "Auto light report interval from off or 5%~50%",
+			"description": "0 for off or 5%~50%",
 			"valueSize": 1,
 			"minValue": 0,
-			"maxValue": 25,
+			"maxValue": 50,
 			"defaultValue": 25,
 			"unsigned": true,
 			"readOnly": false,
@@ -67,11 +76,10 @@
 		},
 		"5": {
 			"label": "Motion Re-triggering Duration",
-			"description": "Motion re-triggering duration (in 1 ~ 127 minutes)",
 			"valueSize": 1,
 			"unit": "minutes",
 			"minValue": 1,
-			"maxValue": 3,
+			"maxValue": 127,
 			"defaultValue": 3,
 			"unsigned": true,
 			"readOnly": false,
@@ -80,10 +88,9 @@
 		},
 		"6": {
 			"label": "Motion Sensitivity",
-			"description": "Motion sensitivity from level 1 ~ level 7",
 			"valueSize": 1,
 			"minValue": 1,
-			"maxValue": 4,
+			"maxValue": 7,
 			"defaultValue": 4,
 			"unsigned": true,
 			"readOnly": false,
@@ -91,23 +98,35 @@
 			"allowManualEntry": true
 		},
 		"7": {
-			"label": "Led Flash Mode Selection",
-			"description": "Led flash mode selection",
+			"label": "LED Flash Mode Selection",
 			"valueSize": 1,
 			"minValue": 1,
-			"maxValue": 1,
+			"maxValue": 3,
 			"defaultValue": 1,
 			"unsigned": true,
 			"readOnly": false,
 			"writeOnly": false,
-			"allowManualEntry": true
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Disabled",
+					"value": 1
+				},
+				{
+					"label": "Quick Flash on Temp. and PIR Trigger",
+					"value": 2
+				},
+				{
+					"label": "Quick Flash on PIR Trigger",
+					"value": 3
+				}
+			]
 		},
 		"8": {
-			"label": "Pir Trigger Notification Re-sending Times",
-			"description": "Pir trigger notification re-sending times from 0 time to 10 times",
+			"label": "PIR Trigger Notification Re-sending Times",
 			"valueSize": 1,
 			"minValue": 0,
-			"maxValue": 3,
+			"maxValue": 10,
 			"defaultValue": 3,
 			"unsigned": true,
 			"readOnly": false,
