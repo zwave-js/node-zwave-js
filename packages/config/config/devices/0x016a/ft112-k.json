@@ -73,10 +73,11 @@
 		},
 		"111": {
 			"label": "Battery Level Check Interval",
+			"description": "When >10, this value is rounded up towards the next multiple of 4 minutes (240 seconds)",
 			"valueSize": 4,
 			"unit": "seconds",
 			"minValue": 0,
-			"maxValue": 606480,
+			"maxValue": 2147483647,
 			"defaultValue": 86640,
 			"unsigned": true,
 			"readOnly": false,
