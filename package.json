@@ -119,7 +119,8 @@
     "config": "ts-node maintenance/importConfig.ts",
     "docs": "docsify serve docs",
     "docs:generate": "ts-node -P maintenance/tsconfig.json maintenance/generateTypedDocs.ts",
-    "perf": "ts-node test/valuedb-perf.ts"
+    "test:perf": "ts-node test/valuedb-perf.ts",
+    "test:firmware": "ts-node test/firmware-extraction.ts"
   },
   "readme": "README.md",
   "husky": {
