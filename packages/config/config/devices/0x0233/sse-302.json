@@ -19,6 +19,7 @@
 	"metadata": {
 		"inclusion": "1) Prepare the controller for enabling inclusion\n2) Keep touching the lamp low button, then after 5 seconds elapsed, 3 beep sounds can be heard. At that time, withdraw touching the button and then inclusion will be commenced",
 		"exclusion": "1) Make sure the switch is in inclusion mode.\n2) Keep touching the lamp low button, then after 5 seconds elapsed, 3 beep sounds can be heard. At that time, withdraw touching the button and then exclusion will be started",
-		"reset": "(* Use this procedure only when the network primary controller is missing or otherwise inoperable.)\n1) Hold the low touch button for 10 seconds\n - Keep holding the button, then at 5 second, 3 beeps will come out, and keep holding\n- 10 seconds later, 5 beep sounds can be heard, and then withdraw touching the low button, so that factory reset should be started.\n2) After factory reset is done, all the lamps will be turned off and all variables will be initialized to default values."
+		"reset": "(* Use this procedure only when the network primary controller is missing or otherwise inoperable.)\n1) Hold the low touch button for 10 seconds\n - Keep holding the button, then at 5 second, 3 beeps will come out, and keep holding\n- 10 seconds later, 5 beep sounds can be heard, and then withdraw touching the low button, so that factory reset should be started.\n2) After factory reset is done, all the lamps will be turned off and all variables will be initialized to default values.",
+		"manual": "https://products.z-wavealliance.org/ProductManual/File?folder=&filename=MarketCertificationFiles/2127/Switch_Product_Manual.pdf"
 	}
 }

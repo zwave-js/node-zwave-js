@@ -30,6 +30,7 @@ interface ReportProblemOptions {
 	filename: string;
 	line?: number;
 	message: string;
+	annotation?: boolean;
 }
 
 export function reportProblem({
@@ -37,8 +38,9 @@ export function reportProblem({
 	filename,
 	line,
 	message,
+	annotation = !!process.env.CI,
 }: ReportProblemOptions): void {
-	if (process.env.CI) {
+	if (annotation) {
 		// Since Github hides the filename in the logs if we use the annotation syntax, we need to write it twice
 		console.log(`\n${filename}:`);
 		console.log(

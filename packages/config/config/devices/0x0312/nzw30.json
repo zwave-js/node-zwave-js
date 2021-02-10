@@ -1,7 +1,7 @@
 // NIE Technology Co., Ltd. NZW30
 // In-Wall Switch (On/Off)
 {
-	"manufacturer": "NIE Technology Co., Ltd.",
+	"manufacturer": "Inovelli",
 	"manufacturerId": "0x0312",
 	"label": "NZW30",
 	"description": "In-Wall Switch (On/Off)",
@@ -18,7 +18,7 @@
 	"supportsZWavePlus": true,
 	"paramInformation": {
 		"3": {
-			"label": "ledIndicator",
+			"label": "LED Indicator",
 			"description": "Set the LED light behavior",
 			"valueSize": 1,
 			"minValue": 0,
@@ -47,7 +47,7 @@
 			]
 		},
 		"4": {
-			"label": "invert",
+			"label": "Switch Orientation",
 			"description": "Invert on & off on the physical switch",
 			"valueSize": 1,
 			"minValue": 0,
@@ -68,7 +68,7 @@
 			]
 		},
 		"5": {
-			"label": "autoOff",
+			"label": "Countdown Timer",
 			"description": "Automatically turn switch off after this number of seconds",
 			"unit": "seconds",
 			"valueSize": 2,

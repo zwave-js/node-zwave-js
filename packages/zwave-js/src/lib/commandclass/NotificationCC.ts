@@ -37,6 +37,7 @@ import {
 	gotDeserializationOptions,
 	implementedVersion,
 } from "./CommandClass";
+import { UserCodeCommand } from "./UserCodeCC";
 
 export enum NotificationCommand {
 	// All the supported commands
@@ -868,11 +869,48 @@ export class NotificationCCReport extends NotificationCC {
 					userId: this.eventParameters[0],
 				};
 			} else {
-				this.eventParameters = CommandClass.from(this.driver, {
-					data: this.eventParameters,
-					fromEncapsulation: true,
-					encapCC: this,
-				});
+				// Try to parse the event parameters - if this fails, we should still handle the notification report
+				try {
+					this.eventParameters = CommandClass.from(this.driver, {
+						data: this.eventParameters,
+						fromEncapsulation: true,
+						encapCC: this,
+					});
+				} catch (e: unknown) {
+					if (
+						e instanceof ZWaveError &&
+						e.code ===
+							ZWaveErrorCodes.PacketFormat_InvalidPayload &&
+						Buffer.isBuffer(this.eventParameters)
+					) {
+						const ccId = CommandClass.getCommandClass(
+							this.eventParameters,
+						);
+						const ccCommand = CommandClass.getCCCommand(
+							this.eventParameters,
+						);
+						if (
+							ccId === CommandClasses["User Code"] &&
+							ccCommand === UserCodeCommand.Report &&
+							this.eventParameters.length >= 3
+						) {
+							// Access control -> Keypad Lock/Unlock operation
+							// Some devices report the user code with truncated UserCode reports
+							this.eventParameters = {
+								userId: this.eventParameters[2],
+							};
+						} else {
+							this.driver.controllerLog.logNode(
+								this.nodeId as number,
+								`Failed to parse Notification CC event parameters, ignoring them...`,
+								"error",
+							);
+						}
+					} else {
+						// unexpected error
+						throw e;
+					}
+				}
 			}
 		} else if (
 			valueConfig.parameter instanceof NotificationParameterWithValue
