@@ -19,8 +19,7 @@
 	"supportsZWavePlus": true,
 	"paramInformation": {
 		"1": {
-			"label": "Silent mode",
-			"description": "Silent mode on/off",
+			"label": "Volume",
 			"valueSize": 1,
 			"minValue": 1,
 			"maxValue": 3,
@@ -45,7 +44,6 @@
 		},
 		"2": {
 			"label": "Auto Relock",
-			"description": "Auto Relock on/off",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 255,
@@ -67,6 +65,7 @@
 		},
 		"3": {
 			"label": "Auto Relock Time",
+			"unit": "seconds",
 			"valueSize": 1,
 			"minValue": 1,
 			"maxValue": 180,
@@ -77,7 +76,7 @@
 			"allowManualEntry": true
 		},
 		"4": {
-			"label": "Wrong code Entry Limit",
+			"label": "Wrong Code Entry Limit",
 			"valueSize": 1,
 			"minValue": 3,
 			"maxValue": 10,
@@ -111,8 +110,9 @@
 			]
 		},
 		"7": {
-			"label": "Shut down time",
+			"label": "Shut Down Time",
 			"description": "Shut down time after wrong code entries",
+			"unit": "seconds",
 			"valueSize": 1,
 			"minValue": 10,
 			"maxValue": 180,
@@ -123,7 +123,8 @@
 			"allowManualEntry": true
 		},
 		"8": {
-			"label": "Operating mode",
+			"label": "Operating Mode",
+			"description": "0 = normal mode (this is the default mode) 1 = vacation mode, keypad lockout 2 = privacy mode, no keypad. RF Unlock will work 3 = passage mode, Lock is permanently unlocked.",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 3,
@@ -151,7 +152,7 @@
 			]
 		},
 		"11": {
-			"label": "One touch locking",
+			"label": "One Touch Locking",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 255,
@@ -159,10 +160,20 @@
 			"unsigned": true,
 			"readOnly": false,
 			"writeOnly": false,
-			"allowManualEntry": true
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Off",
+					"value": 0
+				},
+				{
+					"label": "On",
+					"value": 255
+				}
+			]
 		},
 		"12": {
-			"label": "Privacy button",
+			"label": "Privacy Button",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 255,
@@ -170,7 +181,17 @@
 			"unsigned": true,
 			"readOnly": false,
 			"writeOnly": false,
-			"allowManualEntry": true
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Off",
+					"value": 0
+				},
+				{
+					"label": "On",
+					"value": 255
+				}
+			]
 		},
 		"13": {
 			"label": "Lock Status LED",
@@ -181,10 +202,20 @@
 			"unsigned": true,
 			"readOnly": false,
 			"writeOnly": false,
-			"allowManualEntry": true
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Off",
+					"value": 0
+				},
+				{
+					"label": "On",
+					"value": 255
+				}
+			]
 		},
 		"15": {
-			"label": "Reset to factory default",
+			"label": "Reset To Factory Defaults",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 1,
@@ -202,10 +233,22 @@
 			"unsigned": true,
 			"readOnly": false,
 			"writeOnly": false,
-			"allowManualEntry": true
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Off",
+					"value": 0
+				},
+				{
+					"label": "On",
+					"value": 255
+				}
+			]
 		},
 		"18": {
-			"label": "Door propped timer",
+			"label": "Door Propped Timer",
+			"description": "10 to 2540 second. This value is represented as seconds X 10. (ie a value of 4 would mean a door propped timer of 40 seconds)",
+			"unit": "decaseconds",
 			"valueSize": 1,
 			"minValue": 1,
 			"maxValue": 254,
@@ -216,49 +259,8 @@
 			"allowManualEntry": true
 		},
 		"19": {
-			"label": "DPS Alarm",
-			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 255,
-			"defaultValue": 255,
-			"unsigned": true,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
-		},
-		"20": {
-			"label": "Deadbolt installed",
-			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 1,
-			"defaultValue": 0,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
-		},
-		"21": {
-			"label": "Eco Mode",
-			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 1,
-			"defaultValue": 0,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
-		},
-		"22": {
-			"label": "Privacy Mode with	Deadbolt",
-			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 255,
-			"defaultValue": 0,
-			"unsigned": true,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
-		},
-		"23": {
-			"label": "Lock body alarms mask",
+			"label": "DPS Alarm (Ax sensor)",
+			"description": "Used to enable/disable door condition alarms for locks that support a door position sensor. Any lock that does not support DPS will always report 0x00.",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 255,
@@ -269,7 +271,73 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "DPS Alarm",
+					"label": "Off",
+					"value": 0
+				},
+				{
+					"label": "On",
+					"value": 255
+				}
+			]
+		},
+		"20": {
+			"label": "Deadbolt Installed",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 0,
+			"readOnly": true,
+			"writeOnly": false,
+			"allowManualEntry": false
+		},
+		"21": {
+			"label": "Eco Mode",
+			"description": "If supported switches lock to lower power mode of operation with reduced sound and led brightness.",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 0,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Off",
+					"value": 0
+				},
+				{
+					"label": "On",
+					"value": 255
+				}
+			]
+		},
+		"22": {
+			"label": "Privacy Mode With Deadbolt",
+			"description": "If enabled then extending the deadbolt will put the lock into Privacy Mode.",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 0,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"23": {
+			"label": "Lock Body Alarms Mask",
+			"description": "Each bit controls one alarm. 1 = alarm enabled, 0 = alarm disabled. 0xFF = All Alarms on, Default is 0xFF. Bit 0: DPS Alarm (AX) (Duplicate of parameter 19. Values should be tied together) Bit 1: Deadbolt Alarm Bit 2: Lever Rotated (Rx) Bit 3 – 7: Not Used",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 255,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "DPS Alarm (AX) (Duplicate of parameter 19. Values should be tied together)",
 					"value": 0
 				},
 				{
@@ -279,6 +347,10 @@
 				{
 					"label": "Lever Rotated",
 					"value": 2
+				},
+				{
+					"label": "Off",
+					"value": 255
 				}
 			]
 		}
