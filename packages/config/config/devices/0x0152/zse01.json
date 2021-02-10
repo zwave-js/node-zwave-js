@@ -1,10 +1,10 @@
-// Zooz Zooz Indoor Siren
-// ZSE01
+// UFairy G.R. Tech ZSE01
+// Indoor Siren
 {
-	"manufacturer": "Zooz",
+	"manufacturer": "UFairy G.R. Tech",
 	"manufacturerId": "0x0152",
-	"label": "Zooz Indoor Siren",
-	"description": "ZSE01",
+	"label": "ZSE01",
+	"description": "Indoor Siren",
 	"devices": [
 		{
 			"productType": "0x0003",
