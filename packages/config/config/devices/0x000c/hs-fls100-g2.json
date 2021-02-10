@@ -89,7 +89,7 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "PIR, lux, or Z-Wave triggers",
+					"label": "Z-Wave only",
 					"value": 0
 				},
 				{
