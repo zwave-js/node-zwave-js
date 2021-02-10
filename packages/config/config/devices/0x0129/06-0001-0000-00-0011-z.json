@@ -1,9 +1,10 @@
 // ASSA ABLOY 06-0001-0000-00-0011-Z
+// Smart Door Lock
 {
 	"manufacturer": "ASSA ABLOY",
 	"manufacturerId": "0x0129",
 	"label": "06-0001-0000-00-0011-Z",
-	"description": "",
+	"description": "Smart Door Lock",
 	"devices": [
 		{
 			"productType": "0x0008",

@@ -1,7 +1,7 @@
-// ASSA ABLOY YKFCON
+// Yale YKFCON
 // Smart Living Keyfree Smart Lock
 {
-	"manufacturer": "ASSA ABLOY",
+	"manufacturer": "Yale",
 	"manufacturerId": "0x0129",
 	"label": "YKFCON",
 	"description": "Smart Living Keyfree Smart Lock",

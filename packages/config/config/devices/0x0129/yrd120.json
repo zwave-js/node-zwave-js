@@ -1,10 +1,10 @@
-// ASSA ABLOY YRD120
-// Touchscreen deadbolt without key
+// Yale YRD120
+// Key-Free Touchscreen Deadbolt
 {
-	"manufacturer": "ASSA ABLOY",
+	"manufacturer": "Yale",
 	"manufacturerId": "0x0129",
 	"label": "YRD120",
-	"description": "Touchscreen deadbolt without key",
+	"description": "Key-Free Touchscreen Deadbolt",
 	"devices": [
 		{
 			"productType": "0x0002",

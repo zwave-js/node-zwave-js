@@ -1,7 +1,7 @@
-// ASSA ABLOY SR-BX-ZW
+// Yale SR-BX-ZW
 // External siren
 {
-	"manufacturer": "ASSA ABLOY",
+	"manufacturer": "Yale",
 	"manufacturerId": "0x0129",
 	"label": "SR-BX-ZW",
 	"description": "External siren",
@@ -15,6 +15,81 @@
 	"firmwareVersion": {
 		"min": "0.0",
 		"max": "255.255"
+	},
+	"paramInformation": {
+		"1": {
+			"label": "Alarm Duration",
+			"valueSize": 1,
+			"unit": "minutes",
+			"minValue": 1,
+			"maxValue": 10,
+			"defaultValue": 10,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"2": {
+			"label": "Alarm LED Flash",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 1,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Disable",
+					"value": 0
+				},
+				{
+					"label": "Enable",
+					"value": 1
+				}
+			]
+		},
+		"3": {
+			"label": "Flashing LED Interval",
+			"description": "Control's the siren's LED flash during non-alarm mode. Note: Setting this parameter will significantly reduce the battery life of your siren.",
+			"valueSize": 1,
+			"unit": "10 seconds",
+			"minValue": 0,
+			"maxValue": 25,
+			"defaultValue": 0,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true,
+			"options": [
+				{
+					"label": "Disable",
+					"value": 0
+				}
+			]
+		},
+		"4": {
+			"label": "Tamper Alarm",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 1,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Disable",
+					"value": 0
+				},
+				{
+					"label": "Enable",
+					"value": 1
+				}
+			]
+		}
 	},
 	"metadata": {
 		"inclusion": "ADDING THE SIREN\nThis product can be added and operate in any compatible Z-Wave network. All non-battery operated nodes within the network will act as repeaters, regardless of vendor, to increase reliability of the network.\nAdding steps:\n• Turn on the battery power switch to activate\nthe pre-inserted batteries.\n• The Siren will emit a 2-tone beep.\n• Put the Z-Wave controller into adding or\nLearning mode (please refer to the Z-Wave\ncontroller manual).\n• Within 1.5 seconds, press the Siren learn button\n3 times.\n• Refer to the operation manual of the Z-Wave\ncontroller to complete the learn-in process.\n• If the Siren has already been added (learnt) into\nanother Z-Wave controller, or if the Siren is unable\nto be learnt into the current Z-Wave controller,\nplease remove it first (see Removing the siren below)\nbefore attempting to add it into the current\nZ-Wave controller",

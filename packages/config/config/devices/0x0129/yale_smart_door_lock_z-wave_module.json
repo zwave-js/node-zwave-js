@@ -1,10 +1,10 @@
-// Yale Smart Door Lock
-// The Yale Smart Door Lock Z-Wave module allows you to control your Yale Connected Smart Door Lock from anywhere in the world when linked to a leading Z
+// Yale P-KFCON-MOD-YALE
+// Smart Door Lock
 {
 	"manufacturer": "Yale",
 	"manufacturerId": "0x0129",
-	"label": "Smart Door Lock",
-	"description": "The Yale Smart Door Lock Z-Wave module allows you to control your Yale Connected Smart Door Lock from anywhere in the world when linked to a leading Z",
+	"label": "P-KFCON-MOD-YALE",
+	"description": "Smart Door Lock",
 	"devices": [
 		{
 			"productType": "0x0007",
@@ -31,7 +31,6 @@
 	"paramInformation": {
 		"1": {
 			"label": "Volume",
-			"description": "Volume of product during operation",
 			"valueSize": 1,
 			"minValue": 1,
 			"maxValue": 3,
@@ -56,8 +55,7 @@
 			]
 		},
 		"2": {
-			"label": "Auto Relock",
-			"description": "Auto relock On/Off",
+			"label": "Enable/Disable Auto Relock",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 255,
@@ -68,21 +66,21 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "Off",
+					"label": "Disable",
 					"value": 0
 				},
 				{
-					"label": "On",
+					"label": "Enable",
 					"value": 255
 				}
 			]
 		},
 		"3": {
-			"label": "Relock Time",
-			"description": "Amount of time (secs)",
+			"label": "Manual Relock Time",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 7,
+			"unit": "seconds",
+			"minValue": 7,
+			"maxValue": 60,
 			"defaultValue": 7,
 			"unsigned": true,
 			"readOnly": false,
@@ -91,12 +89,11 @@
 		},
 		"6": {
 			"label": "Remote Relock Time",
-			"description": "Amount of time (secs)",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 10,
-			"defaultValue": 10,
 			"unit": "seconds",
+			"minValue": 10,
+			"maxValue": 90,
+			"defaultValue": 10,
 			"unsigned": true,
 			"readOnly": false,
 			"writeOnly": false,
