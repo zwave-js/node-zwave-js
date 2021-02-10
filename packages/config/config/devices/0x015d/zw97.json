@@ -19,10 +19,9 @@
 	"paramInformation": {
 		"1": {
 			"label": "LED Status",
-			"description": "0----outlet on,led on.1----outlet on ,led off.2-----led no work",
 			"valueSize": 1,
 			"minValue": 0,
-			"maxValue": 0,
+			"maxValue": 2,
 			"defaultValue": 0,
 			"unsigned": true,
 			"readOnly": false,
@@ -30,11 +29,11 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "LED on when outlet is on, LED off when outlet is off",
+					"label": "LED on when outlet is on,",
 					"value": 0
 				},
 				{
-					"label": "LED on when outlet is off, LED off when outlet is on",
+					"label": "LED on when outlet is off",
 					"value": 1
 				},
 				{
