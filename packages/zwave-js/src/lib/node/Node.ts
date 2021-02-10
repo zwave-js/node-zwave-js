@@ -1832,10 +1832,6 @@ version:               ${this.version}`;
 			// Security CC is always secure
 			secure: true,
 		});
-		// ...and be secure
-		if (this.isSecure !== true) {
-			this.isSecure = true;
-		}
 
 		// Ensure that we're not flooding the queue with unnecessary NonceReports (GH#1059)
 		const { queue, currentTransaction } = this.driver[
@@ -1891,11 +1887,6 @@ version:               ${this.version}`;
 			},
 			{ free: true },
 		);
-
-		// If we don't know it yet, assume that the node communicates securely
-		if (this.isSecure !== true) {
-			this.isSecure = true;
-		}
 	}
 
 	private handleHail(_command: HailCC): void {
