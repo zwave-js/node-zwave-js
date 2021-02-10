@@ -29,7 +29,7 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "Switch (default)",
+					"label": "Switch",
 					"value": 0
 				},
 				{

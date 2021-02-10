@@ -40,7 +40,6 @@
 		},
 		"2": {
 			"label": "Temperature Reporting Interval",
-      "description: "0.1°C~5°C",
 			"valueSize": 1,
 			"minValue": 1,
 			"maxValue": 50,
@@ -52,8 +51,8 @@
 		},
 		"3": {
 			"label": "Humidity Reporting Interval",
-      "description: "1%~50%",
 			"valueSize": 1,
+      "unit": "%",
 			"minValue": 1,
 			"maxValue": 50,
 			"defaultValue": 20,
@@ -64,8 +63,8 @@
 		},
 		"4": {
 			"label": "Auto Light Report Interval",
-			"description": "0 for off or 5%~50%",
 			"valueSize": 1,
+      "unit": "%",
 			"minValue": 0,
 			"maxValue": 50,
 			"defaultValue": 25,

@@ -24,7 +24,6 @@
 	"paramInformation": {
 		"35": {
 			"label": "Moving Time From Up (left) to Down (right) For Curtain",
-			"description": "The available range for time set is 1 to 127 seconds",
 			"valueSize": 1,
 			"unit": "seconds",
 			"minValue": 1,
@@ -36,7 +35,7 @@
 			"allowManualEntry": true
 		},
 		"80": {
-			"label": "Notification To Send to The Associated Devices (Group 1) on State Change",
+			"label": "Notification to Send to Association Group 1 on State Change",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 1,
@@ -51,29 +50,28 @@
 					"value": 0
 				},
 				{
-					"label": "Send basic cc report",
+					"label": "Send Basic CC report",
 					"value": 1
 				}
 			]
 		},
 		"85": {
 			"label": "Operation Mode of External Switch",
-			"description": "Refer to the user manual for the description of operation mode 1 or 2",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 1,
-			"defaultValue": 1,
+			"defaultValue": 0,
 			"unsigned": true,
 			"readOnly": false,
 			"writeOnly": false,
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "Operation mode 1",
+					"label": "S1 for closing, S2 for opening",
 					"value": 0
 				},
 				{
-					"label": "Operation mode 2",
+					"label": "S1 and S2 perform same action",
 					"value": 1
 				}
 			]
