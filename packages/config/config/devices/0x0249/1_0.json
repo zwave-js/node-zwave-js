@@ -19,6 +19,7 @@
 	"metadata": {
 		"inclusion": "Pressing and holding both buttons for 1 to 5 seconds",
 		"exclusion": "Pressing and holding both buttons for 5 to 10 seconds when the Moving blind is in the top position",
-		"reset": "Pressing both buttons for more than 30 seconds when the Moving blind is anywhere but in the bottom position. WARNING, don’t do this unless you are very sure what you are doing. Please use this procedure only when the network primary controller is missing or otherwise inoperable"
+		"reset": "Pressing both buttons for more than 30 seconds when the Moving blind is anywhere but in the bottom position. WARNING, don’t do this unless you are very sure what you are doing. Please use this procedure only when the network primary controller is missing or otherwise inoperable",
+		"manual": "https://products.z-wavealliance.org/ProductManual/File?folder=&filename=MarketCertificationFiles/1835/Moving%20blinds%20-%20User%20manual%20-%2028062016.pdf"
 	}
 }

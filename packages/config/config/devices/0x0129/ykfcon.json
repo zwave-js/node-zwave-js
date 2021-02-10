@@ -181,6 +181,7 @@
 	"metadata": {
 		"inclusion": "Put the Z-Wave controller into add mode\n\nEnter the Master code on the lock, followed by #\n\nPress the 4 button, followed by #\n\nPress the 1 button followed by #\n\nRefer to the operation manual of the Z-Wave controller to complete the add/inclusion process\n\nFor more information on this please visit:\nwww.yale.co.uk/smart-living",
 		"exclusion": "Put the Z-Wave controller into remove mode\n\nEnter the Master code on the lock, followed by #\n\nPress the 4 button, followed by #\n\nPress the 2 button followed by #\n\nRefer to the operation manual of the Z-Wave controller to complete the remove/exclusion process\n\nFor more information on this please visit:\nwww.yale.co.uk/smart-living",
-		"reset": "Enter the Master code on the lock, followed by #\n\nPress the 4 button, followed by #\n\nPress the 0 button followed by #\n\nPlease use this procedure only when the network controller is missing or inoperable"
+		"reset": "Enter the Master code on the lock, followed by #\n\nPress the 4 button, followed by #\n\nPress the 0 button followed by #\n\nPlease use this procedure only when the network controller is missing or inoperable",
+		"manual": "https://products.z-wavealliance.org/ProductManual/File?folder=&filename=MarketCertificationFiles/2743/Instruction%20Manual%20V2b.pdf"
 	}
 }

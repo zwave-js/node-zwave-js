@@ -74,11 +74,19 @@ export enum DoorLockOperationType {
 // @publicAPI
 export type DoorHandleStatus = [boolean, boolean, boolean, boolean];
 
-function getTargetModeValueId(endpoint: number): ValueID {
+export function getTargetModeValueId(endpoint: number): ValueID {
 	return {
 		commandClass: CommandClasses["Door Lock"],
 		endpoint,
 		property: "targetMode",
+	};
+}
+
+export function getCurrentModeValueId(endpoint: number): ValueID {
+	return {
+		commandClass: CommandClasses["Door Lock"],
+		endpoint,
+		property: "currentMode",
 	};
 }
 

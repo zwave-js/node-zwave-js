@@ -29,6 +29,7 @@
 	"metadata": {
 		"inclusion": "Please refer to the move in flyer or contact support from the Dwelo app",
 		"exclusion": "Please refer to the move in flyer or contact support from the Dwelo app",
-		"reset": "Please refer to the move in flyer or contact support from the Dwelo app"
+		"reset": "Please refer to the move in flyer or contact support from the Dwelo app",
+		"manual": "https://products.z-wavealliance.org/ProductManual/File?folder=&filename=product_documents/3940/Dwelo%20Controller%20Installer%20Manual%20Hub3.pdf"
 	}
 }

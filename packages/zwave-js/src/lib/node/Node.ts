@@ -53,6 +53,10 @@ import {
 import { ClockCCReport } from "../commandclass/ClockCC";
 import { CommandClass, getCCValueMetadata } from "../commandclass/CommandClass";
 import {
+	DoorLockMode,
+	getCurrentModeValueId as getCurrentLockModeValueId,
+} from "../commandclass/DoorLockCC";
+import {
 	FirmwareUpdateMetaDataCC,
 	FirmwareUpdateMetaDataCCGet,
 	FirmwareUpdateMetaDataCCStatusReport,
@@ -61,6 +65,7 @@ import {
 } from "../commandclass/FirmwareUpdateMetaDataCC";
 import { HailCC } from "../commandclass/HailCC";
 import { isCommandClassContainer } from "../commandclass/ICommandClassContainer";
+import { getLockedValueId } from "../commandclass/LockCC";
 import {
 	getManufacturerIdValueId,
 	getProductIdValueId,
@@ -2335,6 +2340,9 @@ version:               ${this.version}`;
 			// Find out which property we need to update
 			const valueConfig = notificationConfig.lookupValue(value);
 
+			// Perform some heuristics on the known notification
+			this.handleKnownNotification(command);
+
 			let allowIdleReset: boolean;
 			if (!valueConfig) {
 				// This is an unknown value, collect it in an unknown bucket
@@ -2353,6 +2361,7 @@ version:               ${this.version}`;
 				);
 				return;
 			}
+
 			// Now that we've gathered all we need to know, update the value in our DB
 			const valueId: ValueID = {
 				commandClass: command.ccId,
@@ -2384,6 +2393,41 @@ version:               ${this.version}`;
 			};
 			this.valueDB.setValue(valueId, command.notificationEvent);
 			// We don't know what this notification refers to, so we don't force a reset
+		}
+	}
+
+	private handleKnownNotification(command: NotificationCCReport): void {
+		if (
+			// Access Control, manual/keypad (un)lock operation
+			command.notificationType === 0x06 &&
+			[0x01, 0x02, 0x05, 0x06].includes(
+				command.notificationEvent as number,
+			) &&
+			(this.supportsCC(CommandClasses["Door Lock"]) ||
+				this.supportsCC(CommandClasses.Lock))
+		) {
+			// The Door Lock Command Class is constrained to the S2 Access Control key,
+			// while the Notification Command Class, in the same device, could use a
+			// different key. This way the device can notify devices which don't belong
+			// to the S2 Access Control key group of changes in its state.
+
+			const isLocked =
+				command.notificationEvent === 0x01 ||
+				command.notificationEvent === 0x05;
+
+			// Update the current lock status
+			if (this.supportsCC(CommandClasses["Door Lock"])) {
+				this.valueDB.setValue(
+					getCurrentLockModeValueId(command.endpointIndex),
+					isLocked ? DoorLockMode.Secured : DoorLockMode.Unsecured,
+				);
+			}
+			if (this.supportsCC(CommandClasses.Lock)) {
+				this.valueDB.setValue(
+					getLockedValueId(command.endpointIndex),
+					isLocked,
+				);
+			}
 		}
 	}
 

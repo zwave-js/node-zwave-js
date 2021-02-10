@@ -17,6 +17,7 @@
 		"max": "255.255"
 	},
 	"metadata": {
-		"reset": "Not applicable"
+		"reset": "Not applicable",
+		"manual": "https://products.z-wavealliance.org/ProductManual/File?folder=&filename=MarketCertificationFiles/1363/SmartStick-QuickStart-Guide.pdf"
 	}
 }
