@@ -68,6 +68,90 @@
 						"Wake Up"
 					]
 				},
+				"0x04": {
+					"label": "Set Top Box",
+					"supportedCCs": [
+						"Association", // V2+
+						"Association Group Information",
+						"CRC-16 Encapsulation",
+						"Device Reset Locally",
+						"Inclusion Controller",
+						"Power Level",
+						"Manufacturer Specific",
+						"Security",
+						"Security 2",
+						"Supervision",
+						"Simple AV",
+						"Transport Service", // V2+
+						"Version", // V2+
+						"Z-Wave Plus Info" // V2+
+					],
+					"controlledCCs": [
+						"Anti-Theft Unlock, version 1",
+						"Association, version 2 or newer",
+						"Basic",
+						"CRC-16 Encapsulation (if CSC)",
+						"Multi Channel, version 4 or newer",
+						"Multi Channel Association, version 3 or newer (if CSC)",
+						"Security 0 (S0) (if CSC)",
+						"Security 2 (S2) (if CSC)",
+						"Wake Up, version 2 or newer (if CSC or SSC)"
+					]
+				},
+				"0x05": {
+					"label": "Sub System Controller",
+					"supportedCCs": [
+						"Association, version 2 or newer",
+						"Association Group Information",
+						"CRC-16 Encapsulation",
+						"Device Reset Locally (if the device can be reset, refer to [1])",
+						"Inclusion Controller",
+						"Manufacturer Specific",
+						"Power Level",
+						"Security 2 (S2)",
+						"Supervision",
+						"Transport Service, version 2 or newer",
+						"Version, version 2 or newer",
+						"Z-Wave Plus Info, version 2 or newer"
+					],
+					"controlledCCs": [
+						"Basic",
+						"CRC-16 Encapsulation",
+						"Multi Channel, version 4 or newer",
+						"Wake Up, version 2 or newer"
+					]
+				},
+				"0x06": {
+					"label": "TV",
+					"supportedCCs": [
+						"Association, version 2 or newer",
+						"Association Group Information",
+						"CRC-16 Encapsulation (if CSC)",
+						"Device Reset Locally (if the device can be reset, refer to [1])",
+						"Inclusion Controller",
+						"Manufacturer Specific",
+						"Powerlevel",
+						"Security 0 (S0) (if CSC)",
+						"Security 2 (S2)",
+						"Supervision",
+						"Simple AV",
+						"Transport Service, version 2 or newer",
+						"Version, version 2 or newer",
+						"Z-Wave Plus Info, version 2 or newer"
+					],
+					"controlledCCs": [
+						"Anti-Theft Unlock, version1",
+						"Association, version 2 or newer",
+						"Association Group Information (if CSC)",
+						"Basic",
+						"CRC-16 Encapsulation (if CSC)",
+						"Multi Channel, version 4 or newer",
+						"Multi Channel Association, version 3 or newer (if CSC)",
+						"Security 0 (S0) (if CSC)",
+						"Security 2 (S2) (if CSC)",
+						"Wake Up, version 2 or newer) (if CSC or SSC)"
+					]
+				},
 				"0x07": {
 					"label": "Gateway",
 					"supportedCCs": ["Manufacturer Specific", "Security", "Version"],
@@ -79,6 +163,24 @@
 			"label": "AV Control Point",
 			"supportedCCs": ["Basic"],
 			"specific": {
+				"0x01": {
+					"label": "Sound Switch",
+					"supportedCCs": [
+						"Association, version 2 or newer",
+						"Association Group Information",
+						"Basic",
+						"Battery (if LSS)",
+						"Sound Switch",
+						"Device Reset Locally (if the device can be reset)",
+						"Manufacturer Specific",
+						"Power Level",
+						"Security 2 (S2)",
+						"Supervision",
+						"Transport Service, version 2 or newer",
+						"Version, version 2 or newer",
+						"Z-Wave Plus Info, version 2 or newer"
+					]
+				},
 				"0x04": {
 					"label": "Satellite Receiver",
 					"supportedCCs": ["Simple AV Control", "Manufacturer Specific", "Version"]
@@ -137,10 +239,10 @@
 			"label": "Thermostat",
 			"specific": {
 				"0x01": {
-					"label": "Thermostat Heating"
+					"label": "Heating Thermostat"
 				},
 				"0x02": {
-					"label": "Thermostat General",
+					"label": "General Thermostat",
 					"supportedCCs": ["Manufacturer Specific", "Thermostat Mode", "Thermostat Setpoint"]
 				},
 				"0x03": {
@@ -176,7 +278,7 @@
 					]
 				},
 				"0x06": {
-					"label": "Thermostat General V2",
+					"label": "General Thermostat V2",
 					"supportedCCs": [
 						"Basic",
 						"Manufacturer Specific",
@@ -202,6 +304,22 @@
 			"specific": {
 				"0x01": {
 					"label": "Basic Repeater Slave"
+				},
+				"0x03": {
+					"label": "IR Repeater",
+					"supportedCCs": [
+						"Association, version 2 or newer",
+						"Association Group Information",
+						"Device Reset Locally (if the device can be reset, refer to [1])",
+						"IR Repeater",
+						"Manufacturer Specific",
+						"Power Level",
+						"Security 2 (S2)",
+						"Supervision",
+						"Transport Service, version 2 or newer",
+						"Version ,version 2 or newer",
+						"Z-Wave Plus Info, version 2 or newer"
+					]
 				}
 			}
 		},
@@ -214,7 +332,7 @@
 					"supportedCCs": ["All Switch"]
 				},
 				"0x02": {
-					"label": "Binary Tunable Color Light",
+					"label": "Binary Tunable Color Switch",
 					"supportedCCs": ["All Switch", "Manufacturer Specific", "Color Switch"]
 				},
 				"0x03": {
@@ -226,8 +344,77 @@
 						"Scene Actuator Configuration"
 					]
 				},
+				"0x04": {
+					"label": "Power Strip Switch",
+					"supportedCCs": [
+						"Association, version 2 or newer",
+						"Association Group Information",
+						"Basic",
+						"Binary Switch",
+						"Device Reset Locally (if the device can be reset, refer to [1])",
+						"Manufacturer Specific",
+						"Multi Channel, version 4 or newer",
+						"Multi Channel Association, version 3 or newer",
+						"Power Level",
+						"Security 2 (S2)",
+						"Supervision",
+						"Transport Service, version 2 or newer",
+						"Version, version 2 or newer",
+						"Z-Wave Plus Info, version 2 or newer"
+					]
+				},
+				"0x05": {
+					"label": "Siren",
+					"supportedCCs": [
+						"Association, version 2 or newer",
+						"Association Group Information",
+						"Basic",
+						"Battery (if LSS)",
+						"Binary Switch",
+						"Device Reset Locally (if the device can be reset, refer to [1])",
+						"Manufacturer Specific",
+						"Power Level",
+						"Security 2 (S2)",
+						"Supervision",
+						"Transport Service, version 2 or newer",
+						"Version, version 2 or newer",
+						"Z-Wave Plus Info, version 2 or newer"
+					]
+				},
+				"0x06": {
+					"label": "Valve (open/close)",
+					"supportedCCs": [
+						"Association, version 2 or newer",
+						"Association Group Information",
+						"Basic",
+						"Battery (if LSS)",
+						"Binary Switch",
+						"Device Reset Locally (if the device can be reset, refer to [1])",
+						"Manufacturer Specific",
+						"Powerlevel",
+						"Security 2 (S2)",
+						"Supervision",
+						"Transport Service, version 2 or newer",
+						"Version, version 2 or newer",
+						"Z-Wave Plus Info, version 2 or newer"
+					]
+				},
 				"0x07": {
-					"label": "Irrigation Control"
+					"label": "Irrigation Control",
+					"supportedCCs": [
+						"Association, version 2 or newer",
+						"Association Group Information",
+						"Basic",
+						"Binary Switch",
+						"Device Reset Locally (if the device can be reset, refer to [1])",
+						"Manufacturer Specific",
+						"Power Level",
+						"Security 2 (S2)",
+						"Supervision",
+						"Transport Service, version 2 or newer",
+						"Version, version 2 or newer",
+						"Z-Wave Plus Info, version 2 or newer"
+					]
 				}
 			}
 		},
@@ -240,8 +427,22 @@
 					"supportedCCs": ["All Switch"]
 				},
 				"0x02": {
-					"label": "Tunable Color Light"
-					// TODO: don't know which CCs have to be supported
+					"label": "Color Switch Tunable Multilevel",
+					"supportedCCs": [
+						"Association, version 2 or newer",
+						"Association Group Information",
+						"Basic",
+						"Color Switch",
+						"Device Reset Locally (if the device can be reset, refer to [1])",
+						"Manufacturer Specific",
+						"Multilevel Switch or Binary Switch",
+						"Power Level",
+						"Security 2 (S2)",
+						"Supervision",
+						"Transport Service, version 2 or newer",
+						"Version, version 2 or newer",
+						"Z-Wave Plus Info, version 2 or newer"
+					]
 				},
 				"0x03": {
 					"label": "Multiposition Motor",
@@ -284,8 +485,21 @@
 					]
 				},
 				"0x08": {
-					"label": "Fan Switch"
-					// TODO: don't know which CCs have to be supported
+					"label": "Fan Switch",
+					"supportedCCs": [
+						"Association, version 2 or newer",
+						"Association Group Information",
+						"Basic",
+						"Device Reset Locally (if the device can be reset, refer to [1])",
+						"Manufacturer Specific",
+						"Multilevel Switch",
+						"Power Level",
+						"Security 2 (S2)",
+						"Supervision",
+						"Transport Service, version 2 or newer",
+						"Version, version 2 or newer",
+						"Z-Wave Plus Info, version 2 or newer"
+					]
 				}
 			}
 		},
@@ -400,6 +614,25 @@
 						"Manufacturer Specific",
 						"Version"
 					]
+				},
+				"0x03": {
+					"label": "Simple Whole Home Meter",
+					"supportedCCs": [
+						"Association, version 2 or newer",
+						"Association Group Information",
+						"Battery (if LSS or RSS)",
+						"CRC-16 Encapsulation",
+						"Device Reset Locally (if the device can be reset, refer to [1])",
+						"Manufacturer Specific",
+						"Meter, version 2 or newer",
+						"Powerlevel",
+						"Security 2 (S2)",
+						"Supervision",
+						"Transport Service, version 2 or newer",
+						"Version, version 2 or newer",
+						"Wake Up, version 2 or newer (if RSS)",
+						"Z-Wave Plus Info, version 2 or newer"
+					]
 				}
 			}
 		},
@@ -418,8 +651,108 @@
 					"label": "Secure Keypad Door Lock",
 					"supportedCCs": ["Basic", "Door Lock", "User Code", "Manufacturer Specific", "Security", "Version"]
 				},
+				"0x05": {
+					"label": "Secure Door",
+					"supportedCCs": [
+						"Application Status",
+						"Association, version 2 or newer",
+						"Association Group Information",
+						"Barrier Operator",
+						"Battery (if LSS)",
+						"Device Reset Locally (if the device can be reset, refer to [1])",
+						"Manufacturer Specific",
+						"Notification, version 4 or newer",
+						"Power level",
+						"Security 0 (S0)",
+						"Security 2 (S2)",
+						"Supervision",
+						"Transport Service, version 2 or newer",
+						"Version, version 2 or newer",
+						"Z-Wave Plus Info, version 2 or newer"
+					]
+				},
+				"0x06": {
+					"label": "Secure Gate",
+					"supportedCCs": [
+						"Application Status",
+						"Association, version 2 or newer",
+						"Association Group Information",
+						"Barrier Operator",
+						"Battery (if LSS)",
+						"Device Reset Locally (if the device can be reset, refer to [1])",
+						"Manufacturer Specific",
+						"Notification, version 4 or newer",
+						"Power level",
+						"Security 0 (S0)",
+						"Security 2 (S2)",
+						"Supervision",
+						"Transport Service, version 2 or newer",
+						"Version, version 2 or newer",
+						"Z-Wave Plus Info, version 2 or newer"
+					]
+				},
+				"0x07": {
+					"label": "Secure Barrier Add-on",
+					"supportedCCs": [
+						"Application Status",
+						"Association, version 2 or newer",
+						"Association Group Information",
+						"Barrier Operator",
+						"Battery (if LSS)",
+						"Device Reset Locally (if the device can be reset, refer to [1])",
+						"Manufacturer Specific",
+						"Notification, version 4 or newer",
+						"Power level",
+						"Security 0 (S0)",
+						"Security 2 (S2)",
+						"Supervision",
+						"Transport Service, version 2 or newer",
+						"Version, version 2 or newer",
+						"Z-Wave Plus Info, version 2 or newer"
+					]
+				},
+				"0x08": {
+					"label": "Secure Barrier Open only",
+					"supportedCCs": [
+						"Application Status",
+						"Association, version 2 or newer",
+						"Association Group Information",
+						"Barrier Operator",
+						"Battery (if LSS)",
+						"Device Reset Locally (if the device can be reset, refer to [1])",
+						"Manufacturer Specific",
+						"Notification, version 4 or newer",
+						"Power level",
+						"Security 0 (S0)",
+						"Security 2 (S2)",
+						"Supervision",
+						"Transport Service, version 2 or newer",
+						"Version, version 2 or newer",
+						"Z-Wave Plus Info, version 2 or newer"
+					]
+				},
+				"0x09": {
+					"label": "Secure Barrier Close only",
+					"supportedCCs": [
+						"Application Status",
+						"Association, version 2 or newer",
+						"Association Group Information",
+						"Barrier Operator",
+						"Battery (if LSS)",
+						"Device Reset Locally (if the device can be reset, refer to [1])",
+						"Manufacturer Specific",
+						"Notification, version 4 or newer",
+						"Power level",
+						"Security 0 (S0)",
+						"Security 2 (S2)",
+						"Supervision",
+						"Transport Service, version 2 or newer",
+						"Version, version 2 or newer",
+						"Z-Wave Plus Info, version 2 or newer"
+					]
+				},
 				"0x0a": {
-					"label": "Secure Lockbox",
+					"label": "Lockbox",
 					"supportedCCs": [
 						// MUST NOT support Basic
 						"Notification",
