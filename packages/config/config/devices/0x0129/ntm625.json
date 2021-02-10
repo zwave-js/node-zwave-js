@@ -259,7 +259,7 @@
 		},
 		"19": {
 			"label": "DPS Alarm (Ax sensor)",
-			"description": "Used to enable/disable door condition alarms for locks that support a door position sensor. Any lock that does not support DPS will always report 0x00.",
+			"description": "Used to enable/disable door condition alarms for locks that support a door position sensor. Any lock that does not support DPS will always report 'Off'.",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 255,
