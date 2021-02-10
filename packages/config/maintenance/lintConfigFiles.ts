@@ -3,7 +3,6 @@ import { num2hex } from "@zwave-js/shared";
 import { distinct } from "alcalzone-shared/arrays";
 import { wait } from "alcalzone-shared/async";
 import { green, red, white } from "ansi-colors";
-import { readFile } from "fs-extra";
 import levenshtein from "js-levenshtein";
 import * as path from "path";
 import { reportProblem } from "../../../maintenance/tools";
@@ -61,11 +60,10 @@ async function lintDevices(): Promise<void> {
 
 	for (const file of uniqueFiles) {
 		const filePath = path.join(configDir, "devices", file);
-		const fileContents = await readFile(filePath, "utf8");
 		// Try parsing the file
 		let config: DeviceConfig;
 		try {
-			config = new DeviceConfig(file, fileContents);
+			config = await DeviceConfig.from(filePath);
 		} catch (e) {
 			addError(file, e.message);
 			continue;

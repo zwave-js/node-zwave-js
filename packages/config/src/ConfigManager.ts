@@ -1,6 +1,6 @@
 import { ZWaveError, ZWaveErrorCodes, ZWaveLogContainer } from "@zwave-js/core";
 import { num2hex } from "@zwave-js/shared";
-import { pathExists, readFile } from "fs-extra";
+import { pathExists } from "fs-extra";
 import path from "path";
 import {
 	BasicDeviceClass,
@@ -472,8 +472,7 @@ export class ConfigManager {
 			if (!(await pathExists(filePath))) return;
 
 			try {
-				const fileContents = await readFile(filePath, "utf8");
-				return new DeviceConfig(indexEntry.filename, fileContents);
+				return await DeviceConfig.from(filePath);
 			} catch (e) {
 				if (process.env.NODE_ENV !== "test") {
 					this.logger.print(
