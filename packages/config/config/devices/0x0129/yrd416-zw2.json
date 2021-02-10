@@ -18,23 +18,35 @@
 	},
 	"paramInformation": {
 		"1": {
-			"label": "Silent Mode On/Off",
-			"description": "Level",
+			"label": "Volume",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 1,
+			"minValue": 1,
+			"maxValue": 3,
 			"defaultValue": 1,
 			"unsigned": true,
 			"readOnly": false,
 			"writeOnly": false,
-			"allowManualEntry": true
+			"allowManualEntry": false
+			"options": [
+				{
+					"label": "Loud"
+					"value": 1
+				},
+				{
+					"label": "Quiet",
+					"value": 2
+				},
+				{
+					"label": "Off"
+					"value": 3
+				}
+				]
 		},
 		"2": {
-			"label": "Auto Relock On/Off",
-			"description": "0x00 = off, 0xff = on default is 0x00 or off",
+			"label": "Auto Relock",
 			"valueSize": 1,
-			"minValue": -128,
-			"maxValue": 0,
+			"minValue": 0,
+			"maxValue": 255,
 			"defaultValue": 0,
 			"unsigned": true,
 			"readOnly": false,
@@ -43,7 +55,7 @@
 			"options": [
 				{
 					"label": "Auto relock on",
-					"value": -128
+					"value": 255
 				},
 				{
 					"label": "Auto relock off",
@@ -53,10 +65,9 @@
 		},
 		"3": {
 			"label": "Auto Relock Time",
-			"description": "Seconds",
 			"valueSize": 1,
 			"unit": "seconds",
-			"minValue": 0,
+			"minValue": 10,
 			"maxValue": 30,
 			"defaultValue": 30,
 			"unsigned": true,
@@ -66,10 +77,10 @@
 		},
 		"4": {
 			"label": "Wrong Code Entry Limit",
-			"description": "Times",
+			"unit": "Times",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 5,
+			"minValue": 3,
+			"maxValue": 10,
 			"defaultValue": 5,
 			"unsigned": true,
 			"readOnly": false,
@@ -77,12 +88,12 @@
 			"allowManualEntry": true
 		},
 		"7": {
-			"label": "Shut Down Time (after Wrong Code Entries)",
-			"description": "Seconds",
+			"label": "Shut Down Time",
+			"description": "Shut down time after wrong code entries",
 			"valueSize": 1,
 			"unit": "seconds",
-			"minValue": 0,
-			"maxValue": 60,
+			"minValue": 10,
+			"maxValue": 180,
 			"defaultValue": 60,
 			"unsigned": true,
 			"readOnly": false,
@@ -91,7 +102,7 @@
 		},
 		"8": {
 			"label": "Operating Mode",
-			"description": "This sets the operating mode for the lock",
+			"description": "Vacation mode = Keypad lockout; Privacy mode = No keypad, only RF Unlock",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 2,
@@ -102,47 +113,45 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "Normal mode (default)",
+					"label": "Normal",
 					"value": 0
 				},
 				{
-					"label": "Vacation mode (keypad locked out)",
+					"label": "Vacation",
 					"value": 1
 				},
 				{
-					"label": "Privacy mode (keypad locked, rf unlock functional)",
+					"label": "Privacy",
 					"value": 2
 				}
 			]
 		},
 		"11": {
 			"label": "One Touch Locking",
-			"description": "0x00 = off, 0xff = on default is 0xff or on",
 			"valueSize": 1,
-			"minValue": -128,
-			"maxValue": 0,
-			"defaultValue": 0,
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 255,
 			"unsigned": true,
 			"readOnly": false,
 			"writeOnly": false,
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "One touch locking on",
-					"value": -128
+					"label": "On",
+					"value": 255
 				},
 				{
-					"label": "One touch locking off",
+					"label": "Off",
 					"value": 0
 				}
 			]
 		},
 		"12": {
 			"label": "Privacy Button",
-			"description": "0x00 = off, 0xff = on default is 0x00 or off",
 			"valueSize": 1,
-			"minValue": -128,
-			"maxValue": 0,
+			"minValue": 0,
+			"maxValue": 255,
 			"defaultValue": 0,
 			"unsigned": true,
 			"readOnly": false,
@@ -150,21 +159,20 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "Privacy button on",
-					"value": -128
+					"label": "Off",
+					"value": 0
 				},
 				{
-					"label": "Privacy button off",
-					"value": 0
+					"label": "On",
+					"value": 255
 				}
 			]
 		},
 		"13": {
 			"label": "Lock Status Led",
-			"description": "0x00 = off, 0xff = on default is 0x00 or off",
 			"valueSize": 1,
-			"minValue": -128,
-			"maxValue": 0,
+			"minValue": 0,
+			"maxValue": 255,
 			"defaultValue": 0,
 			"unsigned": true,
 			"readOnly": false,
@@ -172,36 +180,24 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "Led on",
-					"value": -128
+					"label": "On",
+					"value": 255
 				},
 				{
-					"label": "Led off",
+					"label": "Off",
 					"value": 0
 				}
 			]
 		},
 		"15": {
-			"label": "Reset to Factory Defaults",
-			"description": "01 = lock will execute reset to factory. 02 = reserved for future use (lock will currently execute reset to factory same as 01). no default value  please use this procedure only when the network primary controller is missing or otherwise inoperable",
+			"label": "Reset To Factory Defaults",
 			"valueSize": 1,
-			"minValue": -128,
-			"maxValue": 0,
+			"minValue": 0,
+			"maxValue": 1,
 			"defaultValue": 0,
-			"unsigned": true,
 			"readOnly": false,
 			"writeOnly": false,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "Reset to factory on",
-					"value": -128
-				},
-				{
-					"label": "Reset to factory off",
-					"value": 0
-				}
-			]
+			"allowManualEntry": true
 		}
 	},
 	"metadata": {
