@@ -71,25 +71,6 @@
 			"required": ["min", "max"],
 			"additionalProperties": false
 		},
-		"metadata": {
-			"type": "object",
-			"properties": {
-				"$import": { "$ref": "#/definitions/import" },
-				"inclusion": {
-					"type": "string",
-					"description": "Inclusion instructions for this device"
-				},
-				"exclusion": {
-					"type": "string",
-					"description": "Exclusion instructions for this device"
-				},
-				"reset": {
-					"type": "string",
-					"description": "Instructions for resetting the device to factory defaults"
-				}
-			},
-			"additionalProperties": false
-		},
 		"supportsZWavePlus": {
 			"const": true
 		},
