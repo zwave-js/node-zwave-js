@@ -634,7 +634,14 @@ alters capabilities: ${!!properties.altersCapabilities}`;
 						direction: "inbound",
 					});
 
-					param = nextParameter;
+					// Some devices report their parameter 1 instead of 0 as the next one
+					// when reaching the end. To avoid infinite loops, stop scanning
+					// once the next parameter is lower than the current one
+					if (nextParameter > param) {
+						param = nextParameter;
+					} else {
+						break;
+					}
 				}
 			}
 
