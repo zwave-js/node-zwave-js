@@ -99,7 +99,7 @@
 			]
 		},
 		"6": {
-			"label": "Lux Sensor Control Mode",
+			"label": "Floodlight Triggers",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 1,
