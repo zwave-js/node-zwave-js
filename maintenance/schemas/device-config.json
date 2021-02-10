@@ -322,6 +322,29 @@
 				}
 			},
 			"additionalProperties": false
+		},
+		"metadata": {
+			"type": "object",
+			"properties": {
+				"inclusion": {
+					"type": "string",
+					"description": "Inclusion instructions for this device"
+				},
+				"exclusion": {
+					"type": "string",
+					"description": "Exclusion instructions for this device"
+				},
+				"reset": {
+					"type": "string",
+					"description": "Instructions for resetting the device to factory defaults"
+				},
+				"manual": {
+					"type": "string",
+					"description": "A link to the device manual"
+				}
+			},
+			"additionalProperties": false,
+			"minProperties": 1
 		}
 	},
 	"anyOf": [
