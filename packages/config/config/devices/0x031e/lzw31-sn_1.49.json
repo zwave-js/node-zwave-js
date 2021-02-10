@@ -12,7 +12,7 @@
 		}
 	],
 	"firmwareVersion": {
-		"min": "0.0",
+		"min": "1.49",
 		"max": "255.255"
 	},
 	"supportsZWavePlus": true,
@@ -146,6 +146,78 @@
 			"writeOnly": false,
 			"allowManualEntry": true
 		},
+		"12": {
+			"label": "Association Behavior",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 15,
+			"defaultValue": 15,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "local",
+					"value": 0
+				},
+				{
+					"label": "3-way",
+					"value": 1
+				},
+				{
+					"label": "3-way & local",
+					"value": 3
+				},
+				{
+					"label": "z-wave hub",
+					"value": 4
+				},
+				{
+					"label": "z-wave hub & local",
+					"value": 5
+				},
+				{
+					"label": "z-wave hub & 3-way",
+					"value": 6
+				},
+				{
+					"label": "z-wave hub & local & 3-way",
+					"value": 7
+				},
+				{
+					"label": "timer",
+					"value": 8
+				},
+				{
+					"label": "timer & local",
+					"value": 9
+				},
+				{
+					"label": "timer & 3-way",
+					"value": 10
+				},
+				{
+					"label": "timer & 3-way & local",
+					"value": 11
+				},
+				{
+					"label": "timer & z-wave hub",
+					"value": 12
+				},
+				{
+					"label": "timer & z-wave hub & local",
+					"value": 13
+				},
+				{
+					"label": "timer & z-wave hub & 3-way",
+					"value": 14
+				},
+				{
+					"label": "all",
+					"value": 15
+				}
+			]
+		},
 		"13": {
 			"label": "LED Indicator Color",
 			"valueSize": 2,
@@ -272,6 +344,59 @@
 				{
 					"label": "Multi-Switch (Auxiliary Switch)",
 					"value": 2
+				}
+			]
+		},
+		"50": {
+			"label": "Configure Physical On/Off Delay",
+			"unit": "100ms",
+			"valueSize": 1,
+			"minValue": 1,
+			"maxValue": 9,
+			"defaultValue": 7,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"51": {
+			"label": "Physical On/Off Delay",
+			"description": "The delay that occurs after pressing the physical button to turn the switch on/off is removed. Consequently this also removes the following scenes: 2x, 3x, 4x, 5x tap. 1x tap and config button scenes still work.",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 1,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Disabled",
+					"value": 0
+				},
+				{
+					"label": "Enabled",
+					"value": 1
+				}
+			]
+		},
+		"52": {
+			"label": "Smart Bulb Mode",
+			"description": "Optimize power output to be more compatible with smart bulbs. This prevents the dimmer from being able to dim & makes it act like an ON / OFF switch.",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Disabled",
+					"value": 0
+				},
+				{
+					"label": "Enabled",
+					"value": 1
 				}
 			]
 		}
