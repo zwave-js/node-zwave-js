@@ -1,0 +1,250 @@
+// McoHome Technology Co., Ltd. MH-S411
+// Touch Panel Switch 1 Button
+{
+	"manufacturer": "McoHome Technology Co., Ltd.",
+	"manufacturerId": "0x015f",
+	"label": "MH-S411",
+	"description": "Touch Panel Switch 1 Button",
+	"devices": [
+		{
+			"productType": "0x4111",
+			"productId": "0x5102"
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"associations": {
+		"1": {
+			"label": "Lifeline",
+			"maxNodes": 1,
+			"isLifeline": true
+		},
+		"2": {
+			"label": "Button 1",
+			"maxNodes": 5
+		}
+	},
+	"paramInformation": {
+		"2": {
+			"label": "Recover state after power failure",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 1,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Disabled",
+					"value": 0
+				},
+				{
+					"label": "Enabled",
+					"value": 1
+				}
+			]
+		},
+		"3": {
+			"label": "ALL ON/ALL OFF",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 255,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Forbid All On and All Off",
+					"value": 0
+				},
+				{
+					"label": "Forbid All On",
+					"value": 1
+				},
+				{
+					"label": "Forbid All Off",
+					"value": 2
+				},
+				{
+					"label": "Allow All On and Off",
+					"value": 255
+				}
+			]
+		},
+		"4": {
+			"label": "LED Backlight brightness level",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 10,
+			"defaultValue": 10,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"5": {
+			"label": "Key Mode",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 4,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Single click to switch on/off",
+					"value": 0
+				},
+				{
+					"label": "Click to turn on, auto off after param 6 duration",
+					"value": 1
+				},
+				{
+					"label": "Click to turn off, auto on after param 6 duration",
+					"value": 2
+				},
+				{
+					"label": "Hold >3s for on until released",
+					"value": 3
+				},
+				{
+					"label": "Single click to toggle, hold >3s for on until released",
+					"value": 4
+				}
+			]
+		},
+		"6": {
+			"label": "Key On duration",
+			"description": "0 for infinite",
+			"valueSize": 2,
+			"minValue": 0,
+			"maxValue": 65535,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"8": {
+			"label": "Basic CC integration setting",
+			"description": "See Manual",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 3,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Mode 0",
+					"value": 0
+				},
+				{
+					"label": "Mode 1",
+					"value": 1
+				},
+				{
+					"label": "Mode 2",
+					"value": 2
+				},
+				{
+					"label": "Mode 3",
+					"value": 3
+				}
+			]
+		},
+		"10": {
+			"label": "Respond to scenes",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "No response to scenes",
+					"value": 0
+				},
+				{
+					"label": "Button 1 responds to scenes",
+					"value": 1
+				}
+			]
+		},
+		"11": {
+			"label": "Button 1 Scene Activate Mode Setting",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 3,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Scene activate function disabled",
+					"value": 0
+				},
+				{
+					"label": "Button 1 tap activates scene in param 12 regardless of state",
+					"value": 1
+				},
+				{
+					"label": "Button 1 tap activates scene in param 12 when state is off",
+					"value": 2
+				},
+				{
+					"label": "Button 1 tap activates scene in param 12 when state is on",
+					"value": 3
+				}
+			]
+		},
+		"12": {
+			"label": "Button 1 Activate Scene ID",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 1,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"13": {
+			"label": "Button 1 Activate Scene dim duration",
+			"description": "0-127 seconds, +128 for minutes",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"255": {
+			"label": "Factory reset",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 55,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Disabled",
+					"value": 0
+				},
+				{
+					"label": "Reset",
+					"value": 55
+				}
+			]
+		}
+	}
+}

@@ -13,10 +13,6 @@
 		{
 			"productType": "0x3141",
 			"productId": "0x1302"
-		},
-		{
-			"productType": "0x3141",
-			"productId": "0x5102"
 		}
 	],
 	"firmwareVersion": {
@@ -48,14 +44,24 @@
 	},
 	"paramInformation": {
 		"2": {
-			"label": "Switch state saved or not when power failure",
+			"label": "Recover state after power failure",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 1,
 			"defaultValue": 1,
 			"readOnly": false,
 			"writeOnly": false,
-			"allowManualEntry": true
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Disabled",
+					"value": 0
+				},
+				{
+					"label": "Enabled",
+					"value": 1
+				}
+			]
 		},
 		"3": {
 			"label": "ALL ON/ALL OFF",

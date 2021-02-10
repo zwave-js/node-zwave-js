@@ -1,39 +1,34 @@
-// McoHome Technology Co., Ltd. TPS412
-// Touch Panel Switch 2 Channel
+// McoHome Technology Co., Ltd. MH-S411
+// Touch Panel Switch 1 Button
 {
 	"manufacturer": "McoHome Technology Co., Ltd.",
 	"manufacturerId": "0x015f",
-	"label": "TPS412",
-	"description": "Touch Panel Switch 2 Channel",
+	"label": "MH-S411",
+	"description": "Touch Panel Switch 1 Button",
 	"devices": [
 		{
-			"productType": "0x4121",
+			"productType": "0x4111",
 			"productId": "0x1302"
 		}
 	],
 	"firmwareVersion": {
 		"min": "0.0",
-		"max": "255.255"
+		"max": "5.5"
 	},
 	"associations": {
 		"1": {
-			"label": "Switch Button Group 1",
+			"label": "Button 1",
 			"maxNodes": 5
 		},
 		"2": {
-			"label": "Switch Button Group 2",
-			"maxNodes": 5
-		},
-		"3": {
-			"label": "All Status Reports",
+			"label": "Lifeline",
 			"maxNodes": 1,
 			"isLifeline": true
 		}
 	},
 	"paramInformation": {
 		"1": {
-			"label": "Saving state before power failure",
-			"description": "Switch state saved or not when power down",
+			"label": "Recover state after power failure",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 1,
