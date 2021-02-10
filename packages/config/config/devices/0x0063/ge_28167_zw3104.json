@@ -95,7 +95,6 @@
 			"label": "Dim Rate Steps (All-On/All-Off)",
 			"description": "Number of steps or levels",
 			"valueSize": 1,
-			"unit": "10ms",
 			"minValue": 1,
 			"maxValue": 99,
 			"defaultValue": 1,

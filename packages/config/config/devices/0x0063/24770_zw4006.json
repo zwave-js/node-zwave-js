@@ -19,6 +19,7 @@
 	"paramInformation": {
 		"1": {
 			"label": "Timeout Duration",
+			"description": "Amount of time the light stays on after motion stops",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 255,

@@ -40,7 +40,7 @@
 			"defaultValue": 50,
 			"unsigned": true,
 			"readOnly": false,
-			"writeOnly": true,
+			"writeOnly": false,
 			"allowManualEntry": true
 		},
 		"3": {

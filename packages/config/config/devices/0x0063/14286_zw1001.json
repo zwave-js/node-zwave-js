@@ -29,11 +29,11 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "LED on when light off, LED off when light on",
+					"label": "LED on when light off",
 					"value": 0
 				},
 				{
-					"label": "LED on when light on, LED off when light off",
+					"label": "LED on when light on",
 					"value": 1
 				},
 				{
