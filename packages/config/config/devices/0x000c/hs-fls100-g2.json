@@ -93,7 +93,7 @@
 					"value": 0
 				},
 				{
-					"label": "Z-Wave only",
+					"label": "PIR, lux, or Z-Wave triggers",
 					"value": 1
 				}
 			]
