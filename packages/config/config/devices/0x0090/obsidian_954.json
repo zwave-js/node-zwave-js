@@ -1,19 +1,14 @@
-// Kwikset 914
-// Door Lock.
+// Kwikset Obsidian 954
+// Touchscreen Electronic Deadbolt
 {
 	"manufacturer": "Kwikset",
 	"manufacturerId": "0x0090",
-	"label": "914",
-	"description": "Door Lock",
+	"label": "Obsidian 954",
+	"description": "Touchscreen Electronic Deadbolt",
 	"devices": [
 		{
-			"productType": "0x0001",
-			"productId": "0x0436",
-			"zwaveAllianceId": [1387, 1394]
-		},
-		{
 			"productType": "0x0003",
-			"productId": "0x4006"
+			"productId": "0x0742"
 		}
 	],
 	"firmwareVersion": {
