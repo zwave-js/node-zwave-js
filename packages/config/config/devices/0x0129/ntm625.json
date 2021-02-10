@@ -342,7 +342,17 @@
 			"defaultValue": 1,
 			"readOnly": false,
 			"writeOnly": false,
-			"allowManualEntry": true
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Disabled",
+					"value": 0
+				},
+				{
+					"label": "Enabled",
+					"value": 1
+				}
+			]
 		},
 		"23[0x02]": {
 			"label": "Lock Body Alarms: Deadbolt",
@@ -352,7 +362,17 @@
 			"defaultValue": 1,
 			"readOnly": false,
 			"writeOnly": false,
-			"allowManualEntry": true
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Disabled",
+					"value": 0
+				},
+				{
+					"label": "Enabled",
+					"value": 1
+				}
+			]
 		},
 		"23[0x04]": {
 			"label": "Lock Body Alarms: Lever Rotated",
@@ -371,18 +391,8 @@
 				{
 					"label": "Enabled",
 					"value": 1
-				},
+				}
 			]
-		},
-		"23[0xFF]": {
-			"label": "All Alarms On",
-			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 1,
-			"defaultValue": 1,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
 		}
 	}
 }
