@@ -329,6 +329,17 @@ compat is not an object`,
 			}
 			this.compat = new CompatConfig(filename, definition.compat);
 		}
+
+		if (definition.metadata != undefined) {
+			if (!isObject(definition.metadata)) {
+				throwInvalidConfig(
+					`device`,
+					`packages/config/config/devices/${filename}:
+metadata is not an object`,
+				);
+			}
+			this.metadata = new DeviceMetadata(filename, definition.metadata);
+		}
 	}
 
 	public readonly manufacturer!: string;
@@ -349,6 +360,8 @@ compat is not an object`,
 	public readonly proprietary?: Record<string, unknown>;
 	/** Contains compatibility options */
 	public readonly compat?: CompatConfig;
+	/** Contains instructions and other metadata for the device */
+	public readonly metadata?: DeviceMetadata;
 }
 
 export class AssociationConfig {
@@ -577,4 +590,36 @@ Parameter #${parameterNumber}: options is malformed!`,
 export interface ConfigOption {
 	value: number;
 	label: string;
+}
+
+export class DeviceMetadata {
+	public constructor(filename: string, definition: JSONObject) {
+		for (const prop of [
+			"inclusion",
+			"exclusion",
+			"reset",
+			"manual",
+		] as const) {
+			if (prop in definition) {
+				const value = definition[prop];
+				if (typeof value !== "string") {
+					throwInvalidConfig(
+						"devices",
+						`packages/config/config/devices/${filename}:
+The metadata entry ${prop} must be a string!`,
+					);
+				}
+				this[prop] = value;
+			}
+		}
+	}
+
+	/** Inclusion instructions */
+	public readonly inclusion?: string;
+	/** Exclusion instructions */
+	public readonly exclusion?: string;
+	/** Instructions for resetting the device to factory defaults */
+	public readonly reset?: string;
+	/** A link to the device manual */
+	public readonly manual?: string;
 }
