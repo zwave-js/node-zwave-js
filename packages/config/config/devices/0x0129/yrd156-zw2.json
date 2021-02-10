@@ -18,8 +18,7 @@
 	},
 	"paramInformation": {
 		"1": {
-			"label": "Silent Mode On/Off",
-			"description": "Level",
+			"label": "Volume",
 			"valueSize": 1,
 			"minValue": 1,
 			"maxValue": 3,
@@ -30,17 +29,21 @@
 			"allowManualEntry": false
 			"options": [
 				{
-					"label": "High Volume"
+					"label": "Loud"
 					"value": 1
 				},
 				{
-					"label": "Silent"
+					"label": "Quiet",
+					"value": 2
+				},
+				{
+					"label": "Off"
 					"value": 3
 				}
 				]
 		},
 		"2": {
-			"label": "Auto Relock On/Off",
+			"label": "Auto Relock",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 255,
@@ -85,7 +88,8 @@
 			"allowManualEntry": true
 		},
 		"7": {
-			"label": "Shut Down Time (after Wrong Code Entries)",
+			"label": "Shut Down Time",
+			"description": "Shut down time after wrong code entries",
 			"valueSize": 1,
 			"unit": "seconds",
 			"minValue": 10,
@@ -98,6 +102,7 @@
 		},
 		"8": {
 			"label": "Operating Mode",
+			"description": "Vacation mode = Keypad lockout; Privacy mode = No keypad, only RF Unlock",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 2,
@@ -108,15 +113,15 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "Normal mode (default)",
+					"label": "Normal",
 					"value": 0
 				},
 				{
-					"label": "Vacation mode (keypad locked out)",
+					"label": "Vacation",
 					"value": 1
 				},
 				{
-					"label": "Privacy mode (keypad locked, rf unlock functional)",
+					"label": "Privacy",
 					"value": 2
 				}
 			]
@@ -133,11 +138,11 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "One touch locking on",
+					"label": "On",
 					"value": 255
 				},
 				{
-					"label": "One touch locking off",
+					"label": "Off",
 					"value": 0
 				}
 			]
@@ -154,12 +159,12 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "Privacy button on",
-					"value": 255
+					"label": "Off",
+					"value": 0
 				},
 				{
-					"label": "Privacy button off",
-					"value": 0
+					"label": "On",
+					"value": 255
 				}
 			]
 		},
@@ -175,35 +180,24 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "Lock status LED on",
+					"label": "On",
 					"value": 255
 				},
 				{
-					"label": "Lock status LED off",
+					"label": "Off",
 					"value": 0
 				}
 			]
 		},
 		"15": {
-			"label": "Reset to Factory Defaults",
+			"label": "Reset To Factory Defaults",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 1,
 			"defaultValue": 0,
-			"unsigned": true,
 			"readOnly": false,
 			"writeOnly": false,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "Reset to factory on",
-					"value": 1
-				},
-				{
-					"label": "Reset to factory off",
-					"value": 0
-				}
-			]
+			"allowManualEntry": true
 		}
 	},
 	"metadata": {
