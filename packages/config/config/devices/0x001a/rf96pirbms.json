@@ -44,7 +44,7 @@
 		"4": {
 			"label": "Re-trigger Interval",
 			"description": "Time between when the sensor will re-trigger a signal that motion has been detected",
-			"valueSize": 1,
+			"valueSize": 2,
 			"unit": "seconds",
 			"minValue": 5,
 			"maxValue": 3600,

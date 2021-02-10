@@ -3,16 +3,13 @@
 {
 	"manufacturer": "Honeywell",
 	"manufacturerId": "0x0039",
-	"label": "39337 / ZW4103",
-	"description": "Plug-in Switch (Single Plug)",
+	"label": "ZW4103",
+	"description": "Plug-in Switch",
 	"devices": [
 		{
 			"productType": "0x5052",
 			"productId": "0x3038",
-			"zwaveAllianceId": [
-				2686,
-				3744
-			]
+			"zwaveAllianceId": [2686, 3744]
 		}
 	],
 	"firmwareVersion": {
@@ -21,10 +18,10 @@
 	},
 	"paramInformation": {
 		"3": {
-			"label": "Led Light",
-			"description": "Led light off when device is turned off (default)",
+			"label": "Indication LED",
+			"description": "LED indicating the state of the switch according to the setting",
 			"valueSize": 1,
-			"minValue": 1,
+			"minValue": 0,
 			"maxValue": 2,
 			"defaultValue": 0,
 			"unsigned": true,
@@ -33,11 +30,15 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "Led light on when device is on",
+					"label": "LED on when the plug turned off",
+					"value": 0
+				},
+				{
+					"label": "LED on when plug is turned on",
 					"value": 1
 				},
 				{
-					"label": "Led light always on",
+					"label": "LED always off",
 					"value": 2
 				}
 			]
