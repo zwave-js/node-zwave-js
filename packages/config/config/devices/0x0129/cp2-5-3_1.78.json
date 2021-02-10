@@ -45,8 +45,8 @@
 		"2": {
 			"label": "Auto Relock",
 			"valueSize": 1,
-			"minValue": 128,
-			"maxValue": 0,
+			"minValue": 0,
+			"maxValue": 255,
 			"defaultValue": 0,
 			"unsigned": true,
 			"readOnly": false,
@@ -54,12 +54,12 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "Enable",
-					"value": 128
-				},
-				{
 					"label": "Disable",
 					"value": 0
+				},
+				{
+					"label": "Enable",
+					"value": 255
 				}
 			]
 		},
