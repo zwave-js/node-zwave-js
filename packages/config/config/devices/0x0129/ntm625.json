@@ -247,8 +247,7 @@
 		},
 		"18": {
 			"label": "Door Propped Timer",
-			"description": "10 to 2540 second. This value is represented as seconds X 10. (ie a value of 4 would mean a door propped timer of 40 seconds)",
-			"unit": "decaseconds",
+			"unit": "10 seconds",
 			"valueSize": 1,
 			"minValue": 1,
 			"maxValue": 254,
