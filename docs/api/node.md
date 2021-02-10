@@ -383,6 +383,7 @@ interface GenericDeviceClass {
 interface SpecificDeviceClass {
 	readonly key: number;
 	readonly label: string;
+	readonly zwavePlusDeviceType?: string | undefined;
 	readonly supportedCCs: readonly CommandClasses[];
 	readonly controlledCCs: readonly CommandClasses[];
 }
