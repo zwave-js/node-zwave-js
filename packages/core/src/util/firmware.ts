@@ -152,7 +152,7 @@ function extractFirmwareAeotec(data: Buffer): Firmware {
 			firmwareNameBytes.indexOf(0, firmwareNameOffset),
 		)
 		.toString("utf8");
-	if (!/^[a-zA-Z0-9_]+$/.test(firmwareName)) {
+	if (!/^[a-zA-Z0-9_ -]+$/.test(firmwareName)) {
 		throw new ZWaveError(
 			"This does not appear to be a valid Aeotec updater (invalid firmware name)!",
 			ZWaveErrorCodes.Argument_Invalid,
