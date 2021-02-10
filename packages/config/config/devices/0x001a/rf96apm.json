@@ -19,7 +19,6 @@
 	"paramInformation": {
 		"13": {
 			"label": "Setting Last Status",
-			"description": "Memory setting for last status",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 1,
