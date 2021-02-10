@@ -176,7 +176,7 @@
 			"valueSize": 2,
 			"unit": "lux",
 			"minValue": 1,
-			"maxValue": 655528,
+			"maxValue": 65528,
 			"defaultValue": 150,
 			"unsigned": true,
 			"readOnly": false,
