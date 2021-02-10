@@ -333,35 +333,45 @@
 				}
 			]
 		},
-		"23": {
-			"label": "Lock Body Alarms Mask",
-			"description": "Each bit controls one alarm. 1 = alarm enabled, 0 = alarm disabled. 0xFF = All Alarms on, Default is 0xFF. Bit 0: DPS Alarm (AX) (Duplicate of parameter 19. Values should be tied together) Bit 1: Deadbolt Alarm Bit 2: Lever Rotated (Rx) Bit 3 – 7: Not Used",
+		"23[0x00]": {
+			"label": "DPS Alarm (AX) (Duplicate of parameter 19. Values should be tied together)",
 			"valueSize": 1,
 			"minValue": 0,
-			"maxValue": 255,
-			"defaultValue": 255,
-			"unsigned": true,
+			"maxValue": 1,
+			"defaultValue": 0,
 			"readOnly": false,
 			"writeOnly": false,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "DPS Alarm (AX) (Duplicate of parameter 19. Values should be tied together)",
-					"value": 0
-				},
-				{
-					"label": "Deadbolt Alarm",
-					"value": 1
-				},
-				{
-					"label": "Lever Rotated",
-					"value": 2
-				},
-				{
-					"label": "Off",
-					"value": 255
-				}
-			]
+			"allowManualEntry": true
+		},
+		"23[0x01]": {
+			"label": "Deadbolt Alarm",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"23[0x02]": {
+			"label": "Lever Rotated",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"23[0xFF]": {
+			"label": "All Alarms On",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 1,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
 		}
 	}
 }
