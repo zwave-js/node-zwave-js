@@ -2,6 +2,7 @@
 	"$schema": "http://json-schema.org/schema#",
 	"type": "object",
 	"properties": {
+		"$import": { "$ref": "#/definitions/import" },
 		"manufacturer": {
 			"type": "string",
 			"description": "The full name of the manufacturer"
@@ -54,32 +55,26 @@
 			}
 		},
 		"firmwareVersion": {
-			"oneOf": [
-				{
-					"const": false
+			"type": "object",
+			"properties": {
+				"min": {
+					"type": "string",
+					"description": "The minimum firmware version this config file targets",
+					"pattern": "^[0-9]|[1-9][0-9]|[1-2][0-9][0-9]\\.[0-9]|[1-9][0-9]|[1-2][0-9][0-9]$"
 				},
-				{
-					"type": "object",
-					"properties": {
-						"min": {
-							"type": "string",
-							"description": "The minimum firmware version this config file targets",
-							"pattern": "^[0-9]|[1-9][0-9]|[1-2][0-9][0-9]\\.[0-9]|[1-9][0-9]|[1-2][0-9][0-9]$"
-						},
-						"max": {
-							"type": "string",
-							"description": "The maximum firmware version this config file targets",
-							"pattern": "^[0-9]|[1-9][0-9]|[1-2][0-9][0-9]\\.[0-9]|[1-9][0-9]|[1-2][0-9][0-9]$"
-						}
-					},
-					"required": ["min", "max"],
-					"additionalProperties": false
+				"max": {
+					"type": "string",
+					"description": "The maximum firmware version this config file targets",
+					"pattern": "^[0-9]|[1-9][0-9]|[1-2][0-9][0-9]\\.[0-9]|[1-9][0-9]|[1-2][0-9][0-9]$"
 				}
-			]
+			},
+			"required": ["min", "max"],
+			"additionalProperties": false
 		},
 		"metadata": {
 			"type": "object",
 			"properties": {
+				"$import": { "$ref": "#/definitions/import" },
 				"inclusion": {
 					"type": "string",
 					"description": "Inclusion instructions for this device"
@@ -101,6 +96,9 @@
 		"associations": {
 			"type": "object",
 			"description": "Define association groups for devices that don't support Z-Wave+ or modify the reported associations for devices that do.",
+			"properties": {
+				"$import": { "$ref": "#/definitions/import" }
+			},
 			"patternProperties": {
 				"^\\d+$": {
 					"type": "object",
@@ -136,10 +134,14 @@
 		"paramInformation": {
 			"type": "object",
 			"description": "Defines all the existing configuration parameters",
+			"properties": {
+				"$import": { "$ref": "#/definitions/import" }
+			},
 			"patternProperties": {
 				"^\\d+(\\[0x[0-9a-f]{1,8}\\])?$": {
 					"type": "object",
 					"properties": {
+						"$import": { "$ref": "#/definitions/import" },
 						"label": {
 							"type": "string",
 							"description": "A short name for the parameter"
@@ -188,6 +190,9 @@
 							"items": {
 								"type": "object",
 								"properties": {
+									"$import": {
+										"$ref": "#/definitions/import"
+									},
 									"label": {
 										"type": "string",
 										"description": "The option label to display"
@@ -197,18 +202,32 @@
 										"description": "Which value this option represents"
 									}
 								},
-								"required": ["label", "value"],
+								"anyOf": [
+									{
+										"required": ["label", "value"]
+									},
+									{
+										"required": ["$import"]
+									}
+								],
 								"additionalProperties": false
 							}
 						}
 					},
-					"required": [
-						"label",
-						"valueSize",
-						"minValue",
-						"maxValue",
-						"defaultValue",
-						"allowManualEntry"
+					"anyOf": [
+						{
+							"required": [
+								"label",
+								"valueSize",
+								"minValue",
+								"maxValue",
+								"defaultValue",
+								"allowManualEntry"
+							]
+						},
+						{
+							"required": ["$import"]
+						}
 					]
 				}
 			},
@@ -217,6 +236,7 @@
 		"compat": {
 			"type": "object",
 			"properties": {
+				"$import": { "$ref": "#/definitions/import" },
 				"commandClasses": {
 					"type": "object",
 					"properties": {
@@ -304,16 +324,28 @@
 			"additionalProperties": false
 		}
 	},
-	"required": [
-		"manufacturer",
-		"manufacturerId",
-		"label",
-		"description",
-		"devices",
-		"firmwareVersion"
+	"anyOf": [
+		{
+			"required": [
+				"manufacturer",
+				"manufacturerId",
+				"label",
+				"description",
+				"devices",
+				"firmwareVersion"
+			]
+		},
+		{
+			"required": ["$import"]
+		}
 	],
 	"additionalProperties": false,
 	"definitions": {
+		"import": {
+			"type": "string",
+			"description": "Used to import another config file or parts thereof",
+			"pattern": "^((?<dir>([\\w\\d_-\\.]+/)+)?(?<filename>[\\w\\d_-]+\\.json))?(?<selector>#([\\w\\d_-]+/)*[\\w\\d_-]+)?$"
+		},
 		"ccInfo": {
 			"type": "object",
 			"properties": {
