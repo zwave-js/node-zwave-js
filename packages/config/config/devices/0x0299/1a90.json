@@ -77,7 +77,7 @@
 					"value": 0
 				},
 				{
-					"label": "In this mode any button press will toggle the output - when on it will be turned off, when off it will be turned on.",
+					"label": "Toggle the output",
 					"value": 1
 				}
 			]
