@@ -39,7 +39,7 @@
 		},
 		"2": {
 			"label": "Report interval",
-			"description": "3 to 8640 - Interval of unsolicited reports in 10s increments, a value of 3 means 30 seconds (30 seconds - 1 day) 0 - Disable unsolicited meter reports of current wattage.",
+			"description": "Interval of unsolicited meter reports in 10s increments; 0 to disable.",
 			"valueSize": 2,
 			"unit": "10s",
 			"minValue": 0,
