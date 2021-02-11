@@ -18,7 +18,7 @@
 	"supportsZWavePlus": true,
 	"paramInformation": {
 		"1": {
-			"label": "Watt Meter Report period",
+			"label": "Watt Meter Report Period",
 			"unit": "5 seconds",
 			"valueSize": 2,
 			"minValue": 1,
@@ -29,7 +29,7 @@
 			"allowManualEntry": true
 		},
 		"2": {
-			"label": "KWH Meter Report period",
+			"label": "KWH Meter Report Period",
 			"unit": "10 minutes",
 			"valueSize": 2,
 			"minValue": 1,
@@ -40,7 +40,7 @@
 			"allowManualEntry": true
 		},
 		"5": {
-			"label": "Level Report Mode",
+			"label": "Level Report Trigger",
 			"valueSize": 1,
 			"minValue": 1,
 			"maxValue": 2,
@@ -80,12 +80,12 @@
 			]
 		},
 		"8": {
-			"label": "Led BackLight",
-			"description": "Led Backlit brightness level",
+			"label": "LED BackLight Brightness",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 10,
 			"defaultValue": 10,
+			"unsigned": true,
 			"readOnly": false,
 			"writeOnly": false,
 			"allowManualEntry": true
@@ -96,6 +96,7 @@
 			"minValue": 0,
 			"maxValue": 1,
 			"defaultValue": 0,
+			"unsigned": true,
 			"readOnly": false,
 			"writeOnly": false,
 			"allowManualEntry": false,
@@ -116,6 +117,7 @@
 			"minValue": 0,
 			"maxValue": 1,
 			"defaultValue": 0,
+			"unsigned": true,
 			"readOnly": false,
 			"writeOnly": false,
 			"allowManualEntry": false,
@@ -131,21 +133,23 @@
 			]
 		},
 		"11": {
-			"label": "Min level shutter close",
+			"label": "Min Level Shutter Close",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 98,
 			"defaultValue": 0,
+			"unsigned": true,
 			"readOnly": false,
 			"writeOnly": false,
 			"allowManualEntry": true
 		},
 		"12": {
-			"label": "Max level shutter close",
+			"label": "Max Level Shutter Close",
 			"valueSize": 1,
 			"minValue": 1,
 			"maxValue": 99,
 			"defaultValue": 99,
+			"unsigned": true,
 			"readOnly": false,
 			"writeOnly": false,
 			"allowManualEntry": true

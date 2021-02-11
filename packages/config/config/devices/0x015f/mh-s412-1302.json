@@ -32,11 +32,12 @@
 	},
 	"paramInformation": {
 		"1": {
-			"label": "Recover state after power failure",
+			"label": "Recover State After Power Failure",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 1,
 			"defaultValue": 1,
+			"unsigned": true,
 			"readOnly": false,
 			"writeOnly": false,
 			"allowManualEntry": false,
