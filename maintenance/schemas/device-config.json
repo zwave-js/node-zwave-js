@@ -300,6 +300,10 @@
 				},
 				"treatBasicSetAsEvent": {
 					"const": true
+				},
+				"manualValueRefreshDelayMs": {
+					"type": "number",
+					"minimum": 0
 				}
 			},
 			"additionalProperties": false
