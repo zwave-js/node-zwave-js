@@ -104,7 +104,7 @@
 			]
 		},
 		"6": {
-			"label": "Input S Scenes",
+			"label": "Input S: Central Scene Events for multiple button presses",
 			"description": "Scene mode trigger type",
 			"valueSize": 1,
 			"minValue": 1,
