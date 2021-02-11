@@ -46,15 +46,15 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "LED ON when load is OFF",
+					"label": "LED ON when load is off",
 					"value": 0
 				},
 				{
-					"label": "LED On when light is turned On",
+					"label": "LED On when light is turned on",
 					"value": 1
 				},
 				{
-					"label": "LED always OFF",
+					"label": "LED always off",
 					"value": 2
 				}
 			]
@@ -113,7 +113,6 @@
 			"label": "Dim Rate Steps (All-On/All-Off)",
 			"description": "Number of steps or levels",
 			"valueSize": 1,
-			"unit": "10ms",
 			"minValue": 1,
 			"maxValue": 99,
 			"defaultValue": 1,

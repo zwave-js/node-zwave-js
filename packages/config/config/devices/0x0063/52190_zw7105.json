@@ -1,0 +1,75 @@
+// GE/Jasco 52190 / ZW7105
+// Z-Wave LED Light Bulb
+{
+	"manufacturer": "GE/Jasco",
+	"manufacturerId": "0x0063",
+	"label": "52190 / ZW7105",
+	"description": "Z-Wave LED Light Bulb",
+	"devices": [
+		{
+			"productType": "0x4c42",
+			"productId": "0x3035",
+			"zwaveAllianceId": 3924
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"paramInformation": {
+		"1": {
+			"label": "State With Manual Switch or Power Failure",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 2,
+			"defaultValue": 2,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Full brightness",
+					"value": 0
+				},
+				{
+					"label": "Last dim level",
+					"value": 1
+				},
+				{
+					"label": "Last state",
+					"value": 2
+				}
+			]
+		},
+		"9": {
+			"label": "Dim Rate Steps",
+			"valueSize": 1,
+			"minValue": 1,
+			"maxValue": 99,
+			"defaultValue": 99,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"10": {
+			"label": "Dim Rate Timing",
+			"valueSize": 1,
+			"unit": "10ms",
+			"minValue": 0,
+			"maxValue": 10,
+			"defaultValue": 10,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		}
+	},
+	"metadata": {
+		"inclusion": "1. When initially powered, the bulb is in SmartStart inclusion mode. If your hub supports SmartStart, scan the QR code.\n2. To change to classic inclusion mode, turn bulb OFF, then ON three times. The bulb rapidly flashes four times to indicate classic mode.\n3. To change back to SmartStart inclusion mode, turn the bulb OFF, then ON three times. The bulb rapidly flashes six times to indicate SmartStart mode.",
+		"exclusion": "1. Follow the instructions for your Z-Wave certified controller to remove a device from the Z-Wave network.\n2. Once the controller is ready to remove your device, turn ON the light switch. The smart bulb flashes twice when\nremoved from the network",
+		"reset": "Starting with the bulb on, cycle the wall switch OFF/ON four times.\n1. Turn the switch off, pause one second, then turn back ON.\n2. Repeat three times (four times total).\n3. The smart bulb flashes twice when reset",
+		"manual": "https://products.z-wavealliance.org/ProductManual/File?folder=&filename=product_documents/3924/52190%20QSG%20v2.pdf"
+	}
+}
