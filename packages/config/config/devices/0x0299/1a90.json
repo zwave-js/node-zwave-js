@@ -94,11 +94,11 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "Use this value if a toggle switch is connected to extension input S.",
+					"label": "Toggle Switch",
 					"value": 0
 				},
 				{
-					"label": "Use this value if a push button switch is connected to extension input S.",
+					"label": "Momentary Switch",
 					"value": 1
 				}
 			]
