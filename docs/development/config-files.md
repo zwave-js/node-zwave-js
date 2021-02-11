@@ -313,6 +313,9 @@ Both parts are optional, so you can import entire files and you can also build s
 
 Properties listed before the `$import` statement may get overwritten by the imports. Properties listed after it will overwrite the imported properties. You can use this to do device-specific additions without having to change the template as a whole.
 
+> [!ATTENTION]
+> Templates **must** be located in a subdirectory called `templates` so they don't get interpreted as complete device configurations.
+
 #### Example 1
 
 ```json
