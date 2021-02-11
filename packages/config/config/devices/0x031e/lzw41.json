@@ -43,7 +43,7 @@
 			]
 		},
 		"51": {
-			"label": "Color Adjustment (Warm White)",
+			"label": "Color Temperature (Warm White)",
 			"description": "Changes the kelvin from 2700k (1387) to 4999k (4999)",
 			"valueSize": 2,
 			"minValue": 1387,
