@@ -83,7 +83,7 @@
 			]
 		},
 		"5": {
-			"label": "Input S Mode",
+			"label": "Input S: Button Mode",
 			"description": "Switching mode of the push buttons",
 			"valueSize": 1,
 			"minValue": 0,
