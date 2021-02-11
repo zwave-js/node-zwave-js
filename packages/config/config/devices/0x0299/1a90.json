@@ -73,7 +73,7 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "In this mode the top button will turn the output on, while the bottom button will turn the output off.",
+					"label": "Top: turn off, Bottom: turn on",
 					"value": 0
 				},
 				{
