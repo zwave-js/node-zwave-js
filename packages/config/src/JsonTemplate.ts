@@ -1,6 +1,7 @@
 import { ZWaveError, ZWaveErrorCodes } from "@zwave-js/core";
 import { isArray, isObject } from "alcalzone-shared/typeguards";
 import * as fs from "fs-extra";
+import JSON5 from "json5";
 import * as path from "path";
 
 const IMPORT_KEY = "$import";
@@ -84,13 +85,14 @@ async function readJsonWithTemplateInternal(
 		throw new ZWaveError(msg, ZWaveErrorCodes.Config_CircularImport);
 	}
 
-	let fileContent: Record<string, unknown>;
+	let json: Record<string, unknown>;
 	if (fileCache.has(filename)) {
-		fileContent = fileCache.get(filename)!;
+		json = fileCache.get(filename)!;
 	} else {
 		try {
-			fileContent = await fs.readJson(filename);
-			fileCache.set(filename, fileContent);
+			const fileContent = await fs.readFile(filename, "utf8");
+			json = JSON5.parse(fileContent);
+			fileCache.set(filename, json);
 		} catch (e) {
 			throw new ZWaveError(
 				`Could not parse config file ${filename}: ${e.message}`,
@@ -100,7 +102,7 @@ async function readJsonWithTemplateInternal(
 	}
 	// Resolve the JSON imports for (a subset) of the file and return the compound file
 	return resolveJsonImports(
-		selector ? select(fileContent, selector) : fileContent,
+		selector ? select(json, selector) : json,
 		filename,
 		[...visited, specifier],
 		fileCache,
