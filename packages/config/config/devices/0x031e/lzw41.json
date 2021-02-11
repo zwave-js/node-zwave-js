@@ -55,8 +55,7 @@
 			"allowManualEntry": true
 		},
 		"52": {
-			"label": "Color Adjustment (Cool White)",
-			"description": "Changes the kelvin from 5000k (5000) to 6500k (6500)",
+			"label": "Color Temperature (Cool White)",
 			"valueSize": 2,
 			"minValue": 5000,
 			"maxValue": 6500,
