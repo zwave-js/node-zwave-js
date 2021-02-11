@@ -64,19 +64,19 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "Forbid All On and All Off",
+					"label": "Forbid all on and all off",
 					"value": 0
 				},
 				{
-					"label": "Forbid All On",
+					"label": "Forbid all on",
 					"value": 1
 				},
 				{
-					"label": "Forbid All Off",
+					"label": "Forbid all off",
 					"value": 2
 				},
 				{
-					"label": "Allow All On and Off",
+					"label": "Allow all on and all off",
 					"value": 255
 				}
 			]
@@ -93,7 +93,7 @@
 			"allowManualEntry": true
 		},
 		"5": {
-			"label": "Key Mode",
+			"label": "Button Mode",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 4,
@@ -126,8 +126,9 @@
 			]
 		},
 		"6": {
-			"label": "Key On Duration",
+			"label": "Relay On Duration",
 			"description": "0 for infinite",
+			"unit": "seconds",
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 65535,
@@ -138,7 +139,7 @@
 			"allowManualEntry": true
 		},
 		"8": {
-			"label": "Basic CC Integration Setting",
+			"label": "Basic CC Mode",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 3,
@@ -149,28 +150,28 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "Mode 0",
+					"label": "Relay 1 responds to set, relay 1 responds to get, instant updates disabled",
 					"value": 0
 				},
 				{
-					"label": "Mode 1",
+					"label": "Relay 1 responds to set, relay 1 responds to get, instant updates enabled",
 					"value": 1
 				},
 				{
-					"label": "Mode 2",
+					"label": "All relays respond to set, get ignored, instant updates disabled",
 					"value": 2
 				},
 				{
-					"label": "Mode 3",
+					"label": "All relays respond to set, relay 1 responds to get, instant updates disabled",
 					"value": 3
 				}
 			]
 		},
-		"10": {
-			"label": "Respond to Scenes",
+		"10[0x01]": {
+			"label": "Button 1 Respond to Scenes",
 			"valueSize": 1,
 			"minValue": 0,
-			"maxValue": 3,
+			"maxValue": 1,
 			"defaultValue": 0,
 			"unsigned": true,
 			"readOnly": false,
@@ -178,25 +179,38 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "No response to scenes",
+					"label": "Disabled",
 					"value": 0
 				},
 				{
-					"label": "Button 1 responds to scenes",
+					"label": "Enabled",
 					"value": 1
+				}
+			]
+		},
+		"10[0x02]": {
+			"label": "Button 2 Respond to Scenes",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 0,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Disabled",
+					"value": 0
 				},
 				{
-					"label": "Button 2 responds to scenes",
-					"value": 2
-				},
-				{
-					"label": "Both buttons respond to scenes",
-					"value": 3
+					"label": "Enabled",
+					"value": 1
 				}
 			]
 		},
 		"11": {
-			"label": "Button 1 Scene Activate Mode Setting",
+			"label": "Button 1 Scene Activate Mode",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 3,
@@ -227,7 +241,7 @@
 		"12": {
 			"label": "Button 1 Activate Scene ID",
 			"valueSize": 1,
-			"minValue": 0,
+			"minValue": 1,
 			"maxValue": 255,
 			"defaultValue": 1,
 			"unsigned": true,
@@ -248,7 +262,7 @@
 			"allowManualEntry": true
 		},
 		"14": {
-			"label": "Button 2 Scene Activate Mode Setting",
+			"label": "Button 2 Scene Activate Mode",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 3,
@@ -279,7 +293,7 @@
 		"15": {
 			"label": "Button 2 Activate Scene ID",
 			"valueSize": 1,
-			"minValue": 0,
+			"minValue": 1,
 			"maxValue": 255,
 			"defaultValue": 1,
 			"unsigned": true,
@@ -303,7 +317,7 @@
 			"label": "Factory Reset",
 			"valueSize": 1,
 			"minValue": 0,
-			"maxValue": 55,
+			"maxValue": 85,
 			"defaultValue": 0,
 			"unsigned": true,
 			"readOnly": false,
@@ -311,12 +325,12 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "Disabled",
+					"label": "Normal Operation",
 					"value": 0
 				},
 				{
 					"label": "Reset",
-					"value": 55
+					"value": 85
 				}
 			]
 		}
