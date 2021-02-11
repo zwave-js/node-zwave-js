@@ -44,11 +44,10 @@
 		},
 		"51": {
 			"label": "Color Temperature (Warm White)",
-			"description": "Changes the kelvin from 2700k (1387) to 4999k (4999)",
 			"valueSize": 2,
-			"minValue": 1387,
+			"minValue": 2700,
 			"maxValue": 4999,
-			"defaultValue": 1387,
+			"defaultValue": 2700,
 			"unsigned": true,
 			"readOnly": false,
 			"writeOnly": false,
