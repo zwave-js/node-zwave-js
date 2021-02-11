@@ -12,6 +12,7 @@ import { pathExists, readFile, writeFile } from "fs-extra";
 import JSON5 from "json5";
 import path from "path";
 import { CompatConfig } from "./CompatConfig";
+import { readJsonWithTemplate } from "./JsonTemplate";
 import type { ConfigLogger } from "./Logger";
 import {
 	configDir,
@@ -121,7 +122,11 @@ export async function loadDeviceIndexInternal(
 
 		const configFiles = await enumFilesRecursive(
 			devicesDir,
-			(file) => file.endsWith(".json") && !file.endsWith("index.json"),
+			(file) =>
+				file.endsWith(".json") &&
+				!file.endsWith("index.json") &&
+				!file.includes("/templates/") &&
+				!file.includes("\\templates\\"),
 		);
 
 		for (const file of configFiles) {
@@ -192,13 +197,11 @@ export class DeviceConfig {
 		const relativePath = relativeTo
 			? path.relative(relativeTo, filename).replace(/\\/g, "/")
 			: filename;
-		const fileContents = await readFile(filename, "utf8");
-
-		return new DeviceConfig(relativePath, fileContents);
+		const json = await readJsonWithTemplate(filename);
+		return new DeviceConfig(relativePath, json);
 	}
 
-	public constructor(filename: string, fileContents: string) {
-		const definition = JSON5.parse(fileContents);
+	public constructor(filename: string, definition: any) {
 		if (!isHexKeyWith4Digits(definition.manufacturerId)) {
 			throwInvalidConfig(
 				`device`,
