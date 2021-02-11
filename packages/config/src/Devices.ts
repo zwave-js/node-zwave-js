@@ -121,7 +121,10 @@ export async function loadDeviceIndexInternal(
 
 		const configFiles = await enumFilesRecursive(
 			devicesDir,
-			(file) => file.endsWith(".json") && !file.endsWith("index.json"),
+			(file) =>
+				file.endsWith(".json") &&
+				!file.endsWith("index.json") &&
+				!file.includes("/templates/"),
 		);
 
 		for (const file of configFiles) {
