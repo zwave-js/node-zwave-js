@@ -115,15 +115,15 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "Multiple button presses (2x-5x) on extension input S will trigger events of central scene 1.",
+					"label": "Central Scene 1",
 					"value": 1
 				},
 				{
-					"label": "Multiple button presses (2x-5x) on extension input S will trigger events of central scene 2.",
+					"label": "Central Scene 2",
 					"value": 2
 				},
 				{
-					"label": "Multiple button presses (2x-5x) on extension input S will trigger events of central scene 3 - an additional central scene exclusive to extension input S.",
+					"label": "Central Scene 3 (exclusive to Input S)",
 					"value": 3
 				}
 			]
