@@ -358,5 +358,8 @@
 				}
 			]
 		}
+	},
+	"compat": {
+		"treatBasicSetAsEvent": true
 	}
 }
