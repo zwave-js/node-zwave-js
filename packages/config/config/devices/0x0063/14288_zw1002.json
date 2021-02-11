@@ -44,6 +44,10 @@
 				{
 					"label": "LED always off",
 					"value": 2
+				},
+				{
+					"label": "LED always on",
+					"value": 3
 				}
 			]
 		}
