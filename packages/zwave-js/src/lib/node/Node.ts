@@ -1505,12 +1505,14 @@ version:               ${this.version}`;
 		// This is not the handler for wakeup notifications, but some legacy devices send this
 		// message whenever there's an update.
 		if (this.requiresManualValueRefresh()) {
-			const delayMs =
+			const delay =
 				this.deviceConfig?.compat?.manualValueRefreshDelayMs || 0;
 			this.driver.controllerLog.logNode(this.nodeId, {
-				message: `Node does not send unsolicited updates; refreshing actuator and sensor values in ${delayMs}ms...`,
+				message: `Node does not send unsolicited updates; refreshing actuator and sensor values${
+					delay > 0 ? ` in ${delay} ms` : ""
+				}...`,
 			});
-			setTimeout(() => this.refreshValues(), delayMs);
+			setTimeout(() => this.refreshValues(), delay);
 		}
 	}
 

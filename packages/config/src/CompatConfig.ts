@@ -104,7 +104,7 @@ error in compat option treatBasicSetAsEvent`,
 		}
 
 		if (definition.manualValueRefreshDelayMs != undefined) {
-			if (typeof definition.manualValueRefreshDelayMs != "number") {
+			if (typeof definition.manualValueRefreshDelayMs !== "number") {
 				throwInvalidConfig(
 					"devices",
 					`config/devices/${filename}:

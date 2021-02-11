@@ -233,7 +233,7 @@ By default, `Basic CC::Set` commands are interpreted as status updates. This fla
 
 ### `manualValueRefreshDelayMs`
 
-Some legacy devices emit an NIF when a local event occurs (e.g., button press) to signal that the controller should request a status update.  Some of these devices, however, require a delay before receiving the update request (or they ignore it or respond with a "busy" message).  `manualValueRefreshDelayMs` specifies that delay, expressed in milliseconds.  If unset, the default delay is 0ms.
+Some legacy devices emit an NIF when a local event occurs (e.g. a button press) to signal that the controller should request a status update. However, some of these devices require a delay before they are ready to respond to this request. `manualValueRefreshDelayMs` specifies that delay, expressed in milliseconds. If unset, there will be no delay.
 
 ## Contributing configuration files
 
