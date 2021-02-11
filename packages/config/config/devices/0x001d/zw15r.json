@@ -18,8 +18,7 @@
 	},
 	"paramInformation": {
 		"7": {
-			"label": "Locator Status",
-			"description": "Locator LED status",
+			"label": "Status LED configuration",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 255,
