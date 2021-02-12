@@ -1,0 +1,39 @@
+// Sercomm Corp SW-PIR03N
+// PIR Motion Sensor
+{
+	"manufacturer": "Sercomm Corp",
+	"manufacturerId": "0x0151",
+	"label": "SW-PIR03N",
+	"description": "PIR Motion Sensor",
+	"devices": [
+		{
+			"productType": "0x0101",
+			"productId": "0x0001",
+			"zwaveAllianceId": 2140
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"paramInformation": {
+		"1": {
+			"label": "Configure Motion Trigger Interval",
+			"description": "Unit: 1s",
+			"valueSize": 2,
+			"minValue": 0,
+			"maxValue": 180,
+			"defaultValue": 180,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		}
+	},
+	"metadata": {
+		"inclusion": "1. Install the battery and the Pairing LED indicator will be lit for one second to indicate a successful booting.\n2. It will blink one time every second while scanning the network. \n3. If the network is not found after 30 seconds, the sensor will go into sleep mode. To wake the sensor again, you need to use the tamper switch to trigger the adding (Inclusion) process, and then the sensor will repeat steps from 2 to 3.",
+		"exclusion": "1. Set the Z-Wave controller to \"Exclusion\" mode.\n2. Press the tamper button 3 times within 2 seconds.\n3. The PIR LED will light up for 1 second if success.\n4. The device will begin to search for a new network.",
+		"reset": "Please reset the device to factory default only when the primary controller is missing or inoperable.\n\n1. Press the tamper switch 4 times within 2 seconds and hold the 4th press until the PIR LED lights up. \n2. The PIR LED will be off after 3 seconds and all settings will be reset to factory defaults.",
+		"manual": "https://products.z-wavealliance.org/ProductManual/File?folder=&filename=MarketCertificationFiles/2140/SW-PIR03N_QIG-20161222.pdf"
+	}
+}

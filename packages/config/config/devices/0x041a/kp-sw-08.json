@@ -1,0 +1,79 @@
+// A.KEEMPLECOM, Ltd. KP-SW-08
+// Smart Touch Light Switch (2-way)
+{
+	"manufacturer": "A.KEEMPLECOM, Ltd.",
+	"manufacturerId": "0x041a",
+	"label": "KP-SW-08",
+	"description": "Smart Touch Light Switch (2-way)",
+	"devices": [
+		{
+			"productType": "0x0100",
+			"productId": "0x0003",
+			"zwaveAllianceId": 3587
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"paramInformation": {
+		"21": {
+			"label": "Setting Device Status After Power Failure",
+			"description": "Define how the switch reacts after the power supply is back on",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 2,
+			"defaultValue": 0,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Touch switch memorizes its state after a power failure",
+					"value": 0
+				},
+				{
+					"label": "Touch switch does not memorize its state after a power failure. connected device will be on after the power supply is reconnected",
+					"value": 1
+				},
+				{
+					"label": "Touch switch does not memorize its state after a power failure. connected device will be off after the power supply is reconnected",
+					"value": 2
+				}
+			]
+		},
+		"24": {
+			"label": "Notification When Load Status Change",
+			"description": "Touch switch can send notifications to association device when state of touch switch’s load change",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 2,
+			"defaultValue": 1,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "The function is disabled",
+					"value": 0
+				},
+				{
+					"label": "Send switch binary report",
+					"value": 1
+				},
+				{
+					"label": "Send switch binary report only when load condition is not changed by Z-Wave command",
+					"value": 2
+				}
+			]
+		}
+	},
+	"metadata": {
+		"inclusion": "1) Connect the power supply.\n2) Set the Z-Wave network main controller into learning mode.\n3) Press and hold the button 1 (the red light flashes slowly) until the pink light flashes slowly and\nthen release, the device sends the network k information (blue light flashes quickly).\n4) After the network is successfully connected, the LED indicator of the device is steady blue, and the load is off by default",
+		"exclusion": "1) Power on the switch.\n2) Set the Z-Wave network controller into the exclusion mode. \n3) Long press the switch button 1 (Red LED blink slowly) when Pink LED indicator light blink slowly, release the button, then the device start to send out exclusion information(Blue LED indicator in quick blinking).\n\n4) When exclusion successfully, LED display is steady blue, load is off.",
+		"reset": "Reset procedure will delete all information in the Z-Wave network or Z-Wave gateway, and will restore switch to factory default settings.\n1. Make sure switch is powered.\n2. Press and hold the Switch button 1 for 20 seconds.\n3. Until the pink light is always on, release the button.\n\nUse this procedure only in the event that the network primary controller is missing or otherwise inoperable",
+		"manual": "https://products.z-wavealliance.org/ProductManual/File?folder=&filename=MarketCertificationFiles/3587/KP-SW-08.pdf"
+	}
+}
