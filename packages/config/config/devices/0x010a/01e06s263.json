@@ -9,11 +9,7 @@
 		{
 			"productType": "0x8161",
 			"productId": "0x2062",
-			"zwaveAllianceId": [
-				3271,
-				3899,
-				3918
-			]
+			"zwaveAllianceId": [3271, 3899, 3918]
 		}
 	],
 	"firmwareVersion": {
@@ -22,212 +18,752 @@
 	},
 	"paramInformation": {
 		"7": {
-			"label": "Button N.1 Off Status Led",
-			"description": "Led is off: 0: LED is off; 1: red; 2: green; 3: blue; 4: yellow; 5: magenta; 6: cyan; 7; white",
+			"label": "Button N.1 Off Status LED",
 			"valueSize": 1,
 			"minValue": 0,
-			"maxValue": 3,
+			"maxValue": 7,
 			"defaultValue": 3,
 			"unsigned": true,
 			"readOnly": false,
 			"writeOnly": false,
-			"allowManualEntry": true
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Off",
+					"value": 0
+				},
+				{
+					"label": "Red",
+					"value": 1
+				},
+				{
+					"label": "Green",
+					"value": 2
+				},
+				{
+					"label": "Blue",
+					"value": 3
+				},
+				{
+					"label": "Yellow",
+					"value": 4
+				},
+				{
+					"label": "Magenta",
+					"value": 5
+				},
+				{
+					"label": "Cyan",
+					"value": 6
+				},
+				{
+					"label": "White",
+					"value": 7
+				}
+			]
 		},
 		"8": {
-			"label": "Button N.2 Off Status Led",
-			"description": "0: LED is off; 1: red; 2: green; 3: blue; 4: yellow; 5: magenta; 6: cyan; 7; white",
+			"label": "Button N.2 Off Status LED",
 			"valueSize": 1,
 			"minValue": 0,
-			"maxValue": 3,
+			"maxValue": 7,
 			"defaultValue": 3,
 			"unsigned": true,
 			"readOnly": false,
 			"writeOnly": false,
-			"allowManualEntry": true
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Off",
+					"value": 0
+				},
+				{
+					"label": "Red",
+					"value": 1
+				},
+				{
+					"label": "Green",
+					"value": 2
+				},
+				{
+					"label": "Blue",
+					"value": 3
+				},
+				{
+					"label": "Yellow",
+					"value": 4
+				},
+				{
+					"label": "Magenta",
+					"value": 5
+				},
+				{
+					"label": "Cyan",
+					"value": 6
+				},
+				{
+					"label": "White",
+					"value": 7
+				}
+			]
 		},
 		"9": {
-			"label": "Button N.3 Off Status Led",
-			"description": "0: LED is off; 1: red; 2: green; 3: blue; 4: yellow; 5: magenta; 6: cyan; 7; white",
+			"label": "Button N.3 Off Status LED",
 			"valueSize": 1,
 			"minValue": 0,
-			"maxValue": 3,
+			"maxValue": 7,
 			"defaultValue": 3,
 			"unsigned": true,
 			"readOnly": false,
 			"writeOnly": false,
-			"allowManualEntry": true
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Off",
+					"value": 0
+				},
+				{
+					"label": "Red",
+					"value": 1
+				},
+				{
+					"label": "Green",
+					"value": 2
+				},
+				{
+					"label": "Blue",
+					"value": 3
+				},
+				{
+					"label": "Yellow",
+					"value": 4
+				},
+				{
+					"label": "Magenta",
+					"value": 5
+				},
+				{
+					"label": "Cyan",
+					"value": 6
+				},
+				{
+					"label": "White",
+					"value": 7
+				}
+			]
 		},
 		"10": {
-			"label": "Button N.4 Off Status Led",
-			"description": "0: LED is off; 1: red; 2: green; 3: blue; 4: yellow; 5: magenta; 6: cyan; 7; white",
+			"label": "Button N.4 Off Status LED",
 			"valueSize": 1,
 			"minValue": 0,
-			"maxValue": 3,
+			"maxValue": 7,
 			"defaultValue": 3,
 			"unsigned": true,
 			"readOnly": false,
 			"writeOnly": false,
-			"allowManualEntry": true
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Off",
+					"value": 0
+				},
+				{
+					"label": "Red",
+					"value": 1
+				},
+				{
+					"label": "Green",
+					"value": 2
+				},
+				{
+					"label": "Blue",
+					"value": 3
+				},
+				{
+					"label": "Yellow",
+					"value": 4
+				},
+				{
+					"label": "Magenta",
+					"value": 5
+				},
+				{
+					"label": "Cyan",
+					"value": 6
+				},
+				{
+					"label": "White",
+					"value": 7
+				}
+			]
 		},
 		"11": {
-			"label": "Button N.5 Off Status Led",
-			"description": "0: LED is off; 1: red; 2: green; 3: blue; 4: yellow; 5: magenta; 6: cyan; 7; white",
+			"label": "Button N.5 Off Status LED",
 			"valueSize": 1,
 			"minValue": 0,
-			"maxValue": 3,
+			"maxValue": 7,
 			"defaultValue": 3,
 			"unsigned": true,
 			"readOnly": false,
 			"writeOnly": false,
-			"allowManualEntry": true
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Off",
+					"value": 0
+				},
+				{
+					"label": "Red",
+					"value": 1
+				},
+				{
+					"label": "Green",
+					"value": 2
+				},
+				{
+					"label": "Blue",
+					"value": 3
+				},
+				{
+					"label": "Yellow",
+					"value": 4
+				},
+				{
+					"label": "Magenta",
+					"value": 5
+				},
+				{
+					"label": "Cyan",
+					"value": 6
+				},
+				{
+					"label": "White",
+					"value": 7
+				}
+			]
 		},
 		"12": {
-			"label": "Button N.6 Off Status Led",
-			"description": "0: LED is off; 1: red; 2: green; 3: blue; 4: yellow; 5: magenta; 6: cyan; 7; white",
+			"label": "Button N.6 Off Status LED",
 			"valueSize": 1,
 			"minValue": 0,
-			"maxValue": 3,
+			"maxValue": 7,
 			"defaultValue": 3,
 			"unsigned": true,
 			"readOnly": false,
 			"writeOnly": false,
-			"allowManualEntry": true
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Off",
+					"value": 0
+				},
+				{
+					"label": "Red",
+					"value": 1
+				},
+				{
+					"label": "Green",
+					"value": 2
+				},
+				{
+					"label": "Blue",
+					"value": 3
+				},
+				{
+					"label": "Yellow",
+					"value": 4
+				},
+				{
+					"label": "Magenta",
+					"value": 5
+				},
+				{
+					"label": "Cyan",
+					"value": 6
+				},
+				{
+					"label": "White",
+					"value": 7
+				}
+			]
 		},
 		"13": {
-			"label": "Button N.1 On Status Led",
-			"description": "0: LED is off; 1: red; 2: green; 3: blue; 4: yellow; 5: magenta; 6: cyan; 7; white",
+			"label": "Button N.1 On Status LED",
 			"valueSize": 1,
 			"minValue": 0,
-			"maxValue": 4,
+			"maxValue": 7,
 			"defaultValue": 4,
 			"unsigned": true,
 			"readOnly": false,
 			"writeOnly": false,
-			"allowManualEntry": true
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Off",
+					"value": 0
+				},
+				{
+					"label": "Red",
+					"value": 1
+				},
+				{
+					"label": "Green",
+					"value": 2
+				},
+				{
+					"label": "Blue",
+					"value": 3
+				},
+				{
+					"label": "Yellow",
+					"value": 4
+				},
+				{
+					"label": "Magenta",
+					"value": 5
+				},
+				{
+					"label": "Cyan",
+					"value": 6
+				},
+				{
+					"label": "White",
+					"value": 7
+				}
+			]
 		},
 		"14": {
-			"label": "Button N.2 On Status Led",
-			"description": "0: LED is off; 1: red; 2: green; 3: blue; 4: yellow; 5: magenta; 6: cyan; 7; white",
+			"label": "Button N.2 On Status LED",
 			"valueSize": 1,
 			"minValue": 0,
-			"maxValue": 4,
+			"maxValue": 7,
 			"defaultValue": 4,
 			"unsigned": true,
 			"readOnly": false,
 			"writeOnly": false,
-			"allowManualEntry": true
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Off",
+					"value": 0
+				},
+				{
+					"label": "Red",
+					"value": 1
+				},
+				{
+					"label": "Green",
+					"value": 2
+				},
+				{
+					"label": "Blue",
+					"value": 3
+				},
+				{
+					"label": "Yellow",
+					"value": 4
+				},
+				{
+					"label": "Magenta",
+					"value": 5
+				},
+				{
+					"label": "Cyan",
+					"value": 6
+				},
+				{
+					"label": "White",
+					"value": 7
+				}
+			]
 		},
 		"15": {
-			"label": "Button N.3 On Status Led",
-			"description": "0: LED is off; 1: red; 2: green; 3: blue; 4: yellow; 5: magenta; 6: cyan; 7; white",
+			"label": "Button N.3 On Status LED",
 			"valueSize": 1,
 			"minValue": 0,
-			"maxValue": 4,
+			"maxValue": 7,
 			"defaultValue": 4,
 			"unsigned": true,
 			"readOnly": false,
 			"writeOnly": false,
-			"allowManualEntry": true
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Off",
+					"value": 0
+				},
+				{
+					"label": "Red",
+					"value": 1
+				},
+				{
+					"label": "Green",
+					"value": 2
+				},
+				{
+					"label": "Blue",
+					"value": 3
+				},
+				{
+					"label": "Yellow",
+					"value": 4
+				},
+				{
+					"label": "Magenta",
+					"value": 5
+				},
+				{
+					"label": "Cyan",
+					"value": 6
+				},
+				{
+					"label": "White",
+					"value": 7
+				}
+			]
 		},
 		"16": {
-			"label": "Button N.4 On Status Led",
-			"description": "0: LED is off; 1: red; 2: green; 3: blue; 4: yellow; 5: magenta; 6: cyan; 7; white",
+			"label": "Button N.4 On Status LED",
 			"valueSize": 1,
 			"minValue": 0,
-			"maxValue": 4,
+			"maxValue": 7,
 			"defaultValue": 4,
 			"unsigned": true,
 			"readOnly": false,
 			"writeOnly": false,
-			"allowManualEntry": true
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Off",
+					"value": 0
+				},
+				{
+					"label": "Red",
+					"value": 1
+				},
+				{
+					"label": "Green",
+					"value": 2
+				},
+				{
+					"label": "Blue",
+					"value": 3
+				},
+				{
+					"label": "Yellow",
+					"value": 4
+				},
+				{
+					"label": "Magenta",
+					"value": 5
+				},
+				{
+					"label": "Cyan",
+					"value": 6
+				},
+				{
+					"label": "White",
+					"value": 7
+				}
+			]
 		},
 		"17": {
-			"label": "Button N.5 On Status Led",
-			"description": "0: LED is off; 1: red; 2: green; 3: blue; 4: yellow; 5: magenta; 6: cyan; 7; white",
+			"label": "Button N.5 On Status LED",
 			"valueSize": 1,
 			"minValue": 0,
-			"maxValue": 4,
+			"maxValue": 7,
 			"defaultValue": 4,
 			"unsigned": true,
 			"readOnly": false,
 			"writeOnly": false,
-			"allowManualEntry": true
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Off",
+					"value": 0
+				},
+				{
+					"label": "Red",
+					"value": 1
+				},
+				{
+					"label": "Green",
+					"value": 2
+				},
+				{
+					"label": "Blue",
+					"value": 3
+				},
+				{
+					"label": "Yellow",
+					"value": 4
+				},
+				{
+					"label": "Magenta",
+					"value": 5
+				},
+				{
+					"label": "Cyan",
+					"value": 6
+				},
+				{
+					"label": "White",
+					"value": 7
+				}
+			]
 		},
 		"18": {
-			"label": "Button N.6 On Status Led",
-			"description": "0: LED is off; 1: red; 2: green; 3: blue; 4: yellow; 5: magenta; 6: cyan; 7; white",
+			"label": "Button N.6 On Status LED",
 			"valueSize": 1,
 			"minValue": 0,
-			"maxValue": 4,
+			"maxValue": 7,
 			"defaultValue": 4,
 			"unsigned": true,
 			"readOnly": false,
 			"writeOnly": false,
-			"allowManualEntry": true
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Off",
+					"value": 0
+				},
+				{
+					"label": "Red",
+					"value": 1
+				},
+				{
+					"label": "Green",
+					"value": 2
+				},
+				{
+					"label": "Blue",
+					"value": 3
+				},
+				{
+					"label": "Yellow",
+					"value": 4
+				},
+				{
+					"label": "Magenta",
+					"value": 5
+				},
+				{
+					"label": "Cyan",
+					"value": 6
+				},
+				{
+					"label": "White",
+					"value": 7
+				}
+			]
 		},
 		"25": {
-			"label": "Output Port Connected to Button N.1",
-			"description": "0: disconnected; 1: button connected to output port 1; 2: button connected to output port 2; 3: button connected to output port 3; 4: button connected to output port 4; 5: button connected to output port 5; 6: button connected to output port 6",
+			"label": "Button N.1 Output Port",
 			"valueSize": 1,
 			"minValue": 0,
-			"maxValue": 1,
+			"maxValue": 6,
 			"defaultValue": 1,
 			"unsigned": true,
 			"readOnly": false,
 			"writeOnly": false,
-			"allowManualEntry": true
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Disconnected",
+					"value": 0
+				},
+				{
+					"label": "Output Port 1",
+					"value": 1
+				},
+				{
+					"label": "Output Port 2",
+					"value": 2
+				},
+				{
+					"label": "Output Port 3",
+					"value": 3
+				},
+				{
+					"label": "Output Port 4",
+					"value": 4
+				},
+				{
+					"label": "Output Port 5",
+					"value": 5
+				},
+				{
+					"label": "Output Port 6",
+					"value": 6
+				}
+			]
 		},
 		"26": {
-			"label": "Output Port Connected to Button N.2",
-			"description": "0: disconnected; 1: button connected to output port 1; 2: button connected to output port 2; 3: button connected to output port 3; 4: button connected to output port 4; 5: button connected to output port 5; 6: button connected to output port 6",
+			"label": "Button N.2 Output Port",
 			"valueSize": 1,
 			"minValue": 0,
-			"maxValue": 2,
+			"maxValue": 6,
 			"defaultValue": 2,
 			"unsigned": true,
 			"readOnly": false,
 			"writeOnly": false,
-			"allowManualEntry": true
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Disconnected",
+					"value": 0
+				},
+				{
+					"label": "Output Port 1",
+					"value": 1
+				},
+				{
+					"label": "Output Port 2",
+					"value": 2
+				},
+				{
+					"label": "Output Port 3",
+					"value": 3
+				},
+				{
+					"label": "Output Port 4",
+					"value": 4
+				},
+				{
+					"label": "Output Port 5",
+					"value": 5
+				},
+				{
+					"label": "Output Port 6",
+					"value": 6
+				}
+			]
 		},
 		"27": {
-			"label": "Output Port Connected to Button N.3",
-			"description": "0: disconnected; 1: button connected to output port 1; 2: button connected to output port 2; 3: button connected to output port 3; 4: button connected to output port 4; 5: button connected to output port 5; 6: button connected to output port 6",
+			"label": "Button N.3 Output Port",
 			"valueSize": 1,
 			"minValue": 0,
-			"maxValue": 3,
+			"maxValue": 6,
 			"defaultValue": 3,
 			"unsigned": true,
 			"readOnly": false,
 			"writeOnly": false,
-			"allowManualEntry": true
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Disconnected",
+					"value": 0
+				},
+				{
+					"label": "Output Port 1",
+					"value": 1
+				},
+				{
+					"label": "Output Port 2",
+					"value": 2
+				},
+				{
+					"label": "Output Port 3",
+					"value": 3
+				},
+				{
+					"label": "Output Port 4",
+					"value": 4
+				},
+				{
+					"label": "Output Port 5",
+					"value": 5
+				},
+				{
+					"label": "Output Port 6",
+					"value": 6
+				}
+			]
 		},
 		"28": {
-			"label": "Output Port Connected to Button N.4",
-			"description": "0: disconnected; 1: button connected to output port 1; 2: button connected to output port 2; 3: button connected to output port 3; 4: button connected to output port 4; 5: button connected to output port 5; 6: button connected to output port 6",
+			"label": "Button N.4 Output Port",
 			"valueSize": 1,
 			"minValue": 0,
-			"maxValue": 4,
+			"maxValue": 6,
 			"defaultValue": 4,
 			"unsigned": true,
 			"readOnly": false,
 			"writeOnly": false,
-			"allowManualEntry": true
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Disconnected",
+					"value": 0
+				},
+				{
+					"label": "Output Port 1",
+					"value": 1
+				},
+				{
+					"label": "Output Port 2",
+					"value": 2
+				},
+				{
+					"label": "Output Port 3",
+					"value": 3
+				},
+				{
+					"label": "Output Port 4",
+					"value": 4
+				},
+				{
+					"label": "Output Port 5",
+					"value": 5
+				},
+				{
+					"label": "Output Port 6",
+					"value": 6
+				}
+			]
 		},
 		"29": {
-			"label": "Output Port Connected to Button N.5",
-			"description": "0: disconnected; 1: button connected to output port 1; 2: button connected to output port 2; 3: button connected to output port 3; 4: button connected to output port 4; 5: button connected to output port 5; 6: button connected to output port 6",
+			"label": "Button N.5 Output Port",
 			"valueSize": 1,
 			"minValue": 0,
-			"maxValue": 5,
+			"maxValue": 6,
 			"defaultValue": 5,
 			"unsigned": true,
 			"readOnly": false,
 			"writeOnly": false,
-			"allowManualEntry": true
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Disconnected",
+					"value": 0
+				},
+				{
+					"label": "Output Port 1",
+					"value": 1
+				},
+				{
+					"label": "Output Port 2",
+					"value": 2
+				},
+				{
+					"label": "Output Port 3",
+					"value": 3
+				},
+				{
+					"label": "Output Port 4",
+					"value": 4
+				},
+				{
+					"label": "Output Port 5",
+					"value": 5
+				},
+				{
+					"label": "Output Port 6",
+					"value": 6
+				}
+			]
 		},
 		"30": {
-			"label": "Output Port Connected to Button N.6",
-			"description": "0: disconnected; 1: button connected to output port 1; 2: button connected to output port 2; 3: button connected to output port 3; 4: button connected to output port 4; 5: button connected to output port 5; 6: button connected to output port 6",
+			"label": "Button N.6 Output Port",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 6,
@@ -235,11 +771,40 @@
 			"unsigned": true,
 			"readOnly": false,
 			"writeOnly": false,
-			"allowManualEntry": true
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Disconnected",
+					"value": 0
+				},
+				{
+					"label": "Output Port 1",
+					"value": 1
+				},
+				{
+					"label": "Output Port 2",
+					"value": 2
+				},
+				{
+					"label": "Output Port 3",
+					"value": 3
+				},
+				{
+					"label": "Output Port 4",
+					"value": 4
+				},
+				{
+					"label": "Output Port 5",
+					"value": 5
+				},
+				{
+					"label": "Output Port 6",
+					"value": 6
+				}
+			]
 		},
 		"31": {
 			"label": "Basic Set On From Group 2",
-			"description": "0: 99 (0x63) 1: 255 (0xff)",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 1,
@@ -247,11 +812,20 @@
 			"unsigned": true,
 			"readOnly": false,
 			"writeOnly": false,
-			"allowManualEntry": true
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "99",
+					"value": 0
+				},
+				{
+					"label": "255",
+					"value": 1
+				}
+			]
 		},
 		"32": {
 			"label": "Basic Set On From Group 3",
-			"description": "0: 99 (0x63) 1: 255 (0xff)",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 1,
@@ -259,11 +833,20 @@
 			"unsigned": true,
 			"readOnly": false,
 			"writeOnly": false,
-			"allowManualEntry": true
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "99",
+					"value": 0
+				},
+				{
+					"label": "255",
+					"value": 1
+				}
+			]
 		},
 		"33": {
 			"label": "Basic Set On From Group 4",
-			"description": "0: 99 (0x63) 1: 255 (0xff)",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 1,
@@ -271,11 +854,20 @@
 			"unsigned": true,
 			"readOnly": false,
 			"writeOnly": false,
-			"allowManualEntry": true
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "99",
+					"value": 0
+				},
+				{
+					"label": "255",
+					"value": 1
+				}
+			]
 		},
 		"34": {
 			"label": "Basic Set On From Group 5",
-			"description": "0: 99 (0x63) 1: 255 (0xff)",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 1,
@@ -283,11 +875,20 @@
 			"unsigned": true,
 			"readOnly": false,
 			"writeOnly": false,
-			"allowManualEntry": true
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "99",
+					"value": 0
+				},
+				{
+					"label": "255",
+					"value": 1
+				}
+			]
 		},
 		"35": {
 			"label": "Basic Set On From Group 6",
-			"description": "0: 99 (0x63) 1: 255 (0xff)",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 1,
@@ -295,11 +896,20 @@
 			"unsigned": true,
 			"readOnly": false,
 			"writeOnly": false,
-			"allowManualEntry": true
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "99",
+					"value": 0
+				},
+				{
+					"label": "255",
+					"value": 1
+				}
+			]
 		},
 		"36": {
 			"label": "Basic Set On From Group 7",
-			"description": "0: 99 (0x63) 1: 255 (0xff)",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 1,
@@ -307,11 +917,20 @@
 			"unsigned": true,
 			"readOnly": false,
 			"writeOnly": false,
-			"allowManualEntry": true
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "99",
+					"value": 0
+				},
+				{
+					"label": "255",
+					"value": 1
+				}
+			]
 		},
 		"206": {
 			"label": "Buttons Max. Brightness",
-			"description": "Leds maximum brightness",
 			"valueSize": 1,
 			"minValue": 5,
 			"maxValue": 100,
@@ -323,10 +942,9 @@
 		},
 		"207": {
 			"label": "Buttons Min. Brightness",
-			"description": "Led minum brightness",
 			"valueSize": 1,
 			"minValue": 0,
-			"maxValue": 5,
+			"maxValue": 100,
 			"defaultValue": 5,
 			"unsigned": true,
 			"readOnly": false,
@@ -335,7 +953,6 @@
 		},
 		"209": {
 			"label": "Buzzer",
-			"description": "0: disabled 1: enabled",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 1,
@@ -343,19 +960,38 @@
 			"unsigned": true,
 			"readOnly": false,
 			"writeOnly": false,
-			"allowManualEntry": true
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Disabled",
+					"value": 0
+				},
+				{
+					"label": "Enabled",
+					"value": 1
+				}
+			]
 		},
 		"218": {
 			"label": "Front-end Buttons Lock",
-			"description": "0: disabled; 1: enabled",
 			"valueSize": 1,
 			"minValue": 0,
-			"maxValue": 0,
+			"maxValue": 1,
 			"defaultValue": 0,
 			"unsigned": true,
 			"readOnly": false,
 			"writeOnly": false,
-			"allowManualEntry": true
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Disabled",
+					"value": 0
+				},
+				{
+					"label": "Enabled",
+					"value": 1
+				}
+			]
 		}
 	},
 	"metadata": {

@@ -1,7 +1,7 @@
-// Aeotec ZW141
+// Aeon Labs ZW141
 // Nano Shutter
 {
-	"manufacturer": "Aeotec",
+	"manufacturer": "Aeon Labs",
 	"manufacturerId": "0x0086",
 	"label": "ZW141",
 	"description": "Nano Shutter",
@@ -79,7 +79,7 @@
 		"120": {
 			"label": "External Switch Mode For S1",
 			"valueSize": 1,
-			"minValue": 0,
+			"minValue": 2,
 			"maxValue": 4,
 			"defaultValue": 0,
 			"unsigned": true,
@@ -87,10 +87,6 @@
 			"writeOnly": false,
 			"allowManualEntry": false,
 			"options": [
-				{
-					"label": "Unidentified mode",
-					"value": 0
-				},
 				{
 					"label": "3-way switch mode",
 					"value": 2
@@ -108,7 +104,7 @@
 		"121": {
 			"label": "External Switch Mode For S2",
 			"valueSize": 1,
-			"minValue": 0,
+			"minValue": 2,
 			"maxValue": 4,
 			"defaultValue": 0,
 			"unsigned": true,
@@ -116,10 +112,6 @@
 			"writeOnly": false,
 			"allowManualEntry": false,
 			"options": [
-				{
-					"label": "Unidentified mode",
-					"value": 0
-				},
 				{
 					"label": "3-way switch mode",
 					"value": 2
