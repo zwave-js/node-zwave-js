@@ -231,6 +231,10 @@ By default, `Basic CC::Set` commands are interpreted as status updates. This fla
 > [!NOTE]
 > If this option is `true`, it has precedence over `disableBasicMapping`.
 
+### `manualValueRefreshDelayMs`
+
+Some legacy devices emit an NIF when a local event occurs (e.g. a button press) to signal that the controller should request a status update. However, some of these devices require a delay before they are ready to respond to this request. `manualValueRefreshDelayMs` specifies that delay, expressed in milliseconds. If unset, there will be no delay.
+
 ## Contributing configuration files
 
 In order to get your configuration file included in this library, this is the way:
@@ -289,3 +293,108 @@ yarn run config import -s oh -Dd --ids 1234 1235
 ```
 
 The device ID can be found in the browser URL - the device at `https://opensmarthouse.org/zwavedatabase/256` has the ID 256.
+
+## Advanced topics for configuration authors
+
+### Importing templates
+
+Some manufacturers have a lot of devices that share configuration parameters. To make these definitions easy to manage and keep them consistent between multiple config files, you can (and should whenever possible) import templates (or parts thereof) instead of repeating the parameter definition in each file.
+
+To import a template, you can use the special `$import` property where you'd normally write out the individual properties. Every property referenced by the `$import` statement gets included in the current location. The `$import` property has the following syntax:
+
+```json
+{
+	"$import": "path/to/template.json#selector"
+}
+```
+
+where
+
+-   `path/to/template.json` is the path to the template file relative to the importing file and
+-   `#selector` is a `/`-separated list of property names that should be traversed in the imported file. This can be used to import only parts of a template.
+
+Both parts are optional, so you can import entire files and you can also build self-referencing templates if you leave out the filesystem path.
+
+Properties listed before the `$import` statement may get overwritten by the imports. Properties listed after it will overwrite the imported properties. You can use this to do device-specific additions without having to change the template as a whole.
+
+> [!ATTENTION]
+> Templates **must** be located in a subdirectory called `templates` so they don't get interpreted as complete device configurations.
+
+#### Example 1
+
+```json
+// config.json (on disk)
+{
+	// ... all the rest
+	"paramInformation": {
+		"1": {
+			"$import": "templates/params.json#light_config",
+			"valueSize": "2" // this device has a different value size than the others
+		}
+	}
+}
+
+// templates/params.json (on disk)
+{
+	"light_config": {
+		"label": "Light configuration",
+		"valueSize": 1,
+		"minValue": 0,
+		"maxValue": 2,
+		// ...
+	},
+	"lifeline_association": {
+		// ...
+	}
+}
+
+// config.json (parsed)
+{
+	// ... all the rest
+	"paramInformation": {
+		"1": {
+			"label": "Light configuration",
+			"valueSize": 2,
+			"minValue": 0,
+			"maxValue": 2,
+		}
+	}
+}
+```
+
+#### Example 2:
+
+```json
+// file1.json (on disk)
+{
+	"template": false,
+	"$import": "template.json#we/all/live/in/1/yellow/submarine",
+}
+
+// file2.json (on disk)
+{
+	"super": "hot",
+	"we": {
+		"all": {
+			"live": {
+				"in": [
+					// even works for arrays if you use the array index
+					"nope",
+					{
+						"yellow": {
+							"submarine": {
+								"template": true
+							}
+						}
+					}
+				]
+			}
+		}
+	}
+}
+
+// file1.json (parsed)
+{
+	"template": true
+}
+```

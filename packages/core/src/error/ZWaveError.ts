@@ -57,6 +57,8 @@ export enum ZWaveErrorCodes {
 
 	Config_Invalid,
 	Config_NotFound,
+	/** A compound config file has circular imports */
+	Config_CircularImport,
 
 	// Here follow message specific errors
 

@@ -1,10 +1,10 @@
-// Yale YRD220
-// Yale Real Living Touchscreen Deadbolt
+// Yale YRD220 / YRD240
+// Real Living Touchscreen Deadbolt
 {
 	"manufacturer": "Yale",
 	"manufacturerId": "0x0129",
-	"label": "YRD220",
-	"description": "Yale Real Living Touchscreen Deadbolt",
+	"label": "YRD220 / YRD240",
+	"description": "Real Living Touchscreen Deadbolt",
 	"devices": [
 		{
 			"productType": "0x0002",
@@ -172,6 +172,89 @@
 				{
 					"label": "Privacy Mode",
 					"value": 2
+				}
+			]
+		},
+		"11": {
+			"label": "One Touch Locking",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 255,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Disable",
+					"value": 0
+				},
+				{
+					"label": "Enable",
+					"value": 255
+				}
+			]
+		},
+		"12": {
+			"label": "Privacy Button",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 0,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Disable",
+					"value": 0
+				},
+				{
+					"label": "Enable",
+					"value": 255
+				}
+			]
+		},
+		"13": {
+			"label": "Lock Status LED",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 0,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Disable",
+					"value": 0
+				},
+				{
+					"label": "Enable",
+					"value": 255
+				}
+			]
+		},
+		"15": {
+			"label": "Reset to Factory Defaults",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Normal Operation",
+					"value": 0
+				},
+				{
+					"label": "Reset Device",
+					"value": 1
 				}
 			]
 		}

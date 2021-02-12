@@ -1,7 +1,7 @@
-// Spectrum Brands SmartCode 888
+// Kwikset SmartCode 888
 // Touchpad Electronic Deadbolt
 {
-	"manufacturer": "Spectrum Brands",
+	"manufacturer": "Kwikset",
 	"manufacturerId": "0x0090",
 	"label": "SmartCode 888",
 	"description": "Touchpad Electronic Deadbolt",
@@ -18,30 +18,29 @@
 	"supportsZWavePlus": true,
 	"paramInformation": {
 		"33": {
-			"label": "SKU",
-			"description": "Set the first four most significant bytes of the SKU",
+			"label": "SKU Number (First 4 Bytes)",
 			"valueSize": 4,
 			"minValue": 0,
-			"maxValue": 4,
+			"maxValue": 0,
 			"defaultValue": 0,
+			"unsigned": true,
 			"readOnly": false,
 			"writeOnly": false,
 			"allowManualEntry": true
 		},
 		"34": {
-			"label": "SKU (Last 4)",
-			"description": "The four least significant bytes of the SKU",
+			"label": "SKU Number (Last 4 Bytes)",
 			"valueSize": 4,
 			"minValue": 0,
-			"maxValue": 4,
+			"maxValue": 0,
 			"defaultValue": 0,
+			"unsigned": true,
 			"readOnly": false,
 			"writeOnly": false,
 			"allowManualEntry": true
 		},
 		"35": {
 			"label": "Interior Status LED",
-			"description": "Allows user to get/set the value for the Interior Status LED control",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 1,
@@ -51,17 +50,17 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "OFF",
+					"label": "Disable",
 					"value": 0
 				},
 				{
-					"label": "ON",
+					"label": "Enable",
 					"value": 1
 				}
 			]
 		},
 		"37": {
-			"label": "Audio Feature Control",
+			"label": "Audio Feedback",
 			"description": "Allows the user to get/set the audio feed back command",
 			"valueSize": 1,
 			"minValue": 0,
@@ -72,11 +71,11 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "OFF",
+					"label": "Disable",
 					"value": 0
 				},
 				{
-					"label": "ON",
+					"label": "Enable",
 					"value": 1
 				}
 			]
@@ -103,8 +102,7 @@
 			]
 		},
 		"47": {
-			"label": "Motor Load Control",
-			"description": "Allows the device to send motor load alarms",
+			"label": "Send Motor Load Alarms",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 1,
@@ -114,18 +112,17 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "OFF",
+					"label": "Disable",
 					"value": 0
 				},
 				{
-					"label": "ON",
+					"label": "Enable",
 					"value": 1
 				}
 			]
 		},
 		"36[0x01]": {
-			"label": "Auto-Lock Feature Control",
-			"description": "Enables or disables automatically re-locking of door",
+			"label": "Auto Relock Door",
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 1,
@@ -135,18 +132,17 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "OFF",
+					"label": "Disable",
 					"value": 0
 				},
 				{
-					"label": "ON",
+					"label": "Enable",
 					"value": 1
 				}
 			]
 		},
 		"36[0xff00]": {
-			"label": "Auto-Lock Feature Control Timing",
-			"description": "The number of seconds before the Auto-Lock will occur",
+			"label": "Auto Relock Timing",
 			"valueSize": 2,
 			"minValue": 30,
 			"maxValue": 180,
@@ -156,23 +152,23 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "Thirty seconds",
+					"label": "30 seconds",
 					"value": 30
 				},
 				{
-					"label": "Sixty Seconds",
+					"label": "60 Seconds",
 					"value": 60
 				},
 				{
-					"label": "Ninety Seconds",
+					"label": "90 Seconds",
 					"value": 90
 				},
 				{
-					"label": "One-Twenty Seconds",
+					"label": "120 Seconds",
 					"value": 120
 				},
 				{
-					"label": "One-Eighty Seconds",
+					"label": "180 Seconds",
 					"value": 180
 				}
 			]

@@ -3,7 +3,13 @@ import MemoryMap from "nrf-intel-hex";
 import { ZWaveError, ZWaveErrorCodes } from "../error/ZWaveError";
 import { CRC16_CCITT } from "./crc";
 
-export type FirmwareFileFormat = "aeotec" | "otz" | "ota" | "hex" | "gecko";
+export type FirmwareFileFormat =
+	| "aeotec"
+	| "otz"
+	| "ota"
+	| "hex"
+	| "gecko"
+	| "bin";
 
 export interface Firmware {
 	data: Buffer;
@@ -27,7 +33,9 @@ export function guessFirmwareFileFormat(
 	filename: string,
 	rawData: Buffer,
 ): FirmwareFileFormat {
-	if (
+	if (filename.endsWith(".bin")) {
+		return "bin";
+	} else if (
 		(filename.endsWith(".exe") || filename.endsWith(".ex_")) &&
 		rawData.includes(firmwareIndicators.aeotec)
 	) {
@@ -75,6 +83,9 @@ export function extractFirmware(
 		case "gecko":
 			// There is no description for the file contents, so we
 			// have to assume this is for firmware target 0
+			return { data: rawData };
+		case "bin":
+			// There is no description for the file contents, so the user has to make sure to select the correct target
 			return { data: rawData };
 	}
 }
@@ -152,7 +163,7 @@ function extractFirmwareAeotec(data: Buffer): Firmware {
 			firmwareNameBytes.indexOf(0, firmwareNameOffset),
 		)
 		.toString("utf8");
-	if (!/^[a-zA-Z0-9_]+$/.test(firmwareName)) {
+	if (!/^[a-zA-Z0-9_ -]+$/.test(firmwareName)) {
 		throw new ZWaveError(
 			"This does not appear to be a valid Aeotec updater (invalid firmware name)!",
 			ZWaveErrorCodes.Argument_Invalid,
@@ -175,12 +186,21 @@ function extractFirmwareAeotec(data: Buffer): Firmware {
 	return ret;
 }
 
-function extractFirmwareHEX(data: Buffer): Firmware {
+function extractFirmwareHEX(dataHEX: Buffer): Firmware {
 	try {
-		const memMap = MemoryMap.fromHex(data.toString("ascii"));
-		return {
-			data: Buffer.from(memMap.get(0)),
-		};
+		const memMap: Map<number, Uint8Array> = MemoryMap.fromHex(
+			dataHEX.toString("ascii"),
+		);
+		// A memory map can be sparse - we'll have to fill the gaps with 0xFF
+		let data: Buffer = Buffer.from([]);
+		for (const [offset, chunk] of memMap.entries()) {
+			data = Buffer.concat([
+				data,
+				Buffer.alloc(offset - data.length, 0xff),
+				chunk,
+			]);
+		}
+		return { data };
 	} catch (e) {
 		if (/Malformed/.test(e.message)) {
 			throw new ZWaveError(

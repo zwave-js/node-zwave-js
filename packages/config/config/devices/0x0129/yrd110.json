@@ -1,10 +1,10 @@
-// ASSA ABLOY YRD110
-// Yale button deadbolt without keyway
+// Yale YRD110
+// Key-Free Push-Button Deadbolt
 {
-	"manufacturer": "ASSA ABLOY",
+	"manufacturer": "Yale",
 	"manufacturerId": "0x0129",
 	"label": "YRD110",
-	"description": "Yale button deadbolt without keyway",
+	"description": "Key-Free Push-Button Deadbolt",
 	"devices": [
 		{
 			"productType": "0x0004",

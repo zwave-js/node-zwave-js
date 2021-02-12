@@ -29,10 +29,6 @@
 		{
 			"productType": "0x6401",
 			"productId": "0x01fd"
-		},
-		{
-			"productType": "0x6501",
-			"productId": "0x000b"
 		}
 	],
 	"firmwareVersion": {

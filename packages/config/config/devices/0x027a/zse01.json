@@ -19,6 +19,7 @@
 	"metadata": {
 		"inclusion": "1. Power the siren up and bring it in within 3 feet from your controller.\n2. Put your Z-Wave controller in inclusion mode.\n3. Press the Z-Wave button on the siren THREE times quickly.\n4. A new alarm device should appear on your controller's dashboard",
 		"exclusion": "1. Bring the siren within 3 feet from your Z-Wave gateway controller.\n\n2. Put your Z-Wave controller in exclusion/unpairing mode.\n\n3. Press and release the Z-Wave button on the siren THREE TIMES quickly.\n\n4. The device should disappear from your controller's device list.\n\nPlease repeat the process following all steps carefully if first attempt is unsuccessful",
-		"reset": "If your primary controller is missing or inoperable, you may need to reset the device to factory settings. To complete the reset process manually, press and hold the Z-Wave button for 10 seconds. \nNOTE: All previously recorded activity and custom settings will be erased from the siren’s memory"
+		"reset": "If your primary controller is missing or inoperable, you may need to reset the device to factory settings. To complete the reset process manually, press and hold the Z-Wave button for 10 seconds. \nNOTE: All previously recorded activity and custom settings will be erased from the siren’s memory",
+		"manual": "https://products.z-wavealliance.org/ProductManual/File?folder=&filename=MarketCertificationFiles/1747/zooz-z-wave-indoor-siren-zse01-manual.pdf"
 	}
 }

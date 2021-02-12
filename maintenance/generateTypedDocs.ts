@@ -14,7 +14,9 @@ import {
 	InterfaceDeclaration,
 	InterfaceDeclarationStructure,
 	Node,
+	OptionalKind,
 	Project,
+	PropertySignatureStructure,
 	SyntaxKind,
 	TypeLiteralNode,
 } from "ts-morph";
@@ -88,6 +90,16 @@ export function stripComments(
 	return node;
 }
 
+function shouldStripPropertySignature(
+	p: OptionalKind<PropertySignatureStructure>,
+): boolean {
+	return !!p.docs?.some(
+		(d) =>
+			typeof d !== "string" &&
+			d.tags?.some((t) => /(deprecated|internal)/.test(t.tagName)),
+	);
+}
+
 // As long as ts-morph has no means to print a structure, we'll have to use this
 // to print the declarations of a class
 function printInterfaceDeclarationStructure(
@@ -100,7 +112,8 @@ interface ${struct.name}${
 			: ""
 	} {
 	${struct.properties
-		?.map((p) => {
+		?.filter((p) => !shouldStripPropertySignature(p))
+		.map((p) => {
 			return `${p.isReadonly ? "readonly " : ""}${p.name}${
 				p.hasQuestionToken ? "?:" : ":"
 			} ${p.type as string};`;

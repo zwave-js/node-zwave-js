@@ -52,6 +52,7 @@ const assignees = [
 	}
 
 	// create new branch for PR
+	await exec.exec("git", ["fetch", "origin"]);
 	await exec.exec("git", ["checkout", "-b", `${branchName}`]);
 
 	if (branchExists) {

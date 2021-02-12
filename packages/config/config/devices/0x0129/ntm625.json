@@ -1,0 +1,398 @@
+// ASSA ABLOY NTM625
+// Yale nexTouch Sectional Mortise Touch Screen Keypad Lock with cylinder and deadbolt
+{
+	"manufacturer": "ASSA ABLOY",
+	"manufacturerId": "0x0129",
+	"label": "NTM625",
+	"description": "Yale nexTouch Sectional Mortise Touch Screen Keypad Lock with cylinder and deadbolt",
+	"devices": [
+		{
+			"productType": "0x8008",
+			"productId": "0x0a00",
+			"zwaveAllianceId": 2967
+		}
+	],
+	"firmwareVersion": {
+		"min": "1.78",
+		"max": "255.255"
+	},
+	"supportsZWavePlus": true,
+	"paramInformation": {
+		"1": {
+			"label": "Volume",
+			"valueSize": 1,
+			"minValue": 1,
+			"maxValue": 3,
+			"defaultValue": 1,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Loud",
+					"value": 1
+				},
+				{
+					"label": "Quiet",
+					"value": 2
+				},
+				{
+					"label": "Off",
+					"value": 3
+				}
+			]
+		},
+		"2": {
+			"label": "Auto Relock",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 0,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Auto relock off",
+					"value": 0
+				},
+				{
+					"label": "Auto relock on",
+					"value": 255
+				}
+			]
+		},
+		"3": {
+			"label": "Auto Relock Time",
+			"unit": "seconds",
+			"valueSize": 1,
+			"minValue": 1,
+			"maxValue": 180,
+			"defaultValue": 3,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"4": {
+			"label": "Wrong Code Entry Limit",
+			"valueSize": 1,
+			"minValue": 3,
+			"maxValue": 10,
+			"defaultValue": 5,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"5": {
+			"label": "Language",
+			"valueSize": 1,
+			"minValue": 1,
+			"maxValue": 3,
+			"defaultValue": 1,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "English",
+					"value": 1
+				},
+				{
+					"label": "Spanish",
+					"value": 2
+				},
+				{
+					"label": "French",
+					"value": 3
+				}
+			]
+		},
+		"7": {
+			"label": "Shut Down Time",
+			"description": "Shut down time after wrong code entries",
+			"unit": "seconds",
+			"valueSize": 1,
+			"minValue": 10,
+			"maxValue": 180,
+			"defaultValue": 60,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"8": {
+			"label": "Operating Mode",
+			"description": "Vacation mode = Keypad lockout; Privacy mode = No keypad, only RF Unlock; Passage mode = permanently unlocked",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 3,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Normal",
+					"value": 0
+				},
+				{
+					"label": "Vacation",
+					"value": 1
+				},
+				{
+					"label": "Privacy",
+					"value": 2
+				},
+				{
+					"label": "Passage",
+					"value": 3
+				}
+			]
+		},
+		"11": {
+			"label": "One Touch Locking",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 255,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Off",
+					"value": 0
+				},
+				{
+					"label": "On",
+					"value": 255
+				}
+			]
+		},
+		"12": {
+			"label": "Privacy Button",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 0,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Off",
+					"value": 0
+				},
+				{
+					"label": "On",
+					"value": 255
+				}
+			]
+		},
+		"13": {
+			"label": "Lock Status LED",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 255,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Off",
+					"value": 0
+				},
+				{
+					"label": "On",
+					"value": 255
+				}
+			]
+		},
+		"15": {
+			"label": "Reset To Factory Defaults",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"16": {
+			"label": "Escape Return Mode",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 0,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Off",
+					"value": 0
+				},
+				{
+					"label": "On",
+					"value": 255
+				}
+			]
+		},
+		"18": {
+			"label": "Door Propped Timer",
+			"unit": "10 seconds",
+			"valueSize": 1,
+			"minValue": 1,
+			"maxValue": 254,
+			"defaultValue": 0,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"19": {
+			"label": "DPS Alarm (Ax sensor)",
+			"description": "Used to enable/disable door condition alarms for locks that support a door position sensor. Any lock that does not support DPS will always report 'Off'.",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 255,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Off",
+					"value": 0
+				},
+				{
+					"label": "On",
+					"value": 255
+				}
+			]
+		},
+		"20": {
+			"label": "Deadbolt Installed",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 0,
+			"readOnly": true,
+			"writeOnly": false,
+			"allowManualEntry": false
+		},
+		"21": {
+			"label": "Eco Mode",
+			"description": "If supported switches lock to lower power mode of operation with reduced sound and led brightness.",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 0,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Off",
+					"value": 0
+				},
+				{
+					"label": "On",
+					"value": 255
+				}
+			]
+		},
+		"22": {
+			"label": "Privacy Mode With Deadbolt",
+			"description": "If enabled then extending the deadbolt will put the lock into Privacy Mode.",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 0,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Off",
+					"value": 0
+				},
+				{
+					"label": "On",
+					"value": 255
+				}
+			]
+		},
+		"23[0x01]": {
+			"label": "Lock Body Alarms: DPS Alarm (AX)",
+			"description": "Duplicate of parameter 19. Values should be tied together",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 1,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Disabled",
+					"value": 0
+				},
+				{
+					"label": "Enabled",
+					"value": 1
+				}
+			]
+		},
+		"23[0x02]": {
+			"label": "Lock Body Alarms: Deadbolt",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 1,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Disabled",
+					"value": 0
+				},
+				{
+					"label": "Enabled",
+					"value": 1
+				}
+			]
+		},
+		"23[0x04]": {
+			"label": "Lock Body Alarms: Lever Rotated",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 1,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Disabled",
+					"value": 0
+				},
+				{
+					"label": "Enabled",
+					"value": 1
+				}
+			]
+		}
+	}
+}

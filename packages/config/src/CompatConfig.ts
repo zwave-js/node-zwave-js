@@ -103,6 +103,30 @@ error in compat option treatBasicSetAsEvent`,
 			this.treatBasicSetAsEvent = definition.treatBasicSetAsEvent;
 		}
 
+		if (definition.manualValueRefreshDelayMs != undefined) {
+			if (typeof definition.manualValueRefreshDelayMs !== "number") {
+				throwInvalidConfig(
+					"devices",
+					`config/devices/${filename}:
+compat option manualValueRefreshDelayMs must be a number!`,
+				);
+			}
+
+			if (
+				definition.manualValueRefreshDelayMs % 1 !== 0 ||
+				definition.manualValueRefreshDelayMs < 0
+			) {
+				throwInvalidConfig(
+					"devices",
+					`config/devices/${filename}:
+compat option manualValueRefreshDelayMs must be a non-negative integer!`,
+				);
+			}
+
+			this.manualValueRefreshDelayMs =
+				definition.manualValueRefreshDelayMs;
+		}
+
 		if (definition.overrideFloatEncoding != undefined) {
 			if (!isObject(definition.overrideFloatEncoding)) {
 				throwInvalidConfig(
@@ -291,6 +315,7 @@ All values in compat option commandClasses.remove must be objects with an "endpo
 	public readonly preserveRootApplicationCCValueIDs?: boolean;
 	public readonly skipConfigurationInfoQuery?: boolean;
 	public readonly treatBasicSetAsEvent?: boolean;
+	public readonly manualValueRefreshDelayMs?: number;
 	public readonly queryOnWakeup?: readonly [
 		string,
 		string,
