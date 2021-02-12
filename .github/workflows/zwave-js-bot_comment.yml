@@ -109,14 +109,9 @@ jobs:
       with:
         script: |
           const bot = require(`${process.env.GITHUB_WORKSPACE}/trusted/.github/bot-scripts/index.js`);
-          try {
-            core.info(`Getting PR #${request.pull_number} from ${request.owner}/${request.repo}`)
-            const result = await bot.getFixLintInfo({github, context});
-            console.dir(result);
-            return result ?? {pending: true};
-          } catch (err) {
-            core.setFailed(`Request failed with error ${err}`)
-          }
+          const result = await bot.getFixLintInfo({github, context});
+          console.dir(result);
+          return result || {pending: true};
 
     - name: Download Lint patch
       if: |

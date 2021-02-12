@@ -49,7 +49,7 @@ async function main(param) {
 
 	return {
 		repoName: pull.head.repo.full_name,
-		headRef: pull.head.sha,
+		headRef: pull.head.ref,
 		patchUrl: url,
 	};
 }
