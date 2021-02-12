@@ -76,7 +76,6 @@
 		},
 		"30": {
 			"label": "Overcurrent Level",
-			"description": "Sets the overcurrent level",
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 4500,

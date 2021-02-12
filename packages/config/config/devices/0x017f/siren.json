@@ -44,7 +44,6 @@
 		},
 		"2": {
 			"label": "Primary Notification Length",
-			"description": "Set the Notification Length",
 			"valueSize": 1,
 			"minValue": 1,
 			"maxValue": 255,

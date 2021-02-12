@@ -103,7 +103,6 @@
 		},
 		"39": {
 			"label": "Low battery value",
-			"description": "Set the low battery value",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 50,
@@ -114,7 +113,6 @@
 		},
 		"255": {
 			"label": "Reset the WallMote Quad",
-			"description": "Reset the WallMote Quad to factory default.",
 			"valueSize": 4,
 			"minValue": 0,
 			"maxValue": 1431655765,

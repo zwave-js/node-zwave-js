@@ -170,8 +170,8 @@
 		},
 		"20": {
 			"label": "Poll Group 2 Interval",
-			"description": "Poll Group 2 interval (minutes).",
 			"valueSize": 1,
+			"unit": "minutes",
 			"minValue": 0,
 			"maxValue": 255,
 			"defaultValue": 2,

@@ -150,7 +150,6 @@
 		},
 		"8": {
 			"label": "Temperature Offset",
-			"description": "Measured Temperature offset",
 			"unit": "1/10 °C",
 			"valueSize": 1,
 			"minValue": -128,

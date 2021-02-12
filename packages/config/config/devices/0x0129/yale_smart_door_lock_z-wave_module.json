@@ -55,7 +55,7 @@
 			]
 		},
 		"2": {
-			"label": "Enable/Disable Auto Relock",
+			"label": "Auto Relock",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 255,

@@ -204,6 +204,61 @@
 				}
 			]
 		},
+		"30": {
+			"label": "Alarm configuration - 1st slot",
+			"description": "determines to which alarm frames and how the device should react",
+			"valueSize": 4,
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"31": {
+			"label": "Alarm configuration - 2nd slot",
+			"description": "determines to which alarm frames and how the device should react",
+			"valueSize": 4,
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"32": {
+			"label": "Alarm configuration - 3rd slot",
+			"description": "determines to which alarm frames and how the device should react",
+			"valueSize": 4,
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"33": {
+			"label": "Alarm configuration - 4th slot",
+			"description": "determines to which alarm frames and how the device should react",
+			"valueSize": 4,
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"34": {
+			"label": "Alarm configuration - 5th slot",
+			"description": "determines to which alarm frames and how the device should react",
+			"valueSize": 4,
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
 		"35": {
 			"label": "Alarm configuration – duration",
 			"description": "defines duration of alarm sequence",
@@ -338,7 +393,6 @@
 		},
 		"152": {
 			"label": "Incandescence level of compact fluorescent lamps",
-			"description": "Incandescence level of dimmable compact fluorescent lamps",
 			"valueSize": 1,
 			"minValue": 1,
 			"maxValue": 99,
@@ -349,7 +403,6 @@
 		},
 		"153": {
 			"label": "Incandescence time of compact fluorescent lamps",
-			"description": "Incandescence time of dimmable compact fluorescent lamps",
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 255,
@@ -420,8 +473,7 @@
 			"allowManualEntry": true
 		},
 		"160": {
-			"label": "Auto-calibration status (read-only)",
-			"description": "Auto-calibration status (read-only parameter)",
+			"label": "Auto-calibration status",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 1,
@@ -442,7 +494,6 @@
 		},
 		"162": {
 			"label": "Delay of a burnt out bulb and overload detection",
-			"description": "Time delay of a burnt out bulb and overload detection",
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 255,
@@ -453,7 +504,6 @@
 		},
 		"163": {
 			"label": "1st button ON value sent to association groups",
-			"description": "First button – Switch ON value sent to 2nd and 3rd association groups",
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 255,
@@ -464,7 +514,6 @@
 		},
 		"164": {
 			"label": "2nd button OFF value sent to association groups",
-			"description": "Second button – Switch OFF value sent to 2nd and 3rd association groups",
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 255,
@@ -509,7 +558,6 @@
 		},
 		"171": {
 			"label": "Load control mode recognized",
-			"description": "Load control mode recognized during auto-calibration",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 1,
@@ -602,7 +650,6 @@
 		},
 		"177": {
 			"label": "Brightness level correction flickering",
-			"description": "Brightness level correction for flickering loads",
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 255,
@@ -637,65 +684,9 @@
 		},
 		"179": {
 			"label": "Approximated power at max brightness",
-			"description": "Approximated power at the maximum brightness level",
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 500,
-			"defaultValue": 0,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
-		},
-		"30": {
-			"label": "Alarm configuration - 1st slot",
-			"description": "determines to which alarm frames and how the device should react",
-			"valueSize": 4,
-			"minValue": 0,
-			"maxValue": 255,
-			"defaultValue": 0,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
-		},
-		"31": {
-			"label": "Alarm configuration - 2nd slot",
-			"description": "determines to which alarm frames and how the device should react",
-			"valueSize": 4,
-			"minValue": 0,
-			"maxValue": 255,
-			"defaultValue": 0,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
-		},
-		"32": {
-			"label": "Alarm configuration - 3rd slot",
-			"description": "determines to which alarm frames and how the device should react",
-			"valueSize": 4,
-			"minValue": 0,
-			"maxValue": 255,
-			"defaultValue": 0,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
-		},
-		"33": {
-			"label": "Alarm configuration - 4th slot",
-			"description": "determines to which alarm frames and how the device should react",
-			"valueSize": 4,
-			"minValue": 0,
-			"maxValue": 255,
-			"defaultValue": 0,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
-		},
-		"34": {
-			"label": "Alarm configuration - 5th slot",
-			"description": "determines to which alarm frames and how the device should react",
-			"valueSize": 4,
-			"minValue": 0,
-			"maxValue": 255,
 			"defaultValue": 0,
 			"readOnly": false,
 			"writeOnly": false,

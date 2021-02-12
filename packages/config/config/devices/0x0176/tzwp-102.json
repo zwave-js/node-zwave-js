@@ -40,7 +40,6 @@
 		},
 		"2": {
 			"label": "device status after power failure",
-			"description": "Remember device status after power failure",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 2,
@@ -64,8 +63,7 @@
 			]
 		},
 		"3": {
-			"label": "Status send when load changes",
-			"description": "Send status in Lifeline when Load status change",
+			"label": "Send Status When Load Changes",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 2,
@@ -110,7 +108,6 @@
 		},
 		"16": {
 			"label": "Report on change of power consumption",
-			"description": "Send report on change of power consumption (W)",
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 2500,

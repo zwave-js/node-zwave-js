@@ -23,7 +23,6 @@
 	"paramInformation": {
 		"3": {
 			"label": "Scene_type",
-			"description": "Scene type",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 1,
@@ -34,7 +33,6 @@
 		},
 		"4": {
 			"label": "Scene_send_to_where",
-			"description": "Scene send to where",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 1,

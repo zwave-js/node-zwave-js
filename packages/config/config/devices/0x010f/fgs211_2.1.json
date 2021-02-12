@@ -69,7 +69,6 @@
 	"paramInformation": {
 		"1": {
 			"label": "Enable/Disable ALL ON/OFF",
-			"description": "Activate/Deactive ALL ON/OFF",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 255,

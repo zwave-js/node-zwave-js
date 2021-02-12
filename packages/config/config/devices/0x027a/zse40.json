@@ -19,7 +19,6 @@
 	"paramInformation": {
 		"1": {
 			"label": "Temperature Scale",
-			"description": "Set the temperature scale",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 1,
@@ -63,7 +62,6 @@
 		},
 		"4": {
 			"label": "Light Sensor",
-			"description": "Configure Light Sensor",
 			"unit": "percent",
 			"valueSize": 1,
 			"minValue": 1,
@@ -129,7 +127,6 @@
 		},
 		"7": {
 			"label": "LED indicator mode",
-			"description": "Select the LED indicator mode",
 			"valueSize": 1,
 			"minValue": 1,
 			"maxValue": 4,

@@ -104,15 +104,28 @@
 			"allowManualEntry": true
 		},
 		"7": {
-			"label": "Edge or Pulse mode or Edge-Toggle mode",
-			"description": "1 - Edge mode 2 - Pulse mode 3 - Edge toggle mode",
+			"label": "Edge, Pulse, or Edge-Toggle mode",
 			"valueSize": 1,
 			"minValue": 1,
 			"maxValue": 3,
 			"defaultValue": 3,
 			"readOnly": false,
 			"writeOnly": false,
-			"allowManualEntry": true
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Edge Mode",
+					"value": 1
+				},
+				{
+					"label": "Pulse Mode",
+					"value": 2
+				},
+				{
+					"label": "Edge Toggle Mode",
+					"value": 3
+				}
+			]
 		}
 	}
 }

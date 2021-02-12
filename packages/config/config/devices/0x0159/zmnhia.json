@@ -223,8 +223,8 @@
 		},
 		"40": {
 			"label": "Power reporting in Watts on power change for Q1",
-			"description": "Power reporting in Watts on power change",
 			"valueSize": 1,
+			"unit": "%",
 			"minValue": 0,
 			"maxValue": 255,
 			"defaultValue": 1,
@@ -235,7 +235,6 @@
 		},
 		"42": {
 			"label": "Power reporting in Watts by time interval for Q1",
-			"description": "Power reporting in Watts by time interval",
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 65535,

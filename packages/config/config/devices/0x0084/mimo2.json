@@ -114,8 +114,7 @@
 			"allowManualEntry": true
 		},
 		"1[0xe0]": {
-			"label": "Relay 1 Trigger Configuration",
-			"description": "Relay 1 Trigger on Sensor Input",
+			"label": "Relay 1 Trigger Configuration on Sensor Input",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 7,
@@ -162,8 +161,7 @@
 			"allowManualEntry": true
 		},
 		"2[0xe0]": {
-			"label": "Relay 2 Trigger Configuration",
-			"description": "Relay 2 Trigger on Sensor Input",
+			"label": "Relay 2 Trigger on Sensor Input",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 7,

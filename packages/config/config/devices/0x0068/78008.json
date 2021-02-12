@@ -146,7 +146,6 @@
 		},
 		"9": {
 			"label": "Interval time for sending battery report",
-			"description": "The interval time of sending battery report",
 			"unit": "Minutes",
 			"valueSize": 1,
 			"minValue": 3,

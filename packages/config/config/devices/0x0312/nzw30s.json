@@ -65,7 +65,6 @@
 		},
 		"5": {
 			"label": "Countdown Timer",
-			"description": "Automatically turn switch off after this number of seconds",
 			"unit": "seconds",
 			"valueSize": 2,
 			"minValue": 0,

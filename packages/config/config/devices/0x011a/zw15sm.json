@@ -63,7 +63,6 @@
 		},
 		"9": {
 			"label": "Instant Energy Autosend Interval",
-			"description": "Instant Energy Autosend Interval (SENSOR_MULTILEVEL_REPORT)",
 			"unit": "minutes",
 			"valueSize": 1,
 			"minValue": 0,
@@ -76,7 +75,6 @@
 		},
 		"10": {
 			"label": "Accumulated Energy Autosend Interval report",
-			"description": "Accumulated Energy Autosend Interval report (METER_REPORT)",
 			"unit": "minutes",
 			"valueSize": 1,
 			"minValue": 0,

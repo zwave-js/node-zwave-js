@@ -193,7 +193,6 @@
 		},
 		"23": {
 			"label": "Calibration Required",
-			"description": "Calibration Required (Read Only)",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 255,
@@ -215,7 +214,6 @@
 		},
 		"27": {
 			"label": "Lock long press",
-			"description": "7 Lock long press",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 255,

@@ -1503,12 +1503,16 @@ version:               ${this.version}`;
 		// supporting node issues a Wake Up Notification Command for sleeping nodes.
 
 		// This is not the handler for wakeup notifications, but some legacy devices send this
-		// message whenever there's an update
+		// message whenever there's an update.
 		if (this.requiresManualValueRefresh()) {
+			const delay =
+				this.deviceConfig?.compat?.manualValueRefreshDelayMs || 0;
 			this.driver.controllerLog.logNode(this.nodeId, {
-				message: `Node does not send unsolicited updates, refreshing actuator and sensor values...`,
+				message: `Node does not send unsolicited updates; refreshing actuator and sensor values${
+					delay > 0 ? ` in ${delay} ms` : ""
+				}...`,
 			});
-			void this.refreshValues();
+			setTimeout(() => this.refreshValues(), delay);
 		}
 	}
 

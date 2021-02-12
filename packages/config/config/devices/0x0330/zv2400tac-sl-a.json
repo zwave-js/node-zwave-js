@@ -19,7 +19,6 @@
 	"paramInformation": {
 		"2": {
 			"label": "State before power failure",
-			"description": "Saving load state before power failure",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 2,
@@ -94,7 +93,6 @@
 		},
 		"5": {
 			"label": "Minimum brightness value",
-			"description": "Setting minimum brightness value",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 50,
@@ -105,7 +103,6 @@
 		},
 		"6": {
 			"label": "Maximum brightness value",
-			"description": "Setting maximum brightness value",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 100,
@@ -116,7 +113,6 @@
 		},
 		"7": {
 			"label": "MOSFET driving type",
-			"description": "Choose MOSFET driving type",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 1,
@@ -202,7 +198,6 @@
 		},
 		"13": {
 			"label": "Over current protection",
-			"description": "Enable/disable over current protection",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 1,

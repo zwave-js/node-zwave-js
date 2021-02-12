@@ -70,7 +70,6 @@
 		},
 		"42": {
 			"label": "Reporting on time interval",
-			"description": "Energy report time intervals",
 			"unit": "seconds",
 			"valueSize": 2,
 			"minValue": 0,

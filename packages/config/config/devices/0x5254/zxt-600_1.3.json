@@ -57,8 +57,7 @@
 			"allowManualEntry": true
 		},
 		"30": {
-			"label": "Auto Report condi Trig by Room Temp change",
-			"description": "Set Auto Report condition Trigger by Room Temperature change",
+			"label": "Auto Report condition Trig by Room Temp change",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 8,
@@ -90,8 +89,7 @@
 			"allowManualEntry": true
 		},
 		"34": {
-			"label": "Set Auto Report Cond by Time Interv",
-			"description": "Set Auto Report Condition by Time Interval",
+			"label": "Set Auto Report Cond by Time Interval",
 			"unit": "hours",
 			"valueSize": 1,
 			"minValue": 1,

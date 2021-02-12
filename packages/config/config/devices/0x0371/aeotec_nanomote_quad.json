@@ -23,7 +23,6 @@
 	"paramInformation": {
 		"32": {
 			"label": "Level for low battery",
-			"description": "Set the level for \"low battery\" alert",
 			"valueSize": 1,
 			"minValue": 10,
 			"maxValue": 50,
@@ -34,7 +33,6 @@
 		},
 		"43": {
 			"label": "Low battery buzzer",
-			"description": "Enable/disable low battery buzzer",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 1,

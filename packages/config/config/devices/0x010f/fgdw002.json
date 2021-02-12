@@ -104,7 +104,6 @@
 		},
 		"12": {
 			"label": "Value of ON command sent to 2nd association group",
-			"description": "Value of ON command frame sent to 2nd association group",
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 255,
@@ -115,7 +114,6 @@
 		},
 		"13": {
 			"label": "Value of OFF command sent to 2nd association group",
-			"description": "Value of OFF command frame sent to 2nd association group",
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 255,

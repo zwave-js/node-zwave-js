@@ -397,7 +397,6 @@
 		},
 		"11": {
 			"label": "Disable Central Scene notification",
-			"description": "Disables or enables the sending of Central Scene notifications",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 1,

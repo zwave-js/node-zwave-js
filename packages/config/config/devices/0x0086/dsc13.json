@@ -168,7 +168,6 @@
 		},
 		"111": {
 			"label": "Interval to send out reports of group 1",
-			"description": "Time interval to send report to Group 1",
 			"unit": "seconds",
 			"valueSize": 4,
 			"minValue": 0,
@@ -180,7 +179,6 @@
 		},
 		"112": {
 			"label": "Interval to send out reports of group 2",
-			"description": "Time interval to send report to Group 2",
 			"unit": "seconds",
 			"valueSize": 4,
 			"minValue": 0,
@@ -192,7 +190,6 @@
 		},
 		"113": {
 			"label": "Interval to send out reports of group 3",
-			"description": "Time interval to send report to Group 3",
 			"unit": "seconds",
 			"valueSize": 4,
 			"minValue": 0,

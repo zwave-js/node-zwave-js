@@ -52,7 +52,6 @@
 		},
 		"11": {
 			"label": "Timer turning off IR external relay",
-			"description": "Automatic turning off IR external relay output after set time",
 			"unit": "seconds",
 			"valueSize": 2,
 			"minValue": 0,
@@ -70,7 +69,6 @@
 		},
 		"12": {
 			"label": "Timer turning on IR external relay output",
-			"description": "Automatic turning on IR external relay output after set time",
 			"unit": "seconds",
 			"valueSize": 2,
 			"minValue": 0,
@@ -82,7 +80,6 @@
 		},
 		"13": {
 			"label": "Timer turning off External relay output",
-			"description": "Automatic turning off External relay output after set time",
 			"unit": "seconds",
 			"valueSize": 2,
 			"minValue": 0,
@@ -94,7 +91,6 @@
 		},
 		"14": {
 			"label": "Timer turning on External relay after output",
-			"description": "Automatic turning on External relay after output set time",
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 32535,
@@ -105,7 +101,6 @@
 		},
 		"40": {
 			"label": "Power reporting (Watts) on power change",
-			"description": "Power reporting in Watts on power change",
 			"unit": "%",
 			"valueSize": 2,
 			"minValue": 0,
@@ -117,7 +112,6 @@
 		},
 		"42": {
 			"label": "Power reporting (Watts) by time interval",
-			"description": "Power reporting in Watts by time interval",
 			"unit": "%",
 			"valueSize": 2,
 			"minValue": 0,
@@ -161,7 +155,6 @@
 		},
 		"100": {
 			"label": "Enable / Disable endpoints relays",
-			"description": "Enable / Disable endpoints IR external relay and External relay",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 3,
@@ -247,134 +240,5 @@
 				}
 			]
 		}
-		// These parameters have an invalid value size
-		//"130": {
-		//"label": "Serial Number",
-		//"valueSize": 32,
-		//"minValue": 0,
-		//"maxValue": 0,
-		//"defaultValue": 0,
-		//"readOnly": true,
-		//"writeOnly": false,
-		//"allowManualEntry": true
-		// },
-		//"131": {
-		//"label": "Meter Software reference",
-		//"valueSize": 16,
-		//"minValue": 0,
-		//"maxValue": 0,
-		//"defaultValue": 0,
-		//"readOnly": true,
-		//"writeOnly": false,
-		//"allowManualEntry": true
-		// },
-		//"132": {
-		//"label": "Meter Hardware reference",
-		//"valueSize": 16,
-		//"minValue": 0,
-		//"maxValue": 0,
-		//"defaultValue": 0,
-		//"readOnly": true,
-		//"writeOnly": false,
-		//"allowManualEntry": true
-		// },
-		//"140": {
-		//"label": "Voltage U1",
-		//"unit": "V",
-		//"valueSize": 24,
-		//"minValue": 0,
-		//"maxValue": 0,
-		//"defaultValue": 0,
-		//"readOnly": true,
-		//"writeOnly": false,
-		//"allowManualEntry": true
-		// },
-		//"141": {
-		//"label": "Current I1",
-		//"unit": "A",
-		//"valueSize": 24,
-		//"minValue": 0,
-		//"maxValue": 0,
-		//"defaultValue": 0,
-		//"readOnly": true,
-		//"writeOnly": false,
-		//"allowManualEntry": true
-		// },
-		//"142": {
-		//"label": "Active Power Total (Pt)",
-		//"unit": "W",
-		//"valueSize": 24,
-		//"minValue": 0,
-		//"maxValue": 0,
-		//"defaultValue": 0,
-		//"readOnly": true,
-		//"writeOnly": false,
-		//"allowManualEntry": true
-		// },
-		//"143": {
-		//"label": "Reactive Power Total (Qt)",
-		//"unit": "kVAr",
-		//"valueSize": 24,
-		//"minValue": 0,
-		//"maxValue": 0,
-		//"defaultValue": 0,
-		//"readOnly": true,
-		//"writeOnly": false,
-		//"allowManualEntry": true
-		// },
-		//"144": {
-		//"label": "Power Factor Total (PFt)",
-		//"valueSize": 16,
-		//"minValue": 0,
-		//"maxValue": 0,
-		//"defaultValue": 0,
-		//"readOnly": true,
-		//"writeOnly": false,
-		//"allowManualEntry": true
-		// },
-		//"145": {
-		//"label": "Active power accumulated (import)",
-		//"unit": "kWh",
-		//"valueSize": 32,
-		//"minValue": 0,
-		//"maxValue": 0,
-		//"defaultValue": 0,
-		//"readOnly": true,
-		//"writeOnly": false,
-		//"allowManualEntry": true
-		// },
-		//"146": {
-		//"label": "Reactive power accumulated",
-		//"unit": "kVArh",
-		//"valueSize": 32,
-		//"minValue": 0,
-		//"maxValue": 0,
-		//"defaultValue": 0,
-		//"readOnly": true,
-		//"writeOnly": false,
-		//"allowManualEntry": true
-		// },
-		//"147": {
-		//"label": "Apparent power accumulated",
-		//"unit": "kVAh",
-		//"valueSize": 32,
-		//"minValue": 0,
-		//"maxValue": 0,
-		//"defaultValue": 0,
-		//"readOnly": true,
-		//"writeOnly": false,
-		//"allowManualEntry": true
-		// },
-		//"148": {
-		//"label": "Active power accumulated (export)",
-		//"unit": "kWh",
-		//"valueSize": 32,
-		//"minValue": 0,
-		//"maxValue": 0,
-		//"defaultValue": 0,
-		//"readOnly": true,
-		//"writeOnly": false,
-		//"allowManualEntry": true
-		// }
 	}
 }

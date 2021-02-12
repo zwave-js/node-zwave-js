@@ -72,8 +72,7 @@
 			]
 		},
 		"51": {
-			"label": "Enable/disable the function of using wall switch",
-			"description": "Enable/disable the function of using wall switch to turn on/off RGB BULB",
+			"label": "Enable/disable the function of using wall switch to turn on/off RGB BULB",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 1,

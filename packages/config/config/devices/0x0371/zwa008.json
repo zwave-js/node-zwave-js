@@ -151,7 +151,6 @@
 		},
 		"7": {
 			"label": "BASIC command value sent to 2nd Assoc Group on On",
-			"description": "BASIC command value sent to 2nd Association Group on ‘On‘ event",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 255,
@@ -163,7 +162,6 @@
 		},
 		"8": {
 			"label": "BASIC command value sent to 2nd Assoc Group on Off",
-			"description": "BASIC command value sent to 2nd Association Group on ‘Off‘ event",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 255,

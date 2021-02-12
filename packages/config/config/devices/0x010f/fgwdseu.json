@@ -59,7 +59,6 @@
 		},
 		"10": {
 			"label": "LED Frame - power limit",
-			"description": "LED frame – power limit",
 			"valueSize": 4,
 			"minValue": 500,
 			"maxValue": 30000,
@@ -540,8 +539,7 @@
 			]
 		},
 		"154": {
-			"label": "1st ch - time parameter for delayed",
-			"description": "First channel - time parameter for delayed OFF / pulse modes",
+			"label": "First Channel - time parameter for delayed",
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 32000,
@@ -551,8 +549,7 @@
 			"allowManualEntry": true
 		},
 		"155": {
-			"label": "2nd ch - time parameter for delayed",
-			"description": "Second channel - time parameter for delayed OFF / pulse modes",
+			"label": "Second Channel - time parameter for delayed",
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 32000,
@@ -584,8 +581,7 @@
 			"allowManualEntry": true
 		},
 		"158": {
-			"label": "1st ch – Double Click value sent to 2nd/3rd",
-			"description": "First channel – Double Click value sent to 2nd and 3rd association groups",
+			"label": "First Channel – Double Click value sent to 2nd/3rd",
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 255,
@@ -618,7 +614,6 @@
 		},
 		"161": {
 			"label": "2nd ch – Double Click value sent to 4th/5th",
-			"description": "Second channel – Double Click value sent to 4th and 5th association groups",
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 255,

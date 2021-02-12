@@ -156,7 +156,6 @@
 		},
 		"13": {
 			"label": "Lamellas positioning mode",
-			"description": "Lamellas positioning in venetian blind mode",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 255,

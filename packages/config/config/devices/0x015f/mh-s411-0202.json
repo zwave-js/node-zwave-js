@@ -1,14 +1,14 @@
-// McoHome Technology Co., Ltd. MH-S412
-// Touch Panel Switch (Dual)
+// McoHome Technology Co., Ltd. MH-S411
+// Touch Panel Switch 1 Button
 {
 	"manufacturer": "McoHome Technology Co., Ltd.",
 	"manufacturerId": "0x015f",
-	"label": "MH-S412",
-	"description": "Touch Panel Switch (Dual)",
+	"label": "MH-S411",
+	"description": "Touch Panel Switch 1 Button",
 	"devices": [
 		{
 			"productType": "0x4102",
-			"productId": "0x0202"
+			"productId": "0x0201"
 		}
 	],
 	"firmwareVersion": {
@@ -17,15 +17,11 @@
 	},
 	"associations": {
 		"1": {
-			"label": "Switch Button Group 1",
+			"label": "Button 1",
 			"maxNodes": 5
 		},
 		"2": {
-			"label": "Switch Button Group 2",
-			"maxNodes": 5
-		},
-		"3": {
-			"label": "Status Reports",
+			"label": "Lifeline",
 			"maxNodes": 1,
 			"isLifeline": true
 		}
