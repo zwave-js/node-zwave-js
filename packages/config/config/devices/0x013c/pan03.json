@@ -29,7 +29,7 @@
 			"allowManualEntry": true
 		},
 		"2": {
-			"label": "KWH Meter Report Period",
+			"label": "kWh Meter Report Period",
 			"unit": "10 minutes",
 			"valueSize": 2,
 			"minValue": 1,
