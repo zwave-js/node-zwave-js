@@ -1,10 +1,10 @@
 // Tronico Technology Co. Ltd. IMZ6220
-// insert module swtich
+// 2 Gang Insert Module Switch
 {
 	"manufacturer": "Tronico Technology Co. Ltd.",
 	"manufacturerId": "0x0111",
 	"label": "IMZ6220",
-	"description": "insert module swtich",
+	"description": "2 Gang Insert Module Switch",
 	"devices": [
 		{
 			"productType": "0x5001",
@@ -18,7 +18,7 @@
 	},
 	"paramInformation": {
 		"1": {
-			"label": "Selection of Switch Types",
+			"label": "Switch Type",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 255,
@@ -29,18 +29,17 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "Momentary switch panel",
+					"label": "Momentary",
 					"value": 0
 				},
 				{
-					"label": "Rocker switch panel",
+					"label": "Rocker",
 					"value": 255
 				}
 			]
 		},
 		"2": {
-			"label": "Synchronize",
-			"description": "Rocket switch button “on/off location” synchronize with insert module on/off status",
+			"label": "Button/Module Synchronization",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 255,
@@ -51,18 +50,17 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "Not synchronize",
-					"value": 255
+					"label": "Enable",
+					"value": 0
 				},
 				{
-					"label": "Synchronize",
-					"value": 0
+					"label": "Disable",
+					"value": 255
 				}
 			]
 		},
 		"3": {
-			"label": "Power On",
-			"description": "Default lighting on/off when power turn on",
+			"label": "Power On Default",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 255,
