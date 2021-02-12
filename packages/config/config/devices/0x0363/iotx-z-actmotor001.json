@@ -1,0 +1,76 @@
+// Nanjing IoTx Intelligent Technology Co., Ltd. IOTX-Z-ACTMOTOR001
+// Z-Wave Smart Motor Actuator
+{
+	"manufacturer": "Nanjing IoTx Intelligent Technology Co., Ltd.",
+	"manufacturerId": "0x0363",
+	"label": "IOTX-Z-ACTMOTOR001",
+	"description": "Z-Wave Smart Motor Actuator",
+	"devices": [
+		{
+			"productType": "0x0005",
+			"productId": "0x0005",
+			"zwaveAllianceId": 3461
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"paramInformation": {
+		"2": {
+			"label": "Smart Configuration",
+			"description": "Percent",
+			"valueSize": 1,
+			"unit": "%",
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 1,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"3": {
+			"label": "Smart Configuration",
+			"description": "Turn off and turn on",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 1,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"4": {
+			"label": "Smart Configuration",
+			"description": "Actuactor function",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 0,
+			"defaultValue": 0,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"5": {
+			"label": "Smart Configuration",
+			"description": "Turn off and turn on",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 0,
+			"defaultValue": 0,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		}
+	},
+	"metadata": {
+		"inclusion": "Make sure connecting module to power supply and module has not joined Z-Wave network (if module joined any other Z-Wave network, please refer to the clauses “Exclude device from a Z-Wave network”). \nFirst, set primary controller/gateway into inclusion mode. And press 'Button L' 3 times, LED starts to flash slowly for 10 seconds, during the flash, don’t press 'Button L' 3 times again, because it will cancel your last operation. Until LED is on for 3 seconds, means success. If module does not find a Z-Wave network within 10 seconds after join network function trigger, please try again. After joined Z-Wave network, please wait for a while until the app showing device is included. Then you can start enjoying with our module",
+		"exclusion": "Method 1: Factory Reset.\nMethod 2: First, set primary controller/gateway into exclusion mode. And press 'Button L' 3 times, LED started to flash slowly for 10 seconds, during the flash, don’t press 'Button L' 3 times again, because it will cancel your last operation. Until LED is on for 3 seconds, means success",
+		"reset": "Please use this procedure only when the network primary controller is missing or otherwise inoperable. Hold Button L for 10 seconds, LED will flash slowly until flash fast for 2 seconds means success. After reset, module is exclude of Z-Wave network, please include again and learn motor again",
+		"manual": "https://products.z-wavealliance.org/ProductManual/File?folder=&filename=product_documents/3461/actmotor001usermanual-E.pdf"
+	}
+}

@@ -1,0 +1,61 @@
+// ATSUMI Electric Co., Ltd. ZNS10
+// 4 in 1 Multi Sensor
+{
+	"manufacturer": "ATSUMI Electric Co., Ltd.",
+	"manufacturerId": "0x0427",
+	"label": "ZNS10",
+	"description": "4 in 1 Multi Sensor",
+	"devices": [
+		{
+			"productType": "0x0001",
+			"productId": "0x0002",
+			"zwaveAllianceId": 3570
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"paramInformation": {
+		"1": {
+			"label": "Led",
+			"description": "Led setting, whether to enable/disable lighting at sending",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 0,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Enable",
+					"value": 0
+				},
+				{
+					"label": "Disable",
+					"value": 1
+				}
+			]
+		},
+		"2": {
+			"label": "Temperature",
+			"description": "Value desired (1 to 9°c in increments of 1°c)",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 0,
+			"defaultValue": 0,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		}
+	},
+	"metadata": {
+		"inclusion": "Press the operating switch once and release it within about 2 seconds, then registration operation is started and the LED lights for about 30 seconds",
+		"exclusion": "Press the operating switch once. The LED comes on and then goes out",
+		"reset": "Use this procedure only in the event that the primary controller is lost. All the set values and the controller information are cleared to return to the factory default.\n1. Hold down the operating switch for about 10 seconds. The LED comes on when initialization starts.\n2. Release the operating switch when the LED comes on.The initialization is complete when the LED goes out",
+		"manual": "https://products.z-wavealliance.org/ProductManual/File?folder=&filename=MarketCertificationFiles/3570/User%20manual_ZNS10.pdf"
+	}
+}

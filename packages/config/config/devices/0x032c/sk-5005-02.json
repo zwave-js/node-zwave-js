@@ -1,0 +1,38 @@
+// Shenzhen Saykey Technology Co., Ltd. SK-5005-02
+// Keyfob Remote Control
+{
+	"manufacturer": "Shenzhen Saykey Technology Co., Ltd.",
+	"manufacturerId": "0x032c",
+	"label": "SK-5005-02",
+	"description": "Keyfob Remote Control",
+	"devices": [
+		{
+			"productType": "0x5005",
+			"productId": "0x0002",
+			"zwaveAllianceId": 2496
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"paramInformation": {
+		"1": {
+			"label": "Protect Timeout",
+			"description": "Protect timeout, in second",
+			"valueSize": 1,
+			"unit": "seconds",
+			"minValue": 0,
+			"maxValue": 30,
+			"defaultValue": 30,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		}
+	},
+	"metadata": {
+		"reset": "1) Press and hold both \"On\" and \"Off\" key together for 2 seconds until LED indicator light on, release all key;\n2) Press and hold both \"Stop\" and \"SOS\" key together for 10 seconds, during hold time LED will blink off 0.5 second interval 2 seconds. After hold 10 seconds LED indicator light off, then release all keys, factory default is retrieve, LED indicator will flashes three times after restore factory default success.\nPlease use this procedure only when the network primary controller is missing or otherwise inoperable",
+		"manual": "https://products.z-wavealliance.org/ProductManual/File?folder=&filename=MarketCertificationFiles/2496/Wireless_Keyfob_User_Manual_20171112.pdf"
+	}
+}
