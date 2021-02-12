@@ -42,7 +42,7 @@
 			"allowManualEntry": true
 		},
 		"3": {
-			"label": "On-command",
+			"label": "On Command",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 99,
@@ -53,7 +53,7 @@
 			"allowManualEntry": true
 		},
 		"4": {
-			"label": "Off-command",
+			"label": "Off Command",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 99,
