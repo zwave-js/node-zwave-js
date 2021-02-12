@@ -18,8 +18,7 @@
 	},
 	"paramInformation": {
 		"2": {
-			"label": "Enable Switch",
-			"description": "Enable switch of \"alarm notification\" report",
+			"label": "Alarm Notification Report",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 1,
@@ -30,11 +29,11 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "Open/close off",
+					"label": "Off",
 					"value": 0
 				},
 				{
-					"label": "Open/close on",
+					"label": "On",
 					"value": 1
 				}
 			]
