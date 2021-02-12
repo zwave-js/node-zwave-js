@@ -57,7 +57,7 @@
 					"value": 0
 				},
 				{
-					"label": "On",
+					"label": "On with prior dim level",
 					"value": 255
 				}
 			]
