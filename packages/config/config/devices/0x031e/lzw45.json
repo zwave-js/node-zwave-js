@@ -130,7 +130,7 @@
 			"allowManualEntry": true
 		},
 		"9[0xffff]": {
-			"label": "Default Color",
+			"label": "Default Color: Hue Color",
 			"description": "Set the default color to a Hue Color Wheel color.  0 represents the previous color, 1-360 represent the Hue Color Wheel Color, and 361 represents a random color.",
 			"valueSize": 4,
 			"minValue": 0,
@@ -142,7 +142,7 @@
 			"allowManualEntry": true
 		},
 		"9[0xffff0000]": {
-			"label": "Default Color",
+			"label": "Default Color: Color Temperature",
 			"description": "Set the default color to a Color Temperature.",
 			"valueSize": 4,
 			"minValue": 2700,
