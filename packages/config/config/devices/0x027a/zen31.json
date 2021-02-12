@@ -64,7 +64,6 @@
 	"paramInformation": {
 		"1": {
 			"label": "On Off Status After Power Failure",
-			"description": "On Off Status After Power Failure. Default: forced to OFF",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 2,

@@ -60,8 +60,7 @@
 			"allowManualEntry": true
 		},
 		"9": {
-			"label": "Current power mode (read only)",
-			"description": "Get the current power mode",
+			"label": "Current power mode",
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 0,
@@ -104,7 +103,6 @@
 		},
 		"64": {
 			"label": "Default Temperature Unit",
-			"description": "Sets the default temperature unit.",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 1,
@@ -125,7 +123,6 @@
 		},
 		"84": {
 			"label": "State of tilt sensor",
-			"description": "State of tilt sensor, read only",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 1,
@@ -136,7 +133,6 @@
 		},
 		"86": {
 			"label": "Enable/Disable the buzzer",
-			"description": "Enables or disables the buzzer",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 1,
@@ -235,6 +231,35 @@
 				}
 			]
 		},
+		"101": {
+			"label": "Lifeline Report Type",
+			"description": "To set what unsolicited report would be sent to the Lifeline group.",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 3,
+			"defaultValue": 3,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Send Nothing",
+					"value": 0
+				},
+				{
+					"label": "Battery Report",
+					"value": 1
+				},
+				{
+					"label": "Temperature",
+					"value": 2
+				},
+				{
+					"label": "Battery and Temperature",
+					"value": 3
+				}
+			]
+		},
 		"111": {
 			"label": "Lifeline Report Interval",
 			"description": "Set the interval time for sending the unsolicited report.",
@@ -259,7 +284,6 @@
 		},
 		"136": {
 			"label": "Sensor probe status",
-			"description": "Sensor probe status (read only)",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 0,
@@ -270,7 +294,6 @@
 		},
 		"252": {
 			"label": "Lock configuration",
-			"description": "Enable/Disable lock configuration",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 1,
@@ -432,35 +455,6 @@
 			"readOnly": false,
 			"writeOnly": false,
 			"allowManualEntry": true
-		},
-		"101": {
-			"label": "Lifeline Report Type",
-			"description": "To set what unsolicited report would be sent to the Lifeline group.",
-			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 3,
-			"defaultValue": 3,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "Send Nothing",
-					"value": 0
-				},
-				{
-					"label": "Battery Report",
-					"value": 1
-				},
-				{
-					"label": "Temperature",
-					"value": 2
-				},
-				{
-					"label": "Battery and Temperature",
-					"value": 3
-				}
-			]
 		},
 		"201[0x0f]": {
 			"label": "Temperature unit",

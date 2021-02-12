@@ -148,7 +148,6 @@
 		},
 		"255": {
 			"label": "Reset to factory default & /or exclude",
-			"description": "Reset sensor to factory default and remove from network",
 			"valueSize": 4,
 			"minValue": 0,
 			"maxValue": 2147483647,

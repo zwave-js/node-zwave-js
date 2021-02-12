@@ -27,7 +27,6 @@
 	"paramInformation": {
 		"1": {
 			"label": "Lock Mode - unlocking sequence",
-			"description": "0 - Lock Mode disabled, 9-28086 - unlocking sequence",
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 28086,
@@ -219,7 +218,6 @@
 		},
 		"17": {
 			"label": "Paired buttons association for Square and Circle",
-			"description": "activate paired buttons association mode for Square and Circle buttons",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 1,
@@ -240,7 +238,6 @@
 		},
 		"18": {
 			"label": "Paired buttons association for Cross and Triangle",
-			"description": "allows to activate paired buttons association mode for Cross and Triangle buttons",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 1,
@@ -261,7 +258,6 @@
 		},
 		"19": {
 			"label": "Paired buttons association for Minus and Plus",
-			"description": "allows to activate paired buttons association mode for Minus and Plus buttons",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 1,

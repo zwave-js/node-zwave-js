@@ -160,7 +160,6 @@
 		},
 		"84": {
 			"label": "ON/OFF time in Night light mode.",
-			"description": "Set the ON/OFF time of the LED when it is in Night light mode.",
 			"valueSize": 4,
 			"minValue": 0,
 			"maxValue": 16777276,

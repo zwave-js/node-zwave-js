@@ -171,7 +171,6 @@
 		},
 		"13": {
 			"label": "Action on button single press or hold",
-			"description": "Defines which command should be sent on button single press or hold",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 8,
@@ -294,7 +293,6 @@
 		},
 		"16": {
 			"label": "What to do on button Down press",
-			"description": "Defines hot to interprete button Down press.",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 2,

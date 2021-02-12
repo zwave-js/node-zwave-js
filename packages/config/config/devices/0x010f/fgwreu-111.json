@@ -72,6 +72,61 @@
 			"writeOnly": false,
 			"allowManualEntry": true
 		},
+		"30": {
+			"label": "Alarm configuration - 1st slot",
+			"description": "Which alarm frames and how the device should react",
+			"valueSize": 4,
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"31": {
+			"label": "Alarm configuration - 2nd slot",
+			"description": "which alarm frames and how the device should react",
+			"valueSize": 4,
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"32": {
+			"label": "Alarm configuration - 3rd slot",
+			"description": "which alarm frames and how the device should react",
+			"valueSize": 4,
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 0,
+			"readOnly": true,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"33": {
+			"label": "Alarm configuration - 4th slot",
+			"description": "which alarm frames and how the device should react",
+			"valueSize": 4,
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"34": {
+			"label": "Alarm configuration - 5th slot",
+			"description": "which alarm frames and how the device should react",
+			"valueSize": 4,
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
 		"35": {
 			"label": "Alarm configuration – duration",
 			"description": "duration of alarm sequence",
@@ -187,7 +242,6 @@
 		},
 		"152": {
 			"label": "Venetian blind – time of full turn of the slats",
-			"description": "time of full turn cycle of the slats",
 			"valueSize": 4,
 			"minValue": 0,
 			"maxValue": 65535,
@@ -247,61 +301,6 @@
 			"minValue": 1,
 			"maxValue": 65535,
 			"defaultValue": 6000,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
-		},
-		"30": {
-			"label": "Alarm configuration - 1st slot",
-			"description": "Which alarm frames and how the device should react",
-			"valueSize": 4,
-			"minValue": 0,
-			"maxValue": 255,
-			"defaultValue": 0,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
-		},
-		"31": {
-			"label": "Alarm configuration - 2nd slot",
-			"description": "which alarm frames and how the device should react",
-			"valueSize": 4,
-			"minValue": 0,
-			"maxValue": 255,
-			"defaultValue": 0,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
-		},
-		"32": {
-			"label": "Alarm configuration - 3rd slot",
-			"description": "which alarm frames and how the device should react",
-			"valueSize": 4,
-			"minValue": 0,
-			"maxValue": 255,
-			"defaultValue": 0,
-			"readOnly": true,
-			"writeOnly": false,
-			"allowManualEntry": true
-		},
-		"33": {
-			"label": "Alarm configuration - 4th slot",
-			"description": "which alarm frames and how the device should react",
-			"valueSize": 4,
-			"minValue": 0,
-			"maxValue": 255,
-			"defaultValue": 0,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
-		},
-		"34": {
-			"label": "Alarm configuration - 5th slot",
-			"description": "which alarm frames and how the device should react",
-			"valueSize": 4,
-			"minValue": 0,
-			"maxValue": 255,
-			"defaultValue": 0,
 			"readOnly": false,
 			"writeOnly": false,
 			"allowManualEntry": true

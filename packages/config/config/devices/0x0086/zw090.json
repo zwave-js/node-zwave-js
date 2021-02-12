@@ -36,7 +36,6 @@
 	"paramInformation": {
 		"81": {
 			"label": "Enable/disable the LED indicator",
-			"description": "This parameter is used to enable/disable the LED indicator",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 1,
@@ -70,7 +69,6 @@
 		},
 		"242": {
 			"label": "Enable/disable Security network",
-			"description": "This parameter is used to enable/disable security network",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 1,
@@ -92,7 +90,6 @@
 		},
 		"252": {
 			"label": "Enable/disable the configuration parameters to be locked",
-			"description": "This parameter is used to Enable/disable the configuration parameters to be locked.",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 1,
@@ -114,7 +111,6 @@
 		},
 		"255": {
 			"label": "Reset the configuration parameter to default factory setting",
-			"description": "Resets all configuration parameters to default setting",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 0,

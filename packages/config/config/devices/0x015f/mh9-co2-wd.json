@@ -34,8 +34,7 @@
 	},
 	"paramInformation": {
 		"1": {
-			"label": "Notification Threshold",
-			"description": "CO2 Notification Threshold",
+			"label": "CO2 Notification Threshold",
 			"valueSize": 2,
 			"minValue": 1,
 			"maxValue": 2000,

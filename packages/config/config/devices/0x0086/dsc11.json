@@ -218,8 +218,7 @@
 			"allowManualEntry": true
 		},
 		"80": {
-			"label": "Status of load changed report",
-			"description": "Status of load changed,send group 1",
+			"label": "Status of load changed report - Group 1",
 			"valueSize": 4,
 			"minValue": 0,
 			"maxValue": 65535,

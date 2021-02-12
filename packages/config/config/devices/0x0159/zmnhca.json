@@ -85,8 +85,8 @@
 		},
 		"42": {
 			"label": "Reporting in Watts by time interval for Q1 or Q2",
-			"description": "Power reporting in Watts by time interval for Q1 or Q2",
 			"valueSize": 2,
+			"unit": "W",
 			"minValue": 0,
 			"maxValue": 32767,
 			"defaultValue": 300,
@@ -185,7 +185,6 @@
 		},
 		"80": {
 			"label": "Reporting to controller",
-			"description": "reports regarding to main controller",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 1,

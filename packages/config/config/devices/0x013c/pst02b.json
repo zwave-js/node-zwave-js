@@ -30,7 +30,6 @@
 		},
 		"3": {
 			"label": "PIR Sensitivity",
-			"description": "PIR Sensitivity setting.",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 99,

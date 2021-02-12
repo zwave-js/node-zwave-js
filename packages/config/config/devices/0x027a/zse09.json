@@ -55,7 +55,6 @@
 		},
 		"4": {
 			"label": "Motion Detection",
-			"description": "255=Motion Detection Enabled",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 255,
@@ -63,7 +62,17 @@
 			"unsigned": true,
 			"readOnly": false,
 			"writeOnly": false,
-			"allowManualEntry": true
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Disabled",
+					"value": 0
+				},
+				{
+					"label": "Enabled",
+					"value": 255
+				}
+			]
 		},
 		"5": {
 			"label": "Light Trigger Level",

@@ -34,7 +34,6 @@
 		},
 		"80": {
 			"label": "Report sent to nodes in association group 1",
-			"description": "Report sent to associated nodes in association group 1",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 1,
@@ -75,7 +74,6 @@
 		},
 		"252": {
 			"label": "Enable/disable config parameters to be locked",
-			"description": "Enable/disable the configuration parameters to be locked",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 1,

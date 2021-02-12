@@ -109,7 +109,6 @@
 		},
 		"7": {
 			"label": "Keypad lockout time",
-			"description": "Incorrect PINs lockout time",
 			"unit": "seconds",
 			"valueSize": 1,
 			"minValue": 1,

@@ -25,7 +25,6 @@
 	"paramInformation": {
 		"1": {
 			"label": "Notification type",
-			"description": "Define the notification type.",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 255,

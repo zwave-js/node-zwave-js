@@ -4,7 +4,7 @@
 	"manufacturer": "Devolo",
 	"manufacturerId": "0x0175",
 	"label": "MT2761",
-	"description": "Devolo Home Control Shutter FM MT2761",
+	"description": "Home Control Shutter",
 	"devices": [
 		{
 			"productType": "0x0003",
@@ -101,7 +101,6 @@
 		},
 		"42": {
 			"label": "Power reporting in Watts by time interval",
-			"description": "Power reporting in Watts by time interval for Q1 or Q2",
 			"unit": "seconds",
 			"valueSize": 2,
 			"minValue": 0,

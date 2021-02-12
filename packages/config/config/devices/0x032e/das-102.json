@@ -85,7 +85,6 @@
 		},
 		"4": {
 			"label": "S1 auto off delay",
-			"description": "Sets auto off delay for S1",
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 65000,
@@ -195,7 +194,6 @@
 		},
 		"11": {
 			"label": "S2 auto off time",
-			"description": "Sets auto off time for S2",
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 65000,
@@ -213,7 +211,6 @@
 		},
 		"12": {
 			"label": "S2 turn on delay",
-			"description": "Sets turn on delay for S2",
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 65000,
@@ -270,7 +267,6 @@
 		},
 		"15": {
 			"label": "S1 button mode",
-			"description": "S1 button operation mode",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 3,
@@ -299,7 +295,6 @@
 		},
 		"16": {
 			"label": "S2 button mode",
-			"description": "S2 button operation mode",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 3,
@@ -328,7 +323,6 @@
 		},
 		"18": {
 			"label": "Smart delay",
-			"description": "Smart delay mode",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 2,
@@ -359,7 +353,6 @@
 		},
 		"51": {
 			"label": "Secure send for S1",
-			"description": "Send secure commands for S1",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 1,
@@ -380,7 +373,6 @@
 		},
 		"52": {
 			"label": "Secure send for S2",
-			"description": "Send secure commands for S2",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 1,

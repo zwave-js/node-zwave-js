@@ -391,8 +391,7 @@
 			"allowManualEntry": true
 		},
 		"30": {
-			"label": "Sequence learning mode",
-			"description": "Launch sequence learning procedure",
+			"label": "Launch Sequence learning mode",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 6,

@@ -116,8 +116,8 @@
 		},
 		"8": {
 			"label": "Heat Staging Delay",
-			"description": "Heat Staging Delay (in min)",
 			"valueSize": 1,
+			"unit": "minutes",
 			"minValue": 1,
 			"maxValue": 60,
 			"defaultValue": 10,
@@ -127,8 +127,8 @@
 		},
 		"9": {
 			"label": "Cool Staging Delay",
-			"description": "Cool Staging Delay (in min)",
 			"valueSize": 1,
+			"unit": "minutes",
 			"minValue": 1,
 			"maxValue": 60,
 			"defaultValue": 10,
@@ -170,8 +170,8 @@
 		},
 		"12": {
 			"label": "Fan Circulation Period",
-			"description": "Fan Circulation Period (in min)",
 			"valueSize": 1,
+			"unit": "minutes",
 			"minValue": 10,
 			"maxValue": 240,
 			"defaultValue": 20,
@@ -269,8 +269,8 @@
 		},
 		"20": {
 			"label": "Compressor Delay",
-			"description": "Compressor Delay (in min)",
 			"valueSize": 1,
+			"unit": "minutes",
 			"minValue": 0,
 			"maxValue": 60,
 			"defaultValue": 5,
@@ -280,8 +280,8 @@
 		},
 		"21": {
 			"label": "Demand Response Period",
-			"description": "Demand Response Period (in min)",
 			"valueSize": 1,
+			"unit": "minutes",
 			"minValue": 10,
 			"maxValue": 240,
 			"defaultValue": 10,
@@ -292,8 +292,8 @@
 		},
 		"22": {
 			"label": "Demand Response Duty Cycle",
-			"description": "Demand Response Duty Cycle (percentage)",
 			"valueSize": 1,
+			"unit": "%",
 			"minValue": 0,
 			"maxValue": 100,
 			"defaultValue": 25,

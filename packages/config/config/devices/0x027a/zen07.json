@@ -18,8 +18,7 @@
 	"supportsZWavePlus": true,
 	"paramInformation": {
 		"1": {
-			"label": "Metering Report",
-			"description": "send metering reports",
+			"label": "Send Metering Report",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 1,
