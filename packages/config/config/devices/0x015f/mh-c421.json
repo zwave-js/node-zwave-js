@@ -30,7 +30,7 @@
 			"allowManualEntry": true
 		},
 		"2": {
-			"label": "KWH Meter Report Period",
+			"label": "kWh Meter Report Period",
 			"unit": "10 minutes",
 			"valueSize": 2,
 			"minValue": 1,
@@ -85,7 +85,7 @@
 			]
 		},
 		"8": {
-			"label": "LED BackLight Brightness",
+			"label": "LED Backlight Brightness",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 10,

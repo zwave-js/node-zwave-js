@@ -145,7 +145,7 @@
 		},
 		"7": {
 			"label": "Single Dimming Step Time (Manual)",
-			"unit": "10ms",
+			"unit": "10 ms",
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 255,
@@ -169,7 +169,7 @@
 		},
 		"9": {
 			"label": "Single Dimming Step Time (Auto)",
-			"unit": "10ms",
+			"unit": "10 ms",
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 255,
@@ -207,7 +207,7 @@
 		"12": {
 			"label": "Reporting Interval For Dimming Level",
 			"description": "0 for no reports",
-			"unit": "10ms",
+			"unit": "10 ms",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 255,
@@ -293,7 +293,7 @@
 			]
 		},
 		"15[0x02]": {
-			"label": "Energy Meter Report KWH",
+			"label": "Energy Meter Report kWh",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 1,
@@ -390,7 +390,7 @@
 		},
 		"32": {
 			"label": "Ampere Alarm Threshold",
-			"unit": "0.01A",
+			"unit": "0.01 A",
 			"valueSize": 2,
 			"minValue": 1,
 			"maxValue": 5000,
@@ -402,7 +402,7 @@
 		},
 		"33": {
 			"label": "Voltage Alarm Threshold",
-			"unit": "0.1V",
+			"unit": "0.1 V",
 			"valueSize": 2,
 			"minValue": 1,
 			"maxValue": 10000,
@@ -414,7 +414,7 @@
 		},
 		"34": {
 			"label": "Wattage Alarm Threshold",
-			"unit": "0.1W",
+			"unit": "0.1 W",
 			"valueSize": 2,
 			"minValue": 1,
 			"maxValue": 3000,
@@ -460,7 +460,7 @@
 		},
 		"64": {
 			"label": "Overloaded Amps Detected",
-			"unit": "0.01A",
+			"unit": "0.01 A",
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 5000,
@@ -472,7 +472,7 @@
 		},
 		"65": {
 			"label": "Overloaded Volts Detected",
-			"unit": "0.1V",
+			"unit": "0.1 V",
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 10000,
@@ -484,7 +484,7 @@
 		},
 		"66": {
 			"label": "Overloaded Watts Detected",
-			"unit": "0.1W",
+			"unit": "0.1 W",
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 3000,
