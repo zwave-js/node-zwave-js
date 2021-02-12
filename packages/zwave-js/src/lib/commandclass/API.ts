@@ -318,6 +318,7 @@ export interface CCAPIs {
 	Security: import("./SecurityCC").SecurityCCAPI;
 	"Sound Switch": import("./SoundSwitchCC").SoundSwitchCCAPI;
 	Supervision: import("./SupervisionCC").SupervisionCCAPI;
+	"Thermostat Fan Mode": import("./ThermostatFanModeCC").ThermostatFanModeCCAPI;
 	"Thermostat Fan State": import("./ThermostatFanStateCC").ThermostatFanStateCCAPI;
 	"Thermostat Mode": import("./ThermostatModeCC").ThermostatModeCCAPI;
 	"Thermostat Operating State": import("./ThermostatOperatingStateCC").ThermostatOperatingStateCCAPI;

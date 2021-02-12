@@ -100,4 +100,6 @@ describe("lib/commandclass/ThermostatFanModeCC => ", () => {
 		expect(cc.mode).toBe(ThermostatFanMode["Auto high"]);
 		expect(cc.off).toBe(true);
 	});
+
+	// TODO: add tests for getting supported features, interview, etc
 });
