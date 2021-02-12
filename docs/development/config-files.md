@@ -294,7 +294,7 @@ The device ID can be found in the browser URL - the device at `https://opensmart
 
 ### Importing templates
 
-Some manufacturers have a lot of devices that share configuration parameters. To make these definitions easy to manage and keep them consistent between multiple config files, you can import templates (or parts thereof) instead of repeating the parameter definition in each file.
+Some manufacturers have a lot of devices that share configuration parameters. To make these definitions easy to manage and keep them consistent between multiple config files, you can (and should whenever possible) import templates (or parts thereof) instead of repeating the parameter definition in each file.
 
 To import a template, you can use the special `$import` property where you'd normally write out the individual properties. Every property referenced by the `$import` statement gets included in the current location. The `$import` property has the following syntax:
 
