@@ -14,9 +14,9 @@ async function main(param) {
 
 	let feedbackText;
 	if (process.env.PENDING) {
-		feedbackText = `⏳ Please wait for the lint check to complete, then try again.`;
+		feedbackText = `🐌 Please wait for the lint check to complete, then try again.`;
 	} else if (process.env.FEEDBACK === "error") {
-		feedbackText = `🔨 I tried my best, but something went wrong.`;
+		feedbackText = `❌ I tried my best, but something went wrong.`;
 	} else if (process.env.FEEDBACK === "unchanged") {
 		feedbackText = `😕 Sorry, I couldn't do anything here.`;
 	} else {
