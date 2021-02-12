@@ -29,7 +29,7 @@
 		{
 			"productType": "0x6401",
 			"productId": "0x01fd"
-		},
+		}
 	],
 	"firmwareVersion": {
 		"min": "0.0",
