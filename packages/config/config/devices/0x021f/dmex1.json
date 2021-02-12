@@ -1,0 +1,51 @@
+// Elexa Consumer Products Inc. DMEX1
+// Range Extender
+{
+	"manufacturer": "Elexa Consumer Products Inc.",
+	"manufacturerId": "0x021f",
+	"label": "DMEX1",
+	"description": "Range Extender",
+	"devices": [
+		{
+			"productType": "0x0003",
+			"productId": "0x0108",
+			"zwaveAllianceId": 2984
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"paramInformation": {
+		"1": {
+			"label": "Night Light &amp;quot;off&amp;quot; Threshold",
+			"description": "Night light off threshold",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 5,
+			"defaultValue": 5,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"2": {
+			"label": "Night Light &amp;quot;on&amp;quot; Threshold",
+			"description": "Night light on threshold",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 5,
+			"defaultValue": 5,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		}
+	},
+	"metadata": {
+		"inclusion": "Turn the primary controller of Z-Wave network into inclusion mode, press the Z-Wave Button on Range Extender 3 times",
+		"exclusion": "Turn the primary controller of the Z-Wave network into exclusion mode, press the Z-Wave Button on Range Extender 3 times",
+		"reset": "Press and hold the Z-Wave Button for 10 seconds and then release it.\nUse this procedure only in the event that your primary network controller is missing or inoperable",
+		"manual": "https://products.z-wavealliance.org/ProductManual/File?folder=&filename=MarketCertificationFiles/2984/DomeExtenderAPIManual10-31.pdf"
+	}
+}
