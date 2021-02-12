@@ -1,0 +1,1183 @@
+{
+	"manufacturer": "Inovelli",
+	"manufacturerId": "0x031e",
+	"label": "LZW45",
+	"description": "Light Strip",
+	"devices": [
+		{
+			"productType": "0x000a",
+			"productId": "0x0001"
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"associations": {
+		"1": {
+			"label": "Lifeline",
+			"maxNodes": 5,
+			"isLifeline": true
+		},
+		"2": {
+			"label": "Basic Set",
+			"maxNodes": 5
+		},
+		"3": {
+			"label": "Switch Multilevel Set",
+			"maxNodes": 5
+		},
+		"4": {
+			"label": "Switch Multilevel Start/Stop",
+			"maxNodes": 5
+		}
+	},
+	"paramInformation": {
+		"1": {
+			"label": "Number of Pixels",
+			"description": "When individually addressable LEDs are used, this parameter tells the controller the number of pixels that are attached.  0: Automatic recognition of pixels.",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 130,
+			"defaultValue": 0,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"2": {
+			"label": "Dimming Speed",
+			"description": "This changes the speed in which the light strip dims up or down. A setting of 0 should turn the light immediately on or off (almost like an on/off switch). Increasing the value should slow down the transition speed.",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 98,
+			"defaultValue": 3,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"3": {
+			"label": "Ramp Rate",
+			"description": "This changes the speed in which the light strip turns on or off. For example, when a user sends the switch a basicSet(value: 0xFF) or basicSet(value: 0x00), this is the speed in which those actions take place. A setting of 0 should turn the light immediately on or off (almost like an on/off switch). Increasing the value should slow down the transition speed. A setting of 99 should keep this in sync with parameter 2.",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 99,
+			"defaultValue": 99,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"4": {
+			"label": "Minimum Level",
+			"description": "The minimum level that the strip can be dimmed to. Useful when the user has an LED strip that does not turn on or flickers at a lower level.",
+			"valueSize": 1,
+			"minValue": 1,
+			"maxValue": 45,
+			"defaultValue": 1,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"5": {
+			"label": "Maximum Level",
+			"description": "The maximum level that the strip can be dimmed to. Useful when the user has an LED strip that reaches its maximum level before the dimmer value of 99.",
+			"valueSize": 1,
+			"minValue": 55,
+			"maxValue": 99,
+			"defaultValue": 99,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"6": {
+			"label": "Auto Off Timer",
+			"description": "Automatically turns the strip off after this many seconds. When the strip is turned on a timer is started that is the duration of this setting. When the timer expires, the strip is turned off. 0 - Auto off is disabled.",
+			"valueSize": 2,
+			"minValue": 0,
+			"maxValue": 32767,
+			"defaultValue": 0,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"7": {
+			"label": "Default Level (Local)",
+			"description": "Default level for the strip when it is powered on from the local switch. A setting of 0 means that the switch will return to the level that it was on before it was turned off.",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 99,
+			"defaultValue": 0,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"8": {
+			"label": "Default Level (Z-Wave)",
+			"description": "Default level for the dimmer when it is powered on from a Z-Wave command (i.e. BasicSet(0xFF)). A setting of 0 means that the switch will return to the level that it was on before it was turned off.",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 99,
+			"defaultValue": 0,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"9[0xffff]": {
+			"label": "Default Color: Hue Color",
+			"description": "Set the default color to a Hue Color Wheel color.  0 represents the previous color, 1-360 represent the Hue Color Wheel Color, and 361 represents a random color.",
+			"valueSize": 4,
+			"minValue": 0,
+			"maxValue": 361,
+			"defaultValue": 0,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"9[0xffff0000]": {
+			"label": "Default Color: Color Temperature",
+			"description": "Set the default color to a Color Temperature.",
+			"valueSize": 4,
+			"minValue": 2700,
+			"maxValue": 6500,
+			"defaultValue": 6500,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"10": {
+			"label": "State after power Restored",
+			"description": "The state the switch should return to once power is restored after power failure.",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 2,
+			"defaultValue": 2,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Off",
+					"value": 0
+				},
+				{
+					"label": "Default Color/Level",
+					"value": 1
+				},
+				{
+					"label": "Previous",
+					"value": 2
+				}
+			]
+		},
+		"17": {
+			"label": "Active Power Reports",
+			"description": "The power level change that will result in a new power report being sent. The value is a percentage of the previous report. 0 = disabled.",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 100,
+			"defaultValue": 10,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"18": {
+			"label": "Periodic Power & Energy Reports",
+			"description": "Time period between consecutive power & energy reports being sent (in seconds). The timer is reset after each report is sent.",
+			"valueSize": 2,
+			"minValue": 0,
+			"maxValue": 32767,
+			"defaultValue": 3600,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true,
+			"unit": "Seconds"
+		},
+		"19": {
+			"label": "Energy Reports",
+			"description": "The energy level change that will result in a new energy report being sent (in kWh)\n\t  0 = 0.01kWh, 10 = 0.1kWh, 100 = 1kWh.",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 127,
+			"defaultValue": 10,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true,
+			"unit": "0.01 kWh"
+		},
+		"21[0xff]": {
+			"label": "Quick Strip Effect: Hue Color Wheel / Color Temp",
+			"description": "If 'Quick Strip Effect: Color Type' is set to 'Hue Color Wheel', this is the hue color wheel value.  To calculate value, value = hue_color_wheel_value / 360 * 255.  If 'Quick Strip Effect: Color Type' is set to 'Color Temp', this is the color temp value.  To calculate value, value = (color_temp_value - 2700) / (6500 - 2700) * 255.",
+			"valueSize": 4,
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 0,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"21[0x7f00]": {
+			"label": "Quick Strip Effect Intensity",
+			"description": "Intensity of the LED strip.  Coarse: 0 - 10, where 10 = 100%.  Fine: 0-99, where 99 = 100%.",
+			"valueSize": 4,
+			"minValue": 0,
+			"maxValue": 99,
+			"defaultValue": 0,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"21[0x8000]": {
+			"label": "Quick Strip Effect Intensity Scale",
+			"description": "Changes the scale of the intensity.  0 = Coarse (10 x Intensity), 1 = Fine (1 x Intensity).",
+			"valueSize": 4,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 0,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true,
+			"options": [
+				{
+					"label": "Coarse",
+					"value": 0
+				},
+				{
+					"label": "Fine",
+					"value": 1
+				}
+			]
+		},
+		"21[0xff0000]": {
+			"label": "Quick Strip Effect: Duration",
+			"description": "The light LED strip effect duration. 1 to 60 = seconds, 61 to 120 minutes, 121 - 254 = hours, 255 = Indefinitely.",
+			"valueSize": 4,
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 0,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"21[0x3f000000]": {
+			"label": "Quick Strip Effect: Effect",
+			"description": "The light LED strip effect.",
+			"valueSize": 4,
+			"minValue": 0,
+			"maxValue": 6,
+			"defaultValue": 0,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Off",
+					"value": 0
+				},
+				{
+					"label": "Solid",
+					"value": 1
+				},
+				{
+					"label": "Chase",
+					"value": 2
+				},
+				{
+					"label": "Fast Blink",
+					"value": 3
+				},
+				{
+					"label": "Slow Blink",
+					"value": 4
+				},
+				{
+					"label": "Fast Fade",
+					"value": 5
+				},
+				{
+					"label": "Slow Fade",
+					"value": 6
+				}
+			]
+		},
+		"21[0x40000000]": {
+			"label": "Quick Strip Effect: Color Type",
+			"description": "Color type for the effect.",
+			"valueSize": 4,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 0,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Hue Color Wheel",
+					"value": 0
+				},
+				{
+					"label": "Color Temp",
+					"value": 1
+				}
+			]
+		},
+		"22[0x7]": {
+			"label": "Custom Strip Effect: Action 1 Effect",
+			"description": "This is the effect of Action 1.",
+			"valueSize": 4,
+			"minValue": 0,
+			"maxValue": 4,
+			"defaultValue": 0,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true,
+			"options": [
+				{
+					"label": "Fade",
+					"value": 0
+				},
+				{
+					"label": "Fade Blend",
+					"value": 1
+				},
+				{
+					"label": "Flash",
+					"value": 2
+				},
+				{
+					"label": "Chase",
+					"value": 3
+				},
+				{
+					"label": "Chase Blend",
+					"value": 4
+				}
+			]
+		},
+		"22[0xf8]": {
+			"label": "Custom Strip Effect: Action 1 Color",
+			"description": "This is the color of Action 1.",
+			"valueSize": 4,
+			"minValue": 0,
+			"maxValue": 15,
+			"defaultValue": 0,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true,
+			"options": [
+				{
+					"label": "Off",
+					"value": 0
+				},
+				{
+					"label": "2700K",
+					"value": 1
+				},
+				{
+					"label": "4500K",
+					"value": 2
+				},
+				{
+					"label": "6500K",
+					"value": 3
+				},
+				{
+					"label": "Red",
+					"value": 4
+				},
+				{
+					"label": "Orange",
+					"value": 5
+				},
+				{
+					"label": "Yellow",
+					"value": 6
+				},
+				{
+					"label": "Yellow Green",
+					"value": 7
+				},
+				{
+					"label": "Green",
+					"value": 8
+				},
+				{
+					"label": "Spring Green",
+					"value": 9
+				},
+				{
+					"label": "Cyan",
+					"value": 10
+				},
+				{
+					"label": "Azure",
+					"value": 11
+				},
+				{
+					"label": "Blue",
+					"value": 12
+				},
+				{
+					"label": "Violet",
+					"value": 13
+				},
+				{
+					"label": "Magenta",
+					"value": 14
+				},
+				{
+					"label": "Random",
+					"value": 15
+				}
+			]
+		},
+		"22[0x700]": {
+			"label": "Custom Strip Effect: Action 2 Effect",
+			"description": "This is the effect of Action 2.",
+			"valueSize": 4,
+			"minValue": 0,
+			"maxValue": 4,
+			"defaultValue": 0,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true,
+			"options": [
+				{
+					"label": "Fade",
+					"value": 0
+				},
+				{
+					"label": "Fade Blend",
+					"value": 1
+				},
+				{
+					"label": "Flash",
+					"value": 2
+				},
+				{
+					"label": "Chase",
+					"value": 3
+				},
+				{
+					"label": "Chase Blend",
+					"value": 4
+				}
+			]
+		},
+		"22[0xf800]": {
+			"label": "Custom Strip Effect: Action 2 Color",
+			"description": "This is the color of Action 2.",
+			"valueSize": 4,
+			"minValue": 0,
+			"maxValue": 15,
+			"defaultValue": 0,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true,
+			"options": [
+				{
+					"label": "Off",
+					"value": 0
+				},
+				{
+					"label": "2700K",
+					"value": 1
+				},
+				{
+					"label": "4500K",
+					"value": 2
+				},
+				{
+					"label": "6500K",
+					"value": 3
+				},
+				{
+					"label": "Red",
+					"value": 4
+				},
+				{
+					"label": "Orange",
+					"value": 5
+				},
+				{
+					"label": "Yellow",
+					"value": 6
+				},
+				{
+					"label": "Yellow Green",
+					"value": 7
+				},
+				{
+					"label": "Green",
+					"value": 8
+				},
+				{
+					"label": "Spring Green",
+					"value": 9
+				},
+				{
+					"label": "Cyan",
+					"value": 10
+				},
+				{
+					"label": "Azure",
+					"value": 11
+				},
+				{
+					"label": "Blue",
+					"value": 12
+				},
+				{
+					"label": "Violet",
+					"value": 13
+				},
+				{
+					"label": "Magenta",
+					"value": 14
+				},
+				{
+					"label": "Random",
+					"value": 15
+				}
+			]
+		},
+		"22[0x70000]": {
+			"label": "Custom Strip Effect: Action 3 Effect",
+			"description": "This is the effect of Action 3.",
+			"valueSize": 4,
+			"minValue": 0,
+			"maxValue": 4,
+			"defaultValue": 0,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true,
+			"options": [
+				{
+					"label": "Fade",
+					"value": 0
+				},
+				{
+					"label": "Fade Blend",
+					"value": 1
+				},
+				{
+					"label": "Flash",
+					"value": 2
+				},
+				{
+					"label": "Chase",
+					"value": 3
+				},
+				{
+					"label": "Chase Blend",
+					"value": 4
+				}
+			]
+		},
+		"22[0xf80000]": {
+			"label": "Custom Strip Effect: Action 3 Color",
+			"description": "This is the color of Action 3.",
+			"valueSize": 4,
+			"minValue": 0,
+			"maxValue": 15,
+			"defaultValue": 0,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true,
+			"options": [
+				{
+					"label": "Off",
+					"value": 0
+				},
+				{
+					"label": "2700K",
+					"value": 1
+				},
+				{
+					"label": "4500K",
+					"value": 2
+				},
+				{
+					"label": "6500K",
+					"value": 3
+				},
+				{
+					"label": "Red",
+					"value": 4
+				},
+				{
+					"label": "Orange",
+					"value": 5
+				},
+				{
+					"label": "Yellow",
+					"value": 6
+				},
+				{
+					"label": "Yellow Green",
+					"value": 7
+				},
+				{
+					"label": "Green",
+					"value": 8
+				},
+				{
+					"label": "Spring Green",
+					"value": 9
+				},
+				{
+					"label": "Cyan",
+					"value": 10
+				},
+				{
+					"label": "Azure",
+					"value": 11
+				},
+				{
+					"label": "Blue",
+					"value": 12
+				},
+				{
+					"label": "Violet",
+					"value": 13
+				},
+				{
+					"label": "Magenta",
+					"value": 14
+				},
+				{
+					"label": "Random",
+					"value": 15
+				}
+			]
+		},
+		"22[0x7000000]": {
+			"label": "Custom Strip Effect: Action 4 Effect",
+			"description": "This is the effect of Action 4.",
+			"valueSize": 4,
+			"minValue": 0,
+			"maxValue": 4,
+			"defaultValue": 0,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true,
+			"options": [
+				{
+					"label": "Fade",
+					"value": 0
+				},
+				{
+					"label": "Fade Blend",
+					"value": 1
+				},
+				{
+					"label": "Flash",
+					"value": 2
+				},
+				{
+					"label": "Chase",
+					"value": 3
+				},
+				{
+					"label": "Chase Blend",
+					"value": 4
+				}
+			]
+		},
+		"22[0xf8000000]": {
+			"label": "Custom Strip Effect: Action 4 Color",
+			"description": "This is the color of Action 4.",
+			"valueSize": 4,
+			"minValue": 0,
+			"maxValue": 15,
+			"defaultValue": 0,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true,
+			"options": [
+				{
+					"label": "Off",
+					"value": 0
+				},
+				{
+					"label": "2700K",
+					"value": 1
+				},
+				{
+					"label": "4500K",
+					"value": 2
+				},
+				{
+					"label": "6500K",
+					"value": 3
+				},
+				{
+					"label": "Red",
+					"value": 4
+				},
+				{
+					"label": "Orange",
+					"value": 5
+				},
+				{
+					"label": "Yellow",
+					"value": 6
+				},
+				{
+					"label": "Yellow Green",
+					"value": 7
+				},
+				{
+					"label": "Green",
+					"value": 8
+				},
+				{
+					"label": "Spring Green",
+					"value": 9
+				},
+				{
+					"label": "Cyan",
+					"value": 10
+				},
+				{
+					"label": "Azure",
+					"value": 11
+				},
+				{
+					"label": "Blue",
+					"value": 12
+				},
+				{
+					"label": "Violet",
+					"value": 13
+				},
+				{
+					"label": "Magenta",
+					"value": 14
+				},
+				{
+					"label": "Random",
+					"value": 15
+				}
+			]
+		},
+		"23[0x7f]": {
+			"label": "Custom Strip Effect: Action 1 Intensity",
+			"description": "This is the intensity of Action 1.",
+			"valueSize": 4,
+			"minValue": 0,
+			"maxValue": 99,
+			"defaultValue": 0,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"23[0x7f00]": {
+			"label": "Custom Strip Effect: Action 2 Intensity",
+			"description": "This is the intensity of Action 2.",
+			"valueSize": 4,
+			"minValue": 0,
+			"maxValue": 99,
+			"defaultValue": 0,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"23[0x7f0000]": {
+			"label": "Custom Strip Effect: Action 3 Intensity",
+			"description": "This is the intensity of Action 3.",
+			"valueSize": 4,
+			"minValue": 0,
+			"maxValue": 99,
+			"defaultValue": 0,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"23[0x7f00000]": {
+			"label": "Custom Strip Effect: Action 4 Intensity",
+			"description": "This is the intensity of Action 4.",
+			"valueSize": 4,
+			"minValue": 0,
+			"maxValue": 99,
+			"defaultValue": 0,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"24[0x3f]": {
+			"label": "Custom Strip Effect: Duration 1",
+			"description": "Duration of the Action 1 Effect.",
+			"valueSize": 4,
+			"minValue": 0,
+			"maxValue": 60,
+			"defaultValue": 0,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"24[0x3f00]": {
+			"label": "Custom Strip Effect: Duration 2",
+			"description": "Duration of the Action 2 Effect.",
+			"valueSize": 4,
+			"minValue": 0,
+			"maxValue": 60,
+			"defaultValue": 0,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"24[0x3f0000]": {
+			"label": "Custom Strip Effect: Duration 3",
+			"description": "Duration of the Action 3 Effect.",
+			"valueSize": 4,
+			"minValue": 0,
+			"maxValue": 60,
+			"defaultValue": 0,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"24[0x3f000000]": {
+			"label": "Custom Strip Effect: Duration 4",
+			"description": "Duration of the Action 4 Effect.",
+			"valueSize": 4,
+			"minValue": 0,
+			"maxValue": 60,
+			"defaultValue": 0,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"30[0xff]": {
+			"label": "Custom Strip Effect: Iterations",
+			"description": "Number of times the custom effect will occur.  Iterations x (Action 1 -> Action 2 -> Action 3 -> Action 4).",
+			"valueSize": 4,
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 0,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"30[0xff00]": {
+			"label": "Custom Strip Effect: Behavior",
+			"description": "What will occur after the Custom Effect is Finished.",
+			"valueSize": 4,
+			"minValue": 0,
+			"maxValue": 2,
+			"defaultValue": 0,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true,
+			"options": [
+				{
+					"label": "Off",
+					"value": 0
+				},
+				{
+					"label": "Previous Color",
+					"value": 1
+				},
+				{
+					"label": "Last Color in Program",
+					"value": 2
+				}
+			]
+		},
+		"30[0xff0000]": {
+			"label": "Custom Strip Effect: Duration Units",
+			"description": "Units of the Duration for Parameter 24.",
+			"valueSize": 4,
+			"minValue": 0,
+			"maxValue": 3,
+			"defaultValue": 0,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true,
+			"options": [
+				{
+					"label": "100ms",
+					"value": 0
+				},
+				{
+					"label": "Seconds",
+					"value": 1
+				},
+				{
+					"label": "Minutes",
+					"value": 2
+				},
+				{
+					"label": "Hours",
+					"value": 3
+				}
+			]
+		},
+		"31[0xff]": {
+			"label": "Pixel Effect",
+			"description": "Pixel Effect that utilizes the individually addressable LEDs.",
+			"valueSize": 2,
+			"minValue": 1,
+			"maxValue": 45,
+			"defaultValue": 1,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true,
+			"options": [
+				{
+					"label": "Static",
+					"value": 1
+				},
+				{
+					"label": "Blink",
+					"value": 2
+				},
+				{
+					"label": "Breath",
+					"value": 3
+				},
+				{
+					"label": "Color Wipe",
+					"value": 4
+				},
+				{
+					"label": "Color Wipe Reverse Inverse",
+					"value": 5
+				},
+				{
+					"label": "Color Wipe Random",
+					"value": 6
+				},
+				{
+					"label": "Random Color",
+					"value": 7
+				},
+				{
+					"label": "Single Dynamic",
+					"value": 8
+				},
+				{
+					"label": "Multi Dynamic",
+					"value": 9
+				},
+				{
+					"label": "Rainbow",
+					"value": 10
+				},
+				{
+					"label": "Rainbow Cycle",
+					"value": 11
+				},
+				{
+					"label": "Scan",
+					"value": 12
+				},
+				{
+					"label": "Dual Scan",
+					"value": 13
+				},
+				{
+					"label": "Fade",
+					"value": 14
+				},
+				{
+					"label": "Running Lights",
+					"value": 15
+				},
+				{
+					"label": "Twinkle",
+					"value": 16
+				},
+				{
+					"label": "Twinkle Random",
+					"value": 17
+				},
+				{
+					"label": "Twinkle Fade",
+					"value": 18
+				},
+				{
+					"label": "Twinkle Fade Random",
+					"value": 19
+				},
+				{
+					"label": "Sparkle",
+					"value": 20
+				},
+				{
+					"label": "Flash Sparkle",
+					"value": 21
+				},
+				{
+					"label": "Hyper Sparkle",
+					"value": 22
+				},
+				{
+					"label": "Strobe",
+					"value": 23
+				},
+				{
+					"label": "Blink Rainbow",
+					"value": 24
+				},
+				{
+					"label": "Chase White",
+					"value": 25
+				},
+				{
+					"label": "Chase Color",
+					"value": 26
+				},
+				{
+					"label": "Chase Random",
+					"value": 27
+				},
+				{
+					"label": "Chase Rainbow",
+					"value": 28
+				},
+				{
+					"label": "Chase Flash",
+					"value": 29
+				},
+				{
+					"label": "Chase Flash Random",
+					"value": 30
+				},
+				{
+					"label": "Chase Rainbow White",
+					"value": 31
+				},
+				{
+					"label": "Chase Blackout",
+					"value": 32
+				},
+				{
+					"label": "Chase Blackout Rainbow",
+					"value": 33
+				},
+				{
+					"label": "Color Sweep Random",
+					"value": 34
+				},
+				{
+					"label": "Running Color",
+					"value": 35
+				},
+				{
+					"label": "Running Red Blue",
+					"value": 36
+				},
+				{
+					"label": "Running Random",
+					"value": 37
+				},
+				{
+					"label": "Larson Scanner",
+					"value": 38
+				},
+				{
+					"label": "Comet",
+					"value": 39
+				},
+				{
+					"label": "Fireworks",
+					"value": 40
+				},
+				{
+					"label": "Fireworks Random",
+					"value": 41
+				},
+				{
+					"label": "Merry Christmas",
+					"value": 42
+				},
+				{
+					"label": "Circus Combustus",
+					"value": 43
+				},
+				{
+					"label": "Halloween",
+					"value": 44
+				},
+				{
+					"label": "Aurora",
+					"value": 45
+				}
+			]
+		},
+		"31[0x7f00]": {
+			"label": "Pixel Effect Intensity",
+			"description": "This is the intensity of the Pixel Effect.",
+			"valueSize": 2,
+			"minValue": 0,
+			"maxValue": 99,
+			"defaultValue": 0,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"51": {
+			"label": "Disable Physical On/Off Delay",
+			"description": "The 700ms delay that occurs after pressing the physical button to turn the switch on/off is removed. Consequently this also removes the following scenes: 2x, 3x, 4x, 5x tap. Still working are the 1x tap, held, released, and the level up/down scenes.",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 1,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "700ms delay disabled",
+					"value": 0
+				},
+				{
+					"label": "700ms delay enabled",
+					"value": 1
+				}
+			]
+		}
+	}
+}
