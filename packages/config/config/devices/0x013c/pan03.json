@@ -41,7 +41,7 @@
 		},
 		"3": {
 			"label": "Threshold of current for Load caution",
-			"unit": ".01A",
+			"unit": "0.01 A",
 			"valueSize": 2,
 			"minValue": 10,
 			"maxValue": 1100,
