@@ -129,13 +129,25 @@
 			"writeOnly": false,
 			"allowManualEntry": true
 		},
-		"9": {
+		"9[0xffff]": {
 			"label": "Default Color",
-			"description": "Byte(3-2): Values between 2700-6500 represent a color temperature. Byte(1-0): Values between 0-361, represent the color on the Hue color wheel. The value of 361 represents a random color.",
+			"description": "Set the default color to a Hue Color Wheel color.  0 represents the previous color, 1-360 represent the Hue Color Wheel Color, and 361 represents a random color.",
 			"valueSize": 4,
 			"minValue": 0,
-			"maxValue": 425984362,
-			"defaultValue": 262144000,
+			"maxValue": 361,
+			"defaultValue": 0,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"9[0xffff0000]": {
+			"label": "Default Color",
+			"description": "Set the default color to a Color Temperature.",
+			"valueSize": 4,
+			"minValue": 2700,
+			"maxValue": 6500,
+			"defaultValue": 6500,
 			"unsigned": true,
 			"readOnly": false,
 			"writeOnly": false,
@@ -189,7 +201,8 @@
 			"unsigned": true,
 			"readOnly": false,
 			"writeOnly": false,
-			"allowManualEntry": true
+			"allowManualEntry": true,
+			"unit": "Seconds"
 		},
 		"19": {
 			"label": "Energy Reports",
@@ -201,7 +214,8 @@
 			"unsigned": true,
 			"readOnly": false,
 			"writeOnly": false,
-			"allowManualEntry": true
+			"allowManualEntry": true,
+			"unit": "0.01 kWh"
 		},
 		"21[0xff]": {
 			"label": "Quick Strip Effect: Hue Color Wheel / Color Temp",
@@ -217,7 +231,7 @@
 		},
 		"21[0x7f00]": {
 			"label": "Quick Strip Effect Intensity",
-			"description": "Intensity of the LED strip.  Course: 0 - 10, where 10 = 100%.  Fine: 0-99, where 99 = 100%.",
+			"description": "Intensity of the LED strip.  Coarse: 0 - 10, where 10 = 100%.  Fine: 0-99, where 99 = 100%.",
 			"valueSize": 4,
 			"minValue": 0,
 			"maxValue": 99,
@@ -229,7 +243,7 @@
 		},
 		"21[0x8000]": {
 			"label": "Quick Strip Effect Intensity Scale",
-			"description": "Changes the scale of the intensity.  0 = Course (10 x Intensity), 1 = Fine (1 x Intensity).",
+			"description": "Changes the scale of the intensity.  0 = Coarse (10 x Intensity), 1 = Fine (1 x Intensity).",
 			"valueSize": 4,
 			"minValue": 0,
 			"maxValue": 1,
@@ -240,7 +254,7 @@
 			"allowManualEntry": true,
 			"options": [
 				{
-					"label": "Course",
+					"label": "Coarse",
 					"value": 0
 				},
 				{
