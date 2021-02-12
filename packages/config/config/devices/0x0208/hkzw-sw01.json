@@ -1,0 +1,101 @@
+// HANK Electronics Ltd. HKZW-SW01
+// Smart Switch
+{
+	"manufacturer": "HANK Electronics Ltd.",
+	"manufacturerId": "0x0208",
+	"label": "HKZW-SW01",
+	"description": "Smart Switch",
+	"devices": [
+		{
+			"productType": "0x0101",
+			"productId": "0x0003",
+			"zwaveAllianceId": 1912
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"paramInformation": {
+		"21": {
+			"label": "Setting Device Status After Power Failure",
+			"description": "Define how the smart switch reacts after the power supply is back on",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 2,
+			"defaultValue": 0,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Smart switch memorizes its state after a power failure",
+					"value": 0
+				},
+				{
+					"label": "Smart switch will be on after the power supply is reconnected",
+					"value": 1
+				},
+				{
+					"label": "Smart switch will be off after the power supply is reconnected",
+					"value": 2
+				}
+			]
+		},
+		"24": {
+			"label": "Notification When Load Status Change",
+			"description": "Smart switch can send notifications to association device (group lifeline) when state of smart switch’s load is changed",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 2,
+			"defaultValue": 1,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "The function is disabled",
+					"value": 0
+				},
+				{
+					"label": "Send basic report",
+					"value": 1
+				},
+				{
+					"label": "Send basic report only when load condition is not changed by Z-Wave command",
+					"value": 2
+				}
+			]
+		},
+		"27": {
+			"label": "Indicator Modes",
+			"description": "After smart switch being included into a Z-Wave network, the LED in the device will indicator the state of load",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 0,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "The LED will follow the status (on/off) of its load",
+					"value": 0
+				},
+				{
+					"label": "When the state of smart switch’s load changed, the LED will follow the status (on/off) of its load, but the red LED will turn off after 5 seconds if there is no more switch action",
+					"value": 1
+				}
+			]
+		}
+	},
+	"metadata": {
+		"inclusion": "1) Connect the power supply.\n2) Set the Z-Wave network main controller into learning mode (see Z-Wave network controller operating manual).\n3) Triple click the Z-Button, LED indicator should blink fast。\n4) Smart Switch should be recognized and included into the Z-Wave network.",
+		"exclusion": "1) Connect the power supply.\n2) Set the Z-Wave network controller into the remove mode (see Z-Wave controller operating manual)\n3) Triple click the Z-button.",
+		"reset": "1) Power on the Switch.\n2) Press and hold the Z-button for more than 20 seconds.\n3) If holding time more than one second, the LED will blink faster and faster. If holding time more than 20 seconds, the LED indicator will be on for 3 seconds, which indicates that the reset is complete, then it will blink slowly indicating that it is not a part of a Z-Wave network.\nUse this procedure only in the event that the network primary controller is missing or otherwise inoperable.",
+		"manual": "https://products.z-wavealliance.org/ProductManual/File?folder=&filename=MarketCertificationFiles/1912/HKZW-SW01_MANUL.pdf"
+	}
+}

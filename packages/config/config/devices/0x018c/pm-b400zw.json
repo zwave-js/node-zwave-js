@@ -1,0 +1,82 @@
+// Dawon DNS PM-B400ZW
+// Power Manager
+{
+	"manufacturer": "Dawon DNS",
+	"manufacturerId": "0x018c",
+	"label": "PM-B400ZW",
+	"description": "Power Manager",
+	"devices": [
+		{
+			"productType": "0x0042",
+			"productId": "0x0005",
+			"zwaveAllianceId": 1607
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"paramInformation": {
+		"1": {
+			"label": "Standy Power Setting Value",
+			"valueSize": 4,
+			"minValue": 0,
+			"maxValue": 0,
+			"defaultValue": 0,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"2": {
+			"label": "Peridic Measurement Value Transmission",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 1,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"3": {
+			"label": "Accumulation Start/Stop",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 0,
+			"defaultValue": 0,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"4": {
+			"label": "Connected Device Use/Not Use",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 0,
+			"defaultValue": 0,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"5": {
+			"label": "Periodic Time Intervals",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 6,
+			"defaultValue": 6,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		}
+	},
+	"metadata": {
+		"inclusion": "After mounting the UZB controller to your PC and running the PC Controller program, click the Add button in the PC Controller program. Press the button on the Smart Plug for more than five seconds after you plug the Smart Plug into a power outlet and it will include to the network controller, while flashing the red button on the LED Smart Plug",
+		"exclusion": "After mounting the UZB controller to your PC and run the PC Controller program you can click the Remove button in the PC Controller program. Press the button on the Smart Plug for more than five seconds after you plug the Smart Plug into a power outlet will Exclusion in the network controller, while the flashing red button LED Smart Plug",
+		"reset": "Press the button on the Smart Plug for more than 10 seconds after you plug the Smart Plug into a power outlet will make a Exclusion in the network controller, while the flashing red button LED Smart Plug. And all the variables are initialized.\n\n※ Please use this procedure only in the event that the network primary \n controller is missing or otherwise inoperable",
+		"manual": "https://products.z-wavealliance.org/ProductManual/File?folder=&filename=MarketCertificationFiles/1607/PB-B400ZW_Manual.pdf"
+	}
+}

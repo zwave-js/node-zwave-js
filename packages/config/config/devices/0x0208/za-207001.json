@@ -1,0 +1,60 @@
+// HANK Electronics Ltd. ZA-207001
+// Scene Controller
+{
+	"manufacturer": "HANK Electronics Ltd.",
+	"manufacturerId": "0x0208",
+	"label": "ZA-207001",
+	"description": "Scene Controller",
+	"devices": [
+		{
+			"productType": "0x0202",
+			"productId": "0x000b",
+			"zwaveAllianceId": 4011
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"paramInformation": {
+		"254": {
+			"label": "Enable/Disable The Configuration Command",
+			"description": "Lock/unlock all configuration parameters",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 0,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Unlock all configuration parameters",
+					"value": 0
+				},
+				{
+					"label": "Lock all configuration parameters",
+					"value": 1
+				}
+			]
+		},
+		"255": {
+			"label": "Reset Scene Controller",
+			"description": "Reset scene controller and remove from the Z-Wave network",
+			"valueSize": 4,
+			"minValue": -1,
+			"maxValue": 1,
+			"defaultValue": 1,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		}
+	},
+	"metadata": {
+		"inclusion": "Included as a non-secure device\n(1) Insert the LIR2450 battery.\n(2) Set the Z-Wave network main controller into learning mode\n(see Z-Wave network controller operating manual).\n(3) Triple click the Z-button.\n(4) If the inclusion is successful, the LED will blink in blue less than\nfor 5 seconds and then keep on for 15 seconds.\n\nIncluded as a secure device\n(1) Insert the LIR2450 battery.\n(2) Set the Z-Wave network main controller into learning mode\n(see Z-Wave network controller operating manual).\n(3) Pressing and holding the Z-button for 3 seconds.\n(4) If the inclusion is successful, the LED will blink in green less than\nfor 5 seconds and then keep on for 15 seconds",
+		"exclusion": "To remove the Scene Controller from the Z-Wave network:\n(1) Insert the LIR2450 battery.\n(2) Set the Z-Wave network main controller into excluding mode\n(see Z-Wave controller operating manual).\n(3) Triple click the Z-button, if the exclusion is successful, LED will blink\nin orange for less than 5 seconds and then keep on for 3 seconds",
+		"reset": "Pressing and holding a button for 20 seconds. Release the button after 20 seconds, LED will keep in yellow for 3 seconds. Scene Controller will be reset to factory defaults if you short press the button within this 3 seconds.\nPlease use this procedure only when the network primary controller is missing or otherwise inoperable",
+		"manual": "https://products.z-wavealliance.org/ProductManual/File?folder=&filename=product_documents/4011/user%20manual-4scene-Manual-final1.pdf"
+	}
+}

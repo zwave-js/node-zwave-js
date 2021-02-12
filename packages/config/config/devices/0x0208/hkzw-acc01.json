@@ -1,0 +1,78 @@
+// HANK Electronics Ltd. HKZW-ACC01
+// IR Transceiver
+{
+	"manufacturer": "HANK Electronics Ltd.",
+	"manufacturerId": "0x0208",
+	"label": "HKZW-ACC01",
+	"description": "IR Transceiver",
+	"devices": [
+		{
+			"productType": "0x0100",
+			"productId": "0x0007",
+			"zwaveAllianceId": 2303
+		},
+		{
+			"productType": "0x0101",
+			"productId": "0x0007",
+			"zwaveAllianceId": 2302
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"paramInformation": {
+		"93": {
+			"label": "Clear All Ir Information",
+			"description": "Device will clear all stored ir code",
+			"valueSize": 4,
+			"minValue": 0,
+			"maxValue": 0,
+			"defaultValue": 0,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"254": {
+			"label": "Enable/Disable The Configuration Command",
+			"description": "Lock/unlock all configuration parameters",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 0,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Unlock",
+					"value": 0
+				},
+				{
+					"label": "Lock",
+					"value": 1
+				}
+			]
+		},
+		"255": {
+			"label": "Reset Device",
+			"description": "Reset to factory default settings and removed from the Z-Wave network",
+			"valueSize": 4,
+			"minValue": 0,
+			"maxValue": 0,
+			"defaultValue": 0,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		}
+	},
+	"metadata": {
+		"inclusion": "Add for inclusion (non-security): \n1. Connect power supply.\n2. Set the Z-Wave network main controller into learning mode.\n3. Triple clicking the Z- button.\n4. If the add for inclusion is successful, the LED will blink fast for less than 5 seconds and then keep on. Otherwise, the LED will blink 5 seconds and then keep blinking slowly, in which case you need to repeat the process from step 2.\nAdd for inclusion (security): \n1. Connect power supply.\n2. Set the Z-Wave network main controller into learning mode.\n3. Press and hold the Z-button for 3 seconds.\nIf the add for inclusion is successful, the LED will blink for less than 5 seconds and then keep on. Otherwise, the LED will blink 5 seconds and then keep blinking slowly, in which case you need to repeat the process from step 2.",
+		"exclusion": "Remove for exclusion;\n1. Connect power supply.\n2. Set the Z-Wave network main controller into learning mode.\n3. Triple clicking the Z- button.\n4. If the remove for exclusion is successful, Led will blink fast for less than 5 seconds and keep blinking slowly. Otherwise, led will blink for 5 seconds and then keep on , in which case you need to repeat the process from step 2.",
+		"reset": "Press and hold the Z-button for 20 seconds. IR Transceiver will send “Device_Reset_Locally” to the main controller and exclude from the Z-Wave network, this procedure will reset the Sensor to factory default.\nPlease include a request to use the reset procedure only when the primary controller is missing or inoperable.",
+		"manual": "https://products.z-wavealliance.org/ProductManual/File?folder=&filename=MarketCertificationFiles/2302/HKZW_ACC01%20MANUL.pdf"
+	}
+}

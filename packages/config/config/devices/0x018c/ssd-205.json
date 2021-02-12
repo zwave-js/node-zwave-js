@@ -1,0 +1,64 @@
+// Dawon DNS SSD-205
+// Smart Switch
+{
+	"manufacturer": "Dawon DNS",
+	"manufacturerId": "0x018c",
+	"label": "SSD-205",
+	"description": "Smart Switch",
+	"devices": [
+		{
+			"productType": "0x0058",
+			"productId": "0x0001",
+			"zwaveAllianceId": 3314
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"paramInformation": {
+		"1": {
+			"label": "Change Report Cycle",
+			"description": "If value is 0x258, the device reports temperature and humidity every 10 minutes",
+			"valueSize": 2,
+			"unit": "minutes",
+			"minValue": 0,
+			"maxValue": 600,
+			"defaultValue": 600,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"2": {
+			"label": "Report Value Due to Temperature Change Rate",
+			"description": "The value is set to 20 and if there is a change in temperature above 2 degrees, the temperature is reported regardless of the reporting period",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 20,
+			"defaultValue": 20,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"3": {
+			"label": "Report Value Due to Humidity Change Rate",
+			"description": "The value is set to 10 and if there is a change in humidity above 10 %, the humidity is reported regardless of the reporting period",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 10,
+			"defaultValue": 10,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		}
+	},
+	"metadata": {
+		"inclusion": "After mounting the UZB controller to your PC and running the PC Controller program, click the Add button in the PC Controller program. Press the button on the Smart Power Strip for more than five seconds after you plug the Smart Power Strip into a power outlet and it will include to the network controller, while flashing the red button on the LED Smart Power Strip",
+		"exclusion": "After mounting the UZB controller to your PC and run the PC Controller program you can click the Remove button in the PC Controller program. Press the button on the Smart Power Strip for more than five seconds after you plug the Smart Power Strip into a power outlet will Exclusion in the network controller, while the flashing red button LED Smart Power Strip",
+		"reset": "With the device powered, press and hold the third button for 10 seconds.\nThe LED of the button will flash red after 5 seconds, it will turn green, then it will flash red again. Then release the button.\nAfter a few moments, the entire LED is blinking and the green LED stops flashing.\nPlease use the procedure only in the event that the network primary controller is missing or otherwise inoperable",
+		"manual": "https://products.z-wavealliance.org/ProductManual/File?folder=&filename=MarketCertificationFiles/3314/Light%20switch%20user%20manual.pdf"
+	}
+}

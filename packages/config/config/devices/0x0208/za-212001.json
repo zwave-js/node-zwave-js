@@ -1,0 +1,91 @@
+// HANK Electronics Ltd. ZA-212001
+// RGB Bulb
+{
+	"manufacturer": "HANK Electronics Ltd.",
+	"manufacturerId": "0x0208",
+	"label": "ZA-212001",
+	"description": "RGB Bulb",
+	"devices": [
+		{
+			"productType": "0x0102",
+			"productId": "0x0004",
+			"zwaveAllianceId": 4036
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"paramInformation": {
+		"21": {
+			"label": "Setting Device Status After Power Failure",
+			"description": "Define how the RGB bulb will react after the power supply is back on",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 2,
+			"defaultValue": 0,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Define how the RGB bulb will react after the power supply is back on",
+					"value": 0
+				},
+				{
+					"label": "Rgb bulb memorizes its state after a power failure",
+					"value": 1
+				},
+				{
+					"label": "Rgb bulb does not memorize its state after a power failure",
+					"value": 2
+				}
+			]
+		},
+		"24": {
+			"label": "Notification When Load Status Change",
+			"description": "Rgb bulb can send notifications to associated device (group lifeline) when the status of the RGB bulb is changed",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 2,
+			"defaultValue": 1,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "The function is disabled",
+					"value": 0
+				},
+				{
+					"label": "Send basic report",
+					"value": 1
+				},
+				{
+					"label": "Send basic report only when the status of the RGB bulb is not changed by Z-Wave command",
+					"value": 2
+				}
+			]
+		},
+		"255": {
+			"label": "Reset to Factory Default",
+			"description": "Resetting to the factory default",
+			"valueSize": 4,
+			"minValue": 1431655765,
+			"maxValue": 1431655765,
+			"defaultValue": 1431655765,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		}
+	},
+	"metadata": {
+		"inclusion": "To include RGB BULB into a Z-Wave network as a non-security device:\n(1) Make sure the power supply is disconnected and the RGB BULB is\nlocated within a direct Z-Wave network's main controller\ncommunication range.\n(2) Set the Z-Wave network main controller into learning mode\n(see Z-Wave network controller operating manual).\n(3) Insert the RGB BULB into a lamp-socket and then power on.\n(4) Auto-inclusion will be activated. If the inclusion is successful, the\nRGB BULB will blink fast in blue for less than 5 seconds and then\nkeep on for 3 seconds. RGB BULB will keep on in the color before it\nis included into the Z-Wave network after the inclusion procedure\nis finished.\n\nTo include RGB BULB into a Z-Wave network as a security device:\n(1) Screw in the RGB BULB.\n(2) Set the Z-Wave network main controller into learning mode\n(see Z-Wave network controller operating manual).\n(3) Toggle the wall switch off and on 3 times quickly (within 3 seconds\nand the final ending position of the wall switch must be on).\n(4) If the inclusion is successful, the RGB BULB will blink fast in green\nfor less than 5 seconds and then keep on 3 seconds. RGB BULB will\nkeep on in the color before it is included into the Z-Wave network\nafter the inclusion procedure is finished",
+		"exclusion": "To remove the RGB BULB from the Z-Wave network:\n(1) Screw in the RGB BULB.\n(2) Set the Z-Wave network main controller into excluding mode\n(see Z-Wave controller operating manual).\n(3) Toggle the wall switch off and on 3 times quickly(within 3\nand the final ending position of the wall switch must be on),\nif the exclusion is successful, the RGB BULB will blink fast in\norange for less than 5 seconds and then keep on for 3 seconds.\nRGB BULB will keep on warm white after the exclusion procedure\nis finished",
+		"reset": "There are two ways to reset the RGB BULB. One is that removing\nRGB BULB from the Z-Wave network, the other is that using the\nconfiguration command class.Please use this procedure only when\n the network primary controller is missing or otherwise inoperable",
+		"manual": "https://products.z-wavealliance.org/ProductManual/File?folder=&filename=product_documents/4036/说明书-Bulb-Manual-final_20201116_V1_11242020.pdf"
+	}
+}

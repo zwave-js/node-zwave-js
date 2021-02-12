@@ -1,0 +1,98 @@
+// Dawon DNS SPD-01
+// Smart Plug
+{
+	"manufacturer": "Dawon DNS",
+	"manufacturerId": "0x018c",
+	"label": "SPD-01",
+	"description": "Smart Plug",
+	"devices": [
+		{
+			"productType": "0x0042",
+			"productId": "0x0001",
+			"zwaveAllianceId": [
+				1384,
+				2532
+			]
+		},
+		{
+			"productType": "0x0042",
+			"productId": "0x0002",
+			"zwaveAllianceId": [
+				1606,
+				2531
+			]
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"paramInformation": {
+		"1": {
+			"label": "Standby Power Setting And Function Enable/Disable",
+			"description": "0.00 watt ~ 3000.00 watt",
+			"valueSize": 4,
+			"minValue": 0,
+			"maxValue": 0,
+			"defaultValue": 0,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"2": {
+			"label": "Periodic Measurement Value Transmission",
+			"description": "Disale/enable",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 1,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"3": {
+			"label": "Start / Stop Power Accumulation Usage Calculation",
+			"description": "Disable/enable",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 1,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"4": {
+			"label": "Report When The Connected Device is Being Used Or Not",
+			"description": "Disable/enable",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 1,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"5": {
+			"label": "This Sets The Periodic Measurement Value Transmission Rate",
+			"description": "10min~1440min",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 6,
+			"defaultValue": 6,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		}
+	},
+	"metadata": {
+		"inclusion": "After mounting the UZB controller to your PC and run the PC Controller program you can click the Add button in the PC Controller program. Press the button on the Smart Plug for more than five seconds after you plug the Smart Plug into a power outlet will Inclusion in the network controller, while the flashing red button LED Smart Plug",
+		"exclusion": "After mounting the UZB controller to your PC and run the PC Controller program you can click the Remove button in the PC Controller program. Press the button on the Smart Plug for more than five seconds after you plug the Smart Plug into a power outlet will Exclusion in the network controller, while the flashing red button LED Smart Plug",
+		"reset": "Press the button on the Smart Plug for more than 10 seconds after you plug the Smart Plug into a power outlet will Exclusion in the network controller, while the flashing red button LED Smart Plug. And all the variables are initialized.\n\n※ Please use this procedure only in the event that the network primary \n controller is missing or otherwise inoperable",
+		"manual": "https://products.z-wavealliance.org/ProductManual/File?folder=&filename=MarketCertificationFiles/1384/B400-ZW_Manual_20150630.docx"
+	}
+}
