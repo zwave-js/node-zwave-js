@@ -29,25 +29,25 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "LED on when load is off",
-					"value": 0
-				},
-				{
-					"label": "LED on when light is turned on",
+					"label": "Led indicator turns on when the connected appliance is on. LED indciator will be off when the connected appliance is off",
 					"value": 1
 				},
 				{
-					"label": "LED always off",
+					"label": "When the connected appliance is off, the LED indicator will be on. when the connected appliance is on, the LED indicator will be off",
+					"value": 0
+				},
+				{
+					"label": "Key switch LED backlight is always off",
 					"value": 2
 				}
 			]
 		},
 		"9": {
-			"label": "Dim Rate Steps",
-			"description": "Number of steps or levels",
+			"label": "Dimming Steps",
+			"description": "Set preferred increments of levels. higher the number the faster the device will change brightness level",
 			"valueSize": 1,
-			"minValue": 1,
-			"maxValue": 99,
+			"minValue": 0,
+			"maxValue": 1,
 			"defaultValue": 1,
 			"unsigned": true,
 			"readOnly": false,
@@ -55,12 +55,11 @@
 			"allowManualEntry": true
 		},
 		"10": {
-			"label": "Dim Rate Timing",
-			"description": "Timing of steps",
+			"label": "Duration of Each Level",
+			"description": "For every unit increase or descrease, the duration is increased or decreased by 10msec. higher the number, slower the duration it takes to adjust the dim level",
 			"valueSize": 1,
-			"unit": "10ms",
-			"minValue": 1,
-			"maxValue": 255,
+			"minValue": 0,
+			"maxValue": 3,
 			"defaultValue": 3,
 			"unsigned": true,
 			"readOnly": false,
@@ -71,6 +70,7 @@
 	"metadata": {
 		"inclusion": "1. Plug the 2-pin AC power plugs of lighting device to the receptacle of PD-100\n2. Insert the module's 3-pin plug into an AC outlet of your preferred location. In normal operating mode, the LED on the front panel will be lit. \n3. Add(Include) the module into your network by a Z-Wave certified controller.\n Normally, the sequence is as follows:\na. Place your network controller into inclusion mode by following the controller manufacturer's instructions\nb. When the controller is ready, single click the button on the front of PD-100 \nc. The controller should indicate that the new device was added successfully.",
 		"exclusion": "a. Place your network controller into exclusion mode by following the controller manufacturer's instructions\nb. When the controller is ready, single click the button on the front of PD-100 \nc. The controller should indicate that the device was excluded successfully.",
-		"reset": "Use this procedure only in the event that the network primary controller is lost or otherwise inoperable.\n\n1. Unplug the PD-100 from the AC outlet and also unplug the power plugs of the lighting from the module (if plugged in)\n2. Press and hold the button on the PD-100\n3. Plug the PD-100 back into the AC outlet with the button pressed\n4. After 3 seconds, release the button. If you see the button blink, that means that the PD-100 has been reset successfully"
+		"reset": "Use this procedure only in the event that the network primary controller is lost or otherwise inoperable.\n\n1. Unplug the PD-100 from the AC outlet and also unplug the power plugs of the lighting from the module (if plugged in)\n2. Press and hold the button on the PD-100\n3. Plug the PD-100 back into the AC outlet with the button pressed\n4. After 3 seconds, release the button. If you see the button blink, that means that the PD-100 has been reset successfully",
+		"manual": "https://products.z-wavealliance.org/ProductManual/File?folder=&filename=MarketCertificationFiles/1125/PD100%20UG%208%2029%2014.doc"
 	}
 }
