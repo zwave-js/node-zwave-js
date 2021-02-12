@@ -18,7 +18,7 @@
 	},
 	"paramInformation": {
 		"2": {
-			"label": "Blink With Service LED During Operation",
+			"label": "Service LED",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 1,
@@ -29,11 +29,11 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "Dont blink",
+					"label": "Disable",
 					"value": 0
 				},
 				{
-					"label": "Blink",
+					"label": "Enable",
 					"value": 1
 				}
 			]
