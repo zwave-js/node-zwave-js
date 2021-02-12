@@ -32,7 +32,7 @@
 		"2": {
 			"label": "KWH Meter Report Period",
 			"description": "6*10 min = 1 hour",
-			"unit": "10 min",
+			"unit": "10 minutes",
 			"valueSize": 2,
 			"minValue": 1,
 			"maxValue": 32767,

@@ -549,7 +549,7 @@ The first occurence of this device is in file config/devices/${index[firstIndex]
 					message: lines.join("\n"),
 				});
 			}
-			console.error();
+			console.log();
 		}
 	}
 
@@ -561,12 +561,12 @@ The first occurence of this device is in file config/devices/${index[firstIndex]
 		.reduce((cur, acc) => cur + acc, 0);
 
 	if (numErrors || numWarnings) {
-		console.error(
+		console.log(
 			`Found ${numErrors} error${
 				numErrors !== 1 ? "s" : ""
 			} and ${numWarnings} warning${numWarnings !== 1 ? "s" : ""}!`,
 		);
-		console.error();
+		console.log();
 	}
 
 	if (errors.size) process.exit(1);
@@ -589,6 +589,10 @@ async function lintSensorTypes(): Promise<void> {
 	// TODO: Validate that all contents are semantically correct
 }
 
+const logError = !!process.env.CI
+	? console.log.bind(console)
+	: console.error.bind(console);
+
 export async function lintConfigFiles(): Promise<void> {
 	try {
 		await lintManufacturers();
@@ -600,6 +604,8 @@ export async function lintConfigFiles(): Promise<void> {
 
 		console.log();
 		console.log(green("The config files are valid!"));
+		console.log();
+		console.log(" ");
 	} catch (e) {
 		if (typeof e.stack === "string") {
 			const lines = (e.stack as string).split("\n");
@@ -607,11 +613,11 @@ export async function lintConfigFiles(): Promise<void> {
 				lines.shift();
 			}
 			const message = lines.join("\n");
-			console.error(red(message));
+			logError(red(message));
 		} else {
-			console.error(red(e.message));
+			logError(red(e.message));
 		}
-		console.error();
+		console.log();
 		return process.exit(1);
 	}
 }

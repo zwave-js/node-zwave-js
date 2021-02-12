@@ -31,7 +31,6 @@ export function getDeviceEntryPredicate(
 		if (firmwareVersion != undefined) {
 			// A firmware version was given, only look at files with a matching firmware version
 			return (
-				typeof entry.firmwareVersion !== "boolean" &&
 				semver.lte(
 					padVersion(entry.firmwareVersion.min),
 					padVersion(firmwareVersion),

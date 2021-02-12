@@ -16,7 +16,6 @@ import {
 	DeviceConfig,
 	DeviceConfigIndex,
 	DeviceConfigIndexEntry,
-	FirmwareVersionRange,
 	loadDeviceIndexInternal,
 } from "./Devices";
 import {
@@ -55,7 +54,7 @@ import {
 	SensorType,
 	SensorTypeMap,
 } from "./SensorTypes";
-import { configDir, formatId, getDeviceEntryPredicate } from "./utils";
+import { configDir, getDeviceEntryPredicate } from "./utils";
 
 export class ConfigManager {
 	public constructor(container?: ZWaveLogContainer) {
@@ -484,47 +483,6 @@ export class ConfigManager {
 				}
 			}
 		}
-	}
-
-	/**
-	 * Adds a given device to the index
-	 * @param manufacturerId The manufacturer id of the device
-	 * @param productType The product type of the device
-	 * @param productId The product id of the device
-	 * @param filename The path to the json configuration of this device
-	 * @param firmwareVersionMin Min firmware version
-	 * @param firmwareVersionMax Max firmware version
-	 *
-	 */
-	public addDeviceToIndex(
-		manufacturerId: number,
-		productType: number,
-		productId: number,
-		filename: string,
-		firmwareVersion?: FirmwareVersionRange | false,
-	): void {
-		if (!this.index) {
-			throw new ZWaveError(
-				"The config has not been loaded yet!",
-				ZWaveErrorCodes.Driver_NotReady,
-			);
-		}
-		// Look up the device in the index
-		const indexEntry: DeviceConfigIndexEntry = {
-			manufacturerId: formatId(manufacturerId),
-			productId: formatId(productId),
-			productType: formatId(productType),
-			firmwareVersion:
-				firmwareVersion === false
-					? false
-					: {
-							min: firmwareVersion?.min || "0.0",
-							max: firmwareVersion?.max || "255.255",
-					  },
-			filename: filename,
-		};
-
-		this.index.push(indexEntry);
 	}
 
 	public getIndex(): DeviceConfigIndexEntry[] | undefined {
