@@ -63,6 +63,7 @@
 		"5": {
 			"label": "Shutoff Timer",
 			"valueSize": 2,
+			"unit": "seconds",
 			"minValue": 0,
 			"maxValue": 32767,
 			"defaultValue": 0,
