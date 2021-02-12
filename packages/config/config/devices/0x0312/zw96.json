@@ -1,0 +1,70 @@
+// EVA LOGIK ZW96
+// Outdoor Smart Plug - 1 channel
+{
+	"manufacturer": "EVA LOGIK",
+	"manufacturerId": "0x0312",
+	"label": "ZW96",
+	"description": "Outdoor Smart Plug - 1 channel",
+	"devices": [
+		{
+			"productType": "0xc000",
+			"productId": "0xc003",
+			"zwaveAllianceId": 3377
+		},
+		{
+			"productType": "0xc000",
+			"productId": "0xc006",
+			"zwaveAllianceId": 3705
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"paramInformation": {
+		"1": {
+			"label": "Led",
+			"description": "Status LED configuration",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 2,
+			"defaultValue": 0,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Outlet on,led on",
+					"value": 0
+				},
+				{
+					"label": "Outlet on ,led off",
+					"value": 1
+				},
+				{
+					"label": "Led no work",
+					"value": 2
+				}
+			]
+		},
+		"2": {
+			"label": "Timer",
+			"description": "The countdown time, the socket closed",
+			"valueSize": 2,
+			"minValue": 0,
+			"maxValue": 0,
+			"defaultValue": 0,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		}
+	},
+	"metadata": {
+		"inclusion": "1:Refer to your primary controller instructions to process the inclusion / exclusion setup procedure.\n2:When prompted by your primary controller, click the PROG button five times in one second.",
+		"exclusion": "1:Refer to your primary controller instructions to process the inclusion / exclusion setup procedure.\n2:When prompted by your primary controller, click the PROG button five times in one second.",
+		"reset": "---Power off ZW96\n---keep holding the PROG button\n---Power on,Press and keep holding the PROG button for no less than 10 seconds.\nPlease use this procedure only when the network primary controller is missing or otherwise inoperable",
+		"manual": "https://products.z-wavealliance.org/ProductManual/File?folder=&filename=MarketCertificationFiles/3377/ZW96-Manual-EVALOGIK-181222.pdf"
+	}
+}

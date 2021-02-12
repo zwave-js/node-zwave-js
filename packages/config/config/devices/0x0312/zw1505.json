@@ -1,0 +1,477 @@
+// EVA LOGIK ZW1505
+// Z-Wave Plus Power Strip
+{
+	"manufacturer": "EVA LOGIK",
+	"manufacturerId": "0x0312",
+	"label": "ZW1505",
+	"description": "Z-Wave Plus Power Strip",
+	"devices": [
+		{
+			"productType": "0xa000",
+			"productId": "0xa004",
+			"zwaveAllianceId": 3128
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"paramInformation": {
+		"1": {
+			"label": "Restores State After Power Failure",
+			"description": "Restores state after power failure",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 2,
+			"defaultValue": 0,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "The state before a power outage",
+					"value": 0
+				},
+				{
+					"label": "Output on",
+					"value": 1
+				},
+				{
+					"label": "Output off",
+					"value": 2
+				}
+			]
+		},
+		"2": {
+			"label": "Power Wattage Report Value Threshold(wattage)",
+			"description": "Power wattage report value threshold(wattage)",
+			"valueSize": 4,
+			"minValue": 0,
+			"maxValue": 5,
+			"defaultValue": 5,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"3": {
+			"label": "Power Wattage Report Frequency (timer)power Wattage Report Frequency (time",
+			"description": "Power wattage report frequency (time",
+			"valueSize": 4,
+			"minValue": 0,
+			"maxValue": 30,
+			"defaultValue": 30,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"4": {
+			"label": "Energy (kwh) Report Frequency (timer)",
+			"description": "Energy (kwh) report frequency (timer)",
+			"valueSize": 4,
+			"minValue": 0,
+			"maxValue": 300,
+			"defaultValue": 300,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"5": {
+			"label": "Energy (kwh) Report Frequency (wattage)",
+			"description": "Energy (kwh) report frequency (wattage)",
+			"valueSize": 2,
+			"minValue": 0,
+			"maxValue": 1800,
+			"defaultValue": 1800,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"6": {
+			"label": "Endpoint1 Enable Auto Turn-off Timer",
+			"description": "Endpoint1 enable auto turn-off timer",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 0,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Ep1 auto turn-off timer disabled",
+					"value": 0
+				},
+				{
+					"label": "Ep1 auto turn-off timer enabled",
+					"value": 1
+				}
+			]
+		},
+		"8": {
+			"label": "Endpoint1 Enable Auto Turn-on Timer",
+			"description": "Endpoint1 enable auto turn-on timer",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 0,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Ep1 auto turn-on timer disabled",
+					"value": 0
+				},
+				{
+					"label": "Ep1 auto turn-on timer enabled",
+					"value": 1
+				}
+			]
+		},
+		"9": {
+			"label": "Endpoint1 Count Down Configuration(turn On The Output By Time）",
+			"description": "Endpoint1 count down configuration(turn on the output by time）",
+			"valueSize": 4,
+			"minValue": 0,
+			"maxValue": 60,
+			"defaultValue": 60,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"10": {
+			"label": "Endpoint2 Enable Auto Turn-off Timer",
+			"description": "Endpoint2 enable auto turn-off timer",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 0,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Ep2 auto turn-off timer disabled",
+					"value": 0
+				},
+				{
+					"label": "Ep2 auto turn-off timer enabled",
+					"value": 1
+				}
+			]
+		},
+		"11": {
+			"label": "Endpoint2 Count Down Configuration(turn Off The Output By Time）",
+			"description": "Endpoint2 count down configuration(turn off the output by time）",
+			"valueSize": 4,
+			"minValue": 0,
+			"maxValue": 60,
+			"defaultValue": 60,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"12": {
+			"label": "Endpoint2 Enable Auto Turn-on Timer",
+			"description": "Endpoint2 enable auto turn-on timer",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 0,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Ep2 auto turn-on timer disabled",
+					"value": 0
+				},
+				{
+					"label": "Ep2 auto turn-on timer enabled",
+					"value": 1
+				}
+			]
+		},
+		"13": {
+			"label": "Endpoint2 Count Down Configuration(turn On The Output By Time）",
+			"description": "Endpoint2 count down configuration(turn on the output by time）",
+			"valueSize": 4,
+			"minValue": 0,
+			"maxValue": 60,
+			"defaultValue": 60,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"14": {
+			"label": "Endpoint3 Enable Auto Turn-off Timer",
+			"description": "Endpoint3 enable auto turn-off timer",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 0,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Ep3 auto turn-off timer disabled",
+					"value": 0
+				},
+				{
+					"label": "Ep3 auto turn-off timer enabled",
+					"value": 1
+				}
+			]
+		},
+		"15": {
+			"label": "Endpoint3 Count Down Configuration(turn Off The Output By Time）",
+			"description": "Endpoint3 count down configuration(turn off the output by time）",
+			"valueSize": 4,
+			"minValue": 0,
+			"maxValue": 60,
+			"defaultValue": 60,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"16": {
+			"label": "Endpoint3 Enable Auto Turn-on Timer",
+			"description": "Endpoint3 enable auto turn-on timer",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 0,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Ep3 auto turn-on timer disabled",
+					"value": 0
+				},
+				{
+					"label": "Ep3 auto turn-on timer enabled",
+					"value": 1
+				}
+			]
+		},
+		"17": {
+			"label": "Endpoint3 Count Down Configuration(turn On The Output By Time）",
+			"description": "Endpoint3 count down configuration(turn on the output by time）",
+			"valueSize": 4,
+			"minValue": 0,
+			"maxValue": 60,
+			"defaultValue": 60,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"18": {
+			"label": "Endpoint4 Enable Auto Turn-off Timer",
+			"description": "Endpoint4 enable auto turn-off timer",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 0,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Ep4 auto turn-off timer disabled",
+					"value": 0
+				},
+				{
+					"label": "Ep4 auto turn-off timer enabled",
+					"value": 1
+				}
+			]
+		},
+		"19": {
+			"label": "Endpoint4 Count Down Configuration(turn Off The Output By Time）",
+			"description": "Endpoint4 count down configuration(turn off the output by time）",
+			"valueSize": 4,
+			"minValue": 0,
+			"maxValue": 60,
+			"defaultValue": 60,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"20": {
+			"label": "Endpoint4 Enable Auto Turn-on Timer",
+			"description": "Endpoint4 enable auto turn-on timer",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 0,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Ep4 auto turn-on timer disabled",
+					"value": 0
+				},
+				{
+					"label": "Ep4 auto turn-on timer enabled",
+					"value": 1
+				}
+			]
+		},
+		"21": {
+			"label": "Endpoint4 Count Down Configuration(turn On The Output By Time）",
+			"description": "Endpoint4 count down configuration(turn on the output by time）",
+			"valueSize": 4,
+			"minValue": 0,
+			"maxValue": 60,
+			"defaultValue": 60,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"22": {
+			"label": "Endpoint5 Enable Auto Turn-off Timer",
+			"description": "Endpoint5 enable auto turn-off timer",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 0,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Ep5 auto turn-off timer disabled",
+					"value": 0
+				},
+				{
+					"label": "Ep5 auto turn-off timer enabled",
+					"value": 1
+				}
+			]
+		},
+		"23": {
+			"label": "Endpoint5 Count Down Configuration(turn Off The Output By Time）",
+			"description": "Endpoint5 count down configuration(turn off the output by time）",
+			"valueSize": 4,
+			"minValue": 0,
+			"maxValue": 60,
+			"defaultValue": 60,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"24": {
+			"label": "Endpoint5 Enable Auto Turn-on Timer",
+			"description": "Endpoint5 enable auto turn-on timer",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 0,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Ep5 auto turn-on timer disabled",
+					"value": 0
+				},
+				{
+					"label": "Ep5 auto turn-on timer enabled",
+					"value": 1
+				}
+			]
+		},
+		"25": {
+			"label": "Endpoint5 Count Down Configuration(turn On The Output By Time）",
+			"description": "Endpoint5 count down configuration(turn on the output by time）",
+			"valueSize": 4,
+			"minValue": 0,
+			"maxValue": 60,
+			"defaultValue": 60,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"26": {
+			"label": "Manual Control",
+			"description": "Manual control",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 1,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Manual control disabled",
+					"value": 0
+				},
+				{
+					"label": "Manual control enabled",
+					"value": 1
+				}
+			]
+		},
+		"27": {
+			"label": "Status LED Configuration",
+			"description": "Status LED configuration",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 2,
+			"defaultValue": 1,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Output on,led on",
+					"value": 0
+				},
+				{
+					"label": "Output on,led off",
+					"value": 1
+				},
+				{
+					"label": "Always off",
+					"value": 2
+				}
+			]
+		}
+	},
+	"metadata": {
+		"inclusion": "Inclusion the ZW1505 from the existing Z-Wave home control network with your primary controller.\n---Refer to your primary controller instructions to process the inclusion / exclusion setup procedure.\n---When prompted by your primary controller, click the PROG button Three times in one second",
+		"exclusion": "Inclusion the ZW1505 from the existing Z-Wave home control network with your primary controller.\n---Refer to your primary controller instructions to process the inclusion / exclusion setup procedure.\n---When prompted by your primary controller, click the PROG button Three times in one second",
+		"reset": "Press the button twice quickly and then press and hold the button 10S.device will reset\nPlease use this procedure only when the network primary controller is missing or otherwise inoperable",
+		"manual": "https://products.z-wavealliance.org/ProductManual/File?folder=&filename=MarketCertificationFiles/3128/Evalogik_ZW1505%20Manual-181026.pdf"
+	}
+}

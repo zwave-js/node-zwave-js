@@ -1,0 +1,362 @@
+// EVA LOGIK ZW313
+// S2 Dimmer Switch
+{
+	"manufacturer": "EVA LOGIK",
+	"manufacturerId": "0x0312",
+	"label": "ZW313",
+	"description": "S2 Dimmer Switch",
+	"devices": [
+		{
+			"productType": "0xa000",
+			"productId": "0xa002",
+			"zwaveAllianceId": 3615
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"paramInformation": {
+		"1": {
+			"label": "Locally Button Function",
+			"description": "Locally button function",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 2,
+			"defaultValue": 0,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Up button on,down button off",
+					"value": 0
+				},
+				{
+					"label": "Up button off,down button on",
+					"value": 1
+				},
+				{
+					"label": "Up button on/off,down button on/off",
+					"value": 2
+				}
+			]
+		},
+		"2": {
+			"label": "Status LED Configuration",
+			"description": "Status LED configuration",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 3,
+			"defaultValue": 0,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Output on,led off",
+					"value": 0
+				},
+				{
+					"label": "Outputoff,led on",
+					"value": 1
+				},
+				{
+					"label": "Always off",
+					"value": 2
+				},
+				{
+					"label": "Always on",
+					"value": 3
+				}
+			]
+		},
+		"3": {
+			"label": "Enable Auto Turn-off Timer",
+			"description": "Enable auto turn-off timer",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 0,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Disabled",
+					"value": 0
+				},
+				{
+					"label": "Enabled",
+					"value": 1
+				}
+			]
+		},
+		"4": {
+			"label": "Auto Turn-off Timer",
+			"description": "Auto turn-off timer",
+			"valueSize": 4,
+			"minValue": 1,
+			"maxValue": 60,
+			"defaultValue": 60,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"5": {
+			"label": "Enable Auto Turn-on Timer",
+			"description": "Enable auto turn-on timer",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 0,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Disabled",
+					"value": 0
+				},
+				{
+					"label": "Enabled",
+					"value": 1
+				}
+			]
+		},
+		"6": {
+			"label": "Auto Turn-on Timer",
+			"description": "Auto turn-on timer",
+			"valueSize": 4,
+			"minValue": 1,
+			"maxValue": 60,
+			"defaultValue": 60,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"7": {
+			"label": "Association Setting Parameter",
+			"description": "Association setting parameter",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 15,
+			"defaultValue": 15,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "None",
+					"value": 0
+				},
+				{
+					"label": "Local",
+					"value": 1
+				},
+				{
+					"label": "3-way",
+					"value": 2
+				},
+				{
+					"label": "3-way&local",
+					"value": 3
+				},
+				{
+					"label": "Z-Wave hub",
+					"value": 4
+				},
+				{
+					"label": "Z-Wave hub&local",
+					"value": 5
+				},
+				{
+					"label": "Z-Wave hub&3-way",
+					"value": 6
+				},
+				{
+					"label": "Z-Wave hub&local&3-way",
+					"value": 7
+				},
+				{
+					"label": "Timer",
+					"value": 8
+				},
+				{
+					"label": "Timer&local",
+					"value": 9
+				},
+				{
+					"label": "Timer&3-way",
+					"value": 10
+				},
+				{
+					"label": "Timer&3-way&local",
+					"value": 11
+				},
+				{
+					"label": "Timer&Z-Wave hub",
+					"value": 12
+				},
+				{
+					"label": "Timer&Z-Wave hub&local",
+					"value": 13
+				},
+				{
+					"label": "Timer&Z-Wave hub&3-way",
+					"value": 14
+				},
+				{
+					"label": "All",
+					"value": 15
+				}
+			]
+		},
+		"8": {
+			"label": "Restores State After Power Failure",
+			"description": "Restores state after power failure",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 2,
+			"defaultValue": 2,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Output off",
+					"value": 0
+				},
+				{
+					"label": "Output on",
+					"value": 1
+				},
+				{
+					"label": "The state before a power outage",
+					"value": 2
+				}
+			]
+		},
+		"9": {
+			"label": "Dimmer Speed Parameter",
+			"description": "From 0x63 to 0x00 or from 0x00 to 0x63 need value second",
+			"valueSize": 1,
+			"unit": "seconds",
+			"minValue": 1,
+			"maxValue": 1,
+			"defaultValue": 1,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"10": {
+			"label": "Multilevel Minimum Value Can Be Set",
+			"description": "The minimum luminance value of the dimming",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 1,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"11": {
+			"label": "Multilevel Maxmum Value Can Be Set",
+			"description": "The maxmum luminance value of the dimming",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 99,
+			"defaultValue": 99,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"12": {
+			"label": "Quickly Press Upper Paddle 2 Times",
+			"description": "When switch is off and quickly press upper paddle 2 times, switch turns on to x brightness",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 0,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Turn on to 99",
+					"value": 0
+				},
+				{
+					"label": "Turn on to the value relate",
+					"value": 1
+				}
+			]
+		},
+		"14": {
+			"label": "Double Tap Behavior",
+			"description": "Double tap behavior",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 2,
+			"defaultValue": 0,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Enable double tap to full brightness",
+					"value": 0
+				},
+				{
+					"label": "Disable double tap to full brightness, single tap to last brightness level",
+					"value": 1
+				},
+				{
+					"label": "Disable double tap to full brightness, single tap always to full brightness",
+					"value": 2
+				}
+			]
+		},
+		"15": {
+			"label": "Enable Or Disable Local Control",
+			"description": "Enable or disable local control",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 1,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Disable",
+					"value": 0
+				},
+				{
+					"label": "Enable",
+					"value": 1
+				}
+			]
+		}
+	},
+	"metadata": {
+		"inclusion": "ADD or Remove the ZW313 from the existing Z-Wave home control network with your primary controller.\n ---Refer to your primary controller instructions to process the inclusion / exclusion setup procedure.\n ---When prompted by your primary controller, click the Up or Down button three times in one second. \nInclude ZW313 to/from a Z-Wave Gateway with supporting Security.The ZW313 can support the Primary Controller that implemented the security S2.",
+		"exclusion": "ADD or Remove the ZW313 from the existing Z-Wave home control network with your primary controller.\n ---Refer to your primary controller instructions to process the inclusion / exclusion setup procedure.\n ---When prompted by your primary controller, click the Up or Down button three times in one second. \nInclude ZW313 to/from a Z-Wave Gateway with supporting Security.The ZW313 can support the Primary Controller that implemented the security S2",
+		"reset": "Press click Z-Wave button 2 times quickly,and hold for at least 10 seconds. to restore the device to the factory\n (Node:Please use this procedure only when the network primary controller is missing or otherwise inoperable.)",
+		"manual": "https://products.z-wavealliance.org/ProductManual/File?folder=&filename=product_documents/3615/ZW313manual_EVALOGIK-190809..pdf"
+	}
+}

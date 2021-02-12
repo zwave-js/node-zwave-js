@@ -1,0 +1,501 @@
+// EVA LOGIK ZW34
+// Z-Wave Relay Dimmer switch
+{
+	"manufacturer": "EVA LOGIK",
+	"manufacturerId": "0x0312",
+	"label": "ZW34",
+	"description": "Z-Wave Relay Dimmer switch",
+	"devices": [
+		{
+			"productType": "0xa000",
+			"productId": "0xa008",
+			"zwaveAllianceId": 3776
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"paramInformation": {
+		"1": {
+			"label": "Led Indicator Mode For Dimmer",
+			"description": "Led indicator mode for dimmer",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 3,
+			"defaultValue": 0,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "On when off and off when on",
+					"value": 0
+				},
+				{
+					"label": "On when on and off when off",
+					"value": 1
+				},
+				{
+					"label": "Always off",
+					"value": 2
+				},
+				{
+					"label": "Always on",
+					"value": 3
+				}
+			]
+		},
+		"2": {
+			"label": "Led Indicator Mode For Relay",
+			"description": "Led indicator mode for relay",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 3,
+			"defaultValue": 0,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "On when off and off when on",
+					"value": 0
+				},
+				{
+					"label": "On when on and off when off",
+					"value": 1
+				},
+				{
+					"label": "Always off",
+					"value": 2
+				},
+				{
+					"label": "Always on",
+					"value": 3
+				}
+			]
+		},
+		"3": {
+			"label": "Led Indicator Color For Dimmer",
+			"description": "Led indicator color for dimmer",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 3,
+			"defaultValue": 0,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "White",
+					"value": 0
+				},
+				{
+					"label": "Blue",
+					"value": 1
+				},
+				{
+					"label": "Green",
+					"value": 2
+				},
+				{
+					"label": "Red",
+					"value": 3
+				}
+			]
+		},
+		"4": {
+			"label": "Led Indicator Color For Relay",
+			"description": "Led indicator color for relay",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 3,
+			"defaultValue": 0,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "White",
+					"value": 0
+				},
+				{
+					"label": "Blue",
+					"value": 1
+				},
+				{
+					"label": "Green",
+					"value": 2
+				},
+				{
+					"label": "Red",
+					"value": 3
+				}
+			]
+		},
+		"5": {
+			"label": "Led Indicator Brightness For Dimmer",
+			"description": "Led indicator brightness for dimmer",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 2,
+			"defaultValue": 1,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Bright (100%)",
+					"value": 0
+				},
+				{
+					"label": "Medium (60%)",
+					"value": 1
+				},
+				{
+					"label": "Low (30%)",
+					"value": 2
+				}
+			]
+		},
+		"6": {
+			"label": "Led Indicator Brightness For Relay",
+			"description": "Led indicator brightness for relay",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 2,
+			"defaultValue": 1,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Bright (100%)",
+					"value": 0
+				},
+				{
+					"label": "Medium (60%)",
+					"value": 1
+				},
+				{
+					"label": "Low (30%)",
+					"value": 2
+				}
+			]
+		},
+		"7": {
+			"label": "Led Indicator Mode For Scene",
+			"description": "Led indicator mode for scene",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 1,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Enable",
+					"value": 0
+				},
+				{
+					"label": "Disable",
+					"value": 1
+				}
+			]
+		},
+		"8": {
+			"label": "Auto Turn-off Timer For Dimmer",
+			"description": "The countdown time, the dimmer off",
+			"valueSize": 4,
+			"minValue": 0,
+			"maxValue": 0,
+			"defaultValue": 0,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"9": {
+			"label": "Auto Turn-on Timer For Dimmer",
+			"description": "The countdown time, the dimmer on",
+			"valueSize": 4,
+			"minValue": 0,
+			"maxValue": 0,
+			"defaultValue": 0,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"10": {
+			"label": "Auto Turn-off Timer For Relay",
+			"description": "The countdown time, the relay off",
+			"valueSize": 4,
+			"minValue": 0,
+			"maxValue": 0,
+			"defaultValue": 0,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"11": {
+			"label": "Auto Turn-on Timer For Relay",
+			"description": "The countdown time, the relay on",
+			"valueSize": 4,
+			"minValue": 0,
+			"maxValue": 0,
+			"defaultValue": 0,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"12": {
+			"label": "Restores State After Power Failure",
+			"description": "Restores state after power failure",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 8,
+			"defaultValue": 3,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Dimmer, relay off",
+					"value": 0
+				},
+				{
+					"label": "Dimmer off, relay on",
+					"value": 1
+				},
+				{
+					"label": "Dimmer on, relay off",
+					"value": 2
+				},
+				{
+					"label": "Previous state for dimmer, previous state for relay",
+					"value": 3
+				},
+				{
+					"label": "Previous state for dimmer, relay on",
+					"value": 4
+				},
+				{
+					"label": "Previous state for dimmer, relay off",
+					"value": 5
+				},
+				{
+					"label": "Dimmer on, previous state for relay",
+					"value": 6
+				},
+				{
+					"label": "Dimmer off, previous state for relay",
+					"value": 7
+				},
+				{
+					"label": "Dimmer on, relay on",
+					"value": 8
+				}
+			]
+		},
+		"13": {
+			"label": "Ramp Rate",
+			"description": "From 0x63 to 0x00 or from 0x00 to 0x63 need required time",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 1,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"14": {
+			"label": "Multilevel Minimum Value Can Be Set",
+			"description": "The minimum brightness of a dimmer",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 1,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"15": {
+			"label": "Multilevel Maximum Value Can Be Set",
+			"description": "The maximum brightness of a dimmer",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 99,
+			"defaultValue": 99,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"17": {
+			"label": "When Switch is On Or Off And Quickly Press Upper Paddle 2 Times",
+			"description": "When switch is on or off and quickly press upper paddle 2 times, switch turns on to x brightness",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 0,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Turn on to 99",
+					"value": 0
+				},
+				{
+					"label": "Turn on to the value relate with parameter 15",
+					"value": 1
+				}
+			]
+		},
+		"18": {
+			"label": "Double Tap Behavior",
+			"description": "Double tap behavior",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 2,
+			"defaultValue": 0,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Enable double tap to full brightness, single tap to last brightness level or custom value set in parameter 23",
+					"value": 0
+				},
+				{
+					"label": "Disable double tap to full brightness, single tap to last brightness level or custom value set in parameter 23",
+					"value": 1
+				},
+				{
+					"label": "Isable double tap to full brightness, single tap always to full brightness",
+					"value": 2
+				}
+			]
+		},
+		"19": {
+			"label": "Enable Or Disable Local / Z-Wave Control For Dimmer",
+			"description": "Enable or disable local / Z-Wave control for dimmer",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 2,
+			"defaultValue": 1,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Disable local on/off control",
+					"value": 0
+				},
+				{
+					"label": "Enable local and Z-Wave control (normal operation like now)",
+					"value": 1
+				},
+				{
+					"label": "Disable local and Z-Wave on/off control",
+					"value": 2
+				}
+			]
+		},
+		"20": {
+			"label": "Enable Or Disable Local / Z-Wave Control For Relay",
+			"description": "Enable or disable local / Z-Wave control for relay",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 2,
+			"defaultValue": 1,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Disable local on/off control",
+					"value": 0
+				},
+				{
+					"label": "Enable local and Z-Wave control (normal operation like now)",
+					"value": 1
+				},
+				{
+					"label": "Disable local and Z-Wave on/off control",
+					"value": 2
+				}
+			]
+		},
+		"21": {
+			"label": "Dimmer Speed Setting (only For Local Press & Hold)",
+			"description": "Time required for local key dimming",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 4,
+			"defaultValue": 4,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"22": {
+			"label": "Ramp Rate For Z-Wave On/Off Controlled",
+			"description": "Ramp rate for Z-Wave on/off controlled",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 0,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "On/off ramp rate for Z-Wave same as manual control (set in parameter 13)",
+					"value": 0
+				},
+				{
+					"label": "On/off ramp rate for Z-Wave control set through command class (like now)",
+					"value": 1
+				}
+			]
+		},
+		"23": {
+			"label": "Default Brightness Level",
+			"description": "In this parameter define default brightness level",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 0,
+			"defaultValue": 0,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		}
+	},
+	"metadata": {
+		"inclusion": "ADD the ZW34 from the existing Z-Wave home control network with your primary controller.\n---Refer to your primary controller instructions to process the inclusion / exclusion setup procedure.\n---When prompted by your primary controller, quickly press 3x UPPER PADDLE FOR DIMMER",
+		"exclusion": "Remove the ZW34 from the existing Z-Wave home control network with your primary controller.\n---Refer to your primary controller instructions to process the inclusion / exclusion setup procedure.\n---When prompted by your primary controller, quickly press 3x LOWER PADDLE FOR DIMMER",
+		"reset": "Press and hold for 15 seconds LOWER PADDLE OF DIMMER until all LED’s start blinking quickly, then release and within 5 press and hold the UPPER PADDLE OF DIMMER for 15 SECONDS until all LED’s blink again for 3 seconds to reset factory\n(Node:Please use this procedure only when the network primary controller is missing or otherwise inoperable.)",
+		"manual": "https://products.z-wavealliance.org/ProductManual/File?folder=&filename=product_documents/3776/ZW34-Manual20191218.pdf"
+	}
+}

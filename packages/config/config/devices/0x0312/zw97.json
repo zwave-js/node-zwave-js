@@ -1,0 +1,77 @@
+// EVA LOGIK ZW97
+// Outdoor Smart Plug - 2 channel
+{
+	"manufacturer": "EVA LOGIK",
+	"manufacturerId": "0x0312",
+	"label": "ZW97",
+	"description": "Outdoor Smart Plug - 2 channel",
+	"devices": [
+		{
+			"productType": "0xc000",
+			"productId": "0xc007",
+			"zwaveAllianceId": 3701
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"paramInformation": {
+		"1": {
+			"label": "Status LED Configuration",
+			"description": "Status LED configuration",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 2,
+			"defaultValue": 0,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Outlet on,led on",
+					"value": 0
+				},
+				{
+					"label": "Outlet on,led off",
+					"value": 1
+				},
+				{
+					"label": "Off",
+					"value": 2
+				}
+			]
+		},
+		"2": {
+			"label": "Count Down Configuration",
+			"description": "Turn off endpoint1 outlet",
+			"valueSize": 2,
+			"minValue": 0,
+			"maxValue": 0,
+			"defaultValue": 0,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"3": {
+			"label": "Count Down Configuration",
+			"description": "Turn off endpoint2 outlet",
+			"valueSize": 2,
+			"minValue": 0,
+			"maxValue": 0,
+			"defaultValue": 0,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		}
+	},
+	"metadata": {
+		"inclusion": "ADD or Remove the ZW97 from the existing Z-Wave home control network with your primary controller.\n---Refer to your primary controller instructions to process the inclusion / exclusion setup procedure.\n---When prompted by your primary controller, click the PROG button five times in one second",
+		"exclusion": "ADD or Remove the ZW97 from the existing Z-Wave home control network with your primary controller.\n---Refer to your primary controller instructions to process the inclusion / exclusion setup procedure.\n---When prompted by your primary controller, click the PROG button five times in one second",
+		"reset": "MANUAL RESET\n ---Power off ZW97\n ---keep holding the PROG button\n ---Power on,Press and keep holding the PROG button for no less than 10 seconds.\n\"Please use this procedure only when the network primary controller is missing or otherwise inoperable.\"",
+		"manual": "https://products.z-wavealliance.org/ProductManual/File?folder=&filename=product_documents/3701/ZW97-Manual191111-evalogik.pdf"
+	}
+}

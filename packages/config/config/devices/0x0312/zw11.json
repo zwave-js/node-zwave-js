@@ -1,0 +1,307 @@
+// EVA LOGIK ZW11
+// Z-Wave Mutil-relay
+{
+	"manufacturer": "EVA LOGIK",
+	"manufacturerId": "0x0312",
+	"label": "ZW11",
+	"description": "Z-Wave Mutil-relay",
+	"devices": [
+		{
+			"productType": "0xa000",
+			"productId": "0xa00a",
+			"zwaveAllianceId": 3749
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"paramInformation": {
+		"1": {
+			"label": "Parameter 1",
+			"description": "Restores state after power failure",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 4,
+			"defaultValue": 1,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "All relays off",
+					"value": 0
+				},
+				{
+					"label": "All relays remember the status prior to power outage and turns back to it",
+					"value": 1
+				},
+				{
+					"label": "All relays turned on after power failure",
+					"value": 2
+				},
+				{
+					"label": "R1&r2 state recovered, r3 – off",
+					"value": 3
+				},
+				{
+					"label": "R1&r2 state recovered , r3-on",
+					"value": 4
+				}
+			]
+		},
+		"2": {
+			"label": "Parameter 2",
+			"description": "Sw1 type select",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 2,
+			"defaultValue": 2,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Momentary switch",
+					"value": 0
+				},
+				{
+					"label": "Toggle switch (contact closed -on, contact opened - off)",
+					"value": 1
+				},
+				{
+					"label": "Toggle switch(device changes status when switch changes status)",
+					"value": 2
+				}
+			]
+		},
+		"3": {
+			"label": "Parameter 3",
+			"description": "Sw2 type select",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 2,
+			"defaultValue": 2,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Momentary switch",
+					"value": 0
+				},
+				{
+					"label": "Toggle switch (contact closed -on, contact opened - off)",
+					"value": 1
+				},
+				{
+					"label": "Toggle switch(device changes status when switch changes status)",
+					"value": 2
+				}
+			]
+		},
+		"4": {
+			"label": "Parameter 4",
+			"description": "Sw3 type select",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 2,
+			"defaultValue": 2,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Momentary switch",
+					"value": 0
+				},
+				{
+					"label": "Toggle switch (contact closed -on, contact opened - off)",
+					"value": 1
+				},
+				{
+					"label": "Toggle switch(device changes status when switch changes status)",
+					"value": 2
+				}
+			]
+		},
+		"5": {
+			"label": "Parameter 5",
+			"description": "Led indicator",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 3,
+			"defaultValue": 0,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Led off when output on,led on when output off",
+					"value": 0
+				},
+				{
+					"label": "Led on when output on,led off when output off",
+					"value": 1
+				},
+				{
+					"label": "Led always off",
+					"value": 2
+				},
+				{
+					"label": "Led always on",
+					"value": 3
+				}
+			]
+		},
+		"6": {
+			"label": "Parameter 6",
+			"description": "The countdown time, relay-1 off",
+			"valueSize": 4,
+			"minValue": 0,
+			"maxValue": 0,
+			"defaultValue": 0,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"7": {
+			"label": "Parameter 7",
+			"description": "The countdown time, relay-1 on",
+			"valueSize": 4,
+			"minValue": 0,
+			"maxValue": 0,
+			"defaultValue": 0,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"8": {
+			"label": "Parameter 8",
+			"description": "The countdown time, relay-2 off",
+			"valueSize": 4,
+			"minValue": 0,
+			"maxValue": 0,
+			"defaultValue": 0,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"9": {
+			"label": "Parameter 9",
+			"description": "The countdown time, relay-2 on",
+			"valueSize": 4,
+			"minValue": 0,
+			"maxValue": 0,
+			"defaultValue": 0,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"10": {
+			"label": "Parameter 10",
+			"description": "The countdown time, relay-3 off",
+			"valueSize": 4,
+			"minValue": 0,
+			"maxValue": 0,
+			"defaultValue": 0,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"11": {
+			"label": "Parameter 11",
+			"description": "The countdown time, relay-3 on",
+			"valueSize": 4,
+			"minValue": 0,
+			"maxValue": 0,
+			"defaultValue": 0,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"12": {
+			"label": "Parameter 12",
+			"description": "Realy-1(ep1)manual control",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 1,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Manual control disabled",
+					"value": 0
+				},
+				{
+					"label": "Manual control enabled",
+					"value": 1
+				}
+			]
+		},
+		"13": {
+			"label": "Parameter 13",
+			"description": "Realy-2(ep2)manual control",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 0,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Manual control disabled",
+					"value": 0
+				},
+				{
+					"label": "Manual control enabled",
+					"value": 1
+				}
+			]
+		},
+		"14": {
+			"label": "Parameter 14",
+			"description": "Realy-3(ep3)manual control",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 0,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Manual control disabled",
+					"value": 0
+				},
+				{
+					"label": "Manual control enabled",
+					"value": 1
+				}
+			]
+		}
+	},
+	"metadata": {
+		"inclusion": "ADD the ZW11 from the existing Z-Wave home control network with your primary controller.\nRefer to your primary controller instructions to process the inclusion setup procedure.\nWhen prompted by your primary controller, click the Program button three times in one second",
+		"exclusion": "Remove the ZW11 from the existing Z-Wave home control network with your primary controller.\nRefer to your primary controller instructions to process the exclusion setup procedure.\nWhen prompted by your primary controller, click the Program button three times in one second",
+		"reset": "press 4x, then LED lit for 4s, within this time press 4x again – LED blinks 3 times then off to FACTORY RESET",
+		"manual": "https://products.z-wavealliance.org/ProductManual/File?folder=&filename=product_documents/3749/ZW11-Manual20191205.pdf"
+	}
+}
