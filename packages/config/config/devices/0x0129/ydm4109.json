@@ -18,8 +18,7 @@
 	},
 	"paramInformation": {
 		"5": {
-			"label": "English Language",
-			"description": "Set the language of the door lock interface",
+			"label": "Language",
 			"valueSize": 1,
 			"minValue": 1,
 			"maxValue": 6,
@@ -30,19 +29,19 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "Korean language",
+					"label": "Korean",
 					"value": 1
 				},
 				{
-					"label": "English language",
+					"label": "English",
 					"value": 2
 				},
 				{
-					"label": "Chinese language",
+					"label": "Chinese",
 					"value": 3
 				},
 				{
-					"label": "Taiwanese language",
+					"label": "Taiwanese",
 					"value": 6
 				}
 			]
