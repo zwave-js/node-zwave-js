@@ -22,11 +22,25 @@
 			"valueSize": 1,
 			"minValue": 1,
 			"maxValue": 3,
-			"defaultValue": 1,
+			"defaultValue": 2,
 			"unsigned": true,
 			"readOnly": false,
 			"writeOnly": false,
-			"allowManualEntry": true
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "High",
+					"value": 1
+				},
+				{
+					"label": "Low",
+					"value": 2
+				},
+				{
+					"label": "Silent",
+					"value": 3
+				}
+			]
 		},
 		"2": {
 			"label": "Auto Relock",
@@ -211,7 +225,6 @@
 		},
 		"19": {
 			"label": "DPS Alarm",
-			"description": "0x00 = off, 0xff = on default is 0x00 or off. used to enable/disable door condition alarms for locks that support a door position sensor. any lock that does not support dps will always report 0x00",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 255,
@@ -227,7 +240,7 @@
 				},
 				{
 					"label": "Enabled",
-					"value": -255
+					"value": 255
 				}
 			]
 		}
