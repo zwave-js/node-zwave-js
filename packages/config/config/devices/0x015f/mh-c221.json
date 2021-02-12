@@ -30,11 +30,13 @@
 	"supportsZWavePlus": true,
 	"paramInformation": {
 		"1": {
-			"label": "Watt meter report period",
+			"label": "Watt Meter Report Period",
+			"unit": "5 seconds",
 			"valueSize": 2,
 			"minValue": 1,
 			"maxValue": 32767,
 			"defaultValue": 720,
+			"unsigned": true,
 			"readOnly": false,
 			"writeOnly": false,
 			"allowManualEntry": true

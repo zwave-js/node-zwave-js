@@ -1,18 +1,14 @@
-// McoHome Technology Co., Ltd. MH-S314
-// Touch Panel Switch 4 Button
+// McoHome Technology Co., Ltd. MH-S411
+// Touch Panel Switch 1 Button
 {
 	"manufacturer": "McoHome Technology Co., Ltd.",
 	"manufacturerId": "0x015f",
-	"label": "MH-S314",
-	"description": "Touch Panel Switch 4 Button",
+	"label": "MH-S411",
+	"description": "Touch Panel Switch 1 Button",
 	"devices": [
 		{
-			"productType": "0x3102",
-			"productId": "0x0204"
-		},
-		{
-			"productType": "0x3141",
-			"productId": "0x1302"
+			"productType": "0x4111",
+			"productId": "0x5102"
 		}
 	],
 	"firmwareVersion": {
@@ -27,18 +23,6 @@
 		},
 		"2": {
 			"label": "Button 1",
-			"maxNodes": 5
-		},
-		"5": {
-			"label": "Button 2",
-			"maxNodes": 5
-		},
-		"8": {
-			"label": "Button 3",
-			"maxNodes": 5
-		},
-		"11": {
-			"label": "Button 4",
 			"maxNodes": 5
 		}
 	},
@@ -144,6 +128,109 @@
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 65535,
+			"defaultValue": 0,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"8": {
+			"label": "Basic CC Mode",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 3,
+			"defaultValue": 0,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Relay 1 responds to set, relay 1 responds to get, instant updates disabled",
+					"value": 0
+				},
+				{
+					"label": "Relay 1 responds to set, relay 1 responds to get, instant updates enabled",
+					"value": 1
+				},
+				{
+					"label": "All relays respond to set, get ignored, instant updates disabled",
+					"value": 2
+				},
+				{
+					"label": "All relays respond to set, relay 1 responds to get, instant updates disabled",
+					"value": 3
+				}
+			]
+		},
+		"10": {
+			"label": "Respond to Scenes",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 0,
+			"unsigned": true,
+			"readOnly": false,
+			"unsigned": true,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Disabled",
+					"value": 0
+				},
+				{
+					"label": "Enabled",
+					"value": 1
+				}
+			]
+		},
+		"11": {
+			"label": "Scene Activate Mode",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 3,
+			"defaultValue": 0,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Scene activate function disabled",
+					"value": 0
+				},
+				{
+					"label": "Button 1 tap activates scene in param 12 regardless of state",
+					"value": 1
+				},
+				{
+					"label": "Button 1 tap activates scene in param 12 when state is off",
+					"value": 2
+				},
+				{
+					"label": "Button 1 tap activates scene in param 12 when state is on",
+					"value": 3
+				}
+			]
+		},
+		"12": {
+			"label": "Button 1 Activate Scene ID",
+			"valueSize": 1,
+			"minValue": 1,
+			"maxValue": 255,
+			"defaultValue": 1,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"13": {
+			"label": "Button 1 Activate Scene Dim Duration",
+			"description": "0-127 seconds, +128 for minutes",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 255,
 			"defaultValue": 0,
 			"unsigned": true,
 			"readOnly": false,
