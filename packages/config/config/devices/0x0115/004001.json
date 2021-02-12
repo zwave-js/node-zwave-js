@@ -19,11 +19,10 @@
 	"paramInformation": {
 		"1": {
 			"label": "Siren Alarm Sequence Interval",
-			"description": "Seconds",
 			"valueSize": 1,
 			"unit": "seconds",
-			"minValue": 0,
-			"maxValue": 10,
+			"minValue": 3,
+			"maxValue": 127,
 			"defaultValue": 10,
 			"unsigned": true,
 			"readOnly": false,
@@ -32,11 +31,10 @@
 		},
 		"2": {
 			"label": "Siren Alarm Tone Length",
-			"description": "Seconds",
 			"valueSize": 1,
 			"unit": "seconds",
-			"minValue": 0,
-			"maxValue": 8,
+			"minValue": 1,
+			"maxValue": 99,
 			"defaultValue": 8,
 			"unsigned": true,
 			"readOnly": false,
@@ -44,7 +42,7 @@
 			"allowManualEntry": true
 		},
 		"3": {
-			"label": "Value of On-command",
+			"label": "On-command",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 99,
@@ -55,10 +53,10 @@
 			"allowManualEntry": true
 		},
 		"4": {
-			"label": "Value of Off-command",
+			"label": "Off-command",
 			"valueSize": 1,
 			"minValue": 0,
-			"maxValue": 0,
+			"maxValue": 99,
 			"defaultValue": 0,
 			"unsigned": true,
 			"readOnly": false,
