@@ -29,7 +29,7 @@
 			"allowManualEntry": true
 		},
 		"2": {
-			"label": "temp & humidity reporting interval",
+			"label": "Temperature & Humidity reporting interval",
 			"unit": "minutes",
 			"valueSize": 2,
 			"minValue": 1,
