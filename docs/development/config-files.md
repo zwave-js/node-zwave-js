@@ -231,6 +231,10 @@ By default, `Basic CC::Set` commands are interpreted as status updates. This fla
 > [!NOTE]
 > If this option is `true`, it has precedence over `disableBasicMapping`.
 
+### `manualValueRefreshDelayMs`
+
+Some legacy devices emit an NIF when a local event occurs (e.g. a button press) to signal that the controller should request a status update. However, some of these devices require a delay before they are ready to respond to this request. `manualValueRefreshDelayMs` specifies that delay, expressed in milliseconds. If unset, there will be no delay.
+
 ## Contributing configuration files
 
 In order to get your configuration file included in this library, this is the way:
