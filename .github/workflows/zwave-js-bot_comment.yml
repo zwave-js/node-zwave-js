@@ -113,13 +113,15 @@ jobs:
             core.info(`Getting PR #${request.pull_number} from ${request.owner}/${request.repo}`)
             const result = await bot.getFixLintInfo({github, context});
             console.dir(result);
-            return result;
+            return result ?? {pending: true};
           } catch (err) {
             core.setFailed(`Request failed with error ${err}`)
           }
 
     - name: Download Lint patch
-      if: steps.check-permissions.outputs.result == 'true'
+      if: |
+        steps.check-permissions.outputs.result == 'true' &&
+        !fromJSON(steps.pr-info.outputs.result).pending
       env:
         PATCH_URL: ${{ fromJSON(steps.pr-info.outputs.result).patchUrl }}
       run: |
@@ -129,7 +131,9 @@ jobs:
         unzip patch.zip
 
     - name: Checkout pull request side by side
-      if: steps.check-permissions.outputs.result == 'true'
+      if: |
+        steps.check-permissions.outputs.result == 'true' &&
+        !fromJSON(steps.pr-info.outputs.result).pending
       uses: actions/checkout@v2
       with:
         token: ${{secrets.BOT_TOKEN}}
@@ -138,7 +142,9 @@ jobs:
         path: untrusted
 
     - name: Do the lint fix
-      if: steps.check-permissions.outputs.result == 'true'
+      if: |
+        steps.check-permissions.outputs.result == 'true' &&
+        !fromJSON(steps.pr-info.outputs.result).pending
       working-directory: ./untrusted
       id: fix
       run: |
@@ -168,6 +174,7 @@ jobs:
       uses: actions/github-script@v3
       env:
         FEEDBACK: ${{ steps.fix.outputs.result }}
+        PENDING: ${{ fromJSON(steps.pr-info.outputs.result).pending }}
       with:
         github-token: ${{secrets.BOT_TOKEN}}
         script: |
