@@ -978,7 +978,7 @@ export class ZWaveNode extends Endpoint {
 		if (this.interviewStage === InterviewStage.ProtocolInfo) {
 			// We ping listening nodes to ensure that they are actually listening
 			// For all others, the messages are queued for wakeup anyways
-			if (this.isListening || this.isFrequentListening) {
+			if (this.isListening && !this.isFrequentListening) {
 				await this.ping();
 			}
 			if (!(await tryInterviewStage(() => this.queryNodeInfo()))) {
@@ -988,12 +988,13 @@ export class ZWaveNode extends Endpoint {
 
 		// The node is deemed ready when has been interviewed completely at least once
 		if (this.interviewStage === InterviewStage.RestartFromCache) {
-			// Mark listening nodes as potentially ready. The first message will determine if it is
+			// Mark nodes as potentially ready. The first message will determine if it is
 			this.readyMachine.send("RESTART_INTERVIEW_FROM_CACHE");
 
-			// We ping listening nodes to ensure that they are actually listening
-			// For all others, the next messages are queued for wakeup anyways
-			if (this.isListening || this.isFrequentListening) {
+			// Assume that sleeping nodes start asleep and ping listening nodes to check their status
+			if (this.canSleep) {
+				this.markAsAsleep();
+			} else if (this.isListening) {
 				await this.ping();
 			}
 		}
