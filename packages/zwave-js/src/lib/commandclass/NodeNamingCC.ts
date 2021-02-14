@@ -1,5 +1,6 @@
 import type { Maybe, MessageOrCCLogEntry, ValueID } from "@zwave-js/core";
 import { CommandClasses, ZWaveError, ZWaveErrorCodes } from "@zwave-js/core";
+import type { JSONObject } from "@zwave-js/shared";
 import type { Driver } from "../driver/Driver";
 import { MessagePriority } from "../message/Constants";
 import {
@@ -378,6 +379,10 @@ export class NodeNamingAndLocationCCLocationReport extends NodeNamingAndLocation
 			...super.toLogEntry(),
 			message: { location: this.location },
 		};
+	}
+
+	public toJSON(): JSONObject {
+		return super.toJSONInherited({ location: this.location });
 	}
 }
 
