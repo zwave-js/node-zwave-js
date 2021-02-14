@@ -659,11 +659,11 @@ The event argument has the shape of [`TranslatedValueID`](api/valueid.md) with o
 The node has sent a notification event using the `Notification` command class. The callback signature is as follows:
 
 ```ts
-(node: ZWaveNode, notificationLabel: string, parameters?: Buffer) => void;
+(node: ZWaveNode, notificationLabel: string, parameters?: Buffer | Duration | Record<string, number>) => void;
 ```
 
 where
 
 -   `node` is the current node instance
 -   `notificationLabel` is a string representing the notification type (e.g. `"Home security"`)
--   `parameters` _(optional)_ depends on the type of the notification. It may be a `Duration`, additional numeric value, an embedded CC or a raw Buffer. Details can be found in the Z-Wave specifications.
+-   `parameters` _(optional)_ depends on the type of the notification. It may be a `Duration`, a dictionary or a raw Buffer. Details can be found in the Z-Wave specifications.
