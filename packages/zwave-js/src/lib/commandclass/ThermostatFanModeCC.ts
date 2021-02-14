@@ -370,7 +370,7 @@ export class ThermostatFanModeCCReport extends ThermostatFanModeCC {
 	@ccValue({ minVersion: 3 })
 	@ccValueMetadata({
 		...ValueMetadata.Boolean,
-		label: "Thermostat fan off",
+		label: "Thermostat fan turned off",
 	})
 	public get off(): boolean | undefined {
 		return this._off;
