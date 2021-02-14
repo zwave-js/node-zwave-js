@@ -1,5 +1,12 @@
-import type { Maybe, MessageOrCCLogEntry, ValueID } from "@zwave-js/core";
-import { CommandClasses, ZWaveError, ZWaveErrorCodes } from "@zwave-js/core";
+import {
+	CommandClasses,
+	Maybe,
+	MessageOrCCLogEntry,
+	validatePayload,
+	ValueID,
+	ZWaveError,
+	ZWaveErrorCodes,
+} from "@zwave-js/core";
 import type { JSONObject } from "@zwave-js/shared";
 import type { Driver } from "../driver/Driver";
 import { MessagePriority } from "../message/Constants";
@@ -277,6 +284,7 @@ export class NodeNamingAndLocationCCNameReport extends NodeNamingAndLocationCC {
 		const encoding = this.payload[0] === 2 ? "utf16le" : "ascii";
 		let nameBuffer = this.payload.slice(1);
 		if (encoding === "utf16le") {
+			validatePayload(nameBuffer.length % 2 === 0);
 			// Z-Wave expects UTF16 BE
 			nameBuffer = nameBuffer.swap16();
 		}
@@ -364,6 +372,7 @@ export class NodeNamingAndLocationCCLocationReport extends NodeNamingAndLocation
 		const encoding = this.payload[0] === 2 ? "utf16le" : "ascii";
 		let locationBuffer = this.payload.slice(1);
 		if (encoding === "utf16le") {
+			validatePayload(locationBuffer.length % 2 === 0);
 			// Z-Wave expects UTF16 BE
 			locationBuffer = locationBuffer.swap16();
 		}
