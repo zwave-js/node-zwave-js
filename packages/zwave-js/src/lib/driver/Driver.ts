@@ -426,9 +426,18 @@ export class Driver extends EventEmitter {
 
 	public readonly configManager: ConfigManager;
 
-	public logContainer: ZWaveLogContainer;
-	public driverLog: DriverLogger;
-	public controllerLog: ControllerLogger;
+	private _logContainer: ZWaveLogContainer;
+	private _driverLog: DriverLogger;
+	/** @internal */
+	public get driverLog(): DriverLogger {
+		return this._driverLog;
+	}
+
+	private _controllerLog: ControllerLogger;
+	/** @internal */
+	public get controllerLog(): ControllerLogger {
+		return this._controllerLog;
+	}
 
 	private _controller: ZWaveController | undefined;
 	/** Encapsulates information about the Z-Wave controller and provides access to its nodes */
@@ -454,11 +463,6 @@ export class Driver extends EventEmitter {
 	) {
 		super();
 
-		this.logContainer = new ZWaveLogContainer(options?.logConfig);
-
-		this.driverLog = new DriverLogger(this.logContainer);
-		this.controllerLog = new ControllerLogger(this.logContainer);
-
 		// merge given options with defaults
 		this.options = applyDefaultOptions(
 			options,
@@ -467,10 +471,14 @@ export class Driver extends EventEmitter {
 		// And make sure they contain valid values
 		checkOptions(this.options);
 
+		this._logContainer = new ZWaveLogContainer(this.options.logConfig);
+		this._driverLog = new DriverLogger(this._logContainer);
+		this._controllerLog = new ControllerLogger(this._logContainer);
+
 		this.cacheDir = this.options.storage.cacheDir;
 
 		// Initialize config manager
-		this.configManager = new ConfigManager(this.logContainer);
+		this.configManager = new ConfigManager(this._logContainer);
 
 		// register some cleanup handlers in case the program doesn't get closed cleanly
 		this._cleanupHandler = this._cleanupHandler.bind(this);
@@ -578,6 +586,11 @@ export class Driver extends EventEmitter {
 		// });
 	}
 
+	/** Updates the logging configuration without having to restart the driver. */
+	public updateLogConfig(config: DeepPartial<LogConfig>): void {
+		this._logContainer.updateConfiguration(config);
+	}
+
 	/** Enumerates all existing serial ports */
 	public static async enumerateSerialPorts(): Promise<string[]> {
 		const ports = await SerialPort.list();
@@ -630,11 +643,11 @@ export class Driver extends EventEmitter {
 					host: url.hostname,
 					port: parseInt(url.port),
 				},
-				this.logContainer,
+				this._logContainer,
 			);
 		} else {
 			this.driverLog.print(`opening serial port ${this.port}`);
-			this.serial = new ZWaveSerialPort(this.port, this.logContainer);
+			this.serial = new ZWaveSerialPort(this.port, this._logContainer);
 		}
 		this.serial
 			.on("data", this.serialport_onData.bind(this))
@@ -1329,7 +1342,7 @@ export class Driver extends EventEmitter {
 		process.removeListener("uncaughtException", this._cleanupHandler);
 
 		// destroy loggers as the very last thing
-		this.logContainer.destroy();
+		this._logContainer.destroy();
 	}
 
 	private serialport_onError(err: Error): void {
