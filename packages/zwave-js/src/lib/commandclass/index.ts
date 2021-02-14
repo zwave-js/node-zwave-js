@@ -57,6 +57,7 @@ export { LocalProtectionState, RFProtectionState } from "./ProtectionCC";
 export { ToneId } from "./SoundSwitchCC";
 export { SupervisionStatus } from "./SupervisionCC";
 export type { SupervisionResult } from "./SupervisionCC";
+export { ThermostatFanState } from "./ThermostatFanStateCC";
 export { ThermostatMode } from "./ThermostatModeCC";
 export { ThermostatOperatingState } from "./ThermostatOperatingStateCC";
 export { SetbackType } from "./ThermostatSetbackCC";
