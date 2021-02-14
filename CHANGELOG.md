@@ -13,6 +13,7 @@
 * Implemented `Thermostat Fan Mode CC`
 * Implemented `Thermostat Fan State CC`
 * The `"notification"` event no longer includes a CC instance as event parameters. CC instances are first converted to a plain JS object now.
+* Added the `updateLogConfig` method to `Driver` to update logging configuration on the fly.
 
 ### Bugfixes
 * It is no longer assumed that a node is included securely when it responds to a nonce request
@@ -21,7 +22,9 @@
 * Avoid infinite loops when scanning V3+ config params when the device does not use param number 0 to indicate the end of the list
 * Guard `handleClockReport` against crashing because of no support
 * Sleeping nodes are now immediately marked as ready when restarting from cache
-* Guard Z-Wave+ bootstrapping against transmission errors
+* Fixed a crash that could happen during Z-Wave+ bootstrapping
+* Fixed a crash that could happen when parsing a `Node Naming And Location CC` with a malformed UTF16 string
+* Unsolicited reports are no longer mapped from the root endpoint to endpoint 1 if that endpoint does not support the CC
 
 ### Config file changes
 * add Inovelli NZW30T manufactured by NIE Technology
