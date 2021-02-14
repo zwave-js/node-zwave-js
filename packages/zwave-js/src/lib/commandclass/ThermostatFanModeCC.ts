@@ -67,6 +67,22 @@ export enum ThermostatFanMode {
 	"External circulation" = 0x0b,
 }
 
+export function getOffStateValueID(endpoint: number): ValueID {
+	return {
+		commandClass: CommandClasses["Thermostat Fan Mode"],
+		endpoint,
+		property: "off",
+	};
+}
+
+export function getModeStateValueID(endpoint: number): ValueID {
+	return {
+		commandClass: CommandClasses["Thermostat Fan Mode"],
+		endpoint,
+		property: "mode",
+	};
+}
+
 @API(CommandClasses["Thermostat Fan Mode"])
 export class ThermostatFanModeCCAPI extends CCAPI {
 	public supportsCommand(cmd: ThermostatFanModeCommand): Maybe<boolean> {
@@ -84,17 +100,47 @@ export class ThermostatFanModeCCAPI extends CCAPI {
 		{ property },
 		value,
 	): Promise<void> => {
-		if (property !== "mode") {
+		const valueDB = this.endpoint.getNodeUnsafe()!.valueDB;
+		if (property === "mode") {
+			if (typeof value !== "number") {
+				throwWrongValueType(
+					this.ccId,
+					property,
+					"number",
+					typeof value,
+				);
+			}
+			const off = valueDB.getValue<boolean>(
+				getOffStateValueID(this.endpoint.index),
+			);
+			await this.set(value, off);
+			if (this.isSinglecast()) {
+				// Verify the current value after a delay
+				this.schedulePoll({ property });
+			}
+		} else if (property === "off") {
+			if (typeof value !== "boolean") {
+				throwWrongValueType(
+					this.ccId,
+					property,
+					"boolean",
+					typeof value,
+				);
+			}
+			const mode = valueDB.getValue<ThermostatFanMode>(
+				getModeStateValueID(this.endpoint.index),
+			);
+			// if (!value && mode == undefined) {
+			// 	// This should NOT be supported, but I don't know which
+			// 	// throw function to call.
+			// }
+			await this.set(mode ?? ThermostatFanMode["Auto low"], value);
+			if (this.isSinglecast()) {
+				// Verify the current value after a delay
+				this.schedulePoll({ property });
+			}
+		} else {
 			throwUnsupportedProperty(this.ccId, property);
-		}
-		if (typeof value !== "number") {
-			throwWrongValueType(this.ccId, property, "number", typeof value);
-		}
-		await this.set(value);
-
-		if (this.isSinglecast()) {
-			// Verify the current value after a delay
-			this.schedulePoll({ property });
 		}
 	};
 
@@ -103,6 +149,7 @@ export class ThermostatFanModeCCAPI extends CCAPI {
 	}): Promise<unknown> => {
 		switch (property) {
 			case "mode":
+			case "off":
 				return (await this.get())?.[property];
 
 			default:
@@ -130,7 +177,7 @@ export class ThermostatFanModeCCAPI extends CCAPI {
 		}
 	}
 
-	public async set(mode: ThermostatFanMode): Promise<void> {
+	public async set(mode: ThermostatFanMode, off?: boolean): Promise<void> {
 		this.assertSupportsCommand(
 			ThermostatFanModeCommand,
 			ThermostatFanModeCommand.Set,
@@ -140,6 +187,7 @@ export class ThermostatFanModeCCAPI extends CCAPI {
 			nodeId: this.endpoint.nodeId,
 			endpoint: this.endpoint.index,
 			mode,
+			off,
 		});
 		await this.driver.sendCommand(cc, this.commandOptions);
 	}
@@ -222,11 +270,18 @@ export class ThermostatFanModeCC extends CommandClass {
 		});
 		const currentStatus = await api.get();
 		if (currentStatus) {
+			let logMessage = `received current thermostat fan mode: ${getEnumMemberName(
+				ThermostatFanMode,
+				currentStatus.mode,
+			)}`;
+			if (currentStatus.off != undefined) {
+				logMessage +=
+					"\n" +
+					`received current thermostat fan mode off bit: ${currentStatus.off}`;
+			}
 			this.driver.controllerLog.logNode(node.id, {
 				endpoint: this.endpointIndex,
-				message:
-					"received current thermostat fan mode: " +
-					getEnumMemberName(ThermostatFanMode, currentStatus.mode),
+				message: logMessage,
 				direction: "inbound",
 			});
 		}
@@ -238,6 +293,7 @@ export class ThermostatFanModeCC extends CommandClass {
 
 type ThermostatFanModeCCSetOptions = CCCommandOptions & {
 	mode: ThermostatFanMode;
+	off: boolean | undefined;
 };
 
 @CCCommand(ThermostatFanModeCommand.Set)
@@ -257,15 +313,22 @@ export class ThermostatFanModeCCSet extends ThermostatFanModeCC {
 			);
 		} else {
 			this.mode = options.mode;
+			if (this.version >= 2) {
+				this.off = options.off;
+			}
 		}
 	}
 
 	public mode: ThermostatFanMode;
 
+	public off: boolean | undefined;
+
 	public serialize(): Buffer {
 		this.payload = Buffer.from([
-			// 0 R R R M M M M
-			this.mode & 0b1111,
+			// O R R R M M M M
+			this.version >= 2 && this.off
+				? 0b1000_0000 | (this.mode & 0b1111)
+				: this.mode & 0b1111,
 		]);
 		return super.serialize();
 	}
@@ -292,7 +355,7 @@ export class ThermostatFanModeCCReport extends ThermostatFanModeCC {
 		validatePayload(this.payload.length >= 1);
 		this._mode = this.payload[0] & 0b1111;
 
-		if (this.version >= 2) {
+		if (this.version >= 3) {
 			this._off = !!(this.payload[0] & 0b1000_0000);
 		}
 
@@ -303,8 +366,7 @@ export class ThermostatFanModeCCReport extends ThermostatFanModeCC {
 	@ccValue()
 	@ccValueMetadata({
 		...ValueMetadata.UInt8,
-		min: 0,
-		max: 15,
+		states: enumValuesToMetadataStates(ThermostatFanMode),
 		label: "Thermostat fan mode",
 	})
 	public get mode(): ThermostatFanMode {
@@ -312,7 +374,11 @@ export class ThermostatFanModeCCReport extends ThermostatFanModeCC {
 	}
 
 	private _off: boolean | undefined;
-	@ccValue({ minVersion: 2 })
+	@ccValue({ minVersion: 3 })
+	@ccValueMetadata({
+		...ValueMetadata.Boolean,
+		label: "Thermostat fan off",
+	})
 	public get off(): boolean | undefined {
 		return this._off;
 	}
@@ -344,7 +410,7 @@ export class ThermostatFanModeCCSupportedReport extends ThermostatFanModeCC {
 		super(driver, options);
 		this._supportedModes = parseBitMask(
 			this.payload,
-			ThermostatFanMode["Auto high"],
+			ThermostatFanMode["Auto low"],
 		);
 
 		// Use this information to create the metadata for the mode property
@@ -354,12 +420,13 @@ export class ThermostatFanModeCCSupportedReport extends ThermostatFanModeCC {
 			property: "mode",
 		};
 		// Only update the dynamic part
-		this.getValueDB().setMetadata(valueId, ({
+		this.getValueDB().setMetadata(valueId, {
+			...ValueMetadata.UInt8,
 			states: enumValuesToMetadataStates(
 				ThermostatFanMode,
 				this._supportedModes,
 			),
-		} as unknown) as ValueMetadata);
+		});
 
 		this.persistValues();
 	}
