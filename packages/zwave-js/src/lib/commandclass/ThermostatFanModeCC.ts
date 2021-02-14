@@ -110,14 +110,11 @@ export class ThermostatFanModeCCAPI extends CCAPI {
 					typeof value,
 				);
 			}
+			// Preserve the value of the "off" flag
 			const off = valueDB.getValue<boolean>(
 				getOffStateValueID(this.endpoint.index),
 			);
 			await this.set(value, off);
-			if (this.isSinglecast()) {
-				// Verify the current value after a delay
-				this.schedulePoll({ property });
-			}
 		} else if (property === "off") {
 			if (typeof value !== "boolean") {
 				throwWrongValueType(
@@ -130,17 +127,20 @@ export class ThermostatFanModeCCAPI extends CCAPI {
 			const mode = valueDB.getValue<ThermostatFanMode>(
 				getModeStateValueID(this.endpoint.index),
 			);
-			// if (!value && mode == undefined) {
-			// 	// This should NOT be supported, but I don't know which
-			// 	// throw function to call.
-			// }
-			await this.set(mode ?? ThermostatFanMode["Auto low"], value);
-			if (this.isSinglecast()) {
-				// Verify the current value after a delay
-				this.schedulePoll({ property });
+			if (mode == undefined) {
+				throw new ZWaveError(
+					`The "off" property cannot be changed before the fan mode is known!`,
+					ZWaveErrorCodes.Argument_Invalid,
+				);
 			}
+			await this.set(mode, value);
 		} else {
 			throwUnsupportedProperty(this.ccId, property);
+		}
+
+		if (this.isSinglecast()) {
+			// Verify the current value after a delay
+			this.schedulePoll({ property });
 		}
 	};
 
@@ -275,9 +275,7 @@ export class ThermostatFanModeCC extends CommandClass {
 				currentStatus.mode,
 			)}`;
 			if (currentStatus.off != undefined) {
-				logMessage +=
-					"\n" +
-					`received current thermostat fan mode off bit: ${currentStatus.off}`;
+				logMessage += ` (turned off)`;
 			}
 			this.driver.controllerLog.logNode(node.id, {
 				endpoint: this.endpointIndex,
@@ -293,7 +291,7 @@ export class ThermostatFanModeCC extends CommandClass {
 
 type ThermostatFanModeCCSetOptions = CCCommandOptions & {
 	mode: ThermostatFanMode;
-	off: boolean | undefined;
+	off?: boolean;
 };
 
 @CCCommand(ThermostatFanModeCommand.Set)
@@ -313,22 +311,17 @@ export class ThermostatFanModeCCSet extends ThermostatFanModeCC {
 			);
 		} else {
 			this.mode = options.mode;
-			if (this.version >= 2) {
-				this.off = options.off;
-			}
+			this.off = options.off;
 		}
 	}
 
 	public mode: ThermostatFanMode;
-
 	public off: boolean | undefined;
 
 	public serialize(): Buffer {
 		this.payload = Buffer.from([
-			// O R R R M M M M
-			this.version >= 2 && this.off
-				? 0b1000_0000 | (this.mode & 0b1111)
-				: this.mode & 0b1111,
+			(this.version >= 2 && this.off ? 0b1000_0000 : 0) |
+				(this.mode & 0b1111),
 		]);
 		return super.serialize();
 	}
