@@ -1,4 +1,4 @@
-import { CommandClasses } from "@zwave-js/core";
+import { CommandClasses, enumValuesToMetadataStates } from "@zwave-js/core";
 import type { Driver } from "../driver/Driver";
 import { createEmptyMockDriver } from "../test/mocks";
 import { getCCValueMetadata } from "./CommandClass";
@@ -65,8 +65,7 @@ describe("lib/commandclass/ThermostatFanStateCC => ", () => {
 			"state",
 		);
 		expect(currentValueMeta).toMatchObject({
-			min: 0,
-			max: 15,
+			states: enumValuesToMetadataStates(ThermostatFanState),
 			label: "Thermostat fan state",
 		});
 	});

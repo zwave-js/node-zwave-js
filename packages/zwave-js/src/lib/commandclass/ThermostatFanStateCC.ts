@@ -1,12 +1,13 @@
 import {
 	CommandClasses,
+	enumValuesToMetadataStates,
 	Maybe,
 	MessageOrCCLogEntry,
 	MessageRecord,
 	validatePayload,
 	ValueMetadata,
 } from "@zwave-js/core";
-import { getEnumMemberName, pick } from "@zwave-js/shared";
+import { getEnumMemberName } from "@zwave-js/shared";
 import type { Driver } from "../driver/Driver";
 import { MessagePriority } from "../message/Constants";
 import {
@@ -60,7 +61,7 @@ export class ThermostatFanStateCCAPI extends CCAPI {
 	}): Promise<unknown> => {
 		switch (property) {
 			case "state":
-				return (await this.get())?.[property];
+				return this.get();
 
 			default:
 				throwUnsupportedProperty(this.ccId, property);
@@ -83,7 +84,7 @@ export class ThermostatFanStateCCAPI extends CCAPI {
 			this.commandOptions,
 		);
 		if (response) {
-			return pick(response, ["state"]);
+			return response?.state;
 		}
 	}
 }
@@ -122,7 +123,7 @@ export class ThermostatFanStateCC extends CommandClass {
 				endpoint: this.endpointIndex,
 				message:
 					"received current thermostat fan state: " +
-					getEnumMemberName(ThermostatFanState, currentStatus.state),
+					getEnumMemberName(ThermostatFanState, currentStatus),
 				direction: "inbound",
 			});
 		}
@@ -150,8 +151,7 @@ export class ThermostatFanStateCCReport extends ThermostatFanStateCC {
 	@ccValue()
 	@ccValueMetadata({
 		...ValueMetadata.UInt8,
-		min: 0,
-		max: 15,
+		states: enumValuesToMetadataStates(ThermostatFanState),
 		label: "Thermostat fan state",
 	})
 	public get state(): ThermostatFanState {
