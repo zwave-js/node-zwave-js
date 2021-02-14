@@ -355,8 +355,7 @@ export class ThermostatModeCCReport extends ThermostatModeCC {
 	@ccValue()
 	@ccValueMetadata({
 		...ValueMetadata.UInt8,
-		min: 0,
-		max: 31,
+		states: enumValuesToMetadataStates(ThermostatMode),
 		label: "Thermostat mode",
 	})
 	public get mode(): ThermostatMode {
@@ -403,12 +402,13 @@ export class ThermostatModeCCSupportedReport extends ThermostatModeCC {
 			property: "mode",
 		};
 		// Only update the dynamic part
-		this.getValueDB().setMetadata(valueId, ({
+		this.getValueDB().setMetadata(valueId, {
+			...ValueMetadata.UInt8,
 			states: enumValuesToMetadataStates(
 				ThermostatMode,
 				this._supportedModes,
 			),
-		} as unknown) as ValueMetadata);
+		});
 
 		this.persistValues();
 	}
