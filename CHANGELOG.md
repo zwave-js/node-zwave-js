@@ -3,7 +3,7 @@
 	Placeholder for next release:
 	## __WORK IN PROGRESS__
 -->
-## __WORK IN PROGRESS__
+## 6.3.0 (2021-02-14)
 ### Features
 * Add missing specific device classes and expose Z-Wave+ Device Types through the `SpecificDeviceClass` class
 * Device metadata like inclusion instructions are now exposed through the `DeviceConfig` class
