@@ -17,6 +17,7 @@ import {
 	getEnumMemberName,
 	isPrintableASCII,
 	isPrintableASCIIWithNewlines,
+	JSONObject,
 	num2hex,
 	pick,
 } from "@zwave-js/shared";
@@ -936,6 +937,16 @@ export class UserCodeCCSet extends UserCodeCC {
 						: buffer2hex(this.userCode),
 			},
 		};
+	}
+
+	public toJSON(): JSONObject {
+		return super.toJSONInherited({
+			userId: this.userId,
+			userCode:
+				typeof this.userCode === "string"
+					? this.userCode
+					: buffer2hex(this.userCode),
+		});
 	}
 }
 

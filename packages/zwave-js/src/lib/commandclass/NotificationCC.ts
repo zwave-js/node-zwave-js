@@ -766,7 +766,6 @@ export class NotificationCCReport extends NotificationCC {
 	public eventParameters:
 		| Buffer
 		| Duration
-		| CommandClass
 		| Record<string, number>
 		| undefined;
 
@@ -871,11 +870,22 @@ export class NotificationCCReport extends NotificationCC {
 			} else {
 				// Try to parse the event parameters - if this fails, we should still handle the notification report
 				try {
-					this.eventParameters = CommandClass.from(this.driver, {
+					// Convert CommandClass instances to a standardized object representation
+					const cc = CommandClass.from(this.driver, {
 						data: this.eventParameters,
 						fromEncapsulation: true,
 						encapCC: this,
 					});
+					let json = cc.toJSON();
+					// If a CC has no good toJSON() representation, we're only interested in the payload
+					if (
+						"nodeId" in json &&
+						"ccId" in json &&
+						"payload" in json
+					) {
+						json = pick(json, ["payload"]);
+					}
+					this.eventParameters = json;
 				} catch (e: unknown) {
 					if (
 						e instanceof ZWaveError &&
