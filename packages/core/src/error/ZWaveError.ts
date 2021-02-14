@@ -146,3 +146,21 @@ export class ZWaveError extends Error {
 		Object.getPrototypeOf(this).name = "ZWaveError";
 	}
 }
+
+export function isTransmissionError(
+	e: unknown,
+): e is ZWaveError & {
+	code:
+		| ZWaveErrorCodes.Controller_MessageDropped
+		| ZWaveErrorCodes.Controller_CallbackNOK
+		| ZWaveErrorCodes.Controller_ResponseNOK
+		| ZWaveErrorCodes.Controller_NodeTimeout;
+} {
+	return (
+		e instanceof ZWaveError &&
+		(e.code === ZWaveErrorCodes.Controller_MessageDropped ||
+			e.code === ZWaveErrorCodes.Controller_CallbackNOK ||
+			e.code === ZWaveErrorCodes.Controller_ResponseNOK ||
+			e.code === ZWaveErrorCodes.Controller_NodeTimeout)
+	);
+}
