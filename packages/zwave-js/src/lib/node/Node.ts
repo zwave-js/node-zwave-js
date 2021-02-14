@@ -1769,9 +1769,18 @@ version:               ${this.version}`;
 			// Instead rely on the version. If MCA is not supported, this will be 0
 			this.getCCVersion(CommandClasses["Multi Channel Association"]) < 3
 		) {
-			// Force the CC to store its values again under endpoint 1
-			command.endpointIndex = 1;
-			command.persistValues();
+			// Find the first endpoint that supports the received CC - if there is none, we don't map the report
+			for (const endpoint of this.getAllEndpoints()) {
+				if (endpoint.index === 0) continue;
+				if (!endpoint.supportsCC(command.ccId)) continue;
+				// Force the CC to store its values again under the supporting endpoint
+				this.driver.controllerLog.logNode(
+					this.nodeId,
+					`Mapping unsolicited report from root device to first supporting endpoint #${endpoint.index}`,
+				);
+				command.endpointIndex = endpoint.index;
+				command.persistValues();
+			}
 		}
 
 		if (command instanceof BasicCC) {
