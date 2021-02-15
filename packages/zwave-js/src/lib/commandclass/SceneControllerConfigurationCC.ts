@@ -322,7 +322,7 @@ export class SceneControllerConfigurationCC extends CommandClass {
 			if (group != undefined) {
 				const logMessage = `received information for association group #${groupId}:
 scene Id: ${group.sceneId}
-dimming duration: ${group.dimmingDuration}`;
+dimming duration: ${group.dimmingDuration.toString()}`;
 				this.driver.controllerLog.logNode(node.id, {
 					endpoint: this.endpointIndex,
 					message: logMessage,
