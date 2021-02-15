@@ -328,15 +328,15 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "Double tap to full brightness",
+					"label": "Enabled",
 					"value": 0
 				},
 				{
-					"label": "Single tap to last brightness level",
+					"label": "Disabled (last level)",
 					"value": 1
 				},
 				{
-					"label": "Single tap to full brightness",
+					"label": "Disabled (full/max level)",
 					"value": 2
 				}
 			]
@@ -353,15 +353,15 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "Local control disabled, Z-Wave control enabled",
+					"label": "Local control disabled",
 					"value": 0
 				},
 				{
-					"label": "Local control and Z-Wave control enabled",
+					"label": "Both enabled",
 					"value": 1
 				},
 				{
-					"label": "Local control and Z-Wave control disabled",
+					"label": "Local/Z-Wave control disabled",
 					"value": 2
 				}
 			]
@@ -439,7 +439,8 @@
 			]
 		},
 		"20": {
-			"label": "Send Reports When Tapped or Held",
+			"label": "Dimming Reporting",
+			"description": "Set how the dimmer to reports when paddles are tapped and held.",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 1,

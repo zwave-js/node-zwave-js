@@ -345,15 +345,15 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "Double tap enabled",
+					"label": "Enabled",
 					"value": 0
 				},
 				{
-					"label": "Double tap disabled, single tap sets dimmer to previous brightness",
+					"label": "Disabled (last level)",
 					"value": 1
 				},
 				{
-					"label": "Double tap disabled, single tap sets dimmer to maximum brightness",
+					"label": "Disabled (full/max level)",
 					"value": 2
 				}
 			]
@@ -370,15 +370,15 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "Local control disabled, Z-Wave control enabled",
+					"label": "Local control disabled",
 					"value": 0
 				},
 				{
-					"label": "Local control and Z-Wave control enabled",
+					"label": "Both enabled",
 					"value": 1
 				},
 				{
-					"label": "Local control and Z-Wave control disabled",
+					"label": "Local/Z-Wave control disabled",
 					"value": 2
 				}
 			]
@@ -396,22 +396,21 @@
 			"allowManualEntry": true
 		},
 		"17": {
-			"label": "Z-Wave Ramp Rate Control",
-			"description": "Set if the Z-Wave ramp rate operates independently of the physical ramp rate.",
+			"label": "Z-Wave Ramp Rate",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 1,
-			"defaultValue": 1,
+			"defaultValue": 0,
 			"readOnly": false,
 			"writeOnly": false,
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "Z-Wave ramp rate matches the configured physical ramp rate",
+					"label": "Z-Wave ramp rate matches parameter 9",
 					"value": 0
 				},
 				{
-					"label": "Z-Wave ramp rate is set using appropriate Z-Wave commands",
+					"label": "Z-Wave ramp rate set independently",
 					"value": 1
 				}
 			]
@@ -440,11 +439,11 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "Report each brightness level to hub when physical / Z-Wave control is disabled for physical dimming (only report final level if physical / Z-Wave control is enabled)",
+					"label": "Send each brightness level (Z-Wave disabled); Final level (Z-Wave enabled)",
 					"value": 0
 				},
 				{
-					"label": "Report final brightness level only for physical dimming, regardless of the physical / Z-Wave control mode",
+					"label": "Send final brightness level regardless of physical/Z-Wave mode",
 					"value": 1
 				}
 			]

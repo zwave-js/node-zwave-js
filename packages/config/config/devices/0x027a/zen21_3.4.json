@@ -281,15 +281,15 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "Local control disabled, Z-Wave control enabled",
+					"label": "Local control disabled",
 					"value": 0
 				},
 				{
-					"label": "Local control and Z-Wave control enabled",
+					"label": "Both enabled",
 					"value": 1
 				},
 				{
-					"label": "Local control and Z-Wave control disabled",
+					"label": "Local/Z-Wave control disabled",
 					"value": 2
 				}
 			]
@@ -309,7 +309,7 @@
 					"value": 0
 				},
 				{
-					"label": "Mechanical (with dimming control)",
+					"label": "Momentary",
 					"value": 1
 				}
 			]
