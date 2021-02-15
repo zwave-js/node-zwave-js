@@ -252,6 +252,10 @@ export class SceneControllerConfigurationCCAPI extends PhysicalCCAPI {
 			cc,
 			this.commandOptions,
 		);
+
+		// Return value includes "groupId", because if get(0) is called
+		// the returned report will include the actual groupId of the
+		// last activated groupId / sceneId
 		if (response)
 			return pick(response, ["groupId", "sceneId", "dimmingDuration"]);
 	}
@@ -262,15 +266,21 @@ export class SceneControllerConfigurationCCAPI extends PhysicalCCAPI {
 export class SceneControllerConfigurationCC extends CommandClass {
 	declare ccCommand: SceneControllerConfigurationCommand;
 
+	public determineRequiredCCInterviews(): readonly CommandClasses[] {
+		// AssociationCC is required and MUST be interviewed
+		// before SceneControllerConfigurationCC to supply groupCount
+		return [
+			...super.determineRequiredCCInterviews(),
+			CommandClasses.Association,
+		];
+	}
+
 	public async interview(complete: boolean = true): Promise<void> {
 		const node = this.getNode()!;
 		const endpoint = this.getEndpoint()!;
 		const api = endpoint.commandClasses[
 			"Scene Controller Configuration"
 		].withOptions({
-			priority: MessagePriority.NodeQuery,
-		});
-		const associationApi = endpoint.commandClasses.Association.withOptions({
 			priority: MessagePriority.NodeQuery,
 		});
 
@@ -281,34 +291,23 @@ export class SceneControllerConfigurationCC extends CommandClass {
 			direction: "none",
 		});
 
-		let groupCount: number | undefined;
-		if (complete) {
-			groupCount = this.getGroupCountCached();
-			if (groupCount === 0) {
-				this.driver.controllerLog.logNode(node.id, {
-					message: "querying number of association groups...",
-					direction: "outbound",
-				});
-				groupCount = await associationApi.getGroupCount();
-				if (groupCount != undefined) {
-					this.driver.controllerLog.logNode(node.id, {
-						endpoint: this.endpointIndex,
-						message: `supports ${groupCount} association groups`,
-						direction: "inbound",
-					});
-				} else {
-					this.driver.controllerLog.logNode(node.id, {
-						endpoint: this.endpointIndex,
-						message:
-							"Querying association groups timed out, skipping interview...",
-						level: "warn",
-					});
-					return;
-				}
-			}
-		} else {
-			groupCount = this.getGroupCountCached();
+		const groupCount = this.getGroupCountCached();
+		if (groupCount === 0) {
+			this.driver.controllerLog.logNode(node.id, {
+				endpoint: this.endpointIndex,
+				message: `soft failing interview (missing association group count)`,
+				direction: "none",
+			});
+
+			this.interviewComplete = false;
+			return;
 		}
+
+		this.driver.controllerLog.logNode(node.id, {
+			endpoint: this.endpointIndex,
+			message: `supports ${groupCount} association groups`,
+			direction: "none",
+		});
 
 		// Always query scene and dimmer duration for each association group
 		// skipping group #1, which is reserved for Lifeline
