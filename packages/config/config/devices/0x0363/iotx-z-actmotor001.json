@@ -18,12 +18,12 @@
 	},
 	"paramInformation": {
 		"2": {
-			"label": "Smart Configuration",
-			"description": "Percent",
+			"label": "Reporting Trigger Threshold Of Shutter Position Change",
+			"description": "Range 1-10%, 0 to disable reporting",
 			"valueSize": 1,
 			"unit": "%",
 			"minValue": 0,
-			"maxValue": 1,
+			"maxValue": 10,
 			"defaultValue": 1,
 			"unsigned": true,
 			"readOnly": false,
@@ -31,8 +31,8 @@
 			"allowManualEntry": true
 		},
 		"3": {
-			"label": "Smart Configuration",
-			"description": "Turn off and turn on",
+			"label": "Stop By Block Function",
+			"description": "",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 1,
@@ -40,31 +40,69 @@
 			"unsigned": true,
 			"readOnly": false,
 			"writeOnly": false,
-			"allowManualEntry": true
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Turn off",
+					"value": 0
+				},
+				{
+					"label": "Turn on",
+					"value": 1
+				}
+			]
 		},
 		"4": {
-			"label": "Smart Configuration",
-			"description": "Actuactor function",
+			"label": "Learn mode",
+			"description": "",
 			"valueSize": 1,
 			"minValue": 0,
-			"maxValue": 0,
+			"maxValue": 4,
 			"defaultValue": 0,
 			"unsigned": true,
 			"readOnly": false,
 			"writeOnly": false,
-			"allowManualEntry": true
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "No operation",
+					"value": 0
+				},
+				{
+					"label": "Initial setting",
+					"value": 1
+				},
+				{
+					"label": "Switch direction reverse",
+					"value": 2
+				},
+				{
+					"label": "App direction reverse",
+					"value": 3
+				}
+			]
 		},
 		"5": {
-			"label": "Smart Configuration",
-			"description": "Turn off and turn on",
+			"label": "Ventilation Function",
+			"description": "",
 			"valueSize": 1,
 			"minValue": 0,
-			"maxValue": 0,
+			"maxValue": 1,
 			"defaultValue": 0,
 			"unsigned": true,
 			"readOnly": false,
 			"writeOnly": false,
-			"allowManualEntry": true
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Turn off",
+					"value": 0
+				},
+				{
+					"label": "Turn on",
+					"value": 1
+				}
+			]
 		}
 	},
 	"metadata": {

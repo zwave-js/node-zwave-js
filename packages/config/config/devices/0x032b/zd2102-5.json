@@ -21,16 +21,26 @@
 	},
 	"paramInformation": {
 		"1": {
-			"label": "Configuration - Switch External",
-			"description": "0xff",
+			"label": "Configuration - External Switch",
+			"description": "",
 			"valueSize": 1,
 			"minValue": 0,
-			"maxValue": 0,
+			"maxValue": 255,
 			"defaultValue": 0,
 			"unsigned": true,
 			"readOnly": false,
 			"writeOnly": false,
-			"allowManualEntry": true
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Disable",
+					"value": 0
+				},
+				{
+					"label": "Enable",
+					"value": 255
+				}
+			]
 		}
 	},
 	"metadata": {

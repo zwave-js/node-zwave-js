@@ -22,7 +22,7 @@
 	"paramInformation": {
 		"3": {
 			"label": "Remember The Last Status",
-			"description": "1: remember",
+			"description": "",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 1,
@@ -30,7 +30,17 @@
 			"unsigned": true,
 			"readOnly": false,
 			"writeOnly": false,
-			"allowManualEntry": true
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Do not remember",
+					"value": 0
+				},
+				{
+					"label": "Remember",
+					"value": 1
+				}
+			]
 		}
 	},
 	"metadata": {

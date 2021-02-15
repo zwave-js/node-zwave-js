@@ -24,12 +24,12 @@
 	"paramInformation": {
 		"1": {
 			"label": "Battery Report Period",
-			"description": "Default 24 (0x18), 0x01~0xff in 15 minute increments",
+			"description": "The period is set in 15 minute increments (multiply the value by 15)",
 			"valueSize": 1,
 			"unit": "minutes",
-			"minValue": 0,
-			"maxValue": 0,
-			"defaultValue": 0,
+			"minValue": 1,
+			"maxValue": 255,
+			"defaultValue": 24,
 			"unsigned": true,
 			"readOnly": false,
 			"writeOnly": false,
@@ -37,9 +37,9 @@
 		}
 	},
 	"metadata": {
-		"inclusion": "1. Press & hold inclusion/Exclusion button during 5 seconds when Open Sensor is exclusion status.\n2. Press for 5 seconds, LED is turn on.\n3. Open sensor will try inclusion for 30 seconds when button is released.",
-		"exclusion": "1. Receiver will stay exclusion waiting mode.\n2. Press & hold inclusion/Exclusion button during 5 seconds when Open Sensor is exclusion status.\n3. Press for 5 seconds, LED is turn on.\n4. Open sensor will try exclusion when button is released.\n5. If exclusion is successful, LED will blink 3 times with 250ms interval.",
-		"reset": "1. Press & hold inclusion/Exclusion button during 10 seconds.\n2. LED will blink while holding the button.\n3. Factory reset will be done in 10 seconds after releasing button and blink 5 times with 100ms interval.\n\n※ Please use factory reset only when the network primary controller is missing or otherwise inoperable",
+		"inclusion": "1. Press & hold inclusion/exclusion button for 5 seconds until LED turns on.\n2. Open sensor will try inclusion for 30 seconds when button is released.",
+		"exclusion": "1. Press & hold inclusion/exclusion button for 5 seconds until LED turns on.\n2. Open sensor will try exclusion when button is released.\n3. If exclusion is successful, LED will blink 3 times with 250ms interval.",
+		"reset": "1. Press & hold inclusion/exclusion button for 10 seconds.\n2. LED will blink while holding the button.\n3. Factory reset will be done in 10 seconds after releasing button and blink 5 times with 100ms interval.\n\n※ Please use factory reset only when the network primary controller is missing or otherwise inoperable",
 		"manual": "https://products.z-wavealliance.org/ProductManual/File?folder=&filename=MarketCertificationFiles/1751/OSLI-01_Guide_document_Rev1.31.pdf"
 	}
 }

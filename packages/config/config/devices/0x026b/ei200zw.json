@@ -18,38 +18,26 @@
 	},
 	"paramInformation": {
 		"1": {
-			"label": "Value of On-command",
+			"label": "Value Of On-Command",
 			"valueSize": 1,
 			"minValue": 0,
-			"maxValue": 0,
+			"maxValue": 99,
 			"defaultValue": 99,
 			"unsigned": true,
 			"readOnly": false,
 			"writeOnly": false,
-			"allowManualEntry": true,
-			"options": [
-				{
-					"label": "",
-					"value": 0
-				}
-			]
+			"allowManualEntry": true
 		},
 		"2": {
-			"label": "Value of Off-command",
+			"label": "Value Of Off-Command",
 			"valueSize": 1,
 			"minValue": 0,
-			"maxValue": 0,
+			"maxValue": 99,
 			"defaultValue": 0,
 			"unsigned": true,
 			"readOnly": false,
 			"writeOnly": false,
-			"allowManualEntry": true,
-			"options": [
-				{
-					"label": "",
-					"value": 0
-				}
-			]
+			"allowManualEntry": true
 		}
 	},
 	"metadata": {
