@@ -591,6 +591,11 @@ export class Driver extends EventEmitter {
 		this._logContainer.updateConfiguration(config);
 	}
 
+	/** Returns the current logging configuration. */
+	public getLogConfig(): LogConfig {
+		return this._logContainer.getConfiguration();
+	}
+
 	/** Enumerates all existing serial ports */
 	public static async enumerateSerialPorts(): Promise<string[]> {
 		const ports = await SerialPort.list();
