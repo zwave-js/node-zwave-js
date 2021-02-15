@@ -136,6 +136,94 @@
 			"writeOnly": false,
 			"allowManualEntry": true
 		},
+		"7[0x01]": {
+			"label": "Send Status Change Report: Local Control",
+			"description": "Determine whether a trigger of this type should prompt a status change report to associated devices.",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 1,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Disable",
+					"value": 0
+				},
+				{
+					"label": "Enable",
+					"value": 1
+				}
+			]
+		},
+		"7[0x02]": {
+			"label": "Send Status Change Report: 3-Way",
+			"description": "Determine whether a trigger of this type should prompt a status change report to associated devices.",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 1,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Disable",
+					"value": 0
+				},
+				{
+					"label": "Enable",
+					"value": 1
+				}
+			]
+		},
+		"7[0x04]": {
+			"label": "Send Status Change Report: Z-Wave",
+			"description": "Determine whether a trigger of this type should prompt a status change report to associated devices.",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 1,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Disable",
+					"value": 0
+				},
+				{
+					"label": "Enable",
+					"value": 1
+				}
+			]
+		},
+		"7[0x08]": {
+			"label": "Send Status Change Report: Timer",
+			"description": "Determine whether a trigger of this type should prompt a status change report to associated devices.",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 1,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Disable",
+					"value": 0
+				},
+				{
+					"label": "Enable",
+					"value": 1
+				}
+			]
+		},
 		"8": {
 			"label": "Status after Power Failure",
 			"valueSize": 1,
@@ -162,6 +250,7 @@
 		},
 		"9": {
 			"label": "Enable/Disable Scene Control",
+			"description": "Send scene commands to hub on physical paddle presses.",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 1,
@@ -180,22 +269,68 @@
 				}
 			]
 		},
-		"10": {
-			"label": "Enable/Disable Local Control",
+		"11": {
+			"label": "Enable Local and Z-Wave Control",
+			"description": "Enable or disable local control at the switch and Z-Wave control.",
 			"valueSize": 1,
 			"minValue": 0,
-			"maxValue": 1,
+			"maxValue": 2,
 			"defaultValue": 1,
 			"readOnly": false,
 			"writeOnly": false,
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "Disable",
+					"label": "Local control disabled, Z-Wave control enabled",
 					"value": 0
 				},
 				{
-					"label": "Enable",
+					"label": "Local control and Z-Wave control enabled",
+					"value": 1
+				},
+				{
+					"label": "Local control and Z-Wave control disabled",
+					"value": 2
+				}
+			]
+		},
+		"12": {
+			"label": "3-Way Switch Type",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Mechanical (off/on only)",
+					"value": 0
+				},
+				{
+					"label": "Mechanical (with dimming control)",
+					"value": 1
+				}
+			]
+		},
+		"13": {
+			"label": "Reporting Behavior When Physical Control Is Disabled",
+			"description": "Enable or disable reporting on/off status and changing LED indicator state even if physical and Z-Wave control is disabled.",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Enabled",
+					"value": 0
+				},
+				{
+					"label": "Disabled",
 					"value": 1
 				}
 			]
