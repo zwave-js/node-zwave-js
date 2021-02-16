@@ -140,13 +140,11 @@ export class TimeCC extends CommandClass {
 
 		this.driver.controllerLog.logNode(node.id, {
 			endpoint: this.endpointIndex,
-			message: `${this.constructor.name}: doing a ${
-				complete ? "complete" : "partial"
-			} interview...`,
+			message: `Interviewing ${this.ccName}...`,
 			direction: "none",
 		});
 
-		// Always keep the slave's time in sync
+		// Synchronize the slave's time
 		if (api.version >= 2) {
 			this.driver.controllerLog.logNode(node.id, {
 				endpoint: this.endpointIndex,
