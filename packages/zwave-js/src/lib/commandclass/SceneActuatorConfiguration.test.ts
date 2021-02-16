@@ -1,5 +1,6 @@
 import { CommandClasses, Duration } from "@zwave-js/core";
 import type { Driver } from "../driver/Driver";
+import { ZWaveNode } from "../node/Node";
 import { createEmptyMockDriver } from "../test/mocks";
 import {
 	SceneActuatorConfigurationCC,
@@ -8,8 +9,6 @@ import {
 	SceneActuatorConfigurationCCSet,
 	SceneActuatorConfigurationCommand,
 } from "./SceneActuatorConfigurationCC";
-
-const fakeDriver = (createEmptyMockDriver() as unknown) as Driver;
 
 function buildCCBuffer(payload: Buffer): Buffer {
 	return Buffer.concat([
@@ -21,6 +20,23 @@ function buildCCBuffer(payload: Buffer): Buffer {
 }
 
 describe("lib/commandclass/SceneActuatorConfigurationCC => ", () => {
+	let fakeDriver: Driver;
+	let node2: ZWaveNode;
+
+	beforeAll(() => {
+		fakeDriver = (createEmptyMockDriver() as unknown) as Driver;
+
+		node2 = new ZWaveNode(2, fakeDriver as any);
+		(fakeDriver.controller.nodes as any).set(2, node2);
+		node2.addCC(CommandClasses["Scene Actuator Configuration"], {
+			isSupported: true,
+			version: 1,
+		});
+	});
+
+	afterAll(() => {
+		node2.destroy();
+	});
 	it("the Get command should serialize correctly", () => {
 		const cc = new SceneActuatorConfigurationCCGet(fakeDriver, {
 			nodeId: 1,
@@ -83,7 +99,7 @@ describe("lib/commandclass/SceneActuatorConfigurationCC => ", () => {
 			]),
 		);
 		const cc = new SceneActuatorConfigurationCCReport(fakeDriver, {
-			nodeId: 4,
+			nodeId: 2,
 			data: ccData,
 		});
 
