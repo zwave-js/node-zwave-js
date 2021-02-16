@@ -303,42 +303,35 @@ export class AssociationCC extends CommandClass {
 
 		this.driver.controllerLog.logNode(node.id, {
 			endpoint: this.endpointIndex,
-			message: `${this.constructor.name}: doing a ${
-				complete ? "complete" : "partial"
-			} interview...`,
+			message: `Interviewing ${this.ccName}...`,
 			direction: "none",
 		});
 
 		// Even if Multi Channel Association is supported, we still need to query the number of
 		// normal association groups since some devices report more association groups than
 		// multi channel association groups
-		let groupCount: number | undefined;
-		if (complete) {
-			// First find out how many groups are supported
+
+		// Find out how many groups are supported
+		this.driver.controllerLog.logNode(node.id, {
+			endpoint: this.endpointIndex,
+			message: "querying number of association groups...",
+			direction: "outbound",
+		});
+		const groupCount = await api.getGroupCount();
+		if (groupCount != undefined) {
 			this.driver.controllerLog.logNode(node.id, {
 				endpoint: this.endpointIndex,
-				message: "querying number of association groups...",
-				direction: "outbound",
+				message: `supports ${groupCount} association groups`,
+				direction: "inbound",
 			});
-			groupCount = await api.getGroupCount();
-			if (groupCount != undefined) {
-				this.driver.controllerLog.logNode(node.id, {
-					endpoint: this.endpointIndex,
-					message: `supports ${groupCount} association groups`,
-					direction: "inbound",
-				});
-			} else {
-				this.driver.controllerLog.logNode(node.id, {
-					endpoint: this.endpointIndex,
-					message:
-						"Querying association groups timed out, skipping interview...",
-					level: "warn",
-				});
-				return;
-			}
 		} else {
-			// Partial interview, read the information from cache
-			groupCount = this.getGroupCountCached();
+			this.driver.controllerLog.logNode(node.id, {
+				endpoint: this.endpointIndex,
+				message:
+					"Querying association groups timed out, skipping interview...",
+				level: "warn",
+			});
+			return;
 		}
 
 		// Skip the remaining quer Association CC in favor of Multi Channel Association if possible
@@ -354,27 +347,10 @@ export class AssociationCC extends CommandClass {
 			return;
 		}
 
-		// Then query each association group
-		for (let groupId = 1; groupId <= groupCount; groupId++) {
-			this.driver.controllerLog.logNode(node.id, {
-				endpoint: this.endpointIndex,
-				message: `querying association group #${groupId}...`,
-				direction: "outbound",
-			});
-			const group = await api.getGroup(groupId);
-			if (group != undefined) {
-				const logMessage = `received information for association group #${groupId}:
-maximum # of nodes: ${group.maxNodes}
-currently assigned nodes: ${group.nodeIds.map(String).join(", ")}`;
-				this.driver.controllerLog.logNode(node.id, {
-					endpoint: this.endpointIndex,
-					message: logMessage,
-					direction: "inbound",
-				});
-			}
-		}
+		// Query each association group for its members
+		await this.refreshValues();
 
-		// Assign the controller to all lifeline groups
+		// Assign the controller to all lifeline groups (Z-Wave+ and configured)
 		const lifelineGroups = getLifelineGroupIds(node);
 		const ownNodeId = this.driver.controller.ownNodeId!;
 		const valueDB = this.getValueDB();
@@ -415,6 +391,36 @@ currently assigned nodes: ${group.nodeIds.map(String).join(", ")}`;
 
 		// Remember that the interview is complete
 		this.interviewComplete = true;
+	}
+
+	public async refreshValues(): Promise<void> {
+		const node = this.getNode()!;
+		const endpoint = this.getEndpoint()!;
+		const api = endpoint.commandClasses.Association.withOptions({
+			priority: MessagePriority.NodeQuery,
+		});
+
+		const groupCount = this.getGroupCountCached();
+
+		// Query each association group
+		for (let groupId = 1; groupId <= groupCount; groupId++) {
+			this.driver.controllerLog.logNode(node.id, {
+				endpoint: this.endpointIndex,
+				message: `querying association group #${groupId}...`,
+				direction: "outbound",
+			});
+			const group = await api.getGroup(groupId);
+			if (group != undefined) {
+				const logMessage = `received information for association group #${groupId}:
+maximum # of nodes: ${group.maxNodes}
+currently assigned nodes: ${group.nodeIds.map(String).join(", ")}`;
+				this.driver.controllerLog.logNode(node.id, {
+					endpoint: this.endpointIndex,
+					message: logMessage,
+					direction: "inbound",
+				});
+			}
+		}
 	}
 }
 
