@@ -349,82 +349,86 @@ export class MeterCC extends CommandClass {
 
 		this.driver.controllerLog.logNode(node.id, {
 			endpoint: this.endpointIndex,
-			message: `${this.constructor.name}: doing a ${
-				complete ? "complete" : "partial"
-			} interview...`,
+			message: `Interviewing ${this.ccName}...`,
 			direction: "none",
 		});
 
 		if (this.version >= 2) {
-			let type: number;
-			let supportsReset: boolean | undefined;
-			let supportedScales: readonly number[] | undefined;
-			let supportedRateTypes: readonly RateType[] | undefined;
+			this.driver.controllerLog.logNode(node.id, {
+				endpoint: this.endpointIndex,
+				message: "querying meter support...",
+				direction: "outbound",
+			});
 
-			const storedType = node.getValue<number>(
-				getTypeValueId(this.endpointIndex),
-			);
-
-			if (complete || storedType == undefined) {
+			const suppResp = await api.getSupported();
+			if (suppResp) {
+				const logMessage = `received meter support:
+type:                 ${getMeterTypeName(
+					this.driver.configManager,
+					suppResp.type,
+				)}
+supported scales:     ${suppResp.supportedScales
+					.map(
+						(s) =>
+							this.driver.configManager.lookupMeterScale(
+								suppResp.type,
+								s,
+							).label,
+					)
+					.map((label) => `\n· ${label}`)
+					.join("")}
+supported rate types: ${suppResp.supportedRateTypes
+					.map((rt) => getEnumMemberName(RateType, rt))
+					.map((label) => `\n· ${label}`)
+					.join("")}
+supports reset:       ${suppResp.supportsReset}`;
 				this.driver.controllerLog.logNode(node.id, {
 					endpoint: this.endpointIndex,
-					message: "querying meter support...",
-					direction: "outbound",
+					message: logMessage,
+					direction: "inbound",
 				});
-
-				const suppResp = await api.getSupported();
-				if (suppResp) {
-					type = suppResp.type;
-					supportsReset = suppResp.supportsReset;
-					supportedScales = suppResp.supportedScales;
-					supportedRateTypes = suppResp.supportedRateTypes;
-
-					const logMessage = `received meter support:
-type:                 ${getMeterTypeName(this.driver.configManager, type)}
-supported scales:     ${supportedScales
-						.map(
-							(s) =>
-								this.driver.configManager.lookupMeterScale(
-									type,
-									s,
-								).label,
-						)
-						.map((label) => `\n· ${label}`)
-						.join("")}
-supported rate types: ${supportedRateTypes
-						.map((rt) => getEnumMemberName(RateType, rt))
-						.map((label) => `\n· ${label}`)
-						.join("")}
-supports reset:       ${supportsReset}`;
-					this.driver.controllerLog.logNode(node.id, {
-						endpoint: this.endpointIndex,
-						message: logMessage,
-						direction: "inbound",
-					});
-				} else {
-					this.driver.controllerLog.logNode(node.id, {
-						endpoint: this.endpointIndex,
-						message:
-							"Querying meter support timed out, skipping interview...",
-						level: "warn",
-					});
-					return;
-				}
 			} else {
-				type = storedType;
-				// supportsReset =
-				// 	node.getValue(
-				// 		getSupportsResetValueId(this.endpointIndex),
-				// 	) ?? false;
-				supportedScales =
-					node.getValue(
-						getSupportedScalesValueId(this.endpointIndex),
-					) ?? [];
-				supportedRateTypes =
-					node.getValue(
-						getSupportedRateTypesValueId(this.endpointIndex),
-					) ?? [];
+				this.driver.controllerLog.logNode(node.id, {
+					endpoint: this.endpointIndex,
+					message:
+						"Querying meter support timed out, skipping interview...",
+					level: "warn",
+				});
+				return;
 			}
+		}
+
+		// Query current meter values
+		await this.refreshValues();
+
+		// Remember that the interview is complete
+		this.interviewComplete = true;
+	}
+
+	public async refreshValues(): Promise<void> {
+		const node = this.getNode()!;
+		const endpoint = this.getEndpoint()!;
+		const api = endpoint.commandClasses.Meter.withOptions({
+			priority: MessagePriority.NodeQuery,
+		});
+
+		if (this.version === 1) {
+			this.driver.controllerLog.logNode(node.id, {
+				endpoint: this.endpointIndex,
+				message: `querying default meter value...`,
+				direction: "outbound",
+			});
+			await api.get();
+		} else {
+			const type: number =
+				node.getValue(getTypeValueId(this.endpointIndex)) ?? 0;
+			const supportedScales: readonly number[] =
+				node.getValue(getSupportedScalesValueId(this.endpointIndex)) ??
+				[];
+			const supportedRateTypes: readonly RateType[] =
+				node.getValue(
+					getSupportedRateTypesValueId(this.endpointIndex),
+				) ?? [];
 
 			const rateTypes = supportedRateTypes.length
 				? supportedRateTypes
@@ -454,17 +458,7 @@ supports reset:       ${supportsReset}`;
 					await api.get({ scale, rateType });
 				}
 			}
-		} else {
-			this.driver.controllerLog.logNode(node.id, {
-				endpoint: this.endpointIndex,
-				message: `querying default meter value...`,
-				direction: "outbound",
-			});
-			await api.get();
 		}
-
-		// Remember that the interview is complete
-		this.interviewComplete = true;
 	}
 
 	public translatePropertyKey(
