@@ -1,0 +1,168 @@
+// Eaton RFTR9605
+// Z-Wave Plus Wireless Duplex Outlet
+{
+	"manufacturer": "Eaton",
+	"manufacturerId": "0x001a",
+	"label": "RFTR9605",
+	"description": "Z-Wave Plus Wireless Duplex Outlet",
+	"devices": [
+		{
+			"productType": "0x5244",
+			"productId": "0x0000"
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"associations": {
+		"1": {
+			"label": "Group 1",
+			"maxNodes": 5,
+			"isLifeline": true
+		}
+	},
+	"paramInformation": {
+		"1": {
+			"label": "Delayed off time",
+			"valueSize": 1,
+			"unit": "seconds",
+			"minValue": 0,
+			"maxValue": 127,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"2": {
+			"label": "Panic On Time",
+			"valueSize": 1,
+			"unit": "seconds",
+			"minValue": 0,
+			"maxValue": 127,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"3": {
+			"label": "Panic Off Time",
+			"valueSize": 1,
+			"unit": "seconds",
+			"minValue": 0,
+			"maxValue": 127,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"5": {
+			"label": "State After Power Loss",
+			"valueSize": 1,
+			"minValue": 1,
+			"maxValue": 3,
+			"defaultValue": 3,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Off",
+					"value": 1
+				},
+				{
+					"label": "On",
+					"value": 2
+				},
+				{
+					"label": "Last state",
+					"value": 3
+				}
+			]
+		},
+		"6": {
+			"label": "Enable/Disable Panic Mode",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Disabled",
+					"value": 0
+				},
+				{
+					"label": "Enabled",
+					"value": 1
+				}
+			]
+		},
+		"13": {
+			"label": "LED Brightness When On",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 4,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Off",
+					"value": 0
+				},
+				{
+					"label": "Low",
+					"value": 1
+				},
+				{
+					"label": "Medium",
+					"value": 3
+				},
+				{
+					"label": "High",
+					"value": 4
+				},
+				{
+					"label": "Full on",
+					"value": 5
+				}
+			]
+		},
+		"14": {
+			"label": "LED Brightness When Off",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 4,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Off",
+					"value": 0
+				},
+				{
+					"label": "Low",
+					"value": 1
+				},
+				{
+					"label": "Medium",
+					"value": 3
+				},
+				{
+					"label": "High",
+					"value": 4
+				},
+				{
+					"label": "Full on",
+					"value": 5
+				}
+			]
+		}
+	}
+}
