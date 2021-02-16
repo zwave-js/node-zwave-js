@@ -254,8 +254,9 @@ export class SceneControllerConfigurationCCAPI extends PhysicalCCAPI {
 		// Return value includes "groupId", because if get(0) is called
 		// the returned report will include the actual groupId of the
 		// last activated groupId / sceneId
-		if (response)
+		if (response) {
 			return pick(response, ["groupId", "sceneId", "dimmingDuration"]);
+		}
 	}
 }
 
