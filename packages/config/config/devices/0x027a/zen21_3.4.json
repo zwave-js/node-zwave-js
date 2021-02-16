@@ -1,10 +1,10 @@
 // Zooz ZEN21
-// Paddle Switch
+// Z-Wave Plus ON/OFF Switch
 {
 	"manufacturer": "Zooz",
 	"manufacturerId": "0x027a",
 	"label": "ZEN21",
-	"description": "Paddle Switch",
+	"description": "Z-Wave Plus ON/OFF Switch",
 	"devices": [
 		{
 			"productType": "0xb111",

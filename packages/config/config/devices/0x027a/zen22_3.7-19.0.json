@@ -1,10 +1,10 @@
 // Zooz ZEN22
-// Dimmer Paddle Switch
+// Z-Wave Plus Dimmer Light Switch
 {
 	"manufacturer": "Zooz",
 	"manufacturerId": "0x027a",
 	"label": "ZEN22",
-	"description": "Dimmer Paddle Switch",
+	"description": "Z-Wave Plus Dimmer Light Switch",
 	"devices": [
 		{
 			"productType": "0xb112",
