@@ -18,7 +18,7 @@
 	},
 	"paramInformation": {
 		"1": {
-			"label": "On Command",
+			"label": "Value of Basic On Command",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 99,
@@ -29,7 +29,7 @@
 			"allowManualEntry": true
 		},
 		"2": {
-			"label": "Off Command",
+			"label": "Value of Basic Off Command",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 99,

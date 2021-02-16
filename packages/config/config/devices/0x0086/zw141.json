@@ -1,9 +1,9 @@
-// Aeon Labs ZW141
+// Aeon Labs ZW141-D/F
 // Nano Shutter
 {
 	"manufacturer": "Aeon Labs",
 	"manufacturerId": "0x0086",
-	"label": "ZW141",
+	"label": "ZW141-D/F",
 	"description": "Nano Shutter",
 	"devices": [
 		{
@@ -35,7 +35,7 @@
 			"allowManualEntry": true
 		},
 		"80": {
-			"label": "Notification to Send to Association Group 1 on State Change",
+			"label": "Notification to Association Group 1 on State Change",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 1,

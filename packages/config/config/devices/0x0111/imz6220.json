@@ -50,11 +50,11 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "Enable",
+					"label": "Enabled",
 					"value": 0
 				},
 				{
-					"label": "Disable",
+					"label": "Disabled",
 					"value": 255
 				}
 			]

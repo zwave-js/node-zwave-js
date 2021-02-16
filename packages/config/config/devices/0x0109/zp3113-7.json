@@ -52,7 +52,7 @@
 		"3": {
 			"label": "Humidity Reporting Interval",
 			"valueSize": 1,
-      "unit": "%",
+			"unit": "%",
 			"minValue": 1,
 			"maxValue": 50,
 			"defaultValue": 20,
@@ -64,7 +64,7 @@
 		"4": {
 			"label": "Auto Light Report Interval",
 			"valueSize": 1,
-      "unit": "%",
+			"unit": "%",
 			"minValue": 0,
 			"maxValue": 50,
 			"defaultValue": 25,
