@@ -1,4 +1,4 @@
-import { ZWaveError, ZWaveErrorCodes } from "@zwave-js/core";
+import { CommandClasses, ZWaveError, ZWaveErrorCodes } from "@zwave-js/core";
 import { SortedList } from "alcalzone-shared/sorted-list";
 import {
 	Action,
@@ -23,7 +23,7 @@ import {
 } from "../controller/SendDataMessages";
 import { MessagePriority } from "../message/Constants";
 import type { Message } from "../message/Message";
-import { NodeStatus } from "../node/Types";
+import { InterviewStage, NodeStatus } from "../node/Types";
 import {
 	CommandQueueEvent,
 	CommandQueueInterpreter,
@@ -283,14 +283,18 @@ const guards: MachineOptions<SendThreadContext, SendThreadEvent>["guards"] = {
 		const targetNode = message.getNodeUnsafe();
 
 		// The send queue is sorted automatically. If the first message is for a sleeping node, all messages in the queue are.
-		// There are two exceptions:
+		// There are a few exceptions:
 		// 1. Pings may be used to determine whether a node is really asleep.
 		// 2. Responses to handshake requests must always be sent, because some sleeping nodes may try to send us encrypted messages.
 		//    If we don't send them, they block the send queue
+		// 3. Nodes that can sleep but do not support wakeup: https://github.com/zwave-js/node-zwave-js/discussions/1537
+		//    We need to try and send messages to them even if they are asleep, because we might never hear from them
 
 		return (
 			!targetNode ||
 			targetNode.status !== NodeStatus.Asleep ||
+			(!targetNode.supportsCC(CommandClasses["Wake Up"]) &&
+				targetNode.interviewStage >= InterviewStage.NodeInfo) ||
 			messageIsPing(message) ||
 			nextTransaction.priority === MessagePriority.Handshake
 		);
