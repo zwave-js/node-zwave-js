@@ -39,7 +39,7 @@ describe("lib/commandclass/SceneActuatorConfigurationCC => ", () => {
 	});
 	it("the Get command should serialize correctly", () => {
 		const cc = new SceneActuatorConfigurationCCGet(fakeDriver, {
-			nodeId: 1,
+			nodeId: 2,
 			sceneId: 1,
 		});
 		const expected = buildCCBuffer(
@@ -72,7 +72,7 @@ describe("lib/commandclass/SceneActuatorConfigurationCC => ", () => {
 
 	it("the Set command should serialize correctly with undefined level", () => {
 		const cc = new SceneActuatorConfigurationCCSet(fakeDriver, {
-			nodeId: 3,
+			nodeId: 2,
 			sceneId: 2,
 			//level: undefined,
 			dimmingDuration: Duration.parseSet(0x05)!,
@@ -113,7 +113,7 @@ describe("lib/commandclass/SceneActuatorConfigurationCC => ", () => {
 			Buffer.from([255]), // not a valid command
 		);
 		const cc: any = new SceneActuatorConfigurationCC(fakeDriver, {
-			nodeId: 5,
+			nodeId: 2,
 			data: serializedCC,
 		});
 		expect(cc.constructor).toBe(SceneActuatorConfigurationCC);
