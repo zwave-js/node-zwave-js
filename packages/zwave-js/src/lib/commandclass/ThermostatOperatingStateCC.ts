@@ -105,20 +105,29 @@ export class ThermostatOperatingStateCC extends CommandClass {
 
 	public async interview(): Promise<void> {
 		const node = this.getNode()!;
-		const endpoint = this.getEndpoint()!;
-		const api = endpoint.commandClasses[
-			"Thermostat Operating State"
-		].withOptions({ priority: MessagePriority.NodeQuery });
 
 		this.driver.controllerLog.logNode(node.id, {
 			endpoint: this.endpointIndex,
-			message: `${this.constructor.name}: doing a ${
-				complete ? "complete" : "partial"
-			} interview...`,
+			message: `Interviewing ${this.ccName}...`,
 			direction: "none",
 		});
 
-		// Always query the current state
+		await this.refreshValues();
+
+		// Remember that the interview is complete
+		this.interviewComplete = true;
+	}
+
+	public async refreshValues(): Promise<void> {
+		const node = this.getNode()!;
+		const endpoint = this.getEndpoint()!;
+		const api = endpoint.commandClasses[
+			"Thermostat Operating State"
+		].withOptions({
+			priority: MessagePriority.NodeQuery,
+		});
+
+		// Query the current state
 		this.driver.controllerLog.logNode(node.id, {
 			endpoint: this.endpointIndex,
 			message: "querying thermostat operating state...",
@@ -136,9 +145,6 @@ export class ThermostatOperatingStateCC extends CommandClass {
 				direction: "inbound",
 			});
 		}
-
-		// Remember that the interview is complete
-		this.interviewComplete = true;
 	}
 }
 
