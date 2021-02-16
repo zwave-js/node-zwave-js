@@ -178,7 +178,7 @@
 		},
 		"12": {
 			"label": "Auto Relay On",
-			"description": "Configures the state that will cause the relay to be turned on",
+			"description": "Configures which events will cause the relay to be turned on",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 2,
