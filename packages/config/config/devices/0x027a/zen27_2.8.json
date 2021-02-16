@@ -439,7 +439,7 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "Physical disbaled: Every brightness level; Physical enabled: Final level only",
+					"label": "Physical disabled: Every brightness level; Physical enabled: Final level only",
 					"value": 0
 				},
 				{
