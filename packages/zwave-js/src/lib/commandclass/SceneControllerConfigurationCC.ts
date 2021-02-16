@@ -138,7 +138,7 @@ export class SceneControllerConfigurationCCAPI extends PhysicalCCAPI {
 				// Disable Group ID / Scene ID
 				await this.disable(propertyKey);
 			} else {
-				// We need to set the dimming duration along with
+				// We need to set the dimming duration along with the scene ID
 				const node = this.endpoint.getNodeUnsafe()!;
 				// If duration is missing, we set a default of instant
 				const dimmingDuration =
