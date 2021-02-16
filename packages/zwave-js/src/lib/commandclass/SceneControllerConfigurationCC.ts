@@ -295,11 +295,10 @@ export class SceneControllerConfigurationCC extends CommandClass {
 		if (groupCount === 0) {
 			this.driver.controllerLog.logNode(node.id, {
 				endpoint: this.endpointIndex,
-				message: `soft failing interview (missing association group count)`,
+				message: `skipping Scene Controller Configuration interview because Association group count is unknown`,
 				direction: "none",
+				level: "warn",
 			});
-
-			this.interviewComplete = false;
 			return;
 		}
 
