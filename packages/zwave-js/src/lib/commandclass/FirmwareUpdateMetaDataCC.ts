@@ -392,7 +392,7 @@ export class FirmwareUpdateMetaDataCCRequestGet extends FirmwareUpdateMetaDataCC
 			if ("firmwareTarget" in options) {
 				this.firmwareTarget = options.firmwareTarget;
 				this.fragmentSize = options.fragmentSize;
-				this.activation = options.activation;
+				this.activation = options.activation ?? false;
 				this.hardwareVersion = options.hardwareVersion;
 			}
 		}
