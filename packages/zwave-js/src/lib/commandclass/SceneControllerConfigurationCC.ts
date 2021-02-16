@@ -23,7 +23,7 @@ import {
 	throwUnsupportedPropertyKey,
 	throwWrongValueType,
 } from "./API";
-import { getGroupCountValueId } from "./AssociationCC";
+import type { AssociationCC } from "./AssociationCC";
 import {
 	API,
 	CCCommand,
@@ -82,9 +82,7 @@ function persistSceneConfig(
 
 	if (!valueDB.hasMetadata(sceneIdValueId)) {
 		valueDB.setMetadata(sceneIdValueId, {
-			...ValueMetadata.Number,
-			min: 0,
-			max: 255,
+			...ValueMetadata.UInt8,
 			label: `Associated Scene ID (${groupId})`,
 		});
 	}
@@ -308,9 +306,8 @@ export class SceneControllerConfigurationCC extends CommandClass {
 			direction: "none",
 		});
 
-		// Always query scene and dimmer duration for each association group
-		// skipping group #1, which is reserved for Lifeline
-		for (let groupId = 2; groupId <= groupCount; groupId++) {
+		// Always query scene configuration for each association group
+		for (let groupId = 1; groupId <= groupCount; groupId++) {
 			this.driver.controllerLog.logNode(node.id, {
 				endpoint: this.endpointIndex,
 				message: `querying scene configuration for association group #${groupId}...`,
@@ -338,8 +335,14 @@ dimming duration: ${group.dimmingDuration.toString()}`;
 	 * This only works AFTER the node has been interviewed by this CC
 	 * or the AssociationCC.
 	 */
-	public getGroupCountCached(): number {
-		return this.getValueDB().getValue(getGroupCountValueId()) ?? 0;
+	protected getGroupCountCached(): number {
+		return (
+			this.getEndpoint()
+				?.createCCInstanceUnsafe<AssociationCC>(
+					CommandClasses.Association,
+				)
+				?.getGroupCountCached() ?? 0
+		);
 	}
 }
 
@@ -370,9 +373,12 @@ export class SceneControllerConfigurationCCSet extends SceneControllerConfigurat
 			this.sceneId = options.sceneId;
 			this.dimmingDuration = options.dimmingDuration;
 
-			if (this.groupId < 2 || this.groupId > groupCount) {
+			// The client SHOULD NOT specify group 1 (the life-line group).
+			// We don't block it here, because the specs don't forbid it,
+			// and it may be needed for some devices.
+			if (this.groupId < 1 || this.groupId > groupCount) {
 				throw new ZWaveError(
-					`${this.constructor.name}: The user ID must be between 2 and the number of supported groups ${groupCount}.`,
+					`${this.constructor.name}: The group ID must be between 1 and the number of supported groups ${groupCount}.`,
 					ZWaveErrorCodes.Argument_Invalid,
 				);
 			}
@@ -448,12 +454,24 @@ export class SceneControllerConfigurationCCReport extends SceneControllerConfigu
 	}
 }
 
+function testResponseForSceneControllerConfigurationGet(
+	sent: SceneControllerConfigurationCCGet,
+	received: SceneControllerConfigurationCCReport,
+) {
+	// We expect a Scene Controller Configuration Report that matches
+	// the requested groupId, unless groupId 0 was requested
+	return sent.groupId === 0 || received.groupId === sent.groupId;
+}
+
 interface SceneControllerConfigurationCCGetOptions extends CCCommandOptions {
 	groupId: number;
 }
 
 @CCCommand(SceneControllerConfigurationCommand.Get)
-@expectedCCResponse(SceneControllerConfigurationCCReport)
+@expectedCCResponse(
+	SceneControllerConfigurationCCReport,
+	testResponseForSceneControllerConfigurationGet,
+)
 export class SceneControllerConfigurationCCGet extends SceneControllerConfigurationCC {
 	public constructor(
 		driver: Driver,
@@ -469,6 +487,13 @@ export class SceneControllerConfigurationCCGet extends SceneControllerConfigurat
 				ZWaveErrorCodes.Deserialization_NotImplemented,
 			);
 		} else {
+			const groupCount = this.getGroupCountCached();
+			if (options.groupId < 0 || options.groupId > groupCount) {
+				throw new ZWaveError(
+					`${this.constructor.name}: The group ID must be between 0 and the number of supported groups ${groupCount}.`,
+					ZWaveErrorCodes.Argument_Invalid,
+				);
+			}
 			this.groupId = options.groupId;
 		}
 	}
