@@ -1,10 +1,10 @@
-// ThermoFloor 45 126 86
-// Heatit Z-Repeater
+// Heatit 45 126 86
+// Z-Repeater
 {
-	"manufacturer": "ThermoFloor",
+	"manufacturer": "Heatit",
 	"manufacturerId": "0x019b",
 	"label": "45 126 86",
-	"description": "Heatit Z-Repeater",
+	"description": "Z-Repeater",
 	"devices": [
 		{
 			"productType": "0x0003",

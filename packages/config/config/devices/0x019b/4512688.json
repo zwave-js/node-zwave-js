@@ -1,10 +1,10 @@
-// ThermoFloor 4512688
-// Heatit Z-Smoke Battery
+// Heatit 4512688
+// Z-Smoke Battery
 {
-	"manufacturer": "ThermoFloor",
+	"manufacturer": "Heatit",
 	"manufacturerId": "0x019b",
 	"label": "4512688",
-	"description": "Heatit Z-Smoke Battery",
+	"description": "Z-Smoke Battery",
 	"devices": [
 		{
 			"productType": "0x0003",
