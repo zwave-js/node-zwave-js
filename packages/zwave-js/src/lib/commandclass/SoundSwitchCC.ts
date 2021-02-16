@@ -294,7 +294,7 @@ export class SoundSwitchCCAPI extends CCAPI {
 export class SoundSwitchCC extends CommandClass {
 	declare ccCommand: SoundSwitchCommand;
 
-	public async interview(complete: boolean = true): Promise<void> {
+	public async interview(): Promise<void> {
 		const node = this.getNode()!;
 		const endpoint = this.getEndpoint()!;
 		const api = endpoint.commandClasses["Sound Switch"].withOptions({

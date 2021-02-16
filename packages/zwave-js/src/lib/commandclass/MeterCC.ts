@@ -340,7 +340,7 @@ export class MeterCCAPI extends PhysicalCCAPI {
 export class MeterCC extends CommandClass {
 	declare ccCommand: MeterCommand;
 
-	public async interview(complete: boolean = true): Promise<void> {
+	public async interview(): Promise<void> {
 		const node = this.getNode()!;
 		const endpoint = this.getEndpoint()!;
 		const api = endpoint.commandClasses.Meter.withOptions({

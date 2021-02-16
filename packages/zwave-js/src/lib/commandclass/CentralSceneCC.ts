@@ -190,7 +190,7 @@ export class CentralSceneCC extends CommandClass {
 		return true;
 	}
 
-	public async interview(complete: boolean = true): Promise<void> {
+	public async interview(): Promise<void> {
 		const node = this.getNode()!;
 		const endpoint = this.getEndpoint()!;
 		const api = endpoint.commandClasses["Central Scene"].withOptions({

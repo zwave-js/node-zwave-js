@@ -288,7 +288,7 @@ export class MultiChannelCC extends CommandClass {
 		});
 	}
 
-	public async interview(complete: boolean = true): Promise<void> {
+	public async interview(): Promise<void> {
 		// Special interview procedure for legacy nodes
 		if (this.version === 1) return this.interviewV1(complete);
 

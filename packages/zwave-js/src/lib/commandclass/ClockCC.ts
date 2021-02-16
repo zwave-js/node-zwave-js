@@ -97,7 +97,7 @@ export class ClockCCAPI extends CCAPI {
 export class ClockCC extends CommandClass {
 	declare ccCommand: ClockCommand;
 
-	public async interview(complete: boolean = true): Promise<void> {
+	public async interview(): Promise<void> {
 		const node = this.getNode()!;
 		const endpoint = this.getEndpoint()!;
 		const api = endpoint.commandClasses.Clock.withOptions({

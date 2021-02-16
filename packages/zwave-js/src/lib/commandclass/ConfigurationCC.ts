@@ -483,7 +483,7 @@ export class ConfigurationCC extends CommandClass {
 		this.registerValue("isParamInformationFromConfig" as any, true);
 	}
 
-	public async interview(complete: boolean = true): Promise<void> {
+	public async interview(): Promise<void> {
 		const node = this.getNode()!;
 
 		const config = node.deviceConfig?.paramInformation;

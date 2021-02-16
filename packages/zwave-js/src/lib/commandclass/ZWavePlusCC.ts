@@ -124,7 +124,7 @@ export class ZWavePlusCCAPI extends PhysicalCCAPI {
 export class ZWavePlusCC extends CommandClass {
 	declare ccCommand: ZWavePlusCommand;
 
-	public async interview(complete: boolean = true): Promise<void> {
+	public async interview(): Promise<void> {
 		const node = this.getNode()!;
 		const endpoint = this.getEndpoint()!;
 		const api = endpoint.commandClasses["Z-Wave Plus Info"].withOptions({

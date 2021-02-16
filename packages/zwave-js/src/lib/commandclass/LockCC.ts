@@ -115,7 +115,7 @@ export class LockCCAPI extends PhysicalCCAPI {
 export class LockCC extends CommandClass {
 	declare ccCommand: LockCommand;
 
-	public async interview(complete: boolean = true): Promise<void> {
+	public async interview(): Promise<void> {
 		const node = this.getNode()!;
 		const endpoint = this.getEndpoint()!;
 		const api = endpoint.commandClasses.Lock.withOptions({

@@ -210,7 +210,7 @@ export class ManufacturerProprietaryCC extends CommandClass {
 		return super.serialize();
 	}
 
-	public async interview(complete: boolean = true): Promise<void> {
+	public async interview(): Promise<void> {
 		this.assertManufacturerIdIsSet();
 
 		const node = this.getNode()!;

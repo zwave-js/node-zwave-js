@@ -131,7 +131,7 @@ export class TimeCCAPI extends CCAPI {
 export class TimeCC extends CommandClass {
 	declare ccCommand: TimeCommand;
 
-	public async interview(complete: boolean = true): Promise<void> {
+	public async interview(): Promise<void> {
 		const node = this.getNode()!;
 		const endpoint = this.getEndpoint()!;
 		const api = endpoint.commandClasses.Time.withOptions({

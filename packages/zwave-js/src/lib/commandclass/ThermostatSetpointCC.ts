@@ -333,7 +333,7 @@ export class ThermostatSetpointCC extends CommandClass {
 		}
 	}
 
-	public async interview(complete: boolean = true): Promise<void> {
+	public async interview(): Promise<void> {
 		const node = this.getNode()!;
 		const endpoint = this.getEndpoint()!;
 		const api = endpoint.commandClasses["Thermostat Setpoint"].withOptions({

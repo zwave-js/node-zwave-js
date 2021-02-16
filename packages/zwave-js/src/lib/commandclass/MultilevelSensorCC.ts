@@ -205,7 +205,7 @@ export class MultilevelSensorCCAPI extends PhysicalCCAPI {
 export class MultilevelSensorCC extends CommandClass {
 	declare ccCommand: MultilevelSensorCommand;
 
-	public async interview(complete: boolean = true): Promise<void> {
+	public async interview(): Promise<void> {
 		const node = this.getNode()!;
 		const endpoint = this.getEndpoint()!;
 		const api = endpoint.commandClasses["Multilevel Sensor"].withOptions({
