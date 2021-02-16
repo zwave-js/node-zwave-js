@@ -199,93 +199,84 @@ export class CentralSceneCC extends CommandClass {
 
 		this.driver.controllerLog.logNode(node.id, {
 			endpoint: this.endpointIndex,
-			message: `${this.constructor.name}: doing a ${
-				complete ? "complete" : "partial"
-			} interview...`,
+			message: `Interviewing ${this.ccName}...`,
 			direction: "none",
 		});
 
-		if (complete) {
-			// If one Association group issues CentralScene notifications,
-			// we need to associate ourselves with that channel
-			if (
-				node.supportsCC(
-					CommandClasses["Association Group Information"],
-				) &&
-				(node.supportsCC(CommandClasses.Association) ||
-					node.supportsCC(
-						CommandClasses["Multi Channel Association"],
-					))
-			) {
-				const groupsIssueingNotifications = node
-					.createCCInstance(AssociationGroupInfoCC)!
-					.findGroupsForIssuedCommand(
-						this.ccId,
-						CentralSceneCommand.Notification,
-					);
-				if (groupsIssueingNotifications.length > 0) {
-					// We always grab the first group - usually it should be the lifeline
-					const groupId = groupsIssueingNotifications[0];
-					const existingAssociations =
-						this.driver.controller
-							.getAssociations(node.id)
-							.get(groupId) ?? [];
+		// If one Association group issues CentralScene notifications,
+		// we need to associate ourselves with that channel
+		if (
+			node.supportsCC(CommandClasses["Association Group Information"]) &&
+			(node.supportsCC(CommandClasses.Association) ||
+				node.supportsCC(CommandClasses["Multi Channel Association"]))
+		) {
+			const groupsIssueingNotifications = node
+				.createCCInstance(AssociationGroupInfoCC)!
+				.findGroupsForIssuedCommand(
+					this.ccId,
+					CentralSceneCommand.Notification,
+				);
+			if (groupsIssueingNotifications.length > 0) {
+				// We always grab the first group - usually it should be the lifeline
+				const groupId = groupsIssueingNotifications[0];
+				const existingAssociations =
+					this.driver.controller
+						.getAssociations(node.id)
+						.get(groupId) ?? [];
 
-					if (
-						!existingAssociations.some(
-							(a) =>
-								a.nodeId === this.driver.controller.ownNodeId,
-						)
-					) {
-						this.driver.controllerLog.logNode(node.id, {
-							endpoint: this.endpointIndex,
-							message:
-								"Configuring associations to receive Central Scene notifications...",
-							direction: "outbound",
-						});
-						await this.driver.controller.addAssociations(
-							node.id,
-							groupId,
-							[{ nodeId: this.driver.controller.ownNodeId! }],
-						);
-					}
+				if (
+					!existingAssociations.some(
+						(a) => a.nodeId === this.driver.controller.ownNodeId,
+					)
+				) {
+					this.driver.controllerLog.logNode(node.id, {
+						endpoint: this.endpointIndex,
+						message:
+							"Configuring associations to receive Central Scene notifications...",
+						direction: "outbound",
+					});
+					await this.driver.controller.addAssociations(
+						node.id,
+						groupId,
+						[{ nodeId: this.driver.controller.ownNodeId! }],
+					);
 				}
 			}
+		}
 
-			this.driver.controllerLog.logNode(node.id, {
-				endpoint: this.endpointIndex,
-				message: "Querying supported scenes...",
-				direction: "outbound",
-			});
-			const ccSupported = await api.getSupported();
-			if (ccSupported) {
-				const logMessage = `received supported scenes:
+		this.driver.controllerLog.logNode(node.id, {
+			endpoint: this.endpointIndex,
+			message: "Querying supported scenes...",
+			direction: "outbound",
+		});
+		const ccSupported = await api.getSupported();
+		if (ccSupported) {
+			const logMessage = `received supported scenes:
 # of scenes:           ${ccSupported.sceneCount}
 supports slow refresh: ${ccSupported.supportsSlowRefresh}`;
-				this.driver.controllerLog.logNode(node.id, {
-					endpoint: this.endpointIndex,
-					message: logMessage,
-					direction: "inbound",
-				});
-			} else {
-				this.driver.controllerLog.logNode(node.id, {
-					endpoint: this.endpointIndex,
-					message:
-						"Querying supported scenes timed out, skipping interview...",
-					level: "warn",
-				});
-				return;
-			}
+			this.driver.controllerLog.logNode(node.id, {
+				endpoint: this.endpointIndex,
+				message: logMessage,
+				direction: "inbound",
+			});
+		} else {
+			this.driver.controllerLog.logNode(node.id, {
+				endpoint: this.endpointIndex,
+				message:
+					"Querying supported scenes timed out, skipping interview...",
+				level: "warn",
+			});
+			return;
+		}
 
-			// The slow refresh capability should be enabled whenever possible
-			if (this.version >= 3 && ccSupported?.supportsSlowRefresh) {
-				this.driver.controllerLog.logNode(node.id, {
-					endpoint: this.endpointIndex,
-					message: "Enabling slow refresh capability...",
-					direction: "outbound",
-				});
-				await api.setConfiguration(true);
-			}
+		// The slow refresh capability should be enabled whenever possible
+		if (this.version >= 3 && ccSupported?.supportsSlowRefresh) {
+			this.driver.controllerLog.logNode(node.id, {
+				endpoint: this.endpointIndex,
+				message: "Enabling slow refresh capability...",
+				direction: "outbound",
+			});
+			await api.setConfiguration(true);
 		}
 
 		// Remember that the interview is complete
