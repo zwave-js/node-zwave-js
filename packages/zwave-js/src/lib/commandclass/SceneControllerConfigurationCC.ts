@@ -313,7 +313,7 @@ export class SceneControllerConfigurationCC extends CommandClass {
 		for (let groupId = 2; groupId <= groupCount; groupId++) {
 			this.driver.controllerLog.logNode(node.id, {
 				endpoint: this.endpointIndex,
-				message: `querying association group #${groupId}...`,
+				message: `querying scene configuration for association group #${groupId}...`,
 				direction: "outbound",
 			});
 			const group = await api.get(groupId);
