@@ -308,6 +308,8 @@ export class SceneActuatorConfigurationCCReport extends SceneActuatorConfigurati
 		this.level = this.payload[1];
 		this.dimmingDuration =
 			Duration.parseReport(this.payload[2]) ?? new Duration(0, "unknown");
+
+		this.persistValues();
 	}
 
 	public sceneId: number;
