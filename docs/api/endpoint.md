@@ -135,7 +135,7 @@ for (const cc of node.commandClasses) {
 }
 ```
 
-All CC APIs share the same basic functionality, which is described below. For the description of each CC API, please refer to the corresponding documentation page.
+All CC APIs share the same basic functionality, which is described below. For the description of each CC API, please refer to the [corresponding documentation](api/CCs/index.md).
 
 ## CC API methods
 
