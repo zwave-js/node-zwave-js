@@ -309,75 +309,73 @@ export class SecurityCC extends CommandClass {
 		});
 
 		// This only needs to be done once
-		if (complete) {
-			this.driver.controllerLog.logNode(node.id, {
-				message: "querying securely supported commands...",
-				direction: "outbound",
-			});
+		this.driver.controllerLog.logNode(node.id, {
+			message: "querying securely supported commands...",
+			direction: "outbound",
+		});
 
-			const resp = await api.getSupportedCommands();
-			if (!resp) {
-				if (node.isSecure === true) {
-					this.driver.controllerLog.logNode(node.id, {
-						endpoint: this.endpointIndex,
-						message:
-							"Querying securely supported commands timed out, skipping Security interview...",
-						level: "warn",
-					});
-					// TODO: Abort interview?
-				} else {
-					// We didn't know if the node was secure, assume that it is not actually included securely
-					this.driver.controllerLog.logNode(
-						node.id,
-						`The node is not included securely. Continuing interview non-securely.`,
-					);
-					node.isSecure = false;
-				}
-				return;
-			}
-
-			const logLines: string[] = [
-				"received secure commands",
-				"supported CCs:",
-			];
-			for (const cc of resp.supportedCCs) {
-				logLines.push(`· ${getCCName(cc)}`);
-			}
-			logLines.push("controlled CCs:");
-			for (const cc of resp.controlledCCs) {
-				logLines.push(`· ${getCCName(cc)}`);
-			}
-			this.driver.controllerLog.logNode(node.id, {
-				message: logLines.join("\n"),
-				direction: "inbound",
-			});
-
-			// Remember which commands are supported securely
-			for (const cc of resp.supportedCCs) {
-				endpoint.addCC(cc, {
-					isSupported: true,
-					secure: true,
+		const resp = await api.getSupportedCommands();
+		if (!resp) {
+			if (node.isSecure === true) {
+				this.driver.controllerLog.logNode(node.id, {
+					endpoint: this.endpointIndex,
+					message:
+						"Querying securely supported commands timed out, skipping Security interview...",
+					level: "warn",
 				});
-			}
-			for (const cc of resp.controlledCCs) {
-				endpoint.addCC(cc, {
-					isControlled: true,
-					secure: true,
-				});
-			}
-
-			// We know for sure that the node is included securely
-			if (node.isSecure !== true) {
-				node.isSecure = true;
+				// TODO: Abort interview?
+			} else {
+				// We didn't know if the node was secure, assume that it is not actually included securely
 				this.driver.controllerLog.logNode(
 					node.id,
-					`The node is included securely.`,
+					`The node is not included securely. Continuing interview non-securely.`,
 				);
+				node.isSecure = false;
 			}
-
-			// Remember that the interview is complete
-			this.interviewComplete = true;
+			return;
 		}
+
+		const logLines: string[] = [
+			"received secure commands",
+			"supported CCs:",
+		];
+		for (const cc of resp.supportedCCs) {
+			logLines.push(`· ${getCCName(cc)}`);
+		}
+		logLines.push("controlled CCs:");
+		for (const cc of resp.controlledCCs) {
+			logLines.push(`· ${getCCName(cc)}`);
+		}
+		this.driver.controllerLog.logNode(node.id, {
+			message: logLines.join("\n"),
+			direction: "inbound",
+		});
+
+		// Remember which commands are supported securely
+		for (const cc of resp.supportedCCs) {
+			endpoint.addCC(cc, {
+				isSupported: true,
+				secure: true,
+			});
+		}
+		for (const cc of resp.controlledCCs) {
+			endpoint.addCC(cc, {
+				isControlled: true,
+				secure: true,
+			});
+		}
+
+		// We know for sure that the node is included securely
+		if (node.isSecure !== true) {
+			node.isSecure = true;
+			this.driver.controllerLog.logNode(
+				node.id,
+				`The node is included securely.`,
+			);
+		}
+
+		// Remember that the interview is complete
+		this.interviewComplete = true;
 	}
 
 	/** Tests if a should be sent secure and thus requires encapsulation */
