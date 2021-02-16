@@ -12,6 +12,7 @@ import {
 } from "@zwave-js/core";
 import { pick } from "@zwave-js/shared";
 import type { Driver } from "../driver/Driver";
+import { MessagePriority } from "../message/Constants";
 import { PhysicalCCAPI } from "./API";
 import {
 	getGroupCountValueId as getAssociationGroupCountValueId,
@@ -406,105 +407,35 @@ export class MultiChannelAssociationCC extends CommandClass {
 
 		this.driver.controllerLog.logNode(node.id, {
 			endpoint: this.endpointIndex,
-			message: `${this.constructor.name}: doing a ${
-				complete ? "complete" : "partial"
-			} interview...`,
+			message: `Interviewing ${this.ccName}...`,
 			direction: "none",
 		});
 
-		let mcGroupCount: number | undefined;
-		if (complete) {
-			// First find out how many groups are supported as multi channel
+		// First find out how many groups are supported as multi channel
+		this.driver.controllerLog.logNode(node.id, {
+			endpoint: this.endpointIndex,
+			message: "querying number of multi channel association groups...",
+			direction: "outbound",
+		});
+		const mcGroupCount = await mcAPI.getGroupCount();
+		if (mcGroupCount != undefined) {
+			this.driver.controllerLog.logNode(node.id, {
+				endpoint: this.endpointIndex,
+				message: `supports ${mcGroupCount} multi channel association groups`,
+				direction: "inbound",
+			});
+		} else {
 			this.driver.controllerLog.logNode(node.id, {
 				endpoint: this.endpointIndex,
 				message:
-					"querying number of multi channel association groups...",
-				direction: "outbound",
+					"Querying multi channel association groups timed out, skipping interview...",
+				level: "warn",
 			});
-			mcGroupCount = await mcAPI.getGroupCount();
-			if (mcGroupCount != undefined) {
-				this.driver.controllerLog.logNode(node.id, {
-					endpoint: this.endpointIndex,
-					message: `supports ${mcGroupCount} multi channel association groups`,
-					direction: "inbound",
-				});
-			} else {
-				this.driver.controllerLog.logNode(node.id, {
-					endpoint: this.endpointIndex,
-					message:
-						"Querying multi channel association groups timed out, skipping interview...",
-					level: "warn",
-				});
-				return;
-			}
-		} else {
-			// Partial interview, read the information from cache
-			mcGroupCount =
-				this.getValueDB().getValue(getGroupCountValueId()) || 0;
-		}
-		// Some devices report more association groups than multi channel association groups, so we need this info here
-		const assocGroupCount =
-			this.getValueDB().getValue<number>(
-				getAssociationGroupCountValueId(),
-			) || mcGroupCount;
-
-		// Then query each multi channel association group
-		for (let groupId = 1; groupId <= mcGroupCount; groupId++) {
-			this.driver.controllerLog.logNode(node.id, {
-				endpoint: this.endpointIndex,
-				message: `querying multi channel association group #${groupId}...`,
-				direction: "outbound",
-			});
-			const group = await mcAPI.getGroup(groupId);
-			if (!group) continue;
-			const logMessage = `received information for multi channel association group #${groupId}:
-maximum # of nodes:           ${group.maxNodes}
-currently assigned nodes:     ${group.nodeIds.map(String).join(", ")}
-currently assigned endpoints: ${group.endpoints
-				.map(({ nodeId, endpoint }) => {
-					if (typeof endpoint === "number") {
-						return `${nodeId}:${endpoint}`;
-					} else {
-						return `${nodeId}:[${endpoint.map(String).join(", ")}]`;
-					}
-				})
-				.join("")}`;
-			this.driver.controllerLog.logNode(node.id, {
-				endpoint: this.endpointIndex,
-				message: logMessage,
-				direction: "inbound",
-			});
+			return;
 		}
 
-		// Check if there are more non-multi-channel association groups we haven't queried yet
-		if (assocGroupCount > mcGroupCount) {
-			this.driver.controllerLog.logNode(node.id, {
-				endpoint: this.endpointIndex,
-				message: `querying additional non-multi-channel association groups...`,
-				direction: "outbound",
-			});
-			for (
-				let groupId = mcGroupCount + 1;
-				groupId <= assocGroupCount;
-				groupId++
-			) {
-				this.driver.controllerLog.logNode(node.id, {
-					endpoint: this.endpointIndex,
-					message: `querying association group #${groupId}...`,
-					direction: "outbound",
-				});
-				const group = await assocAPI.getGroup(groupId);
-				if (!group) continue;
-				const logMessage = `received information for association group #${groupId}:
-maximum # of nodes:           ${group.maxNodes}
-currently assigned nodes:     ${group.nodeIds.map(String).join(", ")}`;
-				this.driver.controllerLog.logNode(node.id, {
-					endpoint: this.endpointIndex,
-					message: logMessage,
-					direction: "inbound",
-				});
-			}
-		}
+		// Query each association group for its members
+		await this.refreshValues();
 
 		// Assign the controller to all lifeline groups
 		const lifelineGroups = getLifelineGroupIds(node);
@@ -642,6 +573,86 @@ currently assigned nodes:     ${group.nodeIds.map(String).join(", ")}`;
 
 		// Remember that the interview is complete
 		this.interviewComplete = true;
+	}
+
+	public async refreshValues(): Promise<void> {
+		const node = this.getNode()!;
+		const endpoint = this.getEndpoint()!;
+		const mcAPI = endpoint.commandClasses[
+			"Multi Channel Association"
+		].withOptions({
+			priority: MessagePriority.NodeQuery,
+		});
+		const assocAPI = endpoint.commandClasses.Association.withOptions({
+			priority: MessagePriority.NodeQuery,
+		});
+
+		const mcGroupCount: number =
+			this.getValueDB().getValue(getGroupCountValueId()) ?? 0;
+
+		// Some devices report more association groups than multi channel association groups, so we need this info here
+		const assocGroupCount =
+			this.getValueDB().getValue<number>(
+				getAssociationGroupCountValueId(),
+			) || mcGroupCount;
+
+		// Then query each multi channel association group
+		for (let groupId = 1; groupId <= mcGroupCount; groupId++) {
+			this.driver.controllerLog.logNode(node.id, {
+				endpoint: this.endpointIndex,
+				message: `querying multi channel association group #${groupId}...`,
+				direction: "outbound",
+			});
+			const group = await mcAPI.getGroup(groupId);
+			if (!group) continue;
+			const logMessage = `received information for multi channel association group #${groupId}:
+maximum # of nodes:           ${group.maxNodes}
+currently assigned nodes:     ${group.nodeIds.map(String).join(", ")}
+currently assigned endpoints: ${group.endpoints
+				.map(({ nodeId, endpoint }) => {
+					if (typeof endpoint === "number") {
+						return `${nodeId}:${endpoint}`;
+					} else {
+						return `${nodeId}:[${endpoint.map(String).join(", ")}]`;
+					}
+				})
+				.join("")}`;
+			this.driver.controllerLog.logNode(node.id, {
+				endpoint: this.endpointIndex,
+				message: logMessage,
+				direction: "inbound",
+			});
+		}
+
+		// Check if there are more non-multi-channel association groups we haven't queried yet
+		if (assocGroupCount > mcGroupCount) {
+			this.driver.controllerLog.logNode(node.id, {
+				endpoint: this.endpointIndex,
+				message: `querying additional non-multi-channel association groups...`,
+				direction: "outbound",
+			});
+			for (
+				let groupId = mcGroupCount + 1;
+				groupId <= assocGroupCount;
+				groupId++
+			) {
+				this.driver.controllerLog.logNode(node.id, {
+					endpoint: this.endpointIndex,
+					message: `querying association group #${groupId}...`,
+					direction: "outbound",
+				});
+				const group = await assocAPI.getGroup(groupId);
+				if (!group) continue;
+				const logMessage = `received information for association group #${groupId}:
+maximum # of nodes:           ${group.maxNodes}
+currently assigned nodes:     ${group.nodeIds.map(String).join(", ")}`;
+				this.driver.controllerLog.logNode(node.id, {
+					endpoint: this.endpointIndex,
+					message: logMessage,
+					direction: "inbound",
+				});
+			}
+		}
 	}
 }
 
