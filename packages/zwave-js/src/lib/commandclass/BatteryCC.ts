@@ -149,7 +149,6 @@ export class BatteryCC extends CommandClass {
 
 	public async interview(): Promise<void> {
 		const node = this.getNode()!;
-		const endpoint = this.getEndpoint()!;
 
 		this.driver.controllerLog.logNode(node.id, {
 			endpoint: this.endpointIndex,
