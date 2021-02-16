@@ -3,7 +3,7 @@
 	Placeholder for next release:
 	## __WORK IN PROGRESS__
 -->
-## __WORK IN PROGRESS__
+## 6.4.0 (2021-02-16)
 ### Features
 * Implemented `Scene Controller Configuration CC`
 * Added the ability to to get the current logging configuration
