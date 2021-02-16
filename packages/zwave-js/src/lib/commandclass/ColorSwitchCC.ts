@@ -486,7 +486,7 @@ export class ColorSwitchCC extends CommandClass {
 				direction: "outbound",
 			});
 
-			// Create metadata
+			// Create metadata for the separate color channels
 			for (const color of supportedColors) {
 				const colorName = getEnumMemberName(ColorComponent, color);
 				valueDB.setMetadata(
@@ -506,6 +506,16 @@ export class ColorSwitchCC extends CommandClass {
 					},
 				);
 			}
+			// And the compound one
+			valueDB.setMetadata(getCurrentColorValueID(this.endpointIndex), {
+				...ValueMetadata.ReadOnly,
+				label: `Current Color`,
+			});
+			valueDB.setMetadata(getTargetColorValueID(this.endpointIndex), {
+				...ValueMetadata.Any,
+				label: `Target Color`,
+			});
+
 			// Create the collective HEX color values
 			const supportsHex = [
 				ColorComponent.Red,
