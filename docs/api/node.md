@@ -104,6 +104,17 @@ Refreshes all non-static sensor and actuator values from this node. Although thi
 > [!WARNING]  
 > **DO NOT** use this method too frequently. Depending on the devices, this may generate a lot of traffic.
 
+### `refreshCCValues`
+
+```ts
+refreshCCValues(cc: CommandClasses): Promise<void>
+```
+
+Refreshes all non-static values from the given CC (all endpoints). Although this method returns a `Promise`, it should generally **not** be `await`ed, since the update may take a long time.
+
+> [!WARNING]  
+> **DO NOT** use this method too frequently. Depending on the devices, this may generate a lot of traffic.
+
 ### `getEndpoint`
 
 ```ts
