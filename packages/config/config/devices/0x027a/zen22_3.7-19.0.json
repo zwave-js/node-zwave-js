@@ -440,7 +440,7 @@
 		},
 		"20": {
 			"label": "Dimming Reporting",
-			"description": "Set how the dimmer to reports when paddles are tapped and held.",
+			"description": "Set how the dimmer reports when paddles are tapped and held.",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 1,
@@ -450,11 +450,11 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "Send each brightness level (Z-Wave disabled); Final level (Z-Wave enabled)",
+					"label": "Physical disbaled: Every brightness level; Physical enabled: Final level only",
 					"value": 0
 				},
 				{
-					"label": "Send final brightness level regardless of physical/Z-Wave mode",
+					"label": "Send final brightness level only",
 					"value": 1
 				}
 			]
