@@ -300,11 +300,6 @@ export class SceneControllerConfigurationCC extends CommandClass {
 			return;
 		}
 
-		this.driver.controllerLog.logNode(node.id, {
-			endpoint: this.endpointIndex,
-			message: `supports ${groupCount} association groups`,
-			direction: "none",
-		});
 
 		// Always query scene configuration for each association group
 		for (let groupId = 1; groupId <= groupCount; groupId++) {
