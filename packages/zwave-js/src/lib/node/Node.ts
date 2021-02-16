@@ -2582,6 +2582,8 @@ version:               ${this.version}`;
 			firmwareTarget: target,
 			fragmentSize: this._firmwareUpdateStatus.fragmentSize,
 			checksum: CRC16_CCITT(data),
+			// We do not want to delay the firmware activation
+			activation: meta.supportsActivation !== false ? false : undefined,
 		});
 		switch (status) {
 			case FirmwareUpdateRequestStatus.Error_AuthenticationExpected:

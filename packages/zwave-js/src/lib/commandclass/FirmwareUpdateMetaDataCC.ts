@@ -213,6 +213,27 @@ export class FirmwareUpdateMetaDataCCAPI extends PhysicalCCAPI {
 		});
 		await this.driver.sendCommand(cc, this.commandOptions);
 	}
+
+	/** Activates a previously transferred firmware image */
+	public async activateFirmware(
+		options: FirmwareUpdateMetaDataCCActivationSetOptions,
+	): Promise<FirmwareUpdateActivationStatus | undefined> {
+		this.assertSupportsCommand(
+			FirmwareUpdateMetaDataCommand,
+			FirmwareUpdateMetaDataCommand.ActivationSet,
+		);
+
+		const cc = new FirmwareUpdateMetaDataCCActivationSet(this.driver, {
+			nodeId: this.endpoint.nodeId,
+			endpoint: this.endpoint.index,
+			...options,
+		});
+		const response = await this.driver.sendCommand<FirmwareUpdateMetaDataCCActivationReport>(
+			cc,
+			this.commandOptions,
+		);
+		return response?.activationStatus;
+	}
 }
 
 @commandClass(CommandClasses["Firmware Update Meta Data"])
@@ -613,8 +634,7 @@ export class FirmwareUpdateMetaDataCCActivationReport extends FirmwareUpdateMeta
 	}
 }
 
-interface FirmwareUpdateMetaDataCCActivationSetOptions
-	extends CCCommandOptions {
+interface FirmwareUpdateMetaDataCCActivationSetOptions {
 	manufacturerId: number;
 	firmwareId: number;
 	checksum: number;
@@ -630,7 +650,7 @@ export class FirmwareUpdateMetaDataCCActivationSet extends FirmwareUpdateMetaDat
 		driver: Driver,
 		options:
 			| CommandClassDeserializationOptions
-			| FirmwareUpdateMetaDataCCActivationSetOptions,
+			| (FirmwareUpdateMetaDataCCActivationSetOptions & CCCommandOptions),
 	) {
 		super(driver, options);
 		if (gotDeserializationOptions(options)) {
