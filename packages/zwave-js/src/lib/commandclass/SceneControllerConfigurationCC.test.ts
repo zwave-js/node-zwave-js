@@ -30,7 +30,7 @@ describe("lib/commandclass/SceneControllerConfigurationCC => ", () => {
 	beforeAll(() => {
 		fakeDriver = (createEmptyMockDriver() as unknown) as Driver;
 
-		node2 = new ZWaveNode(5, fakeDriver as any);
+		node2 = new ZWaveNode(2, fakeDriver as any);
 		(fakeDriver.controller.nodes as any).set(2, node2);
 		node2.addCC(CommandClasses["Scene Controller Configuration"], {
 			isSupported: true,
@@ -49,7 +49,7 @@ describe("lib/commandclass/SceneControllerConfigurationCC => ", () => {
 
 	it("the Get command should serialize correctly", () => {
 		const cc = new SceneControllerConfigurationCCGet(fakeDriver, {
-			nodeId: 1,
+			nodeId: 2,
 			groupId: 1,
 		});
 		const expected = buildCCBuffer(
@@ -59,6 +59,15 @@ describe("lib/commandclass/SceneControllerConfigurationCC => ", () => {
 			]),
 		);
 		expect(cc.serialize()).toEqual(expected);
+	});
+
+	it("the Get command should throw if GroupId > groupCount", () => {
+		expect(() => {
+			new SceneControllerConfigurationCCGet(fakeDriver, {
+				nodeId: 2,
+				groupId: fakeGroupCount + 1,
+			});
+		}).toThrow();
 	});
 
 	it("the Set command should serialize correctly", () => {
@@ -77,6 +86,18 @@ describe("lib/commandclass/SceneControllerConfigurationCC => ", () => {
 			]),
 		);
 		expect(cc.serialize()).toEqual(expected);
+	});
+
+	it("the Set command should throw if GroupId > groupCount", () => {
+		expect(
+			() =>
+				new SceneControllerConfigurationCCSet(fakeDriver, {
+					nodeId: 2,
+					groupId: fakeGroupCount + 1,
+					sceneId: 240,
+					dimmingDuration: Duration.parseSet(0x05)!,
+				}),
+		).toThrow();
 	});
 
 	it("the Report command (v1) should be deserialized correctly", () => {
