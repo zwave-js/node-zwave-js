@@ -28,22 +28,26 @@
 	},
 	"paramInformation": {
 		"1": {
-			"label": "Paddle Orientation",
+			"label": "Invert Switch",
 			"valueSize": 1,
 			"minValue": 0,
-			"maxValue": 1,
+			"maxValue": 2,
 			"defaultValue": 0,
 			"readOnly": false,
 			"writeOnly": false,
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "Top on, bottom off",
+					"label": "Normal Orientation",
 					"value": 0
 				},
 				{
-					"label": "Top off, bottom on",
+					"label": "Invert switch",
 					"value": 1
+				},
+				{
+					"label": "Both paddles toggle",
+					"value": 2
 				}
 			]
 		},
@@ -58,19 +62,19 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "LED is on when switch is off",
+					"label": "LED on when switch off",
 					"value": 0
 				},
 				{
-					"label": "LED is on when switch is off",
+					"label": "LED on when switch on",
 					"value": 1
 				},
 				{
-					"label": "LED is always off",
+					"label": "LED always off",
 					"value": 2
 				},
 				{
-					"label": "LED is always on",
+					"label": "LED always on",
 					"value": 3
 				}
 			]
@@ -138,81 +142,89 @@
 			"allowManualEntry": true
 		},
 		"7[0x01]": {
-			"label": "Control Group 2 With Physical Switch",
+			"label": "Send Status Change Report: Local Control",
+			"description": "Determine whether a trigger of this type should prompt a status change report to associated devices.",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 1,
 			"defaultValue": 1,
+			"unsigned": true,
 			"readOnly": false,
 			"writeOnly": false,
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "Disabled",
+					"label": "Disable",
 					"value": 0
 				},
 				{
-					"label": "Enabled",
+					"label": "Enable",
 					"value": 1
 				}
 			]
 		},
 		"7[0x02]": {
-			"label": "Control Group 2 With Connected 3-Way Switch",
+			"label": "Send Status Change Report: 3-Way",
+			"description": "Determine whether a trigger of this type should prompt a status change report to associated devices.",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 1,
 			"defaultValue": 1,
+			"unsigned": true,
 			"readOnly": false,
 			"writeOnly": false,
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "Disabled",
+					"label": "Disable",
 					"value": 0
 				},
 				{
-					"label": "Enabled",
+					"label": "Enable",
 					"value": 1
 				}
 			]
 		},
 		"7[0x04]": {
-			"label": "Control Group 2 With Z-Wave Commands",
+			"label": "Send Status Change Report: Z-Wave",
+			"description": "Determine whether a trigger of this type should prompt a status change report to associated devices.",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 1,
 			"defaultValue": 1,
+			"unsigned": true,
 			"readOnly": false,
 			"writeOnly": false,
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "Disabled",
+					"label": "Disable",
 					"value": 0
 				},
 				{
-					"label": "Enabled",
+					"label": "Enable",
 					"value": 1
 				}
 			]
 		},
 		"7[0x08]": {
-			"label": "Control Group 2 With On/Off Timers",
+			"label": "Send Status Change Report: Timer",
+			"description": "Determine whether a trigger of this type should prompt a status change report to associated devices.",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 1,
 			"defaultValue": 1,
+			"unsigned": true,
 			"readOnly": false,
 			"writeOnly": false,
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "Disabled",
+					"label": "Disable",
 					"value": 0
 				},
 				{
-					"label": "Enabled",
+					"label": "Enable",
 					"value": 1
 				}
 			]
@@ -242,7 +254,7 @@
 			]
 		},
 		"10": {
-			"label": "Scene Control",
+			"label": "Enable/Disable Scene Control",
 			"description": "Send scene commands to hub on physical paddle presses.",
 			"valueSize": 1,
 			"minValue": 0,

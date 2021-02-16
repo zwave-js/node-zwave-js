@@ -1,19 +1,24 @@
-// Zooz ZEN22
-// Z-Wave Plus Dimmer Light Switch
+// Zooz ZEN21
+// Z-Wave Plus ON/OFF Switch
 {
 	"manufacturer": "Zooz",
 	"manufacturerId": "0x027a",
-	"label": "ZEN22",
-	"description": "Z-Wave Plus Dimmer Light Switch",
+	"label": "ZEN21",
+	"description": "Z-Wave Plus ON/OFF Switch",
 	"devices": [
 		{
-			"productType": "0xb112",
-			"productId": "0x1f1c"
+			"productType": "0xb111",
+			"productId": "0x1e1c"
+		},
+		{
+			"productType": "0xaa00",
+			"productId": "0xaa01",
+			"zwaveAllianceId": 3667
 		}
 	],
 	"firmwareVersion": {
-		"min": "3.7",
-		"max": "19.0"
+		"min": "3.4",
+		"max": "255.255"
 	},
 	"supportsZWavePlus": true,
 	"paramInformation": {
@@ -70,7 +75,7 @@
 			]
 		},
 		"3": {
-			"label": "Enable/Disable Auto Turn-off",
+			"label": "Enable/Disable Auto Off",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 1,
@@ -80,17 +85,17 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "Disabled",
+					"label": "Disable",
 					"value": 0
 				},
 				{
-					"label": "Enabled",
+					"label": "Enable",
 					"value": 1
 				}
 			]
 		},
 		"4": {
-			"label": "Auto Turn-off Timer",
+			"label": "Auto-Off Timer",
 			"unit": "minutes",
 			"valueSize": 4,
 			"minValue": 1,
@@ -101,7 +106,7 @@
 			"allowManualEntry": true
 		},
 		"5": {
-			"label": "Enable/Disable Auto Turn-On",
+			"label": "Enable/Disable Auto On",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 1,
@@ -111,17 +116,17 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "Disabled",
+					"label": "Disable",
 					"value": 0
 				},
 				{
-					"label": "Enabled",
+					"label": "Enable",
 					"value": 1
 				}
 			]
 		},
 		"6": {
-			"label": "Auto Turn-on Timer",
+			"label": "Auto On Timer",
 			"unit": "minutes",
 			"valueSize": 4,
 			"minValue": 1,
@@ -220,7 +225,7 @@
 			]
 		},
 		"8": {
-			"label": "Status after Power failure",
+			"label": "Status after Power Failure",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 2,
@@ -238,70 +243,18 @@
 					"value": 1
 				},
 				{
-					"label": "Prior State",
+					"label": "Prior state",
 					"value": 2
 				}
 			]
 		},
 		"9": {
-			"label": "Dimmer Ramp Rate",
-			"valueSize": 1,
-			"unit": "seconds",
-			"minValue": 1,
-			"maxValue": 99,
-			"defaultValue": 1,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
-		},
-		"10": {
-			"label": "Minimum brightness level",
-			"unit": "%",
-			"valueSize": 1,
-			"minValue": 1,
-			"maxValue": 99,
-			"defaultValue": 1,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
-		},
-		"11": {
-			"label": "Maximum brightness level",
-			"unit": "%",
-			"valueSize": 1,
-			"minValue": 1,
-			"maxValue": 99,
-			"defaultValue": 99,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
-		},
-		"12": {
-			"label": "Double Tap: Brightness Level",
-			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 1,
-			"defaultValue": 0,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "Full brightness (default)",
-					"value": 0
-				},
-				{
-					"label": "Brightness set in parameter 11",
-					"value": 1
-				}
-			]
-		},
-		"13": {
 			"label": "Enable/Disable Scene Control",
+			"description": "Send scene commands to hub on physical paddle presses.",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 1,
-			"defaultValue": 0,
+			"defaultValue": 1,
 			"readOnly": false,
 			"writeOnly": false,
 			"allowManualEntry": false,
@@ -316,34 +269,9 @@
 				}
 			]
 		},
-		"14": {
-			"label": "Enable/Disable Double Tap",
-			"description": "Allows control of the double tap function and assigning the brightness level to single tap.",
-			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 2,
-			"defaultValue": 0,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "Double tap to full brightness",
-					"value": 0
-				},
-				{
-					"label": "Single tap to last brightness level",
-					"value": 1
-				},
-				{
-					"label": "Single tap to full brightness",
-					"value": 2
-				}
-			]
-		},
-		"15": {
-			"label": "Smart Bulb Mode: Enable/Disable Local Control",
-			"description": "Enable or disable local on/off control. If enabled, you’ll only be able to control the connected light via Z-Wave.",
+		"11": {
+			"label": "Enable Local and Z-Wave Control",
+			"description": "Enable or disable local control at the switch and Z-Wave control.",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 2,
@@ -366,55 +294,11 @@
 				}
 			]
 		},
-		"16": {
-			"label": "Physical Dimming Speed",
-			"description": "Time to reach 100% brightness",
-			"valueSize": 1,
-			"unit": "seconds",
-			"minValue": 1,
-			"maxValue": 99,
-			"defaultValue": 4,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
-		},
-		"17": {
-			"label": "Z-Wave Ramp Rate",
-			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 1,
-			"defaultValue": 0,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "Z-Wave ramp rate matches parameter 9",
-					"value": 0
-				},
-				{
-					"label": "Z-Wave ramp rate set independently",
-					"value": 1
-				}
-			]
-		},
-		"18": {
-			"label": "Single Tap: Custom Brightness Level",
-			"description": "Custom brightness level to set with single tap; 0 = last brightness level; 1-99% for custom level",
-			"valueSize": 1,
-			"unit": "%",
-			"minValue": 0,
-			"maxValue": 99,
-			"defaultValue": 0,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
-		},
-		"19": {
+		"12": {
 			"label": "3-Way Switch Type",
 			"valueSize": 1,
 			"minValue": 0,
-			"maxValue": 3,
+			"maxValue": 1,
 			"defaultValue": 0,
 			"readOnly": false,
 			"writeOnly": false,
@@ -425,41 +309,12 @@
 					"value": 0
 				},
 				{
-					"label": "Mechanical (with dimming control)",
-					"value": 1
-				},
-				{
-					"label": "Momentary (with dimming control)",
-					"value": 2
-				},
-				{
-					"label": "Momentary (with dimming control, but reduce after double click)",
-					"value": 3
-				}
-			]
-		},
-		"20": {
-			"label": "Dimming Reporting",
-			"description": "Set how the dimmer reports when paddles are tapped and held.",
-			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 1,
-			"defaultValue": 0,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "Physical disabled: Every brightness level; Physical enabled: Final level only",
-					"value": 0
-				},
-				{
-					"label": "Send final brightness level only",
+					"label": "Momentary",
 					"value": 1
 				}
 			]
 		},
-		"21": {
+		"13": {
 			"label": "Reporting Behavior When Physical Control Is Disabled",
 			"description": "Enable or disable reporting on/off status and changing LED indicator state even if physical and Z-Wave control is disabled.",
 			"valueSize": 1,
@@ -479,18 +334,12 @@
 					"value": 1
 				}
 			]
-		},
-		"22": {
-			"label": "Night Light Mode",
-			"description": "Brightness level when bottom paddle held down for one second",
-			"valueSize": 1,
-			"unit": "%",
-			"minValue": 0,
-			"maxValue": 99,
-			"defaultValue": 0,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
 		}
+	},
+	"metadata": {
+		"inclusion": "1. Initiate inclusion (pairing) in the app (or web interface).\n2. Tap the upper paddle of the switch 3 times.\n3. The LED indicator will blink to signal communication and stay on/off when communication is concluded",
+		"exclusion": "1. Bring your Z-Wave gateway (hub) close to the switch if possible\n2. Put the Z-Wave hub into exclusion mode \n3. Tap the lower paddle on the switch 3 times quickly\n4. Your hub will confirm exclusion and the device will disappear from your controller's device list",
+		"reset": "If your primary controller is missing or inoperable, you may need to reset the device to factory settings. To complete the reset process manually, tap-tap-tap’n’hold the upper paddle for at least 10 seconds. The LED indicator will flash to confirm successful reset.\nNOTE: All previously recorded activity and custom settings will be erased from the device’s memory",
+		"manual": "https://products.z-wavealliance.org/ProductManual/File?folder=&filename=product_documents/3667/zooz-z-wave-plus-on-off-switch-zen21-ver3.1-manual.pdf"
 	}
 }
