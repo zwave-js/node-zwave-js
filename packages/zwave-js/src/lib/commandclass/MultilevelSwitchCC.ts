@@ -410,37 +410,46 @@ export class MultilevelSwitchCC extends CommandClass {
 
 		this.driver.controllerLog.logNode(node.id, {
 			endpoint: this.endpointIndex,
-			message: `${this.constructor.name}: doing a ${
-				complete ? "complete" : "partial"
-			} interview...`,
+			message: `Interviewing ${this.ccName}...`,
 			direction: "none",
 		});
 
-		if (complete) {
-			if (this.version >= 3) {
-				// Find out which kind of switch this is
+		if (this.version >= 3) {
+			// Find out which kind of switch this is
+			this.driver.controllerLog.logNode(node.id, {
+				endpoint: this.endpointIndex,
+				message: "requesting switch type...",
+				direction: "outbound",
+			});
+			const switchType = await api.getSupported();
+			if (switchType != undefined) {
 				this.driver.controllerLog.logNode(node.id, {
 					endpoint: this.endpointIndex,
-					message: "requesting switch type...",
-					direction: "outbound",
+					message: `has switch type ${getEnumMemberName(
+						SwitchType,
+						switchType,
+					)}`,
+					direction: "inbound",
 				});
-				const switchType = await api.getSupported();
-				if (switchType != undefined) {
-					this.driver.controllerLog.logNode(node.id, {
-						endpoint: this.endpointIndex,
-						message: `has switch type ${getEnumMemberName(
-							SwitchType,
-							switchType,
-						)}`,
-						direction: "inbound",
-					});
-				}
-			} else {
-				// requesting the switch type automatically creates the up/down actions
-				// We need to do this manually for V1 and V2
-				this.createMetadataForLevelChangeActions();
 			}
+		} else {
+			// requesting the switch type automatically creates the up/down actions
+			// We need to do this manually for V1 and V2
+			this.createMetadataForLevelChangeActions();
 		}
+
+		await this.refreshValues();
+
+		// Remember that the interview is complete
+		this.interviewComplete = true;
+	}
+
+	public async refreshValues(): Promise<void> {
+		const node = this.getNode()!;
+		const endpoint = this.getEndpoint()!;
+		const api = endpoint.commandClasses["Multilevel Switch"].withOptions({
+			priority: MessagePriority.NodeQuery,
+		});
 
 		this.driver.controllerLog.logNode(node.id, {
 			endpoint: this.endpointIndex,
@@ -448,9 +457,6 @@ export class MultilevelSwitchCC extends CommandClass {
 			direction: "outbound",
 		});
 		await api.get();
-
-		// Remember that the interview is complete
-		this.interviewComplete = true;
 	}
 
 	public setMappedBasicValue(value: number): boolean {
