@@ -264,7 +264,7 @@ export class SceneActuatorConfigurationCCSet extends SceneActuatorConfigurationC
 			}
 			this.sceneId = options.sceneId;
 			this.dimmingDuration = options.dimmingDuration;
-			if (options.level) {
+			if (options.level != undefined) {
 				if (options.level < 0 || options.level > 255) {
 					throw new ZWaveError(
 						`level ${options.level} out of range [1..255]`,

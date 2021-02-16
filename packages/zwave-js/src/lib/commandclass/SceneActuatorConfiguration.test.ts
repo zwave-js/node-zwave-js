@@ -39,7 +39,7 @@ describe("lib/commandclass/SceneActuatorConfigurationCC => ", () => {
 		const cc = new SceneActuatorConfigurationCCSet(fakeDriver, {
 			nodeId: 2,
 			sceneId: 2,
-			level: 0x50,
+			level: 0x00,
 			dimmingDuration: Duration.parseSet(0x05)!,
 		});
 		const expected = buildCCBuffer(
@@ -48,7 +48,7 @@ describe("lib/commandclass/SceneActuatorConfigurationCC => ", () => {
 				2,
 				0x05, // dimmingDuration
 				0b1000_0000,
-				0x50, // level
+				0x00, // level
 			]),
 		);
 		expect(cc.serialize()).toEqual(expected);
@@ -58,7 +58,7 @@ describe("lib/commandclass/SceneActuatorConfigurationCC => ", () => {
 		const cc = new SceneActuatorConfigurationCCSet(fakeDriver, {
 			nodeId: 3,
 			sceneId: 2,
-			level: undefined,
+			//level: undefined,
 			dimmingDuration: Duration.parseSet(0x05)!,
 		});
 		const expected = buildCCBuffer(
