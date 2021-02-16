@@ -158,42 +158,32 @@ export class ManufacturerSpecificCC extends CommandClass {
 			"Manufacturer Specific"
 		].withOptions({ priority: MessagePriority.NodeQuery });
 
-		this.driver.controllerLog.logNode(node.id, {
-			endpoint: this.endpointIndex,
-			message: `${this.constructor.name}: doing a ${
-				complete ? "complete" : "partial"
-			} interview...`,
-			direction: "none",
-		});
+		if (!node.isControllerNode()) {
+			this.driver.controllerLog.logNode(node.id, {
+				endpoint: this.endpointIndex,
+				message: `Interviewing ${this.ccName}...`,
+				direction: "none",
+			});
 
-		// manufacturer information is static
-		if (complete) {
-			if (node.isControllerNode()) {
-				this.driver.controllerLog.logNode(
-					node.id,
-					"not querying manufacturer information from the controller...",
-				);
-			} else {
-				this.driver.controllerLog.logNode(node.id, {
-					endpoint: this.endpointIndex,
-					message: "querying manufacturer information...",
-					direction: "outbound",
-				});
-				const mfResp = await api.get();
-				if (mfResp) {
-					const logMessage = `received response for manufacturer information:
+			this.driver.controllerLog.logNode(node.id, {
+				endpoint: this.endpointIndex,
+				message: "querying manufacturer information...",
+				direction: "outbound",
+			});
+			const mfResp = await api.get();
+			if (mfResp) {
+				const logMessage = `received response for manufacturer information:
   manufacturer: ${
 		this.driver.configManager.lookupManufacturer(mfResp.manufacturerId) ||
 		"unknown"
   } (${num2hex(mfResp.manufacturerId)})
   product type: ${num2hex(mfResp.productType)}
   product id:   ${num2hex(mfResp.productId)}`;
-					this.driver.controllerLog.logNode(node.id, {
-						endpoint: this.endpointIndex,
-						message: logMessage,
-						direction: "inbound",
-					});
-				}
+				this.driver.controllerLog.logNode(node.id, {
+					endpoint: this.endpointIndex,
+					message: logMessage,
+					direction: "inbound",
+				});
 			}
 		}
 
