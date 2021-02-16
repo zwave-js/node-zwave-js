@@ -1074,6 +1074,9 @@ export class Driver extends EventEmitter {
 		this._nodesReady.add(node.id);
 		this.controllerLog.logNode(node.id, "The node is ready to be used");
 
+		// Regularly query listening nodes for updated values
+		node.scheduleManualValueRefreshes();
+
 		this.checkAllNodesReady();
 	}
 
