@@ -853,9 +853,19 @@ export class Driver extends EventEmitter {
 			// Then do all the nodes in parallel
 			for (const node of this._controller.nodes.values()) {
 				if (node.id === this._controller.ownNodeId) continue;
-				// don't await the interview, because it may take a very long time
-				// if a node is asleep
-				void this.interviewNode(node);
+				if (node.interviewStage < InterviewStage.Complete) {
+					// don't await the interview, because it may take a very long time
+					// if a node is asleep
+					void this.interviewNode(node);
+				} else {
+					// The node was already interviewed, just determine its status
+					// Assume that sleeping nodes start asleep and ping listening nodes to check their status
+					if (node.canSleep) {
+						node.markAsAsleep();
+					} else if (node.isListening) {
+						void node.ping();
+					}
+				}
 			}
 		}
 	}
@@ -871,7 +881,7 @@ export class Driver extends EventEmitter {
 	 */
 	public async interviewNode(node: ZWaveNode): Promise<void> {
 		if (node.interviewStage === InterviewStage.Complete) {
-			node.interviewStage = InterviewStage.RestartFromCache;
+			return;
 		}
 
 		// Avoid having multiple restart timeouts active

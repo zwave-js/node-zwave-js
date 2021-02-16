@@ -310,12 +310,6 @@ enum InterviewStage {
 	NodeInfo,
 
 	/**
-	 * This marks the beginning of re-interviews on application startup.
-	 * RestartFromCache and later stages will be serialized as "Complete" in the cache
-	 */
-	RestartFromCache,
-
-	/**
 	 * Information for all command classes has been queried.
 	 * This includes static information that is requested once as well as dynamic
 	 * information that is requested on every restart.

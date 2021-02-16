@@ -1021,22 +1021,9 @@ export class ZWaveNode extends Endpoint {
 			}
 		}
 
-		// The node is deemed ready when has been interviewed completely at least once
-		if (this.interviewStage === InterviewStage.RestartFromCache) {
-			// Mark nodes as potentially ready. The first message will determine if it is
-			this.readyMachine.send("RESTART_INTERVIEW_FROM_CACHE");
-
-			// Ping listening nodes to check their status
-			// Sleeping nodes are assumed to be asleep after a restart from cache
-			if (this.isListening) await this.ping();
-		}
-
 		// At this point the basic interview of new nodes is done. Start here when re-interviewing known nodes
 		// to get updated information about command classes
-		if (
-			this.interviewStage === InterviewStage.RestartFromCache ||
-			this.interviewStage === InterviewStage.NodeInfo
-		) {
+		if (this.interviewStage === InterviewStage.NodeInfo) {
 			// Only advance the interview if it was completed, otherwise abort
 			if (await this.interviewCCs()) {
 				await this.setInterviewStage(InterviewStage.CommandClasses);
@@ -2971,10 +2958,7 @@ protocol version:      ${this._protocolVersion}`;
 	public serialize(): JSONObject {
 		const ret = {
 			id: this.id,
-			interviewStage:
-				this.interviewStage >= InterviewStage.RestartFromCache
-					? InterviewStage[InterviewStage.Complete]
-					: InterviewStage[this.interviewStage],
+			interviewStage: InterviewStage[this.interviewStage],
 			deviceClass: this.deviceClass && {
 				basic: this.deviceClass.basic.key,
 				generic: this.deviceClass.generic.key,
@@ -3028,6 +3012,11 @@ protocol version:      ${this._protocolVersion}`;
 				typeof obj.interviewStage === "number"
 					? obj.interviewStage
 					: InterviewStage[obj.interviewStage];
+
+			// Mark already-interviewed nodes as potentially ready
+			if (this.interviewStage === InterviewStage.Complete) {
+				this.readyMachine.send("RESTART_FROM_CACHE");
+			}
 		}
 		if (isObject(obj.deviceClass)) {
 			const { basic, generic, specific } = obj.deviceClass;
