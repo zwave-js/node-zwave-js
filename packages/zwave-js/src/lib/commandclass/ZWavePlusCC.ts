@@ -133,33 +133,29 @@ export class ZWavePlusCC extends CommandClass {
 
 		this.driver.controllerLog.logNode(node.id, {
 			endpoint: this.endpointIndex,
-			message: `${this.constructor.name}: doing a ${
-				complete ? "complete" : "partial"
-			} interview...`,
+			message: `Interviewing ${this.ccName}...`,
 			direction: "none",
 		});
 
-		if (complete) {
-			this.driver.controllerLog.logNode(node.id, {
-				endpoint: this.endpointIndex,
-				message: "querying Z-Wave+ information...",
-				direction: "outbound",
-			});
+		this.driver.controllerLog.logNode(node.id, {
+			endpoint: this.endpointIndex,
+			message: "querying Z-Wave+ information...",
+			direction: "outbound",
+		});
 
-			const zwavePlusResponse = await api.get();
-			if (zwavePlusResponse) {
-				const logMessage = `received response for Z-Wave+ information:
+		const zwavePlusResponse = await api.get();
+		if (zwavePlusResponse) {
+			const logMessage = `received response for Z-Wave+ information:
 Z-Wave+ version: ${zwavePlusResponse.zwavePlusVersion}
 role type:       ${ZWavePlusRoleType[zwavePlusResponse.roleType]}
 node type:       ${ZWavePlusNodeType[zwavePlusResponse.nodeType]}
 installer icon:  ${num2hex(zwavePlusResponse.installerIcon)}
 user icon:       ${num2hex(zwavePlusResponse.userIcon)}`;
-				this.driver.controllerLog.logNode(node.id, {
-					endpoint: this.endpointIndex,
-					message: logMessage,
-					direction: "inbound",
-				});
-			}
+			this.driver.controllerLog.logNode(node.id, {
+				endpoint: this.endpointIndex,
+				message: logMessage,
+				direction: "inbound",
+			});
 		}
 
 		// Remember that the interview is complete
