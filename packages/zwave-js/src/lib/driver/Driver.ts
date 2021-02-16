@@ -989,6 +989,8 @@ export class Driver extends EventEmitter {
 			}awake.`,
 		);
 
+		this.driverLog.sendQueue(this.sendThread.state.context.queue);
+
 		// Make sure to handle the pending messages as quickly as possible
 		if (oldStatus === NodeStatus.Asleep) {
 			this.sendThread.send({
@@ -1004,6 +1006,10 @@ export class Driver extends EventEmitter {
 					return { type: "requeue" };
 				},
 			});
+
+			setTimeout(() => {
+				this.driverLog.sendQueue(this.sendThread.state.context.queue);
+			}, 20);
 		}
 	}
 
