@@ -143,6 +143,10 @@ export class ZWaveLogContainer extends winston.Container {
 		}
 	}
 
+	public getConfiguration(): LogConfig {
+		return this.logConfig;
+	}
+
 	public getConfiguredTransports(): Transport[] {
 		return this.logConfig.transports;
 	}
