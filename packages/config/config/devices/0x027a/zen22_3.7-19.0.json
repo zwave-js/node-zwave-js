@@ -328,15 +328,15 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "Enabled",
+					"label": "Double tap to full brightness",
 					"value": 0
 				},
 				{
-					"label": "Disabled (last level)",
+					"label": "Single tap to last brightness level",
 					"value": 1
 				},
 				{
-					"label": "Disabled (full/max level)",
+					"label": "Single tap to full brightness",
 					"value": 2
 				}
 			]
@@ -353,15 +353,15 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "Local control disabled",
+					"label": "Local control disabled, Z-Wave control enabled",
 					"value": 0
 				},
 				{
-					"label": "Both enabled",
+					"label": "Local control and Z-Wave control enabled",
 					"value": 1
 				},
 				{
-					"label": "Local/Z-Wave control disabled",
+					"label": "Local control and Z-Wave control disabled",
 					"value": 2
 				}
 			]

@@ -281,15 +281,15 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "Local control disabled",
+					"label": "Local control disabled, Z-Wave control enabled",
 					"value": 0
 				},
 				{
-					"label": "Both enabled",
+					"label": "Local control and Z-Wave control enabled",
 					"value": 1
 				},
 				{
-					"label": "Local/Z-Wave control disabled",
+					"label": "Local control and Z-Wave control disabled",
 					"value": 2
 				}
 			]
