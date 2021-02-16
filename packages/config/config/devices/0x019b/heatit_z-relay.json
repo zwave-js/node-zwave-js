@@ -79,7 +79,7 @@
 		},
 		"4": {
 			"label": "Thermistor Type Input 2",
-			"description": "This parameter decides which kind of thermistor that is connected to the input.",
+			"description": "This parameter decides which kind of thermistor is connected to input 2.",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 1,
