@@ -18,918 +18,115 @@
 	},
 	"paramInformation": {
 		"1": {
-			"label": "User Code 1 Type",
-			"description": "Set the type of user for their corresponding user code. Guests and Workers will require schedules attached to them in order for those types to be assigned",
-			"valueSize": 1,
-			"minValue": 1,
-			"maxValue": 4,
-			"defaultValue": 1,
-			"unsigned": true,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "Owner",
-					"value": 1
-				},
-				{
-					"label": "Guest",
-					"value": 3
-				},
-				{
-					"label": "Worker",
-					"value": 4
-				}
-			]
+			"$import": "templates/kwikset_template.json#usercode_1"
 		},
 		"2": {
-			"label": "User Code 2 Type",
-			"description": "Set the type of user for their corresponding user code. Guests and Workers will require schedules attached to them in order for those types to be assigned",
-			"valueSize": 1,
-			"minValue": 1,
-			"maxValue": 4,
-			"defaultValue": 1,
-			"unsigned": true,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "Owner",
-					"value": 1
-				},
-				{
-					"label": "Guest",
-					"value": 3
-				},
-				{
-					"label": "Worker",
-					"value": 4
-				}
-			]
+			"$import": "templates/kwikset_template.json#usercode_2"
 		},
 		"3": {
-			"label": "User Code 3 Type",
-			"description": "Set the type of user for their corresponding user code. Guests and Workers will require schedules attached to them in order for those types to be assigned",
-			"valueSize": 1,
-			"minValue": 1,
-			"maxValue": 4,
-			"defaultValue": 1,
-			"unsigned": true,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "Owner",
-					"value": 1
-				},
-				{
-					"label": "Guest",
-					"value": 3
-				},
-				{
-					"label": "Worker",
-					"value": 4
-				}
-			]
+			"$import": "templates/kwikset_template.json#usercode_3"
 		},
 		"4": {
-			"label": "User Code 4 Type",
-			"description": "Set the type of user for their corresponding user code. Guests and Workers will require schedules attached to them in order for those types to be assigned",
-			"valueSize": 1,
-			"minValue": 1,
-			"maxValue": 4,
-			"defaultValue": 1,
-			"unsigned": true,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "Owner",
-					"value": 1
-				},
-				{
-					"label": "Guest",
-					"value": 3
-				},
-				{
-					"label": "Worker",
-					"value": 4
-				}
-			]
+			"$import": "templates/kwikset_template.json#usercode_4"
 		},
 		"5": {
-			"label": "User Code 5 Type",
-			"description": "Set the type of user for their corresponding user code. Guests and Workers will require schedules attached to them in order for those types to be assigned",
-			"valueSize": 1,
-			"minValue": 1,
-			"maxValue": 4,
-			"defaultValue": 1,
-			"unsigned": true,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "Owner",
-					"value": 1
-				},
-				{
-					"label": "Guest",
-					"value": 3
-				},
-				{
-					"label": "Worker",
-					"value": 4
-				}
-			]
+			"$import": "templates/kwikset_template.json#usercode_5"
 		},
 		"6": {
-			"label": "User Code 6 Type",
-			"description": "Set the type of user for their corresponding user code. Guests and Workers will require schedules attached to them in order for those types to be assigned",
-			"valueSize": 1,
-			"minValue": 1,
-			"maxValue": 4,
-			"defaultValue": 1,
-			"unsigned": true,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "Owner",
-					"value": 1
-				},
-				{
-					"label": "Guest",
-					"value": 3
-				},
-				{
-					"label": "Worker",
-					"value": 4
-				}
-			]
+			"$import": "templates/kwikset_template.json#usercode_6"
 		},
 		"7": {
-			"label": "User Code 7 Type",
-			"description": "Set the type of user for their corresponding user code. Guests and Workers will require schedules attached to them in order for those types to be assigned",
-			"valueSize": 1,
-			"minValue": 1,
-			"maxValue": 4,
-			"defaultValue": 1,
-			"unsigned": true,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "Owner",
-					"value": 1
-				},
-				{
-					"label": "Guest",
-					"value": 3
-				},
-				{
-					"label": "Worker",
-					"value": 4
-				}
-			]
+			"$import": "templates/kwikset_template.json#usercode_7"
 		},
 		"8": {
-			"label": "User Code 8 Type",
-			"description": "Set the type of user for their corresponding user code. Guests and Workers will require schedules attached to them in order for those types to be assigned",
-			"valueSize": 1,
-			"minValue": 1,
-			"maxValue": 4,
-			"defaultValue": 1,
-			"unsigned": true,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "Owner",
-					"value": 1
-				},
-				{
-					"label": "Guest",
-					"value": 3
-				},
-				{
-					"label": "Worker",
-					"value": 4
-				}
-			]
+			"$import": "templates/kwikset_template.json#usercode_8"
 		},
 		"9": {
-			"label": "User Code 9 Type",
-			"description": "Set the type of user for their corresponding user code. Guests and Workers will require schedules attached to them in order for those types to be assigned",
-			"valueSize": 1,
-			"minValue": 1,
-			"maxValue": 4,
-			"defaultValue": 1,
-			"unsigned": true,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "Owner",
-					"value": 1
-				},
-				{
-					"label": "Guest",
-					"value": 3
-				},
-				{
-					"label": "Worker",
-					"value": 4
-				}
-			]
+			"$import": "templates/kwikset_template.json#usercode_9"
 		},
 		"10": {
-			"label": "User Code 10 Type",
-			"description": "Set the type of user for their corresponding user code. Guests and Workers will require schedules attached to them in order for those types to be assigned",
-			"valueSize": 1,
-			"minValue": 1,
-			"maxValue": 4,
-			"defaultValue": 1,
-			"unsigned": true,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "Owner",
-					"value": 1
-				},
-				{
-					"label": "Guest",
-					"value": 3
-				},
-				{
-					"label": "Worker",
-					"value": 4
-				}
-			]
+			"$import": "templates/kwikset_template.json#usercode_10"
 		},
 		"11": {
-			"label": "User Code 11 Type",
-			"description": "Set the type of user for their corresponding user code. Guests and Workers will require schedules attached to them in order for those types to be assigned",
-			"valueSize": 1,
-			"minValue": 1,
-			"maxValue": 4,
-			"defaultValue": 1,
-			"unsigned": true,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "Owner",
-					"value": 1
-				},
-				{
-					"label": "Guest",
-					"value": 3
-				},
-				{
-					"label": "Worker",
-					"value": 4
-				}
-			]
+			"$import": "templates/kwikset_template.json#usercode_11"
 		},
 		"12": {
-			"label": "User Code 12 Type",
-			"description": "Set the type of user for their corresponding user code. Guests and Workers will require schedules attached to them in order for those types to be assigned",
-			"valueSize": 1,
-			"minValue": 1,
-			"maxValue": 4,
-			"defaultValue": 1,
-			"unsigned": true,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "Owner",
-					"value": 1
-				},
-				{
-					"label": "Guest",
-					"value": 3
-				},
-				{
-					"label": "Worker",
-					"value": 4
-				}
-			]
+			"$import": "templates/kwikset_template.json#usercode_12"
 		},
 		"13": {
-			"label": "User Code 13 Type",
-			"description": "Set the type of user for their corresponding user code. Guests and Workers will require schedules attached to them in order for those types to be assigned",
-			"valueSize": 1,
-			"minValue": 1,
-			"maxValue": 4,
-			"defaultValue": 1,
-			"unsigned": true,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "Owner",
-					"value": 1
-				},
-				{
-					"label": "Guest",
-					"value": 3
-				},
-				{
-					"label": "Worker",
-					"value": 4
-				}
-			]
+			"$import": "templates/kwikset_template.json#usercode_13"
 		},
 		"14": {
-			"label": "User Code 14 Type",
-			"description": "Set the type of user for their corresponding user code. Guests and Workers will require schedules attached to them in order for those types to be assigned",
-			"valueSize": 1,
-			"minValue": 1,
-			"maxValue": 4,
-			"defaultValue": 1,
-			"unsigned": true,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "Owner",
-					"value": 1
-				},
-				{
-					"label": "Guest",
-					"value": 3
-				},
-				{
-					"label": "Worker",
-					"value": 4
-				}
-			]
+			"$import": "templates/kwikset_template.json#usercode_14"
 		},
 		"15": {
-			"label": "User Code 15 Type",
-			"description": "Set the type of user for their corresponding user code. Guests and Workers will require schedules attached to them in order for those types to be assigned",
-			"valueSize": 1,
-			"minValue": 1,
-			"maxValue": 4,
-			"defaultValue": 1,
-			"unsigned": true,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "Owner",
-					"value": 1
-				},
-				{
-					"label": "Guest",
-					"value": 3
-				},
-				{
-					"label": "Worker",
-					"value": 4
-				}
-			]
+			"$import": "templates/kwikset_template.json#usercode_15"
 		},
 		"16": {
-			"label": "User Code 16 Type",
-			"description": "Set the type of user for their corresponding user code. Guests and Workers will require schedules attached to them in order for those types to be assigned",
-			"valueSize": 1,
-			"minValue": 1,
-			"maxValue": 4,
-			"defaultValue": 1,
-			"unsigned": true,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "Owner",
-					"value": 1
-				},
-				{
-					"label": "Guest",
-					"value": 3
-				},
-				{
-					"label": "Worker",
-					"value": 4
-				}
-			]
+			"$import": "templates/kwikset_template.json#usercode_16"
 		},
 		"17": {
-			"label": "User Code 17 Type",
-			"description": "Set the type of user for their corresponding user code. Guests and Workers will require schedules attached to them in order for those types to be assigned",
-			"valueSize": 1,
-			"minValue": 1,
-			"maxValue": 4,
-			"defaultValue": 1,
-			"unsigned": true,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "Owner",
-					"value": 1
-				},
-				{
-					"label": "Guest",
-					"value": 3
-				},
-				{
-					"label": "Worker",
-					"value": 4
-				}
-			]
+			"$import": "templates/kwikset_template.json#usercode_17"
 		},
 		"18": {
-			"label": "User Code 18 Type",
-			"description": "Set the type of user for their corresponding user code. Guests and Workers will require schedules attached to them in order for those types to be assigned",
-			"valueSize": 1,
-			"minValue": 1,
-			"maxValue": 4,
-			"defaultValue": 1,
-			"unsigned": true,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "Owner",
-					"value": 1
-				},
-				{
-					"label": "Guest",
-					"value": 3
-				},
-				{
-					"label": "Worker",
-					"value": 4
-				}
-			]
+			"$import": "templates/kwikset_template.json#usercode_18"
 		},
 		"19": {
-			"label": "User Code 19 Type",
-			"description": "Set the type of user for their corresponding user code. Guests and Workers will require schedules attached to them in order for those types to be assigned",
-			"valueSize": 1,
-			"minValue": 1,
-			"maxValue": 4,
-			"defaultValue": 1,
-			"unsigned": true,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "Owner",
-					"value": 1
-				},
-				{
-					"label": "Guest",
-					"value": 3
-				},
-				{
-					"label": "Worker",
-					"value": 4
-				}
-			]
+			"$import": "templates/kwikset_template.json#usercode_19"
 		},
 		"20": {
-			"label": "User Code 20 Type",
-			"description": "Set the type of user for their corresponding user code. Guests and Workers will require schedules attached to them in order for those types to be assigned",
-			"valueSize": 1,
-			"minValue": 1,
-			"maxValue": 4,
-			"defaultValue": 1,
-			"unsigned": true,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "Owner",
-					"value": 1
-				},
-				{
-					"label": "Guest",
-					"value": 3
-				},
-				{
-					"label": "Worker",
-					"value": 4
-				}
-			]
+			"$import": "templates/kwikset_template.json#usercode_20"
 		},
 		"21": {
-			"label": "User Code 21 Type",
-			"description": "Set the type of user for their corresponding user code. Guests and Workers will require schedules attached to them in order for those types to be assigned",
-			"valueSize": 1,
-			"minValue": 1,
-			"maxValue": 4,
-			"defaultValue": 1,
-			"unsigned": true,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "Owner",
-					"value": 1
-				},
-				{
-					"label": "Guest",
-					"value": 3
-				},
-				{
-					"label": "Worker",
-					"value": 4
-				}
-			]
+			"$import": "templates/kwikset_template.json#usercode_21"
 		},
 		"22": {
-			"label": "User Code 22 Type",
-			"description": "Set the type of user for their corresponding user code. Guests and Workers will require schedules attached to them in order for those types to be assigned",
-			"valueSize": 1,
-			"minValue": 1,
-			"maxValue": 4,
-			"defaultValue": 1,
-			"unsigned": true,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "Owner",
-					"value": 1
-				},
-				{
-					"label": "Guest",
-					"value": 3
-				},
-				{
-					"label": "Worker",
-					"value": 4
-				}
-			]
+			"$import": "templates/kwikset_template.json#usercode_22"
 		},
 		"23": {
-			"label": "User Code 23 Type",
-			"description": "Set the type of user for their corresponding user code. Guests and Workers will require schedules attached to them in order for those types to be assigned",
-			"valueSize": 1,
-			"minValue": 1,
-			"maxValue": 4,
-			"defaultValue": 1,
-			"unsigned": true,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "Owner",
-					"value": 1
-				},
-				{
-					"label": "Guest",
-					"value": 3
-				},
-				{
-					"label": "Worker",
-					"value": 4
-				}
-			]
+			"$import": "templates/kwikset_template.json#usercode_23"
 		},
 		"24": {
-			"label": "User Code 24 Type",
-			"description": "Set the type of user for their corresponding user code. Guests and Workers will require schedules attached to them in order for those types to be assigned",
-			"valueSize": 1,
-			"minValue": 1,
-			"maxValue": 4,
-			"defaultValue": 1,
-			"unsigned": true,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "Owner",
-					"value": 1
-				},
-				{
-					"label": "Guest",
-					"value": 3
-				},
-				{
-					"label": "Worker",
-					"value": 4
-				}
-			]
+			"$import": "templates/kwikset_template.json#usercode_24"
 		},
 		"25": {
-			"label": "User Code 25 Type",
-			"description": "Set the type of user for their corresponding user code. Guests and Workers will require schedules attached to them in order for those types to be assigned",
-			"valueSize": 1,
-			"minValue": 1,
-			"maxValue": 4,
-			"defaultValue": 1,
-			"unsigned": true,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "Owner",
-					"value": 1
-				},
-				{
-					"label": "Guest",
-					"value": 3
-				},
-				{
-					"label": "Worker",
-					"value": 4
-				}
-			]
+			"$import": "templates/kwikset_template.json#usercode_25"
 		},
 		"26": {
-			"label": "User Code 26 Type",
-			"description": "Set the type of user for their corresponding user code. Guests and Workers will require schedules attached to them in order for those types to be assigned",
-			"valueSize": 1,
-			"minValue": 1,
-			"maxValue": 4,
-			"defaultValue": 1,
-			"unsigned": true,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "Owner",
-					"value": 1
-				},
-				{
-					"label": "Guest",
-					"value": 3
-				},
-				{
-					"label": "Worker",
-					"value": 4
-				}
-			]
+			"$import": "templates/kwikset_template.json#usercode_26"
 		},
 		"27": {
-			"label": "User Code 27 Type",
-			"description": "Set the type of user for their corresponding user code. Guests and Workers will require schedules attached to them in order for those types to be assigned",
-			"valueSize": 1,
-			"minValue": 1,
-			"maxValue": 4,
-			"defaultValue": 1,
-			"unsigned": true,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "Owner",
-					"value": 1
-				},
-				{
-					"label": "Guest",
-					"value": 3
-				},
-				{
-					"label": "Worker",
-					"value": 4
-				}
-			]
+			"$import": "templates/kwikset_template.json#usercode_27"
 		},
 		"28": {
-			"label": "User Code 28 Type",
-			"description": "Set the type of user for their corresponding user code. Guests and Workers will require schedules attached to them in order for those types to be assigned",
-			"valueSize": 1,
-			"minValue": 1,
-			"maxValue": 4,
-			"defaultValue": 1,
-			"unsigned": true,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "Owner",
-					"value": 1
-				},
-				{
-					"label": "Guest",
-					"value": 3
-				},
-				{
-					"label": "Worker",
-					"value": 4
-				}
-			]
+			"$import": "templates/kwikset_template.json#usercode_28"
 		},
 		"29": {
-			"label": "User Code 29 Type",
-			"description": "Set the type of user for their corresponding user code. Guests and Workers will require schedules attached to them in order for those types to be assigned",
-			"valueSize": 1,
-			"minValue": 1,
-			"maxValue": 4,
-			"defaultValue": 1,
-			"unsigned": true,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "Owner",
-					"value": 1
-				},
-				{
-					"label": "Guest",
-					"value": 3
-				},
-				{
-					"label": "Worker",
-					"value": 4
-				}
-			]
+			"$import": "templates/kwikset_template.json#usercode_29"
 		},
 		"30": {
-			"label": "User Code 30 Type",
-			"description": "Set the type of user for their corresponding user code. Guests and Workers will require schedules attached to them in order for those types to be assigned",
-			"valueSize": 1,
-			"minValue": 1,
-			"maxValue": 4,
-			"defaultValue": 1,
-			"unsigned": true,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "Owner",
-					"value": 1
-				},
-				{
-					"label": "Guest",
-					"value": 3
-				},
-				{
-					"label": "Worker",
-					"value": 4
-				}
-			]
-		},
-		"33": {
-			"label": "SKU number, 1st 4 bytes",
-			"description": "All printable characters",
-			"valueSize": 4,
-			"minValue": 0,
-			"maxValue": 0,
-			"defaultValue": 0,
-			"unsigned": true,
-			"readOnly": true,
-			"writeOnly": false,
-			"allowManualEntry": true
-		},
-		"34": {
-			"label": "SKU number, last 4 bytes",
-			"description": "All printable characters",
-			"valueSize": 4,
-			"minValue": 0,
-			"maxValue": 0,
-			"defaultValue": 0,
-			"unsigned": true,
-			"readOnly": true,
-			"writeOnly": false,
-			"allowManualEntry": true
-		},
-		"40": {
-			"label": "Reset to Default",
-			"description": "Force Factory Reset",
-			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 1,
-			"defaultValue": 0,
-			"unsigned": true,
-			"readOnly": false,
-			"writeOnly": true,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "Normal Operation",
-					"value": 0
-				},
-				{
-					"label": "Factory Reset",
-					"value": 1
-				}
-			]
+			"$import": "templates/kwikset_template.json#usercode_30"
 		},
 		"31[0x01]": {
-			"label": "Dipswitch setting: Lock Status LED",
-			"description": "State of the Lock Status LED dipswitch on the rear panel of the door lock.",
-			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 1,
-			"defaultValue": 0,
-			"unsigned": true,
-			"readOnly": true,
-			"writeOnly": false,
-			"allowManualEntry": true,
-			"options": [
-				{
-					"label": "Disabled",
-					"value": 0
-				},
-				{
-					"label": "Enabled",
-					"value": 1
-				}
-			]
+			"$import": "templates/kwikset_template.json#dipswitch_led"
 		},
 		"31[0x02]": {
-			"label": "Dipswitch setting: Autolock",
-			"description": "State of the Autolock dipswitch on the rear panel of the door lock.",
-			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 1,
-			"defaultValue": 0,
-			"unsigned": true,
-			"readOnly": true,
-			"writeOnly": false,
-			"allowManualEntry": true,
-			"options": [
-				{
-					"label": "Disabled",
-					"value": 0
-				},
-				{
-					"label": "Enabled",
-					"value": 1
-				}
-			]
+			"$import": "templates/kwikset_template.json#dipswitch_autolock"
 		},
 		"31[0x04]": {
-			"label": "Dipswitch setting: Buzzer",
-			"description": "State of the Buzzer dipswitch on the rear panel of the door lock.",
-			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 1,
-			"defaultValue": 0,
-			"unsigned": true,
-			"readOnly": true,
-			"writeOnly": false,
-			"allowManualEntry": true,
-			"options": [
-				{
-					"label": "Disabled",
-					"value": 0
-				},
-				{
-					"label": "Enabled",
-					"value": 1
-				}
-			]
+			"$import": "templates/kwikset_template.json#dipswitch_buzzer"
 		},
 		"31[0x08]": {
-			"label": "Dipswitch setting: Secure Screen",
-			"description": "State of the Secure Screen dipswitch on the rear panel of the door lock.",
-			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 1,
-			"defaultValue": 0,
-			"unsigned": true,
-			"readOnly": true,
-			"writeOnly": false,
-			"allowManualEntry": true,
-			"options": [
-				{
-					"label": "Disabled",
-					"value": 0
-				},
-				{
-					"label": "Enabled",
-					"value": 1
-				}
-			]
+			"$import": "templates/kwikset_template.json#dipswitch_securescreen"
+		},
+		"33": {
+			"$import": "templates/kwikset_template.json#dipswitch_sku_firstfour"
+		},
+		"34": {
+			"$import": "templates/kwikset_template.json#dipswitch_sku_lastfour"
+		},
+		"40": {
+			"$import": "templates/kwikset_template.json#reset"
 		}
 	},
 	"metadata": {
