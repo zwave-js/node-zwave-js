@@ -24,13 +24,13 @@ This starts the driver and opens the underlying serial port and performs an inte
 
 The following table gives you an overview of what happens during the startup process. Note that the promise resolves before the interview process is completed:
 
-| Step | What happens behind the scenes                                          | Library response                                                                                                          |
-| :--: | ----------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------- |
-|  1   | Serial port is opened                                                   | `start()` Promise resolves                                                                                                |
-|  2   | Controller interview is performed                                       | `"driver ready"` event is emitted                                                                                         |
-|  3   | Every node is interviewed in the background (This may take a long time) | `"ready"` event is emitted for every node as soon as it can be used                                                       |
-|  4   | -                                                                       | `"all nodes ready"` event is emitted for the driver when all nodes can be used                                            |
-|  5   | -                                                                       | `"interview completed"` event is emitted for every node when its interview is completed and all its values are up to date |
+| Step | What happens behind the scenes                                          | Library response                                                                                                                                                              |
+| :--: | ----------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+|  1   | Serial port is opened                                                   | `start()` Promise resolves                                                                                                                                                    |
+|  2   | Controller interview is performed                                       | `"driver ready"` event is emitted                                                                                                                                             |
+|  3   | Every node is interviewed in the background (This may take a long time) | `"ready"` event is emitted for every node as soon as it can be used                                                                                                           |
+|  4   | -                                                                       | `"all nodes ready"` event is emitted for the driver when all nodes can be used                                                                                                |
+|  5   | -                                                                       | `"interview completed"` event is emitted for every node when its interview is completed for the first time. This only gets emitted once, unless the node gets re-interviewed. |
 
 ### `getSupportedCCVersionForEndpoint`
 

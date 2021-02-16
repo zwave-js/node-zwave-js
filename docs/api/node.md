@@ -605,7 +605,7 @@ A non-sleeping node has stopped responding or just started responding again. The
 
 ### `"interview completed"`
 
-The interview process for this node was completed. The node is passed as the single argument to the callback:
+The initial interview process for this node was completed. The node is passed as the single argument to the callback:
 
 ```ts
 (node: ZWaveNode) => void
@@ -641,7 +641,7 @@ interface NodeInterviewFailedEventArgs {
 
 ### `"ready"`
 
-This is emitted during the interview process when enough information about the node is known that it can safely be used. The node is passed as the single argument to the callback:
+This is emitted when enough information about the node is known that it can safely be used. The node is passed as the single argument to the callback:
 
 ```ts
 (node: ZWaveNode) => void
@@ -650,7 +650,7 @@ This is emitted during the interview process when enough information about the n
 There are two situations when this event is emitted:
 
 1. The interview of a node is completed for the first time ever.
-2. The driver begins a partial interview of a node that has previously been interviewed completely.
+2. The node that has previously been interviewed completely and it either responds or is asleep.
 
 > [!NOTE]
 > This event does not imply that the node is currently awake or will respond to requests.
