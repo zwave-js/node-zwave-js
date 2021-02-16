@@ -318,8 +318,8 @@ export class SceneControllerConfigurationCC extends CommandClass {
 			});
 			const group = await api.get(groupId);
 			if (group != undefined) {
-				const logMessage = `received information for association group #${groupId}:
-scene Id: ${group.sceneId}
+				const logMessage = `received scene configuration for association group #${groupId}:
+scene ID:         ${group.sceneId}
 dimming duration: ${group.dimmingDuration.toString()}`;
 				this.driver.controllerLog.logNode(node.id, {
 					endpoint: this.endpointIndex,
