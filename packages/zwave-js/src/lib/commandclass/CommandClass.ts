@@ -176,6 +176,9 @@ export class CommandClass {
 	/** This CC's identifier */
 	public ccId: CommandClasses;
 	public ccCommand?: number;
+	public get ccName(): string {
+		return getCCName(this.ccId);
+	}
 
 	/** The ID of the target node(s) */
 	public nodeId!: number | MulticastDestination;
