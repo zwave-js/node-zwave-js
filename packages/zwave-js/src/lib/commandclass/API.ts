@@ -315,6 +315,7 @@ export interface CCAPIs {
 	Notification: import("./NotificationCC").NotificationCCAPI;
 	Protection: import("./ProtectionCC").ProtectionCCAPI;
 	"Scene Activation": import("./SceneActivationCC").SceneActivationCCAPI;
+	"Scene Actuator Configuration": import("./SceneActuatorConfigurationCC").SceneActuatorConfigurationCCAPI;
 	"Scene Controller Configuration": import("./SceneControllerConfigurationCC").SceneControllerConfigurationCCAPI;
 	Security: import("./SecurityCC").SecurityCCAPI;
 	"Sound Switch": import("./SoundSwitchCC").SoundSwitchCCAPI;
