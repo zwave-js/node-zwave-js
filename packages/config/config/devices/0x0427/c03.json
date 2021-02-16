@@ -49,7 +49,7 @@
 			"unsigned": true,
 			"readOnly": false,
 			"writeOnly": false,
-			"allowManualEntry":  false,
+			"allowManualEntry": false,
 			"options": [
 				{
 					"label": "1° Celcius",
