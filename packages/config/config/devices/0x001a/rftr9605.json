@@ -125,10 +125,6 @@
 				{
 					"label": "High",
 					"value": 4
-				},
-				{
-					"label": "Full on",
-					"value": 5
 				}
 			]
 		},
@@ -157,10 +153,6 @@
 				{
 					"label": "High",
 					"value": 4
-				},
-				{
-					"label": "Full on",
-					"value": 5
 				}
 			]
 		}
