@@ -1,7 +1,7 @@
 // Heatit 4512689
 // Z-Smoke Detector 230V
 {
-	"manufacturer": "THeatit",
+	"manufacturer": "Heatit",
 	"manufacturerId": "0x019b",
 	"label": "4512689",
 	"description": "Z-Smoke Detector 230V",
