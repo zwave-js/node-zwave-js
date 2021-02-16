@@ -159,16 +159,49 @@ export class BasicCC extends CommandClass {
 	public async interview(): Promise<void> {
 		const node = this.getNode()!;
 		const endpoint = this.getEndpoint()!;
-		const api = endpoint.commandClasses.Basic.withOptions({
-			priority: MessagePriority.NodeQuery,
-		});
 
 		this.driver.controllerLog.logNode(node.id, {
 			endpoint: this.endpointIndex,
-			message: `${this.constructor.name}: doing a ${
-				complete ? "complete" : "partial"
-			} interview...`,
+			message: `Interviewing ${this.ccName}...`,
 			direction: "none",
+		});
+
+		// try to query the current state
+		await this.refreshValues();
+
+		// create compat event value if necessary
+		if (node.deviceConfig?.compat?.treatBasicSetAsEvent) {
+			const valueId = getCompatEventValueId(this.endpointIndex);
+			if (!node.valueDB.hasMetadata(valueId)) {
+				node.valueDB.setMetadata(valueId, {
+					...ValueMetadata.ReadOnlyUInt8,
+					label: "Event value",
+				});
+			}
+		} else if (
+			this.getValueDB().getValue(
+				getCurrentValueValueId(this.endpointIndex),
+			) == undefined
+		) {
+			this.driver.controllerLog.logNode(node.id, {
+				endpoint: this.endpointIndex,
+				message:
+					"No response to Basic Get command, assuming the node does not support Basic CC...",
+			});
+			// SDS14223: A controlling node MUST conclude that the Basic Command Class is not supported by a node (or
+			// endpoint) if no Basic Report is returned.
+			endpoint.removeCC(CommandClasses.Basic);
+		}
+
+		// Remember that the interview is complete
+		this.interviewComplete = true;
+	}
+
+	public async refreshValues(): Promise<void> {
+		const node = this.getNode()!;
+		const endpoint = this.getEndpoint()!;
+		const api = endpoint.commandClasses.Basic.withOptions({
+			priority: MessagePriority.NodeQuery,
 		});
 
 		// try to query the current state
@@ -192,30 +225,7 @@ remaining duration: ${basicResponse.duration?.toString() ?? "undefined"}`;
 				message: logMessage,
 				direction: "inbound",
 			});
-		} else {
-			this.driver.controllerLog.logNode(node.id, {
-				endpoint: this.endpointIndex,
-				message:
-					"No response to Basic Get command, assuming the node does not support Basic CC...",
-			});
-			// SDS14223: A controlling node MUST conclude that the Basic Command Class is not supported by a node (or
-			// endpoint) if no Basic Report is returned.
-			endpoint.removeCC(CommandClasses.Basic);
 		}
-
-		// create compat event value if necessary
-		if (node.deviceConfig?.compat?.treatBasicSetAsEvent) {
-			const valueId = getCompatEventValueId(this.endpointIndex);
-			if (!node.valueDB.hasMetadata(valueId)) {
-				node.valueDB.setMetadata(valueId, {
-					...ValueMetadata.ReadOnlyUInt8,
-					label: "Event value",
-				});
-			}
-		}
-
-		// Remember that the interview is complete
-		this.interviewComplete = true;
 	}
 }
 
