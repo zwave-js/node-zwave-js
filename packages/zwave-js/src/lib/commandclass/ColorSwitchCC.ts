@@ -1,14 +1,12 @@
-import type {
-	MessageOrCCLogEntry,
-	MessageRecord,
-	ValueID,
-} from "@zwave-js/core";
 import {
 	CommandClasses,
 	Duration,
 	Maybe,
+	MessageOrCCLogEntry,
+	MessageRecord,
 	parseBitMask,
 	validatePayload,
+	ValueID,
 	ValueMetadata,
 	ZWaveError,
 	ZWaveErrorCodes,
@@ -16,6 +14,7 @@ import {
 import { getEnumMemberName, keysOf, pick } from "@zwave-js/shared";
 import { clamp } from "alcalzone-shared/math";
 import { entries } from "alcalzone-shared/objects";
+import { isObject } from "alcalzone-shared/typeguards";
 import type { Driver } from "../driver/Driver";
 import { MessagePriority } from "../message/Constants";
 import {
@@ -113,6 +112,14 @@ function colorTableKeyToComponent(key: string): ColorComponent {
 	);
 }
 
+function colorComponentToTableKey(
+	component: ColorComponent,
+): ColorKey | undefined {
+	for (const [key, comp] of Object.entries(ColorComponentMap)) {
+		if (comp === component) return key as any;
+	}
+}
+
 function getSupportedColorComponentsValueID(endpointIndex: number): ValueID {
 	return {
 		commandClass: CommandClasses["Color Switch"],
@@ -123,7 +130,7 @@ function getSupportedColorComponentsValueID(endpointIndex: number): ValueID {
 
 function getCurrentColorValueID(
 	endpointIndex: number,
-	component: ColorComponent,
+	component?: ColorComponent,
 ): ValueID {
 	return {
 		commandClass: CommandClasses["Color Switch"],
@@ -135,7 +142,7 @@ function getCurrentColorValueID(
 
 function getTargetColorValueID(
 	endpointIndex: number,
-	component: ColorComponent,
+	component?: ColorComponent,
 ): ValueID {
 	return {
 		commandClass: CommandClasses["Color Switch"],
@@ -230,8 +237,16 @@ export class ColorSwitchCCAPI extends CCAPI {
 		if (this.isSinglecast()) {
 			const valueDB = this.endpoint.getNodeUnsafe()?.valueDB;
 			if (valueDB) {
-				// each color component separately
+				// Update each color component separately and record the changes to the compound value
 				let updatedRGB = false;
+				const currentCompoundValue =
+					valueDB.getValue<Partial<Record<ColorKey, number>>>(
+						getCurrentColorValueID(this.endpoint.index),
+					) ?? {};
+				const targetCompoundValue =
+					valueDB.getValue<Partial<Record<ColorKey, number>>>(
+						getCurrentColorValueID(this.endpoint.index),
+					) ?? {};
 				for (const [key, value] of entries(cc.colorTable)) {
 					const component = colorTableKeyToComponent(key);
 					if (
@@ -247,7 +262,23 @@ export class ColorSwitchCCAPI extends CCAPI {
 						value,
 						{ noEvent: true },
 					);
+
+					// Update the compound value
+					if (key in ColorComponentMap) {
+						currentCompoundValue[key as ColorKey] = value;
+						targetCompoundValue[key as ColorKey] = value;
+					}
 				}
+				// And store the updated compound values
+				valueDB.setValue(
+					getCurrentColorValueID(this.endpoint.index),
+					currentCompoundValue,
+				);
+				valueDB.setValue(
+					getTargetColorValueID(this.endpoint.index),
+					targetCompoundValue,
+				);
+
 				// and hex color if necessary
 				const supportsHex = valueDB.getValue<boolean>(
 					getSupportsHexColorValueID(this.endpoint.index),
@@ -313,32 +344,51 @@ export class ColorSwitchCCAPI extends CCAPI {
 		value,
 	) => {
 		if (property === "targetColor") {
-			if (propertyKey == undefined) {
-				throwMissingPropertyKey(this.ccId, property);
-			} else if (typeof propertyKey !== "number") {
-				throwUnsupportedPropertyKey(this.ccId, property, propertyKey);
-			}
+			if (propertyKey != undefined) {
+				// Single color component, only accepts numbers
+				if (typeof propertyKey !== "number") {
+					throwUnsupportedPropertyKey(
+						this.ccId,
+						property,
+						propertyKey,
+					);
+				} else if (typeof value !== "number") {
+					throwWrongValueType(
+						this.ccId,
+						property,
+						"number",
+						typeof value,
+					);
+				}
 
-			// Single color component, only accepts numbers
-			if (typeof value !== "number") {
-				throwWrongValueType(
-					this.ccId,
-					property,
-					"number",
-					typeof value,
-				);
-			}
+				await this.set({ [propertyKey]: value });
 
-			await this.set({ [propertyKey]: value });
+				if (this.isSinglecast()) {
+					// Verify the current value after a delay
+					// TODO: #1321
+					const duration = undefined as Duration | undefined;
+					this.schedulePoll(
+						{ property, propertyKey },
+						duration?.toMilliseconds(),
+					);
+				}
+			} else {
+				// Set the compound color object
+				if (
+					!isObject(value) ||
+					!Object.keys(value).every((key) => key in ColorComponentMap)
+				) {
+					throw new ZWaveError(
+						`${
+							CommandClasses[this.ccId]
+						}: "${property}" must be set to an object which specifies each color channel`,
+						ZWaveErrorCodes.Argument_Invalid,
+					);
+				}
 
-			if (this.isSinglecast()) {
-				// Verify the current value after a delay
-				// TODO: #1321
-				const duration = undefined as Duration | undefined;
-				this.schedulePoll(
-					{ property, propertyKey },
-					duration?.toMilliseconds(),
-				);
+				await this.set(value);
+
+				// We're not going to poll each color component separately
 			}
 		} else if (property === "hexColor") {
 			// No property key, this is the hex color #rrggbb
@@ -356,6 +406,10 @@ export class ColorSwitchCCAPI extends CCAPI {
 			throwUnsupportedProperty(this.ccId, property);
 		}
 	};
+
+	public isSetValueOptimistic(_valueId: ValueID): boolean {
+		return false; // Color Switch CC handles updating the value DB itself
+	}
 
 	protected [POLL_VALUE]: PollValueImplementation = async ({
 		property,
@@ -560,6 +614,13 @@ export class ColorSwitchCCReport extends ColorSwitchCC {
 			this.duration = Duration.parseReport(this.payload[3]);
 		}
 
+		this.persistValues();
+	}
+
+	public persistValues(): boolean {
+		// Duration is stored globally instead of per component
+		if (!super.persistValues()) return false;
+
 		const valueDB = this.getValueDB();
 
 		const valueId = getCurrentColorValueID(
@@ -575,6 +636,27 @@ export class ColorSwitchCCReport extends ColorSwitchCC {
 				this.colorComponent,
 			);
 			valueDB.setValue(targetValueId, this.targetValue);
+		}
+
+		// Update compound current value
+		const colorTableKey = colorComponentToTableKey(this.colorComponent);
+		if (colorTableKey) {
+			const compoundValueId = getCurrentColorValueID(this.endpointIndex);
+			const compoundValue: Partial<Record<ColorKey, number>> =
+				valueDB.getValue(compoundValueId) ?? {};
+			compoundValue[colorTableKey] = this.currentValue;
+			valueDB.setValue(compoundValueId, compoundValue);
+
+			// and target value
+			if (this.targetValue != undefined) {
+				const compoundTargetValueId = getTargetColorValueID(
+					this.endpointIndex,
+				);
+				const compoundTargetValue: Partial<Record<ColorKey, number>> =
+					valueDB.getValue(compoundTargetValueId) ?? {};
+				compoundTargetValue[colorTableKey] = this.targetValue;
+				valueDB.setValue(compoundTargetValueId, compoundTargetValue);
+			}
 		}
 
 		// Update collective hex value if required
@@ -601,8 +683,7 @@ export class ColorSwitchCCReport extends ColorSwitchCC {
 			);
 		}
 
-		// For duration, which is stored globally instead of per component
-		this.persistValues();
+		return true;
 	}
 
 	public readonly colorComponent: ColorComponent;

@@ -102,6 +102,12 @@ export class CCAPI {
 		return this[SET_VALUE];
 	}
 
+	/** Whether a successful setValue call should imply that the value was successfully updated */
+	// eslint-disable-next-line @typescript-eslint/no-unused-vars
+	public isSetValueOptimistic(valueId: ValueID): boolean {
+		return true;
+	}
+
 	protected [POLL_VALUE]: PollValueImplementation | undefined;
 	/**
 	 * Can be used on supported CC APIs to poll a CC value by property name (and optionally the property key)
