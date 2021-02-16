@@ -485,6 +485,16 @@ export class ConfigurationCC extends CommandClass {
 
 	public async interview(): Promise<void> {
 		const node = this.getNode()!;
+		const endpoint = this.getEndpoint()!;
+		const api = endpoint.commandClasses.Configuration.withOptions({
+			priority: MessagePriority.NodeQuery,
+		});
+
+		this.driver.controllerLog.logNode(node.id, {
+			endpoint: this.endpointIndex,
+			message: `Interviewing ${this.ccName}...`,
+			direction: "none",
+		});
 
 		const config = node.deviceConfig?.paramInformation;
 		if (config) {
@@ -496,15 +506,112 @@ export class ConfigurationCC extends CommandClass {
 			this.deserializeParamInformationFromConfig(config);
 		}
 
+		if (this.version >= 3) {
+			this.driver.controllerLog.logNode(node.id, {
+				endpoint: this.endpointIndex,
+				message: "finding first configuration parameter...",
+				direction: "outbound",
+			});
+			const param0props = await api.getProperties(0);
+			let param: number;
+			if (param0props) {
+				param = param0props.nextParameter;
+				if (param === 0) {
+					this.driver.controllerLog.logNode(node.id, {
+						endpoint: this.endpointIndex,
+						message: `didn't report any config params, trying #1 just to be sure...`,
+						direction: "inbound",
+					});
+					param = 1;
+				}
+			} else {
+				this.driver.controllerLog.logNode(node.id, {
+					endpoint: this.endpointIndex,
+					message:
+						"Finding first configuration parameter timed out, skipping interview...",
+					level: "warn",
+				});
+				return;
+			}
+
+			while (param > 0) {
+				this.driver.controllerLog.logNode(node.id, {
+					endpoint: this.endpointIndex,
+					message: `querying parameter #${param} information...`,
+					direction: "outbound",
+				});
+
+				// Query properties and the next param
+				const props = await api.getProperties(param);
+				if (!props) {
+					this.driver.controllerLog.logNode(node.id, {
+						endpoint: this.endpointIndex,
+						message: `Querying parameter #${param} information timed out, skipping interview...`,
+						level: "warn",
+					});
+					return;
+				}
+				const { nextParameter, ...properties } = props;
+
+				let logMessage: string;
+				if (properties.valueSize === 0) {
+					logMessage = `Parameter #${param} is unsupported. Next parameter: ${nextParameter}`;
+				} else {
+					// Query name and info only if the parameter is supported
+					const name = (await api.getName(param)) ?? "(unknown)";
+					// Skip the info query for bugged devices
+					if (
+						!node.deviceConfig?.compat?.skipConfigurationInfoQuery
+					) {
+						await api.getInfo(param);
+					}
+
+					logMessage = `received information for parameter #${param}:
+parameter name:      ${name}
+value format:        ${getEnumMemberName(ValueFormat, properties.valueFormat)}
+value size:          ${properties.valueSize} bytes
+min value:           ${properties.minValue?.toString() ?? "undefined"}
+max value:           ${properties.maxValue?.toString() ?? "undefined"}
+default value:       ${properties.defaultValue?.toString() ?? "undefined"}
+is read-only:        ${!!properties.isReadonly}
+is advanced (UI):    ${!!properties.isAdvanced}
+has bulk support:    ${!properties.noBulkSupport}
+alters capabilities: ${!!properties.altersCapabilities}`;
+				}
+				this.driver.controllerLog.logNode(node.id, {
+					endpoint: this.endpointIndex,
+					message: logMessage,
+					direction: "inbound",
+				});
+
+				// Some devices report their parameter 1 instead of 0 as the next one
+				// when reaching the end. To avoid infinite loops, stop scanning
+				// once the next parameter is lower than the current one
+				if (nextParameter > param) {
+					param = nextParameter;
+				} else {
+					break;
+				}
+			}
+		}
+
+		await this.refreshValues();
+
+		// Remember that the interview is complete
+		this.interviewComplete = true;
+	}
+
+	public async refreshValues(): Promise<void> {
+		const node = this.getNode()!;
 		const endpoint = this.getEndpoint()!;
 		const api = endpoint.commandClasses.Configuration.withOptions({
 			priority: MessagePriority.NodeQuery,
 		});
 
 		if (this.version < 3) {
+			// V1/V2: Query all values defined in the config file
 			const paramInfo = node.deviceConfig?.paramInformation;
 			if (paramInfo?.size) {
-				// Query all values
 				// Because partial params share the same parameter number,
 				// we need to remember which ones we have already queried.
 				const alreadyQueried = new Set<number>();
@@ -546,107 +653,7 @@ export class ConfigurationCC extends CommandClass {
 				});
 			}
 		} else {
-			// Version >= 3
-			this.driver.controllerLog.logNode(node.id, {
-				endpoint: this.endpointIndex,
-				message: `${this.constructor.name}: doing a ${
-					complete ? "complete" : "partial"
-				} interview...`,
-				direction: "none",
-			});
-
-			if (complete) {
-				// Only scan all parameters during complete interviews
-				this.driver.controllerLog.logNode(node.id, {
-					endpoint: this.endpointIndex,
-					message: "finding first configuration parameter...",
-					direction: "outbound",
-				});
-				const param0props = await api.getProperties(0);
-				let param: number;
-				if (param0props) {
-					param = param0props.nextParameter;
-					if (param === 0) {
-						this.driver.controllerLog.logNode(node.id, {
-							endpoint: this.endpointIndex,
-							message: `didn't report any config params, trying #1 just to be sure...`,
-							direction: "inbound",
-						});
-						param = 1;
-					}
-				} else {
-					this.driver.controllerLog.logNode(node.id, {
-						endpoint: this.endpointIndex,
-						message:
-							"Finding first configuration parameter timed out, skipping interview...",
-						level: "warn",
-					});
-					return;
-				}
-
-				while (param > 0) {
-					this.driver.controllerLog.logNode(node.id, {
-						endpoint: this.endpointIndex,
-						message: `querying parameter #${param} information...`,
-						direction: "outbound",
-					});
-
-					// Query properties and the next param
-					const props = await api.getProperties(param);
-					if (!props) {
-						this.driver.controllerLog.logNode(node.id, {
-							endpoint: this.endpointIndex,
-							message: `Querying parameter #${param} information timed out, skipping interview...`,
-							level: "warn",
-						});
-						return;
-					}
-					const { nextParameter, ...properties } = props;
-
-					let logMessage: string;
-					if (properties.valueSize === 0) {
-						logMessage = `Parameter #${param} is unsupported. Next parameter: ${nextParameter}`;
-					} else {
-						// Query name and info only if the parameter is supported
-						const name = (await api.getName(param)) ?? "(unknown)";
-						// Skip the info query for bugged devices
-						if (
-							!node.deviceConfig?.compat
-								?.skipConfigurationInfoQuery
-						) {
-							await api.getInfo(param);
-						}
-
-						logMessage = `received information for parameter #${param}:
-parameter name:      ${name}
-value format:        ${getEnumMemberName(ValueFormat, properties.valueFormat)}
-value size:          ${properties.valueSize} bytes
-min value:           ${properties.minValue?.toString() ?? "undefined"}
-max value:           ${properties.maxValue?.toString() ?? "undefined"}
-default value:       ${properties.defaultValue?.toString() ?? "undefined"}
-is read-only:        ${!!properties.isReadonly}
-is advanced (UI):    ${!!properties.isAdvanced}
-has bulk support:    ${!properties.noBulkSupport}
-alters capabilities: ${!!properties.altersCapabilities}`;
-					}
-					this.driver.controllerLog.logNode(node.id, {
-						endpoint: this.endpointIndex,
-						message: logMessage,
-						direction: "inbound",
-					});
-
-					// Some devices report their parameter 1 instead of 0 as the next one
-					// when reaching the end. To avoid infinite loops, stop scanning
-					// once the next parameter is lower than the current one
-					if (nextParameter > param) {
-						param = nextParameter;
-					} else {
-						break;
-					}
-				}
-			}
-
-			// Query the values of supported parameters during every interview
+			// V3+: Query the values of discovered parameters
 			const parameters = distinct(
 				this.getDefinedValueIDs()
 					.map((v) => v.property)
@@ -661,9 +668,6 @@ alters capabilities: ${!!properties.altersCapabilities}`;
 				await api.get(param);
 			}
 		}
-
-		// Remember that the interview is complete
-		this.interviewComplete = true;
 	}
 
 	/**
