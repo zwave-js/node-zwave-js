@@ -220,6 +220,8 @@ Looks up the definition of a given device in the configuration DB. It is not nec
 -   `productId`: The product id of the device
 -   `firmwareVersion`: If known, configuration for a specific firmware version can be loaded. If this is `undefined` or not given, the first matching file with a defined firmware range will be returned.
 
+For details on the available properties, refer to the [config file documentation](development/config-files.md).
+
 ### `loadNotifications`
 
 ```ts
