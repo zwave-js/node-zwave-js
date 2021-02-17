@@ -126,39 +126,6 @@
 				}
 			]
 		},
-		"248": {
-			"label": "S1/S2 Functionality",
-			"valueSize": 1,
-			"minValue": -128,
-			"maxValue": 4,
-			"defaultValue": 83,
-			"unsigned": true,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "Sending NIF, RF power level test mode, and factory reset are enabled",
-					"value": -128
-				},
-				{
-					"label": "S1 and S2 are disabled",
-					"value": 0
-				},
-				{
-					"label": "Sending NIF enabled",
-					"value": 1
-				},
-				{
-					"label": "RF power level test mode enabled",
-					"value": 2
-				},
-				{
-					"label": "Factory reset is enabled",
-					"value": 4
-				}
-			]
-		},
 		"252": {
 			"label": "Lock/Unlock Configuration Parameters",
 			"valueSize": 1,
