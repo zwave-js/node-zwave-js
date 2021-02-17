@@ -12,6 +12,7 @@
     -   [ZWaveNode](api/node.md)
     -   [Endpoint](api/endpoint.md)
     -   [Values and Metadata](api/valueid.md)
+    -   [Command Classes](api/CCs/index.md)
 
 -   Advanced usage
 

@@ -33,9 +33,9 @@ export function getCommandClassFromDecorator(
 	decorator: ts.Decorator,
 ): CommandClasses | undefined {
 	if (!ts.isCallExpression(decorator.expression)) return;
+	const decoratorName = decorator.expression.expression.getText(sourceFile);
 	if (
-		decorator.expression.expression.getText(sourceFile) !==
-			"commandClass" ||
+		(decoratorName !== "commandClass" && decoratorName !== "API") ||
 		decorator.expression.arguments.length !== 1
 	)
 		return;
@@ -43,4 +43,16 @@ export function getCommandClassFromDecorator(
 		sourceFile,
 		decorator.expression.arguments[0],
 	);
+}
+
+export function getCommandClassFromClassDeclaration(
+	sourceFile: ts.SourceFile,
+	node: ts.ClassDeclaration,
+): CommandClasses | undefined {
+	if (node.decorators && node.decorators.length > 0) {
+		for (const decorator of node.decorators) {
+			const ccId = getCommandClassFromDecorator(sourceFile, decorator);
+			if (ccId != undefined) return ccId;
+		}
+	}
 }

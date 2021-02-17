@@ -9,7 +9,7 @@ import { blue, green } from "ansi-colors";
 import * as path from "path";
 import ts from "typescript";
 import { reportProblem } from "../../../maintenance/tools";
-import { getCommandClassFromDecorator } from "./shared";
+import { getCommandClassFromClassDeclaration } from "../../../maintenance/tsAPITools";
 import { loadTSConfig, projectRoot } from "./tsTools";
 
 /* wotan-disable no-useless-predicate */
@@ -47,18 +47,6 @@ function isCheckForDeserializationOptions(
 		node.expression.expression.text === "gotDeserializationOptions" &&
 		ts.isBlock(node.thenStatement)
 	);
-}
-
-function getCommandClassFromClassDeclaration(
-	sourceFile: ts.SourceFile,
-	node: ts.ClassDeclaration,
-): CommandClasses | undefined {
-	if (node.decorators && node.decorators.length > 0) {
-		for (const decorator of node.decorators) {
-			const ccId = getCommandClassFromDecorator(sourceFile, decorator);
-			if (ccId != undefined) return ccId;
-		}
-	}
 }
 
 function getCommandClassFromClassOrParent(
