@@ -30,3 +30,13 @@ async sendFirmwareFragment(
 ```
 
 Sends a fragment of the new firmware to the device.
+
+## `activateFirmware` method
+
+```ts
+async activateFirmware(
+	options: FirmwareUpdateMetaDataCCActivationSetOptions,
+): Promise<FirmwareUpdateActivationStatus | undefined>;
+```
+
+Activates a previously transferred firmware image.
