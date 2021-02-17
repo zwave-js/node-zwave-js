@@ -1,6 +1,8 @@
 # Color Switch CC
 
-## `getSupported` method
+## Color Switch CC methods
+
+### `getSupported`
 
 ```ts
 async getSupported(): Promise<
@@ -8,19 +10,19 @@ async getSupported(): Promise<
 >;
 ```
 
-## `get` method
+### `get`
 
 ```ts
 async get(component: ColorComponent): Promise<Pick<ColorSwitchCCReport, "currentValue" | "targetValue" | "duration"> | undefined>;
 ```
 
-## `set` method
+### `set`
 
 ```ts
 async set(options: ColorSwitchCCSetOptions): Promise<void>;
 ```
 
-## `startLevelChange` method
+### `startLevelChange`
 
 ```ts
 async startLevelChange(
@@ -28,7 +30,7 @@ async startLevelChange(
 ): Promise<void>;
 ```
 
-## `stopLevelChange` method
+### `stopLevelChange`
 
 ```ts
 async stopLevelChange(

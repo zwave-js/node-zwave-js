@@ -1,6 +1,8 @@
 # Security CC
 
-## `sendEncapsulated` method
+## Security CC methods
+
+### `sendEncapsulated`
 
 ```ts
 async sendEncapsulated(
@@ -9,7 +11,7 @@ async sendEncapsulated(
 ): Promise<void>;
 ```
 
-## `getNonce` method
+### `getNonce`
 
 ```ts
 async getNonce(
@@ -24,7 +26,7 @@ async getNonce(
 
 Requests a new nonce for Security CC encapsulation.
 
-## `sendNonce` method
+### `sendNonce`
 
 ```ts
 async sendNonce(): Promise<boolean>;
@@ -33,25 +35,25 @@ async sendNonce(): Promise<boolean>;
 Responds to a NonceGet request. The message is sent without any retransmission etc.
 The return value indicates whether a nonce was successfully sent.
 
-## `getSecurityScheme` method
+### `getSecurityScheme`
 
 ```ts
 async getSecurityScheme(): Promise<[0]>;
 ```
 
-## `inheritSecurityScheme` method
+### `inheritSecurityScheme`
 
 ```ts
 async inheritSecurityScheme(): Promise<void>;
 ```
 
-## `setNetworkKey` method
+### `setNetworkKey`
 
 ```ts
 async setNetworkKey(networkKey: Buffer): Promise<void>;
 ```
 
-## `getSupportedCommands` method
+### `getSupportedCommands`
 
 ```ts
 async getSupportedCommands(): Promise<Pick<SecurityCCCommandsSupportedReport, "supportedCCs" | "controlledCCs"> | undefined>;

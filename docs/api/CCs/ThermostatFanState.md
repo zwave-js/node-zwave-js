@@ -1,6 +1,8 @@
 # Thermostat Fan State CC
 
-## `get` method
+## Thermostat Fan State CC methods
+
+### `get`
 
 ```ts
 async get(): Promise<ThermostatFanState | undefined>;

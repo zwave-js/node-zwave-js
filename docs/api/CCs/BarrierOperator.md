@@ -1,12 +1,14 @@
 # Barrier Operator CC
 
-## `get` method
+## Barrier Operator CC methods
+
+### `get`
 
 ```ts
 async get(): Promise<Pick<BarrierOperatorCCReport, "currentState" | "position"> | undefined>;
 ```
 
-## `set` method
+### `set`
 
 ```ts
 async set(
@@ -14,7 +16,7 @@ async set(
 ): Promise<void>;
 ```
 
-## `getSignalingCapabilities` method
+### `getSignalingCapabilities`
 
 ```ts
 async getSignalingCapabilities(): Promise<
@@ -22,7 +24,7 @@ async getSignalingCapabilities(): Promise<
 >;
 ```
 
-## `getEventSignaling` method
+### `getEventSignaling`
 
 ```ts
 async getEventSignaling(
@@ -30,7 +32,7 @@ async getEventSignaling(
 ): Promise<SubsystemState | undefined>;
 ```
 
-## `setEventSignaling` method
+### `setEventSignaling`
 
 ```ts
 async setEventSignaling(

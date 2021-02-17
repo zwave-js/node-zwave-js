@@ -1,12 +1,14 @@
 # User Code CC
 
-## `getUsersCount` method
+## User Code CC methods
+
+### `getUsersCount`
 
 ```ts
 async getUsersCount(): Promise<number | undefined>;
 ```
 
-## `get` method
+### `get`
 
 ```ts
 async get(
@@ -22,7 +24,7 @@ async get(
 >;
 ```
 
-## `set` method
+### `set`
 
 ```ts
 async set(
@@ -37,7 +39,7 @@ async set(
 
 Configures a single user code.
 
-## `setMany` method
+### `setMany`
 
 ```ts
 async setMany(codes: UserCodeCCSetOptions[]): Promise<void>;
@@ -45,7 +47,7 @@ async setMany(codes: UserCodeCCSetOptions[]): Promise<void>;
 
 Configures multiple user codes.
 
-## `clear` method
+### `clear`
 
 ```ts
 async clear(userId: number = 0): Promise<void>;
@@ -57,37 +59,37 @@ Clears one or all user code.
 
 -   `userId`: The user code to clear. If none or 0 is given, all codes are cleared
 
-## `getCapabilities` method
+### `getCapabilities`
 
 ```ts
 async getCapabilities(): Promise<Pick<UserCodeCCCapabilitiesReport, "supportsMasterCode" | "supportsMasterCodeDeactivation" | "supportsUserCodeChecksum" | "supportsMultipleUserCodeReport" | "supportsMultipleUserCodeSet" | "supportedUserIDStatuses" | "supportedKeypadModes" | "supportedASCIIChars"> | undefined>;
 ```
 
-## `getKeypadMode` method
+### `getKeypadMode`
 
 ```ts
 async getKeypadMode(): Promise<KeypadMode | undefined>;
 ```
 
-## `setKeypadMode` method
+### `setKeypadMode`
 
 ```ts
 async setKeypadMode(keypadMode: KeypadMode): Promise<void>;
 ```
 
-## `getMasterCode` method
+### `getMasterCode`
 
 ```ts
 async getMasterCode(): Promise<string | undefined>;
 ```
 
-## `setMasterCode` method
+### `setMasterCode`
 
 ```ts
 async setMasterCode(masterCode: string): Promise<void>;
 ```
 
-## `getUserCodeChecksum` method
+### `getUserCodeChecksum`
 
 ```ts
 async getUserCodeChecksum(): Promise<number | undefined>;

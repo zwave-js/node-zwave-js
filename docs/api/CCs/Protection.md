@@ -1,12 +1,14 @@
 # Protection CC
 
-## `get` method
+## Protection CC methods
+
+### `get`
 
 ```ts
 async get(): Promise<Pick<ProtectionCCReport, "local" | "rf"> | undefined>;
 ```
 
-## `set` method
+### `set`
 
 ```ts
 async set(
@@ -15,31 +17,31 @@ async set(
 ): Promise<void>;
 ```
 
-## `getSupported` method
+### `getSupported`
 
 ```ts
 async getSupported(): Promise<Pick<ProtectionCCSupportedReport, "supportsExclusiveControl" | "supportsTimeout" | "supportedLocalStates" | "supportedRFStates"> | undefined>;
 ```
 
-## `getExclusiveControl` method
+### `getExclusiveControl`
 
 ```ts
 async getExclusiveControl(): Promise<number | undefined>;
 ```
 
-## `setExclusiveControl` method
+### `setExclusiveControl`
 
 ```ts
 async setExclusiveControl(nodeId: number): Promise<void>;
 ```
 
-## `getTimeout` method
+### `getTimeout`
 
 ```ts
 async getTimeout(): Promise<Timeout | undefined>;
 ```
 
-## `setTimeout` method
+### `setTimeout`
 
 ```ts
 async setTimeout(timeout: Timeout): Promise<void>;

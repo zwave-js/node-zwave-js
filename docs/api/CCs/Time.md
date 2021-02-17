@@ -1,24 +1,26 @@
 # Time CC
 
-## `getTime` method
+## Time CC methods
+
+### `getTime`
 
 ```ts
 async getTime(): Promise<Pick<TimeCCTimeReport, "hour" | "minute" | "second"> | undefined>;
 ```
 
-## `getDate` method
+### `getDate`
 
 ```ts
 async getDate(): Promise<Pick<TimeCCDateReport, "day" | "month" | "year"> | undefined>;
 ```
 
-## `setTimezone` method
+### `setTimezone`
 
 ```ts
 async setTimezone(timezone: DSTInfo): Promise<void>;
 ```
 
-## `getTimezone` method
+### `getTimezone`
 
 ```ts
 async getTimezone(): Promise<DSTInfo | undefined>;

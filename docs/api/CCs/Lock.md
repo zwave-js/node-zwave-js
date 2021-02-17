@@ -1,12 +1,14 @@
 # Lock CC
 
-## `get` method
+## Lock CC methods
+
+### `get`
 
 ```ts
 async get(): Promise<boolean | undefined>;
 ```
 
-## `set` method
+### `set`
 
 ```ts
 async set(locked: boolean): Promise<void>;

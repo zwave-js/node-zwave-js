@@ -1,6 +1,8 @@
 # Configuration CC
 
-## `get` method
+## Configuration CC methods
+
+### `get`
 
 ```ts
 async get(
@@ -17,7 +19,7 @@ This may timeout and return `undefined` if the node does not respond.
 If the node replied with a different parameter number, a `ConfigurationCCError`
 is thrown with the `argument` property set to the reported parameter number.
 
-## `set` method
+### `set`
 
 ```ts
 async set(
@@ -29,7 +31,7 @@ async set(
 
 Sets a new value for a given config parameter of the device.
 
-## `reset` method
+### `reset`
 
 ```ts
 async reset(parameter: number): Promise<void>;
@@ -39,7 +41,7 @@ Resets a configuration parameter to its default value.
 
 WARNING: This will throw on legacy devices (ConfigurationCC v3 and below).
 
-## `resetAll` method
+### `resetAll`
 
 ```ts
 async resetAll(): Promise<void>;
@@ -47,13 +49,13 @@ async resetAll(): Promise<void>;
 
 Resets all configuration parameters to their default value.
 
-## `getProperties` method
+### `getProperties`
 
 ```ts
 async getProperties(parameter: number): Promise<Pick<ConfigurationCCPropertiesReport, "valueSize" | "valueFormat" | "minValue" | "maxValue" | "defaultValue" | "nextParameter" | "altersCapabilities" | "isReadonly" | "isAdvanced" | "noBulkSupport"> | undefined>;
 ```
 
-## `getName` method
+### `getName`
 
 ```ts
 async getName(parameter: number): Promise<string | undefined>;
@@ -61,7 +63,7 @@ async getName(parameter: number): Promise<string | undefined>;
 
 Requests the name of a configuration parameter from the node.
 
-## `getInfo` method
+### `getInfo`
 
 ```ts
 async getInfo(parameter: number): Promise<string | undefined>;
@@ -69,7 +71,7 @@ async getInfo(parameter: number): Promise<string | undefined>;
 
 Requests usage info for a configuration parameter from the node.
 
-## `scanParametersLegacy` method
+### `scanParametersLegacy`
 
 ```ts
 async scanParametersLegacy(): Promise<void>;

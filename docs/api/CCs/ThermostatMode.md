@@ -1,12 +1,14 @@
 # Thermostat Mode CC
 
-## `get` method
+## Thermostat Mode CC methods
+
+### `get`
 
 ```ts
 async get(): Promise<Pick<ThermostatModeCCReport, "mode" | "manufacturerData"> | undefined>;
 ```
 
-## `set` method
+### `set`
 
 ```ts
 async set(
@@ -22,7 +24,7 @@ async set(
 ): Promise<void>;
 ```
 
-## `getSupportedModes` method
+### `getSupportedModes`
 
 ```ts
 async getSupportedModes(): Promise<

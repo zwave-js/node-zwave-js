@@ -1,24 +1,26 @@
 # Meter CC
 
-## `get` method
+## Meter CC methods
+
+### `get`
 
 ```ts
 async get(options?: MeterCCGetOptions): Promise<Pick<MeterCCReport, "type" | "scale" | "value" | "previousValue" | "rateType" | "deltaTime"> | undefined>;
 ```
 
-## `getAll` method
+### `getAll`
 
 ```ts
 async getAll(): Promise<Pick<MeterCCReport, "type" | "scale" | "value" | "previousValue" | "rateType" | "deltaTime">[]>;
 ```
 
-## `getSupported` method
+### `getSupported`
 
 ```ts
 async getSupported(): Promise<Pick<MeterCCSupportedReport, "type" | "supportsReset" | "supportedScales" | "supportedRateTypes"> | undefined>;
 ```
 
-## `reset` method
+### `reset`
 
 ```ts
 async reset(options: MeterCCResetOptions): Promise<void>;

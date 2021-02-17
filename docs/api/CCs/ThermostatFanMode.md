@@ -1,18 +1,20 @@
 # Thermostat Fan Mode CC
 
-## `get` method
+## Thermostat Fan Mode CC methods
+
+### `get`
 
 ```ts
 async get(): Promise<Pick<ThermostatFanModeCCReport, "mode" | "off"> | undefined>;
 ```
 
-## `set` method
+### `set`
 
 ```ts
 async set(mode: ThermostatFanMode, off?: boolean): Promise<void>;
 ```
 
-## `getSupportedModes` method
+### `getSupportedModes`
 
 ```ts
 async getSupportedModes(): Promise<

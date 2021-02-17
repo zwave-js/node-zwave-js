@@ -1,12 +1,14 @@
 # Thermostat Setpoint CC
 
-## `get` method
+## Thermostat Setpoint CC methods
+
+### `get`
 
 ```ts
 async get(setpointType: ThermostatSetpointType): Promise<{ value: number; scale: Scale; } | undefined>;
 ```
 
-## `set` method
+### `set`
 
 ```ts
 async set(
@@ -16,13 +18,13 @@ async set(
 ): Promise<void>;
 ```
 
-## `getCapabilities` method
+### `getCapabilities`
 
 ```ts
 async getCapabilities(setpointType: ThermostatSetpointType): Promise<Pick<ThermostatSetpointCCCapabilitiesReport, "minValue" | "maxValue" | "minValueScale" | "maxValueScale"> | undefined>;
 ```
 
-## `getSupportedSetpointTypes` method
+### `getSupportedSetpointTypes`
 
 ```ts
 async getSupportedSetpointTypes(): Promise<

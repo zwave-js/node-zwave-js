@@ -258,7 +258,8 @@ ${source}
 async function processImports(program: Project): Promise<boolean> {
 	const files = await enumFilesRecursive(
 		path.join(__dirname, "../docs"),
-		(f) => f.endsWith(".md"),
+		(f) =>
+			!f.includes("/CCs/") && !f.includes("\\CCs\\") && f.endsWith(".md"),
 	);
 	let hasErrors = false;
 	for (const file of files) {
@@ -292,14 +293,15 @@ function printOverload(method: MethodDeclaration): string {
 /** Generates CC documentation, returns true if there was an error */
 async function generateCCDocs(program: Project): Promise<boolean> {
 	// Delete old cruft
-	const ccDocsDir = path.join(__dirname, "../docs/api/CCs");
+	const docsDir = path.join(__dirname, "../docs");
+	const ccDocsDir = path.join(docsDir, "api/CCs");
 
 	// Load the index file before it gets deleted
 	const indexFilename = path.join(ccDocsDir, "index.md");
 	let indexFileContent = await fs.readFile(indexFilename, "utf8");
-	const autoGenToken = "<!-- BEGIN AUTO-GENERATION -->";
-	const autoGenStart = indexFileContent.indexOf(autoGenToken);
-	if (autoGenStart === -1) {
+	const indexAutoGenToken = "<!-- AUTO-GENERATE: CC List -->";
+	const indexAutoGenStart = indexFileContent.indexOf(indexAutoGenToken);
+	if (indexAutoGenStart === -1) {
 		console.error(
 			red(`Marker for auto-generation in CCs/index.md missing!`),
 		);
@@ -311,7 +313,8 @@ async function generateCCDocs(program: Project): Promise<boolean> {
 
 	// Find CC APIs
 	const ccFiles = program.getSourceFiles("packages/zwave-js/**/*CC.ts");
-	let index = "";
+	let generatedIndex = "";
+	let generatedSidebar = "";
 
 	for (const file of ccFiles) {
 		const APIClass = file
@@ -329,17 +332,22 @@ async function generateCCDocs(program: Project): Promise<boolean> {
 
 		const filename = APIClass.getName()!.replace("CCAPI", "") + ".md";
 		let text = `# ${ccName} CC\n\n`;
-		index += `\n\n## [${ccName} CC](api/CCs/${filename})`;
+		generatedIndex += `\n- [${ccName} CC](api/CCs/${filename})`;
+		generatedSidebar += `\n\t\t- [${ccName} CC](api/CCs/${filename})`;
 
 		// Enumerate all useful public methods
 		const methods = APIClass.getInstanceMethods()
 			.filter((m) => m.hasModifier(SyntaxKind.PublicKeyword))
 			.filter((m) => m.getName() !== "supportsCommand");
 
+		if (methods.length) {
+			text += `## ${ccName} CC methods\n\n`;
+		}
+
 		for (const method of methods) {
 			const signatures = method.getOverloads();
 
-			text += `## \`${method.getName()}\` method
+			text += `### \`${method.getName()}\`
 \`\`\`ts
 ${
 	signatures.length > 0
@@ -401,13 +409,37 @@ ${
 		await fs.writeFile(path.join(ccDocsDir, filename), text, "utf8");
 	}
 
-	// At the end, replace the index file
-	indexFileContent = indexFileContent.slice(
-		0,
-		autoGenStart + autoGenToken.length,
-	);
-	indexFileContent += index;
+	// Write the generated index file and sidebar
+	indexFileContent =
+		indexFileContent.slice(
+			0,
+			indexAutoGenStart + indexAutoGenToken.length,
+		) + generatedIndex;
+	indexFileContent = formatWithPrettier("index.md", indexFileContent);
 	await fs.writeFile(indexFilename, indexFileContent, "utf8");
+
+	const sidebarInputFilename = path.join(docsDir, "_sidebar.md");
+	let sidebarFileContent = await fs.readFile(sidebarInputFilename, "utf8");
+	const sidebarAutoGenToken = "<!-- AUTO-GENERATE: CC Links -->";
+	const sidebarAutoGenStart = sidebarFileContent.indexOf(sidebarAutoGenToken);
+	if (sidebarAutoGenStart === -1) {
+		console.error(
+			red(`Marker for CC auto-generation in _sidebar.md missing!`),
+		);
+		return false;
+	}
+	sidebarFileContent =
+		sidebarFileContent.slice(0, sidebarAutoGenStart) +
+		generatedSidebar +
+		sidebarFileContent.slice(
+			sidebarAutoGenStart + sidebarAutoGenToken.length,
+		);
+	sidebarFileContent = formatWithPrettier("_sidebar.md", sidebarFileContent);
+	await fs.writeFile(
+		path.join(ccDocsDir, "_sidebar.md"),
+		sidebarFileContent,
+		"utf8",
+	);
 
 	return false;
 }

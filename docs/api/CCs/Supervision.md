@@ -1,6 +1,8 @@
 # Supervision CC
 
-## `sendEncapsulated` method
+## Supervision CC methods
+
+### `sendEncapsulated`
 
 ```ts
 async sendEncapsulated(

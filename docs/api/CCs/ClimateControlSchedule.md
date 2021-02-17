@@ -1,6 +1,8 @@
 # Climate Control Schedule CC
 
-## `set` method
+## Climate Control Schedule CC methods
+
+### `set`
 
 ```ts
 async set(
@@ -9,7 +11,7 @@ async set(
 ): Promise<void>;
 ```
 
-## `get` method
+### `get`
 
 ```ts
 async get(
@@ -17,19 +19,19 @@ async get(
 ): Promise<readonly Switchpoint[] | undefined>;
 ```
 
-## `getChangeCounter` method
+### `getChangeCounter`
 
 ```ts
 async getChangeCounter(): Promise<number | undefined>;
 ```
 
-## `getOverride` method
+### `getOverride`
 
 ```ts
 async getOverride(): Promise<{ type: ScheduleOverrideType; state: SetbackState; } | undefined>;
 ```
 
-## `setOverride` method
+### `setOverride`
 
 ```ts
 async setOverride(

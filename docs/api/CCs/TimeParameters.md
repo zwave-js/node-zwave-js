@@ -1,12 +1,14 @@
 # Time Parameters CC
 
-## `get` method
+## Time Parameters CC methods
+
+### `get`
 
 ```ts
 async get(): Promise<Date | undefined>;
 ```
 
-## `set` method
+### `set`
 
 ```ts
 async set(dateAndTime: Date): Promise<void>;

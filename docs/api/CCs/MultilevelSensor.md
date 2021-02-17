@@ -1,6 +1,8 @@
 # Multilevel Sensor CC
 
-## `get` method
+## Multilevel Sensor CC methods
+
+### `get`
 
 ```ts
 async get(): Promise<
@@ -13,7 +15,7 @@ async get(
 ): Promise<number | undefined>;
 ```
 
-## `getSupportedSensorTypes` method
+### `getSupportedSensorTypes`
 
 ```ts
 async getSupportedSensorTypes(): Promise<
@@ -21,7 +23,7 @@ async getSupportedSensorTypes(): Promise<
 >;
 ```
 
-## `getSupportedScales` method
+### `getSupportedScales`
 
 ```ts
 async getSupportedScales(
@@ -29,7 +31,7 @@ async getSupportedScales(
 ): Promise<readonly number[] | undefined>;
 ```
 
-## `sendReport` method
+### `sendReport`
 
 ```ts
 async sendReport(

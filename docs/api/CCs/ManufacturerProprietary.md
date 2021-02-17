@@ -1,6 +1,8 @@
 # Manufacturer Proprietary CC
 
-## `sendData` method
+## Manufacturer Proprietary CC methods
+
+### `sendData`
 
 ```ts
 async sendData(
@@ -9,19 +11,19 @@ async sendData(
 ): Promise<void>;
 ```
 
-## `fibaroVenetianBlindsGet` method
+### `fibaroVenetianBlindsGet`
 
 ```ts
 async fibaroVenetianBlindsGet(): Promise<Pick<FibaroVenetianBlindCCReport, "position" | "tilt"> | undefined>;
 ```
 
-## `fibaroVenetianBlindsSetPosition` method
+### `fibaroVenetianBlindsSetPosition`
 
 ```ts
 async fibaroVenetianBlindsSetPosition(value: number): Promise<void>;
 ```
 
-## `fibaroVenetianBlindsSetTilt` method
+### `fibaroVenetianBlindsSetTilt`
 
 ```ts
 async fibaroVenetianBlindsSetTilt(value: number): Promise<void>;
