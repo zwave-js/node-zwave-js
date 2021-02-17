@@ -1,12 +1,14 @@
 # Language CC
 
-## `get` method
+## Language CC methods
+
+### `get`
 
 ```ts
 async get(): Promise<Pick<LanguageCCReport, "language" | "country"> | undefined>;
 ```
 
-## `set` method
+### `set`
 
 ```ts
 async set(language: string, country?: string): Promise<void>;

@@ -1,12 +1,14 @@
 # Thermostat Setback CC
 
-## `get` method
+## Thermostat Setback CC methods
+
+### `get`
 
 ```ts
 async get(): Promise<Pick<ThermostatSetbackCCReport, "setbackType" | "setbackState"> | undefined>;
 ```
 
-## `set` method
+### `set`
 
 ```ts
 async set(

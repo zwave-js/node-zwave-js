@@ -1,12 +1,14 @@
 # Multilevel Switch CC
 
-## `get` method
+## Multilevel Switch CC methods
+
+### `get`
 
 ```ts
 async get(): Promise<Pick<MultilevelSwitchCCReport, "currentValue" | "targetValue" | "duration"> | undefined>;
 ```
 
-## `set` method
+### `set`
 
 ```ts
 async set(
@@ -22,7 +24,7 @@ Sets the switch to a new value.
 -   `targetValue`: The new target value for the switch
 -   `duration`: The optional duration to reach the target value. Available in V2+
 
-## `startLevelChange` method
+### `startLevelChange`
 
 ```ts
 async startLevelChange(
@@ -30,13 +32,13 @@ async startLevelChange(
 ): Promise<void>;
 ```
 
-## `stopLevelChange` method
+### `stopLevelChange`
 
 ```ts
 async stopLevelChange(): Promise<void>;
 ```
 
-## `getSupported` method
+### `getSupported`
 
 ```ts
 async getSupported(): Promise<SwitchType | undefined>;

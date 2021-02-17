@@ -1,6 +1,8 @@
 # No Operation CC
 
-## `send` method
+## No Operation CC methods
+
+### `send`
 
 ```ts
 async send(): Promise<void>;

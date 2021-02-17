@@ -1,18 +1,20 @@
 # Wake Up CC
 
-## `getInterval` method
+## Wake Up CC methods
+
+### `getInterval`
 
 ```ts
 async getInterval(): Promise<Pick<WakeUpCCIntervalReport, "wakeUpInterval" | "controllerNodeId"> | undefined>;
 ```
 
-## `getIntervalCapabilities` method
+### `getIntervalCapabilities`
 
 ```ts
 async getIntervalCapabilities(): Promise<Pick<WakeUpCCIntervalCapabilitiesReport, "defaultWakeUpInterval" | "minWakeUpInterval" | "maxWakeUpInterval" | "wakeUpIntervalSteps"> | undefined>;
 ```
 
-## `setInterval` method
+### `setInterval`
 
 ```ts
 async setInterval(
@@ -21,7 +23,7 @@ async setInterval(
 ): Promise<void>;
 ```
 
-## `sendNoMoreInformation` method
+### `sendNoMoreInformation`
 
 ```ts
 async sendNoMoreInformation(): Promise<void>;

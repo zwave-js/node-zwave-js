@@ -1,6 +1,8 @@
 # Scene Activation CC
 
-## `set` method
+## Scene Activation CC methods
+
+### `set`
 
 ```ts
 async set(

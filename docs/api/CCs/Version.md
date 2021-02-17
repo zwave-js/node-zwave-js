@@ -1,12 +1,14 @@
 # Version CC
 
-## `get` method
+## Version CC methods
+
+### `get`
 
 ```ts
 async get(): Promise<Pick<VersionCCReport, "libraryType" | "protocolVersion" | "firmwareVersions" | "hardwareVersion"> | undefined>;
 ```
 
-## `getCCVersion` method
+### `getCCVersion`
 
 ```ts
 async getCCVersion(
@@ -14,13 +16,13 @@ async getCCVersion(
 ): Promise<number | undefined>;
 ```
 
-## `getCapabilities` method
+### `getCapabilities`
 
 ```ts
 async getCapabilities(): Promise<Pick<VersionCCCapabilitiesReport, "supportsZWaveSoftwareGet"> | undefined>;
 ```
 
-## `getZWaveSoftware` method
+### `getZWaveSoftware`
 
 ```ts
 async getZWaveSoftware(): Promise<Pick<VersionCCZWaveSoftwareReport, "sdkVersion" | "applicationFrameworkAPIVersion" | "applicationFrameworkBuildNumber" | "hostInterfaceVersion" | "hostInterfaceBuildNumber" | "zWaveProtocolVersion" | "zWaveProtocolBuildNumber" | "applicationVersion" | "applicationBuildNumber"> | undefined>;

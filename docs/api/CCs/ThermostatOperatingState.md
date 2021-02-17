@@ -1,6 +1,8 @@
 # Thermostat Operating State CC
 
-## `get` method
+## Thermostat Operating State CC methods
+
+### `get`
 
 ```ts
 async get(): Promise<ThermostatOperatingState | undefined>;

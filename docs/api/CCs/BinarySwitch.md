@@ -1,12 +1,14 @@
 # Binary Switch CC
 
-## `get` method
+## Binary Switch CC methods
+
+### `get`
 
 ```ts
 async get(): Promise<{ currentValue: Maybe<boolean>; targetValue: boolean | undefined; duration: Duration | undefined; } | undefined>;
 ```
 
-## `set` method
+### `set`
 
 ```ts
 async set(targetValue: boolean, duration?: Duration): Promise<void>;

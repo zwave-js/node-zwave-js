@@ -1,12 +1,14 @@
 # Scene Controller Configuration CC
 
-## `disable` method
+## Scene Controller Configuration CC methods
+
+### `disable`
 
 ```ts
 async disable(groupId: number): Promise<void>;
 ```
 
-## `set` method
+### `set`
 
 ```ts
 async set(
@@ -16,7 +18,7 @@ async set(
 ): Promise<void>;
 ```
 
-## `getLastActivated` method
+### `getLastActivated`
 
 ```ts
 async getLastActivated(): Promise<
@@ -29,7 +31,7 @@ async getLastActivated(): Promise<
 >;
 ```
 
-## `get` method
+### `get`
 
 ```ts
 async get(

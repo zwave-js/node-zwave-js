@@ -1,6 +1,8 @@
 # Association CC
 
-## `getGroupCount` method
+## Association CC methods
+
+### `getGroupCount`
 
 ```ts
 async getGroupCount(): Promise<number | undefined>;
@@ -9,7 +11,7 @@ async getGroupCount(): Promise<number | undefined>;
 Returns the number of association groups a node supports.
 Association groups are consecutive, starting at 1.
 
-## `getGroup` method
+### `getGroup`
 
 ```ts
 async getGroup(groupId: number): Promise<{ maxNodes: number; nodeIds: readonly number[]; } | undefined>;
@@ -17,7 +19,7 @@ async getGroup(groupId: number): Promise<{ maxNodes: number; nodeIds: readonly n
 
 Returns information about an association group.
 
-## `addNodeIds` method
+### `addNodeIds`
 
 ```ts
 async addNodeIds(
@@ -28,7 +30,7 @@ async addNodeIds(
 
 Adds new nodes to an association group.
 
-## `removeNodeIds` method
+### `removeNodeIds`
 
 ```ts
 async removeNodeIds(
@@ -38,7 +40,7 @@ async removeNodeIds(
 
 Removes nodes from an association group.
 
-## `removeNodeIdsFromAllGroups` method
+### `removeNodeIdsFromAllGroups`
 
 ```ts
 async removeNodeIdsFromAllGroups(nodeIds: number[]): Promise<void>;

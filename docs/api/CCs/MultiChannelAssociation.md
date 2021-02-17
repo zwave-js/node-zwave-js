@@ -1,6 +1,8 @@
 # Multi Channel Association CC
 
-## `getGroupCount` method
+## Multi Channel Association CC methods
+
+### `getGroupCount`
 
 ```ts
 async getGroupCount(): Promise<number | undefined>;
@@ -9,7 +11,7 @@ async getGroupCount(): Promise<number | undefined>;
 Returns the number of association groups a node supports.
 Association groups are consecutive, starting at 1.
 
-## `getGroup` method
+### `getGroup`
 
 ```ts
 async getGroup(groupId: number): Promise<Pick<MultiChannelAssociationCCReport, "maxNodes" | "nodeIds" | "endpoints"> | undefined>;
@@ -17,7 +19,7 @@ async getGroup(groupId: number): Promise<Pick<MultiChannelAssociationCCReport, "
 
 Returns information about an association group.
 
-## `addDestinations` method
+### `addDestinations`
 
 ```ts
 async addDestinations(
@@ -27,7 +29,7 @@ async addDestinations(
 
 Adds new nodes or endpoints to an association group.
 
-## `removeDestinations` method
+### `removeDestinations`
 
 ```ts
 async removeDestinations(

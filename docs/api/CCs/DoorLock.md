@@ -1,24 +1,26 @@
 # Door Lock CC
 
-## `getCapabilities` method
+## Door Lock CC methods
+
+### `getCapabilities`
 
 ```ts
 async getCapabilities(): Promise<Pick<DoorLockCCCapabilitiesReport, "autoRelockSupported" | "blockToBlockSupported" | "boltSupported" | "doorSupported" | "holdAndReleaseSupported" | "latchSupported" | "twistAssistSupported" | "supportedDoorLockModes" | "supportedInsideHandles" | "supportedOperationTypes" | "supportedOutsideHandles"> | undefined>;
 ```
 
-## `get` method
+### `get`
 
 ```ts
 async get(): Promise<Pick<DoorLockCCOperationReport, "currentMode" | "targetMode" | "duration" | "outsideHandlesCanOpenDoor" | "insideHandlesCanOpenDoor" | "latchStatus" | "boltStatus" | "doorStatus" | "lockTimeout"> | undefined>;
 ```
 
-## `set` method
+### `set`
 
 ```ts
 async set(mode: DoorLockMode): Promise<void>;
 ```
 
-## `setConfiguration` method
+### `setConfiguration`
 
 ```ts
 async setConfiguration(
@@ -26,7 +28,7 @@ async setConfiguration(
 ): Promise<void>;
 ```
 
-## `getConfiguration` method
+### `getConfiguration`
 
 ```ts
 async getConfiguration(): Promise<Pick<DoorLockCCConfigurationReport, "operationType" | "outsideHandlesCanOpenDoorConfiguration" | "insideHandlesCanOpenDoorConfiguration" | "lockTimeoutConfiguration" | "autoRelockTime" | "holdAndReleaseTime" | "twistAssist" | "blockToBlock"> | undefined>;

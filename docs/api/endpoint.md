@@ -105,6 +105,7 @@ readonly commandClasses(): CCAPIs
 ```
 
 This property provides access to simplified APIs that are taylored to specific CCs.
+
 Make sure to check support of each API using `API.isSupported()` before using it, since all other API calls will throw if the API is not supported. Example:
 
 ```ts
@@ -135,7 +136,7 @@ for (const cc of node.commandClasses) {
 }
 ```
 
-All CC APIs share the same basic functionality, which is described below. For the description of each CC API, please refer to the [corresponding documentation](api/CCs/index.md).
+All CC APIs share the same basic functionality, which is described below. For the description of each CC API, please refer to the [Command Classes documentation](api/CCs/index.md).
 
 ## CC API methods
 

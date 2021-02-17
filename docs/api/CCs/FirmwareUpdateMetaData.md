@@ -1,6 +1,8 @@
 # Firmware Update Meta Data CC
 
-## `getMetaData` method
+## Firmware Update Meta Data CC methods
+
+### `getMetaData`
 
 ```ts
 async getMetaData(): Promise<Pick<FirmwareUpdateMetaDataCCMetaDataReport, "manufacturerId" | "firmwareId" | "checksum" | "firmwareUpgradable" | "maxFragmentSize" | "additionalFirmwareIDs" | "hardwareVersion" | "continuesToFunction" | "supportsActivation"> | undefined>;
@@ -8,7 +10,7 @@ async getMetaData(): Promise<Pick<FirmwareUpdateMetaDataCCMetaDataReport, "manuf
 
 Requests information about the current firmware on the device.
 
-## `requestUpdate` method
+### `requestUpdate`
 
 ```ts
 async requestUpdate(
@@ -19,7 +21,7 @@ async requestUpdate(
 Requests the device to start the firmware update process.
 WARNING: This method may wait up to 60 seconds for a reply.
 
-## `sendFirmwareFragment` method
+### `sendFirmwareFragment`
 
 ```ts
 async sendFirmwareFragment(

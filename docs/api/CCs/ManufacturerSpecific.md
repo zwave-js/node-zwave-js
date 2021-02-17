@@ -1,12 +1,14 @@
 # Manufacturer Specific CC
 
-## `get` method
+## Manufacturer Specific CC methods
+
+### `get`
 
 ```ts
 async get(): Promise<Pick<ManufacturerSpecificCCReport, "manufacturerId" | "productType" | "productId"> | undefined>;
 ```
 
-## `deviceSpecificGet` method
+### `deviceSpecificGet`
 
 ```ts
 async deviceSpecificGet(

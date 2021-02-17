@@ -1,6 +1,8 @@
 # Notification CC
 
-## `getInternal` method
+## Notification CC methods
+
+### `getInternal`
 
 ```ts
 async getInternal(
@@ -10,7 +12,7 @@ async getInternal(
 
 .
 
-## `sendReport` method
+### `sendReport`
 
 ```ts
 async sendReport(
@@ -18,13 +20,13 @@ async sendReport(
 ): Promise<void>;
 ```
 
-## `get` method
+### `get`
 
 ```ts
 async get(options: NotificationCCGetSpecificOptions): Promise<Pick<NotificationCCReport, "notificationStatus" | "notificationEvent" | "alarmLevel" | "zensorNetSourceNodeId" | "eventParameters" | "sequenceNumber"> | undefined>;
 ```
 
-## `set` method
+### `set`
 
 ```ts
 async set(
@@ -33,13 +35,13 @@ async set(
 ): Promise<void>;
 ```
 
-## `getSupported` method
+### `getSupported`
 
 ```ts
 async getSupported(): Promise<Pick<NotificationCCSupportedReport, "supportsV1Alarm" | "supportedNotificationTypes"> | undefined>;
 ```
 
-## `getSupportedEvents` method
+### `getSupportedEvents`
 
 ```ts
 async getSupportedEvents(

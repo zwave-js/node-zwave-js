@@ -1,6 +1,8 @@
 # Indicator CC
 
-## `get` method
+## Indicator CC methods
+
+### `get`
 
 ```ts
 async get(
@@ -8,13 +10,13 @@ async get(
 ): Promise<number | IndicatorObject[] | undefined>;
 ```
 
-## `set` method
+### `set`
 
 ```ts
 async set(value: number | IndicatorObject[]): Promise<void>;
 ```
 
-## `getSupported` method
+### `getSupported`
 
 ```ts
 async getSupported(
@@ -29,7 +31,7 @@ async getSupported(
 >;
 ```
 
-## `identify` method
+### `identify`
 
 ```ts
 async identify(): Promise<void>;

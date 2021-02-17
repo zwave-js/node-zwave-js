@@ -1,18 +1,20 @@
 # Central Scene CC
 
-## `getSupported` method
+## Central Scene CC methods
+
+### `getSupported`
 
 ```ts
 async getSupported(): Promise<Pick<CentralSceneCCSupportedReport, "sceneCount" | "supportsSlowRefresh" | "supportedKeyAttributes"> | undefined>;
 ```
 
-## `getConfiguration` method
+### `getConfiguration`
 
 ```ts
 async getConfiguration(): Promise<Pick<CentralSceneCCConfigurationReport, "slowRefresh"> | undefined>;
 ```
 
-## `setConfiguration` method
+### `setConfiguration`
 
 ```ts
 async setConfiguration(slowRefresh: boolean): Promise<void>;

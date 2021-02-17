@@ -1,12 +1,14 @@
 # Basic CC
 
-## `get` method
+## Basic CC methods
+
+### `get`
 
 ```ts
 async get(): Promise<Pick<BasicCCReport, "currentValue" | "targetValue" | "duration"> | undefined>;
 ```
 
-## `set` method
+### `set`
 
 ```ts
 async set(targetValue: number): Promise<void>;

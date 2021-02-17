@@ -1,12 +1,14 @@
 # Multi Channel CC
 
-## `getEndpoints` method
+## Multi Channel CC methods
+
+### `getEndpoints`
 
 ```ts
 async getEndpoints(): Promise<{ isDynamicEndpointCount: boolean; identicalCapabilities: boolean; individualEndpointCount: number; aggregatedEndpointCount: number | undefined; } | undefined>;
 ```
 
-## `getEndpointCapabilities` method
+### `getEndpointCapabilities`
 
 ```ts
 async getEndpointCapabilities(
@@ -14,7 +16,7 @@ async getEndpointCapabilities(
 ): Promise<EndpointCapability | undefined>;
 ```
 
-## `findEndpoints` method
+### `findEndpoints`
 
 ```ts
 async findEndpoints(
@@ -23,7 +25,7 @@ async findEndpoints(
 ): Promise<readonly number[] | undefined>;
 ```
 
-## `getAggregatedMembers` method
+### `getAggregatedMembers`
 
 ```ts
 async getAggregatedMembers(
@@ -31,7 +33,7 @@ async getAggregatedMembers(
 ): Promise<readonly number[] | undefined>;
 ```
 
-## `sendEncapsulated` method
+### `sendEncapsulated`
 
 ```ts
 async sendEncapsulated(
@@ -42,7 +44,7 @@ async sendEncapsulated(
 ): Promise<void>;
 ```
 
-## `getEndpointCountV1` method
+### `getEndpointCountV1`
 
 ```ts
 async getEndpointCountV1(
@@ -50,7 +52,7 @@ async getEndpointCountV1(
 ): Promise<number | undefined>;
 ```
 
-## `sendEncapsulatedV1` method
+### `sendEncapsulatedV1`
 
 ```ts
 async sendEncapsulatedV1(encapsulated: CommandClass): Promise<void>;

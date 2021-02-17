@@ -1,12 +1,14 @@
 # Clock CC
 
-## `get` method
+## Clock CC methods
+
+### `get`
 
 ```ts
 async get(): Promise<Pick<ClockCCReport, "weekday" | "hour" | "minute"> | undefined>;
 ```
 
-## `set` method
+### `set`
 
 ```ts
 async set(
