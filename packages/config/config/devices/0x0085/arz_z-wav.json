@@ -9,10 +9,7 @@
 		{
 			"productType": "0x0003",
 			"productId": "0x0011",
-			"zwaveAllianceId": [
-				2571,
-				2888
-			]
+			"zwaveAllianceId": [2571, 2888]
 		}
 	],
 	"firmwareVersion": {
@@ -34,11 +31,11 @@
 			"options": [
 				{
 					"label": "Calibrate",
-					"value": "1"
+					"value": 1
 				},
 				{
 					"label": "Uncalibrate",
-					"value": "2"
+					"value": 2
 				}
 			]
 		},
@@ -56,11 +53,11 @@
 			"options": [
 				{
 					"label": "Max",
-					"value": "1"
+					"value": 1
 				},
 				{
 					"label": "Previous Position",
-					"value": "2"
+					"value": 2
 				}
 			]
 		}

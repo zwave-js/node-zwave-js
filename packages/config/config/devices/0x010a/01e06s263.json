@@ -1,7 +1,7 @@
-// VDA 01E06S263
+// Vitrum 01E06S263
 // Vitrum VI EU on-off 6 triac 868.4MHz
 {
-	"manufacturer": "VDA",
+	"manufacturer": "Vitrum",
 	"manufacturerId": "0x010a",
 	"label": "01E06S263",
 	"description": "Vitrum VI EU on-off 6 triac 868.4MHz",
@@ -18,7 +18,7 @@
 	},
 	"paramInformation": {
 		"7": {
-			"label": "Button N.1 Off Status LED",
+			"label": "Button No. 1 Off Status LED",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 7,
@@ -63,7 +63,7 @@
 			]
 		},
 		"8": {
-			"label": "Button N.2 Off Status LED",
+			"label": "Button No. 2 Off Status LED",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 7,
@@ -108,7 +108,7 @@
 			]
 		},
 		"9": {
-			"label": "Button N.3 Off Status LED",
+			"label": "Button No. 3 Off Status LED",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 7,
@@ -153,7 +153,7 @@
 			]
 		},
 		"10": {
-			"label": "Button N.4 Off Status LED",
+			"label": "Button No. 4 Off Status LED",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 7,
@@ -198,7 +198,7 @@
 			]
 		},
 		"11": {
-			"label": "Button N.5 Off Status LED",
+			"label": "Button No. 5 Off Status LED",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 7,
@@ -243,7 +243,7 @@
 			]
 		},
 		"12": {
-			"label": "Button N.6 Off Status LED",
+			"label": "Button No. 6 Off Status LED",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 7,
@@ -288,7 +288,7 @@
 			]
 		},
 		"13": {
-			"label": "Button N.1 On Status LED",
+			"label": "Button No. 1 On Status LED",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 7,
@@ -333,7 +333,7 @@
 			]
 		},
 		"14": {
-			"label": "Button N.2 On Status LED",
+			"label": "Button No. 2 On Status LED",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 7,
@@ -378,7 +378,7 @@
 			]
 		},
 		"15": {
-			"label": "Button N.3 On Status LED",
+			"label": "Button No. 3 On Status LED",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 7,
@@ -423,7 +423,7 @@
 			]
 		},
 		"16": {
-			"label": "Button N.4 On Status LED",
+			"label": "Button No. 4 On Status LED",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 7,
@@ -468,7 +468,7 @@
 			]
 		},
 		"17": {
-			"label": "Button N.5 On Status LED",
+			"label": "Button No. 5 On Status LED",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 7,
@@ -513,7 +513,7 @@
 			]
 		},
 		"18": {
-			"label": "Button N.6 On Status LED",
+			"label": "Button No. 6 On Status LED",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 7,
@@ -558,7 +558,7 @@
 			]
 		},
 		"25": {
-			"label": "Button N.1 Output Port",
+			"label": "Button No. 1 Output Port",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 6,
@@ -599,7 +599,7 @@
 			]
 		},
 		"26": {
-			"label": "Button N.2 Output Port",
+			"label": "Button No. 2 Output Port",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 6,
@@ -640,7 +640,7 @@
 			]
 		},
 		"27": {
-			"label": "Button N.3 Output Port",
+			"label": "Button No. 3 Output Port",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 6,
@@ -681,7 +681,7 @@
 			]
 		},
 		"28": {
-			"label": "Button N.4 Output Port",
+			"label": "Button No. 4 Output Port",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 6,
@@ -722,7 +722,7 @@
 			]
 		},
 		"29": {
-			"label": "Button N.5 Output Port",
+			"label": "Button No. 5 Output Port",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 6,
@@ -763,7 +763,7 @@
 			]
 		},
 		"30": {
-			"label": "Button N.6 Output Port",
+			"label": "Button No. 6 Output Port",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 6,
@@ -815,11 +815,11 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "99",
+					"label": "Value 99",
 					"value": 0
 				},
 				{
-					"label": "255",
+					"label": "Value 255",
 					"value": 1
 				}
 			]
@@ -836,11 +836,11 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "99",
+					"label": "Value 99",
 					"value": 0
 				},
 				{
-					"label": "255",
+					"label": "Value 255",
 					"value": 1
 				}
 			]
@@ -857,11 +857,11 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "99",
+					"label": "Value 99",
 					"value": 0
 				},
 				{
-					"label": "255",
+					"label": "Value 255",
 					"value": 1
 				}
 			]
@@ -878,11 +878,11 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "99",
+					"label": "Value 99",
 					"value": 0
 				},
 				{
-					"label": "255",
+					"label": "Value 255",
 					"value": 1
 				}
 			]
@@ -899,11 +899,11 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "99",
+					"label": "Value 99",
 					"value": 0
 				},
 				{
-					"label": "255",
+					"label": "Value 255",
 					"value": 1
 				}
 			]
@@ -920,17 +920,17 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "99",
+					"label": "Value 99",
 					"value": 0
 				},
 				{
-					"label": "255",
+					"label": "Value 255",
 					"value": 1
 				}
 			]
 		},
 		"206": {
-			"label": "Buttons Max. Brightness",
+			"label": "Buttons Max Brightness",
 			"valueSize": 1,
 			"minValue": 5,
 			"maxValue": 100,
@@ -941,7 +941,7 @@
 			"allowManualEntry": true
 		},
 		"207": {
-			"label": "Buttons Min. Brightness",
+			"label": "Buttons Min Brightness",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 100,

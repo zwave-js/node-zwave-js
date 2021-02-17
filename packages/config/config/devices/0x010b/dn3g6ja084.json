@@ -29,11 +29,11 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "Off",
+					"label": "Disabled",
 					"value": 0
 				},
 				{
-					"label": "On",
+					"label": "Enabled",
 					"value": 1
 				}
 			]

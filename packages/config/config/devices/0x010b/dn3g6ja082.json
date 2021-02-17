@@ -29,19 +29,19 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "Off",
+					"label": "Disabled",
 					"value": 0
 				},
 				{
-					"label": "On",
+					"label": "Enabled",
 					"value": 1
 				}
 			]
 		}
 	},
 	"metadata": {
-		"inclusion": "-Add (Inclusion)\nInsert a CR123A, and LED blinks. \nSet the controller to the status for “Add”. \nPress the button over 3 seconds and release.\nAbout “Add” is completed, LED turns off.\n(If security include, LED turns off will soon after “Preparing inclusion” process.)\nNote) After inclusion completed, this sensor keep waking about 40 seconds, for interview process.\n During this time, button operation is disabled.",
-		"exclusion": "-Remove (exclusion)\nSet the controller to the status for “Remove”.\nPress the button over 3 seconds and release.\nLED blinks when “Remove” is completed.",
+		"inclusion": "Insert a CR123A, and LED blinks. \nSet the controller to the status for “Add”. \nPress the button over 3 seconds and release.\nAbout “Add” is completed, LED turns off.\n(If security include, LED turns off will soon after “Preparing inclusion” process.)\nNote) After inclusion completed, this sensor keep waking about 40 seconds, for interview process.\n During this time, button operation is disabled.",
+		"exclusion": "Set the controller to the status for “Remove”.\nPress the button over 3 seconds and release.\nLED blinks when “Remove” is completed.",
 		"reset": "Press the button over 10 seconds and release.\nPlease use this procedure only when the network primary controller like the gateway is missing or otherwise inoperable",
 		"manual": "https://products.z-wavealliance.org/ProductManual/File?folder=&filename=MarketCertificationFiles/2979/UsersGuide%20DN3G6JA082%20rev1.pdf"
 	}
