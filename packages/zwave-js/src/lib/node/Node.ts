@@ -2578,7 +2578,7 @@ version:               ${this.version}`;
 		// TODO: Should manufacturer id and firmware id be provided externally?
 		const status = await api.requestUpdate({
 			manufacturerId: meta.manufacturerId,
-			firmwareId: meta.firmwareId,
+			firmwareId: (target == 0 ? meta.firmwareId : meta.additionalFirmwareIDs[target - 1]),
 			firmwareTarget: target,
 			fragmentSize: this._firmwareUpdateStatus.fragmentSize,
 			checksum: CRC16_CCITT(data),
