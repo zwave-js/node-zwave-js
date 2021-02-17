@@ -1,7 +1,7 @@
-// Smartly AS AR1P
+// SE Devices AR1P
 // Standalone Relay 1-Pole
 {
-	"manufacturer": "Smartly AS",
+	"manufacturer": "SE Devices",
 	"manufacturerId": "0x024f",
 	"label": "AR1P",
 	"description": "Standalone Relay 1-Pole",
@@ -19,22 +19,41 @@
 	"paramInformation": {
 		"1": {
 			"label": "Hardware Combination Identifier",
-			"description": "Hardware combination identifier",
+			"description": "",
 			"valueSize": 1,
-			"minValue": 0,
+			"minValue": 16,
 			"maxValue": 19,
 			"defaultValue": 19,
 			"unsigned": true,
-			"readOnly": false,
+			"readOnly": true,
 			"writeOnly": false,
-			"allowManualEntry": true
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "2-Pole 8A Relay",
+					"value": 16
+				},
+				{
+					"label": "1-10V Dimmer",
+					"value": 17
+				},
+				{
+					"label": "230V MOSFET Dimmer",
+					"value": 18
+				},
+				{
+					"label": "1-Pole 16A Relay",
+					"value": 19
+				}
+			]
 		},
 		"4": {
 			"label": "Safety Activate Delay",
-			"description": "Safety activation delay",
+			"description": "",
 			"valueSize": 2,
 			"minValue": 0,
-			"maxValue": 0,
+			"maxValue": 32767,
+			"unit": "seconds",
 			"defaultValue": 0,
 			"unsigned": true,
 			"readOnly": false,
@@ -43,10 +62,11 @@
 		},
 		"5": {
 			"label": "Safety Off Period",
-			"description": "Safety off period",
+			"description": "",
 			"valueSize": 2,
 			"minValue": 0,
-			"maxValue": 600,
+			"maxValue": 32767,
+			"unit": "seconds",
 			"defaultValue": 600,
 			"unsigned": true,
 			"readOnly": false,
@@ -55,10 +75,11 @@
 		},
 		"6": {
 			"label": "Safety On Period",
-			"description": "Safety on period",
+			"description": "",
 			"valueSize": 2,
 			"minValue": 0,
-			"maxValue": 300,
+			"maxValue": 32767,
+			"unit": "seconds",
 			"defaultValue": 300,
 			"unsigned": true,
 			"readOnly": false,
@@ -66,16 +87,34 @@
 			"allowManualEntry": true
 		},
 		"16": {
-			"label": "Functionaltiy Identifier",
-			"description": "Functionaltiy identifier",
+			"label": "Back Unit Type",
+			"description": "",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 6,
-			"defaultValue": 6,
+			"defaultValue": 2,
 			"unsigned": true,
-			"readOnly": false,
+			"readOnly": true,
 			"writeOnly": false,
-			"allowManualEntry": true
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "2-Pole 8A Relay",
+					"value": 0
+				},
+				{
+					"label": "230V MOSFET Dimmer",
+					"value": 2
+				},
+				{
+					"label": "1-10V Dimmer",
+					"value": 4
+				},
+				{
+					"label": "1-Pole 16A Relay",
+					"value": 6
+				}
+			]
 		}
 	},
 	"metadata": {

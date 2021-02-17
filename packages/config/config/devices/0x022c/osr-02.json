@@ -1,7 +1,7 @@
-// Remote Solution OSR-02
+// LG U+ OSR-02
 // Open Sensor
 {
-	"manufacturer": "Remote Solution",
+	"manufacturer": "LG U+",
 	"manufacturerId": "0x022c",
 	"label": "OSR-02",
 	"description": "Open Sensor",
@@ -18,11 +18,11 @@
 	},
 	"paramInformation": {
 		"1": {
-			"label": "Battery Period",
-			"description": "Battery report period value",
+			"label": "Battery Report Period",
+			"description": "Value x 15 minute increments",
 			"valueSize": 1,
 			"minValue": 1,
-			"maxValue": 24,
+			"maxValue": 127,
 			"defaultValue": 24,
 			"unsigned": true,
 			"readOnly": false,

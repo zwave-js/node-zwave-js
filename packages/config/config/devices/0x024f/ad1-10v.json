@@ -1,7 +1,7 @@
-// Smartly AS AD1-10V
+// SE Devices AD1-10V
 // Standalone 1-10V Dimmer
 {
-	"manufacturer": "Smartly AS",
+	"manufacturer": "SE Devices",
 	"manufacturerId": "0x024f",
 	"label": "AD1-10V",
 	"description": "Standalone 1-10V Dimmer",
@@ -19,22 +19,41 @@
 	"paramInformation": {
 		"1": {
 			"label": "Hardware Combination Identifier",
-			"description": "Hardware combination identifier",
+			"description": "",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 18,
+			"minValue": 16,
+			"maxValue": 19,
 			"defaultValue": 18,
 			"unsigned": true,
-			"readOnly": false,
+			"readOnly": true,
 			"writeOnly": false,
-			"allowManualEntry": true
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "2-Pole 8A Relay",
+					"value": 16
+				},
+				{
+					"label": "1-10V Dimmer",
+					"value": 17
+				},
+				{
+					"label": "230V MOSFET Dimmer",
+					"value": 18
+				},
+				{
+					"label": "1-Pole 16A Relay",
+					"value": 19
+				}
+			]
 		},
 		"10": {
 			"label": "Dimming Speed",
-			"description": "Dimming speed from min to max",
+			"description": "",
 			"valueSize": 2,
+			"unit": ".01 seconds",
 			"minValue": 0,
-			"maxValue": 300,
+			"maxValue": 32767,
 			"defaultValue": 300,
 			"unsigned": true,
 			"readOnly": false,
@@ -46,19 +65,29 @@
 			"description": "Not applicable",
 			"valueSize": 1,
 			"minValue": 0,
-			"maxValue": 0,
+			"maxValue": 1,
 			"defaultValue": 0,
 			"unsigned": true,
 			"readOnly": false,
 			"writeOnly": false,
-			"allowManualEntry": true
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Leading Edge",
+					"value": 0
+				},
+				{
+					"label": "Tailing Edge",
+					"value": 1
+				}
+			]
 		},
 		"12": {
-			"label": "Maximum Level",
-			"description": "Maximum dimmer level",
+			"label": "Maximum Dimmer Level",
+			"description": "",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 90,
+			"minValue": 1,
+			"maxValue": 99,
 			"defaultValue": 90,
 			"unsigned": true,
 			"readOnly": false,
@@ -66,11 +95,11 @@
 			"allowManualEntry": true
 		},
 		"13": {
-			"label": "Minimum Level",
-			"description": "Minimum dimmer level",
+			"label": "Minimum Dimmer Level",
+			"description": "",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 15,
+			"minValue": 1,
+			"maxValue": 99,
 			"defaultValue": 15,
 			"unsigned": true,
 			"readOnly": false,
@@ -79,22 +108,40 @@
 		},
 		"16": {
 			"label": "Back Unit Type",
-			"description": "Local functionality identifier",
+			"description": "",
 			"valueSize": 1,
 			"minValue": 0,
-			"maxValue": 2,
+			"maxValue": 6,
 			"defaultValue": 2,
 			"unsigned": true,
-			"readOnly": false,
+			"readOnly": true,
 			"writeOnly": false,
-			"allowManualEntry": true
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "2-Pole 8A Relay",
+					"value": 0
+				},
+				{
+					"label": "230V MOSFET Dimmer",
+					"value": 2
+				},
+				{
+					"label": "1-10V Dimmer",
+					"value": 4
+				},
+				{
+					"label": "1-Pole 16A Relay",
+					"value": 6
+				}
+			]
 		},
 		"44": {
 			"label": "Cold Start Minimum Level",
-			"description": "Not applicable",
+			"description": "",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 20,
+			"minValue": 1,
+			"maxValue": 99,
 			"defaultValue": 20,
 			"unsigned": true,
 			"readOnly": false,

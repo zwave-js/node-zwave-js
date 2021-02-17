@@ -18,12 +18,12 @@
 	},
 	"paramInformation": {
 		"1": {
-			"label": "Battery Period",
-			"description": "Default 12 (0x0c), 0x01~0xff in 30 minute increments",
+			"label": "Battery Report Period",
+			"description": "Value x 30 minute increments",
 			"valueSize": 1,
 			"unit": "minutes",
-			"minValue": 0,
-			"maxValue": 12,
+			"minValue": 1,
+			"maxValue": 255,
 			"defaultValue": 12,
 			"unsigned": true,
 			"readOnly": false,

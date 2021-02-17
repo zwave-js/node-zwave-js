@@ -1,7 +1,7 @@
-// Remote Solution OSR-01
+// LG U+ OSR-01
 // Open Sensor
 {
-	"manufacturer": "Remote Solution",
+	"manufacturer": "LG U+",
 	"manufacturerId": "0x022c",
 	"label": "OSR-01",
 	"description": "Open Sensor",
@@ -9,10 +9,7 @@
 		{
 			"productType": "0x0003",
 			"productId": "0x0001",
-			"zwaveAllianceId": [
-				1382,
-				1608
-			]
+			"zwaveAllianceId": [1382, 1608]
 		}
 	],
 	"firmwareVersion": {
@@ -21,12 +18,12 @@
 	},
 	"paramInformation": {
 		"1": {
-			"label": "Battery Period",
-			"description": "Default 24 (0x18), 0x01~0xff in 15 minute increments",
+			"label": "Battery Report Period",
+			"description": "Value x 15 minute increments",
 			"valueSize": 1,
 			"unit": "minutes",
-			"minValue": 0,
-			"maxValue": 24,
+			"minValue": 1,
+			"maxValue": 255,
 			"defaultValue": 24,
 			"unsigned": true,
 			"readOnly": false,

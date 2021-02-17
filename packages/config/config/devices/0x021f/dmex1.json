@@ -1,7 +1,7 @@
-// Elexa Consumer Products Inc. DMEX1
+// Dome DMEX1
 // Range Extender
 {
-	"manufacturer": "Elexa Consumer Products Inc.",
+	"manufacturer": "Dome",
 	"manufacturerId": "0x021f",
 	"label": "DMEX1",
 	"description": "Range Extender",
@@ -18,11 +18,11 @@
 	},
 	"paramInformation": {
 		"1": {
-			"label": "Night Light &amp;quot;off&amp;quot; Threshold",
-			"description": "Night light off threshold",
+			"label": "Night Light Off Threshold",
+			"description": "",
 			"valueSize": 1,
 			"minValue": 0,
-			"maxValue": 5,
+			"maxValue": 10,
 			"defaultValue": 5,
 			"unsigned": true,
 			"readOnly": false,
@@ -30,11 +30,11 @@
 			"allowManualEntry": true
 		},
 		"2": {
-			"label": "Night Light &amp;quot;on&amp;quot; Threshold",
-			"description": "Night light on threshold",
+			"label": "Night Light On Threshold",
+			"description": "",
 			"valueSize": 1,
 			"minValue": 0,
-			"maxValue": 5,
+			"maxValue": 10,
 			"defaultValue": 5,
 			"unsigned": true,
 			"readOnly": false,

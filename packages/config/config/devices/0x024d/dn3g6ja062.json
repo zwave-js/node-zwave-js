@@ -19,11 +19,11 @@
 	"paramInformation": {
 		"1": {
 			"label": "Polling Interval",
-			"description": "30 sec to 127 seconds interval",
+			"description": "",
 			"valueSize": 1,
 			"unit": "seconds",
-			"minValue": 0,
-			"maxValue": 60,
+			"minValue": 30,
+			"maxValue": 127,
 			"defaultValue": 60,
 			"unsigned": true,
 			"readOnly": false,
@@ -31,8 +31,8 @@
 			"allowManualEntry": true
 		},
 		"2": {
-			"label": "Led Blinking Mode",
-			"description": "Led indicator for data transmission blinks when state change",
+			"label": "LED Blinking Mode",
+			"description": "",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 3,
@@ -43,19 +43,19 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "Led indicator is always off",
+					"label": "LED indicator is always off",
 					"value": 0
 				},
 				{
-					"label": "Led indicator lights 1 second after thumb turn status close to open",
+					"label": "LED indicator lights 1 second after thumb turn status close to open",
 					"value": 1
 				},
 				{
-					"label": "Led indicator lights 1 second after thumb turn status open to close",
+					"label": "LED indicator lights 1 second after thumb turn status open to close",
 					"value": 2
 				},
 				{
-					"label": "Led indicator lights 1 second after changed thumb turn status",
+					"label": "LED indicator lights 1 second after changed thumb turn status",
 					"value": 3
 				}
 			]

@@ -1,7 +1,7 @@
-// Hankook Gas Kiki CO., Ltd. HT-A10
+// Gas Keeper HT-A10
 // Smart Gas Keeper
 {
-	"manufacturer": "Hankook Gas Kiki CO., Ltd.",
+	"manufacturer": "Gas Keeper",
 	"manufacturerId": "0x024c",
 	"label": "HT-A10",
 	"description": "Smart Gas Keeper",
@@ -19,10 +19,10 @@
 	"paramInformation": {
 		"1": {
 			"label": "Timer Setting",
-			"description": "Time setting",
+			"description": "",
 			"valueSize": 1,
 			"minValue": 0,
-			"maxValue": 1,
+			"maxValue": 54,
 			"defaultValue": 1,
 			"unsigned": true,
 			"readOnly": false,
@@ -31,10 +31,10 @@
 		},
 		"2": {
 			"label": "Remained Time",
-			"description": "Remained time",
+			"description": "",
 			"valueSize": 2,
 			"minValue": 0,
-			"maxValue": 0,
+			"maxValue": 540,
 			"defaultValue": 0,
 			"unsigned": true,
 			"readOnly": false,

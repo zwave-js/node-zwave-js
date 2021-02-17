@@ -1,7 +1,7 @@
-// iRevo GDM-M2D6D-K0
+// GATEMAN GDM-M2D6D-K0
 // A200-CH
 {
-	"manufacturer": "iRevo",
+	"manufacturer": "GATEMAN",
 	"manufacturerId": "0x0212",
 	"label": "GDM-M2D6D-K0",
 	"description": "A200-CH",
@@ -19,34 +19,58 @@
 	"paramInformation": {
 		"1": {
 			"label": "Silent Mode On/Off",
-			"description": "Unsigned value",
+			"description": "",
 			"valueSize": 1,
-			"minValue": 0,
+			"minValue": 1,
 			"maxValue": 3,
 			"defaultValue": 3,
 			"unsigned": true,
 			"readOnly": false,
 			"writeOnly": false,
-			"allowManualEntry": true
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Mute",
+					"value": 1
+				},
+				{
+					"label": "Volume low",
+					"value": 2
+				},
+				{
+					"label": "Volume high",
+					"value": 3
+				}
+			]
 		},
 		"2": {
 			"label": "Auto Relock On/Off",
-			"description": "Unsigned value",
+			"description": "",
 			"valueSize": 1,
 			"minValue": 0,
-			"maxValue": 0,
+			"maxValue": 255,
 			"defaultValue": 0,
 			"unsigned": true,
 			"readOnly": false,
 			"writeOnly": false,
-			"allowManualEntry": true
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Disable auto relock",
+					"value": 0
+				},
+				{
+					"label": "Enable auto relock",
+					"value": 255
+				}
+			]
 		},
 		"3": {
 			"label": "Relock Time",
-			"description": "Unsigned value",
+			"description": "",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 30,
+			"minValue": 10,
+			"maxValue": 180,
 			"defaultValue": 30,
 			"unsigned": true,
 			"readOnly": false,
