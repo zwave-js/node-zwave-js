@@ -1,4 +1,4 @@
-// NIE Technology Co., Ltd. NZW31T
+// Inovelli NZW31T
 // In-wall Smart Dimmer
 {
 	"manufacturer": "Inovelli",
@@ -11,7 +11,7 @@
 			"productId": "0x261c",
 			"zwaveAllianceId": 2679
 		},
- 		{
+		{
 			"productType": "0x1f02",
 			"productId": "0x1f02"
 		}
