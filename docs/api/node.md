@@ -641,7 +641,11 @@ interface NodeInterviewFailedEventArgs {
 
 ### `"ready"`
 
-This is emitted when enough information about the node is known that it can safely be used. The node is passed as the single argument to the callback:
+This is emitted when enough information about the node is known that it can safely be used. This includes protocol information and supported/controlled CCs.
+
+The driver will also try to identify the node, its CC versions, endpoints, capabilities for each CC, etc. However, this **does not** mean that **all** this information is known to the driver due to potential timeouts, lost messages and/or unresponsive nodes during the interview. Therefore, the driver will do its best to work with what it has.
+
+The node is passed as the single argument to the callback:
 
 ```ts
 (node: ZWaveNode) => void
