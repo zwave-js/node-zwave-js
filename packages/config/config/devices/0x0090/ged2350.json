@@ -776,52 +776,6 @@
 				}
 			]
 		},
-		"33": {
-			"label": "SKU number, 1st 4 bytes",
-			"description": "All printable characters",
-			"valueSize": 4,
-			"minValue": 0,
-			"maxValue": 0,
-			"defaultValue": 0,
-			"unsigned": true,
-			"readOnly": true,
-			"writeOnly": false,
-			"allowManualEntry": true
-		},
-		"34": {
-			"label": "SKU number, last 4 bytes",
-			"description": "All printable characters",
-			"valueSize": 4,
-			"minValue": 0,
-			"maxValue": 0,
-			"defaultValue": 0,
-			"unsigned": true,
-			"readOnly": true,
-			"writeOnly": false,
-			"allowManualEntry": true
-		},
-		"40": {
-			"label": "Reset to Default",
-			"description": "Force Factory Reset",
-			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 1,
-			"defaultValue": 0,
-			"unsigned": true,
-			"readOnly": false,
-			"writeOnly": true,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "Normal Operation",
-					"value": 0
-				},
-				{
-					"label": "Factory Reset",
-					"value": 1
-				}
-			]
-		},
 		"31[0x01]": {
 			"label": "Dipswitch setting: Lock Status LED",
 			"description": "State of the Lock Status LED dipswitch on the rear panel of the door lock.",
