@@ -39,8 +39,9 @@
 			]
 		},
 		"2": {
-			"label": "Temperature Reporting Interval",
+			"label": "Temperature Reporting Threshold",
 			"valueSize": 1,
+			"unit": "0.1 °C",
 			"minValue": 1,
 			"maxValue": 50,
 			"defaultValue": 30,
@@ -50,9 +51,9 @@
 			"allowManualEntry": true
 		},
 		"3": {
-			"label": "Humidity Reporting Interval",
+			"label": "Humidity Reporting Threshold",
 			"valueSize": 1,
-      "unit": "%",
+			"unit": "0.1 °C",
 			"minValue": 1,
 			"maxValue": 50,
 			"defaultValue": 20,
@@ -62,9 +63,9 @@
 			"allowManualEntry": true
 		},
 		"4": {
-			"label": "Auto Light Report Interval",
+			"label": "Light Reporting Threshold",
 			"valueSize": 1,
-      "unit": "%",
+			"unit": "%",
 			"minValue": 0,
 			"maxValue": 50,
 			"defaultValue": 25,

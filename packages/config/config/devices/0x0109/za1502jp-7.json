@@ -19,6 +19,7 @@
 	"paramInformation": {
 		"1": {
 			"label": "Synchronic Time Interval",
+			"description": "Define the synchronic interval time between arrival sensor and the gateway",
 			"valueSize": 1,
 			"unit": "16 seconds",
 			"minValue": 1,
