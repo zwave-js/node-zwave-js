@@ -33,7 +33,7 @@ async sendFirmwareFragment(
 
 Sends a fragment of the new firmware to the device.
 
-## `activateFirmware` method
+### `activateFirmware`
 
 ```ts
 async activateFirmware(
