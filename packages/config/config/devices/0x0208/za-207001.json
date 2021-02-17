@@ -18,7 +18,7 @@
 	},
 	"paramInformation": {
 		"254": {
-			"label": "Lock State Configuration Parameters",
+			"label": "Configuration Parameters",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 1,
