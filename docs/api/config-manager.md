@@ -7,10 +7,6 @@ You can (and should) access it through the `configManager` property of the drive
 
 The constructor takes no arguments.
 
-```ts
-new () => ConfigManager
-```
-
 ## ConfigManager methods
 
 ### `loadManufacturers`
