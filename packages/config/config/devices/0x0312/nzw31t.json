@@ -4,7 +4,7 @@
 	"manufacturer": "Inovelli",
 	"manufacturerId": "0x0312",
 	"label": "NZW31T",
-	"description": "Inovelli In-wall Smart Dimmer",
+	"description": "In-wall Smart Dimmer",
 	"devices": [
 		{
 			"productType": "0x0111",
@@ -13,8 +13,7 @@
 		},
  		{
 			"productType": "0x1f02",
-			"productId": "0x1f02",
-			"zwaveAllianceId": 2679
+			"productId": "0x1f02"
 		}
 	],
 	"firmwareVersion": {
