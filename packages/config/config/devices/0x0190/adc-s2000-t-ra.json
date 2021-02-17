@@ -42,7 +42,7 @@
 		"3": {
 			"label": "Temperature Reporting Threshold",
 			"valueSize": 2,
-			"unit": "tenths of degree",
+			"unit": "1/10th degree",
 			"minValue": 0,
 			"maxValue": 100,
 			"defaultValue": 10,
@@ -106,7 +106,7 @@
 		"8": {
 			"label": "Temperature Calibration Offset",
 			"valueSize": 2,
-			"unit": "tenths of degree",
+			"unit": "1/10th degree",
 			"minValue": -100,
 			"maxValue": 100,
 			"defaultValue": 0,

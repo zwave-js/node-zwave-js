@@ -31,7 +31,7 @@
 		},
 		"2": {
 			"label": "Temperature Variation Report Trigger Point",
-			"description": "Divide this value by 10 and treat it as one decimal place. (20 -> 2.0C, if there is a change in temperature above 2 degrees, the temperature is reported regardless of the reporting period)",
+			"unit": "1/10th degree",
 			"valueSize": 1,
 			"minValue": 10,
 			"maxValue": 30,
