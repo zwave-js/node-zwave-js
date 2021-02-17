@@ -24,6 +24,13 @@
 		"min": "0.0",
 		"max": "255.255"
 	},
+	"associations": {
+		"1": {
+			"label": "Lifeline",
+			"maxNodes": 1,
+			"isLifeline": true
+		}
+	},
 	"paramInformation": {
 		"1": {
 			"label": "User Code 1 Type",
