@@ -4,7 +4,7 @@
 	"manufacturer": "Climax Technology, Ltd.",
 	"manufacturerId": "0x018e",
 	"label": "S-2ZW",
-	"description": "Shutter Control",
+	"description": "Roller shutter control",
 	"devices": [
 		{
 			"productType": "0x0004",
@@ -18,12 +18,11 @@
 	},
 	"paramInformation": {
 		"1": {
-			"label": "Up Time Setting",
-			"description": "The ranges from 0 to 255 seconds",
+			"label": "Open Time Setting",
 			"valueSize": 2,
 			"unit": "seconds",
 			"minValue": 0,
-			"maxValue": 240,
+			"maxValue": 255,
 			"defaultValue": 240,
 			"unsigned": true,
 			"readOnly": false,
@@ -32,11 +31,10 @@
 		},
 		"2": {
 			"label": "Close Time Setting",
-			"description": "The ranges from 0 to 255 seconds",
 			"valueSize": 2,
 			"unit": "seconds",
 			"minValue": 0,
-			"maxValue": 240,
+			"maxValue": 255,
 			"defaultValue": 240,
 			"unsigned": true,
 			"readOnly": false,
@@ -45,8 +43,8 @@
 		},
 		"3": {
 			"label": "Current Position",
-			"description": "The ranges from 0% to 99%",
 			"valueSize": 2,
+			"unit": "%",
 			"minValue": 0,
 			"maxValue": 99,
 			"defaultValue": 99,

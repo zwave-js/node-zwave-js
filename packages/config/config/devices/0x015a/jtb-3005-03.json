@@ -1,7 +1,7 @@
 // Jin Tao Bao JTB-3005-03
 // Thermostat Control Panel
 {
-	"manufacturer": "Jin Tao Bao",
+	"manufacturer": "Jintaobao",
 	"manufacturerId": "0x015a",
 	"label": "JTB-3005-03",
 	"description": "Thermostat Control Panel",
@@ -19,32 +19,31 @@
 	"paramInformation": {
 		"1": {
 			"label": "Synchronization Cool And Heat Temperature Set-point",
-			"description": "Synchronization cool and heat temperature set-point while one of it has been change by master controller",
 			"valueSize": 1,
-			"minValue": -128,
-			"maxValue": 0,
-			"defaultValue": 1,
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 0,
 			"unsigned": true,
 			"readOnly": false,
 			"writeOnly": false,
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "No synchronization",
+					"label": "No Synchronization",
 					"value": 0
 				},
 				{
 					"label": "Synchronization",
-					"value": -128
+					"value": 255
 				}
 			]
 		},
 		"2": {
-			"label": "Inner Master Mcu Communication Address",
-			"description": "Should same as inner master mcu configuration",
+			"label": "RS-485 Address",
+			"description": "Commnucation link to master MCU of product",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 1,
+			"minValue": 1,
+			"maxValue": 255,
 			"defaultValue": 1,
 			"unsigned": true,
 			"readOnly": false,

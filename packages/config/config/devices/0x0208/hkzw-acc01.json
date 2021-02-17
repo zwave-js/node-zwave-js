@@ -23,20 +23,28 @@
 	},
 	"paramInformation": {
 		"93": {
-			"label": "Clear All Ir Information",
-			"description": "Device will clear all stored ir code",
+			"label": "Reset IR Information",
 			"valueSize": 4,
 			"minValue": 0,
-			"maxValue": 0,
+			"maxValue": 1431655765,
 			"defaultValue": 0,
 			"unsigned": true,
 			"readOnly": false,
 			"writeOnly": false,
-			"allowManualEntry": true
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "No Reset",
+					"value": 0
+				},
+				{
+					"label": "Reset All Stored IR Codes",
+					"value": 1431655765
+				}
+			]
 		},
 		"254": {
-			"label": "Enable/Disable The Configuration Command",
-			"description": "Lock/unlock all configuration parameters",
+			"label": "Lock State Configuration Parameters",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 1,
@@ -47,26 +55,31 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "Unlock",
+					"label": "Unlocked",
 					"value": 0
 				},
 				{
-					"label": "Lock",
+					"label": "Locked",
 					"value": 1
 				}
 			]
 		},
 		"255": {
 			"label": "Reset Device",
-			"description": "Reset to factory default settings and removed from the Z-Wave network",
 			"valueSize": 4,
-			"minValue": 0,
-			"maxValue": 0,
-			"defaultValue": 0,
+			"minValue": 1431655765,
+			"maxValue": 1431655765,
+			"defaultValue": 1431655765,
 			"unsigned": true,
 			"readOnly": false,
 			"writeOnly": false,
-			"allowManualEntry": true
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Reset To Factory Defaults",
+					"value": 1431655765
+				}
+			]
 		}
 	},
 	"metadata": {

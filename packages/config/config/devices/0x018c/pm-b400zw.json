@@ -4,7 +4,7 @@
 	"manufacturer": "Dawon DNS",
 	"manufacturerId": "0x018c",
 	"label": "PM-B400ZW",
-	"description": "Power Manager",
+	"description": "Smart Plug",
 	"devices": [
 		{
 			"productType": "0x0042",
@@ -18,7 +18,8 @@
 	},
 	"paramInformation": {
 		"1": {
-			"label": "Standy Power Setting Value",
+			"label": "Standy Power Value",
+			"description": "First 3 Byte Standby Power Value, Last 1 Byte Standby Power Enable/Disble",
 			"valueSize": 4,
 			"minValue": 0,
 			"maxValue": 0,
@@ -29,7 +30,28 @@
 			"allowManualEntry": true
 		},
 		"2": {
-			"label": "Peridic Measurement Value Transmission",
+			"label": "Periodic Measured Value Transmission",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 0,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Disabled",
+					"value": 0
+				},
+				{
+					"label": "Enabled",
+					"value": 1
+				}
+			]
+		},
+		"3": {
+			"label": "Power Accumulation",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 1,
@@ -37,35 +59,46 @@
 			"unsigned": true,
 			"readOnly": false,
 			"writeOnly": false,
-			"allowManualEntry": true
-		},
-		"3": {
-			"label": "Accumulation Start/Stop",
-			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 0,
-			"defaultValue": 0,
-			"unsigned": true,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Disabled",
+					"value": 0
+				},
+				{
+					"label": "Enabled",
+					"value": 1
+				}
+			]
 		},
 		"4": {
-			"label": "Connected Device Use/Not Use",
+			"label": "Report Device Usage",
+			"description": "Before setting the standby power it does not report.",
 			"valueSize": 1,
 			"minValue": 0,
-			"maxValue": 0,
+			"maxValue": 1,
 			"defaultValue": 0,
 			"unsigned": true,
 			"readOnly": false,
 			"writeOnly": false,
-			"allowManualEntry": true
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Disabled",
+					"value": 0
+				},
+				{
+					"label": "Enabled",
+					"value": 1
+				}
+			]
 		},
 		"5": {
-			"label": "Periodic Time Intervals",
+			"label": "Report Time Interval",
 			"valueSize": 1,
+			"unit": "10 minutes",
 			"minValue": 0,
-			"maxValue": 6,
+			"maxValue": 144,
 			"defaultValue": 6,
 			"unsigned": true,
 			"readOnly": false,

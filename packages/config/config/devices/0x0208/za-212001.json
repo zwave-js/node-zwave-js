@@ -18,8 +18,7 @@
 	},
 	"paramInformation": {
 		"21": {
-			"label": "Setting Device Status After Power Failure",
-			"description": "Define how the RGB bulb will react after the power supply is back on",
+			"label": "Device Status After Power Failure",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 2,
@@ -30,22 +29,21 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "Define how the RGB bulb will react after the power supply is back on",
+					"label": "Memorizes State After A Power Failure",
 					"value": 0
 				},
 				{
-					"label": "Rgb bulb memorizes its state after a power failure",
+					"label": "On After The Power Supply Is Reconnected",
 					"value": 1
 				},
 				{
-					"label": "Rgb bulb does not memorize its state after a power failure",
+					"label": "Off After The Power Supply Is Reconnected",
 					"value": 2
 				}
 			]
 		},
 		"24": {
-			"label": "Notification When Load Status Change",
-			"description": "Rgb bulb can send notifications to associated device (group lifeline) when the status of the RGB bulb is changed",
+			"label": "Notifications To Association Device",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 2,
@@ -56,22 +54,21 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "The function is disabled",
+					"label": "Disabled",
 					"value": 0
 				},
 				{
-					"label": "Send basic report",
+					"label": "Basic Report",
 					"value": 1
 				},
 				{
-					"label": "Send basic report only when the status of the RGB bulb is not changed by Z-Wave command",
+					"label": "Basic Report only when load condition is not changed by Z-Wave command",
 					"value": 2
 				}
 			]
 		},
 		"255": {
-			"label": "Reset to Factory Default",
-			"description": "Resetting to the factory default",
+			"label": "Reset Device",
 			"valueSize": 4,
 			"minValue": 1431655765,
 			"maxValue": 1431655765,
@@ -79,7 +76,13 @@
 			"unsigned": true,
 			"readOnly": false,
 			"writeOnly": false,
-			"allowManualEntry": true
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Reset To Factory Defaults",
+					"value": 1431655765
+				}
+			]
 		}
 	},
 	"metadata": {

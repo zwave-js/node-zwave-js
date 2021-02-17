@@ -23,8 +23,8 @@
 	},
 	"paramInformation": {
 		"1": {
-			"label": "Standby Power Setting And Function Enable/Disable",
-			"description": "0.00 watt ~ 3000.00 watt",
+			"label": "Standy Power Value",
+			"description": "First 3 Byte Standby Power Value, Last 1 Byte Standby Power Enable/Disble",
 			"valueSize": 4,
 			"minValue": 0,
 			"maxValue": 0,
@@ -35,8 +35,7 @@
 			"allowManualEntry": true
 		},
 		"2": {
-			"label": "Periodic Measurement Value Transmission",
-			"description": "Disale/enable",
+			"label": "Periodic Measured Value Transmission",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 1,
@@ -44,11 +43,20 @@
 			"unsigned": true,
 			"readOnly": false,
 			"writeOnly": false,
-			"allowManualEntry": true
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Disabled",
+					"value": 0
+				},
+				{
+					"label": "Enabled",
+					"value": 1
+				}
+			]
 		},
 		"3": {
-			"label": "Start / Stop Power Accumulation Usage Calculation",
-			"description": "Disable/enable",
+			"label": "Power Accumulation",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 1,
@@ -56,11 +64,21 @@
 			"unsigned": true,
 			"readOnly": false,
 			"writeOnly": false,
-			"allowManualEntry": true
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Disabled",
+					"value": 0
+				},
+				{
+					"label": "Enabled",
+					"value": 1
+				}
+			]
 		},
 		"4": {
-			"label": "Report When The Connected Device is Being Used Or Not",
-			"description": "Disable/enable",
+			"label": "Report Device Usage",
+			"description": "Before setting the standby power it does not report.",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 1,
@@ -68,14 +86,24 @@
 			"unsigned": true,
 			"readOnly": false,
 			"writeOnly": false,
-			"allowManualEntry": true
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Disabled",
+					"value": 0
+				},
+				{
+					"label": "Enabled",
+					"value": 1
+				}
+			]
 		},
 		"5": {
-			"label": "This Sets The Periodic Measurement Value Transmission Rate",
-			"description": "10min~1440min",
+			"label": "Report Time Interval",
 			"valueSize": 1,
+			"unit": "10 minutes",
 			"minValue": 0,
-			"maxValue": 6,
+			"maxValue": 144,
 			"defaultValue": 6,
 			"unsigned": true,
 			"readOnly": false,

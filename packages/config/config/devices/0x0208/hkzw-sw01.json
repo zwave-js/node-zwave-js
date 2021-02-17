@@ -18,8 +18,7 @@
 	},
 	"paramInformation": {
 		"21": {
-			"label": "Setting Device Status After Power Failure",
-			"description": "Define how the smart switch reacts after the power supply is back on",
+			"label": "Device Status After Power Failure",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 2,
@@ -30,22 +29,21 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "Smart switch memorizes its state after a power failure",
+					"label": "Memorizes State After A Power Failure",
 					"value": 0
 				},
 				{
-					"label": "Smart switch will be on after the power supply is reconnected",
+					"label": "On After The Power Supply Is Reconnected",
 					"value": 1
 				},
 				{
-					"label": "Smart switch will be off after the power supply is reconnected",
+					"label": "Off After The Power Supply Is Reconnected",
 					"value": 2
 				}
 			]
 		},
 		"24": {
-			"label": "Notification When Load Status Change",
-			"description": "Smart switch can send notifications to association device (group lifeline) when state of smart switch’s load is changed",
+			"label": "Notifications To Association Device",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 2,
@@ -56,22 +54,21 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "The function is disabled",
+					"label": "Disabled",
 					"value": 0
 				},
 				{
-					"label": "Send basic report",
+					"label": "Basic Report",
 					"value": 1
 				},
 				{
-					"label": "Send basic report only when load condition is not changed by Z-Wave command",
+					"label": "Basic Report only when load condition is not changed by Z-Wave command",
 					"value": 2
 				}
 			]
 		},
 		"27": {
-			"label": "Indicator Modes",
-			"description": "After smart switch being included into a Z-Wave network, the LED in the device will indicator the state of load",
+			"label": " LED Indicator Mode",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 1,
@@ -82,11 +79,11 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "The LED will follow the status (on/off) of its load",
+					"label": "Follow The Status Of The Switch",
 					"value": 0
 				},
 				{
-					"label": "When the state of smart switch’s load changed, the LED will follow the status (on/off) of its load, but the red LED will turn off after 5 seconds if there is no more switch action",
+					"label": "Follow The Status Of The Switch, Red LED Off After 5 Seconds After Last Switch Action)",
 					"value": 1
 				}
 			]
