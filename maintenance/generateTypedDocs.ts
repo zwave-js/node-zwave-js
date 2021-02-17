@@ -5,6 +5,7 @@
 // wotan-disable no-useless-assertion
 // until fimbullinter/wotan#719 is fixed
 
+import { getCCName } from "@zwave-js/core";
 import { red } from "ansi-colors";
 import * as fs from "fs-extra";
 import * as path from "path";
@@ -13,6 +14,8 @@ import {
 	ExportedDeclarations,
 	InterfaceDeclaration,
 	InterfaceDeclarationStructure,
+	JSDocTagStructure,
+	MethodDeclaration,
 	Node,
 	OptionalKind,
 	Project,
@@ -25,6 +28,7 @@ import {
 	tsConfigFilePath,
 } from "../packages/zwave-js/maintenance/tsTools";
 import { enumFilesRecursive } from "./tools";
+import { getCommandClassFromClassDeclaration } from "./tsAPITools";
 
 export function findSourceNode(
 	program: Project,
@@ -250,9 +254,8 @@ ${source}
 	return hasErrors;
 }
 
-async function main(): Promise<void> {
-	const program = new Project({ tsConfigFilePath });
-
+/** Processes all imports, returns true if there was an error */
+async function processImports(program: Project): Promise<boolean> {
 	const files = await enumFilesRecursive(
 		path.join(__dirname, "../docs"),
 		(f) => f.endsWith(".md"),
@@ -261,6 +264,166 @@ async function main(): Promise<void> {
 	for (const file of files) {
 		hasErrors ||= await processDocFile(program, file);
 	}
+	return hasErrors;
+}
+
+function printMethodDeclaration(method: MethodDeclaration): string {
+	method = method.toggleModifier("public", false);
+	const start = method.getStart();
+	const end = method.getBody()!.getStart();
+	let ret = method
+		.getText()
+		.substr(0, end - start)
+		.trim();
+	if (!method.getReturnTypeNode()) {
+		ret += ": " + method.getSignature().getReturnType().getText(method);
+	}
+	ret += ";";
+	// The text might include one too many tabs at the start of each line
+	return ret.replace(/^\t(\t*)/gm, "$1");
+}
+
+function printOverload(method: MethodDeclaration): string {
+	method = method.toggleModifier("public", false);
+	// The text includes one too many tabs at the start of each line
+	return method.getText().replace(/^\t(\t*)/gm, "$1");
+}
+
+/** Generates CC documentation, returns true if there was an error */
+async function generateCCDocs(program: Project): Promise<boolean> {
+	// Delete old cruft
+	const ccDocsDir = path.join(__dirname, "../docs/api/CCs");
+
+	// Load the index file before it gets deleted
+	const indexFilename = path.join(ccDocsDir, "index.md");
+	let indexFileContent = await fs.readFile(indexFilename, "utf8");
+	const autoGenToken = "<!-- BEGIN AUTO-GENERATION -->";
+	const autoGenStart = indexFileContent.indexOf(autoGenToken);
+	if (autoGenStart === -1) {
+		console.error(
+			red(`Marker for auto-generation in CCs/index.md missing!`),
+		);
+		return false;
+	}
+
+	await fs.remove(ccDocsDir);
+	await fs.ensureDir(ccDocsDir);
+
+	// Find CC APIs
+	const ccFiles = program.getSourceFiles("packages/zwave-js/**/*CC.ts");
+	let index = "";
+
+	for (const file of ccFiles) {
+		const APIClass = file
+			.getClasses()
+			.find((c) => c.getName()?.endsWith("CCAPI"));
+		if (!APIClass) continue;
+
+		const ccId = getCommandClassFromClassDeclaration(
+			file.compilerNode,
+			APIClass.compilerNode,
+		);
+		if (ccId == undefined) continue;
+		const ccName = getCCName(ccId);
+		console.log(`generating documentation for ${ccName} CC...`);
+
+		const filename = APIClass.getName()!.replace("CCAPI", "") + ".md";
+		let text = `# ${ccName} CC\n\n`;
+		index += `\n\n## [${ccName} CC](api/CCs/${filename})`;
+
+		// Enumerate all useful public methods
+		const methods = APIClass.getInstanceMethods()
+			.filter((m) => m.hasModifier(SyntaxKind.PublicKeyword))
+			.filter((m) => m.getName() !== "supportsCommand");
+
+		for (const method of methods) {
+			const signatures = method.getOverloads();
+
+			text += `## \`${method.getName()}\` method
+\`\`\`ts
+${
+	signatures.length > 0
+		? signatures.map(printOverload).join("\n\n")
+		: printMethodDeclaration(method)
+}
+\`\`\`
+
+`;
+			const doc = method.getStructure().docs?.[0];
+			if (typeof doc === "string") {
+				text += doc + "\n\n";
+			} else if (doc != undefined) {
+				if (typeof doc.description === "string") {
+					let description = doc.description.trim();
+					if (!description.endsWith(".")) {
+						description += ".";
+					}
+					text += description + "\n\n";
+				}
+				if (doc.tags) {
+					const paramTags = doc.tags
+						.filter(
+							(
+								t,
+							): t is OptionalKind<JSDocTagStructure> & {
+								text: string;
+							} =>
+								t.tagName === "param" &&
+								typeof t.text === "string",
+						)
+						.map((t) => {
+							const firstSpace = t.text.indexOf(" ");
+							if (firstSpace === -1) return undefined;
+							return [
+								t.text.slice(0, firstSpace),
+								t.text.slice(firstSpace + 1),
+							] as const;
+						})
+						.filter((t): t is [string, string] => !!t);
+
+					if (paramTags.length > 0) {
+						text += "**Parameters:**  \n\n";
+						text += paramTags
+							.map(
+								([param, description]) =>
+									`* \`${param}\`: ${description.trim()}`,
+							)
+							.join("\n");
+						text += "\n\n";
+					}
+				}
+			}
+		}
+
+		text = text.replace(/\r\n/g, "\n");
+		text = formatWithPrettier(filename, text);
+
+		await fs.writeFile(path.join(ccDocsDir, filename), text, "utf8");
+	}
+
+	// At the end, replace the index file
+	indexFileContent = indexFileContent.slice(
+		0,
+		autoGenStart + autoGenToken.length,
+	);
+	indexFileContent += index;
+	await fs.writeFile(indexFilename, indexFileContent, "utf8");
+
+	return false;
+}
+
+async function main(): Promise<void> {
+	const program = new Project({ tsConfigFilePath });
+
+	const hasErrors = (
+		await Promise.all([
+			// Replace all imports
+			processImports(program),
+			// Regenerate all CC documentation files
+			generateCCDocs(program),
+		])
+	).some((err) => err === true);
+
 	if (hasErrors) {
 		process.exit(1);
 	}
