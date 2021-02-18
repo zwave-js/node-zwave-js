@@ -1,10 +1,10 @@
-// Heatit 45 126 86
-// Z-Repeater
+// Heatit Z-Repeater
+// Z-Wave Range Extender
 {
 	"manufacturer": "Heatit",
 	"manufacturerId": "0x019b",
-	"label": "45 126 86",
-	"description": "Z-Repeater",
+	"label": "Z-Repeater",
+	"description": "Z-Wave Range Extender",
 	"devices": [
 		{
 			"productType": "0x0003",

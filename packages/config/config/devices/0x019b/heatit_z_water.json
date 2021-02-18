@@ -188,7 +188,7 @@
 			"label": "Input 1 Report Interval",
 			"description": "Time interval between consecutive temperature reports.",
 			"valueSize": 2,
-			"unit": "seconds",
+			"unit": "10 seconds",
 			"minValue": 0,
 			"maxValue": 8640,
 			"defaultValue": 6,
@@ -197,10 +197,10 @@
 			"allowManualEntry": true
 		},
 		"12": {
-			"label": "Input 2 report interval",
+			"label": "Input 2 Report Interval",
 			"description": "Time interval between consecutive temperature reports.",
 			"valueSize": 2,
-			"unit": "seconds",
+			"unit": "10 seconds",
 			"minValue": 0,
 			"maxValue": 8640,
 			"defaultValue": 6,
@@ -209,10 +209,10 @@
 			"allowManualEntry": true
 		},
 		"13": {
-			"label": "Input 3 report interval",
+			"label": "Input 3 Report Interval",
 			"description": "Time interval between consecutive temperature reports.",
 			"valueSize": 2,
-			"unit": "seconds",
+			"unit": "10 seconds",
 			"minValue": 0,
 			"maxValue": 8640,
 			"defaultValue": 6,
@@ -221,10 +221,10 @@
 			"allowManualEntry": true
 		},
 		"14": {
-			"label": "Input 4 report interval",
+			"label": "Input 4 Report Interval",
 			"description": "Time interval between consecutive temperature reports.",
 			"valueSize": 2,
-			"unit": "seconds",
+			"unit": "10 seconds",
 			"minValue": 0,
 			"maxValue": 8640,
 			"defaultValue": 6,

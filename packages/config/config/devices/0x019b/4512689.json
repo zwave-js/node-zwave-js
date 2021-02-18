@@ -1,10 +1,10 @@
-// Heatit 4512689
-// Z-Smoke Detector 230V
+// Heatit Z-Smoke 230V
+// Wired Smoke Detector
 {
 	"manufacturer": "THeatit",
 	"manufacturerId": "0x019b",
-	"label": "4512689",
-	"description": "Z-Smoke Detector 230V",
+	"label": "Z-Smoke 230V",
+	"description": "Wired Smoke Detector",
 	"devices": [
 		{
 			"productType": "0x0003",

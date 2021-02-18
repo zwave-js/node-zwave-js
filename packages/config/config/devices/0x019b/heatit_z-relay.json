@@ -122,7 +122,7 @@
 		},
 		"7": {
 			"label": "Input 1 Report Interval",
-			"unit": "seconds",
+			"unit": "10 seconds",
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 8640,
@@ -133,7 +133,7 @@
 		},
 		"8": {
 			"label": "Input 2 Report Interval",
-			"unit": "seconds",
+			"unit": "10 seconds",
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 8640,
@@ -145,7 +145,7 @@
 		"9": {
 			"label": "Flood Sensor Report Interval",
 			"valueSize": 2,
-			"unit": "seconds",
+			"unit": "10 seconds",
 			"minValue": 0,
 			"maxValue": 8640,
 			"defaultValue": 2,
@@ -156,7 +156,7 @@
 		"10": {
 			"label": "Meter Reports Interval",
 			"valueSize": 2,
-			"unit": "seconds",
+			"unit": "10 seconds",
 			"minValue": 0,
 			"maxValue": 8640,
 			"defaultValue": 90,
@@ -165,7 +165,7 @@
 			"allowManualEntry": true
 		},
 		"11": {
-			"label": "Input 3 Flood steady timer",
+			"label": "Input 3 Flood Steady Timer",
 			"description": "Defines the time after which the flood sensor state will be considered valid",
 			"valueSize": 1,
 			"unit": "seconds",
