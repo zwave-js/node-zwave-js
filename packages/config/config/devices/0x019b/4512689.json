@@ -1,7 +1,7 @@
 // Heatit Z-Smoke 230V
 // Wired Smoke Detector
 {
-	"manufacturer": "THeatit",
+	"manufacturer": "Heatit",
 	"manufacturerId": "0x019b",
 	"label": "Z-Smoke 230V",
 	"description": "Wired Smoke Detector",

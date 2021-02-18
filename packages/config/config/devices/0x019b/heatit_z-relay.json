@@ -58,7 +58,7 @@
 		},
 		"3": {
 			"label": "Thermistor Type Input 1",
-			"description": "This parameter decides which kind of thermistor that is connected to the input..",
+			"description": "This parameter decides which kind of thermistor is connected to input 1.",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 1,
@@ -79,7 +79,7 @@
 		},
 		"4": {
 			"label": "Thermistor Type Input 2",
-			"description": "This parameter decides which kind of thermistor that is connected to the input.",
+			"description": "This parameter decides which kind of thermistor is connected to input 2.",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 1,
@@ -178,7 +178,7 @@
 		},
 		"12": {
 			"label": "Auto Relay On",
-			"description": "Configures the state that will cause the relay to be turned on",
+			"description": "Configures which events will cause the relay to be turned on",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 2,
@@ -203,7 +203,7 @@
 		},
 		"13": {
 			"label": "Auto Relay Off",
-			"description": "Configures the state that will cause the relay to be turned off",
+			"description": "Configures which events will cause the relay to be turned off",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 2,
