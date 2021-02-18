@@ -419,7 +419,7 @@ You can use `"$if"` in the following locations:
 -   Inside config parameters
 -   Inside config parameter options
 
-It is also possible to select one of multiple variants of a config parameter by specifying an array. The first matchin one will be used, the others don't apply.
+It is also possible to select one of multiple variants of a config parameter by specifying an array. In this case `"$if"` is mandatory in each parameter, except the last one. The first matching definition will be used, the others don't apply.
 
 ```json
 {
@@ -427,8 +427,7 @@ It is also possible to select one of multiple variants of a config parameter by 
 	"paramInformation": {
 		"1": [
 			{
-				// When there are multiple definitions,
-				// "$if" is mandatory in each parameter
+				// This variant is active for firmware version 1.0
 				"$if": "firmwareVersion === 1.0",
 				"label": "Light configuration",
 				"valueSize": 2,
@@ -436,7 +435,7 @@ It is also possible to select one of multiple variants of a config parameter by 
 				"maxValue": 2
 			},
 			{
-				// ... except the last one
+				// This one for all others
 				"label": "Sound configuration",
 				"valueSize": 1,
 				"minValue": 0,
