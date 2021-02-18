@@ -2,6 +2,7 @@ import { ZWaveError, ZWaveErrorCodes } from "@zwave-js/core";
 import {
 	JSONObject,
 	ObjectKeyMap,
+	pick,
 	ReadonlyObjectKeyMap,
 	stringify,
 } from "@zwave-js/shared";
@@ -14,6 +15,7 @@ import path from "path";
 import { CompatConfig } from "./CompatConfig";
 import { readJsonWithTemplate } from "./JsonTemplate";
 import type { ConfigLogger } from "./Logger";
+import { evaluate } from "./Logic";
 import {
 	configDir,
 	enumFilesRecursive,
@@ -25,6 +27,13 @@ import {
 export interface FirmwareVersionRange {
 	min: string;
 	max: string;
+}
+
+export interface DeviceID {
+	manufacturerId: number;
+	productType: number;
+	productId: number;
+	firmwareVersion?: string;
 }
 
 export interface DeviceConfigIndexEntry {
@@ -135,7 +144,9 @@ export async function loadDeviceIndexInternal(
 				.replace(/\\/g, "/");
 			// Try parsing the file
 			try {
-				const config = await DeviceConfig.from(file, devicesDir);
+				const config = await DeviceConfig.from(file, {
+					relativeTo: devicesDir,
+				});
 				// Add the file to the index
 				index.push(
 					...config.devices.map((dev: any) => ({
@@ -189,19 +200,39 @@ function isFirmwareVersion(val: any): val is string {
 	);
 }
 
+function conditionApplies(condition: string, context: unknown): boolean {
+	try {
+		return !!evaluate(condition, context);
+	} catch (e) {
+		throw new ZWaveError(
+			`Invalid condition "condition"!`,
+			ZWaveErrorCodes.Config_Invalid,
+		);
+	}
+}
+
 export class DeviceConfig {
 	public static async from(
 		filename: string,
-		relativeTo?: string,
+		options: {
+			relativeTo?: string;
+			deviceId?: DeviceID;
+		} = {},
 	): Promise<DeviceConfig> {
+		const { relativeTo, deviceId } = options;
+
 		const relativePath = relativeTo
 			? path.relative(relativeTo, filename).replace(/\\/g, "/")
 			: filename;
 		const json = await readJsonWithTemplate(filename);
-		return new DeviceConfig(relativePath, json);
+		return new DeviceConfig(relativePath, json, deviceId);
 	}
 
-	public constructor(filename: string, definition: any) {
+	public readonly filename: string;
+
+	public constructor(filename: string, definition: any, deviceId?: DeviceID) {
+		this.filename = filename;
+
 		if (!isHexKeyWith4Digits(definition.manufacturerId)) {
 			throwInvalidConfig(
 				`device`,
@@ -268,12 +299,22 @@ associations is not an object`,
 			for (const [key, assocDefinition] of entries(
 				definition.associations,
 			)) {
-				if (!/^[1-9][0-9]*$/.test(key))
+				if (!/^[1-9][0-9]*$/.test(key)) {
 					throwInvalidConfig(
 						`device`,
 						`packages/config/config/devices/${filename}:
 found non-numeric group id "${key}" in associations`,
 					);
+				}
+				// Check if this entry applies for the actual config
+				if (
+					deviceId &&
+					"$if" in assocDefinition &&
+					!conditionApplies(assocDefinition.$if, deviceId)
+				) {
+					continue;
+				}
+
 				const keyNum = parseInt(key, 10);
 				associations.set(
 					keyNum,
@@ -306,16 +347,27 @@ paramInformation is not an object`,
 found invalid param number "${key}" in paramInformation`,
 					);
 				}
+
+				// Check if this entry applies for the actual config
+				if (
+					deviceId &&
+					"$if" in paramDefinition &&
+					!conditionApplies(paramDefinition.$if, deviceId)
+				) {
+					continue;
+				}
+
 				const keyNum = parseInt(match[1], 10);
 				const bitMask =
 					match[2] != undefined ? parseInt(match[2], 16) : undefined;
 				paramInformation.set(
 					{ parameter: keyNum, valueBitMask: bitMask },
 					new ParamInformation(
-						filename,
+						this,
 						keyNum,
 						bitMask,
 						paramDefinition,
+						deviceId,
 					),
 				);
 			}
@@ -455,10 +507,11 @@ noEndpoint in association ${groupId} must be either true or left out`,
 
 export class ParamInformation {
 	public constructor(
-		filename: string,
+		parent: DeviceConfig,
 		parameterNumber: number,
 		valueBitMask: number | undefined,
 		definition: JSONObject,
+		deviceId?: DeviceID,
 	) {
 		this.parameterNumber = parameterNumber;
 		this.valueBitMask = valueBitMask;
@@ -466,7 +519,7 @@ export class ParamInformation {
 		if (typeof definition.label !== "string") {
 			throwInvalidConfig(
 				"devices",
-				`packages/config/config/devices/${filename}:
+				`packages/config/config/devices/${parent.filename}:
 Parameter #${parameterNumber} has a non-string label`,
 			);
 		}
@@ -478,7 +531,7 @@ Parameter #${parameterNumber} has a non-string label`,
 		) {
 			throwInvalidConfig(
 				"devices",
-				`packages/config/config/devices/${filename}:
+				`packages/config/config/devices/${parent.filename}:
 Parameter #${parameterNumber} has a non-string description`,
 			);
 		}
@@ -490,7 +543,7 @@ Parameter #${parameterNumber} has a non-string description`,
 		) {
 			throwInvalidConfig(
 				"devices",
-				`packages/config/config/devices/${filename}:
+				`packages/config/config/devices/${parent.filename}:
 Parameter #${parameterNumber} has an invalid value size`,
 			);
 		}
@@ -499,7 +552,7 @@ Parameter #${parameterNumber} has an invalid value size`,
 		if (typeof definition.minValue !== "number") {
 			throwInvalidConfig(
 				"devices",
-				`packages/config/config/devices/${filename}:
+				`packages/config/config/devices/${parent.filename}:
 Parameter #${parameterNumber} has a non-numeric property minValue`,
 			);
 		}
@@ -508,7 +561,7 @@ Parameter #${parameterNumber} has a non-numeric property minValue`,
 		if (typeof definition.maxValue !== "number") {
 			throwInvalidConfig(
 				"devices",
-				`packages/config/config/devices/${filename}:
+				`packages/config/config/devices/${parent.filename}:
 Parameter #${parameterNumber} has a non-numeric property maxValue`,
 			);
 		}
@@ -517,7 +570,7 @@ Parameter #${parameterNumber} has a non-numeric property maxValue`,
 		if (typeof definition.defaultValue !== "number") {
 			throwInvalidConfig(
 				"devices",
-				`packages/config/config/devices/${filename}:
+				`packages/config/config/devices/${parent.filename}:
 Parameter #${parameterNumber} has a non-numeric property defaultValue`,
 			);
 		}
@@ -529,7 +582,7 @@ Parameter #${parameterNumber} has a non-numeric property defaultValue`,
 		) {
 			throwInvalidConfig(
 				"devices",
-				`packages/config/config/devices/${filename}:
+				`packages/config/config/devices/${parent.filename}:
 Parameter #${parameterNumber} has a non-boolean property unsigned`,
 			);
 		}
@@ -538,7 +591,7 @@ Parameter #${parameterNumber} has a non-boolean property unsigned`,
 		if (typeof definition.readOnly !== "boolean") {
 			throwInvalidConfig(
 				"devices",
-				`packages/config/config/devices/${filename}:
+				`packages/config/config/devices/${parent.filename}:
 Parameter #${parameterNumber}: readOnly must be a boolean!`,
 			);
 		}
@@ -547,7 +600,7 @@ Parameter #${parameterNumber}: readOnly must be a boolean!`,
 		if (typeof definition.writeOnly !== "boolean") {
 			throwInvalidConfig(
 				"devices",
-				`packages/config/config/devices/${filename}:
+				`packages/config/config/devices/${parent.filename}:
 Parameter #${parameterNumber}: writeOnly must be a boolean!`,
 			);
 		}
@@ -556,7 +609,7 @@ Parameter #${parameterNumber}: writeOnly must be a boolean!`,
 		if (typeof definition.allowManualEntry !== "boolean") {
 			throwInvalidConfig(
 				"devices",
-				`packages/config/config/devices/${filename}:
+				`packages/config/config/devices/${parent.filename}:
 Parameter #${parameterNumber}: allowManualEntry must be a boolean!`,
 			);
 		}
@@ -573,17 +626,25 @@ Parameter #${parameterNumber}: allowManualEntry must be a boolean!`,
 		) {
 			throwInvalidConfig(
 				"devices",
-				`packages/config/config/devices/${filename}:
+				`packages/config/config/devices/${parent.filename}:
 Parameter #${parameterNumber}: options is malformed!`,
 			);
 		}
-		this.options =
-			definition.options?.map(
-				({ label, value }: { label: string; value: any }) => ({
-					label,
-					value,
-				}),
-			) ?? [];
+		const options = [];
+		if (definition.options) {
+			for (const opt of definition.options) {
+				// Check if this entry applies for the actual config
+				if (
+					deviceId &&
+					"$if" in opt &&
+					!conditionApplies(opt.$if, deviceId)
+				) {
+					continue;
+				}
+				options.push(pick(opt, ["label", "value"]));
+			}
+		}
+		this.options = options;
 	}
 
 	public readonly parameterNumber: number;
