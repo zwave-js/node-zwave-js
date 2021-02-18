@@ -217,6 +217,14 @@ Once the `"driver ready"` event was emitted, this property provides access to th
 > [!WARNING]
 > Don't use it before the driver is ready!
 
+### `configManager`
+
+```ts
+readonly configManager: ConfigManager
+```
+
+Returns the [`ConfigManager`](api/config-manager.md) instance used to lookup device configuration files, meters, notifications, etc...
+
 ### `ready`
 
 ```ts
