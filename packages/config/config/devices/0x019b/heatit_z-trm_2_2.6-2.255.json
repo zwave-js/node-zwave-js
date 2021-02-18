@@ -18,7 +18,7 @@
 	"supportsZWavePlus": true,
 	"paramInformation": {
 		"1": {
-			"label": "Operation mode",
+			"label": "Operation Mode",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 11,
@@ -46,7 +46,7 @@
 			]
 		},
 		"2": {
-			"label": "Sensor mode",
+			"label": "Sensor Mode",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 5,
