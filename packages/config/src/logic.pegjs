@@ -36,7 +36,7 @@ ver_comparison
   }
 
 term
-  = const / string / integer
+  = const / string / hex / integer
 
 const
   = _ variable:(&[a-zA-Z][a-zA-Z0-9]+) { return {var: variable[1].join("")}; }
@@ -44,8 +44,11 @@ const
 integer
   = _ ("-"?[0-9]+) { return parseInt(text(), 10); }
 
+hex
+  = _ ("0x"[0-9a-f]i+) { return parseInt(text(), 16); }
+
 version
-  = _ version:([0-9]+.[0-9]+) { return text(); }
+  = _ version:([0-9]+"."[0-9]+) { return text(); }
  
 string
   = _ ("\""[^\"]*"\"") { return text(); }
