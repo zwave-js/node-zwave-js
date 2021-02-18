@@ -348,28 +348,64 @@ found invalid param number "${key}" in paramInformation`,
 					);
 				}
 
-				// Check if this entry applies for the actual config
 				if (
-					deviceId &&
-					"$if" in paramDefinition &&
-					!conditionApplies(paramDefinition.$if, deviceId)
+					!isObject(paramDefinition) &&
+					!(
+						isArray(paramDefinition) &&
+						(paramDefinition as any[]).every((p) => isObject(p))
+					)
 				) {
-					continue;
+					throwInvalidConfig(
+						`device`,
+						`packages/config/config/devices/${filename}: 
+paramInformation "${key}" is invalid: Every entry must either be an object or an array of objects!`,
+					);
 				}
 
-				const keyNum = parseInt(match[1], 10);
-				const bitMask =
-					match[2] != undefined ? parseInt(match[2], 16) : undefined;
-				paramInformation.set(
-					{ parameter: keyNum, valueBitMask: bitMask },
-					new ParamInformation(
-						this,
-						keyNum,
-						bitMask,
-						paramDefinition,
-						deviceId,
-					),
-				);
+				// Normalize to an array
+				const defns: any[] = isArray(paramDefinition)
+					? paramDefinition
+					: [paramDefinition];
+				if (
+					!defns.every(
+						(d, index) => index === defns.length - 1 || "$if" in d,
+					)
+				) {
+					throwInvalidConfig(
+						`device`,
+						`packages/config/config/devices/${filename}: 
+paramInformation "${key}" is invalid: When there are multiple definitions, every definition except the last one MUST have an "$if" condition!`,
+					);
+				}
+
+				for (const def of defns) {
+					// Check if this entry applies for the actual config
+					if (
+						deviceId &&
+						"$if" in def &&
+						!conditionApplies(def.$if, deviceId)
+					) {
+						continue;
+					}
+
+					const keyNum = parseInt(match[1], 10);
+					const bitMask =
+						match[2] != undefined
+							? parseInt(match[2], 16)
+							: undefined;
+					paramInformation.set(
+						{ parameter: keyNum, valueBitMask: bitMask },
+						new ParamInformation(
+							this,
+							keyNum,
+							bitMask,
+							def,
+							deviceId,
+						),
+					);
+					// Only apply the first matching one
+					break;
+				}
 			}
 			this.paramInformation = paramInformation;
 		}
