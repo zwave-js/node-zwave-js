@@ -84,6 +84,7 @@
 				"^\\d+$": {
 					"type": "object",
 					"properties": {
+						"$if": { "$ref": "#/definitions/condition" },
 						"label": {
 							"type": "string",
 							"description": "How this association group is called"
@@ -123,6 +124,7 @@
 					"type": "object",
 					"properties": {
 						"$import": { "$ref": "#/definitions/import" },
+						"$if": { "$ref": "#/definitions/condition" },
 						"label": {
 							"type": "string",
 							"description": "A short name for the parameter"
@@ -173,6 +175,9 @@
 								"properties": {
 									"$import": {
 										"$ref": "#/definitions/import"
+									},
+									"$if": {
+										"$ref": "#/definitions/condition"
 									},
 									"label": {
 										"type": "string",
@@ -353,6 +358,10 @@
 			"type": "string",
 			"description": "Used to import another config file or parts thereof",
 			"pattern": "^((?<dir>([\\w\\d_-\\.]+/)+)?(?<filename>[\\w\\d_-]+\\.json))?(?<selector>#([\\w\\d_-]+/)*[\\w\\d_-]+)?$"
+		},
+		"condition": {
+			"type": "string",
+			"description": "A condition that must be fulfilled for this entry to exit."
 		},
 		"ccInfo": {
 			"type": "object",
