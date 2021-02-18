@@ -84,6 +84,220 @@ export class Security2CC extends CommandClass {
 	declare ccCommand: Security2Command;
 }
 
+enum ExtensionType {
+	SPAN = 0x01,
+	MPAN = 0x02,
+	MGRP = 0x03,
+	MOS = 0x04,
+}
+
+interface Security2ExtensionOptions {
+	type: ExtensionType;
+	critical: boolean;
+}
+
+class Security2Extension {
+	public constructor(options: Security2ExtensionOptions) {
+		this.type = options.type;
+		this.critical = options.critical;
+	}
+
+	public type: ExtensionType;
+	public critical: boolean;
+	public payload: Buffer = Buffer.allocUnsafe(0);
+
+	public isEncrypted(): boolean {
+		return false;
+	}
+
+	public serialize(moreToFollow: boolean): Buffer {
+		return Buffer.concat([
+			Buffer.from([
+				2 + this.payload.length,
+				(moreToFollow ? 0b1000_0000 : 0) |
+					(this.critical ? 0b0100_0000 : 0) |
+					(this.type & 0b11_1111),
+			]),
+			this.payload,
+		]);
+	}
+}
+
+interface SPANExtensionOptions {
+	senderEI: Buffer;
+}
+
+class SPANExtension extends Security2Extension {
+	public constructor({ senderEI }: SPANExtensionOptions) {
+		if (senderEI.length !== 16) {
+			throw new ZWaveError(
+				"The sender's entropy must be a 16-byte buffer!",
+				ZWaveErrorCodes.Argument_Invalid,
+			);
+		}
+		super({
+			critical: true,
+			type: ExtensionType.SPAN,
+		});
+		this.senderEI = senderEI;
+	}
+
+	public senderEI: Buffer;
+
+	public serialize(moreToFollow: boolean): Buffer {
+		this.payload = this.senderEI;
+		return super.serialize(moreToFollow);
+	}
+}
+
+interface MPANExtensionOptions {
+	groupId: number;
+	innerMPANState: Buffer;
+}
+
+class MPANExtension extends Security2Extension {
+	public constructor(options: MPANExtensionOptions) {
+		if (options.innerMPANState.length !== 16) {
+			throw new ZWaveError(
+				"The inner MPAN state must be a 16-byte buffer!",
+				ZWaveErrorCodes.Argument_Invalid,
+			);
+		}
+		super({
+			critical: true,
+			type: ExtensionType.MPAN,
+		});
+
+		this.groupId = options.groupId;
+		this.innerMPANState = options.innerMPANState;
+	}
+
+	public groupId: number;
+	public innerMPANState: Buffer;
+
+	public isEncrypted(): boolean {
+		return true;
+	}
+
+	public serialize(moreToFollow: boolean): Buffer {
+		this.payload = Buffer.concat([
+			Buffer.from([this.groupId]),
+			this.innerMPANState,
+		]);
+		return super.serialize(moreToFollow);
+	}
+}
+
+interface MGRPExtensionOptions {
+	groupId: number;
+}
+
+class MGRPExtension extends Security2Extension {
+	public constructor(options: MGRPExtensionOptions) {
+		super({
+			critical: true,
+			type: ExtensionType.MGRP,
+		});
+
+		this.groupId = options.groupId;
+	}
+
+	public groupId: number;
+
+	public serialize(moreToFollow: boolean): Buffer {
+		this.payload = Buffer.from([this.groupId]);
+		return super.serialize(moreToFollow);
+	}
+}
+
+class MOSExtension extends Security2Extension {
+	public constructor() {
+		super({
+			critical: true,
+			type: ExtensionType.MOS,
+		});
+	}
+}
+
+interface Security2CCMessageEncapsulationOptions extends CCCommandOptions {
+	sequenceNumber: number;
+	extensions?: Security2Extension[];
+	encapsulated: CommandClass;
+}
+
+function getCCResponseForMessageEncapsulation(
+	sent: Security2CCMessageEncapsulation,
+) {
+	if (sent.encapsulated.expectsCCResponse()) {
+		return Security2CCMessageEncapsulation;
+	}
+}
+
+@CCCommand(Security2Command.MessageEncapsulation)
+@expectedCCResponse(
+	getCCResponseForMessageEncapsulation,
+	() => "checkEncapsulated",
+)
+export class Security2CCMessageEncapsulation extends Security2CC {
+	public constructor(
+		driver: Driver,
+		options:
+			| CommandClassDeserializationOptions
+			| Security2CCMessageEncapsulationOptions,
+	) {
+		super(driver, options);
+		if (gotDeserializationOptions(options)) {
+			// TODO: Deserialize payload
+			throw new ZWaveError(
+				`${this.constructor.name}: deserialization not implemented`,
+				ZWaveErrorCodes.Deserialization_NotImplemented,
+			);
+		} else {
+			this.encapsulated = options.encapsulated;
+			options.encapsulated.encapsulatingCC = this as any;
+
+			this.sequenceNumber = options.sequenceNumber;
+			this.extensions = options.extensions ?? [];
+		}
+	}
+
+	public sequenceNumber: number;
+	public encapsulated!: CommandClass;
+	public extensions: Security2Extension[];
+
+	public serialize(): Buffer {
+		const unencryptedExtensions = this.extensions.filter(
+			(e) => !e.isEncrypted(),
+		);
+		const encryptedExtensions = this.extensions.filter((e) =>
+			e.isEncrypted(),
+		);
+
+		const unencryptedPayload = Buffer.concat([
+			Buffer.from([
+				this.sequenceNumber,
+				(encryptedExtensions.length ? 0b10 : 0) |
+					(unencryptedExtensions.length ? 1 : 0),
+			]),
+			...unencryptedExtensions.map((e, index) =>
+				e.serialize(index < unencryptedExtensions.length - 1),
+			),
+		]);
+		const plaintextPayload = Buffer.concat([
+			...encryptedExtensions.map((e, index) =>
+				e.serialize(index < encryptedExtensions.length - 1),
+			),
+			this.encapsulated.serialize(),
+			/* TODO: CCM control data, */
+			/* TODO: CCM auth tag */
+		]);
+		const ciphertextPayload = (undefined as any) as Buffer; // TODO: encrypt
+
+		this.payload = Buffer.concat([unencryptedPayload, ciphertextPayload]);
+		return super.serialize();
+	}
+}
+
 type Security2CCNonceReportOptions = CCCommandOptions & {
 	sequenceNumber: number;
 	MOS: boolean;
