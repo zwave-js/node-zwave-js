@@ -45,7 +45,10 @@
   "scripts": {
     "prebuild": "ts-node maintenance/prebuild.ts",
     "build": "tsc -b tsconfig.build.json",
-    "clean": "yarn run build -- --clean",
+    "clean": "tsc -b tsconfig.build.json --clean",
     "watch": "yarn run build -- --watch --pretty"
+  },
+  "devDependencies": {
+    "@zwave-js/maintenance": "^6.4.0"
   }
 }

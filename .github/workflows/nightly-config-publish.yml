@@ -71,7 +71,7 @@ jobs:
         # ===============================
 
         # Create a clean build
-        npx lerna run build --scope=@zwave-js/config
+        npx lerna run build
 
         # Lint config files
         yarn run lint:config
