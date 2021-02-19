@@ -823,7 +823,7 @@
 			"writeOnly": false,
 			"allowManualEntry": true
 		},
-		"23[0x7f00000]": {
+		"23[0x7f000000]": {
 			"label": "Custom Strip Effect: Action 4 Intensity",
 			"description": "This is the intensity of Action 4.",
 			"valueSize": 4,
