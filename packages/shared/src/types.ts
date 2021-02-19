@@ -10,6 +10,15 @@ export type JSONObject = Record<string, any>;
 // eslint-disable-next-line @typescript-eslint/ban-types
 export type Constructor<T = {}> = new (...args: any[]) => T;
 
+// eslint-disable-next-line @typescript-eslint/ban-types
+export type TypedClassDecorator<TTarget extends Object> = <
+	// wotan-disable-next-line no-misused-generics
+	T extends TTarget,
+	TConstructor extends new (...args: any[]) => T
+>(
+	apiClass: TConstructor,
+) => TConstructor | void;
+
 export type UnionToIntersection<T> = (
 	T extends any ? (x: T) => any : never
 ) extends (x: infer R) => any
@@ -25,3 +34,4 @@ export type OnlyMethods<T> = {
 };
 
 export type IsAny<T> = 0 extends 1 & T ? true : false;
+

@@ -19,6 +19,8 @@ import {
 	gotDeserializationOptions,
 	implementedVersion,
 } from "./CommandClass";
+import { Security2Extension } from "./Security2/Extension";
+import { ECDHProfiles, KEXFailType, KEXSchemes } from "./Security2/shared";
 
 // All the supported commands
 export enum Security2Command {
@@ -36,26 +38,6 @@ export enum Security2Command {
 	TransferEnd = 0x0c,
 	CommandsSupportedGet = 0x0d,
 	CommandsSupportedReport = 0x0e,
-}
-
-export enum KEXSchemes {
-	KEXScheme1 = 1,
-}
-
-export enum ECDHProfiles {
-	Curve25519 = 0,
-}
-
-export enum KEXFailType {
-	NoKeyMatch = 0x01, // KEX_KEY
-	NoSupportedScheme = 0x02, // KEX_SCHEME
-	NoSupportedCurve = 0x03, // KEX_CURVES
-	Decrypt = 0x05,
-	BootstrappingCanceled = 0x06, // CANCEL
-	WrongSecurityLevel = 0x07, // AUTH
-	KeyNotGranted = 0x08, // GET
-	NoVerify = 0x09, // VERIFY
-	DifferentKey = 0x0a, // REPORT
 }
 
 function securityClassToBitMask(key: SecurityClasses): Buffer {
@@ -82,141 +64,6 @@ function bitMaskToSecurityClass(
 @implementedVersion(1)
 export class Security2CC extends CommandClass {
 	declare ccCommand: Security2Command;
-}
-
-enum ExtensionType {
-	SPAN = 0x01,
-	MPAN = 0x02,
-	MGRP = 0x03,
-	MOS = 0x04,
-}
-
-interface Security2ExtensionOptions {
-	type: ExtensionType;
-	critical: boolean;
-}
-
-class Security2Extension {
-	public constructor(options: Security2ExtensionOptions) {
-		this.type = options.type;
-		this.critical = options.critical;
-	}
-
-	public type: ExtensionType;
-	public critical: boolean;
-	public payload: Buffer = Buffer.allocUnsafe(0);
-
-	public isEncrypted(): boolean {
-		return false;
-	}
-
-	public serialize(moreToFollow: boolean): Buffer {
-		return Buffer.concat([
-			Buffer.from([
-				2 + this.payload.length,
-				(moreToFollow ? 0b1000_0000 : 0) |
-					(this.critical ? 0b0100_0000 : 0) |
-					(this.type & 0b11_1111),
-			]),
-			this.payload,
-		]);
-	}
-}
-
-interface SPANExtensionOptions {
-	senderEI: Buffer;
-}
-
-class SPANExtension extends Security2Extension {
-	public constructor({ senderEI }: SPANExtensionOptions) {
-		if (senderEI.length !== 16) {
-			throw new ZWaveError(
-				"The sender's entropy must be a 16-byte buffer!",
-				ZWaveErrorCodes.Argument_Invalid,
-			);
-		}
-		super({
-			critical: true,
-			type: ExtensionType.SPAN,
-		});
-		this.senderEI = senderEI;
-	}
-
-	public senderEI: Buffer;
-
-	public serialize(moreToFollow: boolean): Buffer {
-		this.payload = this.senderEI;
-		return super.serialize(moreToFollow);
-	}
-}
-
-interface MPANExtensionOptions {
-	groupId: number;
-	innerMPANState: Buffer;
-}
-
-class MPANExtension extends Security2Extension {
-	public constructor(options: MPANExtensionOptions) {
-		if (options.innerMPANState.length !== 16) {
-			throw new ZWaveError(
-				"The inner MPAN state must be a 16-byte buffer!",
-				ZWaveErrorCodes.Argument_Invalid,
-			);
-		}
-		super({
-			critical: true,
-			type: ExtensionType.MPAN,
-		});
-
-		this.groupId = options.groupId;
-		this.innerMPANState = options.innerMPANState;
-	}
-
-	public groupId: number;
-	public innerMPANState: Buffer;
-
-	public isEncrypted(): boolean {
-		return true;
-	}
-
-	public serialize(moreToFollow: boolean): Buffer {
-		this.payload = Buffer.concat([
-			Buffer.from([this.groupId]),
-			this.innerMPANState,
-		]);
-		return super.serialize(moreToFollow);
-	}
-}
-
-interface MGRPExtensionOptions {
-	groupId: number;
-}
-
-class MGRPExtension extends Security2Extension {
-	public constructor(options: MGRPExtensionOptions) {
-		super({
-			critical: true,
-			type: ExtensionType.MGRP,
-		});
-
-		this.groupId = options.groupId;
-	}
-
-	public groupId: number;
-
-	public serialize(moreToFollow: boolean): Buffer {
-		this.payload = Buffer.from([this.groupId]);
-		return super.serialize(moreToFollow);
-	}
-}
-
-class MOSExtension extends Security2Extension {
-	public constructor() {
-		super({
-			critical: true,
-			type: ExtensionType.MOS,
-		});
-	}
 }
 
 interface Security2CCMessageEncapsulationOptions extends CCCommandOptions {
@@ -247,11 +94,38 @@ export class Security2CCMessageEncapsulation extends Security2CC {
 	) {
 		super(driver, options);
 		if (gotDeserializationOptions(options)) {
-			// TODO: Deserialize payload
-			throw new ZWaveError(
-				`${this.constructor.name}: deserialization not implemented`,
-				ZWaveErrorCodes.Deserialization_NotImplemented,
-			);
+			validatePayload(this.payload.length >= 2);
+			this.sequenceNumber = this.payload[0];
+			const hasExtensions = !!(this.payload[1] & 0b1);
+			const hasEncryptedExtensions = !!(this.payload[1] & 0b10);
+
+			let offset = 2;
+			this.extensions = [];
+			const parseExtensions = (buffer: Buffer) => {
+				while (true) {
+					// we need to read at least the length byte
+					validatePayload(buffer.length >= offset + 1);
+					const extensionLength = Security2Extension.getExtensionLength(
+						buffer.slice(offset),
+					);
+					// Parse the extension
+					const ext = Security2Extension.from(
+						buffer.slice(offset, offset + extensionLength),
+					);
+					this.extensions.push(ext);
+					offset += extensionLength;
+					// Check if that was the last extension
+					if (!ext.moreToFollow) break;
+				}
+			};
+			if (hasExtensions) parseExtensions(this.payload);
+
+			const ciphertext = this.payload.slice(offset);
+			// TODO: decrypt
+			const plaintext: Buffer = undefined as any;
+			offset = 0;
+			if (hasEncryptedExtensions) parseExtensions(plaintext);
+			// TODO: authenticate, deserialize CC
 		} else {
 			this.encapsulated = options.encapsulated;
 			options.encapsulated.encapsulatingCC = this as any;
