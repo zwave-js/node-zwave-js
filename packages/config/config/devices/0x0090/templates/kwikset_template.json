@@ -110,6 +110,7 @@
 		"$import": "#usercode_base"
 	},
 	"usercode_22": {
+		"label": "User Code 22 Type",
 		"$import": "#usercode_base"
 	},
 	"usercode_23": {
