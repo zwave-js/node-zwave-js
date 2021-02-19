@@ -6,20 +6,20 @@ Since older versions of the Z-Wave standard don't allow us to request all the in
 
 The following properties are defined and should always be present in the same order for consistency among the config files:
 
-| Property            | Description                                                                                                           |
-| ------------------- | --------------------------------------------------------------------------------------------------------------------- |
-| `manufacturer`      | The name of the manufacturer                                                                                          |
-| `manufacturerId`    | The ID of the manufacturer (as defined in the Z-Wave specs) as a 4-digit hexadecimal string.                          |
-| `label`             | A short label for the device                                                                                          |
-| `description`       | A longer description of the device, usually the full name                                                             |
-| `devices`           | An array of product type and product ID combinations, [see below](#devices) for details.                              |
-| `firmwareVersion`   | The firmware version range this config file is valid for, [see below](#firmwareVersion) for details.                  |
-| `metadata`          | Metadata that is intended to help the user, like inclusion instructions etc. [See below](#metadata) for details.      |
-| `associations`      | The association groups the device supports, [see below](#associations) for details.                                   |
-| `supportsZWavePlus` | If set to `true`, the device complies with the Z-Wave+ standard. In this case, omit the `associations` property.      |
-| `proprietary`       | A dictionary of settings for the proprietary CC. The settings depend on each proprietary CC implementation.           |
-| `paramInformation`  | A dictionary of the configuration parameters the device supports. [See below](#paramInformation) for details.         |
-| `compat`            | Compatibility flags used to influence the communication with non-complient devices. [See below](#compat) for details. |
+| Property            | Description                                                                                                                                                                                                |
+| ------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `manufacturer`      | The name of the manufacturer                                                                                                                                                                               |
+| `manufacturerId`    | The ID of the manufacturer (as defined in the Z-Wave specs) as a 4-digit hexadecimal string.                                                                                                               |
+| `label`             | A short label for the device                                                                                                                                                                               |
+| `description`       | A longer description of the device, usually the full name                                                                                                                                                  |
+| `devices`           | An array of product type and product ID combinations, [see below](#devices) for details.                                                                                                                   |
+| `firmwareVersion`   | The firmware version range this config file is valid for, [see below](#firmwareVersion) for details.                                                                                                       |
+| `supportsZWavePlus` | (deprecated)                                                                                                                                                                                               |
+| `associations`      | The association groups the device supports, [see below](#associations) for details. Only needs to be present if the device does not support Z-Wave+ or requires changes to the default association config. |
+| `paramInformation`  | A dictionary of the configuration parameters the device supports. [See below](#paramInformation) for details.                                                                                              |
+| `proprietary`       | A dictionary of settings for the proprietary CC. The settings depend on each proprietary CC implementation.                                                                                                |
+| `compat`            | Compatibility flags used to influence the communication with non-complient devices. [See below](#compat) for details.                                                                                      |
+| `metadata`          | Metadata that is intended to help the user, like inclusion instructions etc. [See below](#metadata) for details.                                                                                           |
 
 ### `devices`
 
@@ -81,7 +81,7 @@ For devices that don't support the Z-Wave+ standard, the associations must be de
 	},
 	"2": {
 		"label": "Label for group #2",
-		"description": "A description what group #2 does", // optional
+		"description": "A description what group #2 does", // optional, only add this if it adds additional value
 		"maxNodes": 1, // SHOULD be 1 for the lifeline, some devices support more nodes
 		"isLifeline": true, // Whether this is the Lifeline group. SHOULD exist exactly once, some nodes require more groups to report everything
 		"noEndpoint": true, // Whether node id associations must be used for this group, even if the device supports endpoint associations, (optional)

@@ -133,6 +133,10 @@
 			},
 			"additionalProperties": false
 		},
+		"proprietary": {
+			"type": "object",
+			"description": "A dictionary of settings for the proprietary CC. The settings depend on each proprietary CC implementation."
+		},
 		"compat": {
 			"type": "object",
 			"properties": {
