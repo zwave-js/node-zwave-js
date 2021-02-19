@@ -12,6 +12,10 @@ assignees:
 
   Before opening an issue, please read the troubleshooting section if your problem is described there:
   https://zwave-js.github.io/node-zwave-js/#/development/troubleshooting
+  
+  Check the changelog if your problem was already fixed recently.
+  https://github.com/zwave-js/node-zwave-js/blob/master/CHANGELOG.md
+  We cannot provide support if you are not using the latest version.
 
   Also make sure to provide the necessary information, as described here:
   https://zwave-js.github.io/node-zwave-js/#/development/troubleshooting?id=providing-the-necessary-information-for-an-issue
