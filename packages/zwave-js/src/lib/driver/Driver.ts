@@ -1409,22 +1409,28 @@ export class Driver extends EventEmitter {
 				if (!this.assemblePartialCCs(msg)) return;
 			}
 
-			this.driverLog.logMessage(msg, { direction: "inbound" });
-			if (process.env.NODE_ENV !== "test") {
-				// Enrich error data in case something goes wrong
-				Sentry.addBreadcrumb({
-					category: "message",
-					timestamp: Date.now() / 1000,
-					type: "debug",
-					data: {
-						direction: "inbound",
-						msgType: msg.type,
-						functionType: msg.functionType,
-						name: msg.constructor.name,
-						nodeId: msg.getNodeId(),
-						...msg.toLogEntry(),
-					},
-				});
+			try {
+				this.driverLog.logMessage(msg, { direction: "inbound" });
+
+				if (process.env.NODE_ENV !== "test") {
+					// Enrich error data in case something goes wrong
+					Sentry.addBreadcrumb({
+						category: "message",
+						timestamp: Date.now() / 1000,
+						type: "debug",
+						data: {
+							direction: "inbound",
+							msgType: msg.type,
+							functionType: msg.functionType,
+							name: msg.constructor.name,
+							nodeId: msg.getNodeId(),
+							...msg.toLogEntry(),
+						},
+					});
+				}
+			} catch (e) {
+				// We shouldn't throw just because logging a message fails
+				this.driverLog.print(`Logging a message failed: ${e.message}`);
 			}
 			this.sendThread.send({ type: "message", message: msg });
 		}
