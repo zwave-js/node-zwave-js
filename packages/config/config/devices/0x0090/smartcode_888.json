@@ -24,26 +24,10 @@
 	},
 	"paramInformation": {
 		"33": {
-			"label": "SKU Number (First 4 Bytes)",
-			"valueSize": 4,
-			"minValue": 0,
-			"maxValue": 0,
-			"defaultValue": 0,
-			"unsigned": true,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"$import": "templates/kwikset_template.json#dipswitch_sku_firstfour"
 		},
 		"34": {
-			"label": "SKU Number (Last 4 Bytes)",
-			"valueSize": 4,
-			"minValue": 0,
-			"maxValue": 0,
-			"defaultValue": 0,
-			"unsigned": true,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"$import": "templates/kwikset_template.json#dipswitch_sku_lastfour"
 		},
 		"35": {
 			"label": "Interior Status LED",
@@ -87,25 +71,7 @@
 			]
 		},
 		"40": {
-			"label": "Factory Default",
-			"description": "Reset to factory default settings",
-			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 1,
-			"defaultValue": 0,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "Normal",
-					"value": 0
-				},
-				{
-					"label": "Factory Default",
-					"value": 1
-				}
-			]
+			"$import": "templates/kwikset_template.json#reset"
 		},
 		"47": {
 			"label": "Send Motor Load Alarms",

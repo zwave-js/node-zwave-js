@@ -1,0 +1,280 @@
+// Kwikset Template File
+{
+	"usercode_base": {
+		"description": "Guests and Workers will require schedules attached to them in order for those types to be assigned",
+		"valueSize": 1,
+		"minValue": 1,
+		"maxValue": 4,
+		"defaultValue": 1,
+		"unsigned": true,
+		"readOnly": false,
+		"writeOnly": false,
+		"allowManualEntry": false,
+		"options": [
+			{
+				"label": "Owner",
+				"value": 1
+			},
+			{
+				"label": "Guest",
+				"value": 3
+			},
+			{
+				"label": "Worker",
+				"value": 4
+			}
+		]
+	},
+	"usercode_1": {
+		"$import": "#usercode_base",
+		"label": "User Code 1 Type"
+	},
+	"usercode_2": {
+		"$import": "#usercode_base",
+		"label": "User Code 2 Type"
+	},
+	"usercode_3": {
+		"$import": "#usercode_base",
+		"label": "User Code 3 Type"
+	},
+	"usercode_4": {
+		"$import": "#usercode_base",
+		"label": "User Code 4 Type"
+	},
+	"usercode_5": {
+		"$import": "#usercode_base",
+		"label": "User Code 5 Type"
+	},
+	"usercode_6": {
+		"$import": "#usercode_base",
+		"label": "User Code 6 Type"
+	},
+	"usercode_7": {
+		"$import": "#usercode_base",
+		"label": "User Code 7 Type"
+	},
+	"usercode_8": {
+		"$import": "#usercode_base",
+		"label": "User Code 8 Type"
+	},
+	"usercode_9": {
+		"$import": "#usercode_base",
+		"label": "User Code 9 Type"
+	},
+	"usercode_10": {
+		"$import": "#usercode_base",
+		"label": "User Code 10 Type"
+	},
+	"usercode_11": {
+		"$import": "#usercode_base",
+		"label": "User Code 11 Type"
+	},
+	"usercode_12": {
+		"$import": "#usercode_base",
+		"label": "User Code 12 Type"
+	},
+	"usercode_13": {
+		"$import": "#usercode_base",
+		"label": "User Code 13 Type"
+	},
+	"usercode_14": {
+		"$import": "#usercode_base",
+		"label": "User Code 14 Type"
+	},
+	"usercode_15": {
+		"$import": "#usercode_base",
+		"label": "User Code 15 Type"
+	},
+	"usercode_16": {
+		"$import": "#usercode_base",
+		"label": "User Code 16 Type"
+	},
+	"usercode_17": {
+		"$import": "#usercode_base",
+		"label": "User Code 17 Type"
+	},
+	"usercode_18": {
+		"$import": "#usercode_base",
+		"label": "User Code 18 Type"
+	},
+	"usercode_19": {
+		"$import": "#usercode_base",
+		"label": "User Code 19 Type"
+	},
+	"usercode_20": {
+		"$import": "#usercode_base",
+		"label": "User Code 20 Type"
+	},
+	"usercode_21": {
+		"$import": "#usercode_base",
+		"label": "User Code 21 Type"
+	},
+	"usercode_22": {
+		"$import": "#usercode_base",
+		"label": "User Code 22 Type"
+	},
+	"usercode_23": {
+		"$import": "#usercode_base",
+		"label": "User Code 23 Type"
+	},
+	"usercode_24": {
+		"$import": "#usercode_base",
+		"label": "User Code 24 Type"
+	},
+	"usercode_25": {
+		"$import": "#usercode_base",
+		"label": "User Code 25 Type"
+	},
+	"usercode_26": {
+		"$import": "#usercode_base",
+		"label": "User Code 26 Type"
+	},
+	"usercode_27": {
+		"$import": "#usercode_base",
+		"label": "User Code 27 Type"
+	},
+	"usercode_28": {
+		"$import": "#usercode_base",
+		"label": "User Code 28 Type"
+	},
+	"usercode_29": {
+		"$import": "#usercode_base",
+		"label": "User Code 29 Type"
+	},
+	"usercode_30": {
+		"$import": "#usercode_base",
+		"label": "User Code 30 Type"
+	},
+	"dipswitch_led": {
+		"label": "Dipswitch setting: Lock Status LED",
+		"description": "State of the Lock Status LED dipswitch on the rear panel of the door lock.",
+		"valueSize": 1,
+		"minValue": 0,
+		"maxValue": 1,
+		"defaultValue": 0,
+		"unsigned": true,
+		"readOnly": true,
+		"writeOnly": false,
+		"allowManualEntry": true,
+		"options": [
+			{
+				"label": "Disabled",
+				"value": 0
+			},
+			{
+				"label": "Enabled",
+				"value": 1
+			}
+		]
+	},
+	"dipswitch_autolock": {
+		"label": "Dipswitch setting: Autolock",
+		"description": "State of the Autolock dipswitch on the rear panel of the door lock.",
+		"valueSize": 1,
+		"minValue": 0,
+		"maxValue": 1,
+		"defaultValue": 0,
+		"unsigned": true,
+		"readOnly": true,
+		"writeOnly": false,
+		"allowManualEntry": true,
+		"options": [
+			{
+				"label": "Disabled",
+				"value": 0
+			},
+			{
+				"label": "Enabled",
+				"value": 1
+			}
+		]
+	},
+	"dipswitch_buzzer": {
+		"label": "Dipswitch setting: Buzzer",
+		"description": "State of the Buzzer dipswitch on the rear panel of the door lock.",
+		"valueSize": 1,
+		"minValue": 0,
+		"maxValue": 1,
+		"defaultValue": 0,
+		"unsigned": true,
+		"readOnly": true,
+		"writeOnly": false,
+		"allowManualEntry": true,
+		"options": [
+			{
+				"label": "Disabled",
+				"value": 0
+			},
+			{
+				"label": "Enabled",
+				"value": 1
+			}
+		]
+	},
+	"dipswitch_securescreen": {
+		"label": "Dipswitch setting: Secure Screen",
+		"description": "State of the Secure Screen dipswitch on the rear panel of the door lock.",
+		"valueSize": 1,
+		"minValue": 0,
+		"maxValue": 1,
+		"defaultValue": 0,
+		"unsigned": true,
+		"readOnly": true,
+		"writeOnly": false,
+		"allowManualEntry": true,
+		"options": [
+			{
+				"label": "Disabled",
+				"value": 0
+			},
+			{
+				"label": "Enabled",
+				"value": 1
+			}
+		]
+	},
+	"dipswitch_sku_firstfour": {
+		"label": "SKU Number (First 4 Bytes)",
+		"valueSize": 4,
+		"minValue": 0,
+		"maxValue": 0,
+		"defaultValue": 0,
+		"unsigned": true,
+		"readOnly": false,
+		"writeOnly": false,
+		"allowManualEntry": true
+	},
+	"dipswitch_sku_lastfour": {
+		"label": "SKU Number (Last 4 Bytes)",
+		"valueSize": 4,
+		"minValue": 0,
+		"maxValue": 0,
+		"defaultValue": 0,
+		"unsigned": true,
+		"readOnly": false,
+		"writeOnly": false,
+		"allowManualEntry": true
+	},
+	"reset": {
+		"label": "Reset to Default",
+		"description": "Force Factory Reset",
+		"valueSize": 1,
+		"minValue": 0,
+		"maxValue": 1,
+		"defaultValue": 0,
+		"unsigned": true,
+		"readOnly": false,
+		"writeOnly": true,
+		"allowManualEntry": false,
+		"options": [
+			{
+				"label": "Normal Operation",
+				"value": 0
+			},
+			{
+				"label": "Factory Reset",
+				"value": 1
+			}
+		]
+	}
+}
