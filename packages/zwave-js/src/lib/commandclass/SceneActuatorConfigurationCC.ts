@@ -106,7 +106,6 @@ export class SceneActuatorConfigurationCCAPI extends CCAPI {
 			case SceneActuatorConfigurationCommand.Get:
 				return this.isSinglecast();
 			case SceneActuatorConfigurationCommand.Set:
-			case SceneActuatorConfigurationCommand.Report:
 				return true;
 		}
 		return super.supportsCommand(cmd);
@@ -193,14 +192,37 @@ export class SceneActuatorConfigurationCCAPI extends CCAPI {
 		await this.driver.sendCommand(cc, this.commandOptions);
 	}
 
+	public async getActive(): Promise<
+		| Pick<
+				SceneActuatorConfigurationCCReport,
+				"sceneId" | "level" | "dimmingDuration"
+		  >
+		| undefined
+	> {
+		this.assertSupportsCommand(
+			SceneActuatorConfigurationCommand,
+			SceneActuatorConfigurationCommand.Get,
+		);
+
+		const cc = new SceneActuatorConfigurationCCGet(this.driver, {
+			nodeId: this.endpoint.nodeId,
+			endpoint: this.endpoint.index,
+			sceneId: 0,
+		});
+		const response = await this.driver.sendCommand<SceneActuatorConfigurationCCReport>(
+			cc,
+			this.commandOptions,
+		);
+
+		if (response) {
+			return pick(response, ["sceneId", "level", "dimmingDuration"]);
+		}
+	}
+
 	public async get(
 		sceneId: number,
 	): Promise<
-		| {
-				sceneId: number;
-				level: number;
-				dimmingDuration: Duration;
-		  }
+		| Pick<SceneActuatorConfigurationCCReport, "level" | "dimmingDuration">
 		| undefined
 	> {
 		this.assertSupportsCommand(
@@ -218,8 +240,13 @@ export class SceneActuatorConfigurationCCAPI extends CCAPI {
 			this.commandOptions,
 		);
 
-		if (response) {
-			return pick(response, ["sceneId", "level", "dimmingDuration"]);
+		// A response to a
+		if (
+			response &&
+			response.level != undefined &&
+			response.dimmingDuration != undefined
+		) {
+			return pick(response, ["level", "dimmingDuration"]);
 		}
 	}
 }
@@ -264,33 +291,20 @@ export class SceneActuatorConfigurationCCSet extends SceneActuatorConfigurationC
 			}
 			this.sceneId = options.sceneId;
 			this.dimmingDuration = options.dimmingDuration;
-			if (options.level != undefined) {
-				if (options.level < 0 || options.level > 255) {
-					throw new ZWaveError(
-						`level ${options.level} out of range [1..255]`,
-						ZWaveErrorCodes.Argument_Invalid,
-					);
-				}
-				this.override = true;
-				this.level = options.level;
-			} else {
-				this.override = false;
-				this.level = 0xff; // will be ignored
-			}
+			this.level = options.level;
 		}
 	}
 
 	public sceneId: number;
 	public dimmingDuration: Duration;
-	public override: boolean;
-	public level: number;
+	public level?: number;
 
 	public serialize(): Buffer {
 		this.payload = Buffer.from([
 			this.sceneId,
 			this.dimmingDuration.serializeSet(),
-			this.override ? 0b1000_0000 : 0x00,
-			this.level,
+			this.level != undefined ? 0b1000_0000 : 0,
+			this.level ?? 0xff,
 		]);
 		return super.serialize();
 	}
@@ -305,25 +319,35 @@ export class SceneActuatorConfigurationCCReport extends SceneActuatorConfigurati
 		super(driver, options);
 		validatePayload(this.payload.length >= 3);
 		this.sceneId = this.payload[0];
-		this.level = this.payload[1];
-		this.dimmingDuration =
-			Duration.parseReport(this.payload[2]) ?? new Duration(0, "unknown");
 
-		this.persistValues();
+		if (this.sceneId != 0) {
+			this.level = this.payload[1];
+			this.dimmingDuration =
+				Duration.parseReport(this.payload[2]) ??
+				new Duration(0, "unknown");
+
+			this.persistValues();
+		}
 	}
 
-	public sceneId: number;
-	public level: number;
-	public dimmingDuration: Duration;
+	public readonly sceneId: number;
+	public readonly level?: number;
+	public readonly dimmingDuration?: Duration;
 
 	public persistValues(): boolean {
-		persistSceneActuatorConfig.call(
+		if (
+			this.sceneId === 0 ||
+			this.level == undefined ||
+			this.dimmingDuration == undefined
+		) {
+			return false;
+		}
+		return persistSceneActuatorConfig.call(
 			this,
 			this.sceneId,
 			this.level,
 			this.dimmingDuration,
 		);
-		return true;
 	}
 
 	public toLogEntry(): MessageOrCCLogEntry {
@@ -332,7 +356,7 @@ export class SceneActuatorConfigurationCCReport extends SceneActuatorConfigurati
 			message: {
 				sceneId: this.sceneId,
 				level: this.level,
-				dimmingDuration: this.dimmingDuration.toString(),
+				dimmingDuration: this.dimmingDuration?.toString(),
 			},
 		};
 	}
@@ -342,7 +366,9 @@ function testResponseForSceneActuatorConfigurationGet(
 	sent: SceneActuatorConfigurationCCGet,
 	received: SceneActuatorConfigurationCCReport,
 ) {
-	return received.sceneId === sent.sceneId;
+	// We expect a Scene Actuator Configuration Report that matches
+	// the requested sceneId, unless groupId 0 was requested
+	return sent.sceneId === 0 || received.sceneId === sent.sceneId;
 }
 
 interface SceneActuatorConfigurationCCGetOptions extends CCCommandOptions {
@@ -369,12 +395,6 @@ export class SceneActuatorConfigurationCCGet extends SceneActuatorConfigurationC
 				ZWaveErrorCodes.Deserialization_NotImplemented,
 			);
 		} else {
-			if (options.sceneId < 1 || options.sceneId > 255) {
-				throw new ZWaveError(
-					`scene id ${options.sceneId} out of range [1..255]`,
-					ZWaveErrorCodes.Argument_Invalid,
-				);
-			}
 			this.sceneId = options.sceneId;
 		}
 	}

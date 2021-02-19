@@ -63,7 +63,7 @@ describe("lib/commandclass/SceneActuatorConfigurationCC => ", () => {
 				SceneActuatorConfigurationCommand.Set, // CC Command
 				2,
 				0x05, // dimmingDuration
-				0b1000_0000,
+				0b1000_0000, // override
 				0x00, // level
 			]),
 		);
@@ -80,9 +80,9 @@ describe("lib/commandclass/SceneActuatorConfigurationCC => ", () => {
 		const expected = buildCCBuffer(
 			Buffer.from([
 				SceneActuatorConfigurationCommand.Set, // CC Command
-				2,
+				2, // nodeId
 				0x05, // dimmingDuration
-				0b0000_0000,
+				0b0000_0000, // override
 				0xff, // level
 			]),
 		);
