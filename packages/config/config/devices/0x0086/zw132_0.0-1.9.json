@@ -23,7 +23,27 @@
 		"min": "0.0",
 		"max": "1.9"
 	},
-	"supportsZWavePlus": true,
+	"associations": {
+		"1": {
+			"label": "Lifeline",
+			"maxNodes": 5,
+			"isLifeline": true,
+			// The device does not like Endpoint Associations for the lifeline
+			"noEndpoint": true
+		},
+		"2": {
+			"label": "Forward Received Commands",
+			"maxNodes": 5
+		},
+		"3": {
+			"label": "Basic Set for Switch S1",
+			"maxNodes": 5
+		},
+		"4": {
+			"label": "Basic Set for Switch S2",
+			"maxNodes": 5
+		}
+	},
 	"paramInformation": {
 		"3": {
 			"label": "Current Overload Protection.",
