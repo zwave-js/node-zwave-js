@@ -399,3 +399,49 @@ Properties listed before the `$import` statement may get overwritten by the impo
 	"template": true
 }
 ```
+
+### Conditional configuration settings
+
+For devices that only slighly change between firmware versions or hardware revisions, you can enable some settings conditionally with the `"$if"` property. It accepts a string with logic inside, e.g.
+
+```json
+{
+	"$if": "firmwareVersion >= 1.0 && productType === 0x1234"
+	// ... other settings
+}
+```
+
+The logic supports the JavaScript operators `<`, `<=`, `>`, `>=` and `===`, as well as `&&`, `||` and `(...)`. Available variables are `manufacturerId`, `productType`, `productId` and `firmwareVersion`.
+
+You can use `"$if"` in the following locations:
+
+-   Inside association groups
+-   Inside config parameters
+-   Inside config parameter options
+
+It is also possible to select one of multiple variants of a config parameter by specifying an array. In this case `"$if"` is mandatory in each parameter, except the last one. The first matching definition will be used, the others don't apply.
+
+```json
+{
+	// ... all the rest
+	"paramInformation": {
+		"1": [
+			{
+				// This variant is active for firmware version 1.0
+				"$if": "firmwareVersion === 1.0",
+				"label": "Light configuration",
+				"valueSize": 2,
+				"minValue": 0,
+				"maxValue": 2
+			},
+			{
+				// This one for all others
+				"label": "Sound configuration",
+				"valueSize": 1,
+				"minValue": 0,
+				"maxValue": 1
+			}
+		]
+	}
+}
+```

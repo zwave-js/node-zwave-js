@@ -472,7 +472,15 @@ export class ConfigManager {
 			if (!(await pathExists(filePath))) return;
 
 			try {
-				return await DeviceConfig.from(filePath);
+				return await DeviceConfig.from(filePath, {
+					// Specify how the device was identified in order to evaluate conditions
+					deviceId: {
+						manufacturerId,
+						productType,
+						productId,
+						firmwareVersion,
+					},
+				});
 			} catch (e) {
 				if (process.env.NODE_ENV !== "test") {
 					this.logger.print(
