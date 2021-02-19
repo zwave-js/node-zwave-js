@@ -1,0 +1,413 @@
+import {
+	CommandClasses,
+	Duration,
+	Maybe,
+	MessageOrCCLogEntry,
+	validatePayload,
+	ValueID,
+	ValueMetadata,
+	ZWaveError,
+	ZWaveErrorCodes,
+} from "@zwave-js/core";
+import { pick } from "@zwave-js/shared";
+import type { Driver } from "../driver/Driver";
+import {
+	CCAPI,
+	PollValueImplementation,
+	POLL_VALUE,
+	SetValueImplementation,
+	SET_VALUE,
+	throwMissingPropertyKey,
+	throwUnsupportedProperty,
+	throwUnsupportedPropertyKey,
+	throwWrongValueType,
+} from "./API";
+import {
+	API,
+	CCCommand,
+	CCCommandOptions,
+	CommandClass,
+	commandClass,
+	CommandClassDeserializationOptions,
+	expectedCCResponse,
+	gotDeserializationOptions,
+	implementedVersion,
+} from "./CommandClass";
+
+// All the supported commands
+export enum SceneActuatorConfigurationCommand {
+	Set = 0x01,
+	Get = 0x02,
+	Report = 0x03,
+}
+
+export function getLevelValueID(
+	endpoint: number | undefined,
+	sceneId: number,
+): ValueID {
+	return {
+		commandClass: CommandClasses["Scene Actuator Configuration"],
+		endpoint,
+		property: "level",
+		propertyKey: sceneId,
+	};
+}
+
+export function getDimmingDurationValueID(
+	endpoint: number | undefined,
+	sceneId: number,
+): ValueID {
+	return {
+		commandClass: CommandClasses["Scene Actuator Configuration"],
+		endpoint,
+		property: "dimmingDuration",
+		propertyKey: sceneId,
+	};
+}
+
+function persistSceneActuatorConfig(
+	this: SceneActuatorConfigurationCC,
+	sceneId: number,
+	level: number,
+	dimmingDuration: Duration,
+) {
+	const levelValueId = getLevelValueID(this.endpointIndex, sceneId);
+	const dimmingDurationValueId = getDimmingDurationValueID(
+		this.endpointIndex,
+		sceneId,
+	);
+	const valueDB = this.getValueDB();
+
+	if (!valueDB.hasMetadata(levelValueId)) {
+		valueDB.setMetadata(levelValueId, {
+			...ValueMetadata.UInt8,
+			label: `Level (${sceneId})`,
+		});
+	}
+	if (!valueDB.hasMetadata(dimmingDurationValueId)) {
+		valueDB.setMetadata(dimmingDurationValueId, {
+			...ValueMetadata.Duration,
+			label: `Dimming duration (${sceneId})`,
+		});
+	}
+
+	valueDB.setValue(levelValueId, level);
+	valueDB.setValue(dimmingDurationValueId, dimmingDuration);
+
+	return true;
+}
+
+@API(CommandClasses["Scene Actuator Configuration"])
+export class SceneActuatorConfigurationCCAPI extends CCAPI {
+	public supportsCommand(
+		cmd: SceneActuatorConfigurationCommand,
+	): Maybe<boolean> {
+		switch (cmd) {
+			case SceneActuatorConfigurationCommand.Get:
+				return this.isSinglecast();
+			case SceneActuatorConfigurationCommand.Set:
+				return true;
+		}
+		return super.supportsCommand(cmd);
+	}
+
+	protected [SET_VALUE]: SetValueImplementation = async (
+		{ property, propertyKey },
+		value,
+	): Promise<void> => {
+		if (propertyKey == undefined) {
+			throwMissingPropertyKey(this.ccId, property);
+		} else if (typeof propertyKey !== "number") {
+			throwUnsupportedPropertyKey(this.ccId, property, propertyKey);
+		}
+		if (property === "level") {
+			if (typeof value !== "number") {
+				throwWrongValueType(
+					this.ccId,
+					property,
+					"number",
+					typeof value,
+				);
+			}
+
+			// We need to set the dimming duration along with the level.
+			// If no duration is set, we default to 0 seconds
+			const node = this.endpoint.getNodeUnsafe()!;
+			const dimmingDuration =
+				node.getValue<Duration>(
+					getDimmingDurationValueID(this.endpoint.index, propertyKey),
+				) ?? new Duration(0, "seconds");
+			await this.set(propertyKey, dimmingDuration, value);
+		} else {
+			// setting dimmingDuration value alone not supported
+			throwUnsupportedProperty(this.ccId, property);
+		}
+	};
+
+	protected [POLL_VALUE]: PollValueImplementation = async ({
+		property,
+		propertyKey,
+	}): Promise<unknown> => {
+		switch (property) {
+			case "level":
+			case "dimmingDuration": {
+				if (propertyKey == undefined) {
+					throwMissingPropertyKey(this.ccId, property);
+				} else if (typeof propertyKey !== "number") {
+					throwUnsupportedPropertyKey(
+						this.ccId,
+						property,
+						propertyKey,
+					);
+				}
+				return (await this.get(propertyKey))?.[property];
+			}
+			default:
+				throwUnsupportedProperty(this.ccId, property);
+		}
+	};
+
+	public async set(
+		sceneId: number,
+		dimmingDuration: Duration,
+		level?: number,
+	): Promise<void> {
+		this.assertSupportsCommand(
+			SceneActuatorConfigurationCommand,
+			SceneActuatorConfigurationCommand.Set,
+		);
+
+		const cc = new SceneActuatorConfigurationCCSet(this.driver, {
+			nodeId: this.endpoint.nodeId,
+			endpoint: this.endpoint.index,
+			sceneId,
+			dimmingDuration,
+			level,
+		});
+
+		await this.driver.sendCommand(cc, this.commandOptions);
+	}
+
+	public async getActive(): Promise<
+		| Pick<
+				SceneActuatorConfigurationCCReport,
+				"sceneId" | "level" | "dimmingDuration"
+		  >
+		| undefined
+	> {
+		this.assertSupportsCommand(
+			SceneActuatorConfigurationCommand,
+			SceneActuatorConfigurationCommand.Get,
+		);
+
+		const cc = new SceneActuatorConfigurationCCGet(this.driver, {
+			nodeId: this.endpoint.nodeId,
+			endpoint: this.endpoint.index,
+			sceneId: 0,
+		});
+		const response = await this.driver.sendCommand<SceneActuatorConfigurationCCReport>(
+			cc,
+			this.commandOptions,
+		);
+
+		if (response) {
+			return pick(response, ["sceneId", "level", "dimmingDuration"]);
+		}
+	}
+
+	public async get(
+		sceneId: number,
+	): Promise<
+		| Pick<SceneActuatorConfigurationCCReport, "level" | "dimmingDuration">
+		| undefined
+	> {
+		this.assertSupportsCommand(
+			SceneActuatorConfigurationCommand,
+			SceneActuatorConfigurationCommand.Get,
+		);
+
+		if (sceneId === 0) {
+			throw new ZWaveError(
+				`Invalid scene ID 0. To get the currently active scene, use getActive() instead.`,
+				ZWaveErrorCodes.Argument_Invalid,
+			);
+		}
+
+		const cc = new SceneActuatorConfigurationCCGet(this.driver, {
+			nodeId: this.endpoint.nodeId,
+			endpoint: this.endpoint.index,
+			sceneId: sceneId,
+		});
+		const response = await this.driver.sendCommand<SceneActuatorConfigurationCCReport>(
+			cc,
+			this.commandOptions,
+		);
+
+		if (response) {
+			return pick(response, ["level", "dimmingDuration"]);
+		}
+	}
+}
+
+// @noInterview - We don't want to query 255 scenes
+
+@commandClass(CommandClasses["Scene Actuator Configuration"])
+@implementedVersion(1)
+export class SceneActuatorConfigurationCC extends CommandClass {
+	declare ccCommand: SceneActuatorConfigurationCommand;
+}
+
+interface SceneActuatorConfigurationCCSetOptions extends CCCommandOptions {
+	sceneId: number;
+	dimmingDuration: Duration;
+	level?: number;
+}
+
+@CCCommand(SceneActuatorConfigurationCommand.Set)
+export class SceneActuatorConfigurationCCSet extends SceneActuatorConfigurationCC {
+	public constructor(
+		driver: Driver,
+		options:
+			| CommandClassDeserializationOptions
+			| SceneActuatorConfigurationCCSetOptions,
+	) {
+		super(driver, options);
+		if (gotDeserializationOptions(options)) {
+			// TODO: Deserialize payload
+			throw new ZWaveError(
+				`${this.constructor.name}: deserialization not implemented`,
+				ZWaveErrorCodes.Deserialization_NotImplemented,
+			);
+		} else {
+			if (options.sceneId < 1 || options.sceneId > 255) {
+				throw new ZWaveError(
+					`The scene id ${options.sceneId} must be between 1 and 255!`,
+					ZWaveErrorCodes.Argument_Invalid,
+				);
+			}
+			this.sceneId = options.sceneId;
+			this.dimmingDuration = options.dimmingDuration;
+			this.level = options.level;
+		}
+	}
+
+	public sceneId: number;
+	public dimmingDuration: Duration;
+	public level?: number;
+
+	public serialize(): Buffer {
+		this.payload = Buffer.from([
+			this.sceneId,
+			this.dimmingDuration.serializeSet(),
+			this.level != undefined ? 0b1000_0000 : 0,
+			this.level ?? 0xff,
+		]);
+		return super.serialize();
+	}
+}
+
+@CCCommand(SceneActuatorConfigurationCommand.Report)
+export class SceneActuatorConfigurationCCReport extends SceneActuatorConfigurationCC {
+	public constructor(
+		driver: Driver,
+		options: CommandClassDeserializationOptions,
+	) {
+		super(driver, options);
+		validatePayload(this.payload.length >= 3);
+		this.sceneId = this.payload[0];
+
+		if (this.sceneId !== 0) {
+			this.level = this.payload[1];
+			this.dimmingDuration =
+				Duration.parseReport(this.payload[2]) ??
+				new Duration(0, "unknown");
+		}
+
+		this.persistValues();
+	}
+
+	public readonly sceneId: number;
+	public readonly level?: number;
+	public readonly dimmingDuration?: Duration;
+
+	public persistValues(): boolean {
+		// Do not persist values for an inactive scene
+		if (
+			this.sceneId === 0 ||
+			this.level == undefined ||
+			this.dimmingDuration == undefined
+		) {
+			return false;
+		}
+
+		return persistSceneActuatorConfig.call(
+			this,
+			this.sceneId,
+			this.level,
+			this.dimmingDuration,
+		);
+	}
+
+	public toLogEntry(): MessageOrCCLogEntry {
+		return {
+			...super.toLogEntry(),
+			message: {
+				sceneId: this.sceneId,
+				level: this.level,
+				dimmingDuration: this.dimmingDuration?.toString(),
+			},
+		};
+	}
+}
+
+function testResponseForSceneActuatorConfigurationGet(
+	sent: SceneActuatorConfigurationCCGet,
+	received: SceneActuatorConfigurationCCReport,
+) {
+	// We expect a Scene Actuator Configuration Report that matches
+	// the requested sceneId, unless groupId 0 was requested
+	return sent.sceneId === 0 || received.sceneId === sent.sceneId;
+}
+
+interface SceneActuatorConfigurationCCGetOptions extends CCCommandOptions {
+	sceneId: number;
+}
+
+@CCCommand(SceneActuatorConfigurationCommand.Get)
+@expectedCCResponse(
+	SceneActuatorConfigurationCCReport,
+	testResponseForSceneActuatorConfigurationGet,
+)
+export class SceneActuatorConfigurationCCGet extends SceneActuatorConfigurationCC {
+	public constructor(
+		driver: Driver,
+		options:
+			| CommandClassDeserializationOptions
+			| SceneActuatorConfigurationCCGetOptions,
+	) {
+		super(driver, options);
+		if (gotDeserializationOptions(options)) {
+			// TODO: Deserialize payload
+			throw new ZWaveError(
+				`${this.constructor.name}: deserialization not implemented`,
+				ZWaveErrorCodes.Deserialization_NotImplemented,
+			);
+		} else {
+			this.sceneId = options.sceneId;
+		}
+	}
+
+	public sceneId: number;
+
+	public serialize(): Buffer {
+		this.payload = Buffer.from([this.sceneId]);
+		return super.serialize();
+	}
+
+	public toLogEntry(): MessageOrCCLogEntry {
+		return {
+			...super.toLogEntry(),
+			message: { "scene id": this.sceneId },
+		};
+	}
+}
