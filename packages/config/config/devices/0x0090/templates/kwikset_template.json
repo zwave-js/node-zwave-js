@@ -1,7 +1,6 @@
 // Kwikset Template File
 {
-	"usercode_1": {
-		"label": "User Code 1 Type",
+	"usercode_base": {
 		"description": "Guests and Workers will require schedules attached to them in order for those types to be assigned",
 		"valueSize": 1,
 		"minValue": 1,
@@ -25,732 +24,125 @@
 				"value": 4
 			}
 		]
+	},
+	"usercode_1": {
+		"label": "User Code 1 Type",
+		"$import": "#usercode_base"
 	},
 	"usercode_2": {
 		"label": "User Code 2 Type",
-		"valueSize": 1,
-		"minValue": 1,
-		"maxValue": 4,
-		"defaultValue": 1,
-		"unsigned": true,
-		"readOnly": false,
-		"writeOnly": false,
-		"allowManualEntry": false,
-		"options": [
-			{
-				"label": "Owner",
-				"value": 1
-			},
-			{
-				"label": "Guest",
-				"value": 3
-			},
-			{
-				"label": "Worker",
-				"value": 4
-			}
-		]
+		"$import": "#usercode_base"
 	},
 	"usercode_3": {
 		"label": "User Code 3 Type",
-		"valueSize": 1,
-		"minValue": 1,
-		"maxValue": 4,
-		"defaultValue": 1,
-		"unsigned": true,
-		"readOnly": false,
-		"writeOnly": false,
-		"allowManualEntry": false,
-		"options": [
-			{
-				"label": "Owner",
-				"value": 1
-			},
-			{
-				"label": "Guest",
-				"value": 3
-			},
-			{
-				"label": "Worker",
-				"value": 4
-			}
-		]
+		"$import": "#usercode_base"
 	},
 	"usercode_4": {
 		"label": "User Code 4 Type",
-		"valueSize": 1,
-		"minValue": 1,
-		"maxValue": 4,
-		"defaultValue": 1,
-		"unsigned": true,
-		"readOnly": false,
-		"writeOnly": false,
-		"allowManualEntry": false,
-		"options": [
-			{
-				"label": "Owner",
-				"value": 1
-			},
-			{
-				"label": "Guest",
-				"value": 3
-			},
-			{
-				"label": "Worker",
-				"value": 4
-			}
-		]
+		"$import": "#usercode_base"
 	},
 	"usercode_5": {
 		"label": "User Code 5 Type",
-		"valueSize": 1,
-		"minValue": 1,
-		"maxValue": 4,
-		"defaultValue": 1,
-		"unsigned": true,
-		"readOnly": false,
-		"writeOnly": false,
-		"allowManualEntry": false,
-		"options": [
-			{
-				"label": "Owner",
-				"value": 1
-			},
-			{
-				"label": "Guest",
-				"value": 3
-			},
-			{
-				"label": "Worker",
-				"value": 4
-			}
-		]
+		"$import": "#usercode_base"
 	},
 	"usercode_6": {
 		"label": "User Code 6 Type",
-		"description": "Guests and Workers will require schedules attached to them in order for those types to be assigned",
-		"valueSize": 1,
-		"minValue": 1,
-		"maxValue": 4,
-		"defaultValue": 1,
-		"unsigned": true,
-		"readOnly": false,
-		"writeOnly": false,
-		"allowManualEntry": false,
-		"options": [
-			{
-				"label": "Owner",
-				"value": 1
-			},
-			{
-				"label": "Guest",
-				"value": 3
-			},
-			{
-				"label": "Worker",
-				"value": 4
-			}
-		]
+		"$import": "#usercode_base"
 	},
 	"usercode_7": {
 		"label": "User Code 7 Type",
-		"valueSize": 1,
-		"minValue": 1,
-		"maxValue": 4,
-		"defaultValue": 1,
-		"unsigned": true,
-		"readOnly": false,
-		"writeOnly": false,
-		"allowManualEntry": false,
-		"options": [
-			{
-				"label": "Owner",
-				"value": 1
-			},
-			{
-				"label": "Guest",
-				"value": 3
-			},
-			{
-				"label": "Worker",
-				"value": 4
-			}
-		]
+		"$import": "#usercode_base"
 	},
 	"usercode_8": {
 		"label": "User Code 8 Type",
-		"valueSize": 1,
-		"minValue": 1,
-		"maxValue": 4,
-		"defaultValue": 1,
-		"unsigned": true,
-		"readOnly": false,
-		"writeOnly": false,
-		"allowManualEntry": false,
-		"options": [
-			{
-				"label": "Owner",
-				"value": 1
-			},
-			{
-				"label": "Guest",
-				"value": 3
-			},
-			{
-				"label": "Worker",
-				"value": 4
-			}
-		]
+		"$import": "#usercode_base"
 	},
 	"usercode_9": {
 		"label": "User Code 9 Type",
-		"valueSize": 1,
-		"minValue": 1,
-		"maxValue": 4,
-		"defaultValue": 1,
-		"unsigned": true,
-		"readOnly": false,
-		"writeOnly": false,
-		"allowManualEntry": false,
-		"options": [
-			{
-				"label": "Owner",
-				"value": 1
-			},
-			{
-				"label": "Guest",
-				"value": 3
-			},
-			{
-				"label": "Worker",
-				"value": 4
-			}
-		]
+		"$import": "#usercode_base"
 	},
 	"usercode_10": {
 		"label": "User Code 10 Type",
-		"valueSize": 1,
-		"minValue": 1,
-		"maxValue": 4,
-		"defaultValue": 1,
-		"unsigned": true,
-		"readOnly": false,
-		"writeOnly": false,
-		"allowManualEntry": false,
-		"options": [
-			{
-				"label": "Owner",
-				"value": 1
-			},
-			{
-				"label": "Guest",
-				"value": 3
-			},
-			{
-				"label": "Worker",
-				"value": 4
-			}
-		]
+		"$import": "#usercode_base"
 	},
 	"usercode_11": {
 		"label": "User Code 11 Type",
-		"valueSize": 1,
-		"minValue": 1,
-		"maxValue": 4,
-		"defaultValue": 1,
-		"unsigned": true,
-		"readOnly": false,
-		"writeOnly": false,
-		"allowManualEntry": false,
-		"options": [
-			{
-				"label": "Owner",
-				"value": 1
-			},
-			{
-				"label": "Guest",
-				"value": 3
-			},
-			{
-				"label": "Worker",
-				"value": 4
-			}
-		]
+		"$import": "#usercode_base"
 	},
 	"usercode_12": {
 		"label": "User Code 12 Type",
-		"valueSize": 1,
-		"minValue": 1,
-		"maxValue": 4,
-		"defaultValue": 1,
-		"unsigned": true,
-		"readOnly": false,
-		"writeOnly": false,
-		"allowManualEntry": false,
-		"options": [
-			{
-				"label": "Owner",
-				"value": 1
-			},
-			{
-				"label": "Guest",
-				"value": 3
-			},
-			{
-				"label": "Worker",
-				"value": 4
-			}
-		]
+		"$import": "#usercode_base"
 	},
 	"usercode_13": {
 		"label": "User Code 13 Type",
-		"valueSize": 1,
-		"minValue": 1,
-		"maxValue": 4,
-		"defaultValue": 1,
-		"unsigned": true,
-		"readOnly": false,
-		"writeOnly": false,
-		"allowManualEntry": false,
-		"options": [
-			{
-				"label": "Owner",
-				"value": 1
-			},
-			{
-				"label": "Guest",
-				"value": 3
-			},
-			{
-				"label": "Worker",
-				"value": 4
-			}
-		]
+		"$import": "#usercode_base"
 	},
 	"usercode_14": {
 		"label": "User Code 14 Type",
-		"valueSize": 1,
-		"minValue": 1,
-		"maxValue": 4,
-		"defaultValue": 1,
-		"unsigned": true,
-		"readOnly": false,
-		"writeOnly": false,
-		"allowManualEntry": false,
-		"options": [
-			{
-				"label": "Owner",
-				"value": 1
-			},
-			{
-				"label": "Guest",
-				"value": 3
-			},
-			{
-				"label": "Worker",
-				"value": 4
-			}
-		]
+		"$import": "#usercode_base"
 	},
 	"usercode_15": {
 		"label": "User Code 15 Type",
-		"valueSize": 1,
-		"minValue": 1,
-		"maxValue": 4,
-		"defaultValue": 1,
-		"unsigned": true,
-		"readOnly": false,
-		"writeOnly": false,
-		"allowManualEntry": false,
-		"options": [
-			{
-				"label": "Owner",
-				"value": 1
-			},
-			{
-				"label": "Guest",
-				"value": 3
-			},
-			{
-				"label": "Worker",
-				"value": 4
-			}
-		]
+		"$import": "#usercode_base"
 	},
 	"usercode_16": {
 		"label": "User Code 16 Type",
-		"valueSize": 1,
-		"minValue": 1,
-		"maxValue": 4,
-		"defaultValue": 1,
-		"unsigned": true,
-		"readOnly": false,
-		"writeOnly": false,
-		"allowManualEntry": false,
-		"options": [
-			{
-				"label": "Owner",
-				"value": 1
-			},
-			{
-				"label": "Guest",
-				"value": 3
-			},
-			{
-				"label": "Worker",
-				"value": 4
-			}
-		]
+		"$import": "#usercode_base"
 	},
 	"usercode_17": {
 		"label": "User Code 17 Type",
-		"valueSize": 1,
-		"minValue": 1,
-		"maxValue": 4,
-		"defaultValue": 1,
-		"unsigned": true,
-		"readOnly": false,
-		"writeOnly": false,
-		"allowManualEntry": false,
-		"options": [
-			{
-				"label": "Owner",
-				"value": 1
-			},
-			{
-				"label": "Guest",
-				"value": 3
-			},
-			{
-				"label": "Worker",
-				"value": 4
-			}
-		]
+		"$import": "#usercode_base"
 	},
 	"usercode_18": {
 		"label": "User Code 18 Type",
-		"valueSize": 1,
-		"minValue": 1,
-		"maxValue": 4,
-		"defaultValue": 1,
-		"unsigned": true,
-		"readOnly": false,
-		"writeOnly": false,
-		"allowManualEntry": false,
-		"options": [
-			{
-				"label": "Owner",
-				"value": 1
-			},
-			{
-				"label": "Guest",
-				"value": 3
-			},
-			{
-				"label": "Worker",
-				"value": 4
-			}
-		]
+		"$import": "#usercode_base"
 	},
 	"usercode_19": {
 		"label": "User Code 19 Type",
-		"valueSize": 1,
-		"minValue": 1,
-		"maxValue": 4,
-		"defaultValue": 1,
-		"unsigned": true,
-		"readOnly": false,
-		"writeOnly": false,
-		"allowManualEntry": false,
-		"options": [
-			{
-				"label": "Owner",
-				"value": 1
-			},
-			{
-				"label": "Guest",
-				"value": 3
-			},
-			{
-				"label": "Worker",
-				"value": 4
-			}
-		]
+		"$import": "#usercode_base"
 	},
 	"usercode_20": {
 		"label": "User Code 20 Type",
-		"valueSize": 1,
-		"minValue": 1,
-		"maxValue": 4,
-		"defaultValue": 1,
-		"unsigned": true,
-		"readOnly": false,
-		"writeOnly": false,
-		"allowManualEntry": false,
-		"options": [
-			{
-				"label": "Owner",
-				"value": 1
-			},
-			{
-				"label": "Guest",
-				"value": 3
-			},
-			{
-				"label": "Worker",
-				"value": 4
-			}
-		]
+		"$import": "#usercode_base"
 	},
 	"usercode_21": {
 		"label": "User Code 21 Type",
-		"valueSize": 1,
-		"minValue": 1,
-		"maxValue": 4,
-		"defaultValue": 1,
-		"unsigned": true,
-		"readOnly": false,
-		"writeOnly": false,
-		"allowManualEntry": false,
-		"options": [
-			{
-				"label": "Owner",
-				"value": 1
-			},
-			{
-				"label": "Guest",
-				"value": 3
-			},
-			{
-				"label": "Worker",
-				"value": 4
-			}
-		]
+		"$import": "#usercode_base"
 	},
 	"usercode_22": {
-		"label": "User Code 22 Type",
-		"valueSize": 1,
-		"minValue": 1,
-		"maxValue": 4,
-		"defaultValue": 1,
-		"unsigned": true,
-		"readOnly": false,
-		"writeOnly": false,
-		"allowManualEntry": false,
-		"options": [
-			{
-				"label": "Owner",
-				"value": 1
-			},
-			{
-				"label": "Guest",
-				"value": 3
-			},
-			{
-				"label": "Worker",
-				"value": 4
-			}
-		]
+		"$import": "#usercode_base"
 	},
 	"usercode_23": {
 		"label": "User Code 23 Type",
-		"valueSize": 1,
-		"minValue": 1,
-		"maxValue": 4,
-		"defaultValue": 1,
-		"unsigned": true,
-		"readOnly": false,
-		"writeOnly": false,
-		"allowManualEntry": false,
-		"options": [
-			{
-				"label": "Owner",
-				"value": 1
-			},
-			{
-				"label": "Guest",
-				"value": 3
-			},
-			{
-				"label": "Worker",
-				"value": 4
-			}
-		]
+		"$import": "#usercode_base"
 	},
 	"usercode_24": {
 		"label": "User Code 24 Type",
-		"valueSize": 1,
-		"minValue": 1,
-		"maxValue": 4,
-		"defaultValue": 1,
-		"unsigned": true,
-		"readOnly": false,
-		"writeOnly": false,
-		"allowManualEntry": false,
-		"options": [
-			{
-				"label": "Owner",
-				"value": 1
-			},
-			{
-				"label": "Guest",
-				"value": 3
-			},
-			{
-				"label": "Worker",
-				"value": 4
-			}
-		]
+		"$import": "#usercode_base"
 	},
 	"usercode_25": {
 		"label": "User Code 25 Type",
-		"valueSize": 1,
-		"minValue": 1,
-		"maxValue": 4,
-		"defaultValue": 1,
-		"unsigned": true,
-		"readOnly": false,
-		"writeOnly": false,
-		"allowManualEntry": false,
-		"options": [
-			{
-				"label": "Owner",
-				"value": 1
-			},
-			{
-				"label": "Guest",
-				"value": 3
-			},
-			{
-				"label": "Worker",
-				"value": 4
-			}
-		]
+		"$import": "#usercode_base"
 	},
 	"usercode_26": {
 		"label": "User Code 26 Type",
-		"valueSize": 1,
-		"minValue": 1,
-		"maxValue": 4,
-		"defaultValue": 1,
-		"unsigned": true,
-		"readOnly": false,
-		"writeOnly": false,
-		"allowManualEntry": false,
-		"options": [
-			{
-				"label": "Owner",
-				"value": 1
-			},
-			{
-				"label": "Guest",
-				"value": 3
-			},
-			{
-				"label": "Worker",
-				"value": 4
-			}
-		]
+		"$import": "#usercode_base"
 	},
 	"usercode_27": {
 		"label": "User Code 27 Type",
-		"valueSize": 1,
-		"minValue": 1,
-		"maxValue": 4,
-		"defaultValue": 1,
-		"unsigned": true,
-		"readOnly": false,
-		"writeOnly": false,
-		"allowManualEntry": false,
-		"options": [
-			{
-				"label": "Owner",
-				"value": 1
-			},
-			{
-				"label": "Guest",
-				"value": 3
-			},
-			{
-				"label": "Worker",
-				"value": 4
-			}
-		]
+		"$import": "#usercode_base"
 	},
 	"usercode_28": {
 		"label": "User Code 28 Type",
-		"valueSize": 1,
-		"minValue": 1,
-		"maxValue": 4,
-		"defaultValue": 1,
-		"unsigned": true,
-		"readOnly": false,
-		"writeOnly": false,
-		"allowManualEntry": false,
-		"options": [
-			{
-				"label": "Owner",
-				"value": 1
-			},
-			{
-				"label": "Guest",
-				"value": 3
-			},
-			{
-				"label": "Worker",
-				"value": 4
-			}
-		]
+		"$import": "#usercode_base"
 	},
 	"usercode_29": {
 		"label": "User Code 29 Type",
-		"valueSize": 1,
-		"minValue": 1,
-		"maxValue": 4,
-		"defaultValue": 1,
-		"unsigned": true,
-		"readOnly": false,
-		"writeOnly": false,
-		"allowManualEntry": false,
-		"options": [
-			{
-				"label": "Owner",
-				"value": 1
-			},
-			{
-				"label": "Guest",
-				"value": 3
-			},
-			{
-				"label": "Worker",
-				"value": 4
-			}
-		]
+		"$import": "#usercode_base"
 	},
 	"usercode_30": {
 		"label": "User Code 30 Type",
-		"valueSize": 1,
-		"minValue": 1,
-		"maxValue": 4,
-		"defaultValue": 1,
-		"unsigned": true,
-		"readOnly": false,
-		"writeOnly": false,
-		"allowManualEntry": false,
-		"options": [
-			{
-				"label": "Owner",
-				"value": 1
-			},
-			{
-				"label": "Guest",
-				"value": 3
-			},
-			{
-				"label": "Worker",
-				"value": 4
-			}
-		]
+		"$import": "#usercode_base"
 	},
 	"dipswitch_led": {
 		"label": "Dipswitch setting: Lock Status LED",
