@@ -230,6 +230,14 @@ export class SceneActuatorConfigurationCCAPI extends CCAPI {
 			SceneActuatorConfigurationCommand.Get,
 		);
 
+		if (sceneId === 0) {
+			// We need to prevent this, since it will cause the Report sceneId
+			// to be different from the requested sceneId, and the client won't
+			// be able to determine the actual sceneId, because it's hidden in
+			// the return value
+			return;
+		}
+
 		const cc = new SceneActuatorConfigurationCCGet(this.driver, {
 			nodeId: this.endpoint.nodeId,
 			endpoint: this.endpoint.index,
@@ -240,13 +248,12 @@ export class SceneActuatorConfigurationCCAPI extends CCAPI {
 			this.commandOptions,
 		);
 
-		// A response to a
-		if (
-			response &&
-			response.level != undefined &&
-			response.dimmingDuration != undefined
-		) {
+		if (!response) return;
+		if (response.sceneId === sceneId) {
 			return pick(response, ["level", "dimmingDuration"]);
+		} else {
+			// I don't think this can happen, if we block sceneId = 0
+			return;
 		}
 	}
 }
