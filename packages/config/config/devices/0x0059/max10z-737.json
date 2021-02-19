@@ -19,11 +19,10 @@
 	"paramInformation": {
 		"1": {
 			"label": "Setpoint Upper Limit (endpoint 1)",
-			"description": "In degree centigrade",
 			"valueSize": 1,
 			"unit": "°C",
-			"minValue": 0,
-			"maxValue": 35,
+			"minValue": 35,
+			"maxValue": 90,
 			"defaultValue": 35,
 			"unsigned": true,
 			"readOnly": false,
@@ -32,11 +31,10 @@
 		},
 		"2": {
 			"label": "Setpoint Lower Limit (endpoint 1)",
-			"description": "In degree centigrade",
 			"valueSize": 1,
 			"unit": "°C",
-			"minValue": 0,
-			"maxValue": 5,
+			"minValue": 5,
+			"maxValue": 40,
 			"defaultValue": 5,
 			"unsigned": true,
 			"readOnly": false,
@@ -45,11 +43,10 @@
 		},
 		"3": {
 			"label": "Button Override Duration",
-			"description": "In minutes",
 			"valueSize": 1,
 			"unit": "minutes",
-			"minValue": 0,
-			"maxValue": 60,
+			"minValue": 10,
+			"maxValue": 120,
 			"defaultValue": 60,
 			"unsigned": true,
 			"readOnly": false,
@@ -58,15 +55,24 @@
 		},
 		"4": {
 			"label": "Relay State On Power (switch Endpoint Only)",
-			"description": "Boolean",
 			"valueSize": 1,
 			"minValue": 0,
-			"maxValue": 0,
+			"maxValue": 1,
 			"defaultValue": 0,
 			"unsigned": true,
 			"readOnly": false,
 			"writeOnly": false,
-			"allowManualEntry": true
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Relay Off",
+					"value": 0
+				},
+				{
+					"label": "Relay On",
+					"value": 1
+				}
+			]
 		},
 		"5": {
 			"label": "Dynamic Endpoint 2 Device Type",
@@ -78,15 +84,24 @@
 			"unsigned": true,
 			"readOnly": false,
 			"writeOnly": false,
-			"allowManualEntry": true
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Thermostat",
+					"value": 0
+				},
+				{
+					"label": "Binary Switch",
+					"value": 1
+				}
+			]
 		},
 		"6": {
 			"label": "Time Sync",
-			"description": "In 2 minutes steps",
 			"valueSize": 1,
-			"unit": "minutes",
-			"minValue": 0,
-			"maxValue": 65,
+			"unit": "2 minutes",
+			"minValue": 60,
+			"maxValue": 120,
 			"defaultValue": 65,
 			"unsigned": true,
 			"readOnly": false,
@@ -95,16 +110,32 @@
 		},
 		"7": {
 			"label": "Heating Tpi Cycle",
-			"description": "Value 1 = 3 cycles per hour, 2 = 6 cycles per hour, 3 = 9 cycles per hour and 4 = 12 cycles per hour",
 			"valueSize": 1,
-			"unit": "hours",
-			"minValue": 0,
-			"maxValue": 2,
+			"minValue": 1,
+			"maxValue": 4,
 			"defaultValue": 2,
 			"unsigned": true,
 			"readOnly": false,
 			"writeOnly": false,
-			"allowManualEntry": true
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "3 Cycles per hour",
+					"value": 1
+				},
+				{
+					"label": "6 Cycles per hour",
+					"value": 2
+				},
+				{
+					"label": "9 Cycles per hour",
+					"value": 3
+				},
+				{
+					"label": "12 Cycles per hour",
+					"value": 4
+				}
+			]
 		}
 	},
 	"metadata": {
