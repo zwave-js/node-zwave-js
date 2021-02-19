@@ -22,7 +22,7 @@ assignees:
   * enable "log to file"
 
   For HomeAssistant, this is how you do it:
-  Home Assistant --> settings --> Integrations --> Z-Wave JS --> Configure --> Create dump --> zip the json file and post it here.
+  Home Assistant -> settings -> Integrations -> Z-Wave JS -> Configure -> Create dump -> zip the json file and post it here.
 -->
 
 
