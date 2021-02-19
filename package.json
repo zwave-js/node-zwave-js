@@ -124,7 +124,7 @@
     "postversion": "git push && git push --tags",
     "config": "ts-node maintenance/importConfig.ts",
     "docs": "docsify serve docs",
-    "docs:generate": "ts-node -P maintenance/tsconfig.json maintenance/generateTypedDocs.ts",
+    "docs:generate": "ts-node -P packages/maintenance/tsconfig.json packages/maintenance/src/generateTypedDocs.ts",
     "test:perf": "ts-node test/valuedb-perf.ts",
     "test:firmware": "ts-node test/firmware-extraction.ts"
   },
