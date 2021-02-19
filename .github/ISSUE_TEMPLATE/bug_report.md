@@ -1,6 +1,6 @@
 ---
 name: Bug report
-about: Create a report to help us improve
+about: Use this template if something is not working correctly or to report errors in existing device config files.
 title: ''
 labels: bug
 assignees: 
@@ -20,6 +20,9 @@ assignees:
   * Go to Settings, Z-Wave section
   * select log level DEBUG
   * enable "log to file"
+
+  For HomeAssistant, this is how you do it:
+  Home Assistant --> settings --> Integrations --> Z-Wave JS --> Configure --> Create dump --> zip the json file and post it here.
 -->
 
 
