@@ -1,47 +1,45 @@
 // Heatit Z-Smoke 230V
 // Wired Smoke Detector
 {
-        "manufacturer": "Heatit",
-        "manufacturerId": "0x019b",
-        "label": "Z-Smoke 230V",
-        "description": "Wired Smoke Detector",
-        "devices": [
-                {
-                        "productType": "0x0003",
-                        "productId": "0x3601",
-                        "zwaveAllianceId": 3933
-                },
-                {
-                        "productType": "0x0003",
-                        "productId": "0x000d",
-                }
-        ],
-        "firmwareVersion": {
-                "min": "0.0",
-                "max": "255.255",
-        },
-        "metadata": {
-            "inclusion": "Please refer to your primary controller manual on how to enter add/remove mode. The device may only be added or removed from the network if the primary controller is in add/remove mode, and may now be added to the system via the primary controller",
-                "exclusion": "Please refer to your primary controller manual on how to enter add/remove mode. The device may only be added or removed from the network if the primary controller is in add/remove mode, and may now be added to the system via the primary controller",
-                "reset": "After the calibration process is finished, you may access the add/remove mode by pressing the function button three times within 1.5 seconds. Removing the device will reset it to factory defaults",
-                "manual": "https://media.heatit.com/709",
-        },
+	"manufacturer": "Heatit",
+	"manufacturerId": "0x019b",
+	"label": "Z-Smoke 230V",
+	"description": "Wired Smoke Detector",
+	"devices": [
+		{
+			"productType": "0x0003",
+			"productId": "0x3601",
+			"zwaveAllianceId": 3933
+		},
+		{
+			"productType": "0x0003",
+			"productId": "0x000d"
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"metadata": {
+		"inclusion": "Please refer to your primary controller manual on how to enter add/remove mode. The device may only be added or removed from the network if the primary controller is in add/remove mode, and may now be added to the system via the primary controller",
+		"exclusion": "Please refer to your primary controller manual on how to enter add/remove mode. The device may only be added or removed from the network if the primary controller is in add/remove mode, and may now be added to the system via the primary controller",
+		"reset": "After the calibration process is finished, you may access the add/remove mode by pressing the function button three times within 1.5 seconds. Removing the device will reset it to factory defaults",
+		"manual": "https://media.heatit.com/709"
+	},
 
-        "associations": {
-
-    "1": {
-        "label": "Lifeline",
-                "description": "Lifeline. (Normally used by the Z-WaveController) Sends Battery Report, Notification Report, Sensor Multilevel Report, Device Reset Locally Notification",
-        "maxNodes": 1,
-                "isLifeline": true,
-    },
-    "2": {
-        "label": "Sensor Basic Set",
-        "description": "Basic set. When the smoke detector is active, it will send basic set (0xFF).When the smoke detector is deactived, it will send basic set (0x00)",
-        "maxNodes": 5,
-        "isLifeline": true,
-        "noEndpoint": true,
-    },
+	"associations": {
+		"1": {
+			"label": "Lifeline",
+			"description": "Lifeline. (Normally used by the Z-WaveController) Sends Battery Report, Notification Report, Sensor Multilevel Report, Device Reset Locally Notification",
+			"maxNodes": 1,
+			"isLifeline": true
+		},
+		"2": {
+			"label": "Sensor Basic Set",
+			"description": "Basic set. When the smoke detector is active, it will send basic set (0xFF).When the smoke detector is deactived, it will send basic set (0x00)",
+			"maxNodes": 5,
+			"isLifeline": true,
+			"noEndpoint": true
+		}
+	}
 }
-}
-
