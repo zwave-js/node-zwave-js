@@ -1,5 +1,7 @@
 import { ZWaveError, ZWaveErrorCodes } from "@zwave-js/core";
 import {
+	enumFilesRecursive,
+	formatId,
 	JSONObject,
 	ObjectKeyMap,
 	pick,
@@ -16,13 +18,7 @@ import { CompatConfig } from "./CompatConfig";
 import { readJsonWithTemplate } from "./JsonTemplate";
 import type { ConfigLogger } from "./Logger";
 import { evaluate } from "./Logic";
-import {
-	configDir,
-	enumFilesRecursive,
-	formatId,
-	hexKeyRegex4Digits,
-	throwInvalidConfig,
-} from "./utils";
+import { configDir, hexKeyRegex4Digits, throwInvalidConfig } from "./utils";
 
 export interface FirmwareVersionRange {
 	min: string;

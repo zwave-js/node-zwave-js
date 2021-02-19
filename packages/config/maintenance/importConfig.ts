@@ -8,14 +8,13 @@ process.on("unhandledRejection", (r) => {
 	throw r;
 });
 
-import {
-	ConfigManager,
-	DeviceConfigIndexEntry,
-	formatId,
-	padVersion,
-} from "@zwave-js/config";
 import { CommandClasses, getIntegerLimits } from "@zwave-js/core";
-import { enumFilesRecursive, num2hex, stringify } from "@zwave-js/shared";
+import {
+	enumFilesRecursive,
+	formatId,
+	num2hex,
+	stringify,
+} from "@zwave-js/shared";
 import { composeObject } from "alcalzone-shared/objects";
 import { isArray, isObject } from "alcalzone-shared/typeguards";
 import { AssertionError, ok } from "assert";
@@ -28,6 +27,8 @@ import { compare } from "semver";
 import { promisify } from "util";
 import xml2json from "xml2json";
 import yargs from "yargs";
+import { ConfigManager, DeviceConfigIndexEntry } from "../src";
+import { padVersion } from "../src/utils";
 
 const execPromise = promisify(child.exec);
 

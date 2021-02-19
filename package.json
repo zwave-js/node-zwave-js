@@ -122,7 +122,7 @@
     "preversion": "release-script --lerna-check",
     "version": "yarn install && release-script --lerna",
     "postversion": "git push && git push --tags",
-    "config": "ts-node maintenance/importConfig.ts",
+    "config": "ts-node packages/config/maintenance/importConfig.ts",
     "docs": "docsify serve docs",
     "docs:generate": "ts-node -P packages/maintenance/tsconfig.json packages/maintenance/src/generateTypedDocs.ts",
     "test:perf": "ts-node test/valuedb-perf.ts",

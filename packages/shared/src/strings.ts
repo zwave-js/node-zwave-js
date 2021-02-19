@@ -1,3 +1,5 @@
+import { padStart } from "alcalzone-shared/strings";
+
 /** Translates a null-terminated (C++) string to JS */
 export function cpp2js(str: string): string {
 	const nullIndex = str.indexOf("\0");
@@ -14,6 +16,11 @@ export function num2hex(
 	if (uppercase) ret = ret.toUpperCase();
 	if (ret.length % 2 !== 0) ret = "0" + ret;
 	return "0x" + ret;
+}
+
+export function formatId(id: number | string): string {
+	id = typeof id === "number" ? id.toString(16) : id;
+	return "0x" + padStart(id, 4, "0").toLowerCase();
 }
 
 export function stringify(arg: unknown, space: 4 | "\t" = 4): string {
