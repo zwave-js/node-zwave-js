@@ -36,7 +36,7 @@
 			"label": "Lifeline",
 			"maxNodes": 5,
 			"isLifeline": true,
-			"noEndpoint": true,
+			"noEndpoint": true
 		},
 		"2": {
 			"label": "Forward Received Commands",
