@@ -32,6 +32,3 @@ zwave-js-*.tgz
 
 .secrets
 .test-payloads
-yarn.lock
-package-lock.json
-.gitignore
