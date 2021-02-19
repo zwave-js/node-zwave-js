@@ -1,6 +1,7 @@
 # API Overview {docsify-ignore-all}
 
-This page provides a short overview over the API and its concepts.
+`zwave-js` offers different high to low level APIs which give you different options depending on your use case:
+![API](../_images/api-overview.png)
 
 ## Module entry points
 
@@ -19,6 +20,8 @@ Everything exported here is also exported from the root entry point.
 
 The driver is the core of this library. It controls the serial interface, handles transmission and receipt of messages and manages the network cache. Any action you want to perform on the Z-Wave network must go through a driver instance or its associated nodes.
 
+You can use the driver to directly send serial messages or command class instances.
+
 ## [Controller](api/controller.md)
 
 The controller instance contains information about the controller and a list of its nodes.
@@ -27,10 +30,7 @@ The controller instance contains information about the controller and a list of 
 
 Each device is represented by an instance of the ZWaveNode class. Multi channel devices have multiple Endpoints, which provide access to the device's functionality.
 
-## <!-- TODO: --> CommandClass
-
-Communication with nodes is standardized using Command Classes. Most of the functionality of this library is spread over the several command classes.
-The base for this is the `CommandClass` class.
+Node instances offer an entry point to both the [Command Classes API](api/CCs/index.md) and the [Value API](api/node.md#zwavenode-methods).
 
 ## [ValueID](api/valueid.md)
 
