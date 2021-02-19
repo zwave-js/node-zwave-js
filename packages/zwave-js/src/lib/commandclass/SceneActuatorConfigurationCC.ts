@@ -232,7 +232,7 @@ export class SceneActuatorConfigurationCCAPI extends CCAPI {
 
 		if (sceneId === 0) {
 			throw new ZWaveError(
-				`sceneId 0 is not valid for get. Use getActive() instead.`,
+				`Invalid scene ID 0. To get the currently active scene, use getActive() instead.`,
 				ZWaveErrorCodes.Argument_Invalid,
 			);
 		}
