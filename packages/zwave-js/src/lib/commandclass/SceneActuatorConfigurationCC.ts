@@ -231,11 +231,10 @@ export class SceneActuatorConfigurationCCAPI extends CCAPI {
 		);
 
 		if (sceneId === 0) {
-			// We need to prevent this, since it will cause the Report sceneId
-			// to be different from the requested sceneId, and the client won't
-			// be able to determine the actual sceneId, because it's hidden in
-			// the return value
-			return;
+			throw new ZWaveError(
+				`sceneId 0 is not valid for get. Use getActive() instead.`,
+				ZWaveErrorCodes.Argument_Invalid,
+			);
 		}
 
 		const cc = new SceneActuatorConfigurationCCGet(this.driver, {
@@ -248,12 +247,8 @@ export class SceneActuatorConfigurationCCAPI extends CCAPI {
 			this.commandOptions,
 		);
 
-		if (!response) return;
-		if (response.sceneId === sceneId) {
+		if (response) {
 			return pick(response, ["level", "dimmingDuration"]);
-		} else {
-			// I don't think this can happen, if we block sceneId = 0
-			return;
 		}
 	}
 }
@@ -332,9 +327,9 @@ export class SceneActuatorConfigurationCCReport extends SceneActuatorConfigurati
 			this.dimmingDuration =
 				Duration.parseReport(this.payload[2]) ??
 				new Duration(0, "unknown");
-
-			this.persistValues();
 		}
+
+		this.persistValues();
 	}
 
 	public readonly sceneId: number;
