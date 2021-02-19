@@ -1,5 +1,45 @@
 import { CommandClasses } from "@zwave-js/core";
+import * as path from "path";
 import ts from "typescript";
+
+// Find this project's root dir
+export const projectRoot = process.cwd();
+
+/** Used for ts-morph */
+export const tsConfigFilePath = path.join(projectRoot, "tsconfig.json");
+
+export function loadTSConfig(
+	packageName: string = "",
+	build: boolean = true,
+): {
+	options: ts.CompilerOptions;
+	fileNames: string[];
+} {
+	const configFileName = ts.findConfigFile(
+		packageName
+			? path.join(projectRoot, `packages/${packageName}`)
+			: projectRoot,
+		// eslint-disable-next-line @typescript-eslint/unbound-method
+		ts.sys.fileExists,
+		build ? "tsconfig.build.json" : "tsconfig.json",
+	);
+	if (!configFileName) throw new Error("tsconfig.json not found");
+
+	const configFileText = ts.sys.readFile(configFileName);
+	if (!configFileText) throw new Error("could not read tsconfig.json");
+
+	const parsedCommandLine = ts.getParsedCommandLineOfConfigFile(
+		configFileName,
+		{},
+		ts.sys as any,
+	);
+	if (!parsedCommandLine) throw new Error("could not parse tsconfig.json");
+
+	return {
+		options: parsedCommandLine.options,
+		fileNames: parsedCommandLine.fileNames,
+	};
+}
 
 export function expressionToCommandClass(
 	sourceFile: ts.SourceFile,

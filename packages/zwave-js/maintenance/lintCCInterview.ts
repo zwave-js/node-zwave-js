@@ -5,14 +5,15 @@
  */
 
 import { applicationCCs, CommandClasses, getCCName } from "@zwave-js/core";
-import * as path from "path";
-import ts from "typescript";
-import { reportProblem } from "../../../maintenance/tools";
 import {
 	expressionToCommandClass,
 	getCommandClassFromDecorator,
-} from "../../../maintenance/tsAPITools";
-import { loadTSConfig, projectRoot } from "./tsTools";
+	loadTSConfig,
+	projectRoot,
+	reportProblem,
+} from "@zwave-js/maintenance";
+import * as path from "path";
+import ts from "typescript";
 
 /* wotan-disable no-useless-predicate */
 
@@ -40,7 +41,7 @@ export function lintCCInterview(): Promise<void> {
 	// Create a Program to represent the project, then pull out the
 	// source file to parse its AST.
 
-	const tsConfig = loadTSConfig();
+	const tsConfig = loadTSConfig("zwave-js");
 	const program = ts.createProgram(tsConfig.fileNames, tsConfig.options);
 
 	let hasError = false;

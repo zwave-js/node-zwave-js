@@ -71,10 +71,10 @@ jobs:
         # ===============================
 
         # Create a clean build
-        npx lerna run build --scope=@zwave-js/config
+        npx lerna run build
 
         # Lint config files
-        npx lerna run lint:config
+        yarn run lint:config
 
         # ===============================
         # Bump the version and publish

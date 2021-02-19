@@ -4,11 +4,11 @@
  * require("zwave-js/commandclasses") etc.
  */
 
+import { projectRoot } from "@zwave-js/maintenance";
 import * as fs from "fs-extra";
 import * as path from "path";
 
 // Find this project's root dir
-const projectRoot = process.cwd();
 const packageJsonPath = path.join(projectRoot, "package.json");
 const gitIgnorePath = path.join(projectRoot, ".gitignore");
 // Define where the CC index file is located

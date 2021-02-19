@@ -8,6 +8,13 @@ process.on("unhandledRejection", (r) => {
 	throw r;
 });
 
+import { CommandClasses, getIntegerLimits } from "@zwave-js/core";
+import {
+	enumFilesRecursive,
+	formatId,
+	num2hex,
+	stringify,
+} from "@zwave-js/shared";
 import { composeObject } from "alcalzone-shared/objects";
 import { isArray, isObject } from "alcalzone-shared/typeguards";
 import { AssertionError, ok } from "assert";
@@ -20,12 +27,8 @@ import { compare } from "semver";
 import { promisify } from "util";
 import xml2json from "xml2json";
 import yargs from "yargs";
-import { ConfigManager, DeviceConfigIndexEntry } from "../packages/config/src";
-import { formatId, padVersion } from "../packages/config/src/utils";
-import { CommandClasses, getIntegerLimits } from "../packages/core/src";
-import { num2hex } from "../packages/shared/src";
-import { stringify } from "../packages/shared/src/strings";
-import { enumFilesRecursive } from "./tools";
+import { ConfigManager, DeviceConfigIndexEntry } from "../src";
+import { padVersion } from "../src/utils";
 
 const execPromise = promisify(child.exec);
 

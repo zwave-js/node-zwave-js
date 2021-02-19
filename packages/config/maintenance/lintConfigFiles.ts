@@ -1,11 +1,11 @@
 import { getIntegerLimits, getMinimumShiftForBitMask } from "@zwave-js/core";
+import { reportProblem } from "@zwave-js/maintenance";
 import { num2hex } from "@zwave-js/shared";
 import { distinct } from "alcalzone-shared/arrays";
 import { wait } from "alcalzone-shared/async";
 import { green, red, white } from "ansi-colors";
 import levenshtein from "js-levenshtein";
 import * as path from "path";
-import { reportProblem } from "../../../maintenance/tools";
 import { ConfigManager } from "../src/ConfigManager";
 import { DeviceConfig } from "../src/Devices";
 import { configDir, getDeviceEntryPredicate } from "../src/utils";

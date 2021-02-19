@@ -13,6 +13,7 @@ module.exports = {
 	moduleNameMapper: {
 		"^@zwave-js/config(.*)": "<rootDir>/packages/config/src$1",
 		"^@zwave-js/core(.*)": "<rootDir>/packages/core/src$1",
+		"^@zwave-js/maintenance(.*)": "<rootDir>/packages/maintenance/src$1",
 		"^@zwave-js/serial(.*)": "<rootDir>/packages/serial/src$1",
 		"^@zwave-js/shared(.*)": "<rootDir>/packages/shared/src$1",
 		"^@zwave-js/testing(.*)": "<rootDir>/packages/testing/src$1",

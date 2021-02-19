@@ -81,7 +81,9 @@
     "build": "tsc -b tsconfig.build.json",
     "clean": "tsc -b tsconfig.build.json --clean",
     "prewatch": "gulp prebuild",
-    "watch": "tsc -b tsconfig.build.json --watch --pretty",
-    "lint:zwave": "gulp lint"
+    "watch": "tsc -b tsconfig.build.json --watch --pretty"
+  },
+  "devDependencies": {
+    "@zwave-js/maintenance": "^6.4.0"
   }
 }

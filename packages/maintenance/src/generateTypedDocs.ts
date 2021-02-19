@@ -6,6 +6,7 @@
 // until fimbullinter/wotan#719 is fixed
 
 import { getCCName } from "@zwave-js/core";
+import { enumFilesRecursive } from "@zwave-js/shared";
 import { red } from "ansi-colors";
 import * as fs from "fs-extra";
 import * as path from "path";
@@ -23,12 +24,12 @@ import {
 	SyntaxKind,
 	TypeLiteralNode,
 } from "ts-morph";
+import { formatWithPrettier } from "./prettier";
 import {
-	formatWithPrettier,
+	getCommandClassFromClassDeclaration,
+	projectRoot,
 	tsConfigFilePath,
-} from "../packages/zwave-js/maintenance/tsTools";
-import { enumFilesRecursive } from "./tools";
-import { getCommandClassFromClassDeclaration } from "./tsAPITools";
+} from "./tsAPITools";
 
 export function findSourceNode(
 	program: Project,
@@ -257,7 +258,7 @@ ${source}
 /** Processes all imports, returns true if there was an error */
 async function processImports(program: Project): Promise<boolean> {
 	const files = await enumFilesRecursive(
-		path.join(__dirname, "../docs"),
+		path.join(projectRoot, "docs"),
 		(f) =>
 			!f.includes("/CCs/") && !f.includes("\\CCs\\") && f.endsWith(".md"),
 	);
@@ -293,7 +294,7 @@ function printOverload(method: MethodDeclaration): string {
 /** Generates CC documentation, returns true if there was an error */
 async function generateCCDocs(program: Project): Promise<boolean> {
 	// Delete old cruft
-	const docsDir = path.join(__dirname, "../docs");
+	const docsDir = path.join(projectRoot, "docs");
 	const ccDocsDir = path.join(docsDir, "api/CCs");
 
 	// Load the index file before it gets deleted

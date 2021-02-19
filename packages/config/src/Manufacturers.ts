@@ -1,16 +1,11 @@
 import { ZWaveError, ZWaveErrorCodes } from "@zwave-js/core";
-import { stringify } from "@zwave-js/shared";
+import { formatId, stringify } from "@zwave-js/shared";
 import { entries } from "alcalzone-shared/objects";
 import { isObject } from "alcalzone-shared/typeguards";
 import { pathExists, readFile, writeFile } from "fs-extra";
 import JSON5 from "json5";
 import path from "path";
-import {
-	configDir,
-	formatId,
-	hexKeyRegex4Digits,
-	throwInvalidConfig,
-} from "./utils";
+import { configDir, hexKeyRegex4Digits, throwInvalidConfig } from "./utils";
 
 const configPath = path.join(configDir, "manufacturers.json");
 export type ManufacturersMap = Map<number, string>;

@@ -1,6 +1,5 @@
 import { ZWaveError, ZWaveErrorCodes } from "@zwave-js/core";
-import { padStart } from "alcalzone-shared/strings";
-import * as fs from "fs-extra";
+import { formatId } from "@zwave-js/shared";
 import path from "path";
 import * as semver from "semver";
 import type { DeviceConfigIndexEntry } from "./Devices";
@@ -45,35 +44,7 @@ export function getDeviceEntryPredicate(
 	};
 }
 
-export function formatId(id: number | string): string {
-	id = typeof id === "number" ? id.toString(16) : id;
-	return "0x" + padStart(id, 4, "0").toLowerCase();
-}
-
 /** Pads a firmware version string, so it can be compared with semver */
 export function padVersion(version: string): string {
 	return version + ".0";
-}
-
-export async function enumFilesRecursive(
-	rootDir: string,
-	predicate?: (filename: string) => boolean,
-): Promise<string[]> {
-	const ret: string[] = [];
-	try {
-		const filesAndDirs = await fs.readdir(rootDir);
-		for (const f of filesAndDirs) {
-			const fullPath = path.join(rootDir, f);
-
-			if (fs.statSync(fullPath).isDirectory()) {
-				ret.push(...(await enumFilesRecursive(fullPath, predicate)));
-			} else if (predicate?.(fullPath)) {
-				ret.push(fullPath);
-			}
-		}
-	} catch (err) {
-		console.error(`Cannot read directory: "${rootDir}": ${err}`);
-	}
-
-	return ret;
 }

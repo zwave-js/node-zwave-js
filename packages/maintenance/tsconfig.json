@@ -1,0 +1,15 @@
+// tsconfig for IntelliSense - active in all files in the current package
+{
+	"extends": "../../tsconfig.json",
+	"compilerOptions": {
+		"lib": ["ES2020"],
+		"newLine": "lf"
+	},
+	"references": [
+		{
+			"path": "../core/tsconfig.build.json"
+		}
+	],
+	"include": ["src/**/*.ts"],
+	"exclude": ["build/**", "node_modules/**"]
+}
