@@ -150,7 +150,7 @@ export class ThermostatFanStateCCReport extends ThermostatFanStateCC {
 	private _state: ThermostatFanState;
 	@ccValue()
 	@ccValueMetadata({
-		...ValueMetadata.UInt8,
+		...ValueMetadata.ReadOnlyUInt8,
 		states: enumValuesToMetadataStates(ThermostatFanState),
 		label: "Thermostat fan state",
 	})
