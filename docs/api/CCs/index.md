@@ -42,6 +42,7 @@ The **Command Classes API** provides a high-to-mid level entrypoint which allows
 -   [Notification CC](api/CCs/Notification.md)
 -   [Protection CC](api/CCs/Protection.md)
 -   [Scene Activation CC](api/CCs/SceneActivation.md)
+-   [Scene Actuator Configuration CC](api/CCs/SceneActuatorConfiguration.md)
 -   [Scene Controller Configuration CC](api/CCs/SceneControllerConfiguration.md)
 -   [Security CC](api/CCs/Security.md)
 -   [Sound Switch CC](api/CCs/SoundSwitch.md)
