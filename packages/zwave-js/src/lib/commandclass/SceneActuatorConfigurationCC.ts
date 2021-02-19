@@ -130,7 +130,7 @@ export class SceneActuatorConfigurationCCAPI extends CCAPI {
 				);
 			}
 
-			// We need to set the dimming duration along with the level
+			// We need to set the dimming duration along with the level.
 			// If no duration is set, we default to 0 seconds
 			const node = this.endpoint.getNodeUnsafe()!;
 			const dimmingDuration =
@@ -249,14 +249,12 @@ export class SceneActuatorConfigurationCCAPI extends CCAPI {
 	}
 }
 
+// @noInterview - We don't want to query 255 scenes
+
 @commandClass(CommandClasses["Scene Actuator Configuration"])
 @implementedVersion(1)
 export class SceneActuatorConfigurationCC extends CommandClass {
 	declare ccCommand: SceneActuatorConfigurationCommand;
-
-	// interview is omitted, because our only option would be
-	// to query all 255 possible sceneIds, which is a lot of traffic
-	// for little benefit
 }
 
 interface SceneActuatorConfigurationCCSetOptions extends CCCommandOptions {
@@ -283,7 +281,7 @@ export class SceneActuatorConfigurationCCSet extends SceneActuatorConfigurationC
 		} else {
 			if (options.sceneId < 1 || options.sceneId > 255) {
 				throw new ZWaveError(
-					`scene id ${options.sceneId} out of range [1..255]`,
+					`The scene id ${options.sceneId} must be between 1 and 255!`,
 					ZWaveErrorCodes.Argument_Invalid,
 				);
 			}
@@ -333,6 +331,7 @@ export class SceneActuatorConfigurationCCReport extends SceneActuatorConfigurati
 	public readonly dimmingDuration?: Duration;
 
 	public persistValues(): boolean {
+		// Do not persist values for an inactive scene
 		if (
 			this.sceneId === 0 ||
 			this.level == undefined ||
@@ -340,6 +339,7 @@ export class SceneActuatorConfigurationCCReport extends SceneActuatorConfigurati
 		) {
 			return false;
 		}
+
 		return persistSceneActuatorConfig.call(
 			this,
 			this.sceneId,
