@@ -131,49 +131,17 @@ export class SceneActuatorConfigurationCCAPI extends CCAPI {
 			}
 
 			// We need to set the dimming duration along with the level
+			// If no duration is set, we default to 0 seconds
 			const node = this.endpoint.getNodeUnsafe()!;
-			const dimmingDuration = node.getValue<Duration>(
-				getDimmingDurationValueID(this.endpoint.index, propertyKey),
-			);
-			// If dimmingDuration is missing, we must abort
-			if (dimmingDuration == undefined) {
-				throw new ZWaveError(
-					`The "dimmingDuration" property cannot be changed before the level is known!`,
-					ZWaveErrorCodes.Argument_Invalid,
-				);
-			}
+			const dimmingDuration =
+				node.getValue<Duration>(
+					getDimmingDurationValueID(this.endpoint.index, propertyKey),
+				) ?? new Duration(0, "seconds");
 			await this.set(propertyKey, dimmingDuration, value);
-		} else if (property === "dimmingDuration") {
-			if (!(value instanceof Duration)) {
-				throwWrongValueType(
-					this.ccId,
-					property,
-					"Duration",
-					typeof value,
-				);
-			}
-
-			// We need to set the leve along with the dimming duration
-			const node = this.endpoint.getNodeUnsafe()!;
-			const level = node.getValue<number>(
-				getLevelValueID(this.endpoint.index, propertyKey),
-			);
-			// If level is missing, we must abort
-			if (level == undefined) {
-				throw new ZWaveError(
-					`The "level" property cannot be changed before the dimming duration is known!`,
-					ZWaveErrorCodes.Argument_Invalid,
-				);
-			}
-			await this.set(propertyKey, value, level);
 		} else {
-			// setting dimmingDuration value alone not supported,
-			// to be added when setting Duration values is supported
+			// setting dimmingDuration value alone not supported
 			throwUnsupportedProperty(this.ccId, property);
 		}
-
-		// Verify the current value after a delay
-		this.schedulePoll({ property, propertyKey });
 	};
 
 	protected [POLL_VALUE]: PollValueImplementation = async ({
