@@ -277,7 +277,7 @@ export class MOSExtension extends Security2Extension {
 		if (options && gotDeserializationOptions(options)) {
 			super(options);
 		} else {
-			super({ critical: true });
+			super({ critical: false });
 		}
 	}
 }
