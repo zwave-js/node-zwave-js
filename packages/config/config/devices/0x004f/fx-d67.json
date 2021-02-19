@@ -19,7 +19,6 @@
 	"paramInformation": {
 		"1": {
 			"label": "Change The State of Indicator Light",
-			"description": "0 means night light mode ,1 means night light off",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 1,
@@ -27,11 +26,20 @@
 			"unsigned": true,
 			"readOnly": false,
 			"writeOnly": false,
-			"allowManualEntry": true
+			"allowManualEntry": false
+			"options": [
+				{
+					"label": "Night Light",
+					"value": 0
+				},
+				{
+					"label": "On Indicator",
+					"value": 1
+				}
+			]
 		},
 		"2": {
 			"label": "Memory Function",
-			"description": "0 means no memory function, 1 means memory function",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 1,
@@ -39,7 +47,17 @@
 			"unsigned": true,
 			"readOnly": false,
 			"writeOnly": false,
-			"allowManualEntry": true
+			"allowManualEntry": false
+			"options": [
+				{
+					"label": "No Memory",
+					"value": 0
+				},
+				{
+					"label": "Memory Function",
+					"value": 1
+				}
+			]
 		}
 	},
 	"metadata": {
