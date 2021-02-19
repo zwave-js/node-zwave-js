@@ -11,7 +11,7 @@ import { reportProblem } from "../../../maintenance/tools";
 import {
 	expressionToCommandClass,
 	getCommandClassFromDecorator,
-} from "./shared";
+} from "../../../maintenance/tsAPITools";
 import { loadTSConfig, projectRoot } from "./tsTools";
 
 /* wotan-disable no-useless-predicate */

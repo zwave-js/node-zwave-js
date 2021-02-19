@@ -3,6 +3,19 @@
 	Placeholder for next release:
 	## __WORK IN PROGRESS__
 -->
+## 6.4.0 (2021-02-16)
+### Features
+* Implemented `Scene Controller Configuration CC`
+* Added the ability to to get the current logging configuration
+
+### Bugfixes
+* Fixed an issue where sleeping nodes could block the send queue when it is not yet known whether they support `Wake Up CC`
+
+### Config file changes
+* Update configuration for Zooz Zen21, Zen22, Zen26 and Zen27
+* Include LZW31 firmware 1.48 in config
+* Added another Eaton outlet to the config
+
 ## 6.3.0 (2021-02-14)
 ### Features
 * Add missing specific device classes and expose Z-Wave+ Device Types through the `SpecificDeviceClass` class

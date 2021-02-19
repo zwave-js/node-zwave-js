@@ -15,7 +15,13 @@
 		"min": "0.0",
 		"max": "255.255"
 	},
-	"supportsZWavePlus": true,
+	"associations": {
+		"1": {
+			"label": "Lifeline",
+			"maxNodes": 1,
+			"isLifeline": true
+		}
+	},
 	"paramInformation": {
 		"33": {
 			"$import": "templates/kwikset_template.json#dipswitch_sku_firstfour"
