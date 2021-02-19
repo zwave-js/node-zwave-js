@@ -6,6 +6,7 @@
 // until fimbullinter/wotan#719 is fixed
 
 import { getCCName } from "@zwave-js/core";
+import { enumFilesRecursive } from "@zwave-js/shared";
 import { red } from "ansi-colors";
 import * as fs from "fs-extra";
 import * as path from "path";
@@ -23,12 +24,11 @@ import {
 	SyntaxKind,
 	TypeLiteralNode,
 } from "ts-morph";
+import { formatWithPrettier } from "./prettier";
 import {
-	formatWithPrettier,
+	getCommandClassFromClassDeclaration,
 	tsConfigFilePath,
-} from "../packages/zwave-js/maintenance/tsTools";
-import { enumFilesRecursive } from "./tools";
-import { getCommandClassFromClassDeclaration } from "./tsAPITools";
+} from "./tsAPITools";
 
 export function findSourceNode(
 	program: Project,

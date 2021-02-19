@@ -123,10 +123,10 @@ jobs:
       run: yarn run build
 
     - name: Lint config files
-      run: npx lerna run lint:config --no-prefix
+      run: yarn run lint:config
 
     - name: Lint Z-Wave specifics
-      run: npx lerna run lint:zwave --no-prefix
+      run: yarn run lint:zwave
 
   # ===================
   # Runs unit tests on all supported node versions and OSes

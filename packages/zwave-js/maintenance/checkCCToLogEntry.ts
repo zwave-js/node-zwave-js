@@ -2,15 +2,15 @@
  * This scripts checks which CCs have `toLogEntry` implemented
  */
 
+import { loadTSConfig, projectRoot } from "@zwave-js/maintenance";
 import * as path from "path";
 import ts from "typescript";
-import { loadTSConfig, projectRoot } from "./tsTools";
 
 export function checkCCToLogEntry(): void {
 	// Create a Program to represent the project, then pull out the
 	// source file to parse its AST.
 
-	const tsConfig = loadTSConfig();
+	const tsConfig = loadTSConfig("zwave-js");
 	const program = ts.createProgram(tsConfig.fileNames, tsConfig.options);
 
 	const results = new Map<string, boolean | "empty" | "constructor">();

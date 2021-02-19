@@ -3,16 +3,17 @@
 	"extends": "./tsconfig.json",
 	"compilerOptions": {
 		"rootDir": "src",
-		"outDir": "build"
+		"outDir": "build",
 	},
 	"references": [
 		{
 			"path": "../core/tsconfig.build.json"
-		},
-		{
-			"path": "../shared/tsconfig.build.json"
 		}
 	],
-	"include": ["src/**/*.ts"],
-	"exclude": ["src/**/*.test.ts"]
+	"include": [
+		"src/**/*.ts"
+	],
+	"exclude": [
+		"src/**/*.test.ts",
+	]
 }

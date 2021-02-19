@@ -1,10 +1,11 @@
+// eslint-disable-next-line @typescript-eslint/triple-slash-reference
 /// <reference path="ts-pegjs.d.ts" />
 
+import { formatWithPrettier } from "@zwave-js/maintenance";
 import * as fs from "fs";
 import * as path from "path";
 import pegjs from "pegjs";
 import pegts from "ts-pegjs";
-import { formatWithPrettier } from "../../zwave-js/maintenance/tsTools";
 
 const sourceDir = path.join(__dirname, "../src");
 const grammarFilename = path.join(sourceDir, "logic.pegjs");

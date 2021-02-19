@@ -34,3 +34,9 @@ export function isPrintableASCII(text: string): boolean {
 export function isPrintableASCIIWithNewlines(text: string): boolean {
 	return /^[\r\n]*[\u0020-\u007e]*[\r\n]*$/.test(text);
 }
+
+export function compareStrings(a: string, b: string): number {
+	if (a > b) return 1;
+	if (b > a) return -1;
+	return 0;
+}

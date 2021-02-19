@@ -74,7 +74,7 @@ jobs:
         npx lerna run build --scope=@zwave-js/config
 
         # Lint config files
-        npx lerna run lint:config
+        yarn run lint:config
 
         # ===============================
         # Bump the version and publish

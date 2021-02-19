@@ -2,15 +2,15 @@
  * This script generates the exports for all utility types from `src/lib/commandclass/*CC.ts`
  */
 
-import * as fs from "fs-extra";
-import * as path from "path";
-import ts from "typescript";
 import {
-	compareStrings,
 	formatWithPrettier,
 	loadTSConfig,
 	projectRoot,
-} from "./tsTools";
+} from "@zwave-js/maintenance";
+import { compareStrings } from "@zwave-js/shared";
+import * as fs from "fs-extra";
+import * as path from "path";
+import ts from "typescript";
 
 // Define where the CC index file is located
 const ccIndexFile = path.join(projectRoot, "src/lib/commandclass/index.ts");
@@ -19,7 +19,7 @@ function findExports() {
 	// Create a Program to represent the project, then pull out the
 	// source file to parse its AST.
 
-	const tsConfig = loadTSConfig();
+	const tsConfig = loadTSConfig("zwave-js");
 	const program = ts.createProgram(tsConfig.fileNames, tsConfig.options);
 
 	// Used to remember the exports we found
