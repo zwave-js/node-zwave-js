@@ -12,33 +12,15 @@
     "CommandClass.js.map",
     "Controller.d.ts",
     "Controller.d.ts.map",
-    "Controller.js",
-    "Controller.js.map",
     "Driver.d.ts",
     "Driver.d.ts.map",
-    "Driver.js",
-    "Driver.js.map",
-    "Error.d.ts",
-    "Error.d.ts.map",
-    "Error.js",
-    "Error.js.map",
     "Node.d.ts",
     "Node.d.ts.map",
-    "Node.js",
-    "Node.js.map",
-    "Utils.d.ts",
-    "Utils.d.ts.map",
-    "Utils.js",
-    "Utils.js.map",
     "Values.d.ts",
     "Values.d.ts.map",
-    "Values.js",
-    "Values.js.map",
     "build/**/*.{js,d.ts,map}",
     "index.d.ts",
-    "index.d.ts.map",
-    "index.js",
-    "index.js.map"
+    "index.d.ts.map"
   ],
   "author": {
     "name": "AlCalzone",
@@ -77,13 +59,12 @@
     "xstate": "^4.12.0"
   },
   "scripts": {
-    "build:full": "gulp build",
+    "prebuild:full": "esr maintenance/prebuildFull.ts",
+    "build:full": "tsc -b tsconfig.build.json",
+    "postbuild:full": "esr maintenance/postbuildFull.ts",
     "build": "tsc -b tsconfig.build.json",
     "clean": "tsc -b tsconfig.build.json --clean",
-    "prewatch": "gulp prebuild",
+    "prewatch": "esr maintenance/prebuild.ts",
     "watch": "tsc -b tsconfig.build.json --watch --pretty"
-  },
-  "devDependencies": {
-    "@zwave-js/maintenance": "^6.4.0"
   }
 }

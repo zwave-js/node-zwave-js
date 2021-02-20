@@ -47,9 +47,6 @@ jobs:
     - name: Install dependencies
       run: yarn install --prefer-offline --frozen-lockfile
 
-    - name: Compile TypeScript code
-      run: npx lerna run build
-
     - name: Run linters
       run: yarn run lint
 

@@ -6,9 +6,25 @@
 				"displayErrorsAsWarnings": true
 			}
 		],
+		// Project references setup
 		"composite": true,
 		"declaration": true,
 		"declarationMap": true,
+
+		// Paths is required for esbuild without compilation
+		"paths": {
+			"@zwave-js/config": ["./packages/config/src"],
+			"@zwave-js/core": ["./packages/core/src"],
+			"@zwave-js/maintenance": ["./packages/maintenance/src"],
+			"@zwave-js/serial": ["./packages/serial/src"],
+			"@zwave-js/shared": ["./packages/shared/src"],
+			"@zwave-js/testing": ["./packages/testing/src"],
+
+			// Workaround for https://github.com/winstonjs/logform/pull/113
+			// Can be removed once the issue is fixed
+			"logform": ["./packages/core/src/@types/logform.ts"]
+		},
+
 		// To enable Babel support
 		"allowSyntheticDefaultImports": true,
 		"esModuleInterop": true,
@@ -32,22 +48,13 @@
 		"strictFunctionTypes": true,
 		"watch": false, // true breaks CI scripts
 		"pretty": true,
-		"types": [
-			"node",
-			"jest-extended"
-		],
+		"types": ["node", "jest-extended"],
 		"noErrorTruncation": true
 	},
 	"include": [
-		"packages/**/src/**/*.ts",
-		"packages/**/maintenance/**/*.ts",
-		"packages/*/gulpfile.ts",
 		"maintenance/**/*.ts",
-		"test/**/*.ts"
+		"test/**/*.ts",
+		"packages/core/src/@types/logform.ts"
 	],
-	"exclude": [
-		"**/build/**",
-		"node_modules/**",
-		"packages/**/node_modules"
-	]
+	"exclude": ["node_modules/**", "packages/**/node_modules"]
 }

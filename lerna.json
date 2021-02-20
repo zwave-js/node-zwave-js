@@ -5,7 +5,8 @@
 	"version": "6.4.0",
 	"command": {
 		"run": {
-			"stream": true
+			"stream": true,
+			"maxBuffer": 1000000000
 		},
 		"version": {
 			"allowBranch": ["master", "release-*"],
