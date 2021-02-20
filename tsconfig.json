@@ -19,6 +19,7 @@
 			"@zwave-js/serial": ["./packages/serial/src"],
 			"@zwave-js/shared": ["./packages/shared/src"],
 			"@zwave-js/testing": ["./packages/testing/src"],
+			// "zwave-js": ["./packages/zwave-js/src"],
 
 			// Workaround for https://github.com/winstonjs/logform/pull/113
 			// Can be removed once the issue is fixed
@@ -52,9 +53,9 @@
 		"noErrorTruncation": true
 	},
 	"include": [
+		"packages/*/src/**/*.ts",
 		"maintenance/**/*.ts",
-		"test/**/*.ts",
-		"packages/core/src/@types/logform.ts"
+		"test/**/*.ts"
 	],
 	"exclude": ["node_modules/**", "packages/**/node_modules"]
 }

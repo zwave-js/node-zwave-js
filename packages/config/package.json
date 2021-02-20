@@ -43,7 +43,7 @@
     "winston": "^3.3.3"
   },
   "scripts": {
-    "prebuild": "esr maintenance/prebuild.ts",
+    "prebuild": "ts-node maintenance/prebuild.ts",
     "build": "tsc -b tsconfig.build.json",
     "clean": "tsc -b tsconfig.build.json --clean",
     "watch": "yarn run build -- --watch --pretty"

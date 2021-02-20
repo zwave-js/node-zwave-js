@@ -116,9 +116,6 @@ jobs:
     - name: Install dependencies
       run: yarn install --prefer-offline --frozen-lockfile
 
-    - name: Compile TypeScript code
-      run: npx lerna run build
-
     - name: Lint config files
       run: yarn run lint:config
 
@@ -161,10 +158,6 @@ jobs:
     - name: Install dependencies
       run: yarn install --prefer-offline --frozen-lockfile
 
-    # Compilation is necessary, or the tests won't run
-    - name: Compile TypeScript code
-      run: yarn run build
-
     - name: Run component tests
       run: yarn run test:ci
       env:
@@ -206,7 +199,7 @@ jobs:
     - name: Install dependencies
       run: yarn install --prefer-offline --frozen-lockfile
 
-    # Do a full build so the package files are regenerated
+    # Do a full build (includes a type check) and make sure that the package files are regenerated
     - name: Compile TypeScript code
       run: yarn run build:full
 
@@ -253,10 +246,6 @@ jobs:
 
     - name: Install dependencies
       run: yarn install --prefer-offline --frozen-lockfile
-
-    # Compilation is necessary, or the tests won't run
-    - name: Compile TypeScript code
-      run: yarn run build
 
     - name: Generate coverage
       run: yarn run coverage:ci

@@ -1,6 +1,10 @@
 import { generateCCAPIInterface } from "./generateCCAPIInterface";
 import { generateCCExports } from "./generateCCExports";
 
-void Promise.all([generateCCAPIInterface(), generateCCExports()])
-	.then(() => process.exit(0))
-	.catch(() => process.exit(1));
+process.on("unhandledRejection", (r) => {
+	throw r;
+});
+
+void Promise.all([generateCCAPIInterface(), generateCCExports()]).then(() =>
+	process.exit(0),
+);
