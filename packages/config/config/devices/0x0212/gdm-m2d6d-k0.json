@@ -1,10 +1,10 @@
-// GATEMAN GDM-M2D6D-K0
-// A200-CH
+// GATEMAN A200-CH (GDM-M2D6D-K0)
+// Digital Door Lock
 {
 	"manufacturer": "GATEMAN",
 	"manufacturerId": "0x0212",
-	"label": "GDM-M2D6D-K0",
-	"description": "A200-CH",
+	"label": "A200-CH (GDM-M2D6D-K0)",
+	"description": "Digital Door Lock",
 	"devices": [
 		{
 			"productType": "0xc600",
@@ -19,7 +19,6 @@
 	"paramInformation": {
 		"1": {
 			"label": "Silent Mode On/Off",
-			"description": "",
 			"valueSize": 1,
 			"minValue": 1,
 			"maxValue": 3,
@@ -45,7 +44,6 @@
 		},
 		"2": {
 			"label": "Auto Relock On/Off",
-			"description": "",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 255,
@@ -67,7 +65,7 @@
 		},
 		"3": {
 			"label": "Relock Time",
-			"description": "",
+			"description": "Time lock stays unlocked before automatically re-locking",
 			"valueSize": 1,
 			"minValue": 10,
 			"maxValue": 180,
@@ -81,7 +79,7 @@
 	"metadata": {
 		"inclusion": "To include:\n1. Touch keypad with palm\n2. Enter User code(Normal Mode only. Enter Master code if operating Master Mode.)\n3. Press 'R' button [Registration] from the inside of battery cover.\n4. Press 9,#,1,# on the keypad (by sequence)\n5. Wait until 'Ding dong dang' melody play than press 'R' button [Registration]",
 		"exclusion": "To exclude:\n1. Touch keypad with palm\n2. Enter User code(Normal Mode only. Enter Master code if operating Master Mode.)\n3. Press 'R' button [Registration] from the inside of battery cover.\n4. Press 9,#,3,# on the keypad (by sequence)\n5. Wait until 'Ding dong dang' melody play than press 'R' button [Registration]",
-		"reset": "To reset to factory defaults:\n ※ Use this procedure only in the event that the network primary controller is missing or otherwise inoperable. (User code or master code remains the same. Only network settings reset to factory defaults.) \n1. Touch keypad with palm\n2. Enter User code(Normal Mode only. Enter Master code if operating Master Mode.)\n3. Press 'R' button [Registration] from the inside of battery cover.\n4. Press 9,#,9,# on the keypad (by sequence)\n5. Wait until 'Ding dong dang' melody play than press 'R' button [Registration]",
+		"reset": "To reset to factory defaults:\n  Use this procedure only in the event that the network primary controller is missing or otherwise inoperable. (User code or master code remains the same. Only network settings reset to factory defaults.) \n1. Touch keypad with palm\n2. Enter User code(Normal Mode only. Enter Master code if operating Master Mode.)\n3. Press 'R' button [Registration] from the inside of battery cover.\n4. Press 9,#,9,# on the keypad (by sequence)\n5. Wait until 'Ding dong dang' melody play than press 'R' button [Registration]",
 		"manual": "https://products.z-wavealliance.org/ProductManual/File?folder=&filename=MarketCertificationFiles/1796/A200-CH_Quick%20guide%20manual_160607_Ver1.pdf"
 	}
 }
