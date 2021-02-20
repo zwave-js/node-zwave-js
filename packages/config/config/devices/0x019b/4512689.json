@@ -30,7 +30,6 @@
 	"associations": {
 		"1": {
 			"label": "Lifeline",
-			"description": "Lifeline. (Normally used by the Z-WaveController) Sends Battery Report, Notification Report, Sensor Multilevel Report, Device Reset Locally Notification",
 			"maxNodes": 1,
 			"isLifeline": true
 		},
