@@ -397,7 +397,7 @@ export class EntryControlCCEventSupportedReport extends EntryControlCC {
 
 		const eventTypeLength = this.payload[1 + dataTypeLength] & 0b0001_1111;
 		validatePayload(this.payload.length >= 6 + dataTypeLength + eventTypeLength);
-		this._eventTypeSupported = parseBitMask(this.payload.slice(1, 2 + dataTypeLength + eventTypeLength), 0);
+		this._eventTypeSupported = parseBitMask(this.payload.slice(2 + dataTypeLength, 2 + dataTypeLength + eventTypeLength), 0);
 
 		const minMaxStart = 2 + dataTypeLength + eventTypeLength;
 		this._keyCachedSizeMin = this.payload[minMaxStart];
@@ -481,8 +481,8 @@ export class EntryControlCCEventSupportedReport extends EntryControlCC {
 		return {
 			...super.toLogEntry(),
 			message: {
-				"supported data types": this.dataTypeSupported.toString(),
-				"supported event types": this.eventTypeSupported.toString(),
+				"supported data types": this.dataTypeSupported.map((dt) => EntryControlDataTypes[dt]).toString(),
+				"supported event types": this.eventTypeSupported.map((et) => EntryControlEventTypes[et]).toString(),
 				"min key cached size": this.keyCachedSizeMin,
 				"max key cached size": this.keyCachedSizeMax,
 				"min key cached timeout": this.keyCachedTimeoutMin,
