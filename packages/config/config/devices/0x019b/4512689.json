@@ -35,7 +35,7 @@
 		},
 		"2": {
 			"label": "Sensor Basic Set",
-			"description": "Basic set. When the smoke detector is active, it will send basic set (0xFF).When the smoke detector is deactived, it will send basic set (0x00)",
+			"description": "When the smoke detector is active, it will send Basic Set (0xFF) to this group. When the smoke detector is deactived, it will send Basic Set (0x00).",
 			"maxNodes": 5,
 			"isLifeline": true,
 			"noEndpoint": true
