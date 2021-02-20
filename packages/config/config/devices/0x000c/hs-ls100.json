@@ -17,8 +17,7 @@
 	},
 	"paramInformation": {
 		"14": {
-			"$import": "templates/homeseer_template.json#enable_disable_base",
-			"label": "Enable / Disable Basic Set Commands"
+			"$import": "templates/homeseer_template.json#enable_basic_set_command"
 		},
 		"15": {
 			"$import": "templates/homeseer_template.json#basic_set_value"
@@ -36,8 +35,7 @@
 			"allowManualEntry": true
 		},
 		"18": {
-			"$import": "templates/homeseer_template.json#enable_disable_base",
-			"label": "Enable / Disable Shock Alarm"
+			"$import": "templates/homeseer_template.json#enable_shock_alarm"
 		},
 		"19": {
 			"label": "Temperature Report Interval",

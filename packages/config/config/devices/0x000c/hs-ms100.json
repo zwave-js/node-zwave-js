@@ -28,15 +28,13 @@
 			"allowManualEntry": true
 		},
 		"14": {
-			"$import": "templates/homeseer_template.json#enable_disable_base",
-			"label": "Enable / Disable Basic Set Commands"
+			"$import": "templates/homeseer_template.json#enable_basic_set_command"
 		},
 		"15": {
 			"$import": "templates/homeseer_template.json#basic_set_value"
 		},
 		"17": {
-			"$import": "templates/homeseer_template.json#enable_disable_base",
-			"label": "Enable / Disable shock alarm"
+			"$import": "templates/homeseer_template.json#enable_shock_alarm"
 		},
 		"18": {
 			"label": "Motion Detection Timeout",

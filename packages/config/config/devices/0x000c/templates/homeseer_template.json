@@ -119,7 +119,14 @@
 		"writeOnly": false,
 		"allowManualEntry": true
 	},
-
+	"enable_shock_alarm": {
+		"$import": "#enable_disable_base",
+		"label": "Enable / Disable Shock Alarm"
+	},
+	"enable_basic_set_command": {
+		"$import": "#enable_disable_base",
+		"label": "Enable / Disable Basic Set Commands"
+	},
 	"basic_set_value": {
 		"label": "Basic Set Value on Send",
 		"valueSize": 1,
