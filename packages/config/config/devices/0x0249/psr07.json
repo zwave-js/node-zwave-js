@@ -19,7 +19,6 @@
 	"paramInformation": {
 		"1": {
 			"label": "Basic Set Off Level",
-			"description": "",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 99,
@@ -31,7 +30,6 @@
 		},
 		"2": {
 			"label": "Basic Set On Level",
-			"description": "",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 99,
@@ -43,7 +41,7 @@
 		},
 		"10": {
 			"label": "Auto Report Battery Time",
-			"description": "",
+			"unit": "0.5 hours",
 			"valueSize": 1,
 			"minValue": 1,
 			"maxValue": 127,
@@ -54,8 +52,7 @@
 			"allowManualEntry": true
 		},
 		"25": {
-			"label": "Percentage Set Method",
-			"description": "",
+			"label": "Dimmer Set Method",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 1,

@@ -1,10 +1,10 @@
-// GATEMAN GDA-A2E6B-K0
-// A20-SH
+// GATEMAN A20-SH (GDA-A2E6B-K0)
+// Digital Door Lock
 {
 	"manufacturer": "GATEMAN",
 	"manufacturerId": "0x0212",
-	"label": "GDA-A2E6B-K0",
-	"description": "A20-SH",
+	"label": "A20-SH (GDA-A2E6B-K0)",
+	"description": "Digital Door Lock",
 	"devices": [
 		{
 			"productType": "0x1000",
@@ -19,7 +19,6 @@
 	"paramInformation": {
 		"1": {
 			"label": "Silent Mode On/Off",
-			"description": "",
 			"valueSize": 1,
 			"minValue": 1,
 			"maxValue": 3,
@@ -45,7 +44,6 @@
 		},
 		"2": {
 			"label": "Auto Relock On/Off",
-			"description": "Set the auto relock on/off",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 255,
@@ -67,7 +65,7 @@
 		},
 		"3": {
 			"label": "Relock Time",
-			"description": "This value from 10 to 180 seconds means the time for lock to retain the unlocked state before doing the auto relock",
+			"description": "Time lock stays unlocked before automatically re-locking",
 			"valueSize": 1,
 			"unit": "seconds",
 			"minValue": 10,
@@ -80,8 +78,8 @@
 		}
 	},
 	"metadata": {
-		"inclusion": "① Touch Keypad with palm.\n② Enter User Code(Normal Mode only. Enter Master Code if operating Master Mode).\n③ Press 'I' button [Registration] from the inside of battery cover. \n④ Press 9, #, 1, # by sequence on the keypad(to Add).\n⑤ Wait until \"Ding dong dang\" melody play, then press 'I' button [Registration] from the inside of battery cover",
-		"exclusion": "① Touch Keypad with palm.\n② Enter User Code(Normal Mode only. Enter Master Code if operating Master Mode).\n③ Press 'I' button [Registration] from the inside of battery cover. \n④ Press 9, #, 3, # on the keypad by sequence (to Delete).\n⑤ Enter User Code(Normal Mode only. Enter Master Code if operating Master Mode), then press #.\n⑤ Wait until \"Ding dong dang\" melody play, then press 'I' button [Registration] from the inside of battery cover",
+		"inclusion": "1. Touch Keypad with palm.\n2. Enter User Code (Normal Mode only. Enter Master Code if operating Master Mode).\n3. Press 'I' button [Registration] from the inside of battery cover. \n4. Press 9, #, 1, # by sequence on the keypad (to Add).\n5. Wait until \"Ding dong dang\" melody play, then press 'I' button [Registration] from the inside of battery cover",
+		"exclusion": "1. Touch Keypad with palm.\n2. Enter User Code (Normal Mode only. Enter Master Code if operating Master Mode).\n3. Press 'I' button [Registration] from the inside of battery cover. \n4. Press 9, #, 3, # on the keypad by sequence (to Delete).\n5. Enter User Code (Normal Mode only. Enter Master Code if operating Master Mode), then press #.\n6. Wait until \"Ding dong dang\" melody play, then press 'I' button [Registration] from the inside of battery cover",
 		"reset": "This product has no function to go back to the factory default",
 		"manual": "https://products.z-wavealliance.org/ProductManual/File?folder=&filename=MarketCertificationFiles/1434/A20-SH_Manual_v.1.pdf"
 	}

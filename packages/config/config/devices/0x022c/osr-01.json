@@ -19,9 +19,8 @@
 	"paramInformation": {
 		"1": {
 			"label": "Battery Report Period",
-			"description": "Value x 15 minute increments",
 			"valueSize": 1,
-			"unit": "minutes",
+			"unit": "15 minutes",
 			"minValue": 1,
 			"maxValue": 255,
 			"defaultValue": 24,
@@ -32,9 +31,9 @@
 		}
 	},
 	"metadata": {
-		"inclusion": "a. Press & hold Inclusion/Exclusion button for 5 seconds when Open Sensor is\n exclusion status.\nb. LED of Open sensor will be on 5 seconds later.\nc. Open sensor will try Inclusion for 30sec when button is released.\nd. LED will blink 3 times if Inclusion is successful.",
-		"exclusion": "a. Receiver will stay exclusion waiting mode.\nb. Press & hold Inclusion/Exclusion button for 5 seconds when Open Sensor is\n Inclusion status.\nc. LED of Open sensor will be on 5 seconds later.\nd. Open sensor will try Exclusion when button is released.\ne. LED will blink 3 times if Exclusion is successful.",
-		"reset": "a. Press & hold Inclusion/Exclusion button for 10sec.\nb. LED will blink while holding the button.\nc. Factory reset will be done in 5sec after releasing button and LED will blink 5 times.\n\nPlease use this procedure only when the network primary controller is missing or otherwise inoperable",
+		"inclusion": "a. Press & hold Inclusion/Exclusion button for 5 seconds when Open Sensor is exclusion status.\nb. LED of Open sensor will be on 5 seconds later.\nc. Open sensor will try Inclusion for 30sec when button is released.\nd. LED will blink 3 times if Inclusion is successful.",
+		"exclusion": "a. Receiver will stay exclusion waiting mode.\nb. Press & hold Inclusion/Exclusion button for 5 seconds when Open Sensor is Inclusion status.\nc. LED of Open sensor will be on 5 seconds later.\nd. Open sensor will try Exclusion when button is released. LED will blink 3 times if Exclusion is successful.",
+		"reset": "a. Press & hold Inclusion/Exclusion button for 10sec.\nb. LED will blink while holding the button.\nc. Factory reset will be done in 5sec after releasing button and LED will blink 5 times.  Please use this procedure only when the network primary controller is missing or otherwise inoperable",
 		"manual": "https://products.z-wavealliance.org/ProductManual/File?folder=&filename=MarketCertificationFiles/1382/Open_Sensor_Manual.docx"
 	}
 }

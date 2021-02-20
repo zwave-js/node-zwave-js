@@ -19,7 +19,6 @@
 	"paramInformation": {
 		"1": {
 			"label": "Hardware Combination Identifier",
-			"description": "",
 			"valueSize": 1,
 			"minValue": 16,
 			"maxValue": 19,
@@ -51,7 +50,7 @@
 			"label": "Dimming Speed",
 			"description": "",
 			"valueSize": 2,
-			"unit": ".01 seconds",
+			"unit": "0.01 seconds",
 			"minValue": 0,
 			"maxValue": 32767,
 			"defaultValue": 300,
@@ -62,7 +61,6 @@
 		},
 		"11": {
 			"label": "Dimmer Mode",
-			"description": "Not applicable",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 1,
@@ -84,7 +82,6 @@
 		},
 		"12": {
 			"label": "Maximum Dimmer Level",
-			"description": "",
 			"valueSize": 1,
 			"minValue": 1,
 			"maxValue": 99,
@@ -96,7 +93,6 @@
 		},
 		"13": {
 			"label": "Minimum Dimmer Level",
-			"description": "",
 			"valueSize": 1,
 			"minValue": 1,
 			"maxValue": 99,
@@ -108,7 +104,6 @@
 		},
 		"16": {
 			"label": "Back Unit Type",
-			"description": "",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 6,
@@ -138,7 +133,6 @@
 		},
 		"44": {
 			"label": "Cold Start Minimum Level",
-			"description": "",
 			"valueSize": 1,
 			"minValue": 1,
 			"maxValue": 99,

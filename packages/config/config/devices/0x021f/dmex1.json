@@ -19,7 +19,7 @@
 	"paramInformation": {
 		"1": {
 			"label": "Night Light Off Threshold",
-			"description": "",
+			"description": "Sets the brightness at which night light is turned off.  The higher the value,the brighter the ambient light must be to turn off the night light.",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 10,
@@ -31,7 +31,7 @@
 		},
 		"2": {
 			"label": "Night Light On Threshold",
-			"description": "",
+			"description": "Sets the brightness at which night light is turned on.  The lower the value, the dimmer the ambient light must be to turn on the night light.",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 10,

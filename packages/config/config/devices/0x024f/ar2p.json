@@ -19,7 +19,6 @@
 	"paramInformation": {
 		"1": {
 			"label": "Hardware Combination Identifier",
-			"description": "",
 			"valueSize": 1,
 			"minValue": 16,
 			"maxValue": 19,
@@ -49,7 +48,6 @@
 		},
 		"4": {
 			"label": "Safety Activate Delay",
-			"description": "",
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 32767,
@@ -62,7 +60,6 @@
 		},
 		"5": {
 			"label": "Safety Off Period",
-			"description": "",
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 32767,
@@ -75,7 +72,6 @@
 		},
 		"6": {
 			"label": "Safety On Period",
-			"description": "",
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 32767,
@@ -88,7 +84,6 @@
 		},
 		"16": {
 			"label": "Back Unit Type",
-			"description": "",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 6,
