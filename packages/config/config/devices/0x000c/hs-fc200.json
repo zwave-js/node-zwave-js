@@ -15,425 +15,57 @@
 		"min": "0.0",
 		"max": "255.255"
 	},
-	"supportsZWavePlus": true,
 	"paramInformation": {
 		"3": {
-			"label": "Bottom LED Operation",
-			"description": "Sets the operation of the bottom LED",
-			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 1,
-			"defaultValue": 1,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "Bottom LED ON if Load is OFF",
-					"value": 0
-				},
-				{
-					"label": "Bottom LED OFF is load if OFF",
-					"value": 1
-				}
-			]
+			"$import": "templates/homeseer_template.json#led_indicator_two_options"
 		},
 		"4": {
-			"label": "Orientation",
-			"description": "Set paddle's load orientation",
-			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 1,
-			"defaultValue": 0,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "Top of Paddle turns load ON",
-					"value": 0
-				},
-				{
-					"label": "Bottom of Paddle turns load ON",
-					"value": 1
-				}
-			]
+			"$import": "templates/homeseer_template.json#orientation"
 		},
 		"5": {
-			"label": "Fan Type",
-			"description": "Sets fan type",
-			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 1,
-			"defaultValue": 0,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "3-speed",
-					"value": 0
-				},
-				{
-					"label": "4-speed",
-					"value": 1
-				}
-			]
+			"$import": "templates/homeseer_template.json#fan_type"
 		},
 		"13": {
-			"label": "Status Mode",
-			"description": "Sets LED indicator mode of operation",
-			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 1,
-			"defaultValue": 0,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "Normal mode (load status)",
-					"value": 0
-				},
-				{
-					"label": "Status mode (custom status)",
-					"value": 1
-				}
-			]
+			"$import": "templates/homeseer_template.json#status_mode"
 		},
 		"14": {
-			"label": "Normal mode LED color",
-			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 6,
-			"defaultValue": 0,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "White",
-					"value": 0
-				},
-				{
-					"label": "Red",
-					"value": 1
-				},
-				{
-					"label": "Green",
-					"value": 2
-				},
-				{
-					"label": "Blue",
-					"value": 3
-				},
-				{
-					"label": "Magenta",
-					"value": 4
-				},
-				{
-					"label": "Yellow",
-					"value": 5
-				},
-				{
-					"label": "Cyan",
-					"value": 6
-				}
-			]
+			"$import": "templates/homeseer_template.json#led_colors",
+			"label": "Default LED Color"
 		},
 		"21": {
-			"label": "Status mode LED 1 Color (bottom)",
-			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 7,
-			"defaultValue": 0,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "Off",
-					"value": 0
-				},
-				{
-					"label": "Red",
-					"value": 1
-				},
-				{
-					"label": "Green",
-					"value": 2
-				},
-				{
-					"label": "Blue",
-					"value": 3
-				},
-				{
-					"label": "Magenta",
-					"value": 4
-				},
-				{
-					"label": "Yellow",
-					"value": 5
-				},
-				{
-					"label": "Cyan",
-					"value": 6
-				},
-				{
-					"label": "White",
-					"value": 7
-				}
-			]
+			"$import": "templates/homeseer_template.json#status_mode_choices",
+			"label": "Status Mode LED 1 Color"
 		},
 		"22": {
-			"label": "Status mode LED 2 color",
-			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 7,
-			"defaultValue": 0,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "Off",
-					"value": 0
-				},
-				{
-					"label": "Red",
-					"value": 1
-				},
-				{
-					"label": "Green",
-					"value": 2
-				},
-				{
-					"label": "Blue",
-					"value": 3
-				},
-				{
-					"label": "Magenta",
-					"value": 4
-				},
-				{
-					"label": "Yellow",
-					"value": 5
-				},
-				{
-					"label": "Cyan",
-					"value": 6
-				},
-				{
-					"label": "White",
-					"value": 7
-				}
-			]
+			"$import": "templates/homeseer_template.json#status_mode_choices",
+			"label": "Status Mode LED 2 Color"
 		},
 		"23": {
-			"label": "Status mode LED 3 color",
-			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 7,
-			"defaultValue": 0,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "Off",
-					"value": 0
-				},
-				{
-					"label": "Red",
-					"value": 1
-				},
-				{
-					"label": "Green",
-					"value": 2
-				},
-				{
-					"label": "Blue",
-					"value": 3
-				},
-				{
-					"label": "Magenta",
-					"value": 4
-				},
-				{
-					"label": "Yellow",
-					"value": 5
-				},
-				{
-					"label": "Cyan",
-					"value": 6
-				},
-				{
-					"label": "White",
-					"value": 7
-				}
-			]
+			"$import": "templates/homeseer_template.json#status_mode_choices",
+			"label": "Status Mode LED 3 Color"
 		},
 		"24": {
-			"label": "Status mode LED 4 color",
-			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 7,
-			"defaultValue": 0,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "Off",
-					"value": 0
-				},
-				{
-					"label": "Red",
-					"value": 1
-				},
-				{
-					"label": "Green",
-					"value": 2
-				},
-				{
-					"label": "Blue",
-					"value": 3
-				},
-				{
-					"label": "Magenta",
-					"value": 4
-				},
-				{
-					"label": "Yellow",
-					"value": 5
-				},
-				{
-					"label": "Cyan",
-					"value": 6
-				},
-				{
-					"label": "White",
-					"value": 7
-				}
-			]
+			"$import": "templates/homeseer_template.json#status_mode_choices",
+			"label": "Status Mode LED 4 Color"
 		},
 		"30": {
-			"label": "Blink Frequency",
-			"description": "Sets the Blink frequency for All LEDs in Status mode",
-			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 255,
-			"defaultValue": 0,
-			"unsigned": true,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "No blink",
-					"value": 0
-				},
-				{
-					"label": "100ms ON then 100ms OFF",
-					"value": 1
-				},
-				{
-					"label": "200ms ON then 200ms OFF",
-					"value": 2
-				},
-				{
-					"label": "300ms ON then 300ms OFF",
-					"value": 3
-				},
-				{
-					"label": "400ms ON then 400ms OFF",
-					"value": 4
-				},
-				{
-					"label": "500ms ON then 500ms OFF",
-					"value": 5
-				}
-			]
+			"$import": "templates/homeseer_template.json#blink_frequency"
 		},
 		"31[0x01]": {
-			"label": "LED 1 Blink Status (bottom)",
-			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 1,
-			"defaultValue": 0,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "Solid",
-					"value": 0
-				},
-				{
-					"label": "Blink",
-					"value": 1
-				}
-			]
+			"$import": "templates/homeseer_template.json#enable_disable_base",
+			"label": "Enable / Disable Blinking - LED 1"
 		},
 		"31[0x02]": {
-			"label": "LED 2 Blink Status",
-			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 1,
-			"defaultValue": 0,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "Solid",
-					"value": 0
-				},
-				{
-					"label": "Blink",
-					"value": 1
-				}
-			]
+			"$import": "templates/homeseer_template.json#enable_disable_base",
+			"label": "Enable / Disable Blinking - LED 2"
 		},
 		"31[0x04]": {
-			"label": "LED 3 Blink Status",
-			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 1,
-			"defaultValue": 0,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "Solid",
-					"value": 0
-				},
-				{
-					"label": "Blink",
-					"value": 1
-				}
-			]
+			"$import": "templates/homeseer_template.json#enable_disable_base",
+			"label": "Enable / Disable Blinking - LED 3"
 		},
 		"31[0x08]": {
-			"label": "LED 4 Blink Status",
-			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 1,
-			"defaultValue": 0,
-			"readOnly": true,
-			"writeOnly": false,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "Solid",
-					"value": 0
-				},
-				{
-					"label": "Blink",
-					"value": 1
-				}
-			]
+			"$import": "templates/homeseer_template.json#enable_disable_base",
+			"label": "Enable / Disable Blinking - LED 4"
 		}
 	}
 }

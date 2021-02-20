@@ -1,10 +1,10 @@
 // Homeseer Technologies HS-HSM200
-// Homeseer Z-Wave Multi Sensor
+// Z-Wave Multi Sensor
 {
 	"manufacturer": "HomeSeer Technologies",
 	"manufacturerId": "0x000c",
 	"label": "HS-HSM200",
-	"description": "Homeseer Z-Wave Multi Sensorr",
+	"description": "Z-Wave Multi Sensorr",
 	"devices": [
 		{
 			"productType": "0x0004",
@@ -30,8 +30,8 @@
 	},
 	"paramInformation": {
 		"1": {
-			"label": "OnTime",
-			"unit": "Minutes",
+			"label": "Off Delay After Motion",
+			"unit": "minutes",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 127,
@@ -41,8 +41,9 @@
 			"allowManualEntry": true
 		},
 		"2": {
-			"label": "OnLevel",
-			"unit": "Percent",
+			"label": "Dim Level",
+			"description": "Sets the dim level; -1 for full on",
+			"unit": "%",
 			"valueSize": 1,
 			"minValue": -1,
 			"maxValue": 99,
@@ -52,8 +53,9 @@
 			"allowManualEntry": true
 		},
 		"3": {
-			"label": "LiteMin",
-			"unit": "Minutes",
+			"label": "Light Level Report Interval",
+			"description": "Sets the interval for light level reports; 0 to disable",
+			"unit": "minutes",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 127,
@@ -63,9 +65,9 @@
 			"allowManualEntry": true
 		},
 		"4": {
-			"label": "TempMin",
-			"description": "A Temperature report is sent to the controller every TempMin minutes.",
-			"unit": "Minutes",
+			"label": "Temperature Report Interval",
+			"description": "Sets the interval for temp level reports; 0 to disable",
+			"unit": "minutes",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 127,
@@ -75,8 +77,9 @@
 			"allowManualEntry": true
 		},
 		"5": {
-			"label": "TempAdj",
+			"label": "Temperature Calibration",
 			"valueSize": 1,
+			"unit": "0.1°F",
 			"minValue": -128,
 			"maxValue": 127,
 			"defaultValue": 0,
