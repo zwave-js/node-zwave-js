@@ -233,11 +233,11 @@
 					"value": 0
 				},
 				{
-					"label": "Configured custom brightness",
+					"label": "Configured custom brightness (parameter 18)",
 					"value": 1
 				},
 				{
-					"label": "Configured maximum brightness",
+					"label": "Configured maximum brightness (parameter 11)",
 					"value": 2
 				},
 				{
@@ -261,11 +261,11 @@
 					"value": 0
 				},
 				{
-					"label": "Configured custom brightness level",
+					"label": "Configured custom brightness (parameter 18)",
 					"value": 1
 				},
 				{
-					"label": "Configured maximum brightness level",
+					"label": "Configured maximum brightness (parameter 11)",
 					"value": 2
 				},
 				{
