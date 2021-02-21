@@ -20,13 +20,6 @@
 		"min": "0.0",
 		"max": "255.255"
 	},
-	"metadata": {
-		"inclusion": "Please refer to your primary controller manual on how to enter add/remove mode. The device may only be added or removed from the network if the primary controller is in add/remove mode, and may now be added to the system via the primary controller",
-		"exclusion": "Please refer to your primary controller manual on how to enter add/remove mode. The device may only be added or removed from the network if the primary controller is in add/remove mode, and may now be added to the system via the primary controller",
-		"reset": "After the calibration process is finished, you may access the add/remove mode by pressing the function button three times within 1.5 seconds. Removing the device will reset it to factory defaults",
-		"manual": "https://media.heatit.com/709"
-	},
-
 	"associations": {
 		"1": {
 			"label": "Lifeline",
@@ -40,5 +33,11 @@
 			"isLifeline": true,
 			"noEndpoint": true
 		}
-	}
+	},
+	"metadata": {
+		"inclusion": "Please refer to your primary controller manual on how to enter add/remove mode. The device may only be added or removed from the network if the primary controller is in add/remove mode, and may now be added to the system via the primary controller",
+		"exclusion": "Please refer to your primary controller manual on how to enter add/remove mode. The device may only be added or removed from the network if the primary controller is in add/remove mode, and may now be added to the system via the primary controller",
+		"reset": "After the calibration process is finished, you may access the add/remove mode by pressing the function button three times within 1.5 seconds. Removing the device will reset it to factory defaults",
+		"manual": "https://media.heatit.com/709"
+	},
 }
