@@ -1,16 +1,3 @@
-import {
-	API,
-	CCCommand,
-	CCCommandOptions,
-	CommandClass,
-	commandClass,
-	ccValue,
-	ccValueMetadata,
-	expectedCCResponse,
-	implementedVersion,
-	CommandClassDeserializationOptions,
-	gotDeserializationOptions,
-} from "./CommandClass";
 import type {
 	Maybe,
 	MessageOrCCLogEntry,
@@ -19,13 +6,15 @@ import type {
 } from "@zwave-js/core";
 import {
 	CommandClasses,
+	parseBitMask,
 	validatePayload,
+	ValueMetadata,
 	ZWaveError,
 	ZWaveErrorCodes,
-	ValueMetadata,
-	parseBitMask,
 } from "@zwave-js/core";
 import { pick } from "@zwave-js/shared";
+import type { Driver } from "../driver/Driver";
+import { MessagePriority } from "../message/Constants";
 import {
 	CCAPI,
 	PollValueImplementation,
@@ -35,8 +24,19 @@ import {
 	throwUnsupportedProperty,
 	throwWrongValueType,
 } from "./API";
-import type { Driver } from "../driver/Driver";
-import { MessagePriority } from "../message/Constants";
+import {
+	API,
+	CCCommand,
+	CCCommandOptions,
+	ccValue,
+	ccValueMetadata,
+	CommandClass,
+	commandClass,
+	CommandClassDeserializationOptions,
+	expectedCCResponse,
+	gotDeserializationOptions,
+	implementedVersion,
+} from "./CommandClass";
 
 // All the supported commands
 export enum EntryControlCommand {
@@ -61,12 +61,12 @@ export enum EntryControlEventTypes {
 	ExitDelay = 0x07,
 	Arm1 = 0x08,
 	Arm2 = 0x09,
-	Arm3 = 0x0A,
-	Arm4 = 0x0B,
-	Arm5 = 0x0C,
-	Arm6 = 0x0D,
-	Rfid = 0x0E,
-	Bell = 0x0F,
+	Arm3 = 0x0a,
+	Arm4 = 0x0b,
+	Arm5 = 0x0c,
+	Arm6 = 0x0d,
+	Rfid = 0x0e,
+	Bell = 0x0f,
 	Fire = 0x10,
 	Police = 0x11,
 	AlertPanic = 0x12,
@@ -104,7 +104,6 @@ export function getKeyCachedTimeoutStateValueID(endpoint: number): ValueID {
 
 @API(CommandClasses["Entry Control"])
 export class EntryControlCCAPI extends CCAPI {
-
 	public supportsCommand(cmd: EntryControlCommand): Maybe<boolean> {
 		switch (cmd) {
 			case EntryControlCommand.KeySupportedGet:
@@ -185,7 +184,10 @@ export class EntryControlCCAPI extends CCAPI {
 	}
 
 	// eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
-	public async setConfiguration(keyCacheSize: number, keyCacheTimeout: number) {
+	public async setConfiguration(
+		keyCacheSize: number,
+		keyCacheTimeout: number,
+	) {
 		this.assertSupportsCommand(
 			EntryControlCommand,
 			EntryControlCommand.ConfigurationGet,
@@ -272,8 +274,7 @@ export class EntryControlCCAPI extends CCAPI {
 export class EntryControlCC extends CommandClass {
 	declare ccCommand: EntryControlCommand;
 
-	public async interview(complete: boolean = true): Promise<void> {
-		const node = this.getNode()!;
+	public async interview(_complete: boolean = true): Promise<void> {
 		const endpoint = this.getEndpoint()!;
 		const api = endpoint.commandClasses["Entry Control"].withOptions({
 			priority: MessagePriority.NodeQuery,
@@ -303,7 +304,9 @@ export class EntryControlCCNotication extends EntryControlCC {
 		const eventDataLength = this.payload[3];
 
 		validatePayload(this.payload.length >= 4 + eventDataLength);
-		this._eventData = Buffer.from(this.payload.slice(4, 4 + eventDataLength));
+		this._eventData = Buffer.from(
+			this.payload.slice(4, 4 + eventDataLength),
+		);
 	}
 
 	private _sequenceNumber: number;
@@ -362,8 +365,7 @@ export class EntryControlCCKeySupportedReport extends EntryControlCC {
 		...ValueMetadata.ReadOnly,
 		type: "number[]",
 		label: "Supported keys",
-		description:
-			"A list of supported keys",
+		description: "A list of supported keys",
 	})
 	public get keySupported(): number[] {
 		return this._keySupported;
@@ -393,11 +395,22 @@ export class EntryControlCCEventSupportedReport extends EntryControlCC {
 
 		const dataTypeLength = this.payload[0] & 0b0000_0011;
 		validatePayload(this.payload.length >= 6 + dataTypeLength);
-		this._dataTypeSupported = parseBitMask(this.payload.slice(1, 1 + dataTypeLength), 0);
+		this._dataTypeSupported = parseBitMask(
+			this.payload.slice(1, 1 + dataTypeLength),
+			0,
+		);
 
 		const eventTypeLength = this.payload[1 + dataTypeLength] & 0b0001_1111;
-		validatePayload(this.payload.length >= 6 + dataTypeLength + eventTypeLength);
-		this._eventTypeSupported = parseBitMask(this.payload.slice(2 + dataTypeLength, 2 + dataTypeLength + eventTypeLength), 0);
+		validatePayload(
+			this.payload.length >= 6 + dataTypeLength + eventTypeLength,
+		);
+		this._eventTypeSupported = parseBitMask(
+			this.payload.slice(
+				2 + dataTypeLength,
+				2 + dataTypeLength + eventTypeLength,
+			),
+			0,
+		);
 
 		const minMaxStart = 2 + dataTypeLength + eventTypeLength;
 		this._keyCachedSizeMin = this.payload[minMaxStart];
@@ -481,8 +494,12 @@ export class EntryControlCCEventSupportedReport extends EntryControlCC {
 		return {
 			...super.toLogEntry(),
 			message: {
-				"supported data types": this.dataTypeSupported.map((dt) => EntryControlDataTypes[dt]).toString(),
-				"supported event types": this.eventTypeSupported.map((et) => EntryControlEventTypes[et]).toString(),
+				"supported data types": this.dataTypeSupported
+					.map((dt) => EntryControlDataTypes[dt])
+					.toString(),
+				"supported event types": this.eventTypeSupported
+					.map((et) => EntryControlEventTypes[et])
+					.toString(),
 				"min key cached size": this.keyCachedSizeMin,
 				"max key cached size": this.keyCachedSizeMax,
 				"min key cached timeout": this.keyCachedTimeoutMin,
@@ -517,8 +534,7 @@ export class EntryControlCCConfigurationReport extends EntryControlCC {
 	@ccValueMetadata({
 		...ValueMetadata.UInt8,
 		label: "Key cache size",
-		description:
-			"Number of character that must be stored before sending",
+		description: "Number of character that must be stored before sending",
 	})
 	public get keyCachedSize(): number {
 		return this._keyCachedSize;
@@ -562,7 +578,9 @@ interface EntryControlCCConfigurationSetOptions extends CCCommandOptions {
 export class EntryControlCCConfigurationSet extends EntryControlCC {
 	public constructor(
 		driver: Driver,
-		options: CommandClassDeserializationOptions | EntryControlCCConfigurationSetOptions,
+		options:
+			| CommandClassDeserializationOptions
+			| EntryControlCCConfigurationSetOptions,
 	) {
 		super(driver, options);
 		if (gotDeserializationOptions(options)) {
@@ -581,10 +599,7 @@ export class EntryControlCCConfigurationSet extends EntryControlCC {
 	public keyCacheTimeout: number;
 
 	public serialize(): Buffer {
-		this.payload = Buffer.from([
-			this.keyCacheSize,
-			this.keyCacheTimeout,
-		]);
+		this.payload = Buffer.from([this.keyCacheSize, this.keyCacheTimeout]);
 		return super.serialize();
 	}
 
