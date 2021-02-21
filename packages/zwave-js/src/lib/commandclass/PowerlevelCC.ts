@@ -284,7 +284,6 @@ interface PowerlevelCCTestNodeSetOptions extends CCCommandOptions {
 }
 
 @CCCommand(PowerlevelCommand.TestNodeSet)
-@expectedCCResponse(PowerlevelCCReport)
 export class PowerlevelCCTestNodeSet extends PowerlevelCC {
 	public constructor(
 		driver: Driver,
@@ -374,7 +373,7 @@ export class PowerlevelCCTestNodeReport extends PowerlevelCC {
 		...ValueMetadata.ReadOnlyUInt8,
 		label: "Test Node Id",
 	})
-	public testNodeId: number;
+	public readonly testNodeId: number;
 
 	@ccValue({ stateful: false })
 	@ccValueMetadata({
@@ -382,7 +381,7 @@ export class PowerlevelCCTestNodeReport extends PowerlevelCC {
 		states: enumValuesToMetadataStates(PowerlevelTestStatus),
 		label: "Test Status",
 	})
-	public testStatus: PowerlevelTestStatus;
+	public readonly testStatus: PowerlevelTestStatus;
 
 	@ccValue({ stateful: false })
 	@ccValueMetadata({
@@ -391,7 +390,7 @@ export class PowerlevelCCTestNodeReport extends PowerlevelCC {
 		max: 65535,
 		label: "Test frame acknowledged count",
 	})
-	public testFrameAcknowlegedCount;
+	public readonly testFrameAcknowlegedCount;
 
 	public toLogEntry(): MessageOrCCLogEntry {
 		return {
