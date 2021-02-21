@@ -376,6 +376,8 @@ export type CCToName<CC extends CommandClasses> = [CC] extends [
 	? "Node Naming and Location"
 	: [CC] extends [typeof CommandClasses["Notification"]]
 	? "Notification"
+	: [CC] extends [typeof CommandClasses["Powerlevel"]]
+	? "Powerlevel"
 	: [CC] extends [typeof CommandClasses["Protection"]]
 	? "Protection"
 	: [CC] extends [typeof CommandClasses["Scene Activation"]]
@@ -463,6 +465,7 @@ export interface CCAPIs {
 	"No Operation": import("./NoOperationCC").NoOperationCCAPI;
 	"Node Naming and Location": import("./NodeNamingCC").NodeNamingAndLocationCCAPI;
 	Notification: import("./NotificationCC").NotificationCCAPI;
+	Powerlevel: import("./PowerlevelCC").PowerlevelCCAPI;
 	Protection: import("./ProtectionCC").ProtectionCCAPI;
 	"Scene Activation": import("./SceneActivationCC").SceneActivationCCAPI;
 	"Scene Actuator Configuration": import("./SceneActuatorConfigurationCC").SceneActuatorConfigurationCCAPI;
