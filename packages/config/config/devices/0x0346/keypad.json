@@ -1,0 +1,386 @@
+// Ring Keypad
+// Param information taken from https://support.ring.com/hc/en-us/article_attachments/360051851012/Keypad_Zwave_UK.pdf
+{
+	"manufacturer": "Ring",
+	"manufacturerId": "0x0346",
+	"label": "Keypad",
+	"description": "Keypad",
+	"devices": [
+		{
+			"productType": "0x0101",
+			"productId": "0x0201"
+		},
+		{
+			"productType": "0x0101",
+			"productId": "0x0202"
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"supportsZWavePlus": true,
+	"paramInformation": {
+		"1": {
+			"label": "Battery Report Interval",
+			"unit": "min",
+			"valueSize": 2,
+			"minValue": 70,
+			"maxValue": 1440,
+			"defaultValue": 70,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"2": {
+			"label": "Z-Wave Sleep Timeout",
+			"unit": "sec",
+			"valueSize": 1,
+			"minValue": 1,
+			"maxValue": 5,
+			"defaultValue": 1,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"3": {
+			"label": "Co-Proc Is Alive",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 1,
+			"readOnly": true,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "No",
+					"value": 0
+				},
+				{
+					"label": "Yes",
+					"value": 1
+				}
+			]
+		},
+		"4": {
+			"label": "Proximity Timeout",
+			"unit": "sec",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 30,
+			"defaultValue": 5,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"5": {
+			"label": "Button Press Timeout",
+			"unit": "sec",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 30,
+			"defaultValue": 5,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"6": {
+			"label": "Status Change Timeout",
+			"unit": "sec",
+			"valueSize": 1,
+			"minValue": 10,
+			"maxValue": 60,
+			"defaultValue": 15,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"7": {
+			"label": "Power Mode",
+			"unit": "sec",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 0,
+			"readOnly": true,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Extended Battery Life",
+					"value": 0
+				},
+				{
+					"label": "Normal Battery Life",
+					"value": 1
+				}
+			]
+		},
+		"8": {
+			"label": "Key Backlight Timeout",
+			"unit": "sec",
+			"valueSize": 1,
+			"minValue": 1,
+			"maxValue": 15,
+			"defaultValue": 3,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"9": {
+			"label": "Key Backlight Brightness",
+			"unit": "%",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 100,
+			"defaultValue": 100,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"10": {
+			"label": "Key Tone Volume",
+			"unit": "level",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 10,
+			"defaultValue": 8,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"11": {
+			"label": "Ambient Light Sensor Level",
+			"unit": "level",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 100,
+			"defaultValue": 5,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"12": {
+			"label": "Siren Volume",
+			"unit": "volume",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 10,
+			"defaultValue": 6,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"13": {
+			"label": "Proximity On/Off",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 1,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Off",
+					"value": 0
+				},
+				{
+					"label": "On",
+					"value": 1
+				}
+			]
+		},
+		"14": {
+			"label": "Proximity Distance",
+			"unit": "cm",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 100,
+			"defaultValue": 100,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"15": {
+			"label": "Extended Battery Life LED Brightness Adjustment",
+			"unit": "%",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 100,
+			"defaultValue": 50,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"16": {
+			"label": "Reduced Battery Life LED Brightness Adjustment",
+			"unit": "%",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 100,
+			"defaultValue": 65,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"17": {
+			"label": "Fast Blink Rate",
+			"unit": "0.1 sec",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 100,
+			"defaultValue": 5,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"18": {
+			"label": "Slow Blink Rate",
+			"unit": "0.5 sec",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 100,
+			"defaultValue": 2,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"19": {
+			"label": "Supervision Report Timeout",
+			"valueSize": 2,
+			"minValue": 500,
+			"maxValue": 5000,
+			"defaultValue": 1500,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"20": {
+			"label": "Number of Re-transmissions Attempts",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 5,
+			"defaultValue": 1,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"21": {
+			"label": "Wait Period Between Re-transmissions Attempts. settings",
+			"valueSize": 1,
+			"minValue": 1,
+			"maxValue": 60,
+			"defaultValue": 5,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"22": {
+			"$if": "productId === 0x0202",
+			"label": "Language",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 31,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "US English",
+					"value": 0
+				},
+				{
+					"label": "UK English",
+					"value": 1
+				},
+				{
+					"label": "French",
+					"value": 2
+				},
+				{
+					"label": "German",
+					"value": 3
+				},
+				{
+					"label": "Italian",
+					"value": 4
+				},
+				{
+					"label": "Spanish",
+					"value": 5
+				},
+				{
+					"label": "Dutch",
+					"value": 6
+				},
+				{
+					"label": "Danish",
+					"value": 7
+				},
+				{
+					"label": "Norwegian",
+					"value": 8
+				},
+				{
+					"label": "Swedish",
+					"value": 9
+				},
+				{
+					"label": "Finnish",
+					"value": 10
+				},
+				{
+					"label": "Arabic",
+					"value": 11
+				}
+			]
+		},
+		"23": {
+			"$if": "productId === 0x0202",
+			"label": "Bit mask data for supported languages.",
+			"valueSize": 4,
+			"minValue": 0,
+			"maxValue": 4294967295,
+			"defaultValue": 0,
+			"readOnly": true,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"24[0xff]": {
+			"$if": "productId === 0x0202",
+			"label": "Quantity of audio files",
+			"valueSize": 3,
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 0,
+			"readOnly": true,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"24[0xff00]": {
+			"$if": "productId === 0x0202",
+			"label": "Audio file version",
+			"valueSize": 3,
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 0,
+			"readOnly": true,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"24[0xff0000]": {
+			"$if": "productId === 0x0202",
+			"label": "Audio file sub version",
+			"valueSize": 3,
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 0,
+			"readOnly": true,
+			"writeOnly": false,
+			"allowManualEntry": true
+		}
+	}
+}
