@@ -30,7 +30,7 @@
 			"allowManualEntry": true
 		},
 		"2": {
-			"label": "Low Battery Report Threshold",
+			"label": "Low Battery Report",
 			"valueSize": 2,
 			"minValue": 1000,
 			"maxValue": 2500,
