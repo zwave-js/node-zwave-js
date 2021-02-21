@@ -10,8 +10,9 @@ import {
 	ZWaveErrorCodes,
 } from "@zwave-js/core";
 import { getEnumMemberName, pick } from "@zwave-js/shared";
-import { CCAPI, Driver } from "../..";
+import type { Driver } from "../driver/Driver";
 import { NodeStatus } from "../node/Types";
+import { CCAPI } from "./API";
 import {
 	API,
 	CCCommand,
