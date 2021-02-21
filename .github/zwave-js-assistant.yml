@@ -39,6 +39,16 @@ stale:
         - 'waiting for info ⏳'
       label: 'stale 💤'
 
+    # Only wait 2 days for people who don't fill out issue templates
+    - action: label
+      afterDays: 2
+      labels:
+        - 'incomplete ⚠'
+      label: 'stale 💤'
+      comment: |
+        Sorry, we cannot act on issues where the issue template is not filled out completely 😕.
+        Please fill out the entire template or the issue will be closed soon.
+
 # Configure auto-labeling
 autoLabel:
   # Add one array entry for each rule
