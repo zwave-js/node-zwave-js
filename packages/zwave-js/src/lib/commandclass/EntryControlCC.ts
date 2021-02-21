@@ -274,15 +274,83 @@ export class EntryControlCCAPI extends CCAPI {
 export class EntryControlCC extends CommandClass {
 	declare ccCommand: EntryControlCommand;
 
-	public async interview(_complete: boolean = true): Promise<void> {
+	public async interview(complete: boolean = true): Promise<void> {
+		const node = this.getNode()!;
 		const endpoint = this.getEndpoint()!;
 		const api = endpoint.commandClasses["Entry Control"].withOptions({
 			priority: MessagePriority.NodeQuery,
 		});
 
-		await api.getKeySupported();
-		await api.getEventSupported();
-		await api.getConfiguration();
+		this.driver.controllerLog.logNode(node.id, {
+			endpoint: this.endpointIndex,
+			message: `${this.constructor.name}: doing a ${
+				complete ? "complete" : "partial"
+			} interview...`,
+			direction: "none",
+		});
+
+		this.driver.controllerLog.logNode(node.id, {
+			endpoint: this.endpointIndex,
+			message: "requesting entry control supported keys...",
+			direction: "outbound",
+		});
+
+		{
+			const resp = await api.getKeySupported();
+			if (resp) {
+				this.driver.controllerLog.logNode(node.id, {
+					endpoint: this.endpointIndex,
+					message: `received entry control supported keys: ${resp.keySupported.toString()}`,
+					direction: "inbound",
+				});
+			}
+		}
+
+		this.driver.controllerLog.logNode(node.id, {
+			endpoint: this.endpointIndex,
+			message: "requesting entry control supported events...",
+			direction: "outbound",
+		});
+
+		{
+			const resp = await api.getEventSupported();
+			if (resp) {
+				this.driver.controllerLog.logNode(node.id, {
+					endpoint: this.endpointIndex,
+					message: `received entry control supported keys:
+data types:             ${resp.dataTypeSupported
+						.map((e) => EntryControlDataTypes[e])
+						.toString()}
+event types:            ${resp.eventTypeSupported
+						.map((e) => EntryControlEventTypes[e])
+						.toString()}
+key cached size min:    ${resp.keyCachedSizeMin}
+key cached size max:    ${resp.keyCachedSizeMax}
+key cached timeout min: ${resp.keyCachedTimeoutMin}
+key cached timeout max: ${resp.keyCachedTimeoutMax}`,
+					direction: "inbound",
+				});
+			}
+		}
+
+		this.driver.controllerLog.logNode(node.id, {
+			endpoint: this.endpointIndex,
+			message: "requesting entry control configuration...",
+			direction: "outbound",
+		});
+
+		{
+			const resp = await api.getConfiguration();
+			if (resp) {
+				this.driver.controllerLog.logNode(node.id, {
+					endpoint: this.endpointIndex,
+					message: `received entry control supported keys:
+key cached size:    ${resp.keyCachedSize}
+key cached timeout: ${resp.keyCachedTimeout}`,
+					direction: "inbound",
+				});
+			}
+		}
 
 		// Remember that the interview is complete
 		this.interviewComplete = true;
