@@ -894,31 +894,30 @@ export class ZWaveController extends EventEmitter {
 		}
 
 		if (node.supportsCC(CommandClasses["Wake Up"])) {
-			// Query the version, so we can setup the wakeup destination correctly
-			const supportedVersion = await node.commandClasses.Version.getCCVersion(
-				CommandClasses["Wake Up"],
-			);
-			if (supportedVersion != undefined && supportedVersion > 0) {
-				node.addCC(CommandClasses["Wake Up"], {
-					version: supportedVersion,
-				});
-				const instance = node.createCCInstance(
+			try {
+				// Query the version, so we can setup the wakeup destination correctly
+				const supportedVersion = await node.commandClasses.Version.getCCVersion(
 					CommandClasses["Wake Up"],
-				)!;
-
-				try {
+				);
+				if (supportedVersion != undefined && supportedVersion > 0) {
+					node.addCC(CommandClasses["Wake Up"], {
+						version: supportedVersion,
+					});
+					const instance = node.createCCInstance(
+						CommandClasses["Wake Up"],
+					)!;
 					await instance.interview();
-				} catch (e: unknown) {
-					if (isTransmissionError(e)) {
-						this.driver.controllerLog.logNode(node.id, {
-							message: `Cannot configure wakeup destination: ${e.message}`,
-							direction: "none",
-							level: "warn",
-						});
-					} else {
-						// we want to pass all other errors through
-						throw e;
-					}
+				}
+			} catch (e: unknown) {
+				if (isTransmissionError(e)) {
+					this.driver.controllerLog.logNode(node.id, {
+						message: `Cannot configure wakeup destination: ${e.message}`,
+						direction: "none",
+						level: "warn",
+					});
+				} else {
+					// we want to pass all other errors through
+					throw e;
 				}
 			}
 		}
