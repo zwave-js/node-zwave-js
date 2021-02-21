@@ -153,9 +153,6 @@ export class SceneControllerConfigurationCCAPI extends CCAPI {
 			// because I'm not sure how to handle a Duration value
 			throwUnsupportedProperty(this.ccId, property);
 		}
-
-		// Verify the current value after a delay
-		this.schedulePoll({ property, propertyKey });
 	};
 
 	protected [POLL_VALUE]: PollValueImplementation = async ({
