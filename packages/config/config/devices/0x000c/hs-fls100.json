@@ -8,7 +8,8 @@
 	"devices": [
 		{
 			"productType": "0x0201",
-			"productId": "0x000b"
+			"productId": "0x000b",
+			"zwaveAllianceId": 2947
 		}
 	],
 	"firmwareVersion": {
@@ -27,8 +28,14 @@
 			"label": "Luminance Report Interval"
 		},
 		"4": {
-			"$import": "templates/homeseer_template.json#enable_disable_base",
+			"$import": "../templates/master_template.json#base_enable_disable",
 			"label": "Send Basic Report on Trigger"
 		}
+	},
+	"metadata": {
+		"inclusion": "Z-Wave auto inclusion.\nOr manual inclusion : put the Z-Wave controller into inclusion mode, press the Link button 3 times within 1.5 seconds to put the unit into inclusion mode",
+		"exclusion": "Put the Z-Wave Controller into exclusion mode. Press the Link button 3 times within 1.5 seconds to put the unit into exclusion mode",
+		"reset": "The product reset is to operate only when the primary controller is missing or inoperable. Press the Link button 3 times within 1.5 seconds to put the unit into exclusion mode.Within 1 second of step 1, press the Link button again and hold until LED is off (about 5 seconds)",
+		"manual": "https://products.z-wavealliance.org/ProductManual/File?folder=&filename=MarketCertificationFiles/2947/HS-FLS100-user-manual2b-A501112779R.pdf"
 	}
 }

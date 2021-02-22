@@ -8,7 +8,8 @@
 	"devices": [
 		{
 			"productType": "0x4447",
-			"productId": "0x3036"
+			"productId": "0x3036",
+			"zwaveAllianceId": 2676
 		}
 	],
 	"firmwareVersion": {
@@ -17,10 +18,10 @@
 	},
 	"paramInformation": {
 		"3": {
-			"$import": "templates/homeseer_template.json#led_indicator_two_options"
+			"$import": "../templates/master_template.json#led_indicator_two_options"
 		},
 		"4": {
-			"$import": "templates/homeseer_template.json#orientation"
+			"$import": "../templates/master_template.json#orientation"
 		},
 		"11": {
 			"label": "Ramp Rate (Z-Wave)",
@@ -83,31 +84,31 @@
 			"$import": "templates/homeseer_template.json#blink_frequency"
 		},
 		"31[0x01]": {
-			"$import": "templates/homeseer_template.json#enable_disable_base",
+			"$import": "../templates/master_template.json#base_enable_disable",
 			"label": "LED 1 Blink Status"
 		},
 		"31[0x02]": {
-			"$import": "templates/homeseer_template.json#enable_disable_base",
+			"$import": "../templates/master_template.json#base_enable_disable",
 			"label": "LED 2 Blink Status"
 		},
 		"31[0x04]": {
-			"$import": "templates/homeseer_template.json#enable_disable_base",
+			"$import": "../templates/master_template.json#base_enable_disable",
 			"label": "LED 3 Blink Status"
 		},
 		"31[0x08]": {
-			"$import": "templates/homeseer_template.json#enable_disable_base",
+			"$import": "../templates/master_template.json#base_enable_disable",
 			"label": "LED 4 Blink Status"
 		},
 		"31[0x10]": {
-			"$import": "templates/homeseer_template.json#enable_disable_base",
+			"$import": "../templates/master_template.json#base_enable_disable",
 			"label": "LED 5 Blink Status"
 		},
 		"31[0x20]": {
-			"$import": "templates/homeseer_template.json#enable_disable_base",
+			"$import": "../templates/master_template.json#base_enable_disable",
 			"label": "LED 6 Blink Status"
 		},
 		"31[0x40]": {
-			"$import": "templates/homeseer_template.json#enable_disable_base",
+			"$import": "../templates/master_template.json#base_enable_disable",
 			"label": "LED 7 Blink Status"
 		}
 	},
@@ -121,5 +122,11 @@
 				}
 			}
 		}
+	},
+	"metadata": {
+		"inclusion": "1. Turn the connected lights ON/OFF by tapping the switch. Tapping and releasing the upper part of the rocker turns the appliance ON. Tapping and releasing the lower part of the rocker turns the appliance OFF.\n2. Add(Include) the module to/from your Z-Wave network with your primary controller. Please refer to the instructions manual of your gateway or remote controller for details and procedures on how these actions can be done. \n3. Normally, the sequence is as follows: when the inclusion process is prompted by your primary controller, single click and release the rocker switch to ON or OFF position. The controller should show that the action was successful. If the controller shows it was a fail, repeat the procedure",
+		"exclusion": "1. Turn the connected appliance ON/OFF by tapping the switch. Tapping and releasing the upper part of the rocker turns the appliance ON. Tapping and releasing the lower part of the rocker turns the appliance OFF.\n2. Delete(Exclude) the module to/from your Z-Wave network with your primary controller. Please refer to the instructions manual of your gateway or remote controller for details and procedures on how these actions can be done. \n3. Normally, the sequence is as follows: when the exclusion process is prompted by your primary controller, single click and release the rocker switch. The controller should show that the action was successful. If the controller shows it was a fail, repeat the procedure",
+		"reset": "Please use this procedure only in the event that the network primary controller is lost or otherwise inoperable.\n\nAll Configuration Parameters can all be restored to their factory default settings by using your primary controller to delete/reset the device. \nTo manually reset, tap the ON button twice quickly and then tap the OFF button twice quickly. Repeat the procedure to restore the settings to the factory default.",
+		"manual": "https://products.z-wavealliance.org/ProductManual/File?folder=&filename=MarketCertificationFiles/2676/HS-WD200-Manual-4.pdf"
 	}
 }
