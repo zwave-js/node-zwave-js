@@ -68,8 +68,8 @@ describe("lib/commandclass/EntryControlCC => ", () => {
 			data,
 		});
 
-		expect(cc.keyCachedSize).toEqual(1);
-		expect(cc.keyCachedTimeout).toEqual(2);
+		expect(cc.keyCacheSize).toEqual(1);
+		expect(cc.keyCacheTimeout).toEqual(2);
 	});
 
 	it("the EventSupportedGet command should serialize correctly", () => {
@@ -107,17 +107,17 @@ describe("lib/commandclass/EntryControlCC => ", () => {
 			data,
 		});
 
-		expect(cc.dataTypeSupported).toEqual([EntryControlDataTypes.Ascii]);
-		expect(cc.eventTypeSupported).toEqual([
+		expect(cc.supportedDataTypes).toEqual([EntryControlDataTypes.ASCII]);
+		expect(cc.supportedEventTypes).toEqual([
 			EntryControlEventTypes.DisarmAll,
 			EntryControlEventTypes.ArmAway,
 			EntryControlEventTypes.ArmHome,
 			EntryControlEventTypes.Cancel,
 		]);
-		expect(cc.keyCachedSizeMin).toEqual(0);
-		expect(cc.keyCachedSizeMax).toEqual(5);
-		expect(cc.keyCachedTimeoutMin).toEqual(1);
-		expect(cc.keyCachedTimeoutMax).toEqual(10);
+		expect(cc.minKeyCacheSize).toEqual(0);
+		expect(cc.maxKeyCacheSize).toEqual(5);
+		expect(cc.minKeyCacheTimeout).toEqual(1);
+		expect(cc.maxKeyCacheTimeout).toEqual(10);
 	});
 
 	it("the KeySupportedGet command should serialize correctly", () => {
@@ -144,6 +144,6 @@ describe("lib/commandclass/EntryControlCC => ", () => {
 			data,
 		});
 
-		expect(cc.keySupported).toEqual([1, 3, 4, 6]);
+		expect(cc.supportedKeys).toEqual([1, 3, 4, 6]);
 	});
 });
