@@ -564,54 +564,45 @@ export class MultilevelSwitchCCReport extends MultilevelSwitchCC {
 		super(driver, options);
 
 		validatePayload(this.payload.length >= 1);
-		// if the payload contains a reserved value, return the actual value
-		// instead of undefined
-		this._currentValue =
-			parseMaybeNumber(this.payload[0]) || this.payload[0];
+		this.currentValue = parseMaybeNumber(
+			this.payload[0],
+			driver.options.preserveUnknownValues,
+		);
 		if (this.version >= 4 && this.payload.length >= 3) {
-			this._targetValue = parseNumber(this.payload[1]);
-			this._duration = Duration.parseReport(this.payload[2]);
+			this.targetValue = parseNumber(this.payload[1]);
+			this.duration = Duration.parseReport(this.payload[2]);
 		}
 		this.persistValues();
 	}
 
-	private _targetValue: number | undefined;
 	@ccValue({ forceCreation: true })
 	@ccValueMetadata({
 		...ValueMetadata.Level,
 		label: "Target value",
 	})
-	public get targetValue(): number | undefined {
-		return this._targetValue;
-	}
+	public readonly targetValue: number | undefined;
 
-	private _duration: Duration | undefined;
 	@ccValue()
 	@ccValueMetadata({
 		...ValueMetadata.Duration,
 		label: "Transition duration",
 	})
-	public get duration(): Duration | undefined {
-		return this._duration;
-	}
+	public readonly duration: Duration | undefined;
 
-	private _currentValue: Maybe<number>;
 	@ccValue()
 	@ccValueMetadata({
 		...ValueMetadata.ReadOnlyLevel,
 		label: "Current value",
 	})
-	public get currentValue(): Maybe<number> {
-		return this._currentValue;
-	}
+	public readonly currentValue: Maybe<number> | undefined;
 
 	public toLogEntry(): MessageOrCCLogEntry {
 		const message: MessageRecord = {
-			"current value": this._currentValue,
+			"current value": this.currentValue,
 		};
-		if (this._targetValue != undefined && this._duration) {
-			message["target value"] = this._targetValue;
-			message.duration = this._duration.toString();
+		if (this.targetValue != undefined && this.duration) {
+			message["target value"] = this.targetValue;
+			message.duration = this.duration.toString();
 		}
 		return {
 			...super.toLogEntry(),
