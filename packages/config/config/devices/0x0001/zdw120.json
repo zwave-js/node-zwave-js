@@ -1,9 +1,9 @@
-// ACT - Advanced Control Technologies ZDW120
+// HomePro ZDW120
 // Two Wire Wall Dimmer
 {
 	"manufacturer": "ACT - Advanced Control Technologies",
 	"manufacturerId": "0x0001",
-	"label": "ZDW120",
+	"label": "HomePro",
 	"description": "Two Wire Wall Dimmer",
 	"devices": [
 		{
@@ -17,276 +17,65 @@
 	},
 	"associations": {
 		"1": {
-			"label": "Group 1",
-			"description": "Tap once",
+			"label": "Single Tap",
 			"maxNodes": 5
 		},
 		"2": {
-			"label": "Group 2",
-			"description": "Tap twice",
+			"label": "Double Tap",
 			"maxNodes": 5
 		},
 		"3": {
-			"label": "Group 3",
-			"description": "Tap three time",
+			"label": "Triple Tap",
 			"maxNodes": 5
 		},
 		"4": {
-			"label": "Group 4",
-			"description": "Group to update transmitter or controler",
+			"label": "Lifeline",
 			"maxNodes": 5,
 			"isLifeline": true
 		}
 	},
 	"paramInformation": {
 		"1": {
-			"label": "Ignore Start Level Bit When Dimming",
-			"description": "Defines the behavior when transmitting dim commands",
-			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 255,
-			"defaultValue": 1,
-			"unsigned": true,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "Use transmisison start level",
-					"value": 0
-				},
-				{
-					"label": "Ignore transmisison start level",
-					"value": 1
-				}
-			]
+			"$import": "templates/act_template.json#ignore_start_level_transmitting"
 		},
 		"2": {
-			"label": "Suspend Group 4",
-			"description": "Disable transmission of command to Group 4",
-			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 255,
-			"defaultValue": 0,
-			"unsigned": true,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "Enable transmission to Group 4",
-					"value": 0
-				},
-				{
-					"label": "Disable transmission to Group 4",
-					"value": 1
-				}
-			]
+			"$import": "templates/act_template.json#suspend_group_4"
 		},
 		"3": {
-			"label": "Night Light",
-			"description": "Defines the behavior of the blue LED.",
-			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 255,
-			"defaultValue": 0,
-			"unsigned": true,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "LED on when switch is OFF",
-					"value": 0
-				},
-				{
-					"label": "LED on when switch is ON",
-					"value": 1
-				}
-			]
+			"$import": "../templates/master_template.json#led_indicator_two_options_inverted"
 		},
 		"4": {
-			"label": "Invert Switch",
-			"description": "Change the top of the switch to OFF and the bottom of the switch to ON.",
-			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 255,
-			"defaultValue": 0,
-			"unsigned": true,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "No",
-					"value": 0
-				},
-				{
-					"label": "Yes",
-					"value": 1
-				}
-			]
+			"$import": "../templates/master_template.json#orientation"
 		},
 		"5": {
-			"label": "Ignore Start-Level (Receiving)",
-			"description": "This dimmer will start dimming from its current level.",
-			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 255,
-			"defaultValue": 0,
-			"unsigned": true,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "No",
-					"value": 0
-				},
-				{
-					"label": "Yes",
-					"value": 1
-				}
-			]
+			"$import": "templates/act_template.json#ignore_start_level_receiving"
 		},
 		"6": {
-			"label": "Don’t Send Level Command after Dim",
-			"description": "Change behavior of dim level information update",
-			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 255,
-			"defaultValue": 1,
-			"unsigned": true,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "Send level command",
-					"value": 0
-				},
-				{
-					"label": "Don’t send level command",
-					"value": 1
-				}
-			]
+			"$import": "templates/act_template.json#disable_send_level"
 		},
 		"7": {
-			"label": "On/Off Command Dim Step",
-			"description": "Indicates how many levels the dimmer will change for each dimming step.",
-			"valueSize": 1,
-			"minValue": 1,
-			"maxValue": 99,
-			"defaultValue": 1,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"$import": "templates/act_template.json#dim_step_zwave"
 		},
 		"8": {
-			"label": "On/Off Command Dim Rate",
-			"description": "Sets the rate at which the dimmer changes the light level.",
-			"valueSize": 1,
-			"minValue": 1,
-			"maxValue": 255,
-			"defaultValue": 3,
-			"unsigned": true,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"$import": "templates/act_template.json#dim_rate_zwave"
 		},
 		"9": {
-			"label": "Local Control Dim Step",
-			"description": "Indicates how many levels the dimmer will change for each dimming step.",
-			"valueSize": 1,
-			"minValue": 1,
-			"maxValue": 99,
-			"defaultValue": 1,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"$import": "templates/act_template.json#dim_step_manual"
 		},
 		"10": {
-			"label": "Local Control Dim Rate",
-			"description": "Sets the dim rate",
-			"valueSize": 1,
-			"minValue": 1,
-			"maxValue": 255,
-			"defaultValue": 3,
-			"unsigned": true,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"$import": "templates/act_template.json#dim_rate_manual"
 		},
 		"11": {
-			"label": "ALL ON/ALL OFF Dim Step",
-			"description": "Indicates how many levels the dimmer will change for each dimming step.",
-			"valueSize": 1,
-			"minValue": 1,
-			"maxValue": 99,
-			"defaultValue": 1,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"$import": "templates/act_template.json#dim_step_all"
 		},
 		"12": {
-			"label": "ALL ON/ALL OFF Dim Rate",
-			"description": "Sets the dim rate for the all on/off command",
-			"valueSize": 1,
-			"minValue": 1,
-			"maxValue": 255,
-			"defaultValue": 3,
-			"unsigned": true,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"$import": "templates/act_template.json#dim_rate_all"
 		},
 		"13": {
-			"label": "Disable Group 4 During a Dim Command",
-			"description": "Change behavior of command to Group 4 during Dim Command",
-			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 255,
-			"defaultValue": 0,
-			"unsigned": true,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "Enable transmission to Group 4",
-					"value": 0
-				},
-				{
-					"label": "Disable transmission to Group 4",
-					"value": 1
-				}
-			]
+			"$import": "templates/act_template.json#disable_group_4"
 		},
 		"19": {
-			"label": "LED Transmission Indication",
-			"description": "Change behavior of LED during transmission to group 1-4",
-			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 255,
-			"defaultValue": 2,
-			"unsigned": true,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "No flicker",
-					"value": 0
-				},
-				{
-					"label": "Flicker during all transmission",
-					"value": 1
-				},
-				{
-					"label": "Flicker first second of transmission",
-					"value": 2
-				}
-			]
+			"$import": "templates/act_template.json#led_indicator"
 		}
 	}
 }

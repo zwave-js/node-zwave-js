@@ -1,10 +1,10 @@
-// ACT - Advanced Control Technologies RF9575
+// Eaton Aspire RF9575
 // Aspire Anyplace Switch
 {
-	"manufacturer": "ACT - Advanced Control Technologies",
+	"manufacturer": "Eaton",
 	"manufacturerId": "0x0001",
-	"label": "RF9575",
-	"description": "Aspire Anyplace Switch",
+	"label": "Aspire RF9575",
+	"description": "Anyplace Switch",
 	"devices": [
 		{
 			"productType": "0x4243",

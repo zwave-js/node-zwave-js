@@ -1,9 +1,10 @@
-// ACT - Advanced Control Technologies ZRW103
+// HomePro ZRW103
+// 20-Amp 3-Way Relay
 {
-	"manufacturer": "ACT - Advanced Control Technologies",
+	"manufacturer": "HomePro",
 	"manufacturerId": "0x0001",
 	"label": "ZRW103",
-	"description": "",
+	"description": "20-Amp 3-Way Relay",
 	"devices": [
 		{
 			"productType": "0x5257",

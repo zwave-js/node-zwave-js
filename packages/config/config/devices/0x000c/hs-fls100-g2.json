@@ -30,8 +30,7 @@
 			"$import": "templates/homeseer_template.json#enable_pir_trigger_alerts"
 		},
 		"5": {
-			"$import": "templates/homeseer_template.json#enable_disable_base",
-			"label": "Enable PIR/lux Floodlight Triggers"
+			"$import": "templates/homeseer_template.json#enable_pir_triggers"
 		},
 		"6": {
 			"label": "Floodlight Triggers",

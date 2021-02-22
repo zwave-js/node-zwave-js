@@ -17,39 +17,24 @@
 	},
 	"paramInformation": {
 		"14": {
-			"$import": "templates/homeseer_template.json#enable_disable_base",
-			"label": "Enable / Disable Basic Set Commands"
+			"$import": "templates/homeseer_template.json#enable_basic_set_command"
 		},
 		"15": {
 			"$import": "templates/homeseer_template.json#basic_set_value"
 		},
 		"17": {
+			"$import": "../templates/master_template.json#base_0-255_nounit",
 			"label": "Flood Alarm Interval",
-			"valueSize": 1,
 			"unit": "minutes",
-			"minValue": 0,
-			"maxValue": 255,
-			"defaultValue": 5,
-			"unsigned": true,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"defaultValue": 5
 		},
 		"18": {
-			"$import": "templates/homeseer_template.json#enable_disable_base",
-			"label": "Enable / Disable Shock Alarm"
+			"$import": "templates/homeseer_template.json#enable_shock_alarm"
 		},
 		"19": {
+			"$import": "../templates/master_template.json#base_0-255_nounit",
 			"label": "Temperature Report Interval",
-			"valueSize": 1,
-			"unit": "minutes",
-			"minValue": 0,
-			"maxValue": 255,
-			"defaultValue": 0,
-			"unsigned": true,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"unit": "minutes"
 		},
 		"20": {
 			"label": "Temperature (High) Alarm Trigger Threshold",
@@ -74,7 +59,7 @@
 			"allowManualEntry": true
 		},
 		"24": {
-			"$import": "templates/homeseer_template.json#enable_disable_base",
+			"$import": "../templates/master_template.json#base_enable_disable",
 			"label": "Enable / Disable Blinking LED",
 			"defaultValue": 1
 		},

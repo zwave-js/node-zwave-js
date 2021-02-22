@@ -1,7 +1,7 @@
-// ACT - Advanced Control Technologies ZRR150
+// HomePro ZRR150
 // Relay Receptacle
 {
-	"manufacturer": "ACT - Advanced Control Technologies",
+	"manufacturer": "HomePro",
 	"manufacturerId": "0x0001",
 	"label": "ZRR150",
 	"description": "Relay Receptacle",

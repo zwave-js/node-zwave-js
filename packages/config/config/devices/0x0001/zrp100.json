@@ -1,7 +1,7 @@
-// ACT - Advanced Control Technologies ZRP100
-// - Z-Wave Plug-In Appliance Module
+// HomePro ZRP100
+// Z-Wave Plug-In Appliance Module
 {
-	"manufacturer": "ACT - Advanced Control Technologies",
+	"manufacturer": "HomePro",
 	"manufacturerId": "0x0001",
 	"label": "ZRP100",
 	"description": "Z-Wave Plug-In Appliance Module",
