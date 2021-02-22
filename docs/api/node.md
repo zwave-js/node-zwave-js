@@ -353,9 +353,9 @@ This property returns the node's **DeviceClass**, which provides further informa
 
 ```ts
 interface DeviceClass {
-	readonly basic: BasicDeviceClass;
-	readonly generic: GenericDeviceClass;
-	readonly specific: SpecificDeviceClass;
+	readonly basic: any;
+	readonly generic: any;
+	readonly specific: any;
 	readonly mandatorySupportedCCs: readonly CommandClasses[];
 	readonly mandatoryControlledCCs: readonly CommandClasses[];
 }
