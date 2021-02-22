@@ -49,7 +49,7 @@
 			"$import": "../templates/master_template.json#orientation"
 		},
 		"5": {
-			"$import": "templates/act_template.json#ignore_start_level"
+			"$import": "templates/act_template.json#ignore_start_level_receiving"
 		},
 		"6": {
 			"$import": "templates/act_template.json#disable_send_level"
