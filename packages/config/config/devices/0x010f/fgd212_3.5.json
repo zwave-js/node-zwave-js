@@ -1055,5 +1055,17 @@
 			"writeOnly": false,
 			"allowManualEntry": true
 		}
+	},
+	"compat": {
+		"commandClasses": {
+			"add": {
+				// The device lists Scene Activation as controlled, not supported
+				// therefore we don't create values for it. Until we have a capability
+				// to dynamically decide which values to create, force-mark it as supported.
+				"0x2b": {
+					"isSupported": true
+				}
+			}
+		}
 	}
 }
