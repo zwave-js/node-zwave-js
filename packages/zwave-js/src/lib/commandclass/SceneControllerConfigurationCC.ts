@@ -13,7 +13,7 @@ import { pick } from "@zwave-js/shared";
 import type { Driver } from "../driver/Driver";
 import { MessagePriority } from "../message/Constants";
 import {
-	PhysicalCCAPI,
+	CCAPI,
 	PollValueImplementation,
 	POLL_VALUE,
 	SetValueImplementation,
@@ -100,14 +100,14 @@ function persistSceneConfig(
 }
 
 @API(CommandClasses["Scene Controller Configuration"])
-export class SceneControllerConfigurationCCAPI extends PhysicalCCAPI {
+export class SceneControllerConfigurationCCAPI extends CCAPI {
 	public supportsCommand(
 		cmd: SceneControllerConfigurationCommand,
 	): Maybe<boolean> {
 		switch (cmd) {
 			case SceneControllerConfigurationCommand.Get:
+				return this.isSinglecast();
 			case SceneControllerConfigurationCommand.Set:
-			case SceneControllerConfigurationCommand.Report:
 				return true; // This is mandatory
 		}
 		return super.supportsCommand(cmd);
@@ -153,9 +153,6 @@ export class SceneControllerConfigurationCCAPI extends PhysicalCCAPI {
 			// because I'm not sure how to handle a Duration value
 			throwUnsupportedProperty(this.ccId, property);
 		}
-
-		// Verify the current value after a delay
-		this.schedulePoll({ property, propertyKey });
 	};
 
 	protected [POLL_VALUE]: PollValueImplementation = async ({
@@ -212,34 +209,55 @@ export class SceneControllerConfigurationCCAPI extends PhysicalCCAPI {
 	}
 
 	public async getLastActivated(): Promise<
-		| {
-				groupId: number;
-				sceneId: number;
-				dimmingDuration: Duration;
-		  }
+		| Pick<
+				SceneControllerConfigurationCCReport,
+				"groupId" | "sceneId" | "dimmingDuration"
+		  >
 		| undefined
 	> {
 		this.assertSupportsCommand(
 			SceneControllerConfigurationCommand,
 			SceneControllerConfigurationCommand.Get,
 		);
-		return this.get(0);
+
+		const cc = new SceneControllerConfigurationCCGet(this.driver, {
+			nodeId: this.endpoint.nodeId,
+			endpoint: this.endpoint.index,
+			groupId: 0,
+		});
+		const response = await this.driver.sendCommand<SceneControllerConfigurationCCReport>(
+			cc,
+			this.commandOptions,
+		);
+
+		// Return value includes "groupId", because
+		// the returned report will include the actual groupId of the
+		// last activated groupId / sceneId
+		if (response) {
+			return pick(response, ["groupId", "sceneId", "dimmingDuration"]);
+		}
 	}
 
 	public async get(
 		groupId: number,
 	): Promise<
-		| {
-				groupId: number;
-				sceneId: number;
-				dimmingDuration: Duration;
-		  }
+		| Pick<
+				SceneControllerConfigurationCCReport,
+				"sceneId" | "dimmingDuration"
+		  >
 		| undefined
 	> {
 		this.assertSupportsCommand(
 			SceneControllerConfigurationCommand,
 			SceneControllerConfigurationCommand.Get,
 		);
+
+		if (groupId === 0) {
+			throw new ZWaveError(
+				`Invalid group ID 0. To get the last activated group / scene, use getLastActivated() instead.`,
+				ZWaveErrorCodes.Argument_Invalid,
+			);
+		}
 
 		const cc = new SceneControllerConfigurationCCGet(this.driver, {
 			nodeId: this.endpoint.nodeId,
@@ -251,11 +269,11 @@ export class SceneControllerConfigurationCCAPI extends PhysicalCCAPI {
 			this.commandOptions,
 		);
 
-		// Return value includes "groupId", because if get(0) is called
-		// the returned report will include the actual groupId of the
-		// last activated groupId / sceneId
+		// Since groupId is not allowed to be 0, only Reports with
+		// groupId equal to the requested groupId will be accepted,
+		// so we can omit groupId from the return.
 		if (response) {
-			return pick(response, ["groupId", "sceneId", "dimmingDuration"]);
+			return pick(response, ["sceneId", "dimmingDuration"]);
 		}
 	}
 }
@@ -428,13 +446,14 @@ export class SceneControllerConfigurationCCReport extends SceneControllerConfigu
 	public readonly dimmingDuration: Duration;
 
 	public persistValues(): boolean {
-		persistSceneConfig.call(
+		// If groupId = 0, values are meaningless
+		if (this.groupId === 0) return false;
+		return persistSceneConfig.call(
 			this,
 			this.groupId,
 			this.sceneId,
 			this.dimmingDuration,
 		);
-		return true;
 	}
 
 	public toLogEntry(): MessageOrCCLogEntry {
