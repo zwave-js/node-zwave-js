@@ -80,26 +80,42 @@ export enum EntryControlEventTypes {
 }
 
 export enum EntryControlDataTypes {
-	NA = 0x00,
+	None = 0x00,
 	Raw = 0x01,
-	Ascii = 0x02,
-	Md5 = 0x03,
+	ASCII = 0x02,
+	MD5 = 0x03,
 }
 
-export function getKeyCachedSizeStateValueID(endpoint: number): ValueID {
+function getValueID(property: string, endpoint: number): ValueID {
 	return {
 		commandClass: CommandClasses["Entry Control"],
 		endpoint,
-		property: "keyCachedSize",
+		property: property,
 	};
 }
 
-export function getKeyCachedTimeoutStateValueID(endpoint: number): ValueID {
-	return {
-		commandClass: CommandClasses["Entry Control"],
-		endpoint,
-		property: "keyCachedTimeout",
-	};
+export function getKeyCacheSizeStateValueID(endpoint: number): ValueID {
+	return getValueID("keyCacheSize", endpoint);
+}
+
+export function getKeyCacheTimeoutStateValueID(endpoint: number): ValueID {
+	return getValueID("keyCacheTimeout", endpoint);
+}
+
+export function getMinKeyCacheSizeStateValueID(endpoint: number): ValueID {
+	return getValueID("minKeyCacheSize", endpoint);
+}
+
+export function getMaxKeyCacheSizeStateValueID(endpoint: number): ValueID {
+	return getValueID("maxKeyCacheSize", endpoint);
+}
+
+export function getMinKeyCacheTimeoutStateValueID(endpoint: number): ValueID {
+	return getValueID("minKeyCacheTimeout", endpoint);
+}
+
+export function getMaxKeyCacheTimeoutStateValueID(endpoint: number): ValueID {
+	return getValueID("maxKeyCacheTimeout", endpoint);
 }
 
 @API(CommandClasses["Entry Control"])
@@ -117,7 +133,7 @@ export class EntryControlCCAPI extends CCAPI {
 	}
 
 	// eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
-	public async getKeySupported() {
+	public async getSupportedKeys() {
 		this.assertSupportsCommand(
 			EntryControlCommand,
 			EntryControlCommand.KeySupportedGet,
@@ -131,13 +147,11 @@ export class EntryControlCCAPI extends CCAPI {
 			cc,
 			this.commandOptions,
 		);
-		if (response) {
-			return pick(response, ["keySupported"]);
-		}
+		return response?.supportedKeys;
 	}
 
 	// eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
-	public async getEventSupported() {
+	public async getEventCapabilities() {
 		this.assertSupportsCommand(
 			EntryControlCommand,
 			EntryControlCommand.EventSupportedGet,
@@ -153,12 +167,12 @@ export class EntryControlCCAPI extends CCAPI {
 		);
 		if (response) {
 			return pick(response, [
-				"dataTypeSupported",
-				"eventTypeSupported",
-				"keyCachedSizeMin",
-				"keyCachedSizeMax",
-				"keyCachedTimeoutMin",
-				"keyCachedTimeoutMax",
+				"supportedDataTypes",
+				"supportedEventTypes",
+				"minKeyCacheSize",
+				"maxKeyCacheSize",
+				"minKeyCacheTimeout",
+				"maxKeyCacheTimeout",
 			]);
 		}
 	}
@@ -179,7 +193,7 @@ export class EntryControlCCAPI extends CCAPI {
 			this.commandOptions,
 		);
 		if (response) {
-			return pick(response, ["keyCachedSize", "keyCachedTimeout"]);
+			return pick(response, ["keyCacheSize", "keyCacheTimeout"]);
 		}
 	}
 
@@ -193,6 +207,56 @@ export class EntryControlCCAPI extends CCAPI {
 			EntryControlCommand.ConfigurationGet,
 		);
 
+		const valueDB = this.endpoint.getNodeUnsafe()!.valueDB;
+
+		// Validate key cache size
+		const minKeyCacheSize = valueDB.getValue<number>(
+			getMinKeyCacheSizeStateValueID(this.endpoint.index),
+		);
+		if (minKeyCacheSize !== undefined && keyCacheSize < minKeyCacheSize) {
+			throw new ZWaveError(
+				`The "keyCacheSize" (${keyCacheSize}) must be >= than "minKeyCacheSize" (${minKeyCacheSize})!`,
+				ZWaveErrorCodes.Argument_Invalid,
+			);
+		}
+
+		const maxKeyCacheSize = valueDB.getValue<number>(
+			getMaxKeyCacheSizeStateValueID(this.endpoint.index),
+		);
+		if (maxKeyCacheSize !== undefined && keyCacheSize > maxKeyCacheSize) {
+			throw new ZWaveError(
+				`The "keyCacheSize" (${keyCacheSize}) must be <= than "maxKeyCacheSize" (${maxKeyCacheSize})!`,
+				ZWaveErrorCodes.Argument_Invalid,
+			);
+		}
+
+		// Validate key cache timeout
+		const minKeyCacheTimeout = valueDB.getValue<number>(
+			getMinKeyCacheTimeoutStateValueID(this.endpoint.index),
+		);
+		if (
+			minKeyCacheTimeout !== undefined &&
+			keyCacheTimeout < minKeyCacheTimeout
+		) {
+			throw new ZWaveError(
+				`The "keyCacheTimeout" (${keyCacheTimeout}) must be >= than "minKeyCacheTimeout" (${minKeyCacheTimeout})!`,
+				ZWaveErrorCodes.Argument_Invalid,
+			);
+		}
+
+		const maxKeyCacheTimeout = valueDB.getValue<number>(
+			getMaxKeyCacheTimeoutStateValueID(this.endpoint.index),
+		);
+		if (
+			maxKeyCacheTimeout !== undefined &&
+			keyCacheTimeout > maxKeyCacheTimeout
+		) {
+			throw new ZWaveError(
+				`The "keyCacheTimeout" (${keyCacheTimeout}) must be <= than "maxKeyCacheTimeout" (${maxKeyCacheTimeout})!`,
+				ZWaveErrorCodes.Argument_Invalid,
+			);
+		}
+
 		const cc = new EntryControlCCConfigurationSet(this.driver, {
 			nodeId: this.endpoint.nodeId,
 			endpoint: this.endpoint.index,
@@ -204,7 +268,7 @@ export class EntryControlCCAPI extends CCAPI {
 			this.commandOptions,
 		);
 		if (response) {
-			return pick(response, ["keyCachedSize", "keyCachedTimeout"]);
+			return pick(response, ["keyCacheSize", "keyCacheTimeout"]);
 		}
 	}
 
@@ -212,7 +276,7 @@ export class EntryControlCCAPI extends CCAPI {
 		{ property },
 		value,
 	): Promise<void> => {
-		if (property !== "keyCachedSize" && property !== "keyCachedTimeout") {
+		if (property !== "keyCacheSize" && property !== "keyCacheTimeout") {
 			throwUnsupportedProperty(this.ccId, property);
 		}
 		if (typeof value !== "number") {
@@ -220,49 +284,40 @@ export class EntryControlCCAPI extends CCAPI {
 		}
 		const valueDB = this.endpoint.getNodeUnsafe()!.valueDB;
 
-		let keyCachedSize = value;
-		let keyCachedTimeout: number = value;
-		if (property === "keyCachedSize") {
-			const oldKeyCachedTimeout = valueDB.getValue<number>(
-				getKeyCachedTimeoutStateValueID(this.endpoint.index),
+		let keyCacheSize = value;
+		let keyCacheTimeout = 2;
+		if (property === "keyCacheTimeout") {
+			keyCacheTimeout = value;
+
+			const oldKeyCacheSize = valueDB.getValue<number>(
+				getKeyCacheSizeStateValueID(this.endpoint.index),
 			);
-			if (oldKeyCachedTimeout == undefined) {
+			if (oldKeyCacheSize == undefined) {
 				throw new ZWaveError(
-					`The "keyCachedSize" property cannot be changed before the key cached timeout is known!`,
+					`The "keyCacheTimeout" property cannot be changed before the key cache size is known!`,
 					ZWaveErrorCodes.Argument_Invalid,
 				);
 			}
-			keyCachedTimeout = oldKeyCachedTimeout;
-		} else {
-			const oldKeyCachedSize = valueDB.getValue<number>(
-				getKeyCachedSizeStateValueID(this.endpoint.index),
-			);
-			if (oldKeyCachedSize == undefined) {
-				throw new ZWaveError(
-					`The "keyCachedTimeout" property cannot be changed before the key cached size is known!`,
-					ZWaveErrorCodes.Argument_Invalid,
-				);
-			}
-			keyCachedSize = oldKeyCachedSize;
+			keyCacheSize = oldKeyCacheSize;
 		}
-		await this.setConfiguration(keyCachedSize, keyCachedTimeout);
+		await this.setConfiguration(keyCacheSize, keyCacheTimeout);
 	};
 
 	protected [POLL_VALUE]: PollValueImplementation = async ({
 		property,
 	}): Promise<unknown> => {
 		switch (property) {
-			case "dataTypeSupported":
-			case "eventTypeSupported":
-			case "keyCachedSizeMin":
-			case "keyCachedSizeMax":
-			case "keyCachedTimeoutMin":
-			case "keyCachedTimeoutMax":
-				return (await this.getEventSupported())?.[property];
-			case "keySupported":
-				return (await this.getKeySupported())?.[property];
-			case "keyCachedSize":
-			case "keyCachedTimeout":
+			case "supportedDataTypes":
+			case "supportedEventTypes":
+			case "minKeyCacheSize":
+			case "maxKeyCacheSize":
+			case "minKeyCacheTimeout":
+			case "maxKeyCacheTimeout":
+				return (await this.getEventCapabilities())?.[property];
+			case "supportedKeys":
+				return this.getSupportedKeys();
+			case "keyCacheSize":
+			case "keyCacheTimeout":
 				return (await this.getConfiguration())?.[property];
 		}
 		throwUnsupportedProperty(this.ccId, property);
@@ -295,15 +350,13 @@ export class EntryControlCC extends CommandClass {
 			direction: "outbound",
 		});
 
-		{
-			const resp = await api.getKeySupported();
-			if (resp) {
-				this.driver.controllerLog.logNode(node.id, {
-					endpoint: this.endpointIndex,
-					message: `received entry control supported keys: ${resp.keySupported.toString()}`,
-					direction: "inbound",
-				});
-			}
+		const supportedKeys = await api.getSupportedKeys();
+		if (supportedKeys) {
+			this.driver.controllerLog.logNode(node.id, {
+				endpoint: this.endpointIndex,
+				message: `received entry control supported keys: ${supportedKeys.toString()}`,
+				direction: "inbound",
+			});
 		}
 
 		this.driver.controllerLog.logNode(node.id, {
@@ -312,25 +365,23 @@ export class EntryControlCC extends CommandClass {
 			direction: "outbound",
 		});
 
-		{
-			const resp = await api.getEventSupported();
-			if (resp) {
-				this.driver.controllerLog.logNode(node.id, {
-					endpoint: this.endpointIndex,
-					message: `received entry control supported keys:
-data types:             ${resp.dataTypeSupported
-						.map((e) => EntryControlDataTypes[e])
-						.toString()}
-event types:            ${resp.eventTypeSupported
-						.map((e) => EntryControlEventTypes[e])
-						.toString()}
-key cached size min:    ${resp.keyCachedSizeMin}
-key cached size max:    ${resp.keyCachedSizeMax}
-key cached timeout min: ${resp.keyCachedTimeoutMin}
-key cached timeout max: ${resp.keyCachedTimeoutMax}`,
-					direction: "inbound",
-				});
-			}
+		const eventCapabilities = await api.getEventCapabilities();
+		if (eventCapabilities) {
+			this.driver.controllerLog.logNode(node.id, {
+				endpoint: this.endpointIndex,
+				message: `received entry control supported keys:
+data types:             ${eventCapabilities.supportedDataTypes
+					.map((e) => EntryControlDataTypes[e])
+					.toString()}
+event types:            ${eventCapabilities.supportedEventTypes
+					.map((e) => EntryControlEventTypes[e])
+					.toString()}
+key cached size min:    ${eventCapabilities.minKeyCacheSize}
+key cached size max:    ${eventCapabilities.maxKeyCacheSize}
+key cached timeout min: ${eventCapabilities.minKeyCacheTimeout}
+key cached timeout max: ${eventCapabilities.maxKeyCacheTimeout}`,
+				direction: "inbound",
+			});
 		}
 
 		this.driver.controllerLog.logNode(node.id, {
@@ -339,17 +390,15 @@ key cached timeout max: ${resp.keyCachedTimeoutMax}`,
 			direction: "outbound",
 		});
 
-		{
-			const resp = await api.getConfiguration();
-			if (resp) {
-				this.driver.controllerLog.logNode(node.id, {
-					endpoint: this.endpointIndex,
-					message: `received entry control supported keys:
-key cached size:    ${resp.keyCachedSize}
-key cached timeout: ${resp.keyCachedTimeout}`,
-					direction: "inbound",
-				});
-			}
+		const conf = await api.getConfiguration();
+		if (conf) {
+			this.driver.controllerLog.logNode(node.id, {
+				endpoint: this.endpointIndex,
+				message: `received entry control supported keys:
+key cached size:    ${conf.keyCacheSize}
+key cached timeout: ${conf.keyCacheTimeout}`,
+				direction: "inbound",
+			});
 		}
 
 		// Remember that the interview is complete
@@ -358,7 +407,7 @@ key cached timeout: ${resp.keyCachedTimeout}`,
 }
 
 @CCCommand(EntryControlCommand.Notification)
-export class EntryControlCCNotication extends EntryControlCC {
+export class EntryControlCCNotification extends EntryControlCC {
 	public constructor(
 		driver: Driver,
 		options: CommandClassDeserializationOptions,
@@ -366,36 +415,27 @@ export class EntryControlCCNotication extends EntryControlCC {
 		super(driver, options);
 
 		validatePayload(this.payload.length >= 4);
-		this._sequenceNumber = this.payload[0];
-		this._dataType = this.payload[1] & 0b11;
-		this._eventType = this.payload[2];
+		this.sequenceNumber = this.payload[0];
+		this.dataType = this.payload[1] & 0b11;
+		this.eventType = this.payload[2];
 		const eventDataLength = this.payload[3];
+		validatePayload(eventDataLength >= 0 && eventDataLength <= 32);
 
-		validatePayload(this.payload.length >= 4 + eventDataLength);
-		this._eventData = Buffer.from(
-			this.payload.slice(4, 4 + eventDataLength),
+		const offset = 4;
+		validatePayload(this.payload.length >= offset + eventDataLength);
+		const eventData = Buffer.from(
+			this.payload.slice(offset, offset + eventDataLength),
 		);
+		this.eventData =
+			this.dataType == EntryControlDataTypes.ASCII
+				? eventData.toString()
+				: eventData;
 	}
 
-	private _sequenceNumber: number;
-	public get sequenceNumber(): number {
-		return this._sequenceNumber;
-	}
-
-	private _dataType: EntryControlDataTypes;
-	public get dataType(): EntryControlDataTypes {
-		return this._dataType;
-	}
-
-	private _eventType: EntryControlEventTypes;
-	public get eventType(): EntryControlEventTypes {
-		return this._eventType;
-	}
-
-	private _eventData: Buffer;
-	public get eventData(): Buffer {
-		return this._eventData;
-	}
+	public readonly sequenceNumber: number;
+	public readonly dataType: EntryControlDataTypes;
+	public readonly eventType: EntryControlEventTypes;
+	public readonly eventData: Buffer | string;
 
 	public toLogEntry(): MessageOrCCLogEntry {
 		const message: MessageRecord = {
@@ -422,27 +462,17 @@ export class EntryControlCCKeySupportedReport extends EntryControlCC {
 		validatePayload(this.payload.length >= 1);
 		const length = this.payload[0];
 		validatePayload(this.payload.length >= 1 + length);
-		this._keySupported = parseBitMask(this.payload.slice(1, 1 + length), 0);
+		this.supportedKeys = parseBitMask(this.payload.slice(1, 1 + length), 0);
 		this.persistValues();
 	}
 
-	private _keySupported: number[];
-
-	@ccValue()
-	@ccValueMetadata({
-		...ValueMetadata.ReadOnly,
-		type: "number[]",
-		label: "Supported keys",
-		description: "A list of supported keys",
-	})
-	public get keySupported(): number[] {
-		return this._keySupported;
-	}
+	@ccValue({ internal: true })
+	public readonly supportedKeys: readonly number[];
 
 	public toLogEntry(): MessageOrCCLogEntry {
 		return {
 			...super.toLogEntry(),
-			message: { "supported keys": this.keySupported.toString() },
+			message: { "supported keys": this.supportedKeys.toString() },
 		};
 	}
 }
@@ -459,119 +489,68 @@ export class EntryControlCCEventSupportedReport extends EntryControlCC {
 	) {
 		super(driver, options);
 
-		validatePayload(this.payload.length >= 6);
+		validatePayload(this.payload.length >= 1);
+		const dataTypeLength = this.payload[0] & 0b11;
+		let offset = 1;
 
-		const dataTypeLength = this.payload[0] & 0b0000_0011;
-		validatePayload(this.payload.length >= 6 + dataTypeLength);
-		this._dataTypeSupported = parseBitMask(
-			this.payload.slice(1, 1 + dataTypeLength),
-			0,
+		validatePayload(this.payload.length >= offset + dataTypeLength);
+		this.supportedDataTypes = parseBitMask(
+			this.payload.slice(offset, offset + dataTypeLength),
+			EntryControlDataTypes.None,
 		);
+		offset += dataTypeLength;
 
-		const eventTypeLength = this.payload[1 + dataTypeLength] & 0b0001_1111;
-		validatePayload(
-			this.payload.length >= 6 + dataTypeLength + eventTypeLength,
-		);
-		this._eventTypeSupported = parseBitMask(
-			this.payload.slice(
-				2 + dataTypeLength,
-				2 + dataTypeLength + eventTypeLength,
-			),
-			0,
-		);
+		validatePayload(this.payload.length >= offset + 1);
+		const eventTypeLength = this.payload[offset] & 0b11111;
+		offset += 1;
 
-		const minMaxStart = 2 + dataTypeLength + eventTypeLength;
-		this._keyCachedSizeMin = this.payload[minMaxStart];
-		this._keyCachedSizeMax = this.payload[minMaxStart + 1];
-		this._keyCachedTimeoutMin = this.payload[minMaxStart + 2];
-		this._keyCachedTimeoutMax = this.payload[minMaxStart + 3];
+		validatePayload(this.payload.length >= offset + eventTypeLength);
+		this.supportedEventTypes = parseBitMask(
+			this.payload.slice(offset, offset + eventTypeLength),
+			EntryControlEventTypes.Caching,
+		);
+		offset += eventTypeLength;
+
+		validatePayload(this.payload.length >= offset + 4);
+		this.minKeyCacheSize = this.payload[offset];
+		this.maxKeyCacheSize = this.payload[offset + 1];
+		this.minKeyCacheTimeout = this.payload[offset + 2];
+		this.maxKeyCacheTimeout = this.payload[offset + 3];
 		this.persistValues();
 	}
 
-	private _dataTypeSupported: EntryControlDataTypes[];
+	@ccValue({ internal: true })
+	public readonly supportedDataTypes: readonly EntryControlDataTypes[];
 
-	@ccValue()
-	@ccValueMetadata({
-		...ValueMetadata.ReadOnly,
-		type: "number[]",
-		label: "Supported data types",
-		description: "A list of supported data types",
-	})
-	public get dataTypeSupported(): EntryControlDataTypes[] {
-		return this._dataTypeSupported;
-	}
+	@ccValue({ internal: true })
+	public readonly supportedEventTypes: readonly EntryControlEventTypes[];
 
-	private _eventTypeSupported: EntryControlEventTypes[];
+	@ccValue({ internal: true })
+	public readonly minKeyCacheSize: number;
 
-	@ccValue()
-	@ccValueMetadata({
-		...ValueMetadata.ReadOnly,
-		type: "number[]",
-		label: "Supported event types",
-		description: "A list of supported event types",
-	})
-	public get eventTypeSupported(): EntryControlEventTypes[] {
-		return this._eventTypeSupported;
-	}
+	@ccValue({ internal: true })
+	public readonly maxKeyCacheSize: number;
 
-	private _keyCachedSizeMin: number;
+	@ccValue({ internal: true })
+	public readonly minKeyCacheTimeout: number;
 
-	@ccValue()
-	@ccValueMetadata({
-		...ValueMetadata.ReadOnlyUInt8,
-		label: "Minimum supported value of key cache size",
-	})
-	public get keyCachedSizeMin(): number {
-		return this._keyCachedSizeMin;
-	}
-
-	private _keyCachedSizeMax: number;
-
-	@ccValue()
-	@ccValueMetadata({
-		...ValueMetadata.ReadOnlyUInt8,
-		label: "Maximum supported value of key cache size",
-	})
-	public get keyCachedSizeMax(): number {
-		return this._keyCachedSizeMax;
-	}
-
-	private _keyCachedTimeoutMin: number;
-
-	@ccValue()
-	@ccValueMetadata({
-		...ValueMetadata.ReadOnlyUInt8,
-		label: "Minimum supported value of key cache timeout",
-	})
-	public get keyCachedTimeoutMin(): number {
-		return this._keyCachedTimeoutMin;
-	}
-
-	private _keyCachedTimeoutMax: number;
-
-	@ccValue()
-	@ccValueMetadata({
-		...ValueMetadata.ReadOnlyUInt8,
-		label: "Maximum supported value of key cache timeout",
-	})
-	public get keyCachedTimeoutMax(): number {
-		return this._keyCachedTimeoutMax;
-	}
+	@ccValue({ internal: true })
+	public readonly maxKeyCacheTimeout: number;
 
 	public toLogEntry(): MessageOrCCLogEntry {
 		return {
 			...super.toLogEntry(),
 			message: {
-				"supported data types": this.dataTypeSupported
+				"supported data types": this.supportedDataTypes
 					.map((dt) => EntryControlDataTypes[dt])
 					.toString(),
-				"supported event types": this.eventTypeSupported
+				"supported event types": this.supportedEventTypes
 					.map((et) => EntryControlEventTypes[et])
 					.toString(),
-				"min key cached size": this.keyCachedSizeMin,
-				"max key cached size": this.keyCachedSizeMax,
-				"min key cached timeout": this.keyCachedTimeoutMin,
-				"max key cached timeout": this.keyCachedTimeoutMax,
+				"min key cached size": this.minKeyCacheSize,
+				"max key cached size": this.maxKeyCacheSize,
+				"min key cached timeout": this.minKeyCacheTimeout,
+				"max key cached timeout": this.maxKeyCacheTimeout,
 			},
 		};
 	}
@@ -591,24 +570,22 @@ export class EntryControlCCConfigurationReport extends EntryControlCC {
 
 		validatePayload(this.payload.length >= 2);
 
-		this._keyCachedSize = this.payload[0];
-		this._keyCachedTimeout = this.payload[1];
+		this.keyCacheSize = this.payload[0];
+		validatePayload(this.keyCacheSize >= 1 && this.keyCacheSize <= 32);
+		this.keyCacheTimeout = this.payload[1];
+		validatePayload(this.keyCacheTimeout >= 1 && this.keyCacheSize <= 10);
 		this.persistValues();
 	}
-
-	private _keyCachedSize: number;
 
 	@ccValue()
 	@ccValueMetadata({
 		...ValueMetadata.UInt8,
 		label: "Key cache size",
 		description: "Number of character that must be stored before sending",
+		min: 1,
+		max: 32,
 	})
-	public get keyCachedSize(): number {
-		return this._keyCachedSize;
-	}
-
-	private _keyCachedTimeout: number;
+	public readonly keyCacheSize: number;
 
 	@ccValue()
 	@ccValueMetadata({
@@ -616,17 +593,17 @@ export class EntryControlCCConfigurationReport extends EntryControlCC {
 		label: "Key cache timeout",
 		description:
 			"Number of seconds that the key cache must wait for additional characters",
+		min: 1,
+		max: 10,
 	})
-	public get keyCachedTimeout(): number {
-		return this._keyCachedTimeout;
-	}
+	public readonly keyCacheTimeout: number;
 
 	public toLogEntry(): MessageOrCCLogEntry {
 		return {
 			...super.toLogEntry(),
 			message: {
-				"key cached size": this.keyCachedSize,
-				"key cached timeout": this.keyCachedTimeout,
+				"key cache size": this.keyCacheSize,
+				"key cache timeout": this.keyCacheTimeout,
 			},
 		};
 	}
@@ -663,8 +640,8 @@ export class EntryControlCCConfigurationSet extends EntryControlCC {
 		}
 	}
 
-	public keyCacheSize: number;
-	public keyCacheTimeout: number;
+	public readonly keyCacheSize: number;
+	public readonly keyCacheTimeout: number;
 
 	public serialize(): Buffer {
 		this.payload = Buffer.from([this.keyCacheSize, this.keyCacheTimeout]);
