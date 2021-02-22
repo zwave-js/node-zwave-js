@@ -77,13 +77,12 @@
     "xstate": "^4.12.0"
   },
   "scripts": {
-    "build:full": "gulp build",
+    "prebuild:full": "ts-node maintenance/prebuildFull.ts",
+    "build:full": "tsc -b tsconfig.build.json",
+    "postbuild:full": "ts-node maintenance/postbuildFull.ts",
     "build": "tsc -b tsconfig.build.json",
     "clean": "tsc -b tsconfig.build.json --clean",
-    "prewatch": "gulp prebuild",
+    "prewatch": "ts-node maintenance/prebuild.ts",
     "watch": "tsc -b tsconfig.build.json --watch --pretty"
-  },
-  "devDependencies": {
-    "@zwave-js/maintenance": "^6.4.0"
   }
 }

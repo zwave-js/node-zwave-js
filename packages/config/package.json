@@ -47,8 +47,5 @@
     "build": "tsc -b tsconfig.build.json",
     "clean": "tsc -b tsconfig.build.json --clean",
     "watch": "yarn run build -- --watch --pretty"
-  },
-  "devDependencies": {
-    "@zwave-js/maintenance": "^6.4.0"
   }
 }

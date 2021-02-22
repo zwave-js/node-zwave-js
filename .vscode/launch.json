@@ -68,7 +68,7 @@
 				"ts-node/register/transpile-only",
 				"-r",
 				"tsconfig-paths/register",
-				"${workspaceFolder}/maintenance/generateTypedDocs.ts"
+				"${workspaceFolder}/packages/maintenance/src/generateTypedDocs.ts"
 			],
 			"console": "integratedTerminal",
 			"skipFiles": ["<node_internals>/**"],
