@@ -92,6 +92,9 @@ interface ValueMetadataNumeric extends ValueMetadataAny {
 -   `states`: Human-readable names for numeric values, for example `{0: "off", 1: "on"}`.
 -   `unit`: An optional unit for numeric values
 
+> [!WARNING]
+> A value with `type: "number"` can contain the literal string `"unknown"` if the driver option `preserveUnknownValues` is `true`.
+
 #### `boolean`
 
 <!-- #import ValueMetadataBoolean from "zwave-js" with no-jsdoc -->
@@ -104,6 +107,9 @@ interface ValueMetadataBoolean extends ValueMetadataAny {
 ```
 
 -   `default`: The default value
+
+> [!WARNING]
+> A value with `type: "boolean"` can contain the literal string `"unknown"` if the driver option `preserveUnknownValues` is `true`.
 
 #### `string`
 

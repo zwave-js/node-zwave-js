@@ -271,59 +271,53 @@ export class BasicCCReport extends BasicCC {
 
 		if (gotDeserializationOptions(options)) {
 			validatePayload(this.payload.length >= 1);
-			this._currentValue = parseMaybeNumber(this.payload[0]);
+			this.currentValue = parseMaybeNumber(
+				this.payload[0],
+				driver.options.preserveUnknownValues,
+			);
 
 			if (this.version >= 2 && this.payload.length >= 3) {
-				this._targetValue = parseNumber(this.payload[1]);
-				this._duration = Duration.parseReport(this.payload[2]);
+				this.targetValue = parseNumber(this.payload[1]);
+				this.duration = Duration.parseReport(this.payload[2]);
 			}
 			// Do not persist values here. We want to control when this is happening,
 			// in case the report is mapped to another CC
 		} else {
-			this._currentValue = options.currentValue;
+			this.currentValue = options.currentValue;
 			if ("targetValue" in options) {
-				this._targetValue = options.targetValue;
-				this._duration = options.duration;
+				this.targetValue = options.targetValue;
+				this.duration = options.duration;
 			}
 		}
 	}
 
-	private _currentValue: Maybe<number> | undefined;
 	@ccValue()
 	@ccValueMetadata({
 		...ValueMetadata.ReadOnlyLevel,
 		label: "Current value",
 	})
-	public get currentValue(): Maybe<number> | undefined {
-		return this._currentValue;
-	}
+	public readonly currentValue: Maybe<number> | undefined;
 
-	private _targetValue: number | undefined;
 	@ccValue({ forceCreation: true })
 	@ccValueMetadata({
 		...ValueMetadata.Level,
 		label: "Target value",
 	})
-	public get targetValue(): number | undefined {
-		return this._targetValue;
-	}
+	public readonly targetValue: number | undefined;
 
-	private _duration: Duration | undefined;
 	@ccValue({ minVersion: 2 })
 	@ccValueMetadata({
 		...ValueMetadata.ReadOnlyDuration,
 		label: "Remaining duration until target value",
 	})
-	public get duration(): Duration | undefined {
-		return this._duration;
-	}
+	public readonly duration: Duration | undefined;
 
 	public serialize(): Buffer {
 		const payload: number[] = [
-			typeof this._currentValue !== "number" ? 0xfe : this._currentValue,
+			typeof this.currentValue !== "number" ? 0xfe : this.currentValue,
 		];
-		if (this.version >= 2 && this._targetValue && this._duration) {
-			payload.push(this._targetValue, this._duration.serializeReport());
+		if (this.version >= 2 && this.targetValue && this.duration) {
+			payload.push(this.targetValue, this.duration.serializeReport());
 		}
 		this.payload = Buffer.from(payload);
 		return super.serialize();

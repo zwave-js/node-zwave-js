@@ -177,6 +177,13 @@ export interface ZWaveOptions {
 
 	/** Specify the network key to use for encryption. This must be a Buffer of exactly 16 bytes. */
 	networkKey?: Buffer;
+
+	/**
+	 * Some Command Classes support reporting that a value is unknown.
+	 * When this flag is `false`, unknown values are exposed as `undefined`.
+	 * When it is `true`, unknown values are exposed as the literal string "unknown" (even if the value is normally numeric).
+	 * Default: `false` */
+	preserveUnknownValues?: boolean;
 }
 
 const defaultOptions: ZWaveOptions = {
@@ -195,6 +202,7 @@ const defaultOptions: ZWaveOptions = {
 		retryAfterTransmitReport: false,
 		nodeInterview: 5,
 	},
+	preserveUnknownValues: false,
 	skipInterview: false,
 	storage: {
 		driver: fsExtra,
