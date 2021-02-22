@@ -37,3 +37,9 @@ async stopLevelChange(
 	colorComponent: ColorComponent,
 ): Promise<void>;
 ```
+
+### `isSetValueOptimistic`
+
+```ts
+isSetValueOptimistic(_valueId: ValueID): boolean;
+```
