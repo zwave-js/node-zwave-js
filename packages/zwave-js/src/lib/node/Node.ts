@@ -681,8 +681,10 @@ export class ZWaveNode extends Endpoint {
 				},
 				value,
 			);
-			// If the call did not throw, assume that the call was successful and remember the new value
-			this._valueDB.setValue(valueId, value, { noEvent: true });
+			if (api.isSetValueOptimistic(valueId)) {
+				// If the call did not throw, assume that the call was successful and remember the new value
+				this._valueDB.setValue(valueId, value, { noEvent: true });
+			}
 
 			return true;
 		} catch (e: unknown) {
