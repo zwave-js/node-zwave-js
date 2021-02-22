@@ -604,13 +604,21 @@ export class ZWaveNode extends Endpoint {
 	/** Returns a list of all value names that are defined on all endpoints of this node */
 	public getDefinedValueIDs(): TranslatedValueID[] {
 		let ret: ValueID[] = [];
+		const allowControlled: CommandClasses[] = [
+			CommandClasses["Scene Activation"],
+		];
 		for (const endpoint of this.getAllEndpoints()) {
 			for (const [cc, info] of endpoint.implementedCommandClasses) {
-				// Don't return value IDs which are only controlled
-				if (!info.isSupported) continue;
-				const ccInstance = endpoint.createCCInstanceUnsafe(cc);
-				if (ccInstance) {
-					ret.push(...ccInstance.getDefinedValueIDs());
+				// Only expose value IDs for CCs that are supported
+				// with some exceptions that are controlled
+				if (
+					info.isSupported ||
+					(info.isControlled && allowControlled.includes(cc))
+				) {
+					const ccInstance = endpoint.createCCInstanceUnsafe(cc);
+					if (ccInstance) {
+						ret.push(...ccInstance.getDefinedValueIDs());
+					}
 				}
 			}
 		}
