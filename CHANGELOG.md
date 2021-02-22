@@ -8,6 +8,7 @@
 * Implemented `Scene Actuator Configuration CC`
 * Updated `Scene Controller Configuration CC` API to match `Scene Actuator Configuration CC`
 * Values that could previously be `"unknown"` now default to `undefined` instead. If the distinction is relevant, the previous behavior can be restored using the driver option `preserveUnknownValues`.
+* Added values to `Color Switch CC` to set multiple color components at once (#1782)
 
 ### Bugfixes
 * Generating the config index no longer fails in production when single files have errors
