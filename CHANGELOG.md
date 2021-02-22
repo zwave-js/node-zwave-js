@@ -3,6 +3,38 @@
 	Placeholder for next release:
 	## __WORK IN PROGRESS__
 -->
+## __WORK IN PROGRESS__
+### Features
+* Implemented `Scene Actuator Configuration CC`
+* Updated `Scene Controller Configuration CC` API to match `Scene Actuator Configuration CC`
+* Values that could previously be `"unknown"` now default to `undefined` instead. If the distinction is relevant, the previous behavior can be restored using the driver option `preserveUnknownValues`.
+
+### Bugfixes
+* Generating the config index no longer fails in production when single files have errors
+* Fixed a crash that could happen while logging a message while the driver is not ready yet
+* Fixed a crash that could happen while trying to bootstrap a device that does not respond after inclusion
+* The state value in `Thermostat Fan Mode CC` is now readonly
+* Firmware updates now disable the delayed activation feature by default
+* When updating a different firmware target than 0, the correct firmware ID is now used
+* The `Fibaro CC` now correctly understands unknown values.
+
+### Config file changes
+* Added an additional Inovelli NZW31T model
+* Use Node Associations for ZW132 Lifeline
+* Added missing zero to LZW45 partial param 23 mask
+* Correct heatit brand names
+* Add Association Groups to Kwikset locks
+* Fixed an incorrect device ID assignment of Kwikset 914/c
+* Remove duplicate parameters from GED2350
+
+### Changes under the hood
+* The config files for Kwikset locks were refactored to use templates
+* Configuration files may now include conditional sections
+* A bunch of documentation updates: CC documentation, `ConfigManager`, API overview
+* Clarified device file requirements
+* Cleaned up the maintenance scripts that were spread out through the repo
+* Issues with incomplete templates now get auto-staled quickly
+
 ## 6.4.0 (2021-02-16)
 ### Features
 * Implemented `Scene Controller Configuration CC`
