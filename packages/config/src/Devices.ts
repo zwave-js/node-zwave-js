@@ -173,15 +173,24 @@ export async function loadDeviceIndexInternal(
 			}
 		}
 
-		// Save the index to disk (but not during unit tests)
-		await writeFile(
-			path.join(indexPath),
-			`// This file is auto-generated. DO NOT edit it by hand if you don't know what you're doing!"
+		// Save the index to disk
+		try {
+			await writeFile(
+				path.join(indexPath),
+				`// This file is auto-generated. DO NOT edit it by hand if you don't know what you're doing!"
 ${stringify(index, "\t")}
 `,
-			"utf8",
-		);
-		logger?.print("Device index regenerated", "verbose");
+				"utf8",
+			);
+			logger?.print("Device index regenerated", "verbose");
+		} catch (e: unknown) {
+			logger?.print(
+				`Writing the device index to disk failed: ${
+					(e as Error).message
+				}`,
+				"error",
+			);
+		}
 	}
 
 	return index!;
