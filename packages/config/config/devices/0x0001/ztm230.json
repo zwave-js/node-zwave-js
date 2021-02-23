@@ -84,7 +84,7 @@
 			"$import": "templates/act_template.json#led_indicator"
 		},
 		"20": {
-			"$import": "templates/act_template.json#base_1-255_nounit",
+			"$import": "../templates/master_template.json#base_1-255_nounit",
 			"label": "Poll Group Interval",
 			"unit": "minutes",
 			"defaultValue": 2
