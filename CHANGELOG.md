@@ -18,6 +18,9 @@
 * Firmware updates now disable the delayed activation feature by default
 * When updating a different firmware target than 0, the correct firmware ID is now used
 * The `Fibaro CC` now correctly understands unknown values.
+* Value IDs for some controlled CCs are now also exposed through `getDefinedValueIDs`
+* Do not map root endpoint values to all endpoints when multiple endpoints support the value
+* The device index is now preserved in memory if it cannot be written to disk
 
 ### Config file changes
 * Added an additional Inovelli NZW31T model
@@ -27,6 +30,7 @@
 * Add Association Groups to Kwikset locks
 * Fixed an incorrect device ID assignment of Kwikset 914/c
 * Remove duplicate parameters from GED2350
+* Add Zooz zen72, update zen71 description
 
 ### Changes under the hood
 * The config files for Kwikset locks were refactored to use templates
