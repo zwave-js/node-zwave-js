@@ -51,8 +51,8 @@ export async function initSentry(
 
 	Sentry.init({
 		release: `${libName}@${libVersion}`,
-		dsn:
-			"https://3ac1c1077df6496b89d797b331a8ec4a@o327859.ingest.sentry.io/1839595",
+		dsn: "https://a66de07edd064106853cc639407ebe64@sentry.iobroker.net/119",
+		// "https://3ac1c1077df6496b89d797b331a8ec4a@o327859.ingest.sentry.io/1839595",
 		defaultIntegrations: false,
 		integrations: [
 			new Sentry.Integrations.OnUncaughtException(),
