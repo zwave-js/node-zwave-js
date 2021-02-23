@@ -9,6 +9,7 @@
 * Updated `Scene Controller Configuration CC` API to match `Scene Actuator Configuration CC`
 * Values that could previously be `"unknown"` now default to `undefined` instead. If the distinction is relevant, the previous behavior can be restored using the driver option `preserveUnknownValues`.
 * Added values to `Color Switch CC` to set multiple color components at once (#1782)
+* Added the option `nodeFilter` to the logger configuration to limit logging to specific nodes
 
 ### Bugfixes
 * Generating the config index no longer fails in production when single files have errors
@@ -21,6 +22,9 @@
 * Value IDs for some controlled CCs are now also exposed through `getDefinedValueIDs`
 * Do not map root endpoint values to all endpoints when multiple endpoints support the value
 * The device index is now preserved in memory if it cannot be written to disk
+* The unit of configuration parameters is now actually read from device configuration files
+* The list of supported and controlled CCs of a node is no longer overwritten when a device sends a NIF on manual activation
+* Add `toLogEntry` method to `Scene Actuator Configuration CC::Set` command
 
 ### Config file changes
 * Added an additional Inovelli NZW31T model
@@ -31,6 +35,7 @@
 * Fixed an incorrect device ID assignment of Kwikset 914/c
 * Remove duplicate parameters from GED2350
 * Add Zooz zen72, update zen71 description
+* Small wording changes to flush technisat devices
 
 ### Changes under the hood
 * The config files for Kwikset locks were refactored to use templates
