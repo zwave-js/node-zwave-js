@@ -29,7 +29,7 @@
 	},
 	"paramInformation": {
 		"1": {
-			"label": "Basic Set Report Value Sent to Associated Devices",
+			"label": "Basic Set Value",
 			"description": "Set the value of basic set report sent to the light associated with the sensor in Group 2 (so the light turns on to the selected brightness level). 99 is full brightness.",
 			"valueSize": 1,
 			"minValue": 0,
