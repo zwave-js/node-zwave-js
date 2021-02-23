@@ -7,8 +7,6 @@ import winston, { Logger } from "winston";
 import type Transport from "winston-transport";
 import { colorizer } from "./Colorizer";
 
-// The following directive is necessary because of our workaround for logform
-// eslint-disable-next-line @typescript-eslint/unbound-method
 const { combine, timestamp, label } = winston.format;
 
 const loglevels = configs.npm.levels;

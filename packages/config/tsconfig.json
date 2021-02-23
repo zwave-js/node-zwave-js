@@ -7,12 +7,16 @@
 			"path": "../core/tsconfig.build.json"
 		},
 		{
-			"path": "../maintenance/tsconfig.build.json"
-		},
-		{
 			"path": "../shared/tsconfig.build.json"
 		}
 	],
-	"include": ["maintenance/**/*.ts", "src/**/*.ts"],
-	"exclude": ["build/**", "node_modules/**"]
+	"include": [
+		"gulpfile.ts",
+		"maintenance/**/*.ts",
+		"src/**/*.ts"
+	],
+	"exclude": [
+		"build/**",
+		"node_modules/**"
+	]
 }
