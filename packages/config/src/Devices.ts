@@ -638,7 +638,7 @@ Parameter #${parameterNumber} has a non-boolean property unsigned`,
 
 		if (
 			definition.unit != undefined &&
-			typeof definition.unit !== "boolean"
+			typeof definition.unit !== "string"
 		) {
 			throwInvalidConfig(
 				"devices",
