@@ -1,0 +1,104 @@
+// Secure Meters (UK) Ltd. BBK001-Z00
+// Beanbag Thermostat
+{
+	"manufacturer": "Secure Meters (UK) Ltd.",
+	"manufacturerId": "0x0059",
+	"label": "BBK001-Z00",
+	"description": "Beanbag Thermostat",
+	"devices": [
+		{
+			"productType": "0x0013",
+			"productId": "0x0001",
+			"zwaveAllianceId": 2396
+		},
+		{
+			"productType": "0x0015",
+			"productId": "0x0001",
+			"zwaveAllianceId": 2698
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"paramInformation": {
+		"1": {
+			"label": "Delta Temperature For Association Group 2",
+			"valueSize": 1,
+			"unit": "0.1°C",
+			"minValue": 0,
+			"maxValue": 100,
+			"defaultValue": 10,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"2": {
+			"label": "Temperature Report Interval For Association Group 2",
+			"valueSize": 1,
+			"unit": "minutes",
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 30,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"3": {
+			"label": "Minimum Set Point Temperature",
+			"valueSize": 1,
+			"unit": "°C",
+			"minValue": 5,
+			"maxValue": 35,
+			"defaultValue": 5,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"4": {
+			"label": "Maximum Set Point Temperature",
+			"valueSize": 1,
+			"unit": "°C",
+			"minValue": 5,
+			"maxValue": 35,
+			"defaultValue": 35,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"5": {
+			"label": "Delta Temperature For Lifeline Group",
+			"valueSize": 1,
+			"unit": "0.1°C",
+			"minValue": 0,
+			"maxValue": 100,
+			"defaultValue": 0,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"6": {
+			"label": "Temperature Report Interval For Lifeline Group",
+			"valueSize": 1,
+			"unit": "minute",
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 0,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		}
+	},
+	"metadata": {
+		"inclusion": "On thermostat in advance mode scroll to option “Add device”, then click OK button. On other Z-Wave device start learn process, thermostat will display outcome on completion of the process.",
+		"exclusion": "On thermostat in advance mode scroll to option “Remove device”, then click OK button. On other Z-Wave device start learn process, thermostat will display outcome on completion of the process.",
+		"reset": "On thermostat in advance mode scroll to option “Factory Reset”, then click OK button.\n\nNote: Please use this procedure only when the network primary controller is missing or otherwise inoperable",
+		"manual": "https://products.z-wavealliance.org/ProductManual/File?folder=&filename=MarketCertificationFiles/2396/Thermostat%20Manual%20V3.pdf"
+	}
+}

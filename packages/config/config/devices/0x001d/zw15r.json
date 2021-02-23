@@ -18,7 +18,7 @@
 	},
 	"paramInformation": {
 		"7": {
-			"label": "Status LED configuration",
+			"label": "Led Status",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 255,
@@ -29,7 +29,7 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "Locater mode",
+					"label": "Locator mode",
 					"value": 255
 				},
 				{

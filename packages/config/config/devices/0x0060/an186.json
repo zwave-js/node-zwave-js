@@ -1,0 +1,42 @@
+// Everspring AN186
+// ON/OFF PLUG
+{
+	"manufacturer": "Everspring",
+	"manufacturerId": "0x0060",
+	"label": "AN186",
+	"description": "ON/OFF PLUG",
+	"devices": [
+		{
+			"productType": "0x0004",
+			"productId": "0x000c",
+			"zwaveAllianceId": [
+				2659,
+				2777
+			]
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"paramInformation": {
+		"3": {
+			"label": "Remember",
+			"description": "1: remember (0: do not remember)",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 1,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		}
+	},
+	"metadata": {
+		"inclusion": "1. Put the Z-Wave Controller into Inclusion mode.\n2. Press the On/Off knob 3 times within 1.5 seconds to put the unit into Inclusion mode.",
+		"exclusion": "1. Put the Z-Wave Controller into Exclusion mode.\n2. Press the On/Off knob 3 times within 1.5 seconds to put the unit into Exclusion mode.",
+		"reset": "Please use this procedure only when the network primary controller is missing or otherwise inoperable.\n1. Press the On/Off knob 3 times within 1.5 seconds to put the unit into exclusion mode.\n2. Within 1 second of step 1, press and hold the knob for 5 seconds.\n3. Node ID is deleted. The device reverts to factory default state.",
+		"manual": "https://products.z-wavealliance.org/ProductManual/File?folder=&filename=MarketCertificationFiles/2659/AN186_UserManual-20171026.pdf"
+	}
+}

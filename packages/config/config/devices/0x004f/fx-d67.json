@@ -1,0 +1,69 @@
+// Flex Automation FX-D67
+// Smart dimmer
+{
+	"manufacturer": "Flex Automation",
+	"manufacturerId": "0x004f",
+	"label": "FX-D67",
+	"description": "Smart dimmer",
+	"devices": [
+		{
+			"productType": "0x0003",
+			"productId": "0x0008",
+			"zwaveAllianceId": 2427
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"paramInformation": {
+		"1": {
+			"label": "Change The State of Indicator Light",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 1,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false
+			"options": [
+				{
+					"label": "Night Light",
+					"value": 0
+				},
+				{
+					"label": "On Indicator",
+					"value": 1
+				}
+			]
+		},
+		"2": {
+			"label": "Memory Function",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 1,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false
+			"options": [
+				{
+					"label": "No Memory",
+					"value": 0
+				},
+				{
+					"label": "Memory Function",
+					"value": 1
+				}
+			]
+		}
+	},
+	"metadata": {
+		"inclusion": "1. have your Z-Wave controller enter into Inclusion mode\n2. press the dimmer socket button three times within 1.5 seconds",
+		"exclusion": "1. have your Z-Wave controller enter into Exclusion mode\n2. press the dimmer socket button three times within 1.5 seconds",
+		"reset": "1. Press your dimmer socket button four times within 1.5 seconds\n2. the fourth time press and hold on the socket button for 5 seconds until socket LED button off \n3. Use the \"RESET\" procedure only in the event that the network primary controller is missing or otherwise inoperable",
+		"manual": "https://products.z-wavealliance.org/ProductManual/File?folder=&filename=MarketCertificationFiles/2427/FX67.pdf"
+	}
+}
