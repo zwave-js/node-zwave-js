@@ -162,8 +162,7 @@
 			]
 		},
 		"8": {
-			"label": "Battery alarm",
-			"description": "Battery alarm value",
+			"label": "Battery alarm value",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 100,

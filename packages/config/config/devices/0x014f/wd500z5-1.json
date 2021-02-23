@@ -51,9 +51,7 @@
 			"allowManualEntry": true
 		},
 		"7": {
-			"label": "Dim Remote On/Off Step",
-			"description": "Dim Remote On/Off Step (default=3, 3 steps)",
-			"unit": "Step(s)",
+			"label": "Dim Remote On/Off Steps",
 			"valueSize": 1,
 			"minValue": 1,
 			"maxValue": 99,
@@ -64,7 +62,6 @@
 		},
 		"8": {
 			"label": "Dim Remote On/Off Timer",
-			"description": "Dim Remote On/Off Timer (default = 10, 10 ms)",
 			"unit": "ms",
 			"valueSize": 1,
 			"minValue": 1,

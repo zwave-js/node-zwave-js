@@ -30,7 +30,6 @@
 		},
 		"1": {
 			"label": "Stop-functionality",
-			"description": "Adjusting the Stop-Functionality",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 1,

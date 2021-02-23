@@ -1,9 +1,10 @@
-// ACT - Advanced Control Technologies ZRW113
+// HomePro ZRW113
+// Relay Switch
 {
-	"manufacturer": "ACT - Advanced Control Technologies",
+	"manufacturer": "HomePro",
 	"manufacturerId": "0x0001",
 	"label": "ZRW113",
-	"description": "",
+	"description": "Relay Switch",
 	"devices": [
 		{
 			"productType": "0x5257",

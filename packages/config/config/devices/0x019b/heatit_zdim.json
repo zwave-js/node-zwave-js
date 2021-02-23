@@ -65,7 +65,6 @@
 		},
 		"5": {
 			"label": "Double press function",
-			"description": "Defines the double press functionality",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 1,
@@ -86,7 +85,6 @@
 		},
 		"6": {
 			"label": "Scene controller",
-			"description": "Enables scene controller",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 1,

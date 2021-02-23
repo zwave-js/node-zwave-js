@@ -46,7 +46,6 @@
 		},
 		"80": {
 			"label": "Automatic Notifications",
-			"description": "Enable or disable automatic notifications",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 2,
@@ -71,7 +70,6 @@
 		},
 		"90": {
 			"label": "Enable/disable Parameter 91 and 92",
-			"description": "Enables/disables parameter 91 and 92 below",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 1,
@@ -91,7 +89,7 @@
 			]
 		},
 		"91": {
-			"label": "Minimum change in wattage",
+			"label": "Minimum change in wattage to trigger event",
 			"description": "Minimum change in wattage to trigger event",
 			"valueSize": 2,
 			"minValue": 0,
@@ -103,8 +101,7 @@
 			"allowManualEntry": true
 		},
 		"92": {
-			"label": "Minimum change in wattage %",
-			"description": "Minimum change in wattage % to trigger event",
+			"label": "Minimum change in wattage to trigger event",
 			"valueSize": 1,
 			"unit": "%",
 			"minValue": 0,

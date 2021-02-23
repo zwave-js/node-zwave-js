@@ -1,7 +1,7 @@
-// ACT - Advanced Control Technologies ZRF113
-// - Isolated Contact Fixture Module
+// HomePro ZRF113
+// Isolated Contact Fixture Module
 {
-	"manufacturer": "ACT - Advanced Control Technologies",
+	"manufacturer": "HomePro",
 	"manufacturerId": "0x0001",
 	"label": "ZRF113",
 	"description": "Isolated Contact Fixture Module",

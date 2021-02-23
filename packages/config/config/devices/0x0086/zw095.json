@@ -60,7 +60,6 @@
 		},
 		"3": {
 			"label": "Selective Reporting",
-			"description": "Enable selective reporting.",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 16,
@@ -119,7 +118,6 @@
 		},
 		"8": {
 			"label": "Percent Change - Whole HEM",
-			"description": "Percentage change in wattage (Whole HEM).",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 100,
@@ -130,7 +128,6 @@
 		},
 		"9": {
 			"label": "Percent Change - Clamp 1",
-			"description": "Percentage change in wattage (Clamp 1).",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 100,
@@ -141,7 +138,6 @@
 		},
 		"10": {
 			"label": "Percent Change - Clamp 2",
-			"description": "Percentage change in wattage (Clamp 2).",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 100,
@@ -152,7 +148,6 @@
 		},
 		"11": {
 			"label": "Percent Change - Clamp 3",
-			"description": "Percentage change in wattage (Clamp3)",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 100,
@@ -246,7 +241,6 @@
 		},
 		"252": {
 			"label": "Lock Configuration",
-			"description": "Enable/Disable Lock Configuration",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 1,

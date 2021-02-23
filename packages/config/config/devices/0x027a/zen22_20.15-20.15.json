@@ -61,7 +61,6 @@
 		},
 		"3": {
 			"label": "Enable / Disable LED Indicator",
-			"description": "Enable or disable the LED indicator",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 1,

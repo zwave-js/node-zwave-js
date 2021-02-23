@@ -1,10 +1,10 @@
-// ThermoFloor 4512688
 // Heatit Z-Smoke Battery
+// Wireless Smoke Detector
 {
-	"manufacturer": "ThermoFloor",
+	"manufacturer": "Heatit",
 	"manufacturerId": "0x019b",
-	"label": "4512688",
-	"description": "Heatit Z-Smoke Battery",
+	"label": "Z-Smoke Battery",
+	"description": "Wireless Smoke Detector",
 	"devices": [
 		{
 			"productType": "0x0003",

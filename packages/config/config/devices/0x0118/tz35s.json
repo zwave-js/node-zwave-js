@@ -68,7 +68,6 @@
 		},
 		"4": {
 			"label": "Invert switch",
-			"description": "Invert switch behaviour",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 1,

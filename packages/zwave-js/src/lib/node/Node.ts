@@ -978,7 +978,7 @@ export class ZWaveNode extends Endpoint {
 		if (this.interviewStage === InterviewStage.ProtocolInfo) {
 			// We ping listening nodes to ensure that they are actually listening
 			// For all others, the messages are queued for wakeup anyways
-			if (this.isListening || this.isFrequentListening) {
+			if (this.isListening && !this.isFrequentListening) {
 				await this.ping();
 			}
 			if (!(await tryInterviewStage(() => this.queryNodeInfo()))) {
@@ -988,12 +988,13 @@ export class ZWaveNode extends Endpoint {
 
 		// The node is deemed ready when has been interviewed completely at least once
 		if (this.interviewStage === InterviewStage.RestartFromCache) {
-			// Mark listening nodes as potentially ready. The first message will determine if it is
+			// Mark nodes as potentially ready. The first message will determine if it is
 			this.readyMachine.send("RESTART_INTERVIEW_FROM_CACHE");
 
-			// We ping listening nodes to ensure that they are actually listening
-			// For all others, the next messages are queued for wakeup anyways
-			if (this.isListening || this.isFrequentListening) {
+			// Assume that sleeping nodes start asleep and ping listening nodes to check their status
+			if (this.canSleep) {
+				this.markAsAsleep();
+			} else if (this.isListening) {
 				await this.ping();
 			}
 		}
@@ -1503,12 +1504,16 @@ version:               ${this.version}`;
 		// supporting node issues a Wake Up Notification Command for sleeping nodes.
 
 		// This is not the handler for wakeup notifications, but some legacy devices send this
-		// message whenever there's an update
+		// message whenever there's an update.
 		if (this.requiresManualValueRefresh()) {
+			const delay =
+				this.deviceConfig?.compat?.manualValueRefreshDelayMs || 0;
 			this.driver.controllerLog.logNode(this.nodeId, {
-				message: `Node does not send unsolicited updates, refreshing actuator and sensor values...`,
+				message: `Node does not send unsolicited updates; refreshing actuator and sensor values${
+					delay > 0 ? ` in ${delay} ms` : ""
+				}...`,
 			});
-			void this.refreshValues();
+			setTimeout(() => this.refreshValues(), delay);
 		}
 	}
 
@@ -1764,9 +1769,18 @@ version:               ${this.version}`;
 			// Instead rely on the version. If MCA is not supported, this will be 0
 			this.getCCVersion(CommandClasses["Multi Channel Association"]) < 3
 		) {
-			// Force the CC to store its values again under endpoint 1
-			command.endpointIndex = 1;
-			command.persistValues();
+			// Find the first endpoint that supports the received CC - if there is none, we don't map the report
+			for (const endpoint of this.getAllEndpoints()) {
+				if (endpoint.index === 0) continue;
+				if (!endpoint.supportsCC(command.ccId)) continue;
+				// Force the CC to store its values again under the supporting endpoint
+				this.driver.controllerLog.logNode(
+					this.nodeId,
+					`Mapping unsolicited report from root device to first supporting endpoint #${endpoint.index}`,
+				);
+				command.endpointIndex = endpoint.index;
+				command.persistValues();
+			}
 		}
 
 		if (command instanceof BasicCC) {
@@ -2564,7 +2578,10 @@ version:               ${this.version}`;
 		// TODO: Should manufacturer id and firmware id be provided externally?
 		const status = await api.requestUpdate({
 			manufacturerId: meta.manufacturerId,
-			firmwareId: meta.firmwareId,
+			firmwareId:
+				target == 0
+					? meta.firmwareId
+					: meta.additionalFirmwareIDs[target - 1],
 			firmwareTarget: target,
 			fragmentSize: this._firmwareUpdateStatus.fragmentSize,
 			checksum: CRC16_CCITT(data),

@@ -35,9 +35,14 @@ The method either returns the stored value if it was found, and `undefined` othe
 getValueMetadata(valueId: ValueID): ValueMetadata
 ```
 
-Every value in Z-Wave has associated metadata that defines the range of allowed values etc. You can retrieve this metadata using `getValueMetadata`. Like `getValue` this takes a single argument of the type [`ValueID`](api/valueid.md).
+Every value in Z-Wave has associated metadata that defines the range of allowed values etc. You can retrieve this metadata using `getValueMetadata`. Like `getValue` this takes a single argument of the type [`ValueID`](api/valueid.md#ValueID).
 
-This method is guaranteed to return at least some very basic metadata (in the form of a [`ValueMetadata`](/api/valueid.md#ValueMetadata) object), even if the value was not found.
+Metadata in `zwave-js` can be separated into a **static** and a **dynamic** part - whatever makes sense in the current context. Whenever metadata is exposed to applications, the dynamic part is merged on top of the static one. `getValueMetadata` is guaranteed to return at least some very basic metadata (in the form of a [`ValueMetadata`](/api/valueid.md#ValueMetadata) object), even if the value was not found.
+
+> [!NOTE]
+> Changes in metadata are communicated through the [`"metadata updated"`](#quotmetadata-updatedquot) event. Note that this **only** gets used when the dynamic part changes. This event is not emitted if a value **only** has static metadata.
+>
+> If applications plan to use metadata, they **must not** assume that metadata does not exist if there was no `"metadata updated"` event. Instead the `getValueMetadata` method **must** be used to retrieve the metadata initially.
 
 ### `getDefinedValueIDs`
 
@@ -643,7 +648,7 @@ The event argument has the shape of [`TranslatedValueID`](api/valueid.md) with a
 
 ### `"metadata updated"`
 
-The metadata for one of this node's values was added or updated.
+The dynamic metadata for one of this node's values was added or updated.
 The callback takes the node itself and an argument detailing the change:
 
 ```ts
@@ -659,11 +664,11 @@ The event argument has the shape of [`TranslatedValueID`](api/valueid.md) with o
 The node has sent a notification event using the `Notification` command class. The callback signature is as follows:
 
 ```ts
-(node: ZWaveNode, notificationLabel: string, parameters?: Buffer) => void;
+(node: ZWaveNode, notificationLabel: string, parameters?: Buffer | Duration | Record<string, number>) => void;
 ```
 
 where
 
 -   `node` is the current node instance
 -   `notificationLabel` is a string representing the notification type (e.g. `"Home security"`)
--   `parameters` _(optional)_ depends on the type of the notification. It may be a `Duration`, additional numeric value, an embedded CC or a raw Buffer. Details can be found in the Z-Wave specifications.
+-   `parameters` _(optional)_ depends on the type of the notification. It may be a `Duration`, a dictionary or a raw Buffer. Details can be found in the Z-Wave specifications.

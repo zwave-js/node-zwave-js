@@ -1,0 +1,68 @@
+// Philio Technology Corp PAD09
+// Smart Dimmer Plug
+{
+	"manufacturer": "Philio Technology Corp",
+	"manufacturerId": "0x013c",
+	"label": "PAD09",
+	"description": "Smart Dimmer Plug",
+	"devices": [
+		{
+			"productType": "0x0005",
+			"productId": "0x0060",
+			"zwaveAllianceId": [
+				3142,
+				3180,
+				3181,
+				3182
+			]
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"paramInformation": {
+		"1": {
+			"label": "Dimmer Level Report Mode",
+			"description": "0 : disable 1 : enable",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 1,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"2": {
+			"label": "Led Indication Mode",
+			"description": "1: show dimmer state 2 : show night mode 3: one flash mode",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 1,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"4": {
+			"label": "Restore Dimmer State",
+			"description": "0 : dimmer off 1 : last dimmer state 2 : dimmer on",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 1,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		}
+	},
+	"metadata": {
+		"inclusion": "1.check Z-WaveTM Controller entered inclusion mode.\n2.Pressing Include button of PAD09 three times within 2 seconds will \nenter inclusion mode.",
+		"exclusion": "1.check Z-WaveTM Controller entered exclusion mode.\n2.Pressing Include button of PAD09 three times within 2 seconds will \nenter exclusion mode",
+		"reset": "1. Pressing Include button of PAD09 three times within 2 seconds will enter inclusion mode. \n2. Within 1 second, press Include button of PAD09 again for 5 seconds. \n3. IDs are excluded. \n\nnote : Please use this procedure only when the network primary controller is missing or otherwise inoperable",
+		"manual": "https://products.z-wavealliance.org/ProductManual/File?folder=&filename=MarketCertificationFiles/3142/PAD09_UserManual_Philio.pdf"
+	}
+}

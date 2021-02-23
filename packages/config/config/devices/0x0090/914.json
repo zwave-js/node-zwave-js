@@ -14,11 +14,22 @@
 		{
 			"productType": "0x0003",
 			"productId": "0x4006"
+		},
+		{
+			"productType": "0x0003",
+			"productId": "0x0440"
 		}
 	],
 	"firmwareVersion": {
 		"min": "0.0",
 		"max": "255.255"
+	},
+	"associations": {
+		"1": {
+			"label": "Lifeline",
+			"maxNodes": 1,
+			"isLifeline": true
+		}
 	},
 	"paramInformation": {
 		"1": {

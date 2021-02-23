@@ -194,7 +194,6 @@
 		},
 		"11": {
 			"label": "LED Color For Motion Event Report",
-			"description": "LED color when sending a motion event report",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 8,
@@ -243,7 +242,6 @@
 		},
 		"12": {
 			"label": "Led Color For Temperature Sensor Report",
-			"description": "LED color when sending a temperature sensor report",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 8,
@@ -292,7 +290,6 @@
 		},
 		"13": {
 			"label": "Led Color For Light Sensor Report",
-			"description": "LED color when sending a light sensor report",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 8,

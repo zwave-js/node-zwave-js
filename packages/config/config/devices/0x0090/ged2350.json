@@ -16,6 +16,13 @@
 		"min": "0.0",
 		"max": "255.255"
 	},
+	"associations": {
+		"1": {
+			"label": "Lifeline",
+			"maxNodes": 1,
+			"isLifeline": true
+		}
+	},
 	"paramInformation": {
 		"1": {
 			"label": "User Code 1 Type",
@@ -766,52 +773,6 @@
 				{
 					"label": "Worker",
 					"value": 4
-				}
-			]
-		},
-		"33": {
-			"label": "SKU number, 1st 4 bytes",
-			"description": "All printable characters",
-			"valueSize": 4,
-			"minValue": 0,
-			"maxValue": 0,
-			"defaultValue": 0,
-			"unsigned": true,
-			"readOnly": true,
-			"writeOnly": false,
-			"allowManualEntry": true
-		},
-		"34": {
-			"label": "SKU number, last 4 bytes",
-			"description": "All printable characters",
-			"valueSize": 4,
-			"minValue": 0,
-			"maxValue": 0,
-			"defaultValue": 0,
-			"unsigned": true,
-			"readOnly": true,
-			"writeOnly": false,
-			"allowManualEntry": true
-		},
-		"40": {
-			"label": "Reset to Default",
-			"description": "Force Factory Reset",
-			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 1,
-			"defaultValue": 0,
-			"unsigned": true,
-			"readOnly": false,
-			"writeOnly": true,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "Normal Operation",
-					"value": 0
-				},
-				{
-					"label": "Factory Reset",
-					"value": 1
 				}
 			]
 		},

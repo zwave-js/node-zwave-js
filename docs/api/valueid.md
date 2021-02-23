@@ -1,4 +1,6 @@
-# ValueID
+# Values and metadata
+
+## ValueID
 
 The `ValueID` interface uniquely identifies to which CC, endpoint and property a value belongs to:
 

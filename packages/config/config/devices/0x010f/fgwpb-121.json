@@ -60,8 +60,7 @@
 			]
 		},
 		"11": {
-			"label": "PowerReporting",
-			"description": "Power reporting.",
+			"label": "Power Reporting",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 100,
@@ -77,8 +76,7 @@
 			]
 		},
 		"12": {
-			"label": "EnergyReportingThreshold",
-			"description": "Energy reporting threshold.",
+			"label": "Energy Reporting Threshold",
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 500,

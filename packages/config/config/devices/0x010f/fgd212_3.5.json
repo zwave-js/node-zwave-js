@@ -79,8 +79,8 @@
 		},
 		"5": {
 			"label": "Dimming Step at Automatic Control",
-			"description": "percentage of a dimming step at automatic control. 1-99",
 			"valueSize": 1,
+			"unit": "%",
 			"minValue": 1,
 			"maxValue": 99,
 			"defaultValue": 1,
@@ -90,7 +90,6 @@
 		},
 		"6": {
 			"label": "Dimming Step Timing at Automatic Control",
-			"description": "Defines the time of a dimming step at automatic control",
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 255,
@@ -112,7 +111,6 @@
 		},
 		"8": {
 			"label": "Dimming Step Timing at Manual Control",
-			"description": "Defines the time of a dimming step at manual control.",
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 255,
@@ -291,7 +289,6 @@
 		},
 		"21": {
 			"label": "Value sent to associated devices on single click",
-			"description": "The value sent to associated devices on single click.",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 255,
@@ -313,7 +310,6 @@
 		},
 		"22": {
 			"label": "Change [On-Off] bi-stable keys",
-			"description": "Allow changing [On-Off] bi-stable keys",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 255,
@@ -563,7 +559,6 @@
 		},
 		"31": {
 			"label": "Load recognized during auto-calibration",
-			"description": "Load control mode recognized during auto-calibration",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 1,
@@ -711,7 +706,6 @@
 		},
 		"38": {
 			"label": "Brightness level correction for flickering loads",
-			"description": "Duration of brightn level correction for flickering",
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 255,
@@ -952,7 +946,6 @@
 		},
 		"49": {
 			"label": "OVERHEAT and VOLTAGE DROP alarm report",
-			"description": "Critical temperature/VOLTAGE DROP alarm report",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 255,
@@ -1029,7 +1022,6 @@
 		},
 		"58": {
 			"label": "Method of calculating the active power",
-			"description": "Calculation of active power",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 255,

@@ -67,8 +67,7 @@
 		},
 		"6": {
 			"label": "Brightness measuring interval",
-			"description": "Brightness measuring interval [min]",
-			"unit": "min",
+			"unit": "minutes",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 120,

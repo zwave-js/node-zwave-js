@@ -1,0 +1,52 @@
+// Qolsys QZ2130-840
+// IQ Outlet Plug-In On/Off Switch
+{
+	"manufacturer": "Qolsys",
+	"manufacturerId": "0x012a",
+	"label": "QZ2130-840",
+	"description": "IQ Outlet Plug-In On/Off Switch",
+	"devices": [
+		{
+			"productType": "0x4447",
+			"productId": "0x3031",
+			"zwaveAllianceId": 3032
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"paramInformation": {
+		"3": {
+			"label": "Night Light",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 2,
+			"defaultValue": 0,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "LED is on when switch is on"
+					"value": 0
+				},
+				{
+					"label": "LED is on when switch is off"
+					"value": 1
+				},
+				{
+					"label": "LED is always off"
+					"value": 2
+				}
+				]
+		}
+	},
+	"metadata": {
+		"inclusion": "Inclusion: Add the device into your network by a Z-Wave certified controller. The IQ Outlet supports the latest S2 security and SmartStart offered by Z-Wave certified controllers. If your controller supports S2 or SmartStart, please refer to the user guide of the controller for detailed instructions on adding devices to the network. You should be able to add the IQ Outlet into your network using the unique QR code or the DSK 5 digit pin located on the product or packaging. In addition, the device can be added using the traditional method for Z-Wave as follows:\n\n1. Place your network controller into inclusion mode by following the controller manufacturer's instructions.\n2. When the controller is ready, single click the button on the front of the IQ Outlet. The controller should indicate that the new device was added successfully.\n3. Once the IQ Outlet has been successfully added to your home network, you can move it to the preferred location in the home.\n\nIf the controller shows it failed, repeat the procedure.",
+		"exclusion": "Exclusion: Remove the device into your network by a Z-Wave certified controller. The IQ Outlet supports the latest S2 security and SmartStart offered by Z-Wave certified controllers. If your controller supports S2 or SmartStart, please refer to the user guide of the controller for detailed instructions on removing devices to the network. In addition, the device can be removed using the traditional method for Z-Wave as follows:\n\n1. Place your network controller into Exclusion mode by following the controller manufacturer's instructions.\n2. When the controller is ready, single click the button on the front of the IQ Outlet. The controller should indicate that the new device was removed successfully.\n\nIf the controller shows it failed, repeat the procedure.",
+		"reset": "1. Unplug the IQ Outlet from the AC outlet and also unplug the power plugs of the lighting from the module (if plugged in)\n2. Press and hold the button on the IQ Outlet\n3. Plug the IQ Outlet back into the AC outlet with the button pressed\nAfter 3 seconds, release the button. If you see the button blink, that means that IQ Outlet has been reset successfully.\n\nPlease use this procedure only when the network primary controller is missing or otherwise inoperable.",
+		"manual": "https://products.z-wavealliance.org/ProductManual/File?folder=&filename=MarketCertificationFiles/3032/IQ%20Outlet%20User%20Manual%20060718.pdf"
+	}
+}

@@ -46,7 +46,6 @@
 		},
 		"3": {
 			"label": "Default PIR time",
-			"description": "The default PIR time",
 			"valueSize": 2,
 			"minValue": 10,
 			"maxValue": 3600,

@@ -2,6 +2,7 @@ import {
 	actuatorCCs,
 	CommandClasses,
 	indexDBsByNode,
+	isTransmissionError,
 	NODE_ID_BROADCAST,
 	ValueDB,
 	ZWaveError,
@@ -858,18 +859,30 @@ export class ZWaveController extends EventEmitter {
 				});
 				const ownNodeId = this.driver.controller.ownNodeId!;
 
-				if (node.supportsCC(CommandClasses.Association)) {
-					await node.commandClasses.Association.addNodeIds(
-						1,
-						ownNodeId,
-					);
-				} else {
-					await node.commandClasses[
-						"Multi Channel Association"
-					].addDestinations({
-						groupId: 1,
-						endpoints: [{ nodeId: ownNodeId, endpoint: 0 }],
-					});
+				try {
+					if (node.supportsCC(CommandClasses.Association)) {
+						await node.commandClasses.Association.addNodeIds(
+							1,
+							ownNodeId,
+						);
+					} else {
+						await node.commandClasses[
+							"Multi Channel Association"
+						].addDestinations({
+							groupId: 1,
+							endpoints: [{ nodeId: ownNodeId, endpoint: 0 }],
+						});
+					}
+				} catch (e: unknown) {
+					if (isTransmissionError(e)) {
+						this.driver.controllerLog.logNode(node.id, {
+							message: `Failed to configure Z-Wave+ Lifeline association: ${e.message}`,
+							direction: "none",
+							level: "warn",
+						});
+					} else {
+						throw e;
+					}
 				}
 			} else {
 				this.driver.controllerLog.logNode(node.id, {
@@ -896,21 +909,16 @@ export class ZWaveController extends EventEmitter {
 				try {
 					await instance.interview();
 				} catch (e: unknown) {
-					if (
-						e instanceof ZWaveError &&
-						(e.code === ZWaveErrorCodes.Controller_MessageDropped ||
-							e.code === ZWaveErrorCodes.Controller_CallbackNOK ||
-							e.code === ZWaveErrorCodes.Controller_ResponseNOK ||
-							e.code === ZWaveErrorCodes.Controller_NodeTimeout)
-					) {
+					if (isTransmissionError(e)) {
 						this.driver.controllerLog.logNode(node.id, {
 							message: `Cannot configure wakeup destination: ${e.message}`,
 							direction: "none",
 							level: "warn",
 						});
+					} else {
+						// we want to pass all other errors through
+						throw e;
 					}
-					// we want to pass all other errors through
-					throw e;
 				}
 			}
 		}

@@ -145,7 +145,6 @@
 		},
 		"42": {
 			"label": "Humidity threshold to trigger a report.",
-			"description": "Threshold for change in humidity to trigger a report.",
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 65535,

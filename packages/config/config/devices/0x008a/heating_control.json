@@ -105,7 +105,6 @@
 		},
 		"6": {
 			"label": "Type of 'special' thermostat",
-			"description": "Type of 'special' thermostat if applicable",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 2,
@@ -152,7 +151,6 @@
 		},
 		"9": {
 			"label": "Enable/Disable thermostat schedule",
-			"description": "Enable/Disable thermostat schedule inside the controller",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 255,

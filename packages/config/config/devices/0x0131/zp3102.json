@@ -30,8 +30,7 @@
 			"allowManualEntry": true
 		},
 		"2": {
-			"label": "Celsius / Fahrenheit",
-			"description": "0 = Celsius, 1 = Fahrenheit",
+			"label": "Temperature Unit",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 1,

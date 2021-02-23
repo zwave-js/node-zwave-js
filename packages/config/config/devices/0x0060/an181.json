@@ -73,8 +73,7 @@
 		},
 		"4": {
 			"label": "Interval for wattage auto report",
-			"description": "Set the interval for wattage auto report in minutes",
-			"unit": "Minutes",
+			"unit": "minutes",
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 32767,
@@ -91,8 +90,7 @@
 		},
 		"5": {
 			"label": "Interval for kW*h auto report",
-			"description": "Set the interval for kW*h auto report in minutes",
-			"unit": "Minutes",
+			"unit": "minutes",
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 32767,
@@ -109,7 +107,6 @@
 		},
 		"6": {
 			"label": "Auto report load surpasses value",
-			"description": "Auto report when load surpasses the set value of wattage",
 			"unit": "Watt",
 			"valueSize": 2,
 			"minValue": 0,

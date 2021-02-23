@@ -61,7 +61,6 @@
 		},
 		"3": {
 			"label": "LED indication #1",
-			"description": "LED indication button 1",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 8,
@@ -110,7 +109,6 @@
 		},
 		"4": {
 			"label": "LED indication #2",
-			"description": "LED indication button 2",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 8,
@@ -159,7 +157,6 @@
 		},
 		"5": {
 			"label": "LED indication #3",
-			"description": "LED indication button 3",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 8,
@@ -208,7 +205,6 @@
 		},
 		"6": {
 			"label": "LED indication #4",
-			"description": "LED indication button 4",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 8,
@@ -457,7 +453,6 @@
 		},
 		"18": {
 			"label": "Disable House Cleaning.",
-			"description": "Disable House Cleaning Mode.",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 1,
@@ -478,7 +473,6 @@
 		},
 		"23": {
 			"label": "Control of association groups (button #1).",
-			"description": "Control of association groups for device 1 (button #1).",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 1,
@@ -499,7 +493,6 @@
 		},
 		"24": {
 			"label": "Control of association groups (button #2).",
-			"description": "Control of association groups for device 2 (button #2).",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 1,
@@ -520,7 +513,6 @@
 		},
 		"25": {
 			"label": "Control of association groups (button #3).",
-			"description": "Control of association groups for device 3 (button #3).",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 1,
@@ -541,7 +533,6 @@
 		},
 		"26": {
 			"label": "Control of association groups (button #4).",
-			"description": "Control of association groups for device 4 (button #4).",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 1,
@@ -691,7 +682,6 @@
 		},
 		"19[0xff00]": {
 			"label": "Upper switch value - (button #1)",
-			"description": "Multilevel Switch - Upper switch value - (button #1)",
 			"valueSize": 4,
 			"minValue": 0,
 			"maxValue": 255,
@@ -702,7 +692,6 @@
 		},
 		"19[0xff0000]": {
 			"label": "Lower switch value - (button #1)",
-			"description": "Multilevel Switch - Lower switch value - (button #1)",
 			"valueSize": 4,
 			"minValue": 0,
 			"maxValue": 99,
@@ -734,7 +723,6 @@
 		},
 		"20[0xff00]": {
 			"label": "Upper switch value - (button #2)",
-			"description": "Multilevel Switch - Upper switch value - (button #2)",
 			"valueSize": 4,
 			"minValue": 0,
 			"maxValue": 255,
@@ -745,7 +733,6 @@
 		},
 		"20[0xff0000]": {
 			"label": "Lower switch value - (button #2)",
-			"description": "Multilevel Switch - Lower switch value - (button #2)",
 			"valueSize": 4,
 			"minValue": 0,
 			"maxValue": 99,
@@ -777,7 +764,6 @@
 		},
 		"21[0xff00]": {
 			"label": "Upper switch value - (button #3)",
-			"description": "Multilevel Switch - Upper switch value - (button #3)",
 			"valueSize": 4,
 			"minValue": 0,
 			"maxValue": 255,
@@ -788,7 +774,6 @@
 		},
 		"21[0xff0000]": {
 			"label": "Lower switch value - (button #3)",
-			"description": "Multilevel Switch - Lower switch value - (button #3)",
 			"valueSize": 4,
 			"minValue": 0,
 			"maxValue": 99,
@@ -820,7 +805,6 @@
 		},
 		"22[0xff00]": {
 			"label": "Upper switch value - (button #4)",
-			"description": "Multilevel Switch - Upper switch value - (button #4)",
 			"valueSize": 4,
 			"minValue": 0,
 			"maxValue": 255,
@@ -831,7 +815,6 @@
 		},
 		"22[0xff0000]": {
 			"label": "Lower switch value - (button #4)",
-			"description": "Multilevel Switch - Lower switch value - (button #4)",
 			"valueSize": 4,
 			"minValue": 0,
 			"maxValue": 99,

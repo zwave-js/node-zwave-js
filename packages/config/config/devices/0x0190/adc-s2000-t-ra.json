@@ -30,7 +30,7 @@
 			"allowManualEntry": true
 		},
 		"2": {
-			"label": "Low Battery Report",
+			"label": "Low Battery Level",
 			"valueSize": 2,
 			"minValue": 1000,
 			"maxValue": 2500,

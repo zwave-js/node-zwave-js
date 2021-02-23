@@ -188,6 +188,14 @@ unregisterRequestHandler(fnType: FunctionType, handler: RequestHandler): void
 
 Unregisters a message handler that has been added with `registerRequestHandler`
 
+### `updateLogConfig`
+
+```ts
+updateLogConfig(config: DeepPartial<LogConfig>): void
+```
+
+Updates the logging configuration without having to restart the driver.
+
 ## Driver properties
 
 ### `cacheDir`
@@ -208,6 +216,14 @@ Once the `"driver ready"` event was emitted, this property provides access to th
 
 > [!WARNING]
 > Don't use it before the driver is ready!
+
+### `configManager`
+
+```ts
+readonly configManager: ConfigManager
+```
+
+Returns the [`ConfigManager`](api/config-manager.md) instance used to lookup device configuration files, meters, notifications, etc...
 
 ### `ready`
 
@@ -262,7 +278,7 @@ interface FileSystem {
 
 ### `LogConfig`
 
-The log configuration is passed to the driver constructor and can be used to influence the logging behavior. This config will overwrite the `LOGTOFILE` and `LOGLEVEL` environment variables if the corresponding properties are set. All properties are optional and will default to the values described below.
+The log configuration is passed to the driver constructor and can be used to influence the logging behavior. This config will overwrite the `LOGTOFILE` and `LOGLEVEL` environment variables if the corresponding properties are set. All properties are optional and will default to the values described below. To change these options on the fly, you can use the [`updateLogConfig`](#updateLogConfig) method.
 
 ```ts
 interface LogConfig {
@@ -461,3 +477,4 @@ For more control over writing the cache files, you can use the `storage` options
 The `throttle` option allows you to fine-tune the filesystem. The default value `"normal"`
 
 For custom logging options you can use `logConfig`, check [`LogConfig`](#LogConfig) interface for more informations.
+The logging options can be changed on the fly using the [`updateLogConfig`](#updateLogConfig) method.

@@ -1,0 +1,76 @@
+// Ecolink TILT-ZWAVE5
+// Z-Wave Plus Garage Door Tilt Sensor
+{
+	"manufacturer": "Ecolink",
+	"manufacturerId": "0x014a",
+	"label": "TILT-ZWAVE5",
+	"description": "Z-Wave Plus Garage Door Tilt Sensor",
+	"devices": [
+		{
+			"productType": "0x0005",
+			"productId": "0x04aa",
+			"zwaveAllianceId": 3793
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"paramInformation": {
+		"1": {
+			"label": "Application Level Retry",
+			"description": "Number of attempts",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 3,
+			"defaultValue": 3,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"2": {
+			"label": "Milliseconds Between Application Level Retry",
+			"description": "Millisecond delays between application level retry",
+			"valueSize": 2,
+			"unit": "seconds",
+			"minValue": 0,
+			"maxValue": 0,
+			"defaultValue": 0,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"3": {
+			"label": "Garage Close Angle Configuration",
+			"description": "3 different angle settings",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 0,
+			"defaultValue": 0,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"4": {
+			"label": "Garage Open Angle Configuration",
+			"description": "3 different angle settings",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 0,
+			"defaultValue": 0,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		}
+	},
+	"metadata": {
+		"inclusion": "Network Inclusion\nThe Z-Wave Plus Garage Tilt Sensor must be added to a Z-Wave Plus network prior to use. To include the device in a network both the device and the network controller must be in inclusion mode at the same time. Refer to the instructions provided by the manufacturer of your specific controller for details on initiating the controller’s inclusion mode.\n1) Verify that the Z-Wave Plus controller you are using is compatible with the Z-Wave Plus Tilt Sensor.\n2) Put your Z-Wave Plus Controller into add (inclusion) mode.\n3) Insert the battery and press the learn button on the tilt sensor.\n4) The LED on the front of the unit will turn off if network inclusion is successful",
+		"exclusion": "Network Exclusion\n1) Any Z-Wave Plus Device can be removed from any Z-Wave Plus controller. Follow the directions to put your Z-Wave Plus Controller into exclusion mode.\n2) Press the inclusion / exclusion button on the Z-Wave Plus Tilt Sensor.\n3) The LED in front of the unit will blink steadily if the network exclusion is successful.Notes:\n• Controller inclusion mode must be activated BEFORE starting sensor inclusion or exclusion mode.\n• The device can only be included into one controller network at a time, and must be excluded from one network before inclusion in another",
+		"reset": "Factory Default\nThe Z-Wave Plus Tilt Sensor can be factory defaulted by pressing and holding the factory reset button for 5 seconds",
+		"manual": "https://products.z-wavealliance.org/ProductManual/File?folder=&filename=product_documents/3793/TILT-ZWAVE5%20Manual%20R0.9.pdf"
+	}
+}

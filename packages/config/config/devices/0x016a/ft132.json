@@ -189,7 +189,6 @@
 		},
 		"92": {
 			"label": "Set the threshold value of percent power",
-			"description": "Set the threshold value of wattage.",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 100,

@@ -1,0 +1,118 @@
+// Flex Automation FX-S69
+// Meter Switch
+{
+	"manufacturer": "Flex Automation",
+	"manufacturerId": "0x004f",
+	"label": "FX-S69",
+	"description": "Meter Switch",
+	"devices": [
+		{
+			"productType": "0x0004",
+			"productId": "0x0002",
+			"zwaveAllianceId": 2428
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"paramInformation": {
+		"1": {
+			"label": "Change The State of Indicator Light",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 1,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false
+			"options": [
+				{
+					"label": "On Indicator",
+					"value": 0
+				},
+				{
+					"label": "Night Light",
+					"value": 1
+				}
+			]
+		},
+		"2": {
+			"label": "Memory Function",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 1,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false
+			"options": [
+				{
+					"label": "No Memory",
+					"value": 0
+				},
+				{
+					"label": "Memory Function",
+					"value": 1
+				}
+			]
+		}
+		},
+		"3": {
+			"label": "Watt Meter Report Period",
+			"valueSize": 2,
+			"minValue": 1,
+			"maxValue": 32767,
+			"defaultValue": 720,
+			"unit": "5 seconds",
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"4": {
+			"label": "Kwh Meter Report Period",
+			"valueSize": 2,
+			"minValue": 1,
+			"maxValue": 32767,
+			"defaultValue": 6,
+			"unit": "10 minutes",
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"5": {
+			"label": "Threshold of Watt For Load Caution",
+			"valueSize": 2,
+			"minValue": 10,
+			"maxValue": 3000,
+			"defaultValue": 3000,
+			"unit": "Watt",
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"6": {
+			"label": "Threshold of Kwh For Load Caution",
+			"valueSize": 2,
+			"minValue": 1,
+			"maxValue": 10000,
+			"unit": "Kwh",
+			"defaultValue": 10000,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		}
+	},
+	"metadata": {
+		"inclusion": "1. Enter your Z-Wave controller into inclusion mode\n2. Press the socket on/off button three times within 1.5 seconds to be included",
+		"exclusion": "1. Enter your Z-Wave controller into exclusion mode\n2. Press the socket on/off button three times within 1.5 seconds to be excluded",
+		"reset": "1. To reset, press the socket on/off button three times within 1.5 seconds\n2. then the fourth time, press and hold for seconds until the socket LED is off\n3. the socket reset successfully\n\nUse the \"Reset\" procedure only in the event that the network primary controller is missing or otherwise inoperable",
+		"manual": "https://products.z-wavealliance.org/ProductManual/File?folder=&filename=MarketCertificationFiles/2428/FX69.pdf"
+	}
+}

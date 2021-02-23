@@ -49,7 +49,6 @@
 		},
 		"3": {
 			"label": "Threshold of Watt for load caution",
-			"description": "Set threshold of wattage meter value for load caution .",
 			"valueSize": 2,
 			"minValue": 10,
 			"maxValue": 1300,

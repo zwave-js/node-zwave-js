@@ -35,7 +35,6 @@
 		},
 		"2": {
 			"label": "Turn Off Light Time Configuration",
-			"description": "Turn Off Light Time",
 			"valueSize": 1,
 			"minValue": 1,
 			"maxValue": 120,

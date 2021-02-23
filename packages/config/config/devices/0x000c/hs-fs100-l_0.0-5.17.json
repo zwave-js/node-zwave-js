@@ -1,10 +1,10 @@
 // HomeSeer Technologies HS-FS100-L
-// Homeseer Z-Wave Indicator Light Sensor
+// Z-Wave Indicator Light Sensor
 {
 	"manufacturer": "HomeSeer Technologies",
 	"manufacturerId": "0x000c",
 	"label": "HS-FS100-L",
-	"description": "Homeseer Z-Wave Indicator Light Sensor",
+	"description": "Z-Wave Indicator Light Sensor",
 	"devices": [
 		{
 			"productType": "0x0202",
@@ -15,48 +15,18 @@
 		"min": "0.0",
 		"max": "5.17"
 	},
-	"supportsZWavePlus": true,
 	"paramInformation": {
 		"1": {
-			"label": "Light Sensitvity",
-			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 2,
-			"defaultValue": 0,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"$import": "templates/homeseer_template.json#light_sensitivity"
 		},
 		"2": {
-			"label": "Water Detecton beep frequency",
-			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 2,
-			"defaultValue": 2,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"$import": "templates/homeseer_template.json#water_beep_frequency"
 		},
 		"3": {
-			"label": "Temperature reportng interval when on line power",
-			"valueSize": 1,
-			"minValue": 30,
-			"maxValue": 255,
-			"defaultValue": 60,
-			"unsigned": true,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"$import": "templates/homeseer_template.json#temp_reporting_interval"
 		},
 		"4": {
-			"label": "Enable Notfcaton Buzzer",
-			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 1,
-			"defaultValue": 1,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"$import": "templates/homeseer_template.json#enable_notification_buzzer"
 		}
 	}
 }

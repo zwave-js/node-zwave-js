@@ -161,7 +161,6 @@
 		},
 		"7": {
 			"label": "Value sent to 2nd Association Group on On event",
-			"description": "value sent in case of On event",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 255,
@@ -173,7 +172,6 @@
 		},
 		"8": {
 			"label": "value sent to 2nd Association Group on Off event",
-			"description": "value sent in case of Off event",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 255,

@@ -1,0 +1,90 @@
+// Tronico Technology Co. Ltd. IMZ6220
+// 2 Gang Insert Module Switch
+{
+	"manufacturer": "Tronico Technology Co. Ltd.",
+	"manufacturerId": "0x0111",
+	"label": "IMZ6220",
+	"description": "2 Gang Insert Module Switch",
+	"devices": [
+		{
+			"productType": "0x5001",
+			"productId": "0x6260",
+			"zwaveAllianceId": 2444
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"paramInformation": {
+		"1": {
+			"label": "Switch Type",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 255,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Momentary",
+					"value": 0
+				},
+				{
+					"label": "Rocker",
+					"value": 255
+				}
+			]
+		},
+		"2": {
+			"label": "Button/Module Synchronization",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 255,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Enabled",
+					"value": 0
+				},
+				{
+					"label": "Disabled",
+					"value": 255
+				}
+			]
+		},
+		"3": {
+			"label": "Power On Default",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 255,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Off",
+					"value": 0
+				},
+				{
+					"label": "Resume last status",
+					"value": 255
+				}
+			]
+		}
+	},
+	"metadata": {
+		"inclusion": "Step 1) Start the gateway in Add device mode.\nStep 2) Trigger module start \"Device Add/Remove\" mode by program button on the module or local switch connected to the module as following:\n a) By program button on the module: \nQuick pressing the program button 3 times in 1.5 seconds ( LED quick flashing ) to enter “Device Add/Remove” mode. LED lights up for 3 sec to indicate Add process complete.\n\nb) By switch connected to the module (only available after 10 mins of AC power on ): \n● Rocker Switch: Quick toggle channel 1 or channel 2 switch turn on and off 5 times( LED quick flashing ) to enter “Device Add/Remove” mode. LED lights up for 3 sec to indicate Add process complete.\n\n● Momentary Switch: \nQuick pressing channel 1 or channel 2 switch button 5 times ( LED quick flashing ) to enter “Device Add/Remove” mode. LED lights up for 3 sec to indicate Add process complete",
+		"exclusion": "Step 1) Start the gateway in Remove device mode.\nStep 2) Trigger module start \"Device Add/Remove\" mode by program button on the module or local switch connected to the module as following:\n a) By program button on the module: \nQuick pressing the program button 3 times in 1.5 seconds ( LED quick flashing ) to enter “Device Add/Remove” mode. LED lights up for 3 sec to indicate Remove process complete.\n\nb) By switch connected to the module (only available after 10 mins of AC power on ): \n● Rocker Switch: Quick toggle channel 1 or channel 2 switch turn on and off 5 times( LED quick flashing ) to enter “Device Add/Remove” mode. LED lights up for 3 sec to indicate Remove process complete.\n\n● Momentary Switch: \nQuick pressing channel 1 or channel 2 switch button 5 times ( LED quick flashing ) to enter “Device Add/Remove” mode. LED lights up for 3 sec to indicate Remove process complete",
+		"reset": "Press and hold the program button for 10 sec, LED lights up for 3 sec to indicate the factory default reset complete.\nNote:Please use this procedure only when the network primary controller is missing or otherwise inoperable",
+		"manual": "https://products.z-wavealliance.org/ProductManual/File?folder=&filename=MarketCertificationFiles/2444/IMZ6220%20Relay说明书_英文稿(20170606)-VER.2.3.pdf"
+	}
+}

@@ -1,5 +1,5 @@
-// Aeotect Thermostatic Valve similar to Eurotronics Spirit
-// Thermostatic Valve
+// Aeotec Ltd. Radiator Thermostat
+// Thermostat - HVAC
 {
 	"manufacturer": "Aeotec Ltd.",
 	"manufacturerId": "0x0371",
@@ -77,7 +77,6 @@
 		},
 		"4": {
 			"label": "Battery report",
-			"description": "Battery reporting",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 1,
@@ -163,8 +162,7 @@
 		},
 		"8": {
 			"label": "Temperature Offset",
-			"description": "Measured Temperature offset",
-			"unit": "1/10 °C",
+			"unit": ".1°C",
 			"valueSize": 1,
 			"minValue": -128,
 			"maxValue": 50,

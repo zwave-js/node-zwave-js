@@ -36,7 +36,6 @@
 	"paramInformation": {
 		"1": {
 			"label": "Selected Relay",
-			"description": "Selected Relay (Endpoint)",
 			"valueSize": 1,
 			"minValue": 1,
 			"maxValue": 3,
@@ -111,7 +110,6 @@
 		},
 		"4": {
 			"label": "Auto OFF Timer",
-			"description": "Auto OFF Timer Countdown",
 			"valueSize": 2,
 			"unit": "seconds",
 			"minValue": 0,

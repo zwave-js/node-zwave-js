@@ -1,10 +1,10 @@
-// ThermoFloor 4512689
-// Heatit Z-Smoke Detector 230V
+// Heatit Z-Smoke 230V
+// Wired Smoke Detector
 {
-	"manufacturer": "ThermoFloor",
+	"manufacturer": "Heatit",
 	"manufacturerId": "0x019b",
-	"label": "4512689",
-	"description": "Heatit Z-Smoke Detector 230V",
+	"label": "Z-Smoke 230V",
+	"description": "Wired Smoke Detector",
 	"devices": [
 		{
 			"productType": "0x0003",

@@ -65,7 +65,6 @@
 		},
 		"12": {
 			"label": "On automatically with timer",
-			"description": "Turn Smart plug On Automatically with Timer",
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 32535,
@@ -107,7 +106,6 @@
 		},
 		"30": {
 			"label": "Restore state ofter power failure",
-			"description": "Restore on/off status for Smart plug 16A after power failure",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 1,
@@ -140,7 +138,6 @@
 		},
 		"41": {
 			"label": "Treshold time for power reporting",
-			"description": "Treshold time for power reporting [Watt]",
 			"unit": "sec",
 			"valueSize": 2,
 			"minValue": 0,
