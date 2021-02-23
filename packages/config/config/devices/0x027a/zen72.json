@@ -32,7 +32,7 @@
 	},
 	"paramInformation": {
 		"1": {
-			"label": "Paddle Orientation",
+			"label": "Invert Orientation",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 2,
@@ -42,11 +42,11 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "Top on, bottom off",
+					"label": "Normal orientation",
 					"value": 0
 				},
 				{
-					"label": "Top off, bottom on",
+					"label": "Inverted orientation",
 					"value": 1
 				},
 				{
@@ -178,7 +178,7 @@
 					"value": 1
 				},
 				{
-					"label": "Previous State",
+					"label": "Previous state",
 					"value": 2
 				}
 			]
@@ -296,7 +296,7 @@
 			]
 		},
 		"15": {
-			"label": "Enable Local and Z-Wave Control",
+			"label": "Local and Z-Wave Control",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 2,
@@ -310,11 +310,11 @@
 					"value": 0
 				},
 				{
-					"label": "Local control and Z-Wave control enabled",
+					"label": "Both enabled",
 					"value": 1
 				},
 				{
-					"label": "Local control and Z-Wave control disabled",
+					"label": "Both disabled",
 					"value": 2
 				}
 			]
