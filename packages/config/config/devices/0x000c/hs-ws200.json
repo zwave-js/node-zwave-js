@@ -21,7 +21,7 @@
 			"$import": "../templates/master_template.json#led_indicator_two_options"
 		},
 		"4": {
-			"$import": "templates/homeseer_template.json#orientation"
+			"$import": "../templates/master_template.json#orientation"
 		},
 		"13": {
 			"$import": "templates/homeseer_template.json#status_mode"
