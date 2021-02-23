@@ -71,8 +71,8 @@
 			"allowManualEntry": true
 		},
 		"4": {
-			"label": "Lux Level Trigger",
-			"description": "Set lux level trigger with 10 being the lowest reported value.  The sensor will report motion only if lux level is below the set value. 0=set manually; 1=ignore lux.",
+			"label": "Lux Level Threshold",
+			"description": "Set lux level threshold with 10 being the lowest reported value.  The sensor will report motion only if lux level is below the set value. 0=set manually; 1=ignore lux.",
 			"unit": "lux",
 			"valueSize": 2,
 			"minValue": 0,
