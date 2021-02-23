@@ -17,7 +17,7 @@
 		"description": "Controls whether commands will be transmitted to Group 4"
 	},
 	"disable_send_level": {
-		"$import": "../templates/master_template.json#base_enable_disable_inverted",
+		"$import": "../../templates/master_template.json#base_enable_disable_inverted",
 		"label": "Enable / Disable Send Levels After Dim",
 		"description": "Controls whether devices are set to the same level as the ZDW103 after dimming"
 	},
@@ -85,7 +85,7 @@
 		"label": "Dimming Rate (All-On/All-Off)"
 	},
 	"disable_group_4": {
-		"$import": "../templates/master_template.json#base_enable_disable_inverted",
+		"$import": "../../templates/master_template.json#base_enable_disable_inverted",
 		"label": "Enable / Disable Group 4 Dimming",
 		"description": "Controls whether dimming commands are transmitted to Group 4"
 	}
