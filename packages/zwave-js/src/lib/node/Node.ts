@@ -567,8 +567,6 @@ export class ZWaveNode extends Endpoint {
 		return this._neighbors;
 	}
 
-	private _nodeInfoReceived: boolean = false;
-
 	private _valueDB: ValueDB;
 	/**
 	 * Provides access to this node's values
@@ -896,7 +894,6 @@ export class ZWaveNode extends Endpoint {
 
 		this._interviewAttempts = 0;
 		this.interviewStage = InterviewStage.None;
-		this._nodeInfoReceived = false;
 		this._ready = false;
 		this._deviceClass = undefined;
 		this._isListening = undefined;
@@ -1498,12 +1495,11 @@ version:               ${this.version}`;
 	 * Handles the receipt of a NIF / NodeUpdatePayload
 	 */
 	public updateNodeInfo(nodeInfo: NodeUpdatePayload): void {
-		if (!this._nodeInfoReceived) {
+		if (this.interviewStage < InterviewStage.NodeInfo) {
 			for (const cc of nodeInfo.supportedCCs)
 				this.addCC(cc, { isSupported: true });
 			for (const cc of nodeInfo.controlledCCs)
 				this.addCC(cc, { isControlled: true });
-			this._nodeInfoReceived = true;
 		}
 
 		// As the NIF is sent on wakeup, treat this as a sign that the node is awake
