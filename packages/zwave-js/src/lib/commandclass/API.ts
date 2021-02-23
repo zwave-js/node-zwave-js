@@ -286,6 +286,7 @@ export interface CCAPIs {
 	"Alarm Sensor": import("./AlarmSensorCC").AlarmSensorCCAPI;
 	Association: import("./AssociationCC").AssociationCCAPI;
 	"Association Group Information": import("./AssociationGroupInfoCC").AssociationGroupInfoCCAPI;
+	"Barrier Operator": import("./BarrierOperatorCC").BarrierOperatorCCAPI;
 	Basic: import("./BasicCC").BasicCCAPI;
 	Battery: import("./BatteryCC").BatteryCCAPI;
 	"Binary Sensor": import("./BinarySensorCC").BinarySensorCCAPI;
@@ -314,9 +315,12 @@ export interface CCAPIs {
 	Notification: import("./NotificationCC").NotificationCCAPI;
 	Protection: import("./ProtectionCC").ProtectionCCAPI;
 	"Scene Activation": import("./SceneActivationCC").SceneActivationCCAPI;
+	"Scene Controller Configuration": import("./SceneControllerConfigurationCC").SceneControllerConfigurationCCAPI;
 	Security: import("./SecurityCC").SecurityCCAPI;
 	"Sound Switch": import("./SoundSwitchCC").SoundSwitchCCAPI;
 	Supervision: import("./SupervisionCC").SupervisionCCAPI;
+	"Thermostat Fan Mode": import("./ThermostatFanModeCC").ThermostatFanModeCCAPI;
+	"Thermostat Fan State": import("./ThermostatFanStateCC").ThermostatFanStateCCAPI;
 	"Thermostat Mode": import("./ThermostatModeCC").ThermostatModeCCAPI;
 	"Thermostat Operating State": import("./ThermostatOperatingStateCC").ThermostatOperatingStateCCAPI;
 	"Thermostat Setback": import("./ThermostatSetbackCC").ThermostatSetbackCCAPI;

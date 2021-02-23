@@ -1425,6 +1425,18 @@ describe("lib/node/Node", () => {
 				},
 				2,
 			);
+			node.valueDB.setValue(
+				{
+					commandClass: CommandClasses["Multi Channel"],
+					endpoint: 0,
+					property: "interviewComplete",
+				},
+				true,
+			);
+			// The endpoint suppports Binary Switch
+			node.getEndpoint(1)?.addCC(CommandClasses["Binary Switch"], {
+				isSupported: true,
+			});
 
 			// Handle a command for the root endpoint
 			const command = new BinarySwitchCCReport(

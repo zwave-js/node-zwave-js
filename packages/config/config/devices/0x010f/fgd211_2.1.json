@@ -57,7 +57,6 @@
 	"paramInformation": {
 		"1": {
 			"label": "Enable/Disable ALL ON/OFF",
-			"description": "Activate/Deactive ALL ON/OFF",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 255,
@@ -157,7 +156,6 @@
 		},
 		"10": {
 			"label": "Time of AUTOMATIC moving between dimming values",
-			"description": "Time of Automatic moving the Dimmer between the extreme dimming values",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 255,
@@ -270,8 +268,7 @@
 			]
 		},
 		"17": {
-			"label": "3-way switch",
-			"description": "3-way switch function",
+			"label": "3-way switch function",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 255,
@@ -337,7 +334,6 @@
 		},
 		"20": {
 			"label": "Minimum level of the Dimmer",
-			"description": "Enable decreasing the minimum level of the Dimmer",
 			"valueSize": 1,
 			"minValue": 100,
 			"maxValue": 170,

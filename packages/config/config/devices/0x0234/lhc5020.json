@@ -127,7 +127,6 @@
 		},
 		"6": {
 			"label": "Prel. filter time on input terminals",
-			"description": "Preliminary filter time on input terminals",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 255,

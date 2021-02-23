@@ -1,0 +1,91 @@
+// Homeseer Technologies HS-HSM200
+// Z-Wave Multi Sensor
+{
+	"manufacturer": "HomeSeer Technologies",
+	"manufacturerId": "0x000c",
+	"label": "HS-HSM200",
+	"description": "Z-Wave Multi Sensorr",
+	"devices": [
+		{
+			"productType": "0x0004",
+			"productId": "0x0001"
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"associations": {
+		"1": {
+			"label": "Lifeline",
+			"description": "This group is normally automatically assigned to the Z-Wave system controller when EZMultiPli is added to the ZWave network.",
+			"maxNodes": 1,
+			"isLifeline": true
+		},
+		"2": {
+			"label": "Basic",
+			"description": "This group is used to directly turn lights on or off when motion is detected.",
+			"maxNodes": 4
+		}
+	},
+	"paramInformation": {
+		"1": {
+			"label": "Off Delay After Motion",
+			"unit": "minutes",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 127,
+			"defaultValue": 10,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"2": {
+			"label": "Dim Level",
+			"description": "Sets the dim level; -1 for full on",
+			"unit": "%",
+			"valueSize": 1,
+			"minValue": -1,
+			"maxValue": 99,
+			"defaultValue": -1,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"3": {
+			"label": "Light Level Report Interval",
+			"description": "Sets the interval for light level reports; 0 to disable",
+			"unit": "minutes",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 127,
+			"defaultValue": 60,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"4": {
+			"label": "Temperature Report Interval",
+			"description": "Sets the interval for temp level reports; 0 to disable",
+			"unit": "minutes",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 127,
+			"defaultValue": 60,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"5": {
+			"label": "Temperature Calibration",
+			"valueSize": 1,
+			"unit": "0.1°F",
+			"minValue": -128,
+			"maxValue": 127,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		}
+	}
+}

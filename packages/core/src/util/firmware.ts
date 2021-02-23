@@ -3,7 +3,13 @@ import MemoryMap from "nrf-intel-hex";
 import { ZWaveError, ZWaveErrorCodes } from "../error/ZWaveError";
 import { CRC16_CCITT } from "./crc";
 
-export type FirmwareFileFormat = "aeotec" | "otz" | "ota" | "hex" | "gecko";
+export type FirmwareFileFormat =
+	| "aeotec"
+	| "otz"
+	| "ota"
+	| "hex"
+	| "gecko"
+	| "bin";
 
 export interface Firmware {
 	data: Buffer;
@@ -27,7 +33,9 @@ export function guessFirmwareFileFormat(
 	filename: string,
 	rawData: Buffer,
 ): FirmwareFileFormat {
-	if (
+	if (filename.endsWith(".bin")) {
+		return "bin";
+	} else if (
 		(filename.endsWith(".exe") || filename.endsWith(".ex_")) &&
 		rawData.includes(firmwareIndicators.aeotec)
 	) {
@@ -76,6 +84,9 @@ export function extractFirmware(
 			// There is no description for the file contents, so we
 			// have to assume this is for firmware target 0
 			return { data: rawData };
+		case "bin":
+			// There is no description for the file contents, so the user has to make sure to select the correct target
+			return { data: rawData };
 	}
 }
 
@@ -92,7 +103,7 @@ function extractFirmwareAeotec(data: Buffer): Firmware {
 	// The additional firmware data (also 16-byte-aligned), the firmware name (256 bytes)
 	// and some control bytes are added at the end, so we can deduce which kind of information
 	// is included here
-	const numControlBytes = data.length % 16;
+	let numControlBytes = data.length % 16;
 	// The control bytes are as follows:
 	// [2 bytes checksum]? [4 bytes offset] [4 bytes length]
 
@@ -100,11 +111,20 @@ function extractFirmwareAeotec(data: Buffer): Firmware {
 	const firmwareStart = data.readUInt32BE(data.length - 8);
 	const firmwareLength = data.readUInt32BE(data.length - 4);
 
-	if (firmwareStart + firmwareLength > data.length - 256 - numControlBytes) {
-		throw new ZWaveError(
-			"This does not appear to be a valid Aeotec updater (invalid firmware length)!",
-			ZWaveErrorCodes.Argument_Invalid,
-		);
+	// Some files don't have such a strict alignment - in that case fall back to ignoring the non-aligned control bytes
+	switch (true) {
+		case firmwareStart + firmwareLength ===
+			data.length - 256 - numControlBytes:
+			// all good
+			break;
+		case firmwareStart + firmwareLength === data.length - 256 - 8:
+			numControlBytes = 8;
+			break;
+		default:
+			throw new ZWaveError(
+				"This does not appear to be a valid Aeotec updater (invalid firmware length)!",
+				ZWaveErrorCodes.Argument_Invalid,
+			);
 	}
 
 	const firmwareData = data.slice(
@@ -143,7 +163,7 @@ function extractFirmwareAeotec(data: Buffer): Firmware {
 			firmwareNameBytes.indexOf(0, firmwareNameOffset),
 		)
 		.toString("utf8");
-	if (!/^[a-zA-Z0-9_]+$/.test(firmwareName)) {
+	if (!/^[a-zA-Z0-9_ -]+$/.test(firmwareName)) {
 		throw new ZWaveError(
 			"This does not appear to be a valid Aeotec updater (invalid firmware name)!",
 			ZWaveErrorCodes.Argument_Invalid,
@@ -166,12 +186,21 @@ function extractFirmwareAeotec(data: Buffer): Firmware {
 	return ret;
 }
 
-function extractFirmwareHEX(data: Buffer): Firmware {
+function extractFirmwareHEX(dataHEX: Buffer): Firmware {
 	try {
-		const memMap = MemoryMap.fromHex(data.toString("ascii"));
-		return {
-			data: Buffer.from(memMap.get(0)),
-		};
+		const memMap: Map<number, Uint8Array> = MemoryMap.fromHex(
+			dataHEX.toString("ascii"),
+		);
+		// A memory map can be sparse - we'll have to fill the gaps with 0xFF
+		let data: Buffer = Buffer.from([]);
+		for (const [offset, chunk] of memMap.entries()) {
+			data = Buffer.concat([
+				data,
+				Buffer.alloc(offset - data.length, 0xff),
+				chunk,
+			]);
+		}
+		return { data };
 	} catch (e) {
 		if (/Malformed/.test(e.message)) {
 			throw new ZWaveError(

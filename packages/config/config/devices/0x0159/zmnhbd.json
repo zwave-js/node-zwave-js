@@ -1,5 +1,5 @@
 // Qubino ZMNHBD
-// Flush 2 relays
+// Flush 2 Relay
 {
 	"manufacturer": "Qubino",
 	"manufacturerId": "0x0159",
@@ -169,7 +169,6 @@
 		},
 		"15": {
 			"label": "Seconds or milliseconds selection",
-			"description": "Automatic turning off / on seconds or milliseconds selection",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 255,
@@ -181,7 +180,6 @@
 		},
 		"30": {
 			"label": "Saving the state after a power failure",
-			"description": "Saving the state of the relays Q1 and Q2 after a power failure",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 255,
@@ -203,8 +201,8 @@
 		},
 		"40": {
 			"label": "Power reporting in Watts for Q1",
-			"description": "Power reporting in Watts on power change for Q1",
 			"valueSize": 1,
+			"unit": "%",
 			"minValue": 0,
 			"maxValue": 100,
 			"defaultValue": 10,
@@ -214,8 +212,8 @@
 		},
 		"41": {
 			"label": "Power reporting in Watts for Q2",
-			"description": "Power reporting in Watts on power change for Q2",
 			"valueSize": 1,
+			"unit": "%",
 			"minValue": 0,
 			"maxValue": 100,
 			"defaultValue": 10,
@@ -225,7 +223,6 @@
 		},
 		"42": {
 			"label": "Power reporting time interval for Q1",
-			"description": "Power reporting in Watts by time interval for Q1",
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 32535,
@@ -236,7 +233,6 @@
 		},
 		"43": {
 			"label": "Power reporting time interval for Q2",
-			"description": "Power reporting in Watts by time interval for Q2",
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 32535,
@@ -289,7 +285,6 @@
 		},
 		"110": {
 			"label": "Temperature sensor offset",
-			"description": "Temperature sensor offset settings",
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 32536,

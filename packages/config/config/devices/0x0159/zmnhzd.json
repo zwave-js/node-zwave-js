@@ -36,7 +36,6 @@
 	"paramInformation": {
 		"1": {
 			"label": "Wind Gauge - Gust Top Value",
-			"description": "Wind Gauge, Wind Gust Top Value",
 			"unit": "m/s",
 			"valueSize": 2,
 			"minValue": 0,
@@ -48,7 +47,6 @@
 		},
 		"2": {
 			"label": "Rain Gauge - Rate top value",
-			"description": "Rain Rate top value",
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 30000,
@@ -59,7 +57,6 @@
 		},
 		"3": {
 			"label": "Wind Gauge",
-			"description": "Wind Gust",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 1,
@@ -70,7 +67,6 @@
 		},
 		"4": {
 			"label": "Rain Gauge",
-			"description": "Rain Rate",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 1,

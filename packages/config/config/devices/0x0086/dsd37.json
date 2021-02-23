@@ -77,7 +77,6 @@
 		},
 		"255": {
 			"label": "Reset configuration settings to default values",
-			"description": "Reset configuration settings to default values, except parameter is 254",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 1,

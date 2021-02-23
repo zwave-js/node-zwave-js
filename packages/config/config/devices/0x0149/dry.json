@@ -37,7 +37,6 @@
 	"paramInformation": {
 		"1": {
 			"label": "Numbers of clicks to control the load",
-			"description": "Defines which sequences of clicks control the load",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 7,

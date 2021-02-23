@@ -219,7 +219,6 @@
 		},
 		"100": {
 			"label": "Endpoints I2 Notification Type and Event",
-			"description": "Enable / Disable Endpoints I2 or select Notification Type and Event",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 255,
@@ -265,7 +264,6 @@
 		},
 		"101": {
 			"label": "Endpoints I3 Notification Type and Event",
-			"description": "Enable / Disable Endpoints I3 or select Notification Type and Event",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 255,

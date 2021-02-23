@@ -1,3 +1,5 @@
+// Zooz ZEN16
+// Multirelay
 {
 	"manufacturer": "Zooz",
 	"manufacturerId": "0x027a",
@@ -35,7 +37,6 @@
 	"paramInformation": {
 		"1": {
 			"label": "Status After Power Failure",
-			"description": "The state to set after a power failure. ",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 4,

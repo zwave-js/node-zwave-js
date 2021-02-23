@@ -11,7 +11,10 @@
     -   [Controller](api/controller.md)
     -   [ZWaveNode](api/node.md)
     -   [Endpoint](api/endpoint.md)
-    -   [ValueID](api/valueid.md)
+    -   [Values and Metadata](api/valueid.md)
+    -   [ConfigManager](api/config-manager.md)
+    -   [Command Classes](api/CCs/index.md)
+        <!-- AUTO-GENERATE: CC Links -->
 
 -   Advanced usage
 

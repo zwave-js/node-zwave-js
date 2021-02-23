@@ -3,6 +3,90 @@
 	Placeholder for next release:
 	## __WORK IN PROGRESS__
 -->
+## 6.4.0 (2021-02-16)
+### Features
+* Implemented `Scene Controller Configuration CC`
+* Added the ability to to get the current logging configuration
+
+### Bugfixes
+* Fixed an issue where sleeping nodes could block the send queue when it is not yet known whether they support `Wake Up CC`
+
+### Config file changes
+* Update configuration for Zooz Zen21, Zen22, Zen26 and Zen27
+* Include LZW31 firmware 1.48 in config
+* Added another Eaton outlet to the config
+
+## 6.3.0 (2021-02-14)
+### Features
+* Add missing specific device classes and expose Z-Wave+ Device Types through the `SpecificDeviceClass` class
+* Device metadata like inclusion instructions are now exposed through the `DeviceConfig` class
+* Added support for `.bin` firmware files
+* Added the ability to compose config files by importing templates
+* Add compat option `manualValueRefreshDelayMs` to delay the automatic refresh of legacy devices when a NIF is received
+* Implemented `Thermostat Fan Mode CC`
+* Implemented `Thermostat Fan State CC`
+* The `"notification"` event no longer includes a CC instance as event parameters. CC instances are first converted to a plain JS object now.
+* Added the `updateLogConfig` method to `Driver` to update logging configuration on the fly.
+
+### Bugfixes
+* It is no longer assumed that a node is included securely when it responds to a nonce request
+* `.hex` firmware update files with sparse data are now parsed correctly
+* Aeotec firmware updates with spaces in the firmware name are now accepted
+* Avoid infinite loops when scanning V3+ config params when the device does not use param number 0 to indicate the end of the list
+* Guard `handleClockReport` against crashing because of no support
+* Sleeping nodes are now immediately marked as ready when restarting from cache
+* Fixed a crash that could happen during Z-Wave+ bootstrapping
+* Fixed a crash that could happen when parsing a `Node Naming And Location CC` with a malformed UTF16 string
+* Unsolicited reports are no longer mapped from the root endpoint to endpoint 1 if that endpoint does not support the CC
+
+### Config file changes
+* add Inovelli NZW30T manufactured by NIE Technology
+* correct device names UFairy ZSE01/ZSE02
+* improve Kwikset support
+* improve Yale Lock support
+* improved zen22 support
+* force Binary Switch support for Qubino ZMNHDA
+* Imported several config files from the  Z-Wave Alliance
+* Add compat flag `treatBasicSetAsEvent` to linear wt00z-1
+* Add Yale NTM625 sectional mortise lock configuration
+* Use compat option `manualValueRefreshDelayMs` for Leviton DZMX1
+* Move product Type/Id from CT100 to CT101
+* Add/update MCOHome config files for v5 devices
+* Fix latest firmware config for Zooz ZEN30
+* Add support for TechniSat On/Off switch flush mount, BJ
+* Add Technisat shutter-switch
+* Add LED always on to GE 46201
+* Removed descriptions from configuration options that are very similar to the labels
+* Add support for Inovelli LZW45
+* Add a config file for Homeseer HSM200
+* Update parameters for Inovelli LZW31-SN and LZW31-BSD
+
+## 6.2.0 (2021-02-09)
+### Features
+* Added support for `Barrier Operator CC`
+* `Notification CC Reports` with a lock/unlock event are now mapped to `Lock CC` and `Door Lock CC` states.
+
+### Bugfixes
+* `User Code CC V1` reports with a user code that contains only ASCII and newline characters now ignore the newlines
+* `Notification CC Reports` with invalid event parameters are no longer dropped completely
+* Added a workaround for `Notification CC Reports` with embedded `User Code CC Reports` that don't include the user code
+* Added another fallback for Aeotec firmware extraction 
+
+### Config file changes
+* Force Binary Switch support for TKB Home TZ69
+* Add links to device manuals
+* Swap product type and id for Zooz ZEN30
+* Add support for Yale YRM276 lock
+* Reverted the removal of double tap support from some early GE devices
+* Change manufacturer and improve labels for nzw31s and nzw30s
+* Improve Zooz ZEN23 and ZEN24 toggle switch configs
+* Add ABUS SHRM10000
+* Add alternative device id for Heatit Z-Smoke 230V
+* Add support for HomeSeer HS-FLS100-G2
+
+### Changes under the hood
+* Throw better error when parsing a config file fails
+
 ## 6.1.3 (2021-02-05)
 ### Bugfixes
 * The config lint step now correctly fails when a device file cannot be parsed

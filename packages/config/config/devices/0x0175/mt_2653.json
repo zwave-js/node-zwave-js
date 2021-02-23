@@ -1,0 +1,387 @@
+// Devolo MT:2653
+// Home Control Key
+{
+	"manufacturer": "Devolo",
+	"manufacturerId": "0x0175",
+	"label": "MT:2653",
+	"description": "Home Control Key",
+	"devices": [
+		{
+			"productType": "0x0001",
+			"productId": "0x0301",
+			"zwaveAllianceId": 2134
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"associations": {
+		"1": {
+			"label": "Lifeline",
+			"maxNodes": 10,
+			"isLifeline": true
+		},
+		"2": {
+			"label": "Control Group A",
+			"maxNodes": 10
+		},
+		"3": {
+			"label": "Control Group B",
+			"maxNodes": 10
+		},
+		"4": {
+			"label": "Control Group C",
+			"maxNodes": 10
+		},
+		"5": {
+			"label": "Control Group D",
+			"maxNodes": 10
+		}
+	},
+	"paramInformation": {
+		"1": {
+			"label": "Button 1 And 3 Pair Mode",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 2,
+			"defaultValue": 1,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Button 1 -> Group A; Button 3 -> Group C",
+					"value": 0
+				},
+				{
+					"label": "Button 1/3 -> Up/Down; Click -> Group A, without double clicks",
+					"value": 1
+				},
+				{
+					"label": "Button 1/3 -> Up/Down; Click -> Group A; Double Click -> Group C",
+					"value": 2
+				}
+			]
+		},
+		"2": {
+			"label": "Button 2 And 4 Pair Mode",
+			"description": " works with group b, double click with group d",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 2,
+			"defaultValue": 1,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Button 2 -> Group B; Button 4 -> Group D",
+					"value": 0
+				},
+				{
+					"label": "Button 2/4 -> Up/Down; Click -> Group B, without double clicks",
+					"value": 1
+				},
+				{
+					"label": "Button 2/4 -> Up/Down; Click -> Group B; Double Click -> Group D",
+					"value": 2
+				}
+			]
+		},
+		"11": {
+			"label": "Command to Send Control Group A",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 8,
+			"defaultValue": 8,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Disabled",
+					"value": 0
+				},
+				{
+					"label": "Switch on/off and Dim",
+					"value": 1
+				},
+				{
+					"label": "Switch on/off only (basic set)",
+					"value": 2
+				},
+				{
+					"label": "Switch all",
+					"value": 3
+				},
+				{
+					"label": "Send scenes",
+					"value": 4
+				},
+				{
+					"label": "Send preconfigured scenes",
+					"value": 5
+				},
+				{
+					"label": "Control devices in proximity",
+					"value": 6
+				},
+				{
+					"label": "Control doorlock",
+					"value": 7
+				},
+				{
+					"label": "Central scene to gateway",
+					"value": 8
+				}
+			]
+		},
+		"12": {
+			"label": "Command to Send Control Group B",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 8,
+			"defaultValue": 8,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Disabled",
+					"value": 0
+				},
+				{
+					"label": "Switch on/off and Dim",
+					"value": 1
+				},
+				{
+					"label": "Switch on/off only (basic set)",
+					"value": 2
+				},
+				{
+					"label": "Switch all",
+					"value": 3
+				},
+				{
+					"label": "Send scenes",
+					"value": 4
+				},
+				{
+					"label": "Send preconfigured scenes",
+					"value": 5
+				},
+				{
+					"label": "Control devices in proximity",
+					"value": 6
+				},
+				{
+					"label": "Control doorlock",
+					"value": 7
+				},
+				{
+					"label": "Central scene to gateway",
+					"value": 8
+				}
+			]
+		},
+		"13": {
+			"label": "Command to Send Control Group C",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 8,
+			"defaultValue": 8,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Disabled",
+					"value": 0
+				},
+				{
+					"label": "Switch on/off and Dim",
+					"value": 1
+				},
+				{
+					"label": "Switch on/off only (basic set)",
+					"value": 2
+				},
+				{
+					"label": "Switch all",
+					"value": 3
+				},
+				{
+					"label": "Send scenes",
+					"value": 4
+				},
+				{
+					"label": "Send preconfigured scenes",
+					"value": 5
+				},
+				{
+					"label": "Control devices in proximity",
+					"value": 6
+				},
+				{
+					"label": "Control doorlock",
+					"value": 7
+				},
+				{
+					"label": "Central scene to gateway",
+					"value": 8
+				}
+			]
+		},
+		"14": {
+			"label": "Command to to Send Control Group D",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 8,
+			"defaultValue": 8,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Disabled",
+					"value": 0
+				},
+				{
+					"label": "Switch on/off and Dim",
+					"value": 1
+				},
+				{
+					"label": "Switch on/off only (basic set)",
+					"value": 2
+				},
+				{
+					"label": "Switch all",
+					"value": 3
+				},
+				{
+					"label": "Send scenes",
+					"value": 4
+				},
+				{
+					"label": "Send preconfigured scenes",
+					"value": 5
+				},
+				{
+					"label": "Control devices in proximity",
+					"value": 6
+				},
+				{
+					"label": "Control doorlock",
+					"value": 7
+				},
+				{
+					"label": "Central scene to gateway",
+					"value": 8
+				}
+			]
+		},
+		"21": {
+			"label": "Switch All Commands to Send",
+			"valueSize": 1,
+			"minValue": 1,
+			"maxValue": 255,
+			"defaultValue": 1,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Switch off only",
+					"value": 1
+				},
+				{
+					"label": "Switch on only",
+					"value": 2
+				},
+				{
+					"label": "Switch all on and off",
+					"value": 255
+				}
+			]
+		},
+		"22": {
+			"label": "Invert Buttons",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 0,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "No",
+					"value": 0
+				},
+				{
+					"label": "Yes",
+					"value": 1
+				}
+			]
+		},
+		"25": {
+			"label": "Block Wakeup",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 1,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Wakeup is blocked",
+					"value": 0
+				},
+				{
+					"label": "Wakeup is not blocked",
+					"value": 1
+				}
+			]
+		},
+		"30": {
+			"label": "Send Battery Report On Wake Up",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 2,
+			"defaultValue": 0,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "No",
+					"value": 0
+				},
+				{
+					"label": "To wake up notification node",
+					"value": 1
+				},
+				{
+					"label": "Broadcast",
+					"value": 2
+				}
+			]
+		}
+	},
+	"metadata": {
+		"reset": "Enter management mode by push all four buttons together for one second - green led blinks slowly), then hit button 3 followed by keeping button 4 pushed down for 10 seconds. The first five seconds the green LED still blinks followed by a long red, shot green sequence. Once LEDs go off, reset was executed. Please use this\nprocedure only if the device is secondary controller and the primary controller is missing or otherwise inoperable",
+		"manual": "https://products.z-wavealliance.org/ProductManual/File?folder=&filename=MarketCertificationFiles/2134/MT2653_en.pdf"
+	}
+}

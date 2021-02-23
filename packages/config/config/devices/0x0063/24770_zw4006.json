@@ -1,0 +1,243 @@
+// GE/Jasco 24770 / ZW4006
+// In-Wall Smart Motion Switch
+{
+	"manufacturer": "GE/Jasco",
+	"manufacturerId": "0x0063",
+	"label": "24770 / ZW4006",
+	"description": "In-Wall Smart Motion Switch",
+	"devices": [
+		{
+			"productType": "0x494d",
+			"productId": "0x3031",
+			"zwaveAllianceId": 2126
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"paramInformation": {
+		"1": {
+			"label": "Timeout Duration",
+			"description": "Amount of time the light stays on after motion stops",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 5,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Test (5s)",
+					"value": 0
+				},
+				{
+					"label": "1 minute",
+					"value": 1
+				},
+				{
+					"label": "5 minutes",
+					"value": 5
+				},
+				{
+					"label": "15 minutes",
+					"value": 15
+				},
+				{
+					"label": "30 minutes",
+					"value": 30
+				},
+				{
+					"label": "Disable timeout",
+					"value": 255
+				}
+			]
+		},
+		"2": {
+			"label": "Change Brightness of Associated Light Bulb(s)",
+			"description": "255 = last dimming level",
+			"valueSize": 1,
+			"minValue": 255,
+			"maxValue": 255,
+			"defaultValue": 255,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"3": {
+			"label": "Operation Mode",
+			"valueSize": 1,
+			"minValue": 1,
+			"maxValue": 3,
+			"defaultValue": 3,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Manual",
+					"value": 1
+				},
+				{
+					"label": "Vacancy",
+					"value": 2
+				},
+				{
+					"label": "Occupancy",
+					"value": 3
+				}
+			]
+		},
+		"4": {
+			"label": "Enable/Disable Association Mode",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 1,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Disabled",
+					"value": 0
+				},
+				{
+					"label": "Enabled",
+					"value": 1
+				}
+			]
+		},
+		"5": {
+			"label": "Invert Switch",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Normal orientation",
+					"value": 0
+				},
+				{
+					"label": "Inverted switch",
+					"value": 1
+				}
+			]
+		},
+		"6": {
+			"label": "Enable/Disable Motion Sensor",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 1,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Disable",
+					"value": 0
+				},
+				{
+					"label": "Enable",
+					"value": 1
+				}
+			]
+		},
+		"13": {
+			"label": "Motion Sensor Sensitivity",
+			"valueSize": 1,
+			"minValue": 1,
+			"maxValue": 3,
+			"defaultValue": 2,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "High",
+					"value": 1
+				},
+				{
+					"label": "Medium",
+					"value": 2
+				},
+				{
+					"label": "Low",
+					"value": 3
+				}
+			]
+		},
+		"14": {
+			"label": "Enable/Disable Light Sensing",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 1,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Disabled",
+					"value": 0
+				},
+				{
+					"label": "Enabled",
+					"value": 1
+				}
+			]
+		},
+		"15": {
+			"label": "Reset Cycle",
+			"valueSize": 1,
+			"unit": "15 seconds",
+			"minValue": 0,
+			"maxValue": 110,
+			"defaultValue": 2,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"19": {
+			"label": "Exclusion Mode",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 0,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Normal exclusion",
+					"value": 0
+				},
+				{
+					"label": "Press and release 'x', then 'on'",
+					"value": 1
+				}
+			]
+		}
+	},
+	"metadata": {
+		"inclusion": "1. Follow the instructions for your Z-Wave certified\ncontroller to include the smart switch to the\nZ-Wave network.\n2. Once the controller is ready to include your smart\nswitch, press and release the top or bottom button\non the smart switch to include it in the network",
+		"exclusion": "1. Follow the instructions for your Z-Wave certified\ncontroller to exclude a device from the Z-Wave\nnetwork.\n2. Once the controller is ready to exclude your device,\npress and release the top or bottom button on the\nsmart switch to exclude it from the network",
+		"reset": "Press and release the top button ten times.\nNote: This should only be used in the event your\nnetwork’s primary controller is missing or otherwise\ninoperable",
+		"manual": "https://products.z-wavealliance.org/ProductManual/File?folder=&filename=MarketCertificationFiles/2126/24770%20EnFrSp%20QSG%20v1.3.pdf"
+	}
+}

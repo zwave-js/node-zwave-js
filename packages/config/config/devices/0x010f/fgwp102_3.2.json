@@ -169,8 +169,7 @@
 			]
 		},
 		"20": {
-			"label": "„On/Off (Button)” association group (2)",
-			"description": "Control of „On/Off (Button)” association group (2) devices",
+			"label": "On/Off (Button)” association group (2)",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 1,
@@ -191,7 +190,6 @@
 		},
 		"21": {
 			"label": "DOWN value - association group (3)",
-			"description": "DOWN value - „On/Off (Power)” for association group (3)",
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 24900,
@@ -202,7 +200,6 @@
 		},
 		"22": {
 			"label": "UP value - association group (3)",
-			"description": "UP value - „On/Off (Power)” for association group (3)",
 			"valueSize": 2,
 			"minValue": 100,
 			"maxValue": 25000,
@@ -340,7 +337,6 @@
 		},
 		"41": {
 			"label": "LED ring colour (device is ON)",
-			"description": "LED ring colour when controlled device is on",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 9,
@@ -393,7 +389,6 @@
 		},
 		"42": {
 			"label": "LED ring colour (device is OFF)",
-			"description": "LED ring colour when controlled device is off",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 9,
@@ -442,7 +437,6 @@
 		},
 		"43": {
 			"label": "LED ring colour (alarm detection)",
-			"description": "LED ring colour at the Z-Wave network alarm detection",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 9,

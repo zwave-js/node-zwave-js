@@ -79,7 +79,7 @@
 			"allowManualEntry": true
 		},
 		"7": {
-			"label": "Memeory Device Status",
+			"label": "Memeory Device Status at Power Cut",
 			"description": "Memeory Device Status at Power Cut",
 			"valueSize": 1,
 			"minValue": 0,

@@ -1,10 +1,10 @@
-// ASSA ABLOY YRD216
-// Yale Real Living Assure Lock Push Button Deadbolt
+// Yale YRD216
+// Real Living Assure Lock Push Button Deadbolt
 {
-	"manufacturer": "ASSA ABLOY",
+	"manufacturer": "Yale",
 	"manufacturerId": "0x0129",
 	"label": "YRD216",
-	"description": "Yale Real Living Assure Lock Push Button Deadbolt",
+	"description": "Real Living Assure Lock Push Button Deadbolt",
 	"devices": [
 		{
 			"productType": "0x8004",
@@ -19,7 +19,6 @@
 	"paramInformation": {
 		"1": {
 			"label": "Silent mode",
-			"description": "Silent mode on/off",
 			"valueSize": 1,
 			"minValue": 1,
 			"maxValue": 3,
@@ -44,7 +43,6 @@
 		},
 		"2": {
 			"label": "Auto Relock",
-			"description": "Auto Relock on/off",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 255,
@@ -146,7 +144,7 @@
 			]
 		},
 		"11": {
-			"label": "One touch locking",
+			"label": "One Touch Locking",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 255,
@@ -154,10 +152,20 @@
 			"unsigned": true,
 			"readOnly": false,
 			"writeOnly": false,
-			"allowManualEntry": true
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Disable",
+					"value": 0
+				},
+				{
+					"label": "Enable",
+					"value": 255
+				}
+			]
 		},
 		"12": {
-			"label": "Privacy button",
+			"label": "Privacy Button",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 255,
@@ -165,10 +173,20 @@
 			"unsigned": true,
 			"readOnly": false,
 			"writeOnly": false,
-			"allowManualEntry": true
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Disable",
+					"value": 0
+				},
+				{
+					"label": "Enable",
+					"value": 255
+				}
+			]
 		},
 		"13": {
-			"label": "Lock status LED",
+			"label": "Lock Status LED",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 255,
@@ -176,17 +194,37 @@
 			"unsigned": true,
 			"readOnly": false,
 			"writeOnly": false,
-			"allowManualEntry": true
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Disable",
+					"value": 0
+				},
+				{
+					"label": "Enable",
+					"value": 255
+				}
+			]
 		},
 		"15": {
-			"label": "Reset to factory default",
+			"label": "Reset to Factory Defaults",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 1,
 			"defaultValue": 0,
 			"readOnly": false,
 			"writeOnly": false,
-			"allowManualEntry": true
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Normal Operation",
+					"value": 0
+				},
+				{
+					"label": "Reset Device",
+					"value": 1
+				}
+			]
 		}
 	}
 }

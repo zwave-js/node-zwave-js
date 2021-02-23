@@ -1,10 +1,10 @@
-// ASSA ABLOY YRL210
-// Yale Push Button Lever Lock
+// Yale YRL210
+// Push Button Lever Lock
 {
-	"manufacturer": "ASSA ABLOY",
+	"manufacturer": "Yale",
 	"manufacturerId": "0x0129",
 	"label": "YRL210",
-	"description": "Yale Push Button Lever Lock",
+	"description": "Push Button Lever Lock",
 	"devices": [
 		{
 			"productType": "0x0003",

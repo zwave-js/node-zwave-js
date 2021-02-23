@@ -213,5 +213,15 @@
 			"writeOnly": false,
 			"allowManualEntry": true
 		}
+	},
+	"compat": {
+		"commandClasses": {
+			"add": {
+				// The device lists Binary Switch CC as supported, but then responds with a version of 0
+				"0x85": {
+					"isSupported": true
+				}
+			}
+		}
 	}
 }

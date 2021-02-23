@@ -91,7 +91,6 @@
 		},
 		"8": {
 			"label": "Single dimming step size(Manual)",
-			"description": "Single dimming step time(Manual)",
 			"valueSize": 1,
 			"minValue": 1,
 			"maxValue": 99,
@@ -152,7 +151,6 @@
 		},
 		"15": {
 			"label": "Switch1 to Association Group 2 & 3",
-			"description": "Operation report from Switch1 to Association Group 2 & 3",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 255,
@@ -164,7 +162,6 @@
 		},
 		"16": {
 			"label": "Switch1 to Association Group 2",
-			"description": "Operation report from Switch1 to Association Group 2",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 255,

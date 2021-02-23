@@ -16,6 +16,8 @@ import {
 	buffer2hex,
 	getEnumMemberName,
 	isPrintableASCII,
+	isPrintableASCIIWithNewlines,
+	JSONObject,
 	num2hex,
 	pick,
 } from "@zwave-js/shared";
@@ -936,6 +938,16 @@ export class UserCodeCCSet extends UserCodeCC {
 			},
 		};
 	}
+
+	public toJSON(): JSONObject {
+		return super.toJSONInherited({
+			userId: this.userId,
+			userCode:
+				typeof this.userCode === "string"
+					? this.userCode
+					: buffer2hex(this.userCode),
+		});
+	}
 }
 
 @CCCommand(UserCodeCommand.Report)
@@ -970,6 +982,14 @@ export class UserCodeCCReport extends UserCodeCC {
 			const userCodeString = userCodeBuffer.toString("utf8");
 			if (isPrintableASCII(userCodeString)) {
 				this.userCode = userCodeString;
+			} else if (
+				this.version === 1 &&
+				isPrintableASCIIWithNewlines(userCodeString)
+			) {
+				// Ignore leading and trailing newlines in V1 reports if the rest is ASCII
+				this.userCode = userCodeString
+					.replace(/^[\r\n]*/, "")
+					.replace(/[\r\n]*$/, "");
 			} else {
 				this.userCode = userCodeBuffer;
 			}

@@ -37,7 +37,7 @@
 					"value": 254
 				},
 				{
-					"label": "Led off",
+					"label": "LED off",
 					"value": 0
 				}
 			]
@@ -50,4 +50,3 @@
 		"manual": "https://products.z-wavealliance.org/ProductManual/File?folder=&filename=product_documents/3829/Draft%20ZW15R%203-25-20.pdf"
 	}
 }
-

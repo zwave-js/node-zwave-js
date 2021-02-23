@@ -8,11 +8,6 @@
 	"devices": [
 		{
 			"productType": "0x0300",
-			"productId": "0x0102",
-			"zwaveAllianceId": 38
-		},
-		{
-			"productType": "0x0300",
 			"productId": "0x0104"
 		},
 		{
@@ -54,7 +49,6 @@
 	"paramInformation": {
 		"1": {
 			"label": "Enable/Disable ALL ON/OFF",
-			"description": "Activate/Deactive ALL ON/OFF",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 255,

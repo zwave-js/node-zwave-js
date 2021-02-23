@@ -9,6 +9,11 @@
 		{
 			"productType": "0xb111",
 			"productId": "0x1e1c"
+		},
+		{
+			"productType": "0xaa00",
+			"productId": "0xaa01",
+			"zwaveAllianceId": 3667
 		}
 	],
 	"firmwareVersion": {
@@ -18,23 +23,26 @@
 	"supportsZWavePlus": true,
 	"paramInformation": {
 		"1": {
-			"label": "Paddle Control",
-			"description": "Reverse switch direction",
+			"label": "Invert Switch",
 			"valueSize": 1,
 			"minValue": 0,
-			"maxValue": 1,
+			"maxValue": 2,
 			"defaultValue": 0,
 			"readOnly": false,
 			"writeOnly": false,
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "Top-ON, Bottom-OFF",
+					"label": "Normal Orientation",
 					"value": 0
 				},
 				{
-					"label": "Top-OFF, Bottom-ON",
+					"label": "Invert switch",
 					"value": 1
+				},
+				{
+					"label": "Both paddles toggle",
+					"value": 2
 				}
 			]
 		},
@@ -49,18 +57,17 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "LED ON - Switch OFF",
+					"label": "LED on when switch off",
 					"value": 0
 				},
 				{
-					"label": "LED ON - Switch ON",
+					"label": "LED on when switch on",
 					"value": 1
 				}
 			]
 		},
 		"3": {
-			"label": "LED Indicator",
-			"description": "Enable / Disable LED Indicator",
+			"label": "Enable/Disable LED Indicator",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 1,
@@ -70,14 +77,20 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "LED Enabled",
+					"label": "Enable",
 					"value": 0
 				},
 				{
-					"label": "LED Disabled",
+					"label": "Disable",
 					"value": 1
 				}
 			]
 		}
+	},
+	"metadata": {
+		"inclusion": "1. Initiate inclusion (pairing) in the app (or web interface).\n2. Tap the upper paddle of the switch 3 times.\n3. The LED indicator will blink to signal communication and stay on/off when communication is concluded",
+		"exclusion": "1. Bring your Z-Wave gateway (hub) close to the switch if possible\n2. Put the Z-Wave hub into exclusion mode \n3. Tap the lower paddle on the switch 3 times quickly\n4. Your hub will confirm exclusion and the device will disappear from your controller's device list",
+		"reset": "If your primary controller is missing or inoperable, you may need to reset the device to factory settings. To complete the reset process manually, tap-tap-tap’n’hold the upper paddle for at least 10 seconds. The LED indicator will flash to confirm successful reset.\nNOTE: All previously recorded activity and custom settings will be erased from the device’s memory",
+		"manual": "https://products.z-wavealliance.org/ProductManual/File?folder=&filename=product_documents/3667/zooz-z-wave-plus-on-off-switch-zen21-ver3.1-manual.pdf"
 	}
 }

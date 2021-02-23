@@ -15,6 +15,7 @@
 		"min": "0.0",
 		"max": "255.255"
 	},
+	"supportsZWavePlus": true,
 	"associations": {
 		// One entry for each association group
 		"1": {
@@ -133,7 +134,6 @@
 			"label": "Dim Rate Steps (All-On/All-Off)",
 			"description": "Number of steps or levels",
 			"valueSize": 1,
-			"unit": "10ms",
 			"minValue": 1,
 			"maxValue": 99,
 			"defaultValue": 1,

@@ -53,6 +53,10 @@ import {
 import { ClockCCReport } from "../commandclass/ClockCC";
 import { CommandClass, getCCValueMetadata } from "../commandclass/CommandClass";
 import {
+	DoorLockMode,
+	getCurrentModeValueId as getCurrentLockModeValueId,
+} from "../commandclass/DoorLockCC";
+import {
 	FirmwareUpdateMetaDataCC,
 	FirmwareUpdateMetaDataCCGet,
 	FirmwareUpdateMetaDataCCStatusReport,
@@ -61,6 +65,7 @@ import {
 } from "../commandclass/FirmwareUpdateMetaDataCC";
 import { HailCC } from "../commandclass/HailCC";
 import { isCommandClassContainer } from "../commandclass/ICommandClassContainer";
+import { getLockedValueId } from "../commandclass/LockCC";
 import {
 	getManufacturerIdValueId,
 	getProductIdValueId,
@@ -973,7 +978,7 @@ export class ZWaveNode extends Endpoint {
 		if (this.interviewStage === InterviewStage.ProtocolInfo) {
 			// We ping listening nodes to ensure that they are actually listening
 			// For all others, the messages are queued for wakeup anyways
-			if (this.isListening || this.isFrequentListening) {
+			if (this.isListening && !this.isFrequentListening) {
 				await this.ping();
 			}
 			if (!(await tryInterviewStage(() => this.queryNodeInfo()))) {
@@ -983,12 +988,13 @@ export class ZWaveNode extends Endpoint {
 
 		// The node is deemed ready when has been interviewed completely at least once
 		if (this.interviewStage === InterviewStage.RestartFromCache) {
-			// Mark listening nodes as potentially ready. The first message will determine if it is
+			// Mark nodes as potentially ready. The first message will determine if it is
 			this.readyMachine.send("RESTART_INTERVIEW_FROM_CACHE");
 
-			// We ping listening nodes to ensure that they are actually listening
-			// For all others, the next messages are queued for wakeup anyways
-			if (this.isListening || this.isFrequentListening) {
+			// Assume that sleeping nodes start asleep and ping listening nodes to check their status
+			if (this.canSleep) {
+				this.markAsAsleep();
+			} else if (this.isListening) {
 				await this.ping();
 			}
 		}
@@ -1498,12 +1504,16 @@ version:               ${this.version}`;
 		// supporting node issues a Wake Up Notification Command for sleeping nodes.
 
 		// This is not the handler for wakeup notifications, but some legacy devices send this
-		// message whenever there's an update
+		// message whenever there's an update.
 		if (this.requiresManualValueRefresh()) {
+			const delay =
+				this.deviceConfig?.compat?.manualValueRefreshDelayMs || 0;
 			this.driver.controllerLog.logNode(this.nodeId, {
-				message: `Node does not send unsolicited updates, refreshing actuator and sensor values...`,
+				message: `Node does not send unsolicited updates; refreshing actuator and sensor values${
+					delay > 0 ? ` in ${delay} ms` : ""
+				}...`,
 			});
-			void this.refreshValues();
+			setTimeout(() => this.refreshValues(), delay);
 		}
 	}
 
@@ -1759,9 +1769,18 @@ version:               ${this.version}`;
 			// Instead rely on the version. If MCA is not supported, this will be 0
 			this.getCCVersion(CommandClasses["Multi Channel Association"]) < 3
 		) {
-			// Force the CC to store its values again under endpoint 1
-			command.endpointIndex = 1;
-			command.persistValues();
+			// Find the first endpoint that supports the received CC - if there is none, we don't map the report
+			for (const endpoint of this.getAllEndpoints()) {
+				if (endpoint.index === 0) continue;
+				if (!endpoint.supportsCC(command.ccId)) continue;
+				// Force the CC to store its values again under the supporting endpoint
+				this.driver.controllerLog.logNode(
+					this.nodeId,
+					`Mapping unsolicited report from root device to first supporting endpoint #${endpoint.index}`,
+				);
+				command.endpointIndex = endpoint.index;
+				command.persistValues();
+			}
 		}
 
 		if (command instanceof BasicCC) {
@@ -1827,10 +1846,6 @@ version:               ${this.version}`;
 			// Security CC is always secure
 			secure: true,
 		});
-		// ...and be secure
-		if (this.isSecure !== true) {
-			this.isSecure = true;
-		}
 
 		// Ensure that we're not flooding the queue with unnecessary NonceReports (GH#1059)
 		const { queue, currentTransaction } = this.driver[
@@ -1886,11 +1901,6 @@ version:               ${this.version}`;
 			},
 			{ free: true },
 		);
-
-		// If we don't know it yet, assume that the node communicates securely
-		if (this.isSecure !== true) {
-			this.isSecure = true;
-		}
 	}
 
 	private handleHail(_command: HailCC): void {
@@ -2335,6 +2345,9 @@ version:               ${this.version}`;
 			// Find out which property we need to update
 			const valueConfig = notificationConfig.lookupValue(value);
 
+			// Perform some heuristics on the known notification
+			this.handleKnownNotification(command);
+
 			let allowIdleReset: boolean;
 			if (!valueConfig) {
 				// This is an unknown value, collect it in an unknown bucket
@@ -2353,6 +2366,7 @@ version:               ${this.version}`;
 				);
 				return;
 			}
+
 			// Now that we've gathered all we need to know, update the value in our DB
 			const valueId: ValueID = {
 				commandClass: command.ccId,
@@ -2387,6 +2401,41 @@ version:               ${this.version}`;
 		}
 	}
 
+	private handleKnownNotification(command: NotificationCCReport): void {
+		if (
+			// Access Control, manual/keypad (un)lock operation
+			command.notificationType === 0x06 &&
+			[0x01, 0x02, 0x05, 0x06].includes(
+				command.notificationEvent as number,
+			) &&
+			(this.supportsCC(CommandClasses["Door Lock"]) ||
+				this.supportsCC(CommandClasses.Lock))
+		) {
+			// The Door Lock Command Class is constrained to the S2 Access Control key,
+			// while the Notification Command Class, in the same device, could use a
+			// different key. This way the device can notify devices which don't belong
+			// to the S2 Access Control key group of changes in its state.
+
+			const isLocked =
+				command.notificationEvent === 0x01 ||
+				command.notificationEvent === 0x05;
+
+			// Update the current lock status
+			if (this.supportsCC(CommandClasses["Door Lock"])) {
+				this.valueDB.setValue(
+					getCurrentLockModeValueId(command.endpointIndex),
+					isLocked ? DoorLockMode.Secured : DoorLockMode.Unsecured,
+				);
+			}
+			if (this.supportsCC(CommandClasses.Lock)) {
+				this.valueDB.setValue(
+					getLockedValueId(command.endpointIndex),
+					isLocked,
+				);
+			}
+		}
+	}
+
 	private handleClockReport(command: ClockCCReport): void {
 		// A Z-Wave Plus node SHOULD issue a Clock Report Command via the Lifeline Association Group if they
 		// suspect to have inaccurate time and/or weekdays (e.g. after battery removal).
@@ -2412,7 +2461,10 @@ version:               ${this.version}`;
 			command.minute !== minutes
 		) {
 			const endpoint = command.getEndpoint();
-			if (!endpoint) return;
+			if (!endpoint || !endpoint.commandClasses.Clock.isSupported()) {
+				// Make sure the endpoint supports the CC (GH#1704)
+				return;
+			}
 
 			this.driver.controllerLog.logNode(
 				this.nodeId,
@@ -2526,7 +2578,10 @@ version:               ${this.version}`;
 		// TODO: Should manufacturer id and firmware id be provided externally?
 		const status = await api.requestUpdate({
 			manufacturerId: meta.manufacturerId,
-			firmwareId: meta.firmwareId,
+			firmwareId:
+				target == 0
+					? meta.firmwareId
+					: meta.additionalFirmwareIDs[target - 1],
 			firmwareTarget: target,
 			fragmentSize: this._firmwareUpdateStatus.fragmentSize,
 			checksum: CRC16_CCITT(data),

@@ -19,6 +19,7 @@
 	"metadata": {
 		"inclusion": "1. Put Primary Controller into Inclusion Mode\n\n2. Press and Hold Shade Programming Button for >2seconds",
 		"exclusion": "1. Put Primary Controller into Exclusion Mode\n\n2. Press and Hold Shade Programming Button for >2seconds",
-		"reset": "Please use this procedure only when the network primary controller is missing or otherwise inoperable\n\nPress and hold the button on the shade for approximately 15 seconds (the LED will stop flashing when complete)"
+		"reset": "Please use this procedure only when the network primary controller is missing or otherwise inoperable\n\nPress and hold the button on the shade for approximately 15 seconds (the LED will stop flashing when complete)",
+		"manual": "https://products.z-wavealliance.org/ProductManual/File?folder=&filename=MarketCertificationFiles/1749/Graber%20Virtual%20Cord%20Owner's%20Manual%200002.pdf"
 	}
 }

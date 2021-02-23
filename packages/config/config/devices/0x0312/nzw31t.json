@@ -1,7 +1,7 @@
-// NIE Technology Co., Ltd. NZW31T
+// Inovelli NZW31T
 // In-wall Smart Dimmer
 {
-	"manufacturer": "NIE Technology Co., Ltd.",
+	"manufacturer": "Inovelli",
 	"manufacturerId": "0x0312",
 	"label": "NZW31T",
 	"description": "In-wall Smart Dimmer",
@@ -10,6 +10,10 @@
 			"productType": "0x0111",
 			"productId": "0x261c",
 			"zwaveAllianceId": 2679
+		},
+		{
+			"productType": "0x1f02",
+			"productId": "0x1f02"
 		}
 	],
 	"firmwareVersion": {
@@ -19,6 +23,7 @@
 	"metadata": {
 		"inclusion": "Primary inclusion method is via, \"Auto-Inclusion\". Start the inclusion process on your HUB/Gateway and then flip the circuit back on to bring power to your device. You will have 30 seconds before the device times out. The backup method is toggling UP on the switch 6 times within 2 seconds.",
 		"exclusion": "Toggle UP on the switch 6 times within 2 seconds",
-		"reset": "Please use your controller to remove the device from the network. To factory reset, toggle UP the switch 10x in a row when powered on. However, please only use this method if your controller is missing or inoperable."
+		"reset": "Please use your controller to remove the device from the network. To factory reset, toggle UP the switch 10x in a row when powered on. However, please only use this method if your controller is missing or inoperable.",
+		"manual": "https://products.z-wavealliance.org/ProductManual/File?folder=&filename=MarketCertificationFiles/2679/NZW31Tmanual171102.pdf"
 	}
 }

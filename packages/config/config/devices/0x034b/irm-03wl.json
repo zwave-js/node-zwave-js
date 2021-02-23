@@ -17,6 +17,7 @@
 		"max": "255.255"
 	},
 	"metadata": {
-		"reset": "1. Click “Reset”\n2. Once the lock device is removed, iRemocon “SYNC-LED” blinks slowly.\n\nNote: Please use this procedure only when the network primary controller is missing or otherwise inoperable"
+		"reset": "1. Click “Reset”\n2. Once the lock device is removed, iRemocon “SYNC-LED” blinks slowly.\n\nNote: Please use this procedure only when the network primary controller is missing or otherwise inoperable",
+		"manual": "https://products.z-wavealliance.org/ProductManual/File?folder=&filename=MarketCertificationFiles/2789/mc-zw-nw-app-manual.pdf"
 	}
 }

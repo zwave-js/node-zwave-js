@@ -126,7 +126,6 @@
 		},
 		"30": {
 			"label": "Saving Q1 and Q2 after a power failure",
-			"description": "Saving the state of the relays Q1 and Q2 after a power failure",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 255,

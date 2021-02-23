@@ -17,6 +17,11 @@ export type { AlarmSensorValueMetadata } from "./AlarmSensorCC";
 export { CCAPI } from "./API";
 export { AssociationGroupInfoProfile } from "./AssociationGroupInfoCC";
 export type { AssociationGroup } from "./AssociationGroupInfoCC";
+export {
+	BarrierState,
+	SubsystemState,
+	SubsystemType,
+} from "./BarrierOperatorCC";
 export { BatteryChargingStatus, BatteryReplacementStatus } from "./BatteryCC";
 export { BinarySensorType } from "./BinarySensorCC";
 export type { BinarySensorValueMetadata } from "./BinarySensorCC";
@@ -52,6 +57,7 @@ export { LocalProtectionState, RFProtectionState } from "./ProtectionCC";
 export { ToneId } from "./SoundSwitchCC";
 export { SupervisionStatus } from "./SupervisionCC";
 export type { SupervisionResult } from "./SupervisionCC";
+export { ThermostatFanMode } from "./ThermostatFanModeCC";
 export { ThermostatMode } from "./ThermostatModeCC";
 export { ThermostatOperatingState } from "./ThermostatOperatingStateCC";
 export { SetbackType } from "./ThermostatSetbackCC";

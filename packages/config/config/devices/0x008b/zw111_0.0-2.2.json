@@ -231,7 +231,6 @@
 		},
 		"100": {
 			"label": "Reset 101-103 to default",
-			"description": "Reset parameters 101-103 to default values",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 0,
@@ -280,8 +279,7 @@
 			"allowManualEntry": true
 		},
 		"110": {
-			"label": "Reset 111-113 to default",
-			"description": "Reset parameters 111-113 to default values",
+			"label": "Reset Parameters 111-113 to Default",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 0,

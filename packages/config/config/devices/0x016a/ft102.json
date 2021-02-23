@@ -1,0 +1,69 @@
+// Fantem FT102
+// Oomi Touch
+{
+	"manufacturer": "Fantem",
+	"manufacturerId": "0x016a",
+	"label": "FT102",
+	"description": "Oomi Touch",
+	"devices": [
+		{
+			"productType": "0x0102",
+			"productId": "0x0066",
+			"zwaveAllianceId": 1613
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"paramInformation": {
+		"80": {
+			"label": "Command Type When Triggered",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 0,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Notification report",
+					"value": 0
+				},
+				{
+					"label": "Hail",
+					"value": 1
+				}
+			]
+		},
+		"255": {
+			"label": "Reset the Device",
+			"valueSize": 4,
+			"minValue": 0,
+			"maxValue": 1431655765,
+			"defaultValue": 0,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Reset the configuration parameters to default settings",
+					"value": 0
+				},
+				{
+					"label": "Reset the device to factory default settings",
+					"value": 1431655765
+				}
+			]
+		}
+	},
+	"metadata": {
+		"inclusion": "Let your primary Controller/gateway into Inclusion mode, then press once the \"Learn\" Button in the app of Touch.",
+		"exclusion": "Let your primary Controller/gateway into Exclusion mode, then press once the \"Learn\" Button in the app of Touch.",
+		"reset": "Press the \"Reset\" button in the app of Touch. This procedure only be used when the primary controller is missing or inoperable",
+		"manual": "https://products.z-wavealliance.org/ProductManual/File?folder=&filename=MarketCertificationFiles/1613/Oomi%20Touch%20manual.pdf"
+	}
+}

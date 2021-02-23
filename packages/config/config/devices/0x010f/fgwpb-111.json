@@ -51,7 +51,7 @@
 			"allowManualEntry": true
 		},
 		"11": {
-			"label": "PowerReporting",
+			"label": "Power Reporting",
 			"description": "Minimum change in active power consumption to trigger",
 			"unit": "%",
 			"valueSize": 1,
@@ -63,8 +63,7 @@
 			"allowManualEntry": true
 		},
 		"12": {
-			"label": "EnergyReportingThreshold",
-			"description": "Energy reporting threshold",
+			"label": "Energy Reporting Threshold",
 			"unit": "0.01 kWh",
 			"valueSize": 2,
 			"minValue": 0,
@@ -75,8 +74,7 @@
 			"allowManualEntry": true
 		},
 		"13": {
-			"label": "PeriodicPowerRpt",
-			"description": "Periodic power reporting",
+			"label": "Periodic Power Report",
 			"unit": "seconds",
 			"valueSize": 2,
 			"minValue": 0,
@@ -87,8 +85,7 @@
 			"allowManualEntry": true
 		},
 		"14": {
-			"label": "PeriodicEnergyRpt",
-			"description": "Periodic energy reporting",
+			"label": "Periodic Energy Report",
 			"unit": "seconds",
 			"valueSize": 2,
 			"minValue": 0,

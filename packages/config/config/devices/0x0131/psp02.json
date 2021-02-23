@@ -61,8 +61,75 @@
 			"writeOnly": false,
 			"allowManualEntry": true
 		},
+		"8": {
+			"label": "PIR motion re-trigger min interval",
+			"unit": "8s ticks",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 127,
+			"defaultValue": 3,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"9": {
+			"label": "Light on time hysteresis",
+			"description": "time to keep the light on without motion",
+			"unit": "8s ticks",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 127,
+			"defaultValue": 4,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"10": {
+			"label": "Battery level auto-report interval",
+			"unit": "ticks",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 127,
+			"defaultValue": 12,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"11": {
+			"label": "Door state report interval",
+			"unit": "ticks",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 127,
+			"defaultValue": 12,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"12": {
+			"label": "Illumination auto report interval",
+			"unit": "ticks",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 127,
+			"defaultValue": 12,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"13": {
+			"label": "Temperature report interval",
+			"unit": "ticks",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 127,
+			"defaultValue": 12,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
 		"20": {
-			"label": "tick duration",
+			"label": "Tick duration",
 			"description": "auto-reports tick duration",
 			"unit": "s",
 			"valueSize": 1,
@@ -70,6 +137,28 @@
 			"maxValue": 255,
 			"defaultValue": 30,
 			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"21": {
+			"label": "Temperature differential to report",
+			"unit": "Fahrenheit",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 127,
+			"defaultValue": 1,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"22": {
+			"label": "Min illumination differential",
+			"unit": "percent",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 63,
+			"defaultValue": 0,
 			"readOnly": false,
 			"writeOnly": false,
 			"allowManualEntry": true
@@ -96,7 +185,7 @@
 			]
 		},
 		"5[0x04]": {
-			"label": "disable the door/window function",
+			"label": "Disable the door/window function",
 			"description": "Disable/Enable the function",
 			"valueSize": 1,
 			"minValue": 0,
@@ -117,8 +206,7 @@
 			]
 		},
 		"5[0x08]": {
-			"label": "temperature unit",
-			"description": "set the temperature unit",
+			"label": "Temperature Unit",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 1,
@@ -139,7 +227,6 @@
 		},
 		"5[0x10]": {
 			"label": "Disable illumination reports",
-			"description": "toggle illumination reports",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 1,
@@ -160,7 +247,6 @@
 		},
 		"5[0x20]": {
 			"label": "Disable temperature reports",
-			"description": "Disable/enable temperature reports",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 1,
@@ -180,7 +266,7 @@
 			]
 		},
 		"5[0x80]": {
-			"label": "back key release action",
+			"label": "Back key release action",
 			"description": "Disable/enable the back key release into test mode",
 			"valueSize": 1,
 			"minValue": 0,
@@ -201,8 +287,8 @@
 			]
 		},
 		"6[0x01]": {
-			"label": "magnetic integration for lighting control",
-			"description": "switch control",
+			"label": "Magnetic integration for lighting control",
+			"description": "Switch control",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 1,
@@ -243,7 +329,7 @@
 			]
 		},
 		"6[0x04]": {
-			"label": "magetic/pir integration",
+			"label": "Magetic/pir integration",
 			"description": "control lighting in association group 2",
 			"valueSize": 1,
 			"minValue": 0,
@@ -264,7 +350,7 @@
 			]
 		},
 		"6[0x08]": {
-			"label": "device and lighting in same room",
+			"label": "Device and lighting in same room",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 1,
@@ -284,7 +370,7 @@
 			]
 		},
 		"6[0x10]": {
-			"label": "disable delay to turn off the light",
+			"label": "Disable delay to turn off the light",
 			"description": "disable/enable delay",
 			"valueSize": 1,
 			"minValue": 0,
@@ -305,7 +391,7 @@
 			]
 		},
 		"6[0x20]": {
-			"label": "light off control",
+			"label": "Light off control",
 			"description": "disable/enable auto turn off the light",
 			"valueSize": 1,
 			"minValue": 0,
@@ -326,8 +412,7 @@
 			]
 		},
 		"7[0x02]": {
-			"label": "motion off report",
-			"description": "enable motion OFF report",
+			"label": "Motion Off Report",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 1,
@@ -347,8 +432,7 @@
 			]
 		},
 		"7[0x04]": {
-			"label": "PIR super-sensitivity",
-			"description": "enable PIR super-sensitivity",
+			"label": "PIR Super-Sensitivity",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 1,
@@ -389,7 +473,7 @@
 			]
 		},
 		"7[0x10]": {
-			"label": "door closed report type",
+			"label": "Door closed report type",
 			"description": "notification or sensor binary report",
 			"valueSize": 1,
 			"minValue": 0,
@@ -410,7 +494,7 @@
 			]
 		},
 		"7[0x20]": {
-			"label": "multi CC in auto report",
+			"label": "Multi CC in auto report",
 			"description": "disable/enable multi CC in report",
 			"valueSize": 1,
 			"minValue": 0,
@@ -432,7 +516,6 @@
 		},
 		"7[0x40]": {
 			"label": "Battery state reports",
-			"description": "disable/enable battery state reports",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 1,
@@ -450,96 +533,6 @@
 					"value": 1
 				}
 			]
-		},
-		"8": {
-			"label": "PIR motion re-trigger min interval",
-			"unit": "8s ticks",
-			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 127,
-			"defaultValue": 3,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
-		},
-		"9": {
-			"label": "Light on time hysteresis",
-			"description": "time to keep the light on without motion",
-			"unit": "8s ticks",
-			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 127,
-			"defaultValue": 4,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
-		},
-		"10": {
-			"label": "battery level auto-report interval",
-			"unit": "ticks",
-			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 127,
-			"defaultValue": 12,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
-		},
-		"11": {
-			"label": "door state report interval",
-			"unit": "ticks",
-			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 127,
-			"defaultValue": 12,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
-		},
-		"12": {
-			"label": "illumination auto report interval",
-			"unit": "ticks",
-			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 127,
-			"defaultValue": 12,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
-		},
-		"13": {
-			"label": "temperature report interval",
-			"unit": "ticks",
-			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 127,
-			"defaultValue": 12,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
-		},
-		"21": {
-			"label": "temperature differential to report",
-			"unit": "Fahrenheit",
-			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 127,
-			"defaultValue": 1,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
-		},
-		"22": {
-			"label": "min illumination differential",
-			"description": "min illumination differential to report",
-			"unit": "percent",
-			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 63,
-			"defaultValue": 0,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
 		}
 	}
 }

@@ -42,8 +42,7 @@
 			]
 		},
 		"2": {
-			"label": "winter mode",
-			"description": "Summer/Winter mode",
+			"label": "Summer / Winter mode",
 			"valueSize": 1,
 			"minValue": 1,
 			"maxValue": 2,

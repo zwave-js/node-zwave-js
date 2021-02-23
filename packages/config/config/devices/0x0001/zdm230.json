@@ -1,10 +1,10 @@
-// ACT - Advanced Control Technologies ZDM230
-// HomePro Wall Dimmer ZDM230
+// HomePro ZDM230
+// Wall Dimmer
 {
-	"manufacturer": "ACT - Advanced Control Technologies",
+	"manufacturer": "HomePro",
 	"manufacturerId": "0x0001",
 	"label": "ZDM230",
-	"description": "HomePro Wall Dimmer ZDM230",
+	"description": "Wall Dimmer",
 	"devices": [
 		{
 			"productType": "0x444d",
@@ -18,90 +18,32 @@
 	},
 	"associations": {
 		"1": {
-			"label": "Group 1",
-			"description": "Left paddle",
+			"label": "Left Paddle",
 			"maxNodes": 5
 		},
 		"2": {
-			"label": "Group 2",
-			"description": "Right Paddle",
+			"label": "Right Paddle",
 			"maxNodes": 5
 		},
 		"3": {
-			"label": "Group 3",
-			"description": "Right double click paddle",
+			"label": "Right Paddle Double Tap",
 			"maxNodes": 5
 		},
 		"4": {
-			"label": "Group 4",
-			"description": "Group used to inform devices about status updates",
+			"label": "Lifeline",
 			"maxNodes": 5,
 			"isLifeline": true
 		}
 	},
 	"paramInformation": {
 		"1": {
-			"label": "Ignore Start-Level (Transmitting)",
-			"description": "Dimmers controlled by this switch will start dimming from their current level.",
-			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 1,
-			"defaultValue": 1,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "No",
-					"value": 0
-				},
-				{
-					"label": "Yes",
-					"value": 1
-				}
-			]
+			"$import": "templates/act_template.json#ignore_start_level_transmitting"
 		},
 		"2": {
-			"label": "Suspend group 4",
-			"description": "Temporarily disable transmitting commands to Group 4",
-			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 1,
-			"defaultValue": 0,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "No",
-					"value": 0
-				},
-				{
-					"label": "Yes",
-					"value": 1
-				}
-			]
+			"$import": "templates/act_template.json#suspend_group_4"
 		},
 		"3": {
-			"label": "Night Light",
-			"description": "Night-light mode",
-			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 1,
-			"defaultValue": 0,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "No",
-					"value": 0
-				},
-				{
-					"label": "Yes",
-					"value": 1
-				}
-			]
+			"$import": "../templates/master_template.json#led_indicator_two_options_inverted"
 		}
 	}
 }

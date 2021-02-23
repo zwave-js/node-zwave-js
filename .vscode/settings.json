@@ -106,6 +106,10 @@
 		{
 			"fileMatch": ["/packages/config/config/devices/*/*.json"],
 			"url": "/maintenance/schemas/device-config.json"
+		},
+		{
+			"fileMatch": ["/packages/config/config/deviceClasses.json"],
+			"url": "/maintenance/schemas/deviceClasses.json"
 		}
 	]
 }

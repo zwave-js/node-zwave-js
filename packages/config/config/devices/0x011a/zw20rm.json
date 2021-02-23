@@ -56,7 +56,6 @@
 		},
 		"8": {
 			"label": "Instant Meter Autosend Interval",
-			"description": "Instant Energy Autosend Interval (send METER_REPORT)",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 255,
@@ -92,7 +91,6 @@
 		},
 		"11": {
 			"label": "Enable automatic notifications",
-			"description": "Enable automatic notifications to associated device",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 3,
@@ -120,9 +118,9 @@
 			]
 		},
 		"12": {
-			"label": "Minimum change to report",
-			"description": "Minimum change in wattage report",
+			"label": "Minimum change in wattage to report",
 			"valueSize": 1,
+			"unit": "W",
 			"minValue": 0,
 			"maxValue": 255,
 			"defaultValue": 10,

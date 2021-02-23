@@ -174,7 +174,6 @@
 		},
 		"49": {
 			"label": "Metering energy consumed by the Wall Plug itself.",
-			"description": "Reports amount of energy consumed by the Wall Plug itself.",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 255,

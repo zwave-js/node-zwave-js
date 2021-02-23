@@ -196,7 +196,6 @@
 		},
 		"21": {
 			"label": "Temperature Differential Report",
-			"description": "The temperature differential to report.",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 127,
@@ -207,7 +206,6 @@
 		},
 		"22": {
 			"label": "Illumination Differential Report",
-			"description": "The illumination differential to report.",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 99,
