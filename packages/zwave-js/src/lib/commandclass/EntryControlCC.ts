@@ -102,22 +102,6 @@ export function getKeyCacheTimeoutStateValueID(endpoint: number): ValueID {
 	return getValueID("keyCacheTimeout", endpoint);
 }
 
-export function getMinKeyCacheSizeStateValueID(endpoint: number): ValueID {
-	return getValueID("minKeyCacheSize", endpoint);
-}
-
-export function getMaxKeyCacheSizeStateValueID(endpoint: number): ValueID {
-	return getValueID("maxKeyCacheSize", endpoint);
-}
-
-export function getMinKeyCacheTimeoutStateValueID(endpoint: number): ValueID {
-	return getValueID("minKeyCacheTimeout", endpoint);
-}
-
-export function getMaxKeyCacheTimeoutStateValueID(endpoint: number): ValueID {
-	return getValueID("maxKeyCacheTimeout", endpoint);
-}
-
 @API(CommandClasses["Entry Control"])
 export class EntryControlCCAPI extends CCAPI {
 	public supportsCommand(cmd: EntryControlCommand): Maybe<boolean> {
@@ -207,56 +191,6 @@ export class EntryControlCCAPI extends CCAPI {
 			EntryControlCommand.ConfigurationGet,
 		);
 
-		const valueDB = this.endpoint.getNodeUnsafe()!.valueDB;
-
-		// Validate key cache size
-		const minKeyCacheSize = valueDB.getValue<number>(
-			getMinKeyCacheSizeStateValueID(this.endpoint.index),
-		);
-		if (minKeyCacheSize !== undefined && keyCacheSize < minKeyCacheSize) {
-			throw new ZWaveError(
-				`The "keyCacheSize" (${keyCacheSize}) must be >= than "minKeyCacheSize" (${minKeyCacheSize})!`,
-				ZWaveErrorCodes.Argument_Invalid,
-			);
-		}
-
-		const maxKeyCacheSize = valueDB.getValue<number>(
-			getMaxKeyCacheSizeStateValueID(this.endpoint.index),
-		);
-		if (maxKeyCacheSize !== undefined && keyCacheSize > maxKeyCacheSize) {
-			throw new ZWaveError(
-				`The "keyCacheSize" (${keyCacheSize}) must be <= than "maxKeyCacheSize" (${maxKeyCacheSize})!`,
-				ZWaveErrorCodes.Argument_Invalid,
-			);
-		}
-
-		// Validate key cache timeout
-		const minKeyCacheTimeout = valueDB.getValue<number>(
-			getMinKeyCacheTimeoutStateValueID(this.endpoint.index),
-		);
-		if (
-			minKeyCacheTimeout !== undefined &&
-			keyCacheTimeout < minKeyCacheTimeout
-		) {
-			throw new ZWaveError(
-				`The "keyCacheTimeout" (${keyCacheTimeout}) must be >= than "minKeyCacheTimeout" (${minKeyCacheTimeout})!`,
-				ZWaveErrorCodes.Argument_Invalid,
-			);
-		}
-
-		const maxKeyCacheTimeout = valueDB.getValue<number>(
-			getMaxKeyCacheTimeoutStateValueID(this.endpoint.index),
-		);
-		if (
-			maxKeyCacheTimeout !== undefined &&
-			keyCacheTimeout > maxKeyCacheTimeout
-		) {
-			throw new ZWaveError(
-				`The "keyCacheTimeout" (${keyCacheTimeout}) must be <= than "maxKeyCacheTimeout" (${maxKeyCacheTimeout})!`,
-				ZWaveErrorCodes.Argument_Invalid,
-			);
-		}
-
 		const cc = new EntryControlCCConfigurationSet(this.driver, {
 			nodeId: this.endpoint.nodeId,
 			endpoint: this.endpoint.index,
@@ -307,15 +241,6 @@ export class EntryControlCCAPI extends CCAPI {
 		property,
 	}): Promise<unknown> => {
 		switch (property) {
-			case "supportedDataTypes":
-			case "supportedEventTypes":
-			case "minKeyCacheSize":
-			case "maxKeyCacheSize":
-			case "minKeyCacheTimeout":
-			case "maxKeyCacheTimeout":
-				return (await this.getEventCapabilities())?.[property];
-			case "supportedKeys":
-				return this.getSupportedKeys();
 			case "keyCacheSize":
 			case "keyCacheTimeout":
 				return (await this.getConfiguration())?.[property];
@@ -513,9 +438,35 @@ export class EntryControlCCEventSupportedReport extends EntryControlCC {
 
 		validatePayload(this.payload.length >= offset + 4);
 		this.minKeyCacheSize = this.payload[offset];
+		validatePayload(
+			this.minKeyCacheSize >= 1 && this.minKeyCacheSize <= 32,
+		);
 		this.maxKeyCacheSize = this.payload[offset + 1];
+		validatePayload(
+			this.maxKeyCacheSize >= this.minKeyCacheSize &&
+				this.maxKeyCacheSize <= 32,
+		);
 		this.minKeyCacheTimeout = this.payload[offset + 2];
 		this.maxKeyCacheTimeout = this.payload[offset + 3];
+
+		const keyCacheSizeValueId = getKeyCacheSizeStateValueID(
+			this.endpointIndex,
+		);
+		this.getValueDB().setMetadata(keyCacheSizeValueId, {
+			...ValueMetadata.UInt8,
+			min: this.minKeyCacheSize,
+			max: this.maxKeyCacheSize,
+		});
+
+		const keyCacheTimeoutValueId = getKeyCacheTimeoutStateValueID(
+			this.endpointIndex,
+		);
+		this.getValueDB().setMetadata(keyCacheTimeoutValueId, {
+			...ValueMetadata.UInt8,
+			min: this.minKeyCacheTimeout,
+			max: this.maxKeyCacheTimeout,
+		});
+
 		this.persistValues();
 	}
 
@@ -573,7 +524,6 @@ export class EntryControlCCConfigurationReport extends EntryControlCC {
 		this.keyCacheSize = this.payload[0];
 		validatePayload(this.keyCacheSize >= 1 && this.keyCacheSize <= 32);
 		this.keyCacheTimeout = this.payload[1];
-		validatePayload(this.keyCacheTimeout >= 1 && this.keyCacheSize <= 10);
 		this.persistValues();
 	}
 

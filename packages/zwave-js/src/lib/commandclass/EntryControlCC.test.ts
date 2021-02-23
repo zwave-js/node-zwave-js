@@ -1,5 +1,6 @@
 import { CommandClasses } from "@zwave-js/core";
 import type { Driver } from "../driver/Driver";
+import { ZWaveNode } from "../node/Node";
 import { createEmptyMockDriver } from "../test/mocks";
 import {
 	EntryControlCCConfigurationGet,
@@ -14,8 +15,6 @@ import {
 	EntryControlEventTypes,
 } from "./EntryControlCC";
 
-const fakeDriver = (createEmptyMockDriver() as unknown) as Driver;
-
 function buildCCBuffer(payload: Buffer): Buffer {
 	return Buffer.concat([
 		Buffer.from([
@@ -26,6 +25,19 @@ function buildCCBuffer(payload: Buffer): Buffer {
 }
 
 describe("lib/commandclass/EntryControlCC => ", () => {
+	let fakeDriver: Driver;
+	let node1: ZWaveNode;
+
+	beforeAll(() => {
+		fakeDriver = (createEmptyMockDriver() as unknown) as Driver;
+		node1 = new ZWaveNode(1, fakeDriver as any);
+		(fakeDriver.controller.nodes as any).set(1, node1);
+		node1.addCC(CommandClasses["Entry Control"], {
+			isSupported: true,
+			version: 1,
+		});
+	});
+
 	it("the ConfigurationGet command should serialize correctly", () => {
 		const cc = new EntryControlCCConfigurationGet(fakeDriver, {
 			nodeId: 1,
@@ -95,10 +107,10 @@ describe("lib/commandclass/EntryControlCC => ", () => {
 				0b00000000,
 				0b00000000,
 				0b00000010,
-				0,
-				5,
 				1,
-				10,
+				20,
+				2,
+				9,
 			]),
 		);
 
@@ -114,10 +126,10 @@ describe("lib/commandclass/EntryControlCC => ", () => {
 			EntryControlEventTypes.ArmHome,
 			EntryControlEventTypes.Cancel,
 		]);
-		expect(cc.minKeyCacheSize).toEqual(0);
-		expect(cc.maxKeyCacheSize).toEqual(5);
-		expect(cc.minKeyCacheTimeout).toEqual(1);
-		expect(cc.maxKeyCacheTimeout).toEqual(10);
+		expect(cc.minKeyCacheSize).toEqual(1);
+		expect(cc.maxKeyCacheSize).toEqual(20);
+		expect(cc.minKeyCacheTimeout).toEqual(2);
+		expect(cc.maxKeyCacheTimeout).toEqual(9);
 	});
 
 	it("the KeySupportedGet command should serialize correctly", () => {
