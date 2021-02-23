@@ -476,16 +476,12 @@ export class EntryControlCCEventSupportedReport extends EntryControlCC {
 	@ccValue({ internal: true })
 	public readonly supportedEventTypes: readonly EntryControlEventTypes[];
 
-	@ccValue({ internal: true })
 	public readonly minKeyCacheSize: number;
 
-	@ccValue({ internal: true })
 	public readonly maxKeyCacheSize: number;
 
-	@ccValue({ internal: true })
 	public readonly minKeyCacheTimeout: number;
 
-	@ccValue({ internal: true })
 	public readonly maxKeyCacheTimeout: number;
 
 	public toLogEntry(): MessageOrCCLogEntry {
