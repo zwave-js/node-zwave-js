@@ -7,8 +7,8 @@
 	"description": "Valve Controller",
 	"devices": [
 		{
-			"productType": "0x0x03",
-			"productId": "0x0x02",
+			"productType": "0x0003",
+			"productId": "0x0002",
 			"zwaveAllianceId": 1845
 		}
 	],
