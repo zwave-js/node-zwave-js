@@ -1782,6 +1782,7 @@ version:               ${this.version}`;
 				);
 				command.endpointIndex = endpoint.index;
 				command.persistValues();
+				break;
 			}
 		}
 
