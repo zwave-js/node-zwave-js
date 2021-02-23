@@ -3,7 +3,7 @@
 	Placeholder for next release:
 	## __WORK IN PROGRESS__
 -->
-## __WORK IN PROGRESS__
+## 6.5.0 (2021-02-23)
 ### Features
 * Implemented `Scene Actuator Configuration CC`
 * Updated `Scene Controller Configuration CC` API to match `Scene Actuator Configuration CC`
