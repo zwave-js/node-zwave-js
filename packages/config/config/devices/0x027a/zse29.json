@@ -30,7 +30,7 @@
 	"paramInformation": {
 		"1": {
 			"label": "Basic Set Value",
-			"description": "Set the value of basic set report sent to the light associated with the sensor in Group 2 (so the light turns on to the selected brightness level). 99 is full brightness.",
+			"description": "Set the value of Basic Set commands sent to the devices associated in Group 2",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 99,
