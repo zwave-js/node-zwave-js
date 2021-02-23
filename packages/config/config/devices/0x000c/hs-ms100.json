@@ -19,7 +19,7 @@
 	"paramInformation": {
 		"12": {
 			"label": "Motion Sensor Sensitivity",
-			"description": "Higer values increases sensitivity",
+			"description": "Higher values increase sensitivity",
 			"valueSize": 1,
 			"minValue": 1,
 			"maxValue": 8,
