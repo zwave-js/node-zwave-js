@@ -636,6 +636,18 @@ Parameter #${parameterNumber} has a non-boolean property unsigned`,
 		}
 		this.unsigned = definition.unsigned === true;
 
+		if (
+			definition.unit != undefined &&
+			typeof definition.unit !== "string"
+		) {
+			throwInvalidConfig(
+				"devices",
+				`packages/config/config/devices/${parent.filename}:
+Parameter #${parameterNumber} has a non-string unit`,
+			);
+		}
+		this.unit = definition.unit;
+
 		if (typeof definition.readOnly !== "boolean") {
 			throwInvalidConfig(
 				"devices",
@@ -704,6 +716,7 @@ Parameter #${parameterNumber}: options is malformed!`,
 	public readonly maxValue: number;
 	public readonly unsigned?: boolean;
 	public readonly defaultValue: number;
+	public readonly unit?: string;
 	public readonly readOnly: boolean;
 	public readonly writeOnly: boolean;
 	public readonly allowManualEntry: boolean;

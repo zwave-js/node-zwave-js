@@ -79,6 +79,7 @@ export interface ConfigurationMetadata extends ValueMetadataAny {
 	min?: ConfigValue;
 	max?: ConfigValue;
 	default?: ConfigValue;
+	unit?: string;
 	valueSize?: number;
 	format?: ValueFormat;
 	name?: string;
@@ -803,6 +804,7 @@ alters capabilities: ${!!properties.altersCapabilities}`;
 				min: info.minValue,
 				max: info.maxValue,
 				default: info.defaultValue,
+				unit: info.unit,
 				format: info.unsigned
 					? ValueFormat.UnsignedInteger
 					: ValueFormat.SignedInteger,
