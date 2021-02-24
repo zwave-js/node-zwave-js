@@ -62,7 +62,7 @@
 		},
 		"6": {
 			"label": "LED Dim Level Indicator Timeout",
-			"description": "The length of time in seconds that the level indicators should stay illuminated after the dimming level is changed.  A value of 0 means the indicator is always off, and a value of 255 means the indicators are always on.",
+			"description": "How long the level indicators should stay illuminated after the dimming level is changed.",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 255,
