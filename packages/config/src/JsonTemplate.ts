@@ -94,10 +94,16 @@ async function readJsonWithTemplateInternal(
 			json = JSON5.parse(fileContent);
 			fileCache.set(filename, json);
 		} catch (e) {
-			throw new ZWaveError(
-				`Could not parse config file ${filename}: ${e.message}`,
-				ZWaveErrorCodes.Config_Invalid,
-			);
+			let message = `Could not parse config file ${filename}: ${e.message}`;
+			const source = [...visited, selector ? `#${selector}` : undefined]
+				.reverse()
+				.filter((s) => !!s) as string[];
+			if (source.length > 0) {
+				message += `\nImport stack: ${source
+					.map((s) => `\n  in ${s}`)
+					.join("")}`;
+			}
+			throw new ZWaveError(message, ZWaveErrorCodes.Config_Invalid);
 		}
 	}
 	// Resolve the JSON imports for (a subset) of the file and return the compound file

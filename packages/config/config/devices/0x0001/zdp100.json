@@ -1,7 +1,7 @@
-// ACT - Advanced Control Technologies ZDP100
+// HomePro ZDP100
 // - Scene Capable Dimmer Module
 {
-	"manufacturer": "ACT - Advanced Control Technologies",
+	"manufacturer": "HomePro",
 	"manufacturerId": "0x0001",
 	"label": "ZDP100",
 	"description": "Scene Capable Dimmer Module",

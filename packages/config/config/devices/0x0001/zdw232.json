@@ -1,7 +1,7 @@
-// ACT - Advanced Control Technologies ZDW232
-// - 2-Wire Dimmer 1-Gang
+// HomePro ZDW232
+// 2-Wire Dimmer 1-Gang
 {
-	"manufacturer": "ACT - Advanced Control Technologies",
+	"manufacturer": "HomePro",
 	"manufacturerId": "0x0001",
 	"label": "ZDW232",
 	"description": "2-Wire Dimmer 1-Gang",

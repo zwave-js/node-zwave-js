@@ -8,185 +8,40 @@
 	"devices": [
 		{
 			"productType": "0x4447",
-			"productId": "0x3035"
+			"productId": "0x3035",
+			"zwaveAllianceId": 2675
 		}
 	],
 	"firmwareVersion": {
 		"min": "0.0",
 		"max": "255.255"
 	},
-	"supportsZWavePlus": true,
 	"paramInformation": {
 		"3": {
-			"label": "Bottom LED Operation",
-			"description": "Sets LED operation (in normal mode)",
-			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 1,
-			"defaultValue": 0,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "LED ON if load is OFF",
-					"value": 0
-				},
-				{
-					"label": "LED OFF if load is OFF",
-					"value": 1
-				}
-			]
+			"$import": "../templates/master_template.json#led_indicator_two_options"
 		},
 		"4": {
-			"label": "Orientation",
-			"description": "Sets paddle’s load orientation",
-			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 1,
-			"defaultValue": 0,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "Top of Paddle turns load ON",
-					"value": 0
-				},
-				{
-					"label": "Bottom of Paddle turns load ON",
-					"value": 1
-				}
-			]
+			"$import": "../templates/master_template.json#orientation"
 		},
 		"13": {
-			"label": "Status Mode",
-			"description": "Sets switch mode of operation",
-			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 1,
-			"defaultValue": 0,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "Normal mode (load status)",
-					"value": 0
-				},
-				{
-					"label": "Status mode (custom status)",
-					"value": 1
-				}
-			]
+			"$import": "templates/homeseer_template.json#status_mode"
 		},
 		"14": {
-			"label": "Load Status LED Color",
-			"description": "Sets the Normal mode LED color",
-			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 6,
-			"defaultValue": 0,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "White",
-					"value": 0
-				},
-				{
-					"label": "Red",
-					"value": 1
-				},
-				{
-					"label": "Green",
-					"value": 2
-				},
-				{
-					"label": "Blue",
-					"value": 3
-				},
-				{
-					"label": "Magenta",
-					"value": 4
-				},
-				{
-					"label": "Yellow",
-					"value": 5
-				},
-				{
-					"label": "Cyan",
-					"value": 6
-				}
-			]
+			"$import": "templates/homeseer_template.json#led_colors",
+			"label": "Default LED Color"
 		},
 		"21": {
-			"label": "Status LED Color",
-			"description": "Sets the Status mode LED color",
-			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 7,
-			"defaultValue": 0,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "Off",
-					"value": 0
-				},
-				{
-					"label": "Red",
-					"value": 1
-				},
-				{
-					"label": "Green",
-					"value": 2
-				},
-				{
-					"label": "Blue",
-					"value": 3
-				},
-				{
-					"label": "Magenta",
-					"value": 4
-				},
-				{
-					"label": "Yellow",
-					"value": 5
-				},
-				{
-					"label": "Cyan",
-					"value": 6
-				},
-				{
-					"label": "White",
-					"value": 7
-				}
-			]
+			"$import": "templates/homeseer_template.json#status_mode_choices",
+			"label": "Status Mode LED Color"
 		},
 		"31": {
-			"label": "Blink Frequency",
-			"description": "Sets the switch LED Blink frequency",
-			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 255,
-			"defaultValue": 0,
-			"unsigned": true,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "No blink",
-					"value": 0
-				},
-				{
-					"label": "100ms ON then 100ms OFF",
-					"value": 1
-				}
-			]
+			"$import": "templates/homeseer_template.json#blink_frequency"
 		}
+	},
+	"metadata": {
+		"inclusion": "1. Turn the connected appliance ON/OFF by tapping the switch. Tapping and releasing the upper part of the rocker turns the appliance ON. Tapping and releasing the lower part of the rocker turns the appliance OFF.\n2. Add(Include) the module to/from your Z-Wave network with your primary controller. Please refer to the instructions manual of your gateway or remote controller for details and procedures on how these actions can be done. \n3. Normally, the sequence is as follows: when the inclusion process is prompted by your primary controller, single click and release the rocker switch to ON or OFF position. The controller should show that the action was successful. If the controller shows it was a fail, repeat the procedure",
+		"exclusion": "1. Turn the connected appliance ON/OFF by tapping the switch. Tapping and releasing the upper part of the rocker turns the appliance ON. Tapping and releasing the lower part of the rocker turns the appliance OFF.\n2. Delete(Exclude) the module to/from your Z-Wave network with your primary controller. Please refer to the instructions manual of your gateway or remote controller for details and procedures on how these actions can be done. Normally, the sequence is as follows: when the exclusion process is prompted by your primary controller, single click and release the rocker switch. The controller should show that the action was successful. If the controller shows it was a fail, repeat the procedure",
+		"reset": "Please use this procedure only in the event that the network primary controller is lost or otherwise inoperable.\n\nAll Configuration Parameters can all be restored to their factory\ndefault settings by using your primary controller to delete/reset\nthe device. To manually reset, tap the ON button twice quickly and then tap the OFF button twice quickly. Repeat the procedure to restore the settings to the factory default.",
+		"manual": "https://products.z-wavealliance.org/ProductManual/File?folder=&filename=MarketCertificationFiles/2675/HS-WS200-Manual-v4.pdf"
 	}
 }

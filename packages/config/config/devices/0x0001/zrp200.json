@@ -1,10 +1,10 @@
-// ACT - Advanced Control Technologies ZRP200
-// HomePro Applicance Module ZRP200
+// HomePro ZRP200
+// Applicance Module
 {
-	"manufacturer": "ACT - Advanced Control Technologies",
+	"manufacturer": "HomePro",
 	"manufacturerId": "0x0001",
 	"label": "ZRP200",
-	"description": "HomePro Applicance Module ZRP200",
+	"description": "Applicance Module",
 	"devices": [
 		{
 			"productType": "0x7fff",
