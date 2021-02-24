@@ -12,6 +12,12 @@ import {
 	BinarySwitchCCReport,
 	BinarySwitchCommand,
 } from "../commandclass/BinarySwitchCC";
+import {
+	EntryControlCCNotification,
+	EntryControlCommand,
+	EntryControlDataTypes,
+	EntryControlEventTypes,
+} from "../commandclass/EntryControlCC";
 import { NoOperationCC } from "../commandclass/NoOperationCC";
 import { WakeUpCC, WakeUpCommand } from "../commandclass/WakeUpCC";
 import {
@@ -1512,6 +1518,52 @@ describe("lib/node/Node", () => {
 			).toBe(true);
 
 			node.destroy();
+		});
+
+		it("event is sent when recieving a EntryControlNotification", async () => {
+			const node = makeNode([
+				[
+					CommandClasses["Entry Control"],
+					{ isSupported: true, version: 1 },
+				],
+			]);
+
+			const onEntryControlNotification = jest.fn();
+
+			node.on("entry control notification", onEntryControlNotification);
+
+			const buf = Buffer.from([
+				CommandClasses["Entry Control"],
+				EntryControlCommand.Notification, // CC Command
+				0x5,
+				0x2,
+				0x3,
+				4,
+				49,
+				50,
+				51,
+				52,
+			]);
+
+			const command = new EntryControlCCNotification(
+				(fakeDriver as unknown) as Driver,
+				{
+					nodeId: node.id,
+					data: buf,
+				},
+			);
+
+			node.handleCommand(command);
+
+			const calls = onEntryControlNotification.mock.calls;
+			expect(calls.length).toBe(1);
+			const call = calls[0];
+
+			expect(call[0].id).toBe(node.id);
+			expect(call[1]).toBe(5);
+			expect(call[2]).toBe(EntryControlDataTypes.ASCII);
+			expect(call[3]).toBe(EntryControlEventTypes.DisarmAll);
+			expect(call[4]).toBe("1234");
 		});
 	});
 });

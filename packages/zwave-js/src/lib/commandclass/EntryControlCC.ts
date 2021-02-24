@@ -86,6 +86,27 @@ export enum EntryControlDataTypes {
 	MD5 = 0x03,
 }
 
+/**
+ * @publicAPI
+ */
+export interface ZWaveNotificationCallbackArgs_EntryControlCC {
+	sequenceNumber: number;
+	dataType: EntryControlDataTypes;
+	eventType: EntryControlEventTypes;
+	eventData: Buffer | string;
+}
+
+// Strongly typing the callback signature is blocked by https://github.com/microsoft/TypeScript/issues/43171
+// /**
+//  * @publicAPI
+//  * The specialized version of ZWaveNotificationCallback for Entry Control CC
+//  */
+// export type ZWaveNotificationCallback_EntryControlCC = (
+// 	node: ZWaveNode,
+// 	ccId: CommandClasses["Entry Control"],
+// 	args: ZWaveNotificationCallbackArgs_EntryControlCC,
+// ) => void;
+
 function getValueID(property: string, endpoint: number): ValueID {
 	return {
 		commandClass: CommandClasses["Entry Control"],
