@@ -72,7 +72,7 @@
 		},
 		"4": {
 			"label": "Brightness Threshold",
-			"description": "The sensor will report motion only if brightness level is below the set value (10 is the lowest value the sensor reports). 0=set by knob on sensor; 1=ignore brightness.",
+			"description": "The sensor will report motion only if brightness level is below the set value (10 is the lowest value the sensor reports).",
 			"unit": "lux",
 			"valueSize": 2,
 			"minValue": 0,
@@ -81,10 +81,44 @@
 			"readOnly": false,
 			"writeOnly": false,
 			"allowManualEntry": true
+			"options": [
+				{
+					"label": "Set by knob on sensor",
+					"value": 0
+				},
+				{
+					"label": "Ignore brightness",
+					"value": 1
+				},
+				{
+					"label": "10",
+					"value": 10
+				},
+				{
+					"label": "50",
+					"value": 50
+				},
+				{
+					"label": "100",
+					"value": 100
+				},
+				{
+					"label": "200",
+					"value": 200
+				},
+				{
+					"label": "300",
+					"value": 300
+				},
+				{
+					"label": "900 (Test mode)",
+					"value": 900
+				}
+			]
 		},
 		"5": {
 			"label": "Motion Re-trigger Time",
-			"description": "Delay before the sensor reports no motion after detecting the last motion activity. 0=set by knob on sensor.",
+			"description": "Delay before the sensor reports no motion after detecting the last motion activity.",
 			"unit": "seconds",
 			"valueSize": 2,
 			"minValue": 0,
@@ -93,6 +127,36 @@
 			"readOnly": false,
 			"writeOnly": false,
 			"allowManualEntry": true
+			"options": [
+				{
+					"label": "Set by knob on sensor",
+					"value": 0
+				},
+				{
+					"label": "5 (Test mode)",
+					"value": 5
+				},
+				{
+					"label": "30",
+					"value": 30
+				},
+				{
+					"label": "60",
+					"value": 60
+				},
+				{
+					"label": "300",
+					"value": 300
+				},
+				{
+					"label": "600",
+					"value": 600
+				},
+				{
+					"label": "720",
+					"value": 720
+				}
+			]
 		},
 		"6": {
 			"label": "Lux Reporting Frequency",
