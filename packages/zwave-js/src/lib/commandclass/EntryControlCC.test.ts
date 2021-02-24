@@ -10,6 +10,7 @@ import {
 	EntryControlCCEventSupportedReport,
 	EntryControlCCKeySupportedGet,
 	EntryControlCCKeySupportedReport,
+	EntryControlCCNotification,
 	EntryControlCommand,
 	EntryControlDataTypes,
 	EntryControlEventTypes,
@@ -36,6 +37,32 @@ describe("lib/commandclass/EntryControlCC => ", () => {
 			isSupported: true,
 			version: 1,
 		});
+	});
+
+	it("the Notification command should deserialize correctly", () => {
+		const data = buildCCBuffer(
+			Buffer.from([
+				EntryControlCommand.Notification, // CC Command
+				0x1,
+				0x2,
+				0x3,
+				4,
+				49,
+				50,
+				51,
+				52,
+			]),
+		);
+
+		const cc = new EntryControlCCNotification(fakeDriver, {
+			nodeId: 1,
+			data,
+		});
+
+		expect(cc.sequenceNumber).toEqual(1);
+		expect(cc.dataType).toEqual(EntryControlDataTypes.ASCII);
+		expect(cc.eventType).toEqual(EntryControlEventTypes.DisarmAll);
+		expect(cc.eventData).toEqual("1234");
 	});
 
 	it("the ConfigurationGet command should serialize correctly", () => {

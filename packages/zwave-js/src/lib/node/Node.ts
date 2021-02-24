@@ -56,6 +56,7 @@ import {
 	DoorLockMode,
 	getCurrentModeValueId as getCurrentLockModeValueId,
 } from "../commandclass/DoorLockCC";
+import { EntryControlCCNotification } from "../commandclass/EntryControlCC";
 import {
 	FirmwareUpdateMetaDataCC,
 	FirmwareUpdateMetaDataCCGet,
@@ -1830,6 +1831,8 @@ version:               ${this.version}`;
 			return this.handleFirmwareUpdateGet(command);
 		} else if (command instanceof FirmwareUpdateMetaDataCCStatusReport) {
 			return this.handleFirmwareUpdateStatusReport(command);
+		} else if (command instanceof EntryControlCCNotification) {
+			return this.handleEntryControlNotification(command);
 		}
 
 		// Ignore all commands that don't need to be handled
@@ -1968,16 +1971,16 @@ version:               ${this.version}`;
 		- A new Key Held Down notification MUST be sent every 200ms until the key is released.
 		- The Sequence Number field MUST be updated at each notification transmission.
 		- If not receiving a new Key Held Down notification within 400ms, a controlling node SHOULD use an adaptive timeout approach as described in 4.17.1:
-		A controller SHOULD apply an adaptive approach based on the reception of the Key Released Notification. 
-		Initially, the controller SHOULD time out if not receiving any Key Held Down Notification refresh after 
-		400ms and consider this to be a Key Up Notification. If, however, the controller subsequently receives a 
-		Key Released Notification, the controller SHOULD consider the sending node to be operating with the Slow 
+		A controller SHOULD apply an adaptive approach based on the reception of the Key Released Notification.
+		Initially, the controller SHOULD time out if not receiving any Key Held Down Notification refresh after
+		400ms and consider this to be a Key Up Notification. If, however, the controller subsequently receives a
+		Key Released Notification, the controller SHOULD consider the sending node to be operating with the Slow
 		Refresh capability enabled.
 
 		If the Slow Refresh field is true:
 		- A new Key Held Down notification MUST be sent every 55 seconds until the key is released.
 		- The Sequence Number field MUST be updated at each notification refresh.
-		- If not receiving a new Key Held Down notification within 60 seconds after the most recent Key Held Down 
+		- If not receiving a new Key Held Down notification within 60 seconds after the most recent Key Held Down
 		notification, a receiving node MUST respond as if it received a Key Release notification.
 		*/
 
@@ -2948,6 +2951,20 @@ version:               ${this.version}`;
 			}
 			throw e;
 		}
+	}
+
+	private handleEntryControlNotification(
+		notif: EntryControlCCNotification,
+	): void {
+		// Notify listeners
+		this.emit(
+			"entry control notification",
+			this,
+			notif.sequenceNumber,
+			notif.dataType,
+			notif.eventType,
+			notif.eventData,
+		);
 	}
 
 	/**

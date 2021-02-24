@@ -7,6 +7,10 @@ import type {
 	ValueUpdatedArgs,
 } from "@zwave-js/core";
 import type { FirmwareUpdateStatus } from "../commandclass";
+import type {
+	EntryControlDataTypes,
+	EntryControlEventTypes,
+} from "../commandclass/EntryControlCC";
 import type { NotificationCCReport } from "../commandclass/NotificationCC";
 import type { ZWaveNode } from "./Node";
 
@@ -80,6 +84,13 @@ export type ZWaveNodeStatusChangeCallback = (
 	node: ZWaveNode,
 	oldStatus: NodeStatus,
 ) => void;
+export type ZWaveNodeEntryControlNotificationCallback = (
+	node: ZWaveNode,
+	sequenceNumber: number,
+	dataType: EntryControlDataTypes,
+	eventType: EntryControlEventTypes,
+	eventData: Buffer | string,
+) => void;
 
 export interface ZWaveNodeValueEventCallbacks {
 	"value added": ZWaveNodeValueAddedCallback;
@@ -100,6 +111,7 @@ export interface ZWaveNodeEventCallbacks extends ZWaveNodeValueEventCallbacks {
 	alive: ZWaveNodeStatusChangeCallback;
 	"interview completed": (node: ZWaveNode) => void;
 	ready: (node: ZWaveNode) => void;
+	"entry control notification": ZWaveNodeEntryControlNotificationCallback;
 }
 
 export type ZWaveNodeEvents = Extract<keyof ZWaveNodeEventCallbacks, string>;
