@@ -116,47 +116,50 @@
 				}
 			]
 		},
-		"5": {
-			"label": "Motion Re-trigger Time",
-			"description": "Delay before the sensor reports no motion after detecting the last motion activity.",
-			"unit": "seconds",
-			"valueSize": 2,
-			"minValue": 0,
-			"maxValue": 720,
-			"defaultValue": 0,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true,
-			"options": [
-				{
-					"label": "Set by knob on sensor",
-					"value": 0
-				},
-				{
-					"label": "5 (Test mode)",
-					"value": 5
-				},
-				{
-					"label": "30",
-					"value": 30
-				},
-				{
-					"label": "60",
-					"value": 60
-				},
-				{
-					"label": "300",
-					"value": 300
-				},
-				{
-					"label": "600",
-					"value": 600
-				},
-				{
-					"label": "720",
-					"value": 720
-				}
-			]
+        {
+    		"$if": "firmwareVersion >= 1.03"
+			"5": {
+				"label": "Motion Re-trigger Time",
+				"description": "Delay before the sensor reports no motion after detecting the last motion activity.",
+				"unit": "seconds",
+				"valueSize": 2,
+				"minValue": 0,
+				"maxValue": 720,
+				"defaultValue": 0,
+				"readOnly": false,
+				"writeOnly": false,
+				"allowManualEntry": true,
+				"options": [
+					{
+						"label": "Set by knob on sensor",
+						"value": 0
+					},
+					{
+						"label": "5 (Test mode)",
+						"value": 5
+					},
+					{
+						"label": "30",
+						"value": 30
+					},
+					{
+						"label": "60",
+						"value": 60
+					},
+					{
+						"label": "300",
+						"value": 300
+					},
+					{
+						"label": "600",
+						"value": 600
+					},
+					{
+						"label": "720",
+						"value": 720
+					}
+				]
+			},
 		},
 		"6": {
 			"label": "Lux Reporting Frequency",
