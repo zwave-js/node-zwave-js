@@ -119,7 +119,15 @@
 		"5": {
 			"$if": "firmwareVersion >= 1.03",
 			"label": "Motion Re-trigger Time",
-			"description": "Delay before the sensor reports no motion after detecting the last motion activity.",
+			"description": [
+				{
+					"$if": "firmwareVersion < 2.00",
+					"Delay before the sensor reports no motion to Associated Devices after detecting the last motion activity."
+				},
+				{
+					"Delay before the sensor reports no motion after detecting the last motion activity."
+				}
+			],
 			"unit": "seconds",
 			"valueSize": 2,
 			"minValue": 0,
