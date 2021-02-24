@@ -662,15 +662,6 @@ Parameter #${parameterNumber} has a non-numeric property maxValue`,
 		}
 		this.maxValue = definition.maxValue;
 
-		if (typeof definition.defaultValue !== "number") {
-			throwInvalidConfig(
-				"devices",
-				`packages/config/config/devices/${parent.filename}:
-Parameter #${parameterNumber} has a non-numeric property defaultValue`,
-			);
-		}
-		this.defaultValue = definition.defaultValue;
-
 		if (
 			definition.unsigned != undefined &&
 			typeof definition.unsigned !== "boolean"
@@ -712,6 +703,23 @@ Parameter #${parameterNumber}: writeOnly must be a boolean!`,
 			);
 		}
 		this.writeOnly = definition.writeOnly;
+
+		if (definition.defaultValue == undefined) {
+			if (!this.readOnly) {
+				throwInvalidConfig(
+					"devices",
+					`packages/config/config/devices/${parent.filename}:
+Parameter #${parameterNumber} is missing defaultValue, which is required unless the parameter is readOnly`,
+				);
+			}
+		} else if (typeof definition.defaultValue !== "number") {
+			throwInvalidConfig(
+				"devices",
+				`packages/config/config/devices/${parent.filename}:
+Parameter #${parameterNumber} has a non-numeric property defaultValue`,
+			);
+		}
+		this.defaultValue = definition.defaultValue;
 
 		if (typeof definition.allowManualEntry !== "boolean") {
 			throwInvalidConfig(
