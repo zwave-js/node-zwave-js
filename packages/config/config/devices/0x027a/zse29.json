@@ -65,6 +65,7 @@
 			"valueSize": 1,
 			"minValue": 1,
 			"maxValue": 10,
+			"defaultValue": 10,
 			"readOnly": false,
 			"writeOnly": false,
 			"allowManualEntry": true
