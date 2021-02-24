@@ -18,15 +18,18 @@
 	"associations": {
 		"1": {
 			"label": "Left Paddle",
-			"maxNodes": 5
+			"maxNodes": 5,
+			"isLifeline": true
 		},
 		"2": {
 			"label": "Right Paddle",
-			"maxNodes": 5
+			"maxNodes": 5,
+			"isLifeline": true
 		},
 		"3": {
 			"label": "Right Paddle Double Tap",
-			"maxNodes": 5
+			"maxNodes": 5,
+			"isLifeline": true
 		},
 		"4": {
 			"label": "Lifeline",

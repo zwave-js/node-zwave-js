@@ -19,15 +19,18 @@
 	"associations": {
 		"1": {
 			"label": "Single Tap",
-			"maxNodes": 5
+			"maxNodes": 5,
+			"isLifeline": true
 		},
 		"2": {
 			"label": "Double Tap",
-			"maxNodes": 5
+			"maxNodes": 5,
+			"isLifeline": true
 		},
 		"3": {
 			"label": "Triple Tap",
-			"maxNodes": 5
+			"maxNodes": 5,
+			"isLifeline": true
 		},
 		"4": {
 			"label": "Lifeline",
