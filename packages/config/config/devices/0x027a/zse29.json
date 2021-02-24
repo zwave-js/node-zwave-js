@@ -103,6 +103,76 @@
 			"readOnly": false,
 			"writeOnly": false,
 			"allowManualEntry": true
+		},
+		"7": {
+			"label": "Manual Motion Re-trigger Time Setting",
+			"description": "Read the value for the Motion Re-trigger Time set by knob on sensor (overridden by setting Motion Re-trigger Time parameter).",
+			"unit": "seconds",
+			"valueSize": 2,
+			"readOnly": true,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "5 (Test mode)",
+					"value": 5
+				},
+				{
+					"label": "30",
+					"value": 30
+				},
+				{
+					"label": "60",
+					"value": 60
+				},
+				{
+					"label": "300",
+					"value": 300
+				},
+				{
+					"label": "600",
+					"value": 600
+				},
+				{
+					"label": "720",
+					"value": 720
+				}
+			]
+		},
+		"8": {
+			"label": "Manual Brightness Threshold Setting",
+			"description": "Read the value for the Brightness Threshold set by knob on sensor (overridden by setting Brightness Threshold parameter).",
+			"unit": "lux",
+			"valueSize": 2,
+			"readOnly": true,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "10",
+					"value": 10
+				},
+				{
+					"label": "50",
+					"value": 50
+				},
+				{
+					"label": "100",
+					"value": 100
+				},
+				{
+					"label": "200",
+					"value": 200
+				},
+				{
+					"label": "300",
+					"value": 300
+				},
+				{
+					"label": "900 (Test mode)",
+					"value": 900
+				}
+			]
 		}
 	},
 	"metadata": {
