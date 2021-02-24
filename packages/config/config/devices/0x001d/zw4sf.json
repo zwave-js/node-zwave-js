@@ -84,7 +84,7 @@
 		},
 		"7": {
 			"label": "Locator LED Status",
-			"description": "Change the mode of the LED to Status Mode where the LED is illuminated when the load is On, Locator Mode where the LED is illuminated when the Load is Off, or turns off the LED completely for any other setting values.",
+			"description": "Status Mode: The LED is illuminated when the load is On. Locator Mode: The LED is illuminated when the Load is Off.",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 255,
