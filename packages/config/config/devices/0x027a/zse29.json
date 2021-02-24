@@ -71,7 +71,7 @@
 		},
 		"4": {
 			"label": "Brightness Threshold",
-			"description": "The sensor will report motion only if brightness level is below the set value (10 is the lowest value the sensor reports). 0=set by knob; 1=ignore brightness.",
+			"description": "The sensor will report motion only if brightness level is below the set value (10 is the lowest value the sensor reports). 0=set by knob on sensor; 1=ignore brightness.",
 			"unit": "lux",
 			"valueSize": 2,
 			"minValue": 0,
@@ -83,7 +83,7 @@
 		},
 		"5": {
 			"label": "Motion Re-trigger Time",
-			"description": "Delay before the sensor reports no motion after detecting the last motion activity. 0=set manually.",
+			"description": "Delay before the sensor reports no motion after detecting the last motion activity. 0=set by knob on sensor.",
 			"unit": "seconds",
 			"valueSize": 2,
 			"minValue": 0,
