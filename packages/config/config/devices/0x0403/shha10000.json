@@ -1,0 +1,25 @@
+// ABUS Security-Center GmbH & Co. KG SHHA10000
+// Z-Wave Button
+{
+	"manufacturer": "ABUS Security-Center GmbH & Co. KG",
+	"manufacturerId": "0x0403",
+	"label": "SHHA10000",
+	"description": "Smart Wireless Plug",
+	"devices": [
+		{
+			"productType": "0x0003",
+			"productId": "0x0003",
+			"zwaveAllianceId": 3144
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"metadata": {
+		"inclusion": "",
+		"exclusion": "",
+		"reset": "",
+		"manual": ""
+	}
+}
