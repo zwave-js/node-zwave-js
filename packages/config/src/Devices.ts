@@ -34,8 +34,17 @@ export interface DeviceID {
 
 export interface DeviceConfigIndexEntry {
 	manufacturerId: string;
+	productType: string;
+	productId: string;
+	firmwareVersion: FirmwareVersionRange;
+	filename: string;
+}
+
+export interface FulltextDeviceConfigIndexEntry {
+	manufacturerId: string;
 	manufacturer: string;
 	label: string;
+	description: string;
 	productType: string;
 	productId: string;
 	firmwareVersion: FirmwareVersionRange;
@@ -49,7 +58,9 @@ export type ParamInfoMap = ReadonlyObjectKeyMap<
 
 export const devicesDir = path.join(configDir, "devices");
 export const indexPath = path.join(devicesDir, "index.json");
+export const fulltextIndexPath = path.join(devicesDir, "fulltext_index.json");
 export type DeviceConfigIndex = DeviceConfigIndexEntry[];
+export type FulltextDeviceConfigIndex = FulltextDeviceConfigIndexEntry[];
 
 async function hasChangedDeviceFiles(
 	dir: string,
@@ -76,17 +87,14 @@ async function hasChangedDeviceFiles(
 	return false;
 }
 
-/**
- * @internal
- * Loads the index file to quickly access the device configs.
- * Transparently handles updating the index if necessary
- */
-export async function loadDeviceIndexInternal(
+async function loadDeviceIndexShared<T extends Record<string, unknown>>(
+	indexPath: string,
+	extractIndexEntries: (config: DeviceConfig) => T[],
 	logger?: ConfigLogger,
-): Promise<DeviceConfigIndex> {
+): Promise<(T & { filename: string })[]> {
 	// The index file needs to be regenerated if it does not exist
 	let needsUpdate = !(await pathExists(indexPath));
-	let index: DeviceConfigIndex | undefined;
+	let index: (T & { filename: string })[] | undefined;
 	let mtimeIndex: Date | undefined;
 	// ...or if cannot be parsed
 	if (!needsUpdate) {
@@ -145,14 +153,8 @@ export async function loadDeviceIndexInternal(
 				});
 				// Add the file to the index
 				index.push(
-					...config.devices.map((dev: any) => ({
-						manufacturerId: formatId(
-							config.manufacturerId.toString(16),
-						),
-						manufacturer: config.manufacturer,
-						label: config.label,
-						...dev,
-						firmwareVersion: config.firmwareVersion,
+					...extractIndexEntries(config).map((entry) => ({
+						...entry,
 						filename: relativePath,
 					})),
 				);
@@ -194,6 +196,51 @@ ${stringify(index, "\t")}
 	}
 
 	return index!;
+}
+
+/**
+ * @internal
+ * Loads the index file to quickly access the device configs.
+ * Transparently handles updating the index if necessary
+ */
+export async function loadDeviceIndexInternal(
+	logger?: ConfigLogger,
+): Promise<DeviceConfigIndex> {
+	return loadDeviceIndexShared(
+		indexPath,
+		(config) =>
+			config.devices.map((dev) => ({
+				manufacturerId: formatId(config.manufacturerId.toString(16)),
+				manufacturer: config.manufacturer,
+				label: config.label,
+				...dev,
+				firmwareVersion: config.firmwareVersion,
+			})),
+		logger,
+	);
+}
+
+/**
+ * @internal
+ * Loads the full text index file to quickly search the device configs.
+ * Transparently handles updating the index if necessary
+ */
+export async function loadFulltextDeviceIndexInternal(
+	logger?: ConfigLogger,
+): Promise<FulltextDeviceConfigIndex> {
+	return loadDeviceIndexShared(
+		indexPath,
+		(config) =>
+			config.devices.map((dev) => ({
+				manufacturerId: formatId(config.manufacturerId.toString(16)),
+				manufacturer: config.manufacturer,
+				label: config.label,
+				description: config.description,
+				...dev,
+				firmwareVersion: config.firmwareVersion,
+			})),
+		logger,
+	);
 }
 
 function isHexKeyWith4Digits(val: any): val is string {
