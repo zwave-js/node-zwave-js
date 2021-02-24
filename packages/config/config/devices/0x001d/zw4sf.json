@@ -4,7 +4,7 @@
 	"manufacturer": "Leviton",
 	"manufacturerId": "0x001d",
 	"label": "ZW4SF",
-	"description": "Decora Smart 4 Speed Fan Controller",
+	"description": "4 Speed Fan Controller",
 	"devices": [
 		{
 			"productType": "0x0038",
@@ -26,7 +26,6 @@
 	"paramInformation": {
 		"3": {
 			"label": "Min Level",
-			"description": "Minimum Fan Speed level allowed",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 99,
@@ -38,7 +37,6 @@
 		},
 		"4": {
 			"label": "Max Level",
-			"description": "Maximum Fan Speed level allowed",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 99,
@@ -50,7 +48,6 @@
 		},
 		"5": {
 			"label": "Preset Level",
-			"description": "Preset Level for On",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 99,
@@ -66,6 +63,7 @@
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 255,
+			"unit": "seconds",
 			"defaultValue": 3,
 			"unsigned": true,
 			"readOnly": false,
@@ -95,15 +93,15 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "LED Off",
+					"label": "Always off",
 					"value": 0
 				},
 				{
-					"label": "Status Mode",
+					"label": "LED on when switch is on",
 					"value": 254
 				},
 				{
-					"label": "Locator Mode",
+					"label": "LED on when switch is off",
 					"value": 255
 				}
 			]
