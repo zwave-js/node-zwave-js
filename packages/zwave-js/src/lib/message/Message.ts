@@ -175,6 +175,12 @@ export class Message {
 		return true;
 	}
 
+	/** Returns the callback timeout for this message in case the default settings do not apply. */
+	public getCallbackTimeout(): number | undefined {
+		// Use default timeout by default
+		return;
+	}
+
 	/** Serializes this message into a Buffer */
 	public serialize(): Buffer {
 		const ret = Buffer.allocUnsafe(this.payload.length + 5);

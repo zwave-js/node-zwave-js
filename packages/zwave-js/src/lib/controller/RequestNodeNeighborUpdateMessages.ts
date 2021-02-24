@@ -63,6 +63,22 @@ export class RequestNodeNeighborUpdateRequest extends RequestNodeNeighborUpdateR
 		return super.serialize();
 	}
 
+	public getCallbackTimeout(): number | undefined {
+		const node = this.getNodeUnsafe();
+		const allNodes = [...this.driver.controller.nodes.values()];
+		const numListeningNodes = allNodes.filter((n) => n.isListening).length;
+		const numFlirsNodes = allNodes.filter((n) => n.isFrequentListening)
+			.length;
+		const numNodes = allNodes.length;
+
+		return (
+			7600 +
+			numListeningNodes * 217 +
+			numFlirsNodes * 3517 +
+			(node?.isController ? numNodes * 732 : 0)
+		);
+	}
+
 	public toLogEntry(): MessageOrCCLogEntry {
 		return {
 			...super.toLogEntry(),
