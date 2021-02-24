@@ -15,8 +15,9 @@ import {
 import {
 	DeviceConfig,
 	DeviceConfigIndex,
-	DeviceConfigIndexEntry,
+	FulltextDeviceConfigIndex,
 	loadDeviceIndexInternal,
+	loadFulltextDeviceIndexInternal,
 } from "./Devices";
 import {
 	IndicatorMap,
@@ -76,6 +77,7 @@ export class ConfigManager {
 	private basicDeviceClasses: BasicDeviceClassMap | undefined;
 	private genericDeviceClasses: GenericDeviceClassMap | undefined;
 	private index: DeviceConfigIndex | undefined;
+	private fulltextIndex: FulltextDeviceConfigIndex | undefined;
 	private notifications: NotificationMap | undefined;
 
 	public async loadManufacturers(): Promise<void> {
@@ -436,6 +438,18 @@ export class ConfigManager {
 		}
 	}
 
+	public getIndex(): DeviceConfigIndex | undefined {
+		return this.index;
+	}
+
+	public async loadFulltextDeviceIndex(): Promise<void> {
+		this.fulltextIndex = await loadFulltextDeviceIndexInternal(this.logger);
+	}
+
+	public getFulltextIndex(): FulltextDeviceConfigIndex | undefined {
+		return this.fulltextIndex;
+	}
+
 	/**
 	 * Looks up the definition of a given device in the configuration DB
 	 * @param manufacturerId The manufacturer id of the device
@@ -490,10 +504,6 @@ export class ConfigManager {
 				}
 			}
 		}
-	}
-
-	public getIndex(): DeviceConfigIndexEntry[] | undefined {
-		return this.index;
 	}
 
 	public async loadNotifications(): Promise<void> {
