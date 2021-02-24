@@ -80,7 +80,7 @@
 			"defaultValue": 0,
 			"readOnly": false,
 			"writeOnly": false,
-			"allowManualEntry": true
+			"allowManualEntry": true,
 			"options": [
 				{
 					"label": "Set by knob on sensor",
@@ -126,7 +126,7 @@
 			"defaultValue": 0,
 			"readOnly": false,
 			"writeOnly": false,
-			"allowManualEntry": true
+			"allowManualEntry": true,
 			"options": [
 				{
 					"label": "Set by knob on sensor",
