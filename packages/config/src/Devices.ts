@@ -32,22 +32,22 @@ export interface DeviceID {
 	firmwareVersion?: string;
 }
 
-interface BaseDeviceConfigIndexEntry {
+export interface DeviceConfigIndexEntry {
 	manufacturerId: string;
 	productType: string;
 	productId: string;
 	firmwareVersion: FirmwareVersionRange;
-}
-
-export interface DeviceConfigIndexEntry extends BaseDeviceConfigIndexEntry {
 	filename: string;
 }
 
-export interface FulltextDeviceConfigIndexEntry
-	extends BaseDeviceConfigIndexEntry {
+export interface FulltextDeviceConfigIndexEntry {
+	manufacturerId: string;
 	manufacturer: string;
 	label: string;
 	description: string;
+	productType: string;
+	productId: string;
+	firmwareVersion: FirmwareVersionRange;
 	filename: string;
 }
 

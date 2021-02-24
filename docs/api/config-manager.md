@@ -196,12 +196,57 @@ Loads the device index which is internally used to lookup device configuration f
 ### `getIndex`
 
 ```ts
-getIndex(): DeviceConfigIndexEntry[] | undefined;
+getIndex(): DeviceConfigIndex | undefined;
 ```
 
-Returns the previously loaded device index.
+Returns the previously loaded device index. The returned value is an array of `DeviceConfigIndexEntry`:
+
+<!-- #import DeviceConfigIndexEntry from "@zwave-js/config" -->
+
+```ts
+interface DeviceConfigIndexEntry {
+	manufacturerId: string;
+	productType: string;
+	productId: string;
+	firmwareVersion: FirmwareVersionRange;
+	filename: string;
+}
+```
 
 > [!NOTE] `loadDeviceIndex` must be used first.
+
+### `loadFulltextDeviceIndex`
+
+```ts
+loadFulltextDeviceIndex(): Promise<void>;
+```
+
+Like `loadDeviceIndex`, but for the fulltext index
+
+### `getFulltextIndex`
+
+```ts
+getFulltextIndex(): FulltextDeviceConfigIndex | undefined;
+```
+
+Returns the previously loaded fulltext index. Applications shouldn't need this. The returned value is an array of `FulltextDeviceConfigIndexEntry`:
+
+<!-- #import FulltextDeviceConfigIndexEntry from "@zwave-js/config" -->
+
+```ts
+interface FulltextDeviceConfigIndexEntry {
+	manufacturerId: string;
+	manufacturer: string;
+	label: string;
+	description: string;
+	productType: string;
+	productId: string;
+	firmwareVersion: FirmwareVersionRange;
+	filename: string;
+}
+```
+
+> [!NOTE] `loadFulltextDeviceIndex` must be used first.
 
 ### `lookupDevice`
 
