@@ -28,7 +28,6 @@ import {
 	CCCommand,
 	CCCommandOptions,
 	ccValue,
-	ccValueMetadata,
 	CommandClass,
 	commandClass,
 	CommandClassDeserializationOptions,
@@ -81,6 +80,22 @@ export function getNotificationModeValueId(): ValueID {
 	return {
 		commandClass: CommandClasses.Notification,
 		property: "notificationMode",
+	};
+}
+
+export function getAlarmTypeValueId(endpoint?: number): ValueID {
+	return {
+		commandClass: CommandClasses.Notification,
+		endpoint,
+		property: "alarmType",
+	};
+}
+
+export function getAlarmLevelValueId(endpoint?: number): ValueID {
+	return {
+		commandClass: CommandClasses.Notification,
+		endpoint,
+		property: "alarmLevel",
 	};
 }
 
@@ -383,6 +398,7 @@ export class NotificationCC extends CommandClass {
 			direction: "none",
 		});
 
+		let supportsV1Alarm = false;
 		if (this.version >= 2) {
 			let supportedNotificationTypes: readonly number[];
 			let supportedNotificationNames: string[];
@@ -421,6 +437,7 @@ export class NotificationCC extends CommandClass {
 					});
 					return;
 				}
+				supportsV1Alarm = suppResponse.supportsV1Alarm;
 				supportedNotificationTypes =
 					suppResponse.supportedNotificationTypes;
 				supportedNotificationNames = lookupNotificationNames();
@@ -573,6 +590,18 @@ export class NotificationCC extends CommandClass {
 					}
 				}
 			}
+		}
+
+		// Only create metadata for V1 values if necessary
+		if (this.version === 1 || supportsV1Alarm) {
+			valueDB.setMetadata(getAlarmTypeValueId(this.endpointIndex), {
+				...ValueMetadata.ReadOnlyUInt8,
+				label: "Alarm Type",
+			});
+			valueDB.setMetadata(getAlarmLevelValueId(this.endpointIndex), {
+				...ValueMetadata.ReadOnlyUInt8,
+				label: "Alarm Level",
+			});
 		}
 
 		// Remember that the interview is complete
@@ -742,20 +771,31 @@ export class NotificationCCReport extends NotificationCC {
 		}
 	}
 
-	// @noCCValues TODO: This should actually be a huge key value pair
+	// @noCCValues - Persisting this CC is handled by ZWaveNode
+
+	public persistValues(): boolean {
+		if (!super.persistValues()) return false;
+
+		const valueDB = this.getValueDB();
+		if (this.alarmType != undefined) {
+			valueDB.setValue(
+				getAlarmTypeValueId(this.endpointIndex),
+				this.alarmType,
+			);
+		}
+		if (this.alarmLevel != undefined) {
+			valueDB.setValue(
+				getAlarmLevelValueId(this.endpointIndex),
+				this.alarmLevel,
+			);
+		}
+
+		return true;
+	}
+
 	// Disable the lint error temporarily
 
-	@ccValue()
-	@ccValueMetadata({
-		...ValueMetadata.ReadOnlyUInt8,
-		label: "Alarm Type",
-	})
 	public alarmType: number | undefined;
-	@ccValue()
-	@ccValueMetadata({
-		...ValueMetadata.ReadOnlyUInt8,
-		label: "Alarm Level",
-	})
 	public alarmLevel: number | undefined;
 
 	public notificationType: number | undefined;
