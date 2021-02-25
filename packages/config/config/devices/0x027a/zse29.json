@@ -115,7 +115,7 @@
 					"value": 300
 				},
 				{
-					"label": "900 (Test mode)",
+					"label": "900 lux (Test mode)",
 					"value": 900
 				}
 			]
@@ -138,7 +138,7 @@
 					"value": 0
 				},
 				{
-					"label": "5 (Test mode)",
+					"label": "5 seconds (Test mode)",
 					"value": 5
 				},
 				{
@@ -189,7 +189,7 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "5 (Test mode)",
+					"label": "5 seconds (Test mode)",
 					"value": 5
 				}
 			]
@@ -208,7 +208,7 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "900 (Test mode)",
+					"label": "900 lux (Test mode)",
 					"value": 900
 				}
 			]
