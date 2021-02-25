@@ -191,26 +191,6 @@
 				{
 					"label": "5 (Test mode)",
 					"value": 5
-				},
-				{
-					"label": "30",
-					"value": 30
-				},
-				{
-					"label": "60",
-					"value": 60
-				},
-				{
-					"label": "300",
-					"value": 300
-				},
-				{
-					"label": "600",
-					"value": 600
-				},
-				{
-					"label": "720",
-					"value": 720
 				}
 			]
 		},
@@ -227,26 +207,6 @@
 			"writeOnly": false,
 			"allowManualEntry": false,
 			"options": [
-				{
-					"label": "10",
-					"value": 10
-				},
-				{
-					"label": "50",
-					"value": 50
-				},
-				{
-					"label": "100",
-					"value": 100
-				},
-				{
-					"label": "200",
-					"value": 200
-				},
-				{
-					"label": "300",
-					"value": 300
-				},
 				{
 					"label": "900 (Test mode)",
 					"value": 900
