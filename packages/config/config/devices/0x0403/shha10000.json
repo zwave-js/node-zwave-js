@@ -96,11 +96,11 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "LED is permanently on when device on",
+					"label": "LED is on when device on",
 					"value": 0
 				},
 				{
-					"label": "LED is on for 5 seconds when device changing to on",
+					"label": "LED on for 5s when device turns on",
 					"value": 1
 				}
 			]
@@ -163,7 +163,7 @@
 			]
 		},
 		"101": {
-			"label": "Power Report (Watt)",
+			"label": "Power (Watt) Report Interval",
 			"valueSize": 4,
 			"unit": "seconds",
 			"minValue": 0,
@@ -180,7 +180,7 @@
 			]
 		},
 		"102": {
-			"label": "Consumption Report (kWh)",
+			"label": "Consumption (kWh) Report Interval",
 			"valueSize": 4,
 			"unit": "seconds",
 			"minValue": 0,
@@ -197,7 +197,7 @@
 			]
 		},
 		"103": {
-			"label": "Voltage Report (V)",
+			"label": "Voltage (V) Report Interval",
 			"valueSize": 4,
 			"unit": "seconds",
 			"minValue": 0,
@@ -214,7 +214,7 @@
 			]
 		},
 		"104": {
-			"label": "Current Report (A)",
+			"label": "Current (A) Report Interval",
 			"valueSize": 4,
 			"unit": "seconds",
 			"minValue": 0,
