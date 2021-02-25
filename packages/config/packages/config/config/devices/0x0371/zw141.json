@@ -1,0 +1,489 @@
+{
+	"manufacturer": "Aeotec Limited",
+	"manufacturerId": "0x0371",
+	"label": "ZW141",
+	"description": "Nano Shutter",
+	"devices": [
+		{
+			"productType": "0x0003",
+			"productId": "0x008d"
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"associations": {
+		"1": {
+			"label": "Lifeline",
+			"maxNodes": 5,
+			"isLifeline": true
+		},
+		"2": {
+			"label": "Retransmit",
+			"maxNodes": 5
+		}
+	},
+	"paramInformation": {
+		"20": {
+			"label": "Motor Behavior After Powering On",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 2,
+			"defaultValue": 0,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Same position",
+					"value": 0
+				},
+				{
+					"label": "Move to 99%",
+					"value": 1
+				},
+				{
+					"label": "Move to 0%",
+					"value": 2
+				}
+			]
+		},
+		"22": {
+			"label": "Motor Direction",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 3,
+			"defaultValue": 2,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"34": {
+			"label": "Blade Turn Time (Venetian Mode)",
+			"valueSize": 2,
+			"unit": "centiseconds",
+			"minValue": 10,
+			"maxValue": 32767,
+			"defaultValue": 150,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"35": {
+			"label": "Curtain Trip Time",
+			"description": "Set the move time from up (left) to down (right) for a connected motor.",
+			"valueSize": 2,
+			"unit": "centiseconds",
+			"minValue": 500,
+			"maxValue": 32767,
+			"defaultValue": 15000,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"36": {
+			"label": "Enter/Exit Calibration Mode",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 2,
+			"defaultValue": 0,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": true,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Exit calibration",
+					"value": 0
+				},
+				{
+					"label": "Enter shutter mode calibration",
+					"value": 1
+				},
+				{
+					"label": "Enter Venetian mode calibration",
+					"value": 2
+				}
+			]
+		},
+		"37": {
+			"label": "User Confirmation For Calibration",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 0,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": true,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Default",
+					"value": 0
+				},
+				{
+					"label": "Confirm calibration",
+					"value": 1
+				}
+			]
+		},
+		"38": {
+			"label": "Calibration Mode Status Report",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 5,
+			"defaultValue": 0,
+			"unsigned": true,
+			"readOnly": true,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Calibration complete",
+					"value": 0
+				},
+				{
+					"label": "Calibration starts, going to ref. point A",
+					"value": 1
+				},
+				{
+					"label": "Reach reference point A, going to B",
+					"value": 2
+				},
+				{
+					"label": "Reach reference point B, waiting for blade turn calibration",
+					"value": 3
+				},
+				{
+					"label": "Going to reference point C",
+					"value": 4
+				},
+				{
+					"label": "Calibration terminated",
+					"value": 5
+				}
+			]
+		},
+		"39": {
+			"label": "Curtain Mode Operation",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 0,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Shutter mode",
+					"value": 0
+				},
+				{
+					"label": "Venetian mode",
+					"value": 1
+				}
+			]
+		},
+		"40": {
+			"label": "Begin Repositioning",
+			"description": "Set to 1 to begin repositioning. This should correct shutter positional deviations.",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 1,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": true,
+			"allowManualEntry": true,
+			"options": [
+				{
+					"label": "No repositioning",
+					"value": 0
+				},
+				{
+					"label": "Being repositioning",
+					"value": 1
+				}
+			]
+		},
+		"41": {
+			"label": "Repositioning Status Report",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 0,
+			"unsigned": true,
+			"readOnly": true,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Repositioning complete",
+					"value": 0
+				},
+				{
+					"label": "In repositioning",
+					"value": 1
+				}
+			]
+		},
+		"42": {
+			"label": "Enable/Disable Calibration Lock",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 1,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Disable calibration",
+					"value": 0
+				},
+				{
+					"label": "Enable calibration",
+					"value": 1
+				}
+			]
+		},
+		"48": {
+			"label": "S1 Scene Activation Mode",
+			"valueSize": 1,
+			"minValue": 1,
+			"maxValue": 8,
+			"defaultValue": 0,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Key pressed one time",
+					"value": 1
+				},
+				{
+					"label": "Key released",
+					"value": 2
+				},
+				{
+					"label": "Key held down",
+					"value": 4
+				},
+				{
+					"label": "Key pressed two times",
+					"value": 8
+				}
+			]
+		},
+		"49": {
+			"label": "S2 Scene Activation Mode",
+			"valueSize": 1,
+			"minValue": 1,
+			"maxValue": 8,
+			"defaultValue": 0,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Key pressed one time",
+					"value": 1
+				},
+				{
+					"label": "Key released",
+					"value": 2
+				},
+				{
+					"label": "Key held down",
+					"value": 4
+				},
+				{
+					"label": "Key pressed two times",
+					"value": 8
+				}
+			]
+		},
+		"80": {
+			"label": "Type Of Status Report",
+			"description": "Select which report to send when switch status changes",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 2,
+			"defaultValue": 2,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "No report",
+					"value": 0
+				},
+				{
+					"label": "Basic report",
+					"value": 1
+				},
+				{
+					"label": "Switch multilevel report",
+					"value": 2
+				}
+			]
+		},
+		"85": {
+			"label": "External Button Mode Operation",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 0,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "One button opens, the other closes",
+					"value": 0
+				},
+				{
+					"label": "Both buttons do the same action",
+					"value": 1
+				}
+			]
+		},
+		"120": {
+			"label": "Set External Switch Mode For S1",
+			"description": "When the mode is determined, this mode value will not be reset after exclusion",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 4,
+			"defaultValue": 0,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Unidentified",
+					"value": 0
+				},
+				{
+					"label": "2-state switch",
+					"value": 1
+				},
+				{
+					"label": "3-way switch",
+					"value": 2
+				},
+				{
+					"label": "Push button",
+					"value": 3
+				},
+				{
+					"label": "Automatic identification mode",
+					"value": 4
+				}
+			]
+		},
+		"121": {
+			"label": "Set External Switch Mode For S2",
+			"description": "When the mode is determined, this mode value will not be reset after exclusion",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 4,
+			"defaultValue": 0,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Unidentified",
+					"value": 0
+				},
+				{
+					"label": "2-state switch",
+					"value": 1
+				},
+				{
+					"label": "3-way switch",
+					"value": 2
+				},
+				{
+					"label": "Push button",
+					"value": 3
+				},
+				{
+					"label": "Automatic identification mode",
+					"value": 4
+				}
+			]
+		},
+		"243": {
+			"label": "Device Specific Key",
+			"valueSize": 16,
+			"minValue": 0,
+			"maxValue": 0,
+			"defaultValue": 0,
+			"unsigned": true,
+			"readOnly": true,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"248": {
+			"label": "S1 And S2 Functions",
+			"description": "Set the functions available trough the external switches S1 and S2",
+			"valueSize": 1,
+			"minValue": 1,
+			"maxValue": 3,
+			"defaultValue": 1,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Enable network inclusion/exclusion",
+					"value": 1
+				},
+				{
+					"label": "Enable reset to factory defaults",
+					"value": 2
+				},
+				{
+					"label": "Enable both network incl./excl. and reset to factory defaults",
+					"value": 3
+				}
+			]
+		},
+		"255": {
+			"label": "Reset To Factory Defaults",
+			"valueSize": 4,
+			"minValue": 0,
+			"maxValue": 1431655765,
+			"defaultValue": 0,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": true,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Reset to factory default setting",
+					"value": 0
+				},
+				{
+					"label": "Reset to factory and remove from the network",
+					"value": 1431655765
+				}
+			]
+		}
+	}
+}
