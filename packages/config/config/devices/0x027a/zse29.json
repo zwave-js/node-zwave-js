@@ -93,38 +93,14 @@
 				{
 					"label": "Ignore brightness",
 					"value": 1
-				},
-				{
-					"label": "10",
-					"value": 10
-				},
-				{
-					"label": "50",
-					"value": 50
-				},
-				{
-					"label": "100",
-					"value": 100
-				},
-				{
-					"label": "200",
-					"value": 200
-				},
-				{
-					"label": "300",
-					"value": 300
-				},
-				{
-					"label": "900 lux (Test mode)",
-					"value": 900
 				}
 			]
 		},
 		"5": {
 			"$if": "firmwareVersion >= 2",
 			"label": "Motion Re-trigger Time",
-			"description": "Delay before the sensor reports no motion after detecting the last motion activity.",
-			"unit": "seconds",
+			"description": "Delay before the sensor reports no motion after detecting the last motion activity (add 5 seconds to entered value).",
+			"unit": "+5 seconds",
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 720,
@@ -136,30 +112,6 @@
 				{
 					"label": "Set by knob on sensor",
 					"value": 0
-				},
-				{
-					"label": "5 seconds (Test mode)",
-					"value": 5
-				},
-				{
-					"label": "30",
-					"value": 30
-				},
-				{
-					"label": "60",
-					"value": 60
-				},
-				{
-					"label": "300",
-					"value": 300
-				},
-				{
-					"label": "600",
-					"value": 600
-				},
-				{
-					"label": "720",
-					"value": 720
 				}
 			]
 		},
