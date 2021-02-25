@@ -260,7 +260,6 @@ export class ColorSwitchCCAPI extends CCAPI {
 					valueDB.setValue(
 						getCurrentColorValueID(this.endpoint.index, component),
 						value,
-						{ noEvent: true },
 					);
 
 					// Update the compound value
