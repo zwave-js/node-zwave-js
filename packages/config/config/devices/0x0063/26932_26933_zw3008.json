@@ -19,7 +19,22 @@
 		"min": "0.0",
 		"max": "255.255"
 	},
-	"supportsZWavePlus": true,
+	"associations": {
+		"1": {
+			"label": "Lifeline",
+			"maxNodes": 5,
+			"isLifeline": true
+		},
+		"2": {
+			"label": "Local Load",
+			"maxNodes": 5
+		},
+		"3": {
+			"label": "Double Tap",
+			"maxNodes": 5,
+			"isLifeline": true
+		}
+	},
 	"paramInformation": {
 		"1": {
 			"label": "Timeout Duration",
@@ -363,5 +378,8 @@
 				}
 			]
 		}
+	},
+	"compat": {
+		"treatBasicSetAsEvent": true
 	}
 }
