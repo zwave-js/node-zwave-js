@@ -505,7 +505,7 @@ export class NotificationCC extends CommandClass {
 			let notificationMode = valueDB.getValue<"push" | "pull">(
 				getNotificationModeValueId(),
 			);
-			if (!notificationMode) {
+			if (notificationMode !== "push" && notificationMode !== "pull") {
 				notificationMode = await this.determineNotificationMode(
 					api,
 					supportedNotificationEvents,
@@ -609,12 +609,8 @@ export class NotificationCC extends CommandClass {
 	}
 
 	/** Whether the node implements push or pull notifications */
-	public get notificationMode(): Maybe<"push" | "pull"> {
-		return (
-			this.getValueDB().getValue<"push" | "pull">(
-				getNotificationModeValueId(),
-			) ?? ("unknown" as any)
-		);
+	public get notificationMode(): "push" | "pull" | undefined {
+		return this.getValueDB().getValue(getNotificationModeValueId());
 	}
 }
 
