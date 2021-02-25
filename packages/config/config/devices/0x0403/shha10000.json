@@ -113,6 +113,7 @@
 			"minValue": 0,
 			"maxValue": 65535,
 			"defaultValue": 50,
+			"unsigned": true,
 			"readOnly": false,
 			"writeOnly": false,
 			"allowManualEntry": true,
@@ -251,9 +252,9 @@
 		}
 	},
 	"metadata": {
-		"inclusion": "",
-		"exclusion": "",
-		"reset": "",
-		"manual": ""
+		"inclusion": "Plug the Wireless-Socket into an outlet. The Status-LED is flashing.\nClick the + (Add) button in your Z-Wave App and follow the further instructions\nPress the Network-Button on the Socket once. The App will show if the Add device process was successful. The Status LED does not flash anymore but indicates if device is switched on or off. Repeat the inclusion process from step B if it was not successful.",
+		"exclusion": "Click the - (Remove) button in your Z-Wave App and follow the further instructions.\nPress the Button on the socket 3 times. The App will show if the Remove Device process was successful. The Status-LED will now flash continuously. Repeat the exclusion process from step A if it was not successful.",
+		"reset": "1. Keep pressing the Button on the socket for more than 5 seconds (the flash interval of the Status LED is now accelerated)\n2. The wireless socket is now restored to factory settings",
+		"manual": "https://products.z-wavealliance.org/ProductManual/File?folder=&filename=MarketCertificationFiles/3144/Manual%20SHHA10000%20EN.pdf"
 	}
 }
