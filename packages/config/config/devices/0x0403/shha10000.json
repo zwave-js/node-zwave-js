@@ -1,0 +1,260 @@
+// ABUS Security-Center GmbH & Co. KG SHHA10000
+// Z-Wave Button
+{
+	"manufacturer": "ABUS Security-Center GmbH & Co. KG",
+	"manufacturerId": "0x0403",
+	"label": "SHHA10000",
+	"description": "Smart Wireless Plug",
+	"devices": [
+		{
+			"productType": "0x0003",
+			"productId": "0x0003",
+			"zwaveAllianceId": 3144
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"paramInformation": {
+		"1": {
+			"label": "Over current protection",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 1,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Disabled",
+					"value": 0
+				},
+				{
+					"label": "Enabled",
+					"value": 1
+				}
+			]
+		},
+		"2": {
+			"label": "Device Status After Power Failure",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 2,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "State before failure",
+					"value": 0
+				},
+				{
+					"label": "On",
+					"value": 1
+				},
+				{
+					"label": "Off",
+					"value": 2
+				}
+			]
+		},
+		"3": {
+			"label": "Notification Load Status Change",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 2,
+			"defaultValue": 1,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Disabled",
+					"value": 0
+				},
+				{
+					"label": "Send report",
+					"value": 1
+				},
+				{
+					"label": "Send report only with manual change",
+					"value": 2
+				}
+			]
+		},
+		"4": {
+			"label": "LED Indicator Mode",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "LED is on when device on",
+					"value": 0
+				},
+				{
+					"label": "LED on for 5s when device turns on",
+					"value": 1
+				}
+			]
+		},
+		"16": {
+			"label": "Threshold Power Report",
+			"description": "Minimum change in wattage as watt value for a meter report to be sent",
+			"valueSize": 2,
+			"unit": "Watt",
+			"minValue": 0,
+			"maxValue": 65535,
+			"defaultValue": 50,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true,
+			"options": [
+				{
+					"label": "Disabled",
+					"value": 0
+				}
+			]
+		},
+		"17": {
+			"label": "Threshold Power Report",
+			"description": "Minimum change in wattage as percent for a meter report to be sent",
+			"valueSize": 1,
+			"unit": "%",
+			"minValue": 0,
+			"maxValue": 127,
+			"defaultValue": 10,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true,
+			"options": [
+				{
+					"label": "Disabled",
+					"value": 0
+				}
+			]
+		},
+		"100": {
+			"label": "Parameters 101 to 104",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 85,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "No Reset",
+					"value": 0
+				},
+				{
+					"label": "Reset to default Values",
+					"value": 85
+				}
+			]
+		},
+		"101": {
+			"label": "Power (Watt) Report Interval",
+			"valueSize": 4,
+			"unit": "seconds",
+			"minValue": 0,
+			"maxValue": 2678400,
+			"defaultValue": 600,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true,
+			"options": [
+				{
+					"label": "Disabled",
+					"value": 0
+				}
+			]
+		},
+		"102": {
+			"label": "Consumption (kWh) Report Interval",
+			"valueSize": 4,
+			"unit": "seconds",
+			"minValue": 0,
+			"maxValue": 2678400,
+			"defaultValue": 3600,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true,
+			"options": [
+				{
+					"label": "Disabled",
+					"value": 0
+				}
+			]
+		},
+		"103": {
+			"label": "Voltage (V) Report Interval",
+			"valueSize": 4,
+			"unit": "seconds",
+			"minValue": 0,
+			"maxValue": 2678400,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true,
+			"options": [
+				{
+					"label": "Disabled",
+					"value": 0
+				}
+			]
+		},
+		"104": {
+			"label": "Current (A) Report Interval",
+			"valueSize": 4,
+			"unit": "seconds",
+			"minValue": 0,
+			"maxValue": 2678400,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true,
+			"options": [
+				{
+					"label": "Disabled",
+					"value": 0
+				}
+			]
+		},
+		"254": {
+			"label": "Configuration",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Unlocked",
+					"value": 0
+				},
+				{
+					"label": "Locked",
+					"value": 1
+				}
+			]
+		}
+	},
+	"metadata": {
+		"inclusion": "Plug the Wireless-Socket into an outlet. The Status-LED is flashing.\nClick the + (Add) button in your Z-Wave App and follow the further instructions\nPress the Network-Button on the Socket once. The App will show if the Add device process was successful. The Status LED does not flash anymore but indicates if device is switched on or off. Repeat the inclusion process from step B if it was not successful.",
+		"exclusion": "Click the - (Remove) button in your Z-Wave App and follow the further instructions.\nPress the Button on the socket 3 times. The App will show if the Remove Device process was successful. The Status-LED will now flash continuously. Repeat the exclusion process from step A if it was not successful.",
+		"reset": "1. Keep pressing the Button on the socket for more than 5 seconds (the flash interval of the Status LED is now accelerated)\n2. The wireless socket is now restored to factory settings",
+		"manual": "https://products.z-wavealliance.org/ProductManual/File?folder=&filename=MarketCertificationFiles/3144/Manual%20SHHA10000%20EN.pdf"
+	}
+}
