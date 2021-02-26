@@ -15,7 +15,7 @@ import {
 } from "../message/Message";
 import { DeviceClass } from "../node/DeviceClass";
 
-enum NodeCapabilityFlags {
+enum ProtocolFlags {
 	Listening = 0b10_000_000,
 	Routing = 0b01_000_000,
 
@@ -27,7 +27,7 @@ enum NodeCapabilityFlags {
 	VersionMask = 0b111,
 }
 
-enum SecurityFlags {
+enum DeviceCapabilityFlags {
 	Security = 1 << 0,
 	Controller = 1 << 1,
 	SpecificDevice = 1 << 2, // ?
@@ -77,42 +77,46 @@ export class GetNodeProtocolInfoResponse extends Message {
 	public constructor(driver: Driver, options: MessageDeserializationOptions) {
 		super(driver, options);
 
-		const capabilities = this.payload[0];
-		this._isListening =
-			(capabilities & NodeCapabilityFlags.Listening) !== 0;
-		this._isRouting = (capabilities & NodeCapabilityFlags.Routing) !== 0;
+		const protocol = this.payload[0];
+		this.isListening = (protocol & ProtocolFlags.Listening) !== 0;
+		this.isRouting = (protocol & ProtocolFlags.Routing) !== 0;
 
 		// This is an educated guess. OZW only checks for the 40k flag
-		switch (capabilities & NodeCapabilityFlags.BaudrateMask) {
-			case NodeCapabilityFlags.Baudrate_100k:
-				this._maxBaudRate = 100000;
+		switch (protocol & ProtocolFlags.BaudrateMask) {
+			case ProtocolFlags.Baudrate_100k:
+				this.maxBaudRate = 100000;
 				break;
-			case NodeCapabilityFlags.Baudrate_40k:
-				this._maxBaudRate = 40000;
+			case ProtocolFlags.Baudrate_40k:
+				this.maxBaudRate = 40000;
 				break;
-			case NodeCapabilityFlags.Baudrate_9k6:
-				this._maxBaudRate = 9600;
+			case ProtocolFlags.Baudrate_9k6:
+				this.maxBaudRate = 9600;
 				break;
 			default:
 				// We don't know this baudrate yet, encode it as 0
-				this._maxBaudRate = (0 as any) as Baudrate;
+				this.maxBaudRate = (0 as any) as Baudrate;
 		}
 
-		this._version = (capabilities & NodeCapabilityFlags.VersionMask) + 1;
+		this.version = (protocol & ProtocolFlags.VersionMask) + 1;
 
-		const security = this.payload[1];
-		this._isSecure = (security & SecurityFlags.Security) !== 0;
-		this._isFrequentListening =
-			(security &
-				(SecurityFlags.Sensor1000ms | SecurityFlags.Sensor250ms)) !==
-			0;
-		this._isBeaming = (security & SecurityFlags.BeamCapability) !== 0;
+		const capability = this.payload[1];
+		this.isSecure = !!(capability & DeviceCapabilityFlags.Security);
+		this.isFrequentListening = !!(
+			capability &
+			(DeviceCapabilityFlags.Sensor1000ms |
+				DeviceCapabilityFlags.Sensor250ms)
+		);
+		this.isBeaming = !!(capability & DeviceCapabilityFlags.BeamCapability);
+		this.isRoutingSlave = !!(
+			capability & DeviceCapabilityFlags.RoutingSlave
+		);
+		this.isController = !!(capability & DeviceCapabilityFlags.Controller);
 
 		// parse the device class
 		const basic = this.payload[3];
 		const generic = this.payload[4];
 		const specific = this.payload[5];
-		this._deviceClass = new DeviceClass(
+		this.deviceClass = new DeviceClass(
 			this.driver.configManager,
 			basic,
 			generic,
@@ -120,45 +124,16 @@ export class GetNodeProtocolInfoResponse extends Message {
 		);
 	}
 
-	private _isListening: boolean;
-	public get isListening(): boolean {
-		return this._isListening;
-	}
-
-	private _isFrequentListening: boolean;
-	public get isFrequentListening(): boolean {
-		return this._isFrequentListening;
-	}
-
-	private _isRouting: boolean;
-	public get isRouting(): boolean {
-		return this._isRouting;
-	}
-
-	private _maxBaudRate: Baudrate;
-	public get maxBaudRate(): Baudrate {
-		return this._maxBaudRate;
-	}
-
-	private _isSecure: boolean;
-	public get isSecure(): boolean {
-		return this._isSecure;
-	}
-
-	private _version: number;
-	public get version(): number {
-		return this._version;
-	}
-
-	private _isBeaming: boolean;
-	public get isBeaming(): boolean {
-		return this._isBeaming;
-	}
-
-	private _deviceClass: DeviceClass;
-	public get deviceClass(): DeviceClass {
-		return this._deviceClass;
-	}
+	public readonly isListening: boolean;
+	public readonly isFrequentListening: boolean;
+	public readonly isRouting: boolean;
+	public readonly maxBaudRate: Baudrate;
+	public readonly isController: boolean;
+	public readonly isRoutingSlave: boolean;
+	public readonly isSecure: boolean;
+	public readonly version: number;
+	public readonly isBeaming: boolean;
+	public readonly deviceClass: DeviceClass;
 
 	public toJSON(): JSONObject {
 		return super.toJSONInherited({

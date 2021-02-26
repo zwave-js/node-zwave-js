@@ -486,6 +486,16 @@ export class ZWaveNode extends Endpoint {
 		return this._isBeaming;
 	}
 
+	private _isRoutingSlave: boolean | undefined;
+	public get isRoutingSlave(): boolean | undefined {
+		return this._isRoutingSlave;
+	}
+
+	private _isController: boolean | undefined;
+	public get isController(): boolean | undefined {
+		return this._isController;
+	}
+
 	public get manufacturerId(): number | undefined {
 		return this.getValue(getManufacturerIdValueId());
 	}
@@ -1108,6 +1118,8 @@ export class ZWaveNode extends Endpoint {
 		this._isSecure = resp.isSecure || unknownBoolean;
 		this._version = resp.version;
 		this._isBeaming = resp.isBeaming;
+		this._isRoutingSlave = resp.isRoutingSlave;
+		this._isController = resp.isController;
 
 		const logMessage = `received response for protocol info:
 basic device class:    ${this._deviceClass.basic.label}
