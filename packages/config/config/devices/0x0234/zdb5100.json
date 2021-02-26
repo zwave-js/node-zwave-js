@@ -186,6 +186,84 @@
 			"writeOnly": false,
 			"allowManualEntry": true
 		},
+		"16": {
+			"label": "Pushbutton 1 functionality",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 4,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Standard toggle-function",
+					"value": 0
+				},
+				{
+					"label": "Automatic turn off after the time has expired",
+					"value": 1
+				},
+				{
+					"label": "Automatic turn on after the time has expired",
+					"value": 2
+				},
+				{
+					"label": "Always turn off or dim down",
+					"value": 3
+				},
+				{
+					"label": "Always turn on or dim up",
+					"value": 4
+				}
+			]
+		},
+		"17": {
+			"label": "Timer value for pushbutton 1",
+			"valueSize": 2,
+			"minValue": 0,
+			"maxValue": 43200,
+			"defaultValue": 300,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"18": {
+			"label": "Multi-Level Switch Set values for pushbutton 1",
+			"valueSize": 4,
+			"minValue": 0,
+			"maxValue": 65535,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"19": {
+			"label": "Binary Switch Set support for pushbutton 1",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 2,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "control pushbutton indicator LEDs",
+					"value": 0
+				},
+				{
+					"label": "Controls LED's and state",
+					"value": 1
+				},
+				{
+					"label": "As activated the pushbutton",
+					"value": 2
+				}
+			]
+		},
+
 		"20": {
 			"label": "Pushbutton 1 LED indication",
 			"description": "This parameter specifies how the LED indication is controlled.",
