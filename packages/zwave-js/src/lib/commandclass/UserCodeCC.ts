@@ -281,13 +281,16 @@ function persistUserCode(
 				),
 			});
 		}
-		if (!valueDB.hasMetadata(codeValueId)) {
-			valueDB.setMetadata(codeValueId, {
-				...ValueMetadata.String,
-				minLength: 4,
-				maxLength: 10,
-				label: `User Code (${userId})`,
-			});
+		const codeMetadata: ValueMetadata = {
+			...(typeof userCode === "string"
+				? ValueMetadata.String
+				: ValueMetadata.Buffer),
+			minLength: 4,
+			maxLength: 10,
+			label: `User Code (${userId})`,
+		};
+		if (valueDB.getMetadata(codeValueId)?.type !== codeMetadata.type) {
+			valueDB.setMetadata(codeValueId, codeMetadata);
 		}
 
 		valueDB.setValue(statusValueId, userIdStatus);

@@ -35,6 +35,7 @@ export type ValueType =
 	| "string[]"
 	| "duration"
 	| "color"
+	| "buffer"
 	| "any";
 
 export interface ValueMetadataAny {
@@ -86,6 +87,14 @@ export interface ValueMetadataString extends ValueMetadataAny {
 	default?: string;
 }
 
+export interface ValueMetadataBuffer extends ValueMetadataAny {
+	type: "buffer";
+	/** The minimum length this buffer must have (optional) */
+	minLength?: number;
+	/** The maximum length this buffer may have (optional) */
+	maxLength?: number;
+}
+
 export interface ValueMetadataDuration extends ValueMetadataAny {
 	type: "duration";
 	default?: Duration;
@@ -95,7 +104,9 @@ export type ValueMetadata =
 	| ValueMetadataAny
 	| ValueMetadataNumeric
 	| ValueMetadataBoolean
-	| ValueMetadataString;
+	| ValueMetadataString
+	| ValueMetadataDuration
+	| ValueMetadataBuffer;
 
 // TODO: lists of allowed values, etc...
 
@@ -393,6 +404,24 @@ const WriteOnlyDuration: ValueMetadataDuration = {
 	..._writeonly,
 };
 
+/** A buffer */
+const _Buffer: ValueMetadataBuffer = {
+	..._default,
+	type: "buffer",
+};
+
+/** A buffer (readonly) */
+const ReadOnlyBuffer: ValueMetadataBuffer = {
+	..._Buffer,
+	..._readonly,
+};
+
+/** A buffer (writeonly) */
+const WriteOnlyBuffer: ValueMetadataBuffer = {
+	..._Buffer,
+	..._writeonly,
+};
+
 /** A collection of predefined CC value metadata */
 export const ValueMetadata = {
 	/** The default value for metadata: readable and writeable */
@@ -494,4 +523,11 @@ export const ValueMetadata = {
 	ReadOnlyDuration: Object.freeze(ReadOnlyDuration),
 	/** A duration value (writeonly) */
 	WriteOnlyDuration: Object.freeze(WriteOnlyDuration),
+
+	/** A buffer */
+	Buffer: Object.freeze(_Buffer),
+	/** A buffer (readonly) */
+	ReadOnlyBuffer: Object.freeze(ReadOnlyBuffer),
+	/** A buffer (writeonly) */
+	WriteOnlyBuffer: Object.freeze(WriteOnlyBuffer),
 };
