@@ -575,6 +575,7 @@
 			]
 		},
 		"21": {
+			"$if": "firmwareVersion >= 1.2",
 			"label": "3-Way Switch Type",
 			"valueSize": 1,
 			"minValue": 0,
