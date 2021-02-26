@@ -27,6 +27,7 @@
 		"3": {
 			"label": "Min Level",
 			"valueSize": 1,
+			"unit": "%",
 			"minValue": 0,
 			"maxValue": 99,
 			"defaultValue": 10,
@@ -38,6 +39,7 @@
 		"4": {
 			"label": "Max Level",
 			"valueSize": 1,
+			"unit": "%",
 			"minValue": 0,
 			"maxValue": 99,
 			"defaultValue": 99,
@@ -49,6 +51,7 @@
 		"5": {
 			"label": "Preset Level",
 			"valueSize": 1,
+			"unit": "%",
 			"minValue": 0,
 			"maxValue": 99,
 			"defaultValue": 0,
@@ -61,9 +64,9 @@
 			"label": "LED Dim Level Indicator Timeout",
 			"description": "How long the level indicators should stay illuminated after the dimming level is changed.",
 			"valueSize": 1,
+			"unit": "seconds",
 			"minValue": 0,
 			"maxValue": 255,
-			"unit": "seconds",
 			"defaultValue": 3,
 			"unsigned": true,
 			"readOnly": false,
@@ -71,11 +74,11 @@
 			"allowManualEntry": true,
 			"options": [
 				{
-					"label": "Level Indicators Always Off",
+					"label": "Always Off",
 					"value": 0
 				},
 				{
-					"label": "Level Indicators Always On",
+					"label": "Always On",
 					"value": 255
 				}
 			]
