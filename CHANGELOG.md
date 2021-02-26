@@ -3,6 +3,25 @@
 	Placeholder for next release:
 	## __WORK IN PROGRESS__
 -->
+## __WORK IN PROGRESS__
+### Bugfixes
+* When updating color components from `hexColor`, the value events are now emitted
+* Alarm V1 values are only created if supported
+* Fixed the detection of the notification mode of a mode instead of always skipping it
+
+### Config file changes
+* Update HeatIt Z-Smoke associations and metadata
+* Force Multi Channel CC to be supported for MH-C421
+* Add Double Tap to several GE switches
+* Add ABUS SHHA10000 configuration
+* Add Zooz ZEN17 and ZEN32
+
+### Changes under the hood
+* Several config files were refactored to use templates
+* Add method to load fulltext device index
+* Releases now pin the external dependencies to exact versions
+* `defaultValue` in config params is now only required if the param is writable
+
 ## 6.5.0 (2021-02-23)
 ### Features
 * Implemented `Scene Actuator Configuration CC`
