@@ -1,15 +1,22 @@
 {
-	"packages": ["packages/*"],
+	"packages": [
+		"packages/*"
+	],
 	"useWorkspaces": true,
 	"npmClient": "yarn",
-	"version": "6.5.0",
+	"version": "6.5.1",
 	"command": {
 		"run": {
 			"stream": true
 		},
 		"version": {
-			"allowBranch": ["master", "release-*"],
-			"ignoreChanges": ["*.md"],
+			"allowBranch": [
+				"master",
+				"release-*"
+			],
+			"ignoreChanges": [
+				"*.md"
+			],
 			"exact": true,
 			"amend": true,
 			"push": false

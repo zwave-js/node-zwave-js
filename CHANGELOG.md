@@ -3,7 +3,7 @@
 	Placeholder for next release:
 	## __WORK IN PROGRESS__
 -->
-## __WORK IN PROGRESS__
+## 6.5.1 (2021-02-26)
 ### Bugfixes
 * When updating color components from `hexColor`, the value events are now emitted
 * Alarm V1 values are only created if supported
