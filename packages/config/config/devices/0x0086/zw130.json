@@ -24,6 +24,45 @@
 		"max": "255.255"
 	},
 	"supportsZWavePlus": true,
+	"associations": {
+		"1": {
+			"label": "Z-Wave Plus Lifeline. When touching the Button 1 to 4, the Central Scene Notificcation command will be sent to the associated node (1) in Association group 1.",
+			"maxNodes": 1,
+			"isLifeline": true,
+		},
+		"2": {
+			"label": "When touching the Button 1, the Basic Set command will be sent to the associated nodes in Association group 2.",
+			"maxNodes": 5
+		},
+		"3": {
+			"label": "When touching the Button 1, the Multilevel Switch Set command will be sent to the associated nodes in Association group 3.",
+			"maxNodes": 5
+		},
+		"4": {
+			"label": "When touching the Button 2, the Basic Set command will be sent to the associated nodes in Association group 4.",
+			"maxNodes": 5
+		},
+		"5": {
+			"label": "When touching the Button 2, the Multilevel Switch Set command will be sent to the associated nodes in Association group 5.",
+			"maxNodes": 5
+		},
+		"6": {
+			"label": "When touching the Button 3, the Basic Set command will be sent to the associated nodes in Association group 6.",
+			"maxNodes": 5
+		},
+		"7": {
+			"label": "When touching the Button 3, the Multilevel Switch Set command will be sent to the associated nodes in Association group 7.",
+			"maxNodes": 5
+		},
+		"8": {
+			"label": "When touching the Button 4, the Basic Set command will be sent to the associated nodes in Association group 8.",
+			"maxNodes": 5
+		},
+		"9": {
+			"label": "When touching the Button 4, the Multilevel Switch Set command will be sent to the associated nodes in Association group 9.",
+			"maxNodes": 5
+		}
+	},
 	"paramInformation": {
 		"1": {
 			"label": "Touch sound",
