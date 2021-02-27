@@ -344,6 +344,7 @@
 			"valueSize": 4,
 			"minValue": 0,
 			"maxValue": 4294967295,
+			"unsigned": true,
 			"defaultValue": 0,
 			"readOnly": true,
 			"writeOnly": false,
