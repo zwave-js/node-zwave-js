@@ -28,7 +28,7 @@
 		"1": {
 			"label": "Z-Wave Plus Lifeline. When touching the Button 1 to 4, the Central Scene Notificcation command will be sent to the associated node (1) in Association group 1.",
 			"maxNodes": 1,
-			"isLifeline": true,
+			"isLifeline": true
 		},
 		"2": {
 			"label": "When touching the Button 1, the Basic Set command will be sent to the associated nodes in Association group 2.",
