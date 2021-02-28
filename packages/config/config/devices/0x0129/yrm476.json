@@ -1,15 +1,15 @@
-// Yale YRM276
+// Yale YRM476
 // Assure Lock for Andersen Patio Doors
 {
 	"manufacturer": "Yale",
 	"manufacturerId": "0x0129",
-	"label": "YRM276",
+	"label": "YRM476",
 	"description": "Assure Lock for Andersen Patio Doors",
 	"devices": [
 		{
 			"productType": "0x8014",
-			"productId": "0x1600",
-			"zwaveAllianceId": 2911
+			"productId": "0x1604",
+			"zwaveAllianceId": 2925
 		}
 	],
 	"firmwareVersion": {
@@ -44,6 +44,9 @@
 		"12": {
 			"$import": "templates/yale_template.json#privacy_button"
 		},
+		"13": {
+			"$import": "templates/yale_template.json#lock_status_led"
+		},
 		"15": {
 			"$import": "templates/yale_template.json#reset_factory"
 		},
@@ -58,6 +61,6 @@
 		"inclusion": "1. Enter the 4-8 digit master PIN code followed by the gear key.\n2. Press the 7 key followed by the gear key.\n3. Press the 1 key followed by the gear key",
 		"exclusion": "1. Enter the 4-8 digit master PIN code followed by the gear key.\n2. Press the 7 key followed by the gear key.\n3. Press the 3 key followed by the gear key",
 		"reset": "Please use this procedure only when the network primary controller is missing or otherwise inoperable.\nWhen resetting the lock, all user codes,including the Master code*, are deleted. All programming features are reset to the original default settings.\n1. Remove the battery cover and batteries.\n2. Remove the interior lock to access the reset button.\n3. The reset button is located above the cable connectors. PCB\n4. Re-insert 3 batteries and hold the reset button for 3 seconds.\n5. While still holding the reset button, insert the 4th battery, and hold the reset button for an additional 3 seconds.\n6. Release the reset button.\n7. Re-install the interior lock onto the door.Upon reset, Master Code creation is the PIN only option available and must be performed prior to any other programming of the lock.\n For best results, the lock should be installed on the door when resetting the lock to factory default. If the process was done and the lock was not installed on the door, review the Re-Handing instructions listed in Hardware Troubleshooting",
-		"manual": "https://products.z-wavealliance.org/ProductManual/File?folder=&filename=MarketCertificationFiles/2911/YRM276_YRM476-INST-FUL%20Rev%20A%20WEB_SystemGuide.pdf"
+		"manual": "https://products.z-wavealliance.org/ProductManual/File?folder=&filename=MarketCertificationFiles/2925/YRM276_YRM476-INST-FUL%20Rev%20A%20WEB_SystemGuide.pdf"
 	}
 }

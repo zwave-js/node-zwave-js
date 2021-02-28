@@ -1,19 +1,19 @@
-// Yale NTM620 / NTM625 / NTM640 / NTM645
-// NexTouch Sectional Mortise Touch Screen Keypad Lock
+// Yale YRD416
+// Assure Lock with Bluetooth Z-Wave Enabled Push Button Deadbolt
 {
 	"manufacturer": "Yale",
 	"manufacturerId": "0x0129",
-	"label": "NTM620 / NTM625 / NTM640 / NTM645",
-	"description": "NexTouch Sectional Mortise Touch Screen Keypad Lock",
+	"label": "YRD416",
+	"description": "Assure Lock with Bluetooth Z-Wave Enabled Push Button Deadbolt",
 	"devices": [
 		{
-			"productType": "0x8008",
-			"productId": "0x0a00",
-			"zwaveAllianceId": [2954, 2967, 2978, 2983]
+			"productType": "0x8004",
+			"productId": "0x1000",
+			"zwaveAllianceId": 3260
 		}
 	],
 	"firmwareVersion": {
-		"min": "1.78",
+		"min": "0.0",
 		"max": "255.255"
 	},
 	"paramInformation": {
@@ -27,13 +27,10 @@
 			"$import": "templates/yale_template.json#auto_relock_time_180"
 		},
 		"4": {
-			"$import": "templates/yale_template.json#wrong_code_limit_10"
-		},
-		"5": {
-			"$import": "templates/yale_template.json#language"
+			"$import": "templates/yale_template.json#wrong_code_limit_3_to_10"
 		},
 		"7": {
-			"$import": "templates/yale_template.json#wrong_code_lockout"
+			"$import": "templates/yale_template.json#wrong_code_lockout_10_to_127"
 		},
 		"8": {
 			"$import": "templates/yale_template.json#operating_mode"
@@ -49,37 +46,12 @@
 		},
 		"15": {
 			"$import": "templates/yale_template.json#reset_factory"
-		},
-		"16": {
-			"$import": "templates/yale_template.json#enable_escape_mode"
-		},
-		"18": {
-			"$import": "templates/yale_template.json#door_propped_timer"
-		},
-		// Param 19 omitted because the manual indicates it is a duplicate of Param 23 bit 1
-		"20": {
-			"$import": "templates/yale_template.json#deadbolt_installed_state"
-		},
-		"21": {
-			"$import": "templates/yale_template.json#eco_mode"
-		},
-		"22": {
-			"$import": "templates/yale_template.json#privacy_mode"
-		},
-		"23[0x01]": {
-			"$import": "templates/yale_template.json#enable_dps_alarm"
-		},
-		"23[0x02]": {
-			"$import": "templates/yale_template.json#enable_deadbolt_alarm"
-		},
-		"23[0x04]": {
-			"$import": "templates/yale_template.json#enable_rotated_alarm"
 		}
 	},
 	"metadata": {
 		"inclusion": "1. Enter the 4-8 digit master PIN code followed by the gear key.\n2. Press the 7 key followed by the gear key.\n3. Press the 1 key followed by the gear key",
 		"exclusion": "1. Enter the 4-8 digit master PIN code followed by the gear key.\n2. Press the 7 key followed by the gear key.\n3. Press the 3 key followed by the gear key",
 		"reset": "Please use this procedure only when the network primary controller is missing or otherwise inoperable.\n1. Remove the inside lever with the lever removal tool.\n2. Remove battery cover using hex wrench provided with lock.\n3. Remove four (4) AA batteries.\n4. Remove the 10-32 x 3/4\" pan head screw from the center of the battery housing into the barrel nut of the outside assembly.\n5. Remove inside escutcheon. Cables may stay connected.\n6. Reinstall batteries \n7. On the back of the PC board, push and hold the Reset Button with the lever removal tool for 3 seconds.\n8. While continuing the press the reset button, temporarily remove one AA battery.\n9. Reinstall the battery\n10. Release reset button and wait 15 seconds. Speaker will announce \"Welcome to Yale\"\n11. Reassemble escutcheon",
-		"manual": "https://products.z-wavealliance.org/ProductManual/File?folder=&filename=MarketCertificationFiles/2954/nexTouch%20Sectional%20Mortise%20with%20ZW2.pdf"
+		"manual": "https://products.z-wavealliance.org/ProductManual/File?folder=&filename=MarketCertificationFiles/3260/YRD416_YaleRealLivingAssureDeadbolt_Z-WavePlus_SystemIntegratorsGuide.pdf"
 	}
 }

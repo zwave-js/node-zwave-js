@@ -1,19 +1,15 @@
-// Yale YRD226 / YRC226 / YRC246 / YRD256 / YRC256 / YRD446
-// Assure Touchscreen Deadbolt
+// Yale YRL216 / YRL236
+// Assure Lever Keypad with Z-Wave Plus
 {
 	"manufacturer": "Yale",
 	"manufacturerId": "0x0129",
-	"label": "YRD226 / YRC226 / YRC246 / YRD256 / YRC256 / YRD446",
-	"description": "Assure Touchscreen Deadbolt",
+	"label": "YRL216 / YRL236",
+	"description": "Assure Lever Keypad with Z-Wave Plus",
 	"devices": [
 		{
-			"productType": "0x8002",
-			"productId": "0x0600",
-			"zwaveAllianceId": [1878, 1972, 1973, 3211, 3299, 3401, 3418]
-		},
-		{
-			"productType": "0x8002",
-			"productId": "0x4600"
+			"productType": "0x800b",
+			"productId": "0x0f00",
+			"zwaveAllianceId": [3129, 3266]
 		}
 	],
 	"firmwareVersion": {
@@ -33,13 +29,6 @@
 		"4": {
 			"$import": "templates/yale_template.json#wrong_code_limit_3_to_10"
 		},
-		"5": {
-			"$import": "templates/yale_template.json#language"
-		},
-		"6": {
-			"$import": "../templates/master_template.json#base_enable_disable_255",
-			"label": "Radio Event Reporting"
-		},
 		"7": {
 			"$import": "templates/yale_template.json#wrong_code_lockout_10_to_127"
 		},
@@ -49,9 +38,6 @@
 		"11": {
 			"$import": "templates/yale_template.json#one_touch"
 		},
-		"12": {
-			"$import": "templates/yale_template.json#privacy_button"
-		},
 		"13": {
 			"$import": "templates/yale_template.json#lock_status_led"
 		},
@@ -60,9 +46,9 @@
 		}
 	},
 	"metadata": {
-		"inclusion": "Enter the 4-8 master Pin code followed by the gear key.\nPress the 7 key followed by the gear key\nPress the 1 key followed by the gear key",
-		"exclusion": "Enter the 4-8 digit master pin code followed by the gear key\nPress the 7 key followed by the gear key\nPress the 3 key followed by the gear key",
+		"inclusion": "To include; Enter the 4-8 master Pin code followed by the gear key.\nPress the 7 key followed by the gear key\nPress the 1 key followed by the gear key",
+		"exclusion": "To exclude; Enter the 4-8 digit master pin code followed by the gear key\nPress the 7 key followed by the gear key\nPress the 3 key followed by the gear key",
 		"reset": "Remove the battery cover and batteries.\nRemove the interior escutcheon to access the reset button.\nThe reset button is located above the PCB cable connector.\nWhile pressing the reset button for a minimum of 3 seconds, reinstall batteries. Release reset button.\nReplace battery cover. \nPlease use this procedure only when the network primary controller is missing or otherwise inoperable",
-		"manual": "https://products.z-wavealliance.org/ProductManual/File?folder=&filename=MarketCertificationFiles/1878/WGA6ZWManual.pdf"
+		"manual": "https://products.z-wavealliance.org/ProductManual/File?folder=&filename=MarketCertificationFiles/3129/Assure_Lever_Manual_ZWave_Cert.pdf"
 	}
 }
