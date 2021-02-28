@@ -26,47 +26,46 @@
 	"supportsZWavePlus": true,
 	"associations": {
 		"1": {
-			"label": "Z-Wave Plus Lifeline. When touching the Button 1 to 4, the Central Scene Notificcation command will be sent to the associated node (1) in Association group 1.",
+			"label": "Lifeline",
 			"maxNodes": 1,
 			"isLifeline": true
 		},
 		"2": {
-			"label": "When touching the Button 1, the Basic Set command will be sent to the associated nodes in Association group 2.",
+			"label": "Button 1 (Basic Set)",
 			"maxNodes": 5
 		},
 		"3": {
-			"label": "When touching the Button 1, the Multilevel Switch Set command will be sent to the associated nodes in Association group 3.",
+			"label": "Button 1 (Multilevel)",
 			"maxNodes": 5
 		},
 		"4": {
-			"label": "When touching the Button 2, the Basic Set command will be sent to the associated nodes in Association group 4.",
+			"label": "Button 2 (Basic Set)",
 			"maxNodes": 5
 		},
 		"5": {
-			"label": "When touching the Button 2, the Multilevel Switch Set command will be sent to the associated nodes in Association group 5.",
+			"label": "Button 2 (Multilevel)",
 			"maxNodes": 5
 		},
 		"6": {
-			"label": "When touching the Button 3, the Basic Set command will be sent to the associated nodes in Association group 6.",
+			"label": "Button 3 (Basic Set)",
 			"maxNodes": 5
 		},
 		"7": {
-			"label": "When touching the Button 3, the Multilevel Switch Set command will be sent to the associated nodes in Association group 7.",
+			"label": "Button 3 (Multilevel)",
 			"maxNodes": 5
 		},
 		"8": {
-			"label": "When touching the Button 4, the Basic Set command will be sent to the associated nodes in Association group 8.",
+			"label": "Button 4 (Basic Set)",
 			"maxNodes": 5
 		},
 		"9": {
-			"label": "When touching the Button 4, the Multilevel Switch Set command will be sent to the associated nodes in Association group 9.",
+			"label": "Button 4 (Multilevel)",
 			"maxNodes": 5
 		}
 	},
 	"paramInformation": {
 		"1": {
 			"label": "Touch sound",
-			"description": "Enable/disable the touch sound.",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 1,
@@ -87,7 +86,6 @@
 		},
 		"2": {
 			"label": "Touch vibration",
-			"description": "Enable/disable the touch vibration.",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 1,
@@ -108,7 +106,6 @@
 		},
 		"3": {
 			"label": "Button slide",
-			"description": "Enable/disable the function of button slide.",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 1,
@@ -129,7 +126,7 @@
 		},
 		"4": {
 			"label": "Notification report",
-			"description": "Which notification to be sent to the associated devices.",
+			"description": "Which notification type to send to associated devices",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 3,
@@ -151,6 +148,7 @@
 		"39": {
 			"label": "Low battery value",
 			"valueSize": 1,
+			"unit": "%",
 			"minValue": 0,
 			"maxValue": 50,
 			"defaultValue": 5,
