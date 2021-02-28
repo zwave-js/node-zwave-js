@@ -16,6 +16,159 @@
 		"min": "0.0",
 		"max": "255.255"
 	},
+	"supportsZWavePlus": true,
+	"paramInformation": {
+		"1": {
+			"label": "Basic Set Report Value",
+			"description": "Set the value of basic set report sent to the light associated with the sensor in Group 2 (so the light turns on to the selected brightness level).",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 99,
+			"defaultValue": 99,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false
+		},
+		"2": {
+			"label": "Enable Motion Reports",
+			"description": "Enable or disable motion reports completely. If motion sensor is disabled, the device will not report motion at all to your hub.",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 1,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Disable",
+					"value": 0
+				},
+				{
+					"label": "Enable",
+					"value": 1
+				}
+			]
+		},
+		"3": {
+			"label": "Motion Sensor Sensitivity",
+			"description": "Adjust sensitivity of the motion sensor. (10 is most sensative)",
+			"valueSize": 1,
+			"minValue": 1,
+			"maxValue": 10,
+			"defaultValue": 5,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"4": {
+			"label": "Lux Level Trigger",
+			"description":"Set the lux level trigger. 0 – lux trigger set manually at the lux knob; 1 – lux trigger ignored, every motion event is reported; 10 – 900 (lux)",
+			"valueSize": 2,
+			"unit": "lux",
+			"minValue": 0,
+			"maxValue": 900,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"5": {
+			"label": "Trigger Interval",
+			"description": "Set the trigger interval for motion sensor re-activation.  0 – set manually at the timer knob; 5 – 720 seconds (add 5 seconds to entered value so if value is set to 10, the actual clear time is 15 seconds)",
+			"valueSize": 2,
+			"unit": "Seconds",
+			"minValue": 0,
+			"maxValue": 720,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"6": {
+			"label": "Lux Reporting Frequency",
+			"valueSize": 2,
+			"unit": "Minutes",
+			"minValue": 1,
+			"maxValue": 1440,
+			"defaultValue": 30,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"7": {
+			"label": "Motion Trigger Knob Setting",
+			"valueSize": 2,
+			"unit": "Seconds",
+			"minValue": 5,
+			"maxValue": 720,
+			"readOnly": true,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Test Mode",
+					"value": 5
+				},
+				{
+					"label": "30",
+					"value": 30
+				},
+				{
+					"label": "60",
+					"value": 60
+				},
+				{
+					"label": "300",
+					"value": 300
+				},
+				{
+					"label": "600",
+					"value": 600
+				},
+				{
+					"label": "720",
+					"value": 720
+				}
+			]
+		},
+		"8": {
+			"label": "Lux Trigger Knob Setting",
+			"valueSize": 2,
+			"unit": "Lux",
+			"minValue": 10,
+			"maxValue": 900,
+			"readOnly": true,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "10",
+					"value": 10
+				},
+				{
+					"label": "50",
+					"value": 50
+				},
+				{
+					"label": "100",
+					"value": 100
+				},
+				{
+					"label": "200",
+					"value": 200
+				},
+				{
+					"label": "300",
+					"value": 300
+				},
+				{
+					"label": "Test Mode",
+					"value": 900
+				}
+			]
+		}
+	},
 	"metadata": {
 		"inclusion": "AUTO-INCLUSION:\n1. Initiate inclusion (pairing) in the app (or web interface). Not Sure how? ask@getzooz.com. If you’re using an S2 hub, it may ask you to enter the DSK key printed on the back cover sticker to complete secure inclusion.\n2. Insert the batteries or the USB adapter board. The LED indicator\nwill start blinking and the sensor will join the network Automatically.\n\nMANUAL INCLUSION:\nPut your Z-Wave hub into inclusion mode and click the tamper switch 3 times quickly",
 		"exclusion": "1. Bring the sensor within direct range of your Z-Wave\ngateway (hub).\n2. Put the Z-Wave hub into exclusion mode (not sure\nhow to do that? ask@getzooz.com).\n3. Press and release the tamper switch 3 times quickly.\n4. Your hub will confirm exclusion and the sensor will\ndisappear from your controller's device list",
