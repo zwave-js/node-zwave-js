@@ -32,9 +32,10 @@
 			"maxValue": 60
 		},
 		"4": {
-			"$import": "templates/yale_template.json#wrong_tag_limit",
+			"$import": "templates/yale_template.json#wrong_tag_limit"
+		},
 		"7": {
-			"$import": "templates/yale_template.json#wrong_tag_lockout",
+			"$import": "templates/yale_template.json#wrong_tag_lockout"
 		}
 	},
 	"metadata": {
