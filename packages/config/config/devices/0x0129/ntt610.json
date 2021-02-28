@@ -52,8 +52,7 @@
 		},
 		"18": {
 			"$import": "templates/yale_template.json#door_propped_timer",
-			"minValue": 10,
-			"maxValue": 2540
+			"minValue": 10
 		},
 		"19": {
 			"$import": "templates/yale_template.json#dps_alarm"
