@@ -27,7 +27,7 @@
 			"defaultValue": 99,
 			"readOnly": false,
 			"writeOnly": false,
-			"allowManualEntry": false
+			"allowManualEntry": true
 		},
 		"2": {
 			"label": "Enable Motion Reports",
