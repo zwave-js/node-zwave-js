@@ -31,7 +31,6 @@
 		"1": {
 			"label": "Fade On Time",
 			"description": "Time it takes to fade on; units are seconds when value is 1-127, and minutes (subtracting 127) when value is 128-253.",
-			"unit": "seconds or -127 minutes",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 253,
@@ -50,7 +49,6 @@
 		"2": {
 			"label": "Fade off time",
 			"description": "Time it takes to fade off; units are seconds when value is 1-127, and minutes (subtracting 127) when value is 128-253.",
-			"unit": "seconds or -127 minutes",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 253,
@@ -68,8 +66,8 @@
 		},
 		"3": {
 			"label": "Minimum Light Level",
-			"unit": "%",
 			"valueSize": 1,
+			"unit": "%",
 			"minValue": 0,
 			"maxValue": 100,
 			"defaultValue": 10,
@@ -79,8 +77,8 @@
 		},
 		"4": {
 			"label": "Maximum Light Level",
-			"unit": "%",
 			"valueSize": 1,
+			"unit": "%",
 			"minValue": 0,
 			"maxValue": 100,
 			"defaultValue": 100,
@@ -89,7 +87,7 @@
 			"allowManualEntry": true
 		},
 		"7": {
-			"label": "Locator LED Status",
+			"label": "LED Indicator",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 255,
@@ -100,15 +98,15 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "LED Off",
+					"label": "Off",
 					"value": 0
 				},
 				{
-					"label": "Status Mode",
+					"label": "LED on when switch on",
 					"value": 254
 				},
 				{
-					"label": "Locator Mode",
+					"label": "LED on when switch off",
 					"value": 255
 				}
 			]
