@@ -54,12 +54,12 @@
 		"label": "Auto Relock"
 	},
 	"auto_relock_time_180": {
-		"$import": "../../templates/master_template.json#base_0_180_nounit",
+		"$import": "../../templates/master_template.json#base_0-180_nounit",
 		"label": "Auto Relock Time",
 		"unit": "seconds"
 	},
 	"auto_relock_time_127": {
-		"$import": "../../templates/master_template.json#base_0_127_nounit",
+		"$import": "../../templates/master_template.json#base_0-127_nounit",
 		"label": "Auto Relock Time",
 		"unit": "seconds",
 		"minValue": 10,
@@ -102,13 +102,13 @@
 		"allowManualEntry": true
 	},
 	"wrong_code_lockout": {
-		"$import": "../../templates/master_template.json#base_0_180_nounit",
+		"$import": "../../templates/master_template.json#base_0-180_nounit",
 		"label": "Wrong Code Lockout Time",
 		"unit": "seconds",
 		"defaultValue": 60
 	},
 	"wrong_code_lockout_10_to_127": {
-		"$import": "../../templates/master_template.json#base_0_127_nounit",
+		"$import": "../../templates/master_template.json#base_0-127_nounit",
 		"label": "Wrong Code Lockout Time",
 		"unit": "seconds",
 		"minValue": 10,
@@ -252,7 +252,7 @@
 		]
 	},
 	"door_propped_timer": {
-		"$import": "../../templates/master_template.json#base_0_127_nounit",
+		"$import": "../../templates/master_template.json#base_0-127_nounit",
 		"label": "Door Propped Time Limit",
 		"unit": "10 seconds",
 		"minValue": 10,

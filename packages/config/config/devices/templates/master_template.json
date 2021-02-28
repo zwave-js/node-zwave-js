@@ -97,7 +97,7 @@
 		"writeOnly": false,
 		"allowManualEntry": true
 	},
-	"base_0_180_nounit": {
+	"base_0-180_nounit": {
 		"valueSize": 1,
 		"minValue": 0,
 		"maxValue": 180,
@@ -107,7 +107,7 @@
 		"writeOnly": false,
 		"allowManualEntry": true
 	},
-	"base_0_127_nounit": {
+	"base_0-127_nounit": {
 		"valueSize": 1,
 		"minValue": 0,
 		"maxValue": 127,
