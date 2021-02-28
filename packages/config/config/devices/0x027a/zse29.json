@@ -63,7 +63,7 @@
 		},
 		"4": {
 			"label": "Lux Level Trigger",
-			"description":"Set the lux level trigger. 0 – lux trigger set manually at the lux knob; 1 – lux trigger ignored, every motion event is reported; 10 – 900 (lux)",
+			"description": "Set the lux level trigger. 0 – lux trigger set manually at the lux knob; 1 – lux trigger ignored, every motion event is reported; 10 – 900 (lux)",
 			"valueSize": 2,
 			"unit": "lux",
 			"minValue": 0,
