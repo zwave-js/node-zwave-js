@@ -107,7 +107,7 @@
 		"writeOnly": false,
 		"allowManualEntry": true
 	},
-	"base_0-127_nounit": {
+	"base_0_127_nounit": {
 		"valueSize": 1,
 		"minValue": 0,
 		"maxValue": 127,
