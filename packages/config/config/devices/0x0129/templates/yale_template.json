@@ -56,14 +56,16 @@
 	"auto_relock_time_180": {
 		"$import": "../../templates/master_template.json#base_0-180_nounit",
 		"label": "Auto Relock Time",
-		"unit": "seconds"
+		"unit": "seconds",
+		"defaultValue": 30
 	},
 	"auto_relock_time_127": {
 		"$import": "../../templates/master_template.json#base_0-127_nounit",
 		"label": "Auto Relock Time",
 		"unit": "seconds",
 		"minValue": 10,
-		"maxValue": 127
+		"maxValue": 127,
+		"defaultValue": 5
 	},
 	"wrong_code_limit_10": {
 		"label": "Wrong Code Limit",
