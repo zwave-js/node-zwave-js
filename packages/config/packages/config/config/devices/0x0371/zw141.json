@@ -64,7 +64,7 @@
 		"34": {
 			"label": "Blade Turn Time (Venetian Mode)",
 			"valueSize": 2,
-			"unit": "centiseconds",
+			"unit": "0.01 seconds",
 			"minValue": 10,
 			"maxValue": 32767,
 			"defaultValue": 150,
@@ -77,7 +77,7 @@
 			"label": "Curtain Trip Time",
 			"description": "Set the move time from up (left) to down (right) for a connected motor.",
 			"valueSize": 2,
-			"unit": "centiseconds",
+			"unit": "0.01 seconds",
 			"minValue": 500,
 			"maxValue": 32767,
 			"defaultValue": 15000,
@@ -148,19 +148,19 @@
 					"value": 0
 				},
 				{
-					"label": "Calibration starts, going to ref. point A",
+					"label": "Calibration starts, going to point A",
 					"value": 1
 				},
 				{
-					"label": "Reach reference point A, going to B",
+					"label": "Reach point A, going to B",
 					"value": 2
 				},
 				{
-					"label": "Reach reference point B, waiting for blade turn calibration",
+					"label": "Reach point B, waiting for blade turn calibration",
 					"value": 3
 				},
 				{
-					"label": "Going to reference point C",
+					"label": "Going to point C",
 					"value": 4
 				},
 				{
@@ -192,7 +192,7 @@
 		},
 		"40": {
 			"label": "Begin Repositioning",
-			"description": "Set to 1 to begin repositioning. This should correct shutter positional deviations.",
+			"description": "Initiating repositioning should correct shutter positional deviations.",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 1,
@@ -203,7 +203,7 @@
 			"allowManualEntry": true,
 			"options": [
 				{
-					"label": "No repositioning",
+					"label": "Normal operation",
 					"value": 0
 				},
 				{
@@ -228,13 +228,13 @@
 					"value": 0
 				},
 				{
-					"label": "In repositioning",
+					"label": "Repositioning",
 					"value": 1
 				}
 			]
 		},
 		"42": {
-			"label": "Enable/Disable Calibration Lock",
+			"label": "Calibration Lock",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 1,
@@ -245,11 +245,11 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "Disable calibration",
+					"label": "Disable",
 					"value": 0
 				},
 				{
-					"label": "Enable calibration",
+					"label": "Enable",
 					"value": 1
 				}
 			]
@@ -333,7 +333,7 @@
 					"value": 1
 				},
 				{
-					"label": "Switch multilevel report",
+					"label": "Switch Multilevel report",
 					"value": 2
 				}
 			]
@@ -350,11 +350,11 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "One button opens, the other closes",
+					"label": "Normal",
 					"value": 0
 				},
 				{
-					"label": "Both buttons do the same action",
+					"label": "Both buttons toggle",
 					"value": 1
 				}
 			]
