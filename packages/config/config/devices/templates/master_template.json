@@ -4,6 +4,7 @@
 		"minValue": 0,
 		"maxValue": 1,
 		"defaultValue": 0,
+		"unsigned": true,
 		"readOnly": false,
 		"writeOnly": false,
 		"allowManualEntry": false,
@@ -18,11 +19,32 @@
 			}
 		]
 	},
+	"base_enable_disable_255": {
+		"valueSize": 1,
+		"minValue": 0,
+		"maxValue": 255,
+		"defaultValue": 0,
+		"unsigned": true,
+		"readOnly": false,
+		"writeOnly": false,
+		"allowManualEntry": false,
+		"options": [
+			{
+				"label": "Disable",
+				"value": 0
+			},
+			{
+				"label": "Enable",
+				"value": 255
+			}
+		]
+	},
 	"base_enable_disable_inverted": {
 		"valueSize": 1,
 		"minValue": 0,
 		"maxValue": 1,
 		"defaultValue": 1,
+		"unsigned": true,
 		"readOnly": false,
 		"writeOnly": false,
 		"allowManualEntry": false,
@@ -73,6 +95,24 @@
 		"minValue": 1,
 		"maxValue": 255,
 		"defaultValue": 1,
+		"unsigned": true,
+		"readOnly": false,
+		"writeOnly": false,
+		"allowManualEntry": true
+	},
+	"base_0-180_nounit": {
+		"valueSize": 1,
+		"minValue": 0,
+		"maxValue": 180,
+		"unsigned": true,
+		"readOnly": false,
+		"writeOnly": false,
+		"allowManualEntry": true
+	},
+	"base_0-127_nounit": {
+		"valueSize": 1,
+		"minValue": 0,
+		"maxValue": 127,
 		"unsigned": true,
 		"readOnly": false,
 		"writeOnly": false,

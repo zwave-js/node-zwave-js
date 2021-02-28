@@ -1,0 +1,335 @@
+{
+	"volume": {
+		"label": "Volume",
+		"valueSize": 1,
+		"minValue": 1,
+		"maxValue": 3,
+		"defaultValue": 2,
+		"unsigned": true,
+		"readOnly": false,
+		"writeOnly": false,
+		"allowManualEntry": true,
+		"options": [
+			{
+				"label": "High",
+				"value": 1
+			},
+			{
+				"label": "Low",
+				"value": 2
+			},
+			{
+				"label": "Silent",
+				"value": 3
+			}
+		]
+	},
+	"volume_inverted": {
+		"label": "Volume",
+		"valueSize": 1,
+		"minValue": 1,
+		"maxValue": 3,
+		"defaultValue": 2,
+		"unsigned": true,
+		"readOnly": false,
+		"writeOnly": false,
+		"allowManualEntry": true,
+		"options": [
+			{
+				"label": "Silent",
+				"value": 1
+			},
+			{
+				"label": "Low",
+				"value": 2
+			},
+			{
+				"label": "High",
+				"value": 3
+			}
+		]
+	},
+	"auto_relock": {
+		"$import": "../../templates/master_template.json#base_enable_disable_255",
+		"label": "Auto Relock"
+	},
+	"auto_relock_time_180": {
+		"$import": "../../templates/master_template.json#base_0-180_nounit",
+		"label": "Auto Relock Time",
+		"unit": "seconds",
+		"defaultValue": 30
+	},
+	"auto_relock_time_127": {
+		"$import": "../../templates/master_template.json#base_0-127_nounit",
+		"label": "Auto Relock Time",
+		"unit": "seconds",
+		"minValue": 10,
+		"maxValue": 127,
+		"defaultValue": 5
+	},
+	"wrong_code_limit_10": {
+		"label": "Wrong Code Limit",
+		"description": "Number of wrong attempts before the lockout a triggered",
+		"valueSize": 1,
+		"minValue": 0,
+		"maxValue": 10,
+		"defaultValue": 5,
+		"unsigned": true,
+		"readOnly": false,
+		"writeOnly": false,
+		"allowManualEntry": true
+	},
+	"wrong_code_limit_3_to_10": {
+		"label": "Wrong Code Limit",
+		"description": "Number of wrong attempts before the lockout a triggered",
+		"valueSize": 1,
+		"minValue": 3,
+		"maxValue": 10,
+		"defaultValue": 5,
+		"unsigned": true,
+		"readOnly": false,
+		"writeOnly": false,
+		"allowManualEntry": true
+	},
+	"wrong_code_limit_7": {
+		"label": "Wrong Code Limit",
+		"description": "Number of wrong attempts before the lockout a triggered",
+		"valueSize": 1,
+		"minValue": 0,
+		"maxValue": 7,
+		"defaultValue": 5,
+		"unsigned": true,
+		"readOnly": false,
+		"writeOnly": false,
+		"allowManualEntry": true
+	},
+	"wrong_code_lockout": {
+		"$import": "../../templates/master_template.json#base_0-180_nounit",
+		"label": "Wrong Code Lockout Time",
+		"unit": "seconds",
+		"defaultValue": 60
+	},
+	"wrong_code_lockout_10_to_127": {
+		"$import": "../../templates/master_template.json#base_0-127_nounit",
+		"label": "Wrong Code Lockout Time",
+		"unit": "seconds",
+		"minValue": 10,
+		"maxValue": 127,
+		"defaultValue": 60
+	},
+	"wrong_tag_limit": {
+		"label": "Wrong Tag Limit",
+		"description": "Number of wrong attempts before the lockout a triggered",
+		"valueSize": 1,
+		"minValue": 1,
+		"maxValue": 20,
+		"defaultValue": 5,
+		"unsigned": true,
+		"readOnly": false,
+		"writeOnly": false,
+		"allowManualEntry": true
+	},
+	"wrong_tag_lockout": {
+		"label": "Wrong Tag Lockout Time",
+		"valueSize": 1,
+		"unit": "seconds",
+		"minValue": 1,
+		"maxValue": 250,
+		"defaultValue": 180,
+		"unsigned": true,
+		"readOnly": false,
+		"writeOnly": false,
+		"allowManualEntry": true
+	},
+	"language": {
+		"label": "Language",
+		"valueSize": 1,
+		"minValue": 1,
+		"maxValue": 3,
+		"defaultValue": 1,
+		"unsigned": true,
+		"readOnly": false,
+		"writeOnly": false,
+		"allowManualEntry": false,
+		"options": [
+			{
+				"label": "English",
+				"value": 1
+			},
+			{
+				"label": "Spanish",
+				"value": 2
+			},
+			{
+				"label": "French",
+				"value": 3
+			}
+		]
+	},
+	"language_asia": {
+		"label": "Language",
+		"valueSize": 1,
+		"minValue": 1,
+		"maxValue": 6,
+		"defaultValue": 2,
+		"unsigned": true,
+		"readOnly": false,
+		"writeOnly": false,
+		"allowManualEntry": false,
+		"options": [
+			{
+				"label": "Korean language",
+				"value": 1
+			},
+			{
+				"label": "English language",
+				"value": 2
+			},
+			{
+				"label": "Chinese language",
+				"value": 3
+			},
+			{
+				"label": "Taiwanese language",
+				"value": 6
+			}
+		]
+	},
+	"operating_mode": {
+		"label": "Operating Mode",
+		"valueSize": 1,
+		"minValue": 0,
+		"maxValue": 2,
+		"defaultValue": 0,
+		"unsigned": true,
+		"readOnly": false,
+		"writeOnly": false,
+		"allowManualEntry": false,
+		"options": [
+			{
+				"label": "Normal mode",
+				"value": 0
+			},
+			{
+				"label": "Vacation mode",
+				"value": 1
+			},
+			{
+				"label": "Privacy mode",
+				"value": 2
+			}
+		]
+	},
+	"one_touch": {
+		"$import": "../../templates/master_template.json#base_enable_disable_255",
+		"label": "One Touch Locking"
+	},
+	"privacy_button": {
+		"$import": "../../templates/master_template.json#base_enable_disable_255",
+		"label": "Privacy Button"
+	},
+	"lock_status_led": {
+		"$import": "../../templates/master_template.json#base_enable_disable_255",
+		"label": "Lock Status LED"
+	},
+	"reset_factory": {
+		"label": "Reset to Factory Defaults",
+		"valueSize": 1,
+		"minValue": 0,
+		"maxValue": 1,
+		"defaultValue": 0,
+		"unsigned": true,
+		"readOnly": false,
+		"writeOnly": false,
+		"allowManualEntry": false,
+		"options": [
+			{
+				"label": "Normal Operation",
+				"value": 0
+			},
+			{
+				"label": "Reset to factory defaults",
+				"value": 1
+			}
+		]
+	},
+	"door_propped_timer": {
+		"$import": "../../templates/master_template.json#base_0-127_nounit",
+		"label": "Door Propped Time Limit",
+		"unit": "10 seconds",
+		"minValue": 10,
+		"defaultValue": 0
+	},
+	"dps_alarm": {
+		"$import": "../../templates/master_template.json#base_enable_disable_255",
+		"label": "Door Propped Alarm"
+	},
+	"enable_dps_alarm": {
+		"$import": "../../templates/master_template.json#base_enable_disable",
+		"label": "Door Propped Alarm",
+		"defaultValue": 1
+	},
+	"deadbolt_installed_state": {
+		"$import": "../../templates/master_template.json#base_enable_disable_255",
+		"label": "Deadbolt Status",
+		"options": [
+			{
+				"label": "Not installed",
+				"value": 0
+			},
+			{
+				"label": "Installed",
+				"value": 255
+			}
+		]
+	},
+	"eco_mode": {
+		"$import": "../../templates/master_template.json#base_enable_disable_255",
+		"label": "Eco Mode"
+	},
+	"privacy_mode": {
+		"$import": "../../templates/master_template.json#base_enable_disable_255",
+		"label": "Privacy Mode With Deadbolt",
+		"description": "If enabled then extending the deadbolt will put the lock into privacy mode"
+	},
+	"enable_deadbolt_alarm": {
+		"$import": "../../templates/master_template.json#base_enable_disable",
+		"label": "Deadbolt Alarm",
+		"defaultValue": 1
+	},
+	"enable_rotated_alarm": {
+		"$import": "../../templates/master_template.json#base_enable_disable",
+		"label": "Rotated Alarm",
+		"defaultValue": 1
+	},
+	"enable_escape_mode": {
+		"$import": "../../templates/master_template.json#base_enable_disable_255",
+		"label": "Escape Return Mode"
+	},
+	"manual_relock_time": {
+		"label": "Manual Relock Time",
+		"description": "Time to auto relock after manual lock/unlock",
+		"valueSize": 1,
+		"unit": "seconds",
+		"minValue": 7,
+		"maxValue": 60,
+		"defaultValue": 7,
+		"unsigned": true,
+		"readOnly": false,
+		"writeOnly": false,
+		"allowManualEntry": true
+	},
+	"remote_relock_time": {
+		"label": "Remote Relock Time",
+		"description": "Time to auto relock after Z-Wave lock/unlock",
+		"valueSize": 1,
+		"unit": "seconds",
+		"minValue": 10,
+		"maxValue": 90,
+		"defaultValue": 10,
+		"unsigned": true,
+		"readOnly": false,
+		"writeOnly": false,
+		"allowManualEntry": true
+	}
+}
