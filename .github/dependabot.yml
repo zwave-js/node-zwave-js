@@ -6,7 +6,7 @@ updates:
     interval: "monthly"
     time: "04:00"
     timezone: Europe/Berlin
-  open-pull-requests-limit: 20
+  open-pull-requests-limit: 7
   target-branch: dependencies # Work around the limitation that dependabot may not merge into protected branches
   assignees:
     - "AlCalzone"
