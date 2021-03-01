@@ -2921,10 +2921,10 @@
   resolved "https://registry.yarnpkg.com/@xstate/graph/-/graph-1.3.0.tgz#710a7f24a86c81ff27d6cc6766102a15f3b23f7b"
   integrity sha512-/gPDHcXvNm+DY0Cw+wHVza+6eebmqji6u5rEYKOIAUWuAFBn7svVY6VxtRnWnjGl9B3rHTioenV0ELH8GzK3eA==
 
-"@xstate/test@^0.4.1":
-  version "0.4.1"
-  resolved "https://registry.yarnpkg.com/@xstate/test/-/test-0.4.1.tgz#115aed246dc352a52da3e5594d273ad9ccf483df"
-  integrity sha512-N8xEWcnWPVVpRkVgGGhpHGTJKLnm2UyGqkvk7eNaMqWdcg8fT6SyRSLtzJuqtJe8wZviScTr7P71Yp1cLawDWg==
+"@xstate/test@^0.4.2":
+  version "0.4.2"
+  resolved "https://registry.yarnpkg.com/@xstate/test/-/test-0.4.2.tgz#cd17c5435a455e15858f482db21175b285cd5ce0"
+  integrity sha512-MuEDYmHOV6W4mIIntOVVdj5tv2I+gDqhtR3iAazHOTHw2CL0y4d5WFHlFpV1TxIqQaSS6A2rXMCw9FYBnYmvhg==
   dependencies:
     "@xstate/graph" "^1.1.0"
     chalk "^2.4.2"
