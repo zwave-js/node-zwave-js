@@ -88,7 +88,7 @@ export class ZWaveLoggerBase {
 
 export interface LogConfig {
 	enabled: boolean;
-	level: string;
+	level: string | number;
 	transports: Transport[];
 	logToFile: boolean;
 	nodeFilter?: number[];
@@ -109,7 +109,7 @@ export class ZWaveLogContainer extends winston.Container {
 	private consoleTransport: ConsoleTransportInstance | undefined;
 	private loglevelVisibleCache = new Map<string, boolean>();
 
-	private logConfig: LogConfig = {
+	private logConfig: LogConfig & { level: string } = {
 		enabled: true,
 		level: getTransportLoglevel(),
 		logToFile: !!process.env.LOGTOFILE,
@@ -145,6 +145,9 @@ export class ZWaveLogContainer extends winston.Container {
 			config.logToFile != undefined &&
 			config.logToFile !== this.logConfig.logToFile;
 
+		if (typeof config.level === "number") {
+			config.level = loglevelFromNumber(config.level);
+		}
 		const changedLogLevel =
 			config.level != undefined && config.level !== this.logConfig.level;
 
@@ -377,6 +380,14 @@ export class ZWaveLogContainer extends winston.Container {
 
 function getTransportLoglevel(): string {
 	return process.env.LOGLEVEL! in loglevels ? process.env.LOGLEVEL! : "debug";
+}
+
+/** Performs a reverse lookup of the numeric loglevel */
+function loglevelFromNumber(numLevel: number | undefined): string | undefined {
+	if (numLevel == undefined) return;
+	for (const [level, value] of Object.entries(loglevels)) {
+		if (value === numLevel) return level;
+	}
 }
 
 /**
