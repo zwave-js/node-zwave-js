@@ -2719,12 +2719,13 @@
   dependencies:
     "@types/node" "*"
 
-"@types/gulp-sourcemaps@0.0.32":
-  version "0.0.32"
-  resolved "https://registry.yarnpkg.com/@types/gulp-sourcemaps/-/gulp-sourcemaps-0.0.32.tgz#e79ee617e0cb15729874be4533fe59c07793a175"
-  integrity sha512-+7BAmptW2bxyJnJcCEuie7vLoop3FwWgCdBMzyv7MYXED/HeNMeQuX7uPCkp4vfU1TTu4CYFH0IckNPvo0VePA==
+"@types/gulp-sourcemaps@0.0.34":
+  version "0.0.34"
+  resolved "https://registry.yarnpkg.com/@types/gulp-sourcemaps/-/gulp-sourcemaps-0.0.34.tgz#af63e5317425b96a90ad295d01377dfcf1f5efdc"
+  integrity sha512-FOn9QOQpiH27Ay6Gy7bEl465+TzJ/QmIXgXD/oYptyX5W8wy8DZ7ZacIBAIOUylC68RT8qIYo+5KJG4OUfiFQQ==
   dependencies:
     "@types/node" "*"
+    "@types/vinyl" "*"
 
 "@types/gulp@^4.0.7":
   version "4.0.8"

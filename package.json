@@ -46,7 +46,7 @@
     "@fimbul/wotan": "^0.22.0",
     "@types/fs-extra": "^9.0.1",
     "@types/gulp": "^4.0.7",
-    "@types/gulp-sourcemaps": "0.0.32",
+    "@types/gulp-sourcemaps": "0.0.34",
     "@types/jest": "^26.0.14",
     "@types/js-levenshtein": "^1.1.0",
     "@types/json-logic-js": "^1.2.1",
