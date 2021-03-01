@@ -36,13 +36,13 @@
   resolved "https://registry.yarnpkg.com/@actions/io/-/io-1.0.2.tgz#2f614b6e69ce14d191180451eb38e6576a6e6b27"
   integrity sha512-J8KuFqVPr3p6U8W93DOXlXW6zFvrQAJANdS+vw0YhusLIq+bszW8zmK2Fh1C2kDPX8FMvwIl1OUcFgvJoXLbAg==
 
-"@alcalzone/jsonl-db@^1.2.3":
-  version "1.2.3"
-  resolved "https://registry.yarnpkg.com/@alcalzone/jsonl-db/-/jsonl-db-1.2.3.tgz#88b9a447215b50b778ab9a14dffa13f8167a154a"
-  integrity sha512-1LKEzZXR8c0WFC51+hym9PArZAjAyQDHMWmuBtp4oHKzh1Lisp6Ve4ihEJrgkKHiEla1IpSrLKDMCf2zbIwH8g==
+"@alcalzone/jsonl-db@^1.2.4":
+  version "1.2.4"
+  resolved "https://registry.yarnpkg.com/@alcalzone/jsonl-db/-/jsonl-db-1.2.4.tgz#a54c352a9b9e17c23013496d30452ab8d9a9d65d"
+  integrity sha512-cnFdlBlPFeI3uXO1Nz7che91dD0YmTwJFTTCHevGHL8m/K0cLR3cYbZ1djudaTf5/dWNsfSCOyH91j9MTd1yjw==
   dependencies:
-    alcalzone-shared "^3.0.1"
-    fs-extra "^9.0.1"
+    alcalzone-shared "^3.0.2"
+    fs-extra "^9.1.0"
 
 "@alcalzone/release-script@^1.8.1":
   version "1.8.2"
@@ -3077,14 +3077,7 @@ ajv@^7.0.2:
     require-from-string "^2.0.2"
     uri-js "^4.2.2"
 
-alcalzone-shared@^3.0.1:
-  version "3.0.1"
-  resolved "https://registry.yarnpkg.com/alcalzone-shared/-/alcalzone-shared-3.0.1.tgz#6cf6cfa9891a667a9e581d49b9bcece18e9b847d"
-  integrity sha512-HVw17dRMqcvGyojDpb1gGn4znt64yQ77X8m0cjmDpeoURxTbOLbA3cdqGMlDxP7EGlAv7BZNX5ir9Y+Q1CcTCw==
-  dependencies:
-    debug "^4.3.1"
-
-alcalzone-shared@^3.0.2:
+alcalzone-shared@^3.0.1, alcalzone-shared@^3.0.2:
   version "3.0.2"
   resolved "https://registry.yarnpkg.com/alcalzone-shared/-/alcalzone-shared-3.0.2.tgz#e0c6380be679e1e8fc22b648c6fdba2d2d1b04d0"
   integrity sha512-kcXwSVaB19k3gbJoDqktD9nL2JyufbTThbk8LEL0xKY77TqoIWtraOrrGtRCihlqJPIyfacdFu//0X28ZfWPSg==
@@ -5547,15 +5540,15 @@ fs-extra@8.1.0, fs-extra@^8.1.0:
     jsonfile "^4.0.0"
     universalify "^0.1.0"
 
-fs-extra@^9.0.0, fs-extra@^9.0.1:
-  version "9.0.1"
-  resolved "https://registry.yarnpkg.com/fs-extra/-/fs-extra-9.0.1.tgz#910da0062437ba4c39fedd863f1675ccfefcb9fc"
-  integrity sha512-h2iAoN838FqAFJY2/qVpzFXy+EBxfVE220PalAqQLDVsFOHLJrZvut5puAbCdNv6WJk+B8ihI+k0c7JK5erwqQ==
+fs-extra@^9.0.0, fs-extra@^9.0.1, fs-extra@^9.1.0:
+  version "9.1.0"
+  resolved "https://registry.yarnpkg.com/fs-extra/-/fs-extra-9.1.0.tgz#5954460c764a8da2094ba3554bf839e6b9a7c86d"
+  integrity sha512-hcg3ZmepS30/7BSFqRvoo3DOMQu7IjqxO5nCDt+zM9XWjb33Wg7ziNT+Qvqbuc3+gWpzO02JubVyk2G4Zvo1OQ==
   dependencies:
     at-least-node "^1.0.0"
     graceful-fs "^4.2.0"
     jsonfile "^6.0.1"
-    universalify "^1.0.0"
+    universalify "^2.0.0"
 
 fs-minipass@^1.2.5:
   version "1.2.7"
@@ -10916,11 +10909,6 @@ universalify@^0.1.0:
   version "0.1.2"
   resolved "https://registry.yarnpkg.com/universalify/-/universalify-0.1.2.tgz#b646f69be3942dabcecc9d6639c80dc105efaa66"
   integrity sha512-rBJeI5CXAlmy1pV+617WB9J63U6XcazHHF2f2dbJix4XzpUF0RS3Zbj0FGIOCAva5P/d/GBOYaACQ1w+0azUkg==
-
-universalify@^1.0.0:
-  version "1.0.0"
-  resolved "https://registry.yarnpkg.com/universalify/-/universalify-1.0.0.tgz#b61a1da173e8435b2fe3c67d29b9adf8594bd16d"
-  integrity sha512-rb6X1W158d7pRQBg5gkR8uPaSfiids68LTJQYOtEUhoJUWBdaQHsuT/EUduxXYxcrt4r5PJ4fuHW1MHT6p0qug==
 
 universalify@^2.0.0:
   version "2.0.0"
