@@ -22,7 +22,6 @@
 	"paramInformation": {
 		"1": {
 			"label": "Battery Report Interval",
-			"description": "Default heartbeat check in time",
 			"valueSize": 2,
 			"unit": "minutes",
 			"minValue": 4,
@@ -35,7 +34,7 @@
 		"2": {
 			"$if": "firmwareVersion >= 2.4",
 			"label": "Supervision Timeout",
-			"description": "The number of seconds waiting for a supervision report in response to a supervision get from the sensor",
+			"description": "How long to wait for a supervision report in response to a supervision get from the sensor",
 			"valueSize": 1,
 			"unit": "seconds",
 			"minValue": 5,
@@ -48,7 +47,7 @@
 		"3": {
 			"$if": "firmwareVersion >= 2.4",
 			"label": "Supervision Retries",
-			"description": "Number of application level retries attempted for messages either not ACKed or messages encapsulated via supervision get that did not receive a report",
+			"description": "Number of application level retries attempted for messages either not ACKed or Supervision encapsulated messages that did not receive a report",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 5,
@@ -60,7 +59,7 @@
 		"4": {
 			"$if": "firmwareVersion >= 2.4",
 			"label": "Supervision Back Off",
-			"description": "The number base seconds used in the calculation for sleeping between retry messages",
+			"description": "Used to calculate the delay between retried messages",
 			"valueSize": 1,
 			"unit": "seconds",
 			"minValue": 1,
@@ -72,7 +71,7 @@
 		},
 		"5": {
 			"$if": "firmwareVersion >= 2.4",
-			"label": "Supervision Battery Report (one in N)",
+			"label": "Supervision Battery Report Frequency",
 			"description": "The number of battery report messages sent before being encapsulated in supervision",
 			"valueSize": 1,
 			"minValue": 0,
