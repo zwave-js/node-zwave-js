@@ -42,7 +42,7 @@
     "@babel/preset-typescript": "^7.10.4",
     "@commitlint/cli": "^11.0.0",
     "@commitlint/config-conventional": "^11.0.0",
-    "@fimbul/mithotyn": "^0.21.0",
+    "@fimbul/mithotyn": "^0.24.0",
     "@fimbul/wotan": "^0.22.0",
     "@types/fs-extra": "^9.0.1",
     "@types/gulp": "^4.0.7",
