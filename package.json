@@ -61,7 +61,7 @@
     "@types/xml2json": "^0.11.3",
     "@types/yargs": "^16.0.0",
     "@typescript-eslint/eslint-plugin": "^4.15.2",
-    "@typescript-eslint/parser": "^4.15.2",
+    "@typescript-eslint/parser": "^4.16.1",
     "@xstate/test": "^0.4.2",
     "ansi-colors": "^4.1.1",
     "axios": "^0.21.1",
