@@ -3,6 +3,22 @@
 	Placeholder for next release:
 	## __WORK IN PROGRESS__
 -->
+## __WORK IN PROGRESS__
+### Features
+* Added the `"buffer"` metadata type to distinguish binary user codes from string user codes
+
+### Bugfixes
+* The heal node callback timeout depend on the network size and node types
+* In configuration metadata, `states` is now also present when `allowManualEntry` is `true`
+
+### Config file changes
+* Minor corrections to Homeseer devices
+* Add additional product ID to Fibaro Roller Shutter 3
+
+### Changes under the hood
+* Lots of dependency updates
+* Refactored config files for Yale locks to use templates
+
 ## 6.5.1 (2021-02-26)
 ### Bugfixes
 * When updating color components from `hexColor`, the value events are now emitted
