@@ -1316,16 +1316,16 @@
     unique-filename "^1.1.1"
     which "^1.3.1"
 
-"@fimbul/mimir@^0.22.0":
-  version "0.22.0"
-  resolved "https://registry.yarnpkg.com/@fimbul/mimir/-/mimir-0.22.0.tgz#e42a52d7b460e20b43d264969ff32c782abcef48"
-  integrity sha512-qK9j0xmNm0bhejFLXLPTBaG7ynzfOC6zSF7S4OjybZAVy2uHMvt8mGBevNVMtljB8b3rkm3pUznSk5Dio6Y9RA==
+"@fimbul/mimir@^0.24.0":
+  version "0.24.0"
+  resolved "https://registry.yarnpkg.com/@fimbul/mimir/-/mimir-0.24.0.tgz#10cf88731a614851c1a6e844cd7c7136cfbffb36"
+  integrity sha512-x0xvAdJrHMtPxzwj7a8YCVi1Z42JvCuawNWEG9MCyJYDmOADSbRNW7VAAv9kugD0XGJkR8S2s4iZACwlqKIXOA==
   dependencies:
-    "@fimbul/ymir" "^0.22.0"
+    "@fimbul/ymir" "^0.24.0"
     chalk "^4.0.0"
     debug "^4.0.0"
     tslib "^2.0.0"
-    tsutils "^3.16.0"
+    tsutils "^3.19.1"
 
 "@fimbul/mithotyn@^0.24.0":
   version "0.24.0"
@@ -1334,13 +1334,13 @@
   dependencies:
     mock-require "^3.0.2"
 
-"@fimbul/wotan@^0.22.0":
-  version "0.22.0"
-  resolved "https://registry.yarnpkg.com/@fimbul/wotan/-/wotan-0.22.0.tgz#c9bb0b443869c5d17d2a704b414e01c0c416a4de"
-  integrity sha512-/8hiJu21rPt9VXGfhakyK90nblww854G9PtArhzU8m8hY18e0hS+Keq9iVb5Jema29RUmpL+KzbqzY+PAAJpRQ==
+"@fimbul/wotan@^0.24.0":
+  version "0.24.0"
+  resolved "https://registry.yarnpkg.com/@fimbul/wotan/-/wotan-0.24.0.tgz#e09be03073021253ce45f76452bf9097b7293ab9"
+  integrity sha512-zEsI1gzoWPLwNeK9PqGzXz5Cu+2G9igZuE7eQmSBAquO+NJfXmQA7WOR4TGH9nCSAG0/cJpJgGxpeM1ux0/ytQ==
   dependencies:
-    "@fimbul/mimir" "^0.22.0"
-    "@fimbul/ymir" "^0.22.0"
+    "@fimbul/mimir" "^0.24.0"
+    "@fimbul/ymir" "^0.24.0"
     bind-decorator "^1.0.11"
     chalk "^4.0.0"
     debug "^4.0.0"
@@ -1349,7 +1349,7 @@
     import-local "^3.0.0"
     inversify "^5.0.0"
     is-negated-glob "^1.0.0"
-    js-yaml "^3.10.0"
+    js-yaml "^4.0.0"
     json5 "^2.0.0"
     minimatch "^3.0.4"
     normalize-glob "^0.0.2"
@@ -1358,12 +1358,12 @@
     semver "^7.0.0"
     stable "^0.1.8"
     tslib "^2.0.0"
-    tsutils "^3.6.0"
+    tsutils "^3.20.0"
 
-"@fimbul/ymir@^0.22.0":
-  version "0.22.0"
-  resolved "https://registry.yarnpkg.com/@fimbul/ymir/-/ymir-0.22.0.tgz#503083c739d9ab490a81ef0ff3f51ac94c88fd87"
-  integrity sha512-6QsE5x7N+Lju15fE+p7PR2CjaF7K9VwUNkop5eiVqvR9yH3eRdit2FMuswqDs3HBeptFx1F3z/GO27ZKViDqdw==
+"@fimbul/ymir@^0.24.0":
+  version "0.24.0"
+  resolved "https://registry.yarnpkg.com/@fimbul/ymir/-/ymir-0.24.0.tgz#aa6d4b4ef2232f62049ffdfa88bc4e039fe13072"
+  integrity sha512-d1w5ncRd5sgl9uOVdwB8v8KwSTs7Ov2g4mUbrNixoP4wSG5YNS5W0l8S6X+sG1leUfhW/CQSXFNtpc3bZHRnpg==
   dependencies:
     inversify "^5.0.0"
     reflect-metadata "^0.1.12"
@@ -3284,6 +3284,11 @@ argparse@^1.0.7:
   integrity sha512-o5Roy6tNG4SL/FOkCAN6RzjiakZS25RLYFrcMttJqbdd8BWrnA+fGz57iN5Pb06pvBGvl5gQ0B48dJlslXvoTg==
   dependencies:
     sprintf-js "~1.0.2"
+
+argparse@^2.0.1:
+  version "2.0.1"
+  resolved "https://registry.yarnpkg.com/argparse/-/argparse-2.0.1.tgz#246f50f3ca78a3240f6c997e8a9bd1eac49e4b38"
+  integrity sha512-8+9WqebbFzpX9OR+Wa6O29asIogeRMzcGtAINdpMHHyAg10f05aSFVBbcEqGf/PXw1EjAZ+q2/bEBg3DvurK3Q==
 
 arr-diff@^4.0.0:
   version "4.0.0"
@@ -6564,7 +6569,7 @@ is-ci@^2.0.0:
   dependencies:
     ci-info "^2.0.0"
 
-is-core-module@^2.1.0, is-core-module@^2.2.0:
+is-core-module@^2.2.0:
   version "2.2.0"
   resolved "https://registry.yarnpkg.com/is-core-module/-/is-core-module-2.2.0.tgz#97037ef3d52224d85163f5597b2b63d9afed981a"
   integrity sha512-XRAfAdyyY5F5cOXn7hYQDqh2Xmii+DEfIcQGxK/uNwMHhIkPWO0g8msXcbzLe+MpGoR951MlqM/2iIlU4vKDdQ==
@@ -7380,13 +7385,20 @@ js-tokens@^4.0.0:
   resolved "https://registry.yarnpkg.com/js-tokens/-/js-tokens-4.0.0.tgz#19203fb59991df98e3a287050d4647cdeaf32499"
   integrity sha512-RdJUflcE3cUzKiMqQgsCu06FPu9UdIJO0beYbPhHN4k6apgJtifcoCtT9bcxOpYBtpD2kCM6Sbzg4CausW/PKQ==
 
-js-yaml@^3.10.0, js-yaml@^3.13.1:
+js-yaml@^3.13.1:
   version "3.14.1"
   resolved "https://registry.yarnpkg.com/js-yaml/-/js-yaml-3.14.1.tgz#dae812fdb3825fa306609a8717383c50c36a0537"
   integrity sha512-okMH7OXXJ7YrN9Ok3/SXrnu4iX9yOk+25nqX4imS2npuvTYDmo/QEZoqwZkYaIDk3jVvBOTOIEgEhaLOynBS9g==
   dependencies:
     argparse "^1.0.7"
     esprima "^4.0.0"
+
+js-yaml@^4.0.0:
+  version "4.0.0"
+  resolved "https://registry.yarnpkg.com/js-yaml/-/js-yaml-4.0.0.tgz#f426bc0ff4b4051926cd588c71113183409a121f"
+  integrity sha512-pqon0s+4ScYUvX30wxQi3PogGFAlUyH0awepWvwkj4jD4v+ova3RiYw8bmA6x2rDrEaj8i/oWKoRxpVNW+Re8Q==
+  dependencies:
+    argparse "^2.0.1"
 
 jsbn@~0.1.0:
   version "0.1.1"
@@ -9755,15 +9767,7 @@ resolve-url@^0.2.1:
   resolved "https://registry.yarnpkg.com/resolve-url/-/resolve-url-0.2.1.tgz#2c637fe77c893afd2a663fe21aa9080068e2052a"
   integrity sha1-LGN/53yJOv0qZj/iGqkIAGjiBSo=
 
-resolve@^1.1.6, resolve@^1.1.7, resolve@^1.10.0, resolve@^1.14.1, resolve@^1.17.0, resolve@^1.18.1, resolve@^1.4.0:
-  version "1.19.0"
-  resolved "https://registry.yarnpkg.com/resolve/-/resolve-1.19.0.tgz#1af5bf630409734a067cae29318aac7fa29a267c"
-  integrity sha512-rArEXAgsBG4UgRGcynxWIWKFvh/XZCcS8UJdHhwy91zwAvCZIbcs+vAbflgBnNjYMs/i/i+/Ux6IZhML1yPvxg==
-  dependencies:
-    is-core-module "^2.1.0"
-    path-parse "^1.0.6"
-
-resolve@^1.14.2:
+resolve@^1.1.6, resolve@^1.1.7, resolve@^1.10.0, resolve@^1.14.1, resolve@^1.14.2, resolve@^1.17.0, resolve@^1.18.1, resolve@^1.4.0:
   version "1.20.0"
   resolved "https://registry.yarnpkg.com/resolve/-/resolve-1.20.0.tgz#629a013fb3f70755d6f0b7935cc1c2c5378b1975"
   integrity sha512-wENBPt4ySzg4ybFQW2TT1zMQucPK95HSh/nq2CFTZVOGut2+pQvSsgtda4d26YrYcr067wjbmzOG8byDPBX63A==
@@ -10842,10 +10846,10 @@ tslib@^2.0.0:
   resolved "https://registry.yarnpkg.com/tslib/-/tslib-2.1.0.tgz#da60860f1c2ecaa5703ab7d39bc05b6bf988b97a"
   integrity sha512-hcVC3wYEziELGGmEEXue7D75zbwIIVUMWAVbHItGPx0ziyXxrOMQx4rQEVEV45Ut/1IotuEvwqPopzIOkDMf0A==
 
-tsutils@^3.16.0, tsutils@^3.17.1, tsutils@^3.6.0:
-  version "3.19.1"
-  resolved "https://registry.yarnpkg.com/tsutils/-/tsutils-3.19.1.tgz#d8566e0c51c82f32f9c25a4d367cd62409a547a9"
-  integrity sha512-GEdoBf5XI324lu7ycad7s6laADfnAqCw6wLGI+knxvw9vsIYBaJfYdmeCEG3FMMUiSm3OGgNb+m6utsWf5h9Vw==
+tsutils@^3.17.1, tsutils@^3.19.1, tsutils@^3.20.0:
+  version "3.20.0"
+  resolved "https://registry.yarnpkg.com/tsutils/-/tsutils-3.20.0.tgz#ea03ea45462e146b53d70ce0893de453ff24f698"
+  integrity sha512-RYbuQuvkhuqVeXweWT3tJLKOEJ/UUw9GjNEZGWdrLLlM+611o1gwLHBpxoFJKKl25fLprp2eVthtKs5JOrNeXg==
   dependencies:
     tslib "^1.8.1"
 
