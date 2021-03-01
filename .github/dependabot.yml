@@ -3,10 +3,10 @@ updates:
 - package-ecosystem: npm
   directory: "/"
   schedule:
-    interval: monthly
+    interval: "monthly"
     time: "04:00"
     timezone: Europe/Berlin
   open-pull-requests-limit: 20
   assignees:
-  - AlCalzone
+    - "AlCalzone"
   versioning-strategy: increase
