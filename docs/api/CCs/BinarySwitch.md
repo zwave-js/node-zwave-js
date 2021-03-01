@@ -5,7 +5,7 @@
 ### `get`
 
 ```ts
-async get(): Promise<{ currentValue: Maybe<boolean>; targetValue: boolean | undefined; duration: Duration | undefined; } | undefined>;
+async get(): Promise<{ currentValue: boolean | ("unknown" & { __brand: boolean; }); targetValue: boolean | undefined; duration: Duration | undefined; } | undefined>;
 ```
 
 ### `set`
