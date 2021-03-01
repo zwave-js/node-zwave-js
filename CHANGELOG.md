@@ -3,7 +3,7 @@
 	Placeholder for next release:
 	## __WORK IN PROGRESS__
 -->
-## __WORK IN PROGRESS__
+## 6.6.0 (2021-03-02)
 ### Features
 * Added the `"buffer"` metadata type to distinguish binary user codes from string user codes
 
