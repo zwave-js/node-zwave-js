@@ -2388,14 +2388,14 @@
     "@sentry/utils" "6.2.0"
     tslib "^1.9.3"
 
-"@sentry/integrations@^5.24.2":
-  version "5.29.2"
-  resolved "https://registry.yarnpkg.com/@sentry/integrations/-/integrations-5.29.2.tgz#bd00dfd81f8a9448a5ccf87a3eb7d12035088ad9"
-  integrity sha512-bH50B0xubbHrJFq8xZRxOc5BgXe1PXKfC0OqQkhhSd+Bu2WDLCHcn0CEzV+8thZTYkipAoFAFJNdEWcsM2Wcew==
+"@sentry/integrations@^6.2.0":
+  version "6.2.0"
+  resolved "https://registry.yarnpkg.com/@sentry/integrations/-/integrations-6.2.0.tgz#f3952cb07fd86aa1ea3923d51049fc4875b634a9"
+  integrity sha512-gvAhP61qs2fog2xCTDs94ZT8cZbWEjFZmOWfT1VXlZDIVopIporj5Qe6IgrLTiCWL61Yko5h5nFnPZ4mpjf+0w==
   dependencies:
-    "@sentry/types" "5.29.2"
-    "@sentry/utils" "5.29.2"
-    localforage "1.8.1"
+    "@sentry/types" "6.2.0"
+    "@sentry/utils" "6.2.0"
+    localforage "^1.8.1"
     tslib "^1.9.3"
 
 "@sentry/minimal@6.2.0":
@@ -2433,23 +2433,10 @@
     "@sentry/utils" "6.2.0"
     tslib "^1.9.3"
 
-"@sentry/types@5.29.2":
-  version "5.29.2"
-  resolved "https://registry.yarnpkg.com/@sentry/types/-/types-5.29.2.tgz#ac87383df1222c2d9b9f8f9ed7a6b86ea41a098a"
-  integrity sha512-dM9wgt8wy4WRty75QkqQgrw9FV9F+BOMfmc0iaX13Qos7i6Qs2Q0dxtJ83SoR4YGtW8URaHzlDtWlGs5egBiMA==
-
 "@sentry/types@6.2.0":
   version "6.2.0"
   resolved "https://registry.yarnpkg.com/@sentry/types/-/types-6.2.0.tgz#ca020ff42913c6b9f88a9d0c375b5ee3965a2590"
   integrity sha512-vN4P/a+QqAuVfWFB9G3nQ7d6bgnM9jd/RLVi49owMuqvM24pv5mTQHUk2Hk4S3k7ConrHFl69E7xH6Dv5VpQnQ==
-
-"@sentry/utils@5.29.2":
-  version "5.29.2"
-  resolved "https://registry.yarnpkg.com/@sentry/utils/-/utils-5.29.2.tgz#99a5cdda2ea19d34a41932f138d470adcb3ee673"
-  integrity sha512-nEwQIDjtFkeE4k6yIk4Ka5XjGRklNLThWLs2xfXlL7uwrYOH2B9UBBOOIRUraBm/g/Xrra3xsam/kRxuiwtXZQ==
-  dependencies:
-    "@sentry/types" "5.29.2"
-    tslib "^1.9.3"
 
 "@sentry/utils@6.2.0":
   version "6.2.0"
@@ -7586,10 +7573,10 @@ load-json-file@^5.3.0:
     strip-bom "^3.0.0"
     type-fest "^0.3.0"
 
-localforage@1.8.1:
-  version "1.8.1"
-  resolved "https://registry.yarnpkg.com/localforage/-/localforage-1.8.1.tgz#f6c0a24b41ab33b10e4dc84342dd696f6f3e3433"
-  integrity sha512-azSSJJfc7h4bVpi0PGi+SmLQKJl2/8NErI+LhJsrORNikMZnhaQ7rv9fHj+ofwgSHrKRlsDCL/639a6nECIKuQ==
+localforage@^1.8.1:
+  version "1.9.0"
+  resolved "https://registry.yarnpkg.com/localforage/-/localforage-1.9.0.tgz#f3e4d32a8300b362b4634cc4e066d9d00d2f09d1"
+  integrity sha512-rR1oyNrKulpe+VM9cYmcFn6tsHuokyVHFaCM3+osEmxaHTbEk8oQu6eGDfS6DQLWi/N67XRmB8ECG37OES368g==
   dependencies:
     lie "3.1.1"
 
