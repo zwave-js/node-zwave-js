@@ -62,7 +62,7 @@
     "@types/yargs": "^15.0.7",
     "@typescript-eslint/eslint-plugin": "^4.3.0",
     "@typescript-eslint/parser": "^4.15.2",
-    "@xstate/test": "^0.4.1",
+    "@xstate/test": "^0.4.2",
     "ansi-colors": "^4.1.1",
     "axios": "^0.21.1",
     "clipboardy": "^2.3.0",
