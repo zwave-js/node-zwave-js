@@ -29,7 +29,7 @@
 	},
 	"paramInformation": {
 		"1": {
-			"$if": "firmwareVersion >= 2",
+			"$if": "firmwareVersion >= 2.0",
 			"label": "Basic Set Value",
 			"description": "Set the value of Basic Set commands sent to the devices associated in Group 2",
 			"valueSize": 1,
@@ -41,7 +41,7 @@
 			"allowManualEntry": true
 		},
 		"2": {
-			"$if": "firmwareVersion >= 2",
+			"$if": "firmwareVersion >= 2.0",
 			"label": "Enable / Disable Motion Reports",
 			"valueSize": 1,
 			"minValue": 0,
@@ -62,7 +62,7 @@
 			]
 		},
 		"3": {
-			"$if": "firmwareVersion >= 2",
+			"$if": "firmwareVersion >= 2.0",
 			"label": "Motion Sensitivity",
 			"description": "Adjust motion sensitivity where 10 is the most sensitive setting.",
 			"valueSize": 1,
@@ -74,7 +74,7 @@
 			"allowManualEntry": true
 		},
 		"4": {
-			"$if": "firmwareVersion >= 2",
+			"$if": "firmwareVersion >= 2.0",
 			"label": "Brightness Threshold",
 			"description": "The sensor will report motion only if brightness level is below the set value (10 is the lowest value the sensor reports).",
 			"unit": "lux",
@@ -97,7 +97,7 @@
 			]
 		},
 		"5": {
-			"$if": "firmwareVersion >= 2",
+			"$if": "firmwareVersion >= 2.0",
 			"label": "Motion Re-trigger Time",
 			"description": "Delay before the sensor reports no motion after detecting the last motion activity (add 5 seconds to entered value).",
 			"unit": "+5 seconds",
@@ -116,7 +116,7 @@
 			]
 		},
 		"6": {
-			"$if": "firmwareVersion >= 2",
+			"$if": "firmwareVersion >= 2.0",
 			"label": "Lux Reporting Frequency",
 			"unit": "minutes",
 			"valueSize": 2,
@@ -128,7 +128,7 @@
 			"allowManualEntry": true
 		},
 		"7": {
-			"$if": "firmwareVersion >= 2",
+			"$if": "firmwareVersion >= 2.0",
 			"label": "Manual Motion Re-trigger Time Setting",
 			"description": "Read the value for the Motion Re-trigger Time set by knob on sensor (overridden by setting Motion Re-trigger Time parameter).",
 			"unit": "seconds",
@@ -147,7 +147,7 @@
 			]
 		},
 		"8": {
-			"$if": "firmwareVersion >= 2",
+			"$if": "firmwareVersion >= 2.0",
 			"label": "Manual Brightness Threshold Setting",
 			"description": "Read the value for the Brightness Threshold set by knob on sensor (overridden by setting Brightness Threshold parameter).",
 			"unit": "lux",
