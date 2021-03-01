@@ -23,7 +23,7 @@ export async function loadNamedScalesInternal(): Promise<NamedScalesGroupMap> {
 
 	try {
 		const fileContents = await readFile(configPath, "utf8");
-		const definition = JSON5.parse(fileContents) as unknown;
+		const definition = JSON5.parse(fileContents);
 		if (!isObject(definition)) {
 			throwInvalidConfig(
 				"named scales",
