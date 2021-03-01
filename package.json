@@ -50,7 +50,7 @@
     "@types/jest": "^26.0.14",
     "@types/js-levenshtein": "^1.1.0",
     "@types/json-logic-js": "^1.2.1",
-    "@types/json5": "0.0.30",
+    "@types/json5": "2.2.0",
     "@types/mockdate": "^2.0.0",
     "@types/node": "^14.14.31",
     "@types/pegjs": "^0.10.2",
