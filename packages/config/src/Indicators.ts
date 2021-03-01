@@ -27,7 +27,7 @@ export async function loadIndicatorsInternal(): Promise<{
 
 	try {
 		const fileContents = await readFile(indicatorsConfigPath, "utf8");
-		const definition = JSON5.parse(fileContents) as unknown;
+		const definition = JSON5.parse(fileContents);
 		if (!isObject(definition)) {
 			throwInvalidConfig("indicators", "the database is not an object");
 		}
@@ -45,7 +45,7 @@ export async function loadIndicatorsInternal(): Promise<{
 		}
 
 		const indicators = new Map<number, string>();
-		for (const [id, label] of entries((definition as any).indicators)) {
+		for (const [id, label] of entries(definition.indicators)) {
 			if (!hexKeyRegexNDigits.test(id)) {
 				throwInvalidConfig(
 					"indicators",
@@ -57,9 +57,7 @@ export async function loadIndicatorsInternal(): Promise<{
 		}
 
 		const properties = new Map<number, IndicatorProperty>();
-		for (const [id, propDefinition] of entries(
-			(definition as any).properties,
-		)) {
+		for (const [id, propDefinition] of entries(definition.properties)) {
 			if (!hexKeyRegexNDigits.test(id)) {
 				throwInvalidConfig(
 					"indicators",

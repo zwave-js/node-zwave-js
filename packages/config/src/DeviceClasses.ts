@@ -27,7 +27,7 @@ export async function loadDeviceClassesInternal(): Promise<{
 
 	try {
 		const fileContents = await readFile(configPath, "utf8");
-		const definition = JSON5.parse(fileContents) as JSONObject;
+		const definition = JSON5.parse(fileContents);
 		if (!isObject(definition)) {
 			throwInvalidConfig(
 				"device classes",
@@ -35,13 +35,13 @@ export async function loadDeviceClassesInternal(): Promise<{
 			);
 		}
 
-		if (!isObject((definition as any).basic)) {
+		if (!isObject(definition.basic)) {
 			throwInvalidConfig(
 				"device classes",
 				`The "basic" property is not an object`,
 			);
 		}
-		if (!isObject((definition as any).generic)) {
+		if (!isObject(definition.generic)) {
 			throwInvalidConfig(
 				"device classes",
 				`The "generic" property is not an object`,
@@ -49,7 +49,7 @@ export async function loadDeviceClassesInternal(): Promise<{
 		}
 
 		const basicDeviceClasses = new Map<number, string>();
-		for (const [key, basicClass] of entries((definition as any).basic)) {
+		for (const [key, basicClass] of entries(definition.basic)) {
 			if (!hexKeyRegexNDigits.test(key)) {
 				throwInvalidConfig(
 					"device classes",
@@ -61,9 +61,7 @@ export async function loadDeviceClassesInternal(): Promise<{
 		}
 
 		const genericDeviceClasses = new Map<number, GenericDeviceClass>();
-		for (const [key, genericDefinition] of entries(
-			(definition as any).generic,
-		)) {
+		for (const [key, genericDefinition] of entries(definition.generic)) {
 			if (!hexKeyRegexNDigits.test(key)) {
 				throwInvalidConfig(
 					"device classes",
