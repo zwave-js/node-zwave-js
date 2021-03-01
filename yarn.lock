@@ -44,10 +44,10 @@
     alcalzone-shared "^3.0.2"
     fs-extra "^9.1.0"
 
-"@alcalzone/release-script@^1.8.1":
-  version "1.8.2"
-  resolved "https://registry.yarnpkg.com/@alcalzone/release-script/-/release-script-1.8.2.tgz#a2ee46688d8bfaff1f1f4df10b11848d2dfbe1dc"
-  integrity sha512-MW/DACmh5zPChsP6xT8crms0sQ6AfHgbJ43t1kZuEuu4uW6N8+dizqxZfrcPzYCEPEFbZzzp0ok22SjsLg2/NA==
+"@alcalzone/release-script@^1.8.3":
+  version "1.8.3"
+  resolved "https://registry.yarnpkg.com/@alcalzone/release-script/-/release-script-1.8.3.tgz#5e6022541cb543b59eed18b1e2daac7b4cd2b1d2"
+  integrity sha512-PPzX+GG08Gwx7ygraGB8pbnWSD0KIxHiJtegLhHK9GZ+QodAl2K4VQe8/RuY0r4fhwDWCXbYbPEw10xaxXmh2w==
   dependencies:
     alcalzone-shared "^3.0.1"
     axios "^0.21.1"
