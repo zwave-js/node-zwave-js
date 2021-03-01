@@ -44,7 +44,7 @@
     "@commitlint/config-conventional": "^11.0.0",
     "@fimbul/mithotyn": "^0.24.0",
     "@fimbul/wotan": "^0.24.0",
-    "@types/fs-extra": "^9.0.1",
+    "@types/fs-extra": "^9.0.8",
     "@types/gulp": "^4.0.7",
     "@types/gulp-sourcemaps": "0.0.34",
     "@types/jest": "^26.0.14",
