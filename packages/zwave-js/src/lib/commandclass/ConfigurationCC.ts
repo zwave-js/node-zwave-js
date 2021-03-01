@@ -812,7 +812,7 @@ alters capabilities: ${!!properties.altersCapabilities}`;
 				writeable: !info.readOnly,
 				allowManualEntry: info.allowManualEntry,
 				states:
-					!info.allowManualEntry && info.options.length > 0
+					info.options.length > 0
 						? composeObject(
 								info.options.map(({ label, value }) => [
 									value.toString(),
