@@ -20,7 +20,7 @@ export async function loadManufacturersInternal(): Promise<ManufacturersMap> {
 	}
 	try {
 		const fileContents = await readFile(configPath, "utf8");
-		const definition = JSON5.parse(fileContents) as unknown;
+		const definition = JSON5.parse(fileContents);
 		if (!isObject(definition)) {
 			throwInvalidConfig(
 				"manufacturers",
