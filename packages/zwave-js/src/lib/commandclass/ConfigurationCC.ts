@@ -90,7 +90,7 @@ export interface ConfigurationMetadata extends ValueMetadataAny {
 	// The following information cannot be detected by scanning.
 	// We have to rely on configuration to support them
 	// options?: readonly ConfigOption[];
-	states?: Record<string, number>;
+	states?: Record<number, string>;
 	allowManualEntry?: boolean;
 	isFromConfig?: boolean;
 }
@@ -708,7 +708,11 @@ alters capabilities: ${!!properties.altersCapabilities}`;
 	): ConfigurationMetadata {
 		const valueDB = this.getValueDB();
 		const valueId = getParamInformationValueID(parameter, valueBitMask);
-		return valueDB.getMetadata(valueId) ?? { ...ValueMetadata.Any };
+		return (
+			(valueDB.getMetadata(valueId) as ConfigurationMetadata) ?? {
+				...ValueMetadata.Any,
+			}
+		);
 	}
 
 	/**
