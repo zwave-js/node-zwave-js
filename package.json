@@ -75,7 +75,7 @@
     "gulp": "^4.0.2",
     "gulp-sourcemaps": "^3.0.0",
     "gulp-typescript": "^6.0.0-alpha.1",
-    "husky": "^4.3.0",
+    "husky": "^5.1.2",
     "jest": "^26.4.2",
     "jest-circus": "^26.4.2",
     "jest-extended": "^0.11.5",
