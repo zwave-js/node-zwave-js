@@ -1,4 +1,8 @@
-import { CommandClasses, ZWaveLogContainer } from "@zwave-js/core";
+import {
+	CommandClasses,
+	createDefaultTransportFormat,
+	ZWaveLogContainer,
+} from "@zwave-js/core";
 import { assertLogInfo, assertMessage, SpyTransport } from "@zwave-js/testing";
 import { InterviewStage } from "../node/Types";
 import { ControllerLogger } from "./Controller";
@@ -10,6 +14,7 @@ describe("lib/log/Controller =>", () => {
 	// Replace all defined transports with a spy transport
 	beforeAll(() => {
 		spyTransport = new SpyTransport();
+		spyTransport.format = createDefaultTransportFormat(true, true);
 		controllerLogger = new ControllerLogger(
 			new ZWaveLogContainer({
 				transports: [spyTransport],
