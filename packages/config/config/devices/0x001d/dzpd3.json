@@ -98,7 +98,7 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "Off",
+					"label": "Always off",
 					"value": 0
 				},
 				{
