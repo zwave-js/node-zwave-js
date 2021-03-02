@@ -175,10 +175,9 @@ export class ZWaveLogContainer extends winston.Container {
 				((config.transports as any) as Transport[] | undefined) ??
 				this.createLogTransports();
 
-			this.loggers.forEach((logger, label) =>
+			this.loggers.forEach((logger) =>
 				logger.configure({
 					transports: this.logConfig.transports,
-					format: this.createLoggerFormat(label),
 				}),
 			);
 		}
