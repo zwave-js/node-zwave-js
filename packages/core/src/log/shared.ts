@@ -13,8 +13,9 @@ const loglevels = configs.npm.levels;
 const isTTY = process.stdout.isTTY;
 const isUnitTest = process.env.NODE_ENV === "test";
 
-export const timestampFormat = "HH:mm:ss.SSS";
-const timestampPadding = " ".repeat(timestampFormat.length + 1);
+export const timestampFormatShort = "HH:mm:ss.SSS";
+const timestampPaddingShort = " ".repeat(timestampFormatShort.length + 1);
+const timestampPaddingISO = " ".repeat(new Date().toISOString().length + 1);
 const channelPadding = " ".repeat(7); // 6 chars channel name, 1 space
 
 export type DataDirection = "inbound" | "outbound" | "none";
@@ -165,64 +166,68 @@ export class ZWaveLogContainer extends winston.Container {
 	public createLoggerFormat(channel: string): Format {
 		// Only colorize the output if logging to a TTY, otherwise we'll get
 		// ansi color codes in logfiles
-		const colorize = !this.logConfig.logToFile && (isTTY || isUnitTest);
+		const isConsole = !this.logConfig.logToFile && (isTTY || isUnitTest);
 		const formats: Format[] = [];
 		formats.push(
 			label({ label: channel }),
-			timestamp({ format: timestampFormat }),
+			timestamp(isConsole ? { format: timestampFormatShort } : undefined),
 			this.logMessageFormatter,
 		);
-		if (colorize) formats.push(colorizer());
-		formats.push(this.logMessagePrinter);
+		if (isConsole) formats.push(colorizer());
+		formats.push(this.createLogMessagePrinter(isConsole));
 
 		return combine(...formats);
 	}
 
 	/** Prints a formatted and colorized log message */
-	public logMessagePrinter: Format = {
-		transform: (((info: ZWaveLogInfo) => {
-			// The formatter has already split the message into multiple lines
-			const messageLines = messageToLines(info.message);
-			// Also this can only happen if the user forgot to call the formatter first
-			if (info.secondaryTagPadding == undefined)
-				info.secondaryTagPadding = -1;
-			// Format the first message line
-			let firstLine = [
-				info.primaryTags,
-				messageLines[0],
-				info.secondaryTagPadding < 0
-					? undefined
-					: " ".repeat(info.secondaryTagPadding),
-				// If the secondary tag padding is zero, the previous segment gets
-				// filtered out and we have one less space than necessary
-				info.secondaryTagPadding === 0 && info.secondaryTags
-					? " " + info.secondaryTags
-					: info.secondaryTags,
-			]
-				.filter((item) => !!item)
-				.join(" ");
-			// The directional arrows and the optional grouping lines must be prepended
-			// without adding spaces
-			firstLine = `${info.timestamp} ${info.label} ${info.direction}${firstLine}`;
-			const lines = [firstLine];
-			if (info.multiline) {
-				// Format all message lines but the first
-				lines.push(
-					...messageLines.slice(1).map(
-						(line) =>
-							// Skip the columns for the timestamp and the channel name
-							timestampPadding +
-							channelPadding +
-							// Skip the columns for directional arrows
-							directionPrefixPadding +
-							line,
-					),
-				);
-			}
-			info[MESSAGE as any] = lines.join("\n");
-			return info;
-		}) as unknown) as TransformFunction,
-	};
+	public createLogMessagePrinter(isConsole: boolean): Format {
+		return {
+			transform: (((info: ZWaveLogInfo) => {
+				// The formatter has already split the message into multiple lines
+				const messageLines = messageToLines(info.message);
+				// Also this can only happen if the user forgot to call the formatter first
+				if (info.secondaryTagPadding == undefined)
+					info.secondaryTagPadding = -1;
+				// Format the first message line
+				let firstLine = [
+					info.primaryTags,
+					messageLines[0],
+					info.secondaryTagPadding < 0
+						? undefined
+						: " ".repeat(info.secondaryTagPadding),
+					// If the secondary tag padding is zero, the previous segment gets
+					// filtered out and we have one less space than necessary
+					info.secondaryTagPadding === 0 && info.secondaryTags
+						? " " + info.secondaryTags
+						: info.secondaryTags,
+				]
+					.filter((item) => !!item)
+					.join(" ");
+				// The directional arrows and the optional grouping lines must be prepended
+				// without adding spaces
+				firstLine = `${info.timestamp} ${info.label} ${info.direction}${firstLine}`;
+				const lines = [firstLine];
+				if (info.multiline) {
+					// Format all message lines but the first
+					lines.push(
+						...messageLines.slice(1).map(
+							(line) =>
+								// Skip the columns for the timestamp and the channel name
+								(isConsole
+									? timestampPaddingShort
+									: timestampPaddingISO) +
+								channelPadding +
+								// Skip the columns for directional arrows
+								directionPrefixPadding +
+								line,
+						),
+					);
+				}
+				info[MESSAGE as any] = lines.join("\n");
+				return info;
+			}) as unknown) as TransformFunction,
+		};
+	}
 
 	/** Formats the log message and calculates the necessary paddings */
 	public logMessageFormatter: Format = {
