@@ -615,5 +615,8 @@
 				}
 			]
 		}
+	},
+	"compat": {
+		"preserveRootApplicationCCValueIDs": true
 	}
 }
