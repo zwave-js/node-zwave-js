@@ -49,9 +49,9 @@
 		}
 	},
 	"metadata": {
-		"inclusion": "1. Enter the 4-8 digit master PIN code followed by the gear key.\n2. Press the 7 key followed by the gear key.\n3. Press the 1 key followed by the gear key",
-		"exclusion": "1. Enter the 4-8 digit master PIN code followed by the gear key.\n2. Press the 7 key followed by the gear key.\n3. Press the 3 key followed by the gear key",
-		"reset": "Please use this procedure only when the network primary controller is missing or otherwise inoperable.\n1. Remove the inside lever with the lever removal tool.\n2. Remove battery cover using hex wrench provided with lock.\n3. Remove four (4) AA batteries.\n4. Remove the 10-32 x 3/4\" pan head screw from the center of the battery housing into the barrel nut of the outside assembly.\n5. Remove inside escutcheon. Cables may stay connected.\n6. Reinstall batteries \n7. On the back of the PC board, push and hold the Reset Button with the lever removal tool for 3 seconds.\n8. While continuing the press the reset button, temporarily remove one AA battery.\n9. Reinstall the battery\n10. Release reset button and wait 15 seconds. Speaker will announce \"Welcome to Yale\"\n11. Reassemble escutcheon",
+		"inclusion": "1. Remove the battery cover.\n2. Press and hold reset/pair button on left side of device until unit beeps two (2) times.\n3. Release button and network inclusion begins.\n4. Replace battery cover.",
+		"exclusion": "1. Remove the battery cover.\n2. Press and hold reset/pair button on left side of device until unit beeps five (5) times.\n3. Release button and network exclusion begins.\n4. Replace battery cover.",
+		"reset": "Please use this procedure only when the network primary controller is missing or otherwise inoperable.\n1. Remove the battery cover.\n2. Remove four (4) AA batteries.\n3. On the left side of the device, push and hold the Reset Button with the lever removal tool for at least 3 seconds.\n4. While continuing to hold the reset button, reinstall the batteries\n5. Release reset button and wait 15 seconds.\n6. Reinstall battery cover",
 		"manual": "https://products.z-wavealliance.org/ProductManual/File?folder=&filename=MarketCertificationFiles/3170/YRD156_YaleRealLivingAssureDeadbolt_Z-WavePlus_SystemIntegratorsGuide.pdf"
 	}
 }
