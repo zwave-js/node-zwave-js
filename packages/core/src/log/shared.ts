@@ -17,8 +17,7 @@ const loglevels = configs.npm.levels;
 const isTTY = process.stdout.isTTY;
 const isUnitTest = process.env.NODE_ENV === "test";
 
-export const timestampFormat = "HH:mm:ss.SSS";
-const timestampPadding = " ".repeat(timestampFormat.length + 1);
+export const timestampFormatShort = "HH:mm:ss.SSS";
 const channelPadding = " ".repeat(7); // 6 chars channel name, 1 space
 
 export type DataDirection = "inbound" | "outbound" | "none";
@@ -189,20 +188,30 @@ export class ZWaveLogContainer extends winston.Container {
 		return this.logConfig.transports;
 	}
 
-	/** The common logger format for all channels */
+	/** Creates the common logger format for all loggers under a given channel */
 	public createLoggerFormat(channel: string): Format {
-		// Only colorize the output if logging to a TTY, otherwise we'll get
-		// ansi color codes in logfiles
-		const colorize = !this.logConfig.logToFile && (isTTY || isUnitTest);
-		const formats: Format[] = [];
-		formats.push(
+		return combine(
+			// add the channel as a label
 			label({ label: channel }),
-			timestamp({ format: timestampFormat }),
-			this.logMessageFormatter,
+			// default to short timestamps
+			timestamp(),
 		);
-		if (colorize) formats.push(colorizer());
-		formats.push(this.logMessagePrinter);
+	}
 
+	/** The common logger format for built-in transports */
+	public createDefaultTransportFormat(
+		colorize: boolean,
+		shortTimestamps: boolean,
+	): Format {
+		const formats: Format[] = [
+			// overwrite the default timestamp format if necessary
+			shortTimestamps
+				? timestamp({ format: timestampFormatShort })
+				: undefined,
+			this.logMessageFormatter,
+			colorize ? colorizer() : undefined,
+			this.logMessagePrinter,
+		].filter((f): f is Format => !!f);
 		return combine(...formats);
 	}
 
@@ -232,6 +241,7 @@ export class ZWaveLogContainer extends winston.Container {
 			// The directional arrows and the optional grouping lines must be prepended
 			// without adding spaces
 			firstLine = `${info.timestamp} ${info.label} ${info.direction}${firstLine}`;
+			const timestampPadding = " ".repeat(info.timestamp!.length + 1);
 			const lines = [firstLine];
 			if (info.multiline) {
 				// Format all message lines but the first
@@ -348,6 +358,13 @@ export class ZWaveLogContainer extends winston.Container {
 	private createConsoleTransport(): ConsoleTransportInstance {
 		return new winston.transports.Console({
 			level: getTransportLoglevel(),
+			format: this.createDefaultTransportFormat(
+				// Only colorize the output if logging to a TTY, otherwise we'll get
+				// ansi color codes in logfiles or redirected shells
+				isTTY || isUnitTest,
+				// Only use short timestamps if logging to a TTY
+				isTTY,
+			),
 			silent: this.isConsoleTransportSilent(),
 		});
 	}
@@ -364,6 +381,7 @@ export class ZWaveLogContainer extends winston.Container {
 		return new winston.transports.File({
 			filename: this.logConfig.filename,
 			level: getTransportLoglevel(),
+			format: this.createDefaultTransportFormat(false, false),
 			silent: this.isFileTransportSilent(),
 		});
 	}
