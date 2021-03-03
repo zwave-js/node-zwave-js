@@ -496,7 +496,7 @@ export class SecurityCCCommandEncapsulation extends SecurityCC {
 		}
 
 		if (gotDeserializationOptions(options)) {
-			// HALF_NONCE_SIZE bytes iv, 1 byte frame control, 1 byte CC header, 1 byte nonce id, 8 bytes auth code
+			// HALF_NONCE_SIZE bytes iv, 1 byte frame control, at least 1 CC byte, 1 byte nonce id, 8 bytes auth code
 			validatePayload(
 				this.payload.length >= HALF_NONCE_SIZE + 1 + 1 + 1 + 8,
 			);
@@ -596,6 +596,8 @@ export class SecurityCCCommandEncapsulation extends SecurityCC {
 		this.decryptedCCBytes = Buffer.concat(
 			[...partials, this].map((cc) => cc.decryptedCCBytes!),
 		);
+		// make sure this contains a complete CC command that's worth splitting
+		validatePayload(this.decryptedCCBytes.length >= 2);
 		// and deserialize the CC
 		this.encapsulated = CommandClass.from(this.driver, {
 			data: this.decryptedCCBytes,

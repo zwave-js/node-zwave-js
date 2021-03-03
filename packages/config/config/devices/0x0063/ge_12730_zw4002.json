@@ -136,5 +136,16 @@
 			"writeOnly": false,
 			"allowManualEntry": true
 		}
+	},
+	"compat": {
+		"treatBasicSetAsEvent": true,
+		"commandClasses": {
+			"remove": {
+				"0x6c": {
+					// The device does not support supervision although it is mandatory for the device type
+					"endpoints": "*"
+				}
+			}
+		}
 	}
 }
