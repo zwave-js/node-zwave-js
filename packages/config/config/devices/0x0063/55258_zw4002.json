@@ -57,7 +57,15 @@
 		}
 	},
 	"compat": {
-		"treatBasicSetAsEvent": true
+		"treatBasicSetAsEvent": true,
+		"commandClasses": {
+			"remove": {
+				"0x6c": {
+					// The device does not support supervision although it is mandatory for the device type
+					"endpoints": "*"
+				}
+			}
+		}
 	},
 	"metadata": {
 		"inclusion": "1. Follow the instructions for your Z-Wave certified controller to add a device to the Z-Wave network.\n2. Once the controller is ready to add your device, press and release the top or bottom rocker",
