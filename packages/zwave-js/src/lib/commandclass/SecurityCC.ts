@@ -496,9 +496,9 @@ export class SecurityCCCommandEncapsulation extends SecurityCC {
 		}
 
 		if (gotDeserializationOptions(options)) {
-			// HALF_NONCE_SIZE bytes iv, 1 byte frame control, 2 bytes CC header, 1 byte nonce id, 8 bytes auth code
+			// HALF_NONCE_SIZE bytes iv, 1 byte frame control, 1 byte CC header, 1 byte nonce id, 8 bytes auth code
 			validatePayload(
-				this.payload.length >= HALF_NONCE_SIZE + 1 + 2 + 1 + 8,
+				this.payload.length >= HALF_NONCE_SIZE + 1 + 1 + 1 + 8,
 			);
 			const iv = this.payload.slice(0, HALF_NONCE_SIZE);
 			const encryptedPayload = this.payload.slice(HALF_NONCE_SIZE, -9);
