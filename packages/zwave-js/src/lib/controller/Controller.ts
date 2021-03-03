@@ -1068,6 +1068,10 @@ export class ZWaveController extends EventEmitter {
 					this._nodes.set(newNode.id, newNode);
 					this._nodePendingInclusion = undefined;
 
+					// We're communicating with the device, so assume it is alive
+					// If it is actually a sleeping device, it will be marked as such later
+					newNode.markAsAlive();
+
 					// Assign return route to make sure the node's responses reach us
 					try {
 						this.driver.controllerLog.logNode(newNode.id, {
@@ -1172,6 +1176,10 @@ export class ZWaveController extends EventEmitter {
 					);
 					this._nodePendingReplace = undefined;
 					this._nodes.set(newNode.id, newNode);
+
+					// We're communicating with the device, so assume it is alive
+					// If it is actually a sleeping device, it will be marked as such later
+					newNode.markAsAlive();
 
 					// Assign return route to make sure the node's responses reach us
 					try {
