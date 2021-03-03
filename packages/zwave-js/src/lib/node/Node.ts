@@ -1138,7 +1138,15 @@ version:               ${this.version}`;
 		});
 
 		// Assume that sleeping nodes start asleep
-		if (this.canSleep) this.markAsAsleep();
+		if (this.canSleep) {
+			if (this.status === NodeStatus.Alive) {
+				// unless it was just inluded and is currently communicating with us
+				// In that case we need to switch from alive/dead to awake/asleep
+				this.markAsAwake();
+			} else {
+				this.markAsAsleep();
+			}
+		}
 
 		await this.setInterviewStage(InterviewStage.ProtocolInfo);
 	}
