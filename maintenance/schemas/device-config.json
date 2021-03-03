@@ -508,9 +508,12 @@
 							"label",
 							"valueSize",
 							"minValue",
-							"maxValue",
-							"allowManualEntry"
-						]
+							"maxValue"
+						],
+						"not": {
+							"$comment": "not required means forbidden in JSON schema",
+							"required": ["allowManualEntry"]
+						}
 					},
 					"else": {
 						"required": [
