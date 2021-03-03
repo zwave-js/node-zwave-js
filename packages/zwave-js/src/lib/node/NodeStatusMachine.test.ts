@@ -106,6 +106,13 @@ describe("lib/driver/NodeStatusMachine", () => {
 			{
 				start: "alive",
 				event: "AWAKE",
+				canSleep: true,
+				target: "awake",
+			},
+			{
+				start: "alive",
+				event: "AWAKE",
+				canSleep: false,
 				target: "alive",
 			},
 			{
