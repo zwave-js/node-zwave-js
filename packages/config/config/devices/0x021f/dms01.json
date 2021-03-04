@@ -18,8 +18,8 @@
 	"supportsZWavePlus": true,
 	"paramInformation": {
 		"1": {
-			"label": "Primary Notification Volume Level",
-			"valueSize": 2,
+			"label": "Primary Notification Volume",
+			"valueSize": 1,
 			"minValue": 1,
 			"maxValue": 3,
 			"defaultValue": 2,
@@ -28,22 +28,22 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "Low Volume",
+					"label": "Low",
 					"value": 1
 				},
 				{
-					"label": "Medium Volume",
+					"label": "Medium",
 					"value": 2
 				},
 				{
-					"label": "High Volume",
+					"label": "High",
 					"value": 3
 				}
 			]
 		},
 		"2": {
 			"label": "Primary Notification Length",
-			"valueSize": 2,
+			"valueSize": 1,
 			"minValue": 1,
 			"maxValue": 255,
 			"defaultValue": 2,
@@ -64,42 +64,35 @@
 					"value": 3
 				},
 				{
-					"label": "Plays Until Battery Is Depleted",
+					"label": "Forever",
 					"value": 255
 				}
 			]
 		},
 		"3": {
 			"label": "Secondary Notification Length",
-			"valueSize": 2,
+			"valueSize": 1,
+			"unit": "minutes",
 			"minValue": 0,
 			"maxValue": 255,
 			"defaultValue": 1,
 			"readOnly": false,
 			"writeOnly": false,
-			"allowManualEntry": false,
+			"allowManualEntry": true,
 			"options": [
 				{
-					"label": "Does Not Stop",
+					"label": "Forever",
 					"value": 0
 				},
 				{
-					"label": "One Minute",
-					"value": 1
-				},
-				{
-					"label": "Five Minutes",
-					"value": 5
-				},
-				{
-					"label": "Chime Will Not Play",
+					"label": "Disabled",
 					"value": 255
 				}
 			]
 		},
 		"4": {
-			"label": "Secondary Notification Volume Level",
-			"valueSize": 2,
+			"label": "Secondary Notification Volume",
+			"valueSize": 1,
 			"minValue": 1,
 			"maxValue": 3,
 			"defaultValue": 2,
@@ -108,22 +101,22 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "Low Volume",
+					"label": "Low",
 					"value": 1
 				},
 				{
-					"label": "Medium Volume",
+					"label": "Medium",
 					"value": 2
 				},
 				{
-					"label": "High Volume",
+					"label": "High",
 					"value": 3
 				}
 			]
 		},
 		"5": {
 			"label": "Primary Notification Sound",
-			"valueSize": 2,
+			"valueSize": 1,
 			"minValue": 1,
 			"maxValue": 10,
 			"defaultValue": 9,
@@ -136,7 +129,7 @@
 					"value": 1
 				},
 				{
-					"label": "Fur Elise",
+					"label": "Für Elise",
 					"value": 2
 				},
 				{
@@ -175,10 +168,10 @@
 		},
 		"6": {
 			"label": "Secondary Notification Sound",
-			"valueSize": 2,
+			"valueSize": 1,
 			"minValue": 1,
 			"maxValue": 10,
-			"defaultValue": 9,
+			"defaultValue": 10,
 			"readOnly": false,
 			"writeOnly": false,
 			"allowManualEntry": false,
@@ -188,7 +181,7 @@
 					"value": 1
 				},
 				{
-					"label": "Fur Elise",
+					"label": "Für Elise",
 					"value": 2
 				},
 				{
@@ -226,9 +219,8 @@
 			]
 		},
 		"7": {
-			"label": "Toggle secondary chime",
-			"description": "Toggles between primary and secondary chime for binary switch",
-			"valueSize": 2,
+			"label": "Toggle notification sound",
+			"valueSize": 1,
 			"minValue": 1,
 			"maxValue": 2,
 			"defaultValue": 1,
@@ -237,14 +229,19 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "Primary notification will play",
+					"label": "Primary notification",
 					"value": 1
 				},
 				{
-					"label": "Secondary notification will play",
+					"label": "Secondary notification",
 					"value": 2
 				}
 			]
 		}
+	},
+	"metadata": {
+		"inclusion": "When prompted by the controller:\n1. The Siren should be within 10’ of your Z-Wave controller for the inclusion process. After successful pairing, the device can be brought to the desired lo-cation.\n2. Remove the BACK COVER by twisting it CLOCKWISE.\n3. Remove the BATTERY TABS.\n4. Press the CONNECT BUTTON quickly 3 times in a row.\n\nThe LED RING will flash five times indicating exclusion/disconnection.",
+		"exclusion": "When prompted by the controller:\n1. Remove the BACK COVER from the MAIN BODY.\n2. Press the CONNECT BUTTON quickly 3 times in a row.\n\nThe LED RING will flash five times indicating exclusion/disconnection.",
+		"reset": "If needed, the Siren can be reset locally by following these steps. Only do this when your Z-Wave controller is disconnected or otherwise unreachable. Beware that resetting your device will disconnect it from the system:\n1. Remove the BACK COVER and confirm that your Siren is powered up.\n2. Press and hold the CONNECT BUTTON for at least 10 seconds then release. A flashing light indicates a successful factory reset.\n3. The Siren’s memory will be erased to factory settings."
 	}
 }
