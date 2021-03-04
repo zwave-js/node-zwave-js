@@ -1,0 +1,634 @@
+// Logic Group MATRIX ZBA7140
+// Matrix ZBA7140
+{
+	"revision": 4,
+	"manufacturer": "Logic Group",
+	"manufacturerId": "0x0234",
+	"label": "MATRIX ZBA7140",
+	"description": "Matrix ZBA7140",
+	"devices": [
+		{
+			"productType": "0x0004",
+			"productId": "0x0129"
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"associations": {
+		"1": {
+			"label": "Lifeline",
+			"maxNodes": 5,
+			"isLifeline": true
+		},
+		"2": {
+			"label": "Button 1 Basic",
+			"description": "Button 1 Basic",
+			"maxNodes": 5
+		},
+		"3": {
+			"label": "Button 1 Multilevel",
+			"description": "Button 1 Multilevel",
+			"maxNodes": 5
+		},
+		"4": {
+			"label": "Button 2 Basic",
+			"description": "Button 2 Basic",
+			"maxNodes": 5
+		},
+		"5": {
+			"label": "Button 4 Basic",
+			"description": "Button 4 Basic",
+			"maxNodes": 5
+		},
+		"6": {
+			"label": "Button 3 Basic",
+			"description": "Button 3 Basic",
+			"maxNodes": 5
+		},
+		"7": {
+			"label": "Button 3 Multilevel",
+			"description": "Button 3 Multilevel",
+			"maxNodes": 5
+		},
+		"9": {
+			"label": "Button 4 Multilevel",
+			"description": "Button 4 Multilevel",
+			"maxNodes": 5
+		}
+	},
+	"paramInformation": {
+		"1": {
+			"label": "Enable Central Scene notifications",
+			"description": "This parameter can be used for enabling or disabling Central scene notifications",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 1,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true,
+			"options": [
+				{
+					"label": "Central Scene notifications are disabled.",
+					"value": 0
+				},
+				{
+					"label": "Central Scene Notifications are enabled. (Default)",
+					"value": 1
+				}
+			]
+		},
+		"2": {
+			"label": "Pushbutton press threshold time",
+			"description": "Specifies the time that a pushbutton must be activated before it is detected as pressed.",
+			"valueSize": 2,
+			"minValue": 1,
+			"maxValue": 1000,
+			"defaultValue": 400,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false
+		},
+		"3": {
+			"label": "Pushbutton held threshold time",
+			"description": "Specifies the time that a pushbutton must have been activated before it is accepted as “held-down”.",
+			"valueSize": 2,
+			"minValue": 1,
+			"maxValue": 5000,
+			"defaultValue": 600,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false
+		},
+		"4": {
+			"label": "Mode of the LED indication.",
+			"description": "This parameter specifies the mode of the LED indication.",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 2,
+			"defaultValue": 1,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "LED indication is turned off.",
+					"value": 0
+				},
+				{
+					"label": "LEDs indicates the current level of the battery, when the device is in",
+					"value": 1
+				},
+				{
+					"label": "LED colour is set by configuration parameter 5.",
+					"value": 2
+				}
+			]
+		},
+		"6": {
+			"label": "Associations groups, transmission when included secure.",
+			"description": "This parameter specifies if commands are transmitted as a secure message for each of the association groups.",
+			"valueSize": 2,
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 255,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "All messages in all groups are sent as insecure.",
+					"value": 0
+				},
+				{
+					"label": "Messages in association group 2 are sent as secure.",
+					"value": 1
+				},
+				{
+					"label": "Messages in association group 3 are sent as secure.",
+					"value": 2
+				},
+				{
+					"label": "Messages in association group 4 are sent as secure.",
+					"value": 4
+				},
+				{
+					"label": "Messages in association group 5 are sent as secure.",
+					"value": 8
+				},
+				{
+					"label": "Messages in association group 6 are sent as secure.",
+					"value": 16
+				},
+				{
+					"label": "Messages in association group 7 are sent as secure.",
+					"value": 32
+				},
+				{
+					"label": "Messages in association group 8 are sent as secure.",
+					"value": 64
+				},
+				{
+					"label": "Messages in association group 9 are sent as secure.",
+					"value": 128
+				},
+				{
+					"label": "All messages in all groups  are sent as secure. (Default)",
+					"value": 255
+				}
+			]
+		},
+		"7": {
+			"label": "Pushbutton 1 functionality.",
+			"description": "This parameter specifies the functionality of pushbutton 1.",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 3,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false
+		},
+		"10": {
+			"label": "Pushbutton 2 functionality.",
+			"description": "This parameter specifies the functionality of pushbutton 2.",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 3,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false
+		},
+		"13": {
+			"label": "Pushbutton 3 functionality.",
+			"description": "This parameter specifies the functionality of pushbutton 3.",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 3,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false
+		},
+		"16": {
+			"label": "Pushbutton 4 functionality.",
+			"description": "This parameter specifies the functionality of pushbutton 4.",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 3,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false
+		},
+		"5[0x01]": {
+			"label": "LEDs colour indication, Byte 1",
+			"description": "Specifies the level for the red colour. (Default is 255)",
+			"valueSize": 4,
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 255,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false
+		},
+		"5[0xff00]": {
+			"label": "LEDs colour indication, Byte 2",
+			"description": "Specifies the level for the green colour. (Default is 85)",
+			"valueSize": 4,
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 85,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false
+		},
+		"5[0xff0000]": {
+			"label": "LEDs colour indication, Byte 3",
+			"description": "Specifies the level for the blue colour. (Default is 85)",
+			"valueSize": 4,
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 85,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false
+		},
+		"5[0x01000000]": {
+			"label": "Not used.",
+			"description": "This byte is not used and must be set to 0.",
+			"valueSize": 4,
+			"minValue": 0,
+			"maxValue": 0,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false
+		},
+		"8[0x01]": {
+			"label": "Switch multilevel set single-activation values for pushbutton 1, Byte 1",
+			"description": "Enable/Disable",
+			"valueSize": 4,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 1,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Disabled –A single activation of the pushbutton will not send commands",
+					"value": 0
+				},
+				{
+					"label": "Enabled –A single activation will send commands to devices in the asso",
+					"value": 1
+				}
+			]
+		},
+		"8[0xff00]": {
+			"label": "Switch multilevel set single-activation values for pushbutton 1, Byte 2",
+			"description": "Upper switch value",
+			"valueSize": 4,
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 255,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false
+		},
+		"8[0xff0000]": {
+			"label": "Switch multilevel set single-activation values for pushbutton 1, Byte 3",
+			"description": "Lower switch value",
+			"valueSize": 4,
+			"minValue": 0,
+			"maxValue": 99,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false
+		},
+		"8[0x01000000]": {
+			"label": "Switch multilevel set single-activation values for pushbutton 1, Byte 4",
+			"description": "Duration",
+			"valueSize": 4,
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false
+		},
+		"9[0x01]": {
+			"label": "Switch Multilevel Set double-activation values for pushbutton 1. Byte 1",
+			"description": "Enable/Disable",
+			"valueSize": 4,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 1,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false
+		},
+		"9[0xff00]": {
+			"label": "Switch Multilevel Set double-activation values for pushbutton 1. Byte 2",
+			"description": "Upper switch value",
+			"valueSize": 4,
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 99,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false
+		},
+		"9[0xff0000]": {
+			"label": "Switch Multilevel Set double-activation values for pushbutton 1. Byte 3",
+			"description": "Lower switch value",
+			"valueSize": 4,
+			"minValue": 0,
+			"maxValue": 99,
+			"defaultValue": 99,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false
+		},
+		"9[0x01000000]": {
+			"label": "Switch Multilevel Set double-activation values for pushbutton 1. Byte 4",
+			"description": "Duration",
+			"valueSize": 4,
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false
+		},
+		"11[0x01]": {
+			"label": "Switch multilevel set single-activation values for pushbutton 2, Byte 1",
+			"description": "Enable/Disable",
+			"valueSize": 4,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 1,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false
+		},
+		"11[0xff00]": {
+			"label": "Switch multilevel set single-activation values for pushbutton 2, Byte 2",
+			"description": "Upper switch value",
+			"valueSize": 4,
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 255,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false
+		},
+		"11[0xff0000]": {
+			"label": "Switch multilevel set single-activation values for pushbutton 2, Byte 3",
+			"description": "Lower switch value",
+			"valueSize": 4,
+			"minValue": 0,
+			"maxValue": 99,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false
+		},
+		"11[0x01000000]": {
+			"label": "Switch multilevel set single-activation values for pushbutton 2, Byte 4",
+			"description": "Duration",
+			"valueSize": 4,
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false
+		},
+		"12[0x01]": {
+			"label": "Switch Multilevel Set double-activation values for pushbutton 2. Byte 1",
+			"description": "Enable/Disable",
+			"valueSize": 4,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 1,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false
+		},
+		"12[0xff00]": {
+			"label": "Switch Multilevel Set double-activation values for pushbutton 2. Byte 2",
+			"description": "Upper switch value",
+			"valueSize": 4,
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 99,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false
+		},
+		"12[0xff0000]": {
+			"label": "Switch Multilevel Set double-activation values for pushbutton 2. Byte 3",
+			"description": "Lower switch value",
+			"valueSize": 4,
+			"minValue": 0,
+			"maxValue": 99,
+			"defaultValue": 99,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false
+		},
+		"12[0x01000000]": {
+			"label": "Switch Multilevel Set double-activation values for pushbutton 2. Byte 4",
+			"description": "Duration",
+			"valueSize": 4,
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false
+		},
+		"14[0x01]": {
+			"label": "Switch multilevel set single-activation values for pushbutton 3, Byte 1",
+			"description": "Enable/Disable",
+			"valueSize": 4,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 1,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false
+		},
+		"14[0xff00]": {
+			"label": "Switch multilevel set single-activation values for pushbutton 3, Byte 2",
+			"description": "Upper switch value.",
+			"valueSize": 4,
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 255,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false
+		},
+		"14[0xff0000]": {
+			"label": "Switch multilevel set single-activation values for pushbutton 3, Byte 3",
+			"description": "Lower switch value",
+			"valueSize": 4,
+			"minValue": 0,
+			"maxValue": 99,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false
+		},
+		"14[0x01000000]": {
+			"label": "Switch multilevel set single-activation values for pushbutton 3, Byte 3",
+			"description": "Duaration",
+			"valueSize": 4,
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false
+		},
+		"15[0x01]": {
+			"label": "Switch Multilevel Set double-activation values for pushbutton 3. Byte 1",
+			"description": "Enable/Disable",
+			"valueSize": 4,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 1,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false
+		},
+		"15[0xff00]": {
+			"label": "Switch Multilevel Set double-activation values for pushbutton 3. Byte 2",
+			"description": "Upper switch value",
+			"valueSize": 4,
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 99,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false
+		},
+		"15[0xff0000]": {
+			"label": "Switch Multilevel Set double-activation values for pushbutton 3. Byte 3",
+			"description": "Lower switch value",
+			"valueSize": 4,
+			"minValue": 0,
+			"maxValue": 99,
+			"defaultValue": 99,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false
+		},
+		"15[0x01000000]": {
+			"label": "Switch Multilevel Set double-activation values for pushbutton 3. Byte 4",
+			"description": "Duration",
+			"valueSize": 4,
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false
+		},
+		"17[0x01]": {
+			"label": "Switch multilevel set single-activation values for pushbutton 4, Byte 1",
+			"description": "Enable/Disable",
+			"valueSize": 4,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 1,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false
+		},
+		"17[0xff00]": {
+			"label": "Switch multilevel set single-activation values for pushbutton 4, Byte 2",
+			"description": "Upper switch value",
+			"valueSize": 4,
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 255,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false
+		},
+		"17[0xff0000]": {
+			"label": "Switch multilevel set single-activation values for pushbutton 4, Byte 3",
+			"description": "Lower switch value",
+			"valueSize": 4,
+			"minValue": 0,
+			"maxValue": 99,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false
+		},
+		"17[0x01000000]": {
+			"label": "Switch multilevel set single-activation values for pushbutton 4, Byte 4",
+			"description": "Duration",
+			"valueSize": 4,
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false
+		},
+		"18[0x01]": {
+			"label": "Switch Multilevel Set double-activation values for pushbutton 4. Byte 1",
+			"description": "Enable/Disable",
+			"valueSize": 4,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 1,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false
+		},
+		"18[0xff00]": {
+			"label": "Switch Multilevel Set double-activation values for pushbutton 4. Byte 2",
+			"description": "Upper switch value",
+			"valueSize": 4,
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 99,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false
+		},
+		"18[0xff0000]": {
+			"label": "Switch Multilevel Set double-activation values for pushbutton 4. Byte 3",
+			"description": "Lower switch value",
+			"valueSize": 4,
+			"minValue": 0,
+			"maxValue": 99,
+			"defaultValue": 99,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false
+		},
+		"18[0x01000000]": {
+			"label": "Switch Multilevel Set double-activation values for pushbutton 4. Byte 4",
+			"description": "Duration",
+			"valueSize": 4,
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false
+		}
+	}
+}
