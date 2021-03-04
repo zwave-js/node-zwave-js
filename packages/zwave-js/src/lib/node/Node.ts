@@ -1008,12 +1008,9 @@ export class ZWaveNode extends Endpoint {
 			// Mark nodes as potentially ready. The first message will determine if it is
 			this.readyMachine.send("RESTART_INTERVIEW_FROM_CACHE");
 
-			// Assume that sleeping nodes start asleep and ping listening nodes to check their status
-			if (this.canSleep) {
-				this.markAsAsleep();
-			} else if (this.isListening) {
-				await this.ping();
-			}
+			// Ping listening nodes to check their status
+			// Sleeping nodes are assumed to be asleep after a restart from cache
+			if (this.isListening) await this.ping();
 		}
 
 		// At this point the basic interview of new nodes is done. Start here when re-interviewing known nodes
@@ -3043,6 +3040,9 @@ version:               ${this.version}`;
 		tryParse("isSecure", "boolean");
 		tryParse("isBeaming", "boolean");
 		tryParse("version", "number");
+
+		// A node that can sleep should be assumed to be sleeping after resuming from cache
+		if (this.canSleep) this.markAsAsleep();
 
 		if (isArray(obj.neighbors)) {
 			// parse only valid node IDs
