@@ -27,6 +27,8 @@ export enum TransportServiceCommand {
 	SubsequentSegment = 0xe0,
 }
 
+const MAX_SEGMENT_SIZE = 39;
+
 @commandClass(CommandClasses["Transport Service"])
 @implementedVersion(2)
 export class TransportServiceCC extends CommandClass {
@@ -52,6 +54,14 @@ export class TransportServiceCC extends CommandClass {
 			ret.payload,
 		]);
 		return ret;
+	}
+
+	/** Encapsulates a command that should be sent in multiple segments */
+	public static encapsulate(
+		_driver: Driver,
+		_cc: CommandClass,
+	): TransportServiceCC {
+		throw new Error("not implemented");
 	}
 }
 
@@ -104,6 +114,9 @@ export class TransportServiceCCFirstSegment extends TransportServiceCC {
 			}
 
 			this.partialDatagram = this.payload.slice(payloadOffset, -2);
+			// A node supporting the Transport Service Command Class, version 2
+			// MUST NOT send Transport Service segments with the Payload field longer than 39 bytes.
+			validatePayload(this.partialDatagram.length <= MAX_SEGMENT_SIZE);
 		} else {
 			this.datagramSize = options.datagramSize;
 			this.sessionId = options.sessionId;
@@ -153,32 +166,13 @@ export class TransportServiceCCFirstSegment extends TransportServiceCC {
 		return super.serialize();
 	}
 
-	public mergePartialCCs(
-		partials: TransportServiceCCSubsequentSegment[],
-	): void {
-		// Concat the CC buffers
-		const datagram = Buffer.allocUnsafe(this.datagramSize);
-		this.partialDatagram.copy(datagram, 0);
-		for (const partial of partials) {
-			// Ensure that we don't try to write out-of-bounds
-			if (
-				partial.datagramOffset + partial.partialDatagram.length >
-				datagram.length
-			) {
-				throw new ZWaveError(
-					`The partial datagram offset and length in a segment are not compatible to the communicated datagram length`,
-					ZWaveErrorCodes.PacketFormat_InvalidPayload,
-				);
-			}
-			partial.partialDatagram.copy(datagram, partial.datagramOffset);
-		}
+	public expectMoreMessages(): boolean {
+		return true; // The FirstSegment message always expects more messages
+	}
 
-		// and deserialize the CC
-		this.encapsulated = CommandClass.from(this.driver, {
-			data: datagram,
-			fromEncapsulation: true,
-			encapCC: this,
-		});
+	public getPartialCCSessionId(): Record<string, any> | undefined {
+		// Only use the session ID to identify the session, not the CC command
+		return { ccCommand: undefined, sessionId: this.sessionId };
 	}
 
 	protected computeEncapsulationOverhead(): number {
@@ -239,6 +233,9 @@ export class TransportServiceCCSubsequentSegment extends TransportServiceCC {
 			}
 
 			this.partialDatagram = this.payload.slice(payloadOffset, -2);
+			// A node supporting the Transport Service Command Class, version 2
+			// MUST NOT send Transport Service segments with the Payload field longer than 39 bytes.
+			validatePayload(this.partialDatagram.length <= MAX_SEGMENT_SIZE);
 		} else {
 			this.datagramSize = options.datagramSize;
 			this.datagramOffset = options.datagramOffset;
@@ -253,6 +250,74 @@ export class TransportServiceCCSubsequentSegment extends TransportServiceCC {
 	public sessionId: number;
 	public headerExtension: Buffer | undefined;
 	public partialDatagram: Buffer;
+
+	// This can only be received
+	private _encapsulated!: CommandClass;
+	public get encapsulated(): CommandClass {
+		return this._encapsulated;
+	}
+
+	public expectMoreMessages(
+		session: [
+			TransportServiceCCFirstSegment,
+			...TransportServiceCCSubsequentSegment[]
+		],
+	): boolean {
+		if (!(session[0] instanceof TransportServiceCCFirstSegment)) {
+			// First segment is missing
+			return true;
+		}
+		const datagramSize = session[0].datagramSize;
+		const chunkSize = session[0].partialDatagram.length;
+		const received = new Array<boolean>(
+			Math.ceil(datagramSize / chunkSize),
+		).fill(false);
+		for (const segment of [...session, this]) {
+			const offset =
+				segment instanceof TransportServiceCCFirstSegment
+					? 0
+					: segment.datagramOffset;
+			received[offset / chunkSize] = true;
+		}
+		// Expect more messages as long as we haven't received everything
+		return !received.every(Boolean);
+	}
+
+	public getPartialCCSessionId(): Record<string, any> | undefined {
+		// Only use the session ID to identify the session, not the CC command
+		return { ccCommand: undefined, sessionId: this.sessionId };
+	}
+
+	public mergePartialCCs(
+		partials: [
+			TransportServiceCCFirstSegment,
+			...TransportServiceCCSubsequentSegment[]
+		],
+	): void {
+		// Concat the CC buffers
+		const datagram = Buffer.allocUnsafe(this.datagramSize);
+		for (const partial of [...partials, this]) {
+			// Ensure that we don't try to write out-of-bounds
+			const offset =
+				partial instanceof TransportServiceCCFirstSegment
+					? 0
+					: partial.datagramOffset;
+			if (offset + partial.partialDatagram.length > datagram.length) {
+				throw new ZWaveError(
+					`The partial datagram offset and length in a segment are not compatible to the communicated datagram length`,
+					ZWaveErrorCodes.PacketFormat_InvalidPayload,
+				);
+			}
+			partial.partialDatagram.copy(datagram, offset);
+		}
+
+		// and deserialize the CC
+		this._encapsulated = CommandClass.from(this.driver, {
+			data: datagram,
+			fromEncapsulation: true,
+			encapCC: this,
+		});
+	}
 
 	public serialize(): Buffer {
 		// Transport Service re-uses the lower 3 bits of the ccCommand as payload

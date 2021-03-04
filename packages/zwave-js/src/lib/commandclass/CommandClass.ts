@@ -834,8 +834,12 @@ export class CommandClass {
 		return undefined; // Only select CCs support to be split
 	}
 
-	/** When a CC supports to be split into multiple partial CCs, this indicates that the last report hasn't been received yet */
-	public expectMoreMessages(): boolean {
+	/**
+	 * When a CC supports to be split into multiple partial CCs, this indicates that the last report hasn't been received yet.
+	 * @param session The previously received set of messages received in this partial CC session
+	 */
+	// eslint-disable-next-line @typescript-eslint/no-unused-vars
+	public expectMoreMessages(session: CommandClass[]): boolean {
 		return false; // By default, all CCs are monolithic
 	}
 
