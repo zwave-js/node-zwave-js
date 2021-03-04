@@ -1146,6 +1146,42 @@ describe("lib/node/Node", () => {
 			expect(node.getCCVersion(0x27)).toBe(0);
 			node.destroy();
 		});
+
+		it("deserialize() should set the node status to Asleep if the node can sleep", () => {
+			const input = {
+				...serializedTestNode,
+				isListening: false,
+				isFrequentListening: false,
+			};
+			const node = new ZWaveNode(1, fakeDriver);
+			node.deserialize(input);
+			expect(node.status).toBe(NodeStatus.Asleep);
+			node.destroy();
+		});
+
+		it("deserialize() should set the node status to Unknown if the node is a listening node", () => {
+			const input = {
+				...serializedTestNode,
+				isListening: true,
+				isFrequentListening: false,
+			};
+			const node = new ZWaveNode(1, fakeDriver);
+			node.deserialize(input);
+			expect(node.status).toBe(NodeStatus.Unknown);
+			node.destroy();
+		});
+
+		it("deserialize() should set the node status to Unknown if the node is a frequent listening node", () => {
+			const input = {
+				...serializedTestNode,
+				isListening: false,
+				isFrequentListening: true,
+			};
+			const node = new ZWaveNode(1, fakeDriver);
+			node.deserialize(input);
+			expect(node.status).toBe(NodeStatus.Unknown);
+			node.destroy();
+		});
 	});
 
 	describe("the emitted events", () => {
