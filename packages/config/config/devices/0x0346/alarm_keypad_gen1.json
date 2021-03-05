@@ -344,17 +344,53 @@
 				}
 			]
 		},
-		"23": {
-			"$if": "productId === 0x0202",
-			"label": "Bit mask data for supported languages.",
-			"valueSize": 4,
-			"minValue": 0,
-			"maxValue": 4294967295,
-			"unsigned": true,
-			"defaultValue": 0,
-			"readOnly": true,
-			"writeOnly": false,
-			"allowManualEntry": false
+		"23[0x1]": {
+			"$import": "templates/ring_template.json#supported_language",
+			"label": "US English"
+		},
+		"23[0x2]": {
+			"$import": "templates/ring_template.json#supported_language",
+			"label": "UK English"
+		},
+		"23[0x4]": {
+			"$import": "templates/ring_template.json#supported_language",
+			"label": "French"
+		},
+		"23[0x8]": {
+			"$import": "templates/ring_template.json#supported_language",
+			"label": "German"
+		},
+		"23[0x10]": {
+			"$import": "templates/ring_template.json#supported_language",
+			"label": "Italian"
+		},
+		"23[0x20]": {
+			"$import": "templates/ring_template.json#supported_language",
+			"label": "Spanish"
+		},
+		"23[0x40]": {
+			"$import": "templates/ring_template.json#supported_language",
+			"label": "Dutch"
+		},
+		"23[0x80]": {
+			"$import": "templates/ring_template.json#supported_language",
+			"label": "Danish"
+		},
+		"23[0x100]": {
+			"$import": "templates/ring_template.json#supported_language",
+			"label": "Norwegian"
+		},
+		"23[0x200]": {
+			"$import": "templates/ring_template.json#supported_language",
+			"label": "Swedish"
+		},
+		"23[0x400]": {
+			"$import": "templates/ring_template.json#supported_language",
+			"label": "Finnish"
+		},
+		"23[0x800]": {
+			"$import": "templates/ring_template.json#supported_language",
+			"label": "Arabic"
 		},
 		"24[0xff]": {
 			"$if": "productId === 0x0202",
