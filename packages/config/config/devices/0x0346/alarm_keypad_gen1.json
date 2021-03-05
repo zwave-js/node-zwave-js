@@ -103,11 +103,10 @@
 		"7": {
 			"label": "Enable / Disable Extended Battery Life Mode",
 			"valueSize": 1,
-			"unit": "seconds",
 			"minValue": 0,
 			"maxValue": 1,
 			"defaultValue": 0,
-			"readOnly": true,
+			"readOnly": false,
 			"writeOnly": false,
 			"allowManualEntry": false,
 			"options": [
@@ -344,55 +343,55 @@
 				}
 			]
 		},
-		"23[0x1]": {
+		"23[0x1000000]": {
 			"$import": "templates/ring_template.json#supported_language",
 			"label": "US English"
 		},
-		"23[0x2]": {
+		"23[0x2000000]": {
 			"$import": "templates/ring_template.json#supported_language",
 			"label": "UK English"
 		},
-		"23[0x4]": {
+		"23[0x4000000]": {
 			"$import": "templates/ring_template.json#supported_language",
 			"label": "French"
 		},
-		"23[0x8]": {
+		"23[0x8000000]": {
 			"$import": "templates/ring_template.json#supported_language",
 			"label": "German"
 		},
-		"23[0x10]": {
+		"23[0x10000000]": {
 			"$import": "templates/ring_template.json#supported_language",
 			"label": "Italian"
 		},
-		"23[0x20]": {
+		"23[0x20000000]": {
 			"$import": "templates/ring_template.json#supported_language",
 			"label": "Spanish"
 		},
-		"23[0x40]": {
+		"23[0x40000000]": {
 			"$import": "templates/ring_template.json#supported_language",
 			"label": "Dutch"
 		},
-		"23[0x80]": {
+		"23[0x80000000]": {
 			"$import": "templates/ring_template.json#supported_language",
 			"label": "Danish"
 		},
-		"23[0x100]": {
+		"23[0x10000]": {
 			"$import": "templates/ring_template.json#supported_language",
 			"label": "Norwegian"
 		},
-		"23[0x200]": {
+		"23[0x20000]": {
 			"$import": "templates/ring_template.json#supported_language",
 			"label": "Swedish"
 		},
-		"23[0x400]": {
+		"23[0x40000]": {
 			"$import": "templates/ring_template.json#supported_language",
 			"label": "Finnish"
 		},
-		"23[0x800]": {
+		"23[0x80000]": {
 			"$import": "templates/ring_template.json#supported_language",
 			"label": "Arabic"
 		},
-		"24[0xff]": {
+		"24[0xff0000]": {
 			"$if": "productId === 0x0202",
 			"label": "Quantity of audio files",
 			"valueSize": 3,
@@ -414,7 +413,7 @@
 			"writeOnly": false,
 			"allowManualEntry": false
 		},
-		"24[0xff0000]": {
+		"24[0xff]": {
 			"$if": "productId === 0x0202",
 			"label": "Audio file sub version",
 			"valueSize": 3,
