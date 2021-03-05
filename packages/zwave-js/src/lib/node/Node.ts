@@ -2985,10 +2985,11 @@ protocol version:      ${this._protocolVersion}`;
 			isFrequentListening: this.isFrequentListening,
 			isRouting: this.isRouting,
 			supportedDataRates: this.supportedDataRates,
-			protocolVersion: this.protocolVersion
-				? ProtocolVersion[this.protocolVersion]
-				: undefined,
-			nodeType: this.nodeType ? NodeType[this.nodeType] : undefined,
+			protocolVersion: this.protocolVersion,
+			nodeType:
+				this.nodeType != undefined
+					? NodeType[this.nodeType]
+					: undefined,
 			supportsSecurity: this.supportsSecurity,
 			supportsBeaming: this.supportsBeaming,
 			isSecure: this.isSecure ?? unknownBoolean,
@@ -3053,7 +3054,7 @@ protocol version:      ${this._protocolVersion}`;
 				this[`_${key}` as keyof this] = obj[key];
 		};
 		const tryParseLegacy = (
-			keys: Extract<keyof ZWaveNode, string>[],
+			keys: string[],
 			types: ("boolean" | "number" | "string")[],
 		): void => {
 			for (const key of keys) {
@@ -3065,6 +3066,10 @@ protocol version:      ${this._protocolVersion}`;
 		};
 		tryParse("isListening", "boolean");
 		tryParseLegacy(["isFrequentListening"], ["string", "boolean"]);
+		if ((this._isFrequentListening as any) === true) {
+			// fallback for legacy cache files
+			this._isFrequentListening = "1000ms";
+		}
 		tryParse("isRouting", "boolean");
 		if (typeof obj.maxBaudRate === "number") {
 			this._supportedDataRates = [obj.maxBaudRate];
@@ -3074,13 +3079,15 @@ protocol version:      ${this._protocolVersion}`;
 		tryParse("isSecure", "boolean");
 		tryParse("supportsSecurity", "boolean");
 		tryParse("supportsBeaming", "boolean");
-		if (typeof obj.version === "number") {
-			this._protocolVersion = obj.vesion;
-		} else if (obj.protocolVersion in ProtocolVersion) {
-			this._protocolVersion = ProtocolVersion[obj.protocolVersion] as any;
-		}
+		tryParseLegacy(["protocolVersion", "version"], ["number"]);
 		if (obj.nodeType in NodeType) {
 			this._nodeType = NodeType[obj.nodeType] as any;
+		}
+		if (
+			isArray(obj.supportedDataRates) &&
+			obj.supportedDataRates.every((r: unknown) => typeof r === "number")
+		) {
+			this._supportedDataRates = obj.supportedDataRates;
 		}
 
 		// A node that can sleep should be assumed to be sleeping after resuming from cache
