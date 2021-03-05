@@ -32,3 +32,4 @@ zwave-js-*.tgz
 
 .secrets
 .test-payloads
+packages/config/config/devices/0x0234/zdb5100.json
