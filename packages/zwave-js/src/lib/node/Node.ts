@@ -102,7 +102,6 @@ import {
 	ApplicationUpdateRequestNodeInfoRequestFailed,
 } from "../controller/ApplicationUpdateRequest";
 import {
-	Baudrate,
 	GetNodeProtocolInfoRequest,
 	GetNodeProtocolInfoResponse,
 } from "../controller/GetNodeProtocolInfoMessages";
@@ -130,12 +129,14 @@ import {
 	RequestNodeInfoResponse,
 } from "./RequestNodeInfoMessages";
 import type {
+	DataRate,
+	FLiRS,
 	TranslatedValueID,
 	ZWaveNodeEventCallbacks,
 	ZWaveNodeEvents,
 	ZWaveNodeValueEventCallbacks,
 } from "./Types";
-import { InterviewStage, NodeStatus } from "./Types";
+import { InterviewStage, NodeStatus, NodeType, ProtocolVersion } from "./Types";
 
 export interface ZWaveNode {
 	on<TEvent extends ZWaveNodeEvents>(
@@ -442,12 +443,14 @@ export class ZWaveNode extends Endpoint {
 	}
 
 	private _isListening: boolean | undefined;
+	/** Whether this node is always listening or not */
 	public get isListening(): boolean | undefined {
 		return this._isListening;
 	}
 
-	private _isFrequentListening: boolean | undefined;
-	public get isFrequentListening(): boolean | undefined {
+	private _isFrequentListening: FLiRS | undefined;
+	/** Indicates the wakeup interval if this node is a FLiRS node. `false` if it isn't. */
+	public get isFrequentListening(): FLiRS | undefined {
 		return this._isFrequentListening;
 	}
 
@@ -458,13 +461,20 @@ export class ZWaveNode extends Endpoint {
 	}
 
 	private _isRouting: boolean | undefined;
+	/** Whether the node supports routing/forwarding messages. */
 	public get isRouting(): boolean | undefined {
 		return this._isRouting;
 	}
 
-	private _maxBaudRate: Baudrate | undefined;
-	public get maxBaudRate(): Baudrate | undefined {
-		return this._maxBaudRate;
+	private _supportedDataRates: readonly DataRate[] | undefined;
+	public get supportedDataRates(): readonly DataRate[] | undefined {
+		return this._supportedDataRates;
+	}
+
+	public get maxDataRate(): DataRate | undefined {
+		if (this._supportedDataRates) {
+			return Math.max(...this._supportedDataRates) as DataRate;
+		}
 	}
 
 	private _isSecure: Maybe<boolean> | undefined;
@@ -475,25 +485,31 @@ export class ZWaveNode extends Endpoint {
 		this._isSecure = value;
 	}
 
-	private _version: number | undefined;
+	private _protocolVersion: ProtocolVersion | undefined;
 	/** The Z-Wave protocol version this node implements */
-	public get version(): number | undefined {
-		return this._version;
+	public get protocolVersion(): ProtocolVersion | undefined {
+		return this._protocolVersion;
 	}
 
-	private _isBeaming: boolean | undefined;
-	public get isBeaming(): boolean | undefined {
-		return this._isBeaming;
+	private _nodeType: NodeType | undefined;
+	/** Whether this node is a controller (can calculate routes) or an end node (relies on route info) */
+	public get nodeType(): NodeType | undefined {
+		return this._nodeType;
 	}
 
-	private _isRoutingSlave: boolean | undefined;
-	public get isRoutingSlave(): boolean | undefined {
-		return this._isRoutingSlave;
+	private _supportsSecurity: boolean | undefined;
+	/**
+	 * Whether this node supports security (S0 or S2).
+	 * **WARNING:** Nodes often report this incorrectly - do not blindly trust it.
+	 */
+	public get supportsSecurity(): boolean | undefined {
+		return this._supportsSecurity;
 	}
 
-	private _isController: boolean | undefined;
-	public get isController(): boolean | undefined {
-		return this._isController;
+	private _supportsBeaming: boolean | undefined;
+	/** Whether this node can issue wakeup beams to FLiRS nodes */
+	public get supportsBeaming(): boolean | undefined {
+		return this._supportsBeaming;
 	}
 
 	public get manufacturerId(): number | undefined {
@@ -517,11 +533,11 @@ export class ZWaveNode extends Endpoint {
 		return this.getValue(getZWavePlusVersionValueId());
 	}
 
-	public get nodeType(): ZWavePlusNodeType | undefined {
+	public get zwavePlusNodeType(): ZWavePlusNodeType | undefined {
 		return this.getValue(getNodeTypeValueId());
 	}
 
-	public get roleType(): ZWavePlusRoleType | undefined {
+	public get zwavePlusRoleType(): ZWavePlusRoleType | undefined {
 		return this.getValue(getRoleTypeValueId());
 	}
 
@@ -909,10 +925,12 @@ export class ZWaveNode extends Endpoint {
 		this._isListening = undefined;
 		this._isFrequentListening = undefined;
 		this._isRouting = undefined;
-		this._maxBaudRate = undefined;
+		this._supportedDataRates = undefined;
 		this._isSecure = undefined;
-		this._version = undefined;
-		this._isBeaming = undefined;
+		this._protocolVersion = undefined;
+		this._nodeType = undefined;
+		this._supportsSecurity = undefined;
+		this._supportsBeaming = undefined;
 		this._deviceConfig = undefined;
 		this._neighbors = [];
 		this._hasEmittedNoNetworkKeyError = false;
@@ -1106,29 +1124,30 @@ export class ZWaveNode extends Endpoint {
 		for (const cc of this._deviceClass.mandatoryControlledCCs) {
 			this.addCC(cc, { isControlled: true });
 		}
+
 		this._isListening = resp.isListening;
 		this._isFrequentListening = resp.isFrequentListening;
 		this._isRouting = resp.isRouting;
-		this._maxBaudRate = resp.maxBaudRate;
-		// Many nodes don't have this flag set, even if they are included securely
-		// So we treat false as "unknown"
-		this._isSecure = resp.isSecure || unknownBoolean;
-		this._version = resp.version;
-		this._isBeaming = resp.isBeaming;
-		this._isRoutingSlave = resp.isRoutingSlave;
-		this._isController = resp.isController;
+		this._supportedDataRates = resp.supportedDataRates;
+		this._protocolVersion = resp.protocolVersion;
+		this._nodeType = resp.nodeType;
+		this._supportsSecurity = resp.supportsSecurity;
+		this._supportsBeaming = resp.supportsBeaming;
+
+		this._isSecure = unknownBoolean;
 
 		const logMessage = `received response for protocol info:
 basic device class:    ${this._deviceClass.basic.label}
 generic device class:  ${this._deviceClass.generic.label}
 specific device class: ${this._deviceClass.specific.label}
-is a listening device: ${this.isListening}
+node type:             ${getEnumMemberName(NodeType, this._nodeType)}
+is always listening:   ${this.isListening}
 is frequent listening: ${this.isFrequentListening}
-is a routing device:   ${this.isRouting}
-is a secure device:    ${this.isSecure}
-is a beaming device:   ${this.isBeaming}
-maximum baud rate:     ${this.maxBaudRate} kbps
-version:               ${this.version}`;
+can route messages:    ${this.isRouting}
+supports security:     ${this._supportsSecurity}
+supports beaming:      ${this._supportsBeaming}
+maximum data rate:     ${this.maxDataRate} kbps
+protocol version:      ${this._protocolVersion}`;
 		this.driver.controllerLog.logNode(this.id, {
 			message: logMessage,
 			direction: "inbound",
@@ -2965,10 +2984,14 @@ version:               ${this.version}`;
 			isListening: this.isListening,
 			isFrequentListening: this.isFrequentListening,
 			isRouting: this.isRouting,
-			maxBaudRate: this.maxBaudRate,
+			supportedDataRates: this.supportedDataRates,
+			protocolVersion: this.protocolVersion
+				? ProtocolVersion[this.protocolVersion]
+				: undefined,
+			nodeType: this.nodeType ? NodeType[this.nodeType] : undefined,
+			supportsSecurity: this.supportsSecurity,
+			supportsBeaming: this.supportsBeaming,
 			isSecure: this.isSecure ?? unknownBoolean,
-			isBeaming: this.isBeaming,
-			version: this.version,
 			commandClasses: {} as JSONObject,
 		};
 		// Sort the CCs by their key before writing to the object
@@ -3029,15 +3052,36 @@ version:               ${this.version}`;
 			if (typeof obj[key] === type)
 				this[`_${key}` as keyof this] = obj[key];
 		};
+		const tryParseLegacy = (
+			keys: Extract<keyof ZWaveNode, string>[],
+			types: ("boolean" | "number" | "string")[],
+		): void => {
+			for (const key of keys) {
+				if (types.includes(typeof obj[key] as any)) {
+					this[`_${keys[0]}` as keyof this] = obj[key];
+					return;
+				}
+			}
+		};
 		tryParse("isListening", "boolean");
-		tryParse("isFrequentListening", "boolean");
+		tryParseLegacy(["isFrequentListening"], ["string", "boolean"]);
 		tryParse("isRouting", "boolean");
-		tryParse("maxBaudRate", "number");
+		if (typeof obj.maxBaudRate === "number") {
+			this._supportedDataRates = [obj.maxBaudRate];
+		}
 		// isSecure may be boolean or "unknown"
 		tryParse("isSecure", "string");
 		tryParse("isSecure", "boolean");
-		tryParse("isBeaming", "boolean");
-		tryParse("version", "number");
+		tryParse("supportsSecurity", "boolean");
+		tryParse("supportsBeaming", "boolean");
+		if (typeof obj.version === "number") {
+			this._protocolVersion = obj.vesion;
+		} else if (obj.protocolVersion in ProtocolVersion) {
+			this._protocolVersion = ProtocolVersion[obj.protocolVersion] as any;
+		}
+		if (obj.nodeType in NodeType) {
+			this._nodeType = NodeType[obj.nodeType] as any;
+		}
 
 		// A node that can sleep should be assumed to be sleeping after resuming from cache
 		if (this.canSleep) this.markAsAsleep();

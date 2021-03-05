@@ -344,7 +344,7 @@ enum InterviewStage {
 ### `deviceClass`
 
 ```ts
-readonly deviceClass: DeviceClass
+readonly deviceClass: DeviceClass | undefined;
 ```
 
 This property returns the node's **DeviceClass**, which provides further information about the kind of device this node is.
@@ -402,10 +402,10 @@ readonly zwavePlusVersion: number | undefined
 
 Returns the version of the `Z-Wave+` Command Class this node supports. If the CC is supported, the value only exists **after** the node is ready.
 
-### `nodeType`
+### `zwavePlusNodeType`
 
 ```ts
-readonly nodeType: ZWavePlusNodeType | undefined
+readonly zwavePlusNodeType: ZWavePlusNodeType | undefined
 ```
 
 If the `Z-Wave+` Command Class is supported, this returns the `Z-Wave+` node type this device has, which is one of the following values:
@@ -419,10 +419,10 @@ enum ZWavePlusNodeType {
 }
 ```
 
-### `roleType`
+### `zwavePlusRoleType`
 
 ```ts
-readonly roleType: ZWavePlusRoleType | undefined
+readonly zwavePlusRoleType: ZWavePlusRoleType | undefined
 ```
 
 If the `Z-Wave+` Command Class is supported, this returns the `Z-Wave+` role type this device has, which is one of the following values:
@@ -445,58 +445,95 @@ enum ZWavePlusRoleType {
 ### `isListening`
 
 ```ts
-readonly isListening: boolean
+readonly isListening: boolean | undefined;
 ```
 
-Whether this node is a listening node.
+Whether this node is always listening.
 
 ### `isFrequentListening`
 
 ```ts
-readonly isFrequentListening: boolean
+readonly isFrequentListening: false | "250ms" | "1000ms" | undefined;
 ```
 
-Whether this node is a frequent listening node.
+Indicates the wakeup interval if this node is a FLiRS node. `false` if it isn't.
+
+### `canSleep`
+
+```ts
+readonly canSleep: boolean | undefined;
+```
+
+Whether this node can sleep. If this is the case it must be expected to be asleep most of the time.
 
 ### `isRouting`
 
 ```ts
-readonly isRouting: boolean
+readonly isRouting: boolean | undefined;
 ```
 
-Whether this node is a routing node.
+Whether the node supports routing/forwarding messages. If both this property and `isListening` are true, it can be assumed that the node **will** route messages.
 
-### `maxBaudRate`
+### `supportedDataRates`
 
 ```ts
-readonly maxBaudRate: number
+readonly supportedDataRates: readonly number[] | undefined;
 ```
 
-The baud rate used to communicate with this node. Possible values are `9.6k`, `40k` and `100k`.
+A list of data rates (in bits per second) this node supports. Possible values are `9600`, `40000` and `100000`.
+
+### `maxDataRate`
+
+```ts
+readonly maxDataRate: number
+```
+
+The maximum data rate this nodes supports.
+
+### `supportsSecurity`
+
+```ts
+readonly supportsSecurity: boolean | undefined;
+```
+
+Whether this node supports secure communication (S0 or S2).
+
+> [!WARNING] Nodes often report this incorrectly - do not blindly trust this value.
 
 ### `isSecure`
 
 ```ts
-readonly isSecure: boolean
+readonly isSecure: boolean | "unknown" | undefined;
 ```
 
 Whether this node is communicating securely with the controller.
 
-### `isBeaming`
+### `supportsBeaming`
 
 ```ts
-readonly isBeaming: boolean
+readonly supportsBeaming: boolean | undefined;
 ```
 
-Whether this node is a beaming node.
+Whether this node can issue wakeup beams to FLiRS nodes
 
-### `version`
+### `protocolVersion`
 
 ```ts
-readonly version: number
+readonly protocolVersion: ProtocolVersion | undefined
 ```
 
 The Z-Wave protocol version this node implements.
+
+<!-- #import ProtocolVersion from "zwave-js" -->
+
+```ts
+enum ProtocolVersion {
+	"unknown" = 0,
+	"2.0" = 1,
+	"4.2x / 5.0x" = 2,
+	"4.5x / 6.0x" = 3,
+}
+```
 
 ### `firmwareVersion`
 
