@@ -1780,17 +1780,15 @@ version:               ${this.version}`;
 		// was wrong. Stop querying it regularly for updates
 		this.cancelManualValueRefresh(command.ccId);
 
-		// If this is a report for the root endpoint and the node does not support Multi Channel Association CC V3+,
-		// we need to map it to endpoint 1
+		// If this is a report for the root endpoint and the node supports the CC on another endpoint,
+		// we need to map it to endpoint 1. Either it does not support multi channel associations or
+		// it is misbehaving. In any case, we would hide this report if we didn't map it
 		if (
 			command.endpointIndex === 0 &&
 			command.constructor.name.endsWith("Report") &&
 			this.getEndpointCount() >= 1 &&
 			// skip the root to endpoint mapping if the root endpoint values are not meant to mirror endpoint 1
-			!this._deviceConfig?.compat?.preserveRootApplicationCCValueIDs &&
-			// Don't check for MCA support or devices without it won't be handled
-			// Instead rely on the version. If MCA is not supported, this will be 0
-			this.getCCVersion(CommandClasses["Multi Channel Association"]) < 3
+			!this._deviceConfig?.compat?.preserveRootApplicationCCValueIDs
 		) {
 			// Find the first endpoint that supports the received CC - if there is none, we don't map the report
 			for (const endpoint of this.getAllEndpoints()) {
