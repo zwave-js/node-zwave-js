@@ -115,14 +115,14 @@ getAssociations(nodeId: number): ReadonlyMap<number, readonly Association[]>;
 isAssociationAllowed(nodeId: number, group: number, association: Association): boolean;
 addAssociations(nodeId: number, group: number, associations: Association[]): Promise<void>;
 removeAssociations(nodeId: number, group: number, associations: Association[]): Promise<void>;
-removeNodeFromAllAssocations(nodeId: number): Promise<void>;
+removeNodeFromAllAssociations(nodeId: number): Promise<void>;
 ```
 
 -   `getAssociationGroups` returns all association groups for a given node.
 -   `getAssociations` returns all defined associations of a given node.
 -   `addAssociations` can be used to add one or more associations to a node's group. You should check if each association is allowed using `isAssociationAllowed` before doing so.
 -   To remove a previously added association, use `removeAssociations`
--   A node can be removed from all other nodes' associations using `removeNodeFromAllAssocations`
+-   A node can be removed from all other nodes' associations using `removeNodeFromAllAssociations`
 
 #### `AssociationGroup` interface
 

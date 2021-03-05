@@ -1114,7 +1114,7 @@ export class Driver extends EventEmitter {
 		);
 
 		// Asynchronously remove the node from all possible associations, ignore potential errors
-		this.controller.removeNodeFromAllAssocations(node.id).catch((err) => {
+		this.controller.removeNodeFromAllAssociations(node.id).catch((err) => {
 			this.driverLog.print(
 				`Failed to remove node ${node.id} from all associations: ${err.message}`,
 				"error",
