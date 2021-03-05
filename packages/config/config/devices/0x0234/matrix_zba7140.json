@@ -224,7 +224,7 @@
 			"writeOnly": false,
 			"allowManualEntry": true
 		},
-		"5[0x01]": {
+		"5[0xff]": {
 			"label": "LEDs colour indication, Byte 1",
 			"description": "Specifies the level for the red colour. (Default is 255)",
 			"valueSize": 4,
@@ -257,7 +257,7 @@
 			"writeOnly": false,
 			"allowManualEntry": true
 		},
-		"5[0x01000000]": {
+		"5[0xff000000]": {
 			"label": "Not used.",
 			"description": "This byte is not used and must be set to 0.",
 			"valueSize": 4,
@@ -311,7 +311,7 @@
 			"writeOnly": false,
 			"allowManualEntry": true
 		},
-		"8[0x01000000]": {
+		"8[0xff000000]": {
 			"label": "Switch multilevel set single-activation values for pushbutton 1, Byte 4",
 			"description": "Duration",
 			"valueSize": 4,
@@ -355,7 +355,7 @@
 			"writeOnly": false,
 			"allowManualEntry": true
 		},
-		"9[0x01000000]": {
+		"9[0xff000000]": {
 			"label": "Switch Multilevel Set double-activation values for pushbutton 1. Byte 4",
 			"description": "Duration",
 			"valueSize": 4,
@@ -399,7 +399,7 @@
 			"writeOnly": false,
 			"allowManualEntry": true
 		},
-		"11[0x01000000]": {
+		"11[0xff000000]": {
 			"label": "Switch multilevel set single-activation values for pushbutton 2, Byte 4",
 			"description": "Duration",
 			"valueSize": 4,
@@ -443,7 +443,7 @@
 			"writeOnly": false,
 			"allowManualEntry": true
 		},
-		"12[0x01000000]": {
+		"12[0xff000000]": {
 			"label": "Switch Multilevel Set double-activation values for pushbutton 2. Byte 4",
 			"description": "Duration",
 			"valueSize": 4,
@@ -487,7 +487,7 @@
 			"writeOnly": false,
 			"allowManualEntry": true
 		},
-		"14[0x01000000]": {
+		"14[0xff000000]": {
 			"label": "Switch multilevel set single-activation values for pushbutton 3, Byte 3",
 			"description": "Duaration",
 			"valueSize": 4,
@@ -531,7 +531,7 @@
 			"writeOnly": false,
 			"allowManualEntry": true
 		},
-		"15[0x01000000]": {
+		"15[0xff000000]": {
 			"label": "Switch Multilevel Set double-activation values for pushbutton 3. Byte 4",
 			"description": "Duration",
 			"valueSize": 4,
@@ -575,7 +575,7 @@
 			"writeOnly": false,
 			"allowManualEntry": true
 		},
-		"17[0x01000000]": {
+		"17[0xff000000]": {
 			"label": "Switch multilevel set single-activation values for pushbutton 4, Byte 4",
 			"description": "Duration",
 			"valueSize": 4,
@@ -619,7 +619,7 @@
 			"writeOnly": false,
 			"allowManualEntry": true
 		},
-		"18[0x01000000]": {
+		"18[0xff000000]": {
 			"label": "Switch Multilevel Set double-activation values for pushbutton 4. Byte 4",
 			"description": "Duration",
 			"valueSize": 4,
