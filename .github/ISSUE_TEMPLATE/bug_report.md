@@ -46,7 +46,7 @@ assignees:
 - [ ] I am **not** using HomeAssistant. **Or:** a developer has told me to come here.
 - [ ] I am **not** using ZWaveJS2MQTT. **Or:** a developer has told me to come here.
 - [ ] I have checked the troubleshooting section and my problem is **not** described there.
-- [ ] I have read the changelog problem was **not** mentioned there.
+- [ ] I have read the changelog and my problem was **not** mentioned there.
 
 **Describe the bug**
 
