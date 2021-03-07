@@ -1,14 +1,15 @@
-// GE/Jasco 12727
+// GE/Jasco 12727 / ZW4003
 // Wireless Lighting Control Smart Toggle Switch
 {
 	"manufacturer": "GE/Jasco",
 	"manufacturerId": "0x0063",
-	"label": "12727",
+	"label": "12727 / ZW4003",
 	"description": "Wireless Lighting Control Smart Toggle Switch",
 	"devices": [
 		{
 			"productType": "0x4952",
-			"productId": "0x3033"
+			"productId": "0x3033",
+			"zwaveAllianceId": 1200
 		}
 	],
 	"firmwareVersion": {

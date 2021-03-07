@@ -1,21 +1,26 @@
-// Electronic Solutions DBMZ EU
+// Electronic Solutions DBMZ
 // DC Motor Controller - Window coverings
 {
 	"manufacturer": "Electronic Solutions",
 	"manufacturerId": "0x0033",
-	"label": "DBMZ EU",
+	"label": "DBMZ",
 	"description": "DC Motor Controller - Window coverings",
 	"devices": [
 		{
 			"productType": "0x5250",
-			"productId": "0x3032"
+			"productId": "0x3032",
+			"zwaveAllianceId": [
+				305,
+				40,
+				41,
+				42
+			]
 		}
 	],
 	"firmwareVersion": {
 		"min": "0.0",
 		"max": "255.255"
 	},
-	"supportsZWavePlus": true,
 	"paramInformation": {
 		"1": {
 			"label": "Calibration",

@@ -8,7 +8,8 @@
 	"devices": [
 		{
 			"productType": "0x0248",
-			"productId": "0xa020"
+			"productId": "0xa020",
+			"zwaveAllianceId": 1602
 		}
 	],
 	"firmwareVersion": {
@@ -29,8 +30,8 @@
 		"2": {
 			"label": "Set-point display resolution",
 			"description": "range from 0.1 to 10°C 1=0.1°C 100=10°C",
-			"unit": "°C",
 			"valueSize": 2,
+			"unit": "°C",
 			"minValue": 1,
 			"maxValue": 100,
 			"defaultValue": 5,
@@ -41,8 +42,8 @@
 		"3": {
 			"label": "Min Set-point and override limit",
 			"description": "from min 0°C to max setpoint override limit 0=0°C 40=40°C",
-			"unit": "°C",
 			"valueSize": 2,
+			"unit": "°C",
 			"minValue": 0,
 			"maxValue": 40,
 			"defaultValue": 12,
@@ -53,8 +54,8 @@
 		"4": {
 			"label": "Max Set-point and override limit",
 			"description": "from min setpoint override limit to max 40°C 0=0°C 40=40°C",
-			"unit": "°C",
 			"valueSize": 2,
+			"unit": "°C",
 			"minValue": 0,
 			"maxValue": 40,
 			"defaultValue": 28,
@@ -65,8 +66,8 @@
 		"5": {
 			"label": "LED Flash period",
 			"description": "0 to 65535 seconds",
-			"unit": "seconds",
 			"valueSize": 4,
+			"unit": "seconds",
 			"minValue": 0,
 			"maxValue": 65535,
 			"defaultValue": 1,
@@ -77,8 +78,8 @@
 		"6": {
 			"label": "Set-point control function",
 			"description": "0=Disabled 1=Enabled",
-			"unit": "int",
 			"valueSize": 1,
+			"unit": "int",
 			"minValue": 0,
 			"maxValue": 1,
 			"defaultValue": 1,
@@ -99,8 +100,8 @@
 		"7": {
 			"label": "Temporarily override scheduler",
 			"description": "0=Disabled 1=Enabled",
-			"unit": "int",
 			"valueSize": 1,
+			"unit": "int",
 			"minValue": 0,
 			"maxValue": 1,
 			"defaultValue": 1,

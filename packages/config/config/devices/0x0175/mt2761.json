@@ -8,7 +8,8 @@
 	"devices": [
 		{
 			"productType": "0x0003",
-			"productId": "0x0052"
+			"productId": "0x0052",
+			"zwaveAllianceId": 2962
 		}
 	],
 	"firmwareVersion": {
@@ -286,5 +287,11 @@
 			"writeOnly": false,
 			"allowManualEntry": true
 		}
+	},
+	"metadata": {
+		"inclusion": "Module Inclusion (Adding to Z-wave network)\n• Connect module to power supply (with \ntemperature sensor connected - if purchased),\n• auto-inclusion (works for about 5 seconds after connected to power supply) or\n• press push button I1 three times within 3s (3 times change switch state within 3 seconds) or\n• press service button S (only applicable for 24 V SELV supply voltage) for more than 2 second.\nNOTE1: For auto-inclusion procedure, first set main controller into inclusion mode and then connect module to power supply.\nNOTE2: When connecting temperature sensor to module that has already been included, you have to exclude module first. Switch off power supply, connect the sensor and re-include the module.",
+		"exclusion": "Module Exclusion (Removing from Z-Wave network)\n• Connect module to power supply \n• bring module within maximum 1 meter (3 feet) of the main controller,\n• enable add/remove mode on main controller\nIf push button I1 is pressed three times within 3s (or service button S is pressed more than 2 and less than 6 seconds) module is excluded, but configuration parameters are not set to their default values.",
+		"reset": "• press push button I1 five times within 3s (5 times change switch state within 3 seconds) in the first 60 seconds after the module is connected to the power supply or\n• press service button S (only applicable for 24 V SELV supply voltage) for more than 6 second.\nBy this function all parameters of the module are set to their default values and the ID of the device is deleted.\nNOTE: Please use this procedure only when the network primary controller is missing or otherwise inoperable.\nNOTE: If the module is included with parameters 71 with value different to default and module reset is done, wait at least 30s before next inclusion",
+		"manual": "https://products.z-wavealliance.org/ProductManual/File?folder=&filename=MarketCertificationFiles/2962/Manual_Devolo_HC%20Shutter_FM.pdf"
 	}
 }

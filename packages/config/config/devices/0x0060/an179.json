@@ -1,29 +1,31 @@
-// Everspring AN179
+// Everspring HAN02
 // In-Wall Switch Module
 {
 	"manufacturer": "Everspring",
 	"manufacturerId": "0x0060",
-	"label": "AN179",
+	"label": "HAN02",
 	"description": "In-Wall Switch Module",
 	"devices": [
 		{
 			"productType": "0x0004",
-			"productId": "0x0008"
+			"productId": "0x0008",
+			"zwaveAllianceId": 1058
 		},
 		{
 			"productType": "0x0011",
-			"productId": "0x0001"
+			"productId": "0x0001",
+			"zwaveAllianceId": 695
 		},
 		{
 			"productType": "0x0011",
-			"productId": "0x0002"
+			"productId": "0x0002",
+			"zwaveAllianceId": 696
 		}
 	],
 	"firmwareVersion": {
 		"min": "0.0",
 		"max": "255.255"
 	},
-	"supportsZWavePlus": true,
 	"paramInformation": {
 		"1": {
 			"label": "Basic Set Command value",
@@ -51,7 +53,7 @@
 			"description": "Remember last status after power loss.",
 			"valueSize": 1,
 			"minValue": 0,
-			"maxValue": 255,
+			"maxValue": 1,
 			"defaultValue": 1,
 			"unsigned": true,
 			"readOnly": false,
@@ -73,7 +75,7 @@
 			"description": "Edge or toogle switch mode.",
 			"valueSize": 1,
 			"minValue": 0,
-			"maxValue": 255,
+			"maxValue": 1,
 			"defaultValue": 0,
 			"unsigned": true,
 			"readOnly": false,

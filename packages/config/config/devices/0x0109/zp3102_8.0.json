@@ -8,7 +8,11 @@
 	"devices": [
 		{
 			"productType": "0x2002",
-			"productId": "0x0205"
+			"productId": "0x0205",
+			"zwaveAllianceId": [
+				1070,
+				1702
+			]
 		}
 	],
 	"firmwareVersion": {
@@ -61,5 +65,11 @@
 			"writeOnly": false,
 			"allowManualEntry": true
 		}
+	},
+	"metadata": {
+		"inclusion": "Put the Z-Wave Interface Controller into 'inclusion' mode, and follow its instructions to add the ZP3102 to your Z-Wave network. For a successful inclusion, it is suggested to have the sensor and your Z-Wave controller about one meter apart. Press the Program Switch of the ZP3102 (refer to the manual for the location of the program switch) ready the ZP3102 for inclusion into the Z-Wave network. If inclusion does not take place or is unsuccessful within 20 seconds, the ZP3102 will go to sleep; if this happens, simply repeat pressing the program switch to try again",
+		"exclusion": "Put the Z-Wave Interface Controller into “exclusion” mode, and following its instruction to delete the ZP3102 to your Z-Wave network. Press the Program Switch of ZP3102 once to be excluded. The LED on the ZP3102 should start to flash",
+		"reset": "Removing the rear cover to wake up the device. Press Program Switch 10 times within 10 seconds, ZP3102 will go back to factory default. (This is to be used only in the case of the primary controller being inoperable or otherwise unavailable.)",
+		"manual": "https://products.z-wavealliance.org/ProductManual/File?folder=&filename=MarketCertificationFiles/1070/20140725%20-%20(Z-WAVE%20CERTIFICATION)%20ZP%203102-5%20PIR_20140722_500%20Series.pdf"
 	}
 }

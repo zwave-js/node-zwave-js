@@ -8,7 +8,8 @@
 	"devices": [
 		{
 			"productType": "0x4952",
-			"productId": "0x3032"
+			"productId": "0x3032",
+			"zwaveAllianceId": 1196
 		}
 	],
 	"firmwareVersion": {
@@ -20,7 +21,7 @@
 			"label": "Night Light",
 			"valueSize": 1,
 			"minValue": 0,
-			"maxValue": 255,
+			"maxValue": 2,
 			"defaultValue": 0,
 			"unsigned": true,
 			"readOnly": false,
@@ -45,7 +46,7 @@
 			"label": "Invert Switch",
 			"valueSize": 1,
 			"minValue": 0,
-			"maxValue": 255,
+			"maxValue": 1,
 			"defaultValue": 0,
 			"unsigned": true,
 			"readOnly": false,

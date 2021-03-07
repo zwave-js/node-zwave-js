@@ -1,14 +1,15 @@
-// GE/Jasco 12729
+// GE/Jasco 12729 / ZW3004
 // In-Wall Smart Dimmer
 {
 	"manufacturer": "GE/Jasco",
 	"manufacturerId": "0x0063",
-	"label": "12729",
+	"label": "12729 / ZW3004",
 	"description": "In-Wall Smart Dimmer",
 	"devices": [
 		{
 			"productType": "0x4944",
-			"productId": "0x3033"
+			"productId": "0x3033",
+			"zwaveAllianceId": 1201
 		}
 	],
 	"firmwareVersion": {
@@ -21,7 +22,7 @@
 			"description": "Invert the ON/OFF Switch State.",
 			"valueSize": 1,
 			"minValue": 0,
-			"maxValue": 255,
+			"maxValue": 1,
 			"defaultValue": 0,
 			"unsigned": true,
 			"readOnly": false,

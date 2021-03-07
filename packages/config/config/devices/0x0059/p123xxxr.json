@@ -1,10 +1,10 @@
 // Secure Meters (UK) Ltd. P123XXXR
-// Generation Meter Series P.
+// Generation Meter Series P
 {
 	"manufacturer": "Secure Meters (UK) Ltd.",
 	"manufacturerId": "0x0059",
 	"label": "P123XXXR",
-	"description": "Generation Meter Series P.",
+	"description": "Generation Meter Series P",
 	"devices": [
 		{
 			"productType": "0x0005",

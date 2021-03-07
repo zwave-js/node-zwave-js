@@ -7,6 +7,11 @@
 	"description": "USB Dongle",
 	"devices": [
 		{
+			"productType": "0x0000",
+			"productId": "0x0000",
+			"zwaveAllianceId": 1239
+		},
+		{
 			"productType": "0x1001",
 			"productId": "0x0101",
 			"zwaveAllianceId": 849

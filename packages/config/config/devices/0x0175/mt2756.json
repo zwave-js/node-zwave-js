@@ -8,7 +8,8 @@
 	"devices": [
 		{
 			"productType": "0x0002",
-			"productId": "0x0021"
+			"productId": "0x0021",
+			"zwaveAllianceId": 2227
 		}
 	],
 	"firmwareVersion": {
@@ -102,5 +103,11 @@
 			"writeOnly": false,
 			"allowManualEntry": true
 		}
+	},
+	"metadata": {
+		"inclusion": "1. Have Z-Wave™ Controller entered inclusion mode.\n2. Pressing the tamper key three times within 1.5 \nseconds to enter the inclusion mode.\n3. After add successful, the device will wake to \nreceive the setting command from Z-Wave™ \nController about 20 seconds.",
+		"exclusion": "1. Have Z-Wave™ Controller entered exclusion mode.\n2. Pressing tamper key three times within 1.5 seconds\nto enter the exclusion mode.\nNode ID has been excluded.",
+		"reset": "Notice: Use this procedure only in the event \nthat the primary controller is lost or \notherwise inoperable.\n1. Pressing tamper key four times within 1.5 seconds \nand do not release the tamper key in the 4 th \npressed, and the LED will light ON.\n2. After 3 seconds the LED will turn OFF, after that \nwithin 2 seconds, release the tamper key. If \nsuccessful, the LED will light ON one second. \nOtherwise, the LED will flash once.\n3. IDs are excluded and all settings will reset to \nfactory default",
+		"manual": "https://products.z-wavealliance.org/ProductManual/File?folder=&filename=MarketCertificationFiles/2227/MT02756_MT02755_Manual.pdf"
 	}
 }

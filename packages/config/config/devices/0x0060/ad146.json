@@ -1,21 +1,21 @@
-// Everspring AD146
+// Everspring AD146-0
 // In-Wall Dimmer Module
 {
 	"manufacturer": "Everspring",
 	"manufacturerId": "0x0060",
-	"label": "AD146",
+	"label": "AD146-0",
 	"description": "In-Wall Dimmer Module",
 	"devices": [
 		{
 			"productType": "0x0003",
-			"productId": "0x0002"
+			"productId": "0x0002",
+			"zwaveAllianceId": 1057
 		}
 	],
 	"firmwareVersion": {
 		"min": "0.0",
 		"max": "255.255"
 	},
-	"supportsZWavePlus": true,
 	"paramInformation": {
 		"1": {
 			"label": "Basic Set Command value",
@@ -42,7 +42,7 @@
 			"label": "Remember last status",
 			"valueSize": 1,
 			"minValue": 0,
-			"maxValue": 255,
+			"maxValue": 1,
 			"defaultValue": 1,
 			"unsigned": true,
 			"readOnly": false,
@@ -64,7 +64,7 @@
 			"description": "Edge or toogle switch mode.",
 			"valueSize": 1,
 			"minValue": 0,
-			"maxValue": 255,
+			"maxValue": 1,
 			"defaultValue": 0,
 			"unsigned": true,
 			"readOnly": false,
@@ -86,7 +86,7 @@
 			"description": "Dimming or On/Off Switch",
 			"valueSize": 1,
 			"minValue": 0,
-			"maxValue": 255,
+			"maxValue": 1,
 			"defaultValue": 0,
 			"unsigned": true,
 			"readOnly": false,
@@ -103,5 +103,11 @@
 				}
 			]
 		}
+	},
+	"metadata": {
+		"inclusion": "1. Put the Z-Wave Controller into inclusion mode.\n2. Press the link key three times within 1.5 seconds to put the unit into inclusion mode.",
+		"exclusion": "1. Put the Z-Wave Controller into exclusion mode.\n2. Press the link key three times within 1.5 seconds to put the unit into exclusion mode.",
+		"reset": "(This procedure should only be used when the primary controller is no longer operational.)\n1. Press the link key three times within 1.5 seconds to put the unit into exclusion mode.\n2. Within 1 second of step 1, press link key again and hold until LED is off (about 5 sec.).\n3. Node ID is excluded, and the unit is returned to the factory default state.",
+		"manual": "https://products.z-wavealliance.org/ProductManual/File?folder=&filename=MarketCertificationFiles/1057/Manual_AD146-0_20140728.pdf"
 	}
 }
