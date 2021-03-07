@@ -125,7 +125,7 @@
 			]
 		},
 		"40": {
-			"label": "Treshold Change in Power for reporting",
+			"label": "Threshold Change in Power for reporting",
 			"description": "Change of power consumption [Watt] reporting threshold",
 			"unit": "%",
 			"valueSize": 1,
@@ -136,8 +136,8 @@
 			"writeOnly": false,
 			"allowManualEntry": true
 		},
-		"41": {
-			"label": "Treshold time for power reporting",
+		"42": {
+			"label": "Threshold time for power reporting",
 			"unit": "sec",
 			"valueSize": 2,
 			"minValue": 0,
