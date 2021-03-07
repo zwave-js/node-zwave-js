@@ -20,6 +20,11 @@
 		},
 		{
 			"productType": "0x0243",
+			"productId": "0x0216",
+			"zwaveAllianceId": [817, 818]
+		},
+		{
+			"productType": "0x0243",
 			"productId": "0x0300"
 		}
 	],

@@ -1,0 +1,53 @@
+// SATCO Products, Inc. 86-100
+// Z-Wave Plug-In On/Off Appliance Module
+{
+	"manufacturer": "SATCO Products, Inc.",
+	"manufacturerId": "0x0307",
+	"label": "86-100",
+	"description": "Z-Wave Plug-In On/Off Appliance Module",
+	"devices": [
+		{
+			"productType": "0x4447",
+			"productId": "0x3031",
+			"zwaveAllianceId": 2042
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"paramInformation": {
+		"3": {
+			"label": "Led Indicator",
+			"description": "The LED indicator will be on whenever the connected appliance is off, and turns off when the connected device is on",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 2,
+			"defaultValue": 0,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "LED on when load is on",
+					"value": 0
+				},
+				{
+					"label": "LED on when load is off",
+					"value": 1
+				},
+				{
+					"label": "Always off",
+					"value": 2
+				}
+			]
+		}
+	},
+	"metadata": {
+		"inclusion": "1. Put your network controller into inclusion mode following the instructions from your controller manufacturer\n2. When the controller is ready, single click the button on the front of 86-100 \n3. The controller should indicate that the new device was added successfully",
+		"exclusion": "1. Put your network controller into exclusion mode following the instructions from your controller manufacturer\n2. When the controller is ready, single click the button on the front of 86-100 \n3. The controller should indicate that the device was excluded successfully",
+		"reset": "Use this procedure only in the event that the network primary controller is lost or otherwise inoperable.\n\na. Unplug 86-100 from the AC outlet and also unplug the power plug of the appliance from the module(if plugged in)\nb. Press and hold the button on the 86-100 module\nc. Plug the 86-100 back into the AC outlet with the button pressed\nd. After 3 seconds, release the button. If you see the button blinks, that means the module has been reset successfully",
+		"manual": "https://products.z-wavealliance.org/ProductManual/File?folder=&filename=MarketCertificationFiles/2042/86-100%20IOT%20OM_102116.pdf"
+	}
+}

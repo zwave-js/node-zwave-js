@@ -1,0 +1,30 @@
+// Honeywell L7000-ME
+// Lynx Touch
+{
+	"manufacturer": "Honeywell",
+	"manufacturerId": "0x0039",
+	"label": "L7000-ME",
+	"description": "Lynx Touch",
+	"devices": [
+		{
+			"productType": "0x1001",
+			"productId": "0x0007",
+			"zwaveAllianceId": 1520
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"associations": {
+		"1": {
+			"label": "Group 1",
+			"maxNodes": 1,
+			"isLifeline": true
+		}
+	},
+	"metadata": {
+		"reset": "Press the Automation icon on the LYNX Touch Home Screen to access Z-Wave Home Automation features.\nUse down arrow to scroll to the Automation Screen Page 2, and press Tools button to access Advanced Tools option.\nPress Advanced Tools button to access additional Z-Wave options, and then press Reset Controller button",
+		"manual": "https://products.z-wavealliance.org/ProductManual/File?folder=&filename=MarketCertificationFiles/1520/LYNX_Touch_QG.pdf"
+	}
+}

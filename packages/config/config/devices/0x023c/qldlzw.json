@@ -1,0 +1,32 @@
+// SafeTech Products QLDLZW
+// The Doorlock
+{
+	"manufacturer": "SafeTech Products",
+	"manufacturerId": "0x023c",
+	"label": "QLDLZW",
+	"description": "The Doorlock",
+	"devices": [
+		{
+			"productType": "0x0001",
+			"productId": "0x0002",
+			"zwaveAllianceId": 1451
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"associations": {
+		"1": {
+			"label": "Group 1",
+			"maxNodes": 5,
+			"isLifeline": true
+		}
+	},
+	"metadata": {
+		"inclusion": "Prepare your Z-Wave controller to add a device to the network (refer to your controller's user manual.) Push the Z-Wave button on The Doorlock. The button is accessed through a small hole, insert a paperclip or similar to push it. (See diagram in Product Manual for button placement.)",
+		"exclusion": "Prepare your Z-Wave controller to remove a device from the network (refer to your controller's user manual)\nPush the Z-Wave button on The Doorlock. (See diagram in Product Manual for button placement.)",
+		"reset": "To reset The Doorlock's Z-Wave settings to their factory defaults, hold the Z-Wave button down for 5 seconds. (See diagram in Product Manual for button placement.) The reset procedure should only be used when the primary controller is missing or inoperable",
+		"manual": "https://products.z-wavealliance.org/ProductManual/File?folder=&filename=MarketCertificationFiles/1451/R003023_02-Doorlock%20Operating%20Instructions.pdf"
+	}
+}

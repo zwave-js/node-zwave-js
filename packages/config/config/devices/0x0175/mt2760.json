@@ -8,7 +8,8 @@
 	"devices": [
 		{
 			"productType": "0x0001",
-			"productId": "0x0051"
+			"productId": "0x0051",
+			"zwaveAllianceId": 2838
 		}
 	],
 	"firmwareVersion": {
@@ -512,5 +513,11 @@
 				}
 			]
 		}
+	},
+	"metadata": {
+		"inclusion": "AUTOMATICALLY ADDING THE DEVICE TO A Z-WAVE NETWORK (AUTO INCLUSION)\n1. Enable add/remove mode on your Z-Wave gateway (hub)\n2. Connect the device to the power supply (with the temperature sensor already connected – sold separately*).\n3. Auto-inclusion will be initiated within 5 seconds of connection to the power supply and the device will automatically enrol in your network\nMANUALLY ADDING THE DEVICE TO A Z-WAVE NETWORK (MANUAL INCLUSION)\n1. Enable add/remove mode on your Z-Wave gateway (hub)\n2. Connect the device to the power supply (with the temperature sensor already connected)\n3. Toggle the switch connected to the I1 terminal 3 times within 3 seconds\nOR\nIf the device is powered by 24 V SELV supply, press and hold the S (Service) button between 2 and 6 seconds\n4. A new multi-channel device will appear on your dashboard\n\nMake sure the device is excluded from your network before connecting the temperature sensor. Switch off the power supply, connect the temperature sensor, and re-include the device to your network.\nNOTE2: When connecting temperature sensor to module that has already been included, you have to exclude module first. Switch off power supply, connect the sensor and re-include the module.",
+		"exclusion": "REMOVAL FROM A ZWAVE NETWORK (Z-WAVE EXCLUSION)\n1. Connect the device to the power supply\n2. Make sure the device is within direct range of your Z-Wave gateway (hub) or use a hand-held Z-Wave remote to perform exclusion\n3. Enable add/remove mode on your Z-Wave gateway (hub)\n4. Toggle the switch connected to the I1 terminal 3 times within 3 seconds\nOR\nIf the device is powered by 24 V SELV supply, press and hold the S (Service) button between 2 and 6 seconds\n5. The device will be removed from your network but any custom configuration parameters will not be erased",
+		"reset": "FACTORY RESET\n1. Connect the device to the power supply\n2. Within the first minute (60 seconds) the device is connected to the power supply, toggle the switch connected to the I1 terminal 5 times within 3 seconds (5 times change switch state).\nOR\nIf the device is powered by 24 V SELV supply, press and hold the S (Service) button for at least 6 seconds\n\nBy resetting the device, all custom parameters previously set on the device will return to their default values, and the owner ID will be deleted. Use this reset procedure only when the main gateway (hub) is missing or otherwise inoperable.\n\nPlease use this procedure only when the network primary controller is missing or otherwise inoperable",
+		"manual": "https://products.z-wavealliance.org/ProductManual/File?folder=&filename=MarketCertificationFiles/2838/manualdevoloHCdimmerFM25012018_0910.pdf"
 	}
 }

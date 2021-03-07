@@ -1,0 +1,39 @@
+// LG U+ OSR-02
+// Open Sensor
+{
+	"manufacturer": "LG U+",
+	"manufacturerId": "0x022c",
+	"label": "OSR-02",
+	"description": "Open Sensor",
+	"devices": [
+		{
+			"productType": "0x0060",
+			"productId": "0x0001",
+			"zwaveAllianceId": 3625
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"paramInformation": {
+		"1": {
+			"label": "Battery Report Period",
+			"unit": "15 minutes",
+			"valueSize": 1,
+			"minValue": 1,
+			"maxValue": 127,
+			"defaultValue": 24,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		}
+	},
+	"metadata": {
+		"inclusion": "a. Press & hold Inclusion/Exclusion button for 5 seconds when Door Sensor is exclusion status.\nb. LED of Door sensor will be on 5 seconds later.\nc. Door sensor will try Inclusion for 30sec when button is released.\nd. LED will blink 3 times with 250ms interval if Inclusion is successful",
+		"exclusion": "a. Receiver will stay exclusion waiting mode.\nb. Press & hold Inclusion/Exclusion button for 5 seconds when Door Sensor is Inclusion status.\nc. LED of Door sensor will be on 5 seconds later.\nd. Door sensor will try Exclusion when button is released.\ne. LED will blink 3 times with 250ms interval if Exclusion is successful",
+		"reset": "a. Press & hold Inclusion/Exclusion button for 10sec.\nb. LED will blink while holding the button.\nc. Factory reset will be done in 5sec after releasing button and LED will blink 5 times with 100ms interval. Please use this procedure only when the network primary controller is missing or otherwise inoperable",
+		"manual": "https://products.z-wavealliance.org/ProductManual/File?folder=&filename=product_documents/3625/DoorSensor_UsersManual.pdf"
+	}
+}

@@ -1,0 +1,30 @@
+// Samsung SDS SHP-GS100M
+// IoT Hub
+{
+	"manufacturer": "Samsung SDS",
+	"manufacturerId": "0x022e",
+	"label": "SHP-GS100M",
+	"description": "IoT Hub",
+	"devices": [
+		{
+			"productType": "0x0007",
+			"productId": "0x0007",
+			"zwaveAllianceId": 1385
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"associations": {
+		"1": {
+			"label": "Group 1",
+			"maxNodes": 1,
+			"isLifeline": true
+		}
+	},
+	"metadata": {
+		"reset": "Use this procedure only when the network primary controller is missing or otherwise inoperable.\n1. Check the White or Blue LED of Top. White LED means that SHP-GS100M is Normal WiFi connection and has no slave device. Blue LED means that SHP-GS100M is Normal WiFi connection and has slave devices.\n2. Press Factory Default Reset Button during 10 seconds.",
+		"manual": "https://products.z-wavealliance.org/ProductManual/File?folder=&filename=MarketCertificationFiles/1385/[CEF18015]SHP-GS100M%20Manual_fn.doc"
+	}
+}

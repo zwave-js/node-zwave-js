@@ -1,0 +1,51 @@
+// Gas Keeper HT-A10
+// Smart Gas Keeper
+{
+	"manufacturer": "Gas Keeper",
+	"manufacturerId": "0x024c",
+	"label": "HT-A10",
+	"description": "Smart Gas Keeper",
+	"devices": [
+		{
+			"productType": "0x0100",
+			"productId": "0x0100",
+			"zwaveAllianceId": 1687
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"paramInformation": {
+		"1": {
+			"label": "Timer Setting",
+			"unit": "10 minutes",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 54,
+			"defaultValue": 1,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"2": {
+			"label": "Remained Time",
+			"unit": "minutes",
+			"valueSize": 2,
+			"minValue": 0,
+			"maxValue": 540,
+			"defaultValue": 0,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		}
+	},
+	"metadata": {
+		"inclusion": "This must be done at GAS valve and when closed. Press Timer UP button for 5 seconds till hearing beep once",
+		"exclusion": "This must be done at GAS valve and when closed. Press Timer UP button for 5 seconds till hearing beep once",
+		"reset": "This must be done at GAS valve and when closed. Press Timer UP button for 10 seconds till hearing beep once. Use this procedure only in the event that the network primary controller is missing or otherwise inoperable",
+		"manual": "https://products.z-wavealliance.org/ProductManual/File?folder=&filename=MarketCertificationFiles/1687/Manual_soosanhometech.pdf"
+	}
+}

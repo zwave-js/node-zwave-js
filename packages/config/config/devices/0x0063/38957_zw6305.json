@@ -1,0 +1,167 @@
+// GE/Jasco 38957/ZW6305
+// Slim Smart Door/Window Sensor
+{
+	"manufacturer": "GE/Jasco",
+	"manufacturerId": "0x0063",
+	"label": "38957/ZW6305",
+	"description": "Slim Smart Door/Window Sensor",
+	"devices": [
+		{
+			"productType": "0x4953",
+			"productId": "0x3139",
+			"zwaveAllianceId": 3115
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"paramInformation": {
+		"1": {
+			"label": "Reverse Open/Close Detection",
+			"description": "This parameter allows you to reverse the detection values of the device",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 0,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "(default) disabled",
+					"value": 0
+				},
+				{
+					"label": "Reverse event (open 16, close 17)",
+					"value": 1
+				}
+			]
+		},
+		"19": {
+			"label": "Alternate Exclusion",
+			"description": "This parameter allows you to enable the alternate exclusion method that is available for this device",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 0,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "(default) disabled",
+					"value": 0
+				},
+				{
+					"label": "Enabled",
+					"value": 1
+				}
+			]
+		},
+		"20": {
+			"label": "Inclusion Configuration",
+			"description": "This parameter allows you to change the inclusion configuration settings of this device",
+			"valueSize": 1,
+			"minValue": 1,
+			"maxValue": 2,
+			"defaultValue": 1,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "(default) - notification only",
+					"value": 1
+				},
+				{
+					"label": "Notification and basic report",
+					"value": 2
+				}
+			]
+		},
+		"21": {
+			"label": "Led Control (magnet Triggers Only)",
+			"description": "This parameter gives you the option to turn the LED off on magnetic triggers",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 0,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "(default) - enabled",
+					"value": 0
+				},
+				{
+					"label": "Disabled",
+					"value": 1
+				}
+			]
+		},
+		"23": {
+			"label": "Battery Report Interval",
+			"description": "This parameter allows you to choose how often the battery level is reported",
+			"valueSize": 4,
+			"minValue": 60,
+			"maxValue": 1440,
+			"defaultValue": 1440,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true,
+			"options": [
+				{
+					"label": "5-60 minutes",
+					"value": 60
+				},
+				{
+					"label": "6 hours",
+					"value": 360
+				},
+				{
+					"label": "12 hours",
+					"value": 720
+				},
+				{
+					"label": "(default) daily",
+					"value": 1440
+				}
+			]
+		},
+		"53": {
+			"label": "Tamper LED Control",
+			"description": "This parameter allows you to choose how often the LED will flash once the device/battery cover is tampered with",
+			"valueSize": 1,
+			"minValue": 1,
+			"maxValue": 2,
+			"defaultValue": 1,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "(default) continuous flash",
+					"value": 1
+				},
+				{
+					"label": "Flashes once, on initial tamper only",
+					"value": 2
+				}
+			]
+		}
+	},
+	"metadata": {
+		"inclusion": "1. Follow the instructions for your Z-Wave certified controller to add the sensor in the Z-Wave network.\n2. Once the controller is ready to add your sensor, ensure battery is installed with the correct polarity in the sensor and the battery tab has been removed.\n3. Press and release the programming button. This starts the manual add process. The red LED will begin to flash quickly as it begins the add process.\n4. The red LED will activate for 3 seconds to confirm the sensor has been added in the network.\n5. The controller’s app will indicate if it has discovered the sensor. If prompted by the controller to enter the S2 security code, refer to the QR code/security number on the back of the box, or the QR code label on the product. Enter the 5-digit code.",
+		"exclusion": "1. Follow the instructions for your Z-Wave certified controller to remove the sensor from the Z-Wave network.\n2. Once the controller is ready to remove your sensor, press and release the programming button on the sensor 1 time to remove it from the network.\n3. The red LED will blink 5 times to indicate it has been removed.",
+		"reset": "1. Press the programming button 10 times within 6 seconds (interval between presses of the button cannot be longer than 1 second).\n2. The red LED will activate for 2 seconds, followed by 3 quick flashes.\n\n- Please use this procedure only when the network primary controller is missing or otherwise inoperable.",
+		"manual": "https://products.z-wavealliance.org/ProductManual/File?folder=&filename=MarketCertificationFiles/3115/38957-QSG-1.pdf"
+	}
+}

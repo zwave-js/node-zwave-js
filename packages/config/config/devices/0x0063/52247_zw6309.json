@@ -1,0 +1,213 @@
+// GE/Jasco 52247/ZW6309
+// Smart Flood/Freeze Sensor
+{
+	"manufacturer": "GE/Jasco",
+	"manufacturerId": "0x0063",
+	"label": "52247/ZW6309",
+	"description": "Smart Flood/Freeze Sensor",
+	"devices": [
+		{
+			"productType": "0x4953",
+			"productId": "0x3430",
+			"zwaveAllianceId": [3953, 4043]
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"paramInformation": {
+		"19": {
+			"label": "Alternate Exclusion",
+			"description": "Alternative way to perform exclusion",
+			"valueSize": 2,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 0,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Press button once when prompted to remove device",
+					"value": 0
+				},
+				{
+					"label": "Press the button three times quickly when prompted to remove device",
+					"value": 1
+				}
+			]
+		},
+		"21": {
+			"label": "Reverse Wet/Dry Detection",
+			"description": "Detection mode(1:wet 2:dry)",
+			"valueSize": 2,
+			"minValue": 1,
+			"maxValue": 2,
+			"defaultValue": 1,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Normal detection (water detected)",
+					"value": 1
+				},
+				{
+					"label": "Reverse detection (dry detected)",
+					"value": 2
+				}
+			]
+		},
+		"22": {
+			"label": "Temp Report Freq.(battery)",
+			"description": "Set temp report freq",
+			"valueSize": 2,
+			"minValue": 5,
+			"maxValue": 1440,
+			"defaultValue": 60,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true,
+			"options": [
+				{
+					"label": "5... 59 minutes",
+					"value": 59
+				},
+				{
+					"label": "Hourly",
+					"value": 60
+				},
+				{
+					"label": "6 hours",
+					"value": 360
+				},
+				{
+					"label": "12 hours",
+					"value": 720
+				},
+				{
+					"label": "Daily",
+					"value": 1440
+				}
+			]
+		},
+		"23": {
+			"label": "Battery Report Freq",
+			"description": "Set battery report freq",
+			"valueSize": 2,
+			"minValue": 5,
+			"maxValue": 1440,
+			"defaultValue": 1440,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true,
+			"options": [
+				{
+					"label": "5... 60 minutes",
+					"value": 60
+				},
+				{
+					"label": "Hourly",
+					"value": 360
+				},
+				{
+					"label": "12 hours",
+					"value": 720
+				},
+				{
+					"label": "Daily",
+					"value": 1440
+				}
+			]
+		},
+		"50": {
+			"label": "Low Temp Alert Level",
+			"description": "Low temp",
+			"valueSize": 2,
+			"minValue": -4,
+			"maxValue": 122,
+			"defaultValue": 33,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"51": {
+			"label": "High Temp Alert Level",
+			"description": "High temp",
+			"valueSize": 2,
+			"minValue": -4,
+			"maxValue": 122,
+			"defaultValue": 104,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"52": {
+			"label": "Temp Report Freq.(usb)",
+			"description": "Set temp report freq",
+			"valueSize": 2,
+			"minValue": 5,
+			"maxValue": 360,
+			"defaultValue": 60,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "5... 360 minutes - sent every 5 minutes, up to 6 hours",
+					"value": 360
+				},
+				{
+					"label": "Hourly",
+					"value": 60
+				}
+			]
+		},
+		"53": {
+			"label": "Led/Buzzer Action During Tamper Event",
+			"description": "Set tamper indication 0 = no led, no beep (default) 1 = red LED flash 5x, no beep 2 = red LED cont flash, no beep 3 = no led, cont beep 4 = red LED cont flash, cont beep",
+			"valueSize": 2,
+			"minValue": 0,
+			"maxValue": 4,
+			"defaultValue": 0,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "No led, no beep",
+					"value": 0
+				},
+				{
+					"label": "Red LED flash 5x, no beep",
+					"value": 1
+				},
+				{
+					"label": "Red LED continuous flash, no beep",
+					"value": 2
+				},
+				{
+					"label": "No led, continuous beep",
+					"value": 3
+				},
+				{
+					"label": "Red LED continuous flash, continuous beep",
+					"value": 4
+				}
+			]
+		}
+	},
+	"metadata": {
+		"inclusion": "Battery power/micro USB power\n1. Follow the instructions for your Z-Wave certified controller to add the sensor in the Z-Wave network.\n2. Once the controller is ready to add your device, remove the top cover of the sensor (see figure 7).\n3. Ensure battery is installed with the correct polarity and the battery tab has been removed (see figure 8) or ensure micro USB is plugged into USB port (see figure 9).\n4. Press and release the programming button (see figure 10). This starts the manual add process. The red LED flashes quickly as it searches for a network. After 25 seconds, the LED will stop flashing if the sensor is not\nadded to the network. Press the programming button to manually start the add process. If it times out, the LED will stop flashing. Press and release the programming button again.\n5. The controller’s app will indicate if it discovers the sensor.",
+		"exclusion": "1. Follow the instructions for your Z-Wave certified controller to remove the sensor from the Z-Wave network.\n2. Once the controller is ready to remove your sensor, press and release the programming button one time on the sensor (see figure 10).\n3. The red LED will blink five times to indicate it has been removed. Secure the top cover",
+		"reset": "1. Press the programming button 10 times within six seconds (interval between presses of the button cannot be longer than one second).\n2. The red LED will activate for two seconds, followed by three quick flashes to confirm the sensor has been reset. Secure the top cover into place.\nNote: This should only be used if your network’s primary controller is missing or otherwise inoperable",
+		"manual": "https://products.z-wavealliance.org/ProductManual/File?folder=&filename=product_documents/3953/52247_QSG_v1[1].pdf"
+	}
+}

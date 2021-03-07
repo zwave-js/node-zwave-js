@@ -1,14 +1,15 @@
-// Reitz-Group.de Duwi ZW WS - 05443
+// Reitz-Group.de ZWWS
 // Battery powered One paddle wall controller
 {
 	"manufacturer": "Reitz-Group.de",
 	"manufacturerId": "0x0064",
-	"label": "Duwi ZW WS - 05443",
+	"label": "ZWWS",
 	"description": "Battery powered One paddle wall controller",
 	"devices": [
 		{
 			"productType": "0x5002",
-			"productId": "0x0000"
+			"productId": "0x0000",
+			"zwaveAllianceId": [339, 342]
 		}
 	],
 	"firmwareVersion": {

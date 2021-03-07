@@ -1,0 +1,53 @@
+// ShenZhen Sunricher Technology, Ltd. SR-ZV9001T4-DIM
+// Wall Controller
+{
+	"manufacturer": "ShenZhen Sunricher Technology, Ltd.",
+	"manufacturerId": "0x0330",
+	"label": "SR-ZV9001T4-DIM",
+	"description": "Wall Controller",
+	"devices": [
+		{
+			"productType": "0x0003",
+			"productId": "0xa10d",
+			"zwaveAllianceId": 2704
+		},
+		{
+			"productType": "0x031a",
+			"productId": "0xa10d",
+			"zwaveAllianceId": 2908
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"associations": {
+		"1": {
+			"label": "Lifeline",
+			"maxNodes": 1,
+			"isLifeline": true
+		},
+		"2": {
+			"label": "Group 2",
+			"maxNodes": 12
+		},
+		"3": {
+			"label": "Group 3",
+			"maxNodes": 12
+		},
+		"4": {
+			"label": "Group 4",
+			"maxNodes": 12
+		},
+		"5": {
+			"label": "Group 5",
+			"maxNodes": 12
+		}
+	},
+	"metadata": {
+		"inclusion": "1. Set primary controller/gateway into inclusion mode (Please refer to your primary\ncontrollers manual on how to turn your controller into inclusion).\n2. Make sure the wall controller does not belong to any Z-Wave network (please refer to\nthe part “How to check whether the wall controller included to a network” of this manual).\n3. Short press the “inclusion/exclusion” button, or press and hold down “ALL ON/OFF”\nbutton for over 3 seconds, the wall controller will be set to inclusion mode, and waiting to\nbe included, then LED indicator turns on and blinks 6 times quickly to indicate\nsuccessful inclusion.\nOnce the wall controller quits “inclusion mode”, the LED indicator will turns off. There\nare 3 methods for the wall controller to quit “inclusion mode”:\n1. Automatically quits after successful inclusion.\n2. Quits after 25 seconds timeout.\n3. Press and hold down “ALL ON/OFF” button for over 3 seconds, or short press the\n“inclusion/exclusion” button to quit",
+		"exclusion": "There are two exclusion methods:\nMethod 1: Exclusion from the primary controller/gateway as follows:\n1. Set the primary controller/gateway into exclusion mode (Please refer to your primary\ncontrollers manual on how to set your controller into exclusion).\n2. Short press the “inclusion/exclusion” button, or press and hold down “ALL ON/OFF”\nbutton for over 3 seconds, the wall controller will be set to exclusion mode, and waiting\nto be excluded, then LED indicator turns on and shows 3 short blinks and 1 long blink to\nindicate successful exclusion.\nOnce the wall controller quits “exclusion mode”, the LED indicator will turns off. There\nare 3 methods for the wall controller to quit “exclusion mode”:\n1. Automatically quits after successful exclusion.\n2. Quits after 25 seconds timeout.\n3. Press and hold down “ALL ON/OFF” button for over 3 seconds, or short press the\n“inclusion/exclusion” button to quit.\nMethod 2: Factory reset the wall controller will force the wall controller to be excluded\nfrom a network. (please refer to the part “Factory Reset” of this manual)",
+		"reset": "Press and hold down “inclusion/exclusion” button for over 8 seconds, LED indicator turns on and shows 3 short blinks and 1 long blink to indicate successful factory reset, release “inclusion/exclusion” button, the wall controller will restart automatically.\n\nIf this controller is the primary controller for your network, resetting it will result in the nodes in your network being orphaned and it will be necessary after the reset to exclude and re-include all of the nodes in the network. If this controller is being used as a secondary controller in the network, use this procedure to reset this controller only in the event that the network primary controller is missing or otherwise inoperable",
+		"manual": "https://products.z-wavealliance.org/ProductManual/File?folder=&filename=MarketCertificationFiles/2704/Z-Wave%20Wall%20Controller%20SR-ZV9001T4-DIM-EU%20User%20Manual.pdf"
+	}
+}

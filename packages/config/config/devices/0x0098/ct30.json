@@ -12,7 +12,8 @@
 		},
 		{
 			"productType": "0x0001",
-			"productId": "0x001e"
+			"productId": "0x001e",
+			"zwaveAllianceId": 158
 		},
 		{
 			"productType": "0x0001",

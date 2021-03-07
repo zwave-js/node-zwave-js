@@ -1,0 +1,32 @@
+// Hankook Gas Kiki CO., Ltd. HT-A20
+// Gas Detector
+{
+	"manufacturer": "Hankook Gas Kiki CO., Ltd.",
+	"manufacturerId": "0x024c",
+	"label": "HT-A20",
+	"description": "Gas Detector",
+	"devices": [
+		{
+			"productType": "0x0100",
+			"productId": "0x0101",
+			"zwaveAllianceId": 1884
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"associations": {
+		"1": {
+			"label": "Group 1",
+			"maxNodes": 5,
+			"isLifeline": true
+		}
+	},
+	"metadata": {
+		"inclusion": "Press On/OFF button for 5 seconds till hearing beep once.\nWhen inclusion completes, you will hear ‘beep’ sound with voice message alert. When inclusion completes, Connection LED will be on.",
+		"exclusion": "Press On/OFF button for 5 seconds till hearing beep once.\nWhen exclusion completes, you will hear ‘beep’ sound with voice message alert. When exclusion completes, Connection LED will be off. (The same as the inclusion method)",
+		"reset": "Press On/OFF button for 10 seconds till hearing beep once.\n When reset completes, you will hear ‘beep’ sound with voice message alert.\n(Reset function, the primary controller will be used only when does not exist or inoperative.)",
+		"manual": "https://products.z-wavealliance.org/ProductManual/File?folder=&filename=MarketCertificationFiles/1884/Product%20Manual.pdf"
+	}
+}

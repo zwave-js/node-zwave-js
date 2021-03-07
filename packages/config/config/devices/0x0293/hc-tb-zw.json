@@ -1,0 +1,40 @@
+// Home controls HC-TB-ZW
+// Hogar Pebble
+{
+	"manufacturer": "Home controls",
+	"manufacturerId": "0x0293",
+	"label": "HC-TB-ZW",
+	"description": "Hogar Pebble",
+	"devices": [
+		{
+			"productType": "0x0003",
+			"productId": "0x0113",
+			"zwaveAllianceId": 3107
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"associations": {
+		"1": {
+			"label": "Group 1",
+			"maxNodes": 3,
+			"isLifeline": true
+		},
+		"2": {
+			"label": "Double Tap",
+			"maxNodes": 3,
+			"isLifeline": true
+		}
+	},
+	"compat": {
+		"disableBasicMapping": true
+	},
+	"metadata": {
+		"inclusion": "1. Put the controller into INCLUSION mode. Follow the instructions\nprovided by the controller manufacturer.\n\n2. Press and hold the config button for more than 2 seconds. ALL indicator lights will blink 3 times. At this point release the config button, the device will start the inclusion process",
+		"exclusion": "1. Put the controller into EXCLUSION mode. Follow the instructions provided by the controller manufacturer.\n\n2. Press and hold the config button for more than 2 seconds. ALL indicator lights will blink. At this point release the config\nbutton, the device will start the exclusion process",
+		"reset": "Please use this procedure only when the network primary controller is missing or otherwise inoperable.\n\nTo reset the device, use stick press and hold Config button till all LEDs are ON (about 5 seconds). The device is successfully removed from the network and reset",
+		"manual": "https://products.z-wavealliance.org/ProductManual/File?folder=&filename=MarketCertificationFiles/3107/Pebble_Z-Wave%20(1)%20(1).pdf"
+	}
+}
