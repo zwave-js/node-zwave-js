@@ -3,6 +3,25 @@
 	Placeholder for next release:
 	## __WORK IN PROGRESS__
 -->
+## __WORK IN PROGRESS__
+### Bugfixes
+* After a restart, sleeping nodes have their status correctly determined even if they weren't interviewed completely before
+* During inclusion, sleeping nodes are no longer marked as asleep after the protocol info was queried
+* Fixed the length validation in sequenced Security S0 Message Encapsulation commands
+* Unsolicited reports from the root endpoint are now also mapped to higher endpoints when the node supports Multi Channel Association V3+
+* Fixed a crash: `supportedCCs` is not iterable. If this happens to you, re-interview affected devices.
+
+### Config file changes
+* Added config for Ring Range Extender
+* Updatde yrd156 inclusion, exclusion, reset instructions
+* Remove Supervision support for GE 14287 / ZW4002
+* Values for the root endpoint values of ZW132 are no longer hidden
+* Cleanup Ring Contact Sensor and Motion Sensor
+* Correct DMS01 configuration file
+* Add Zooz ZSE29 configuration parameters
+* Added lots of lightly reviewed config files from ZWA import
+* Removed invalid params 1 and 2 from Fibaro FGRM222
+
 ## 6.6.0 (2021-03-02)
 ### Features
 * Added the `"buffer"` metadata type to distinguish binary user codes from string user codes
