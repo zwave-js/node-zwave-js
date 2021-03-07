@@ -9,10 +9,7 @@
 		{
 			"productType": "0x0001",
 			"productId": "0x0468",
-			"zwaveAllianceId": [
-				3028,
-				3707
-			]
+			"zwaveAllianceId": [3028, 3707]
 		}
 	],
 	"firmwareVersion": {
@@ -48,7 +45,6 @@
 			"minValue": -1,
 			"maxValue": 0,
 			"defaultValue": 0,
-			"unsigned": true,
 			"readOnly": false,
 			"writeOnly": false,
 			"allowManualEntry": false,
@@ -140,7 +136,6 @@
 			"minValue": -1,
 			"maxValue": 0,
 			"defaultValue": 0,
-			"unsigned": true,
 			"readOnly": false,
 			"writeOnly": false,
 			"allowManualEntry": false,

@@ -92,7 +92,7 @@
 			"defaultValue": 0,
 			"unsigned": true,
 			"readOnly": true,
-			"writeOnly": true,
+			"writeOnly": false,
 			"allowManualEntry": false,
 			"options": [
 				{

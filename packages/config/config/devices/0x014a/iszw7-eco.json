@@ -86,7 +86,7 @@
 			"defaultValue": 30,
 			"unsigned": true,
 			"readOnly": true,
-			"writeOnly": true,
+			"writeOnly": false,
 			"allowManualEntry": true
 		},
 		"6": {
@@ -94,7 +94,7 @@
 			"description": "Enable intrusion/smoke/co siren volume adjustable and mutable. 0 is disabled (default). 1 is enabled",
 			"valueSize": 1,
 			"minValue": 0,
-			"maxValue": 0,
+			"maxValue": 1,
 			"defaultValue": 0,
 			"unsigned": true,
 			"readOnly": false,

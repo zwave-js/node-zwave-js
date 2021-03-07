@@ -122,7 +122,7 @@
 			"description": "When temperature reaches at cut off temperature point than relay will be switched off. in case of °f scale: minimum value is 320 and maximum value is 2120 (in 0.1 °f resolution)",
 			"valueSize": 2,
 			"unit": "0.1 °F",
-			"minValue": 320,
+			"minValue": 0,
 			"maxValue": 2120,
 			"defaultValue": 0,
 			"unsigned": true,
