@@ -1,0 +1,259 @@
+// Dooya DT82TV/F-1.2/14
+// Curtain Motor
+{
+	"manufacturer": "Dooya",
+	"manufacturerId": "0x030a",
+	"label": "DT82TV/F-1.2/14",
+	"description": "Curtain motor",
+	"devices": [
+		{
+			"productType": "0x0103",
+			"productId": "0x0090",
+			"zwaveAllianceId": [2862, 2926, 3343]
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"paramInformation": {
+		"1": {
+			"label": "Set The Motor Rotation Direction",
+			"description": "",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 0,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "The motor direction is forward",
+					"value": 0
+				},
+				{
+					"label": "The motor direction is opposite",
+					"value": 1
+				}
+			]
+		},
+		"2": {
+			"label": "Set To Start Holding Hands",
+			"description": "",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 0,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Open hand start function",
+					"value": 0
+				},
+				{
+					"label": "Close hand start function",
+					"value": 1
+				}
+			]
+		},
+		"3": {
+			"label": "Weak Electric Switch Mode",
+			"description": "",
+			"valueSize": 1,
+			"minValue": 1,
+			"maxValue": 4,
+			"defaultValue": 1,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Double-button reboundable switch",
+					"value": 1
+				},
+				{
+					"label": "Double-button not reboundable switch",
+					"value": 2
+				},
+				{
+					"label": "DC246 switch",
+					"value": 3
+				},
+				{
+					"label": "Single-button cyclic switch mode",
+					"value": 4
+				}
+			]
+		},
+		"4": {
+			"label": "Strong Electric Switch Mode",
+			"description": "",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 2,
+			"defaultValue": 0,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Double-button not reboundable",
+					"value": 0
+				},
+				{
+					"label": "Hotel mode",
+					"value": 1
+				},
+				{
+					"label": "Double-button reboundable mode",
+					"value": 2
+				}
+			]
+		},
+		"5": {
+			"label": "Limit Position Status",
+			"description": "",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 0,
+			"unsigned": true,
+			"readOnly": true,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Limit position has not been set",
+					"value": 0
+				},
+				{
+					"label": "Limit position has been set",
+					"value": 1
+				}
+			]
+		},
+		"6": {
+			"label": "Device Type",
+			"description": "",
+			"valueSize": 1,
+			"minValue": 1,
+			"maxValue": 18,
+			"defaultValue": 1,
+			"unsigned": true,
+			"readOnly": true,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Curtain",
+					"value": 1
+				},
+				{
+					"label": "Shutter",
+					"value": 17
+				},
+				{
+					"label": "Venetian",
+					"value": 18
+				}
+			]
+		},
+		"7": {
+			"label": "Power Supply Type",
+			"description": "",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 0,
+			"unsigned": true,
+			"readOnly": true,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Main power (AC power)",
+					"value": 0
+				},
+				{
+					"label": "Battery",
+					"value": 1
+				}
+			]
+		},
+		"8": {
+			"label": "Manually Set / Cancel Open Borders",
+			"description": "",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 0,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Cancel manually open the border of the curtain",
+					"value": 0
+				},
+				{
+					"label": "Manually set the open boundary of the curtain",
+					"value": 1
+				}
+			]
+		},
+		"9": {
+			"label": "Manually Set / Cancel Close Borders",
+			"description": "",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 0,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Cancel manually close the border of the curtain",
+					"value": 0
+				},
+				{
+					"label": "Manually set the closed boundary of the curtain",
+					"value": 1
+				}
+			]
+		},
+		"10": {
+			"label": "Delete The Limit Position",
+			"description": "",
+			"valueSize": 1,
+			"minValue": 127,
+			"maxValue": 127,
+			"defaultValue": 127,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": true,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Delete the limit position",
+					"value": 127
+				}
+			]
+		}
+	},
+	"metadata": {
+		"inclusion": "Press the motor setting button three times within 1.5 seconds. (Press P1 (1 beep), Press P1 (1 beep), Press P1( 1 beep and 1 jog))",
+		"exclusion": "Press the motor setting button three times within 1.5 seconds. (Press P1 (1 beep), Press P1 (1 beep), Press P1 (1 beep and 1 jog))",
+		"reset": "Press and hold P1 for 10 seconds (Press and hold P1 button for 2 seconds, the motor will long beep once and jog once; for 5 seconds, 3 beeps and jog once if no limits; for 10 seconds, 3 beeps and jog once; release the P1 button, 16 beeps and jog once.)\nPlease use this procedure only when the network primary controller is missing or otherwise inoperable",
+		"manual": "https://products.z-wavealliance.org/ProductManual/File?folder=&filename=product_documents/3343/DM35ECB-F.pdf"
+	}
+}
