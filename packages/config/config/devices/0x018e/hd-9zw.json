@@ -1,0 +1,43 @@
+// Climax Technology, Ltd. HD-9ZW
+// Heat Detector
+{
+	"manufacturer": "Climax Technology, Ltd.",
+	"manufacturerId": "0x018e",
+	"label": "HD-9ZW",
+	"description": "Heat Detector",
+	"devices": [
+		{
+			"productType": "0x0003",
+			"productId": "0x0002",
+			"zwaveAllianceId": [
+				1427,
+				1809
+			]
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"associations": {
+		"1": {
+			"label": "Group 1",
+			"maxNodes": 5,
+			"isLifeline": true
+		},
+		"2": {
+			"label": "Group 2",
+			"maxNodes": 5
+		},
+		"3": {
+			"label": "Group 3",
+			"maxNodes": 5
+		}
+	},
+	"metadata": {
+		"inclusion": "This product can be included and operated in any Z-Wave network with other Z-Wave certified devices from other manufactures and/or other applications. All non-battery operated nodes within the network will act as repeaters regardless of vendor to increase reliability of the network.\n-Insert the 3 “AA” batteries into the battery compartment connecting the correct polarity as shown on the battery compartment lid.\n-HD-9 will emit a 2-tone beep.\n-Put the Z-Wave gateway or control panel into Inclusion or Learning mode (please refer to the Z-Wave gateway or control panel manual).\n-Within 1.5 seconds, press the Test Button 3 times. HD-9 will emit a 2-tone beep.\n-Refer to the operation manual of the Z-Wave gateway or control panel to complete the learn-in process.\n-If the sensor has already been included (learnt) into another Z-Wave Gateway/Control Panel, or if the sensor is unable to be learnt into the current Z-Wave Gateway/Control Panel, please exclude it first (see Exclusion) before attempting to include it into the current Z-Wave Gateway/Control Panel.",
+		"exclusion": "The Heat Detector must be removed from existing Z-Wave network before being included into another. There are two methods available to exclude a device.\nExclusion Mode\n-Put the Z-Wave gateway or control panel into Exclusion mode (please refer to the Z-Wave gateway or control panel manual).\n-Within 1.5 seconds, press the Test Button 3 times and the Heat Detector will be removed from the Z-Wave network.",
+		"reset": "(Only use factory reset when network Control Panel/Gateway is missing or inoperable).\n-Press and hold the Test Button of the Heat Detector.\n-While holding the Test Button, power on the Heat Detector, wait for 10 seconds to factory reset.",
+		"manual": "https://products.z-wavealliance.org/ProductManual/File?folder=&filename=MarketCertificationFiles/1427/HD-9ZW%2020150911.doc"
+	}
+}

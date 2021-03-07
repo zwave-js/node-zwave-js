@@ -1,0 +1,155 @@
+// Eaton RFTR9605-T
+// Eatons Z-Wave Plus Wireless Receptacle
+{
+	"manufacturer": "Eaton",
+	"manufacturerId": "0x001a",
+	"label": "RFTR9605-T",
+	"description": "Eatons Z-Wave Plus Wireless Receptacle",
+	"devices": [
+		{
+			"productType": "0x5244",
+			"productId": "0x0505",
+			"zwaveAllianceId": 3039
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"paramInformation": {
+		"1": {
+			"label": "Delayed Off Time",
+			"description": "Delayed off time",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 10,
+			"defaultValue": 10,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"2": {
+			"label": "Panic On Time",
+			"description": "Interval after which device will turn on during panic mode",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 1,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"3": {
+			"label": "Panic Off Time",
+			"description": "Interval after which device will turn off during panic mode",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 1,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"5": {
+			"label": "Power Up State",
+			"description": "1 = off 2 = on 3 = last state",
+			"valueSize": 1,
+			"minValue": 1,
+			"maxValue": 3,
+			"defaultValue": 1,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Turn off when power is restored",
+					"value": 1
+				},
+				{
+					"label": "Turn on when power is restored",
+					"value": 2
+				},
+				{
+					"label": "Return to last state when power is restored",
+					"value": 3
+				}
+			]
+		},
+		"6": {
+			"label": "Panic Mode Enabled",
+			"description": "0=off 1=on",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 0,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Disable panic mode",
+					"value": 0
+				},
+				{
+					"label": "Enable panic mode",
+					"value": 1
+				}
+			]
+		},
+		"13": {
+			"label": "Blue LED Brightness Level While The Receptacle is On",
+			"description": "Light intensity of indicator led",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 4,
+			"defaultValue": 3,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Indicator light stays off",
+					"value": 0
+				},
+				{
+					"label": "Increase the brightness of indicator light",
+					"value": 4
+				}
+			]
+		},
+		"14": {
+			"label": "Blue LED Brightness Level While The Receptacle is Off",
+			"description": "Light intensity of indicator led",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 4,
+			"defaultValue": 1,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Indicator light stays off",
+					"value": 0
+				},
+				{
+					"label": "Increase the brightness of indicator light",
+					"value": 4
+				}
+			]
+		}
+	},
+	"metadata": {
+		"inclusion": "1. To include this device in a Z-Wave network, select the command on your Z Wave controller for inclusion (Install, Add Device,\nAdd Node, Include Device, etc.). Then press the device ON/OFF button one time to include it in the network.\n2. Based on the controller, the controller may ask you to scan the QR code or manually enter 5 digit code under the QR code\nto install the device as a secured device. You may find this QR code on the device or included in device packaging.\n3. After the Device is added to the network, the blue indicator LED will stop blinking. This indicates the device is installed in the Z-Wave\nnetwork",
+		"exclusion": "1. To exclude this device from a Z-Wave network, select the setting on your Z-Wave controller for exclusion\n(Uninstall, Remove Device, Remove Node, Exclude Device, etc.).\n2. Once your controller is in exclusion mode, press the device ON/OFF button one time to exclude it from the network. The LED will start blinking.",
+		"reset": "Please use this procedure only when the network primary controller is missing or otherwise inoperable\n\nThe device could be reset locally. This will cause the device to be excluded from its network and restore to factory default.\nBefore leaving the network the switch will send a notification to the controller indicating its departure from the Z-Wave network.\n1. Turn the device ON.\n2. Press and hold ON/OFF button for 20 second till the LED flashes for the third time.\n3. Release the ON/OFF button.\n4. LED will start flashing rapidly. Once the LED starts blinking slowly, that indicates the device is not part of the network.",
+		"manual": "https://products.z-wavealliance.org/ProductManual/File?folder=&filename=MarketCertificationFiles/3039/RFTR9605-T%20Instruction%20Sheet.pdf"
+	}
+}

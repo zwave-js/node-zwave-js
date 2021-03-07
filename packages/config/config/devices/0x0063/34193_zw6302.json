@@ -1,0 +1,123 @@
+// GE/Jasco 34193/ZW6302
+// Portable Smart Motion Sensor
+{
+	"manufacturer": "GE/Jasco",
+	"manufacturerId": "0x0063",
+	"label": "34193/ZW6302",
+	"description": "Portable Smart Motion Sensor",
+	"devices": [
+		{
+			"productType": "0x4953",
+			"productId": "0x3133",
+			"zwaveAllianceId": 1902
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"paramInformation": {
+		"13": {
+			"label": "Pir Sensitiivity Setting",
+			"description": "You can modify the sensitivity of PIR if changing the value in parameter 13",
+			"valueSize": 1,
+			"minValue": 1,
+			"maxValue": 3,
+			"defaultValue": 3,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Low sensitivity",
+					"value": 1
+				},
+				{
+					"label": "Medium sensitivity",
+					"value": 2
+				},
+				{
+					"label": "High sensitivity",
+					"value": 3
+				}
+			]
+		},
+		"18": {
+			"label": "Pir Timeout Duration",
+			"description": "Pir timeout duration",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 4,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true,
+			"options": [
+				{
+					"label": "1 min to 60 min",
+					"value": 60
+				},
+				{
+					"label": "5 seconds",
+					"value": 255
+				}
+			]
+		},
+		"20": {
+			"label": "Basic Set, Notification And Basic Report",
+			"description": "Changing parameter 20 can let the motion sensor send out \"Basic Set\" command or \"basic report\" command or \"notification\" report to Z-Wave devices",
+			"valueSize": 1,
+			"minValue": 1,
+			"maxValue": 3,
+			"defaultValue": 1,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Motion sensor will send out notification",
+					"value": 1
+				},
+				{
+					"label": "Motion sensor will send out Basic Set",
+					"value": 2
+				},
+				{
+					"label": "Motion sensor will sendout basic report",
+					"value": 3
+				}
+			]
+		},
+		"28": {
+			"label": "Enable &amp; Disable The LED Indication When PIR is Triggered",
+			"description": "Enable & disable the LED indication when PIR is triggered",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 1,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Disable",
+					"value": 0
+				},
+				{
+					"label": "Enable",
+					"value": 1
+				}
+			]
+		}
+	},
+	"metadata": {
+		"inclusion": "1. Follow the instructions for your Z-Wave certified controller to include a device to the Z-Wave network. \n2. Once the controller is ready to include your device, press and release the program button to include it in the network. \n3. The blue LED will activate for 3 seconds to confirm it has been included",
+		"exclusion": "1. Follow the instructions for your Z-Wave certified controller to exclude a device from the Z-Wave network. \n 2. Once the controller is ready to exclude your device, press and release the program button to exclude it from the network.",
+		"reset": "1. Press the program button 10 times within 6 seconds. \n2. The blue LED will blink for 3 seconds. \nNote: This should only be done in the event your primary controller is missing or otherwise inoperable",
+		"manual": "https://products.z-wavealliance.org/ProductManual/File?folder=&filename=MarketCertificationFiles/1902/50359%20manual%20w:parameters.pdf"
+	}
+}

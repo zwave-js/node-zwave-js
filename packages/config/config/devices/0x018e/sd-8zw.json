@@ -1,0 +1,32 @@
+// Climax Technology, Ltd. SD-8ZW
+// Smoke Detector
+{
+	"manufacturer": "Climax Technology, Ltd.",
+	"manufacturerId": "0x018e",
+	"label": "SD-8ZW",
+	"description": "Smoke Detector",
+	"devices": [
+		{
+			"productType": "0x0003",
+			"productId": "0x0001",
+			"zwaveAllianceId": 1428
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"associations": {
+		"3": {
+			"label": "Group 3",
+			"maxNodes": 5,
+			"isLifeline": true
+		}
+	},
+	"metadata": {
+		"inclusion": "This product can be included and operated in any Z-Wave network with other Z-Wave certified devices from other manufactures and/or other applications. All non-battery operated nodes within the network will act as repeaters regardless of vendor to increase reliability of the network.\n-Insert the 3 “AA” batteries into the battery compartment connecting the correct polarity as shown on the battery compartment lid. The Smoke Detector will emit a 2-tone beep.\n-The LED will start flashing and begin a 6-minute warming period.\n-Put the Z-wave gateway or control panel into Inclusion or Learning mode (please refer to the Z-wave gateway or control panel manual).\n-Within 1.5 seconds, press the Test Button 3 times. The Smoke Detector will emit a 2-tone beep and the LED will turn on for ~2 seconds.\n-Refer to the operation manual of the Z-wave gateway or control panel to complete the learn-in process.\n-If the sensor has already been included (learnt) into another Z-wave Gateway/Control Panel, or if the sensor is unable to be learnt into the current Z-wave Gateway/Control Panel, please exclude it first (see Exclusion) before attempting to include it into the current Z-wave Gateway/Control Panel.\n-When the 6-minute warming period is over, the Smoke Detector will emit one short beep to indicate that the Smoke Detector is starting calibration process. The process will be repeated every 100 seconds and notified by a short beep respectively. The Smoke Detector will emit a 2-tone beep and the LED will turn off to indicate calibration is completed.\n-Normal calibration process lasts 2 - 16 minutes.\n-If the Smoke Detector emits continuous beeps after 16 minutes, the calibration has failed. Remove the batteries to silence the continuous beeps.\n-Restart the calibration process by re-inserting the batteries.",
+		"exclusion": "The Smoke Detector must be removed from existing Z-wave network before being included into another. There are two methods available to exclude a device.\nExclusion Mode\n-Put the Z-wave gateway or control panel into Exclusion mode (please refer to the Z-wave gateway or control panel manual).\n-Within 1.5 seconds, press the Test Button 3 times and the Smoke Detector will be removed from the Z-wave network.",
+		"reset": "(Only use factory reset when network Control Panel/Gateway is missing or inoperable).\n-Press and hold the Test Button of the Smoke Detector for 8 seconds to factory reset",
+		"manual": "https://products.z-wavealliance.org/ProductManual/File?folder=&filename=MarketCertificationFiles/1428/SD-8ZW%2020150804.doc"
+	}
+}

@@ -1,0 +1,97 @@
+// Allegion S-6500F
+// Schlage Z-Wave Mortise Lock
+{
+	"manufacturer": "Allegion",
+	"manufacturerId": "0x003b",
+	"label": "S-6500F",
+	"description": "Schlage Z-Wave Mortise Lock",
+	"devices": [
+		{
+			"productType": "0x0003",
+			"productId": "0x6500",
+			"zwaveAllianceId": [
+				3690,
+				3811,
+				3813
+			]
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"paramInformation": {
+		"3": {
+			"label": "Beeper",
+			"description": "Read and write 0: disable beeper -1: enable beeper",
+			"valueSize": 1,
+			"minValue": -1,
+			"maxValue": 0,
+			"defaultValue": -1,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Enable beeper",
+					"value": -1
+				},
+				{
+					"label": "Disable beeper",
+					"value": 0
+				}
+			]
+		},
+		"5": {
+			"label": "Auto Lock",
+			"description": "Read-only 0: disable auto lock -1: enable auto lock",
+			"valueSize": 1,
+			"minValue": -1,
+			"maxValue": 0,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Enable auto lock",
+					"value": -1
+				},
+				{
+					"label": "Disable auto lock",
+					"value": 0
+				}
+			]
+		},
+		"6": {
+			"label": "User Slot Bit Field",
+			"description": "Each bit represent user slot",
+			"valueSize": 2,
+			"minValue": 0,
+			"maxValue": 3,
+			"defaultValue": 3,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"18": {
+			"label": "Get Bootloader Version",
+			"description": "Version of the bootloader",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 1,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		}
+	},
+	"metadata": {
+		"inclusion": "1. Place your Z-Wave Controller into the “Add” or Inclusion Mode (Refer the respective documentation for that specific home automation system or panel device for details). \n2. Slide the battery cover upward. \n3. Press the wireless button more than 3 seconds.\n4. Press “1” on the keypad.\n5. Press “6” on the keypad.\n6. Press User Code on the keypad.\n7. Press “#” on the keypad.\n8. If RF LED flickers, inclusion has completed successfully.\n9. If battery replace LED flickers(fail), try repeating steps 1-7",
+		"exclusion": "1. Place your Z-Wave Controller into the “Remove” or Exclusion Mode (Refer the respective documentation for that specific home automation system or panel device for details). \n2. Slide the battery cover upward. \n3. Press the wireless button more than 3 seconds.\n4. Press “2” on the keypad.\n5. Press “6” on the keypad.\n6. Press User Code on the keypad.\n7. Press “#” on the keypad.\n8. If RF LED flickers, exclusion has completed successfully.\n9. If battery replace LED flickers, try repeating steps 1-7.",
+		"reset": "Please use this procedure only when the network primary controller is missing or otherwise inoperable\n\nWhen Master code was already registered \n1. Remove batteries (power off).\n2. Press “N” and “S” buttons at the same time and hold.\n3. Insert batteries (power on).\n4. Release “N” and “S” buttons.\n5. Press 3-digit Master code.\n6. Press “#” on the keypad.\n7. Press “8” on the keypad.\n\nWhen Master code was not registered yet\n1. Remove batteries (power off).\n2. Press “N” button and “S” button at the same time and hold.\n3. Insert batteries (power on).\n4. Release “N” and “S” buttons.\n5. Press 3-digit Master code to register.\n6. Press “#” on the keypad.\n7. Press previous 3-digit Master code.\n8. Press “#” on the keypad.",
+		"manual": "https://products.z-wavealliance.org/ProductManual/File?folder=&filename=product_documents/3811/Manual%20for%20Schlage%20Z-Wave%20Mortise%20Lock%20v1_0.pdf"
+	}
+}

@@ -1,0 +1,46 @@
+// Vision Security ZD2112JP-5
+// Door Contact
+{
+	"manufacturer": "Vision Security",
+	"manufacturerId": "0x0109",
+	"label": "ZD2112JP-5",
+	"description": "Door Contact",
+	"devices": [
+		{
+			"productType": "0x2001",
+			"productId": "0x01a1",
+			"zwaveAllianceId": 1750
+		},
+		{
+			"productType": "0x2001",
+			"productId": "0x01a2",
+			"zwaveAllianceId": 2499
+		},
+		{
+			"productType": "0x2001",
+			"productId": "0x01a3",
+			"zwaveAllianceId": 2667
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"associations": {
+		"1": {
+			"label": "Group 1",
+			"maxNodes": 5,
+			"isLifeline": true
+		},
+		"2": {
+			"label": "Group 2",
+			"maxNodes": 5
+		}
+	},
+	"metadata": {
+		"inclusion": "For “Inclusion” in (adding to) a network: Put the Z-Wave™ Interface Controller into “inclusion” mode, and following its instruction to add the ZD2112 to your controller. To get in the “inclusion” mode, the distance between sensor and controller is suggested to be in one meter. Press the program switch of ZD2112 for sending the NIF. After sending NIF, Z-Wave will send the auto inclusion; otherwise, ZD2112 will go to sleep after 20 seconds.",
+		"exclusion": "For “Exclusion” from (removing from) a network: Put the Z-Wave™ Interface Controller into “exclusion” mode, and following its instruction to delete the ZD2112 from your controller. Press the program switch of ZD2112 for 1 second at least to be excluded.\nNote: All user and network settings will be cleared and the device reset to factory defaults when the device is excluded.",
+		"reset": "Factory Default Reset: Trigger the rear cover switch to send the Alarm Report and trigger the reed switch (close & open) 5 times in 10 seconds, ZD2112 will send the “Device Reset Locally Notification” command and reset to the factory default. \n (Remark: This is to be used only in the case of primary controller being inoperable or otherwise unavailable.)",
+		"manual": "https://products.z-wavealliance.org/ProductManual/File?folder=&filename=MarketCertificationFiles/1750/ZD%202112-5_12122014-Japan%20DW.pdf"
+	}
+}

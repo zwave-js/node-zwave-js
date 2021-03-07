@@ -1,0 +1,371 @@
+// Fantem FT098-K55
+// Bulb
+{
+	"manufacturer": "Fantem",
+	"manufacturerId": "0x016a",
+	"label": "FT098-K55",
+	"description": "Bulb",
+	"devices": [
+		{
+			"productType": "0x1d03",
+			"productId": "0x0062",
+			"zwaveAllianceId": 2607
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"paramInformation": {
+		"20": {
+			"label": "Set The Bulbs State After It is Re-powered On",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 2,
+			"defaultValue": 1,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "The last state before re-power on",
+					"value": 0
+				},
+				{
+					"label": "Always on",
+					"value": 1
+				},
+				{
+					"label": "Always off",
+					"value": 2
+				}
+			]
+		},
+		"32": {
+			"label": "Enable/Disable to Send Out a Report When The Color is Changed",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 0,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Disable",
+					"value": 0
+				},
+				{
+					"label": "Hail cc",
+					"value": 1
+				}
+			]
+		},
+		"33": {
+			"label": "Get The Bulb’s Color Value",
+			"valueSize": 4,
+			"minValue": 0,
+			"maxValue": 16777215,
+			"defaultValue": 0,
+			"unsigned": true,
+			"readOnly": true,
+			"writeOnly": false,
+			"options": [
+				{
+					"label": "Green color value",
+					"value": 65535
+				},
+				{
+					"label": "Red color value",
+					"value": 16777215
+				}
+			]
+		},
+		"34": {
+			"label": "Enable/Disable The Function of Using External Switch to Turn On/Off The Bulb",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 0,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Disable",
+					"value": 0
+				},
+				{
+					"label": "Enable",
+					"value": 1
+				}
+			]
+		},
+		"35": {
+			"label": "Enable/Disable The Function of Using External Switch to Changes The Bulb’s Color",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 1,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Disable",
+					"value": 0
+				},
+				{
+					"label": "Enable",
+					"value": 1
+				}
+			]
+		},
+		"36": {
+			"label": "Reboot/Save/Exit Colorful Mode",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 3,
+			"defaultValue": 0,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Un-reboot colorful mode",
+					"value": 0
+				},
+				{
+					"label": "Reboot colorful mode",
+					"value": 1
+				},
+				{
+					"label": "Exit colorful mode",
+					"value": 2
+				},
+				{
+					"label": "Save the current colorful mode value and then to be exited",
+					"value": 3
+				}
+			]
+		},
+		"37": {
+			"label": "Colorful Mode Configuration",
+			"valueSize": 4,
+			"minValue": 0,
+			"maxValue": 2147483647,
+			"defaultValue": 157483008,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Colour change speed level",
+					"value": 31
+				},
+				{
+					"label": "Time base of color change speed",
+					"value": 255
+				},
+				{
+					"label": "Cycle count",
+					"value": 65535
+				},
+				{
+					"label": "Brightness",
+					"value": 16777215
+				},
+				{
+					"label": "Color display cycle",
+					"value": 134217727
+				},
+				{
+					"label": "Color change speed option",
+					"value": 1073741823
+				},
+				{
+					"label": "Color transition style",
+					"value": 2147483647
+				}
+			]
+		},
+		"38": {
+			"label": "Change Speed",
+			"valueSize": 4,
+			"minValue": 0,
+			"maxValue": 2147483647,
+			"defaultValue": 50332416,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true,
+			"options": [
+				{
+					"label": "Set the pause time of on",
+					"value": 65535
+				},
+				{
+					"label": "Set the speed from on to off",
+					"value": 16777215
+				},
+				{
+					"label": "Set the speed from off to on",
+					"value": 2147483647
+				}
+			]
+		},
+		"39": {
+			"label": "Color Index Configuration When The Bulb is in Multi Color Mode",
+			"valueSize": 4,
+			"minValue": 0,
+			"maxValue": 2147483647,
+			"defaultValue": 2003125025,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Index 8",
+					"value": 15
+				},
+				{
+					"label": "Index 7",
+					"value": 255
+				},
+				{
+					"label": "Index 6",
+					"value": 4095
+				},
+				{
+					"label": "Index 5",
+					"value": 65535
+				},
+				{
+					"label": "Index 4",
+					"value": 1048575
+				},
+				{
+					"label": "Index 3",
+					"value": 16777215
+				},
+				{
+					"label": "Index 2",
+					"value": 268435455
+				},
+				{
+					"label": "Index 1",
+					"value": 2147483647
+				}
+			]
+		},
+		"80": {
+			"label": "To Set Whcih Notification Can Be Sent to The Associated Devices (group 1) When The State of LED Bulb is Changed",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 2,
+			"defaultValue": 1,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Nothing",
+					"value": 0
+				},
+				{
+					"label": "Hail cc",
+					"value": 1
+				},
+				{
+					"label": "Basic cc report",
+					"value": 2
+				}
+			]
+		},
+		"112": {
+			"label": "Set The Dimmer Mode",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 3,
+			"defaultValue": 0,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Parabolic curve mode",
+					"value": 0
+				},
+				{
+					"label": "Index curve mode",
+					"value": 1
+				},
+				{
+					"label": "(parabolic + index)/2 mode",
+					"value": 2
+				},
+				{
+					"label": "Linear mode",
+					"value": 3
+				}
+			]
+		},
+		"252": {
+			"label": "Enable/Disable Lock Configuration",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 0,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Disable",
+					"value": 0
+				},
+				{
+					"label": "Enable",
+					"value": 1
+				}
+			]
+		},
+		"255": {
+			"label": "Reset The Bulb",
+			"valueSize": 4,
+			"minValue": 0,
+			"maxValue": 1431655765,
+			"defaultValue": 0,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Reset all configuration parameters to factory default settings",
+					"value": 0
+				},
+				{
+					"label": "Reset the bulb to factory default",
+					"value": 1431655765
+				}
+			]
+		}
+	},
+	"metadata": {
+		"inclusion": "Turn the primary controller of Z-Wave network into inclusion mode, press the external switch of LED Bulb to turn it off and then press the external switch again to turn it on",
+		"exclusion": "Turn the primary controller of Z-Wave network into exclusion mode, press the external switch of LED Bulb to turn off and then press the external switch again to turn on it, repeat the operation 3 times",
+		"reset": "Turn the controller of Z-Wave network into exclusion mode, press the external switch of LED Bulb to turn off and then press the external switch again to turn on it, repeat the operation 3 times.\nAfter the LED Bulb is excluded from network, it will be reset to factory default state.\nUse this procedure only in the event that your primary network controller is missing or inoperable",
+		"manual": "https://products.z-wavealliance.org/ProductManual/File?folder=&filename=MarketCertificationFiles/2607/Bulb%20manual.pdf"
+	}
+}

@@ -1,0 +1,48 @@
+// GE/Jasco 14311/ZW4201
+// Plug-in Outdoor Smart Switch
+{
+	"manufacturer": "GE/Jasco",
+	"manufacturerId": "0x0063",
+	"label": "14311/ZW4201",
+	"description": "Plug-in Outdoor Smart Switch",
+	"devices": [
+		{
+			"productType": "0x4f50",
+			"productId": "0x3033",
+			"zwaveAllianceId": [
+				1370,
+				1843,
+				2559
+			]
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"associations": {
+		"1": {
+			"label": "Group 1",
+			"maxNodes": 5,
+			"isLifeline": true
+		},
+		"2": {
+			"label": "Group 2",
+			"maxNodes": 5
+		},
+		"3": {
+			"label": "Double Tap",
+			"maxNodes": 5,
+			"isLifeline": true
+		}
+	},
+	"compat": {
+		"disableBasicMapping": true
+	},
+	"metadata": {
+		"inclusion": "1. Follow the instructions for your Z-Wave certified controller to\ninclude the smart switch to the Z-Wave network.\n2. Once the controller is ready to include your outdoor smart\nswitch, single press and release the manual/program\nbutton on the smart switch to include it in the network.\n3. Once your controller has confirmed that the smart switch\nhas been included, refresh the Z-Wave network to\noptimize performance",
+		"exclusion": "1. Follow the instructions for your Z-wave certified controller to\nexclude a device from the Z-wave network.\n2. Once the controller is ready to Exclude your device, press and\nrelease the manual/program button on the smart switch to exclude\nit from the network",
+		"reset": "1. If plugged in, unplug the Switch from the receptacle.\n2. Press and hold the top button for at least 3 seconds while you plug\nthe switch into a receptacle.\nNote: This should only be used in the event your network’s\nprimary controller is missing or otherwise inoperable",
+		"manual": "https://products.z-wavealliance.org/ProductManual/File?folder=&filename=MarketCertificationFiles/1370/14311-1%20QSG.pdf"
+	}
+}

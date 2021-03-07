@@ -1,0 +1,33 @@
+// iControl 649496 02012 5
+// iControl MiFi Secure
+{
+	"manufacturer": "iControl",
+	"manufacturerId": "0x0106",
+	"label": "649496 02012 5",
+	"description": "iControl MiFi Secure",
+	"devices": [
+		{
+			"productType": "0x0002",
+			"productId": "0x0001",
+			"zwaveAllianceId": [
+				1320,
+				1562
+			]
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"associations": {
+		"1": {
+			"label": "Group 1",
+			"maxNodes": 1,
+			"isLifeline": true
+		}
+	},
+	"metadata": {
+		"reset": "To reset the MiFi Secure to factory defaults, push and hold the \"Reset\" button for at least 15 seconds (or until all LED's begin flashing simultaneously). Note: resetting your MiFi Secure will remove it and all associated devices from your Icontrol system, in addition to clearing all communication settings",
+		"manual": "https://products.z-wavealliance.org/ProductManual/File?folder=&filename=MarketCertificationFiles/1562/Activation_Guide_SimonXT_Cellular_Only_13005.22-7.5.0-3302015_0.pdf"
+	}
+}

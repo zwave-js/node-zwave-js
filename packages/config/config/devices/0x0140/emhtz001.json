@@ -1,0 +1,320 @@
+// Computime EMHTZ001
+// Energy Consumption Monitor Energiemonitor Z-Wave, 230V Model Number
+{
+	"manufacturer": "Computime",
+	"manufacturerId": "0x0140",
+	"label": "EMHTZ001",
+	"description": "Energy Consumption Monitor Energiemonitor Z-Wave, 230V Model Number",
+	"devices": [
+		{
+			"productType": "0x0803",
+			"productId": "0x1003",
+			"zwaveAllianceId": 3024
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"paramInformation": {
+		"2": {
+			"label": "Energy Detection Mode",
+			"description": "Energy detection mode",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 3,
+			"defaultValue": 0,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "0 = report power, energy absolute value",
+					"value": 0
+				},
+				{
+					"label": "1 = report positive / negative power, report the algebraic sum energy",
+					"value": 1
+				},
+				{
+					"label": "2 = report positive / negative power, only report energy positive part (consuming electricity)",
+					"value": 2
+				},
+				{
+					"label": "3 = report positive / negative power, only report energy negative part (generating electricity)",
+					"value": 3
+				}
+			]
+		},
+		"3": {
+			"label": "Selective Reporting",
+			"description": "Enable selective reporting only when power change reaches a certain threshold or percentage set in parameters 4-11 below. this is used to reduce the network traffic",
+			"valueSize": 1,
+			"unit": "%",
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 1,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "0 = disable",
+					"value": 0
+				},
+				{
+					"label": "1 = enable",
+					"value": 1
+				}
+			]
+		},
+		"4": {
+			"label": "Wattage Threshold Change",
+			"description": "Valid values 0-30000",
+			"valueSize": 2,
+			"minValue": 0,
+			"maxValue": 30000,
+			"defaultValue": 50,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"5": {
+			"label": "Clamp 1",
+			"description": "Valid values 0-30000",
+			"valueSize": 2,
+			"minValue": 0,
+			"maxValue": 30000,
+			"defaultValue": 50,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"6": {
+			"label": "Clamp 2",
+			"description": "Valid values 0-30000",
+			"valueSize": 2,
+			"minValue": 0,
+			"maxValue": 30000,
+			"defaultValue": 50,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"7": {
+			"label": "Clamp 3",
+			"description": "Valid values 0-30000",
+			"valueSize": 2,
+			"minValue": 0,
+			"maxValue": 30000,
+			"defaultValue": 50,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"8": {
+			"label": "Clamp 4",
+			"description": "Valid values 0-30000",
+			"valueSize": 2,
+			"minValue": 0,
+			"maxValue": 30000,
+			"defaultValue": 50,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"9": {
+			"label": "Wattage Percentage Change",
+			"description": "Valid values 0-100",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 100,
+			"defaultValue": 10,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"10": {
+			"label": "Clamp 1",
+			"description": "Valid values 0-100",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 100,
+			"defaultValue": 10,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"11": {
+			"label": "Clamp 2",
+			"description": "Valid values 0-100",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 100,
+			"defaultValue": 10,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"12": {
+			"label": "Clamp 3",
+			"description": "Valid values 0-100",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 100,
+			"defaultValue": 10,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"13": {
+			"label": "Clamp 4",
+			"description": "Valid values 0-100",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 100,
+			"defaultValue": 10,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"101": {
+			"label": "Auto Report Kwh",
+			"description": "Valid values 0 - 31, bit 0: whole em, bit 1: clamp 1, bit 2: clamp 2, bit 3: clamp 3, bit 4: clamp 4",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 1,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"102": {
+			"label": "Auto Report W",
+			"description": "Valid values 0 - 31, bit 0: whole em, bit 1: clamp 1, bit 2: clamp 2, bit 3: clamp 3, bit 4: clamp 4",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 1,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"103": {
+			"label": "Auto Report V",
+			"description": "Valid values 0 - 31, bit 0: whole em, bit 1: clamp 1, bit 2: clamp 2, bit 3: clamp 3, bit 4: clamp 4",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 0,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"104": {
+			"label": "Auto Report A",
+			"description": "Valid values 0 - 31, bit 0: whole em, bit 1: clamp 1, bit 2: clamp 2, bit 3: clamp 3, bit 4: clamp 4",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 0,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"105": {
+			"label": "Auto Report Kvar",
+			"description": "Valid values 0 - 31, bit 0: whole em, bit 1: clamp 1, bit 2: clamp 2, bit 3: clamp 3, bit 4: clamp 4",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 0,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"111": {
+			"label": "Time Interval Auto Report Kwh",
+			"description": "Valid values 0x1e-0x7fffffff",
+			"valueSize": 4,
+			"minValue": 0,
+			"maxValue": 2147483647,
+			"defaultValue": 0,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"112": {
+			"label": "Time Interval Auto Report W",
+			"description": "Valid values 0x1e-0x7fffffff",
+			"valueSize": 4,
+			"minValue": 0,
+			"maxValue": 2147483647,
+			"defaultValue": 0,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"113": {
+			"label": "Time Interval Auto Report V",
+			"description": "Valid values 0x1e-0x7fffffff",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 2147483647,
+			"defaultValue": 0,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"114": {
+			"label": "Time Interval Auto Report A",
+			"description": "Valid values 0x1e-0x7fffffff",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 2147483647,
+			"defaultValue": 0,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"115": {
+			"label": "Time Interval Auto Report Kvar",
+			"description": "Valid values 0x1e-0x7fffffff",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 2147483647,
+			"defaultValue": 0,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		}
+	},
+	"metadata": {
+		"inclusion": "1. Start the COQON App\n2. Select \"Device\" then \"Settings\" and tap on \"+\" to add your Electric Monitor\n3. Select \"Add new COQON device\" \n4. Follow the steps in the App",
+		"exclusion": "1. Start the COQON App\n2. Select \"Device\" then \"Settings\" and tap on the device to remove Electric Monitor\n3. Tap on the the trash can icon\n4. Follow the steps in the App",
+		"reset": "To reset the device to factory default press and hold the function button for 10 seconds. \nNote: Please use this procedure ony when the network primary controller is missing or otherwise inoperabe!",
+		"manual": "https://products.z-wavealliance.org/ProductManual/File?folder=&filename=MarketCertificationFiles/3024/EMHTZ001%20ManualNEW.pdf"
+	}
+}

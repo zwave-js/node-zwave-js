@@ -1,0 +1,363 @@
+// VDA 01E06S263
+// Vitrum VI EU on-off 6 triac 868.4MHz
+{
+	"manufacturer": "VDA",
+	"manufacturerId": "0x010a",
+	"label": "01E06S263",
+	"description": "Vitrum VI EU on-off 6 triac 868.4MHz",
+	"devices": [
+		{
+			"productType": "0x8161",
+			"productId": "0x2062",
+			"zwaveAllianceId": [3271, 3899, 3918]
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"paramInformation": {
+		"7": {
+			"label": "Button N.1 Off Status Led",
+			"description": "Led is off: 0: LED is off; 1: red; 2: green; 3: blue; 4: yellow; 5: magenta; 6: cyan; 7; white",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 7,
+			"defaultValue": 3,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"8": {
+			"label": "Button N.2 Off Status Led",
+			"description": "0: LED is off; 1: red; 2: green; 3: blue; 4: yellow; 5: magenta; 6: cyan; 7; white",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 7,
+			"defaultValue": 3,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"9": {
+			"label": "Button N.3 Off Status Led",
+			"description": "0: LED is off; 1: red; 2: green; 3: blue; 4: yellow; 5: magenta; 6: cyan; 7; white",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 7,
+			"defaultValue": 3,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"10": {
+			"label": "Button N.4 Off Status Led",
+			"description": "0: LED is off; 1: red; 2: green; 3: blue; 4: yellow; 5: magenta; 6: cyan; 7; white",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 7,
+			"defaultValue": 3,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"11": {
+			"label": "Button N.5 Off Status Led",
+			"description": "0: LED is off; 1: red; 2: green; 3: blue; 4: yellow; 5: magenta; 6: cyan; 7; white",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 7,
+			"defaultValue": 3,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"12": {
+			"label": "Button N.6 Off Status Led",
+			"description": "0: LED is off; 1: red; 2: green; 3: blue; 4: yellow; 5: magenta; 6: cyan; 7; white",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 7,
+			"defaultValue": 3,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"13": {
+			"label": "Button N.1 On Status Led",
+			"description": "0: LED is off; 1: red; 2: green; 3: blue; 4: yellow; 5: magenta; 6: cyan; 7; white",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 7,
+			"defaultValue": 4,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"14": {
+			"label": "Button N.2 On Status Led",
+			"description": "0: LED is off; 1: red; 2: green; 3: blue; 4: yellow; 5: magenta; 6: cyan; 7; white",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 7,
+			"defaultValue": 4,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"15": {
+			"label": "Button N.3 On Status Led",
+			"description": "0: LED is off; 1: red; 2: green; 3: blue; 4: yellow; 5: magenta; 6: cyan; 7; white",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 7,
+			"defaultValue": 4,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"16": {
+			"label": "Button N.4 On Status Led",
+			"description": "0: LED is off; 1: red; 2: green; 3: blue; 4: yellow; 5: magenta; 6: cyan; 7; white",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 7,
+			"defaultValue": 4,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"17": {
+			"label": "Button N.5 On Status Led",
+			"description": "0: LED is off; 1: red; 2: green; 3: blue; 4: yellow; 5: magenta; 6: cyan; 7; white",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 7,
+			"defaultValue": 4,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"18": {
+			"label": "Button N.6 On Status Led",
+			"description": "0: LED is off; 1: red; 2: green; 3: blue; 4: yellow; 5: magenta; 6: cyan; 7; white",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 7,
+			"defaultValue": 4,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"25": {
+			"label": "Output Port Connected to Button N.1",
+			"description": "0: disconnected; 1: button connected to output port 1; 2: button connected to output port 2; 3: button connected to output port 3; 4: button connected to output port 4; 5: button connected to output port 5; 6: button connected to output port 6",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 6,
+			"defaultValue": 1,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"26": {
+			"label": "Output Port Connected to Button N.2",
+			"description": "0: disconnected; 1: button connected to output port 1; 2: button connected to output port 2; 3: button connected to output port 3; 4: button connected to output port 4; 5: button connected to output port 5; 6: button connected to output port 6",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 6,
+			"defaultValue": 2,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"27": {
+			"label": "Output Port Connected to Button N.3",
+			"description": "0: disconnected; 1: button connected to output port 1; 2: button connected to output port 2; 3: button connected to output port 3; 4: button connected to output port 4; 5: button connected to output port 5; 6: button connected to output port 6",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 6,
+			"defaultValue": 3,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"28": {
+			"label": "Output Port Connected to Button N.4",
+			"description": "0: disconnected; 1: button connected to output port 1; 2: button connected to output port 2; 3: button connected to output port 3; 4: button connected to output port 4; 5: button connected to output port 5; 6: button connected to output port 6",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 6,
+			"defaultValue": 4,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"29": {
+			"label": "Output Port Connected to Button N.5",
+			"description": "0: disconnected; 1: button connected to output port 1; 2: button connected to output port 2; 3: button connected to output port 3; 4: button connected to output port 4; 5: button connected to output port 5; 6: button connected to output port 6",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 6,
+			"defaultValue": 5,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"30": {
+			"label": "Output Port Connected to Button N.6",
+			"description": "0: disconnected; 1: button connected to output port 1; 2: button connected to output port 2; 3: button connected to output port 3; 4: button connected to output port 4; 5: button connected to output port 5; 6: button connected to output port 6",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 6,
+			"defaultValue": 6,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"31": {
+			"label": "Basic Set On From Group 2",
+			"description": "0: 99 (0x63) 1: 255 (0xff)",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 1,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"32": {
+			"label": "Basic Set On From Group 3",
+			"description": "0: 99 (0x63) 1: 255 (0xff)",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 1,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"33": {
+			"label": "Basic Set On From Group 4",
+			"description": "0: 99 (0x63) 1: 255 (0xff)",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 1,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"34": {
+			"label": "Basic Set On From Group 5",
+			"description": "0: 99 (0x63) 1: 255 (0xff)",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 1,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"35": {
+			"label": "Basic Set On From Group 6",
+			"description": "0: 99 (0x63) 1: 255 (0xff)",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 1,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"36": {
+			"label": "Basic Set On From Group 7",
+			"description": "0: 99 (0x63) 1: 255 (0xff)",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 1,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"206": {
+			"label": "Buttons Max. Brightness",
+			"description": "Leds maximum brightness",
+			"valueSize": 1,
+			"minValue": 5,
+			"maxValue": 100,
+			"defaultValue": 100,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"207": {
+			"label": "Buttons Min. Brightness",
+			"description": "Led minum brightness",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 100,
+			"defaultValue": 5,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"209": {
+			"label": "Buzzer",
+			"description": "0: disabled 1: enabled",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 1,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"218": {
+			"label": "Front-end Buttons Lock",
+			"description": "0: disabled; 1: enabled",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 0,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		}
+	},
+	"metadata": {
+		"inclusion": "Add the device to a certified Z-Wave network\nThe device supports both Classic Add (Classic Inclusion) and Network Wide Add (Network Wide Inclusion).\nThe device supports encryption S2 Unauthenticated.\nFollow the steps below to add the device to the network.\n1. Set primary controller into Add mode (please see controller instruction manual) and operate on it either to enable S2 Unauthenticated encryption or to disable encryption\n2. Check the device is not already added to the network (please refer to the manual section “How to check the device is added to the network”)\n3. Press and hold button N.1 located on top-left front-end device more then 4 seconds till button LED blinks shortly magenta or press shortly the Physical button located on the front-end top-back device (see section “Physical Button Operating” to locate Physical Button).\n4. Every device LED button blinks green shortly 3 times upon the device added successfully\n\nShould the device fail the Classic Add (Classic Inclusion) the device enters into Network Wide Add (Network Wide Inclusion) mode up to 4 times. Any time the device enters into Wide Add Mode, LED Button N.1 blinks Magenta and keeps on to emit a short beep.\n\nHow to check the device is added to the network\nPress button N.1 shortly. The LED button blinks red shortly whether the device is not added to the network",
+		"exclusion": "Remove the device from a certified Z-Wave network\n1. Set primary controller into Remove mode (please see controller instruction manual)\n2. Check the device is not already removed from the network (please refer to the manual section “How to check the device is added to the network”)\n3. Press and hold button N.1 located on top-left front-end device more then 6 seconds till the device emits a long beep. Release the button and press it shortly 3 times again or press shortly the Physical button located on the front end top-back device\n4. Button LED blinks red shortly upon the device removed successfully.\n5. Check the device is removed from the network (please refer to the manual section “How to check the device is added to the network”)\n\nHow to check the device is added to the network\nPress button N.1 shortly. The LED button blinks red shortly whether the device is not added to the network",
+		"reset": "Press and hold the Physical button for about 5 seconds till the buzzer plays a long beep, release the button and press it again till the buzzer plays a sequence of 3 short beeps, than release the button.\nWarning: don’t care the 2 short beeps played after 2 seconds from start and keep on pressing the button till the buzzer plays the 3 short beeps sequence.\nSee Factory reset below for more details and notes.\n\nFactory reset\nDuring factory reset the device sends a Device Reset Locally notification from the Lifeline group.\nThe device reverts to its factory default settings, blinking all LED buttons and reboots and send the Device Reset Locally Notification from the Lifeline group.\nDo not disconnect the device from power supply till rebooting is completed.\nConfiguration and settings are restore to default values.\nHome ID and Node ID are cleared as well",
+		"manual": "https://products.z-wavealliance.org/ProductManual/File?folder=&filename=product_documents/3271/Vitrum%20VI%20EU%20on-off%206%20triac%20868.4MHz%20User%20Manual.1.21.pdf"
+	}
+}

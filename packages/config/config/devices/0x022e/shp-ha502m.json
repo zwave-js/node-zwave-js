@@ -1,0 +1,30 @@
+// Samsung SDS SHP-HA502M
+// Home Security Pad
+{
+	"manufacturer": "Samsung SDS",
+	"manufacturerId": "0x022e",
+	"label": "SHP-HA502M",
+	"description": "Home Security Pad",
+	"devices": [
+		{
+			"productType": "0x0007",
+			"productId": "0x0008",
+			"zwaveAllianceId": 1376
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"associations": {
+		"1": {
+			"label": "Group 1",
+			"maxNodes": 1,
+			"isLifeline": true
+		}
+	},
+	"metadata": {
+		"reset": "Use this procedure only when the network primary controller is missing or otherwise inoperable.\n1. Press setting from main menu.(Refer to 1.Main Menu)\n2. Press password menu\n3. Enter password(#*00) and press Done.\n4. Press OK and then Hidden menu shows up.\n5. Press factory default menu",
+		"manual": "https://products.z-wavealliance.org/ProductManual/File?folder=&filename=MarketCertificationFiles/1376/[CEF17993]%20SHP-HA502M%20Manual.docx"
+	}
+}

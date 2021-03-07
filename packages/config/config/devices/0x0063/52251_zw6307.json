@@ -1,0 +1,143 @@
+// GE/Jasco 52251/ZW6307
+// Portable Smart Motion Sensor
+{
+	"manufacturer": "GE/Jasco",
+	"manufacturerId": "0x0063",
+	"label": "52251/ZW6307",
+	"description": "Portable Smart Motion Sensor",
+	"devices": [
+		{
+			"productType": "0x4953",
+			"productId": "0x3238",
+			"zwaveAllianceId": 3971
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"paramInformation": {
+		"13": {
+			"label": "Pir Sensitivity",
+			"description": "Configuration the motion sensitivity high medium or low",
+			"valueSize": 1,
+			"minValue": 1,
+			"maxValue": 3,
+			"defaultValue": 3,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Low sensitivity",
+					"value": 1
+				},
+				{
+					"label": "Medium sensitivity",
+					"value": 2
+				},
+				{
+					"label": "High sensitivity",
+					"value": 3
+				}
+			]
+		},
+		"18": {
+			"label": "Motion Timeout Duration",
+			"description": "Timeout duration motion detect, when battery operated (1-60), when usb powered it is continually 5 seconds",
+			"valueSize": 1,
+			"minValue": 1,
+			"maxValue": 127,
+			"defaultValue": 1,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true,
+			"options": [
+				{
+					"label": "Timeout duration after detection in minutes",
+					"value": 60
+				},
+				{
+					"label": "5 seconds",
+					"value": 127
+				}
+			]
+		},
+		"19": {
+			"label": "Alternate Exclusion",
+			"description": "Alternate exclusion mode press button one time or three times",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 0,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Classic inclusion",
+					"value": 0
+				},
+				{
+					"label": "Alternate inclusion",
+					"value": 1
+				}
+			]
+		},
+		"20": {
+			"label": "Notification",
+			"description": "Sensor will send out notification",
+			"valueSize": 1,
+			"minValue": 1,
+			"maxValue": 1,
+			"defaultValue": 1,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"23": {
+			"label": "Battery Report Interval",
+			"description": "Interval between reports of battery level",
+			"valueSize": 2,
+			"minValue": 5,
+			"maxValue": 1440,
+			"defaultValue": 1440,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"28": {
+			"label": "Motion Action Blink Led",
+			"description": "Disable or enable motion action blink led",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 1,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Disable led",
+					"value": 0
+				},
+				{
+					"label": "Enabled",
+					"value": 1
+				}
+			]
+		}
+	},
+	"metadata": {
+		"inclusion": "1. Follow the instructions for your Z-Wave certified controller to add the device in the Z-Wave network.\n2. Once the controller is ready to add your motion sensor, press and release the button on the sensor.\n3. The blue LED will continue to flash quickly after it locates a network – the controller’s app will indicate if it discovers the sensor. If prompted by the controller to enter the S2 security code, refer to the QR code/security number on the back of the box or the QR code label on the product (see figure 3). Enter the 5-digit code.\n4. The blue LED will activate for 3 seconds to confirm it has been added in the network.",
+		"exclusion": "1. Follow the instructions for your Z-Wave certified controller to remove the device from the Z-Wave network.\n2. Once the controller is ready to remove your motion sensor, press and release the button on the sensor.\n3. The LED will blink 5 times",
+		"reset": "1. Press the button 10 times within 6 seconds (interval between 2 presses of the button cannot be longer than 1 second).\n2. The blue LED will blink 3 times",
+		"manual": "https://products.z-wavealliance.org/ProductManual/File?folder=&filename=product_documents/3971/52251_QSG_v1[1].pdf"
+	}
+}
