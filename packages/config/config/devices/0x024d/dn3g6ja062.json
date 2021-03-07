@@ -1,0 +1,68 @@
+// Z-works Inc. DN3G6JA062
+// Lock Dectector
+{
+	"manufacturer": "Z-works Inc.",
+	"manufacturerId": "0x024d",
+	"label": "DN3G6JA062",
+	"description": "Lock Dectector",
+	"devices": [
+		{
+			"productType": "0x4761",
+			"productId": "0x0001",
+			"zwaveAllianceId": 1651
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"paramInformation": {
+		"1": {
+			"label": "Polling Interval",
+			"valueSize": 1,
+			"unit": "seconds",
+			"minValue": 30,
+			"maxValue": 127,
+			"defaultValue": 60,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"2": {
+			"label": "LED Blinking Mode",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 3,
+			"defaultValue": 1,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "LED indicator is always off",
+					"value": 0
+				},
+				{
+					"label": "LED indicator lights 1 second after opening",
+					"value": 1
+				},
+				{
+					"label": "LED indicator lights 1 second after closing",
+					"value": 2
+				},
+				{
+					"label": "LED indicator lights 1 second after opening and closing",
+					"value": 3
+				}
+			]
+		}
+	},
+	"metadata": {
+		"inclusion": "Using a paper clip or equivalent, push the button over 3 seconds.\n(Please note that this product is reset if switch is pushed over 10 seconds)\nStatus LED turns off after adding",
+		"exclusion": "Using a paper clip or equivalent, push the button over 3 seconds.\n(Please note that this product is reset if switch is pushed over 10 seconds)\nStatus LED starts flashing after removal is finished",
+		"reset": "Using a paper clip or equivalent, push the button over 10 seconds.\nUse this procedure only in the event that the network primary controller is missing or otherwise inoperable",
+		"manual": "https://products.z-wavealliance.org/ProductManual/File?folder=&filename=MarketCertificationFiles/1651/User's%20Guide%20151215_160310_updated.pdf"
+	}
+}

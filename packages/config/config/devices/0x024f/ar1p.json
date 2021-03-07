@@ -1,0 +1,121 @@
+// SE Devices AR1P
+// Standalone Relay 1-Pole
+{
+	"manufacturer": "SE Devices",
+	"manufacturerId": "0x024f",
+	"label": "AR1P",
+	"description": "Standalone Relay 1-Pole",
+	"devices": [
+		{
+			"productType": "0x0003",
+			"productId": "0x1013",
+			"zwaveAllianceId": 2858
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"paramInformation": {
+		"1": {
+			"label": "Hardware Combination Identifier",
+			"valueSize": 1,
+			"minValue": 16,
+			"maxValue": 19,
+			"defaultValue": 19,
+			"unsigned": true,
+			"readOnly": true,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "2-Pole 8A Relay",
+					"value": 16
+				},
+				{
+					"label": "1-10V Dimmer",
+					"value": 17
+				},
+				{
+					"label": "230V MOSFET Dimmer",
+					"value": 18
+				},
+				{
+					"label": "1-Pole 16A Relay",
+					"value": 19
+				}
+			]
+		},
+		"4": {
+			"label": "Safety Activate Delay",
+			"valueSize": 2,
+			"minValue": 0,
+			"maxValue": 32767,
+			"unit": "seconds",
+			"defaultValue": 0,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"5": {
+			"label": "Safety Off Period",
+			"valueSize": 2,
+			"minValue": 0,
+			"maxValue": 32767,
+			"unit": "seconds",
+			"defaultValue": 600,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"6": {
+			"label": "Safety On Period",
+			"valueSize": 2,
+			"minValue": 0,
+			"maxValue": 32767,
+			"unit": "seconds",
+			"defaultValue": 300,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"16": {
+			"label": "Back Unit Type",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 6,
+			"defaultValue": 2,
+			"unsigned": true,
+			"readOnly": true,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "2-Pole 8A Relay",
+					"value": 0
+				},
+				{
+					"label": "230V MOSFET Dimmer",
+					"value": 2
+				},
+				{
+					"label": "1-10V Dimmer",
+					"value": 4
+				},
+				{
+					"label": "1-Pole 16A Relay",
+					"value": 6
+				}
+			]
+		}
+	},
+	"metadata": {
+		"inclusion": "To add the device to a Z-Wave network, the Z-Wave Controller must first be set into Add (Learn) mode. Then use a paperclip or a small pointy tool to push and hold the button in the button hole for approximately a second. The device LED will blink twice to indicate that it sends information to the Controller",
+		"exclusion": "To remove the device from a Z-Wave network, the Z-Wave Controller must first be set into Remove (Learn) mode. Then use a paperclip or a small pointy tool to push and hold the button in the button hole for approximately a second. The device LED will blink twice to indicate that it sends information to the Controller",
+		"reset": "WARNING! Executing a Factory Reset on a device may make it stop working as wanted and WILL remove it from the Z-Wave network. Please DO NOT execute this procedure unless it’s absolutely necessary.\n\nPress and Hold the Add/Remove button for about 15 seconds - until LED indicator starts blinking. Then release the button. The device will now be factory reset and removed from the Z-Wave network.\n\nThe button is located about 10 mm down in the middle of the three holes on the front. A thin tool (a very small screwdriver, a toothpick, a paper clip or similar) is needed to access the button",
+		"manual": "https://products.z-wavealliance.org/ProductManual/File?folder=&filename=MarketCertificationFiles/2858/ARxP%20-%20Standalone%20Z-Wave%20Relay%20-%20User%20Manual.pdf"
+	}
+}
