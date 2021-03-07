@@ -9,12 +9,7 @@
 		{
 			"productType": "0x5250",
 			"productId": "0x3032",
-			"zwaveAllianceId": [
-				305,
-				40,
-				41,
-				42
-			]
+			"zwaveAllianceId": [305, 40, 41, 42]
 		}
 	],
 	"firmwareVersion": {
