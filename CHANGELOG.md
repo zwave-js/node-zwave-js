@@ -3,7 +3,7 @@
 	Placeholder for next release:
 	## __WORK IN PROGRESS__
 -->
-## __WORK IN PROGRESS__
+## 6.6.1 (2021-03-07)
 ### Bugfixes
 * After a restart, sleeping nodes have their status correctly determined even if they weren't interviewed completely before
 * During inclusion, sleeping nodes are no longer marked as asleep after the protocol info was queried
