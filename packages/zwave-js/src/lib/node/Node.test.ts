@@ -2,7 +2,6 @@ import {
 	assertZWaveError,
 	CommandClasses,
 	CommandClassInfo,
-	unknownBoolean,
 	ValueDB,
 	ValueID,
 	ValueMetadata,
@@ -30,8 +29,13 @@ import { createEmptyMockDriver } from "../test/mocks";
 import { DeviceClass } from "./DeviceClass";
 import { ZWaveNode } from "./Node";
 import { RequestNodeInfoRequest } from "./RequestNodeInfoMessages";
-import type { ZWaveNodeEvents } from "./Types";
-import { InterviewStage, NodeStatus } from "./Types";
+import {
+	InterviewStage,
+	NodeStatus,
+	NodeType,
+	ProtocolVersion,
+	ZWaveNodeEvents,
+} from "./Types";
 
 /** This is an ugly hack to be able to test the private methods without resorting to @internal */
 class TestNode extends ZWaveNode {
@@ -209,21 +213,22 @@ describe("lib/node/Node", () => {
 			beforeAll(() => {
 				fakeDriver.sendMessage.mockClear();
 
-				expected = {
+				expected = ({
 					isListening: true,
 					isFrequentListening: false,
 					isRouting: true,
-					maxBaudRate: 100000,
-					isSecure: false,
-					version: 3,
-					isBeaming: false,
+					supportedDataRates: [100000],
+					supportsSecurity: false,
+					protocolVersion: ProtocolVersion["4.5x / 6.0x"],
+					supportsBeaming: false,
+					nodeType: NodeType.Controller,
 					deviceClass: new DeviceClass(
 						fakeDriver.configManager,
 						0x01,
 						0x03,
 						0x02,
 					),
-				} as GetNodeProtocolInfoResponse;
+				} as unknown) as GetNodeProtocolInfoResponse;
 
 				fakeDriver.sendMessage.mockResolvedValue(expected);
 			});
@@ -242,14 +247,7 @@ describe("lib/node/Node", () => {
 				for (const prop of Object.keys(
 					expected,
 				) as (keyof typeof expected)[]) {
-					if (prop === "isSecure") {
-						// we special-case false as "unknown" because many secure nodes still report false
-						expect(node.isSecure).toBe(
-							expected.isSecure || unknownBoolean,
-						);
-					} else {
-						expect((node as any)[prop]).toBe(expected[prop]);
-					}
+					expect((node as any)[prop]).toBe(expected[prop]);
 				}
 			});
 
@@ -923,10 +921,12 @@ describe("lib/node/Node", () => {
 			isListening: true,
 			isFrequentListening: false,
 			isRouting: false,
-			maxBaudRate: 40000,
-			isSecure: false,
-			isBeaming: true,
-			version: 4,
+			supportedDataRates: [40000],
+			supportsSecurity: false,
+			isSecure: "unknown",
+			supportsBeaming: true,
+			protocolVersion: 3,
+			nodeType: "Controller",
 			neighbors: [2, 3, 4],
 			commandClasses: {
 				"0x25": {
@@ -959,6 +959,21 @@ describe("lib/node/Node", () => {
 			// @ts-ignore We need write access to the map
 			fakeDriver.controller.nodes.set(1, node);
 			node.deserialize(serializedTestNode);
+			expect(node.serialize()).toEqual(serializedTestNode);
+			node.destroy();
+		});
+
+		it("deserializing a legacy node object should have the correct properties", () => {
+			const node = new ZWaveNode(1, fakeDriver);
+			// @ts-ignore We need write access to the map
+			fakeDriver.controller.nodes.set(1, node);
+			const legacy = {
+				...serializedTestNode,
+				version: 3,
+				isBeaming: true,
+				maxBaudRate: 40000,
+			};
+			node.deserialize(legacy);
 			expect(node.serialize()).toEqual(serializedTestNode);
 			node.destroy();
 		});
@@ -1068,12 +1083,12 @@ describe("lib/node/Node", () => {
 			const node = new ZWaveNode(1, fakeDriver);
 			const wrongInputs: [string, any][] = [
 				["isListening", 1],
-				["isFrequentListening", "2"],
+				["isFrequentListening", 2],
 				["isRouting", {}],
-				["maxBaudRate", true],
-				["isSecure", 3],
-				["isBeaming", "3"],
-				["version", false],
+				["supportedDataRates", true],
+				["supportsSecurity", 3],
+				["supportsSecurity", "3"],
+				["protocolVersion", false],
 			];
 			for (const [prop, val] of wrongInputs) {
 				const input = {
