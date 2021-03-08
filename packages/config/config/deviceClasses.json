@@ -2,6 +2,7 @@
 // legacy Z-Wave standard (SDS10242)
 {
 	"basic": {
+		// The GetNodeProtocolInfo messages rely on these values - double-check there when changing anything
 		"0x01": "Controller",
 		"0x02": "Static Controller",
 		"0x03": "Slave",
