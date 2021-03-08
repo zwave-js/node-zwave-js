@@ -178,7 +178,22 @@ export class NodeNamingAndLocationCC extends CommandClass {
 		return true;
 	}
 
-	public async interview(complete: boolean = true): Promise<void> {
+	public async interview(): Promise<void> {
+		const node = this.getNode()!;
+
+		this.driver.controllerLog.logNode(node.id, {
+			endpoint: this.endpointIndex,
+			message: `Interviewing ${this.ccName}...`,
+			direction: "none",
+		});
+
+		await this.refreshValues();
+
+		// Remember that the interview is complete
+		this.interviewComplete = true;
+	}
+
+	public async refreshValues(): Promise<void> {
 		const node = this.getNode()!;
 		const endpoint = this.getEndpoint()!;
 		const api = endpoint.commandClasses[
@@ -188,34 +203,28 @@ export class NodeNamingAndLocationCC extends CommandClass {
 		});
 
 		this.driver.controllerLog.logNode(node.id, {
-			message: `${this.constructor.name}: doing a ${
-				complete ? "complete" : "partial"
-			} interview...`,
-			direction: "none",
-		});
-
-		this.driver.controllerLog.logNode(node.id, {
 			message: "retrieving node name...",
 			direction: "outbound",
 		});
 		const name = await api.getName();
-		this.driver.controllerLog.logNode(node.id, {
-			message: `is named "${name}"`,
-			direction: "inbound",
-		});
+		if (name != undefined) {
+			this.driver.controllerLog.logNode(node.id, {
+				message: `is named "${name}"`,
+				direction: "inbound",
+			});
+		}
 
 		this.driver.controllerLog.logNode(node.id, {
 			message: "retrieving node location...",
 			direction: "outbound",
 		});
 		const location = await api.getLocation();
-		this.driver.controllerLog.logNode(node.id, {
-			message: `received location: ${location}`,
-			direction: "inbound",
-		});
-
-		// Remember that the interview is complete
-		this.interviewComplete = true;
+		if (location != undefined) {
+			this.driver.controllerLog.logNode(node.id, {
+				message: `received location: ${location}`,
+				direction: "inbound",
+			});
+		}
 	}
 }
 

@@ -333,7 +333,7 @@ export class ThermostatSetpointCC extends CommandClass {
 		}
 	}
 
-	public async interview(complete: boolean = true): Promise<void> {
+	public async interview(): Promise<void> {
 		const node = this.getNode()!;
 		const endpoint = this.getEndpoint()!;
 		const api = endpoint.commandClasses["Thermostat Setpoint"].withOptions({
@@ -342,9 +342,7 @@ export class ThermostatSetpointCC extends CommandClass {
 
 		this.driver.controllerLog.logNode(node.id, {
 			endpoint: this.endpointIndex,
-			message: `${this.constructor.name}: doing a ${
-				complete ? "complete" : "partial"
-			} interview...`,
+			message: `Interviewing ${this.ccName}...`,
 			direction: "none",
 		});
 
@@ -358,33 +356,24 @@ export class ThermostatSetpointCC extends CommandClass {
 				this.endpointIndex,
 			);
 
-			// If we haven't yet, query the supported setpoint types
-			if (complete) {
+			// Query the supported setpoint types
+			this.driver.controllerLog.logNode(node.id, {
+				endpoint: this.endpointIndex,
+				message: "retrieving supported setpoint types...",
+				direction: "outbound",
+			});
+			const resp = await api.getSupportedSetpointTypes();
+			if (!resp) {
 				this.driver.controllerLog.logNode(node.id, {
 					endpoint: this.endpointIndex,
-					message: "retrieving supported setpoint types...",
-					direction: "outbound",
+					message:
+						"Querying supported setpoint types timed out, skipping interview...",
+					level: "warn",
 				});
-				const resp = await api.getSupportedSetpointTypes();
-				if (!resp) {
-					this.driver.controllerLog.logNode(node.id, {
-						endpoint: this.endpointIndex,
-						message:
-							"Querying supported setpoint types timed out, skipping interview...",
-						level: "warn",
-					});
-					return;
-				}
-				setpointTypes = [...resp];
-				interpretation = undefined; // we don't know yet which interpretation the device uses
-			} else {
-				setpointTypes =
-					this.getValueDB().getValue(supportedSetpointTypesValueId) ??
-					[];
-				interpretation = this.getValueDB().getValue(
-					getSetpointTypesInterpretationValueID(this.endpointIndex),
-				);
+				return;
 			}
+			setpointTypes = [...resp];
+			interpretation = undefined; // we don't know yet which interpretation the device uses
 
 			// If necessary, test which interpretation the device follows
 
@@ -398,27 +387,20 @@ export class ThermostatSetpointCC extends CommandClass {
 				interpretationChanged = true;
 			}
 
-			if (!interpretation) {
-				if ([3, 4, 5, 6].some((type) => setpointTypes.includes(type))) {
-					this.driver.controllerLog.logNode(node.id, {
-						endpoint: this.endpointIndex,
-						message:
-							"uses Thermostat Setpoint bitmap interpretation A",
-						direction: "none",
-					});
-					switchToInterpretationA();
-				} else {
-					this.driver.controllerLog.logNode(node.id, {
-						endpoint: this.endpointIndex,
-						message:
-							"Thermostat Setpoint bitmap interpretation is unknown, assuming B for now",
-						direction: "none",
-					});
-				}
-			} else if (interpretation === "A") {
-				setpointTypes = setpointTypes.map(
-					(i) => thermostatSetpointTypeMap[i],
-				);
+			if ([3, 4, 5, 6].some((type) => setpointTypes.includes(type))) {
+				this.driver.controllerLog.logNode(node.id, {
+					endpoint: this.endpointIndex,
+					message: "uses Thermostat Setpoint bitmap interpretation A",
+					direction: "none",
+				});
+				switchToInterpretationA();
+			} else {
+				this.driver.controllerLog.logNode(node.id, {
+					endpoint: this.endpointIndex,
+					message:
+						"Thermostat Setpoint bitmap interpretation is unknown, assuming B for now",
+					direction: "none",
+				});
 			}
 
 			// Now scan all endpoints. Each type we received a value for gets marked as supported
@@ -446,6 +428,7 @@ export class ThermostatSetpointCC extends CommandClass {
 					logMessage = `received current value of setpoint ${setpointName}: ${
 						setpoint.value
 					} ${setpoint.scale.unit ?? ""}`;
+					// wotan-disable-next-line
 				} else if (!interpretation) {
 					// The setpoint type is not supported, switch to interpretation A
 					this.driver.controllerLog.logNode(node.id, {
@@ -477,13 +460,12 @@ export class ThermostatSetpointCC extends CommandClass {
 				interpretationChanged = true;
 			}
 
-			// After a complete interview, we need to remember which setpoint types are supported
-			if (complete) {
-				this.getValueDB().setValue(
-					supportedSetpointTypesValueId,
-					supportedSetpointTypes,
-				);
-			}
+			// Remember which setpoint types are actually supported, so we don't
+			// need to do this guesswork again
+			this.getValueDB().setValue(
+				supportedSetpointTypesValueId,
+				supportedSetpointTypes,
+			);
 
 			// Also save the bitmap interpretation if we know it now
 			if (interpretationChanged) {
@@ -495,46 +477,37 @@ export class ThermostatSetpointCC extends CommandClass {
 		} else {
 			// Versions >= 3 adhere to bitmap interpretation A, so we can rely on getSupportedSetpointTypes
 
-			// If we haven't yet, query the supported setpoint types
+			// Query the supported setpoint types
 			let setpointTypes: ThermostatSetpointType[] = [];
-			if (complete) {
+			this.driver.controllerLog.logNode(node.id, {
+				endpoint: this.endpointIndex,
+				message: "retrieving supported setpoint types...",
+				direction: "outbound",
+			});
+			const resp = await api.getSupportedSetpointTypes();
+			if (resp) {
+				setpointTypes = [...resp];
+				const logMessage =
+					"received supported setpoint types:\n" +
+					setpointTypes
+						.map((type) =>
+							getEnumMemberName(ThermostatSetpointType, type),
+						)
+						.map((name) => `· ${name}`)
+						.join("\n");
 				this.driver.controllerLog.logNode(node.id, {
 					endpoint: this.endpointIndex,
-					message: "retrieving supported setpoint types...",
-					direction: "outbound",
+					message: logMessage,
+					direction: "inbound",
 				});
-				const resp = await api.getSupportedSetpointTypes();
-				if (resp) {
-					setpointTypes = [...resp];
-					const logMessage =
-						"received supported setpoint types:\n" +
-						setpointTypes
-							.map((type) =>
-								getEnumMemberName(ThermostatSetpointType, type),
-							)
-							.map((name) => `· ${name}`)
-							.join("\n");
-					this.driver.controllerLog.logNode(node.id, {
-						endpoint: this.endpointIndex,
-						message: logMessage,
-						direction: "inbound",
-					});
-				} else {
-					this.driver.controllerLog.logNode(node.id, {
-						endpoint: this.endpointIndex,
-						message:
-							"Querying supported setpoint types timed out, skipping interview...",
-						level: "warn",
-					});
-					return;
-				}
 			} else {
-				setpointTypes =
-					this.getValueDB().getValue({
-						commandClass: this.ccId,
-						property: "supportedSetpointTypes",
-						endpoint: this.endpointIndex,
-					}) ?? [];
+				this.driver.controllerLog.logNode(node.id, {
+					endpoint: this.endpointIndex,
+					message:
+						"Querying supported setpoint types timed out, skipping interview...",
+					level: "warn",
+				});
+				return;
 			}
 
 			for (const type of setpointTypes) {
@@ -542,44 +515,25 @@ export class ThermostatSetpointCC extends CommandClass {
 					ThermostatSetpointType,
 					type,
 				);
-				// If we haven't yet, find out the capabilities of this setpoint
-				if (complete) {
-					this.driver.controllerLog.logNode(node.id, {
-						endpoint: this.endpointIndex,
-						message: `retrieving capabilities for setpoint ${setpointName}...`,
-						direction: "outbound",
-					});
-					const setpointCaps = await api.getCapabilities(type);
-					if (setpointCaps) {
-						const minValueUnit = getSetpointUnit(
-							this.driver.configManager,
-							setpointCaps.minValueScale,
-						);
-						const maxValueUnit = getSetpointUnit(
-							this.driver.configManager,
-							setpointCaps.maxValueScale,
-						);
-						const logMessage = `received capabilities for setpoint ${setpointName}:
-minimum value: ${setpointCaps.minValue} ${minValueUnit}
-maximum value: ${setpointCaps.maxValue} ${maxValueUnit}`;
-						this.driver.controllerLog.logNode(node.id, {
-							endpoint: this.endpointIndex,
-							message: logMessage,
-							direction: "inbound",
-						});
-					}
-				}
-				// Every time, query the current value
+				// Find out the capabilities of this setpoint
 				this.driver.controllerLog.logNode(node.id, {
 					endpoint: this.endpointIndex,
-					message: `querying current value of setpoint ${setpointName}...`,
+					message: `retrieving capabilities for setpoint ${setpointName}...`,
 					direction: "outbound",
 				});
-				const setpoint = await api.get(type);
-				if (setpoint) {
-					const logMessage = `received current value of setpoint ${setpointName}: ${
-						setpoint.value
-					} ${setpoint.scale.unit ?? ""}`;
+				const setpointCaps = await api.getCapabilities(type);
+				if (setpointCaps) {
+					const minValueUnit = getSetpointUnit(
+						this.driver.configManager,
+						setpointCaps.minValueScale,
+					);
+					const maxValueUnit = getSetpointUnit(
+						this.driver.configManager,
+						setpointCaps.maxValueScale,
+					);
+					const logMessage = `received capabilities for setpoint ${setpointName}:
+minimum value: ${setpointCaps.minValue} ${minValueUnit}
+maximum value: ${setpointCaps.maxValue} ${maxValueUnit}`;
 					this.driver.controllerLog.logNode(node.id, {
 						endpoint: this.endpointIndex,
 						message: logMessage,
@@ -587,10 +541,51 @@ maximum value: ${setpointCaps.maxValue} ${maxValueUnit}`;
 					});
 				}
 			}
+
+			// Query the current value for all setpoint types
+			await this.refreshValues();
 		}
 
 		// Remember that the interview is complete
 		this.interviewComplete = true;
+	}
+
+	public async refreshValues(): Promise<void> {
+		const node = this.getNode()!;
+		const endpoint = this.getEndpoint()!;
+		const api = endpoint.commandClasses["Thermostat Setpoint"].withOptions({
+			priority: MessagePriority.NodeQuery,
+		});
+
+		const setpointTypes: ThermostatSetpointType[] =
+			this.getValueDB().getValue(
+				getSupportedSetpointTypesValueID(this.endpointIndex),
+			) ?? [];
+
+		// Query each setpoint's current value
+		for (const type of setpointTypes) {
+			const setpointName = getEnumMemberName(
+				ThermostatSetpointType,
+				type,
+			);
+			// Every time, query the current value
+			this.driver.controllerLog.logNode(node.id, {
+				endpoint: this.endpointIndex,
+				message: `querying current value of setpoint ${setpointName}...`,
+				direction: "outbound",
+			});
+			const setpoint = await api.get(type);
+			if (setpoint) {
+				const logMessage = `received current value of setpoint ${setpointName}: ${
+					setpoint.value
+				} ${setpoint.scale.unit ?? ""}`;
+				this.driver.controllerLog.logNode(node.id, {
+					endpoint: this.endpointIndex,
+					message: logMessage,
+					direction: "inbound",
+				});
+			}
+		}
 	}
 }
 

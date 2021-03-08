@@ -36,9 +36,9 @@
             // e.g. add event handlers to all known nodes
         );
 
-        // After a node was interviewed, it is safe to control it
+        // When a node is marked as ready, it is safe to control it
         const node = driver.controller.nodes.get(2);
-        node.once("interview completed", async () => {
+        node.once("ready", async () => {
             // e.g. perform a BasicCC::Set with target value 50
             await node.commandClasses.Basic.set(50);
         });

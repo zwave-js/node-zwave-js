@@ -104,6 +104,17 @@ Refreshes all non-static sensor and actuator values from this node. Although thi
 > [!WARNING]  
 > **DO NOT** use this method too frequently. Depending on the devices, this may generate a lot of traffic.
 
+### `refreshCCValues`
+
+```ts
+refreshCCValues(cc: CommandClasses): Promise<void>
+```
+
+Refreshes all non-static values from the given CC (all endpoints). Although this method returns a `Promise`, it should generally **not** be `await`ed, since the update may take a long time.
+
+> [!WARNING]  
+> **DO NOT** use this method too frequently. Depending on the devices, this may generate a lot of traffic.
+
 ### `getEndpoint`
 
 ```ts
@@ -308,12 +319,6 @@ enum InterviewStage {
 	ProtocolInfo,
 	/** The node has been queried for supported and controlled command classes */
 	NodeInfo,
-
-	/**
-	 * This marks the beginning of re-interviews on application startup.
-	 * RestartFromCache and later stages will be serialized as "Complete" in the cache
-	 */
-	RestartFromCache,
 
 	/**
 	 * Information for all command classes has been queried.
@@ -600,7 +605,7 @@ A non-sleeping node has stopped responding or just started responding again. The
 
 ### `"interview completed"`
 
-The interview process for this node was completed. The node is passed as the single argument to the callback:
+The initial interview process for this node was completed. The node is passed as the single argument to the callback:
 
 ```ts
 (node: ZWaveNode) => void
@@ -636,7 +641,11 @@ interface NodeInterviewFailedEventArgs {
 
 ### `"ready"`
 
-This is emitted during the interview process when enough information about the node is known that it can safely be used. The node is passed as the single argument to the callback:
+This is emitted when enough information about the node is known that it can safely be used. This includes protocol information and supported/controlled CCs.
+
+The driver will also try to identify the node, its CC versions, endpoints, capabilities for each CC, etc. However, this **does not** mean that **all** this information is known to the driver due to potential timeouts, lost messages and/or unresponsive nodes during the interview. Therefore, the driver will do its best to work with what it has.
+
+The node is passed as the single argument to the callback:
 
 ```ts
 (node: ZWaveNode) => void
@@ -645,7 +654,7 @@ This is emitted during the interview process when enough information about the n
 There are two situations when this event is emitted:
 
 1. The interview of a node is completed for the first time ever.
-2. The driver begins a partial interview of a node that has previously been interviewed completely.
+2. The node that has previously been interviewed completely and it either responds or is asleep.
 
 > [!NOTE]
 > This event does not imply that the node is currently awake or will respond to requests.
