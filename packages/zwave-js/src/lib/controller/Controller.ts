@@ -2024,7 +2024,7 @@ ${associatedNodes.join(", ")}`,
 	 * Removes a node from all other nodes' associations
 	 * WARNING: It is not recommended to await this method
 	 */
-	public async removeNodeFromAllAssocations(nodeId: number): Promise<void> {
+	public async removeNodeFromAllAssociations(nodeId: number): Promise<void> {
 		// Create all async tasks
 		const tasks = [...this.nodes.values()]
 			.filter((node) => node.id !== this._ownNodeId && node.id !== nodeId)
