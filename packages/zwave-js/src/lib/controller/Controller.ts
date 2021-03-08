@@ -124,7 +124,7 @@ interface ControllerEventCallbacks {
 	"inclusion stopped": () => void;
 	"exclusion stopped": () => void;
 	"node added": (node: ZWaveNode) => void;
-	"node removed": (node: ZWaveNode) => void;
+	"node removed": (node: ZWaveNode, replaced: boolean) => void;
 	"heal network progress": (
 		progress: ReadonlyMap<number, HealNodeStatus>,
 	) => void;
@@ -1157,7 +1157,7 @@ export class ZWaveController extends EventEmitter {
 				this.emit("inclusion stopped");
 
 				if (this._nodePendingReplace) {
-					this.emit("node removed", this._nodePendingReplace);
+					this.emit("node removed", this._nodePendingReplace, true);
 					this._nodes.delete(this._nodePendingReplace.id);
 
 					// Create a fresh node instance and forget the old one
@@ -1308,7 +1308,11 @@ export class ZWaveController extends EventEmitter {
 					);
 
 					// notify listeners
-					this.emit("node removed", this._nodePendingExclusion);
+					this.emit(
+						"node removed",
+						this._nodePendingExclusion,
+						false,
+					);
 					// and forget the node
 					this._nodes.delete(this._nodePendingExclusion.id);
 					this._nodePendingExclusion = undefined;
@@ -2133,7 +2137,7 @@ ${associatedNodes.join(", ")}`,
 					// If everything went well, the status is RemoveFailedNodeStatus.NodeRemoved
 
 					// Emit the removed event so the driver and applications can react
-					this.emit("node removed", this.nodes.get(nodeId)!);
+					this.emit("node removed", this.nodes.get(nodeId)!, false);
 					// and forget the node
 					this._nodes.delete(nodeId);
 

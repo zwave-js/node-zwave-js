@@ -1101,7 +1101,7 @@ export class Driver extends EventEmitter {
 	}
 
 	/** This is called when a node was removed from the network */
-	private onNodeRemoved(node: ZWaveNode): void {
+	private onNodeRemoved(node: ZWaveNode, replaced: boolean): void {
 		// Remove all listeners
 		this.removeNodeEventHandlers(node);
 		// purge node values from the DB
@@ -1113,24 +1113,33 @@ export class Driver extends EventEmitter {
 			ZWaveErrorCodes.Controller_NodeRemoved,
 		);
 
-		// Asynchronously remove the node from all possible associations, ignore potential errors
-		this.controller.removeNodeFromAllAssocations(node.id).catch((err) => {
-			this.driverLog.print(
-				`Failed to remove node ${node.id} from all associations: ${err.message}`,
-				"error",
-			);
-		});
-
-		// Remove the node id from all cached neighbor lists and asynchronously make the affected nodes update their neighbor lists
-		for (const otherNode of this.controller.nodes.values()) {
-			if (otherNode !== node && otherNode.neighbors.includes(node.id)) {
-				otherNode.removeNodeFromCachedNeighbors(node.id);
-				otherNode.queryNeighborsInternal().catch((err) => {
+		if (!replaced) {
+			// Asynchronously remove the node from all possible associations, ignore potential errors
+			// but only if the node is not getting replaced, because the removal will interfere with
+			// bootstrapping the new node
+			this.controller
+				.removeNodeFromAllAssocations(node.id)
+				.catch((err) => {
 					this.driverLog.print(
-						`Failed to update neighbors for node ${otherNode.id}: ${err.message}`,
-						"warn",
+						`Failed to remove node ${node.id} from all associations: ${err.message}`,
+						"error",
 					);
 				});
+
+			// Remove the node id from all cached neighbor lists and asynchronously make the affected nodes update their neighbor lists
+			for (const otherNode of this.controller.nodes.values()) {
+				if (
+					otherNode !== node &&
+					otherNode.neighbors.includes(node.id)
+				) {
+					otherNode.removeNodeFromCachedNeighbors(node.id);
+					otherNode.queryNeighborsInternal().catch((err) => {
+						this.driverLog.print(
+							`Failed to update neighbors for node ${otherNode.id}: ${err.message}`,
+							"warn",
+						);
+					});
+				}
 			}
 		}
 
