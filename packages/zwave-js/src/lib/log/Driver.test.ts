@@ -1,4 +1,8 @@
-import { getDirectionPrefix, ZWaveLogContainer } from "@zwave-js/core";
+import {
+	createDefaultTransportFormat,
+	getDirectionPrefix,
+	ZWaveLogContainer,
+} from "@zwave-js/core";
 import { assertLogInfo, assertMessage, SpyTransport } from "@zwave-js/testing";
 import { createDeferredPromise } from "alcalzone-shared/deferred-promise";
 import { SortedList } from "alcalzone-shared/sorted-list";
@@ -56,6 +60,7 @@ describe("lib/log/Driver =>", () => {
 	// Replace all defined transports with a spy transport
 	beforeAll(() => {
 		spyTransport = new SpyTransport();
+		spyTransport.format = createDefaultTransportFormat(true, true);
 		driverLogger = new DriverLogger(
 			new ZWaveLogContainer({
 				transports: [spyTransport],
