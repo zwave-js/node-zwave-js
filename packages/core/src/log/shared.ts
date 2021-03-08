@@ -5,6 +5,10 @@ import * as path from "path";
 import { configs, MESSAGE } from "triple-beam";
 import winston, { Logger } from "winston";
 import type Transport from "winston-transport";
+import type {
+	ConsoleTransportInstance,
+	FileTransportInstance,
+} from "winston/lib/winston/transports";
 import { colorizer } from "./Colorizer";
 
 const { combine, timestamp, label } = winston.format;
@@ -84,7 +88,7 @@ export class ZWaveLoggerBase {
 
 export interface LogConfig {
 	enabled: boolean;
-	level: number;
+	level: string | number;
 	transports: Transport[];
 	logToFile: boolean;
 	nodeFilter?: number[];
@@ -101,13 +105,13 @@ function stringToNodeList(nodes?: string): number[] | undefined {
 }
 
 export class ZWaveLogContainer extends winston.Container {
-	private fileTransport: Transport | undefined;
-	private consoleTransport: Transport | undefined;
+	private fileTransport: FileTransportInstance | undefined;
+	private consoleTransport: ConsoleTransportInstance | undefined;
 	private loglevelVisibleCache = new Map<string, boolean>();
 
-	private logConfig: LogConfig = {
+	private logConfig: LogConfig & { level: string } = {
 		enabled: true,
-		level: getTransportLoglevelNumeric(),
+		level: getTransportLoglevel(),
 		logToFile: !!process.env.LOGTOFILE,
 		nodeFilter: stringToNodeList(process.env.LOG_NODES),
 		transports: undefined as any,
@@ -137,19 +141,43 @@ export class ZWaveLogContainer extends winston.Container {
 	}
 
 	public updateConfiguration(config: DeepPartial<LogConfig>): void {
+		const changedLoggingTarget =
+			config.logToFile != undefined &&
+			config.logToFile !== this.logConfig.logToFile;
+
+		if (typeof config.level === "number") {
+			config.level = loglevelFromNumber(config.level);
+		}
+		const changedLogLevel =
+			config.level != undefined && config.level !== this.logConfig.level;
+
+		const changedFilename =
+			config.filename != undefined &&
+			config.filename !== this.logConfig.filename;
+
 		this.logConfig = Object.assign(this.logConfig, config);
-		if (!this.logConfig.transports?.length) {
-			this.logConfig.transports = this.createLogTransports();
+
+		// If the loglevel changed, our cached "is visible" info is out of date
+		if (changedLogLevel) {
+			this.loglevelVisibleCache.clear();
 		}
 
-		for (const transport of this.logConfig.transports) {
-			if (transport === this.consoleTransport) {
-				transport.silent = this.isConsoleTransportSilent();
-			} else if (transport === this.fileTransport) {
-				transport.silent = this.isFileTransportSilent();
-			} else {
-				transport.silent = !this.logConfig.enabled;
-			}
+		// When the log target (console, file, filename) was changed, recreate the transport
+		// because at least the filename does not update dynamically
+		if (changedLoggingTarget || changedFilename) {
+			this.fileTransport?.destroy();
+			this.fileTransport = undefined;
+
+			this.logConfig.transports =
+				((config.transports as any) as Transport[] | undefined) ??
+				this.createLogTransports();
+
+			this.loggers.forEach((logger, label) =>
+				logger.configure({
+					transports: this.logConfig.transports,
+					format: this.createLoggerFormat(label),
+				}),
+			);
 		}
 	}
 
@@ -282,7 +310,7 @@ export class ZWaveLogContainer extends winston.Container {
 			this.loglevelVisibleCache.set(
 				loglevel,
 				loglevel in loglevels &&
-					loglevels[loglevel] <= this.logConfig.level,
+					loglevels[loglevel] <= loglevels[this.logConfig.level],
 			);
 		}
 		return this.loglevelVisibleCache.get(loglevel)!;
@@ -317,7 +345,7 @@ export class ZWaveLogContainer extends winston.Container {
 		return ret;
 	}
 
-	private createConsoleTransport(): Transport {
+	private createConsoleTransport(): ConsoleTransportInstance {
 		return new winston.transports.Console({
 			level: getTransportLoglevel(),
 			silent: this.isConsoleTransportSilent(),
@@ -332,7 +360,7 @@ export class ZWaveLogContainer extends winston.Container {
 		return !this.logConfig.enabled;
 	}
 
-	private createFileTransport(): Transport {
+	private createFileTransport(): FileTransportInstance {
 		return new winston.transports.File({
 			filename: this.logConfig.filename,
 			level: getTransportLoglevel(),
@@ -353,8 +381,13 @@ export class ZWaveLogContainer extends winston.Container {
 function getTransportLoglevel(): string {
 	return process.env.LOGLEVEL! in loglevels ? process.env.LOGLEVEL! : "debug";
 }
-function getTransportLoglevelNumeric(): number {
-	return loglevels[getTransportLoglevel()];
+
+/** Performs a reverse lookup of the numeric loglevel */
+function loglevelFromNumber(numLevel: number | undefined): string | undefined {
+	if (numLevel == undefined) return;
+	for (const [level, value] of Object.entries(loglevels)) {
+		if (value === numLevel) return level;
+	}
 }
 
 /**
