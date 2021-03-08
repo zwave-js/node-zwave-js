@@ -27,7 +27,6 @@
 		"3": {
 			"label": "Min Level",
 			"valueSize": 1,
-			"unit": "%",
 			"minValue": 0,
 			"maxValue": 99,
 			"defaultValue": 10,
@@ -39,7 +38,6 @@
 		"4": {
 			"label": "Max Level",
 			"valueSize": 1,
-			"unit": "%",
 			"minValue": 0,
 			"maxValue": 99,
 			"defaultValue": 99,
@@ -51,7 +49,6 @@
 		"5": {
 			"label": "Preset Level",
 			"valueSize": 1,
-			"unit": "%",
 			"minValue": 0,
 			"maxValue": 99,
 			"defaultValue": 0,
@@ -62,7 +59,7 @@
 		},
 		"6": {
 			"label": "LED Dim Level Indicator Timeout",
-			"description": "How long the level indicators should stay illuminated after the dimming level is changed.",
+			"description": "How long the level indicators should stay illuminated after the dimming level is changed",
 			"valueSize": 1,
 			"unit": "seconds",
 			"minValue": 0,
@@ -85,7 +82,6 @@
 		},
 		"7": {
 			"label": "Locator LED Status",
-			"description": "Status Mode: The LED is illuminated when the load is On. Locator Mode: The LED is illuminated when the Load is Off.",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 255,
