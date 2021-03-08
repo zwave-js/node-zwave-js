@@ -174,7 +174,7 @@ export class TimeParametersCCAPI extends CCAPI {
 export class TimeParametersCC extends CommandClass {
 	declare ccCommand: TimeParametersCommand;
 
-	public async interview(complete: boolean = true): Promise<void> {
+	public async interview(): Promise<void> {
 		const node = this.getNode()!;
 		const endpoint = this.getEndpoint()!;
 		const api = endpoint.commandClasses["Time Parameters"].withOptions({
@@ -183,13 +183,11 @@ export class TimeParametersCC extends CommandClass {
 
 		this.driver.controllerLog.logNode(node.id, {
 			endpoint: this.endpointIndex,
-			message: `${this.constructor.name}: doing a ${
-				complete ? "complete" : "partial"
-			} interview...`,
+			message: `Interviewing ${this.ccName}...`,
 			direction: "none",
 		});
 
-		// Always keep the node's time in sync
+		// Synchronize the node's time
 		this.driver.controllerLog.logNode(node.id, {
 			endpoint: this.endpointIndex,
 			message: "setting current time...",

@@ -17,7 +17,7 @@ export interface NodeReadyContext {
 export type NodeReadyEvent =
 	| { type: "NOT_DEAD" }
 	| { type: "MAYBE_DEAD" }
-	| { type: "RESTART_INTERVIEW_FROM_CACHE" }
+	| { type: "RESTART_FROM_CACHE" }
 	| { type: "INTERVIEW_DONE" };
 
 export type NodeReadyMachine = StateMachine<
@@ -58,9 +58,7 @@ export function createNodeReadyMachine(
 				notReady: {
 					entry: assign({ isMaybeDead: true }) as any,
 					on: {
-						RESTART_INTERVIEW_FROM_CACHE: [
-							{ target: "readyIfNotDead" },
-						],
+						RESTART_FROM_CACHE: [{ target: "readyIfNotDead" }],
 					},
 				},
 				readyIfNotDead: {

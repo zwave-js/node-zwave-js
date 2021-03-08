@@ -124,15 +124,23 @@ export class FibaroVenetianBlindCC extends FibaroCC {
 		}
 	}
 
-	public async interview(complete: boolean = true): Promise<void> {
+	public async interview(): Promise<void> {
 		const node = this.getNode()!;
 
 		this.driver.controllerLog.logNode(node.id, {
-			message: `${this.constructor.name}: doing a ${
-				complete ? "complete" : "partial"
-			} interview...`,
+			endpoint: this.endpointIndex,
+			message: `Interviewing ${this.ccName}...`,
 			direction: "none",
 		});
+
+		await this.refreshValues();
+
+		// Remember that the interview is complete
+		this.interviewComplete = true;
+	}
+
+	public async refreshValues(): Promise<void> {
+		const node = this.getNode()!;
 
 		this.driver.controllerLog.logNode(node.id, {
 			message: "Requesting venetian blind position and tilt...",
@@ -153,9 +161,6 @@ tilt:     ${resp.tilt}`;
 				direction: "inbound",
 			});
 		}
-
-		// Remember that the interview is complete
-		this.interviewComplete = true;
 	}
 }
 
