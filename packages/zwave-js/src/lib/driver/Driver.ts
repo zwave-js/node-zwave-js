@@ -1118,7 +1118,7 @@ export class Driver extends EventEmitter {
 			// but only if the node is not getting replaced, because the removal will interfere with
 			// bootstrapping the new node
 			this.controller
-				.removeNodeFromAllAssocations(node.id)
+				.removeNodeFromAllAssociations(node.id)
 				.catch((err) => {
 					this.driverLog.print(
 						`Failed to remove node ${node.id} from all associations: ${err.message}`,
