@@ -280,10 +280,12 @@ interface FileSystem {
 
 The log configuration is passed to the driver constructor and can be used to influence the logging behavior. This config will overwrite the `LOGTOFILE` and `LOGLEVEL` environment variables if the corresponding properties are set. All properties are optional and will default to the values described below. To change these options on the fly, you can use the [`updateLogConfig`](#updateLogConfig) method.
 
+<!-- #import LogConfig from "@zwave-js/core" -->
+
 ```ts
 interface LogConfig {
 	enabled: boolean;
-	level: number;
+	level: string | number;
 	transports: Transport[];
 	logToFile: boolean;
 	nodeFilter?: number[];
@@ -293,7 +295,8 @@ interface LogConfig {
 ```
 
 -   `enable`: If `false`, logging will be disabled. Default: `true`.
--   `level`: The numeric loglevel (like the `npm` [loglevels](https://github.com/winstonjs/triple-beam/blob/master/config/npm.js)), ranging from `0` (error) to `6` (silly). Default: `5` (debug) or whatever is configured with the `LOGLEVEL` environment variable.
+-   `level`: The loglevel, ranging from `"error"` to `"silly"`, based on the `npm` [loglevels](https://github.com/winstonjs/triple-beam/blob/master/config/npm.js). The default is `"debug"` or whatever is configured with the `LOGLEVEL` environment variable.  
+    For convenience, the numeric loglevels `0` (`"error"`) to `6` (`"silly"`) can be used instead, but will be converted to their string counterpart internally.
 -   `transports`: Custom [`winston`](https://github.com/winstonjs/winston) log transports. Setting this property will override all configured and default transports. Use `getConfiguredTransports()` if you want to extend the default transports. Default: console transport if `logToFile` is `false`, otherwise a file transport.
 -   `logToFile`: Whether the log should go to a file instead of the console. Default: `false` or whatever is configured with the `LOGTOFILE` environment variable.
 -   `nodeFilter`: If set, only messages regarding the given node IDs are logged
