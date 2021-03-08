@@ -1021,22 +1021,9 @@ export class ZWaveNode extends Endpoint {
 			}
 		}
 
-		// The node is deemed ready when has been interviewed completely at least once
-		if (this.interviewStage === InterviewStage.RestartFromCache) {
-			// Mark nodes as potentially ready. The first message will determine if it is
-			this.readyMachine.send("RESTART_INTERVIEW_FROM_CACHE");
-
-			// Ping listening nodes to check their status
-			// Sleeping nodes are assumed to be asleep after a restart from cache
-			if (this.isListening) await this.ping();
-		}
-
 		// At this point the basic interview of new nodes is done. Start here when re-interviewing known nodes
 		// to get updated information about command classes
-		if (
-			this.interviewStage === InterviewStage.RestartFromCache ||
-			this.interviewStage === InterviewStage.NodeInfo
-		) {
+		if (this.interviewStage === InterviewStage.NodeInfo) {
 			// Only advance the interview if it was completed, otherwise abort
 			if (await this.interviewCCs()) {
 				await this.setInterviewStage(InterviewStage.CommandClasses);
@@ -1059,9 +1046,6 @@ export class ZWaveNode extends Endpoint {
 
 		await this.setInterviewStage(InterviewStage.Complete);
 		this.readyMachine.send("INTERVIEW_DONE");
-
-		// Regularly query listening nodes for updated values
-		this.scheduleManualValueRefreshesForListeningNodes();
 
 		// Tell listeners that the interview is completed
 		// The driver will then send this node to sleep
@@ -1335,8 +1319,11 @@ protocol version:      ${this._protocolVersion}`;
 				return "continue";
 			}
 
+			// Skip this step if the CC was already interviewed
+			if (instance.interviewComplete) return "continue";
+
 			try {
-				await instance.interview(!instance.interviewComplete);
+				await instance.interview();
 			} catch (e: unknown) {
 				if (
 					e instanceof ZWaveError &&
@@ -1571,11 +1558,12 @@ protocol version:      ${this._protocolVersion}`;
 	}
 
 	/**
+	 * @internal
 	 * Schedules the regular refreshes of some CC values
 	 */
-	private scheduleManualValueRefreshesForListeningNodes(): void {
+	public scheduleManualValueRefreshes(): void {
 		// Only schedule this for listening nodes. Sleeping nodes are queried on wakeup
-		if (this.supportsCC(CommandClasses["Wake Up"])) return;
+		if (!this.canSleep) return;
 		// Only schedule this if we don't expect any unsolicited updates
 		if (!this.requiresManualValueRefresh()) return;
 
@@ -1632,16 +1620,15 @@ protocol version:      ${this._protocolVersion}`;
 	}
 
 	/**
-	 * Refreshes all non-static values of a single CC from this node.
+	 * Refreshes all non-static values of a single CC from this node (all endpoints).
 	 * WARNING: It is not recommended to await this method!
 	 */
-	private async refreshCCValues(cc: CommandClasses): Promise<void> {
+	public async refreshCCValues(cc: CommandClasses): Promise<void> {
 		for (const endpoint of this.getAllEndpoints()) {
 			const instance = endpoint.createCCInstanceUnsafe(cc);
 			if (instance) {
-				// Don't do a complete interview, only dynamic values
 				try {
-					await instance.interview(false);
+					await instance.refreshValues();
 				} catch (e) {
 					this.driver.controllerLog.logNode(
 						this.id,
@@ -1656,7 +1643,7 @@ protocol version:      ${this._protocolVersion}`;
 	}
 
 	/**
-	 * Refreshes all non-static values from this node.
+	 * Refreshes all non-static values from this node's actuator and sensor CCs.
 	 * WARNING: It is not recommended to await this method!
 	 */
 	public async refreshValues(): Promise<void> {
@@ -1669,9 +1656,8 @@ protocol version:      ${this._protocolVersion}`;
 				) {
 					continue;
 				}
-				// Don't do a complete interview, only dynamic values
 				try {
-					await cc.interview(false);
+					await cc.refreshValues();
 				} catch (e) {
 					this.driver.controllerLog.logNode(
 						this.id,
@@ -2971,10 +2957,7 @@ protocol version:      ${this._protocolVersion}`;
 	public serialize(): JSONObject {
 		const ret = {
 			id: this.id,
-			interviewStage:
-				this.interviewStage >= InterviewStage.RestartFromCache
-					? InterviewStage[InterviewStage.Complete]
-					: InterviewStage[this.interviewStage],
+			interviewStage: InterviewStage[this.interviewStage],
 			deviceClass: this.deviceClass && {
 				basic: this.deviceClass.basic.key,
 				generic: this.deviceClass.generic.key,
@@ -3028,6 +3011,11 @@ protocol version:      ${this._protocolVersion}`;
 				typeof obj.interviewStage === "number"
 					? obj.interviewStage
 					: InterviewStage[obj.interviewStage];
+
+			// Mark already-interviewed nodes as potentially ready
+			if (this.interviewStage === InterviewStage.Complete) {
+				this.readyMachine.send("RESTART_FROM_CACHE");
+			}
 		}
 		if (isObject(obj.deviceClass)) {
 			const { basic, generic, specific } = obj.deviceClass;

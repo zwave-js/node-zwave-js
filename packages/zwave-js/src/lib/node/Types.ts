@@ -113,16 +113,6 @@ export enum InterviewStage {
 	/** The node has been queried for supported and controlled command classes */
 	NodeInfo,
 
-	// ===== the stuff above should never change =====
-
-	/**
-	 * This marks the beginning of re-interviews on application startup.
-	 * RestartFromCache and later stages will be serialized as "Complete" in the cache
-	 */
-	RestartFromCache,
-
-	// ===== the stuff below changes frequently, so it has to be redone on every start =====
-
 	/**
 	 * Information for all command classes has been queried.
 	 * This includes static information that is requested once as well as dynamic

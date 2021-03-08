@@ -431,6 +431,20 @@
 			"}"
 		]
 	},
+	"Z-Wave CC Refresh Values": {
+		"prefix": "zwccrefval",
+		"body": [
+			"public async refreshValues(): Promise<void> {",
+			"\tconst node = this.getNode()!;",
+			"\tconst endpoint = this.getEndpoint()!;",
+			"\tconst api = endpoint.commandClasses[\"${1:Basic}\"].withOptions({",
+			"\t\tpriority: MessagePriority.NodeQuery,",
+			"\t});",
+			"",
+			"\t${0:// TODO: Implementation}",
+			"}"
+		]
+	},
 	"Jest test file": {
 		"prefix": "jest",
 		"body": [

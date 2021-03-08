@@ -360,7 +360,7 @@ export class IndicatorCC extends CommandClass {
 		);
 	}
 
-	public async interview(complete: boolean = true): Promise<void> {
+	public async interview(): Promise<void> {
 		const node = this.getNode()!;
 		const endpoint = this.getEndpoint()!;
 		const api = endpoint.commandClasses.Indicator.withOptions({
@@ -369,10 +369,64 @@ export class IndicatorCC extends CommandClass {
 
 		this.driver.controllerLog.logNode(node.id, {
 			endpoint: this.endpointIndex,
-			message: `${this.constructor.name}: doing a ${
-				complete ? "complete" : "partial"
-			} interview...`,
+			message: `Interviewing ${this.ccName}...`,
 			direction: "none",
+		});
+
+		if (this.version > 1) {
+			this.driver.controllerLog.logNode(node.id, {
+				endpoint: this.endpointIndex,
+				message: "scanning supported indicator IDs...",
+				direction: "outbound",
+			});
+			// Query ID 0 to get the first supported ID
+			let curId = 0x00;
+			const supportedIndicatorIds: number[] = [];
+			do {
+				const supportedResponse = await api.getSupported(curId);
+				if (!supportedResponse) {
+					this.driver.controllerLog.logNode(node.id, {
+						endpoint: this.endpointIndex,
+						message:
+							"Time out while scanning supported indicator IDs, skipping interview...",
+						level: "warn",
+					});
+					return;
+				}
+
+				supportedIndicatorIds.push(
+					supportedResponse.indicatorId ?? curId,
+				);
+				curId = supportedResponse.nextIndicatorId;
+			} while (curId !== 0x00);
+
+			// The IDs are not stored by the report CCs so store them here once we have all of them
+			this.getValueDB().setValue(
+				getSupportedIndicatorIDsValueID(this.endpointIndex),
+				supportedIndicatorIds,
+			);
+			const logMessage = `supported indicator IDs: ${supportedIndicatorIds.join(
+				", ",
+			)}`;
+			this.driver.controllerLog.logNode(node.id, {
+				endpoint: this.endpointIndex,
+				message: logMessage,
+				direction: "inbound",
+			});
+		}
+
+		// Query current values
+		await this.refreshValues();
+
+		// Remember that the interview is complete
+		this.interviewComplete = true;
+	}
+
+	public async refreshValues(): Promise<void> {
+		const node = this.getNode()!;
+		const endpoint = this.getEndpoint()!;
+		const api = endpoint.commandClasses.Indicator.withOptions({
+			priority: MessagePriority.NodeQuery,
 		});
 
 		if (this.version === 1) {
@@ -383,54 +437,10 @@ export class IndicatorCC extends CommandClass {
 			});
 			await api.get();
 		} else {
-			let supportedIndicatorIds: number[];
-			if (complete) {
-				this.driver.controllerLog.logNode(node.id, {
-					endpoint: this.endpointIndex,
-					message: "scanning supported indicator IDs...",
-					direction: "outbound",
-				});
-				// Query ID 0 to get the first supported ID
-				let curId = 0x00;
-				supportedIndicatorIds = [];
-				do {
-					const supportedResponse = await api.getSupported(curId);
-					if (!supportedResponse) {
-						this.driver.controllerLog.logNode(node.id, {
-							endpoint: this.endpointIndex,
-							message:
-								"Time out while scanning supported indicator IDs, skipping interview...",
-							level: "warn",
-						});
-						return;
-					}
-
-					supportedIndicatorIds.push(
-						supportedResponse.indicatorId ?? curId,
-					);
-					curId = supportedResponse.nextIndicatorId;
-				} while (curId !== 0x00);
-
-				// The IDs are not stored by the report CCs so store them here once we have all of them
-				this.getValueDB().setValue(
+			const supportedIndicatorIds: number[] =
+				this.getValueDB().getValue(
 					getSupportedIndicatorIDsValueID(this.endpointIndex),
-					supportedIndicatorIds,
-				);
-				const logMessage = `supported indicator IDs: ${supportedIndicatorIds.join(
-					", ",
-				)}`;
-				this.driver.controllerLog.logNode(node.id, {
-					endpoint: this.endpointIndex,
-					message: logMessage,
-					direction: "inbound",
-				});
-			} else {
-				supportedIndicatorIds =
-					this.getValueDB().getValue(
-						getSupportedIndicatorIDsValueID(this.endpointIndex),
-					) ?? [];
-			}
-
+				) ?? [];
 			for (const indicatorId of supportedIndicatorIds) {
 				this.driver.controllerLog.logNode(node.id, {
 					endpoint: this.endpointIndex,
@@ -442,9 +452,6 @@ export class IndicatorCC extends CommandClass {
 				await api.get(indicatorId);
 			}
 		}
-
-		// Remember that the interview is complete
-		this.interviewComplete = true;
 	}
 
 	public translatePropertyKey(

@@ -210,7 +210,7 @@ export class ManufacturerProprietaryCC extends CommandClass {
 		return super.serialize();
 	}
 
-	public async interview(complete: boolean = true): Promise<void> {
+	public async interview(): Promise<void> {
 		this.assertManufacturerIdIsSet();
 
 		const node = this.getNode()!;
@@ -228,7 +228,7 @@ export class ManufacturerProprietaryCC extends CommandClass {
 			await new FibaroVenetianBlindCC(this.driver, {
 				nodeId: this.nodeId,
 				endpoint: this.endpointIndex,
-			}).interview(complete);
+			}).interview();
 		} else {
 			this.driver.controllerLog.logNode(node.id, {
 				message: `${this.constructor.name}: skipping interview because none of the implemented proprietary CCs are supported...`,
@@ -238,6 +238,33 @@ export class ManufacturerProprietaryCC extends CommandClass {
 
 		// Remember that the interview is complete
 		this.interviewComplete = true;
+	}
+
+	public async refreshValues(): Promise<void> {
+		this.assertManufacturerIdIsSet();
+
+		const node = this.getNode()!;
+		// TODO: Can this be refactored?
+		const proprietaryConfig = node.deviceConfig?.proprietary;
+		if (
+			this.manufacturerId === 0x010f /* Fibaro */ &&
+			proprietaryConfig &&
+			isArray(proprietaryConfig.fibaroCCs) &&
+			proprietaryConfig.fibaroCCs.includes(0x26 /* Venetian Blinds */)
+		) {
+			// eslint-disable-next-line @typescript-eslint/no-var-requires
+			const FibaroVenetianBlindCC = (require("./manufacturerProprietary/Fibaro") as typeof import("./manufacturerProprietary/Fibaro"))
+				.FibaroVenetianBlindCC;
+			await new FibaroVenetianBlindCC(this.driver, {
+				nodeId: this.nodeId,
+				endpoint: this.endpointIndex,
+			}).refreshValues();
+		} else {
+			this.driver.controllerLog.logNode(node.id, {
+				message: `${this.constructor.name}: skipping interview because none of the implemented proprietary CCs are supported...`,
+				direction: "none",
+			});
+		}
 	}
 }
 
