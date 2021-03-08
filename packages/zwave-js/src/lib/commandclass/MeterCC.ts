@@ -465,12 +465,7 @@ supports reset:       ${suppResp.supportsReset}`;
 		property: string | number,
 		propertyKey: string | number,
 	): string | undefined {
-		if (
-			(property === "value" ||
-				property === "previousValue" ||
-				property === "deltaTime") &&
-			typeof propertyKey === "number"
-		) {
+		if (property === "value" && typeof propertyKey === "number") {
 			const { meterType, rateType, scale } = splitPropertyKey(
 				propertyKey,
 			);
@@ -559,32 +554,21 @@ export class MeterCCReport extends MeterCC {
 	}
 
 	public persistValues(): boolean {
-		const valueIdBase: Omit<ValueID, "property"> = {
+		const valueDB = this.getValueDB();
+
+		const valueId = {
 			commandClass: this.ccId,
 			endpoint: this.endpointIndex,
+			property: "value",
 			propertyKey: toPropertyKey(
 				this._type,
 				this._rateType,
 				this._scale.key,
 			),
 		};
-		const ccSpecific = {
-			meterType: this._type,
-			rateType: this._rateType,
-			scale: this._scale.key,
-		};
-		const valueDB = this.getValueDB();
-
-		const valueValueId = { ...valueIdBase, property: "value" };
-		const previousValueValueID = {
-			...valueIdBase,
-			property: "previousValue",
-		};
-		const deltaTimeValueId = { ...valueIdBase, property: "deltaTime" };
-
 		// Always create metadata if it does not exist
-		if (!valueDB.hasMetadata(valueValueId)) {
-			valueDB.setMetadata(valueValueId, {
+		if (!valueDB.hasMetadata(valueId)) {
+			valueDB.setMetadata(valueId, {
 				...ValueMetadata.ReadOnlyNumber,
 				label: getValueLabel(
 					this.driver.configManager,
@@ -593,50 +577,14 @@ export class MeterCCReport extends MeterCC {
 					this._rateType,
 				),
 				unit: this._scale.label,
-				ccSpecific,
-			});
-		}
-		if (this.version >= 2 && !valueDB.hasMetadata(previousValueValueID)) {
-			valueDB.setMetadata(previousValueValueID, {
-				...ValueMetadata.ReadOnlyNumber,
-				label: getValueLabel(
-					this.driver.configManager,
-					this._type,
-					this._scale,
-					this._rateType,
-					"prev. value",
-				),
-				unit: this._scale.label,
-				ccSpecific,
-			});
-		}
-		if (this.version >= 2 && !valueDB.hasMetadata(deltaTimeValueId)) {
-			valueDB.setMetadata(
-				{ ...valueIdBase, property: "deltaTime" },
-				{
-					...ValueMetadata.ReadOnlyNumber,
-					label: getValueLabel(
-						this.driver.configManager,
-						this._type,
-						this._scale,
-						this._rateType,
-						"prev. time delta",
-					),
-					unit: "s",
-					ccSpecific,
+				ccSpecific: {
+					meterType: this._type,
+					rateType: this._rateType,
+					scale: this._scale.key,
 				},
-			);
+			});
 		}
-		valueDB.setValue(valueValueId, this._value);
-		if (this._previousValue != undefined) {
-			valueDB.setValue(previousValueValueID, this._previousValue);
-		}
-		if (this._deltaTime != "unknown") {
-			valueDB.setValue(
-				{ ...valueIdBase, property: "deltaTime" },
-				this._deltaTime,
-			);
-		}
+		valueDB.setValue(valueId, this._value);
 		return true;
 	}
 
