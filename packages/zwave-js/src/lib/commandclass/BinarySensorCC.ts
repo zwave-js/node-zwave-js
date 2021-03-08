@@ -163,7 +163,7 @@ export class BinarySensorCCAPI extends PhysicalCCAPI {
 export class BinarySensorCC extends CommandClass {
 	declare ccCommand: BinarySensorCommand;
 
-	public async interview(complete: boolean = true): Promise<void> {
+	public async interview(): Promise<void> {
 		const node = this.getNode()!;
 		const endpoint = this.getEndpoint()!;
 		const api = endpoint.commandClasses["Binary Sensor"].withOptions({
@@ -172,21 +172,18 @@ export class BinarySensorCC extends CommandClass {
 
 		this.driver.controllerLog.logNode(node.id, {
 			endpoint: this.endpointIndex,
-			message: `${this.constructor.name}: doing a ${
-				complete ? "complete" : "partial"
-			} interview...`,
+			message: `Interviewing ${this.ccName}...`,
 			direction: "none",
 		});
 
 		// Find out which sensor types this sensor supports
-		let supportedSensorTypes: readonly BinarySensorType[] | undefined;
-		if (complete && this.version >= 2) {
+		if (this.version >= 2) {
 			this.driver.controllerLog.logNode(node.id, {
 				endpoint: this.endpointIndex,
 				message: "querying supported sensor types...",
 				direction: "outbound",
 			});
-			supportedSensorTypes = await api.getSupportedSensorTypes();
+			const supportedSensorTypes = await api.getSupportedSensorTypes();
 			if (supportedSensorTypes) {
 				const logMessage = `received supported sensor types: ${supportedSensorTypes
 					.map((type) => getEnumMemberName(BinarySensorType, type))
@@ -206,13 +203,22 @@ export class BinarySensorCC extends CommandClass {
 				});
 				return;
 			}
-		} else {
-			supportedSensorTypes = this.getValueDB().getValue(
-				getSupportedSensorTypesValueId(this.endpointIndex),
-			);
 		}
 
-		// Always query (all of) the sensor's current value(s)
+		await this.refreshValues();
+
+		// Remember that the interview is complete
+		this.interviewComplete = true;
+	}
+
+	public async refreshValues(): Promise<void> {
+		const node = this.getNode()!;
+		const endpoint = this.getEndpoint()!;
+		const api = endpoint.commandClasses["Binary Sensor"].withOptions({
+			priority: MessagePriority.NodeQuery,
+		});
+
+		// Query (all of) the sensor's current value(s)
 		if (this.version === 1) {
 			this.driver.controllerLog.logNode(node.id, {
 				endpoint: this.endpointIndex,
@@ -227,7 +233,12 @@ export class BinarySensorCC extends CommandClass {
 					direction: "inbound",
 				});
 			}
-		} else if (supportedSensorTypes) {
+		} else {
+			const supportedSensorTypes: readonly BinarySensorType[] =
+				this.getValueDB().getValue(
+					getSupportedSensorTypesValueId(this.endpointIndex),
+				) ?? [];
+
 			for (const type of supportedSensorTypes) {
 				const sensorName = getEnumMemberName(BinarySensorType, type);
 				this.driver.controllerLog.logNode(node.id, {
@@ -245,9 +256,6 @@ export class BinarySensorCC extends CommandClass {
 				}
 			}
 		}
-
-		// Remember that the interview is complete
-		this.interviewComplete = true;
 	}
 
 	public setMappedBasicValue(value: number): boolean {
