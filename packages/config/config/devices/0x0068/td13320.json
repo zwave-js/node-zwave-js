@@ -1,0 +1,64 @@
+// Good Way Technology Co., Ltd. TD13320
+// Smart Meter Switch
+{
+	"manufacturer": "Good Way Technology Co., Ltd.",
+	"manufacturerId": "0x0068",
+	"label": "TD13320",
+	"description": "Smart Meter Switch",
+	"devices": [
+		{
+			"productType": "0x0003",
+			"productId": "0x0006",
+			"zwaveAllianceId": 2115
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"paramInformation": {
+		"1": {
+			"label": "Meter Report Time",
+			"description": "How often to send a meter report(minute)",
+			"valueSize": 2,
+			"unit": "minutes",
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 30,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"2": {
+			"label": "Night Light Mode",
+			"description": "Sets the night light mode",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 0,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"3": {
+			"label": "Night Light Color Value",
+			"description": "Sets the night light color value",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 0,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		}
+	},
+	"metadata": {
+		"inclusion": "If you want to manually include the device, press the button for 3 times to include the device.\nLED Status: Blue LED Solid light",
+		"exclusion": "If you want to manually exclude the device, press the button for 3 times to exclude the device.\nLED Status: Green LED 1 sec. flashes 1 times",
+		"reset": "The Device Reset Locally Notification Command is used to\nadvertise that the device will be reset to default.\nPress the button 3 times in 2 sec., and hold it for more\nthan 3 sec.\nPlease use this procedure only when the network primary\ncontroller is missing or otherwise inoperable",
+		"manual": "https://products.z-wavealliance.org/ProductManual/File?folder=&filename=MarketCertificationFiles/2115/TD13320_UserManual_2016_12_13.pdf"
+	}
+}

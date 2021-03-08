@@ -69,6 +69,10 @@
 
     -   [Send custom messages](usage/custom.md)
 
+-   Guides and FAQ
+
+    -   [Partial config parameters explained](guides/partial-parameters.md)
+
 -   Development
     -   [Introduction](development/intro.md)
     -   [Device configuration files](development/config-files.md)

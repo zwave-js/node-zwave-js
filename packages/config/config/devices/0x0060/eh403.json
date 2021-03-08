@@ -1,0 +1,64 @@
+// Everspring EH403
+// Z-Wave Floodlight with Motion Detector
+{
+	"manufacturer": "Everspring",
+	"manufacturerId": "0x0060",
+	"label": "EH403",
+	"description": "Z-Wave Floodlight with Motion Detector",
+	"devices": [
+		{
+			"productType": "0x0012",
+			"productId": "0x0001",
+			"zwaveAllianceId": 2890
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"paramInformation": {
+		"1": {
+			"label": "Pir Trigger Off Period",
+			"description": "Pir trigger off period can be set 8~720 secs",
+			"valueSize": 2,
+			"minValue": 8,
+			"maxValue": 720,
+			"defaultValue": 15,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"2": {
+			"label": "Lux Sensor Threshold",
+			"description": "Lux sensor threshold can be set 30~200",
+			"valueSize": 2,
+			"minValue": 30,
+			"maxValue": 200,
+			"defaultValue": 50,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": true,
+			"allowManualEntry": true
+		},
+		"3": {
+			"label": "Lux Auto Report",
+			"description": "Lux auto report can be set 0~1440 minutes",
+			"valueSize": 2,
+			"unit": "minutes",
+			"minValue": 0,
+			"maxValue": 1440,
+			"defaultValue": 0,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		}
+	},
+	"metadata": {
+		"inclusion": "Auto Inclusion\nThe unit supports Auto Inclusion feature where it will automatically enter Inclusion mode when first powered up after a factory reset.\n\n1. Prepare the Z-Wave controller.\n2. Plug the cable plug to the wall socket to power up the unit.\n3. The Link LED will start to blink slowly with 2-second on, 2-second off (for 2 minutes) which shows the unit does not be paired.\n4. Within 30 seconds, put the Z-Wave Controller into inclusion mode.\n5. The Inclusion process should be completed when the Link LED stops blinking.\n\nNote: If you are connecting this unit to a Z-Wave Controller that utilizes the S2 security protocol, you may be asked by your controller to enter a 5-digit Device Specific Key (DSK) that is unique to each unit. This can be found in one of two places:\n- on the QR code label on the back of the unit\n- on the insert card inside the packaging.\n\n6. Turn on the floodlight using the controller to check if the auto inclusion is working properly.\n\nManual Inclusion\n1. Prepare the Z-Wave controller.\n2. Press the tamper switch 3 times within 1.5 seconds to put the unit into inclusion mode",
+		"exclusion": "1. Put the Z-Wave Controller into exclusion mode.\n2. Press the tamper switch 3 times within 1.5 seconds to put the unit into exclusion mode",
+		"reset": "1. Press the tamper switch 3 times within 1.5 seconds to put the unit into exclusion mode\n2. Within 1 second of step 1, press the tamper switch again and hold until LED is off (about 5 seconds).\n3. Node ID is excluded. The device reverts to factory default state and will be in auto-inclusion mode for 4 minutes.\n4. Please use this procedure only when the network primary controller is missing or otherwise inoperable",
+		"manual": "https://products.z-wavealliance.org/ProductManual/File?folder=&filename=MarketCertificationFiles/2890/EH403%20Manual_20180522修改-A501112670R.pdf"
+	}
+}

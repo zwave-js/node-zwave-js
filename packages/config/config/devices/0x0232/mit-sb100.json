@@ -1,0 +1,30 @@
+// MODACOM CO., Ltd. MIT-SB100
+// Smart Brain™
+{
+	"manufacturer": "MODACOM CO., Ltd.",
+	"manufacturerId": "0x0232",
+	"label": "MIT-SB100",
+	"description": "Smart Brain™",
+	"devices": [
+		{
+			"productType": "0x0001",
+			"productId": "0x0001",
+			"zwaveAllianceId": 1568
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"associations": {
+		"1": {
+			"label": "Group 1",
+			"maxNodes": 3,
+			"isLifeline": true
+		}
+	},
+	"metadata": {
+		"reset": "To reset a device Smart Brain™, press button “Add Devices” and press ‘Z+’ icon.\nWhen the list of Z-Wave commands is shown, press “Reset” menu in commands.",
+		"manual": "https://products.z-wavealliance.org/ProductManual/File?folder=&filename=MarketCertificationFiles/1568/SmartBrain_User%20Guide_En(20151109).pdf"
+	}
+}

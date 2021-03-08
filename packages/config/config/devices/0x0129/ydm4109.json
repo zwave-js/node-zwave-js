@@ -1,0 +1,27 @@
+// Yale YDM3109 / YDM4109
+// Smart Living Keyfree Smart Lock
+{
+	"manufacturer": "Yale",
+	"manufacturerId": "0x0129",
+	"label": "YDM3109 / YDM4109",
+	"description": "Smart Living Keyfree Smart Lock",
+	"devices": [
+		{
+			"productType": "0x0006",
+			"productId": "0x0000",
+			"zwaveAllianceId": [2402, 2403]
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"associations": {
+		"1": {
+			"label": "Alarm Reports",
+			"description": "Alarm reports are sent out to all devices in the association group",
+			"maxNodes": 5,
+			"isLifeline": true
+		}
+	}
+}

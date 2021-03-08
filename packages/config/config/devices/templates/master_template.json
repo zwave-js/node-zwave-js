@@ -1,0 +1,240 @@
+{
+	"base_enable_disable": {
+		"valueSize": 1,
+		"minValue": 0,
+		"maxValue": 1,
+		"defaultValue": 0,
+		"unsigned": true,
+		"readOnly": false,
+		"writeOnly": false,
+		"allowManualEntry": false,
+		"options": [
+			{
+				"label": "Disable",
+				"value": 0
+			},
+			{
+				"label": "Enable",
+				"value": 1
+			}
+		]
+	},
+	"base_enable_disable_255": {
+		"valueSize": 1,
+		"minValue": 0,
+		"maxValue": 255,
+		"defaultValue": 0,
+		"unsigned": true,
+		"readOnly": false,
+		"writeOnly": false,
+		"allowManualEntry": false,
+		"options": [
+			{
+				"label": "Disable",
+				"value": 0
+			},
+			{
+				"label": "Enable",
+				"value": 255
+			}
+		]
+	},
+	"base_enable_disable_inverted": {
+		"valueSize": 1,
+		"minValue": 0,
+		"maxValue": 1,
+		"defaultValue": 1,
+		"unsigned": true,
+		"readOnly": false,
+		"writeOnly": false,
+		"allowManualEntry": false,
+		"options": [
+			{
+				"label": "Enable",
+				"value": 0
+			},
+			{
+				"label": "Disable",
+				"value": 1
+			}
+		]
+	},
+	"base_0-99_nounit": {
+		"valueSize": 1,
+		"minValue": 0,
+		"maxValue": 99,
+		"defaultValue": 1,
+		"unsigned": true,
+		"readOnly": false,
+		"writeOnly": false,
+		"allowManualEntry": true
+	},
+	"base_1-99_nounit": {
+		"valueSize": 1,
+		"minValue": 1,
+		"maxValue": 99,
+		"defaultValue": 1,
+		"unsigned": true,
+		"readOnly": false,
+		"writeOnly": false,
+		"allowManualEntry": true
+	},
+	"base_0-255_nounit": {
+		"description": "Set 0 to disable",
+		"valueSize": 1,
+		"minValue": 0,
+		"maxValue": 255,
+		"defaultValue": 1,
+		"unsigned": true,
+		"readOnly": false,
+		"writeOnly": false,
+		"allowManualEntry": true
+	},
+	"base_1-255_nounit": {
+		"valueSize": 1,
+		"minValue": 1,
+		"maxValue": 255,
+		"defaultValue": 1,
+		"unsigned": true,
+		"readOnly": false,
+		"writeOnly": false,
+		"allowManualEntry": true
+	},
+	"base_0-180_nounit": {
+		"valueSize": 1,
+		"minValue": 0,
+		"maxValue": 180,
+		"unsigned": true,
+		"readOnly": false,
+		"writeOnly": false,
+		"allowManualEntry": true
+	},
+	"base_0-127_nounit": {
+		"valueSize": 1,
+		"minValue": 0,
+		"maxValue": 127,
+		"unsigned": true,
+		"readOnly": false,
+		"writeOnly": false,
+		"allowManualEntry": true
+	},
+	"dimming_timing_with_0": {
+		"description": "Set 0 to disable",
+		"valueSize": 1,
+		"unit": "10ms",
+		"minValue": 0,
+		"maxValue": 255,
+		"defaultValue": 3,
+		"unsigned": true,
+		"readOnly": false,
+		"writeOnly": false,
+		"allowManualEntry": true
+	},
+	"dimming_timing": {
+		"valueSize": 1,
+		"unit": "10ms",
+		"minValue": 1,
+		"maxValue": 255,
+		"defaultValue": 3,
+		"unsigned": true,
+		"readOnly": false,
+		"writeOnly": false,
+		"allowManualEntry": true
+	},
+	"orientation": {
+		"$import": "#base_enable_disable",
+		"label": "Inverted Orientation"
+	},
+	"led_indicator_two_options": {
+		"label": "LED Indicator",
+		"valueSize": 1,
+		"minValue": 0,
+		"maxValue": 1,
+		"defaultValue": 1,
+		"readOnly": false,
+		"writeOnly": false,
+		"allowManualEntry": false,
+		"options": [
+			{
+				"label": "On when load is off",
+				"value": 0
+			},
+			{
+				"label": "On when load is on",
+				"value": 1
+			}
+		]
+	},
+	"led_indicator_two_options_inverted": {
+		"label": "LED Indicator",
+		"valueSize": 1,
+		"minValue": 0,
+		"maxValue": 1,
+		"defaultValue": 1,
+		"readOnly": false,
+		"writeOnly": false,
+		"allowManualEntry": false,
+		"options": [
+			{
+				"label": "On when load is on",
+				"value": 0
+			},
+			{
+				"label": "On when load is off",
+				"value": 1
+			}
+		]
+	},
+	"led_indicator_three_options": {
+		"label": "LED Indicator",
+		"valueSize": 1,
+		"minValue": 0,
+		"maxValue": 2,
+		"defaultValue": 0,
+		"readOnly": false,
+		"writeOnly": false,
+		"allowManualEntry": false,
+		"options": [
+			{
+				"label": "On when load is off",
+				"value": 0
+			},
+			{
+				"label": "On when load is on",
+				"value": 1
+			},
+			{
+				"label": "Always off",
+				"value": 2
+			}
+		]
+	},
+	"led_indicator_four_options": {
+		"label": "LED Indicator",
+		"valueSize": 1,
+		"minValue": 0,
+		"maxValue": 3,
+		"defaultValue": 0,
+		"readOnly": false,
+		"writeOnly": false,
+		"allowManualEntry": false,
+		"options": [
+			{
+				"label": "On when load is off",
+				"value": 0
+			},
+			{
+				"label": "On when load is on",
+				"value": 1
+			},
+			{
+				"label": "Always off",
+				"value": 2
+			},
+			{
+				"label": "Always on",
+				"value": 3
+			}
+		]
+	}
+}

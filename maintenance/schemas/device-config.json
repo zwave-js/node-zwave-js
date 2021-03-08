@@ -408,14 +408,32 @@
 			},
 			"anyOf": [
 				{
-					"required": [
-						"label",
-						"valueSize",
-						"minValue",
-						"maxValue",
-						"defaultValue",
-						"allowManualEntry"
-					]
+					"if": {
+						"properties": {
+							"readOnly": {
+								"const": true
+							}
+						}
+					},
+					"then": {
+						"required": [
+							"label",
+							"valueSize",
+							"minValue",
+							"maxValue",
+							"allowManualEntry"
+						]
+					},
+					"else": {
+						"required": [
+							"label",
+							"valueSize",
+							"minValue",
+							"maxValue",
+							"defaultValue",
+							"allowManualEntry"
+						]
+					}
 				},
 				{
 					"required": ["$import"]

@@ -1,0 +1,38 @@
+// GE/Jasco 37792 / ZW5307
+// 2 Button Hub/Panel Remote
+{
+	"manufacturer": "GE/Jasco",
+	"manufacturerId": "0x0063",
+	"label": "37792 / ZW5307",
+	"description": "2 Button Hub/Panel Remote",
+	"devices": [
+		{
+			"productType": "0x4843",
+			"productId": "0x3133",
+			"zwaveAllianceId": 2930
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"paramInformation": {
+		"21": {
+			"label": "Adjust Refresh",
+			"description": "Adjust refresh",
+			"valueSize": 1,
+			"unit": "seconds",
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 0,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		}
+	},
+	"metadata": {
+		"reset": "Returning your remote to factory defaults\n1. Press and release Button 1 ten times quickly. All button presses must be within 6 seconds.\n2. The LED will flash five (5) times when completed successfully.\nNOTE: This should only be used in the event your network's primary controller/hub is missing or otherwise inoperable",
+		"manual": "https://products.z-wavealliance.org/ProductManual/File?folder=&filename=MarketCertificationFiles/2930/37792%20QSG%20w%20Parameters.pdf"
+	}
+}

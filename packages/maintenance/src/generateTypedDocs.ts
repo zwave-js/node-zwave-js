@@ -337,9 +337,13 @@ async function generateCCDocs(program: Project): Promise<boolean> {
 		generatedSidebar += `\n\t\t- [${ccName} CC](api/CCs/${filename})`;
 
 		// Enumerate all useful public methods
+		const ignoredMethods: string[] = [
+			"supportsCommand",
+			"isSetValueOptimistic",
+		];
 		const methods = APIClass.getInstanceMethods()
 			.filter((m) => m.hasModifier(SyntaxKind.PublicKeyword))
-			.filter((m) => m.getName() !== "supportsCommand");
+			.filter((m) => !ignoredMethods.includes(m.getName()));
 
 		if (methods.length) {
 			text += `## ${ccName} CC methods\n\n`;

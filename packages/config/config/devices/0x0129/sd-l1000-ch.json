@@ -12,7 +12,8 @@
 		},
 		{
 			"productType": "0x6600",
-			"productId": "0x0002"
+			"productId": "0x0002",
+			"zwaveAllianceId": 2535
 		}
 	],
 	"firmwareVersion": {
@@ -21,84 +22,26 @@
 	},
 	"paramInformation": {
 		"1": {
-			"label": "Volume",
-			"valueSize": 1,
-			"minValue": 1,
-			"maxValue": 3,
-			"defaultValue": 3,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "Silent",
-					"value": 1
-				},
-				{
-					"label": "Low",
-					"value": 2
-				},
-				{
-					"label": "High",
-					"value": 3
-				}
-			]
+			"$import": "templates/yale_template.json#volume_inverted"
 		},
 		"2": {
-			"label": "Auto Re-lock",
-			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 255,
-			"defaultValue": 0,
-			"unsigned": true,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "Disable",
-					"value": 0
-				},
-				{
-					"label": "Enable",
-					"value": 255
-				}
-			]
+			"$import": "templates/yale_template.json#auto_relock"
 		},
 		"3": {
-			"label": "Re-lock time",
-			"unit": "seconds",
-			"valueSize": 1,
-			"minValue": 7,
-			"maxValue": 60,
-			"defaultValue": 30,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"$import": "templates/yale_template.json#auto_relock_time_180",
+			"maxValue": 60
 		},
 		"4": {
-			"label": "Wrong tag limit",
-			"description": "Number of wrong tags that can be tried before stand-down",
-			"valueSize": 1,
-			"minValue": 1,
-			"maxValue": 20,
-			"defaultValue": 20,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"$import": "templates/yale_template.json#wrong_tag_limit"
 		},
 		"7": {
-			"label": "Wrong tag timeout",
-			"description": "Time after the wrong tag limit being exceeded before re-trying",
-			"valueSize": 1,
-			"unit": "seconds",
-			"minValue": 1,
-			"maxValue": 250,
-			"defaultValue": 250,
-			"unsigned": true,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"$import": "templates/yale_template.json#wrong_tag_lockout"
 		}
+	},
+	"metadata": {
+		"inclusion": "Put the Z-Wave controller into add or learn mode\n\nPress the R button on the lock 3 times quickly (within 1.5 seconds)\n\nRefer to the operation manual of the Z-Wave controller to complete the learn in process\n\nFor more information on this please visit:\nwww.yale.co.uk/smart-living",
+		"exclusion": "Put the existing Z-Wave controller into Remove Mode\n\nPress the R button on the lock 3 times quickly (within 1.5 secs)\n\nThe lock is now ready to be added to a new Z-Wave controller\n\nFor more information on this please visit:\nwww.yale.co.uk/smart-living",
+		"reset": "Only use this when the existing Z-Wave controller is missing or inoperable\n\n Lift up the lever handle\n\nWhile holding the handle up, press the R button 3 times within 1.5 seconds",
+		"manual": "https://products.z-wavealliance.org/ProductManual/File?folder=&filename=MarketCertificationFiles/2535/Instruction%20Manual%20V2a.pdf"
 	}
 }

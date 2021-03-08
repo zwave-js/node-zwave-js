@@ -34,8 +34,17 @@ export interface DeviceID {
 
 export interface DeviceConfigIndexEntry {
 	manufacturerId: string;
+	productType: string;
+	productId: string;
+	firmwareVersion: FirmwareVersionRange;
+	filename: string;
+}
+
+export interface FulltextDeviceConfigIndexEntry {
+	manufacturerId: string;
 	manufacturer: string;
 	label: string;
+	description: string;
 	productType: string;
 	productId: string;
 	firmwareVersion: FirmwareVersionRange;
@@ -49,7 +58,9 @@ export type ParamInfoMap = ReadonlyObjectKeyMap<
 
 export const devicesDir = path.join(configDir, "devices");
 export const indexPath = path.join(devicesDir, "index.json");
+export const fulltextIndexPath = path.join(devicesDir, "fulltext_index.json");
 export type DeviceConfigIndex = DeviceConfigIndexEntry[];
+export type FulltextDeviceConfigIndex = FulltextDeviceConfigIndexEntry[];
 
 async function hasChangedDeviceFiles(
 	dir: string,
@@ -76,17 +87,14 @@ async function hasChangedDeviceFiles(
 	return false;
 }
 
-/**
- * @internal
- * Loads the index file to quickly access the device configs.
- * Transparently handles updating the index if necessary
- */
-export async function loadDeviceIndexInternal(
+async function loadDeviceIndexShared<T extends Record<string, unknown>>(
+	indexPath: string,
+	extractIndexEntries: (config: DeviceConfig) => T[],
 	logger?: ConfigLogger,
-): Promise<DeviceConfigIndex> {
+): Promise<(T & { filename: string })[]> {
 	// The index file needs to be regenerated if it does not exist
 	let needsUpdate = !(await pathExists(indexPath));
-	let index: DeviceConfigIndex | undefined;
+	let index: (T & { filename: string })[] | undefined;
 	let mtimeIndex: Date | undefined;
 	// ...or if cannot be parsed
 	if (!needsUpdate) {
@@ -145,14 +153,8 @@ export async function loadDeviceIndexInternal(
 				});
 				// Add the file to the index
 				index.push(
-					...config.devices.map((dev: any) => ({
-						manufacturerId: formatId(
-							config.manufacturerId.toString(16),
-						),
-						manufacturer: config.manufacturer,
-						label: config.label,
-						...dev,
-						firmwareVersion: config.firmwareVersion,
+					...extractIndexEntries(config).map((entry) => ({
+						...entry,
 						filename: relativePath,
 					})),
 				);
@@ -173,18 +175,72 @@ export async function loadDeviceIndexInternal(
 			}
 		}
 
-		// Save the index to disk (but not during unit tests)
-		await writeFile(
-			path.join(indexPath),
-			`// This file is auto-generated. DO NOT edit it by hand if you don't know what you're doing!"
+		// Save the index to disk
+		try {
+			await writeFile(
+				path.join(indexPath),
+				`// This file is auto-generated. DO NOT edit it by hand if you don't know what you're doing!"
 ${stringify(index, "\t")}
 `,
-			"utf8",
-		);
-		logger?.print("Device index regenerated", "verbose");
+				"utf8",
+			);
+			logger?.print("Device index regenerated", "verbose");
+		} catch (e: unknown) {
+			logger?.print(
+				`Writing the device index to disk failed: ${
+					(e as Error).message
+				}`,
+				"error",
+			);
+		}
 	}
 
 	return index!;
+}
+
+/**
+ * @internal
+ * Loads the index file to quickly access the device configs.
+ * Transparently handles updating the index if necessary
+ */
+export async function loadDeviceIndexInternal(
+	logger?: ConfigLogger,
+): Promise<DeviceConfigIndex> {
+	return loadDeviceIndexShared(
+		indexPath,
+		(config) =>
+			config.devices.map((dev) => ({
+				manufacturerId: formatId(config.manufacturerId.toString(16)),
+				manufacturer: config.manufacturer,
+				label: config.label,
+				...dev,
+				firmwareVersion: config.firmwareVersion,
+			})),
+		logger,
+	);
+}
+
+/**
+ * @internal
+ * Loads the full text index file to quickly search the device configs.
+ * Transparently handles updating the index if necessary
+ */
+export async function loadFulltextDeviceIndexInternal(
+	logger?: ConfigLogger,
+): Promise<FulltextDeviceConfigIndex> {
+	return loadDeviceIndexShared(
+		indexPath,
+		(config) =>
+			config.devices.map((dev) => ({
+				manufacturerId: formatId(config.manufacturerId.toString(16)),
+				manufacturer: config.manufacturer,
+				label: config.label,
+				description: config.description,
+				...dev,
+				firmwareVersion: config.firmwareVersion,
+			})),
+		logger,
+	);
 }
 
 function isHexKeyWith4Digits(val: any): val is string {
@@ -606,15 +662,6 @@ Parameter #${parameterNumber} has a non-numeric property maxValue`,
 		}
 		this.maxValue = definition.maxValue;
 
-		if (typeof definition.defaultValue !== "number") {
-			throwInvalidConfig(
-				"devices",
-				`packages/config/config/devices/${parent.filename}:
-Parameter #${parameterNumber} has a non-numeric property defaultValue`,
-			);
-		}
-		this.defaultValue = definition.defaultValue;
-
 		if (
 			definition.unsigned != undefined &&
 			typeof definition.unsigned !== "boolean"
@@ -626,6 +673,18 @@ Parameter #${parameterNumber} has a non-boolean property unsigned`,
 			);
 		}
 		this.unsigned = definition.unsigned === true;
+
+		if (
+			definition.unit != undefined &&
+			typeof definition.unit !== "string"
+		) {
+			throwInvalidConfig(
+				"devices",
+				`packages/config/config/devices/${parent.filename}:
+Parameter #${parameterNumber} has a non-string unit`,
+			);
+		}
+		this.unit = definition.unit;
 
 		if (typeof definition.readOnly !== "boolean") {
 			throwInvalidConfig(
@@ -644,6 +703,23 @@ Parameter #${parameterNumber}: writeOnly must be a boolean!`,
 			);
 		}
 		this.writeOnly = definition.writeOnly;
+
+		if (definition.defaultValue == undefined) {
+			if (!this.readOnly) {
+				throwInvalidConfig(
+					"devices",
+					`packages/config/config/devices/${parent.filename}:
+Parameter #${parameterNumber} is missing defaultValue, which is required unless the parameter is readOnly`,
+				);
+			}
+		} else if (typeof definition.defaultValue !== "number") {
+			throwInvalidConfig(
+				"devices",
+				`packages/config/config/devices/${parent.filename}:
+Parameter #${parameterNumber} has a non-numeric property defaultValue`,
+			);
+		}
+		this.defaultValue = definition.defaultValue;
 
 		if (typeof definition.allowManualEntry !== "boolean") {
 			throwInvalidConfig(
@@ -695,6 +771,7 @@ Parameter #${parameterNumber}: options is malformed!`,
 	public readonly maxValue: number;
 	public readonly unsigned?: boolean;
 	public readonly defaultValue: number;
+	public readonly unit?: string;
 	public readonly readOnly: boolean;
 	public readonly writeOnly: boolean;
 	public readonly allowManualEntry: boolean;

@@ -1,0 +1,30 @@
+// Winka Electronic Co., Ltd. WK-0001
+// Gateway
+{
+	"manufacturer": "Winka Electronic Co., Ltd.",
+	"manufacturerId": "0x0331",
+	"label": "WK-0001",
+	"description": "Gateway",
+	"devices": [
+		{
+			"productType": "0x0001",
+			"productId": "0x1001",
+			"zwaveAllianceId": 2825
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"associations": {
+		"1": {
+			"label": "Group 1",
+			"maxNodes": 5,
+			"isLifeline": true
+		}
+	},
+	"metadata": {
+		"reset": "When the user clicks the icon in the APP homepage interface at top right corner, The user clicks \"Setting\" again and enters the setting interface,The user clicks the \"Z-WAVE Controller Reset\" menu in the interface as shown above and the \"Warning Dialog\" prompt interface pops up , after clicking \"OK\" to confirm the reset. (to use the reset procedure only when the primary controller is missing or inoperable.)",
+		"manual": "https://products.z-wavealliance.org/ProductManual/File?folder=&filename=MarketCertificationFiles/2825/User_Manual_of_Winka_Sysit_Gateway_V1.3.8_20180215.pdf"
+	}
+}

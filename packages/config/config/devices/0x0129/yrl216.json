@@ -1,0 +1,54 @@
+// Yale YRL216 / YRL236
+// Assure Lever Keypad with Z-Wave Plus
+{
+	"manufacturer": "Yale",
+	"manufacturerId": "0x0129",
+	"label": "YRL216 / YRL236",
+	"description": "Assure Lever Keypad with Z-Wave Plus",
+	"devices": [
+		{
+			"productType": "0x800b",
+			"productId": "0x0f00",
+			"zwaveAllianceId": [3129, 3266]
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"paramInformation": {
+		"1": {
+			"$import": "templates/yale_template.json#volume"
+		},
+		"2": {
+			"$import": "templates/yale_template.json#auto_relock"
+		},
+		"3": {
+			"$import": "templates/yale_template.json#auto_relock_time_180"
+		},
+		"4": {
+			"$import": "templates/yale_template.json#wrong_code_limit_3_to_10"
+		},
+		"7": {
+			"$import": "templates/yale_template.json#wrong_code_lockout_10_to_127"
+		},
+		"8": {
+			"$import": "templates/yale_template.json#operating_mode"
+		},
+		"11": {
+			"$import": "templates/yale_template.json#one_touch"
+		},
+		"13": {
+			"$import": "templates/yale_template.json#lock_status_led"
+		},
+		"15": {
+			"$import": "templates/yale_template.json#reset_factory"
+		}
+	},
+	"metadata": {
+		"inclusion": "To include; Enter the 4-8 master Pin code followed by the gear key.\nPress the 7 key followed by the gear key\nPress the 1 key followed by the gear key",
+		"exclusion": "To exclude; Enter the 4-8 digit master pin code followed by the gear key\nPress the 7 key followed by the gear key\nPress the 3 key followed by the gear key",
+		"reset": "Remove the battery cover and batteries.\nRemove the interior escutcheon to access the reset button.\nThe reset button is located above the PCB cable connector.\nWhile pressing the reset button for a minimum of 3 seconds, reinstall batteries. Release reset button.\nReplace battery cover. \nPlease use this procedure only when the network primary controller is missing or otherwise inoperable",
+		"manual": "https://products.z-wavealliance.org/ProductManual/File?folder=&filename=MarketCertificationFiles/3129/Assure_Lever_Manual_ZWave_Cert.pdf"
+	}
+}

@@ -1,0 +1,30 @@
+// Yale YDM4109+
+// Digital Door Lock
+{
+	"manufacturer": "Yale",
+	"manufacturerId": "0x0129",
+	"label": "YDM4109+",
+	"description": "Digital Door Lock",
+	"devices": [
+		{
+			"productType": "0xc700",
+			"productId": "0x0005",
+			"zwaveAllianceId": 3449
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"paramInformation": {
+		"5": {
+			"$import": "templates/yale_template.json#language_asia"
+		}
+	},
+	"metadata": {
+		"inclusion": "To include:\n1. Touch keypad with palm\n2. Enter User code(Normal Mode only. Enter Master code if operating Master Mode.)\n3. Press 'I' button [Registration] from the inside of battery cover.\n4. Press 9,#,1,# on the keypad (by sequence)\n5. Wait until 'Ding dong dang' melody play then press 'I' button",
+		"exclusion": "To exclude:\n1. Touch keypad with palm\n2. Enter User code(Normal Mode only. Enter Master code if operating Master Mode.)\n3. Press 'I' button [Registration] from the inside of battery cover.\n4. Press 9,#,3,# on the keypad (by sequence)\n5. Wait until 'Ding dong dang' melody play then press 'I' button",
+		"reset": "To reset to factory defaults:\n ※ Please use this procedure only when the network primary controller is missing or otherwise inoperable. (User code or master code remains the same. Only network settings reset to factory defaults.) \n1. Touch keypad with palm\n2. Enter User code(Normal Mode only. Enter Master code if operating Master Mode.)\n3. Press 'I' button [Registration] from the inside of battery cover.\n4. Press 9,#,9,# on the keypad (by sequence)\n5. Wait until 'Ding dong dang' melody play then press 'I' button",
+		"manual": "https://products.z-wavealliance.org/ProductManual/File?folder=&filename=MarketCertificationFiles/3449/YDM4109Plus_Quick%20Start%20Guide_190702.pdf"
+	}
+}

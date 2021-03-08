@@ -3,6 +3,102 @@
 	Placeholder for next release:
 	## __WORK IN PROGRESS__
 -->
+## 6.6.1 (2021-03-07)
+### Bugfixes
+* After a restart, sleeping nodes have their status correctly determined even if they weren't interviewed completely before
+* During inclusion, sleeping nodes are no longer marked as asleep after the protocol info was queried
+* Fixed the length validation in sequenced Security S0 Message Encapsulation commands
+* Unsolicited reports from the root endpoint are now also mapped to higher endpoints when the node supports Multi Channel Association V3+
+* Fixed a crash: `supportedCCs` is not iterable. If this happens to you, re-interview affected devices.
+
+### Config file changes
+* Added config for Ring Range Extender
+* Updatde yrd156 inclusion, exclusion, reset instructions
+* Remove Supervision support for GE 14287 / ZW4002
+* Values for the root endpoint values of ZW132 are no longer hidden
+* Cleanup Ring Contact Sensor and Motion Sensor
+* Correct DMS01 configuration file
+* Add Zooz ZSE29 configuration parameters
+* Added lots of lightly reviewed config files from ZWA import
+* Removed invalid params 1 and 2 from Fibaro FGRM222
+
+## 6.6.0 (2021-03-02)
+### Features
+* Added the `"buffer"` metadata type to distinguish binary user codes from string user codes
+
+### Bugfixes
+* The heal node callback timeout depend on the network size and node types
+* In configuration metadata, `states` is now also present when `allowManualEntry` is `true`
+
+### Config file changes
+* Minor corrections to Homeseer devices
+* Add additional product ID to Fibaro Roller Shutter 3
+
+### Changes under the hood
+* Lots of dependency updates
+* Refactored config files for Yale locks to use templates
+
+## 6.5.1 (2021-02-26)
+### Bugfixes
+* When updating color components from `hexColor`, the value events are now emitted
+* Alarm V1 values are only created if supported
+* Fixed the detection of the notification mode of a mode instead of always skipping it
+
+### Config file changes
+* Update HeatIt Z-Smoke associations and metadata
+* Force Multi Channel CC to be supported for MH-C421
+* Add Double Tap to several GE switches
+* Add ABUS SHHA10000 configuration
+* Add Zooz ZEN17 and ZEN32
+
+### Changes under the hood
+* Several config files were refactored to use templates
+* Add method to load fulltext device index
+* Releases now pin the external dependencies to exact versions
+* `defaultValue` in config params is now only required if the param is writable
+
+## 6.5.0 (2021-02-23)
+### Features
+* Implemented `Scene Actuator Configuration CC`
+* Updated `Scene Controller Configuration CC` API to match `Scene Actuator Configuration CC`
+* Values that could previously be `"unknown"` now default to `undefined` instead. If the distinction is relevant, the previous behavior can be restored using the driver option `preserveUnknownValues`.
+* Added values to `Color Switch CC` to set multiple color components at once (#1782)
+* Added the option `nodeFilter` to the logger configuration to limit logging to specific nodes
+
+### Bugfixes
+* Generating the config index no longer fails in production when single files have errors
+* Fixed a crash that could happen while logging a message while the driver is not ready yet
+* Fixed a crash that could happen while trying to bootstrap a device that does not respond after inclusion
+* The state value in `Thermostat Fan Mode CC` is now readonly
+* Firmware updates now disable the delayed activation feature by default
+* When updating a different firmware target than 0, the correct firmware ID is now used
+* The `Fibaro CC` now correctly understands unknown values.
+* Value IDs for some controlled CCs are now also exposed through `getDefinedValueIDs`
+* Do not map root endpoint values to all endpoints when multiple endpoints support the value
+* The device index is now preserved in memory if it cannot be written to disk
+* The unit of configuration parameters is now actually read from device configuration files
+* The list of supported and controlled CCs of a node is no longer overwritten when a device sends a NIF on manual activation
+* Add `toLogEntry` method to `Scene Actuator Configuration CC::Set` command
+
+### Config file changes
+* Added an additional Inovelli NZW31T model
+* Use Node Associations for ZW132 Lifeline
+* Added missing zero to LZW45 partial param 23 mask
+* Correct heatit brand names
+* Add Association Groups to Kwikset locks
+* Fixed an incorrect device ID assignment of Kwikset 914/c
+* Remove duplicate parameters from GED2350
+* Add Zooz zen72, update zen71 description
+* Small wording changes to flush technisat devices
+
+### Changes under the hood
+* The config files for Kwikset locks were refactored to use templates
+* Configuration files may now include conditional sections
+* A bunch of documentation updates: CC documentation, `ConfigManager`, API overview
+* Clarified device file requirements
+* Cleaned up the maintenance scripts that were spread out through the repo
+* Issues with incomplete templates now get auto-staled quickly
+
 ## 6.4.0 (2021-02-16)
 ### Features
 * Implemented `Scene Controller Configuration CC`

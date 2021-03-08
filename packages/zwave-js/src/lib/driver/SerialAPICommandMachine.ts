@@ -267,7 +267,7 @@ export function getSerialAPICommandMachineConfig(
 					],
 				},
 				after: {
-					SENDDATA_CALLBACK_TIMEOUT: {
+					CALLBACK_TIMEOUT: {
 						target: "failure",
 						actions: assign({
 							lastError: (_) => "callback timeout",
@@ -363,7 +363,14 @@ export function getSerialAPICommandMachineOptions(
 		delays: {
 			RETRY_DELAY: (ctx) => computeRetryDelay(ctx),
 			RESPONSE_TIMEOUT: timeoutConfig.response,
-			SENDDATA_CALLBACK_TIMEOUT: timeoutConfig.sendDataCallback,
+			CALLBACK_TIMEOUT: (ctx) => {
+				return (
+					// Ask the message for its callback timeout
+					ctx.msg.getCallbackTimeout() ||
+					// and fall back to default values
+					timeoutConfig.sendDataCallback
+				);
+			},
 			ACK_TIMEOUT: timeoutConfig.ack,
 		},
 	};

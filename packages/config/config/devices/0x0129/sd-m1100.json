@@ -17,74 +17,16 @@
 	},
 	"paramInformation": {
 		"1": {
-			"label": "Volume",
-			"valueSize": 1,
-			"minValue": 1,
-			"maxValue": 3,
-			"defaultValue": 3,
-			"unsigned": true,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "Silent",
-					"value": 1
-				},
-				{
-					"label": "Low Volume",
-					"value": 2
-				},
-				{
-					"label": "High Volume",
-					"value": 3
-				}
-			]
+			"$import": "templates/yale_template.json#volume_inverted"
 		},
 		"2": {
-			"label": "Enable/Disable Auto Relock",
-			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 255,
-			"defaultValue": 255,
-			"unsigned": true,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "Disable",
-					"value": 0
-				},
-				{
-					"label": "Enable",
-					"value": 255
-				}
-			]
+			"$import": "templates/yale_template.json#auto_relock"
 		},
 		"3": {
-			"label": "Manual Relock Time",
-			"valueSize": 1,
-			"unit": "seconds",
-			"minValue": 7,
-			"maxValue": 60,
-			"defaultValue": 7,
-			"unsigned": true,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"$import": "templates/yale_template.json#manual_relock_time"
 		},
 		"6": {
-			"label": "Remote Relock Time",
-			"valueSize": 1,
-			"unit": "seconds",
-			"minValue": 0,
-			"maxValue": 90,
-			"defaultValue": 10,
-			"unsigned": true,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"$import": "templates/yale_template.json#remote_relock_time"
 		}
 	}
 }

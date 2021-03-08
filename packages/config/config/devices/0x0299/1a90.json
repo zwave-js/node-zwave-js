@@ -3,8 +3,8 @@
 {
 	"manufacturer": "TechniSat",
 	"manufacturerId": "0x0299",
-	"label": "Single-Switch 0300/9499",
-	"description": "On/Off switch flush mount, BJ",
+	"label": "Single-Switch ",
+	"description": "Flush On/Off switch",
 	"devices": [
 		{
 			"productType": "0x0002",

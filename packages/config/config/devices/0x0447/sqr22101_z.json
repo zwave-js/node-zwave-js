@@ -1,0 +1,48 @@
+// Schneider Electric SQR22101**Z
+// Z-Wave Dimmer
+{
+	"manufacturer": "Schneider Electric",
+	"manufacturerId": "0x0447",
+	"label": "SQR22101**Z",
+	"description": "Z-Wave Dimmer",
+	"devices": [
+		{
+			"productType": "0x0111",
+			"productId": "0x1201",
+			"zwaveAllianceId": 3919
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"paramInformation": {
+		"1": {
+			"label": "LED Indicator",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 1,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Power on, LED off; power off, LED on",
+					"value": 0
+				},
+				{
+					"label": "Power on, LED on; power off, LED off",
+					"value": 1
+				}
+			]
+		}
+	},
+	"metadata": {
+		"inclusion": "Quick click x3, within 1.5s/ interval <0.5s",
+		"exclusion": "Quick click x3, within 1.5s/ interval <0.5s",
+		"reset": "Quick click x3 +press x 1 >10 seconds",
+		"manual": "https://products.z-wavealliance.org/ProductManual/File?folder=&filename=product_documents/3919/GDE77979_Z-Wave%20dimmer%20user%20manual_English%20version_2020-07-08.pdf"
+	}
+}

@@ -18,6 +18,7 @@ const defaultImplementations = {
 	getNodeId: () => undefined,
 	toLogEntry: () => ({ tags: [] }),
 	needsCallbackId: () => true,
+	getCallbackTimeout: () => undefined,
 };
 
 export const dummyResponseOK = ({

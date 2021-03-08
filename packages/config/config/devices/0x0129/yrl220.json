@@ -38,219 +38,37 @@
 	},
 	"paramInformation": {
 		"1": {
-			"label": "Audio Volume",
-			"description": "Sets the volume level of the beeps and voice prompts",
-			"valueSize": 1,
-			"minValue": 1,
-			"maxValue": 3,
-			"defaultValue": 3,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "Silent",
-					"value": 1
-				},
-				{
-					"label": "Low",
-					"value": 2
-				},
-				{
-					"label": "High",
-					"value": 3
-				}
-			]
+			"$import": "templates/yale_template.json#volume_inverted"
 		},
 		"2": {
-			"label": "Auto Re-lock",
-			"description": "When enabled, the unit will automatically re-lock",
-			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 255,
-			"defaultValue": 0,
-			"unsigned": true,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "Off",
-					"value": 0
-				},
-				{
-					"label": "On",
-					"value": 255
-				}
-			]
+			"$import": "templates/yale_template.json#auto_relock"
 		},
 		"3": {
-			"label": "Re-lock Time",
-			"description": "Time after unlocking that the device will lock",
-			"valueSize": 1,
-			"minValue": 5,
-			"maxValue": 255,
-			"defaultValue": 30,
-			"unsigned": true,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"$import": "templates/yale_template.json#auto_relock_time_180"
 		},
 		"4": {
-			"label": "Wrong Code Entry Limit",
-			"description": "The number of invalid tries before the lock shutdowns and sends an alarm",
-			"valueSize": 1,
-			"minValue": 1,
-			"maxValue": 7,
-			"defaultValue": 5,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"$import": "templates/yale_template.json#wrong_code_limit_3_to_10"
 		},
 		"5": {
-			"label": "Language",
-			"description": "Language used by the voice prompts",
-			"valueSize": 1,
-			"minValue": 1,
-			"maxValue": 3,
-			"defaultValue": 1,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "English",
-					"value": 1
-				},
-				{
-					"label": "Spanish",
-					"value": 2
-				},
-				{
-					"label": "French",
-					"value": 3
-				}
-			]
+			"$import": "templates/yale_template.json#language"
 		},
 		"7": {
-			"label": "Shutdown Time",
-			"description": "Number of times the device is locked out after the invalid retries are exceeded",
-			"valueSize": 1,
-			"minValue": 1,
-			"maxValue": 255,
-			"defaultValue": 30,
-			"unsigned": true,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"$import": "templates/yale_template.json#wrong_code_lockout_10_to_127"
 		},
 		"8": {
-			"label": "Operating Mode",
-			"description": "Sets if the unit operates normal, or disables keypad and Z-Wave lock/unlock",
-			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 3,
-			"defaultValue": 0,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "Normal",
-					"value": 0
-				},
-				{
-					"label": "Vacation Mode",
-					"value": 1
-				},
-				{
-					"label": "Privacy Mode",
-					"value": 3
-				}
-			]
+			"$import": "templates/yale_template.json#operating_mode"
 		},
 		"11": {
-			"label": "One Touch Locking",
-			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 255,
-			"defaultValue": 255,
-			"unsigned": true,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "Disable",
-					"value": 0
-				},
-				{
-					"label": "Enable",
-					"value": 255
-				}
-			]
+			"$import": "templates/yale_template.json#one_touch"
 		},
 		"12": {
-			"label": "Privacy Button",
-			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 255,
-			"defaultValue": 0,
-			"unsigned": true,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "Disable",
-					"value": 0
-				},
-				{
-					"label": "Enable",
-					"value": 255
-				}
-			]
+			"$import": "templates/yale_template.json#privacy_button"
 		},
 		"13": {
-			"label": "Lock Status LED",
-			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 255,
-			"defaultValue": 0,
-			"unsigned": true,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "Disable",
-					"value": 0
-				},
-				{
-					"label": "Enable",
-					"value": 255
-				}
-			]
+			"$import": "templates/yale_template.json#lock_status_led"
 		},
 		"15": {
-			"label": "Reset to Factory Defaults",
-			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 1,
-			"defaultValue": 0,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "Normal Operation",
-					"value": 0
-				},
-				{
-					"label": "Reset Device",
-					"value": 1
-				}
-			]
+			"$import": "templates/yale_template.json#reset_factory"
 		}
 	}
 }

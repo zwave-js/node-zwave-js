@@ -8,7 +8,8 @@
 	"devices": [
 		{
 			"productType": "0x0004",
-			"productId": "0x000a"
+			"productId": "0x000a",
+			"zwaveAllianceId": 1262
 		}
 	],
 	"firmwareVersion": {
@@ -69,5 +70,11 @@
 				}
 			]
 		}
+	},
+	"metadata": {
+		"inclusion": "1. Have Z-Wave™ Controller entered inclusion mode.\n2. Pressing tamper key three times within 1.5 seconds\nto enter the inclusion mode.\n3. After add successful, the LED will light ON 1 second",
+		"exclusion": "1. Have Z-Wave™ Controller entered exclusion mode.\n2. Pressing tamper key three times within 1.5 seconds to enter the exclusion mode.\nNode ID has been excluded",
+		"reset": "Notice: Use this procedure only in the event that the primary controller is lost or otherwise inoperable.\n1. Pressing tamper key four times within 1.5 seconds and do not release the tamper key in the 4 pressed, and the LED will light ON.\n2. After 3 seconds the LED will turn OFF, after that within 2 seconds, release the tamper key. If successful, the LED will light ON one second. Otherwise, the LED will flash once.\n3. IDs are excluded and all settings will reset to factory default",
+		"manual": "https://products.z-wavealliance.org/ProductManual/File?folder=&filename=MarketCertificationFiles/1262/DCH-Z510_Manual.pdf"
 	}
 }

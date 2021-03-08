@@ -1,0 +1,24 @@
+// Fibargroup FGFS-101 ()
+// FIBARO Flood Sensor
+{
+	"manufacturer": "Fibargroup",
+	"manufacturerId": "0x010f",
+	"label": "FGFS-101 ()",
+	"description": "FIBARO Flood Sensor",
+	"devices": [
+		{
+			"productType": "0x0000",
+			"productId": "0x1001",
+			"zwaveAllianceId": [1036, 994]
+		},
+		{
+			"productType": "0x0000",
+			"productId": "0x2001",
+			"zwaveAllianceId": 1041
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	}
+}

@@ -1,7 +1,7 @@
-// ACT - Advanced Control Technologies ZDW104
-// - Wall Mounted Dimmer
+// HomePro ZDW104
+// Wall Mounted Dimmer
 {
-	"manufacturer": "ACT - Advanced Control Technologies",
+	"manufacturer": "HomePro",
 	"manufacturerId": "0x0001",
 	"label": "ZDW104",
 	"description": "Wall Mounted Dimmer",

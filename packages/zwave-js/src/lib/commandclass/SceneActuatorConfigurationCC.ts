@@ -304,6 +304,17 @@ export class SceneActuatorConfigurationCCSet extends SceneActuatorConfigurationC
 		]);
 		return super.serialize();
 	}
+
+	public toLogEntry(): MessageOrCCLogEntry {
+		return {
+			...super.toLogEntry(),
+			message: {
+				sceneId: this.sceneId,
+				level: this.level,
+				dimmingDuration: this.dimmingDuration?.toString(),
+			},
+		};
+	}
 }
 
 @CCCommand(SceneActuatorConfigurationCommand.Report)

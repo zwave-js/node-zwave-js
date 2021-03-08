@@ -1,0 +1,31 @@
+// Climax Technology, Ltd. SRAC-23ZW
+{
+	"manufacturer": "Climax Technology, Ltd.",
+	"manufacturerId": "0x018e",
+	"label": "SRAC-23ZW",
+	"description": "",
+	"devices": [
+		{
+			"productType": "0x0002",
+			"productId": "0x0001",
+			"zwaveAllianceId": 1755
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"associations": {
+		"1": {
+			"label": "Group 1",
+			"maxNodes": 5,
+			"isLifeline": true
+		}
+	},
+	"metadata": {
+		"inclusion": "This product can be included and operated in any Z-Wave network with other Z-Wave certified devices from other manufactures and/or other applications. All non-battery operated nodes within the network will act as repeaters regardless of vendor to increase reliability of the network.\n-Plug the Siren into a power socket.\n-The LED indicator will flash twice.\n-Put the Z-Wave gateway or control panel into Inclusion or Learning mode (please refer to the Z-Wave gateway or control panel manual).\n-Within 1.5 seconds, press the Test Button 3 times.\n-Refer to the operation manual of the Z-Wave gateway or control panel to complete the learn-in process.\n-If the Siren was included successfully, it will emit 1 long beep and the LED will flash once.\n-If the device has already been included (learnt) into another Z-Wave Gateway/Control Panel, or if the device is unable to be learnt into the current Z-Wave Gateway/Control Panel, please exclude it first (see Exclusion) before attempting to include it into the current Z-Wave Gateway/Control Panel.",
+		"exclusion": "The Siren must be removed from existing Z-Wave network before being included into another. There are two methods available to exclude a device.\nExclusion Mode\n-Put the Z-Wave gateway or control panel into Exclusion mode (please refer to the Z-Wave gateway or control panel manual).\n-Within 1.5 seconds, press the Test Button 3 times and the Siren will be removed from the Z-Wave network",
+		"reset": "Factory Reset\n(Only use factory reset when network Control Panel/Gateway is missing or inoperable).\n-Press and hold the Test Button of the Siren for ~10 seconds until the LED starts to flash (twice) to factory reset. The siren will also emit 2 short beeps.",
+		"manual": "https://products.z-wavealliance.org/ProductManual/File?folder=&filename=MarketCertificationFiles/1755/SRAC-23B-ZW%2020151228.doc"
+	}
+}

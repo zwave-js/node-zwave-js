@@ -79,6 +79,7 @@ export interface ConfigurationMetadata extends ValueMetadataAny {
 	min?: ConfigValue;
 	max?: ConfigValue;
 	default?: ConfigValue;
+	unit?: string;
 	valueSize?: number;
 	format?: ValueFormat;
 	name?: string;
@@ -89,7 +90,7 @@ export interface ConfigurationMetadata extends ValueMetadataAny {
 	// The following information cannot be detected by scanning.
 	// We have to rely on configuration to support them
 	// options?: readonly ConfigOption[];
-	states?: Record<string, number>;
+	states?: Record<number, string>;
 	allowManualEntry?: boolean;
 	isFromConfig?: boolean;
 }
@@ -707,7 +708,11 @@ alters capabilities: ${!!properties.altersCapabilities}`;
 	): ConfigurationMetadata {
 		const valueDB = this.getValueDB();
 		const valueId = getParamInformationValueID(parameter, valueBitMask);
-		return valueDB.getMetadata(valueId) ?? { ...ValueMetadata.Any };
+		return (
+			(valueDB.getMetadata(valueId) as ConfigurationMetadata) ?? {
+				...ValueMetadata.Any,
+			}
+		);
 	}
 
 	/**
@@ -803,6 +808,7 @@ alters capabilities: ${!!properties.altersCapabilities}`;
 				min: info.minValue,
 				max: info.maxValue,
 				default: info.defaultValue,
+				unit: info.unit,
 				format: info.unsigned
 					? ValueFormat.UnsignedInteger
 					: ValueFormat.SignedInteger,
@@ -810,7 +816,7 @@ alters capabilities: ${!!properties.altersCapabilities}`;
 				writeable: !info.readOnly,
 				allowManualEntry: info.allowManualEntry,
 				states:
-					!info.allowManualEntry && info.options.length > 0
+					info.options.length > 0
 						? composeObject(
 								info.options.map(({ label, value }) => [
 									value.toString(),

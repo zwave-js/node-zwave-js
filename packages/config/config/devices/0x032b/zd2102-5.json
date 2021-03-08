@@ -1,0 +1,49 @@
+// Anchor Tech ZD2102-5
+// Door Sensor
+{
+	"manufacturer": "Anchor Tech",
+	"manufacturerId": "0x032b",
+	"label": "ZD2102-5",
+	"description": "Door Sensor",
+	"devices": [
+		{
+			"productType": "0x2001",
+			"productId": "0x0106",
+			"zwaveAllianceId": [2249, 2250]
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"paramInformation": {
+		"1": {
+			"label": "Configuration - External Switch",
+			"description": "",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 0,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Disable",
+					"value": 0
+				},
+				{
+					"label": "Enable",
+					"value": 255
+				}
+			]
+		}
+	},
+	"metadata": {
+		"inclusion": "For “Inclusion” (adding to) a network: Put the Z-Wave™ network controller into “inclusion” mode following its instructions. To add the ZD2102-5 to your controller press the program switch of ZD2102-5 to send the Node Information Frame (NIF). After sending NIF, the network controller will send the auto inclusion request; otherwise, ZD2102-5 will go to sleep after 15 seconds",
+		"exclusion": "For “Exclusion” (removing from) a network: Put the Z-Wave™ network controller into “exclusion” mode, following its instructions. To delete the ZD2102-5 from your controller press the program switch of ZD2102-5 for at least 1 second to be excluded. Note: All user and network settings will be cleared and the device reset to factory setting defaults when the device is excluded",
+		"reset": "Factory Default Reset: Trigger the rear cover switch to send the Alarm Report and trigger the reed switch (close & open) 5 times in 10 seconds, ZD2102-5 will send the “Device Reset Locally Notification” command and reset to the factory default condition. (Remark: This is to be used only in the case of primary controller being inoperable or otherwise unavailable.)",
+		"manual": "https://products.z-wavealliance.org/ProductManual/File?folder=&filename=MarketCertificationFiles/2249/ZD%202102_10252013.pdf"
+	}
+}

@@ -8,6 +8,11 @@
 	"devices": [
 		{
 			"productType": "0x200a",
+			"productId": "0x0a01",
+			"zwaveAllianceId": 592
+		},
+		{
+			"productType": "0x200a",
 			"productId": "0x0a02"
 		}
 	],

@@ -87,8 +87,17 @@ export interface LogConfig {
 	level: number;
 	transports: Transport[];
 	logToFile: boolean;
+	nodeFilter?: number[];
 	filename: string;
 	forceConsole: boolean;
+}
+
+function stringToNodeList(nodes?: string): number[] | undefined {
+	if (!nodes) return undefined;
+	return nodes
+		.split(",")
+		.map((n) => parseInt(n))
+		.filter((n) => !Number.isNaN(n));
 }
 
 export class ZWaveLogContainer extends winston.Container {
@@ -100,6 +109,7 @@ export class ZWaveLogContainer extends winston.Container {
 		enabled: true,
 		level: getTransportLoglevelNumeric(),
 		logToFile: !!process.env.LOGTOFILE,
+		nodeFilter: stringToNodeList(process.env.LOG_NODES),
 		transports: undefined as any,
 		filename: require.main
 			? path.join(
@@ -329,6 +339,15 @@ export class ZWaveLogContainer extends winston.Container {
 			silent: this.isFileTransportSilent(),
 		});
 	}
+
+	/**
+	 * Checks the log configuration whether logs should be written for a given node id
+	 */
+	public shouldLogNode(nodeId: number): boolean {
+		// If no filters are set, every node gets logged
+		if (!this.logConfig.nodeFilter) return true;
+		return this.logConfig.nodeFilter.includes(nodeId);
+	}
 }
 
 function getTransportLoglevel(): string {
@@ -336,16 +355,6 @@ function getTransportLoglevel(): string {
 }
 function getTransportLoglevelNumeric(): number {
 	return loglevels[getTransportLoglevel()];
-}
-
-/**
- * Checks the LOG_NODES env variable whether logs should be written for a given node id
- */
-export function shouldLogNode(nodeId: number): boolean {
-	const activeFilters = (process.env.LOG_NODES ?? "*").split(",");
-	if (activeFilters.includes("*")) return true;
-	if (activeFilters.includes(nodeId.toString())) return true;
-	return false;
 }
 
 /**

@@ -1,0 +1,32 @@
+// Samsung SDS SHP-SR100Z
+// Motion sensor
+{
+	"manufacturer": "Samsung SDS",
+	"manufacturerId": "0x022e",
+	"label": "SHP-SR100Z",
+	"description": "Motion sensor",
+	"devices": [
+		{
+			"productType": "0x0005",
+			"productId": "0x0005",
+			"zwaveAllianceId": 1365
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"associations": {
+		"1": {
+			"label": "Group 1",
+			"maxNodes": 5,
+			"isLifeline": true
+		}
+	},
+	"metadata": {
+		"inclusion": "Click [Add] icon in Z-Wave PC Controller Program\n- Press a Func_Button 1 time in SHP-SR100Z (PIR Sensor)\n- If Inclusion Process is successful, LED is Blinking 3 times in SHP-SR100Z",
+		"exclusion": "Click [Remove] icon in Z-Wave PC Controller Program\n- Press a Func_Button 3 times quickly in SHP-SR100Z\n- If Exclusion Process is successful, LED is Blinking 5 times in SHP-SR100Z",
+		"reset": "Please use this procedure only in the event that the network primary controller is missing or otherwise inoperable.\n- Press a Func_Button for 10 seconds in SHP-SR100Z\n- If Factory Reset Process is successful, LED is Blinking 1 time in SHP-SR100Z\n- Device Reset Locally notification is Transmitted",
+		"manual": "https://products.z-wavealliance.org/ProductManual/File?folder=&filename=MarketCertificationFiles/1365/[CEF%2017852]SHP-SG100Z%20Manual_fn.pdf"
+	}
+}

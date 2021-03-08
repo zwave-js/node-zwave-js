@@ -1,10 +1,10 @@
 // Zooz ZEN71
-// Z-Wave Plus 700 Series S2 ON/OFF Switch
+// Z-Wave Plus 700 Series ON/OFF Switch
 {
 	"manufacturer": "Zooz",
 	"manufacturerId": "0x027a",
 	"label": "ZEN71",
-	"description": "Z-Wave Plus 700 Series S2 ON/OFF Switch",
+	"description": "Z-Wave Plus 700 Series ON/OFF Switch",
 	"devices": [
 		{
 			"productType": "0x7000",

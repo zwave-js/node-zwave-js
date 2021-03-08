@@ -3,7 +3,6 @@ import {
 	DataDirection,
 	getDirectionPrefix,
 	messageRecordToLines,
-	shouldLogNode,
 	tagify,
 	ZWaveLogContainer,
 	ZWaveLoggerBase,
@@ -124,7 +123,9 @@ export class DriverLogger extends ZWaveLoggerBase {
 	): void {
 		if (!this.isDriverLogVisible()) return;
 		if (nodeId == undefined) nodeId = message.getNodeId();
-		if (nodeId != undefined && !shouldLogNode(nodeId)) return;
+		if (nodeId != undefined && !this.container.shouldLogNode(nodeId)) {
+			return;
+		}
 
 		const isCCContainer = isCommandClassContainer(message);
 		const logEntry = message.toLogEntry();

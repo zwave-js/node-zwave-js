@@ -1,0 +1,229 @@
+// Secure Meters (UK) Ltd. SSP 302 ANZ
+// Secure Smart Plug 302
+{
+	"manufacturer": "Secure Meters (UK) Ltd.",
+	"manufacturerId": "0x0059",
+	"label": "SSP 302 ANZ",
+	"description": "Secure Smart Plug 302",
+	"devices": [
+		{
+			"productType": "0x0011",
+			"productId": "0x0002",
+			"zwaveAllianceId": 1271
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"paramInformation": {
+		"1": {
+			"label": "Switch Status Delta Based Configuration",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 1,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"2": {
+			"label": "Voltage Delta Based Configuration",
+			"valueSize": 2,
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 0,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"3": {
+			"label": "Current Delta Based Configuration",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 0,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"4": {
+			"label": "Power Factor Delta Based Configuration",
+			"description": "This configuration parameter will be used to enable/disable the delta base power factor reporting in 0.1% resolution.  if user wants to set power factor 10% = 10/0.1 = 100",
+			"valueSize": 2,
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 0,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true,
+			"options": [
+				{
+					"label": "",
+					"value": 0
+				}
+			]
+		},
+		"5": {
+			"label": "Active Power Delta Based Configuration",
+			"valueSize": 2,
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 0,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"6": {
+			"label": "Active Energy Delta Based Configuration",
+			"valueSize": 2,
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 0,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"7": {
+			"label": "Apparent Energy Delta Based Configuration",
+			"valueSize": 2,
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 0,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"8": {
+			"label": "Switch Status Time Interval Based",
+			"valueSize": 2,
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 0,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"9": {
+			"label": "Voltage Time Interval Based",
+			"valueSize": 2,
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 0,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"10": {
+			"label": "Current Time Interval Based",
+			"valueSize": 2,
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 0,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"11": {
+			"label": "Power Factor Time Interval Based",
+			"valueSize": 2,
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 0,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"12": {
+			"label": "Active Power Time Interval Based",
+			"valueSize": 2,
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 0,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"13": {
+			"label": "Active Energy Time Interval Based",
+			"valueSize": 2,
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 0,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"14": {
+			"label": "Apparent Energy Time Interval Based",
+			"valueSize": 2,
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 0,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"15": {
+			"label": "Relay And LED Configuration",
+			"description": "This configuration is used to change the relay LED status when relay is open/close and also enable to whether to retain the last relay status over power cycle",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 3,
+			"defaultValue": 0,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Relay status will not be retain over power cycle, and relay status LED will lit when relay on and relay status LED will off when relay off\"",
+					"value": 0
+				},
+				{
+					"label": "Relay status will be retain over power cycle, and relay status LED will lit when relay on and relay status LED will off when relay off",
+					"value": 1
+				},
+				{
+					"label": "Relay status will not be retain over power cycle, and relay status LED will off when relay on and relay status LED will lit when relay off",
+					"value": 2
+				},
+				{
+					"label": "Relay status will be retain over power cycle, and relay status LED will off when relay on and relay status LED will lit when relay off",
+					"value": 3
+				}
+			]
+		},
+		"16": {
+			"label": "Sleep Current Configuration",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 0,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		}
+	},
+	"metadata": {
+		"inclusion": "To include the SSP 302 onto a network, put the controller into inclusion mode. Now, press and hold the button on SSP 302 for 4 to 7 seconds then release. The network status LED will start flashing (twice per second) on successful start of inclusion process. \nOn successful inclusion the LED will turn off",
+		"exclusion": "To exclude the SSP 302 from a network, put the controller into exclusion mode. Now, press and hold the button on SSP 302 for 4 to 7 seconds then release. The network status LED will start flashing (twice per second) on successful start of exclusion process.\nAfter successful exclusion the network status LED will start flashing once per second, and the device will reset to factory default.",
+		"reset": "Please use this procedure only when the primary controller is missing or otherwise inoperable. Power cycle the device and press and hold the button for more than 11 seconds and less than 15 seconds within the 60 seconds of power cycle to put the device in factory default, that include setting all the configuration, Association to factory default and removing the device from Z-Wave network",
+		"manual": "https://products.z-wavealliance.org/ProductManual/File?folder=&filename=MarketCertificationFiles/1271/SSP%20302%20User%20Manual%20for%20Web.pdf"
+	}
+}

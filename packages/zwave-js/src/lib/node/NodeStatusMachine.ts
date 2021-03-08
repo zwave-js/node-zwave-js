@@ -93,6 +93,10 @@ export function createNodeStatusMachine(node: ZWaveNode): NodeStatusMachine {
 							target: "asleep",
 							cond: "canSleep",
 						},
+						AWAKE: {
+							target: "awake",
+							cond: "canSleep",
+						},
 					},
 				},
 				asleep: {

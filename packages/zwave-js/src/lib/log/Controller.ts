@@ -3,7 +3,6 @@ import {
 	DataDirection,
 	getDirectionPrefix,
 	getNodeTag,
-	shouldLogNode,
 	tagify,
 	ValueAddedArgs,
 	ValueID,
@@ -101,7 +100,7 @@ export class ControllerLogger extends ZWaveLoggerBase {
 		const { level, message, direction, endpoint } = messageOrOptions;
 		const actualLevel = level || CONTROLLER_LOGLEVEL;
 		if (!this.container.isLoglevelVisible(actualLevel)) return;
-		if (!shouldLogNode(nodeId)) return;
+		if (!this.container.shouldLogNode(nodeId)) return;
 
 		this.logger.log({
 			level: actualLevel,
@@ -222,7 +221,7 @@ export class ControllerLogger extends ZWaveLoggerBase {
 	/** Logs the interview progress of a node */
 	public interviewStage(node: ZWaveNode): void {
 		if (!this.isControllerLogVisible()) return;
-		if (!shouldLogNode(node.id)) return;
+		if (!this.container.shouldLogNode(node.id)) return;
 
 		this.logger.log({
 			level: CONTROLLER_LOGLEVEL,
@@ -240,7 +239,7 @@ export class ControllerLogger extends ZWaveLoggerBase {
 	/** Logs the interview progress of a node */
 	public interviewStart(node: ZWaveNode): void {
 		if (!this.isControllerLogVisible()) return;
-		if (!shouldLogNode(node.id)) return;
+		if (!this.container.shouldLogNode(node.id)) return;
 
 		const message = `Beginning interview - last completed stage: ${
 			InterviewStage[node.interviewStage]

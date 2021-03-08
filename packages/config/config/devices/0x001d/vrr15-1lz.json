@@ -1,9 +1,9 @@
-// Leviton VRR15-1LZ
+// Leviton VRR15
 // Receptacle
 {
 	"manufacturer": "Leviton",
 	"manufacturerId": "0x001d",
-	"label": "VRR15-1LZ",
+	"label": "VRR15",
 	"description": "Receptacle",
 	"devices": [
 		{
@@ -12,7 +12,8 @@
 		},
 		{
 			"productType": "0x1603",
-			"productId": "0x0334"
+			"productId": "0x0334",
+			"zwaveAllianceId": 812
 		}
 	],
 	"firmwareVersion": {

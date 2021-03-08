@@ -138,7 +138,7 @@ describe("lib/node/Node", () => {
 				controlled: CommandClasses[];
 			}[] = [
 				{
-					supported: [CommandClasses["Anti-theft"]],
+					supported: [CommandClasses["Anti-Theft"]],
 					controlled: [CommandClasses.Basic],
 				},
 			];
@@ -697,7 +697,7 @@ describe("lib/node/Node", () => {
 
 		it("ignores the data in an NIF if it was received already", () => {
 			const node = makeNode();
-			node.updateNodeInfo(emptyNodeInfo as any);
+			node.interviewStage = InterviewStage.Complete;
 			node.updateNodeInfo({
 				controlledCCs: [CommandClasses.Configuration],
 				supportedCCs: [CommandClasses.Battery],
@@ -775,17 +775,17 @@ describe("lib/node/Node", () => {
 
 		it("should return 0 if a command class is not supported", () => {
 			const node = new ZWaveNode(2, fakeDriver);
-			expect(node.getCCVersion(CommandClasses["Anti-theft"])).toBe(0);
+			expect(node.getCCVersion(CommandClasses["Anti-Theft"])).toBe(0);
 			node.destroy();
 		});
 
 		it("should return the supported version otherwise", () => {
 			const node = new ZWaveNode(2, fakeDriver);
-			node.addCC(CommandClasses["Anti-theft"], {
+			node.addCC(CommandClasses["Anti-Theft"], {
 				isSupported: true,
 				version: 5,
 			});
-			expect(node.getCCVersion(CommandClasses["Anti-theft"])).toBe(5);
+			expect(node.getCCVersion(CommandClasses["Anti-Theft"])).toBe(5);
 			node.destroy();
 		});
 	});
@@ -795,14 +795,14 @@ describe("lib/node/Node", () => {
 
 		it("should mark a CC as not supported", () => {
 			const node = new ZWaveNode(2, fakeDriver);
-			node.addCC(CommandClasses["Anti-theft"], {
+			node.addCC(CommandClasses["Anti-Theft"], {
 				isSupported: true,
 				version: 7,
 			});
-			expect(node.getCCVersion(CommandClasses["Anti-theft"])).toBe(7);
+			expect(node.getCCVersion(CommandClasses["Anti-Theft"])).toBe(7);
 
-			node.removeCC(CommandClasses["Anti-theft"]);
-			expect(node.getCCVersion(CommandClasses["Anti-theft"])).toBe(0);
+			node.removeCC(CommandClasses["Anti-Theft"]);
+			expect(node.getCCVersion(CommandClasses["Anti-Theft"])).toBe(0);
 			node.destroy();
 		});
 	});
@@ -1144,6 +1144,42 @@ describe("lib/node/Node", () => {
 			expect(node.supportsCC(0x25)).toBeFalse();
 			expect(node.controlsCC(0x26)).toBeFalse();
 			expect(node.getCCVersion(0x27)).toBe(0);
+			node.destroy();
+		});
+
+		it("deserialize() should set the node status to Asleep if the node can sleep", () => {
+			const input = {
+				...serializedTestNode,
+				isListening: false,
+				isFrequentListening: false,
+			};
+			const node = new ZWaveNode(1, fakeDriver);
+			node.deserialize(input);
+			expect(node.status).toBe(NodeStatus.Asleep);
+			node.destroy();
+		});
+
+		it("deserialize() should set the node status to Unknown if the node is a listening node", () => {
+			const input = {
+				...serializedTestNode,
+				isListening: true,
+				isFrequentListening: false,
+			};
+			const node = new ZWaveNode(1, fakeDriver);
+			node.deserialize(input);
+			expect(node.status).toBe(NodeStatus.Unknown);
+			node.destroy();
+		});
+
+		it("deserialize() should set the node status to Unknown if the node is a frequent listening node", () => {
+			const input = {
+				...serializedTestNode,
+				isListening: false,
+				isFrequentListening: true,
+			};
+			const node = new ZWaveNode(1, fakeDriver);
+			node.deserialize(input);
+			expect(node.status).toBe(NodeStatus.Unknown);
 			node.destroy();
 		});
 	});

@@ -1,0 +1,100 @@
+// Ring 4AR1S7-0EN0 / 4AR1E9-0EU0
+// Range Extender (1st generation)
+{
+	"manufacturer": "Ring",
+	"manufacturerId": "0x0346",
+	"label": "4AR1S7-0EN0 / 4AR1E9-0EU0",
+	"description": "Range Extender (1st generation)",
+	"devices": [
+		{
+			"productType": "0x0401",
+			"productId": "0x0101"
+		},
+		{
+			"productType": "0x0401",
+			"productId": "0x0102"
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"paramInformation": {
+		"1": {
+			"label": "Battery Report Interval",
+			"valueSize": 2,
+			"unit": "minutes",
+			"minValue": 4,
+			"maxValue": 70,
+			"defaultValue": 70,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"2": {
+			"$if": "firmwareVersion >= 2.4",
+			"label": "Supervision Timeout",
+			"description": "How long to wait for a supervision report in response to a supervision get from the sensor",
+			"valueSize": 1,
+			"unit": "seconds",
+			"minValue": 5,
+			"maxValue": 50,
+			"defaultValue": 15,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"3": {
+			"$if": "firmwareVersion >= 2.4",
+			"label": "Supervision Retries",
+			"description": "Number of application level retries attempted for messages either not ACKed or Supervision encapsulated messages that did not receive a report",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 5,
+			"defaultValue": 1,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"4": {
+			"$if": "firmwareVersion >= 2.4",
+			"label": "Supervision Back Off",
+			"description": "Used to calculate the delay between retried messages",
+			"valueSize": 1,
+			"unit": "seconds",
+			"minValue": 1,
+			"maxValue": 60,
+			"defaultValue": 5,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"5": {
+			"$if": "firmwareVersion >= 2.4",
+			"label": "Supervision Battery Report Frequency",
+			"description": "The number of battery report messages sent before being encapsulated in supervision",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 31,
+			"defaultValue": 5,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"6": {
+			"$if": "firmwareVersion >= 2.4",
+			"label": "Build Number",
+			"description": "The Jenkins build number for this firmware",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 255,
+			"unsigned": true,
+			"readOnly": true,
+			"writeOnly": false,
+			"allowManualEntry": false
+		}
+	},
+	"metadata": {
+		"manual": "https://support.ring.com/hc/en-us/article_attachments/360051851812/Range_Extender_Zwave_UK.pdf"
+	}
+}

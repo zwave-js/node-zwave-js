@@ -1,0 +1,81 @@
+// TechniSat Digital GmbH 0000/9518
+// Door/Window Sensor
+{
+	"manufacturer": "TechniSat Digital GmbH",
+	"manufacturerId": "0x0299",
+	"label": "0000/9518",
+	"description": "Door/Window Sensor",
+	"devices": [
+		{
+			"productType": "0x0200",
+			"productId": "0x0008",
+			"zwaveAllianceId": 2968
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"paramInformation": {
+		"14": {
+			"label": "Enable/Disable Basic Set Command",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 0,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "The function is disabled",
+					"value": 0
+				},
+				{
+					"label": "The function is enabled",
+					"value": 1
+				}
+			]
+		},
+		"15": {
+			"label": "Value of The Basic Set",
+			"description": "Door/window sensor can reverse its value of Basic Set when the magnet is triggered",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 0,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Send Basic Set value = 255 to nodes associated with group 2 when door/window is opened",
+					"value": 0
+				},
+				{
+					"label": "Send Basic Set value = 0 to nodes associated with group 2 when door/window is opened",
+					"value": 1
+				}
+			]
+		},
+		"32": {
+			"label": "Level of Low Battery",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 99,
+			"defaultValue": 20,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		}
+	},
+	"metadata": {
+		"inclusion": "1. Insert the AAA battery.\n2. Set the Z-Wave network main controller into learning mode.\n3. Triple or single short press the Z-button.\n4. If the add for inclusion is successful, the LED will blink less than 5 seconds and then keep on 3 seconds. Otherwise, the LED will blink 5 seconds and then turn off, in which case you need to repeat the process from step 2.",
+		"exclusion": "1. Insert the AAA battery.\n2. Set the Z-Wave network main controller into learning mode.\n3. Triple clicking the Z-button.\n4. If the remove for exclusion, the LED will turn off within 1 second. Otherwise, the LED will blink 5 seconds and then turn off, in which case you need to repeat the process from step 2.",
+		"reset": "1. Insert the AAA battery.\n2. Pressing and holding the Z button for more than 20 seconds,\n3. Led will keep on until the Z-Button is released, and it will reset to factory default when the button is released.\n\nUsing this procedure only in the event that the network primary controller is missing or otherwise inoperable.",
+		"manual": "https://products.z-wavealliance.org/ProductManual/File?folder=&filename=MarketCertificationFiles/2968/BDA_Türkontakt_2.pdf"
+	}
+}

@@ -486,6 +486,16 @@ export class ZWaveNode extends Endpoint {
 		return this._isBeaming;
 	}
 
+	private _isRoutingSlave: boolean | undefined;
+	public get isRoutingSlave(): boolean | undefined {
+		return this._isRoutingSlave;
+	}
+
+	private _isController: boolean | undefined;
+	public get isController(): boolean | undefined {
+		return this._isController;
+	}
+
 	public get manufacturerId(): number | undefined {
 		return this.getValue(getManufacturerIdValueId());
 	}
@@ -567,8 +577,6 @@ export class ZWaveNode extends Endpoint {
 		return this._neighbors;
 	}
 
-	private _nodeInfoReceived: boolean = false;
-
 	private _valueDB: ValueDB;
 	/**
 	 * Provides access to this node's values
@@ -604,13 +612,21 @@ export class ZWaveNode extends Endpoint {
 	/** Returns a list of all value names that are defined on all endpoints of this node */
 	public getDefinedValueIDs(): TranslatedValueID[] {
 		let ret: ValueID[] = [];
+		const allowControlled: CommandClasses[] = [
+			CommandClasses["Scene Activation"],
+		];
 		for (const endpoint of this.getAllEndpoints()) {
 			for (const [cc, info] of endpoint.implementedCommandClasses) {
-				// Don't return value IDs which are only controlled
-				if (!info.isSupported) continue;
-				const ccInstance = endpoint.createCCInstanceUnsafe(cc);
-				if (ccInstance) {
-					ret.push(...ccInstance.getDefinedValueIDs());
+				// Only expose value IDs for CCs that are supported
+				// with some exceptions that are controlled
+				if (
+					info.isSupported ||
+					(info.isControlled && allowControlled.includes(cc))
+				) {
+					const ccInstance = endpoint.createCCInstanceUnsafe(cc);
+					if (ccInstance) {
+						ret.push(...ccInstance.getDefinedValueIDs());
+					}
 				}
 			}
 		}
@@ -681,8 +697,10 @@ export class ZWaveNode extends Endpoint {
 				},
 				value,
 			);
-			// If the call did not throw, assume that the call was successful and remember the new value
-			this._valueDB.setValue(valueId, value, { noEvent: true });
+			if (api.isSetValueOptimistic(valueId)) {
+				// If the call did not throw, assume that the call was successful and remember the new value
+				this._valueDB.setValue(valueId, value, { noEvent: true });
+			}
 
 			return true;
 		} catch (e: unknown) {
@@ -886,7 +904,6 @@ export class ZWaveNode extends Endpoint {
 
 		this._interviewAttempts = 0;
 		this.interviewStage = InterviewStage.None;
-		this._nodeInfoReceived = false;
 		this._ready = false;
 		this._deviceClass = undefined;
 		this._isListening = undefined;
@@ -991,12 +1008,9 @@ export class ZWaveNode extends Endpoint {
 			// Mark nodes as potentially ready. The first message will determine if it is
 			this.readyMachine.send("RESTART_INTERVIEW_FROM_CACHE");
 
-			// Assume that sleeping nodes start asleep and ping listening nodes to check their status
-			if (this.canSleep) {
-				this.markAsAsleep();
-			} else if (this.isListening) {
-				await this.ping();
-			}
+			// Ping listening nodes to check their status
+			// Sleeping nodes are assumed to be asleep after a restart from cache
+			if (this.isListening) await this.ping();
 		}
 
 		// At this point the basic interview of new nodes is done. Start here when re-interviewing known nodes
@@ -1101,6 +1115,8 @@ export class ZWaveNode extends Endpoint {
 		this._isSecure = resp.isSecure || unknownBoolean;
 		this._version = resp.version;
 		this._isBeaming = resp.isBeaming;
+		this._isRoutingSlave = resp.isRoutingSlave;
+		this._isController = resp.isController;
 
 		const logMessage = `received response for protocol info:
 basic device class:    ${this._deviceClass.basic.label}
@@ -1119,7 +1135,15 @@ version:               ${this.version}`;
 		});
 
 		// Assume that sleeping nodes start asleep
-		if (this.canSleep) this.markAsAsleep();
+		if (this.canSleep) {
+			if (this.status === NodeStatus.Alive) {
+				// unless it was just inluded and is currently communicating with us
+				// In that case we need to switch from alive/dead to awake/asleep
+				this.markAsAwake();
+			} else {
+				this.markAsAsleep();
+			}
+		}
 
 		await this.setInterviewStage(InterviewStage.ProtocolInfo);
 	}
@@ -1488,12 +1512,11 @@ version:               ${this.version}`;
 	 * Handles the receipt of a NIF / NodeUpdatePayload
 	 */
 	public updateNodeInfo(nodeInfo: NodeUpdatePayload): void {
-		if (!this._nodeInfoReceived) {
+		if (this.interviewStage < InterviewStage.NodeInfo) {
 			for (const cc of nodeInfo.supportedCCs)
 				this.addCC(cc, { isSupported: true });
 			for (const cc of nodeInfo.controlledCCs)
 				this.addCC(cc, { isControlled: true });
-			this._nodeInfoReceived = true;
 		}
 
 		// As the NIF is sent on wakeup, treat this as a sign that the node is awake
@@ -1757,17 +1780,15 @@ version:               ${this.version}`;
 		// was wrong. Stop querying it regularly for updates
 		this.cancelManualValueRefresh(command.ccId);
 
-		// If this is a report for the root endpoint and the node does not support Multi Channel Association CC V3+,
-		// we need to map it to endpoint 1
+		// If this is a report for the root endpoint and the node supports the CC on another endpoint,
+		// we need to map it to endpoint 1. Either it does not support multi channel associations or
+		// it is misbehaving. In any case, we would hide this report if we didn't map it
 		if (
 			command.endpointIndex === 0 &&
 			command.constructor.name.endsWith("Report") &&
 			this.getEndpointCount() >= 1 &&
 			// skip the root to endpoint mapping if the root endpoint values are not meant to mirror endpoint 1
-			!this._deviceConfig?.compat?.preserveRootApplicationCCValueIDs &&
-			// Don't check for MCA support or devices without it won't be handled
-			// Instead rely on the version. If MCA is not supported, this will be 0
-			this.getCCVersion(CommandClasses["Multi Channel Association"]) < 3
+			!this._deviceConfig?.compat?.preserveRootApplicationCCValueIDs
 		) {
 			// Find the first endpoint that supports the received CC - if there is none, we don't map the report
 			for (const endpoint of this.getAllEndpoints()) {
@@ -1780,6 +1801,7 @@ version:               ${this.version}`;
 				);
 				command.endpointIndex = endpoint.index;
 				command.persistValues();
+				break;
 			}
 		}
 
@@ -3016,6 +3038,9 @@ version:               ${this.version}`;
 		tryParse("isSecure", "boolean");
 		tryParse("isBeaming", "boolean");
 		tryParse("version", "number");
+
+		// A node that can sleep should be assumed to be sleeping after resuming from cache
+		if (this.canSleep) this.markAsAsleep();
 
 		if (isArray(obj.neighbors)) {
 			// parse only valid node IDs

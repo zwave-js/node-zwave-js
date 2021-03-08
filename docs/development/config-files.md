@@ -113,7 +113,7 @@ where each parameter definition has the following properties:
 | `valueSize`        | number  |    yes    | How many bytes the device uses for this value                                                                                                                                                                                                                               |
 | `minValue`         | number  |    yes    | The minimum allowed value for this parameter                                                                                                                                                                                                                                |
 | `maxValue`         | number  |    yes    | The maximum allowed value for this parameter                                                                                                                                                                                                                                |
-| `defaultValue`     | number  |    yes    | The factory default value of this parameter                                                                                                                                                                                                                                 |
+| `defaultValue`     | number  |   maybe   | The factory default value of this parameter. This is required unless the parameter is `readOnly`.                                                                                                                                                                           |
 | `unit`             | string  |    no     | The unit for this parameter's values, e.g. `minutes`, `seconds`, `%`, `kWh`, `0.1 °C`, etc...                                                                                                                                                                               |
 | `unsigned`         | boolean |    no     | Whether this parameter is interpreted as an unsigned value by the device (default: `false`). This simplifies usage for the end user.                                                                                                                                        |
 | `readOnly`         | boolean |    no     | Whether this parameter can only be read                                                                                                                                                                                                                                     |
@@ -123,7 +123,7 @@ where each parameter definition has the following properties:
 
 ### Partial parameters
 
-Some devices use a single parameter number to configure several, sometimes unrelated, options. For convenience, `node-zwave-js` provides a simple way to define these values as multiple (partial) configuration parameters.
+Some devices use a single parameter number to configure several, sometimes unrelated, options. For convenience, `node-zwave-js` provides a simple way to define these values as multiple (partial) configuration parameters. For an in-depth explanation, see [the guide on partial parameters](guides/partial-parameters.md).
 
 For example,
 

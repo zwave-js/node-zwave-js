@@ -504,18 +504,10 @@ supported CCs:`;
 				const endpointCCs = [...endpointCounts.entries()]
 					.filter(([, ccEndpoints]) => ccEndpoints <= endpoint)
 					.map(([ccId]) => ccId);
-				// Create a new capability value from the CCs
-				const capability: EndpointCapability = {
-					generic: 0 as any, // unknown
-					specific: 0 as any, // unknown
-					isDynamic: false,
-					wasRemoved: false,
-					supportedCCs: endpointCCs,
-				};
-				// And store it
+				// And store it per endpoint
 				node.valueDB.setValue(
 					getEndpointCCsValueId(endpoint),
-					capability,
+					endpointCCs,
 				);
 			}
 		}

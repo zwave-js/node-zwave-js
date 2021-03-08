@@ -1,7 +1,9 @@
 import {
 	CommandClasses,
+	Maybe,
 	MessageOrCCLogEntry,
 	MessageRecord,
+	parseMaybeNumber,
 	validatePayload,
 	ValueID,
 	ValueMetadata,
@@ -237,7 +239,10 @@ export class FibaroVenetianBlindCCReport extends FibaroVenetianBlindCC {
 		// When the node sends a report, payload[0] === 0b11. This is probably a
 		// bit mask for position and tilt
 		if (!!(this.payload[0] & 0b10)) {
-			this.position = this.payload[1];
+			this.position = parseMaybeNumber(
+				this.payload[1],
+				driver.options.preserveUnknownValues,
+			);
 			const positionValueId = getFibaroVenetianBlindPositionValueId(
 				this.endpointIndex,
 			);
@@ -248,7 +253,10 @@ export class FibaroVenetianBlindCCReport extends FibaroVenetianBlindCC {
 			valueDB.setValue(positionValueId, this.position);
 		}
 		if (!!(this.payload[0] & 0b01)) {
-			this.tilt = this.payload[2];
+			this.tilt = parseMaybeNumber(
+				this.payload[2],
+				driver.options.preserveUnknownValues,
+			);
 			const tiltValueId = getFibaroVenetianBlindTiltValueId(
 				this.endpointIndex,
 			);
@@ -260,8 +268,8 @@ export class FibaroVenetianBlindCCReport extends FibaroVenetianBlindCC {
 		}
 	}
 
-	public readonly position?: number;
-	public readonly tilt?: number;
+	public readonly position?: Maybe<number>;
+	public readonly tilt?: Maybe<number>;
 
 	public toLogEntry(): MessageOrCCLogEntry {
 		const message: MessageRecord = {};
