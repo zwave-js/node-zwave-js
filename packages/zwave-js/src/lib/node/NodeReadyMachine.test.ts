@@ -29,10 +29,10 @@ describe("lib/driver/NodeReadyMachine", () => {
 			expect(service.state.value).toBe("notReady");
 		});
 
-		it("when the interview is restarted from cache, the node should be ready as soon as it is known NOT to be dead", () => {
+		it("when the driver is restarted from cache, the node should be ready as soon as it is known NOT to be dead", () => {
 			const testMachine = createNodeReadyMachine();
 			service = interpret(testMachine).start();
-			service.send("RESTART_INTERVIEW_FROM_CACHE");
+			service.send("RESTART_FROM_CACHE");
 			expect(service.state.value).toBe("readyIfNotDead");
 			// service.send("MAYBE_DEAD");
 			// expect(service.state.value).toBe("readyIfNotDead");
@@ -40,11 +40,11 @@ describe("lib/driver/NodeReadyMachine", () => {
 			expect(service.state.value).toBe("ready");
 		});
 
-		it("when the interview is restarted from cache and the node is known to be not dead, it should be ready immediately", () => {
+		it("when the driver is restarted from cache and the node is known to be not dead, it should be ready immediately", () => {
 			const testMachine = createNodeReadyMachine();
 			service = interpret(testMachine).start();
 			service.send("NOT_DEAD");
-			service.send("RESTART_INTERVIEW_FROM_CACHE");
+			service.send("RESTART_FROM_CACHE");
 			expect(service.state.value).toBe("ready");
 		});
 

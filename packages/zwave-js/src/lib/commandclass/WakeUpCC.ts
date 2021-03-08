@@ -194,7 +194,7 @@ export class WakeUpCC extends CommandClass {
 		}
 	}
 
-	public async interview(complete: boolean = true): Promise<void> {
+	public async interview(): Promise<void> {
 		const node = this.getNode()!;
 		const endpoint = this.getEndpoint()!;
 		const api = endpoint.commandClasses["Wake Up"].withOptions({
@@ -203,9 +203,7 @@ export class WakeUpCC extends CommandClass {
 
 		this.driver.controllerLog.logNode(node.id, {
 			endpoint: this.endpointIndex,
-			message: `${this.constructor.name}: doing a ${
-				complete ? "complete" : "partial"
-			} interview...`,
+			message: `Interviewing ${this.ccName}...`,
 			direction: "none",
 		});
 
@@ -225,30 +223,27 @@ export class WakeUpCC extends CommandClass {
 			);
 		} else {
 			// Retrieve the allowed wake up intervals if possible
-			if (complete) {
-				// This information does not change
-				if (this.version >= 2) {
-					this.driver.controllerLog.logNode(node.id, {
-						endpoint: this.endpointIndex,
-						message:
-							"retrieving wakeup capabilities from the device...",
-						direction: "outbound",
-					});
-					const wakeupCaps = await api.getIntervalCapabilities();
-					if (wakeupCaps) {
-						const logMessage = `received wakeup capabilities:
+			if (this.version >= 2) {
+				this.driver.controllerLog.logNode(node.id, {
+					endpoint: this.endpointIndex,
+					message:
+						"retrieving wakeup capabilities from the device...",
+					direction: "outbound",
+				});
+				const wakeupCaps = await api.getIntervalCapabilities();
+				if (wakeupCaps) {
+					const logMessage = `received wakeup capabilities:
 default wakeup interval: ${wakeupCaps.defaultWakeUpInterval} seconds
 minimum wakeup interval: ${wakeupCaps.minWakeUpInterval} seconds
 maximum wakeup interval: ${wakeupCaps.maxWakeUpInterval} seconds
 wakeup interval steps:   ${wakeupCaps.wakeUpIntervalSteps} seconds`;
-						this.driver.controllerLog.logNode(node.id, {
-							endpoint: this.endpointIndex,
-							message: logMessage,
-							direction: "inbound",
-						});
-					} else {
-						hadCriticalTimeout = true;
-					}
+					this.driver.controllerLog.logNode(node.id, {
+						endpoint: this.endpointIndex,
+						message: logMessage,
+						direction: "inbound",
+					});
+				} else {
+					hadCriticalTimeout = true;
 				}
 			}
 

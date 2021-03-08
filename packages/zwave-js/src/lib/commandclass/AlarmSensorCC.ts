@@ -156,7 +156,7 @@ export class AlarmSensorCCAPI extends PhysicalCCAPI {
 export class AlarmSensorCC extends CommandClass {
 	declare ccCommand: AlarmSensorCommand;
 
-	public async interview(complete: boolean = true): Promise<void> {
+	public async interview(): Promise<void> {
 		const node = this.getNode()!;
 		const endpoint = this.getEndpoint()!;
 
@@ -177,46 +177,55 @@ export class AlarmSensorCC extends CommandClass {
 
 		this.driver.controllerLog.logNode(node.id, {
 			endpoint: this.endpointIndex,
-			message: `${this.constructor.name}: doing a ${
-				complete ? "complete" : "partial"
-			} interview...`,
+			message: `Interviewing ${this.ccName}...`,
 			direction: "none",
 		});
 
 		// Find out which sensor types this sensor supports
-		let supportedSensorTypes: readonly AlarmSensorType[] | undefined;
-		if (complete) {
+		this.driver.controllerLog.logNode(node.id, {
+			endpoint: this.endpointIndex,
+			message: "querying supported sensor types...",
+			direction: "outbound",
+		});
+		const supportedSensorTypes = await api.getSupportedSensorTypes();
+		if (supportedSensorTypes) {
+			const logMessage = `received supported sensor types: ${supportedSensorTypes
+				.map((type) => getEnumMemberName(AlarmSensorType, type))
+				.map((name) => `\n· ${name}`)
+				.join("")}`;
 			this.driver.controllerLog.logNode(node.id, {
 				endpoint: this.endpointIndex,
-				message: "querying supported sensor types...",
-				direction: "outbound",
+				message: logMessage,
+				direction: "inbound",
 			});
-			supportedSensorTypes = await api.getSupportedSensorTypes();
-			if (supportedSensorTypes) {
-				const logMessage = `received supported sensor types: ${supportedSensorTypes
-					.map((type) => getEnumMemberName(AlarmSensorType, type))
-					.map((name) => `\n· ${name}`)
-					.join("")}`;
-				this.driver.controllerLog.logNode(node.id, {
-					endpoint: this.endpointIndex,
-					message: logMessage,
-					direction: "inbound",
-				});
-			} else {
-				this.driver.controllerLog.logNode(node.id, {
-					endpoint: this.endpointIndex,
-					message:
-						"Querying supported sensor types timed out, skipping interview...",
-					level: "warn",
-				});
-				return;
-			}
 		} else {
-			supportedSensorTypes =
-				this.getValueDB().getValue(
-					getSupportedSensorTypesValueId(this.endpointIndex),
-				) ?? [];
+			this.driver.controllerLog.logNode(node.id, {
+				endpoint: this.endpointIndex,
+				message:
+					"Querying supported sensor types timed out, skipping interview...",
+				level: "warn",
+			});
+			return;
 		}
+
+		// Query (all of) the sensor's current value(s)
+		await this.refreshValues();
+
+		// Remember that the interview is complete
+		this.interviewComplete = true;
+	}
+
+	public async refreshValues(): Promise<void> {
+		const node = this.getNode()!;
+		const endpoint = this.getEndpoint()!;
+		const api = endpoint.commandClasses["Alarm Sensor"].withOptions({
+			priority: MessagePriority.NodeQuery,
+		});
+
+		const supportedSensorTypes: readonly AlarmSensorType[] =
+			this.getValueDB().getValue(
+				getSupportedSensorTypesValueId(this.endpointIndex),
+			) ?? [];
 
 		// Always query (all of) the sensor's current value(s)
 		for (const type of supportedSensorTypes) {
@@ -246,9 +255,6 @@ duration: ${currentValue.duration}`;
 				});
 			}
 		}
-
-		// Remember that the interview is complete
-		this.interviewComplete = true;
 	}
 
 	protected createMetadataForSensorType(sensorType: AlarmSensorType): void {

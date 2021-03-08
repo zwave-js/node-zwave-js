@@ -176,6 +176,9 @@ export class CommandClass {
 	/** This CC's identifier */
 	public ccId: CommandClasses;
 	public ccCommand?: number;
+	public get ccName(): string {
+		return getCCName(this.ccId);
+	}
 
 	/** The ID of the target node(s) */
 	public nodeId!: number | MulticastDestination;
@@ -378,14 +381,18 @@ export class CommandClass {
 		return stripUndefined({ ...ret, ...props });
 	}
 
-	// This needs to be overwritten per command class. In the default implementation, don't do anything
 	/**
 	 * Performs the interview procedure for this CC according to SDS14223
-	 * @param complete Whether a complete interview should be performed or only the necessary steps on startup
 	 */
-	// eslint-disable-next-line @typescript-eslint/no-unused-vars
-	public async interview(complete: boolean = true): Promise<void> {
-		// Empty on purpose
+	public async interview(): Promise<void> {
+		// This needs to be overwritten per command class. In the default implementation, don't do anything
+	}
+
+	/**
+	 * Refreshes all dynamic values of this CC
+	 */
+	public async refreshValues(): Promise<void> {
+		// This needs to be overwritten per command class. In the default implementation, don't do anything
 	}
 
 	/** Determines which CC interviews must be performed before this CC can be interviewed */

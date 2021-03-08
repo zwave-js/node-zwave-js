@@ -978,12 +978,12 @@ describe("lib/node/Node", () => {
 			node.destroy();
 		});
 
-		it("nodes with a completed interview don't get their stage reset when resuming from cache", () => {
+		it("a changed interview stage is reflected in the cache", () => {
 			const node = new ZWaveNode(1, fakeDriver);
 			// @ts-ignore We need write access to the map
 			fakeDriver.controller.nodes.set(1, node);
 			node.deserialize(serializedTestNode);
-			node.interviewStage = InterviewStage.RestartFromCache;
+			node.interviewStage = InterviewStage.Complete;
 			expect(node.serialize().interviewStage).toEqual(
 				InterviewStage[InterviewStage.Complete],
 			);
