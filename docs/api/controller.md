@@ -305,12 +305,20 @@ A node could not be included into or excluded from the network for some reason.
 
 The process to include or exclude a node was stopped successfully. Note that these events are also emitted after a node was included or excluded.
 
-### `"node added"` / `"node removed"`
+### `"node added"`
 
-A node has successfully been added to or removed from the network. The added or removed node is passed to the event handler as the only argument:
+A node has successfully been added to the network. The added node is passed to the event handler as the only argument:
 
 ```ts
 (node: ZWaveNode) => void
+```
+
+### `"node removed"`
+
+A node has successfully been replaced or removed from the network. The `replace` parameter indicates whether the node was replaced with another node.
+
+```ts
+(node: ZWaveNode, replaced: boolean) => void
 ```
 
 ### `"heal network progress"`
