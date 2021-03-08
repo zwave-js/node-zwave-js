@@ -2,7 +2,7 @@
 // Portable Smart Motion Sensor
 {
 	"manufacturer": "GE/Jasco",
-	"manufacturerId": "0x027a",
+	"manufacturerId": "0x0063",
 	"label": "ZW6302",
 	"description": "Portable Smart Motion Sensor",
 	"devices": [
