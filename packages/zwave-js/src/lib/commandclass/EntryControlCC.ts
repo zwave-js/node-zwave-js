@@ -275,7 +275,7 @@ export class EntryControlCCAPI extends CCAPI {
 export class EntryControlCC extends CommandClass {
 	declare ccCommand: EntryControlCommand;
 
-	public async interview(complete: boolean = true): Promise<void> {
+	public async interview(): Promise<void> {
 		const node = this.getNode()!;
 		const endpoint = this.getEndpoint()!;
 		const api = endpoint.commandClasses["Entry Control"].withOptions({
@@ -284,9 +284,7 @@ export class EntryControlCC extends CommandClass {
 
 		this.driver.controllerLog.logNode(node.id, {
 			endpoint: this.endpointIndex,
-			message: `${this.constructor.name}: doing a ${
-				complete ? "complete" : "partial"
-			} interview...`,
+			message: `Interviewing ${this.ccName}...`,
 			direction: "none",
 		});
 
@@ -316,19 +314,32 @@ export class EntryControlCC extends CommandClass {
 			this.driver.controllerLog.logNode(node.id, {
 				endpoint: this.endpointIndex,
 				message: `received entry control supported keys:
-data types:             ${eventCapabilities.supportedDataTypes
+data types:            ${eventCapabilities.supportedDataTypes
 					.map((e) => EntryControlDataTypes[e])
 					.toString()}
-event types:            ${eventCapabilities.supportedEventTypes
+event types:           ${eventCapabilities.supportedEventTypes
 					.map((e) => EntryControlEventTypes[e])
 					.toString()}
-key cached size min:    ${eventCapabilities.minKeyCacheSize}
-key cached size max:    ${eventCapabilities.maxKeyCacheSize}
-key cached timeout min: ${eventCapabilities.minKeyCacheTimeout}
-key cached timeout max: ${eventCapabilities.maxKeyCacheTimeout}`,
+min key cache size:    ${eventCapabilities.minKeyCacheSize}
+max key cache size:    ${eventCapabilities.maxKeyCacheSize}
+min key cache timeout: ${eventCapabilities.minKeyCacheTimeout} seconds
+max key cache timeout: ${eventCapabilities.maxKeyCacheTimeout} seconds`,
 				direction: "inbound",
 			});
 		}
+
+		await this.refreshValues();
+
+		// Remember that the interview is complete
+		this.interviewComplete = true;
+	}
+
+	public async refreshValues(): Promise<void> {
+		const node = this.getNode()!;
+		const endpoint = this.getEndpoint()!;
+		const api = endpoint.commandClasses["Entry Control"].withOptions({
+			priority: MessagePriority.NodeQuery,
+		});
 
 		this.driver.controllerLog.logNode(node.id, {
 			endpoint: this.endpointIndex,
@@ -340,15 +351,12 @@ key cached timeout max: ${eventCapabilities.maxKeyCacheTimeout}`,
 		if (conf) {
 			this.driver.controllerLog.logNode(node.id, {
 				endpoint: this.endpointIndex,
-				message: `received entry control supported keys:
-key cached size:    ${conf.keyCacheSize}
-key cached timeout: ${conf.keyCacheTimeout}`,
+				message: `received entry control configuration:
+key cache size:    ${conf.keyCacheSize}
+key cache timeout: ${conf.keyCacheTimeout} seconds`,
 				direction: "inbound",
 			});
 		}
-
-		// Remember that the interview is complete
-		this.interviewComplete = true;
 	}
 }
 
@@ -498,11 +506,8 @@ export class EntryControlCCEventSupportedReport extends EntryControlCC {
 	public readonly supportedEventTypes: readonly EntryControlEventTypes[];
 
 	public readonly minKeyCacheSize: number;
-
 	public readonly maxKeyCacheSize: number;
-
 	public readonly minKeyCacheTimeout: number;
-
 	public readonly maxKeyCacheTimeout: number;
 
 	public toLogEntry(): MessageOrCCLogEntry {
@@ -515,10 +520,10 @@ export class EntryControlCCEventSupportedReport extends EntryControlCC {
 				"supported event types": this.supportedEventTypes
 					.map((et) => EntryControlEventTypes[et])
 					.toString(),
-				"min key cached size": this.minKeyCacheSize,
-				"max key cached size": this.maxKeyCacheSize,
-				"min key cached timeout": this.minKeyCacheTimeout,
-				"max key cached timeout": this.maxKeyCacheTimeout,
+				"min key cache size": this.minKeyCacheSize,
+				"max key cache size": this.maxKeyCacheSize,
+				"min key cache timeout": this.minKeyCacheTimeout,
+				"max key cache timeout": this.maxKeyCacheTimeout,
 			},
 		};
 	}
@@ -558,8 +563,9 @@ export class EntryControlCCConfigurationReport extends EntryControlCC {
 	@ccValueMetadata({
 		...ValueMetadata.UInt8,
 		label: "Key cache timeout",
+		unit: "seconds",
 		description:
-			"Number of seconds that the key cache must wait for additional characters",
+			"How long the key cache must wait for additional characters",
 		min: 1,
 		max: 10,
 	})
