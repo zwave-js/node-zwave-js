@@ -343,19 +343,19 @@
 				}
 			]
 		},
-		"23[0x1000000]": {
+		"23[0x01000000]": {
 			"$import": "templates/ring_template.json#supported_language",
 			"label": "US English"
 		},
-		"23[0x2000000]": {
+		"23[0x02000000]": {
 			"$import": "templates/ring_template.json#supported_language",
 			"label": "UK English"
 		},
-		"23[0x4000000]": {
+		"23[0x04000000]": {
 			"$import": "templates/ring_template.json#supported_language",
 			"label": "French"
 		},
-		"23[0x8000000]": {
+		"23[0x08000000]": {
 			"$import": "templates/ring_template.json#supported_language",
 			"label": "German"
 		},
@@ -375,19 +375,19 @@
 			"$import": "templates/ring_template.json#supported_language",
 			"label": "Danish"
 		},
-		"23[0x10000]": {
+		"23[0x010000]": {
 			"$import": "templates/ring_template.json#supported_language",
 			"label": "Norwegian"
 		},
-		"23[0x20000]": {
+		"23[0x020000]": {
 			"$import": "templates/ring_template.json#supported_language",
 			"label": "Swedish"
 		},
-		"23[0x40000]": {
+		"23[0x040000]": {
 			"$import": "templates/ring_template.json#supported_language",
 			"label": "Finnish"
 		},
-		"23[0x80000]": {
+		"23[0x080000]": {
 			"$import": "templates/ring_template.json#supported_language",
 			"label": "Arabic"
 		},
