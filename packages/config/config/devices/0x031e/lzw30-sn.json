@@ -330,7 +330,7 @@
 		},
 		"13": {
 			"$if": "firmwareVersion >= 1.17",
-			"label": "",
+			"label": "Load Type",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 1,
