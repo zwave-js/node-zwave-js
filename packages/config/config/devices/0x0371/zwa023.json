@@ -416,7 +416,6 @@
 			"readOnly": false,
 			"writeOnly": false,
 			"allowManualEntry": true
-			]
 		},
 		"32": {
 			"label": "Release/Disable alarm",
