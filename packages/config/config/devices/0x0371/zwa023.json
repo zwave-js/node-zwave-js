@@ -1,0 +1,485 @@
+// Aeotec Ltd. ZWA023
+// Smart Switch 7 (B plug)
+{
+	"manufacturer": "Aeotec Ltd.",
+	"manufacturerId": "0x0371",
+	"label": "ZWA023",
+	"description": "Smart Switch 7",
+	"devices": [
+		{
+			"productType": "0x0003",
+			"productId": "0x00af"
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"supportsZWavePlus": true,
+	"paramInformation": {
+    "1": {
+			"label": "LED indicator mode",
+			"description": "Allows you to configure how the LED indicator works",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 2,
+			"defaultValue": 2,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "LED Disabled",
+					"value": 0
+				},
+				{
+					"label": "Night Light Mode",
+					"value": 1
+				},
+				{
+					"label": "On/Off Mode",
+					"value": 2
+				}
+			]
+		},
+    "2[0xFF000000]": {
+			"label": "Night Light enable (hour)",
+			"description": "Enable or disable Night Light Mode during specific times",
+			"valueSize": 4,
+			"minValue": 0,
+			"maxValue": 24,
+			"defaultValue": 18,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"2[0xFF0000]": {
+			"label": "Night Light enable (minute)",
+			"description": "Enable or disable Night Light Mode during specific times",
+			"valueSize": 4,
+			"minValue": 0,
+			"maxValue": 59,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+    "2[0xFF00]": {
+			"label": "Night Light enable (second)",
+			"description": "Enable or disable Night Light Mode during specific times",
+			"valueSize": 4,
+			"minValue": 0,
+			"maxValue": 59,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"3[0xFF000000]": {
+			"label": "Night Light disable (hour)",
+			"description": "Enable or disable Night Light Mode during specific times",
+			"valueSize": 4,
+			"minValue": 0,
+			"maxValue": 24,
+			"defaultValue": 6,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"3[0xFF0000]": {
+			"label": "Night Light disable (minute)",
+			"description": "Enable or disable Night Light Mode during specific times",
+			"valueSize": 4,
+			"minValue": 0,
+			"maxValue": 59,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+    "3[0xFF00]": {
+			"label": "Night Light disable (second)",
+			"description": "Enable or disable Night Light Mode during specific times",
+			"valueSize": 4,
+			"minValue": 0,
+			"maxValue": 59,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+    "4": {
+			"label": "Start/Stop LED flash",
+			"description": "Sets the timeframe of flashing in seconds",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": true,
+			"allowManualEntry": true
+		},
+    "5": {
+			"label": "Flash frequency",
+			"description": "Configures the LED flash frequency and amount of time",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 5,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+    "6": {
+			"label": "Usage Alert",
+			"description": "Send alert when energy draw is above this value",
+      "unit": "W",
+			"valueSize": 2,
+			"minValue": 0,
+			"maxValue": 3000,
+			"defaultValue": 100,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+    "7": {
+			"label": "Plug Always On",
+			"description": "Enable/Disable ability to turn off plug via hardware or commands",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 2,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+      "options": [
+				{
+					"label": "Button toggles on/off",
+					"value": 0
+				},
+				{
+					"label": "Button only allows network inclusion/exclusion",
+					"value": 1
+				},
+				{
+					"label": "Plug ignores commands to turn off",
+					"value": 2
+				}
+			]
+		},
+    "8": {
+			"label": "Power Out Action",
+			"description": "Set the plug's action on power outage",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 2,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+      "options": [
+				{
+					"label": "Previous State",
+					"value": 0
+				},
+				{
+					"label": "Power On",
+					"value": 1
+				},
+				{
+					"label": "Power Off",
+					"value": 2
+				}
+			]
+		},
+    "9": {
+			"label": "Group 3 Scene ID",
+			"description": "Set the scene id sent through group 3 via parameter 6",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 255,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"10": {
+			"label": "Over-load Threshold",
+			"description": "Set Watt (W) Threshold for Overpower.",
+			"unit": "W",
+			"valueSize": 2,
+			"minValue": 0,
+			"maxValue": 1800,
+			"defaultValue": 1800,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+    "11": {
+			"label": "Over-voltage Threshold",
+			"description": "Set Voltage (V) Threshold for Overpower.",
+			"unit": "V",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 135,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+    "19": {
+			"label": "Threshold Check Time",
+			"description": "Set Threshold check period.",
+			"unit": "s",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 5,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+    "20": {
+			"label": "kWh threshold",
+			"description": "When to send a kWh report",
+			"valueSize": 2,
+			"minValue": 0,
+			"maxValue": 10000,
+			"defaultValue": 100,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+    "21": {
+			"label": "Watt threshold",
+			"description": "When to send a watt report",
+			"valueSize": 2,
+			"minValue": 0,
+			"maxValue": 2500,
+			"defaultValue": 100,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"22": {
+			"label": "Current threshold",
+			"description": "When to send a current report",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 150,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+    "23": {
+			"label": "Watt Automatic Report Time",
+			"description": "How often to send a wattage report",
+      "unit": "s",
+			"valueSize": 2,
+			"minValue": 0,
+			"maxValue": 65535,
+			"defaultValue": 600,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+    "24": {
+			"label": "kWh Automatic Report Time",
+			"description": "How often to send a kWh report",
+      "unit": "s",
+			"valueSize": 2,
+			"minValue": 0,
+			"maxValue": 65535,
+			"defaultValue": 600,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"25": {
+			"label": "Voltage Automatic Report Time",
+			"description": "How often to send a voltage report",
+			"valueSize": 2,
+			"minValue": 0,
+			"maxValue": 65535,
+			"defaultValue": 600,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+    "25": {
+			"label": "Current Automatic Report Time",
+			"description": "How often to send a current report",
+			"valueSize": 2,
+			"minValue": 0,
+			"maxValue": 65535,
+			"defaultValue": 600,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"30[0x01]": {
+			"label": "Alarm reaction to Access Control trigger state",
+			"description": "React to access control triggers from other Z-Wave devices.",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"30[0x0100]": {
+			"label": "Alarm reaction to Smoke Alarms",
+			"description": "React to Smoke Alarms from other Z-Wave devices.",
+			"valueSize": 2,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"30[0x0200]": {
+			"label": "Alarm reaction to CO Alarms",
+			"description": "React to CO Alarms from other Z-Wave devices.",
+			"valueSize": 2,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"30[0x0400]": {
+			"label": "Alarm reaction to CO2 Alarms",
+			"description": "React to CO2 Alarms from other Z-Wave devices.",
+			"valueSize": 2,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"30[0x0800]": {
+			"label": "Alarm reaction to Heat Alarms",
+			"description": "React to Heat Alarms from other Z-Wave devices.",
+			"valueSize": 2,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"30[0x1000]": {
+			"label": "Alarm reaction to Water Alarms",
+			"description": "React to Water Alarms from other Z-Wave devices.",
+			"valueSize": 2,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"30[0x2000]": {
+			"label": "Alarm reaction to Access Control Alarms",
+			"description": "React to Access Control Alarms from other Z-Wave devices.",
+			"valueSize": 2,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"30[0x4000]": {
+			"label": "Alarm reaction to Home Security Alarms",
+			"description": "React to Home Security Alarms from other Z-Wave devices.",
+			"valueSize": 2,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+    "31": {
+			"label": "Switch reaction to alarm",
+			"description": "What do to when an alarm is recieved",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+			]
+		},
+		"32": {
+			"label": "Release/Disable alarm",
+			"description": "Sets how you are able to disable Smart Switch 7s alarm state",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 0,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+    "40": {
+			"label": "Automatic Off Time",
+			"description": "Timer to automatically turn off after turned on",
+      "unit": "s",
+			"valueSize": 4,
+			"minValue": 0,
+			"maxValue": 86400,
+			"defaultValue": 0,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+    "41": {
+			"label": "Automatic On Time",
+			"description": "Timer to automatically turn on after turned off",
+      "unit": "s",
+			"valueSize": 4,
+			"minValue": 0,
+			"maxValue": 86400,
+			"defaultValue": 0,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"42": {
+			"label": "Status Update",
+			"description": "Determine which reports are sent to your gateway",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 2,
+			"defaultValue": 2,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "No report sent",
+					"value": 0
+				},
+				{
+					"label": "Report Basic Report",
+					"value": 1
+				},
+				{
+					"label": "Report Binary Switch",
+					"value": 2
+				}
+			]
+		}
+	}
+}
