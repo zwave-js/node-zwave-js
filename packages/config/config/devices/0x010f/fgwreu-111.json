@@ -1,10 +1,10 @@
 // Fibargroup FGWREU-111
-// Fibaro Walli Roller Shutter
+// Walli Roller Shutter
 {
 	"manufacturer": "Fibargroup",
 	"manufacturerId": "0x010f",
 	"label": "FGWREU-111",
-	"description": "Fibaro Walli Roller Shutter",
+	"description": "Walli Roller Shutter",
 	"devices": [
 		{
 			"productType": "0x1d01",
@@ -15,7 +15,6 @@
 		"min": "0.0",
 		"max": "255.255"
 	},
-	"supportsZWavePlus": true,
 	"paramInformation": {
 		"11": {
 			"label": "LED frame colour when moving",

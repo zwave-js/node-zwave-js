@@ -1,19 +1,298 @@
 // Fibargroup FGSS-001
-// FIBARO Smoke Sensor
+// Smoke Sensor
 {
 	"manufacturer": "Fibargroup",
 	"manufacturerId": "0x010f",
-	"label": "Smoke Sensor",
-	"description": "FIBARO Smoke Sensor",
+	"label": "FGSS-001",
+	"description": "Smoke Sensor",
 	"devices": [
 		{
 			"productType": "0x0000",
 			"productId": "0x1000",
 			"zwaveAllianceId": 1049
+		},
+		{
+			"productType": "0x0c00",
+			"productId": "0x1000"
+		},
+		{
+			"productType": "0x0c00",
+			"productId": "0x3000"
 		}
 	],
 	"firmwareVersion": {
 		"min": "0.0",
 		"max": "255.255"
+	},
+	"associations": {
+		"1": {
+			"label": "Fire Status",
+			"maxNodes": 5
+		},
+		"2": {
+			"label": "TMP Button",
+			"maxNodes": 5
+		},
+		"3": {
+			"label": "Device Status",
+			"maxNodes": 1,
+			"isLifeline": true
+		}
+	},
+	"paramInformation": {
+		"1": {
+			"label": "Alarm Cancellation Delay",
+			"valueSize": 2,
+			"minValue": 0,
+			"maxValue": 3600,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"2[0x01]": {
+			"$import": "templates/fibarogroup_templates.json#enable_disable_bit_default_true",
+			"label": "Acoustic Alarm",
+			"description": " This doesn’t affect the communication with the Z-Wave network controller, i.e. the sensor will keep sending alarms, reports and all information to the associated devices. Modifying this parameter settings helps extending the battery life"
+		},
+		"2[0x02]": {
+			"$import": "templates/fibarogroup_templates.json#enable_disable_bit_default_true",
+			"label": "Visual Alarm",
+			"description": " This doesn’t affect the communication with the Z-Wave network controller, i.e. the sensor will keep sending alarms, reports and all information to the associated devices. Modifying this parameter settings helps extending the battery life"
+		},
+		"5": {
+			"label": "Type of alarm to 1st association group (SMOKE)",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 255,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "ALARM SENSOR (SMOKE)",
+					"value": 0
+				},
+				{
+					"label": "BASIC_SET",
+					"value": 255
+				}
+			]
+		},
+		"7": {
+			"label": "Forced Level of Dimming group 1",
+			"valueSize": 1,
+			"minValue": 1,
+			"maxValue": 255,
+			"defaultValue": 255,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"10": {
+			"label": "Interval between temperature readings",
+			"valueSize": 2,
+			"minValue": 1,
+			"maxValue": 32767,
+			"defaultValue": 300,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"12": {
+			"label": "Insensitiveness to temperature changes.",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 100,
+			"defaultValue": 20,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"13[0x01]": {
+			"$import": "templates/fibarogroup_templates.json#enable_disable_bit",
+			"label": "Broadcast Smoke mode"
+		},
+		"13[0x02]": {
+			"$import": "templates/fibarogroup_templates.json#enable_disable_bit",
+			"label": "Broadcast Tamper mode"
+		},
+		"73": {
+			"label": "Temperature measurement compensation",
+			"valueSize": 2,
+			"unit": "0.1°C",
+			"minValue": -1000,
+			"maxValue": 1000,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"80": {
+			"label": "Z-Wave range test interval",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 1,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"81": {
+			"label": "Temperature alarm threshold",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 100,
+			"defaultValue": 54,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"82": {
+			"label": "Smoke Sensor sensitivity",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 3,
+			"defaultValue": 2,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "High",
+					"value": 1
+				},
+				{
+					"label": "Medium",
+					"value": 2
+				},
+				{
+					"label": "Low",
+					"value": 3
+				}
+			]
+		},
+		"83": {
+			"label": "Black Box sensitivity level",
+			"valueSize": 1,
+			"minValue": 1,
+			"maxValue": 3,
+			"defaultValue": 2,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "High",
+					"value": 1
+				},
+				{
+					"label": "Medium",
+					"value": 2
+				},
+				{
+					"label": "Low",
+					"value": 3
+				}
+			]
+		},
+		"84": {
+			"label": "Malfunction alarm",
+			"description": "Time interval in which malfuntion alarm, if detected, is repeated using visual and acoustic alarms",
+			"valueSize": 1,
+			"unit": "0.1 seconds",
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 10,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"85": {
+			"label": "Temperature alarm",
+			"valueSize": 1,
+			"minValue": -126,
+			"maxValue": 127,
+			"defaultValue": 5,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"86": {
+			"label": "Lack of the Z-Wave range alarm",
+			"valueSize": 2,
+			"minValue": 1,
+			"maxValue": 17280,
+			"defaultValue": 360,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"87": {
+			"label": "Low battery alarm",
+			"valueSize": 2,
+			"minValue": 1,
+			"maxValue": 17280,
+			"defaultValue": 360,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"88": {
+			"label": "Temperature measurement compensation for report",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 0,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Ignore temperature compensation",
+					"value": 0
+				},
+				{
+					"label": "Include temperature compensation",
+					"value": 1
+				}
+			]
+		},
+		"89": {
+			"label": "Tamper alarm",
+			"description": "Activates/inactivates tamper switch alarm",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 2,
+			"defaultValue": 1,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Tamper alarm inactive",
+					"value": 0
+				},
+				{
+					"label": "Tamper alarm active, with cancellation option",
+					"value": 1
+				},
+				{
+					"label": "Tamper alarm active, without cancellation option",
+					"value": 2
+				}
+			]
+		}
+	},
+	"metadata": {
+		"manual": "https://manuals.fibaro.com/content/manuals/en/FGSS-001/FGSS-001-EN-A-v1.01.pdf"
 	}
 }

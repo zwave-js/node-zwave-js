@@ -1,0 +1,17 @@
+// Fibargroup FGWPE/F-101
+// Metered Wall Plug Switch
+{
+	"$import": "templates/fgwpx-10x.json",
+	"label": "FGWPE/F-101",
+	"devices": [
+		{
+			"productType": "0x0600",
+			"productId": "0x1000",
+			"zwaveAllianceId": 993
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	}
+}

@@ -1,0 +1,14 @@
+// Fibargroup FGWDSEU-221 Double
+// Walli Double Switch
+{
+	"$import": "templates/fgwdseu-221.json",
+	"label": "FGWDSEU-221 Double",
+	"description": "Walli Double Switch",
+	"devices": [
+		{
+			"productType": "0x1b01",
+			"productId": "0x1000",
+			"zwaveAllianceId": [3256, 3395, 3661]
+		}
+	]
+}

@@ -1,0 +1,386 @@
+// Fibargroup FGKF-601
+// Keyfob
+{
+	"manufacturer": "Fibargroup",
+	"manufacturerId": "0x010f",
+	"label": "FGKF-601",
+	"description": "Keyfob",
+	"devices": [
+		{
+			"productType": "0x1001",
+			"productId": "0x1000"
+		},
+		{
+			"productType": "0x1001",
+			"productId": "0x2000"
+		},
+		{
+			"productType": "0x1001",
+			"productId": "0x3000"
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"paramInformation": {
+		"1": {
+			"label": "Lock Mode - unlocking sequence",
+			"valueSize": 2,
+			"minValue": 0,
+			"maxValue": 28086,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"2": {
+			"label": "Lock Mode - time to lock and locking button",
+			"description": "0 - Lock Mode disabled, 5-1791 - calculated value",
+			"unit": "s",
+			"valueSize": 2,
+			"minValue": 0,
+			"maxValue": 1791,
+			"defaultValue": 60,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"3": {
+			"label": "First scene sequence",
+			"description": "0 - 1st sequence disabled, 9-28086 - value of sequence",
+			"valueSize": 2,
+			"minValue": 0,
+			"maxValue": 28086,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"4": {
+			"label": "Second scene sequence",
+			"description": "0 - 2nd sequence disabled, 9-28086 - value of sequence",
+			"valueSize": 2,
+			"minValue": 0,
+			"maxValue": 28086,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"5": {
+			"label": "Third scene sequence",
+			"description": "0 - 3rd sequence disabled, 9-28086 - value of sequence",
+			"valueSize": 2,
+			"minValue": 0,
+			"maxValue": 28086,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"6": {
+			"label": "Fourth scene sequence",
+			"description": "0 - 4th sequence disabled, 9-28086 - value of sequence",
+			"valueSize": 2,
+			"minValue": 0,
+			"maxValue": 28086,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"7": {
+			"label": "Fifth scene sequence",
+			"description": "0 - 5th sequence disabled, 9-28086 - value of sequence",
+			"valueSize": 2,
+			"minValue": 0,
+			"maxValue": 28086,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"8": {
+			"label": "Sixth scene sequence",
+			"description": "0 - 6th sequence disabled, 9-28086 - value of sequence",
+			"valueSize": 2,
+			"minValue": 0,
+			"maxValue": 28086,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"9": {
+			"label": "Sequences - timeout",
+			"description": "Time to lock",
+			"valueSize": 1,
+			"unit": "0.1 seconds",
+			"minValue": 5,
+			"maxValue": 30,
+			"defaultValue": 10,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"10": {
+			"label": "Single button associations - operating mode",
+			"description": "This parameter allows to choose operating mode for single button associations.",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 2,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "single click switches state to opposite",
+					"value": 0
+				},
+				{
+					"label": "single click => opposite, double click => max",
+					"value": 1
+				},
+				{
+					"label": "single click turns on, double click turns off",
+					"value": 2
+				}
+			]
+		},
+		"11": {
+			"label": "Value sent to Square association group",
+			"description": "1-99 or 255 (last state)",
+			"valueSize": 2,
+			"minValue": 1,
+			"maxValue": 255,
+			"defaultValue": 255,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"12": {
+			"label": "Value sent to Circle association group",
+			"description": "1-99 or 255 (last state)",
+			"valueSize": 2,
+			"minValue": 1,
+			"maxValue": 255,
+			"defaultValue": 255,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"13": {
+			"label": "Value sent to Crossx association group",
+			"description": "1-99 or 255 (last state)",
+			"valueSize": 2,
+			"minValue": 1,
+			"maxValue": 255,
+			"defaultValue": 255,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"14": {
+			"label": "Value sent to Triangle association group",
+			"description": "1-99 or 255 (last state)",
+			"valueSize": 2,
+			"minValue": 1,
+			"maxValue": 255,
+			"defaultValue": 255,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"15": {
+			"label": "Value sent to Minus association group",
+			"description": "1-99 or 255 (last state)",
+			"valueSize": 2,
+			"minValue": 1,
+			"maxValue": 255,
+			"defaultValue": 255,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"16": {
+			"label": "Value sent to Plus association group",
+			"description": "1-99 or 255 (last state)",
+			"valueSize": 2,
+			"minValue": 1,
+			"maxValue": 255,
+			"defaultValue": 255,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"17": {
+			"label": "Paired buttons association for Square and Circle",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "paired buttons association inactive",
+					"value": 0
+				},
+				{
+					"label": "paired buttons association active",
+					"value": 1
+				}
+			]
+		},
+		"18": {
+			"label": "Paired buttons association for Cross and Triangle",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "paired buttons association inactive",
+					"value": 0
+				},
+				{
+					"label": "paired buttons association active",
+					"value": 1
+				}
+			]
+		},
+		"19": {
+			"label": "Paired buttons association for Minus and Plus",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "paired buttons association inactive",
+					"value": 0
+				},
+				{
+					"label": "paired buttons association active",
+					"value": 1
+				}
+			]
+		},
+		"21[0x01]": {
+			"$import": "templates/fibarogroup_templates.json#enable_disable_bit_default_true",
+			"label": "Scene activation for Square button 1 time"
+		},
+		"21[0x02]": {
+			"$import": "templates/fibarogroup_templates.json#enable_disable_bit",
+			"label": "Scene activation for Square button 2 times"
+		},
+		"21[0x04]": {
+			"$import": "templates/fibarogroup_templates.json#enable_disable_bit",
+			"label": "Scene activation for Square button 3 times"
+		},
+		"21[0x08]": {
+			"$import": "templates/fibarogroup_templates.json#enable_disable_bit_default_true",
+			"label": "Scene activation for Square button held down and released"
+		},
+		"22[0x01]": {
+			"$import": "templates/fibarogroup_templates.json#enable_disable_bit_default_true",
+			"label": "Scene activation for Circle button 1 time"
+		},
+		"22[0x02]": {
+			"$import": "templates/fibarogroup_templates.json#enable_disable_bit",
+			"label": "Scene activation for Circle button 2 times"
+		},
+		"22[0x04]": {
+			"$import": "templates/fibarogroup_templates.json#enable_disable_bit",
+			"label": "Scene activation for Circle button 3 times"
+		},
+		"22[0x08]": {
+			"$import": "templates/fibarogroup_templates.json#enable_disable_bit_default_true",
+			"label": "Scene activation for Circle button held down and released"
+		},
+		"23[0x01]": {
+			"$import": "templates/fibarogroup_templates.json#enable_disable_bit_default_true",
+			"label": "Scene activation for Cross button 1 time"
+		},
+		"23[0x02]": {
+			"$import": "templates/fibarogroup_templates.json#enable_disable_bit",
+			"label": "Scene activation for Cross button 2 times"
+		},
+		"23[0x04]": {
+			"$import": "templates/fibarogroup_templates.json#enable_disable_bit",
+			"label": "Scene activation for Cross button 3 times"
+		},
+		"23[0x08]": {
+			"$import": "templates/fibarogroup_templates.json#enable_disable_bit_default_true",
+			"label": "Scene activation for Cross button held down and released"
+		},
+		"24[0x01]": {
+			"$import": "templates/fibarogroup_templates.json#enable_disable_bit_default_true",
+			"label": "Scene activation for Triangle button 1 time"
+		},
+		"24[0x02]": {
+			"$import": "templates/fibarogroup_templates.json#enable_disable_bit",
+			"label": "Scene activation for Triangle button 2 times"
+		},
+		"24[0x04]": {
+			"$import": "templates/fibarogroup_templates.json#enable_disable_bit",
+			"label": "Scene activation for Triangle button 3 times"
+		},
+		"24[0x08]": {
+			"$import": "templates/fibarogroup_templates.json#enable_disable_bit_default_true",
+			"label": "Scene activation for Triangle button held down and released"
+		},
+		"25[0x01]": {
+			"$import": "templates/fibarogroup_templates.json#enable_disable_bit_default_true",
+			"label": "Scene activation for Minus button 1 time"
+		},
+		"25[0x02]": {
+			"$import": "templates/fibarogroup_templates.json#enable_disable_bit",
+			"label": "Scene activation for Minus button 2 times"
+		},
+		"25[0x04]": {
+			"$import": "templates/fibarogroup_templates.json#enable_disable_bit",
+			"label": "Scene activation for Minus button 3 times"
+		},
+		"25[0x08]": {
+			"$import": "templates/fibarogroup_templates.json#enable_disable_bit_default_true",
+			"label": "Scene activation for Minus button held down and released"
+		},
+		"26[0x01]": {
+			"$import": "templates/fibarogroup_templates.json#enable_disable_bit_default_true",
+			"label": "Scene activation for Plus button 1 time"
+		},
+		"26[0x02]": {
+			"$import": "templates/fibarogroup_templates.json#enable_disable_bit",
+			"label": "Scene activation for Plus button 2 times"
+		},
+		"26[0x04]": {
+			"$import": "templates/fibarogroup_templates.json#enable_disable_bit",
+			"label": "Scene activation for Plus button 3 times"
+		},
+		"26[0x08]": {
+			"$import": "templates/fibarogroup_templates.json#enable_disable_bit_default_true",
+			"label": "Scene activation for Plus button held down and released"
+		},
+		"29": {
+			"label": "Associations in Z-Wave network security mode",
+			"description": "defines how commands are sent in specified association groups",
+			"valueSize": 2,
+			"minValue": 0,
+			"maxValue": 4095,
+			"defaultValue": 4095,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		}
+	}
+}

@@ -1,0 +1,14 @@
+// Fibargroup FGWDSEU-221 Single
+// Walli Single Switch
+{
+	"$import": "templates/fgwdseu-221.json",
+	"label": "FGWDSEU-221 Single",
+	"description": "Walli Single Switch",
+	"devices": [
+		{
+			"productType": "0x1a01",
+			"productId": "0x1000",
+			"zwaveAllianceId": [3375, 3393, 3662]
+		}
+	]
+}

@@ -1,0 +1,292 @@
+// Fibargroup FGD-211
+// Universal Dimmer 500W
+{
+	"manufacturer": "Fibargroup",
+	"manufacturerId": "0x010f",
+	"label": "FGD-211",
+	"description": "Universal Dimmer 500W",
+	"devices": [
+		{
+			"productType": "0x0100",
+			"productId": "0x0100",
+			"zwaveAllianceId": 88
+		},
+		{
+			"productType": "0x0100",
+			"productId": "0x0104"
+		},
+		{
+			"productType": "0x0100",
+			"productId": "0x0106"
+		},
+		{
+			"productType": "0x0100",
+			"productId": "0x0107"
+		},
+		{
+			"productType": "0x0100",
+			"productId": "0x0109"
+		},
+		{
+			"productType": "0x0100",
+			"productId": "0x100a"
+		},
+		{
+			"productType": "0x0100",
+			"productId": "0x300a"
+		},
+		{
+			"productType": "0x0100",
+			"productId": "0x400a"
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"associations": {
+		"1": {
+			"label": "Switch 1",
+			"maxNodes": 5
+		},
+		"2": {
+			"label": "Switch 2",
+			"maxNodes": 5
+		},
+		"3": {
+			"label": "Controller Updates",
+			"maxNodes": 1,
+			"isLifeline": true
+		}
+	},
+	"paramInformation": {
+		"1": {
+			"$import": "templates/fibarogroup_templates.json#enable_disable_all_on_off"
+		},
+		"6": {
+			"label": "Separation of association sending (key 1)",
+			"description": "Activate/Deactivate association sending for group 1 - Also see param #16",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 0,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Map status to all devices in group 1",
+					"value": 0
+				},
+				{
+					"label": "Map OFF status to devices in group 1 - last state",
+					"value": 1
+				},
+				{
+					"label": "Map OFF status to devices in group 1 - 100% state",
+					"value": 2
+				}
+			]
+		},
+		"7": {
+			"label": "Control key #2 behaviour",
+			"description": "Checking the device status before sending a control frame from the key no. 2.",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 1,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Device status is not checked",
+					"value": 0
+				},
+				{
+					"label": "Device status is checked",
+					"value": 1
+				}
+			]
+		},
+		"8": {
+			"label": "Dimming step at automatic control",
+			"valueSize": 1,
+			"minValue": 1,
+			"maxValue": 99,
+			"defaultValue": 1,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"9": {
+			"label": "Time of MANUALLY moving between dimming values",
+			"valueSize": 1,
+			"unit": "10 milliseconds",
+			"minValue": 1,
+			"maxValue": 255,
+			"defaultValue": 5,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"10": {
+			"label": "Time of AUTOMATIC moving between dimming values",
+			"valueSize": 1,
+			"unit": "10 milliseconds",
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 1,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"11": {
+			"label": "Dimming step at manual control",
+			"valueSize": 1,
+			"minValue": 1,
+			"maxValue": 99,
+			"defaultValue": 1,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"12": [
+			{
+				"$if": "firmwareVersion >= 2.1",
+				"label": "Maximum dimmer level control",
+				"valueSize": 1,
+				"minValue": 2,
+				"maxValue": 99,
+				"defaultValue": 99,
+				"readOnly": false,
+				"writeOnly": false,
+				"allowManualEntry": true
+			},
+			{
+				"label": "Maximum dimmer level control",
+				"valueSize": 1,
+				"minValue": 2,
+				"maxValue": 99,
+				"defaultValue": 2,
+				"readOnly": false,
+				"writeOnly": false,
+				"allowManualEntry": true
+			}
+		],
+		"13": {
+			"label": "Minimum dimmer level control",
+			"valueSize": 1,
+			"minValue": 1,
+			"maxValue": 98,
+			"defaultValue": 2,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"14": {
+			"label": "Inputs Button/Switch configuration",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 2,
+			"defaultValue": 0,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Mono-stable input (button)",
+					"value": 0
+				},
+				{
+					"label": "Bi-stable input (switch)",
+					"value": 1
+				},
+				{
+					"$if": "firmwareVersion >= 2.1",
+					"label": "Roller blind switch (up / down)",
+					"value": 2
+				}
+			]
+		},
+		"15": [
+			{
+				"$if": "firmwareVersion >= 2.1",
+				"$import": "templates/fibarogroup_templates.json#enable_disable_double_click"
+			},
+			{
+				"$import": "templates/fibarogroup_templates.json#enable_disable_double_click",
+				"defaultValue": 0
+			}
+		],
+		"16": {
+			"$import": "templates/fibarogroup_templates.json#saving_state_power_failure"
+		},
+		"17": {
+			"$import": "templates/fibarogroup_templates.json#3way_switch"
+		},
+		"18": {
+			"label": "Synchronizing light level for associated devices",
+			"description": "The dimmer communicate the level to the associated devices",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 0,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Disable",
+					"value": 0
+				},
+				{
+					"label": "Enable",
+					"value": 1
+				}
+			]
+		},
+		"19": {
+			"$import": "templates/fibarogroup_templates.json#change_bi_stable_keys"
+		},
+		"20": {
+			"label": "Minimum level of the Dimmer",
+			"valueSize": 1,
+			"minValue": 100,
+			"maxValue": 170,
+			"defaultValue": 110,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"30": {
+			"$import": "templates/fibarogroup_templates.json#alarm_response",
+			"label": "General Purpose Alarm"
+		},
+		"39": {
+			"$import": "templates/fibarogroup_templates.json#alarm_time"
+		},
+		"40": {
+			"$if": "firmwareVersion >= 1.9",
+			"label": "Updating the dimming level without switch.",
+			"valueSize": 1,
+			"minValue": 1,
+			"maxValue": 99,
+			"defaultValue": 99,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"41": {
+			"$if": "firmwareVersion >= 1.9",
+			"$import": "templates/fibarogroup_templates.json#scene_activation"
+		}
+	}
+}

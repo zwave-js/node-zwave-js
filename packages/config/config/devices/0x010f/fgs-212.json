@@ -1,0 +1,21 @@
+// Fibargroup FGS-212
+// Relay Switch 1x3kW
+{
+	"$import": "templates/fgs-2xx.json",
+	"label": "FGS-212",
+	"description": "Relay Switch 1x3kW",
+	"devices": [
+		{
+			"productType": "0x0401",
+			"productId": "0x100a"
+		},
+		{
+			"productType": "0x0402",
+			"productId": "0x3002"
+		},
+		{
+			"productType": "0x0402",
+			"productId": "0x1002"
+		}
+	]
+}

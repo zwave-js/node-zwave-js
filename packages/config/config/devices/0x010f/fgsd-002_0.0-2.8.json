@@ -1,0 +1,26 @@
+// Fibargroup FGSD-002
+// Smoke Detector
+{
+	"manufacturer": "Fibargroup",
+	"manufacturerId": "0x010f",
+	"label": "FGSD-002",
+	"description": "Smoke Detector",
+	"devices": [
+		{
+			"productType": "0x0c02",
+			"productId": "0x1002"
+		},
+		{
+			"productType": "0x0c02",
+			"productId": "0x1003"
+		},
+		{
+			"productType": "0x0c02",
+			"productId": "0x4002"
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "2.8"
+	}
+}

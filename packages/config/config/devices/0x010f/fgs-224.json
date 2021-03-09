@@ -1,0 +1,13 @@
+// Fibargroup FGS-224
+// Double Smart Module
+{
+	"$import": "templates/fgs-2x4.json",
+	"label": "FGS-224",
+	"description": "Double Smart Module",
+	"devices": [
+		{
+			"productType": "0x0204",
+			"productId": "0x1000"
+		}
+	]
+}

@@ -1,0 +1,489 @@
+// Template for FGWPX-111 and FGWPX-121
+{
+	"manufacturer": "Fibargroup",
+	"manufacturerId": "0x010f",
+	"description": "Metered Wall Plug Switch",
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"paramInformation": {
+		"2": {
+			"label": "Power Failure",
+			"description": "How the Wall Plug will react in the event of power supply failure",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 1,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Switched OFF",
+					"value": 0
+				},
+				{
+					"label": "Restore State",
+					"value": 1
+				}
+			]
+		},
+		"3": {
+			"label": "Overload",
+			"description": "Turn off the controlled device in case of exceeding the defined power",
+			"valueSize": 2,
+			"unit": "0.1 Watts",
+			"minValue": 0,
+			"maxValue": 18000,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true,
+			"options": [
+				{
+					"label": "Overload Disabled",
+					"value": 0
+				}
+			]
+		},
+		"11": {
+			"label": "Power Reporting",
+			"description": "Minimum change in active power consumption to trigger",
+			"valueSize": 1,
+			"unit": "%",
+			"minValue": 0,
+			"maxValue": 100,
+			"defaultValue": 15,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true,
+			"options": [
+				{
+					"label": "Disables power reporting",
+					"value": 0
+				}
+			]
+		},
+		"12": {
+			"label": "Energy Reporting Threshold",
+			"valueSize": 2,
+			"unit": "0.01 kWh",
+			"minValue": 0,
+			"maxValue": 500,
+			"defaultValue": 10,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true,
+			"options": [
+				{
+					"label": "Disables energy reporting",
+					"value": 0
+				}
+			]
+		},
+		"13": {
+			"label": "Periodic Power Report",
+			"valueSize": 2,
+			"unit": "seconds",
+			"minValue": 0,
+			"maxValue": 32400,
+			"defaultValue": 3600,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true,
+			"options": [
+				{
+					"label": "Disables reporting",
+					"value": 0
+				}
+			]
+		},
+		"14": {
+			"label": "Periodic Energy Report",
+			"valueSize": 2,
+			"unit": "seconds",
+			"minValue": 0,
+			"maxValue": 32400,
+			"defaultValue": 3600,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true,
+			"options": [
+				{
+					"label": "Disables reporting",
+					"value": 0
+				}
+			]
+		},
+		"15": {
+			"label": "Self Consumption",
+			"description": "Measuring energy consumed by the Wall Plug itself",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Disabled",
+					"value": 0
+				},
+				{
+					"label": "Enabled",
+					"value": 1
+				}
+			]
+		},
+		"21": {
+			"label": "Up Value",
+			"description": "Upper power threshold",
+			"valueSize": 2,
+			"unit": "0.1W",
+			"minValue": 100,
+			"maxValue": 18000,
+			"defaultValue": 500,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"22": {
+			"label": "Down value",
+			"description": "Lower power threshold",
+			"valueSize": 2,
+			"unit": "0.1W",
+			"minValue": 0,
+			"maxValue": 17900,
+			"defaultValue": 300,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"23[0x01]": {
+			"$import": "fibarogroup_templates.json#enable_disable_bit_default_true",
+			"label": "Power Exceeded controlling 3rd association group devices"
+		},
+		"23[0x02]": {
+			"$import": "fibarogroup_templates.json#enable_disable_bit_default_true",
+			"label": "Power Dropped controlling 3rd association group devices"
+		},
+		"24": {
+			"label": "Switch On",
+			"description": "Command frame sent to devices in 2nd group",
+			"valueSize": 2,
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 255,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true,
+			"options": [
+				{
+					"label": "OFF",
+					"value": 0
+				},
+				{
+					"label": "Last State/ON",
+					"value": 255
+				}
+			]
+		},
+		"25": {
+			"label": "Switch Off",
+			"description": "Command frame sent to devices in 2nd group",
+			"valueSize": 2,
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true,
+			"options": [
+				{
+					"label": "OFF",
+					"value": 0
+				},
+				{
+					"label": "Last State/ON",
+					"value": 255
+				}
+			]
+		},
+		"26": {
+			"label": "Threshold Up",
+			"description": "Command frame sent to the devices in 3rd group",
+			"valueSize": 2,
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 255,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true,
+			"options": [
+				{
+					"label": "OFF",
+					"value": 0
+				},
+				{
+					"label": "Last State/ON",
+					"value": 255
+				}
+			]
+		},
+		"27": {
+			"label": "Threshold Down",
+			"description": "Command frame sent to the devices in 3rd group",
+			"valueSize": 2,
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true,
+			"options": [
+				{
+					"label": "OFF",
+					"value": 0
+				},
+				{
+					"label": "Last State/ON",
+					"value": 255
+				}
+			]
+		},
+		"30[0x01]": {
+			"$import": "fibarogroup_templates.json#enable_disable_bit_default_true",
+			"label": "React to General Alarm",
+			"description": "Network alarms to which the Wall Plug will respond"
+		},
+		"30[0x02]": {
+			"$import": "fibarogroup_templates.json#enable_disable_bit_default_true",
+			"label": "React to Smoke Alarm",
+			"description": "Network alarms to which the Wall Plug will respond"
+		},
+		"30[0x04]": {
+			"$import": "fibarogroup_templates.json#enable_disable_bit_default_true",
+			"label": "React to Carbon Monoxide Alarm",
+			"description": "Network alarms to which the Wall Plug will respond"
+		},
+		"30[0x08]": {
+			"$import": "fibarogroup_templates.json#enable_disable_bit_default_true",
+			"label": "React to Carbon Dioxide Alarm",
+			"description": "Network alarms to which the Wall Plug will respond"
+		},
+		"30[0x0f]": {
+			"$import": "fibarogroup_templates.json#enable_disable_bit_default_true",
+			"label": "React to High Temperature Alarm",
+			"description": "Network alarms to which the Wall Plug will respond"
+		},
+		"30[0x10]": {
+			"$import": "fibarogroup_templates.json#enable_disable_bit_default_true",
+			"label": "React to Flood Alarm",
+			"description": "Network alarms to which the Wall Plug will respond"
+		},
+		"31": {
+			"label": "Response to alarm frames",
+			"description": "Wall plug response to alarms",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 50,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true,
+			"options": [
+				{
+					"label": "No Reaction",
+					"value": 0
+				},
+				{
+					"label": "ON",
+					"value": 1
+				},
+				{
+					"label": "OFF",
+					"value": 2
+				}
+			]
+		},
+		"32": {
+			"label": "Alarm state duration",
+			"description": "Specifies the duration of the alarm state",
+			"valueSize": 2,
+			"minValue": 1,
+			"maxValue": 32400,
+			"defaultValue": 600,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"40": {
+			"label": "Power load for violet color",
+			"description": "Maximum active power to flash the LED frame Violet",
+			"valueSize": 2,
+			"minValue": 1000,
+			"maxValue": 18000,
+			"defaultValue": 18000,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"41": {
+			"label": "LED frame color ON",
+			"description": "LED frame color when controlled device is on",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 9,
+			"defaultValue": 1,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Disable Illumination",
+					"value": 0
+				},
+				{
+					"label": "Active Power (Smooth)",
+					"value": 1
+				},
+				{
+					"label": "Active Power (Steps)",
+					"value": 2
+				},
+				{
+					"label": "White",
+					"value": 3
+				},
+				{
+					"label": "Red",
+					"value": 4
+				},
+				{
+					"label": "Green",
+					"value": 5
+				},
+				{
+					"label": "Blue",
+					"value": 6
+				},
+				{
+					"label": "Yellow",
+					"value": 7
+				},
+				{
+					"label": "Cyan",
+					"value": 8
+				},
+				{
+					"label": "Magenta",
+					"value": 9
+				}
+			]
+		},
+		"42": {
+			"label": "LED frame color OFF",
+			"description": "LED frame color when controlled device is off",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 9,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Disable Illumination",
+					"value": 0
+				},
+				{
+					"label": "Last Measured Load",
+					"value": 1
+				},
+				{
+					"label": "White",
+					"value": 3
+				},
+				{
+					"label": "Red",
+					"value": 4
+				},
+				{
+					"label": "Green",
+					"value": 5
+				},
+				{
+					"label": "Blue",
+					"value": 6
+				},
+				{
+					"label": "Yellow",
+					"value": 7
+				},
+				{
+					"label": "Cyan",
+					"value": 8
+				},
+				{
+					"label": "Magenta",
+					"value": 9
+				}
+			]
+		},
+		"43": {
+			"label": "LED frame color Z-Wave",
+			"description": "Z-Wave alarm illumination",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 9,
+			"defaultValue": 2,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Disable Illumination",
+					"value": 0
+				},
+				{
+					"label": "No change in color",
+					"value": 1
+				},
+				{
+					"label": "Red/White/Blue",
+					"value": 2
+				},
+				{
+					"label": "White",
+					"value": 3
+				},
+				{
+					"label": "Red",
+					"value": 4
+				},
+				{
+					"label": "Green",
+					"value": 5
+				},
+				{
+					"label": "Blue",
+					"value": 6
+				},
+				{
+					"label": "Yellow",
+					"value": 7
+				},
+				{
+					"label": "Cyan",
+					"value": 8
+				},
+				{
+					"label": "Magenta",
+					"value": 9
+				}
+			]
+		}
+	}
+}

@@ -1,0 +1,25 @@
+// Fibargroup FGS-213
+// Single Switch 2
+{
+	"$import": "templates/fgs-2x3.json",
+	"label": "FGS-213",
+	"description": "Single Switch 2",
+	"devices": [
+		{
+			"productType": "0x0403",
+			"productId": "0x1000"
+		},
+		{
+			"productType": "0x0403",
+			"productId": "0x2000"
+		},
+		{
+			"productType": "0x0403",
+			"productId": "0x3000"
+		},
+		{
+			"productType": "0x0403",
+			"productId": "0x6000"
+		}
+	]
+}

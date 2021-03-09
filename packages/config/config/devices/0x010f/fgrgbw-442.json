@@ -4,7 +4,7 @@
 	"manufacturer": "Fibargroup",
 	"manufacturerId": "0x010f",
 	"label": "FGRGBW-442",
-	"description": "RGBW CONTROLLER 2",
+	"description": "RGBW Controller 2",
 	"devices": [
 		{
 			"productType": "0x0902",
@@ -15,7 +15,6 @@
 		"min": "0.0",
 		"max": "255.255"
 	},
-	"supportsZWavePlus": true,
 	"paramInformation": {
 		"1": {
 			"label": "Remember device status before the power failure",
@@ -165,6 +164,72 @@
 				}
 			]
 		},
+		"30": {
+			"label": "Alarm configuration - 1st slot",
+			"valueSize": 4,
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"31": {
+			"label": "Alarm configuration - 2nd slot",
+			"valueSize": 4,
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"32": {
+			"label": "Alarm configuration - 3rd slot",
+			"valueSize": 4,
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"33": {
+			"label": "Alarm configuration - 4th slot",
+			"valueSize": 4,
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"34": {
+			"label": "Alarm configuration - 5th slot",
+			"valueSize": 4,
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"35": {
+			"label": "Duration of alarm signalization",
+			"valueSize": 2,
+			"minValue": 0,
+			"maxValue": 32400,
+			"defaultValue": 600,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true,
+			"options": [
+				{
+					"label": "infinite signalization",
+					"value": 0
+				}
+			]
+		},
 		"40": {
 			"label": "Input 1 - sent scenes",
 			"valueSize": 1,
@@ -297,128 +362,6 @@
 			"writeOnly": false,
 			"allowManualEntry": true
 		},
-		"157": {
-			"label": "Start programmed sequence",
-			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 10,
-			"defaultValue": 0,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "sequence inactive",
-					"value": 0
-				},
-				{
-					"label": "user-defined sequence 1",
-					"value": 1
-				},
-				{
-					"label": "user-defined sequence 2",
-					"value": 2
-				},
-				{
-					"label": "user-defined sequence 3",
-					"value": 3
-				},
-				{
-					"label": "user-defined sequence 4",
-					"value": 4
-				},
-				{
-					"label": "user-defined sequence 5",
-					"value": 5
-				},
-				{
-					"label": "Fireplace sequence",
-					"value": 6
-				},
-				{
-					"label": "Storm sequence",
-					"value": 7
-				},
-				{
-					"label": "Rainbow sequence",
-					"value": 8
-				},
-				{
-					"label": "Aurora sequence",
-					"value": 9
-				},
-				{
-					"label": "Police (red-white-blue) sequence",
-					"value": 10
-				}
-			]
-		},
-		"30": {
-			"label": "Alarm configuration - 1st slot",
-			"valueSize": 4,
-			"minValue": 0,
-			"maxValue": 255,
-			"defaultValue": 0,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
-		},
-		"31": {
-			"label": "Alarm configuration - 2nd slot",
-			"valueSize": 4,
-			"minValue": 0,
-			"maxValue": 255,
-			"defaultValue": 0,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
-		},
-		"32": {
-			"label": "Alarm configuration - 3rd slot",
-			"valueSize": 4,
-			"minValue": 0,
-			"maxValue": 255,
-			"defaultValue": 0,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
-		},
-		"33": {
-			"label": "Alarm configuration - 4th slot",
-			"valueSize": 4,
-			"minValue": 0,
-			"maxValue": 255,
-			"defaultValue": 0,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
-		},
-		"34": {
-			"label": "Alarm configuration - 5th slot",
-			"valueSize": 4,
-			"minValue": 0,
-			"maxValue": 255,
-			"defaultValue": 0,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
-		},
-		"35": {
-			"label": "Duration of alarm signalization",
-			"valueSize": 2,
-			"minValue": 0,
-			"maxValue": 32400,
-			"defaultValue": 600,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true,
-			"options": [
-				{
-					"label": "infinite signalization",
-					"value": 0
-				}
-			]
-		},
 		"154[0xff]": {
 			"label": "ON frame value for single click IN1",
 			"valueSize": 4,
@@ -538,6 +481,62 @@
 			"readOnly": false,
 			"writeOnly": false,
 			"allowManualEntry": true
+		},
+		"157": {
+			"label": "Start programmed sequence",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 10,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "sequence inactive",
+					"value": 0
+				},
+				{
+					"label": "user-defined sequence 1",
+					"value": 1
+				},
+				{
+					"label": "user-defined sequence 2",
+					"value": 2
+				},
+				{
+					"label": "user-defined sequence 3",
+					"value": 3
+				},
+				{
+					"label": "user-defined sequence 4",
+					"value": 4
+				},
+				{
+					"label": "user-defined sequence 5",
+					"value": 5
+				},
+				{
+					"label": "Fireplace sequence",
+					"value": 6
+				},
+				{
+					"label": "Storm sequence",
+					"value": 7
+				},
+				{
+					"label": "Rainbow sequence",
+					"value": 8
+				},
+				{
+					"label": "Aurora sequence",
+					"value": 9
+				},
+				{
+					"label": "Police (red-white-blue) sequence",
+					"value": 10
+				}
+			]
 		}
 	}
 }

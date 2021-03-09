@@ -1,0 +1,25 @@
+// Fibargroup FGS-221
+// Double Relay Switch 2x1.5kW
+{
+	"$import": "templates/fgs-2xx.json",
+	"label": "FGS-222",
+	"description": "Double Relay Switch 2x1.5kW",
+	"devices": [
+		{
+			"productType": "0x0202",
+			"productId": "0x1002"
+		},
+		{
+			"productType": "0x0202",
+			"productId": "0x3002"
+		},
+		{
+			"productType": "0x0202",
+			"productId": "0x4002"
+		},
+		{
+			"productType": "0x0202",
+			"productId": "0x6002"
+		}
+	]
+}

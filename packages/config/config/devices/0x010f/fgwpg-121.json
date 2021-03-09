@@ -1,0 +1,13 @@
+// Fibargroup FGWPG-121
+// Metered Wall Plug Switch
+{
+	"$import": "templates/fgwpx-1x1.json",
+	"label": "FGWPG-121",
+	"devices": [
+		{
+			"productType": "0x1501",
+			"productId": "0x1000",
+			"zwaveAllianceId": 3606
+		}
+	]
+}

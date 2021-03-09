@@ -1,10 +1,10 @@
 // Fibargroup HC2
-// FIBARO
+// Home Center 2
 {
 	"manufacturer": "Fibargroup",
 	"manufacturerId": "0x010f",
 	"label": "HC2",
-	"description": "FIBARO",
+	"description": "Home Center 2",
 	"devices": [
 		{
 			"productType": "0x0001",

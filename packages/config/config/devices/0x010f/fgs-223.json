@@ -1,0 +1,29 @@
+// Fibargroup FGS-223
+// Double Switch 2
+{
+	"$import": "templates/fgs-2x3.json",
+	"label": "FGS-223",
+	"description": "Double Switch 2",
+	"devices": [
+		{
+			"productType": "0x0203",
+			"productId": "0x1000"
+		},
+		{
+			"productType": "0x0203",
+			"productId": "0x2000"
+		},
+		{
+			"productType": "0x0203",
+			"productId": "0x3000"
+		},
+		{
+			"productType": "0x0203",
+			"productId": "0x4000"
+		},
+		{
+			"productType": "0x0203",
+			"productId": "0x6000"
+		}
+	]
+}

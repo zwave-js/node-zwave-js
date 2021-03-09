@@ -1,0 +1,339 @@
+// Fibargroup FGDW-002
+// Fibaro Door Window Sensor 2
+{
+	"manufacturer": "Fibargroup",
+	"manufacturerId": "0x010f",
+	"label": "FGDW-002",
+	"description": "Fibaro Door Window Sensor 2",
+	"devices": [
+		{
+			"productType": "0x0702",
+			"productId": "0x1000",
+			"zwaveAllianceId": 2181
+		},
+		{
+			"productType": "0x0702",
+			"productId": "0x2000",
+			"zwaveAllianceId": 2279
+		},
+		{
+			"productType": "0x0702",
+			"productId": "0x3000",
+			"zwaveAllianceId": 2294
+		},
+		{
+			"productType": "0x0702",
+			"productId": "0x4000",
+			"zwaveAllianceId": 2296
+		},
+		{
+			"productType": "0x0702",
+			"productId": "0x6000",
+			"zwaveAllianceId": 3500
+		},
+		{
+			"productType": "0x0702",
+			"productId": "0x7000",
+			"zwaveAllianceId": 3501
+		},
+		{
+			"productType": "0x0702",
+			"productId": "0x8000",
+			"zwaveAllianceId": 2295
+		},
+		{
+			"productType": "0x0702",
+			"productId": "0x9000",
+			"zwaveAllianceId": 3499
+		},
+		{
+			"productType": "0x0702",
+			"productId": "0xa000",
+			"zwaveAllianceId": 2570
+		},
+		{
+			"productType": "0x0702",
+			"productId": "0xb000",
+			"zwaveAllianceId": 3502
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"paramInformation": {
+		"1": {
+			"label": "Door/window state",
+			"description": "What state is door/window when the magnet is close to the sensor",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "closed when magnet near",
+					"value": 0
+				},
+				{
+					"label": "opened when magnet near",
+					"value": 1
+				}
+			]
+		},
+		"3[0x01]": {
+			"$import": "templates/fibarogroup_templates.json#enable_disable_bit_default_true",
+			"label": "Associations: Send secure commands to 2nd group (On/Off)",
+			"description": "This is only active when the node is included securely"
+		},
+		"3[0x02]": {
+			"$import": "templates/fibarogroup_templates.json#enable_disable_bit_default_true",
+			"label": "Associations: Send secure commands to 3rd group (Tamper)",
+			"description": "This is only active when the node is included securely"
+		},
+		"11": {
+			"label": "2nd association group triggers",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 2,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Switch after opening and closing",
+					"value": 0
+				},
+				{
+					"label": "Switch after opening (parameter 12)",
+					"value": 1
+				},
+				{
+					"label": "Switch after closing (parameter 13)",
+					"value": 2
+				}
+			]
+		},
+		"12": {
+			"label": "Value of ON command sent to 2nd association group",
+			"valueSize": 2,
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 255,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"13": {
+			"label": "Value of OFF command sent to 2nd association group",
+			"valueSize": 2,
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 255,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"14": {
+			"label": "Association for opening - time delay",
+			"valueSize": 2,
+			"minValue": 0,
+			"maxValue": 32400,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"15": {
+			"label": "Association for closing - time delay",
+			"valueSize": 2,
+			"minValue": 0,
+			"maxValue": 32400,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"30": {
+			"label": "Tamper - alarm cancellation delay",
+			"valueSize": 2,
+			"minValue": 0,
+			"maxValue": 32400,
+			"defaultValue": 5,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"31": {
+			"label": "Tamper - send reporting alarm cancellation",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Disable",
+					"value": 0
+				},
+				{
+					"label": "Enable",
+					"value": 1
+				}
+			]
+		},
+		"50": {
+			"label": "Interval of temperature measurements",
+			"valueSize": 2,
+			"minValue": 0,
+			"maxValue": 32400,
+			"defaultValue": 300,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"51": {
+			"label": "Temperature reports threshold",
+			"valueSize": 2,
+			"minValue": 0,
+			"maxValue": 300,
+			"defaultValue": 10,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"52": {
+			"label": "Interval of temperature reports",
+			"valueSize": 2,
+			"minValue": 0,
+			"maxValue": 32400,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"53": {
+			"label": "Temperature offset",
+			"valueSize": 2,
+			"minValue": -1000,
+			"maxValue": 1000,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"54": {
+			"label": "Temperature alarm reports",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 3,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Temperature alarms disabled",
+					"value": 0
+				},
+				{
+					"label": "High temperature alarm",
+					"value": 1
+				},
+				{
+					"label": "Low temperature alarm",
+					"value": 2
+				},
+				{
+					"label": "High and low temperature alarms enabled",
+					"value": 3
+				}
+			]
+		},
+		"55": {
+			"label": "High temperature alarm threshold",
+			"valueSize": 2,
+			"minValue": 1,
+			"maxValue": 600,
+			"defaultValue": 350,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"56": {
+			"label": "Low temperature alarm threshold",
+			"valueSize": 2,
+			"minValue": 0,
+			"maxValue": 599,
+			"defaultValue": 100,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"2[0x01]": {
+			"label": "Visual LED indications - Open/close",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "No indication",
+					"value": 0
+				},
+				{
+					"label": "Open/close indication",
+					"value": 1
+				}
+			]
+		},
+		"2[0x02]": {
+			"label": "Visual LED indications - wake up",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 1,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "No indication",
+					"value": 0
+				},
+				{
+					"label": "Enable wake up notification",
+					"value": 1
+				}
+			]
+		},
+		"2[0x04]": {
+			"label": "Visual LED indications - tampering",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 1,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "No indication",
+					"value": 0
+				},
+				{
+					"label": "Enable indication of device tampering",
+					"value": 1
+				}
+			]
+		}
+	}
+}

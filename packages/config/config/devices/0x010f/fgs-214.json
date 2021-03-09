@@ -1,0 +1,13 @@
+// Fibargroup FGS-214
+// Smart Module
+{
+	"$import": "templates/fgs-2x4.json",
+	"label": "FGS-214",
+	"description": "Smart Module",
+	"devices": [
+		{
+			"productType": "0x0404",
+			"productId": "0x1000"
+		}
+	]
+}

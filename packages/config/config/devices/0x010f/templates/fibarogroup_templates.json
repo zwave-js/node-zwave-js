@@ -1,0 +1,294 @@
+{
+	"enable_disable_bit": {
+		"valueSize": 1,
+		"minValue": 0,
+		"maxValue": 1,
+		"defaultValue": 0,
+		"unsigned": true,
+		"readOnly": false,
+		"writeOnly": false,
+		"allowManualEntry": false,
+		"options": [
+			{
+				"label": "Disable",
+				"value": 0
+			},
+			{
+				"label": "Enable",
+				"value": 1
+			}
+		]
+	},
+	"enable_disable_bit_reverse": {
+		"valueSize": 1,
+		"minValue": 0,
+		"maxValue": 1,
+		"defaultValue": 0,
+		"unsigned": true,
+		"readOnly": false,
+		"writeOnly": false,
+		"allowManualEntry": false,
+		"options": [
+			{
+				"label": "Enable",
+				"value": 0
+			},
+			{
+				"label": "Disable",
+				"value": 1
+			}
+		]
+	},
+	"enable_disable_bit_default_true": {
+		"$import": "#enable_disable_bit",
+		"defaultValue": 1
+	},
+	"secure_assoc_bit": {
+		"$import": "#enable_disable_bit",
+		"defaultValue": 1,
+		"description": "This is only active when the node is included securely"
+	},
+	"enable_disable_all_on_off": {
+		"label": "Enable/Disable ALL ON/OFF",
+		"valueSize": 1,
+		"minValue": 0,
+		"maxValue": 255,
+		"defaultValue": 255,
+		"unsigned": true,
+		"readOnly": false,
+		"writeOnly": false,
+		"allowManualEntry": false,
+		"options": [
+			{
+				"label": "ALL ON disabled / ALL OFF disabled",
+				"value": 0
+			},
+			{
+				"label": "ALL ON disabled / ALL OFF active",
+				"value": 1
+			},
+			{
+				"label": "ALL ON active / ALL OFF disabled",
+				"value": 2
+			},
+			{
+				"label": "ALL ON active / ALL OFF active",
+				"value": 255
+			}
+		]
+	},
+	"change_bi_stable_keys": {
+		"label": "Change [On-Off] bi-stable keys",
+		"description": "Assigns bistable key status to the device status",
+		"valueSize": 1,
+		"minValue": 0,
+		"maxValue": 1,
+		"defaultValue": 0,
+		"unsigned": true,
+		"readOnly": false,
+		"writeOnly": false,
+		"allowManualEntry": false,
+		"options": [
+			{
+				"label": "Device changes status on key status change",
+				"value": 0
+			},
+			{
+				"label": "Device status depends on key status",
+				"value": 1
+			}
+		]
+	},
+	"enable_disable_double_click": {
+		"label": "Double-click set lighting at 100%",
+		"valueSize": 1,
+		"minValue": 0,
+		"maxValue": 1,
+		"defaultValue": 0,
+		"unsigned": true,
+		"readOnly": false,
+		"writeOnly": false,
+		"allowManualEntry": false,
+		"options": [
+			{
+				"label": "Disable double click",
+				"value": 0
+			},
+			{
+				"label": "Enable double click",
+				"value": 1
+			}
+		]
+	},
+	"3way_switch": {
+		"label": "The function of 3-way switch",
+		"description": "Key no. 2 controls the Dimmer additionally",
+		"valueSize": 1,
+		"minValue": 0,
+		"maxValue": 1,
+		"defaultValue": 0,
+		"unsigned": true,
+		"readOnly": false,
+		"writeOnly": false,
+		"allowManualEntry": false,
+		"options": [
+			{
+				"label": "3-way switch function for S2 disabled",
+				"value": 0
+			},
+			{
+				"label": "3-way switch function for S2 enabled",
+				"value": 1
+			}
+		]
+	},
+	"scene_activation": {
+		"label": "Scene activation functionality",
+		"description": "SCENE ID depends on the switch type configuration",
+		"valueSize": 1,
+		"minValue": 0,
+		"maxValue": 1,
+		"defaultValue": 0,
+		"unsigned": true,
+		"readOnly": false,
+		"writeOnly": false,
+		"allowManualEntry": false,
+		"options": [
+			{
+				"label": "Scene functionality deactivated",
+				"value": 0
+			},
+			{
+				"label": "Scene functionality activated",
+				"value": 1
+			}
+		]
+	},
+	"alarm_response": {
+		"label": "General Purpose Alarm",
+		"description": "The parameter specifies the response to an alarm",
+		"valueSize": 1,
+		"minValue": 0,
+		"maxValue": 3,
+		"defaultValue": 3,
+		"unsigned": true,
+		"readOnly": false,
+		"writeOnly": false,
+		"allowManualEntry": false,
+		"options": [
+			{
+				"label": "Deactivated - no response to alarm",
+				"value": 0
+			},
+			{
+				"label": "Relay on",
+				"value": 1
+			},
+			{
+				"label": "Relay off",
+				"value": 2
+			},
+			{
+				"label": "Relay flashing",
+				"value": 3
+			}
+		]
+	},
+	"alarm_report": {
+		"valueSize": 1,
+		"minValue": 0,
+		"maxValue": 1,
+		"defaultValue": 1,
+		"unsigned": true,
+		"readOnly": false,
+		"writeOnly": false,
+		"allowManualEntry": false,
+		"options": [
+			{
+				"label": "No reaction",
+				"value": 0
+			},
+			{
+				"label": "Send an alarm frame",
+				"value": 1
+			}
+		]
+	},
+	"alarm_time": {
+		"label": "Alarm time",
+		"description": "Amount of time the device keeps on flashing after receipt of Alarm Frame",
+		"valueSize": 2,
+		"unit": "milliseconds",
+		"minValue": 0,
+		"maxValue": 65535,
+		"defaultValue": 600,
+		"unsigned": true,
+		"readOnly": false,
+		"writeOnly": false,
+		"allowManualEntry": true
+	},
+	"saving_state_power_failure": {
+		"label": "Saving state before power failure",
+		"valueSize": 1,
+		"minValue": 0,
+		"maxValue": 1,
+		"defaultValue": 1,
+		"unsigned": true,
+		"readOnly": false,
+		"writeOnly": false,
+		"allowManualEntry": false,
+		"options": [
+			{
+				"label": "All outputs are set to OFF upon power restore",
+				"value": 0
+			},
+			{
+				"label": "Outputs set to previous state upon power restore",
+				"value": 1
+			}
+		]
+	},
+	"alarm_cancelling": {
+		"label": "Alarm cancelling or turning a device off",
+		"description": "Allows for deactivating device turn off and alarm cancellation functions",
+		"valueSize": 1,
+		"minValue": 0,
+		"maxValue": 255,
+		"defaultValue": 0,
+		"unsigned": true,
+		"readOnly": false,
+		"writeOnly": false,
+		"allowManualEntry": false,
+		"options": [
+			{
+				"label": "Alarm (flooding) cancellation inactive",
+				"value": 0
+			},
+			{
+				"label": "Alarm (flooding) cancellation active",
+				"value": 1
+			}
+		]
+	},
+	"key_press_brigthness_level": {
+		"description": "1-99 Set Level; 255 Last State",
+		"valueSize": 2,
+		"minValue": 1,
+		"maxValue": 255,
+		"defaultValue": 255,
+		"unsigned": true,
+		"readOnly": false,
+		"writeOnly": false,
+		"allowManualEntry": true,
+		"options": [
+			{
+				"label": "Max Brightness",
+				"value": 99
+			},
+			{
+				"label": "Last State",
+				"value": 255
+			}
+		]
+	}
+}

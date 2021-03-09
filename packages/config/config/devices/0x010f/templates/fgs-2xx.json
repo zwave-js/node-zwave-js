@@ -1,0 +1,302 @@
+// Template for FGS-211, FGS-212, FGS-221 and FGS-222
+{
+	"manufacturer": "Fibargroup",
+	"manufacturerId": "0x010f",
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"associations": {
+		"1": {
+			"label": "Switch 1",
+			"maxNodes": 16
+		},
+		"2": {
+			"label": "Switch 2",
+			"maxNodes": 16
+		},
+		"3": {
+			"label": "Controller Updates",
+			"description": "Reports state of devices.",
+			"maxNodes": 1,
+			"isLifeline": true
+		}
+	},
+	"paramInformation": {
+		"1": {
+			"$import": "fibarogroup_templates.json#enable_disable_all_on_off"
+		},
+		"3": {
+			"label": "Auto off relay after specified time",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 0,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Manual override disabled",
+					"value": 0
+				},
+				{
+					"label": "Manual override enabled",
+					"value": 1
+				}
+			]
+		},
+		"4": [
+			{
+				"$if": "firmwareVersion >= 1.9",
+				"label": "Relay 1: Auto off",
+				"description": "Time period for auto off, 0 = Auto off disabled",
+				"valueSize": 2,
+				"unit": "100 miliseconds",
+				"minValue": 0,
+				"maxValue": 65535,
+				"defaultValue": 0,
+				"unsigned": true,
+				"readOnly": false,
+				"writeOnly": false,
+				"allowManualEntry": true
+			},
+			{
+				"label": "Relay 1: Auto off",
+				"description": "Time period for auto off, 0 = Auto off disabled",
+				"valueSize": 1,
+				"unit": "10 miliseconds",
+				"minValue": 0,
+				"maxValue": 256,
+				"defaultValue": 0,
+				"unsigned": true,
+				"readOnly": false,
+				"writeOnly": false,
+				"allowManualEntry": true
+			}
+		],
+		"5": [
+			{
+				"$if": "firmwareVersion >= 1.9 && (productType === 0x0200 || productType === 0x0202)",
+				"label": "Relay 2: Auto off",
+				"description": "Time period for auto off, 0 = Auto off disabled",
+				"valueSize": 2,
+				"unit": "100 miliseconds",
+				"minValue": 0,
+				"maxValue": 65535,
+				"defaultValue": 0,
+				"unsigned": true,
+				"readOnly": false,
+				"writeOnly": false,
+				"allowManualEntry": true
+			},
+			{
+				"$if": "productType === 0x0200 || productType === 0x0202",
+				"label": "Relay 2: Auto off",
+				"description": "Time period for auto off, 0 = Auto off disabled",
+				"valueSize": 1,
+				"unit": "10 miliseconds",
+				"minValue": 0,
+				"maxValue": 256,
+				"defaultValue": 0,
+				"unsigned": true,
+				"readOnly": false,
+				"writeOnly": false,
+				"allowManualEntry": true
+			}
+		],
+		"6": {
+			"label": "Sending commands to group 1 devices",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 2,
+			"defaultValue": 0,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Commands are sent when device is turned on and off",
+					"value": 0
+				},
+				{
+					"label": "Commands sent when device off with memorized state",
+					"value": 1
+				},
+				{
+					"label": "Commands are sent when device is turned off",
+					"value": 2
+				}
+			]
+		},
+		"7": {
+			"$if": "productType === 0x0200 || productType === 0x0202",
+			"label": "Sending commands to group 2 devices",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 2,
+			"defaultValue": 0,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Commands are sent when device is turned on and off",
+					"value": 0
+				},
+				{
+					"label": "Commands sent when device off with memorized state",
+					"value": 1
+				},
+				{
+					"label": "Commands are sent when device is turned off",
+					"value": 2
+				}
+			]
+		},
+		"13": {
+			"label": "Assigns bistable key status to the device status",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 0,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "On/Off device changes status on key status change",
+					"value": 0
+				},
+				{
+					"label": "Device status depends on key status",
+					"value": 1
+				}
+			]
+		},
+		"14": {
+			"label": "Switch type connector",
+			"description": "Switch type connector, you may choose between momentary and toggle switches",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 1,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Momentary switch",
+					"value": 0
+				},
+				{
+					"label": "Toggle switch",
+					"value": 1
+				}
+			]
+		},
+		"15": {
+			"label": "Operation of the Dimmer/Roller Shutter Controller",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 0,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Dimmer/Shutter Controller control not active",
+					"value": 0
+				},
+				{
+					"label": "Dimmer/Roller Shutter Controller control is active",
+					"value": 1
+				}
+			]
+		},
+		"16": {
+			"label": "Saving state of the device after power failure",
+			"description": "Returns to the last position saved",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 1,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Switch does not save state after power failure",
+					"value": 0
+				},
+				{
+					"label": "Fibaro Switch saves its state before power failure",
+					"value": 1
+				}
+			]
+		},
+		"30": {
+			"$import": "fibarogroup_templates.json#alarm_response",
+			"label": "Relay 1: Response to General Alarm"
+		},
+		"31": {
+			"$import": "fibarogroup_templates.json#alarm_response",
+			"label": "Relay 1: Response to Water Flood Alarm",
+			"defaultValue": 2
+		},
+		"32": {
+			"$import": "fibarogroup_templates.json#alarm_response",
+			"label": "Relay 1: Response to Smoke, CO, CO2 Alarm"
+		},
+		"33": {
+			"$import": "fibarogroup_templates.json#alarm_response",
+			"label": "Relay 1: Response to Temperature Alarm",
+			"defaultValue": 1
+		},
+		"39": {
+			"label": "ALARM FLASHING alarm time",
+			"description": "Amount of time the device keeps on flashing after receipt of Alarm Frame",
+			"valueSize": 2,
+			"unit": "milliseconds",
+			"minValue": 0,
+			"maxValue": 65535,
+			"defaultValue": 600,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"40": {
+			"$if": "productType === 0x0200 || productType === 0x0202",
+			"$import": "fibarogroup_templates.json#alarm_response",
+			"label": "Relay 2: Response to General Alarm",
+			"defaultValue": 3
+		},
+		"41": {
+			"$if": "productType === 0x0200 || productType === 0x0202",
+			"$import": "fibarogroup_templates.json#alarm_response",
+			"label": "Relay 2: Response to Water Flood Alarm",
+			"defaultValue": 2
+		},
+		"42": {
+			"$if": "productType === 0x0200 || productType === 0x0202",
+			"$import": "fibarogroup_templates.json#alarm_response",
+			"label": "Relay 2: Response to Smoke, CO, CO2 Alarm",
+			"defaultValue": 3
+		},
+		"43": {
+			"$if": "productType === 0x0200 || productType === 0x0202",
+			"$import": "fibarogroup_templates.json#alarm_response",
+			"label": "Relay 2: Response to Temperature Alarm",
+			"defaultValue": 1
+		}
+	}
+}
