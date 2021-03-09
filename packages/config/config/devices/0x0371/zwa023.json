@@ -320,6 +320,7 @@
 			"label": "Current Automatic Report Time",
 			"description": "How often to send a current report",
 			"valueSize": 2,
+			"unsigned": true,
 			"minValue": 0,
 			"maxValue": 65535,
 			"defaultValue": 600,
