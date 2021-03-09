@@ -1780,6 +1780,39 @@ version:               ${this.version}`;
 		// was wrong. Stop querying it regularly for updates
 		this.cancelManualValueRefresh(command.ccId);
 
+		if (this.id === 37) {
+			this.driver.controllerLog.logNode(
+				this.nodeId,
+				`DEBUG LOG FOR #2012`,
+			);
+			this.driver.controllerLog.logNode(
+				this.nodeId,
+				`command.endpointIndex = ${command.endpointIndex}`,
+			);
+			this.driver.controllerLog.logNode(
+				this.nodeId,
+				`command.constructor.name = ${command.constructor.name}`,
+			);
+			this.driver.controllerLog.logNode(
+				this.nodeId,
+				`endpoint count = ${this.getEndpointCount()}`,
+			);
+			this.driver.controllerLog.logNode(
+				this.nodeId,
+				`preserveRootApplicationCCValueIDs = ${!!this._deviceConfig
+					?.compat?.preserveRootApplicationCCValueIDs}`,
+			);
+			for (const endpoint of this.getAllEndpoints()) {
+				if (endpoint.index === 0) continue;
+				this.driver.controllerLog.logNode(
+					this.nodeId,
+					`endpoint ${endpoint.index}:
+  supportsCC: ${endpoint.supportsCC(command.ccId)}
+  CC version: ${endpoint.getCCVersion(command.ccId)}`,
+				);
+			}
+		}
+
 		// If this is a report for the root endpoint and the node supports the CC on another endpoint,
 		// we need to map it to endpoint 1. Either it does not support multi channel associations or
 		// it is misbehaving. In any case, we would hide this report if we didn't map it
