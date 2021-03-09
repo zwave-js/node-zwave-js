@@ -17,7 +17,7 @@
 	},
 	"supportsZWavePlus": true,
 	"paramInformation": {
-    "1": {
+		"1": {
 			"label": "LED indicator mode",
 			"description": "Allows you to configure how the LED indicator works",
 			"valueSize": 1,
@@ -42,7 +42,7 @@
 				}
 			]
 		},
-    "2[0xFF000000]": {
+		"2[0xFF000000]": {
 			"label": "Night Light enable (hour)",
 			"description": "Enable or disable Night Light Mode during specific times",
 			"valueSize": 4,
@@ -64,7 +64,7 @@
 			"writeOnly": false,
 			"allowManualEntry": true
 		},
-    "2[0xFF00]": {
+		"2[0xFF00]": {
 			"label": "Night Light enable (second)",
 			"description": "Enable or disable Night Light Mode during specific times",
 			"valueSize": 4,
@@ -97,7 +97,7 @@
 			"writeOnly": false,
 			"allowManualEntry": true
 		},
-    "3[0xFF00]": {
+		"3[0xFF00]": {
 			"label": "Night Light disable (second)",
 			"description": "Enable or disable Night Light Mode during specific times",
 			"valueSize": 4,
@@ -108,7 +108,7 @@
 			"writeOnly": false,
 			"allowManualEntry": true
 		},
-    "4": {
+		"4": {
 			"label": "Start/Stop LED flash",
 			"description": "Sets the timeframe of flashing in seconds",
 			"valueSize": 1,
@@ -119,7 +119,7 @@
 			"writeOnly": true,
 			"allowManualEntry": true
 		},
-    "5": {
+		"5": {
 			"label": "Flash frequency",
 			"description": "Configures the LED flash frequency and amount of time",
 			"valueSize": 1,
@@ -130,10 +130,10 @@
 			"writeOnly": false,
 			"allowManualEntry": true
 		},
-    "6": {
+		"6": {
 			"label": "Usage Alert",
 			"description": "Send alert when energy draw is above this value",
-      "unit": "W",
+			"unit": "W",
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 3000,
@@ -142,7 +142,7 @@
 			"writeOnly": false,
 			"allowManualEntry": true
 		},
-    "7": {
+		"7": {
 			"label": "Plug Always On",
 			"description": "Enable/Disable ability to turn off plug via hardware or commands",
 			"valueSize": 1,
@@ -152,7 +152,7 @@
 			"readOnly": false,
 			"writeOnly": false,
 			"allowManualEntry": false,
-      "options": [
+			"options": [
 				{
 					"label": "Button toggles on/off",
 					"value": 0
@@ -167,7 +167,7 @@
 				}
 			]
 		},
-    "8": {
+		"8": {
 			"label": "Power Out Action",
 			"description": "Set the plug's action on power outage",
 			"valueSize": 1,
@@ -177,7 +177,7 @@
 			"readOnly": false,
 			"writeOnly": false,
 			"allowManualEntry": false,
-      "options": [
+			"options": [
 				{
 					"label": "Previous State",
 					"value": 0
@@ -192,7 +192,7 @@
 				}
 			]
 		},
-    "9": {
+		"9": {
 			"label": "Group 3 Scene ID",
 			"description": "Set the scene id sent through group 3 via parameter 6",
 			"valueSize": 1,
@@ -215,7 +215,7 @@
 			"writeOnly": false,
 			"allowManualEntry": true
 		},
-    "11": {
+		"11": {
 			"label": "Over-voltage Threshold",
 			"description": "Set Voltage (V) Threshold for Overpower.",
 			"unit": "V",
@@ -227,7 +227,7 @@
 			"writeOnly": false,
 			"allowManualEntry": true
 		},
-    "19": {
+		"19": {
 			"label": "Threshold Check Time",
 			"description": "Set Threshold check period.",
 			"unit": "s",
@@ -239,7 +239,7 @@
 			"writeOnly": false,
 			"allowManualEntry": true
 		},
-    "20": {
+		"20": {
 			"label": "kWh threshold",
 			"description": "When to send a kWh report",
 			"valueSize": 2,
@@ -250,7 +250,7 @@
 			"writeOnly": false,
 			"allowManualEntry": true
 		},
-    "21": {
+		"21": {
 			"label": "Watt threshold",
 			"description": "When to send a watt report",
 			"valueSize": 2,
@@ -272,10 +272,10 @@
 			"writeOnly": false,
 			"allowManualEntry": true
 		},
-    "23": {
+		"23": {
 			"label": "Watt Automatic Report Time",
 			"description": "How often to send a wattage report",
-      "unit": "s",
+			"unit": "s",
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 65535,
@@ -284,10 +284,10 @@
 			"writeOnly": false,
 			"allowManualEntry": true
 		},
-    "24": {
+		"24": {
 			"label": "kWh Automatic Report Time",
 			"description": "How often to send a kWh report",
-      "unit": "s",
+			"unit": "s",
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 65535,
@@ -307,7 +307,7 @@
 			"writeOnly": false,
 			"allowManualEntry": true
 		},
-    "25": {
+		"25": {
 			"label": "Current Automatic Report Time",
 			"description": "How often to send a current report",
 			"valueSize": 2,
@@ -406,7 +406,7 @@
 			"writeOnly": false,
 			"allowManualEntry": true
 		},
-    "31": {
+		"31": {
 			"label": "Switch reaction to alarm",
 			"description": "What do to when an alarm is recieved",
 			"valueSize": 1,
@@ -429,10 +429,10 @@
 			"writeOnly": false,
 			"allowManualEntry": true
 		},
-    "40": {
+		"40": {
 			"label": "Automatic Off Time",
 			"description": "Timer to automatically turn off after turned on",
-      "unit": "s",
+			"unit": "s",
 			"valueSize": 4,
 			"minValue": 0,
 			"maxValue": 86400,
@@ -442,10 +442,10 @@
 			"writeOnly": false,
 			"allowManualEntry": true
 		},
-    "41": {
+		"41": {
 			"label": "Automatic On Time",
 			"description": "Timer to automatically turn on after turned off",
-      "unit": "s",
+			"unit": "s",
 			"valueSize": 4,
 			"minValue": 0,
 			"maxValue": 86400,
