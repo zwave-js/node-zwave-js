@@ -328,6 +328,48 @@
 			"writeOnly": false,
 			"allowManualEntry": true
 		},
+		"13": {
+			"$if": "firmwareVersion >= 1.17",
+			"label": "Load Type",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Automatically detect load type",
+					"value": 0
+				},
+				{
+					"label": "Manually set for special load type",
+					"value": 1
+				}
+			]
+		},
+		"51": {
+			"$if": "firmwareVersion >= 1.19",
+			"label": "Instant On",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 1,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "No Delay",
+					"value": 0
+				},
+				{
+					"label": "700ms Delay",
+					"value": 1
+				}
+			]
+		},
 		"8[0xff]": {
 			"label": "LED Strip Effect (Color)",
 			"valueSize": 4,
