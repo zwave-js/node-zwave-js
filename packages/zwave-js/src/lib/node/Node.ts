@@ -2276,7 +2276,7 @@ version:               ${this.version}`;
 		this.notificationIdleTimeouts.set(
 			key,
 			// Unref'ing long running timeouts allows to quit the application before the timeout elapses
-			setTimeout(handler, 5 * 3600 * 1000 /* 5 minutes */).unref(),
+			setTimeout(handler, 5 * 60 * 1000 /* 5 minutes */).unref(),
 		);
 	}
 
