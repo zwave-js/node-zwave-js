@@ -850,10 +850,14 @@ export class Driver extends EventEmitter {
 				this._controller.ownNodeId!,
 			)!;
 			await this.interviewNode(controllerNode);
+
 			// Then do all the nodes in parallel
 			for (const node of this._controller.nodes.values()) {
-				if (node.id === this._controller.ownNodeId) continue;
-				if (node.interviewStage < InterviewStage.Complete) {
+				if (node.id === this._controller.ownNodeId) {
+					// The controller is always alive
+					node.markAsAlive();
+					continue;
+				} else if (node.interviewStage < InterviewStage.Complete) {
 					// don't await the interview, because it may take a very long time
 					// if a node is asleep
 					void this.interviewNode(node);
