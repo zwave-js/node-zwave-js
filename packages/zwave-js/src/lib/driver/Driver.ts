@@ -850,19 +850,23 @@ export class Driver extends EventEmitter {
 				this._controller.ownNodeId!,
 			)!;
 			await this.interviewNode(controllerNode);
+
 			// Then do all the nodes in parallel
 			for (const node of this._controller.nodes.values()) {
-				if (node.id === this._controller.ownNodeId) continue;
-				if (node.interviewStage < InterviewStage.Complete) {
+				// A node that can sleep should be assumed to be sleeping after resuming from cache
+				if (node.canSleep) node.markAsAsleep();
+
+				if (node.id === this._controller.ownNodeId) {
+					// The controller is always alive
+					node.markAsAlive();
+					continue;
+				} else if (node.interviewStage < InterviewStage.Complete) {
 					// don't await the interview, because it may take a very long time
 					// if a node is asleep
 					void this.interviewNode(node);
 				} else {
-					// The node was already interviewed, just determine its status
-					// Assume that sleeping nodes start asleep and ping listening nodes to check their status
-					if (node.canSleep) {
-						node.markAsAsleep();
-					} else if (node.isListening) {
+					// The node was already interviewed, ping listening nodes to check their status
+					if (node.isListening) {
 						void node.ping();
 					}
 				}
@@ -2151,14 +2155,18 @@ ${handlers.length} left`,
 		try {
 			const ret = await promise;
 			if (expirationTimeout) clearTimeout(expirationTimeout);
+			// Track and potentially update the status of the node when communication succeeds
 			if (node) {
 				if (node.canSleep) {
-					// If the node is not meant to be kept awake, try to send it back to sleep
-					if (!node.keepAwake) {
-						this.debounceSendNodeToSleep(node);
+					// Do not update the node status when we just responded to a nonce request
+					if (options.priority !== MessagePriority.Handshake) {
+						// If the node is not meant to be kept awake, try to send it back to sleep
+						if (!node.keepAwake) {
+							this.debounceSendNodeToSleep(node);
+						}
+						// The node must be awake because it answered
+						node.markAsAwake();
 					}
-					// The node must be awake because it answered
-					node.markAsAwake();
 				} else if (node.status !== NodeStatus.Alive) {
 					// The node status was unknown or dead - in either case it must be alive because it answered
 					node.markAsAlive();
