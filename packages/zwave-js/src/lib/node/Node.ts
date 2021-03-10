@@ -2385,12 +2385,13 @@ protocol version:      ${this._protocolVersion}`;
 				propertyKey = valueConfig.variableName;
 				allowIdleReset = valueConfig.idle;
 			} else {
-				this.emit(
-					"notification",
-					this,
-					valueConfig.label,
-					command.eventParameters,
-				);
+				this.emit("notification", this, CommandClasses.Notification, {
+					type: command.notificationType,
+					event: value,
+					label: notificationConfig.name,
+					eventLabel: valueConfig.label,
+					parameters: command.eventParameters,
+				});
 				return;
 			}
 
