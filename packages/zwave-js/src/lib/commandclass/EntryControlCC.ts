@@ -12,7 +12,7 @@ import {
 	ZWaveError,
 	ZWaveErrorCodes,
 } from "@zwave-js/core";
-import { pick } from "@zwave-js/shared";
+import { buffer2hex, pick } from "@zwave-js/shared";
 import type { Driver } from "../driver/Driver";
 import { MessagePriority } from "../message/Constants";
 import {
@@ -380,24 +380,50 @@ export class EntryControlCCNotification extends EntryControlCC {
 		const eventData = Buffer.from(
 			this.payload.slice(offset, offset + eventDataLength),
 		);
-		this.eventData =
-			this.dataType == EntryControlDataTypes.ASCII
-				? eventData.toString()
-				: eventData;
+		switch (this.dataType) {
+			case EntryControlDataTypes.Raw:
+				// RAW 1 to 32 bytes of arbitrary binary data
+				validatePayload(eventDataLength >= 1 && eventDataLength <= 32);
+				this.eventData = eventData;
+				break;
+			case EntryControlDataTypes.ASCII:
+				// ASCII 1 to 32 ASCII encoded characters. ASCII codes MUST be in the value range 0x00-0xF7.
+				// The string MUST be padded with the value 0xFF to fit 16 byte blocks when sent in a notification.
+				validatePayload(
+					eventDataLength === 16 || eventDataLength === 32,
+				);
+				this.eventData = eventData.toString("ascii");
+				validatePayload(
+					/^[\u0000-\u007f]+[\u00ff]*$/.test(this.eventData),
+				);
+				// Trim padding
+				this.eventData = this.eventData.replace(/[\u00ff]*$/, "");
+				break;
+			case EntryControlDataTypes.MD5:
+				// MD5 16 byte binary data encoded as a MD5 hash value.
+				validatePayload(eventDataLength === 16);
+				this.eventData = eventData;
+				break;
+		}
 	}
 
 	public readonly sequenceNumber: number;
 	public readonly dataType: EntryControlDataTypes;
 	public readonly eventType: EntryControlEventTypes;
-	public readonly eventData: Buffer | string;
+	public readonly eventData?: Buffer | string;
 
 	public toLogEntry(): MessageOrCCLogEntry {
 		const message: MessageRecord = {
 			"sequence number": this.sequenceNumber,
 			"data type": this.dataType,
 			"event type": this.eventType,
-			"event data": this.eventData.toString(),
 		};
+		if (this.eventData) {
+			message["event data"] =
+				typeof this.eventData === "string"
+					? this.eventData
+					: buffer2hex(this.eventData);
+		}
 		return {
 			...super.toLogEntry(),
 			message,
