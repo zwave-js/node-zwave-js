@@ -52,7 +52,11 @@ export type {
 } from "./MultilevelSensorCC";
 export { LevelChangeDirection, SwitchType } from "./MultilevelSwitchCC";
 export type { MultilevelSwitchLevelChangeMetadata } from "./MultilevelSwitchCC";
-export type { NotificationMetadata } from "./NotificationCC";
+export type {
+	NotificationMetadata,
+	ZWaveNotificationCallbackArgs_NotificationCC,
+	ZWaveNotificationCallback_NotificationCC,
+} from "./NotificationCC";
 export { LocalProtectionState, RFProtectionState } from "./ProtectionCC";
 export { ToneId } from "./SoundSwitchCC";
 export { SupervisionStatus } from "./SupervisionCC";
