@@ -7,7 +7,7 @@ import type {
 	ValueUpdatedArgs,
 } from "@zwave-js/core";
 import type { FirmwareUpdateStatus } from "../commandclass";
-import type { NotificationCCReport } from "../commandclass/NotificationCC";
+import type { ZWaveNotificationCallback_NotificationCC } from "../commandclass/NotificationCC";
 import type { ZWaveNode } from "./Node";
 
 export interface TranslatedValueID extends ValueID {
@@ -57,11 +57,6 @@ export type ZWaveNodeMetadataUpdatedCallback = (
 	node: ZWaveNode,
 	args: ZWaveNodeMetadataUpdatedArgs,
 ) => void;
-export type ZWaveNotificationCallback = (
-	node: ZWaveNode,
-	notificationLabel: string,
-	parameters?: NotificationCCReport["eventParameters"],
-) => void;
 export type ZWaveInterviewFailedCallback = (
 	node: ZWaveNode,
 	args: NodeInterviewFailedEventArgs,
@@ -80,6 +75,8 @@ export type ZWaveNodeStatusChangeCallback = (
 	node: ZWaveNode,
 	oldStatus: NodeStatus,
 ) => void;
+
+export type ZWaveNotificationCallback = ZWaveNotificationCallback_NotificationCC;
 
 export interface ZWaveNodeValueEventCallbacks {
 	"value added": ZWaveNodeValueAddedCallback;

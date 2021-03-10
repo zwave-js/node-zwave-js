@@ -22,3 +22,11 @@ The old parsing code was based on reverse-engineering, best-effort guesses and l
 -   The `supportsSecurity` property was split off from the `isSecure` property because they have a different meaning.
 -   The mutually exclusive `isRoutingSlave` and `isController` properties were merged into the new `nodeType` property.
 -   The old `nodeType` and `roleType` properties were renamed to `zwavePlusNodeType` and `zwavePlusRoleType` to clarify that they refer to Z-Wave+.
+
+## Reworked `"notification"` event
+
+This event serves a similar purpose as the `"value notification"` event (which was introduced later), but it was historically only used for the `Notification CC`. These events tend to contain more complicated data than the relatively simple `"value notification"` event, which is why it was kept separate.
+
+Since the original implementation, the need for a more versatile CC-specific notification event has arisen. Therefore we decided to rework this event and decouple it from the `Notification CC`. As a result, the event callback now indicates which CC raised the event and its arguments are moved into a single object parameter.
+
+See the [`"notification"` event](../api/node#quotnotificationquot) docs for a detailed description what changed.

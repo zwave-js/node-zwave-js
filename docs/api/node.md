@@ -707,14 +707,52 @@ The event argument has the shape of [`TranslatedValueID`](api/valueid.md) with o
 
 ### `"notification"`
 
-The node has sent a notification event using the `Notification` command class. The callback signature is as follows:
+This event serves a similar purpose as the `"value notification"`, but is used for more complex CC-specific notifications.
+The base callback signature has the following shape:
 
 ```ts
-(node: ZWaveNode, notificationLabel: string, parameters?: Buffer | Duration | Record<string, number>) => void;
+type ZWaveNotificationCallback = (
+	node: ZWaveNode,
+	ccId: CommandClasses,
+	args: Record<string, unknown>,
+): void;
 ```
 
 where
 
 -   `node` is the current node instance
--   `notificationLabel` is a string representing the notification type (e.g. `"Home security"`)
--   `parameters` _(optional)_ depends on the type of the notification. It may be a `Duration`, a dictionary or a raw Buffer. Details can be found in the Z-Wave specifications.
+-   `ccId` is the identifier for the CC which raised this event
+-   `args` is a CC-specific argument object
+
+The CCs that use this event bring specialized versions of the callback and arguments.
+
+#### `Notification CC`
+
+<!-- #import ZWaveNotificationCallback_NotificationCC from "zwave-js" -->
+
+```ts
+type ZWaveNotificationCallback_NotificationCC = (
+	node: ZWaveNode,
+	ccId: CommandClasses.Notification,
+	args: ZWaveNotificationCallbackArgs_NotificationCC,
+) => void;
+```
+
+with the argument
+
+<!-- #import ZWaveNotificationCallbackArgs_NotificationCC from "zwave-js" -->
+
+```ts
+interface ZWaveNotificationCallbackArgs_NotificationCC {
+	/** The numeric identifier for the notification type */
+	type: number;
+	/** The human-readable label for the notification type */
+	label: string;
+	/** The numeric identifier for the notification event */
+	event: number;
+	/** The human-readable label for the notification event */
+	eventLabel: string;
+	/** Additional information related to the event */
+	parameters?: NotificationCCReport["eventParameters"];
+}
+```
