@@ -734,19 +734,23 @@ where
 
 The CCs that use this event bring specialized versions of the callback and arguments.
 
-#### `Notification CC`
+#### `Entry Control CC`
 
-<!-- #import ZWaveNotificationCallback_NotificationCC from "zwave-js" -->
+The argument object has the following type:
+
+<!-- #import ZWaveNotificationCallbackArgs_EntryControlCC from "zwave-js" -->
 
 ```ts
-type ZWaveNotificationCallback_NotificationCC = (
-	node: ZWaveNode,
-	ccId: CommandClasses.Notification,
-	args: ZWaveNotificationCallbackArgs_NotificationCC,
-) => void;
+interface ZWaveNotificationCallbackArgs_EntryControlCC {
+	eventType: EntryControlEventTypes;
+	dataType: EntryControlDataTypes;
+	eventData?: Buffer | string;
+}
 ```
 
-with the argument
+#### `Notification CC`
+
+The argument object has the following type:
 
 <!-- #import ZWaveNotificationCallbackArgs_NotificationCC from "zwave-js" -->
 
