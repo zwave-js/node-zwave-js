@@ -391,12 +391,13 @@ export class EntryControlCCNotification extends EntryControlCC {
 				validatePayload(
 					eventDataLength === 16 || eventDataLength === 32,
 				);
+				// Using toString("ascii") converts the padding bytes 0xff to 0x7f
 				this.eventData = eventData.toString("ascii");
 				validatePayload(
-					/^[\u0000-\u007f]+[\u00ff]*$/.test(this.eventData),
+					/^[\u0000-\u007f]+[\u007f]*$/.test(this.eventData),
 				);
 				// Trim padding
-				this.eventData = this.eventData.replace(/[\u00ff]*$/, "");
+				this.eventData = this.eventData.replace(/[\u007f]*$/, "");
 				break;
 			case EntryControlDataTypes.MD5:
 				// MD5 16 byte binary data encoded as a MD5 hash value.

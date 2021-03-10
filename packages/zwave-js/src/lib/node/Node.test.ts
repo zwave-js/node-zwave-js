@@ -1531,17 +1531,21 @@ describe("lib/node/Node", () => {
 			const spy = jest.fn();
 			node.on("notification", spy);
 
-			const buf = Buffer.from([
-				CommandClasses["Entry Control"],
-				EntryControlCommand.Notification, // CC Command
-				0x5,
-				0x2,
-				0x3,
-				4,
-				49,
-				50,
-				51,
-				52,
+			const buf = Buffer.concat([
+				Buffer.from([
+					CommandClasses["Entry Control"],
+					EntryControlCommand.Notification, // CC Command
+					0x5,
+					0x2,
+					0x3,
+					16,
+					49,
+					50,
+					51,
+					52,
+				]),
+				// Required padding for ASCII
+				Buffer.alloc(12, 0xff),
 			]);
 
 			const command = new EntryControlCCNotification(
@@ -1561,7 +1565,6 @@ describe("lib/node/Node", () => {
 			expect(call[0].id).toBe(node.id);
 			expect(call[1]).toBe(CommandClasses["Entry Control"]);
 			expect(call[2]).toEqual({
-				sequenceNumber: 5,
 				dataType: EntryControlDataTypes.ASCII,
 				eventType: EntryControlEventTypes.DisarmAll,
 				eventData: "1234",
