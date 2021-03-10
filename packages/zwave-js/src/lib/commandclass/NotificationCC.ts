@@ -22,6 +22,7 @@ import { JSONObject, num2hex, pick } from "@zwave-js/shared";
 import { isArray } from "alcalzone-shared/typeguards";
 import type { Driver } from "../driver/Driver";
 import { MessagePriority } from "../message/Constants";
+import type { ZWaveNode } from "../node/Node";
 import { PhysicalCCAPI } from "./API";
 import {
 	API,
@@ -57,6 +58,32 @@ export type NotificationMetadata = ValueMetadata & {
 		notificationType: number;
 	};
 };
+
+/**
+ * @publicAPI
+ */
+export interface ZWaveNotificationCallbackArgs_NotificationCC {
+	/** The numeric identifier for the notification type */
+	type: number;
+	/** The human-readable label for the notification type */
+	label: string;
+	/** The numeric identifier for the notification event */
+	event: number;
+	/** The human-readable label for the notification event */
+	eventLabel: string;
+	/** Additional information related to the event */
+	parameters?: NotificationCCReport["eventParameters"];
+}
+
+/**
+ * @publicAPI
+ * The specialized version of ZWaveNotificationCallback for Notification CC
+ */
+export type ZWaveNotificationCallback_NotificationCC = (
+	node: ZWaveNode,
+	ccId: CommandClasses.Notification,
+	args: ZWaveNotificationCallbackArgs_NotificationCC,
+) => void;
 
 /** Returns the ValueID used to store the supported notification types of a node */
 export function getSupportedNotificationTypesValueId(): ValueID {

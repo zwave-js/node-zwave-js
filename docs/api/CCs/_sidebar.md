@@ -3,6 +3,7 @@
     -   [Introduction](README.md)
     -   [Quick Start](getting-started/quickstart.md)
     -   [Migrating to v6](getting-started/migrating-to-v6.md)
+    -   [Migrating to v7](getting-started/migrating-to-v7.md)
 
 -   API
 
