@@ -728,7 +728,19 @@ The CCs that use this event bring specialized versions of the callback and argum
 
 #### `Entry Control CC`
 
-The argument object has the following type:
+uses the following signature
+
+<!-- #import ZWaveNotificationCallbackParams_EntryControlCC from "zwave-js" -->
+
+```ts
+type ZWaveNotificationCallbackParams_EntryControlCC = [
+	node: ZWaveNode,
+	ccId: typeof CommandClasses["Entry Control"],
+	args: ZWaveNotificationCallbackArgs_EntryControlCC,
+];
+```
+
+where the argument object has the type
 
 <!-- #import ZWaveNotificationCallbackArgs_EntryControlCC from "zwave-js" -->
 
@@ -742,7 +754,19 @@ interface ZWaveNotificationCallbackArgs_EntryControlCC {
 
 #### `Notification CC`
 
-The argument object has the following type:
+uses the following signature
+
+<!-- #import ZWaveNotificationCallbackParams_NotificationCC from "zwave-js" -->
+
+```ts
+type ZWaveNotificationCallbackParams_NotificationCC = [
+	node: ZWaveNode,
+	ccId: CommandClasses.Notification,
+	args: ZWaveNotificationCallbackArgs_NotificationCC,
+];
+```
+
+where the argument object has the type
 
 <!-- #import ZWaveNotificationCallbackArgs_NotificationCC from "zwave-js" -->
 

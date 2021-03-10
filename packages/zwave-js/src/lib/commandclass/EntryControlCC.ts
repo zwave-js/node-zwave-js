@@ -15,6 +15,7 @@ import {
 import { buffer2hex, pick } from "@zwave-js/shared";
 import type { Driver } from "../driver/Driver";
 import { MessagePriority } from "../message/Constants";
+import type { ZWaveNode } from "../node/Node";
 import {
 	CCAPI,
 	PollValueImplementation,
@@ -95,16 +96,15 @@ export interface ZWaveNotificationCallbackArgs_EntryControlCC {
 	eventData?: Buffer | string;
 }
 
-// Strongly typing the callback signature is blocked by https://github.com/microsoft/TypeScript/issues/43171
-// /**
-//  * @publicAPI
-//  * The specialized version of ZWaveNotificationCallback for Entry Control CC
-//  */
-// export type ZWaveNotificationCallback_EntryControlCC = (
-// 	node: ZWaveNode,
-// 	ccId: CommandClasses["Entry Control"],
-// 	args: ZWaveNotificationCallbackArgs_EntryControlCC,
-// ) => void;
+/**
+ * @publicAPI
+ * Parameter types for the Entry Control CC specific version of ZWaveNotificationCallback
+ */
+export type ZWaveNotificationCallbackParams_EntryControlCC = [
+	node: ZWaveNode,
+	ccId: typeof CommandClasses["Entry Control"],
+	args: ZWaveNotificationCallbackArgs_EntryControlCC,
+];
 
 function getValueID(property: string, endpoint: number): ValueID {
 	return {
