@@ -90,10 +90,9 @@ export enum EntryControlDataTypes {
  * @publicAPI
  */
 export interface ZWaveNotificationCallbackArgs_EntryControlCC {
-	sequenceNumber: number;
-	dataType: EntryControlDataTypes;
 	eventType: EntryControlEventTypes;
-	eventData: Buffer | string;
+	dataType: EntryControlDataTypes;
+	eventData?: Buffer | string;
 }
 
 // Strongly typing the callback signature is blocked by https://github.com/microsoft/TypeScript/issues/43171

@@ -734,10 +734,9 @@ The argument object has the following type:
 
 ```ts
 interface ZWaveNotificationCallbackArgs_EntryControlCC {
-	sequenceNumber: number;
-	dataType: EntryControlDataTypes;
 	eventType: EntryControlEventTypes;
-	eventData: Buffer | string;
+	dataType: EntryControlDataTypes;
+	eventData?: Buffer | string;
 }
 ```
 
