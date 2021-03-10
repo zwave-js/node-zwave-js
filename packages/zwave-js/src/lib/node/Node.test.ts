@@ -1520,7 +1520,7 @@ describe("lib/node/Node", () => {
 			node.destroy();
 		});
 
-		it("event is sent when recieving a EntryControlNotification", async () => {
+		it("a notification event is sent when receiving an EntryControlNotification", async () => {
 			const node = makeNode([
 				[
 					CommandClasses["Entry Control"],
@@ -1528,9 +1528,8 @@ describe("lib/node/Node", () => {
 				],
 			]);
 
-			const onEntryControlNotification = jest.fn();
-
-			node.on("entry control notification", onEntryControlNotification);
+			const spy = jest.fn();
+			node.on("notification", spy);
 
 			const buf = Buffer.from([
 				CommandClasses["Entry Control"],
@@ -1555,15 +1554,18 @@ describe("lib/node/Node", () => {
 
 			node.handleCommand(command);
 
-			const calls = onEntryControlNotification.mock.calls;
+			const calls = spy.mock.calls;
 			expect(calls.length).toBe(1);
 			const call = calls[0];
 
 			expect(call[0].id).toBe(node.id);
-			expect(call[1]).toBe(5);
-			expect(call[2]).toBe(EntryControlDataTypes.ASCII);
-			expect(call[3]).toBe(EntryControlEventTypes.DisarmAll);
-			expect(call[4]).toBe("1234");
+			expect(call[1]).toBe(CommandClasses["Entry Control"]);
+			expect(call[2]).toEqual({
+				sequenceNumber: 5,
+				dataType: EntryControlDataTypes.ASCII,
+				eventType: EntryControlEventTypes.DisarmAll,
+				eventData: "1234",
+			});
 		});
 	});
 });
