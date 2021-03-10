@@ -31,6 +31,7 @@
         -   [Configuration CC](api/CCs/Configuration.md)
         -   [CRC-16 Encapsulation CC](api/CCs/CRC16.md)
         -   [Door Lock CC](api/CCs/DoorLock.md)
+        -   [Entry Control CC](api/CCs/EntryControl.md)
         -   [Firmware Update Meta Data CC](api/CCs/FirmwareUpdateMetaData.md)
         -   [Indicator CC](api/CCs/Indicator.md)
         -   [Language CC](api/CCs/Language.md)
