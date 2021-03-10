@@ -3116,9 +3116,6 @@ protocol version:      ${this._protocolVersion}`;
 			this._supportedDataRates = obj.supportedDataRates;
 		}
 
-		// A node that can sleep should be assumed to be sleeping after resuming from cache
-		if (this.canSleep) this.markAsAsleep();
-
 		if (isArray(obj.neighbors)) {
 			// parse only valid node IDs
 			this._neighbors = obj.neighbors.filter(

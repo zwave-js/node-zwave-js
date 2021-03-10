@@ -1168,7 +1168,7 @@ describe("lib/node/Node", () => {
 			node.destroy();
 		});
 
-		it("deserialize() should set the node status to Asleep if the node can sleep", () => {
+		it("deserialize() should set the node status to Unknown if the node can sleep", () => {
 			const input = {
 				...serializedTestNode,
 				isListening: false,
@@ -1176,7 +1176,7 @@ describe("lib/node/Node", () => {
 			};
 			const node = new ZWaveNode(1, fakeDriver);
 			node.deserialize(input);
-			expect(node.status).toBe(NodeStatus.Asleep);
+			expect(node.status).toBe(NodeStatus.Unknown);
 			node.destroy();
 		});
 

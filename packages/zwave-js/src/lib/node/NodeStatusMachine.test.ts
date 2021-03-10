@@ -28,13 +28,13 @@ describe("lib/driver/NodeStatusMachine", () => {
 			expect(service.state.value).toBe("unknown");
 		});
 
-		it(`The node should start in the asleep state if it can definitely sleep`, () => {
+		it(`The node should start in the unknown state if it can definitely sleep`, () => {
 			const testMachine = createNodeStatusMachine({
 				canSleep: true,
 			} as any);
 
 			service = interpret(testMachine).start();
-			expect(service.state.value).toBe("asleep");
+			expect(service.state.value).toBe("unknown");
 		});
 
 		const transitions: {
