@@ -304,6 +304,7 @@ export interface CCAPIs {
 	"Color Switch": import("./ColorSwitchCC").ColorSwitchCCAPI;
 	Configuration: import("./ConfigurationCC").ConfigurationCCAPI;
 	"Door Lock": import("./DoorLockCC").DoorLockCCAPI;
+	"Entry Control": import("./EntryControlCC").EntryControlCCAPI;
 	"Firmware Update Meta Data": import("./FirmwareUpdateMetaDataCC").FirmwareUpdateMetaDataCCAPI;
 	Indicator: import("./IndicatorCC").IndicatorCCAPI;
 	Language: import("./LanguageCC").LanguageCCAPI;
