@@ -2961,7 +2961,7 @@ protocol version:      ${this._protocolVersion}`;
 		this.emit(
 			"notification",
 			this,
-			CommandClasses["Energy Production"],
+			CommandClasses["Entry Control"],
 			pick(notif, [
 				"sequenceNumber",
 				"dataType",
