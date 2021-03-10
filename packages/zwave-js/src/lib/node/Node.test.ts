@@ -1569,6 +1569,8 @@ describe("lib/node/Node", () => {
 				eventType: EntryControlEventTypes.DisarmAll,
 				eventData: "1234",
 			});
+
+			node.destroy();
 		});
 	});
 });

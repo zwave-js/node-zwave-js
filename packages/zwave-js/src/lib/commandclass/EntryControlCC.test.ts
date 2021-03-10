@@ -41,16 +41,20 @@ describe("lib/commandclass/EntryControlCC => ", () => {
 
 	it("the Notification command should deserialize correctly", () => {
 		const data = buildCCBuffer(
-			Buffer.from([
-				EntryControlCommand.Notification, // CC Command
-				0x1,
-				0x2,
-				0x3,
-				4,
-				49,
-				50,
-				51,
-				52,
+			Buffer.concat([
+				Buffer.from([
+					EntryControlCommand.Notification, // CC Command
+					0x1,
+					0x2,
+					0x3,
+					16,
+					49,
+					50,
+					51,
+					52,
+				]),
+				// Required padding for ASCII
+				Buffer.alloc(12, 0xff),
 			]),
 		);
 
