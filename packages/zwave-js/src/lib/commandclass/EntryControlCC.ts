@@ -376,34 +376,43 @@ export class EntryControlCCNotification extends EntryControlCC {
 
 		const offset = 4;
 		validatePayload(this.payload.length >= offset + eventDataLength);
-		const eventData = Buffer.from(
-			this.payload.slice(offset, offset + eventDataLength),
-		);
-		switch (this.dataType) {
-			case EntryControlDataTypes.Raw:
-				// RAW 1 to 32 bytes of arbitrary binary data
-				validatePayload(eventDataLength >= 1 && eventDataLength <= 32);
-				this.eventData = eventData;
-				break;
-			case EntryControlDataTypes.ASCII:
-				// ASCII 1 to 32 ASCII encoded characters. ASCII codes MUST be in the value range 0x00-0xF7.
-				// The string MUST be padded with the value 0xFF to fit 16 byte blocks when sent in a notification.
-				validatePayload(
-					eventDataLength === 16 || eventDataLength === 32,
-				);
-				// Using toString("ascii") converts the padding bytes 0xff to 0x7f
-				this.eventData = eventData.toString("ascii");
-				validatePayload(
-					/^[\u0000-\u007f]+[\u007f]*$/.test(this.eventData),
-				);
-				// Trim padding
-				this.eventData = this.eventData.replace(/[\u007f]*$/, "");
-				break;
-			case EntryControlDataTypes.MD5:
-				// MD5 16 byte binary data encoded as a MD5 hash value.
-				validatePayload(eventDataLength === 16);
-				this.eventData = eventData;
-				break;
+		if (eventDataLength > 0) {
+			// We shouldn't need to check this, since the specs are pretty clear which format to expect.
+			// But as always - manufacturers don't care and send ASCII data with 0 bytes...
+
+			const eventData = Buffer.from(
+				this.payload.slice(offset, offset + eventDataLength),
+			);
+			switch (this.dataType) {
+				case EntryControlDataTypes.Raw:
+					// RAW 1 to 32 bytes of arbitrary binary data
+					validatePayload(
+						eventDataLength >= 1 && eventDataLength <= 32,
+					);
+					this.eventData = eventData;
+					break;
+				case EntryControlDataTypes.ASCII:
+					// ASCII 1 to 32 ASCII encoded characters. ASCII codes MUST be in the value range 0x00-0xF7.
+					// The string MUST be padded with the value 0xFF to fit 16 byte blocks when sent in a notification.
+					validatePayload(
+						eventDataLength === 16 || eventDataLength === 32,
+					);
+					// Using toString("ascii") converts the padding bytes 0xff to 0x7f
+					this.eventData = eventData.toString("ascii");
+					validatePayload(
+						/^[\u0000-\u007f]+[\u007f]*$/.test(this.eventData),
+					);
+					// Trim padding
+					this.eventData = this.eventData.replace(/[\u007f]*$/, "");
+					break;
+				case EntryControlDataTypes.MD5:
+					// MD5 16 byte binary data encoded as a MD5 hash value.
+					validatePayload(eventDataLength === 16);
+					this.eventData = eventData;
+					break;
+			}
+		} else {
+			this.dataType = EntryControlDataTypes.None;
 		}
 	}
 
