@@ -1,5 +1,4 @@
 import type {
-	CommandClasses,
 	MetadataUpdatedArgs,
 	ValueAddedArgs,
 	ValueID,
@@ -8,6 +7,8 @@ import type {
 	ValueUpdatedArgs,
 } from "@zwave-js/core";
 import type { FirmwareUpdateStatus } from "../commandclass";
+import type { ZWaveNotificationCallbackParams_EntryControlCC } from "../commandclass/EntryControlCC";
+import type { ZWaveNotificationCallbackParams_NotificationCC } from "../commandclass/NotificationCC";
 import type { ZWaveNode } from "./Node";
 
 export interface TranslatedValueID extends ValueID {
@@ -76,14 +77,10 @@ export type ZWaveNodeStatusChangeCallback = (
 	oldStatus: NodeStatus,
 ) => void;
 
-// Strongly typing the callback signature is blocked by https://github.com/microsoft/TypeScript/issues/43171
-// export type ZWaveNotificationCallback =
-// 	| ZWaveNotificationCallback_NotificationCC
-// 	| ZWaveNotificationCallback_EntryControlCC;
 export type ZWaveNotificationCallback = (
-	node: ZWaveNode,
-	ccId: CommandClasses,
-	args: Record<string, unknown>,
+	...args:
+		| ZWaveNotificationCallbackParams_NotificationCC
+		| ZWaveNotificationCallbackParams_EntryControlCC
 ) => void;
 
 export interface ZWaveNodeValueEventCallbacks {
