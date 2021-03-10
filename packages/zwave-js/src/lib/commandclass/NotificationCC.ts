@@ -22,6 +22,7 @@ import { JSONObject, num2hex, pick } from "@zwave-js/shared";
 import { isArray } from "alcalzone-shared/typeguards";
 import type { Driver } from "../driver/Driver";
 import { MessagePriority } from "../message/Constants";
+import type { ZWaveNode } from "../node/Node";
 import { PhysicalCCAPI } from "./API";
 import {
 	API,
@@ -74,16 +75,15 @@ export interface ZWaveNotificationCallbackArgs_NotificationCC {
 	parameters?: NotificationCCReport["eventParameters"];
 }
 
-// Strongly typing the callback signature is blocked by https://github.com/microsoft/TypeScript/issues/43171
-// /**
-//  * @publicAPI
-//  * The specialized version of ZWaveNotificationCallback for Notification CC
-//  */
-// export type ZWaveNotificationCallback_NotificationCC = (
-// 	node: ZWaveNode,
-// 	ccId: CommandClasses.Notification,
-// 	args: ZWaveNotificationCallbackArgs_NotificationCC,
-// ) => void;
+/**
+ * @publicAPI
+ * Parameter types for the Notification CC specific version of ZWaveNotificationCallback
+ */
+export type ZWaveNotificationCallbackParams_NotificationCC = [
+	node: ZWaveNode,
+	ccId: CommandClasses.Notification,
+	args: ZWaveNotificationCallbackArgs_NotificationCC,
+];
 
 /** Returns the ValueID used to store the supported notification types of a node */
 export function getSupportedNotificationTypesValueId(): ValueID {

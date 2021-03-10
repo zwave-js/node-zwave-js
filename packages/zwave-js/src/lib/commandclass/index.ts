@@ -34,7 +34,10 @@ export { CommandClass } from "./CommandClass";
 export type { ConfigValue } from "./ConfigurationCC";
 export { DoorLockMode, DoorLockOperationType } from "./DoorLockCC";
 export type { DoorHandleStatus } from "./DoorLockCC";
-export type { ZWaveNotificationCallbackArgs_EntryControlCC } from "./EntryControlCC";
+export type {
+	ZWaveNotificationCallbackArgs_EntryControlCC,
+	ZWaveNotificationCallbackParams_EntryControlCC,
+} from "./EntryControlCC";
 export {
 	FirmwareDownloadStatus,
 	FirmwareUpdateActivationStatus,
@@ -56,6 +59,7 @@ export type { MultilevelSwitchLevelChangeMetadata } from "./MultilevelSwitchCC";
 export type {
 	NotificationMetadata,
 	ZWaveNotificationCallbackArgs_NotificationCC,
+	ZWaveNotificationCallbackParams_NotificationCC,
 } from "./NotificationCC";
 export { LocalProtectionState, RFProtectionState } from "./ProtectionCC";
 export { ToneId } from "./SoundSwitchCC";
