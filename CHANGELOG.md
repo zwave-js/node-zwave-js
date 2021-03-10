@@ -3,7 +3,7 @@
 	Placeholder for next release:
 	## __WORK IN PROGRESS__
 -->
-## __WORK IN PROGRESS__ · _Summer is coming!_
+## 7.0.0-alpha.2 (2021-03-11) · _Summer is coming!_
 ### Breaking changes · [Migration guide](https://zwave-js.github.io/node-zwave-js/#/getting-started/migrating-to-v7)
 * Renamed `controller.removeNodeFromAllAssocations` to `controller.removeNodeFromAllAssociations` to fix a typo
 * We've reworked/fixed the parsing of Node Information Frames (NIF) to match the specifications and changed node properties to make more sense
