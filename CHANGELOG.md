@@ -3,6 +3,23 @@
 	Placeholder for next release:
 	## __WORK IN PROGRESS__
 -->
+## __WORK IN PROGRESS__ · _Summer is coming!_
+### Breaking changes · [Migration guide](https://zwave-js.github.io/node-zwave-js/#/getting-started/migrating-to-v7)
+* Renamed `controller.removeNodeFromAllAssocations` to `controller.removeNodeFromAllAssociations` to fix a typo
+* We've reworked/fixed the parsing of Node Information Frames (NIF) to match the specifications and changed node properties to make more sense
+* Nodes with a completed interview are no longer queried for all their values when restarting
+* The `deltaTime` and `previousValue` values for the `Meter CC` are no longer exposed
+* Numeric loglevels are converted to the corresponding string loglevel internally. `driver.getLogConfig` always returns the string loglevel regardless.
+* The `"notification"` event was decoupled from the `Notification CC` and now serves as a generic event for CC-specific notifications.
+
+### Features
+* The logger formats were more cleanly separated between logger and transport instances. As a result, writing user-defined transports is now much easier.
+* Implemented a `logfmt` transport in https://github.com/zwave-js/log-transports
+* Added support for `Entry Control CC`
+
+### Bugfixes
+* Changes to the logger configuration are now correctly applied dynamically
+
 ## 6.6.2 (2021-03-14)
 ### Bugfixes
 * While replacing a node with `replaceFailedNode` the node does not get removed from associations anymore. This could prevent secure inclusion from succeeding.
