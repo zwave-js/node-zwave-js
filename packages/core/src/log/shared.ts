@@ -167,7 +167,11 @@ export class ZWaveLogContainer extends winston.Container {
 
 		// When the log target (console, file, filename) was changed, recreate the transport
 		// because at least the filename does not update dynamically
-		if (changedLoggingTarget || changedFilename) {
+		if (
+			(this.logConfig.transports as any) == undefined ||
+			changedLoggingTarget ||
+			changedFilename
+		) {
 			this.fileTransport?.destroy();
 			this.fileTransport = undefined;
 
