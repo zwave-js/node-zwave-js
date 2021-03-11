@@ -19,6 +19,9 @@
 		"min": "0.0",
 		"max": "255.255"
 	},
+	"compat": {
+        "disableStrictEntryControlDataValidation": true
+    },
 	"paramInformation": {
 		"1": {
 			"label": "Battery Report Interval",
