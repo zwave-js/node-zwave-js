@@ -184,6 +184,10 @@
 				"disableBasicMapping": {
 					"const": true
 				},
+				"manualValueRefreshDelayMs": {
+					"type": "number",
+					"minimum": 0
+				},
 				"overrideFloatEncoding": {
 					"type": "object",
 					"properties": {
@@ -223,10 +227,6 @@
 				},
 				"treatBasicSetAsEvent": {
 					"const": true
-				},
-				"manualValueRefreshDelayMs": {
-					"type": "number",
-					"minimum": 0
 				}
 			},
 			"additionalProperties": false
