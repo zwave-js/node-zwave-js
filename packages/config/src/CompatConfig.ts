@@ -1,5 +1,5 @@
 import type { CommandClasses, CommandClassInfo, ValueID } from "@zwave-js/core";
-import type { JSONObject } from "@zwave-js/shared";
+import { JSONObject, pick } from "@zwave-js/shared";
 import { isArray, isObject } from "alcalzone-shared/typeguards";
 import { hexKeyRegex2Digits, throwInvalidConfig } from "./utils";
 
@@ -300,8 +300,25 @@ All values in compat option commandClasses.remove must be objects with an "endpo
 				this.removeCCs = removeCCs;
 			}
 		}
+
+		if (definition.alarmMapping != undefined) {
+			if (
+				!isArray(definition.alarmMapping) ||
+				!definition.alarmMapping.every((m: any) => isObject(m))
+			) {
+				throwInvalidConfig(
+					"devices",
+					`config/devices/${filename}:
+compat option alarmMapping must be an array where all items are objects!`,
+				);
+			}
+			this.alarmMapping = (definition.alarmMapping as any[]).map(
+				(m, i) => new CompatMapAlarm(filename, m, i + 1),
+			);
+		}
 	}
 
+	public readonly alarmMapping?: readonly CompatMapAlarm[];
 	public readonly addCCs?: ReadonlyMap<CommandClasses, CompatAddCC>;
 	public readonly removeCCs?: ReadonlyMap<
 		CommandClasses,
@@ -409,4 +426,103 @@ invalid endpoint index in compat option commandClasses.add`,
 	}
 
 	public readonly endpoints: ReadonlyMap<number, Partial<CommandClassInfo>>;
+}
+
+export interface CompatMapAlarmFrom {
+	alarmType: number;
+	alarmLevel?: number;
+}
+
+export interface CompatMapAlarmTo {
+	notificationType: number;
+	notificationEvent: number;
+	eventParameters?: Record<string, number | "alarmLevel">;
+}
+
+export class CompatMapAlarm {
+	public constructor(
+		filename: string,
+		definition: JSONObject,
+		index: number,
+	) {
+		if (!isObject(definition.from)) {
+			throwInvalidConfig(
+				"devices",
+				`config/devices/${filename}:
+error in compat option alarmMapping, mapping #${index}: property "from" must be an object!`,
+			);
+		} else {
+			if (typeof definition.from.alarmType !== "number") {
+				throwInvalidConfig(
+					"devices",
+					`config/devices/${filename}:
+error in compat option alarmMapping, mapping #${index}: property "from.alarmType" must be a number!`,
+				);
+			}
+			if (
+				definition.from.alarmLevel != undefined &&
+				typeof definition.from.alarmLevel !== "number"
+			) {
+				throwInvalidConfig(
+					"devices",
+					`config/devices/${filename}:
+error in compat option alarmMapping, mapping #${index}: if property "from.alarmLevel" is given, it must be a number!`,
+				);
+			}
+		}
+
+		if (!isObject(definition.to)) {
+			throwInvalidConfig(
+				"devices",
+				`config/devices/${filename}:
+error in compat option alarmMapping, mapping #${index}: property "to" must be an object!`,
+			);
+		} else {
+			if (typeof definition.to.notificationType !== "number") {
+				throwInvalidConfig(
+					"devices",
+					`config/devices/${filename}:
+error in compat option alarmMapping, mapping #${index}: property "to.notificationType" must be a number!`,
+				);
+			}
+			if (typeof definition.to.notificationEvent !== "number") {
+				throwInvalidConfig(
+					"devices",
+					`config/devices/${filename}:
+error in compat option alarmMapping, mapping #${index}: property "to.notificationEvent" must be a number!`,
+				);
+			}
+			if (definition.to.eventParameters != undefined) {
+				if (!isObject(definition.to.eventParameters)) {
+					throwInvalidConfig(
+						"devices",
+						`config/devices/${filename}:
+error in compat option alarmMapping, mapping #${index}: property "to.eventParameters" must be an object!`,
+					);
+				} else {
+					for (const [key, val] of Object.entries(
+						definition.to.eventParameters,
+					)) {
+						if (typeof val !== "number" && val !== "alarmLevel") {
+							throwInvalidConfig(
+								"devices",
+								`config/devices/${filename}:
+error in compat option alarmMapping, mapping #${index}: property "to.eventParameters.${key}" must be a number or the literal "alarmLevel"!`,
+							);
+						}
+					}
+				}
+			}
+		}
+
+		this.from = pick(definition.from, ["alarmType", "alarmLevel"]);
+		this.to = pick(definition.to, [
+			"notificationType",
+			"notificationEvent",
+			"eventParameters",
+		]);
+	}
+
+	public readonly from: CompatMapAlarmFrom;
+	public readonly to: CompatMapAlarmTo;
 }
