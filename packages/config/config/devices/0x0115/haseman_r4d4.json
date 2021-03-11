@@ -1,0 +1,726 @@
+// Z-Wave.Me
+// Haseman R4D4
+{
+    "manufacturer": "Z-Wave.Me",
+    "manufacturerId": "0x0115",
+    "label": "Haseman R4D4",
+    "description": "4 x relay and 4 x universal dimmers",
+    "devices": [
+        {
+            "productType": "0xf222",
+            "productId": "0x2111"
+        }
+    ],
+    "firmwareVersion": {
+        "min": "0.0",
+        "max": "255.255"
+    },
+    "associations": {
+        "1": {
+            "label": "Group 1",
+            "maxNodes": 8,
+            "isLifeline": true
+        },
+        "2": {
+            "label": "Group 2",
+            "maxNodes": 8
+        },
+        "3": {
+            "label": "Group 3",
+            "maxNodes": 8
+        },
+        "4": {
+            "label": "Group 4",
+            "maxNodes": 8
+        },
+        "5": {
+            "label": "Group 5",
+            "maxNodes": 8
+        },
+        "6": {
+            "label": "Group 6",
+            "maxNodes": 8
+        },
+        "7": {
+            "label": "Group 7",
+            "maxNodes": 8
+        },
+        "8": {
+            "label": "Group 8",
+            "maxNodes": 8
+        },
+        "9": {
+            "label": "Group 9",
+            "maxNodes": 8
+        }
+    },
+    "paramInformation": {
+        "64": {
+            "label": "Channel 1 power up memory",
+            "description": "When Power Up memory is enabled, the module will save the actual status of the associated channel output in case of power break",
+            "valueSize": 2,
+            "defaultValue": 0,
+            "readOnly": false,
+            "writeOnly": false,
+            "minValue": 0,
+            "maxValue": 1,
+            "allowManualEntry": false,
+            "options": [
+                {
+                    "label": "Disabled",
+                    "value": 0
+                },
+                {
+                    "label": "Enabled",
+                    "value": 1
+                }
+            ]
+        },
+        "65": {
+            "label": "Channel 2 power up memory",
+            "description": "When Power Up memory is enabled, the module will save the actual status of the associated channel output in case of power break",
+            "valueSize": 2,
+            "defaultValue": 0,
+            "readOnly": false,
+            "writeOnly": false,
+            "minValue": 0,
+            "maxValue": 1,
+            "allowManualEntry": false,
+            "options": [
+                {
+                    "label": "Disabled",
+                    "value": 0
+                },
+                {
+                    "label": "Enabled",
+                    "value": 1
+                }
+            ]
+        },
+        "66": {
+            "label": "Channel 3 power up memory",
+            "description": "When Power Up memory is enabled, the module will save the actual status of the associated channel output in case of power break",
+            "valueSize": 2,
+            "defaultValue": 0,
+            "readOnly": false,
+            "writeOnly": false,
+            "minValue": 0,
+            "maxValue": 1,
+            "allowManualEntry": false,
+            "options": [
+                {
+                    "label": "Disabled",
+                    "value": 0
+                },
+                {
+                    "label": "Enabled",
+                    "value": 1
+                }
+            ]
+        },
+        "67": {
+            "label": "Channel 4 power up memory",
+            "description": "When Power Up memory is enabled, the module will save the actual status of the associated channel output in case of power break",
+            "valueSize": 2,
+            "defaultValue": 0,
+            "readOnly": false,
+            "writeOnly": false,
+            "minValue": 0,
+            "maxValue": 1,
+            "allowManualEntry": false,
+            "options": [
+                {
+                    "label": "Disabled",
+                    "value": 0
+                },
+                {
+                    "label": "Enabled",
+                    "value": 1
+                }
+            ]
+        },
+        "68": {
+            "label": "Channel 5 power up memory",
+            "description": "When Power Up memory is enabled, the module will save the actual status of the associated channel output in case of power break",
+            "valueSize": 2,
+            "defaultValue": 0,
+            "readOnly": false,
+            "writeOnly": false,
+            "minValue": 0,
+            "maxValue": 1,
+            "allowManualEntry": false,
+            "options": [
+                {
+                    "label": "Disabled",
+                    "value": 0
+                },
+                {
+                    "label": "Enabled",
+                    "value": 1
+                }
+            ]
+        },
+        "69": {
+            "label": "Channel 6 power up memory",
+            "description": "When Power Up memory is enabled, the module will save the actual status of the associated channel output in case of power break",
+            "valueSize": 2,
+            "defaultValue": 0,
+            "readOnly": false,
+            "writeOnly": false,
+            "minValue": 0,
+            "maxValue": 1,
+            "allowManualEntry": false,
+            "options": [
+                {
+                    "label": "Disabled",
+                    "value": 0
+                },
+                {
+                    "label": "Enabled",
+                    "value": 1
+                }
+            ]
+        },
+        "70": {
+            "label": "Channel 7 power up memory",
+            "description": "When Power Up memory is enabled, the module will save the actual status of the associated channel output in case of power break",
+            "valueSize": 2,
+            "defaultValue": 0,
+            "readOnly": false,
+            "writeOnly": false,
+            "minValue": 0,
+            "maxValue": 1,
+            "allowManualEntry": false,
+            "options": [
+                {
+                    "label": "Disabled",
+                    "value": 0
+                },
+                {
+                    "label": "Enabled",
+                    "value": 1
+                }
+            ]
+        },
+        "71": {
+            "label": "Channel 8 power up memory",
+            "description": "When Power Up memory is enabled, the module will save the actual status of the associated channel output in case of power break",
+            "valueSize": 2,
+            "defaultValue": 0,
+            "readOnly": false,
+            "writeOnly": false,
+            "minValue": 0,
+            "maxValue": 1,
+            "allowManualEntry": false,
+            "options": [
+                {
+                    "label": "Disabled",
+                    "value": 0
+                },
+                {
+                    "label": "Enabled",
+                    "value": 1
+                }
+            ]
+        },
+        "72": {
+            "label": "Channel 1 button type",
+            "valueSize": 2,
+            "defaultValue": 1,
+            "readOnly": false,
+            "writeOnly": false,
+            "minValue": 1,
+            "maxValue": 4,
+            "allowManualEntry": false,
+            "options": [
+                {
+                    "label": "Push button",
+                    "description": "Short press is switching On/Off, Long press is Dimming / Brightening, Double press is directly switching to MAX LEVEL",
+                    "value": 1
+                },
+                {
+                    "label": "Toggle switch",
+                    "description": "Each changing of the switch position will change the Output between ON and OFF  statuses.",
+                    "value": 2
+                },
+                {
+                    "label": "Follower switch",
+                    "description": "The output is following the status of the switch: open switch – inactive output, closed switch – active output.",
+                    "value": 3
+                },
+                {
+                    "label": "Pulse",
+                    "description": "The output is switching On for 3 seconds",
+                    "value": 4
+                }
+            ]
+        },
+        "73": {
+            "label": "Channel 2 button type",
+            "valueSize": 2,
+            "defaultValue": 1,
+            "readOnly": false,
+            "writeOnly": false,
+            "minValue": 1,
+            "maxValue": 4,
+            "allowManualEntry": false,
+            "options": [
+                {
+                    "label": "Push button",
+                    "description": "Short press is switching On/Off, Long press is Dimming / Brightening, Double press is directly switching to MAX LEVEL",
+                    "value": 1
+                },
+                {
+                    "label": "Toggle switch",
+                    "description": "Each changing of the switch position will change the Output between ON and OFF  statuses.",
+                    "value": 2
+                },
+                {
+                    "label": "Follower switch",
+                    "description": "The output is following the status of the switch: open switch – inactive output, closed switch – active output.",
+                    "value": 3
+                },
+                {
+                    "label": "Pulse",
+                    "description": "The output is switching On for 3 seconds",
+                    "value": 4
+                }
+            ]
+        },
+        "74": {
+            "label": "Channel 3 button type",
+            "valueSize": 2,
+            "defaultValue": 1,
+            "readOnly": false,
+            "writeOnly": false,
+            "minValue": 1,
+            "maxValue": 4,
+            "allowManualEntry": false,
+            "options": [
+                {
+                    "label": "Push button",
+                    "description": "Short press is switching On/Off, Long press is Dimming / Brightening, Double press is directly switching to MAX LEVEL",
+                    "value": 1
+                },
+                {
+                    "label": "Toggle switch",
+                    "description": "Each changing of the switch position will change the Output between ON and OFF  statuses.",
+                    "value": 2
+                },
+                {
+                    "label": "Follower switch",
+                    "description": "The output is following the status of the switch: open switch – inactive output, closed switch – active output.",
+                    "value": 3
+                },
+                {
+                    "label": "Pulse",
+                    "description": "The output is switching On for 3 seconds",
+                    "value": 4
+                }
+            ]
+        },
+        "75": {
+            "label": "Channel 4 button type",
+            "valueSize": 2,
+            "defaultValue": 1,
+            "readOnly": false,
+            "writeOnly": false,
+            "minValue": 1,
+            "maxValue": 4,
+            "allowManualEntry": false,
+            "options": [
+                {
+                    "label": "Push button",
+                    "description": "Short press is switching On/Off, Long press is Dimming / Brightening, Double press is directly switching to MAX LEVEL",
+                    "value": 1
+                },
+                {
+                    "label": "Toggle switch",
+                    "description": "Each changing of the switch position will change the Output between ON and OFF  statuses.",
+                    "value": 2
+                },
+                {
+                    "label": "Follower switch",
+                    "description": "The output is following the status of the switch: open switch – inactive output, closed switch – active output.",
+                    "value": 3
+                },
+                {
+                    "label": "Pulse",
+                    "description": "The output is switching On for 3 seconds",
+                    "value": 4
+                }
+            ]
+        },
+        "76": {
+            "label": "Channel 5 button type",
+            "valueSize": 2,
+            "defaultValue": 1,
+            "readOnly": false,
+            "writeOnly": false,
+            "minValue": 1,
+            "maxValue": 4,
+            "allowManualEntry": false,
+            "options": [
+                {
+                    "label": "Push button",
+                    "description": "Short press is switching On/Off, Long press is Dimming / Brightening, Double press is directly switching to MAX LEVEL",
+                    "value": 1
+                },
+                {
+                    "label": "Toggle switch",
+                    "description": "Each changing of the switch position will change the Output between ON and OFF  statuses.",
+                    "value": 2
+                },
+                {
+                    "label": "Follower switch",
+                    "description": "The output is following the status of the switch: open switch – inactive output, closed switch – active output.",
+                    "value": 3
+                },
+                {
+                    "label": "Pulse",
+                    "description": "The output is switching On for 3 seconds",
+                    "value": 4
+                }
+            ]
+        },
+        "77": {
+            "label": "Channel 6 button type",
+            "valueSize": 2,
+            "defaultValue": 1,
+            "readOnly": false,
+            "writeOnly": false,
+            "minValue": 1,
+            "maxValue": 4,
+            "allowManualEntry": false,
+            "options": [
+                {
+                    "label": "Push button",
+                    "description": "Short press is switching On/Off, Long press is Dimming / Brightening, Double press is directly switching to MAX LEVEL",
+                    "value": 1
+                },
+                {
+                    "label": "Toggle switch",
+                    "description": "Each changing of the switch position will change the Output between ON and OFF  statuses.",
+                    "value": 2
+                },
+                {
+                    "label": "Follower switch",
+                    "description": "The output is following the status of the switch: open switch – inactive output, closed switch – active output.",
+                    "value": 3
+                },
+                {
+                    "label": "Pulse",
+                    "description": "The output is switching On for 3 seconds",
+                    "value": 4
+                }
+            ]
+        },
+        "78": {
+            "label": "Channel 7 button type",
+            "valueSize": 2,
+            "defaultValue": 1,
+            "readOnly": false,
+            "writeOnly": false,
+            "minValue": 1,
+            "maxValue": 4,
+            "allowManualEntry": false,
+            "options": [
+                {
+                    "label": "Push button",
+                    "description": "Short press is switching On/Off, Long press is Dimming / Brightening, Double press is directly switching to MAX LEVEL",
+                    "value": 1
+                },
+                {
+                    "label": "Toggle switch",
+                    "description": "Each changing of the switch position will change the Output between ON and OFF  statuses.",
+                    "value": 2
+                },
+                {
+                    "label": "Follower switch",
+                    "description": "The output is following the status of the switch: open switch – inactive output, closed switch – active output.",
+                    "value": 3
+                },
+                {
+                    "label": "Pulse",
+                    "description": "The output is switching On for 3 seconds",
+                    "value": 4
+                }
+            ]
+        },
+        "79": {
+            "label": "Channel 8 button type",
+            "valueSize": 2,
+            "defaultValue": 1,
+            "readOnly": false,
+            "writeOnly": false,
+            "minValue": 1,
+            "maxValue": 4,
+            "allowManualEntry": false,
+            "options": [
+                {
+                    "label": "Push button",
+                    "description": "Short press is switching On/Off, Long press is Dimming / Brightening, Double press is directly switching to MAX LEVEL",
+                    "value": 1
+                },
+                {
+                    "label": "Toggle switch",
+                    "description": "Each changing of the switch position will change the Output between ON and OFF  statuses.",
+                    "value": 2
+                },
+                {
+                    "label": "Follower switch",
+                    "description": "The output is following the status of the switch: open switch – inactive output, closed switch – active output.",
+                    "value": 3
+                },
+                {
+                    "label": "Pulse",
+                    "description": "The output is switching On for 3 seconds",
+                    "value": 4
+                }
+            ]
+        },
+        "80": {
+            "label": "Channel 1 dimming mode",
+            "valueSize": 2,
+            "defaultValue": 0,
+            "readOnly": false,
+            "writeOnly": false,
+            "minValue": 0,
+            "maxValue": 1,
+            "allowManualEntry": false,
+            "options": [
+                {
+                    "label": "Trailing Edge",
+                    "value": 0
+                },
+                {
+                    "label": "Leading Edge",
+                    "value": 1
+                }
+            ]
+        },
+        "81": {
+            "label": "Channel 2 dimming mode",
+            "valueSize": 2,
+            "defaultValue": 0,
+            "readOnly": false,
+            "writeOnly": false,
+            "minValue": 0,
+            "maxValue": 1,
+            "allowManualEntry": false,
+            "options": [
+                {
+                    "label": "Trailing Edge",
+                    "value": 0
+                },
+                {
+                    "label": "Leading Edge",
+                    "value": 1
+                }
+            ]
+        },
+        "82": {
+            "label": "Channel 3 dimming mode",
+            "valueSize": 2,
+            "defaultValue": 0,
+            "readOnly": false,
+            "writeOnly": false,
+            "minValue": 0,
+            "maxValue": 1,
+            "allowManualEntry": false,
+            "options": [
+                {
+                    "label": "Trailing Edge",
+                    "value": 0
+                },
+                {
+                    "label": "Leading Edge",
+                    "value": 1
+                }
+            ]
+        },
+        "83": {
+            "label": "Channel 4 dimming mode",
+            "valueSize": 2,
+            "defaultValue": 0,
+            "readOnly": false,
+            "writeOnly": false,
+            "minValue": 0,
+            "maxValue": 1,
+            "allowManualEntry": false,
+            "options": [
+                {
+                    "label": "Trailing Edge",
+                    "value": 0
+                },
+                {
+                    "label": "Leading Edge",
+                    "value": 1
+                }
+            ]
+        },
+        "84": {
+            "label": "Channel 1 soft start",
+            "valueSize": 2,
+            "defaultValue": 1,
+            "readOnly": false,
+            "writeOnly": false,
+            "minValue": 0,
+            "maxValue": 1,
+            "allowManualEntry": false,
+            "options": [
+                {
+                    "label": "Disabled",
+                    "value": 0
+                },
+                {
+                    "label": "Enabled",
+                    "value": 1
+                }
+            ]
+        },
+        "85": {
+            "label": "Channel 2 soft start",
+            "valueSize": 2,
+            "defaultValue": 1,
+            "readOnly": false,
+            "writeOnly": false,
+            "minValue": 0,
+            "maxValue": 1,
+            "allowManualEntry": false,
+            "options": [
+                {
+                    "label": "Disabled",
+                    "value": 0
+                },
+                {
+                    "label": "Enabled",
+                    "value": 1
+                }
+            ]
+        },
+        "86": {
+            "label": "Channel 3 soft start",
+            "valueSize": 2,
+            "defaultValue": 1,
+            "readOnly": false,
+            "writeOnly": false,
+            "minValue": 0,
+            "maxValue": 1,
+            "allowManualEntry": false,
+            "options": [
+                {
+                    "label": "Disabled",
+                    "value": 0
+                },
+                {
+                    "label": "Enabled",
+                    "value": 1
+                }
+            ]
+        },
+        "87": {
+            "label": "Channel 4 soft start",
+            "valueSize": 2,
+            "defaultValue": 1,
+            "readOnly": false,
+            "writeOnly": false,
+            "minValue": 0,
+            "maxValue": 1,
+            "allowManualEntry": false,
+            "options": [
+                {
+                    "label": "Disabled",
+                    "value": 0
+                },
+                {
+                    "label": "Enabled",
+                    "value": 1
+                }
+            ]
+        },
+        "88": {
+            "label": "Channel 1 min level",
+            "valueSize": 2,
+            "defaultValue": 1,
+            "readOnly": false,
+            "writeOnly": false,
+            "minValue": 1,
+            "maxValue": 98,
+            "allowManualEntry": true
+        },
+        "89": {
+            "label": "Channel 2 min level",
+            "valueSize": 2,
+            "defaultValue": 1,
+            "readOnly": false,
+            "writeOnly": false,
+            "minValue": 1,
+            "maxValue": 98,
+            "allowManualEntry": true
+        },
+        "90": {
+            "label": "Channel 3 min level",
+            "valueSize": 2,
+            "defaultValue": 1,
+            "readOnly": false,
+            "writeOnly": false,
+            "minValue": 1,
+            "maxValue": 98,
+            "allowManualEntry": true
+        },
+        "91": {
+            "label": "Channel 4 min level",
+            "valueSize": 2,
+            "defaultValue": 1,
+            "readOnly": false,
+            "writeOnly": false,
+            "minValue": 1,
+            "maxValue": 98,
+            "allowManualEntry": true
+        },
+        "92": {
+            "label": "Channel 1 max level",
+            "valueSize": 2,
+            "defaultValue": 99,
+            "readOnly": false,
+            "writeOnly": false,
+            "minValue": 2,
+            "maxValue": 99,
+            "allowManualEntry": true
+        },
+        "93": {
+            "label": "Channel 2 max level",
+            "valueSize": 2,
+            "defaultValue": 99,
+            "readOnly": false,
+            "writeOnly": false,
+            "minValue": 2,
+            "maxValue": 99,
+            "allowManualEntry": true
+        },
+        "94": {
+            "label": "Channel 3 max level",
+            "valueSize": 2,
+            "defaultValue": 99,
+            "readOnly": false,
+            "writeOnly": false,
+            "minValue": 2,
+            "maxValue": 99,
+            "allowManualEntry": true
+        },
+        "95": {
+            "label": "Channel 4 max level",
+            "valueSize": 2,
+            "defaultValue": 99,
+            "readOnly": false,
+            "writeOnly": false,
+            "minValue": 2,
+            "maxValue": 99,
+            "allowManualEntry": true
+        }
+    },
+    "metadata": {
+        "manual": "http://ekitzone.com/image/catalog/PDF/Haseman_R4D4_Manual.pdf"
+    }
+}
