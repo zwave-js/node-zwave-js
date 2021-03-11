@@ -146,6 +146,31 @@
 			"$import": "templates/kwikset_template.json#reset"
 		}
 	},
+	"compat": {
+		"alarmMapping": [
+			{
+				"from": {
+					"alarmType": 0 // No status reported
+				},
+				"to": {
+					"notificationType": 6, // Access Control
+					"notificationEvent": 0 // idle
+				}
+			},
+			{
+				"from": {
+					"alarmType": 18 // Keypad Lock
+				},
+				"to": {
+					"notificationType": 6, // Access Control
+					"notificationEvent": 5, // Keypad lock operation
+					"eventParameters": {
+						"userId": "alarmLevel"
+					}
+				}
+			}
+		]
+	},
 	"metadata": {
 		"inclusion": "Initiate the process to add the lock to your system at your smart home controller.\nWhen prompted by your smart home system to add the lock, press button “A” on the lock interior one time. The red LED will illuminate when the lock enters Add Mode.\nPlease allow time for the controller to add the lock to your system",
 		"exclusion": "Follow your smart home system’s instructions to remove the lock from the network. When prompted by the system, press button A” on the lock interior once. The red LED will illuminate when the lock enters Remove mode.",
