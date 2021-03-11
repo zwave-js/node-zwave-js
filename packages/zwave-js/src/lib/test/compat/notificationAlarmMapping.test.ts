@@ -29,6 +29,8 @@ describe("compat flags", () => {
 	});
 
 	it("the alarmMapping compat flag works correctly (using the example Kwikset 910)", async () => {
+		jest.setTimeout(30000);
+
 		const node2 = new ZWaveNode(2, driver);
 		((driver.controller.nodes as any) as Map<number, ZWaveNode>).set(
 			2,
