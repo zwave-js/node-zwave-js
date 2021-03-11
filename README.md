@@ -19,6 +19,7 @@
 -   [License](LICENSE)
 -   [Changelog](CHANGELOG.md)
 -   [Documentation](https://zwave-js.github.io/node-zwave-js/)
+-   [Device configuration DB](https://devices.zwave-js.io)
 
 <!--
 TODO: Move all this to the documentation
