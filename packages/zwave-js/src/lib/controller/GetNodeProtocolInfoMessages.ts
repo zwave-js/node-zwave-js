@@ -106,17 +106,9 @@ export class GetNodeProtocolInfoResponse extends Message {
 		this.supportsSecurity = !!(capability & 0b1);
 
 		// parse the device class
-		let offset = 3;
-		let basic: number;
-		if (this.nodeType === NodeType.Controller) {
-			basic = this.payload[offset++];
-		} else {
-			basic = this.isRouting ? 0x04 : 0x03;
-		}
-		const generic = this.payload[offset++];
-		const specific = containsSpecificDeviceClass
-			? this.payload[offset++]
-			: 0x00;
+		const basic = this.payload[3];
+		const generic = this.payload[4];
+		const specific = containsSpecificDeviceClass ? this.payload[5] : 0x00;
 		this.deviceClass = new DeviceClass(
 			this.driver.configManager,
 			basic,
