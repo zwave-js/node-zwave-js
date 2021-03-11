@@ -1011,12 +1011,12 @@ export class ZWaveNode extends Endpoint {
 			await this.queryProtocolInfo();
 		}
 
+		if (this.isListening || this.isFrequentListening) {
+			// Ping non-sleeping nodes to determine their status
+			await this.ping();
+		}
+
 		if (this.interviewStage === InterviewStage.ProtocolInfo) {
-			// We ping listening nodes to ensure that they are actually listening
-			// For all others, the messages are queued for wakeup anyways
-			if (this.isListening && !this.isFrequentListening) {
-				await this.ping();
-			}
 			if (!(await tryInterviewStage(() => this.queryNodeInfo()))) {
 				return false;
 			}
