@@ -19,9 +19,6 @@
 		"min": "0.0",
 		"max": "255.255"
 	},
-	"compat": {
-		"disableStrictEntryControlDataValidation": true
-	},
 	"paramInformation": {
 		"1": {
 			"label": "Battery Report Interval",
@@ -427,6 +424,9 @@
 			"writeOnly": false,
 			"allowManualEntry": false
 		}
+	},
+	"compat": {
+		"disableStrictEntryControlDataValidation": true
 	},
 	"metadata": {
 		"manual": "https://support.ring.com/hc/en-us/article_attachments/360051851012/Keypad_Zwave_UK.pdf"
