@@ -1935,6 +1935,15 @@ ${handlers.length} left`,
 
 					// Tell the send thread that we received a NIF from the node
 					this.sendThread.send({ type: "NIF", nodeId: node.id });
+
+					if (
+						node.canSleep &&
+						node.supportsCC(CommandClasses["Wake Up"])
+					) {
+						// In case this is a sleeping node and there are no messages in the queue, the node may go back to sleep very soon
+						this.debounceSendNodeToSleep(node);
+					}
+
 					return;
 				}
 			}
