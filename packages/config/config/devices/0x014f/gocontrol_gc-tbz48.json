@@ -490,7 +490,7 @@
 			"writeOnly": false,
 			"allowManualEntry": true
 		},
-			"52": {
+		"52": {
 			"label": "Filter Timer",
 			"unit": "hours",
 			"valueSize": 2,
