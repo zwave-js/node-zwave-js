@@ -2,7 +2,7 @@
 // Push Button Deadbolt
 {
 	"manufacturer": "Yale",
-	"manufacturerId": "0x0109",
+	"manufacturerId": "0x0109", // Addresses a series of locks that report the incorrect manufacturerId
 	"label": "YRD210",
 	"description": "Push Button Deadbolt",
 	"devices": [
