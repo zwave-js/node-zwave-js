@@ -331,5 +331,136 @@
 		"readOnly": false,
 		"writeOnly": false,
 		"allowManualEntry": true
+	},
+	"alarm_map_keypad_limit": {
+		"from": {
+			"alarmType": 161,
+			"alarmLevel": 1
+		},
+		"to": {
+			"notificationType": 6,
+			"notificationEvent": 16
+		}
+	},
+	"alarm_map_manual_unlock": {
+		"from": {
+			"alarmType": 22,
+			"alarmLevel": 1
+		},
+		"to": {
+			"notificationType": 6,
+			"notificationEvent": 2
+		}
+	},
+	"alarm_map_rf_unlock": {
+		"from": {
+			"alarmType": 25,
+			"alarmLevel": 1
+		},
+		"to": {
+			"notificationType": 6,
+			"notificationEvent": 4
+		}
+	},
+	"alarm_map_keypad_unlock": {
+		"from": {
+			"alarmType": 19
+		},
+		"to": {
+			"notificationType": 6,
+			"notificationEvent": 6
+		}
+	},
+	"alarm_map_manual_lock": {
+		"from": {
+			"alarmType": 21
+		},
+		"to": {
+			"notificationType": 6,
+			"notificationEvent": 1
+		}
+	},
+	"alarm_map_rf_lock": {
+		"from": {
+			"alarmType": 24,
+			"alarmLevel": 1
+		},
+		"to": {
+			"notificationType": 6,
+			"notificationEvent": 3
+		}
+	},
+	"alarm_map_keypad_lock": {
+		"from": {
+			"alarmType": 18
+		},
+		"to": {
+			"notificationType": 6,
+			"notificationEvent": 5
+		}
+	},
+	"alarm_map_deadbolt_jammed": {
+		"from": {
+			"alarmType": 9
+		},
+		"to": {
+			"notificationType": 6,
+			"notificationEvent": 11
+		}
+	},
+	"alarm_map_non_access": {
+		"from": {
+			"alarmType": 38
+		},
+		"to": {
+			"notificationType": 6,
+			"notificationEvent": 254
+		}
+	},
+	"alarm_map_low_battery": {
+		"from": {
+			"alarmType": 167
+		},
+		"to": {
+			"notificationType": 6,
+			"notificationEvent": 10,
+			"eventParameters": {
+				"userId": "alarmLevel"
+			}
+		}
+	},
+	"alarm_map_auto_relock": {
+		"from": {
+			"alarmType": 27,
+			"alarmLevel": 1
+		},
+		"to": {
+			"notificationType": 6,
+			"notificationEvent": 9
+		}
+	},
+	"alarm_map_disabled_pin_used": {
+		"from": {
+			"alarmType": 131
+		},
+		"to": {
+			"notificationType": 6,
+			"notificationEvent": 254,
+			"eventParameters": {
+				"userId": "alarmLevel"
+			}
+		}
+	},
+	"alarm_map_user_outside_schedule": {
+		"from": {
+			"alarmType": 132
+		},
+		"to": {
+			"notificationType": 6,
+			"notificationEvent": 254,
+			"eventParameters": {
+				"userId": "alarmLevel"
+			}
+		}
 	}
 }
