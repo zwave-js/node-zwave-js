@@ -853,22 +853,24 @@ export class Driver extends EventEmitter {
 
 			// Then do all the nodes in parallel
 			for (const node of this._controller.nodes.values()) {
-				// A node that can sleep should be assumed to be sleeping after resuming from cache
-				if (node.canSleep) node.markAsAsleep();
-
 				if (node.id === this._controller.ownNodeId) {
 					// The controller is always alive
 					node.markAsAlive();
 					continue;
-				} else if (node.interviewStage < InterviewStage.Complete) {
+				} else if (node.canSleep) {
+					// A node that can sleep should be assumed to be sleeping after resuming from cache
+					node.markAsAsleep();
+				}
+
+				// Continue the interview if necessary. If that is not necessary, at least
+				// determine the node's status
+				if (node.interviewStage < InterviewStage.Complete) {
 					// don't await the interview, because it may take a very long time
 					// if a node is asleep
 					void this.interviewNode(node);
-				} else {
-					// The node was already interviewed, ping listening nodes to check their status
-					if (node.isListening) {
-						void node.ping();
-					}
+				} else if (node.isListening || node.isFrequentListening) {
+					// Ping non-sleeping nodes to determine their status
+					void node.ping();
 				}
 			}
 		}
@@ -1933,6 +1935,15 @@ ${handlers.length} left`,
 
 					// Tell the send thread that we received a NIF from the node
 					this.sendThread.send({ type: "NIF", nodeId: node.id });
+
+					if (
+						node.canSleep &&
+						node.supportsCC(CommandClasses["Wake Up"])
+					) {
+						// In case this is a sleeping node and there are no messages in the queue, the node may go back to sleep very soon
+						this.debounceSendNodeToSleep(node);
+					}
+
 					return;
 				}
 			}
