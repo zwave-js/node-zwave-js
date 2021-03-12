@@ -103,7 +103,7 @@
 		"allowManualEntry": true,
 		"options": [
 			{
-				"label": "555",
+				"label": "True Sine Mode",
 				"value": 555
 			}
 		]
