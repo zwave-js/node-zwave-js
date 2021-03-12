@@ -1,10 +1,10 @@
-// Z-Wave.Me
-// Haseman R4D4
+// Haseman
+// R4D4 4x Relay and 4x Universal Dimmer
 {
-	"manufacturer": "Z-Wave.Me",
+	"manufacturer": "Haseman",
 	"manufacturerId": "0x0115",
-	"label": "Haseman R4D4",
-	"description": "4 x relay and 4 x universal dimmers",
+	"label": "R4D4",
+	"description": "4x Relay and 4x Universal Dimmer",
 	"devices": [
 		{
 			"productType": "0xf222",
