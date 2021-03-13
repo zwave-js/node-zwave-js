@@ -1,0 +1,193 @@
+{
+	//Generic for Multiple Devices in Logic Group
+	"enable_central_scene": {
+		"label": "Enable Central Scene notifications",
+		"valueSize": 1,
+		"minValue": 0,
+		"maxValue": 1,
+		"defaultValue": 1,
+		"readOnly": false,
+		"writeOnly": false,
+		"allowManualEntry": false,
+		"options": [
+			{
+				"label": "Disabled",
+				"value": 0
+			},
+			{
+				"label": "Enabled (Default)",
+				"value": 1
+			}
+		]
+	},
+
+	//Primarily ZBA7140 Parameters here and below.
+	"button_pressed_threshold_time": {
+		"label": "Pushbutton press threshold time",
+		"valueSize": 2,
+		"minValue": 1,
+		"maxValue": 1000,
+		"defaultValue": 400,
+		"readOnly": false,
+		"writeOnly": false,
+		"allowManualEntry": true
+	},
+	"button_held_threshold_time": {
+		"label": "Pushbutton held threshold time",
+		"valueSize": 2,
+		"minValue": 1,
+		"maxValue": 5000,
+		"defaultValue": 600,
+		"readOnly": false,
+		"writeOnly": false,
+		"allowManualEntry": true
+	},
+
+	"led_indication": {
+		"label": "LED indication.",
+		"valueSize": 1,
+		"minValue": 0,
+		"maxValue": 2,
+		"defaultValue": 1,
+		"readOnly": false,
+		"writeOnly": false,
+		"allowManualEntry": false,
+		"options": [
+			{
+				"label": "Turned off.",
+				"value": 0
+			},
+			{
+				"label": "Current level of the battery, when the device is in",
+				"value": 1
+			},
+			{
+				"label": "LED colour is set by configuration parameter 5.",
+				"value": 2
+			}
+		]
+	},
+	"association_param_secure": {
+		"label": "Associations groups, transmission when included secure.",
+		"valueSize": 2,
+		"minValue": 0,
+		"maxValue": 255,
+		"defaultValue": 255,
+		"readOnly": false,
+		"writeOnly": false,
+		"allowManualEntry": false,
+		"options": [
+			{
+				"label": "All messages in all groups are sent as insecure.",
+				"value": 0
+			},
+			{
+				"label": "Messages in association group 2 are sent as secure.",
+				"value": 1
+			},
+			{
+				"label": "Messages in association group 3 are sent as secure.",
+				"value": 2
+			},
+			{
+				"label": "Messages in association group 4 are sent as secure.",
+				"value": 4
+			},
+			{
+				"label": "Messages in association group 5 are sent as secure.",
+				"value": 8
+			},
+			{
+				"label": "Messages in association group 6 are sent as secure.",
+				"value": 16
+			},
+			{
+				"label": "Messages in association group 7 are sent as secure.",
+				"value": 32
+			},
+			{
+				"label": "Messages in association group 8 are sent as secure.",
+				"value": 64
+			},
+			{
+				"label": "Messages in association group 9 are sent as secure.",
+				"value": 128
+			},
+			{
+				"label": "All messages in all groups are sent as secure.",
+				"value": 255
+			}
+		]
+	},
+
+	"pushbutton_functionality": {
+		"label": "Pushbutton functionality.",
+		"valueSize": 1,
+		"minValue": 0,
+		"maxValue": 3,
+		"defaultValue": 0,
+		"readOnly": false,
+		"writeOnly": false,
+		"allowManualEntry": true
+	},
+	"led_functionality": {
+		"valueSize": 4,
+		"unsigned": true,
+		"minValue": 0,
+		"maxValue": 255,
+		"defaultValue": 0,
+		"readOnly": false,
+		"writeOnly": false,
+		"allowManualEntry": true
+	},
+	"multilevel_enable": {
+		"valueSize": 4,
+		"minValue": 0,
+		"maxValue": 1,
+		"defaultValue": 1,
+		"readOnly": false,
+		"writeOnly": false,
+		"allowManualEntry": false,
+		"options": [
+			{
+				"label": "Disabled",
+				"value": 0
+			},
+			{
+				"label": "Enabled",
+				"value": 1
+			}
+		]
+	},
+
+	"multilevel_upper_function": {
+		"description": "Upper switch value",
+		"valueSize": 4,
+		"minValue": 0,
+		"maxValue": 255,
+		"defaultValue": 255,
+		"readOnly": false,
+		"writeOnly": false,
+		"allowManualEntry": true
+	},
+	"multilevel_lower_function": {
+		"description": "Lower switch value",
+		"valueSize": 4,
+		"minValue": 0,
+		"maxValue": 99,
+		"defaultValue": 0,
+		"readOnly": false,
+		"writeOnly": false,
+		"allowManualEntry": true
+	},
+	"multilevel_duration_function": {
+		"description": "Duration",
+		"valueSize": 4,
+		"minValue": 0,
+		"maxValue": 255,
+		"defaultValue": 0,
+		"readOnly": false,
+		"writeOnly": false,
+		"allowManualEntry": true
+	}
+}

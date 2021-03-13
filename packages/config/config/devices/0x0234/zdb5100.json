@@ -4,7 +4,7 @@
 	"manufacturer": "Logic Group",
 	"manufacturerId": "0x0234",
 	"label": "ZDB5100",
-	"description": "MATRIX Switch with Dimmer and Backlight",
+	"description": "Wall Switch",
 	"devices": [
 		{
 			"productType": "0x0003",
@@ -16,15 +16,109 @@
 		"min": "0.0",
 		"max": "255.255"
 	},
+<<<<<<< Updated upstream
+=======
+	"associations": {
+		"1": {
+			"label": "Lifeline",
+			"description": "Sends Device Reset notifications, and Central Scene notifications.",
+			"maxNodes": 5,
+			"isLifeline": true
+		},
+		"2": {
+			"label": "Basic Report, Pushbutton 1",
+			"maxNodes": 5
+		},
+		"3": {
+			"label": "Binary Switch Report, Pushbutton 1",
+			"maxNodes": 5
+		},
+		"4": {
+			"label": "Multi-Level Report, Pushbutton 1",
+			"maxNodes": 5
+		},
+		"5": {
+			"label": "Basic Report, Pushbutton 2",
+			"maxNodes": 5
+		},
+		"6": {
+			"label": "Binary Switch Report, Pushbutton 2",
+			"maxNodes": 5
+		},
+		"7": {
+			"label": "Multi-Level Report, Pushbutton 2",
+			"maxNodes": 5
+		},
+		"8": {
+			"label": "Basic Report, Pushbutton 3",
+			"maxNodes": 5
+		},
+		"9": {
+			"label": "Binary Switch Report, Pushbutton 3",
+			"maxNodes": 5
+		},
+		"10": {
+			"label": "Multi-Level Report, Pushbutton 3",
+			"maxNodes": 5
+		},
+		"11": {
+			"label": "Basic Report, Pushbutton 4",
+			"maxNodes": 5
+		},
+		"12": {
+			"label": "Binary Switch Report, Pushbutton 4",
+			"maxNodes": 5
+		},
+		"13": {
+			"label": "Multi-Level Report, Pushbutton 4",
+			"maxNodes": 5
+		},
+		"14": {
+			"label": "Dimmer Basic Report",
+			"maxNodes": 5
+		}
+	},
+>>>>>>> Stashed changes
 	"paramInformation": {
+		"1": {
+			"label": "Operating pushbutton(s) for dimmer",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 15,
+			"defaultValue": 1,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Disabled",
+					"value": 0
+				},
+				{
+					"label": "Push Button 1",
+					"value": 1
+				},
+				{
+					"label": "Push Button 2",
+					"value": 2
+				},
+				{
+					"label": "Push Button 3",
+					"value": 4
+				},
+				{
+					"label": "Push Button 4",
+					"value": 8
+				}
+			]
+		},
 		"2": {
 			"label": "Duration of dimming",
-			"description": "Specifies the duration of a full regulation of the light from 0% to 100%",
 			"valueSize": 1,
+			"unsigned": true,
 			"minValue": 0,
 			"maxValue": 255,
 			"defaultValue": 5,
-			"unsigned": true,
 			"readOnly": false,
 			"writeOnly": false,
 			"allowManualEntry": false,
@@ -44,13 +138,17 @@
 			]
 		},
 		"3": {
+<<<<<<< Updated upstream
 			"label": "Duration of On/Off",
 			"description": "This parameter specifies the duration when turning the light on or off",
+=======
+			"label": "Duration of on/off",
+>>>>>>> Stashed changes
 			"valueSize": 1,
+			"unsigned": true,
 			"minValue": 0,
 			"maxValue": 255,
 			"defaultValue": 0,
-			"unsigned": true,
 			"readOnly": false,
 			"writeOnly": false,
 			"allowManualEntry": true,
@@ -70,7 +168,11 @@
 			]
 		},
 		"4": {
+<<<<<<< Updated upstream
 			"label": "Dimmer Mode",
+=======
+			"label": "Dimmer mode",
+>>>>>>> Stashed changes
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 2,
@@ -81,7 +183,11 @@
 			"allowManualEntry": false,
 			"options": [
 				{
+<<<<<<< Updated upstream
 					"label": "No dimming, only on/off (0/100%)",
+=======
+					"label": "No dimming, only on/off (0%/100%)",
+>>>>>>> Stashed changes
 					"value": 0
 				},
 				{
@@ -95,7 +201,12 @@
 			]
 		},
 		"5": {
+<<<<<<< Updated upstream
 			"label": "Dimmer Minimum Level",
+=======
+			"label": "Dimmer minimum level",
+			"unit": "%",
+>>>>>>> Stashed changes
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 99,
@@ -106,7 +217,12 @@
 			"allowManualEntry": true
 		},
 		"6": {
+<<<<<<< Updated upstream
 			"label": "Dimmer Maximum Level",
+=======
+			"label": "Dimmer maximum level",
+			"unit": "%",
+>>>>>>> Stashed changes
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 99,
@@ -117,7 +233,11 @@
 			"allowManualEntry": true
 		},
 		"7": {
+<<<<<<< Updated upstream
 			"label": "Central Scene Notifications",
+=======
+			"label": "Central Scene notifications",
+>>>>>>> Stashed changes
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 1,
@@ -128,21 +248,34 @@
 			"allowManualEntry": false,
 			"options": [
 				{
+<<<<<<< Updated upstream
 					"label": "Notifications are disabled",
 					"value": 0
 				},
 				{
 					"label": "Notifications are enabled",
+=======
+					"label": "Disabled.",
+					"value": 0
+				},
+				{
+					"label": "Enabled",
+>>>>>>> Stashed changes
 					"value": 1
 				}
 			]
 		},
 		"8": {
+<<<<<<< Updated upstream
 			"label": "Double-activation Functionality",
+=======
+			"label": "Double-activation functionality",
+>>>>>>> Stashed changes
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 1,
 			"defaultValue": 1,
+<<<<<<< Updated upstream
 			"unsigned": true,
 			"readOnly": false,
 			"writeOnly": false,
@@ -166,20 +299,31 @@
 			"maxValue": 1,
 			"defaultValue": 1,
 			"unsigned": true,
+=======
+>>>>>>> Stashed changes
 			"readOnly": false,
 			"writeOnly": false,
 			"allowManualEntry": false,
 			"options": [
 				{
+<<<<<<< Updated upstream
 					"label": "Triple-activation of pushbutton 1, does not start the add/remove process\"",
 					"value": 0
 				},
 				{
 					"label": "Triple-activation of pushbutton 1, starts the add/remove process",
+=======
+					"label": "Disabled.",
+					"value": 0
+				},
+				{
+					"label": "Sets light to 100%.",
+>>>>>>> Stashed changes
 					"value": 1
 				}
 			]
 		},
+
 		"10": {
 			"label": "Enhanced LED control",
 			"valueSize": 1,
@@ -191,54 +335,164 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "Enhanced LED control is disabled.",
+					"label": "Disabled (Default)",
 					"value": 0
 				},
 				{
-					"label": "Enhanced LED control is enabled.",
+					"label": "Enabled",
 					"value": 1
 				}
 			]
 		},
 		"11": {
+<<<<<<< Updated upstream
 			"label": "Pushbutton Debounce Timer",
 			"description": "0 – 2.55 seconds. default is 5, which equals to a debounce-filter on 50 milliseconds (0.05 seconds)",
 			"valueSize": 1,
 			"unit": "0.1 seconds",
 			"minValue": 0,
+=======
+			"label": "Pushbutton debounce timer",
+			"unit": "0.01 seconds",
+			"valueSize": 1,
+			"unsigned": true,
+			"minValue": 1,
+>>>>>>> Stashed changes
 			"maxValue": 255,
 			"defaultValue": 5,
-			"unsigned": true,
 			"readOnly": false,
 			"writeOnly": false,
 			"allowManualEntry": true
 		},
 		"12": {
+<<<<<<< Updated upstream
 			"label": "Pushbutton Press Threshold Time",
 			"description": "0 – 2.55 seconds. default is 20, which equals to 200 milliseconds (0.2 seconds)",
 			"valueSize": 1,
 			"unit": "0.1 seconds",
 			"minValue": 0,
+=======
+			"label": "Pushbutton press threshold time",
+			"unit": "0.01 seconds",
+			"valueSize": 1,
+			"unsigned": true,
+			"minValue": 1,
+>>>>>>> Stashed changes
 			"maxValue": 255,
 			"defaultValue": 20,
-			"unsigned": true,
 			"readOnly": false,
 			"writeOnly": false,
 			"allowManualEntry": true
 		},
 		"13": {
+<<<<<<< Updated upstream
 			"label": "Pushbutton Held Threshold Time",
 			"description": "0 – 2.55 seconds. default is 50, which equals to 500 milliseconds (0,5 seconds)",
 			"valueSize": 1,
 			"unit": "0.1 seconds",
 			"minValue": 0,
+=======
+			"label": "Pushbutton held threshold time.",
+			"unit": "0.01 seconds",
+			"valueSize": 1,
+			"unsigned": true,
+			"minValue": 1,
+>>>>>>> Stashed changes
 			"maxValue": 255,
 			"defaultValue": 50,
-			"unsigned": true,
 			"readOnly": false,
 			"writeOnly": false,
 			"allowManualEntry": true
 		},
+		"14[0xff]": {
+			"label": "Global brightness Red LED level",
+			"valueSize": 4,
+			"unsigned": true,
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 127,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"14[0xff00]": {
+			"label": "Global brightness Green LED level",
+			"valueSize": 4,
+			"unsigned": true,
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 127,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"14[0xff0000]": {
+			"label": "Global brightness Blue LED level",
+			"valueSize": 4,
+			"unsigned": true,
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 127,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"15": {
+			"label": "Associations groups",
+			"valueSize": 2,
+			"unsigned": true,
+			"minValue": 0,
+			"maxValue": 65535,
+			"defaultValue": 8191,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"16": {
+			"label": "Pushbutton 1 functionality",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 4,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Standard toggle-function",
+					"value": 0
+				},
+				{
+					"label": "Automatic turn off",
+					"value": 1
+				},
+				{
+					"label": "Automatic turn on",
+					"value": 2
+				},
+				{
+					"label": "Always turn off or dim down",
+					"value": 3
+				},
+				{
+					"label": "Always turn on or dim up",
+					"value": 4
+				}
+			]
+		},
+		"17": {
+			"label": "Timer value for pushbutton 1",
+			"unit": "1.0 seconds",
+			"valueSize": 2,
+			"unsigned": true,
+			"minValue": 0,
+			"maxValue": 43200,
+			"defaultValue": 300,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+<<<<<<< Updated upstream
 		"14": {
 			"label": "Global Brightness Control",
 			"description": "This parameter specifies a common brightness for each of the three base colours for all four pushbutton indicators. byte 1: red brightness.  byte 2: green brightness.  byte 3: blue brightness.  byte 4: not used – must be set to 0",
@@ -374,10 +628,20 @@
 			"maxValue": 300,
 			"defaultValue": 300,
 			"unsigned": true,
+=======
+		"18": {
+			"label": "Multi-Level Switch Set values for pushbutton 1",
+			"valueSize": 4,
+			"unsigned": true,
+			"minValue": 0,
+			"maxValue": 4294967295,
+			"defaultValue": 33488896,
+>>>>>>> Stashed changes
 			"readOnly": false,
 			"writeOnly": false,
 			"allowManualEntry": true
 		},
+<<<<<<< Updated upstream
 		"18": {
 			"label": "Multi-Level Switch Set Values For Pushbutton 1",
 			"description": "Byte 1: enable / disable byte 2: upper switch value byte 3: lower switch value byte 4: not used – must be set to 0",
@@ -411,16 +675,24 @@
 		"19": {
 			"label": "Binary Switch Set Support For Pushbutton 1",
 			"description": "This parameter specifies how received binary switch set commands are handled",
+=======
+		"19": {
+			"label": "Binary Switch Set support for pushbutton 1",
+>>>>>>> Stashed changes
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 2,
 			"defaultValue": 0,
+<<<<<<< Updated upstream
 			"unsigned": true,
+=======
+>>>>>>> Stashed changes
 			"readOnly": false,
 			"writeOnly": false,
 			"allowManualEntry": false,
 			"options": [
 				{
+<<<<<<< Updated upstream
 					"label": "Binary switch set only controls the pushbutton indicator leds, on/off",
 					"value": 0
 				},
@@ -430,13 +702,28 @@
 				},
 				{
 					"label": "Binary switch set is handled as if the user had activated the pushbutton, including transmission of commands via the association groups",
+=======
+					"label": "Controls LED",
+					"value": 0
+				},
+				{
+					"label": "Controls switch and LED",
+					"value": 1
+				},
+				{
+					"label": "As if pushbutton activated",
+>>>>>>> Stashed changes
 					"value": 2
 				}
 			]
 		},
 		"20": {
+<<<<<<< Updated upstream
 			"label": "Pushbutton 1 LED Indication",
 			"description": "This parameter specifies how the LED indication is controlled",
+=======
+			"label": "Pushbutton 1 LED indication",
+>>>>>>> Stashed changes
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 7,
@@ -506,24 +793,109 @@
 				}
 			]
 		},
+<<<<<<< Updated upstream
 		"22": {
 			"label": "On Indication Rgb-saturation For Pushbutton 1",
 			"description": "This parameter specifies the saturation levels for the red, green and blue leds, when on status is indicated. (default is the on-state indicated by a 50% blue colour). byte 1: colour saturation, red. byte 2: colour saturation, green. byte 3: colour saturation, blue. byte 4: LED control",
+=======
+		"22[0xff]": {
+			"label": "LEDs colour for pushbutton 1 ON indication",
+			"description": "Red colour",
+>>>>>>> Stashed changes
 			"valueSize": 4,
-			"minValue": 0,
-			"maxValue": 4294967295,
-			"defaultValue": 32512,
 			"unsigned": true,
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 0,
 			"readOnly": false,
 			"writeOnly": false,
 			"allowManualEntry": true
 		},
+		"22[0xff00]": {
+			"label": "LEDs colour for pushbutton 1 ON indication",
+			"description": "Green colour",
+			"valueSize": 4,
+			"unsigned": true,
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+<<<<<<< Updated upstream
 		"23": {
 			"label": "Off Indication Rgb-saturation For Pushbutton 1",
 			"description": "This parameter specifies the saturation levels for the red, green and blue leds, when off status is indicated. (default is the off-state indicated as a low white light on 5%). byte 1: colour saturation, red. byte 2: colour saturation, green. byte 3: colour saturation, blue. byte 4: LED control",
+=======
+		"22[0xff0000]": {
+			"label": "LEDs colour for pushbutton 1 ON indication",
+			"description": "Blue colour",
+>>>>>>> Stashed changes
 			"valueSize": 4,
+			"unsigned": true,
 			"minValue": 0,
-			"maxValue": 65535,
+			"maxValue": 255,
+			"defaultValue": 127,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"22[0xff000000]": {
+			"label": "LED Time for pushbutton 1 blinking",
+			"unit": "x0.1 sec",
+			"valueSize": 4,
+			"unsigned": true,
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"23[0xff]": {
+			"label": "LEDs colour for pushbutton 1 OFF indication",
+			"description": "Red colour",
+			"valueSize": 4,
+			"unsigned": true,
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 47,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"23[0xff00]": {
+			"label": "LEDs colour for pushbutton 1 OFF indication",
+			"description": "Green colour",
+			"valueSize": 4,
+			"unsigned": true,
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 47,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"23[0xff0000]": {
+			"label": "LEDs colour for pushbutton 1 OFF indication",
+			"description": "Blue colour",
+			"valueSize": 4,
+			"unsigned": true,
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"23[0xff000000]": {
+			"label": "LED Time for pushbutton 1 blinking",
+			"unit": "x0.1 sec",
+			"valueSize": 4,
+			"unsigned": true,
+			"minValue": 0,
+			"maxValue": 255,
 			"defaultValue": 0,
 			"unsigned": true,
 			"readOnly": false,
@@ -565,13 +937,18 @@
 			]
 		},
 		"25": {
+<<<<<<< Updated upstream
 			"label": "Timer Value For Pushbutton 2",
 			"description": "This parameter specifies the time used in previous configuration parameter. this parameter is only applicable if previous parameter has value 1 or 2",
+=======
+			"label": "Timer value for pushbutton 2",
+			"unit": "x1.0 seconds",
+>>>>>>> Stashed changes
 			"valueSize": 2,
+			"unsigned": true,
 			"minValue": 0,
 			"maxValue": 43200,
 			"defaultValue": 300,
-			"unsigned": true,
 			"readOnly": false,
 			"writeOnly": false,
 			"allowManualEntry": true
@@ -580,10 +957,16 @@
 			"label": "Multi-Level Switch Set Values For Pushbutton 2",
 			"description": "Byte 1: enable / disable. byte 2: upper switch value. byte 3: lower switch value. byte 4: not used – must be set to 0",
 			"valueSize": 4,
+			"unsigned": true,
 			"minValue": 0,
+<<<<<<< Updated upstream
 			"maxValue": 255,
 			"defaultValue": 0,
 			"unsigned": true,
+=======
+			"maxValue": 4294967295,
+			"defaultValue": 33488896,
+>>>>>>> Stashed changes
 			"readOnly": false,
 			"writeOnly": false,
 			"allowManualEntry": true,
@@ -619,22 +1002,27 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "control pushbutton indicator LEDs",
+					"label": "Controls LED",
 					"value": 0
 				},
 				{
-					"label": "Controls LED's and state",
+					"label": "Controls switch and LED",
 					"value": 1
 				},
 				{
-					"label": "As activated the pushbutton",
+					"label": "As if pushbutton activated",
 					"value": 2
 				}
 			]
 		},
 		"28": {
+<<<<<<< Updated upstream
 			"label": "Pushbutton 2 LED Indication",
 			"description": "This parameter specifies how the LED indication is controlled",
+=======
+			"label": "Pushbutton 2 LED indication.",
+			"description": "Pushbutton 2 LED indication.",
+>>>>>>> Stashed changes
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 7,
@@ -673,7 +1061,11 @@
 					"value": 6
 				},
 				{
+<<<<<<< Updated upstream
 					"label": "The LED indicator is on for 5 seconds when the pushbutton is activated",
+=======
+					"label": "On for 5 sec",
+>>>>>>> Stashed changes
 					"value": 7
 				}
 			]
@@ -704,33 +1096,132 @@
 				}
 			]
 		},
+<<<<<<< Updated upstream
 		"30": {
 			"label": "On Indication Rgb-saturation For Pushbutton 2",
 			"description": "This parameter specifies the saturation levels for the red, green and blue leds, when on status is indicated. (default is the on-state indicated by a 50% blue colour). byte 1: colour saturation, red. byte 2: colour saturation, green. byte 3: colour saturation, blue. byte 4: LED control",
+=======
+		"30[0xff]": {
+			"label": "LEDs colour for pushbutton 2 ON indication",
+			"description": "Red colour",
+>>>>>>> Stashed changes
 			"valueSize": 4,
+			"unsigned": true,
 			"minValue": 0,
+<<<<<<< Updated upstream
 			"maxValue": 4294967295,
 			"defaultValue": 0,
-			"unsigned": true,
+=======
+			"maxValue": 255,
+			"defaultValue": 0,
 			"readOnly": false,
 			"writeOnly": false,
 			"allowManualEntry": true
 		},
+		"30[0xff00]": {
+			"label": "LEDs colour for pushbutton 2 ON indication",
+			"description": "Green colour",
+			"valueSize": 4,
+>>>>>>> Stashed changes
+			"unsigned": true,
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+<<<<<<< Updated upstream
 		"31": {
 			"label": "Off Indication Rgb-saturation For Pushbutton 2",
 			"description": "This parameter specifies the saturation levels for the red, green and blue leds, when off status is indicated. (default is the off-state indicated as a low white light on 5%). byte 1: colour saturation, red. byte 2: colour saturation, green. byte 3: colour saturation, blue. byte 4: LED control",
+=======
+		"30[0xff0000]": {
+			"label": "LEDs colour for pushbutton 2 ON indication",
+			"description": "Blue colour",
+>>>>>>> Stashed changes
 			"valueSize": 4,
+			"unsigned": true,
 			"minValue": 0,
+<<<<<<< Updated upstream
 			"maxValue": 4294967295,
 			"defaultValue": 255,
+=======
+			"maxValue": 255,
+			"defaultValue": 127,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"30[0xff000000]": {
+			"label": "LED Time for pushbutton 2 blinking",
+			"unit": "x0.1 sec",
+			"valueSize": 4,
 			"unsigned": true,
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"31[0xff]": {
+			"label": "LEDs colour for pushbutton 2 OFF indication",
+			"description": "Red colour",
+			"valueSize": 4,
+>>>>>>> Stashed changes
+			"unsigned": true,
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 47,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"31[0xff00]": {
+			"label": "LEDs colour for pushbutton 2 OFF indication",
+			"description": "Green colour",
+			"valueSize": 4,
+			"unsigned": true,
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 47,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"31[0xff0000]": {
+			"label": "LEDs colour for pushbutton 2 OFF indication",
+			"description": "Blue colour",
+			"valueSize": 4,
+			"unsigned": true,
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"31[0xff000000]": {
+			"label": "LED Time for pushbutton 2 blinking",
+			"unit": "x0.1 sec",
+			"valueSize": 4,
+			"unsigned": true,
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 0,
 			"readOnly": false,
 			"writeOnly": false,
 			"allowManualEntry": true
 		},
 		"32": {
+<<<<<<< Updated upstream
 			"label": "Pushbutton 3 Functionality",
 			"description": "This parameter specifies the functionality of pushbutton 3",
+=======
+			"label": "Pushbutton 3 functionality",
+			"description": "Pushbutton 3 functionality",
+>>>>>>> Stashed changes
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 4,
@@ -763,14 +1254,20 @@
 			]
 		},
 		"33": {
+<<<<<<< Updated upstream
 			"label": "Timer Value For Pushbutton 3",
 			"description": "Specifies the time in seconds. default is 300 = 5 minutes",
 			"valueSize": 2,
 			"unit": "seconds",
+=======
+			"label": "Timer value for pushbutton 3",
+			"unit": "x1.0 seconds",
+			"valueSize": 2,
+			"unsigned": true,
+>>>>>>> Stashed changes
 			"minValue": 0,
 			"maxValue": 43200,
 			"defaultValue": 300,
-			"unsigned": true,
 			"readOnly": false,
 			"writeOnly": false,
 			"allowManualEntry": true
@@ -779,10 +1276,16 @@
 			"label": "Multi-Level Switch Set Values For Pushbutton 3",
 			"description": "Byte 1: enable / disable. byte 2: upper switch value. byte 3: lower switch value. byte 4: not used – must be set to 0",
 			"valueSize": 4,
+			"unsigned": true,
 			"minValue": 0,
+<<<<<<< Updated upstream
 			"maxValue": 255,
 			"defaultValue": 0,
 			"unsigned": true,
+=======
+			"maxValue": 4294967295,
+			"defaultValue": 33488896,
+>>>>>>> Stashed changes
 			"readOnly": false,
 			"writeOnly": false,
 			"allowManualEntry": true,
@@ -818,6 +1321,7 @@
 			"allowManualEntry": false,
 			"options": [
 				{
+<<<<<<< Updated upstream
 					"label": "Binary switch set only controls the pushbutton indicator leds, on/off",
 					"value": 0
 				},
@@ -827,6 +1331,17 @@
 				},
 				{
 					"label": "Binary switch set is handled as if the user had activated the pushbutton, including transmission of commands via the association groups",
+=======
+					"label": "Controls LED",
+					"value": 0
+				},
+				{
+					"label": "Controls switch and LED",
+					"value": 1
+				},
+				{
+					"label": "As if pushbutton activated",
+>>>>>>> Stashed changes
 					"value": 2
 				}
 			]
@@ -872,7 +1387,7 @@
 					"value": 6
 				},
 				{
-					"label": "ON for 5 seconds when the pushbutton is activated",
+					"label": "On for 5 sec",
 					"value": 7
 				}
 			]
@@ -903,26 +1418,110 @@
 				}
 			]
 		},
+<<<<<<< Updated upstream
 		"38": {
 			"label": "On Indication Rgb-saturation For Pushbutton 3",
 			"description": "This parameter specifies the saturation levels for the red, green and blue leds, when on status is indicated. (default is the on-state indicated by a 50% blue colour). byte 1: colour saturation, red. byte 2: colour saturation, green. byte 3: colour saturation, blue. byte 4: LED control",
+=======
+		"38[0xff]": {
+			"label": "LEDs colour for pushbutton 3 ON indication",
+			"description": "Red colour",
+>>>>>>> Stashed changes
 			"valueSize": 4,
-			"minValue": 0,
-			"maxValue": 4294967295,
-			"defaultValue": 32512,
 			"unsigned": true,
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 0,
 			"readOnly": false,
 			"writeOnly": false,
 			"allowManualEntry": true
 		},
+		"38[0xff00]": {
+			"label": "LEDs colour for pushbutton 3 ON indication",
+			"description": "Green colour",
+			"valueSize": 4,
+			"unsigned": true,
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"38[0xff0000]": {
+			"label": "LEDs colour for pushbutton 3 ON indication",
+			"description": "Blue colour",
+			"valueSize": 4,
+			"unsigned": true,
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 127,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+<<<<<<< Updated upstream
 		"39": {
 			"label": "Off Indication Rgb-saturation For Pushbutton 3",
 			"description": "This parameter specifies the saturation levels for the red, green and blue leds, when off status is indicated. (default is the off-state indicated as a low white light on 5%). byte 1: colour saturation, red. byte 2: colour saturation, green. byte 3: colour saturation, blue. byte 4: LED control",
+=======
+		"38[0xff000000]": {
+			"label": "LED Time for pushbutton 3 blinking",
+			"unit": "x0.1 sec",
+>>>>>>> Stashed changes
 			"valueSize": 4,
-			"minValue": 0,
-			"maxValue": 4294967295,
-			"defaultValue": 791621376,
 			"unsigned": true,
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"39[0xff]": {
+			"label": "LEDs colour for pushbutton 3 OFF indication",
+			"description": "Red colour",
+			"valueSize": 4,
+			"unsigned": true,
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 47,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"39[0xff00]": {
+			"label": "LEDs colour for pushbutton 3 OFF indication",
+			"description": "Green colour",
+			"valueSize": 4,
+			"unsigned": true,
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 47,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"39[0xff0000]": {
+			"label": "LEDs colour for pushbutton 3 OFF indication",
+			"description": "Blue colour",
+			"valueSize": 4,
+			"unsigned": true,
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"39[0xff000000]": {
+			"label": "LED Time for pushbutton 3 blinking",
+			"unit": "x0.1 sec",
+			"valueSize": 4,
+			"unsigned": true,
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 0,
 			"readOnly": false,
 			"writeOnly": false,
 			"allowManualEntry": true
@@ -962,14 +1561,20 @@
 			]
 		},
 		"41": {
+<<<<<<< Updated upstream
 			"label": "Timer Value For Pushbutton 4",
 			"description": "Specifies the time in seconds. default is 300 = 5 minutes",
 			"valueSize": 2,
 			"unit": "seconds",
+=======
+			"label": "Timer value for pushbutton 4",
+			"unit": "x1.0 seconds",
+			"valueSize": 2,
+			"unsigned": true,
+>>>>>>> Stashed changes
 			"minValue": 0,
 			"maxValue": 43200,
 			"defaultValue": 300,
-			"unsigned": true,
 			"readOnly": false,
 			"writeOnly": false,
 			"allowManualEntry": true
@@ -978,10 +1583,10 @@
 			"label": "Multi-Level Switch Set Values For Pushbutton 4",
 			"description": "Byte 1: enable / disable. byte 2: upper switch value. byte 3: lower switch value. byte 4: not used – must be set to 0",
 			"valueSize": 4,
+			"unsigned": true,
 			"minValue": 0,
 			"maxValue": 4294967295,
 			"defaultValue": 33488896,
-			"unsigned": true,
 			"readOnly": false,
 			"writeOnly": false,
 			"allowManualEntry": true,
@@ -1017,6 +1622,7 @@
 			"allowManualEntry": false,
 			"options": [
 				{
+<<<<<<< Updated upstream
 					"label": "Binary switch set only controls the pushbutton indicator leds, on/off",
 					"value": 0
 				},
@@ -1026,6 +1632,17 @@
 				},
 				{
 					"label": "Binary switch set is handled as if the user had activated the pushbutton, including transmission of commands via the association groups",
+=======
+					"label": "Controls LED",
+					"value": 0
+				},
+				{
+					"label": "Controls switch and LED",
+					"value": 1
+				},
+				{
+					"label": "As if pushbutton activated",
+>>>>>>> Stashed changes
 					"value": 2
 				}
 			]
@@ -1071,7 +1688,7 @@
 					"value": 6
 				},
 				{
-					"label": "ON for 5 seconds when the pushbutton is activated",
+					"label": "On for 5 sec",
 					"value": 7
 				}
 			]
@@ -1102,69 +1719,101 @@
 				}
 			]
 		},
+<<<<<<< Updated upstream
 		"46": {
 			"label": "On Indication Rgb-saturation For Pushbutton 4",
 			"description": "This parameter specifies the saturation levels for the red, green and blue leds, when on status is indicated. (default is the on-state indicated by a 50% blue colour). byte 1: colour saturation, red. byte 2: colour saturation, green. byte 3: colour saturation, blue. byte 4: LED control",
+=======
+		"46[0xff]": {
+			"label": "LEDs colour for pushbutton 4 ON indication",
+			"description": "Red colour",
+>>>>>>> Stashed changes
 			"valueSize": 4,
 			"minValue": 0,
-			"maxValue": 4294967295,
-			"defaultValue": 32512,
-			"unsigned": true,
+			"maxValue": 127,
+			"defaultValue": 0,
 			"readOnly": false,
 			"writeOnly": false,
 			"allowManualEntry": true
 		},
+<<<<<<< Updated upstream
 		"47": {
 			"label": "Off Indication Rgb-saturation For Pushbutton 4",
 			"description": "This parameter specifies the saturation levels for the red, green and blue leds, when off status is indicated. (default is the off-state indicated as a low white light on 5%). byte 1: colour saturation, red. byte 2: colour saturation, green. byte 3: colour saturation, blue. byte 4: LED control",
+=======
+		"46[0xff00]": {
+			"label": "LEDs colour for pushbutton 4 ON indication",
+			"description": "Green colour",
+>>>>>>> Stashed changes
 			"valueSize": 4,
 			"minValue": 0,
-			"maxValue": 4294967295,
-			"defaultValue": 791621376,
-			"unsigned": true,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
-		},
-		"1[0x01]": {
-			"label": "Pushbutton 1 controls the dimmer",
-			"description": "Enabling this parameter lets pushbutton 1 control the built-in dimmer.",
-			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 1,
-			"defaultValue": 1,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
-		},
-		"1[0x02]": {
-			"label": "Pushbutton 2 controls the dimmer",
-			"description": "Enabling this parameter lets pushbutton 2 control the built-in dimmer.",
-			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 1,
+			"maxValue": 127,
 			"defaultValue": 0,
 			"readOnly": false,
 			"writeOnly": false,
 			"allowManualEntry": true
 		},
-		"1[0x04]": {
-			"label": "Pushbutton 3 controls the dimmer",
-			"description": "Enabling this parameter lets pushbutton 3 control the built-in dimmer.",
-			"valueSize": 1,
+		"46[0xff0000]": {
+			"label": "LEDs colour for pushbutton 4 ON indication",
+			"description": "Blue colour",
+			"valueSize": 4,
 			"minValue": 0,
-			"maxValue": 1,
+			"maxValue": 127,
+			"defaultValue": 127,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"46[0xff000000]": {
+			"label": "LED Time for pushbutton 4 blinking",
+			"unit": "x0.1 sec",
+			"valueSize": 4,
+			"minValue": 0,
+			"maxValue": 127,
 			"defaultValue": 0,
 			"readOnly": false,
 			"writeOnly": false,
 			"allowManualEntry": true
 		},
-		"1[0x08]": {
-			"label": "Pushbutton 4 controls the dimmer",
-			"description": "Enabling this parameter lets pushbutton 4 control the built-in dimmer.",
-			"valueSize": 1,
+		"47[0xff]": {
+			"label": "LEDs colour for pushbutton 4 OFF indication",
+			"description": "Red colour",
+			"valueSize": 4,
 			"minValue": 0,
-			"maxValue": 1,
+			"maxValue": 127,
+			"defaultValue": 47,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"47[0xff00]": {
+			"label": "LEDs colour for pushbutton 4 OFF indication",
+			"description": "Green colour",
+			"valueSize": 4,
+			"minValue": 0,
+			"maxValue": 127,
+			"defaultValue": 47,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"47[0xff0000]": {
+			"label": "LEDs colour for pushbutton 4 OFF indication",
+			"description": "Blue colour",
+			"valueSize": 4,
+			"minValue": 0,
+			"maxValue": 127,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"47[0xff000000]": {
+			"label": "LED Time for pushbutton 4 blinking",
+			"unit": "x0.1 sec",
+			"valueSize": 4,
+			"minValue": 0,
+			"maxValue": 127,
 			"defaultValue": 0,
 			"readOnly": false,
 			"writeOnly": false,

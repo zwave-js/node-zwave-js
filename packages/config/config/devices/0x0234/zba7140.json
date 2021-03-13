@@ -1,0 +1,247 @@
+// Logic Group MATRIX ZBA7140
+// Matrix ZBA7140
+{
+	"manufacturer": "Logic Group",
+	"manufacturerId": "0x0234",
+	"label": "ZBA7140",
+	"description": "Wireless switch",
+	"devices": [
+		{
+			"productType": "0x0004",
+			"productId": "0x0129"
+			//"zwaveAllianceId":
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"associations": {
+		"1": {
+			"label": "Lifeline",
+			"maxNodes": 5,
+			"isLifeline": true
+		},
+		"2": {
+			"label": "Button 1 Basic",
+			"maxNodes": 5
+		},
+		"3": {
+			"label": "Button 1 Multilevel",
+			"maxNodes": 5
+		},
+		"4": {
+			"label": "Button 2 Basic",
+			"maxNodes": 5
+		},
+		"5": {
+			"label": "Button 4 Basic",
+			"maxNodes": 5
+		},
+		"6": {
+			"label": "Button 3 Basic",
+			"maxNodes": 5
+		},
+		"7": {
+			"label": "Button 3 Multilevel",
+			"maxNodes": 5
+		},
+		"9": {
+			"label": "Button 4 Multilevel",
+			"maxNodes": 5
+		}
+	},
+
+	"metadata": {
+		"inclusion": "",
+		"exclusion": "",
+		"reset": "",
+		"manual": "https://products.z-wavealliance.org/ProductManual/File?folder=&filename=MarketCertificationFiles/1845/HS-WV100-Manual.pdf"
+	},
+
+	"paramInformation": {
+		"1": {
+			"$import": "templates/logic_group_template#enable_central_scene"
+		},
+		"2": {
+			"$import": "templates/logic_group_template.json#button_pressed_threshold_time"
+		},
+		"3": {
+			"$import": "templates/logic_group_template.json#button_held_threshold_time"
+		},
+		"4": {
+			"$import": "templates/logic_group_template.json#led_indication"
+		},
+		"6": {
+			"$import": "templates/logic_group_template.json#association_param_secure"
+		},
+		"7": {
+			"$import": "templates/logic_group_template.json#pushbutton_functionality",
+			"label": "Pushbutton 2 functionality."
+		},
+		"10": {
+			"$import": "templates/logic_group_template.json#pushbutton_functionality",
+			"label": "Pushbutton 2 functionality."
+		},
+		"13": {
+			"$import": "templates/logic_group_template.json#pushbutton_functionality",
+			"label": "Pushbutton 3 functionality."
+		},
+		"16": {
+			"$import": "templates/logic_group_template.json#pushbutton_functionality",
+			"label": "Pushbutton 4 functionality."
+		},
+
+		"5[0xff]": {
+			"$import": "templates/logic_group_template.json#led_functionality",
+			"label": "LEDs colour indication, Byte 1",
+			"description": "Red colour",
+			"defaultValue": 127
+		},
+		"5[0xff00]": {
+			"$import": "templates/logic_group_template.json#led_functionality",
+			"label": "LEDs colour indication, Byte 2",
+			"description": "Green colour",
+			"defaultValue": 85
+		},
+		"5[0xff0000]": {
+			"$import": "templates/logic_group_template.json#led_functionality",
+			"label": "LEDs colour indication, Byte 3",
+			"description": "Blue colour",
+			"defaultValue": 85
+		},
+		"5[0xff000000]": {
+			"$import": "templates/logic_group_template.json#led_functionality",
+			"label": "LED Time for blinking",
+			"unit": "0.1 sec"
+		},
+		"8[0x01]": {
+			"$import": "templates/logic_group_template.json#multilevel_enable",
+			"label": "Switch multilevel set single-activation values for pushbutton 1, Byte 1"
+		},
+		"8[0xff00]": {
+			"$import": "templates/logic_group_template.json#multilevel_upper_function",
+			"label": "Switch multilevel set single-activation values for pushbutton 1, Byte 2"
+		},
+		"8[0xff0000]": {
+			"$import": "templates/logic_group_template.json#multilevel_lower_function",
+			"label": "Switch multilevel set single-activation values for pushbutton 1, Byte 3"
+		},
+		"8[0xff000000]": {
+			"$import": "templates/logic_group_template.json#multilevel_duration_function",
+			"label": "Switch multilevel set single-activation values for pushbutton 1, Byte 4"
+		},
+		"9[0x01]": {
+			"$import": "templates/logic_group_template.json#multilevel_enable",
+			"label": "Switch Multilevel Set double-activation values for pushbutton 1. Byte 1"
+		},
+		"9[0xff00]": {
+			"$import": "templates/logic_group_template.json#multilevel_upper_function",
+			"label": "Switch Multilevel Set double-activation values for pushbutton 1. Byte 2"
+		},
+		"9[0xff0000]": {
+			"$import": "templates/logic_group_template.json#multilevel_lower_function",
+			"label": "Switch Multilevel Set double-activation values for pushbutton 1. Byte 3"
+		},
+		"9[0xff000000]": {
+			"$import": "templates/logic_group_template.json#multilevel_duration_function",
+			"label": "Switch Multilevel Set double-activation values for pushbutton 1. Byte 4"
+		},
+		"11[0x01]": {
+			"$import": "templates/logic_group_template.json#multilevel_enable",
+			"label": "Switch multilevel set single-activation values for pushbutton 2, Byte 1"
+		},
+		"11[0xff00]": {
+			"$import": "templates/logic_group_template.json#multilevel_upper_function",
+			"label": "Switch multilevel set single-activation values for pushbutton 2, Byte 2"
+		},
+		"11[0xff0000]": {
+			"$import": "templates/logic_group_template.json#multilevel_lower_function",
+			"label": "Switch multilevel set single-activation values for pushbutton 2, Byte 3"
+		},
+		"11[0xff000000]": {
+			"$import": "templates/logic_group_template.json#multilevel_duration_function",
+			"label": "Switch multilevel set single-activation values for pushbutton 2, Byte 4"
+		},
+		"12[0x01]": {
+			"$import": "templates/logic_group_template.json#multilevel_enable",
+			"label": "Switch Multilevel Set double-activation values for pushbutton 2. Byte 1"
+		},
+		"12[0xff00]": {
+			"$import": "templates/logic_group_template.json#multilevel_upper_function",
+			"label": "Switch Multilevel Set double-activation values for pushbutton 2. Byte 2"
+		},
+		"12[0xff0000]": {
+			"$import": "templates/logic_group_template.json#multilevel_lower_function",
+			"label": "Switch Multilevel Set double-activation values for pushbutton 2. Byte 3"
+		},
+		"12[0xff000000]": {
+			"$import": "templates/logic_group_template.json#multilevel_duration_function",
+			"label": "Switch Multilevel Set double-activation values for pushbutton 2. Byte 4"
+		},
+		"14[0x01]": {
+			"$import": "templates/logic_group_template.json#multilevel_enable",
+			"label": "Switch multilevel set single-activation values for pushbutton 3, Byte 1"
+		},
+		"14[0xff00]": {
+			"$import": "templates/logic_group_template.json#multilevel_upper_function",
+			"label": "Switch multilevel set single-activation values for pushbutton 3, Byte 2"
+		},
+		"14[0xff0000]": {
+			"$import": "templates/logic_group_template.json#multilevel_lower_function",
+			"label": "Switch multilevel set single-activation values for pushbutton 3, Byte 3"
+		},
+		"14[0xff000000]": {
+			"$import": "templates/logic_group_template.json#multilevel_duration_function",
+			"label": "Switch multilevel set single-activation values for pushbutton 3, Byte 3"
+		},
+		"15[0x01]": {
+			"$import": "templates/logic_group_template.json#multilevel_enable",
+			"label": "Switch Multilevel Set double-activation values for pushbutton 3. Byte 1"
+		},
+		"15[0xff00]": {
+			"$import": "templates/logic_group_template.json#multilevel_upper_function",
+			"label": "Switch Multilevel Set double-activation values for pushbutton 3. Byte 2"
+		},
+		"15[0xff0000]": {
+			"$import": "templates/logic_group_template.json#multilevel_lower_function",
+			"label": "Switch Multilevel Set double-activation values for pushbutton 3. Byte 3"
+		},
+		"15[0xff000000]": {
+			"$import": "templates/logic_group_template.json#multilevel_duration_function",
+			"label": "Switch Multilevel Set double-activation values for pushbutton 3. Byte 4"
+		},
+		"17[0x01]": {
+			"$import": "templates/logic_group_template.json#multilevel_enable",
+			"label": "Switch multilevel set single-activation values for pushbutton 4, Byte 1"
+		},
+		"17[0xff00]": {
+			"$import": "templates/logic_group_template.json#multilevel_upper_function",
+			"label": "Switch multilevel set single-activation values for pushbutton 4, Byte 2"
+		},
+		"17[0xff0000]": {
+			"$import": "templates/logic_group_template.json#multilevel_lower_function",
+			"label": "Switch multilevel set single-activation values for pushbutton 4, Byte 3"
+		},
+		"17[0xff000000]": {
+			"$import": "templates/logic_group_template.json#multilevel_duration_function",
+			"label": "Switch multilevel set single-activation values for pushbutton 4, Byte 4"
+		},
+		"18[0x01]": {
+			"$import": "templates/logic_group_template.json#multilevel_enable",
+			"label": "Switch Multilevel Set double-activation values for pushbutton 4. Byte 1"
+		},
+		"18[0xff00]": {
+			"$import": "templates/logic_group_template.json#multilevel_upper_function",
+			"label": "Switch Multilevel Set double-activation values for pushbutton 4. Byte 2"
+		},
+		"18[0xff0000]": {
+			"$import": "templates/logic_group_template.json#multilevel_lower_function",
+			"label": "Switch Multilevel Set double-activation values for pushbutton 4. Byte 3"
+		},
+		"18[0xff000000]": {
+			"$import": "templates/logic_group_template.json#multilevel_duration_function",
+			"label": "Switch Multilevel Set double-activation values for pushbutton 4. Byte 4"
+		}
+	}
+}
