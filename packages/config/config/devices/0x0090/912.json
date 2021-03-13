@@ -160,9 +160,6 @@
 				"$import": "templates/kwikset_template.json#alarm_map_keypad_lock"
 			},
 			{
-				"$import": "templates/kwikset_template.json#alarm_map_keypad_unlocked"
-			},
-			{
 				"$import": "templates/kwikset_template.json#alarm_map_manual_lock"
 			},
 			{

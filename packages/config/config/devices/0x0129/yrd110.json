@@ -78,12 +78,6 @@
 			},
 			{
 				"$import": "templates/yale_template.json#alarm_map_auto_relock"
-			},
-			{
-				"$import": "templates/yale_template.json#alarm_map_disabled_pin_used"
-			},
-			{
-				"$import": "templates/yale_template.json#alarm_map_user_outside_schedule"
 			}
 		]
 	}

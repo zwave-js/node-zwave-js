@@ -409,7 +409,7 @@
 		},
 		"to": {
 			"notificationType": 6, // Access Control
-			"notificationEvent": 13, // Single uder code deleted
+			"notificationEvent": 13, // Single user code deleted
 			"eventParameters": {
 				"userId": "alarmLevel"
 			}

@@ -438,29 +438,5 @@
 			"notificationType": 6,
 			"notificationEvent": 9
 		}
-	},
-	"alarm_map_disabled_pin_used": {
-		"from": {
-			"alarmType": 131
-		},
-		"to": {
-			"notificationType": 6,
-			"notificationEvent": 254,
-			"eventParameters": {
-				"userId": "alarmLevel"
-			}
-		}
-	},
-	"alarm_map_user_outside_schedule": {
-		"from": {
-			"alarmType": 132
-		},
-		"to": {
-			"notificationType": 6,
-			"notificationEvent": 254,
-			"eventParameters": {
-				"userId": "alarmLevel"
-			}
-		}
 	}
 }
