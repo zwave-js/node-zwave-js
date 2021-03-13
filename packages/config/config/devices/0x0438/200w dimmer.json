@@ -61,7 +61,7 @@
 				},
 				{
 					"label": "State saved at power failure, switch are set to previous state upon power restore",
-					"value": "2"
+					"value": 2
 				}
 			]
 		},
