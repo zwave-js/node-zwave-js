@@ -261,7 +261,7 @@
 			"label": "LED Strip Effect",
 			"valueSize": 4,
 			"minValue": 0,
-			"maxValue": 83823359,
+			"maxValue": 100600575,
 			"defaultValue": 0,
 			"readOnly": false,
 			"writeOnly": false,
