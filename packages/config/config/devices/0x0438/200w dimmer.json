@@ -49,66 +49,110 @@
 			"defaultValue": 0,
 			"readOnly": false,
 			"writeOnly": false,
-			"allowManualEntry": false
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "State NOT saved at power failure, switch are set to OFF upon power restore",
+					"value": 0
+				},
+				{
+					"label": "State NOT saved at power failure, switch are set to ON upon power restore",
+					"value": 1
+				},
+				{
+					"label": "State saved at power failure, switch are set to previous state upon power restore",
+					"value": "2"
+				}
+			]
 		},
 		"2": {
-			"label": "Notification when load status change",
-			"description": "Notification when load status change",
+			"label": "Notification when load status change.",
+			"description": "Notification when load status change.",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 1,
 			"defaultValue": 1,
 			"readOnly": false,
 			"writeOnly": false,
-			"allowManualEntry": false
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Disable",
+					"value": 0
+				},
+				{
+					"label": "Send Switch Multilevel Report",
+					"value": 1
+				}
+			]
 		},
 		"3": {
 			"label": "Default dimming speed",
-			"description": "Default dimming speed",
+			"description": "Dimming speed in seconds. Valid values is 0-100. Default is 5.",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 100,
 			"defaultValue": 5,
 			"readOnly": false,
 			"writeOnly": false,
-			"allowManualEntry": false
+			"allowManualEntry": true
 		},
 		"5": {
 			"label": "Enable or Disable external switch to pair network",
-			"description": "Enable or Disable external switch to pair network",
+			"description": "Enable or Disable external switch to pair network.",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 1,
 			"defaultValue": 0,
 			"readOnly": false,
 			"writeOnly": false,
-			"allowManualEntry": false
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Disable",
+					"value": 0
+				},
+				{
+					"label": "Enable",
+					"value": 1
+				}
+			]
 		},
 		"6": {
-			"label": "Setting dimming way",
-			"description": "Setting dimming way",
+			"label": "Set the Dimming mode",
+			"description": "Set the Dimming mode to be Linear or Logaritmic.",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 1,
 			"defaultValue": 0,
 			"readOnly": false,
 			"writeOnly": false,
-			"allowManualEntry": false
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Linear",
+					"value": 0
+				},
+				{
+					"label": "Logaritmic",
+					"value": 1
+				}
+			]
 		},
 		"7": {
 			"label": "Setting default brightness when turn on",
-			"description": "Setting default brightness when turn on the dimmer from off status",
+			"description": "Setting brightness when turn on dimmer from off status. Setting of 0 means that the dimmer will use parameter 1. Valid values: 0-99.",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 99,
 			"defaultValue": 0,
 			"readOnly": false,
 			"writeOnly": false,
-			"allowManualEntry": false
+			"allowManualEntry": true
 		},
 		"8": {
 			"label": "Setting delay time when turn off the load",
-			"description": "Setting delay time when turn off the load",
+			"description": "Setting delay time in seconds when load is turned off. Valid values : 0-60 seconds.",
 			"unit": "Second",
 			"valueSize": 1,
 			"minValue": 0,
@@ -116,7 +160,7 @@
 			"defaultValue": 0,
 			"readOnly": false,
 			"writeOnly": false,
-			"allowManualEntry": false
+			"allowManualEntry": true
 		}
 	},
 	"revision": 3
