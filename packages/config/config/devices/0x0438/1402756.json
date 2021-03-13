@@ -1,0 +1,123 @@
+// Namron 1402756
+// LED Dimmer
+{
+	"associations": {
+		"1": {
+			"label": "Lifeline",
+			"maxNodes": 5,
+			"isLifeline": true
+		},
+		"2": {
+			"label": "Basic Set",
+			"maxNodes": 5
+		},
+		"3": {
+			"label": "Switch Multilevel",
+			"maxNodes": 5
+		},
+		"4": {
+			"label": "External Button",
+			"maxNodes": 5
+		}
+	},
+	"description": "LED Dimmer",
+	"devices": [
+		{
+			"productType": "0x0202",
+			"productId": "0x0002"
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"label": "1402756",
+	"manufacturer": "Namron",
+	"manufacturerId": "0x0438",
+	"metadata": {
+		"inclusion": "1. Set primary controller/gateway into inclusion mode (Please refer top your primary controllers manual on how to set your controller into inclusion). 2. Power on the in-wall dimmer. 3.Tripple Press the reset button on the dimmer, it will set the dimmer into inclusion mode. The purple indicator light will stay solid on for 10 seconds to indicate successful incusion.",
+		"exclusion": "1. Set the primary controller/gateway int exclusion mode (Please refer top your primary controllers manual on how to set your controller into exclusion). 2.Triple press the reset button, the dimmer will be set to exclusion mode, and wait to be excluded, then the dimmer will be excluded form the network.",
+		"reset": "Press and hold down the reset button for over 5 seconds, the dimmer will be reset to factory defaults."
+	},
+	"paramInformation": {
+		"1": {
+			"label": "State After Power Restore",
+			"description": "State After Power Restore",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 2,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false
+		},
+		"2": {
+			"label": "Notification when load status change",
+			"description": "Notification when load status change",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 1,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false
+		},
+		"3": {
+			"label": "Default dimming speed",
+			"description": "Default dimming speed",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 100,
+			"defaultValue": 5,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false
+		},
+		"5": {
+			"label": "Enable or Disable external switch to pair network",
+			"description": "Enable or Disable external switch to pair network",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false
+		},
+		"6": {
+			"label": "Setting dimming way",
+			"description": "Setting dimming way",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false
+		},
+		"7": {
+			"label": "Setting default brightness when turn on",
+			"description": "Setting default brightness when turn on the dimmer from off status",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 99,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false
+		},
+		"8": {
+			"label": "Setting delay time when turn off the load",
+			"description": "Setting delay time when turn off the load",
+			"unit": "Second",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 60,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false
+		}
+	},
+	"revision": 3
+}
