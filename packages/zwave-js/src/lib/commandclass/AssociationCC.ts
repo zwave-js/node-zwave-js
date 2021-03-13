@@ -68,11 +68,23 @@ export function getLifelineGroupIds(node: ZWaveNode): number[] {
 
 	// If the target node supports Z-Wave+ info that means the lifeline MUST be group #1
 	if (node.supportsCC(CommandClasses["Z-Wave Plus Info"])) {
+		// wotan-disable-next-line no-restricted-property-access
+		node["driver"].controllerLog.logNode(
+			node.id,
+			`getLifelineGroupIds(node ${node.id}) => supports ZW+`,
+		);
+
 		lifelineGroups.push(1);
 	}
 
 	// We have a device config file that tells us which (additional) association to assign
 	if (node.deviceConfig?.associations?.size) {
+		// wotan-disable-next-line no-restricted-property-access
+		node["driver"].controllerLog.logNode(
+			node.id,
+			`associations found in config`,
+		);
+
 		lifelineGroups.push(
 			...[...node.deviceConfig.associations.values()]
 				.filter((a) => a.isLifeline)
@@ -379,12 +391,24 @@ currently assigned nodes: ${group.nodeIds.map(String).join(", ")}`;
 		const ownNodeId = this.driver.controller.ownNodeId!;
 		const valueDB = this.getValueDB();
 
+		this.driver.controllerLog.logNode(
+			node.id,
+			`lifelineGroups = ${JSON.stringify(lifelineGroups)}`,
+		);
+
 		if (lifelineGroups.length) {
 			for (const group of lifelineGroups) {
 				// Check if we are already in the lifeline group
 				const lifelineValueId = getNodeIdsValueId(group);
 				const lifelineNodeIds: number[] =
 					valueDB.getValue(lifelineValueId) ?? [];
+				this.driver.controllerLog.logNode(
+					node.id,
+					`lifelineNodeIds(group ${group}) = ${JSON.stringify(
+						lifelineNodeIds,
+					)}`,
+				);
+
 				if (!lifelineNodeIds.includes(ownNodeId)) {
 					this.driver.controllerLog.logNode(node.id, {
 						endpoint: this.endpointIndex,
