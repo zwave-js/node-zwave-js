@@ -1,10 +1,10 @@
-// Zooz ZST10-700
-// S2 Z-Wave 700 USB Stick
+// Silicon Labs 700 Series-based Controller
+// Note: This device file is shared by multiple manufacturers
 {
-	"manufacturer": "Zooz",
+	"manufacturer": "Silicon Labs",
 	"manufacturerId": "0x0000",
 	"label": "ZST10-700",
-	"description": "S2 Z-Wave 700 USB Stick",
+	"description": "700 Series-based Controller",
 	"devices": [
 		{
 			"productType": "0x0004",
