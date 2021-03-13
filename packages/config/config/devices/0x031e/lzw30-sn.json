@@ -84,6 +84,7 @@
 		},
 		"5": {
 			"label": "LED Indicator Color",
+			"description": "Uses a scaled hue value (realHue / 360 * 255).",
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 255,
@@ -127,7 +128,7 @@
 			]
 		},
 		"6": {
-			"label": "LED Indicator Intensity",
+			"label": "LED Indicator Brightness",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 10,
@@ -183,7 +184,7 @@
 			]
 		},
 		"7": {
-			"label": "LED Indicator Intensity (When Off)",
+			"label": "LED Indicator Brightness When Off",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 10,
@@ -297,7 +298,7 @@
 		},
 		"10": {
 			"label": "Active Power Reports",
-			"unit": "percent",
+			"unit": "%",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 100,
@@ -319,7 +320,7 @@
 		},
 		"12": {
 			"label": "Energy Reports",
-			"unit": "percent",
+			"unit": "%",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 100,
@@ -352,6 +353,7 @@
 		"51": {
 			"$if": "firmwareVersion >= 1.19",
 			"label": "Instant On",
+			"description": "Enabling this disables the 700ms button delay and multi-tap scenes.",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 1,
@@ -361,17 +363,18 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "No Delay",
+					"label": "Enabled",
 					"value": 0
 				},
 				{
-					"label": "700ms Delay",
+					"label": "Disabled",
 					"value": 1
 				}
 			]
 		},
 		"8[0xff]": {
-			"label": "LED Strip Effect (Color)",
+			"label": "LED Effect Color",
+			"description": "Uses a scaled hue value (realHue / 360 * 255).",
 			"valueSize": 4,
 			"minValue": 0,
 			"maxValue": 255,
@@ -415,11 +418,11 @@
 			]
 		},
 		"8[0xff00]": {
-			"label": "LED Strip Effect (Brightness)",
+			"label": "LED Effect Brightness",
 			"valueSize": 4,
 			"minValue": 0,
 			"maxValue": 10,
-			"defaultValue": 0,
+			"defaultValue": 3,
 			"readOnly": false,
 			"writeOnly": false,
 			"allowManualEntry": false,
@@ -471,17 +474,18 @@
 			]
 		},
 		"8[0xff0000]": {
-			"label": "LED Strip Effect (Duration)",
+			"label": "LED Effect Duration",
+			"description": "1 to 60 = seconds, 61 to 120 = minutes (minus 60), 121 - 254 = hours (minus 120), 255 = indefinitely",
 			"valueSize": 4,
 			"minValue": 0,
 			"maxValue": 255,
-			"defaultValue": 0,
+			"defaultValue": 255,
 			"readOnly": false,
 			"writeOnly": false,
 			"allowManualEntry": true
 		},
 		"8[0x7f000000]": {
-			"label": "LED Strip Effect (Effect)",
+			"label": "LED Effect Type",
 			"valueSize": 4,
 			"minValue": 0,
 			"maxValue": 4,
