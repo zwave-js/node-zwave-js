@@ -231,7 +231,13 @@
 			"defaultValue": 0,
 			"readOnly": false,
 			"writeOnly": false,
-			"allowManualEntry": true
+			"allowManualEntry": true,
+			"options": [
+				{
+					"label": "Disable",
+					"value": 0
+				}
+			]
 		},
 		"67": {
 			"label": "External sensors threshold",
@@ -246,7 +252,7 @@
 		},
 		"68": {
 			"label": "External sensors - periodical reports",
-			"description": "reporting period of analog inputs value",
+			"description": "reporting period of external sensors",
 			"unit": "seconds",
 			"valueSize": 2,
 			"minValue": 0,
@@ -254,7 +260,13 @@
 			"defaultValue": 0,
 			"readOnly": false,
 			"writeOnly": false,
-			"allowManualEntry": true
+			"allowManualEntry": true,
+			"options": [
+				{
+					"label": "Disable",
+					"value": 0
+				}
+			]
 		},
 		"150": {
 			"label": "Input 1 - sensitivity",
