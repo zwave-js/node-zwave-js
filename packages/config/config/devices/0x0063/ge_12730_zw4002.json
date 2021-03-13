@@ -16,31 +16,6 @@
 		"max": "255.255"
 	},
 	"paramInformation": {
-		"3": {
-			"label": "LED Light",
-			"description": "Sets when the LED on the switch is lit.",
-			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 2,
-			"defaultValue": 0,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "LED on when light off",
-					"value": 0
-				},
-				{
-					"label": "LED on when light on",
-					"value": 1
-				},
-				{
-					"label": "LED always off",
-					"value": 2
-				}
-			]
-		},
 		"4": {
 			"label": "Invert Switch",
 			"valueSize": 1,
