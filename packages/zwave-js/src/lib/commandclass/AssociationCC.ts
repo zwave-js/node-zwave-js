@@ -388,7 +388,7 @@ currently assigned nodes: ${group.nodeIds.map(String).join(", ")}`;
 				if (!lifelineNodeIds.includes(ownNodeId)) {
 					this.driver.controllerLog.logNode(node.id, {
 						endpoint: this.endpointIndex,
-						message: `Controller missing from lifeline group #${group}, assinging ourselves...`,
+						message: `Controller missing from lifeline group #${group}, assigning ourselves...`,
 						direction: "outbound",
 					});
 					// Add a new destination
