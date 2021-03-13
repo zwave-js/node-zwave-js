@@ -2032,10 +2032,13 @@ version:               ${this.version}`;
 			if (this.centralSceneKeyHeldDownContext) {
 				clearTimeout(this.centralSceneKeyHeldDownContext.timeout);
 				this.centralSceneKeyHeldDownContext = undefined;
+			} else if (this.centralSceneForcedKeyUp) {
+				// If we timed out and the controller subsequently receives a Key Released Notification,
+				// we SHOULD consider the sending node to be operating with the Slow Refresh capability enabled.
+				this.valueDB.setValue(getSlowRefreshValueId(), true);
+				// Do not raise the duplicate event
+				return;
 			}
-			// If the controller subsequently receives a Key Released Notification, the controller SHOULD consider
-			// the sending node to be operating with the Slow Refresh capability enabled.
-			this.valueDB.setValue(getSlowRefreshValueId(), true);
 		}
 
 		setSceneValue(command.sceneNumber, command.keyAttribute);
