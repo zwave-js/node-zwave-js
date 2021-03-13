@@ -1,11 +1,10 @@
 // Logic Group ZIF5028 / HeatIt Z-DIN 616
 // 6 relay switches and 6 digital inputs module for DIN rail
 {
-	"revision": 9,
 	"manufacturer": "Logic Group",
 	"manufacturerId": "0x0234",
-	"label": "ZIF5028 / HeatIt Z-DIN 616",
-	"description": "6 relay switches and 6 digital inputs module for DIN rail",
+	"label": "ZIF5028",
+	"description": "DIN Rail Relay",
 	"devices": [
 		{
 			"productType": "0x0003",
@@ -19,105 +18,85 @@
 	"associations": {
 		"1": {
 			"label": "Lifeline",
-			"description": "RELAY OUTPUT. Basic Report On/Off when relay output is activated.",
 			"maxNodes": 1,
 			"isLifeline": true
 		},
 		"2": {
 			"label": "Basic Set On / Off Input 1",
-			"description": "Sends Basic Set On / Off when input 1 is activated.",
 			"maxNodes": 5
 		},
 		"3": {
 			"label": "Binary Switch Set On / Off Input 1",
-			"description": "Sends Binary Switch Set On / Off when input 1 is activated.",
 			"maxNodes": 5
 		},
 		"4": {
 			"label": "Multilevel Switch Set Input 1",
-			"description": "Sends Multilevel Switch Set / etc... when input 1 is activated.",
 			"maxNodes": 5
 		},
 		"5": {
 			"label": "Basic Set On / Off Input 2",
-			"description": "Sends Basic Set On / Off when input 2 is activated.",
 			"maxNodes": 5
 		},
 		"6": {
 			"label": "Binary Switch Set On / Off Input 2",
-			"description": "Sends Binary Switch Set On / Off when input 2 is activated.",
 			"maxNodes": 5
 		},
 		"7": {
 			"label": "Multilevel Switch Set Input 2",
-			"description": "Sends Multilevel Switch Set / etc... when input 2 is activated.",
 			"maxNodes": 5
 		},
 		"8": {
 			"label": "Basic Set On / Off Input 3",
-			"description": "Sends Basic Set On / Off when input 3 is activated.",
 			"maxNodes": 5
 		},
 		"9": {
 			"label": "Binary Switch Set On / Off Input 3",
-			"description": "Sends Binary Switch Set On / Off when input 3 is activated.",
 			"maxNodes": 5
 		},
 		"10": {
 			"label": "Multilevel Switch Set Input 3",
-			"description": "Sends Multilevel Switch Set / etc... when input 3 is activated.",
 			"maxNodes": 5
 		},
 		"11": {
 			"label": "Basic Set On / Off Input 4",
-			"description": "Sends Basic Set On / Off when input 4 is activated.",
 			"maxNodes": 5
 		},
 		"12": {
 			"label": "Binary Switch Set On / Off  Input 4",
-			"description": "Sends Binary Switch Set On / Off when input 4 is activated.",
 			"maxNodes": 5
 		},
 		"13": {
 			"label": "Multilevel Switch Set Input 4",
-			"description": "Sends Multilevel Switch Set / etc... when input 4 is activated.",
 			"maxNodes": 5
 		},
 		"14": {
 			"label": "Basic Set On / Off Input 5",
-			"description": "Sends Basic Set On / Off when input 5 is activated.",
 			"maxNodes": 5
 		},
 		"15": {
 			"label": "Binary Switch Set On / Off Input 5",
-			"description": "Sends Binary Switch Set On / Off when input 5 is activated.",
 			"maxNodes": 5
 		},
 		"16": {
 			"label": "Multilevel Switch Set Input 5",
-			"description": "Sends Multilevel Switch Set / etc... when input 5 is activated.",
 			"maxNodes": 5
 		},
 		"17": {
 			"label": "Basic Report On / Off Input 6",
-			"description": "Sends Basic Set On / Off when input 6 is activated.",
 			"maxNodes": 5
 		},
 		"18": {
 			"label": "Basic Set On / Off Input 6",
-			"description": "Sends Binary Switch Set On / Off when input 6 is activated.",
 			"maxNodes": 5
 		},
 		"19": {
 			"label": "Multilevel Switch Set Input 6",
-			"description": "Sends Multilevel Switch Set / etc... when input 6 is activated.",
 			"maxNodes": 5
 		}
 	},
 	"paramInformation": {
 		"1": {
 			"label": "Status of LED",
-			"description": "This parameter can be used to change the mode of the front-mounted status LED.",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 3,
@@ -127,26 +106,25 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "The LED is Off.",
+					"label": "Disabled.",
 					"value": 0
 				},
 				{
-					"label": "The LED is steadily lit-up. (Standard)",
+					"label": "Steadily lit-up. (Standard)",
 					"value": 1
 				},
 				{
-					"label": "The LED flashes in 1 second interval (1 Hz).",
+					"label": "Flashes in 1 second interval (1 Hz).",
 					"value": 2
 				},
 				{
-					"label": "The LED flashes in 1/2 second interval (1/2 Hz).",
+					"label": "Flashes in 1/2 second interval (1/2 Hz).",
 					"value": 3
 				}
 			]
 		},
 		"2": {
 			"label": "Brightness of status LED.",
-			"description": "Determines the brightness of the status LED.",
 			"unit": "%",
 			"valueSize": 1,
 			"minValue": 0,
@@ -154,25 +132,10 @@
 			"defaultValue": 50,
 			"readOnly": false,
 			"writeOnly": false,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "Switch off LED.",
-					"value": 0
-				},
-				{
-					"label": "Standard brightness - 50% (default)",
-					"value": 50
-				},
-				{
-					"label": "Maximum brightness.",
-					"value": 99
-				}
-			]
+			"allowManualEntry": true
 		},
 		"3": {
-			"label": "Function setup of input 1.",
-			"description": "Configures the function of input 1.",
+			"label": "Function setup of input 1",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 3,
@@ -182,26 +145,25 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "Inactive.",
+					"label": "Disabled",
 					"value": 0
 				},
 				{
-					"label": "Mode 1, level-controlled input.",
+					"label": "Level-controlled input",
 					"value": 1
 				},
 				{
-					"label": "Mode 2, falling-edge controlled input.",
+					"label": "Falling-edge controlled input",
 					"value": 2
 				},
 				{
-					"label": "Mode 3, rising-edge controlled input. (Standard)",
+					"label": "Rising-edge controlled input",
 					"value": 3
 				}
 			]
 		},
 		"4": {
 			"label": "Timer for input 1",
-			"description": "Configures the timer of input 1",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 255,
@@ -212,37 +174,35 @@
 			"allowManualEntry": true
 		},
 		"5": {
-			"label": "Function setup of input 2.",
-			"description": "Configures the function of input 2.",
+			"label": "Function setup of input 2",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 3,
 			"defaultValue": 3,
 			"readOnly": false,
 			"writeOnly": false,
-			"allowManualEntry": true,
+			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "Inactive.",
+					"label": "Disabled",
 					"value": 0
 				},
 				{
-					"label": "Mode 1, level-controlled input.",
+					"label": "Level-controlled input",
 					"value": 1
 				},
 				{
-					"label": "Mode 2, falling-edge controlled input.",
+					"label": "Falling-edge controlled input",
 					"value": 2
 				},
 				{
-					"label": "Mode 3, rising-edge controlled input. (Standard)",
+					"label": "Rising-edge controlled input",
 					"value": 3
 				}
 			]
 		},
 		"6": {
 			"label": "Timer for input 2",
-			"description": "Configures the timer of input 2",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 255,
@@ -253,37 +213,35 @@
 			"allowManualEntry": true
 		},
 		"7": {
-			"label": "Function setup of input 3.",
-			"description": "Configures the function of input 3.",
+			"label": "Function setup of input 3",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 3,
 			"defaultValue": 3,
 			"readOnly": false,
 			"writeOnly": false,
-			"allowManualEntry": true,
+			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "Inactive.",
+					"label": "Disabled",
 					"value": 0
 				},
 				{
-					"label": "Mode 1, level-controlled input.",
+					"label": "Level-controlled input",
 					"value": 1
 				},
 				{
-					"label": "Mode 2, falling-edge controlled input.",
+					"label": "Falling-edge controlled input",
 					"value": 2
 				},
 				{
-					"label": "Mode 3, rising-edge controlled input. (Standard)",
+					"label": "Rising-edge controlled input",
 					"value": 3
 				}
 			]
 		},
 		"8": {
 			"label": "Timer for input 3",
-			"description": "Configures the timer of input 3",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 255,
@@ -294,37 +252,35 @@
 			"allowManualEntry": true
 		},
 		"9": {
-			"label": "Function setup of input 4.",
-			"description": "Configures the function of input 4.",
+			"label": "Function setup of input 4",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 3,
 			"defaultValue": 3,
 			"readOnly": false,
 			"writeOnly": false,
-			"allowManualEntry": true,
+			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "Inactive.",
+					"label": "Disabled",
 					"value": 0
 				},
 				{
-					"label": "Mode 1, level-controlled input.",
+					"label": "Level-controlled input",
 					"value": 1
 				},
 				{
-					"label": "Mode 2, falling-edge controlled input.",
+					"label": "Falling-edge controlled input",
 					"value": 2
 				},
 				{
-					"label": "Mode 3, rising-edge controlled input. (Standard)",
+					"label": "Rising-edge controlled input",
 					"value": 3
 				}
 			]
 		},
 		"10": {
 			"label": "Timer for input 4",
-			"description": "Configures the timer of input 4",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 255,
@@ -335,37 +291,35 @@
 			"allowManualEntry": true
 		},
 		"11": {
-			"label": "Function setup of input 5.",
-			"description": "Configures the function of input 5.",
+			"label": "Function setup of input 5",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 3,
 			"defaultValue": 3,
 			"readOnly": false,
 			"writeOnly": false,
-			"allowManualEntry": true,
+			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "Inactive.",
+					"label": "Disabled",
 					"value": 0
 				},
 				{
-					"label": "Mode 1, level-controlled input.",
+					"label": "Level-controlled input",
 					"value": 1
 				},
 				{
-					"label": "Mode 2, falling-edge controlled input.",
+					"label": "Falling-edge controlled input",
 					"value": 2
 				},
 				{
-					"label": "Mode 3, rising-edge controlled input. (Standard)",
+					"label": "Rising-edge controlled input",
 					"value": 3
 				}
 			]
 		},
 		"12": {
 			"label": "Timer for input 5",
-			"description": "Configures the timer of input 5",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 255,
@@ -376,37 +330,35 @@
 			"allowManualEntry": true
 		},
 		"13": {
-			"label": "Function setup of input 6.",
-			"description": "Configures the function of input 6.",
+			"label": "Function setup of input 6",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 3,
 			"defaultValue": 3,
 			"readOnly": false,
 			"writeOnly": false,
-			"allowManualEntry": true,
+			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "Inactive.",
+					"label": "Disabled",
 					"value": 0
 				},
 				{
-					"label": "Mode 1, level-controlled input.",
+					"label": "Level-controlled input",
 					"value": 1
 				},
 				{
-					"label": "Mode 2, falling-edge controlled input.",
+					"label": "Falling-edge controlled input",
 					"value": 2
 				},
 				{
-					"label": "Mode 3, rising-edge controlled input. (Standard)",
+					"label": "Rising-edge controlled input",
 					"value": 3
 				}
 			]
 		},
 		"14": {
 			"label": "Timer setup of input 6",
-			"description": "Configures the timer of input 6",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 255,
@@ -418,7 +370,6 @@
 		},
 		"15": {
 			"label": "Input Snubber-filter time constant.",
-			"description": "The time constant of the input snubber-filter.",
 			"unit": "x10 ms",
 			"valueSize": 1,
 			"minValue": 0,
@@ -431,7 +382,6 @@
 		},
 		"16": {
 			"label": "Threshold value for activation of inputs.",
-			"description": "The time that an entry must be stable before it is accepted as active / idle.",
 			"unit": "x10 ms",
 			"valueSize": 1,
 			"minValue": 0,
@@ -444,7 +394,6 @@
 		},
 		"17": {
 			"label": "Threshold for input in latched mode.",
-			"description": "Time that an input must be activated before it accepts the button latched mode.",
 			"unit": "x10 ms",
 			"valueSize": 1,
 			"minValue": 0,
@@ -457,7 +406,6 @@
 		},
 		"18": {
 			"label": "Deactivate Central Scene notifications.",
-			"description": "Central Scene notifications when the 6 inputs are activated.",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 1,
@@ -467,137 +415,131 @@
 			"allowManualEntry": true,
 			"options": [
 				{
-					"label": "Central Scene notifications enabled. (Standard)",
+					"label": "Enabled (Default)",
 					"value": 0
 				},
 				{
-					"label": "Central Scene notifications disabled.",
+					"label": "Disabled",
 					"value": 1
 				}
 			]
 		},
 		"19": {
 			"label": "Output function, Output 1.",
-			"description": "Output 1 can be controlled via Z-Wave or Input 1.",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 1,
 			"defaultValue": 0,
 			"readOnly": false,
 			"writeOnly": false,
-			"allowManualEntry": true,
+			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "Output is controlled via Z-Wave messages.",
+					"label": "Controlled via Z-Wave messages.",
 					"value": 0
 				},
 				{
-					"label": "Output is controlled by input 1. (Standard)",
+					"label": "Controlled by input 1. (Standard)",
 					"value": 1
 				}
 			]
 		},
 		"20": {
 			"label": "Output function, Output 2.",
-			"description": "Output 2 can be controlled via Z-Wave or Input 2.",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 1,
 			"defaultValue": 0,
 			"readOnly": false,
 			"writeOnly": false,
-			"allowManualEntry": true,
+			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "Output is controlled via Z-Wave messages.",
+					"label": "Controlled via Z-Wave messages.",
 					"value": 0
 				},
 				{
-					"label": "Output is controlled by input 2. (Standard)",
+					"label": "Controlled by input 2. (Standard)",
 					"value": 1
 				}
 			]
 		},
 		"21": {
 			"label": "Output function, Output 3.",
-			"description": "Output 3 can be controlled via Z-Wave or Input 3.",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 1,
 			"defaultValue": 0,
 			"readOnly": false,
 			"writeOnly": false,
-			"allowManualEntry": true,
+			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "Output is controlled via Z-Wave messages.",
+					"label": "Controlled via Z-Wave messages.",
 					"value": 0
 				},
 				{
-					"label": "Output is controlled by input 3. (Standard)",
+					"label": "Controlled by input 3. (Standard)",
 					"value": 1
 				}
 			]
 		},
 		"22": {
 			"label": "Output function, Output 4.",
-			"description": "Output 4 can be controlled via Z-Wave or Input 4.",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 1,
 			"defaultValue": 0,
 			"readOnly": false,
 			"writeOnly": false,
-			"allowManualEntry": true,
+			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "Output is controlled via Z-Wave messages.",
+					"label": "Controlled via Z-Wave messages.",
 					"value": 0
 				},
 				{
-					"label": "Output is controlled by input 4. (Standard)",
+					"label": "Controlled by input 4. (Standard)",
 					"value": 1
 				}
 			]
 		},
 		"23": {
 			"label": "Output function, Output 5.",
-			"description": "Output 5 can be controlled via Z-Wave or Input 5.",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 1,
 			"defaultValue": 0,
 			"readOnly": false,
 			"writeOnly": false,
-			"allowManualEntry": true,
+			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "Output is controlled via Z-Wave messages.",
+					"label": "Controlled via Z-Wave messages.",
 					"value": 0
 				},
 				{
-					"label": "Output is controlled by input 5. (Standard)",
+					"label": "Controlled by input 5. (Standard)",
 					"value": 1
 				}
 			]
 		},
 		"24": {
 			"label": "Output function, Output 6.",
-			"description": "Output 6 can be controlled via Z-Wave or Input 6.",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 1,
 			"defaultValue": 0,
 			"readOnly": false,
 			"writeOnly": false,
-			"allowManualEntry": true,
+			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "Output is controlled via Z-Wave messages.",
+					"label": "Controlled via Z-Wave messages.",
 					"value": 0
 				},
 				{
-					"label": "Output is controlled by input 6. (Standard)",
+					"label": "Controlled by input 6. (Standard)",
 					"value": 1
 				}
 			]
