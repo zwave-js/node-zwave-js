@@ -8,22 +8,23 @@
 	"devices": [
 		{
 			"productType": "0x0003",
-			"productId": "0x010a"
+			"productId": "0x010a",
+			"zwaveAllianceId": 1779
 		}
 	],
 	"firmwareVersion": {
 		"min": "2.0",
 		"max": "255.255"
 	},
-	"supportsZWavePlus": true,
 	"paramInformation": {
 		"1": {
-			"label": "Upper paddle buttons mode",
-			"description": "Pair Mode, upper two buttons",
+			"label": "Upper Paddle Buttons Mode",
+			"description": "Configuration of pair mode for the upper two buttons (button #1 and #2)",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 1,
 			"defaultValue": 0,
+			"unsigned": true,
 			"readOnly": false,
 			"writeOnly": false,
 			"allowManualEntry": false,
@@ -39,402 +40,33 @@
 			]
 		},
 		"2": {
-			"label": "Lower paddle buttons mode",
-			"description": "Pair Mode, upper two buttons",
+			"label": "Lower Paddle Buttons Mode",
+			"description": "Configuration of pair mode for the lower two buttons (button #3 and #4)",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 1,
 			"defaultValue": 0,
+			"unsigned": true,
 			"readOnly": false,
 			"writeOnly": false,
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "Separate mode (toggle mode).",
+					"label": "Separate mode (toggle mode)",
 					"value": 0
 				},
 				{
-					"label": "Pair mode",
+					"label": "In pair mode, left side sends on/up commands, right side sends off/down commands",
 					"value": 1
 				}
 			]
 		},
 		"3": {
-			"label": "LED indication #1",
+			"label": "Led #1 Mode",
+			"description": "Configuration of the LED status indication",
 			"valueSize": 1,
 			"minValue": 0,
-			"maxValue": 8,
-			"defaultValue": 1,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "LED indication is disabled",
-					"value": 0
-				},
-				{
-					"label": "Indicates corresponding button",
-					"value": 1
-				},
-				{
-					"label": "Inverted indication",
-					"value": 2
-				},
-				{
-					"label": "Status of corresponding paddle",
-					"value": 3
-				},
-				{
-					"label": "Corresponding paddle, with inverted indication.",
-					"value": 4
-				},
-				{
-					"label": "Status of the built-in relay.",
-					"value": 5
-				},
-				{
-					"label": "Status of the built-in relay, inverted indication.",
-					"value": 6
-				},
-				{
-					"label": "5 seconds indication",
-					"value": 7
-				},
-				{
-					"label": "LED indication is disabled (BASIC SET)",
-					"value": 8
-				}
-			]
-		},
-		"4": {
-			"label": "LED indication #2",
-			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 8,
-			"defaultValue": 1,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "LED indication is disabled",
-					"value": 0
-				},
-				{
-					"label": "Indicates corresponding button",
-					"value": 1
-				},
-				{
-					"label": "Inverted indication",
-					"value": 2
-				},
-				{
-					"label": "Status of corresponding paddle",
-					"value": 3
-				},
-				{
-					"label": "Corresponding paddle, with inverted indication.",
-					"value": 4
-				},
-				{
-					"label": "Status of the built-in relay.",
-					"value": 5
-				},
-				{
-					"label": "Status of the built-in relay, inverted indication.",
-					"value": 6
-				},
-				{
-					"label": "5 seconds indication",
-					"value": 7
-				},
-				{
-					"label": "LED indication is disabled (BASIC SET)",
-					"value": 8
-				}
-			]
-		},
-		"5": {
-			"label": "LED indication #3",
-			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 8,
-			"defaultValue": 1,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "LED indication is disabled",
-					"value": 0
-				},
-				{
-					"label": "Indicates corresponding button",
-					"value": 1
-				},
-				{
-					"label": "Inverted indication",
-					"value": 2
-				},
-				{
-					"label": "Status of corresponding paddle",
-					"value": 3
-				},
-				{
-					"label": "Corresponding paddle, with inverted indication.",
-					"value": 4
-				},
-				{
-					"label": "Status of the built-in relay.",
-					"value": 5
-				},
-				{
-					"label": "Status of the built-in relay, inverted indication.",
-					"value": 6
-				},
-				{
-					"label": "5 seconds indication",
-					"value": 7
-				},
-				{
-					"label": "LED indication is disabled (BASIC SET)",
-					"value": 8
-				}
-			]
-		},
-		"6": {
-			"label": "LED indication #4",
-			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 8,
-			"defaultValue": 1,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "LED indication is disabled",
-					"value": 0
-				},
-				{
-					"label": "Indicates corresponding button",
-					"value": 1
-				},
-				{
-					"label": "Inverted indication",
-					"value": 2
-				},
-				{
-					"label": "Status of corresponding paddle",
-					"value": 3
-				},
-				{
-					"label": "Corresponding paddle, with inverted indication.",
-					"value": 4
-				},
-				{
-					"label": "Status of the built-in relay.",
-					"value": 5
-				},
-				{
-					"label": "Status of the built-in relay, inverted indication.",
-					"value": 6
-				},
-				{
-					"label": "5 seconds indication",
-					"value": 7
-				},
-				{
-					"label": "LED indication is disabled (BASIC SET)",
-					"value": 8
-				}
-			]
-		},
-		"7": {
-			"label": "Percentage of light in the LED #1 when On",
-			"description": "Configure the percentage of light in LED # 1, when the LED is turned on.",
-			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 100,
-			"defaultValue": 50,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
-		},
-		"8": {
-			"label": "Percentage of light in the LED #2 when On",
-			"description": "Configure the percentage of light in LED # 2, when the LED is turned on.",
-			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 100,
-			"defaultValue": 50,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
-		},
-		"9": {
-			"label": "Percentage of light in the LED #3 when On",
-			"description": "Configure the percentage of light in LED # 3, when the LED is turned on.",
-			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 100,
-			"defaultValue": 50,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
-		},
-		"10": {
-			"label": "Percentage of light in the LED #4 when On",
-			"description": "Configure the percentage of light in LED #4, when the LED is turned on.",
-			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 100,
-			"defaultValue": 50,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
-		},
-		"11": {
-			"label": "Percentage of light in the LED #1 when Off",
-			"description": "Configure the percentage of light in LED # 1, when the LED is turned off.",
-			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 100,
-			"defaultValue": 0,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
-		},
-		"12": {
-			"label": "Percentage of light in the LED #2 when Off",
-			"description": "Configure the percentage of light in LED # 2, when the LED is turned off.",
-			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 100,
-			"defaultValue": 0,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
-		},
-		"13": {
-			"label": "Percentage of light in the LED #3 when Off",
-			"description": "Configure the percentage of light in LED #3, when the LED is turned off.",
-			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 100,
-			"defaultValue": 0,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
-		},
-		"14": {
-			"label": "Percentage of light in the LED #4 when Off",
-			"description": "Configure the percentage of light in LED #4, when the LED is turned off.",
-			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 100,
-			"defaultValue": 0,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
-		},
-		"15": {
-			"label": "Relay mode",
-			"description": "How built-in relay is controlled",
-			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 13,
-			"defaultValue": 1,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "Relay is disabled.",
-					"value": 0
-				},
-				{
-					"label": "Relay is controlled by button #1",
-					"value": 1
-				},
-				{
-					"label": "Relay is controlled by button #2",
-					"value": 2
-				},
-				{
-					"label": "Relay is controlled by button #3",
-					"value": 3
-				},
-				{
-					"label": "Relay is controlled by button #4",
-					"value": 4
-				},
-				{
-					"label": "Relay is activated for one second, button #1",
-					"value": 5
-				},
-				{
-					"label": "Relay is activated for half a second, button #2",
-					"value": 6
-				},
-				{
-					"label": "Relay is activated for half a second, button #3",
-					"value": 7
-				},
-				{
-					"label": "Relay is activated for half a second, button #4",
-					"value": 8
-				},
-				{
-					"label": "Relay follows the state of button #1",
-					"value": 9
-				},
-				{
-					"label": "Relay follows the state of button #2",
-					"value": 10
-				},
-				{
-					"label": "Relay follows the state of button #3",
-					"value": 11
-				},
-				{
-					"label": "Relay follows the state of button #4",
-					"value": 12
-				},
-				{
-					"label": "Relay is controlled by commands to root device",
-					"value": 13
-				}
-			]
-		},
-		"16": {
-			"label": "Indicator mode.",
-			"description": "set the current light level for the actual LED or the level value can be stored",
-			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 1,
-			"defaultValue": 1,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "Indicator Set used to control the LED.",
-					"value": 0
-				},
-				{
-					"label": "Indicator Set values and internal activations.",
-					"value": 1
-				}
-			]
-		},
-		"17": {
-			"label": "Scene notification offset.",
-			"description": "Scene sequence numbers transmitted by Central Scene notifications.",
-			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 200,
+			"maxValue": 7,
 			"defaultValue": 1,
 			"unsigned": true,
 			"readOnly": false,
@@ -442,101 +74,452 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "Scene notifications are turned off.",
+					"label": "LED indication is disabled (led can be controlled by indicator command class set commands)",
 					"value": 0
 				},
 				{
-					"label": "Send scene value for button #",
+					"label": "LED indicates the status of the corresponding button",
 					"value": 1
+				},
+				{
+					"label": "LED indicates the status of the corresponding button, with inverted indication",
+					"value": 2
+				},
+				{
+					"label": "LED indicates the status of corresponding paddle (in pair mode)",
+					"value": 3
+				},
+				{
+					"label": "LED indicates the status of the corresponding paddle (in pair mode), with inverted indication",
+					"value": 4
+				},
+				{
+					"label": "LED indicates the status of the built-in relay",
+					"value": 5
+				},
+				{
+					"label": "LED indicates the status of the built-in relay, with inverted indication",
+					"value": 6
+				},
+				{
+					"label": "LED show a 5 seconds indication when the corresponding button is pressed",
+					"value": 7
 				}
 			]
 		},
-		"18": {
-			"label": "Disable House Cleaning.",
+		"4": {
+			"label": "Led #2 Mode",
+			"description": "Configuration of the LED status indication",
 			"valueSize": 1,
 			"minValue": 0,
-			"maxValue": 1,
-			"defaultValue": 0,
+			"maxValue": 7,
+			"defaultValue": 1,
+			"unsigned": true,
 			"readOnly": false,
 			"writeOnly": false,
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "House Cleaning Mode is enabled",
+					"label": "Led indication is disabled (led can be controlled by indicator command class set commands)",
 					"value": 0
 				},
 				{
-					"label": "1 House Cleaning Mode is disabled.",
+					"label": "Led indicates the status of the corresponding button",
+					"value": 1
+				},
+				{
+					"label": "Led indicates the status of the corresponding button, with inverted indication",
+					"value": 2
+				},
+				{
+					"label": "Led indicates the status of corresponding paddle (in pair mode)",
+					"value": 3
+				},
+				{
+					"label": "Led indicates the status of the corresponding paddle (in pair mode), with inverted indication",
+					"value": 4
+				},
+				{
+					"label": "Led indicates the status of the built-in relay",
+					"value": 5
+				},
+				{
+					"label": "Led indicates the status of the built-in relay, with inverted indication",
+					"value": 6
+				},
+				{
+					"label": "Led show a 5 seconds indication when the corresponding button is pressed",
+					"value": 7
+				}
+			]
+		},
+		"5": {
+			"label": "Led #3 Mode",
+			"description": "Configuration of the LED status indication",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 7,
+			"defaultValue": 1,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Led indication is disabled (led can be controlled by indicator command class set commands)",
+					"value": 0
+				},
+				{
+					"label": "Led indicates the status of the corresponding button",
+					"value": 1
+				},
+				{
+					"label": "Led indicates the status of the corresponding button, with inverted indication",
+					"value": 2
+				},
+				{
+					"label": "Led indicates the status of corresponding paddle (in pair mode)",
+					"value": 3
+				},
+				{
+					"label": "Led indicates the status of the corresponding paddle (in pair mode), with inverted indication",
+					"value": 4
+				},
+				{
+					"label": "Led indicates the status of the built-in relay",
+					"value": 5
+				},
+				{
+					"label": "Led indicates the status of the built-in relay, with inverted indication",
+					"value": 6
+				},
+				{
+					"label": "Led show a 5 seconds indication when the corresponding button is pressed",
+					"value": 7
+				}
+			]
+		},
+		"6": {
+			"label": "Led #4 Mode",
+			"description": "Configuration of the LED status indication",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 7,
+			"defaultValue": 1,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Led indication is disabled (led can be controlled by indicator command class set commands)",
+					"value": 0
+				},
+				{
+					"label": "Led indicates the status of the corresponding button",
+					"value": 1
+				},
+				{
+					"label": "Led indicates the status of the corresponding button, with inverted indication",
+					"value": 2
+				},
+				{
+					"label": "Led indicates the status of corresponding paddle (in pair mode)",
+					"value": 3
+				},
+				{
+					"label": "Led indicates the status of the corresponding paddle (in pair mode), with inverted indication",
+					"value": 4
+				},
+				{
+					"label": "Led indicates the status of the built-in relay",
+					"value": 5
+				},
+				{
+					"label": "Led indicates the status of the built-in relay, with inverted indication",
+					"value": 6
+				},
+				{
+					"label": "Led show a 5 seconds indication when the corresponding button is pressed",
+					"value": 7
+				}
+			]
+		},
+		"7": {
+			"label": "Led #1 Brightness Level",
+			"description": "Specifies the brightness level of the LED when it is on",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 100,
+			"defaultValue": 50,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"8": {
+			"label": "Led #2 Brightness Level",
+			"description": "Specifies the brightness level of the LED when it is on",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 100,
+			"defaultValue": 50,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"9": {
+			"label": "Led #3 Brightness Level",
+			"description": "Specifies the brightness level of the LED when it is on",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 100,
+			"defaultValue": 50,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"10": {
+			"label": "Led #4 Brightness Level",
+			"description": "Specifies the brightness level of the LED when it is on",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 100,
+			"defaultValue": 50,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"11": {
+			"label": "Led #1 Off Brightness Level",
+			"description": "Specifies the brightness level of the LED when it is off\"",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 100,
+			"defaultValue": 0,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"12": {
+			"label": "Led #2 Off Brightness Level",
+			"description": "Specifies the brightness level of the LED when it is off\"",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 100,
+			"defaultValue": 0,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"13": {
+			"label": "Led #3 Off Brightness Level",
+			"description": "Specifies the brightness level of the LED when it is off\"",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 100,
+			"defaultValue": 0,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"14": {
+			"label": "Led #4 Off Brightness Level",
+			"description": "Specifies the brightness level of the LED when it is off\"",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 100,
+			"defaultValue": 0,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"15": {
+			"label": "Relay Mode",
+			"description": "This parameter configures which of the buttons that shall control the built-in relay, or if the relay only will be activated for one second, each time button #1 is used",
+			"valueSize": 1,
+			"unit": "seconds",
+			"minValue": 0,
+			"maxValue": 5,
+			"defaultValue": 1,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Relay is disabled",
+					"value": 0
+				},
+				{
+					"label": "Relay is controlled by button #1 or by upper paddle when pair mode is active\"",
+					"value": 1
+				},
+				{
+					"label": "Relay is controlled by button #2 or by upper paddle when pair mode is active",
+					"value": 2
+				},
+				{
+					"label": "Relay is controlled by button #3 or by lower paddle when pair mode is active",
+					"value": 3
+				},
+				{
+					"label": "Relay is controlled by button #4 or by lower paddle when pair mode is active",
+					"value": 4
+				},
+				{
+					"label": "Relay is activated for one second and is controlled by button #1 or by upper paddle when pair mode is active",
+					"value": 5
+				}
+			]
+		},
+		"16": {
+			"label": "Indicator Mode",
+			"description": "When zhc5010 receives an indicator set message, then the received value can be used only to set the current light level for the actual LED or the level value can be stored and will then be used for subsequent internal LED activations",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 1,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Indicator set level values are only used to control the led",
+					"value": 0
+				},
+				{
+					"label": "Indicator set level values are also used by internal LED activations",
+					"value": 1
+				}
+			]
+		},
+		"17": {
+			"label": "Scene Notification Offset",
+			"description": "Configure the scene sequence numbers that will be transmitted by central scene notifications",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 127,
+			"defaultValue": 1,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Scene notifications are turned off",
+					"value": 0
+				},
+				{
+					"label": "Button #1 will send scene [value], button #2 will send scene [value] + 1, button #3 will send scene [value] + 2, button #4 will send scene [value] + 3",
+					"value": 127
+				}
+			]
+		},
+		"18": {
+			"label": "Disable House Cleaning Mode",
+			"description": "This parameter is able to enable or disable the so-called “house cleaning mode”, where zhc5010 is able to send a dimming command in order to set the level of the lights to 100%",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 0,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "House cleaning mode is enabled",
+					"value": 0
+				},
+				{
+					"label": "House cleaning mode is disabled; double-press button scene notifications will be disabled too",
 					"value": 1
 				}
 			]
 		},
 		"23": {
-			"label": "Control of association groups (button #1).",
+			"label": "Control of Association Groups For Device 1 (button #1)",
+			"description": "Enable or disable if received commands are relayed to the nodes in the association groups",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 1,
 			"defaultValue": 1,
+			"unsigned": true,
 			"readOnly": false,
 			"writeOnly": false,
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "Association groups will not be switched.",
+					"label": "When commands are received by device 1, nodes in the association groups will not be switched, button activations will still send switch values",
 					"value": 0
 				},
 				{
-					"label": "Association groups will be switched",
+					"label": "When commands are received by device 1, nodes in the association groups will be switched",
 					"value": 1
 				}
 			]
 		},
 		"24": {
-			"label": "Control of association groups (button #2).",
+			"label": "Control of Association Groups For Device 2 (button #2)",
+			"description": "Enable or disable if received commands are relayed to the nodes in the association groups",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 1,
 			"defaultValue": 1,
+			"unsigned": true,
 			"readOnly": false,
 			"writeOnly": false,
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "Association groups will not be switched.",
+					"label": "When commands are received by device 2, nodes in the association groups will not be switched, button activations will still send switch values",
 					"value": 0
 				},
 				{
-					"label": "Association groups will be switched",
+					"label": "When commands are received by device 2, nodes in the association groups will be switched\"",
 					"value": 1
 				}
 			]
 		},
 		"25": {
-			"label": "Control of association groups (button #3).",
+			"label": "Control of Association Groups For Device 3 (button #3)",
+			"description": "Enable or disable if received commands are relayed to the nodes in the association groups",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 1,
 			"defaultValue": 1,
+			"unsigned": true,
 			"readOnly": false,
 			"writeOnly": false,
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "Association groups will not be switched.",
+					"label": "When commands are received by device 3, nodes in the association groups will not be switched, button activations will still send switch values",
 					"value": 0
 				},
 				{
-					"label": "Association groups will be switched",
+					"label": "When commands are received by device 3, nodes in the association groups will be switched\"",
 					"value": 1
 				}
 			]
 		},
 		"26": {
-			"label": "Control of association groups (button #4).",
+			"label": "Control of Association Groups For Device 4 (button #4)",
+			"description": "Enable or disable if received commands are relayed to the nodes in the association groups",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 1,
 			"defaultValue": 1,
+			"unsigned": true,
 			"readOnly": false,
 			"writeOnly": false,
 			"allowManualEntry": false,
@@ -826,5 +809,11 @@
 	},
 	"compat": {
 		"preserveRootApplicationCCValueIDs": true
+	},
+	"metadata": {
+		"inclusion": "Pushing the upper left button 3 times, (triple click) will activate Inclusion Mode on the device. It is also possible to activate Inclusion Mode by triple clicking the switch in the middle of the module (normally covered by the middle plastic cover, this can be removed by means of a little screwdriver)",
+		"exclusion": "Pushing the upper left button 3 times, (triple click) will activate Exclusion Mode on the device. It is also possible to activate Exclusion Mode by triple clicking the switch in the middle of the module (normally covered by the middle plastic cover, this can be removed by means of a little screwdriver)",
+		"reset": "ZHC5010 can be factory reset by pressing the small button in the middle of the module (normally covered by small plastic cover) for at least 10 seconds. Please use this procedure only when the network primary controller is missing or otherwise inoperable",
+		"manual": "https://products.z-wavealliance.org/ProductManual/File?folder=&filename=MarketCertificationFiles/1779/ZHC5010-Manual-EN-Rev11.pdf"
 	}
 }

@@ -1,15 +1,15 @@
-// Logic Group ZDB5100
-// MATRIX Switch with Dimmer and Backlight
+// Logic Group ZDB5400
+// Dimmer Wall Switch
 {
 	"manufacturer": "Logic Group",
 	"manufacturerId": "0x0234",
-	"label": "ZDB5100",
-	"description": "MATRIX Switch with Dimmer and Backlight",
+	"label": "ZDB5400",
+	"description": "Dimmer Wall Switch",
 	"devices": [
 		{
 			"productType": "0x0003",
-			"productId": "0x0121",
-			"zwaveAllianceId": 3399
+			"productId": "0x0124",
+			"zwaveAllianceId": 3623
 		}
 	],
 	"firmwareVersion": {
@@ -17,9 +17,43 @@
 		"max": "255.255"
 	},
 	"paramInformation": {
+		"1": {
+			"label": "Operating Pushbutton(s) For Dimmer",
+			"description": "This parameter specifies which pushbutton(s) that shall be used to control the built-in dimmer. the parameter is a bitmask, so each of the values can be added together in order to have several pushbuttons to operate the dimmer",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 8,
+			"defaultValue": 1,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "No local operation of the dimmer\"",
+					"value": 0
+				},
+				{
+					"label": "Pushbutton 1 controls the dimmer\"",
+					"value": 1
+				},
+				{
+					"label": "Pushbutton 2 controls the dimmer",
+					"value": 2
+				},
+				{
+					"label": "Pushbutton 3 controls the dimmer",
+					"value": 4
+				},
+				{
+					"label": "Pushbutton 4 controls the dimmer",
+					"value": 8
+				}
+			]
+		},
 		"2": {
-			"label": "Duration of dimming",
-			"description": "Specifies the duration of a full regulation of the light from 0% to 100%",
+			"label": "Duration of Dimming",
+			"description": "This parameter specifies the duration of a full regulation of the light from 0% to 100%. a regulation of the light with 1% will take 1/100 of the specified duration. this is used when a pushbutton is held-down for controlling the dimming, and when the dimming is fulfilled from other Z-Wave devices",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 255,
@@ -53,7 +87,7 @@
 			"unsigned": true,
 			"readOnly": false,
 			"writeOnly": false,
-			"allowManualEntry": true,
+			"allowManualEntry": false,
 			"options": [
 				{
 					"label": "Immediately",
@@ -71,6 +105,7 @@
 		},
 		"4": {
 			"label": "Dimmer Mode",
+			"description": "The dimmer can work in three different modes: on/off, leading edge or trailing edge",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 2,
@@ -96,9 +131,10 @@
 		},
 		"5": {
 			"label": "Dimmer Minimum Level",
+			"description": "Corresponds to 0 – 99%",
 			"valueSize": 1,
 			"minValue": 0,
-			"maxValue": 99,
+			"maxValue": 0,
 			"defaultValue": 0,
 			"unsigned": true,
 			"readOnly": false,
@@ -107,6 +143,7 @@
 		},
 		"6": {
 			"label": "Dimmer Maximum Level",
+			"description": "Corresponds to 0 – 99%",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 99,
@@ -118,6 +155,7 @@
 		},
 		"7": {
 			"label": "Central Scene Notifications",
+			"description": "This parameter can be used for disabling central scene notifications",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 1,
@@ -139,6 +177,7 @@
 		},
 		"8": {
 			"label": "Double-activation Functionality",
+			"description": "This parameter specifies the reaction when double-activating the pushbuttons",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 1,
@@ -181,21 +220,23 @@
 			]
 		},
 		"10": {
-			"label": "Enhanced LED control",
+			"label": "Enhanced LED Control",
+			"description": "This parameter can be used for enabling the enhanced LED control. see document about matrix enhanced LED control",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 1,
 			"defaultValue": 0,
+			"unsigned": true,
 			"readOnly": false,
 			"writeOnly": false,
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "Enhanced LED control is disabled.",
+					"label": "Enhanced LED control is disabled\"",
 					"value": 0
 				},
 				{
-					"label": "Enhanced LED control is enabled.",
+					"label": "Enhanced LED control is enabled",
 					"value": 1
 				}
 			]
@@ -204,9 +245,9 @@
 			"label": "Pushbutton Debounce Timer",
 			"description": "0 – 2.55 seconds. default is 5, which equals to a debounce-filter on 50 milliseconds (0.05 seconds)",
 			"valueSize": 1,
-			"unit": "0.1 seconds",
+			"unit": "seconds",
 			"minValue": 0,
-			"maxValue": 255,
+			"maxValue": 5,
 			"defaultValue": 5,
 			"unsigned": true,
 			"readOnly": false,
@@ -217,9 +258,9 @@
 			"label": "Pushbutton Press Threshold Time",
 			"description": "0 – 2.55 seconds. default is 20, which equals to 200 milliseconds (0.2 seconds)",
 			"valueSize": 1,
-			"unit": "0.1 seconds",
+			"unit": "seconds",
 			"minValue": 0,
-			"maxValue": 255,
+			"maxValue": 20,
 			"defaultValue": 20,
 			"unsigned": true,
 			"readOnly": false,
@@ -230,9 +271,9 @@
 			"label": "Pushbutton Held Threshold Time",
 			"description": "0 – 2.55 seconds. default is 50, which equals to 500 milliseconds (0,5 seconds)",
 			"valueSize": 1,
-			"unit": "0.1 seconds",
+			"unit": "seconds",
 			"minValue": 0,
-			"maxValue": 255,
+			"maxValue": 50,
 			"defaultValue": 50,
 			"unsigned": true,
 			"readOnly": false,
@@ -467,15 +508,15 @@
 					"value": 4
 				},
 				{
-					"label": "Follow internal dimmer",
+					"label": "The LED indication follows the status of the internal dimmer, on or off",
 					"value": 5
 				},
 				{
-					"label": "Follow internal dimmer inverse",
+					"label": "The LED indication follows the status of the internal dimmer with inverted functionality, on or off",
 					"value": 6
 				},
 				{
-					"label": "On for 5 sec",
+					"label": "The LED indicator is on for 5 seconds when the pushbutton is activated",
 					"value": 7
 				}
 			]
@@ -493,15 +534,15 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "Direct control",
+					"label": "Direct control; the LED indication shows the received colour immediately, until the pushbutton is activated",
 					"value": 0
 				},
 				{
-					"label": "Color for OFF state",
+					"label": "Colour command sets the colour for off indication",
 					"value": 1
 				},
 				{
-					"label": "Color for ON state",
+					"label": "Colour command sets the colour for on indication",
 					"value": 2
 				}
 			]
@@ -511,8 +552,8 @@
 			"description": "This parameter specifies the saturation levels for the red, green and blue leds, when on status is indicated. (default is the on-state indicated by a 50% blue colour). byte 1: colour saturation, red. byte 2: colour saturation, green. byte 3: colour saturation, blue. byte 4: LED control",
 			"valueSize": 4,
 			"minValue": 0,
-			"maxValue": 4294967295,
-			"defaultValue": 32512,
+			"maxValue": 255,
+			"defaultValue": 255,
 			"unsigned": true,
 			"readOnly": false,
 			"writeOnly": false,
@@ -523,8 +564,8 @@
 			"description": "This parameter specifies the saturation levels for the red, green and blue leds, when off status is indicated. (default is the off-state indicated as a low white light on 5%). byte 1: colour saturation, red. byte 2: colour saturation, green. byte 3: colour saturation, blue. byte 4: LED control",
 			"valueSize": 4,
 			"minValue": 0,
-			"maxValue": 65535,
-			"defaultValue": 0,
+			"maxValue": 47,
+			"defaultValue": 47,
 			"unsigned": true,
 			"readOnly": false,
 			"writeOnly": false,
@@ -543,23 +584,23 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "Standard toggle-function",
+					"label": "Standard toggle-function, the state is switched between on and off, dimming up and down",
 					"value": 0
 				},
 				{
-					"label": "Automatic turn off after the time has expired",
+					"label": "Automatic turn off after the time has expired (staircase lighting function), the time is specified in the next configuration parameter",
 					"value": 1
 				},
 				{
-					"label": "Automatic turn on after the time has expired",
+					"label": "Automatic turn on after the time has expired, the time is specified in the next configuration parameter",
 					"value": 2
 				},
 				{
-					"label": "Always turn off or dim down",
+					"label": "Always turn off or dim down. using this parameter, the pushbutton can only send ‘off’ or ‘dim down’ commands. use this in pair with another pushbutton with value 4 (see chapter 2.6 in the manual)",
 					"value": 3
 				},
 				{
-					"label": "Always turn on or dim up",
+					"label": "Always turn on or dim up. using this parameter, the pushbutton can only send ‘on’ or ‘dim up’ commands. use this in pair with another pushbutton with value 3 (see chapter 2.6 in the manual)",
 					"value": 4
 				}
 			]
@@ -569,12 +610,22 @@
 			"description": "This parameter specifies the time used in previous configuration parameter. this parameter is only applicable if previous parameter has value 1 or 2",
 			"valueSize": 2,
 			"minValue": 0,
-			"maxValue": 43200,
+			"maxValue": 1,
 			"defaultValue": 300,
 			"unsigned": true,
 			"readOnly": false,
 			"writeOnly": false,
-			"allowManualEntry": true
+			"allowManualEntry": true,
+			"options": [
+				{
+					"label": "Enhanced LED control is disabled",
+					"value": 0
+				},
+				{
+					"label": "Enhanced LED control is enabled",
+					"value": 1
+				}
+			]
 		},
 		"26": {
 			"label": "Multi-Level Switch Set Values For Pushbutton 2",
@@ -619,15 +670,15 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "control pushbutton indicator LEDs",
+					"label": "Binary switch set only controls the button indicator leds, on/off",
 					"value": 0
 				},
 				{
-					"label": "Controls LED's and state",
+					"label": "Binary switch set controls the internal switch status and the button indicator leds",
 					"value": 1
 				},
 				{
-					"label": "As activated the pushbutton",
+					"label": "Binary switch set is handled as if the user had activated the button, including transmission of commands via the association groups",
 					"value": 2
 				}
 			]
@@ -691,15 +742,15 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "Direct control",
+					"label": "Direct control; the LED indication shows the received colour immediately, until the pushbutton is activated",
 					"value": 0
 				},
 				{
-					"label": "Colour for OFF indication",
+					"label": "Colour command sets the colour for off indication",
 					"value": 1
 				},
 				{
-					"label": "Colour for ON indication",
+					"label": "Colour command sets the colour for on indication",
 					"value": 2
 				}
 			]
@@ -709,7 +760,7 @@
 			"description": "This parameter specifies the saturation levels for the red, green and blue leds, when on status is indicated. (default is the on-state indicated by a 50% blue colour). byte 1: colour saturation, red. byte 2: colour saturation, green. byte 3: colour saturation, blue. byte 4: LED control",
 			"valueSize": 4,
 			"minValue": 0,
-			"maxValue": 4294967295,
+			"maxValue": 0,
 			"defaultValue": 0,
 			"unsigned": true,
 			"readOnly": false,
@@ -721,7 +772,7 @@
 			"description": "This parameter specifies the saturation levels for the red, green and blue leds, when off status is indicated. (default is the off-state indicated as a low white light on 5%). byte 1: colour saturation, red. byte 2: colour saturation, green. byte 3: colour saturation, blue. byte 4: LED control",
 			"valueSize": 4,
 			"minValue": 0,
-			"maxValue": 4294967295,
+			"maxValue": 255,
 			"defaultValue": 255,
 			"unsigned": true,
 			"readOnly": false,
@@ -741,23 +792,23 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "Standard toggle-function",
+					"label": "Standard toggle-function, the state is switched between on and off, dimming up and down",
 					"value": 0
 				},
 				{
-					"label": "Automatic turn off after the time has expired",
+					"label": "Automatic turn off after the time has expired (staircase lighting function), the time is specified in the next configuration parameter",
 					"value": 1
 				},
 				{
-					"label": "Automatic turn on after the time has expired",
+					"label": "Automatic turn on after the time has expired, the time is specified in the next configuration parameter",
 					"value": 2
 				},
 				{
-					"label": "Always turn off or dim down",
+					"label": "Always turn off or dim down. using this parameter, the pushbutton can only send ‘off’ or ‘dim down’ commands. use this in pair with another pushbutton with value 4 (see chapter 2.6 in the manual)",
 					"value": 3
 				},
 				{
-					"label": "Always turn on or dim up",
+					"label": "Always turn on or dim up. using this parameter, the pushbutton can only send ‘on’ or ‘dim up’ commands. use this in pair with another pushbutton with value 3 (see chapter 2.6 in the manual)",
 					"value": 4
 				}
 			]
@@ -766,9 +817,9 @@
 			"label": "Timer Value For Pushbutton 3",
 			"description": "Specifies the time in seconds. default is 300 = 5 minutes",
 			"valueSize": 2,
-			"unit": "seconds",
+			"unit": "minutes",
 			"minValue": 0,
-			"maxValue": 43200,
+			"maxValue": 300,
 			"defaultValue": 300,
 			"unsigned": true,
 			"readOnly": false,
@@ -844,15 +895,15 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "Internal LED control is disabled",
+					"label": "Internal LED control is disabled, only external commands control the indication",
 					"value": 0
 				},
 				{
-					"label": "follows the switch status",
+					"label": "The LED indication follows the switch status",
 					"value": 1
 				},
 				{
-					"label": "follows the switch status , inverse",
+					"label": "The LED indication follows the switch status – with inverted functionality",
 					"value": 2
 				},
 				{
@@ -864,15 +915,15 @@
 					"value": 4
 				},
 				{
-					"label": "Follow internal dimmer",
+					"label": "The LED indication follows the status of the internal dimmer, on or off",
 					"value": 5
 				},
 				{
-					"label": "Follow internal dimmer inverse",
+					"label": "The LED indication follows the status of the internal dimmer with inverted functionality, on or off",
 					"value": 6
 				},
 				{
-					"label": "ON for 5 seconds when the pushbutton is activated",
+					"label": "The LED indicator is on for 5 seconds when the pushbutton is activated",
 					"value": 7
 				}
 			]
@@ -890,15 +941,15 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "Direct control",
+					"label": "Direct control; the LED indication shows the received colour immediately, until the pushbutton is activated",
 					"value": 0
 				},
 				{
-					"label": "Color for OFF state",
+					"label": "Colour command sets the colour for off indication",
 					"value": 1
 				},
 				{
-					"label": "Color for ON state",
+					"label": "Colour command sets the colour for on indication",
 					"value": 2
 				}
 			]
@@ -908,8 +959,8 @@
 			"description": "This parameter specifies the saturation levels for the red, green and blue leds, when on status is indicated. (default is the on-state indicated by a 50% blue colour). byte 1: colour saturation, red. byte 2: colour saturation, green. byte 3: colour saturation, blue. byte 4: LED control",
 			"valueSize": 4,
 			"minValue": 0,
-			"maxValue": 4294967295,
-			"defaultValue": 32512,
+			"maxValue": 127,
+			"defaultValue": 127,
 			"unsigned": true,
 			"readOnly": false,
 			"writeOnly": false,
@@ -920,8 +971,8 @@
 			"description": "This parameter specifies the saturation levels for the red, green and blue leds, when off status is indicated. (default is the off-state indicated as a low white light on 5%). byte 1: colour saturation, red. byte 2: colour saturation, green. byte 3: colour saturation, blue. byte 4: LED control",
 			"valueSize": 4,
 			"minValue": 0,
-			"maxValue": 4294967295,
-			"defaultValue": 791621376,
+			"maxValue": 47,
+			"defaultValue": 47,
 			"unsigned": true,
 			"readOnly": false,
 			"writeOnly": false,
@@ -940,23 +991,23 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "Toggle-function",
+					"label": "Standard toggle-function, the state is switched between on and off, dimming up and down",
 					"value": 0
 				},
 				{
-					"label": "Automatic turn off after the time has expired",
+					"label": "Automatic turn off after the time has expired (staircase lighting function), the time is specified in the next configuration parameter",
 					"value": 1
 				},
 				{
-					"label": "Automatic turn on after the time has expired",
+					"label": "Automatic turn on after the time has expired, the time is specified in the next configuration parameter",
 					"value": 2
 				},
 				{
-					"label": "Always turn off or dim down",
+					"label": "Always turn off or dim down. using this parameter, the pushbutton can only send ‘off’ or ‘dim down’ commands. use this in pair with another pushbutton with value 4 (see chapter 2.6 in the manual)",
 					"value": 3
 				},
 				{
-					"label": "Always turn on or dim up",
+					"label": "Always turn on or dim up. using this parameter, the pushbutton can only send ‘on’ or ‘dim up’ commands. use this in pair with another pushbutton with value 3 (see chapter 2.6 in the manual)",
 					"value": 4
 				}
 			]
@@ -965,9 +1016,9 @@
 			"label": "Timer Value For Pushbutton 4",
 			"description": "Specifies the time in seconds. default is 300 = 5 minutes",
 			"valueSize": 2,
-			"unit": "seconds",
+			"unit": "minutes",
 			"minValue": 0,
-			"maxValue": 43200,
+			"maxValue": 300,
 			"defaultValue": 300,
 			"unsigned": true,
 			"readOnly": false,
@@ -979,8 +1030,8 @@
 			"description": "Byte 1: enable / disable. byte 2: upper switch value. byte 3: lower switch value. byte 4: not used – must be set to 0",
 			"valueSize": 4,
 			"minValue": 0,
-			"maxValue": 4294967295,
-			"defaultValue": 33488896,
+			"maxValue": 255,
+			"defaultValue": 255,
 			"unsigned": true,
 			"readOnly": false,
 			"writeOnly": false,
@@ -1043,15 +1094,15 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "LED control is disabled",
+					"label": "Internal LED control is disabled, only external commands control the indication",
 					"value": 0
 				},
 				{
-					"label": "follows the switch status",
+					"label": "The LED indication follows the switch status",
 					"value": 1
 				},
 				{
-					"label": "follows the switch status , inverse",
+					"label": "The LED indication follows the switch status – with inverted functionality",
 					"value": 2
 				},
 				{
@@ -1063,15 +1114,15 @@
 					"value": 4
 				},
 				{
-					"label": "Follow internal dimmer",
+					"label": "The LED indication follows the status of the internal dimmer, on or off",
 					"value": 5
 				},
 				{
-					"label": "Follow internal dimmer inverse",
+					"label": "The LED indication follows the status of the internal dimmer with inverted functionality, on or off",
 					"value": 6
 				},
 				{
-					"label": "ON for 5 seconds when the pushbutton is activated",
+					"label": "The LED indicator is on for 5 seconds when the pushbutton is activated",
 					"value": 7
 				}
 			]
@@ -1089,15 +1140,15 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "Direct control",
+					"label": "Direct control; the LED indication shows the received colour immediately, until the pushbutton is activated",
 					"value": 0
 				},
 				{
-					"label": "Color for OFF state",
+					"label": "Colour command sets the colour for off indication",
 					"value": 1
 				},
 				{
-					"label": "Color for ON state",
+					"label": "Colour command sets the colour for on indication",
 					"value": 2
 				}
 			]
@@ -1107,8 +1158,8 @@
 			"description": "This parameter specifies the saturation levels for the red, green and blue leds, when on status is indicated. (default is the on-state indicated by a 50% blue colour). byte 1: colour saturation, red. byte 2: colour saturation, green. byte 3: colour saturation, blue. byte 4: LED control",
 			"valueSize": 4,
 			"minValue": 0,
-			"maxValue": 4294967295,
-			"defaultValue": 32512,
+			"maxValue": 255,
+			"defaultValue": 255,
 			"unsigned": true,
 			"readOnly": false,
 			"writeOnly": false,
@@ -1119,62 +1170,18 @@
 			"description": "This parameter specifies the saturation levels for the red, green and blue leds, when off status is indicated. (default is the off-state indicated as a low white light on 5%). byte 1: colour saturation, red. byte 2: colour saturation, green. byte 3: colour saturation, blue. byte 4: LED control",
 			"valueSize": 4,
 			"minValue": 0,
-			"maxValue": 4294967295,
-			"defaultValue": 791621376,
+			"maxValue": 255,
+			"defaultValue": 255,
 			"unsigned": true,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
-		},
-		"1[0x01]": {
-			"label": "Pushbutton 1 controls the dimmer",
-			"description": "Enabling this parameter lets pushbutton 1 control the built-in dimmer.",
-			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 1,
-			"defaultValue": 1,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
-		},
-		"1[0x02]": {
-			"label": "Pushbutton 2 controls the dimmer",
-			"description": "Enabling this parameter lets pushbutton 2 control the built-in dimmer.",
-			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 1,
-			"defaultValue": 0,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
-		},
-		"1[0x04]": {
-			"label": "Pushbutton 3 controls the dimmer",
-			"description": "Enabling this parameter lets pushbutton 3 control the built-in dimmer.",
-			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 1,
-			"defaultValue": 0,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
-		},
-		"1[0x08]": {
-			"label": "Pushbutton 4 controls the dimmer",
-			"description": "Enabling this parameter lets pushbutton 4 control the built-in dimmer.",
-			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 1,
-			"defaultValue": 0,
 			"readOnly": false,
 			"writeOnly": false,
 			"allowManualEntry": true
 		}
 	},
 	"metadata": {
-		"inclusion": "Remove white pushbutton cover and press on the center switch with a non-conductive object. The LEDs will now start blinking on pushbutton 1 (upper left pushbutton)",
-		"exclusion": "Remove white pushbutton cover and press on the center switch with a non-conductive object. The LEDs will now start blinking on pushbutton 1 (upper left pushbutton)",
-		"reset": "Remove white pushbutton cover and long-press the center switch for 10 seconds with a non-conductive object.\n\nPlease use this procedure only when the network primary controller is missing or otherwise inoperable",
-		"manual": "https://products.z-wavealliance.org/ProductManual/File?folder=&filename=MarketCertificationFiles/3399/MATRIX_ZDB5100_User_Manual_1_01-EN.pdf"
+		"inclusion": "Add MATRIX 55 to a network with Classic Inclusion by pressing once on the switch through the hole (I) with a non-conductive object. The LED inside the module will start blinking",
+		"exclusion": "Use same procedure for removing MATRIX 55 with Classic Exclusion",
+		"reset": "MATRIX can be factory reset by holding the switch through the hole (I) for at least 10 seconds.\nPlease use this procedure only when the network primary controller is missing or otherwise inoperable",
+		"manual": "https://products.z-wavealliance.org/ProductManual/File?folder=&filename=product_documents/3623/ZDB5400-Manual.pdf"
 	}
 }
