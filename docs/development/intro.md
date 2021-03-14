@@ -42,10 +42,6 @@ Afterwards just execute `yarn` in the cloned directory, which will install all r
 
 For more details on the different development tasks, check the corresponding pages:
 
-## [Device configuration files](development/config-files.md)
-
-Since older versions of the Z-Wave standard don't allow us to request everything we need from the devices themselves, there is a need for configuration files. If you want to add a new device or edit an existing one, start here!
-
 ## [Implementing Command Classes](development/implementing-cc.md)
 
 Most of the Z-Wave functionality exists in Command Classes (short: CC). Here's a high-level overview how to implement them.

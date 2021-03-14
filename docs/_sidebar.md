@@ -24,9 +24,17 @@
 
     -   [Partial config parameters explained](guides/partial-parameters.md)
 
+-   Device Files
+
+    -   [Device configuration file format](config-files/config-file-format.md)
+    -   [Contributing device files](config-files/contributing-files.md)
+    -   [Importing files from other sources](config-files/importing-from-others.md)
+    -   [Properly conditioning parameters](config-files/conditional-parameters.md)
+    -   [Mandatory use of device templates](config-files/using-templates.md)
+    -   [Mandatory style guide](config-files/style-guide.md)
+
 -   Development
     -   [Introduction](development/intro.md)
-    -   [Device configuration files](development/config-files.md)
     -   [Implementing a Command Class](development/implementing-cc.md)
     -   [Troubleshooting](development/troubleshooting.md)
     -   [Installing from GitHub](development/installing-from-github.md)

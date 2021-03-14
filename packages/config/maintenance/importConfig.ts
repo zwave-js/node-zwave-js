@@ -37,8 +37,8 @@ const program = yargs
 		description: "source of the import",
 		alias: "s",
 		type: "array",
-		choices: ["oh", "ozw"], // oh: openhab, ozw: openzwave
-		default: ["oh"],
+		choices: ["oh", "ozw", "zwa"], // oh: openhab, ozw: openzwave; zwa: zWave Alliance
+		default: ["zwa"],
 	})
 	.option("ids", {
 		description:
@@ -67,6 +67,12 @@ const program = yargs
 	.option("devices", {
 		alias: "d",
 		description: "Parse and update devices configurations",
+		type: "boolean",
+		default: false,
+	})
+	.option("parse", {
+		alias: "p",
+		description: "Run custom parse routines -- maintenance",
 		type: "boolean",
 		default: false,
 	})
@@ -100,6 +106,9 @@ const ozwTarName = "openzwave.tar.gz";
 const ozwTarUrl =
 	"https://github.com/OpenZWave/open-zwave/archive/master.tar.gz";
 const ozwConfigFolder = path.join(ozwTempDir, "./config");
+
+const zwaTempDir = path.join(__dirname, "../../../.tmpzwa");
+const zwaConfigFolder = path.join(zwaTempDir, "./config");
 
 const ohTempDir = path.join(__dirname, "../../../.tmpoh");
 const importedManufacturersPath = path.join(ohTempDir, "manufacturers.json");
@@ -293,8 +302,7 @@ function normalizeUnits(unit: string) {
 	} else if (/degrees/i.test(unit)) {
 		return "°";
 	}
-
-	return undefined;
+	return unit;
 }
 
 /**
@@ -318,6 +326,7 @@ function normalizeConfig(config: Record<string, any>): Record<string, any> {
 		associations: config.associations,
 		paramInformation: {},
 		compat: config.compat,
+		metadata: config.metadata,
 	};
 
 	// Delete optional properties if they have no relevant entry
@@ -330,7 +339,9 @@ function normalizeConfig(config: Record<string, any>): Record<string, any> {
 	if (!normalized.compat || Object.keys(normalized.compat).length === 0) {
 		delete normalized.compat;
 	}
-
+	if (!normalized.metadata || Object.keys(normalized.metadata).length === 0) {
+		delete normalized.metadata;
+	}
 	if (
 		config.paramInformation &&
 		Object.keys(config.paramInformation).length > 0
@@ -374,6 +385,8 @@ function normalizeConfig(config: Record<string, any>): Record<string, any> {
 
 		for (const [key, original] of entries) {
 			const param: Record<string, any> = {
+				$if: original.$if,
+				$import: original.$import,
 				label: original.label,
 				description: original.description,
 				valueSize: original.valueSize,
@@ -388,9 +401,7 @@ function normalizeConfig(config: Record<string, any>): Record<string, any> {
 				options: original.options,
 			};
 
-			if (!param.unsigned) delete param.unsigned;
-			if (!param.unit) delete param.unit;
-			if (!param.description) delete param.description;
+			//if (!param.allowManualEntry) delete param.allowManualEntry;
 
 			if (!param.options || param.options.length === 0) {
 				delete param.options;
@@ -399,6 +410,21 @@ function normalizeConfig(config: Record<string, any>): Record<string, any> {
 				param.minValue = Math.min(...values);
 				param.maxValue = Math.max(...values);
 			}
+
+			if (typeof param.$if === "undefined") delete param.$if;
+			if (typeof param.$import === "undefined") delete param.$import;
+			if (typeof param.label === "undefined") delete param.label;
+			if (typeof param.description === "undefined")
+				delete param.description;
+			if (typeof param.valueSize === "undefined") delete param.valueSize;
+			if (typeof param.unit === "undefined") delete param.unit;
+			if (typeof param.minValue === "undefined") delete param.minValue;
+			if (typeof param.maxValue === "undefined") delete param.maxValue;
+			if (typeof param.defaultValue === "undefined")
+				delete param.defaultValue;
+			if (typeof param.unsigned === "undefined") delete param.unsigned;
+			if (typeof param.readOnly === "undefined") delete param.readOnly;
+			if (typeof param.writeOnly === "undefined") delete param.writeOnly;
 
 			normalizedParamInfo[key] = param;
 		}
@@ -713,6 +739,891 @@ async function parseOZWProduct(
 	);
 }
 
+/*********************************************************
+ *														 *
+ *          zWave Alliance Processing Section            *
+ * 														 *
+ * *******************************************************/
+
+/**
+ * Parse a directory of zWave Alliance device xmls
+ * */
+async function parseZWAFiles(): Promise<void> {
+	// Parse json files in the zwaTempDir
+	let jsonData = [];
+
+	const configFiles = await enumFilesRecursive(zwaTempDir, (file) =>
+		file.endsWith(".json"),
+	);
+
+	for (const file of configFiles) {
+		const j = await fs.readFile(file, "utf8");
+
+		/**
+		 * zWave Alliance numbering isn't always continuous and an html page is 
+		returned when a device number doesn't. Test for and delete such files.
+		 */
+		if (j.charAt(0) === "{") {
+			jsonData.push(JSON.parse(j));
+		} else {
+			void fs.unlink(file);
+		}
+	}
+	// Temp
+	for (const file of jsonData) {
+		if (!file.Identifier || file.Identifier === "") {
+			console.log(`Missing identifier: ${file.Id}`);
+		}
+	}
+
+	// Temp limit to specified manufacturers
+	for (let file of jsonData) {
+		if (file.ManufacturerId == "0x0234") {
+			continue;
+		} else {
+			delete file.ProductId;
+		}
+	}
+
+	// Combine provided files within models
+	jsonData = combineDeviceFiles(jsonData);
+
+	// Sanitize text fields for all files we'll use
+	jsonData = sanitizeFields(jsonData);
+
+	// Load our existing config files to cross-reference
+	await configManager.loadManufacturers();
+	if (program.devices) {
+		await configManager.loadDeviceIndex();
+	}
+
+	for (const file of jsonData) {
+		// Lookup the manufacturer
+		const manufacturerId = parseInt(file.ManufacturerId, 16);
+		const manufacturerName = configManager.lookupManufacturer(
+			manufacturerId,
+		);
+
+		// Add the manufacturer to our manufacturers.json if it is missing
+		if (isNaN(manufacturerId)) {
+		} else if (manufacturerName === undefined && file.Brand !== undefined) {
+			console.log(`Adding missing manufacturer: ${file.Brand}`);
+			configManager.setManufacturer(manufacturerId, file.Brand);
+		}
+
+		/**
+		 *  Process and write the device files, if called with program.devices
+		 */
+
+		if (program.devices && file.ProductId) {
+			await parseZWAProduct(file, manufacturerId, manufacturerName);
+		}
+	}
+
+	/**
+	 *  Write the manufacturer.json file, if called with program.manufacturers
+	 */
+	if (program.manufacturers) {
+		await configManager.saveManufacturers();
+	}
+}
+
+/***
+ * Combine zWave Alliance Device Files
+ */
+function combineDeviceFiles(json: Array<object>) {
+	for (const file of json) {
+		const identifier = file.Identifier ? file.Identifier : "Unknown";
+		const normalizedIdentifier = normalizeIdentifier(identifier);
+		file.Identifier = normalizedIdentifier[0];
+		file.OriginalIdentifier = normalizedIdentifier[1];
+	}
+
+	for (const file of json) {
+		const testManufactuer: number = file.ManufacturerId;
+		const testCertification: string = file.CertificationNumber;
+		const testParameters = file.ConfigurationParameters;
+		const testIdentifier = file.Identifier;
+
+		// Don't process if we've already seen this file
+		if (!file.ProductId) {
+			continue;
+		}
+
+		// Only deal with formatted IDs
+		file.ProductId = file.ProductId.replace(/^0x/, "");
+		file.ProductId = formatId(file.ProductId);
+		file.ProductTypeId = file.ProductTypeId.replace(/^0x/, "");
+		file.ProductTypeId = formatId(file.ProductTypeId);
+
+		for (const test_file of json) {
+			// Don't reprocess test files we've already seen
+			if (!test_file.ProductId) {
+				continue;
+			}
+
+			// Only deal with formatted IDs, but have to test as these will be undefined on subsequent visits
+			test_file.ProductId = test_file.ProductId.replace(/^0x/, "");
+			test_file.ProductId = formatId(test_file.ProductId);
+			test_file.ProductTypeId = test_file.ProductTypeId.replace(
+				/^0x/,
+				"",
+			);
+			test_file.ProductTypeId = formatId(test_file.ProductTypeId);
+
+			if (
+				test_file.ManufacturerId === testManufactuer &&
+				test_file.ProductId
+			) {
+				// Add the current file being tested
+				if (
+					test_file.Identifier === testIdentifier &&
+					test_file.CertificationNumber === testCertification
+				) {
+					file.combinedDevices = createOrUpdateArray(
+						file.combinedDevices,
+						{
+							ProductId: test_file.ProductId,
+							ProductTypeId: test_file.ProductTypeId,
+							Id: test_file.Id,
+							Brand: test_file.Brand,
+							Identifier: test_file.Identifier,
+						},
+					);
+				}
+				// Duplicate of file tested, so add the ID and remove the duplicate
+				else if (
+					test_file.ProductId === file.ProductId &&
+					test_file.ProductTypeId === file.ProductTypeId &&
+					isEquivalentParameters(
+						testParameters,
+						test_file?.ConfigurationParameters,
+						"ParameterNumber",
+					)
+				) {
+					// Add the device
+					file.combinedDevices = createOrUpdateArray(
+						file.combinedDevices,
+						{
+							ProductId: test_file.ProductId,
+							ProductTypeId: test_file.ProductTypeId,
+							Id: test_file.Id,
+							Brand: test_file.Brand,
+							Identifier: test_file.Identifier,
+						},
+					);
+					delete test_file.Identifier;
+					delete test_file.ProductId;
+
+					// Merge the files themselves
+					file.SupportedCommandClasses = keepLongest(
+						file.SupportedCommandClasses,
+						test_file.SupportedCommandClasses,
+					);
+					file.AssociationGroups = keepLongest(
+						file.AssociationGroups,
+						test_file.AssociationGroups,
+					);
+					file.Documents = keepLongest(
+						file.Documents,
+						test_file.Documents,
+					);
+					file.Texts = keepLongest(file.Texts, test_file.Texts);
+					file.Features = keepLongest(
+						file.Features,
+						test_file.Features,
+					);
+				}
+				// Combine devices with similar identifiers AND equivalent parameters
+				else if (
+					test_file.Identifier === testIdentifier &&
+					testIdentifier !== "Unknown" &&
+					testIdentifier.length > 3 &&
+					isEquivalentParameters(
+						testParameters,
+						test_file?.ConfigurationParameters,
+						"ParameterNumber",
+					)
+				) {
+					file.combinedDevices = createOrUpdateArray(
+						file.combinedDevices,
+						{
+							ProductId: test_file.ProductId,
+							ProductTypeId: test_file.ProductTypeId,
+							Id: test_file.Id,
+							Brand: test_file.Brand,
+							Identifier: test_file.Identifier,
+						},
+					);
+					delete test_file.Identifier;
+					delete test_file.ProductId;
+
+					// Merge the files themselves
+					// If they aren't both zwave plus, we need to strike the command classes
+					if (
+						bothZwavePlus(
+							file.SupportedCommandClasses,
+							test_file.SupportedCommandClasses,
+						)
+					) {
+						file.SupportedCommandClasses = keepLongest(
+							file.SupportedCommandClasses,
+							test_file.SupportedCommandClasses,
+						);
+					} else {
+						file.SupportedCommandClasses = [];
+					}
+					file.AssociationGroups = keepLongest(
+						file.AssociationGroups,
+						test_file.AssociationGroups,
+					);
+					file.Documents = keepLongest(
+						file.Documents,
+						test_file.Documents,
+					);
+					file.Texts = keepLongest(file.Texts, test_file.Texts);
+					file.Features = keepLongest(
+						file.Features,
+						test_file.Features,
+					);
+				}
+				// Show an error if the device parameters should match, but they don't
+				// TODO add erorr handling if a FW changes parameters
+				else if (
+					test_file.ProductId === file.ProductId &&
+					test_file.ProductTypeId === file.ProductTypeId &&
+					isEquivalentParameters(
+						testParameters,
+						test_file?.ConfigurationParameters,
+						"ParameterNumber",
+					) == false
+				) {
+					console.log(
+						`ERROR ERROR ERROR - Will end up with duplicate device file due to firmware change -- ${file.Id} and ${test_file.Id}`,
+					);
+				}
+				// We were wrong to change the identifier because the params don't match, restore the tested file as it is different
+				else if (
+					test_file.Identifier === testIdentifier &&
+					isEquivalentParameters(
+						testParameters,
+						test_file?.ConfigurationParameters,
+						"ParameterNumber",
+					) === false
+				) {
+					test_file.Identifier = test_file.OriginalIdentifier;
+				}
+			}
+		}
+	}
+	function keepLongest(current_group: any, test_group: any) {
+		if (current_group.length >= test_group.length) {
+			return current_group;
+		} else {
+			return test_group;
+		}
+	}
+
+	function bothZwavePlus(current_group: any, test_group: any) {
+		for (const z of current_group) {
+			for (const class2 of test_group) {
+				if (
+					(z.Identifier.includes("ZWAVEPLUS") ||
+						z.Identifier.includes("ASSOCIATION_GRP_INFO")) &&
+					(class2.Identifier.includes("ZWAVEPLUS") ||
+						class2.Identifier.includes("ASSOCIATION_GRP_INFO"))
+				) {
+					return true;
+				}
+			}
+		}
+		return false;
+	}
+	return json;
+}
+
+/***
+ * Combine zWave Alliance Device Files
+ */
+function sanitizeFields(json: Array<object>) {
+	for (const file of json) {
+		if (file.ProductId) {
+			file.Identifier = file.Identifier
+				? sanitizeString(file.Identifier)
+				: "";
+			file.Brand = file.Brand ? sanitizeString(file.Brand) : "";
+		}
+		if (file.AssociationGroups) {
+			for (const assoc of file.AssociationGroups) {
+				assoc.Description = assoc.Description
+					? sanitizeString(assoc.Description)
+					: "";
+				assoc.group_name = assoc.group_name
+					? sanitizeString(assoc.group_name)
+					: "";
+			}
+		}
+		if (file.ConfigurationParameters) {
+			for (const param of file.ConfigurationParameters) {
+				param.Name = param.Name ? sanitizeString(param.Name) : "";
+				param.Name = param.Name ? param.Name.replace(/\.\"/g, '"') : "";
+				param.Name = param.Name
+					? param.Name.replace(/[\,\.\:]$/, '"')
+					: "";
+				param.Name = param.Name ? param.Name.replace(/\:\"/g, '"') : "";
+				param.Description = param.Description
+					? sanitizeString(param.Description)
+					: "";
+				if (param.ConfigurationParameterValues) {
+					for (const value of param.ConfigurationParameterValues) {
+						value.Description = value.Description
+							? sanitizeString(value.Description)
+							: "";
+						value.Description = value.Description
+							? value.Description.replace(/[\,\.\:]$/, '"')
+							: "";
+					}
+				}
+			}
+		}
+		if (file.Texts) {
+			for (const text of file.Texts) {
+				text.description = text.description
+					? sanitizeString(text.description)
+					: "";
+				text.value = text.value ? sanitizeString(text.value) : "";
+			}
+		}
+	}
+	return json;
+}
+
+/**
+ * Read and parse the product xml, add it to index if missing,
+ * create/update device json config and validate the newly added
+ * device
+ *
+ * @param product the parsed product json entry from manufacturer.xml
+ */
+async function parseZWAProduct(
+	product: any,
+	manufacturerId: number,
+	manufacturer: string | undefined,
+): Promise<void> {
+	const productLabel = product.Identifier;
+
+	// any products descriptions have productName in it, remove it
+	const productName = product.Name.replace(productLabel, "");
+
+	// Format the device IDs like we expect them
+
+	let manufacturerIdHex = product.ManufacturerId.replace(/^0x/, "");
+	manufacturerIdHex = formatId(manufacturerIdHex);
+
+	/*************************************
+	 *	Load the device configurations   *
+	 *************************************/
+	let deviceConfigs: any;
+	for (const device of product.combinedDevices) {
+		deviceConfigs =
+			configManager
+				.getIndex()
+				?.filter(
+					(f: DeviceConfigIndexEntry) =>
+						f.manufacturerId === manufacturerIdHex &&
+						f.productType === device.ProductTypeId &&
+						f.productId === device.ProductId,
+				) ?? [];
+		if (deviceConfigs) {
+			break;
+		}
+	}
+
+	// Determine where the config file should be
+	const latestConfig = getLatestConfigVersion(deviceConfigs) ?? [];
+	let fileNameRelative: string;
+	if (latestConfig.filename) {
+		fileNameRelative = latestConfig?.filename;
+	} else {
+		fileNameRelative =
+			latestConfig?.filename ??
+			`${manufacturerIdHex}/${labelToFilename(productLabel)}.json`;
+	}
+	const fileNameAbsolute = path.join(processedDir, fileNameRelative);
+
+	// Load the existing config so we can merge it with the updated information
+	let existingDevice: Record<string, any> | undefined;
+
+	try {
+		if (await fs.pathExists(fileNameAbsolute)) {
+			existingDevice = JSON5.parse(
+				await fs.readFile(fileNameAbsolute, "utf8"),
+			);
+		}
+	} catch (e) {
+		console.log("Error processing: " + fileNameAbsolute + " - " + e);
+	}
+
+	/********************************
+	 *    Build the device lists    *
+	 ********************************/
+	const devices = existingDevice?.devices ?? [];
+
+	for (const dev of product.combinedDevices) {
+		// Append the zwa device ID to existing devices
+		for (const eDevice of devices) {
+			if (
+				eDevice.productType == dev.ProductTypeId &&
+				eDevice.productId == dev.ProductId
+			) {
+				eDevice.zwaveAllianceId = dev.Id;
+			}
+		}
+
+		// Add new devices
+		if (
+			!devices.some(
+				(d: { productType: string; productId: string }) =>
+					d.productType === dev.ProductTypeId &&
+					d.productId === dev.ProductId,
+			)
+		) {
+			devices.push({
+				productType: dev.ProductTypeId,
+				productId: dev.ProductId,
+				zwaveAllianceId: dev.Id,
+			});
+		}
+	}
+
+	/***************************************
+	 *   Setup the initial configuration   *
+	 ***************************************/
+
+	const inclusion = product?.Texts?.find((document) => document.Type === 1)
+		?.value;
+	const exclusion = product?.Texts?.find((document) => document.Type === 2)
+		?.value;
+	const reset = product?.Texts?.find((document) => document.Type === 5)
+		?.value;
+	let manual = product?.Documents?.find((document) => document.Type === 1)
+		?.value;
+	const website_root =
+		"https://products.z-wavealliance.org/ProductManual/File?folder=&filename=";
+	if (manual) {
+		manual = manual.replace(/ /g, "%20");
+		manual = website_root.concat(manual);
+	}
+
+	const newConfig: Record<string, any> = {
+		manufacturer,
+		manufacturerId: manufacturerIdHex,
+		label: productLabel,
+		description: existingDevice?.description ?? productName, // don't override the descrition
+		devices: devices,
+		firmwareVersion: {
+			min: existingDevice?.firmwareVersion.min ?? "0.0",
+			max: existingDevice?.firmwareVersion.max ?? "255.255",
+		},
+		associations: existingDevice?.associations ?? {},
+		paramInformation: existingDevice?.paramInformation ?? {},
+		compat: existingDevice?.compat,
+	};
+	if (inclusion || exclusion || reset || manual) {
+		newConfig.metadata = {
+			inclusion: inclusion,
+			exclusion: exclusion,
+			reset: reset,
+			manual: manual,
+		};
+	}
+
+	/***************************
+	 *     Clean up values     *
+	 ***************************/
+
+	newConfig.description = sanitizeString(newConfig.description);
+
+	/**********************
+	 *     Parameters     *
+	 **********************/
+	const parameters = product.ConfigurationParameters;
+
+	let requiresManualReview = false;
+	for (const param of parameters) {
+		const parsedParam =
+			newConfig.paramInformation[param.ParameterNumber] ?? {};
+
+		if (parsedParam.$import) {
+			continue;
+		}
+
+		// By default, update existing properties with new descriptions
+		parsedParam.label = param.Name || parsedParam.label;
+		parsedParam.label = normalizeLabel(parsedParam.label);
+		parsedParam.description =
+			param.ConfigurationParameterValues.length > 1 // Sometimes values options are described and not presented as options
+				? param.Description
+				: param.ConfigurationParameterValues[0].Description;
+		parsedParam.description = normalizeDescription(parsedParam.description);
+		parsedParam.valueSize = updateNumberOrDefault(
+			param.Size,
+			parsedParam.valueSize,
+			1,
+		);
+		parsedParam.minValue = updateNumberOrDefault(
+			param.minValue,
+			parsedParam.min,
+			0,
+		);
+		try {
+			const priorMax = parsedParam.maxValue;
+			parsedParam.maxValue = updateNumberOrDefault(
+				param.maxValue,
+				parsedParam.max,
+				getIntegerLimits(parsedParam.valueSize, false).max, // choose the biggest possible number if no max is given
+			);
+			parsedParam.maxValue =
+				parsedParam.maxValue >= priorMax
+					? parsedParam.maxValue
+					: priorMax;
+		} catch {
+			// some config params have absurd value sizes, ignore them
+			parsedParam.maxValue = parsedParam.minValue;
+		}
+		parsedParam.readOnly = param.flagReadOnly;
+		parsedParam.writeOnly = param.Description.includes("write") // zWave Alliance typically puts (write only) in the description
+			? true
+			: false;
+		parsedParam.allowManualEntry =
+			param.ConfigurationParameterValues.length === 1 ? true : false;
+		parsedParam.defaultValue = updateNumberOrDefault(
+			param.DefaultValue,
+			parsedParam.value,
+			parsedParam.minValue, // choose the smallest possible number if no default is given
+		);
+
+		// Setup the unit
+		if (
+			parsedParam.description.toLowerCase().includes("hour") ||
+			parsedParam.description.toLowerCase().includes("hours")
+		) {
+			parsedParam.unit = "hours";
+		} else if (
+			parsedParam.description.toLowerCase().includes("minute") ||
+			parsedParam.description.toLowerCase().includes("minutes")
+		) {
+			parsedParam.unit = "minutes";
+		} else if (
+			parsedParam.description.toLowerCase().includes("second") ||
+			parsedParam.description.toLowerCase().includes("seconds")
+		) {
+			parsedParam.unit = "seconds";
+		} else if (
+			parsedParam.description.toLowerCase().includes("percent") ||
+			parsedParam.description.toLowerCase().includes("percentage")
+		) {
+			parsedParam.unit = "%";
+		} else if (
+			parsedParam.description.toLowerCase().includes("centigrade") ||
+			parsedParam.description.toLowerCase().includes("celsius")
+		) {
+			parsedParam.unit = "°C";
+		} else if (
+			parsedParam.description.toLowerCase().includes("fahrenheit")
+		) {
+			parsedParam.unit = "°F";
+		}
+
+		// Sanity check some values
+		parsedParam.minValue =
+			parsedParam.minValue <= parsedParam.defaultValue
+				? parsedParam.minValue
+				: parsedParam.defaultValue;
+		parsedParam.maxValue =
+			parsedParam.maxValue >= parsedParam.defaultValue
+				? parsedParam.maxValue
+				: parsedParam.defaultValue;
+		parsedParam.writeOnly =
+			parsedParam.readOnly === false ? parsedParam.writeOnly : true;
+
+		// Setup unsigned
+		if (parsedParam.minValue >= 0) {
+			parsedParam.unsigned = true;
+		} else {
+			delete parsedParam.unsigned;
+		}
+
+		if (typeof parsedParam.description !== "string") {
+			parsedParam.description = "";
+		}
+
+		// Parse options list if manual entry is disallowed (i.e. options picker)
+		if (parsedParam.allowManualEntry === false) {
+			parsedParam.options = [];
+			for (const item of param.ConfigurationParameterValues) {
+				// Values are given as options
+				if (item.From === item.To) {
+					const opt = {
+						label: normalizeDescription(item.Description),
+						value: item.To,
+					};
+					parsedParam.options.push(opt);
+					if (parsedParam.minValue > item.value) {
+						parsedParam.minValue = item.value;
+					}
+					if (parsedParam.maxValue < item.value) {
+						parsedParam.maxValue = item.value;
+					}
+				} else if (
+					(item.From == 0 && item.To == 99) ||
+					(item.From == 1 && item.To == 99) ||
+					(item.From == 0 && item.To == 255) ||
+					(item.From == 1 && item.To == 255) ||
+					(item.From == 0 && item.To > 500) ||
+					(item.From == 1 && item.To > 500)
+				) {
+					parsedParam.allowManualEntry = true;
+				} else {
+					// Sometimes options appear to be a list but present multiple values; these will require manual correction
+					const opt = {
+						label: normalizeDescription(item.Description),
+						value: item.To,
+					};
+					parsedParam.options.push(opt);
+					requiresManualReview = true;
+				}
+			}
+		}
+		newConfig.paramInformation[param.ParameterNumber] = parsedParam;
+	}
+
+	/********************************
+	 *        Associations		    *
+	 ********************************/
+
+	// If Z-Wave+ is supported, we don't usually need the association information to determine the lifeline, but we still set it up in case we do
+
+	let zwavePlus = false;
+	zwavePlus = product?.SupportedCommandClasses?.find((document) =>
+		document.Identifier.includes("ZWAVEPLUS"),
+	)
+		? true
+		: zwavePlus;
+	zwavePlus = product?.SupportedCommandClasses?.find((document) =>
+		document.Identifier.includes("ASSOCIATION_GRP_INFO"),
+	)
+		? true
+		: zwavePlus;
+	zwavePlus = product?.AssociationGroups?.find((document) =>
+		document.Description.includes("Z-Wave Plus"),
+	)
+		? true
+		: zwavePlus;
+	zwavePlus = existingDevice?.supportsZWavePlus ? true : zwavePlus;
+
+	const newAssociations = {};
+	let addCompat = false;
+	for (const ass of product.AssociationGroups) {
+		let label: string =
+			ass.group_name.length > 0
+				? ass.group_name
+				: "Group " + ass.GroupNumber.toString();
+		const maxNodes = ass.MaximumNodes;
+		const groupName = ass.group_name.toLowerCase();
+		const description = ass.Description.toLowerCase();
+		let lifeline = false;
+		if (
+			groupName.includes("lifeline") ||
+			description.includes("lifeline")
+		) {
+			lifeline = true;
+
+			// Lifeline reporting on other than #1, so we need associations even if zWave Plus
+			if (ass.GroupNumber !== 1) {
+				zwavePlus = false;
+			}
+		}
+
+		// Add double tap support if supported by the device
+		if (groupName.includes("double") || description.includes("double")) {
+			label = "Double Tap";
+			lifeline = true; // Required to receive Basic Set notifications
+			zwavePlus = false; // Required
+			addCompat = true;
+
+			if (newConfig.compat) {
+				newConfig.compat.disableBasicMapping = true;
+			} else {
+				newConfig.compat = {};
+				newConfig.compat.disableBasicMapping = true;
+			}
+		}
+
+		newAssociations[ass.GroupNumber] = {
+			label: label,
+			maxNodes: maxNodes,
+		};
+		if (lifeline) {
+			newAssociations[ass.GroupNumber].isLifeline = true;
+		}
+	}
+
+	// Overwrite the existing associations if we need to add the compat flag
+	if (Object.keys(newConfig.associations).length !== 0 && addCompat) {
+		newConfig.associations = newAssociations;
+	}
+	// Add the associations if the originals are blank AND the device is not zWavePlus.
+	else if (
+		Object.keys(newConfig.associations).length === 0 &&
+		zwavePlus === false
+	) {
+		newConfig.associations = newAssociations;
+	}
+
+	// Warn if the device file requires conflicts to be resolved
+	if (requiresManualReview) {
+		console.log(
+			`ERROR - Manual review required due to potential conflicts or invalid values: ${fileNameAbsolute}`,
+		);
+	}
+	/*************************************
+	 *   Write the configuration file    *
+	 *************************************/
+
+	// Create the dir if necessary
+	const manufacturerDir = path.join(processedDir, manufacturerIdHex);
+	await fs.ensureDir(manufacturerDir);
+
+	// Write the file
+	// Add a comment explaining which device this is
+	// prettier-ignore
+	const output = `// ${newConfig.manufacturer} ${newConfig.label}${newConfig.description ? (`
+// ${newConfig.description}`) : ""}
+${stringify(normalizeConfig(newConfig), "\t")}`;
+	await fs.writeFile(fileNameAbsolute, output, "utf8");
+}
+
+async function indexZWAFiles(): Promise<void> {
+	// Parse json files in the zwaTempDir
+	let jsonData = [];
+
+	const configFiles = await enumFilesRecursive(processedDir, (file) =>
+		file.endsWith(".json"),
+	);
+
+	for (const file of configFiles) {
+		const j = await fs.readFile(file, "utf8");
+		jsonData.push(JSON.parse(j));
+	}
+}
+
+async function maintenanceParse(): Promise<void> {
+	// Parse json files in the zwaTempDir
+	let zwaData = [];
+
+	// Load the zwa files
+	const zwaFiles = await enumFilesRecursive(zwaTempDir, (file) =>
+		file.endsWith(".json"),
+	);
+	for (const file of zwaFiles) {
+		const j = await fs.readFile(file, "utf8");
+
+		/**
+		 * zWave Alliance numbering isn't always continuous and an html page is 
+		returned when a device number doesn't. Test for and delete such files.
+		 */
+		if (j.charAt(0) === "{") {
+			zwaData.push(JSON.parse(j));
+		} else {
+			void fs.unlink(file);
+		}
+	}
+
+	// Build the list of device files
+	const configFiles = await enumFilesRecursive(processedDir, (file) =>
+		file.endsWith(".json"),
+	);
+	for (const file of configFiles) {
+		const j = await fs.readFile(file, "utf8");
+
+		let jsonData;
+		try {
+			jsonData = JSON5.parse(j);
+		} catch (e) {
+			console.log("Error processing: " + file + " - " + e);
+		}
+
+		let includedZwaFiles = [];
+
+		try {
+			for (const device of jsonData.devices) {
+				if (Array.isArray(device.zwaveAllianceId)) {
+					includedZwaFiles = includedZwaFiles.concat(
+						device.zwaveAllianceId,
+					);
+				} else if (device.zwaveAllianceId) {
+					includedZwaFiles.push(device.zwaveAllianceId);
+				}
+			}
+		} catch (e) {
+			console.log("Error iterating: " + file + " - " + e);
+		}
+
+		includedZwaFiles.sort(function (a, b) {
+			return a - b;
+		});
+
+		for (const referenceDevice of includedZwaFiles) {
+			for (const zwafile of zwaData) {
+				if (zwafile.Id === referenceDevice) {
+					let manual = zwafile?.Documents?.find(
+						(document) => document.Type === 1,
+					)?.value;
+
+					const website_root =
+						"https://products.z-wavealliance.org/ProductManual/File?folder=&filename=";
+
+					if (manual) {
+						manual = manual.replace(/ /g, "%20");
+						manual = website_root.concat(manual);
+
+						if (jsonData.metadata) {
+							jsonData.metadata.manual = manual;
+							break;
+						} else {
+							jsonData.metadata = {};
+							jsonData.metadata.manual = manual;
+							break;
+						}
+					}
+				}
+			}
+		}
+
+		if (jsonData.metadata) {
+			/*************************************
+			 *   Write the configuration file    *
+			 *************************************/
+
+			// Add a comment explaining which device this is
+			// prettier-ignore
+			const output = `// ${jsonData.manufacturer} ${jsonData.label}${jsonData.description ? (`
+// ${jsonData.description}`) : ""}
+${stringify(normalizeConfig(jsonData), "\t")}`;
+			await fs.writeFile(file, output, "utf8");
+		}
+	}
+
+	function keepLongest(current_group: any, test_group: any) {
+		if (current_group.length >= test_group.length) {
+			return current_group;
+		} else {
+			return test_group;
+		}
+	}
+}
+
 /**
  * Downloads all device information
  * @param IDs If given, only these IDs are downloaded
@@ -973,6 +1884,273 @@ ${stringify(parsed, "\t")}`;
 	}
 }
 
+/****************************************************************************
+ *                   Normalize Identifier function                          *
+ * Strips out common model number variations representing different         *
+ * jurisdicitons, which typically share firmware and parameter settings     *
+ * 																			*
+ * Note: Returns an array of the new identifier, and the original           *
+ ****************************************************************************/
+function normalizeIdentifier(originalIdentifier: string) {
+	// Cleanup current Identifier and store in case of later duplicate files
+	let newIdentifier = originalIdentifier;
+
+	const country_codes = [
+		"(US)",
+		"us",
+		"US",
+		"(EU)",
+		"eu",
+		"EU",
+		"(RU)",
+		"ru",
+		"RU",
+		"(AU)",
+		"au",
+		"AU",
+		"(CM)",
+		"cm",
+		"CM",
+	];
+
+	for (const code of country_codes) {
+		const regex = new RegExp(code, "g");
+		newIdentifier = newIdentifier.replace(regex, "");
+	}
+
+	const suffixToRemove = [
+		"-1",
+		"-2",
+		"-3",
+		"-4",
+		"a",
+		"A",
+		"b",
+		"B",
+		"c",
+		"C",
+		"d",
+		"D",
+		"e",
+		"i",
+		"I",
+		"j",
+		"J",
+	];
+	for (const suffix of suffixToRemove) {
+		if (newIdentifier.slice(-suffix.length) == suffix) {
+			newIdentifier = newIdentifier.slice(0, -suffix.length);
+			break;
+		}
+	}
+
+	const prohibitedEndChars = ["-", ".", "_", ",", " "];
+	for (const endChar of prohibitedEndChars) {
+		if (newIdentifier.slice(-1) === endChar) {
+			newIdentifier = newIdentifier.slice(0, -1);
+			break;
+		}
+	}
+	newIdentifier = newIdentifier.trim();
+	newIdentifier = newIdentifier.toLocaleUpperCase();
+	return [newIdentifier, originalIdentifier];
+}
+/****************************************************************************
+ *                   Normalize label function                               *
+ * Capitilze each word in a label        							        *
+ * 																			*
+ ****************************************************************************/
+function normalizeLabel(originalString: string) {
+	originalString = sanitizeString(originalString);
+	originalString = originalString.replace(/\n/g, " ");
+	originalString = originalString.replace(/\\"/g, "");
+	let splitStr = originalString.toLowerCase().split(" ");
+	for (let i = 0; i < splitStr.length; i++) {
+		splitStr[i] =
+			splitStr[i].charAt(0).toUpperCase() + splitStr[i].substring(1);
+	}
+	originalString = splitStr.join(" ");
+
+	splitStr = originalString.split("/");
+	for (let i = 0; i < splitStr.length; i++) {
+		splitStr[i] =
+			splitStr[i].charAt(0).toUpperCase() + splitStr[i].substring(1);
+	}
+	originalString = splitStr.join("/");
+
+	originalString = originalString.replace(/ Led /g, " LED ");
+	originalString = originalString.replace(/ Rgb /g, " RGB ");
+	originalString = originalString.replace(/ Pir /g, " PIR ");
+	originalString = originalString.replace(/Z-wave/g, "Z-Wave");
+	originalString = originalString.replace(/basic set/g, "Basic Set");
+	originalString = originalString.replace(
+		/multi-level switch/g,
+		"Multi-Level Switch",
+	);
+	originalString = originalString.replace(/Multi-level/g, "Multi-Level");
+	originalString = originalString.replace(/ Of /g, " of ");
+	originalString = originalString.replace(/ To /g, " to ");
+	originalString = originalString.replace(/ A /g, " a ");
+	originalString = originalString.replace(/ An /g, " an ");
+	originalString = originalString.replace(/ Is /g, " is ");
+	originalString = originalString.replace(/ In /g, " in ");
+
+	const prohibitedEndChars = ["-", ".", "_", ",", " "];
+	// Clean-up the end of labels
+	for (const endChar of prohibitedEndChars) {
+		if (originalString.slice(-1) === endChar) {
+			originalString = originalString.slice(0, -1);
+			break;
+		}
+	}
+
+	// Clean-up the beginning of labels
+	for (const endChar of prohibitedEndChars) {
+		if (originalString.slice(0) === endChar) {
+			originalString = originalString.slice(1, 0);
+			break;
+		}
+	}
+
+	originalString = originalString.trim();
+
+	return originalString;
+}
+
+/****************************************************************************
+ *                   Normalize description                                  *
+ * Capitilze each word in a description          					        *
+ * 																			*
+ ****************************************************************************/
+function normalizeDescription(originalString: string) {
+	originalString = sanitizeString(originalString);
+	originalString = originalString.replace(/\n/g, " ");
+	originalString = originalString.replace(/\\"/g, "");
+	originalString = originalString.toLocaleLowerCase();
+	originalString = originalString.replace(/ led /g, " LED ");
+	originalString = originalString.replace(/ rgb /g, " RGB ");
+	originalString = originalString.replace(/ pir /g, " PIR ");
+	originalString = originalString.replace(/basic set/g, "Basic Set");
+	originalString = originalString.replace(/multi-level/g, "Multi-Level");
+	originalString = originalString.replace(/z-wave/g, "Z-Wave");
+	originalString =
+		originalString.charAt(0).toUpperCase() + originalString.slice(1);
+	originalString = originalString.replace(
+		/multi-level switch/g,
+		"Multi-Level Switch",
+	);
+	originalString = originalString.replace(/multi-level/g, "Multi-Level");
+
+	const prohibitedEndChars = ["-", ".", "_", ",", " "];
+	// Clean-up the end of labels
+	for (const endChar of prohibitedEndChars) {
+		if (originalString.slice(-1) === endChar) {
+			originalString = originalString.slice(0, -1);
+			break;
+		}
+	}
+
+	// Clean-up the beginning of labels
+	for (const endChar of prohibitedEndChars) {
+		if (originalString.slice(0) === endChar) {
+			originalString = originalString.slice(1, 0);
+			break;
+		}
+	}
+
+	originalString = originalString.trim();
+	return originalString;
+}
+/****************************************************************************
+ *                   Sanitize String function                             *
+ * Strips out common mistakes in strings							        *
+ * 																			*
+ ****************************************************************************/
+function sanitizeString(originalString: string) {
+	originalString = originalString.replace(/\r\n/g, "\n");
+	originalString = originalString.replace(/\r/g, "\n");
+	originalString = originalString.replace(/\n\n\n\n/g, "\n\n");
+	originalString = originalString.replace(/\t/g, " ");
+	// eslint-disable-next-line prettier/prettier
+	originalString = originalString.replace(/\"\"/g, '"');
+	originalString = originalString.replace(/      /g, " ");
+	originalString = originalString.replace(/     /g, " ");
+	originalString = originalString.replace(/    /g, " ");
+	originalString = originalString.replace(/   /g, " ");
+	originalString = originalString.replace(/  /g, " ");
+	originalString = originalString.replace(/\,s*$/g, "");
+	originalString = originalString.replace(/\„s*$/g, "");
+	originalString = originalString.replace(/\.s*$/g, "");
+	originalString = originalString.replace(/\:s*$/g, "");
+	originalString = originalString.trim();
+	return originalString;
+}
+/****************************************************************************
+ *                   Parameter Comparison function                          *
+ * Compare two sets of parameters and return true if the numbers match      *
+ * 																			*
+ * Note: Accepts as a string the name of the parameter key in the object    *
+ ****************************************************************************/
+
+function isEquivalentParameters(
+	tested_device: any = [],
+	compared_device: any = [],
+	parameterKey: string,
+) {
+	const testParameters = new Set();
+	//tested_device = tested_device ?? [];
+	//compared_device = compared_device ?? [];
+	for (const tp of tested_device) {
+		const temp = tp[parameterKey];
+		testParameters.add(temp);
+	}
+
+	const compareParameters = new Set();
+	for (const cp of compared_device) {
+		const temp = cp[parameterKey];
+		compareParameters.add(temp);
+	}
+
+	const setDifference = new Set(
+		[...compareParameters].filter((x) => !testParameters.has(x)),
+	);
+	if (setDifference.size == 0) {
+		return true;
+	} else {
+		return false;
+	}
+}
+
+/****************************************************************************
+ *                 Create array, or update array if it exists,              *
+ * 				   append ZWA Ids										    *
+ ****************************************************************************/
+
+function createOrUpdateArray(potentialArray: any, update: any) {
+	potentialArray = potentialArray ?? [];
+	const newArray = potentialArray;
+	for (const arr of newArray) {
+		if (
+			(arr.ProductId === update.ProductId &&
+				arr.ProductTypeId === update.ProductTypeId) ||
+			(arr.ProductId === formatId(update.ProductId) &&
+				arr.ProductTypeId === formatId(update.ProductTypeId))
+		) {
+			if (Array.isArray(arr.Id)) {
+				arr.Id.push(update.Id);
+			} else {
+				const temp = arr.Id;
+				arr.Id = [];
+				arr.Id.push(temp);
+				arr.Id.push(update.Id);
+			}
+			return newArray;
+		}
+	}
+	newArray.push(update);
+	return newArray;
+}
+
 /**
  * Get latest device configuration file version
  * @param configs list of device config index entries
@@ -1034,6 +2212,16 @@ void (async () => {
 				await parseOZWConfig();
 		}
 
+		if (program.source.includes("zwa")) {
+			/* TODO: Add routine to download only the most recent, or specific, zwave alliance files
+			if (program.download) {
+				await downloadOZWConfig();
+				await extractConfigFromTar();
+			} */
+
+			if (program.manufacturers || program.devices) await parseZWAFiles();
+		}
+
 		if (program.source.includes("oh")) {
 			if (program.download) {
 				await downloadManufacturers();
@@ -1051,6 +2239,10 @@ void (async () => {
 			if (program.devices) {
 				await importConfigFiles();
 			}
+		}
+
+		if (program.parse) {
+			await maintenanceParse();
 		}
 	}
 })();
