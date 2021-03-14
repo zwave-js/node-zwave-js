@@ -16,7 +16,7 @@ Additional information is available at: [Importing files from other sources](imp
 
 We present complex bitmask-type parameters as individual parameters. Doing so requires converting such parameters to Partial Parameters.
 
-Additional information is available at: [Guide on partial parameters](config-files/partial-parameters.md)
+Additional information is available at: [Guide on partial parameters](../config-files/partial-parameters.md)
 
 ## Conditional Parameters and Settings
 
