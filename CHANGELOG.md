@@ -3,7 +3,7 @@
 	Placeholder for next release:
 	## __WORK IN PROGRESS__
 -->
-## __WORK IN PROGRESS__
+## 6.6.2 (2021-03-14)
 ### Bugfixes
 * While replacing a node with `replaceFailedNode` the node does not get removed from associations anymore. This could prevent secure inclusion from succeeding.
 * Notification variables are now auto-idled after 5 minutes as it was intended, not after 5 hours.
