@@ -118,7 +118,7 @@ Descriptions should be **Sentence case**.
 "paramInformation": {
     "4": {
         "label": "Duration Sent on Pushbutton 1",
-		"description": "Allowable range: 0-99",
+        "description": "Allowable range: 0-99",
         "valueSize": 1,
         "minValue": 0,
         "maxValue": 255,
@@ -143,7 +143,7 @@ Descriptions should be **Sentence case**.
 "paramInformation": {
     "4": {
         "label": "Duration Sent on Pushbutton 1",
-		"description": "Values 1-127 = seconds; 128-255 = minutes (minus 127)",
+        "description": "Values 1-127 = seconds; 128-255 = minutes (minus 127)",
         "valueSize": 1,
         "minValue": 1,
         "maxValue": 255,
