@@ -268,7 +268,6 @@
 		"51": {
 			"$if": "firmwareVersion >= 1.19",
 			"label": "Instant On",
-			"description": "Enables instant on (ie: disables the 700ms button delay).",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 1,
