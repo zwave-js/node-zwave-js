@@ -6,6 +6,8 @@ Our goal is to present users with clear, descriptive parameter labels and useful
 
 Consistency, consistency, consistency. Labels and descriptions should be consistent. If one includes (Clamp 1), another shouldn't include "- Clamp 1" or [Clamp 1]. Please use the same terminology, labels, and formatting.
 
+Please use only **American English**.
+
 ## Comments
 
 Our device files begin with a series of two comments that describe the manufacturer/brand, label and description.
@@ -81,14 +83,78 @@ Descriptions should be **Title Case**.
 
 Shorten labels wherever possible. E.g. `Threshold at which to send a battery report` becomes `Battery Report Threshold`.
 
+Labels should be clear and concise. They should clearly explain what the parameter does while avoiding unnnecessary technical jargon:
+
+```diff
+"paramInformation": {
+    "4": {
+-        "label": "Switch multilevel set single-activation values for pushbutton 1, Byte 1",
++        "label": "Value Sent on Pushbutton 1",
+        "valueSize": 1,
+        "minValue": 0,
+        "maxValue": 99,
+        "defaultValue": 0,
+        "unsigned": true,
+        "readOnly": false,
+        "writeOnly": false,
+        "allowManualEntry": true
+    }
+}
+```
+
 Labels should be **Title Case**.
 
 ### Descriptions
 
-Descriptions can be helpful, but they clutter UIs. As such, unnecessary descriptions that merely restate the label **must** be removed. Additionally, information like units or available ranges should be removed as that information is provided to UIs through other properties.  
-As a rule of thumb: Only include a description if it is necessary, helpful and adds significant value.
+Descriptions can be helpful, but they clutter UIs. As such, unnecessary descriptions that merely restate the label **must** be removed. Additionally, information like units or available ranges should be removed as that information is provided to UIs through other properties.
+
+As a rule of thumb: Only include a description if it is necessary, helpful, and adds significant value.
 
 Descriptions should be **Sentence case**.
+
+**Exception 1:** Sometimes a parameter provides for a range of 0-99, or 255 for the last value (or similar). This could be confusing to users because 100-254 are not valid values. In such circumstances the allowable range _should_ be explained, in conjunction with a predefined option as a hint (described below).
+
+```json
+"paramInformation": {
+    "4": {
+        "label": "Duration Sent on Pushbutton 1",
+		"description": "Allowable range: 0-99",
+        "valueSize": 1,
+        "minValue": 0,
+        "maxValue": 255,
+        "defaultValue": 30,
+        "unsigned": true,
+        "readOnly": false,
+        "writeOnly": false,
+        "allowManualEntry": true,
+		"options": [
+            {
+                "label": "Dimmer default",
+                "value": 255
+            }
+        ]
+    }
+}
+```
+
+**Exception 2:** Some manufacturers use parameters for which the unit changes depending on the value. In such circumstances there is no other option but to describe the unit in the description.
+
+```json
+"paramInformation": {
+    "4": {
+        "label": "Duration Sent on Pushbutton 1",
+		"description": "Values 1-127 = seconds; 128-255 = minutes (minus 127)",
+        "valueSize": 1,
+        "minValue": 1,
+        "maxValue": 255,
+        "defaultValue": 30,
+        "unsigned": true,
+        "readOnly": false,
+        "writeOnly": false,
+        "allowManualEntry": false
+    }
+}
+```
 
 ### Options
 
@@ -118,6 +184,59 @@ Option labels should be **Sentence case**.
             {
                 "label": "Invert switch",
                 "value": 1
+            }
+        ]
+    }
+}
+```
+
+#### Options as Hints
+
+Sometimes a parameter provides for a range of 0-99, or 255 for the last value (or similar). Or, 0-99 with 0 meaning the parameter is disabled. In such circumstances the min/max range must encompass the full range, but the predefined value should be described as an option **while still allowing manual entries**. UIs are then free to use this information to display hints or predefined options.
+
+For example:
+
+```json
+"paramInformation": {
+    "4": {
+        "label": "Dimmer Delay",
+		"description": "Allowable range: 0-99",
+        "valueSize": 1,
+        "minValue": 0,
+        "maxValue": 255,
+        "defaultValue": 0,
+        "unsigned": true,
+        "readOnly": false,
+        "writeOnly": false,
+        "allowManualEntry": true,
+		        "options": [
+            {
+                "label": "Dimmer default",
+                "value": 255
+            }
+        ]
+    }
+}
+```
+
+or
+
+```json
+"paramInformation": {
+    "4": {
+        "label": "Dimmer Transition",
+        "valueSize": 1,
+        "minValue": 0,
+        "maxValue": 99,
+        "defaultValue": 0,
+        "unsigned": true,
+        "readOnly": false,
+        "writeOnly": false,
+        "allowManualEntry": true,
+		        "options": [
+            {
+                "label": "Disable",
+                "value": 0
             }
         ]
     }
