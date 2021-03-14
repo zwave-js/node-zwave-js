@@ -20,15 +20,12 @@
 
     -   [Send custom messages](usage/custom.md)
 
--   Guides and FAQ
-
-    -   [Partial config parameters explained](guides/partial-parameters.md)
-
 -   Device Files
 
     -   [Device configuration file format](config-files/config-file-format.md)
     -   [Contributing device files](config-files/contributing-files.md)
     -   [Importing files from other sources](config-files/importing-from-others.md)
+    -   [Guide on partial parameters](config-files/partial-parameters.md)
     -   [Properly conditioning parameters](config-files/conditional-parameters.md)
     -   [Mandatory use of device templates](config-files/using-templates.md)
     -   [Mandatory style guide](config-files/style-guide.md)
