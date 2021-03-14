@@ -3,7 +3,7 @@
 We provide import scripts to import and convert Z-Wave config files from other sources.
 
 > [!NOTE]
-> It is intended that these config files will be used only as a starting point. Almost always the resulting config files will need to be edited to add [templates](using-templates.md) and to comply with our [mandatory style guide](style-guide.md). Parameters may also need to be [conditioned](conditional-parameters.md) or converted to [partial parameters](config-files/config-file-format.md).
+> It is intended that these config files will be used only as a starting point. Almost always the resulting config files will need to be edited to add [templates](using-templates.md) and to comply with our [mandatory style guide](style-guide.md). Parameters may also need to be [conditioned](conditional-parameters.md) or converted to [partial parameters](config-files/partial-parameters.md).
 
 ## OpenZWave
 
