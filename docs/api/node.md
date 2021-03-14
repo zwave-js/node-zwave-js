@@ -419,6 +419,14 @@ enum ZWavePlusNodeType {
 }
 ```
 
+### `ready`
+
+```ts
+readonly ready: boolean
+```
+
+Whether this node is a ready, and safe to interact with.
+
 ### `roleType`
 
 ```ts
