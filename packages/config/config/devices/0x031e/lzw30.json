@@ -125,7 +125,8 @@
 					"value": 234
 				},
 				{
-					"label": "White (firmware 1.19+)",
+					"$if": "firmwareVersion >= 1.19",
+					"label": "White",
 					"value": 255
 				}
 			]
@@ -243,8 +244,9 @@
 			]
 		},
 		"13": {
+			"$if": "firmwareVersion >= 1.17",
 			"label": "Special Load Type",
-			"description": "Can be used in certain 3-way dumb switch setups where the load is confusing the switch as to which state it should be in. (firmware 1.17+).",
+			"description": "Can be used in certain 3-way dumb switch setups where the load is confusing the switch as to which state it should be in.",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 1,
@@ -264,8 +266,9 @@
 			]
 		},
 		"51": {
+			"$if": "firmwareVersion >= 1.19",
 			"label": "Instant On",
-			"description": "Enables instant on (ie: disables the 700ms button delay). (firmware 1.19+).",
+			"description": "Enables instant on (ie: disables the 700ms button delay).",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 1,
