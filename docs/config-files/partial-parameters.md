@@ -1,8 +1,37 @@
-# Partial config parameters explained
+# Guide on partial parameters
 
-Some devices use a single parameter number to configure several, sometimes unrelated, options. For convenience, `node-zwave-js` provides a simple way to define these values as multiple (partial) configuration parameters. This is a new concept for many and can be confusing at first, so this section is intended to provide some help.
+Some devices use a single parameter number to configure several, sometimes unrelated, options. For convenience, `node-zwave-js` provides a simple way to define these values as multiple (partial) configuration parameters.
 
-Let's take an advanced parameter from the Zooz ZEN21 as an example. Parameter #7 has the following values:
+For example,
+
+```json
+"40[0x01]": {
+	"label": "Button 1: behavior",
+	/* parameter definition */
+},
+"40[0x02]": {
+	"label": "Button 1: notifications",
+	/* parameter definition */
+},
+"40[0x04]": {
+	"label": "Button 2: behavior",
+	/* parameter definition */
+},
+"40[0x08]": {
+	"label": "Button 2: notifications",
+	/* parameter definition */
+},
+```
+
+defines 4 partial parameters that each switch a single bit of parameter #40. Using the appended bit mask (e.g. `[0x01]`), you can configure which bits each partial parameter affects.
+
+Partial parameters must follow these rules:
+
+1. The `valueSize` must be the actual size of the parameter, as defined in the device manual (not just the part of the bitmask). Each partial parameter must have the same `valueSize`.
+1. Each bitmask must fit into the configured `valueSize` of the parameter.
+1. The `minValue`, `maxValue` and `defaultValue` as well as options values are relative to the lowest bit the bit mask. If the bit mask is `0xC` (binary `1100`), these properties must be in the range 0...3 (2 bits). Any required bit shifts are automatically done.
+
+Partial parameters are a new concept for many and can be confusing at first, so this section is intended to provide some help. Let's take an advanced parameter from the Zooz ZEN21 as an example. Parameter #7 has the following values:
 
 | Value | Meaning                                                                           |
 | ----- | --------------------------------------------------------------------------------- |
