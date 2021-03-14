@@ -116,6 +116,10 @@ Note: If all available options can be listed, manual entry should be _disabled_.
 }
 ```
 
+## Special Note: Enable/Disable
+
+Whenever a parameter provides for only two options, and it is possible to do so, describe the label and/or description in a way that allows the options to be Enable/Disable. Ultimately some UIs may choose to present these parameters using a simple switch. Avoid Yes/No, True/False, etc.
+
 ## Min/Max Values
 
 A parameter must define the range of min/max values, however, that range should only be as large as is necessary. Frequently, imported config files have a range of 0-255 when the only possible range is 0-1. Please check the manual.
@@ -155,7 +159,7 @@ While somewhat rare, sometimes parameters can only be read or written. Typically
         "defaultValue": 0,
         "unsigned": true,
 -       "readOnly": false,
--       "readOnly": true,
++       "readOnly": true,
         "writeOnly": false,
         "allowManualEntry": true
     }
