@@ -425,7 +425,7 @@ enum ZWavePlusNodeType {
 readonly ready: boolean
 ```
 
-Whether this node is a ready, and safe to interact with.
+Whether the node is ready to be used.
 
 ### `roleType`
 
