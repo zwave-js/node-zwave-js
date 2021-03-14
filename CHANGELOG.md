@@ -15,7 +15,7 @@
 ### Features
 * The logger formats were more cleanly separated between logger and transport instances. As a result, writing user-defined transports is now much easier.
 * Implemented a `logfmt` transport in https://github.com/zwave-js/log-transports
-* Added support for `Entry Control CC`
+* Added support for `Entry Control CC`. It has been found that some entry control devices don't follow some of the strict rules regarding the data format. The validation can be turned off with the compat option `disableStrictEntryControlDataValidation`.
 
 ### Bugfixes
 * Changes to the logger configuration are now correctly applied dynamically
