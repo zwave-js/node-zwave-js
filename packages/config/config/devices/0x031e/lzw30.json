@@ -123,6 +123,10 @@
 				{
 					"label": "Pink",
 					"value": 234
+				},
+				{
+					"label": "White (firmware 1.19+)",
+					"value": 255
 				}
 			]
 		},
@@ -238,16 +242,48 @@
 				}
 			]
 		},
-		"8": {
-			"label": "LED Strip Effect",
-			"description": "Calculated sum of parameters as per overview section",
-			"valueSize": 4,
+		"13": {
+			"label": "Special Load Type",
+			"description": "Can be used in certain 3-way dumb switch setups where the load is confusing the switch as to which state it should be in. (firmware 1.17+).",
+			"valueSize": 1,
 			"minValue": 0,
-			"maxValue": 83823359,
+			"maxValue": 1,
 			"defaultValue": 0,
 			"readOnly": false,
 			"writeOnly": false,
-			"allowManualEntry": true
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Detect Load Type",
+					"value": 0
+				},
+				{
+					"label": "Manually set for special load type",
+					"value": 1
+				}
+			]
+		},
+		"51": {
+			"label": "Instant On",
+			"description": "Enables instant on (ie: disables the 700ms button delay). (firmware 1.19+).",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 1,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Enabled (no delay)",
+					"value": 0
+				},
+				{
+					"label": "Disabled (700ms delay)",
+					"value": 1
+				}
+			]
 		}
 	}
 }
