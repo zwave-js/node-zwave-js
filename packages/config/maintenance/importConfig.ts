@@ -804,7 +804,7 @@ async function parseZWAFiles(): Promise<void> {
 		);
 
 		// Add the manufacturer to our manufacturers.json if it is missing
-		if (isNaN(manufacturerId)) {
+		if (Number.isNaN(manufacturerId)) {
 		} else if (manufacturerName === undefined && file.Brand !== undefined) {
 			console.log(`Adding missing manufacturer: ${file.Brand}`);
 			configManager.setManufacturer(manufacturerId, file.Brand);
