@@ -43,18 +43,18 @@ Sometimes a manufacturer makes a device for another company. The field `manufact
 + // Yale YDM3109
   // Smart Door Lock
   {
--     "manufacturer": "Assa Abloy",
-+     "manufacturer": "Yale",
-      "manufacturerId": "0x0129",
-      "label": "YDM3109",
-      "description": "Smart Door Lock",
-      "devices": [
-          {
-              "productType": "0xc600",
-              "productId": "0x0300",
-              "zwaveAllianceId": 3227
-          }
-      // ...
+- 	"manufacturer": "Assa Abloy",
++ 	"manufacturer": "Yale",
+	"manufacturerId": "0x0129",
+	"label": "YDM3109",
+	"description": "Smart Door Lock",
+	"devices": [
+		{
+			"productType": "0xc600",
+			"productId": "0x0300",
+			"zwaveAllianceId": 3227
+		}
+	// ...
   }
 ```
 
@@ -63,16 +63,16 @@ Sometimes a manufacturer makes a device for another company. The field `manufact
 These should generally conform to the name under which the device is sold. If the description merely mirrors the label, it should be omitted instead. Remove the manufacturer name from the description, if present. For example:
 
 ```diff
-  // Yale YDM3109
-- // Yale Smart Door Lock
-+ // Smart Door Lock
-  {
-      "manufacturer": "Yale",
-      "manufacturerId": "0x0129",
-      "label": "YDM3109",
--     "description": "Yale Smart Door Lock",
-+     "description": "Smart Door Lock",
-      "devices": [
+    	// Yale YDM3109
+-  	// Yale Smart Door Lock
++  	// Smart Door Lock
+  	{
+  		"manufacturer": "Yale",
+  		"manufacturerId": "0x0129",
+  		"label": "YDM3109",
+- 		"description": "Yale Smart Door Lock",
++ 		"description": "Smart Door Lock",
+   		"devices": [
 ```
 
 Descriptions should be **Title Case**.
@@ -87,18 +87,18 @@ Labels should be clear and concise. They should clearly explain what the paramet
 
 ```diff
 "paramInformation": {
-    "4": {
--        "label": "Switch multilevel set single-activation values for pushbutton 1, Byte 1",
-+        "label": "Value Sent on Pushbutton 1",
-        "valueSize": 1,
-        "minValue": 0,
-        "maxValue": 99,
-        "defaultValue": 0,
-        "unsigned": true,
-        "readOnly": false,
-        "writeOnly": false,
-        "allowManualEntry": true
-    }
+  	"4": {
+- 		"label": "Switch multilevel set single-activation values for pushbutton 1, Byte 1",
++ 		"label": "Value Sent on Pushbutton 1",
+		"valueSize": 1,
+		"minValue": 0,
+		"maxValue": 99,
+		"defaultValue": 0,
+		"unsigned": true,
+		"readOnly": false,
+		"writeOnly": false,
+		"allowManualEntry": true
+	}
 }
 ```
 
@@ -116,24 +116,24 @@ Descriptions should be **Sentence case**.
 
 ```json
 "paramInformation": {
-    "4": {
-        "label": "Duration Sent on Pushbutton 1",
-        "description": "Allowable range: 0-99",
-        "valueSize": 1,
-        "minValue": 0,
-        "maxValue": 255,
-        "defaultValue": 30,
-        "unsigned": true,
-        "readOnly": false,
-        "writeOnly": false,
-        "allowManualEntry": true,
+	"4": {
+		"label": "Duration Sent on Pushbutton 1",
+		"description": "Allowable range: 0-99",
+		"valueSize": 1,
+		"minValue": 0,
+		"maxValue": 255,
+		"defaultValue": 30,
+		"unsigned": true,
+		"readOnly": false,
+		"writeOnly": false,
+		"allowManualEntry": true,
 		"options": [
-            {
-                "label": "Dimmer default",
-                "value": 255
-            }
-        ]
-    }
+			{
+				"label": "Dimmer default",
+				"value": 255
+			}
+		]
+	}
 }
 ```
 
@@ -141,18 +141,18 @@ Descriptions should be **Sentence case**.
 
 ```json
 "paramInformation": {
-    "4": {
-        "label": "Duration Sent on Pushbutton 1",
-        "description": "Values 1-127 = seconds; 128-255 = minutes (minus 127)",
-        "valueSize": 1,
-        "minValue": 1,
-        "maxValue": 255,
-        "defaultValue": 30,
-        "unsigned": true,
-        "readOnly": false,
-        "writeOnly": false,
-        "allowManualEntry": false
-    }
+	"4": {
+		"label": "Duration Sent on Pushbutton 1",
+		"description": "Values 1-127 = seconds; 128-255 = minutes (minus 127)",
+		"valueSize": 1,
+		"minValue": 1,
+		"maxValue": 255,
+		"defaultValue": 30,
+		"unsigned": true,
+		"readOnly": false,
+		"writeOnly": false,
+		"allowManualEntry": false
+	}
 }
 ```
 
@@ -166,27 +166,27 @@ Option labels should be **Sentence case**.
 
 ```json
 "paramInformation": {
-    "4": {
-        "label": "Invert Switch",
-        "valueSize": 1,
-        "minValue": 0,
-        "maxValue": 1,
-        "defaultValue": 0,
-        "unsigned": true,
-        "readOnly": false,
-        "writeOnly": false,
-        "allowManualEntry": false,
-        "options": [
-            {
-                "label": "Normal orientation",
-                "value": 0
-            },
-            {
-                "label": "Invert switch",
-                "value": 1
-            }
-        ]
-    }
+	"4": {
+		"label": "Invert Switch",
+		"valueSize": 1,
+		"minValue": 0,
+		"maxValue": 1,
+		"defaultValue": 0,
+		"unsigned": true,
+		"readOnly": false,
+		"writeOnly": false,
+		"allowManualEntry": false,
+		"options": [
+			{
+				"label": "Normal orientation",
+				"value": 0
+			},
+			{
+				"label": "Invert switch",
+				"value": 1
+			}
+		]
+	}
 }
 ```
 
@@ -198,24 +198,24 @@ For example:
 
 ```json
 "paramInformation": {
-    "4": {
-        "label": "Dimmer Delay",
-        "description": "Allowable range: 0-99",
-        "valueSize": 1,
-        "minValue": 0,
-        "maxValue": 255,
-        "defaultValue": 0,
-        "unsigned": true,
-        "readOnly": false,
-        "writeOnly": false,
-        "allowManualEntry": true,
+	"4": {
+		"label": "Dimmer Delay",
+		"description": "Allowable range: 0-99",
+		"valueSize": 1,
+		"minValue": 0,
+		"maxValue": 255,
+		"defaultValue": 0,
+		"unsigned": true,
+		"readOnly": false,
+		"writeOnly": false,
+		"allowManualEntry": true,
 		"options": [
-            {
-                "label": "Dimmer default",
-                "value": 255
-            }
-        ]
-    }
+			{
+				"label": "Dimmer default",
+				"value": 255
+			}
+		]
+	}
 }
 ```
 
@@ -223,23 +223,23 @@ or
 
 ```json
 "paramInformation": {
-    "4": {
-        "label": "Dimmer Transition",
-        "valueSize": 1,
-        "minValue": 0,
-        "maxValue": 99,
-        "defaultValue": 0,
-        "unsigned": true,
-        "readOnly": false,
-        "writeOnly": false,
-        "allowManualEntry": true,
+	"4": {
+		"label": "Dimmer Transition",
+		"valueSize": 1,
+		"minValue": 0,
+		"maxValue": 99,
+		"defaultValue": 0,
+		"unsigned": true,
+		"readOnly": false,
+		"writeOnly": false,
+		"allowManualEntry": true,
 		"options": [
-            {
-                "label": "Disable",
-                "value": 0
-            }
-        ]
-    }
+			{
+				"label": "Disable",
+				"value": 0
+			}
+		]
+	}
 }
 ```
 
@@ -271,18 +271,18 @@ Some devices use multiples of the base units - these should be represented as a 
 -   `100 ms`
 
 ```json
-    "1": {
-        "label": "Countdown Timer",
-        "valueSize": 1,
-        "unit": "minutes",
-        "minValue": 0,
-        "maxValue": 254,
-        "defaultValue": 0,
-        "unsigned": true,
-        "readOnly": false,
-        "writeOnly": false,
-        "allowManualEntry": true
-    }
+	"1": {
+		"label": "Countdown Timer",
+		"valueSize": 1,
+		"unit": "minutes",
+		"minValue": 0,
+		"maxValue": 254,
+		"defaultValue": 0,
+		"unsigned": true,
+		"readOnly": false,
+		"writeOnly": false,
+		"allowManualEntry": true
+	}
 ```
 
 > [!NOTE] The range 0-99 should **not** be defined as a percent. Why?
@@ -295,17 +295,17 @@ Some devices use multiples of the base units - these should be represented as a 
 While somewhat rare, sometimes parameters can only be read or written. Typically, the description or manual would say so. If applicable, change the appropriate definition to true.
 
 ```diff
-      "1": {
-          "label": "Countdown Timer",
-          "valueSize": 1,
-          "unit": "minutes",
-          "minValue": 0,
-          "maxValue": 254,
-          "defaultValue": 0,
-          "unsigned": true,
--         "readOnly": false,
-+         "readOnly": true,
-          "writeOnly": false,
-          "allowManualEntry": true
-      }
+  	"1": {
+  		"label": "Countdown Timer",
+  		"valueSize": 1,
+  		"unit": "minutes",
+  		"minValue": 0,
+  		"maxValue": 254,
+  		"defaultValue": 0,
+  		"unsigned": true,
+- 		"readOnly": false,
++ 		"readOnly": true,
+  		"writeOnly": false,
+  		"allowManualEntry": true
+  	}
 ```

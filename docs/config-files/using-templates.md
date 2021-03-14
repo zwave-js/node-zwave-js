@@ -29,40 +29,40 @@ Properties listed before the `$import` statement may get overwritten by the impo
 ```json
 // config.json (on disk)
 {
-    // ... all the rest
-    "paramInformation": {
-        "1": {
-            "$import": "templates/params.json#light_config",
-            "valueSize": "2" // this device has a different value size than the others
-        }
-    }
+	// ... all the rest
+	"paramInformation": {
+		"1": {
+			"$import": "templates/params.json#light_config",
+			"valueSize": "2" // this device has a different value size than the others
+		}
+	}
 }
 
 // templates/params.json (on disk)
 {
-    "light_config": {
-        "label": "Light configuration",
-        "valueSize": 1,
-        "minValue": 0,
-        "maxValue": 2,
-        // ...
-    },
-    "lifeline_association": {
-        // ...
-    }
+	"light_config": {
+		"label": "Light configuration",
+		"valueSize": 1,
+		"minValue": 0,
+		"maxValue": 2,
+		// ...
+	},
+	"lifeline_association": {
+		// ...
+	}
 }
 
 // config.json (parsed)
 {
-    // ... all the rest
-    "paramInformation": {
-        "1": {
-            "label": "Light configuration",
-            "valueSize": 2,
-            "minValue": 0,
-            "maxValue": 2,
-        }
-    }
+	// ... all the rest
+	"paramInformation": {
+		"1": {
+			"label": "Light configuration",
+			"valueSize": 2,
+			"minValue": 0,
+			"maxValue": 2,
+		}
+	}
 }
 ```
 
@@ -71,30 +71,30 @@ Properties listed before the `$import` statement may get overwritten by the impo
 ```json
 // file1.json (on disk)
 {
-    "template": false,
-    "$import": "template.json#we/all/live/in/1/yellow/submarine",
+	"template": false,
+	"$import": "template.json#we/all/live/in/1/yellow/submarine",
 }
 
 // file2.json (on disk)
 {
-    "super": "hot",
-    "we": {
-        "all": {
-            "live": {
-                "in": [
-                    // even works for arrays if you use the array index
-                    "nope",
-                    {
-                        "yellow": {
-                            "submarine": {
-                                "template": true
-                            }
-                        }
-                    }
-                ]
-            }
-        }
-    }
+	"super": "hot",
+	"we": {
+		"all": {
+			"live": {
+				"in": [
+					// even works for arrays if you use the array index
+					"nope",
+					{
+						"yellow": {
+							"submarine": {
+								"template": true
+							}
+						}
+					}
+				]
+			}
+		}
+	}
 }
 
 // file1.json (parsed)
@@ -116,66 +116,66 @@ If you think you have one to add, ensure first that it makes sense to use in con
 For example, commonly used definitions provided by the master template include:
 
 ```json
-    "base_enable_disable": {
-        "valueSize": 1,
-        "minValue": 0,
-        "maxValue": 1,
-        "defaultValue": 0,
-        "unsigned": true,
-        "readOnly": false,
-        "writeOnly": false,
-        "allowManualEntry": false,
-        "options": [
-            {
-                "label": "Disable",
-                "value": 0
-            },
-            {
-                "label": "Enable",
-                "value": 1
-            }
-        ]
-    },
+	"base_enable_disable": {
+		"valueSize": 1,
+		"minValue": 0,
+		"maxValue": 1,
+		"defaultValue": 0,
+		"unsigned": true,
+		"readOnly": false,
+		"writeOnly": false,
+		"allowManualEntry": false,
+		"options": [
+			{
+				"label": "Disable",
+				"value": 0
+			},
+			{
+				"label": "Enable",
+				"value": 1
+			}
+		]
+	},
 ```
 
 or
 
 ```json
-    "base_enable_disable_inverted": {
-        "valueSize": 1,
-        "minValue": 0,
-        "maxValue": 1,
-        "defaultValue": 1,
-        "unsigned": true,
-        "readOnly": false,
-        "writeOnly": false,
-        "allowManualEntry": false,
-        "options": [
-            {
-                "label": "Enable",
-                "value": 0
-            },
-            {
-                "label": "Disable",
-                "value": 1
-            }
-        ]
-    },
+	"base_enable_disable_inverted": {
+		"valueSize": 1,
+		"minValue": 0,
+		"maxValue": 1,
+		"defaultValue": 1,
+		"unsigned": true,
+		"readOnly": false,
+		"writeOnly": false,
+		"allowManualEntry": false,
+		"options": [
+			{
+				"label": "Enable",
+				"value": 0
+			},
+			{
+				"label": "Disable",
+				"value": 1
+			}
+		]
+	},
 ```
 
 or
 
 ```json
-    "base_0-99_nounit": {
-        "valueSize": 1,
-        "minValue": 0,
-        "maxValue": 99,
-        "defaultValue": 1,
-        "unsigned": true,
-        "readOnly": false,
-        "writeOnly": false,
-        "allowManualEntry": true
-    },
+	"base_0-99_nounit": {
+		"valueSize": 1,
+		"minValue": 0,
+		"maxValue": 99,
+		"defaultValue": 1,
+		"unsigned": true,
+		"readOnly": false,
+		"writeOnly": false,
+		"allowManualEntry": true
+	},
 ```
 
 ## Very, Very Frequently Used Parameters
@@ -229,52 +229,52 @@ Second, review the manufacturer-specific template under the `templates` folder i
 Examples:
 
 ```json
-    "volume": {
-        "label": "Volume",
-        "valueSize": 1,
-        "minValue": 1,
-        "maxValue": 3,
-        "defaultValue": 2,
-        "unsigned": true,
-        "readOnly": false,
-        "writeOnly": false,
-        "allowManualEntry": true,
-        "options": [
-            {
-                "label": "High",
-                "value": 1
-            },
-            {
-                "label": "Low",
-                "value": 2
-            },
-            {
-                "label": "Silent",
-                "value": 3
-            }
-        ]
-    },
+	"volume": {
+		"label": "Volume",
+		"valueSize": 1,
+		"minValue": 1,
+		"maxValue": 3,
+		"defaultValue": 2,
+		"unsigned": true,
+		"readOnly": false,
+		"writeOnly": false,
+		"allowManualEntry": true,
+		"options": [
+			{
+				"label": "High",
+				"value": 1
+			},
+			{
+				"label": "Low",
+				"value": 2
+			},
+			{
+				"label": "Silent",
+				"value": 3
+			}
+		]
+	},
 ```
 
 Templates defined in the manufacturer-specific template should be built on top of master-level bases. Specific values can be overridden after the `$import` statement. For example:
 
 ```json
-    "enable_deadbolt_alarm": {
-        "$import": "../../templates/master_template.json#base_enable_disable",
-        "label": "Deadbolt Alarm",
-        "defaultValue": 1 // Note that ordinarily 0 is the default value for the base, but this paramter requires a default of 1.
-    },
+	"enable_deadbolt_alarm": {
+		"$import": "../../templates/master_template.json#base_enable_disable",
+		"label": "Deadbolt Alarm",
+		"defaultValue": 1 // Note that ordinarily 0 is the default value for the base, but this paramter requires a default of 1.
+	},
 ```
 
 or
 
 ```json
-    "auto_relock_time_180": {
-        "$import": "../../templates/master_template.json#base_0-180_nounit",
-        "label": "Auto Relock Time",
-        "unit": "seconds", // New keys can also be added, such as a unit.
-        "defaultValue": 30
-    },
+	"auto_relock_time_180": {
+		"$import": "../../templates/master_template.json#base_0-180_nounit",
+		"label": "Auto Relock Time",
+		"unit": "seconds", // New keys can also be added, such as a unit.
+		"defaultValue": 30
+	},
 ```
 
 Note: If you add a definition to the templates, please ensure the name is **descriptive**. Someone will later need to skim these parameters when adding a new device to determine if a parameter already exists.
@@ -284,10 +284,10 @@ Note: If you add a definition to the templates, please ensure the name is **desc
 Generally, if a parameter is used in three or more files it should be added to the manufacturer-specific template. Less frequently used parameters that are likely to be used in future devices may also be added. Even if a parameter is only used in a single device file, a master-level or manufacturer-level base should be employed whenever possible.
 
 ```json
-    "1": {
-        "$import": "../templates/master_template.json#base_enable_disable",
-        "label": "Unique Parameter in Device File"
-    },
+	"1": {
+		"$import": "../templates/master_template.json#base_enable_disable",
+		"label": "Unique Parameter in Device File"
+	},
 ```
 
 ## Label Changes
@@ -295,58 +295,58 @@ Generally, if a parameter is used in three or more files it should be added to t
 While you can override a label for an imported template in a device file, we prefer that reused label variations be made in the manufacturer-specific template. That allows easier editing and ensures consistency across devices.
 
 ```json
-    "usercode_base": {
-        "description": "Guests and Workers will require schedules attached to them in order for those types to be assigned",
-        "valueSize": 1,
-        "minValue": 1,
-        "maxValue": 4,
-        "defaultValue": 1,
-        "unsigned": true,
-        "readOnly": false,
-        "writeOnly": false,
-        "allowManualEntry": false,
-        "options": [
-            {
-                "label": "Owner",
-                "value": 1
-            },
-            {
-                "label": "Guest",
-                "value": 3
-            },
-            {
-                "label": "Worker",
-                "value": 4
-            }
-        ]
-    },
-    "usercode_1": {
-        "$import": "#usercode_base",
-        "label": "User Code 1 Type"
-    },
-    "usercode_2": {
-        "$import": "#usercode_base",
-        "label": "User Code 2 Type"
-    },
-    "usercode_3": {
-        "$import": "#usercode_base",
-        "label": "User Code 3 Type"
-    },
+	"usercode_base": {
+		"description": "Guests and Workers will require schedules attached to them in order for those types to be assigned",
+		"valueSize": 1,
+		"minValue": 1,
+		"maxValue": 4,
+		"defaultValue": 1,
+		"unsigned": true,
+		"readOnly": false,
+		"writeOnly": false,
+		"allowManualEntry": false,
+		"options": [
+			{
+				"label": "Owner",
+				"value": 1
+			},
+			{
+				"label": "Guest",
+				"value": 3
+			},
+			{
+				"label": "Worker",
+				"value": 4
+			}
+		]
+	},
+	"usercode_1": {
+		"$import": "#usercode_base",
+		"label": "User Code 1 Type"
+	},
+	"usercode_2": {
+		"$import": "#usercode_base",
+		"label": "User Code 2 Type"
+	},
+	"usercode_3": {
+		"$import": "#usercode_base",
+		"label": "User Code 3 Type"
+	},
 ```
 
 Which then becomes in the device file:
 
 ```json
-    "paramInformation": {
-        "1": {
-            "$import": "templates/kwikset_template.json#usercode_1"
-        },
-        "2": {
-            "$import": "templates/kwikset_template.json#usercode_2"
-        },
-        "3": {
-            "$import": "templates/kwikset_template.json#usercode_3"
-        }
+	"paramInformation": {
+		"1": {
+			"$import": "templates/kwikset_template.json#usercode_1"
+		},
+		"2": {
+			"$import": "templates/kwikset_template.json#usercode_2"
+		},
+		"3": {
+			"$import": "templates/kwikset_template.json#usercode_3"
+		}
 ```
 
 ## Ultimate Goal
