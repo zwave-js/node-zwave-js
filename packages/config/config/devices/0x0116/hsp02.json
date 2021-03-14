@@ -89,7 +89,7 @@
 		},
 		"5": {
 			"label": "Brightness Threshold",
-			"description": "Motion sensing is active, when the lux level falls below this value.",
+			"description": "Motion sensing is active while the brightness is below this value.",
 			"valueSize": 1,
 			"minValue": 1,
 			"maxValue": 100,
@@ -100,7 +100,7 @@
 			"allowManualEntry": true
 		},
 		"6": {
-			"label": "On-Off time",
+			"label": "On time",
 			"description": "The amount of time the module/lighting should stay ON for.",
 			"valueSize": 1,
 			"minValue": 5,
