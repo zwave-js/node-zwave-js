@@ -200,7 +200,7 @@ For example:
 "paramInformation": {
     "4": {
         "label": "Dimmer Delay",
-		"description": "Allowable range: 0-99",
+        "description": "Allowable range: 0-99",
         "valueSize": 1,
         "minValue": 0,
         "maxValue": 255,
