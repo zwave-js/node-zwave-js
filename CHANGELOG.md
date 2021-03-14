@@ -3,6 +3,31 @@
 	Placeholder for next release:
 	## __WORK IN PROGRESS__
 -->
+## __WORK IN PROGRESS__
+### Bugfixes
+* While replacing a node with `replaceFailedNode` the node does not get removed from associations anymore. This could prevent secure inclusion from succeeding.
+* Notification variables are now auto-idled after 5 minutes as it was intended, not after 5 hours.
+* Fixed a typo in the logging for Association CC
+
+### Config file changes
+* Added Leviton 4 Speed Fan Controller zw4sf
+* Added russian versions of several Shenzhen Neo devices
+* Update Qubino Smart Plug 16A, parameter 41 does not exist
+* Update LZW30 parameters to match documentation/latest firmware
+* Change misidentified device sm103 to hsp02
+* Remove unsupported double tap on GE 26932; add double tap to 12730; fix parameters
+* The config file for 700-series controllers released with the base chip from Silabs is * now more generic
+* Add param 52 to Gocontrol GC-TBZ48
+* Add config for Haseman R4D4
+* Add config for YRD210 versions with an incorrect manufacturer ID
+* Improve Leviton dzpd3 parameter metadata and add device metadata
+* Add Ring Keypad config
+* Add config params 13 and 51 to Inovelli LZW30-SN
+
+### Changes under the hood
+* We've reworked the docs on device configuration files, including a style guide.
+* Fixed a typo that prevented the nightly configuration releases
+
 ## 6.6.1 (2021-03-07)
 ### Bugfixes
 * After a restart, sleeping nodes have their status correctly determined even if they weren't interviewed completely before
