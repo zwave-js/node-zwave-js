@@ -108,7 +108,6 @@ const ozwTarUrl =
 const ozwConfigFolder = path.join(ozwTempDir, "./config");
 
 const zwaTempDir = path.join(__dirname, "../../../.tmpzwa");
-const zwaConfigFolder = path.join(zwaTempDir, "./config");
 
 const ohTempDir = path.join(__dirname, "../../../.tmpoh");
 const importedManufacturersPath = path.join(ohTempDir, "manufacturers.json");
@@ -777,7 +776,7 @@ async function parseZWAFiles(): Promise<void> {
 	}
 
 	// Temp limit to specified manufacturers
-	for (let file of jsonData) {
+	for (const file of jsonData) {
 		if (file.ManufacturerId == "0x0234") {
 			continue;
 		} else {
@@ -831,7 +830,7 @@ async function parseZWAFiles(): Promise<void> {
 /***
  * Combine zWave Alliance Device Files
  */
-function combineDeviceFiles(json: Array<object>) {
+function combineDeviceFiles(json: Record<string, any>[]) {
 	for (const file of json) {
 		const identifier = file.Identifier ? file.Identifier : "Unknown";
 		const normalizedIdentifier = normalizeIdentifier(identifier);
@@ -1045,7 +1044,7 @@ function combineDeviceFiles(json: Array<object>) {
 /***
  * Combine zWave Alliance Device Files
  */
-function sanitizeFields(json: Array<object>) {
+function sanitizeFields(json: Record<string, any>[]) {
 	for (const file of json) {
 		if (file.ProductId) {
 			file.Identifier = file.Identifier
@@ -1140,9 +1139,9 @@ async function parseZWAProduct(
 	}
 
 	// Determine where the config file should be
-	const latestConfig = getLatestConfigVersion(deviceConfigs) ?? [];
+	const latestConfig = getLatestConfigVersion(deviceConfigs);
 	let fileNameRelative: string;
-	if (latestConfig.filename) {
+	if (latestConfig?.filename) {
 		fileNameRelative = latestConfig?.filename;
 	} else {
 		fileNameRelative =
@@ -1161,7 +1160,7 @@ async function parseZWAProduct(
 			);
 		}
 	} catch (e) {
-		console.log("Error processing: " + fileNameAbsolute + " - " + e);
+		console.log(`Error processing: ${fileNameAbsolute} - ${e}`);
 	}
 
 	/********************************
@@ -1200,14 +1199,17 @@ async function parseZWAProduct(
 	 *   Setup the initial configuration   *
 	 ***************************************/
 
-	const inclusion = product?.Texts?.find((document) => document.Type === 1)
+	const inclusion = product?.Texts?.find(
+		(document: any) => document.Type === 1,
+	)?.value;
+	const exclusion = product?.Texts?.find(
+		(document: any) => document.Type === 2,
+	)?.value;
+	const reset = product?.Texts?.find((document: any) => document.Type === 5)
 		?.value;
-	const exclusion = product?.Texts?.find((document) => document.Type === 2)
-		?.value;
-	const reset = product?.Texts?.find((document) => document.Type === 5)
-		?.value;
-	let manual = product?.Documents?.find((document) => document.Type === 1)
-		?.value;
+	let manual = product?.Documents?.find(
+		(document: any) => document.Type === 1,
+	)?.value;
 	const website_root =
 		"https://products.z-wavealliance.org/ProductManual/File?folder=&filename=";
 	if (manual) {
@@ -1405,30 +1407,30 @@ async function parseZWAProduct(
 	// If Z-Wave+ is supported, we don't usually need the association information to determine the lifeline, but we still set it up in case we do
 
 	let zwavePlus = false;
-	zwavePlus = product?.SupportedCommandClasses?.find((document) =>
+	zwavePlus = product?.SupportedCommandClasses?.find((document: any) =>
 		document.Identifier.includes("ZWAVEPLUS"),
 	)
 		? true
 		: zwavePlus;
-	zwavePlus = product?.SupportedCommandClasses?.find((document) =>
+	zwavePlus = product?.SupportedCommandClasses?.find((document: any) =>
 		document.Identifier.includes("ASSOCIATION_GRP_INFO"),
 	)
 		? true
 		: zwavePlus;
-	zwavePlus = product?.AssociationGroups?.find((document) =>
+	zwavePlus = product?.AssociationGroups?.find((document: any) =>
 		document.Description.includes("Z-Wave Plus"),
 	)
 		? true
 		: zwavePlus;
 	zwavePlus = existingDevice?.supportsZWavePlus ? true : zwavePlus;
 
-	const newAssociations = {};
+	const newAssociations: Record<string, any> = {};
 	let addCompat = false;
 	for (const ass of product.AssociationGroups) {
 		let label: string =
 			ass.group_name.length > 0
 				? ass.group_name
-				: "Group " + ass.GroupNumber.toString();
+				: `Group ${ass.GroupNumber}`;
 		const maxNodes = ass.MaximumNodes;
 		const groupName = ass.group_name.toLowerCase();
 		const description = ass.Description.toLowerCase();
@@ -1504,23 +1506,9 @@ ${stringify(normalizeConfig(newConfig), "\t")}`;
 	await fs.writeFile(fileNameAbsolute, output, "utf8");
 }
 
-async function indexZWAFiles(): Promise<void> {
-	// Parse json files in the zwaTempDir
-	let jsonData = [];
-
-	const configFiles = await enumFilesRecursive(processedDir, (file) =>
-		file.endsWith(".json"),
-	);
-
-	for (const file of configFiles) {
-		const j = await fs.readFile(file, "utf8");
-		jsonData.push(JSON.parse(j));
-	}
-}
-
 async function maintenanceParse(): Promise<void> {
 	// Parse json files in the zwaTempDir
-	let zwaData = [];
+	const zwaData = [];
 
 	// Load the zwa files
 	const zwaFiles = await enumFilesRecursive(zwaTempDir, (file) =>
@@ -1551,23 +1539,21 @@ async function maintenanceParse(): Promise<void> {
 		try {
 			jsonData = JSON5.parse(j);
 		} catch (e) {
-			console.log("Error processing: " + file + " - " + e);
+			console.log(`Error processing: ${file} - ${e}`);
 		}
 
-		let includedZwaFiles = [];
+		const includedZwaFiles = [];
 
 		try {
 			for (const device of jsonData.devices) {
 				if (Array.isArray(device.zwaveAllianceId)) {
-					includedZwaFiles = includedZwaFiles.concat(
-						device.zwaveAllianceId,
-					);
+					includedZwaFiles.push(...device.zwaveAllianceId);
 				} else if (device.zwaveAllianceId) {
 					includedZwaFiles.push(device.zwaveAllianceId);
 				}
 			}
 		} catch (e) {
-			console.log("Error iterating: " + file + " - " + e);
+			console.log(`Error iterating: ${file} - ${e}`);
 		}
 
 		includedZwaFiles.sort(function (a, b) {
@@ -1578,7 +1564,7 @@ async function maintenanceParse(): Promise<void> {
 			for (const zwafile of zwaData) {
 				if (zwafile.Id === referenceDevice) {
 					let manual = zwafile?.Documents?.find(
-						(document) => document.Type === 1,
+						(document: any) => document.Type === 1,
 					)?.value;
 
 					const website_root =
@@ -1612,14 +1598,6 @@ async function maintenanceParse(): Promise<void> {
 // ${jsonData.description}`) : ""}
 ${stringify(normalizeConfig(jsonData), "\t")}`;
 			await fs.writeFile(file, output, "utf8");
-		}
-	}
-
-	function keepLongest(current_group: any, test_group: any) {
-		if (current_group.length >= test_group.length) {
-			return current_group;
-		} else {
-			return test_group;
 		}
 	}
 }
@@ -2179,11 +2157,11 @@ async function updateManufacturerNames(): Promise<void> {
 	for (const file of configFiles) {
 		let fileContents = await fs.readFile(file, "utf8");
 		const id = parseInt(
-			fileContents.match(/"manufacturerId"\: "0x([0-9a-fA-F]+)"/)![1],
+			/"manufacturerId"\: "0x([0-9a-fA-F]+)"/.exec(fileContents)![1],
 			16,
 		);
 		const name = configManager.lookupManufacturer(id);
-		const oldName = fileContents.match(/"manufacturer"\: "([^\"]+)"/)![1];
+		const oldName = /"manufacturer"\: "([^\"]+)"/.exec(fileContents)![1];
 		if (oldName && name && name !== oldName) {
 			fileContents = fileContents.replace(
 				`// ${oldName} `,
