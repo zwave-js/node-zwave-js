@@ -209,7 +209,7 @@ For example:
         "readOnly": false,
         "writeOnly": false,
         "allowManualEntry": true,
-		        "options": [
+		"options": [
             {
                 "label": "Dimmer default",
                 "value": 255
@@ -233,7 +233,7 @@ or
         "readOnly": false,
         "writeOnly": false,
         "allowManualEntry": true,
-		        "options": [
+		"options": [
             {
                 "label": "Disable",
                 "value": 0
