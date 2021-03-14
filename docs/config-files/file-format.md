@@ -1,8 +1,4 @@
-# Device configuration files
-
-Since older versions of the Z-Wave standard don't allow us to request all the information we need from the devices themselves, there is a need for configuration files. These are located under [`packages/config/config/devices/<manufacturerID-as-hex>/<device-name>[_<firmware-range>].json`](https://github.com/zwave-js/node-zwave-js/tree/master/packages/config/config).
-
-## Properties
+# Configuration file format
 
 The following properties are defined and should always be present in the same order for consistency among the config files:
 
@@ -21,7 +17,7 @@ The following properties are defined and should always be present in the same or
 | `compat`            | Compatibility flags used to influence the communication with non-complient devices. [See below](#compat) for details.                                                                                      |
 | `metadata`          | Metadata that is intended to help the user, like inclusion instructions etc. [See below](#metadata) for details.                                                                                           |
 
-### `devices`
+## `devices`
 
 Each device in the Z-Wave standard is identified by its product type and product ID. If a config file was imported from the _Z-Wave Alliance_ database, their identifiers are noted here too. A config file that is valid for both `0x0123 / 0x1000` and `0x2345 / 0x0001` would have the following `devices` entry:
 
@@ -39,7 +35,7 @@ Each device in the Z-Wave standard is identified by its product type and product
 ]
 ```
 
-### `firmwareVersion`
+## `firmwareVersion`
 
 Since different firmware versions of a device may have different config params, you must specify the firmware range for each config file. A config file that is valid from version `2.0` to `4.75` would have the following `firmwareVersion` entry:
 
@@ -56,7 +52,7 @@ All other firmware ranges should be reflected in the filename. This also means t
 > [!NOTE]
 > Although some manufacturers tend to display firmware versions with leading zeroes, firmwares are interpreted as two numbers. This means `2.01` is equivalent to `2.1`. Leading zeroes **must not** be used in config files to avoid confusion.
 
-### `metadata`
+## `metadata`
 
 Can be used to add instructions for the user to a device:
 
@@ -68,7 +64,7 @@ Can be used to add instructions for the user to a device:
 }
 ```
 
-### `associations`
+## `associations`
 
 For devices that don't support the Z-Wave+ standard, the associations must be defined. The property looks as follows:
 
@@ -92,7 +88,7 @@ For devices that don't support the Z-Wave+ standard, the associations must be de
 
 The `isLifeline` key is used to determine which group sends the controller device status updates.
 
-### `paramInformation`
+## `paramInformation`
 
 This property defines all the existing configuration parameters. It looks like this
 

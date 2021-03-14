@@ -1,4 +1,4 @@
-# Importing templates
+# Using templates
 
 Some manufacturers have a lot of devices that share configuration parameters. To make these definitions easy to manage and keep them consistent between multiple config files, you should whenever possible import templates (or parts thereof) instead of repeating the parameter definition in each file.
 
@@ -66,7 +66,7 @@ Properties listed before the `$import` statement may get overwritten by the impo
 }
 ```
 
-### Example 2:
+### Example 2
 
 ```json
 // file1.json (on disk)
@@ -107,11 +107,13 @@ Properties listed before the `$import` statement may get overwritten by the impo
 
 ## Master Template
 
-First, review the master template at packages/config/config/devices/templates/master_template.json. That file defines commonly used parameter bases (for which you can override specific portions as necessary). It is important to be aware of what is available as you'll be using them.
+First, review the master template at `packages/config/config/devices/templates/master_template.json`. That file defines commonly used parameter bases (for which you can override specific portions as necessary). It is important to be aware of what is available as you'll be using them.
 
-If you think you have one to add, ensure it is used elsewhere for other manufacturers before doing so. If not, it belongs in the manufacturer-specific template instead. **You will not be permitted to modify a pre-existing definition as doing so will change _every_ device in the repo using that base.**
+If you think you have one to add, ensure first that it makes sense to use in configuration files for other manufacturers. If not, it belongs in the manufacturer-specific template instead.
 
-For example, it provides:
+> [!ATTENTION] Modifying a pre-existing master template definition is not permitted unless there is a **very good reason** for it. Doing so will affect **every** device in the repo using that base.
+
+For example, commonly used definitions provided by the master template include:
 
 ```json
     "base_enable_disable": {
@@ -180,7 +182,7 @@ or
 
 The master-level template also contains a few very, very frequently used parameters, such as ones dealing with switch orientation or LED lights. **If these exist and are applicable, use them.**
 
-E.g.:
+Examples:
 
 ```json
 	"orientation": {
@@ -220,9 +222,11 @@ or
 
 ## Manufacturer-specific Template
 
-Second, review the manufacturer-specific template under the templates folder in the manufacturer folder. If one doesn't exist, create one. This template will define bases specific to the manufacturer, as well as parameters used across devices. **It is _very_ unlikely that you will be allowed to change a pre-existing definition as doing so would change every device by that manufacturer using that definition.**
+Second, review the manufacturer-specific template under the `templates` folder in the manufacturer folder. If one doesn't exist, create one. This template will define bases specific to the manufacturer, as well as parameters used across devices.
 
-E.g.:
+> [!NOTE] It is **very** unlikely that we'll permit you to change a pre-existing manufacturer template definition. Doing so will affect **every** device by that manufacturer using that definition.
+
+Examples:
 
 ```json
     "volume": {
@@ -252,7 +256,7 @@ E.g.:
     },
 ```
 
-Templates defined in the manufacturer-specific template should be built on top of master-level bases. Specific values can be overridden after the $import statement. For example:
+Templates defined in the manufacturer-specific template should be built on top of master-level bases. Specific values can be overridden after the `$import` statement. For example:
 
 ```json
     "enable_deadbolt_alarm": {
@@ -277,7 +281,7 @@ Note: If you add a definition to the templates, please ensure the name is **desc
 
 ## One-off Parameters
 
-Generally, if a parameter is used in three or more files it should be added to the manufacturer-specific template. Less frequently used parameters likley to be used in future devices may also be added. Even if a parameter is only used in a single device file, a master-level or manufacturer-level base should be employed whenever possible.
+Generally, if a parameter is used in three or more files it should be added to the manufacturer-specific template. Less frequently used parameters that are likely to be used in future devices may also be added. Even if a parameter is only used in a single device file, a master-level or manufacturer-level base should be employed whenever possible.
 
 ```json
     "1": {
