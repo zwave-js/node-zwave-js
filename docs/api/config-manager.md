@@ -263,6 +263,14 @@ Looks up the definition of a given device in the configuration DB. It is not nec
 
 For details on the available properties, refer to the [config file documentation](development/config-files.md).
 
+### `lookupDevicePreserveConditions`
+
+```ts
+lookupDevicePreserveConditions(manufacturerId: number, productType: number, productId: number, firmwareVersion?: string): Promise<ConditionalDeviceConfig | undefined>;
+```
+
+Like `lookupDevice`, but does not evaluate `$if` conditions. The resulting object will contain all settings that are defined regardless if they apply or not.
+
 ### `loadNotifications`
 
 ```ts
