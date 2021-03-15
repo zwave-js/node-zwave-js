@@ -96,14 +96,16 @@
 			]
 		},
 		"4[0x01]": {
-			"$import": "templates/fibarogroup_templates.json#enable_disable_bit_default_true",
+			"$import": "../templates/master_template.json#base_enable_disable",
 			"label": "Buzzer - signalling successful recogniction of gesture",
-			"description": "Acoustic signalling of gesture recognition result (using the built-in buzzer)."
+			"description": "Acoustic signalling of gesture recognition result (using the built-in buzzer)",
+			"defaultValue": 1
 		},
 		"4[0x02]": {
-			"$import": "templates/fibarogroup_templates.json#enable_disable_bit_default_true",
+			"$import": "../templates/master_template.json#base_enable_disable",
 			"label": "Buzzer - signalling failed recogniction of gesture",
-			"description": "Acoustic signalling of gesture recognition result (using the built-in buzzer)."
+			"description": "Acoustic signalling of gesture recognition result (using the built-in buzzer)",
+			"defaultValue": 1
 		},
 		"5": {
 			"label": "Powering mode update interval",
@@ -164,32 +166,36 @@
 			]
 		},
 		"10[0x01]": {
-			"$import": "templates/fibarogroup_templates.json#enable_disable_bit_default_true",
+			"$import": "../templates/master_template.json#base_enable_disable",
 			"label": "Scenes for flick UP gesture sent to controller",
-			"description": "Should this action be sent to the 1st \"Lifeline\" group"
+			"description": "Should this action be sent to the 1st \"Lifeline\" group",
+			"defaultValue": 1
 		},
 		"10[0x02]": {
-			"$import": "templates/fibarogroup_templates.json#enable_disable_bit_default_true",
+			"$import": "../templates/master_template.json#base_enable_disable",
 			"label": "Scenes for flick DOWN gesture sent to controller",
-			"description": "Should this action be sent to the 1st \"Lifeline\" group"
+			"description": "Should this action be sent to the 1st \"Lifeline\" group",
+			"defaultValue": 1
 		},
 		"10[0x04]": {
-			"$import": "templates/fibarogroup_templates.json#enable_disable_bit_default_true",
+			"$import": "../templates/master_template.json#base_enable_disable",
 			"label": "Scenes for flick LEFT gesture sent to controller",
-			"description": "Should this action be sent to the 1st \"Lifeline\" group"
+			"description": "Should this action be sent to the 1st \"Lifeline\" group",
+			"defaultValue": 1
 		},
 		"10[0x08]": {
-			"$import": "templates/fibarogroup_templates.json#enable_disable_bit_default_true",
+			"$import": "../templates/master_template.json#base_enable_disable",
 			"label": "Scenes for flick RIGHT gesture sent to controller",
-			"description": "Should this action be sent to the 1st \"Lifeline\" group"
+			"description": "Should this action be sent to the 1st \"Lifeline\" group",
+			"defaultValue": 1
 		},
-		"10[0x0f]": {
-			"$import": "templates/fibarogroup_templates.json#enable_disable_bit",
+		"10[0x10]": {
+			"$import": "../templates/master_template.json#base_enable_disable",
 			"label": "Scenes for clockwise circular gesture sent to controller",
 			"description": "Should this action be sent to the 1st \"Lifeline\" group"
 		},
-		"10[0x10]": {
-			"$import": "templates/fibarogroup_templates.json#enable_disable_bit",
+		"10[0x20]": {
+			"$import": "../templates/master_template.json#base_enable_disable",
 			"label": "Scenes for CCW circular gesture sent to controller",
 			"description": "Should this action be sent to the 1st \"Lifeline\" group"
 		},
@@ -209,25 +215,29 @@
 			"$import": "templates/fibarogroup_templates.json#secure_assoc_bit",
 			"label": "Associations: Send secure commands to 5th group (Flick right)"
 		},
-		"11[0x0f]": {
+		"11[0x10]": {
 			"$import": "templates/fibarogroup_templates.json#secure_assoc_bit",
 			"label": "Associations: Send secure commands to 6th group (Circular AirWheel)"
 		},
 		"12[0x01]": {
-			"$import": "templates/fibarogroup_templates.json#enable_disable_bit_default_true",
-			"label": "Associations: Toggle mode for 2nd group (Flick up)"
+			"$import": "../templates/master_template.json#base_enable_disable",
+			"label": "Associations: Toggle mode for 2nd group (Flick up)",
+			"defaultValue": 1
 		},
 		"12[0x02]": {
-			"$import": "templates/fibarogroup_templates.json#enable_disable_bit_default_true",
-			"label": "Associations: Toggle mode for 3rd group (Flick down)"
+			"$import": "../templates/master_template.json#base_enable_disable",
+			"label": "Associations: Toggle mode for 3rd group (Flick down)",
+			"defaultValue": 1
 		},
 		"12[0x04]": {
-			"$import": "templates/fibarogroup_templates.json#enable_disable_bit_default_true",
-			"label": "Associations: Toggle mode for 4th group (Flick left)"
+			"$import": "../templates/master_template.json#base_enable_disable",
+			"label": "Associations: Toggle mode for 4th group (Flick left)",
+			"defaultValue": 1
 		},
 		"12[0x08]": {
-			"$import": "templates/fibarogroup_templates.json#enable_disable_bit_default_true",
-			"label": "Associations: Toggle mode for 5th group (Flick right)"
+			"$import": "../templates/master_template.json#base_enable_disable",
+			"label": "Associations: Toggle mode for 5th group (Flick right)",
+			"defaultValue": 1
 		},
 		"13": {
 			"label": "Rate of smooth level control",

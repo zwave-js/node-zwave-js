@@ -329,43 +329,43 @@
 			"$import": "templates/fibarogroup_templates.json#enable_disable_double_click"
 		},
 		"24[0x01]": {
-			"$import": "templates/fibarogroup_templates.json#enable_disable_bit",
-			"label": "Do not send when switching ON (single click) for 2nd and 3rd assoc group"
+			"$import": "../templates/master_template.json#base_enable_disable_inverted",
+			"label": "Send when switching ON (single click) for 2nd and 3rd assoc group"
 		},
 		"24[0x02]": {
-			"$import": "templates/fibarogroup_templates.json#enable_disable_bit",
-			"label": "Do not send when switching OFF (single click) for 2nd and 3rd assoc group"
+			"$import": "../templates/master_template.json#base_enable_disable_inverted",
+			"label": "Send when switching OFF (single click) for 2nd and 3rd assoc group"
 		},
 		"24[0x04]": {
-			"$import": "templates/fibarogroup_templates.json#enable_disable_bit",
-			"label": "Do not send when changing dimming level for 2nd and 3rd assoc group"
+			"$import": "../templates/master_template.json#base_enable_disable_inverted",
+			"label": "Send when changing dimming level for 2nd and 3rd assoc group"
 		},
 		"24[0x08]": {
-			"$import": "templates/fibarogroup_templates.json#enable_disable_bit",
-			"label": "Do not send on double click for 2nd and 3rd assoc group"
+			"$import": "../templates/master_template.json#base_enable_disable_inverted",
+			"label": "Send on double click for 2nd and 3rd assoc group"
 		},
-		"24[0x0f]": {
-			"$import": "templates/fibarogroup_templates.json#enable_disable_bit",
+		"24[0x10]": {
+			"$import": "../templates/master_template.json#base_enable_disable",
 			"label": "Send 0xFF value on double click for 2nd and 3rd assoc group"
 		},
 		"25[0x01]": {
-			"$import": "templates/fibarogroup_templates.json#enable_disable_bit",
-			"label": "Do not send when switching ON (single click) for 4th and 5th assoc group"
+			"$import": "../templates/master_template.json#base_enable_disable_inverted",
+			"label": "Send when switching ON (single click) for 4th and 5th assoc group"
 		},
 		"25[0x02]": {
-			"$import": "templates/fibarogroup_templates.json#enable_disable_bit",
-			"label": "Do not send when switching OFF (single click) for 4th and 5th assoc group"
+			"$import": "../templates/master_template.json#base_enable_disable_inverted",
+			"label": "Send when switching OFF (single click) for 4th and 5th assoc group"
 		},
 		"25[0x04]": {
-			"$import": "templates/fibarogroup_templates.json#enable_disable_bit",
-			"label": "Do not send when changing dimming level for 4th and 5th assoc group"
+			"$import": "../templates/master_template.json#base_enable_disable_inverted",
+			"label": "Send when changing dimming level for 4th and 5th assoc group"
 		},
 		"25[0x08]": {
-			"$import": "templates/fibarogroup_templates.json#enable_disable_bit",
-			"label": "Do not send on double click for 4th and 5th assoc group"
+			"$import": "../templates/master_template.json#base_enable_disable_inverted",
+			"label": "Send on double click for 4th and 5th assoc group"
 		},
-		"25[0x0f]": {
-			"$import": "templates/fibarogroup_templates.json#enable_disable_bit",
+		"25[0x10]": {
+			"$import": "../templates/master_template.json#base_enable_disable",
 			"label": "Send 0xFF value on double click for 4th and 5th assoc group"
 		},
 		"26": {

@@ -162,12 +162,14 @@
 			"allowManualEntry": true
 		},
 		"23[0x01]": {
-			"$import": "fibarogroup_templates.json#enable_disable_bit_default_true",
-			"label": "Power Exceeded controlling 3rd association group devices"
+			"$import": "../../templates/master_template.json#base_enable_disable",
+			"label": "Power Exceeded controlling 3rd association group devices",
+			"defaultValue": 1
 		},
 		"23[0x02]": {
-			"$import": "fibarogroup_templates.json#enable_disable_bit_default_true",
-			"label": "Power Dropped controlling 3rd association group devices"
+			"$import": "../../templates/master_template.json#base_enable_disable",
+			"label": "Power Dropped controlling 3rd association group devices",
+			"defaultValue": 1
 		},
 		"24": {
 			"label": "Switch On",
@@ -254,34 +256,40 @@
 			]
 		},
 		"30[0x01]": {
-			"$import": "fibarogroup_templates.json#enable_disable_bit_default_true",
+			"$import": "../../templates/master_template.json#base_enable_disable",
 			"label": "React to General Alarm",
-			"description": "Network alarms to which the Wall Plug will respond"
+			"description": "Network alarms to which the Wall Plug will respond",
+			"defaultValue": 1
 		},
 		"30[0x02]": {
-			"$import": "fibarogroup_templates.json#enable_disable_bit_default_true",
+			"$import": "../../templates/master_template.json#base_enable_disable",
 			"label": "React to Smoke Alarm",
-			"description": "Network alarms to which the Wall Plug will respond"
+			"description": "Network alarms to which the Wall Plug will respond",
+			"defaultValue": 1
 		},
 		"30[0x04]": {
-			"$import": "fibarogroup_templates.json#enable_disable_bit_default_true",
+			"$import": "../../templates/master_template.json#base_enable_disable",
 			"label": "React to Carbon Monoxide Alarm",
-			"description": "Network alarms to which the Wall Plug will respond"
+			"description": "Network alarms to which the Wall Plug will respond",
+			"defaultValue": 1
 		},
 		"30[0x08]": {
-			"$import": "fibarogroup_templates.json#enable_disable_bit_default_true",
+			"$import": "../../templates/master_template.json#base_enable_disable",
 			"label": "React to Carbon Dioxide Alarm",
-			"description": "Network alarms to which the Wall Plug will respond"
-		},
-		"30[0x0f]": {
-			"$import": "fibarogroup_templates.json#enable_disable_bit_default_true",
-			"label": "React to High Temperature Alarm",
-			"description": "Network alarms to which the Wall Plug will respond"
+			"description": "Network alarms to which the Wall Plug will respond",
+			"defaultValue": 1
 		},
 		"30[0x10]": {
-			"$import": "fibarogroup_templates.json#enable_disable_bit_default_true",
+			"$import": "../../templates/master_template.json#base_enable_disable",
+			"label": "React to High Temperature Alarm",
+			"description": "Network alarms to which the Wall Plug will respond",
+			"defaultValue": 1
+		},
+		"30[0x20]": {
+			"$import": "../../templates/master_template.json#base_enable_disable",
 			"label": "React to Flood Alarm",
-			"description": "Network alarms to which the Wall Plug will respond"
+			"description": "Network alarms to which the Wall Plug will respond",
+			"defaultValue": 1
 		},
 		"31": {
 			"label": "Response to alarm frames",

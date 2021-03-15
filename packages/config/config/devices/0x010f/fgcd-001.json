@@ -182,21 +182,23 @@
 			"$import": "templates/fibarogroup_templates.json#secure_assoc_bit",
 			"label": "Associations: Send secure commands to 5th group"
 		},
-		"7[0x0f]": {
+		"7[0x10]": {
 			"$import": "templates/fibarogroup_templates.json#secure_assoc_bit",
 			"label": "Associations: Send secure commands to 6th group"
 		},
-		"7[0x10]": {
+		"7[0x20]": {
 			"$import": "templates/fibarogroup_templates.json#secure_assoc_bit",
 			"label": "Associations: Send secure commands to 7th group"
 		},
 		"10[0x01]": {
-			"$import": "templates/fibarogroup_templates.json#enable_disable_bit_default_true",
-			"label": "Associations: Send Basic On to 2nd group (CO Alarm)"
+			"$import": "../templates/master_template.json#base_enable_disable",
+			"label": "Associations: Send Basic On to 2nd group (CO Alarm)",
+			"defaultValue": 1
 		},
 		"10[0x02]": {
-			"$import": "templates/fibarogroup_templates.json#enable_disable_bit_default_true",
-			"label": "Associations: Send Basic Off to 2nd group (CO Alarm)"
+			"$import": "../templates/master_template.json#base_enable_disable",
+			"label": "Associations: Send Basic Off to 2nd group (CO Alarm)",
+			"defaultValue": 1
 		},
 		"11": {
 			"label": "Value of BASIC ON command sent to 2nd assoc group",

@@ -51,14 +51,16 @@
 			"allowManualEntry": true
 		},
 		"2[0x01]": {
-			"$import": "templates/fibarogroup_templates.json#enable_disable_bit_default_true",
+			"$import": "../templates/master_template.json#base_enable_disable",
 			"label": "Acoustic Alarm",
-			"description": " This doesn’t affect the communication with the Z-Wave network controller, i.e. the sensor will keep sending alarms, reports and all information to the associated devices. Modifying this parameter settings helps extending the battery life"
+			"description": "This doesn’t affect the communication with the Z-Wave network controller, i.e. the sensor will keep sending alarms, reports and all information to the associated devices. Modifying this parameter settings helps extending the battery life",
+			"defaultValue": 1
 		},
 		"2[0x02]": {
-			"$import": "templates/fibarogroup_templates.json#enable_disable_bit_default_true",
+			"$import": "../templates/master_template.json#base_enable_disable",
 			"label": "Visual Alarm",
-			"description": " This doesn’t affect the communication with the Z-Wave network controller, i.e. the sensor will keep sending alarms, reports and all information to the associated devices. Modifying this parameter settings helps extending the battery life"
+			"description": "This doesn’t affect the communication with the Z-Wave network controller, i.e. the sensor will keep sending alarms, reports and all information to the associated devices. Modifying this parameter settings helps extending the battery life",
+			"defaultValue": 1
 		},
 		"5": {
 			"label": "Type of alarm to 1st association group (SMOKE)",
@@ -113,11 +115,11 @@
 			"allowManualEntry": true
 		},
 		"13[0x01]": {
-			"$import": "templates/fibarogroup_templates.json#enable_disable_bit",
+			"$import": "../templates/master_template.json#base_enable_disable",
 			"label": "Broadcast Smoke mode"
 		},
 		"13[0x02]": {
-			"$import": "templates/fibarogroup_templates.json#enable_disable_bit",
+			"$import": "../templates/master_template.json#base_enable_disable",
 			"label": "Broadcast Tamper mode"
 		},
 		"73": {

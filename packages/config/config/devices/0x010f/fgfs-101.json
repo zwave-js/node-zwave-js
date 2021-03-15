@@ -194,13 +194,13 @@
 		},
 		"13[0x01]": {
 			"$if": "firmwareVersion < 3.2 || firmwareVersion >= 23.23",
-			"$import": "templates/fibarogroup_templates.json#enable_disable_bit",
+			"$import": "../templates/master_template.json#base_enable_disable",
 			"label": "Alarm Broadcast Flood Mode",
 			"description": "Transmitting the alarm or control frame in 'broadcast' mode"
 		},
 		"13[0x02]": {
 			"$if": "firmwareVersion < 3.2 || firmwareVersion >= 23.23",
-			"$import": "templates/fibarogroup_templates.json#enable_disable_bit",
+			"$import": "../templates/master_template.json#base_enable_disable",
 			"label": "Alarm Broadcast Tamper Mode",
 			"description": "Transmitting the alarm or control frame in 'broadcast' mode"
 		},
@@ -287,12 +287,13 @@
 			"allowManualEntry": true
 		},
 		"74[0x01]": {
-			"$import": "templates/fibarogroup_templates.json#enable_disable_bit",
+			"$import": "../templates/master_template.json#base_enable_disable",
 			"label": "Button tamper alarm"
 		},
 		"74[0x02]": {
-			"$import": "templates/fibarogroup_templates.json#enable_disable_bit_default_true",
-			"label": "Movement tamper alarm"
+			"$import": "../templates/master_template.json#base_enable_disable",
+			"label": "Movement tamper alarm",
+			"defaultValue": 1
 		},
 		"75": {
 			"label": "Visual and audible alarms duration",
@@ -342,21 +343,18 @@
 		},
 		"78[0x01]": {
 			"$if": "firmwareVersion >= 3.2 && firmwareVersion < 23.23",
-			"$import": "templates/fibarogroup_templates.json#enable_disable_bit_default_true",
-			"label": "Associations: Send secure commands to 2nd group (Control)",
-			"description": "This is only active when the node is included securely"
+			"$import": "templates/fibarogroup_templates.json#secure_assoc_bit",
+			"label": "Associations: Send secure commands to 2nd group (Control)"
 		},
 		"78[0x02]": {
 			"$if": "firmwareVersion >= 3.2 && firmwareVersion < 23.23",
-			"$import": "templates/fibarogroup_templates.json#enable_disable_bit_default_true",
-			"label": "Associations: Send secure commands to 3rd group (Alarm)",
-			"description": "This is only active when the node is included securely"
+			"$import": "templates/fibarogroup_templates.json#secure_assoc_bit",
+			"label": "Associations: Send secure commands to 3rd group (Alarm)"
 		},
 		"78[0x04]": {
 			"$if": "firmwareVersion >= 3.2 && firmwareVersion < 23.23",
-			"$import": "templates/fibarogroup_templates.json#enable_disable_bit_default_true",
-			"label": "Associations: Send secure commands to 4th group (Tamper)",
-			"description": "This is only active when the node is included securely"
+			"$import": "templates/fibarogroup_templates.json#secure_assoc_bit",
+			"label": "Associations: Send secure commands to 4th group (Tamper)"
 		}
 	}
 }

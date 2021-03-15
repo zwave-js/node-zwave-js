@@ -146,100 +146,6 @@
 			"writeOnly": false,
 			"allowManualEntry": true
 		},
-		"15": {
-			"$if": "productType === 0x0203",
-			"label": "Second channel - operating mode",
-			"description": "This parameter allows to choose operating for the 2nd channel controlled by the S2 switch.",
-			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 5,
-			"defaultValue": 0,
-			"unsigned": true,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "Standard operation",
-					"value": 0
-				},
-				{
-					"label": "Delay ON",
-					"value": 1
-				},
-				{
-					"label": "Delay OFF",
-					"value": 2
-				},
-				{
-					"label": "Auto ON",
-					"value": 3
-				},
-				{
-					"label": "Auto OFF",
-					"value": 4
-				},
-				{
-					"label": "Flashing Mode",
-					"value": 5
-				}
-			]
-		},
-		"16": {
-			"$if": "productType === 0x0203",
-			"label": "Second channel - reaction to switch for delay/auto ON/OFF modes",
-			"description": "This parameter determines how the device in timed mode reacts to pushing the switch connected to the S2 terminal.",
-			"valueSize": 1,
-			"unit": "seconds",
-			"minValue": 0,
-			"maxValue": 2,
-			"defaultValue": 0,
-			"unsigned": true,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "Cancel mode and set target state",
-					"value": 0
-				},
-				{
-					"label": "No reaction to switch - mode runs until it ends",
-					"value": 1
-				},
-				{
-					"label": "Reset timer - start counting from the beginning",
-					"value": 2
-				}
-			]
-		},
-		"17": {
-			"$if": "productType === 0x0203",
-			"label": "Second channel - time parameter for delay/auto ON/OFF modes",
-			"description": "This parameter allows to set time parameter used in timed modes.",
-			"valueSize": 2,
-			"unit": "0.1 seconds",
-			"minValue": 1,
-			"maxValue": 32000,
-			"defaultValue": 50,
-			"unsigned": true,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
-		},
-		"18": {
-			"$if": "productType === 0x0203",
-			"label": "Second channel - pulse time for flashing mode",
-			"description": "This parameter allows to set time of switching to opposite state in flashing mode.",
-			"valueSize": 2,
-			"minValue": 1,
-			"maxValue": 32000,
-			"defaultValue": 5,
-			"unsigned": true,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
-		},
 		"20": {
 			"label": "Switch type",
 			"description": "Inputs type configuration",
@@ -305,51 +211,51 @@
 			"label": "Associations: Send secure commands to 5th group"
 		},
 		"28[0x01]": {
-			"$import": "fibarogroup_templates.json#enable_disable_bit",
+			"$import": "../../templates/master_template.json#base_enable_disable",
 			"label": "S1 switch - Send Scenes: Key pressed 1 time"
 		},
 		"28[0x02]": {
-			"$import": "fibarogroup_templates.json#enable_disable_bit",
+			"$import": "../../templates/master_template.json#base_enable_disable",
 			"label": "S1 switch - Send Scenes: Key pressed 2 times"
 		},
 		"28[0x04]": {
-			"$import": "fibarogroup_templates.json#enable_disable_bit",
+			"$import": "../../templates/master_template.json#base_enable_disable",
 			"label": "S1 switch - Send Scenes: Key pressed 3 times"
 		},
 		"28[0x08]": {
-			"$import": "fibarogroup_templates.json#enable_disable_bit",
+			"$import": "../../templates/master_template.json#base_enable_disable",
 			"label": "S1 switch - Send Scenes: Key held down and Key released"
 		},
 		"29[0x01]": {
-			"$import": "fibarogroup_templates.json#enable_disable_bit",
+			"$import": "../../templates/master_template.json#base_enable_disable",
 			"label": "S2 switch - Send Scenes: Key pressed 1 time"
 		},
 		"29[0x02]": {
-			"$import": "fibarogroup_templates.json#enable_disable_bit",
+			"$import": "../../templates/master_template.json#base_enable_disable",
 			"label": "S2 switch - Send Scenes: Key pressed 2 times"
 		},
 		"29[0x04]": {
-			"$import": "fibarogroup_templates.json#enable_disable_bit",
+			"$import": "../../templates/master_template.json#base_enable_disable",
 			"label": "S2 switch - Send Scenes: Key pressed 3 times"
 		},
 		"29[0x08]": {
-			"$import": "fibarogroup_templates.json#enable_disable_bit",
+			"$import": "../../templates/master_template.json#base_enable_disable",
 			"label": "S2 switch - Send Scenes: Key held down and Key released"
 		},
 		"30[0x01]": {
-			"$import": "fibarogroup_templates.json#enable_disable_bit",
+			"$import": "../../templates/master_template.json#base_enable_disable",
 			"label": "S1 switch associations - Ignore turning ON with 1 click"
 		},
 		"30[0x02]": {
-			"$import": "fibarogroup_templates.json#enable_disable_bit",
+			"$import": "../../templates/master_template.json#base_enable_disable",
 			"label": "S1 switch associations - Ignore turning OFF with 1 click"
 		},
 		"30[0x04]": {
-			"$import": "fibarogroup_templates.json#enable_disable_bit",
+			"$import": "../../templates/master_template.json#base_enable_disable",
 			"label": "S1 switch associations - Ignore holding and releasing"
 		},
 		"30[0x08]": {
-			"$import": "fibarogroup_templates.json#enable_disable_bit",
+			"$import": "../../templates/master_template.json#base_enable_disable",
 			"label": "S1 switch associations - Ignore double click"
 		},
 		"31": {
@@ -389,20 +295,20 @@
 			"allowManualEntry": true
 		},
 		"35[0x01]": {
-			"$import": "fibarogroup_templates.json#enable_disable_bit",
-			"label": "S2 switch associations - Ignore turning ON with 1 click"
+			"$import": "../../templates/master_template.json#base_enable_disable_inverted",
+			"label": "S2 switch associations - Turning ON with 1 click"
 		},
 		"35[0x02]": {
-			"$import": "fibarogroup_templates.json#enable_disable_bit",
-			"label": "S2 switch associations - Ignore turning OFF with 1 click"
+			"$import": "../../templates/master_template.json#base_enable_disable_inverted",
+			"label": "S2 switch associations - Turning OFF with 1 click"
 		},
 		"35[0x04]": {
-			"$import": "fibarogroup_templates.json#enable_disable_bit",
-			"label": "S2 switch associations - Ignore holding and releasing"
+			"$import": "../../templates/master_template.json#base_enable_disable_inverted",
+			"label": "S2 switch associations - Holding and releasing"
 		},
 		"35[0x08]": {
-			"$import": "fibarogroup_templates.json#enable_disable_bit",
-			"label": "S2 switch associations - Ignore double click"
+			"$import": "../../templates/master_template.json#base_enable_disable_inverted",
+			"label": "S2 switch associations - Double click"
 		},
 		"36": {
 			"label": "S2 Switch ON value sent to 4th and 5th association groups",
@@ -499,48 +405,6 @@
 		},
 		"53": {
 			"label": "First channel - energy reports",
-			"description": "This parameter determines the minimum change in consumed energy that will result in sending new energy report to the main controller.",
-			"valueSize": 2,
-			"unit": "0.01 kWh",
-			"minValue": 1,
-			"maxValue": 32000,
-			"defaultValue": 100,
-			"unsigned": true,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
-		},
-		"54": {
-			"$if": "productType === 0x0203",
-			"label": "Second Channel - power reports",
-			"description": "This parameter determines the minimum change in consumed power that will result in sending new power report to the main controller.",
-			"valueSize": 2,
-			"unit": "%",
-			"minValue": 1,
-			"maxValue": 100,
-			"defaultValue": 20,
-			"unsigned": true,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
-		},
-		"55": {
-			"$if": "productType === 0x0203",
-			"label": "Second channel - minimal time between power reports",
-			"description": "This parameter determines minimum time that has to elapse before sending new power report to the main controller.",
-			"valueSize": 2,
-			"unit": "seconds",
-			"minValue": 1,
-			"maxValue": 120,
-			"defaultValue": 10,
-			"unsigned": true,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
-		},
-		"57": {
-			"$if": "productType === 0x0203",
-			"label": "Second channel - energy reports",
 			"description": "This parameter determines the minimum change in consumed energy that will result in sending new energy report to the main controller.",
 			"valueSize": 2,
 			"unit": "0.01 kWh",

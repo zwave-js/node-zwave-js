@@ -32,7 +32,7 @@
 				"$if": "productType === 0x1b01",
 				"label": "First channel – overload safety switch",
 				"valueSize": 4,
-				"unit": "0.1 watts",
+				"unit": "0.1 W",
 				"minValue": 0,
 				"maxValue": 36200,
 				"defaultValue": 0,
@@ -43,7 +43,7 @@
 			{
 				"label": "First channel – overload safety switch",
 				"valueSize": 4,
-				"unit": "0.1 watts",
+				"unit": "0.1 W",
 				"minValue": 0,
 				"maxValue": 45000,
 				"defaultValue": 0,
@@ -68,7 +68,7 @@
 				"$if": "productType === 0x1b01",
 				"label": "LED Frame - power limit",
 				"valueSize": 4,
-				"unit": "0.1 watts",
+				"unit": "0.1 W",
 				"minValue": 500,
 				"maxValue": 30000,
 				"defaultValue": 30000,
@@ -79,7 +79,7 @@
 			{
 				"label": "LED Frame - power limit",
 				"valueSize": 4,
-				"unit": "0.1 watts",
+				"unit": "0.1 W",
 				"minValue": 500,
 				"maxValue": 36800,
 				"defaultValue": 36800,
@@ -268,7 +268,6 @@
 		"25": {
 			"$if": "productType === 0x1b01",
 			"label": "Outputs orientation",
-			"description": "Outputs orientation",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 1,

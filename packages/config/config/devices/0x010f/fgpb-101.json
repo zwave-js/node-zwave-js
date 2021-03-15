@@ -90,171 +90,190 @@
 	},
 	"paramInformation": {
 		"1[0x01]": {
-			"$import": "templates/fibarogroup_templates.json#enable_disable_bit_default_true",
-			"label": "Scenes sent to the controller: Key Pressed 1 time"
+			"$import": "../templates/master_template.json#base_enable_disable",
+			"label": "Scenes sent to the controller: Key Pressed 1 time",
+			"defaultValue": 1
 		},
 		"1[0x02]": {
-			"$import": "templates/fibarogroup_templates.json#enable_disable_bit_default_true",
-			"label": "Scenes sent to the controller: Key Pressed 2 times"
+			"$import": "../templates/master_template.json#base_enable_disable",
+			"label": "Scenes sent to the controller: Key Pressed 2 times",
+			"defaultValue": 1
 		},
 		"1[0x04]": {
-			"$import": "templates/fibarogroup_templates.json#enable_disable_bit_default_true",
-			"label": "Scenes sent to the controller: Key Pressed 3 times"
+			"$import": "../templates/master_template.json#base_enable_disable",
+			"label": "Scenes sent to the controller: Key Pressed 3 times",
+			"defaultValue": 1
 		},
 		"1[0x08]": {
-			"$import": "templates/fibarogroup_templates.json#enable_disable_bit_default_true",
-			"label": "Scenes sent to the controller: Key Pressed 4 times"
+			"$import": "../templates/master_template.json#base_enable_disable",
+			"label": "Scenes sent to the controller: Key Pressed 4 times",
+			"defaultValue": 1
 		},
 		"1[0x10]": {
-			"$import": "templates/fibarogroup_templates.json#enable_disable_bit_default_true",
-			"label": "Scenes sent to the controller: Key Pressed 5 times"
+			"$import": "../templates/master_template.json#base_enable_disable",
+			"label": "Scenes sent to the controller: Key Pressed 5 times",
+			"defaultValue": 1
 		},
 		"1[0x20]": {
-			"$import": "templates/fibarogroup_templates.json#enable_disable_bit_default_true",
-			"label": "Scenes sent to the controller: Key Held Down"
+			"$import": "../templates/master_template.json#base_enable_disable",
+			"label": "Scenes sent to the controller: Key Held Down",
+			"defaultValue": 1
 		},
 		"1[0x40]": {
-			"$import": "templates/fibarogroup_templates.json#enable_disable_bit_default_true",
-			"label": "Scenes sent to the controller: Key Released"
+			"$import": "../templates/master_template.json#base_enable_disable",
+			"label": "Scenes sent to the controller: Key Released",
+			"defaultValue": 1
 		},
 		"3[0x01]": {
-			"$import": "templates/fibarogroup_templates.json#enable_disable_bit_default_true",
-			"label": "Associations: Send secure commands to 2nd group",
-			"description": "This is only active when the node is included securely"
+			"$import": "templates/fibarogroup_templates.json#secure_assoc_bit",
+			"label": "Associations: Send secure commands to 2nd group"
 		},
 		"3[0x02]": {
-			"$import": "templates/fibarogroup_templates.json#enable_disable_bit_default_true",
-			"label": "Associations: Send secure commands to 3rd group",
-			"description": "This is only active when the node is included securely"
+			"$import": "templates/fibarogroup_templates.json#secure_assoc_bit",
+			"label": "Associations: Send secure commands to 3rd group"
 		},
 		"3[0x04]": {
-			"$import": "templates/fibarogroup_templates.json#enable_disable_bit_default_true",
-			"label": "Associations: Send secure commands to 4th group",
-			"description": "This is only active when the node is included securely"
+			"$import": "templates/fibarogroup_templates.json#secure_assoc_bit",
+			"label": "Associations: Send secure commands to 4th group"
 		},
 		"10[0x01]": {
-			"$import": "templates/fibarogroup_templates.json#enable_disable_bit_default_true",
+			"$import": "../templates/master_template.json#base_enable_disable",
 			"label": "Key Pressed 1 time Switched On – command sent to 2nd association group",
-			"description": "This parameter defines commands sent to devices associated in 2nd association group after a single click."
+			"description": "This parameter defines commands sent to devices associated in 2nd association group after a single click",
+			"defaultValue": 1
 		},
 		"10[0x02]": {
-			"$import": "templates/fibarogroup_templates.json#enable_disable_bit_default_true",
+			"$import": "../templates/master_template.json#base_enable_disable",
 			"label": "Key Pressed 1 time Switched Off – command sent to 2nd association group",
-			"description": "This parameter defines commands sent to devices associated in 2nd association group after a single click."
+			"description": "This parameter defines commands sent to devices associated in 2nd association group after a single click",
+			"defaultValue": 1
 		},
 		"11": {
-			"$import": "templates/fibarogroup_templates.json#key_press_brigthness_level",
+			"$import": "templates/fibarogroup_templates.json#key_press_brightness_level",
 			"label": "Key Pressed 1 time – value of SWITCH ON command sent to 2nd association group"
 		},
 		"12[0x01]": {
-			"$import": "templates/fibarogroup_templates.json#enable_disable_bit_default_true",
+			"$import": "../templates/master_template.json#base_enable_disable",
 			"label": "Key Pressed 2 times Switched On – command sent to 2nd association group",
-			"description": "This parameter defines commands sent to devices associated in 2nd association group after a double click."
+			"description": "This parameter defines commands sent to devices associated in 2nd association group after a double click",
+			"defaultValue": 1
 		},
 		"12[0x02]": {
-			"$import": "templates/fibarogroup_templates.json#enable_disable_bit",
+			"$import": "../templates/master_template.json#base_enable_disable",
 			"label": "Key Pressed 2 times Switched Off – command sent to 2nd association group",
-			"description": "This parameter defines commands sent to devices associated in 2nd association group after a double click."
+			"description": "This parameter defines commands sent to devices associated in 2nd association group after a double click"
 		},
 		"13": {
-			"$import": "templates/fibarogroup_templates.json#key_press_brigthness_level",
+			"$import": "templates/fibarogroup_templates.json#key_press_brightness_level",
 			"label": "Key Pressed 2 times – value of SWITCH ON command sent to 2nd association group",
 			"defaultValue": 99
 		},
 		"14[0x01]": {
-			"$import": "templates/fibarogroup_templates.json#enable_disable_bit",
+			"$import": "../templates/master_template.json#base_enable_disable",
 			"label": "Key Pressed 3 times Switched On – command sent to 2nd association group",
-			"description": "This parameter defines commands sent to devices associated in 2nd association group after a triple click."
+			"description": "This parameter defines commands sent to devices associated in 2nd association group after a triple click"
 		},
 		"14[0x02]": {
-			"$import": "templates/fibarogroup_templates.json#enable_disable_bit",
+			"$import": "../templates/master_template.json#base_enable_disable",
 			"label": "Key Pressed 3 times Switched Off – command sent to 2nd association group",
-			"description": "This parameter defines commands sent to devices associated in 2nd association group after a triple click."
+			"description": "This parameter defines commands sent to devices associated in 2nd association group after a triple click"
 		},
 		"15": {
-			"$import": "templates/fibarogroup_templates.json#key_press_brigthness_level",
+			"$import": "templates/fibarogroup_templates.json#key_press_brightness_level",
 			"label": "Key Pressed 3 times – value of SWITCH ON command sent to 2nd association group"
 		},
 		"20[0x01]": {
-			"$import": "templates/fibarogroup_templates.json#enable_disable_bit_default_true",
+			"$import": "../templates/master_template.json#base_enable_disable",
 			"label": "Key Pressed 1 time Switched On – command sent to 3rd association group",
-			"description": "This parameter defines commands sent to devices associated in 3rd association group after a single click."
+			"description": "This parameter defines commands sent to devices associated in 3rd association group after a single click",
+			"defaultValue": 1
 		},
 		"20[0x02]": {
-			"$import": "templates/fibarogroup_templates.json#enable_disable_bit_default_true",
+			"$import": "../templates/master_template.json#base_enable_disable",
 			"label": "Key Pressed 1 time Switched Off – command sent to 3rd association group",
-			"description": "This parameter defines commands sent to devices associated in 3rd association group after a single click."
+			"description": "This parameter defines commands sent to devices associated in 3rd association group after a single click",
+			"defaultValue": 1
 		},
 		"21": {
-			"$import": "templates/fibarogroup_templates.json#key_press_brigthness_level",
+			"$import": "templates/fibarogroup_templates.json#key_press_brightness_level",
 			"label": "Key Pressed 1 time – value of SWITCH ON command sent to 3rd association group"
 		},
 		"22[0x01]": {
-			"$import": "templates/fibarogroup_templates.json#enable_disable_bit_default_true",
+			"$import": "../templates/master_template.json#base_enable_disable",
 			"label": "Key Pressed 2 times Switched On – command sent to 3rd association group",
-			"description": "This parameter defines commands sent to devices associated in 3rd association group after a double click."
+			"description": "This parameter defines commands sent to devices associated in 3rd association group after a double click",
+			"defaultValue": 1
 		},
 		"22[0x02]": {
-			"$import": "templates/fibarogroup_templates.json#enable_disable_bit",
+			"$import": "../templates/master_template.json#base_enable_disable",
 			"label": "Key Pressed 2 times Switched Off – command sent to 3rd association group",
-			"description": "This parameter defines commands sent to devices associated in 3rd association group after a double click."
+			"description": "This parameter defines commands sent to devices associated in 3rd association group after a double click"
 		},
 		"23": {
-			"$import": "templates/fibarogroup_templates.json#key_press_brigthness_level",
+			"$import": "templates/fibarogroup_templates.json#key_press_brightness_level",
 			"label": "Key Pressed 2 times – value of SWITCH ON command sent to 3rd association group",
 			"defaultValue": 99
 		},
 		"24[0x01]": {
-			"$import": "templates/fibarogroup_templates.json#enable_disable_bit",
+			"$import": "../templates/master_template.json#base_enable_disable",
 			"label": "Key Pressed 3 times Switched On – command sent to 3rd association group",
-			"description": "This parameter defines commands sent to devices associated in 3rd association group after a triple click."
+			"description": "This parameter defines commands sent to devices associated in 3rd association group after a triple click"
 		},
 		"24[0x02]": {
-			"$import": "templates/fibarogroup_templates.json#enable_disable_bit",
+			"$import": "../templates/master_template.json#base_enable_disable",
 			"label": "Key Pressed 3 times Switched Off – command sent to 3rd association group",
-			"description": "This parameter defines commands sent to devices associated in 3rd association group after a triple click."
+			"description": "This parameter defines commands sent to devices associated in 3rd association group after a triple click"
 		},
 		"25": {
-			"$import": "templates/fibarogroup_templates.json#key_press_brigthness_level",
+			"$import": "templates/fibarogroup_templates.json#key_press_brightness_level",
 			"label": "Key Pressed 3 times – value of SWITCH ON command sent to 3rd association group"
 		},
 		"29[0x01]": {
-			"$import": "templates/fibarogroup_templates.json#enable_disable_bit_default_true",
+			"$import": "../templates/master_template.json#base_enable_disable",
 			"label": "Key Held Down Brightening – command sent to 3rd association group",
-			"description": "This parameter defines commands sent to devices associated in 3rd association group after holding the button down"
+			"description": "This parameter defines commands sent to devices associated in 3rd association group after holding the button down",
+			"defaultValue": 1
 		},
 		"29[0x02]": {
-			"$import": "templates/fibarogroup_templates.json#enable_disable_bit_default_true",
+			"$import": "../templates/master_template.json#base_enable_disable",
 			"label": "Key Held Down Dimming – command sent to 3rd association group",
-			"description": "This parameter defines commands sent to devices associated in 3rd association group after holding the button down"
+			"description": "This parameter defines commands sent to devices associated in 3rd association group after holding the button down",
+			"defaultValue": 1
 		},
 		"30[0x01]": {
-			"$import": "templates/fibarogroup_templates.json#enable_disable_bit_default_true",
-			"label": "Send Alarm Frame to 4th Association Group: Key Pressed 1 time"
+			"$import": "../templates/master_template.json#base_enable_disable",
+			"label": "Send Alarm Frame to 4th Association Group: Key Pressed 1 time",
+			"defaultValue": 1
 		},
 		"30[0x02]": {
-			"$import": "templates/fibarogroup_templates.json#enable_disable_bit_default_true",
-			"label": "Send Alarm Frame to 4th Association Group: Key Pressed 2 times"
+			"$import": "../templates/master_template.json#base_enable_disable",
+			"label": "Send Alarm Frame to 4th Association Group: Key Pressed 2 times",
+			"defaultValue": 1
 		},
 		"30[0x04]": {
-			"$import": "templates/fibarogroup_templates.json#enable_disable_bit_default_true",
-			"label": "Send Alarm Frame to 4th Association Group: Key Pressed 3 times"
+			"$import": "../templates/master_template.json#base_enable_disable",
+			"label": "Send Alarm Frame to 4th Association Group: Key Pressed 3 times",
+			"defaultValue": 1
 		},
 		"30[0x08]": {
-			"$import": "templates/fibarogroup_templates.json#enable_disable_bit_default_true",
-			"label": "Send Alarm Frame to 4th Association Group: Key Pressed 4 times"
+			"$import": "../templates/master_template.json#base_enable_disable",
+			"label": "Send Alarm Frame to 4th Association Group: Key Pressed 4 times",
+			"defaultValue": 1
 		},
 		"30[0x10]": {
-			"$import": "templates/fibarogroup_templates.json#enable_disable_bit_default_true",
-			"label": "Send Alarm Frame to 4th Association Group: Key Pressed 5 times"
+			"$import": "../templates/master_template.json#base_enable_disable",
+			"label": "Send Alarm Frame to 4th Association Group: Key Pressed 5 times",
+			"defaultValue": 1
 		},
 		"30[0x20]": {
+			"$import": "../templates/master_template.json#base_enable_disable",
 			"label": "Send Alarm Frame to 4th Association Group: Key Held Down",
-			"$import": "templates/fibarogroup_templates.json#enable_disable_bit_default_true"
+			"defaultValue": 1
 		},
 		"30[0x40]": {
-			"$import": "templates/fibarogroup_templates.json#enable_disable_bit_default_true",
-			"label": "Send Alarm Frame to 4th Association Group: Key Released"
+			"$import": "../templates/master_template.json#base_enable_disable",
+			"label": "Send Alarm Frame to 4th Association Group: Key Released",
+			"defaultValue": 1
 		}
 	},
 	"metadata": {

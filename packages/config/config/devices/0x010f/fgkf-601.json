@@ -276,100 +276,112 @@
 			]
 		},
 		"21[0x01]": {
-			"$import": "templates/fibarogroup_templates.json#enable_disable_bit_default_true",
-			"label": "Scene activation for Square button 1 time"
+			"$import": "../templates/master_template.json#base_enable_disable",
+			"label": "Scene activation for Square button 1 time",
+			"defaultValue": 1
 		},
 		"21[0x02]": {
-			"$import": "templates/fibarogroup_templates.json#enable_disable_bit",
+			"$import": "../templates/master_template.json#base_enable_disable",
 			"label": "Scene activation for Square button 2 times"
 		},
 		"21[0x04]": {
-			"$import": "templates/fibarogroup_templates.json#enable_disable_bit",
+			"$import": "../templates/master_template.json#base_enable_disable",
 			"label": "Scene activation for Square button 3 times"
 		},
 		"21[0x08]": {
-			"$import": "templates/fibarogroup_templates.json#enable_disable_bit_default_true",
-			"label": "Scene activation for Square button held down and released"
+			"$import": "../templates/master_template.json#base_enable_disable",
+			"label": "Scene activation for Square button held down and released",
+			"defaultValue": 1
 		},
 		"22[0x01]": {
-			"$import": "templates/fibarogroup_templates.json#enable_disable_bit_default_true",
-			"label": "Scene activation for Circle button 1 time"
+			"$import": "../templates/master_template.json#base_enable_disable",
+			"label": "Scene activation for Circle button 1 time",
+			"defaultValue": 1
 		},
 		"22[0x02]": {
-			"$import": "templates/fibarogroup_templates.json#enable_disable_bit",
+			"$import": "../templates/master_template.json#base_enable_disable",
 			"label": "Scene activation for Circle button 2 times"
 		},
 		"22[0x04]": {
-			"$import": "templates/fibarogroup_templates.json#enable_disable_bit",
+			"$import": "../templates/master_template.json#base_enable_disable",
 			"label": "Scene activation for Circle button 3 times"
 		},
 		"22[0x08]": {
-			"$import": "templates/fibarogroup_templates.json#enable_disable_bit_default_true",
-			"label": "Scene activation for Circle button held down and released"
+			"$import": "../templates/master_template.json#base_enable_disable",
+			"label": "Scene activation for Circle button held down and released",
+			"defaultValue": 1
 		},
 		"23[0x01]": {
-			"$import": "templates/fibarogroup_templates.json#enable_disable_bit_default_true",
-			"label": "Scene activation for Cross button 1 time"
+			"$import": "../templates/master_template.json#base_enable_disable",
+			"label": "Scene activation for Cross button 1 time",
+			"defaultValue": 1
 		},
 		"23[0x02]": {
-			"$import": "templates/fibarogroup_templates.json#enable_disable_bit",
+			"$import": "../templates/master_template.json#base_enable_disable",
 			"label": "Scene activation for Cross button 2 times"
 		},
 		"23[0x04]": {
-			"$import": "templates/fibarogroup_templates.json#enable_disable_bit",
+			"$import": "../templates/master_template.json#base_enable_disable",
 			"label": "Scene activation for Cross button 3 times"
 		},
 		"23[0x08]": {
-			"$import": "templates/fibarogroup_templates.json#enable_disable_bit_default_true",
-			"label": "Scene activation for Cross button held down and released"
+			"$import": "../templates/master_template.json#base_enable_disable",
+			"label": "Scene activation for Cross button held down and released",
+			"defaultValue": 1
 		},
 		"24[0x01]": {
-			"$import": "templates/fibarogroup_templates.json#enable_disable_bit_default_true",
-			"label": "Scene activation for Triangle button 1 time"
+			"$import": "../templates/master_template.json#base_enable_disable",
+			"label": "Scene activation for Triangle button 1 time",
+			"defaultValue": 1
 		},
 		"24[0x02]": {
-			"$import": "templates/fibarogroup_templates.json#enable_disable_bit",
+			"$import": "../templates/master_template.json#base_enable_disable",
 			"label": "Scene activation for Triangle button 2 times"
 		},
 		"24[0x04]": {
-			"$import": "templates/fibarogroup_templates.json#enable_disable_bit",
+			"$import": "../templates/master_template.json#base_enable_disable",
 			"label": "Scene activation for Triangle button 3 times"
 		},
 		"24[0x08]": {
-			"$import": "templates/fibarogroup_templates.json#enable_disable_bit_default_true",
-			"label": "Scene activation for Triangle button held down and released"
+			"$import": "../templates/master_template.json#base_enable_disable",
+			"label": "Scene activation for Triangle button held down and released",
+			"defaultValue": 1
 		},
 		"25[0x01]": {
-			"$import": "templates/fibarogroup_templates.json#enable_disable_bit_default_true",
-			"label": "Scene activation for Minus button 1 time"
+			"$import": "../templates/master_template.json#base_enable_disable",
+			"label": "Scene activation for Minus button 1 time",
+			"defaultValue": 1
 		},
 		"25[0x02]": {
-			"$import": "templates/fibarogroup_templates.json#enable_disable_bit",
+			"$import": "../templates/master_template.json#base_enable_disable",
 			"label": "Scene activation for Minus button 2 times"
 		},
 		"25[0x04]": {
-			"$import": "templates/fibarogroup_templates.json#enable_disable_bit",
+			"$import": "../templates/master_template.json#base_enable_disable",
 			"label": "Scene activation for Minus button 3 times"
 		},
 		"25[0x08]": {
-			"$import": "templates/fibarogroup_templates.json#enable_disable_bit_default_true",
-			"label": "Scene activation for Minus button held down and released"
+			"$import": "../templates/master_template.json#base_enable_disable",
+			"label": "Scene activation for Minus button held down and released",
+			"defaultValue": 1
 		},
 		"26[0x01]": {
-			"$import": "templates/fibarogroup_templates.json#enable_disable_bit_default_true",
-			"label": "Scene activation for Plus button 1 time"
+			"$import": "../templates/master_template.json#base_enable_disable",
+			"label": "Scene activation for Plus button 1 time",
+			"defaultValue": 1
 		},
 		"26[0x02]": {
-			"$import": "templates/fibarogroup_templates.json#enable_disable_bit",
+			"$import": "../templates/master_template.json#base_enable_disable",
 			"label": "Scene activation for Plus button 2 times"
 		},
 		"26[0x04]": {
-			"$import": "templates/fibarogroup_templates.json#enable_disable_bit",
+			"$import": "../templates/master_template.json#base_enable_disable",
 			"label": "Scene activation for Plus button 3 times"
 		},
 		"26[0x08]": {
-			"$import": "templates/fibarogroup_templates.json#enable_disable_bit_default_true",
-			"label": "Scene activation for Plus button held down and released"
+			"$import": "../templates/master_template.json#base_enable_disable",
+			"label": "Scene activation for Plus button held down and released",
+			"defaultValue": 1
 		},
 		"29": {
 			"label": "Associations in Z-Wave network security mode",

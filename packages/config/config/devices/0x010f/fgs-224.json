@@ -9,5 +9,178 @@
 			"productType": "0x0204",
 			"productId": "0x1000"
 		}
-	]
+	],
+	"paramInformation": {
+		"25": {
+			"label": "Inputs orientation",
+			"description": "This parameter allows reversing operation of S1 and S2 inputs changing the wiring. Use in case of incorrect wiring.",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 0,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "default (S1 - 1st channel, S2 - 2nd channel)",
+					"value": 0
+				},
+				{
+					"label": "reversed (S1 - 2nd channel, S2 - 1st channel)",
+					"value": 1
+				}
+			]
+		},
+		"151": {
+			"label": "Second channel - operating mode",
+			"description": "This parameter allows to choose operating for channel controlled with Q/Q2 output. timed modes (value 1, 2 or 3), time is set parameter 155 and reaction to input is set with parameter 153.",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 3,
+			"defaultValue": 0,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Standard operation",
+					"value": 0
+				},
+				{
+					"label": "Delay Off",
+					"value": 1
+				},
+				{
+					"label": "Auto Off",
+					"value": 2
+				},
+				{
+					"label": "Flashing",
+					"value": 3
+				}
+			]
+		},
+		"153": {
+			"label": "Second channel - reaction to input change in delayed/auto OFF modes",
+			"description": "This parameter determines how the device when changing state of S2 input in timed for second channel.",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 2,
+			"defaultValue": 0,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Cancel mode and set default state",
+					"value": 0
+				},
+				{
+					"label": "No reaction, mode runs until it ends",
+					"value": 1
+				},
+				{
+					"label": "Reset timer, start counting time from the beginning",
+					"value": 2
+				}
+			]
+		},
+		"155": {
+			"label": "Second channel – time parameter for delayed/auto OFF and flashing modes",
+			"description": "This parameter allows to set time parameter used in timed modes. (s)",
+			"valueSize": 2,
+			"minValue": 0,
+			"maxValue": 32000,
+			"unit": "s",
+			"defaultValue": 5,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"159": {
+			"label": "S2 Switch ON value sent to 3rd association group",
+			"description": "This parameter determines value sent with Switch On command to devices associated in 3rd association group.",
+			"valueSize": 2,
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 255,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"160": {
+			"label": "S2 Switch OFF value sent to 3rd association group",
+			"description": "This parameter determines value sent with Switch Off command to devices associated in 3rd association group.",
+			"valueSize": 2,
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 0,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"161": {
+			"label": "S2 Switch Double Click value sent to 3rd association groups",
+			"description": "This parameter determines value sent with Double Click command to devices associated in 3rd association group.",
+			"valueSize": 2,
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 99,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"163": {
+			"label": "Q2 output type",
+			"description": "This parameter determines type of Q2 output.",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 0,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Normally Open (relay contacts opened turned off, closed when turned on)",
+					"value": 0
+				},
+				{
+					"label": "Normally Closed (relay contacts closed turned off, opened when turned on)",
+					"value": 1
+				}
+			]
+		},
+		"164": {
+			"label": "Lock simultaneous switching of Q1 and Q2 outputs",
+			"description": "When the lock is enabled, both outputs cannot turned on at the same time.",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 0,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Lock disabled",
+					"value": 0
+				},
+				{
+					"label": "Lock enabled",
+					"value": 1
+				}
+			]
+		}
+	}
 }

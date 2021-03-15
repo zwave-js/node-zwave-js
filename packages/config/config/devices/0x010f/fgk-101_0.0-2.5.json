@@ -161,12 +161,12 @@
 			"allowManualEntry": true
 		},
 		"9[0x01]": {
-			"$import": "templates/fibarogroup_templates.json#enable_disable_bit_reverse",
+			"$import": "../templates/master_template.json#base_enable_disable_inverted",
 			"label": "Group 1 alarm"
 		},
 		"9[0x02]": {
 			"$if": "firmwareVersion < 2.5",
-			"$import": "templates/fibarogroup_templates.json#enable_disable_bit_reverse",
+			"$import": "../templates/master_template.json#base_enable_disable_inverted",
 			"label": "Group 2 alarm"
 		},
 		"10": {

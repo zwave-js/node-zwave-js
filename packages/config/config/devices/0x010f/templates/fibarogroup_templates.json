@@ -1,50 +1,6 @@
 {
-	"enable_disable_bit": {
-		"valueSize": 1,
-		"minValue": 0,
-		"maxValue": 1,
-		"defaultValue": 0,
-		"unsigned": true,
-		"readOnly": false,
-		"writeOnly": false,
-		"allowManualEntry": false,
-		"options": [
-			{
-				"label": "Disable",
-				"value": 0
-			},
-			{
-				"label": "Enable",
-				"value": 1
-			}
-		]
-	},
-	"enable_disable_bit_reverse": {
-		"valueSize": 1,
-		"minValue": 0,
-		"maxValue": 1,
-		"defaultValue": 0,
-		"unsigned": true,
-		"readOnly": false,
-		"writeOnly": false,
-		"allowManualEntry": false,
-		"options": [
-			{
-				"label": "Enable",
-				"value": 0
-			},
-			{
-				"label": "Disable",
-				"value": 1
-			}
-		]
-	},
-	"enable_disable_bit_default_true": {
-		"$import": "#enable_disable_bit",
-		"defaultValue": 1
-	},
 	"secure_assoc_bit": {
-		"$import": "#enable_disable_bit",
+		"$import": "../../templates/master_template.json#base_enable_disable",
 		"defaultValue": 1,
 		"description": "This is only active when the node is included securely"
 	},
@@ -64,15 +20,15 @@
 				"value": 0
 			},
 			{
-				"label": "ALL ON disabled / ALL OFF active",
+				"label": "ALL ON disabled / ALL OFF enabled",
 				"value": 1
 			},
 			{
-				"label": "ALL ON active / ALL OFF disabled",
+				"label": "ALL ON enabled / ALL OFF disabled",
 				"value": 2
 			},
 			{
-				"label": "ALL ON active / ALL OFF active",
+				"label": "ALL ON enabled / ALL OFF enabled",
 				"value": 255
 			}
 		]
@@ -100,47 +56,13 @@
 		]
 	},
 	"enable_disable_double_click": {
-		"label": "Double-click set lighting at 100%",
-		"valueSize": 1,
-		"minValue": 0,
-		"maxValue": 1,
-		"defaultValue": 0,
-		"unsigned": true,
-		"readOnly": false,
-		"writeOnly": false,
-		"allowManualEntry": false,
-		"options": [
-			{
-				"label": "Disable double click",
-				"value": 0
-			},
-			{
-				"label": "Enable double click",
-				"value": 1
-			}
-		]
+		"$import": "../../templates/master_template.json#base_enable_disable",
+		"label": "Set full brightness on double-click"
 	},
 	"3way_switch": {
-		"label": "The function of 3-way switch",
-		"description": "Key no. 2 controls the Dimmer additionally",
-		"valueSize": 1,
-		"minValue": 0,
-		"maxValue": 1,
-		"defaultValue": 0,
-		"unsigned": true,
-		"readOnly": false,
-		"writeOnly": false,
-		"allowManualEntry": false,
-		"options": [
-			{
-				"label": "3-way switch function for S2 disabled",
-				"value": 0
-			},
-			{
-				"label": "3-way switch function for S2 enabled",
-				"value": 1
-			}
-		]
+		"$import": "../../templates/master_template.json#base_enable_disable",
+		"label": "3-way switch function for S2",
+		"description": "Key no. 2 controls the Dimmer additionally"
 	},
 	"scene_activation": {
 		"label": "Scene activation functionality",
@@ -228,7 +150,7 @@
 		"allowManualEntry": true
 	},
 	"saving_state_power_failure": {
-		"label": "Saving state before power failure",
+		"label": "Restore state after power failure",
 		"valueSize": 1,
 		"minValue": 0,
 		"maxValue": 1,
@@ -250,7 +172,6 @@
 	},
 	"alarm_cancelling": {
 		"label": "Alarm cancelling or turning a device off",
-		"description": "Allows for deactivating device turn off and alarm cancellation functions",
 		"valueSize": 1,
 		"minValue": 0,
 		"maxValue": 255,
@@ -270,7 +191,7 @@
 			}
 		]
 	},
-	"key_press_brigthness_level": {
+	"key_press_brightness_level": {
 		"description": "1-99 Set Level; 255 Last State",
 		"valueSize": 2,
 		"minValue": 1,
