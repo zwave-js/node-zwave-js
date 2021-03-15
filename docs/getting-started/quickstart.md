@@ -32,9 +32,9 @@
         The node interview will continue in the background.
         */
 
-        driver.controller.nodes.forEach(
+        driver.controller.nodes.forEach((node) => {
             // e.g. add event handlers to all known nodes
-        );
+        });
 
         // When a node is marked as ready, it is safe to control it
         const node = driver.controller.nodes.get(2);
