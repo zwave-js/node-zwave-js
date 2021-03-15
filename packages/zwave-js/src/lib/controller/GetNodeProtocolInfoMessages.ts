@@ -74,9 +74,7 @@ export class GetNodeProtocolInfoResponse extends Message {
 		}
 		this.supportedDataRates = supportedDataRates;
 
-		this.protocolVersion =
-			((ProtocolVersion[protocol & 0b111] as any) as ProtocolVersion) ??
-			ProtocolVersion.unknown;
+		this.protocolVersion = protocol & 0b111;
 
 		const capability = this.payload[1];
 		this.optionalFunctionality = !!(capability & 0b1000_0000);
