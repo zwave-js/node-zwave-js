@@ -506,7 +506,7 @@ supported CCs:`;
 		for (let endpoint = 1; endpoint <= numEndpoints; endpoint++) {
 			// Check which CCs exist on this endpoint
 			const endpointCCs = [...endpointCounts.entries()]
-				.filter(([, ccEndpoints]) => ccEndpoints <= endpoint)
+				.filter(([, ccEndpoints]) => ccEndpoints >= endpoint)
 				.map(([ccId]) => ccId);
 			// And store it per endpoint
 			node.valueDB.setValue(getEndpointCCsValueId(endpoint), endpointCCs);
