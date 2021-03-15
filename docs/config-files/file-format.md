@@ -66,7 +66,16 @@ Can be used to add instructions for the user to a device:
 
 ## `associations`
 
-For devices that don't support the Z-Wave+ standard, the associations must be defined. The property looks as follows:
+For devices which do not allow auto-discovering associations, the associations must be defined in the config file.
+
+Before defining `associations` in a config file, please make sure that **at least one** of the following points applies:
+
+-   The device **does not** support `Z-Wave Plus CC` and `Association Group Info CC`
+-   The auto-discovered labels are **bad** (content or formatting wise), like `GROUP_1` instead of something useful like `Multilevel Sensor Reports`
+-   Additional lifelines besides the primary one are **necessary** to get all desired reports
+-   `zwave-js` auto-assigns an endpoint association (node 1, endpoint 0) to the lifeline, but the device needs a node association (node 1, no endpoint) to report properly
+
+The property looks as follows:
 
 ```json
 "associations": {
