@@ -1,6 +1,25 @@
 // Namron 1402756
 // LED Dimmer
 {
+	"manufacturer": "Namron",
+	"manufacturerId": "0x0438",
+	"label": "1402756",
+	"description": "LED Dimmer",
+	"devices": [
+		{
+			"productType": "0x0202",
+			"productId": "0x0002"
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"metadata": {
+		"inclusion": "1. Set primary controller/gateway into inclusion mode (Please refer top your primary controllers manual on how to set your controller into inclusion). 2. Power on the in-wall dimmer. 3.Tripple Press the reset button on the dimmer, it will set the dimmer into inclusion mode. The purple indicator light will stay solid on for 10 seconds to indicate successful incusion.",
+		"exclusion": "1. Set the primary controller/gateway int exclusion mode (Please refer top your primary controllers manual on how to set your controller into exclusion). 2.Triple press the reset button, the dimmer will be set to exclusion mode, and wait to be excluded, then the dimmer will be excluded form the network.",
+		"reset": "Press and hold down the reset button for over 5 seconds, the dimmer will be reset to factory defaults."
+	},
 	"associations": {
 		"1": {
 			"label": "Lifeline",
@@ -20,29 +39,9 @@
 			"maxNodes": 5
 		}
 	},
-	"description": "LED Dimmer",
-	"devices": [
-		{
-			"productType": "0x0202",
-			"productId": "0x0002"
-		}
-	],
-	"firmwareVersion": {
-		"min": "0.0",
-		"max": "255.255"
-	},
-	"label": "1402756",
-	"manufacturer": "Namron",
-	"manufacturerId": "0x0438",
-	"metadata": {
-		"inclusion": "1. Set primary controller/gateway into inclusion mode (Please refer top your primary controllers manual on how to set your controller into inclusion). 2. Power on the in-wall dimmer. 3.Tripple Press the reset button on the dimmer, it will set the dimmer into inclusion mode. The purple indicator light will stay solid on for 10 seconds to indicate successful incusion.",
-		"exclusion": "1. Set the primary controller/gateway int exclusion mode (Please refer top your primary controllers manual on how to set your controller into exclusion). 2.Triple press the reset button, the dimmer will be set to exclusion mode, and wait to be excluded, then the dimmer will be excluded form the network.",
-		"reset": "Press and hold down the reset button for over 5 seconds, the dimmer will be reset to factory defaults."
-	},
 	"paramInformation": {
 		"1": {
 			"label": "State After Power Restore",
-			"description": "State After Power Restore",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 2,
@@ -66,7 +65,7 @@
 			]
 		},
 		"2": {
-			"label": "Notification when load status change.",
+			"label": "Notification on status change.",
 			"description": "Notification when load status change.",
 			"valueSize": 1,
 			"minValue": 0,
@@ -89,17 +88,23 @@
 		"3": {
 			"label": "Default dimming speed",
 			"description": "Dimming speed in seconds. Valid values is 0-100. Default is 5.",
+			"unit": "seconds",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 100,
 			"defaultValue": 5,
 			"readOnly": false,
 			"writeOnly": false,
-			"allowManualEntry": true
+			"allowManualEntry": true,
+			"options": [
+				{
+					"label": "Dimmer default",
+					"value": 5
+				}
+			]
 		},
 		"5": {
 			"label": "Enable or Disable external switch to pair network",
-			"description": "Enable or Disable external switch to pair network.",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 1,
@@ -119,7 +124,7 @@
 			]
 		},
 		"6": {
-			"label": "Set the Dimming mode",
+			"label": "Dimming mode",
 			"description": "Set the Dimming mode to be Linear or Logaritmic.",
 			"valueSize": 1,
 			"minValue": 0,
@@ -140,27 +145,40 @@
 			]
 		},
 		"7": {
-			"label": "Setting default brightness when turn on",
+			"label": "Default brightness when turn on",
 			"description": "Setting brightness when turn on dimmer from off status. Setting of 0 means that the dimmer will use parameter 1. Valid values: 0-99.",
 			"valueSize": 1,
+			"unit": "%",
 			"minValue": 0,
 			"maxValue": 99,
 			"defaultValue": 0,
 			"readOnly": false,
 			"writeOnly": false,
-			"allowManualEntry": true
+			"allowManualEntry": true,
+			"options": [
+				{
+					"label": "Dimmer default",
+					"value": 0
+				}
+			]
 		},
 		"8": {
-			"label": "Setting delay time when turn off the load",
+			"label": "Delay time when turn off the load",
 			"description": "Setting delay time in seconds when load is turned off. Valid values : 0-60 seconds.",
-			"unit": "Second",
+			"unit": "Seconds",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 60,
 			"defaultValue": 0,
 			"readOnly": false,
 			"writeOnly": false,
-			"allowManualEntry": true
+			"allowManualEntry": true,
+			"options": [
+				{
+					"label": "Dimmer default",
+					"value": 0
+				}
+			]
 		}
 	},
 	"revision": 3
