@@ -129,11 +129,11 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "Don’t remember relay state",
+					"label": "Do not remember relay state",
 					"value": 0
 				},
 				{
-					"label": "Remember the Relay Status.",
+					"label": "Remember relay state",
 					"value": 1
 				}
 			]
