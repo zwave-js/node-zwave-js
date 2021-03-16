@@ -136,7 +136,7 @@
 		},
 		"7": {
 			"label": "Meter report interval",
-                  	"unit": "seconds",
+			"unit": "seconds",
 			"valueSize": 2,
 			"minValue": 30,
 			"maxValue": 32767,
