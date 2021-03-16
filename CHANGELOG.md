@@ -3,6 +3,14 @@
 	Placeholder for next release:
 	## __WORK IN PROGRESS__
 -->
+## __WORK IN PROGRESS__
+### Bugfixes
+* Avoid crash during bootstrapping when `Version CC` is not in the NIF
+
+### Config file changes
+* Split LZW31-sn param 16 and normalize param names
+* Separate Neo CoolCam NAS-WR01ZE V2 from WR01Z
+
 ## 6.6.2 (2021-03-14)
 ### Bugfixes
 * While replacing a node with `replaceFailedNode` the node does not get removed from associations anymore. This could prevent secure inclusion from succeeding.
