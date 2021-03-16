@@ -6,6 +6,7 @@ import {
 	generateAuthKey,
 	generateEncryptionKey,
 	getCCName,
+	isZWaveError,
 	Maybe,
 	MessageOrCCLogEntry,
 	MessageRecord,
@@ -203,7 +204,7 @@ export class SecurityCCAPI extends PhysicalCCAPI {
 			});
 		} catch (e) {
 			if (
-				e instanceof ZWaveError &&
+				isZWaveError(e) &&
 				(e.code === ZWaveErrorCodes.Controller_ResponseNOK ||
 					e.code === ZWaveErrorCodes.Controller_CallbackNOK ||
 					e.code === ZWaveErrorCodes.Controller_NodeTimeout ||

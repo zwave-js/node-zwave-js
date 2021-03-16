@@ -1,4 +1,9 @@
-import { ValueID, ZWaveError, ZWaveErrorCodes } from "@zwave-js/core";
+import {
+	isZWaveError,
+	ValueID,
+	ZWaveError,
+	ZWaveErrorCodes,
+} from "@zwave-js/core";
 import type { CCAPI } from "../commandclass/API";
 import type { Driver } from "../driver/Driver";
 import type { ZWaveNode } from "./Node";
@@ -50,7 +55,7 @@ export class VirtualNode extends VirtualEndpoint {
 		} catch (e: unknown) {
 			// Define which errors during setValue are expected and won't crash
 			// the driver:
-			if (e instanceof ZWaveError) {
+			if (isZWaveError(e)) {
 				let handled = false;
 				let emitErrorEvent = false;
 				switch (e.code) {

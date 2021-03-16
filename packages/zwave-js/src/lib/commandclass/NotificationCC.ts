@@ -7,6 +7,7 @@ import {
 import {
 	CommandClasses,
 	Duration,
+	isZWaveError,
 	Maybe,
 	MessageOrCCLogEntry,
 	MessageRecord,
@@ -943,7 +944,7 @@ export class NotificationCCReport extends NotificationCC {
 					this.eventParameters = json;
 				} catch (e: unknown) {
 					if (
-						e instanceof ZWaveError &&
+						isZWaveError(e) &&
 						e.code ===
 							ZWaveErrorCodes.PacketFormat_InvalidPayload &&
 						Buffer.isBuffer(this.eventParameters)

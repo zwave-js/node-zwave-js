@@ -4,6 +4,7 @@ import {
 	CommandClasses,
 	deserializeCacheValue,
 	getCCName,
+	isZWaveError,
 	MessageOrCCLogEntry,
 	MessageRecord,
 	NODE_ID_BROADCAST,
@@ -451,10 +452,7 @@ export class CommandClass {
 			return this.getNode();
 		} catch (e: unknown) {
 			// This was expected
-			if (
-				e instanceof ZWaveError &&
-				e.code === ZWaveErrorCodes.Driver_NotReady
-			) {
+			if (isZWaveError(e) && e.code === ZWaveErrorCodes.Driver_NotReady) {
 				return undefined;
 			}
 			// Something else happened

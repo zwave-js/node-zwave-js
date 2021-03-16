@@ -8,6 +8,7 @@ import {
 	CommandClassInfo,
 	CRC16_CCITT,
 	getCCName,
+	isZWaveError,
 	MAX_NODES,
 	Maybe,
 	MetadataUpdatedArgs,
@@ -723,7 +724,7 @@ export class ZWaveNode extends Endpoint {
 		} catch (e: unknown) {
 			// Define which errors during setValue are expected and won't crash
 			// the driver:
-			if (e instanceof ZWaveError) {
+			if (isZWaveError(e)) {
 				let handled = false;
 				let emitErrorEvent = false;
 				switch (e.code) {
@@ -986,7 +987,7 @@ export class ZWaveNode extends Endpoint {
 				return true;
 			} catch (e: unknown) {
 				if (
-					e instanceof ZWaveError &&
+					isZWaveError(e) &&
 					(e.code === ZWaveErrorCodes.Controller_NodeTimeout ||
 						e.code === ZWaveErrorCodes.Controller_ResponseNOK ||
 						e.code === ZWaveErrorCodes.Controller_CallbackNOK ||
@@ -1297,7 +1298,7 @@ protocol version:      ${this._protocolVersion}`;
 				instance = endpoint.createCCInstance(cc)!;
 			} catch (e: unknown) {
 				if (
-					e instanceof ZWaveError &&
+					isZWaveError(e) &&
 					e.code === ZWaveErrorCodes.CC_NotSupported
 				) {
 					// The CC is no longer supported. This can happen if the node tells us
@@ -1327,7 +1328,7 @@ protocol version:      ${this._protocolVersion}`;
 				await instance.interview();
 			} catch (e: unknown) {
 				if (
-					e instanceof ZWaveError &&
+					isZWaveError(e) &&
 					(e.code === ZWaveErrorCodes.Controller_MessageDropped ||
 						e.code === ZWaveErrorCodes.Controller_CallbackNOK ||
 						e.code === ZWaveErrorCodes.Controller_ResponseNOK ||
@@ -2709,7 +2710,7 @@ protocol version:      ${this._protocolVersion}`;
 			this.keepAwake = false;
 		} catch (e: unknown) {
 			if (
-				e instanceof ZWaveError &&
+				isZWaveError(e) &&
 				e.code === ZWaveErrorCodes.Controller_NodeTimeout
 			) {
 				throw new ZWaveError(
@@ -2931,7 +2932,7 @@ protocol version:      ${this._protocolVersion}`;
 			this.handleFirmwareUpdateStatusReport(report);
 		} catch (e: unknown) {
 			if (
-				e instanceof ZWaveError &&
+				isZWaveError(e) &&
 				e.code === ZWaveErrorCodes.Controller_NodeTimeout
 			) {
 				this.driver.controllerLog.logNode(

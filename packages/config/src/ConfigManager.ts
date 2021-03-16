@@ -1,4 +1,9 @@
-import { ZWaveError, ZWaveErrorCodes, ZWaveLogContainer } from "@zwave-js/core";
+import {
+	isZWaveError,
+	ZWaveError,
+	ZWaveErrorCodes,
+	ZWaveLogContainer,
+} from "@zwave-js/core";
 import { num2hex } from "@zwave-js/shared";
 import { pathExists } from "fs-extra";
 import path from "path";
@@ -85,10 +90,7 @@ export class ConfigManager {
 			this.manufacturers = await loadManufacturersInternal();
 		} catch (e: unknown) {
 			// If the config file is missing or invalid, don't try to find it again
-			if (
-				e instanceof ZWaveError &&
-				e.code === ZWaveErrorCodes.Config_Invalid
-			) {
+			if (isZWaveError(e) && e.code === ZWaveErrorCodes.Config_Invalid) {
 				if (process.env.NODE_ENV !== "test") {
 					this.logger.print(
 						`Could not load manufacturers config: ${e.message}`,
@@ -155,10 +157,7 @@ export class ConfigManager {
 			this.indicatorProperties = config.properties;
 		} catch (e: unknown) {
 			// If the config file is missing or invalid, don't try to find it again
-			if (
-				e instanceof ZWaveError &&
-				e.code === ZWaveErrorCodes.Config_Invalid
-			) {
+			if (isZWaveError(e) && e.code === ZWaveErrorCodes.Config_Invalid) {
 				if (process.env.NODE_ENV !== "test") {
 					this.logger.print(
 						`Could not load indicators config: ${e.message}`,
@@ -208,10 +207,7 @@ export class ConfigManager {
 			this.namedScales = await loadNamedScalesInternal();
 		} catch (e: unknown) {
 			// If the config file is missing or invalid, don't try to find it again
-			if (
-				e instanceof ZWaveError &&
-				e.code === ZWaveErrorCodes.Config_Invalid
-			) {
+			if (isZWaveError(e) && e.code === ZWaveErrorCodes.Config_Invalid) {
 				if (process.env.NODE_ENV !== "test") {
 					this.logger.print(
 						`Could not load scales config: ${e.message}`,
@@ -251,10 +247,7 @@ export class ConfigManager {
 			this.sensorTypes = await loadSensorTypesInternal(this);
 		} catch (e: unknown) {
 			// If the config file is missing or invalid, don't try to find it again
-			if (
-				e instanceof ZWaveError &&
-				e.code === ZWaveErrorCodes.Config_Invalid
-			) {
+			if (isZWaveError(e) && e.code === ZWaveErrorCodes.Config_Invalid) {
 				if (process.env.NODE_ENV !== "test") {
 					this.logger.print(
 						`Could not load sensor types config: ${e.message}`,
@@ -300,10 +293,7 @@ export class ConfigManager {
 			this.meters = await loadMetersInternal();
 		} catch (e: unknown) {
 			// If the config file is missing or invalid, don't try to find it again
-			if (
-				e instanceof ZWaveError &&
-				e.code === ZWaveErrorCodes.Config_Invalid
-			) {
+			if (isZWaveError(e) && e.code === ZWaveErrorCodes.Config_Invalid) {
 				if (process.env.NODE_ENV !== "test") {
 					this.logger.print(
 						`Could not meters config: ${e.message}`,
@@ -350,10 +340,7 @@ export class ConfigManager {
 			this.genericDeviceClasses = config.genericDeviceClasses;
 		} catch (e: unknown) {
 			// If the config file is missing or invalid, don't try to find it again
-			if (
-				e instanceof ZWaveError &&
-				e.code === ZWaveErrorCodes.Config_Invalid
-			) {
+			if (isZWaveError(e) && e.code === ZWaveErrorCodes.Config_Invalid) {
 				if (process.env.NODE_ENV !== "test") {
 					this.logger.print(
 						`Could not load scales config: ${e.message}`,
@@ -418,9 +405,8 @@ export class ConfigManager {
 		} catch (e: unknown) {
 			// If the index file is missing or invalid, don't try to find it again
 			if (
-				(!(e instanceof ZWaveError) && e instanceof Error) ||
-				(e instanceof ZWaveError &&
-					e.code === ZWaveErrorCodes.Config_Invalid)
+				(!isZWaveError(e) && e instanceof Error) ||
+				(isZWaveError(e) && e.code === ZWaveErrorCodes.Config_Invalid)
 			) {
 				// Fall back to no index on production systems
 				if (!this.index) this.index = [];
@@ -511,10 +497,7 @@ export class ConfigManager {
 			this.notifications = await loadNotificationsInternal();
 		} catch (e: unknown) {
 			// If the config file is missing or invalid, don't try to find it again
-			if (
-				e instanceof ZWaveError &&
-				e.code === ZWaveErrorCodes.Config_Invalid
-			) {
+			if (isZWaveError(e) && e.code === ZWaveErrorCodes.Config_Invalid) {
 				if (process.env.NODE_ENV !== "test") {
 					this.logger.print(
 						`Could not load notifications config: ${e.message}`,
