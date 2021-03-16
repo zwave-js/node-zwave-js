@@ -119,8 +119,7 @@
 			"allowManualEntry": true
 		},
 		"7": {
-			"label": "Remember Relay ON/OFF status after power failure.",
-			"description": "Plug state after power-on",
+			"label": "Remember Relay ON/OFF status after power failure",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 1,
