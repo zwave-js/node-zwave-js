@@ -76,7 +76,7 @@
 		},
 		"4": {
 			"label": "Alarm current threshold",
-			"description": "Max current for over-current notification",
+			"description": "An over-current notification is sent when the current is higher than this value",
 			"unit": "A",
 			"valueSize": 1,
 			"minValue": 1,
