@@ -164,7 +164,17 @@ refreshInfo(): Promise<void>
 
 Resets all information about this node and forces a fresh interview.
 
-**WARNING:** Take care NOT to call this method when the node is already being interviewed. Otherwise the node information may become inconsistent.
+> [!WARNING] Take care NOT to call this method when the node is already being interviewed. Otherwise the node information may become inconsistent.
+
+### `interviewCC`
+
+```ts
+interviewCC(cc: CommandClasses): Promise<void>
+```
+
+Rediscovers all capabilities of a single CC on this node and all endpoints. Although this method returns a `Promise`, it should generally **not** be `await`ed, since the update may take a long time.
+
+> [!NOTE] This method should only be used when necessary, for example when CC capabilities were not discovered correctly. It can be considered to be a more targeted version of `refreshInfo`.
 
 ### `beginFirmwareUpdate`
 

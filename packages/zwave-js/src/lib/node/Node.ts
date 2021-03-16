@@ -1622,6 +1622,34 @@ protocol version:      ${this._protocolVersion}`;
 	}
 
 	/**
+	 * Rediscovers all capabilities of a single CC on this node and all endpoints.
+	 * This can be considered a more targeted variant of `refreshInfo`.
+	 *
+	 * WARNING: It is not recommended to await this method!
+	 */
+	public async interviewCC(cc: CommandClasses): Promise<void> {
+		const endpoints = this.getAllEndpoints();
+		// Interview the node itself last
+		endpoints.push(endpoints.shift()!);
+		for (const endpoint of endpoints) {
+			const instance = endpoint.createCCInstanceUnsafe(cc);
+			if (instance) {
+				try {
+					await instance.interview();
+				} catch (e) {
+					this.driver.controllerLog.logNode(
+						this.id,
+						`failed to interview CC ${getCCName(cc)}, endpoint ${
+							endpoint.index
+						}: ${e.message}`,
+						"error",
+					);
+				}
+			}
+		}
+	}
+
+	/**
 	 * Refreshes all non-static values of a single CC from this node (all endpoints).
 	 * WARNING: It is not recommended to await this method!
 	 */
