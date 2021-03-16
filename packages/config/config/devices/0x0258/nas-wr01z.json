@@ -108,7 +108,7 @@
 		},
 		"6": {
 			"label": "Power Report Threshold",
-			"description": "Power consumed change to be reported",
+			"description": "Change in power consumption that triggers a report",
 			"unit": "%",
 			"valueSize": 1,
 			"minValue": 1,
