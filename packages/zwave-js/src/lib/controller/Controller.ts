@@ -3,6 +3,7 @@ import {
 	CommandClasses,
 	indexDBsByNode,
 	isTransmissionError,
+	isZWaveError,
 	NODE_ID_BROADCAST,
 	ValueDB,
 	ZWaveError,
@@ -818,7 +819,7 @@ export class ZWaveController extends EventEmitter {
 				node.isSecure = true;
 			} catch (e: unknown) {
 				let errorMessage = `Security bootstrapping failed, the node is included insecurely`;
-				if (!(e instanceof ZWaveError)) {
+				if (!isZWaveError(e)) {
 					errorMessage += `: ${e as any}`;
 				} else if (
 					e.code === ZWaveErrorCodes.Controller_MessageExpired

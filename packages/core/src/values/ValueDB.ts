@@ -1,7 +1,7 @@
 import type { JsonlDB } from "@alcalzone/jsonl-db";
 import { EventEmitter } from "events";
 import type { CommandClasses } from "../capabilities/CommandClasses";
-import { ZWaveError, ZWaveErrorCodes } from "../error/ZWaveError";
+import { isZWaveError, ZWaveError, ZWaveErrorCodes } from "../error/ZWaveError";
 import type { ValueMetadata } from "../values/Metadata";
 
 /** Uniquely identifies to which CC, endpoint and property a value belongs to */
@@ -219,7 +219,7 @@ export class ValueDB extends EventEmitter {
 			dbKey = this.valueIdToDBKey(valueId);
 		} catch (e) {
 			if (
-				e instanceof ZWaveError &&
+				isZWaveError(e) &&
 				e.code === ZWaveErrorCodes.Argument_Invalid &&
 				options.noThrow === true
 			) {
@@ -374,7 +374,7 @@ export class ValueDB extends EventEmitter {
 			dbKey = this.valueIdToDBKey(valueId);
 		} catch (e) {
 			if (
-				e instanceof ZWaveError &&
+				isZWaveError(e) &&
 				e.code === ZWaveErrorCodes.Argument_Invalid &&
 				options.noThrow === true
 			) {

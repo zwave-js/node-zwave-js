@@ -6,6 +6,7 @@ import {
 	deserializeCacheValue,
 	Duration,
 	highResTimestamp,
+	isZWaveError,
 	LogConfig,
 	SecurityManager,
 	serializeCacheValue,
@@ -732,7 +733,7 @@ export class Driver extends EventEmitter {
 			} catch (e: unknown) {
 				let message: string;
 				if (
-					e instanceof ZWaveError &&
+					isZWaveError(e) &&
 					e.code === ZWaveErrorCodes.Controller_MessageDropped
 				) {
 					message = `Failed to initialize the driver, no response from the controller. Are you sure this is a Z-Wave controller?`;
@@ -960,7 +961,7 @@ export class Driver extends EventEmitter {
 				}
 			}
 		} catch (e: unknown) {
-			if (e instanceof ZWaveError) {
+			if (isZWaveError(e)) {
 				if (
 					e.code === ZWaveErrorCodes.Driver_NotReady ||
 					e.code === ZWaveErrorCodes.Controller_NodeRemoved
@@ -1477,7 +1478,7 @@ export class Driver extends EventEmitter {
 		e: Error,
 		data: Buffer,
 	): MessageHeaders | undefined {
-		if (e instanceof ZWaveError) {
+		if (isZWaveError(e)) {
 			switch (e.code) {
 				case ZWaveErrorCodes.PacketFormat_Invalid:
 				case ZWaveErrorCodes.PacketFormat_Checksum:
@@ -1641,7 +1642,7 @@ It is probably asleep, moving its messages to the wakeup queue.`,
 					try {
 						command.mergePartialCCs(session);
 					} catch (e: unknown) {
-						if (e instanceof ZWaveError) {
+						if (isZWaveError(e)) {
 							switch (e.code) {
 								case ZWaveErrorCodes.Deserialization_NotImplemented:
 								case ZWaveErrorCodes.CC_NotImplemented:
@@ -1698,7 +1699,7 @@ It is probably asleep, moving its messages to the wakeup queue.`,
 				await this.handleRequest(msg);
 			} catch (e) {
 				if (
-					e instanceof ZWaveError &&
+					isZWaveError(e) &&
 					e.code === ZWaveErrorCodes.Driver_NotReady
 				) {
 					this.driverLog.print(
@@ -2185,7 +2186,7 @@ ${handlers.length} left`,
 			}
 			return ret;
 		} catch (e) {
-			if (e instanceof ZWaveError) {
+			if (isZWaveError(e)) {
 				if (
 					// If a controller command failed (that is not SendData), pass the response/callback through
 					(e.code === ZWaveErrorCodes.Controller_ResponseNOK ||
@@ -2243,7 +2244,7 @@ ${handlers.length} left`,
 		} catch (e: unknown) {
 			// A timeout always has to be expected. In this case return nothing.
 			if (
-				e instanceof ZWaveError &&
+				isZWaveError(e) &&
 				e.code === ZWaveErrorCodes.Controller_NodeTimeout
 			) {
 				if (command.isSinglecast()) {

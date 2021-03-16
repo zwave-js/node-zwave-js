@@ -1,4 +1,4 @@
-import { ZWaveError, ZWaveErrorCodes } from "@zwave-js/core";
+import { isZWaveError, ZWaveError, ZWaveErrorCodes } from "@zwave-js/core";
 import { getEnumMemberName } from "@zwave-js/shared";
 import {
 	assign,
@@ -158,7 +158,7 @@ export function sendDataErrorToZWaveError(
 
 /** Tests whether the given error is one that was caused by the serial API execution */
 export function isSerialCommandError(error: unknown): boolean {
-	if (!(error instanceof ZWaveError)) return false;
+	if (!isZWaveError(error)) return false;
 	switch (error.code) {
 		case ZWaveErrorCodes.Controller_Timeout:
 		case ZWaveErrorCodes.Controller_ResponseNOK:
