@@ -280,7 +280,10 @@ interface ConditionalDeviceConfig {
 	readonly manufacturerId: number;
 	readonly label: string;
 	readonly description: string;
-	readonly devices: readonly { productType: string; productId: string }[];
+	readonly devices: readonly {
+		productType: number;
+		productId: number;
+	}[];
 	readonly firmwareVersion: FirmwareVersionRange;
 	readonly associations?: ReadonlyMap<number, ConditionalAssociationConfig>;
 	readonly paramInformation?: ReadonlyObjectKeyMap<

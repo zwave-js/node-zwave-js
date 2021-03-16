@@ -218,7 +218,8 @@ export async function loadDeviceIndexInternal(
 				manufacturerId: formatId(config.manufacturerId.toString(16)),
 				manufacturer: config.manufacturer,
 				label: config.label,
-				...dev,
+				productType: formatId(dev.productType),
+				productId: formatId(dev.productId),
 				firmwareVersion: config.firmwareVersion,
 			})),
 		logger,
@@ -241,7 +242,8 @@ export async function loadFulltextDeviceIndexInternal(
 				manufacturer: config.manufacturer,
 				label: config.label,
 				description: config.description,
-				...dev,
+				productType: formatId(dev.productType),
+				productId: formatId(dev.productId),
 				firmwareVersion: config.firmwareVersion,
 			})),
 		logger,
@@ -331,7 +333,10 @@ devices is malformed (not an object or type/id that is not a 4-digit hex key)`,
 			);
 		}
 		this.devices = (definition.devices as any[]).map(
-			({ productType, productId }) => ({ productType, productId }),
+			({ productType, productId }) => ({
+				productType: parseInt(productType, 16),
+				productId: parseInt(productId, 16),
+			}),
 		);
 
 		if (
@@ -499,8 +504,8 @@ metadata is not an object`,
 	public readonly label!: string;
 	public readonly description!: string;
 	public readonly devices: readonly {
-		productType: string;
-		productId: string;
+		productType: number;
+		productId: number;
 	}[];
 	public readonly firmwareVersion: FirmwareVersionRange;
 	public readonly associations?: ReadonlyMap<
@@ -581,8 +586,8 @@ export class DeviceConfig {
 		public readonly label: string,
 		public readonly description: string,
 		public readonly devices: readonly {
-			productType: string;
-			productId: string;
+			productType: number;
+			productId: number;
 		}[],
 		public readonly firmwareVersion: FirmwareVersionRange,
 		public readonly associations?: ReadonlyMap<number, AssociationConfig>,
