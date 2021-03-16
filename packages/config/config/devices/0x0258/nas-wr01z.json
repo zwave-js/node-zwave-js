@@ -77,7 +77,7 @@
 		"4": {
 			"label": "Maximum alarm current",
 			"description": "Max current for over-current notification",
-			"unit": "Ampere",
+			"unit": "A",
 			"valueSize": 1,
 			"minValue": 1,
 			"maxValue": 15,
