@@ -895,11 +895,16 @@ export class ZWaveController extends EventEmitter {
 
 		if (node.supportsCC(CommandClasses["Wake Up"])) {
 			try {
-				// Query the version, so we can setup the wakeup destination correctly
-				const supportedVersion = await node.commandClasses.Version.getCCVersion(
-					CommandClasses["Wake Up"],
-				);
-				if (supportedVersion != undefined && supportedVersion > 0) {
+				// Query the version, so we can setup the wakeup destination correctly.
+				let supportedVersion: number | undefined;
+				if (node.supportsCC(CommandClasses.Version)) {
+					supportedVersion = await node.commandClasses.Version.getCCVersion(
+						CommandClasses["Wake Up"],
+					);
+				}
+				// If querying the version can't be done, we should at least assume that it supports V1
+				supportedVersion ??= 1;
+				if (supportedVersion > 0) {
 					node.addCC(CommandClasses["Wake Up"], {
 						version: supportedVersion,
 					});
