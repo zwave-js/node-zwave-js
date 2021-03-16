@@ -41,11 +41,11 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "Disable Report",
+					"label": "Disable",
 					"value": 0
 				},
 				{
-					"label": "Enable Report",
+					"label": "Enable",
 					"value": 1
 				}
 			]
