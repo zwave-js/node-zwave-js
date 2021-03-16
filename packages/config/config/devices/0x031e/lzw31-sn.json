@@ -12,8 +12,8 @@
 		}
 	],
 	"firmwareVersion": {
-		"min": "1.47",
-		"max": "1.48"
+		"min": "0.0",
+		"max": "255.255"
 	},
 	"supportsZWavePlus": true,
 	"paramInformation": {
@@ -26,7 +26,13 @@
 			"defaultValue": 3,
 			"readOnly": false,
 			"writeOnly": false,
-			"allowManualEntry": true
+			"allowManualEntry": true,
+			"options": [
+				{
+					"label": "Immediate",
+					"value": 0
+				}
+			]
 		},
 		"2": {
 			"label": "Dimming Speed (Z-Wave)",
@@ -37,7 +43,17 @@
 			"defaultValue": 101,
 			"readOnly": false,
 			"writeOnly": false,
-			"allowManualEntry": true
+			"allowManualEntry": true,
+			"options": [
+				{
+					"label": "Immediate",
+					"value": 0
+				},
+				{
+					"label": "Synced with Parameter 1",
+					"value": 101
+				}
+			]
 		},
 		"3": {
 			"label": "Ramp Rate",
@@ -48,7 +64,17 @@
 			"defaultValue": 101,
 			"readOnly": false,
 			"writeOnly": false,
-			"allowManualEntry": true
+			"allowManualEntry": true,
+			"options": [
+				{
+					"label": "Immediate",
+					"value": 0
+				},
+				{
+					"label": "Synced with Parameter 1",
+					"value": 101
+				}
+			]
 		},
 		"4": {
 			"label": "Ramp Rate (Z-Wave)",
@@ -59,7 +85,17 @@
 			"defaultValue": 101,
 			"readOnly": false,
 			"writeOnly": false,
-			"allowManualEntry": true
+			"allowManualEntry": true,
+			"options": [
+				{
+					"label": "Immediate",
+					"value": 0
+				},
+				{
+					"label": "Synced with Parameter 1",
+					"value": 101
+				}
+			]
 		},
 		"5": {
 			"label": "Minimum Dim Level",
@@ -115,7 +151,7 @@
 			"allowManualEntry": true
 		},
 		"9": {
-			"label": "Default Level (Local)",
+			"label": "Default Level",
 			"unit": "%",
 			"valueSize": 1,
 			"minValue": 0,
@@ -123,7 +159,13 @@
 			"defaultValue": 0,
 			"readOnly": false,
 			"writeOnly": false,
-			"allowManualEntry": true
+			"allowManualEntry": true,
+			"options": [
+				{
+					"label": "Last State",
+					"value": 0
+				}
+			]
 		},
 		"10": {
 			"label": "Default Level (Z-Wave)",
@@ -134,7 +176,13 @@
 			"defaultValue": 0,
 			"readOnly": false,
 			"writeOnly": false,
-			"allowManualEntry": true
+			"allowManualEntry": true,
+			"options": [
+				{
+					"label": "Last State",
+					"value": 0
+				}
+			]
 		},
 		"11": {
 			"label": "Power On State",
@@ -144,7 +192,17 @@
 			"defaultValue": 0,
 			"readOnly": false,
 			"writeOnly": false,
-			"allowManualEntry": true
+			"allowManualEntry": true,
+			"options": [
+				{
+					"label": "Off",
+					"value": 0
+				},
+				{
+					"label": "Last State",
+					"value": 101
+				}
+			]
 		},
 		"12[0x01]": {
 			"label": "Association Behavior: Local",
@@ -228,6 +286,7 @@
 		},
 		"13": {
 			"label": "LED Indicator Color",
+			"description": "Uses a scaled hue value (realHue / 360 * 255).",
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 255,
@@ -235,37 +294,311 @@
 			"unsigned": true,
 			"readOnly": false,
 			"writeOnly": false,
-			"allowManualEntry": true
+			"allowManualEntry": true,
+			"options": [
+				{
+					"label": "Red",
+					"value": 0
+				},
+				{
+					"label": "Orange",
+					"value": 21
+				},
+				{
+					"label": "Yellow",
+					"value": 42
+				},
+				{
+					"label": "Green",
+					"value": 85
+				},
+				{
+					"label": "Cyan",
+					"value": 127
+				},
+				{
+					"label": "Blue",
+					"value": 170
+				},
+				{
+					"label": "Violet",
+					"value": 212
+				},
+				{
+					"label": "Pink",
+					"value": 234
+				},
+				{
+					"$if": "firmwareVersion >= 1.47",
+					"label": "White",
+					"value": 255
+				}
+			]
 		},
 		"14": {
-			"label": "LED Indicator Intensity",
+			"label": "LED Indicator Brightness",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 10,
 			"defaultValue": 5,
 			"readOnly": false,
 			"writeOnly": false,
-			"allowManualEntry": true
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Off",
+					"value": 0
+				},
+				{
+					"label": "10%",
+					"value": 1
+				},
+				{
+					"label": "20%",
+					"value": 2
+				},
+				{
+					"label": "30%",
+					"value": 3
+				},
+				{
+					"label": "40%",
+					"value": 4
+				},
+				{
+					"label": "50%",
+					"value": 5
+				},
+				{
+					"label": "60%",
+					"value": 6
+				},
+				{
+					"label": "70%",
+					"value": 7
+				},
+				{
+					"label": "80%",
+					"value": 8
+				},
+				{
+					"label": "90%",
+					"value": 9
+				},
+				{
+					"label": "100%",
+					"value": 10
+				}
+			]
 		},
 		"15": {
-			"label": "LED Indicator Intensity (When Off)",
+			"label": "LED Indicator Brightness When Off",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 10,
 			"defaultValue": 1,
 			"readOnly": false,
 			"writeOnly": false,
-			"allowManualEntry": true
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Off",
+					"value": 0
+				},
+				{
+					"label": "10%",
+					"value": 1
+				},
+				{
+					"label": "20%",
+					"value": 2
+				},
+				{
+					"label": "30%",
+					"value": 3
+				},
+				{
+					"label": "40%",
+					"value": 4
+				},
+				{
+					"label": "50%",
+					"value": 5
+				},
+				{
+					"label": "60%",
+					"value": 6
+				},
+				{
+					"label": "70%",
+					"value": 7
+				},
+				{
+					"label": "80%",
+					"value": 8
+				},
+				{
+					"label": "90%",
+					"value": 9
+				},
+				{
+					"label": "100%",
+					"value": 10
+				}
+			]
 		},
-		"16": {
-			"label": "LED Strip Effect",
+		"16[0xff]": {
+			"label": "LED Effect Color",
+			"description": "Uses a scaled hue value (realHue / 360 * 255).",
 			"valueSize": 4,
 			"minValue": 0,
-			"maxValue": 83823359,
+			"maxValue": 255,
 			"defaultValue": 0,
 			"readOnly": false,
 			"writeOnly": false,
+			"allowManualEntry": true,
+			"options": [
+				{
+					"label": "Red",
+					"value": 0
+				},
+				{
+					"label": "Orange",
+					"value": 21
+				},
+				{
+					"label": "Yellow",
+					"value": 42
+				},
+				{
+					"label": "Green",
+					"value": 85
+				},
+				{
+					"label": "Cyan",
+					"value": 127
+				},
+				{
+					"label": "Blue",
+					"value": 170
+				},
+				{
+					"label": "Violet",
+					"value": 212
+				},
+				{
+					"label": "Pink",
+					"value": 234
+				},
+				{
+					"$if": "firmwareVersion >= 1.47",
+					"label": "White",
+					"value": 255
+				}
+			]
+		},
+		"16[0xff00]": {
+			"label": "LED Effect Brightness",
+			"valueSize": 4,
+			"minValue": 0,
+			"maxValue": 10,
+			"defaultValue": 3,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Off",
+					"value": 0
+				},
+				{
+					"label": "10%",
+					"value": 1
+				},
+				{
+					"label": "20%",
+					"value": 2
+				},
+				{
+					"label": "30%",
+					"value": 3
+				},
+				{
+					"label": "40%",
+					"value": 4
+				},
+				{
+					"label": "50%",
+					"value": 5
+				},
+				{
+					"label": "60%",
+					"value": 6
+				},
+				{
+					"label": "70%",
+					"value": 7
+				},
+				{
+					"label": "80%",
+					"value": 8
+				},
+				{
+					"label": "90%",
+					"value": 9
+				},
+				{
+					"label": "100%",
+					"value": 10
+				}
+			]
+		},
+		"16[0xff0000]": {
+			"label": "LED Effect Duration",
+			"description": "1 to 60 = seconds, 61 to 120 = minutes (minus 60), 121 - 254 = hours (minus 120), 255 = indefinitely",
+			"valueSize": 4,
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 255,
+			"readOnly": false,
+			"writeOnly": false,
 			"allowManualEntry": true
+		},
+		"16[0x7f000000]": {
+			"label": "LED Effect Type",
+			"valueSize": 4,
+			"minValue": 0,
+			"maxValue": 5,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Off",
+					"value": 0
+				},
+				{
+					"label": "Solid",
+					"value": 1
+				},
+				{
+					"label": "Chase",
+					"value": 2
+				},
+				{
+					"label": "Fast Blink",
+					"value": 3
+				},
+				{
+					"label": "Slow Blink",
+					"value": 4
+				},
+				{
+					"label": "Pulse",
+					"value": 5
+				}
+			]
 		},
 		"17": {
 			"label": "LED Indicator Timeout",
@@ -322,7 +655,7 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "No-Neutral",
+					"label": "No Neutral",
 					"value": 0
 				},
 				{
@@ -355,9 +688,22 @@
 				}
 			]
 		},
+		"50": {
+			"$if": "firmwareVersion >= 1.49",
+			"label": "Configure Physical On/Off Delay",
+			"unit": "100ms",
+			"valueSize": 1,
+			"minValue": 1,
+			"maxValue": 9,
+			"defaultValue": 7,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
 		"51": {
-			"label": "Physical On/Off Delay",
-			"description": "The delay that occurs after pressing the physical button to turn the switch on/off is removed. Consequently this also removes the following scenes: 2x, 3x, 4x, 5x tap. 1x tap and config button scenes still work.",
+			"$if": "firmwareVersion >= 1.47",
+			"label": "Instant On",
+			"description": "Enabling this disables the 700ms button delay and multi-tap scenes.",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 1,
@@ -377,6 +723,7 @@
 			]
 		},
 		"52": {
+			"$if": "firmwareVersion >= 1.47",
 			"label": "Smart Bulb Mode",
 			"description": "Optimize power output to be more compatible with smart bulbs. This prevents the dimmer from being able to dim & makes it act like an ON / OFF switch.",
 			"valueSize": 1,
