@@ -22,8 +22,7 @@
 	"supportsZWavePlus": true,
 	"paramInformation": {
 		"1": {
-			"label": "Remember Relay ON/OFF status after power failure.",
-			"description": "Plug state after power-on",
+			"label": "Remember relay ON/OFF status after power failure",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 1,
@@ -33,18 +32,17 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "Don’t remember relay state",
+					"label": "Do not remember",
 					"value": 0
 				},
 				{
-					"label": "Remember the Relay Status.",
+					"label": "Remember",
 					"value": 1
 				}
 			]
 		},
 		"2": {
-			"label": "Button On/Off Enable",
-			"description": "Enable/Disable top button function",
+			"label": "Top button function",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 1,
@@ -54,18 +52,17 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "Disable Button",
+					"label": "Disable",
 					"value": 0
 				},
 				{
-					"label": "Enable Button",
+					"label": "Enable",
 					"value": 1
 				}
 			]
 		},
 		"3": {
-			"label": "LED enable",
-			"description": "This parameter defines the LED indication Function ON/OFF.",
+			"label": "LED indication",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 1,
@@ -75,18 +72,17 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "Disable LED indication Function",
+					"label": "Disable",
 					"value": 0
 				},
 				{
-					"label": "Enable LED indication Function",
+					"label": "Enable",
 					"value": 1
 				}
 			]
 		},
 		"4": {
-			"label": "Plug Time switch Function",
-			"description": "Timer plug OFF after time period",
+			"label": "Timed auto-off",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 1,
@@ -96,19 +92,19 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "Time switch Disable",
+					"label": "Disable",
 					"value": 0
 				},
 				{
-					"label": "Time switch Enable",
+					"label": "Enable",
 					"value": 1
 				}
 			]
 		},
 		"5": {
-			"label": "Time switch Period",
-			"description": "Delay time after the plug is switched off (in minutes)",
-			"unit": "Minutes",
+			"label": "Timed auto-off period",
+			"description": "Delay time after the plug is switched off",
+			"unit": "minutes",
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 32767,
@@ -119,8 +115,7 @@
 			"allowManualEntry": true
 		},
 		"6": {
-			"label": "Meter Report Enable",
-			"description": "This parameter defines Disable/Enable meter report measure data to controller.",
+			"label": "Send meter reports",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 1,
@@ -130,19 +125,18 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "Disable Report",
+					"label": "Disable",
 					"value": 0
 				},
 				{
-					"label": "Enable Report",
+					"label": "Enable",
 					"value": 1
 				}
 			]
 		},
 		"7": {
-			"label": "Meter Report Interval",
-			"description": "Interval time reporting data to controller",
-			"unit": "Seconds",
+			"label": "Meter report interval",
+                  	"unit": "seconds",
 			"valueSize": 2,
 			"minValue": 30,
 			"maxValue": 32767,
@@ -153,9 +147,9 @@
 			"allowManualEntry": true
 		},
 		"8": {
-			"label": "Maxium over-load current",
-			"description": "maximum current the plug can provide to load",
-			"unit": "Ampere",
+			"label": "Maxium current",
+			"description": "Maximum current the plug can provide to load",
+			"unit": "A",
 			"valueSize": 1,
 			"minValue": 1,
 			"maxValue": 16,
@@ -165,9 +159,9 @@
 			"allowManualEntry": true
 		},
 		"9": {
-			"label": "Power Report Threshold",
-			"description": "Power consumed change to be reported",
-			"unit": "cA",
+			"label": "Power report threshold",
+			"description": "Change in power consumption that triggers a report",
+			"unit": "0.01 A",
 			"valueSize": 2,
 			"minValue": 1,
 			"maxValue": 1600,
@@ -177,9 +171,9 @@
 			"allowManualEntry": true
 		},
 		"10": {
-			"label": "Maximum alarm current",
-			"description": "Max current for over-current notification",
-			"unit": "Ampere",
+			"label": "Alarm current thershold",
+			"description": "An over-current notification is sent when the current is higher than this value",
+			"unit": "A",
 			"valueSize": 1,
 			"minValue": 1,
 			"maxValue": 16,
