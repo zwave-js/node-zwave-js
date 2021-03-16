@@ -97,11 +97,11 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "Disable LED indication Function",
+					"label": "Disable",
 					"value": 0
 				},
 				{
-					"label": "Enable LED indication Function",
+					"label": "Enable",
 					"value": 1
 				}
 			]
