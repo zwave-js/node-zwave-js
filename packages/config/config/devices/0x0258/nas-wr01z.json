@@ -172,8 +172,7 @@
 			"allowManualEntry": true
 		},
 		"10": {
-			"label": "Button On/Off Enable",
-			"description": "Enable/Disable top button function",
+			"label": "Top button function",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 1,
