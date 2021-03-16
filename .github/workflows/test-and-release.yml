@@ -351,8 +351,9 @@ jobs:
       run: |
         npm i -g @sentry/cli
         export SENTRY_AUTH_TOKEN=${{ secrets.SENTRY_AUTH_TOKEN }}
-        export SENTRY_ORG=alcalzone
-        export SENTRY_PROJECT=iobroker_zwave
+        export SENTRY_URL=https://sentry.iobroker.net
+        export SENTRY_ORG=iobroker
+        export SENTRY_PROJECT=zwave-js
         export SENTRY_VERSION=zwave-js@${{ steps.extract_release.outputs.VERSION }}
         sentry-cli releases new $SENTRY_VERSION
         sentry-cli releases set-commits $SENTRY_VERSION --auto
