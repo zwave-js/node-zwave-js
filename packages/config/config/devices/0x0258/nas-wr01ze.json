@@ -147,7 +147,7 @@
 			"allowManualEntry": true
 		},
 		"8": {
-			"label": "Maxium current",
+			"label": "Maximum current",
 			"description": "Maximum current the plug can provide to load",
 			"unit": "A",
 			"valueSize": 1,
