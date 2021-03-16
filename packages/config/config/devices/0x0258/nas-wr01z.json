@@ -30,7 +30,7 @@
 	"supportsZWavePlus": true,
 	"paramInformation": {
 		"1": {
-			"label": "Meter Report Enable",
+			"label": "Send Meter Reports",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 1,
@@ -51,8 +51,7 @@
 		},
 		"2": {
 			"label": "Meter Report Interval",
-			"description": "Interval time reporting data to controller",
-			"unit": "Seconds",
+			"unit": "seconds",
 			"valueSize": 2,
 			"minValue": 1,
 			"maxValue": 65535,
@@ -63,9 +62,9 @@
 			"allowManualEntry": true
 		},
 		"3": {
-			"label": "Maxium over-load current",
+			"label": "Maximum current",
 			"description": "maximum current the plug can provide to load",
-			"unit": "Ampere",
+			"unit": "A",
 			"valueSize": 1,
 			"minValue": 1,
 			"maxValue": 16,
@@ -75,9 +74,9 @@
 			"allowManualEntry": true
 		},
 		"4": {
-			"label": "Maximum alarm current",
-			"description": "Max current for over-current notification",
-			"unit": "Ampere",
+			"label": "Alarm current threshold",
+			"description": "An over-current notification is sent when the current is higher than this value",
+			"unit": "A",
 			"valueSize": 1,
 			"minValue": 1,
 			"maxValue": 15,
@@ -87,8 +86,7 @@
 			"allowManualEntry": true
 		},
 		"5": {
-			"label": "LED enable",
-			"description": "This parameter defines the LED indication Function ON/OFF.",
+			"label": "LED Indication",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 1,
@@ -98,19 +96,19 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "Disable LED indication Function",
+					"label": "Disable",
 					"value": 0
 				},
 				{
-					"label": "Enable LED indication Function",
+					"label": "Enable",
 					"value": 1
 				}
 			]
 		},
 		"6": {
 			"label": "Power Report Threshold",
-			"description": "Power consumed change to be reported",
-			"unit": "percentage",
+			"description": "Change in power consumption that triggers a report",
+			"unit": "%",
 			"valueSize": 1,
 			"minValue": 1,
 			"maxValue": 100,
@@ -120,8 +118,7 @@
 			"allowManualEntry": true
 		},
 		"7": {
-			"label": "Remember Relay ON/OFF status after power failure.",
-			"description": "Plug state after power-on",
+			"label": "Remember Relay ON/OFF status after power failure",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 1,
@@ -131,18 +128,17 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "Don’t remember relay state",
+					"label": "Do not remember relay state",
 					"value": 0
 				},
 				{
-					"label": "Remember the Relay Status.",
+					"label": "Remember relay state",
 					"value": 1
 				}
 			]
 		},
 		"8": {
-			"label": "Plug Time switch Function",
-			"description": "Timer plug OFF after time period",
+			"label": "Timed auto-off",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 1,
@@ -152,19 +148,19 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "Time switch Disable",
+					"label": "Disable",
 					"value": 0
 				},
 				{
-					"label": "Time switch Enable",
+					"label": "Enable",
 					"value": 1
 				}
 			]
 		},
 		"9": {
-			"label": "Time switch Period",
-			"description": "Delay time after the plug is switched off (in minutes)",
-			"unit": "Minutes",
+			"label": "Timed auto-off period",
+			"description": "Delay time after which the plug is automatically switched off",
+			"unit": "minutes",
 			"valueSize": 2,
 			"minValue": 1,
 			"maxValue": 65535,
@@ -175,8 +171,7 @@
 			"allowManualEntry": true
 		},
 		"10": {
-			"label": "Button On/Off Enable",
-			"description": "Enable/Disable top button function",
+			"label": "Top button function",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 1,
@@ -186,11 +181,11 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "Disable Button",
+					"label": "Disable",
 					"value": 0
 				},
 				{
-					"label": "Enable Button",
+					"label": "Enable",
 					"value": 1
 				}
 			]
