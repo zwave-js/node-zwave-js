@@ -139,8 +139,7 @@
 			]
 		},
 		"8": {
-			"label": "Plug Time switch Function",
-			"description": "Timer plug OFF after time period",
+			"label": "Timed auto-off",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 1,
