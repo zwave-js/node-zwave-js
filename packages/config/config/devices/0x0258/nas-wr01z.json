@@ -75,7 +75,7 @@
 			"allowManualEntry": true
 		},
 		"4": {
-			"label": "Maximum alarm current",
+			"label": "Alarm current threshold",
 			"description": "Max current for over-current notification",
 			"unit": "A",
 			"valueSize": 1,
