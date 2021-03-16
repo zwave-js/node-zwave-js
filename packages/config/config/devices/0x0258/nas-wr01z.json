@@ -109,7 +109,7 @@
 		"6": {
 			"label": "Power Report Threshold",
 			"description": "Power consumed change to be reported",
-			"unit": "percentage",
+			"unit": "%",
 			"valueSize": 1,
 			"minValue": 1,
 			"maxValue": 100,
