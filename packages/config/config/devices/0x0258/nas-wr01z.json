@@ -52,7 +52,6 @@
 		},
 		"2": {
 			"label": "Meter Report Interval",
-			"description": "Interval time reporting data to controller",
 			"unit": "seconds",
 			"valueSize": 2,
 			"minValue": 1,
