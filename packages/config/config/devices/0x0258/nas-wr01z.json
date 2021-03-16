@@ -159,8 +159,8 @@
 			]
 		},
 		"9": {
-			"label": "Time switch Period",
-			"description": "Delay time after the plug is switched off (in minutes)",
+			"label": "Timed auto-off period",
+			"description": "Delay time after which the plug is automatically switched off",
 			"unit": "Minutes",
 			"valueSize": 2,
 			"minValue": 1,
