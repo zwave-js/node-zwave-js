@@ -3,7 +3,7 @@
 	Placeholder for next release:
 	## __WORK IN PROGRESS__
 -->
-## 7.0.0-beta.0 (2021-03-14) · _Summer is coming!_
+## __WORK IN PROGRESS__ · _Summer is coming!_
 ### Breaking changes · [Migration guide](https://zwave-js.github.io/node-zwave-js/#/getting-started/migrating-to-v7)
 * Renamed `controller.removeNodeFromAllAssocations` to `controller.removeNodeFromAllAssociations` to fix a typo
 * We've reworked/fixed the parsing of Node Information Frames (NIF) to match the specifications and changed node properties to make more sense
@@ -16,9 +16,26 @@
 * The logger formats were more cleanly separated between logger and transport instances. As a result, writing user-defined transports is now much easier.
 * Implemented a `logfmt` transport in https://github.com/zwave-js/log-transports
 * Added support for `Entry Control CC`. It has been found that some entry control devices don't follow some of the strict rules regarding the data format. The validation can be turned off with the compat option `disableStrictEntryControlDataValidation`.
+* Implemented an API to re-interview a single CC on a node and its endpoints without repeating the entire node interview
 
 ### Bugfixes
 * Changes to the logger configuration are now correctly applied dynamically
+* Changed how an error gets identified as a `ZWaveError` to avoid problems with duplicated dependencies
+
+### Config file changes
+* Add missing Sunricher device configs
+
+### Changes under the hood
+* Added a missing callback function to the quick start example
+* Added an API to `ConfigManager` to look up device configurations without evaluating the conditionals
+
+## 6.6.3 (2021-03-16)
+### Bugfixes
+* Avoid crash during bootstrapping when `Version CC` is not in the NIF
+
+### Config file changes
+* Split LZW31-sn param 16 and normalize param names
+* Separate Neo CoolCam NAS-WR01ZE V2 from WR01Z
 
 ## 6.6.2 (2021-03-14)
 ### Bugfixes
