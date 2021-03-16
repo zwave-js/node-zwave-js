@@ -65,7 +65,7 @@
 		"3": {
 			"label": "Maxium over-load current",
 			"description": "maximum current the plug can provide to load",
-			"unit": "Ampere",
+			"unit": "A",
 			"valueSize": 1,
 			"minValue": 1,
 			"maxValue": 16,
