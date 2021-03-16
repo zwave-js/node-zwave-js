@@ -182,11 +182,11 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "Disable Button",
+					"label": "Disable",
 					"value": 0
 				},
 				{
-					"label": "Enable Button",
+					"label": "Enable",
 					"value": 1
 				}
 			]
