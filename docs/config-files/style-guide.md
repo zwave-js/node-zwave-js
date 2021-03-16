@@ -77,6 +77,16 @@ These should generally conform to the name under which the device is sold. If th
 
 Descriptions should be **Title Case**.
 
+## Association Groups
+
+The association group labels should be clear and concise. They should clearly explain what the association group is for, e.g. `Multilevel Sensor Reports`. Avoid generic names like `Group #1`.
+
+The primary reporting group (usually group 1 for Z-Wave Plus) **must** be called `Lifeline`.
+
+Labels should be **Title Case**.
+
+> [!NOTE] Association Groups should only be defined if necessary. Refer to the [property definition](config-files/file-format.md#associations) to figure out when that is the case.
+
 ## Configuration Parameters
 
 ### Labels
