@@ -31,7 +31,6 @@
 	"paramInformation": {
 		"1": {
 			"label": "Meter Report Enable",
-			"description": "This parameter defines Disable/Enable meter report measure data to controller.",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 1,
