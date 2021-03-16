@@ -63,7 +63,7 @@
 			"allowManualEntry": true
 		},
 		"3": {
-			"label": "Maxium over-load current",
+			"label": "Maximum current",
 			"description": "maximum current the plug can provide to load",
 			"unit": "A",
 			"valueSize": 1,
