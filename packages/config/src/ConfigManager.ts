@@ -18,6 +18,7 @@ import {
 	SpecificDeviceClass,
 } from "./DeviceClasses";
 import {
+	ConditionalDeviceConfig,
 	DeviceConfig,
 	DeviceConfigIndex,
 	FulltextDeviceConfigIndex,
@@ -437,19 +438,19 @@ export class ConfigManager {
 	}
 
 	/**
-	 * Looks up the definition of a given device in the configuration DB
+	 * Looks up the definition of a given device in the configuration DB, but does not evaluate conditional settings.
 	 * @param manufacturerId The manufacturer id of the device
 	 * @param productType The product type of the device
 	 * @param productId The product id of the device
 	 * @param firmwareVersion If known, configuration for a specific firmware version can be loaded.
 	 * If this is `undefined` or not given, the first matching file with a defined firmware range will be returned.
 	 */
-	public async lookupDevice(
+	public async lookupDevicePreserveConditions(
 		manufacturerId: number,
 		productType: number,
 		productId: number,
 		firmwareVersion?: string,
-	): Promise<DeviceConfig | undefined> {
+	): Promise<ConditionalDeviceConfig | undefined> {
 		// Load/regenerate the index if necessary
 		if (!this.index) await this.loadDeviceIndex();
 
@@ -472,15 +473,7 @@ export class ConfigManager {
 			if (!(await pathExists(filePath))) return;
 
 			try {
-				return await DeviceConfig.from(filePath, {
-					// Specify how the device was identified in order to evaluate conditions
-					deviceId: {
-						manufacturerId,
-						productType,
-						productId,
-						firmwareVersion,
-					},
-				});
+				return await ConditionalDeviceConfig.from(filePath);
 			} catch (e) {
 				if (process.env.NODE_ENV !== "test") {
 					this.logger.print(
@@ -490,6 +483,34 @@ export class ConfigManager {
 				}
 			}
 		}
+	}
+
+	/**
+	 * Looks up the definition of a given device in the configuration DB
+	 * @param manufacturerId The manufacturer id of the device
+	 * @param productType The product type of the device
+	 * @param productId The product id of the device
+	 * @param firmwareVersion If known, configuration for a specific firmware version can be loaded.
+	 * If this is `undefined` or not given, the first matching file with a defined firmware range will be returned.
+	 */
+	public async lookupDevice(
+		manufacturerId: number,
+		productType: number,
+		productId: number,
+		firmwareVersion?: string,
+	): Promise<DeviceConfig | undefined> {
+		const ret = await this.lookupDevicePreserveConditions(
+			manufacturerId,
+			productType,
+			productId,
+			firmwareVersion,
+		);
+		return ret?.evaluate({
+			manufacturerId,
+			productType,
+			productId,
+			firmwareVersion,
+		});
 	}
 
 	public async loadNotifications(): Promise<void> {
