@@ -3,7 +3,7 @@
 	Placeholder for next release:
 	## __WORK IN PROGRESS__
 -->
-## __WORK IN PROGRESS__
+## 6.6.3 (2021-03-16)
 ### Bugfixes
 * Avoid crash during bootstrapping when `Version CC` is not in the NIF
 
