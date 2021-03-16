@@ -87,8 +87,7 @@
 			"allowManualEntry": true
 		},
 		"5": {
-			"label": "LED enable",
-			"description": "This parameter defines the LED indication Function ON/OFF.",
+			"label": "LED Indication",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 1,
