@@ -149,11 +149,11 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "Time switch Disable",
+					"label": "Disable",
 					"value": 0
 				},
 				{
-					"label": "Time switch Enable",
+					"label": "Enable",
 					"value": 1
 				}
 			]
