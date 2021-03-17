@@ -357,7 +357,6 @@ describe("lib/driver/Transaction => ", () => {
 			undefined as any,
 			undefined as any,
 		);
-		expect(test.stack).toStartWith("Transaction:");
 		expect(test.stack).toInclude("Transaction.test.ts");
 		expect(test.stack).not.toInclude("FOOBAR");
 	});

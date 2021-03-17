@@ -144,6 +144,11 @@ export class ZWaveError extends Error {
 		// We need to set the prototype explicitly
 		Object.setPrototypeOf(this, ZWaveError.prototype);
 		Object.getPrototypeOf(this).name = "ZWaveError";
+
+		// If there's a better stack, use it
+		if (typeof transactionSource === "string") {
+			this.stack = `ZWaveError: ${this.message}\n${transactionSource}`;
+		}
 	}
 }
 

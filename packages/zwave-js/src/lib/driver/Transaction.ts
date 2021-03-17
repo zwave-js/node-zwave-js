@@ -25,10 +25,7 @@ export class Transaction implements Comparable<Transaction> {
 		// class will try to print the message
 		const tmp = { message: "" };
 		Error.captureStackTrace(tmp, Transaction);
-		this.stack = (tmp as any).stack;
-		if (this.stack.startsWith("Error")) {
-			this.stack = "Transaction" + this.stack.substr(5);
-		}
+		this.stack = (tmp as any).stack.replace(/^Error:?\s*\n/, "");
 	}
 
 	/** The timestamp at which the transaction was created */
