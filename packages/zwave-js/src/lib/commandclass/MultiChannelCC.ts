@@ -62,6 +62,14 @@ export function getEndpointCCsValueId(endpointIndex: number): ValueID {
 	};
 }
 
+export function getEndpointDeviceClassValueId(endpointIndex: number): ValueID {
+	return {
+		commandClass: CommandClasses["Multi Channel"],
+		endpoint: endpointIndex,
+		property: "deviceClass",
+	};
+}
+
 export function getCountIsDynamicValueId(): ValueID {
 	return {
 		commandClass: CommandClasses["Multi Channel"],
@@ -266,6 +274,7 @@ export class MultiChannelCC extends CommandClass {
 	public constructor(driver: Driver, options: CommandClassOptions) {
 		super(driver, options);
 		this.registerValue(getEndpointCCsValueId(0).property, true);
+		this.registerValue(getEndpointDeviceClassValueId(0).property, true);
 	}
 
 	/** Tests if a command targets a specific endpoint and thus requires encapsulation */
@@ -619,14 +628,21 @@ export class MultiChannelCCCapabilityReport extends MultiChannelCC {
 	}
 
 	public persistValues(): boolean {
+		const deviceClassValueId = getEndpointDeviceClassValueId(
+			this.endpointIndex,
+		);
 		const ccsValueId = getEndpointCCsValueId(this.endpointIndex);
+
+		const valueDB = this.getValueDB();
 		if (this.capability.wasRemoved) {
-			this.getValueDB().removeValue(ccsValueId);
+			valueDB.removeValue(deviceClassValueId);
+			valueDB.removeValue(ccsValueId);
 		} else {
-			this.getValueDB().setValue(
-				ccsValueId,
-				this.capability.supportedCCs,
-			);
+			valueDB.setValue(deviceClassValueId, {
+				generic: this.capability.generic.key,
+				specific: this.capability.specific.key,
+			});
+			valueDB.setValue(ccsValueId, this.capability.supportedCCs);
 		}
 		return true;
 	}
