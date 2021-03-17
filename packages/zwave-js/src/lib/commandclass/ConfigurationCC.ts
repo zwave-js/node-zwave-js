@@ -617,7 +617,7 @@ alters capabilities: ${!!properties.altersCapabilities}`;
 				const alreadyQueried = new Set<number>();
 				for (const param of paramInfo.keys()) {
 					// No need to query writeonly params
-					if (paramInfo.get(param)!.writeOnly) continue;
+					if (paramInfo.get(param)?.writeOnly) continue;
 					// Don't double-query params
 					if (alreadyQueried.has(param.parameter)) continue;
 					alreadyQueried.add(param.parameter);
@@ -660,12 +660,20 @@ alters capabilities: ${!!properties.altersCapabilities}`;
 					.filter((p): p is number => typeof p === "number"),
 			);
 			for (const param of parameters) {
-				this.driver.controllerLog.logNode(node.id, {
-					endpoint: this.endpointIndex,
-					message: `querying parameter #${param} value...`,
-					direction: "outbound",
-				});
-				await api.get(param);
+				if (this.getParamInformation(param).readable !== false) {
+					this.driver.controllerLog.logNode(node.id, {
+						endpoint: this.endpointIndex,
+						message: `querying parameter #${param} value...`,
+						direction: "outbound",
+					});
+					await api.get(param);
+				} else {
+					this.driver.controllerLog.logNode(node.id, {
+						endpoint: this.endpointIndex,
+						message: `not querying parameter #${param} value, because it is writeonly`,
+						direction: "none",
+					});
+				}
 			}
 		}
 	}
