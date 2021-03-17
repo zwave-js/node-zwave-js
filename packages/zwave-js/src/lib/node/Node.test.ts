@@ -840,9 +840,14 @@ describe("lib/node/Node", () => {
 
 	describe("getEndpoint()", () => {
 		let node: ZWaveNode;
-		beforeEach(() => {
+		beforeEach(async () => {
 			const fakeDriver = createEmptyMockDriver();
-			node = new ZWaveNode(2, fakeDriver as any);
+			await fakeDriver.configManager.loadDeviceClasses();
+			node = new ZWaveNode(
+				2,
+				fakeDriver as any,
+				new DeviceClass(fakeDriver.configManager, 0x04, 0x01, 0x01), // Portable Remote Controller
+			);
 		});
 
 		afterEach(() => {
@@ -906,6 +911,39 @@ describe("lib/node/Node", () => {
 		it("returns undefined if a non-existent endpoint is requested", () => {
 			const actual = node.getEndpoint(5);
 			expect(actual).toBeUndefined();
+		});
+
+		it("sets the correct device class for the endpoint", async () => {
+			// interviewComplete needs to be true for getEndpoint to work
+			node.valueDB.setValue(
+				{
+					commandClass: CommandClasses["Multi Channel"],
+					property: "interviewComplete",
+				},
+				true,
+			);
+			node.valueDB.setValue(
+				{
+					commandClass: CommandClasses["Multi Channel"],
+					property: "individualCount",
+				},
+				5,
+			);
+
+			node.valueDB.setValue(
+				{
+					commandClass: CommandClasses["Multi Channel"],
+					endpoint: 5,
+					property: "deviceClass",
+				},
+				{
+					generic: 0x03,
+					specific: 0x12, // Doorbell
+				},
+			);
+
+			const actual = node.getEndpoint(5);
+			expect(actual?.deviceClass?.specific.label).toBe("Doorbell");
 		});
 	});
 
