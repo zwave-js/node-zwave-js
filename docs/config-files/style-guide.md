@@ -75,7 +75,7 @@ These should generally conform to the name under which the device is sold. If th
 		"devices": [
 ```
 
-Descriptions should be **Title Case**.
+Device descriptions should be **Title Case**.
 
 ## Association Groups
 
@@ -114,9 +114,9 @@ Labels should be clear and concise. They should clearly explain what the paramet
 
 Labels should be **Title Case**.
 
-### Descriptions
+### Parameter Descriptions
 
-Descriptions can be helpful, but they clutter UIs. As such, unnecessary descriptions that merely restate the label **must** be removed. Additionally, information like units or available ranges should be removed as that information is provided to UIs through other properties.
+Parameter descriptions can be helpful, but they clutter UIs. As such, unnecessary descriptions that merely restate the label **must** be removed. Additionally, information like units or available ranges should be removed as that information is provided to UIs through other properties.
 
 As a rule of thumb: Only include a description if it is necessary, helpful, and adds significant value.
 
