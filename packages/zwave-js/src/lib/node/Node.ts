@@ -3149,7 +3149,13 @@ protocol version:      ${this._protocolVersion}`;
 		tryParse("isSecure", "boolean");
 		tryParse("supportsSecurity", "boolean");
 		tryParse("supportsBeaming", "boolean");
-		tryParseLegacy(["protocolVersion", "version"], ["number"]);
+		tryParse("protocolVersion", "number");
+		if (!this._protocolVersion) {
+			// The legacy version field was off by 1
+			if (typeof obj.version === "number") {
+				this._protocolVersion = obj.version - 1;
+			}
+		}
 		if (obj.nodeType in NodeType) {
 			this._nodeType = NodeType[obj.nodeType] as any;
 		}

@@ -975,10 +975,12 @@ describe("lib/node/Node", () => {
 			fakeDriver.controller.nodes.set(1, node);
 			const legacy = {
 				...serializedTestNode,
-				version: 3,
+				version: 4, // version 4 -> protocolVersion 3
 				isBeaming: true,
 				maxBaudRate: 40000,
 			};
+			// @ts-expect-error We want to test this!
+			delete legacy.protocolVersion;
 			node.deserialize(legacy);
 			expect(node.serialize()).toEqual(serializedTestNode);
 			node.destroy();
