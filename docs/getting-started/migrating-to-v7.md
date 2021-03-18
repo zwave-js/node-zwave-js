@@ -18,8 +18,7 @@ The old parsing code was based on reverse-engineering, best-effort guesses and l
 -   `maxBaudRate` was renamed to `maxDataRate`, the type `Baudrate` was renamed to `DataRate`
 -   The property `supportedDataRates` was added to provide an array of supported data rates
 -   The 100kbps data rate is now detected correctly
--   The `version` property was renamed to `protocolVersion` and had its type changed from `number` to the enum `ProtocolVersion` (the underlying values are still the same).
-
+-   The `version` property was renamed to `protocolVersion` and had its type changed from `number` to the enum `ProtocolVersion`. The underlying values are also lowered by `1` to match the Z-Wave specifications, so a `version` of `4` corresponds to a `protocolVersion` of `3` (`"4.5x / 6.0x"`).
 -   The `isBeaming` property was renamed to `supportsBeaming` to better show its intent
 -   The `supportsSecurity` property was split off from the `isSecure` property because they have a different meaning.
 -   The mutually exclusive `isRoutingSlave` and `isController` properties were merged into the new `nodeType` property.
