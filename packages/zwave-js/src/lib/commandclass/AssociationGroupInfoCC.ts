@@ -10,7 +10,7 @@ import {
 	ZWaveError,
 	ZWaveErrorCodes,
 } from "@zwave-js/core";
-import { getEnumMemberName, num2hex } from "@zwave-js/shared";
+import { cpp2js, getEnumMemberName, num2hex } from "@zwave-js/shared";
 import type { Driver } from "../driver/Driver";
 import { MessagePriority } from "../message/Constants";
 import { PhysicalCCAPI } from "./API";
@@ -549,7 +549,11 @@ export class AssociationGroupInfoCCNameReport extends AssociationGroupInfoCC {
 		this.groupId = this.payload[0];
 		const nameLength = this.payload[1];
 		validatePayload(this.payload.length >= 2 + nameLength);
-		this.name = this.payload.slice(2, 2 + nameLength).toString("utf8");
+		// The specs don't allow 0-terminated string, but some devices use them
+		// So we need to cut them off
+		this.name = cpp2js(
+			this.payload.slice(2, 2 + nameLength).toString("utf8"),
+		);
 		this.persistValues();
 	}
 
