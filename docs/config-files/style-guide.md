@@ -60,7 +60,7 @@ Sometimes a manufacturer makes a device for another company. The field `manufact
 
 ## Device Descriptions
 
-These should generally conform to the name under which the device is sold. If the description merely mirrors the label, it should be omitted instead. Remove the manufacturer name from the description, if present. For example:
+These should generally conform to the name under which the device is sold. If the description merely mirrors the label, it should be omitted. Remove the manufacturer name from the description, if present. For example:
 
 ```diff
 	// Yale YDM3109
@@ -75,7 +75,7 @@ These should generally conform to the name under which the device is sold. If th
 		"devices": [
 ```
 
-Descriptions should be **Title Case**.
+Device descriptions should be **Title Case**.
 
 ## Association Groups
 
@@ -114,9 +114,9 @@ Labels should be clear and concise. They should clearly explain what the paramet
 
 Labels should be **Title Case**.
 
-### Descriptions
+### Parameter Descriptions
 
-Descriptions can be helpful, but they clutter UIs. As such, unnecessary descriptions that merely restate the label **must** be removed. Additionally, information like units or available ranges should be removed as that information is provided to UIs through other properties.
+Parameter descriptions can be helpful, but they clutter UIs. As such, unnecessary descriptions that merely restate the label **must** be removed. Additionally, information like units or available ranges should be removed as that information is provided to UIs through other properties.
 
 As a rule of thumb: Only include a description if it is necessary, helpful, and adds significant value.
 
@@ -261,7 +261,7 @@ Whenever a parameter only allows two options, formulate the label and/or descrip
 
 A parameter must define the range of min/max values, however, that range should only be as large as is necessary. Frequently, imported config files have a range of 0-255 when the only possible range is 0-1. Please check the manual.
 
-An exception are parameters which accept a single special value outside the normal range, e.g. `10-255` and `0 (disable)`. There isn't a simple way to represent these gaps, so the value range should be `0-255` in this case.
+An exception is parameters that accept a single special value outside the normal range, e.g. `10-255` and `0 (disable)`. There isn't a simple way to represent these gaps, so the value range should be `0-255` in that case.
 
 ### Units
 
@@ -272,7 +272,7 @@ Whenever possible, a unit should be defined for configuration parameters. Unit s
 -   `°F` instead of `Fahrenheit`/...
 -   `W`/`V`/`A`/... instead of `watts`/`volts`/`Ampere`/...
 
-Time units (`seconds`, `minutes`, `hours`) should not be abbreviated. `ms` for `milliseconds` are an exception to keep the units short.
+Time units (`seconds`, `minutes`, `hours`) should not be abbreviated. `ms` for `milliseconds` is an exception to keep the units short.
 
 Some devices use multiples of the base units - these should be represented as a decimal number in front of the base unit, e.g.
 
