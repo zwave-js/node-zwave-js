@@ -163,6 +163,37 @@ Partial parameters must follow these rules:
 
 While the Z-Wave specs define how the protocol works and how devices must behave, the reality is different. `zwave-js` tries to be smart about this, but sometimes that is not enough. The following compat flags are available to influence how `zwave-js` communicates with these devices:
 
+### `alarmMapping`
+
+This option is used to translate V1 `alarmType` and `alarmLevel` to V2+ notifications. Although the V1 values are not standardized, some manufacturers use the same values for all of their devices. This property has the following shape:
+
+```json
+"compat": {
+	"alarmMapping": [
+		{
+			"from": {
+				"alarmType": 21, // or any other number between 0 and 255
+				"alarmLevel": 2, // or any other number between 0 and 255 (optional)
+			},
+			"to": {
+				"notificationType": 6, // or any other standardized notification type
+				"notificationEvent": 5, // or any other standardized notification event
+				"eventParameters": {
+					// Additional event parameters for this notification event (optional)
+					"someProperty": 1, // either a fixed number
+					"userId": "alarmLevel", // or the reported alarmLevel
+				}
+			}
+		}
+	]
+}
+```
+
+From the array of single mappings, the first one with a matching `alarmType` and `alarmLevel` is selected. You can leave out the `alarmLevel` to not match against it.
+One use case for this is to use the `alarmLevel` as the `userId` in the `eventParameters`.
+
+Single alarm mappings may be `$import`ed from templates.
+
 ### `commandClasses.add`
 
 If a device does not report some CCs in its NIF, this can be used to add them. This property has the following shape:

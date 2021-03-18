@@ -741,37 +741,79 @@ export class NotificationCCReport extends NotificationCC {
 
 				// Turn the event parameters into something useful
 				this.parseEventParameters();
-			} else if (this.alarmType !== 0 && this.version >= 2) {
-				// Check if the device actually supports Notification CC, but chooses
-				// to send Alarm frames instead (GH#1034)
-				const valueDB = this.getValueDB();
-				const supportedNotificationTypes = valueDB.getValue<number[]>(
-					getSupportedNotificationTypesValueId(),
-				);
-				if (
-					isArray(supportedNotificationTypes) &&
-					supportedNotificationTypes.includes(this.alarmType)
-				) {
-					const supportedNotificationEvents = valueDB.getValue<
+			} else if (this.alarmType !== 0) {
+				if (this.version >= 2) {
+					// Check if the device actually supports Notification CC, but chooses
+					// to send Alarm frames instead (GH#1034)
+					const valueDB = this.getValueDB();
+					const supportedNotificationTypes = valueDB.getValue<
 						number[]
-					>(getSupportedNotificationEventsValueId(this.alarmType));
+					>(getSupportedNotificationTypesValueId());
 					if (
-						isArray(supportedNotificationEvents) &&
-						supportedNotificationEvents.includes(this.alarmLevel)
+						isArray(supportedNotificationTypes) &&
+						supportedNotificationTypes.includes(this.alarmType)
 					) {
-						// This alarm frame corresponds to a valid notification event
+						const supportedNotificationEvents = valueDB.getValue<
+							number[]
+						>(
+							getSupportedNotificationEventsValueId(
+								this.alarmType,
+							),
+						);
+						if (
+							isArray(supportedNotificationEvents) &&
+							supportedNotificationEvents.includes(
+								this.alarmLevel,
+							)
+						) {
+							// This alarm frame corresponds to a valid notification event
+							this.driver.controllerLog.logNode(
+								this.nodeId as number,
+								`treating V1 Alarm frame as Notification Report`,
+							);
+							this.notificationType = this.alarmType;
+							this.notificationEvent = this.alarmLevel;
+							this.alarmType = undefined;
+							this.alarmLevel = undefined;
+						}
+					}
+				} else {
+					// V1 Alarm, check if there is a compat option to map this V1 report to a V2+ report
+					const mapping = this.getNodeUnsafe()?.deviceConfig?.compat
+						?.alarmMapping;
+					const match = mapping?.find(
+						(m) =>
+							m.from.alarmType === this.alarmType &&
+							(m.from.alarmLevel == undefined ||
+								m.from.alarmLevel === this.alarmLevel),
+					);
+					if (match) {
 						this.driver.controllerLog.logNode(
 							this.nodeId as number,
-							`treating V1 Alarm frame as Notification Report`,
+							`compat mapping found, treating V1 Alarm frame as Notification Report`,
 						);
-						this.notificationType = this.alarmType;
-						this.notificationEvent = this.alarmLevel;
+						this.notificationType = match.to.notificationType;
+						this.notificationEvent = match.to.notificationEvent;
+						if (match.to.eventParameters) {
+							this.eventParameters = {};
+							for (const [key, val] of Object.entries(
+								match.to.eventParameters,
+							)) {
+								if (typeof val === "number") {
+									this.eventParameters[key] = val;
+									// wotan-disable-next-line no-useless-predicate
+								} else if (val === "alarmLevel") {
+									this.eventParameters[key] = this.alarmLevel;
+								}
+							}
+						}
 						this.alarmType = undefined;
 						this.alarmLevel = undefined;
 					}
 				}
 			}
 		} else {
+			// Create a notification to send
 			if ("alarmType" in options) {
 				this.alarmType = options.alarmType;
 				this.alarmLevel = options.alarmLevel;
