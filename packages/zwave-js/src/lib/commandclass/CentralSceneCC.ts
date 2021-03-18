@@ -54,6 +54,13 @@ function getSceneLabel(sceneNumber: number): string {
 	return `Scene ${padStart(sceneNumber.toString(), 3, "0")}`;
 }
 
+export function getSlowRefreshValueId(): ValueID {
+	return {
+		commandClass: CommandClasses["Central Scene"],
+		property: "slowRefresh",
+	};
+}
+
 export enum CentralSceneCommand {
 	SupportedGet = 0x01,
 	SupportedReport = 0x02,
@@ -296,7 +303,10 @@ export class CentralSceneCCNotification extends CentralSceneCC {
 		this._sequenceNumber = this.payload[0];
 		this._keyAttribute = this.payload[1] & 0b111;
 		this._sceneNumber = this.payload[2];
-		if (this._keyAttribute === CentralSceneKeys.KeyHeldDown) {
+		if (
+			this._keyAttribute === CentralSceneKeys.KeyHeldDown &&
+			this.version >= 3
+		) {
 			// A receiving node MUST ignore this field if the command is not
 			// carrying the Key Held Down key attribute.
 			this._slowRefresh = !!(this.payload[1] & 0b1000_0000);
@@ -365,7 +375,8 @@ export class CentralSceneCCSupportedReport extends CentralSceneCC {
 
 		validatePayload(this.payload.length >= 2);
 		this._sceneCount = this.payload[0];
-		this._supportsSlowRefresh = !!(this.payload[1] & 0b1000_0000);
+		this._supportsSlowRefresh =
+			this.version >= 3 ? !!(this.payload[1] & 0b1000_0000) : undefined;
 		const bitMaskBytes = (this.payload[1] & 0b110) >>> 1;
 		const identicalKeyAttributes = !!(this.payload[1] & 0b1);
 		const numEntries = identicalKeyAttributes ? 1 : this.sceneCount;
@@ -414,9 +425,9 @@ export class CentralSceneCCSupportedReport extends CentralSceneCC {
 	}
 
 	// TODO: Only offer `slowRefresh` if this is true
-	private _supportsSlowRefresh: boolean;
+	private _supportsSlowRefresh: boolean | undefined;
 	@ccValue({ internal: true })
-	public get supportsSlowRefresh(): boolean {
+	public get supportsSlowRefresh(): boolean | undefined {
 		return this._supportsSlowRefresh;
 	}
 

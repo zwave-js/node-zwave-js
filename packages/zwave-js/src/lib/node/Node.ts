@@ -50,6 +50,7 @@ import {
 	CentralSceneCCNotification,
 	CentralSceneKeys,
 	getSceneValueId,
+	getSlowRefreshValueId,
 } from "../commandclass/CentralSceneCC";
 import { ClockCCReport } from "../commandclass/ClockCC";
 import { CommandClass, getCCValueMetadata } from "../commandclass/CommandClass";
@@ -1980,6 +1981,7 @@ protocol version:      ${this._protocolVersion}`;
 		  }
 		| undefined;
 	private lastCentralSceneNotificationSequenceNumber: number | undefined;
+	private centralSceneForcedKeyUp = false;
 
 	/** Handles the receipt of a Central Scene notifification */
 	private handleCentralSceneNotification(
@@ -2022,6 +2024,7 @@ protocol version:      ${this._protocolVersion}`;
 		};
 
 		const forceKeyUp = (): void => {
+			this.centralSceneForcedKeyUp = true;
 			// force key up event
 			setSceneValue(
 				this.centralSceneKeyHeldDownContext!.sceneNumber,
@@ -2044,15 +2047,21 @@ protocol version:      ${this._protocolVersion}`;
 
 		if (command.keyAttribute === CentralSceneKeys.KeyHeldDown) {
 			// Set or refresh timer to force a release of the key
+			this.centralSceneForcedKeyUp = false;
 			if (this.centralSceneKeyHeldDownContext) {
 				clearTimeout(this.centralSceneKeyHeldDownContext.timeout);
 			}
+			// If the node does not advertise support for the slow refresh capability, we might still be dealing with a
+			// slow refresh node. We use the stored value for fallback behavior
+			const slowRefresh =
+				command.slowRefresh ??
+				this.valueDB.getValue<boolean>(getSlowRefreshValueId());
 			this.centralSceneKeyHeldDownContext = {
 				sceneNumber: command.sceneNumber,
 				// Unref'ing long running timers allows the process to exit mid-timeout
 				timeout: setTimeout(
 					forceKeyUp,
-					command.slowRefresh ? 60000 : 400,
+					slowRefresh ? 60000 : 400,
 				).unref(),
 			};
 		} else if (command.keyAttribute === CentralSceneKeys.KeyReleased) {
@@ -2060,6 +2069,12 @@ protocol version:      ${this._protocolVersion}`;
 			if (this.centralSceneKeyHeldDownContext) {
 				clearTimeout(this.centralSceneKeyHeldDownContext.timeout);
 				this.centralSceneKeyHeldDownContext = undefined;
+			} else if (this.centralSceneForcedKeyUp) {
+				// If we timed out and the controller subsequently receives a Key Released Notification,
+				// we SHOULD consider the sending node to be operating with the Slow Refresh capability enabled.
+				this.valueDB.setValue(getSlowRefreshValueId(), true);
+				// Do not raise the duplicate event
+				return;
 			}
 		}
 
