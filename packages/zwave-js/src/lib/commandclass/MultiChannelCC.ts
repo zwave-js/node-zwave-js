@@ -288,11 +288,17 @@ export class MultiChannelCC extends CommandClass {
 		});
 	}
 
-	public async interview(complete: boolean = true): Promise<void> {
-		// Special interview procedure for legacy nodes
-		if (this.version === 1) return this.interviewV1(complete);
-
+	public async interview(): Promise<void> {
 		const node = this.getNode()!;
+		this.driver.controllerLog.logNode(node.id, {
+			endpoint: this.endpointIndex,
+			message: `Interviewing ${this.ccName}...`,
+			direction: "none",
+		});
+
+		// Special interview procedure for legacy nodes
+		if (this.version === 1) return this.interviewV1();
+
 		const endpoint = node.getEndpoint(this.endpointIndex)!;
 		const api = endpoint.commandClasses["Multi Channel"].withOptions({
 			priority: MessagePriority.NodeQuery,
@@ -451,65 +457,59 @@ supported CCs:`;
 		this.interviewComplete = true;
 	}
 
-	private async interviewV1(complete: boolean = true): Promise<void> {
-		// Only do the interview once
-		if (complete) {
-			const node = this.getNode()!;
-			const api = node.getEndpoint(this.endpointIndex)!.commandClasses[
-				"Multi Channel"
-			];
+	private async interviewV1(): Promise<void> {
+		const node = this.getNode()!;
+		const api = node.getEndpoint(this.endpointIndex)!.commandClasses[
+			"Multi Channel"
+		];
 
-			// V1 works the opposite way - we scan all CCs and remember how many
-			// endpoints they have
-			const supportedCCs = [...node.implementedCommandClasses.keys()]
-				// Don't query CCs the node only controls
-				.filter((cc) => node.supportsCC(cc))
-				// Don't query CCs that want to skip the endpoint interview
-				.filter(
-					(cc) => !node.createCCInstance(cc)?.skipEndpointInterview(),
-				);
-			const endpointCounts = new Map<CommandClasses, number>();
-			for (const ccId of supportedCCs) {
+		// V1 works the opposite way - we scan all CCs and remember how many
+		// endpoints they have
+		const supportedCCs = [...node.implementedCommandClasses.keys()]
+			// Don't query CCs the node only controls
+			.filter((cc) => node.supportsCC(cc))
+			// Don't query CCs that want to skip the endpoint interview
+			.filter(
+				(cc) => !node.createCCInstance(cc)?.skipEndpointInterview(),
+			);
+		const endpointCounts = new Map<CommandClasses, number>();
+		for (const ccId of supportedCCs) {
+			this.driver.controllerLog.logNode(node.id, {
+				message: `Querying endpoint count for CommandClass ${getCCName(
+					ccId,
+				)}...`,
+				direction: "outbound",
+			});
+			const endpointCount = await api.getEndpointCountV1(ccId);
+			if (endpointCount != undefined) {
+				endpointCounts.set(ccId, endpointCount);
+
 				this.driver.controllerLog.logNode(node.id, {
-					message: `Querying endpoint count for CommandClass ${getCCName(
+					message: `CommandClass ${getCCName(
 						ccId,
-					)}...`,
-					direction: "outbound",
+					)} has ${endpointCount} endpoints`,
+					direction: "inbound",
 				});
-				const endpointCount = await api.getEndpointCountV1(ccId);
-				if (endpointCount != undefined) {
-					endpointCounts.set(ccId, endpointCount);
-
-					this.driver.controllerLog.logNode(node.id, {
-						message: `CommandClass ${getCCName(
-							ccId,
-						)} has ${endpointCount} endpoints`,
-						direction: "inbound",
-					});
-				}
 			}
+		}
 
-			// Store the collected information
-			// We have only individual and no dynamic and no aggregated endpoints
-			const numEndpoints = Math.max(...endpointCounts.values());
-			node.valueDB.setValue(getCountIsDynamicValueId(), false);
-			node.valueDB.setValue(getAggregatedCountValueId(), 0);
-			node.valueDB.setValue(getIndividualCountValueId(), numEndpoints);
-			// Since we queried all CCs separately, we can assume that all
-			// endpoints have different capabilities
-			node.valueDB.setValue(getIdenticalCapabilitiesValueId(), false);
+		// Store the collected information
+		// We have only individual and no dynamic and no aggregated endpoints
+		const numEndpoints = Math.max(...endpointCounts.values());
+		node.valueDB.setValue(getCountIsDynamicValueId(), false);
+		node.valueDB.setValue(getAggregatedCountValueId(), 0);
+		node.valueDB.setValue(getIndividualCountValueId(), numEndpoints);
+		// Since we queried all CCs separately, we can assume that all
+		// endpoints have different capabilities
+		node.valueDB.setValue(getIdenticalCapabilitiesValueId(), false);
 
-			for (let endpoint = 1; endpoint <= numEndpoints; endpoint++) {
-				// Check which CCs exist on this endpoint
-				const endpointCCs = [...endpointCounts.entries()]
-					.filter(([, ccEndpoints]) => ccEndpoints <= endpoint)
-					.map(([ccId]) => ccId);
-				// And store it per endpoint
-				node.valueDB.setValue(
-					getEndpointCCsValueId(endpoint),
-					endpointCCs,
-				);
-			}
+		for (let endpoint = 1; endpoint <= numEndpoints; endpoint++) {
+			// Check which CCs exist on this endpoint
+			const endpointCCs = [...endpointCounts.entries()]
+				.filter(([, ccEndpoints]) => ccEndpoints <= endpoint)
+				.map(([ccId]) => ccId);
+			// And store it per endpoint
+			node.valueDB.setValue(getEndpointCCsValueId(endpoint), endpointCCs);
 		}
 
 		// Remember that the interview is complete

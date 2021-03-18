@@ -255,6 +255,9 @@
 				"disableBasicMapping": {
 					"const": true
 				},
+				"disableStrictEntryControlDataValidation": {
+					"const": true
+				},
 				"manualValueRefreshDelayMs": {
 					"type": "number",
 					"minimum": 0

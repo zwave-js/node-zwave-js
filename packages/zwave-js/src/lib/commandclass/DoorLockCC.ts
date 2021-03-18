@@ -343,7 +343,7 @@ export class DoorLockCCAPI extends PhysicalCCAPI {
 export class DoorLockCC extends CommandClass {
 	declare ccCommand: DoorLockCommand;
 
-	public async interview(complete: boolean = true): Promise<void> {
+	public async interview(): Promise<void> {
 		const node = this.getNode()!;
 		const endpoint = this.getEndpoint()!;
 		const api = endpoint.commandClasses["Door Lock"].withOptions({
@@ -352,9 +352,7 @@ export class DoorLockCC extends CommandClass {
 
 		this.driver.controllerLog.logNode(node.id, {
 			endpoint: this.endpointIndex,
-			message: `${this.constructor.name}: doing a ${
-				complete ? "complete" : "partial"
-			} interview...`,
+			message: `Interviewing ${this.ccName}...`,
 			direction: "none",
 		});
 
@@ -362,7 +360,7 @@ export class DoorLockCC extends CommandClass {
 		// In this case, do now mark this CC as interviewed completely
 		let hadCriticalTimeout = false;
 
-		if (complete && this.version >= 4) {
+		if (this.version >= 4) {
 			this.driver.controllerLog.logNode(node.id, {
 				endpoint: this.endpointIndex,
 				message: "requesting lock capabilities...",
@@ -377,7 +375,7 @@ supported operation types: ${resp.supportedOperationTypes
 supported door lock modes: ${resp.supportedDoorLockModes
 					.map((t) => getEnumMemberName(DoorLockMode, t))
 					.map((str) => `\n· ${str}`)
-					.join(", ")}
+					.join("")}
 supported outside handles: ${resp.supportedOutsideHandles
 					.map(String)
 					.join(", ")}
@@ -415,6 +413,19 @@ supports block to block:   ${resp.blockToBlockSupported}`;
 				hadCriticalTimeout = true;
 			}
 		}
+
+		await this.refreshValues();
+
+		// Remember that the interview is complete
+		if (!hadCriticalTimeout) this.interviewComplete = true;
+	}
+
+	public async refreshValues(): Promise<void> {
+		const node = this.getNode()!;
+		const endpoint = this.getEndpoint()!;
+		const api = endpoint.commandClasses["Door Lock"].withOptions({
+			priority: MessagePriority.NodeQuery,
+		});
 
 		this.driver.controllerLog.logNode(node.id, {
 			endpoint: this.endpointIndex,
@@ -483,9 +494,6 @@ latch status:       ${status.latchStatus}`;
 				direction: "inbound",
 			});
 		}
-
-		// Remember that the interview is complete
-		if (!hadCriticalTimeout) this.interviewComplete = true;
 	}
 }
 

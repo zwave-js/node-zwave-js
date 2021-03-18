@@ -20,6 +20,7 @@ import type {
 	MultiStageCallback,
 	SuccessIndicator,
 } from "../message/SuccessIndicator";
+import { NodeType } from "../node/Types";
 
 export enum NodeNeighborUpdateStatus {
 	UpdateStarted = 0x21,
@@ -75,7 +76,7 @@ export class RequestNodeNeighborUpdateRequest extends RequestNodeNeighborUpdateR
 			7600 +
 			numListeningNodes * 217 +
 			numFlirsNodes * 3517 +
-			(node?.isController ? numNodes * 732 : 0)
+			(node?.nodeType === NodeType.Controller ? numNodes * 732 : 0)
 		);
 	}
 

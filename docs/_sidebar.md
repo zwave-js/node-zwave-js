@@ -3,6 +3,7 @@
     -   [Introduction](README.md)
     -   [Quick Start](getting-started/quickstart.md)
     -   [Migrating to v6](getting-started/migrating-to-v6.md)
+    -   [Migrating to v7](getting-started/migrating-to-v7.md)
 
 -   API
 
@@ -20,13 +21,19 @@
 
     -   [Send custom messages](usage/custom.md)
 
--   Guides and FAQ
+-   Device Configuration Files
 
-    -   [Partial config parameters explained](guides/partial-parameters.md)
+    -   [Overview](config-files/overview.md)
+    -   [File format](config-files/file-format.md)
+    -   [Contributing device files](config-files/contributing-files.md)
+    -   [Importing files from other sources](config-files/importing-from-others.md)
+    -   [Style guide](config-files/style-guide.md)
+    -   [Conditional parameters and settings](config-files/conditional-settings.md)
+    -   [Using templates](config-files/using-templates.md)
+    -   [Guide on partial parameters](config-files/partial-parameters.md)
 
 -   Development
     -   [Introduction](development/intro.md)
-    -   [Device configuration files](development/config-files.md)
     -   [Implementing a Command Class](development/implementing-cc.md)
     -   [Troubleshooting](development/troubleshooting.md)
     -   [Installing from GitHub](development/installing-from-github.md)

@@ -3,6 +3,67 @@
 	Placeholder for next release:
 	## __WORK IN PROGRESS__
 -->
+## __WORK IN PROGRESS__ · _Summer is coming!_
+### Breaking changes · [Migration guide](https://zwave-js.github.io/node-zwave-js/#/getting-started/migrating-to-v7)
+* Renamed `controller.removeNodeFromAllAssocations` to `controller.removeNodeFromAllAssociations` to fix a typo
+* We've reworked/fixed the parsing of Node Information Frames (NIF) to match the specifications and changed node properties to make more sense
+* Nodes with a completed interview are no longer queried for all their values when restarting
+* The `deltaTime` and `previousValue` values for the `Meter CC` are no longer exposed
+* Numeric loglevels are converted to the corresponding string loglevel internally. `driver.getLogConfig` always returns the string loglevel regardless.
+* The `"notification"` event was decoupled from the `Notification CC` and now serves as a generic event for CC-specific notifications.
+
+### Features
+* The logger formats were more cleanly separated between logger and transport instances. As a result, writing user-defined transports is now much easier.
+* Implemented a `logfmt` transport in https://github.com/zwave-js/log-transports
+* Added support for `Entry Control CC`. It has been found that some entry control devices don't follow some of the strict rules regarding the data format. The validation can be turned off with the compat option `disableStrictEntryControlDataValidation`.
+* Implemented an API to re-interview a single CC on a node and its endpoints without repeating the entire node interview
+* The stack of `ZWaveError`s related to transmission errors now contain the call stack where the message was created instead of the internal state machine's stack
+
+### Bugfixes
+* Changes to the logger configuration are now correctly applied dynamically
+* Changed how an error gets identified as a `ZWaveError` to avoid problems with duplicated dependencies
+* Writeonly parameters are no longer queried even if `Configuration CC` has version 3 or higher
+
+### Config file changes
+* Add missing Sunricher device configs
+
+### Changes under the hood
+* Added a missing callback function to the quick start example
+* Added an API to `ConfigManager` to look up device configurations without evaluating the conditionals
+
+## 6.6.3 (2021-03-16)
+### Bugfixes
+* Avoid crash during bootstrapping when `Version CC` is not in the NIF
+
+### Config file changes
+* Split LZW31-sn param 16 and normalize param names
+* Separate Neo CoolCam NAS-WR01ZE V2 from WR01Z
+
+## 6.6.2 (2021-03-14)
+### Bugfixes
+* While replacing a node with `replaceFailedNode` the node does not get removed from associations anymore. This could prevent secure inclusion from succeeding.
+* Notification variables are now auto-idled after 5 minutes as it was intended, not after 5 hours.
+* Fixed a typo in the logging for Association CC
+
+### Config file changes
+* Added Leviton 4 Speed Fan Controller zw4sf
+* Added russian versions of several Shenzhen Neo devices
+* Update Qubino Smart Plug 16A, parameter 41 does not exist
+* Update LZW30 parameters to match documentation/latest firmware
+* Change misidentified device sm103 to hsp02
+* Remove unsupported double tap on GE 26932; add double tap to 12730; fix parameters
+* The config file for 700-series controllers released with the base chip from Silabs is * now more generic
+* Add param 52 to Gocontrol GC-TBZ48
+* Add config for Haseman R4D4
+* Add config for YRD210 versions with an incorrect manufacturer ID
+* Improve Leviton dzpd3 parameter metadata and add device metadata
+* Add Ring Keypad config
+* Add config params 13 and 51 to Inovelli LZW30-SN
+
+### Changes under the hood
+* We've reworked the docs on device configuration files, including a style guide.
+* Fixed a typo that prevented the nightly configuration releases
+
 ## 6.6.1 (2021-03-07)
 ### Bugfixes
 * After a restart, sleeping nodes have their status correctly determined even if they weren't interviewed completely before

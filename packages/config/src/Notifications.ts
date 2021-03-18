@@ -1,4 +1,4 @@
-import { ZWaveError, ZWaveErrorCodes } from "@zwave-js/core";
+import { isZWaveError, ZWaveError, ZWaveErrorCodes } from "@zwave-js/core";
 import { JSONObject, num2hex } from "@zwave-js/shared";
 import { entries } from "alcalzone-shared/objects";
 import { isArray, isObject } from "alcalzone-shared/typeguards";
@@ -65,7 +65,7 @@ export async function loadNotificationsInternal(): Promise<NotificationMap> {
 		}
 		return notifications;
 	} catch (e: unknown) {
-		if (e instanceof ZWaveError) {
+		if (isZWaveError(e)) {
 			throw e;
 		} else {
 			throwInvalidConfig("notifications");

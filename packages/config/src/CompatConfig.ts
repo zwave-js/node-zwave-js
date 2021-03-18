@@ -65,6 +65,20 @@ error in compat option disableBasicMapping`,
 
 			this.disableBasicMapping = definition.disableBasicMapping;
 		}
+
+		if (definition.disableStrictEntryControlDataValidation != undefined) {
+			if (definition.disableStrictEntryControlDataValidation !== true) {
+				throwInvalidConfig(
+					"devices",
+					`config/devices/${filename}:
+error in compat option disableStrictEntryControlDataValidation`,
+				);
+			}
+
+			this.disableStrictEntryControlDataValidation =
+				definition.disableStrictEntryControlDataValidation;
+		}
+
 		if (definition.preserveRootApplicationCCValueIDs != undefined) {
 			if (definition.preserveRootApplicationCCValueIDs !== true) {
 				throwInvalidConfig(
@@ -325,6 +339,7 @@ compat option alarmMapping must be an array where all items are objects!`,
 		"*" | readonly number[]
 	>;
 	public readonly disableBasicMapping?: boolean;
+	public readonly disableStrictEntryControlDataValidation?: boolean;
 	public readonly overrideFloatEncoding?: {
 		size?: number;
 		precision?: number;

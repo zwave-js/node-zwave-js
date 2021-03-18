@@ -8,6 +8,7 @@ import {
 	CommandClassInfo,
 	CRC16_CCITT,
 	getCCName,
+	isZWaveError,
 	MAX_NODES,
 	Maybe,
 	MetadataUpdatedArgs,
@@ -49,6 +50,7 @@ import {
 	CentralSceneCCNotification,
 	CentralSceneKeys,
 	getSceneValueId,
+	getSlowRefreshValueId,
 } from "../commandclass/CentralSceneCC";
 import { ClockCCReport } from "../commandclass/ClockCC";
 import { CommandClass, getCCValueMetadata } from "../commandclass/CommandClass";
@@ -56,6 +58,7 @@ import {
 	DoorLockMode,
 	getCurrentModeValueId as getCurrentLockModeValueId,
 } from "../commandclass/DoorLockCC";
+import { EntryControlCCNotification } from "../commandclass/EntryControlCC";
 import {
 	FirmwareUpdateMetaDataCC,
 	FirmwareUpdateMetaDataCCGet,
@@ -102,7 +105,6 @@ import {
 	ApplicationUpdateRequestNodeInfoRequestFailed,
 } from "../controller/ApplicationUpdateRequest";
 import {
-	Baudrate,
 	GetNodeProtocolInfoRequest,
 	GetNodeProtocolInfoResponse,
 } from "../controller/GetNodeProtocolInfoMessages";
@@ -130,12 +132,14 @@ import {
 	RequestNodeInfoResponse,
 } from "./RequestNodeInfoMessages";
 import type {
+	DataRate,
+	FLiRS,
 	TranslatedValueID,
 	ZWaveNodeEventCallbacks,
 	ZWaveNodeEvents,
 	ZWaveNodeValueEventCallbacks,
 } from "./Types";
-import { InterviewStage, NodeStatus } from "./Types";
+import { InterviewStage, NodeStatus, NodeType, ProtocolVersion } from "./Types";
 
 export interface ZWaveNode {
 	on<TEvent extends ZWaveNodeEvents>(
@@ -442,12 +446,14 @@ export class ZWaveNode extends Endpoint {
 	}
 
 	private _isListening: boolean | undefined;
+	/** Whether this node is always listening or not */
 	public get isListening(): boolean | undefined {
 		return this._isListening;
 	}
 
-	private _isFrequentListening: boolean | undefined;
-	public get isFrequentListening(): boolean | undefined {
+	private _isFrequentListening: FLiRS | undefined;
+	/** Indicates the wakeup interval if this node is a FLiRS node. `false` if it isn't. */
+	public get isFrequentListening(): FLiRS | undefined {
 		return this._isFrequentListening;
 	}
 
@@ -458,13 +464,20 @@ export class ZWaveNode extends Endpoint {
 	}
 
 	private _isRouting: boolean | undefined;
+	/** Whether the node supports routing/forwarding messages. */
 	public get isRouting(): boolean | undefined {
 		return this._isRouting;
 	}
 
-	private _maxBaudRate: Baudrate | undefined;
-	public get maxBaudRate(): Baudrate | undefined {
-		return this._maxBaudRate;
+	private _supportedDataRates: readonly DataRate[] | undefined;
+	public get supportedDataRates(): readonly DataRate[] | undefined {
+		return this._supportedDataRates;
+	}
+
+	public get maxDataRate(): DataRate | undefined {
+		if (this._supportedDataRates) {
+			return Math.max(...this._supportedDataRates) as DataRate;
+		}
 	}
 
 	private _isSecure: Maybe<boolean> | undefined;
@@ -475,25 +488,31 @@ export class ZWaveNode extends Endpoint {
 		this._isSecure = value;
 	}
 
-	private _version: number | undefined;
+	private _protocolVersion: ProtocolVersion | undefined;
 	/** The Z-Wave protocol version this node implements */
-	public get version(): number | undefined {
-		return this._version;
+	public get protocolVersion(): ProtocolVersion | undefined {
+		return this._protocolVersion;
 	}
 
-	private _isBeaming: boolean | undefined;
-	public get isBeaming(): boolean | undefined {
-		return this._isBeaming;
+	private _nodeType: NodeType | undefined;
+	/** Whether this node is a controller (can calculate routes) or an end node (relies on route info) */
+	public get nodeType(): NodeType | undefined {
+		return this._nodeType;
 	}
 
-	private _isRoutingSlave: boolean | undefined;
-	public get isRoutingSlave(): boolean | undefined {
-		return this._isRoutingSlave;
+	private _supportsSecurity: boolean | undefined;
+	/**
+	 * Whether this node supports security (S0 or S2).
+	 * **WARNING:** Nodes often report this incorrectly - do not blindly trust it.
+	 */
+	public get supportsSecurity(): boolean | undefined {
+		return this._supportsSecurity;
 	}
 
-	private _isController: boolean | undefined;
-	public get isController(): boolean | undefined {
-		return this._isController;
+	private _supportsBeaming: boolean | undefined;
+	/** Whether this node can issue wakeup beams to FLiRS nodes */
+	public get supportsBeaming(): boolean | undefined {
+		return this._supportsBeaming;
 	}
 
 	public get manufacturerId(): number | undefined {
@@ -517,11 +536,11 @@ export class ZWaveNode extends Endpoint {
 		return this.getValue(getZWavePlusVersionValueId());
 	}
 
-	public get nodeType(): ZWavePlusNodeType | undefined {
+	public get zwavePlusNodeType(): ZWavePlusNodeType | undefined {
 		return this.getValue(getNodeTypeValueId());
 	}
 
-	public get roleType(): ZWavePlusRoleType | undefined {
+	public get zwavePlusRoleType(): ZWavePlusRoleType | undefined {
 		return this.getValue(getRoleTypeValueId());
 	}
 
@@ -706,7 +725,7 @@ export class ZWaveNode extends Endpoint {
 		} catch (e: unknown) {
 			// Define which errors during setValue are expected and won't crash
 			// the driver:
-			if (e instanceof ZWaveError) {
+			if (isZWaveError(e)) {
 				let handled = false;
 				let emitErrorEvent = false;
 				switch (e.code) {
@@ -909,10 +928,12 @@ export class ZWaveNode extends Endpoint {
 		this._isListening = undefined;
 		this._isFrequentListening = undefined;
 		this._isRouting = undefined;
-		this._maxBaudRate = undefined;
+		this._supportedDataRates = undefined;
 		this._isSecure = undefined;
-		this._version = undefined;
-		this._isBeaming = undefined;
+		this._protocolVersion = undefined;
+		this._nodeType = undefined;
+		this._supportsSecurity = undefined;
+		this._supportsBeaming = undefined;
 		this._deviceConfig = undefined;
 		this._neighbors = [];
 		this._hasEmittedNoNetworkKeyError = false;
@@ -967,7 +988,7 @@ export class ZWaveNode extends Endpoint {
 				return true;
 			} catch (e: unknown) {
 				if (
-					e instanceof ZWaveError &&
+					isZWaveError(e) &&
 					(e.code === ZWaveErrorCodes.Controller_NodeTimeout ||
 						e.code === ZWaveErrorCodes.Controller_ResponseNOK ||
 						e.code === ZWaveErrorCodes.Controller_CallbackNOK ||
@@ -992,33 +1013,20 @@ export class ZWaveNode extends Endpoint {
 			await this.queryProtocolInfo();
 		}
 
+		if (this.isListening || this.isFrequentListening) {
+			// Ping non-sleeping nodes to determine their status
+			await this.ping();
+		}
+
 		if (this.interviewStage === InterviewStage.ProtocolInfo) {
-			// We ping listening nodes to ensure that they are actually listening
-			// For all others, the messages are queued for wakeup anyways
-			if (this.isListening && !this.isFrequentListening) {
-				await this.ping();
-			}
 			if (!(await tryInterviewStage(() => this.queryNodeInfo()))) {
 				return false;
 			}
 		}
 
-		// The node is deemed ready when has been interviewed completely at least once
-		if (this.interviewStage === InterviewStage.RestartFromCache) {
-			// Mark nodes as potentially ready. The first message will determine if it is
-			this.readyMachine.send("RESTART_INTERVIEW_FROM_CACHE");
-
-			// Ping listening nodes to check their status
-			// Sleeping nodes are assumed to be asleep after a restart from cache
-			if (this.isListening) await this.ping();
-		}
-
 		// At this point the basic interview of new nodes is done. Start here when re-interviewing known nodes
 		// to get updated information about command classes
-		if (
-			this.interviewStage === InterviewStage.RestartFromCache ||
-			this.interviewStage === InterviewStage.NodeInfo
-		) {
+		if (this.interviewStage === InterviewStage.NodeInfo) {
 			// Only advance the interview if it was completed, otherwise abort
 			if (await this.interviewCCs()) {
 				await this.setInterviewStage(InterviewStage.CommandClasses);
@@ -1041,9 +1049,6 @@ export class ZWaveNode extends Endpoint {
 
 		await this.setInterviewStage(InterviewStage.Complete);
 		this.readyMachine.send("INTERVIEW_DONE");
-
-		// Regularly query listening nodes for updated values
-		this.scheduleManualValueRefreshesForListeningNodes();
 
 		// Tell listeners that the interview is completed
 		// The driver will then send this node to sleep
@@ -1106,29 +1111,30 @@ export class ZWaveNode extends Endpoint {
 		for (const cc of this._deviceClass.mandatoryControlledCCs) {
 			this.addCC(cc, { isControlled: true });
 		}
+
 		this._isListening = resp.isListening;
 		this._isFrequentListening = resp.isFrequentListening;
 		this._isRouting = resp.isRouting;
-		this._maxBaudRate = resp.maxBaudRate;
-		// Many nodes don't have this flag set, even if they are included securely
-		// So we treat false as "unknown"
-		this._isSecure = resp.isSecure || unknownBoolean;
-		this._version = resp.version;
-		this._isBeaming = resp.isBeaming;
-		this._isRoutingSlave = resp.isRoutingSlave;
-		this._isController = resp.isController;
+		this._supportedDataRates = resp.supportedDataRates;
+		this._protocolVersion = resp.protocolVersion;
+		this._nodeType = resp.nodeType;
+		this._supportsSecurity = resp.supportsSecurity;
+		this._supportsBeaming = resp.supportsBeaming;
+
+		this._isSecure = unknownBoolean;
 
 		const logMessage = `received response for protocol info:
 basic device class:    ${this._deviceClass.basic.label}
 generic device class:  ${this._deviceClass.generic.label}
 specific device class: ${this._deviceClass.specific.label}
-is a listening device: ${this.isListening}
+node type:             ${getEnumMemberName(NodeType, this._nodeType)}
+is always listening:   ${this.isListening}
 is frequent listening: ${this.isFrequentListening}
-is a routing device:   ${this.isRouting}
-is a secure device:    ${this.isSecure}
-is a beaming device:   ${this.isBeaming}
-maximum baud rate:     ${this.maxBaudRate} kbps
-version:               ${this.version}`;
+can route messages:    ${this.isRouting}
+supports security:     ${this._supportsSecurity}
+supports beaming:      ${this._supportsBeaming}
+maximum data rate:     ${this.maxDataRate} kbps
+protocol version:      ${this._protocolVersion}`;
 		this.driver.controllerLog.logNode(this.id, {
 			message: logMessage,
 			direction: "inbound",
@@ -1293,7 +1299,7 @@ version:               ${this.version}`;
 				instance = endpoint.createCCInstance(cc)!;
 			} catch (e: unknown) {
 				if (
-					e instanceof ZWaveError &&
+					isZWaveError(e) &&
 					e.code === ZWaveErrorCodes.CC_NotSupported
 				) {
 					// The CC is no longer supported. This can happen if the node tells us
@@ -1316,11 +1322,14 @@ version:               ${this.version}`;
 				return "continue";
 			}
 
+			// Skip this step if the CC was already interviewed
+			if (instance.interviewComplete) return "continue";
+
 			try {
-				await instance.interview(!instance.interviewComplete);
+				await instance.interview();
 			} catch (e: unknown) {
 				if (
-					e instanceof ZWaveError &&
+					isZWaveError(e) &&
 					(e.code === ZWaveErrorCodes.Controller_MessageDropped ||
 						e.code === ZWaveErrorCodes.Controller_CallbackNOK ||
 						e.code === ZWaveErrorCodes.Controller_ResponseNOK ||
@@ -1552,11 +1561,12 @@ version:               ${this.version}`;
 	}
 
 	/**
+	 * @internal
 	 * Schedules the regular refreshes of some CC values
 	 */
-	private scheduleManualValueRefreshesForListeningNodes(): void {
+	public scheduleManualValueRefreshes(): void {
 		// Only schedule this for listening nodes. Sleeping nodes are queried on wakeup
-		if (this.supportsCC(CommandClasses["Wake Up"])) return;
+		if (!this.canSleep) return;
 		// Only schedule this if we don't expect any unsolicited updates
 		if (!this.requiresManualValueRefresh()) return;
 
@@ -1613,16 +1623,43 @@ version:               ${this.version}`;
 	}
 
 	/**
-	 * Refreshes all non-static values of a single CC from this node.
+	 * Rediscovers all capabilities of a single CC on this node and all endpoints.
+	 * This can be considered a more targeted variant of `refreshInfo`.
+	 *
 	 * WARNING: It is not recommended to await this method!
 	 */
-	private async refreshCCValues(cc: CommandClasses): Promise<void> {
+	public async interviewCC(cc: CommandClasses): Promise<void> {
+		const endpoints = this.getAllEndpoints();
+		// Interview the node itself last
+		endpoints.push(endpoints.shift()!);
+		for (const endpoint of endpoints) {
+			const instance = endpoint.createCCInstanceUnsafe(cc);
+			if (instance) {
+				try {
+					await instance.interview();
+				} catch (e) {
+					this.driver.controllerLog.logNode(
+						this.id,
+						`failed to interview CC ${getCCName(cc)}, endpoint ${
+							endpoint.index
+						}: ${e.message}`,
+						"error",
+					);
+				}
+			}
+		}
+	}
+
+	/**
+	 * Refreshes all non-static values of a single CC from this node (all endpoints).
+	 * WARNING: It is not recommended to await this method!
+	 */
+	public async refreshCCValues(cc: CommandClasses): Promise<void> {
 		for (const endpoint of this.getAllEndpoints()) {
 			const instance = endpoint.createCCInstanceUnsafe(cc);
 			if (instance) {
-				// Don't do a complete interview, only dynamic values
 				try {
-					await instance.interview(false);
+					await instance.refreshValues();
 				} catch (e) {
 					this.driver.controllerLog.logNode(
 						this.id,
@@ -1637,7 +1674,7 @@ version:               ${this.version}`;
 	}
 
 	/**
-	 * Refreshes all non-static values from this node.
+	 * Refreshes all non-static values from this node's actuator and sensor CCs.
 	 * WARNING: It is not recommended to await this method!
 	 */
 	public async refreshValues(): Promise<void> {
@@ -1650,9 +1687,8 @@ version:               ${this.version}`;
 				) {
 					continue;
 				}
-				// Don't do a complete interview, only dynamic values
 				try {
-					await cc.interview(false);
+					await cc.refreshValues();
 				} catch (e) {
 					this.driver.controllerLog.logNode(
 						this.id,
@@ -1825,6 +1861,8 @@ version:               ${this.version}`;
 			return this.handleFirmwareUpdateGet(command);
 		} else if (command instanceof FirmwareUpdateMetaDataCCStatusReport) {
 			return this.handleFirmwareUpdateStatusReport(command);
+		} else if (command instanceof EntryControlCCNotification) {
+			return this.handleEntryControlNotification(command);
 		}
 
 		// Ignore all commands that don't need to be handled
@@ -1943,6 +1981,7 @@ version:               ${this.version}`;
 		  }
 		| undefined;
 	private lastCentralSceneNotificationSequenceNumber: number | undefined;
+	private centralSceneForcedKeyUp = false;
 
 	/** Handles the receipt of a Central Scene notifification */
 	private handleCentralSceneNotification(
@@ -1963,16 +2002,16 @@ version:               ${this.version}`;
 		- A new Key Held Down notification MUST be sent every 200ms until the key is released.
 		- The Sequence Number field MUST be updated at each notification transmission.
 		- If not receiving a new Key Held Down notification within 400ms, a controlling node SHOULD use an adaptive timeout approach as described in 4.17.1:
-		A controller SHOULD apply an adaptive approach based on the reception of the Key Released Notification. 
-		Initially, the controller SHOULD time out if not receiving any Key Held Down Notification refresh after 
-		400ms and consider this to be a Key Up Notification. If, however, the controller subsequently receives a 
-		Key Released Notification, the controller SHOULD consider the sending node to be operating with the Slow 
+		A controller SHOULD apply an adaptive approach based on the reception of the Key Released Notification.
+		Initially, the controller SHOULD time out if not receiving any Key Held Down Notification refresh after
+		400ms and consider this to be a Key Up Notification. If, however, the controller subsequently receives a
+		Key Released Notification, the controller SHOULD consider the sending node to be operating with the Slow
 		Refresh capability enabled.
 
 		If the Slow Refresh field is true:
 		- A new Key Held Down notification MUST be sent every 55 seconds until the key is released.
 		- The Sequence Number field MUST be updated at each notification refresh.
-		- If not receiving a new Key Held Down notification within 60 seconds after the most recent Key Held Down 
+		- If not receiving a new Key Held Down notification within 60 seconds after the most recent Key Held Down
 		notification, a receiving node MUST respond as if it received a Key Release notification.
 		*/
 
@@ -1985,6 +2024,7 @@ version:               ${this.version}`;
 		};
 
 		const forceKeyUp = (): void => {
+			this.centralSceneForcedKeyUp = true;
 			// force key up event
 			setSceneValue(
 				this.centralSceneKeyHeldDownContext!.sceneNumber,
@@ -2007,15 +2047,21 @@ version:               ${this.version}`;
 
 		if (command.keyAttribute === CentralSceneKeys.KeyHeldDown) {
 			// Set or refresh timer to force a release of the key
+			this.centralSceneForcedKeyUp = false;
 			if (this.centralSceneKeyHeldDownContext) {
 				clearTimeout(this.centralSceneKeyHeldDownContext.timeout);
 			}
+			// If the node does not advertise support for the slow refresh capability, we might still be dealing with a
+			// slow refresh node. We use the stored value for fallback behavior
+			const slowRefresh =
+				command.slowRefresh ??
+				this.valueDB.getValue<boolean>(getSlowRefreshValueId());
 			this.centralSceneKeyHeldDownContext = {
 				sceneNumber: command.sceneNumber,
 				// Unref'ing long running timers allows the process to exit mid-timeout
 				timeout: setTimeout(
 					forceKeyUp,
-					command.slowRefresh ? 60000 : 400,
+					slowRefresh ? 60000 : 400,
 				).unref(),
 			};
 		} else if (command.keyAttribute === CentralSceneKeys.KeyReleased) {
@@ -2023,6 +2069,12 @@ version:               ${this.version}`;
 			if (this.centralSceneKeyHeldDownContext) {
 				clearTimeout(this.centralSceneKeyHeldDownContext.timeout);
 				this.centralSceneKeyHeldDownContext = undefined;
+			} else if (this.centralSceneForcedKeyUp) {
+				// If we timed out and the controller subsequently receives a Key Released Notification,
+				// we SHOULD consider the sending node to be operating with the Slow Refresh capability enabled.
+				this.valueDB.setValue(getSlowRefreshValueId(), true);
+				// Do not raise the duplicate event
+				return;
 			}
 		}
 
@@ -2380,12 +2432,13 @@ version:               ${this.version}`;
 				propertyKey = valueConfig.variableName;
 				allowIdleReset = valueConfig.idle;
 			} else {
-				this.emit(
-					"notification",
-					this,
-					valueConfig.label,
-					command.eventParameters,
-				);
+				this.emit("notification", this, CommandClasses.Notification, {
+					type: command.notificationType,
+					event: value,
+					label: notificationConfig.name,
+					eventLabel: valueConfig.label,
+					parameters: command.eventParameters,
+				});
 				return;
 			}
 
@@ -2700,7 +2753,7 @@ version:               ${this.version}`;
 			this.keepAwake = false;
 		} catch (e: unknown) {
 			if (
-				e instanceof ZWaveError &&
+				isZWaveError(e) &&
 				e.code === ZWaveErrorCodes.Controller_NodeTimeout
 			) {
 				throw new ZWaveError(
@@ -2922,7 +2975,7 @@ version:               ${this.version}`;
 			this.handleFirmwareUpdateStatusReport(report);
 		} catch (e: unknown) {
 			if (
-				e instanceof ZWaveError &&
+				isZWaveError(e) &&
 				e.code === ZWaveErrorCodes.Controller_NodeTimeout
 			) {
 				this.driver.controllerLog.logNode(
@@ -2945,6 +2998,40 @@ version:               ${this.version}`;
 		}
 	}
 
+	private recentEntryControlNotificationSequenceNumbers: number[] = [];
+	private handleEntryControlNotification(
+		command: EntryControlCCNotification,
+	): void {
+		if (
+			this.recentEntryControlNotificationSequenceNumbers.includes(
+				command.sequenceNumber,
+			)
+		) {
+			this.driver.controllerLog.logNode(
+				this.id,
+				`Received duplicate Entry Control Notification (sequence number ${command.sequenceNumber}), ignoring...`,
+				"warn",
+			);
+			return;
+		}
+
+		// Keep track of the last 5 sequence numbers
+		this.recentEntryControlNotificationSequenceNumbers.unshift(
+			command.sequenceNumber,
+		);
+		if (this.recentEntryControlNotificationSequenceNumbers.length > 5) {
+			this.recentEntryControlNotificationSequenceNumbers.pop();
+		}
+
+		// Notify listeners
+		this.emit(
+			"notification",
+			this,
+			CommandClasses["Entry Control"],
+			pick(command, ["eventType", "dataType", "eventData"]),
+		);
+	}
+
 	/**
 	 * @internal
 	 * Serializes this node in order to store static data in a cache
@@ -2952,10 +3039,7 @@ version:               ${this.version}`;
 	public serialize(): JSONObject {
 		const ret = {
 			id: this.id,
-			interviewStage:
-				this.interviewStage >= InterviewStage.RestartFromCache
-					? InterviewStage[InterviewStage.Complete]
-					: InterviewStage[this.interviewStage],
+			interviewStage: InterviewStage[this.interviewStage],
 			deviceClass: this.deviceClass && {
 				basic: this.deviceClass.basic.key,
 				generic: this.deviceClass.generic.key,
@@ -2965,10 +3049,15 @@ version:               ${this.version}`;
 			isListening: this.isListening,
 			isFrequentListening: this.isFrequentListening,
 			isRouting: this.isRouting,
-			maxBaudRate: this.maxBaudRate,
+			supportedDataRates: this.supportedDataRates,
+			protocolVersion: this.protocolVersion,
+			nodeType:
+				this.nodeType != undefined
+					? NodeType[this.nodeType]
+					: undefined,
+			supportsSecurity: this.supportsSecurity,
+			supportsBeaming: this.supportsBeaming,
 			isSecure: this.isSecure ?? unknownBoolean,
-			isBeaming: this.isBeaming,
-			version: this.version,
 			commandClasses: {} as JSONObject,
 		};
 		// Sort the CCs by their key before writing to the object
@@ -3004,6 +3093,11 @@ version:               ${this.version}`;
 				typeof obj.interviewStage === "number"
 					? obj.interviewStage
 					: InterviewStage[obj.interviewStage];
+
+			// Mark already-interviewed nodes as potentially ready
+			if (this.interviewStage === InterviewStage.Complete) {
+				this.readyMachine.send("RESTART_FROM_CACHE");
+			}
 		}
 		if (isObject(obj.deviceClass)) {
 			const { basic, generic, specific } = obj.deviceClass;
@@ -3029,18 +3123,42 @@ version:               ${this.version}`;
 			if (typeof obj[key] === type)
 				this[`_${key}` as keyof this] = obj[key];
 		};
+		const tryParseLegacy = (
+			keys: string[],
+			types: ("boolean" | "number" | "string")[],
+		): void => {
+			for (const key of keys) {
+				if (types.includes(typeof obj[key] as any)) {
+					this[`_${keys[0]}` as keyof this] = obj[key];
+					return;
+				}
+			}
+		};
 		tryParse("isListening", "boolean");
-		tryParse("isFrequentListening", "boolean");
+		tryParseLegacy(["isFrequentListening"], ["string", "boolean"]);
+		if ((this._isFrequentListening as any) === true) {
+			// fallback for legacy cache files
+			this._isFrequentListening = "1000ms";
+		}
 		tryParse("isRouting", "boolean");
-		tryParse("maxBaudRate", "number");
+		if (typeof obj.maxBaudRate === "number") {
+			this._supportedDataRates = [obj.maxBaudRate];
+		}
 		// isSecure may be boolean or "unknown"
 		tryParse("isSecure", "string");
 		tryParse("isSecure", "boolean");
-		tryParse("isBeaming", "boolean");
-		tryParse("version", "number");
-
-		// A node that can sleep should be assumed to be sleeping after resuming from cache
-		if (this.canSleep) this.markAsAsleep();
+		tryParse("supportsSecurity", "boolean");
+		tryParse("supportsBeaming", "boolean");
+		tryParseLegacy(["protocolVersion", "version"], ["number"]);
+		if (obj.nodeType in NodeType) {
+			this._nodeType = NodeType[obj.nodeType] as any;
+		}
+		if (
+			isArray(obj.supportedDataRates) &&
+			obj.supportedDataRates.every((r: unknown) => typeof r === "number")
+		) {
+			this._supportedDataRates = obj.supportedDataRates;
+		}
 
 		if (isArray(obj.neighbors)) {
 			// parse only valid node IDs

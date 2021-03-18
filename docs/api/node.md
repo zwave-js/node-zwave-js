@@ -104,6 +104,17 @@ Refreshes all non-static sensor and actuator values from this node. Although thi
 > [!WARNING]  
 > **DO NOT** use this method too frequently. Depending on the devices, this may generate a lot of traffic.
 
+### `refreshCCValues`
+
+```ts
+refreshCCValues(cc: CommandClasses): Promise<void>
+```
+
+Refreshes all non-static values from the given CC (all endpoints). Although this method returns a `Promise`, it should generally **not** be `await`ed, since the update may take a long time.
+
+> [!WARNING]  
+> **DO NOT** use this method too frequently. Depending on the devices, this may generate a lot of traffic.
+
 ### `getEndpoint`
 
 ```ts
@@ -153,7 +164,17 @@ refreshInfo(): Promise<void>
 
 Resets all information about this node and forces a fresh interview.
 
-**WARNING:** Take care NOT to call this method when the node is already being interviewed. Otherwise the node information may become inconsistent.
+> [!WARNING] Take care NOT to call this method when the node is already being interviewed. Otherwise the node information may become inconsistent.
+
+### `interviewCC`
+
+```ts
+interviewCC(cc: CommandClasses): Promise<void>
+```
+
+Rediscovers all capabilities of a single CC on this node and all endpoints. Although this method returns a `Promise`, it should generally **not** be `await`ed, since the update may take a long time.
+
+> [!NOTE] This method should only be used when necessary, for example when CC capabilities were not discovered correctly. It can be considered to be a more targeted version of `refreshInfo`.
 
 ### `beginFirmwareUpdate`
 
@@ -310,12 +331,6 @@ enum InterviewStage {
 	NodeInfo,
 
 	/**
-	 * This marks the beginning of re-interviews on application startup.
-	 * RestartFromCache and later stages will be serialized as "Complete" in the cache
-	 */
-	RestartFromCache,
-
-	/**
 	 * Information for all command classes has been queried.
 	 * This includes static information that is requested once as well as dynamic
 	 * information that is requested on every restart.
@@ -344,7 +359,7 @@ enum InterviewStage {
 ### `deviceClass`
 
 ```ts
-readonly deviceClass: DeviceClass
+readonly deviceClass: DeviceClass | undefined;
 ```
 
 This property returns the node's **DeviceClass**, which provides further information about the kind of device this node is.
@@ -402,10 +417,10 @@ readonly zwavePlusVersion: number | undefined
 
 Returns the version of the `Z-Wave+` Command Class this node supports. If the CC is supported, the value only exists **after** the node is ready.
 
-### `nodeType`
+### `zwavePlusNodeType`
 
 ```ts
-readonly nodeType: ZWavePlusNodeType | undefined
+readonly zwavePlusNodeType: ZWavePlusNodeType | undefined
 ```
 
 If the `Z-Wave+` Command Class is supported, this returns the `Z-Wave+` node type this device has, which is one of the following values:
@@ -419,10 +434,18 @@ enum ZWavePlusNodeType {
 }
 ```
 
-### `roleType`
+### `ready`
 
 ```ts
-readonly roleType: ZWavePlusRoleType | undefined
+readonly ready: boolean
+```
+
+Whether the node is ready to be used.
+
+### `zwavePlusRoleType`
+
+```ts
+readonly zwavePlusRoleType: ZWavePlusRoleType | undefined
 ```
 
 If the `Z-Wave+` Command Class is supported, this returns the `Z-Wave+` role type this device has, which is one of the following values:
@@ -445,58 +468,95 @@ enum ZWavePlusRoleType {
 ### `isListening`
 
 ```ts
-readonly isListening: boolean
+readonly isListening: boolean | undefined;
 ```
 
-Whether this node is a listening node.
+Whether this node is always listening.
 
 ### `isFrequentListening`
 
 ```ts
-readonly isFrequentListening: boolean
+readonly isFrequentListening: false | "250ms" | "1000ms" | undefined;
 ```
 
-Whether this node is a frequent listening node.
+Indicates the wakeup interval if this node is a FLiRS node. `false` if it isn't.
+
+### `canSleep`
+
+```ts
+readonly canSleep: boolean | undefined;
+```
+
+Whether this node can sleep. If this is the case it must be expected to be asleep most of the time.
 
 ### `isRouting`
 
 ```ts
-readonly isRouting: boolean
+readonly isRouting: boolean | undefined;
 ```
 
-Whether this node is a routing node.
+Whether the node supports routing/forwarding messages. If both this property and `isListening` are true, it can be assumed that the node **will** route messages.
 
-### `maxBaudRate`
+### `supportedDataRates`
 
 ```ts
-readonly maxBaudRate: number
+readonly supportedDataRates: readonly number[] | undefined;
 ```
 
-The baud rate used to communicate with this node. Possible values are `9.6k`, `40k` and `100k`.
+A list of data rates (in bits per second) this node supports. Possible values are `9600`, `40000` and `100000`.
+
+### `maxDataRate`
+
+```ts
+readonly maxDataRate: number
+```
+
+The maximum data rate this nodes supports.
+
+### `supportsSecurity`
+
+```ts
+readonly supportsSecurity: boolean | undefined;
+```
+
+Whether this node supports secure communication (S0 or S2).
+
+> [!WARNING] Nodes often report this incorrectly - do not blindly trust this value.
 
 ### `isSecure`
 
 ```ts
-readonly isSecure: boolean
+readonly isSecure: boolean | "unknown" | undefined;
 ```
 
 Whether this node is communicating securely with the controller.
 
-### `isBeaming`
+### `supportsBeaming`
 
 ```ts
-readonly isBeaming: boolean
+readonly supportsBeaming: boolean | undefined;
 ```
 
-Whether this node is a beaming node.
+Whether this node can issue wakeup beams to FLiRS nodes
 
-### `version`
+### `protocolVersion`
 
 ```ts
-readonly version: number
+readonly protocolVersion: ProtocolVersion | undefined
 ```
 
 The Z-Wave protocol version this node implements.
+
+<!-- #import ProtocolVersion from "zwave-js" -->
+
+```ts
+enum ProtocolVersion {
+	"unknown" = 0,
+	"2.0" = 1,
+	"4.2x / 5.0x" = 2,
+	"4.5x / 6.0x" = 3,
+}
+```
 
 ### `firmwareVersion`
 
@@ -563,7 +623,7 @@ A non-sleeping node has stopped responding or just started responding again. The
 
 ### `"interview completed"`
 
-The interview process for this node was completed. The node is passed as the single argument to the callback:
+The initial interview process for this node was completed. The node is passed as the single argument to the callback:
 
 ```ts
 (node: ZWaveNode) => void
@@ -599,7 +659,11 @@ interface NodeInterviewFailedEventArgs {
 
 ### `"ready"`
 
-This is emitted during the interview process when enough information about the node is known that it can safely be used. The node is passed as the single argument to the callback:
+This is emitted when enough information about the node is known that it can safely be used. This includes protocol information and supported/controlled CCs.
+
+The driver will also try to identify the node, its CC versions, endpoints, capabilities for each CC, etc. However, this **does not** mean that **all** this information is known to the driver due to potential timeouts, lost messages and/or unresponsive nodes during the interview. Therefore, the driver will do its best to work with what it has.
+
+The node is passed as the single argument to the callback:
 
 ```ts
 (node: ZWaveNode) => void
@@ -608,7 +672,7 @@ This is emitted during the interview process when enough information about the n
 There are two situations when this event is emitted:
 
 1. The interview of a node is completed for the first time ever.
-2. The driver begins a partial interview of a node that has previously been interviewed completely.
+2. The node that has previously been interviewed completely and it either responds or is asleep.
 
 > [!NOTE]
 > This event does not imply that the node is currently awake or will respond to requests.
@@ -661,14 +725,80 @@ The event argument has the shape of [`TranslatedValueID`](api/valueid.md) with o
 
 ### `"notification"`
 
-The node has sent a notification event using the `Notification` command class. The callback signature is as follows:
+This event serves a similar purpose as the `"value notification"`, but is used for more complex CC-specific notifications.
+The base callback signature has the following shape:
 
 ```ts
-(node: ZWaveNode, notificationLabel: string, parameters?: Buffer | Duration | Record<string, number>) => void;
+type ZWaveNotificationCallback = (
+	node: ZWaveNode,
+	ccId: CommandClasses,
+	args: Record<string, unknown>,
+): void;
 ```
 
 where
 
 -   `node` is the current node instance
--   `notificationLabel` is a string representing the notification type (e.g. `"Home security"`)
--   `parameters` _(optional)_ depends on the type of the notification. It may be a `Duration`, a dictionary or a raw Buffer. Details can be found in the Z-Wave specifications.
+-   `ccId` is the identifier for the CC which raised this event
+-   `args` is a CC-specific argument object
+
+The CCs that use this event bring specialized versions of the callback and arguments.
+
+#### `Entry Control CC`
+
+uses the following signature
+
+<!-- #import ZWaveNotificationCallbackParams_EntryControlCC from "zwave-js" -->
+
+```ts
+type ZWaveNotificationCallbackParams_EntryControlCC = [
+	node: ZWaveNode,
+	ccId: typeof CommandClasses["Entry Control"],
+	args: ZWaveNotificationCallbackArgs_EntryControlCC,
+];
+```
+
+where the argument object has the type
+
+<!-- #import ZWaveNotificationCallbackArgs_EntryControlCC from "zwave-js" -->
+
+```ts
+interface ZWaveNotificationCallbackArgs_EntryControlCC {
+	eventType: EntryControlEventTypes;
+	dataType: EntryControlDataTypes;
+	eventData?: Buffer | string;
+}
+```
+
+#### `Notification CC`
+
+uses the following signature
+
+<!-- #import ZWaveNotificationCallbackParams_NotificationCC from "zwave-js" -->
+
+```ts
+type ZWaveNotificationCallbackParams_NotificationCC = [
+	node: ZWaveNode,
+	ccId: CommandClasses.Notification,
+	args: ZWaveNotificationCallbackArgs_NotificationCC,
+];
+```
+
+where the argument object has the type
+
+<!-- #import ZWaveNotificationCallbackArgs_NotificationCC from "zwave-js" -->
+
+```ts
+interface ZWaveNotificationCallbackArgs_NotificationCC {
+	/** The numeric identifier for the notification type */
+	type: number;
+	/** The human-readable label for the notification type */
+	label: string;
+	/** The numeric identifier for the notification event */
+	event: number;
+	/** The human-readable label for the notification event */
+	eventLabel: string;
+	/** Additional information related to the event */
+	parameters?: NotificationCCReport["eventParameters"];
+}
+```

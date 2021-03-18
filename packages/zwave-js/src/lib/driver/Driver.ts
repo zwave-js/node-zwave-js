@@ -6,6 +6,7 @@ import {
 	deserializeCacheValue,
 	Duration,
 	highResTimestamp,
+	isZWaveError,
 	LogConfig,
 	SecurityManager,
 	serializeCacheValue,
@@ -732,7 +733,7 @@ export class Driver extends EventEmitter {
 			} catch (e: unknown) {
 				let message: string;
 				if (
-					e instanceof ZWaveError &&
+					isZWaveError(e) &&
 					e.code === ZWaveErrorCodes.Controller_MessageDropped
 				) {
 					message = `Failed to initialize the driver, no response from the controller. Are you sure this is a Z-Wave controller?`;
@@ -850,12 +851,28 @@ export class Driver extends EventEmitter {
 				this._controller.ownNodeId!,
 			)!;
 			await this.interviewNode(controllerNode);
+
 			// Then do all the nodes in parallel
 			for (const node of this._controller.nodes.values()) {
-				if (node.id === this._controller.ownNodeId) continue;
-				// don't await the interview, because it may take a very long time
-				// if a node is asleep
-				void this.interviewNode(node);
+				if (node.id === this._controller.ownNodeId) {
+					// The controller is always alive
+					node.markAsAlive();
+					continue;
+				} else if (node.canSleep) {
+					// A node that can sleep should be assumed to be sleeping after resuming from cache
+					node.markAsAsleep();
+				}
+
+				// Continue the interview if necessary. If that is not necessary, at least
+				// determine the node's status
+				if (node.interviewStage < InterviewStage.Complete) {
+					// don't await the interview, because it may take a very long time
+					// if a node is asleep
+					void this.interviewNode(node);
+				} else if (node.isListening || node.isFrequentListening) {
+					// Ping non-sleeping nodes to determine their status
+					void node.ping();
+				}
 			}
 		}
 	}
@@ -871,7 +888,7 @@ export class Driver extends EventEmitter {
 	 */
 	public async interviewNode(node: ZWaveNode): Promise<void> {
 		if (node.interviewStage === InterviewStage.Complete) {
-			node.interviewStage = InterviewStage.RestartFromCache;
+			return;
 		}
 
 		// Avoid having multiple restart timeouts active
@@ -944,7 +961,7 @@ export class Driver extends EventEmitter {
 				}
 			}
 		} catch (e: unknown) {
-			if (e instanceof ZWaveError) {
+			if (isZWaveError(e)) {
 				if (
 					e.code === ZWaveErrorCodes.Driver_NotReady ||
 					e.code === ZWaveErrorCodes.Controller_NodeRemoved
@@ -1064,6 +1081,9 @@ export class Driver extends EventEmitter {
 		this._nodesReady.add(node.id);
 		this.controllerLog.logNode(node.id, "The node is ready to be used");
 
+		// Regularly query listening nodes for updated values
+		node.scheduleManualValueRefreshes();
+
 		this.checkAllNodesReady();
 	}
 
@@ -1118,7 +1138,7 @@ export class Driver extends EventEmitter {
 			// but only if the node is not getting replaced, because the removal will interfere with
 			// bootstrapping the new node
 			this.controller
-				.removeNodeFromAllAssocations(node.id)
+				.removeNodeFromAllAssociations(node.id)
 				.catch((err) => {
 					this.driverLog.print(
 						`Failed to remove node ${node.id} from all associations: ${err.message}`,
@@ -1458,7 +1478,7 @@ export class Driver extends EventEmitter {
 		e: Error,
 		data: Buffer,
 	): MessageHeaders | undefined {
-		if (e instanceof ZWaveError) {
+		if (isZWaveError(e)) {
 			switch (e.code) {
 				case ZWaveErrorCodes.PacketFormat_Invalid:
 				case ZWaveErrorCodes.PacketFormat_Checksum:
@@ -1622,7 +1642,7 @@ It is probably asleep, moving its messages to the wakeup queue.`,
 					try {
 						command.mergePartialCCs(session);
 					} catch (e: unknown) {
-						if (e instanceof ZWaveError) {
+						if (isZWaveError(e)) {
 							switch (e.code) {
 								case ZWaveErrorCodes.Deserialization_NotImplemented:
 								case ZWaveErrorCodes.CC_NotImplemented:
@@ -1679,7 +1699,7 @@ It is probably asleep, moving its messages to the wakeup queue.`,
 				await this.handleRequest(msg);
 			} catch (e) {
 				if (
-					e instanceof ZWaveError &&
+					isZWaveError(e) &&
 					e.code === ZWaveErrorCodes.Driver_NotReady
 				) {
 					this.driverLog.print(
@@ -1916,6 +1936,15 @@ ${handlers.length} left`,
 
 					// Tell the send thread that we received a NIF from the node
 					this.sendThread.send({ type: "NIF", nodeId: node.id });
+
+					if (
+						node.canSleep &&
+						node.supportsCC(CommandClasses["Wake Up"])
+					) {
+						// In case this is a sleeping node and there are no messages in the queue, the node may go back to sleep very soon
+						this.debounceSendNodeToSleep(node);
+					}
+
 					return;
 				}
 			}
@@ -2138,14 +2167,18 @@ ${handlers.length} left`,
 		try {
 			const ret = await promise;
 			if (expirationTimeout) clearTimeout(expirationTimeout);
+			// Track and potentially update the status of the node when communication succeeds
 			if (node) {
 				if (node.canSleep) {
-					// If the node is not meant to be kept awake, try to send it back to sleep
-					if (!node.keepAwake) {
-						this.debounceSendNodeToSleep(node);
+					// Do not update the node status when we just responded to a nonce request
+					if (options.priority !== MessagePriority.Handshake) {
+						// If the node is not meant to be kept awake, try to send it back to sleep
+						if (!node.keepAwake) {
+							this.debounceSendNodeToSleep(node);
+						}
+						// The node must be awake because it answered
+						node.markAsAwake();
 					}
-					// The node must be awake because it answered
-					node.markAsAwake();
 				} else if (node.status !== NodeStatus.Alive) {
 					// The node status was unknown or dead - in either case it must be alive because it answered
 					node.markAsAlive();
@@ -2153,7 +2186,7 @@ ${handlers.length} left`,
 			}
 			return ret;
 		} catch (e) {
-			if (e instanceof ZWaveError) {
+			if (isZWaveError(e)) {
 				if (
 					// If a controller command failed (that is not SendData), pass the response/callback through
 					(e.code === ZWaveErrorCodes.Controller_ResponseNOK ||
@@ -2211,7 +2244,7 @@ ${handlers.length} left`,
 		} catch (e: unknown) {
 			// A timeout always has to be expected. In this case return nothing.
 			if (
-				e instanceof ZWaveError &&
+				isZWaveError(e) &&
 				e.code === ZWaveErrorCodes.Controller_NodeTimeout
 			) {
 				if (command.isSinglecast()) {

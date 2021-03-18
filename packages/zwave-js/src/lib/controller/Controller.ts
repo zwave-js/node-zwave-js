@@ -3,6 +3,7 @@ import {
 	CommandClasses,
 	indexDBsByNode,
 	isTransmissionError,
+	isZWaveError,
 	NODE_ID_BROADCAST,
 	ValueDB,
 	ZWaveError,
@@ -818,7 +819,7 @@ export class ZWaveController extends EventEmitter {
 				node.isSecure = true;
 			} catch (e: unknown) {
 				let errorMessage = `Security bootstrapping failed, the node is included insecurely`;
-				if (!(e instanceof ZWaveError)) {
+				if (!isZWaveError(e)) {
 					errorMessage += `: ${e as any}`;
 				} else if (
 					e.code === ZWaveErrorCodes.Controller_MessageExpired
@@ -895,11 +896,16 @@ export class ZWaveController extends EventEmitter {
 
 		if (node.supportsCC(CommandClasses["Wake Up"])) {
 			try {
-				// Query the version, so we can setup the wakeup destination correctly
-				const supportedVersion = await node.commandClasses.Version.getCCVersion(
-					CommandClasses["Wake Up"],
-				);
-				if (supportedVersion != undefined && supportedVersion > 0) {
+				// Query the version, so we can setup the wakeup destination correctly.
+				let supportedVersion: number | undefined;
+				if (node.supportsCC(CommandClasses.Version)) {
+					supportedVersion = await node.commandClasses.Version.getCCVersion(
+						CommandClasses["Wake Up"],
+					);
+				}
+				// If querying the version can't be done, we should at least assume that it supports V1
+				supportedVersion ??= 1;
+				if (supportedVersion > 0) {
 					node.addCC(CommandClasses["Wake Up"], {
 						version: supportedVersion,
 					});
@@ -2028,7 +2034,7 @@ ${associatedNodes.join(", ")}`,
 	 * Removes a node from all other nodes' associations
 	 * WARNING: It is not recommended to await this method
 	 */
-	public async removeNodeFromAllAssocations(nodeId: number): Promise<void> {
+	public async removeNodeFromAllAssociations(nodeId: number): Promise<void> {
 		// Create all async tasks
 		const tasks = [...this.nodes.values()]
 			.filter((node) => node.id !== this._ownNodeId && node.id !== nodeId)

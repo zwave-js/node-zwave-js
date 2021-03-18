@@ -1,4 +1,4 @@
-import { ZWaveError, ZWaveErrorCodes } from "@zwave-js/core";
+import { isZWaveError, ZWaveError, ZWaveErrorCodes } from "@zwave-js/core";
 import { JSONObject, num2hex } from "@zwave-js/shared";
 import { entries } from "alcalzone-shared/objects";
 import { isObject } from "alcalzone-shared/typeguards";
@@ -39,7 +39,7 @@ export async function loadMetersInternal(): Promise<MeterMap> {
 		}
 		return meters;
 	} catch (e: unknown) {
-		if (e instanceof ZWaveError) {
+		if (isZWaveError(e)) {
 			throw e;
 		} else {
 			throwInvalidConfig("meters");
