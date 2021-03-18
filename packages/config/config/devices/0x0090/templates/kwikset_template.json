@@ -295,18 +295,6 @@
 			"notificationEvent": 11 // Lock state: Lock Jammed
 		}
 	},
-	"alarm_map_keypad_unlocked": {
-		"from": {
-			"alarmType": 16 // Keypad Unlock
-		},
-		"to": {
-			"notificationType": 6, // Access Control
-			"notificationEvent": 6, // Keypad unlock operation
-			"eventParameters": {
-				"userId": "alarmLevel"
-			}
-		}
-	},
 	"alarm_map_keypad_lock": {
 		"from": {
 			"alarmType": 18 // Keypad Lock

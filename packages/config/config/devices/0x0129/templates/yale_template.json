@@ -338,8 +338,8 @@
 			"alarmLevel": 1
 		},
 		"to": {
-			"notificationType": 6,
-			"notificationEvent": 16
+			"notificationType": 6, // Access Control
+			"notificationEvent": 19 // Manually enter user access code exceeds code limit
 		}
 	},
 	"alarm_map_manual_unlock": {
@@ -348,8 +348,8 @@
 			"alarmLevel": 1
 		},
 		"to": {
-			"notificationType": 6,
-			"notificationEvent": 2
+			"notificationType": 6, // Access Control
+			"notificationEvent": 2 // Manual unlock operation
 		}
 	},
 	"alarm_map_rf_unlock": {
@@ -358,8 +358,8 @@
 			"alarmLevel": 1
 		},
 		"to": {
-			"notificationType": 6,
-			"notificationEvent": 4
+			"notificationType": 6, // Access Control
+			"notificationEvent": 4 // RF unlock operation
 		}
 	},
 	"alarm_map_keypad_unlock": {
@@ -367,8 +367,8 @@
 			"alarmType": 19
 		},
 		"to": {
-			"notificationType": 6,
-			"notificationEvent": 6
+			"notificationType": 6, // Access Control
+			"notificationEvent": 6 // Keypad unlock operation
 		}
 	},
 	"alarm_map_manual_lock": {
@@ -376,8 +376,8 @@
 			"alarmType": 21
 		},
 		"to": {
-			"notificationType": 6,
-			"notificationEvent": 1
+			"notificationType": 6, // Access Control
+			"notificationEvent": 1 // Manual lock operation
 		}
 	},
 	"alarm_map_rf_lock": {
@@ -386,8 +386,8 @@
 			"alarmLevel": 1
 		},
 		"to": {
-			"notificationType": 6,
-			"notificationEvent": 3
+			"notificationType": 6, // Access Control
+			"notificationEvent": 3 // RF lock operation
 		}
 	},
 	"alarm_map_keypad_lock": {
@@ -395,8 +395,8 @@
 			"alarmType": 18
 		},
 		"to": {
-			"notificationType": 6,
-			"notificationEvent": 5
+			"notificationType": 6, // Access Control
+			"notificationEvent": 5 // Keypad lock operation
 		}
 	},
 	"alarm_map_deadbolt_jammed": {
@@ -404,17 +404,8 @@
 			"alarmType": 9
 		},
 		"to": {
-			"notificationType": 6,
-			"notificationEvent": 11
-		}
-	},
-	"alarm_map_non_access": {
-		"from": {
-			"alarmType": 38
-		},
-		"to": {
-			"notificationType": 6,
-			"notificationEvent": 254
+			"notificationType": 6, // Access Control
+			"notificationEvent": 11 // Lock jammed
 		}
 	},
 	"alarm_map_low_battery": {
@@ -422,10 +413,10 @@
 			"alarmType": 167
 		},
 		"to": {
-			"notificationType": 6,
-			"notificationEvent": 10,
+			"notificationType": 8, // Power Management
+			"notificationEvent": 10, // Replace battery soon
 			"eventParameters": {
-				"userId": "alarmLevel"
+				"batteryLevel": "alarmLevel"
 			}
 		}
 	},
@@ -435,8 +426,8 @@
 			"alarmLevel": 1
 		},
 		"to": {
-			"notificationType": 6,
-			"notificationEvent": 9
+			"notificationType": 6, // Access Control
+			"notificationEvent": 9 // Auto lock locked operation
 		}
 	}
 }

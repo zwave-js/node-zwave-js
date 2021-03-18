@@ -83,9 +83,6 @@
 				"$import": "templates/yale_template.json#alarm_map_deadbolt_jammed"
 			},
 			{
-				"$import": "templates/yale_template.json#alarm_map_non_access"
-			},
-			{
 				"$import": "templates/yale_template.json#alarm_map_low_battery"
 			},
 			{
