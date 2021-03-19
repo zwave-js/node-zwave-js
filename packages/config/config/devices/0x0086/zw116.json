@@ -12,25 +12,35 @@
 		},
 		{
 			"productType": "0x0003",
-			"productId": "0x0074"
+			"productId": "0x0074",
+			"zwaveAllianceId": 2289
 		},
 		{
 			"productType": "0x0103",
-			"productId": "0x0074"
+			"productId": "0x0074",
+			"zwaveAllianceId": 2208
 		},
 		{
 			"productType": "0x0203",
-			"productId": "0x0074"
+			"productId": "0x0074",
+			"zwaveAllianceId": 2288
 		}
 	],
 	"firmwareVersion": {
 		"min": "0.0",
 		"max": "255.255"
 	},
+	"metadata": {
+		"inclusion": "Turn the primary controller of Z-Wave network into inclusion mode, short press the product’s Action button that you can find on the product's housing",
+		"exclusion": "Turn the primary controller of Z-Wave network into exclusion mode, short press the product’s Action button that you can find on the product's housing",
+		"reset": "Press and hold the Action button that you can find on the product's housing for 20 seconds and then release. This procedure should only be used when the primary controller is inoperable",
+		"manual": "https://Products.Z-WaveAlliance.org/ProductManual/File?folder=&amp;filename=Manuals/2289/Nano Switch manual.pdf"
+	},
 	"supportsZWavePlus": true,
 	"paramInformation": {
 		"3": {
 			"label": "Current Overload Protection",
+			"description": "Output load will be closed after 30 seconds if the current exceeds (US: 15.5A, AU or EU: 10.5A)",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 1,
@@ -51,6 +61,7 @@
 		},
 		"4": {
 			"label": "Overheat protection",
+			"description": "Output load will be closed after 30 seconds if the temperature inside the product exceeds 100C",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 1,
@@ -68,18 +79,6 @@
 					"value": 1
 				}
 			]
-		},
-		"9": {
-			"label": "Instant Energy Autosend Interval",
-			"unit": "minutes",
-			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 255,
-			"defaultValue": 0,
-			"unsigned": true,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
 		},
 		"20": {
 			"label": "Output status after re-power",
@@ -187,15 +186,15 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "Energy mode.",
+					"label": "The LED will follow the status",
 					"value": 0
 				},
 				{
-					"label": "Momentary indicate mode",
+					"label": "Momentary indicate mode (5 seconds)",
 					"value": 1
 				},
 				{
-					"label": "Night light mode. The LED will remain ON state",
+					"label": "Night light mode",
 					"value": 2
 				}
 			]
@@ -256,6 +255,7 @@
 		"91": {
 			"label": "Set the threshold value of wattage",
 			"description": "Threshold change in wattage (in terms of wattage) to induce an automatic report",
+			"unit": "watts",
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 60000,
@@ -268,6 +268,7 @@
 		"92": {
 			"label": "Set the threshold value of percent power",
 			"description": "Threshold percentage change in wattage for an automatic report",
+			"unit": "%",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 100,
@@ -473,7 +474,7 @@
 			]
 		},
 		"122": {
-			"label": "Control destination of external switch",
+			"label": "Control destination of external switch S1",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 3,
@@ -483,15 +484,68 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "control the output loads of itself",
+					"label": "Control the output loads of itself",
 					"value": 1
 				},
 				{
-					"label": "control the other nodes",
+					"label": "Control other nodes",
 					"value": 2
 				},
 				{
-					"label": "control the output loads of itself and other nodes",
+					"label": "Control the output loads of itself and other nodes",
+					"value": 3
+				}
+			]
+		},
+		"123": {
+			"label": "Control destination of external switch S2",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 3,
+			"defaultValue": 3,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Control the output loads of itself",
+					"value": 1
+				},
+				{
+					"label": "Control other nodes",
+					"value": 2
+				},
+				{
+					"label": "Control the output loads of itself and other nodes",
+					"value": 3
+				}
+			]
+		},
+		"247": {
+			"label": "S1/S2 when the Switch mode is 3-way switch",
+			"description": "Set the working way for S1/S2 when the Switch mode is 3-way switch mode",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 3,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "S1 and S2 is a toggle switch",
+					"value": 0
+				},
+				{
+					"label": "S1 is an On/Off switch",
+					"value": 1
+				},
+				{
+					"label": "S2 is an On/Off switch",
+					"value": 2
+				},
+				{
+					"label": "S1 and S2 are an On/Off switch",
 					"value": 3
 				}
 			]
@@ -523,7 +577,7 @@
 			"maxValue": 1431655765,
 			"defaultValue": 0,
 			"readOnly": false,
-			"writeOnly": false,
+			"writeOnly": true,
 			"allowManualEntry": false,
 			"options": [
 				{
