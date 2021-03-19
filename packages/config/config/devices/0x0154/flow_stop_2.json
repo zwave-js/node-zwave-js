@@ -1,25 +1,25 @@
 // Popp & Co Flow Stop
 // Version 2
 {
-  "manufacturer": "Popp & Co",
-  "manufacturerId": "0x0154",
-  "label": "Flow Stop 2",
-  "devices": [
-    {
-      "productType": "0x0005",
-      "productId": "0x0003"
-    }
-  ],
-  "firmwareVersion": {
-    "min": "0.0",
-    "max": "255.255"
-  },
-  "paramInformation": {
-    "0": {
-      "$import": "templates/popp_templates.json#led_status"
-    },
-    "1": {
-      "$import": "templates/popp_templates.json#shut_off_controller_behavior"
-    }
-  }
+	"manufacturer": "Popp & Co",
+	"manufacturerId": "0x0154",
+	"label": "Flow Stop 2",
+	"devices": [
+		{
+			"productType": "0x0005",
+			"productId": "0x0003"
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"paramInformation": {
+		"0": {
+			"$import": "templates/popp_templates.json#led_status"
+		},
+		"1": {
+			"$import": "templates/popp_templates.json#shut_off_controller_behavior"
+		}
+	}
 }
