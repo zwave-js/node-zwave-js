@@ -16,10 +16,10 @@
 	},
 	"paramInformation": {
 		"0": {
-			"$import": "templates/popp_templates.json#led_status"
+			"$import": "templates/popp_template.json#led_status"
 		},
 		"1": {
-			"$import": "templates/popp_templates.json#shut_off_controller_behavior"
+			"$import": "templates/popp_template.json#shut_off_controller_behavior"
 		}
 	}
 }
