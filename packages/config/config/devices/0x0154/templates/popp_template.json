@@ -1,0 +1,22 @@
+{
+  "led_status": {
+    "label": "LED Status",
+    "valueSize": 1,
+    "minValue": 0,
+    "maxValue": 1,
+    "defaultValue": 0,
+    "readOnly": false,
+    "writeOnly": false,
+    "allowManualEntry": true
+  },
+  "shut_off_controller_behavior": {
+    "label": "Shut-Off Controller Behavior",
+    "valueSize": 1,
+    "minValue": 0,
+    "maxValue": 4,
+    "defaultValue": 0,
+    "readOnly": false,
+    "writeOnly": false,
+    "allowManualEntry": true
+  }
+}
