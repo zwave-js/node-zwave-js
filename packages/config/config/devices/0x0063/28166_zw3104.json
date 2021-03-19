@@ -61,8 +61,7 @@
 		},
 		"6": {
 			"$if": "firmwareVersion >= 5.21",
-			"label": "Light Level Change Mode",
-			"description": "Controls whether to fade to the next light level or jump straight there.",
+			"label": "Smooth Level Changes",
 			"valueSize": 1,
 			"unsigned": true,
 			"minValue": 0,
@@ -73,11 +72,11 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "Smooth Level Changes",
+					"label": "Enabled",
 					"value": 1
 				},
 				{
-					"label": "Instant Level Changes",
+					"label": "Disabled",
 					"value": 0
 				}
 			]
