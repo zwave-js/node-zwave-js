@@ -3,8 +3,8 @@
 {
 	"manufacturer": "Popp & Co",
 	"manufacturerId": "0x0154",
-	"label": "Flow Stop",
-	"description": "",
+	"label": "POPE009501",
+	"description": "Flow Stop",
 	"devices": [
 		{
 			"productType": "0x0003",
