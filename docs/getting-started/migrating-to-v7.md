@@ -31,3 +31,22 @@ This event serves a similar purpose as the `"value notification"` event (which w
 Since the original implementation, the need for a more versatile CC-specific notification event has arisen. Therefore we decided to rework this event and decouple it from the `Notification CC`. As a result, the event callback now indicates which CC raised the event and its arguments are moved into a single object parameter.
 
 See the [`"notification"` event](../api/node#quotnotificationquot) docs for a detailed description what changed.
+
+## `Endpoint` constructor changed
+
+The `Endpoint` needed to be modified in order to include the device class information. To be in line with the existing `ZWaveNode` constructor, the additional argument was added **before** the last one:
+
+```diff
+	public constructor(
+		/** The id of the node this endpoint belongs to */
+		public readonly nodeId: number,
+		/** The driver instance this endpoint belongs to */
+		protected readonly driver: Driver,
+		/** The index of this endpoint. 0 for the root device, 1+ otherwise */
+		public readonly index: number,
++		deviceClass?: DeviceClass,
+		supportedCCs?: CommandClasses[],
+	)
+```
+
+Unless you need the constructor outside of `zwave-js` for some obscure reason, this should not affect you.

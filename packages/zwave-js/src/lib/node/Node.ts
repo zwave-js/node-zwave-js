@@ -74,7 +74,10 @@ import {
 	getProductIdValueId,
 	getProductTypeValueId,
 } from "../commandclass/ManufacturerSpecificCC";
-import { getEndpointCCsValueId } from "../commandclass/MultiChannelCC";
+import {
+	getEndpointCCsValueId,
+	getEndpointDeviceClassValueId,
+} from "../commandclass/MultiChannelCC";
 import {
 	getNodeLocationValueId,
 	getNodeNameValueId,
@@ -181,7 +184,7 @@ export class ZWaveNode extends Endpoint {
 		valueDB?: ValueDB,
 	) {
 		// Define this node's intrinsic endpoint as the root device (0)
-		super(id, driver, 0);
+		super(id, driver, 0, deviceClass, supportedCCs);
 
 		this._valueDB =
 			valueDB ?? new ValueDB(id, driver.valueDB!, driver.metadataDB!);
@@ -195,18 +198,7 @@ export class ZWaveNode extends Endpoint {
 			this._valueDB.on(event, this.translateValueEvent.bind(this, event));
 		}
 
-		this._deviceClass = deviceClass;
-		// Add mandatory CCs
-		if (deviceClass) {
-			for (const cc of deviceClass.mandatorySupportedCCs) {
-				this.addCC(cc, { isSupported: true });
-			}
-			for (const cc of deviceClass.mandatoryControlledCCs) {
-				this.addCC(cc, { isControlled: true });
-			}
-		}
-		// Add optional CCs
-		for (const cc of supportedCCs) this.addCC(cc, { isSupported: true });
+		// Add optional controlled CCs - endpoints don't have this
 		for (const cc of controlledCCs) this.addCC(cc, { isControlled: true });
 
 		// Create and hook up the status machine
@@ -438,11 +430,6 @@ export class ZWaveNode extends Endpoint {
 	 */
 	public get ready(): boolean {
 		return this._ready;
-	}
-
-	private _deviceClass: DeviceClass | undefined;
-	public get deviceClass(): DeviceClass | undefined {
-		return this._deviceClass;
 	}
 
 	private _isListening: boolean | undefined;
@@ -812,6 +799,28 @@ export class ZWaveNode extends Endpoint {
 		});
 	}
 
+	/** Returns the device class of an endpoint. Falls back to the node's device class if the information is not known. */
+	private getEndpointDeviceClass(index: number): DeviceClass | undefined {
+		const deviceClass = this.getValue<{
+			generic: number;
+			specific: number;
+		}>(
+			getEndpointDeviceClassValueId(
+				this.endpointsHaveIdenticalCapabilities ? 1 : index,
+			),
+		);
+		if (deviceClass && this._deviceClass) {
+			return new DeviceClass(
+				this.driver.configManager,
+				this._deviceClass.basic.key,
+				deviceClass.generic,
+				deviceClass.specific,
+			);
+		}
+		// fall back to the node's device class if it is known
+		return this._deviceClass;
+	}
+
 	private getEndpointCCs(index: number): CommandClasses[] | undefined {
 		return this.getValue(
 			getEndpointCCsValueId(
@@ -871,6 +880,7 @@ export class ZWaveNode extends Endpoint {
 					this.id,
 					this.driver,
 					index,
+					this.getEndpointDeviceClass(index),
 					this.getEndpointCCs(index),
 				),
 			);
@@ -2224,7 +2234,7 @@ protocol version:      ${this._protocolVersion}`;
 		let mappedTargetCC: CommandClass | undefined;
 		// Do not map the basic CC if the device config forbids it
 		if (!this._deviceConfig?.compat?.disableBasicMapping) {
-			switch (this.deviceClass?.generic.key) {
+			switch (sourceEndpoint.deviceClass?.generic.key) {
 				case 0x20: // Binary Sensor
 					mappedTargetCC = sourceEndpoint.createCCInstanceUnsafe(
 						CommandClasses["Binary Sensor"],
@@ -2273,6 +2283,7 @@ protocol version:      ${this._protocolVersion}`;
 			// Treat BasicCCSet as value events if desired
 			if (this._deviceConfig?.compat?.treatBasicSetAsEvent) {
 				this.driver.controllerLog.logNode(this.id, {
+					endpoint: command.endpointIndex,
 					message: "treating BasicCC Set as a value event",
 				});
 				this._valueDB.setValue(
@@ -2288,6 +2299,7 @@ protocol version:      ${this._protocolVersion}`;
 			// Some devices send their current state using `BasicCCSet`s to their associations
 			// instead of using reports. We still interpret them like reports
 			this.driver.controllerLog.logNode(this.id, {
+				endpoint: command.endpointIndex,
 				message: "treating BasicCC Set as a report",
 			});
 
