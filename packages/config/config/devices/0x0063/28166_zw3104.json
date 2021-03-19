@@ -72,12 +72,12 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "Enabled",
-					"value": 1
-				},
-				{
 					"label": "Disabled",
 					"value": 0
+				},
+				{
+					"label": "Enabled",
+					"value": 1
 				}
 			]
 		},
