@@ -18,14 +18,25 @@
 * Added support for `Entry Control CC`. It has been found that some entry control devices don't follow some of the strict rules regarding the data format. The validation can be turned off with the compat option `disableStrictEntryControlDataValidation`.
 * Implemented an API to re-interview a single CC on a node and its endpoints without repeating the entire node interview
 * The stack of `ZWaveError`s related to transmission errors now contain the call stack where the message was created instead of the internal state machine's stack
+* Added a compat option `alarmMapping` to map unstandardized V1 alarm values to standardized V2 notification events
+* Use the new compat option `alarmMapping` in Kwikset and Yale locks
+* Moved the `deviceClass` property from `ZWaveNode` to its base class `Endpoint` and consider the endpoint's device class where necessary
 
 ### Bugfixes
 * Changes to the logger configuration are now correctly applied dynamically
 * Changed how an error gets identified as a `ZWaveError` to avoid problems with duplicated dependencies
 * Writeonly parameters are no longer queried even if `Configuration CC` has version 3 or higher
+* Fall back to slow refresh behavior on `Central Scene CC V2` if a delayed key up is detected
+* Handle incorrectly zero-terminated strings in name reports of `Association Group Info CC`
+* Allow healing single nodes
 
 ### Config file changes
 * Add missing Sunricher device configs
+* Mark Alarm Sensor as not supported on FGBS001
+* Add Fakro ZWS230 chain actuator
+* Add RU version of ZW100 (FW 1.10)
+* Distinguish Popp Flow Stop valve versions 1 and 2
+* Add undocumented parameter 6 to ZW3104
 
 ### Changes under the hood
 * Added a missing callback function to the quick start example
