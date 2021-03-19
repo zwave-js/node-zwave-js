@@ -3141,14 +3141,12 @@ protocol version:      ${this._protocolVersion}`;
 			this._isFrequentListening = "1000ms";
 		}
 		tryParse("isRouting", "boolean");
-		if (typeof obj.maxBaudRate === "number") {
-			this._supportedDataRates = [obj.maxBaudRate];
-		}
 		// isSecure may be boolean or "unknown"
 		tryParse("isSecure", "string");
 		tryParse("isSecure", "boolean");
 		tryParse("supportsSecurity", "boolean");
 		tryParse("supportsBeaming", "boolean");
+		tryParseLegacy(["supportsBeaming", "isBeaming"], ["string"]);
 		tryParse("protocolVersion", "number");
 		if (!this._protocolVersion) {
 			// The legacy version field was off by 1
@@ -3158,6 +3156,9 @@ protocol version:      ${this._protocolVersion}`;
 		}
 		if (obj.nodeType in NodeType) {
 			this._nodeType = NodeType[obj.nodeType] as any;
+		}
+		if (typeof obj.maxBaudRate === "number") {
+			this._supportedDataRates = [obj.maxBaudRate];
 		}
 		if (
 			isArray(obj.supportedDataRates) &&
