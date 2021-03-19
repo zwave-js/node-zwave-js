@@ -51,6 +51,8 @@ A Z-Wave network needs to be reorganized (healed) from time to time. To do so, t
 
 The `healNode` method performs this step for a given node. The returned promise resolves to `true` if the process was completed, or `false` if it was unsuccessful.
 
+> [!ATTENTION] Healing a Z-Wave network causes a lot of traffic and can take very long. Degraded performance **must** be expected while a healing process is active.
+
 ### `beginHealingNetwork`
 
 ```ts

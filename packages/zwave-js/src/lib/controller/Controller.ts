@@ -1336,7 +1336,9 @@ export class ZWaveController extends EventEmitter {
 	private _healNetworkProgress = new Map<number, HealNodeStatus>();
 
 	/**
-	 * Requests all alive slave nodes to update their neighbor lists
+	 * Performs a healing process for all alive nodes in the network,
+	 * requesting updated neighbor lists and assigning fresh routes to
+	 * association targets.
 	 */
 	public beginHealingNetwork(): boolean {
 		// Don't start the process twice
@@ -1357,7 +1359,7 @@ export class ZWaveController extends EventEmitter {
 				(node.status === NodeStatus.Asleep &&
 					node.interviewStage === InterviewStage.ProtocolInfo)
 			) {
-				// Don't interview dead nodes
+				// Don't heal dead nodes
 				this.driver.controllerLog.logNode(
 					id,
 					`Skipping heal because the node is not responding.`,
@@ -1374,7 +1376,7 @@ export class ZWaveController extends EventEmitter {
 				.filter(([, status]) => status === "pending")
 				.map(async ([nodeId]) => {
 					// await the heal process for each node and treat errors as a non-successful heal
-					const result = await this.healNode(nodeId).catch(
+					const result = await this.healNodeInternal(nodeId).catch(
 						() => false,
 					);
 					if (!this._healNetworkActive) return;
@@ -1431,9 +1433,43 @@ export class ZWaveController extends EventEmitter {
 	}
 
 	/**
-	 * Performs the healing process for a node
+	 * Performs a healing process for a single alive node in the network,
+	 * updating the neighbor list and assigning fresh routes to
+	 * association targets.
+	 *
+	 * Returns `true` if the process succeeded, `false` otherwise.
 	 */
 	public async healNode(nodeId: number): Promise<boolean> {
+		// Don't start the process twice
+		if (this._healNetworkActive) return false;
+		this._healNetworkActive = true;
+
+		// Don't try to heal dead nodes
+		const node = this.nodes.getOrThrow(nodeId);
+		if (
+			// The node is known to be dead
+			node.status === NodeStatus.Dead ||
+			// The node is assumed asleep but has never been interviewed.
+			// It is most likely dead
+			(node.status === NodeStatus.Asleep &&
+				node.interviewStage === InterviewStage.ProtocolInfo)
+		) {
+			this.driver.controllerLog.logNode(
+				nodeId,
+				`Skipping heal because the node is not responding.`,
+			);
+			return false;
+		}
+
+		try {
+			this.driver.controllerLog.logNode(nodeId, `Healing node...`);
+			return await this.healNodeInternal(nodeId);
+		} finally {
+			this._healNetworkActive = false;
+		}
+	}
+
+	private async healNodeInternal(nodeId: number): Promise<boolean> {
 		// The healing process consists of four steps
 		// Each step is tried up to 5 times before the healing process is considered failed
 		const maxAttempts = 5;
