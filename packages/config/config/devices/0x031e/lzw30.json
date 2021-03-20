@@ -1,10 +1,10 @@
 // Inovelli LZW30
-// Black Series On/Off switch
+// Black Series On/Off Switch
 {
 	"manufacturer": "Inovelli",
 	"manufacturerId": "0x031e",
 	"label": "LZW30",
-	"description": "Black Series On/Off switch",
+	"description": "Black Series On/Off Switch",
 	"devices": [
 		{
 			"productType": "0x0004",
