@@ -73,7 +73,7 @@
 			"allowManualEntry": true
 		},
 		"4": {
-			"label": "Association Behaviour",
+			"label": "Association Behavior",
 			"valueSize": 1,
 			"minValue": 1,
 			"maxValue": 15,
