@@ -124,6 +124,11 @@
 				{
 					"label": "Pink",
 					"value": 234
+				},
+				{
+				"$if": "firmwareVersion >= 1.19",
+				"label": "White",
+				"value": 255
 				}
 			]
 		},
