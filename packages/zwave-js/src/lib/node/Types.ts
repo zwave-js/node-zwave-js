@@ -100,6 +100,7 @@ export interface ZWaveNodeEventCallbacks extends ZWaveNodeValueEventCallbacks {
 	sleep: ZWaveNodeStatusChangeCallback;
 	dead: ZWaveNodeStatusChangeCallback;
 	alive: ZWaveNodeStatusChangeCallback;
+	unknown: ZWaveNodeStatusChangeCallback;
 	"interview completed": (node: ZWaveNode) => void;
 	ready: (node: ZWaveNode) => void;
 }

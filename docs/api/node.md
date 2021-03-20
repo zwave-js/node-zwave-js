@@ -621,6 +621,14 @@ A non-sleeping node has stopped responding or just started responding again. The
 (node: ZWaveNode) => void
 ```
 
+### `"unknown"`
+
+A message is received from a presumably dead node. The node is passed as the single argument to the callback:
+
+```ts
+(node: ZWaveNode) => void
+```
+
 ### `"interview completed"`
 
 The initial interview process for this node was completed. The node is passed as the single argument to the callback:

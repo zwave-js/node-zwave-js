@@ -1331,6 +1331,13 @@ describe("lib/node/Node", () => {
 				expectedEvent: "alive",
 			});
 		});
+
+		it("Changing the status to unknown should raise the unknown event", () => {
+			performTest({
+				targetStatus: NodeStatus.Unknown,
+				expectedEvent: "unknown",
+			});
+		});
 	});
 
 	describe("getValue()", () => {

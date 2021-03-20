@@ -367,6 +367,8 @@ export class ZWaveNode extends Endpoint {
 			this.emit("dead", this, oldStatus);
 		} else if (this._status === NodeStatus.Alive) {
 			this.emit("alive", this, oldStatus);
+		} else {
+			this.emit("unknown", this, oldStatus);
 		}
 
 		// To be marked ready, a node must be known to be not dead.
