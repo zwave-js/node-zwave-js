@@ -78,6 +78,8 @@ What are the node IDs?
 - [ ] Manual Docker build
     - `node-zwave-js` branch: <!-- fill in -->
     - `zwavejs2mqtt` branch: <!-- fill in -->
+- [ ] `node-red-contrib-zwave-js`
+    - Module version (in node config ui): <!-- fill in -->
 - [ ] Manually built (as described in the [docs](https://zwave-js.github.io/node-zwave-js/#/development/installing-from-github)) 
 - [ ] Other: <!-- Please describe: -->
 
