@@ -237,7 +237,7 @@
 		]
 	},
 	"current_threshold": {
-		"label": "Current Threshold",
+		"label": "Current Change Threshold",
 		"description": "Threshold change in wattage to induce an automatic report",
 		"valueSize": 2,
 		"unit": "W",
@@ -251,21 +251,22 @@
 	},
 	"current_threshold_clamp1": {
 		"$import": "#current_threshold",
-		"label": "Current Threshold (Clamp 1)"
+		"label": "Current Change Threshold (Clamp 1)"
 	},
 	"current_threshold_clamp2": {
 		"$import": "#current_threshold",
-		"label": "Current Threshold (Clamp 2)"
+		"label": "Current Change Threshold (Clamp 2)"
 	},
 	"current_threshold_clamp3": {
 		"$import": "#current_threshold",
-		"label": "Current Threshold (Clamp 3)"
+		"label": "Current Change Threshold (Clamp 3)"
 	},
 	"current_threshold_wholehem": {
 		"$import": "#current_threshold",
-		"label": "Current Threshold (Whole HEM)"
+		"label": "Current Change Threshold (Whole HEM)"
 	},
 	"percent_threshold": {
+		"label": "Current Percentage Change Threshold",
 		"description": "Percentage change in wattage to induce an automatic report",
 		"valueSize": 1,
 		"unit": "%",
@@ -278,19 +279,19 @@
 	},
 	"percent_threshold_clamp1": {
 		"$import": "#percent_threshold",
-		"label": "Wattage Percent Threshold (Clamp 1)"
+		"label": "Wattage Percentage Threshold (Clamp 1)"
 	},
 	"percent_threshold_clamp2": {
 		"$import": "#percent_threshold",
-		"label": "Wattage Percent Threshold (Clamp 2)"
+		"label": "Wattage Percentage Threshold (Clamp 2)"
 	},
 	"percent_threshold_clamp3": {
 		"$import": "#percent_threshold",
-		"label": "Wattage Percent Threshold (Clamp 3)"
+		"label": "Wattage Percentage Threshold (Clamp 3)"
 	},
 	"percent_threshold_wholehem": {
 		"$import": "#percent_threshold",
-		"label": "Wattage Percent Threshold (Whole HEM)"
+		"label": "Wattage Percentage Threshold (Whole HEM)"
 	},
 	"reset_parameters": {
 		"valueSize": 1,
