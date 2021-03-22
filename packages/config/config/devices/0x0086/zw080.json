@@ -67,7 +67,7 @@
 			]
 		},
 		"37[0xff]": {
-			"$import": "../templates/master_template.json#wattage_percent_trigger",
+			"$import": "templates/aeotec_template.json#wattage_percent_trigger",
 			"valueSize": 2
 		},
 		"80": {
