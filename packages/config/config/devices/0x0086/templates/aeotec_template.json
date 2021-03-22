@@ -136,7 +136,7 @@
 	},
 	"sensor_report_type": {
 		"label": "Motion Sensor Triggered Command",
-		"valueSize": 1,
+		"valueSize": 4,
 		"minValue": 16,
 		"maxValue": 256,
 		"defaultValue": 1,
