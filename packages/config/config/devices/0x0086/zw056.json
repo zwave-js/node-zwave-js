@@ -164,7 +164,7 @@
 			"$import": "templates/aeotec_template.json#enable_notifications"
 		},
 		"81": {
-			"$import": "templates/aeotec_template.json#ow_battery_button"
+			"$import": "templates/aeotec_template.json#low_battery_button"
 		},
 		"241": {
 			"label": "Pair Wireless Button With Doorbell",
