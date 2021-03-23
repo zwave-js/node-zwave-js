@@ -8,7 +8,8 @@
 	"devices": [
 		{
 			"productType": "0x0003",
-			"productId": "0x0121"
+			"productId": "0x0121",
+			"zwaveAllianceId": 3399
 		}
 	],
 	"firmwareVersion": {
@@ -77,1211 +78,420 @@
 	},
 	"paramInformation": {
 		"1": {
-			"label": "Operating pushbutton(s) for dimmer",
-			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 15,
+			"$import": "templates/logic_group_template.json#dimmer_pushbutton"
+		},
+		"2": {
+			"$import": "templates/logic_group_template.json#dimming_duration"
+		},
+		"3": {
+			"$import": "templates/logic_group_template.json#duration_on_off"
+		},
+		"4": {
+			"$import": "templates/logic_group_template.json#dimmer_mode"
+		},
+		"5": {
+			"$import": "templates/logic_group_template.json#dimmer_min"
+		},
+		"6": {
+			"$import": "templates/logic_group_template.json#dimmer_max"
+		},
+		"7": {
+			"$import": "templates/logic_group_template.json#enable_central_scene"
+		},
+		"8": {
+			"$import": "../templates/master_template.json#base_enable_disable",
+			"label": "Double-activation functionality",
 			"defaultValue": 1,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": false,
 			"options": [
 				{
 					"label": "Disabled",
 					"value": 0
 				},
 				{
-					"label": "Push Button 1",
-					"value": 1
-				},
-				{
-					"label": "Push Button 2",
-					"value": 2
-				},
-				{
-					"label": "Push Button 3",
-					"value": 4
-				},
-				{
-					"label": "Push Button 4",
-					"value": 8
-				}
-			]
-		},
-		"2": {
-			"label": "Duration of dimming",
-			"valueSize": 1,
-			"unsigned": true,
-			"minValue": 0,
-			"maxValue": 255,
-			"defaultValue": 5,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
-		},
-		"3": {
-			"label": "Duration of on/off",
-			"valueSize": 1,
-			"unsigned": true,
-			"minValue": 0,
-			"maxValue": 255,
-			"defaultValue": 0,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
-		},
-		"4": {
-			"label": "Dimmer mode",
-			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 2,
-			"defaultValue": 1,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "No dimming, only on/off (0%/100%)",
-					"value": 0
-				},
-				{
-					"label": "Trailing edge dimming",
-					"value": 1
-				},
-				{
-					"label": "Leading edge dimming",
-					"value": 2
-				}
-			]
-		},
-		"5": {
-			"label": "Dimmer minimum level",
-			"unit": "%",
-			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 99,
-			"defaultValue": 0,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
-		},
-		"6": {
-			"label": "Dimmer maximum level",
-			"unit": "%",
-			"valueSize": 1,
-			"minValue": 1,
-			"maxValue": 99,
-			"defaultValue": 99,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
-		},
-		"7": {
-			"label": "Central Scene notifications",
-			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 1,
-			"defaultValue": 1,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "Disabled.",
-					"value": 0
-				},
-				{
-					"label": "Enabled",
+					"label": "Sets light to 100%",
 					"value": 1
 				}
 			]
 		},
-		"8": {
-			"label": "Double-activation functionality",
-			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 1,
-			"defaultValue": 1,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "Disabled.",
-					"value": 0
-				},
-				{
-					"label": "Sets light to 100%.",
-					"value": 1
-				}
-			]
-		},
-
 		"10": {
+			"$import": "../templates/master_template.json#base_enable_disable",
 			"label": "Enhanced LED control",
-			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 1,
-			"defaultValue": 0,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "Disabled (Default)",
-					"value": 0
-				},
-				{
-					"label": "Enabled",
-					"value": 1
-				}
-			]
 		},
 		"11": {
+			"$import": "../templates/master_template.json#base_1-255_nounit",
 			"label": "Pushbutton debounce timer",
 			"unit": "0.01 seconds",
-			"valueSize": 1,
-			"unsigned": true,
-			"minValue": 1,
-			"maxValue": 255,
-			"defaultValue": 5,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"defaultValue": 5
 		},
 		"12": {
+			"$import": "../templates/master_template.json#base_1-255_nounit",
 			"label": "Pushbutton press threshold time",
 			"unit": "0.01 seconds",
-			"valueSize": 1,
-			"unsigned": true,
-			"minValue": 1,
-			"maxValue": 255,
-			"defaultValue": 20,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"defaultValue": 20
 		},
 		"13": {
+			"$import": "../templates/master_template.json#base_1-255_nounit",
 			"label": "Pushbutton held threshold time.",
 			"unit": "0.01 seconds",
-			"valueSize": 1,
-			"unsigned": true,
-			"minValue": 1,
-			"maxValue": 255,
-			"defaultValue": 50,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"defaultValue": 50
 		},
 		"14[0xff]": {
-			"label": "Global brightness Red LED level",
+			"$import": "../templates/master_template.json#base_0-255_nounit",
+			"label": "Global brightness Red LED",
 			"valueSize": 4,
 			"unsigned": true,
-			"minValue": 0,
-			"maxValue": 255,
 			"defaultValue": 127,
-			"readOnly": false,
-			"writeOnly": false,
 			"allowManualEntry": true
 		},
 		"14[0xff00]": {
-			"label": "Global brightness Green LED level",
+			"$import": "../templates/master_template.json#base_0-255_nounit",
+			"label": "Global brightness Green LED",
 			"valueSize": 4,
 			"unsigned": true,
-			"minValue": 0,
-			"maxValue": 255,
 			"defaultValue": 127,
-			"readOnly": false,
-			"writeOnly": false,
 			"allowManualEntry": true
 		},
 		"14[0xff0000]": {
-			"label": "Global brightness Blue LED level",
+			"$import": "../templates/master_template.json#base_0-255_nounit",
+			"label": "Global brightness Blue LED",
 			"valueSize": 4,
 			"unsigned": true,
-			"minValue": 0,
-			"maxValue": 255,
 			"defaultValue": 127,
-			"readOnly": false,
-			"writeOnly": false,
 			"allowManualEntry": true
 		},
 		"15": {
 			"label": "Associations groups",
+			"$import": "../templates/master_template.json#base_0-255_nounit",
 			"valueSize": 2,
 			"unsigned": true,
-			"minValue": 0,
 			"maxValue": 65535,
 			"defaultValue": 8191,
-			"readOnly": false,
-			"writeOnly": false,
 			"allowManualEntry": true
 		},
 		"16": {
-			"label": "Pushbutton 1 functionality",
-			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 4,
-			"defaultValue": 0,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "Standard toggle-function",
-					"value": 0
-				},
-				{
-					"label": "Automatic turn off",
-					"value": 1
-				},
-				{
-					"label": "Automatic turn on",
-					"value": 2
-				},
-				{
-					"label": "Always turn off or dim down",
-					"value": 3
-				},
-				{
-					"label": "Always turn on or dim up",
-					"value": 4
-				}
-			]
+			"$import": "templates/logic_group_template.json#pushbutton_function_zdb5100",
+			"label": "Pushbutton 1 functionality"
 		},
 		"17": {
+			"$import": "../templates/master_template.json#base_0-255_nounit",
 			"label": "Timer value for pushbutton 1",
 			"unit": "1.0 seconds",
 			"valueSize": 2,
-			"unsigned": true,
-			"minValue": 0,
 			"maxValue": 43200,
 			"defaultValue": 300,
-			"readOnly": false,
-			"writeOnly": false,
 			"allowManualEntry": true
 		},
 		"18": {
-			"label": "Multi-Level Switch Set values for pushbutton 1",
-			"valueSize": 4,
-			"unsigned": true,
-			"minValue": 0,
-			"maxValue": 4294967295,
-			"defaultValue": 33488896,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"$import": "templates/logic_group_template.json#multilevel_switch_set",
+			"label": "Multi-Level Switch Set values for pushbutton 1"
 		},
 		"19": {
-			"label": "Binary Switch Set support for pushbutton 1",
-			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 2,
-			"defaultValue": 0,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "Controls LED",
-					"value": 0
-				},
-				{
-					"label": "Controls switch and LED",
-					"value": 1
-				},
-				{
-					"label": "As if pushbutton activated",
-					"value": 2
-				}
-			]
+			"$import": "templates/logic_group_template.json#binary_switch_set",
+			"label": "Binary Switch Set support for pushbutton 1"
 		},
 		"20": {
-			"label": "Pushbutton 1 LED indication",
-			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 7,
-			"defaultValue": 7,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "Internal LED control is disabled, only external.",
-					"value": 0
-				},
-				{
-					"label": "LED follows the switch status.",
-					"value": 1
-				},
-				{
-					"label": "LED follows the switch inverse status",
-					"value": 2
-				},
-				{
-					"label": "Same as 1",
-					"value": 3
-				},
-				{
-					"label": "Same as 2",
-					"value": 4
-				},
-				{
-					"label": "Follow internal dimmer",
-					"value": 5
-				},
-				{
-					"label": "Follow internal dimmer inverse",
-					"value": 6
-				},
-				{
-					"label": "On for 5 sec",
-					"value": 7
-				}
-			]
+			"$import": "templates/logic_group_template.json#pushbutton_led_indicator"
 		},
 		"21": {
-			"label": "Colour commands for pushbutton 1 LED indication",
-			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 2,
-			"defaultValue": 0,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "Direct control",
-					"value": 0
-				},
-				{
-					"label": "Color for OFF state",
-					"value": 1
-				},
-				{
-					"label": "Color for ON state",
-					"value": 2
-				}
-			]
+			"$import": "templates/logic_group_template.json#color_command_pushbutton",
+			"label": "Colour Commands For Pushbutton 1 LED Indication",
 		},
 		"22[0xff]": {
-			"label": "LEDs colour for pushbutton 1 ON indication",
-			"description": "Red colour",
+			"$import": "templates/logic_group_template.json#led_indicator",
+			"label": "Pushbutton 1 LED indicator ON Red",
 			"valueSize": 4,
-			"unsigned": true,
-			"minValue": 0,
-			"maxValue": 255,
-			"defaultValue": 0,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"defaultValue": 0
 		},
 		"22[0xff00]": {
-			"label": "LEDs colour for pushbutton 1 ON indication",
-			"description": "Green colour",
+			"$import": "templates/logic_group_template.json#led_indicator",
+			"label": "Pushbutton 1 LED indicator ON Green",
 			"valueSize": 4,
-			"unsigned": true,
-			"minValue": 0,
-			"maxValue": 255,
-			"defaultValue": 0,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"defaultValue": 0
 		},
 		"22[0xff0000]": {
-			"label": "LEDs colour for pushbutton 1 ON indication",
-			"description": "Blue colour",
+			"$import": "templates/logic_group_template.json#led_indicator",
+			"label": "Pushbutton 1 LED indicator ON Blue",
 			"valueSize": 4,
-			"unsigned": true,
-			"minValue": 0,
-			"maxValue": 255,
-			"defaultValue": 127,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"defaultValue": 127
 		},
 		"22[0xff000000]": {
+			"$import": "../templates/master_template.json#base_0-255_nounit",
 			"label": "LED Time for pushbutton 1 blinking",
 			"unit": "x0.1 sec",
 			"valueSize": 4,
-			"unsigned": true,
-			"minValue": 0,
-			"maxValue": 255,
 			"defaultValue": 0,
-			"readOnly": false,
-			"writeOnly": false,
 			"allowManualEntry": true
 		},
 		"23[0xff]": {
-			"label": "LEDs colour for pushbutton 1 OFF indication",
-			"description": "Red colour",
+			"$import": "templates/logic_group_template.json#led_indicator",
+			"label": "Pushbutton 1 LED indicator OFF Red",
 			"valueSize": 4,
-			"unsigned": true,
-			"minValue": 0,
-			"maxValue": 255,
-			"defaultValue": 47,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"defaultValue": 47
 		},
 		"23[0xff00]": {
-			"label": "LEDs colour for pushbutton 1 OFF indication",
-			"description": "Green colour",
+			"$import": "templates/logic_group_template.json#led_indicator",
+			"label": "Pushbutton 1 LED indicator OFF Green",
 			"valueSize": 4,
-			"unsigned": true,
-			"minValue": 0,
-			"maxValue": 255,
-			"defaultValue": 47,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"defaultValue": 47
 		},
 		"23[0xff0000]": {
-			"label": "LEDs colour for pushbutton 1 OFF indication",
-			"description": "Blue colour",
+			"$import": "templates/logic_group_template.json#led_indicator",
+			"label": "Pushbutton 1 LED indicator OFF Blue",
 			"valueSize": 4,
-			"unsigned": true,
-			"minValue": 0,
-			"maxValue": 255,
-			"defaultValue": 0,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"defaultValue": 0
 		},
 		"23[0xff000000]": {
+			"$import": "../templates/master_template.json#base_0-255_nounit",
 			"label": "LED Time for pushbutton 1 blinking",
 			"unit": "x0.1 sec",
 			"valueSize": 4,
-			"unsigned": true,
-			"minValue": 0,
-			"maxValue": 255,
 			"defaultValue": 0,
-			"readOnly": false,
-			"writeOnly": false,
 			"allowManualEntry": true
 		},
 		"24": {
-			"label": "Pushbutton 2 functionality",
-			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 4,
-			"defaultValue": 0,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "Standard toggle-function",
-					"value": 0
-				},
-				{
-					"label": "Automatic turn off after the time has expired",
-					"value": 1
-				},
-				{
-					"label": "Automatic turn on after the time has expired",
-					"value": 2
-				},
-				{
-					"label": "Always turn off or dim down",
-					"value": 3
-				},
-				{
-					"label": "Always turn on or dim up",
-					"value": 4
-				}
-			]
+			"$import": "templates/logic_group_template.json#pushbutton_function_zdb5100",
+			"label": "Pushbutton 2 Functionality"
 		},
 		"25": {
+			"$import": "../templates/master_template.json#base_0-255_nounit",
 			"label": "Timer value for pushbutton 2",
 			"unit": "x1.0 seconds",
 			"valueSize": 2,
-			"unsigned": true,
-			"minValue": 0,
 			"maxValue": 43200,
 			"defaultValue": 300,
-			"readOnly": false,
-			"writeOnly": false,
 			"allowManualEntry": true
 		},
 		"26": {
-			"label": "Multi-Level Switch Set values for pushbutton 2.",
-			"valueSize": 4,
-			"unsigned": true,
-			"minValue": 0,
-			"maxValue": 4294967295,
-			"defaultValue": 33488896,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"$import": "templates/logic_group_template.json#multilevel_switch_set",
+			"label": "Multi-Level Switch Set Values For Pushbutton 2"
 		},
 		"27": {
-			"label": "Binary Switch Set support for pushbutton 2",
-			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 2,
-			"defaultValue": 0,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "Controls LED",
-					"value": 0
-				},
-				{
-					"label": "Controls switch and LED",
-					"value": 1
-				},
-				{
-					"label": "As if pushbutton activated",
-					"value": 2
-				}
-			]
+			"$import": "templates/logic_group_template.json#binary_switch_set",
+			"label": "Binary Switch Set Support For Pushbutton 2",
 		},
 		"28": {
-			"label": "Pushbutton 2 LED indication.",
-			"description": "Pushbutton 2 LED indication.",
-			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 7,
-			"defaultValue": 7,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "LED control is disabled",
-					"value": 0
-				},
-				{
-					"label": "The LED indication follows the switch status.",
-					"value": 1
-				},
-				{
-					"label": "follows the switch status , inverse",
-					"value": 2
-				},
-				{
-					"label": "Same as 1",
-					"value": 3
-				},
-				{
-					"label": "Same as 2",
-					"value": 4
-				},
-				{
-					"label": "Follow internal dimmer",
-					"value": 5
-				},
-				{
-					"label": "Follow internal dimmer inverse",
-					"value": 6
-				},
-				{
-					"label": "On for 5 sec",
-					"value": 7
-				}
-			]
+			"$import": "templates/logic_group_template.json#pushbutton_led_indicator"
 		},
 		"29": {
-			"label": "Colour commands for pushbutton 2 LED indication.",
-			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 2,
-			"defaultValue": 1,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "Direct control",
-					"value": 0
-				},
-				{
-					"label": "Colour for OFF indication",
-					"value": 1
-				},
-				{
-					"label": "Colour for ON indication",
-					"value": 2
-				}
-			]
+			"$import": "templates/logic_group_template.json#color_command_pushbutton",
+			"label": "Colour Commands For Pushbutton 2 LED Indication"
 		},
 		"30[0xff]": {
-			"label": "LEDs colour for pushbutton 2 ON indication",
-			"description": "Red colour",
+			"$import": "templates/logic_group_template.json#led_indicator",
+			"label": "Pushbutton 2 LED indicator ON Red",
 			"valueSize": 4,
-			"unsigned": true,
-			"minValue": 0,
-			"maxValue": 255,
-			"defaultValue": 0,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"defaultValue": 0
 		},
 		"30[0xff00]": {
-			"label": "LEDs colour for pushbutton 2 ON indication",
-			"description": "Green colour",
+			"$import": "templates/logic_group_template.json#led_indicator",
+			"label": "Pushbutton 2 LED indicator ON Green",
 			"valueSize": 4,
-			"unsigned": true,
-			"minValue": 0,
-			"maxValue": 255,
-			"defaultValue": 0,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"defaultValue": 0
 		},
 		"30[0xff0000]": {
-			"label": "LEDs colour for pushbutton 2 ON indication",
-			"description": "Blue colour",
+			"$import": "templates/logic_group_template.json#led_indicator",
+			"label": "Pushbutton 2 LED indicator ON Blue",
 			"valueSize": 4,
-			"unsigned": true,
-			"minValue": 0,
-			"maxValue": 255,
-			"defaultValue": 127,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"defaultValue": 127
 		},
 		"30[0xff000000]": {
+			"$import": "../templates/master_template.json#base_0-255_nounit",
 			"label": "LED Time for pushbutton 2 blinking",
 			"unit": "x0.1 sec",
 			"valueSize": 4,
-			"unsigned": true,
-			"minValue": 0,
-			"maxValue": 255,
 			"defaultValue": 0,
-			"readOnly": false,
-			"writeOnly": false,
 			"allowManualEntry": true
 		},
 		"31[0xff]": {
-			"label": "LEDs colour for pushbutton 2 OFF indication",
-			"description": "Red colour",
+			"$import": "templates/logic_group_template.json#led_indicator",
+			"label": "Pushbutton 2 LED indicator OFF Red",
 			"valueSize": 4,
-			"unsigned": true,
-			"minValue": 0,
-			"maxValue": 255,
-			"defaultValue": 47,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"defaultValue": 47
 		},
 		"31[0xff00]": {
-			"label": "LEDs colour for pushbutton 2 OFF indication",
-			"description": "Green colour",
+			"$import": "templates/logic_group_template.json#led_indicator",
+			"label": "Pushbutton 2 LED indicator OFF Green",
 			"valueSize": 4,
-			"unsigned": true,
-			"minValue": 0,
-			"maxValue": 255,
-			"defaultValue": 47,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"defaultValue": 47
 		},
 		"31[0xff0000]": {
-			"label": "LEDs colour for pushbutton 2 OFF indication",
-			"description": "Blue colour",
+			"$import": "templates/logic_group_template.json#led_indicator",
+			"label": "Pushbutton 2 LED indicator OFF Blue",
 			"valueSize": 4,
-			"unsigned": true,
-			"minValue": 0,
-			"maxValue": 255,
-			"defaultValue": 0,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"defaultValue": 0
 		},
 		"31[0xff000000]": {
+			"$import": "../templates/master_template.json#base_0-255_nounit",
 			"label": "LED Time for pushbutton 2 blinking",
 			"unit": "x0.1 sec",
 			"valueSize": 4,
-			"unsigned": true,
-			"minValue": 0,
-			"maxValue": 255,
 			"defaultValue": 0,
-			"readOnly": false,
-			"writeOnly": false,
 			"allowManualEntry": true
 		},
 		"32": {
-			"label": "Pushbutton 3 functionality",
-			"description": "Pushbutton 3 functionality",
-			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 4,
-			"defaultValue": 0,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "Standard toggle-function",
-					"value": 0
-				},
-				{
-					"label": "Automatic turn off after the time has expired",
-					"value": 1
-				},
-				{
-					"label": "Automatic turn on after the time has expired",
-					"value": 2
-				},
-				{
-					"label": "Always turn off or dim down",
-					"value": 3
-				},
-				{
-					"label": "Always turn on or dim up",
-					"value": 4
-				}
-			]
+			"$import": "templates/logic_group_template.json#pushbutton_function_zdb5100",
+			"label": "Pushbutton 3 functionality"
 		},
 		"33": {
+			"$import": "../templates/master_template.json#base_0-255_nounit",
 			"label": "Timer value for pushbutton 3",
 			"unit": "x1.0 seconds",
 			"valueSize": 2,
-			"unsigned": true,
-			"minValue": 0,
 			"maxValue": 43200,
 			"defaultValue": 300,
-			"readOnly": false,
-			"writeOnly": false,
 			"allowManualEntry": true
 		},
 		"34": {
-			"label": "Multi-Level Switch Set values for pushbutton 3",
-			"valueSize": 4,
-			"unsigned": true,
-			"minValue": 0,
-			"maxValue": 4294967295,
-			"defaultValue": 33488896,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"$import": "templates/logic_group_template.json#multilevel_switch_set",
+			"label": "Multi-Level Switch Set Values For Pushbutton 3"
 		},
 		"35": {
-			"label": "Binary Switch Set support for pushbutton 3",
-			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 2,
-			"defaultValue": 0,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "Controls LED",
-					"value": 0
-				},
-				{
-					"label": "Controls switch and LED",
-					"value": 1
-				},
-				{
-					"label": "As if pushbutton activated",
-					"value": 2
-				}
-			]
+			"$import": "templates/logic_group_template.json#binary_switch_set",
+			"label": "Binary Switch Set Support For Pushbutton 3"
 		},
 		"36": {
-			"label": "Pushbutton 3 LED indication",
-			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 7,
-			"defaultValue": 7,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "Internal LED control is disabled",
-					"value": 0
-				},
-				{
-					"label": "follows the switch status",
-					"value": 1
-				},
-				{
-					"label": "follows the switch status , inverse",
-					"value": 2
-				},
-				{
-					"label": "Same as 1",
-					"value": 3
-				},
-				{
-					"label": "Same as 2",
-					"value": 4
-				},
-				{
-					"label": "Follow internal dimmer",
-					"value": 5
-				},
-				{
-					"label": "Follow internal dimmer inverse",
-					"value": 6
-				},
-				{
-					"label": "On for 5 sec",
-					"value": 7
-				}
-			]
+			"$import": "templates/logic_group_template.json#pushbutton_led_indicator"
 		},
 		"37": {
-			"label": "Colour commands for pushbutton 3 LED indication.",
-			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 2,
-			"defaultValue": 1,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "Direct control",
-					"value": 0
-				},
-				{
-					"label": "Color for OFF state",
-					"value": 1
-				},
-				{
-					"label": "Color for ON state",
-					"value": 2
-				}
-			]
+			"$import": "templates/logic_group_template.json#color_command_pushbutton",
+			"label": "Colour Commands For Pushbutton 3 LED Indication"
 		},
 		"38[0xff]": {
-			"label": "LEDs colour for pushbutton 3 ON indication",
-			"description": "Red colour",
+			"$import": "templates/logic_group_template.json#led_indicator",
+			"label": "Pushbutton 3 LED indicator ON Red",
 			"valueSize": 4,
-			"unsigned": true,
-			"minValue": 0,
-			"maxValue": 255,
 			"defaultValue": 0,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
 		},
 		"38[0xff00]": {
-			"label": "LEDs colour for pushbutton 3 ON indication",
-			"description": "Green colour",
+			"$import": "templates/logic_group_template.json#led_indicator",
+			"label": "Pushbutton 3 LED indicator ON Green",
 			"valueSize": 4,
-			"unsigned": true,
-			"minValue": 0,
-			"maxValue": 255,
-			"defaultValue": 0,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"defaultValue": 0
 		},
 		"38[0xff0000]": {
-			"label": "LEDs colour for pushbutton 3 ON indication",
-			"description": "Blue colour",
+			"$import": "templates/logic_group_template.json#led_indicator",
+			"label": "Pushbutton 3 LED indicator ON Blue",
 			"valueSize": 4,
-			"unsigned": true,
-			"minValue": 0,
-			"maxValue": 255,
-			"defaultValue": 127,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"defaultValue": 127
 		},
 		"38[0xff000000]": {
+			"$import": "../templates/master_template.json#base_0-255_nounit",
 			"label": "LED Time for pushbutton 3 blinking",
 			"unit": "x0.1 sec",
 			"valueSize": 4,
-			"unsigned": true,
-			"minValue": 0,
-			"maxValue": 255,
 			"defaultValue": 0,
-			"readOnly": false,
-			"writeOnly": false,
 			"allowManualEntry": true
 		},
 		"39[0xff]": {
-			"label": "LEDs colour for pushbutton 3 OFF indication",
-			"description": "Red colour",
+			"$import": "templates/logic_group_template.json#led_indicator",
+			"label": "Pushbutton 3 LED indicator OFF Red",
 			"valueSize": 4,
-			"unsigned": true,
-			"minValue": 0,
-			"maxValue": 255,
-			"defaultValue": 47,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"defaultValue": 47
 		},
 		"39[0xff00]": {
-			"label": "LEDs colour for pushbutton 3 OFF indication",
-			"description": "Green colour",
+			"$import": "templates/logic_group_template.json#led_indicator",
+			"label": "Pushbutton 3 LED indicator OFF Green",
 			"valueSize": 4,
-			"unsigned": true,
-			"minValue": 0,
-			"maxValue": 255,
-			"defaultValue": 47,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"defaultValue": 47
 		},
 		"39[0xff0000]": {
-			"label": "LEDs colour for pushbutton 3 OFF indication",
-			"description": "Blue colour",
+			"$import": "templates/logic_group_template.json#led_indicator",
+			"label": "Pushbutton 3 LED indicator OFF Blue",
 			"valueSize": 4,
-			"unsigned": true,
-			"minValue": 0,
-			"maxValue": 255,
-			"defaultValue": 0,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"defaultValue": 0
 		},
 		"39[0xff000000]": {
+			"$import": "../templates/master_template.json#base_0-255_nounit",
 			"label": "LED Time for pushbutton 3 blinking",
 			"unit": "x0.1 sec",
 			"valueSize": 4,
-			"unsigned": true,
-			"minValue": 0,
-			"maxValue": 255,
 			"defaultValue": 0,
-			"readOnly": false,
-			"writeOnly": false,
 			"allowManualEntry": true
 		},
 		"40": {
-			"label": "Pushbutton 4 functionality.",
-			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 4,
-			"defaultValue": 0,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "Toggle-function",
-					"value": 0
-				},
-				{
-					"label": "Automatic turn off after the time has expired",
-					"value": 1
-				},
-				{
-					"label": "Automatic turn on after the time has expired",
-					"value": 2
-				},
-				{
-					"label": "Always turn off or dim down",
-					"value": 3
-				},
-				{
-					"label": "Always turn on or dim up",
-					"value": 4
-				}
-			]
+			"$import": "templates/logic_group_template.json#pushbutton_function_zdb5100",
+			"label": "Pushbutton 4 Functionality"
 		},
 		"41": {
+			"$import": "../templates/master_template.json#base_0-255_nounit",
 			"label": "Timer value for pushbutton 4",
 			"unit": "x1.0 seconds",
 			"valueSize": 2,
-			"unsigned": true,
-			"minValue": 0,
 			"maxValue": 43200,
 			"defaultValue": 300,
-			"readOnly": false,
-			"writeOnly": false,
 			"allowManualEntry": true
 		},
 		"42": {
-			"label": "Multi-Level Switch Set values for pushbutton 4.",
-			"valueSize": 4,
-			"unsigned": true,
-			"minValue": 0,
-			"maxValue": 4294967295,
-			"defaultValue": 33488896,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"$import": "templates/logic_group_template.json#multilevel_switch_set",
+			"label": "Multi-Level Switch Set Values For Pushbutton 4"
 		},
 		"43": {
-			"label": "Binary Switch Set support for pushbutton 4.",
-			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 2,
-			"defaultValue": 0,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "Controls LED",
-					"value": 0
-				},
-				{
-					"label": "Controls switch and LED",
-					"value": 1
-				},
-				{
-					"label": "As if pushbutton activated",
-					"value": 2
-				}
-			]
+			"$import": "templates/logic_group_template.json#binary_switch_set",
+			"label": "Binary Switch Set Support For Pushbutton 4"
 		},
 		"44": {
-			"label": "Pushbutton 4 LED indication",
-			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 7,
-			"defaultValue": 7,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "LED control is disabled",
-					"value": 0
-				},
-				{
-					"label": "follows the switch status",
-					"value": 1
-				},
-				{
-					"label": "follows the switch status , inverse",
-					"value": 2
-				},
-				{
-					"label": "Same as 1",
-					"value": 3
-				},
-				{
-					"label": "Same as 2",
-					"value": 4
-				},
-				{
-					"label": "Follow internal dimmer",
-					"value": 5
-				},
-				{
-					"label": "Follow internal dimmer inverse",
-					"value": 6
-				},
-				{
-					"label": "On for 5 sec",
-					"value": 7
-				}
-			]
+			"$import": "templates/logic_group_template.json#pushbutton_led_indicator"
 		},
 		"45": {
-			"label": "Colour commands for pushbutton 4 LED indication",
-			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 2,
-			"defaultValue": 1,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "Direct control",
-					"value": 0
-				},
-				{
-					"label": "Color for OFF state",
-					"value": 1
-				},
-				{
-					"label": "Color for ON state",
-					"value": 2
-				}
-			]
+			"$import": "templates/logic_group_template.json#color_command_pushbutton",
+			"label": "Colour Commands For Pushbutton 4 LED Indication"
 		},
 		"46[0xff]": {
-			"label": "LEDs colour for pushbutton 4 ON indication",
-			"description": "Red colour",
+			"$import": "templates/logic_group_template.json#led_indicator",
+			"label": "Pushbutton 4 LED indicator ON Red",
 			"valueSize": 4,
-			"minValue": 0,
-			"maxValue": 127,
-			"defaultValue": 0,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"defaultValue": 0
 		},
 		"46[0xff00]": {
-			"label": "LEDs colour for pushbutton 4 ON indication",
-			"description": "Green colour",
+			"$import": "templates/logic_group_template.json#led_indicator",
+			"label": "Pushbutton 4 LED indicator ON Green",
 			"valueSize": 4,
-			"minValue": 0,
-			"maxValue": 127,
-			"defaultValue": 0,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"defaultValue": 0
 		},
 		"46[0xff0000]": {
-			"label": "LEDs colour for pushbutton 4 ON indication",
-			"description": "Blue colour",
+			"$import": "templates/logic_group_template.json#led_indicator",
+			"label": "Pushbutton 4 LED indicator ON Blue",
 			"valueSize": 4,
-			"minValue": 0,
-			"maxValue": 127,
-			"defaultValue": 127,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"defaultValue": 127
 		},
 		"46[0xff000000]": {
+			"$import": "../templates/master_template.json#base_0-255_nounit",
 			"label": "LED Time for pushbutton 4 blinking",
 			"unit": "x0.1 sec",
 			"valueSize": 4,
-			"minValue": 0,
-			"maxValue": 127,
-			"defaultValue": 0,
-			"readOnly": false,
-			"writeOnly": false,
 			"allowManualEntry": true
 		},
 		"47[0xff]": {
-			"label": "LEDs colour for pushbutton 4 OFF indication",
-			"description": "Red colour",
+			"$import": "templates/logic_group_template.json#led_indicator",
+			"label": "Pushbutton 4 LED indicator OFF Red",
 			"valueSize": 4,
-			"minValue": 0,
-			"maxValue": 127,
-			"defaultValue": 47,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"defaultValue": 47
 		},
 		"47[0xff00]": {
-			"label": "LEDs colour for pushbutton 4 OFF indication",
-			"description": "Green colour",
+			"$import": "templates/logic_group_template.json#led_indicator",
+			"label": "Pushbutton 4 LED indicator OFF Green",
 			"valueSize": 4,
-			"minValue": 0,
-			"maxValue": 127,
-			"defaultValue": 47,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"defaultValue": 47
 		},
 		"47[0xff0000]": {
-			"label": "LEDs colour for pushbutton 4 OFF indication",
-			"description": "Blue colour",
+			"$import": "templates/logic_group_template.json#led_indicator",
+			"label": "Pushbutton 4 LED indicator OFF Blue",
 			"valueSize": 4,
-			"minValue": 0,
-			"maxValue": 127,
-			"defaultValue": 0,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"defaultValue": 0
 		},
 		"47[0xff000000]": {
+			"$import": "../templates/master_template.json#base_0-255_nounit",
 			"label": "LED Time for pushbutton 4 blinking",
 			"unit": "x0.1 sec",
 			"valueSize": 4,
-			"minValue": 0,
-			"maxValue": 127,
 			"defaultValue": 0,
-			"readOnly": false,
-			"writeOnly": false,
 			"allowManualEntry": true
 		}
+	},
+	"metadata": {
+		"inclusion": "Remove white pushbutton cover and press on the center switch with a non-conductive object. The LEDs will now start blinking on pushbutton 1 (upper left pushbutton)",
+		"exclusion": "Remove white pushbutton cover and press on the center switch with a non-conductive object. The LEDs will now start blinking on pushbutton 1 (upper left pushbutton)",
+		"reset": "Remove white pushbutton cover and long-press the center switch for 10 seconds with a non-conductive object. Please use this procedure only when the network primary controller is missing or otherwise inoperable",
+		"manual": "https://products.z-wavealliance.org/ProductManual/File?folder=&filename=MarketCertificationFiles/3399/MATRIX_ZDB5100_User_Manual_1_01-EN.pdf"
 	}
 }

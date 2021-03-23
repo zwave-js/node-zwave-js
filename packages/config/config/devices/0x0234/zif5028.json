@@ -1,0 +1,233 @@
+// Logic Group ZIF5028 / HeatIt Z-DIN 616
+// 6 relay switches and 6 digital inputs module for DIN rail
+{
+	"manufacturer": "Logic Group",
+	"manufacturerId": "0x0234",
+	"label": "ZIF5028",
+	"description": "DIN Rail Relays",
+	"devices": [
+		{
+			"productType": "0x0003",
+			"productId": "0x0112"
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"associations": {
+		"1": {
+			"label": "Lifeline",
+			"maxNodes": 1,
+			"isLifeline": true
+		},
+		"2": {
+			"label": "Basic Set On / Off Input 1",
+			"maxNodes": 5
+		},
+		"3": {
+			"label": "Binary Switch Set On / Off Input 1",
+			"maxNodes": 5
+		},
+		"4": {
+			"label": "Multilevel Switch Set Input 1",
+			"maxNodes": 5
+		},
+		"5": {
+			"label": "Basic Set On / Off Input 2",
+			"maxNodes": 5
+		},
+		"6": {
+			"label": "Binary Switch Set On / Off Input 2",
+			"maxNodes": 5
+		},
+		"7": {
+			"label": "Multilevel Switch Set Input 2",
+			"maxNodes": 5
+		},
+		"8": {
+			"label": "Basic Set On / Off Input 3",
+			"maxNodes": 5
+		},
+		"9": {
+			"label": "Binary Switch Set On / Off Input 3",
+			"maxNodes": 5
+		},
+		"10": {
+			"label": "Multilevel Switch Set Input 3",
+			"maxNodes": 5
+		},
+		"11": {
+			"label": "Basic Set On / Off Input 4",
+			"maxNodes": 5
+		},
+		"12": {
+			"label": "Binary Switch Set On / Off  Input 4",
+			"maxNodes": 5
+		},
+		"13": {
+			"label": "Multilevel Switch Set Input 4",
+			"maxNodes": 5
+		},
+		"14": {
+			"label": "Basic Set On / Off Input 5",
+			"maxNodes": 5
+		},
+		"15": {
+			"label": "Binary Switch Set On / Off Input 5",
+			"maxNodes": 5
+		},
+		"16": {
+			"label": "Multilevel Switch Set Input 5",
+			"maxNodes": 5
+		},
+		"17": {
+			"label": "Basic Report On / Off Input 6",
+			"maxNodes": 5
+		},
+		"18": {
+			"label": "Basic Set On / Off Input 6",
+			"maxNodes": 5
+		},
+		"19": {
+			"label": "Multilevel Switch Set Input 6",
+			"maxNodes": 5
+		}
+	},
+	"paramInformation": {
+		"1": {
+			"$import": "templates/logic_group_template.json#status_led"
+		},
+		"2": {
+			"$import": "../templates/master_template.json#base_0-99_nounit",
+			"label": "Brightness of status LED.",
+			"unit": "%",
+			"defaultValue": 50
+		},
+		"3": {
+			"$import": "templates/logic_group_template.json#input_funtion_relay",
+			"label": "Function setup of input 1"
+		},
+		"4": {
+			"$import": "../templates/master_template.json#base_0-255_nounit",
+			"label": "Timer for input 1",
+			"defaultValue": 0,
+			"allowManualEntry": true
+		},
+		"5": {
+			"$import": "templates/logic_group_template.json#input_funtion_relay",
+			"label": "Function setup of input 2"
+		},
+		"6": {
+			"$import": "../templates/master_template.json#base_0-255_nounit",
+			"label": "Timer for input 2",
+			"defaultValue": 0,
+			"allowManualEntry": true
+		},
+		"7": {
+			"$import": "templates/logic_group_template.json#input_funtion_relay",
+			"label": "Function setup of input 3"
+		},
+		"8": {
+			"$import": "../templates/master_template.json#base_0-255_nounit",
+			"label": "Timer for input 3",
+			"defaultValue": 0,
+			"allowManualEntry": true
+		},
+		"9": {
+			"$import": "templates/logic_group_template.json#input_funtion_relay",
+			"label": "Function setup of input 4"
+		},
+		"10": {
+			"$import": "../templates/master_template.json#base_0-255_nounit",
+			"label": "Timer for input 4",
+			"defaultValue": 0,
+			"allowManualEntry": true
+		},
+		"11": {
+			"$import": "templates/logic_group_template.json#input_funtion_relay",
+			"label": "Function setup of input 5"
+		},
+		"12": {
+			"$import": "../templates/master_template.json#base_0-255_nounit",
+			"label": "Timer for input 5",
+			"defaultValue": 0,
+			"allowManualEntry": true
+		},
+		"13": {
+			"$import": "templates/logic_group_template.json#input_funtion_relay",
+			"label": "Function setup of input 6"
+		},
+		"14": {
+			"$import": "../templates/master_template.json#base_0-255_nounit",
+			"label": "Timer setup of input 6",
+			"defaultValue": 0,
+			"allowManualEntry": true
+		},
+		"15": {
+			"$import": "../templates/master_template.json#base_0-255_nounit",
+			"label": "Input Snubber-filter time constant.",
+			"unit": "x10 ms",
+			"defaultValue": 5,
+			"allowManualEntry": true
+		},
+		"16": {
+			"$import": "../templates/master_template.json#base_0-255_nounit",
+			"label": "Threshold value for activation of inputs.",
+			"unit": "x10 ms",
+			"defaultValue": 200,
+			"allowManualEntry": true
+		},
+		"17": {
+			"$import": "../templates/master_template.json#base_0-255_nounit",
+			"label": "Threshold for input in latched mode.",
+			"unit": "x10 ms",
+			"defaultValue": 50,
+			"allowManualEntry": true
+		},
+		"18": {
+			"$import": "templates/logic_group_template.json#enable_central_scene",
+			"defaultValue": 0,
+			"options": [
+				{
+					"label": "Enabled",
+					"value": 0
+				},
+				{
+					"label": "Disabled",
+					"value": 1
+				}
+			]
+		},
+		"19": {
+			"$import": "templates/logic_group_template.json#output_function_relay",
+			"label": "Output 1"
+		},
+		"20": {
+			"$import": "templates/logic_group_template.json#output_function_relay",
+			"label": "Output 2"
+		},
+		"21": {
+			"$import": "templates/logic_group_template.json#output_function_relay",
+			"label": "Output 3"
+		},
+		"22": {
+			"$import": "templates/logic_group_template.json#output_function_relay",
+			"label": "Output 4"
+		},
+		"23": {
+			"$import": "templates/logic_group_template.json#output_function_relay",
+			"label": "Output 5"
+		},
+		"24": {
+			"$import": "templates/logic_group_template.json#output_function_relay",
+			"label": "Function setup of input 6"
+		}
+	},
+	"metadata": {
+		"inclusion": "Push the button in the hole near the 'INCLUSION' text with a non-conductive object. The LED will now start blinking",
+		"exclusion": "Push the button in the hole near the 'INCLUSION' text with a non-conductive object. The LED will now start blinking",
+		"reset": "Push the button in the hole near the 'INCLUSION' text with a non-conductive object for 10 seconds. Please use this procedure only when the network primary controller is missing or otherwise inoperable",
+		"manual": ""
+	}
+}

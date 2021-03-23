@@ -1,0 +1,474 @@
+{
+	//Generic for Multiple Devices in Logic Group
+	"enable_central_scene": {
+		"$import": "../../templates/master_template.json#base_enable_disable",
+		"label": "Central Scene notifications",
+		"defaultValue": 1
+	},
+	//Primarily ZBA7140 Parameters below.
+	"button_pressed_threshold_time": {
+		"label": "Pushbutton press threshold time",
+		"valueSize": 2,
+		"minValue": 1,
+		"maxValue": 1000,
+		"defaultValue": 400,
+		"readOnly": false,
+		"writeOnly": false,
+		"allowManualEntry": true
+	},
+	"button_held_threshold_time": {
+		"label": "Pushbutton held threshold time",
+		"valueSize": 2,
+		"minValue": 1,
+		"maxValue": 5000,
+		"defaultValue": 600,
+		"readOnly": false,
+		"writeOnly": false,
+		"allowManualEntry": true
+	},
+	"led_indication": {
+		"$import": "../../templates/master_template.json#led_indicator_three_options",
+		"defaultValue": 1,
+		"options": [
+			{
+				"label": "Turned off.",
+				"value": 0
+			},
+			{
+				"label": "Current level of the battery",
+				"value": 1
+			},
+			{
+				"label": "LED colour is set by configuration parameter 5.",
+				"value": 2
+			}
+		]
+	},
+	"association_param_secure": {
+		"label": "Associations groups, transmission when included secure.",
+		"valueSize": 2,
+		"minValue": 0,
+		"maxValue": 255,
+		"defaultValue": 255,
+		"readOnly": false,
+		"writeOnly": false,
+		"allowManualEntry": false,
+		"options": [
+			{
+				"label": "All messages in all groups are sent as insecure",
+				"value": 0
+			},
+			{
+				"label": "Messages in association group 2 are sent as secure",
+				"value": 1
+			},
+			{
+				"label": "Messages in association group 3 are sent as secure",
+				"value": 2
+			},
+			{
+				"label": "Messages in association group 4 are sent as secure",
+				"value": 4
+			},
+			{
+				"label": "Messages in association group 5 are sent as secure",
+				"value": 8
+			},
+			{
+				"label": "Messages in association group 6 are sent as secure",
+				"value": 16
+			},
+			{
+				"label": "Messages in association group 7 are sent as secure",
+				"value": 32
+			},
+			{
+				"label": "Messages in association group 8 are sent as secure",
+				"value": 64
+			},
+			{
+				"label": "Messages in association group 9 are sent as secure",
+				"value": 128
+			},
+			{
+				"label": "All messages in all groups are sent as secure",
+				"value": 255
+			}
+		]
+	},
+	"multilevel_enable": {
+		"$import": "../../templates/master_template.json#base_enable_disable",
+		"valueSize": 4,
+		"defaultValue": 1
+	},
+	"multilevel_upper_function": {
+		"$import": "../../templates/master_template.json#base_0-99_nounit",
+		"description": "Upper switch value",
+		"valueSize": 4,
+		"defaultValue": 255
+	},
+	"multilevel_lower_function": {
+		"$import": "../../templates/master_template.json#base_0-99_nounit",
+		"description": "Lower switch value",
+		"valueSize": 4
+	},
+	"multilevel_duration_function": {
+		"$import": "../../templates/master_template.json#base_0-255_nounit",
+		"description": "Duration",
+		"valueSize": 4
+	},
+	"pushbutton_functionality": {
+		"$import": "../../templates/master_template.json#base_0-255_nounit",
+		"maxValue": 3,
+		"defaultValue": 0,
+		"allowManualEntry": false,
+		"options": [
+			{
+				"label": "Toggle",
+				"value": 0
+			},
+			{
+				"label": "Turn on, dim up",
+				"value": 1
+			},
+			{
+				"label": "Turn off, dim down",
+				"value": 2
+			},
+			{
+				"label": "Momentary",
+				"value": 3
+			}
+		]
+	},
+	//Primarily ZDB5100 Parameters below.
+	"color_command_pushbutton": {
+		"label": "Colour commands LED indicator",
+		"valueSize": 1,
+		"minValue": 0,
+		"maxValue": 2,
+		"defaultValue": 0,
+		"readOnly": false,
+		"writeOnly": false,
+		"allowManualEntry": false,
+		"options": [
+			{
+				"label": "Direct control",
+				"value": 0
+			},
+			{
+				"label": "Color for OFF state",
+				"value": 1
+			},
+			{
+				"label": "Color for ON state",
+				"value": 2
+			}
+		]
+	},
+	"dimmer_pushbutton": {
+		"$import": "../../templates/master_template.json#base_0-255_nounit",
+		"label": "Operating pushbutton(s) for dimmer",
+		"maxValue": 15,
+		"allowManualEntry": false,
+		"options": [
+			{
+				"label": "Disabled",
+				"value": 0
+			},
+			{
+				"label": "Push Button 1",
+				"value": 1
+			},
+			{
+				"label": "Push Button 2",
+				"value": 2
+			},
+			{
+				"label": "Push Button 3",
+				"value": 4
+			},
+			{
+				"label": "Push Button 4",
+				"value": 8
+			}
+		]
+	},
+	"dimming_duration": {
+		"$import": "../../templates/master_template.json#base_0-255_nounit",
+		"label": "Duration of dimming",
+		"defaultValue": 5,
+		"allowManualEntry": false,
+		"options": [
+			{
+				"label": "Immediately",
+				"value": 0
+			},
+			{
+				"label": "Duration in seconds",
+				"value": 127
+			},
+			{
+				"label": "Duration in minutes (minus 127) from 1 – 128 minutes, where 128 is 1 minute",
+				"value": 255
+			}
+		]
+	},
+	"duration_on_off": {
+		"$import": "../../templates/master_template.json#base_0-255_nounit",
+		"label": "Duration of on/off",
+		"defaultValue": 0,
+		"allowManualEntry": true,
+		"options": [
+			{
+				"label": "Immediately",
+				"value": 0
+			},
+			{
+				"label": "Time in seconds",
+				"value": 127
+			},
+			{
+				"label": "Time in minutes (minus 127) from 1 – 128 minutes, where 128 is 1 minute",
+				"value": 255
+			}
+		]
+	},
+	"dimmer_mode": {
+		"$import": "../../templates/master_template.json#base_0-255_nounit",
+		"label": "Dimmer mode",
+		"maxValue": 2,
+		"allowManualEntry": false,
+		"options": [
+			{
+				"label": "No dimming, only on/off (0%/100%)",
+				"value": 0
+			},
+			{
+				"label": "Trailing edge dimming",
+				"value": 1
+			},
+			{
+				"label": "Leading edge dimming",
+				"value": 2
+			}
+		]
+	},
+	"dimmer_min": {
+		"$import": "../../templates/master_template.json#base_0-99_nounit",
+		"label": "Dimmer minimum level",
+		"unit": "%",
+		"defaultValue": 0
+	},
+	"dimmer_max": {
+		"$import": "../../templates/master_template.json#base_0-99_nounit",
+		"label": "Dimmer maximum level",
+		"unit": "%",
+		"defaultValue": 99
+	},
+	"led_indicator": {
+		"$import": "../../templates/master_template.json#base_0-255_nounit",
+		"valueSize": 4,
+		"unsigned": true,
+		"allowManualEntry": true
+	},
+	"pushbutton_led_indicator": {
+		"$import": "../../templates/master_template.json#base_0-255_nounit",
+		"label": "Pushbutton LED indicator",
+		"maxValue": 7,
+		"defaultValue": 7,
+		"unsigned": true,
+		"allowManualEntry": false,
+		"options": [
+			{
+				"label": "Internal LED disabled, only external commands control the indication",
+				"value": 0
+			},
+			{
+				"label": "LED follows switch",
+				"value": 1
+			},
+			{
+				"label": "LED follows switch, inverted",
+				"value": 2
+			},
+			{
+				"label": "Same as 1",
+				"value": 3
+			},
+			{
+				"label": "Same as 2",
+				"value": 4
+			},
+			{
+				"label": "Follow internal dimmer",
+				"value": 5
+			},
+			{
+				"label": "Follow internal dimmer inverted",
+				"value": 6
+			},
+			{
+				"label": "On for 5 sec",
+				"value": 7
+			}
+		]
+	},
+	"color_commands_pushbutton": {
+		"$import": "../../templates/master_template.json#base_0-255_nounit",
+		"maxValue": 2,
+		"defaultValue": 1,
+		"unsigned": true,
+		"allowManualEntry": false,
+		"options": [
+			{
+				"label": "Direct control",
+				"value": 0
+			},
+			{
+				"label": "OFF state",
+				"value": 1
+			},
+			{
+				"label": "ON state",
+				"value": 2
+			}
+		]
+	},
+	"binary_switch_set": {
+		"$import": "../../templates/master_template.json#base_0-255_nounit",
+		"maxValue": 2,
+		"defaultValue": 0,
+		"allowManualEntry": false,
+		"options": [
+			{
+				"label": "LED",
+				"value": 0
+			},
+			{
+				"label": "Switch and LED",
+				"value": 1
+			},
+			{
+				"label": "Pushbutton activated",
+				"value": 2
+			}
+		]
+	},
+	"multilevel_switch_set": {
+		"$import": "../../templates/master_template.json#base_0-255_nounit",
+		"valueSize": 4,
+		"maxValue": 4294967295,
+		"defaultValue": 33488896,
+		"allowManualEntry": true,
+		"options": [
+			{
+				"label": "Byte 4: not used – must be set to 0",
+				"value": 0
+			},
+			{
+				"label": "Byte 1: disabled – a single activation of the pushbutton will not send commands to devices in association group 4",
+				"value": 0
+			},
+			{
+				"label": "Byte 1: enabled – a single activation will send commands to devices in association group 4. devices will receive commands with the values set in byte 2 and 3 (default)",
+				"value": 1
+			},
+			{
+				"label": "Byte 2: when single pressing the pushbutton for on, a multilevel switch set with this value will be send to devices in association group 4. (default)",
+				"value": 255
+			}
+		]
+	},
+	"pushbutton_function_zdb5100": {
+		"$import": "../../templates/master_template.json#base_0-255_nounit",
+		"maxValue": 4,
+		"defaultValue": 0,
+		"allowManualEntry": false,
+		"options": [
+			{
+				"label": "Standard toggle-function",
+				"value": 0
+			},
+			{
+				"label": "Automatic turn off after the time has expired",
+				"value": 1
+			},
+			{
+				"label": "Automatic turn on after the time has expired",
+				"value": 2
+			},
+			{
+				"label": "Always turn off or dim down",
+				"value": 3
+			},
+			{
+				"label": "Always turn on or dim up",
+				"value": 4
+			}
+		]
+	},
+	//Primarily ZIF5028 Parameters below
+	"input_funtion_relay": {
+		"$import": "../../templates/master_template.json#base_0-255_nounit",
+		"label": "Function setup of input",
+		"maxValue": 3,
+		"defaultValue": 3,
+		"allowManualEntry": false,
+		"options": [
+			{
+				"label": "Disabled",
+				"value": 0
+			},
+			{
+				"label": "Level-controlled input",
+				"value": 1
+			},
+			{
+				"label": "Falling-edge controlled input",
+				"value": 2
+			},
+			{
+				"label": "Rising-edge controlled input",
+				"value": 3
+			}
+		]
+	},
+	"output_function_relay": {
+		"$import": "../../templates/master_template.json#base_enable_disable",
+		"label": "Output function",
+		"options": [
+			{
+				"label": "Controlled via Z-Wave messages",
+				"value": 0
+			},
+			{
+				"label": "Controlled by input 1",
+				"value": 1
+			}
+		]
+	},
+	"status_led": {
+		"$import": "../../templates/master_template.json#led_indicator_four_options",
+		"label": "Status of LED",
+		"defaultValue": 1,
+		"options": [
+			{
+				"label": "Disabled",
+				"value": 0
+			},
+			{
+				"label": "Enabled",
+				"value": 1
+			},
+			{
+				"label": "Flashes in 1 second interval",
+				"value": 2
+			},
+			{
+				"label": "Flashes in 1/2 second interval",
+				"value": 3
+			}
+		]
+	}
+}
