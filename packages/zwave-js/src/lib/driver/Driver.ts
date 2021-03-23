@@ -900,10 +900,11 @@ export class Driver extends EventEmitter {
 		// Drop all pending messages that come from a previous interview attempt
 		this.rejectTransactions(
 			(t) =>
-				t.priority === MessagePriority.NodeQuery &&
-				t.message.getNodeId() === node.id,
+				t.message.getNodeId() === node.id &&
+				(t.priority === MessagePriority.NodeQuery ||
+					t.tag === "interview"),
 			"The interview was restarted",
-			ZWaveErrorCodes.Controller_MessageDropped,
+			ZWaveErrorCodes.Controller_InterviewRestarted,
 		);
 
 		const maxInterviewAttempts = this.options.attempts.nodeInterview;
@@ -967,6 +968,11 @@ export class Driver extends EventEmitter {
 					e.code === ZWaveErrorCodes.Controller_NodeRemoved
 				) {
 					// This only happens when a node is removed during the interview - we don't log this
+					return;
+				} else if (
+					e.code === ZWaveErrorCodes.Controller_InterviewRestarted
+				) {
+					// The interview was restarted by a user - we don't log this
 					return;
 				}
 				this.controllerLog.logNode(
@@ -2124,6 +2130,10 @@ ${handlers.length} left`,
 			options.priority !== MessagePriority.Handshake &&
 			options.priority !== MessagePriority.PreTransmitHandshake
 		) {
+			if (options.priority === MessagePriority.NodeQuery) {
+				// Remember that this transaction was part of an interview
+				options.tag = "interview";
+			}
 			options.priority = MessagePriority.WakeUp;
 		}
 
@@ -2413,13 +2423,21 @@ ${handlers.length} left`,
 			type: "requeue",
 			priority: MessagePriority.WakeUp,
 		};
+		const requeueAndTagAsInterview: TransactionReducerResult = {
+			...requeue,
+			tag: "interview",
+		};
 
 		const reducer: TransactionReducer = (transaction, _source) => {
 			const msg = transaction.message;
 			if (msg.getNodeId() !== nodeId) return { type: "keep" };
 			// Drop all messages that are not allowed in the wakeup queue
 			// For all other messages, change the priority to wakeup
-			return this.mayMoveToWakeupQueue(transaction) ? requeue : reject;
+			return this.mayMoveToWakeupQueue(transaction)
+				? transaction.priority === MessagePriority.NodeQuery
+					? requeueAndTagAsInterview
+					: requeue
+				: reject;
 		};
 
 		// Apply the reducer to the send thread

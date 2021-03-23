@@ -33,6 +33,9 @@ export enum ZWaveErrorCodes {
 	Controller_InclusionFailed,
 	Controller_ExclusionFailed,
 
+	/** The interview for this node was restarted by the user */
+	Controller_InterviewRestarted,
+
 	/** The node with the given node ID was not found */
 	Controller_NodeNotFound,
 	/** The endpoint with the given index was not found on the node */
