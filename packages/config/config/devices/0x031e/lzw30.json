@@ -1,10 +1,10 @@
 // Inovelli LZW30
-// Base model On-Off switch
+// Black Series On/Off Switch
 {
 	"manufacturer": "Inovelli",
 	"manufacturerId": "0x031e",
 	"label": "LZW30",
-	"description": "Base model On-Off switch",
+	"description": "Black Series On/Off Switch",
 	"devices": [
 		{
 			"productType": "0x0004",
@@ -73,7 +73,7 @@
 			"allowManualEntry": true
 		},
 		"4": {
-			"label": "Association Behaviour",
+			"label": "Association Behavior",
 			"valueSize": 1,
 			"minValue": 1,
 			"maxValue": 15,
@@ -84,13 +84,14 @@
 		},
 		"5": {
 			"label": "LED Indicator Color",
+			"description": "Uses a scaled hue value (realHue / 360 * 255).",
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 255,
 			"defaultValue": 170,
 			"readOnly": false,
 			"writeOnly": false,
-			"allowManualEntry": false,
+			"allowManualEntry": true,
 			"options": [
 				{
 					"label": "Red",

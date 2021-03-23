@@ -228,6 +228,7 @@
 		},
 		"13": {
 			"label": "LED Indicator Color",
+			"description": "Uses a scaled hue value (realHue / 360 * 255).",
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 255,
@@ -235,7 +236,46 @@
 			"unsigned": true,
 			"readOnly": false,
 			"writeOnly": false,
-			"allowManualEntry": true
+			"allowManualEntry": true,
+			"options": [
+				{
+					"label": "Red",
+					"value": 0
+				},
+				{
+					"label": "Orange",
+					"value": 21
+				},
+				{
+					"label": "Yellow",
+					"value": 42
+				},
+				{
+					"label": "Green",
+					"value": 85
+				},
+				{
+					"label": "Cyan",
+					"value": 127
+				},
+				{
+					"label": "Blue",
+					"value": 170
+				},
+				{
+					"label": "Violet",
+					"value": 212
+				},
+				{
+					"label": "Pink",
+					"value": 234
+				},
+				{
+					"$if": "firmwareVersion >= 1.45",
+					"label": "White",
+					"value": 255
+				}
+			]
 		},
 		"14": {
 			"label": "LED Indicator Intensity",
