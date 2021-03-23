@@ -899,7 +899,10 @@ export class Driver extends EventEmitter {
 
 		// Drop all pending messages that come from a previous interview attempt
 		this.rejectTransactions(
-			(t) => t.tag === "interview" && t.message.getNodeId() === node.id,
+			(t) =>
+				t.message.getNodeId() === node.id &&
+				(t.priority === MessagePriority.NodeQuery ||
+					t.tag === "interview"),
 			"The interview was restarted",
 			ZWaveErrorCodes.Controller_InterviewRestarted,
 		);
