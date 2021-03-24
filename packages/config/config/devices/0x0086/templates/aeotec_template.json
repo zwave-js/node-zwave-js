@@ -171,7 +171,7 @@
 	"selective_reporting": {
 		"$import": "../../templates/master_template.json#base_enable_disable",
 		"label": "Selective Reporting",
-		"description": "Report only when the threshold defined below is exceeded"
+		"description": "Report only when the defined threshold is exceeded"
 	},
 	"lock_configuration": {
 		"$import": "../../templates/master_template.json#base_enable_disable",
