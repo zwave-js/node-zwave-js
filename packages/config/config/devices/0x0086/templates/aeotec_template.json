@@ -283,19 +283,19 @@
 	},
 	"percent_threshold_clamp1": {
 		"$import": "#percent_threshold",
-		"label": "Wattage Percentage Threshold (Clamp 1)"
+		"label": "Current Percentage Threshold (Clamp 1)"
 	},
 	"percent_threshold_clamp2": {
 		"$import": "#percent_threshold",
-		"label": "Wattage Percentage Threshold (Clamp 2)"
+		"label": "Current Percentage Threshold (Clamp 2)"
 	},
 	"percent_threshold_clamp3": {
 		"$import": "#percent_threshold",
-		"label": "Wattage Percentage Threshold (Clamp 3)"
+		"label": "Current Percentage Threshold (Clamp 3)"
 	},
 	"percent_threshold_wholehem": {
 		"$import": "#percent_threshold",
-		"label": "Wattage Percentage Threshold (Whole HEM)"
+		"label": "Current Percentage Threshold (Whole HEM)"
 	},
 	"reset_parameters": {
 		"valueSize": 1,
@@ -404,6 +404,10 @@
 		"allowManualEntry": false,
 		"options": [
 			{
+				"label": "Send nothing",
+				"value": 0
+			},
+			{
 				"label": "Send hail cc",
 				"value": 1
 			},
@@ -415,10 +419,7 @@
 				"label": "Send multilevel switch report",
 				"value": 3
 			},
-			{
-				"label": "Send nothing",
-				"value": 0
-			},
+
 			{
 				"label": "Send hail cc when using the manual switch to change the load state",
 				"value": 4
@@ -455,11 +456,11 @@
 	},
 	"wake_up_10_minutes": {
 		"$import": "../../templates/master_template.json#base_enable_disable",
-		"label": "Wake device for 10 minutes after power on"
+		"label": "Wake Device for 10 minutes After Power On"
 	},
 	"low_battery_check": {
 		"$import": "../../templates/master_template.json#base_enable_disable",
-		"label": "Low battery voltage check"
+		"label": "Low Battery Voltage Check"
 	},
 	"low_battery_threshold": {
 		"label": "Low Battery Threshold",
@@ -474,8 +475,8 @@
 		"allowManualEntry": true
 	},
 	"low_battery_interval": {
-		"label": "Low battery voltage check time",
-		"description": "Minimum battery low check Interval time is 4 minutes (240 seconds)",
+		"label": "Low Battery Coltage Check Interval",
+		"description": "Minimum battery low check interval time is 4 minutes (240 seconds)",
 		"valueSize": 4,
 		"unit": "seconds",
 		"minValue": 0,
@@ -502,7 +503,7 @@
 	},
 	"send_automatic_reports": {
 		"$import": "../../templates/master_template.json#base_enable_disable",
-		"label": "Send Automatic Reports When Exceed Thresholds"
+		"label": "Send Automatic Reports When Exceeding Thresholds"
 	},
 	"current_overload": {
 		"$import": "../../templates/master_template.json#base_enable_disable",
@@ -571,52 +572,52 @@
 	},
 	"auto_report_group1_amp": {
 		"$import": "../../templates/master_template.json#base_enable_disable",
-		"label": "Automatic Report: Group 1 - Amperage",
+		"label": "Automatic Report: Group 1 - Current",
 		"valueSize": 4
 	},
 	"auto_report_group1_amp_clamp1": {
 		"$import": "../../templates/master_template.json#base_enable_disable",
-		"label": "Automatic Report: Group 1 - Amperage (Clamp 1)",
+		"label": "Automatic Report: Group 1 - Current (Clamp 1)",
 		"valueSize": 4
 	},
 	"auto_report_group1_amp_clamp2": {
 		"$import": "../../templates/master_template.json#base_enable_disable",
-		"label": "Automatic Report: Group 1 - Amperage (Clamp 2)",
+		"label": "Automatic Report: Group 1 - Current (Clamp 2)",
 		"valueSize": 4
 	},
 	"auto_report_group1_amp_wholehem": {
 		"$import": "../../templates/master_template.json#base_enable_disable",
-		"label": "Automatic Report: Group 1 - Amperage (Whole HEM)",
+		"label": "Automatic Report: Group 1 - Current (Whole HEM)",
 		"valueSize": 4
 	},
 	"auto_report_group1_msrc": {
 		"$import": "../../templates/master_template.json#base_enable_disable",
-		"label": "Automatic Report: Group 1 - Multilevel Sensor Report - Wattage",
+		"label": "Automatic Report: Group 1 - Multilevel Sensor Report - Power",
 		"valueSize": 4
 	},
 	"auto_report_group1_watt": {
 		"$import": "../../templates/master_template.json#base_enable_disable",
-		"label": "Automatic Report: Group 1 - Wattage",
+		"label": "Automatic Report: Group 1 - Power",
 		"valueSize": 4
 	},
 	"auto_report_group1_watt_clamp1": {
 		"$import": "../../templates/master_template.json#base_enable_disable",
-		"label": "Automatic Report: Group 1 - Wattage (Clamp 1)",
+		"label": "Automatic Report: Group 1 - Power (Clamp 1)",
 		"valueSize": 4
 	},
 	"auto_report_group1_watt_clamp2": {
 		"$import": "../../templates/master_template.json#base_enable_disable",
-		"label": "Automatic Report: Group 1 - Wattage (Clamp 2)",
+		"label": "Automatic Report: Group 1 - Power (Clamp 2)",
 		"valueSize": 4
 	},
 	"auto_report_group1_watt_clamp3": {
 		"$import": "../../templates/master_template.json#base_enable_disable",
-		"label": "Automatic Report: Group 1 - Wattage (Clamp 3)",
+		"label": "Automatic Report: Group 1 - Power (Clamp 3)",
 		"valueSize": 4
 	},
 	"auto_report_group1_watt_wholehem": {
 		"$import": "../../templates/master_template.json#base_enable_disable",
-		"label": "Automatic Report: Group 1 - Wattage (Whole HEM)",
+		"label": "Automatic Report: Group 1 - Power (Whole HEM)",
 		"valueSize": 4
 	},
 	"auto_report_group1_kwh": {
@@ -686,52 +687,52 @@
 	},
 	"auto_report_group2_amp": {
 		"$import": "../../templates/master_template.json#base_enable_disable",
-		"label": "Automatic Report: Group 2 - Amperage",
+		"label": "Automatic Report: Group 2 - Current",
 		"valueSize": 4
 	},
 	"auto_report_group2_amp_clamp1": {
 		"$import": "../../templates/master_template.json#base_enable_disable",
-		"label": "Automatic Report: Group 2 - Amperage (Clamp 1)",
+		"label": "Automatic Report: Group 2 - Current (Clamp 1)",
 		"valueSize": 4
 	},
 	"auto_report_group2_amp_clamp2": {
 		"$import": "../../templates/master_template.json#base_enable_disable",
-		"label": "Automatic Report: Group 2 - Amperage (Clamp 2)",
+		"label": "Automatic Report: Group 2 - Current (Clamp 2)",
 		"valueSize": 4
 	},
 	"auto_report_group2_amp_wholehem": {
 		"$import": "../../templates/master_template.json#base_enable_disable",
-		"label": "Automatic Report: Group 2 - Amperage (Whole HEM)",
+		"label": "Automatic Report: Group 2 - Current (Whole HEM)",
 		"valueSize": 4
 	},
 	"auto_report_group2_msrc": {
 		"$import": "../../templates/master_template.json#base_enable_disable",
-		"label": "Automatic Report: Group 2 - Multilevel Sensor Report - Wattage",
+		"label": "Automatic Report: Group 2 - Multilevel Sensor Report - Power",
 		"valueSize": 4
 	},
 	"auto_report_group2_watt": {
 		"$import": "../../templates/master_template.json#base_enable_disable",
-		"label": "Automatic Report: Group 2 - Wattage",
+		"label": "Automatic Report: Group 2 - Power",
 		"valueSize": 4
 	},
 	"auto_report_group2_watt_clamp1": {
 		"$import": "../../templates/master_template.json#base_enable_disable",
-		"label": "Automatic Report: Group 2 - Wattage (Clamp 1)",
+		"label": "Automatic Report: Group 2 - Power (Clamp 1)",
 		"valueSize": 4
 	},
 	"auto_report_group2_watt_clamp2": {
 		"$import": "../../templates/master_template.json#base_enable_disable",
-		"label": "Automatic Report: Group 2 - Wattage (Clamp 2)",
+		"label": "Automatic Report: Group 2 - Power (Clamp 2)",
 		"valueSize": 4
 	},
 	"auto_report_group2_watt_clamp3": {
 		"$import": "../../templates/master_template.json#base_enable_disable",
-		"label": "Automatic Report: Group 2 - Wattage (Clamp 3)",
+		"label": "Automatic Report: Group 2 - Power (Clamp 3)",
 		"valueSize": 4
 	},
 	"auto_report_group2_watt_wholehem": {
 		"$import": "../../templates/master_template.json#base_enable_disable",
-		"label": "Automatic Report: Group 2 - Wattage (Whole HEM)",
+		"label": "Automatic Report: Group 2 - Power (Whole HEM)",
 		"valueSize": 4
 	},
 	"auto_report_group2_kwh": {
@@ -801,52 +802,52 @@
 	},
 	"auto_report_group3_amp": {
 		"$import": "../../templates/master_template.json#base_enable_disable",
-		"label": "Automatic Report: Group 3 - Amperage",
+		"label": "Automatic Report: Group 3 - Current",
 		"valueSize": 4
 	},
 	"auto_report_group3_amp_clamp1": {
 		"$import": "../../templates/master_template.json#base_enable_disable",
-		"label": "Automatic Report: Group 3 - Amperage (Clamp 1)",
+		"label": "Automatic Report: Group 3 - Current (Clamp 1)",
 		"valueSize": 4
 	},
 	"auto_report_group3_amp_clamp2": {
 		"$import": "../../templates/master_template.json#base_enable_disable",
-		"label": "Automatic Report: Group 3 - Amperage (Clamp 2)",
+		"label": "Automatic Report: Group 3 - Current (Clamp 2)",
 		"valueSize": 4
 	},
 	"auto_report_group3_amp_wholehem": {
 		"$import": "../../templates/master_template.json#base_enable_disable",
-		"label": "Automatic Report: Group 3 - Amperage (Whole HEM)",
+		"label": "Automatic Report: Group 3 - Current (Whole HEM)",
 		"valueSize": 4
 	},
 	"auto_report_group3_msrc": {
 		"$import": "../../templates/master_template.json#base_enable_disable",
-		"label": "Automatic Report: Group 3 - Multilevel Sensor Report - Wattage",
+		"label": "Automatic Report: Group 3 - Multilevel Sensor Report - Power",
 		"valueSize": 4
 	},
 	"auto_report_group3_watt": {
 		"$import": "../../templates/master_template.json#base_enable_disable",
-		"label": "Automatic Report: Group 3 - Wattage",
+		"label": "Automatic Report: Group 3 - Power",
 		"valueSize": 4
 	},
 	"auto_report_group3_watt_clamp1": {
 		"$import": "../../templates/master_template.json#base_enable_disable",
-		"label": "Automatic Report: Group 3 - Wattage (Clamp 1)",
+		"label": "Automatic Report: Group 3 - Power (Clamp 1)",
 		"valueSize": 4
 	},
 	"auto_report_group3_watt_clamp2": {
 		"$import": "../../templates/master_template.json#base_enable_disable",
-		"label": "Automatic Report: Group 3 - Wattage (Clamp 2)",
+		"label": "Automatic Report: Group 3 - Power (Clamp 2)",
 		"valueSize": 4
 	},
 	"auto_report_group3_watt_clamp3": {
 		"$import": "../../templates/master_template.json#base_enable_disable",
-		"label": "Automatic Report: Group 3 - Wattage (Clamp 3)",
+		"label": "Automatic Report: Group 3 - Power (Clamp 3)",
 		"valueSize": 4
 	},
 	"auto_report_group3_watt_wholehem": {
 		"$import": "../../templates/master_template.json#base_enable_disable",
-		"label": "Automatic Report: Group 3 - Wattage (Whole HEM)",
+		"label": "Automatic Report: Group 3 - Power (Whole HEM)",
 		"valueSize": 4
 	},
 	"auto_report_group3_kwh": {
@@ -935,7 +936,7 @@
 		"allowManualEntry": false,
 		"options": [
 			{
-				"label": "Aeotech",
+				"label": "Aeotec",
 				"value": 0
 			},
 			{
@@ -945,8 +946,7 @@
 		]
 	},
 	"wattage_trigger": {
-		"label": "Minimum change in wattage to trigger event",
-		"description": "Minimum change in wattage to trigger event",
+		"label": "Minimum Power Change to Trigger Event",
 		"valueSize": 2,
 		"minValue": 0,
 		"maxValue": 32000,
@@ -957,7 +957,7 @@
 		"allowManualEntry": true
 	},
 	"wattage_percent_trigger": {
-		"label": "Minimum change in wattage to trigger event",
+		"label": "Minimum Power Percentage Change to Trigger Event",
 		"valueSize": 1,
 		"unit": "%",
 		"minValue": 0,
