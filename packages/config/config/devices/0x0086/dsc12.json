@@ -86,7 +86,7 @@
 			"$import": "templates/aeotec_template.json#auto_report_interval_group3"
 		},
 		"120": {
-			"$import": "templates/aeotec_template.json#external_switch_3"
+			"$import": "templates/aeotec_template.json#external_switch_3way"
 		}
 	}
 }
