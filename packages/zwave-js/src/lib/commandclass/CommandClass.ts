@@ -382,6 +382,13 @@ export class CommandClass {
 		return stripUndefined({ ...ret, ...props });
 	}
 
+	protected throwMissingCriticalInterviewResponse(): never {
+		throw new ZWaveError(
+			`The node did not respond to a critical interview query in time.`,
+			ZWaveErrorCodes.Controller_NodeTimeout,
+		);
+	}
+
 	/**
 	 * Performs the interview procedure for this CC according to SDS14223
 	 */
