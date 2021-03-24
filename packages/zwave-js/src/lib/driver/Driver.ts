@@ -984,7 +984,7 @@ export class Driver extends EventEmitter {
 				if (node.firmwareVersion != undefined) {
 					message += `:${node.firmwareVersion}`;
 				}
-				const contexts: Record<string, any> = {
+				const deviceInfo: Record<string, any> = {
 					supportsConfigCCV3:
 						node.getCCVersion(CommandClasses.Configuration) >= 3,
 					supportsAGI: node.supportsCC(
@@ -995,14 +995,14 @@ export class Driver extends EventEmitter {
 					),
 				};
 				try {
-					if (contexts.supportsConfigCCV3) {
+					if (deviceInfo.supportsConfigCCV3) {
 						// Try to collect all info about config params we can get
 						const instance = node.createCCInstanceUnsafe(
 							ConfigurationCC,
 						)!;
-						contexts.parameters = instance.getQueriedParamInfos();
+						deviceInfo.parameters = instance.getQueriedParamInfos();
 					}
-					if (contexts.supportsAGI) {
+					if (deviceInfo.supportsAGI) {
 						// Try to collect all info about association groups we can get
 						const instance = node.createCCInstanceUnsafe(
 							AssociationGroupInfoCC,
@@ -1021,15 +1021,20 @@ export class Driver extends EventEmitter {
 								instance.getGroupNameCached(group) ?? "",
 							);
 						}
-						contexts.associationGroups = names;
+						deviceInfo.associationGroups = names;
 					}
-					if (contexts.supportsZWavePlus) {
-						contexts.zWavePlusVersion = node.zwavePlusVersion;
+					if (deviceInfo.supportsZWavePlus) {
+						deviceInfo.zWavePlusVersion = node.zwavePlusVersion;
 					}
 				} catch {
 					// Don't fail on the last meters :)
 				}
-				Sentry.captureMessage(message, { contexts });
+				Sentry.captureMessage(message, (scope) => {
+					scope.clearBreadcrumbs();
+					scope.setUser(null);
+					scope.setExtras(deviceInfo);
+					return scope;
+				});
 			}
 		} catch (e: unknown) {
 			if (isZWaveError(e)) {
