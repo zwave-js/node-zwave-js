@@ -999,7 +999,7 @@
 			}
 		]
 	},
-	"external_switch_3": {
+	"external_switch_3way": {
 		"$import": "../../templates/master_template.json#base_0-255_nounit",
 		"label": "External Switch Type",
 		"options": [
