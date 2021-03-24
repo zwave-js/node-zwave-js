@@ -270,7 +270,7 @@
 	},
 	"percent_threshold": {
 		"label": "Current Percentage Change Threshold",
-		"description": "Percentage change in wattage to induce an automatic report",
+		"description": "Threshold change in power consumption (on a percentage basiss) to induce an automatic report",
 		"valueSize": 1,
 		"unit": "%",
 		"minValue": 0,

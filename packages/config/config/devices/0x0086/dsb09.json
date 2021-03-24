@@ -45,11 +45,11 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "120V",
+					"label": "120 V",
 					"value": 120
 				},
 				{
-					"label": "240V",
+					"label": "240 V",
 					"value": 240
 				}
 			]

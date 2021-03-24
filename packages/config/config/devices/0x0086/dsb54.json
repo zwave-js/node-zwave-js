@@ -52,7 +52,7 @@
 			"label": "On Trigger: Send Binary Sensor Report",
 			"valueSize": 4
 		},
-		"121[0x100]": {
+		"121[0x0100]": {
 			"$import": "../templates/master_template.json#base_enable_disable",
 			"label": "On Trigger: Send Basic Report",
 			"valueSize": 4

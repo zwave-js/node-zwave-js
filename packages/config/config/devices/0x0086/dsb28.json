@@ -104,13 +104,13 @@
 		"101[0x1000]": {
 			"$import": "templates/aeotec_template.json#auto_report_group1_kwh_clamp2"
 		},
-		"101[0x10000]": {
+		"101[0x010000]": {
 			"$import": "templates/aeotec_template.json#auto_report_group1_v_clamp1"
 		},
-		"101[0x20000]": {
+		"101[0x020000]": {
 			"$import": "templates/aeotec_template.json#auto_report_group1_v_clamp2"
 		},
-		"101[0x80000]": {
+		"101[0x080000]": {
 			"$import": "templates/aeotec_template.json#auto_report_group1_amp_clamp1"
 		},
 		"101[0x100000]": {
@@ -140,13 +140,13 @@
 		"102[0x1000]": {
 			"$import": "templates/aeotec_template.json#auto_report_group2_kwh_clamp2"
 		},
-		"102[0x10000]": {
+		"102[0x010000]": {
 			"$import": "templates/aeotec_template.json#auto_report_group2_v_clamp1"
 		},
-		"102[0x20000]": {
+		"102[0x00000]": {
 			"$import": "templates/aeotec_template.json#auto_report_group2_v_clamp2"
 		},
-		"102[0x80000]": {
+		"102[0x080000]": {
 			"$import": "templates/aeotec_template.json#auto_report_group2_amp_clamp1"
 		},
 		"102[0x100000]": {
@@ -176,13 +176,13 @@
 		"103[0x1000]": {
 			"$import": "templates/aeotec_template.json#auto_report_group3_kwh_clamp2"
 		},
-		"103[0x10000]": {
+		"103[0x010000]": {
 			"$import": "templates/aeotec_template.json#auto_report_group3_v_clamp1"
 		},
-		"103[0x20000]": {
+		"103[0x020000]": {
 			"$import": "templates/aeotec_template.json#auto_report_group3_v_clamp2"
 		},
-		"103[0x80000]": {
+		"103[0x080000]": {
 			"$import": "templates/aeotec_template.json#auto_report_group3_amp_clamp1"
 		},
 		"103[0x100000]": {
