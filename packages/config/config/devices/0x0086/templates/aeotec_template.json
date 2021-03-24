@@ -350,7 +350,7 @@
 		"allowManualEntry": false,
 		"options": [
 			{
-				"label": "Disabled",
+				"label": "Disable",
 				"value": 0
 			},
 			{
@@ -358,7 +358,7 @@
 				"value": 1
 			},
 			{
-				"label": "Basic report CC",
+				"label": "Basic CC",
 				"value": 2
 			}
 		]
@@ -375,19 +375,19 @@
 		"allowManualEntry": false,
 		"options": [
 			{
-				"label": "Send nothing",
+				"label": "Disable",
 				"value": 0
 			},
 			{
-				"label": "Send hail cc",
+				"label": "Hail CC",
 				"value": 1
 			},
 			{
-				"label": "Send basic report cc",
+				"label": "Basic CC",
 				"value": 2
 			},
 			{
-				"label": "Send hail cc when using action button to change the output load state",
+				"label": "Hail CC (when using action button to change the output load state)",
 				"value": 3
 			}
 		]
@@ -404,24 +404,24 @@
 		"allowManualEntry": false,
 		"options": [
 			{
-				"label": "Send nothing",
+				"label": "Disable",
 				"value": 0
 			},
 			{
-				"label": "Send hail cc",
+				"label": "Hail CC",
 				"value": 1
 			},
 			{
-				"label": "Send basic cc report",
+				"label": "Basic CC",
 				"value": 2
 			},
 			{
-				"label": "Send multilevel switch report",
+				"label": "Multilevel Switch",
 				"value": 3
 			},
 
 			{
-				"label": "Send hail cc when using the manual switch to change the load state",
+				"label": "Hail CC (when using the manual switch to change the load state)",
 				"value": 4
 			}
 		]
