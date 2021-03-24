@@ -1,0 +1,124 @@
+// McoHome Technology Co., Ltd. H-S511
+// Touch Panel Switch 1-Way
+{
+	"manufacturer": "McoHome Technology Co., Ltd.",
+	"manufacturerId": "0x015f",
+	"label": "MH-S511",
+	"description": "MCOHome Touch Panel Switch MH-S511 (1 way)",
+	"devices": [
+		{
+			"productType": "0x5111",
+			"productId": "0x1406"
+		},
+		{
+			"productType": "0x5111",
+			"productId": "0x5103"
+		},
+		{
+			"productType": "0x5131",
+			"productId": "0x5101"
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"supportsZWavePlus": true,
+	"paramInformation": {
+		"2": {
+			"label": "Switch state saved or not when power failure",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 1,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true,
+            "options": [
+            {
+                "label": "Disabled",
+                "value": 0
+            },
+            {
+                "label": "Enabled",
+                "value": 1
+            }
+        ]
+		},
+		"3": {
+			"label": "ALL ON/ALL OFF",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 255,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true,
+            "options": [
+            {
+                "label": "Forbid ALL ON, Forbid ALL OFF",
+                "value": 0
+            },
+            {
+                "label": "Forbid ALL ON, Allow ALL OFF",
+                "value": 1
+            },
+			{
+                "label": "Allow ALL ON, Forbid ALL OFF",
+                "value": 2
+            },
+            {
+                "label": "Allow ALL ON, Allow ALL OFF",
+                "value": 255
+            }
+		]
+		},
+		"4": {
+			"label": "LED Backlit brightness level",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 10,
+			"defaultValue": 10,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"5": {
+			"label": "Key Mode",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 4,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true,
+            "options": [
+            {
+                "label": "Single click to switch on or off",
+                "value": 0
+            },
+            {
+                "label": "When turned on, auto off after X seconds",
+                "value": 1
+            },
+			{
+                "label": "When turned off, auto on after X seconds",
+                "value": 2
+            }
+		]
+		},
+		"6": {
+			"label": "Key On duration",
+			"unit": "seconds",
+			"valueSize": 2,
+			"minValue": 0,
+			"maxValue": 65535,
+			"defaultValue": 0,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		}
+	}
+}
