@@ -53,7 +53,7 @@
 			"$import": "templates/aeotec_template.json#current_overload"
 		},
 		"20": {
-			"$if": "firmwareVersion >= 3.255",
+			"$if": "firmwareVersion >= 4.0",
 			"$import": "../templates/master_template.json#state_after_power_failure"
 		},
 		"80": {
