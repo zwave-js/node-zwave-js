@@ -241,7 +241,7 @@
 	},
 	"current_threshold": {
 		"label": "Current Change Threshold",
-		"description": "Threshold change in wattage to induce an automatic report",
+		"description": "Threshold change in power consumption to induce an automatic report",
 		"valueSize": 2,
 		"unit": "W",
 		"minValue": 0,
