@@ -269,7 +269,7 @@
 	},
 	"percent_threshold": {
 		"label": "Current Percentage Change Threshold",
-		"description": "Threshold change in power consumption (on a percentage basiss) to induce an automatic report",
+		"description": "Threshold change in power consumption (on a percentage basis) to induce an automatic report",
 		"valueSize": 1,
 		"unit": "%",
 		"minValue": 0,
@@ -474,7 +474,7 @@
 		"allowManualEntry": true
 	},
 	"low_battery_interval": {
-		"label": "Low Battery Coltage Check Interval",
+		"label": "Low Battery Voltage Check Interval",
 		"description": "Minimum battery low check interval time is 4 minutes (240 seconds)",
 		"valueSize": 4,
 		"unit": "seconds",
