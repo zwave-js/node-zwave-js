@@ -219,7 +219,7 @@
 	},
 	"factory_reset_exclude": {
 		"label": "Reset to Default Factory Setting",
-		"description": "This parameter is used to reset product to default factory setting. (there are just 2 values can be used)",
+		"description": "This parameter is used to reset the product to default factory setting.",
 		"valueSize": 4,
 		"minValue": 1,
 		"maxValue": 1431655765,
