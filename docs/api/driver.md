@@ -196,6 +196,14 @@ updateLogConfig(config: DeepPartial<LogConfig>): void
 
 Updates the logging configuration without having to restart the driver.
 
+### `getLogConfig`
+
+```ts
+getLogConfig(): LogConfig
+```
+
+Returns the current logging configuration.
+
 ## Driver properties
 
 ### `cacheDir`
