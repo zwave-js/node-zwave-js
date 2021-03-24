@@ -25,7 +25,17 @@
 			"defaultValue": 1,
 			"readOnly": false,
 			"writeOnly": false,
-			"allowManualEntry": true
+			"allowManualEntry": true,
+            "options": [
+            {
+                "label": "Disabled",
+                "value": 0
+            },
+            {
+                "label": "Enabled",
+                "value": 1
+            }
+        ]
 		},
 		"3": {
 			"label": "ALL ON/ALL OFF",
@@ -36,7 +46,25 @@
 			"unsigned": true,
 			"readOnly": false,
 			"writeOnly": false,
-			"allowManualEntry": true
+			"allowManualEntry": true,
+            "options": [
+            {
+                "label": "Forbid ALL ON, Forbid ALL OFF",
+                "value": 0
+            },
+            {
+                "label": "Forbid ALL ON, Allow ALL OFF",
+                "value": 1
+            },
+			{
+                "label": "Allow ALL ON, Forbid ALL OFF",
+                "value": 2
+            },
+            {
+                "label": "Allow ALL ON, Allow ALL OFF",
+                "value": 255
+            }
+		]
 		},
 		"4": {
 			"label": "LED Backlit brightness level",
@@ -56,7 +84,21 @@
 			"defaultValue": 0,
 			"readOnly": false,
 			"writeOnly": false,
-			"allowManualEntry": true
+			"allowManualEntry": true,
+            "options": [
+            {
+                "label": "Single click to switch on or off",
+                "value": 0
+            },
+            {
+                "label": "When turned on, auto off after X seconds",
+                "value": 1
+            },
+			{
+                "label": "When turned off, auto on after X seconds",
+                "value": 2
+            }
+		]
 		},
 		"6": {
 			"label": "Key On duration",
