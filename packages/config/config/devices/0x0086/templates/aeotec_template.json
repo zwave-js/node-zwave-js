@@ -218,8 +218,7 @@
 		]
 	},
 	"factory_reset_exclude": {
-		"label": "Reset to Default Factory Setting",
-		"description": "This parameter is used to reset the product to default factory setting.",
+		"label": "Reset to Factory Default Setting",
 		"valueSize": 4,
 		"minValue": 1,
 		"maxValue": 1431655765,
@@ -230,7 +229,7 @@
 		"allowManualEntry": false,
 		"options": [
 			{
-				"label": "Reset the product to default factory setting and be excluded from the Z-Wave network",
+				"label": "Reset the product to factory default setting and exclude from Z-Wave network",
 				"value": 1431655765
 			},
 			{
