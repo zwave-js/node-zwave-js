@@ -2240,12 +2240,6 @@ protocol version:      ${this._protocolVersion}`;
 						CommandClasses["Binary Sensor"],
 					);
 					break;
-				// TODO: Which sensor type to use here?
-				// case GenericDeviceClasses["Multilevel Sensor"]:
-				// 	mappedTargetCC = this.createCCInstanceUnsafe(
-				// 		CommandClasses["Multilevel Sensor"],
-				// 	);
-				// 	break;
 				case 0x10: // Binary Switch
 					mappedTargetCC = sourceEndpoint.createCCInstanceUnsafe(
 						CommandClasses["Binary Switch"],
@@ -2284,7 +2278,7 @@ protocol version:      ${this._protocolVersion}`;
 			if (this._deviceConfig?.compat?.treatBasicSetAsEvent) {
 				this.driver.controllerLog.logNode(this.id, {
 					endpoint: command.endpointIndex,
-					message: "treating BasicCC Set as a value event",
+					message: "treating BasicCC::Set as a value event",
 				});
 				this._valueDB.setValue(
 					getBasicCCCompatEventValueId(command.endpointIndex),
@@ -2294,23 +2288,15 @@ protocol version:      ${this._protocolVersion}`;
 					},
 				);
 				return;
-			}
+			} else {
+				// Some devices send their current state using `BasicCCSet`s to their associations
+				// instead of using reports. We still interpret them like reports
+				this.driver.controllerLog.logNode(this.id, {
+					endpoint: command.endpointIndex,
+					message: "treating BasicCC::Set as a report",
+				});
 
-			// Some devices send their current state using `BasicCCSet`s to their associations
-			// instead of using reports. We still interpret them like reports
-			this.driver.controllerLog.logNode(this.id, {
-				endpoint: command.endpointIndex,
-				message: "treating BasicCC Set as a report",
-			});
-
-			// Try to set the mapped value on the target CC
-			const didSetMappedValue = mappedTargetCC?.setMappedBasicValue(
-				command.targetValue,
-			);
-
-			// Otherwise fall back to setting it ourselves
-			if (!didSetMappedValue) {
-				// Sets cannot store their value automatically, so store the values manually
+				// Basic Set commands cannot store their value automatically, so store the values manually
 				this._valueDB.setValue(
 					getBasicCCCurrentValueValueId(command.endpointIndex),
 					command.targetValue,
