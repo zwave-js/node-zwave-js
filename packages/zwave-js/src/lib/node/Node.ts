@@ -86,6 +86,7 @@ import {
 	NotificationCC,
 	NotificationCCReport,
 } from "../commandclass/NotificationCC";
+import { SceneActivationCCSet } from "../commandclass/SceneActivationCC";
 import {
 	SecurityCCNonceGet,
 	SecurityCCNonceReport,
@@ -1876,11 +1877,16 @@ protocol version:      ${this._protocolVersion}`;
 		}
 
 		// Ignore all commands that don't need to be handled
-		if (command.constructor.name.endsWith("Report")) {
+		switch (true) {
 			// Reports are either a response to a Get command or
 			// automatically store their values in the Value DB.
 			// No need to manually handle them - other than what we've already done
-			return;
+			case command.constructor.name.endsWith("Report"):
+
+			// When this command is received, its values get emitted as an event.
+			// Nothing else to do here
+			case command instanceof SceneActivationCCSet:
+				return;
 		}
 
 		this.driver.controllerLog.logNode(this.id, {
