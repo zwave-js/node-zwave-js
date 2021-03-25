@@ -262,6 +262,9 @@
 					"type": "number",
 					"minimum": 0
 				},
+				"mapRootReportsToEndpoints": {
+					"const": true
+				},
 				"overrideFloatEncoding": {
 					"type": "object",
 					"properties": {
