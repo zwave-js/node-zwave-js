@@ -728,6 +728,22 @@ alters capabilities: ${!!properties.altersCapabilities}`;
 	}
 
 	/**
+	 * @internal
+	 * Returns the param info that was queried for this node. This returns the information that was returned by the node
+	 * and does not include partial parameters.
+	 */
+	public getQueriedParamInfos(): Record<number, ConfigurationMetadata> {
+		const parameters = distinct(
+			this.getDefinedValueIDs()
+				.map((v) => v.property)
+				.filter((p): p is number => typeof p === "number"),
+		);
+		return composeObject(
+			parameters.map((p) => [p as any, this.getParamInformation(p)]),
+		);
+	}
+
+	/**
 	 * Returns stored config parameter metadata for all partial config params addressed with the given parameter number
 	 */
 	public getPartialParamInfos(

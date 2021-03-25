@@ -119,7 +119,6 @@ import {
 import type { Driver } from "../driver/Driver";
 import { Extended, interpretEx } from "../driver/StateMachineShared";
 import type { Transaction } from "../driver/Transaction";
-import type { Message } from "../message/Message";
 import { DeviceClass } from "./DeviceClass";
 import { Endpoint } from "./Endpoint";
 import {
@@ -1094,27 +1093,6 @@ export class ZWaveNode extends Endpoint {
 				requestedNodeId: this.id,
 			}),
 		);
-		if (
-			process.env.NODE_ENV !== "test" &&
-			!(resp instanceof GetNodeProtocolInfoResponse)
-		) {
-			// eslint-disable-next-line @typescript-eslint/no-var-requires
-			const Sentry: typeof import("@sentry/node") = require("@sentry/node");
-			Sentry.captureMessage(
-				"Response to GetNodeProtocolInfoRequest is not a GetNodeProtocolInfoResponse",
-				{
-					contexts: {
-						message: {
-							name: ((resp as any) as Message).constructor.name,
-							type: ((resp as any) as Message).type,
-							functionType: ((resp as any) as Message)
-								.functionType,
-							...((resp as any) as Message).toLogEntry(),
-						},
-					},
-				},
-			);
-		}
 		this._deviceClass = resp.deviceClass;
 		for (const cc of this._deviceClass.mandatorySupportedCCs) {
 			this.addCC(cc, { isSupported: true });
@@ -1765,28 +1743,6 @@ protocol version:      ${this._protocolVersion}`;
 					removeNonRepeaters: false,
 				}),
 			);
-			if (
-				process.env.NODE_ENV !== "test" &&
-				!(resp instanceof GetRoutingInfoResponse)
-			) {
-				// eslint-disable-next-line @typescript-eslint/no-var-requires
-				const Sentry: typeof import("@sentry/node") = require("@sentry/node");
-				Sentry.captureMessage(
-					"Response to GetRoutingInfoRequest is not a GetRoutingInfoResponse",
-					{
-						contexts: {
-							message: {
-								name: ((resp as any) as Message).constructor
-									.name,
-								type: ((resp as any) as Message).type,
-								functionType: ((resp as any) as Message)
-									.functionType,
-								...((resp as any) as Message).toLogEntry(),
-							},
-						},
-					},
-				);
-			}
 			this._neighbors = resp.nodeIds;
 			this.driver.controllerLog.logNode(this.id, {
 				message: `  node neighbors received: ${this._neighbors.join(
