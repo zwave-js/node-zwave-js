@@ -6,6 +6,8 @@ process.on("unhandledRejection", (_r) => {
 	// debugger;
 });
 
+// Uncomment this to test Sentry reporting
+// import "../packages/zwave-js";
 import { Driver } from "../packages/zwave-js/src/lib/driver/Driver";
 
 const driver = new Driver("COM5", {

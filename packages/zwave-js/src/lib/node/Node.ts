@@ -86,6 +86,7 @@ import {
 	NotificationCC,
 	NotificationCCReport,
 } from "../commandclass/NotificationCC";
+import { SceneActivationCCSet } from "../commandclass/SceneActivationCC";
 import {
 	SecurityCCNonceGet,
 	SecurityCCNonceReport,
@@ -118,7 +119,6 @@ import {
 import type { Driver } from "../driver/Driver";
 import { Extended, interpretEx } from "../driver/StateMachineShared";
 import type { Transaction } from "../driver/Transaction";
-import type { Message } from "../message/Message";
 import { DeviceClass } from "./DeviceClass";
 import { Endpoint } from "./Endpoint";
 import {
@@ -1093,27 +1093,6 @@ export class ZWaveNode extends Endpoint {
 				requestedNodeId: this.id,
 			}),
 		);
-		if (
-			process.env.NODE_ENV !== "test" &&
-			!(resp instanceof GetNodeProtocolInfoResponse)
-		) {
-			// eslint-disable-next-line @typescript-eslint/no-var-requires
-			const Sentry: typeof import("@sentry/node") = require("@sentry/node");
-			Sentry.captureMessage(
-				"Response to GetNodeProtocolInfoRequest is not a GetNodeProtocolInfoResponse",
-				{
-					contexts: {
-						message: {
-							name: ((resp as any) as Message).constructor.name,
-							type: ((resp as any) as Message).type,
-							functionType: ((resp as any) as Message)
-								.functionType,
-							...((resp as any) as Message).toLogEntry(),
-						},
-					},
-				},
-			);
-		}
 		this._deviceClass = resp.deviceClass;
 		for (const cc of this._deviceClass.mandatorySupportedCCs) {
 			this.addCC(cc, { isSupported: true });
@@ -1764,28 +1743,6 @@ protocol version:      ${this._protocolVersion}`;
 					removeNonRepeaters: false,
 				}),
 			);
-			if (
-				process.env.NODE_ENV !== "test" &&
-				!(resp instanceof GetRoutingInfoResponse)
-			) {
-				// eslint-disable-next-line @typescript-eslint/no-var-requires
-				const Sentry: typeof import("@sentry/node") = require("@sentry/node");
-				Sentry.captureMessage(
-					"Response to GetRoutingInfoRequest is not a GetRoutingInfoResponse",
-					{
-						contexts: {
-							message: {
-								name: ((resp as any) as Message).constructor
-									.name,
-								type: ((resp as any) as Message).type,
-								functionType: ((resp as any) as Message)
-									.functionType,
-								...((resp as any) as Message).toLogEntry(),
-							},
-						},
-					},
-				);
-			}
 			this._neighbors = resp.nodeIds;
 			this.driver.controllerLog.logNode(this.id, {
 				message: `  node neighbors received: ${this._neighbors.join(
@@ -1826,28 +1783,29 @@ protocol version:      ${this._protocolVersion}`;
 		// was wrong. Stop querying it regularly for updates
 		this.cancelManualValueRefresh(command.ccId);
 
-		// If this is a report for the root endpoint and the node supports the CC on another endpoint,
-		// we need to map it to endpoint 1. Either it does not support multi channel associations or
-		// it is misbehaving. In any case, we would hide this report if we didn't map it
+		// If this is a report for the root endpoint and the node supports the CC on another endpoint, it was probably
+		// meant to come from that endpoint. Either it does not support multi channel associations or it is misbehaving.
+		// We map these to a supporting endpoint if the corresponding compat flag is set
 		if (
 			command.endpointIndex === 0 &&
 			command.constructor.name.endsWith("Report") &&
 			this.getEndpointCount() >= 1 &&
-			// skip the root to endpoint mapping if the root endpoint values are not meant to mirror endpoint 1
-			!this._deviceConfig?.compat?.preserveRootApplicationCCValueIDs
+			this._deviceConfig?.compat?.mapRootReportsToEndpoints
 		) {
-			// Find the first endpoint that supports the received CC - if there is none, we don't map the report
-			for (const endpoint of this.getAllEndpoints()) {
-				if (endpoint.index === 0) continue;
-				if (!endpoint.supportsCC(command.ccId)) continue;
-				// Force the CC to store its values again under the supporting endpoint
+			// Figure out if the mapping from root to another endpoint is unambiguous.
+			// Otherwise, we cannot map without getting it wrong some of the time.
+			const supportingEndpoints = this.getAllEndpoints().filter(
+				(e) => e.index !== 0 && e.supportsCC(command.ccId),
+			);
+			if (supportingEndpoints.length === 1) {
+				const endpoint = supportingEndpoints[0];
+				// Force the CC to store its values again under the only supporting endpoint
 				this.driver.controllerLog.logNode(
 					this.nodeId,
-					`Mapping unsolicited report from root device to first supporting endpoint #${endpoint.index}`,
+					`Mapping unsolicited report from root device to endpoint #${endpoint.index}`,
 				);
 				command.endpointIndex = endpoint.index;
 				command.persistValues();
-				break;
 			}
 		}
 
@@ -1876,11 +1834,16 @@ protocol version:      ${this._protocolVersion}`;
 		}
 
 		// Ignore all commands that don't need to be handled
-		if (command.constructor.name.endsWith("Report")) {
+		switch (true) {
 			// Reports are either a response to a Get command or
 			// automatically store their values in the Value DB.
 			// No need to manually handle them - other than what we've already done
-			return;
+			case command.constructor.name.endsWith("Report"):
+
+			// When this command is received, its values get emitted as an event.
+			// Nothing else to do here
+			case command instanceof SceneActivationCCSet:
+				return;
 		}
 
 		this.driver.controllerLog.logNode(this.id, {
@@ -2240,12 +2203,6 @@ protocol version:      ${this._protocolVersion}`;
 						CommandClasses["Binary Sensor"],
 					);
 					break;
-				// TODO: Which sensor type to use here?
-				// case GenericDeviceClasses["Multilevel Sensor"]:
-				// 	mappedTargetCC = this.createCCInstanceUnsafe(
-				// 		CommandClasses["Multilevel Sensor"],
-				// 	);
-				// 	break;
 				case 0x10: // Binary Switch
 					mappedTargetCC = sourceEndpoint.createCCInstanceUnsafe(
 						CommandClasses["Binary Switch"],
@@ -2284,7 +2241,7 @@ protocol version:      ${this._protocolVersion}`;
 			if (this._deviceConfig?.compat?.treatBasicSetAsEvent) {
 				this.driver.controllerLog.logNode(this.id, {
 					endpoint: command.endpointIndex,
-					message: "treating BasicCC Set as a value event",
+					message: "treating BasicCC::Set as a value event",
 				});
 				this._valueDB.setValue(
 					getBasicCCCompatEventValueId(command.endpointIndex),
@@ -2294,23 +2251,15 @@ protocol version:      ${this._protocolVersion}`;
 					},
 				);
 				return;
-			}
+			} else {
+				// Some devices send their current state using `BasicCCSet`s to their associations
+				// instead of using reports. We still interpret them like reports
+				this.driver.controllerLog.logNode(this.id, {
+					endpoint: command.endpointIndex,
+					message: "treating BasicCC::Set as a report",
+				});
 
-			// Some devices send their current state using `BasicCCSet`s to their associations
-			// instead of using reports. We still interpret them like reports
-			this.driver.controllerLog.logNode(this.id, {
-				endpoint: command.endpointIndex,
-				message: "treating BasicCC Set as a report",
-			});
-
-			// Try to set the mapped value on the target CC
-			const didSetMappedValue = mappedTargetCC?.setMappedBasicValue(
-				command.targetValue,
-			);
-
-			// Otherwise fall back to setting it ourselves
-			if (!didSetMappedValue) {
-				// Sets cannot store their value automatically, so store the values manually
+				// Basic Set commands cannot store their value automatically, so store the values manually
 				this._valueDB.setValue(
 					getBasicCCCurrentValueValueId(command.endpointIndex),
 					command.targetValue,

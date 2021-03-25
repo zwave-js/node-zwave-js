@@ -58,9 +58,13 @@ Sometimes a manufacturer makes a device for another company. The field `manufact
 	}
 ```
 
+## Device Label
+
+These should generally conform to the **model number** (or **SKU**) of the device. Remove the manufacturer name from the label, if present.
+
 ## Device Descriptions
 
-These should generally conform to the name under which the device is sold. If the description merely mirrors the label, it should be omitted. Remove the manufacturer name from the description, if present. For example:
+These should generally conform to the **name** under which the device is sold. This should not just mirror the label, unless the device is actually being marketed as such. Remove the manufacturer name from the description, if present. For example:
 
 ```diff
 	// Yale YDM3109

@@ -156,10 +156,11 @@ export type TransactionReducerResult =
 			message?: Message;
 	  }
 	| {
-			// Changes the priority of the transaction if a new one is given,
+			// Changes the priority (and tag) of the transaction if a new one is given,
 			// and moves the current transaction back to the queue
 			type: "requeue";
 			priority?: MessagePriority;
+			tag?: any;
 	  };
 
 export type TransactionReducer = (
@@ -588,6 +589,9 @@ export function createSendThreadMachine(
 					case "requeue":
 						if (reducerResult.priority != undefined) {
 							transaction.priority = reducerResult.priority;
+						}
+						if (reducerResult.tag != undefined) {
+							transaction.tag = reducerResult.tag;
 						}
 						requeue.push(transaction);
 						break;

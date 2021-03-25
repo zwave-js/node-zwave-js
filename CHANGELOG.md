@@ -3,7 +3,7 @@
 	Placeholder for next release:
 	## __WORK IN PROGRESS__
 -->
-## 7.0.0-beta.2 (2021-03-19) · _Summer is coming!_
+## 7.0.0 (2021-03-23) · _Summer is coming!_
 ### Breaking changes · [Migration guide](https://zwave-js.github.io/node-zwave-js/#/getting-started/migrating-to-v7)
 * Renamed `controller.removeNodeFromAllAssocations` to `controller.removeNodeFromAllAssociations` to fix a typo
 * We've reworked/fixed the parsing of Node Information Frames (NIF) to match the specifications and changed node properties to make more sense
@@ -29,6 +29,7 @@
 * Fall back to slow refresh behavior on `Central Scene CC V2` if a delayed key up is detected
 * Handle incorrectly zero-terminated strings in name reports of `Association Group Info CC`
 * Allow healing single nodes
+* Manually requesting a re-interview while another one is still in progress no longer causes multiple interviews to happen in parallel
 
 ### Config file changes
 * Add missing Sunricher device configs
@@ -37,6 +38,7 @@
 * Add RU version of ZW100 (FW 1.10)
 * Distinguish Popp Flow Stop valve versions 1 and 2
 * Add undocumented parameter 6 to ZW3104
+* Minor update for some Inovelli switches and dimmers
 
 ### Changes under the hood
 * Added a missing callback function to the quick start example

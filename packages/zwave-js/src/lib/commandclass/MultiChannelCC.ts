@@ -324,10 +324,10 @@ export class MultiChannelCC extends CommandClass {
 			this.driver.controllerLog.logNode(node.id, {
 				endpoint: this.endpointIndex,
 				message:
-					"Querying device endpoint information timed out, skipping interview...",
+					"Querying device endpoint information timed out, aborting interview...",
 				level: "warn",
 			});
-			return;
+			return this.throwMissingCriticalInterviewResponse();
 		}
 
 		let logMessage = `received response for device endpoints:
@@ -459,6 +459,13 @@ supported CCs:`;
 					message: logMessage,
 					direction: "inbound",
 				});
+			} else {
+				this.driver.controllerLog.logNode(node.id, {
+					endpoint: this.endpointIndex,
+					message: `Querying endpoint #${endpoint} capabilities timed out, aborting interview...`,
+					level: "warn",
+				});
+				return this.throwMissingCriticalInterviewResponse();
 			}
 		}
 

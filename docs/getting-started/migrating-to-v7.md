@@ -6,7 +6,7 @@ In version 7.x we got rid of some old habits, leading to several breaking change
 
 This legacy behavior resulted in a lot of traffic and delays when the driver was restarted, often doing many unnecessary queries. To reduce the strain on battery devices and to keep the network as responsive as possible, we've opted not to do this anymore when a node was previously interviewed. This also means that the `"interview completed"` event is now only emitted after the initial interview and after manually-requested re-interviews, but not after each restart.
 
-If you need to manually update values, you can do that on demand with [`node.refreshValues()`](../api/node.md#refreshValues) or [`node.refreshCCValues()`](../api/node.md#refreshCCValues).
+If you need to manually update values, you can do that on demand with [`node.refreshValues()`](api/node.md#refreshValues) or [`node.refreshCCValues()`](api/node.md#refreshCCValues).
 
 To determine if a node can be interacted with, you should listen for the `ready` event instead.
 
@@ -30,7 +30,7 @@ This event serves a similar purpose as the `"value notification"` event (which w
 
 Since the original implementation, the need for a more versatile CC-specific notification event has arisen. Therefore we decided to rework this event and decouple it from the `Notification CC`. As a result, the event callback now indicates which CC raised the event and its arguments are moved into a single object parameter.
 
-See the [`"notification"` event](../api/node#quotnotificationquot) docs for a detailed description what changed.
+See the [`"notification"` event](api/node#quotnotificationquot) docs for a detailed description what changed.
 
 ## `Endpoint` constructor changed
 

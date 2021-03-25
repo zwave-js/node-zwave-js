@@ -21,7 +21,13 @@ import {
 	ZWaveSerialPortBase,
 	ZWaveSocket,
 } from "@zwave-js/serial";
-import { DeepPartial, num2hex, pick, stringify } from "@zwave-js/shared";
+import {
+	DeepPartial,
+	formatId,
+	num2hex,
+	pick,
+	stringify,
+} from "@zwave-js/shared";
 import { wait } from "alcalzone-shared/async";
 import {
 	createDeferredPromise,
@@ -37,10 +43,12 @@ import { URL } from "url";
 import * as util from "util";
 import { interpret } from "xstate";
 import { FirmwareUpdateStatus } from "../commandclass";
+import { AssociationGroupInfoCC } from "../commandclass/AssociationGroupInfoCC";
 import {
 	CommandClass,
 	getImplementedVersion,
 } from "../commandclass/CommandClass";
+import { ConfigurationCC } from "../commandclass/ConfigurationCC";
 import { DeviceResetLocallyCCNotification } from "../commandclass/DeviceResetLocallyCC";
 import {
 	isEncapsulatingCommandClass,
@@ -900,10 +908,11 @@ export class Driver extends EventEmitter {
 		// Drop all pending messages that come from a previous interview attempt
 		this.rejectTransactions(
 			(t) =>
-				t.priority === MessagePriority.NodeQuery &&
-				t.message.getNodeId() === node.id,
+				t.message.getNodeId() === node.id &&
+				(t.priority === MessagePriority.NodeQuery ||
+					t.tag === "interview"),
 			"The interview was restarted",
-			ZWaveErrorCodes.Controller_MessageDropped,
+			ZWaveErrorCodes.Controller_InterviewRestarted,
 		);
 
 		const maxInterviewAttempts = this.options.attempts.nodeInterview;
@@ -959,6 +968,73 @@ export class Driver extends EventEmitter {
 						maxAttempts: maxInterviewAttempts,
 					});
 				}
+			} else if (
+				node.manufacturerId != undefined &&
+				node.productType != undefined &&
+				node.productId != undefined &&
+				!node.deviceConfig &&
+				process.env.NODE_ENV !== "test"
+			) {
+				// The interview succeeded, but we don't have a device config for this node.
+				// Report it, so we can add a config file
+
+				let message = `Missing device config: ${formatId(
+					node.manufacturerId,
+				)}:${formatId(node.productType)}:${formatId(node.productId)}`;
+				if (node.firmwareVersion != undefined) {
+					message += `:${node.firmwareVersion}`;
+				}
+				const deviceInfo: Record<string, any> = {
+					supportsConfigCCV3:
+						node.getCCVersion(CommandClasses.Configuration) >= 3,
+					supportsAGI: node.supportsCC(
+						CommandClasses["Association Group Information"],
+					),
+					supportsZWavePlus: node.supportsCC(
+						CommandClasses["Z-Wave Plus Info"],
+					),
+				};
+				try {
+					if (deviceInfo.supportsConfigCCV3) {
+						// Try to collect all info about config params we can get
+						const instance = node.createCCInstanceUnsafe(
+							ConfigurationCC,
+						)!;
+						deviceInfo.parameters = instance.getQueriedParamInfos();
+					}
+					if (deviceInfo.supportsAGI) {
+						// Try to collect all info about association groups we can get
+						const instance = node.createCCInstanceUnsafe(
+							AssociationGroupInfoCC,
+						)!;
+						// wotan-disable-next-line no-restricted-property-access
+						const associationGroupCount = instance[
+							"getAssociationGroupCountCached"
+						]();
+						const names: string[] = [];
+						for (
+							let group = 1;
+							group <= associationGroupCount;
+							group++
+						) {
+							names.push(
+								instance.getGroupNameCached(group) ?? "",
+							);
+						}
+						deviceInfo.associationGroups = names;
+					}
+					if (deviceInfo.supportsZWavePlus) {
+						deviceInfo.zWavePlusVersion = node.zwavePlusVersion;
+					}
+				} catch {
+					// Don't fail on the last meters :)
+				}
+				Sentry.captureMessage(message, (scope) => {
+					scope.clearBreadcrumbs();
+					scope.setUser(null);
+					scope.setExtras(deviceInfo);
+					return scope;
+				});
 			}
 		} catch (e: unknown) {
 			if (isZWaveError(e)) {
@@ -967,6 +1043,11 @@ export class Driver extends EventEmitter {
 					e.code === ZWaveErrorCodes.Controller_NodeRemoved
 				) {
 					// This only happens when a node is removed during the interview - we don't log this
+					return;
+				} else if (
+					e.code === ZWaveErrorCodes.Controller_InterviewRestarted
+				) {
+					// The interview was restarted by a user - we don't log this
 					return;
 				}
 				this.controllerLog.logNode(
@@ -2124,6 +2205,10 @@ ${handlers.length} left`,
 			options.priority !== MessagePriority.Handshake &&
 			options.priority !== MessagePriority.PreTransmitHandshake
 		) {
+			if (options.priority === MessagePriority.NodeQuery) {
+				// Remember that this transaction was part of an interview
+				options.tag = "interview";
+			}
 			options.priority = MessagePriority.WakeUp;
 		}
 
@@ -2413,13 +2498,21 @@ ${handlers.length} left`,
 			type: "requeue",
 			priority: MessagePriority.WakeUp,
 		};
+		const requeueAndTagAsInterview: TransactionReducerResult = {
+			...requeue,
+			tag: "interview",
+		};
 
 		const reducer: TransactionReducer = (transaction, _source) => {
 			const msg = transaction.message;
 			if (msg.getNodeId() !== nodeId) return { type: "keep" };
 			// Drop all messages that are not allowed in the wakeup queue
 			// For all other messages, change the priority to wakeup
-			return this.mayMoveToWakeupQueue(transaction) ? requeue : reject;
+			return this.mayMoveToWakeupQueue(transaction)
+				? transaction.priority === MessagePriority.NodeQuery
+					? requeueAndTagAsInterview
+					: requeue
+				: reject;
 		};
 
 		// Apply the reducer to the send thread

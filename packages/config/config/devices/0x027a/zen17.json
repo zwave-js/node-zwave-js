@@ -66,7 +66,7 @@
 		},
 		"2": {
 			"label": "Input Type for S1 Terminal",
-			"description": "Note: The device must be reinterviewed after changing",
+			"description": "Note: The device must be excluded (without resetting it) and re-included after changing to/from values 4-10",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 10,
@@ -124,7 +124,7 @@
 		},
 		"3": {
 			"label": "Input Type for S2 Terminal",
-			"description": "Note: The device must be reinterviewed after changing",
+			"description": "Note: The device must be excluded (without resetting it) and re-included after changing to/from values 4-10",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 10,
@@ -259,10 +259,10 @@
 		},
 		"10": {
 			"label": "Control Relay 1 with S1 Input",
-			"description": "If disabled a Z-Wave report will be sent, but R1 will not be triggered",
+			"description": "If disabled and Parameter 2 is values 4-10, a Z-Wave report will be sent but R1 will not be triggered",
 			"valueSize": 1,
 			"minValue": 0,
-			"maxValue": 2,
+			"maxValue": 1,
 			"defaultValue": 1,
 			"unsigned": true,
 			"readOnly": false,
@@ -270,21 +270,21 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "Control R1",
+					"label": "Disable",
 					"value": 0
 				},
 				{
-					"label": "Z-Wave report only",
+					"label": "Enable",
 					"value": 1
 				}
 			]
 		},
 		"11": {
 			"label": "Control Relay 2 with S2 Input",
-			"description": "If disabled a Z-Wave report will be sent, but R2 will not be triggered",
+			"description": "If disabled and Parameter 3 is values 4-10, a Z-Wave report will be sent but R2 will not be triggered",
 			"valueSize": 1,
 			"minValue": 0,
-			"maxValue": 2,
+			"maxValue": 1,
 			"defaultValue": 1,
 			"unsigned": true,
 			"readOnly": false,
@@ -292,11 +292,11 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "Control R2",
+					"label": "Disable",
 					"value": 0
 				},
 				{
-					"label": "Z-Wave report only",
+					"label": "Enable",
 					"value": 1
 				}
 			]
@@ -306,7 +306,7 @@
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 2,
-			"defaultValue": 0,
+			"defaultValue": 1,
 			"unsigned": true,
 			"readOnly": false,
 			"writeOnly": false,
@@ -424,5 +424,9 @@
 				}
 			]
 		}
+	},
+	"compat": {
+		// This device improperly reports the state of R2 (endpoint 2) through the root endpoint in a way that also changes the state of R1 (endpoint 1)
+		"preserveRootApplicationCCValueIDs": true
 	}
 }
