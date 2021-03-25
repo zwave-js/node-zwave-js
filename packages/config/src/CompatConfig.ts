@@ -79,6 +79,19 @@ error in compat option disableStrictEntryControlDataValidation`,
 				definition.disableStrictEntryControlDataValidation;
 		}
 
+		if (definition.mapRootReportsToEndpoints != undefined) {
+			if (definition.mapRootReportsToEndpoints !== true) {
+				throwInvalidConfig(
+					"devices",
+					`config/devices/${filename}:
+error in compat option mapRootReportsToEndpoints`,
+				);
+			}
+
+			this.mapRootReportsToEndpoints =
+				definition.mapRootReportsToEndpoints;
+		}
+
 		if (definition.preserveRootApplicationCCValueIDs != undefined) {
 			if (definition.preserveRootApplicationCCValueIDs !== true) {
 				throwInvalidConfig(
@@ -340,6 +353,8 @@ compat option alarmMapping must be an array where all items are objects!`,
 	>;
 	public readonly disableBasicMapping?: boolean;
 	public readonly disableStrictEntryControlDataValidation?: boolean;
+	public readonly manualValueRefreshDelayMs?: number;
+	public readonly mapRootReportsToEndpoints?: boolean;
 	public readonly overrideFloatEncoding?: {
 		size?: number;
 		precision?: number;
@@ -347,7 +362,6 @@ compat option alarmMapping must be an array where all items are objects!`,
 	public readonly preserveRootApplicationCCValueIDs?: boolean;
 	public readonly skipConfigurationInfoQuery?: boolean;
 	public readonly treatBasicSetAsEvent?: boolean;
-	public readonly manualValueRefreshDelayMs?: number;
 	public readonly queryOnWakeup?: readonly [
 		string,
 		string,

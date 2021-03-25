@@ -256,6 +256,15 @@ By default, received `Basic` commands are mapped to a more appropriate CC. Setti
 
 The specifications mandate strict rules for the data in `Entry Control CC Notifications`, which some devices do not follow, causing the notifications to get dropped. Setting `disableStrictEntryControlDataValidation` to `true` disables these strict checks.
 
+### `manualValueRefreshDelayMs`
+
+Some legacy devices emit an NIF when a local event occurs (e.g. a button press) to signal that the controller should request a status update. However, some of these devices require a delay before they are ready to respond to this request. `manualValueRefreshDelayMs` specifies that delay, expressed in milliseconds. If unset, there will be no delay.
+
+### `mapRootReportsToEndpoints`
+
+Starting with version 3, the `Multi Channel Association CC` allows setting up Multi Channel Lifeline Associations between devices, allowing devices to report the status of their endpoints. Despite this possibility, some devices only use the root device for reporting.  
+When the flag `mapRootReportsToEndpoints` is set to `true`, `zwave-js` will map these suboptimal reports to an endpoint if the mapping is not ambiguous.
+
 ### `preserveRootApplicationCCValueIDs`
 
 The Z-Wave+ specs mandate that the root endpoint must **mirror** the application functionality of endpoint 1 (and potentially others). For this reason, `zwave-js` hides these superfluous values. However, some legacy devices offer additional functionality through the root endpoint, which should not be hidden. To achive this, set `preserveRootApplicationCCValueIDs` to `true`.
@@ -270,7 +279,3 @@ By default, `Basic CC::Set` commands are interpreted as status updates. This fla
 
 > [!NOTE]
 > If this option is `true`, it has precedence over `disableBasicMapping`.
-
-### `manualValueRefreshDelayMs`
-
-Some legacy devices emit an NIF when a local event occurs (e.g. a button press) to signal that the controller should request a status update. However, some of these devices require a delay before they are ready to respond to this request. `manualValueRefreshDelayMs` specifies that delay, expressed in milliseconds. If unset, there will be no delay.
