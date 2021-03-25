@@ -66,19 +66,19 @@
 		},
 		"7": {
 			"$import": "templates/logic_group_template.json#pushbutton_functionality",
-			"label": "Pushbutton 1",
+			"label": "Pushbutton 1"
 		},
 		"10": {
 			"$import": "templates/logic_group_template.json#pushbutton_functionality",
-			"label": "Pushbutton 2",
+			"label": "Pushbutton 2"
 		},
 		"13": {
 			"$import": "templates/logic_group_template.json#pushbutton_functionality",
-			"label": "Pushbutton 3",
+			"label": "Pushbutton 3"
 		},
 		"16": {
 			"$import": "templates/logic_group_template.json#pushbutton_functionality",
-			"label": "Pushbutton 4",
+			"label": "Pushbutton 4"
 		},
 		"5[0xff]": {
 			"$import": "../templates/master_template.json#base_0-255_nounit",
