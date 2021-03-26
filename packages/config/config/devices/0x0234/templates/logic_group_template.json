@@ -62,7 +62,7 @@
 		"allowManualEntry": true
 	},
 	"led_indicator_zba7140": {
-		"description": "LED Mode",
+		"label": "LED Mode",
 		"valueSize": 1,
 		"minValue": 0,
 		"maxValue": 255,
@@ -116,6 +116,13 @@
 		]
 	},
 	//Primarily ZDB5100 Parameters below.
+	"global_brightness": {
+		"$import": "../templates/master_template.json#base_0-255_nounit",
+		"label": "Global brightness LED",
+		"valueSize": 4,
+		"defaultValue": 127
+	},
+
 	"color_command_pushbutton": {
 		"label": "Color Commands LED indicator",
 		"valueSize": 1,
@@ -272,32 +279,7 @@
 			}
 		]
 	},
-	"multilevel_switch_set": {
-		"$import": "../../templates/master_template.json#base_0-255_nounit",
-		"label": "Multi-Level Switch support",
-		"valueSize": 4,
-		"maxValue": 4294967295,
-		"defaultValue": 33488896,
-		"allowManualEntry": true,
-		"options": [
-			{
-				"label": "Byte 4: not used – must be set to 0",
-				"value": 0
-			},
-			{
-				"label": "Byte 1: disabled – a single activation of the pushbutton will not send commands to devices in association group 4",
-				"value": 0
-			},
-			{
-				"label": "Byte 1: enabled – a single activation will send commands to devices in association group 4. devices will receive commands with the values set in byte 2 and 3 (default)",
-				"value": 1
-			},
-			{
-				"label": "Byte 2: when single pressing the pushbutton for on, a multilevel switch set with this value will be send to devices in association group 4. (default)",
-				"value": 255
-			}
-		]
-	},
+
 	"pushbutton_function_zdb5100": {
 		"valueSize": 1,
 		"minValue": 0,

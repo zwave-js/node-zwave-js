@@ -19,7 +19,6 @@
 	"associations": {
 		"1": {
 			"label": "Lifeline",
-			"description": "Sends Device Reset notifications, and Central Scene notifications.",
 			"maxNodes": 5,
 			"isLifeline": true
 		},
@@ -44,7 +43,7 @@
 			"maxNodes": 5
 		},
 		"7": {
-			"label": "Multi-Level Report, Pushbutton 2",
+			"label": "Multilevel Report, Pushbutton 2",
 			"maxNodes": 5
 		},
 		"8": {
@@ -56,7 +55,7 @@
 			"maxNodes": 5
 		},
 		"10": {
-			"label": "Multi-Level Report, Pushbutton 3",
+			"label": "Multilevel Report, Pushbutton 3",
 			"maxNodes": 5
 		},
 		"11": {
@@ -68,7 +67,7 @@
 			"maxNodes": 5
 		},
 		"13": {
-			"label": "Multi-Level Report, Pushbutton 4",
+			"label": "Multilevel Report, Pushbutton 4",
 			"maxNodes": 5
 		},
 		"14": {
@@ -156,28 +155,16 @@
 			"defaultValue": 50
 		},
 		"14[0xff]": {
-			"$import": "../templates/master_template.json#base_0-255_nounit",
-			"label": "Global brightness Red LED",
-			"valueSize": 4,
-			"unsigned": true,
-			"defaultValue": 127,
-			"allowManualEntry": true
+			"$import": "templates/logic_group_template.json#global_brightness",
+			"label": "Global brightness Red LED"
 		},
 		"14[0xff00]": {
-			"$import": "../templates/master_template.json#base_0-255_nounit",
-			"label": "Global brightness Green LED",
-			"valueSize": 4,
-			"unsigned": true,
-			"defaultValue": 127,
-			"allowManualEntry": true
+			"$import": "templates/logic_group_template.json#global_brightness",
+			"label": "Global brightness Green LED"
 		},
 		"14[0xff0000]": {
-			"$import": "../templates/master_template.json#base_0-255_nounit",
-			"label": "Global brightness Blue LED",
-			"valueSize": 4,
-			"unsigned": true,
-			"defaultValue": 127,
-			"allowManualEntry": true
+			"$import": "templates/logic_group_template.json#global_brightness",
+			"label": "Global brightness Blue LED"
 		},
 		"15[0x01]": {
 			"$import": "../../templates/master_template.json#base_enable_disable",
