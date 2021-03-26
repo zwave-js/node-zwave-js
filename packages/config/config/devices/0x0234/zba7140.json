@@ -65,7 +65,7 @@
 		"4": {
 			"$import": "templates/logic_group_template.json#led_indicator_zba7140"
 		},
-		"6":{
+		"6": {
 			"$import": "templates/logic_group_template.json#association_param_secure",
 			"valueSize": 2
 		},

@@ -26,7 +26,7 @@
 		"label": "Duration",
 		"valueSize": 4
 	},
-	"multilevel_disabled_byte":{
+	"multilevel_disabled_byte": {
 		"label": "Disabled",
 		"valueSize": 4,
 		"minValue": 0,
@@ -37,11 +37,10 @@
 		"writeOnly": false,
 		"allowManualEntry": false
 	},
-
 	//Primarily ZBA7140 Parameters below.
 	"button_pressed_threshold_time": {
 		"label": "Pushbutton press threshold time",
-		"unit" : "ms",
+		"unit": "ms",
 		"valueSize": 2,
 		"minValue": 1,
 		"maxValue": 1000,
@@ -52,7 +51,7 @@
 	},
 	"button_held_threshold_time": {
 		"label": "Pushbutton held threshold time",
-		"unit" : "ms",
+		"unit": "ms",
 		"valueSize": 2,
 		"minValue": 1,
 		"maxValue": 5000,
@@ -87,7 +86,7 @@
 		]
 	},
 	"pushbutton_functionality": {
-		"label":"Pushbutton",
+		"label": "Pushbutton",
 		"valueSize": 1,
 		"minValue": 0,
 		"maxValue": 3,
@@ -122,7 +121,6 @@
 		"valueSize": 4,
 		"defaultValue": 127
 	},
-
 	"color_command_pushbutton": {
 		"label": "Color Commands LED indicator",
 		"valueSize": 1,
@@ -253,7 +251,6 @@
 			}
 		]
 	},
-
 	"binary_switch_set": {
 		"label": "Binary Switch Set support",
 		"valueSize": 1,
@@ -279,7 +276,6 @@
 			}
 		]
 	},
-
 	"pushbutton_function_zdb5100": {
 		"valueSize": 1,
 		"minValue": 0,
