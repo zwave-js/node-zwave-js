@@ -65,10 +65,6 @@
 		"4": {
 			"$import": "templates/logic_group_template.json#led_indicator_zba7140"
 		},
-		"6": {
-			"$import": "templates/logic_group_template.json#association_param_secure",
-			"valueSize": 2
-		},
 		"6[0x01]": {
 			"$import": "../../templates/master_template.json#base_enable_disable",
 			"label": "Association group 2 secure message",
