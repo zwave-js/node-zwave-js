@@ -293,20 +293,15 @@
 		},
 		"22[0xff]": {
 			"$import": "templates/logic_group_template.json#led_indicator",
-			"label": "Pushbutton 1 LED indicator ON Red",
-			"valueSize": 4,
-			"defaultValue": 0
+			"label": "Pushbutton 1 LED indicator ON Red"
 		},
 		"22[0xff00]": {
 			"$import": "templates/logic_group_template.json#led_indicator",
-			"label": "Pushbutton 1 LED indicator ON Green",
-			"valueSize": 4,
-			"defaultValue": 0
+			"label": "Pushbutton 1 LED indicator ON Green"
 		},
 		"22[0xff0000]": {
 			"$import": "templates/logic_group_template.json#led_indicator",
 			"label": "Pushbutton 1 LED indicator ON Blue",
-			"valueSize": 4,
 			"defaultValue": 127
 		},
 		"22[0xff000000]": {
@@ -320,20 +315,16 @@
 		"23[0xff]": {
 			"$import": "templates/logic_group_template.json#led_indicator",
 			"label": "Pushbutton 1 LED indicator OFF Red",
-			"valueSize": 4,
 			"defaultValue": 47
 		},
 		"23[0xff00]": {
 			"$import": "templates/logic_group_template.json#led_indicator",
 			"label": "Pushbutton 1 LED indicator OFF Green",
-			"valueSize": 4,
 			"defaultValue": 47
 		},
 		"23[0xff0000]": {
 			"$import": "templates/logic_group_template.json#led_indicator",
-			"label": "Pushbutton 1 LED indicator OFF Blue",
-			"valueSize": 4,
-			"defaultValue": 0
+			"label": "Pushbutton 1 LED indicator OFF Blue"
 		},
 		"23[0xff000000]": {
 			"$import": "../templates/master_template.json#base_0-255_nounit",
@@ -385,20 +376,15 @@
 		},
 		"30[0xff]": {
 			"$import": "templates/logic_group_template.json#led_indicator",
-			"label": "Pushbutton 2 LED indicator ON Red",
-			"valueSize": 4,
-			"defaultValue": 0
+			"label": "Pushbutton 2 LED indicator ON Red"
 		},
 		"30[0xff00]": {
 			"$import": "templates/logic_group_template.json#led_indicator",
-			"label": "Pushbutton 2 LED indicator ON Green",
-			"valueSize": 4,
-			"defaultValue": 0
+			"label": "Pushbutton 2 LED indicator ON Green"
 		},
 		"30[0xff0000]": {
 			"$import": "templates/logic_group_template.json#led_indicator",
 			"label": "Pushbutton 2 LED indicator ON Blue",
-			"valueSize": 4,
 			"defaultValue": 127
 		},
 		"30[0xff000000]": {
@@ -412,20 +398,16 @@
 		"31[0xff]": {
 			"$import": "templates/logic_group_template.json#led_indicator",
 			"label": "Pushbutton 2 LED indicator OFF Red",
-			"valueSize": 4,
 			"defaultValue": 47
 		},
 		"31[0xff00]": {
 			"$import": "templates/logic_group_template.json#led_indicator",
 			"label": "Pushbutton 2 LED indicator OFF Green",
-			"valueSize": 4,
 			"defaultValue": 47
 		},
 		"31[0xff0000]": {
 			"$import": "templates/logic_group_template.json#led_indicator",
-			"label": "Pushbutton 2 LED indicator OFF Blue",
-			"valueSize": 4,
-			"defaultValue": 0
+			"label": "Pushbutton 2 LED indicator OFF Blue"
 		},
 		"31[0xff000000]": {
 			"$import": "../templates/master_template.json#base_0-255_nounit",
@@ -477,20 +459,15 @@
 		},
 		"38[0xff]": {
 			"$import": "templates/logic_group_template.json#led_indicator",
-			"label": "Pushbutton 3 LED indicator ON Red",
-			"valueSize": 4,
-			"defaultValue": 0
+			"label": "Pushbutton 3 LED indicator ON Red"
 		},
 		"38[0xff00]": {
 			"$import": "templates/logic_group_template.json#led_indicator",
-			"label": "Pushbutton 3 LED indicator ON Green",
-			"valueSize": 4,
-			"defaultValue": 0
+			"label": "Pushbutton 3 LED indicator ON Green"
 		},
 		"38[0xff0000]": {
 			"$import": "templates/logic_group_template.json#led_indicator",
 			"label": "Pushbutton 3 LED indicator ON Blue",
-			"valueSize": 4,
 			"defaultValue": 127
 		},
 		"38[0xff000000]": {
@@ -504,20 +481,16 @@
 		"39[0xff]": {
 			"$import": "templates/logic_group_template.json#led_indicator",
 			"label": "Pushbutton 3 LED indicator OFF Red",
-			"valueSize": 4,
 			"defaultValue": 47
 		},
 		"39[0xff00]": {
 			"$import": "templates/logic_group_template.json#led_indicator",
 			"label": "Pushbutton 3 LED indicator OFF Green",
-			"valueSize": 4,
 			"defaultValue": 47
 		},
 		"39[0xff0000]": {
 			"$import": "templates/logic_group_template.json#led_indicator",
-			"label": "Pushbutton 3 LED indicator OFF Blue",
-			"valueSize": 4,
-			"defaultValue": 0
+			"label": "Pushbutton 3 LED indicator OFF Blue"
 		},
 		"39[0xff000000]": {
 			"$import": "../templates/master_template.json#base_0-255_nounit",
@@ -569,20 +542,15 @@
 		},
 		"46[0xff]": {
 			"$import": "templates/logic_group_template.json#led_indicator",
-			"label": "Pushbutton 4 LED indicator ON Red",
-			"valueSize": 4,
-			"defaultValue": 0
+			"label": "Pushbutton 4 LED indicator ON Red"
 		},
 		"46[0xff00]": {
 			"$import": "templates/logic_group_template.json#led_indicator",
-			"label": "Pushbutton 4 LED indicator ON Green",
-			"valueSize": 4,
-			"defaultValue": 0
+			"label": "Pushbutton 4 LED indicator ON Green"
 		},
 		"46[0xff0000]": {
 			"$import": "templates/logic_group_template.json#led_indicator",
 			"label": "Pushbutton 4 LED indicator ON Blue",
-			"valueSize": 4,
 			"defaultValue": 127
 		},
 		"46[0xff000000]": {
@@ -595,20 +563,16 @@
 		"47[0xff]": {
 			"$import": "templates/logic_group_template.json#led_indicator",
 			"label": "Pushbutton 4 LED indicator OFF Red",
-			"valueSize": 4,
 			"defaultValue": 47
 		},
 		"47[0xff00]": {
 			"$import": "templates/logic_group_template.json#led_indicator",
 			"label": "Pushbutton 4 LED indicator OFF Green",
-			"valueSize": 4,
 			"defaultValue": 47
 		},
 		"47[0xff0000]": {
 			"$import": "templates/logic_group_template.json#led_indicator",
-			"label": "Pushbutton 4 LED indicator OFF Blue",
-			"valueSize": 4,
-			"defaultValue": 0
+			"label": "Pushbutton 4 LED indicator OFF Blue"
 		},
 		"47[0xff000000]": {
 			"$import": "../templates/master_template.json#base_0-255_nounit",
