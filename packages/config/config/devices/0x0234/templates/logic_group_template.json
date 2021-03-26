@@ -149,21 +149,18 @@
 	"dimmer_pushbutton": {
 		"$import": "../../templates/master_template.json#base_0-255_nounit",
 		"label": "Pushbutton used for dimmer",
-		"maxValue": 15,
-		"allowManualEntry": false
+		"maxValue": 15
 	},
 	"dimming_duration": {
 		"$import": "../../templates/master_template.json#base_0-255_nounit",
 		"label": "Duration of dimming",
 		"unit": "second",
-		"defaultValue": 5,
-		"allowManualEntry": true
+		"defaultValue": 5
 	},
 	"duration_on_off": {
 		"$import": "../../templates/master_template.json#base_0-255_nounit",
 		"label": "Duration of on/off",
-		"defaultValue": 0,
-		"allowManualEntry": true
+		"defaultValue": 0
 	},
 	"dimmer_mode": {
 		"label": "Dimmer Mode",
@@ -205,16 +202,13 @@
 	"led_indicator": {
 		"$import": "../../templates/master_template.json#base_0-255_nounit",
 		"label": "Pushbutton LED indicator",
-		"valueSize": 4,
-		"unsigned": true,
-		"allowManualEntry": true
+		"valueSize": 4
 	},
 	"pushbutton_led_indicator": {
 		"$import": "../../templates/master_template.json#base_0-255_nounit",
 		"label": "Pushbutton LED indicator",
 		"maxValue": 7,
 		"defaultValue": 7,
-		"unsigned": true,
 		"allowManualEntry": false,
 		"options": [
 			{
