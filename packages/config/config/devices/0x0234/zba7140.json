@@ -32,7 +32,7 @@
 			"maxNodes": 5
 		},
 		"5": {
-			"label": "Button 4 Basic",
+			"label": "Button 2 Multilevel",
 			"maxNodes": 5
 		},
 		"6": {
@@ -41,6 +41,10 @@
 		},
 		"7": {
 			"label": "Button 3 Multilevel",
+			"maxNodes": 5
+		},
+		"8": {
+			"label": "Button 4 Basic",
 			"maxNodes": 5
 		},
 		"9": {
@@ -59,10 +63,57 @@
 			"$import": "templates/logic_group_template.json#button_held_threshold_time"
 		},
 		"4": {
-			"$import": "templates/logic_group_template.json#led_indication"
+			"$import": "templates/logic_group_template.json#led_indicator_zba7140"
 		},
-		"6": {
-			"$import": "templates/logic_group_template.json#association_param_secure"
+		"6":{
+			"$import": "templates/logic_group_template.json#association_param_secure",
+			"valueSize": 2
+		},
+		"6[0x01]": {
+			"$import": "../../templates/master_template.json#base_enable_disable",
+			"label": "Association group 2 secure message",
+			"valueSize": 2
+		},
+		"6[0x02]": {
+			"$import": "../../templates/master_template.json#base_enable_disable",
+			"label": "Association group 3 secure message",
+			"valueSize": 2
+		},
+		"6[0x04]": {
+			"$import": "../../templates/master_template.json#base_enable_disable",
+			"label": "Association group 4 secure message",
+			"valueSize": 2
+		},
+		"6[0x08]": {
+			"$import": "../../templates/master_template.json#base_enable_disable",
+			"label": "Association group 5 secure message",
+			"valueSize": 2
+		},
+		"6[0x16]": {
+			"$import": "../../templates/master_template.json#base_enable_disable",
+			"label": "Association group 6 secure message",
+			"valueSize": 2
+		},
+		"6[0x32]": {
+			"$import": "../../templates/master_template.json#base_enable_disable",
+			"label": "Association group 7 secure message",
+			"valueSize": 2
+		},
+		"6[0x64]": {
+			"$import": "../../templates/master_template.json#base_enable_disable",
+			"label": "Association group 8 secure message",
+			"valueSize": 2
+		},
+		"6[0x80]": {
+			"$import": "../../templates/master_template.json#base_enable_disable",
+			"label": "Association group 9 secure message",
+			"valueSize": 2
+		},
+		"6[0xff]": {
+			"$import": "../../templates/master_template.json#base_0-255_nounit",
+			"label": "Messages in all association groups are sent as secure",
+			"valueSize": 2,
+			"defaultValue": 255
 		},
 		"7": {
 			"$import": "templates/logic_group_template.json#pushbutton_functionality",
@@ -240,7 +291,6 @@
 	"metadata": {
 		"inclusion": "Remove white pushbutton cover and press on the center switch with a non-conductive object. The LEDs will now start blinking on pushbutton 1 (upper left pushbutton)",
 		"exclusion": "Remove white pushbutton cover and press on the center switch with a non-conductive object. The LEDs will now start blinking on pushbutton 1 (upper left pushbutton)",
-		"reset": "Remove white pushbutton cover and long-press the center switch for 10 seconds with a non-conductive object. Please use this procedure only when the network primary controller is missing or otherwise inoperable",
-		"manual": ""
+		"reset": "Remove white pushbutton cover and long-press the center switch for 10 seconds with a non-conductive object. Please use this procedure only when the network primary controller is missing or otherwise inoperable"
 	}
 }

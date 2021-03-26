@@ -77,8 +77,28 @@
 		}
 	},
 	"paramInformation": {
-		"1": {
+		"1[0xff]": {
 			"$import": "templates/logic_group_template.json#dimmer_pushbutton"
+		},
+		"1[0x01]":{
+			"$import": "../../templates/master_template.json#base_enable_disable",
+			"label": "Pushbutton 1",
+			"maxValue": 15
+		},
+		"1[0x02]":{
+			"$import": "../../templates/master_template.json#base_enable_disable",
+			"label": "Pushbutton 2",
+			"maxValue": 15
+		},
+		"1[0x04]":{
+			"$import": "../../templates/master_template.json#base_enable_disable",
+			"label": "Pushbutton 3",
+			"maxValue": 15
+		},
+		"1[0x08]":{
+			"$import": "../../templates/master_template.json#base_enable_disable",
+			"label": "Pushbutton 4",
+			"maxValue": 15
 		},
 		"2": {
 			"$import": "templates/logic_group_template.json#dimming_duration"
@@ -120,19 +140,19 @@
 		"11": {
 			"$import": "../templates/master_template.json#base_1-255_nounit",
 			"label": "Pushbutton debounce timer",
-			"unit": "0.01 seconds",
+			"unit": "10 ms",
 			"defaultValue": 5
 		},
 		"12": {
 			"$import": "../templates/master_template.json#base_1-255_nounit",
 			"label": "Pushbutton press threshold time",
-			"unit": "0.01 seconds",
+			"unit": "10 ms",
 			"defaultValue": 20
 		},
 		"13": {
 			"$import": "../templates/master_template.json#base_1-255_nounit",
 			"label": "Pushbutton held threshold time.",
-			"unit": "0.01 seconds",
+			"unit": "10 ms",
 			"defaultValue": 50
 		},
 		"14[0xff]": {
@@ -159,14 +179,77 @@
 			"defaultValue": 127,
 			"allowManualEntry": true
 		},
-		"15": {
-			"label": "Associations groups",
-			"$import": "../templates/master_template.json#base_0-255_nounit",
+		"15[0x01]": {
+			"$import": "../../templates/master_template.json#base_enable_disable",
+			"label": "Association group 2 secure message",
+			"valueSize": 2
+		},
+		"15[0x02]": {
+			"$import": "../../templates/master_template.json#base_enable_disable",
+			"label": "Association group 3 secure message",
+			"valueSize": 2
+		},
+		"15[0x04]": {
+			"$import": "../../templates/master_template.json#base_enable_disable",
+			"label": "Association group 4 secure message",
+			"valueSize": 2
+		},
+		"15[0x08]": {
+			"$import": "../../templates/master_template.json#base_enable_disable",
+			"label": "Association group 5 secure message",
+			"valueSize": 2
+		},
+		"15[0x16]": {
+			"$import": "../../templates/master_template.json#base_enable_disable",
+			"label": "Association group 6 secure message",
+			"valueSize": 2
+		},
+		"15[0x32]": {
+			"$import": "../../templates/master_template.json#base_enable_disable",
+			"label": "Association group 7 secure message",
+			"valueSize": 2
+		},
+		"15[0x64]": {
+			"$import": "../../templates/master_template.json#base_enable_disable",
+			"label": "Association group 8 secure message",
+			"valueSize": 2
+		},
+		"15[0x80]": {
+			"$import": "../../templates/master_template.json#base_enable_disable",
+			"label": "Association group 9 secure message",
+			"valueSize": 2
+		},
+		"15[0xff]": {
+			"$import": "../../templates/master_template.json#base_enable_disable",
+			"label": "Association group 10 secure message",
+			"valueSize": 2
+		},		
+		"15[0x0200]": {
+			"$import": "../../templates/master_template.json#base_enable_disable",
+			"label": "Association group 11 secure message",
+			"valueSize": 2
+		},		
+		"15[0x0400]": {
+			"$import": "../../templates/master_template.json#base_enable_disable",
+			"label": "Association group 12 secure message",
+			"valueSize": 2
+		},
+		"15[0x0800]": {
+			"$import": "../../templates/master_template.json#base_enable_disable",
+			"label": "Association group 13 secure message",
+			"valueSize": 2
+		},
+		"15[0x1000]": {
+			"$import": "../../templates/master_template.json#base_enable_disable",
+			"label": "Association group 14 secure message",
+			"valueSize": 2
+		},
+		"15[0x1fff]": {
+			"$import": "../../templates/master_template.json#base_0-255_nounit",
+			"label": "Messages in all association groups are sent as secure",
 			"valueSize": 2,
-			"unsigned": true,
 			"maxValue": 65535,
-			"defaultValue": 8191,
-			"allowManualEntry": true
+			"defaultValue": 8191
 		},
 		"16": {
 			"$import": "templates/logic_group_template.json#pushbutton_function_zdb5100",
@@ -175,22 +258,34 @@
 		"17": {
 			"$import": "../templates/master_template.json#base_0-255_nounit",
 			"label": "Timer value for pushbutton 1",
-			"unit": "1.0 seconds",
+			"unit": "1 second",
 			"valueSize": 2,
 			"maxValue": 43200,
 			"defaultValue": 300,
 			"allowManualEntry": true
 		},
-		"18": {
-			"$import": "templates/logic_group_template.json#multilevel_switch_set",
-			"label": "Multi-Level Switch Set values for pushbutton 1"
+		"18[0x01]": {
+			"$import": "templates/logic_group_template.json#multilevel_enable",
+			"label": "Pushbutton 1 Single-Activation Enable"
+		},
+		"18[0xff00]": {
+			"$import": "templates/logic_group_template.json#multilevel_upper_function",
+			"label": "Pushbutton 1 Single-Activation ON Value"
+		},
+		"18[0xff0000]": {
+			"$import": "templates/logic_group_template.json#multilevel_lower_function",
+			"label": "Pushbutton 1 Single-Activation OFF Value"
+		},
+		"18[0xff000000]": {
+			"$import": "templates/logic_group_template.json#multilevel_disabled_byte"
 		},
 		"19": {
 			"$import": "templates/logic_group_template.json#binary_switch_set",
 			"label": "Binary Switch Set support for pushbutton 1"
 		},
 		"20": {
-			"$import": "templates/logic_group_template.json#pushbutton_led_indicator"
+			"$import": "templates/logic_group_template.json#pushbutton_led_indicator",
+			"label": "Pushbutton 1 LED indicator"
 		},
 		"21": {
 			"$import": "templates/logic_group_template.json#color_command_pushbutton",
@@ -217,7 +312,7 @@
 		"22[0xff000000]": {
 			"$import": "../templates/master_template.json#base_0-255_nounit",
 			"label": "LED Time for pushbutton 1 blinking",
-			"unit": "x0.1 sec",
+			"unit": "100 ms",
 			"valueSize": 4,
 			"defaultValue": 0,
 			"allowManualEntry": true
@@ -243,7 +338,7 @@
 		"23[0xff000000]": {
 			"$import": "../templates/master_template.json#base_0-255_nounit",
 			"label": "LED Time for pushbutton 1 blinking",
-			"unit": "x0.1 sec",
+			"unit": "100 ms",
 			"valueSize": 4,
 			"defaultValue": 0,
 			"allowManualEntry": true
@@ -255,22 +350,34 @@
 		"25": {
 			"$import": "../templates/master_template.json#base_0-255_nounit",
 			"label": "Timer value for pushbutton 2",
-			"unit": "x1.0 seconds",
+			"unit": "1 second",
 			"valueSize": 2,
 			"maxValue": 43200,
 			"defaultValue": 300,
 			"allowManualEntry": true
 		},
-		"26": {
-			"$import": "templates/logic_group_template.json#multilevel_switch_set",
-			"label": "Multi-Level Switch Set Values For Pushbutton 2"
+		"26[0x01]": {
+			"$import": "templates/logic_group_template.json#multilevel_enable",
+			"label": "Pushbutton 4 Single-Activation Enable"
+		},
+		"26[0xff00]": {
+			"$import": "templates/logic_group_template.json#multilevel_upper_function",
+			"label": "Pushbutton 2 Single-Activation ON Value"
+		},
+		"26[0xff0000]": {
+			"$import": "templates/logic_group_template.json#multilevel_lower_function",
+			"label": "Pushbutton 2 Single-Activation OFF Value"
+		},
+		"26[0xff000000]": {
+			"$import": "templates/logic_group_template.json#multilevel_disabled_byte"
 		},
 		"27": {
 			"$import": "templates/logic_group_template.json#binary_switch_set",
 			"label": "Binary Switch Set Support For Pushbutton 2"
 		},
 		"28": {
-			"$import": "templates/logic_group_template.json#pushbutton_led_indicator"
+			"$import": "templates/logic_group_template.json#pushbutton_led_indicator",
+			"label": "Pushbutton 2 LED indicator"
 		},
 		"29": {
 			"$import": "templates/logic_group_template.json#color_command_pushbutton",
@@ -297,7 +404,7 @@
 		"30[0xff000000]": {
 			"$import": "../templates/master_template.json#base_0-255_nounit",
 			"label": "LED Time for pushbutton 2 blinking",
-			"unit": "x0.1 sec",
+			"unit": "100 ms",
 			"valueSize": 4,
 			"defaultValue": 0,
 			"allowManualEntry": true
@@ -323,7 +430,7 @@
 		"31[0xff000000]": {
 			"$import": "../templates/master_template.json#base_0-255_nounit",
 			"label": "LED Time for pushbutton 2 blinking",
-			"unit": "x0.1 sec",
+			"unit": "100 ms",
 			"valueSize": 4,
 			"defaultValue": 0,
 			"allowManualEntry": true
@@ -335,22 +442,34 @@
 		"33": {
 			"$import": "../templates/master_template.json#base_0-255_nounit",
 			"label": "Timer value for pushbutton 3",
-			"unit": "x1.0 seconds",
+			"unit": "1 second",
 			"valueSize": 2,
 			"maxValue": 43200,
 			"defaultValue": 300,
 			"allowManualEntry": true
 		},
-		"34": {
-			"$import": "templates/logic_group_template.json#multilevel_switch_set",
-			"label": "Multi-Level Switch Set Values For Pushbutton 3"
+		"34[0x01]": {
+			"$import": "templates/logic_group_template.json#multilevel_enable",
+			"label": "Pushbutton 3 Single-Activation Enabled"
+		},		
+		"34[0xff00]": {
+			"$import": "templates/logic_group_template.json#multilevel_upper_function",
+			"label": "Pushbutton 3 Single-Activation ON Value"
+		},		
+		"34[0xff0000]": {
+			"$import": "templates/logic_group_template.json#multilevel_lower_function",
+			"label": "Pushbutton 3 Single-Activation OFF Value"
+		},		
+		"34[0xff000000]": {
+			"$import": "templates/logic_group_template.json#multilevel_disabled_byte"
 		},
 		"35": {
 			"$import": "templates/logic_group_template.json#binary_switch_set",
 			"label": "Binary Switch Set Support For Pushbutton 3"
 		},
 		"36": {
-			"$import": "templates/logic_group_template.json#pushbutton_led_indicator"
+			"$import": "templates/logic_group_template.json#pushbutton_led_indicator",
+			"label": "Pushbutton 3 LED indicator"
 		},
 		"37": {
 			"$import": "templates/logic_group_template.json#color_command_pushbutton",
@@ -377,7 +496,7 @@
 		"38[0xff000000]": {
 			"$import": "../templates/master_template.json#base_0-255_nounit",
 			"label": "LED Time for pushbutton 3 blinking",
-			"unit": "x0.1 sec",
+			"unit": "100 ms",
 			"valueSize": 4,
 			"defaultValue": 0,
 			"allowManualEntry": true
@@ -403,7 +522,7 @@
 		"39[0xff000000]": {
 			"$import": "../templates/master_template.json#base_0-255_nounit",
 			"label": "LED Time for pushbutton 3 blinking",
-			"unit": "x0.1 sec",
+			"unit": "100 ms",
 			"valueSize": 4,
 			"defaultValue": 0,
 			"allowManualEntry": true
@@ -415,22 +534,34 @@
 		"41": {
 			"$import": "../templates/master_template.json#base_0-255_nounit",
 			"label": "Timer value for pushbutton 4",
-			"unit": "x1.0 seconds",
+			"unit": "1 second",
 			"valueSize": 2,
 			"maxValue": 43200,
 			"defaultValue": 300,
 			"allowManualEntry": true
 		},
-		"42": {
-			"$import": "templates/logic_group_template.json#multilevel_switch_set",
-			"label": "Multi-Level Switch Set Values For Pushbutton 4"
+		"42[0x01]": {
+			"$import": "templates/logic_group_template.json#multilevel_enable",
+			"label": "Pushbutton 4 Single-Activation Enable"
+		},		
+		"42[0xff00]": {
+			"$import": "templates/logic_group_template.json#multilevel_upper_function",
+			"label": "Pushbutton 4 Single-Activation ON Value"
+		},		
+		"42[0xff0000]": {
+			"$import": "templates/logic_group_template.json#multilevel_lower_function",
+			"label": "Pushbutton 4 Single-Activation OFF Value"
+		},		
+		"42[0xff000000]": {
+			"$import": "templates/logic_group_template.json#multilevel_disabled_byte"
 		},
 		"43": {
 			"$import": "templates/logic_group_template.json#binary_switch_set",
 			"label": "Binary Switch Set Support For Pushbutton 4"
 		},
 		"44": {
-			"$import": "templates/logic_group_template.json#pushbutton_led_indicator"
+			"$import": "templates/logic_group_template.json#pushbutton_led_indicator",
+			"label": "Pushbutton 4 LED indicator"
 		},
 		"45": {
 			"$import": "templates/logic_group_template.json#color_command_pushbutton",
@@ -457,7 +588,7 @@
 		"46[0xff000000]": {
 			"$import": "../templates/master_template.json#base_0-255_nounit",
 			"label": "LED Time for pushbutton 4 blinking",
-			"unit": "x0.1 sec",
+			"unit": "100 ms",
 			"valueSize": 4,
 			"allowManualEntry": true
 		},
@@ -482,7 +613,7 @@
 		"47[0xff000000]": {
 			"$import": "../templates/master_template.json#base_0-255_nounit",
 			"label": "LED Time for pushbutton 4 blinking",
-			"unit": "x0.1 sec",
+			"unit": "100 ms",
 			"valueSize": 4,
 			"defaultValue": 0,
 			"allowManualEntry": true

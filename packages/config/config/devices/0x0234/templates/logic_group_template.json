@@ -2,12 +2,46 @@
 	//Generic for Multiple Devices in Logic Group
 	"enable_central_scene": {
 		"$import": "../../templates/master_template.json#base_enable_disable",
-		"label": "Central Scene notifications",
+		"label": "Central Scene",
 		"defaultValue": 1
 	},
+	"multilevel_enable": {
+		"$import": "../../templates/master_template.json#base_enable_disable",
+		"valueSize": 4,
+		"defaultValue": 1
+	},
+	"multilevel_upper_function": {
+		"$import": "../../templates/master_template.json#base_0-99_nounit",
+		"label": "Upper switch value",
+		"valueSize": 4,
+		"defaultValue": 255
+	},
+	"multilevel_lower_function": {
+		"$import": "../../templates/master_template.json#base_0-99_nounit",
+		"label": "Lower switch value",
+		"valueSize": 4
+	},
+	"multilevel_duration_function": {
+		"$import": "../../templates/master_template.json#base_0-255_nounit",
+		"label": "Duration",
+		"valueSize": 4
+	},
+	"multilevel_disabled_byte":{
+		"label": "Disabled",
+		"valueSize": 4,
+		"minValue": 0,
+		"maxValue": 0,
+		"defaultValue": 0,
+		"unsigned": true,
+		"readOnly": true,
+		"writeOnly": false,
+		"allowManualEntry": false
+	},
+
 	//Primarily ZBA7140 Parameters below.
 	"button_pressed_threshold_time": {
 		"label": "Pushbutton press threshold time",
+		"unit" : "ms",
 		"valueSize": 2,
 		"minValue": 1,
 		"maxValue": 1000,
@@ -18,6 +52,7 @@
 	},
 	"button_held_threshold_time": {
 		"label": "Pushbutton held threshold time",
+		"unit" : "ms",
 		"valueSize": 2,
 		"minValue": 1,
 		"maxValue": 5000,
@@ -26,101 +61,40 @@
 		"writeOnly": false,
 		"allowManualEntry": true
 	},
-	"led_indication": {
-		"$import": "../../templates/master_template.json#led_indicator_three_options",
-		"defaultValue": 1,
-		"options": [
-			{
-				"label": "Turned off.",
-				"value": 0
-			},
-			{
-				"label": "Current level of the battery",
-				"value": 1
-			},
-			{
-				"label": "LED colour is set by configuration parameter 5.",
-				"value": 2
-			}
-		]
-	},
-	"association_param_secure": {
-		"label": "Associations groups, transmission when included secure.",
-		"valueSize": 2,
+	"led_indicator_zba7140": {
+		"description": "LED Mode",
+		"valueSize": 1,
 		"minValue": 0,
 		"maxValue": 255,
-		"defaultValue": 255,
+		"defaultValue": 1,
+		"unsigned": true,
 		"readOnly": false,
 		"writeOnly": false,
 		"allowManualEntry": false,
 		"options": [
 			{
-				"label": "All messages in all groups are sent as insecure",
+				"label": "Disabled",
 				"value": 0
 			},
 			{
-				"label": "Messages in association group 2 are sent as secure",
+				"label": "Battery level",
 				"value": 1
 			},
 			{
-				"label": "Messages in association group 3 are sent as secure",
+				"label": "LED set by parameter 5.",
 				"value": 2
-			},
-			{
-				"label": "Messages in association group 4 are sent as secure",
-				"value": 4
-			},
-			{
-				"label": "Messages in association group 5 are sent as secure",
-				"value": 8
-			},
-			{
-				"label": "Messages in association group 6 are sent as secure",
-				"value": 16
-			},
-			{
-				"label": "Messages in association group 7 are sent as secure",
-				"value": 32
-			},
-			{
-				"label": "Messages in association group 8 are sent as secure",
-				"value": 64
-			},
-			{
-				"label": "Messages in association group 9 are sent as secure",
-				"value": 128
-			},
-			{
-				"label": "All messages in all groups are sent as secure",
-				"value": 255
 			}
 		]
 	},
-	"multilevel_enable": {
-		"$import": "../../templates/master_template.json#base_enable_disable",
-		"valueSize": 4,
-		"defaultValue": 1
-	},
-	"multilevel_upper_function": {
-		"$import": "../../templates/master_template.json#base_0-99_nounit",
-		"description": "Upper switch value",
-		"valueSize": 4,
-		"defaultValue": 255
-	},
-	"multilevel_lower_function": {
-		"$import": "../../templates/master_template.json#base_0-99_nounit",
-		"description": "Lower switch value",
-		"valueSize": 4
-	},
-	"multilevel_duration_function": {
-		"$import": "../../templates/master_template.json#base_0-255_nounit",
-		"description": "Duration",
-		"valueSize": 4
-	},
 	"pushbutton_functionality": {
-		"$import": "../../templates/master_template.json#base_0-255_nounit",
+		"label":"Pushbutton",
+		"valueSize": 1,
+		"minValue": 0,
 		"maxValue": 3,
 		"defaultValue": 0,
+		"unsigned": true,
+		"readOnly": false,
+		"writeOnly": false,
 		"allowManualEntry": false,
 		"options": [
 			{
@@ -143,11 +117,12 @@
 	},
 	//Primarily ZDB5100 Parameters below.
 	"color_command_pushbutton": {
-		"label": "Colour commands LED indicator",
+		"label": "Color Commands LED indicator",
 		"valueSize": 1,
 		"minValue": 0,
 		"maxValue": 2,
 		"defaultValue": 0,
+		"unsigned": true,
 		"readOnly": false,
 		"writeOnly": false,
 		"allowManualEntry": false,
@@ -168,88 +143,44 @@
 	},
 	"dimmer_pushbutton": {
 		"$import": "../../templates/master_template.json#base_0-255_nounit",
-		"label": "Operating pushbutton(s) for dimmer",
+		"label": "Pushbutton used for dimmer",
 		"maxValue": 15,
-		"allowManualEntry": false,
-		"options": [
-			{
-				"label": "Disabled",
-				"value": 0
-			},
-			{
-				"label": "Push Button 1",
-				"value": 1
-			},
-			{
-				"label": "Push Button 2",
-				"value": 2
-			},
-			{
-				"label": "Push Button 3",
-				"value": 4
-			},
-			{
-				"label": "Push Button 4",
-				"value": 8
-			}
-		]
+		"allowManualEntry": false
 	},
 	"dimming_duration": {
 		"$import": "../../templates/master_template.json#base_0-255_nounit",
 		"label": "Duration of dimming",
+		"unit": "second",
 		"defaultValue": 5,
-		"allowManualEntry": false,
-		"options": [
-			{
-				"label": "Immediately",
-				"value": 0
-			},
-			{
-				"label": "Duration in seconds",
-				"value": 127
-			},
-			{
-				"label": "Duration in minutes (minus 127) from 1 – 128 minutes, where 128 is 1 minute",
-				"value": 255
-			}
-		]
+		"allowManualEntry": true
 	},
 	"duration_on_off": {
 		"$import": "../../templates/master_template.json#base_0-255_nounit",
 		"label": "Duration of on/off",
 		"defaultValue": 0,
-		"allowManualEntry": true,
-		"options": [
-			{
-				"label": "Immediately",
-				"value": 0
-			},
-			{
-				"label": "Time in seconds",
-				"value": 127
-			},
-			{
-				"label": "Time in minutes (minus 127) from 1 – 128 minutes, where 128 is 1 minute",
-				"value": 255
-			}
-		]
+		"allowManualEntry": true
 	},
 	"dimmer_mode": {
-		"$import": "../../templates/master_template.json#base_0-255_nounit",
-		"label": "Dimmer mode",
+		"label": "Dimmer Mode",
+		"valueSize": 1,
+		"minValue": 0,
 		"maxValue": 2,
+		"defaultValue": 1,
+		"unsigned": true,
+		"readOnly": false,
+		"writeOnly": false,
 		"allowManualEntry": false,
 		"options": [
 			{
-				"label": "No dimming, only on/off (0%/100%)",
+				"label": "No dimming, Switch only",
 				"value": 0
 			},
 			{
-				"label": "Trailing edge dimming",
+				"label": "Trailing Edge",
 				"value": 1
 			},
 			{
-				"label": "Leading edge dimming",
+				"label": "Leading Edge",
 				"value": 2
 			}
 		]
@@ -268,6 +199,7 @@
 	},
 	"led_indicator": {
 		"$import": "../../templates/master_template.json#base_0-255_nounit",
+		"label": "Pushbutton LED indicator",
 		"valueSize": 4,
 		"unsigned": true,
 		"allowManualEntry": true
@@ -281,23 +213,23 @@
 		"allowManualEntry": false,
 		"options": [
 			{
-				"label": "Internal LED disabled, only external commands control the indication",
+				"label": "Disabled, External Control only",
 				"value": 0
 			},
 			{
-				"label": "LED follows switch",
+				"label": "Follow switch",
 				"value": 1
 			},
 			{
-				"label": "LED follows switch, inverted",
+				"label": "Follow switch, inverted",
 				"value": 2
 			},
 			{
-				"label": "Same as 1",
+				"label": "Follow switch",
 				"value": 3
 			},
 			{
-				"label": "Same as 2",
+				"label": "Follow switch, inverted",
 				"value": 4
 			},
 			{
@@ -314,31 +246,16 @@
 			}
 		]
 	},
-	"color_commands_pushbutton": {
-		"$import": "../../templates/master_template.json#base_0-255_nounit",
-		"maxValue": 2,
-		"defaultValue": 1,
-		"unsigned": true,
-		"allowManualEntry": false,
-		"options": [
-			{
-				"label": "Direct control",
-				"value": 0
-			},
-			{
-				"label": "OFF state",
-				"value": 1
-			},
-			{
-				"label": "ON state",
-				"value": 2
-			}
-		]
-	},
+
 	"binary_switch_set": {
-		"$import": "../../templates/master_template.json#base_0-255_nounit",
+		"label": "Binary Switch Set support",
+		"valueSize": 1,
+		"minValue": 0,
 		"maxValue": 2,
 		"defaultValue": 0,
+		"unsigned": true,
+		"readOnly": false,
+		"writeOnly": false,
 		"allowManualEntry": false,
 		"options": [
 			{
@@ -357,6 +274,7 @@
 	},
 	"multilevel_switch_set": {
 		"$import": "../../templates/master_template.json#base_0-255_nounit",
+		"label": "Multi-Level Switch support",
 		"valueSize": 4,
 		"maxValue": 4294967295,
 		"defaultValue": 33488896,
@@ -381,13 +299,17 @@
 		]
 	},
 	"pushbutton_function_zdb5100": {
-		"$import": "../../templates/master_template.json#base_0-255_nounit",
+		"valueSize": 1,
+		"minValue": 0,
 		"maxValue": 4,
 		"defaultValue": 0,
+		"unsigned": true,
+		"readOnly": false,
+		"writeOnly": false,
 		"allowManualEntry": false,
 		"options": [
 			{
-				"label": "Standard toggle-function",
+				"label": "Toggle",
 				"value": 0
 			},
 			{

@@ -1,0 +1,34 @@
+node_modules/
+/packages/*/package-lock.json
+
+# Yarn config and stuff
+.yarn/*
+!.yarn/cache
+!.yarn/releases
+!.yarn/plugins
+!.yarn/sdks
+!.yarn/versions
+
+# compiled test-files
+*.test.js
+/.nyc_output
+coverage/
+
+# npm packet files
+zwave-js-*.tgz
+
+# ZWave cache
+**/cache
+
+# Temporary (import) config files
+.tmp
+.tmpoh/
+.tmpozw/
+
+# Compiled source files
+**/build
+**/*.tsbuildinfo
+*.map
+
+.secrets
+.test-payloads
