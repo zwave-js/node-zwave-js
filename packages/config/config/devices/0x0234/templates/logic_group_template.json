@@ -40,7 +40,7 @@
 	//Primarily ZBA7140 Parameters below.
 	"button_pressed_threshold_time": {
 		"label": "Pushbutton press threshold time",
-		"unit": "ms",
+		"unit": "1 ms",
 		"valueSize": 2,
 		"minValue": 1,
 		"maxValue": 1000,
@@ -51,7 +51,7 @@
 	},
 	"button_held_threshold_time": {
 		"label": "Pushbutton held threshold time",
-		"unit": "ms",
+		"unit": "1 ms",
 		"valueSize": 2,
 		"minValue": 1,
 		"maxValue": 5000,
@@ -116,7 +116,7 @@
 	},
 	//Primarily ZDB5100 Parameters below.
 	"global_brightness": {
-		"$import": "../templates/master_template.json#base_0-255_nounit",
+		"$import": "../../templates/master_template.json#base_0-255_nounit",
 		"label": "Global brightness LED",
 		"valueSize": 4,
 		"defaultValue": 127
