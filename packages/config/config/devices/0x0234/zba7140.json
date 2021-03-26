@@ -66,47 +66,47 @@
 			"$import": "templates/logic_group_template.json#led_indicator_zba7140"
 		},
 		"6[0x01]": {
-			"$import": "../../templates/master_template.json#base_enable_disable",
+			"$import": "../templates/master_template.json#base_enable_disable",
 			"label": "Association group 2 secure message",
 			"valueSize": 2
 		},
 		"6[0x02]": {
-			"$import": "../../templates/master_template.json#base_enable_disable",
+			"$import": "../templates/master_template.json#base_enable_disable",
 			"label": "Association group 3 secure message",
 			"valueSize": 2
 		},
 		"6[0x04]": {
-			"$import": "../../templates/master_template.json#base_enable_disable",
+			"$import": "../templates/master_template.json#base_enable_disable",
 			"label": "Association group 4 secure message",
 			"valueSize": 2
 		},
 		"6[0x08]": {
-			"$import": "../../templates/master_template.json#base_enable_disable",
+			"$import": "../templates/master_template.json#base_enable_disable",
 			"label": "Association group 5 secure message",
 			"valueSize": 2
 		},
 		"6[0x16]": {
-			"$import": "../../templates/master_template.json#base_enable_disable",
+			"$import": "../templates/master_template.json#base_enable_disable",
 			"label": "Association group 6 secure message",
 			"valueSize": 2
 		},
 		"6[0x32]": {
-			"$import": "../../templates/master_template.json#base_enable_disable",
+			"$import": "../templates/master_template.json#base_enable_disable",
 			"label": "Association group 7 secure message",
 			"valueSize": 2
 		},
 		"6[0x64]": {
-			"$import": "../../templates/master_template.json#base_enable_disable",
+			"$import": "../templates/master_template.json#base_enable_disable",
 			"label": "Association group 8 secure message",
 			"valueSize": 2
 		},
 		"6[0x80]": {
-			"$import": "../../templates/master_template.json#base_enable_disable",
+			"$import": "../templates/master_template.json#base_enable_disable",
 			"label": "Association group 9 secure message",
 			"valueSize": 2
 		},
 		"6[0xff]": {
-			"$import": "../../templates/master_template.json#base_0-255_nounit",
+			"$import": "../templates/master_template.json#base_0-255_nounit",
 			"label": "Messages in all association groups are sent as secure",
 			"valueSize": 2,
 			"defaultValue": 255

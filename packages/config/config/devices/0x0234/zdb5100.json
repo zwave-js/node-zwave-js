@@ -79,22 +79,22 @@
 		"1[0xff]": {
 			"$import": "templates/logic_group_template.json#dimmer_pushbutton"
 		},
-		"1[0x01]":{
+		"1[0x01]": {
 			"$import": "../../templates/master_template.json#base_enable_disable",
 			"label": "Pushbutton 1",
 			"maxValue": 15
 		},
-		"1[0x02]":{
+		"1[0x02]": {
 			"$import": "../../templates/master_template.json#base_enable_disable",
 			"label": "Pushbutton 2",
 			"maxValue": 15
 		},
-		"1[0x04]":{
+		"1[0x04]": {
 			"$import": "../../templates/master_template.json#base_enable_disable",
 			"label": "Pushbutton 3",
 			"maxValue": 15
 		},
-		"1[0x08]":{
+		"1[0x08]": {
 			"$import": "../../templates/master_template.json#base_enable_disable",
 			"label": "Pushbutton 4",
 			"maxValue": 15
@@ -167,67 +167,67 @@
 			"label": "Global brightness Blue LED"
 		},
 		"15[0x01]": {
-			"$import": "../../templates/master_template.json#base_enable_disable",
+			"$import": "../templates/master_template.json#base_enable_disable",
 			"label": "Association group 2 secure message",
 			"valueSize": 2
 		},
 		"15[0x02]": {
-			"$import": "../../templates/master_template.json#base_enable_disable",
+			"$import": "../templates/master_template.json#base_enable_disable",
 			"label": "Association group 3 secure message",
 			"valueSize": 2
 		},
 		"15[0x04]": {
-			"$import": "../../templates/master_template.json#base_enable_disable",
+			"$import": "../templates/master_template.json#base_enable_disable",
 			"label": "Association group 4 secure message",
 			"valueSize": 2
 		},
 		"15[0x08]": {
-			"$import": "../../templates/master_template.json#base_enable_disable",
+			"$import": "../templates/master_template.json#base_enable_disable",
 			"label": "Association group 5 secure message",
 			"valueSize": 2
 		},
 		"15[0x16]": {
-			"$import": "../../templates/master_template.json#base_enable_disable",
+			"$import": "../templates/master_template.json#base_enable_disable",
 			"label": "Association group 6 secure message",
 			"valueSize": 2
 		},
 		"15[0x32]": {
-			"$import": "../../templates/master_template.json#base_enable_disable",
+			"$import": "../templates/master_template.json#base_enable_disable",
 			"label": "Association group 7 secure message",
 			"valueSize": 2
 		},
 		"15[0x64]": {
-			"$import": "../../templates/master_template.json#base_enable_disable",
+			"$import": "../templates/master_template.json#base_enable_disable",
 			"label": "Association group 8 secure message",
 			"valueSize": 2
 		},
 		"15[0x80]": {
-			"$import": "../../templates/master_template.json#base_enable_disable",
+			"$import": "../templates/master_template.json#base_enable_disable",
 			"label": "Association group 9 secure message",
 			"valueSize": 2
 		},
 		"15[0xff]": {
-			"$import": "../../templates/master_template.json#base_enable_disable",
+			"$import": "../templates/master_template.json#base_enable_disable",
 			"label": "Association group 10 secure message",
 			"valueSize": 2
-		},		
+		},
 		"15[0x0200]": {
-			"$import": "../../templates/master_template.json#base_enable_disable",
+			"$import": "../templates/master_template.json#base_enable_disable",
 			"label": "Association group 11 secure message",
 			"valueSize": 2
-		},		
+		},
 		"15[0x0400]": {
-			"$import": "../../templates/master_template.json#base_enable_disable",
+			"$import": "../templates/master_template.json#base_enable_disable",
 			"label": "Association group 12 secure message",
 			"valueSize": 2
 		},
 		"15[0x0800]": {
-			"$import": "../../templates/master_template.json#base_enable_disable",
+			"$import": "../templates/master_template.json#base_enable_disable",
 			"label": "Association group 13 secure message",
 			"valueSize": 2
 		},
 		"15[0x1000]": {
-			"$import": "../../templates/master_template.json#base_enable_disable",
+			"$import": "../templates/master_template.json#base_enable_disable",
 			"label": "Association group 14 secure message",
 			"valueSize": 2
 		},
@@ -420,15 +420,15 @@
 		"34[0x01]": {
 			"$import": "templates/logic_group_template.json#multilevel_enable",
 			"label": "Pushbutton 3 Single-Activation Enabled"
-		},		
+		},
 		"34[0xff00]": {
 			"$import": "templates/logic_group_template.json#multilevel_upper_function",
 			"label": "Pushbutton 3 Single-Activation ON Value"
-		},		
+		},
 		"34[0xff0000]": {
 			"$import": "templates/logic_group_template.json#multilevel_lower_function",
 			"label": "Pushbutton 3 Single-Activation OFF Value"
-		},		
+		},
 		"34[0xff000000]": {
 			"$import": "templates/logic_group_template.json#multilevel_disabled_byte"
 		},
@@ -503,15 +503,15 @@
 		"42[0x01]": {
 			"$import": "templates/logic_group_template.json#multilevel_enable",
 			"label": "Pushbutton 4 Single-Activation Enable"
-		},		
+		},
 		"42[0xff00]": {
 			"$import": "templates/logic_group_template.json#multilevel_upper_function",
 			"label": "Pushbutton 4 Single-Activation ON Value"
-		},		
+		},
 		"42[0xff0000]": {
 			"$import": "templates/logic_group_template.json#multilevel_lower_function",
 			"label": "Pushbutton 4 Single-Activation OFF Value"
-		},		
+		},
 		"42[0xff000000]": {
 			"$import": "templates/logic_group_template.json#multilevel_disabled_byte"
 		},
