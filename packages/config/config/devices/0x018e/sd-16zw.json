@@ -1,0 +1,39 @@
+// Climax Technology, Ltd. SD-16ZW
+// Smoke Detector
+{
+	"manufacturer": "Climax Technology, Ltd.",
+	"manufacturerId": "0x018e",
+	"label": "SD-16ZW",
+	"description": "Smoke Detector",
+	"devices": [
+		{
+			"productType": "0x0003",
+			"productId": "0x0004",
+			"zwaveAllianceId": 1621
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"associations": {
+		"1": {
+			"label": "Group 1",
+			"maxNodes": 1
+		},
+		"2": {
+			"label": "Group 2",
+			"maxNodes": 5
+		},
+		"3": {
+			"label": "Group 3",
+			"maxNodes": 5
+		}
+	},
+	"metadata": {
+		"inclusion": "This product can be included and operated in any Z-Wave network with other Z-Wave certified devices from other manufactures and/or other applications. All non-battery operated nodes within the network will act as repeaters regardless of vendor to increase reliability of the network.\n-Put the Z-Wave gateway or control panel into Inclusion or Learning mode (please refer to the Z-Wave gateway or control panel manual).\n-Within 1.5 seconds, press the Function button 3 times. The Smoke Detector will emit a 2-tone beep and the LED will turn on for ~2 seconds.\n-Refer to the operation manual of the Z-Wave gateway or control panel to complete the learn-in process.\n-If the sensor has already been included (learnt) into another Z-Wave Gateway/Control Panel, or if the sensor is unable to be learnt into the current Z-Wave Gateway/Control Panel, please exclude it first (see Exclusion) before attempting to include it into the current Z-Wave Gateway/Control Panel.\n-When the 1-minute warming period is over, the Smoke Detector will start calibration process.",
+		"exclusion": "The Smoke Detector must be removed from existing Z-Wave network before being included into another. There are two methods available to exclude a device.\nExclusion Mode\n-Put the Z-Wave gateway or control panel into Exclusion mode (please refer to the Z-Wave gateway or control panel manual).\n-Within 1.5 seconds, press the Function button 3 times and the Smoke Detector will be removed from the Z-Wave network.",
+		"reset": "(Only use factory reset when network Control Panel/Gateway is missing or inoperable).\n-Press and hold the Function Button of the Smoke Detector for 10 seconds to factory reset",
+		"manual": "https://products.z-wavealliance.org/ProductManual/File?folder=&filename=MarketCertificationFiles/1621/SD-16-ZW%2020160114.doc"
+	}
+}

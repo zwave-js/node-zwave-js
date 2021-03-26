@@ -1,4 +1,9 @@
-import { CommandClasses, ZWaveError, ZWaveErrorCodes } from "@zwave-js/core";
+import {
+	CommandClasses,
+	isZWaveError,
+	ZWaveError,
+	ZWaveErrorCodes,
+} from "@zwave-js/core";
 import { JSONObject, num2hex } from "@zwave-js/shared";
 import { distinct } from "alcalzone-shared/arrays";
 import { entries } from "alcalzone-shared/objects";
@@ -77,7 +82,7 @@ export async function loadDeviceClassesInternal(): Promise<{
 
 		return { basicDeviceClasses, genericDeviceClasses };
 	} catch (e: unknown) {
-		if (e instanceof ZWaveError) {
+		if (isZWaveError(e)) {
 			throw e;
 		} else {
 			throwInvalidConfig("device classes");

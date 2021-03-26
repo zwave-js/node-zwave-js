@@ -33,6 +33,9 @@ export enum ZWaveErrorCodes {
 	Controller_InclusionFailed,
 	Controller_ExclusionFailed,
 
+	/** The interview for this node was restarted by the user */
+	Controller_InterviewRestarted,
+
 	/** The node with the given node ID was not found */
 	Controller_NodeNotFound,
 	/** The endpoint with the given index was not found on the node */
@@ -144,7 +147,16 @@ export class ZWaveError extends Error {
 		// We need to set the prototype explicitly
 		Object.setPrototypeOf(this, ZWaveError.prototype);
 		Object.getPrototypeOf(this).name = "ZWaveError";
+
+		// If there's a better stack, use it
+		if (typeof transactionSource === "string") {
+			this.stack = `ZWaveError: ${this.message}\n${transactionSource}`;
+		}
 	}
+}
+
+export function isZWaveError(e: unknown): e is ZWaveError {
+	return e instanceof Error && Object.getPrototypeOf(e).name === "ZWaveError";
 }
 
 export function isTransmissionError(
@@ -157,7 +169,7 @@ export function isTransmissionError(
 		| ZWaveErrorCodes.Controller_NodeTimeout;
 } {
 	return (
-		e instanceof ZWaveError &&
+		isZWaveError(e) &&
 		(e.code === ZWaveErrorCodes.Controller_MessageDropped ||
 			e.code === ZWaveErrorCodes.Controller_CallbackNOK ||
 			e.code === ZWaveErrorCodes.Controller_ResponseNOK ||

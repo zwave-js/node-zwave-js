@@ -20,20 +20,14 @@ import {
 	getUserIconValueId,
 } from "../commandclass/ZWavePlusCC";
 import type { Driver } from "../driver/Driver";
+import type { DeviceClass } from "./DeviceClass";
 import type { ZWaveNode } from "./Node";
-
-export interface EndpointCapabilities {
-	isDynamic: boolean;
-	genericClass: number;
-	specificClass: number;
-	supportedCCs: CommandClasses[];
-}
 
 /**
  * Represents a physical endpoint of a Z-Wave node. This can either be the root
  * device itself (index 0) or a more specific endpoint like a single plug.
  *
- * Each endpoint may have different capabilities (supported/controlled CCs)
+ * Each endpoint may have different capabilities (device class/supported CCs)
  */
 export class Endpoint {
 	public constructor(
@@ -43,13 +37,31 @@ export class Endpoint {
 		protected readonly driver: Driver,
 		/** The index of this endpoint. 0 for the root device, 1+ otherwise */
 		public readonly index: number,
+		deviceClass?: DeviceClass,
 		supportedCCs?: CommandClasses[],
 	) {
+		this._deviceClass = deviceClass;
+		// Add mandatory CCs
+		if (deviceClass) {
+			for (const cc of deviceClass.mandatorySupportedCCs) {
+				this.addCC(cc, { isSupported: true });
+			}
+			for (const cc of deviceClass.mandatoryControlledCCs) {
+				this.addCC(cc, { isControlled: true });
+			}
+		}
+
+		// Add optional CCs
 		if (supportedCCs != undefined) {
 			for (const cc of supportedCCs) {
 				this.addCC(cc, { isSupported: true });
 			}
 		}
+	}
+
+	protected _deviceClass: DeviceClass | undefined;
+	public get deviceClass(): DeviceClass | undefined {
+		return this._deviceClass;
 	}
 
 	/** Resets all stored information of this endpoint */

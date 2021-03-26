@@ -1,14 +1,15 @@
-// GE/Jasco 12718
+// GE/Jasco 12718 / ZW3101
 // Smart Dimmer
 {
 	"manufacturer": "GE/Jasco",
 	"manufacturerId": "0x0063",
-	"label": "12718",
+	"label": "12718 / ZW3101",
 	"description": "Smart Dimmer",
 	"devices": [
 		{
 			"productType": "0x5044",
-			"productId": "0x3031"
+			"productId": "0x3031",
+			"zwaveAllianceId": 1191
 		}
 	],
 	"firmwareVersion": {
@@ -30,8 +31,8 @@
 		"8": {
 			"label": "Time between dimmer steps",
 			"description": "Timing of the steps",
-			"unit": "10ms",
 			"valueSize": 1,
+			"unit": "10ms",
 			"minValue": 1,
 			"maxValue": 255,
 			"defaultValue": 3,

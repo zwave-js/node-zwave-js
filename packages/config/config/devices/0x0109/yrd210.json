@@ -1,0 +1,60 @@
+// Yale YRD210
+// Push Button Deadbolt
+{
+	"manufacturer": "Yale",
+	"manufacturerId": "0x0109", // Addresses a series of locks that report the incorrect manufacturerId
+	"label": "YRD210",
+	"description": "Push Button Deadbolt",
+	"devices": [
+		{
+			"productType": "0x0001",
+			"productId": "0x0000"
+		},
+		{
+			"productType": "0x0002",
+			"productId": "0x0000"
+		},
+		{
+			"productType": "0x0003",
+			"productId": "0x0000"
+		},
+		{
+			"productType": "0x0004",
+			"productId": "0x0000"
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"associations": {
+		"1": {
+			"label": "Alarm Reports",
+			"maxNodes": 4,
+			"isLifeline": true
+		}
+	},
+	"paramInformation": {
+		"1": {
+			"$import": "../0x0129/templates/yale_template.json#volume_inverted"
+		},
+		"2": {
+			"$import": "../0x0129/templates/yale_template.json#auto_relock"
+		},
+		"3": {
+			"$import": "../0x0129/templates/yale_template.json#auto_relock_time_180"
+		},
+		"4": {
+			"$import": "../0x0129/templates/yale_template.json#wrong_code_limit_10"
+		},
+		"5": {
+			"$import": "../0x0129/templates/yale_template.json#language"
+		},
+		"7": {
+			"$import": "../0x0129/templates/yale_template.json#wrong_code_lockout_10_to_127"
+		},
+		"8": {
+			"$import": "../0x0129/templates/yale_template.json#operating_mode"
+		}
+	}
+}

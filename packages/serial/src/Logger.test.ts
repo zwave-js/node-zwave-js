@@ -1,4 +1,7 @@
-import { ZWaveLogContainer } from "@zwave-js/core";
+import {
+	createDefaultTransportFormat,
+	ZWaveLogContainer,
+} from "@zwave-js/core";
 import { assertMessage, SpyTransport } from "@zwave-js/testing";
 import colors from "ansi-colors";
 import { pseudoRandomBytes } from "crypto";
@@ -11,6 +14,7 @@ describe("lib/log/Serial =>", () => {
 	// Replace all defined transports with a spy transport
 	beforeAll(() => {
 		spyTransport = new SpyTransport();
+		spyTransport.format = createDefaultTransportFormat(true, true);
 		serialLogger = new SerialLogger(
 			new ZWaveLogContainer({
 				transports: [spyTransport],

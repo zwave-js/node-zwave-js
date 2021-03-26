@@ -1,0 +1,42 @@
+// ShenZhen Sunricher Technology, Ltd. SR-ZV9001T3-DIM
+// Wall Controller
+{
+	"manufacturer": "ShenZhen Sunricher Technology, Ltd.",
+	"manufacturerId": "0x0330",
+	"label": "SR-ZV9001T3-DIM",
+	"description": "Wall Controller",
+	"devices": [
+		{
+			"productType": "0x0301",
+			"productId": "0xa109",
+			"zwaveAllianceId": 2949
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"associations": {
+		"1": {
+			"label": "Lifeline",
+			"maxNodes": 1,
+			"isLifeline": true
+		},
+		"2": {
+			"label": "Group 2",
+			"maxNodes": 12
+		},
+		"3": {
+			"label": "Group 3",
+			"maxNodes": 12
+		},
+		"4": {
+			"label": "Group 4",
+			"maxNodes": 12
+		}
+	},
+	"metadata": {
+		"reset": "Press and hold down “inclusion/exclusion” button for over 8 seconds, LED indicator blinks slowly to indicate successful factory reset, release “inclusion/exclusion” button, the wall controller will restart automatically.\n\nNote: Factory reset is not recommended for exclusion, please use this procedure only if the primary controller/gateway is missing or otherwise inoperable",
+		"manual": "https://products.z-wavealliance.org/ProductManual/File?folder=&filename=MarketCertificationFiles/2949/Z-Wave%20Wall%20Controller%20SR-ZV9001T3-DIM-US.pdf"
+	}
+}

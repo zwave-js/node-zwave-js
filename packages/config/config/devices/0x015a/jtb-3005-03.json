@@ -1,0 +1,60 @@
+// Jin Tao Bao JTB-3005-03
+// Thermostat Control Panel
+{
+	"manufacturer": "Jin Tao Bao",
+	"manufacturerId": "0x015a",
+	"label": "JTB-3005-03",
+	"description": "Thermostat Control Panel",
+	"devices": [
+		{
+			"productType": "0x3005",
+			"productId": "0x0003",
+			"zwaveAllianceId": 2634
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"paramInformation": {
+		"1": {
+			"label": "Synchronization Cool And Heat Temperature Set-point",
+			"description": "Synchronization cool and heat temperature set-point while one of it has been change by master controller",
+			"valueSize": 1,
+			"minValue": -128,
+			"maxValue": 0,
+			"defaultValue": 1,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "No synchronization",
+					"value": 0
+				},
+				{
+					"label": "Synchronization",
+					"value": -128
+				}
+			]
+		},
+		"2": {
+			"label": "Inner Master Mcu Communication Address",
+			"description": "Should same as inner master mcu configuration",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 1,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		}
+	},
+	"metadata": {
+		"inclusion": "Start master controller add device mode as instruction, press 3 time of PB button located on the back side of thermostat panel in 1.5 second,\nLED flash indicator inclusion processing until included or 60 second timeout no detect any master controller",
+		"exclusion": "Start master controller remove device mode as instruction, press 3 time of PB button located on the back side of thermostat panel in 1.5 second, LED flash indicator exclusion processing until excluded or 5 second timeout no detect any master controller",
+		"reset": "Please use this procedure only when the network primary controller is missing or otherwise inoperable.\n\nPress and hold PB button located on the back side of thermostat\npanel for 10 seconds retrieve thermostat panel factory default",
+		"manual": "https://products.z-wavealliance.org/ProductManual/File?folder=&filename=MarketCertificationFiles/2634/JTB-3005-03-Manual_20171016.pdf"
+	}
+}

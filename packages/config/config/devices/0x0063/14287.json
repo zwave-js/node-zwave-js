@@ -8,64 +8,37 @@
 	"devices": [
 		{
 			"productType": "0x4944",
-			"productId": "0x3131"
+			"productId": "0x3131",
+			"zwaveAllianceId": [2103, 2506]
 		}
 	],
 	"firmwareVersion": {
 		"min": "0.0",
 		"max": "255.255"
 	},
-	"supportsZWavePlus": true,
 	"associations": {
 		"1": {
-			"label": "Lifeline",
-			"maxNodes": 1,
+			"label": "Group 1",
+			"maxNodes": 5,
 			"isLifeline": true
 		},
 		"2": {
-			"label": "Controlled with local load",
-			"description": "Supports Basic Set and is controlled with the local load",
+			"label": "Group 2",
 			"maxNodes": 5
 		},
 		"3": {
 			"label": "Double Tap",
-			"description": "Supports Basic Set and is controlled by double pressing the On or Off button",
-			"maxNodes": 5
+			"maxNodes": 5,
+			"isLifeline": true
 		}
 	},
 	"paramInformation": {
-		"3": {
-			"label": "Night Light",
-			"description": "Defines the behavior of the blue LED",
-			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 255,
-			"defaultValue": 0,
-			"unsigned": true,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "LED on when switch is OFF",
-					"value": 0
-				},
-				{
-					"label": "LED on when switch is ON",
-					"value": 1
-				},
-				{
-					"label": "LED always off",
-					"value": 2
-				}
-			]
-		},
 		"4": {
 			"label": "Invert Switch",
 			"description": "Invert the ON/OFF Switch State",
 			"valueSize": 1,
 			"minValue": 0,
-			"maxValue": 255,
+			"maxValue": 1,
 			"defaultValue": 0,
 			"unsigned": true,
 			"readOnly": false,
@@ -73,11 +46,11 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "No",
+					"label": "Default",
 					"value": 0
 				},
 				{
-					"label": "Yes",
+					"label": "Invert",
 					"value": 1
 				}
 			]
@@ -93,5 +66,11 @@
 				}
 			}
 		}
+	},
+	"metadata": {
+		"inclusion": "1. Follow the instructions for your Z-Wave certified controller to include a device to the Z-Wave network.\n2. Once the controller is ready to include your device, press and release the top or bottom of the smart fan control switch (rocker) to include it in the network.\n3. Once your controller has confirmed the device has been included, refresh the Z-Wave network to optimize performance",
+		"exclusion": "1. Follow the instructions for your Z-Wave certified controller to exclude a device from the Z-Wave network. \n2. Once the controller is ready to Exclude your device, press and release the top or bottom of the wireless smart switch (rocker) to exclude it from the network",
+		"reset": "1. Quickly press ON (Top) button three (3) times then immediately press the OFF (Bottom) button three (3) times. The LED will flash ON/OFF 5 times when completed successfully.\nNote: This should only be used in the event your network’s primary controller is missing or otherwise inoperable",
+		"manual": "https://products.z-wavealliance.org/ProductManual/File?folder=&filename=MarketCertificationFiles/2506/Binder2.pdf"
 	}
 }

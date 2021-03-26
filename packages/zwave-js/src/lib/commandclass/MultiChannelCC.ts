@@ -62,6 +62,14 @@ export function getEndpointCCsValueId(endpointIndex: number): ValueID {
 	};
 }
 
+export function getEndpointDeviceClassValueId(endpointIndex: number): ValueID {
+	return {
+		commandClass: CommandClasses["Multi Channel"],
+		endpoint: endpointIndex,
+		property: "deviceClass",
+	};
+}
+
 export function getCountIsDynamicValueId(): ValueID {
 	return {
 		commandClass: CommandClasses["Multi Channel"],
@@ -266,6 +274,7 @@ export class MultiChannelCC extends CommandClass {
 	public constructor(driver: Driver, options: CommandClassOptions) {
 		super(driver, options);
 		this.registerValue(getEndpointCCsValueId(0).property, true);
+		this.registerValue(getEndpointDeviceClassValueId(0).property, true);
 	}
 
 	/** Tests if a command targets a specific endpoint and thus requires encapsulation */
@@ -288,11 +297,17 @@ export class MultiChannelCC extends CommandClass {
 		});
 	}
 
-	public async interview(complete: boolean = true): Promise<void> {
-		// Special interview procedure for legacy nodes
-		if (this.version === 1) return this.interviewV1(complete);
-
+	public async interview(): Promise<void> {
 		const node = this.getNode()!;
+		this.driver.controllerLog.logNode(node.id, {
+			endpoint: this.endpointIndex,
+			message: `Interviewing ${this.ccName}...`,
+			direction: "none",
+		});
+
+		// Special interview procedure for legacy nodes
+		if (this.version === 1) return this.interviewV1();
+
 		const endpoint = node.getEndpoint(this.endpointIndex)!;
 		const api = endpoint.commandClasses["Multi Channel"].withOptions({
 			priority: MessagePriority.NodeQuery,
@@ -309,10 +324,10 @@ export class MultiChannelCC extends CommandClass {
 			this.driver.controllerLog.logNode(node.id, {
 				endpoint: this.endpointIndex,
 				message:
-					"Querying device endpoint information timed out, skipping interview...",
+					"Querying device endpoint information timed out, aborting interview...",
 				level: "warn",
 			});
-			return;
+			return this.throwMissingCriticalInterviewResponse();
 		}
 
 		let logMessage = `received response for device endpoints:
@@ -444,6 +459,13 @@ supported CCs:`;
 					message: logMessage,
 					direction: "inbound",
 				});
+			} else {
+				this.driver.controllerLog.logNode(node.id, {
+					endpoint: this.endpointIndex,
+					message: `Querying endpoint #${endpoint} capabilities timed out, aborting interview...`,
+					level: "warn",
+				});
+				return this.throwMissingCriticalInterviewResponse();
 			}
 		}
 
@@ -451,65 +473,59 @@ supported CCs:`;
 		this.interviewComplete = true;
 	}
 
-	private async interviewV1(complete: boolean = true): Promise<void> {
-		// Only do the interview once
-		if (complete) {
-			const node = this.getNode()!;
-			const api = node.getEndpoint(this.endpointIndex)!.commandClasses[
-				"Multi Channel"
-			];
+	private async interviewV1(): Promise<void> {
+		const node = this.getNode()!;
+		const api = node.getEndpoint(this.endpointIndex)!.commandClasses[
+			"Multi Channel"
+		];
 
-			// V1 works the opposite way - we scan all CCs and remember how many
-			// endpoints they have
-			const supportedCCs = [...node.implementedCommandClasses.keys()]
-				// Don't query CCs the node only controls
-				.filter((cc) => node.supportsCC(cc))
-				// Don't query CCs that want to skip the endpoint interview
-				.filter(
-					(cc) => !node.createCCInstance(cc)?.skipEndpointInterview(),
-				);
-			const endpointCounts = new Map<CommandClasses, number>();
-			for (const ccId of supportedCCs) {
+		// V1 works the opposite way - we scan all CCs and remember how many
+		// endpoints they have
+		const supportedCCs = [...node.implementedCommandClasses.keys()]
+			// Don't query CCs the node only controls
+			.filter((cc) => node.supportsCC(cc))
+			// Don't query CCs that want to skip the endpoint interview
+			.filter(
+				(cc) => !node.createCCInstance(cc)?.skipEndpointInterview(),
+			);
+		const endpointCounts = new Map<CommandClasses, number>();
+		for (const ccId of supportedCCs) {
+			this.driver.controllerLog.logNode(node.id, {
+				message: `Querying endpoint count for CommandClass ${getCCName(
+					ccId,
+				)}...`,
+				direction: "outbound",
+			});
+			const endpointCount = await api.getEndpointCountV1(ccId);
+			if (endpointCount != undefined) {
+				endpointCounts.set(ccId, endpointCount);
+
 				this.driver.controllerLog.logNode(node.id, {
-					message: `Querying endpoint count for CommandClass ${getCCName(
+					message: `CommandClass ${getCCName(
 						ccId,
-					)}...`,
-					direction: "outbound",
+					)} has ${endpointCount} endpoints`,
+					direction: "inbound",
 				});
-				const endpointCount = await api.getEndpointCountV1(ccId);
-				if (endpointCount != undefined) {
-					endpointCounts.set(ccId, endpointCount);
-
-					this.driver.controllerLog.logNode(node.id, {
-						message: `CommandClass ${getCCName(
-							ccId,
-						)} has ${endpointCount} endpoints`,
-						direction: "inbound",
-					});
-				}
 			}
+		}
 
-			// Store the collected information
-			// We have only individual and no dynamic and no aggregated endpoints
-			const numEndpoints = Math.max(...endpointCounts.values());
-			node.valueDB.setValue(getCountIsDynamicValueId(), false);
-			node.valueDB.setValue(getAggregatedCountValueId(), 0);
-			node.valueDB.setValue(getIndividualCountValueId(), numEndpoints);
-			// Since we queried all CCs separately, we can assume that all
-			// endpoints have different capabilities
-			node.valueDB.setValue(getIdenticalCapabilitiesValueId(), false);
+		// Store the collected information
+		// We have only individual and no dynamic and no aggregated endpoints
+		const numEndpoints = Math.max(...endpointCounts.values());
+		node.valueDB.setValue(getCountIsDynamicValueId(), false);
+		node.valueDB.setValue(getAggregatedCountValueId(), 0);
+		node.valueDB.setValue(getIndividualCountValueId(), numEndpoints);
+		// Since we queried all CCs separately, we can assume that all
+		// endpoints have different capabilities
+		node.valueDB.setValue(getIdenticalCapabilitiesValueId(), false);
 
-			for (let endpoint = 1; endpoint <= numEndpoints; endpoint++) {
-				// Check which CCs exist on this endpoint
-				const endpointCCs = [...endpointCounts.entries()]
-					.filter(([, ccEndpoints]) => ccEndpoints <= endpoint)
-					.map(([ccId]) => ccId);
-				// And store it per endpoint
-				node.valueDB.setValue(
-					getEndpointCCsValueId(endpoint),
-					endpointCCs,
-				);
-			}
+		for (let endpoint = 1; endpoint <= numEndpoints; endpoint++) {
+			// Check which CCs exist on this endpoint
+			const endpointCCs = [...endpointCounts.entries()]
+				.filter(([, ccEndpoints]) => ccEndpoints <= endpoint)
+				.map(([ccId]) => ccId);
+			// And store it per endpoint
+			node.valueDB.setValue(getEndpointCCsValueId(endpoint), endpointCCs);
 		}
 
 		// Remember that the interview is complete
@@ -619,14 +635,21 @@ export class MultiChannelCCCapabilityReport extends MultiChannelCC {
 	}
 
 	public persistValues(): boolean {
+		const deviceClassValueId = getEndpointDeviceClassValueId(
+			this.endpointIndex,
+		);
 		const ccsValueId = getEndpointCCsValueId(this.endpointIndex);
+
+		const valueDB = this.getValueDB();
 		if (this.capability.wasRemoved) {
-			this.getValueDB().removeValue(ccsValueId);
+			valueDB.removeValue(deviceClassValueId);
+			valueDB.removeValue(ccsValueId);
 		} else {
-			this.getValueDB().setValue(
-				ccsValueId,
-				this.capability.supportedCCs,
-			);
+			valueDB.setValue(deviceClassValueId, {
+				generic: this.capability.generic.key,
+				specific: this.capability.specific.key,
+			});
+			valueDB.setValue(ccsValueId, this.capability.supportedCCs);
 		}
 		return true;
 	}

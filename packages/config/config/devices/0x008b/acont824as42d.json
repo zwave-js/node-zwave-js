@@ -1,0 +1,19 @@
+// Trane Corporation ACONT824AS42D
+// Ingersoll Rand XL824 - American Standard Version
+{
+	"manufacturer": "Trane Corporation",
+	"manufacturerId": "0x008b",
+	"label": "ACONT824AS42D",
+	"description": "Ingersoll Rand XL824 - American Standard Version",
+	"devices": [
+		{
+			"productType": "0x4138",
+			"productId": "0x3234",
+			"zwaveAllianceId": 1006
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	}
+}

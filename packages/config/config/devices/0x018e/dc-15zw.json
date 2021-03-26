@@ -1,0 +1,32 @@
+// Climax Technology, Ltd. DC-15ZW
+// Door Contact
+{
+	"manufacturer": "Climax Technology, Ltd.",
+	"manufacturerId": "0x018e",
+	"label": "DC-15ZW",
+	"description": "Door Contact",
+	"devices": [
+		{
+			"productType": "0x0001",
+			"productId": "0x0001",
+			"zwaveAllianceId": [1429, 3080]
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"associations": {
+		"3": {
+			"label": "Group 3",
+			"maxNodes": 5,
+			"isLifeline": true
+		}
+	},
+	"metadata": {
+		"inclusion": "This product can be included and operated in any Z-Wave network with other Z-Wave certified devices from other manufactures and/or other applications. All non-battery operated nodes within the network will act as repeaters regardless of vendor to increase reliability of the network.\n-Pull out the battery insulator.\n-The LED indicator will turn on briefly.\n-Put the Z-wave gateway or control panel into Inclusion mode (please refer to the Z-wave gateway or control panel manual).\n-Within 1.5 seconds, press the Test Button 3 times.\n-Refer to the operation manual of the Z-wave gateway or control panel to complete the learn-in process.\n-Please press and release the Tamper Switch once, and activate the Door Contact once (open and close) after inclusion is completed to ensure the Gateway/Control Panel recognizes the current status of the Door Contact.\n-If the sensor has already been included (learnt) into another Z-wave Gateway/Control Panel, or if the sensor is unable to be learnt into the current Z-wave Gateway/Control Panel, please exclude it first (see Exclusion) before attempting to include it into the current Z-wave Gateway/Control Panel.",
+		"exclusion": "The Door Contact must be removed from existing Z-wave network before being included into another. There are two methods available to exclude a device.\nExclusion Mode\n-Put the Z-wave gateway or control panel into Exclusion mode (please refer to the Z-wave gateway or control panel manual).\n-Within 1.5 seconds, press the Test Button 3 times and the Door Contact will be removed from the Z-wave network.",
+		"reset": "(Only use factory reset when network Control Panel/Gateway is missing or inoperable).\n-Press and hold the Test Button of the Door Contact for 10 seconds to factory reset.",
+		"manual": "https://products.z-wavealliance.org/ProductManual/File?folder=&filename=MarketCertificationFiles/1429/DC-15ZW_20150806.doc"
+	}
+}

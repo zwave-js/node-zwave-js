@@ -1,0 +1,42 @@
+// ShenZhen Sunricher Technology, Ltd. SR-ZV9002T3-CCT
+// Wall Controller
+{
+	"manufacturer": "ShenZhen Sunricher Technology, Ltd.",
+	"manufacturerId": "0x0330",
+	"label": "SR-ZV9002T3-CCT",
+	"description": "Wall Controller",
+	"devices": [
+		{
+			"productType": "0x0301",
+			"productId": "0xa101",
+			"zwaveAllianceId": 2902
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"associations": {
+		"1": {
+			"label": "Lifeline",
+			"maxNodes": 1,
+			"isLifeline": true
+		},
+		"2": {
+			"label": "Group 2",
+			"maxNodes": 12
+		},
+		"3": {
+			"label": "Group 3",
+			"maxNodes": 12
+		},
+		"4": {
+			"label": "Group 4",
+			"maxNodes": 12
+		}
+	},
+	"metadata": {
+		"reset": "Press and hold down “inclusion/exclusion” button for over 8 seconds, LED indicator will blink slowly to indicate successful factory reset, release “inclusion/exclusion” button,the wall controller will restart automatically.\n\nPlease use this procedure only when the network primary controller is missing or otherwise inoperable",
+		"manual": "https://products.z-wavealliance.org/ProductManual/File?folder=&filename=MarketCertificationFiles/2902/Z-Wave%20Wall%20Controller%20SR-ZV9002T3-CCT-US.pdf"
+	}
+}

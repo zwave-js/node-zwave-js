@@ -12,7 +12,8 @@
 		},
 		{
 			"productType": "0x0008",
-			"productId": "0x0002"
+			"productId": "0x0002",
+			"zwaveAllianceId": [1238, 1251, 1532, 1764, 1769, 1855]
 		}
 	],
 	"firmwareVersion": {
@@ -314,5 +315,11 @@
 				}
 			]
 		}
+	},
+	"metadata": {
+		"inclusion": "To add or include the danalock into a Z-Wave network\nSet the controller in inclusion mode\nTouch the User Button until you hear two beeps.",
+		"exclusion": "To remove or exclude the danalock into a Z-Wave network\nSet the controller in exclusion mode\nTouch the User Button until you hear two beeps",
+		"reset": "The danalock can be set to factory settings by holding the User Button for ten beeps. Please use this procedure only when the primary controller is missing or otherwise inoperable",
+		"manual": "https://products.z-wavealliance.org/ProductManual/File?folder=&filename=MarketCertificationFiles/1238/Danalock%20Product%20manual.pdf"
 	}
 }

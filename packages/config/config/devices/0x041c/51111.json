@@ -1,0 +1,42 @@
+// Kjell & Co Elektronik 51111
+// Motion Sensor
+{
+	"manufacturer": "Kjell & Co Elektronik",
+	"manufacturerId": "0x041c",
+	"label": "51111",
+	"description": "Motion Sensor",
+	"devices": [
+		{
+			"productType": "0x8001",
+			"productId": "0x1000",
+			"zwaveAllianceId": 3275
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"associations": {
+		"1": {
+			"label": "Group 1",
+			"maxNodes": 5,
+			"isLifeline": true
+		},
+		"2": {
+			"label": "Group 2",
+			"maxNodes": 5,
+			"isLifeline": true
+		},
+		"3": {
+			"label": "Group 3",
+			"maxNodes": 5,
+			"isLifeline": true
+		}
+	},
+	"metadata": {
+		"inclusion": "-Press Func_Button 3 time in the motion sensor, Green LED is Blinking 3 times within 1 second.\n-If Inclusion Process is successful, Green LED will turn off.",
+		"exclusion": "-Press Func_Button 3 times quickly.\n-If Exclusion Process is successful, Green LED is Blinking 6 times, then turn off.",
+		"reset": "-Long press Func_Button while installing batteries \n-Device Reset Locally notification is Transmitted\n-Please use this procedure only when the network primary controller is missing or otherwise inoperable.",
+		"manual": "https://products.z-wavealliance.org/ProductManual/File?folder=&filename=MarketCertificationFiles/3275/51111%20user%20manual.pdf"
+	}
+}

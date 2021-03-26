@@ -1,0 +1,49 @@
+// Sharp DN3G6JA084
+// Motion Detect Sensor
+{
+	"manufacturer": "Sharp",
+	"manufacturerId": "0x010b",
+	"label": "DN3G6JA084",
+	"description": "Motion Detect Sensor",
+	"devices": [
+		{
+			"productType": "0x4761",
+			"productId": "0x0084",
+			"zwaveAllianceId": 2980
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"paramInformation": {
+		"2": {
+			"label": "Enable Switch",
+			"description": "Enable switch of \"alarm notification\" report",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 1,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Motion detect off",
+					"value": 0
+				},
+				{
+					"label": "Motion detect on",
+					"value": 1
+				}
+			]
+		}
+	},
+	"metadata": {
+		"inclusion": "-Add (Inclusion)\nInsert a CR123A, and LED blinks. \nSet the controller to the status for “Add”. \nPress the button over 3 seconds and release.\nAbout “Add” is completed, LED turns off.\n(If security include, LED turns off will soon after “Preparing inclusion” process.)\nNote) After inclusion completed, this sensor keep waking about 40 seconds, for interview process.\n During this time, button operation is disabled.",
+		"exclusion": "-Remove (exclusion)\nSet the controller to the status for “Remove”.\nPress the button over 3 seconds and release.\nLED blinks when “Remove” is completed.",
+		"reset": "Press the button over 10 seconds and release.\nPlease use this procedure only when the network primary controller like the gateway is missing or otherwise inoperable",
+		"manual": "https://products.z-wavealliance.org/ProductManual/File?folder=&filename=MarketCertificationFiles/2980/UsersGuide%20DN3G6JA084%20rev1.pdf"
+	}
+}

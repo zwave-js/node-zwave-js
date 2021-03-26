@@ -59,6 +59,28 @@
 				}
 			]
 		},
+		"6": {
+			"$if": "firmwareVersion >= 5.21",
+			"label": "Smooth Level Changes",
+			"valueSize": 1,
+			"unsigned": true,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Disabled",
+					"value": 0
+				},
+				{
+					"label": "Enabled",
+					"value": 1
+				}
+			]
+		},
 		"7": {
 			"label": "Dim Rate Steps (Z-Wave Command)",
 			"description": "Number of steps or levels",

@@ -46,7 +46,7 @@ assignees:
 - [ ] I am **not** using HomeAssistant. **Or:** a developer has told me to come here.
 - [ ] I am **not** using ZWaveJS2MQTT. **Or:** a developer has told me to come here.
 - [ ] I have checked the troubleshooting section and my problem is **not** described there.
-- [ ] I have read the changelog problem was **not** mentioned there.
+- [ ] I have read the changelog and my problem was **not** mentioned there.
 
 **Describe the bug**
 
@@ -78,6 +78,8 @@ What are the node IDs?
 - [ ] Manual Docker build
     - `node-zwave-js` branch: <!-- fill in -->
     - `zwavejs2mqtt` branch: <!-- fill in -->
+- [ ] `node-red-contrib-zwave-js`
+    - Module version (double click node): <!-- fill in -->
 - [ ] Manually built (as described in the [docs](https://zwave-js.github.io/node-zwave-js/#/development/installing-from-github)) 
 - [ ] Other: <!-- Please describe: -->
 

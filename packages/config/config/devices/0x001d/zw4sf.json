@@ -1,0 +1,108 @@
+// Leviton ZW4SF
+// 4 Speed Fan Controller
+{
+	"manufacturer": "Leviton",
+	"manufacturerId": "0x001d",
+	"label": "ZW4SF",
+	"description": "4 Speed Fan Controller",
+	"devices": [
+		{
+			"productType": "0x0038",
+			"productId": "0x0002",
+			"zwaveAllianceId": 3832
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"paramInformation": {
+		"3": {
+			"label": "Min Level",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 99,
+			"defaultValue": 10,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"4": {
+			"label": "Max Level",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 99,
+			"defaultValue": 99,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"5": {
+			"label": "Preset Level",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 99,
+			"defaultValue": 0,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"6": {
+			"label": "LED Dim Level Indicator Timeout",
+			"description": "How long the level indicators should stay illuminated after the dimming level is changed",
+			"valueSize": 1,
+			"unit": "seconds",
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 3,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true,
+			"options": [
+				{
+					"label": "Always Off",
+					"value": 0
+				},
+				{
+					"label": "Always On",
+					"value": 255
+				}
+			]
+		},
+		"7": {
+			"label": "Locator LED Status",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 255,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Always off",
+					"value": 0
+				},
+				{
+					"label": "LED on when switch is on",
+					"value": 254
+				},
+				{
+					"label": "LED on when switch is off",
+					"value": 255
+				}
+			]
+		}
+	},
+	"metadata": {
+		"inclusion": "Classic Inclusion To A Z-Wave Network\nFor older controllers Classic Inclusion is supported. Depending on the age of the controller the controller will need to be 3 to 35 feet from the device when including.\n1. To enter programming mode, hold the button for 7 seconds. The status light will turn amber, release and the status light will blink.\n2. Follow the Z-Wave controller instructions to enter inclusion mode.\n3. Tap the top or the paddle of the paddle one time. The status light will quickly flash green.\n4. The Z-Wave controller will confirm successful inclusion to the network",
+		"exclusion": "Exclusion From A Z-Wave Network\nWhen removing an fan speed controller from a Z-Wave network,\nbest practice is to use the exclusion command found in the Z-Wave\ncontroller.\n1. To enter programming mode, hold the button for 7 seconds. The\nstatus light will turn amber, release and the status light will blink.\n2. Follow Z-Wave controller directions to enter exclusion mode\n3. Tap the the top of the paddle 1 time. The status light will quickly\nflash green.\n4. The Z-Wave controller will remove the device from the network",
+		"reset": "Factory Default\nWhen removing a fan speed controller from a network it is best\npractice to use the exclusion process. In situations where a device\nneeds to be returned to factory default follow the following steps. A\nreset should only be used when a controller is\ninoperable or missing.\n1. Hold the top of the paddle for 7 seconds, the status light will turn amber.\nContinue holding the top paddle for another 7 seconds (total of 14 seconds).\nThe status light will quickly flash red/ amber.\n2. Release the top of the paddle and the device will reset",
+		"manual": "https://products.z-wavealliance.org/ProductManual/File?folder=&filename=product_documents/3832/Draft%20ZW4SF%203-25-20.pdf"
+	}
+}

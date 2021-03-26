@@ -24,13 +24,13 @@ This starts the driver and opens the underlying serial port and performs an inte
 
 The following table gives you an overview of what happens during the startup process. Note that the promise resolves before the interview process is completed:
 
-| Step | What happens behind the scenes                                          | Library response                                                                                                          |
-| :--: | ----------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------- |
-|  1   | Serial port is opened                                                   | `start()` Promise resolves                                                                                                |
-|  2   | Controller interview is performed                                       | `"driver ready"` event is emitted                                                                                         |
-|  3   | Every node is interviewed in the background (This may take a long time) | `"ready"` event is emitted for every node as soon as it can be used                                                       |
-|  4   | -                                                                       | `"all nodes ready"` event is emitted for the driver when all nodes can be used                                            |
-|  5   | -                                                                       | `"interview completed"` event is emitted for every node when its interview is completed and all its values are up to date |
+| Step | What happens behind the scenes                                          | Library response                                                                                                                                                              |
+| :--: | ----------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+|  1   | Serial port is opened                                                   | `start()` Promise resolves                                                                                                                                                    |
+|  2   | Controller interview is performed                                       | `"driver ready"` event is emitted                                                                                                                                             |
+|  3   | Every node is interviewed in the background (This may take a long time) | `"ready"` event is emitted for every node as soon as it can be used                                                                                                           |
+|  4   | -                                                                       | `"all nodes ready"` event is emitted for the driver when all nodes can be used                                                                                                |
+|  5   | -                                                                       | `"interview completed"` event is emitted for every node when its interview is completed for the first time. This only gets emitted once, unless the node gets re-interviewed. |
 
 ### `getSupportedCCVersionForEndpoint`
 
@@ -196,6 +196,14 @@ updateLogConfig(config: DeepPartial<LogConfig>): void
 
 Updates the logging configuration without having to restart the driver.
 
+### `getLogConfig`
+
+```ts
+getLogConfig(): LogConfig
+```
+
+Returns the current logging configuration.
+
 ## Driver properties
 
 ### `cacheDir`
@@ -280,10 +288,12 @@ interface FileSystem {
 
 The log configuration is passed to the driver constructor and can be used to influence the logging behavior. This config will overwrite the `LOGTOFILE` and `LOGLEVEL` environment variables if the corresponding properties are set. All properties are optional and will default to the values described below. To change these options on the fly, you can use the [`updateLogConfig`](#updateLogConfig) method.
 
+<!-- #import LogConfig from "@zwave-js/core" -->
+
 ```ts
 interface LogConfig {
 	enabled: boolean;
-	level: number;
+	level: string | number;
 	transports: Transport[];
 	logToFile: boolean;
 	nodeFilter?: number[];
@@ -293,7 +303,8 @@ interface LogConfig {
 ```
 
 -   `enable`: If `false`, logging will be disabled. Default: `true`.
--   `level`: The numeric loglevel (like the `npm` [loglevels](https://github.com/winstonjs/triple-beam/blob/master/config/npm.js)), ranging from `0` (error) to `6` (silly). Default: `5` (debug) or whatever is configured with the `LOGLEVEL` environment variable.
+-   `level`: The loglevel, ranging from `"error"` to `"silly"`, based on the `npm` [loglevels](https://github.com/winstonjs/triple-beam/blob/master/config/npm.js). The default is `"debug"` or whatever is configured with the `LOGLEVEL` environment variable.  
+    For convenience, the numeric loglevels `0` (`"error"`) to `6` (`"silly"`) can be used instead, but will be converted to their string counterpart internally.
 -   `transports`: Custom [`winston`](https://github.com/winstonjs/winston) log transports. Setting this property will override all configured and default transports. Use `getConfiguredTransports()` if you want to extend the default transports. Default: console transport if `logToFile` is `false`, otherwise a file transport.
 -   `logToFile`: Whether the log should go to a file instead of the console. Default: `false` or whatever is configured with the `LOGTOFILE` environment variable.
 -   `nodeFilter`: If set, only messages regarding the given node IDs are logged

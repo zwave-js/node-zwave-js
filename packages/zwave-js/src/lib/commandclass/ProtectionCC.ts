@@ -342,7 +342,7 @@ export class ProtectionCCAPI extends CCAPI {
 export class ProtectionCC extends CommandClass {
 	declare ccCommand: ProtectionCommand;
 
-	public async interview(complete: boolean = true): Promise<void> {
+	public async interview(): Promise<void> {
 		const node = this.getNode()!;
 		const endpoint = this.getEndpoint()!;
 		const api = endpoint.commandClasses.Protection.withOptions({
@@ -350,20 +350,17 @@ export class ProtectionCC extends CommandClass {
 		});
 
 		this.driver.controllerLog.logNode(node.id, {
-			message: `${this.constructor.name}: doing a ${
-				complete ? "complete" : "partial"
-			} interview...`,
+			endpoint: this.endpointIndex,
+			message: `Interviewing ${this.ccName}...`,
 			direction: "none",
 		});
-
-		const valueDB = this.getValueDB();
 
 		// We need to do some queries after a potential timeout
 		// In this case, do now mark this CC as interviewed completely
 		let hadCriticalTimeout = false;
 
 		// First find out what the device supports
-		if (complete && this.version >= 2) {
+		if (this.version >= 2) {
 			this.driver.controllerLog.logNode(node.id, {
 				message: "querying protection capabilities...",
 				direction: "outbound",
@@ -391,6 +388,20 @@ RF protection states:    ${resp.supportedRFStates
 				hadCriticalTimeout = true;
 			}
 		}
+
+		await this.refreshValues();
+
+		// Remember that the interview is complete
+		if (!hadCriticalTimeout) this.interviewComplete = true;
+	}
+
+	public async refreshValues(): Promise<void> {
+		const node = this.getNode()!;
+		const endpoint = this.getEndpoint()!;
+		const api = endpoint.commandClasses.Protection.withOptions({
+			priority: MessagePriority.NodeQuery,
+		});
+		const valueDB = this.getValueDB();
 
 		const supportsExclusiveControl = !!valueDB.getValue<boolean>(
 			getSupportsExclusiveControlValueID(this.endpointIndex),
@@ -450,9 +461,6 @@ rf     ${getEnumMemberName(RFProtectionState, protectionResp.rf)}`;
 				});
 			}
 		}
-
-		// Remember that the interview is complete
-		if (!hadCriticalTimeout) this.interviewComplete = true;
 	}
 }
 

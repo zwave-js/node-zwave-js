@@ -1,0 +1,48 @@
+// GE/Jasco 34184 / ZW5307
+// 2 Button Hub Remote
+{
+	"manufacturer": "GE/Jasco",
+	"manufacturerId": "0x0063",
+	"label": "34184 / ZW5307",
+	"description": "2 Button Hub Remote",
+	"devices": [
+		{
+			"productType": "0x4843",
+			"productId": "0x0037",
+			"zwaveAllianceId": 2961
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"paramInformation": {
+		"1": {
+			"label": "Adjust Refresh",
+			"description": "Adjusts refresh time from 1-55 seconds",
+			"valueSize": 1,
+			"unit": "seconds",
+			"minValue": 0,
+			"maxValue": 55,
+			"defaultValue": 0,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true,
+			"options": [
+				{
+					"label": "Default - 10 seconds",
+					"value": 0
+				},
+				{
+					"label": "Seconds",
+					"value": 55
+				}
+			]
+		}
+	},
+	"metadata": {
+		"reset": "1. Press and release Button 1 ten times quickly. All button presses must be within 6 seconds.\n2. The LED will flash five (5) times when completed successfully.\nNOTE: This should only be used in the event your network's primary\ncontroller/hub is missing or otherwise inoperable",
+		"manual": "https://products.z-wavealliance.org/ProductManual/File?folder=&filename=MarketCertificationFiles/2961/34184-QSG.pdf"
+	}
+}

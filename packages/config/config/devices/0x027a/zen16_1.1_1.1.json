@@ -470,5 +470,9 @@
 				}
 			]
 		}
+	},
+	"compat": {
+		// This device improperly reports the state of R2 (endpoint 2) through the root endpoint in a way that also changes the state of R1 (endpoint 1)
+		"preserveRootApplicationCCValueIDs": true
 	}
 }

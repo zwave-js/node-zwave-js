@@ -2,7 +2,6 @@ import {
 	assertZWaveError,
 	CommandClasses,
 	CommandClassInfo,
-	unknownBoolean,
 	ValueDB,
 	ValueID,
 	ValueMetadata,
@@ -13,6 +12,12 @@ import {
 	BinarySwitchCCReport,
 	BinarySwitchCommand,
 } from "../commandclass/BinarySwitchCC";
+import {
+	EntryControlCCNotification,
+	EntryControlCommand,
+	EntryControlDataTypes,
+	EntryControlEventTypes,
+} from "../commandclass/EntryControlCC";
 import { NoOperationCC } from "../commandclass/NoOperationCC";
 import { WakeUpCC, WakeUpCommand } from "../commandclass/WakeUpCC";
 import {
@@ -30,8 +35,13 @@ import { createEmptyMockDriver } from "../test/mocks";
 import { DeviceClass } from "./DeviceClass";
 import { ZWaveNode } from "./Node";
 import { RequestNodeInfoRequest } from "./RequestNodeInfoMessages";
-import type { ZWaveNodeEvents } from "./Types";
-import { InterviewStage, NodeStatus } from "./Types";
+import {
+	InterviewStage,
+	NodeStatus,
+	NodeType,
+	ProtocolVersion,
+	ZWaveNodeEvents,
+} from "./Types";
 
 /** This is an ugly hack to be able to test the private methods without resorting to @internal */
 class TestNode extends ZWaveNode {
@@ -209,21 +219,22 @@ describe("lib/node/Node", () => {
 			beforeAll(() => {
 				fakeDriver.sendMessage.mockClear();
 
-				expected = {
+				expected = ({
 					isListening: true,
 					isFrequentListening: false,
 					isRouting: true,
-					maxBaudRate: 100000,
-					isSecure: false,
-					version: 3,
-					isBeaming: false,
+					supportedDataRates: [100000],
+					supportsSecurity: false,
+					protocolVersion: ProtocolVersion["4.5x / 6.0x"],
+					supportsBeaming: false,
+					nodeType: NodeType.Controller,
 					deviceClass: new DeviceClass(
 						fakeDriver.configManager,
 						0x01,
 						0x03,
 						0x02,
 					),
-				} as GetNodeProtocolInfoResponse;
+				} as unknown) as GetNodeProtocolInfoResponse;
 
 				fakeDriver.sendMessage.mockResolvedValue(expected);
 			});
@@ -242,14 +253,7 @@ describe("lib/node/Node", () => {
 				for (const prop of Object.keys(
 					expected,
 				) as (keyof typeof expected)[]) {
-					if (prop === "isSecure") {
-						// we special-case false as "unknown" because many secure nodes still report false
-						expect(node.isSecure).toBe(
-							expected.isSecure || unknownBoolean,
-						);
-					} else {
-						expect((node as any)[prop]).toBe(expected[prop]);
-					}
+					expect((node as any)[prop]).toBe(expected[prop]);
 				}
 			});
 
@@ -836,9 +840,14 @@ describe("lib/node/Node", () => {
 
 	describe("getEndpoint()", () => {
 		let node: ZWaveNode;
-		beforeEach(() => {
+		beforeEach(async () => {
 			const fakeDriver = createEmptyMockDriver();
-			node = new ZWaveNode(2, fakeDriver as any);
+			await fakeDriver.configManager.loadDeviceClasses();
+			node = new ZWaveNode(
+				2,
+				fakeDriver as any,
+				new DeviceClass(fakeDriver.configManager, 0x04, 0x01, 0x01), // Portable Remote Controller
+			);
 		});
 
 		afterEach(() => {
@@ -903,6 +912,39 @@ describe("lib/node/Node", () => {
 			const actual = node.getEndpoint(5);
 			expect(actual).toBeUndefined();
 		});
+
+		it("sets the correct device class for the endpoint", async () => {
+			// interviewComplete needs to be true for getEndpoint to work
+			node.valueDB.setValue(
+				{
+					commandClass: CommandClasses["Multi Channel"],
+					property: "interviewComplete",
+				},
+				true,
+			);
+			node.valueDB.setValue(
+				{
+					commandClass: CommandClasses["Multi Channel"],
+					property: "individualCount",
+				},
+				5,
+			);
+
+			node.valueDB.setValue(
+				{
+					commandClass: CommandClasses["Multi Channel"],
+					endpoint: 5,
+					property: "deviceClass",
+				},
+				{
+					generic: 0x03,
+					specific: 0x12, // Doorbell
+				},
+			);
+
+			const actual = node.getEndpoint(5);
+			expect(actual?.deviceClass?.specific.label).toBe("Doorbell");
+		});
 	});
 
 	describe("serialize() / deserialize()", () => {
@@ -923,10 +965,12 @@ describe("lib/node/Node", () => {
 			isListening: true,
 			isFrequentListening: false,
 			isRouting: false,
-			maxBaudRate: 40000,
-			isSecure: false,
-			isBeaming: true,
-			version: 4,
+			supportedDataRates: [40000],
+			supportsSecurity: false,
+			isSecure: "unknown",
+			supportsBeaming: true,
+			protocolVersion: 3,
+			nodeType: "Controller",
 			neighbors: [2, 3, 4],
 			commandClasses: {
 				"0x25": {
@@ -963,12 +1007,29 @@ describe("lib/node/Node", () => {
 			node.destroy();
 		});
 
-		it("nodes with a completed interview don't get their stage reset when resuming from cache", () => {
+		it("deserializing a legacy node object should have the correct properties", () => {
+			const node = new ZWaveNode(1, fakeDriver);
+			// @ts-ignore We need write access to the map
+			fakeDriver.controller.nodes.set(1, node);
+			const legacy = {
+				...serializedTestNode,
+				version: 4, // version 4 -> protocolVersion 3
+				isBeaming: true,
+				maxBaudRate: 40000,
+			};
+			// @ts-expect-error We want to test this!
+			delete legacy.protocolVersion;
+			node.deserialize(legacy);
+			expect(node.serialize()).toEqual(serializedTestNode);
+			node.destroy();
+		});
+
+		it("a changed interview stage is reflected in the cache", () => {
 			const node = new ZWaveNode(1, fakeDriver);
 			// @ts-ignore We need write access to the map
 			fakeDriver.controller.nodes.set(1, node);
 			node.deserialize(serializedTestNode);
-			node.interviewStage = InterviewStage.RestartFromCache;
+			node.interviewStage = InterviewStage.Complete;
 			expect(node.serialize().interviewStage).toEqual(
 				InterviewStage[InterviewStage.Complete],
 			);
@@ -1068,12 +1129,12 @@ describe("lib/node/Node", () => {
 			const node = new ZWaveNode(1, fakeDriver);
 			const wrongInputs: [string, any][] = [
 				["isListening", 1],
-				["isFrequentListening", "2"],
+				["isFrequentListening", 2],
 				["isRouting", {}],
-				["maxBaudRate", true],
-				["isSecure", 3],
-				["isBeaming", "3"],
-				["version", false],
+				["supportedDataRates", true],
+				["supportsSecurity", 3],
+				["supportsSecurity", "3"],
+				["protocolVersion", false],
 			];
 			for (const [prop, val] of wrongInputs) {
 				const input = {
@@ -1144,6 +1205,42 @@ describe("lib/node/Node", () => {
 			expect(node.supportsCC(0x25)).toBeFalse();
 			expect(node.controlsCC(0x26)).toBeFalse();
 			expect(node.getCCVersion(0x27)).toBe(0);
+			node.destroy();
+		});
+
+		it("deserialize() should set the node status to Unknown if the node can sleep", () => {
+			const input = {
+				...serializedTestNode,
+				isListening: false,
+				isFrequentListening: false,
+			};
+			const node = new ZWaveNode(1, fakeDriver);
+			node.deserialize(input);
+			expect(node.status).toBe(NodeStatus.Unknown);
+			node.destroy();
+		});
+
+		it("deserialize() should set the node status to Unknown if the node is a listening node", () => {
+			const input = {
+				...serializedTestNode,
+				isListening: true,
+				isFrequentListening: false,
+			};
+			const node = new ZWaveNode(1, fakeDriver);
+			node.deserialize(input);
+			expect(node.status).toBe(NodeStatus.Unknown);
+			node.destroy();
+		});
+
+		it("deserialize() should set the node status to Unknown if the node is a frequent listening node", () => {
+			const input = {
+				...serializedTestNode,
+				isListening: false,
+				isFrequentListening: true,
+			};
+			const node = new ZWaveNode(1, fakeDriver);
+			node.deserialize(input);
+			expect(node.status).toBe(NodeStatus.Unknown);
 			node.destroy();
 		});
 	});
@@ -1410,11 +1507,11 @@ describe("lib/node/Node", () => {
 
 		beforeEach(() => fakeDriver.sendMessage.mockClear());
 
-		it("should map commands from the root endpoint to endpoint 1 if MultiChannelAssociationCC is V1/V2", async () => {
+		it("should map commands from the root endpoint to a supporting endpoint if compat flag mapRootReportsToEndpoints is set", async () => {
 			const node = makeNode([
 				[
 					CommandClasses["Multi Channel Association"],
-					{ isSupported: true, version: 2 },
+					{ isSupported: true },
 				],
 			]);
 			// We have two endpoints
@@ -1437,6 +1534,11 @@ describe("lib/node/Node", () => {
 			node.getEndpoint(1)?.addCC(CommandClasses["Binary Switch"], {
 				isSupported: true,
 			});
+			node["_deviceConfig"] = {
+				compat: {
+					mapRootReportsToEndpoints: true,
+				},
+			} as any;
 
 			// Handle a command for the root endpoint
 			const command = new BinarySwitchCCReport(
@@ -1459,6 +1561,59 @@ describe("lib/node/Node", () => {
 					property: "currentValue",
 				}),
 			).toBe(true);
+
+			node.destroy();
+		});
+
+		it("a notification event is sent when receiving an EntryControlNotification", async () => {
+			const node = makeNode([
+				[
+					CommandClasses["Entry Control"],
+					{ isSupported: true, version: 1 },
+				],
+			]);
+
+			const spy = jest.fn();
+			node.on("notification", spy);
+
+			const buf = Buffer.concat([
+				Buffer.from([
+					CommandClasses["Entry Control"],
+					EntryControlCommand.Notification, // CC Command
+					0x5,
+					0x2,
+					0x3,
+					16,
+					49,
+					50,
+					51,
+					52,
+				]),
+				// Required padding for ASCII
+				Buffer.alloc(12, 0xff),
+			]);
+
+			const command = new EntryControlCCNotification(
+				(fakeDriver as unknown) as Driver,
+				{
+					nodeId: node.id,
+					data: buf,
+				},
+			);
+
+			node.handleCommand(command);
+
+			const calls = spy.mock.calls;
+			expect(calls.length).toBe(1);
+			const call = calls[0];
+
+			expect(call[0].id).toBe(node.id);
+			expect(call[1]).toBe(CommandClasses["Entry Control"]);
+			expect(call[2]).toEqual({
+				dataType: EntryControlDataTypes.ASCII,
+				eventType: EntryControlEventTypes.DisarmAll,
+				eventData: "1234",
+			});
 
 			node.destroy();
 		});

@@ -141,6 +141,77 @@
 			"type": "object",
 			"properties": {
 				"$import": { "$ref": "#/definitions/import" },
+				"alarmMapping": {
+					"description": "Is used to map legacy V1 alarm values to V2+ Notification events",
+					"type": "array",
+					"items": {
+						"type": "object",
+						"properties": {
+							"$import": { "$ref": "#/definitions/import" },
+							"from": {
+								"type": "object",
+								"properties": {
+									"alarmType": {
+										"type": "integer",
+										"minimum": 0,
+										"maximum": 255
+									},
+									"alarmLevel": {
+										"type": "integer",
+										"minimum": 0,
+										"maximum": 255
+									}
+								},
+								"additionalProperties": false,
+								"required": ["alarmType"]
+							},
+							"to": {
+								"type": "object",
+								"properties": {
+									"notificationType": {
+										"type": "integer",
+										"minimum": 0,
+										"maximum": 255
+									},
+									"notificationEvent": {
+										"type": "integer",
+										"minimum": 0,
+										"maximum": 255
+									},
+									"eventParameters": {
+										"type": "object",
+										"additionalProperties": {
+											"anyOf": [
+												{
+													"type": "integer"
+												},
+												{
+													"enum": ["alarmLevel"]
+												}
+											]
+										}
+									}
+								},
+								"additionalProperties": false,
+								"required": [
+									"notificationType",
+									"notificationEvent"
+								]
+							}
+						},
+						"additionalProperties": false,
+						"anyOf": [
+							{
+								"required": ["from", "to"]
+							},
+							{
+								"required": ["$import"]
+							}
+						]
+					},
+					"minItems": 1,
+					"additionalItems": false
+				},
 				"commandClasses": {
 					"type": "object",
 					"properties": {
@@ -184,6 +255,16 @@
 				"disableBasicMapping": {
 					"const": true
 				},
+				"disableStrictEntryControlDataValidation": {
+					"const": true
+				},
+				"manualValueRefreshDelayMs": {
+					"type": "number",
+					"minimum": 0
+				},
+				"mapRootReportsToEndpoints": {
+					"const": true
+				},
 				"overrideFloatEncoding": {
 					"type": "object",
 					"properties": {
@@ -223,10 +304,6 @@
 				},
 				"treatBasicSetAsEvent": {
 					"const": true
-				},
-				"manualValueRefreshDelayMs": {
-					"type": "number",
-					"minimum": 0
 				}
 			},
 			"additionalProperties": false
@@ -275,7 +352,7 @@
 		"import": {
 			"type": "string",
 			"description": "Used to import another config file or parts thereof",
-			"pattern": "^((?<dir>([\\w\\d_-\\.]+/)+)?(?<filename>[\\w\\d_-]+\\.json))?(?<selector>#([\\w\\d_-]+/)*[\\w\\d_-]+)?$"
+			"pattern": "^((?<dir>([\\w\\d_\\.-]+/)+)?(?<filename>[\\w\\d_-]+\\.json))?(?<selector>#([\\w\\d_-]+/)*[\\w\\d_-]+)?$"
 		},
 		"condition": {
 			"type": "string",

@@ -3,6 +3,7 @@ import {
 	CommandClasses,
 	indexDBsByNode,
 	isTransmissionError,
+	isZWaveError,
 	NODE_ID_BROADCAST,
 	ValueDB,
 	ZWaveError,
@@ -124,7 +125,7 @@ interface ControllerEventCallbacks {
 	"inclusion stopped": () => void;
 	"exclusion stopped": () => void;
 	"node added": (node: ZWaveNode) => void;
-	"node removed": (node: ZWaveNode) => void;
+	"node removed": (node: ZWaveNode, replaced: boolean) => void;
 	"heal network progress": (
 		progress: ReadonlyMap<number, HealNodeStatus>,
 	) => void;
@@ -818,7 +819,7 @@ export class ZWaveController extends EventEmitter {
 				node.isSecure = true;
 			} catch (e: unknown) {
 				let errorMessage = `Security bootstrapping failed, the node is included insecurely`;
-				if (!(e instanceof ZWaveError)) {
+				if (!isZWaveError(e)) {
 					errorMessage += `: ${e as any}`;
 				} else if (
 					e.code === ZWaveErrorCodes.Controller_MessageExpired
@@ -895,11 +896,16 @@ export class ZWaveController extends EventEmitter {
 
 		if (node.supportsCC(CommandClasses["Wake Up"])) {
 			try {
-				// Query the version, so we can setup the wakeup destination correctly
-				const supportedVersion = await node.commandClasses.Version.getCCVersion(
-					CommandClasses["Wake Up"],
-				);
-				if (supportedVersion != undefined && supportedVersion > 0) {
+				// Query the version, so we can setup the wakeup destination correctly.
+				let supportedVersion: number | undefined;
+				if (node.supportsCC(CommandClasses.Version)) {
+					supportedVersion = await node.commandClasses.Version.getCCVersion(
+						CommandClasses["Wake Up"],
+					);
+				}
+				// If querying the version can't be done, we should at least assume that it supports V1
+				supportedVersion ??= 1;
+				if (supportedVersion > 0) {
 					node.addCC(CommandClasses["Wake Up"], {
 						version: supportedVersion,
 					});
@@ -1157,7 +1163,7 @@ export class ZWaveController extends EventEmitter {
 				this.emit("inclusion stopped");
 
 				if (this._nodePendingReplace) {
-					this.emit("node removed", this._nodePendingReplace);
+					this.emit("node removed", this._nodePendingReplace, true);
 					this._nodes.delete(this._nodePendingReplace.id);
 
 					// Create a fresh node instance and forget the old one
@@ -1308,7 +1314,11 @@ export class ZWaveController extends EventEmitter {
 					);
 
 					// notify listeners
-					this.emit("node removed", this._nodePendingExclusion);
+					this.emit(
+						"node removed",
+						this._nodePendingExclusion,
+						false,
+					);
 					// and forget the node
 					this._nodes.delete(this._nodePendingExclusion.id);
 					this._nodePendingExclusion = undefined;
@@ -1326,7 +1336,9 @@ export class ZWaveController extends EventEmitter {
 	private _healNetworkProgress = new Map<number, HealNodeStatus>();
 
 	/**
-	 * Requests all alive slave nodes to update their neighbor lists
+	 * Performs a healing process for all alive nodes in the network,
+	 * requesting updated neighbor lists and assigning fresh routes to
+	 * association targets.
 	 */
 	public beginHealingNetwork(): boolean {
 		// Don't start the process twice
@@ -1347,7 +1359,7 @@ export class ZWaveController extends EventEmitter {
 				(node.status === NodeStatus.Asleep &&
 					node.interviewStage === InterviewStage.ProtocolInfo)
 			) {
-				// Don't interview dead nodes
+				// Don't heal dead nodes
 				this.driver.controllerLog.logNode(
 					id,
 					`Skipping heal because the node is not responding.`,
@@ -1364,7 +1376,7 @@ export class ZWaveController extends EventEmitter {
 				.filter(([, status]) => status === "pending")
 				.map(async ([nodeId]) => {
 					// await the heal process for each node and treat errors as a non-successful heal
-					const result = await this.healNode(nodeId).catch(
+					const result = await this.healNodeInternal(nodeId).catch(
 						() => false,
 					);
 					if (!this._healNetworkActive) return;
@@ -1421,9 +1433,43 @@ export class ZWaveController extends EventEmitter {
 	}
 
 	/**
-	 * Performs the healing process for a node
+	 * Performs a healing process for a single alive node in the network,
+	 * updating the neighbor list and assigning fresh routes to
+	 * association targets.
+	 *
+	 * Returns `true` if the process succeeded, `false` otherwise.
 	 */
 	public async healNode(nodeId: number): Promise<boolean> {
+		// Don't start the process twice
+		if (this._healNetworkActive) return false;
+		this._healNetworkActive = true;
+
+		// Don't try to heal dead nodes
+		const node = this.nodes.getOrThrow(nodeId);
+		if (
+			// The node is known to be dead
+			node.status === NodeStatus.Dead ||
+			// The node is assumed asleep but has never been interviewed.
+			// It is most likely dead
+			(node.status === NodeStatus.Asleep &&
+				node.interviewStage === InterviewStage.ProtocolInfo)
+		) {
+			this.driver.controllerLog.logNode(
+				nodeId,
+				`Skipping heal because the node is not responding.`,
+			);
+			return false;
+		}
+
+		try {
+			this.driver.controllerLog.logNode(nodeId, `Healing node...`);
+			return await this.healNodeInternal(nodeId);
+		} finally {
+			this._healNetworkActive = false;
+		}
+	}
+
+	private async healNodeInternal(nodeId: number): Promise<boolean> {
 		// The healing process consists of four steps
 		// Each step is tried up to 5 times before the healing process is considered failed
 		const maxAttempts = 5;
@@ -2024,7 +2070,7 @@ ${associatedNodes.join(", ")}`,
 	 * Removes a node from all other nodes' associations
 	 * WARNING: It is not recommended to await this method
 	 */
-	public async removeNodeFromAllAssocations(nodeId: number): Promise<void> {
+	public async removeNodeFromAllAssociations(nodeId: number): Promise<void> {
 		// Create all async tasks
 		const tasks = [...this.nodes.values()]
 			.filter((node) => node.id !== this._ownNodeId && node.id !== nodeId)
@@ -2133,7 +2179,7 @@ ${associatedNodes.join(", ")}`,
 					// If everything went well, the status is RemoveFailedNodeStatus.NodeRemoved
 
 					// Emit the removed event so the driver and applications can react
-					this.emit("node removed", this.nodes.get(nodeId)!);
+					this.emit("node removed", this.nodes.get(nodeId)!, false);
 					// and forget the node
 					this._nodes.delete(nodeId);
 

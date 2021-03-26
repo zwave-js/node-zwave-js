@@ -1,0 +1,198 @@
+// GE/Jasco 43985 / ZW6306
+// Smart Flood/Freeze Sensor
+{
+	"manufacturer": "GE/Jasco",
+	"manufacturerId": "0x0063",
+	"label": "43985 / ZW6306",
+	"description": "Smart Flood/Freeze Sensor",
+	"devices": [
+		{
+			"productType": "0x4953",
+			"productId": "0x3236",
+			"zwaveAllianceId": 3678
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"paramInformation": {
+		"19": {
+			"label": "Alternate Exclusion",
+			"description": "When enabled, press the button three times quickly when prompted to remove device",
+			"valueSize": 2,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 0,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Press the button once when prompted to remove device",
+					"value": 0
+				},
+				{
+					"label": "Press the button three times quickly when prompted to remove device",
+					"value": 1
+				}
+			]
+		},
+		"21": {
+			"label": "Reverse Detection of Wet/Dry",
+			"valueSize": 2,
+			"minValue": 1,
+			"maxValue": 2,
+			"defaultValue": 1,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Normal detection(water detected)",
+					"value": 1
+				},
+				{
+					"label": "Reverse detection(dry detected)",
+					"value": 2
+				}
+			]
+		},
+		"22": {
+			"label": "Temperature Report Interval (when Battery Operated)",
+			"valueSize": 2,
+			"minValue": 5,
+			"maxValue": 1440,
+			"defaultValue": 60,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true,
+			"options": [
+				{
+					"label": "Hourly",
+					"value": 60
+				},
+				{
+					"label": "5-60 minutes",
+					"value": 60
+				},
+				{
+					"label": "6 hours",
+					"value": 360
+				},
+				{
+					"label": "12 hours",
+					"value": 720
+				},
+				{
+					"label": "Daily",
+					"value": 1440
+				}
+			]
+		},
+		"23": {
+			"label": "Battery Report Interval",
+			"valueSize": 2,
+			"minValue": 5,
+			"maxValue": 1440,
+			"defaultValue": 1440,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true,
+			"options": [
+				{
+					"label": "5-60 minutes",
+					"value": 60
+				},
+				{
+					"label": "6 hours",
+					"value": 360
+				},
+				{
+					"label": "12 hours",
+					"value": 720
+				},
+				{
+					"label": "Daily",
+					"value": 1440
+				}
+			]
+		},
+		"50": {
+			"label": "Low Temp Alarm",
+			"description": "Notification type: heat = 04 under limit event = 06 under limit non-event = 00",
+			"valueSize": 2,
+			"minValue": -4,
+			"maxValue": 122,
+			"defaultValue": 33,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"51": {
+			"label": "High Temp Alarm",
+			"description": "Notification type: heat = 04 over limit event = 02 over limit non-event = 00",
+			"valueSize": 2,
+			"minValue": -4,
+			"maxValue": 122,
+			"defaultValue": 104,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"52": {
+			"label": "Temperature Report Interval (when Usb Operated)",
+			"valueSize": 2,
+			"minValue": 5,
+			"maxValue": 360,
+			"defaultValue": 60,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"53": {
+			"label": "Tamper Alert Configuration",
+			"valueSize": 2,
+			"minValue": 1,
+			"maxValue": 5,
+			"defaultValue": 1,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "(default) - red LED continuous flash and beeps",
+					"value": 1
+				},
+				{
+					"label": "Red LED flashes once, continuous beeps",
+					"value": 2
+				},
+				{
+					"label": "Red LED continuous flash, no beeps",
+					"value": 3
+				},
+				{
+					"label": "Red LED flash once, no beeps",
+					"value": 4
+				},
+				{
+					"label": "No led, no beeps",
+					"value": 5
+				}
+			]
+		}
+	},
+	"metadata": {
+		"inclusion": "1. Follow the instructions for your Z-Wave certified controller to add the sensor in the Z-Wave network.\n2. Once the controller is ready to add your device, remove the top cover of the sensor. Ensure battery is installed with the correct polarity and the battery tab has been removed, or ensure micro USB is plugged into USB port.\n3. Press and release the programming button (see figure 10). This starts the manual add process. The red LED flashes quickly as it searches for a network. After 25 seconds, the LED will stop flashing. Press the programming button to manually start the add process. If it times out, the LED will stop flashing. Press and release the programming button again.\n4. The controller’s app will indicate if it discovers the sensor. If prompted by the controller to enter the S2 security code, refer to the QR code/security number on the back of the box or the QR code label on the product (see above). Enter the 5-digit code",
+		"exclusion": "1. Follow the instructions for your Z-Wave certified controller to remove the sensor from the Z-Wave network.\n2. Once the controller is ready to remove your sensor, press and release the programming button one time on the sensor (see figure 10).\n3. The red LED will blink five times to indicate it has been removed. Secure the top cover",
+		"reset": "1. Press the programming button 10 times within 6 seconds (interval between presses of the button cannot be longer than 1 second).\n2. The red LED will activate for 2 seconds, followed by three quick flashes. This confirms the sensor has been reset. Secure the top cover into place.\nNote: This should only be used if your network’s primary controller is missing or otherwise inoperable",
+		"manual": "https://products.z-wavealliance.org/ProductManual/File?folder=&filename=product_documents/3678/43985%20EnFrSp%20QSG%20v1.pdf"
+	}
+}

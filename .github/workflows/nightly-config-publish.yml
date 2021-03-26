@@ -101,7 +101,7 @@ jobs:
           v += "." + dateStr;
         } else {
           // This is not a prerelease, patch-bump and then append the config (pre)identifier
-          v = semver.inc(v, "patch") + "-" + datestr;
+          v = semver.inc(v, "patch") + "-" + dateStr;
         }
         console.log(v);
         EOF

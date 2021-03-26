@@ -1,0 +1,63 @@
+// Qolsys QZ2140-840
+// Z-Wave Plug-In Dimmer
+{
+	"manufacturer": "Qolsys",
+	"manufacturerId": "0x012a",
+	"label": "QZ2140-840",
+	"description": "Z-Wave Plug-In Dimmer",
+	"devices": [
+		{
+			"productType": "0x4744",
+			"productId": "0x3032",
+			"zwaveAllianceId": 2912
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"paramInformation": {
+		"3": {
+			"label": "Night Light",
+			"description": "When value =0 the LED indicator will be off when the the connected light is on, and the LED will be on when the connected light is off. if value =1 the LED indicator will be on when the connected light is on, and the LED indicator will be off when the connected light is off. if value =2 the LED indicator will always be off regardless of the load status",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 2,
+			"defaultValue": 0,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"9": {
+			"label": "Dimming Resolution Level",
+			"description": "Valid values: 1-99, indicates the number of dimming levels",
+			"valueSize": 1,
+			"minValue": 1,
+			"maxValue": 99,
+			"defaultValue": 1,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"10": {
+			"label": "Timer",
+			"description": "Valid values: 1-255, indicates the time duration of each level",
+			"valueSize": 1,
+			"minValue": 1,
+			"maxValue": 255,
+			"defaultValue": 3,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		}
+	},
+	"metadata": {
+		"inclusion": "1. Place your network controller into inclusion mode by following the controller manufacturer's instructions.\n2. When the controller is ready, single click the button on the front of the IQ Dimmer. The controller should indicate that the new device was added successfully.\n3. Once the IQ Dimmer has been successfully added to your home network, you can move it to the preferred location in the home",
+		"exclusion": "1. Place your network controller into exclusion mode by following the controller manufacturer's instructions.\n2. When the controller is ready, single click the button on the front of the IQ Dimmer. The controller should indicate that the new device was removed successfully.\n3. Once the IQ Dimmer has been successfully added to your home network, you can move it to the preferred location in the home",
+		"reset": "1. Unplug the IQ Dimmer from the AC outlet and also unplug the power plugs of the lighting from the module (if plugged in)\n2. Press and hold the button on the IQ Dimmer\n3. Plug the IQ Dimmer back into the AC outlet with the button pressed. After 3 seconds, release the button. If you see the button blink, that means that IQ Dimmer has been reset successfully.\n\nPlease use this procedure only when the network primary controller is missing or otherwise inoperable.",
+		"manual": "https://products.z-wavealliance.org/ProductManual/File?folder=&filename=MarketCertificationFiles/2912/IQ%20Dimmer%20UG%20Online.pdf"
+	}
+}

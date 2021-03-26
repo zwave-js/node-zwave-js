@@ -51,6 +51,8 @@ A Z-Wave network needs to be reorganized (healed) from time to time. To do so, t
 
 The `healNode` method performs this step for a given node. The returned promise resolves to `true` if the process was completed, or `false` if it was unsuccessful.
 
+> [!ATTENTION] Healing a Z-Wave network causes a lot of traffic and can take very long. Degraded performance **must** be expected while a healing process is active.
+
 ### `beginHealingNetwork`
 
 ```ts
@@ -115,14 +117,14 @@ getAssociations(nodeId: number): ReadonlyMap<number, readonly Association[]>;
 isAssociationAllowed(nodeId: number, group: number, association: Association): boolean;
 addAssociations(nodeId: number, group: number, associations: Association[]): Promise<void>;
 removeAssociations(nodeId: number, group: number, associations: Association[]): Promise<void>;
-removeNodeFromAllAssocations(nodeId: number): Promise<void>;
+removeNodeFromAllAssociations(nodeId: number): Promise<void>;
 ```
 
 -   `getAssociationGroups` returns all association groups for a given node.
 -   `getAssociations` returns all defined associations of a given node.
 -   `addAssociations` can be used to add one or more associations to a node's group. You should check if each association is allowed using `isAssociationAllowed` before doing so.
 -   To remove a previously added association, use `removeAssociations`
--   A node can be removed from all other nodes' associations using `removeNodeFromAllAssocations`
+-   A node can be removed from all other nodes' associations using `removeNodeFromAllAssociations`
 
 #### `AssociationGroup` interface
 
@@ -305,12 +307,20 @@ A node could not be included into or excluded from the network for some reason.
 
 The process to include or exclude a node was stopped successfully. Note that these events are also emitted after a node was included or excluded.
 
-### `"node added"` / `"node removed"`
+### `"node added"`
 
-A node has successfully been added to or removed from the network. The added or removed node is passed to the event handler as the only argument:
+A node has successfully been added to the network. The added node is passed to the event handler as the only argument:
 
 ```ts
 (node: ZWaveNode) => void
+```
+
+### `"node removed"`
+
+A node has successfully been replaced or removed from the network. The `replace` parameter indicates whether the node was replaced with another node.
+
+```ts
+(node: ZWaveNode, replaced: boolean) => void
 ```
 
 ### `"heal network progress"`

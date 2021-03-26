@@ -490,6 +490,17 @@
 			"writeOnly": false,
 			"allowManualEntry": true
 		},
+		"52": {
+			"label": "Filter Timer",
+			"unit": "hours",
+			"valueSize": 2,
+			"minValue": 0,
+			"maxValue": 4000,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
 		"54": {
 			"label": "Heat Timer",
 			"unit": "hours",

@@ -1,0 +1,146 @@
+// Secure Meters (UK) Ltd. MAX10Y-376
+// SIR 321
+{
+	"manufacturer": "Secure Meters (UK) Ltd.",
+	"manufacturerId": "0x0059",
+	"label": "MAX10Y-376",
+	"description": "SIR 321",
+	"devices": [
+		{
+			"productType": "0x0010",
+			"productId": "0x0003",
+			"zwaveAllianceId": 4045
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"paramInformation": {
+		"1": {
+			"label": "Enable/Disable Fail Safe Timer",
+			"description": "For any non zero value fail safe timer of 60 minutes starts after valid 'switch binary set' or 'Basic Set' command, timer is reloaded with 60 minutes on every successful communication with the controller. in case of communication failure with the controller for 60 minutes. fail safe timer will switch off the relay and communication failure indicated on rf led",
+			"valueSize": 1,
+			"unit": "minutes",
+			"minValue": -1,
+			"maxValue": 127,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Diable fail safe timer",
+					"value": 0
+				},
+				{
+					"label": "Enable fail safe timer",
+					"value": 127
+				},
+				{
+					"label": "Enable fail safe timer",
+					"value": -1
+				}
+			]
+		},
+		"2": {
+			"label": "Temperature Scale",
+			"description": "Used to select temperature scale '°c' or '°f' for unsolicited multilevel sensor report. note: (1) on every scale change config parameter 3 to 5 will be set to their default values. (2) parameter 2 to 5 available only if temperature sensor is connected while inclusion process",
+			"valueSize": 2,
+			"minValue": 127,
+			"maxValue": 255,
+			"defaultValue": 0,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Unsolicited multilevel sensor report in °c scale",
+					"value": 127
+				},
+				{
+					"label": "Unsolicited multilevel sensor report in °f scale",
+					"value": 255
+				}
+			]
+		},
+		"3": {
+			"label": "Temperature Report Interval",
+			"description": "Configuration of time for time base temperature reporting. (range 31 second to 65534 second)",
+			"valueSize": 2,
+			"unit": "seconds",
+			"minValue": -2,
+			"maxValue": 32767,
+			"defaultValue": 30,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Time base temperature reporting is disable",
+					"value": 30
+				},
+				{
+					"label": "Time base temperature reporting time in seconds. (31 to 32767 second)",
+					"value": 32767
+				},
+				{
+					"label": "Not used (ignore)",
+					"value": 29
+				},
+				{
+					"label": "Time base temperature reporting time in seconds. ((65536 + value) = 32768 to 65534 second)",
+					"value": -2
+				}
+			]
+		},
+		"4": {
+			"label": "Delta Configuration Temperature Report",
+			"description": "Configuration of delta temperature for delta temperature change based reporting. in case of °f scale: minimum value is 0 and maximum value is 500 (in 0.1 °f resolution)",
+			"valueSize": 2,
+			"minValue": 0,
+			"maxValue": 100,
+			"defaultValue": 0,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Delta temperature reporting is disable",
+					"value": 0
+				},
+				{
+					"label": "Delta temperature value in °c (in 0.1 °c resolution)",
+					"value": 100
+				}
+			]
+		},
+		"5": {
+			"label": "Cut Off Temperature",
+			"description": "When temperature reaches at cut off temperature point than relay will be switched off. in case of °f scale: minimum value is 320 and maximum value is 2120 (in 0.1 °f resolution)",
+			"valueSize": 2,
+			"unit": "0.1 °F",
+			"minValue": 0,
+			"maxValue": 2120,
+			"defaultValue": 0,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true,
+			"options": [
+				{
+					"label": "Cut off temperature feature is disable",
+					"value": 0
+				}
+			]
+		}
+	},
+	"metadata": {
+		"inclusion": "STEP 1: Ensure the RF LED is flashing on the SIR 321, if not than follow ‘Exclusion’ steps first.\nSTEP 2: Put the third party controller into inclusion mode.\nSTEP 3: Press and hold the pairing button on the SIR 321 until the RF LED start flashing at a fast rate. Then release the button.\nThe SIR 321 has been added onto the network when the RF LED stop flashing",
+		"exclusion": "STEP 1: Put the third party controller into exclusion mode.\nSTEP 2: Press and hold the pairing button on the SIR 321 until the RF LED start flashing at a fast rate. Then release the button.\nThe SIR 321 has been removed from the network when the RF LED starts flashing",
+		"reset": "\"Please use this procedure only when the primary controller is missing or otherwise inoperable.\"\n\nPress pairing button and boost button simultaneously until RF LED starts flashing to put the device in a factory default mode, all the configuration and association set to factory default and removing the device from Z-wave network",
+		"manual": "https://products.z-wavealliance.org/ProductManual/File?folder=&filename=product_documents/4045/SIR321%20BGX501-867%20R07.pdf"
+	}
+}

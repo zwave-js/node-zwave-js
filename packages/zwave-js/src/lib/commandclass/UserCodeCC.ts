@@ -702,7 +702,7 @@ export class UserCodeCCAPI extends PhysicalCCAPI {
 export class UserCodeCC extends CommandClass {
 	declare ccCommand: UserCodeCommand;
 
-	public async interview(complete: boolean = true): Promise<void> {
+	public async interview(): Promise<void> {
 		const node = this.getNode()!;
 		const endpoint = this.getEndpoint()!;
 		const api = endpoint.commandClasses["User Code"].withOptions({
@@ -710,65 +710,76 @@ export class UserCodeCC extends CommandClass {
 		});
 
 		this.driver.controllerLog.logNode(node.id, {
-			message: `${this.constructor.name}: doing a ${
-				complete ? "complete" : "partial"
-			} interview...`,
+			endpoint: this.endpointIndex,
+			message: `Interviewing ${this.ccName}...`,
 			direction: "none",
 		});
 
-		// Query capabilities first because they determine the next steps
-		let supportsMasterCode = false;
-		let supportsUserCodeChecksum = false;
-		let supportedKeypadModes: readonly KeypadMode[] = [];
-		let supportedUsers: number | undefined;
-		if (complete) {
-			if (this.version >= 2) {
-				this.driver.controllerLog.logNode(node.id, {
-					message: "querying capabilities...",
-					direction: "outbound",
-				});
-				const caps = await api.getCapabilities();
-				if (caps) {
-					supportsMasterCode = caps.supportsMasterCode;
-					supportsUserCodeChecksum = caps.supportsUserCodeChecksum;
-					supportedKeypadModes = caps.supportedKeypadModes;
-				}
-			}
-
+		// Query capabilities first to determine what needs to be done when refreshing
+		if (this.version >= 2) {
 			this.driver.controllerLog.logNode(node.id, {
-				message: "querying number of user codes...",
+				message: "querying capabilities...",
 				direction: "outbound",
 			});
-			supportedUsers = await api.getUsersCount();
-			if (supportedUsers == undefined) {
+			const caps = await api.getCapabilities();
+			if (!caps) {
 				this.driver.controllerLog.logNode(node.id, {
 					endpoint: this.endpointIndex,
 					message:
-						"Querying number of user codes timed out, skipping interview...",
+						"User Code capabilities query timed out, skipping interview...",
 					level: "warn",
 				});
 				return;
 			}
-		} else {
-			supportsMasterCode =
-				node.getValue<boolean>(
-					getSupportsMasterCodeValueID(this.endpointIndex),
-				) ?? false;
-			supportsUserCodeChecksum =
-				node.getValue<boolean>(
-					getSupportsUserCodeChecksumValueID(this.endpointIndex),
-				) ?? false;
-			supportedKeypadModes =
-				node.getValue<readonly KeypadMode[]>(
-					getSupportedKeypadModesValueID(this.endpointIndex),
-				) ?? [];
-			supportedUsers =
-				node.getValue<number>(
-					getSupportedUsersValueID(this.endpointIndex),
-				) ?? 0;
 		}
 
-		// Now check for changed values and codes
+		this.driver.controllerLog.logNode(node.id, {
+			message: "querying number of user codes...",
+			direction: "outbound",
+		});
+		const supportedUsers = await api.getUsersCount();
+		if (supportedUsers == undefined) {
+			this.driver.controllerLog.logNode(node.id, {
+				endpoint: this.endpointIndex,
+				message:
+					"Querying number of user codes timed out, skipping interview...",
+				level: "warn",
+			});
+			return;
+		}
+
+		// Synchronize user codes and settings
+		await this.refreshValues();
+
+		// Remember that the interview is complete
+		this.interviewComplete = true;
+	}
+
+	public async refreshValues(): Promise<void> {
+		const node = this.getNode()!;
+		const endpoint = this.getEndpoint()!;
+		const api = endpoint.commandClasses["User Code"].withOptions({
+			priority: MessagePriority.NodeQuery,
+		});
+
+		const supportsMasterCode =
+			node.getValue<boolean>(
+				getSupportsMasterCodeValueID(this.endpointIndex),
+			) ?? false;
+		const supportsUserCodeChecksum =
+			node.getValue<boolean>(
+				getSupportsUserCodeChecksumValueID(this.endpointIndex),
+			) ?? false;
+		const supportedKeypadModes =
+			node.getValue<readonly KeypadMode[]>(
+				getSupportedKeypadModesValueID(this.endpointIndex),
+			) ?? [];
+		const supportedUsers =
+			node.getValue<number>(
+				getSupportedUsersValueID(this.endpointIndex),
+			) ?? 0;
+
+		// Check for changed values and codes
 		if (this.version >= 2) {
 			if (supportsMasterCode) {
 				this.driver.controllerLog.logNode(node.id, {
@@ -830,9 +841,6 @@ export class UserCodeCC extends CommandClass {
 				await api.get(userId);
 			}
 		}
-
-		// Remember that the interview is complete
-		this.interviewComplete = true;
 	}
 }
 

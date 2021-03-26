@@ -97,18 +97,26 @@ export class ClockCCAPI extends CCAPI {
 export class ClockCC extends CommandClass {
 	declare ccCommand: ClockCommand;
 
-	public async interview(complete: boolean = true): Promise<void> {
+	public async interview(): Promise<void> {
+		const node = this.getNode()!;
+
+		this.driver.controllerLog.logNode(node.id, {
+			endpoint: this.endpointIndex,
+			message: `Interviewing ${this.ccName}...`,
+			direction: "none",
+		});
+
+		await this.refreshValues();
+
+		// Remember that the interview is complete
+		this.interviewComplete = true;
+	}
+
+	public async refreshValues(): Promise<void> {
 		const node = this.getNode()!;
 		const endpoint = this.getEndpoint()!;
 		const api = endpoint.commandClasses.Clock.withOptions({
 			priority: MessagePriority.NodeQuery,
-		});
-
-		this.driver.controllerLog.logNode(node.id, {
-			message: `${this.constructor.name}: doing a ${
-				complete ? "complete" : "partial"
-			} interview...`,
-			direction: "none",
 		});
 
 		this.driver.controllerLog.logNode(node.id, {
@@ -129,9 +137,6 @@ export class ClockCC extends CommandClass {
 				direction: "inbound",
 			});
 		}
-
-		// Remember that the interview is complete
-		this.interviewComplete = true;
 	}
 }
 

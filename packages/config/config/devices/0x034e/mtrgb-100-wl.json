@@ -1,0 +1,40 @@
+// TEM AG MTRGB-100-WL
+// Radio RGBW
+{
+	"manufacturer": "TEM AG",
+	"manufacturerId": "0x034e",
+	"label": "MTRGB-100-WL",
+	"description": "Radio RGBW",
+	"devices": [
+		{
+			"productType": "0x0001",
+			"productId": "0x0005",
+			"zwaveAllianceId": 3234
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"paramInformation": {
+		"1": {
+			"label": "Heartbeat Notification Rate",
+			"description": "Heartbeat notification rate in minutes",
+			"valueSize": 2,
+			"unit": "minutes",
+			"minValue": 1,
+			"maxValue": 60,
+			"defaultValue": 60,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		}
+	},
+	"metadata": {
+		"inclusion": "Inclusion (Add)\nTo include (Add) the device to a Z-Wave network, press the button four times in quick succession. When the device is in Add mode, the LED flashes green. When finished, the new status is:\nAdd: The LED lights up briefly in green\nRemove: The LED lights up briefly in red",
+		"exclusion": "Exclusion (Remove)\nTo exclude (Remove) the device from a Z-Wave network, press the button four times in quick succession. When the device is in Add mode, the LED flashes green. When finished, the new status is:\nAdd: The LED lights up briefly in green\nRemove: The LED lights up briefly in red",
+		"reset": "Please use this procedure only when the network primary controller is missing or otherwise inoperable",
+		"manual": "https://products.z-wavealliance.org/ProductManual/File?folder=&filename=MarketCertificationFiles/3234/Operating_manual_myTEM_Radio_RGBW_en.pdf"
+	}
+}
