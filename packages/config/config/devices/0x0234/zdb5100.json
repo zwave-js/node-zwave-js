@@ -232,7 +232,7 @@
 			"valueSize": 2
 		},
 		"15[0x1fff]": {
-			"$import": "../../templates/master_template.json#base_0-255_nounit",
+			"$import": "../templates/master_template.json#base_0-255_nounit",
 			"label": "Messages in all association groups are sent as secure",
 			"valueSize": 2,
 			"maxValue": 65535,
