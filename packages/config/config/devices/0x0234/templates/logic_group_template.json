@@ -545,7 +545,7 @@
 		"defaultValue": 5
 	},
 	"input_timer": {
-		"$import": "../templates/master_template.json#base_0-255_nounit",
+		"$import": "../../templates/master_template.json#base_0-255_nounit",
 		"label": "Timer for input",
 		"defaultValue": 0
 	}
