@@ -201,7 +201,7 @@
 			"label": "Association group 13 secure message",
 			"valueSize": 2
 		},
-		"15[0x1000]": {
+		"15[0x1ffe]": {
 			"$import": "../templates/master_template.json#base_0-255_nounit",
 			"label": "Messages in all association groups are sent as secure",
 			"valueSize": 2,
