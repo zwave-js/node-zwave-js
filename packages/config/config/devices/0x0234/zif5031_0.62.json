@@ -46,19 +46,19 @@
 			"$import": "templates/logic_group_template.json#led_brightness"
 		},
 		"3": {
-			"$import": "../../templates/master_template.json#base_enable_disable",
+			"$import": "../templates/master_template.json#base_enable_disable",
 			"label": "Thermistor connected to input 1"
 		},
 		"4": {
-			"$import": "../../templates/master_template.json#base_enable_disable",
+			"$import": "../templates/master_template.json#base_enable_disable",
 			"label": "Thermistor connected to input 2"
 		},
 		"5": {
-			"$import": "../../templates/master_template.json#base_enable_disable",
+			"$import": "../templates/master_template.json#base_enable_disable",
 			"label": "Thermistor connected to input 3"
 		},
 		"6": {
-			"$import": "../../templates/master_template.json#base_enable_disable",
+			"$import": "../templates/master_template.json#base_enable_disable",
 			"label": "Thermistor connected to input 4"
 		},
 		"7": {
