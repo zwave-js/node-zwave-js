@@ -3,7 +3,7 @@
 	Add placeholder for next release with `wip` snippet
 -->
 
-## __WORK IN PROGRESS__
+## 7.0.1 (2021-03-27)
 ### Bugfixes
 * Abort interview attempt when endpoint query times out
 * Don't log `TODO` when receiving `SceneActivationCC::Set` commands
