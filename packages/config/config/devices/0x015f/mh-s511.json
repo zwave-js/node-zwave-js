@@ -7,14 +7,6 @@
 	"description": "Touch Panel Switch 1-Way",
 	"devices": [
 		{
-			"productType": "0x5111",
-			"productId": "0x1406"
-		},
-		{
-			"productType": "0x5111",
-			"productId": "0x5103"
-		},
-		{
 			"productType": "0x5131",
 			"productId": "0x5101"
 		}
