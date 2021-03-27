@@ -17,15 +17,23 @@
 	},
 	"associations": {
 		"1": {
-			"label": "Group 1",
+			"label": "Controller",
 			"maxNodes": 5,
 			"isLifeline": true
+		},
+		"2": {
+			"label": "Double Tap",
+			"maxNodes": 5
+		},
+		"3": {
+			"label": "Triple Tap",
+			"maxNodes": 5
 		}
 	},
 	"paramInformation": {
-		"3": {
-			"label": "Night Light",
-			"description": "In night-light mode the LED will turn ON when the switch is turned OFF.",
+		"1": {
+			"label": "Dim Start Level",
+			"description": "Start dimming from that start level or current level",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 255,
@@ -36,18 +44,18 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "No",
+					"label": "Use Start Level",
 					"value": 0
 				},
 				{
-					"label": "Yes",
+					"label": "Ignore Start Level",
 					"value": 1
 				}
 			]
 		},
-		"4": {
-			"label": "Invert Switch",
-			"description": "Change the top of the switch to OFF and the bottom of the switch to ON.",
+		"3": {
+			"label": "LED Indication",
+			"description": "The WD500Z-1 will flicker its LED when it is transmitting to any of its groups.",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 255,
@@ -58,12 +66,104 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "No",
+					"label": "LED ON - Switch ON",
 					"value": 0
 				},
 				{
-					"label": "Yes",
+					"label": "LED ON - Switch OFF",
 					"value": 1
+				}
+			]
+		},
+		"4": {
+			"label": "Invert Switch",
+			"description": "Reverse switch direction",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 0,
+			"unsigned": true,
+			"readOnly": true,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Top-ON, Bottom-OFF",
+					"value": 0
+				},
+				{
+					"label": "Bottom-ON, Top-OFF",
+					"value": 1
+				}
+			]
+		},
+		"14": {
+			"label": "Enable Shade Control Group 2",
+			"description": "The switch can control shade control devices if this parameter is set to 1",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 0,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Disable",
+					"value": 0
+				},
+				{
+					"label": "Enable",
+					"value": 1
+				}
+			]
+		},
+		"15": {
+			"label": "Enable Shade Control Group 3",
+			"description": "The switch can control shade control devices if this parameter is set to 1.",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 0,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Disable",
+					"value": 0
+				},
+				{
+					"label": "Enable",
+					"value": 1
+				}
+			]
+		},
+		"19": {
+			"label": "LED Transmission Indication",
+			"description": "LED mode while transmitting",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 2,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Disable Flicker",
+					"value": 0
+				},
+				{
+					"label": "Flicker while transmitting",
+					"value": 1
+				},
+				{
+					"label": "Flicker for 1 second",
+					"value": 2
 				}
 			]
 		},
