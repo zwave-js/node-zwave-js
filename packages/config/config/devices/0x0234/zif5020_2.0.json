@@ -201,11 +201,11 @@
 			"label": "Association group 13 secure message",
 			"valueSize": 2
 		},
-		"15[0x1ffe]": {
+		"15[0x0fff]": {
 			"$import": "../templates/master_template.json#base_0-255_nounit",
 			"label": "Messages in all association groups are sent as secure",
 			"valueSize": 2,
-			"maxValue": 8190,
+			"maxValue": 4095,
 			"defaultValue": 4095
 		}
 	},
