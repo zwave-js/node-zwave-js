@@ -1,3 +1,5 @@
+// Logic Group ZBA7140
+// MATRIX Wireless Switch
 {
 	"manufacturer": "Logic Group",
 	"manufacturerId": "0x0234",
@@ -131,29 +133,25 @@
 			"$import": "../templates/master_template.json#base_0-255_nounit",
 			"label": "LED Indicator Red Color",
 			"valueSize": 4,
-			"defaultValue": 127,
-			"allowManualEntry": true
+			"defaultValue": 127
 		},
 		"5[0xff00]": {
 			"$import": "../templates/master_template.json#base_0-255_nounit",
 			"label": "LED Indicator Green Color",
 			"valueSize": 4,
-			"defaultValue": 85,
-			"allowManualEntry": true
+			"defaultValue": 85
 		},
 		"5[0xff0000]": {
 			"$import": "../templates/master_template.json#base_0-255_nounit",
 			"label": "LED Indicator Blue Color",
 			"valueSize": 4,
-			"defaultValue": 85,
-			"allowManualEntry": true
+			"defaultValue": 85
 		},
 		"5[0xff000000]": {
 			"$import": "../templates/master_template.json#base_0-255_nounit",
 			"label": "LED Time for blinking",
 			"unit": "0.1 sec",
-			"valueSize": 4,
-			"allowManualEntry": true
+			"valueSize": 4
 		},
 		"8[0x01]": {
 			"$import": "templates/logic_group_template.json#multilevel_enable",

@@ -1,0 +1,217 @@
+// Logic Group ZIF5020
+// DIN-rail module with 10 digital ouputs and 4 digital inputs
+{
+	"manufacturer": "Logic Group",
+	"manufacturerId": "0x0234",
+	"label": "ZIF5020",
+	"description": "DIN Rail Relays",
+	"devices": [
+		{
+			"productType": "0x0003",
+			"productId": "0x010d"
+		}
+	],
+	"firmwareVersion": {
+		"min": "2.0",
+		"max": "255.255"
+	},
+	"associations": {
+		"1": {
+			"label": "Lifeline",
+			"maxNodes": 1,
+			"isLifeline": true
+		},
+		"2": {
+			"label": "Basic Report, Input 1",
+			"maxNodes": 5
+		},
+		"3": {
+			"label": "Basic Switch Report, Input 1",
+			"maxNodes": 5
+		},
+		"4": {
+			"label": "Multilevel Switch Report, Input 1",
+			"maxNodes": 5
+		},
+		"5": {
+			"label": "Basic Report, Input 2",
+			"maxNodes": 5
+		},
+		"6": {
+			"label": "Basic Switch Report, Input 2",
+			"maxNodes": 5
+		},
+		"7": {
+			"label": "Multilevel Switch Report, Input 2",
+			"maxNodes": 5
+		},
+		"8": {
+			"label": "Basic Report, Input 3",
+			"maxNodes": 5
+		},
+		"9": {
+			"label": "Basic Switch Report, Input 3",
+			"maxNodes": 5
+		},
+		"10": {
+			"label": "Multilevel Switch Report, Input 3",
+			"maxNodes": 5
+		},
+		"11": {
+			"label": "Basic Report, Input 4",
+			"maxNodes": 5
+		},
+		"12": {
+			"label": "Basic Switch Report, Input 4",
+			"maxNodes": 5
+		},
+		"13": {
+			"label": "Multilevel Switch Report, Input 4",
+			"maxNodes": 5
+		}
+	},
+	"paramInformation": {
+		"1": {
+			"$import": "templates/logic_group_template.json#status_led"
+		},
+		"2": {
+			"$import": "templates/logic_group_template.json#led_brightness"
+		},
+		"3": {
+			"$import": "templates/logic_group_template.json#input_function_setup",
+			"label": "Function setup of Input 1"
+		},
+		"4": {
+			"$import": "templates/logic_group_template.json#input_timer",
+			"label": "Timer for Input 1"
+		},
+		"5": {
+			"$import": "templates/logic_group_template.json#input_function_setup",
+			"label": "Function setup of Input 2"
+		},
+		"6": {
+			"$import": "templates/logic_group_template.json#input_timer",
+			"label": "Timer for Input 2"
+		},
+		"7": {
+			"$import": "templates/logic_group_template.json#input_function_setup",
+			"label": "Function setup of Input 3"
+		},
+		"8": {
+			"$import": "templates/logic_group_template.json#input_timer",
+			"label": "Timer for Input 3"
+		},
+		"9": {
+			"$import": "templates/logic_group_template.json#input_function_setup",
+			"label": "Function setup of Input 4"
+		},
+		"10": {
+			"$import": "templates/logic_group_template.json#input_timer",
+			"label": "Timer for Input 4"
+		},
+		"11": {
+			"$import": "../templates/master_template.json#base_0-255_nounit",
+			"label": "Input Snubber-filter time constant.",
+			"unit": "50 ms",
+			"defaultValue": 5
+		},
+		"12": {
+			"$import": "../templates/master_template.json#base_0-255_nounit",
+			"label": "Threshold value for activation of inputs.",
+			"unit": "200 ms",
+			"defaultValue": 20
+		},
+		"13": {
+			"$import": "../templates/master_template.json#base_0-255_nounit",
+			"label": "Threshold for input in latched mode.",
+			"unit": "50 ms",
+			"defaultValue": 50
+		},
+		"14": {
+			"$import": "templates/logic_group_template.json#enable_central_scene",
+			"defaultValue": 0,
+			"options": [
+				{
+					"label": "Enabled",
+					"value": 0
+				},
+				{
+					"label": "Disabled",
+					"value": 1
+				}
+			]
+		},
+		"15[0x01]": {
+			"$import": "../templates/master_template.json#base_enable_disable",
+			"label": "Association group 2 secure message",
+			"valueSize": 2
+		},
+		"15[0x02]": {
+			"$import": "../templates/master_template.json#base_enable_disable",
+			"label": "Association group 3 secure message",
+			"valueSize": 2
+		},
+		"15[0x04]": {
+			"$import": "../templates/master_template.json#base_enable_disable",
+			"label": "Association group 4 secure message",
+			"valueSize": 2
+		},
+		"15[0x08]": {
+			"$import": "../templates/master_template.json#base_enable_disable",
+			"label": "Association group 5 secure message",
+			"valueSize": 2
+		},
+		"15[0x16]": {
+			"$import": "../templates/master_template.json#base_enable_disable",
+			"label": "Association group 6 secure message",
+			"valueSize": 2
+		},
+		"15[0x32]": {
+			"$import": "../templates/master_template.json#base_enable_disable",
+			"label": "Association group 7 secure message",
+			"valueSize": 2
+		},
+		"15[0x64]": {
+			"$import": "../templates/master_template.json#base_enable_disable",
+			"label": "Association group 8 secure message",
+			"valueSize": 2
+		},
+		"15[0x80]": {
+			"$import": "../templates/master_template.json#base_enable_disable",
+			"label": "Association group 9 secure message",
+			"valueSize": 2
+		},
+		"15[0xff]": {
+			"$import": "../templates/master_template.json#base_enable_disable",
+			"label": "Association group 10 secure message",
+			"valueSize": 2
+		},
+		"15[0x0200]": {
+			"$import": "../templates/master_template.json#base_enable_disable",
+			"label": "Association group 11 secure message",
+			"valueSize": 2
+		},
+		"15[0x0400]": {
+			"$import": "../templates/master_template.json#base_enable_disable",
+			"label": "Association group 12 secure message",
+			"valueSize": 2
+		},
+		"15[0x0800]": {
+			"$import": "../templates/master_template.json#base_enable_disable",
+			"label": "Association group 13 secure message",
+			"valueSize": 2
+		},
+		"15[0x1000]": {
+			"$import": "../templates/master_template.json#base_0-255_nounit",
+			"label": "Messages in all association groups are sent as secure",
+			"valueSize": 2,
+			"maxValue": 8190,
+			"defaultValue": 4095
+		}
+	},
+	"metadata": {
+		"inclusion": "Push the button in the hole near the 'INCLUSION' text with a non-conductive object. The LED will now start blinking",
+		"exclusion": "Push the button in the hole near the 'INCLUSION' text with a non-conductive object. The LED will now start blinking",
+		"reset": "Push the button in the hole near the 'INCLUSION' text with a non-conductive object for 10 seconds. Please use this procedure only when the network primary controller is missing or otherwise inoperable"
+	}
+}

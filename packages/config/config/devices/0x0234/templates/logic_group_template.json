@@ -1,5 +1,4 @@
 {
-	//Generic for Multiple Devices in Logic Group
 	"enable_central_scene": {
 		"$import": "../../templates/master_template.json#base_enable_disable",
 		"label": "Central Scene",
@@ -37,7 +36,6 @@
 		"writeOnly": false,
 		"allowManualEntry": false
 	},
-	//Primarily ZBA7140 Parameters below.
 	"button_pressed_threshold_time": {
 		"label": "Pushbutton press threshold time",
 		"unit": "1 ms",
@@ -114,7 +112,6 @@
 			}
 		]
 	},
-	//Primarily ZDB5100 Parameters below.
 	"global_brightness": {
 		"$import": "../../templates/master_template.json#base_0-255_nounit",
 		"label": "Global brightness LED",
@@ -198,6 +195,11 @@
 		"label": "Dimmer maximum level",
 		"unit": "%",
 		"defaultValue": 99
+	},
+	"dimmer_metering": {
+		"$import": "../../templates/master_template.json#base_0-255_nounit",
+		"label": "Meter report time",
+		"defaultValue": 60
 	},
 	"led_indicator": {
 		"$import": "../../templates/master_template.json#base_0-255_nounit",
@@ -302,7 +304,6 @@
 			}
 		]
 	},
-	//Primarily ZIF5028 Parameters below
 	"input_funtion_relay": {
 		"$import": "../../templates/master_template.json#base_0-255_nounit",
 		"label": "Function setup of input",
@@ -364,5 +365,188 @@
 				"value": 3
 			}
 		]
+	},
+	"meter_type": {
+		"label": "Meter Type of input",
+		"description": "Meter Type of input",
+		"valueSize": 1,
+		"minValue": 0,
+		"maxValue": 5,
+		"defaultValue": 1,
+		"readOnly": false,
+		"writeOnly": false,
+		"allowManualEntry": false,
+		"options": [
+			{
+				"label": "Input not in use",
+				"value": 0
+			},
+			{
+				"label": "Electricity meter",
+				"value": 1
+			},
+			{
+				"label": "Gas meter.",
+				"value": 2
+			},
+			{
+				"label": "Water meter.",
+				"value": 3
+			},
+			{
+				"label": "Heat meter",
+				"value": 4
+			},
+			{
+				"label": "Cooling meter.",
+				"value": 5
+			}
+		]
+	},
+	"input_scale": {
+		"label": "Scale Type of input",
+		"valueSize": 1,
+		"minValue": 0,
+		"maxValue": 6,
+		"defaultValue": 3,
+		"readOnly": false,
+		"writeOnly": false,
+		"allowManualEntry": true
+	},
+	"input_precision": {
+		"label": "Precision of input",
+		"valueSize": 1,
+		"minValue": 0,
+		"maxValue": 7,
+		"defaultValue": 0,
+		"readOnly": false,
+		"writeOnly": false,
+		"allowManualEntry": true
+	},
+	"pulse_unit": {
+		"label": "Pulses per Unit of input 5",
+		"unit": "pulse",
+		"valueSize": 2,
+		"minValue": 0,
+		"maxValue": 65000,
+		"defaultValue": 1,
+		"readOnly": false,
+		"writeOnly": false,
+		"allowManualEntry": true
+	},
+	"rate_type": {
+		"label": "Rate Type of input",
+		"valueSize": 1,
+		"minValue": 0,
+		"maxValue": 3,
+		"defaultValue": 1,
+		"readOnly": false,
+		"writeOnly": false,
+		"allowManualEntry": false,
+		"options": [
+			{
+				"label": "Unspecified",
+				"value": 0
+			},
+			{
+				"label": "Import",
+				"value": 1
+			},
+			{
+				"label": "Export",
+				"value": 2
+			},
+			{
+				"label": "Reserved",
+				"value": 3
+			}
+		]
+	},
+	"time_interval_report": {
+		"label": "Time interval between meter reports",
+		"unit": "100 ms",
+		"valueSize": 2,
+		"minValue": 0,
+		"maxValue": 8640,
+		"defaultValue": 90,
+		"unsigned": true,
+		"readOnly": false,
+		"writeOnly": false,
+		"allowManualEntry": true
+	},
+	"led_brightness": {
+		"$import": "../../templates/master_template.json#base_0-99_nounit",
+		"label": "Brightness of Status LED",
+		"unit": "%",
+		"defaultValue": 50
+	},
+	"input_calibration": {
+		"$import": "../../templates/master_template.json#base_0-99_nounit",
+		"label": "Input Calibration",
+		"unit": "0.1 degree celsius",
+		"minValue": -40,
+		"maxValue": 40,
+		"defaultValue": 0
+	},
+	"input_report_interval": {
+		"label": "Input Report Interval",
+		"unit": "10 seconds",
+		"valueSize": 2,
+		"minValue": 0,
+		"maxValue": 8640,
+		"defaultValue": 6,
+		"unsigned": true,
+		"readOnly": false,
+		"writeOnly": false,
+		"allowManualEntry": true
+	},
+	"input_function_setup": {
+		"label": "Function setup of Input",
+		"valueSize": 1,
+		"minValue": 0,
+		"maxValue": 6,
+		"defaultValue": 3,
+		"unsigned": true,
+		"readOnly": false,
+		"writeOnly": false,
+		"allowManualEntry": true,
+		"options": [
+			{
+				"label": "Level-controlled, NO",
+				"value": 0
+			},
+			{
+				"label": "Level-controlled, NC",
+				"value": 1
+			},
+			{
+				"label": "Toggle-controlled, NO",
+				"value": 2
+			},
+			{
+				"label": "Toggle-controlled, NC",
+				"value": 3
+			},
+			{
+				"label": "Timer-controlled, NO",
+				"value": 4
+			},
+			{
+				"label": "Timer-controlled, NC",
+				"value": 5
+			}
+		]
+	},
+	"pushbutton_debounce": {
+		"$import": "../../templates/master_template.json#base_1-255_nounit",
+		"label": "Pushbutton debounce timer",
+		"unit": "10 ms",
+		"valueSize": 1,
+		"defaultValue": 5
+	},
+	"input_timer": {
+		"$import": "../templates/master_template.json#base_0-255_nounit",
+		"label": "Timer for input",
+		"defaultValue": 0
 	}
 }
