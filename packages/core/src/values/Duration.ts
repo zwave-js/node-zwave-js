@@ -92,11 +92,11 @@ export class Duration {
 	public toString(): string {
 		switch (this.unit) {
 			case "minutes":
-				return `[Duration: ${this._value}${
+				return `[Duration: ${this._value} ${
 					this.value === 1 ? "minute" : "minutes"
 				}]`;
 			case "seconds":
-				return `[Duration: ${this._value}${
+				return `[Duration: ${this._value} ${
 					this.value === 1 ? "second" : "seconds"
 				}]`;
 			default:
