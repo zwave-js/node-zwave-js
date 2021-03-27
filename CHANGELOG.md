@@ -1,8 +1,26 @@
 # Changelog
 <!--
-	Placeholder for next release:
-	## __WORK IN PROGRESS__
+	Add placeholder for next release with `wip` snippet
 -->
+
+## __WORK IN PROGRESS__
+### Bugfixes
+* Abort interview attempt when endpoint query times out
+* Don't log `TODO` when receiving `SceneActivationCC::Set` commands
+* Don't map `BasicCC::Set` to other CCs
+* Don't map reports from the root device to endpoint if it is ambiguous, allow opt-in with compat flag
+
+### Config file changes
+* Add compat flag to zen17 and zen16; fix zen17 config
+* Cleanup and template Aeotec configurations (part 1)
+* Update Inovelli `LZW60` device to better match upstream documentation
+* Add Namron 200W LED dimmer
+* Add alarm value mapping for Kwikset 888
+* Remove Supervision CC from Inovelli LZW36 due to firmware bug
+
+### Changes under the hood
+* Collect telemetry information for identified devices without a config file
+
 ## 7.0.0 (2021-03-23) · _Summer is coming!_
 ### Breaking changes · [Migration guide](https://zwave-js.github.io/node-zwave-js/#/getting-started/migrating-to-v7)
 * Renamed `controller.removeNodeFromAllAssocations` to `controller.removeNodeFromAllAssociations` to fix a typo
