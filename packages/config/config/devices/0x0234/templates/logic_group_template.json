@@ -409,6 +409,7 @@
 		"minValue": 0,
 		"maxValue": 6,
 		"defaultValue": 3,
+		"unsigned": true,
 		"readOnly": false,
 		"writeOnly": false,
 		"allowManualEntry": true
@@ -419,6 +420,7 @@
 		"minValue": 0,
 		"maxValue": 7,
 		"defaultValue": 0,
+		"unsigned": true,
 		"readOnly": false,
 		"writeOnly": false,
 		"allowManualEntry": true
@@ -430,6 +432,7 @@
 		"minValue": 0,
 		"maxValue": 65000,
 		"defaultValue": 1,
+		"unsigned": true,
 		"readOnly": false,
 		"writeOnly": false,
 		"allowManualEntry": true
@@ -440,6 +443,7 @@
 		"minValue": 0,
 		"maxValue": 3,
 		"defaultValue": 1,
+		"unsigned": true,
 		"readOnly": false,
 		"writeOnly": false,
 		"allowManualEntry": false,
@@ -486,7 +490,8 @@
 		"unit": "0.1 degree celsius",
 		"minValue": -40,
 		"maxValue": 40,
-		"defaultValue": 0
+		"defaultValue": 0,
+		"unsigned": false
 	},
 	"input_report_interval": {
 		"label": "Input Report Interval",
