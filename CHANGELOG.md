@@ -9,6 +9,7 @@
 * Don't log `TODO` when receiving `SceneActivationCC::Set` commands
 * Don't map `BasicCC::Set` to other CCs
 * Don't map reports from the root device to endpoint if it is ambiguous, allow opt-in with compat flag
+* Treat controller timeout as an expected error in more locations instead of throwing
 
 ### Config file changes
 * Add compat flag to zen17 and zen16; fix zen17 config
