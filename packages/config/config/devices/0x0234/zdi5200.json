@@ -28,7 +28,7 @@
 	},
 	"paramInformation": {
 		"1": {
-			"$import": "templates/logic_group_template.json#dimmer_duration"
+			"$import": "templates/logic_group_template.json#dimming_duration"
 		},
 		"2": {
 			"$import": "templates/logic_group_template.json#dimmer_mode"
