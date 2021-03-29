@@ -2085,10 +2085,14 @@ protocol version:      ${this._protocolVersion}`;
 		if (this.lastWakeUp) {
 			// we've already measured the wake up interval, so we can check whether a refresh is necessary
 			const wakeUpInterval =
-				this.getValue<number>(getWakeUpIntervalValueId()) ?? 0;
+				this.getValue<number>(getWakeUpIntervalValueId()) ?? 1;
 			// The wakeup interval is specified in seconds. Also add 5 seconds tolerance to avoid
-			// unnecessary queries since there might be some delay
-			if ((now - this.lastWakeUp) / 1000 > wakeUpInterval + 5) {
+			// unnecessary queries since there might be some delay. A wakeup interval of 0 means manual wakeup,
+			// so the interval shouldn't be verified
+			if (
+				wakeUpInterval > 0 &&
+				(now - this.lastWakeUp) / 1000 > wakeUpInterval + 5
+			) {
 				this.commandClasses["Wake Up"].getInterval().catch(() => {
 					// Don't throw if there's an error
 				});
