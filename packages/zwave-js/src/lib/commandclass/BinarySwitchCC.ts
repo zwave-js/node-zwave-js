@@ -126,11 +126,13 @@ export class BinarySwitchCCAPI extends CCAPI {
 		// If the command did not fail, assume that it succeeded and update the currentValue accordingly
 		// so UIs have immediate feedback
 		if (this.isSinglecast()) {
-			const valueDB = this.endpoint.getNodeUnsafe()?.valueDB;
-			valueDB?.setValue(
-				getCurrentValueValueId(this.endpoint.index),
-				value,
-			);
+			if (!this.driver.options.disableOptimisticValueUpdate) {
+				const valueDB = this.endpoint.getNodeUnsafe()?.valueDB;
+				valueDB?.setValue(
+					getCurrentValueValueId(this.endpoint.index),
+					value,
+				);
+			}
 
 			// Verify the current value after a delay
 			// TODO: #1321
