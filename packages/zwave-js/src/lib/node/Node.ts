@@ -54,6 +54,7 @@ import {
 } from "../commandclass/CentralSceneCC";
 import { ClockCCReport } from "../commandclass/ClockCC";
 import { CommandClass, getCCValueMetadata } from "../commandclass/CommandClass";
+import type { ConfigurationMetadata } from "../commandclass/ConfigurationCC";
 import {
 	DoorLockMode,
 	getCurrentModeValueId as getCurrentLockModeValueId,
@@ -605,7 +606,9 @@ export class ZWaveNode extends Endpoint {
 	 * Retrieves metadata for a given value id.
 	 * This can be used to enhance the user interface of an application
 	 */
-	public getValueMetadata(valueId: ValueID): ValueMetadata {
+	public getValueMetadata(
+		valueId: ValueID,
+	): ValueMetadata | ConfigurationMetadata {
 		const { commandClass, property } = valueId;
 		return {
 			// Merge static metadata
