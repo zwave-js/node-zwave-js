@@ -484,6 +484,18 @@ interface ZWaveOptions {
 	 * When it is `true`, unknown values are exposed as the literal string "unknown" (even if the value is normally numeric).
 	 * Default: `false` */
 	preserveUnknownValues?: boolean;
+
+	/**
+	 * Some SET-type commands optimistically update the current value to match the target value
+	 * when the device acknowledges the command.
+	 *
+	 * While this generally makes UIs feel more responsive, it is not necessary for devices which report their status
+	 * on their own and can lead to confusing behavior when dealing with slow devices like blinds.
+	 *
+	 * To disable the optimistic update, set this option to `true`.
+	 * Default: `false`
+	 */
+	disableOptimisticValueUpdate?: boolean;
 }
 ```
 

@@ -94,7 +94,11 @@ export class BasicCCAPI extends CCAPI {
 		// so UIs have immediate feedback
 		if (this.isSinglecast()) {
 			// Only update currentValue for valid target values
-			if (value >= 0 && value <= 99) {
+			if (
+				!this.driver.options.disableOptimisticValueUpdate &&
+				value >= 0 &&
+				value <= 99
+			) {
 				const valueDB = this.endpoint.getNodeUnsafe()?.valueDB;
 				valueDB?.setValue(
 					getCurrentValueValueId(this.endpoint.index),
