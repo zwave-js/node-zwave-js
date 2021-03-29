@@ -71,7 +71,10 @@ import {
 	SupervisionResult,
 	SupervisionStatus,
 } from "../commandclass/SupervisionCC";
-import { WakeUpCCNoMoreInformation } from "../commandclass/WakeUpCC";
+import {
+	getWakeUpIntervalValueId,
+	WakeUpCCNoMoreInformation,
+} from "../commandclass/WakeUpCC";
 import { ApplicationCommandRequest } from "../controller/ApplicationCommandRequest";
 import {
 	ApplicationUpdateRequest,
@@ -2683,10 +2686,18 @@ ${handlers.length} left`,
 			node.supportsCC(CommandClasses["Wake Up"]) &&
 			!this.hasPendingMessages(node)
 		) {
-			this.sendNodeToSleepTimers.set(
-				node.id,
-				setTimeout(() => sendNodeToSleep(node), 1000).unref(),
+			const wakeUpInterval = node.getValue<number>(
+				getWakeUpIntervalValueId(),
 			);
+			// GH#2179: when a device only wakes up manually, don't send it back to sleep
+			// Best case, the user wanted to interact with it.
+			// Worst case, the device won't ACK this and cause a delay
+			if (wakeUpInterval !== 0) {
+				this.sendNodeToSleepTimers.set(
+					node.id,
+					setTimeout(() => sendNodeToSleep(node), 1000).unref(),
+				);
+			}
 		}
 	}
 
