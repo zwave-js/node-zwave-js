@@ -38,7 +38,7 @@ export interface MessageBaseOptions {
 	callbackId?: number;
 }
 
-interface MessageCreationOptions extends MessageBaseOptions {
+export interface MessageCreationOptions extends MessageBaseOptions {
 	type?: MessageType;
 	functionType?: FunctionType;
 	expectedResponse?: FunctionType | typeof Message | ResponsePredicate;
