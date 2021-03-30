@@ -1047,7 +1047,6 @@ export class Driver extends EventEmitter {
 				}
 				Sentry.captureMessage(message, (scope) => {
 					scope.clearBreadcrumbs();
-					scope.setUser(null);
 					scope.setExtras(deviceInfo);
 					return scope;
 				});
