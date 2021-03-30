@@ -178,3 +178,18 @@ export function isTransmissionError(
 			e.code === ZWaveErrorCodes.Controller_NodeTimeout)
 	);
 }
+
+/**
+ * Tests is the given error is a "recoverable" error - i.e. something that shouldn't happen unless
+ * someone interacted with zwave-js in a weird way, but something we can deal with.
+ *
+ * This explicitly does not include transmission errors.
+ */
+export function isRecoverableZWaveError(e: unknown): e is ZWaveError {
+	if (!isZWaveError(e)) return false;
+	switch (e.code) {
+		case ZWaveErrorCodes.Controller_InterviewRestarted:
+			return true;
+	}
+	return false;
+}

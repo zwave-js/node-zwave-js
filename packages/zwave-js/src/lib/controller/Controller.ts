@@ -2,6 +2,7 @@ import {
 	actuatorCCs,
 	CommandClasses,
 	indexDBsByNode,
+	isRecoverableZWaveError,
 	isTransmissionError,
 	isZWaveError,
 	NODE_ID_BROADCAST,
@@ -875,7 +876,7 @@ export class ZWaveController extends EventEmitter {
 						});
 					}
 				} catch (e: unknown) {
-					if (isTransmissionError(e)) {
+					if (isTransmissionError(e) || isRecoverableZWaveError(e)) {
 						this.driver.controllerLog.logNode(node.id, {
 							message: `Failed to configure Z-Wave+ Lifeline association: ${e.message}`,
 							direction: "none",
@@ -915,7 +916,7 @@ export class ZWaveController extends EventEmitter {
 					await instance.interview();
 				}
 			} catch (e: unknown) {
-				if (isTransmissionError(e)) {
+				if (isTransmissionError(e) || isRecoverableZWaveError(e)) {
 					this.driver.controllerLog.logNode(node.id, {
 						message: `Cannot configure wakeup destination: ${e.message}`,
 						direction: "none",
