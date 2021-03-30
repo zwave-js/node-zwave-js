@@ -1023,7 +1023,10 @@ export class ZWaveNode extends Endpoint {
 			await this.queryProtocolInfo();
 		}
 
-		if (this.isListening || this.isFrequentListening) {
+		if (
+			(this.isListening || this.isFrequentListening) &&
+			this.status !== NodeStatus.Alive
+		) {
 			// Ping non-sleeping nodes to determine their status
 			await this.ping();
 		}
