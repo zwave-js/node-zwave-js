@@ -4,6 +4,7 @@ import { wait } from "alcalzone-shared/async";
 import type { Driver } from "../../driver/Driver";
 import { ZWaveNode } from "../../node/Node";
 import { createAndStartDriver } from "../utils";
+import { isFunctionSupported_NoBridge } from "./fixtures";
 
 describe("regression tests", () => {
 	let driver: Driver;
@@ -23,7 +24,7 @@ describe("regression tests", () => {
 
 		driver["_controller"] = {
 			ownNodeId: 1,
-			isFunctionSupported: () => true,
+			isFunctionSupported: isFunctionSupported_NoBridge,
 			nodes: new Map(),
 		} as any;
 	});

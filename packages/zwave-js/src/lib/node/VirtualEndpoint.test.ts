@@ -8,8 +8,19 @@ import type { BinarySensorCCAPI } from "../commandclass/BinarySensorCC";
 import { BinarySwitchCCAPI } from "../commandclass/BinarySwitchCC";
 import { ZWaveController } from "../controller/Controller";
 import type { Driver } from "../driver/Driver";
+import { FunctionType } from "../message/Constants";
 import { createAndStartDriver } from "../test/utils";
 import { ZWaveNode } from "./Node";
+
+// Test mock for isFunctionSupported to control which commands are getting used
+function isFunctionSupported(fn: FunctionType): boolean {
+	switch (fn) {
+		case FunctionType.SendDataBridge:
+		case FunctionType.SendDataMulticastBridge:
+			return false;
+	}
+	return true;
+}
 
 describe("lib/node/VirtualEndpoint", () => {
 	let driver: Driver;
@@ -22,7 +33,7 @@ describe("lib/node/VirtualEndpoint", () => {
 			debugger;
 		}
 		driver["_controller"] = new ZWaveController(driver);
-		driver["_controller"].isFunctionSupported = () => true;
+		driver["_controller"].isFunctionSupported = isFunctionSupported;
 	});
 
 	function makePhysicalNode(nodeId: number): ZWaveNode {

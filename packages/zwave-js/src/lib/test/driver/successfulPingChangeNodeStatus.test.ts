@@ -2,9 +2,20 @@ import { MessageHeaders, MockSerialPort } from "@zwave-js/serial";
 import { getEnumMemberName } from "@zwave-js/shared";
 import { wait } from "alcalzone-shared/async";
 import type { Driver } from "../../driver/Driver";
+import { FunctionType } from "../../message/Constants";
 import { ZWaveNode } from "../../node/Node";
 import { NodeStatus } from "../../node/Types";
 import { createAndStartDriver } from "../utils";
+
+// Test mock for isFunctionSupported to control which commands are getting used
+function isFunctionSupported(fn: FunctionType): boolean {
+	switch (fn) {
+		case FunctionType.SendDataBridge:
+		case FunctionType.SendDataMulticastBridge:
+			return false;
+	}
+	return true;
+}
 
 describe("When a ping succeeds, the node should be marked awake/alive", () => {
 	let driver: Driver;
@@ -16,7 +27,7 @@ describe("When a ping succeeds, the node should be marked awake/alive", () => {
 
 		driver["_controller"] = {
 			ownNodeId: 1,
-			isFunctionSupported: () => true,
+			isFunctionSupported,
 			nodes: new Map(),
 		} as any;
 	});
