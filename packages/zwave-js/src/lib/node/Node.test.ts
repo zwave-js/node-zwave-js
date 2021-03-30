@@ -1014,13 +1014,18 @@ describe("lib/node/Node", () => {
 			const legacy = {
 				...serializedTestNode,
 				version: 4, // version 4 -> protocolVersion 3
+				isFrequentListening: true, // --> 1000ms
 				isBeaming: true,
 				maxBaudRate: 40000,
 			};
 			// @ts-expect-error We want to test this!
 			delete legacy.protocolVersion;
 			node.deserialize(legacy);
-			expect(node.serialize()).toEqual(serializedTestNode);
+			const expected = {
+				...serializedTestNode,
+				isFrequentListening: "1000ms",
+			};
+			expect(node.serialize()).toEqual(expected);
 			node.destroy();
 		});
 
