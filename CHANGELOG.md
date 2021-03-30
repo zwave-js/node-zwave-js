@@ -2,6 +2,22 @@
 <!--
 	Add placeholder for next release with `wip` snippet
 -->
+## __WORK IN PROGRESS__
+### Features
+* Add the driver option `disableOptimisticValueUpdate` to opt-out from optimistic `currentValue` update
+* More lock/unlock events are now mapped to the `(Door) Lock CC` status
+* Implemented the Bridge API versions of `SendData[Multicast]` commands and prefer them over the Static API variants if supported
+
+### Bugfixes
+* Add missing exports for Message class
+* Minimize automatic interaction with manual wakeup nodes, which might not be awake long
+* Shut down gracefully if the serial port is suddenly not open
+* Handle `CC_NotSupported` and other "freak" errors during node bootstrapping
+* Avoid pinging between ProtocolInfo and NodeInfo interview stages if the node status is known
+
+### Config file changes
+* Removed compat flag `preserveRootApplicationCCValueIDs` from Zooz Zen16/17 again
+* Fixed typo in Zen32 configuration
 
 ## 7.0.1 (2021-03-27)
 ### Bugfixes
