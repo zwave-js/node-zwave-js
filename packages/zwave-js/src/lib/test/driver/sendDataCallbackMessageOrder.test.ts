@@ -15,6 +15,7 @@ import type { Driver } from "../../driver/Driver";
 import { ZWaveNode } from "../../node/Node";
 import { NodeStatus } from "../../node/Types";
 import { createAndStartDriver } from "../utils";
+import { isFunctionSupported_NoBridge } from "./fixtures";
 
 describe("regression tests", () => {
 	let driver: Driver;
@@ -32,6 +33,9 @@ describe("regression tests", () => {
 			ownNodeId: 1,
 			nonceTimeout: driver.options.timeouts.nonce,
 		});
+		driver[
+			"_controller"
+		]!.isFunctionSupported = isFunctionSupported_NoBridge;
 
 		// We need to create a fake driver instance for Node 17 to support receiving encrypted messages
 		({ driver: driver17 } = await createAndStartDriver({
@@ -39,7 +43,7 @@ describe("regression tests", () => {
 		}));
 		driver17["_controller"] = {
 			ownNodeId: 17,
-			isFunctionSupported: () => true,
+			isFunctionSupported: isFunctionSupported_NoBridge,
 			nodes: new Map(),
 		} as any;
 

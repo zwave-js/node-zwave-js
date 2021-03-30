@@ -21,11 +21,20 @@ import {
 	SendDataRequest,
 	TransmitOptions,
 } from "../controller/SendDataMessages";
-import { MessageType } from "../message/Constants";
+import { FunctionType, MessageType } from "../message/Constants";
 import { Message, messageTypes } from "../message/Message";
 import { ZWaveNode } from "../node/Node";
 import { createAndStartDriver, PORT_ADDRESS } from "../test/utils";
 import { Driver } from "./Driver";
+
+// Test mock for isFunctionSupported to control which commands are getting used
+function isFunctionSupported(fn: FunctionType): boolean {
+	switch (fn) {
+		case FunctionType.SendData:
+			return true;
+	}
+	return false;
+}
 
 @messageTypes(MessageType.Request, 0xff)
 class TestMessage extends Message {}
@@ -397,6 +406,7 @@ describe("lib/driver/Driver => ", () => {
 					get: () => node2,
 					forEach: () => {},
 				},
+				isFunctionSupported,
 			} as any;
 		});
 
@@ -470,6 +480,7 @@ describe("lib/driver/Driver => ", () => {
 					get: () => node2,
 					forEach: () => {},
 				},
+				isFunctionSupported,
 			} as any;
 		});
 
