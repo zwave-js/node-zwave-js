@@ -17,7 +17,7 @@
 	},
 	"associations": {
 		"1": {
-			"label": "Controller",
+			"label": "Lifeline",
 			"maxNodes": 5,
 			"isLifeline": true
 		},
@@ -55,7 +55,7 @@
 		},
 		"3": {
 			"label": "LED Indication",
-			"description": "The WD500Z-1 will flicker its LED when it is transmitting to any of its groups.",
+			"description": "Flicker LED when transmitting to any of its groups.",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 255,
@@ -66,11 +66,11 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "LED ON - Switch ON",
+					"label": "Enable",
 					"value": 0
 				},
 				{
-					"label": "LED ON - Switch OFF",
+					"label": "Disable",
 					"value": 1
 				}
 			]
@@ -88,11 +88,11 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "Top-ON, Bottom-OFF",
+					"label": "Disable",
 					"value": 0
 				},
 				{
-					"label": "Bottom-ON, Top-OFF",
+					"label": "Enable",
 					"value": 1
 				}
 			]
