@@ -2442,12 +2442,13 @@ protocol version:      ${this._protocolVersion}`;
 	}
 
 	private handleKnownNotification(command: NotificationCCReport): void {
+		const lockEvents = [0x01, 0x03, 0x05, 0x09];
+		const unlockEvents = [0x02, 0x04, 0x06];
 		if (
-			// Access Control, manual/keypad (un)lock operation
+			// Access Control, manual/keypad/rf/auto (un)lock operation
 			command.notificationType === 0x06 &&
-			[0x01, 0x02, 0x05, 0x06].includes(
-				command.notificationEvent as number,
-			) &&
+			(lockEvents.includes(command.notificationEvent as number) ||
+				unlockEvents.includes(command.notificationEvent as number)) &&
 			(this.supportsCC(CommandClasses["Door Lock"]) ||
 				this.supportsCC(CommandClasses.Lock))
 		) {
@@ -2456,9 +2457,9 @@ protocol version:      ${this._protocolVersion}`;
 			// different key. This way the device can notify devices which don't belong
 			// to the S2 Access Control key group of changes in its state.
 
-			const isLocked =
-				command.notificationEvent === 0x01 ||
-				command.notificationEvent === 0x05;
+			const isLocked = lockEvents.includes(
+				command.notificationEvent as number,
+			);
 
 			// Update the current lock status
 			if (this.supportsCC(CommandClasses["Door Lock"])) {
