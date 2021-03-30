@@ -1522,8 +1522,19 @@ export class Driver extends EventEmitter {
 			// all good, send ACK
 			await this.writeHeader(MessageHeaders.ACK);
 		} catch (e) {
-			const response = this.handleDecodeError(e, data);
-			if (response) await this.writeHeader(response);
+			try {
+				const response = this.handleDecodeError(e, data);
+				if (response) await this.writeHeader(response);
+			} catch (e) {
+				if (
+					e instanceof Error &&
+					/serial port is not open/.test(e.message)
+				) {
+					this.emit("error", e);
+					void this.destroy();
+					return;
+				}
+			}
 		}
 
 		// If the message could be decoded, forward it to the send thread
