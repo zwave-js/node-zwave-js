@@ -1,5 +1,6 @@
 import type { ParamInfoMap } from "@zwave-js/config";
 import type {
+	ConfigValue,
 	MessageOrCCLogEntry,
 	MessageRecord,
 	ValueID,
@@ -8,6 +9,7 @@ import {
 	CacheMetadata,
 	CacheValue,
 	CommandClasses,
+	ConfigurationMetadata,
 	encodeBitMask,
 	getIntegerLimits,
 	getMinimumShiftForBitMask,
@@ -17,8 +19,8 @@ import {
 	parseBitMask,
 	stripUndefined,
 	validatePayload,
+	ValueFormat,
 	ValueMetadata,
-	ValueMetadataAny,
 	ZWaveError,
 	ZWaveErrorCodes,
 } from "@zwave-js/core";
@@ -66,40 +68,6 @@ export enum ConfigurationCommand {
 	PropertiesReport = 0x0f,
 	DefaultReset = 0x01,
 }
-
-export enum ValueFormat {
-	SignedInteger = 0x00,
-	UnsignedInteger = 0x01,
-	Enumerated = 0x02, // UnsignedInt, Radio Buttons
-	BitField = 0x03, // Check Boxes
-}
-
-export interface ConfigurationMetadata extends ValueMetadataAny {
-	// readable and writeable are inherited from ValueMetadataAny
-	min?: ConfigValue;
-	max?: ConfigValue;
-	default?: ConfigValue;
-	unit?: string;
-	valueSize?: number;
-	format?: ValueFormat;
-	name?: string;
-	info?: string;
-	noBulkSupport?: boolean;
-	isAdvanced?: boolean;
-	requiresReInclusion?: boolean;
-	// The following information cannot be detected by scanning.
-	// We have to rely on configuration to support them
-	// options?: readonly ConfigOption[];
-	states?: Record<number, string>;
-	allowManualEntry?: boolean;
-	isFromConfig?: boolean;
-}
-
-// A configuration value is either a single number or a bit map
-/**
- * @publicAPI
- */
-export type ConfigValue = number | Set<number>;
 
 function configValueToString(value: ConfigValue): string {
 	if (typeof value === "number") return value.toString();
