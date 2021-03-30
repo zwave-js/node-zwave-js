@@ -180,7 +180,7 @@
 			]
 		},
 		"5": {
-			"label": "LED Indicator (Button 5)",
+			"label": "LED Indicator (Button 4)",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 3,
