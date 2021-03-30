@@ -31,7 +31,6 @@ export { Weekday } from "./ClockCC";
 export { ColorComponent } from "./ColorSwitchCC";
 export type { ColorTable } from "./ColorSwitchCC";
 export { CommandClass } from "./CommandClass";
-export type { ConfigValue } from "./ConfigurationCC";
 export { DoorLockMode, DoorLockOperationType } from "./DoorLockCC";
 export type { DoorHandleStatus } from "./DoorLockCC";
 export type {
