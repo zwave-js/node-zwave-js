@@ -915,7 +915,12 @@ export class ZWaveController extends EventEmitter {
 					await instance.interview();
 				}
 			} catch (e: unknown) {
-				if (isTransmissionError(e)) {
+				if (
+					isTransmissionError(e) ||
+					(isZWaveError(e) &&
+						// should not happen, but somehow it does
+						e.code === ZWaveErrorCodes.CC_NotSupported)
+				) {
 					this.driver.controllerLog.logNode(node.id, {
 						message: `Cannot configure wakeup destination: ${e.message}`,
 						direction: "none",
