@@ -32,7 +32,6 @@ import type { ZWaveNode } from "../node/Node";
 import { InterviewStage } from "../node/Types";
 import type { VirtualEndpoint } from "../node/VirtualEndpoint";
 import { CCAPI } from "./API";
-import type { ConfigurationMetadata } from "./ConfigurationCC";
 import {
 	EncapsulatingCommandClass,
 	isEncapsulatingCommandClass,
@@ -1388,7 +1387,7 @@ export function ccValueMetadata(meta: ValueMetadata): PropertyDecorator {
 export function getCCValueMetadata(
 	cc: CommandClasses,
 	property: string | number,
-): ValueMetadata | ConfigurationMetadata {
+): ValueMetadata {
 	// retrieve the current metadata
 	const metadata =
 		Reflect.getMetadata(METADATA_ccValueMeta, CommandClass) || {};
