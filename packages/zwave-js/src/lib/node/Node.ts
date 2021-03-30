@@ -8,6 +8,7 @@ import {
 	CommandClassInfo,
 	CRC16_CCITT,
 	getCCName,
+	isTransmissionError,
 	isZWaveError,
 	MAX_NODES,
 	Maybe,
@@ -997,13 +998,7 @@ export class ZWaveNode extends Endpoint {
 				await method();
 				return true;
 			} catch (e: unknown) {
-				if (
-					isZWaveError(e) &&
-					(e.code === ZWaveErrorCodes.Controller_NodeTimeout ||
-						e.code === ZWaveErrorCodes.Controller_ResponseNOK ||
-						e.code === ZWaveErrorCodes.Controller_CallbackNOK ||
-						e.code === ZWaveErrorCodes.Controller_MessageDropped)
-				) {
+				if (isTransmissionError(e)) {
 					return false;
 				}
 				throw e;
@@ -1317,13 +1312,7 @@ protocol version:      ${this._protocolVersion}`;
 			try {
 				await instance.interview();
 			} catch (e: unknown) {
-				if (
-					isZWaveError(e) &&
-					(e.code === ZWaveErrorCodes.Controller_MessageDropped ||
-						e.code === ZWaveErrorCodes.Controller_CallbackNOK ||
-						e.code === ZWaveErrorCodes.Controller_ResponseNOK ||
-						e.code === ZWaveErrorCodes.Controller_NodeTimeout)
-				) {
+				if (isTransmissionError(e)) {
 					// We had a CAN or timeout during the interview
 					// or the node is presumed dead. Abort the process
 					return false;

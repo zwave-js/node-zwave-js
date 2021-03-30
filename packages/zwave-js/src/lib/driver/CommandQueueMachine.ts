@@ -8,10 +8,7 @@ import {
 	StateMachine,
 } from "xstate";
 import { raise, sendParent } from "xstate/lib/actions";
-import {
-	SendDataMulticastRequest,
-	SendDataRequest,
-} from "../controller/SendDataMessages";
+import { isSendData } from "../controller/SendDataShared";
 import type { Message } from "../message/Message";
 import {
 	createSerialAPICommandMachine,
@@ -250,18 +247,11 @@ export function createCommandQueueMachine(
 				executeSuccessful: (_, evt: any) =>
 					evt.data?.type === "success",
 				queueNotEmpty: (ctx) => ctx.queue.length > 0,
-				currentTransactionIsSendData: (ctx) => {
-					const msg = ctx.currentTransaction?.message;
-					return (
-						msg instanceof SendDataRequest ||
-						msg instanceof SendDataMulticastRequest
-					);
-				},
+				currentTransactionIsSendData: (ctx) =>
+					isSendData(ctx.currentTransaction?.message),
 				isSendDataWithCallbackTimeout: (ctx, evt: any) => {
-					const msg = ctx.currentTransaction?.message;
 					return (
-						(msg instanceof SendDataRequest ||
-							msg instanceof SendDataMulticastRequest) &&
+						isSendData(ctx.currentTransaction?.message) &&
 						evt.data?.type === "failure" &&
 						evt.data?.reason === "callback timeout"
 					);

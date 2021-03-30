@@ -6,7 +6,7 @@ import {
 	generateAuthKey,
 	generateEncryptionKey,
 	getCCName,
-	isZWaveError,
+	isTransmissionError,
 	Maybe,
 	MessageOrCCLogEntry,
 	MessageRecord,
@@ -19,12 +19,13 @@ import {
 import { buffer2hex, num2hex, pick } from "@zwave-js/shared";
 import { randomBytes } from "crypto";
 import type { ZWaveController } from "../controller/Controller";
+import { SendDataBridgeRequest } from "../controller/SendDataBridgeMessages";
 import {
 	SendDataRequest,
 	TransmitOptions,
 } from "../controller/SendDataMessages";
 import type { Driver } from "../driver/Driver";
-import { MessagePriority } from "../message/Constants";
+import { FunctionType, MessagePriority } from "../message/Constants";
 import { PhysicalCCAPI } from "./API";
 import {
 	API,
@@ -192,7 +193,12 @@ export class SecurityCCAPI extends PhysicalCCAPI {
 			endpoint: this.endpoint.index,
 			nonce,
 		});
-		const msg = new SendDataRequest(this.driver, {
+		const SendDataConstructor = this.driver.controller.isFunctionSupported(
+			FunctionType.SendDataBridge,
+		)
+			? SendDataBridgeRequest
+			: SendDataRequest;
+		const msg = new SendDataConstructor(this.driver, {
 			command: cc,
 			// Seems we need these options or some nodes won't accept the nonce
 			transmitOptions: TransmitOptions.ACK | TransmitOptions.AutoRoute,
@@ -203,13 +209,7 @@ export class SecurityCCAPI extends PhysicalCCAPI {
 				priority: MessagePriority.Handshake,
 			});
 		} catch (e) {
-			if (
-				isZWaveError(e) &&
-				(e.code === ZWaveErrorCodes.Controller_ResponseNOK ||
-					e.code === ZWaveErrorCodes.Controller_CallbackNOK ||
-					e.code === ZWaveErrorCodes.Controller_NodeTimeout ||
-					e.code === ZWaveErrorCodes.Controller_MessageDropped)
-			) {
+			if (isTransmissionError(e)) {
 				// The nonce could not be sent, invalidate it
 				this.driver.securityManager.deleteNonce(nonceId);
 				return false;

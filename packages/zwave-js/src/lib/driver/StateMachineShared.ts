@@ -15,6 +15,12 @@ import {
 } from "xstate";
 import { respond } from "xstate/lib/actions";
 import {
+	SendDataBridgeRequest,
+	SendDataBridgeRequestTransmitReport,
+	SendDataMulticastBridgeRequest,
+	SendDataMulticastBridgeRequestTransmitReport,
+} from "../controller/SendDataBridgeMessages";
+import {
 	SendDataAbort,
 	SendDataMulticastRequest,
 	SendDataMulticastRequestTransmitReport,
@@ -22,6 +28,7 @@ import {
 	SendDataRequestTransmitReport,
 	TransmitStatus,
 } from "../controller/SendDataMessages";
+import { isSendData } from "../controller/SendDataShared";
 import type { DriverLogger } from "../log/Driver";
 import type { Message } from "../message/Message";
 import type { SendDataErrorData } from "./SendThreadMachine";
@@ -87,10 +94,7 @@ export function sendDataErrorToZWaveError(
 				transaction.stack,
 			);
 		case "response NOK":
-			if (
-				transaction.message instanceof SendDataRequest ||
-				transaction.message instanceof SendDataMulticastRequest
-			) {
+			if (isSendData(transaction.message)) {
 				return new ZWaveError(
 					`Failed to send the command after ${transaction.message.maxSendAttempts} attempts. Transmission queue full`,
 					ZWaveErrorCodes.Controller_MessageDropped,
@@ -106,9 +110,13 @@ export function sendDataErrorToZWaveError(
 				);
 			}
 		case "callback NOK":
-			if (transaction.message instanceof SendDataRequest) {
-				const status = (receivedMessage as SendDataRequestTransmitReport)
-					.transmitStatus;
+			if (
+				transaction.message instanceof SendDataRequest ||
+				transaction.message instanceof SendDataBridgeRequest
+			) {
+				const status = (receivedMessage as
+					| SendDataRequestTransmitReport
+					| SendDataBridgeRequestTransmitReport).transmitStatus;
 				return new ZWaveError(
 					`Failed to send the command after ${
 						transaction.message.maxSendAttempts
@@ -123,9 +131,12 @@ export function sendDataErrorToZWaveError(
 					transaction.stack,
 				);
 			} else if (
-				transaction.message instanceof SendDataMulticastRequest
+				transaction.message instanceof SendDataMulticastRequest ||
+				transaction.message instanceof SendDataMulticastBridgeRequest
 			) {
-				const status = (receivedMessage as SendDataMulticastRequestTransmitReport)
+				const status = (receivedMessage as
+					| SendDataMulticastRequestTransmitReport
+					| SendDataMulticastBridgeRequestTransmitReport)
 					.transmitStatus;
 				return new ZWaveError(
 					`One or more nodes did not respond to the multicast request (Status ${getEnumMemberName(

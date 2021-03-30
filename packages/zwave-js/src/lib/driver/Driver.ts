@@ -83,11 +83,19 @@ import {
 import { BridgeApplicationCommandRequest } from "../controller/BridgeApplicationCommandRequest";
 import { ZWaveController } from "../controller/Controller";
 import {
+	SendDataBridgeRequest,
+	SendDataMulticastBridgeRequest,
+} from "../controller/SendDataBridgeMessages";
+import {
 	MAX_SEND_ATTEMPTS,
 	SendDataAbort,
 	SendDataMulticastRequest,
 	SendDataRequest,
 } from "../controller/SendDataMessages";
+import {
+	isSendDataSinglecast,
+	SendDataMessage,
+} from "../controller/SendDataShared";
 import { ControllerLogger } from "../log/Controller";
 import { DriverLogger } from "../log/Driver";
 import {
@@ -1639,12 +1647,13 @@ export class Driver extends EventEmitter {
 		transaction: Transaction,
 		e: ZWaveError,
 	): transaction is Transaction & {
-		message: SendDataRequest;
+		message: SendDataRequest | SendDataBridgeRequest;
 	} {
 		return (
 			// If the node does not acknowledge our request, it is either asleep or dead
 			e.code === ZWaveErrorCodes.Controller_CallbackNOK &&
-			transaction.message instanceof SendDataRequest &&
+			(transaction.message instanceof SendDataRequest ||
+				transaction.message instanceof SendDataBridgeRequest) &&
 			// Ignore pre-transmit handshakes because the actual transaction will be retried
 			transaction.priority !== MessagePriority.PreTransmitHandshake
 		);
@@ -1656,7 +1665,7 @@ export class Driver extends EventEmitter {
 	 */
 	private handleMissingNodeACK(
 		transaction: Transaction & {
-			message: SendDataRequest;
+			message: SendDataRequest | SendDataBridgeRequest;
 		},
 	): boolean {
 		const node = transaction.message.getNodeUnsafe();
@@ -2217,6 +2226,7 @@ ${handlers.length} left`,
 			// If we move multicasts to the wakeup queue, it is unlikely
 			// that there is ever a points where all targets are awake
 			!(msg instanceof SendDataMulticastRequest) &&
+			!(msg instanceof SendDataMulticastBridgeRequest) &&
 			// Handshake messages are meant to be sent immediately
 			options.priority !== MessagePriority.Handshake &&
 			options.priority !== MessagePriority.PreTransmitHandshake
@@ -2315,11 +2325,25 @@ ${handlers.length} left`,
 		command: CommandClass,
 		options: SendCommandOptions = {},
 	): Promise<TResponse | undefined> {
-		let msg: SendDataRequest | SendDataMulticastRequest;
+		let msg: SendDataMessage;
 		if (command.isSinglecast()) {
-			msg = new SendDataRequest(this, { command });
+			if (
+				this.controller.isFunctionSupported(FunctionType.SendDataBridge)
+			) {
+				// Prioritize Bridge commands when they are supported
+				msg = new SendDataBridgeRequest(this, { command });
+			} else {
+				msg = new SendDataRequest(this, { command });
+			}
 		} else if (command.isMulticast()) {
-			msg = new SendDataMulticastRequest(this, { command });
+			if (
+				this.controller.isFunctionSupported(FunctionType.SendDataBridge)
+			) {
+				// Prioritize Bridge commands when they are supported
+				msg = new SendDataMulticastBridgeRequest(this, { command });
+			} else {
+				msg = new SendDataMulticastRequest(this, { command });
+			}
 		} else {
 			throw new ZWaveError(
 				`A CC must either be singlecast or multicast`,
@@ -2716,15 +2740,40 @@ ${handlers.length} left`,
 
 	/** Computes the maximum net CC payload size for the given CC or SendDataRequest */
 	public computeNetCCPayloadSize(
-		commandOrMsg: CommandClass | SendDataRequest,
+		commandOrMsg: CommandClass | SendDataRequest | SendDataBridgeRequest,
 	): number {
 		// Recreate the correct encapsulation structure
-		const msg =
-			commandOrMsg instanceof SendDataRequest
-				? commandOrMsg
-				: new SendDataRequest(this, { command: commandOrMsg });
+		let msg: SendDataRequest | SendDataBridgeRequest;
+		if (isSendDataSinglecast(commandOrMsg)) {
+			msg = commandOrMsg;
+		} else {
+			const SendDataConstructor = this.getSendDataSinglecastConstructor();
+			msg = new SendDataConstructor(this, { command: commandOrMsg });
+		}
 		this.encapsulateCommands(msg);
 		return msg.command.getMaxPayloadLength(msg.getMaxPayloadLength());
+	}
+
+	/** Returns the preferred constructor to use for singlecast SendData commands */
+	public getSendDataSinglecastConstructor():
+		| typeof SendDataRequest
+		| typeof SendDataBridgeRequest {
+		return this._controller?.isFunctionSupported(
+			FunctionType.SendDataBridge,
+		)
+			? SendDataBridgeRequest
+			: SendDataRequest;
+	}
+
+	/** Returns the preferred constructor to use for multicast SendData commands */
+	public getSendDataMulticastConstructor():
+		| typeof SendDataMulticastRequest
+		| typeof SendDataMulticastBridgeRequest {
+		return this._controller?.isFunctionSupported(
+			FunctionType.SendDataMulticastBridge,
+		)
+			? SendDataMulticastBridgeRequest
+			: SendDataMulticastRequest;
 	}
 
 	// This does not all need to be printed to the console
