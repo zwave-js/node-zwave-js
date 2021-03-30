@@ -1,6 +1,5 @@
 import type { ParamInfoMap } from "@zwave-js/config";
 import type {
-	ConfigValue,
 	MessageOrCCLogEntry,
 	MessageRecord,
 	ValueID,
@@ -10,6 +9,7 @@ import {
 	CacheValue,
 	CommandClasses,
 	ConfigurationMetadata,
+	ConfigValue,
 	encodeBitMask,
 	getIntegerLimits,
 	getMinimumShiftForBitMask,
