@@ -1002,12 +1002,14 @@ export class Driver extends EventEmitter {
 				// The interview succeeded, but we don't have a device config for this node.
 				// Report it, so we can add a config file
 
-				let message = `Missing device config: ${formatId(
+				let configFingerprint = `${formatId(
 					node.manufacturerId,
 				)}:${formatId(node.productType)}:${formatId(node.productId)}`;
 				if (node.firmwareVersion != undefined) {
-					message += `:${node.firmwareVersion}`;
+					configFingerprint += `:${node.firmwareVersion}`;
 				}
+				const message = `Missing device config: ${configFingerprint}`;
+
 				const deviceInfo: Record<string, any> = {
 					supportsConfigCCV3:
 						node.getCCVersion(CommandClasses.Configuration) >= 3,
@@ -1055,7 +1057,8 @@ export class Driver extends EventEmitter {
 				}
 				Sentry.captureMessage(message, (scope) => {
 					scope.clearBreadcrumbs();
-					scope.setUser(null);
+					// Group by device config, otherwise Sentry groups by "Unknown device config", which is nonsense
+					scope.setFingerprint([configFingerprint]);
 					scope.setExtras(deviceInfo);
 					return scope;
 				});
