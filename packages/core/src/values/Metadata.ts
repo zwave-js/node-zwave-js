@@ -107,9 +107,9 @@ export enum ValueFormat {
 	BitField = 0x03, // Check Boxes
 }
 
-// A configuration value is either a single number or a bit map
 /**
  * @publicAPI
+ * A configuration value is either a single number or a bit map
  */
 export type ConfigValue = number | Set<number>;
 

@@ -9,7 +9,6 @@ import {
 	CacheValue,
 	CommandClasses,
 	ConfigurationMetadata,
-	ConfigValue,
 	encodeBitMask,
 	getIntegerLimits,
 	getMinimumShiftForBitMask,
@@ -68,6 +67,9 @@ export enum ConfigurationCommand {
 	PropertiesReport = 0x0f,
 	DefaultReset = 0x01,
 }
+
+/** @publicAPI */
+export type ConfigValue = import("@zwave-js/core").ConfigValue;
 
 function configValueToString(value: ConfigValue): string {
 	if (typeof value === "number") return value.toString();
