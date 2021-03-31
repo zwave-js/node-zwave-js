@@ -496,17 +496,25 @@ interface ZWaveOptions {
 	 * Default: `false`
 	 */
 	disableOptimisticValueUpdate?: boolean;
+
+	/**
+	 * Information about the application to be included in collected metrics. If this property is not provided, no metrics are collected.
+	 */
+	metrics?: {
+		applicationName: string;
+		applicationVersion: string;
+	};
 }
 ```
 
 The timeout values `ack` and `byte` are sent to the Z-Wave stick using the `SetSerialApiTimeouts` command. Change them only if you know what you're doing.
-
 The `report` timeout is used by this library to determine how long to wait for a node's response.
-
-If your network has connectivity issues, you can increase the number of interview attempts the driver makes before giving up. The default is 5.
+If your network has connectivity issues, you can increase the number of interview attempts the driver makes before giving up. The default is `5`.
 
 For more control over writing the cache files, you can use the `storage` options. By default, the cache is located inside `node_modules/zwave-js/cache` and written using Node.js built-in `fs` methods (promisified using `fs-extra`). The replacement file system must adhere to the [`FileSystem`](#FileSystem) interface.
 The `throttle` option allows you to fine-tune the filesystem. The default value `"normal"`
 
 For custom logging options you can use `logConfig`, check [`LogConfig`](#LogConfig) interface for more informations.
 The logging options can be changed on the fly using the [`updateLogConfig`](#updateLogConfig) method.
+
+The `metrics` property is optional, but **we kindly ask you** to use it and enable metrics. It allows us to gain insight how `zwave-js` is used, which manufacturers and devices are most prevalent and where to best focus our efforts in order to improve `zwave-js` the most. We do not store any personal information. Details can be found under [telemetry](getting-started/telemetry.md#usage-statistics).

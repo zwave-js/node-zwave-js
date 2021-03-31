@@ -34,7 +34,7 @@ import {
 	DeferredPromise,
 } from "alcalzone-shared/deferred-promise";
 import { entries } from "alcalzone-shared/objects";
-import { isArray } from "alcalzone-shared/typeguards";
+import { isArray, isObject } from "alcalzone-shared/typeguards";
 import { EventEmitter } from "events";
 import fsExtra from "fs-extra";
 import path from "path";
@@ -107,6 +107,7 @@ import { getDefaultPriority, Message } from "../message/Message";
 import { isNodeQuery } from "../node/INodeQuery";
 import type { ZWaveNode } from "../node/Node";
 import { InterviewStage, NodeStatus } from "../node/Types";
+import { compileMetrics, sendMetrics } from "../telemetry/metrics";
 import type { FileSystem } from "./FileSystem";
 import {
 	createSendThreadMachine,
@@ -216,6 +217,14 @@ export interface ZWaveOptions {
 	 * Default: `false`
 	 */
 	disableOptimisticValueUpdate?: boolean;
+
+	/**
+	 * Information about the application to be included in collected metrics. If this property is not provided, no metrics are collected.
+	 */
+	metrics?: {
+		applicationName: string;
+		applicationVersion: string;
+	};
 }
 
 const defaultOptions: ZWaveOptions = {
@@ -335,6 +344,30 @@ function checkOptions(options: ZWaveOptions): void {
 			`The Node interview attempts must be between 1 and 10!`,
 			ZWaveErrorCodes.Driver_InvalidOptions,
 		);
+	}
+	if (options.metrics != undefined) {
+		if (
+			!isObject(options.metrics) ||
+			// wotan-disable-next-line no-useless-predicate
+			typeof options.metrics.applicationName !== "string" ||
+			// wotan-disable-next-line no-useless-predicate
+			typeof options.metrics.applicationVersion !== "string"
+		) {
+			throw new ZWaveError(
+				`The application metrics must be an object with two string properties "applicationName" and "applicationVersion"!`,
+				ZWaveErrorCodes.Driver_InvalidOptions,
+			);
+		} else if (options.metrics.applicationName.length > 100) {
+			throw new ZWaveError(
+				`The applicationName for metrics must be maximum 100 characters long!`,
+				ZWaveErrorCodes.Driver_InvalidOptions,
+			);
+		} else if (options.metrics.applicationVersion.length > 100) {
+			throw new ZWaveError(
+				`The applicationVersion for metrics must be maximum 100 characters long!`,
+				ZWaveErrorCodes.Driver_InvalidOptions,
+			);
+		}
 	}
 }
 
@@ -512,20 +545,22 @@ export class Driver extends EventEmitter {
 		// And make sure they contain valid values
 		checkOptions(this.options);
 
-		this._logContainer = new ZWaveLogContainer(this.options.logConfig);
-		this._driverLog = new DriverLogger(this._logContainer);
-		this._controllerLog = new ControllerLogger(this._logContainer);
-
-		this.cacheDir = this.options.storage.cacheDir;
-
-		// Initialize config manager
-		this.configManager = new ConfigManager(this._logContainer);
-
 		// register some cleanup handlers in case the program doesn't get closed cleanly
 		this._cleanupHandler = this._cleanupHandler.bind(this);
 		process.on("exit", this._cleanupHandler);
 		process.on("SIGINT", this._cleanupHandler);
 		process.on("uncaughtException", this._cleanupHandler);
+
+		// Initialize logging
+		this._logContainer = new ZWaveLogContainer(this.options.logConfig);
+		this._driverLog = new DriverLogger(this._logContainer);
+		this._controllerLog = new ControllerLogger(this._logContainer);
+
+		// Initialize the cache
+		this.cacheDir = this.options.storage.cacheDir;
+
+		// Initialize config manager
+		this.configManager = new ConfigManager(this._logContainer);
 
 		// And initialize but don't start the send thread machine
 		const sendThreadMachine = createSendThreadMachine(
@@ -1210,6 +1245,44 @@ export class Driver extends EventEmitter {
 		this.controllerLog.print("All nodes are ready to be used");
 		this.emit("all nodes ready");
 		this._nodesReadyEventEmitted = true;
+
+		// We know we have all data, this is the time to send metrics (when enabled)
+		void this.compileAndSendMetrics().catch(() => {
+			/* ignore */
+		});
+	}
+
+	private metricsTimeout: NodeJS.Timeout | undefined;
+	private async compileAndSendMetrics(): Promise<void> {
+		// Don't send anything if metrics are not enabled
+		if (!this.options.metrics) return;
+
+		if (this.metricsTimeout) {
+			clearTimeout(this.metricsTimeout);
+			this.metricsTimeout = undefined;
+		}
+
+		let success = false;
+		try {
+			const metrics = compileMetrics(this, {
+				driverVersion: libVersion,
+				...this.options.metrics,
+			});
+			success = await sendMetrics(metrics);
+		} catch {
+			// Didn't work - try again in a few hours
+			success = false;
+		} finally {
+			this.driverLog.print(
+				success
+					? `Metrics sent - next transmission scheduled in 23 hours.`
+					: `Failed to send metrics - next transmission scheduled in 6 hours.`,
+				"verbose",
+			);
+			this.metricsTimeout = setTimeout(() => {
+				void this.compileAndSendMetrics();
+			}, (success ? 23 : 6) * 3600 * 1000 /* 6 or 23 hours */).unref();
+		}
 	}
 
 	/** Is called when a node interview is completed */
@@ -1480,6 +1553,7 @@ export class Driver extends EventEmitter {
 			this.saveToCacheTimer,
 			...this.sendNodeToSleepTimers.values(),
 			...this.retryNodeInterviewTimeouts.values(),
+			this.metricsTimeout,
 		]) {
 			if (timeout) clearTimeout(timeout);
 		}
