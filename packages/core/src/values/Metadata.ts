@@ -100,7 +100,7 @@ export interface ValueMetadataDuration extends ValueMetadataAny {
 	default?: Duration;
 }
 
-export enum ValueFormat {
+export enum ConfigValueFormat {
 	SignedInteger = 0x00,
 	UnsignedInteger = 0x01,
 	Enumerated = 0x02, // UnsignedInt, Radio Buttons
@@ -120,7 +120,7 @@ export interface ConfigurationMetadata extends ValueMetadataAny {
 	default?: ConfigValue;
 	unit?: string;
 	valueSize?: number;
-	format?: ValueFormat;
+	format?: ConfigValueFormat;
 	name?: string;
 	info?: string;
 	noBulkSupport?: boolean;

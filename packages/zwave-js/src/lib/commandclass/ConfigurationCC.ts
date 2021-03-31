@@ -9,6 +9,7 @@ import {
 	CacheValue,
 	CommandClasses,
 	ConfigurationMetadata,
+	ConfigValueFormat,
 	encodeBitMask,
 	getIntegerLimits,
 	getMinimumShiftForBitMask,
@@ -18,7 +19,6 @@ import {
 	parseBitMask,
 	stripUndefined,
 	validatePayload,
-	ValueFormat,
 	ValueMetadata,
 	ZWaveError,
 	ZWaveErrorCodes,
@@ -147,7 +147,7 @@ export class ConfigurationCCAPI extends PhysicalCCAPI {
 		let valueSize = ccInstance.getParamInformation(property).valueSize;
 		const valueFormat =
 			ccInstance.getParamInformation(property).format ||
-			ValueFormat.SignedInteger;
+			ConfigValueFormat.SignedInteger;
 
 		let targetValue: number;
 		if (propertyKey) {
@@ -173,7 +173,7 @@ export class ConfigurationCCAPI extends PhysicalCCAPI {
 			// If there's no value size configured, figure out a matching value size
 			valueSize = getMinIntegerSize(
 				targetValue,
-				valueFormat === ValueFormat.SignedInteger,
+				valueFormat === ConfigValueFormat.SignedInteger,
 			);
 			// Throw if the value is too large or too small
 			if (!valueSize) {
@@ -538,7 +538,10 @@ export class ConfigurationCC extends CommandClass {
 
 					logMessage = `received information for parameter #${param}:
 parameter name:      ${name}
-value format:        ${getEnumMemberName(ValueFormat, properties.valueFormat)}
+value format:        ${getEnumMemberName(
+						ConfigValueFormat,
+						properties.valueFormat,
+					)}
 value size:          ${properties.valueSize} bytes
 min value:           ${properties.minValue?.toString() ?? "undefined"}
 max value:           ${properties.maxValue?.toString() ?? "undefined"}
@@ -808,8 +811,8 @@ alters capabilities: ${!!properties.altersCapabilities}`;
 				default: info.defaultValue,
 				unit: info.unit,
 				format: info.unsigned
-					? ValueFormat.UnsignedInteger
-					: ValueFormat.SignedInteger,
+					? ConfigValueFormat.UnsignedInteger
+					: ConfigValueFormat.SignedInteger,
 				readable: !info.writeOnly,
 				writeable: !info.readOnly,
 				allowManualEntry: info.allowManualEntry,
@@ -899,13 +902,13 @@ export class ConfigurationCCReport extends ConfigurationCC {
 			// In Config CC v1/v2, this must be SignedInteger
 			// As those nodes don't communicate any parameter information
 			// we fall back to that default value anyways
-			oldParamInformation.format || ValueFormat.SignedInteger,
+			oldParamInformation.format || ConfigValueFormat.SignedInteger,
 		);
 		// Store the parameter size and value
 		this.extendParamInformation(this._parameter, undefined, {
 			valueSize: this._valueSize,
 			type:
-				oldParamInformation.format === ValueFormat.BitField
+				oldParamInformation.format === ConfigValueFormat.BitField
 					? "number[]"
 					: "number",
 		});
@@ -917,7 +920,7 @@ export class ConfigurationCCReport extends ConfigurationCC {
 		) {
 			const isSigned =
 				oldParamInformation.format == undefined ||
-				oldParamInformation.format === ValueFormat.SignedInteger;
+				oldParamInformation.format === ConfigValueFormat.SignedInteger;
 			this.extendParamInformation(
 				this._parameter,
 				undefined,
@@ -1098,7 +1101,7 @@ export class ConfigurationCCSet extends ConfigurationCC {
 		if (!this.resetToDefault) {
 			const valueFormat =
 				this.getParamInformation(this.parameter).format ||
-				ValueFormat.SignedInteger;
+				ConfigValueFormat.SignedInteger;
 
 			// Make sure that the given value fits into the value size
 			if (
@@ -1249,7 +1252,7 @@ export class ConfigurationCCBulkSet extends ConfigurationCC {
 				const param = this._parameters[i];
 				const valueFormat =
 					this.getParamInformation(param).format ||
-					ValueFormat.SignedInteger;
+					ConfigValueFormat.SignedInteger;
 
 				// Make sure that the given value fits into the value size
 				if (!isSafeValue(value, valueSize, valueFormat)) {
@@ -1334,7 +1337,7 @@ export class ConfigurationCCBulkReport extends ConfigurationCC {
 					this.payload.slice(5 + i * this.valueSize),
 					this.valueSize,
 					this.getParamInformation(param).format ||
-						ValueFormat.SignedInteger,
+						ConfigValueFormat.SignedInteger,
 				),
 			);
 		}
@@ -1680,7 +1683,7 @@ export class ConfigurationCCPropertiesReport extends ConfigurationCC {
 		validatePayload(this.payload.length >= nextParameterOffset + 2);
 
 		if (this.valueSize > 0) {
-			if (this._valueFormat !== ValueFormat.BitField) {
+			if (this._valueFormat !== ConfigValueFormat.BitField) {
 				this._minValue = parseValue(
 					this.payload.slice(3),
 					this._valueSize,
@@ -1721,8 +1724,8 @@ export class ConfigurationCCPropertiesReport extends ConfigurationCC {
 		// If we actually received parameter info, store it
 		if (this._valueSize > 0) {
 			const valueType =
-				this._valueFormat === ValueFormat.SignedInteger ||
-				this._valueFormat === ValueFormat.UnsignedInteger
+				this._valueFormat === ConfigValueFormat.SignedInteger ||
+				this._valueFormat === ConfigValueFormat.UnsignedInteger
 					? "number"
 					: "number[]";
 			const paramInfo: Partial<ConfigurationMetadata> = stripUndefined({
@@ -1751,8 +1754,8 @@ export class ConfigurationCCPropertiesReport extends ConfigurationCC {
 		return this._valueSize;
 	}
 
-	private _valueFormat: ValueFormat;
-	public get valueFormat(): ValueFormat {
+	private _valueFormat: ConfigValueFormat;
+	public get valueFormat(): ConfigValueFormat {
 		return this._valueFormat;
 	}
 
@@ -1801,7 +1804,10 @@ export class ConfigurationCCPropertiesReport extends ConfigurationCC {
 			"parameter #": this._parameter,
 			"next param #": this._nextParameter,
 			"value size": this._valueSize,
-			"value format": getEnumMemberName(ValueFormat, this._valueFormat),
+			"value format": getEnumMemberName(
+				ConfigValueFormat,
+				this._valueFormat,
+			),
 		};
 		if (this._minValue != undefined) {
 			message["min value"] = configValueToString(this._minValue);
@@ -1872,21 +1878,21 @@ export class ConfigurationCCDefaultReset extends ConfigurationCC {}
 function isSafeValue(
 	value: number,
 	size: number,
-	format: ValueFormat,
+	format: ConfigValueFormat,
 ): boolean {
 	let minValue: number;
 	let maxValue: number;
 	switch (format) {
-		case ValueFormat.SignedInteger:
+		case ConfigValueFormat.SignedInteger:
 			minValue = -Math.pow(2, 8 * size - 1);
 			maxValue = Math.pow(2, 8 * size - 1) - 1;
 			break;
-		case ValueFormat.UnsignedInteger:
-		case ValueFormat.Enumerated:
+		case ConfigValueFormat.UnsignedInteger:
+		case ConfigValueFormat.Enumerated:
 			minValue = 0;
 			maxValue = Math.pow(2, 8 * size);
 			break;
-		case ValueFormat.BitField:
+		case ConfigValueFormat.BitField:
 		default:
 			throw new Error("not implemented");
 	}
@@ -1897,15 +1903,15 @@ function isSafeValue(
 function parseValue(
 	raw: Buffer,
 	size: number,
-	format: ValueFormat,
+	format: ConfigValueFormat,
 ): ConfigValue {
 	switch (format) {
-		case ValueFormat.SignedInteger:
+		case ConfigValueFormat.SignedInteger:
 			return raw.readIntBE(0, size);
-		case ValueFormat.UnsignedInteger:
-		case ValueFormat.Enumerated:
+		case ConfigValueFormat.UnsignedInteger:
+		case ConfigValueFormat.Enumerated:
 			return raw.readUIntBE(0, size);
-		case ValueFormat.BitField:
+		case ConfigValueFormat.BitField:
 			return new Set(parseBitMask(raw.slice(0, size)));
 	}
 }
@@ -1914,11 +1920,11 @@ function throwInvalidValueError(
 	value: any,
 	parameter: number,
 	valueSize: number,
-	valueFormat: ValueFormat,
+	valueFormat: ConfigValueFormat,
 ): never {
 	throw new ZWaveError(
 		`The value ${value} is invalid for configuration parameter ${parameter} (size = ${valueSize}, format = ${getEnumMemberName(
-			ValueFormat,
+			ConfigValueFormat,
 			valueFormat,
 		)})!`,
 		ZWaveErrorCodes.Argument_Invalid,
@@ -1930,7 +1936,7 @@ function tryCatchOutOfBoundsError(
 	value: any,
 	parameter: number,
 	valueSize: number,
-	valueFormat: ValueFormat,
+	valueFormat: ConfigValueFormat,
 ): void {
 	if (e.message.includes("out of bounds")) {
 		throwInvalidValueError(value, parameter, valueSize, valueFormat);
@@ -1944,18 +1950,18 @@ function serializeValue(
 	payload: Buffer,
 	offset: number,
 	size: number,
-	format: ValueFormat,
+	format: ConfigValueFormat,
 	value: ConfigValue,
 ): void {
 	switch (format) {
-		case ValueFormat.SignedInteger:
+		case ConfigValueFormat.SignedInteger:
 			payload.writeIntBE(value as number, offset, size);
 			return;
-		case ValueFormat.UnsignedInteger:
-		case ValueFormat.Enumerated:
+		case ConfigValueFormat.UnsignedInteger:
+		case ConfigValueFormat.Enumerated:
 			payload.writeUIntBE(value as number, offset, size);
 			return;
-		case ValueFormat.BitField: {
+		case ConfigValueFormat.BitField: {
 			const mask = encodeBitMask(
 				[...(value as Set<number>).values()],
 				size * 8,
