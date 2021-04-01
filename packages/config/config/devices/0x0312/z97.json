@@ -10,28 +10,28 @@
 		{
 			"productType": "0xc000",
 			"productId": "0xc007",
-      "zwaveAllianceId": 3701
+			"zwaveAllianceId": 3701
 		}
 	],
 	"firmwareVersion": {
 		"min": "0.0",
 		"max": "255.255"
 	},
-  "associations": {
+	"associations": {
 		"1": {
 			"label": "Lifeline",
 			"maxNodes": 1,
 			"isLifeline": true
 		},
-    "2": {
+		"2": {
 			"label": "Outlet 1 (Left) State Notification",
-      "description": "When the state of Outlet 1 (Left) is changed, On (0xFF) or Off (0x00). The ZW97 will automatically send out a related command, On (0xFF) or Off (0x00) to its associated group.",
+			"description": "When the state of Outlet 1 (Left) is changed, On (0xFF) or Off (0x00). The ZW97 will automatically send out a related command, On (0xFF) or Off (0x00) to its associated group.",
 			"maxNodes": 5,
 			"isLifeline": false
 		},
-    "3": {
+		"3": {
 			"label": "Outlet 2 (Left) State Notification",
-      "description": "When the state of Outlet 2 (Right) is changed, On (0xFF) or Off (0x00). The ZW97 will automatically send out a related command, On (0xFF) or Off (0x00) to its associated group.",
+			"description": "When the state of Outlet 2 (Right) is changed, On (0xFF) or Off (0x00). The ZW97 will automatically send out a related command, On (0xFF) or Off (0x00) to its associated group.",
 			"maxNodes": 5,
 			"isLifeline": false
 		}
@@ -74,7 +74,7 @@
 			"writeOnly": false,
 			"allowManualEntry": true
 		},
-    "3": {
+		"3": {
 			"label": "Countdown",
 			"description": "Outlet 2 (Right) Auto Shutoff",
 			"unit": "seconds",
