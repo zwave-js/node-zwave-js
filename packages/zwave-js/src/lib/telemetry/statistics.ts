@@ -4,7 +4,7 @@ import axios from "axios";
 import * as crypto from "crypto";
 import type { Driver } from "../driver/Driver";
 
-const apiToken = "8F03DC2E86EFD74C2B092770A95B3062";
+const apiToken = "ef58278d935ccb26307800279458484d";
 const statisticsUrl = `https://stats.zwave-js.io/statistics`;
 
 export interface AppInfo {
