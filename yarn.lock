@@ -2640,10 +2640,10 @@
   dependencies:
     "@types/istanbul-lib-report" "*"
 
-"@types/jest@^26.0.14":
-  version "26.0.20"
-  resolved "https://registry.yarnpkg.com/@types/jest/-/jest-26.0.20.tgz#cd2f2702ecf69e86b586e1f5223a60e454056307"
-  integrity sha512-9zi2Y+5USJRxd0FsahERhBwlcvFh6D2GLQnY2FH2BzK8J9s9omvNHIbvABwIluXa0fD8XVKMLTO0aOEuUfACAA==
+"@types/jest@^26.0.22":
+  version "26.0.22"
+  resolved "https://registry.yarnpkg.com/@types/jest/-/jest-26.0.22.tgz#8308a1debdf1b807aa47be2838acdcd91e88fbe6"
+  integrity sha512-eeWwWjlqxvBxc4oQdkueW5OF/gtfSceKk4OnOAGlUSwS/liBRtZppbJuz1YkgbrbfGOoeBHun9fOvXnjNwrSOw==
   dependencies:
     jest-diff "^26.0.0"
     pretty-format "^26.0.0"
@@ -3023,10 +3023,10 @@ ajv@^7.0.2:
     require-from-string "^2.0.2"
     uri-js "^4.2.2"
 
-alcalzone-shared@^3.0.1, alcalzone-shared@^3.0.2:
-  version "3.0.2"
-  resolved "https://registry.yarnpkg.com/alcalzone-shared/-/alcalzone-shared-3.0.2.tgz#e0c6380be679e1e8fc22b648c6fdba2d2d1b04d0"
-  integrity sha512-kcXwSVaB19k3gbJoDqktD9nL2JyufbTThbk8LEL0xKY77TqoIWtraOrrGtRCihlqJPIyfacdFu//0X28ZfWPSg==
+alcalzone-shared@^3.0.1, alcalzone-shared@^3.0.2, alcalzone-shared@^3.0.3:
+  version "3.0.3"
+  resolved "https://registry.yarnpkg.com/alcalzone-shared/-/alcalzone-shared-3.0.3.tgz#b9eb6f97b3bb8906d762eb968b8ebea899c29f82"
+  integrity sha512-DHScJbVDE9VT5ZBahgmeLHnWf5+KdnukWeqMfkVg9CUtI0CWEKWjRazKo17wr4PGQmnA4MYx/alZMADrd0gaYg==
   dependencies:
     debug "^4.3.1"
 
@@ -7244,10 +7244,10 @@ jsesc@~0.5.0:
   resolved "https://registry.yarnpkg.com/jsesc/-/jsesc-0.5.0.tgz#e7dee66e35d6fc16f710fe91d5cf69f70f08911d"
   integrity sha1-597mbjXW/Bb3EP6R1c9p9w8IkR0=
 
-json-logic-js@^2.0.0:
-  version "2.0.0"
-  resolved "https://registry.yarnpkg.com/json-logic-js/-/json-logic-js-2.0.0.tgz#bd83ade3f1e46e4544062e61f9f7c035052b101d"
-  integrity sha512-cQBDOXgFtFladCg99wnQ7YfN+nv1+Sznj4K6bp3CTgDJNJKgEXJE2VCXzVBjEU2e1UagDHSek52IQk5Ha38n7Q==
+json-logic-js@^2.0.1:
+  version "2.0.1"
+  resolved "https://registry.yarnpkg.com/json-logic-js/-/json-logic-js-2.0.1.tgz#ce5399be0ff2f015c016026823c0f5339a96ec4f"
+  integrity sha512-J3hhqM4IY66sL8qyzU7cwLmTAt3kA6ZsYxyuZBEwhcc+OYPTmAHc64fBTXHT6K5RwFeUqJUX1tfO7wpKsUx+9A==
 
 json-parse-better-errors@^1.0.1:
   version "1.0.2"
@@ -10753,10 +10753,10 @@ typedarray@^0.0.6:
   resolved "https://registry.yarnpkg.com/typedarray/-/typedarray-0.0.6.tgz#867ac74e3864187b1d3d47d996a78ec5c8830777"
   integrity sha1-hnrHTjhkGHsdPUfZlqeOxciDB3c=
 
-typescript@^4.2.2:
-  version "4.2.2"
-  resolved "https://registry.yarnpkg.com/typescript/-/typescript-4.2.2.tgz#1450f020618f872db0ea17317d16d8da8ddb8c4c"
-  integrity sha512-tbb+NVrLfnsJy3M59lsDgrzWIflR4d4TIUjz+heUnHZwdF7YsrMTKoRERiIvI2lvBG95dfpLxB21WZhys1bgaQ==
+typescript@^4.2.3:
+  version "4.2.3"
+  resolved "https://registry.yarnpkg.com/typescript/-/typescript-4.2.3.tgz#39062d8019912d43726298f09493d598048c1ce3"
+  integrity sha512-qOcYwxaByStAWrBf4x0fibwZvMRG+r4cQoTjbPtUlrWjBHbmCAww1i448U0GJ+3cNNEtebDteo/cHOR3xJ4wEw==
 
 typescript@~4.1.2:
   version "4.1.3"
