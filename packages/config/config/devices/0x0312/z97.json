@@ -1,0 +1,97 @@
+// NIE Technology Co., Ltd. ZW97 / Eva Logik
+// Outdoor Z-Wave Plug-In Module (2-Channel)
+// TODO: ZW97 support Over temperature protection, When the temperature is greater than 105 degrees Celsius, the Heat Alarm signal is sent out Notification Type : Heat Alarm 0x04 . Event :Overheat detected 0x02
+{
+	"manufacturer": "NIE Technology Co., Ltd.",
+	"manufacturerId": "0x0312",
+	"label": "ZW97",
+	"description": "Outdoor Z-Wave Plug-In Module (2-Channel)",
+	"devices": [
+		{
+			"productType": "0xc000",
+			"productId": "0xc007",
+      "zwaveAllianceId": 3701
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+  "associations": {
+		"1": {
+			"label": "Lifeline",
+			"maxNodes": 1,
+			"isLifeline": true
+		},
+    "2": {
+			"label": "Outlet 1 (Left) State Notification",
+      "description": "When the state of Outlet 1 (Left) is changed, On (0xFF) or Off (0x00). The ZW97 will automatically send out a related command, On (0xFF) or Off (0x00) to its associated group.",
+			"maxNodes": 5,
+			"isLifeline": false
+		},
+    "3": {
+			"label": "Outlet 2 (Left) State Notification",
+      "description": "When the state of Outlet 2 (Right) is changed, On (0xFF) or Off (0x00). The ZW97 will automatically send out a related command, On (0xFF) or Off (0x00) to its associated group.",
+			"maxNodes": 5,
+			"isLifeline": false
+		}
+	},
+	"paramInformation": {
+		"1": {
+			"label": "LED Invert/Off",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 2,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Outlet On / LED On",
+					"value": 0
+				},
+				{
+					"label": "Outlet On / LED Off",
+					"value": 1
+				},
+				{
+					"label": "LED Disabled",
+					"value": 2
+				}
+			]
+		},
+		"2": {
+			"label": "Countdown",
+			"description": "Outlet 1 (Left) Auto Shutoff",
+			"unit": "seconds",
+			"valueSize": 2,
+			"minValue": 0,
+			"maxValue": 36000,
+			"defaultValue": 0,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+    "3": {
+			"label": "Countdown",
+			"description": "Outlet 2 (Right) Auto Shutoff",
+			"unit": "seconds",
+			"valueSize": 2,
+			"minValue": 0,
+			"maxValue": 36000,
+			"defaultValue": 0,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		}
+	},
+  	"metadata": {
+		"inclusion": "Refer to your primary controller instructions to process the inclusion / exclusion setup procedure.\nWhen prompted by your primary controller, click the PROG button five times in one second.",
+		"exclusion": "-Refer to your primary controller instructions to process the inclusion / exclusion setup procedure.\nWhen prompted by your primary controller, click the PROG button five times in one second.",
+		"reset": "Power off ZW97\n---keep holding the PROG button\n---Power on,Press and keep holding the PROG button for no less than 10 seconds.\nPlease use this procedure only when the network primary controller is missing or otherwise inoperable.",
+		"manual": "https://products.z-wavealliance.org/ProductManual/File?folder=&filename=MarketCertificationFiles/2693/ZW97-Manual171115.pdf"
+	}
+}
