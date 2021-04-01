@@ -15,10 +15,6 @@ const driver = new Driver("COM5", {
 	networkKey: Buffer.from([
 		1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16,
 	]),
-	statistics: {
-		applicationName: "test",
-		applicationVersion: "0.0.1",
-	},
 })
 	.on("error", console.error)
 	.once("driver ready", async () => {

@@ -107,7 +107,11 @@ import { getDefaultPriority, Message } from "../message/Message";
 import { isNodeQuery } from "../node/INodeQuery";
 import type { ZWaveNode } from "../node/Node";
 import { InterviewStage, NodeStatus } from "../node/Types";
-import { compileStatistics, sendStatistics } from "../telemetry/statistics";
+import {
+	AppInfo,
+	compileStatistics,
+	sendStatistics,
+} from "../telemetry/statistics";
 import type { FileSystem } from "./FileSystem";
 import {
 	createSendThreadMachine,
@@ -217,14 +221,6 @@ export interface ZWaveOptions {
 	 * Default: `false`
 	 */
 	disableOptimisticValueUpdate?: boolean;
-
-	/**
-	 * Information about the application to be included in collected statistics. If this property is not provided, no statistics are collected.
-	 */
-	statistics?: {
-		applicationName: string;
-		applicationVersion: string;
-	};
 }
 
 const defaultOptions: ZWaveOptions = {
@@ -344,30 +340,6 @@ function checkOptions(options: ZWaveOptions): void {
 			`The Node interview attempts must be between 1 and 10!`,
 			ZWaveErrorCodes.Driver_InvalidOptions,
 		);
-	}
-	if (options.statistics != undefined) {
-		if (
-			!isObject(options.statistics) ||
-			// wotan-disable-next-line no-useless-predicate
-			typeof options.statistics.applicationName !== "string" ||
-			// wotan-disable-next-line no-useless-predicate
-			typeof options.statistics.applicationVersion !== "string"
-		) {
-			throw new ZWaveError(
-				`The application statistics must be an object with two string properties "applicationName" and "applicationVersion"!`,
-				ZWaveErrorCodes.Driver_InvalidOptions,
-			);
-		} else if (options.statistics.applicationName.length > 100) {
-			throw new ZWaveError(
-				`The applicationName for statistics must be maximum 100 characters long!`,
-				ZWaveErrorCodes.Driver_InvalidOptions,
-			);
-		} else if (options.statistics.applicationVersion.length > 100) {
-			throw new ZWaveError(
-				`The applicationVersion for statistics must be maximum 100 characters long!`,
-				ZWaveErrorCodes.Driver_InvalidOptions,
-			);
-		}
 	}
 }
 
@@ -1252,10 +1224,70 @@ export class Driver extends EventEmitter {
 		});
 	}
 
+	private statisticsEnabled: boolean = false;
+	private statisticsAppInfo:
+		| Pick<AppInfo, "applicationName" | "applicationVersion">
+		| undefined;
+
+	/**
+	 * Enable sending usage statistics. Although this does not include any sensitive information, we expect that you
+	 * inform your users before enabling statistics.
+	 */
+	public enableStatistics(
+		appInfo: Pick<AppInfo, "applicationName" | "applicationVersion">,
+	): void {
+		if (this.statisticsEnabled) return;
+		this.statisticsEnabled = true;
+
+		if (
+			!isObject(appInfo) ||
+			// wotan-disable-next-line no-useless-predicate
+			typeof appInfo.applicationName !== "string" ||
+			// wotan-disable-next-line no-useless-predicate
+			typeof appInfo.applicationVersion !== "string"
+		) {
+			throw new ZWaveError(
+				`The application statistics must be an object with two string properties "applicationName" and "applicationVersion"!`,
+				ZWaveErrorCodes.Driver_InvalidOptions,
+			);
+		} else if (appInfo.applicationName.length > 100) {
+			throw new ZWaveError(
+				`The applicationName for statistics must be maximum 100 characters long!`,
+				ZWaveErrorCodes.Driver_InvalidOptions,
+			);
+		} else if (appInfo.applicationVersion.length > 100) {
+			throw new ZWaveError(
+				`The applicationVersion for statistics must be maximum 100 characters long!`,
+				ZWaveErrorCodes.Driver_InvalidOptions,
+			);
+		}
+
+		this.statisticsAppInfo = appInfo;
+
+		// If we're already ready, send statistics
+		if (this._nodesReadyEventEmitted) {
+			void this.compileAndSendStatistics().catch(() => {
+				/* ignore */
+			});
+		}
+	}
+
+	/**
+	 * Disable sending usage statistics
+	 */
+	public disableStatistics(): void {
+		this.statisticsEnabled = false;
+		this.statisticsAppInfo = undefined;
+		if (this.statisticsTimeout) {
+			clearTimeout(this.statisticsTimeout);
+			this.statisticsTimeout = undefined;
+		}
+	}
+
 	private statisticsTimeout: NodeJS.Timeout | undefined;
 	private async compileAndSendStatistics(): Promise<void> {
 		// Don't send anything if statistics are not enabled
-		if (!this.options.statistics) return;
+		if (!this.statisticsEnabled || !this.statisticsAppInfo) return;
 
 		if (this.statisticsTimeout) {
 			clearTimeout(this.statisticsTimeout);
@@ -1266,7 +1298,7 @@ export class Driver extends EventEmitter {
 		try {
 			const statistics = compileStatistics(this, {
 				driverVersion: libVersion,
-				...this.options.statistics,
+				...this.statisticsAppInfo,
 			});
 			success = await sendStatistics(statistics);
 		} catch {

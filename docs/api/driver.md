@@ -32,6 +32,27 @@ The following table gives you an overview of what happens during the startup pro
 |  4   | -                                                                       | `"all nodes ready"` event is emitted for the driver when all nodes can be used                                                                                                |
 |  5   | -                                                                       | `"interview completed"` event is emitted for every node when its interview is completed for the first time. This only gets emitted once, unless the node gets re-interviewed. |
 
+### `enableStatistics`
+
+```ts
+enableStatistics(appInfo: { applicationName: string; applicationVersion: string }): void
+```
+
+Enable sending usage statistics. Although this does not include any sensitive information, we expect that you inform your users about this before enabling statistics.
+
+`applicationName` is the name of your application. Please keep this consistent between versions. `applicationVersion` is the current version of your application. Both must be strings and have a maximum length of 100 characters.
+
+> [!NOTE] Sending usage statistics is optional, but **we kindly ask you** to enable it. It allows us to gain insight how much `zwave-js` is used, which manufacturers and devices are most prevalent and where to best focus our efforts in order to improve `zwave-js` the most.
+> Details including which information is sent can be found under [telemetry](getting-started/telemetry.md#usage-statistics).
+
+### `disableStatistics`
+
+```ts
+disableStatistics(): void
+```
+
+Disable sending usage statistics.
+
 ### `getSupportedCCVersionForEndpoint`
 
 ```ts
@@ -496,14 +517,6 @@ interface ZWaveOptions {
 	 * Default: `false`
 	 */
 	disableOptimisticValueUpdate?: boolean;
-
-	/**
-	 * Information about the application to be included in collected statistics. If this property is not provided, no statistics are collected.
-	 */
-	statistics?: {
-		applicationName: string;
-		applicationVersion: string;
-	};
 }
 ```
 
@@ -516,5 +529,3 @@ The `throttle` option allows you to fine-tune the filesystem. The default value 
 
 For custom logging options you can use `logConfig`, check [`LogConfig`](#LogConfig) interface for more informations.
 The logging options can be changed on the fly using the [`updateLogConfig`](#updateLogConfig) method.
-
-The `statistics` property is optional, but **we kindly ask you** to use it and enable statistics. It allows us to gain insight how `zwave-js` is used, which manufacturers and devices are most prevalent and where to best focus our efforts in order to improve `zwave-js` the most. We do not store any personal information. Details can be found under [telemetry](getting-started/telemetry.md#usage-statistics).
