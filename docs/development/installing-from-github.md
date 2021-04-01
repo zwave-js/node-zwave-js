@@ -13,7 +13,7 @@ If you need to test changes from GitHub, e.g. a branch that fixes an issue you h
 1. Install dependencies, compile the sources and link the packages
     ```bash
     yarn
-    yarn run build
+    yarn run build:full
     lerna exec -- yarn link
     ```
 1. Open directory of your application, run
@@ -22,3 +22,4 @@ If you need to test changes from GitHub, e.g. a branch that fixes an issue you h
     ```
     If you use other packages from the `@zwave-js/*` scope, link them the same way.
 1. (Re)start your application
+1. If you're planning to work on `zwave-js`, run `yarn run watch` to continuously rebuild the changes
