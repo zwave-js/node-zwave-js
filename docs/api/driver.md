@@ -498,9 +498,9 @@ interface ZWaveOptions {
 	disableOptimisticValueUpdate?: boolean;
 
 	/**
-	 * Information about the application to be included in collected metrics. If this property is not provided, no metrics are collected.
+	 * Information about the application to be included in collected statistics. If this property is not provided, no statistics are collected.
 	 */
-	metrics?: {
+	statistics?: {
 		applicationName: string;
 		applicationVersion: string;
 	};
@@ -517,4 +517,4 @@ The `throttle` option allows you to fine-tune the filesystem. The default value 
 For custom logging options you can use `logConfig`, check [`LogConfig`](#LogConfig) interface for more informations.
 The logging options can be changed on the fly using the [`updateLogConfig`](#updateLogConfig) method.
 
-The `metrics` property is optional, but **we kindly ask you** to use it and enable metrics. It allows us to gain insight how `zwave-js` is used, which manufacturers and devices are most prevalent and where to best focus our efforts in order to improve `zwave-js` the most. We do not store any personal information. Details can be found under [telemetry](getting-started/telemetry.md#usage-statistics).
+The `statistics` property is optional, but **we kindly ask you** to use it and enable statistics. It allows us to gain insight how `zwave-js` is used, which manufacturers and devices are most prevalent and where to best focus our efforts in order to improve `zwave-js` the most. We do not store any personal information. Details can be found under [telemetry](getting-started/telemetry.md#usage-statistics).

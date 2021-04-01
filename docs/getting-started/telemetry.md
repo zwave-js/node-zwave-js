@@ -23,7 +23,7 @@ We also use [Sentry](https://sentry.io) to capture basic information about devic
 
 ## Usage statistics
 
-In order to gain insight how `zwave-js` is used, which manufacturers and devices are most prevalent and where to best focus our efforts in order to improve `zwave-js` the most, we collect statistics. That is **if the application developer has opted in** to this functionality. Since this data may seem more sensitive, we are extra careful - therefore we've built our own metrics stack which is self-hosted next to the Sentry instances. The reports include the following data:
+In order to gain insight how `zwave-js` is used, which manufacturers and devices are most prevalent and where to best focus our efforts in order to improve `zwave-js` the most, we collect statistics. That is **if the application developer has opted in** to this functionality. Since this data may seem more sensitive, we are extra careful - therefore we've built our own statistics stack which is self-hosted next to the Sentry instances. The reports include the following data:
 
 -   The **hash** of the network's home id. This is used to distinguish the individual networks. The hash cannot be reversed to reconstruct the home id.
 -   The application that uses `zwave-js` and its version.
