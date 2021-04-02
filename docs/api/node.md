@@ -634,7 +634,7 @@ The initial interview or reinterview process for this node has started. The node
 A state of the interview process for this node was completed. Only the name of the stage is provided and should not be relied on as stage names are subject to change:
 
 ```ts
-(node: ZWaveNode, completedStageName: string) => void
+(node: ZWaveNode, stageName: string) => void
 ```
 
 ### `"interview completed"`
