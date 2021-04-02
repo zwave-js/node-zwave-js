@@ -26,14 +26,12 @@
 		"2": {
 			"label": "Outlet 1 (Left) State Notification",
 			"description": "When the state of Outlet 1 (Left) is changed, On (0xFF) or Off (0x00). The ZW97 will automatically send out a related command, On (0xFF) or Off (0x00) to its associated group.",
-			"maxNodes": 5,
-			"isLifeline": false
+			"maxNodes": 5
 		},
 		"3": {
 			"label": "Outlet 2 (Left) State Notification",
 			"description": "When the state of Outlet 2 (Right) is changed, On (0xFF) or Off (0x00). The ZW97 will automatically send out a related command, On (0xFF) or Off (0x00) to its associated group.",
-			"maxNodes": 5,
-			"isLifeline": false
+			"maxNodes": 5
 		}
 	},
 	"paramInformation": {
