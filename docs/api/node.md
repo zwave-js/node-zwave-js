@@ -621,9 +621,25 @@ A non-sleeping node has stopped responding or just started responding again. The
 (node: ZWaveNode) => void
 ```
 
+### `"interview started"`
+
+The initial interview or reinterview process for this node has started. The node is passed as the single argument to the callback:
+
+```ts
+(node: ZWaveNode) => void
+```
+
+### `"interview stage completed"`
+
+A state of the interview process for this node was completed. Only the name of the stage is provided and should not be relied on as stage names are subject to change:
+
+```ts
+(node: ZWaveNode, completedStageName: string) => void
+```
+
 ### `"interview completed"`
 
-The initial interview process for this node was completed. The node is passed as the single argument to the callback:
+The initial interview or reinterview process for this node was completed. The node is passed as the single argument to the callback:
 
 ```ts
 (node: ZWaveNode) => void
@@ -676,6 +692,16 @@ There are two situations when this event is emitted:
 
 > [!NOTE]
 > This event does not imply that the node is currently awake or will respond to requests.
+
+### `"not ready"`
+
+This is emitted when a node that was previously ready is no longer ready.
+
+The node is passed as the single argument to the callback:
+
+```ts
+(node: ZWaveNode) => void
+```
 
 ### `"value added"` / `"value updated"` / `"value removed"`
 
