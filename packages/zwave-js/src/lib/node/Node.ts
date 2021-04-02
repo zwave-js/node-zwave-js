@@ -422,11 +422,7 @@ export class ZWaveNode extends Endpoint {
 		if (ready === this._ready) return;
 
 		this._ready = ready;
-		if (ready) {
-			this.emit("ready", this);
-		} else {
-			this.emit("not ready", this);
-		}
+		if (ready) this.emit("ready", this);
 	}
 
 	/**

@@ -166,6 +166,12 @@ Resets all information about this node and forces a fresh interview.
 
 > [!WARNING] Take care NOT to call this method when the node is already being interviewed. Otherwise the node information may become inconsistent.
 
+In `zwave-js-server`, calling this command will trigger a `not ready` event for the node. The node is passed as the single argument to the callback:
+
+```ts
+(node: ZWaveNode) => void
+```
+
 ### `interviewCC`
 
 ```ts
@@ -692,16 +698,6 @@ There are two situations when this event is emitted:
 
 > [!NOTE]
 > This event does not imply that the node is currently awake or will respond to requests.
-
-### `"not ready"`
-
-This is emitted when a node that was previously ready is no longer ready.
-
-The node is passed as the single argument to the callback:
-
-```ts
-(node: ZWaveNode) => void
-```
 
 ### `"value added"` / `"value updated"` / `"value removed"`
 
