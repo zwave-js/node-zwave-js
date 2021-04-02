@@ -86,7 +86,7 @@
 			"allowManualEntry": true
 		}
 	},
-  	"metadata": {
+	"metadata": {
 		"inclusion": "Refer to your primary controller instructions to process the inclusion / exclusion setup procedure.\nWhen prompted by your primary controller, click the PROG button five times in one second.",
 		"exclusion": "-Refer to your primary controller instructions to process the inclusion / exclusion setup procedure.\nWhen prompted by your primary controller, click the PROG button five times in one second.",
 		"reset": "Power off ZW97\n---keep holding the PROG button\n---Power on,Press and keep holding the PROG button for no less than 10 seconds.\nPlease use this procedure only when the network primary controller is missing or otherwise inoperable.",
