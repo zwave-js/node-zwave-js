@@ -5,7 +5,7 @@ import * as path from "path";
 // By installing source map support, we get the original source
 // locations in error messages
 import "source-map-support/register";
-import { initSentry } from "./lib/sentry";
+import { initSentry } from "./lib/telemetry/sentry";
 
 /** The version of zwave-js, exported for your convenience */
 // eslint-disable-next-line @typescript-eslint/no-var-requires

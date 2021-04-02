@@ -32,6 +32,27 @@ The following table gives you an overview of what happens during the startup pro
 |  4   | -                                                                       | `"all nodes ready"` event is emitted for the driver when all nodes can be used                                                                                                |
 |  5   | -                                                                       | `"interview completed"` event is emitted for every node when its interview is completed for the first time. This only gets emitted once, unless the node gets re-interviewed. |
 
+### `enableStatistics`
+
+```ts
+enableStatistics(appInfo: { applicationName: string; applicationVersion: string }): void
+```
+
+Enable sending usage statistics. Although this does not include any sensitive information, we expect that you inform your users about this before enabling statistics.
+
+`applicationName` is the name of your application. Please keep this consistent between versions. `applicationVersion` is the current version of your application. Both must be strings and have a maximum length of 100 characters.
+
+> [!NOTE] Sending usage statistics is optional, but **we kindly ask you** to enable it. It allows us to gain insight how much `zwave-js` is used, which manufacturers and devices are most prevalent and where to best focus our efforts in order to improve `zwave-js` the most.
+> Details including which information is sent can be found under [telemetry](getting-started/telemetry.md#usage-statistics).
+
+### `disableStatistics`
+
+```ts
+disableStatistics(): void
+```
+
+Disable sending usage statistics.
+
 ### `getSupportedCCVersionForEndpoint`
 
 ```ts
@@ -500,10 +521,8 @@ interface ZWaveOptions {
 ```
 
 The timeout values `ack` and `byte` are sent to the Z-Wave stick using the `SetSerialApiTimeouts` command. Change them only if you know what you're doing.
-
 The `report` timeout is used by this library to determine how long to wait for a node's response.
-
-If your network has connectivity issues, you can increase the number of interview attempts the driver makes before giving up. The default is 5.
+If your network has connectivity issues, you can increase the number of interview attempts the driver makes before giving up. The default is `5`.
 
 For more control over writing the cache files, you can use the `storage` options. By default, the cache is located inside `node_modules/zwave-js/cache` and written using Node.js built-in `fs` methods (promisified using `fs-extra`). The replacement file system must adhere to the [`FileSystem`](#FileSystem) interface.
 The `throttle` option allows you to fine-tune the filesystem. The default value `"normal"`

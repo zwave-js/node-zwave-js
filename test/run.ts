@@ -18,10 +18,6 @@ const driver = new Driver("COM5", {
 })
 	.on("error", console.error)
 	.once("driver ready", async () => {
-		driver.on("all nodes ready", async () => {
-			const mc = driver.controller.getMulticastGroup([13, 13]);
-			await mc.commandClasses["Binary Switch"].set(false);
-		});
 		// const cc = new CommandClass(driver, {
 		// 	nodeId: 24,
 		// 	ccId: 0x5d,

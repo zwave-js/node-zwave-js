@@ -34,7 +34,7 @@ import {
 	DeferredPromise,
 } from "alcalzone-shared/deferred-promise";
 import { entries } from "alcalzone-shared/objects";
-import { isArray } from "alcalzone-shared/typeguards";
+import { isArray, isObject } from "alcalzone-shared/typeguards";
 import { EventEmitter } from "events";
 import fsExtra from "fs-extra";
 import path from "path";
@@ -107,6 +107,11 @@ import { getDefaultPriority, Message } from "../message/Message";
 import { isNodeQuery } from "../node/INodeQuery";
 import type { ZWaveNode } from "../node/Node";
 import { InterviewStage, NodeStatus } from "../node/Types";
+import {
+	AppInfo,
+	compileStatistics,
+	sendStatistics,
+} from "../telemetry/statistics";
 import type { FileSystem } from "./FileSystem";
 import {
 	createSendThreadMachine,
@@ -512,20 +517,22 @@ export class Driver extends EventEmitter {
 		// And make sure they contain valid values
 		checkOptions(this.options);
 
-		this._logContainer = new ZWaveLogContainer(this.options.logConfig);
-		this._driverLog = new DriverLogger(this._logContainer);
-		this._controllerLog = new ControllerLogger(this._logContainer);
-
-		this.cacheDir = this.options.storage.cacheDir;
-
-		// Initialize config manager
-		this.configManager = new ConfigManager(this._logContainer);
-
 		// register some cleanup handlers in case the program doesn't get closed cleanly
 		this._cleanupHandler = this._cleanupHandler.bind(this);
 		process.on("exit", this._cleanupHandler);
 		process.on("SIGINT", this._cleanupHandler);
 		process.on("uncaughtException", this._cleanupHandler);
+
+		// Initialize logging
+		this._logContainer = new ZWaveLogContainer(this.options.logConfig);
+		this._driverLog = new DriverLogger(this._logContainer);
+		this._controllerLog = new ControllerLogger(this._logContainer);
+
+		// Initialize the cache
+		this.cacheDir = this.options.storage.cacheDir;
+
+		// Initialize config manager
+		this.configManager = new ConfigManager(this._logContainer);
 
 		// And initialize but don't start the send thread machine
 		const sendThreadMachine = createSendThreadMachine(
@@ -1210,6 +1217,104 @@ export class Driver extends EventEmitter {
 		this.controllerLog.print("All nodes are ready to be used");
 		this.emit("all nodes ready");
 		this._nodesReadyEventEmitted = true;
+
+		// We know we have all data, this is the time to send statistics (when enabled)
+		void this.compileAndSendStatistics().catch(() => {
+			/* ignore */
+		});
+	}
+
+	private statisticsEnabled: boolean = false;
+	private statisticsAppInfo:
+		| Pick<AppInfo, "applicationName" | "applicationVersion">
+		| undefined;
+
+	/**
+	 * Enable sending usage statistics. Although this does not include any sensitive information, we expect that you
+	 * inform your users before enabling statistics.
+	 */
+	public enableStatistics(
+		appInfo: Pick<AppInfo, "applicationName" | "applicationVersion">,
+	): void {
+		if (this.statisticsEnabled) return;
+		this.statisticsEnabled = true;
+
+		if (
+			!isObject(appInfo) ||
+			// wotan-disable-next-line no-useless-predicate
+			typeof appInfo.applicationName !== "string" ||
+			// wotan-disable-next-line no-useless-predicate
+			typeof appInfo.applicationVersion !== "string"
+		) {
+			throw new ZWaveError(
+				`The application statistics must be an object with two string properties "applicationName" and "applicationVersion"!`,
+				ZWaveErrorCodes.Driver_InvalidOptions,
+			);
+		} else if (appInfo.applicationName.length > 100) {
+			throw new ZWaveError(
+				`The applicationName for statistics must be maximum 100 characters long!`,
+				ZWaveErrorCodes.Driver_InvalidOptions,
+			);
+		} else if (appInfo.applicationVersion.length > 100) {
+			throw new ZWaveError(
+				`The applicationVersion for statistics must be maximum 100 characters long!`,
+				ZWaveErrorCodes.Driver_InvalidOptions,
+			);
+		}
+
+		this.statisticsAppInfo = appInfo;
+
+		// If we're already ready, send statistics
+		if (this._nodesReadyEventEmitted) {
+			void this.compileAndSendStatistics().catch(() => {
+				/* ignore */
+			});
+		}
+	}
+
+	/**
+	 * Disable sending usage statistics
+	 */
+	public disableStatistics(): void {
+		this.statisticsEnabled = false;
+		this.statisticsAppInfo = undefined;
+		if (this.statisticsTimeout) {
+			clearTimeout(this.statisticsTimeout);
+			this.statisticsTimeout = undefined;
+		}
+	}
+
+	private statisticsTimeout: NodeJS.Timeout | undefined;
+	private async compileAndSendStatistics(): Promise<void> {
+		// Don't send anything if statistics are not enabled
+		if (!this.statisticsEnabled || !this.statisticsAppInfo) return;
+
+		if (this.statisticsTimeout) {
+			clearTimeout(this.statisticsTimeout);
+			this.statisticsTimeout = undefined;
+		}
+
+		let success = false;
+		try {
+			const statistics = compileStatistics(this, {
+				driverVersion: libVersion,
+				...this.statisticsAppInfo,
+			});
+			success = await sendStatistics(statistics);
+		} catch {
+			// Didn't work - try again in a few hours
+			success = false;
+		} finally {
+			this.driverLog.print(
+				success
+					? `Usage statistics sent - next transmission scheduled in 23 hours.`
+					: `Failed to send usage statistics - next transmission scheduled in 6 hours.`,
+				"verbose",
+			);
+			this.statisticsTimeout = setTimeout(() => {
+				void this.compileAndSendStatistics();
+			}, (success ? 23 : 6) * 3600 * 1000 /* 6 or 23 hours */).unref();
+		}
 	}
 
 	/** Is called when a node interview is completed */
@@ -1480,6 +1585,7 @@ export class Driver extends EventEmitter {
 			this.saveToCacheTimer,
 			...this.sendNodeToSleepTimers.values(),
 			...this.retryNodeInterviewTimeouts.values(),
+			this.statisticsTimeout,
 		]) {
 			if (timeout) clearTimeout(timeout);
 		}
