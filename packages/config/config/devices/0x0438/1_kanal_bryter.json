@@ -15,6 +15,18 @@
 		"min": "0.0",
 		"max": "255.255"
 	},
+	"supportsZWavePlus": true,
+	"associations": {
+		"1": {
+			"label": "LifeLine",
+			"maxNodes": 1,
+			"isLifeline": true
+		},
+		"2": {
+			"label": "Button 1",
+			"maxNodes": 5
+		}
+	},
 	"paramInformation": {
 		"1": {
 			"label": "Factory Reset",
