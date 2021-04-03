@@ -721,7 +721,7 @@
 					"value": 1
 				}
 			]
-		}
+		},
 		"52": {
 			"$if": "firmwareVersion >= 1.47",
 			"label": "Smart Bulb Mode",
