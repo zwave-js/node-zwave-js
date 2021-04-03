@@ -73,7 +73,7 @@
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 100,
-			"defaultValue": 0,
+			"defaultValue": 0
 		},
 		"7": {
 			"label": "Control Items",
