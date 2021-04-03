@@ -70,12 +70,10 @@
 		"6": {
 			"$import": "../templates/master_template.json#base_0-100_nounit",
 			"label": "Play Ringtone",
-			"options": [
-				{
-					"label": "Stop playing",
-					"value": 0
-				}
-			]
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 100,
+			"defaultValue": 0,
 		},
 		"7": {
 			"label": "Control Items",
