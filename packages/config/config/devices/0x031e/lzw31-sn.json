@@ -702,8 +702,8 @@
 		},
 		"51": {
 			"$if": "firmwareVersion >= 1.47",
-			"label": "Instant On",
-			"description": "Enabling this disables the 700ms button delay and multi-tap scenes.",
+			"label": "Physical On/Off Delay",
+			"description": "The delay that occurs after pressing the physical button to turn the switch on/off is removed. Consequently this also removes the following scenes: 2x, 3x, 4x, 5x tap. 1x tap and config button scenes still work.",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 1,
@@ -721,7 +721,7 @@
 					"value": 1
 				}
 			]
-		},
+		}
 		"52": {
 			"$if": "firmwareVersion >= 1.47",
 			"label": "Smart Bulb Mode",
