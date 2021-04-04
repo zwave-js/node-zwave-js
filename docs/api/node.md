@@ -164,13 +164,7 @@ refreshInfo(): Promise<void>
 
 Resets all information about this node and forces a fresh interview.
 
-> [!WARNING] Take care NOT to call this method when the node is already being interviewed. Otherwise the node information may become inconsistent.
-
-In `zwave-js-server`, calling this command will trigger a `not ready` event for the node. The node is passed as the single argument to the callback:
-
-```ts
-(node: ZWaveNode) => void
-```
+> [!WARNING] After calling this method, the node will no longer be `ready`. Keep this in mind if you rely on the `ready` state in your application.
 
 ### `interviewCC`
 
