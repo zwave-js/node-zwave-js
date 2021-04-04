@@ -256,6 +256,10 @@ By default, received `Basic` commands are mapped to a more appropriate CC. Setti
 
 The specifications mandate strict rules for the data in `Entry Control CC Notifications`, which some devices do not follow, causing the notifications to get dropped. Setting `disableStrictEntryControlDataValidation` to `true` disables these strict checks.
 
+### `forceNotificationIdleReset`
+
+Version 8 of the `Notification CC` added the requirement that devices must issue an idle notification after a notification variable is no longer active. Several legacy devices and some misbehaving V8 devices do not return their variables to idle automatically. By setting `forceNotificationIdleReset` to `true`, `zwave-js` auto-idles supporting notification variables after 5 minutes.
+
 ### `manualValueRefreshDelayMs`
 
 Some legacy devices emit an NIF when a local event occurs (e.g. a button press) to signal that the controller should request a status update. However, some of these devices require a delay before they are ready to respond to this request. `manualValueRefreshDelayMs` specifies that delay, expressed in milliseconds. If unset, there will be no delay.

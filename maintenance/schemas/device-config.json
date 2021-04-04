@@ -258,6 +258,9 @@
 				"disableStrictEntryControlDataValidation": {
 					"const": true
 				},
+				"forceNotificationIdleReset": {
+					"const": true
+				},
 				"manualValueRefreshDelayMs": {
 					"type": "number",
 					"minimum": 0
