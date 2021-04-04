@@ -218,7 +218,7 @@ export class MultilevelSensorCC extends CommandClass {
 			direction: "none",
 		});
 
-		if (this.version > 5) {
+		if (this.version >= 5) {
 			// Query the supported sensor types
 			this.driver.controllerLog.logNode(node.id, {
 				endpoint: this.endpointIndex,
