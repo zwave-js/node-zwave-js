@@ -2414,14 +2414,13 @@ protocol version:      ${this._protocolVersion}`;
 				propertyKey,
 			};
 			this.valueDB.setValue(valueId, value);
-			// Nodes before V8 don't necessarily reset the notification to idle
-			// Set a fallback timer in case the node does not reset it.
+			// Nodes before V8 (and some misbehaving V8 ones) don't necessarily reset the notification to idle.
+			// The specifications advise to auto-reset the variables, but it has been found that this interferes
+			// with some motion sensors that don't refresh their active notification. Therefore, we set a fallback
+			// timer if the `forceNotificationIdleReset` compat flag is set.
 			if (
 				allowIdleReset &&
-				this.driver.getSafeCCVersionForNode(
-					CommandClasses.Notification,
-					this.id,
-				) <= 7
+				!!this._deviceConfig?.compat?.forceNotificationIdleReset
 			) {
 				this.scheduleNotificationIdleReset(valueId, () =>
 					setStateIdle(value),
