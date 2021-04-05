@@ -219,11 +219,11 @@
 					"value": 4095
 				}
 			]
-		},
-		"metadata": {
-			"inclusion": "Push the button in the hole near the 'INCLUSION' text with a non-conductive object. The LED will now start blinking",
-			"exclusion": "Push the button in the hole near the 'INCLUSION' text with a non-conductive object. The LED will now start blinking",
-			"reset": "Push the button in the hole near the 'INCLUSION' text with a non-conductive object for 10 seconds. Please use this procedure only when the network primary controller is missing or otherwise inoperable"
-		}
+	},
+	"metadata": {
+		"inclusion": "Push the button in the hole near the 'INCLUSION' text with a non-conductive object. The LED will now start blinking",
+		"exclusion": "Push the button in the hole near the 'INCLUSION' text with a non-conductive object. The LED will now start blinking",
+		"reset": "Push the button in the hole near the 'INCLUSION' text with a non-conductive object for 10 seconds. Please use this procedure only when the network primary controller is missing or otherwise inoperable"
 	}
+}
 }
