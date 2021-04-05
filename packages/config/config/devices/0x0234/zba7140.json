@@ -127,7 +127,6 @@
 			"valueSize": 2
 		},
 		"6[0xff]": {
-			"$import": "../templates/master_template.json#base_enable_disable",
 			"label": "Messages in all association groups are sent as secure",
 			"valueSize": 2,
 			"minValue": 0,
