@@ -122,7 +122,7 @@
 		"13": {
 			"$import": "../templates/master_template.json#base_0-255_nounit",
 			"label": "Threshold for input in latched mode.",
-			"unit": "50 ms",
+			"unit": "500 ms",
 			"defaultValue": 50
 		},
 		"14": {
@@ -159,17 +159,17 @@
 			"label": "Association group 5 secure message",
 			"valueSize": 2
 		},
-		"15[0x16]": {
+		"15[0x10]": {
 			"$import": "../templates/master_template.json#base_enable_disable",
 			"label": "Association group 6 secure message",
 			"valueSize": 2
 		},
-		"15[0x32]": {
+		"15[0x20]": {
 			"$import": "../templates/master_template.json#base_enable_disable",
 			"label": "Association group 7 secure message",
 			"valueSize": 2
 		},
-		"15[0x64]": {
+		"15[0x40]": {
 			"$import": "../templates/master_template.json#base_enable_disable",
 			"label": "Association group 8 secure message",
 			"valueSize": 2
@@ -179,7 +179,7 @@
 			"label": "Association group 9 secure message",
 			"valueSize": 2
 		},
-		"15[0xff]": {
+		"15[0x100]": {
 			"$import": "../templates/master_template.json#base_enable_disable",
 			"label": "Association group 10 secure message",
 			"valueSize": 2
@@ -200,16 +200,31 @@
 			"valueSize": 2
 		},
 		"15[0x0fff]": {
-			"$import": "../templates/master_template.json#base_0-255_nounit",
 			"label": "Messages in all association groups are sent as secure",
 			"valueSize": 2,
+			"minValue": 0,
 			"maxValue": 4095,
-			"defaultValue": 4095
-		}
-	},
-	"metadata": {
-		"inclusion": "Push the button in the hole near the 'INCLUSION' text with a non-conductive object. The LED will now start blinking",
-		"exclusion": "Push the button in the hole near the 'INCLUSION' text with a non-conductive object. The LED will now start blinking",
-		"reset": "Push the button in the hole near the 'INCLUSION' text with a non-conductive object for 10 seconds. Please use this procedure only when the network primary controller is missing or otherwise inoperable"
+			"defaultValue": 4095,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Disable",
+					"value": 0
+				},
+				{
+					"label": "Enable",
+					"value": 4095
+				}
+			]
+		},
 	}
+},
+"metadata": {
+	"inclusion": "Push the button in the hole near the 'INCLUSION' text with a non-conductive object. The LED will now start blinking",
+	"exclusion": "Push the button in the hole near the 'INCLUSION' text with a non-conductive object. The LED will now start blinking",
+	"reset": "Push the button in the hole near the 'INCLUSION' text with a non-conductive object for 10 seconds. Please use this procedure only when the network primary controller is missing or otherwise inoperable"
+}
 }
