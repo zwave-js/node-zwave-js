@@ -4,9 +4,12 @@
 -->
 ## __WORK IN PROGRESS__
 ### Features
-* Add the driver option `disableOptimisticValueUpdate` to opt-out from optimistic `currentValue` update
+* Added the driver option `disableOptimisticValueUpdate` to opt-out from optimistic `currentValue` update
 * More lock/unlock events are now mapped to the `(Door) Lock CC` status
 * Implemented the Bridge API versions of `SendData[Multicast]` commands and prefer them over the Static API variants if supported
+* Added the node events `interview started` and `interview stage completed` to monitor progress of node interviews.
+* Implemented opt-in telemetry for usage statistics. Dear developers, please strongly consider enabling this feature to help us focus our efforts. Details can be found [here](https://zwave-js.github.io/node-zwave-js/#/api/driver?id=enablestatistics) and [here](https://zwave-js.github.io/node-zwave-js/#/getting-started/telemetry?id=usage-statistics).
+* Added the device compat option `enableBasicSetMapping` to opt-in to mapping `Basic CC::Set` commands to other CCs
 
 ### Bugfixes
 * Add missing exports for Message class
@@ -14,6 +17,11 @@
 * Shut down gracefully if the serial port is suddenly not open
 * Handle `CC_NotSupported` and other "freak" errors during node bootstrapping
 * Avoid pinging between ProtocolInfo and NodeInfo interview stages if the node status is known
+* Fixed an issue that caused the `Multilevel Sensor CC` interview to do nothing if `V5` is supported by the node
+* Fixed a crash: `supportedCCs` is not iterable. Added a workaround for crashes caused by the previous fix.
+* Notification variables are no longer automatically set to idle after 5 minutes. If a device does not send idle notifications, the compat flag `forceNotificationIdleReset` must now be enabled in the configuration files.
+* `ConfigurationMetadata` is now part of the `ValueMetadata` union type.
+* Changes to the loglevel now work correctly on the fly
 
 ### Config file changes
 * Removed compat flag `preserveRootApplicationCCValueIDs` from Zooz Zen16/17 again
