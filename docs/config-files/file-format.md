@@ -250,7 +250,7 @@ If a device reports support for a CCs but does not correctly support it, this ca
 
 ### `disableBasicMapping`
 
-By default, received `Basic` commands are mapped to a more appropriate CC. Setting `disableBasicMapping` to `true` disables this feature.
+By default, received `Basic CC::Report` commands are mapped to a more appropriate CC. Setting `disableBasicMapping` to `true` disables this feature.
 
 ### `disableStrictEntryControlDataValidation`
 
