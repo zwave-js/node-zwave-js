@@ -2,7 +2,7 @@
 <!--
 	Add placeholder for next release with `wip` snippet
 -->
-## __WORK IN PROGRESS__
+## 7.1.0 (2021-04-05)
 ### Features
 * Added the driver option `disableOptimisticValueUpdate` to opt-out from optimistic `currentValue` update
 * More lock/unlock events are now mapped to the `(Door) Lock CC` status
