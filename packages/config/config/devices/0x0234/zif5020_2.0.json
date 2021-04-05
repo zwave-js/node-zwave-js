@@ -122,7 +122,7 @@
 		"13": {
 			"$import": "../templates/master_template.json#base_0-255_nounit",
 			"label": "Threshold for input in latched mode.",
-			"unit": "500 ms",
+			"unit": "50 ms",
 			"defaultValue": 50
 		},
 		"14": {
@@ -179,7 +179,7 @@
 			"label": "Association group 9 secure message",
 			"valueSize": 2
 		},
-		"15[0x100]": {
+		"15[0xff]": {
 			"$import": "../templates/master_template.json#base_enable_disable",
 			"label": "Association group 10 secure message",
 			"valueSize": 2
@@ -219,6 +219,7 @@
 					"value": 4095
 				}
 			]
+		}
 	},
 	"metadata": {
 		"inclusion": "Push the button in the hole near the 'INCLUSION' text with a non-conductive object. The LED will now start blinking",
