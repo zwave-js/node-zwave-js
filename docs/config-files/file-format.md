@@ -250,11 +250,17 @@ If a device reports support for a CCs but does not correctly support it, this ca
 
 ### `disableBasicMapping`
 
-By default, received `Basic` commands are mapped to a more appropriate CC. Setting `disableBasicMapping` to `true` disables this feature.
+By default, received `Basic CC::Report` commands are mapped to a more appropriate CC. Setting `disableBasicMapping` to `true` disables this feature.
 
 ### `disableStrictEntryControlDataValidation`
 
 The specifications mandate strict rules for the data in `Entry Control CC Notifications`, which some devices do not follow, causing the notifications to get dropped. Setting `disableStrictEntryControlDataValidation` to `true` disables these strict checks.
+
+### `enableBasicSetMapping`
+
+`Basic CC::Set` commands are not meant to be mapped to other CCs. Some devices still use them to report status. By setting `enableBasicSetMapping` to `true`, `Basic CC::Set` commands are mapped just like `Basic CC::Report`s.
+
+> [!NOTE] The option `disableBasicMapping` has precedence. If that is `true`, no `Basic` commands will be mapped.
 
 ### `forceNotificationIdleReset`
 
