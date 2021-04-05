@@ -79,6 +79,18 @@ error in compat option disableStrictEntryControlDataValidation`,
 				definition.disableStrictEntryControlDataValidation;
 		}
 
+		if (definition.enableBasicSetMapping != undefined) {
+			if (definition.enableBasicSetMapping !== true) {
+				throwInvalidConfig(
+					"devices",
+					`config/devices/${filename}:
+error in compat option enableBasicSetMapping`,
+				);
+			}
+
+			this.enableBasicSetMapping = definition.enableBasicSetMapping;
+		}
+
 		if (definition.forceNotificationIdleReset != undefined) {
 			if (definition.forceNotificationIdleReset !== true) {
 				throwInvalidConfig(
@@ -366,6 +378,7 @@ compat option alarmMapping must be an array where all items are objects!`,
 	>;
 	public readonly disableBasicMapping?: boolean;
 	public readonly disableStrictEntryControlDataValidation?: boolean;
+	public readonly enableBasicSetMapping?: boolean;
 	public readonly forceNotificationIdleReset?: boolean;
 	public readonly manualValueRefreshDelayMs?: number;
 	public readonly mapRootReportsToEndpoints?: boolean;

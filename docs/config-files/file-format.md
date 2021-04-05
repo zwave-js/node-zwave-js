@@ -256,6 +256,12 @@ By default, received `Basic` commands are mapped to a more appropriate CC. Setti
 
 The specifications mandate strict rules for the data in `Entry Control CC Notifications`, which some devices do not follow, causing the notifications to get dropped. Setting `disableStrictEntryControlDataValidation` to `true` disables these strict checks.
 
+### `enableBasicSetMapping`
+
+`Basic CC::Set` commands are not meant to be mapped to other CCs. Some devices still use them to report status. By setting `enableBasicSetMapping` to `true`, `Basic CC::Set` commands are mapped just like `Basic CC::Report`s.
+
+> [!NOTE] The option `disableBasicMapping` has precedence. If that is `true`, no `Basic` commands will be mapped.
+
 ### `forceNotificationIdleReset`
 
 Version 8 of the `Notification CC` added the requirement that devices must issue an idle notification after a notification variable is no longer active. Several legacy devices and some misbehaving V8 devices do not return their variables to idle automatically. By setting `forceNotificationIdleReset` to `true`, `zwave-js` auto-idles supporting notification variables after 5 minutes.

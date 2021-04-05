@@ -2268,17 +2268,25 @@ protocol version:      ${this._protocolVersion}`;
 					message: "treating BasicCC::Set as a report",
 				});
 
-				// Basic Set commands cannot store their value automatically, so store the values manually
-				this._valueDB.setValue(
-					getBasicCCCurrentValueValueId(command.endpointIndex),
-					command.targetValue,
-				);
-				// Since the node sent us a Basic command, we are sure that it is at least controlled
-				// Add it to the support list, so the information lands in the network cache
-				if (!sourceEndpoint.controlsCC(CommandClasses.Basic)) {
-					sourceEndpoint.addCC(CommandClasses.Basic, {
-						isControlled: true,
-					});
+				// If enabled in a config file, try to set the mapped value on the target CC first
+				const didSetMappedValue =
+					!!this._deviceConfig?.compat?.enableBasicSetMapping &&
+					!!mappedTargetCC?.setMappedBasicValue(command.targetValue);
+
+				// Otherwise handle the command ourselves
+				if (!didSetMappedValue) {
+					// Basic Set commands cannot store their value automatically, so store the values manually
+					this._valueDB.setValue(
+						getBasicCCCurrentValueValueId(command.endpointIndex),
+						command.targetValue,
+					);
+					// Since the node sent us a Basic command, we are sure that it is at least controlled
+					// Add it to the support list, so the information lands in the network cache
+					if (!sourceEndpoint.controlsCC(CommandClasses.Basic)) {
+						sourceEndpoint.addCC(CommandClasses.Basic, {
+							isControlled: true,
+						});
+					}
 				}
 			}
 		}

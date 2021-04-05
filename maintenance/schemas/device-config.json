@@ -258,6 +258,9 @@
 				"disableStrictEntryControlDataValidation": {
 					"const": true
 				},
+				"enableBasicSetMapping": {
+					"const": true
+				},
 				"forceNotificationIdleReset": {
 					"const": true
 				},
