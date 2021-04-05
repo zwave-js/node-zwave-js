@@ -2,8 +2,8 @@
 {
 	"manufacturer": "Namron AS",
 	"manufacturerId": "0x0438",
-	"label": "4 KANALER BRYTER",
-	"description": "The remote control is a Z-Wave device that can both control other Z-Wave devices and activate scenes in Gateways. Although it is controlling other devices, the device cannot act as Z-Wave network controller (primary or secondary) and will always need a Z-Wave network controller to be included into a Z-Wave network. It also supports the Over The Air (OTA) feature for the product’s firmware upgrade.\n The remote control has following functions:\n 1. Control of groups of other Z-Wave devices using 'ON', 'OFF' and Dim commands.\n 2. Activation of scenes in Gateway mode.\n The encryption modes that the remote control supports are S0, S2 Authenticated, S2 Unauthenticated. When the remote control is being included into a Z-Wave network, you can use your primary controller/gateway to enable one encryption mode or disable encryption. (The primary controller/gateway shall support encryption mode configuration).",
+	"label": "7070990327770",
+	"description": "Namron 4 kanaler bryter K8",
 	"devices": [
 		{
 			"productType": "0x0300",
@@ -15,7 +15,6 @@
 		"min": "0.0",
 		"max": "255.255"
 	},
-	"supportsZWavePlus": true,
 	"associations": {
 		"1": {
 			"label": "LifeLine",

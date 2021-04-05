@@ -2,8 +2,8 @@
 {
 	"manufacturer": "Namron AS",
 	"manufacturerId": "0x0438",
-	"label": "2 KANALER BRYTER",
-	"description": "",
+	"label": "7070990328562",
+	"description": "Namron 2 kanaler bryter K4",
 	"devices": [
 		{
 			"productType": "0x0300",
@@ -15,7 +15,6 @@
 		"min": "0.0",
 		"max": "255.255"
 	},
-	"supportsZWavePlus": true,
 	"associations": {
 		"1": {
 			"label": "LifeLine",
