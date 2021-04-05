@@ -164,7 +164,7 @@ refreshInfo(): Promise<void>
 
 Resets all information about this node and forces a fresh interview.
 
-> [!WARNING] Take care NOT to call this method when the node is already being interviewed. Otherwise the node information may become inconsistent.
+> [!WARNING] After calling this method, the node will no longer be `ready`. Keep this in mind if you rely on the `ready` state in your application.
 
 ### `interviewCC`
 
@@ -621,9 +621,25 @@ A non-sleeping node has stopped responding or just started responding again. The
 (node: ZWaveNode) => void
 ```
 
+### `"interview started"`
+
+The initial interview or reinterview process for this node has started. The node is passed as the single argument to the callback:
+
+```ts
+(node: ZWaveNode) => void
+```
+
+### `"interview stage completed"`
+
+A state of the interview process for this node was completed. Only the name of the stage is provided and should not be relied on as stage names are subject to change:
+
+```ts
+(node: ZWaveNode, stageName: string) => void
+```
+
 ### `"interview completed"`
 
-The initial interview process for this node was completed. The node is passed as the single argument to the callback:
+The initial interview or reinterview process for this node was completed. The node is passed as the single argument to the callback:
 
 ```ts
 (node: ZWaveNode) => void

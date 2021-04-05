@@ -1022,6 +1022,7 @@ export class ZWaveNode extends Endpoint {
 				this.id,
 				`new node, doing a full interview...`,
 			);
+			this.emit("interview started", this);
 			await this.queryProtocolInfo();
 		}
 
@@ -1076,6 +1077,11 @@ export class ZWaveNode extends Endpoint {
 		completedStage: InterviewStage,
 	): Promise<void> {
 		this.interviewStage = completedStage;
+		this.emit(
+			"interview stage completed",
+			this,
+			getEnumMemberName(InterviewStage, completedStage),
+		);
 		// Also save to the cache after certain stages
 		switch (completedStage) {
 			case InterviewStage.ProtocolInfo:

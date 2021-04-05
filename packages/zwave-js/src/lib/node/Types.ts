@@ -102,6 +102,8 @@ export interface ZWaveNodeEventCallbacks extends ZWaveNodeValueEventCallbacks {
 	alive: ZWaveNodeStatusChangeCallback;
 	"interview completed": (node: ZWaveNode) => void;
 	ready: (node: ZWaveNode) => void;
+	"interview stage completed": (node: ZWaveNode, stageName: string) => void;
+	"interview started": (node: ZWaveNode) => void;
 }
 
 export type ZWaveNodeEvents = Extract<keyof ZWaveNodeEventCallbacks, string>;
