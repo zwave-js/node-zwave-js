@@ -179,7 +179,7 @@
 			"label": "Association group 9 secure message",
 			"valueSize": 2
 		},
-		"15[0xff]": {
+		"15[0x100]": {
 			"$import": "../templates/master_template.json#base_enable_disable",
 			"label": "Association group 10 secure message",
 			"valueSize": 2
