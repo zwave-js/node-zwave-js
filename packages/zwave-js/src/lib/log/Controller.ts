@@ -34,23 +34,12 @@ export class ControllerLogger extends ZWaveLoggerBase {
 		super(loggers, CONTROLLER_LABEL);
 	}
 
-	private _isValueLogVisible: boolean | undefined;
 	private isValueLogVisible(): boolean {
-		if (this._isValueLogVisible === undefined) {
-			this._isValueLogVisible = this.container.isLoglevelVisible(
-				VALUE_LOGLEVEL,
-			);
-		}
-		return this._isValueLogVisible;
+		return this.container.isLoglevelVisible(VALUE_LOGLEVEL);
 	}
-	private _isControllerLogVisible: boolean | undefined;
+
 	private isControllerLogVisible(): boolean {
-		if (this._isControllerLogVisible === undefined) {
-			this._isControllerLogVisible = this.container.isLoglevelVisible(
-				CONTROLLER_LOGLEVEL,
-			);
-		}
-		return this._isControllerLogVisible;
+		return this.container.isLoglevelVisible(CONTROLLER_LOGLEVEL);
 	}
 
 	/**

@@ -30,23 +30,12 @@ export class DriverLogger extends ZWaveLoggerBase {
 		super(loggers, DRIVER_LABEL);
 	}
 
-	private _isDriverLogVisible: boolean | undefined;
 	private isDriverLogVisible(): boolean {
-		if (this._isDriverLogVisible === undefined) {
-			this._isDriverLogVisible = this.container.isLoglevelVisible(
-				DRIVER_LOGLEVEL,
-			);
-		}
-		return this._isDriverLogVisible;
+		return this.container.isLoglevelVisible(DRIVER_LOGLEVEL);
 	}
-	private _isSendQueueLogVisible: boolean | undefined;
+
 	private isSendQueueLogVisible(): boolean {
-		if (this._isSendQueueLogVisible === undefined) {
-			this._isSendQueueLogVisible = this.container.isLoglevelVisible(
-				SENDQUEUE_LOGLEVEL,
-			);
-		}
-		return this._isSendQueueLogVisible;
+		return this.container.isLoglevelVisible(SENDQUEUE_LOGLEVEL);
 	}
 
 	/**

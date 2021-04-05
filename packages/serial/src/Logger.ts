@@ -16,12 +16,8 @@ export class SerialLogger extends ZWaveLoggerBase {
 		super(loggers, SERIAL_LABEL);
 	}
 
-	private _isVisible: boolean | undefined;
 	private isVisible(): boolean {
-		if (this._isVisible === undefined) {
-			this._isVisible = this.container.isLoglevelVisible(SERIAL_LOGLEVEL);
-		}
-		return this._isVisible;
+		return this.container.isLoglevelVisible(SERIAL_LOGLEVEL);
 	}
 
 	/**
