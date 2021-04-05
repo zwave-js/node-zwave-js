@@ -1,15 +1,14 @@
-// Logic Group ZDB5100
-// MATRIX Switch with Dimmer and Backlight
+// Logic Group ZDB5400
+// MATRIX 55 Switch with Dimmer and Backlight
 {
 	"manufacturer": "Logic Group",
 	"manufacturerId": "0x0234",
-	"label": "ZDB5100",
+	"label": "ZDB5400",
 	"description": "Wall Switch",
 	"devices": [
 		{
 			"productType": "0x0003",
-			"productId": "0x0121",
-			"zwaveAllianceId": 3399
+			"productId": "0x0124"
 		}
 	],
 	"firmwareVersion": {
@@ -76,6 +75,9 @@
 		}
 	},
 	"paramInformation": {
+		"0": {
+			"$import": "templates/logic_group_template.json#dimmer_pushbutton"
+		},
 		"1[0xff]": {
 			"$import": "templates/logic_group_template.json#dimmer_pushbutton"
 		},
@@ -133,10 +135,7 @@
 			"label": "Enhanced LED control"
 		},
 		"11": {
-			"$import": "../templates/master_template.json#base_1-255_nounit",
-			"label": "Pushbutton debounce timer",
-			"unit": "10 ms",
-			"defaultValue": 5
+			"$import": "templates/logic_group_template.json#pushbutton_debounce"
 		},
 		"12": {
 			"$import": "../templates/master_template.json#base_1-255_nounit",
@@ -267,7 +266,7 @@
 		},
 		"19": {
 			"$import": "templates/logic_group_template.json#binary_switch_set",
-			"label": "Binary Switch Set support for pushbutton 1"
+			"label": "Binary Switch Set Function for pushbutton 1"
 		},
 		"20": {
 			"$import": "templates/logic_group_template.json#pushbutton_led_indicator",
@@ -347,7 +346,7 @@
 		},
 		"27": {
 			"$import": "templates/logic_group_template.json#binary_switch_set",
-			"label": "Binary Switch Set Support For Pushbutton 2"
+			"label": "Binary Switch Set Function For Pushbutton 2"
 		},
 		"28": {
 			"$import": "templates/logic_group_template.json#pushbutton_led_indicator",
@@ -427,7 +426,7 @@
 		},
 		"35": {
 			"$import": "templates/logic_group_template.json#binary_switch_set",
-			"label": "Binary Switch Set Support For Pushbutton 3"
+			"label": "Binary Switch Set Function For Pushbutton 3"
 		},
 		"36": {
 			"$import": "templates/logic_group_template.json#pushbutton_led_indicator",
@@ -507,7 +506,7 @@
 		},
 		"43": {
 			"$import": "templates/logic_group_template.json#binary_switch_set",
-			"label": "Binary Switch Set Support For Pushbutton 4"
+			"label": "Binary Switch Set Function For Pushbutton 4"
 		},
 		"44": {
 			"$import": "templates/logic_group_template.json#pushbutton_led_indicator",
@@ -562,6 +561,6 @@
 		"inclusion": "Remove white pushbutton cover and press on the center switch with a non-conductive object. The LEDs will now start blinking on pushbutton 1 (upper left pushbutton)",
 		"exclusion": "Remove white pushbutton cover and press on the center switch with a non-conductive object. The LEDs will now start blinking on pushbutton 1 (upper left pushbutton)",
 		"reset": "Remove white pushbutton cover and long-press the center switch for 10 seconds with a non-conductive object. Please use this procedure only when the network primary controller is missing or otherwise inoperable",
-		"manual": "https://products.z-wavealliance.org/ProductManual/File?folder=&filename=MarketCertificationFiles/3399/MATRIX_ZDB5100_User_Manual_1_01-EN.pdf"
+		"manual": "https://products.z-wavealliance.org/ProductManual/File?folder=&filename=product_documents/3623/ZDB5400-Manual.pdf"
 	}
 }
