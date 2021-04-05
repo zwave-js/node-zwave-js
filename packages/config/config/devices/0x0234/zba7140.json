@@ -137,15 +137,15 @@
 			"readOnly": false,
 			"writeOnly": false,
 			"allowManualEntry": false,
-			"options":[
-			{
-				"label": "Disable",
-				"value": 0
-			},
-			{
-				"label": "Enable",
-				"value": 255
-			}
+			"options": [
+				{
+					"label": "Disable",
+					"value": 0
+				},
+				{
+					"label": "Enable",
+					"value": 255
+				}
 			]
 		},
 		"7": {

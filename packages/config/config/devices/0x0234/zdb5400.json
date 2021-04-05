@@ -237,15 +237,15 @@
 			"readOnly": false,
 			"writeOnly": false,
 			"allowManualEntry": false,
-			"options":[
-			{
-				"label": "Disable",
-				"value": 0
-			},
-			{
-				"label": "Enable",
-				"value": 8191
-			}
+			"options": [
+				{
+					"label": "Disable",
+					"value": 0
+				},
+				{
+					"label": "Enable",
+					"value": 8191
+				}
 			]
 		},
 		"16": {
@@ -387,7 +387,7 @@
 			"unit": "100 ms",
 			"valueSize": 4,
 			"defaultValue": 0
-		},		
+		},
 		"31[0xff000000]": {
 			"$import": "templates/logic_group_template.json#led_indicator",
 			"label": "Pushbutton 2 LED indicator OFF Red",
