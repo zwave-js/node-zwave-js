@@ -137,6 +137,9 @@ export class ZWaveLogContainer extends winston.Container {
 			this.add(label, {
 				transports: this.getConfiguredTransports(),
 				format: createLoggerFormat(label),
+				// Accept all logs, no matter what. The individual loggers take care
+				// of filtering the wrong loglevels
+				level: "silly",
 			});
 		}
 
@@ -243,7 +246,6 @@ export class ZWaveLogContainer extends winston.Container {
 
 	private createConsoleTransport(): ConsoleTransportInstance {
 		return new winston.transports.Console({
-			level: getTransportLoglevel(),
 			format: createDefaultTransportFormat(
 				// Only colorize the output if logging to a TTY, otherwise we'll get
 				// ansi color codes in logfiles or redirected shells
@@ -266,7 +268,6 @@ export class ZWaveLogContainer extends winston.Container {
 	private createFileTransport(): FileTransportInstance {
 		return new winston.transports.File({
 			filename: this.logConfig.filename,
-			level: getTransportLoglevel(),
 			format: createDefaultTransportFormat(false, false),
 			silent: this.isFileTransportSilent(),
 		});
