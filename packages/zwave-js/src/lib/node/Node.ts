@@ -823,11 +823,18 @@ export class ZWaveNode extends Endpoint {
 	}
 
 	private getEndpointCCs(index: number): CommandClasses[] | undefined {
-		return this.getValue(
+		const ret = this.getValue(
 			getEndpointCCsValueId(
 				this.endpointsHaveIdenticalCapabilities ? 1 : index,
 			),
 		);
+		// Workaround for the change in #1977
+		if (isArray(ret)) {
+			// The value is set up correctly, return it
+			return ret as CommandClasses[];
+		} else if (isObject(ret) && "supportedCCs" in ret) {
+			return ret.supportedCCs as CommandClasses[];
+		}
 	}
 
 	/** Returns the current endpoint count of this node */
