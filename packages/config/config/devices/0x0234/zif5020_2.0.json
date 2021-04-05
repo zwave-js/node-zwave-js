@@ -1,10 +1,8 @@
-// Logic Group ZIF5020
-// DIN-rail module with 10 digital ouputs and 4 digital inputs
 {
 	"manufacturer": "Logic Group",
 	"manufacturerId": "0x0234",
 	"label": "ZIF5020",
-	"description": "DIN Rail Relays",
+	"description": "DIN Rail Interface",
 	"devices": [
 		{
 			"productType": "0x0003",
@@ -132,11 +130,11 @@
 			"defaultValue": 0,
 			"options": [
 				{
-					"label": "Enabled",
+					"label": "Enable",
 					"value": 0
 				},
 				{
-					"label": "Disabled",
+					"label": "Disable",
 					"value": 1
 				}
 			]

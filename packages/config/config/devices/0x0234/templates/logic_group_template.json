@@ -24,14 +24,18 @@
 	"multilevel_duration_function": {
 		"$import": "../../templates/master_template.json#base_0-255_nounit",
 		"label": "Duration",
-		"valueSize": 4,
-		"defaultValue": 0
+		"valueSize": 4
 	},
 	"multilevel_disabled_byte": {
-		"$import": "../../templates/master_template.json#base_enable_disable",
-		"label": "Disabled Byte",
+		"label": "Disable",
 		"valueSize": 4,
-		"defaultValue": 0
+		"minValue": 0,
+		"maxValue": 0,
+		"defaultValue": 0,
+		"unsigned": true,
+		"readOnly": false,
+		"writeOnly": false,
+		"allowManualEntry": true
 	},
 	"button_pressed_threshold_time": {
 		"label": "Pushbutton press threshold time",
@@ -60,14 +64,14 @@
 		"valueSize": 1,
 		"minValue": 0,
 		"maxValue": 255,
-		"defaultValue": 1,
+		"defaultValue": 0,
 		"unsigned": true,
 		"readOnly": false,
 		"writeOnly": false,
 		"allowManualEntry": false,
 		"options": [
 			{
-				"label": "Disabled",
+				"label": "Disable",
 				"value": 0
 			},
 			{
@@ -113,7 +117,7 @@
 		"$import": "../../templates/master_template.json#base_0-255_nounit",
 		"label": "Global brightness LED",
 		"valueSize": 4,
-		"defaultValue": 127
+		"defaultValue": 255
 	},
 	"color_command_pushbutton": {
 		"label": "Color Commands LED indicator",
@@ -201,6 +205,7 @@
 	"led_indicator": {
 		"$import": "../../templates/master_template.json#base_0-255_nounit",
 		"label": "Pushbutton LED indicator",
+		"unsigned": true,
 		"valueSize": 4,
 		"defaultValue": 0
 	},
@@ -246,7 +251,7 @@
 		]
 	},
 	"binary_switch_set": {
-		"label": "Binary Switch Set Function",
+		"label": "Binary Switch Set support",
 		"valueSize": 1,
 		"minValue": 0,
 		"maxValue": 2,
@@ -261,11 +266,11 @@
 				"value": 0
 			},
 			{
-				"label": "Internal switch and LED",
+				"label": "Switch and LED",
 				"value": 1
 			},
 			{
-				"label": "Toggle Pushbutton",
+				"label": "Pushbutton activated",
 				"value": 2
 			}
 		]
@@ -330,7 +335,6 @@
 	"output_function_relay": {
 		"$import": "../../templates/master_template.json#base_enable_disable",
 		"label": "Output function",
-		"defaultValue": 1,
 		"options": [
 			{
 				"label": "Controlled via Z-Wave messages",
@@ -543,7 +547,7 @@
 	},
 	"pushbutton_debounce": {
 		"$import": "../../templates/master_template.json#base_1-255_nounit",
-		"label": "Pushbutton Debounce Timer",
+		"label": "Pushbutton debounce timer",
 		"unit": "10 ms",
 		"valueSize": 1,
 		"defaultValue": 5

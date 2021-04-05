@@ -1,10 +1,8 @@
-// Logic Group ZIF5028 / HeatIt Z-DIN 616
-// 6 relay switches and 6 digital inputs module for DIN rail
 {
 	"manufacturer": "Logic Group",
 	"manufacturerId": "0x0234",
 	"label": "ZIF5028",
-	"description": "DIN Rail Relays",
+	"description": "DIN Rail Interface",
 	"devices": [
 		{
 			"productType": "0x0003",
@@ -102,7 +100,7 @@
 			"$import": "templates/logic_group_template.json#led_brightness"
 		},
 		"3": {
-			"$import": "templates/logic_group_template.json#input_funtion_relay_setup",
+			"$import": "templates/logic_group_template.json#input_funtion_relay",
 			"label": "Function setup of input 1"
 		},
 		"4": {
@@ -110,7 +108,7 @@
 			"label": "Timer for input 1"
 		},
 		"5": {
-			"$import": "templates/logic_group_template.json#input_funtion_relay_setup",
+			"$import": "templates/logic_group_template.json#input_funtion_relay",
 			"label": "Function setup of input 2"
 		},
 		"6": {
@@ -118,7 +116,7 @@
 			"label": "Timer for input 2"
 		},
 		"7": {
-			"$import": "templates/logic_group_template.json#input_funtion_relay_setup",
+			"$import": "templates/logic_group_template.json#input_funtion_relay",
 			"label": "Function setup of input 3"
 		},
 		"8": {
@@ -126,7 +124,7 @@
 			"label": "Timer for input 3"
 		},
 		"9": {
-			"$import": "templates/logic_group_template.json#input_funtion_relay_setup",
+			"$import": "templates/logic_group_template.json#input_funtion_relay",
 			"label": "Function setup of input 4"
 		},
 		"10": {
@@ -134,7 +132,7 @@
 			"label": "Timer for input 4"
 		},
 		"11": {
-			"$import": "templates/logic_group_template.json#input_funtion_relay_setup",
+			"$import": "templates/logic_group_template.json#input_funtion_relay",
 			"label": "Function setup of input 5"
 		},
 		"12": {
@@ -142,7 +140,7 @@
 			"label": "Timer for input 5"
 		},
 		"13": {
-			"$import": "templates/logic_group_template.json#input_funtion_relay_setup",
+			"$import": "templates/logic_group_template.json#input_funtion_relay",
 			"label": "Function setup of input 6"
 		},
 		"14": {
@@ -204,7 +202,7 @@
 		},
 		"24": {
 			"$import": "templates/logic_group_template.json#output_function_relay",
-			"label": "Output 6"
+			"label": "Function setup of input 6"
 		}
 	},
 	"metadata": {
