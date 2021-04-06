@@ -1,9 +1,9 @@
-// AEON Labs DSC26103-ZW
+// AEON Labs DSC26
 // Micro Switch G2
 {
 	"manufacturer": "AEON Labs",
 	"manufacturerId": "0x0086",
-	"label": "DSC26103-ZW",
+	"label": "DSC26",
 	"description": "Micro Switch G2",
 	"devices": [
 		{

@@ -1028,7 +1028,7 @@
 		"maxValue": 255,
 		"defaultValue": 0,
 		"readOnly": false,
-		"writeOnly": false,
+		"writeOnly": true,
 		"allowManualEntry": true
 	},
 	"blink_length": {
@@ -1040,7 +1040,7 @@
 		"maxValue": 255,
 		"defaultValue": 0,
 		"readOnly": false,
-		"writeOnly": false,
+		"writeOnly": true,
 		"allowManualEntry": true
 	},
 	"motion_timeout": {
