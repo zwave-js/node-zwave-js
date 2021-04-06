@@ -2,7 +2,7 @@
 <!--
 	Add placeholder for next release with `wip` snippet
 -->
-## __WORK IN PROGRESS__
+## 7.1.1 (2021-04-06)
 ### Changes under the hood
 * Usage statistics now use a random 32 byte value to salt the HomeID hash
 
