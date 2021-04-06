@@ -375,37 +375,6 @@
 				}
 			]
 		},
-		"132": {
-			"label": "Run Schedule",
-			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 1,
-			"defaultValue": 0,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "not running schedule",
-					"value": 0
-				},
-				{
-					"label": "running schedule",
-					"value": 1
-				}
-			]
-		},
-		"137": {
-			"label": "Backlight Timeout",
-			"unit": "seconds",
-			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 120,
-			"defaultValue": 30,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
-		},
 		"141": {
 			"label": "Screen Timeout",
 			"valueSize": 1,
@@ -432,16 +401,6 @@
 			"minValue": 0,
 			"maxValue": 20,
 			"defaultValue": 10,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
-		},
-		"185": {
-			"label": "Schedule Enable",
-			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 1,
-			"defaultValue": 0,
 			"readOnly": false,
 			"writeOnly": false,
 			"allowManualEntry": true
