@@ -20,10 +20,8 @@ import { buffer2hex, num2hex, pick } from "@zwave-js/shared";
 import { randomBytes } from "crypto";
 import type { ZWaveController } from "../controller/Controller";
 import { SendDataBridgeRequest } from "../controller/SendDataBridgeMessages";
-import {
-	SendDataRequest,
-	TransmitOptions,
-} from "../controller/SendDataMessages";
+import { SendDataRequest } from "../controller/SendDataMessages";
+import { TransmitOptions } from "../controller/SendDataShared";
 import type { Driver } from "../driver/Driver";
 import { FunctionType, MessagePriority } from "../message/Constants";
 import { PhysicalCCAPI } from "./API";

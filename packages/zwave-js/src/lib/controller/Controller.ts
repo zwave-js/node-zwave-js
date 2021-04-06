@@ -39,6 +39,8 @@ import type {
 } from "../commandclass/MultiChannelAssociationCC";
 import type { Driver, RequestHandler } from "../driver/Driver";
 import { FunctionType } from "../message/Constants";
+import type { Message } from "../message/Message";
+import type { SuccessIndicator } from "../message/SuccessIndicator";
 import { DeviceClass } from "../node/DeviceClass";
 import { ZWaveNode } from "../node/Node";
 import { InterviewStage, NodeStatus } from "../node/Types";
@@ -108,6 +110,7 @@ import {
 	SetSerialApiTimeoutsRequest,
 	SetSerialApiTimeoutsResponse,
 } from "./SetSerialApiTimeoutsMessages";
+import { SetSUCNodeIdRequest } from "./SetSUCNodeIDMessages";
 import { ZWaveLibraryTypes } from "./ZWaveLibraryTypes";
 
 export type HealNodeStatus = "pending" | "done" | "failed" | "skipped";
@@ -1645,6 +1648,25 @@ ${associatedNodes.join(", ")}`,
 		return true;
 	}
 
+	/** Configures the given Node to be SUC/SIS or not */
+	public async configureSUC(
+		nodeId: number,
+		enableSUC: boolean,
+		enableSIS: boolean,
+	): Promise<boolean> {
+		const result = await this.driver.sendMessage<
+			Message & SuccessIndicator
+		>(
+			new SetSUCNodeIdRequest(this.driver, {
+				sucNodeId: nodeId,
+				enableSUC,
+				enableSIS,
+			}),
+		);
+
+		return result.isOK();
+	}
+
 	public async assignReturnRoute(
 		nodeId: number,
 		destinationNodeId: number,
@@ -1656,6 +1678,7 @@ ${associatedNodes.join(", ")}`,
 			}),
 		);
 	}
+
 	/**
 	 * Returns a dictionary of all association groups of this node and their information.
 	 * This only works AFTER the interview process
