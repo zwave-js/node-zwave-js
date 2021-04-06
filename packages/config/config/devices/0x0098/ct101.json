@@ -68,12 +68,71 @@
 				}
 			]
 		},
-		"2": {
-			"label": "HVAC Settings",
-			"description": "Configured HVAC settings",
+		"2[0xff]": {
+			"label": "HVAC Type",
+			"valueSize": 4,
+			"minValue": 1,
+			"maxValue": 2,
+			"defaultValue": 1,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Normal",
+					"value": 1
+				},
+				{
+					"label": "Heat Pump",
+					"value": 2
+				}
+			]
+		},
+		"2[0x0f00]": {
+			"label": "# of Auxiliary or Heat Stages",
 			"valueSize": 4,
 			"minValue": 0,
-			"maxValue": 0,
+			"maxValue": 15,
+			"defaultValue": 0,
+			"readOnly": true,
+			"writeOnly": false,
+			"allowManualEntry": false
+		},
+		"2[0xf000]": {
+			"label": "Aux Setup Type",
+			"valueSize": 4,
+			"minValue": 1,
+			"maxValue": 2,
+			"readOnly": true,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Gas",
+					"value": 1
+				},
+				{
+					"label": "Electric",
+					"value": 2
+				}
+			]
+		},
+		"2[0xff0000]": {
+			"label": "# of Heat Pump Stages",
+			"valueSize": 4,
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 0,
+			"readOnly": true,
+			"writeOnly": false,
+			"allowManualEntry": false
+		},
+		"2[0xff000000]": {
+			"label": "# of Cool Stages",
+			"valueSize": 4,
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 0,
 			"readOnly": true,
 			"writeOnly": false,
 			"allowManualEntry": false
