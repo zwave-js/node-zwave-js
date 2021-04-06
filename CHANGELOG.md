@@ -2,6 +2,10 @@
 <!--
 	Add placeholder for next release with `wip` snippet
 -->
+## __WORK IN PROGRESS__
+### Changes under the hood
+* Usage statistics now use a random 32 byte value to salt the HomeID hash
+
 ## 7.1.0 (2021-04-05)
 ### Features
 * Added the driver option `disableOptimisticValueUpdate` to opt-out from optimistic `currentValue` update
