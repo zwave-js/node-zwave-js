@@ -35,6 +35,7 @@ import {
 } from "alcalzone-shared/deferred-promise";
 import { entries } from "alcalzone-shared/objects";
 import { isArray, isObject } from "alcalzone-shared/typeguards";
+import { randomBytes } from "crypto";
 import { EventEmitter } from "events";
 import fsExtra from "fs-extra";
 import path from "path";
@@ -1224,7 +1225,12 @@ export class Driver extends EventEmitter {
 		});
 	}
 
-	private statisticsEnabled: boolean = false;
+	private _statisticsEnabled: boolean = false;
+	/** Whether reporting usage statistics is currently enabled */
+	public get statisticsEnabled(): boolean {
+		return this._statisticsEnabled;
+	}
+
 	private statisticsAppInfo:
 		| Pick<AppInfo, "applicationName" | "applicationVersion">
 		| undefined;
@@ -1236,8 +1242,8 @@ export class Driver extends EventEmitter {
 	public enableStatistics(
 		appInfo: Pick<AppInfo, "applicationName" | "applicationVersion">,
 	): void {
-		if (this.statisticsEnabled) return;
-		this.statisticsEnabled = true;
+		if (this._statisticsEnabled) return;
+		this._statisticsEnabled = true;
 
 		if (
 			!isObject(appInfo) ||
@@ -1276,12 +1282,23 @@ export class Driver extends EventEmitter {
 	 * Disable sending usage statistics
 	 */
 	public disableStatistics(): void {
-		this.statisticsEnabled = false;
+		this._statisticsEnabled = false;
 		this.statisticsAppInfo = undefined;
 		if (this.statisticsTimeout) {
 			clearTimeout(this.statisticsTimeout);
 			this.statisticsTimeout = undefined;
 		}
+	}
+
+	/** @internal */
+	// eslint-disable-next-line @typescript-eslint/require-await
+	public async getUUID(): Promise<string> {
+		// To anonymously identify a network, we create a unique ID and use it to salt the Home ID
+		if (!this._valueDB!.has("uuid")) {
+			this._valueDB!.set("uuid", randomBytes(32).toString("hex"));
+		}
+		const ret = this._valueDB!.get("uuid") as string;
+		return ret;
 	}
 
 	private statisticsTimeout: NodeJS.Timeout | undefined;
@@ -1296,7 +1313,7 @@ export class Driver extends EventEmitter {
 
 		let success = false;
 		try {
-			const statistics = compileStatistics(this, {
+			const statistics = await compileStatistics(this, {
 				driverVersion: libVersion,
 				...this.statisticsAppInfo,
 			});
