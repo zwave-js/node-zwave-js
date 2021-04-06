@@ -686,7 +686,7 @@
 					"value": 1
 				},
 				{
-					"label": "Slow Blink",
+					"label": "Chase",
 					"value": 2
 				},
 				{
@@ -694,7 +694,7 @@
 					"value": 3
 				},
 				{
-					"label": "Chase",
+					"label": "Slow Blink",
 					"value": 4
 				},
 				{
@@ -838,7 +838,7 @@
 					"value": 1
 				},
 				{
-					"label": "Slow Blink",
+					"label": "Chase",
 					"value": 2
 				},
 				{
@@ -846,7 +846,7 @@
 					"value": 3
 				},
 				{
-					"label": "Chase",
+					"label": "Slow Blink",
 					"value": 4
 				},
 				{
