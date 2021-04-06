@@ -368,7 +368,10 @@
 		},
 		"to": {
 			"notificationType": 6, // Access Control
-			"notificationEvent": 6 // Keypad unlock operation
+			"notificationEvent": 6, // Keypad unlock operation
+			"eventParameters": {
+				"userId": "alarmLevel"
+			}
 		}
 	},
 	"alarm_map_manual_lock": {
@@ -396,7 +399,10 @@
 		},
 		"to": {
 			"notificationType": 6, // Access Control
-			"notificationEvent": 5 // Keypad lock operation
+			"notificationEvent": 5, // Keypad lock operation
+			"eventParameters": {
+				"userId": "alarmLevel"
+			}
 		}
 	},
 	"alarm_map_deadbolt_jammed": {
