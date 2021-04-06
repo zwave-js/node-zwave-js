@@ -189,6 +189,7 @@ export function isRecoverableZWaveError(e: unknown): e is ZWaveError {
 	if (!isZWaveError(e)) return false;
 	switch (e.code) {
 		case ZWaveErrorCodes.Controller_InterviewRestarted:
+		case ZWaveErrorCodes.Controller_NodeRemoved:
 			return true;
 	}
 	return false;
