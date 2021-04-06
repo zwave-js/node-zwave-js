@@ -82,7 +82,7 @@
 					"value": 0
 				},
 				{
-					"label": "Synced with Parameter 1",
+					"label": "Synced with parameter 1",
 					"value": 99
 				}
 			]
@@ -104,7 +104,7 @@
 					"value": 0
 				},
 				{
-					"label": "Synced with Parameter 1",
+					"label": "Synced with parameter 1",
 					"value": 99
 				}
 			]
@@ -126,7 +126,7 @@
 					"value": 0
 				},
 				{
-					"label": "Synced with Parameter 1",
+					"label": "Synced with parameter 1",
 					"value": 99
 				}
 			]
@@ -211,7 +211,7 @@
 			"allowManualEntry": true,
 			"options": [
 				{
-					"label": "Last State",
+					"label": "Last state",
 					"value": 0
 				}
 			]
@@ -228,7 +228,7 @@
 			"allowManualEntry": true,
 			"options": [
 				{
-					"label": "Last State",
+					"label": "Last state",
 					"value": 0
 				}
 			]
@@ -245,7 +245,7 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "Last State",
+					"label": "Last state",
 					"value": 0
 				},
 				{
@@ -274,7 +274,7 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "Last State",
+					"label": "Last state",
 					"value": 0
 				},
 				{
@@ -307,7 +307,7 @@
 					"value": 0
 				},
 				{
-					"label": "Last State",
+					"label": "Last state",
 					"value": 100
 				}
 			]
@@ -340,7 +340,7 @@
 					"value": 99
 				},
 				{
-					"label": "Last State",
+					"label": "Last state",
 					"value": 100
 				}
 			]
@@ -686,15 +686,15 @@
 					"value": 1
 				},
 				{
-					"label": "Slow Blink",
+					"label": "Chase",
 					"value": 2
 				},
 				{
-					"label": "Fast Blink",
+					"label": "Fast blink",
 					"value": 3
 				},
 				{
-					"label": "Chase",
+					"label": "Slow blink",
 					"value": 4
 				},
 				{
@@ -838,15 +838,15 @@
 					"value": 1
 				},
 				{
-					"label": "Slow Blink",
+					"label": "Chase",
 					"value": 2
 				},
 				{
-					"label": "Fast Blink",
+					"label": "Fast blink",
 					"value": 3
 				},
 				{
-					"label": "Chase",
+					"label": "Slow blink",
 					"value": 4
 				},
 				{
