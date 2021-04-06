@@ -30,7 +30,7 @@
 	},
 	"associations": {
 		"1": {
-			"label": "Group 1",
+			"label": "Lifeline",
 			"maxNodes": 2,
 			"isLifeline": true
 		}
@@ -38,7 +38,6 @@
 	"paramInformation": {
 		"1": {
 			"label": "Temperature Reporting Threshold",
-			"description": "Reporting threshold for changes in the ambient temperature",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 4,
@@ -48,23 +47,23 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "Disabled",
+					"label": "Disable",
 					"value": 0
 				},
 				{
-					"label": "0.5° F",
+					"label": "0.5 °F",
 					"value": 1
 				},
 				{
-					"label": "1.0° F",
+					"label": "1.0 °F",
 					"value": 2
 				},
 				{
-					"label": "1.5° F",
+					"label": "1.5 °F",
 					"value": 3
 				},
 				{
-					"label": "2.0° F",
+					"label": "2.0 °F",
 					"value": 4
 				}
 			]
@@ -81,11 +80,10 @@
 			"allowManualEntry": true
 		},
 		"3": {
-			"label": "Utility Lock Enable/Disable",
-			"description": "Prevents setpoint changes at thermostat",
+			"label": "Lock Setpoint Changes",
 			"valueSize": 1,
 			"minValue": 0,
-			"maxValue": 255,
+			"maxValue": 1,
 			"defaultValue": 0,
 			"unsigned": true,
 			"readOnly": false,
@@ -93,11 +91,11 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "Utility lock disabled",
+					"label": "Disable",
 					"value": 0
 				},
 				{
-					"label": "Utility lock enabled",
+					"label": "Enable",
 					"value": 1
 				}
 			]
@@ -118,7 +116,7 @@
 			"description": "Reporting threshold for changes in the relative humidity",
 			"valueSize": 1,
 			"minValue": 0,
-			"maxValue": 255,
+			"maxValue": 3,
 			"defaultValue": 0,
 			"unsigned": true,
 			"readOnly": false,
@@ -126,7 +124,7 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "Disabled",
+					"label": "Disable",
 					"value": 0
 				},
 				{
@@ -144,11 +142,10 @@
 			]
 		},
 		"6": {
-			"label": "Auxiliary/Emergency",
-			"description": "Enables or disables auxiliary / emergency heating",
+			"label": "Auxiliary/Emergency Heating",
 			"valueSize": 1,
 			"minValue": 0,
-			"maxValue": 255,
+			"maxValue": 1,
 			"defaultValue": 0,
 			"unsigned": true,
 			"readOnly": false,
@@ -156,11 +153,11 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "Auxiliary/Emergency heat disabled",
+					"label": "Disable",
 					"value": 0
 				},
 				{
-					"label": "Auxiliary/Emergency heat enabled",
+					"label": "Enable",
 					"value": 1
 				}
 			]
@@ -177,35 +174,35 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "0.5° F",
+					"label": "0.5 °F",
 					"value": 1
 				},
 				{
-					"label": "1.0° F",
+					"label": "1.0 °F",
 					"value": 2
 				},
 				{
-					"label": "1.5° F",
+					"label": "1.5 °F",
 					"value": 3
 				},
 				{
-					"label": "2.0° F",
+					"label": "2.0 °F",
 					"value": 4
 				},
 				{
-					"label": "2.5° F",
+					"label": "2.5 °F",
 					"value": 5
 				},
 				{
-					"label": "3.0° F",
+					"label": "3.0 °F",
 					"value": 6
 				},
 				{
-					"label": "3.5° F",
+					"label": "3.5 °F",
 					"value": 7
 				},
 				{
-					"label": "4.0° F",
+					"label": "4.0 °F",
 					"value": 8
 				}
 			]
@@ -222,22 +219,21 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "2.0° F",
+					"label": "2.0 °F",
 					"value": 4
 				},
 				{
-					"label": "4.0° F",
+					"label": "4.0 °F",
 					"value": 8
 				},
 				{
-					"label": "6.0° F",
+					"label": "6.0 °F",
 					"value": 12
 				}
 			]
 		},
 		"9": {
 			"label": "Thermostat Recovery Mode",
-			"description": "Fast or Economy recovery mode",
 			"valueSize": 1,
 			"minValue": 1,
 			"maxValue": 2,
@@ -269,7 +265,6 @@
 		},
 		"11": {
 			"label": "Simple UI Mode",
-			"description": "Simple mode enable/disable",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 1,
@@ -279,18 +274,17 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "Normal mode enabled",
+					"label": "Enable",
 					"value": 0
 				},
 				{
-					"label": "Simple mode enabled",
+					"label": "Enable",
 					"value": 1
 				}
 			]
 		},
 		"12": {
 			"label": "Multicast",
-			"description": "Enable or disables Multicast",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 1,
@@ -300,11 +294,11 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "Multicast disabled",
+					"label": "Disable",
 					"value": 0
 				},
 				{
-					"label": "Multicast enabled",
+					"label": "Enable",
 					"value": 1
 				}
 			]
