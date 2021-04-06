@@ -1,9 +1,10 @@
-// Namron AS 2 KANALER BRYTER
+// Namron 2 KANALER BRYTER
+// Wireless Switch
 {
-	"manufacturer": "Namron AS",
+	"manufacturer": "Namron",
 	"manufacturerId": "0x0438",
-	"label": "7070990328562",
-	"description": "Namron 2 kanaler bryter K4",
+	"label": "2 Channel Switch",
+	"description": "2 Channel Switch K4",
 	"devices": [
 		{
 			"productType": "0x0300",
@@ -17,7 +18,7 @@
 	},
 	"associations": {
 		"1": {
-			"label": "LifeLine",
+			"label": "Lifeline",
 			"maxNodes": 1,
 			"isLifeline": true
 		},
@@ -33,7 +34,7 @@
 	"paramInformation": {
 		"1": {
 			"label": "Factory Reset",
-			"description": "Factory reset",
+			"description": "Factory Reset",
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 21930,
