@@ -595,6 +595,7 @@ export function indexDBsByNode(databases: JsonlDB[]): Map<number, Set<string>> {
 	for (const db of databases) {
 		for (const key of db.keys()) {
 			const nodeId = extractNodeIdFromDBKeyFast(key);
+			if (nodeId == undefined) continue;
 			if (!indexes.has(nodeId)) {
 				indexes.set(nodeId, new Set());
 			}
@@ -604,11 +605,11 @@ export function indexDBsByNode(databases: JsonlDB[]): Map<number, Set<string>> {
 	return indexes;
 }
 
-function extractNodeIdFromDBKeyFast(key: string): number {
+function extractNodeIdFromDBKeyFast(key: string): number | undefined {
 	const start = 10; // {"nodeId":
 	if (key.charCodeAt(start - 1) !== 58) {
-		console.error(key.slice(start - 1));
-		throw new Error("Invalid input format!");
+		// Invalid input format for a node value, assume it is for the driver
+		return undefined;
 	}
 	let end = start + 1;
 	const len = key.length;

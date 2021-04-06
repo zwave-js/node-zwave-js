@@ -13,15 +13,18 @@ export interface AppInfo {
 	applicationVersion: string;
 }
 
-export function compileStatistics(
+export async function compileStatistics(
 	driver: Driver,
 	appInfo: AppInfo,
-): Record<string, any> {
+): Promise<Record<string, any>> {
+	const salt = await driver.getUUID();
 	return {
-		// Hash the homeId, so it cannot easily be tracked
+		// Salt and hash the homeId, so it cannot easily be tracked
+		// It is no state secret, but since we're collecting it, make sure it is anonymous
 		id: crypto
 			.createHash("sha256")
 			.update(driver.controller.homeId!.toString(16))
+			.update(salt)
 			.digest("hex"),
 		...appInfo,
 		devices: [...driver.controller.nodes.values()].map((node) => ({
