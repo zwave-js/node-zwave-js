@@ -199,7 +199,6 @@
 		},
 		"64": {
 			"label": "Analog inputs - periodical reports",
-			"description": "reporting period of analog inputs value",
 			"unit": "seconds",
 			"valueSize": 2,
 			"minValue": 0,
@@ -235,7 +234,6 @@
 		},
 		"67": {
 			"label": "External sensors threshold",
-			"description": "External sensors - minimal change to report",
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 255,
