@@ -74,10 +74,9 @@
 			"valueSize": 4,
 			"minValue": 0,
 			"maxValue": 0,
-			"defaultValue": 0,
 			"readOnly": true,
 			"writeOnly": false,
-			"allowManualEntry": true
+			"allowManualEntry": false
 		},
 		"3": {
 			"label": "Lock Setpoint Changes",
@@ -104,12 +103,21 @@
 			"label": "Power Status",
 			"description": "C-Wire / Battery Status",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 0,
-			"defaultValue": 0,
+			"minValue": 1,
+			"maxValue": 2,
 			"readOnly": true,
 			"writeOnly": false,
-			"allowManualEntry": true
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "C-Wire",
+					"value": 1
+				},
+				{
+					"label": "Batteries",
+					"value": 2
+				}
+			]
 		},
 		"5": {
 			"label": "Humidity Reporting Threshold",
@@ -274,7 +282,7 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "Enable",
+					"label": "Disable",
 					"value": 0
 				},
 				{
