@@ -690,7 +690,8 @@
 		},
 		"50": {
 			"$if": "firmwareVersion >= 1.49",
-			"label": "Configure Physical On/Off Delay",
+			"label": "Physical Button Delay",
+			"description": "Adjusting this changes the delay if Button Delay and Scene Control is enabled.",
 			"unit": "100ms",
 			"valueSize": 1,
 			"minValue": 1,
@@ -702,8 +703,8 @@
 		},
 		"51": {
 			"$if": "firmwareVersion >= 1.47",
-			"label": "Instant On",
-			"description": "Enabling this disables the 700ms button delay and multi-tap scenes.",
+			"label": "Button Delay and Scene Control",
+			"description": "Disabling this disables the button delay and multi-tap scenes. This allows the switch to respond instantly to physical actions.",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 1,
