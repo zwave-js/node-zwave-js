@@ -1,13 +1,13 @@
-// McoHome Technology Co., Ltd. MH-S512
-// Touch Panel Switch 2-Way
+// McoHome Technology Co., Ltd. MH-S511
+// Touch Panel Switch
 {
 	"manufacturer": "McoHome Technology Co., Ltd.",
 	"manufacturerId": "0x015f",
-	"label": "MH-S512",
-	"description": "Touch Panel Switch 2-Way",
+	"label": "MH-S511",
+	"description": "Touch Panel Switch",
 	"devices": [
 		{
-			"productType": "0x5121",
+			"productType": "0x5111",
 			"productId": "0x5103"
 		}
 	],
@@ -96,38 +96,38 @@
 				},
 				{
 					"label": "When turned off, auto on after X seconds",
-					"value": 2	
+					"value": 2
 				},
-					{
-						"label": "Hold more than 3 seconds, turns on, when released, turns off",
-						"value": 3
-					},
-					{
-						"label": "Single click to switch on/off, Hold more than 3 seconds will turn on, when released, turns off",
-						"value": 4
-					},
-					{
-						"label": "Momentary switch mode 2: hold the key is on, off once released",
-						"value": 5
-					},
-					{
-						"label": "Hold more than three seconds to turn on, Hold more than three seconds to turn off",
-						"value": 6
-					}
-				]
-			},
-			"6": {
-				"label": "Key On Duration",
-				"unit": "seconds",
-				"valueSize": 2,
-				"minValue": 0,
-				"maxValue": 65535,
-				"defaultValue": 0,
-				"unsigned": true,
-				"readOnly": false,
-				"writeOnly": false,
-				"allowManualEntry": true
-			},
+				{
+					"label": "Hold more than 3 seconds, turns on, when released, turns off",
+					"value": 3
+				},
+				{
+					"label": "Single click to switch on/off, Hold more than 3 seconds will turn on, when released, turns off",
+					"value": 4
+				},
+				{
+					"label": "Momentary switch mode 2: hold the key is on, off once released",
+					"value": 5
+				},
+				{
+					"label": "Hold more than three seconds to turn on, Hold more than three seconds to turn off",
+					"value": 6
+				}
+			]
+		},
+		"6": {
+			"label": "Key On Duration",
+			"unit": "seconds",
+			"valueSize": 2,
+			"minValue": 0,
+			"maxValue": 65535,
+			"defaultValue": 0,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true		
+		},
 			"8": {
 				"label": "Basic CC Integration Setting",
 				"valueSize": 1,
@@ -159,47 +159,6 @@
 			},
 			"10": {
 				"label": "Key 1 Mode",
-				"valueSize": 1,
-				"minValue": 0,
-				"maxValue": 6,
-				"defaultValue": 0,
-				"unsigned": true,
-				"readOnly": false,
-				"writeOnly": false,
-				"allowManualEntry": true,
-				"options": [
-					{
-						"label": "Single click to switch on/off",
-						"value": 0
-					},
-					{
-						"label": "When turned on, auto off after X seconds",
-						"value": 1
-					},
-					{
-						"label": "When turned off, auto on after X seconds",
-						"value": 2
-					},
-					{
-						"label": "Hold more than 3 seconds, turns on, when released, turns off",
-						"value": 3
-					},
-					{
-						"label": "Single click to switch on/off, Hold more than 3 seconds will turn on, when released, turns off",
-						"value": 4
-					},
-					{
-						"label": "Momentary switch mode 2: hold the key is on, off once released",
-						"value": 5
-					},
-					{
-						"label": "Hold more than three seconds to turn on, Hold more than three seconds to turn off",
-						"value": 6
-					}
-				]
-			},
-			"11": {
-				"label": "Key 2 Mode",
 				"valueSize": 1,
 				"minValue": 0,
 				"maxValue": 6,
@@ -374,57 +333,6 @@
 				"writeOnly": false,
 				"allowManualEntry": true
 			},
-			"20": {
-				"label": "Key 2 Scene Activate Mode Setting",
-				"valueSize": 1,
-				"minValue": 0,
-				"maxValue": 3,
-				"defaultValue": 0,
-				"readOnly": false,
-				"writeOnly": false,
-				"allowManualEntry": true,
-				"options": [
-					{
-						"label": "Scene Activate function disabled",
-						"value": 0
-					},
-					{
-						"label": "Upon clicking Key 2, always activate scene ID1 no matter what the status of Key 1 is",
-						"value": 1
-					},
-					{
-						"label": "Upon clicking Key 2, always activate scene ID1 when Key 1's relay output is open",
-						"value": 2
-					},
-					{
-						"label": "Upon clicking Key 2, always activate scene ID1 when Key 1's relay output is closed",
-						"value": 3
-					}
-				]
-			},
-			"21": {
-				"label": "Key 2 Activate Scene ID (0=Scene Activate Function Disabled)",
-				"valueSize": 1,
-				"minValue": 0,
-				"maxValue": 255,
-				"defaultValue": 0,
-				"unsigned": true,
-				"readOnly": false,
-				"writeOnly": false,
-				"allowManualEntry": true
-			},
-			"22": {
-				"label": "Key 2 Activate Scene Duration (0=Instantly)",
-				"unit":"seconds",
-				"valueSize": 1,
-				"minValue": 0,
-				"maxValue": 255,
-				"defaultValue": 0,
-				"unsigned": true,
-				"readOnly": false,
-				"writeOnly": false,
-				"allowManualEntry": true
-			},
 			"255": {
 				"label": "Factory Reset",
 				"valueSize": 1,
@@ -450,3 +358,5 @@
 	
 		}
 	}
+		
+	

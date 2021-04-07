@@ -1,9 +1,9 @@
-// McoHome Technology Co., Ltd MH-DT311/MH-DT411
+// McoHome Technology Co., Ltd MH-DT311/MH-DT411/MH-DT511
 // MCOHome Dimmer Switch
 {
 	"manufacturer": "McoHome Technology Co., Ltd.",
 	"manufacturerId": "0x015f",
-	"label": "MH-DT311/MH-DT411",
+	"label": "MH-DT311/MH-DT411/MH-DT511",
 	"description": "MCOHome Dimmer Switch",
 	"devices": [
 		{
@@ -13,6 +13,10 @@
 		{
 			"productType": "0xd411",
 			"productId": "0x5102"
+		},
+		{
+			"productType": "0xd511",
+			"productId": "0x5103"
 		}
 	],
 	"firmwareVersion": {
@@ -29,15 +33,16 @@
 			"label": "Dim %",
 			"maxNodes": 5
 		},
-		"3": {
+		"5": {
 			"label": "Plus Button",
 			"maxNodes": 5
 		},
-		"4": {
+		"8": {
 			"label": "Minus Button",
 			"maxNodes": 5
 		}
 	},
+	"supportsZWavePlus": true,
 	"paramInformation": {
 		"1": {
 			"label": "Recover State After Power Failure",
@@ -51,11 +56,11 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "Disabled",
+					"label": "Disable",
 					"value": 0
 				},
 				{
-					"label": "Enabled",
+					"label": "Enable",
 					"value": 1
 				}
 			]
