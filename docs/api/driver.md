@@ -38,12 +38,15 @@ The following table gives you an overview of what happens during the startup pro
 enableStatistics(appInfo: { applicationName: string; applicationVersion: string }): void
 ```
 
-Enable sending usage statistics. Although this does not include any sensitive information, we expect that you inform your users about this before enabling statistics.
+Enable sending usage statistics. Although this does not include any sensitive information, we expect you to inform your users about this before enabling statistics.
 
 `applicationName` is the name of your application. Please keep this consistent between versions. `applicationVersion` is the current version of your application. Both must be strings and have a maximum length of 100 characters.
 
 > [!NOTE] Sending usage statistics is optional, but **we kindly ask you** to enable it. It allows us to gain insight how much `zwave-js` is used, which manufacturers and devices are most prevalent and where to best focus our efforts in order to improve `zwave-js` the most.
-> Details including which information is sent can be found under [telemetry](getting-started/telemetry.md#usage-statistics).
+
+> A short description of the importance of collecting this data to the project to be shared with your users is included at [User Disclosure](data-collection/user-disclosure.md).
+
+> Details including which information is sent can be found under [Usage Statistics](data-collection/data-collection.md#usage-statistics).
 
 ### `disableStatistics`
 
