@@ -1,6 +1,5 @@
 // NIE Technology Co., Ltd. ZW97 / Eva Logik
 // Outdoor Z-Wave Plug-In Module (2-Channel)
-// TODO: ZW97 support Over temperature protection, When the temperature is greater than 105 degrees Celsius, the Heat Alarm signal is sent out Notification Type : Heat Alarm 0x04 . Event :Overheat detected 0x02
 {
 	"manufacturer": "NIE Technology Co., Ltd.",
 	"manufacturerId": "0x0312",
@@ -24,19 +23,19 @@
 			"isLifeline": true
 		},
 		"2": {
-			"label": "Outlet 1 (Left) State Notification",
+			"label": "Outlet 1 (Left)",
 			"description": "When the state of Outlet 1 (Left) is changed, On (0xFF) or Off (0x00). The ZW97 will automatically send out a related command, On (0xFF) or Off (0x00) to its associated group.",
 			"maxNodes": 5
 		},
 		"3": {
-			"label": "Outlet 2 (Left) State Notification",
+			"label": "Outlet 2 (Left)",
 			"description": "When the state of Outlet 2 (Right) is changed, On (0xFF) or Off (0x00). The ZW97 will automatically send out a related command, On (0xFF) or Off (0x00) to its associated group.",
 			"maxNodes": 5
 		}
 	},
 	"paramInformation": {
 		"1": {
-			"label": "LED Invert/Off",
+			"label": "LED Indicator",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 2,
@@ -46,22 +45,21 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "Outlet On / LED On",
+					"label": "Outlet on / LED on",
 					"value": 0
 				},
 				{
-					"label": "Outlet On / LED Off",
+					"label": "Outlet on / LED off",
 					"value": 1
 				},
 				{
-					"label": "LED Disabled",
+					"label": "LED disabled",
 					"value": 2
 				}
 			]
 		},
 		"2": {
-			"label": "Countdown",
-			"description": "Outlet 1 (Left) Auto Shutoff",
+			"label": "Outlet 1 (Left) Auto Shutoff",
 			"unit": "seconds",
 			"valueSize": 2,
 			"minValue": 0,
@@ -73,8 +71,7 @@
 			"allowManualEntry": true
 		},
 		"3": {
-			"label": "Countdown",
-			"description": "Outlet 2 (Right) Auto Shutoff",
+			"label": "Outlet 2 (Right) Auto Shutoff",
 			"unit": "seconds",
 			"valueSize": 2,
 			"minValue": 0,
