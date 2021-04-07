@@ -25,12 +25,12 @@ We also use [Sentry](https://sentry.io) to capture basic information about devic
 
 In order to gain insight into how `zwave-js` is used, which manufacturers and devices are most prevalent and where to best focus our efforts in order to improve `zwave-js` the most, we collect statistics about the devices used in our ecosystem. This information is only collected **if the application developer has opted in** into this functionality. Since some users may have concerns about this data being collected, even though the data cannot be tied to a specific user, we have built our own [statistics stack](https://github.com/zwave-js/statistics-server) which is self-hosted next to the Sentry instances. The reports include the following data:
 
--   A **hash** of a salted unique value, which is calculated by salting the network's home id with a 32 byte randomly generated number. This is used to distinguish the individual records to ensure that duplicate entries aren't made. The hash and salt cannot be reversed to reconstruct the home id.
+-   A **hash** of your network's home ID salted with a 32 byte randomly generated number. This is used to distinguish the individual records to ensure that duplicate entries aren't made. The hash and salt cannot be reversed to reconstruct the home ID.
 -   The application that uses `zwave-js` and its version.
 -   The version of `zwave-js`.
 -   The **manufacturer ID**, **product type**, **product ID** and **firmware version** that are reported by each device - in other words which devices you have.
 
-> [!NOTE] We do not collect the submitting user's IP address, nor is the IP address or any other identifying information stored and tied to the record.
+> [!NOTE] We do not collect your IP address, nor is the IP address or any other identifying information stored and tied to a record.
 
 Here's an example of the collected data along with an explanation:
 
