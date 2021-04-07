@@ -2,7 +2,7 @@
 
 Please allow the Z-Wave JS project to collect some anonymized data regarding the devices you own so that we can generate statistics that allow us to better focus our development efforts. This information is not tracked to any identifiable user or IP address and **cannot be used to identify you**. Specifically, we'd like to collect:
 
-1. A hash of your network ID salted with a 32 byte randomly generated number, which is used to prevent duplicate records (this hash and salt **cannot be undone** to reveal your network ID or identify you);
+1. A hash of your network ID salted with a 32 byte randomly generated number, which is used to prevent duplicate records (this salted hash **cannot be undone** to reveal your network ID or identify you);
 
 2. name and version of the application you are running;
 
