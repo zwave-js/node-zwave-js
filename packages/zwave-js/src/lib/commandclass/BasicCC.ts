@@ -224,6 +224,10 @@ current value:      ${basicResponse.currentValue}`;
 target value:       ${basicResponse.targetValue}
 remaining duration: ${basicResponse.duration?.toString() ?? "undefined"}`;
 			}
+			this.getValueDB().setValue(
+				getCurrentValueValueId(this.endpointIndex),
+				basicResponse.currentValue
+			);
 			this.driver.controllerLog.logNode(node.id, {
 				endpoint: this.endpointIndex,
 				message: logMessage,
