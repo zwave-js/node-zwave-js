@@ -17,10 +17,8 @@ import { MultiCommandCCCommandEncapsulation } from "../commandclass/MultiCommand
 import { SecurityCCCommandEncapsulation } from "../commandclass/SecurityCC";
 import { WakeUpCCIntervalSet } from "../commandclass/WakeUpCC";
 import { ApplicationCommandRequest } from "../controller/ApplicationCommandRequest";
-import {
-	SendDataRequest,
-	TransmitOptions,
-} from "../controller/SendDataMessages";
+import { SendDataRequest } from "../controller/SendDataMessages";
+import { TransmitOptions } from "../controller/SendDataShared";
 import { FunctionType, MessageType } from "../message/Constants";
 import { Message, messageTypes } from "../message/Message";
 import { ZWaveNode } from "../node/Node";
