@@ -41,5 +41,5 @@
 
 -   Data Collection & Use Practices
 
-    -   [Data Collection Notice](getting-started/data-collection.md)
-    -   [User Disclosure](getting-started/user-disclosure.md)
+    -   [Data Collection Notice](data-collection/data-collection.md)
+    -   [User Disclosure](data-collection/user-disclosure.md)
