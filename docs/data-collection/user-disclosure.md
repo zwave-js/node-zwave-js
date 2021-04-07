@@ -10,4 +10,4 @@ Please allow the Z-Wave JS project to collect some anonymized data regarding the
 
 4. the manufacturer ID, product type, product ID, and firmware version of each device that is part of your Z-Wave network.
 
-Collecting this information is critical to the user experience provided by Z-Wave JS. More information about the data that is collected and how it is used, including an example of the data collected, can be found at: https://zwave-js.github.io/node-zwave-js/#/data-collection/data-collection.
+Collecting this information is critical to the user experience provided by Z-Wave JS. More information about the data that is collected and how it is used, including an example of the data collected, can be found at: [https://zwave-js.github.io/node-zwave-js/#/data-collection/data-collection?id=usage-statistics](https://zwave-js.github.io/node-zwave-js/#/data-collection/data-collection?id=usage-statistics).
