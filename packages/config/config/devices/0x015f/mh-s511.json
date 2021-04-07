@@ -80,7 +80,7 @@
 			"label": "Key Mode",
 			"valueSize": 1,
 			"minValue": 0,
-			"maxValue": 4,
+			"maxValue": 6,
 			"defaultValue": 0,
 			"readOnly": false,
 			"writeOnly": false,

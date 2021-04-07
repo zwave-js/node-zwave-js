@@ -137,7 +137,7 @@
 			"unit":"100ms",
 			"valueSize": 2,
 			"minValue": 0,
-			"maxValue": 65535,
+			"maxValue": 32767,
 			"defaultValue": 0,
 			"readOnly": false,
 			"writeOnly": false,
