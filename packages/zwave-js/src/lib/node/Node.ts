@@ -145,6 +145,14 @@ import type {
 } from "./Types";
 import { InterviewStage, NodeStatus, NodeType, ProtocolVersion } from "./Types";
 
+/** Returns a Value ID that can be used to store node specific data without relating it to a CC */
+function getNodeMetaValueID(property: string): ValueID {
+	return {
+		commandClass: -1,
+		property,
+	};
+}
+
 export interface ZWaveNode {
 	on<TEvent extends ZWaveNodeEvents>(
 		event: TEvent,
@@ -564,6 +572,16 @@ export class ZWaveNode extends Endpoint {
 		} else {
 			this._valueDB.removeValue(getNodeLocationValueId());
 		}
+	}
+
+	/** Whether a SUC return route was configured for this node */
+	public get hasSUCReturnRoute(): boolean {
+		return !!this.valueDB.getValue<boolean>(
+			getNodeMetaValueID("hasSUCReturnRoute"),
+		);
+	}
+	public set hasSUCReturnRoute(value: boolean) {
+		this.valueDB.setValue(getNodeMetaValueID("hasSUCReturnRoute"), value);
 	}
 
 	private _deviceConfig: DeviceConfig | undefined;

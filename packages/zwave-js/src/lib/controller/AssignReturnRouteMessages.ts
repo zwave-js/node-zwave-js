@@ -26,7 +26,7 @@ import type { INodeQuery } from "../node/INodeQuery";
 import { TransmitStatus } from "./SendDataShared";
 
 @messageTypes(MessageType.Request, FunctionType.AssignReturnRoute)
-@priority(MessagePriority.NodeQuery)
+@priority(MessagePriority.Normal)
 export class AssignReturnRouteRequestBase extends Message {
 	public constructor(driver: Driver, options: MessageOptions) {
 		if (

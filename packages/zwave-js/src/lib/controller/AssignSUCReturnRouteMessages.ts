@@ -25,34 +25,37 @@ import type { SuccessIndicator } from "../message/SuccessIndicator";
 import type { INodeQuery } from "../node/INodeQuery";
 import { TransmitStatus } from "./SendDataShared";
 
-@messageTypes(MessageType.Request, FunctionType.DeleteReturnRoute)
+@messageTypes(MessageType.Request, FunctionType.AssignSUCReturnRoute)
 @priority(MessagePriority.Normal)
-export class DeleteReturnRouteRequestBase extends Message {
+export class AssignSUCReturnRouteRequestBase extends Message {
 	public constructor(driver: Driver, options: MessageOptions) {
 		if (
 			gotDeserializationOptions(options) &&
-			(new.target as any) !== DeleteReturnRouteRequestTransmitReport
+			(new.target as any) !== AssignSUCReturnRouteRequestTransmitReport
 		) {
-			return new DeleteReturnRouteRequestTransmitReport(driver, options);
+			return new AssignSUCReturnRouteRequestTransmitReport(
+				driver,
+				options,
+			);
 		}
 		super(driver, options);
 	}
 }
 
-export interface DeleteReturnRouteRequestOptions extends MessageBaseOptions {
+export interface AssignSUCReturnRouteRequestOptions extends MessageBaseOptions {
 	nodeId: number;
 }
 
-@expectedResponse(FunctionType.DeleteReturnRoute)
-@expectedCallback(FunctionType.DeleteReturnRoute)
-export class DeleteReturnRouteRequest
-	extends DeleteReturnRouteRequestBase
+@expectedResponse(FunctionType.AssignSUCReturnRoute)
+@expectedCallback(FunctionType.AssignSUCReturnRoute)
+export class AssignSUCReturnRouteRequest
+	extends AssignSUCReturnRouteRequestBase
 	implements INodeQuery {
 	public constructor(
 		driver: Driver,
 		options:
 			| MessageDeserializationOptions
-			| DeleteReturnRouteRequestOptions,
+			| AssignSUCReturnRouteRequestOptions,
 	) {
 		super(driver, options);
 		if (gotDeserializationOptions(options)) {
@@ -74,37 +77,37 @@ export class DeleteReturnRouteRequest
 	}
 }
 
-@messageTypes(MessageType.Response, FunctionType.DeleteReturnRoute)
-export class DeleteReturnRouteResponse
+@messageTypes(MessageType.Response, FunctionType.AssignSUCReturnRoute)
+export class AssignSUCReturnRouteResponse
 	extends Message
 	implements SuccessIndicator {
 	public constructor(driver: Driver, options: MessageDeserializationOptions) {
 		super(driver, options);
-		this.hasStarted = this.payload[0] !== 0;
+		this.wasExecuted = this.payload[0] !== 0;
 	}
 
 	public isOK(): boolean {
-		return this.hasStarted;
+		return this.wasExecuted;
 	}
 
-	public readonly hasStarted: boolean;
+	public readonly wasExecuted: boolean;
 
 	public toJSON(): JSONObject {
 		return super.toJSONInherited({
-			hasStarted: this.hasStarted,
+			wasExecuted: this.wasExecuted,
 		});
 	}
 
 	public toLogEntry(): MessageOrCCLogEntry {
 		return {
 			...super.toLogEntry(),
-			message: { "has started": this.hasStarted },
+			message: { "was executed": this.wasExecuted },
 		};
 	}
 }
 
-export class DeleteReturnRouteRequestTransmitReport
-	extends DeleteReturnRouteRequestBase
+export class AssignSUCReturnRouteRequestTransmitReport
+	extends AssignSUCReturnRouteRequestBase
 	implements SuccessIndicator {
 	public constructor(driver: Driver, options: MessageDeserializationOptions) {
 		super(driver, options);
@@ -113,13 +116,13 @@ export class DeleteReturnRouteRequestTransmitReport
 		this._transmitStatus = this.payload[1];
 	}
 
+	public isOK(): boolean {
+		return this._transmitStatus === TransmitStatus.OK;
+	}
+
 	private _transmitStatus: TransmitStatus;
 	public get transmitStatus(): TransmitStatus {
 		return this._transmitStatus;
-	}
-
-	public isOK(): boolean {
-		return this._transmitStatus === TransmitStatus.OK;
 	}
 
 	public toJSON(): JSONObject {

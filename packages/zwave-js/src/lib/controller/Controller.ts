@@ -51,7 +51,9 @@ import {
 	AddNodeType,
 } from "./AddNodeToNetworkRequest";
 import { AssignReturnRouteRequest } from "./AssignReturnRouteMessages";
+import { AssignSUCReturnRouteRequest } from "./AssignSUCReturnRouteMessages";
 import { DeleteReturnRouteRequest } from "./DeleteReturnRouteMessages";
+import { DeleteSUCReturnRouteRequest } from "./DeleteSUCReturnRouteMessages";
 import {
 	GetControllerCapabilitiesRequest,
 	GetControllerCapabilitiesResponse,
@@ -422,14 +424,43 @@ export class ZWaveController extends EventEmitter {
 		);
 		this._sucNodeId = suc.sucNodeId;
 		if (this._sucNodeId === 0) {
-			this.driver.controllerLog.print(`no SUC present`);
+			this.driver.controllerLog.print(`No SUC present in the network`);
+		} else if (this._sucNodeId === this._ownNodeId) {
+			this.driver.controllerLog.print(`This is the SUC`);
 		} else {
 			this.driver.controllerLog.print(
 				`SUC has node ID ${this.sucNodeId}`,
 			);
 		}
-		// TODO: if configured, enable this controller as SIS if there's no SUC
-		// https://github.com/OpenZWave/open-zwave/blob/a46f3f36271f88eed5aea58899a6cb118ad312a2/cpp/src/Driver.cpp#L2586
+
+		// There needs to be a SUC/SIS in the network. If not, we promote ourselves to one if the following conditions are met:
+		// We are the primary controller, but we are not SUC, there is no SUC and there is no SIS
+		if (
+			!this._isSecondary &&
+			this._sucNodeId === 0 &&
+			!this._isStaticUpdateController &&
+			!this._isSISPresent
+		) {
+			this.driver.controllerLog.print(
+				`There is no SUC/SIS in the network - promoting ourselves...`,
+			);
+			try {
+				const result = await this.configureSUC(
+					this._ownNodeId,
+					true,
+					true,
+				);
+				this.driver.controllerLog.print(
+					`Promotion to SUC/SIS ${result ? "succeeded" : "failed"}.`,
+					result ? undefined : "warn",
+				);
+			} catch (e) {
+				this.driver.controllerLog.print(
+					`Error while promoting to SUC/SIS: ${e.message}`,
+					"error",
+				);
+			}
+		}
 
 		// if it's a bridge controller, request the virtual nodes
 		if (
@@ -462,6 +493,7 @@ export class ZWaveController extends EventEmitter {
   controller supports timers: ${this._supportsTimers}
   nodes in the network:       ${initData.nodeIds.join(", ")}`,
 		);
+
 		// Index the value DB for optimal performance
 		const valueDBIndexes = indexDBsByNode([
 			this.driver.valueDB!,
@@ -878,6 +910,9 @@ export class ZWaveController extends EventEmitter {
 							endpoints: [{ nodeId: ownNodeId, endpoint: 0 }],
 						});
 					}
+
+					// After setting the association, make sure the node knows how to reach us
+					await this.assignReturnRoute(node.id, ownNodeId);
 				} catch (e: unknown) {
 					if (isTransmissionError(e) || isRecoverableZWaveError(e)) {
 						this.driver.controllerLog.logNode(node.id, {
@@ -1082,23 +1117,10 @@ export class ZWaveController extends EventEmitter {
 					// If it is actually a sleeping device, it will be marked as such later
 					newNode.markAsAlive();
 
-					// Assign return route to make sure the node's responses reach us
-					try {
-						this.driver.controllerLog.logNode(newNode.id, {
-							message: `Assigning return route to controller...`,
-							direction: "outbound",
-						});
-						await this.assignReturnRoute(
-							newNode.id,
-							this._ownNodeId!,
-						);
-					} catch (e) {
-						this.driver.controllerLog.logNode(
-							newNode.id,
-							`assigning return route failed: ${e.message}`,
-							"warn",
-						);
-					}
+					// Assign SUC return route to make sure the node knows where to get its routes from
+					newNode.hasSUCReturnRoute = await this.assignSUCReturnRoute(
+						newNode.id,
+					);
 
 					if (!this._includeNonSecure) {
 						await this.secureBootstrapS0(newNode);
@@ -1191,23 +1213,10 @@ export class ZWaveController extends EventEmitter {
 					// If it is actually a sleeping device, it will be marked as such later
 					newNode.markAsAlive();
 
-					// Assign return route to make sure the node's responses reach us
-					try {
-						this.driver.controllerLog.logNode(newNode.id, {
-							message: `Assigning return route to controller...`,
-							direction: "outbound",
-						});
-						await this.assignReturnRoute(
-							newNode.id,
-							this._ownNodeId!,
-						);
-					} catch (e) {
-						this.driver.controllerLog.logNode(
-							newNode.id,
-							`assigning return route failed: ${e.message}`,
-							"warn",
-						);
-					}
+					// Assign SUC return route to make sure the node knows where to get its routes from
+					newNode.hasSUCReturnRoute = await this.assignSUCReturnRoute(
+						newNode.id,
+					);
 
 					// Try perform the security bootstrap process
 					if (!this._includeNonSecure) {
@@ -1667,16 +1676,112 @@ ${associatedNodes.join(", ")}`,
 		return result.isOK();
 	}
 
+	public async assignSUCReturnRoute(nodeId: number): Promise<boolean> {
+		this.driver.controllerLog.logNode(nodeId, {
+			message: `Assigning SUC return route...`,
+			direction: "outbound",
+		});
+
+		try {
+			const result = await this.driver.sendMessage<
+				Message & SuccessIndicator
+			>(
+				new AssignSUCReturnRouteRequest(this.driver, {
+					nodeId,
+				}),
+			);
+
+			return result.isOK();
+		} catch (e) {
+			this.driver.controllerLog.logNode(
+				nodeId,
+				`Assigning SUC return route failed: ${e.message}`,
+				"error",
+			);
+			return false;
+		}
+	}
+
+	public async deleteSUCReturnRoute(nodeId: number): Promise<boolean> {
+		this.driver.controllerLog.logNode(nodeId, {
+			message: `Deleting SUC return route...`,
+			direction: "outbound",
+		});
+
+		try {
+			const result = await this.driver.sendMessage<
+				Message & SuccessIndicator
+			>(
+				new DeleteSUCReturnRouteRequest(this.driver, {
+					nodeId,
+				}),
+			);
+
+			return result.isOK();
+		} catch (e) {
+			this.driver.controllerLog.logNode(
+				nodeId,
+				`Deleting SUC return route failed: ${e.message}`,
+				"error",
+			);
+			return false;
+		}
+	}
+
 	public async assignReturnRoute(
 		nodeId: number,
 		destinationNodeId: number,
-	): Promise<void> {
-		await this.driver.sendMessage(
-			new AssignReturnRouteRequest(this.driver, {
+	): Promise<boolean> {
+		this.driver.controllerLog.logNode(nodeId, {
+			message: `Assigning return route to node ${destinationNodeId}...`,
+			direction: "outbound",
+		});
+
+		try {
+			const result = await this.driver.sendMessage<
+				Message & SuccessIndicator
+			>(
+				new AssignReturnRouteRequest(this.driver, {
+					nodeId,
+					destinationNodeId,
+				}),
+			);
+
+			return result.isOK();
+		} catch (e) {
+			this.driver.controllerLog.logNode(
 				nodeId,
-				destinationNodeId,
-			}),
-		);
+				`Assigning return route failed: ${e.message}`,
+				"error",
+			);
+			return false;
+		}
+	}
+
+	public async deleteReturnRoute(nodeId: number): Promise<boolean> {
+		this.driver.controllerLog.logNode(nodeId, {
+			message: `Deleting all return routes...`,
+			direction: "outbound",
+		});
+
+		try {
+			const result = await this.driver.sendMessage<
+				Message & SuccessIndicator
+			>(
+				new DeleteReturnRouteRequest(this.driver, {
+					nodeId,
+				}),
+			);
+
+			return result.isOK();
+		} catch (e) {
+			this.driver.controllerLog.logNode(
+				nodeId,
+				`Deleting return routes failed: ${e.message}`,
+				"error",
+			);
+			return false;
+		}
 	}
 
 	/**

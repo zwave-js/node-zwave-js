@@ -903,16 +903,29 @@ export class Driver extends EventEmitter {
 					node.markAsAsleep();
 				}
 
-				// Continue the interview if necessary. If that is not necessary, at least
-				// determine the node's status
-				if (node.interviewStage < InterviewStage.Complete) {
-					// don't await the interview, because it may take a very long time
-					// if a node is asleep
-					void this.interviewNode(node);
-				} else if (node.isListening || node.isFrequentListening) {
-					// Ping non-sleeping nodes to determine their status
-					void node.ping();
-				}
+				void (async () => {
+					// Continue the interview if necessary. If that is not necessary, at least
+					// determine the node's status
+					if (node.interviewStage < InterviewStage.Complete) {
+						// don't await the interview, because it may take a very long time
+						// if a node is asleep
+						await this.interviewNode(node);
+					} else if (node.isListening || node.isFrequentListening) {
+						// Ping non-sleeping nodes to determine their status
+						await node.ping();
+					}
+
+					// Previous versions of zwave-js didn't configure the SUC return route. Make sure each node has one
+					// and remember that we did. If the node is not responsive - tough luck, try again next time
+					if (
+						!node.hasSUCReturnRoute &&
+						node.status !== NodeStatus.Dead
+					) {
+						node.hasSUCReturnRoute = await this.controller.assignSUCReturnRoute(
+							node.id,
+						);
+					}
+				})();
 			}
 		}
 	}
