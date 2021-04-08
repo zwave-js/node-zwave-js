@@ -126,12 +126,11 @@ export enum FunctionType {
 	FUNC_ID_ZW_CREATE_NEW_PRIMARY = 0x4c, // Control the createnewprimary process...start, stop, etc.
 	FUNC_ID_ZW_CONTROLLER_CHANGE = 0x4d, // Control the transferprimary process...start, stop, etc.
 	FUNC_ID_ZW_SET_LEARN_MODE = 0x50, // Put a controller into learn mode for replication/ receipt of configuration info
-	FUNC_ID_ZW_ASSIGN_SUC_RETURN_ROUTE = 0x51, // Assign a return route to the SUC
+	AssignSUCReturnRoute = 0x51, // Assign a return route to the SUC
 	FUNC_ID_ZW_ENABLE_SUC = 0x52, // Make a controller a Static Update Controller
 	FUNC_ID_ZW_REQUEST_NETWORK_UPDATE = 0x53, // Network update for a SUC(?)
-	FUNC_ID_ZW_SET_SUC_NODE_ID = 0x54, // Identify a Static Update Controller node id
-	FUNC_ID_ZW_DELETE_SUC_RETURN_ROUTE = 0x55, // Remove return routes to the SUC
-
+	SetSUCNodeId = 0x54, // Configure a static/bridge controller to be a SUC/SIS node (or not)
+	DeleteSUCReturnRoute = 0x55, // Remove return routes to the SUC
 	GetSUCNodeId = 0x56, // Try to retrieve a Static Update Controller node id (zero if no SUC present)
 
 	UNKNOWN_FUNC_SEND_SUC_ID = 0x57,

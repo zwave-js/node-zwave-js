@@ -30,11 +30,8 @@ import {
 	priority,
 } from "../message/Message";
 import type { SuccessIndicator } from "../message/SuccessIndicator";
-import {
-	MAX_SEND_ATTEMPTS,
-	TransmitOptions,
-	TransmitStatus,
-} from "./SendDataMessages";
+import { MAX_SEND_ATTEMPTS } from "./SendDataMessages";
+import { TransmitOptions, TransmitStatus } from "./SendDataShared";
 
 @messageTypes(MessageType.Request, FunctionType.SendDataBridge)
 @priority(MessagePriority.Normal)
