@@ -352,57 +352,6 @@
 					"value": 2
 				}
 			]
-		},
-		"10": {
-			"label": "Temperature Reporting Filter",
-			"description": "Upper/Lower bounds for thermostat temperature reporting",
-			"valueSize": 4,
-			"minValue": 0,
-			"maxValue": 124,
-			"defaultValue": 124,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
-		},
-		"11": {
-			"label": "Simple UI Mode",
-			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 1,
-			"defaultValue": 1,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "Disable",
-					"value": 0
-				},
-				{
-					"label": "Enable",
-					"value": 1
-				}
-			]
-		},
-		"12": {
-			"label": "Multicast",
-			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 1,
-			"defaultValue": 0,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "Disable",
-					"value": 0
-				},
-				{
-					"label": "Enable",
-					"value": 1
-				}
-			]
 		}
 	}
 }
