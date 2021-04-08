@@ -134,7 +134,7 @@
 		},
 		"6": {
 			"label": "Switch 1 - Timing Function",
-			"unit":"100ms",
+			"unit": "100ms",
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 32767,
@@ -208,5 +208,5 @@
 				}
 			]
 		}
-}
+	}
 }

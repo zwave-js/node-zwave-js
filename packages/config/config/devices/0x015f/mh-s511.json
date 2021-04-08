@@ -126,237 +126,233 @@
 			"unsigned": true,
 			"readOnly": false,
 			"writeOnly": false,
-			"allowManualEntry": true		
+			"allowManualEntry": true
 		},
-			"8": {
-				"label": "Basic CC Integration Setting",
-				"valueSize": 1,
-				"minValue": 0,
-				"maxValue": 3,
-				"defaultValue": 0,
-				"unsigned": true,
-				"readOnly": false,
-				"writeOnly": false,
-				"allowManualEntry": false,
-				"options": [
-					{
-						"label": "Basic Set Received, Key 1 responds.  Basic Get Received, Key 1 sends Basic Report.  Key 1 WILL NOT send unsolicited Basic Report (No Endpoint) to Life Line Association",
-						"value": 0
-					},
-					{
-						"label": "Basic Set Received, Key 1 responds.  Basic Get Received, Key 1 sends Basic Report. Key 1 WILL send unsolicited Basic Report (No Endpoint) to Life Line Association",
-						"value": 1
-					},
-					{
-						"label": "Basic Set Received, all keys respond.  Basic Get Received, No reply.  All Keys WILL NOT send unsolicited Basic Report (No Endpoint) to Life Line Association",
-						"value": 2
-					},
-					{
-						"label": "Basic Set Received, all keys respond.  Basic Get Received, No reply.  All Keys WILL send unsolicited Basic Report (No Endpoint) to Life Line Association",
-						"value": 3
-					}
-				]
-			},
-			"10": {
-				"label": "Key 1 Mode",
-				"valueSize": 1,
-				"minValue": 0,
-				"maxValue": 6,
-				"defaultValue": 0,
-				"unsigned": true,
-				"readOnly": false,
-				"writeOnly": false,
-				"allowManualEntry": false,
-				"options": [
-					{
-						"label": "Single click to switch on/off",
-						"value": 0
-					},
-					{
-						"label": "When turned on, auto off after X seconds",
-						"value": 1
-					},
-					{
-						"label": "When turned off, auto on after X seconds",
-						"value": 2
-					},
-					{
-						"label": "Hold more than 3 seconds, turns on, when released, turns off",
-						"value": 3
-					},
-					{
-						"label": "Single click to switch on/off, Hold more than 3 seconds will turn on, when released, turns off",
-						"value": 4
-					},
-					{
-						"label": "Momentary switch mode 2: hold the key is on, off once released",
-						"value": 5
-					},
-					{
-						"label": "Hold more than three seconds to turn on, Hold more than three seconds to turn off",
-						"value": 6
-					}
-				]
-			},
-			"14": {
-				"label": "Disable Local Control",
-				"valueSize": 1,
-				"minValue": 0,
-				"maxValue": 1,
-				"defaultValue": 0,
-				"readOnly": false,
-				"writeOnly": false,
-				"allowManualEntry": false,
-				"options": [
-					{
-						"label": "All keys are valid for local control",
-						"value": 0
-					},
-					{
-						"label": "All keys are invalid for local control",
-						"value": 1
-					}
-				]
-			},
-			"15": {
-				"label": "Disable Remote Control",
-				"valueSize": 1,
-				"minValue": 0,
-				"maxValue": 1,
-				"defaultValue": 0,
-				"readOnly": false,
-				"writeOnly": false,
-				"allowManualEntry": false,
-				"options": [
-					{
-						"label": "All keys are valid for remote (gateway) control",
-						"value": 0
-					},
-					{
-						"label": "All keys are invalid for remote (gateway) control",
-						"value": 1
-					}
-				]
-			},
-			"16": {
-				"label": "Scene Respond",
-				"valueSize": 1,
-				"minValue": 0,
-				"maxValue": 7,
-				"defaultValue": 0,
-				"readOnly": false,
-				"writeOnly": false,
-				"allowManualEntry": false,
-				"options": [
-					{
-						"label": "Scene Respond Disabled",
-						"value": 0
-					},
-					{
-						"label": "Key 1 responds, Keys 2 and 3 do not respond",
-						"value": 1
-					},
-					{
-						"label": "Key 2 responds, Keys 1 and 3 do not respond",
-						"value": 2
-					},
-					{
-						"label": "Keys 1 and 2 respond, Key does not respond",
-						"value": 3
-					},
-					{
-						"label": "Key 3 responds, Keys 1 and 2 do not respond",
-						"value": 4
-					},
-					{
-						"label": "Keys 1 and 3 respond, Key 2 does not respond",
-						"value": 5
-					},
-					{
-						"label": "Keys 2 and 3 respond to scene, Key 1 does not respond",
-						"value": 6
-					},
-					{
-						"label": "Keys 1, 2 and 3 all respond to scene",
-						"value": 7
-					}
-				]
-			},
-			"17": {
-				"label": "Key 1 Scene Activate Mode Setting",
-				"valueSize": 1,
-				"minValue": 0,
-				"maxValue": 3,
-				"defaultValue": 0,
-				"readOnly": false,
-				"writeOnly": false,
-				"allowManualEntry": false,
-				"options": [
-					{
-						"label": "Scene Activate function disabled",
-						"value": 0
-					},
-					{
-						"label": "Upon clicking Key 1, always activate scene ID1 no matter what the status of Key 1 is",
-						"value": 1
-					},
-					{
-						"label": "Upon clicking Key 1, always activate scene ID1 when Key 1's relay output is open",
-						"value": 2
-					},
-					{
-						"label": "Upon clicking Key 1, always activate scene ID1 when Key 1's relay output is closed",
-						"value": 3
-					}
-				]
-			},
-			"18": {
-				"label": "Key 1 Activate Scene ID (0=Scene Activate Function Disabled)",
-				"valueSize": 1,
-				"minValue": 0,
-				"maxValue": 255,
-				"defaultValue": 0,
-				"unsigned": true,
-				"readOnly": false,
-				"writeOnly": false,
-				"allowManualEntry": true
-			},
-			"19": {
-				"label": "Key 1 Activate Scene Duration (0=Instantly)",
-				"unit":"seconds",
-				"valueSize": 1,
-				"minValue": 0,
-				"maxValue": 255,
-				"defaultValue": 0,
-				"unsigned": true,
-				"readOnly": false,
-				"writeOnly": false,
-				"allowManualEntry": true
-			},
-			"255": {
-				"label": "Factory Reset",
-				"valueSize": 1,
-				"minValue": 0,
-				"maxValue": 85,
-				"defaultValue": 0,
-				"unsigned": true,
-				"readOnly": false,
-				"writeOnly": true,
-				"allowManualEntry": true,
-				"options": [
-					{
-						"label": "No",
-						"value": 0
-					},
-					{
-						"label": "Factory Reset",
-						"value": 85
-					}
-				]
-			}
-			
-	
+		"8": {
+			"label": "Basic CC Integration Setting",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 3,
+			"defaultValue": 0,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Basic Set Received, Key 1 responds.  Basic Get Received, Key 1 sends Basic Report.  Key 1 WILL NOT send unsolicited Basic Report (No Endpoint) to Life Line Association",
+					"value": 0
+				},
+				{
+					"label": "Basic Set Received, Key 1 responds.  Basic Get Received, Key 1 sends Basic Report. Key 1 WILL send unsolicited Basic Report (No Endpoint) to Life Line Association",
+					"value": 1
+				},
+				{
+					"label": "Basic Set Received, all keys respond.  Basic Get Received, No reply.  All Keys WILL NOT send unsolicited Basic Report (No Endpoint) to Life Line Association",
+					"value": 2
+				},
+				{
+					"label": "Basic Set Received, all keys respond.  Basic Get Received, No reply.  All Keys WILL send unsolicited Basic Report (No Endpoint) to Life Line Association",
+					"value": 3
+				}
+			]
+		},
+		"10": {
+			"label": "Key 1 Mode",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 6,
+			"defaultValue": 0,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Single click to switch on/off",
+					"value": 0
+				},
+				{
+					"label": "When turned on, auto off after X seconds",
+					"value": 1
+				},
+				{
+					"label": "When turned off, auto on after X seconds",
+					"value": 2
+				},
+				{
+					"label": "Hold more than 3 seconds, turns on, when released, turns off",
+					"value": 3
+				},
+				{
+					"label": "Single click to switch on/off, Hold more than 3 seconds will turn on, when released, turns off",
+					"value": 4
+				},
+				{
+					"label": "Momentary switch mode 2: hold the key is on, off once released",
+					"value": 5
+				},
+				{
+					"label": "Hold more than three seconds to turn on, Hold more than three seconds to turn off",
+					"value": 6
+				}
+			]
+		},
+		"14": {
+			"label": "Disable Local Control",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "All keys are valid for local control",
+					"value": 0
+				},
+				{
+					"label": "All keys are invalid for local control",
+					"value": 1
+				}
+			]
+		},
+		"15": {
+			"label": "Disable Remote Control",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "All keys are valid for remote (gateway) control",
+					"value": 0
+				},
+				{
+					"label": "All keys are invalid for remote (gateway) control",
+					"value": 1
+				}
+			]
+		},
+		"16": {
+			"label": "Scene Respond",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 7,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Scene Respond Disabled",
+					"value": 0
+				},
+				{
+					"label": "Key 1 responds, Keys 2 and 3 do not respond",
+					"value": 1
+				},
+				{
+					"label": "Key 2 responds, Keys 1 and 3 do not respond",
+					"value": 2
+				},
+				{
+					"label": "Keys 1 and 2 respond, Key does not respond",
+					"value": 3
+				},
+				{
+					"label": "Key 3 responds, Keys 1 and 2 do not respond",
+					"value": 4
+				},
+				{
+					"label": "Keys 1 and 3 respond, Key 2 does not respond",
+					"value": 5
+				},
+				{
+					"label": "Keys 2 and 3 respond to scene, Key 1 does not respond",
+					"value": 6
+				},
+				{
+					"label": "Keys 1, 2 and 3 all respond to scene",
+					"value": 7
+				}
+			]
+		},
+		"17": {
+			"label": "Key 1 Scene Activate Mode Setting",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 3,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Scene Activate function disabled",
+					"value": 0
+				},
+				{
+					"label": "Upon clicking Key 1, always activate scene ID1 no matter what the status of Key 1 is",
+					"value": 1
+				},
+				{
+					"label": "Upon clicking Key 1, always activate scene ID1 when Key 1's relay output is open",
+					"value": 2
+				},
+				{
+					"label": "Upon clicking Key 1, always activate scene ID1 when Key 1's relay output is closed",
+					"value": 3
+				}
+			]
+		},
+		"18": {
+			"label": "Key 1 Activate Scene ID (0=Scene Activate Function Disabled)",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 0,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"19": {
+			"label": "Key 1 Activate Scene Duration (0=Instantly)",
+			"unit": "seconds",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 0,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"255": {
+			"label": "Factory Reset",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 85,
+			"defaultValue": 0,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": true,
+			"allowManualEntry": true,
+			"options": [
+				{
+					"label": "No",
+					"value": 0
+				},
+				{
+					"label": "Factory Reset",
+					"value": 85
+				}
+			]
 		}
 	}
-		
-	
+}

@@ -405,7 +405,7 @@
 		},
 		"19": {
 			"label": "Key 1 Activate Scene Duration (0=Instantly)",
-			"unit":"seconds",
+			"unit": "seconds",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 255,
@@ -456,7 +456,7 @@
 		},
 		"22": {
 			"label": "Key 2 Activate Scene Duration (0=Instantly)",
-			"unit":"seconds",
+			"unit": "seconds",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 255,
@@ -507,7 +507,7 @@
 		},
 		"25": {
 			"label": "Key 3 Activate Scene Duration (0=Instantly)",
-			"unit":"seconds",
+			"unit": "seconds",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 255,
@@ -538,7 +538,5 @@
 				}
 			]
 		}
-		
-
 	}
 }
