@@ -343,7 +343,7 @@
 		},
 		"26[0xff000000]": {
 			"$import": "templates/logic_group_template.json#multilevel_enable",
-			"label": "Pushbutton 4 Single-Activation Enable"
+			"label": "Pushbutton 2 Single-Activation Enable"
 		},
 		"26[0xff0000]": {
 			"$import": "templates/logic_group_template.json#multilevel_upper_function",
