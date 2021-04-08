@@ -9,6 +9,18 @@
 		{
 			"productType": "0x0902",
 			"productId": "0x1000"
+		},
+		{
+			"productType": "0x0902",
+			"productId": "0x2000"
+		},
+		{
+			"productType": "0x0902",
+			"productId": "0x3000"
+		},
+		{
+			"productType": "0x0902",
+			"productId": "0x4000"
 		}
 	],
 	"firmwareVersion": {
@@ -32,7 +44,7 @@
 					"value": 0
 				},
 				{
-					"label": "restore the state",
+					"label": "device restores the state from before the power failure",
 					"value": 1
 				}
 			]
@@ -48,11 +60,11 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "Analog input without internal pull-up",
+					"label": "Analog input without internal pull-up (Sensor Multilevel)",
 					"value": 0
 				},
 				{
-					"label": "Analog input with internal pull-up",
+					"label": "Analog input with internal pull-up (Sensor Multilevel)",
 					"value": 1
 				},
 				{
@@ -60,11 +72,11 @@
 					"value": 2
 				},
 				{
-					"label": "Toggle switch: switch state on every input change",
+					"label": "Toggle switch: switch state on every input change (Central Scene)",
 					"value": 3
 				},
 				{
-					"label": "Toggle switch: closed – ON, opened – OFF",
+					"label": "Toggle switch: contact closed - ON, contact opened - OFF (Central Scene)",
 					"value": 4
 				}
 			]
@@ -80,11 +92,11 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "Analog input without internal pull-up",
+					"label": "Analog input without internal pull-up (Sensor Multilevel)",
 					"value": 0
 				},
 				{
-					"label": "Analog input with internal pull-up",
+					"label": "Analog input with internal pull-up (Sensor Multilevel)",
 					"value": 1
 				},
 				{
@@ -92,11 +104,11 @@
 					"value": 2
 				},
 				{
-					"label": "Toggle switch: switch state on every input change",
+					"label": "Toggle switch: switch state on every input change (Central Scene)",
 					"value": 3
 				},
 				{
-					"label": "Toggle switch: closed – ON, opened – OFF",
+					"label": "Toggle switch: contact closed - ON, contact opened - OFF (Central Scene)",
 					"value": 4
 				}
 			]
@@ -112,11 +124,11 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "Analog input without internal pull-up",
+					"label": "Analog input without internal pull-up (Sensor Multilevel)",
 					"value": 0
 				},
 				{
-					"label": "Analog input with internal pull-up",
+					"label": "Analog input with internal pull-up (Sensor Multilevel)",
 					"value": 1
 				},
 				{
@@ -124,11 +136,11 @@
 					"value": 2
 				},
 				{
-					"label": "Toggle switch: switch state on every input change",
+					"label": "Toggle switch: switch state on every input change (Central Scene)",
 					"value": 3
 				},
 				{
-					"label": "Toggle switch: closed – ON, opened – OFF",
+					"label": "Toggle switch: contact closed - ON, contact opened - OFF (Central Scene)",
 					"value": 4
 				}
 			]
@@ -144,11 +156,11 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "Analog input without internal pull-up",
+					"label": "Analog input without internal pull-up (Sensor Multilevel)",
 					"value": 0
 				},
 				{
-					"label": "Analog input with internal pull-up",
+					"label": "Analog input with internal pull-up (Sensor Multilevel)",
 					"value": 1
 				},
 				{
@@ -156,11 +168,11 @@
 					"value": 2
 				},
 				{
-					"label": "Toggle switch: switch state on every input change",
+					"label": "Toggle switch: switch state on every input change (Central Scene)",
 					"value": 3
 				},
 				{
-					"label": "Toggle switch:closed – ON, opened – OF",
+					"label": "Toggle switch: contact closed - ON, contact opened - OFF (Central Scene)",
 					"value": 4
 				}
 			]
@@ -207,7 +219,7 @@
 		},
 		"62": {
 			"label": "Power reports - periodic",
-			"unit": "seconda",
+			"unit": "seconds",
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 32400,
@@ -249,6 +261,7 @@
 		},
 		"66": {
 			"label": "Energy reports - periodic",
+			"unit": "seconds",
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 32400,
@@ -268,17 +281,18 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "RGBW mode",
+					"label": "RGBW mode (every input controls output with the same number, IN1‑OUT1, IN2‑OUT2, IN3‑OUT3, IN4‑OUT4)",
 					"value": 0
 				},
 				{
-					"label": "HSB and White mode",
+					"label": "HSB and White mode (inputs works in HSB color model, IN1‑H (Hue), IN2‑S (Saturation), IN3‑B (Brightness), IN4‑White (OUT4)",
 					"value": 1
 				}
 			]
 		},
 		"151": {
 			"label": "Local control - transition time",
+			"unit": "seconds",
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 254,
@@ -289,6 +303,7 @@
 		},
 		"152": {
 			"label": "Remote control - transition time",
+			"unit": "seconds",
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 254,
@@ -405,6 +420,7 @@
 		},
 		"35": {
 			"label": "Duration of alarm signalization",
+			"unit": "seconds",
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 32400,
