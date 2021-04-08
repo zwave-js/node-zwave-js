@@ -68,7 +68,7 @@
 				}
 			]
 		},
-		"2[0xff]": {
+		"2[0xff000000]": {
 			"label": "HVAC Type",
 			"valueSize": 4,
 			"minValue": 1,
@@ -88,7 +88,7 @@
 				}
 			]
 		},
-		"2[0x0f00]": {
+		"2[0x0f0000]": {
 			"label": "Number of Auxiliary or Heat Stages",
 			"valueSize": 4,
 			"minValue": 0,
@@ -97,7 +97,7 @@
 			"writeOnly": false,
 			"allowManualEntry": false
 		},
-		"2[0xf000]": {
+		"2[0xf00000]": {
 			"label": "Auxiliary Heat Type",
 			"valueSize": 4,
 			"minValue": 1,
@@ -116,7 +116,7 @@
 				}
 			]
 		},
-		"2[0xff0000]": {
+		"2[0xff00]": {
 			"label": "Number of Heat Pump Stages",
 			"valueSize": 4,
 			"minValue": 0,
@@ -125,7 +125,7 @@
 			"writeOnly": false,
 			"allowManualEntry": false
 		},
-		"2[0xff000000]": {
+		"2[0xff]": {
 			"label": "Number of Cool Stages",
 			"valueSize": 4,
 			"minValue": 0,
