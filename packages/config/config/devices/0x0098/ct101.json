@@ -269,10 +269,9 @@
 				}
 			]
 		},
-		"8": {
-			"label": "Thermostat Differential Temperature",
-			"description": "Configures additional stages",
-			"valueSize": 1,
+		"8[0xff00]": {
+			"label": "Heating Differential Temperature",
+			"valueSize": 2,
 			"minValue": 4,
 			"maxValue": 12,
 			"defaultValue": 4,
@@ -285,8 +284,48 @@
 					"value": 4
 				},
 				{
+					"label": "3.0 °F",
+					"value": 6
+				},
+				{
 					"label": "4.0 °F",
 					"value": 8
+				},
+				{
+					"label": "5.0 °F",
+					"value": 10
+				},
+				{
+					"label": "6.0 °F",
+					"value": 12
+				}
+			]
+		},
+		"8[0xff]": {
+			"label": "Cooling Differential Temperature",
+			"valueSize": 2,
+			"minValue": 4,
+			"maxValue": 12,
+			"defaultValue": 4,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "2.0 °F",
+					"value": 4
+				},
+				{
+					"label": "3.0 °F",
+					"value": 6
+				},
+				{
+					"label": "4.0 °F",
+					"value": 8
+				},
+				{
+					"label": "5.0 °F",
+					"value": 10
 				},
 				{
 					"label": "6.0 °F",
