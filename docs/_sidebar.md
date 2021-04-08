@@ -21,6 +21,12 @@
 
     -   [Send custom messages](usage/custom.md)
 
+-   Troubleshooting
+
+    -   [Overview](troubleshooting/index.md)
+    -   [A device does not respond](troubleshooting/no-device-response.md)
+    -   [Missing updates from a device](troubleshooting/no-updates.md)
+
 -   Device Configuration Files
 
     -   [Overview](config-files/overview.md)
@@ -36,7 +42,6 @@
 
     -   [Introduction](development/intro.md)
     -   [Implementing a Command Class](development/implementing-cc.md)
-    -   [Troubleshooting](development/troubleshooting.md)
     -   [Installing from GitHub](development/installing-from-github.md)
 
 -   Data Collection & Use Practices
