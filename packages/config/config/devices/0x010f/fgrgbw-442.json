@@ -44,7 +44,7 @@
 					"value": 0
 				},
 				{
-					"label": "device restores the state from before the power failure",
+					"label": "restore the state",
 					"value": 1
 				}
 			]
@@ -60,11 +60,11 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "Analog input without internal pull-up (Sensor Multilevel)",
+					"label": "Analog input without internal pull-up",
 					"value": 0
 				},
 				{
-					"label": "Analog input with internal pull-up (Sensor Multilevel)",
+					"label": "Analog input with internal pull-up",
 					"value": 1
 				},
 				{
@@ -72,11 +72,11 @@
 					"value": 2
 				},
 				{
-					"label": "Toggle switch: switch state on every input change (Central Scene)",
+					"label": "Toggle switch: switch state on every input change",
 					"value": 3
 				},
 				{
-					"label": "Toggle switch: contact closed - ON, contact opened - OFF (Central Scene)",
+					"label": "Toggle switch: closed – ON, opened – OFF",
 					"value": 4
 				}
 			]
@@ -92,11 +92,11 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "Analog input without internal pull-up (Sensor Multilevel)",
+					"label": "Analog input without internal pull-up",
 					"value": 0
 				},
 				{
-					"label": "Analog input with internal pull-up (Sensor Multilevel)",
+					"label": "Analog input with internal pull-up",
 					"value": 1
 				},
 				{
@@ -104,11 +104,11 @@
 					"value": 2
 				},
 				{
-					"label": "Toggle switch: switch state on every input change (Central Scene)",
+					"label": "Toggle switch: switch state on every input change",
 					"value": 3
 				},
 				{
-					"label": "Toggle switch: contact closed - ON, contact opened - OFF (Central Scene)",
+					"label": "Toggle switch: closed – ON, opened – OFF",
 					"value": 4
 				}
 			]
@@ -124,11 +124,11 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "Analog input without internal pull-up (Sensor Multilevel)",
+					"label": "Analog input without internal pull-up",
 					"value": 0
 				},
 				{
-					"label": "Analog input with internal pull-up (Sensor Multilevel)",
+					"label": "Analog input with internal pull-up",
 					"value": 1
 				},
 				{
@@ -136,11 +136,11 @@
 					"value": 2
 				},
 				{
-					"label": "Toggle switch: switch state on every input change (Central Scene)",
+					"label": "Toggle switch: switch state on every input change",
 					"value": 3
 				},
 				{
-					"label": "Toggle switch: contact closed - ON, contact opened - OFF (Central Scene)",
+					"label": "Toggle switch: closed – ON, opened – OFF",
 					"value": 4
 				}
 			]
@@ -156,11 +156,11 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "Analog input without internal pull-up (Sensor Multilevel)",
+					"label": "Analog input without internal pull-up",
 					"value": 0
 				},
 				{
-					"label": "Analog input with internal pull-up (Sensor Multilevel)",
+					"label": "Analog input with internal pull-up",
 					"value": 1
 				},
 				{
@@ -168,11 +168,11 @@
 					"value": 2
 				},
 				{
-					"label": "Toggle switch: switch state on every input change (Central Scene)",
+					"label": "Toggle switch: switch state on every input change",
 					"value": 3
 				},
 				{
-					"label": "Toggle switch: contact closed - ON, contact opened - OFF (Central Scene)",
+					"label": "Toggle switch:closed – ON, opened – OF",
 					"value": 4
 				}
 			]
@@ -281,11 +281,11 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "RGBW mode (every input controls output with the same number, IN1‑OUT1, IN2‑OUT2, IN3‑OUT3, IN4‑OUT4)",
+					"label": "RGBW mode (IN1‑OUT1, IN2‑OUT2, IN3‑OUT3, IN4‑OUT4)",
 					"value": 0
 				},
 				{
-					"label": "HSB and White mode (inputs works in HSB color model, IN1‑H (Hue), IN2‑S (Saturation), IN3‑B (Brightness), IN4‑White (OUT4)",
+					"label": "HSB and White mode (IN1‑H, IN2‑S, IN3‑B, IN4‑White (OUT4)",
 					"value": 1
 				}
 			]
