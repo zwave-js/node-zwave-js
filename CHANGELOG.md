@@ -2,7 +2,7 @@
 <!--
 	Add placeholder for next release with `wip` snippet
 -->
-## 7.2.0 (2021-04-09)
+## __WORK IN PROGRESS__
 ### Features
 * Added methods to manage SUC return routes and automatically promote the controller to SUC/SIS if possible and necessary
 
@@ -16,6 +16,8 @@
 * Map alarmLevel to userId for Yale locks
 * Map `Basic CC::Set` to `Binary Sensor` for WADWAZ-1 and WAPIRZ-1
 * Add additional product ID to Fibaro FGS-224
+* Add compat flag `preserveRootApplicationCCValueIDs` to ZEN16, 17, 25
+* Update FGRGBW-442 config
 
 ## 7.1.1 (2021-04-06)
 ### Changes under the hood
