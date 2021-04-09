@@ -1303,6 +1303,11 @@ export class Driver extends EventEmitter {
 		}
 	}
 
+	/** Returns whether or not usage statistics are enabled. */
+	public areStatisticsEnabled(): boolean {
+		return this._statisticsEnabled;
+	}
+
 	/** @internal */
 	// eslint-disable-next-line @typescript-eslint/require-await
 	public async getUUID(): Promise<string> {

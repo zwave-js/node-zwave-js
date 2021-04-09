@@ -56,6 +56,14 @@ disableStatistics(): void
 
 Disable sending usage statistics.
 
+### `areStatisticsEnabled`
+
+```ts
+areStatisticsEnabled(): boolean
+```
+
+Returns whether usage statistics are enabled.
+
 ### `getSupportedCCVersionForEndpoint`
 
 ```ts
