@@ -56,6 +56,14 @@ disableStatistics(): void
 
 Disable sending usage statistics.
 
+### `statisticsEnabled`
+
+```ts
+statisticsEnabled(): boolean
+```
+
+Returns whether reporting usage statistics is currently enabled.
+
 ### `getSupportedCCVersionForEndpoint`
 
 ```ts
@@ -77,14 +85,6 @@ This method
 
 > [!WARNING]
 > This only provides reliable information **after** the node/endpoint interview was completed.
-
-### `statisticsEnabled`
-
-```ts
-statisticsEnabled(): boolean
-```
-
-Returns whether reporting usage statistics is currently enabled.
 
 ### `getSafeCCVersionForNode`
 
