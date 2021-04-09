@@ -270,11 +270,6 @@ Version 8 of the `Notification CC` added the requirement that devices must issue
 
 Some legacy devices emit an NIF when a local event occurs (e.g. a button press) to signal that the controller should request a status update. However, some of these devices require a delay before they are ready to respond to this request. `manualValueRefreshDelayMs` specifies that delay, expressed in milliseconds. If unset, there will be no delay.
 
-### `mapRootReportsToEndpoints`
-
-Starting with version 3, the `Multi Channel Association CC` allows setting up Multi Channel Lifeline Associations between devices, allowing devices to report the status of their endpoints. Despite this possibility, some devices only use the root device for reporting.  
-When the flag `mapRootReportsToEndpoints` is set to `true`, `zwave-js` will map these suboptimal reports to an endpoint if the mapping is not ambiguous.
-
 ### `preserveRootApplicationCCValueIDs`
 
 The Z-Wave+ specs mandate that the root endpoint must **mirror** the application functionality of endpoint 1 (and potentially others). For this reason, `zwave-js` hides these superfluous values. However, some legacy devices offer additional functionality through the root endpoint, which should not be hidden. To achive this, set `preserveRootApplicationCCValueIDs` to `true`.

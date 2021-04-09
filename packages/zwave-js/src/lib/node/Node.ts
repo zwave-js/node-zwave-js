@@ -1806,29 +1806,28 @@ protocol version:      ${this._protocolVersion}`;
 		// was wrong. Stop querying it regularly for updates
 		this.cancelManualValueRefresh(command.ccId);
 
-		// If this is a report for the root endpoint and the node supports the CC on another endpoint, it was probably
-		// meant to come from that endpoint. Either it does not support multi channel associations or it is misbehaving.
-		// We map these to a supporting endpoint if the corresponding compat flag is set
+		// If this is a report for the root endpoint and the node supports the CC on another endpoint,
+		// we need to map it to endpoint 1. Either it does not support multi channel associations or
+		// it is misbehaving. In any case, we would hide this report if we didn't map it
 		if (
 			command.endpointIndex === 0 &&
 			command.constructor.name.endsWith("Report") &&
 			this.getEndpointCount() >= 1 &&
-			this._deviceConfig?.compat?.mapRootReportsToEndpoints
+			// skip the root to endpoint mapping if the root endpoint values are not meant to mirror endpoint 1
+			!this._deviceConfig?.compat?.preserveRootApplicationCCValueIDs
 		) {
-			// Figure out if the mapping from root to another endpoint is unambiguous.
-			// Otherwise, we cannot map without getting it wrong some of the time.
-			const supportingEndpoints = this.getAllEndpoints().filter(
-				(e) => e.index !== 0 && e.supportsCC(command.ccId),
-			);
-			if (supportingEndpoints.length === 1) {
-				const endpoint = supportingEndpoints[0];
-				// Force the CC to store its values again under the only supporting endpoint
+			// Find the first endpoint that supports the received CC - if there is none, we don't map the report
+			for (const endpoint of this.getAllEndpoints()) {
+				if (endpoint.index === 0) continue;
+				if (!endpoint.supportsCC(command.ccId)) continue;
+				// Force the CC to store its values again under the supporting endpoint
 				this.driver.controllerLog.logNode(
 					this.nodeId,
-					`Mapping unsolicited report from root device to endpoint #${endpoint.index}`,
+					`Mapping unsolicited report from root device to first supporting endpoint #${endpoint.index}`,
 				);
 				command.endpointIndex = endpoint.index;
 				command.persistValues();
+				break;
 			}
 		}
 

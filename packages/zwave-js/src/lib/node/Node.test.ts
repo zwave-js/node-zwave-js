@@ -1512,11 +1512,11 @@ describe("lib/node/Node", () => {
 
 		beforeEach(() => fakeDriver.sendMessage.mockClear());
 
-		it("should map commands from the root endpoint to a supporting endpoint if compat flag mapRootReportsToEndpoints is set", async () => {
+		it("should map commands from the root endpoint to endpoint 1 if MultiChannelAssociationCC is V1/V2", async () => {
 			const node = makeNode([
 				[
 					CommandClasses["Multi Channel Association"],
-					{ isSupported: true },
+					{ isSupported: true, version: 2 },
 				],
 			]);
 			// We have two endpoints
@@ -1539,11 +1539,6 @@ describe("lib/node/Node", () => {
 			node.getEndpoint(1)?.addCC(CommandClasses["Binary Switch"], {
 				isSupported: true,
 			});
-			node["_deviceConfig"] = {
-				compat: {
-					mapRootReportsToEndpoints: true,
-				},
-			} as any;
 
 			// Handle a command for the root endpoint
 			const command = new BinarySwitchCCReport(
