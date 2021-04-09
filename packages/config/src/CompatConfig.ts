@@ -104,19 +104,6 @@ error in compat option forceNotificationIdleReset`,
 				definition.forceNotificationIdleReset;
 		}
 
-		if (definition.mapRootReportsToEndpoints != undefined) {
-			if (definition.mapRootReportsToEndpoints !== true) {
-				throwInvalidConfig(
-					"devices",
-					`config/devices/${filename}:
-error in compat option mapRootReportsToEndpoints`,
-				);
-			}
-
-			this.mapRootReportsToEndpoints =
-				definition.mapRootReportsToEndpoints;
-		}
-
 		if (definition.preserveRootApplicationCCValueIDs != undefined) {
 			if (definition.preserveRootApplicationCCValueIDs !== true) {
 				throwInvalidConfig(
@@ -381,7 +368,6 @@ compat option alarmMapping must be an array where all items are objects!`,
 	public readonly enableBasicSetMapping?: boolean;
 	public readonly forceNotificationIdleReset?: boolean;
 	public readonly manualValueRefreshDelayMs?: number;
-	public readonly mapRootReportsToEndpoints?: boolean;
 	public readonly overrideFloatEncoding?: {
 		size?: number;
 		precision?: number;
