@@ -23,7 +23,6 @@
 		"min": "0.0",
 		"max": "255.255"
 	},
-	"supportsZWavePlus": true,
 	"paramInformation": {
 		"1": {
 			"label": "Restore State After Power Failure",
@@ -65,7 +64,7 @@
 				},
 				{
 					"label": "Roller Blind Switch - S1 Dim Up, S2 Dim Down",
-					"value": 1
+					"value": 2
 				}
 			]
 		},
@@ -139,7 +138,8 @@
 			"allowManualEntry": true
 		},
 		"7": {
-			"label": "Single dimming step time (Manual) 10ms steps",
+			"label": "Single dimming step time (Manual)",
+			"unit" : "10ms",
 			"valueSize": 2,
 			"minValue": 1,
 			"maxValue": 255,
@@ -160,6 +160,7 @@
 		},
 		"9": {
 			"label": "Single dimming step time (Auto)",
+			"unit" : "10ms",
 			"valueSize": 2,
 			"minValue": 1,
 			"maxValue": 255,

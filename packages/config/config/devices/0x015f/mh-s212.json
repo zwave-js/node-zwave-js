@@ -26,7 +26,6 @@
 			"isLifeline": true
 		}
 	},
-	"supportsZWavePlus": true,
 	"paramInformation": {
 		"1": {
 			"label": "Restore State After Power Failure",
@@ -117,17 +116,17 @@
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 1,
-			"defaultValue": 0,
+			"defaultValue": 1,
 			"readOnly": false,
 			"writeOnly": false,
 			"allowManualEntry": true,
 			"options": [
 				{
-					"label": "Toggle Switch without specified on/off position",
+					"label": "Forbid Manual Operation",
 					"value": 0
 				},
 				{
-					"label": "Toggle Switch with specified on/off position",
+					"label": "Allow Manual Operation",
 					"value": 1
 				}
 			]

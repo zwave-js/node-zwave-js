@@ -42,7 +42,6 @@
 			"maxNodes": 5
 		}
 	},
-	"supportsZWavePlus": true,
 	"paramInformation": {
 		"1": {
 			"label": "Recover State After Power Failure",

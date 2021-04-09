@@ -15,7 +15,6 @@
 		"min": "0.0",
 		"max": "255.255"
 	},
-	"supportsZWavePlus": true,
 	"paramInformation": {
 		"2": {
 			"label": "Restore State After Power Failure",
@@ -91,27 +90,27 @@
 					"value": 0
 				},
 				{
-					"label": "When turned on, auto off after X seconds",
+					"label": "When turned on, auto off after 'Key On Duration' seconds",
 					"value": 1
 				},
 				{
-					"label": "When turned off, auto on after X seconds",
+					"label": "When turned off, auto on after 'Key On Duration' seconds",
 					"value": 2
 				},
 				{
-					"label": "Hold more than 3 seconds, turns on, when released, turns off",
+					"label": "Hold >3secs turns on, when released, turns off",
 					"value": 3
 				},
 				{
-					"label": "Single click to switch on/off, Hold more than 3 seconds will turn on, when released, turns off",
+					"label": "Single click for on/off, Hold >3secs on, release turns off",
 					"value": 4
 				},
 				{
-					"label": "Momentary switch mode 2: hold the key is on, off once released",
+					"label": "Momentary switch: hold key turns on, off once released",
 					"value": 5
 				},
 				{
-					"label": "Hold more than three seconds to turn on, Hold more than three seconds to turn off",
+					"label": "Hold >3secs turns on, Hold >3secs turns off",
 					"value": 6
 				}
 			]
@@ -140,19 +139,19 @@
 				"allowManualEntry": false,
 				"options": [
 					{
-						"label": "Basic Set Received, Key 1 responds.  Basic Get Received, Key 1 sends Basic Report.  Key 1 WILL NOT send unsolicited Basic Report (No Endpoint) to Life Line Association",
+						"label": "Key1 Responds to Basic Set and Get. No unsolicited report to Lifeline",
 						"value": 0
 					},
 					{
-						"label": "Basic Set Received, Key 1 responds.  Basic Get Received, Key 1 sends Basic Report. Key 1 WILL send unsolicited Basic Report (No Endpoint) to Life Line Association",
+						"label": "Key1 Responds to Basic Set and Get. Key1 WILL send unsolicited report to Lifeline",
 						"value": 1
 					},
 					{
-						"label": "Basic Set Received, all keys respond.  Basic Get Received, No reply.  All Keys WILL NOT send unsolicited Basic Report (No Endpoint) to Life Line Association",
+						"label": "All Keys respond to Basic Set. Basic Get ignored. No unsolicited report to Lifeline",
 						"value": 2
 					},
 					{
-						"label": "Basic Set Received, all keys respond.  Basic Get Received, No reply.  All Keys WILL send unsolicited Basic Report (No Endpoint) to Life Line Association",
+						"label": "All Keys respond to Basic Set. Basic Get ignored. All keys send unsolicited report to Lifeline",
 						"value": 3
 					}
 				]
@@ -173,27 +172,27 @@
 						"value": 0
 					},
 					{
-						"label": "When turned on, auto off after X seconds",
+						"label": "When turned on, auto off after 'Key On Duration' seconds",
 						"value": 1
 					},
 					{
-						"label": "When turned off, auto on after X seconds",
+						"label": "When turned off, auto on after 'Key On Duration' seconds",
 						"value": 2
 					},
 					{
-						"label": "Hold more than 3 seconds, turns on, when released, turns off",
+						"label": "Hold >3secs turns on, when released, turns off",
 						"value": 3
 					},
 					{
-						"label": "Single click to switch on/off, Hold more than 3 seconds will turn on, when released, turns off",
+						"label": "Single click for on/off, Hold >3secs on, release turns off",
 						"value": 4
 					},
 					{
-						"label": "Momentary switch mode 2: hold the key is on, off once released",
+						"label": "Momentary switch: hold key turns on, off once released",
 						"value": 5
 					},
 					{
-						"label": "Hold more than three seconds to turn on, Hold more than three seconds to turn off",
+						"label": "Hold >3secs turns on, Hold >3secs turns off",
 						"value": 6
 					}
 				]
