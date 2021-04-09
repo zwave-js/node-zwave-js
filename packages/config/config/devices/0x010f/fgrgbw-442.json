@@ -281,11 +281,11 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "RGBW mode (IN1‑OUT1, IN2‑OUT2, IN3‑OUT3, IN4‑OUT4)",
+					"label": "RGBW mode: IN1‑OUT1, IN2‑OUT2, IN3‑OUT3, IN4‑OUT4",
 					"value": 0
 				},
 				{
-					"label": "HSB and White mode (IN1‑H, IN2‑S, IN3‑B, IN4‑White (OUT4)",
+					"label": "HSB and White mode: IN1‑H, IN2‑S, IN3‑B, IN4‑White (OUT4)",
 					"value": 1
 				}
 			]
