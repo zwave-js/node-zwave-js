@@ -2,7 +2,7 @@
 <!--
 	Add placeholder for next release with `wip` snippet
 -->
-## __WORK IN PROGRESS__
+## 7.2.1 (2021-04-10)
 ### Features
 * Added methods to manage SUC return routes and automatically promote the controller to SUC/SIS if possible and necessary
 
