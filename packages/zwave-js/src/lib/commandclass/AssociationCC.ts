@@ -26,7 +26,7 @@ import {
 	gotDeserializationOptions,
 	implementedVersion,
 } from "./CommandClass";
-import type { Association } from "./MultiChannelAssociationCC";
+import type { AssociationAddress } from "./MultiChannelAssociationCC";
 
 /** Returns the ValueID used to store the maximum number of nodes of an association group */
 export function getMaxNodesValueId(
@@ -295,9 +295,9 @@ export class AssociationCC extends CommandClass {
 	 */
 	public getAllDestinationsCached(): ReadonlyMap<
 		number,
-		readonly Association[]
+		readonly AssociationAddress[]
 	> {
-		const ret = new Map<number, Association[]>();
+		const ret = new Map<number, AssociationAddress[]>();
 		const groupCount = this.getGroupCountCached();
 		const valueDB = this.getValueDB();
 		for (let i = 1; i <= groupCount; i++) {

@@ -243,7 +243,7 @@ export class CentralSceneCC extends CommandClass {
 						direction: "outbound",
 					});
 					await this.driver.controller.addAssociations(
-						node.id,
+						{ nodeId: node.id },
 						groupId,
 						[{ nodeId: this.driver.controller.ownNodeId! }],
 					);
