@@ -9,6 +9,18 @@
 		{
 			"productType": "0x0902",
 			"productId": "0x1000"
+		},
+		{
+			"productType": "0x0902",
+			"productId": "0x2000"
+		},
+		{
+			"productType": "0x0902",
+			"productId": "0x3000"
+		},
+		{
+			"productType": "0x0902",
+			"productId": "0x4000"
 		}
 	],
 	"firmwareVersion": {
@@ -207,7 +219,7 @@
 		},
 		"62": {
 			"label": "Power reports - periodic",
-			"unit": "seconda",
+			"unit": "seconds",
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 32400,
@@ -249,6 +261,7 @@
 		},
 		"66": {
 			"label": "Energy reports - periodic",
+			"unit": "seconds",
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 32400,
@@ -268,17 +281,18 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "RGBW mode",
+					"label": "RGBW mode: IN1‑OUT1, IN2‑OUT2, IN3‑OUT3, IN4‑OUT4",
 					"value": 0
 				},
 				{
-					"label": "HSB and White mode",
+					"label": "HSB and White mode: IN1‑H, IN2‑S, IN3‑B, IN4‑White (OUT4)",
 					"value": 1
 				}
 			]
 		},
 		"151": {
 			"label": "Local control - transition time",
+			"unit": "seconds",
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 254,
@@ -289,6 +303,7 @@
 		},
 		"152": {
 			"label": "Remote control - transition time",
+			"unit": "seconds",
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 254,
@@ -405,6 +420,7 @@
 		},
 		"35": {
 			"label": "Duration of alarm signalization",
+			"unit": "seconds",
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 32400,
