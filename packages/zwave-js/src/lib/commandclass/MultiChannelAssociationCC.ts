@@ -37,42 +37,61 @@ import {
 /**
  * @publicAPI
  */
-export interface Association {
+export interface AssociationAddress {
 	nodeId: number;
 	endpoint?: number;
 }
 
+/**
+ * @publicAPI
+ * @deprecated use AssociationAddress instead
+ */
+export type Association = AssociationAddress;
+
 /** Returns the ValueID used to store the maximum number of nodes of an association group */
-export function getMaxNodesValueId(groupId: number): ValueID {
+export function getMaxNodesValueId(
+	endpointIndex: number,
+	groupId: number,
+): ValueID {
 	return {
 		commandClass: CommandClasses["Multi Channel Association"],
+		endpoint: endpointIndex,
 		property: "maxNodes",
 		propertyKey: groupId,
 	};
 }
 
 /** Returns the ValueID used to store the node IDs of a multi channel association group */
-export function getNodeIdsValueId(groupId: number): ValueID {
+export function getNodeIdsValueId(
+	endpointIndex: number,
+	groupId: number,
+): ValueID {
 	return {
 		commandClass: CommandClasses["Multi Channel Association"],
+		endpoint: endpointIndex,
 		property: "nodeIds",
 		propertyKey: groupId,
 	};
 }
 
 /** Returns the ValueID used to store the endpoint addresses of a multi channel association group */
-export function getEndpointsValueId(groupId: number): ValueID {
+export function getEndpointsValueId(
+	endpointIndex: number,
+	groupId: number,
+): ValueID {
 	return {
 		commandClass: CommandClasses["Multi Channel Association"],
+		endpoint: endpointIndex,
 		property: "endpoints",
 		propertyKey: groupId,
 	};
 }
 
 /** Returns the ValueID used to store the number of multi channel association group */
-export function getGroupCountValueId(): ValueID {
+export function getGroupCountValueId(endpointIndex: number): ValueID {
 	return {
 		commandClass: CommandClasses["Multi Channel Association"],
+		endpoint: endpointIndex,
 		property: "groupCount",
 	};
 }
@@ -285,7 +304,7 @@ export class MultiChannelAssociationCCAPI extends PhysicalCCAPI {
 						.filter((d) => !d.endpoint)
 						.map((d) => d.nodeId),
 					endpoints: destinations.filter(
-						(d): d is Association & { endpoint: number } =>
+						(d): d is AssociationAddress & { endpoint: number } =>
 							!!d.endpoint,
 					),
 				});
@@ -310,9 +329,9 @@ export class MultiChannelAssociationCC extends CommandClass {
 	public constructor(driver: Driver, options: CommandClassOptions) {
 		super(driver, options);
 		// Make valueIDs internal
-		this.registerValue(getMaxNodesValueId(0).property, true);
-		this.registerValue(getNodeIdsValueId(0).property, true);
-		this.registerValue(getEndpointsValueId(0).property, true);
+		this.registerValue(getMaxNodesValueId(0, 0).property, true);
+		this.registerValue(getNodeIdsValueId(0, 0).property, true);
+		this.registerValue(getEndpointsValueId(0, 0).property, true);
 	}
 
 	public determineRequiredCCInterviews(): readonly CommandClasses[] {
@@ -325,17 +344,16 @@ export class MultiChannelAssociationCC extends CommandClass {
 		];
 	}
 
-	public skipEndpointInterview(): boolean {
-		// The associations are managed on the root device
-		return true;
-	}
-
 	/**
-	 * Returns the number of association groups reported by the node.
+	 * Returns the number of association groups reported by the node/endpoint.
 	 * This only works AFTER the interview process
 	 */
 	public getGroupCountCached(): number {
-		return this.getValueDB().getValue(getGroupCountValueId()) || 0;
+		return (
+			this.getValueDB().getValue(
+				getGroupCountValueId(this.endpointIndex),
+			) || 0
+		);
 	}
 
 	/**
@@ -343,30 +361,37 @@ export class MultiChannelAssociationCC extends CommandClass {
 	 * This only works AFTER the interview process
 	 */
 	public getMaxNodesCached(groupId: number): number {
-		return this.getValueDB().getValue(getMaxNodesValueId(groupId)) || 0;
+		return (
+			this.getValueDB().getValue(
+				getMaxNodesValueId(this.endpointIndex, groupId),
+			) || 0
+		);
 	}
 
 	/**
-	 * Returns all the destinations of all association groups reported by the node.
+	 * Returns all the destinations of all association groups reported by the node/endpoint.
 	 * This only works AFTER the interview process
 	 */
 	public getAllDestinationsCached(): ReadonlyMap<
 		number,
-		readonly Association[]
+		readonly AssociationAddress[]
 	> {
-		const ret = new Map<number, Association[]>();
+		const ret = new Map<number, AssociationAddress[]>();
 		const groupCount = this.getGroupCountCached();
 		const valueDB = this.getValueDB();
 		for (let i = 1; i <= groupCount; i++) {
-			const groupDestinations: Association[] = [];
+			const groupDestinations: AssociationAddress[] = [];
 			// Add all node destinations
 			const nodes =
-				valueDB.getValue<number[]>(getNodeIdsValueId(i)) ?? [];
+				valueDB.getValue<number[]>(
+					getNodeIdsValueId(this.endpointIndex, i),
+				) ?? [];
 			groupDestinations.push(...nodes.map((nodeId) => ({ nodeId })));
 			// And all endpoint destinations
 			const endpoints =
-				valueDB.getValue<EndpointAddress[]>(getEndpointsValueId(i)) ??
-				[];
+				valueDB.getValue<EndpointAddress[]>(
+					getEndpointsValueId(this.endpointIndex, i),
+				) ?? [];
 			for (const ep of endpoints) {
 				if (typeof ep.endpoint === "number") {
 					groupDestinations.push({
@@ -454,9 +479,12 @@ export class MultiChannelAssociationCC extends CommandClass {
 					node.deviceConfig?.associations?.get(group)?.noEndpoint;
 
 				const nodeIdsValueId = groupSupportsMultiChannel
-					? getNodeIdsValueId(group)
-					: getAssociationNodeIdsValueId(group);
-				const endpointsValueId = getEndpointsValueId(group);
+					? getNodeIdsValueId(this.endpointIndex, group)
+					: getAssociationNodeIdsValueId(this.endpointIndex, group);
+				const endpointsValueId = getEndpointsValueId(
+					this.endpointIndex,
+					group,
+				);
 
 				const lifelineNodeIds: number[] =
 					this.getValueDB().getValue(nodeIdsValueId) ?? [];
@@ -558,7 +586,7 @@ export class MultiChannelAssociationCC extends CommandClass {
 				}
 			}
 			// Remember that we have a lifeline association
-			valueDB.setValue(getHasLifelineValueId(), true);
+			valueDB.setValue(getHasLifelineValueId(this.endpointIndex), true);
 		} else {
 			this.driver.controllerLog.logNode(node.id, {
 				endpoint: this.endpointIndex,
@@ -568,7 +596,7 @@ export class MultiChannelAssociationCC extends CommandClass {
 				level: "warn",
 			});
 			// Remember that we have NO lifeline association
-			valueDB.setValue(getHasLifelineValueId(), false);
+			valueDB.setValue(getHasLifelineValueId(this.endpointIndex), false);
 		}
 
 		// Remember that the interview is complete
@@ -588,12 +616,14 @@ export class MultiChannelAssociationCC extends CommandClass {
 		});
 
 		const mcGroupCount: number =
-			this.getValueDB().getValue(getGroupCountValueId()) ?? 0;
+			this.getValueDB().getValue(
+				getGroupCountValueId(this.endpointIndex),
+			) ?? 0;
 
 		// Some devices report more association groups than multi channel association groups, so we need this info here
 		const assocGroupCount =
 			this.getValueDB().getValue<number>(
-				getAssociationGroupCountValueId(),
+				getAssociationGroupCountValueId(this.endpointIndex),
 			) || mcGroupCount;
 
 		// Then query each multi channel association group
@@ -876,15 +906,15 @@ export class MultiChannelAssociationCCReport extends MultiChannelAssociationCC {
 
 		// Persist values
 		this.getValueDB().setValue(
-			getMaxNodesValueId(this._groupId),
+			getMaxNodesValueId(this.endpointIndex, this._groupId),
 			this._maxNodes,
 		);
 		this.getValueDB().setValue(
-			getNodeIdsValueId(this._groupId),
+			getNodeIdsValueId(this.endpointIndex, this._groupId),
 			this._nodeIds,
 		);
 		this.getValueDB().setValue(
-			getEndpointsValueId(this._groupId),
+			getEndpointsValueId(this.endpointIndex, this._groupId),
 			this._endpoints,
 		);
 	}
