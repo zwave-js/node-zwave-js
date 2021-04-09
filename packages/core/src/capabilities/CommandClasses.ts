@@ -128,6 +128,9 @@ export enum CommandClasses {
 	"Z/IP ND" = 0x58,
 	"Z/IP Portal" = 0x61,
 	"Z-Wave Plus Info" = 0x5e,
+
+	// Used to designate values that don't belong to any CC
+	"_NONE" = -1,
 }
 
 export function getCCName(cc: number): string {
