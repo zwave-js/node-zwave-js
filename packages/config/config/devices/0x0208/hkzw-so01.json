@@ -36,7 +36,21 @@
 			"defaultValue": 0,
 			"readOnly": false,
 			"writeOnly": false,
-			"allowManualEntry": true
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Previous State",
+					"value": 0
+				},
+				{
+					"label": "On",
+					"value": 1
+				},
+				{
+					"label": "Off",
+					"value": 2
+				}
+			]
 		},
 		"24": {
 			"label": "Notification on Load Change",
