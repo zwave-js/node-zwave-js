@@ -48,7 +48,10 @@ export type { IndicatorMetadata } from "./IndicatorCC";
 export { DeviceIdType } from "./ManufacturerSpecificCC";
 export { RateType } from "./MeterCC";
 export type { MeterMetadata } from "./MeterCC";
-export type { Association } from "./MultiChannelAssociationCC";
+export type {
+	Association,
+	AssociationAddress,
+} from "./MultiChannelAssociationCC";
 export type {
 	MultilevelSensorCCReportOptions,
 	MultilevelSensorValue,
