@@ -1,6 +1,6 @@
 import type { JsonlDB } from "@alcalzone/jsonl-db";
 import { EventEmitter } from "events";
-import type { CommandClasses } from "../capabilities/CommandClasses";
+import { CommandClasses } from "../capabilities/CommandClasses";
 import { isZWaveError, ZWaveError, ZWaveErrorCodes } from "../error/ZWaveError";
 import type { ValueMetadata } from "../values/Metadata";
 
@@ -227,6 +227,12 @@ export class ValueDB extends EventEmitter {
 				return;
 			}
 			throw e;
+		}
+
+		// Force values that belong to no CC to stay internal
+		if (valueId.commandClass === CommandClasses._NONE) {
+			options.stateful = true;
+			options.noEvent = true;
 		}
 
 		if (options.stateful !== false) {

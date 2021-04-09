@@ -148,7 +148,7 @@ import { InterviewStage, NodeStatus, NodeType, ProtocolVersion } from "./Types";
 /** Returns a Value ID that can be used to store node specific data without relating it to a CC */
 function getNodeMetaValueID(property: string): ValueID {
 	return {
-		commandClass: -1,
+		commandClass: CommandClasses._NONE,
 		property,
 	};
 }
