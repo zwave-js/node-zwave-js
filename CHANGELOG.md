@@ -2,6 +2,21 @@
 <!--
 	Add placeholder for next release with `wip` snippet
 -->
+## __WORK IN PROGRESS__
+### Features
+* Added methods to manage SUC return routes and automatically promote the controller to SUC/SIS if possible and necessary
+
+### Bugfixes
+* Restored the pre-7.1.x behavior of mapping reports from the root device to the first supporting endpoint
+* `Thermostat Fan Mode API` now uses the correct CC for its commands
+* Treat transaction failures due to a removed node as recoverable
+* Make sure each node has a return route to the SUC
+
+### Config file changes
+* Map alarmLevel to userId for Yale locks
+* Map `Basic CC::Set` to `Binary Sensor` for WADWAZ-1 and WAPIRZ-1
+* Add additional product ID to Fibaro FGS-224
+
 ## 7.1.1 (2021-04-06)
 ### Changes under the hood
 * Usage statistics now use a random 32 byte value to salt the HomeID hash
@@ -36,7 +51,7 @@
 * Abort interview attempt when endpoint query times out
 * Don't log `TODO` when receiving `SceneActivationCC::Set` commands
 * Don't map `BasicCC::Set` to other CCs
-* Don't map reports from the root device to endpoint if it is ambiguous, allow opt-in with compat flag
+* Don't map reports from the root device to endpoint if it is ambiguous, allow opt-in with compat flag (reverted in 7.2.0)
 * Add space between number and unit when logging durations
 * Treat controller timeout as an expected error in more locations instead of throwing
 
