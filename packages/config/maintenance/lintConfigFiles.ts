@@ -118,6 +118,25 @@ description: ${description}`,
 				}
 			}
 
+			// Check if there are options with duplicate values
+			for (const [
+				{ parameter },
+				value,
+			] of config.paramInformation.entries()) {
+				for (let i = 0; i < value.options.length; i++) {
+					const option = value.options[i];
+					const firstIndex = value.options.findIndex(
+						(o) => o.value === option.value,
+					);
+					if (firstIndex !== i) {
+						addError(
+							file,
+							`Parameter #${parameter} is invalid: option value ${option.value} duplicated between "${value.options[firstIndex].label}" and "${option.label}"!`,
+						);
+					}
+				}
+			}
+
 			// Check if there are options where min/max values is not compatible with the valueSize
 			for (const [
 				{ parameter },
