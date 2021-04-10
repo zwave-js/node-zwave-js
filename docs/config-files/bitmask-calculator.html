@@ -19,10 +19,14 @@
 			}
 			tbody tr td:first-of-type {
 				font-weight: bold;
-				text-align: center;
+				/* text-align: center; */
+			}
+
+			thead tr:last-of-type th {
+				border-bottom: 1px solid #ddd;
 			}
 			tfoot tr:first-of-type td {
-				border-top: 1px solid gray;
+				border-top: 1px solid #ddd;
 			}
 			tfoot td:first-child {
 				font-weight: bold;
@@ -57,6 +61,12 @@
 				}
 				bitmaskHex.innerText = num2hex(num);
 				bitmaskDec.innerText = num;
+
+				// Compute the range
+				while (num > 0 && (num & 1) === 0) {
+					num = num >>> 1;
+				}
+				valueRange.innerText = `0–${num}`;
 			}
 
 			function setBytes(n) {
@@ -83,15 +93,11 @@
 					bytesContainer.appendChild(tr);
 				}
 			}
-
-			function test(e) {
-				console.dir(e);
-			}
 		</script>
 	</head>
 
 	<body>
-		<label for="num_bytes">Number of bytes:</label>&nbsp;
+		<label for="num_bytes">Value size:</label>&nbsp;
 		<input
 			id="num_bytes"
 			type="number"
@@ -125,6 +131,10 @@
 					<td>Decimal:</td>
 					<td id="dec" colspan="8">0</td>
 				</tr>
+				<tr>
+					<td>Value range:</td>
+					<td id="range" colspan="8">0&ndash;0</td>
+				</tr>
 			</tfoot>
 		</table>
 
@@ -132,6 +142,7 @@
 			const bytesContainer = document.getElementById("bytes");
 			const bitmaskHex = document.getElementById("hex");
 			const bitmaskDec = document.getElementById("dec");
+			const valueRange = document.getElementById("range");
 			setBytes(document.getElementById("num_bytes").valueAsNumber);
 			computeBitmask();
 		</script>
