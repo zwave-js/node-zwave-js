@@ -1047,7 +1047,7 @@
 		"label": "Motion Sensor Timeout",
 		"valueSize": 2,
 		"unit": "seconds",
-		"minValue": 15300,
+		"minValue": 1,
 		"maxValue": 15300,
 		"defaultValue": 240,
 		"unsigned": true,
