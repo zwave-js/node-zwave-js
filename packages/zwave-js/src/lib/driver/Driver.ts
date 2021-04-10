@@ -661,7 +661,7 @@ export class Driver extends EventEmitter {
 	// wotan-disable async-function-assignability
 	public async start(): Promise<void> {
 		// avoid starting twice
-		if (this._wasDestroyed) {
+		if (this.wasDestroyed) {
 			throw new ZWaveError(
 				"The driver was destroyed. Create a new instance and start that one.",
 				ZWaveErrorCodes.Driver_Destroyed,
@@ -1538,13 +1538,16 @@ export class Driver extends EventEmitter {
 		void this.initializeControllerAndNodes();
 	}
 
-	private _wasDestroyed: boolean = false;
+	private _destroyPromise: DeferredPromise<void> | undefined;
+	private get wasDestroyed(): boolean {
+		return !!this._destroyPromise;
+	}
 	/**
 	 * Ensures that the driver is ready to communicate (serial port open and not destroyed).
 	 * If desired, also checks that the controller interview has been completed.
 	 */
 	private ensureReady(includingController: boolean = false): void {
-		if (!this._wasStarted || !this._isOpen || this._wasDestroyed) {
+		if (!this._wasStarted || !this._isOpen || this.wasDestroyed) {
 			throw new ZWaveError(
 				"The driver is not ready or has been destroyed",
 				ZWaveErrorCodes.Driver_NotReady,
@@ -1563,7 +1566,7 @@ export class Driver extends EventEmitter {
 		return (
 			this._wasStarted &&
 			this._isOpen &&
-			!this._wasDestroyed &&
+			!this.wasDestroyed &&
 			this._controllerInterviewed
 		);
 	}
@@ -1577,9 +1580,10 @@ export class Driver extends EventEmitter {
 	 * Must be called under any circumstances.
 	 */
 	public async destroy(): Promise<void> {
-		// Ensure this is only called once
-		if (this._wasDestroyed) return;
-		this._wasDestroyed = true;
+		// Ensure this is only called once and all subsequent calls block
+		if (this._destroyPromise) return this._destroyPromise;
+		this._destroyPromise = createDeferredPromise();
+
 		this.driverLog.print("destroying driver instance...");
 
 		// First stop the send thread machine and close the serial port, so nothing happens anymore
@@ -1629,6 +1633,8 @@ export class Driver extends EventEmitter {
 
 		// destroy loggers as the very last thing
 		this._logContainer.destroy();
+
+		this._destroyPromise.resolve();
 	}
 
 	private serialport_onError(err: Error): void {
