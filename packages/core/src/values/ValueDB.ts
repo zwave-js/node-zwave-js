@@ -229,12 +229,6 @@ export class ValueDB extends EventEmitter {
 			throw e;
 		}
 
-		// Force values that belong to no CC to stay internal
-		if (valueId.commandClass === CommandClasses._NONE) {
-			options.stateful = true;
-			options.noEvent = true;
-		}
-
 		if (options.stateful !== false) {
 			const cbArg: ValueAddedArgs | ValueUpdatedArgs = {
 				...valueId,
@@ -250,10 +244,13 @@ export class ValueDB extends EventEmitter {
 
 			this._index.add(dbKey);
 			this._db.set(dbKey, value);
-			if (options.noEvent !== true) {
+			if (
+				valueId.commandClass !== CommandClasses._NONE &&
+				options.noEvent !== true
+			) {
 				this.emit(event, cbArg);
 			}
-		} else {
+		} else if (valueId.commandClass !== CommandClasses._NONE) {
 			// For non-stateful values just emit a notification
 			this.emit("value notification", {
 				...valueId,
@@ -276,11 +273,15 @@ export class ValueDB extends EventEmitter {
 		if (this._db.has(dbKey)) {
 			const prevValue = this._db.get(dbKey);
 			this._db.delete(dbKey);
-			const cbArg: ValueRemovedArgs = {
-				...valueId,
-				prevValue,
-			};
-			if (options.noEvent !== true) {
+
+			if (
+				valueId.commandClass !== CommandClasses._NONE &&
+				options.noEvent !== true
+			) {
+				const cbArg: ValueRemovedArgs = {
+					...valueId,
+					prevValue,
+				};
 				this.emit("value removed", cbArg);
 			}
 			return true;
@@ -344,7 +345,11 @@ export class ValueDB extends EventEmitter {
 			if (this._db.has(key)) {
 				const prevValue = this._db.get(key);
 				this._db.delete(key);
-				if (options.noEvent !== true) {
+
+				if (
+					valueId.commandClass !== CommandClasses._NONE &&
+					options.noEvent !== true
+				) {
 					const cbArg: ValueRemovedArgs = {
 						...valueId,
 						prevValue,
@@ -355,7 +360,10 @@ export class ValueDB extends EventEmitter {
 			if (this._metadata.has(key)) {
 				this._metadata.delete(key);
 
-				if (options.noEvent !== true) {
+				if (
+					valueId.commandClass !== CommandClasses._NONE &&
+					options.noEvent !== true
+				) {
 					const cbArg: MetadataUpdatedArgs = {
 						...valueId,
 						metadata: undefined,
@@ -404,7 +412,10 @@ export class ValueDB extends EventEmitter {
 			...valueId,
 			metadata,
 		};
-		if (options.noEvent !== true) {
+		if (
+			valueId.commandClass !== CommandClasses._NONE &&
+			options.noEvent !== true
+		) {
 			this.emit("metadata updated", cbArg);
 		}
 	}
