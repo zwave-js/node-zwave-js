@@ -162,34 +162,39 @@
 				}
 			]
 		},
-		"21": {
-			"label": "Load State",
-			"description": "Load State (Read Only)",
+		"21[0xff00]": {
+			"label": "Blind State: Direction",
 			"valueSize": 2,
 			"minValue": 0,
-			"maxValue": 99,
+			"maxValue": 2,
 			"defaultValue": 0,
 			"readOnly": true,
 			"writeOnly": false,
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "Bit 0: Load is OFF",
+					"label": "Stopped",
 					"value": 0
 				},
 				{
-					"label": "Bit 1: Sunblind position 0%",
-					"value": 0
-				},
-				{
-					"label": "Bit 0: Load is going UP/DOWN",
+					"label": "Moving down",
 					"value": 1
 				},
 				{
-					"label": "Bit 1: Sunblind position 99%",
-					"value": 99
+					"label": "Moving up",
+					"value": 2
 				}
 			]
+		},
+		"21[0xff]": {
+			"label": "Blind State: Position",
+			"valueSize": 2,
+			"minValue": 0,
+			"maxValue": 99,
+			"defaultValue": 0,
+			"readOnly": true,
+			"writeOnly": false,
+			"allowManualEntry": true
 		},
 		"23": {
 			"label": "Calibration Required",

@@ -67,7 +67,7 @@
 		},
 		"4": {
 			"label": "Light Threshold",
-			"description": "Setting the illumination threshold to turn on the light. when the event triggered and the environment illumination lower then the threshold, the device will turn on the light.0 means turn off illumination detected function. and never turn on the light.1 means darkest.99 means brightest.100 means turn off illumination detected function. and always turn on the light  notice: in none test mode, only the value in 1 to 99 will enable the illumination detected function and update the illumination value",
+			"description": "The light will only turn on when the environment illumination is below this setting. 1: darkest; 99: brightest",
 			"valueSize": 1,
 			"minValue": 1,
 			"maxValue": 100,
@@ -78,19 +78,7 @@
 			"allowManualEntry": true,
 			"options": [
 				{
-					"label": "Setting the illumination threshold to turn on the light",
-					"value": 100
-				},
-				{
-					"label": "1 means darkest",
-					"value": 1
-				},
-				{
-					"label": "99 means brightest",
-					"value": 99
-				},
-				{
-					"label": "100 means turn off illumination",
+					"label": "Disable illumination check",
 					"value": 100
 				}
 			]

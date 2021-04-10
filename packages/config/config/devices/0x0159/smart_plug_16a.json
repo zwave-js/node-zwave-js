@@ -46,39 +46,36 @@
 			]
 		},
 		"11": {
-			"label": "Automatic turning OFF relay after set time",
+			"label": "Auto-Off Timer",
 			"description": "When the relay is turned ON, it automatically turns OFF after the defined time",
-			"unit": "s",
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 32535,
 			"defaultValue": 0,
+			"unit": "seconds",
 			"readOnly": false,
 			"writeOnly": false,
 			"allowManualEntry": true,
 			"options": [
 				{
-					"label": "Auto OFF disabled",
+					"label": "Disabled",
 					"value": 0
 				}
 			]
 		},
 		"12": {
-			"label": "On automatically with timer",
+			"label": "Auto-On Timer",
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 32535,
 			"defaultValue": 0,
+			"unit": "seconds",
 			"readOnly": false,
 			"writeOnly": false,
-			"allowManualEntry": false,
+			"allowManualEntry": true,
 			"options": [
 				{
-					"label": "Auto ON Disabled",
-					"value": 0
-				},
-				{
-					"label": "please delete this option",
+					"label": "Disabled",
 					"value": 0
 				}
 			]

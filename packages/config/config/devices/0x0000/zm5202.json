@@ -54,7 +54,7 @@
 			"allowManualEntry": true
 		},
 		"3": {
-			"label": "dimming",
+			"label": "Dimming",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 1,
@@ -64,15 +64,11 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "off",
+					"label": "Disable",
 					"value": 0
 				},
 				{
-					"label": "dimming",
-					"value": 0
-				},
-				{
-					"label": "on",
+					"label": "Enable",
 					"value": 1
 				}
 			]

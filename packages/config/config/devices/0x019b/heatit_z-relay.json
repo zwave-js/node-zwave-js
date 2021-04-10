@@ -197,7 +197,7 @@
 				},
 				{
 					"label": "No flood detected",
-					"value": 1
+					"value": 2
 				}
 			]
 		},
@@ -222,7 +222,7 @@
 				},
 				{
 					"label": "No flood detected",
-					"value": 1
+					"value": 2
 				}
 			]
 		},

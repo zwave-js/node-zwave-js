@@ -27,11 +27,7 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "Last State (default)",
-					"value": 0
-				},
-				{
-					"label": "Remove Me",
+					"label": "Last State",
 					"value": 0
 				},
 				{
