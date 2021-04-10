@@ -2,7 +2,7 @@
 <!--
 	Add placeholder for next release with `wip` snippet
 -->
-## __WORK IN PROGRESS__
+## 7.2.2 (2021-04-11)
 ### Bugfixes
 * Block subsequent `destroy()` calls instead of returning immediately. This should avoid cache corruption when the zwavejs2mqtt Docker container shuts down.
 * Fix error: Cannot translate a value ID for the non-implemented CC _NONE
