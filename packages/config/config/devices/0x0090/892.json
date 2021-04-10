@@ -114,23 +114,19 @@
 			"defaultValue": 0,
 			"unsigned": true,
 			"readOnly": false,
-			"writeOnly": true,
+			"writeOnly": false,
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "Initiate the handing process (set)",
-					"value": 1
-				},
-				{
-					"label": "Unknown latch position (get)",
+					"label": "Unknown latch position (read only)",
 					"value": 0
 				},
 				{
-					"label": "Right handed lock (get)",
+					"label": "Right handed lock (read); Initiate handing process (write)",
 					"value": 1
 				},
 				{
-					"label": "Left handed lock (get)",
+					"label": "Left handed lock (read only)",
 					"value": 2
 				}
 			]

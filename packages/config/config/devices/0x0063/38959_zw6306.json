@@ -72,11 +72,7 @@
 			"allowManualEntry": true,
 			"options": [
 				{
-					"label": "5...60 minutes",
-					"value": 60
-				},
-				{
-					"label": "(default) - hourly",
+					"label": "hourly",
 					"value": 60
 				},
 				{

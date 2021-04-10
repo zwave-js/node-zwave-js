@@ -44,10 +44,10 @@
 		},
 		"3": {
 			"label": "Supervision Encapsulation",
-			"description": "Encapsulate unsolicited notifications in supervision get requests. 0: disabled 1: enabled",
+			"description": "Encapsulate unsolicited notifications in supervision get requests.",
 			"valueSize": 1,
 			"minValue": 0,
-			"maxValue": 0,
+			"maxValue": 1,
 			"defaultValue": 1,
 			"unsigned": true,
 			"readOnly": false,
@@ -55,12 +55,12 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "Disabled",
+					"label": "Disable",
 					"value": 0
 				},
 				{
-					"label": "Enabled",
-					"value": 0
+					"label": "Enable",
+					"value": 1
 				}
 			]
 		},
