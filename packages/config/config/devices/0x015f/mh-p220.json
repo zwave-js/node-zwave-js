@@ -139,7 +139,7 @@
 		},
 		"7": {
 			"label": "Single dimming step time (Manual)",
-			"unit" : "10ms",
+			"unit": "10ms",
 			"valueSize": 2,
 			"minValue": 1,
 			"maxValue": 255,
@@ -160,7 +160,7 @@
 		},
 		"9": {
 			"label": "Single dimming step time (Auto)",
-			"unit" : "10ms",
+			"unit": "10ms",
 			"valueSize": 2,
 			"minValue": 1,
 			"maxValue": 255,
