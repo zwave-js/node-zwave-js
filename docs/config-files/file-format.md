@@ -159,6 +159,10 @@ Partial parameters must follow these rules:
 1. Each bitmask must fit into the configured `valueSize` of the parameter.
 1. The `minValue`, `maxValue` and `defaultValue` as well as options values are relative to the lowest bit the bit mask. If the bit mask is `0xC` (binary `1100`), these properties must be in the range 0...3 (2 bits). Any required bit shifts are automatically done.
 
+### Bitmask calculator
+
+<iframe height="350" width="400" src="config-files/bitmask-calculator.html" style="min-width: 0; width: 400px; height: 350px; border: 0; margin: 0 auto" />
+
 ## `compat`
 
 While the Z-Wave specs define how the protocol works and how devices must behave, the reality is different. `zwave-js` tries to be smart about this, but sometimes that is not enough. The following compat flags are available to influence how `zwave-js` communicates with these devices:
