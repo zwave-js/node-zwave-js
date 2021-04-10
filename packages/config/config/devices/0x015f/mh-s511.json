@@ -125,7 +125,7 @@
 			"unsigned": true,
 			"readOnly": false,
 			"writeOnly": false,
-			"allowManualEntry": true		
+			"allowManualEntry": true
 		},
 			"8": {
 				"label": "Basic CC Integration Setting",
@@ -322,7 +322,7 @@
 			},
 			"19": {
 				"label": "Key 1 Activate Scene Duration (0=Instantly)",
-				"unit":"seconds",
+				"unit": "seconds",
 				"valueSize": 1,
 				"minValue": 0,
 				"maxValue": 255,
@@ -353,9 +353,6 @@
 					}
 				]
 			}
-			
-	
 		}
 	}
-		
-	
+}
