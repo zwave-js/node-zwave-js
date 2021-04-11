@@ -433,6 +433,10 @@
 					"type": "number",
 					"description": "The maximum allowed value for this parameter"
 				},
+				"unit": {
+					"type": "string",
+					"description": "In which unit the value is interpreted"
+				},
 				"unsigned": {
 					"type": "boolean",
 					"description": "Whether this parameter is interpreted as an unsigned value by the device (default: false). This simplifies usage for the end user."
