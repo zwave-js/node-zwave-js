@@ -88,11 +88,11 @@ export enum FunctionType {
 	UNKNOWN_FUNC_FlashAutoProgSet = 0x27, // ??
 	UNKNOWN_FUNC_UNKNOWN_0x28 = 0x28, // ??
 
-	UNKNOWN_FUNC_NVMGetId = 0x29,
-	UNKNOWN_FUNC_NVMExtReadLongBuffer = 0x2a,
-	UNKNOWN_FUNC_NVMExtWriteLongBuffer = 0x2b,
-	UNKNOWN_FUNC_NVMExtReadLongByte = 0x2c,
-	UNKNOWN_FUNC_NVMExtWriteLongByte = 0x2d,
+	GetNVMId = 0x29, // Returns information about the external NVM
+	ExtNVMReadLongBuffer = 0x2a, // Reads a buffer from the external NVM
+	ExtNVMWriteLongBuffer = 0x2b, // Writes a buffer to the external NVM
+	ExtNVMReadLongByte = 0x2c, // Reads a byte from the external NVM
+	ExtExtWriteLongByte = 0x2d, // Writes a byte to the external NVM
 
 	UNKNOWN_FUNC_CLOCK_SET = 0x30, // ??
 	UNKNOWN_FUNC_CLOCK_GET = 0x31, // ??
