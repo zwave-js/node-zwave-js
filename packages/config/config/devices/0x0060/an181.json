@@ -107,7 +107,7 @@
 		},
 		"6": {
 			"label": "Auto report load surpasses value",
-			"unit": "Watt",
+			"unit": "W",
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 2500,

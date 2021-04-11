@@ -80,7 +80,7 @@
 		"5": {
 			"label": "Overload Protection",
 			"description": "Set the Watt level for overload protection to kick in",
-			"unit": "Watts",
+			"unit": "W",
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 1500,

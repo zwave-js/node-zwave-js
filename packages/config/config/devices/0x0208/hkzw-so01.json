@@ -77,7 +77,7 @@
 		"151": {
 			"label": "Threshold of power report",
 			"description": "Power Threshold at which to send meter report",
-			"unit": "Watts",
+			"unit": "W",
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 65535,
