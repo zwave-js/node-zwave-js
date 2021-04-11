@@ -35,141 +35,141 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "OFF",
+					"label": "Off",
 					"value": 0
 				},
 				{
-					"label": "ON (RESUME)",
+					"label": "On (Resume)",
 					"value": 1
 				},
 				{
-					"label": "17°C COOL ",
+					"label": "17°C Cool",
 					"value": 2
 				},
 				{
-					"label": "18°C COOL ",
+					"label": "18°C Cool",
 					"value": 3
 				},
 				{
-					"label": "19°C COOL ",
+					"label": "19°C Cool",
 					"value": 4
 				},
 				{
-					"label": "20°C COOL ",
+					"label": "20°C Cool",
 					"value": 5
 				},
 				{
-					"label": "21°C COOL ",
+					"label": "21°C Cool",
 					"value": 6
 				},
 				{
-					"label": "22°C COOL ",
+					"label": "22°C Cool",
 					"value": 7
 				},
 				{
-					"label": "23°C COOL ",
+					"label": "23°C Cool",
 					"value": 8
 				},
 				{
-					"label": "24°C COOL ",
+					"label": "24°C Cool",
 					"value": 9
 				},
 				{
-					"label": "25°C COOL ",
+					"label": "25°C Cool",
 					"value": 10
 				},
 				{
-					"label": "26°C COOL ",
+					"label": "26°C Cool",
 					"value": 11
 				},
 				{
-					"label": "27°C COOL ",
+					"label": "27°C Cool",
 					"value": 12
 				},
 				{
-					"label": "28°C COOL ",
+					"label": "28°C Cool",
 					"value": 13
 				},
 				{
-					"label": "29°C COOL ",
+					"label": "29°C Cool",
 					"value": 14
 				},
 				{
-					"label": "30°C COOL ",
+					"label": "30°C Cool",
 					"value": 15
 				},
 				{
-					"label": "17°C HEAT ",
+					"label": "17°C Heat",
 					"value": 16
 				},
 				{
-					"label": "18°C HEAT ",
+					"label": "18°C Heat",
 					"value": 17
 				},
 				{
-					"label": "19°C HEAT ",
+					"label": "19°C Heat",
 					"value": 18
 				},
 				{
-					"label": "20°C HEAT ",
+					"label": "20°C Heat",
 					"value": 19
 				},
 				{
-					"label": "21°C HEAT ",
+					"label": "21°C Heat",
 					"value": 20
 				},
 				{
-					"label": "22°C HEAT ",
+					"label": "22°C Heat",
 					"value": 21
 				},
 				{
-					"label": "23°C HEAT ",
+					"label": "23°C Heat",
 					"value": 22
 				},
 				{
-					"label": "24°C HEAT ",
+					"label": "24°C Heat",
 					"value": 23
 				},
 				{
-					"label": "25°C HEAT ",
+					"label": "25°C Heat",
 					"value": 24
 				},
 				{
-					"label": "26°C HEAT ",
+					"label": "26°C Heat",
 					"value": 25
 				},
 				{
-					"label": "27°C HEAT ",
+					"label": "27°C Heat",
 					"value": 26
 				},
 				{
-					"label": "28°C HEAT ",
+					"label": "28°C Heat",
 					"value": 27
 				},
 				{
-					"label": "29°C HEAT ",
+					"label": "29°C Heat",
 					"value": 28
 				},
 				{
-					"label": "30°C HEAT ",
+					"label": "30°C Heat",
 					"value": 29
 				},
 				{
-					"label": "DRY MODE",
+					"label": "Dry mode",
 					"value": 30
 				},
 				{
-					"label": "AUTO MODE",
+					"label": "Auto mode",
 					"value": 31
 				},
 				{
-					"label": "FAN MODE",
+					"label": "Fan mode",
 					"value": 32
 				}
 			]
 		},
 		"26": {
-			"label": "Check IR Code Learning Status",
+			"label": "IR Code Learning Status",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 4,
@@ -200,7 +200,7 @@
 			]
 		},
 		"27": {
-			"label": "Set IR Code Number from built-in code library",
+			"label": "IR Code Number From Built-in Code Library",
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 65535,
@@ -211,7 +211,7 @@
 			"allowManualEntry": true
 		},
 		"30": {
-			"label": "Auto Report condition Trig by Room Temp change",
+			"label": "Auto Report Condition By Room Temp Change",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 8,
@@ -255,7 +255,7 @@
 			]
 		},
 		"32": {
-			"label": "Set built-in IR Emitter Control",
+			"label": "Built-in IR Emitter Control",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 255,
@@ -276,7 +276,7 @@
 			]
 		},
 		"33": {
-			"label": "Control AC SWING function",
+			"label": "AC Swing Function",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 1,
@@ -296,7 +296,7 @@
 			]
 		},
 		"34": {
-			"label": "Set Auto Report Cond by Time Interval",
+			"label": "Auto Report By Time Interval",
 			"unit": "hours",
 			"valueSize": 1,
 			"minValue": 1,
@@ -307,61 +307,15 @@
 			"allowManualEntry": true
 		},
 		"37": {
-			"label": "Calibrate Temperature reading",
+			"label": "Calibrate Temperature Reading",
+			"unit": "°C",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 255,
+			"minValue": -5,
+			"maxValue": 5,
 			"defaultValue": 0,
-			"unsigned": true,
 			"readOnly": false,
 			"writeOnly": false,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "0°C",
-					"value": 0
-				},
-				{
-					"label": "1°C",
-					"value": 1
-				},
-				{
-					"label": "2°C",
-					"value": 2
-				},
-				{
-					"label": "3°C",
-					"value": 3
-				},
-				{
-					"label": "4°C",
-					"value": 4
-				},
-				{
-					"label": "5°C",
-					"value": 5
-				},
-				{
-					"label": "-1°C",
-					"value": 255
-				},
-				{
-					"label": "-2°C",
-					"value": 254
-				},
-				{
-					"label": "-3°C",
-					"value": 253
-				},
-				{
-					"label": "-4°C",
-					"value": 252
-				},
-				{
-					"label": "-5°C",
-					"value": 251
-				}
-			]
+			"allowManualEntry": true
 		}
 	},
 	"metadata": {
