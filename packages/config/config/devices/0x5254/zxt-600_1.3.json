@@ -30,20 +30,175 @@
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 32,
-			"defaultValue": 32,
+			"defaultValue": 0,
 			"readOnly": false,
 			"writeOnly": false,
-			"allowManualEntry": true
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "OFF",
+					"value": 0
+				},
+				{
+					"label": "ON (RESUME)",
+					"value": 1
+				},
+				{
+					"label": "17°C COOL ",
+					"value": 2
+				},
+				{
+					"label": "18°C COOL ",
+					"value": 3
+				},
+				{
+					"label": "19°C COOL ",
+					"value": 4
+				},
+				{
+					"label": "20°C COOL ",
+					"value": 5
+				},
+				{
+					"label": "21°C COOL ",
+					"value": 6
+				},
+				{
+					"label": "22°C COOL ",
+					"value": 7
+				},
+				{
+					"label": "23°C COOL ",
+					"value": 8
+				},
+				{
+					"label": "24°C COOL ",
+					"value": 9
+				},
+				{
+					"label": "25°C COOL ",
+					"value": 10
+				},
+				{
+					"label": "26°C COOL ",
+					"value": 11
+				},
+				{
+					"label": "27°C COOL ",
+					"value": 12
+				},
+				{
+					"label": "28°C COOL ",
+					"value": 13
+				},
+				{
+					"label": "29°C COOL ",
+					"value": 14
+				},
+				{
+					"label": "30°C COOL ",
+					"value": 15
+				},
+				{
+					"label": "17°C HEAT ",
+					"value": 16
+				},
+				{
+					"label": "18°C HEAT ",
+					"value": 17
+				},
+				{
+					"label": "19°C HEAT ",
+					"value": 18
+				},
+				{
+					"label": "20°C HEAT ",
+					"value": 19
+				},
+				{
+					"label": "21°C HEAT ",
+					"value": 20
+				},
+				{
+					"label": "22°C HEAT ",
+					"value": 21
+				},
+				{
+					"label": "23°C HEAT ",
+					"value": 22
+				},
+				{
+					"label": "24°C HEAT ",
+					"value": 23
+				},
+				{
+					"label": "25°C HEAT ",
+					"value": 24
+				},
+				{
+					"label": "26°C HEAT ",
+					"value": 25
+				},
+				{
+					"label": "27°C HEAT ",
+					"value": 26
+				},
+				{
+					"label": "28°C HEAT ",
+					"value": 27
+				},
+				{
+					"label": "29°C HEAT ",
+					"value": 28
+				},
+				{
+					"label": "30°C HEAT ",
+					"value": 29
+				},
+				{
+					"label": "DRY MODE",
+					"value": 30
+				},
+				{
+					"label": "AUTO MODE",
+					"value": 31
+				},
+				{
+					"label": "FAN MODE",
+					"value": 32
+				}
+			]
 		},
 		"26": {
 			"label": "Check IR Code Learning Status",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 4,
-			"defaultValue": 4,
 			"readOnly": true,
 			"writeOnly": false,
-			"allowManualEntry": true
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Idle - IR Channel is idle.",
+					"value": 0
+				},
+				{
+					"label": "OK - the last learning operation was completed successfully.",
+					"value": 1
+				},
+				{
+					"label": "Learning - ZXT-600 is busy processing previous learning request.",
+					"value": 2
+				},
+				{
+					"label": "Full – All locations are being used.",
+					"value": 3
+				},
+				{
+					"label": "The last learning request was failed.",
+					"value": 4
+				}
+			]
 		},
 		"27": {
 			"label": "Set IR Code Number from built-in code library",
@@ -61,10 +216,44 @@
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 8,
-			"defaultValue": 8,
+			"defaultValue": 1,
 			"readOnly": false,
 			"writeOnly": false,
-			"allowManualEntry": true
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "0.5°C",
+					"value": 1
+				},
+				{
+					"label": "1°C",
+					"value": 2
+				},
+				{
+					"label": "1.5°C",
+					"value": 3
+				},
+				{
+					"label": "2°C",
+					"value": 4
+				},
+				{
+					"label": "2.5°C",
+					"value": 5
+				},
+				{
+					"label": "3°C",
+					"value": 6
+				},
+				{
+					"label": "3.5°C",
+					"value": 7
+				},
+				{
+					"label": "4°C",
+					"value": 8
+				}
+			]
 		},
 		"32": {
 			"label": "Set built-in IR Emitter Control",
@@ -75,18 +264,37 @@
 			"unsigned": true,
 			"readOnly": false,
 			"writeOnly": false,
-			"allowManualEntry": true
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Disable",
+					"value": 0
+				},
+				{
+					"label": "Enable",
+					"value": 255
+				}
+			]
 		},
 		"33": {
 			"label": "Control AC SWING function",
-			"description": "Control AC &amp;amp;quot;SWING&amp;amp;quot; function",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 1,
 			"defaultValue": 1,
 			"readOnly": false,
 			"writeOnly": false,
-			"allowManualEntry": true
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Swing OFF",
+					"value": 0
+				},
+				{
+					"label": "Swing Auto",
+					"value": 1
+				}
+			]
 		},
 		"34": {
 			"label": "Set Auto Report Cond by Time Interval",
@@ -104,11 +312,62 @@
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 255,
-			"defaultValue": 5,
+			"defaultValue": 0,
 			"unsigned": true,
 			"readOnly": false,
 			"writeOnly": false,
-			"allowManualEntry": true
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "0°C",
+					"value": 0
+				},
+				{
+					"label": "1°C",
+					"value": 1
+				},
+				{
+					"label": "2°C",
+					"value": 2
+				},
+				{
+					"label": "3°C",
+					"value": 3
+				},
+				{
+					"label": "4°C",
+					"value": 4
+				},
+				{
+					"label": "5°C",
+					"value": 5
+				},
+				{
+					"label": "-1°C",
+					"value": 255
+				},
+				{
+					"label": "-2°C",
+					"value": 254
+				},
+				{
+					"label": "-3°C",
+					"value": 253
+				},
+				{
+					"label": "-4°C",
+					"value": 252
+				},
+				{
+					"label": "-5°C",
+					"value": 251
+				}
+			]
 		}
+	},
+	"metadata": {
+		"inclusion": "When it is prompted to enter it, please triple click the PROG button within 1 second. Green Indicator flashes TWICE then stay off.",
+		"exclusion": "When it is prompted to enter it, please triple click the PROG button within 1 second. Green Indicator flashes TWICE then stay off.",
+		"reset": "Press and Hold “PROG” button for 3 seconds on AC Master, the Green Indicator will light up. DO NOT Release the “PROG” Button until Green Indicator flashes TWICE."
 	}
 }
