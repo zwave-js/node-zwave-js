@@ -100,7 +100,7 @@
 		"5": {
 			"label": "Threshold of Watt for Load Caution",
 			"description": "Above this level, switch enters overload mode",
-			"unit": "Watt",
+			"unit": "W",
 			"valueSize": 2,
 			"minValue": 10,
 			"maxValue": 3000,

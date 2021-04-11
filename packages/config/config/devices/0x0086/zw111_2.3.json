@@ -334,7 +334,7 @@
 		"92": {
 			"label": "Set the threshold value of percent power",
 			"description": "Threshold change in wattage (in terms of percentage)",
-			"unit": "watt",
+			"unit": "W",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 100,

@@ -109,7 +109,7 @@
 			"label": "Threshold Power Report",
 			"description": "Minimum change in wattage as watt value for a meter report to be sent",
 			"valueSize": 2,
-			"unit": "Watt",
+			"unit": "W",
 			"minValue": 0,
 			"maxValue": 65535,
 			"defaultValue": 50,
