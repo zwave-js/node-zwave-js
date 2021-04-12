@@ -166,7 +166,7 @@
 			"label": "Switch 2 - Operation Report to Association Group 2",
 			"valueSize": 1,
 			"minValue": 0,
-			"maxValue": 1,
+			"maxValue": 2,
 			"defaultValue": 0,
 			"readOnly": false,
 			"writeOnly": false,
