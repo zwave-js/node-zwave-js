@@ -433,7 +433,7 @@
 			"unsigned": true,
 			"readOnly": false,
 			"writeOnly": true,
-			"allowManualEntry": true,
+			"allowManualEntry": false,
 			"options": [
 				{
 					"label": "No",

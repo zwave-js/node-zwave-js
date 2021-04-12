@@ -35,7 +35,7 @@
 			"defaultValue": 1,
 			"readOnly": false,
 			"writeOnly": false,
-			"allowManualEntry": true,
+			"allowManualEntry": false,
 			"options": [
 				{
 					"label": "Disable",
@@ -55,7 +55,7 @@
 			"defaultValue": 1,
 			"readOnly": false,
 			"writeOnly": false,
-			"allowManualEntry": true,
+			"allowManualEntry": false,
 			"options": [
 				{
 					"label": "Momentary Buttons",
@@ -75,7 +75,7 @@
 			"defaultValue": 1,
 			"readOnly": false,
 			"writeOnly": false,
-			"allowManualEntry": true,
+			"allowManualEntry": false,
 			"options": [
 				{
 					"label": "Toggle Switch without specified on/off position",
@@ -95,7 +95,7 @@
 			"defaultValue": 0,
 			"readOnly": false,
 			"writeOnly": false,
-			"allowManualEntry": true,
+			"allowManualEntry": false,
 			"options": [
 				{
 					"label": "Report both on/off",
@@ -119,20 +119,20 @@
 			"defaultValue": 1,
 			"readOnly": false,
 			"writeOnly": false,
-			"allowManualEntry": true,
+			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "Forbid Manual Operation",
+					"label": "Disable",
 					"value": 0
 				},
 				{
-					"label": "Allow Manual Operation",
+					"label": "Enable",
 					"value": 1
 				}
 			]
 		},
 		"6": {
-			"label": "Switch 1 - Timing Function",
+			"label": "Switch 1 - Off Timer Interval",
 			"unit": "100ms",
 			"valueSize": 2,
 			"minValue": 0,
@@ -150,7 +150,7 @@
 			"defaultValue": 0,
 			"readOnly": false,
 			"writeOnly": false,
-			"allowManualEntry": true,
+			"allowManualEntry": false,
 			"options": [
 				{
 					"label": "Switch Immediately",
@@ -170,7 +170,7 @@
 			"defaultValue": 0,
 			"readOnly": false,
 			"writeOnly": false,
-			"allowManualEntry": true,
+			"allowManualEntry": false,
 			"options": [
 				{
 					"label": "Report both on/off",
@@ -195,7 +195,7 @@
 			"unsigned": true,
 			"readOnly": false,
 			"writeOnly": true,
-			"allowManualEntry": true,
+			"allowManualEntry": false,
 			"options": [
 				{
 					"label": "No",
