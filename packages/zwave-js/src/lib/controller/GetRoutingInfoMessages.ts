@@ -1,4 +1,4 @@
-import type { MessageOrCCLogEntry } from "@zwave-js/core";
+import { MessageOrCCLogEntry, NUM_NODEMASK_BYTES } from "@zwave-js/core";
 import type { JSONObject } from "@zwave-js/shared";
 import type { Driver } from "../driver/Driver";
 import {
@@ -14,7 +14,7 @@ import {
 	messageTypes,
 	priority,
 } from "../message/Message";
-import { NUM_NODEMASK_BYTES, parseNodeBitMask } from "./NodeBitMask";
+import { parseNodeBitMask } from "./NodeBitMask";
 
 interface GetRoutingInfoRequestOptions extends MessageBaseOptions {
 	nodeId: number;

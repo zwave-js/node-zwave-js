@@ -98,6 +98,7 @@ import {
 	GetNVMIdRequest,
 	GetNVMIdResponse,
 	NVMId,
+	nvmSizeToBufferSize,
 } from "../serialapi/nvm/GetNVMIdMessages";
 import {
 	AddNodeStatus,
@@ -3048,5 +3049,47 @@ ${associatedNodes.join(", ")}`,
 			}),
 		);
 		return ret.success;
+	}
+
+	public async backupNVMRaw(
+		onProgress?: (bytesRead: number, total: number) => void,
+	): Promise<Buffer> {
+		// TODO: Power down RF before dumping
+		// ZW_SetRFReceiveMode
+
+		const size = nvmSizeToBufferSize((await this.getNVMId()).memorySize);
+		if (!size) {
+			throw new ZWaveError(
+				"Unknown NVM size - cannot backup!",
+				ZWaveErrorCodes.Controller_NotSupported,
+			);
+		}
+
+		const ret = Buffer.allocUnsafe(size);
+		let offset = 0;
+		// Try reading the maximum size at first, the Serial API will return chunks in a size it supports
+		// TODO: use Serial API SERIAL_API_SETUP_CMD_TX_GET_MAX_PAYLOAD_SIZE to figure this out
+		let chunkSize: number = Math.min(0xffff, ret.length);
+		while (offset < ret.length) {
+			const chunk = await this.externalNVMReadBuffer(
+				offset,
+				Math.min(chunkSize, ret.length - offset),
+			);
+			chunk.copy(ret, offset);
+			offset += chunk.length;
+			if (chunkSize > chunk.length) chunkSize = chunk.length;
+
+			// Report progress for listeners
+			if (onProgress) setImmediate(() => onProgress(offset, size));
+		}
+
+		// TODO: You can also get away with eliding all the 0xff pages. The NVR also holds the page size of the NVM (NVMP),
+		// so you can figure out which pages you don't have to save or restore. If you do this, you need to make sure to issue a
+		// "factory reset" before restoring the NVM - that'll blank out the NVM to 0xffs before initializing it.
+
+		// TODO: Power up RF after dumping
+		// ZW_SetRFReceiveMode
+
+		return ret;
 	}
 }

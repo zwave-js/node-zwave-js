@@ -35,6 +35,35 @@ export enum NVMSize {
 	Unknown = 0xff, // Unknown NVM type, size could not be determined
 }
 
+export function nvmSizeToBufferSize(size: NVMSize): number | undefined {
+	switch (size) {
+		case NVMSize["16KB"]:
+			return 16 * 1024;
+		case NVMSize["32KB"]:
+			return 32 * 1024;
+		case NVMSize["64KB"]:
+			return 64 * 1024;
+		case NVMSize["128KB"]:
+			return 128 * 1024;
+		case NVMSize["256KB"]:
+			return 256 * 1024;
+		case NVMSize["512KB"]:
+			return 512 * 1024;
+		case NVMSize["1MB"]:
+			return 1 * 1024 * 1024;
+		case NVMSize["2MB"]:
+			return 2 * 1024 * 1024;
+		case NVMSize["4MB"]:
+			return 4 * 1024 * 1024;
+		case NVMSize["8MB"]:
+			return 8 * 1024 * 1024;
+		case NVMSize["16MB"]:
+			return 16 * 1024 * 1024;
+		default:
+			return undefined;
+	}
+}
+
 export type NVMId = Pick<
 	GetNVMIdResponse,
 	"nvmManufacturerId" | "memoryType" | "memorySize"
