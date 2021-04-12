@@ -114,7 +114,7 @@
 		]
 	},
 	"motion_report_type": {
-		"label": "Motion Sensor Triggered Command",
+		"label": "Motion Sensor Report Type to Send",
 		"valueSize": 1,
 		"minValue": 1,
 		"maxValue": 2,
@@ -135,7 +135,7 @@
 		]
 	},
 	"sensor_report_type": {
-		"label": "Motion Sensor Triggered Command",
+		"label": "Report Type to Send",
 		"valueSize": 4,
 		"minValue": 16,
 		"maxValue": 256,
@@ -146,11 +146,11 @@
 		"allowManualEntry": false,
 		"options": [
 			{
-				"label": "Send Sensor Binary Report CC",
+				"label": "Sensor Binary Report CC",
 				"value": 16
 			},
 			{
-				"label": "Send Basic Set CC",
+				"label": "Basic Set CC",
 				"value": 256
 			}
 		]
