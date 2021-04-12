@@ -128,6 +128,7 @@ export class ControllerLogger extends ZWaveLoggerBase {
 		args: LogValueArgs<ValueID>,
 	): void {
 		if (!this.isValueLogVisible()) return;
+		if (!this.container.shouldLogNode(args.nodeId)) return;
 
 		const primaryTags: string[] = [
 			getNodeTag(args.nodeId),
@@ -181,6 +182,7 @@ export class ControllerLogger extends ZWaveLoggerBase {
 	/** Prints a log message for updated metadata of a value id */
 	public metadataUpdated(args: LogValueArgs<ValueID>): void {
 		if (!this.isValueLogVisible()) return;
+		if (!this.container.shouldLogNode(args.nodeId)) return;
 
 		const primaryTags: string[] = [
 			getNodeTag(args.nodeId),
