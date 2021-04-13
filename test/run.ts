@@ -196,6 +196,10 @@ const driver = new Driver("COM5", {
 		// 		// );
 	});
 void driver.start();
+// driver.enableStatistics({
+// 	applicationName: "test",
+// 	applicationVersion: "0.0.1",
+// });
 
 // // // @ts-check
 // // require("reflect-metadata");
