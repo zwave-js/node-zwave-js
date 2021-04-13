@@ -47,19 +47,19 @@
 		},
 		"3": {
 			"$import": "../templates/master_template.json#base_enable_disable",
-			"label": "Thermistor connected to input 1"
+			"label": "Thermistor Connected To Input 1"
 		},
 		"4": {
 			"$import": "../templates/master_template.json#base_enable_disable",
-			"label": "Thermistor connected to input 2"
+			"label": "Thermistor Connected To Input 2"
 		},
 		"5": {
 			"$import": "../templates/master_template.json#base_enable_disable",
-			"label": "Thermistor connected to input 3"
+			"label": "Thermistor Connected To Input 3"
 		},
 		"6": {
 			"$import": "../templates/master_template.json#base_enable_disable",
-			"label": "Thermistor connected to input 4"
+			"label": "Thermistor Connected To Input 4"
 		},
 		"7": {
 			"$import": "templates/logic_group_template.json#input_calibration",
@@ -83,15 +83,15 @@
 		},
 		"12": {
 			"$import": "templates/logic_group_template.json#input_report_interval",
-			"label": "Input 2 report interval"
+			"label": "Input 2 Report Interval"
 		},
 		"13": {
 			"$import": "templates/logic_group_template.json#input_report_interval",
-			"label": "Input 3 report intervals"
+			"label": "Input 3 Report Intervals"
 		},
 		"14": {
 			"$import": "templates/logic_group_template.json#input_report_interval",
-			"label": "Input 4 report interval"
+			"label": "Input 4 Report Interval"
 		}
 	},
 	"metadata": {

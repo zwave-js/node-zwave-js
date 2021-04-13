@@ -1,12 +1,12 @@
 {
 	"manufacturer": "Logic Group",
 	"manufacturerId": "0x0234",
-	"label": "ZDB5400",
+	"label": "ZRB5120",
 	"description": "Wall Controller",
 	"devices": [
 		{
 			"productType": "0x0003",
-			"productId": "0x0124"
+			"productId": "0x0125"
 		}
 	],
 	"firmwareVersion": {
@@ -68,41 +68,46 @@
 			"maxNodes": 5
 		},
 		"14": {
-			"label": "Dimmer Basic Report",
+			"label": "Basic Switch Report, Relay 1",
+			"maxNodes": 5
+		},
+		"15": {
+			"label": "Basic Switch Report, Relay 2",
 			"maxNodes": 5
 		}
 	},
 	"paramInformation": {
 		"1[0x01]": {
 			"$import": "../templates/master_template.json#base_enable_disable",
-			"label": "Pushbutton 1"
+			"label": "Pushbutton 1 Controls Relay 1"
 		},
 		"1[0x02]": {
 			"$import": "../templates/master_template.json#base_enable_disable",
-			"label": "Pushbutton 2"
+			"label": "Pushbutton 2 Controls Relay 1"
 		},
 		"1[0x04]": {
 			"$import": "../templates/master_template.json#base_enable_disable",
-			"label": "Pushbutton 3"
+			"label": "Pushbutton 3 Controls Relay 1"
 		},
 		"1[0x08]": {
 			"$import": "../templates/master_template.json#base_enable_disable",
-			"label": "Pushbutton 4"
+			"label": "Pushbutton 4 Controls Relay 1"
 		},
-		"2": {
-			"$import": "templates/logic_group_template.json#dimming_duration"
+		"2[0x01]": {
+			"$import": "../templates/master_template.json#base_enable_disable",
+			"label": "Pushbutton 1 Controls Relay 2"
 		},
-		"3": {
-			"$import": "templates/logic_group_template.json#duration_on_off"
+		"2[0x02]": {
+			"$import": "../templates/master_template.json#base_enable_disable",
+			"label": "Pushbutton 2 Controls Relay 2"
 		},
-		"4": {
-			"$import": "templates/logic_group_template.json#dimmer_mode"
+		"2[0x04]": {
+			"$import": "../templates/master_template.json#base_enable_disable",
+			"label": "Pushbutton 3 Controls Relay 2"
 		},
-		"5": {
-			"$import": "templates/logic_group_template.json#dimmer_min"
-		},
-		"6": {
-			"$import": "templates/logic_group_template.json#dimmer_max"
+		"2[0x08]": {
+			"$import": "../templates/master_template.json#base_enable_disable",
+			"label": "Pushbutton 4 Controls Relay 2"
 		},
 		"7": {
 			"$import": "templates/logic_group_template.json#enable_central_scene"
@@ -139,7 +144,7 @@
 		},
 		"13": {
 			"$import": "../templates/master_template.json#base_1-255_nounit",
-			"label": "Pushbutton Held Threshold Time.",
+			"label": "Pushbutton Held Threshold Time",
 			"unit": "10 ms",
 			"defaultValue": 50
 		},
@@ -157,71 +162,6 @@
 		},
 		"14[0xff]": {
 			"$import": "templates/logic_group_template.json#multilevel_disabled_byte"
-		},
-		"15[0x01]": {
-			"$import": "../templates/master_template.json#base_enable_disable",
-			"label": "Association Group 2 Secure Message",
-			"valueSize": 2
-		},
-		"15[0x02]": {
-			"$import": "../templates/master_template.json#base_enable_disable",
-			"label": "Association Group 3 Secure Message",
-			"valueSize": 2
-		},
-		"15[0x04]": {
-			"$import": "../templates/master_template.json#base_enable_disable",
-			"label": "Association Group 4 Secure Message",
-			"valueSize": 2
-		},
-		"15[0x08]": {
-			"$import": "../templates/master_template.json#base_enable_disable",
-			"label": "Association Group 5 Secure Message",
-			"valueSize": 2
-		},
-		"15[0x10]": {
-			"$import": "../templates/master_template.json#base_enable_disable",
-			"label": "Association Group 6 Secure Message",
-			"valueSize": 2
-		},
-		"15[0x20]": {
-			"$import": "../templates/master_template.json#base_enable_disable",
-			"label": "Association Group 7 Secure Message",
-			"valueSize": 2
-		},
-		"15[0x40]": {
-			"$import": "../templates/master_template.json#base_enable_disable",
-			"label": "Association Group 8 Secure Message",
-			"valueSize": 2
-		},
-		"15[0x80]": {
-			"$import": "../templates/master_template.json#base_enable_disable",
-			"label": "Association Group 9 Secure Message",
-			"valueSize": 2
-		},
-		"15[0x100]": {
-			"$import": "../templates/master_template.json#base_enable_disable",
-			"label": "Association Group 10 Secure Message",
-			"valueSize": 2
-		},
-		"15[0x0200]": {
-			"$import": "../templates/master_template.json#base_enable_disable",
-			"label": "Association Group 11 Secure Message",
-			"valueSize": 2
-		},
-		"15[0x0400]": {
-			"$import": "../templates/master_template.json#base_enable_disable",
-			"label": "Association Group 12 Secure Message",
-			"valueSize": 2
-		},
-		"15[0x0800]": {
-			"$import": "../templates/master_template.json#base_enable_disable",
-			"label": "Association Group 13 Secure Message",
-			"valueSize": 2
-		},
-		"15[0x1000]": {
-			"$import": "../templates/master_template.json#base_enable_disable",
-			"label": "Association Group 14 Secure Message",
-			"valueSize": 2
 		},
 		"16": {
 			"$import": "templates/logic_group_template.json#pushbutton_function_zdb5100",
@@ -472,7 +412,7 @@
 		},
 		"41": {
 			"$import": "../templates/master_template.json#base_0-255_nounit",
-			"label": "Timer Value For pushbutton 4",
+			"label": "Timer Value For Pushbutton 4",
 			"unit": "1 second",
 			"valueSize": 2,
 			"maxValue": 43200,
@@ -550,7 +490,6 @@
 	"metadata": {
 		"inclusion": "Remove white pushbutton cover and press on the center switch with a non-conductive object. The LEDs will now start blinking on pushbutton 1 (upper left pushbutton)",
 		"exclusion": "Remove white pushbutton cover and press on the center switch with a non-conductive object. The LEDs will now start blinking on pushbutton 1 (upper left pushbutton)",
-		"reset": "Remove white pushbutton cover and long-press the center switch for 10 seconds with a non-conductive object. Please use this procedure only when the network primary controller is missing or otherwise inoperable",
-		"manual": "https://products.z-wavealliance.org/ProductManual/File?folder=&filename=product_documents/3623/ZDB5400-Manual.pdf"
+		"reset": "Remove white pushbutton cover and long-press the center switch for 10 seconds with a non-conductive object. Please use this procedure only when the network primary controller is missing or otherwise inoperable"
 	}
 }

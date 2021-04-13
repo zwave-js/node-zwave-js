@@ -11,13 +11,14 @@
 	},
 	"multilevel_upper_function": {
 		"$import": "../../templates/master_template.json#base_0-99_nounit",
-		"label": "Upper switch value",
+		"label": "Upper Switch Value",
+		"description": "Allowable range: 0-99",
 		"valueSize": 4,
 		"defaultValue": 255
 	},
 	"multilevel_lower_function": {
 		"$import": "../../templates/master_template.json#base_0-99_nounit",
-		"label": "Lower switch value",
+		"label": "Lower Switch Value",
 		"valueSize": 4,
 		"defaultValue": 0
 	},
@@ -38,7 +39,7 @@
 		"allowManualEntry": true
 	},
 	"button_pressed_threshold_time": {
-		"label": "Pushbutton press threshold time",
+		"label": "Pushbutton Press Threshold Time",
 		"unit": "1 ms",
 		"valueSize": 2,
 		"minValue": 1,
@@ -49,7 +50,7 @@
 		"allowManualEntry": true
 	},
 	"button_held_threshold_time": {
-		"label": "Pushbutton held threshold time",
+		"label": "Pushbutton Held Threshold Time",
 		"unit": "1 ms",
 		"valueSize": 2,
 		"minValue": 1,
@@ -75,11 +76,11 @@
 				"value": 0
 			},
 			{
-				"label": "Battery level",
+				"label": "Battery Level",
 				"value": 1
 			},
 			{
-				"label": "LED set by parameter 5.",
+				"label": "LED Set By Parameter 5",
 				"value": 2
 			}
 		]
@@ -100,11 +101,11 @@
 				"value": 0
 			},
 			{
-				"label": "Turn on, dim up",
+				"label": "Turn On, Dim Up",
 				"value": 1
 			},
 			{
-				"label": "Turn off, dim down",
+				"label": "Turn Off, Dim Down",
 				"value": 2
 			},
 			{
@@ -115,12 +116,12 @@
 	},
 	"global_brightness": {
 		"$import": "../../templates/master_template.json#base_0-255_nounit",
-		"label": "Global brightness LED",
+		"label": "Global Brightness LED",
 		"valueSize": 4,
 		"defaultValue": 255
 	},
 	"color_command_pushbutton": {
-		"label": "Color Commands LED indicator",
+		"label": "Color Commands LED Indicator",
 		"valueSize": 1,
 		"minValue": 0,
 		"maxValue": 2,
@@ -131,28 +132,28 @@
 		"allowManualEntry": false,
 		"options": [
 			{
-				"label": "Direct control",
+				"label": "Direct Control",
 				"value": 0
 			},
 			{
-				"label": "Color for OFF state",
+				"label": "Color For OFF State",
 				"value": 1
 			},
 			{
-				"label": "Color for ON state",
+				"label": "Color For ON State",
 				"value": 2
 			}
 		]
 	},
 	"dimming_duration": {
 		"$import": "../../templates/master_template.json#base_0-255_nounit",
-		"label": "Duration of dimming",
+		"label": "Duration Of Dimming",
 		"unit": "seconds",
 		"defaultValue": 5
 	},
 	"duration_on_off": {
 		"$import": "../../templates/master_template.json#base_0-255_nounit",
-		"label": "Duration of on/off",
+		"label": "Duration Of On/Off",
 		"defaultValue": 0
 	},
 	"dimmer_mode": {
@@ -167,7 +168,7 @@
 		"allowManualEntry": false,
 		"options": [
 			{
-				"label": "No dimming, Switch only",
+				"label": "No dimming, Switch Only",
 				"value": 0
 			},
 			{
@@ -182,31 +183,29 @@
 	},
 	"dimmer_min": {
 		"$import": "../../templates/master_template.json#base_0-99_nounit",
-		"label": "Dimmer minimum level",
-		"unit": "%",
+		"label": "Dimmer Minimum Level",
 		"defaultValue": 0
 	},
 	"dimmer_max": {
 		"$import": "../../templates/master_template.json#base_0-99_nounit",
-		"label": "Dimmer maximum level",
-		"unit": "%",
+		"label": "Dimmer Maximum Level",
 		"defaultValue": 99
 	},
 	"dimmer_metering": {
 		"$import": "../../templates/master_template.json#base_0-255_nounit",
-		"label": "Meter report time",
+		"label": "Meter Report Time",
 		"defaultValue": 60
 	},
 	"led_indicator": {
 		"$import": "../../templates/master_template.json#base_0-255_nounit",
-		"label": "Pushbutton LED indicator",
+		"label": "Pushbutton LED Indicator",
 		"unsigned": true,
 		"valueSize": 4,
 		"defaultValue": 0
 	},
 	"pushbutton_led_indicator": {
 		"$import": "../../templates/master_template.json#base_0-255_nounit",
-		"label": "Pushbutton LED indicator",
+		"label": "Pushbutton LED Indicator",
 		"maxValue": 7,
 		"defaultValue": 7,
 		"allowManualEntry": false,
@@ -216,31 +215,31 @@
 				"value": 0
 			},
 			{
-				"label": "Follow switch",
+				"label": "Follow Switch",
 				"value": 1
 			},
 			{
-				"label": "Follow switch, inverted",
+				"label": "Follow Switch, Inverted",
 				"value": 2
 			},
 			{
-				"label": "Follow switch",
+				"label": "Follow Switch",
 				"value": 3
 			},
 			{
-				"label": "Follow switch, inverted",
+				"label": "Follow Switch, Inverted",
 				"value": 4
 			},
 			{
-				"label": "Follow internal dimmer",
+				"label": "Follow Internal Dimmer",
 				"value": 5
 			},
 			{
-				"label": "Follow internal dimmer inverted",
+				"label": "Follow Internal Dimmer Inverted",
 				"value": 6
 			},
 			{
-				"label": "On for 5 sec",
+				"label": "On For 5 Sec",
 				"value": 7
 			}
 		]
@@ -261,11 +260,11 @@
 				"value": 0
 			},
 			{
-				"label": "Switch and LED",
+				"label": "Switch And LED",
 				"value": 1
 			},
 			{
-				"label": "Pushbutton activated",
+				"label": "Pushbutton Activated",
 				"value": 2
 			}
 		]
@@ -285,26 +284,26 @@
 				"value": 0
 			},
 			{
-				"label": "Automatic turn off after the time has expired",
+				"label": "Automatic Turn Off After The Time Has Expired",
 				"value": 1
 			},
 			{
-				"label": "Automatic turn on after the time has expired",
+				"label": "Automatic Turn On After The Time Has Expired",
 				"value": 2
 			},
 			{
-				"label": "Always turn off or dim down",
+				"label": "Always Turn Off Or Dim Down",
 				"value": 3
 			},
 			{
-				"label": "Always turn on or dim up",
+				"label": "Always Turn On Or Dim Up",
 				"value": 4
 			}
 		]
 	},
 	"input_funtion_relay": {
 		"$import": "../../templates/master_template.json#base_0-255_nounit",
-		"label": "Function setup of input",
+		"label": "Function Setup Of Input",
 		"maxValue": 3,
 		"defaultValue": 3,
 		"allowManualEntry": false,
@@ -314,36 +313,36 @@
 				"value": 0
 			},
 			{
-				"label": "Level-controlled input",
+				"label": "Level Controlled Input",
 				"value": 1
 			},
 			{
-				"label": "Falling-edge controlled input",
+				"label": "Falling-edge Controlled Input",
 				"value": 2
 			},
 			{
-				"label": "Rising-edge controlled input",
+				"label": "Rising-edge Controlled Input",
 				"value": 3
 			}
 		]
 	},
 	"output_function_relay": {
 		"$import": "../../templates/master_template.json#base_enable_disable",
-		"label": "Output function",
+		"label": "Output Function",
 		"options": [
 			{
-				"label": "Controlled via Z-Wave messages",
+				"label": "Controlled Via Z-Wave Messages",
 				"value": 0
 			},
 			{
-				"label": "Controlled by input 1",
+				"label": "Controlled By Input 1",
 				"value": 1
 			}
 		]
 	},
 	"status_led": {
 		"$import": "../../templates/master_template.json#led_indicator_four_options",
-		"label": "Status of LED",
+		"label": "Status Of LED",
 		"defaultValue": 1,
 		"options": [
 			{
@@ -355,18 +354,18 @@
 				"value": 1
 			},
 			{
-				"label": "Flashes in 1 second interval",
+				"label": "Flashes In 1 Second Interval",
 				"value": 2
 			},
 			{
-				"label": "Flashes in 1/2 second interval",
+				"label": "Flashes In 1/2 Second Interval",
 				"value": 3
 			}
 		]
 	},
 	"meter_type": {
-		"label": "Meter Type of input",
-		"description": "Meter Type of input",
+		"label": "Meter Type Of Input",
+		"description": "Meter Type Of Input",
 		"valueSize": 1,
 		"minValue": 0,
 		"maxValue": 5,
@@ -376,33 +375,34 @@
 		"allowManualEntry": false,
 		"options": [
 			{
-				"label": "Input not in use",
+				"label": "Input Not In Use",
 				"value": 0
 			},
 			{
-				"label": "Electricity meter",
+				"label": "Electricity Meter",
 				"value": 1
 			},
 			{
-				"label": "Gas meter.",
+				"label": "Gas Meter",
 				"value": 2
 			},
 			{
-				"label": "Water meter.",
+				"label": "Water Meter",
 				"value": 3
 			},
 			{
-				"label": "Heat meter",
+				"label": "Heat Meter",
 				"value": 4
 			},
 			{
-				"label": "Cooling meter.",
+				"label": "Cooling Meter",
 				"value": 5
 			}
 		]
 	},
 	"input_scale": {
-		"label": "Scale Type of input",
+		// The meaning of this parameter's values change depending on parameter "meter_type"
+		"label": "Scale Type Of Input",
 		"valueSize": 1,
 		"minValue": 0,
 		"maxValue": 6,
@@ -413,7 +413,8 @@
 		"allowManualEntry": true
 	},
 	"input_precision": {
-		"label": "Precision of input",
+		//number of decimal points
+		"label": "Precision Of Input",
 		"valueSize": 1,
 		"minValue": 0,
 		"maxValue": 7,
@@ -424,7 +425,7 @@
 		"allowManualEntry": true
 	},
 	"pulse_unit": {
-		"label": "Pulses per Unit of input 5",
+		"label": "Pulses Per Unit Of Input 5",
 		"unit": "pulse",
 		"valueSize": 2,
 		"minValue": 0,
@@ -436,7 +437,7 @@
 		"allowManualEntry": true
 	},
 	"rate_type": {
-		"label": "Rate Type of input",
+		"label": "Rate Type Of Input",
 		"valueSize": 1,
 		"minValue": 0,
 		"maxValue": 2,
@@ -461,7 +462,7 @@
 		]
 	},
 	"time_interval_report": {
-		"label": "Time interval between meter reports",
+		"label": "Time Interval Between Meter Reports",
 		"unit": "100 ms",
 		"valueSize": 2,
 		"minValue": 0,
@@ -499,7 +500,7 @@
 		"allowManualEntry": true
 	},
 	"input_function_setup": {
-		"label": "Function setup of Input",
+		"label": "Function Setup Of Input",
 		"valueSize": 1,
 		"minValue": 0,
 		"maxValue": 6,
@@ -510,41 +511,41 @@
 		"allowManualEntry": true,
 		"options": [
 			{
-				"label": "Level-controlled, NO",
+				"label": "Level-Controlled, NO",
 				"value": 0
 			},
 			{
-				"label": "Level-controlled, NC",
+				"label": "Level-Controlled, NC",
 				"value": 1
 			},
 			{
-				"label": "Toggle-controlled, NO",
+				"label": "Toggle-Controlled, NO",
 				"value": 2
 			},
 			{
-				"label": "Toggle-controlled, NC",
+				"label": "Toggle-Controlled, NC",
 				"value": 3
 			},
 			{
-				"label": "Timer-controlled, NO",
+				"label": "Timer-Controlled, NO",
 				"value": 4
 			},
 			{
-				"label": "Timer-controlled, NC",
+				"label": "Timer-Controlled, NC",
 				"value": 5
 			}
 		]
 	},
 	"pushbutton_debounce": {
 		"$import": "../../templates/master_template.json#base_1-255_nounit",
-		"label": "Pushbutton debounce timer",
+		"label": "Pushbutton Debounce Timer",
 		"unit": "10 ms",
 		"valueSize": 1,
 		"defaultValue": 5
 	},
 	"input_timer": {
 		"$import": "../../templates/master_template.json#base_0-255_nounit",
-		"label": "Timer for input",
+		"label": "Timer For Input",
 		"defaultValue": 0
 	}
 }

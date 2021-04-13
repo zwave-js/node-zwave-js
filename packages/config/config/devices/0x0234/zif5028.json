@@ -101,68 +101,68 @@
 		},
 		"3": {
 			"$import": "templates/logic_group_template.json#input_funtion_relay",
-			"label": "Function setup of input 1"
+			"label": "Function Setup Of input 1"
 		},
 		"4": {
 			"$import": "templates/logic_group_template.json#input_timer",
-			"label": "Timer for input 1"
+			"label": "Timer For Input 1"
 		},
 		"5": {
 			"$import": "templates/logic_group_template.json#input_funtion_relay",
-			"label": "Function setup of input 2"
+			"label": "Function Setup Of Input 2"
 		},
 		"6": {
 			"$import": "templates/logic_group_template.json#input_timer",
-			"label": "Timer for input 2"
+			"label": "Timer For Input 2"
 		},
 		"7": {
 			"$import": "templates/logic_group_template.json#input_funtion_relay",
-			"label": "Function setup of input 3"
+			"label": "Function Setup Of Input 3"
 		},
 		"8": {
 			"$import": "templates/logic_group_template.json#input_timer",
-			"label": "Timer for input 3"
+			"label": "Timer For Input 3"
 		},
 		"9": {
 			"$import": "templates/logic_group_template.json#input_funtion_relay",
-			"label": "Function setup of input 4"
+			"label": "Function Setup Of Input 4"
 		},
 		"10": {
 			"$import": "templates/logic_group_template.json#input_timer",
-			"label": "Timer for input 4"
+			"label": "Timer For Input 4"
 		},
 		"11": {
 			"$import": "templates/logic_group_template.json#input_funtion_relay",
-			"label": "Function setup of input 5"
+			"label": "Function Setup Of Input 5"
 		},
 		"12": {
 			"$import": "templates/logic_group_template.json#input_timer",
-			"label": "Timer for input 5"
+			"label": "Timer For Input 5"
 		},
 		"13": {
 			"$import": "templates/logic_group_template.json#input_funtion_relay",
-			"label": "Function setup of input 6"
+			"label": "Function Setup Of Input 6"
 		},
 		"14": {
 			"$import": "../templates/master_template.json#base_0-255_nounit",
-			"label": "Timer setup of input 6",
+			"label": "Timer Setup Of Input 6",
 			"defaultValue": 0
 		},
 		"15": {
 			"$import": "../templates/master_template.json#base_0-255_nounit",
-			"label": "Input Snubber-filter time constant.",
+			"label": "Input Snubber-filter Time Constant.",
 			"unit": "10 ms",
 			"defaultValue": 5
 		},
 		"16": {
 			"$import": "../templates/master_template.json#base_0-255_nounit",
-			"label": "Threshold value for activation of inputs.",
+			"label": "Threshold Value For Activation Of Inputs.",
 			"unit": "10 ms",
 			"defaultValue": 200
 		},
 		"17": {
 			"$import": "../templates/master_template.json#base_0-255_nounit",
-			"label": "Threshold for input in latched mode.",
+			"label": "Threshold For Input In Latched Mode.",
 			"unit": "10 ms",
 			"defaultValue": 50
 		},
@@ -202,7 +202,7 @@
 		},
 		"24": {
 			"$import": "templates/logic_group_template.json#output_function_relay",
-			"label": "Function setup of input 6"
+			"label": "Function Setup Of Input 6"
 		}
 	},
 	"metadata": {

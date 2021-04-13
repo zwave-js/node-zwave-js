@@ -110,7 +110,7 @@
 		},
 		"8": {
 			"$import": "../templates/master_template.json#base_enable_disable",
-			"label": "Double-activation functionality",
+			"label": "Double-Activation Functionality",
 			"defaultValue": 1,
 			"options": [
 				{
@@ -125,113 +125,112 @@
 		},
 		"10": {
 			"$import": "../templates/master_template.json#base_enable_disable",
-			"label": "Enhanced LED control"
+			"label": "Enhanced LED Control"
 		},
 		"11": {
-			"$import": "../templates/master_template.json#base_1-255_nounit",
-			"label": "Pushbutton debounce timer",
+			"$import": "templates/logic_group_template.json#pushbutton_debounce",
 			"unit": "10 ms",
 			"defaultValue": 5
 		},
 		"12": {
 			"$import": "../templates/master_template.json#base_1-255_nounit",
-			"label": "Pushbutton press threshold time",
+			"label": "Pushbutton Press Threshold Time",
 			"unit": "10 ms",
 			"defaultValue": 20
 		},
 		"13": {
 			"$import": "../templates/master_template.json#base_1-255_nounit",
-			"label": "Pushbutton held threshold time.",
+			"label": "Pushbutton Held Threshold Time",
 			"unit": "10 ms",
 			"defaultValue": 50
 		},
 		"14[0xff000000]": {
 			"$import": "templates/logic_group_template.json#global_brightness",
-			"label": "Global brightness Red LED"
+			"label": "Global Brightness Red LED"
 		},
 		"14[0xff0000]": {
 			"$import": "templates/logic_group_template.json#global_brightness",
-			"label": "Global brightness Green LED"
+			"label": "Global Brightness Green LED"
 		},
 		"14[0xff00]": {
 			"$import": "templates/logic_group_template.json#global_brightness",
-			"label": "Global brightness Blue LED"
+			"label": "Global Brightness Blue LED"
 		},
 		"14[0xff]": {
 			"$import": "templates/logic_group_template.json#multilevel_disabled_byte"
 		},
 		"15[0x01]": {
 			"$import": "../templates/master_template.json#base_enable_disable",
-			"label": "Association group 2 secure message",
+			"label": "Association Group 2 Secure Message",
 			"valueSize": 2
 		},
 		"15[0x02]": {
 			"$import": "../templates/master_template.json#base_enable_disable",
-			"label": "Association group 3 secure message",
+			"label": "Association Group 3 Secure Message",
 			"valueSize": 2
 		},
 		"15[0x04]": {
 			"$import": "../templates/master_template.json#base_enable_disable",
-			"label": "Association group 4 secure message",
+			"label": "Association Group 4 Secure Message",
 			"valueSize": 2
 		},
 		"15[0x08]": {
 			"$import": "../templates/master_template.json#base_enable_disable",
-			"label": "Association group 5 secure message",
+			"label": "Association Group 5 Secure Message",
 			"valueSize": 2
 		},
 		"15[0x10]": {
 			"$import": "../templates/master_template.json#base_enable_disable",
-			"label": "Association group 6 secure message",
+			"label": "Association Group 6 Secure Message",
 			"valueSize": 2
 		},
 		"15[0x20]": {
 			"$import": "../templates/master_template.json#base_enable_disable",
-			"label": "Association group 7 secure message",
+			"label": "Association Group 7 Secure Message",
 			"valueSize": 2
 		},
 		"15[0x40]": {
 			"$import": "../templates/master_template.json#base_enable_disable",
-			"label": "Association group 8 secure message",
+			"label": "Association Group 8 Secure Message",
 			"valueSize": 2
 		},
 		"15[0x80]": {
 			"$import": "../templates/master_template.json#base_enable_disable",
-			"label": "Association group 9 secure message",
+			"label": "Association Group 9 Secure Message",
 			"valueSize": 2
 		},
 		"15[0x100]": {
 			"$import": "../templates/master_template.json#base_enable_disable",
-			"label": "Association group 10 secure message",
+			"label": "Association Group 10 Secure Message",
 			"valueSize": 2
 		},
 		"15[0x0200]": {
 			"$import": "../templates/master_template.json#base_enable_disable",
-			"label": "Association group 11 secure message",
+			"label": "Association Group 11 Secure Message",
 			"valueSize": 2
 		},
 		"15[0x0400]": {
 			"$import": "../templates/master_template.json#base_enable_disable",
-			"label": "Association group 12 secure message",
+			"label": "Association Group 12 Secure Message",
 			"valueSize": 2
 		},
 		"15[0x0800]": {
 			"$import": "../templates/master_template.json#base_enable_disable",
-			"label": "Association group 13 secure message",
+			"label": "Association Group 13 Secure Message",
 			"valueSize": 2
 		},
 		"15[0x1000]": {
 			"$import": "../templates/master_template.json#base_enable_disable",
-			"label": "Association group 14 secure message",
+			"label": "Association Group 14 Secure Message",
 			"valueSize": 2
 		},
 		"16": {
 			"$import": "templates/logic_group_template.json#pushbutton_function_zdb5100",
-			"label": "Pushbutton 1 functionality"
+			"label": "Pushbutton 1 Functionality"
 		},
 		"17": {
 			"$import": "../templates/master_template.json#base_0-255_nounit",
-			"label": "Timer value for pushbutton 1",
+			"label": "Timer Value For Pushbutton 1",
 			"unit": "1 second",
 			"valueSize": 2,
 			"maxValue": 43200,
@@ -258,7 +257,7 @@
 		},
 		"20": {
 			"$import": "templates/logic_group_template.json#pushbutton_led_indicator",
-			"label": "Pushbutton 1 LED indicator"
+			"label": "Pushbutton 1 LED Indicator"
 		},
 		"21": {
 			"$import": "templates/logic_group_template.json#color_command_pushbutton",
@@ -266,42 +265,42 @@
 		},
 		"22[0xff000000]": {
 			"$import": "templates/logic_group_template.json#led_indicator",
-			"label": "Pushbutton 1 LED indicator ON Red"
+			"label": "Pushbutton 1 LED Indicator ON Red"
 		},
 		"22[0xff0000]": {
 			"$import": "templates/logic_group_template.json#led_indicator",
-			"label": "Pushbutton 1 LED indicator ON Green"
+			"label": "Pushbutton 1 LED Indicator ON Green"
 		},
 		"22[0xff00]": {
 			"$import": "templates/logic_group_template.json#led_indicator",
-			"label": "Pushbutton 1 LED indicator ON Blue",
+			"label": "Pushbutton 1 LED Indicator ON Blue",
 			"defaultValue": 127
 		},
 		"22[0xff]": {
 			"$import": "../templates/master_template.json#base_0-255_nounit",
-			"label": "LED Time for pushbutton 1 ON blinking",
+			"label": "LED Time For Pushbutton 1 ON Blinking",
 			"unit": "100 ms",
 			"valueSize": 4,
 			"defaultValue": 0
 		},
 		"23[0xff000000]": {
 			"$import": "templates/logic_group_template.json#led_indicator",
-			"label": "Pushbutton 1 LED indicator OFF Red",
+			"label": "Pushbutton 1 LED Indicator OFF Red",
 			"defaultValue": 47
 		},
 		"23[0xff0000]": {
 			"$import": "templates/logic_group_template.json#led_indicator",
-			"label": "Pushbutton 1 LED indicator OFF Green",
+			"label": "Pushbutton 1 LED Indicator OFF Green",
 			"defaultValue": 47
 		},
 		"23[0xff00]": {
 			"$import": "templates/logic_group_template.json#led_indicator",
-			"label": "Pushbutton 1 LED indicator OFF Blue",
+			"label": "Pushbutton 1 LED Indicator OFF Blue",
 			"defaultValue": 47
 		},
 		"23[0xff]": {
 			"$import": "../templates/master_template.json#base_0-255_nounit",
-			"label": "LED Time for pushbutton 1 OFF blinking",
+			"label": "LED Time For Pushbutton 1 OFF Blinking",
 			"unit": "100 ms",
 			"valueSize": 4,
 			"defaultValue": 0
@@ -312,7 +311,7 @@
 		},
 		"25": {
 			"$import": "../templates/master_template.json#base_0-255_nounit",
-			"label": "Timer value for pushbutton 2",
+			"label": "Timer Value For Pushbutton 2",
 			"unit": "1 second",
 			"valueSize": 2,
 			"maxValue": 43200,
@@ -339,7 +338,7 @@
 		},
 		"28": {
 			"$import": "templates/logic_group_template.json#pushbutton_led_indicator",
-			"label": "Pushbutton 2 LED indicator"
+			"label": "Pushbutton 2 LED Indicator"
 		},
 		"29": {
 			"$import": "templates/logic_group_template.json#color_command_pushbutton",
@@ -347,53 +346,53 @@
 		},
 		"30[0xff000000]": {
 			"$import": "templates/logic_group_template.json#led_indicator",
-			"label": "Pushbutton 2 LED indicator ON Red"
+			"label": "Pushbutton 2 LED Indicator ON Red"
 		},
 		"30[0xff0000]": {
 			"$import": "templates/logic_group_template.json#led_indicator",
-			"label": "Pushbutton 2 LED indicator ON Green"
+			"label": "Pushbutton 2 LED Indicator ON Green"
 		},
 		"30[0xff00]": {
 			"$import": "templates/logic_group_template.json#led_indicator",
-			"label": "Pushbutton 2 LED indicator ON Blue",
+			"label": "Pushbutton 2 LED Indicator ON Blue",
 			"defaultValue": 127
 		},
 		"30[0xff]": {
 			"$import": "../templates/master_template.json#base_0-255_nounit",
-			"label": "LED Time for pushbutton 2 ON blinking",
+			"label": "LED Time For Pushbutton 2 ON Blinking",
 			"unit": "100 ms",
 			"valueSize": 4,
 			"defaultValue": 0
 		},
 		"31[0xff000000]": {
 			"$import": "templates/logic_group_template.json#led_indicator",
-			"label": "Pushbutton 2 LED indicator OFF Red",
+			"label": "Pushbutton 2 LED Indicator OFF Red",
 			"defaultValue": 47
 		},
 		"31[0xff0000]": {
 			"$import": "templates/logic_group_template.json#led_indicator",
-			"label": "Pushbutton 2 LED indicator OFF Green",
+			"label": "Pushbutton 2 LED Indicator OFF Green",
 			"defaultValue": 47
 		},
 		"31[0xff00]": {
 			"$import": "templates/logic_group_template.json#led_indicator",
-			"label": "Pushbutton 2 LED indicator OFF Blue",
+			"label": "Pushbutton 2 LED Indicator OFF Blue",
 			"defaultValue": 47
 		},
 		"31[0xff]": {
 			"$import": "../templates/master_template.json#base_0-255_nounit",
-			"label": "LED Time for pushbutton 2 OFF blinking",
+			"label": "LED Time For Pushbutton 2 OFF Blinking",
 			"unit": "100 ms",
 			"valueSize": 4,
 			"defaultValue": 0
 		},
 		"32": {
 			"$import": "templates/logic_group_template.json#pushbutton_function_zdb5100",
-			"label": "Pushbutton 3 functionality"
+			"label": "Pushbutton 3 Functionality"
 		},
 		"33": {
 			"$import": "../templates/master_template.json#base_0-255_nounit",
-			"label": "Timer value for pushbutton 3",
+			"label": "Timer Value For Pushbutton 3",
 			"unit": "1 second",
 			"valueSize": 2,
 			"maxValue": 43200,
@@ -420,7 +419,7 @@
 		},
 		"36": {
 			"$import": "templates/logic_group_template.json#pushbutton_led_indicator",
-			"label": "Pushbutton 3 LED indicator"
+			"label": "Pushbutton 3 LED Indicator"
 		},
 		"37": {
 			"$import": "templates/logic_group_template.json#color_command_pushbutton",
@@ -428,42 +427,42 @@
 		},
 		"38[0xff000000]": {
 			"$import": "templates/logic_group_template.json#led_indicator",
-			"label": "Pushbutton 3 LED indicator ON Red"
+			"label": "Pushbutton 3 LED Indicator ON Red"
 		},
 		"38[0xff0000]": {
 			"$import": "templates/logic_group_template.json#led_indicator",
-			"label": "Pushbutton 3 LED indicator ON Green"
+			"label": "Pushbutton 3 LED Indicator ON Green"
 		},
 		"38[0xff00]": {
 			"$import": "templates/logic_group_template.json#led_indicator",
-			"label": "Pushbutton 3 LED indicator ON Blue",
+			"label": "Pushbutton 3 LED Indicator ON Blue",
 			"defaultValue": 127
 		},
 		"38[0xff]": {
 			"$import": "../templates/master_template.json#base_0-255_nounit",
-			"label": "LED Time for pushbutton 3 ON blinking",
+			"label": "LED Time For Pushbutton 3 ON Blinking",
 			"unit": "100 ms",
 			"valueSize": 4,
 			"defaultValue": 0
 		},
 		"39[0xff000000]": {
 			"$import": "templates/logic_group_template.json#led_indicator",
-			"label": "Pushbutton 3 LED indicator OFF Red",
+			"label": "Pushbutton 3 LED Indicator OFF Red",
 			"defaultValue": 47
 		},
 		"39[0xff0000]": {
 			"$import": "templates/logic_group_template.json#led_indicator",
-			"label": "Pushbutton 3 LED indicator OFF Green",
+			"label": "Pushbutton 3 LED Indicator OFF Green",
 			"defaultValue": 47
 		},
 		"39[0xff00]": {
 			"$import": "templates/logic_group_template.json#led_indicator",
-			"label": "Pushbutton 3 LED indicator OFF Blue",
+			"label": "Pushbutton 3 LED Indicator OFF Blue",
 			"defaultValue": 47
 		},
 		"39[0xff]": {
 			"$import": "../templates/master_template.json#base_0-255_nounit",
-			"label": "LED Time for pushbutton 3 OFF blinking",
+			"label": "LED Time For Pushbutton 3 OFF Blinking",
 			"unit": "100 ms",
 			"valueSize": 4,
 			"defaultValue": 0
@@ -474,7 +473,7 @@
 		},
 		"41": {
 			"$import": "../templates/master_template.json#base_0-255_nounit",
-			"label": "Timer value for pushbutton 4",
+			"label": "Timer Value For Pushbutton 4",
 			"unit": "1 second",
 			"valueSize": 2,
 			"maxValue": 43200,
@@ -501,7 +500,7 @@
 		},
 		"44": {
 			"$import": "templates/logic_group_template.json#pushbutton_led_indicator",
-			"label": "Pushbutton 4 LED indicator"
+			"label": "Pushbutton 4 LED Indicator"
 		},
 		"45": {
 			"$import": "templates/logic_group_template.json#color_command_pushbutton",
@@ -509,41 +508,41 @@
 		},
 		"46[0xff000000]": {
 			"$import": "templates/logic_group_template.json#led_indicator",
-			"label": "Pushbutton 4 LED indicator ON Red"
+			"label": "Pushbutton 4 LED Indicator ON Red"
 		},
 		"46[0xff0000]": {
 			"$import": "templates/logic_group_template.json#led_indicator",
-			"label": "Pushbutton 4 LED indicator ON Green"
+			"label": "Pushbutton 4 LED Indicator ON Green"
 		},
 		"46[0xff00]": {
 			"$import": "templates/logic_group_template.json#led_indicator",
-			"label": "Pushbutton 4 LED indicator ON Blue",
+			"label": "Pushbutton 4 LED Indicator ON Blue",
 			"defaultValue": 127
 		},
 		"46[0xff]": {
 			"$import": "../templates/master_template.json#base_0-255_nounit",
-			"label": "LED Time for pushbutton 4 ON blinking",
+			"label": "LED Time For Pushbutton 4 ON Blinking",
 			"unit": "100 ms",
 			"valueSize": 4
 		},
 		"47[0xff000000]": {
 			"$import": "templates/logic_group_template.json#led_indicator",
-			"label": "Pushbutton 4 LED indicator OFF Red",
+			"label": "Pushbutton 4 LED Indicator OFF Red",
 			"defaultValue": 47
 		},
 		"47[0xff0000]": {
 			"$import": "templates/logic_group_template.json#led_indicator",
-			"label": "Pushbutton 4 LED indicator OFF Green",
+			"label": "Pushbutton 4 LED Indicator OFF Green",
 			"defaultValue": 47
 		},
 		"47[0xff00]": {
 			"$import": "templates/logic_group_template.json#led_indicator",
-			"label": "Pushbutton 4 LED indicator OFF Blue",
+			"label": "Pushbutton 4 LED Indicator OFF Blue",
 			"defaultValue": 47
 		},
 		"47[0xff]": {
 			"$import": "../templates/master_template.json#base_0-255_nounit",
-			"label": "LED Time for pushbutton 4 OFF blinking",
+			"label": "LED Time For Pushbutton 4 OFF Blinking",
 			"unit": "100 ms",
 			"valueSize": 4,
 			"defaultValue": 0

@@ -88,42 +88,42 @@
 		},
 		"6[0x01]": {
 			"$import": "../templates/master_template.json#base_enable_disable",
-			"label": "Association group 2 secure message",
+			"label": "Association Group 2 Secure Message",
 			"valueSize": 2
 		},
 		"6[0x02]": {
 			"$import": "../templates/master_template.json#base_enable_disable",
-			"label": "Association group 3 secure message",
+			"label": "Association Group 3 Secure Message",
 			"valueSize": 2
 		},
 		"6[0x04]": {
 			"$import": "../templates/master_template.json#base_enable_disable",
-			"label": "Association group 4 secure message",
+			"label": "Association Group 4 Secure Message",
 			"valueSize": 2
 		},
 		"6[0x08]": {
 			"$import": "../templates/master_template.json#base_enable_disable",
-			"label": "Association group 5 secure message",
+			"label": "Association Group 5 Secure Message",
 			"valueSize": 2
 		},
 		"6[0x10]": {
 			"$import": "../templates/master_template.json#base_enable_disable",
-			"label": "Association group 6 secure message",
+			"label": "Association Group 6 Secure Message",
 			"valueSize": 2
 		},
 		"6[0x20]": {
 			"$import": "../templates/master_template.json#base_enable_disable",
-			"label": "Association group 7 secure message",
+			"label": "Association Group 7 Secure Message",
 			"valueSize": 2
 		},
 		"6[0x40]": {
 			"$import": "../templates/master_template.json#base_enable_disable",
-			"label": "Association group 8 secure message",
+			"label": "Association Group 8 Secure Message",
 			"valueSize": 2
 		},
 		"6[0x80]": {
 			"$import": "../templates/master_template.json#base_enable_disable",
-			"label": "Association group 9 secure message",
+			"label": "Association Group 9 Secure Message",
 			"valueSize": 2
 		},
 		"7": {

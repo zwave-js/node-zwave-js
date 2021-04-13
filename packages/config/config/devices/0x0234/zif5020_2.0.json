@@ -77,51 +77,51 @@
 		},
 		"3": {
 			"$import": "templates/logic_group_template.json#input_function_setup",
-			"label": "Function setup of Input 1"
+			"label": "Function Setup Of Input 1"
 		},
 		"4": {
 			"$import": "templates/logic_group_template.json#input_timer",
-			"label": "Timer for Input 1"
+			"label": "Timer For Input 1"
 		},
 		"5": {
 			"$import": "templates/logic_group_template.json#input_function_setup",
-			"label": "Function setup of Input 2"
+			"label": "Function Setup Of Input 2"
 		},
 		"6": {
 			"$import": "templates/logic_group_template.json#input_timer",
-			"label": "Timer for Input 2"
+			"label": "Timer For Input 2"
 		},
 		"7": {
 			"$import": "templates/logic_group_template.json#input_function_setup",
-			"label": "Function setup of Input 3"
+			"label": "Function Setup Of Input 3"
 		},
 		"8": {
 			"$import": "templates/logic_group_template.json#input_timer",
-			"label": "Timer for Input 3"
+			"label": "Timer For Input 3"
 		},
 		"9": {
 			"$import": "templates/logic_group_template.json#input_function_setup",
-			"label": "Function setup of Input 4"
+			"label": "Function Setup Of Input 4"
 		},
 		"10": {
 			"$import": "templates/logic_group_template.json#input_timer",
-			"label": "Timer for Input 4"
+			"label": "Timer For Input 4"
 		},
 		"11": {
 			"$import": "../templates/master_template.json#base_0-255_nounit",
-			"label": "Input Snubber-filter time constant.",
+			"label": "Input Snubber-filter Time Constant.",
 			"unit": "50 ms",
 			"defaultValue": 5
 		},
 		"12": {
 			"$import": "../templates/master_template.json#base_0-255_nounit",
-			"label": "Threshold value for activation of inputs.",
+			"label": "Threshold Value For Activation Of Inputs.",
 			"unit": "200 ms",
 			"defaultValue": 20
 		},
 		"13": {
 			"$import": "../templates/master_template.json#base_0-255_nounit",
-			"label": "Threshold for input in latched mode.",
+			"label": "Threshold For Input In Latched Mode.",
 			"unit": "50 ms",
 			"defaultValue": 50
 		},
@@ -141,62 +141,62 @@
 		},
 		"15[0x01]": {
 			"$import": "../templates/master_template.json#base_enable_disable",
-			"label": "Association group 2 secure message",
+			"label": "Association Group 2 Secure Message",
 			"valueSize": 2
 		},
 		"15[0x02]": {
 			"$import": "../templates/master_template.json#base_enable_disable",
-			"label": "Association group 3 secure message",
+			"label": "Association Group 3 Secure Message",
 			"valueSize": 2
 		},
 		"15[0x04]": {
 			"$import": "../templates/master_template.json#base_enable_disable",
-			"label": "Association group 4 secure message",
+			"label": "Association Group 4 Secure Message",
 			"valueSize": 2
 		},
 		"15[0x08]": {
 			"$import": "../templates/master_template.json#base_enable_disable",
-			"label": "Association group 5 secure message",
+			"label": "Association Group 5 Secure Message",
 			"valueSize": 2
 		},
 		"15[0x10]": {
 			"$import": "../templates/master_template.json#base_enable_disable",
-			"label": "Association group 6 secure message",
+			"label": "Association Group 6 Secure Message",
 			"valueSize": 2
 		},
 		"15[0x20]": {
 			"$import": "../templates/master_template.json#base_enable_disable",
-			"label": "Association group 7 secure message",
+			"label": "Association Group 7 Secure Message",
 			"valueSize": 2
 		},
 		"15[0x40]": {
 			"$import": "../templates/master_template.json#base_enable_disable",
-			"label": "Association group 8 secure message",
+			"label": "Association Group 8 Secure Message",
 			"valueSize": 2
 		},
 		"15[0x80]": {
 			"$import": "../templates/master_template.json#base_enable_disable",
-			"label": "Association group 9 secure message",
+			"label": "Association Group 9 Secure Message",
 			"valueSize": 2
 		},
 		"15[0x100]": {
 			"$import": "../templates/master_template.json#base_enable_disable",
-			"label": "Association group 10 secure message",
+			"label": "Association Group 10 Secure Message",
 			"valueSize": 2
 		},
 		"15[0x0200]": {
 			"$import": "../templates/master_template.json#base_enable_disable",
-			"label": "Association group 11 secure message",
+			"label": "Association Group 11 Secure Message",
 			"valueSize": 2
 		},
 		"15[0x0400]": {
 			"$import": "../templates/master_template.json#base_enable_disable",
-			"label": "Association group 12 secure message",
+			"label": "Association Group 12 Secure Message",
 			"valueSize": 2
 		},
 		"15[0x0800]": {
 			"$import": "../templates/master_template.json#base_enable_disable",
-			"label": "Association group 13 secure message",
+			"label": "Association Group 13 Secure Message",
 			"valueSize": 2
 		}
 	},

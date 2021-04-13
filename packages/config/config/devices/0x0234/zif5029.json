@@ -53,127 +53,127 @@
 		},
 		"9": {
 			"$import": "templates/logic_group_template.json#meter_type",
-			"label": "Meter Type of input 1"
+			"label": "Meter Type Of Input 1"
 		},
 		"10": {
 			"$import": "templates/logic_group_template.json#input_scale",
-			"label": "Scale Type of input 1"
+			"label": "Scale Type Of Input 1"
 		},
 		"11": {
 			"$import": "templates/logic_group_template.json#input_precision",
-			"label": "Precision of input 1"
+			"label": "Precision Of Input 1"
 		},
 		"12": {
 			"$import": "templates/logic_group_template.json#pulse_unit",
-			"label": "Pulses per Unit of input 1"
+			"label": "Pulses Per Unit Of Input 1"
 		},
 		"13": {
 			"$import": "templates/logic_group_template.json#rate_type",
-			"label": "Rate Type of input 1"
+			"label": "Rate Type of Input 1"
 		},
 		"14": {
 			"$import": "templates/logic_group_template.json#meter_type",
-			"label": "Meter Type of input 2"
+			"label": "Meter Type Of Input 2"
 		},
 		"15": {
 			"$import": "templates/logic_group_template.json#input_scale",
-			"label": "Scale Type of input 2"
+			"label": "Scale Type Of Input 2"
 		},
 		"16": {
 			"$import": "templates/logic_group_template.json#input_precision",
-			"label": "Precision of input 2"
+			"label": "Precision Of Input 2"
 		},
 		"17": {
 			"$import": "templates/logic_group_template.json#pulse_unit",
-			"label": "Pulses per Unit of input 2"
+			"label": "Pulses Per Unit Of Input 2"
 		},
 		"18": {
 			"$import": "templates/logic_group_template.json#rate_type",
-			"label": "Rate Type of input 2"
+			"label": "Rate Type Of Input 2"
 		},
 		"19": {
 			"$import": "templates/logic_group_template.json#meter_type",
-			"label": "Meter Type of input 3"
+			"label": "Meter Type Of Input 3"
 		},
 		"20": {
 			"$import": "templates/logic_group_template.json#input_scale",
-			"label": "Scale Type of input 3"
+			"label": "Scale Type Of Input 3"
 		},
 		"21": {
 			"$import": "templates/logic_group_template.json#input_precision",
-			"label": "Precision of input 3"
+			"label": "Precision Of Input 3"
 		},
 		"22": {
 			"$import": "templates/logic_group_template.json#pulse_unit",
-			"label": "Pulses per Unit of input 3"
+			"label": "Pulses Per Unit Of Input 3"
 		},
 		"23": {
 			"$import": "templates/logic_group_template.json#rate_type",
-			"label": "Rate Type of input 3"
+			"label": "Rate Type Of Input 3"
 		},
 		"24": {
 			"$import": "templates/logic_group_template.json#meter_type",
-			"label": "Meter Type of input 4"
+			"label": "Meter Type Of Input 4"
 		},
 		"25": {
 			"$import": "templates/logic_group_template.json#input_scale",
-			"label": "Scale Type of input 4"
+			"label": "Scale Type Of Input 4"
 		},
 		"26": {
 			"$import": "templates/logic_group_template.json#input_precision",
-			"label": "Precision of input 4"
+			"label": "Precision Of Input 4"
 		},
 		"27": {
 			"$import": "templates/logic_group_template.json#pulse_unit",
-			"label": "Pulses per Unit of input 4"
+			"label": "Pulses Per Unit Of Input 4"
 		},
 		"28": {
 			"$import": "templates/logic_group_template.json#rate_type",
-			"label": "Rate Type of input 4"
+			"label": "Rate Type Of Input 4"
 		},
 		"29": {
 			"$import": "templates/logic_group_template.json#meter_type",
-			"label": "Meter Type of input 5"
+			"label": "Meter Type Of Input 5"
 		},
 		"30": {
 			"$import": "templates/logic_group_template.json#input_scale",
-			"label": "Scale Type of input 5"
+			"label": "Scale Type Of Input 5"
 		},
 		"31": {
 			"$import": "templates/logic_group_template.json#input_precision",
-			"label": "Precision of input 5"
+			"label": "Precision Of Input 5"
 		},
 		"32": {
 			"$import": "templates/logic_group_template.json#pulse_unit",
-			"label": "Pulses per Unit of input 5"
+			"label": "Pulses Per Unit Of Input 5"
 		},
 		"33": {
 			"$import": "templates/logic_group_template.json#rate_type",
-			"label": "Rate Type of input 5"
+			"label": "Rate Type Of Input 5"
 		},
 		"34": {
 			"$import": "templates/logic_group_template.json#meter_type",
-			"label": "Meter Type of input 6"
+			"label": "Meter Type Of Input 6"
 		},
 		"35": {
 			"$import": "templates/logic_group_template.json#input_precision",
-			"label": "Scale Type of input 6"
+			"label": "Scale Type Of Input 6"
 		},
 		"36": {
 			"$import": "templates/logic_group_template.json#input_precision",
-			"label": "Precision of input 6"
+			"label": "Precision Of Input 6"
 		},
 		"37": {
 			"$import": "templates/logic_group_template.json#pulse_unit",
-			"label": "Pulses per Unit of input 6"
+			"label": "Pulses Per Unit Of Input 6"
 		},
 		"38": {
 			"$import": "templates/logic_group_template.json#rate_type",
-			"label": "Rate Type of input 6"
+			"label": "Rate Type Of Input 6"
 		},
 		"39": {
 			"$import": "templates/logic_group_template.json#time_interval_report",
-			"label": "Time interval between meter reports"
+			"label": "Time Interval Between Meter Reports"
 		}
 	},
 	"metadata": {
