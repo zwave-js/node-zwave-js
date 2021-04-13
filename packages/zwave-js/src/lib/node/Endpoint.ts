@@ -91,6 +91,9 @@ export class Endpoint {
 	 * @param info The information about the command class. This is merged with existing information.
 	 */
 	public addCC(cc: CommandClasses, info: Partial<CommandClassInfo>): void {
+		// Endpoints cannot support Multi Channel CC
+		if (this.index > 0 && cc === CommandClasses["Multi Channel"]) return;
+
 		let ccInfo = this._implementedCommandClasses.get(cc) ?? {
 			isSupported: false,
 			isControlled: false,
