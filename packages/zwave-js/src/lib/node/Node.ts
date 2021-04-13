@@ -78,6 +78,7 @@ import {
 import {
 	getEndpointCCsValueId,
 	getEndpointDeviceClassValueId,
+	getEndpointIndizesValueId,
 } from "../commandclass/MultiChannelCC";
 import {
 	getNodeLocationValueId,
@@ -333,11 +334,7 @@ export class ZWaveNode extends Endpoint {
 		) {
 			// Iterate through all possible non-root endpoints of this node and
 			// check if there is a value ID that mirrors root endpoint functionality
-			for (
-				let endpoint = 1;
-				endpoint <= this.getEndpointCount();
-				endpoint++
-			) {
+			for (const endpoint of this.getEndpointIndizes()) {
 				const possiblyMirroredValueID: ValueID = {
 					// same CC, property and key
 					...pick(arg, ["commandClass", "property", "propertyKey"]),
@@ -855,12 +852,32 @@ export class ZWaveNode extends Endpoint {
 		}
 	}
 
-	/** Returns the current endpoint count of this node */
+	/**
+	 * Returns the current endpoint count of this node.
+	 *
+	 * If you want to enumerate the existing endpoints, use `getEndpointIndizes` instead.
+	 * Some devices are known to contradict themselves.
+	 */
 	public getEndpointCount(): number {
 		return (
 			(this.individualEndpointCount || 0) +
 			(this.aggregatedEndpointCount || 0)
 		);
+	}
+
+	/**
+	 * Returns indizes of all endpoints on the node.
+	 */
+	public getEndpointIndizes(): number[] {
+		let ret = this.getValue<number[]>(getEndpointIndizesValueId());
+		if (!ret) {
+			// Endpoint indizes not stored, assume sequential endpoints
+			ret = [];
+			for (let i = 1; i <= this.getEndpointCount(); i++) {
+				ret.push(i);
+			}
+		}
+		return ret;
 	}
 
 	/** Whether the Multi Channel CC has been interviewed and all endpoint information is known */
@@ -887,8 +904,6 @@ export class ZWaveNode extends Endpoint {
 			);
 		// Zero is the root endpoint - i.e. this node
 		if (index === 0) return this;
-		// Check if the requested endpoint exists on the physical node
-		if (index > this.getEndpointCount()) return undefined;
 		// Check if the Multi Channel CC interview for this node is completed,
 		// because we don't have all the information before that
 		if (!this.isMultiChannelInterviewComplete) {
@@ -898,6 +913,9 @@ export class ZWaveNode extends Endpoint {
 			);
 			return undefined;
 		}
+		// Check if the endpoint index is in the list of known endpoint indizes
+		if (!this.getEndpointIndizes().includes(index)) return undefined;
+
 		// Create an endpoint instance if it does not exist
 		if (!this._endpointInstances.has(index)) {
 			this._endpointInstances.set(
@@ -920,9 +938,9 @@ export class ZWaveNode extends Endpoint {
 		// Check if the Multi Channel CC interview for this node is completed,
 		// because we don't have all the endpoint information before that
 		if (this.isMultiChannelInterviewComplete) {
-			for (let i = 1; i <= this.getEndpointCount(); i++) {
-				// Iterating over the endpoint count ensures that we don't get undefined
-				ret.push(this.getEndpoint(i)!);
+			for (const i of this.getEndpointIndizes()) {
+				const endpoint = this.getEndpoint(i);
+				if (endpoint) ret.push(endpoint);
 			}
 		}
 		return ret;
@@ -1463,11 +1481,7 @@ protocol version:      ${this._protocolVersion}`;
 		}
 
 		// Now query ALL endpoints
-		for (
-			let endpointIndex = 1;
-			endpointIndex <= this.getEndpointCount();
-			endpointIndex++
-		) {
+		for (const endpointIndex of this.getEndpointIndizes()) {
 			const endpoint = this.getEndpoint(endpointIndex);
 			if (!endpoint) continue;
 
