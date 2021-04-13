@@ -2,6 +2,23 @@
 <!--
 	Add placeholder for next release with `wip` snippet
 -->
+## __WORK IN PROGRESS__
+### Bugfixes
+* The `nodeFilter` logging option is now correctly applied to value change logs
+* Fixed an issue where unsuccessful `SendData[Multicast]Bridge` requests would not cause the transaction to be rejected. This caused `removeFailedNode` and `replaceFailedNode` commands to not work on sticks supporting the Bridge Controller API
+* Existence of endpoints is now based on the known endpoint indizes instead of just the total count
+* Non-root endpoints may no longer support `Multi Channel CC`, even if their device class indicates so
+* The `Multi Channel CC` interview is now skipped for non-root endpoints
+
+### Config file changes
+* Add Haseman RS-10PM2
+* Improve config for Remotec zxt-310
+* Correct report type label for Aeotec devices
+* Synchronize Philio PAN04 configuration with manual
+
+### Changes under the hood
+* When rate-limited, the statistics reporter now tries again after the time indicated by the statistics backend
+
 ## 7.2.2 (2021-04-11)
 ### Bugfixes
 * Block subsequent `destroy()` calls instead of returning immediately. This should avoid cache corruption when the zwavejs2mqtt Docker container shuts down.
