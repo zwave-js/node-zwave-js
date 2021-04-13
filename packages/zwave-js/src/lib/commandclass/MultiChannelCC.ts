@@ -304,6 +304,11 @@ export class MultiChannelCC extends CommandClass {
 		});
 	}
 
+	public skipEndpointInterview(): boolean {
+		// The endpoints are discovered by querying the root device
+		return true;
+	}
+
 	public async interview(): Promise<void> {
 		const node = this.getNode()!;
 		this.driver.controllerLog.logNode(node.id, {

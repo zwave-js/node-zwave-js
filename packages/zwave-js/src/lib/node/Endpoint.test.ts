@@ -1,3 +1,4 @@
+import { ConfigManager } from "@zwave-js/config";
 import {
 	assertZWaveError,
 	CommandClasses,
@@ -9,6 +10,7 @@ import "../commandclass/index";
 import { VersionCCAPI } from "../commandclass/VersionCC";
 import type { Driver } from "../driver/Driver";
 import { createEmptyMockDriver } from "../test/mocks";
+import { DeviceClass } from "./DeviceClass";
 import { Endpoint } from "./Endpoint";
 import { ZWaveNode } from "./Node";
 
@@ -108,6 +110,21 @@ describe("lib/node/Endpoint", () => {
 			endpoint.addCC(cc, { isSupported: true });
 			const instance = endpoint.createCCInstance(cc);
 			expect(instance).toBeUndefined();
+		});
+	});
+
+	describe("quirks", () => {
+		it("A non-root endpoint with the `Power Strip Switch` device class does not support the Multi Channel CC", async () => {
+			const cm = new ConfigManager();
+			await cm.loadDeviceClasses();
+			const powerStripSwitch = new DeviceClass(cm, 0x01, 0x10, 0x04);
+
+			const fakeDriver = (createEmptyMockDriver() as unknown) as Driver;
+
+			const node = new ZWaveNode(1, fakeDriver, powerStripSwitch);
+			expect(node.supportsCC(CommandClasses["Multi Channel"])).toBeTrue();
+			const ep = new Endpoint(1, fakeDriver, 1, powerStripSwitch);
+			expect(ep.supportsCC(CommandClasses["Multi Channel"])).toBeFalse();
 		});
 	});
 });
