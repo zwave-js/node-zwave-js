@@ -9,3 +9,8 @@ export function isFunctionSupported_NoBridge(fn: FunctionType): boolean {
 	}
 	return true;
 }
+
+// Test mock for isFunctionSupported to control which commands are getting used
+export function isFunctionSupported_All(): boolean {
+	return true;
+}

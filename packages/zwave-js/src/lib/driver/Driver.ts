@@ -2459,8 +2459,12 @@ ${handlers.length} left`,
 					(e.code === ZWaveErrorCodes.Controller_ResponseNOK ||
 						e.code === ZWaveErrorCodes.Controller_CallbackNOK) &&
 					e.context instanceof Message &&
+					// We need to check the function type here because context can be the transmit reports
 					e.context.functionType !== FunctionType.SendData &&
-					e.context.functionType !== FunctionType.SendDataMulticast
+					e.context.functionType !== FunctionType.SendDataMulticast &&
+					e.context.functionType !== FunctionType.SendDataBridge &&
+					e.context.functionType !==
+						FunctionType.SendDataMulticastBridge
 				) {
 					return e.context as TResponse;
 				}
