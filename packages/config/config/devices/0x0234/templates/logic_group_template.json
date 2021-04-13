@@ -63,7 +63,7 @@
 		"label": "LED Mode",
 		"valueSize": 1,
 		"minValue": 0,
-		"maxValue": 255,
+		"maxValue": 2,
 		"defaultValue": 0,
 		"unsigned": true,
 		"readOnly": false,
@@ -144,15 +144,10 @@
 			}
 		]
 	},
-	"dimmer_pushbutton": {
-		"$import": "../../templates/master_template.json#base_0-255_nounit",
-		"label": "Pushbutton used for dimmer",
-		"maxValue": 15
-	},
 	"dimming_duration": {
 		"$import": "../../templates/master_template.json#base_0-255_nounit",
 		"label": "Duration of dimming",
-		"unit": "second",
+		"unit": "seconds",
 		"defaultValue": 5
 	},
 	"duration_on_off": {
@@ -444,7 +439,7 @@
 		"label": "Rate Type of input",
 		"valueSize": 1,
 		"minValue": 0,
-		"maxValue": 3,
+		"maxValue": 2,
 		"defaultValue": 1,
 		"unsigned": true,
 		"readOnly": false,
@@ -462,10 +457,6 @@
 			{
 				"label": "Export",
 				"value": 2
-			},
-			{
-				"label": "Reserved",
-				"value": 3
 			}
 		]
 	},
@@ -484,13 +475,12 @@
 	"led_brightness": {
 		"$import": "../../templates/master_template.json#base_0-99_nounit",
 		"label": "Brightness of Status LED",
-		"unit": "%",
 		"defaultValue": 50
 	},
 	"input_calibration": {
 		"$import": "../../templates/master_template.json#base_0-99_nounit",
 		"label": "Input Calibration",
-		"unit": "0.1 degree celsius",
+		"unit": "0.1 °C",
 		"minValue": -40,
 		"maxValue": 40,
 		"defaultValue": 0,

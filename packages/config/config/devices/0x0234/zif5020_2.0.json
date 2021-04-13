@@ -198,27 +198,6 @@
 			"$import": "../templates/master_template.json#base_enable_disable",
 			"label": "Association group 13 secure message",
 			"valueSize": 2
-		},
-		"15[0x0fff]": {
-			"label": "Messages in all association groups are sent as secure",
-			"valueSize": 2,
-			"minValue": 0,
-			"maxValue": 4095,
-			"defaultValue": 4095,
-			"unsigned": true,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "Disable",
-					"value": 0
-				},
-				{
-					"label": "Enable",
-					"value": 4095
-				}
-			]
 		}
 	},
 	"metadata": {

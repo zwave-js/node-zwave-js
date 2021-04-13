@@ -126,27 +126,6 @@
 			"label": "Association group 9 secure message",
 			"valueSize": 2
 		},
-		"6[0xff]": {
-			"label": "Messages in all association groups are sent as secure",
-			"valueSize": 2,
-			"minValue": 0,
-			"maxValue": 255,
-			"defaultValue": 255,
-			"unsigned": true,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "Disable",
-					"value": 0
-				},
-				{
-					"label": "Enable",
-					"value": 255
-				}
-			]
-		},
 		"7": {
 			"$import": "templates/logic_group_template.json#pushbutton_functionality",
 			"label": "Pushbutton 1"
