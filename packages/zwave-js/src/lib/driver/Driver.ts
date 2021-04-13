@@ -10,6 +10,7 @@ import {
 	LogConfig,
 	SecurityManager,
 	serializeCacheValue,
+	timespan,
 	ValueMetadata,
 	ZWaveError,
 	ZWaveErrorCodes,
@@ -1324,7 +1325,7 @@ export class Driver extends EventEmitter {
 			this.statisticsTimeout = undefined;
 		}
 
-		let success = false;
+		let success: number | boolean = false;
 		try {
 			const statistics = await compileStatistics(this, {
 				driverVersion: libVersion,
@@ -1335,15 +1336,30 @@ export class Driver extends EventEmitter {
 			// Didn't work - try again in a few hours
 			success = false;
 		} finally {
-			this.driverLog.print(
-				success
-					? `Usage statistics sent - next transmission scheduled in 23 hours.`
-					: `Failed to send usage statistics - next transmission scheduled in 6 hours.`,
-				"verbose",
-			);
-			this.statisticsTimeout = setTimeout(() => {
-				void this.compileAndSendStatistics();
-			}, (success ? 23 : 6) * 3600 * 1000 /* 6 or 23 hours */).unref();
+			if (typeof success === "number") {
+				this.driverLog.print(
+					`Sending usage statistics was rate limited - next attempt scheduled in ${success} seconds.`,
+					"verbose",
+				);
+				// Wait at most 6 hours to try again
+				const retryMs = Math.max(
+					timespan.minutes(1),
+					Math.min(success * 1000, timespan.hours(6)),
+				);
+				this.statisticsTimeout = setTimeout(() => {
+					void this.compileAndSendStatistics();
+				}, retryMs).unref();
+			} else {
+				this.driverLog.print(
+					success
+						? `Usage statistics sent - next transmission scheduled in 23 hours.`
+						: `Failed to send usage statistics - next transmission scheduled in 6 hours.`,
+					"verbose",
+				);
+				this.statisticsTimeout = setTimeout(() => {
+					void this.compileAndSendStatistics();
+				}, timespan.hours(success ? 23 : 6)).unref();
+			}
 		}
 	}
 

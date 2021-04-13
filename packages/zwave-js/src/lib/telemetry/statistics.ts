@@ -41,9 +41,15 @@ export async function compileStatistics(
 	};
 }
 
+/**
+ * Sends the statistics to the statistics backend. Returns:
+ * - `true` when sending succeeded
+ * - The number of seconds to wait before trying again when hitting the rate limiter
+ * - `false` for any other errors
+ */
 export async function sendStatistics(
 	statistics: Record<string, any>,
-): Promise<boolean> {
+): Promise<boolean | number> {
 	try {
 		const { data } = await axios.post(
 			statisticsUrl,
@@ -55,6 +61,16 @@ export async function sendStatistics(
 		}
 		return false;
 	} catch (e) {
+		if (isObject(e.response) && e.response.status === 429) {
+			// We've hit the rate limiter. Figure out when we may try again.
+			if (
+				isObject(e.response.headers) &&
+				"retry-after" in e.response.headers
+			) {
+				const retryAfter = parseInt(e.response.headers["retry-after"]);
+				if (Number.isInteger(retryAfter)) return retryAfter;
+			}
+		}
 		// didn't work, try again later
 		return false;
 	}
