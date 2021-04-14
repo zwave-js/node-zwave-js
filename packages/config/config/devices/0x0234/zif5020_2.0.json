@@ -127,6 +127,7 @@
 		},
 		"14": {
 			"$import": "../templates/master_template.json#base_enable_disable_inverted",
+			"label": "Central Scene",
 			"defaultValue": 0
 		},
 		"15[0x01]": {
