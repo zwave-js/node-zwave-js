@@ -44,11 +44,11 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "Use Start Level",
+					"label": "Enable,
 					"value": 0
 				},
 				{
-					"label": "Ignore Start Level",
+					"label": "Disable",
 					"value": 1
 				}
 			]
@@ -58,7 +58,7 @@
 			"description": "Flicker LED when transmitting to any of its groups.",
 			"valueSize": 1,
 			"minValue": 0,
-			"maxValue": 255,
+			"maxValue": 1,
 			"defaultValue": 0,
 			"unsigned": true,
 			"readOnly": false,
@@ -80,7 +80,7 @@
 			"description": "Reverse switch direction",
 			"valueSize": 1,
 			"minValue": 0,
-			"maxValue": 255,
+			"maxValue": 1,
 			"defaultValue": 0,
 			"unsigned": true,
 			"readOnly": true,
@@ -99,10 +99,9 @@
 		},
 		"14": {
 			"label": "Enable Shade Control Group 2",
-			"description": "The switch can control shade control devices if this parameter is set to 1",
 			"valueSize": 1,
 			"minValue": 0,
-			"maxValue": 255,
+			"maxValue": 1,
 			"defaultValue": 0,
 			"unsigned": true,
 			"readOnly": false,
@@ -121,10 +120,9 @@
 		},
 		"15": {
 			"label": "Enable Shade Control Group 3",
-			"description": "The switch can control shade control devices if this parameter is set to 1.",
 			"valueSize": 1,
 			"minValue": 0,
-			"maxValue": 255,
+			"maxValue": 1,
 			"defaultValue": 0,
 			"unsigned": true,
 			"readOnly": false,
@@ -142,37 +140,11 @@
 			]
 		},
 		"19": {
-			"label": "LED Transmission Indication",
-			"description": "LED mode while transmitting",
+			"label": "LED Transmission Indicator",
 			"valueSize": 1,
 			"minValue": 0,
-			"maxValue": 255,
+			"maxValue": 2,
 			"defaultValue": 2,
-			"unsigned": true,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "Disable Flicker",
-					"value": 0
-				},
-				{
-					"label": "Flicker while transmitting",
-					"value": 1
-				},
-				{
-					"label": "Flicker for 1 second",
-					"value": 2
-				}
-			]
-		},
-		"29": {
-			"label": "Load Sense",
-			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 255,
-			"defaultValue": 0,
 			"unsigned": true,
 			"readOnly": false,
 			"writeOnly": false,
@@ -183,8 +155,12 @@
 					"value": 0
 				},
 				{
-					"label": "Enable",
+					"label": "Flicker while transmitting",
 					"value": 1
+				},
+				{
+					"label": "Flicker for 1 second",
+					"value": 2
 				}
 			]
 		}
