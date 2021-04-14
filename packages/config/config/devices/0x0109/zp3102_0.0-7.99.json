@@ -87,5 +87,8 @@
 			"writeOnly": false,
 			"allowManualEntry": true
 		}
+	},
+	"compat": {
+		"enableBasicSetMapping": true
 	}
 }
