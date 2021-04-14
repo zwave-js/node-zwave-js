@@ -32,8 +32,7 @@
 	},
 	"paramInformation": {
 		"1": {
-			"label": "Dim Start Level",
-			"description": "Start dimming from that start level or current level",
+			"label": "Ignore Start Level",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 255,
