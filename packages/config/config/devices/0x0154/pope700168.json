@@ -15,7 +15,21 @@
 		"min": "0.0",
 		"max": "255.255"
 	},
-	"supportsZWavePlus": true,
+	"associations": {
+		"1": {
+			"label": "Lifeline",
+			"maxNodes": 5,
+			"isLifeline": true
+		},
+		"2": {
+			"label": "Rain detected (Basic Set)",
+			"maxNodes": 5
+		},
+		"3": {
+			"label": "Heavy rain detected (Basic Set)",
+			"maxNodes": 5
+		}
+	},
 	"paramInformation": {
 		"1": {
 			"label": "Rain Counter",
@@ -96,6 +110,18 @@
 			"readOnly": false,
 			"writeOnly": false,
 			"allowManualEntry": true
+		}
+	},
+	"compat": {
+		"commandClasses": {
+			"add": {
+				// The device uses Basic Set commands to report rain.
+				// We don't set up an association in group 2 or 3 by default, but if a user does,
+				// this is needed or the Basic CC will be hidden
+				"0x20": {
+					"isSupported": true
+				}
+			}
 		}
 	}
 }
