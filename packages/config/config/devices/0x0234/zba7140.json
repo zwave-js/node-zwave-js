@@ -20,35 +20,35 @@
 			"isLifeline": true
 		},
 		"2": {
-			"label": "Basic Report, Pushbutton 1 ",
+			"label": "Button 1 (Basic Report)",
 			"maxNodes": 5
 		},
 		"3": {
-			"label": "Multilevel Report, Pushbutton 1 ",
+			"label": "Button 1 (Multilevel Report)",
 			"maxNodes": 5
 		},
 		"4": {
-			"label": "Basic Report, Pushbutton 2",
+			"label": "Button 2 (Basic Report)",
 			"maxNodes": 5
 		},
 		"5": {
-			"label": "Multilevel Report, Pushbutton 2 ",
+			"label": "Button 2 (Multilevel Report)",
 			"maxNodes": 5
 		},
 		"6": {
-			"label": "Basic Report, Pushbutton 3 ",
+			"label": "Button 3 (Basic Report)",
 			"maxNodes": 5
 		},
 		"7": {
-			"label": "Multilevel Report, Pushbutton 3 ",
+			"label": "Button 3 (Multilevel Report)",
 			"maxNodes": 5
 		},
 		"8": {
-			"label": "Basic Report, Pushbutton 4 ",
+			"label": "Button 4 (Basic Report)",
 			"maxNodes": 5
 		},
 		"9": {
-			"label": "Multilevel Report, Pushbutton 4 ",
+			"label": "Button 4 (Multilevel Report)",
 			"maxNodes": 5
 		}
 	},
@@ -88,187 +88,182 @@
 		},
 		"6[0x01]": {
 			"$import": "../templates/master_template.json#base_enable_disable",
-			"label": "Association Group 2 Secure Message",
+			"label": "Send Association Group 2 Messages Securely",
 			"valueSize": 2
 		},
 		"6[0x02]": {
 			"$import": "../templates/master_template.json#base_enable_disable",
-			"label": "Association Group 3 Secure Message",
+			"label": "Send Association Group 3 Messages Securely",
 			"valueSize": 2
 		},
 		"6[0x04]": {
 			"$import": "../templates/master_template.json#base_enable_disable",
-			"label": "Association Group 4 Secure Message",
+			"label": "Send Association Group 4 Messages Securely",
 			"valueSize": 2
 		},
 		"6[0x08]": {
 			"$import": "../templates/master_template.json#base_enable_disable",
-			"label": "Association Group 5 Secure Message",
+			"label": "Send Association Group 5 Messages Securely",
 			"valueSize": 2
 		},
 		"6[0x10]": {
 			"$import": "../templates/master_template.json#base_enable_disable",
-			"label": "Association Group 6 Secure Message",
+			"label": "Send Association Group 6 Messages Securely",
 			"valueSize": 2
 		},
 		"6[0x20]": {
 			"$import": "../templates/master_template.json#base_enable_disable",
-			"label": "Association Group 7 Secure Message",
+			"label": "Send Association Group 7 Messages Securely",
 			"valueSize": 2
 		},
 		"6[0x40]": {
 			"$import": "../templates/master_template.json#base_enable_disable",
-			"label": "Association Group 8 Secure Message",
-			"valueSize": 2
-		},
-		"6[0x80]": {
-			"$import": "../templates/master_template.json#base_enable_disable",
-			"label": "Association Group 9 Secure Message",
+			"label": "Send Association Group 8 Messages Securely",
 			"valueSize": 2
 		},
 		"7": {
-			"$import": "templates/logic_group_template.json#pushbutton_functionality",
-			"label": "Pushbutton 1"
+			"$import": "templates/logic_group_template.json#button_functionality",
+			"label": "Button 1"
 		},
 		"10": {
-			"$import": "templates/logic_group_template.json#pushbutton_functionality",
-			"label": "Pushbutton 2"
+			"$import": "templates/logic_group_template.json#button_functionality",
+			"label": "Button 2"
 		},
 		"13": {
-			"$import": "templates/logic_group_template.json#pushbutton_functionality",
-			"label": "Pushbutton 3"
+			"$import": "templates/logic_group_template.json#button_functionality",
+			"label": "Button 3"
 		},
 		"16": {
-			"$import": "templates/logic_group_template.json#pushbutton_functionality",
-			"label": "Pushbutton 4"
+			"$import": "templates/logic_group_template.json#button_functionality",
+			"label": "Button 4"
 		},
 		"8[0xff000000]": {
 			"$import": "templates/logic_group_template.json#multilevel_enable",
-			"label": "Pushbutton 1 Single-Activation Enable"
+			"label": "Button 1 - Single Press"
 		},
 		"8[0xff0000]": {
 			"$import": "templates/logic_group_template.json#multilevel_upper_function",
-			"label": "Pushbutton 1 Single-Activation ON Value"
+			"label": "Button 1 - Single Press (On Value)"
 		},
 		"8[0xff00]": {
 			"$import": "templates/logic_group_template.json#multilevel_lower_function",
-			"label": "Pushbutton 1 Single-Activation OFF Value"
+			"label": "Button 1 - Single Press (Off Value)"
 		},
 		"8[0xff]": {
 			"$import": "templates/logic_group_template.json#multilevel_duration_function",
-			"label": "Pushbutton 1 Single-Activation Duration Value"
+			"label": "Button 1 - Single Press (Duration)"
 		},
 		"9[0xff000000]": {
 			"$import": "templates/logic_group_template.json#multilevel_enable",
-			"label": "Pushbutton 1 Double-Activation Enable"
+			"label": "Button 1 - Double Press"
 		},
 		"9[0xff0000]": {
 			"$import": "templates/logic_group_template.json#multilevel_upper_function",
-			"label": "Pushbutton 1 Double-Activation ON Value"
+			"label": "Button 1 - Double Press (On Value)"
 		},
 		"9[0xff00]": {
 			"$import": "templates/logic_group_template.json#multilevel_lower_function",
-			"label": "Pushbutton 1 Double-Activation OFF Value"
+			"label": "Button 1 - Double Press (Off Value)"
 		},
 		"9[0xff]": {
 			"$import": "templates/logic_group_template.json#multilevel_duration_function",
-			"label": "Pushbutton 1 Double-Activation Duration Value"
+			"label": "Button 1 - Double Press (Duration)"
 		},
 		"11[0xff000000]": {
 			"$import": "templates/logic_group_template.json#multilevel_enable",
-			"label": "Pushbutton 2 Single-Activation Enable"
+			"label": "Button 2 - Single Press"
 		},
 		"11[0xff0000]": {
 			"$import": "templates/logic_group_template.json#multilevel_upper_function",
-			"label": "Pushbutton 2 Single-Activation ON Value"
+			"label": "Button 2 - Single Press (On Value)"
 		},
 		"11[0xff00]": {
 			"$import": "templates/logic_group_template.json#multilevel_lower_function",
-			"label": "Pushbutton 2 Single-Activation OFF Value"
+			"label": "Button 2 - Single Press (Off Value)"
 		},
 		"11[0xff]": {
 			"$import": "templates/logic_group_template.json#multilevel_duration_function",
-			"label": "Pushbutton 2 Single-Activation Duration Value"
+			"label": "Button 2 - Single Press (Duration)"
 		},
 		"12[0xff000000]": {
 			"$import": "templates/logic_group_template.json#multilevel_enable",
-			"label": "Pushbutton 2 Double-Activation Enable"
+			"label": "Button 2 - Double Press"
 		},
 		"12[0xff0000]": {
 			"$import": "templates/logic_group_template.json#multilevel_upper_function",
-			"label": "Pushbutton 2 Double-Activation ON Value"
+			"label": "Button 2 - Double Press (On Value)"
 		},
 		"12[0xff00]": {
 			"$import": "templates/logic_group_template.json#multilevel_lower_function",
-			"label": "Pushbutton 2 Double-Activation OFF Value"
+			"label": "Button 2 - Double Press (Off Value)"
 		},
 		"12[0xff]": {
 			"$import": "templates/logic_group_template.json#multilevel_duration_function",
-			"label": "Pushbutton 2 Double-Activation Duration Value"
+			"label": "Button 2 - Double Press (Duration)"
 		},
 		"14[0xff000000]": {
 			"$import": "templates/logic_group_template.json#multilevel_enable",
-			"label": "Pushbutton 3 Single-Activation Enable"
+			"label": "Button 3 - Single Press"
 		},
 		"14[0xff0000]": {
 			"$import": "templates/logic_group_template.json#multilevel_upper_function",
-			"label": "Pushbutton 3 Single-Activation ON Value"
+			"label": "Button 3 - Single Press (On Value)"
 		},
 		"14[0xff00]": {
 			"$import": "templates/logic_group_template.json#multilevel_lower_function",
-			"label": "Pushbutton 3 Single-Activation OFF Value"
+			"label": "Button 3 - Single Press (Off Value)"
 		},
 		"14[0xff]": {
 			"$import": "templates/logic_group_template.json#multilevel_duration_function",
-			"label": "Pushbutton 3 Single-Activation Duration Value"
+			"label": "Button 3 - Single Press (Duration)"
 		},
 		"15[0xff000000]": {
 			"$import": "templates/logic_group_template.json#multilevel_enable",
-			"label": "Pushbutton 3 Double-Activation Enable"
+			"label": "Button 3 - Double Press"
 		},
 		"15[0xff0000]": {
 			"$import": "templates/logic_group_template.json#multilevel_upper_function",
-			"label": "Pushbutton 3 Double-Activation ON Value"
+			"label": "Button 3 - Double Press (On Value)"
 		},
 		"15[0xff00]": {
 			"$import": "templates/logic_group_template.json#multilevel_lower_function",
-			"label": "Pushbutton 3 Double-Activation OFF Value"
+			"label": "Button 3 - Double Press (Off Value)"
 		},
 		"15[0xff]": {
 			"$import": "templates/logic_group_template.json#multilevel_duration_function",
-			"label": "Pushbutton 3 Double-Activation Duration Value"
+			"label": "Button 3 - Double Press (Duration)"
 		},
 		"17[0xff000000]": {
 			"$import": "templates/logic_group_template.json#multilevel_enable",
-			"label": "Pushbutton 4 Single-Activation Enable"
+			"label": "Button 4 - Single Press"
 		},
 		"17[0xff0000]": {
 			"$import": "templates/logic_group_template.json#multilevel_upper_function",
-			"label": "Pushbutton 4 Single-Activation ON Value"
+			"label": "Button 4 - Single Press (On Value)"
 		},
 		"17[0xff00]": {
 			"$import": "templates/logic_group_template.json#multilevel_lower_function",
-			"label": "Pushbutton 4 Single-Activation OFF Value"
+			"label": "Button 4 - Single Press (Off Value)"
 		},
 		"17[0xff]": {
 			"$import": "templates/logic_group_template.json#multilevel_duration_function",
-			"label": "Pushbutton 4 Single-Activation Duration Value"
+			"label": "Button 4 - Single Press (Duration)"
 		},
 		"18[0xff000000]": {
 			"$import": "templates/logic_group_template.json#multilevel_enable",
-			"label": "Pushbutton 4 Double-Activation Enable"
+			"label": "Button 4 - Double Press (On Value)"
 		},
 		"18[0xff0000]": {
 			"$import": "templates/logic_group_template.json#multilevel_upper_function",
-			"label": "Pushbutton 4 Double-Activation ON Value"
+			"label": "Button 4 - Double Press (On Value)"
 		},
 		"18[0xff00]": {
 			"$import": "templates/logic_group_template.json#multilevel_lower_function",
-			"label": "Pushbutton 4 Double-Activation OFF Value"
+			"label": "Button 4 - Double Press (Off Value)"
 		},
 		"18[0xff]": {
 			"$import": "templates/logic_group_template.json#multilevel_duration_function",
-			"label": "Pushbutton 4 Double-Activation Duration Value"
+			"label": "Button 4 - Double Press (Duration)"
 		}
 	},
 	"metadata": {

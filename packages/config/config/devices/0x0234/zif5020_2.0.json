@@ -20,51 +20,51 @@
 			"isLifeline": true
 		},
 		"2": {
-			"label": "Basic Report, Input 1",
+			"label": "Input 1 (Basic Report)",
 			"maxNodes": 5
 		},
 		"3": {
-			"label": "Basic Switch Report, Input 1",
+			"label": "Input 1 (Binary Report)",
 			"maxNodes": 5
 		},
 		"4": {
-			"label": "Multilevel Switch Report, Input 1",
+			"label": "Input 1 (Multilevel Report)",
 			"maxNodes": 5
 		},
 		"5": {
-			"label": "Basic Report, Input 2",
+			"label": "Input 2 (Basic Report)",
 			"maxNodes": 5
 		},
 		"6": {
-			"label": "Basic Switch Report, Input 2",
+			"label": "Input 2 (Binary Report)",
 			"maxNodes": 5
 		},
 		"7": {
-			"label": "Multilevel Switch Report, Input 2",
+			"label": "Input 2 (Multilevel Report)",
 			"maxNodes": 5
 		},
 		"8": {
-			"label": "Basic Report, Input 3",
+			"label": "Input 3 (Basic Report)",
 			"maxNodes": 5
 		},
 		"9": {
-			"label": "Basic Switch Report, Input 3",
+			"label": "Input 3 (Binary Report)",
 			"maxNodes": 5
 		},
 		"10": {
-			"label": "Multilevel Switch Report, Input 3",
+			"label": "Input 3 (Multilevel Report)",
 			"maxNodes": 5
 		},
 		"11": {
-			"label": "Basic Report, Input 4",
+			"label": "Input 4 (Basic Report)",
 			"maxNodes": 5
 		},
 		"12": {
-			"label": "Basic Switch Report, Input 4",
+			"label": "Input 4 (Binary Report)",
 			"maxNodes": 5
 		},
 		"13": {
-			"label": "Multilevel Switch Report, Input 4",
+			"label": "Input 4 (Multilevel Report)",
 			"maxNodes": 5
 		}
 	},
@@ -126,18 +126,8 @@
 			"defaultValue": 50
 		},
 		"14": {
-			"$import": "templates/logic_group_template.json#enable_central_scene",
-			"defaultValue": 0,
-			"options": [
-				{
-					"label": "Enable",
-					"value": 0
-				},
-				{
-					"label": "Disable",
-					"value": 1
-				}
-			]
+			"$import": "../templates/master_template.json#base_enable_disable_inverted",
+			"defaultValue": 0
 		},
 		"15[0x01]": {
 			"$import": "../templates/master_template.json#base_enable_disable",

@@ -20,75 +20,75 @@
 			"isLifeline": true
 		},
 		"2": {
-			"label": "Basic Report, Input 1",
+			"label": "Input 1 (Basic Report)",
 			"maxNodes": 5
 		},
 		"3": {
-			"label": "Binary Switch Report, Input 1",
+			"label": "Input 1 (Binary Report)",
 			"maxNodes": 5
 		},
 		"4": {
-			"label": "Multilevel Switch Report, Input 1",
+			"label": "Input 1 (Multilevel Report)",
 			"maxNodes": 5
 		},
 		"5": {
-			"label": "Basic Report, Input 2",
+			"label": "Input 2 (Basic Report)",
 			"maxNodes": 5
 		},
 		"6": {
-			"label": "Binary Switch Report, Input 2",
+			"label": "Input 2 (Binary Report)",
 			"maxNodes": 5
 		},
 		"7": {
-			"label": "Multilevel Switch Report, Input 2",
+			"label": "Input 2 (Multilevel Report)",
 			"maxNodes": 5
 		},
 		"8": {
-			"label": "Basic Report, Input 3",
+			"label": "Input 3 (Basic Report)",
 			"maxNodes": 5
 		},
 		"9": {
-			"label": "Binary Switch Report, Input 3",
+			"label": "Input 3 (Binary Report)",
 			"maxNodes": 5
 		},
 		"10": {
-			"label": "Multilevel Switch Report, Input 3",
+			"label": "Input 3 (Multilevel Report)",
 			"maxNodes": 5
 		},
 		"11": {
-			"label": "Basic Report, Input 4",
+			"label": "Input 4 (Basic Report)",
 			"maxNodes": 5
 		},
 		"12": {
-			"label": "Binary Switch Report, Input 4",
+			"label": "Input 4 (Binary Report)",
 			"maxNodes": 5
 		},
 		"13": {
-			"label": "Multilevel Switch Report, Input 4",
+			"label": "Input 4 (Multilevel Report)",
 			"maxNodes": 5
 		},
 		"14": {
-			"label": "Basic Report, Input 5",
+			"label": "Input 5 (Basic Report)",
 			"maxNodes": 5
 		},
 		"15": {
-			"label": "Binary Switch Report, Input 5",
+			"label": "Input 5 (Binary Report)",
 			"maxNodes": 5
 		},
 		"16": {
-			"label": "Multilevel Switch Report, Input 5",
+			"label": "Input 5 (Multilevel Report)",
 			"maxNodes": 5
 		},
 		"17": {
-			"label": "Basic Report, Input 6",
+			"label": "Input 6 (Basic Report)",
 			"maxNodes": 5
 		},
 		"18": {
-			"label": "Basic Switch Report, Input 6",
+			"label": "Input 6 (Binary Report)",
 			"maxNodes": 5
 		},
 		"19": {
-			"label": "Multilevel Switch Report, Input 6",
+			"label": "Input 6 (Multilevel Report)",
 			"maxNodes": 5
 		}
 	},
@@ -101,51 +101,51 @@
 		},
 		"3": {
 			"$import": "templates/logic_group_template.json#input_funtion_relay",
-			"label": "Function Setup Of input 1"
+			"label": "Input 1 - Function"
 		},
 		"4": {
 			"$import": "templates/logic_group_template.json#input_timer",
-			"label": "Timer For Input 1"
+			"label": "Input 1 - Timer"
 		},
 		"5": {
 			"$import": "templates/logic_group_template.json#input_funtion_relay",
-			"label": "Function Setup Of Input 2"
+			"label": "Input 2 - Function"
 		},
 		"6": {
 			"$import": "templates/logic_group_template.json#input_timer",
-			"label": "Timer For Input 2"
+			"label": "Input 2 - Timer"
 		},
 		"7": {
 			"$import": "templates/logic_group_template.json#input_funtion_relay",
-			"label": "Function Setup Of Input 3"
+			"label": "Input 3 - Function"
 		},
 		"8": {
 			"$import": "templates/logic_group_template.json#input_timer",
-			"label": "Timer For Input 3"
+			"label": "Input 3 - Timer"
 		},
 		"9": {
 			"$import": "templates/logic_group_template.json#input_funtion_relay",
-			"label": "Function Setup Of Input 4"
+			"label": "Input 4 - Function"
 		},
 		"10": {
 			"$import": "templates/logic_group_template.json#input_timer",
-			"label": "Timer For Input 4"
+			"label": "Input 4 - Timer"
 		},
 		"11": {
 			"$import": "templates/logic_group_template.json#input_funtion_relay",
-			"label": "Function Setup Of Input 5"
+			"label": "Input 5 - Function"
 		},
 		"12": {
 			"$import": "templates/logic_group_template.json#input_timer",
-			"label": "Timer For Input 5"
+			"label": "Input 5 - Timer"
 		},
 		"13": {
 			"$import": "templates/logic_group_template.json#input_funtion_relay",
-			"label": "Function Setup Of Input 6"
+			"label": "Input 6 - Function"
 		},
 		"14": {
 			"$import": "../templates/master_template.json#base_0-255_nounit",
-			"label": "Timer Setup Of Input 6",
+			"label": "Input 6 - Timer",
 			"defaultValue": 0
 		},
 		"15": {
@@ -167,42 +167,32 @@
 			"defaultValue": 50
 		},
 		"18": {
-			"$import": "templates/logic_group_template.json#enable_central_scene",
-			"defaultValue": 0,
-			"options": [
-				{
-					"label": "Enabled",
-					"value": 0
-				},
-				{
-					"label": "Disabled",
-					"value": 1
-				}
-			]
+			"$import": "../templates/master_template.json#base_enable_disable_inverted",
+			"defaultValue": 0
 		},
 		"19": {
 			"$import": "templates/logic_group_template.json#output_function_relay",
-			"label": "Output 1"
+			"label": "Output 1 - Function"
 		},
 		"20": {
 			"$import": "templates/logic_group_template.json#output_function_relay",
-			"label": "Output 2"
+			"label": "Output 2 - Function"
 		},
 		"21": {
 			"$import": "templates/logic_group_template.json#output_function_relay",
-			"label": "Output 3"
+			"label": "Output 3 - Function"
 		},
 		"22": {
 			"$import": "templates/logic_group_template.json#output_function_relay",
-			"label": "Output 4"
+			"label": "Output 4 - Function"
 		},
 		"23": {
 			"$import": "templates/logic_group_template.json#output_function_relay",
-			"label": "Output 5"
+			"label": "Output 5 - Function"
 		},
 		"24": {
 			"$import": "templates/logic_group_template.json#output_function_relay",
-			"label": "Function Setup Of Input 6"
+			"label": "Output 6 - Function"
 		}
 	},
 	"metadata": {

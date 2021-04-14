@@ -22,19 +22,19 @@
 			"isLifeline": true
 		},
 		"2": {
-			"label": "Multilevel Sensor Report, Input 1",
+			"label": "Input 1 (Multilevel Report)",
 			"maxNodes": 5
 		},
 		"3": {
-			"label": "Multilevel Sensor Report, Input 2",
+			"label": "Input 2 (Multilevel Report)",
 			"maxNodes": 5
 		},
 		"4": {
-			"label": "Multilevel Sensor Report, Input 3",
+			"label": "Input 3 (Multilevel Report)",
 			"maxNodes": 5
 		},
 		"5": {
-			"label": "Multilevel Sensor Report, Input 4",
+			"label": "Input 4 (Multilevel Report)",
 			"maxNodes": 5
 		}
 	},
@@ -47,35 +47,35 @@
 		},
 		"3": {
 			"$import": "../templates/master_template.json#base_enable_disable",
-			"label": "Thermistor Connected To Input 1"
+			"label": "Input 1 - Thermistor"
 		},
 		"4": {
 			"$import": "../templates/master_template.json#base_enable_disable",
-			"label": "Thermistor Connected To Input 2"
+			"label": "Input 2 - Thermistor"
 		},
 		"5": {
 			"$import": "../templates/master_template.json#base_enable_disable",
-			"label": "Thermistor Connected To Input 3"
+			"label": "Input 3 - Thermistor"
 		},
 		"6": {
 			"$import": "../templates/master_template.json#base_enable_disable",
-			"label": "Thermistor Connected To Input 4"
+			"label": "Input 4 - Thermistor"
 		},
 		"7": {
 			"$import": "templates/logic_group_template.json#input_calibration",
-			"label": "Input 1 Calibration"
+			"label": "Input 1 - Calibration"
 		},
 		"8": {
 			"$import": "templates/logic_group_template.json#input_calibration",
-			"label": "Input 2 Calibration"
+			"label": "Input 2 - Calibration"
 		},
 		"9": {
 			"$import": "templates/logic_group_template.json#input_calibration",
-			"label": "Input 3 Calibration"
+			"label": "Input 3 - Calibration"
 		},
 		"10": {
 			"$import": "templates/logic_group_template.json#input_calibration",
-			"label": "Input 4 Calibration"
+			"label": "Input 4 - Calibration"
 		},
 		"11": {
 			"$import": "templates/logic_group_template.json#input_report_interval",
@@ -87,7 +87,7 @@
 		},
 		"13": {
 			"$import": "templates/logic_group_template.json#input_report_interval",
-			"label": "Input 3 Report Intervals"
+			"label": "Input 3 Report Interval"
 		},
 		"14": {
 			"$import": "templates/logic_group_template.json#input_report_interval",

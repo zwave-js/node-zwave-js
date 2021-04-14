@@ -25,21 +25,11 @@
 	"multilevel_duration_function": {
 		"$import": "../../templates/master_template.json#base_0-255_nounit",
 		"label": "Duration",
+		"description": "Values 1-127 = seconds; 128-255 = minutes (minus 127)",
 		"valueSize": 4
 	},
-	"multilevel_disabled_byte": {
-		"label": "Disable",
-		"valueSize": 4,
-		"minValue": 0,
-		"maxValue": 0,
-		"defaultValue": 0,
-		"unsigned": true,
-		"readOnly": false,
-		"writeOnly": false,
-		"allowManualEntry": true
-	},
 	"button_pressed_threshold_time": {
-		"label": "Pushbutton Press Threshold Time",
+		"label": "Button Press Threshold Time",
 		"unit": "1 ms",
 		"valueSize": 2,
 		"minValue": 1,
@@ -50,7 +40,7 @@
 		"allowManualEntry": true
 	},
 	"button_held_threshold_time": {
-		"label": "Pushbutton Held Threshold Time",
+		"label": "Button Held Threshold Time",
 		"unit": "1 ms",
 		"valueSize": 2,
 		"minValue": 1,
@@ -85,8 +75,8 @@
 			}
 		]
 	},
-	"pushbutton_functionality": {
-		"label": "Pushbutton",
+	"button_functionality": {
+		"label": "Button",
 		"valueSize": 1,
 		"minValue": 0,
 		"maxValue": 3,
@@ -116,11 +106,11 @@
 	},
 	"global_brightness": {
 		"$import": "../../templates/master_template.json#base_0-255_nounit",
-		"label": "Global Brightness LED",
+		"label": "LED Indicator Brightness:",
 		"valueSize": 4,
 		"defaultValue": 255
 	},
-	"color_command_pushbutton": {
+	"color_command_button": {
 		"label": "Color Commands LED Indicator",
 		"valueSize": 1,
 		"minValue": 0,
@@ -198,14 +188,14 @@
 	},
 	"led_indicator": {
 		"$import": "../../templates/master_template.json#base_0-255_nounit",
-		"label": "Pushbutton LED Indicator",
+		"label": "Button LED Indicator",
 		"unsigned": true,
 		"valueSize": 4,
 		"defaultValue": 0
 	},
-	"pushbutton_led_indicator": {
+	"button_led_indicator": {
 		"$import": "../../templates/master_template.json#base_0-255_nounit",
-		"label": "Pushbutton LED Indicator",
+		"label": "Button LED Indicator",
 		"maxValue": 7,
 		"defaultValue": 7,
 		"allowManualEntry": false,
@@ -264,12 +254,12 @@
 				"value": 1
 			},
 			{
-				"label": "Pushbutton Activated",
+				"label": "Button Activated",
 				"value": 2
 			}
 		]
 	},
-	"pushbutton_function_zdb5100": {
+	"button_function_zdb5100": {
 		"valueSize": 1,
 		"minValue": 0,
 		"maxValue": 4,
@@ -303,7 +293,7 @@
 	},
 	"input_funtion_relay": {
 		"$import": "../../templates/master_template.json#base_0-255_nounit",
-		"label": "Function Setup Of Input",
+		"label": "Input - Function",
 		"maxValue": 3,
 		"defaultValue": 3,
 		"allowManualEntry": false,
@@ -328,7 +318,7 @@
 	},
 	"output_function_relay": {
 		"$import": "../../templates/master_template.json#base_enable_disable",
-		"label": "Output Function",
+		"label": "Output - Function",
 		"options": [
 			{
 				"label": "Controlled Via Z-Wave Messages",
@@ -364,8 +354,7 @@
 		]
 	},
 	"meter_type": {
-		"label": "Meter Type Of Input",
-		"description": "Meter Type Of Input",
+		"label": "Input - Meter Type",
 		"valueSize": 1,
 		"minValue": 0,
 		"maxValue": 5,
@@ -402,7 +391,7 @@
 	},
 	"input_scale": {
 		// The meaning of this parameter's values change depending on parameter "meter_type"
-		"label": "Scale Type Of Input",
+		"label": "Input - Scale Type",
 		"valueSize": 1,
 		"minValue": 0,
 		"maxValue": 6,
@@ -414,7 +403,7 @@
 	},
 	"input_precision": {
 		//number of decimal points
-		"label": "Precision Of Input",
+		"label": "Input - Precision",
 		"valueSize": 1,
 		"minValue": 0,
 		"maxValue": 7,
@@ -425,7 +414,7 @@
 		"allowManualEntry": true
 	},
 	"pulse_unit": {
-		"label": "Pulses Per Unit Of Input 5",
+		"label": "Input 5 - Pulses Per Unit",
 		"unit": "pulse",
 		"valueSize": 2,
 		"minValue": 0,
@@ -437,7 +426,7 @@
 		"allowManualEntry": true
 	},
 	"rate_type": {
-		"label": "Rate Type Of Input",
+		"label": "Input - Rate Type",
 		"valueSize": 1,
 		"minValue": 0,
 		"maxValue": 2,
@@ -480,7 +469,7 @@
 	},
 	"input_calibration": {
 		"$import": "../../templates/master_template.json#base_0-99_nounit",
-		"label": "Input Calibration",
+		"label": "Input - Calibration",
 		"unit": "0.1 °C",
 		"minValue": -40,
 		"maxValue": 40,
@@ -500,7 +489,7 @@
 		"allowManualEntry": true
 	},
 	"input_function_setup": {
-		"label": "Function Setup Of Input",
+		"label": "Input - Function",
 		"valueSize": 1,
 		"minValue": 0,
 		"maxValue": 6,
@@ -536,16 +525,16 @@
 			}
 		]
 	},
-	"pushbutton_debounce": {
+	"button_debounce": {
 		"$import": "../../templates/master_template.json#base_1-255_nounit",
-		"label": "Pushbutton Debounce Timer",
+		"label": "Button Debounce Timer",
 		"unit": "10 ms",
 		"valueSize": 1,
 		"defaultValue": 5
 	},
 	"input_timer": {
 		"$import": "../../templates/master_template.json#base_0-255_nounit",
-		"label": "Timer For Input",
+		"label": "Input - Timer",
 		"defaultValue": 0
 	}
 }
