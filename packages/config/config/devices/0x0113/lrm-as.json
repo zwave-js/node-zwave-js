@@ -54,8 +54,7 @@
 			]
 		},
 		"3": {
-			"label": "LED Indication",
-			"description": "Flicker LED when transmitting to any of its groups.",
+			"label": "Night Light",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 1,
@@ -66,18 +65,17 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "Enable",
+					"label": "Disable",
 					"value": 0
 				},
 				{
-					"label": "Disable",
+					"label": "Enable",
 					"value": 1
 				}
 			]
 		},
 		"4": {
 			"label": "Invert Switch",
-			"description": "Reverse switch direction",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 1,
