@@ -27,7 +27,7 @@
 			"maxNodes": 5
 		},
 		"3": {
-			"label": "Outlet 2 (Left)",
+			"label": "Outlet 2 (Right)",
 			"maxNodes": 5
 		}
 	},
@@ -58,8 +58,8 @@
 		},
 		"2": {
 			"label": "Outlet 1 (Left) Auto Shutoff",
-			"unit": "seconds",
 			"valueSize": 2,
+			"unit": "seconds",
 			"minValue": 0,
 			"maxValue": 36000,
 			"defaultValue": 0,
@@ -70,8 +70,8 @@
 		},
 		"3": {
 			"label": "Outlet 2 (Right) Auto Shutoff",
-			"unit": "seconds",
 			"valueSize": 2,
+			"unit": "seconds",
 			"minValue": 0,
 			"maxValue": 36000,
 			"defaultValue": 0,
