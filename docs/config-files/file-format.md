@@ -58,9 +58,11 @@ Can be used to add instructions for the user to a device:
 
 ```json
 "metadata": {
+	"wakeup": "How to wake up the device manually",
 	"inclusion": "How to include this device",
 	"exclusion": "How to exclude this device",
-	"reset": "How to factory-reset this device"
+	"reset": "How to factory-reset this device",
+	"manual": "A link to the device manual
 }
 ```
 

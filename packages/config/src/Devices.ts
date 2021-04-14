@@ -955,6 +955,7 @@ export interface ConfigOption {
 export class DeviceMetadata {
 	public constructor(filename: string, definition: JSONObject) {
 		for (const prop of [
+			"wakeup",
 			"inclusion",
 			"exclusion",
 			"reset",
@@ -974,6 +975,8 @@ The metadata entry ${prop} must be a string!`,
 		}
 	}
 
+	/** How to wake up the device manually */
+	public readonly wakeup?: string;
 	/** Inclusion instructions */
 	public readonly inclusion?: string;
 	/** Exclusion instructions */
