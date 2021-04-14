@@ -71,19 +71,50 @@
 			"writeOnly": false,
 			"allowManualEntry": true
 		},
-		"5": {
-			"label": "Trigger Interval",
-			"description": "Set the trigger interval for motion sensor re-activation.",
-			"unit": "minutes",
-			"valueSize": 1,
-			"minValue": 1,
-			"maxValue": 255,
-			"defaultValue": 3,
-			"unsigned": true,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
-		},
+		"5": [
+			{
+				"$if": "firmwareVersion < 17.9",
+				"label": "Trigger Interval",
+				"description": "Set the trigger interval for motion sensor re-activation.",
+				"unit": "minutes",
+				"valueSize": 1,
+				"minValue": 1,
+				"maxValue": 255,
+				"defaultValue": 3,
+				"unsigned": true,
+				"readOnly": false,
+				"writeOnly": false,
+				"allowManualEntry": true
+			},
+			{
+				"$if": "firmwareVersion >= 17.9 && firmwareVersion < 24.2",
+				"label": "Trigger Interval",
+				"description": "Set the trigger interval for motion sensor re-activation.",
+				"unit": "seconds",
+				"valueSize": 1,
+				"minValue": 15,
+				"maxValue": 60,
+				"defaultValue": 15,
+				"unsigned": true,
+				"readOnly": false,
+				"writeOnly": false,
+				"allowManualEntry": true
+			},
+			{
+				"$if": "firmwareVersion >= 24.2",
+				"label": "Trigger Interval",
+				"description": "Set the trigger interval for motion sensor re-activation.",
+				"unit": "seconds",
+				"valueSize": 1,
+				"minValue": 15,
+				"maxValue": 255,
+				"defaultValue": 15,
+				"unsigned": true,
+				"readOnly": false,
+				"writeOnly": false,
+				"allowManualEntry": true
+			}
+		],
 		"6": {
 			"label": "Motion Sensor Sensitivity",
 			"description": "Adjust sensitivity of the motion sensor.",
