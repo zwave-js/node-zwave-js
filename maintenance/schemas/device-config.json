@@ -314,6 +314,10 @@
 		"metadata": {
 			"type": "object",
 			"properties": {
+				"wakeup": {
+					"type": "string",
+					"description": "How to wake up the device manually"
+				},
 				"inclusion": {
 					"type": "string",
 					"description": "Inclusion instructions for this device"
