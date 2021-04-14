@@ -83,9 +83,6 @@
 			"valueSize": 4,
 			"defaultValue": 85
 		},
-		"5[0xff]": {
-			"$import": "templates/logic_group_template.json#multilevel_disabled_byte"
-		},
 		"6[0x01]": {
 			"$import": "../templates/master_template.json#base_enable_disable",
 			"label": "Send Association Group 2 Messages Securely",
