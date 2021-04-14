@@ -1930,14 +1930,18 @@ ${associatedNodes.join(", ")}`,
 		const node = this.nodes.getOrThrow(nodeId);
 		const targetNode = this.nodes.getOrThrow(association.nodeId);
 
-		const targetEndpoint = targetNode.getEndpoint(
-			association.endpoint ?? 0,
-		);
+		let targetEndpoint = targetNode.getEndpoint(association.endpoint ?? 0);
+		// Don't check that the target endpoint exists when adding an association to the controller
 		if (!targetEndpoint) {
-			throw new ZWaveError(
-				`The endpoint ${association.endpoint} was not found on node ${association.nodeId}!`,
-				ZWaveErrorCodes.Controller_EndpointNotFound,
-			);
+			if (association.nodeId !== this._ownNodeId) {
+				throw new ZWaveError(
+					`The endpoint ${association.endpoint} was not found on node ${association.nodeId}!`,
+					ZWaveErrorCodes.Controller_EndpointNotFound,
+				);
+			} else {
+				// The controller has no endpoints
+				targetEndpoint = targetNode;
+			}
 		}
 
 		// SDS14223:
@@ -1978,13 +1982,13 @@ ${associatedNodes.join(", ")}`,
 		// actuator Command Class if the actual association group sends Basic Control Command Class.
 		if (
 			groupCCs.includes(CommandClasses.Basic) &&
-			actuatorCCs.some((cc) => targetEndpoint.supportsCC(cc))
+			actuatorCCs.some((cc) => targetEndpoint?.supportsCC(cc))
 		) {
 			return true;
 		}
 
 		// Enforce that at least one issued CC is supported
-		return groupCCs.some((cc) => targetEndpoint.supportsCC(cc));
+		return groupCCs.some((cc) => targetEndpoint?.supportsCC(cc));
 	}
 
 	/**
