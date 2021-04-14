@@ -316,7 +316,7 @@
 			"properties": {
 				"wakeup": {
 					"type": "string",
-					"description": "How to wake up this device manually"
+					"description": "How to wake up the device manually"
 				},
 				"inclusion": {
 					"type": "string",
