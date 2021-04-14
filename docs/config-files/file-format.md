@@ -161,7 +161,7 @@ Partial parameters must follow these rules:
 
 ### Bitmask calculator
 
-<iframe height="350" width="400" src="config-files/bitmask-calculator.html" style="min-width: 0; width: 400px; height: 350px; border: 0; margin: 0 auto" />
+<iframe height="270" width="400" src="config-files/bitmask-calculator.html" style="min-width: 0; width: 400px; height: 270px; border: 0; margin: 0 auto"></iframe>
 
 ## `compat`
 
