@@ -2,6 +2,23 @@
 <!--
 	Add placeholder for next release with `wip` snippet
 -->
+## __WORK IN PROGRESS__
+<!--### Features
+-->
+### Bugfixes
+* Add associations to the controller with arbitrary target endpoints is no longer an error
+
+### Config file changes
+* Update Remotec ZXT-600 config
+* Add NIE Tech / Eva Logik ZW97
+* Make parameter #5 firmware dependent for Zooz ZSE40
+* Enable Basic Set Mapping for ZP3102
+* Cleanup and template Aeotec configurations (part 2)
+* Add Zooz ZSE11
+* Preserve Basic CC for Popp rain sensor
+* Update Radio Thermostat CT101 config
+* Device configuration files may now contain wakeup instructions
+
 ## 7.2.3 (2021-04-13)
 ### Bugfixes
 * The `nodeFilter` logging option is now correctly applied to value change logs
