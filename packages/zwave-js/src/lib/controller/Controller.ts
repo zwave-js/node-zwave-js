@@ -1930,18 +1930,16 @@ ${associatedNodes.join(", ")}`,
 		const node = this.nodes.getOrThrow(nodeId);
 		const targetNode = this.nodes.getOrThrow(association.nodeId);
 
-		let targetEndpoint = targetNode.getEndpoint(association.endpoint ?? 0);
-		// Don't check that the target endpoint exists when adding an association to the controller
+		// Check that the target endpoint exists except when adding an association to the controller
+		const targetEndpoint =
+			association.nodeId === this._ownNodeId
+				? targetNode
+				: targetNode.getEndpoint(association.endpoint ?? 0);
 		if (!targetEndpoint) {
-			if (association.nodeId !== this._ownNodeId) {
-				throw new ZWaveError(
-					`The endpoint ${association.endpoint} was not found on node ${association.nodeId}!`,
-					ZWaveErrorCodes.Controller_EndpointNotFound,
-				);
-			} else {
-				// The controller has no endpoints
-				targetEndpoint = targetNode;
-			}
+			throw new ZWaveError(
+				`The endpoint ${association.endpoint} was not found on node ${association.nodeId}!`,
+				ZWaveErrorCodes.Controller_EndpointNotFound,
+			);
 		}
 
 		// SDS14223:
