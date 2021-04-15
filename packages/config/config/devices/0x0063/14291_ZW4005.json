@@ -1,0 +1,90 @@
+// GE/Jasco 14291/ZW4005
+// In-Wall Smart Switch
+{
+	"manufacturer": "GE/Jasco",
+	"manufacturerId": "0x0063",
+	"label": "14291/ZW4005",
+	"description": "In-Wall Smart Switch",
+	"devices": [
+		{
+			"productType": "0x4952",
+			"productId": "0x3036",
+			"zwaveAllianceId": 2501
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"associations": {
+		"1": {
+			"label": "Lifeline",
+			"maxNodes": 5,
+			"isLifeline": true
+		},
+		"2": {
+			"label": "Local Load",
+			"maxNodes": 5
+		},
+		"3": {
+			"label": "Double Tap",
+			"maxNodes": 5,
+			"isLifeline": true
+		}
+	},
+	"paramInformation": {
+		"3": {
+			"label": "LED Light",
+			"description": "LED status when connected lights are On or Off.",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 2,
+			"defaultValue": 0,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "On when light is Off",
+					"value": 0
+				},
+				{
+					"label": "On when light is On",
+					"value": 1
+				},
+				{
+					"label": "Always Off",
+					"value": 2
+				}
+			]
+		},
+		"4": {
+			"label": "Invert Switch",
+			"description": "Invert the default On/Off rocker settings.",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 0,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Normal operation",
+					"value": 0
+				},
+				{
+					"label": "Invert",
+					"value": 1
+				}
+			]
+		}
+
+	},
+	"metadata": {
+		"inclusion": "1. Follow the instructions for your controller to include a device to the network. 2. Once the controller is ready to include your device, press and release the top or bottom of the wireless smart switch(rocker) to include it in the network. 3. Once your controller has confirmed that the device has been included, refresh the Z-Wave network to optimize performance.",
+		"exclusion": "1. Follow the instructions for your controller to exclude a device from the network. 2. Once the controller is ready to exclude your device, press and release the top button of the wireless smart switch (rocker) to exclude it from the network."
+	}
+}
