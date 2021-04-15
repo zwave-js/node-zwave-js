@@ -1,0 +1,261 @@
+// Qubino ZMNHMD
+// Flush Smart leak protector
+{
+	"manufacturer": "Qubino",
+	"manufacturerId": "0x0159",
+	"label": "ZMNHMD",
+	"description": "Smart leak protector",
+	"devices": [
+		{
+			"productType": "0x0006",
+			"productId": "0x0051"
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"supportsZWavePlus": true,
+	"paramInformation": {
+		"1": {
+			"label": "Output 1 Valve Type",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "NO (Normally Open) Valve Type",
+					"value": 0
+				},
+				{
+					"label": "NC (Normally Closed) Valve Type",
+					"value": 1
+				}
+			]
+		},
+		"2": {
+			"label": "Input 2 Contact Type",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "NO (Normally Open) Valve Type",
+					"value": 0
+				},
+				{
+					"label": "NC (Normally Closed) Valve Type",
+					"value": 1
+				}
+			]
+		},
+		"3": {
+			"label": "Input 3 Contact Type",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "NO (Normally Open) Valve Type",
+					"value": 0
+				},
+				{
+					"label": "NC (Normally Closed) Valve Type",
+					"value": 1
+				}
+			]
+		},
+		"30": {
+			"label": "Restore State on Power Failure",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Enabled (the Device Will Restore State on Power Failure)",
+					"value": 0
+				},
+				{
+					"label": "Disabled (the Device Will Not Restore State on Power Failure and Will Remain Off)",
+					"value": 1
+				}
+			]
+		},
+		"48": {
+			"label": "Water Total Consumption Value in Liters",
+			"valueSize": 4,
+			"minValue": -2147483648,
+			"maxValue": 2147483647,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"50": {
+			"label": "Number of Liters per Pulse",
+			"valueSize": 2,
+			"minValue": 1,
+			"maxValue": 1000,
+			"defaultValue": 10,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"51": {
+			"label": "Number of Liters for Slow Leak",
+			"valueSize": 2,
+			"minValue": 1,
+			"maxValue": 1000,
+			"defaultValue": 1,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"52": {
+			"label": "Water Consumption Time Interval for Slow Leak",
+			"valueSize": 1,
+			"minValue": 1,
+			"maxValue": 24,
+			"defaultValue": 24,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"53": {
+			"label": "Number of Liters for Medium Leak",
+			"valueSize": 2,
+			"minValue": 1,
+			"maxValue": 1000,
+			"defaultValue": 150,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"54": {
+			"label": "Water Consumption Time Interval for Medium Leak",
+			"valueSize": 1,
+			"minValue": 1,
+			"maxValue": 24,
+			"defaultValue": 6,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"55": {
+			"label": "Number of Liters for Fast Leak",
+			"valueSize": 2,
+			"minValue": 1,
+			"maxValue": 1000,
+			"defaultValue": 300,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"56": {
+			"label": "Water Consumption Time Interval for Fast Leak",
+			"valueSize": 1,
+			"minValue": 1,
+			"maxValue": 24,
+			"defaultValue": 3,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"60": {
+			"label": "Enable Closing Valve According to Slow Leak",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 1,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Close the Valve",
+					"value": 0
+				},
+				{
+					"label": "Do Not Close the Valve",
+					"value": 1
+				}
+			]
+		},
+		"61": {
+			"label": "Enable Closing Valve According to Medium Leak",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Close the Valve",
+					"value": 0
+				},
+				{
+					"label": "Do Not Close the Valve",
+					"value": 1
+				}
+			]
+		},
+		"62": {
+			"label": "Enable Closing Valve According to Fast Leak",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Close the Valve",
+					"value": 0
+				},
+				{
+					"label": "Do Not Close the Valve",
+					"value": 1
+				}
+			]
+		},
+		"63": {
+			"label": "Enable Closing Valve According to Hardware Leak",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Close the Valve",
+					"value": 0
+				},
+				{
+					"label": "Do Not Close the Valve",
+					"value": 1
+				}
+			]
+		}
+	}
+}
