@@ -125,11 +125,11 @@
 		"allowManualEntry": false,
 		"options": [
 			{
-				"label": "Send Basic Set CC",
+				"label": "Basic CC",
 				"value": 1
 			},
 			{
-				"label": "Send Sensor Binary Report CC",
+				"label": "Sensor Binary Report CC",
 				"value": 2
 			}
 		]
@@ -150,8 +150,65 @@
 				"value": 16
 			},
 			{
+<<<<<<< HEAD
 				"label": "Basic Set CC",
+=======
+				"label": "Basic CC",
+>>>>>>> 0e2f493d... feat: aeotec group 2
 				"value": 256
+			}
+		]
+	},
+	"binary_report_type": {
+		"label": "Motion Sensor Triggered Command",
+		"valueSize": 1,
+		"minValue": 0,
+		"maxValue": 3,
+		"defaultValue": 1,
+		"unsigned": true,
+		"readOnly": false,
+		"writeOnly": false,
+		"allowManualEntry": false,
+		"options": [
+			{
+				"label": "Disable",
+				"value": 0
+			},
+			{
+				"label": "Basic CC",
+				"value": 1
+			},
+			{
+				"label": "Binary Report CC",
+				"value": 2
+			},
+			{
+				"label": "Basic CC and Binary Report CC",
+				"value": 3
+			}
+		]
+	},
+	"notification_report_type": {
+		"valueSize": 1,
+		"minValue": 0,
+		"maxValue": 2,
+		"defaultValue": 1,
+		"unsigned": true,
+		"readOnly": false,
+		"writeOnly": false,
+		"allowManualEntry": false,
+		"options": [
+			{
+				"label": "Disable",
+				"value": 0
+			},
+			{
+				"label": "Basic CC",
+				"value": 1
+			},
+			{
+				"label": "MultiLevel CC",
+				"value": 2
 			}
 		]
 	},
@@ -167,6 +224,39 @@
 		"readOnly": false,
 		"writeOnly": false,
 		"allowManualEntry": true
+	},
+	"celsius_farenheit": {
+		"valueSize": 4,
+		"minValue": 1,
+		"maxValue": 2,
+		"defaultValue": 1,
+		"readOnly": false,
+		"writeOnly": false,
+		"allowManualEntry": false,
+		"options": [
+			{
+				"label": "Celsius",
+				"value": 1
+			},
+			{
+				"label": "Fahrenheit",
+				"value": 2
+			}
+		]
+	},
+	"celsius_farenheit_0": {
+		"$import": "../../templates/master_template.json#base_0-1_nounit",
+		"valueSize": 4,
+		"options": [
+			{
+				"label": "Celsius",
+				"value": 0
+			},
+			{
+				"label": "Fahrenheit",
+				"value": 1
+			}
+		]
 	},
 	"selective_reporting": {
 		"$import": "../../templates/master_template.json#base_enable_disable",
@@ -184,6 +274,38 @@
 	"low_temp_alarm": {
 		"$import": "../../templates/master_template.json#base_enable_disable",
 		"label": "Low Temperature Alarm (-15°C)"
+	},
+	"below_temp_report": {
+		"$import": "../../templates/master_template.json#base_enable_disable",
+		"label": "Report Below Temperature Threshold"
+	},
+	"below_humidity_report": {
+		"$import": "../../templates/master_template.json#base_enable_disable",
+		"label": "Report Below Humidity Threshold"
+	},
+	"below_luminance_report": {
+		"$import": "../../templates/master_template.json#base_enable_disable",
+		"label": "Report Below Luminance Threshold"
+	},
+	"below_ultraviolet_report": {
+		"$import": "../../templates/master_template.json#base_enable_disable",
+		"label": "Report Below Ultraviolet Threshold"
+	},
+	"above_temp_report": {
+		"$import": "../../templates/master_template.json#base_enable_disable",
+		"label": "Report Above Temperature Threshold"
+	},
+	"above_humidity_report": {
+		"$import": "../../templates/master_template.json#base_enable_disable",
+		"label": "Report Above Humidity Threshold"
+	},
+	"above_luminance_report": {
+		"$import": "../../templates/master_template.json#base_enable_disable",
+		"label": "Report Above Luminance Threshold"
+	},
+	"above_ultraviolet_report": {
+		"$import": "../../templates/master_template.json#base_enable_disable",
+		"label": "Report Above Ultraviolet Threshold"
 	},
 	"report_interval": {
 		"valueSize": 4,
@@ -480,7 +602,7 @@
 		"unit": "seconds",
 		"minValue": 0,
 		"maxValue": 2147483647,
-		"defaultValue": 0,
+		"defaultValue": 86640,
 		"unsigned": true,
 		"readOnly": false,
 		"writeOnly": false,
@@ -547,6 +669,11 @@
 	"auto_report_group1_luminance": {
 		"$import": "../../templates/master_template.json#base_enable_disable",
 		"label": "Automatic Report: Group 1 - Luminance",
+		"valueSize": 4
+	},
+	"auto_report_group1_ultraviolet": {
+		"$import": "../../templates/master_template.json#base_enable_disable",
+		"label": "Automatic Report: Group 1 - Ultraviolet",
 		"valueSize": 4
 	},
 	"auto_report_group1_v": {
@@ -664,6 +791,11 @@
 		"label": "Automatic Report: Group 2 - Luminance",
 		"valueSize": 4
 	},
+	"auto_report_group2_ultraviolet": {
+		"$import": "../../templates/master_template.json#base_enable_disable",
+		"label": "Automatic Report: Group 2 - Ultraviolet",
+		"valueSize": 4
+	},
 	"auto_report_group2_v": {
 		"$import": "../../templates/master_template.json#base_enable_disable",
 		"label": "Automatic Report: Group 2 - Voltage",
@@ -777,6 +909,11 @@
 	"auto_report_group3_luminance": {
 		"$import": "../../templates/master_template.json#base_enable_disable",
 		"label": "Automatic Report: Group 3 - Luminance",
+		"valueSize": 4
+	},
+	"auto_report_group3_ultraviolet": {
+		"$import": "../../templates/master_template.json#base_enable_disable",
+		"label": "Automatic Report: Group 3 - Ultraviolet",
 		"valueSize": 4
 	},
 	"auto_report_group3_v": {
@@ -1020,6 +1157,69 @@
 			}
 		]
 	},
+	"external_switch_3way_auto": {
+		"label": "External Switch Type",
+		"valueSize": 1,
+		"minValue": 0,
+		"maxValue": 4,
+		"defaultValue": 0,
+		"unsigned": true,
+		"readOnly": false,
+		"writeOnly": false,
+		"allowManualEntry": false,
+		"options": [
+			{
+				"label": "Unidentified mode",
+				"value": 0
+			},
+			{
+				"label": "Switch",
+				"value": 1
+			},
+			{
+				"label": "3-way mode",
+				"value": 2
+			},
+			{
+				"label": "Momentary",
+				"value": 3
+			},
+			{
+				"label": "Automatic identification mode",
+				"value": 4
+			}
+		]
+	},
+	"switch_mode_state_s1": {
+		"$import": "../../templates/master_template.json#base_0-1_nounit",
+		"label": "Switch Mode (S1): State Sync",
+		"allowManualEntry": false,
+		"options": [
+			{
+				"label": "Toggle Switch",
+				"value": 0
+			},
+			{
+				"label": "On/Off Switch",
+				"value": 1
+			}
+		]
+	},
+	"switch_mode_state_s2": {
+		"$import": "../../templates/master_template.json#base_0-1_nounit",
+		"label": "Switch Mode (S2): State Sync",
+		"allowManualEntry": false,
+		"options": [
+			{
+				"label": "Toggle Switch",
+				"value": 0
+			},
+			{
+				"label": "On/Off Switch",
+				"value": 1
+			}
+		]
+	},
 	"blink_duration": {
 		"label": "LED Blink Duration",
 		"valueSize": 2,
@@ -1127,5 +1327,524 @@
 		"valueSize": 3,
 		"unit": "%",
 		"defaultValue": 50
+	},
+	"wake_up_timeout": {
+		"label": "Wake Up Timeout",
+		"unit": "seconds",
+		"valueSize": 1,
+		"minValue": 8,
+		"maxValue": 127,
+		"defaultValue": 15,
+		"unsigned": true,
+		"readOnly": false,
+		"writeOnly": false,
+		"allowManualEntry": true
+	},
+	"current_power_mode": {
+		"$if": "firmwareVersion >= 1.7 && firmwareVersion <= 1.9",
+		"label": "Current Power Mode",
+		"valueSize": 2,
+		"minValue": 0,
+		"maxValue": 1,
+		"defaultValue": 0,
+		"readOnly": true,
+		"writeOnly": false,
+		"allowManualEntry": false,
+		"options": [
+			{
+				"label": "USB power mode",
+				"value": 0
+			},
+			{
+				"label": "Battery power mode",
+				"value": 1
+			}
+		]
+	},
+	"sleep_state": {
+		"label": "Sleep State",
+		"valueSize": 2,
+		"minValue": 0,
+		"maxValue": 1,
+		"defaultValue": 0,
+		"readOnly": true,
+		"writeOnly": false,
+		"allowManualEntry": false,
+		"options": [
+			{
+				"label": "Asleep",
+				"value": 0
+			},
+			{
+				"label": "Awake",
+				"value": 1
+			}
+		]
+	},
+	"switch_disconnet_s1": {
+		"label": "Control Destination (S1)",
+		"valueSize": 1,
+		"minValue": 1,
+		"maxValue": 3,
+		"defaultValue": 3,
+		"unsigned": true,
+		"readOnly": true,
+		"writeOnly": false,
+		"allowManualEntry": false,
+		"options": [
+			{
+				"label": "Load",
+				"value": 1
+			},
+			{
+				"label": "Association group 3",
+				"value": 2
+			},
+			{
+				"label": "Load and association group 3",
+				"value": 3
+			}
+		]
+	},
+	"switch_disconnet_s2": {
+		"label": "Control Destination (S2)",
+		"valueSize": 1,
+		"minValue": 1,
+		"maxValue": 3,
+		"defaultValue": 3,
+		"unsigned": true,
+		"readOnly": true,
+		"writeOnly": false,
+		"allowManualEntry": false,
+		"options": [
+			{
+				"label": "Load",
+				"value": 1
+			},
+			{
+				"label": "Association group 4",
+				"value": 2
+			},
+			{
+				"label": "Load and association group 3",
+				"value": 3
+			}
+		]
+	},
+	"dimming_rate_255": {
+		"$import": "../../templates/master_template.json#base_1-255_nounit",
+		"label": "Dimming Rate",
+		"unit": "seconds",
+		"defaultValue": 3
+	},
+	"current_working_mode": {
+		"label": "Current Working Mode",
+		"valueSize": 1,
+		"minValue": 0,
+		"maxValue": 2,
+		"defaultValue": 0,
+		"unsigned": true,
+		"readOnly": true,
+		"writeOnly": false,
+		"allowManualEntry": false,
+		"options": [
+			{
+				"label": "Unknown",
+				"value": 0
+			},
+			{
+				"label": "2-wire mode (no neutral)",
+				"value": 1
+			},
+			{
+				"label": "3-wire mode",
+				"value": 2
+			}
+		]
+	},
+	"dimming_principle": {
+		"$import": "../../templates/master_template.json#base_0-1_nounit",
+		"label": "Dimming Principle",
+		"defaultValue": 1,
+		"options": [
+			{
+				"label": "Trailing edge mode",
+				"value": 0
+			},
+			{
+				"label": "Leading edge mode",
+				"value": 1
+			}
+		]
+	},
+	"load_type": {
+		"label": "Load Type",
+		"valueSize": 1,
+		"minValue": 0,
+		"maxValue": 3,
+		"defaultValue": 0,
+		"unsigned": true,
+		"readOnly": true,
+		"writeOnly": false,
+		"allowManualEntry": false,
+		"options": [
+			{
+				"label": "Unknown",
+				"value": 0
+			}
+			{
+				"label": "Resistive load",
+				"value": 1
+			},
+			{
+				"label": "Capacitive load",
+				"value": 2
+			},
+			{
+				"label": "Inductive load",
+				"value": 3
+			}
+
+		]
+	},
+	"min_brightness": {
+		"$import": "../../templates/master_template.json#base_0-99_nounit",
+		"label": "Minimum Brightness Level",
+		"defaultValue": 0
+	},
+	"max_brightness": {
+		"$import": "../../templates/master_template.json#base_0-99_nounit",
+		"label": "Maximum Brightness Level",
+		"defaultValue": 99
+	},
+	"load_recognition_method": {
+		"label": "Load Recognition Method",
+		"valueSize": 1,
+		"minValue": 0,
+		"maxValue": 2,
+		"defaultValue": 2,
+		"unsigned": true,
+		"readOnly": false,
+		"writeOnly": false,
+		"allowManualEntry": false,
+		"options": [
+			{
+				"label": "Never recognize the load when power on",
+				"value": 0
+			},
+			{
+				"label": "Only recognize once when first power on",
+				"value": 1
+			},
+			{
+				"label": "Recognize the load once power on",
+				"value": 2
+			}
+		]
+	},
+	// Appointment times
+	"base_appointment_day": {
+		"description": "Add values to select day(s) of week: Disable = 0; Monday = 1; Tuesday = 2; Wednesday = 4; Thursday = 8; Friday = 16; Saturday = 32; Sunday = 64",
+		"valueSize": 4,
+		"minValue": 0,
+		"maxValue": 127,
+		"defaultValue": 0,
+		"readOnly": false,
+		"writeOnly": false,
+		"allowManualEntry": true,
+		"options": [
+			{
+				"label": "Disable",
+				"value": 0
+			}
+		]
+	},
+	"base_appointment_hour": {
+		"valueSize": 4,
+		"minValue": 0,
+		"maxValue": 24,
+		"defaultValue": 0,
+		"readOnly": false,
+		"writeOnly": false,
+		"allowManualEntry": true
+	},
+	"base_appointment_minute": {
+		"valueSize": 4,
+		"minValue": 0,
+		"maxValue": 59,
+		"defaultValue": 0,
+		"readOnly": false,
+		"writeOnly": false,
+		"allowManualEntry": true
+	},
+	"enable_appointment_one": {
+		"$import": "../../templates/master_template.json#base_enable_disable",
+		"label": "Auto-On Schedule One"
+	},
+	"appointment_one_day": {
+		"$import": "#base_appointment_day",
+		"label": "Auto-On Schedule One: Day"
+	},
+	"appointment_one_hour": {
+		"$import": "#base_appointment_hour",
+		"label": "Auto-On Schedule One: Hour"
+	},
+	"appointment_one_minute": {
+		"$import": "#base_appointment_minute",
+		"label": "Auto-On Schedule One: Minute"
+	},
+	"appointment_one_brightnesss": {
+		"$import": "../../templates/master_template.json#base_0-99_nounit",
+		"label": "Auto-On Schedule One: Brightness"
+	},
+	"enable_appointment_two": {
+		"$import": "../../templates/master_template.json#base_enable_disable",
+		"label": "Auto-On Schedule Two"
+	},
+	"appointment_two_day": {
+		"$import": "#base_appointment_day",
+		"label": "Auto-On Schedule Two: Day"
+	},
+	"appointment_two_hour": {
+		"$import": "#base_appointment_hour",
+		"label": "Auto-On Schedule Two: Hour"
+	},
+	"appointment_two_minute": {
+		"$import": "#base_appointment_minute",
+		"label": "Auto-On Schedule Two: Minute"
+	},
+	"appointment_two_brightnesss": {
+		"$import": "../../templates/master_template.json#base_0-99_nounit",
+		"label": "Auto-On Schedule Two: Brightness"
+	},
+	"night_light_hour_on": {
+		"$import": "#base_appointment_hour",
+		"label": "Night Light (On): Hour"
+	},
+	"night_light_minute_on": {
+		"$import": "#base_appointment_minute",
+		"label": "Night Light (On): Minute"
+	},
+	"night_light_hour_off": {
+		"$import": "#base_appointment_hour",
+		"label": "Night Light (Off): Hour"
+	},
+	"night_light_minute_off": {
+		"$import": "#base_appointment_minute",
+		"label": "Night Light (Off): Minute"
+	},
+	// WallSwipe Options
+	"scene_control": {
+		"$import": "../../templates/master_template.json#base_enable_disable",
+		"label": "Scene Control (All Waves)",
+		"valueSize": 4,
+		"defaultValue": 1
+	},
+	"scene_control_left_right_wave": {
+		"$import": "../../templates/master_template.json#base_enable_disable",
+		"label": "Scene Control (Left/Right Wave)",
+		"valueSize": 4,
+		"defaultValue": 1
+	},
+	"wave_option": {
+		"$import": "../../templates/master_template.json#base_0-1_nounit",
+		"label": "Wave Option",
+		"valueSize": 4,
+		"defaultValue": 1,
+		"options": [
+			{
+				"label": "Wave Option 1",
+				"value": 0
+			},
+			{
+				"label": "Wave Option 2",
+				"value": 1
+			}
+		]
+	},
+	"enable_disable_ir_sensor": {
+		"$import": "../../templates/master_template.json#base_enable_disable",
+		"label": "WallSwipe IR sensor"
+	},
+	"button_color_brightness": {
+		"$import": "../../templates/master_template.json#base_0-99_nounit",
+		"label": "WallSwipe Button Brightness",
+		"valueSize": 4,
+		"defaultValue": 87
+	},
+	"button_color_red": {
+		"$import": "../../templates/master_template.json#base_0-255_nounit",
+		"label": "WallSwipe Button Color: Red",
+		"valueSize": 4,
+		"defaultValue": 255
+	},
+	"button_color_green": {
+		"$import": "../../templates/master_template.json#base_0-255_nounit",
+		"label": "WallSwipe Button Color: Green",
+		"valueSize": 4,
+		"defaultValue": 255
+	},
+	"button_color_blue": {
+		"$import": "../../templates/master_template.json#base_0-255_nounit",
+		"label": "WallSwipe Button Color: Blue",
+		"valueSize": 4,
+		"defaultValue": 255
+	},
+	"button_color_up_brightness": {
+		"$import": "../../templates/master_template.json#base_0-99_nounit",
+		"label": "LED Indicator on Up Gesture: Brightness",
+		"valueSize": 4,
+		"defaultValue": 23
+	},
+	"button_color_up_red": {
+		"$import": "../../templates/master_template.json#base_0-255_nounit",
+		"label": "LED Indicator on Up Gesture: Brightness: Red",
+		"valueSize": 4,
+		"defaultValue": 255
+	},
+	"button_color_up_green": {
+		"$import": "../../templates/master_template.json#base_0-255_nounit",
+		"label": "LED Indicator on Up Gesture: Brightness: Green",
+		"valueSize": 4,
+		"defaultValue": 255
+	},
+	"button_color_up_blue": {
+		"$import": "../../templates/master_template.json#base_0-255_nounit",
+		"label": "LED Indicator on Up Gesture: Brightness: Blue",
+		"valueSize": 4,
+		"defaultValue": 255
+	},
+	"button_color_down_brightness": {
+		"$import": "../../templates/master_template.json#base_0-99_nounit",
+		"label": "LED Indicator on Down Gesture: Brightness",
+		"valueSize": 4,
+		"defaultValue": 23
+	},
+	"button_color_down_red": {
+		"$import": "../../templates/master_template.json#base_0-255_nounit",
+		"label": "LED Indicator on Down Gesture: Brightness: Red",
+		"valueSize": 4,
+		"defaultValue": 255
+	},
+	"button_color_down_green": {
+		"$import": "../../templates/master_template.json#base_0-255_nounit",
+		"label": "LED Indicator on Down Gesture: Brightness: Green",
+		"valueSize": 4,
+		"defaultValue": 255
+	},
+	"button_color_down_blue": {
+		"$import": "../../templates/master_template.json#base_0-255_nounit",
+		"label": "LED Indicator on Down Gesture: Brightness: Blue",
+		"valueSize": 4,
+		"defaultValue": 255
+	},
+	"button_color_left_brightness": {
+		"$import": "../../templates/master_template.json#base_0-99_nounit",
+		"label": "LED Indicator on Left Gesture: Brightness",
+		"valueSize": 4,
+		"defaultValue": 23
+	},
+	"button_color_left_red": {
+		"$import": "../../templates/master_template.json#base_0-255_nounit",
+		"label": "LED Indicator on Left Gesture: Brightness: Red",
+		"valueSize": 4,
+		"defaultValue": 255
+	},
+	"button_color_left_green": {
+		"$import": "../../templates/master_template.json#base_0-255_nounit",
+		"label": "LED Indicator on Left Gesture: Brightness: Green",
+		"valueSize": 4,
+		"defaultValue": 255
+	},
+	"button_color_left_blue": {
+		"$import": "../../templates/master_template.json#base_0-255_nounit",
+		"label": "LED Indicator on Left Gesture: Brightness: Blue",
+		"valueSize": 4,
+		"defaultValue": 255
+	},
+	"button_color_right_brightness": {
+		"$import": "../../templates/master_template.json#base_0-99_nounit",
+		"label": "LED Indicator on Right Gesture: Brightness",
+		"valueSize": 4,
+		"defaultValue": 23
+	},
+	"button_color_right_red": {
+		"$import": "../../templates/master_template.json#base_0-255_nounit",
+		"label": "LED Indicator on Right Gesture: Brightness: Red",
+		"valueSize": 4,
+		"defaultValue": 255
+	},
+	"button_color_right_green": {
+		"$import": "../../templates/master_template.json#base_0-255_nounit",
+		"label": "LED Indicator on Right Gesture: Brightness: Green",
+		"valueSize": 4,
+		"defaultValue": 255
+	},
+	"button_color_right_blue": {
+		"$import": "../../templates/master_template.json#base_0-255_nounit",
+		"label": "LED Indicator on Right Gesture: Brightness: Blue",
+		"valueSize": 4,
+		"defaultValue": 255
+	},
+	"button_color_night_brightness": {
+		"$import": "../../templates/master_template.json#base_0-99_nounit",
+		"label": "LED Indicator (Night): Brightness",
+		"valueSize": 4,
+		"defaultValue": 23
+	},
+	"button_color_night_red": {
+		"$import": "../../templates/master_template.json#base_0-255_nounit",
+		"label": "LED Indicator (Night): Brightness: Red",
+		"valueSize": 4,
+		"defaultValue": 255
+	},
+	"button_color_night_green": {
+		"$import": "../../templates/master_template.json#base_0-255_nounit",
+		"label": "LED Indicator (Night): Brightness: Green",
+		"valueSize": 4,
+		"defaultValue": 255
+	},
+	"button_color_night_blue": {
+		"$import": "../../templates/master_template.json#base_0-255_nounit",
+		"label": "LED Indicator (Night): Brightness: Blue",
+		"valueSize": 4,
+		"defaultValue": 255
+	},
+	"wallswipe_recalibrate": {
+		"label": "WallSwipe Sensitivity",
+		"valueSize": 1,
+		"minValue": 0,
+		"maxValue": 255,
+		"defaultValue": 0,
+		"unsigned": true,
+		"readOnly": false,
+		"writeOnly": true,
+		"allowManualEntry": true
+	},
+	"wallswipe_status": {
+		"label": "WallSwipe Status",
+		"valueSize": 1,
+		"minValue": 0,
+		"maxValue": 1,
+		"defaultValue": 0,
+		"unsigned": true,
+		"readOnly": true,
+		"writeOnly": false,
+		"allowManualEntry": false,
+		"options": [
+			{
+				"label": "Disconnected",
+				"value": 0
+			},
+			{
+				"label": "Connected",
+				"value": 1
+			}
+		]
+	},
+	"wallswipe_reset": {
+		"$import": "../../templates/master_template.json#base_enable_disable",
+		"label": "WallSwipe Reset Function",
+		"defaultValue": 1
 	}
 }

@@ -1,0 +1,63 @@
+// AEON Labs DSD31
+// Siren Gen5
+{
+	"manufacturer": "AEON Labs",
+	"manufacturerId": "0x0086",
+	"label": "DSD31",
+	"description": "Siren Gen5",
+	"devices": [
+		{
+			"productType": "0x0004",
+			"productId": "0x0050"
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"supportsZWavePlus": true,
+	"paramInformation": {
+		"37[0xff00]": {
+			"label": "Siren Sound",
+			"valueSize": 2,
+			"minValue": 1,
+			"maxValue": 5,
+			"defaultValue": 1,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Siren Sound 1",
+					"value": 1
+				},
+				{
+					"label": "Siren Sound 2",
+					"value": 2
+				},
+				{
+					"label": "Siren Sound 3",
+					"value": 3
+				},
+				{
+					"label": "Siren Sound 4",
+					"value": 4
+				},
+				{
+					"label": "Siren Sound 5",
+					"value": 5
+				}
+			]
+		},
+		"37[0xff]": {
+			"$import": "../templates/master_template.json#volume_three",
+			"valueSize": 2
+		},
+		"80": {
+			"$import": "templates/aeotec_template.json#enable_notifications"
+		},
+		"252": {
+			"$import": "templates/aeotec_template.json#lock_configuration"
+		}
+	}
+}
