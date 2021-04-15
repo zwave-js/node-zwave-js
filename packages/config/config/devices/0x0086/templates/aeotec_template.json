@@ -221,7 +221,7 @@
 		"writeOnly": false,
 		"allowManualEntry": true
 	},
-	"celsius_farenheit": {
+	"celsius_fahrenheit": {
 		"valueSize": 4,
 		"minValue": 1,
 		"maxValue": 2,
@@ -240,7 +240,7 @@
 			}
 		]
 	},
-	"celsius_farenheit_0": {
+	"celsius_fahrenheit_0": {
 		"$import": "../../templates/master_template.json#base_0-1_nounit",
 		"valueSize": 4,
 		"options": [
