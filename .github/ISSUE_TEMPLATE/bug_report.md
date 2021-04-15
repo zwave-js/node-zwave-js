@@ -20,7 +20,7 @@ assignees:
   UNLESS a developer told you to come here.
 
   3. Check the troubleshooting section if your problem is described there:
-  https://zwave-js.github.io/node-zwave-js/#/development/troubleshooting
+  https://zwave-js.github.io/node-zwave-js/#/troubleshooting/index
 
   4. Check the changelog if your problem was already fixed recently.
   https://github.com/zwave-js/node-zwave-js/blob/master/CHANGELOG.md
