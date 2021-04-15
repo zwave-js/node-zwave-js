@@ -66,11 +66,11 @@
 			"$import": "templates/aeotec_template.json#enable_notifications_0-3"
 		},
 		"81": {
-			"$import": "templates/aeotec_template.json#enable_notifications_basic_only",
+			"$import": "templates/aeotec_template.json#enable_notification_basic_set_only",
 			"label": "Send Notifications to Associated Devices (Group 3)"
 		},
 		"82": {
-			"$import": "templates/aeotec_template.json#enable_notifications_basic_only",
+			"$import": "templates/aeotec_template.json#enable_notification_basic_set_only",
 			"label": "Send Notifications to Associated Devices (Group 4)"
 		},
 		"83": {
@@ -198,11 +198,11 @@
 			"$import": "templates/aeotec_template.json#switch_mode_state_s2"
 		},
 		"122": {
-			"$import": "templates/aeotec_template.json#switch_disconnet_s1"
+			"$import": "templates/aeotec_template.json#switch_destination_s1"
 		},
 		"123": {
 			"$if": "firmwareVersion >= 2.0",
-			"$import": "templates/aeotec_template.json#switch_disconnet_s2"
+			"$import": "templates/aeotec_template.json#switch_destination_s2"
 		},
 		"252": {
 			"$import": "templates/aeotec_template.json#lock_configuration"

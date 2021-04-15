@@ -125,11 +125,11 @@
 		"allowManualEntry": false,
 		"options": [
 			{
-				"label": "Basic CC",
+				"label": "Basic CC Report",
 				"value": 1
 			},
 			{
-				"label": "Sensor Binary Report CC",
+				"label": "Binary Sensor CC Report",
 				"value": 2
 			}
 		]
@@ -146,11 +146,11 @@
 		"allowManualEntry": false,
 		"options": [
 			{
-				"label": "Sensor Binary Report CC",
+				"label": "Binary Sensor CC Report",
 				"value": 16
 			},
 			{
-				"label": "Basic CC",
+				"label": "Basic CC Report",
 				"value": 256
 			}
 		]
@@ -171,15 +171,15 @@
 				"value": 0
 			},
 			{
-				"label": "Basic CC",
+				"label": "Basic CC Report",
 				"value": 1
 			},
 			{
-				"label": "Binary Report CC",
+				"label": "Binary Sensor CC Report",
 				"value": 2
 			},
 			{
-				"label": "Basic CC and Binary Report CC",
+				"label": "Basic CC Report and Binary Sensor CC Report",
 				"value": 3
 			}
 		]
@@ -199,11 +199,11 @@
 				"value": 0
 			},
 			{
-				"label": "Basic CC",
+				"label": "Basic CC Set",
 				"value": 1
 			},
 			{
-				"label": "MultiLevel CC",
+				"label": "MultiLevel Switch CC Report",
 				"value": 2
 			}
 		]
@@ -434,7 +434,7 @@
 			}
 		]
 	},
-	"enable_notifications_basic_only": {
+	"enable_notification_basic_report_only": {
 		"label": "Send Notifications to Associated Devices (Group 1)",
 		"valueSize": 1,
 		"minValue": 0,
@@ -450,7 +450,28 @@
 				"value": 0
 			},
 			{
-				"label": "Basic CC",
+				"label": "Basic CC Report",
+				"value": 1
+			}
+		]
+	},
+	"enable_notification_basic_set_only": {
+		"label": "Send Notifications to Associated Devices (Group 1)",
+		"valueSize": 1,
+		"minValue": 0,
+		"maxValue": 1,
+		"defaultValue": 0,
+		"unsigned": true,
+		"readOnly": false,
+		"writeOnly": false,
+		"allowManualEntry": false,
+		"options": [
+			{
+				"label": "Disabled",
+				"value": 0
+			},
+			{
+				"label": "Basic CC Set",
 				"value": 1
 			}
 		]
@@ -475,7 +496,7 @@
 				"value": 1
 			},
 			{
-				"label": "Basic CC",
+				"label": "Basic CC Report",
 				"value": 2
 			}
 		]
@@ -500,7 +521,7 @@
 				"value": 1
 			},
 			{
-				"label": "Basic CC",
+				"label": "Basic CC Report",
 				"value": 2
 			},
 			{
@@ -529,11 +550,11 @@
 				"value": 1
 			},
 			{
-				"label": "Basic CC",
+				"label": "Basic CC Report",
 				"value": 2
 			},
 			{
-				"label": "Multilevel Switch",
+				"label": "Multilevel Switch CC Report",
 				"value": 3
 			},
 
@@ -1336,27 +1357,6 @@
 		"writeOnly": false,
 		"allowManualEntry": true
 	},
-	"current_power_mode": {
-		"$if": "firmwareVersion >= 1.7 && firmwareVersion <= 1.9",
-		"label": "Current Power Mode",
-		"valueSize": 2,
-		"minValue": 0,
-		"maxValue": 1,
-		"defaultValue": 0,
-		"readOnly": true,
-		"writeOnly": false,
-		"allowManualEntry": false,
-		"options": [
-			{
-				"label": "USB power mode",
-				"value": 0
-			},
-			{
-				"label": "Battery power mode",
-				"value": 1
-			}
-		]
-	},
 	"sleep_state": {
 		"label": "Sleep State",
 		"valueSize": 2,
@@ -1377,7 +1377,7 @@
 			}
 		]
 	},
-	"switch_disconnet_s1": {
+	"switch_destination_s1": {
 		"label": "Control Destination (S1)",
 		"valueSize": 1,
 		"minValue": 1,
@@ -1402,7 +1402,7 @@
 			}
 		]
 	},
-	"switch_disconnet_s2": {
+	"switch_destination_s2": {
 		"label": "Control Destination (S2)",
 		"valueSize": 1,
 		"minValue": 1,
@@ -1524,22 +1524,22 @@
 		"allowManualEntry": false,
 		"options": [
 			{
-				"label": "Never recognize the load when power on",
+				"label": "Never",
 				"value": 0
 			},
 			{
-				"label": "Only recognize once when first power on",
+				"label": "Only on first power on",
 				"value": 1
 			},
 			{
-				"label": "Recognize the load once power on",
+				"label": "Every power on",
 				"value": 2
 			}
 		]
 	},
 	// Appointment times
 	"base_appointment_day": {
-		"description": "Add values to select day(s) of week: Disable = 0; Monday = 1; Tuesday = 2; Wednesday = 4; Thursday = 8; Friday = 16; Saturday = 32; Sunday = 64",
+		"description": "Sum values to select day(s) of week: Disable = 0; Monday = 1; Tuesday = 2; Wednesday = 4; Thursday = 8; Friday = 16; Saturday = 32; Sunday = 64",
 		"valueSize": 4,
 		"minValue": 0,
 		"maxValue": 127,

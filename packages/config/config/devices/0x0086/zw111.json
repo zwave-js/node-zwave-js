@@ -205,10 +205,10 @@
 			"$import": "templates/aeotec_template.json#switch_mode_state_s2"
 		},
 		"123": {
-			"$import": "templates/aeotec_template.json#switch_disconnet_s1"
+			"$import": "templates/aeotec_template.json#switch_destination_s1"
 		},
 		"124": {
-			"$import": "templates/aeotec_template.json#switch_disconnet_s2"
+			"$import": "templates/aeotec_template.json#switch_destination_s2"
 		},
 		"125": {
 			"$import": "templates/aeotec_template.json#dimming_rate_255"

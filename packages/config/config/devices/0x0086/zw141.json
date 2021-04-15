@@ -44,7 +44,7 @@
 			"allowManualEntry": true
 		},
 		"80": {
-			"$import": "templates/aeotec_template.json#enable_notifications_basic_only"
+			"$import": "templates/aeotec_template.json#enable_notification_basic_report_only"
 		},
 		"85": {
 			"label": "Operation Mode of External Switch",
