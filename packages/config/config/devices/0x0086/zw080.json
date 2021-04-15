@@ -15,11 +15,6 @@
 			"productType": "0x0204",
 			"productId": "0x0050",
 			"zwaveAllianceId": 1141
-		},
-		{
-			"productType": "0x0004",
-			"productId": "0x0050",
-			"zwaveAllianceId": 1136
 		}
 	],
 	"firmwareVersion": {

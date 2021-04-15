@@ -1574,7 +1574,8 @@
 	},
 	"enable_appointment_one": {
 		"$import": "../../templates/master_template.json#base_enable_disable",
-		"label": "Auto-On Schedule One"
+		"label": "Auto-On Schedule One",
+		"valueSize": 4
 	},
 	"appointment_one_day": {
 		"$import": "#base_appointment_day",
@@ -1582,7 +1583,8 @@
 	},
 	"appointment_one_hour": {
 		"$import": "#base_appointment_hour",
-		"label": "Auto-On Schedule One: Hour"
+		"label": "Auto-On Schedule One: Hour",
+		"valueSize": 4
 	},
 	"appointment_one_minute": {
 		"$import": "#base_appointment_minute",
@@ -1590,11 +1592,13 @@
 	},
 	"appointment_one_brightness": {
 		"$import": "../../templates/master_template.json#base_0-99_nounit",
-		"label": "Auto-On Schedule One: Brightness"
+		"label": "Auto-On Schedule One: Brightness",
+		"valueSize": 4
 	},
 	"enable_appointment_two": {
 		"$import": "../../templates/master_template.json#base_enable_disable",
-		"label": "Auto-On Schedule Two"
+		"label": "Auto-On Schedule Two",
+		"valueSize": 4
 	},
 	"appointment_two_day": {
 		"$import": "#base_appointment_day",
@@ -1610,7 +1614,8 @@
 	},
 	"appointment_two_brightness": {
 		"$import": "../../templates/master_template.json#base_0-99_nounit",
-		"label": "Auto-On Schedule Two: Brightness"
+		"label": "Auto-On Schedule Two: Brightness",
+		"valueSize": 4
 	},
 	"night_light_hour_on": {
 		"$import": "#base_appointment_hour",
@@ -1659,7 +1664,8 @@
 	},
 	"enable_disable_ir_sensor": {
 		"$import": "../../templates/master_template.json#base_enable_disable",
-		"label": "WallSwipe IR sensor"
+		"label": "WallSwipe IR sensor",
+		"valueSize": 4
 	},
 	"button_color_brightness": {
 		"$import": "../../templates/master_template.json#base_0-99_nounit",
