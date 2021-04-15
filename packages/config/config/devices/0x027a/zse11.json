@@ -44,7 +44,7 @@
 			"allowManualEntry": true
 		},
 		"19": {
-			"label": "LED Indicator for Motion",
+			"label": "Flash LED on Motion",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 1,
@@ -54,11 +54,11 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "Off",
+					"label": "Disable",
 					"value": 0
 				},
 				{
-					"label": "Flash LED on Motion",
+					"label": "Enable",
 					"value": 1
 				}
 			]
