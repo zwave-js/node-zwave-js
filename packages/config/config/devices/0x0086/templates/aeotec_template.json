@@ -1588,7 +1588,7 @@
 		"$import": "#base_appointment_minute",
 		"label": "Auto-On Schedule One: Minute"
 	},
-	"appointment_one_brightnesss": {
+	"appointment_one_brightness": {
 		"$import": "../../templates/master_template.json#base_0-99_nounit",
 		"label": "Auto-On Schedule One: Brightness"
 	},
@@ -1608,7 +1608,7 @@
 		"$import": "#base_appointment_minute",
 		"label": "Auto-On Schedule Two: Minute"
 	},
-	"appointment_two_brightnesss": {
+	"appointment_two_brightness": {
 		"$import": "../../templates/master_template.json#base_0-99_nounit",
 		"label": "Auto-On Schedule Two: Brightness"
 	},
