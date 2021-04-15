@@ -30,7 +30,7 @@
 	"paramInformation": {
 		"1": {
 			"label": "Factory Reset",
-			"valueSize": 1,
+			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 21930,
 			"defaultValue": 0,
