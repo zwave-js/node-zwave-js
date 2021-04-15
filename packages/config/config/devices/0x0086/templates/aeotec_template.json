@@ -1487,7 +1487,7 @@
 			{
 				"label": "Unknown",
 				"value": 0
-			}
+			},
 			{
 				"label": "Resistive load",
 				"value": 1
@@ -1500,7 +1500,6 @@
 				"label": "Inductive load",
 				"value": 3
 			}
-
 		]
 	},
 	"min_brightness": {
