@@ -39,6 +39,25 @@
 		"min": "0.0",
 		"max": "255.255"
 	},
+	"associations": {
+		"1": {
+			"label": "Lifeline",
+			"maxNodes": 1,
+			"isLifeline": true
+		},
+		"2": {
+			"label": "Forward Received Commands",
+			"maxNodes": 5
+		},
+		"3": {
+			"label": "Basic Set for Switch S1",
+			"maxNodes": 5
+		},
+		"4": {
+			"label": "Basic Set for Switch S2",
+			"maxNodes": 5
+		}
+	},
 	"paramInformation": {
 		"3": {
 			"$import": "templates/aeotec_template.json#current_overload"
