@@ -56,9 +56,9 @@
 		},
 		"121": {
 			"label": "Sensor Report Type",
-			"valueSize": 1,
+			"valueSize": 4,
 			"minValue": 1,
-			"maxValue": 16,
+			"maxValue": 17,
 			"defaultValue": 1,
 			"unsigned": true,
 			"readOnly": false,
@@ -66,12 +66,16 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "Send Sensor Binary Report CC",
+					"label": "Basic CC Set",
 					"value": 1
 				},
 				{
-					"label": "Send Basic Set CC",
+					"label": "Binary Sensor CC Report",
 					"value": 16
+				},
+				{
+					"label": "Basic CC Set and Binary Sensor CC Report",
+					"value": 17
 				}
 			]
 		},
