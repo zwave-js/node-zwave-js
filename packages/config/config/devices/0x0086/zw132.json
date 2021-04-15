@@ -120,11 +120,11 @@
 			"$import": "templates/aeotec_template.json#send_automatic_reports"
 		},
 		"91": {
-			"$import": "../templates/master_template.json#wattage_trigger",
+			"$import": "templates/aeotec_template.json#wattage_trigger",
 			"defaultValue": 25
 		},
 		"92": {
-			"$import": "../templates/master_template.json#wattage_percent_trigger",
+			"$import": "templates/aeotec_template.json#wattage_percent_trigger",
 			"defaultValue": 5
 		},
 		"100": {

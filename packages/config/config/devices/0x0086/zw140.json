@@ -119,9 +119,6 @@
 		"122": {
 			"$import": "templates/aeotec_template.json#switch_disconnet_s1"
 		},
-		"252": {
-			"$import": "templates/aeotec_template.json#lock_configuration"
-		},
 		// WallSwipe Settings
 		"144": {
 			"$if": "firmwareVersion >= 2.0",
