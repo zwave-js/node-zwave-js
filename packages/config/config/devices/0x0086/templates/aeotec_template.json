@@ -150,11 +150,7 @@
 				"value": 16
 			},
 			{
-<<<<<<< HEAD
-				"label": "Basic Set CC",
-=======
 				"label": "Basic CC",
->>>>>>> 0e2f493d... feat: aeotec group 2
 				"value": 256
 			}
 		]

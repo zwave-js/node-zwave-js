@@ -359,9 +359,6 @@
 			"$import": "templates/aeotec_template.json#factory_reset_exclude"
 		}
 	},
-	"compat": {
-		"treatBasicSetAsEvent": true
-	},
 	"metadata": {
 		"inclusion": "Turn the primary controller of Z-Wave network into inclusion mode, short press the product’s Action button that you can find on the product's housing",
 		"exclusion": "Turn the primary controller of Z-Wave network into exclusion mode, short press the product’s Action button that you can find on the product's housing",
