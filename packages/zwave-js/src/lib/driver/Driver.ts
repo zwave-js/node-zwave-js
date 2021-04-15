@@ -2149,18 +2149,8 @@ ${handlers.length} left`,
 					message: `The node was reset locally, removing it`,
 					direction: "inbound",
 				});
-				if (!(await this.controller.isFailedNode(msg.command.nodeId))) {
-					try {
-						// Force a ping of the node, so it gets added to the failed nodes list
-						node.markAsAwake();
-						await node.commandClasses["No Operation"].send();
-					} catch {
-						// this is expected
-					}
-				}
 
 				try {
-					// ...because we can only remove failed nodes
 					await this.controller.removeFailedNode(msg.command.nodeId);
 				} catch (e) {
 					this.controllerLog.logNode(msg.command.nodeId, {
