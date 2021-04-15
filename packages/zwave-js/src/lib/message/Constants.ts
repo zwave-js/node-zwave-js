@@ -62,7 +62,7 @@ export enum FunctionType {
 
 	SerialAPISetup = 0x0b, // Configure the Serial API
 
-	UNKNOWN_FUNC_RF_RECEIVE_MODE = 0x10, // Power down the RF section of the stick
+	SetRFReceiveMode = 0x10, // Power the RF section of the stick down/up
 	UNKNOWN_FUNC_SET_SLEEP_MODE = 0x11, // Set the CPU into sleep mode
 
 	FUNC_ID_ZW_SEND_NODE_INFORMATION = 0x12, // Send Node Information Frame of the stick

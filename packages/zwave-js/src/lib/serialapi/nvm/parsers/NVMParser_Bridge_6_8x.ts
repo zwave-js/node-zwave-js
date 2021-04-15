@@ -1,3 +1,5 @@
+// @ts-nocheck
+
 import { HOMEID_BYTES, MAX_NODES, NUM_NODEMASK_BYTES } from "@zwave-js/core";
 import { NVMJSON, NVMParser } from "./NVMParser";
 import { NVMEntryType, NVMLayout } from "./shared";

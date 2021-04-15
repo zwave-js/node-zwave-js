@@ -79,6 +79,10 @@ import {
 	SerialAPISetup_SetTXStatusReportResponse,
 } from "../serialapi/misc/SerialAPISetupMessages";
 import {
+	SetRFReceiveModeRequest,
+	SetRFReceiveModeResponse,
+} from "../serialapi/misc/SetRFReceiveModeMessages";
+import {
 	ExtNVMReadLongBufferRequest,
 	ExtNVMReadLongBufferResponse,
 } from "../serialapi/nvm/ExtNVMReadLongBufferMessages";
@@ -2987,6 +2991,25 @@ ${associatedNodes.join(", ")}`,
 		}
 	}
 
+	/** Turns the Z-Wave radio on or off */
+	public async toggleRF(enabled: boolean): Promise<boolean> {
+		try {
+			this.driver.controllerLog.print(
+				`Turning RF ${enabled ? "on" : "off"}...`,
+			);
+			const ret = await this.driver.sendMessage<SetRFReceiveModeResponse>(
+				new SetRFReceiveModeRequest(this.driver, { enabled }),
+			);
+			return ret.isOK();
+		} catch (e) {
+			this.driver.controllerLog.print(
+				`Error turning RF ${enabled ? "on" : "off"}: ${e.message}`,
+				"error",
+			);
+			return false;
+		}
+	}
+
 	/** Returns information of the controller's external NVM */
 	public async getNVMId(): Promise<NVMId> {
 		const ret = await this.driver.sendMessage<GetNVMIdResponse>(
@@ -3054,8 +3077,13 @@ ${associatedNodes.join(", ")}`,
 	public async backupNVMRaw(
 		onProgress?: (bytesRead: number, total: number) => void,
 	): Promise<Buffer> {
-		// TODO: Power down RF before dumping
-		// ZW_SetRFReceiveMode
+		// Turn Z-Wave radio off to avoid having the protocol write to the NVM while dumping it
+		if (!(await this.toggleRF(false))) {
+			throw new ZWaveError(
+				"Could not turn off the Z-Wave radio before creating NVM backup!",
+				ZWaveErrorCodes.Controller_ResponseNOK,
+			);
+		}
 
 		const size = nvmSizeToBufferSize((await this.getNVMId()).memorySize);
 		if (!size) {
@@ -3087,8 +3115,8 @@ ${associatedNodes.join(", ")}`,
 		// so you can figure out which pages you don't have to save or restore. If you do this, you need to make sure to issue a
 		// "factory reset" before restoring the NVM - that'll blank out the NVM to 0xffs before initializing it.
 
-		// TODO: Power up RF after dumping
-		// ZW_SetRFReceiveMode
+		// Turn Z-Wave radio back on
+		await this.toggleRF(true);
 
 		return ret;
 	}
