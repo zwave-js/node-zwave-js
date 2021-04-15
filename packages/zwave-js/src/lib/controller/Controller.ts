@@ -1930,9 +1930,11 @@ ${associatedNodes.join(", ")}`,
 		const node = this.nodes.getOrThrow(nodeId);
 		const targetNode = this.nodes.getOrThrow(association.nodeId);
 
-		const targetEndpoint = targetNode.getEndpoint(
-			association.endpoint ?? 0,
-		);
+		// Check that the target endpoint exists except when adding an association to the controller
+		const targetEndpoint =
+			association.nodeId === this._ownNodeId
+				? targetNode
+				: targetNode.getEndpoint(association.endpoint ?? 0);
 		if (!targetEndpoint) {
 			throw new ZWaveError(
 				`The endpoint ${association.endpoint} was not found on node ${association.nodeId}!`,
@@ -1978,13 +1980,13 @@ ${associatedNodes.join(", ")}`,
 		// actuator Command Class if the actual association group sends Basic Control Command Class.
 		if (
 			groupCCs.includes(CommandClasses.Basic) &&
-			actuatorCCs.some((cc) => targetEndpoint.supportsCC(cc))
+			actuatorCCs.some((cc) => targetEndpoint?.supportsCC(cc))
 		) {
 			return true;
 		}
 
 		// Enforce that at least one issued CC is supported
-		return groupCCs.some((cc) => targetEndpoint.supportsCC(cc));
+		return groupCCs.some((cc) => targetEndpoint?.supportsCC(cc));
 	}
 
 	/**
