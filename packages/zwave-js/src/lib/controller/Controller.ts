@@ -1062,7 +1062,7 @@ export class ZWaveController extends EventEmitter {
 						new Set(),
 					),
 				);
-				// TODO: According to INS13954-7, there are several more steps and different timeouts when including a controller
+				// TODO: According to INS13954, there are several more steps and different timeouts when including a controller
 				// For now do the absolute minimum - that is include the controller
 				return true; // Don't invoke any more handlers
 			}
@@ -1085,7 +1085,14 @@ export class ZWaveController extends EventEmitter {
 				if (this._stopInclusionPromise != null)
 					this._stopInclusionPromise.resolve(true);
 
-				if (this._nodePendingInclusion != null) {
+				if (msg.statusContext!.nodeId === NODE_ID_BROADCAST) {
+					// No idea how this can happen but it dit at least once
+					this.driver.controllerLog.print(
+						`Cannot add a node with the Node ID ${NODE_ID_BROADCAST}, aborting...`,
+						"warn",
+					);
+					this._nodePendingInclusion = undefined;
+				} else if (this._nodePendingInclusion != null) {
 					const newNode = this._nodePendingInclusion;
 					const supportedCommandClasses = [
 						...newNode.implementedCommandClasses.entries(),
