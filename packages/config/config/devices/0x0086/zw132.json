@@ -108,7 +108,7 @@
 			"$import": "templates/aeotec_template.json#enable_appointment_two"
 		},
 		"87[0xff0000]": {
-			"$import": "templates/aeotec_template.json#appointment_twoday"
+			"$import": "templates/aeotec_template.json#appointment_two_day"
 		},
 		"87[0xff00]": {
 			"$import": "templates/aeotec_template.json#appointment_two_hour"
