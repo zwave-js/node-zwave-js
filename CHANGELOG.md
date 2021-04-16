@@ -2,7 +2,7 @@
 <!--
 	Add placeholder for next release with `wip` snippet
 -->
-## __WORK IN PROGRESS__
+## 7.2.4 (2021-04-16)
 ### Bugfixes
 * Adding associations to the controller with arbitrary target endpoints is no longer an error
 * Add node requrests for a node with ID 255 are no longer handled
