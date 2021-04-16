@@ -55,21 +55,21 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "Momentary Buttons",
+					"label": "Momentary",
 					"value": 0
 				},
 				{
-					"label": "Toggle (2-State Switches)",
+					"label": "Switch",
 					"value": 1
 				},
 				{
-					"label": "Roller Blind Switch - S1 Dim Up, S2 Dim Down",
+					"label": "Roller Blind Switch - S1 -> Up; S2 -> Down",
 					"value": 2
 				}
 			]
 		},
 		"3": {
-			"label": "2-State Switches",
+			"label": "Switch States",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 1,
@@ -79,11 +79,11 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "Toggle Switch without specified on/off position",
+					"label": "Toggle",
 					"value": 0
 				},
 				{
-					"label": "Toggle Switch with specified on/off position",
+					"label": "On/off switch",
 					"value": 1
 				}
 			]
@@ -118,7 +118,7 @@
 			]
 		},
 		"5": {
-			"label": "Minimum brightness level",
+			"label": "Minimum Brightness",
 			"valueSize": 1,
 			"minValue": 1,
 			"maxValue": 98,
@@ -128,7 +128,7 @@
 			"allowManualEntry": true
 		},
 		"6": {
-			"label": "Maximum brightness level",
+			"label": "Maximum Brightness",
 			"valueSize": 1,
 			"minValue": 2,
 			"maxValue": 99,
@@ -138,9 +138,10 @@
 			"allowManualEntry": true
 		},
 		"7": {
-			"label": "Single dimming step time (Manual)",
-			"unit": "10ms",
+			"label": "Dimming Step Time (Manual)",
+
 			"valueSize": 2,
+			"unit": "10ms",
 			"minValue": 1,
 			"maxValue": 255,
 			"defaultValue": 3,
@@ -149,7 +150,7 @@
 			"allowManualEntry": true
 		},
 		"8": {
-			"label": "Single dimming step size (Manual)",
+			"label": "Single Dimming Step Size (Manual)",
 			"valueSize": 1,
 			"minValue": 1,
 			"maxValue": 99,
@@ -159,9 +160,9 @@
 			"allowManualEntry": true
 		},
 		"9": {
-			"label": "Single dimming step time (Auto)",
-			"unit": "10ms",
+			"label": "Single Dimming Step Time (Auto)",
 			"valueSize": 2,
+			"unit": "10ms",
 			"minValue": 1,
 			"maxValue": 255,
 			"defaultValue": 3,
@@ -170,7 +171,7 @@
 			"allowManualEntry": true
 		},
 		"10": {
-			"label": "Single dimming step size (Auto)",
+			"label": "Single Dimming Step Size (Auto)",
 			"valueSize": 1,
 			"minValue": 1,
 			"maxValue": 99,
@@ -180,7 +181,7 @@
 			"allowManualEntry": true
 		},
 		"11": {
-			"label": "Timer function (Auto-off)",
+			"label": "Auto-Off Timer",
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 255,
