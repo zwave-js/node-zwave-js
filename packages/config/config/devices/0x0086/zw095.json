@@ -63,16 +63,16 @@
 			"$import": "templates/aeotec_template.json#selective_reporting"
 		},
 		"4": {
-			"$import": "templates/aeotec_template.json#current_threshold_wholehem"
+			"$import": "templates/aeotec_template.json#power_threshold_wholehem"
 		},
 		"5": {
-			"$import": "templates/aeotec_template.json#current_threshold_clamp1"
+			"$import": "templates/aeotec_template.json#power_threshold_clamp1"
 		},
 		"6": {
-			"$import": "templates/aeotec_template.json#current_threshold_clamp2"
+			"$import": "templates/aeotec_template.json#power_threshold_clamp2"
 		},
 		"7": {
-			"$import": "templates/aeotec_template.json#current_threshold_clamp3"
+			"$import": "templates/aeotec_template.json#power_threshold_clamp3"
 		},
 		"8": {
 			"$import": "templates/aeotec_template.json#percent_threshold_wholehem",
