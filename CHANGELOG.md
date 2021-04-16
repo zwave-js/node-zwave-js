@@ -3,10 +3,11 @@
 	Add placeholder for next release with `wip` snippet
 -->
 ## __WORK IN PROGRESS__
-<!--### Features
--->
 ### Bugfixes
-* Add associations to the controller with arbitrary target endpoints is no longer an error
+* Adding associations to the controller with arbitrary target endpoints is no longer an error
+* Add node requrests for a node with ID 255 are no longer handled
+* When reacting to locally reset node, don't try to mark it as failed twice
+* Do not override internal log transports with configured ones
 
 ### Config file changes
 * Update Remotec ZXT-600 config
@@ -18,6 +19,10 @@
 * Preserve Basic CC for Popp rain sensor
 * Update Radio Thermostat CT101 config
 * Device configuration files may now contain wakeup instructions
+* Add Qubino Smart Leak Protector
+* Fix incorrect selective reporting labels for aeon home energy meters
+* Correct Evolve LRM-AS
+* Add parameter 32 to GE/Jasco 46203
 
 ## 7.2.3 (2021-04-13)
 ### Bugfixes
