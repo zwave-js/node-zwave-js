@@ -1,10 +1,10 @@
 // Qubino ZMNHMD
-// Smart leak protector
+// Smart Leak Protector
 {
 	"manufacturer": "Qubino",
 	"manufacturerId": "0x0159",
 	"label": "ZMNHMD",
-	"description": "Smart leak protector",
+	"description": "Smart Leak Protector",
 	"devices": [
 		{
 			"productType": "0x0006",
