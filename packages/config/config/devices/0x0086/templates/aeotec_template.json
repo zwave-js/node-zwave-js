@@ -356,8 +356,8 @@
 			}
 		]
 	},
-	"current_threshold": {
-		"label": "Current Change Threshold",
+	"power_threshold": {
+		"label": "Power Change Threshold",
 		"description": "Threshold change in power consumption to induce an automatic report",
 		"valueSize": 2,
 		"unit": "W",
@@ -369,24 +369,24 @@
 		"writeOnly": false,
 		"allowManualEntry": true
 	},
-	"current_threshold_clamp1": {
-		"$import": "#current_threshold",
-		"label": "Current Change Threshold (Clamp 1)"
+	"power_threshold_clamp1": {
+		"$import": "#power_threshold",
+		"label": "Power Change Threshold (Clamp 1)"
 	},
-	"current_threshold_clamp2": {
-		"$import": "#current_threshold",
-		"label": "Current Change Threshold (Clamp 2)"
+	"power_threshold_clamp2": {
+		"$import": "#power_threshold",
+		"label": "Power Change Threshold (Clamp 2)"
 	},
-	"current_threshold_clamp3": {
-		"$import": "#current_threshold",
-		"label": "Current Change Threshold (Clamp 3)"
+	"power_threshold_clamp3": {
+		"$import": "#power_threshold",
+		"label": "Power Change Threshold (Clamp 3)"
 	},
-	"current_threshold_wholehem": {
-		"$import": "#current_threshold",
-		"label": "Current Change Threshold (Whole HEM)"
+	"power_threshold_wholehem": {
+		"$import": "#power_threshold",
+		"label": "Power Change Threshold (Whole HEM)"
 	},
 	"percent_threshold": {
-		"label": "Current Percentage Change Threshold",
+		"label": "Power Percentage Change Threshold",
 		"description": "Threshold change in power consumption (on a percentage basis) to induce an automatic report",
 		"valueSize": 1,
 		"unit": "%",
@@ -400,19 +400,19 @@
 	},
 	"percent_threshold_clamp1": {
 		"$import": "#percent_threshold",
-		"label": "Current Percentage Threshold (Clamp 1)"
+		"label": "Power Percentage Threshold (Clamp 1)"
 	},
 	"percent_threshold_clamp2": {
 		"$import": "#percent_threshold",
-		"label": "Current Percentage Threshold (Clamp 2)"
+		"label": "Power Percentage Threshold (Clamp 2)"
 	},
 	"percent_threshold_clamp3": {
 		"$import": "#percent_threshold",
-		"label": "Current Percentage Threshold (Clamp 3)"
+		"label": "Power Percentage Threshold (Clamp 3)"
 	},
 	"percent_threshold_wholehem": {
 		"$import": "#percent_threshold",
-		"label": "Current Percentage Threshold (Whole HEM)"
+		"label": "Power Percentage Threshold (Whole HEM)"
 	},
 	"reset_parameters": {
 		"valueSize": 1,
