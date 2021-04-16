@@ -35,7 +35,7 @@
 			"label": "Ignore Start Level",
 			"valueSize": 1,
 			"minValue": 0,
-			"maxValue": 255,
+			"maxValue": 1,
 			"defaultValue": 1,
 			"unsigned": true,
 			"readOnly": false,
@@ -95,7 +95,7 @@
 			]
 		},
 		"14": {
-			"label": "Enable Shade Control Group 2",
+			"label": "Shade Control Group 2",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 1,
@@ -116,7 +116,7 @@
 			]
 		},
 		"15": {
-			"label": "Enable Shade Control Group 3",
+			"label": "Shade Control Group 3",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 1,
@@ -137,7 +137,7 @@
 			]
 		},
 		"19": {
-			"label": "LED Transmission Indicator",
+			"label": "LED Indicator",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 2,
