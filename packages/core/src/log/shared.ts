@@ -135,7 +135,7 @@ export class ZWaveLogContainer extends winston.Container {
 	public getLogger(label: string): ZWaveLogger {
 		if (!this.has(label)) {
 			this.add(label, {
-				transports: this.getConfiguredTransports(),
+				transports: this.getAllTransports(),
 				format: createLoggerFormat(label),
 				// Accept all logs, no matter what. The individual loggers take care
 				// of filtering the wrong loglevels
@@ -168,34 +168,30 @@ export class ZWaveLogContainer extends winston.Container {
 			this.loglevelVisibleCache.clear();
 		}
 
-		// When the log target (console, file, filename) was changed, recreate the transport
+		// When the log target (console, file, filename) was changed, recreate the internal transports
 		// because at least the filename does not update dynamically
-		if (
-			(this.logConfig.transports as any) == undefined ||
+		// Also do this when configuring the logger for the first time
+		const recreateInternalTransports =
+			(this.fileTransport == undefined &&
+				this.consoleTransport == undefined) ||
 			changedLoggingTarget ||
-			changedFilename
-		) {
+			changedFilename;
+
+		if (recreateInternalTransports) {
 			this.fileTransport?.destroy();
 			this.fileTransport = undefined;
+		}
 
-			this.logConfig.transports =
-				((config.transports as any) as Transport[] | undefined) ??
-				this.createLogTransports();
-
+		// When the internal transports or the custom transports were changed, we need to update the loggers
+		if (recreateInternalTransports || config.transports != undefined) {
 			this.loggers.forEach((logger) =>
-				logger.configure({
-					transports: this.logConfig.transports,
-				}),
+				logger.configure({ transports: this.getAllTransports() }),
 			);
 		}
 	}
 
 	public getConfiguration(): LogConfig {
 		return this.logConfig;
-	}
-
-	public getConfiguredTransports(): Transport[] {
-		return this.logConfig.transports;
 	}
 
 	/** Tests whether a log using the given loglevel will be logged */
@@ -225,7 +221,14 @@ export class ZWaveLogContainer extends winston.Container {
 		this.logConfig.transports = [];
 	}
 
-	private createLogTransports(): Transport[] {
+	private getAllTransports(): Transport[] {
+		return [
+			...this.getInternalTransports(),
+			...(this.logConfig.transports ?? []),
+		];
+	}
+
+	private getInternalTransports(): Transport[] {
 		const ret: Transport[] = [];
 		if (this.logConfig.enabled && this.logConfig.logToFile) {
 			if (!this.fileTransport) {
