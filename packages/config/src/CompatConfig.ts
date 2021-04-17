@@ -91,6 +91,19 @@ error in compat option enableBasicSetMapping`,
 			this.enableBasicSetMapping = definition.enableBasicSetMapping;
 		}
 
+		if (definition.forceRefreshValuesCCReport != undefined) {
+			if (definition.forceRefreshValuesCCReport !== true) {
+				throwInvalidConfig(
+					"devices",
+					`config/devices/${filename}:
+error in compat option forceRefreshValuesCCReport`,
+				);
+			}
+
+			this.forceRefreshValuesCCReport =
+				definition.forceRefreshValuesCCReport;
+		}
+
 		if (definition.forceNotificationIdleReset != undefined) {
 			if (definition.forceNotificationIdleReset !== true) {
 				throwInvalidConfig(
@@ -366,6 +379,7 @@ compat option alarmMapping must be an array where all items are objects!`,
 	public readonly disableBasicMapping?: boolean;
 	public readonly disableStrictEntryControlDataValidation?: boolean;
 	public readonly enableBasicSetMapping?: boolean;
+	public readonly forceRefreshValuesCCReport?: boolean;
 	public readonly forceNotificationIdleReset?: boolean;
 	public readonly manualValueRefreshDelayMs?: number;
 	public readonly overrideFloatEncoding?: {

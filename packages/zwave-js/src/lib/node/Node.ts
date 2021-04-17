@@ -47,6 +47,7 @@ import {
 	getCompatEventValueId as getBasicCCCompatEventValueId,
 	getCurrentValueValueId as getBasicCCCurrentValueValueId,
 } from "../commandclass/BasicCC";
+import { BinarySwitchCCReport } from "../commandclass/BinarySwitchCC";
 import {
 	CentralSceneCCNotification,
 	CentralSceneKeys,
@@ -1867,6 +1868,8 @@ protocol version:      ${this._protocolVersion}`;
 			return this.handleFirmwareUpdateStatusReport(command);
 		} else if (command instanceof EntryControlCCNotification) {
 			return this.handleEntryControlNotification(command);
+		} else if (command instanceof BinarySwitchCCReport) {
+			return this.handleBinarySwitchReport(command);
 		}
 
 		// Ignore all commands that don't need to be handled
@@ -3039,6 +3042,16 @@ protocol version:      ${this._protocolVersion}`;
 			CommandClasses["Entry Control"],
 			pick(command, ["eventType", "dataType", "eventData"]),
 		);
+	}
+
+	private handleBinarySwitchReport(_command: BinarySwitchCCReport): void {
+		if (this.deviceConfig?.compat?.forceRefreshValuesCCReport) {
+			this.driver.controllerLog.logNode(
+				this.id,
+				`Refreshing values for all endpoints...`,
+			);
+			void this.refreshValues();
+		}
 	}
 
 	/**
