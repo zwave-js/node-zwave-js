@@ -1,4 +1,4 @@
-// Nortek Security & Control LLC WAPIRZ-1
+// Nortek Security & Control LLC PIR-200
 // PIR Motion Detector
 {
 	"manufacturer": "Nortek Security & Control LLC",
@@ -14,13 +14,6 @@
 	"firmwareVersion": {
 		"min": "0.0",
 		"max": "255.255"
-	},
-	"associations": {
-		"1": {
-			"label": "Group 1",
-			"maxNodes": 5,
-			"isLifeline": true
-		}
 	},
 	"paramInformation": {
 		"5": {
