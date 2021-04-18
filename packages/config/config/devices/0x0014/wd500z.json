@@ -55,6 +55,7 @@
 		},
 		"3": {
 			"label": "Night Light",
+			"description": "When enabled, the LED indicator will turn on when the light is turned off",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 1,
