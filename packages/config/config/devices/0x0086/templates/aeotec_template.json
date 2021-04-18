@@ -708,6 +708,11 @@
 		"label": "Automatic Report: Group 1 - Voltage (Clamp 2)",
 		"valueSize": 4
 	},
+	"auto_report_group1_v_clamp3": {
+		"$import": "../../templates/master_template.json#base_enable_disable",
+		"label": "Automatic Report: Group 1 - Voltage (Clamp 3)",
+		"valueSize": 4
+	},
 	"auto_report_group1_v_wholehem": {
 		"$import": "../../templates/master_template.json#base_enable_disable",
 		"label": "Automatic Report: Group 1 - Voltage (Whole HEM)",
@@ -726,6 +731,11 @@
 	"auto_report_group1_amp_clamp2": {
 		"$import": "../../templates/master_template.json#base_enable_disable",
 		"label": "Automatic Report: Group 1 - Current (Clamp 2)",
+		"valueSize": 4
+	},
+	"auto_report_group1_amp_clamp3": {
+		"$import": "../../templates/master_template.json#base_enable_disable",
+		"label": "Automatic Report: Group 1 - Current (Clamp 3)",
 		"valueSize": 4
 	},
 	"auto_report_group1_amp_wholehem": {
@@ -828,6 +838,11 @@
 		"label": "Automatic Report: Group 2 - Voltage (Clamp 2)",
 		"valueSize": 4
 	},
+	"auto_report_group2_v_clamp3": {
+		"$import": "../../templates/master_template.json#base_enable_disable",
+		"label": "Automatic Report: Group 2 - Voltage (Clamp 3)",
+		"valueSize": 4
+	},
 	"auto_report_group2_v_wholehem": {
 		"$import": "../../templates/master_template.json#base_enable_disable",
 		"label": "Automatic Report: Group 2 - Voltage (Whole HEM)",
@@ -846,6 +861,11 @@
 	"auto_report_group2_amp_clamp2": {
 		"$import": "../../templates/master_template.json#base_enable_disable",
 		"label": "Automatic Report: Group 2 - Current (Clamp 2)",
+		"valueSize": 4
+	},
+	"auto_report_group2_amp_clamp3": {
+		"$import": "../../templates/master_template.json#base_enable_disable",
+		"label": "Automatic Report: Group 2 - Current (Clamp 3)",
 		"valueSize": 4
 	},
 	"auto_report_group2_amp_wholehem": {
@@ -948,6 +968,11 @@
 		"label": "Automatic Report: Group 3 - Voltage (Clamp 2)",
 		"valueSize": 4
 	},
+	"auto_report_group3_v_clamp3": {
+		"$import": "../../templates/master_template.json#base_enable_disable",
+		"label": "Automatic Report: Group 3 - Voltage (Clamp 3)",
+		"valueSize": 4
+	},
 	"auto_report_group3_v_wholehem": {
 		"$import": "../../templates/master_template.json#base_enable_disable",
 		"label": "Automatic Report: Group 3 - Voltage (Whole HEM)",
@@ -966,6 +991,11 @@
 	"auto_report_group3_amp_clamp2": {
 		"$import": "../../templates/master_template.json#base_enable_disable",
 		"label": "Automatic Report: Group 3 - Current (Clamp 2)",
+		"valueSize": 4
+	},
+	"auto_report_group3_amp_clamp3": {
+		"$import": "../../templates/master_template.json#base_enable_disable",
+		"label": "Automatic Report: Group 3 - Current (Clamp 3)",
 		"valueSize": 4
 	},
 	"auto_report_group3_amp_wholehem": {
