@@ -377,5 +377,8 @@
 				}
 			]
 		}
+	},
+	"compat": {
+		"treatBasicSetAsEvent": true
 	}
 }
