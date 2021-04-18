@@ -104,11 +104,11 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "On when relay is off",
+					"label": "On when dimmer is off",
 					"value": 0
 				},
 				{
-					"label": "On when relay is on",
+					"label": "On when dimmer is on",
 					"value": 1
 				},
 				{
@@ -133,11 +133,11 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "On when relay is off",
+					"label": "On when dimmer is off",
 					"value": 0
 				},
 				{
-					"label": "On when relay is on",
+					"label": "On when dimmer is on",
 					"value": 1
 				},
 				{
@@ -162,11 +162,11 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "On when relay is off",
+					"label": "On when dimmer is off",
 					"value": 0
 				},
 				{
-					"label": "On when relay is on",
+					"label": "On when dimmer is on",
 					"value": 1
 				},
 				{
@@ -191,11 +191,11 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "On when relay is off",
+					"label": "On when dimmer is off",
 					"value": 0
 				},
 				{
-					"label": "On when relay is on",
+					"label": "On when dimmer is on",
 					"value": 1
 				},
 				{
@@ -528,7 +528,7 @@
 			]
 		},
 		"19": {
-			"label": "Enable / Disable Relay",
+			"label": "Relay Control",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 2,
@@ -566,11 +566,11 @@
 			"options": [
 				{
 					"label": "Disable",
-					"value": 0
+					"value": 1
 				},
 				{
 					"label": "Enable",
-					"value": 1
+					"value": 0
 				}
 			]
 		},
