@@ -3,8 +3,8 @@
 {
 	"manufacturer": "Cyberhouse",
 	"manufacturerId": "0x0014",
-	"label": "WD500Z",
-	"description": "Linear -1",
+	"label": "WD500Z-1",
+	"description": "Linear WD500Z-1",
 	"devices": [
 		{
 			"productType": "0x4457",
