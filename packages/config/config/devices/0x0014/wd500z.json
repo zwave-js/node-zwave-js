@@ -1,10 +1,10 @@
 // Cyberhouse WD500Z
-// Linear -1
+// Dimmer Switch
 {
 	"manufacturer": "Cyberhouse",
 	"manufacturerId": "0x0014",
 	"label": "WD500Z-1",
-	"description": "Linear WD500Z-1",
+	"description": "Dimmer Switch",
 	"devices": [
 		{
 			"productType": "0x4457",
