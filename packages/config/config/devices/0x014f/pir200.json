@@ -41,31 +41,31 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "highest",
+					"label": "Highest",
 					"value": 1
 				},
 				{
-					"label": "higher",
+					"label": "Higher",
 					"value": 2
 				},
 				{
-					"label": "high",
+					"label": "High",
 					"value": 3
 				},
 				{
-					"label": "normal",
+					"label": "Normal",
 					"value": 4
 				},
 				{
-					"label": "low",
+					"label": "Low",
 					"value": 5
 				},
 				{
-					"label": "lower",
+					"label": "Lower",
 					"value": 6
 				},
 				{
-					"label": "lowest",
+					"label": "Lowest",
 					"value": 7
 				}
 			]
