@@ -25,11 +25,11 @@
 			"maxNodes": 5
 		},
 		"3": {
-			"label": "Button 1 (Binary Report)",
+			"label": "Button 1 (Binary Switch Set)",
 			"maxNodes": 5
 		},
 		"4": {
-			"label": "Button 1 (Multilevel Report)",
+			"label": "Button 1 (Multilevel Set)",
 			"maxNodes": 5
 		},
 		"5": {
@@ -37,11 +37,11 @@
 			"maxNodes": 5
 		},
 		"6": {
-			"label": "Button 2 (Binary Report)",
+			"label": "Button 2 (Binary Switch Set)",
 			"maxNodes": 5
 		},
 		"7": {
-			"label": "Button 2 (Multilevel Report)",
+			"label": "Button 2 (Multilevel Set)",
 			"maxNodes": 5
 		},
 		"8": {
@@ -49,11 +49,11 @@
 			"maxNodes": 5
 		},
 		"9": {
-			"label": "Button 3  (Binary Report)",
+			"label": "Button 3 (Binary Switch Set)",
 			"maxNodes": 5
 		},
 		"10": {
-			"label": "Button 3 (Multilevel Report)",
+			"label": "Button 3 (Multilevel Set)",
 			"maxNodes": 5
 		},
 		"11": {
@@ -61,11 +61,11 @@
 			"maxNodes": 5
 		},
 		"12": {
-			"label": "Button 4 (Binary Report)",
+			"label": "Button 4 (Binary Switch Set)",
 			"maxNodes": 5
 		},
 		"13": {
-			"label": "Button 4 (Multilevel Report)",
+			"label": "Button 4 (Multilevel Set)",
 			"maxNodes": 5
 		},
 		"14": {
@@ -249,42 +249,42 @@
 		},
 		"22[0xff000000]": {
 			"$import": "templates/logic_group_template.json#led_indicator",
-			"label": "Button 1 LED Indicator ON Red"
+			"label": "Button 1 LED Indicator (On): Red"
 		},
 		"22[0xff0000]": {
 			"$import": "templates/logic_group_template.json#led_indicator",
-			"label": "Button 1 LED Indicator ON Green"
+			"label": "Button 1 LED Indicator (On): Green"
 		},
 		"22[0xff00]": {
 			"$import": "templates/logic_group_template.json#led_indicator",
-			"label": "Button 1 LED Indicator ON Blue",
+			"label": "Button 1 LED Indicator (On): Blue",
 			"defaultValue": 127
 		},
 		"22[0xff]": {
 			"$import": "../templates/master_template.json#base_0-255_nounit",
-			"label": "LED Time For Button 1 ON Blinking",
+			"label": "LED Time For Button 1 (On): Blinking",
 			"unit": "100 ms",
 			"valueSize": 4,
 			"defaultValue": 0
 		},
 		"23[0xff000000]": {
 			"$import": "templates/logic_group_template.json#led_indicator",
-			"label": "Button 1 LED Indicator OFF Red",
+			"label": "Button 1 LED Indicator (Off): Red",
 			"defaultValue": 47
 		},
 		"23[0xff0000]": {
 			"$import": "templates/logic_group_template.json#led_indicator",
-			"label": "Button 1 LED Indicator OFF Green",
+			"label": "Button 1 LED Indicator (Off): Green",
 			"defaultValue": 47
 		},
 		"23[0xff00]": {
 			"$import": "templates/logic_group_template.json#led_indicator",
-			"label": "Button 1 LED Indicator OFF Blue",
+			"label": "Button 1 LED Indicator (Off): Blue",
 			"defaultValue": 47
 		},
 		"23[0xff]": {
 			"$import": "../templates/master_template.json#base_0-255_nounit",
-			"label": "LED Time For Button 1 OFF Blinking",
+			"label": "LED Time For Button 1 (Off): Blinking",
 			"unit": "100 ms",
 			"valueSize": 4,
 			"defaultValue": 0
@@ -327,42 +327,42 @@
 		},
 		"30[0xff000000]": {
 			"$import": "templates/logic_group_template.json#led_indicator",
-			"label": "Button 2 LED Indicator ON Red"
+			"label": "Button 2 LED Indicator (On): Red"
 		},
 		"30[0xff0000]": {
 			"$import": "templates/logic_group_template.json#led_indicator",
-			"label": "Button 2 LED Indicator ON Green"
+			"label": "Button 2 LED Indicator (On): Green"
 		},
 		"30[0xff00]": {
 			"$import": "templates/logic_group_template.json#led_indicator",
-			"label": "Button 2 LED Indicator ON Blue",
+			"label": "Button 2 LED Indicator (On): Blue",
 			"defaultValue": 127
 		},
 		"30[0xff]": {
 			"$import": "../templates/master_template.json#base_0-255_nounit",
-			"label": "LED Time For Button 2 ON Blinking",
+			"label": "LED Time For Button 2 (On): Blinking",
 			"unit": "100 ms",
 			"valueSize": 4,
 			"defaultValue": 0
 		},
 		"31[0xff000000]": {
 			"$import": "templates/logic_group_template.json#led_indicator",
-			"label": "Button 2 LED Indicator OFF Red",
+			"label": "Button 2 LED Indicator (OFF) Red",
 			"defaultValue": 47
 		},
 		"31[0xff0000]": {
 			"$import": "templates/logic_group_template.json#led_indicator",
-			"label": "Button 2 LED Indicator OFF Green",
+			"label": "Button 2 LED Indicator (OFF) Green",
 			"defaultValue": 47
 		},
 		"31[0xff00]": {
 			"$import": "templates/logic_group_template.json#led_indicator",
-			"label": "Button 2 LED Indicator OFF Blue",
+			"label": "Button 2 LED Indicator (OFF) Blue",
 			"defaultValue": 47
 		},
 		"31[0xff]": {
 			"$import": "../templates/master_template.json#base_0-255_nounit",
-			"label": "LED Time For Button 2 OFF Blinking",
+			"label": "LED Time For Button 2 (OFF) Blinking",
 			"unit": "100 ms",
 			"valueSize": 4,
 			"defaultValue": 0
@@ -405,42 +405,42 @@
 		},
 		"38[0xff000000]": {
 			"$import": "templates/logic_group_template.json#led_indicator",
-			"label": "Button 3 LED Indicator ON Red"
+			"label": "Button 3 LED Indicator (On): Red"
 		},
 		"38[0xff0000]": {
 			"$import": "templates/logic_group_template.json#led_indicator",
-			"label": "Button 3 LED Indicator ON Green"
+			"label": "Button 3 LED Indicator (On): Green"
 		},
 		"38[0xff00]": {
 			"$import": "templates/logic_group_template.json#led_indicator",
-			"label": "Button 3 LED Indicator ON Blue",
+			"label": "Button 3 LED Indicator (On): Blue",
 			"defaultValue": 127
 		},
 		"38[0xff]": {
 			"$import": "../templates/master_template.json#base_0-255_nounit",
-			"label": "LED Time For Button 3 ON Blinking",
+			"label": "LED Time For Button 3 (On): Blinking",
 			"unit": "100 ms",
 			"valueSize": 4,
 			"defaultValue": 0
 		},
 		"39[0xff000000]": {
 			"$import": "templates/logic_group_template.json#led_indicator",
-			"label": "Button 3 LED Indicator OFF Red",
+			"label": "Button 3 LED Indicator (Off): Red",
 			"defaultValue": 47
 		},
 		"39[0xff0000]": {
 			"$import": "templates/logic_group_template.json#led_indicator",
-			"label": "Button 3 LED Indicator OFF Green",
+			"label": "Button 3 LED Indicator (Off): Green",
 			"defaultValue": 47
 		},
 		"39[0xff00]": {
 			"$import": "templates/logic_group_template.json#led_indicator",
-			"label": "Button 3 LED Indicator OFF Blue",
+			"label": "Button 3 LED Indicator (Off): Blue",
 			"defaultValue": 47
 		},
 		"39[0xff]": {
 			"$import": "../templates/master_template.json#base_0-255_nounit",
-			"label": "LED Time For Button 3 OFF Blinking",
+			"label": "LED Time For Button 3 (Off): Blinking",
 			"unit": "100 ms",
 			"valueSize": 4,
 			"defaultValue": 0
@@ -483,41 +483,41 @@
 		},
 		"46[0xff000000]": {
 			"$import": "templates/logic_group_template.json#led_indicator",
-			"label": "Button 4 LED Indicator ON Red"
+			"label": "Button 4 LED Indicator (On): Red"
 		},
 		"46[0xff0000]": {
 			"$import": "templates/logic_group_template.json#led_indicator",
-			"label": "Button 4 LED Indicator ON Green"
+			"label": "Button 4 LED Indicator (On): Green"
 		},
 		"46[0xff00]": {
 			"$import": "templates/logic_group_template.json#led_indicator",
-			"label": "Button 4 LED Indicator ON Blue",
+			"label": "Button 4 LED Indicator (On): Blue",
 			"defaultValue": 127
 		},
 		"46[0xff]": {
 			"$import": "../templates/master_template.json#base_0-255_nounit",
-			"label": "LED Time For Button 4 ON Blinking",
+			"label": "LED Time For Button 4 (On): Blinking",
 			"unit": "100 ms",
 			"valueSize": 4
 		},
 		"47[0xff000000]": {
 			"$import": "templates/logic_group_template.json#led_indicator",
-			"label": "Button 4 LED Indicator OFF Red",
+			"label": "Button 4 LED Indicator (Off): Red",
 			"defaultValue": 47
 		},
 		"47[0xff0000]": {
 			"$import": "templates/logic_group_template.json#led_indicator",
-			"label": "Button 4 LED Indicator OFF Green",
+			"label": "Button 4 LED Indicator (Off): Green",
 			"defaultValue": 47
 		},
 		"47[0xff00]": {
 			"$import": "templates/logic_group_template.json#led_indicator",
-			"label": "Button 4 LED Indicator OFF Blue",
+			"label": "Button 4 LED Indicator (Off): Blue",
 			"defaultValue": 47
 		},
 		"47[0xff]": {
 			"$import": "../templates/master_template.json#base_0-255_nounit",
-			"label": "LED Time For Button 4 OFF Blinking",
+			"label": "LED Time For Button 4 (Off): Blinking",
 			"unit": "100 ms",
 			"valueSize": 4,
 			"defaultValue": 0
