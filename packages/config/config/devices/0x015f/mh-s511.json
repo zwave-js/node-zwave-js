@@ -86,31 +86,31 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "Single click to switch on/off",
+					"label": "Single click (On/Off)",
 					"value": 0
 				},
 				{
-					"label": "When turned on, auto off after 'Key On Duration' seconds",
+					"label": "Auto off after 'Key on Duration' seconds",
 					"value": 1
 				},
 				{
-					"label": "When turned off, auto on after 'Key On Duration' seconds",
+					"label": "Auto on after 'Key on Duration' seconds",
 					"value": 2
 				},
 				{
-					"label": "Hold >3secs turns on, when released, turns off",
+					"label": "Held 3 seconds -> On; Release -> Off",
 					"value": 3
 				},
 				{
-					"label": "Single click for on/off, Hold >3secs on, release turns off",
+					"label": "Single click (On/Off); Held 3 seconds -> On; Release -> Off",
 					"value": 4
 				},
 				{
-					"label": "Momentary switch: hold key turns on, off once released",
+					"label": "Momentary switch; Held -> On; Release -> Off",
 					"value": 5
 				},
 				{
-					"label": "Hold >3secs turns on, Hold >3secs turns off",
+					"label": "Held 3 seconds -> On; Held 3 seconds -> Off",
 					"value": 6
 				}
 			]
@@ -139,19 +139,19 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "Key1 Responds to Basic Set and Get. No unsolicited report to Lifeline",
+					"label": "Key1 (Basic CC Set/Get); Reporting disabled",
 					"value": 0
 				},
 				{
-					"label": "Key1 Responds to Basic Set and Get. Key1 WILL send unsolicited report to Lifeline",
+					"label": "Key1 (Basic CC Set/Get); Reporting enabled",
 					"value": 1
 				},
 				{
-					"label": "All Keys respond to Basic Set. Basic Get ignored. No unsolicited report to Lifeline",
+					"label": "All keys (Basic CC Set only); Reporting disabled",
 					"value": 2
 				},
 				{
-					"label": "All Keys respond to Basic Set. Basic Get ignored. All keys send unsolicited report to Lifeline",
+					"label": "All keys (Basic CC Set only); Reporting enabled",
 					"value": 3
 				}
 			]
@@ -168,37 +168,37 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "Single click to switch on/off",
+					"label": "Single click (On/Off)",
 					"value": 0
 				},
 				{
-					"label": "When turned on, auto off after 'Key On Duration' seconds",
+					"label": "Auto off after 'Key on Duration' seconds",
 					"value": 1
 				},
 				{
-					"label": "When turned off, auto on after 'Key On Duration' seconds",
+					"label": "Auto on after 'Key on Duration' seconds",
 					"value": 2
 				},
 				{
-					"label": "Hold >3secs turns on, when released, turns off",
+					"label": "Held 3 seconds -> On; Release -> Off",
 					"value": 3
 				},
 				{
-					"label": "Single click for on/off, Hold >3secs on, release turns off",
+					"label": "Single click (On/Off); Held 3 seconds -> On; Release -> Off",
 					"value": 4
 				},
 				{
-					"label": "Momentary switch: hold key turns on, off once released",
+					"label": "Momentary switch; Held -> On; Release -> Off",
 					"value": 5
 				},
 				{
-					"label": "Hold >3secs turns on, Hold >3secs turns off",
+					"label": "Held 3 seconds -> On; Held 3 seconds -> Off",
 					"value": 6
 				}
 			]
 		},
 		"14": {
-			"label": "Disable Local Control",
+			"label": "Local Control",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 1,
@@ -208,17 +208,17 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "All keys are valid for local control",
+					"label": "Enable",
 					"value": 0
 				},
 				{
-					"label": "All keys are invalid for local control",
+					"label": "Disable",
 					"value": 1
 				}
 			]
 		},
 		"15": {
-			"label": "Disable Remote Control",
+			"label": "Remote Control",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 1,
@@ -228,11 +228,11 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "All keys are valid for remote (gateway) control",
+					"label": "Enable",
 					"value": 0
 				},
 				{
-					"label": "All keys are invalid for remote (gateway) control",
+					"label": "Disable",
 					"value": 1
 				}
 			]
@@ -248,41 +248,41 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "Scene Respond Disabled",
+					"label": "Disable",
 					"value": 0
 				},
 				{
-					"label": "Key 1 responds, Keys 2 and 3 do not respond",
+					"label": "Key 1 responds",
 					"value": 1
 				},
 				{
-					"label": "Key 2 responds, Keys 1 and 3 do not respond",
+					"label": "Key 2 responds",
 					"value": 2
 				},
 				{
-					"label": "Keys 1 and 2 respond, Key does not respond",
+					"label": "Keys 1 and 2 respond",
 					"value": 3
 				},
 				{
-					"label": "Key 3 responds, Keys 1 and 2 do not respond",
+					"label": "Key 3 responds",
 					"value": 4
 				},
 				{
-					"label": "Keys 1 and 3 respond, Key 2 does not respond",
+					"label": "Keys 1 and 3 respond",
 					"value": 5
 				},
 				{
-					"label": "Keys 2 and 3 respond to scene, Key 1 does not respond",
+					"label": "Keys 2 and 3 respond",
 					"value": 6
 				},
 				{
-					"label": "Keys 1, 2 and 3 all respond to scene",
+					"label": "All keys respond",
 					"value": 7
 				}
 			]
 		},
 		"17": {
-			"label": "Key 1 Scene Activate Mode Setting",
+			"label": "Key 1 Scene Settings",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 3,
@@ -292,15 +292,15 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "Scene Activate function disabled",
+					"label": "Scene activation disabled",
 					"value": 0
 				},
 				{
-					"label": "Upon clicking Key 1, always activate scene ID1 no matter what the status of Key 1 is",
+					"label": "Key 1 -> Scene ID1 (Any Key 1 relay state)",
 					"value": 1
 				},
 				{
-					"label": "Upon clicking Key 1, always activate scene ID1 when Key 1's relay output is open",
+					"label": "Key 1 -> Scene ID 1 (Key 1 relay open)",
 					"value": 2
 				},
 				{
@@ -310,7 +310,7 @@
 			]
 		},
 		"18": {
-			"label": "Key 1 Activate Scene ID (0=Scene Activate Function Disabled)",
+			"label": "Key 1 Activate Scene ID (0=Scene activation disabled)",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 255,
@@ -333,7 +333,7 @@
 			"allowManualEntry": true
 		},
 		"255": {
-			"label": "Factory Reset",
+			"label": "Factory reset",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 85,
@@ -344,11 +344,11 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "No",
+					"label": "Normal operation",
 					"value": 0
 				},
 				{
-					"label": "Factory Reset",
+					"label": "Factory reset",
 					"value": 85
 				}
 			]

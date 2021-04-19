@@ -139,7 +139,6 @@
 		},
 		"7": {
 			"label": "Dimming Step Time (Manual)",
-
 			"valueSize": 2,
 			"unit": "10ms",
 			"minValue": 1,
@@ -150,7 +149,7 @@
 			"allowManualEntry": true
 		},
 		"8": {
-			"label": "Single Dimming Step Size (Manual)",
+			"label": "Dimming Step Size (Manual)",
 			"valueSize": 1,
 			"minValue": 1,
 			"maxValue": 99,
@@ -160,7 +159,7 @@
 			"allowManualEntry": true
 		},
 		"9": {
-			"label": "Single Dimming Step Time (Auto)",
+			"label": "Dimming Step Time (Auto)",
 			"valueSize": 2,
 			"unit": "10ms",
 			"minValue": 1,
@@ -171,7 +170,7 @@
 			"allowManualEntry": true
 		},
 		"10": {
-			"label": "Single Dimming Step Size (Auto)",
+			"label": "Dimming Step Size (Auto)",
 			"valueSize": 1,
 			"minValue": 1,
 			"maxValue": 99,
@@ -267,25 +266,25 @@
 					"value": 0
 				},
 				{
-					"label": "Enable Scene Activation and send basic set on/off to AG4",
+					"label": "Scene activation; Control Association Group 4",
 					"value": 1
 				},
 				{
-					"label": "Scene Activation only",
+					"label": "Scene Activation",
 					"value": 2
 				},
 				{
-					"label": "Send Basic On/Off only",
+					"label": "Send Basic CC Set",
 					"value": 3
 				},
 				{
-					"label": "Disable S2 Function",
+					"label": "Disable",
 					"value": 255
 				}
 			]
 		},
 		"18": {
-			"label": "Operation report Switch2 to Association Group 4",
+			"label": "Association Group 4 Commands",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 255,
@@ -296,19 +295,19 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "Send Both Basic On and Off",
+					"label": "Basic CC Set (On/Off)",
 					"value": 0
 				},
 				{
-					"label": "Send Basic On",
+					"label": "Basic CC Set (On)",
 					"value": 1
 				},
 				{
-					"label": "Send Basic Off",
+					"label": "Basic CC Set (Off)",
 					"value": 2
 				},
 				{
-					"label": "No Report",
+					"label": "Disable",
 					"value": 255
 				}
 			]
@@ -347,7 +346,7 @@
 			"allowManualEntry": true
 		},
 		"255": {
-			"label": "Factory Reset",
+			"label": "Factory reset",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 85,
@@ -358,11 +357,11 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "No",
+					"label": "Normal operation",
 					"value": 0
 				},
 				{
-					"label": "Factory Reset",
+					"label": "Factory reset",
 					"value": 85
 				}
 			]

@@ -126,7 +126,7 @@
 			"allowManualEntry": true
 		},
 		"5": {
-			"label": "Minimum Brightness Level",
+			"label": "Minimum Brightness",
 			"valueSize": 1,
 			"minValue": 1,
 			"maxValue": 98,
@@ -137,7 +137,7 @@
 			"allowManualEntry": true
 		},
 		"6": {
-			"label": "Maximum Brightness Level",
+			"label": "Maximum Brightness",
 			"valueSize": 1,
 			"minValue": 2,
 			"maxValue": 99,
@@ -218,7 +218,6 @@
 		},
 		"12": {
 			"label": "Dimming Level Reporting Interval",
-
 			"valueSize": 1,
 			"unit": "10 ms",
 			"minValue": 0,
@@ -448,7 +447,6 @@
 		},
 		"36": {
 			"label": "Overload Shutoff",
-			"unit": "seconds",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 1,
@@ -470,7 +468,6 @@
 		},
 		"35": {
 			"label": "Overload Shutoff Delay",
-
 			"valueSize": 1,
 			"unit": "seconds",
 			"minValue": 0,
@@ -534,7 +531,7 @@
 			"allowManualEntry": false
 		},
 		"255": {
-			"label": "Factory Reset",
+			"label": "Factory reset",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 85,
@@ -545,7 +542,7 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "Normal Operation",
+					"label": "Normal operation",
 					"value": 0
 				},
 				{
