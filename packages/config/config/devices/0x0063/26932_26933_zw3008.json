@@ -378,8 +378,8 @@
 			]
 		}
 	},
-	// Add compat flag to re-enable basic command events to replicate central scene functionality. 
-	// Allows user to detect switch button presses as events when zwave controller is added to Group 2 or 3. 
+	// Add compat flag to re-enable basic command events to replicate central scene functionality.
+	// Allows user to detect switch button presses as events when zwave controller is added to Group 2 or 3.
 	"compat": {
 		"treatBasicSetAsEvent": true
 	}
