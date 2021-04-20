@@ -17,10 +17,9 @@
 	},
 	"paramInformation": {
 		"5": {
-			"label": "Trigger Interval",
-			"description": "Set the trigger interval for motion sensor re-activation.",
-			"unit": "minutes",
+			"label": "Trigger Re-Activation Delay",
 			"valueSize": 1,
+			"unit": "minutes",
 			"minValue": 1,
 			"maxValue": 255,
 			"defaultValue": 3,
@@ -31,7 +30,6 @@
 		},
 		"6": {
 			"label": "Motion Sensor Sensitivity",
-			"description": "Adjust sensitivity of the motion sensor.",
 			"valueSize": 1,
 			"minValue": 1,
 			"maxValue": 7,
