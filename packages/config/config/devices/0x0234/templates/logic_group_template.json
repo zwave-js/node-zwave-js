@@ -212,14 +212,6 @@
 				"value": 2
 			},
 			{
-				"label": "Follow switch",
-				"value": 3
-			},
-			{
-				"label": "Follow switch - inverted",
-				"value": 4
-			},
-			{
 				"label": "Follow internal dimmer",
 				"value": 5
 			},

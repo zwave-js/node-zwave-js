@@ -247,7 +247,7 @@
 		},
 		"20": {
 			"$import": "templates/logic_group_template.json#button_led_indicator",
-			"label": "Button 1 - LED Indicator"
+			"label": "Button 1 LED Indicator"
 		},
 		"21": {
 			"$import": "templates/logic_group_template.json#color_command_button",
