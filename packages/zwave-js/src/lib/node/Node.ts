@@ -268,6 +268,11 @@ export class ZWaveNode extends Endpoint {
 		]) {
 			if (timeout) clearTimeout(timeout);
 		}
+
+		// Clear all scheduled polls that would interfere with the interview
+		for (const valueId of this.scheduledPolls.keys()) {
+			this.cancelScheduledPoll(valueId);
+		}
 	}
 
 	/**
@@ -1076,6 +1081,11 @@ export class ZWaveNode extends Endpoint {
 		// Restart all state machines
 		this.readyMachine.restart();
 		this.statusMachine.restart();
+
+		// Remove queued polls that would interfere with the interview
+		for (const valueId of this.scheduledPolls.keys()) {
+			this.cancelScheduledPoll(valueId);
+		}
 
 		// Restore the previously saved name/location
 		if (name != undefined) this.name = name;
