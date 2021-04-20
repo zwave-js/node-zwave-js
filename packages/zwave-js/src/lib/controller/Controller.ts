@@ -1816,7 +1816,7 @@ ${associatedNodes.join(", ")}`,
 		if (node.supportsCC(CommandClasses["Multi Channel Association"])) {
 			mcInstance = node.createCCInstanceUnsafe<MultiChannelAssociationCC>(
 				CommandClasses["Multi Channel Association"],
-			)!;
+			);
 		}
 
 		const assocGroupCount = assocInstance.getGroupCountCached() ?? 0;
@@ -2022,7 +2022,7 @@ ${associatedNodes.join(", ")}`,
 		if (node.supportsCC(CommandClasses.Association)) {
 			assocInstance = node.createCCInstanceUnsafe<AssociationCC>(
 				CommandClasses.Association,
-			)!;
+			);
 		} else if (nodeAssociations.length > 0) {
 			throw new ZWaveError(
 				`Node ${nodeId} does not support associations!`,
@@ -2032,7 +2032,7 @@ ${associatedNodes.join(", ")}`,
 		if (node.supportsCC(CommandClasses["Multi Channel Association"])) {
 			mcInstance = node.createCCInstanceUnsafe<MultiChannelAssociationCC>(
 				CommandClasses["Multi Channel Association"],
-			)!;
+			);
 		} else if (endpointAssociations.length > 0) {
 			throw new ZWaveError(
 				`Node ${nodeId} does not support multi channel associations!`,
