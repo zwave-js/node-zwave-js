@@ -30,7 +30,7 @@
 			"isLifeline": true
 		},
 		"2": {
-			"label": "Dim %",
+			"label": "Multilevel",
 			"maxNodes": 5
 		},
 		"5": {
@@ -163,7 +163,6 @@
 			"label": "Dimming Step Size (Manual)",
 
 			"valueSize": 1,
-			"unit": "%",
 			"minValue": 1,
 			"maxValue": 99,
 			"defaultValue": 1,
@@ -189,7 +188,6 @@
 			"label": "Dimming Step Size (Auto)",
 
 			"valueSize": 1,
-			"unit": "%",
 			"minValue": 1,
 			"maxValue": 99,
 			"defaultValue": 1,
@@ -531,7 +529,7 @@
 			"allowManualEntry": false
 		},
 		"255": {
-			"label": "Factory reset",
+			"label": "Factory Reset",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 85,

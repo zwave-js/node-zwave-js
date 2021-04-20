@@ -214,13 +214,13 @@
 					"value": 0
 				},
 				{
-					"label": "Reach Max brightness level",
+					"label": "Max brightness",
 					"value": 1
 				}
 			]
 		},
 		"15": {
-			"label": "Operation report Switch1 to Assoc Group 2 & 3",
+			"label": "Operation Report Switch1 to Association Groups 2 & 3",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 255,
@@ -231,7 +231,7 @@
 			"allowManualEntry": true
 		},
 		"16": {
-			"label": "Operation report Switch1 to Association Group 2",
+			"label": "Operation Report Switch1 to Association Group 2",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 1,
@@ -241,17 +241,17 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "When sent basic set on, value is 0xff",
+					"label": "On = 0xff",
 					"value": 0
 				},
 				{
-					"label": "Wehen sent basic set on, value is current dimmer value",
+					"label": "On = Current dimmer value",
 					"value": 1
 				}
 			]
 		},
 		"17": {
-			"label": "Switch 2 function",
+			"label": "Switch 2 Function",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 255,
@@ -313,7 +313,7 @@
 			]
 		},
 		"19": {
-			"label": "Scene ID sent to AG1 when one click of S2",
+			"label": "Scene ID - One Click of S2 (Association Group 1)",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 255,
@@ -324,7 +324,7 @@
 			"allowManualEntry": true
 		},
 		"20": {
-			"label": "Scene ID sent to AG1 double click of S2",
+			"label": "Scene ID - Double Click of S2 (Association Group 1)",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 255,
@@ -335,7 +335,7 @@
 			"allowManualEntry": true
 		},
 		"21": {
-			"label": "Scene ID sent to AG1 when hold S2",
+			"label": "Scene ID - Hold of S2 (Association Group 1)",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 255,
