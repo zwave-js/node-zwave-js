@@ -1,5 +1,5 @@
 // Logic Group ZIF5031
-// DIN Mount Multiple Actuator Controller for Floor Heating
+// DIN Rail Interface
 {
 	"manufacturer": "Logic Group",
 	"manufacturerId": "0x0234",

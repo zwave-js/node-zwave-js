@@ -1,3 +1,5 @@
+// Logic Group ZDB5100
+// Wall Controller
 {
 	"manufacturer": "Logic Group",
 	"manufacturerId": "0x0234",
@@ -347,22 +349,22 @@
 		},
 		"31[0xff000000]": {
 			"$import": "templates/logic_group_template.json#led_indicator",
-			"label": "Button 2 LED Indicator (OFF) Red",
+			"label": "Button 2 LED Indicator (Off) Red",
 			"defaultValue": 47
 		},
 		"31[0xff0000]": {
 			"$import": "templates/logic_group_template.json#led_indicator",
-			"label": "Button 2 LED Indicator (OFF) Green",
+			"label": "Button 2 LED Indicator (Off) Green",
 			"defaultValue": 47
 		},
 		"31[0xff00]": {
 			"$import": "templates/logic_group_template.json#led_indicator",
-			"label": "Button 2 LED Indicator (OFF) Blue",
+			"label": "Button 2 LED Indicator (Off) Blue",
 			"defaultValue": 47
 		},
 		"31[0xff]": {
 			"$import": "../templates/master_template.json#base_0-255_nounit",
-			"label": "LED Time For Button 2 (OFF) Blinking",
+			"label": "LED Time For Button 2 (Off) Blinking",
 			"unit": "100 ms",
 			"valueSize": 4,
 			"defaultValue": 0
@@ -419,8 +421,8 @@
 		"38[0xff]": {
 			"$import": "../templates/master_template.json#base_0-255_nounit",
 			"label": "LED Time For Button 3 (On): Blinking",
-			"unit": "100 ms",
 			"valueSize": 4,
+			"unit": "100 ms",
 			"defaultValue": 0
 		},
 		"39[0xff000000]": {
@@ -441,8 +443,8 @@
 		"39[0xff]": {
 			"$import": "../templates/master_template.json#base_0-255_nounit",
 			"label": "LED Time For Button 3 (Off): Blinking",
-			"unit": "100 ms",
 			"valueSize": 4,
+			"unit": "100 ms",
 			"defaultValue": 0
 		},
 		"40": {
@@ -452,8 +454,8 @@
 		"41": {
 			"$import": "../templates/master_template.json#base_0-255_nounit",
 			"label": "Button 4 - Timer",
-			"unit": "seconds",
 			"valueSize": 2,
+			"unit": "seconds",
 			"maxValue": 43200,
 			"defaultValue": 300
 		},

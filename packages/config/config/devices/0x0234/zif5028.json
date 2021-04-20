@@ -1,3 +1,5 @@
+// Logic Group ZIF5028
+// DIN Rail Interface
 {
 	"manufacturer": "Logic Group",
 	"manufacturerId": "0x0234",
