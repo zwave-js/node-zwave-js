@@ -827,8 +827,6 @@ export class ZWaveNode extends Endpoint {
 		// Avoid false positives or false negatives due to a mis-formatted value ID
 		valueId = normalizeValueID(valueId);
 
-		if (this.scheduledPolls.has(valueId)) return false;
-
 		// Try to retrieve the corresponding CC API
 		const endpointInstance = this.getEndpoint(valueId.endpoint || 0);
 		if (!endpointInstance) return false;
@@ -840,6 +838,8 @@ export class ZWaveNode extends Endpoint {
 		// Check if the pollValue method is implemented
 		if (!api.pollValue) return false;
 
+		// make sure there is only one timeout instance per poll
+		this.cancelScheduledPoll(valueId);
 		this.scheduledPolls.set(
 			valueId,
 			setTimeout(async () => {
