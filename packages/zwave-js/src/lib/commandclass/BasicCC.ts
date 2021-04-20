@@ -139,6 +139,11 @@ export class BasicCCAPI extends CCAPI {
 			this.commandOptions,
 		);
 		if (response) {
+			const valueDB = this.endpoint.getNodeUnsafe()?.valueDB;
+			valueDB?.setValue(
+				getCurrentValueValueId(this.endpoint.index),
+				response.currentValue,
+			);
 			return pick(response, ["currentValue", "targetValue", "duration"]);
 		}
 	}
