@@ -14,6 +14,7 @@ import {
 	Maybe,
 	MetadataUpdatedArgs,
 	NodeUpdatePayload,
+	normalizeValueID,
 	sensorCCs,
 	timespan,
 	topologicalSort,
@@ -22,6 +23,8 @@ import {
 	ValueID,
 	valueIdToString,
 	ValueMetadata,
+	ValueRemovedArgs,
+	ValueUpdatedArgs,
 	ZWaveError,
 	ZWaveErrorCodes,
 } from "@zwave-js/core";
@@ -30,6 +33,7 @@ import {
 	JSONObject,
 	Mixin,
 	num2hex,
+	ObjectKeyMap,
 	pick,
 	stringify,
 } from "@zwave-js/shared";
@@ -198,6 +202,7 @@ export class ZWaveNode extends Endpoint {
 
 		this._valueDB =
 			valueDB ?? new ValueDB(id, driver.valueDB!, driver.metadataDB!);
+		// Pass value events to our listeners
 		for (const event of [
 			"value added",
 			"value updated",
@@ -206,6 +211,22 @@ export class ZWaveNode extends Endpoint {
 			"metadata updated",
 		] as const) {
 			this._valueDB.on(event, this.translateValueEvent.bind(this, event));
+		}
+
+		// Also avoid verifying a value change for which we recently received an update
+		for (const event of ["value updated", "value removed"] as const) {
+			this._valueDB.on(
+				event,
+				(args: ValueUpdatedArgs | ValueRemovedArgs) => {
+					if (this.cancelScheduledPoll(args)) {
+						this.driver.controllerLog.logNode(
+							this.nodeId,
+							"Scheduled poll canceled because value was updated",
+							"verbose",
+						);
+					}
+				},
+			);
 		}
 
 		// Add optional controlled CCs - endpoints don't have this
@@ -780,11 +801,68 @@ export class ZWaveNode extends Endpoint {
 				ZWaveErrorCodes.CC_NoAPI,
 			);
 		}
+
 		// And call it
 		return (api.pollValue as PollValueImplementation<T>)({
 			property: valueId.property,
 			propertyKey: valueId.propertyKey,
 		});
+	}
+
+	protected scheduledPolls = new ObjectKeyMap<ValueID, NodeJS.Timeout>();
+	/**
+	 * @internal
+	 * Schedules a value to be polled after a given time. Only one schedule can be active for a given value ID.
+	 * @returns `true` if the poll was scheduled, `false` otherwise
+	 */
+	public schedulePoll(
+		valueId: ValueID,
+		timeoutMs: number = this.driver.options.timeouts.refreshValue,
+	): boolean {
+		// Avoid false positives or false negatives due to a mis-formatted value ID
+		valueId = normalizeValueID(valueId);
+
+		if (this.scheduledPolls.has(valueId)) return false;
+
+		// Try to retrieve the corresponding CC API
+		const endpointInstance = this.getEndpoint(valueId.endpoint || 0);
+		if (!endpointInstance) return false;
+
+		const api = (endpointInstance.commandClasses as any)[
+			valueId.commandClass
+		] as CCAPI;
+
+		// Check if the pollValue method is implemented
+		if (!api.pollValue) return false;
+
+		this.scheduledPolls.set(
+			valueId,
+			setTimeout(async () => {
+				this.cancelScheduledPoll(valueId);
+				try {
+					await api.pollValue!(valueId);
+				} catch {
+					/* ignore */
+				}
+			}, timeoutMs).unref(),
+		);
+		return true;
+	}
+
+	/**
+	 * @internal
+	 * Cancels a poll that has been scheduled with schedulePoll
+	 */
+	public cancelScheduledPoll(valueId: ValueID): boolean {
+		// Avoid false positives or false negatives due to a mis-formatted value ID
+		valueId = normalizeValueID(valueId);
+
+		if (this.scheduledPolls.has(valueId)) {
+			clearTimeout(this.scheduledPolls.get(valueId)!);
+			this.scheduledPolls.delete(valueId);
+			return true;
+		}
+		return false;
 	}
 
 	public get endpointCountIsDynamic(): boolean | undefined {

@@ -137,6 +137,9 @@ export class BinarySwitchCCAPI extends CCAPI {
 			// Verify the current value after a delay
 			// TODO: #1321
 			const duration = undefined as Duration | undefined;
+			// We query currentValue instead of targetValue to make sure that unsolicited updates cancel the scheduled poll
+			// wotan-disable-next-line no-useless-predicate
+			if (property === "targetValue") property = "currentValue";
 			this.schedulePoll({ property }, duration?.toMilliseconds() ?? 1000);
 		}
 	};
