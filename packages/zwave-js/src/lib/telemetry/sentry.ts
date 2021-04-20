@@ -112,38 +112,42 @@ export async function initSentry(
 							},
 						};
 					}
-				} else if (hint.originalException instanceof Error) {
-					const msg = hint.originalException.message;
-					if (
-						/(no such file|permission denied|cannot open|file not found)/i.test(
-							msg,
-						) &&
-						/(\/dev\/|\/mqtt\/|COM\d+|Select Port)/i.test(msg)
-					) {
-						// No such file or directory, cannot open /dev/ttyACM0
-						// no such file or directory, rename '/usr/src/app/store/mqtt/incoming~'
-						// Opening COM18: File not found
-						// No such file or directory, cannot open Select Port
-						ignore = true;
-					} else if (
-						/(EROFS|ENODEV|ENOSPC)/i.test(msg) &&
-						/(read-only file system|no such device|no space left)/i.test(
-							msg,
-						)
-					) {
-						// EROFS: read-only file system, write
-						// ENODEV: no such device, write
-						// ENOSPC: no space left on device, write
-						ignore = true;
-					} else if (/unknown system error/i.test(msg)) {
-						// Unknown system error -116: Unknown system error -116, write
-						ignore = true;
-					} else if (/custom baud rate/i.test(msg)) {
-						// Input/output error setting custom baud rate of 115200
-						ignore = true;
-					} else if (/bindings\.node/i.test(msg)) {
-						// Could not locate the bindings file
-						ignore = true;
+				} else if (hint.originalException) {
+					try {
+						const msg = hint.originalException.toString();
+						if (
+							/(no such file|permission denied|cannot open|file not found)/i.test(
+								msg,
+							) &&
+							/(\/dev\/|\/mqtt\/|COM\d+|Select Port)/i.test(msg)
+						) {
+							// No such file or directory, cannot open /dev/ttyACM0
+							// no such file or directory, rename '/usr/src/app/store/mqtt/incoming~'
+							// Opening COM18: File not found
+							// No such file or directory, cannot open Select Port
+							ignore = true;
+						} else if (
+							/(EROFS|ENODEV|ENOSPC)/i.test(msg) &&
+							/(read-only file system|no such device|no space left)/i.test(
+								msg,
+							)
+						) {
+							// EROFS: read-only file system, write
+							// ENODEV: no such device, write
+							// ENOSPC: no space left on device, write
+							ignore = true;
+						} else if (/unknown system error/i.test(msg)) {
+							// Unknown system error -116: Unknown system error -116, write
+							ignore = true;
+						} else if (/custom baud rate/i.test(msg)) {
+							// Input/output error setting custom baud rate of 115200
+							ignore = true;
+						} else if (/bindings\.node/i.test(msg)) {
+							// Could not locate the bindings file
+							ignore = true;
+						}
+					} catch {
+						// This doesn't seem to be representable as a string
 					}
 				}
 			}
