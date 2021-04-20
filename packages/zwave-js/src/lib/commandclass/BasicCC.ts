@@ -139,6 +139,11 @@ export class BasicCCAPI extends CCAPI {
 			this.commandOptions,
 		);
 		if (response) {
+			const valueDB = this.endpoint.getNodeUnsafe()?.valueDB;
+			valueDB?.setValue(
+				getCurrentValueValueId(this.endpoint.index),
+				response.currentValue,
+			);
 			return pick(response, ["currentValue", "targetValue", "duration"]);
 		}
 	}
@@ -224,10 +229,6 @@ current value:      ${basicResponse.currentValue}`;
 target value:       ${basicResponse.targetValue}
 remaining duration: ${basicResponse.duration?.toString() ?? "undefined"}`;
 			}
-			this.getValueDB().setValue(
-				getCurrentValueValueId(this.endpointIndex),
-				basicResponse.currentValue,
-			);
 			this.driver.controllerLog.logNode(node.id, {
 				endpoint: this.endpointIndex,
 				message: logMessage,
