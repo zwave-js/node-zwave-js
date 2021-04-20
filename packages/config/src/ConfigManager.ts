@@ -22,6 +22,7 @@ import {
 	DeviceConfig,
 	DeviceConfigIndex,
 	FulltextDeviceConfigIndex,
+	generatePriorityDeviceIndex,
 	loadDeviceIndexInternal,
 	loadFulltextDeviceIndexInternal,
 } from "./Devices";
@@ -63,13 +64,17 @@ import {
 } from "./SensorTypes";
 import { configDir, getDeviceEntryPredicate } from "./utils";
 
+export interface ConfigManagerOptions {
+	logContainer?: ZWaveLogContainer;
+	deviceConfigPriorityDir?: string;
+}
+
 export class ConfigManager {
-	public constructor(container?: ZWaveLogContainer) {
-		// Make it easier to use this in tests and scripts
-		if (!container) {
-			container = new ZWaveLogContainer({ enabled: false });
-		}
-		this.logger = new ConfigLogger(container);
+	public constructor(options: ConfigManagerOptions = {}) {
+		this.logger = new ConfigLogger(
+			options.logContainer ?? new ZWaveLogContainer({ enabled: false }),
+		);
+		this.deviceConfigPriorityDir = options.deviceConfigPriorityDir;
 	}
 
 	private logger: ConfigLogger;
@@ -82,6 +87,8 @@ export class ConfigManager {
 	private meters: MeterMap | undefined;
 	private basicDeviceClasses: BasicDeviceClassMap | undefined;
 	private genericDeviceClasses: GenericDeviceClassMap | undefined;
+
+	private deviceConfigPriorityDir: string | undefined;
 	private index: DeviceConfigIndex | undefined;
 	private fulltextIndex: FulltextDeviceConfigIndex | undefined;
 	private notifications: NotificationMap | undefined;
@@ -402,7 +409,17 @@ export class ConfigManager {
 
 	public async loadDeviceIndex(): Promise<void> {
 		try {
-			this.index = await loadDeviceIndexInternal(this.logger);
+			// The index of config files included in this package
+			const embeddedIndex = await loadDeviceIndexInternal(this.logger);
+			// A dynamic index of the user-defined priority device config files
+			const priorityIndex = this.deviceConfigPriorityDir
+				? await generatePriorityDeviceIndex(
+						this.deviceConfigPriorityDir,
+						this.logger,
+				  )
+				: [];
+			// Put the priority index in front, so the files get resolved first
+			this.index = [...priorityIndex, ...embeddedIndex];
 		} catch (e: unknown) {
 			// If the index file is missing or invalid, don't try to find it again
 			if (
@@ -465,11 +482,9 @@ export class ConfigManager {
 		);
 
 		if (indexEntry) {
-			const filePath = path.join(
-				configDir,
-				"devices",
-				indexEntry.filename,
-			);
+			const filePath = path.isAbsolute(indexEntry.filename)
+				? indexEntry.filename
+				: path.join(configDir, "devices", indexEntry.filename);
 			if (!(await pathExists(filePath))) return;
 
 			try {

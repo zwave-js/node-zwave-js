@@ -459,17 +459,22 @@ interface ZWaveOptions {
 	timeouts: {
 		/** how long to wait for an ACK */
 		ack: number; // >=1, default: 1000 ms
+
 		/** not sure */
 		byte: number; // >=1, default: 150 ms
+
 		/**
 		 * How long to wait for a controller response. Usually this timeout should never elapse,
 		 * so this is merely a safeguard against the driver stalling
 		 */
 		response: number; // [500...5000], default: 1600 ms
+
 		/** How long to wait for a callback from the host for a SendData[Multicast]Request */
 		sendDataCallback: number; // >=10000, default: 65000 ms
+
 		/** How much time a node gets to process a request and send a response */
 		report: number; // [1000...40000], default: 10000 ms
+
 		/** How long generated nonces are valid */
 		nonce: number; // [3000...20000], default: 5000 ms
 	};
@@ -477,10 +482,13 @@ interface ZWaveOptions {
 	attempts: {
 		/** How often the driver should try communication with the controller before giving up */
 		controller: number; // [1...3], default: 3
+
 		/** How often the driver should try sending SendData commands before giving up */
 		sendData: number; // [1...5], default: 3
+
 		/** Whether a command should be retried when a node acknowledges the receipt but no response is received */
 		retryAfterTransmitReport: boolean; // default: false
+
 		/**
 		 * How many attempts should be made for each node interview before giving up
 		 */
@@ -496,6 +504,12 @@ interface ZWaveOptions {
 		driver: FileSystem;
 		/** Allows you to specify a different cache directory */
 		cacheDir: string;
+		/**
+		 * Allows you to specify a directory where device configuration files can be loaded from with higher priority than the included ones.
+		 * This directory does not get indexed and should be used sparingly, e.g. for testing.
+		 */
+		deviceConfigPriorityDir?: string;
+
 		/**
 		 * How frequently the values and metadata should be written to the DB files. This is a compromise between data loss
 		 * in cause of a crash and disk wear:

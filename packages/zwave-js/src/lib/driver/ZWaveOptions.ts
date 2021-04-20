@@ -65,6 +65,12 @@ export interface ZWaveOptions {
 		/** Allows you to specify a different cache directory */
 		cacheDir: string;
 		/**
+		 * Allows you to specify a directory where device configuration files can be loaded from with higher priority than the included ones.
+		 * This directory does not get indexed and should be used sparingly, e.g. for testing.
+		 */
+		deviceConfigPriorityDir?: string;
+
+		/**
 		 * How frequently the values and metadata should be written to the DB files. This is a compromise between data loss
 		 * in cause of a crash and disk wear:
 		 *

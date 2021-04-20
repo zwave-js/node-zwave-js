@@ -445,7 +445,11 @@ export class Driver extends EventEmitter {
 		this.cacheDir = this.options.storage.cacheDir;
 
 		// Initialize config manager
-		this.configManager = new ConfigManager(this._logContainer);
+		this.configManager = new ConfigManager({
+			logContainer: this._logContainer,
+			deviceConfigPriorityDir: this.options.storage
+				.deviceConfigPriorityDir,
+		});
 
 		// And initialize but don't start the send thread machine
 		const sendThreadMachine = createSendThreadMachine(
