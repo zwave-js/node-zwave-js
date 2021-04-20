@@ -92,6 +92,59 @@ async function hasChangedDeviceFiles(
 	return false;
 }
 
+/**
+ * Read all device config files from a given directory and return them as index entries.
+ * Does not update the index itself.
+ */
+async function generateIndex<T extends Record<string, unknown>>(
+	devicesDir: string,
+	extractIndexEntries: (config: DeviceConfig) => T[],
+	logger?: ConfigLogger,
+): Promise<(T & { filename: string })[]> {
+	const index: (T & { filename: string })[] = [];
+
+	const configFiles = await enumFilesRecursive(
+		devicesDir,
+		(file) =>
+			file.endsWith(".json") &&
+			!file.endsWith("index.json") &&
+			!file.includes("/templates/") &&
+			!file.includes("\\templates\\"),
+	);
+
+	for (const file of configFiles) {
+		const relativePath = path
+			.relative(devicesDir, file)
+			.replace(/\\/g, "/");
+		// Try parsing the file
+		try {
+			const config = await DeviceConfig.from(file, {
+				relativeTo: devicesDir,
+			});
+			// Add the file to the index
+			index.push(
+				...extractIndexEntries(config).map((entry) => ({
+					...entry,
+					filename: relativePath,
+				})),
+			);
+		} catch (e: unknown) {
+			const message = `Error parsing config file ${relativePath}: ${
+				(e as Error).message
+			}`;
+			// Crash hard during tests, just print an error when in production systems.
+			// A user could have changed a config file
+			if (process.env.NODE_ENV === "test" || !!process.env.CI) {
+				throw new ZWaveError(message, ZWaveErrorCodes.Config_Invalid);
+			} else {
+				logger?.print(message, "error");
+			}
+		}
+	}
+
+	return index;
+}
+
 async function loadDeviceIndexShared<T extends Record<string, unknown>>(
 	indexPath: string,
 	extractIndexEntries: (config: DeviceConfig) => T[],
@@ -136,50 +189,8 @@ async function loadDeviceIndexShared<T extends Record<string, unknown>>(
 	}
 
 	if (needsUpdate) {
-		index = [];
-
-		const configFiles = await enumFilesRecursive(
-			devicesDir,
-			(file) =>
-				file.endsWith(".json") &&
-				!file.endsWith("index.json") &&
-				!file.includes("/templates/") &&
-				!file.includes("\\templates\\"),
-		);
-
-		for (const file of configFiles) {
-			const relativePath = path
-				.relative(devicesDir, file)
-				.replace(/\\/g, "/");
-			// Try parsing the file
-			try {
-				const config = await DeviceConfig.from(file, {
-					relativeTo: devicesDir,
-				});
-				// Add the file to the index
-				index.push(
-					...extractIndexEntries(config).map((entry) => ({
-						...entry,
-						filename: relativePath,
-					})),
-				);
-			} catch (e: unknown) {
-				const message = `Error parsing config file ${relativePath}: ${
-					(e as Error).message
-				}`;
-				// Crash hard during tests, just print an error when in production systems.
-				// A user could have changed a config file
-				if (process.env.NODE_ENV === "test" || !!process.env.CI) {
-					throw new ZWaveError(
-						message,
-						ZWaveErrorCodes.Config_Invalid,
-					);
-				} else {
-					logger?.print(message, "error");
-				}
-			}
-		}
-
+		// Read all files from disk and generate an index
+		index = await generateIndex(devicesDir, extractIndexEntries, logger);
 		// Save the index to disk
 		try {
 			await writeFile(
@@ -201,6 +212,39 @@ ${stringify(index, "\t")}
 	}
 
 	return index!;
+}
+
+/**
+ * @internal
+ * Loads the index file to quickly access the device configs.
+ * Transparently handles updating the index if necessary
+ */
+export async function generatePriorityDeviceIndex(
+	deviceConfigPriorityDir: string,
+	logger?: ConfigLogger,
+): Promise<DeviceConfigIndex> {
+	return (
+		await generateIndex(
+			deviceConfigPriorityDir,
+			(config) =>
+				config.devices.map((dev) => ({
+					manufacturerId: formatId(
+						config.manufacturerId.toString(16),
+					),
+					manufacturer: config.manufacturer,
+					label: config.label,
+					productType: formatId(dev.productType),
+					productId: formatId(dev.productId),
+					firmwareVersion: config.firmwareVersion,
+				})),
+			logger,
+		)
+	).map(({ filename, ...entry }) => ({
+		...entry,
+		// The generated index makes the filenames relative to the given directory
+		// but we need them to be absolute
+		filename: path.join(deviceConfigPriorityDir, filename),
+	}));
 }
 
 /**

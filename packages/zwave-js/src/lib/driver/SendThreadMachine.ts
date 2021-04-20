@@ -34,7 +34,6 @@ import {
 	CommandQueueInterpreter,
 	createCommandQueueMachine,
 } from "./CommandQueueMachine";
-import type { ZWaveOptions } from "./Driver";
 import type {
 	SerialAPICommandDoneData,
 	SerialAPICommandMachineParams,
@@ -44,6 +43,7 @@ import {
 	ServiceImplementations,
 } from "./StateMachineShared";
 import type { Transaction } from "./Transaction";
+import type { ZWaveOptions } from "./ZWaveOptions";
 
 /* eslint-disable @typescript-eslint/ban-types */
 export interface SendThreadStateSchema {

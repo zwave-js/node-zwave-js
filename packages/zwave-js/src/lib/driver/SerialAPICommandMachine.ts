@@ -13,11 +13,11 @@ import {
 	isMultiStageCallback,
 	isSuccessIndicator,
 } from "../message/SuccessIndicator";
-import type { ZWaveOptions } from "./Driver";
 import {
 	respondUnsolicited,
 	ServiceImplementations,
 } from "./StateMachineShared";
+import type { ZWaveOptions } from "./ZWaveOptions";
 
 /* eslint-disable @typescript-eslint/ban-types */
 export interface SerialAPICommandStateSchema {
