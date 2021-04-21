@@ -106,7 +106,10 @@ export class BasicCCAPI extends CCAPI {
 				);
 			}
 
-			// and verify the current value after a delay
+			// and verify the current value after a delay. We query currentValue instead of targetValue to make sure
+			// that unsolicited updates cancel the scheduled poll
+			// wotan-disable-next-line no-useless-predicate
+			if (property === "targetValue") property = "currentValue";
 			this.schedulePoll({ property });
 		}
 	};
