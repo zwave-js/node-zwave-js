@@ -27,7 +27,7 @@
 		"max": "255.255"
 	},
 	"compat": {
-	"forceNotificationIdleReset": true
+		"forceNotificationIdleReset": true
 	},
 	"associations": {
 		"1": {
