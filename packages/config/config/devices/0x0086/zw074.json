@@ -26,6 +26,9 @@
 		"min": "0.0",
 		"max": "255.255"
 	},
+	"compat": {
+	"forceNotificationIdleReset": true
+	},
 	"associations": {
 		"1": {
 			"label": "Lifeline",
