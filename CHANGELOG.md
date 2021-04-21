@@ -2,6 +2,35 @@
 <!--
 	Add placeholder for next release with `wip` snippet
 -->
+## __WORK IN PROGRESS__
+<!-- ### Breaking changes
+ -->
+### Features
+* Added a driver option to specify a user-defined directory to prioritize loading device config files from. This can be used to simplify testing and developing new configs.
+* When a value is updated either by polling or through unsolicited updates, pending verification polls are canceled now. This reduces traffic for nodes that report status changes on their own.
+
+### Bugfixes
+* `Basic CC` values are now correctly persisted when requested using the `Basic CC API`. This also avoids incorrectly detecting devices as not supporting the `Basic CC`.
+
+### Config file changes
+* Add `forceNotificationIdleReset` compat flag to Aeotec MultiSensor Gen5
+* Add load sense to Evolve LDM-15W
+* corrected style in Nortek PD300Z-2
+* Remove Group 2 Lifeline attribute for Aeotec ZW098
+* Minor improvements to zen32 configuration
+* Widen firmware range for Popp Solar Siren 2
+* Add compat flag to GE zw3008 to re-enable basic command events to replicate central scene functionality
+* Add new configuration for PIR-200 Motion Sensor
+* MCOHome configuration changes
+* Correct LZW31-SN dimming and ramp labels
+* Update Aeotec ZW095 config
+* Correct Linear wd500z
+* Correct Nortek wd500z
+* Correct alarm mapping for Yale YRD210
+
+### Changes under the hood
+* Update several dependencies
+
 ## 7.2.4 (2021-04-16)
 ### Bugfixes
 * Adding associations to the controller with arbitrary target endpoints is no longer an error
