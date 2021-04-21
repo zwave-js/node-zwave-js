@@ -402,5 +402,14 @@
 				"userId": "alarmLevel"
 			}
 		}
+	},
+	"alarm_map_low_battery": {
+		"from": {
+			"alarmType": 167
+		},
+		"to": {
+			"notificationType": 8, // Power Management
+			"notificationEvent": 10 // Replace battery soon
+		}
 	}
 }
