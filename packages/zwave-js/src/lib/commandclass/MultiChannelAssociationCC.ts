@@ -462,141 +462,154 @@ export class MultiChannelAssociationCC extends CommandClass {
 		// Query each association group for its members
 		await this.refreshValues();
 
-		// Assign the controller to all lifeline groups
-		const lifelineGroups = getLifelineGroupIds(node);
-		const ownNodeId = this.driver.controller.ownNodeId!;
-		const valueDB = this.getValueDB();
-		// We check if a node supports Multi Channel CC before creating Multi Channel Lifeline Associations (#1109)
-		const supportsMultiChannel = node.supportsCC(
-			CommandClasses["Multi Channel"],
-		);
+		// TODO: Improve how the assignments are handled. For now only auto-assign associations on the root endpoint
+		if (this.endpointIndex === 0) {
+			// Assign the controller to all lifeline groups
+			const lifelineGroups = getLifelineGroupIds(node);
+			const ownNodeId = this.driver.controller.ownNodeId!;
+			const valueDB = this.getValueDB();
+			// We check if a node supports Multi Channel CC before creating Multi Channel Lifeline Associations (#1109)
+			const supportsMultiChannel = node.supportsCC(
+				CommandClasses["Multi Channel"],
+			);
 
-		if (lifelineGroups.length) {
-			for (const group of lifelineGroups) {
-				const groupSupportsMultiChannel = group <= mcGroupCount;
-				const mustUseNodeAssociation =
-					!supportsMultiChannel ||
-					node.deviceConfig?.associations?.get(group)?.noEndpoint;
+			if (lifelineGroups.length) {
+				for (const group of lifelineGroups) {
+					const groupSupportsMultiChannel = group <= mcGroupCount;
+					const mustUseNodeAssociation =
+						!supportsMultiChannel ||
+						node.deviceConfig?.associations?.get(group)?.noEndpoint;
 
-				const nodeIdsValueId = groupSupportsMultiChannel
-					? getNodeIdsValueId(this.endpointIndex, group)
-					: getAssociationNodeIdsValueId(this.endpointIndex, group);
-				const endpointsValueId = getEndpointsValueId(
-					this.endpointIndex,
-					group,
-				);
+					const nodeIdsValueId = groupSupportsMultiChannel
+						? getNodeIdsValueId(this.endpointIndex, group)
+						: getAssociationNodeIdsValueId(
+								this.endpointIndex,
+								group,
+						  );
+					const endpointsValueId = getEndpointsValueId(
+						this.endpointIndex,
+						group,
+					);
 
-				const lifelineNodeIds: number[] =
-					this.getValueDB().getValue(nodeIdsValueId) ?? [];
-				const lifelineDestinations: EndpointAddress[] =
-					this.getValueDB().getValue(endpointsValueId) ?? [];
+					const lifelineNodeIds: number[] =
+						this.getValueDB().getValue(nodeIdsValueId) ?? [];
+					const lifelineDestinations: EndpointAddress[] =
+						this.getValueDB().getValue(endpointsValueId) ?? [];
 
-				const isAssignedAsNodeAssociation = lifelineNodeIds.includes(
-					ownNodeId,
-				);
-				const isAssignedAsEndpointAssociation = lifelineDestinations.some(
-					(addr) => addr.nodeId === ownNodeId && addr.endpoint === 0,
-				);
-
-				let didMCAssignmentWork = true;
-
-				if (
-					!groupSupportsMultiChannel &&
-					!isAssignedAsNodeAssociation
-				) {
-					// Use normal association if this is not a multi channel association group
-					this.driver.controllerLog.logNode(node.id, {
-						endpoint: this.endpointIndex,
-						message: `Lifeline group #${group} does not support multi channel - assigning controller with Association CC...`,
-						direction: "outbound",
-					});
-
-					await assocAPI.addNodeIds(group, ownNodeId);
-					// refresh the associations - don't trust that it worked
-					await assocAPI.getGroup(group);
-				} else if (
-					(this.version < 3 || mustUseNodeAssociation) &&
-					!isAssignedAsNodeAssociation
-				) {
-					// Use node id associations for V1 and V2 and if a multi channel lifeline is forbidden
-					this.driver.controllerLog.logNode(node.id, {
-						endpoint: this.endpointIndex,
-						message: `Lifeline group #${group} is configured to use node association - assigning controller...`,
-						direction: "outbound",
-					});
-
-					// Remove endpoint associations first, we want a node association
-					if (isAssignedAsEndpointAssociation) {
-						await mcAPI.removeDestinations({
-							groupId: group,
-							endpoints: [{ nodeId: ownNodeId, endpoint: 0 }],
-						});
-					}
-
-					await mcAPI.addDestinations({
-						groupId: group,
-						nodeIds: [ownNodeId],
-					});
-					// refresh the associations - don't trust that it worked
-					const groupReport = await mcAPI.getGroup(group);
-					didMCAssignmentWork = !!groupReport?.nodeIds.includes(
+					const isAssignedAsNodeAssociation = lifelineNodeIds.includes(
 						ownNodeId,
 					);
-				} else if (
-					this.version >= 3 &&
-					!mustUseNodeAssociation &&
-					!isAssignedAsEndpointAssociation
-				) {
-					this.driver.controllerLog.logNode(node.id, {
-						endpoint: this.endpointIndex,
-						message: `Lifeline group #${group}: assigning controller with multi channel association...`,
-						direction: "outbound",
-					});
+					const isAssignedAsEndpointAssociation = lifelineDestinations.some(
+						(addr) =>
+							addr.nodeId === ownNodeId && addr.endpoint === 0,
+					);
 
-					// Starting with V3, the endpoint address must be used
-					// Remove node associations first, we want an endpoint association
-					if (isAssignedAsNodeAssociation) {
-						await mcAPI.removeDestinations({
+					let didMCAssignmentWork = true;
+
+					if (
+						!groupSupportsMultiChannel &&
+						!isAssignedAsNodeAssociation
+					) {
+						// Use normal association if this is not a multi channel association group
+						this.driver.controllerLog.logNode(node.id, {
+							endpoint: this.endpointIndex,
+							message: `Lifeline group #${group} does not support multi channel - assigning controller with Association CC...`,
+							direction: "outbound",
+						});
+
+						await assocAPI.addNodeIds(group, ownNodeId);
+						// refresh the associations - don't trust that it worked
+						await assocAPI.getGroup(group);
+					} else if (
+						(this.version < 3 || mustUseNodeAssociation) &&
+						!isAssignedAsNodeAssociation
+					) {
+						// Use node id associations for V1 and V2 and if a multi channel lifeline is forbidden
+						this.driver.controllerLog.logNode(node.id, {
+							endpoint: this.endpointIndex,
+							message: `Lifeline group #${group} is configured to use node association - assigning controller...`,
+							direction: "outbound",
+						});
+
+						// Remove endpoint associations first, we want a node association
+						if (isAssignedAsEndpointAssociation) {
+							await mcAPI.removeDestinations({
+								groupId: group,
+								endpoints: [{ nodeId: ownNodeId, endpoint: 0 }],
+							});
+						}
+
+						await mcAPI.addDestinations({
 							groupId: group,
 							nodeIds: [ownNodeId],
 						});
-					}
-					await mcAPI.addDestinations({
-						groupId: group,
-						endpoints: [{ nodeId: ownNodeId, endpoint: 0 }],
-					});
-					// and refresh the associations - don't trust that it worked
-					const groupReport = await mcAPI.getGroup(group);
-					didMCAssignmentWork = !!groupReport?.endpoints.some(
-						(a) => a.nodeId === ownNodeId && a.endpoint === 0,
-					);
-				}
+						// refresh the associations - don't trust that it worked
+						const groupReport = await mcAPI.getGroup(group);
+						didMCAssignmentWork = !!groupReport?.nodeIds.includes(
+							ownNodeId,
+						);
+					} else if (
+						this.version >= 3 &&
+						!mustUseNodeAssociation &&
+						!isAssignedAsEndpointAssociation
+					) {
+						this.driver.controllerLog.logNode(node.id, {
+							endpoint: this.endpointIndex,
+							message: `Lifeline group #${group}: assigning controller with multi channel association...`,
+							direction: "outbound",
+						});
 
-				// Fallback to Association CC if endpoint association didn't work
-				if (!didMCAssignmentWork) {
-					this.driver.controllerLog.logNode(node.id, {
-						endpoint: this.endpointIndex,
-						message: `Lifeline group #${group}: Multi Channel Association assignment failed, falling back to Association CC`,
-						direction: "none",
-						level: "warn",
-					});
-					await assocAPI.addNodeIds(group, ownNodeId);
-					// and refresh the associations - don't trust that it worked
-					await assocAPI.getGroup(group);
+						// Starting with V3, the endpoint address must be used
+						// Remove node associations first, we want an endpoint association
+						if (isAssignedAsNodeAssociation) {
+							await mcAPI.removeDestinations({
+								groupId: group,
+								nodeIds: [ownNodeId],
+							});
+						}
+						await mcAPI.addDestinations({
+							groupId: group,
+							endpoints: [{ nodeId: ownNodeId, endpoint: 0 }],
+						});
+						// and refresh the associations - don't trust that it worked
+						const groupReport = await mcAPI.getGroup(group);
+						didMCAssignmentWork = !!groupReport?.endpoints.some(
+							(a) => a.nodeId === ownNodeId && a.endpoint === 0,
+						);
+					}
+
+					// Fallback to Association CC if endpoint association didn't work
+					if (!didMCAssignmentWork) {
+						this.driver.controllerLog.logNode(node.id, {
+							endpoint: this.endpointIndex,
+							message: `Lifeline group #${group}: Multi Channel Association assignment failed, falling back to Association CC`,
+							direction: "none",
+							level: "warn",
+						});
+						await assocAPI.addNodeIds(group, ownNodeId);
+						// and refresh the associations - don't trust that it worked
+						await assocAPI.getGroup(group);
+					}
 				}
+				// Remember that we have a lifeline association
+				valueDB.setValue(
+					getHasLifelineValueId(this.endpointIndex),
+					true,
+				);
+			} else {
+				this.driver.controllerLog.logNode(node.id, {
+					endpoint: this.endpointIndex,
+					message:
+						"No information about Lifeline associations, cannot assign ourselves!",
+					direction: "outbound",
+					level: "warn",
+				});
+				// Remember that we have NO lifeline association
+				valueDB.setValue(
+					getHasLifelineValueId(this.endpointIndex),
+					false,
+				);
 			}
-			// Remember that we have a lifeline association
-			valueDB.setValue(getHasLifelineValueId(this.endpointIndex), true);
-		} else {
-			this.driver.controllerLog.logNode(node.id, {
-				endpoint: this.endpointIndex,
-				message:
-					"No information about Lifeline associations, cannot assign ourselves!",
-				direction: "outbound",
-				level: "warn",
-			});
-			// Remember that we have NO lifeline association
-			valueDB.setValue(getHasLifelineValueId(this.endpointIndex), false);
 		}
 
 		// Remember that the interview is complete
