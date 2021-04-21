@@ -1387,10 +1387,6 @@ protocol version:      ${this._protocolVersion}`;
 			this.productId != undefined
 		) {
 			// Try to load the config file
-			this.driver.controllerLog.logNode(
-				this.id,
-				"trying to load device config",
-			);
 			this._deviceConfig = await this.driver.configManager.lookupDevice(
 				this.manufacturerId,
 				this.productType,
@@ -1400,12 +1396,16 @@ protocol version:      ${this._protocolVersion}`;
 			if (this._deviceConfig) {
 				this.driver.controllerLog.logNode(
 					this.id,
-					"device config loaded",
+					`${
+						this._deviceConfig.isEmbedded
+							? "Embedded"
+							: "User-provided"
+					} device config loaded`,
 				);
 			} else {
 				this.driver.controllerLog.logNode(
 					this.id,
-					"no device config loaded",
+					"No device config found",
 					"warn",
 				);
 			}

@@ -645,7 +645,15 @@ export class DeviceConfig {
 		public readonly compat?: CompatConfig,
 		/** Contains instructions and other metadata for the device */
 		public readonly metadata?: DeviceMetadata,
-	) {}
+	) {
+		// A config file is treated as am embedded one when it is located under the devices root dir
+		this.isEmbedded = !path
+			.relative(devicesDir, this.filename)
+			.startsWith("..");
+	}
+
+	/** Whether this is an embedded configuration or not */
+	public readonly isEmbedded: boolean;
 }
 
 export class ConditionalAssociationConfig {
