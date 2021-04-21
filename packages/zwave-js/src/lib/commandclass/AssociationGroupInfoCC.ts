@@ -382,11 +382,6 @@ export class AssociationGroupInfoCC extends CommandClass {
 		];
 	}
 
-	public skipEndpointInterview(): boolean {
-		// The associations are managed on the root device
-		return true;
-	}
-
 	/** Returns the name of an association group */
 	public getGroupNameCached(groupId: number): string | undefined {
 		return this.getValueDB().getValue(getGroupNameValueID(groupId));
