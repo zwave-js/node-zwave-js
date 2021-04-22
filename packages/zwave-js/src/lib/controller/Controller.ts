@@ -10,7 +10,13 @@ import {
 	ZWaveError,
 	ZWaveErrorCodes,
 } from "@zwave-js/core";
-import { flatMap, JSONObject, num2hex } from "@zwave-js/shared";
+import {
+	flatMap,
+	JSONObject,
+	num2hex,
+	ObjectKeyMap,
+	ReadonlyObjectKeyMap,
+} from "@zwave-js/shared";
 import { distinct } from "alcalzone-shared/arrays";
 import {
 	createDeferredPromise,
@@ -1882,7 +1888,10 @@ ${associatedNodes.join(", ")}`,
 		return ret;
 	}
 
-	/** Returns all Associations (Multi Channel or normal) that are configured on a node */
+	/**
+	 * Returns all associations (Multi Channel or normal) that are configured on the root device or an endpoint of a node.
+	 * @param endpointIndex The endpoint to return the associations for. If no endpoint is given, the associations of the root device (endpoint 0) are returned.
+	 */
 	public getAssociations(
 		nodeId: number,
 		endpointIndex: number = 0,
@@ -1936,6 +1945,33 @@ ${associatedNodes.join(", ")}`,
 			}
 		}
 
+		return ret;
+	}
+
+	/**
+	 * Returns all associations (Multi Channel or normal) that are configured on a node and all its endpoints.
+	 * The returned map uses the source node+endpoint as keys and its values are a map of association group IDs to target node+endpoint.
+	 */
+	public getAllAssociations(
+		nodeId: number,
+	): ReadonlyObjectKeyMap<
+		AssociationAddress,
+		ReadonlyMap<number, readonly AssociationAddress[]>
+	> {
+		const node = this.nodes.getOrThrow(nodeId);
+
+		const ret = new ObjectKeyMap<
+			AssociationAddress,
+			ReadonlyMap<number, readonly AssociationAddress[]>
+		>();
+		for (const endpoint of node.getAllEndpoints()) {
+			if (endpoint.supportsCC(CommandClasses.Association)) {
+				ret.set(
+					{ nodeId, endpoint: endpoint.index },
+					this.getAssociations(nodeId, endpoint.index),
+				);
+			}
+		}
 		return ret;
 	}
 
