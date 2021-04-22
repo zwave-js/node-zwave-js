@@ -21,16 +21,6 @@
 	},
 	"supportsZWavePlus": true,
 	"paramInformation": {
-		"0": {
-			"label": "ON/OFF mode",
-			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 2,
-			"defaultValue": 2,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
-		},
 		"1": {
 			"label": "Remember device state",
 			"description": "Determines how the device will react in the event of power supply failure",
@@ -277,7 +267,7 @@
 			"minValue": 0,
 			"maxValue": 15,
 			"defaultValue": 0,
-			"readOnly": true,
+			"readOnly": false,
 			"writeOnly": false,
 			"allowManualEntry": false,
 			"options": [
@@ -310,9 +300,31 @@
 			"minValue": 0,
 			"maxValue": 15,
 			"defaultValue": 0,
-			"readOnly": true,
+			"readOnly": false,
 			"writeOnly": false,
-			"allowManualEntry": true
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "no scenes",
+					"value": 0
+				},
+				{
+					"label": "Key pressed once",
+					"value": 1
+				},
+				{
+					"label": "Key pressed twice",
+					"value": 2
+				},
+				{
+					"label": "Key pressed 3 times",
+					"value": 4
+				},
+				{
+					"label": "Key held down and released",
+					"value": 8
+				}
+			]
 		},
 		"60": {
 			"label": "Power reports – include self-consumption",
@@ -566,6 +578,30 @@
 			"writeOnly": false,
 			"allowManualEntry": true
 		},
+		"172": {
+			"label": "ON/OFF mode",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 2,
+			"defaultValue": 2,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "ON/OFF mode disabled (dimming is possible)",
+					"value": 0
+				},
+				{
+					"label": "ON/OFF mode enabled (dimming is not possible)",
+					"value": 1
+				},
+				{
+					"label": "mode selected automatically",
+					"value": 2
+				}
+			]
+		},		
 		"173": {
 			"label": "Dimmability of the load (read only)",
 			"valueSize": 1,
