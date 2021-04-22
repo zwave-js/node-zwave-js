@@ -185,6 +185,9 @@
 			},
 			{
 				"$import": "templates/kwikset_template.json#alarm_map_code_deleted"
+			},
+			{
+				"$import": "templates/kwikset_template.json#alarm_map_low_battery"
 			}
 		]
 	}
