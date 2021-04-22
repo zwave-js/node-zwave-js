@@ -601,7 +601,7 @@
 					"value": 2
 				}
 			]
-		},		
+		},
 		"173": {
 			"label": "Dimmability of the load (read only)",
 			"valueSize": 1,
