@@ -412,12 +412,22 @@ export class ConfigManager {
 			// The index of config files included in this package
 			const embeddedIndex = await loadDeviceIndexInternal(this.logger);
 			// A dynamic index of the user-defined priority device config files
-			const priorityIndex = this.deviceConfigPriorityDir
-				? await generatePriorityDeviceIndex(
-						this.deviceConfigPriorityDir,
-						this.logger,
-				  )
-				: [];
+			const priorityIndex: DeviceConfigIndex = [];
+			if (this.deviceConfigPriorityDir) {
+				if (await pathExists(this.deviceConfigPriorityDir)) {
+					priorityIndex.push(
+						...(await generatePriorityDeviceIndex(
+							this.deviceConfigPriorityDir,
+							this.logger,
+						)),
+					);
+				} else {
+					this.logger.print(
+						`Priority device configuration directory ${this.deviceConfigPriorityDir} not found`,
+						"warn",
+					);
+				}
+			}
 			// Put the priority index in front, so the files get resolved first
 			this.index = [...priorityIndex, ...embeddedIndex];
 		} catch (e: unknown) {
