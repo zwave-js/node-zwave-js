@@ -1614,7 +1614,7 @@ export class ZWaveController extends EventEmitter {
 		try {
 			associatedNodes = distinct(
 				flatMap<number, AssociationAddress[]>(
-					[...(this.getAssociations(nodeId).values() as any)],
+					[...(this.getAssociations({ nodeId }).values() as any)],
 					(assocs: AssociationAddress[]) =>
 						assocs.map((a) => a.nodeId),
 				),

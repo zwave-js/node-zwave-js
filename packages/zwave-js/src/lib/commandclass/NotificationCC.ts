@@ -362,7 +362,9 @@ export class NotificationCC extends CommandClass {
 				node.supportsCC(CommandClasses["Association Group Information"])
 			) {
 				const assocGroups = this.driver.controller.getAssociationGroups(
-					node.id,
+					{
+						nodeId: node.id,
+					},
 				);
 				for (const group of assocGroups.values()) {
 					// Check if this group sends Notification Reports
