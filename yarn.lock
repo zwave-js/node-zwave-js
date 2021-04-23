@@ -1015,10 +1015,10 @@
     resolve-global "1.0.0"
     yargs "^16.2.0"
 
-"@commitlint/config-conventional@^12.0.1":
-  version "12.0.1"
-  resolved "https://registry.yarnpkg.com/@commitlint/config-conventional/-/config-conventional-12.0.1.tgz#7bf3bbf68bda967c5165135ebe8f2055decf1a83"
-  integrity sha512-1ZhB135lh47zVmf1orwcjxuKuam11fJIH/bdVxW9XiQv8XPwC6iIp19knfl8FcOT78AVBnes1z6EVxgUeP2/4Q==
+"@commitlint/config-conventional@^12.1.1":
+  version "12.1.1"
+  resolved "https://registry.yarnpkg.com/@commitlint/config-conventional/-/config-conventional-12.1.1.tgz#73dd3b1a7912138420d248f334f15c94c250bc9e"
+  integrity sha512-15CqbXMsQiEb0qbzjEHe2OkzaXPYSp7RxaS6KoSVk/4W0QiigquavQ+M0huBZze92h0lMS6Pxoq4AJ5CQ3D+iQ==
   dependencies:
     conventional-changelog-conventionalcommits "^4.3.1"
 
@@ -4881,10 +4881,10 @@ eslint-config-prettier@^8.2.0:
   resolved "https://registry.yarnpkg.com/eslint-config-prettier/-/eslint-config-prettier-8.2.0.tgz#78de77d63bca8e9e59dae75a614b5299925bb7b3"
   integrity sha512-dWV9EVeSo2qodOPi1iBYU/x6F6diHv8uujxbxr77xExs3zTAlNXvVZKiyLsQGNz7yPV2K49JY5WjPzNIuDc2Bw==
 
-eslint-plugin-prettier@^3.1.4:
-  version "3.3.1"
-  resolved "https://registry.yarnpkg.com/eslint-plugin-prettier/-/eslint-plugin-prettier-3.3.1.tgz#7079cfa2497078905011e6f82e8dd8453d1371b7"
-  integrity sha512-Rq3jkcFY8RYeQLgk2cCwuc0P7SEFwDravPhsJZOQ5N4YI4DSg50NyqJ/9gdZHzQlHf8MvafSesbNJCcP/FF6pQ==
+eslint-plugin-prettier@^3.4.0:
+  version "3.4.0"
+  resolved "https://registry.yarnpkg.com/eslint-plugin-prettier/-/eslint-plugin-prettier-3.4.0.tgz#cdbad3bf1dbd2b177e9825737fe63b476a08f0c7"
+  integrity sha512-UDK6rJT6INSfcOo545jiaOwB701uAIt2/dR7WnFQoGCVl1/EMqdANBmwUaqqQ45aXprsTGzSa39LI1PyuRBxxw==
   dependencies:
     prettier-linter-helpers "^1.0.0"
 
