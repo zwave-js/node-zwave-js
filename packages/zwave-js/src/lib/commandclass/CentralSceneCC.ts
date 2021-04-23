@@ -228,7 +228,7 @@ export class CentralSceneCC extends CommandClass {
 				const groupId = groupsIssueingNotifications[0];
 				const existingAssociations =
 					this.driver.controller
-						.getAssociations(node.id)
+						.getAssociations({ nodeId: node.id })
 						.get(groupId) ?? [];
 
 				if (
@@ -243,7 +243,7 @@ export class CentralSceneCC extends CommandClass {
 						direction: "outbound",
 					});
 					await this.driver.controller.addAssociations(
-						node.id,
+						{ nodeId: node.id },
 						groupId,
 						[{ nodeId: this.driver.controller.ownNodeId! }],
 					);

@@ -109,20 +109,29 @@ By default, the node will be included securely (with encryption) if a network ke
 
 ### Managing associations
 
-The following methods can be used to manage associations between nodes. This only works AFTER the interview process!
+The following methods can be used to manage associations between nodes and/or endpoints. This only works AFTER the interview process!
 
 ```ts
-getAssociationGroups(nodeId: number): ReadonlyMap<number, AssociationGroup>;
-getAssociations(nodeId: number): ReadonlyMap<number, readonly Association[]>;
-isAssociationAllowed(nodeId: number, group: number, association: Association): boolean;
-addAssociations(nodeId: number, group: number, associations: Association[]): Promise<void>;
-removeAssociations(nodeId: number, group: number, associations: Association[]): Promise<void>;
+getAssociationGroups(source: AssociationAddress): ReadonlyMap<number, AssociationGroup>;
+
+getAssociations(source: AssociationAddress): ReadonlyMap<number, readonly AssociationAddress[]>;
+getAllAssociations(nodeId: number): ReadonlyObjectKeyMap<
+	AssociationAddress,
+	ReadonlyMap<number, readonly AssociationAddress[]>
+>;
+
+isAssociationAllowed(source: AssociationAddress, group: number, destination: AssociationAddress): boolean;
+
+addAssociations(source: AssociationAddress, group: number, destinations: AssociationAddress[]): Promise<void>;
+
+removeAssociations(source: AssociationAddress, group: number, destinations: AssociationAddress[]): Promise<void>;
 removeNodeFromAllAssociations(nodeId: number): Promise<void>;
 ```
 
--   `getAssociationGroups` returns all association groups for a given node.
--   `getAssociations` returns all defined associations of a given node.
--   `addAssociations` can be used to add one or more associations to a node's group. You should check if each association is allowed using `isAssociationAllowed` before doing so.
+-   `getAssociationGroups` returns all association groups for a given node or endpoint.
+-   `getAssociations` returns all defined associations of a given node **or** endpoint. If no endpoint is given, the associations for the root endpoint (`0`) are returned.
+-   `getAllAssociations` returns all defined associations of a given **node and all its endpoints**. The returned `Map` uses the source node+endpoint as keys and its values are `Maps` of association group IDs to target node+endpoint.
+-   `addAssociations` can be used to add one or more associations to a node's or endpoint's group. You should check if each association is allowed using `isAssociationAllowed` before doing so.
 -   To remove a previously added association, use `removeAssociations`
 -   A node can be removed from all other nodes' associations using `removeNodeFromAllAssociations`
 
@@ -149,14 +158,14 @@ interface AssociationGroup {
 }
 ```
 
-#### `Association` interface
+#### `AssociationAddress` interface
 
-This defines the target of a node's association:
+This defines the source and target node/endpoint of an association:
 
-<!-- #import Association from "zwave-js" -->
+<!-- #import AssociationAddress from "zwave-js" -->
 
 ```ts
-interface Association {
+interface AssociationAddress {
 	nodeId: number;
 	endpoint?: number;
 }

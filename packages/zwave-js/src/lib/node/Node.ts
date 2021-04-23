@@ -1015,6 +1015,17 @@ export class ZWaveNode extends Endpoint {
 		return this._endpointInstances.get(index)!;
 	}
 
+	public getEndpointOrThrow(index: number): Endpoint {
+		const ret = this.getEndpoint(index);
+		if (!ret) {
+			throw new ZWaveError(
+				`Endpoint ${index} does not exist on Node ${this.id}`,
+				ZWaveErrorCodes.Controller_EndpointNotFound,
+			);
+		}
+		return ret;
+	}
+
 	/** Returns a list of all endpoints of this node, including the root endpoint (index 0) */
 	public getAllEndpoints(): Endpoint[] {
 		const ret: Endpoint[] = [this];

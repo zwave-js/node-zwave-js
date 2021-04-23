@@ -247,35 +247,42 @@ export interface AssociationGroup {
 }
 
 /** Returns the ValueID used to store the name of an association group */
-function getGroupNameValueID(groupId: number): ValueID {
+function getGroupNameValueID(endpointIndex: number, groupId: number): ValueID {
 	return {
 		commandClass: CommandClasses["Association Group Information"],
+		endpoint: endpointIndex,
 		property: "name",
 		propertyKey: groupId,
 	};
 }
 
 /** Returns the ValueID used to store info for an association group */
-function getGroupInfoValueID(groupId: number): ValueID {
+function getGroupInfoValueID(endpointIndex: number, groupId: number): ValueID {
 	return {
 		commandClass: CommandClasses["Association Group Information"],
+		endpoint: endpointIndex,
 		property: "info",
 		propertyKey: groupId,
 	};
 }
 
 /** Returns the ValueID used to store info for an association group */
-function getIssuedCommandsValueID(groupId: number): ValueID {
+function getIssuedCommandsValueID(
+	endpointIndex: number,
+	groupId: number,
+): ValueID {
 	return {
 		commandClass: CommandClasses["Association Group Information"],
+		endpoint: endpointIndex,
 		property: "issuedCommands",
 		propertyKey: groupId,
 	};
 }
 
-function getHasDynamicInfoValueID(): ValueID {
+function getHasDynamicInfoValueID(endpointIndex: number): ValueID {
 	return {
 		commandClass: CommandClasses["Association Group Information"],
+		endpoint: endpointIndex,
 		property: "hasDynamicInfo",
 	};
 }
@@ -369,8 +376,8 @@ export class AssociationGroupInfoCC extends CommandClass {
 
 	public constructor(driver: Driver, options: CommandClassOptions) {
 		super(driver, options);
-		this.registerValue(getGroupNameValueID(0).property, true);
-		this.registerValue(getGroupInfoValueID(0).property, true);
+		this.registerValue(getGroupNameValueID(0, 0).property, true);
+		this.registerValue(getGroupInfoValueID(0, 0).property, true);
 	}
 
 	public determineRequiredCCInterviews(): readonly CommandClasses[] {
@@ -382,14 +389,11 @@ export class AssociationGroupInfoCC extends CommandClass {
 		];
 	}
 
-	public skipEndpointInterview(): boolean {
-		// The associations are managed on the root device
-		return true;
-	}
-
 	/** Returns the name of an association group */
 	public getGroupNameCached(groupId: number): string | undefined {
-		return this.getValueDB().getValue(getGroupNameValueID(groupId));
+		return this.getValueDB().getValue(
+			getGroupNameValueID(this.endpointIndex, groupId),
+		);
 	}
 
 	/** Returns the association profile for an association group */
@@ -398,14 +402,16 @@ export class AssociationGroupInfoCC extends CommandClass {
 	): AssociationGroupInfoProfile | undefined {
 		return this.getValueDB().getValue<{
 			profile: AssociationGroupInfoProfile;
-		}>(getGroupInfoValueID(groupId))?.profile;
+		}>(getGroupInfoValueID(this.endpointIndex, groupId))?.profile;
 	}
 
 	/** Returns the dictionary of all commands issued by the given association group */
 	public getIssuedCommandsCached(
 		groupId: number,
 	): ReadonlyMap<CommandClasses, readonly number[]> | undefined {
-		return this.getValueDB().getValue(getIssuedCommandsValueID(groupId));
+		return this.getValueDB().getValue(
+			getIssuedCommandsValueID(this.endpointIndex, groupId),
+		);
 	}
 
 	public findGroupsForIssuedCommand(
@@ -511,7 +517,7 @@ export class AssociationGroupInfoCC extends CommandClass {
 		// Query the information for each group (this is the only thing that could be dynamic)
 		const associationGroupCount = this.getAssociationGroupCountCached();
 		const hasDynamicInfo = this.getValueDB().getValue(
-			getHasDynamicInfoValueID(),
+			getHasDynamicInfoValueID(this.endpointIndex),
 		);
 
 		for (let groupId = 1; groupId <= associationGroupCount; groupId++) {
@@ -558,7 +564,7 @@ export class AssociationGroupInfoCCNameReport extends AssociationGroupInfoCC {
 	}
 
 	public persistValues(): boolean {
-		const valueId = getGroupNameValueID(this.groupId);
+		const valueId = getGroupNameValueID(this.endpointIndex, this.groupId);
 		this.getValueDB().setValue(valueId, this.name);
 		return true;
 	}
@@ -657,7 +663,7 @@ export class AssociationGroupInfoCCInfoReport extends AssociationGroupInfoCC {
 		if (!super.persistValues()) return false;
 		for (const group of this.groups) {
 			const { groupId, mode, profile, eventCode } = group;
-			const valueId = getGroupInfoValueID(groupId);
+			const valueId = getGroupInfoValueID(this.endpointIndex, groupId);
 			this.getValueDB().setValue(valueId, {
 				mode,
 				profile,
