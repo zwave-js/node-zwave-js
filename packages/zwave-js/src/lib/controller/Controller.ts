@@ -1800,12 +1800,29 @@ ${associatedNodes.join(", ")}`,
 
 	/**
 	 * Returns a dictionary of all association groups of this node or endpoint and their information.
+	 * If no endpoint is given, the associations of the root device (endpoint 0) are returned.
 	 * This only works AFTER the interview process
 	 */
 	public getAssociationGroups(
+		source: AssociationAddress,
+	): ReadonlyMap<number, AssociationGroup>;
+
+	/**
+	 * Returns a dictionary of all association groups for the root device (endpoint 0) of this node.
+	 *
+	 * @deprecated Use the overload with `source: AssociationAddress` instead
+	 */
+	public getAssociationGroups(
 		nodeId: number,
-		endpointIndex: number = 0,
+	): ReadonlyMap<number, AssociationGroup>;
+
+	public getAssociationGroups(
+		source: number | AssociationAddress,
 	): ReadonlyMap<number, AssociationGroup> {
+		const nodeId = typeof source === "number" ? source : source.nodeId;
+		const endpointIndex =
+			typeof source === "number" ? 0 : source.endpoint ?? 0;
+
 		const node = this.nodes.getOrThrow(nodeId);
 		const endpoint = node.getEndpointOrThrow(endpointIndex);
 
@@ -1890,12 +1907,27 @@ ${associatedNodes.join(", ")}`,
 
 	/**
 	 * Returns all associations (Multi Channel or normal) that are configured on the root device or an endpoint of a node.
-	 * @param endpointIndex The endpoint to return the associations for. If no endpoint is given, the associations of the root device (endpoint 0) are returned.
+	 * If no endpoint is given, the associations of the root device (endpoint 0) are returned.
+	 */
+	public getAssociations(
+		source: AssociationAddress,
+	): ReadonlyMap<number, readonly AssociationAddress[]>;
+
+	/**
+	 * Returns all associations (Multi Channel or normal) that are configured on the root device (endpoint 0) of this node.
+	 * @deprecated Use the overload with `source: AssociationAddress` instead
 	 */
 	public getAssociations(
 		nodeId: number,
-		endpointIndex: number = 0,
+	): ReadonlyMap<number, readonly AssociationAddress[]>;
+
+	public getAssociations(
+		source: number | AssociationAddress,
 	): ReadonlyMap<number, readonly AssociationAddress[]> {
+		const nodeId = typeof source === "number" ? source : source.nodeId;
+		const endpointIndex =
+			typeof source === "number" ? 0 : source.endpoint ?? 0;
+
 		const node = this.nodes.getOrThrow(nodeId);
 		const endpoint = node.getEndpointOrThrow(endpointIndex);
 
@@ -1965,11 +1997,12 @@ ${associatedNodes.join(", ")}`,
 			ReadonlyMap<number, readonly AssociationAddress[]>
 		>();
 		for (const endpoint of node.getAllEndpoints()) {
+			const address: AssociationAddress = {
+				nodeId,
+				endpoint: endpoint.index,
+			};
 			if (endpoint.supportsCC(CommandClasses.Association)) {
-				ret.set(
-					{ nodeId, endpoint: endpoint.index },
-					this.getAssociations(nodeId, endpoint.index),
-				);
+				ret.set(address, this.getAssociations(address));
 			}
 		}
 		return ret;

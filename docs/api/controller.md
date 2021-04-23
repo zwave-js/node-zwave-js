@@ -112,9 +112,9 @@ By default, the node will be included securely (with encryption) if a network ke
 The following methods can be used to manage associations between nodes and/or endpoints. This only works AFTER the interview process!
 
 ```ts
-getAssociationGroups(nodeId: number, endpointIndex?: number): ReadonlyMap<number, AssociationGroup>;
+getAssociationGroups(source: AssociationAddress): ReadonlyMap<number, AssociationGroup>;
 
-getAssociations(nodeId: number, endpointIndex?: number): ReadonlyMap<number, readonly AssociationAddress[]>;
+getAssociations(source: AssociationAddress): ReadonlyMap<number, readonly AssociationAddress[]>;
 getAllAssociations(nodeId: number): ReadonlyObjectKeyMap<
 	AssociationAddress,
 	ReadonlyMap<number, readonly AssociationAddress[]>
