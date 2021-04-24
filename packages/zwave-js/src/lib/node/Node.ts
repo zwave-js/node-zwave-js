@@ -1060,11 +1060,16 @@ export class ZWaveNode extends Endpoint {
 
 	/**
 	 * Resets all information about this node and forces a fresh interview.
+	 * **Note:** This does nothing for the controller node.
 	 *
-	 * WARNING: Take care NOT to call this method when the node is already being interviewed.
+	 * **WARNING:** Take care NOT to call this method when the node is already being interviewed.
 	 * Otherwise the node information may become inconsistent.
 	 */
 	public async refreshInfo(): Promise<void> {
+		// It does not make sense to re-interview the controller. All important information is queried
+		// directly via the serial API
+		if (this.isControllerNode()) return;
+
 		// preserve the node name and location, since they might not be stored on the node
 		const name = this.name;
 		const location = this.location;

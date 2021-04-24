@@ -1,17 +1,13 @@
-// Fibargroup FGWPB-121
+// Fibargroup FGWPG-121
 // Fibaro Wall Plug
 {
 	"manufacturer": "Fibargroup",
 	"manufacturerId": "0x010f",
-	"label": "FGWPB-121",
+	"label": "FGWPG-121",
 	"description": "Fibaro Wall Plug",
 	"devices": [
 		{
-			"productType": "0x1401",
-			"productId": "0x2000"
-		},
-		{
-			"productType": "0x1801",
+			"productType": "0x1501",
 			"productId": "0x1000"
 		}
 	],
@@ -46,7 +42,7 @@
 			"description": "Overload safety switch",
 			"valueSize": 2,
 			"minValue": 0,
-			"maxValue": 18000,
+			"maxValue": 30000,
 			"defaultValue": 0,
 			"readOnly": false,
 			"writeOnly": false,
@@ -148,7 +144,7 @@
 			"description": "Upper power threshold",
 			"valueSize": 2,
 			"minValue": 100,
-			"maxValue": 18000,
+			"maxValue": 30000,
 			"defaultValue": 500,
 			"readOnly": false,
 			"writeOnly": false,
@@ -159,7 +155,7 @@
 			"description": "Lower power threshold",
 			"valueSize": 2,
 			"minValue": 0,
-			"maxValue": 17900,
+			"maxValue": 29900,
 			"defaultValue": 300,
 			"readOnly": false,
 			"writeOnly": false,
@@ -356,8 +352,8 @@
 			"description": "Maximum active power to flash the LED frame Violet",
 			"valueSize": 2,
 			"minValue": 1000,
-			"maxValue": 18000,
-			"defaultValue": 18000,
+			"maxValue": 30000,
+			"defaultValue": 30000,
 			"readOnly": false,
 			"writeOnly": false,
 			"allowManualEntry": true

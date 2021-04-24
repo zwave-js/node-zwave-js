@@ -62,8 +62,8 @@
   "dependencies": {
     "@alcalzone/jsonl-db": "^1.2.4",
     "@alcalzone/pak": "^0.1.0",
-    "@sentry/integrations": "^6.2.5",
-    "@sentry/node": "^6.2.5",
+    "@sentry/integrations": "^6.3.0",
+    "@sentry/node": "^6.3.0",
     "@zwave-js/config": "7.2.4",
     "@zwave-js/core": "7.2.4",
     "@zwave-js/serial": "7.2.4",
@@ -76,7 +76,7 @@
     "serialport": "^9.0.7",
     "source-map-support": "^0.5.19",
     "winston": "^3.3.3",
-    "xstate": "^4.17.1"
+    "xstate": "^4.18.0"
   },
   "scripts": {
     "build:full": "gulp build",
