@@ -53,7 +53,10 @@ export async function installConfigUpdate(newVersion: string): Promise<void> {
 	// Check which package manager to use for the update
 	let pak: PackageManager;
 	try {
-		pak = await detectPackageManager(__dirname);
+		pak = await detectPackageManager({
+			cwd: __dirname,
+			requireLockfile: false,
+		});
 	} catch {
 		throw new ZWaveError(
 			`Config update failed: No package manager detected or package.json not found!`,
