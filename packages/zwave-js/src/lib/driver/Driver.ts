@@ -2900,6 +2900,14 @@ ${handlers.length} left`,
 		// and reload the config files
 		await this.configManager.loadAll();
 
+		// Now try to apply them to all known devices
+		if (this._controller) {
+			for (const node of this._controller.nodes.values()) {
+				// wotan-disable-next-line no-restricted-property-access
+				if (node.ready) await node["loadDeviceConfig"]();
+			}
+		}
+
 		return true;
 	}
 }
