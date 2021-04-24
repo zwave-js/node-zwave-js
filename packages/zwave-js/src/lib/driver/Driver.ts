@@ -122,10 +122,13 @@ import {
 } from "./SendThreadMachine";
 import { throttlePresets } from "./ThrottlePresets";
 import { Transaction } from "./Transaction";
+import { checkForConfigUpdates, installConfigUpdate } from "./UpdateConfig";
 import type { ZWaveOptions } from "./ZWaveOptions";
 
-// eslint-disable-next-line
-const { version: libVersion } = require("../../../package.json");
+// eslint-disable-next-line @typescript-eslint/no-var-requires
+const packageJson = require("../../../package.json");
+const libVersion: string = packageJson.version;
+
 // This is made with cfonts:
 const libNameString = `
 ███████╗ ██╗    ██╗  █████╗  ██╗   ██╗ ███████╗             ██╗ ███████╗
@@ -384,6 +387,10 @@ export class Driver extends EventEmitter {
 	}
 
 	public readonly configManager: ConfigManager;
+	private _configVersion: string;
+	public get configVersion(): string {
+		return this._configVersion;
+	}
 
 	private _logContainer: ZWaveLogContainer;
 	private _driverLog: DriverLogger;
@@ -445,6 +452,7 @@ export class Driver extends EventEmitter {
 		this.cacheDir = this.options.storage.cacheDir;
 
 		// Initialize config manager
+		this._configVersion = packageJson.dependencies["@zwave-js/config"];
 		this.configManager = new ConfigManager({
 			logContainer: this._logContainer,
 			deviceConfigPriorityDir: this.options.storage
@@ -599,6 +607,7 @@ export class Driver extends EventEmitter {
 		// Log which version is running
 		this.driverLog.print(libNameString, "info");
 		this.driverLog.print(`version ${libVersion}`, "info");
+		this.driverLog.print(`config version ${this.configVersion}`, "info");
 		this.driverLog.print("", "info");
 
 		this.driverLog.print("starting driver...");
@@ -664,14 +673,7 @@ export class Driver extends EventEmitter {
 			// Load the necessary configuration
 			this.driverLog.print("loading configuration...");
 			try {
-				await this.configManager.loadDeviceClasses();
-				await this.configManager.loadManufacturers();
-				await this.configManager.loadDeviceIndex();
-				await this.configManager.loadNotifications();
-				await this.configManager.loadNamedScales();
-				await this.configManager.loadSensorTypes();
-				await this.configManager.loadMeters();
-				await this.configManager.loadIndicators();
+				await this.configManager.loadAll();
 			} catch (e) {
 				const message = `Failed to load the configuration: ${e.message}`;
 				this.driverLog.print(message, "error");
@@ -2860,5 +2862,44 @@ ${handlers.length} left`,
 	// This does not all need to be printed to the console
 	public [util.inspect.custom](): string {
 		return "[Driver]";
+	}
+
+	/**
+	 * Checks whether there is a compatible update for the currently installed config package.
+	 * Returns the new version if there is an update, `undefined` otherwise.
+	 */
+	public async checkForConfigUpdates(): Promise<string | undefined> {
+		try {
+			return await checkForConfigUpdates(this._configVersion);
+		} catch (e) {
+			this.driverLog.print(e.message, "error");
+		}
+	}
+
+	/**
+	 * Installs an update for the embedded configuration DB if there is a compatible one.
+	 * Returns `true` when an update was installed, `false` otherwise.
+	 *
+	 * **Note:** Bugfixes and changes to device configuration generally require a restart or re-interview to take effect.
+	 */
+	public async installConfigUpdate(): Promise<boolean> {
+		const newVersion = await this.checkForConfigUpdates();
+		if (!newVersion) return false;
+
+		try {
+			await installConfigUpdate(newVersion);
+		} catch (e) {
+			this.driverLog.print(e.message, "error");
+			return false;
+		}
+		this.driverLog.print(
+			`Updated embedded configuration DB to version ${newVersion}, activating...`,
+		);
+		// Remember that we use the new version
+		this._configVersion = newVersion;
+		// and reload the config files
+		await this.configManager.loadAll();
+
+		return true;
 	}
 }
