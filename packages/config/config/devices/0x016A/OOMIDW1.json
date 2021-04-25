@@ -3,12 +3,12 @@
 {
 	"manufacturer": "Fantem",
 	"manufacturerId": "0x016A",
-	"label": "FT112-A",
+	"label": "OOMIDW1",
 	"description": "Door/Window Sensor",
 	"devices": [
 		{
 			"productType": "0x0202",
-			"productId": "0x4a"
+			"productId": "0x004a"
 		}
 	],
 	"firmwareVersion": {
