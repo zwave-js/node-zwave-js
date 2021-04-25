@@ -2,7 +2,7 @@
 // Door/Window Sensor
 {
 	"manufacturer": "Omni",
-	"manufacturerId": "0x16a",
+	"manufacturerId": "0x016A",
 	"label": "OOMIDW1",
 	"description": "Door/Window Sensor",
 	"devices": [
