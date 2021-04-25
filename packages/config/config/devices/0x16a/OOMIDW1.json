@@ -8,7 +8,7 @@
 	"devices": [
 		{
 			"productType": "0x202",
-			"productId": "0x4a",
+			"productId": "0x4a"
 		}
 	],
 	"firmwareVersion": {
@@ -50,6 +50,6 @@
 	"metadata": {
 		"inclusion": "Turn the primary controller of Z-Wave network into inclusion mode, short press the product’s Action Button that you can find in the back of the product",
 		"exclusion": "Turn the primary controller of Z-Wave network into exclusion mode, short press the product’s Action Button that you can find in back of the product",
-		"reset": "Press the Action Button once that you can find in back of the product for 20 seconds and then release. This procedure should only be used when the primary controller is inoperable",
+		"reset": "Press the Action Button once that you can find in back of the product for 20 seconds and then release. This procedure should only be used when the primary controller is inoperable"
 	}
 }
