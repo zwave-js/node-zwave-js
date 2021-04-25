@@ -1,9 +1,9 @@
 // Omni OOMIDW1 and FT112-A
 // Door/Window Sensor
 {
-	"manufacturer": "Omni",
+	"manufacturer": "Fantem",
 	"manufacturerId": "0x016A",
-	"label": "OOMIDW1",
+	"label": "FT112-A",
 	"description": "Door/Window Sensor",
 	"devices": [
 		{
