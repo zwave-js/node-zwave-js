@@ -360,7 +360,7 @@
 		},
 		"243": {
 			"label": "Device Specific Key",
-			"valueSize": 16,
+			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 0,
 			"defaultValue": 0,
