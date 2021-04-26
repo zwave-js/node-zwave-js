@@ -112,7 +112,7 @@
 			"$import": "../0x0086/templates/aeotec_template.json#tone_duration_emergency"
 		},
 		"8[0xff00]": {
-			"$import": "../0x0086/templates/aeotec_template.json#emergency"
+			"$import": "../0x0086/templates/aeotec_template.json#tone_interval_emergency"
 		},
 		"8[0xff]": {
 			"$import": "../0x0086/templates/aeotec_template.json#tone_play_count_emergency"
