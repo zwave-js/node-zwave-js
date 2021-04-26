@@ -1,10 +1,10 @@
 // AEON Labs ZW141
-// Nano Shutter
+// Nano Shutter V.2
 {
 	"manufacturer": "AEON Labs",
 	"manufacturerId": "0x0086",
 	"label": "ZW141",
-	"description": "Nano Shutter",
+	"description": "Nano Shutter V.2",
 	"devices": [
 		{
 			"productType": "0x0003",
