@@ -110,13 +110,13 @@
 		"41[0x0f]": [
 			{
 				"$if": "firmwareVersion >= 1.7 firmwareVersion <= 1.9",
-				"$import": "templates/aeotec_template.json#celsius_farenheit",
+				"$import": "templates/aeotec_template.json#celsius_fahrenheit",
 				"label": "Temperature Threshold Unit",
 				"valueSize": 3
 			},
 			{
 				"$if": "firmwareVersion >= 1.10",
-				"$import": "templates/aeotec_template.json#celsius_farenheit",
+				"$import": "templates/aeotec_template.json#celsius_fahrenheit",
 				"label": "Temperature Threshold Unit",
 				"valueSize": 4
 			}
@@ -210,13 +210,13 @@
 		"49[0xff]": [
 			{
 				"$if": "firmwareVersion < 1.10",
-				"$import": "templates/aeotec_template.json#celsius_farenheit",
+				"$import": "templates/aeotec_template.json#celsius_fahrenheit",
 				"label": "Upper Temperature Limit Unit",
 				"valueSize": 3
 			},
 			{
 				"$if": "firmwareVersion >= 1.10",
-				"$import": "templates/aeotec_template.json#celsius_farenheit",
+				"$import": "templates/aeotec_template.json#celsius_fahrenheit",
 				"label": "Upper Temperature Limit Unit",
 				"valueSize": 4
 			}
@@ -250,13 +250,13 @@
 		"50[0xff]": [
 			{
 				"$if": "firmwareVersion < 1.10",
-				"$import": "templates/aeotec_template.json#celsius_farenheit",
+				"$import": "templates/aeotec_template.json#celsius_fahrenheit",
 				"label": "Lower Temperature Limit Unit",
 				"valueSize": 3
 			},
 			{
 				"$if": "firmwareVersion >= 1.10",
-				"$import": "templates/aeotec_template.json#celsius_farenheit",
+				"$import": "templates/aeotec_template.json#celsius_fahrenheit",
 				"label": "Lower Temperature Limit Unit",
 				"valueSize": 3
 			}
@@ -451,7 +451,7 @@
 			"$import": "templates/aeotec_template.json#auto_report_group3_luminance"
 		},
 		"64": {
-			"$import": "templates/aeotec_template.json#celsius_farenheit",
+			"$import": "templates/aeotec_template.json#celsius_fahrenheit",
 			"label": "Automatic Temperature Reporting Unit"
 		},
 		"100": {
@@ -488,7 +488,7 @@
 		},
 		"201[0xff]": {
 			"$if": "firmwareVersion >= 1.6",
-			"$import": "templates/aeotec_template.json#celsius_farenheit",
+			"$import": "templates/aeotec_template.json#celsius_fahrenheit",
 			"label": "Temperature Calibration Unit"
 		},
 		"201[0xff00]": {

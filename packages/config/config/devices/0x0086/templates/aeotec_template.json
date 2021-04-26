@@ -2302,7 +2302,7 @@
 		"allowManualEntry": true
 	},
 	"recover_limit_temp_unit": {
-		"$import": "#celsius_farenheit_0",
+		"$import": "#celsius_fahrenheit_0",
 		"label": "Recover Limit Temperature Unit",
 		"valueSize": 2
 	},

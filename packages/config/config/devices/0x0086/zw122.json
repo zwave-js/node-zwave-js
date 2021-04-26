@@ -129,7 +129,7 @@
 			"allowManualEntry": true
 		},
 		"49[0xff00]": {
-			"$import": "templates/aeotec_template.json#celsius_farenheit_0",
+			"$import": "templates/aeotec_template.json#celsius_fahrenheit_0",
 			"label": "Overheat Threshold Temperature Unit"
 		},
 		"50[0xffff0000]": {
@@ -143,7 +143,7 @@
 			"allowManualEntry": true
 		},
 		"50[0xff00]": {
-			"$import": "templates/aeotec_template.json#celsius_farenheit_0",
+			"$import": "templates/aeotec_template.json#celsius_fahrenheit_0",
 			"label": "Underheat Threshold Temperature Unit"
 		},
 		"57[0xff00]": {
@@ -270,7 +270,7 @@
 			]
 		},
 		"64": {
-			"$import": "templates/aeotec_template.json#celsius_farenheit_0",
+			"$import": "templates/aeotec_template.json#celsius_fahrenheit_0",
 			"label": "Temperature Unit for Reporting",
 			"valueSize": 1
 		},
@@ -391,7 +391,7 @@
 			"allowManualEntry": true
 		},
 		"201[0x0f]": {
-			"$import": "templates/aeotec_template.json#celsius_farenheit_0",
+			"$import": "templates/aeotec_template.json#celsius_fahrenheit_0",
 			"label": "Temperature Calibration Unit",
 			"valueSize": 2
 		},
