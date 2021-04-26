@@ -96,7 +96,7 @@
 		"40": {
 			"$import": "templates/aeotec_template.json#selective_reporting"
 		},
-		"41": {
+		"41[0xffff]": {
 			"$if": "firmwareVersion <= 1.6",
 			"label": "Temperature Change Threshold",
 			"valueSize": 2,
@@ -109,7 +109,7 @@
 		},
 		"41[0x0f]": [
 			{
-				"$if": "firmwareVersion >= 1.7 firmwareVersion <= 1.9",
+				"$if": "firmwareVersion > 1.6 firmwareVersion <= 1.9",
 				"$import": "templates/aeotec_template.json#celsius_fahrenheit",
 				"label": "Temperature Threshold Unit",
 				"valueSize": 3
@@ -123,7 +123,7 @@
 		],
 		"41[0xffff00]": [
 			{
-				"$if": "firmwareVersion >= 1.7 firmwareVersion <= 1.9",
+				"$if": "firmwareVersion > 1.6 firmwareVersion <= 1.9",
 				"label": "Temperature Change Threshold",
 				"unit": "0.1 °C/°F",
 				"valueSize": 3,
@@ -474,24 +474,26 @@
 			"$import": "templates/aeotec_template.json#reset_parameters",
 			"label": "Reset Parameters 111-113 to Default Values"
 		},
-		"201": {
-			"$if": "firmwareVersion <= 1.6",
-			"label": "Temperature Calibration",
-			"valueSize": 1,
-			"unit": "0.1 °C/°F",
-			"minValue": -100,
-			"maxValue": 100,
-			"defaultValue": 0,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
-		},
-		"201[0xff]": {
-			"$if": "firmwareVersion >= 1.6",
-			"$import": "templates/aeotec_template.json#celsius_fahrenheit",
-			"label": "Temperature Calibration Unit",
-			"valueSize": 2
-		},
+		"201[0xff]": [
+			{
+				"$if": "firmwareVersion <= 1.6",
+				"label": "Temperature Calibration",
+				"valueSize": 1,
+				"unit": "0.1 °C/°F",
+				"minValue": -100,
+				"maxValue": 100,
+				"defaultValue": 0,
+				"readOnly": false,
+				"writeOnly": false,
+				"allowManualEntry": true
+			},
+			{
+				"$if": "firmwareVersion > 1.6",
+				"$import": "templates/aeotec_template.json#celsius_fahrenheit",
+				"label": "Temperature Calibration Unit",
+				"valueSize": 2
+			}
+		],
 		"201[0xff00]": {
 			"$if": "firmwareVersion >= 1.6",
 			"label": "Temperature Calibration Offset",
