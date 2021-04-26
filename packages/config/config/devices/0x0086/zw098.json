@@ -328,15 +328,18 @@
 		},
 		"39[0xff00]": {
 			"$import": "../templates/master_template.json#base_0-255_nounit",
-			"label": "Single Color/Fade Out: Blue Value"
+			"label": "Single Color/Fade Out: Blue Value",
+			"valueSize": 4
 		},
 		"39[0xff0000]": {
 			"$import": "../templates/master_template.json#base_0-255_nounit",
-			"label": "Single Color/Fade Out: Green Value"
+			"label": "Single Color/Fade Out: Green Value",
+			"valueSize": 4
 		},
 		"39[0xff000000]": {
 			"$import": "../templates/master_template.json#base_0-255_nounit",
-			"label": "Single Color/Fade Out: Red Value"
+			"label": "Single Color/Fade Out: Red Value",
+			"valueSize": 4
 		},
 		"80": {
 			"$import": "templates/aeotec_template.json#enable_notifications"

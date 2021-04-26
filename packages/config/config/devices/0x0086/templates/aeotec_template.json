@@ -2295,8 +2295,9 @@
 		"description": "Defines the difference below or above the upper/lower limit after which the limit is reenabled ",
 		"valueSize": 2,
 		"minValue": 1,
-		"maxValue": 65280,
-		"defaultValue": 5121,
+		"maxValue": 255,
+		"defaultValue": 20,
+		"unsigned": true,
 		"readOnly": false,
 		"writeOnly": false,
 		"allowManualEntry": true
@@ -2323,7 +2324,7 @@
 		"valueSize": 1,
 		"unit": "lux",
 		"minValue": 10,
-		"maxValue": 2550,
+		"maxValue": 255,
 		"defaultValue": 100,
 		"unsigned": true,
 		"readOnly": false,
@@ -2473,7 +2474,17 @@
 	},
 	"wallmote_command_type": {
 		"$import": "../../templates/master_template.json#base_0-1_nounit",
-		"label": "Command Type to Send Association Groups"
+		"label": "Command Type to Send Association Groups",
+		"options": [
+			{
+				"label": "Basic CC Set",
+				"value": 0
+			},
+			{
+				"label": "Binary Switch CC Set",
+				"value": 1
+			}
+		]
 	},
 	"wakeup_led": {
 		"$import": "../../templates/master_template.json#base_enable_disable",
