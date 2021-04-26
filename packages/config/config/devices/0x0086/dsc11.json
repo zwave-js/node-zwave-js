@@ -28,67 +28,67 @@
 			"$import": "templates/aeotec_template.json#selective_reporting"
 		},
 		"5": {
-			"$import": "templates/aeotec_template.json#current_threshold",
-			"label": "Current Change Threshold (Whole Strip)",
+			"$import": "templates/aeotec_template.json#power_threshold",
+			"label": "Power Change Threshold (Whole Strip)",
 			"defaultValue": 25
 		},
 		"6": {
-			"$import": "templates/aeotec_template.json#current_threshold",
-			"label": "Current Change Threshold (Socket 1)",
+			"$import": "templates/aeotec_template.json#power_threshold",
+			"label": "Power Change Threshold (Socket 1)",
 			"defaultValue": 25
 		},
 		"7": {
-			"$import": "templates/aeotec_template.json#current_threshold",
-			"label": "Current Change Threshold (Socket 2)",
+			"$import": "templates/aeotec_template.json#power_threshold",
+			"label": "Power Change Threshold (Socket 2)",
 			"defaultValue": 25
 		},
 		"8": {
-			"$import": "templates/aeotec_template.json#current_threshold",
-			"label": "Current Change Threshold (Socket 3)",
+			"$import": "templates/aeotec_template.json#power_threshold",
+			"label": "Power Change Threshold (Socket 3)",
 			"defaultValue": 25
 		},
 		"9": {
-			"$import": "templates/aeotec_template.json#current_threshold",
-			"label": "Current Change Threshold (Socket 4)",
+			"$import": "templates/aeotec_template.json#power_threshold",
+			"label": "Power Change Threshold (Socket 4)",
 			"defaultValue": 25
 		},
 		"10": {
-			"$import": "templates/aeotec_template.json#current_threshold",
-			"label": "Current Change Threshold (Socket 5)",
+			"$import": "templates/aeotec_template.json#power_threshold",
+			"label": "Power Change Threshold (Socket 5)",
 			"defaultValue": 25
 		},
 		"11": {
-			"$import": "templates/aeotec_template.json#current_threshold",
-			"label": "Current Change Threshold (Socket 6)",
+			"$import": "templates/aeotec_template.json#power_threshold",
+			"label": "Power Change Threshold (Socket 6)",
 			"defaultValue": 25
 		},
 		"12": {
 			"$import": "templates/aeotec_template.json#percent_threshold",
-			"label": "Current Percentage Change Threshold (Whole Strip)"
+			"label": "Power Percentage Change Threshold (Whole Strip)"
 		},
 		"13": {
 			"$import": "templates/aeotec_template.json#percent_threshold",
-			"label": "Current Percentage Change Threshold (Socket 1)"
+			"label": "Power Percentage Change Threshold (Socket 1)"
 		},
 		"14": {
 			"$import": "templates/aeotec_template.json#percent_threshold",
-			"label": "Current Percentage Change Threshold (Socket 2)"
+			"label": "Power Percentage Change Threshold (Socket 2)"
 		},
 		"15": {
 			"$import": "templates/aeotec_template.json#percent_threshold",
-			"label": "Current Percentage Change Threshold (Socket 3)"
+			"label": "Power Percentage Change Threshold (Socket 3)"
 		},
 		"16": {
 			"$import": "templates/aeotec_template.json#percent_threshold",
-			"label": "Current Percentage Change Threshold (Socket 4)"
+			"label": "Power Percentage Change Threshold (Socket 4)"
 		},
 		"17": {
 			"$import": "templates/aeotec_template.json#percent_threshold",
-			"label": "Current Percentage Change Threshold (Socket 5)"
+			"label": "Power Percentage Change Threshold (Socket 5)"
 		},
 		"18": {
 			"$import": "templates/aeotec_template.json#percent_threshold",
-			"label": "Current Percentage Change Threshold (Socket 6)"
+			"label": "Power Percentage Change Threshold (Socket 6)"
 		},
 		"80": {
 			"$import": "templates/aeotec_template.json#enable_notifications"

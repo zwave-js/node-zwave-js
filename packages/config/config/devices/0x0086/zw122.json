@@ -147,10 +147,10 @@
 			"label": "Underheat Threshold Temperature Unit"
 		},
 		"57[0xff00]": {
-			"$import": "templates/aeotec_template.json#recover_limit_temp",
+			"$import": "templates/aeotec_template.json#recover_limit_temp"
 		},
 		"57[0x0f]": {
-			"$import": "templates/aeotec_template.json#recover_limit_temp_unit",
+			"$import": "templates/aeotec_template.json#recover_limit_temp_unit"
 		},
 		"84": {
 			"label": "Tilt Sensor State",
@@ -218,7 +218,7 @@
 				{
 					"label": "Disable",
 					"value": 0
-				}
+				},
 				{
 					"label": "On when wet",
 					"value": 1
@@ -244,7 +244,7 @@
 				{
 					"label": "Disable",
 					"value": 0
-				}
+				},
 				{
 					"label": "On when wet",
 					"value": 1
