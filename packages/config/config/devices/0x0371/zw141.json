@@ -252,6 +252,7 @@
 		},
 		"80": {
 			"$import": "../0x0086/templates/aeotec_template.json#notification_report_type",
+			"label": "Command Report Type",
 			"options": [
 				{
 					"label": "Disable",
