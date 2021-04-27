@@ -44,7 +44,7 @@
     alcalzone-shared "^3.0.2"
     fs-extra "^9.1.0"
 
-"@alcalzone/pak@^0.3.0":
+"@alcalzone/pak@^0.3.1":
   version "0.3.1"
   resolved "https://registry.yarnpkg.com/@alcalzone/pak/-/pak-0.3.1.tgz#2c0a99dcf4757e025c5d8b7fcb88342973836b8c"
   integrity sha512-8NBymgHauGk5ARmVyhOh+5bLxH0cQXV52MUPVvw/IJZck4gugu+7v28fiJR5ddciOe1QZcLTUbc2qTptDVklPQ==
