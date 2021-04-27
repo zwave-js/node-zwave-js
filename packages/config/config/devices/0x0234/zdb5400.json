@@ -1,15 +1,15 @@
-// Logic Group ZDB5100
+// Logic Group ZDB5400
 // Wall Controller
 {
 	"manufacturer": "Logic Group",
 	"manufacturerId": "0x0234",
-	"label": "ZDB5100",
+	"label": "ZDB5400",
 	"description": "Wall Controller",
 	"devices": [
 		{
 			"productType": "0x0003",
-			"productId": "0x0121",
-			"zwaveAllianceId": 3399
+			"productId": "0x0124",
+			"zwaveAllianceId": 3623
 		}
 	],
 	"firmwareVersion": {
@@ -51,7 +51,7 @@
 			"maxNodes": 5
 		},
 		"9": {
-			"label": "Button 3  (Binary Switch Set)",
+			"label": "Button 3 (Binary Switch Set)",
 			"maxNodes": 5
 		},
 		"10": {
@@ -220,8 +220,8 @@
 		"17": {
 			"$import": "../templates/master_template.json#base_0-255_nounit",
 			"label": "Button 1 - Timer",
-			"unit": "seconds",
 			"valueSize": 2,
+			"unit": "seconds",
 			"maxValue": 43200,
 			"defaultValue": 300
 		},
@@ -421,8 +421,8 @@
 		"38[0xff]": {
 			"$import": "../templates/master_template.json#base_0-255_nounit",
 			"label": "LED Time For Button 3 (On): Blinking",
-			"valueSize": 4,
 			"unit": "100 ms",
+			"valueSize": 4,
 			"defaultValue": 0
 		},
 		"39[0xff000000]": {
@@ -443,8 +443,8 @@
 		"39[0xff]": {
 			"$import": "../templates/master_template.json#base_0-255_nounit",
 			"label": "LED Time For Button 3 (Off): Blinking",
-			"valueSize": 4,
 			"unit": "100 ms",
+			"valueSize": 4,
 			"defaultValue": 0
 		},
 		"40": {
@@ -454,8 +454,8 @@
 		"41": {
 			"$import": "../templates/master_template.json#base_0-255_nounit",
 			"label": "Button 4 - Timer",
-			"valueSize": 2,
 			"unit": "seconds",
+			"valueSize": 2,
 			"maxValue": 43200,
 			"defaultValue": 300
 		},
@@ -529,6 +529,6 @@
 		"inclusion": "Remove white button cover and press on the center switch with a non-conductive object. The LEDs will now start blinking on button 1 (upper left button)",
 		"exclusion": "Remove white button cover and press on the center switch with a non-conductive object. The LEDs will now start blinking on button 1 (upper left button)",
 		"reset": "Remove white button cover and long-press the center switch for 10 seconds with a non-conductive object. Please use this procedure only when the network primary controller is missing or otherwise inoperable",
-		"manual": "https://products.z-wavealliance.org/ProductManual/File?folder=&filename=MarketCertificationFiles/3399/MATRIX_ZDB5100_User_Manual_1_01-EN.pdf"
+		"manual": "https://products.z-wavealliance.org/ProductManual/File?folder=&filename=product_documents/3623/ZDB5400-Manual.pdf"
 	}
 }
