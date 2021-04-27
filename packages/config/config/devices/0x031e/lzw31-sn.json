@@ -742,13 +742,13 @@
 					{
 						"label": "On / Off Only",
 						"value": 1
-					}
+					},
 					{
 						"label": "Smart Bulb",
 						"value": 2
 					}
 				]
-			}
+			},
 			{
 				"$if": "firmwareVersion >= 1.47",
 				"label": "Smart Bulb Mode",
