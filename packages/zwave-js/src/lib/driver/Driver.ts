@@ -452,7 +452,13 @@ export class Driver extends EventEmitter {
 		this.cacheDir = this.options.storage.cacheDir;
 
 		// Initialize config manager
-		this._configVersion = packageJson.dependencies["@zwave-js/config"];
+		try {
+			// eslint-disable-next-line @typescript-eslint/no-var-requires
+			this._configVersion = require("@zwave-js/config/package.json").version;
+		} catch {
+			this._configVersion =
+				packageJson?.dependencies?.["@zwave-js/config"] ?? libVersion;
+		}
 		this.configManager = new ConfigManager({
 			logContainer: this._logContainer,
 			deviceConfigPriorityDir: this.options.storage
@@ -607,7 +613,11 @@ export class Driver extends EventEmitter {
 		// Log which version is running
 		this.driverLog.print(libNameString, "info");
 		this.driverLog.print(`version ${libVersion}`, "info");
-		this.driverLog.print(`config version ${this.configVersion}`, "info");
+		// wotan-disable-next-line no-restricted-property-access
+		this.configManager["logger"].print(
+			`version ${this.configVersion}`,
+			"info",
+		);
 		this.driverLog.print("", "info");
 
 		this.driverLog.print("starting driver...");
@@ -2868,9 +2878,25 @@ ${handlers.length} left`,
 	 * Checks whether there is a compatible update for the currently installed config package.
 	 * Returns the new version if there is an update, `undefined` otherwise.
 	 */
-	public async checkForConfigUpdates(): Promise<string | undefined> {
+	public async checkForConfigUpdates(
+		silent: boolean = false,
+	): Promise<string | undefined> {
 		try {
-			return await checkForConfigUpdates(this._configVersion);
+			if (!silent)
+				this.driverLog.print("Checking for configuration updates...");
+			const ret = await checkForConfigUpdates(this._configVersion);
+			if (ret) {
+				if (!silent)
+					this.driverLog.print(
+						`Configuration update available: ${ret}`,
+					);
+			} else {
+				if (!silent)
+					this.driverLog.print(
+						"No configuration update available...",
+					);
+			}
+			return ret;
 		} catch (e) {
 			this.driverLog.print(e.message, "error");
 		}
@@ -2883,17 +2909,20 @@ ${handlers.length} left`,
 	 * **Note:** Bugfixes and changes to device configuration generally require a restart or re-interview to take effect.
 	 */
 	public async installConfigUpdate(): Promise<boolean> {
-		const newVersion = await this.checkForConfigUpdates();
+		const newVersion = await this.checkForConfigUpdates(true);
 		if (!newVersion) return false;
 
 		try {
+			this.driverLog.print(
+				`Installing version ${newVersion} of configuration DB...`,
+			);
 			await installConfigUpdate(newVersion);
 		} catch (e) {
 			this.driverLog.print(e.message, "error");
 			return false;
 		}
 		this.driverLog.print(
-			`Updated embedded configuration DB to version ${newVersion}, activating...`,
+			`Configuration DB updated to version ${newVersion}, activating...`,
 		);
 		// Remember that we use the new version
 		this._configVersion = newVersion;

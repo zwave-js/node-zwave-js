@@ -33,9 +33,9 @@ export async function checkForConfigUpdates(
 	}
 
 	// Find the highest possible prepatch update (e.g. 7.2.4 -> 7.2.5-20200424)
-	const allVersions = Object.keys(registry.versions).filter(
-		(v) => !!semver.valid(v),
-	);
+	const allVersions = Object.keys(registry.versions)
+		.filter((v) => !!semver.valid(v))
+		.filter((v) => /\-\d{8}$/.test(v));
 	const updateRange = `>${currentVersion} <${semver.inc(
 		currentVersion,
 		"patch",
@@ -65,8 +65,8 @@ export async function installConfigUpdate(newVersion: string): Promise<void> {
 	}
 
 	// And install it
-	const result = await pak.install([`@zwave-js/config@${newVersion}`], {
-		exact: true,
+	const result = await pak.overrideDependencies({
+		"@zwave-js/config": newVersion,
 	});
 	if (result.success) return;
 	throw new ZWaveError(

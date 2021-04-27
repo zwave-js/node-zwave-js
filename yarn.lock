@@ -44,11 +44,12 @@
     alcalzone-shared "^3.0.2"
     fs-extra "^9.1.0"
 
-"@alcalzone/pak@0.2.0":
-  version "0.2.0"
-  resolved "https://registry.yarnpkg.com/@alcalzone/pak/-/pak-0.2.0.tgz#2acbe49030a9947dc9e605faee7cadf3f98cd575"
-  integrity sha512-kH2J/7XqzOxenpaZBooef1dZCAkZ6wM7lRSTSDYyHtXXniht9v9SkG1foZIxvgYW36xhFcqqZ1KchQY/lguzKw==
+"@alcalzone/pak@0.3.0":
+  version "0.3.0"
+  resolved "https://registry.yarnpkg.com/@alcalzone/pak/-/pak-0.3.0.tgz#47fa393d9c60c935cf60dbac49dbebded69fa17a"
+  integrity sha512-52a2uPUYufpdYfVkk6kpIqgS02WVORelLDX6n1OqYEsQ1kc1wjzztwZlVWXqYsQizvKy7C4i323uzRfBn11r4w==
   dependencies:
+    axios "^0.21.1"
     execa "^5.0.0"
     fs-extra "^9.1.0"
 
