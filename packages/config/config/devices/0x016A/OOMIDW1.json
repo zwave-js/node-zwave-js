@@ -23,6 +23,7 @@
 		}
 	},
 	"paramInformation": {
+		// Fantem is an OEM for Aeotec devices
 		"1": {
 			"$import": "../0x0086/templates/aeotec_template.json#invert_state_report"
 		},
