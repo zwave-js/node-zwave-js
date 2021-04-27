@@ -113,6 +113,7 @@ The following methods can be used to manage associations between nodes and/or en
 
 ```ts
 getAssociationGroups(source: AssociationAddress): ReadonlyMap<number, AssociationGroup>;
+getAllAssociationGroups(nodeId: number): ReadonlyMap<number, ReadonlyMap<number, AssociationGroup>>;
 
 getAssociations(source: AssociationAddress): ReadonlyMap<number, readonly AssociationAddress[]>;
 getAllAssociations(nodeId: number): ReadonlyObjectKeyMap<
@@ -128,9 +129,10 @@ removeAssociations(source: AssociationAddress, group: number, destinations: Asso
 removeNodeFromAllAssociations(nodeId: number): Promise<void>;
 ```
 
--   `getAssociationGroups` returns all association groups for a given node or endpoint.
+-   `getAssociationGroups` returns all association groups for a given node **or** endpoint.
+-   `getAllAssociationGroups` returns all association groups of a given **node and all its endpoints**. The returned `Map` uses the endpoint index as keys and its values are `Map`s of group IDs to their definition
 -   `getAssociations` returns all defined associations of a given node **or** endpoint. If no endpoint is given, the associations for the root endpoint (`0`) are returned.
--   `getAllAssociations` returns all defined associations of a given **node and all its endpoints**. The returned `Map` uses the source node+endpoint as keys and its values are `Maps` of association group IDs to target node+endpoint.
+-   `getAllAssociations` returns all defined associations of a given **node and all its endpoints**. The returned `Map` uses the source node+endpoint as keys and its values are `Map`s of association group IDs to target node+endpoint.
 -   `addAssociations` can be used to add one or more associations to a node's or endpoint's group. You should check if each association is allowed using `isAssociationAllowed` before doing so.
 -   To remove a previously added association, use `removeAssociations`
 -   A node can be removed from all other nodes' associations using `removeNodeFromAllAssociations`

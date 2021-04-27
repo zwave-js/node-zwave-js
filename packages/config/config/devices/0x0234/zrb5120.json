@@ -1,15 +1,14 @@
-// Logic Group ZDB5100
+// Logic Group ZRB5120
 // Wall Controller
 {
 	"manufacturer": "Logic Group",
 	"manufacturerId": "0x0234",
-	"label": "ZDB5100",
+	"label": "ZRB5120",
 	"description": "Wall Controller",
 	"devices": [
 		{
 			"productType": "0x0003",
-			"productId": "0x0121",
-			"zwaveAllianceId": 3399
+			"productId": "0x0125"
 		}
 	],
 	"firmwareVersion": {
@@ -71,41 +70,46 @@
 			"maxNodes": 5
 		},
 		"14": {
-			"label": "Dimmer (Basic Report)",
+			"label": "Relay 1 (Binary Report)",
+			"maxNodes": 5
+		},
+		"15": {
+			"label": "Relay 2 (Binary Report",
 			"maxNodes": 5
 		}
 	},
 	"paramInformation": {
 		"1[0x01]": {
 			"$import": "../templates/master_template.json#base_enable_disable",
-			"label": "Button 1"
+			"label": "Button 1 Controls Relay 1"
 		},
 		"1[0x02]": {
 			"$import": "../templates/master_template.json#base_enable_disable",
-			"label": "Button 2"
+			"label": "Button 2 Controls Relay 1"
 		},
 		"1[0x04]": {
 			"$import": "../templates/master_template.json#base_enable_disable",
-			"label": "Button 3"
+			"label": "Button 3 Controls Relay 1"
 		},
 		"1[0x08]": {
 			"$import": "../templates/master_template.json#base_enable_disable",
-			"label": "Button 4"
+			"label": "Button 4 Controls Relay 1"
 		},
-		"2": {
-			"$import": "templates/logic_group_template.json#dimming_duration"
+		"2[0x01]": {
+			"$import": "../templates/master_template.json#base_enable_disable",
+			"label": "Button 1 Controls Relay 2"
 		},
-		"3": {
-			"$import": "templates/logic_group_template.json#duration_on_off"
+		"2[0x02]": {
+			"$import": "../templates/master_template.json#base_enable_disable",
+			"label": "Button 2 Controls Relay 2"
 		},
-		"4": {
-			"$import": "templates/logic_group_template.json#dimmer_mode"
+		"2[0x04]": {
+			"$import": "../templates/master_template.json#base_enable_disable",
+			"label": "Button 3 Controls Relay 2"
 		},
-		"5": {
-			"$import": "templates/logic_group_template.json#dimmer_min"
-		},
-		"6": {
-			"$import": "templates/logic_group_template.json#dimmer_max"
+		"2[0x08]": {
+			"$import": "../templates/master_template.json#base_enable_disable",
+			"label": "Button 4 Controls Relay 2"
 		},
 		"7": {
 			"$import": "templates/logic_group_template.json#enable_central_scene"
@@ -421,8 +425,8 @@
 		"38[0xff]": {
 			"$import": "../templates/master_template.json#base_0-255_nounit",
 			"label": "LED Time For Button 3 (On): Blinking",
-			"valueSize": 4,
 			"unit": "100 ms",
+			"valueSize": 4,
 			"defaultValue": 0
 		},
 		"39[0xff000000]": {
@@ -443,8 +447,8 @@
 		"39[0xff]": {
 			"$import": "../templates/master_template.json#base_0-255_nounit",
 			"label": "LED Time For Button 3 (Off): Blinking",
-			"valueSize": 4,
 			"unit": "100 ms",
+			"valueSize": 4,
 			"defaultValue": 0
 		},
 		"40": {
@@ -454,8 +458,8 @@
 		"41": {
 			"$import": "../templates/master_template.json#base_0-255_nounit",
 			"label": "Button 4 - Timer",
-			"valueSize": 2,
 			"unit": "seconds",
+			"valueSize": 2,
 			"maxValue": 43200,
 			"defaultValue": 300
 		},
@@ -526,9 +530,8 @@
 		}
 	},
 	"metadata": {
-		"inclusion": "Remove white button cover and press on the center switch with a non-conductive object. The LEDs will now start blinking on button 1 (upper left button)",
-		"exclusion": "Remove white button cover and press on the center switch with a non-conductive object. The LEDs will now start blinking on button 1 (upper left button)",
-		"reset": "Remove white button cover and long-press the center switch for 10 seconds with a non-conductive object. Please use this procedure only when the network primary controller is missing or otherwise inoperable",
-		"manual": "https://products.z-wavealliance.org/ProductManual/File?folder=&filename=MarketCertificationFiles/3399/MATRIX_ZDB5100_User_Manual_1_01-EN.pdf"
+		"inclusion": "Remove white pushbutton cover and press on the center switch with a non-conductive object. The LEDs will now start blinking on pushbutton 1 (upper left pushbutton)",
+		"exclusion": "Remove white pushbutton cover and press on the center switch with a non-conductive object. The LEDs will now start blinking on pushbutton 1 (upper left pushbutton)",
+		"reset": "Remove white pushbutton cover and long-press the center switch for 10 seconds with a non-conductive object. Please use this procedure only when the network primary controller is missing or otherwise inoperable"
 	}
 }
