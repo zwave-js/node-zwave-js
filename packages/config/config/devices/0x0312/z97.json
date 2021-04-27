@@ -24,11 +24,11 @@
 		},
 		"2": {
 			"label": "Outlet 1 (Left)",
-			"maxNodes": 5
+			"maxNodes": 2
 		},
 		"3": {
 			"label": "Outlet 2 (Right)",
-			"maxNodes": 5
+			"maxNodes": 2
 		}
 	},
 	"paramInformation": {
