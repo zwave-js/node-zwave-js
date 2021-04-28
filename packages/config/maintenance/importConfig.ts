@@ -1523,7 +1523,7 @@ ${stringify(normalizeConfig(newConfig), "\t")}`;
 
 async function maintenanceParse(): Promise<void> {
 	// Parse json files in the zwaTempDir
-	let zwaData = [];
+	const zwaData = [];
 
 	// Load the zwa files
 	const zwaFiles = await enumFilesRecursive(zwaTempDir, (file) =>
