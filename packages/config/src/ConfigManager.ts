@@ -93,6 +93,17 @@ export class ConfigManager {
 	private fulltextIndex: FulltextDeviceConfigIndex | undefined;
 	private notifications: NotificationMap | undefined;
 
+	public async loadAll(): Promise<void> {
+		await this.loadDeviceClasses();
+		await this.loadManufacturers();
+		await this.loadDeviceIndex();
+		await this.loadNotifications();
+		await this.loadNamedScales();
+		await this.loadSensorTypes();
+		await this.loadMeters();
+		await this.loadIndicators();
+	}
+
 	public async loadManufacturers(): Promise<void> {
 		try {
 			this.manufacturers = await loadManufacturersInternal();
