@@ -108,6 +108,7 @@ const ozwTarUrl =
 const ozwConfigFolder = path.join(ozwTempDir, "./config");
 
 const zwaTempDir = path.join(__dirname, "../../../.tmpzwa");
+const zwaConfigFolder = path.join(zwaTempDir, "./config");
 
 const ohTempDir = path.join(__dirname, "../../../.tmpoh");
 const importedManufacturersPath = path.join(ohTempDir, "manufacturers.json");
@@ -409,7 +410,24 @@ function normalizeConfig(config: Record<string, any>): Record<string, any> {
 				options: original.options,
 			};
 
-			//if (!param.allowManualEntry) delete param.allowManualEntry;
+			if (typeof param.$if === "undefined") delete param.$if;
+			if (typeof param.$import === "undefined") delete param.$import;
+			if (typeof param.label === "undefined" || param.label === "")
+				delete param.label;
+			if (
+				typeof param.description === "undefined" ||
+				param.description === ""
+			)
+				delete param.description;
+			if (typeof param.valueSize === "undefined") delete param.valueSize;
+			if (typeof param.unit === "undefined") delete param.unit;
+			if (typeof param.defaultValue === "undefined")
+				delete param.defaultValue;
+			if (typeof param.unsigned === "undefined") delete param.unsigned;
+			if (typeof param.readOnly === "undefined") delete param.readOnly;
+			if (typeof param.writeOnly === "undefined") delete param.writeOnly;
+			if (typeof param.allowManualEntry === "undefined")
+				delete param.allowManualEntry;
 
 			if (!param.options || param.options.length === 0) {
 				delete param.options;
@@ -419,20 +437,8 @@ function normalizeConfig(config: Record<string, any>): Record<string, any> {
 				param.maxValue = Math.max(...values);
 			}
 
-			if (typeof param.$if === "undefined") delete param.$if;
-			if (typeof param.$import === "undefined") delete param.$import;
-			if (typeof param.label === "undefined") delete param.label;
-			if (typeof param.description === "undefined")
-				delete param.description;
-			if (typeof param.valueSize === "undefined") delete param.valueSize;
-			if (typeof param.unit === "undefined") delete param.unit;
 			if (typeof param.minValue === "undefined") delete param.minValue;
 			if (typeof param.maxValue === "undefined") delete param.maxValue;
-			if (typeof param.defaultValue === "undefined")
-				delete param.defaultValue;
-			if (typeof param.unsigned === "undefined") delete param.unsigned;
-			if (typeof param.readOnly === "undefined") delete param.readOnly;
-			if (typeof param.writeOnly === "undefined") delete param.writeOnly;
 
 			normalizedParamInfo[key] = param;
 		}
@@ -839,7 +845,7 @@ async function parseZWAFiles(): Promise<void> {
 /***
  * Combine zWave Alliance Device Files
  */
-function combineDeviceFiles(json: Record<string, any>[]) {
+function combineDeviceFiles(json: Array<object>) {
 	for (const file of json) {
 		const identifier = file.Identifier ? file.Identifier : "Unknown";
 		const normalizedIdentifier = normalizeIdentifier(identifier);
@@ -1007,7 +1013,7 @@ function combineDeviceFiles(json: Record<string, any>[]) {
 					) == false
 				) {
 					console.log(
-						`ERROR ERROR ERROR - Will end up with duplicate device file due to firmware change -- ${file.Id} and ${test_file.Id}`,
+						`WARNING - Detected possible firmware parameter change ${file.Identifer} -- ${file.Id} and ${test_file.Id}`,
 					);
 				}
 				// We were wrong to change the identifier because the params don't match, restore the tested file as it is different
@@ -1053,7 +1059,7 @@ function combineDeviceFiles(json: Record<string, any>[]) {
 /***
  * Combine zWave Alliance Device Files
  */
-function sanitizeFields(json: Record<string, any>[]) {
+function sanitizeFields(json: Array<object>) {
 	for (const file of json) {
 		if (file.ProductId) {
 			file.Identifier = file.Identifier
@@ -1464,10 +1470,10 @@ async function parseZWAProduct(
 			addCompat = true;
 
 			if (newConfig.compat) {
-				newConfig.compat.disableBasicMapping = true;
+				newConfig.compat.treatBasicSetAsEvent = true;
 			} else {
 				newConfig.compat = {};
-				newConfig.compat.disableBasicMapping = true;
+				newConfig.compat.treatBasicSetAsEvent = true;
 			}
 		}
 
@@ -1517,7 +1523,7 @@ ${stringify(normalizeConfig(newConfig), "\t")}`;
 
 async function maintenanceParse(): Promise<void> {
 	// Parse json files in the zwaTempDir
-	const zwaData = [];
+	let zwaData = [];
 
 	// Load the zwa files
 	const zwaFiles = await enumFilesRecursive(zwaTempDir, (file) =>
@@ -1551,12 +1557,14 @@ async function maintenanceParse(): Promise<void> {
 			console.log(`Error processing: ${file} - ${e}`);
 		}
 
-		const includedZwaFiles = [];
+		let includedZwaFiles = [];
 
 		try {
 			for (const device of jsonData.devices) {
 				if (Array.isArray(device.zwaveAllianceId)) {
-					includedZwaFiles.push(...device.zwaveAllianceId);
+					includedZwaFiles = includedZwaFiles.concat(
+						device.zwaveAllianceId,
+					);
 				} else if (device.zwaveAllianceId) {
 					includedZwaFiles.push(device.zwaveAllianceId);
 				}
@@ -1607,6 +1615,14 @@ async function maintenanceParse(): Promise<void> {
 // ${jsonData.description}`) : ""}
 ${stringify(normalizeConfig(jsonData), "\t")}`;
 			await fs.writeFile(file, output, "utf8");
+		}
+	}
+
+	function keepLongest(current_group: any, test_group: any) {
+		if (current_group.length >= test_group.length) {
+			return current_group;
+		} else {
+			return test_group;
 		}
 	}
 }
