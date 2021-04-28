@@ -18,8 +18,8 @@
 	},
 	"paramInformation": {
 		"12": {
-			"label": "Motion Sensitivity",
-			"description": "Adjust motion sensitivity where 8 is the most sensitive setting",
+			"label": "Motion Sensor Sensitivity",
+			"description": "8 is the highest sensitivity",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 8,
@@ -36,8 +36,7 @@
 			]
 		},
 		"13": {
-			"label": "Motion Clear Time",
-			"description": "Seconds",
+			"label": "Motion Detection: Timeout",
 			"valueSize": 2,
 			"unit": "seconds",
 			"minValue": 10,
@@ -133,8 +132,7 @@
 			]
 		},
 		"19": {
-			"label": "Led Indicator Mode",
-			"description": "Enable or disable LED indicator for motion alerts",
+			"label": "Flash LED on Motion",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 1,
@@ -145,11 +143,11 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "Don’t flash LED when motion is detected",
+					"label": "Disable",
 					"value": 0
 				},
 				{
-					"label": "Flash LED indicator when motion is detected",
+					"label": "Enable",
 					"value": 1
 				}
 			]
@@ -167,8 +165,7 @@
 			"allowManualEntry": true
 		},
 		"172": {
-			"label": "Reporting Frequency",
-			"description": "Hours",
+			"label": "Minimum Reporting Frequency",
 			"valueSize": 2,
 			"unit": "hours",
 			"minValue": 1,
@@ -180,7 +177,7 @@
 			"allowManualEntry": true
 		},
 		"182": {
-			"label": "Battery Reporting Threshold",
+			"label": "Battery Reporting Change Threshold",
 			"valueSize": 1,
 			"unit": "%",
 			"minValue": 0,
