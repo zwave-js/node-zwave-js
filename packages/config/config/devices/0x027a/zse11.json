@@ -30,12 +30,8 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "Disable motion reports",
+					"label": "Disable",
 					"value": 0
-				},
-				{
-					"label": "Sensitivity levels where 8 is the most sensitive",
-					"value": 8
 				}
 			]
 		},
@@ -53,8 +49,7 @@
 			"allowManualEntry": true
 		},
 		"14": {
-			"label": "Basic Set Commands",
-			"description": "Decide whether the sensor should send Basic Set commands to group 2 when motion is detected",
+			"label": "Motion Detection: Send Basic Set",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 1,
@@ -65,18 +60,17 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "Doesn't send Basic Set commands",
+					"label": "Disable",
 					"value": 0
 				},
 				{
-					"label": "Sends Basic Set commands",
+					"label": "Enable",
 					"value": 1
 				}
 			]
 		},
 		"15": {
-			"label": "Basic Set Value",
-			"description": "Decide whether the sensor should send Basic Set on or off commands to group 2 when motion is detected",
+			"label": "Motion Detection: Basic Set Value",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 1,
@@ -87,18 +81,17 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "Send 0xff (on) when motion is detected and 0x00 (off) when motion stops",
+					"label": "Motion detected: 0xff (on); No motion: 0x00 (off)",
 					"value": 0
 				},
 				{
-					"label": "Send 0x00 (off) when motion is detected and 0xff (on) when motion stops",
+					"label": "Motion detected: 0x00 (off); No motion: 0xff (on)",
 					"value": 1
 				}
 			]
 		},
 		"16": {
-			"label": "Motion Binary Sensor Reports",
-			"description": "Decide whether the sensor should send binary sensor reports when motion is detected",
+			"label": "Motion Detection: Send Binary Sensor Reports",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 1,
@@ -109,20 +102,18 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "Doesn't send binary sensor reports",
+					"label": "Disable",
 					"value": 0
 				},
 				{
-					"label": "Sends binary sensor reports",
+					"label": "Enable",
 					"value": 1
 				}
 			]
 		},
 		"18": {
 			"label": "Temperature Scale",
-			"description": "Choose if you'd like the sensor to report temperature in celsius or fahrenheit scale",
 			"valueSize": 1,
-			"unit": "°C",
 			"minValue": 1,
 			"maxValue": 2,
 			"defaultValue": 2,
@@ -165,12 +156,11 @@
 		},
 		"32": {
 			"label": "Low Battery Alert",
-			"description": "Battery level percentage",
 			"valueSize": 1,
 			"unit": "%",
-			"minValue": 0,
-			"maxValue": 0,
-			"defaultValue": 0,
+			"minValue": 10,
+			"maxValue": 50,
+			"defaultValue": 10,
 			"unsigned": true,
 			"readOnly": false,
 			"writeOnly": false,
@@ -191,11 +181,10 @@
 		},
 		"182": {
 			"label": "Battery Reporting Threshold",
-			"description": "Set the battery reporting threshold (measured in percentage)",
 			"valueSize": 1,
 			"unit": "%",
 			"minValue": 0,
-			"maxValue": 0,
+			"maxValue": 99,
 			"defaultValue": 0,
 			"unsigned": true,
 			"readOnly": false,
@@ -203,14 +192,13 @@
 			"allowManualEntry": true,
 			"options": [
 				{
-					"label": "Doesn't report battery based on the reporting threshold",
+					"label": "Disable",
 					"value": 0
 				}
 			]
 		},
 		"183": {
-			"label": "Temperature Reporting Threshold",
-			"description": "Degrees fahrenheit",
+			"label": "Temperature Reporting Change Threshold",
 			"valueSize": 2,
 			"unit": "°F",
 			"minValue": 1,
@@ -222,8 +210,7 @@
 			"allowManualEntry": true
 		},
 		"184": {
-			"label": "Humidity Reporting Threshold",
-			"description": "Set the reporting threshold for humidity. the sensor will report new humidity value to the hub whenever humidity changes by the percentage number entered as value",
+			"label": "Humidity Reporting Change Threshold",
 			"valueSize": 1,
 			"unit": "%",
 			"minValue": 0,
@@ -232,25 +219,20 @@
 			"unsigned": true,
 			"readOnly": false,
 			"writeOnly": false,
-			"allowManualEntry": false,
+			"allowManualEntry": true,
 			"options": [
 				{
-					"label": "Disable humidity reporting based on environmental changes",
+					"label": "Disable",
 					"value": 0
-				},
-				{
-					"label": "Percentage",
-					"value": 80
 				}
 			]
 		},
 		"185": {
-			"label": "Lux Reporting Threshold",
-			"description": "Set the reporting threshold for lux. the sensor will report new lux value to the hub whenever the brightness level changes by the number of lux entered as value",
+			"label": "Brightness Reporting Change Threshold",
 			"valueSize": 2,
 			"unit": "lux",
 			"minValue": 0,
-			"maxValue": 0,
+			"maxValue": 30000,
 			"defaultValue": 50,
 			"unsigned": true,
 			"readOnly": false,
@@ -258,7 +240,7 @@
 			"allowManualEntry": true,
 			"options": [
 				{
-					"label": "Disable lux reporting based on environmental changes",
+					"label": "Disable",
 					"value": 0
 				}
 			]
