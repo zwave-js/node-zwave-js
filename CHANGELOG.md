@@ -3,14 +3,20 @@
 	Add placeholder for next release with `wip` snippet
 -->
 ## __WORK IN PROGRESS__
-<!-- ### Breaking changes
- -->
+<!-- ### Breaking changes -->
 ### Features
 * Added a driver option to specify a user-defined directory to prioritize loading device config files from. This can be used to simplify testing and developing new configs.
 * When a value is updated either by polling or through unsolicited updates, pending verification polls are canceled now. This reduces traffic for nodes that report status changes on their own.
+* Experimental support for updating the embedded configuration files on demand
+* Support firmware updates with `*.hec` files
+* Added a method to get all association groups of a node and its endpoints
+* Associations can now also be managed on the endpoints of a node. Several method signatures were revised and the old versions are deprecated now. See PR #2287 for details.
 
 ### Bugfixes
 * `Basic CC` values are now correctly persisted when requested using the `Basic CC API`. This also avoids incorrectly detecting devices as not supporting the `Basic CC`.
+* `ObjectKeyMap` and `ReadonlyObjectKeyMap` are now iterable
+* The controller can no longer be re-interviewed with `refreshInfo`
+* Handle error when logging a `Notification CC Report` before the config is loaded
 
 ### Config file changes
 * Add `forceNotificationIdleReset` compat flag to Aeotec MultiSensor Gen5
@@ -27,9 +33,23 @@
 * Correct Linear wd500z
 * Correct Nortek wd500z
 * Correct alarm mapping for Yale YRD210
+* Add compat flag to LZW36
+* Add RU product ID to Wintop 82 iDoorSensor
+* Force auto-idling for ZG8101 notifications
+* Override reported Multilevel Switch version for MH-C421
+* Template Logic Group configuration files
+* Add compat flag to remove supervision from homeseer HS-WD100+
+* Correct manufacturer name for MP20Z
+* Add namron 4 channel and fix 1+2 channel switch
+* Fix ZW117 group label
+* Add `enableBasicSetMapping` compat flag to SM103
+* Add Fibaro outlet FWPG-121 (UK version)
+* Map Basic Set to Binary Sensor Reports for Fibaro FGK101
+* Add battery low mapping to Kwikset locks
 
 ### Changes under the hood
 * Update several dependencies
+* The Github Bot can now import device files from the Z-Wave Alliance Website
 
 ## 7.2.4 (2021-04-16)
 ### Bugfixes
