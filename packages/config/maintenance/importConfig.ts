@@ -1273,7 +1273,7 @@ async function parseZWAProduct(
 	 **********************/
 	const parameters = product.ConfigurationParameters;
 
-	let requiresManualReview = false;
+	const requiresManualReview = false;
 	for (const param of parameters) {
 		const parsedParam =
 			newConfig.paramInformation[param.ParameterNumber] ?? {};
@@ -1509,7 +1509,7 @@ ${stringify(normalizeConfig(newConfig), "\t")}`;
 async function maintenanceParse(): Promise<void> {
 	await fs.ensureDir(zwaTempDir);
 
-	let highestDevice = await retrieveZWADeviceIds();
+	const highestDevice = await retrieveZWADeviceIds();
 }
 
 /**
@@ -1521,23 +1521,20 @@ async function retrieveZWADeviceIds(
 	highestDeviceOnly: boolean = true,
 	manufacturer: number[] = [-1],
 ): Promise<number[]> {
-	let deviceIdsSet = new Set<number>();
+	const deviceIdsSet = new Set<number>();
 
 	for (const manu of manufacturer) {
 		let page = 1;
-		let firstPage: String;
-		let pageNumbers: [];
-		let lastPage: number;
 		// Page 1
 		let currentUrl = `https://products.z-wavealliance.org/search/DoAdvancedSearch?productName=&productIdentifier=&productDescription=&category=-1&brand=${manu}&regionId=-1&order=&page=${page}`;
-		firstPage = (await axios({ url: currentUrl })).data;
+		const firstPage = (await axios({ url: currentUrl })).data;
 		for (const i of firstPage.match(/(?<=productId=).*?(?=[\&\"])/g)) {
 			deviceIdsSet.add(i);
 		}
-		pageNumbers = firstPage.match(/(?<=page=\d+">).*?(?=\<)/g)
+		const pageNumbers = firstPage.match(/(?<=page=\d+">).*?(?=\<)/g)
 			? firstPage.match(/(?<=page=\d+">).*?(?=\<)/g)
 			: [1];
-		lastPage = Math.max(...pageNumbers);
+		const lastPage = Math.max(...pageNumbers);
 
 		process.stdout.write(`Processing Page 1 of ${lastPage}...`);
 		// Delete the last line
@@ -1551,7 +1548,7 @@ async function retrieveZWADeviceIds(
 				);
 				currentUrl = `https://products.z-wavealliance.org/search/DoAdvancedSearch?productName=&productIdentifier=&productDescription=&category=-1&brand=${manu}&regionId=-1&order=&page=${page}`;
 				const nextPage = (await axios({ url: currentUrl })).data;
-				let nextPageIds = nextPage.match(
+				const nextPageIds = nextPage.match(
 					/(?<=productId=).*?(?=[\&\"])/g,
 				);
 
