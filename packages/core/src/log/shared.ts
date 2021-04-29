@@ -148,8 +148,10 @@ export class ZWaveLogContainer extends winston.Container {
 
 	public updateConfiguration(config: DeepPartial<LogConfig>): void {
 		const changedLoggingTarget =
-			config.logToFile != undefined &&
-			config.logToFile !== this.logConfig.logToFile;
+			(config.logToFile != undefined &&
+				config.logToFile !== this.logConfig.logToFile) ||
+			(config.forceConsole != undefined &&
+				config.forceConsole !== this.logConfig.forceConsole);
 
 		if (typeof config.level === "number") {
 			config.level = loglevelFromNumber(config.level);
@@ -180,6 +182,8 @@ export class ZWaveLogContainer extends winston.Container {
 		if (recreateInternalTransports) {
 			this.fileTransport?.destroy();
 			this.fileTransport = undefined;
+			this.consoleTransport?.destroy();
+			this.consoleTransport = undefined;
 		}
 
 		// When the internal transports or the custom transports were changed, we need to update the loggers
@@ -242,7 +246,7 @@ export class ZWaveLogContainer extends winston.Container {
 				this.fileTransport = this.createFileTransport();
 			}
 			ret.push(this.fileTransport);
-		} else {
+		} else if (isTTY || this.logConfig.forceConsole) {
 			if (!this.consoleTransport) {
 				this.consoleTransport = this.createConsoleTransport();
 			}
