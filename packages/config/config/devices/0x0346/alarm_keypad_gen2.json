@@ -13,8 +13,7 @@
 		},
 		{
 			"productType": "0x0101",
-			"productId": "0x0401",
-			"zwaveAllianceId": 3870
+			"productId": "0x0401"
 		}
 	],
 	"firmwareVersion": {
@@ -24,7 +23,6 @@
 	"paramInformation": {
 		"1": {
 			"label": "Heartbeat Interval",
-			"description": "Number of minutes between heartbeats",
 			"valueSize": 1,
 			"unit": "minutes",
 			"minValue": 1,
@@ -36,7 +34,6 @@
 		},
 		"2": {
 			"label": "Application Retries",
-			"description": "Number of application level retries attempted for messages either not ACKed or messages encapsulated via supervision get that did not receive a report.",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 5,
@@ -47,7 +44,6 @@
 		},
 		"3": {
 			"label": "Application Level Retry Base Wait Time Period",
-			"description": "The number base seconds used in the calculation for sleeping between retry messages.",
 			"valueSize": 1,
 			"unit": "seconds",
 			"minValue": 1,
@@ -59,7 +55,6 @@
 		},
 		"4": {
 			"label": "Announcement Audio Volume",
-			"description": "Announcement audio volume adjustment",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 10,
@@ -70,7 +65,6 @@
 		},
 		"5": {
 			"label": "Key Tone Volume",
-			"description": "Key tone volume adjustment",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 10,
@@ -81,7 +75,6 @@
 		},
 		"6": {
 			"label": "Siren Volume",
-			"description": "Siren volume adjustment",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 10,
@@ -91,8 +84,7 @@
 			"allowManualEntry": true
 		},
 		"7": {
-			"label": "Long Press Emergency Duration (seconds)",
-			"description": "Configure the duration for the hold time required to capture a long press",
+			"label": "Emergency Button: Long Press Duration",
 			"valueSize": 1,
 			"unit": "seconds",
 			"minValue": 2,
@@ -103,8 +95,7 @@
 			"allowManualEntry": true
 		},
 		"8": {
-			"label": "Long Press Number Pad Duration",
-			"description": "Configure the hold time required to capture a long press",
+			"label": "Number Pad: Long Press Duration",
 			"valueSize": 1,
 			"unit": "seconds",
 			"minValue": 2,
@@ -116,7 +107,6 @@
 		},
 		"9": {
 			"label": "Proximity Display Timeout",
-			"description": "Timeout when proximity is detected and no input is received",
 			"valueSize": 1,
 			"unit": "seconds",
 			"minValue": 0,
@@ -128,7 +118,6 @@
 		},
 		"10": {
 			"label": "Button Press Display Timeout",
-			"description": "Timeout when any button is pressed but a sequence is not completed and buttons are no longer being pressed",
 			"valueSize": 1,
 			"unit": "seconds",
 			"minValue": 0,
@@ -140,7 +129,6 @@
 		},
 		"11": {
 			"label": "Status Change Display Timeout",
-			"description": "Timeout when indicator command is received from the hub to change status",
 			"valueSize": 1,
 			"unit": "seconds",
 			"minValue": 1,
@@ -151,7 +139,7 @@
 			"allowManualEntry": true
 		},
 		"12": {
-			"label": "Security Mode Brightness",
+			"label": "Security Mode: Brightness",
 			"description": "Adjusts the brightness of the security mode buttons",
 			"valueSize": 1,
 			"minValue": 0,
@@ -162,8 +150,8 @@
 			"allowManualEntry": true
 		},
 		"13": {
-			"label": "Key Backlight Brightness",
-			"description": "Adjusts the brightness of the keypad backlight. used for key backlight leds only",
+			"label": "Key Backlight: Brightness",
+                        "description": "Used for key backlight LEDs only",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 100,
@@ -173,8 +161,8 @@
 			"allowManualEntry": true
 		},
 		"14": {
-			"label": "Ambient Light Sensor Level",
-			"description": "Light threshold where keypad will stop backlighting if higher than",
+			"label": "Key Backlight: Ambient Light Threshold",
+			"description": "Backlighting is turned off when the ambient light level is higher than this value",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 100,
@@ -185,7 +173,6 @@
 		},
 		"15": {
 			"label": "Proximity On/Off",
-			"description": "Turn on and off the proximity detection",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 1,
@@ -205,8 +192,7 @@
 			]
 		},
 		"16": {
-			"label": "Ramp Time Config",
-			"description": "Ramp time to turn the leds on/off",
+			"label": "LED Ramp Time",
 			"valueSize": 1,
 			"unit": "milliseconds",
 			"minValue": 0,
@@ -218,7 +204,6 @@
 		},
 		"17": {
 			"label": "Low Battery Threshold",
-			"description": "Percentage level at which the display would turn on",
 			"valueSize": 1,
 			"unit": "%",
 			"minValue": 0,
@@ -231,7 +216,6 @@
 		"18": {
 			"$if": "productId === 0x0401",
 			"label": "Keypad language",
-			"description": "Sets the language on the keypad",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 11,
@@ -292,7 +276,6 @@
 		},
 		"19": {
 			"label": "Warn Battery Threshold",
-			"description": "Percentage level at which the display would turn on the red battery indicator",
 			"valueSize": 1,
 			"unit": "%",
 			"minValue": 0,
@@ -315,7 +298,6 @@
 		},
 		"21": {
 			"label": "Supervision Report Timeout",
-			"description": "Number of milliseconds waiting for a supervisory report response to a supervisory get encapsulated command from the sensor before attempting a retry",
 			"valueSize": 2,
 			"unit": "milliseconds",
 			"minValue": 500,
@@ -326,8 +308,8 @@
 			"allowManualEntry": true
 		},
 		"22": {
-			"label": "System Security Mode Display - 601 = Always On,1 - 600 = periodic interval, 0 = Always Off, except when there's activity",
-			"description": "System security mode display options",
+			"label": "System Security Mode Display",
+			"description": "Options are: 601 = Always On, 1 - 600 = periodic interval, 0 = Always Off, except when there's activity",
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 601,
@@ -386,7 +368,6 @@
 		},
 		"24": {
 			"label": "Calibrate Speaker",
-			"description": "Speaker calibration value",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 1,
