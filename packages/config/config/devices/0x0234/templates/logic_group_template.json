@@ -526,5 +526,77 @@
 		"$import": "../../templates/master_template.json#base_0-255_nounit",
 		"label": "Input: Timer",
 		"defaultValue": 0
-	}
+	},
+	"startup_relay": {
+		"label": "Relay Startup State",
+		"valueSize": 1,
+		"minValue": 0,
+		"maxValue": 2,
+		"defaultValue": 0,
+		"readOnly": false,
+		"writeOnly": false,
+		"allowManualEntry": false,
+		"options": [
+			{
+				"label": "Off",
+				"value": 0
+			},
+			{
+				"label": "On",
+				"value": 1
+			},
+			{
+				"label": "Last registered state",
+				"value": 2
+			}
+		]
+	},
+	"watt_threshold_change": {
+		"label": "Watt Threshold: Change",
+		"unit": "watt",
+		"valueSize": 2,
+		"minValue": 0,
+		"maxValue": 500,
+		"defaultValue": 50,
+		"unsigned": true,
+		"readOnly": false,
+		"writeOnly": false,
+		"allowManualEntry": true
+	},
+	"watt_threshold_power": {
+		"label": "Watt Threshold: Power Off",
+		"unit": "watt",
+		"valueSize": 2,
+		"minValue": 0,
+		"maxValue": 3000,
+		"defaultValue": 2900,
+		"unsigned": true,
+		"readOnly": false,
+		"writeOnly": false,
+		"allowManualEntry": true
+	},
+	"led_power_consumption_mode": {
+		"label": "LED Mode",
+		"valueSize": 1,
+		"minValue": 0,
+		"maxValue": 2,
+		"defaultValue": 0,
+		"readOnly": false,
+		"writeOnly": false,
+		"allowManualEntry": false,
+		"options": [
+			{
+				"label": "Basic",
+				"value": 0
+			},
+			{
+				"label": "Power consumption indicator",
+				"value": 1
+			},
+			{
+				"label": "LED set by parameter 6 and 7",
+				"value": 2
+			}
+		]
+	},
 }
