@@ -17,6 +17,7 @@
 * `ObjectKeyMap` and `ReadonlyObjectKeyMap` are now iterable
 * The controller can no longer be re-interviewed with `refreshInfo`
 * Handle error when logging a `Notification CC Report` before the config is loaded
+* Consider custom transports to determine loglevel visibility
 
 ### Config file changes
 * Add `forceNotificationIdleReset` compat flag to Aeotec MultiSensor Gen5
@@ -46,6 +47,7 @@
 * Add Fibaro outlet FWPG-121 (UK version)
 * Map Basic Set to Binary Sensor Reports for Fibaro FGK101
 * Add battery low mapping to Kwikset locks
+* Make invert switch parameter writable on Nortek WD500Z-1, Linear WD500Z-1 and Evolve LRM-AS
 
 ### Changes under the hood
 * Update several dependencies
