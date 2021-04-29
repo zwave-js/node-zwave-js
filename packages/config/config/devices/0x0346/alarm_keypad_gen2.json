@@ -309,14 +309,24 @@
 		},
 		"22": {
 			"label": "System Security Mode Display",
-			"description": "Options are: 601 = Always On, 1 - 600 = periodic interval, 0 = Always Off, except when there's activity",
+			"description": "Options are: 601 = Always On (default), 1 - 600 = periodic interval, 0 = Always Off, except when there's activity",
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 601,
 			"defaultValue": 0,
 			"readOnly": false,
 			"writeOnly": false,
-			"allowManualEntry": true
+			"allowManualEntry": true,
+                        "options": [
+                                {
+                                        "label": "Always off",
+                                        "value": 0
+                                },
+                                {
+                                        "label": "Always on",
+                                        "value": 601
+                                }
+                        ]
 		},
 		"23[0x01000000]": {
 			"$import": "templates/ring_template.json#supported_language",
