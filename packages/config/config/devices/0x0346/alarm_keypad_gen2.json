@@ -10,10 +10,10 @@
 			"productType": "0x0101",
 			"productId": "0x0301"
 		},
-                {
-                        "productType": "0x0101",
-                        "productId": "0x0401"
-                }
+		{
+			"productType": "0x0101",
+			"productId": "0x0401"
+		}
 	],
 	"firmwareVersion": {
 		"min": "0.0",
@@ -191,16 +191,16 @@
 			"readOnly": false,
 			"writeOnly": false,
 			"allowManualEntry": true,
-                        "options": [
-                                {
-                                        "label": "Disable",
-                                        "value": 0
-                                },
-                                {
-                                        "label": "Enable",
-                                        "value": 1
-                                }
-                        ]
+			"options": [
+				{
+					"label": "Disable",
+					"value": 0
+				},
+				{
+					"label": "Enable",
+					"value": 1
+				}
+			]
 		},
 		"16": {
 			"label": "Ramp Time Config",
@@ -227,7 +227,7 @@
 			"allowManualEntry": true
 		},
 		"18": {
-                        "$if": "productId === 0x0401",
+			"$if": "productId === 0x0401",
 			"label": "Languages Set",
 			"description": "This parameter sets the language on the keypad",
 			"valueSize": 1,
@@ -237,56 +237,56 @@
 			"readOnly": false,
 			"writeOnly": false,
 			"allowManualEntry": false,
-                        "options": [
-                                {
-                                        "label": "US English",
-                                        "value": 0
-                                },
-                                {
-                                        "label": "UK English",
-                                        "value": 1
-                                },
-                                {
-                                        "label": "French",
-                                        "value": 2
-                                },
-                                {
-                                        "label": "German",
-                                        "value": 3
-                                },
-                                {
-                                        "label": "Italian",
-                                        "value": 4
-                                },
-                                {
-                                        "label": "Spanish",
-                                        "value": 5
-                                },
-                                {
-                                        "label": "Dutch",
-                                        "value": 6
-                                },
-                                {
-                                        "label": "Danish",
-                                        "value": 7
-                                },
-                                {
-                                        "label": "Norwegian",
-                                        "value": 8
-                                },
-                                {
-                                        "label": "Swedish",
-                                        "value": 9
-                                },
-                                {
-                                        "label": "Finnish",
-                                        "value": 10
-                                },
-                                {
-                                        "label": "Arabic",
-                                        "value": 11
-                                }
-                        ]
+			"options": [
+				{
+					"label": "US English",
+					"value": 0
+				},
+				{
+					"label": "UK English",
+					"value": 1
+				},
+				{
+					"label": "French",
+					"value": 2
+				},
+				{
+					"label": "German",
+					"value": 3
+				},
+				{
+					"label": "Italian",
+					"value": 4
+				},
+				{
+					"label": "Spanish",
+					"value": 5
+				},
+				{
+					"label": "Dutch",
+					"value": 6
+				},
+				{
+					"label": "Danish",
+					"value": 7
+				},
+				{
+					"label": "Norwegian",
+					"value": 8
+				},
+				{
+					"label": "Swedish",
+					"value": 9
+				},
+				{
+					"label": "Finnish",
+					"value": 10
+				},
+				{
+					"label": "Arabic",
+					"value": 11
+				}
+			]
 		},
 		"19": {
 			"label": "Warn Battery Threshold",
@@ -394,9 +394,9 @@
 			"allowManualEntry": true
 		}
 	},
-        "compat": {
-                "disableStrictEntryControlDataValidation": true
-        },
+	"compat": {
+		"disableStrictEntryControlDataValidation": true
+	},
 	"metadata": {
 		"inclusion": "After powering on the device, press and hold the #1 button for ~3 seconds. Release the button and the device will enter Classic inclusion mode which implements both classic inclusion with a Node Information Frame, and Network Wide Inclusion. During Classic Inclusion mode, the green Connection LED will blink three times followed by a brief pause, repeatedly. When Classic inclusion times-out, the device will blink alternating red and green a few times",
 		"exclusion": "Exclusion Instructions: \n1. Initiate remove “Ring Alarm Keypad” flow in the Ring Alarm mobile application – Select the settings icon from device details page and choose “Remove Device” to remove the device. This will place the controller into Remove or “Z-Wave Exclusion” mode. \n2. Locate the pinhole reset button on the back of the device. \n3. With the controller in Remove (Z-Wave Exclusion) mode, use a paper clip or similar object and tap the pinhole button. The device’s Connection LED turns on solid red to indicate the device was removed from the network.",
