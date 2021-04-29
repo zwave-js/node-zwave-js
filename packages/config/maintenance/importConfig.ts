@@ -438,7 +438,7 @@ function normalizeConfig(config: Record<string, any>): Record<string, any> {
 
 			if (!param.options || param.options.length === 0) {
 				delete param.options;
-			} else {
+			} else if (program.source.includes("ozw")) {
 				const values = param.options.map((o: any) => o.value);
 				param.minValue = Math.min(...values);
 				param.maxValue = Math.max(...values);
@@ -1295,26 +1295,8 @@ async function parseZWAProduct(
 			parsedParam.valueSize,
 			1,
 		);
-		parsedParam.minValue = updateNumberOrDefault(
-			param.minValue,
-			parsedParam.min,
-			0,
-		);
-		try {
-			const priorMax = parsedParam.maxValue;
-			parsedParam.maxValue = updateNumberOrDefault(
-				param.maxValue,
-				parsedParam.max,
-				getIntegerLimits(parsedParam.valueSize, false).max, // choose the biggest possible number if no max is given
-			);
-			parsedParam.maxValue =
-				parsedParam.maxValue >= priorMax
-					? parsedParam.maxValue
-					: priorMax;
-		} catch {
-			// some config params have absurd value sizes, ignore them
-			parsedParam.maxValue = parsedParam.minValue;
-		}
+		parsedParam.minValue = param.minValue;
+		parsedParam.maxValue = param.maxValue;
 		parsedParam.readOnly = param.flagReadOnly;
 		parsedParam.writeOnly = param.Description.toLowerCase().includes(
 			"write",
@@ -1398,15 +1380,15 @@ async function parseZWAProduct(
 						value: item.To,
 					};
 					parsedParam.options.push(opt);
-					if (parsedParam.minValue < item.From) {
+					if (item.From < parsedParam.minValue) {
 						parsedParam.minValue = item.From;
 					}
-					if (parsedParam.maxValue < item.To) {
+					if (item.To > parsedParam.maxValue) {
 						parsedParam.maxValue = item.To;
 					}
 				} else {
 					parsedParam.allowManualEntry = true;
-					if (parsedParam.minValue < item.From) {
+					if (parsedParam.minValue > item.From) {
 						parsedParam.minValue = item.From;
 					}
 					if (parsedParam.maxValue < item.To) {
