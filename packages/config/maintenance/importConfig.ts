@@ -115,7 +115,6 @@ const ozwTarUrl =
 const ozwConfigFolder = path.join(ozwTempDir, "./config");
 
 const zwaTempDir = path.join(__dirname, "../../../.tmpzwa");
-const zwaConfigFolder = path.join(zwaTempDir, "./config");
 
 const ohTempDir = path.join(__dirname, "../../../.tmpoh");
 const importedManufacturersPath = path.join(ohTempDir, "manufacturers.json");
@@ -1483,12 +1482,6 @@ async function parseZWAProduct(
 		newConfig.associations = newAssociations;
 	}
 
-	// Warn if the device file requires conflicts to be resolved
-	if (requiresManualReview) {
-		console.log(
-			`ERROR - Manual review required due to potential conflicts or invalid values: ${fileNameAbsolute}`,
-		);
-	}
 	/*************************************
 	 *   Write the configuration file    *
 	 *************************************/
