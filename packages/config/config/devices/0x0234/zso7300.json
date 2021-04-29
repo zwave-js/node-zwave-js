@@ -26,7 +26,6 @@
 		"3": {
 			"label": "Relay (Binary Switch Set)",
 			"maxNodes": 5
-
 		}
 	},
 	"paramInformation": {
@@ -73,7 +72,6 @@
 			"label": "LED Indicator (Off): Red",
 			"valueSize": 4,
 			"defaultValue": 143
-			
 		},
 		"7[0xff0000]": {
 			"$import": "../templates/master_template.json#base_enable_disable",
