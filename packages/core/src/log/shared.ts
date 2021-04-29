@@ -200,15 +200,16 @@ export class ZWaveLogContainer extends winston.Container {
 
 	/** Tests whether a log using the given loglevel will be logged */
 	public isLoglevelVisible(loglevel: string): boolean {
-		// If we are not connected to a TTY, not unit testing and not logging to a file, we won't see anything
-		if (isUnitTest) return true;
+		// If we are not connected to a TTY, not logging to a file and don't have any custom transports, we won't see anything
 		if (
-			!isTTY &&
-			!this.logConfig.logToFile &&
-			!this.logConfig.forceConsole &&
-			this.logConfig.transports.length === 0
-		)
+			!this.fileTransport &&
+			!this.consoleTransport &&
+			// wotan-disable-next-line no-useless-predicate
+			(!this.logConfig.transports ||
+				this.logConfig.transports.length === 0)
+		) {
 			return false;
+		}
 
 		if (!this.loglevelVisibleCache.has(loglevel)) {
 			this.loglevelVisibleCache.set(
@@ -246,7 +247,7 @@ export class ZWaveLogContainer extends winston.Container {
 				this.fileTransport = this.createFileTransport();
 			}
 			ret.push(this.fileTransport);
-		} else if (isTTY || this.logConfig.forceConsole) {
+		} else if (!isUnitTest && (isTTY || this.logConfig.forceConsole)) {
 			if (!this.consoleTransport) {
 				this.consoleTransport = this.createConsoleTransport();
 			}
