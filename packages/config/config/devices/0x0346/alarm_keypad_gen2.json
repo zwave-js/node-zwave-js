@@ -8,11 +8,13 @@
 	"devices": [
 		{
 			"productType": "0x0101",
-			"productId": "0x0301"
+			"productId": "0x0301",
+			"zwaveAllianceId": 3870
 		},
 		{
 			"productType": "0x0101",
-			"productId": "0x0401"
+			"productId": "0x0401",
+			"zwaveAllianceId": 3870
 		}
 	],
 	"firmwareVersion": {
@@ -22,7 +24,7 @@
 	"paramInformation": {
 		"1": {
 			"label": "Heartbeat Interval",
-			"description": "This parameter is the number minutes between heartbeats. Heartbeats are automatic battery reports on a timer after the last event.",
+			"description": "This parameter is the number of minutes between heartbeats",
 			"valueSize": 1,
 			"unit": "minutes",
 			"minValue": 1,
@@ -34,7 +36,7 @@
 		},
 		"2": {
 			"label": "Application Retries",
-			"description": "This parameter is the number of application level retries attempted for messages",
+			"description": "Number of application level retries attempted for messages either not ACKed or messages encapsulated via supervision get that did not receive a report.",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 5,
@@ -45,7 +47,7 @@
 		},
 		"3": {
 			"label": "Application Level Retry Base Wait Time Period",
-			"description": "This parameter is the base seconds used in the calculation for sleeping between retry messages",
+			"description": "The number base seconds used in the calculation for sleeping between retry messages.",
 			"valueSize": 1,
 			"unit": "seconds",
 			"minValue": 1,
@@ -57,7 +59,7 @@
 		},
 		"4": {
 			"label": "Announcement Audio Volume",
-			"description": "This parameter is the announce audio volume adjustment",
+			"description": "Announcement audio volume adjustment",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 10,
@@ -68,7 +70,7 @@
 		},
 		"5": {
 			"label": "Key Tone Volume",
-			"description": "This parameter is the key tone volume adjustment",
+			"description": "Key tone volume adjustment",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 10,
@@ -79,7 +81,7 @@
 		},
 		"6": {
 			"label": "Siren Volume",
-			"description": "This parameter is the siren volume adjustment",
+			"description": "Siren volume adjustment",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 10,
@@ -90,7 +92,7 @@
 		},
 		"7": {
 			"label": "Long Press Emergency Duration (seconds)",
-			"description": "This parameter is the special key long press duration - hold time required to capture a long press in seconds",
+			"description": "Configure the duration for the hold time required to capture a long press",
 			"valueSize": 1,
 			"unit": "seconds",
 			"minValue": 2,
@@ -101,8 +103,8 @@
 			"allowManualEntry": true
 		},
 		"8": {
-			"label": "Long Press Number Pad Duration (seconds)",
-			"description": "This parameter is the hold time required to capture a long press in seconds",
+			"label": "Long Press Number Pad Duration",
+			"description": "Configure the hold time required to capture a long press",
 			"valueSize": 1,
 			"unit": "seconds",
 			"minValue": 2,
@@ -114,7 +116,7 @@
 		},
 		"9": {
 			"label": "Proximity Display Timeout",
-			"description": "This parameter is the timeout in seconds when proximity is detected and no input is received",
+			"description": "Timeout when proximity is detected and no input is received",
 			"valueSize": 1,
 			"unit": "seconds",
 			"minValue": 0,
@@ -126,7 +128,7 @@
 		},
 		"10": {
 			"label": "Button Press Display Timeout",
-			"description": "This parameter is the timeout in seconds when any button is pressed",
+			"description": "Timeout when any button is pressed but a sequence is not completed and buttons are no longer being pressed",
 			"valueSize": 1,
 			"unit": "seconds",
 			"minValue": 0,
@@ -138,7 +140,7 @@
 		},
 		"11": {
 			"label": "Status Change Display Timeout",
-			"description": "This parameter is the timeout in seconds when indicator command is received from the hub to change status",
+			"description": "Timeout when indicator command is received from the hub to change status",
 			"valueSize": 1,
 			"unit": "seconds",
 			"minValue": 1,
@@ -150,7 +152,7 @@
 		},
 		"12": {
 			"label": "Security Mode Brightness",
-			"description": "This parameter adjusts the brightness of the security mode buttons",
+			"description": "Adjusts the brightness of the security mode buttons",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 100,
@@ -161,7 +163,7 @@
 		},
 		"13": {
 			"label": "Key Backlight Brightness",
-			"description": "This parameter adjusts the brightness of the keypad backlight. used for key backlight leds only",
+			"description": "Adjusts the brightness of the keypad backlight. used for key backlight leds only",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 100,
@@ -172,7 +174,7 @@
 		},
 		"14": {
 			"label": "Ambient Light Sensor Level",
-			"description": "This parameter is the light threshold where keypad will stop backlighting if higher than",
+			"description": "Light threshold where keypad will stop backlighting if higher than",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 100,
@@ -183,7 +185,7 @@
 		},
 		"15": {
 			"label": "Proximity On/Off",
-			"description": "This parameter is the turn on and off the proximity detection",
+			"description": "Turn on and off the proximity detection",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 1,
@@ -204,9 +206,9 @@
 		},
 		"16": {
 			"label": "Ramp Time Config",
-			"description": "This parameter is the ramp time to turn the leds on/off in milliseconds",
+			"description": "Ramp time to turn the leds on/off",
 			"valueSize": 1,
-			"unit": "seconds",
+			"unit": "milliseconds",
 			"minValue": 0,
 			"maxValue": 255,
 			"defaultValue": 50,
@@ -216,7 +218,7 @@
 		},
 		"17": {
 			"label": "Low Battery Threshold",
-			"description": "This parameter is the percentage level at which the display would turn on",
+			"description": "Percentage level at which the display would turn on",
 			"valueSize": 1,
 			"unit": "%",
 			"minValue": 0,
@@ -228,8 +230,8 @@
 		},
 		"18": {
 			"$if": "productId === 0x0401",
-			"label": "Languages Set",
-			"description": "This parameter sets the language on the keypad",
+			"label": "Keypad language",
+			"description": "Sets the language on the keypad",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 11,
@@ -290,7 +292,7 @@
 		},
 		"19": {
 			"label": "Warn Battery Threshold",
-			"description": "This parameter is the percentage level at which the display would turn on the red battery indicator",
+			"description": "Percentage level at which the display would turn on the red battery indicator",
 			"valueSize": 1,
 			"unit": "%",
 			"minValue": 0,
@@ -302,7 +304,7 @@
 		},
 		"20": {
 			"label": "System Security Mode Blink Duration",
-			"description": "This parameter is the configurable on time for the blink",
+			"description": "Modify the time for the LED to be active when set to blink on a period per System Security Mode Display below",
 			"valueSize": 1,
 			"minValue": 1,
 			"maxValue": 60,
@@ -313,9 +315,9 @@
 		},
 		"21": {
 			"label": "Supervision Report Timeout",
-			"description": "This parameter is the number of milliseconds waiting for a supervisory report response to a supervisory get encapsulated command from the sensor before attempting a retry\"",
+			"description": "Number of milliseconds waiting for a supervisory report response to a supervisory get encapsulated command from the sensor before attempting a retry",
 			"valueSize": 2,
-			"unit": "seconds",
+			"unit": "milliseconds",
 			"minValue": 500,
 			"maxValue": 30000,
 			"defaultValue": 10000,
@@ -324,8 +326,8 @@
 			"allowManualEntry": true
 		},
 		"22": {
-			"label": "System Security Mode Display",
-			"description": "This parameter is the system security mode display options",
+			"label": "System Security Mode Display - 601 = Always On,1 - 600 = periodic interval, 0 = Always Off, except when there's activity",
+			"description": "System security mode display options",
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 601,
@@ -384,18 +386,24 @@
 		},
 		"24": {
 			"label": "Calibrate Speaker",
-			"description": "This parameter is the speaker calibration value",
+			"description": "Speaker calibration value",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 1,
 			"defaultValue": 0,
 			"readOnly": false,
 			"writeOnly": false,
-			"allowManualEntry": true
+                        "options": [
+                                {
+                                        "label": "Idle",
+                                        "value": 0
+                                },
+                                {
+                                        "label": "Calibrate",
+                                        "value": 1
+                                }
+                        ]
 		}
-	},
-	"compat": {
-		"disableStrictEntryControlDataValidation": true
 	},
 	"metadata": {
 		"inclusion": "After powering on the device, press and hold the #1 button for ~3 seconds. Release the button and the device will enter Classic inclusion mode which implements both classic inclusion with a Node Information Frame, and Network Wide Inclusion. During Classic Inclusion mode, the green Connection LED will blink three times followed by a brief pause, repeatedly. When Classic inclusion times-out, the device will blink alternating red and green a few times",
