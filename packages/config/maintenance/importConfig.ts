@@ -64,6 +64,13 @@ const program = yargs
 		type: "boolean",
 		default: false,
 	})
+	.option("manufacturer_folder", {
+		alias: "M",
+		description:
+			"Download all zwa files for the specified manufacturer (using the zwa website manufacturer ID)",
+		type: "array",
+		array: true,
+	})
 	.option("devices", {
 		alias: "d",
 		description: "Parse and update devices configurations",
@@ -1309,11 +1316,13 @@ async function parseZWAProduct(
 			parsedParam.maxValue = parsedParam.minValue;
 		}
 		parsedParam.readOnly = param.flagReadOnly;
-		parsedParam.writeOnly = param.Description.includes("write") // zWave Alliance typically puts (write only) in the description
+		parsedParam.writeOnly = param.Description.toLowerCase().includes(
+			"write",
+		) // zWave Alliance typically puts (write only) in the description
 			? true
 			: false;
 		parsedParam.allowManualEntry =
-			param.ConfigurationParameterValues.length === 1 ? true : false;
+			param.ConfigurationParameterValues.length > 1 ? false : true;
 		parsedParam.defaultValue = updateNumberOrDefault(
 			param.DefaultValue,
 			parsedParam.value,
@@ -1376,7 +1385,10 @@ async function parseZWAProduct(
 		}
 
 		// Parse options list if manual entry is disallowed (i.e. options picker)
-		if (parsedParam.allowManualEntry === false) {
+		if (
+			parsedParam.allowManualEntry === false ||
+			(parsedParam.minValue === 0 && parsedParam.maxValue === 0)
+		) {
 			parsedParam.options = [];
 			for (const item of param.ConfigurationParameterValues) {
 				// Values are given as options
@@ -1386,29 +1398,20 @@ async function parseZWAProduct(
 						value: item.To,
 					};
 					parsedParam.options.push(opt);
-					if (parsedParam.minValue > item.value) {
-						parsedParam.minValue = item.value;
+					if (parsedParam.minValue < item.From) {
+						parsedParam.minValue = item.From;
 					}
-					if (parsedParam.maxValue < item.value) {
-						parsedParam.maxValue = item.value;
+					if (parsedParam.maxValue < item.To) {
+						parsedParam.maxValue = item.To;
 					}
-				} else if (
-					(item.From == 0 && item.To == 99) ||
-					(item.From == 1 && item.To == 99) ||
-					(item.From == 0 && item.To == 255) ||
-					(item.From == 1 && item.To == 255) ||
-					(item.From == 0 && item.To > 500) ||
-					(item.From == 1 && item.To > 500)
-				) {
-					parsedParam.allowManualEntry = true;
 				} else {
-					// Sometimes options appear to be a list but present multiple values; these will require manual correction
-					const opt = {
-						label: normalizeDescription(item.Description),
-						value: item.To,
-					};
-					parsedParam.options.push(opt);
-					requiresManualReview = true;
+					parsedParam.allowManualEntry = true;
+					if (parsedParam.minValue < item.From) {
+						parsedParam.minValue = item.From;
+					}
+					if (parsedParam.maxValue < item.To) {
+						parsedParam.maxValue = item.To;
+					}
 				}
 			}
 		}
@@ -1522,108 +1525,75 @@ ${stringify(normalizeConfig(newConfig), "\t")}`;
 }
 
 async function maintenanceParse(): Promise<void> {
-	// Parse json files in the zwaTempDir
-	const zwaData = [];
+	await fs.ensureDir(zwaTempDir);
 
-	// Load the zwa files
-	const zwaFiles = await enumFilesRecursive(zwaTempDir, (file) =>
-		file.endsWith(".json"),
-	);
-	for (const file of zwaFiles) {
-		const j = await fs.readFile(file, "utf8");
+	let highestDevice = await retrieveZWADeviceIds();
+}
 
-		/**
-		 * zWave Alliance numbering isn't always continuous and an html page is 
-		returned when a device number doesn't. Test for and delete such files.
-		 */
-		if (j.charAt(0) === "{") {
-			zwaData.push(JSON.parse(j));
-		} else {
-			void fs.unlink(file);
+/**
+ * Retrieve ZWA device IDs, either the highest (most recent) device ID or all device IDs for the specified manufacturer
+ * Note: ZWA's search uses different manufacturer IDs than devices
+ */
+
+async function retrieveZWADeviceIds(
+	highestDeviceOnly: boolean = true,
+	manufacturer: number[] = [-1],
+): Promise<number[]> {
+	let deviceIdsSet = new Set<number>();
+
+	for (const manu of manufacturer) {
+		let page = 1;
+		let firstPage: String;
+		let pageNumbers: [];
+		let lastPage: number;
+		// Page 1
+		let currentUrl = `https://products.z-wavealliance.org/search/DoAdvancedSearch?productName=&productIdentifier=&productDescription=&category=-1&brand=${manu}&regionId=-1&order=&page=${page}`;
+		firstPage = (await axios({ url: currentUrl })).data;
+		for (const i of firstPage.match(/(?<=productId=).*?(?=[\&\"])/g)) {
+			deviceIdsSet.add(i);
+		}
+		pageNumbers = firstPage.match(/(?<=page=\d+">).*?(?=\<)/g)
+			? firstPage.match(/(?<=page=\d+">).*?(?=\<)/g)
+			: [1];
+		lastPage = Math.max(...pageNumbers);
+
+		process.stdout.write(`Processing Page 1 of ${lastPage}...`);
+		// Delete the last line
+		process.stdout.write("\r\x1b[K");
+
+		if (!highestDeviceOnly) {
+			page++;
+			while (page <= lastPage) {
+				process.stdout.write(
+					`Processing Page ${page} of ${lastPage}...`,
+				);
+				currentUrl = `https://products.z-wavealliance.org/search/DoAdvancedSearch?productName=&productIdentifier=&productDescription=&category=-1&brand=${manu}&regionId=-1&order=&page=${page}`;
+				const nextPage = (await axios({ url: currentUrl })).data;
+				let nextPageIds = nextPage.match(
+					/(?<=productId=).*?(?=[\&\"])/g,
+				);
+
+				for (const i of nextPageIds) {
+					deviceIdsSet.add(i);
+				}
+				page++;
+				// Delete the last line
+				process.stdout.write("\r\x1b[K");
+			}
 		}
 	}
 
-	// Build the list of device files
-	const configFiles = await enumFilesRecursive(processedDir, (file) =>
-		file.endsWith(".json"),
-	);
-	for (const file of configFiles) {
-		const j = await fs.readFile(file, "utf8");
-
-		let jsonData;
-		try {
-			jsonData = JSON5.parse(j);
-		} catch (e) {
-			console.log(`Error processing: ${file} - ${e}`);
-		}
-
-		let includedZwaFiles = [];
-
-		try {
-			for (const device of jsonData.devices) {
-				if (Array.isArray(device.zwaveAllianceId)) {
-					includedZwaFiles = includedZwaFiles.concat(
-						device.zwaveAllianceId,
-					);
-				} else if (device.zwaveAllianceId) {
-					includedZwaFiles.push(device.zwaveAllianceId);
-				}
-			}
-		} catch (e) {
-			console.log(`Error iterating: ${file} - ${e}`);
-		}
-
-		includedZwaFiles.sort(function (a, b) {
-			return a - b;
+	if (highestDeviceOnly) {
+		const deviceIds: number[] = [...deviceIdsSet];
+		deviceIds.sort(function (a, b) {
+			return b - a;
 		});
-
-		for (const referenceDevice of includedZwaFiles) {
-			for (const zwafile of zwaData) {
-				if (zwafile.Id === referenceDevice) {
-					let manual = zwafile?.Documents?.find(
-						(document: any) => document.Type === 1,
-					)?.value;
-
-					const website_root =
-						"https://products.z-wavealliance.org/ProductManual/File?folder=&filename=";
-
-					if (manual) {
-						manual = manual.replace(/ /g, "%20");
-						manual = website_root.concat(manual);
-
-						if (jsonData.metadata) {
-							jsonData.metadata.manual = manual;
-							break;
-						} else {
-							jsonData.metadata = {};
-							jsonData.metadata.manual = manual;
-							break;
-						}
-					}
-				}
-			}
-		}
-
-		if (jsonData.metadata) {
-			/*************************************
-			 *   Write the configuration file    *
-			 *************************************/
-
-			// Add a comment explaining which device this is
-			// prettier-ignore
-			const output = `// ${jsonData.manufacturer} ${jsonData.label}${jsonData.description ? (`
-// ${jsonData.description}`) : ""}
-${stringify(normalizeConfig(jsonData), "\t")}`;
-			await fs.writeFile(file, output, "utf8");
-		}
-	}
-
-	function keepLongest(current_group: any, test_group: any) {
-		if (current_group.length >= test_group.length) {
-			return current_group;
-		} else {
-			return test_group;
-		}
+		console.log(`Highest Device Found: ${deviceIds[0]}`);
+		return [deviceIds[0]];
+	} else {
+		const deviceIds: number[] = [...deviceIdsSet];
+		console.log(`Identified ${deviceIds.length} device files`);
+		return deviceIds;
 	}
 }
 
@@ -2244,6 +2214,16 @@ void (async () => {
 						?.map((id) => parseInt(id as any))
 						.filter((num) => !Number.isNaN(num)),
 				);
+			}
+
+			if (program.manufacturer_folder) {
+				const deviceIds = await retrieveZWADeviceIds(
+					false,
+					program.manufacturer_folder
+						?.map((manu) => parseInt(manu as any))
+						.filter((num) => !Number.isNaN(num)),
+				);
+				await downloadDevicesZWA(deviceIds);
 			}
 
 			if (program.manufacturers || program.devices) await parseZWAFiles();
