@@ -148,8 +148,10 @@ export class ZWaveLogContainer extends winston.Container {
 
 	public updateConfiguration(config: DeepPartial<LogConfig>): void {
 		const changedLoggingTarget =
-			config.logToFile != undefined &&
-			config.logToFile !== this.logConfig.logToFile;
+			(config.logToFile != undefined &&
+				config.logToFile !== this.logConfig.logToFile) ||
+			(config.forceConsole != undefined &&
+				config.forceConsole !== this.logConfig.forceConsole);
 
 		if (typeof config.level === "number") {
 			config.level = loglevelFromNumber(config.level);
@@ -180,6 +182,8 @@ export class ZWaveLogContainer extends winston.Container {
 		if (recreateInternalTransports) {
 			this.fileTransport?.destroy();
 			this.fileTransport = undefined;
+			this.consoleTransport?.destroy();
+			this.consoleTransport = undefined;
 		}
 
 		// When the internal transports or the custom transports were changed, we need to update the loggers
@@ -196,10 +200,16 @@ export class ZWaveLogContainer extends winston.Container {
 
 	/** Tests whether a log using the given loglevel will be logged */
 	public isLoglevelVisible(loglevel: string): boolean {
-		// If we are not connected to a TTY, not unit testing and not logging to a file, we won't see anything
-		if (isUnitTest) return true;
-		if (!isTTY && !this.logConfig.logToFile && !this.logConfig.forceConsole)
+		// If we are not connected to a TTY, not logging to a file and don't have any custom transports, we won't see anything
+		if (
+			!this.fileTransport &&
+			!this.consoleTransport &&
+			// wotan-disable-next-line no-useless-predicate
+			(!this.logConfig.transports ||
+				this.logConfig.transports.length === 0)
+		) {
 			return false;
+		}
 
 		if (!this.loglevelVisibleCache.has(loglevel)) {
 			this.loglevelVisibleCache.set(
@@ -237,7 +247,7 @@ export class ZWaveLogContainer extends winston.Container {
 				this.fileTransport = this.createFileTransport();
 			}
 			ret.push(this.fileTransport);
-		} else {
+		} else if (!isUnitTest && (isTTY || this.logConfig.forceConsole)) {
 			if (!this.consoleTransport) {
 				this.consoleTransport = this.createConsoleTransport();
 			}
