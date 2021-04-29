@@ -198,7 +198,12 @@ export class ZWaveLogContainer extends winston.Container {
 	public isLoglevelVisible(loglevel: string): boolean {
 		// If we are not connected to a TTY, not unit testing and not logging to a file, we won't see anything
 		if (isUnitTest) return true;
-		if (!isTTY && !this.logConfig.logToFile && !this.logConfig.forceConsole)
+		if (
+			!isTTY &&
+			!this.logConfig.logToFile &&
+			!this.logConfig.forceConsole &&
+			this.logConfig.transports.length === 0
+		)
 			return false;
 
 		if (!this.loglevelVisibleCache.has(loglevel)) {
