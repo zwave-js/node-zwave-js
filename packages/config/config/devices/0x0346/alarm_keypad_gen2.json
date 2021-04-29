@@ -24,7 +24,7 @@
 	"paramInformation": {
 		"1": {
 			"label": "Heartbeat Interval",
-			"description": "This parameter is the number of minutes between heartbeats",
+			"description": "Number of minutes between heartbeats",
 			"valueSize": 1,
 			"unit": "minutes",
 			"minValue": 1,
