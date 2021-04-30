@@ -16,6 +16,7 @@ import {
 	JSONObject,
 	num2hex,
 	ObjectKeyMap,
+	pick,
 	ReadonlyObjectKeyMap,
 } from "@zwave-js/shared";
 import { distinct } from "alcalzone-shared/arrays";
@@ -53,9 +54,20 @@ import { ZWaveNode } from "../node/Node";
 import { InterviewStage, NodeStatus } from "../node/Types";
 import { VirtualNode } from "../node/VirtualNode";
 import {
+	RFRegion,
 	SerialAPISetupCommand,
+	SerialAPISetup_GetPowerlevelRequest,
+	SerialAPISetup_GetPowerlevelResponse,
+	SerialAPISetup_GetRFRegionRequest,
+	SerialAPISetup_GetRFRegionResponse,
 	SerialAPISetup_GetSupportedCommandsRequest,
 	SerialAPISetup_GetSupportedCommandsResponse,
+	SerialAPISetup_SetPowerlevelRequest,
+	SerialAPISetup_SetPowerlevelResponse,
+	SerialAPISetup_SetRFRegionRequest,
+	SerialAPISetup_SetRFRegionResponse,
+	SerialAPISetup_SetTXStatusReportRequest,
+	SerialAPISetup_SetTXStatusReportResponse,
 } from "../serialapi/misc/SerialAPISetupMessages";
 import {
 	AddNodeStatus,
@@ -459,10 +471,34 @@ export class ZWaveController extends EventEmitter {
 			);
 			this._supportedSerialAPISetupCommands = setupCaps.supportedCommands;
 			this.driver.controllerLog.print(
-				`received serial API setup capabilities:
-  supported commands: ${this._supportedSerialAPISetupCommands
-		.map((cmd) => `\n· ${getEnumMemberName(SerialAPISetupCommand, cmd)}`)
-		.join("")}`,
+				`supported serial API setup commands:${this._supportedSerialAPISetupCommands
+					.map(
+						(cmd) =>
+							`\n· ${getEnumMemberName(
+								SerialAPISetupCommand,
+								cmd,
+							)}`,
+					)
+					.join("")}`,
+			);
+		}
+
+		// Enable TX status report if supported
+		if (
+			this.isSerialAPISetupCommandSupported(
+				SerialAPISetupCommand.SetTxStatusReport,
+			)
+		) {
+			this.driver.controllerLog.print(`Enabling TX status report...`);
+			const resp = await this.driver.sendMessage<SerialAPISetup_SetTXStatusReportResponse>(
+				new SerialAPISetup_SetTXStatusReportRequest(this.driver, {
+					enabled: true,
+				}),
+			);
+			this.driver.controllerLog.print(
+				`Enabling TX status report ${
+					resp.success ? "successful" : "failed"
+				}...`,
 			);
 		}
 
@@ -2635,6 +2671,50 @@ ${associatedNodes.join(", ")}`,
 			this._replaceFailedPromise = createDeferredPromise();
 			return this._replaceFailedPromise;
 		}
+	}
+
+	/** Configure the RF region at the Z-Wave API Module */
+	public async setRFRegion(region: RFRegion): Promise<boolean> {
+		const result = await this.driver.sendMessage<SerialAPISetup_SetRFRegionResponse>(
+			new SerialAPISetup_SetRFRegionRequest(this.driver, { region }),
+		);
+		// TODO: Issue soft reset
+		return result.success;
+	}
+
+	/** Request the current RF region configured at the Z-Wave API Module */
+	public async getRFRegion(): Promise<RFRegion> {
+		const result = await this.driver.sendMessage<SerialAPISetup_GetRFRegionResponse>(
+			new SerialAPISetup_GetRFRegionRequest(this.driver),
+		);
+		return result.region;
+	}
+
+	/** Configure the Powerlevel setting of the Z-Wave API */
+	public async setPowerlevel(
+		powerlevel: number,
+		measured0dBm: number,
+	): Promise<boolean> {
+		const result = await this.driver.sendMessage<SerialAPISetup_SetPowerlevelResponse>(
+			new SerialAPISetup_SetPowerlevelRequest(this.driver, {
+				powerlevel,
+				measured0dBm,
+			}),
+		);
+		return result.success;
+	}
+
+	/** Request the Powerlevel setting of the Z-Wave API */
+	public async getPowerlevel(): Promise<
+		Pick<
+			SerialAPISetup_GetPowerlevelResponse,
+			"powerlevel" | "measured0dBm"
+		>
+	> {
+		const result = await this.driver.sendMessage<SerialAPISetup_GetPowerlevelResponse>(
+			new SerialAPISetup_GetPowerlevelRequest(this.driver),
+		);
+		return pick(result, ["powerlevel", "measured0dBm"]);
 	}
 
 	/**
