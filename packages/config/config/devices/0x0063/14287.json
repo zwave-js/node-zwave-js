@@ -34,6 +34,7 @@
 	},
 	"paramInformation": {
 		"4": {
+			// Test
 			"label": "Invert Switch",
 			"description": "Invert the ON/OFF Switch State",
 			"valueSize": 1,
@@ -46,6 +47,7 @@
 			"allowManualEntry": false,
 			"options": [
 				{
+					// Test
 					"label": "Default",
 					"value": 0
 				},
@@ -55,6 +57,7 @@
 				}
 			]
 		}
+		// Test
 	},
 	"compat": {
 		"treatBasicSetAsEvent": true,
@@ -71,6 +74,6 @@
 		"inclusion": "1. Follow the instructions for your Z-Wave certified controller to include a device to the Z-Wave network.\n2. Once the controller is ready to include your device, press and release the top or bottom of the smart fan control switch (rocker) to include it in the network.\n3. Once your controller has confirmed the device has been included, refresh the Z-Wave network to optimize performance",
 		"exclusion": "1. Follow the instructions for your Z-Wave certified controller to exclude a device from the Z-Wave network. \n2. Once the controller is ready to Exclude your device, press and release the top or bottom of the wireless smart switch (rocker) to exclude it from the network",
 		"reset": "1. Quickly press ON (Top) button three (3) times then immediately press the OFF (Bottom) button three (3) times. The LED will flash ON/OFF 5 times when completed successfully.\nNote: This should only be used in the event your network’s primary controller is missing or otherwise inoperable",
-		"manual": "https://products.z-wavealliance.org/ProductManual/File?folder=&filename=MarketCertificationFiles/2506/Binder2.pdf"
+		"manual": "https://products.z-wavealliance.org/ProductManual/File?folder=&filename=MarketCertificationFiles/2103/Binder1.pdf"
 	}
 }
