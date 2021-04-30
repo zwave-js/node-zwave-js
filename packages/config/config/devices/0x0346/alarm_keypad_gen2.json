@@ -384,6 +384,7 @@
 			"defaultValue": 0,
 			"readOnly": false,
 			"writeOnly": false,
+                        "allowManualEntry": false,
                         "options": [
                                 {
                                         "label": "Idle",
