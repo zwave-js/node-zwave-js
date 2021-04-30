@@ -12,6 +12,7 @@ import {
 } from "@zwave-js/core";
 import {
 	flatMap,
+	getEnumMemberName,
 	JSONObject,
 	num2hex,
 	ObjectKeyMap,
@@ -51,6 +52,11 @@ import { DeviceClass } from "../node/DeviceClass";
 import { ZWaveNode } from "../node/Node";
 import { InterviewStage, NodeStatus } from "../node/Types";
 import { VirtualNode } from "../node/VirtualNode";
+import {
+	SerialAPISetupCommand,
+	SerialAPISetup_GetSupportedCommandsRequest,
+	SerialAPISetup_GetSupportedCommandsResponse,
+} from "../serialapi/misc/SerialAPISetupMessages";
 import {
 	AddNodeStatus,
 	AddNodeToNetworkRequest,
@@ -297,6 +303,28 @@ export class ZWaveController extends EventEmitter {
 		return this._supportedFunctionTypes.indexOf(functionType) > -1;
 	}
 
+	private _supportedSerialAPISetupCommands:
+		| SerialAPISetupCommand[]
+		| undefined;
+	public get supportedSerialAPISetupCommands():
+		| readonly SerialAPISetupCommand[]
+		| undefined {
+		return this._supportedSerialAPISetupCommands;
+	}
+
+	/** Checks if a given Serial API setup command is supported by this controller */
+	public isSerialAPISetupCommandSupported(
+		command: SerialAPISetupCommand,
+	): boolean {
+		if (!this._supportedSerialAPISetupCommands) {
+			throw new ZWaveError(
+				"Cannot check yet if a Serial API setup command is supported by the controller. The interview process has not been completed.",
+				ZWaveErrorCodes.Driver_NotReady,
+			);
+		}
+		return this._supportedSerialAPISetupCommands.indexOf(command) > -1;
+	}
+
 	private _sucNodeId: number | undefined;
 	public get sucNodeId(): number | undefined {
 		return this._sucNodeId;
@@ -419,8 +447,24 @@ export class ZWaveController extends EventEmitter {
 		.map((fn) => `\n  · ${FunctionType[fn]} (${num2hex(fn)})`)
 		.join("")}`,
 		);
-
 		// now we can check if a function is supported
+
+		// Figure out which sub commands of SerialAPISetup are supported
+		if (this.isFunctionSupported(FunctionType.SerialAPISetup)) {
+			this.driver.controllerLog.print(
+				`querying serial API setup capabilities...`,
+			);
+			const setupCaps = await this.driver.sendMessage<SerialAPISetup_GetSupportedCommandsResponse>(
+				new SerialAPISetup_GetSupportedCommandsRequest(this.driver),
+			);
+			this._supportedSerialAPISetupCommands = setupCaps.supportedCommands;
+			this.driver.controllerLog.print(
+				`received serial API setup capabilities:
+  supported commands: ${this._supportedSerialAPISetupCommands
+		.map((cmd) => `\n· ${getEnumMemberName(SerialAPISetupCommand, cmd)}`)
+		.join("")}`,
+			);
+		}
 
 		// find the SUC
 		this.driver.controllerLog.print(`finding SUC...`);

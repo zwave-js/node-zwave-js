@@ -60,7 +60,7 @@ export enum FunctionType {
 	UNKNOWN_FUNC_UNKNOWN_0x09 = 0x09, // ??
 	UNKNOWN_FUNC_UNKNOWN_0x0a = 0x0a, // ??
 
-	UNKNOWN_FUNC_SerialAPISetup = 0x0b,
+	SerialAPISetup = 0x0b, // Configure the Serial API
 
 	UNKNOWN_FUNC_RF_RECEIVE_MODE = 0x10, // Power down the RF section of the stick
 	UNKNOWN_FUNC_SET_SLEEP_MODE = 0x11, // Set the CPU into sleep mode
