@@ -3006,14 +3006,7 @@ ajv@^7.0.2:
     require-from-string "^2.0.2"
     uri-js "^4.2.2"
 
-alcalzone-shared@^3.0.1:
-  version "3.0.3"
-  resolved "https://registry.yarnpkg.com/alcalzone-shared/-/alcalzone-shared-3.0.3.tgz#b9eb6f97b3bb8906d762eb968b8ebea899c29f82"
-  integrity sha512-DHScJbVDE9VT5ZBahgmeLHnWf5+KdnukWeqMfkVg9CUtI0CWEKWjRazKo17wr4PGQmnA4MYx/alZMADrd0gaYg==
-  dependencies:
-    debug "^4.3.1"
-
-alcalzone-shared@^3.0.4:
+alcalzone-shared@^3.0.1, alcalzone-shared@^3.0.4:
   version "3.0.4"
   resolved "https://registry.yarnpkg.com/alcalzone-shared/-/alcalzone-shared-3.0.4.tgz#0438990e0793bf664fdffd82e88f4ece81db1bf0"
   integrity sha512-QVnZWWRLVV0NGbR+AszgR3Y/BpPjGKgAyoiKuNegtYbLVTadbFbKLfYQd+4YYkB9PSaj+Qc5Z81U6UtQwzGeQA==
