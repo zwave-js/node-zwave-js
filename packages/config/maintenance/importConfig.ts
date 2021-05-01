@@ -20,6 +20,7 @@ import { isArray, isObject } from "alcalzone-shared/typeguards";
 import { AssertionError, ok } from "assert";
 import axios from "axios";
 import * as child from "child_process";
+import * as JSONC from "comment-json";
 import * as fs from "fs-extra";
 import * as JSON5 from "json5";
 import * as path from "path";
@@ -332,17 +333,20 @@ function normalizeConfig(config: Record<string, any>): Record<string, any> {
 		manufacturerId: config.manufacturerId,
 		label: sanitizeText(config.label) ?? "",
 		description: sanitizeText(config.description) ?? "",
-		devices: config.devices.sort(
-			(a: any, b: any) =>
-				a.productType.localeCompare(b.productType) ||
-				a.productId.localeCompare(b.productId),
-		),
+		devices: config.devices,
 		firmwareVersion: config.firmwareVersion,
 		associations: config.associations,
-		paramInformation: {},
+		paramInformation: config.paramInformation,
 		compat: config.compat,
 		metadata: config.metadata,
 	};
+
+	// Original sort code
+	// devices: config.devices.sort(
+	// 	(a: any, b: any) =>
+	// 		a.productType.localeCompare(b.productType) ||
+	// 		a.productId.localeCompare(b.productId),
+	// ),
 
 	// Delete optional properties if they have no relevant entry
 	if (
@@ -361,36 +365,9 @@ function normalizeConfig(config: Record<string, any>): Record<string, any> {
 		config.paramInformation &&
 		Object.keys(config.paramInformation).length > 0
 	) {
-		// TODO: Sorting object keys is useless while we have a mix of integer and string keys,
-		// since the ES2015 specs define the order
-
-		// const paramKeys = Object.keys(config.paramInformation);
-
-		// // ensure paramKeys respect the order: 100, 101[0x01], 101[0x02], 102 etc...
-		// paramKeys.sort((a, b) => {
-		// 	const aMask = paramsRegex.exec(a) ?? [];
-		// 	const bMask = paramsRegex.exec(b) ?? [];
-
-		// 	if (aMask.length > 1) {
-		// 		a = a.replace(aMask[0], "");
-		// 	}
-
-		// 	if (bMask.length > 1) {
-		// 		b = b.replace(bMask[0], "");
-		// 	}
-
-		// 	if (a === b) {
-		// 		return (
-		// 			parseInt(aMask[1] ?? 0, 16) - parseInt(bMask[1] ?? 0, 16)
-		// 		);
-		// 	} else {
-		// 		return parseInt(a) - parseInt(b);
-		// 	}
-		// });
-
-		const normalizedParamInfo: Record<string, any> = {};
 		// Filter out duplicates between partial and non-partial params
 		const entries = Object.entries<any>(config.paramInformation).filter(
+			// Losing comments between parameters here
 			([key], _, arr) =>
 				// Allow partial params
 				!/^\d+$/.test(key) ||
@@ -398,58 +375,51 @@ function normalizeConfig(config: Record<string, any>): Record<string, any> {
 				!arr.some(([otherKey]) => otherKey.startsWith(`${key}[`)),
 		);
 
-		for (const [key, original] of entries) {
-			const param: Record<string, any> = {
-				$if: original.$if,
-				$import: original.$import,
-				label: original.label,
-				description: original.description,
-				valueSize: original.valueSize,
-				unit: normalizeUnits(original.unit),
-				minValue: original.minValue,
-				maxValue: original.maxValue,
-				defaultValue: original.defaultValue,
-				unsigned: original.unsigned,
-				readOnly: original.readOnly,
-				writeOnly: original.writeOnly,
-				allowManualEntry: original.allowManualEntry,
-				options: original.options,
-			};
+		for (const [key, original] of Object.entries<any>(
+			normalized.paramInformation,
+		)) {
+			original.unit = normalizeUnits(original.unit);
 
-			if (typeof param.$if === "undefined") delete param.$if;
-			if (typeof param.$import === "undefined") delete param.$import;
-			if (typeof param.label === "undefined" || param.label === "")
-				delete param.label;
-			if (
-				typeof param.description === "undefined" ||
-				param.description === ""
-			)
-				delete param.description;
-			if (typeof param.valueSize === "undefined") delete param.valueSize;
-			if (typeof param.unit === "undefined") delete param.unit;
-			if (typeof param.defaultValue === "undefined")
-				delete param.defaultValue;
-			if (typeof param.unsigned === "undefined") delete param.unsigned;
-			if (typeof param.readOnly === "undefined") delete param.readOnly;
-			if (typeof param.writeOnly === "undefined") delete param.writeOnly;
-			if (typeof param.allowManualEntry === "undefined")
-				delete param.allowManualEntry;
+			// Defines the order in which keys will be saved
+			const order = [
+				"$if",
+				"$import",
+				"label",
+				"description",
+				"valueSize",
+				"unit",
+				"minValue",
+				"maxValue",
+				"defaultValue",
+				"unsigned",
+				"readOnly",
+				"writeOnly",
+				"allowManualEntry",
+				"options",
+			];
 
-			if (!param.options || param.options.length === 0) {
-				delete param.options;
-			} else if (program.source.includes("ozw")) {
-				const values = param.options.map((o: any) => o.value);
-				param.minValue = Math.min(...values);
-				param.maxValue = Math.max(...values);
+			// Remove undefined keys while preserving comments
+			for (const l of order) {
+				if (typeof l === "undefined") {
+					continue;
+				} else if (original[l] === "") {
+					delete original[l];
+				}
+
+				const temp = original[l];
+				delete original[l];
+				original[l] = temp;
 			}
 
-			if (typeof param.minValue === "undefined") delete param.minValue;
-			if (typeof param.maxValue === "undefined") delete param.maxValue;
-
-			normalizedParamInfo[key] = param;
+			// Delete empty options arrays
+			if (original.options.length === 0) {
+				delete original.options;
+			} else if (program.source.includes("ozw")) {
+				const values = original.options.map((o: any) => o.value);
+				original.minValue = Math.min(...values);
+				original.maxValue = Math.max(...values);
+			}
 		}
-
-		normalized.paramInformation = normalizedParamInfo;
 	} else {
 		delete normalized.paramInformation;
 	}
@@ -1161,7 +1131,7 @@ async function parseZWAProduct(
 
 	try {
 		if (await fs.pathExists(fileNameAbsolute)) {
-			existingDevice = JSON5.parse(
+			existingDevice = JSONC.parse(
 				await fs.readFile(fileNameAbsolute, "utf8"),
 			);
 		}
@@ -1408,7 +1378,7 @@ async function parseZWAProduct(
 		: zwavePlus;
 	zwavePlus = existingDevice?.supportsZWavePlus ? true : zwavePlus;
 
-	const newAssociations: Record<string, any> = {};
+	const newAssociations: Record<string, any> = newConfig.associations || {};
 	let addCompat = false;
 	for (const ass of product.AssociationGroups) {
 		let label: string =
@@ -1480,7 +1450,7 @@ async function parseZWAProduct(
 	// prettier-ignore
 	const output = `// ${newConfig.manufacturer} ${newConfig.label}${newConfig.description ? (`
 // ${newConfig.description}`) : ""}
-${stringify(normalizeConfig(newConfig), "\t")}`;
+${JSONC.stringify(normalizeConfig(newConfig), null, "\t")}`;
 	await fs.writeFile(fileNameAbsolute, output, "utf8");
 }
 
@@ -1514,7 +1484,7 @@ async function maintenanceParse(): Promise<void> {
 
 		let jsonData;
 		try {
-			jsonData = JSON5.parse(j);
+			jsonData = JSONC.parse(j);
 		} catch (e) {
 			console.log(`Error processing: ${file} - ${e}`);
 		}
@@ -1575,9 +1545,10 @@ async function maintenanceParse(): Promise<void> {
 			// prettier-ignore
 			const output = `// ${jsonData.manufacturer} ${jsonData.label}${jsonData.description ? (`
 // ${jsonData.description}`) : ""}
-${stringify(normalizeConfig(jsonData), "\t")}`;
+${JSONC.stringify(normalizeConfig(jsonData), null, "\t")}`;
 			await fs.writeFile(file, output, "utf8");
 		}
+	}
 
 	function keepLongest(current_group: any, test_group: any) {
 		if (current_group.length >= test_group.length) {
