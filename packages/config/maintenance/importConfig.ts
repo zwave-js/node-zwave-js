@@ -328,39 +328,99 @@ function normalizeUnits(unit: string) {
  * @param config Device JSON configuration
  */
 function normalizeConfig(config: Record<string, any>): Record<string, any> {
-	const normalized: Record<string, any> = {
-		manufacturer: config.manufacturer,
-		manufacturerId: config.manufacturerId,
-		label: sanitizeText(config.label) ?? "",
-		description: sanitizeText(config.description) ?? "",
-		devices: config.devices,
-		firmwareVersion: config.firmwareVersion,
-		associations: config.associations,
-		paramInformation: config.paramInformation,
-		compat: config.compat,
-		metadata: config.metadata,
-	};
+	// Top-level key order (comments are not preserved between top-level keys)
+	const topOrder = [
+		"manufacturer",
+		"manufacturerId",
+		"label",
+		"description",
+		"devices",
+		"firmwareVersion",
+		"associations",
+		"paramInformation",
+		"compat",
+		"metadata",
+	];
 
-	// Original sort code
-	// devices: config.devices.sort(
-	// 	(a: any, b: any) =>
-	// 		a.productType.localeCompare(b.productType) ||
-	// 		a.productId.localeCompare(b.productId),
-	// ),
+	// Parameter key order (comments preserved)
+	const paramOrder = [
+		"$if",
+		"$import",
+		"label",
+		"description",
+		"valueSize",
+		"unit",
+		"minValue",
+		"maxValue",
+		"defaultValue",
+		"unsigned",
+		"readOnly",
+		"writeOnly",
+		"allowManualEntry",
+		"options",
+	];
 
-	// Delete optional properties if they have no relevant entry
-	if (
-		!normalized.associations ||
-		Object.keys(normalized.associations).length === 0
-	) {
-		delete normalized.associations;
+	// Potentially empty arrays to remove
+	const arraysToClean = ["associations", "compat", "metadata"];
+
+	/*******************
+	 * Standardize things
+	 ********************/
+
+	// Enforce top-level order
+	for (const l of topOrder) {
+		if (typeof config[l] === "undefined") {
+			continue;
+		} else if (config[l] === "") {
+			delete config[l];
+		}
+
+		const temp = config[l];
+		delete config[l];
+		config[l] = temp;
 	}
-	if (!normalized.compat || Object.keys(normalized.compat).length === 0) {
-		delete normalized.compat;
+
+	// Remove empty arrays
+	for (const array of Object.keys(arraysToClean)) {
+		if (!config[array] || config[array].length === 0) {
+			delete config[array];
+		}
 	}
-	if (!normalized.metadata || Object.keys(normalized.metadata).length === 0) {
-		delete normalized.metadata;
+
+	// Sanitize labels
+	config.label = sanitizeText(config.label) ?? "";
+	config.description = sanitizeText(config.description) ?? "";
+
+	// Sort devices (Bubble)
+	let done = false;
+	while (!done && config.devices.length > 1) {
+		done = true;
+		for (let i = 1; i <= config.devices.length; i += 1) {
+			if (
+				config.devices[i - 1].productType ===
+					config.devices[i]?.productType &&
+				config.devices[i - 1].productId > config.devices[i].productId
+			) {
+				[config.devices[i - 1], config.devices[i]] = [
+					config.devices[i],
+					config.devices[i - 1],
+				];
+			}
+
+			if (
+				config.devices[i - 1].productType >
+				config.devices[i]?.productType
+			) {
+				done = false;
+				[config.devices[i - 1], config.devices[i]] = [
+					config.devices[i],
+					config.devices[i - 1],
+				];
+			}
+		}
 	}
+
+	// Standardize parameters
 	if (
 		config.paramInformation &&
 		Object.keys(config.paramInformation).length > 0
@@ -376,31 +436,13 @@ function normalizeConfig(config: Record<string, any>): Record<string, any> {
 		);
 
 		for (const [key, original] of Object.entries<any>(
-			normalized.paramInformation,
+			config.paramInformation,
 		)) {
 			original.unit = normalizeUnits(original.unit);
 
-			// Defines the order in which keys will be saved
-			const order = [
-				"$if",
-				"$import",
-				"label",
-				"description",
-				"valueSize",
-				"unit",
-				"minValue",
-				"maxValue",
-				"defaultValue",
-				"unsigned",
-				"readOnly",
-				"writeOnly",
-				"allowManualEntry",
-				"options",
-			];
-
 			// Remove undefined keys while preserving comments
-			for (const l of order) {
-				if (typeof l === "undefined") {
+			for (const l of paramOrder) {
+				if (typeof original[l] === "undefined") {
 					continue;
 				} else if (original[l] === "") {
 					delete original[l];
@@ -421,10 +463,10 @@ function normalizeConfig(config: Record<string, any>): Record<string, any> {
 			}
 		}
 	} else {
-		delete normalized.paramInformation;
+		delete config.paramInformation;
 	}
 
-	return normalized;
+	return config;
 }
 
 /**
