@@ -35,6 +35,56 @@
 	"paramInformation": {
 		"4": {
 			// Test
+			"$if": "firmwareVersion <= 1.0",
+			"label": "Invert Switch",
+			"description": "Invert the ON/OFF Switch State",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 0,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					// Test
+					"label": "Default",
+					"value": 0
+				},
+				{
+					"label": "Invert",
+					"value": 1
+				}
+			]
+		},
+		"4[0x01]": {
+			// Test
+			"$if": "firmwareVersion >= 2.0",
+			"label": "Invert Switch",
+			"description": "Invert the ON/OFF Switch State",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 0,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					// Test
+					"label": "Default",
+					"value": 0
+				},
+				{
+					"label": "Invert",
+					"value": 1
+				}
+			]
+		},
+		"4[0x02]": {
+			// Test
 			"label": "Invert Switch",
 			"description": "Invert the ON/OFF Switch State",
 			"valueSize": 1,
