@@ -19,7 +19,6 @@
 	"paramInformation": {
 		"12": {
 			"label": "Motion Sensor Sensitivity",
-			"description": "8 is the highest sensitivity",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 8,
@@ -80,17 +79,18 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "Motion detected: 0xff (on); No motion: 0x00 (off)",
+					"label": "0xff for Motion; 0x00 for Clear",
 					"value": 0
 				},
 				{
-					"label": "Motion detected: 0x00 (off); No motion: 0xff (on)",
+					"label": "0x00 for Motion; 0xff for Clear",
 					"value": 1
 				}
 			]
 		},
 		"16": {
 			"label": "Motion Detection: Send Binary Sensor Reports",
+			"description": "If disabled, notification reports will be sent instead",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 1,
