@@ -2085,6 +2085,10 @@
 		"allowManualEntry": false,
 		"options": [
 			{
+				"label": "Normal Operation",
+				"value": 0
+			},
+			{
 				"label": "Unpair Button No. 1",
 				"value": 1
 			},
@@ -2093,24 +2097,8 @@
 				"value": 2
 			},
 			{
-				"label": "Unpair Button Nos. 1-2",
-				"value": 3
-			},
-			{
 				"label": "Unpair Button No. 3",
 				"value": 4
-			},
-			{
-				"label": "Unpair Button Nos. 1 & 3",
-				"value": 5
-			},
-			{
-				"label": "Unpair Button Nos. 2 & 3",
-				"value": 6
-			},
-			{
-				"label": "Unpair Button Nos. 1-3",
-				"value": 7
 			}
 		]
 	},
