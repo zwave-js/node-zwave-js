@@ -2292,7 +2292,7 @@
 	// Recover limits
 	"recover_limit_temp": {
 		"label": "Temperature Recover Limit",
-		"description": "Defines the difference below or above the upper/lower limit after which the limit is reenabled ",
+		"description": "Defines the difference below or above the upper/lower limit after which the limit is reenabled",
 		"valueSize": 2,
 		"minValue": 1,
 		"maxValue": 255,
