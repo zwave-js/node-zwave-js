@@ -528,33 +528,26 @@
 		"defaultValue": 0
 	},
 	"startup_relay": {
-		"label": "Relay Startup State",
-		"valueSize": 1,
-		"minValue": 0,
-		"maxValue": 2,
-		"defaultValue": 0,
-		"readOnly": false,
-		"writeOnly": false,
-		"allowManualEntry": false,
+		"$import": "../../templates/master_template.json#state_after_power_failure",
 		"options": [
 			{
-				"label": "Off",
+				"label": "Always off",
 				"value": 0
 			},
 			{
-				"label": "On",
+				"label": "Always on",
 				"value": 1
 			},
 			{
-				"label": "Last registered state",
+				"label": "Previous state",
 				"value": 2
 			}
 		]
 	},
 	"watt_threshold_change": {
-		"label": "Watt Threshold: Change",
-		"unit": "watt",
+		"label": "Power Change Threshold",
 		"valueSize": 2,
+		"unit": "W",
 		"minValue": 0,
 		"maxValue": 500,
 		"defaultValue": 50,
@@ -564,9 +557,9 @@
 		"allowManualEntry": true
 	},
 	"watt_threshold_power": {
-		"label": "Watt Threshold: Power Off",
-		"unit": "watt",
+		"label": "Power Change Threshold: Power Off",
 		"valueSize": 2,
+		"unit": "W",
 		"minValue": 0,
 		"maxValue": 3000,
 		"defaultValue": 2900,
@@ -594,7 +587,7 @@
 				"value": 1
 			},
 			{
-				"label": "LED set by parameter 6 and 7",
+				"label": "LED set by parameters 6 and 7",
 				"value": 2
 			}
 		]
