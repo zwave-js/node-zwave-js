@@ -60,7 +60,7 @@
 			"allowManualEntry": true
 		},
 		"4": {
-			"label": "Led Indicator",
+			"label": "LED Indicator",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 2,
@@ -98,8 +98,8 @@
 			"allowManualEntry": true
 		},
 		"6": {
-			"label": "Supervisory Report Timeout",
-			"description": "This parameter is the number of milliseconds waiting for a supervisory report response to a supervisory get",
+			"label": "Supervision Report Timeout",
+			"description": "This parameter is the number of milliseconds waiting for a Supervision Report response to a Supervision Get",
 			"valueSize": 2,
 			"unit": "ms",
 			"minValue": 500,
