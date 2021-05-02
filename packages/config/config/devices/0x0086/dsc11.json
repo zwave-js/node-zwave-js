@@ -94,7 +94,7 @@
 			"$import": "templates/aeotec_template.json#enable_notifications"
 		},
 		"90": {
-			"label": "Opearting Temperature of Smart Strip",
+			"label": "Operating Temperature of Smart Strip",
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 65535,
