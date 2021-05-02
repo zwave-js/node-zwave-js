@@ -2076,7 +2076,7 @@
 	"button_unpair": {
 		"label": "Button Unpairing",
 		"valueSize": 1,
-		"minValue": 1,
+		"minValue": 0,
 		"maxValue": 7,
 		"defaultValue": 0,
 		"unsigned": true,
