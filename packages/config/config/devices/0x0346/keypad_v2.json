@@ -196,7 +196,7 @@
 			"unsigned": true,
 			"readOnly": false,
 			"writeOnly": false,
-			"allowManualEntry": true,
+			"allowManualEntry": false,
 			"options": [
 				{
 					"label": "Disable",
@@ -327,7 +327,7 @@
 			"unsigned": true,
 			"readOnly": false,
 			"writeOnly": false,
-			"allowManualEntry": true,
+			"allowManualEntry": false,
 			"options": [
 				{
 					"label": "Disable",
