@@ -510,7 +510,7 @@
 			"$if": "firmwareVersion >= 1.6",
 			"label": "Humidity Sensor Calibration",
 			"valueSize": 1,
-			"unit": "rh",
+			"unit": "% rH",
 			"minValue": -50,
 			"maxValue": 50,
 			"defaultValue": 0,
