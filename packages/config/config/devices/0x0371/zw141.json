@@ -371,7 +371,7 @@
 			"allowManualEntry": true
 		},
 		"248": {
-			"label": "External Switch: Netowrk/Reset Functions",
+			"label": "External Switch: Network/Reset Functions",
 			"valueSize": 1,
 			"minValue": 1,
 			"maxValue": 3,
