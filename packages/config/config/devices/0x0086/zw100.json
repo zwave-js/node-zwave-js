@@ -109,7 +109,7 @@
 		},
 		"41[0x0f]": [
 			{
-				"$if": "firmwareVersion > 1.6 firmwareVersion <= 1.9",
+				"$if": "firmwareVersion > 1.6 && firmwareVersion <= 1.9",
 				"$import": "templates/aeotec_template.json#celsius_fahrenheit",
 				"label": "Temperature Threshold Unit",
 				"valueSize": 3
