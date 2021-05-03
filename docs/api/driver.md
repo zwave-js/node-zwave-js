@@ -236,6 +236,24 @@ getLogConfig(): LogConfig
 
 Returns the current logging configuration.
 
+### `checkForConfigUpdates`
+
+```ts
+checkForConfigUpdates(): Promise<string | undefined>
+```
+
+Checks whether there is a compatible update for the currently installed config package. Returns the new version if there is an update, `undefined` otherwise.
+
+### `installConfigUpdate`
+
+```ts
+installConfigUpdate(): Promise<boolean>
+```
+
+Checks whether there is a compatible update for the currently installed config package and tries to install it. Returns `true` when an update was installed, `false` otherwise.
+
+> [!NOTE] Although the updated config gets loaded after the update, bugfixes and changes to device configuration generally require either a driver restart or re-interview of the changed devices to take effect.
+
 ## Driver properties
 
 ### `cacheDir`

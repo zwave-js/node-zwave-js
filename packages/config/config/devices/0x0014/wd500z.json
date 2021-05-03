@@ -82,7 +82,7 @@
 			"maxValue": 1,
 			"defaultValue": 0,
 			"unsigned": true,
-			"readOnly": true,
+			"readOnly": false,
 			"writeOnly": false,
 			"allowManualEntry": false,
 			"options": [

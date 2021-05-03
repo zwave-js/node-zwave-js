@@ -1906,6 +1906,30 @@ ${associatedNodes.join(", ")}`,
 	}
 
 	/**
+	 * Returns all association groups that exist on a node and all its endpoints.
+	 * The returned map uses the endpoint index as keys and its values are maps of group IDs to their definition
+	 */
+	public getAllAssociationGroups(
+		nodeId: number,
+	): ReadonlyMap<number, ReadonlyMap<number, AssociationGroup>> {
+		const node = this.nodes.getOrThrow(nodeId);
+
+		const ret = new Map<number, ReadonlyMap<number, AssociationGroup>>();
+		for (const endpoint of node.getAllEndpoints()) {
+			if (endpoint.supportsCC(CommandClasses.Association)) {
+				ret.set(
+					endpoint.index,
+					this.getAssociationGroups({
+						nodeId,
+						endpoint: endpoint.index,
+					}),
+				);
+			}
+		}
+		return ret;
+	}
+
+	/**
 	 * Returns all associations (Multi Channel or normal) that are configured on the root device or an endpoint of a node.
 	 * If no endpoint is given, the associations of the root device (endpoint 0) are returned.
 	 */

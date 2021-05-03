@@ -63,6 +63,13 @@ export enum ZWaveErrorCodes {
 	/** A compound config file has circular imports */
 	Config_CircularImport,
 
+	/** Failed to download the npm registry info for config updates */
+	Config_Update_RegistryError,
+	/** Could not detect which package manager to use for updates */
+	Config_Update_PackageManagerNotFound,
+	/** Installing the configuration update failed */
+	Config_Update_InstallFailed,
+
 	// Here follow message specific errors
 
 	/** The removal process could not be started or completed due to one or several reasons */
