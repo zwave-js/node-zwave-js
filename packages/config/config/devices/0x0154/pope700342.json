@@ -23,8 +23,8 @@
     },  
 		"2": {
 			"label": "Switching Command",
-			"maxNodes": 10
-       		"description": "All devices in this group will receive a BASIC SET command on Smoke Alarms. Configuration parameter 3 and 4 will define the BASIC command sent.",
+			"maxNodes": 10,
+       		"description": "All devices in this group will receive a BASIC SET command on Smoke Alarms. Configuration parameter 3 and 4 will define the BASIC command sent."
       }
 	},
 	"paramInformation": {
