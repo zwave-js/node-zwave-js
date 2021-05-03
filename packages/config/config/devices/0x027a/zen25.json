@@ -322,7 +322,7 @@
 			{
 				"label": "Disable power reporting of USB port",
 				"value": 4
-			},
+			}
 		]
 	}
 },
