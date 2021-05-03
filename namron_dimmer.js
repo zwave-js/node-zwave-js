@@ -15,8 +15,8 @@
 	},
 	"paramInformation": {
 		"2": {
-			"label": "Saving load state",
-			"description": "Saving load state before power failure",
+			"label": "Save load state",
+			"description": "Saves load state before power failure",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 2,
@@ -41,7 +41,7 @@
 		},
 		"3": {
 			"label": "Enable/disable to send report",
-			"description": " Enable/disable to send the basic report to the Lifeline when the load state changed（When value set as 1, repower on the dimmer, it will send Basic report automatically）",
+			"description": " Sends the basic report to the Lifeline when the load state changed（When value set as 1, repower on the dimmer, it will send Basic report automatically）",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 1,
@@ -61,8 +61,8 @@
 		   ]
 		},
 		"4": {
-			"label": "Default fade time (in seconds)",
-			"description": "Default fade time (unit is second, this value has the same function as Duration of Multilevel) Valid value: 0~127",
+			"label": "Default fade time",
+			"description": "This value has the same function as Duration of Multilevel. Valid value: 0~127",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 127,
@@ -74,7 +74,7 @@
 		},
 		"5": {
 			"label": "Minimum brightness value",
-			"description": "Setting minimum brightness value. Valid value: 0~50, the bigger the value is, the higher the load’s minimum brightness is",
+			"description": "Valid value: 0~50. The bigger the value is, the higher the load’s minimum brightness is",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 50,
@@ -85,7 +85,7 @@
 		},
 		"6": {
 			"label": "Maxium brightness value",
-			"description": "Setting maximum brightness value. Valid values: 0 ~ 100",
+			"description": "Valid values: 0 ~ 100",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 100,
@@ -142,7 +142,7 @@
 		},
 		"9": {
 			"label": "Added / removed from a network through external switch",
-			"description": "Added / removed from a network through external switch (when enables this function, triple press the external switch within 1.5 seconds to be added to or removed from a network)",
+			"description": "When enabling this function, triple press the external switch within 1.5 seconds to be added to or removed from a network",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 1,
@@ -217,7 +217,7 @@
 		},
 		"13": {
 			"label": "Enable / Disable over current protection",
-			"description": "Enable / Disable over current protection (over 2.1A for 20 seconds continously",
+			"description": "Must be over 2.1A for 20 seconds continously",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 1,
@@ -237,8 +237,8 @@
 		   ]
 		},
 		"14": {
-			"label": "Power automatic report absolute threshold (W)",
-			"description": "Power automatic report absolute threshold, unit is W. When power changes above the absolute threshold, immediately report current power value",
+			"label": "Power automatic report absolute threshold",
+			"description": "When power changes above the absolute threshold, immediately report current power value",
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 1,
@@ -248,8 +248,8 @@
 			"allowManualEntry": false
 		},
 		"15": {
-			"label": "Power automatic report percentage threshold (%)",
-			"description": "Power automatic report percentage threshold, unit is %. When power changes above the percentage threshold, immediately report current power value",
+			"label": "Power automatic report percentage threshold",
+			"description": "When power changes above the percentage threshold, immediately report current power value",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 1,
@@ -259,8 +259,8 @@
 			"allowManualEntry": false
 		},
 		"21": {
-			"label": "Power metering automatic report time cycle (seconds)",
-			"description": "Power metering automatic report time cycle, unit is second. Valid time cycle value: 5~2678400, when set as 0, report function disabled",
+			"label": "Power metering automatic report time cycle",
+			"description": "Valid time cycle value: 5~2678400, when set as 0, report function disabled",
 			"valueSize": 4,
 			"minValue": 0,
 			"maxValue": 2678400,
@@ -270,8 +270,8 @@
 			"allowManualEntry": true
 		},
 		"22": {
-			"label": "Energy metering automatic report time cycle (seconds)",
-			"description": "Energy metering automatic report time cycle, unit is second. Valid time cycle value: 5~2678400, when set as 0, report function disabled",
+			"label": "Energy metering automatic report time cycle",
+			"description": "Valid time cycle value: 5~2678400, when set as 0, report function disabled",
 			"valueSize": 4,
 			"minValue": 0,
 			"maxValue": 2678400,
@@ -281,8 +281,8 @@
 			"allowManualEntry": true
 		},
 		"23": {
-			"label": "Voltage metering automatic report time cycle (seconds)",
-			"description": "Voltage metering automatic report time cycle, unit is second. Valid time cycle value: 5~2678400, when set as 0, report function disabled",
+			"label": "Voltage metering automatic report time cycle",
+			"description": "Valid time cycle value: 5~2678400, when set as 0, report function disabled",
 			"valueSize": 4,
 			"minValue": 0,
 			"maxValue": 2678400,
@@ -292,8 +292,8 @@
 			"allowManualEntry": true
 		},
 		"24": {
-			"label": "Current metering automatic report time cycle (seconds)",
-			"description": "Current metering automatic report time cycle, unit is second. Valid time cycle value: 5~2678400, when set as 0, report function disabled",
+			"label": "Current metering automatic report time cycle",
+			"description": "Valid time cycle value: 5~2678400, when set as 0, report function disabled",
 			"valueSize": 4,
 			"minValue": 0,
 			"maxValue": 2678400,
