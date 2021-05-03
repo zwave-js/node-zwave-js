@@ -293,8 +293,9 @@
 		}
 	},
 	"18": {
+		"$if": "firmwareVersion >= 2.0",
 		"label": "Enable/Disable Power Reports",
-		"description": "Enable or disable power reporting (Requires Firmware 2.0)",
+		"description": "Enable or disable power reporting",
 		"valueSize": 1,
 		"minValue": 0,
 		"maxValue": 4,
