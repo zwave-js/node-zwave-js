@@ -444,23 +444,8 @@ Consider converting this parameter to unsigned using ${white(
 					...config.paramInformation.entries(),
 				].filter(([k]) => !!k.valueBitMask);
 
-				// Check if there are parameters with a single bit mask
-				const partialParamCounts = partialParams
-					.map(([k]) => k)
-					.reduce((map, key) => {
-						if (!map.has(key.parameter)) map.set(key.parameter, 0);
-						map.set(key.parameter, map.get(key.parameter)! + 1);
-						return map;
-					}, new Map<number, number>());
-				for (const [param, count] of partialParamCounts.entries()) {
-					if (count === 1) {
-						addError(
-							file,
-							`Parameter #${param} has a single bit mask defined. Either add more, or delete the bit mask.`,
-							variant,
-						);
-					}
-				}
+				// Checking if there are parameters with a single bit mask happens for the condional config,
+				// not the evaluated one
 
 				// Check if there are partial parameters and non-partials with the same number
 				const duplicatedPartials = distinct(
@@ -683,6 +668,31 @@ Did you mean to use ${opt.value >>> shiftAmount}?`,
 					addError(
 						file,
 						`The maximum firmware version ${config.firmwareVersion.max} is invalid. Leading zeroes are not permitted.`,
+					);
+				}
+			}
+		}
+
+		// Check only the conditional configs for single bit masks, because they might be added for
+		// separate variants
+		if (conditionalConfig.paramInformation) {
+			const partialParams = [
+				...conditionalConfig.paramInformation.entries(),
+			].filter(([k]) => !!k.valueBitMask);
+
+			// Check if there are parameters with a single bit mask
+			const partialParamCounts = partialParams
+				.map(([k]) => k)
+				.reduce((map, key) => {
+					if (!map.has(key.parameter)) map.set(key.parameter, 0);
+					map.set(key.parameter, map.get(key.parameter)! + 1);
+					return map;
+				}, new Map<number, number>());
+			for (const [param, count] of partialParamCounts.entries()) {
+				if (count === 1) {
+					addError(
+						file,
+						`Parameter #${param} has a single bit mask defined. Either add more, or delete the bit mask.`,
 					);
 				}
 			}
