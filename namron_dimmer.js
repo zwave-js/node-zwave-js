@@ -13,7 +13,6 @@
 		"min": "0.0",
 		"max": "255.255"
 	},
-	"supportsZWavePlus": true,
 	"paramInformation": {
 		"2": {
 			"label": "Saving load state",
@@ -42,10 +41,7 @@
 		},
 		"3": {
 			"label": "Enable/disable to send report",
-			"description": " Enable/disable to send the basic report to the Lifeline
-							when the load state changed（When value set as 1, repower
-							on the dimmer, it will send Basic report
-							automatically）",
+			"description": " Enable/disable to send the basic report to the Lifeline when the load state changed（When value set as 1, repower on the dimmer, it will send Basic report automatically）",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 1,
@@ -66,9 +62,7 @@
 		},
 		"4": {
 			"label": "Default fade time (in seconds)",
-			"description": "Default fade time (unit is second, this value has the same
-							function as Duration of Multilevel)
-							Valid value: 0~127",
+			"description": "Default fade time (unit is second, this value has the same function as Duration of Multilevel) Valid value: 0~127",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 127,
@@ -80,9 +74,7 @@
 		},
 		"5": {
 			"label": "Minimum brightness value",
-			"description": "Setting minimum brightness value
-							Valid value: 0~50, the bigger the value is, the higher the
-							load’s minimum brightness is",
+			"description": "Setting minimum brightness value. Valid value: 0~50, the bigger the value is, the higher the load’s minimum brightness is",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 50,
@@ -149,12 +141,8 @@
 		   ]	
 		},
 		"9": {
-			"label": "Added / removed from a network through external
-							switch",
-			"description": "Added / removed from a network through external
-							switch (when enables this function, triple press the external
-							switch within 1.5 seconds to be added to or removed from a
-							network)",
+			"label": "Added / removed from a network through external switch",
+			"description": "Added / removed from a network through external switch (when enables this function, triple press the external switch within 1.5 seconds to be added to or removed from a network)",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 1,
@@ -250,9 +238,7 @@
 		},
 		"14": {
 			"label": "Power automatic report absolute threshold (W)",
-			"description": "Power automatic report absolute threshold, unit is W
-							When power changes above the absolute threshold,
-							immediately report current power value",
+			"description": "Power automatic report absolute threshold, unit is W. When power changes above the absolute threshold, immediately report current power value",
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 1,
@@ -263,9 +249,7 @@
 		},
 		"15": {
 			"label": "Power automatic report percentage threshold (%)",
-			"description": "Power automatic report percentage threshold, unit is %
-							When power changes above the percentage threshold,
-							immediately report current power value",
+			"description": "Power automatic report percentage threshold, unit is %. When power changes above the percentage threshold, immediately report current power value",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 1,
@@ -276,9 +260,7 @@
 		},
 		"21": {
 			"label": "Power metering automatic report time cycle (seconds)",
-			"description": "Power metering automatic report time cycle, unit is second
-							Valid time cycle value: 5~2678400, when set as 0, report
-							function disabled",
+			"description": "Power metering automatic report time cycle, unit is second. Valid time cycle value: 5~2678400, when set as 0, report function disabled",
 			"valueSize": 4,
 			"minValue": 0,
 			"maxValue": 2678400,
@@ -289,9 +271,7 @@
 		},
 		"22": {
 			"label": "Energy metering automatic report time cycle (seconds)",
-			"description": "Energy metering automatic report time cycle, unit is second
-							Valid time cycle value: 5~2678400, when set as 0, report
-							function disabled",
+			"description": "Energy metering automatic report time cycle, unit is second. Valid time cycle value: 5~2678400, when set as 0, report function disabled",
 			"valueSize": 4,
 			"minValue": 0,
 			"maxValue": 2678400,
@@ -302,9 +282,7 @@
 		},
 		"23": {
 			"label": "Voltage metering automatic report time cycle (seconds)",
-			"description": "Voltage metering automatic report time cycle, unit is second
-							Valid time cycle value: 5~2678400, when set as 0, report
-							function disabled",
+			"description": "Voltage metering automatic report time cycle, unit is second. Valid time cycle value: 5~2678400, when set as 0, report function disabled",
 			"valueSize": 4,
 			"minValue": 0,
 			"maxValue": 2678400,
@@ -315,9 +293,7 @@
 		},
 		"24": {
 			"label": "Current metering automatic report time cycle (seconds)",
-			"description": "Current metering automatic report time cycle, unit is second
-							Valid time cycle value: 5~2678400, when set as 0, report
-							function disabled",
+			"description": "Current metering automatic report time cycle, unit is second. Valid time cycle value: 5~2678400, when set as 0, report function disabled",
 			"valueSize": 4,
 			"minValue": 0,
 			"maxValue": 2678400,
