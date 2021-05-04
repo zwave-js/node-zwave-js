@@ -12,9 +12,11 @@ import {
 } from "@zwave-js/core";
 import {
 	flatMap,
+	getEnumMemberName,
 	JSONObject,
 	num2hex,
 	ObjectKeyMap,
+	pick,
 	ReadonlyObjectKeyMap,
 } from "@zwave-js/shared";
 import { distinct } from "alcalzone-shared/arrays";
@@ -51,6 +53,30 @@ import { DeviceClass } from "../node/DeviceClass";
 import { ZWaveNode } from "../node/Node";
 import { InterviewStage, NodeStatus } from "../node/Types";
 import { VirtualNode } from "../node/VirtualNode";
+import {
+	NodeIDType,
+	RFRegion,
+	SerialAPISetupCommand,
+	SerialAPISetup_CommandUnsupportedResponse,
+	SerialAPISetup_GetLRMaximumPayloadSizeRequest,
+	SerialAPISetup_GetLRMaximumPayloadSizeResponse,
+	SerialAPISetup_GetMaximumPayloadSizeRequest,
+	SerialAPISetup_GetMaximumPayloadSizeResponse,
+	SerialAPISetup_GetPowerlevelRequest,
+	SerialAPISetup_GetPowerlevelResponse,
+	SerialAPISetup_GetRFRegionRequest,
+	SerialAPISetup_GetRFRegionResponse,
+	SerialAPISetup_GetSupportedCommandsRequest,
+	SerialAPISetup_GetSupportedCommandsResponse,
+	SerialAPISetup_SetNodeIDTypeRequest,
+	SerialAPISetup_SetNodeIDTypeResponse,
+	SerialAPISetup_SetPowerlevelRequest,
+	SerialAPISetup_SetPowerlevelResponse,
+	SerialAPISetup_SetRFRegionRequest,
+	SerialAPISetup_SetRFRegionResponse,
+	SerialAPISetup_SetTXStatusReportRequest,
+	SerialAPISetup_SetTXStatusReportResponse,
+} from "../serialapi/misc/SerialAPISetupMessages";
 import {
 	AddNodeStatus,
 	AddNodeToNetworkRequest,
@@ -297,6 +323,28 @@ export class ZWaveController extends EventEmitter {
 		return this._supportedFunctionTypes.indexOf(functionType) > -1;
 	}
 
+	private _supportedSerialAPISetupCommands:
+		| SerialAPISetupCommand[]
+		| undefined;
+	public get supportedSerialAPISetupCommands():
+		| readonly SerialAPISetupCommand[]
+		| undefined {
+		return this._supportedSerialAPISetupCommands;
+	}
+
+	/** Checks if a given Serial API setup command is supported by this controller */
+	public isSerialAPISetupCommandSupported(
+		command: SerialAPISetupCommand,
+	): boolean {
+		if (!this._supportedSerialAPISetupCommands) {
+			throw new ZWaveError(
+				"Cannot check yet if a Serial API setup command is supported by the controller. The interview process has not been completed.",
+				ZWaveErrorCodes.Driver_NotReady,
+			);
+		}
+		return this._supportedSerialAPISetupCommands.indexOf(command) > -1;
+	}
+
 	private _sucNodeId: number | undefined;
 	public get sucNodeId(): number | undefined {
 		return this._sucNodeId;
@@ -419,8 +467,48 @@ export class ZWaveController extends EventEmitter {
 		.map((fn) => `\n  · ${FunctionType[fn]} (${num2hex(fn)})`)
 		.join("")}`,
 		);
-
 		// now we can check if a function is supported
+
+		// Figure out which sub commands of SerialAPISetup are supported
+		if (this.isFunctionSupported(FunctionType.SerialAPISetup)) {
+			this.driver.controllerLog.print(
+				`querying serial API setup capabilities...`,
+			);
+			const setupCaps = await this.driver.sendMessage<SerialAPISetup_GetSupportedCommandsResponse>(
+				new SerialAPISetup_GetSupportedCommandsRequest(this.driver),
+			);
+			this._supportedSerialAPISetupCommands = setupCaps.supportedCommands;
+			this.driver.controllerLog.print(
+				`supported serial API setup commands:${this._supportedSerialAPISetupCommands
+					.map(
+						(cmd) =>
+							`\n· ${getEnumMemberName(
+								SerialAPISetupCommand,
+								cmd,
+							)}`,
+					)
+					.join("")}`,
+			);
+		}
+
+		// Enable TX status report if supported
+		if (
+			this.isSerialAPISetupCommandSupported(
+				SerialAPISetupCommand.SetTxStatusReport,
+			)
+		) {
+			this.driver.controllerLog.print(`Enabling TX status report...`);
+			const resp = await this.driver.sendMessage<SerialAPISetup_SetTXStatusReportResponse>(
+				new SerialAPISetup_SetTXStatusReportRequest(this.driver, {
+					enabled: true,
+				}),
+			);
+			this.driver.controllerLog.print(
+				`Enabling TX status report ${
+					resp.success ? "successful" : "failed"
+				}...`,
+			);
+		}
 
 		// find the SUC
 		this.driver.controllerLog.print(`finding SUC...`);
@@ -2591,6 +2679,140 @@ ${associatedNodes.join(", ")}`,
 			this._replaceFailedPromise = createDeferredPromise();
 			return this._replaceFailedPromise;
 		}
+	}
+
+	/** Configure the RF region at the Z-Wave API Module */
+	public async setRFRegion(region: RFRegion): Promise<boolean> {
+		const result = await this.driver.sendMessage<
+			| SerialAPISetup_SetRFRegionResponse
+			| SerialAPISetup_CommandUnsupportedResponse
+		>(new SerialAPISetup_SetRFRegionRequest(this.driver, { region }));
+		if (result instanceof SerialAPISetup_CommandUnsupportedResponse) {
+			throw new ZWaveError(
+				`Your hardware does not support setting the RF region!`,
+				ZWaveErrorCodes.Driver_NotSupported,
+			);
+		}
+		// TODO: Issue soft reset
+		return result.success;
+	}
+
+	/** Request the current RF region configured at the Z-Wave API Module */
+	public async getRFRegion(): Promise<RFRegion> {
+		const result = await this.driver.sendMessage<
+			| SerialAPISetup_GetRFRegionResponse
+			| SerialAPISetup_CommandUnsupportedResponse
+		>(new SerialAPISetup_GetRFRegionRequest(this.driver));
+		if (result instanceof SerialAPISetup_CommandUnsupportedResponse) {
+			throw new ZWaveError(
+				`Your hardware does not support getting the RF region!`,
+				ZWaveErrorCodes.Driver_NotSupported,
+			);
+		}
+		return result.region;
+	}
+
+	/** Configure the Powerlevel setting of the Z-Wave API */
+	public async setPowerlevel(
+		powerlevel: number,
+		measured0dBm: number,
+	): Promise<boolean> {
+		const result = await this.driver.sendMessage<
+			| SerialAPISetup_SetPowerlevelResponse
+			| SerialAPISetup_CommandUnsupportedResponse
+		>(
+			new SerialAPISetup_SetPowerlevelRequest(this.driver, {
+				powerlevel,
+				measured0dBm,
+			}),
+		);
+		if (result instanceof SerialAPISetup_CommandUnsupportedResponse) {
+			throw new ZWaveError(
+				`Your hardware does not support setting the powerlevel!`,
+				ZWaveErrorCodes.Driver_NotSupported,
+			);
+		}
+		return result.success;
+	}
+
+	/** Request the Powerlevel setting of the Z-Wave API */
+	public async getPowerlevel(): Promise<
+		Pick<
+			SerialAPISetup_GetPowerlevelResponse,
+			"powerlevel" | "measured0dBm"
+		>
+	> {
+		const result = await this.driver.sendMessage<
+			| SerialAPISetup_GetPowerlevelResponse
+			| SerialAPISetup_CommandUnsupportedResponse
+		>(new SerialAPISetup_GetPowerlevelRequest(this.driver));
+		if (result instanceof SerialAPISetup_CommandUnsupportedResponse) {
+			throw new ZWaveError(
+				`Your hardware does not support getting the powerlevel!`,
+				ZWaveErrorCodes.Driver_NotSupported,
+			);
+		}
+		return pick(result, ["powerlevel", "measured0dBm"]);
+	}
+
+	/**
+	 * @internal
+	 * Configure whether the Z-Wave API should use short (8 bit) or long (16 bit) Node IDs
+	 */
+	public async setNodeIDType(nodeIdType: NodeIDType): Promise<boolean> {
+		const result = await this.driver.sendMessage<
+			| SerialAPISetup_SetNodeIDTypeResponse
+			| SerialAPISetup_CommandUnsupportedResponse
+		>(
+			new SerialAPISetup_SetNodeIDTypeRequest(this.driver, {
+				nodeIdType,
+			}),
+		);
+		if (result instanceof SerialAPISetup_CommandUnsupportedResponse) {
+			throw new ZWaveError(
+				`Your hardware does not support switching between short and long node IDs!`,
+				ZWaveErrorCodes.Driver_NotSupported,
+			);
+		}
+		return result.success;
+	}
+
+	/**
+	 * @internal
+	 * Request the maximum payload that the Z-Wave API Module can accept for transmitting Z-Wave frames. This value depends on the RF Profile
+	 */
+	public async getMaxPayloadSize(): Promise<number> {
+		const result = await this.driver.sendMessage<
+			| SerialAPISetup_GetMaximumPayloadSizeResponse
+			| SerialAPISetup_CommandUnsupportedResponse
+		>(new SerialAPISetup_GetMaximumPayloadSizeRequest(this.driver), {
+			supportCheck: false,
+		});
+		if (result instanceof SerialAPISetup_CommandUnsupportedResponse) {
+			throw new ZWaveError(
+				`Your hardware does not support getting the max. payload size!`,
+				ZWaveErrorCodes.Driver_NotSupported,
+			);
+		}
+		return result.maxPayloadSize;
+	}
+
+	/**
+	 * @internal
+	 * Request the maximum payload that the Z-Wave API Module can accept for transmitting Z-Wave Long Range frames. This value depends on the RF Profile
+	 */
+	public async getMaxPayloadSizeLongRange(): Promise<number> {
+		const result = await this.driver.sendMessage<
+			| SerialAPISetup_GetLRMaximumPayloadSizeResponse
+			| SerialAPISetup_CommandUnsupportedResponse
+		>(new SerialAPISetup_GetLRMaximumPayloadSizeRequest(this.driver));
+		if (result instanceof SerialAPISetup_CommandUnsupportedResponse) {
+			throw new ZWaveError(
+				`Your hardware does not support getting the max. long range payload size!`,
+				ZWaveErrorCodes.Driver_NotSupported,
+			);
+		}
+		return result.maxPayloadSize;
 	}
 
 	/**
