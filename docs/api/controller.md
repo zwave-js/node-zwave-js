@@ -202,6 +202,48 @@ Creates a virtual node that can be used to send commands to multiple supporting 
 > -   Broadcasting or multicasting commands is not possible using `Security S0`.
 > -   Secure multicast requires `Security S2`, which is not yet supported by `zwave-js` and requires devices that support it.
 
+### Configure RF region
+
+```ts
+setRFRegion(region: RFRegion): Promise<boolean>
+getRFRegion(): Promise<RFRegion>
+```
+
+Configure or read the RF region at the Z-Wave API Module. The possible regions are:
+
+```ts
+export enum RFRegion {
+	"Europe" = 0x00,
+	"USA" = 0x01,
+	"Australia/New Zealand" = 0x02,
+	"Hong Kong" = 0x03,
+	"India" = 0x05,
+	"Israel" = 0x06,
+	"Russia" = 0x07,
+	"China" = 0x08,
+	"USA (Long Range)" = 0x09,
+	"Japan" = 0x20,
+	"Korea" = 0x21,
+	"Unknown" = 0xfe,
+	"Default (EU)" = 0xff,
+}
+```
+
+> [!ATTENTION] Not all controllers support configuring the RF region. These methods will throw if they are not supported
+
+### Configure TX powerlevel
+
+```ts
+setPowerlevel(powerlevel: number, measured0dBm: number): Promise<boolean>;
+getPowerlevel(): Promise<{powerlevel: number, measured0dBm: number}>;
+```
+
+Configure or read the TX powerlevel setting of the Z-Wave API. `powerlevel` is the normal powerlevel, `measured0dBm` the measured output power at 0 dBm. Both are in dBm and must be between -12.8 and +12.7.
+
+> [!ATTENTION] Not all controllers support configuring the TX powerlevel. These methods will throw if they are not supported.
+
+> [!WARNING] Increasing the powerlevel (i.e. "shouting louder") does not improve reception of the controller and may even be **against the law**. Use at your own risk!
+
 ## Controller properties
 
 ### `nodes`
