@@ -34,7 +34,7 @@ export enum SerialAPISetupCommand {
 	GetLRMaximumPayloadSize = 0x11,
 	GetRFRegion = 0x20,
 	SetRFRegion = 0x40,
-	SetNodeIDBase = 0x80,
+	SetNodeIDType = 0x80,
 }
 
 export enum RFRegion {
@@ -53,9 +53,22 @@ export enum RFRegion {
 	"Default (EU)" = 0xff,
 }
 
+export enum NodeIDType {
+	Short = 0x01,
+	Long = 0x02,
+}
+
+function testResponseForSerialAPISetupRequest(
+	sent: Message,
+	received: Message,
+) {
+	if (!(received instanceof SerialAPISetupResponse)) return false;
+	return (sent as SerialAPISetupRequest).command === received.command;
+}
+
 @messageTypes(MessageType.Request, FunctionType.SerialAPISetup)
 @priority(MessagePriority.Controller)
-@expectedResponse(FunctionType.SerialAPISetup)
+@expectedResponse(testResponseForSerialAPISetupRequest)
 export class SerialAPISetupRequest extends Message {
 	// This must be set in subclasses
 	public command!: SerialAPISetupCommand;
@@ -110,8 +123,23 @@ export class SerialAPISetupResponse extends Message {
 			case SerialAPISetupCommand.GetPowerlevel:
 				CommandConstructor = SerialAPISetup_GetPowerlevelResponse;
 				break;
+			case SerialAPISetupCommand.GetMaximumPayloadSize:
+				CommandConstructor = SerialAPISetup_GetMaximumPayloadSizeResponse;
+				break;
+			case SerialAPISetupCommand.GetLRMaximumPayloadSize:
+				CommandConstructor = SerialAPISetup_GetLRMaximumPayloadSizeResponse;
+				break;
+			case SerialAPISetupCommand.SetNodeIDType:
+				CommandConstructor = SerialAPISetup_SetNodeIDTypeResponse;
+				break;
+			case 0x00:
+				// This is an unsupported command
+				this.command = this.payload[0];
+				CommandConstructor = SerialAPISetup_CommandUnsupportedResponse;
+				break;
 		}
 
+		// wotan-disable-next-line no-useless-predicate
 		if (CommandConstructor && (new.target as any) !== CommandConstructor) {
 			return new CommandConstructor(driver, options);
 		}
@@ -130,6 +158,20 @@ export class SerialAPISetupResponse extends Message {
 			...super.toLogEntry(),
 			message,
 		};
+	}
+}
+
+export class SerialAPISetup_CommandUnsupportedResponse extends SerialAPISetupResponse {
+	public toLogEntry(): MessageOrCCLogEntry {
+		const ret = { ...super.toLogEntry() };
+		const message = ret.message!;
+		message.error = "unsupported command";
+		message.command = getEnumMemberName(
+			SerialAPISetupCommand,
+			this.command,
+		);
+		delete message.payload;
+		return ret;
 	}
 }
 
@@ -165,7 +207,7 @@ export class SerialAPISetup_GetSupportedCommandsResponse extends SerialAPISetupR
 				SerialAPISetupCommand.GetMaximumPayloadSize,
 				SerialAPISetupCommand.GetRFRegion,
 				SerialAPISetupCommand.SetRFRegion,
-				SerialAPISetupCommand.SetNodeIDBase,
+				SerialAPISetupCommand.SetNodeIDType,
 			] as const) {
 				if (!!(this.payload[0] & cmd)) this.supportedCommands.push(cmd);
 			}
@@ -253,6 +295,73 @@ export class SerialAPISetup_SetTXStatusReportResponse
 	}
 }
 
+// =============================================================================
+
+export interface SerialAPISetup_SetNodeIDTypeOptions
+	extends MessageBaseOptions {
+	nodeIdType: NodeIDType;
+}
+
+export class SerialAPISetup_SetNodeIDTypeRequest extends SerialAPISetupRequest {
+	public constructor(
+		driver: Driver,
+		options:
+			| MessageDeserializationOptions
+			| SerialAPISetup_SetNodeIDTypeOptions,
+	) {
+		super(driver, options);
+		this.command = SerialAPISetupCommand.SetNodeIDType;
+
+		if (gotDeserializationOptions(options)) {
+			throw new ZWaveError(
+				`${this.constructor.name}: deserialization not implemented`,
+				ZWaveErrorCodes.Deserialization_NotImplemented,
+			);
+		} else {
+			this.nodeIdType = options.nodeIdType;
+		}
+	}
+
+	public nodeIdType: NodeIDType;
+
+	public serialize(): Buffer {
+		this.payload = Buffer.from([this.nodeIdType]);
+
+		return super.serialize();
+	}
+
+	public toLogEntry(): MessageOrCCLogEntry {
+		const ret = { ...super.toLogEntry() };
+		const message = ret.message!;
+		message["node ID type"] =
+			this.nodeIdType === NodeIDType.Short ? "8 bit" : "16 bit";
+		delete message.payload;
+		return ret;
+	}
+}
+
+export class SerialAPISetup_SetNodeIDTypeResponse
+	extends SerialAPISetupResponse
+	implements SuccessIndicator {
+	public constructor(driver: Driver, options: MessageDeserializationOptions) {
+		super(driver, options);
+		this.success = this.payload[0] !== 0;
+	}
+
+	isOK(): boolean {
+		return this.success;
+	}
+
+	public readonly success: boolean;
+
+	public toLogEntry(): MessageOrCCLogEntry {
+		const ret = { ...super.toLogEntry() };
+		const message = ret.message!;
+		message.success = this.success;
+		delete message.payload;
+		return ret;
+	}
+}
 // =============================================================================
 
 export class SerialAPISetup_GetRFRegionRequest extends SerialAPISetupRequest {
@@ -464,6 +573,58 @@ export class SerialAPISetup_SetPowerlevelResponse
 		const ret = { ...super.toLogEntry() };
 		const message = ret.message!;
 		message.success = this.success;
+		delete message.payload;
+		return ret;
+	}
+}
+
+// =============================================================================
+
+export class SerialAPISetup_GetMaximumPayloadSizeRequest extends SerialAPISetupRequest {
+	public constructor(driver: Driver, options?: MessageOptions) {
+		super(driver, options);
+		this.command = SerialAPISetupCommand.GetMaximumPayloadSize;
+	}
+}
+
+export class SerialAPISetup_GetMaximumPayloadSizeResponse extends SerialAPISetupResponse {
+	public constructor(driver: Driver, options: MessageDeserializationOptions) {
+		super(driver, options);
+		this.maxPayloadSize = this.payload[0];
+	}
+
+	public readonly maxPayloadSize: number;
+
+	public toLogEntry(): MessageOrCCLogEntry {
+		const ret = { ...super.toLogEntry() };
+		const message = ret.message!;
+		message["maximum payload size"] = `${this.maxPayloadSize} bytes`;
+		delete message.payload;
+		return ret;
+	}
+}
+
+// =============================================================================
+
+export class SerialAPISetup_GetLRMaximumPayloadSizeRequest extends SerialAPISetupRequest {
+	public constructor(driver: Driver, options?: MessageOptions) {
+		super(driver, options);
+		this.command = SerialAPISetupCommand.GetLRMaximumPayloadSize;
+	}
+}
+
+export class SerialAPISetup_GetLRMaximumPayloadSizeResponse extends SerialAPISetupResponse {
+	public constructor(driver: Driver, options: MessageDeserializationOptions) {
+		super(driver, options);
+		this.maxPayloadSize = this.payload[0];
+	}
+
+	public readonly maxPayloadSize: number;
+
+	public toLogEntry(): MessageOrCCLogEntry {
+		const ret = { ...super.toLogEntry() };
+		const message = ret.message!;
+		message["maximum payload size"] = `${this.maxPayloadSize} bytes`;
 		delete message.payload;
 		return ret;
 	}
