@@ -81,8 +81,7 @@
 			"allowManualEntry": true
 		},
 		"5": {
-			"label": "Scale of Temperature",
-			"description": "Set Temperature Scale to Fahrenheit or Centigrade. DEFAULT =1 Fahrenheit",
+			"label": "Temperature Scale",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 1,
