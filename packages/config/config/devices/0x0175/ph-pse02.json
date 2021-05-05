@@ -72,7 +72,8 @@
 		},
 		"31": {
 			"label": "Alarm Duration",
-			"description": "Play alarm sound duration.",
+			"description": "Play alarm sound duration (30s * this value)",
+			"unit": "*30 seconds",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 127,
