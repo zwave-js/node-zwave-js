@@ -28,18 +28,18 @@ interface GetRoutingInfoRequestOptions extends MessageBaseOptions {
 export class GetRoutingInfoRequest extends Message {
 	public constructor(driver: Driver, options: GetRoutingInfoRequestOptions) {
 		super(driver, options);
-		this.nodeId = options.nodeId;
+		this.sourceNodeId = options.nodeId;
 		this.removeNonRepeaters = !!options.removeNonRepeaters;
 		this.removeBadLinks = !!options.removeBadLinks;
 	}
 
-	public nodeId: number;
+	public sourceNodeId: number;
 	public removeNonRepeaters: boolean;
 	public removeBadLinks: boolean;
 
 	public serialize(): Buffer {
 		this.payload = Buffer.from([
-			this.nodeId,
+			this.sourceNodeId,
 			this.removeNonRepeaters ? 1 : 0,
 			this.removeBadLinks ? 1 : 0,
 			0, // callbackId - this must be 0 as per the docs
@@ -49,7 +49,7 @@ export class GetRoutingInfoRequest extends Message {
 
 	public toJSON(): JSONObject {
 		return super.toJSONInherited({
-			nodeId: this.nodeId,
+			nodeId: this.sourceNodeId,
 			removeNonRepeaters: this.removeNonRepeaters,
 			removeBadLinks: this.removeBadLinks,
 		});

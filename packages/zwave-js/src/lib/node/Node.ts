@@ -118,10 +118,6 @@ import {
 	GetNodeProtocolInfoRequest,
 	GetNodeProtocolInfoResponse,
 } from "../controller/GetNodeProtocolInfoMessages";
-import {
-	GetRoutingInfoRequest,
-	GetRoutingInfoResponse,
-} from "../controller/GetRoutingInfoMessages";
 import type { Driver } from "../driver/Driver";
 import { Extended, interpretEx } from "../driver/StateMachineShared";
 import type { Transaction } from "../driver/Transaction";
@@ -620,7 +616,10 @@ export class ZWaveNode extends Endpoint {
 	}
 
 	private _neighbors: readonly number[] = [];
-	/** The IDs of all direct neighbors of this node */
+	/**
+	 * The IDs of all direct neighbors of this node
+	 * @deprecated Request the current known neighbors using `controller.getNodeNeighbors` instead.
+	 */
 	public get neighbors(): readonly number[] {
 		return this._neighbors;
 	}
@@ -1198,6 +1197,7 @@ export class ZWaveNode extends Endpoint {
 
 		if (this.interviewStage === InterviewStage.OverwriteConfig) {
 			// Request a list of this node's neighbors
+			// wotan-disable-next-line no-unstable-api-use
 			if (!(await tryInterviewStage(() => this.queryNeighbors()))) {
 				return false;
 			}
@@ -1863,48 +1863,14 @@ protocol version:      ${this._protocolVersion}`;
 		await this.setInterviewStage(InterviewStage.OverwriteConfig);
 	}
 
-	/** @internal */
-	public async queryNeighborsInternal(): Promise<void> {
-		this.driver.controllerLog.logNode(this.id, {
-			message: "requesting node neighbors...",
-			direction: "outbound",
-		});
-		try {
-			const resp = await this.driver.sendMessage<GetRoutingInfoResponse>(
-				new GetRoutingInfoRequest(this.driver, {
-					nodeId: this.id,
-					removeBadLinks: false,
-					removeNonRepeaters: false,
-				}),
-			);
-			this._neighbors = resp.nodeIds;
-			this.driver.controllerLog.logNode(this.id, {
-				message: `  node neighbors received: ${this._neighbors.join(
-					", ",
-				)}`,
-				direction: "inbound",
-			});
-		} catch (e) {
-			this.driver.controllerLog.logNode(
-				this.id,
-				`  requesting the node neighbors failed: ${e.message}`,
-				"error",
-			);
-			throw e;
-		}
-	}
-
 	/**
-	 * @internal
-	 * Temporarily updates the node's neighbor list by removing a node from it
+	 * Queries the controller for a node's neighbor nodes during the node interview
+	 * @deprecated This should be done on demand, not once
 	 */
-	public removeNodeFromCachedNeighbors(nodeId: number): void {
-		this._neighbors = this._neighbors.filter((id) => id !== nodeId);
-	}
-
-	/** Queries a node for its neighbor nodes during the node interview */
 	protected async queryNeighbors(): Promise<void> {
-		await this.queryNeighborsInternal();
+		this._neighbors = await this.driver.controller.getNodeNeighbors(
+			this.id,
+		);
 		await this.setInterviewStage(InterviewStage.Neighbors);
 	}
 
