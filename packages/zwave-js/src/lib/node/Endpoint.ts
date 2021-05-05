@@ -40,16 +40,7 @@ export class Endpoint {
 		deviceClass?: DeviceClass,
 		supportedCCs?: CommandClasses[],
 	) {
-		this._deviceClass = deviceClass;
-		// Add mandatory CCs
-		if (deviceClass) {
-			for (const cc of deviceClass.mandatorySupportedCCs) {
-				this.addCC(cc, { isSupported: true });
-			}
-			for (const cc of deviceClass.mandatoryControlledCCs) {
-				this.addCC(cc, { isControlled: true });
-			}
-		}
+		this.applyDeviceClass(deviceClass);
 
 		// Add optional CCs
 		if (supportedCCs != undefined) {
@@ -86,6 +77,25 @@ export class Endpoint {
 	}
 
 	/**
+	 * Sets the device class of this endpoint and configures the mandatory CCs.
+	 * **Note:** This does nothing if the device class was already configured
+	 */
+	protected applyDeviceClass(deviceClass?: DeviceClass): void {
+		if (this._deviceClass) return;
+
+		this._deviceClass = deviceClass;
+		// Add mandatory CCs
+		if (deviceClass) {
+			for (const cc of deviceClass.mandatorySupportedCCs) {
+				this.addMandatoryCC(cc, { isSupported: true });
+			}
+			for (const cc of deviceClass.mandatoryControlledCCs) {
+				this.addMandatoryCC(cc, { isControlled: true });
+			}
+		}
+	}
+
+	/**
 	 * Adds a CC to the list of command classes implemented by the endpoint or updates the information.
 	 * You shouldn't need to call this yourself.
 	 * @param info The information about the command class. This is merged with existing information.
@@ -102,6 +112,38 @@ export class Endpoint {
 		};
 		ccInfo = Object.assign(ccInfo, info);
 		this._implementedCommandClasses.set(cc, ccInfo);
+	}
+
+	/**
+	 * Adds a mandatory CC to the list of command classes implemented by the endpoint or updates the information.
+	 * Performs some sanity checks before adding so the behavior is in compliance with the specifications
+	 */
+	protected addMandatoryCC(
+		cc: CommandClasses,
+		info: Partial<CommandClassInfo>,
+	): void {
+		if (
+			this.getNodeUnsafe()?.isListening &&
+			(cc === CommandClasses.Battery || cc === CommandClasses["Wake Up"])
+		) {
+			// Avoid adding Battery and Wake Up CC to always listening nodes or their endpoints
+			return;
+		} else if (
+			this.index > 0 &&
+			[
+				CommandClasses["CRC-16 Encapsulation"],
+				CommandClasses["Device Reset Locally"],
+				CommandClasses["Manufacturer Specific"],
+				CommandClasses.Powerlevel,
+				CommandClasses.Version,
+				CommandClasses["Transport Service"],
+			].includes(cc)
+		) {
+			// Avoid adding CCs as mandatory to endpoints that should only be implemented by the root device
+			return;
+		}
+
+		this.addCC(cc, info);
 	}
 
 	/** Removes a CC from the list of command classes implemented by the endpoint */
