@@ -84,8 +84,5 @@
     "clean": "tsc -b tsconfig.build.json --clean",
     "prewatch": "gulp prebuild",
     "watch": "tsc -b tsconfig.build.json --watch --pretty"
-  },
-  "devDependencies": {
-    "@zwave-js/maintenance": "7.0.0"
   }
 }
