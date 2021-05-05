@@ -72,14 +72,20 @@
 		},
 		"31": {
 			"label": "Alarm Duration",
-			"description": "Play alarm sound duration.",
+			"unit": "30 seconds",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 127,
 			"defaultValue": 6,
 			"readOnly": false,
 			"writeOnly": false,
-			"allowManualEntry": true
+			"allowManualEntry": true,
+			"options": [
+				{
+					"label": "Never stop",
+					"value": 0
+				}
+			]
 		}
 	}
 }
