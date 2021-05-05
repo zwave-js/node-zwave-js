@@ -41,6 +41,14 @@ async stopExclusion(): Promise<boolean>
 
 Stops the exclusion process to remove a node from the network.The returned promise resolves to `true` if stopping the exclusion was successful, `false` if it failed or if it was not active.
 
+### `getNodeNeighbors`
+
+```ts
+async getNodeNeighbors(nodeId: number): Promise<readonly number[]>
+```
+
+Returns the known list of neighbors for a node.
+
 ### `healNode`
 
 ```ts

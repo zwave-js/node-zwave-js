@@ -584,14 +584,6 @@ readonly deviceConfig: DeviceConfig | undefined
 
 Contains additional information about this node, loaded from a [config file](/development/config-files.md#device-configuration-files).
 
-### `neighbors`
-
-```ts
-readonly neighbors: number[]
-```
-
-The IDs of all nodes this node is connected to or is communicating through.
-
 ### `keepAwake`
 
 ```ts
