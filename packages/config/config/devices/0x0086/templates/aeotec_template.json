@@ -392,7 +392,7 @@
 		"unit": "%",
 		"minValue": 0,
 		"maxValue": 100,
-		"defaultValue": 50,
+		"defaultValue": 5,
 		"unsigned": true,
 		"readOnly": false,
 		"writeOnly": false,
@@ -1387,6 +1387,27 @@
 		"writeOnly": false,
 		"allowManualEntry": true
 	},
+	"current_power_mode": {
+		"label": "Current Power Mode",
+		"valueSize": 2,
+		"minValue": 0,
+		"maxValue": 1,
+		"defaultValue": 0,
+		"unsigned": true,
+		"readOnly": true,
+		"writeOnly": false,
+		"allowManualEntry": false,
+		"options": [
+			{
+				"label": "USB Power",
+				"value": 0
+			},
+			{
+				"label": "Battery",
+				"value": 1
+			}
+		]
+	},
 	"sleep_state": {
 		"label": "Sleep State",
 		"valueSize": 2,
@@ -1567,6 +1588,748 @@
 			}
 		]
 	},
+	// Doorbells/Sirens
+	"base_light_index": {
+		"valueSize": 4,
+		"minValue": 1,
+		"maxValue": 127,
+		"defaultValue": 1,
+		"unsigned": true,
+		"readOnly": false,
+		"writeOnly": false,
+		"allowManualEntry": false,
+		"options": [
+			{
+				"label": "Light effect #1",
+				"value": 1
+			},
+			{
+				"label": "Light effect #2",
+				"value": 2
+			},
+			{
+				"label": "Light effect #3",
+				"value": 4
+			},
+			{
+				"label": "Light effect #4",
+				"value": 8
+			},
+			{
+				"label": "Light effect #5",
+				"value": 16
+			},
+			{
+				"label": "Light effect #6",
+				"value": 32
+			},
+			{
+				"label": "Light effect #7",
+				"value": 64
+			},
+			{
+				"label": "Last configuration value",
+				"value": 127
+			}
+		]
+	},
+	"light_index_browse": {
+		"$import": "#base_light_index",
+		"label": "Light Effect Index (Browse)"
+	},
+	"light_index_tamper": {
+		"$import": "#base_light_index",
+		"label": "Light Effect Index (Tamper)"
+	},
+	"light_index_doorbell_1": {
+		"$import": "#base_light_index",
+		"label": "Light Effect Index (Doorbell 1)"
+	},
+	"light_index_doorbell_2": {
+		"$import": "#base_light_index",
+		"label": "Light Effect Index (Doorbell 2)"
+	},
+	"light_index_doorbell_3": {
+		"$import": "#base_light_index",
+		"label": "Light Effect Index (Doorbell 3)"
+	},
+	"light_index_environment": {
+		"$import": "#base_light_index",
+		"label": "Light Effect Index (Environment)"
+	},
+	"light_index_security": {
+		"$import": "#base_light_index",
+		"label": "Light Effect Index (Security)"
+	},
+	"light_index_emergency": {
+		"$import": "#base_light_index",
+		"label": "Light Effect Index (Emergency)"
+	},
+	"base_tone_play_mode": {
+		"valueSize": 4,
+		"minValue": 0,
+		"maxValue": 255,
+		"defaultValue": 0,
+		"unsigned": true,
+		"readOnly": false,
+		"writeOnly": false,
+		"allowManualEntry": false,
+		"options": [
+			{
+				"label": "Single playback",
+				"value": 0
+			},
+			{
+				"label": "Single loop playback",
+				"value": 1
+			},
+			{
+				"label": "Loop playback tones",
+				"value": 2
+			},
+			{
+				"label": "Random playback tones",
+				"value": 3
+			},
+			{
+				"label": "Last configuration value",
+				"value": 255
+			}
+		]
+	},
+	"tone_play_mode_browse": {
+		"$import": "#base_tone_play_mode",
+		"label": "Tone Play Mode (Browse)"
+	},
+	"base_tone_duration": {
+		"valueSize": 4,
+		"unit": "seconds",
+		"minValue": 0,
+		"maxValue": 255,
+		"defaultValue": 0,
+		"unsigned": true,
+		"readOnly": false,
+		"writeOnly": false,
+		"allowManualEntry": false,
+		"options": [
+			{
+				"label": "Original tone length",
+				"value": 0
+			},
+			{
+				"label": "Last configuration value",
+				"value": 255
+			}
+		]
+	},
+	"tone_duration_tamper": {
+		"$import": "#base_tone_duration",
+		"label": "Tone Duration (Tamper)"
+	},
+	"tone_duration_doorbell_1": {
+		"$import": "#base_tone_duration",
+		"label": "Tone Duration (Doorbell 1)"
+	},
+	"tone_duration_doorbell_2": {
+		"$import": "#base_tone_duration",
+		"label": "Tone Duration (Doorbell 2)"
+	},
+	"tone_duration_doorbell_3": {
+		"$import": "#base_tone_duration",
+		"label": "Tone Duration (Doorbell 3)"
+	},
+	"tone_duration_environment": {
+		"$import": "#base_tone_duration",
+		"label": "Tone Duration (Environment)"
+	},
+	"tone_duration_security": {
+		"$import": "#base_tone_duration",
+		"label": "Tone Duration (Security)"
+	},
+	"tone_duration_emergency": {
+		"$import": "#base_tone_duration",
+		"label": "Tone Duration (Emergency)"
+	},
+	"base_tone_interval": {
+		"valueSize": 4,
+		"unit": "seconds",
+		"minValue": 0,
+		"maxValue": 255,
+		"defaultValue": 0,
+		"unsigned": true,
+		"readOnly": false,
+		"writeOnly": false,
+		"allowManualEntry": true,
+		"options": [
+			{
+				"label": "No interval",
+				"value": 0
+			},
+			{
+				"label": "Last configuration value",
+				"value": 255
+			}
+		]
+	},
+	"tone_interval_tamper": {
+		"$import": "#base_tone_interval",
+		"label": "Interval Between Tones (Tamper)"
+	},
+	"tone_interval_doorbell_1": {
+		"$import": "#base_tone_interval",
+		"label": "Interval Between Tones (Doorbell 1)"
+	},
+	"tone_interval_doorbell_2": {
+		"$import": "#base_tone_interval",
+		"label": "Interval Between Tones (Doorbell 2)"
+	},
+	"tone_interval_doorbell_3": {
+		"$import": "#base_tone_interval",
+		"label": "Interval Between Tones (Doorbell 3)"
+	},
+	"tone_interval_environment": {
+		"$import": "#base_tone_interval",
+		"label": "Interval Between Tones (Environment)"
+	},
+	"tone_interval_security": {
+		"$import": "#base_tone_interval",
+		"label": "Interval Between Tones (Security)"
+	},
+	"tone_interval_emergency": {
+		"$import": "#base_tone_interval",
+		"label": "Interval Between Tones (Emergency)"
+	},
+	"base_tone_play_count": {
+		"valueSize": 4,
+		"minValue": 0,
+		"maxValue": 255,
+		"defaultValue": 1,
+		"unsigned": true,
+		"readOnly": false,
+		"writeOnly": false,
+		"allowManualEntry": true,
+		"options": [
+			{
+				"label": "Unlimited",
+				"value": 0
+			},
+			{
+				"label": "Last configuration value",
+				"value": 255
+			}
+		]
+	},
+	"tone_play_count_tamper": {
+		"$import": "#base_tone_play_count",
+		"label": "Tone Play Count (Tamper)"
+	},
+	"tone_play_count_doorbell_1": {
+		"$import": "#base_tone_play_count",
+		"label": "Tone Play Count (Doorbell 1)"
+	},
+	"tone_play_count_doorbell_2": {
+		"$import": "#base_tone_play_count",
+		"label": "Tone Play Count (Doorbell 2)"
+	},
+	"tone_play_count_doorbell_3": {
+		"$import": "#base_tone_play_count",
+		"label": "Tone Play Count (Doorbell 3)"
+	},
+	"tone_play_count_environment": {
+		"$import": "#base_tone_play_count",
+		"label": "Tone Play Count (Environment)"
+	},
+	"tone_play_count_security": {
+		"$import": "#base_tone_play_count",
+		"label": "Tone Play Count (Security)"
+	},
+	"tone_play_count_emergency": {
+		"$import": "#base_tone_play_count",
+		"label": "Tone Play Count (Emergency)"
+	},
+	"base_dim_duration": {
+		"valueSize": 4,
+		"unit": "ms",
+		"minValue": 0,
+		"maxValue": 127,
+		"unsigned": true,
+		"readOnly": false,
+		"writeOnly": false,
+		"allowManualEntry": true
+	},
+	"dim_duration_on_1": {
+		"$import": "#base_dim_duration",
+		"label": "Light Effect No. 1: Dim On Duration",
+		"defaultValue": 75
+	},
+	"dim_duration_off_1": {
+		"$import": "#base_dim_duration",
+		"label": "Light Effect No. 1: Dim Off Duration",
+		"defaultValue": 25
+	},
+	"dim_duration_on_2": {
+		"$import": "#base_dim_duration",
+		"label": "Light Effect No. 2: Dim On Duration",
+		"defaultValue": 50
+	},
+	"dim_duration_off_2": {
+		"$import": "#base_dim_duration",
+		"label": "Light Effect No. 2: Dim Off Duration",
+		"defaultValue": 50
+	},
+	"dim_duration_on_3": {
+		"$import": "#base_dim_duration",
+		"label": "Light Effect No. 3: Dim On Duration",
+		"defaultValue": 0
+	},
+	"dim_duration_off_3": {
+		"$import": "#base_dim_duration",
+		"label": "Light Effect No. 3: Dim Off Duration",
+		"defaultValue": 33
+	},
+	"dim_duration_on_4": {
+		"$import": "#base_dim_duration",
+		"label": "Light Effect No. 4: Dim On Duration",
+		"defaultValue": 33
+	},
+	"dim_duration_off_4": {
+		"$import": "#base_dim_duration",
+		"label": "Light Effect No. 4: Dim Off Duration",
+		"defaultValue": 0
+	},
+	"dim_duration_on_5": {
+		"$import": "#base_dim_duration",
+		"label": "Light Effect No. 5: Dim On Duration",
+		"defaultValue": 33
+	},
+	"dim_duration_off_5": {
+		"$import": "#base_dim_duration",
+		"label": "Light Effect No. 5: Dim Off Duration",
+		"defaultValue": 0
+	},
+	"dim_duration_on_6": {
+		"$import": "#base_dim_duration",
+		"label": "Light Effect No. 6: Dim On Duration",
+		"defaultValue": 0
+	},
+	"dim_duration_off_6": {
+		"$import": "#base_dim_duration",
+		"label": "Light Effect No. 6: Dim Off Duration",
+		"defaultValue": 0
+	},
+	"dim_duration_on_7": {
+		"$import": "#base_dim_duration",
+		"label": "Light Effect No. 7: Dim On Duration",
+		"defaultValue": 0
+	},
+	"dim_duration_off_7": {
+		"$import": "#base_dim_duration",
+		"label": "Light Effect No. 7: Dim Off Duration",
+		"defaultValue": 0
+	},
+	"base_led_duration": {
+		"$import": "../../templates/master_template.json#base_0-255_nounit",
+		"valueSize": 4,
+		"unit": "ms"
+	},
+	"led_duration_on_1": {
+		"$import": "#base_led_duration",
+		"label": "Light Effect No. 1: LED Indicator On Duration",
+		"defaultValue": 20
+	},
+	"led_duration_off_1": {
+		"$import": "#base_led_duration",
+		"label": "Light Effect No. 1: LED Indicator Off Duration",
+		"defaultValue": 3
+	},
+	"led_duration_on_2": {
+		"$import": "#base_led_duration",
+		"label": "Light Effect No. 2: LED Indicator On Duration",
+		"defaultValue": 0
+	},
+	"led_duration_off_2": {
+		"$import": "#base_led_duration",
+		"label": "Light Effect No. 2: LED Indicator Off Duration",
+		"defaultValue": 3
+	},
+	"led_duration_on_3": {
+		"$import": "#base_led_duration",
+		"label": "Light Effect No. 3: LED Indicator On Duration",
+		"defaultValue": 1
+	},
+	"led_duration_off_3": {
+		"$import": "#base_led_duration",
+		"label": "Light Effect No. 3: LED Indicator Off Duration",
+		"defaultValue": 3
+	},
+	"led_duration_on_4": {
+		"$import": "#base_led_duration",
+		"label": "Light Effect No. 4: LED Indicator On Duration",
+		"defaultValue": 0
+	},
+	"led_duration_off_4": {
+		"$import": "#base_led_duration",
+		"label": "Light Effect No. 4: LED Indicator Off Duration",
+		"defaultValue": 3
+	},
+	"led_duration_on_5": {
+		"$import": "#base_led_duration",
+		"label": "Light Effect No. 5: LED Indicator On Duration",
+		"defaultValue": 0
+	},
+	"led_duration_off_5": {
+		"$import": "#base_led_duration",
+		"label": "Light Effect No. 5: LED Indicator Off Duration",
+		"defaultValue": 3
+	},
+	"led_duration_on_6": {
+		"$import": "#base_led_duration",
+		"label": "Light Effect No. 6: LED Indicator On Duration",
+		"defaultValue": 10
+	},
+	"led_duration_off_6": {
+		"$import": "#base_led_duration",
+		"label": "Light Effect No. 6: LED Indicator Off Duration",
+		"defaultValue": 0
+	},
+	"led_duration_on_7": {
+		"$import": "#base_led_duration",
+		"label": "Light Effect No. 7: LED Indicator On Duration",
+		"defaultValue": 0
+	},
+	"led_duration_off_7": {
+		"$import": "#base_led_duration",
+		"label": "Light Effect No. 7: LED Indicator Off Duration",
+		"defaultValue": 1
+	},
+	"base_basic_set_command": {
+		"valueSize": 1,
+		"minValue": 0,
+		"maxValue": 4,
+		"unsigned": true,
+		"readOnly": false,
+		"writeOnly": false,
+		"allowManualEntry": false,
+		"options": [
+			{
+				"label": "Disable",
+				"value": 0
+			},
+			{
+				"label": "Start playing -> On; Stop playing -> None",
+				"value": 1
+			},
+			{
+				"label": "Start playing -> Off; Stop playing -> None",
+				"value": 2
+			},
+			{
+				"label": "Start playing -> On; Stop playing -> Off",
+				"value": 3
+			},
+			{
+				"label": "Start playing -> Off; Stop playing -> On",
+				"value": 4
+			}
+		]
+	},
+	"basic_set_command_browse": {
+		"$import": "#base_basic_set_command",
+		"label": "Group 2 Basic Set Command (Browse)",
+		"defaultValue": 3
+	},
+	"basic_set_command_tamper": {
+		"$import": "#base_basic_set_command",
+		"label": "Group 3 Basic Set Command (Tampering)",
+		"defaultValue": 3
+	},
+	"basic_set_command_doorbell_1": {
+		"$import": "#base_basic_set_command",
+		"label": "Group 4 Basic Set Command (Doorbell 1)",
+		"defaultValue": 3
+	},
+	"basic_set_command_doorbell_2": {
+		"$import": "#base_basic_set_command",
+		"label": "Group 5 Basic Set Command (Doorbell 2)",
+		"defaultValue": 3
+	},
+	"basic_set_command_doorbell_3": {
+		"$import": "#base_basic_set_command",
+		"label": "Group 6 Basic Set Command (Doorbell 3)",
+		"defaultValue": 3
+	},
+	"basic_set_command_environment": {
+		"$import": "#base_basic_set_command",
+		"label": "Group 7 Basic Set Command (Environment)",
+		"defaultValue": 3
+	},
+	"basic_set_command_security": {
+		"$import": "#base_basic_set_command",
+		"label": "Group 8 Basic Set Command (Security)",
+		"defaultValue": 3
+	},
+	"basic_set_command_emergency": {
+		"$import": "#base_basic_set_command",
+		"label": "Group 9 Basic Set Command (Emergency)",
+		"defaultValue": 3
+	},
+	"button_unpair": {
+		"label": "Button Unpairing",
+		"valueSize": 1,
+		"minValue": 0,
+		"maxValue": 7,
+		"defaultValue": 0,
+		"unsigned": true,
+		"readOnly": false,
+		"writeOnly": true,
+		"allowManualEntry": false,
+		"options": [
+			{
+				"label": "Normal Operation",
+				"value": 0
+			},
+			{
+				"label": "Unpair Button No. 1",
+				"value": 1
+			},
+			{
+				"label": "Unpair Button No. 2",
+				"value": 2
+			},
+			{
+				"label": "Unpair Button No. 3",
+				"value": 4
+			}
+		]
+	},
+	"button_pair": {
+		"label": "Button Pairing",
+		"valueSize": 1,
+		"minValue": 0,
+		"maxValue": 4,
+		"defaultValue": 0,
+		"unsigned": true,
+		"readOnly": false,
+		"writeOnly": true,
+		"allowManualEntry": false,
+		"options": [
+			{
+				"label": "Stop pairing",
+				"value": 0
+			},
+			{
+				"label": "Pair Button No. 1",
+				"value": 1
+			},
+			{
+				"label": "Pair Button No. 2",
+				"value": 2
+			},
+			{
+				"label": "Pair Button No. 3",
+				"value": 4
+			}
+		]
+	},
+	"button_pairing_status": {
+		"label": "Pairing Mode Status",
+		"valueSize": 1,
+		"minValue": 0,
+		"maxValue": 4,
+		"defaultValue": 0,
+		"unsigned": true,
+		"readOnly": true,
+		"writeOnly": false,
+		"allowManualEntry": false,
+		"options": [
+			{
+				"label": "Not pairing",
+				"value": 0
+			},
+			{
+				"label": "Pairing Button No. 1",
+				"value": 1
+			},
+			{
+				"label": "Pairing Button No. 1",
+				"value": 2
+			},
+			{
+				"label": "Pairing Button No. 1",
+				"value": 4
+			}
+		]
+	},
+	"button_status_1": {
+		"label": "Status: Button 1",
+		"valueSize": 1,
+		"minValue": 0,
+		"maxValue": 1,
+		"defaultValue": 0,
+		"unsigned": true,
+		"readOnly": true,
+		"writeOnly": false,
+		"allowManualEntry": false,
+		"options": [
+			{
+				"label": "Not paired",
+				"value": 0
+			},
+			{
+				"label": "Paired",
+				"value": 1
+			}
+		]
+	},
+	"button_status_2": {
+		"label": "Status: Button 2",
+		"valueSize": 1,
+		"minValue": 0,
+		"maxValue": 1,
+		"defaultValue": 0,
+		"unsigned": true,
+		"readOnly": true,
+		"writeOnly": false,
+		"allowManualEntry": false,
+		"options": [
+			{
+				"label": "Not paired",
+				"value": 0
+			},
+			{
+				"label": "Paired",
+				"value": 1
+			}
+		]
+	},
+	"button_status_3": {
+		"label": "Status: Button 3",
+		"valueSize": 1,
+		"minValue": 0,
+		"maxValue": 1,
+		"defaultValue": 0,
+		"unsigned": true,
+		"readOnly": true,
+		"writeOnly": false,
+		"allowManualEntry": false,
+		"options": [
+			{
+				"label": "Not paired",
+				"value": 0
+			},
+			{
+				"label": "Paired",
+				"value": 1
+			}
+		]
+	},
+	"base_button_battery_voltage": {
+		"valueSize": 4,
+		"unit": "mV",
+		"minValue": 0,
+		"maxValue": 32767,
+		"defaultValue": 0,
+		"unsigned": true,
+		"readOnly": true,
+		"writeOnly": false,
+		"allowManualEntry": true,
+		"options": [
+			{
+				"label": "Not paired",
+				"value": 0
+			}
+		]
+	},
+	"button_battery_voltage_1": {
+		"$import": "#base_button_battery_voltage",
+		"label": "Button 1: Battery Voltage"
+	},
+	"button_battery_voltage_2": {
+		"$import": "#base_button_battery_voltage",
+		"label": "Button 2: Battery Voltage"
+	},
+	"button_battery_voltage_3": {
+		"$import": "#base_button_battery_voltage",
+		"label": "Button 3: Battery Voltage"
+	},
+	"base_button_version": {
+		"$import": "#base_0-65535",
+		"options": [
+			{
+				"label": "Not paired",
+				"value": 0
+			}
+		]
+	},
+	"button_version_1": {
+		"$import": "#base_button_version",
+		"label": "Button 1: Software Version"
+	},
+	"button_version_2": {
+		"$import": "#base_button_version",
+		"label": "Button 2: Software Version"
+	},
+	"button_version_3": {
+		"$import": "#base_button_version",
+		"label": "Button 3: Software Version"
+	},
+	"stop_action_button": {
+		"$import": "../../templates/master_template.json#base_enable_disable",
+		"label": "Stop Playing Tone on Action Button"
+	},
+	// Recover limits
+	"recover_limit_temp": {
+		"label": "Temperature Recover Limit",
+		"description": "Defines the difference below or above the upper/lower limit after which the limit is reenabled",
+		"valueSize": 2,
+		"minValue": 1,
+		"maxValue": 255,
+		"defaultValue": 20,
+		"unsigned": true,
+		"readOnly": false,
+		"writeOnly": false,
+		"allowManualEntry": true
+	},
+	"recover_limit_temp_unit": {
+		"$import": "#celsius_fahrenheit_0",
+		"label": "Recover Limit Temperature Unit",
+		"valueSize": 2
+	},
+	"recover_limit_humidity": {
+		"label": "Humidity Recover Limit",
+		"valueSize": 1,
+		"unit": "%",
+		"minValue": 1,
+		"maxValue": 50,
+		"defaultValue": 5,
+		"unsigned": true,
+		"readOnly": false,
+		"writeOnly": false,
+		"allowManualEntry": true
+	},
+	"recover_limit_lighting": {
+		"label": "Lighting Recover Limit",
+		"valueSize": 1,
+		"unit": "lux",
+		"minValue": 10,
+		"maxValue": 255,
+		"defaultValue": 100,
+		"unsigned": true,
+		"readOnly": false,
+		"writeOnly": false,
+		"allowManualEntry": true
+	},
+	"recover_limit_ultraviolet": {
+		"label": "Ultraviolet Recover Limit",
+		"valueSize": 1,
+		"minValue": 1,
+		"maxValue": 5,
+		"defaultValue": 2,
+		"unsigned": true,
+		"readOnly": false,
+		"writeOnly": false,
+		"allowManualEntry": true
+	},
 	// Appointment times
 	"base_appointment_day": {
 		"description": "Sum values to select day(s) of week: Disable = 0; Monday = 1; Tuesday = 2; Wednesday = 4; Thursday = 8; Friday = 16; Saturday = 32; Sunday = 64",
@@ -1662,6 +2425,72 @@
 	"night_light_minute_off": {
 		"$import": "#base_appointment_minute",
 		"label": "Night Light (Off): Minute"
+	},
+	// WallMote Settings
+	"enable_touch_sound": {
+		"$import": "../../templates/master_template.json#base_enable_disable",
+		"label": "Touch Sound"
+	},
+	"enable_touch_vibration": {
+		"$import": "../../templates/master_template.json#base_enable_disable",
+		"label": "Touch Vibration"
+	},
+	"enable_button_slide": {
+		"$import": "../../templates/master_template.json#base_enable_disable",
+		"label": "Button Slide Function"
+	},
+	"wallmote_report_type": {
+		"label": "Report Type",
+		"valueSize": 1,
+		"minValue": 1,
+		"maxValue": 3,
+		"defaultValue": 1,
+		"unsigned": true,
+		"readOnly": false,
+		"writeOnly": false,
+		"allowManualEntry": false,
+		"options": [
+			{
+				"label": "Central scene CC",
+				"value": 1
+			},
+			{
+				"label": "Central scene CC and Configuration CC",
+				"value": 3
+			}
+		]
+	},
+	"wallmote_command_type": {
+		"$import": "../../templates/master_template.json#base_0-1_nounit",
+		"label": "Command Type to Send Association Groups",
+		"options": [
+			{
+				"label": "Basic CC Set",
+				"value": 0
+			},
+			{
+				"label": "Binary Switch CC Set",
+				"value": 1
+			}
+		]
+	},
+	"wakeup_led": {
+		"$import": "../../templates/master_template.json#base_enable_disable",
+		"label": "Wake Up Notification LED",
+		"description": "Blink the orange LED when wallmote sends out wake up notification",
+		"defaultValue": 0
+	},
+	"message_failure_led": {
+		"$import": "../../templates/master_template.json#base_enable_disable",
+		"label": "Blink LED on Message Send Failure"
+	},
+	"charging_led": {
+		"$import": "../../templates/master_template.json#base_enable_disable",
+		"label": "Charging Status LED"
+	},
+	"button_press_led": {
+		"$import": "../../templates/master_template.json#base_enable_disable",
+		"label": "Button Press LED"
 	},
 	// WallSwipe Options
 	"scene_control": {
@@ -1842,26 +2671,12 @@
 		"defaultValue": 255
 	},
 	"wallswipe_recalibrate": {
-		"label": "WallSwipe Sensitivity",
-		"valueSize": 1,
-		"minValue": 0,
-		"maxValue": 255,
-		"defaultValue": 0,
-		"unsigned": true,
-		"readOnly": false,
-		"writeOnly": true,
-		"allowManualEntry": true
+		"$import": "../../templates/master_template.json#base_0-255_nounit",
+		"label": "WallSwipe Sensitivity"
 	},
 	"wallswipe_status": {
+		"$import": "../../templates/master_template.json#base_0-1_nounit",
 		"label": "WallSwipe Status",
-		"valueSize": 1,
-		"minValue": 0,
-		"maxValue": 1,
-		"defaultValue": 0,
-		"unsigned": true,
-		"readOnly": true,
-		"writeOnly": false,
-		"allowManualEntry": false,
 		"options": [
 			{
 				"label": "Disconnected",
