@@ -72,8 +72,7 @@
 		},
 		"31": {
 			"label": "Alarm Duration",
-			"description": "Play alarm sound duration (30s * this value)",
-			"unit": "*30 seconds",
+			"unit": "30 seconds",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 127,
@@ -83,7 +82,7 @@
 			"allowManualEntry": true,
 			"options": [
 				{
-					"label": "Never stop.",
+					"label": "Never stop",
 					"value": 0
 				}
 			]
