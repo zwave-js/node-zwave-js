@@ -56,7 +56,7 @@
 		"commandClasses": {
 			"remove": {
 				"0x6c": {
-					// The device does not support supervision although it is mandatory for the device type
+					// The device support supervision, but does not accept supervision-encapsulated Multilevel Switch commands
 					"endpoints": "*"
 				}
 			}
