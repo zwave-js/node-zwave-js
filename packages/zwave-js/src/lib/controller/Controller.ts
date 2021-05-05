@@ -98,7 +98,10 @@ import {
 	GetControllerVersionRequest,
 	GetControllerVersionResponse,
 } from "./GetControllerVersionMessages";
-import { GetRoutingInfoRequest } from "./GetRoutingInfoMessages";
+import {
+	GetRoutingInfoRequest,
+	GetRoutingInfoResponse,
+} from "./GetRoutingInfoMessages";
 import {
 	GetSerialApiCapabilitiesRequest,
 	GetSerialApiCapabilitiesResponse,
@@ -1635,38 +1638,7 @@ export class ZWaveController extends EventEmitter {
 			}
 		}
 
-		// 2. retrieve the updated list
-		for (let attempt = 1; attempt <= maxAttempts; attempt++) {
-			// If the process was stopped in the meantime, cancel
-			if (!this._healNetworkActive) return false;
-
-			this.driver.controllerLog.logNode(nodeId, {
-				message: `retrieving updated neighbor list (attempt ${attempt})...`,
-				direction: "outbound",
-			});
-
-			try {
-				// Retrieve the updated list from the node
-				await this.nodes.get(nodeId)!.queryNeighborsInternal();
-				break;
-			} catch (e) {
-				this.driver.controllerLog.logNode(
-					nodeId,
-					`retrieving the updated neighbor list failed: ${e.message}`,
-					"warn",
-				);
-			}
-			if (attempt === maxAttempts) {
-				this.driver.controllerLog.logNode(nodeId, {
-					message: `failed to retrieve the updated neighbor list after ${maxAttempts} attempts, healing failed`,
-					level: "warn",
-					direction: "none",
-				});
-				return false;
-			}
-		}
-
-		// 3. delete all return routes so we can assign new ones
+		// 2. delete all return routes so we can assign new ones
 		for (let attempt = 1; attempt <= maxAttempts; attempt++) {
 			this.driver.controllerLog.logNode(nodeId, {
 				message: `deleting return routes (attempt ${attempt})...`,
@@ -1696,7 +1668,7 @@ export class ZWaveController extends EventEmitter {
 			}
 		}
 
-		// 4. Assign up to 4 return routes for associations, one of which should be the controller
+		// 3. Assign up to 4 return routes for associations, one of which should be the controller
 		let associatedNodes: number[] = [];
 		const maxReturnRoutes = 4;
 		try {
@@ -2813,6 +2785,37 @@ ${associatedNodes.join(", ")}`,
 			);
 		}
 		return result.maxPayloadSize;
+	}
+
+	/**
+	 * Returns the known list of neighbors for a node
+	 */
+	public async getNodeNeighbors(nodeId: number): Promise<readonly number[]> {
+		this.driver.controllerLog.logNode(nodeId, {
+			message: "requesting node neighbors...",
+			direction: "outbound",
+		});
+		try {
+			const resp = await this.driver.sendMessage<GetRoutingInfoResponse>(
+				new GetRoutingInfoRequest(this.driver, {
+					nodeId,
+					removeBadLinks: false,
+					removeNonRepeaters: false,
+				}),
+			);
+			this.driver.controllerLog.logNode(nodeId, {
+				message: `node neighbors received: ${resp.nodeIds.join(", ")}`,
+				direction: "inbound",
+			});
+			return resp.nodeIds;
+		} catch (e) {
+			this.driver.controllerLog.logNode(
+				nodeId,
+				`requesting the node neighbors failed: ${e.message}`,
+				"error",
+			);
+			throw e;
+		}
 	}
 
 	/**
