@@ -490,7 +490,7 @@ describe("lib/node/Node", () => {
 				const request: GetRoutingInfoRequest =
 					fakeDriver.sendMessage.mock.calls[0][0];
 				expect(request).toBeInstanceOf(GetRoutingInfoRequest);
-				expect(request.nodeId).toBe(node.id);
+				expect(request.sourceNodeId).toBe(node.id);
 			});
 
 			it("should remember the neighbor list", async () => {
