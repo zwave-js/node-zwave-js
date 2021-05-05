@@ -80,7 +80,13 @@
 			"defaultValue": 6,
 			"readOnly": false,
 			"writeOnly": false,
-			"allowManualEntry": true
+			"allowManualEntry": true,
+			"options": [
+				{
+					"label": "Never stop.",
+					"value": 0
+				}
+			]
 		}
 	}
 }
