@@ -215,37 +215,7 @@ export class VersionCC extends CommandClass {
 			direction: "none",
 		});
 
-		// Version information should not change (except for firmware updates)
-		// Step 1: Query node versions
-		this.driver.controllerLog.logNode(node.id, {
-			endpoint: this.endpointIndex,
-			message: "querying node versions...",
-			direction: "outbound",
-		});
-		const versionGetResponse = await api.get();
-		if (versionGetResponse) {
-			// prettier-ignore
-			let logMessage = `received response for node versions:
-  library type:      ${ZWaveLibraryTypes[versionGetResponse.libraryType]} (${num2hex(versionGetResponse.libraryType)})
-  protocol version:  ${versionGetResponse.protocolVersion}
-  firmware versions: ${versionGetResponse.firmwareVersions.join(", ")}`;
-			if (versionGetResponse.hardwareVersion != undefined) {
-				logMessage += `\n  hardware version:  ${versionGetResponse.hardwareVersion}`;
-			}
-			this.driver.controllerLog.logNode(node.id, {
-				endpoint: this.endpointIndex,
-				message: logMessage,
-				direction: "inbound",
-			});
-		}
-
-		// Step 2: Query all CC versions
-		this.driver.controllerLog.logNode(node.id, {
-			endpoint: this.endpointIndex,
-			message: "querying CC versions...",
-			direction: "outbound",
-		});
-		for (const [cc] of endpoint.implementedCommandClasses.entries()) {
+		const queryCCVersion = async (cc: CommandClasses): Promise<void> => {
 			// only query the ones we support a version > 1 for
 			const maxImplemented = getImplementedVersion(cc);
 			if (maxImplemented <= 1) {
@@ -255,7 +225,7 @@ export class VersionCC extends CommandClass {
 						cc,
 					)}) because max implemented version is ${maxImplemented}`,
 				);
-				continue;
+				return;
 			}
 
 			this.driver.controllerLog.logNode(node.id, {
@@ -292,18 +262,56 @@ export class VersionCC extends CommandClass {
 					level: "warn",
 				});
 			}
+		};
+
+		// Version information should not change (except for firmware updates)
+		// Step 1: Query Version CC version
+		await queryCCVersion(CommandClasses.Version);
+		// The CC instance was created before the versions were determined, so `this.version` contains a wrong value
+		this.version = this.driver.getSafeCCVersionForNode(
+			CommandClasses.Version,
+			node.id,
+			this.endpointIndex,
+		);
+
+		// Step 2: Query node versions
+		this.driver.controllerLog.logNode(node.id, {
+			endpoint: this.endpointIndex,
+			message: "querying node versions...",
+			direction: "outbound",
+		});
+		const versionGetResponse = await api.get();
+		if (versionGetResponse) {
+			// prettier-ignore
+			let logMessage = `received response for node versions:
+  library type:      ${ZWaveLibraryTypes[versionGetResponse.libraryType]} (${num2hex(versionGetResponse.libraryType)})
+  protocol version:  ${versionGetResponse.protocolVersion}
+  firmware versions: ${versionGetResponse.firmwareVersions.join(", ")}`;
+			if (versionGetResponse.hardwareVersion != undefined) {
+				logMessage += `\n  hardware version:  ${versionGetResponse.hardwareVersion}`;
+			}
+			this.driver.controllerLog.logNode(node.id, {
+				endpoint: this.endpointIndex,
+				message: logMessage,
+				direction: "inbound",
+			});
 		}
 
-		// Step 3: Query VersionCC capabilities
-		if (
-			// The CC was created before the versions were determined, so `this.version` contains a wrong value
-			this.driver.getSafeCCVersionForNode(
-				CommandClasses.Version,
-				node.id,
-				this.endpointIndex,
-			) >= 3
-		) {
-			// Step 3a: Support for SoftwareGet
+		// Step 3: Query all other CC versions
+		this.driver.controllerLog.logNode(node.id, {
+			endpoint: this.endpointIndex,
+			message: "querying CC versions...",
+			direction: "outbound",
+		});
+		for (const [cc] of endpoint.implementedCommandClasses.entries()) {
+			// We already queried the Version CC version at the start of this interview
+			if (cc === CommandClasses.Version) continue;
+			await queryCCVersion(cc);
+		}
+
+		// Step 4: Query VersionCC capabilities
+		if (this.version >= 3) {
+			// Step 4a: Support for SoftwareGet
 			this.driver.controllerLog.logNode(node.id, {
 				endpoint: this.endpointIndex,
 				message: "querying if Z-Wave Software Get is supported...",
@@ -321,7 +329,7 @@ export class VersionCC extends CommandClass {
 				});
 
 				if (supportsZWaveSoftwareGet) {
-					// Step 3b: Query Z-Wave Software versions
+					// Step 4b: Query Z-Wave Software versions
 					this.driver.controllerLog.logNode(node.id, {
 						endpoint: this.endpointIndex,
 						message: "querying Z-Wave software versions...",
