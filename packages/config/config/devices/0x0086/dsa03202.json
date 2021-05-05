@@ -42,55 +42,46 @@
 		"241": {
 			"$import": "templates/aeotec_template.json#base_mode_5",
 			"label": "Button 1 (Upper Left) Mode",
-			"readOnly": false,
 			"writeOnly": true
 		},
 		"242": {
 			"$import": "templates/aeotec_template.json#base_mode_5",
 			"label": "Button 2 (Upper Right) Mode",
-			"readOnly": false,
 			"writeOnly": true
 		},
 		"243": {
 			"$import": "templates/aeotec_template.json#base_mode_5",
 			"label": "Button 3 (Lower Left) Mode",
-			"readOnly": false,
 			"writeOnly": true
 		},
 		"244": {
 			"$import": "templates/aeotec_template.json#base_mode_5",
 			"label": "Button 4 (Lower Right) Mode",
-			"readOnly": false,
 			"writeOnly": true
 		},
 		"245": {
 			"$import": "templates/aeotec_template.json#base_mode_5",
 			"label": "Button 5 (Include) Mode",
-			"readOnly": false,
 			"writeOnly": true
 		},
 		"246": {
 			"$import": "templates/aeotec_template.json#base_mode_5",
 			"label": "Button 6 (Exclude) Mode",
-			"readOnly": false,
 			"writeOnly": true
 		},
 		"247": {
 			"$import": "templates/aeotec_template.json#base_mode_5",
 			"label": "Button 7 (Association) Mode",
-			"readOnly": false,
 			"writeOnly": true
 		},
 		"248": {
 			"$import": "templates/aeotec_template.json#base_mode_5",
 			"label": "Button 8 (Learn) Mode",
-			"readOnly": false,
 			"writeOnly": true
 		},
 		"250": {
 			"$import": "../templates/master_template.json#base_enable_disable",
 			"label": "Scene Mode (Secondary Controller)",
-			"readOnly": false,
 			"writeOnly": true
 		}
 	},
