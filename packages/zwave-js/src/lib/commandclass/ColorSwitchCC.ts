@@ -385,7 +385,26 @@ export class ColorSwitchCCAPI extends CCAPI {
 					);
 				}
 
-				await this.set(value);
+				// GH#2527: strip unsupported color components, because some devices don't react otherwise
+				if (this.isSinglecast()) {
+					const node = this.endpoint.getNodeUnsafe();
+					const supportedColors = node?.getValue<
+						readonly ColorComponent[]
+					>(getSupportedColorComponentsValueID(this.endpoint.index));
+					if (supportedColors) {
+						value = pick(
+							value,
+							supportedColors
+								.map((c) => colorComponentToTableKey(c))
+								.filter((c) => !!c) as ColorKey[],
+						);
+					}
+				}
+
+				// Avoid sending empty commands
+				if (Object.keys(value as any).length === 0) return;
+
+				await this.set(value as ColorTable);
 
 				// We're not going to poll each color component separately
 			}
