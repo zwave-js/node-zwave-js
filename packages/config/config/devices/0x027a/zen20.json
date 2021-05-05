@@ -465,5 +465,9 @@
 				}
 			]
 		}
+	},
+	"compat": {
+		// Accumulative values are reported on the root endpoint
+		"preserveRootApplicationCCValueIDs": true
 	}
 }

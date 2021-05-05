@@ -1,4 +1,4 @@
-import { cpp2js, num2hex } from "./strings";
+import { cpp2js, isPrintableASCIIWithNewlines, num2hex } from "./strings";
 
 describe("lib/strings => cpp2js() => ", () => {
 	it("should truncate null-terminated strings", () => {
@@ -38,5 +38,21 @@ describe("lib/strings => num2hex()", () => {
 
 	it("when the uppercase parameter is true, the hex digits should be uppercase", () => {
 		expect(num2hex(0xabc123, true)).toBe("0xABC123");
+	});
+});
+
+describe("lib/strings => isPrintableASCIIWithNewlines() => ", () => {
+	it("should return true for ASCII strings that start or end with newlines", () => {
+		const testCases = [
+			["abcdef\n\r", true],
+			["\n\r", true],
+			["", true],
+			["\r\n \n\r", true],
+			["ß", false],
+			["\r\nß\r\n", false],
+		] as const;
+		for (const [inp, result] of testCases) {
+			expect(isPrintableASCIIWithNewlines(inp)).toBe(result);
+		}
 	});
 });

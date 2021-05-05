@@ -28,6 +28,8 @@
 		}
 	},
 	"compat": {
-		"enableBasicSetMapping": true
+		"enableBasicSetMapping": true,
+		// The device does not idle its own notifications
+		"forceNotificationIdleReset": true
 	}
 }

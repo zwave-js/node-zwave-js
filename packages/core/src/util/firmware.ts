@@ -1,3 +1,4 @@
+import * as crypto from "crypto";
 // @ts-expect-error There are no type definitions for nrf-intel-hex
 import MemoryMap from "nrf-intel-hex";
 import { ZWaveError, ZWaveErrorCodes } from "../error/ZWaveError";
@@ -8,6 +9,7 @@ export type FirmwareFileFormat =
 	| "otz"
 	| "ota"
 	| "hex"
+	| "hec"
 	| "gecko"
 	| "bin";
 
@@ -21,6 +23,8 @@ const firmwareIndicators = {
 	aeotec: Buffer.from("Zensys.ZWave", "utf8"),
 	// This seems to be the standard beginning of a gecko bootloader firmware
 	gecko: 0xeb17a603,
+	// Encrypted HEC firmware files
+	hec: Buffer.from("HSENC2", "ascii"),
 };
 
 /**
@@ -42,16 +46,18 @@ export function guessFirmwareFileFormat(
 		return "aeotec";
 	} else if (/\.(hex|ota|otz)$/.test(filename)) {
 		return filename.slice(-3) as FirmwareFileFormat;
-	} else if (filename.endsWith(".hec")) {
-		throw new ZWaveError(
-			"Encrypted .hec firmware files are not supported",
-			ZWaveErrorCodes.Unsupported_Firmware_Format,
-		);
 	} else if (
 		filename.endsWith(".gbl") &&
 		rawData.readUInt32BE(0) === firmwareIndicators.gecko
 	) {
 		return "gecko";
+	} else if (
+		filename.endsWith(".hec") &&
+		rawData
+			.slice(0, firmwareIndicators.hec.length)
+			.equals(firmwareIndicators.hec)
+	) {
+		return "hec";
 	} else {
 		throw new ZWaveError(
 			"Could not detect firmware format",
@@ -65,6 +71,7 @@ export function guessFirmwareFileFormat(
  * - `"aeotec"` - A Windows executable (.exe or .ex_) that contains Aeotec's upload tool
  * - `"otz"` - A compressed firmware file in Intel HEX format
  * - `"ota"` or `"hex"` - An uncompressed firmware file in Intel HEX format
+ * - `"hec"` - An encrypted Intel HEX firmware file
  * - `"gecko"` - A binary gecko bootloader firmware file with `.gbl` extension
  *
  * The returned firmware data and target can be used to start a firmware update process with `node.beginFirmwareUpdate`
@@ -80,6 +87,8 @@ export function extractFirmware(
 		case "ota":
 		case "hex":
 			return extractFirmwareHEX(rawData);
+		case "hec":
+			return extractFirmwareHEC(rawData);
 		case "gecko":
 			// There is no description for the file contents, so we
 			// have to assume this is for firmware target 0
@@ -186,11 +195,12 @@ function extractFirmwareAeotec(data: Buffer): Firmware {
 	return ret;
 }
 
-function extractFirmwareHEX(dataHEX: Buffer): Firmware {
+function extractFirmwareHEX(dataHEX: Buffer | string): Firmware {
 	try {
-		const memMap: Map<number, Uint8Array> = MemoryMap.fromHex(
-			dataHEX.toString("ascii"),
-		);
+		if (Buffer.isBuffer(dataHEX)) {
+			dataHEX = dataHEX.toString("ascii");
+		}
+		const memMap: Map<number, Uint8Array> = MemoryMap.fromHex(dataHEX);
 		// A memory map can be sparse - we'll have to fill the gaps with 0xFF
 		let data: Buffer = Buffer.from([]);
 		for (const [offset, chunk] of memMap.entries()) {
@@ -211,4 +221,25 @@ function extractFirmwareHEX(dataHEX: Buffer): Firmware {
 			throw e;
 		}
 	}
+}
+
+function extractFirmwareHEC(data: Buffer): Firmware {
+	const key =
+		"d7a68def0f4a1241940f6cb8017121d15f0e2682e258c9f7553e706e834923b7";
+	const iv = "0e6519297530583708612a2823663844";
+	const decipher = crypto.createDecipheriv(
+		"aes-256-cbc",
+		Buffer.from(key, "hex"),
+		Buffer.from(iv, "hex"),
+	);
+
+	const ciphertext = Buffer.from(data.slice(6).toString("ascii"), "base64");
+	const plaintext = Buffer.concat([
+		decipher.update(ciphertext),
+		decipher.final(),
+	])
+		.toString("ascii")
+		.replace(/ /g, "\n");
+
+	return extractFirmwareHEX(plaintext);
 }

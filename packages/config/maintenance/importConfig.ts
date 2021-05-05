@@ -119,6 +119,8 @@ const ohUrlIDs =
 	"https://opensmarthouse.org/dmxConnect/api/zwavedatabase/device/list.php?filter=&manufacturer=-1&limit=100000";
 const ohUrlDevice = (id: number) =>
 	`https://opensmarthouse.org/dmxConnect/api/zwavedatabase/device/read.php?device_id=${id}`;
+const zwaUrlDevice = (id: number) =>
+	`https://products.z-wavealliance.org/Products/${id}/json`;
 
 function isNullishOrEmptyString(
 	value: number | string | null | undefined,
@@ -143,15 +145,21 @@ function updateNumberOrDefault(
 	return defaultN;
 }
 
-/** Retrieves the list of database IDs */
-async function fetchIDs(): Promise<number[]> {
+/** Retrieves the list of database IDs from the OpenSmartHouse DB */
+async function fetchIDsOH(): Promise<number[]> {
 	const data = (await axios({ url: ohUrlIDs })).data;
 	return data.devices.map((d: any) => d.id);
 }
 
-/** Retrieves the definition for a specific device */
-async function fetchDevice(id: number): Promise<string> {
+/** Retrieves the definition for a specific device from the OpenSmartHouse DB */
+async function fetchDeviceOH(id: number): Promise<string> {
 	const source = (await axios({ url: ohUrlDevice(id) })).data;
+	return stringify(source, "\t");
+}
+
+/** Retrieves the definition for a specific device from the Z-Wave Alliance DB */
+async function fetchDeviceZWA(id: number): Promise<string> {
+	const source = (await axios({ url: zwaUrlDevice(id) })).data;
 	return stringify(source, "\t");
 }
 
@@ -199,6 +207,7 @@ async function extractConfigFromTar(): Promise<void> {
 async function cleanTmpDirectory(): Promise<void> {
 	await fs.remove(ozwTempDir);
 	await fs.remove(ohTempDir);
+	await fs.remove(zwaTempDir);
 	console.log("temporary directories cleaned");
 }
 
@@ -768,21 +777,21 @@ async function parseZWAFiles(): Promise<void> {
 			void fs.unlink(file);
 		}
 	}
-	// Temp
-	for (const file of jsonData) {
-		if (!file.Identifier || file.Identifier === "") {
-			console.log(`Missing identifier: ${file.Id}`);
-		}
-	}
+	// // Temp
+	// for (const file of jsonData) {
+	// 	if (!file.Identifier || file.Identifier === "") {
+	// 		console.log(`Missing identifier: ${file.Id}`);
+	// 	}
+	// }
 
-	// Temp limit to specified manufacturers
-	for (const file of jsonData) {
-		if (file.ManufacturerId == "0x0234") {
-			continue;
-		} else {
-			delete file.ProductId;
-		}
-	}
+	// // Temp limit to specified manufacturers
+	// for (const file of jsonData) {
+	// 	if (file.ManufacturerId == "0x0234") {
+	// 		continue;
+	// 	} else {
+	// 		delete file.ProductId;
+	// 	}
+	// }
 
 	// Combine provided files within models
 	jsonData = combineDeviceFiles(jsonData);
@@ -1603,13 +1612,35 @@ ${stringify(normalizeConfig(jsonData), "\t")}`;
 }
 
 /**
- * Downloads all device information
+ * Downloads the given device configurations from ZWA
  * @param IDs If given, only these IDs are downloaded
  */
-async function downloadDevices(IDs?: number[]): Promise<void> {
+async function downloadDevicesZWA(IDs: number[]): Promise<void> {
+	await fs.ensureDir(zwaTempDir);
+	for (let i = 0; i < IDs.length; i++) {
+		process.stdout.write(
+			`Fetching device config ${i + 1} of ${IDs.length}...`,
+		);
+		const content = await fetchDeviceZWA(IDs[i]);
+		await fs.writeFile(
+			path.join(zwaTempDir, `${IDs[i]}.json`),
+			content,
+			"utf8",
+		);
+		// Delete the last line
+		process.stdout.write("\r\x1b[K");
+	}
+	console.log("done!");
+}
+
+/**
+ * Downloads all device information from the OpenSmartHouse DB
+ * @param IDs If given, only these IDs are downloaded
+ */
+async function downloadDevicesOH(IDs?: number[]): Promise<void> {
 	if (!isArray(IDs) || !IDs.length) {
 		process.stdout.write("Fetching database IDs...");
-		IDs = await fetchIDs();
+		IDs = await fetchIDsOH();
 		// Delete the last line
 		process.stdout.write("\r\x1b[K");
 	}
@@ -1619,7 +1650,7 @@ async function downloadDevices(IDs?: number[]): Promise<void> {
 		process.stdout.write(
 			`Fetching device config ${i + 1} of ${IDs.length}...`,
 		);
-		const content = await fetchDevice(IDs[i]);
+		const content = await fetchDeviceOH(IDs[i]);
 		await fs.writeFile(
 			path.join(ohTempDir, `${IDs[i]}.json`),
 			content,
@@ -1631,8 +1662,8 @@ async function downloadDevices(IDs?: number[]): Promise<void> {
 	console.log("done!");
 }
 
-/** Downloads all manufacturer information */
-async function downloadManufacturers(): Promise<void> {
+/** Downloads all manufacturer information from the OpenSmartHouse DB */
+async function downloadManufacturersOH(): Promise<void> {
 	process.stdout.write("Fetching manufacturers...");
 
 	const data = (await axios({ url: ohUrlManufacturers })).data;
@@ -1807,7 +1838,7 @@ async function parseOHConfigFile(
 }
 
 /** Translates all downloaded config files */
-async function importConfigFiles(): Promise<void> {
+async function importConfigFilesOH(): Promise<void> {
 	const configFiles = (await fs.readdir(ohTempDir)).filter(
 		(file) =>
 			file.endsWith(".json") &&
@@ -2191,19 +2222,21 @@ void (async () => {
 		}
 
 		if (program.source.includes("zwa")) {
-			/* TODO: Add routine to download only the most recent, or specific, zwave alliance files
-			if (program.download) {
-				await downloadOZWConfig();
-				await extractConfigFromTar();
-			} */
+			if (program.download && program.ids) {
+				await downloadDevicesZWA(
+					program.ids
+						?.map((id) => parseInt(id as any))
+						.filter((num) => !Number.isNaN(num)),
+				);
+			}
 
 			if (program.manufacturers || program.devices) await parseZWAFiles();
 		}
 
 		if (program.source.includes("oh")) {
 			if (program.download) {
-				await downloadManufacturers();
-				await downloadDevices(
+				await downloadManufacturersOH();
+				await downloadDevicesOH(
 					program.ids
 						?.map((id) => parseInt(id as any))
 						.filter((num) => !Number.isNaN(num)),
@@ -2215,7 +2248,7 @@ void (async () => {
 			}
 
 			if (program.devices) {
-				await importConfigFiles();
+				await importConfigFilesOH();
 			}
 		}
 
