@@ -474,26 +474,18 @@
 			"$import": "templates/aeotec_template.json#reset_parameters",
 			"label": "Reset Parameters 111-113 to Default Values"
 		},
-		"201[0xff]": [
-			{
-				"$if": "firmwareVersion <= 1.6",
-				"label": "Temperature Calibration",
-				"valueSize": 1,
-				"unit": "0.1 °C/°F",
-				"minValue": -100,
-				"maxValue": 100,
-				"defaultValue": 0,
-				"readOnly": false,
-				"writeOnly": false,
-				"allowManualEntry": true
-			},
-			{
-				"$if": "firmwareVersion > 1.6",
-				"$import": "templates/aeotec_template.json#celsius_fahrenheit",
-				"label": "Temperature Calibration Unit",
-				"valueSize": 2
-			}
-		],
+		"201[0xff]": {
+			"$if": "firmwareVersion >= 1.6",
+			"label": "Temperature Calibration",
+			"valueSize": 1,
+			"unit": "0.1 °C/°F",
+			"minValue": -100,
+			"maxValue": 100,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
 		"201[0xff00]": {
 			"$if": "firmwareVersion >= 1.6",
 			"label": "Temperature Calibration Offset",
