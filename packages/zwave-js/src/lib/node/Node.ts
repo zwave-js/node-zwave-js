@@ -1244,14 +1244,6 @@ export class ZWaveNode extends Endpoint {
 				requestedNodeId: this.id,
 			}),
 		);
-		this._deviceClass = resp.deviceClass;
-		for (const cc of this._deviceClass.mandatorySupportedCCs) {
-			this.addCC(cc, { isSupported: true });
-		}
-		for (const cc of this._deviceClass.mandatoryControlledCCs) {
-			this.addCC(cc, { isControlled: true });
-		}
-
 		this._isListening = resp.isListening;
 		this._isFrequentListening = resp.isFrequentListening;
 		this._isRouting = resp.isRouting;
@@ -1260,13 +1252,14 @@ export class ZWaveNode extends Endpoint {
 		this._nodeType = resp.nodeType;
 		this._supportsSecurity = resp.supportsSecurity;
 		this._supportsBeaming = resp.supportsBeaming;
-
 		this._isSecure = unknownBoolean;
 
+		this.applyDeviceClass(resp.deviceClass);
+
 		const logMessage = `received response for protocol info:
-basic device class:    ${this._deviceClass.basic.label}
-generic device class:  ${this._deviceClass.generic.label}
-specific device class: ${this._deviceClass.specific.label}
+basic device class:    ${this.deviceClass!.basic.label}
+generic device class:  ${this.deviceClass!.generic.label}
+specific device class: ${this.deviceClass!.specific.label}
 node type:             ${getEnumMemberName(NodeType, this._nodeType)}
 is always listening:   ${this.isListening}
 is frequent listening: ${this.isFrequentListening}
