@@ -11,18 +11,28 @@ import { isArray, isObject } from "alcalzone-shared/typeguards";
 import { pathExists, readFile } from "fs-extra";
 import JSON5 from "json5";
 import path from "path";
-import { configDir, hexKeyRegexNDigits, throwInvalidConfig } from "./utils";
-
-const configPath = path.join(configDir, "deviceClasses.json");
+import {
+	configDir,
+	externalConfigDir,
+	hexKeyRegexNDigits,
+	throwInvalidConfig,
+} from "./utils";
 
 export type BasicDeviceClassMap = ReadonlyMap<number, string>;
 export type GenericDeviceClassMap = ReadonlyMap<number, GenericDeviceClass>;
 
 /** @internal */
-export async function loadDeviceClassesInternal(): Promise<{
+export async function loadDeviceClassesInternal(
+	externalConfig?: boolean,
+): Promise<{
 	basicDeviceClasses: BasicDeviceClassMap;
 	genericDeviceClasses: GenericDeviceClassMap;
 }> {
+	const configPath = path.join(
+		(externalConfig && externalConfigDir) || configDir,
+		"deviceClasses.json",
+	);
+
 	if (!(await pathExists(configPath))) {
 		throw new ZWaveError(
 			"The device classes config file does not exist!",

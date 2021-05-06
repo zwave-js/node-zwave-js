@@ -5,15 +5,25 @@ import { isObject } from "alcalzone-shared/typeguards";
 import { pathExists, readFile } from "fs-extra";
 import JSON5 from "json5";
 import path from "path";
-import { configDir, hexKeyRegexNDigits, throwInvalidConfig } from "./utils";
-
-const configPath = path.join(configDir, "scales.json");
+import {
+	configDir,
+	externalConfigDir,
+	hexKeyRegexNDigits,
+	throwInvalidConfig,
+} from "./utils";
 
 export type ScaleGroup = ReadonlyMap<number, Scale>;
 export type NamedScalesGroupMap = ReadonlyMap<string, ScaleGroup>;
 
 /** @internal */
-export async function loadNamedScalesInternal(): Promise<NamedScalesGroupMap> {
+export async function loadNamedScalesInternal(
+	externalConfig?: boolean,
+): Promise<NamedScalesGroupMap> {
+	const configPath = path.join(
+		(externalConfig && externalConfigDir) || configDir,
+		"scales.json",
+	);
+
 	if (!(await pathExists(configPath))) {
 		throw new ZWaveError(
 			"The named scales config file does not exist!",
