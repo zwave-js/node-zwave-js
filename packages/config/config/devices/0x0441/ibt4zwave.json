@@ -19,7 +19,6 @@
 	"paramInformation": {
 		"30[0xff]": {
 			"label": "Alarm Configuration - 1st Slot Notification Type",
-			"description": "This parameter determines to which alarm frames and how the device should react. the parameters consist of 4 bytes, three most significant bytes are set according to the official Z-Wave protocol specification.  default value [0x00, 0x00, 0x00, 0x00] (disabled). the 4 bytes must be converted to a single decimal value to be entered in the gateway sending the configuration parameter value. example: event: home security (0x07) status: motion detected (0x08) parameter: none (0x00) action: open (0x01) = 0x07080001 which is 117964801 decimal to be entered in the gateway",
 			"valueSize": 4,
 			"minValue": 0,
 			"maxValue": 22,
@@ -121,7 +120,6 @@
 		},
     "30[0xff00]": {
 			"label": "Alarm Configuration - 1st Slot Notification Status",
-			"description": "This parameter determines to which alarm frames and how the device should react. the parameters consist of 4 bytes, three most significant bytes are set according to the official Z-Wave protocol specification.  default value [0x00, 0x00, 0x00, 0x00] (disabled). the 4 bytes must be converted to a single decimal value to be entered in the gateway sending the configuration parameter value. example: event: home security (0x07) status: motion detected (0x08) parameter: none (0x00) action: open (0x01) = 0x07080001 which is 117964801 decimal to be entered in the gateway",
 			"valueSize": 4,
 			"minValue": 0,
 			"maxValue": 255,
@@ -142,22 +140,15 @@
 			]
 		},
         "30[0xff0000]": {
-			"label": "Alarm Configuration - 1st Slot Event/State Parameters",
-			"description": "This parameter determines to which alarm frames and how the device should react. the parameters consist of 4 bytes, three most significant bytes are set according to the official Z-Wave protocol specification.  default value [0x00, 0x00, 0x00, 0x00] (disabled). the 4 bytes must be converted to a single decimal value to be entered in the gateway sending the configuration parameter value. example: event: home security (0x07) status: motion detected (0x08) parameter: none (0x00) action: open (0x01) = 0x07080001 which is 117964801 decimal to be entered in the gateway",
+			"label": "Alarm Configuration - 1st Slot Notification Event",
 			"valueSize": 4,
 			"minValue": 0,
-			//"maxValue": 4294967042,
+			"maxValue": 255,
 			"defaultValue": 0,
 			"unsigned": true,
 			"readOnly": false,
 			"writeOnly": false,
 			"allowManualEntry": true,
-			"options": [
-				{
-					"label": "Disabled",
-					"value": 0
-				}
-			]
 		},
         "30[0xff000000]": {
 			"label": "Alarm Configuration - 1st Slot Action",
