@@ -22,7 +22,7 @@
 			"description": "This parameter determines to which alarm frames and how the device should react. the parameters consist of 4 bytes, three most significant bytes are set according to the official Z-Wave protocol specification.  default value [0x00, 0x00, 0x00, 0x00] (disabled). the 4 bytes must be converted to a single decimal value to be entered in the gateway sending the configuration parameter value. example: event: home security (0x07) status: motion detected (0x08) parameter: none (0x00) action: open (0x01) = 0x07080001 which is 117964801 decimal to be entered in the gateway",
 			"valueSize": 4,
 			"minValue": 0,
-			"maxValue": 5,
+			"maxValue": 22,
 			"defaultValue": 0,
 			"unsigned": true,
 			"readOnly": false,
@@ -48,6 +48,74 @@
 				{
 					"label": "Water Alarm",
 					"value": 5
+				},
+				{
+					"label": "Access Control",
+					"value": 6
+				},
+				{
+					"label": "Home Security",
+					"value": 7
+				},
+				{
+					"label": "Power Management",
+					"value": 8
+				},
+				{
+					"label": "System",
+					"value": 9
+				},
+				{
+					"label": "Emergency Alarm",
+					"value": 10
+				},
+				{
+					"label": "Clock",
+					"value": 11
+				},
+				{
+					"label": "Appliance",
+					"value": 12
+				},
+				{
+					"label": "Home Health",
+					"value": 13
+				},
+				{
+					"label": "Siren",
+					"value": 14
+				},
+				{
+					"label": "Water Valve",
+					"value": 15
+				},
+				{
+					"label": "Weather Alarm",
+					"value": 16
+				},
+				{
+					"label": "Irrigation",
+					"value": 17
+				},
+				{
+					"label": "Gas Alarm",
+					"value": 18
+				},
+				{
+					"label": "Pest Control",
+					"value": 19
+				},
+				{
+					"label": "Light Sensor",
+					"value": 20
+				},
+				{
+					"label": "Water Quality Monitoring",
+					"value": 21
+				},
+				{
+					"label": "Home Monitoring",
+					"value": 22
 				}
 			]
 		},
