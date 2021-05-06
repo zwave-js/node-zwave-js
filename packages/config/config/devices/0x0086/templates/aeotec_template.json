@@ -6,7 +6,7 @@
 		"defaultValue": 0,
 		"unsigned": true,
 		"readOnly": false,
-		"writeOnly": false,
+		"writeOnly": true,
 		"allowManualEntry": false,
 		"options": [
 			{
