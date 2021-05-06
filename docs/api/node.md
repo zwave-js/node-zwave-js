@@ -685,6 +685,22 @@ There are two situations when this event is emitted:
 > [!NOTE]
 > This event does not imply that the node is currently awake or will respond to requests.
 
+### `"firmware update progress"`
+
+Firmware update progress has been made. The callback takes the node itself, the already sent fragments, and the total fragments to be sent:
+
+```ts
+(node: ZWaveNode, sentFragments: number, totalFragments: number) => void;
+```
+
+### `"firmware update finished"`
+
+The firmware update process is finished. The update may or may not have been successful depending on the returned status, and if it was successful a wait time may be needed before the device is functional again.
+
+```ts
+(changedNode: ZWaveNode, status: FirmwareUpdateStatus, waitTime?: number) => void;
+```
+
 ### `"value added"` / `"value updated"` / `"value removed"`
 
 A value belonging to this node was added, updated or removed. The callback takes the node itself and an argument detailing the change:
