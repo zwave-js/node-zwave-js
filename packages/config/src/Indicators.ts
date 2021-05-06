@@ -10,18 +10,28 @@ import { isObject } from "alcalzone-shared/typeguards";
 import { pathExists, readFile } from "fs-extra";
 import JSON5 from "json5";
 import path from "path";
-import { configDir, hexKeyRegexNDigits, throwInvalidConfig } from "./utils";
-
-const indicatorsConfigPath = path.join(configDir, "indicators.json");
+import {
+	configDir,
+	externalConfigDir,
+	hexKeyRegexNDigits,
+	throwInvalidConfig,
+} from "./utils";
 
 export type IndicatorMap = ReadonlyMap<number, string>;
 export type IndicatorPropertiesMap = ReadonlyMap<number, IndicatorProperty>;
 
 /** @internal */
-export async function loadIndicatorsInternal(): Promise<{
+export async function loadIndicatorsInternal(
+	externalConfig?: boolean,
+): Promise<{
 	indicators: IndicatorMap;
 	properties: IndicatorPropertiesMap;
 }> {
+	const indicatorsConfigPath = path.join(
+		(externalConfig && externalConfigDir) || configDir,
+		"indicators.json",
+	);
+
 	if (!(await pathExists(indicatorsConfigPath))) {
 		throw new ZWaveError(
 			"The config file does not exist!",

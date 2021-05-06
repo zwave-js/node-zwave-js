@@ -4,6 +4,7 @@ import * as fs from "fs-extra";
 import path from "path";
 import * as semver from "semver";
 import type { DeviceConfigIndexEntry } from "./Devices";
+import type { ConfigLogger } from "./Logger";
 
 /** The absolute path of the embedded configuration directory */
 export const configDir = path.resolve(__dirname, "../config");
@@ -61,11 +62,15 @@ export function padVersion(version: string): string {
 /**
  * Synchronizes or updates the external config directory and returns whether the directory is in a state that can be used
  */
-export async function syncExternalConfigDir(): Promise<boolean> {
+export async function syncExternalConfigDir(
+	logger: ConfigLogger,
+): Promise<boolean> {
 	if (!externalConfigDir) return false;
 	const externalVersionFilename = path.join(externalConfigDir, "version");
-	const currentVersion = (await fs.readJSON("../package.json")).version;
-	const updateRange = `>${currentVersion} <${semver.inc(
+	const currentVersion = (
+		await fs.readJSON(path.join(__dirname, "../package.json"))
+	).version;
+	const supportedRange = `>=${currentVersion} <${semver.inc(
 		currentVersion,
 		"patch",
 	)}`;
@@ -82,7 +87,9 @@ export async function syncExternalConfigDir(): Promise<boolean> {
 		if (!semver.valid(version)) {
 			wipe = true;
 		} else if (
-			!semver.satisfies(version, updateRange, { includePrerelease: true })
+			!semver.satisfies(version, supportedRange, {
+				includePrerelease: true,
+			})
 		) {
 			wipe = true;
 		}
@@ -95,11 +102,23 @@ export async function syncExternalConfigDir(): Promise<boolean> {
 
 	// Wipe and override the external dir
 	try {
+		logger.print(
+			`Synchronizing external config dir ${externalConfigDir}...`,
+		);
 		await fs.emptyDir(externalConfigDir);
-		await fs.copy(configDir, externalConfigDir);
+		await fs.copy(configDir, externalConfigDir, {
+			filter: async (src: string) => {
+				if (!(await fs.stat(src)).isFile()) return true;
+				return src.endsWith(".json");
+			},
+		});
 		await fs.writeFile(externalVersionFilename, currentVersion, "utf8");
 	} catch {
 		// Something went wrong
+		logger.print(
+			`Synchronizing external config dir failed - using embedded config`,
+			"error",
+		);
 		return false;
 	}
 
