@@ -391,34 +391,14 @@ function normalizeConfig(config: Record<string, any>): Record<string, any> {
 	config.label = sanitizeText(config.label) ?? "";
 	config.description = sanitizeText(config.description) ?? "";
 
-	// Sort devices (Bubble)
-	let done = false;
-	while (!done && config.devices.length > 1) {
-		done = true;
-		for (let i = 1; i <= config.devices.length; i += 1) {
-			if (
-				config.devices[i - 1].productType ===
-					config.devices[i]?.productType &&
-				config.devices[i - 1].productId > config.devices[i].productId
-			) {
-				[config.devices[i - 1], config.devices[i]] = [
-					config.devices[i],
-					config.devices[i - 1],
-				];
-			}
-
-			if (
-				config.devices[i - 1].productType >
-				config.devices[i]?.productType
-			) {
-				done = false;
-				[config.devices[i - 1], config.devices[i]] = [
-					config.devices[i],
-					config.devices[i - 1],
-				];
-			}
-		}
-	}
+	// Sort devices by productType, then productId
+	config.devices.sort((a: any, b: any) => {
+		if (a.productType < b.productType) return -1;
+		if (a.productType > b.productType) return +1;
+		if (a.productId < b.productId) return -1;
+		if (a.productId > b.productId) return +1;
+		return 0;
+	});
 
 	// Standardize parameters
 	if (
@@ -426,26 +406,29 @@ function normalizeConfig(config: Record<string, any>): Record<string, any> {
 		Object.keys(config.paramInformation).length > 0
 	) {
 		// Filter out duplicates between partial and non-partial params
-		const entries = Object.entries<any>(config.paramInformation).filter(
-			// Losing comments between parameters here
-			([key], _, arr) =>
+		const allowedKeys = Object.keys(config.paramInformation).filter(
+			(key, _, arr) =>
 				// Allow partial params
 				!/^\d+$/.test(key) ||
 				// and non-partial params without a corresponding partial param
-				!arr.some(([otherKey]) => otherKey.startsWith(`${key}[`)),
+				!arr.some((otherKey) => otherKey.startsWith(`${key}[`)),
 		);
 
 		for (const [key, original] of Object.entries<any>(
 			config.paramInformation,
 		)) {
+			if (!allowedKeys.includes(key)) {
+				delete config.paramInformation[key];
+				continue;
+			}
+
 			original.unit = normalizeUnits(original.unit);
 
 			// Remove undefined keys while preserving comments
 			for (const l of paramOrder) {
-				if (typeof original[l] === "undefined") {
-					continue;
-				} else if (original[l] === "") {
+				if (original[l] == undefined || original[l] === "") {
 					delete original[l];
+					continue;
 				}
 
 				const temp = original[l];
@@ -2055,16 +2038,16 @@ function normalizeLabel(originalString: string) {
  * 																			*
  ****************************************************************************/
 function normalizeDescription(originalString: string) {
-	originalString = sanitizeString(originalString);
-	originalString = originalString.replace(/\n/g, " ");
-	originalString = originalString.replace(/\\"/g, "");
-	originalString = originalString.toLocaleLowerCase();
-	originalString = originalString.replace(/ led /g, " LED ");
-	originalString = originalString.replace(/ rgb /g, " RGB ");
-	originalString = originalString.replace(/ pir /g, " PIR ");
-	originalString = originalString.replace(/basic set/g, "Basic Set");
-	originalString = originalString.replace(/multi-level/g, "Multi-Level");
-	originalString = originalString.replace(/z-wave/g, "Z-Wave");
+	originalString = sanitizeString(originalString)
+		.toLocaleLowerCase()
+		.replace(/\n/g, " ")
+		.replace(/\\"/g, "")
+		.replace(/ led /g, " LED ")
+		.replace(/ rgb /g, " RGB ")
+		.replace(/ pir /g, " PIR ")
+		.replace(/basic set/g, "Basic Set")
+		.replace(/multi-level/g, "Multi-Level")
+		.replace(/z-?wave/g, "Z-Wave");
 	originalString =
 		originalString.charAt(0).toUpperCase() + originalString.slice(1);
 	originalString = originalString.replace(
@@ -2073,24 +2056,11 @@ function normalizeDescription(originalString: string) {
 	);
 	originalString = originalString.replace(/multi-level/g, "Multi-Level");
 
-	const prohibitedEndChars = ["-", ".", "_", ",", " "];
 	// Clean-up the end of labels
-	for (const endChar of prohibitedEndChars) {
-		if (originalString.slice(-1) === endChar) {
-			originalString = originalString.slice(0, -1);
-			break;
-		}
-	}
+	originalString = originalString.replace(/[._, -]+$/, "");
 
 	// Clean-up the beginning of labels
-	for (const endChar of prohibitedEndChars) {
-		if (originalString.slice(0) === endChar) {
-			originalString = originalString.slice(1, 0);
-			break;
-		}
-	}
-
-	originalString = originalString.trim();
+	originalString = originalString.replace(/^[._, -]+/, "");
 	return originalString;
 }
 /****************************************************************************
@@ -2099,23 +2069,18 @@ function normalizeDescription(originalString: string) {
  * 																			*
  ****************************************************************************/
 function sanitizeString(originalString: string) {
-	originalString = originalString.replace(/\r\n/g, "\n");
-	originalString = originalString.replace(/\r/g, "\n");
-	originalString = originalString.replace(/\n\n\n\n/g, "\n\n");
-	originalString = originalString.replace(/\t/g, " ");
-	// eslint-disable-next-line prettier/prettier
-	originalString = originalString.replace(/\"\"/g, '"');
-	originalString = originalString.replace(/      /g, " ");
-	originalString = originalString.replace(/     /g, " ");
-	originalString = originalString.replace(/    /g, " ");
-	originalString = originalString.replace(/   /g, " ");
-	originalString = originalString.replace(/  /g, " ");
-	originalString = originalString.replace(/\,s*$/g, "");
-	originalString = originalString.replace(/\„s*$/g, "");
-	originalString = originalString.replace(/\.s*$/g, "");
-	originalString = originalString.replace(/\:s*$/g, "");
-	originalString = originalString.trim();
-	return originalString;
+	return originalString
+		.replace(/\r\n/g, "\n")
+		.replace(/\r/g, "\n")
+		.replace(/\n\n\n\n/g, "\n\n")
+		.replace(/\t/g, " ")
+		.replace(/\"\"/g, '"')
+		.replace(/ {2,}/g, " ")
+		.replace(/\,s*$/g, "")
+		.replace(/\„s*$/g, "")
+		.replace(/\.s*$/g, "")
+		.replace(/\:s*$/g, "")
+		.trim();
 }
 /****************************************************************************
  *                   Parameter Comparison function                          *
@@ -2146,11 +2111,7 @@ function isEquivalentParameters(
 	const setDifference = new Set(
 		[...compareParameters].filter((x) => !testParameters.has(x)),
 	);
-	if (setDifference.size == 0) {
-		return true;
-	} else {
-		return false;
-	}
+	return setDifference.size === 0;
 }
 
 /****************************************************************************
