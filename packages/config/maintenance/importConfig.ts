@@ -406,13 +406,20 @@ function normalizeConfig(config: Record<string, any>): Record<string, any> {
 		Object.keys(config.paramInformation).length > 0
 	) {
 		// Filter out duplicates between partial and non-partial params
-		const allowedKeys = Object.keys(config.paramInformation).filter(
-			(key, _, arr) =>
-				// Allow partial params
-				!/^\d+$/.test(key) ||
-				// and non-partial params without a corresponding partial param
-				!arr.some((otherKey) => otherKey.startsWith(`${key}[`)),
-		);
+		const allowedKeys = Object.entries<Record<string, any>>(
+			config.paramInformation,
+		)
+			.filter(
+				([key, param], _, arr) =>
+					// Allow partial params
+					!/^\d+$/.test(key) ||
+					// and non-partial params...
+					// either with a condition
+					"$if" in param ||
+					// or without a corresponding partial param
+					!arr.some(([otherKey]) => otherKey.startsWith(`${key}[`)),
+			)
+			.map(([key]) => key);
 
 		for (const [key, original] of Object.entries<any>(
 			config.paramInformation,
