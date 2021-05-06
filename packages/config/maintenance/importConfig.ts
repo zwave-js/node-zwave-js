@@ -68,7 +68,7 @@ const program = yargs
 	.option("manufacturer_folder", {
 		alias: "M",
 		description:
-			"Download all zwa files for the specified manufacturer (using the zwa website manufacturer ID)",
+			"Download all Z-Wave alliance files for the specified manufacturer (using the zwa website manufacturer ID)",
 		type: "array",
 		array: true,
 	})
@@ -848,7 +848,7 @@ async function parseZWAFiles(): Promise<void> {
 /***
  * Combine zWave Alliance Device Files
  */
-function combineDeviceFiles(json: Array<object>) {
+function combineDeviceFiles(json: Record<string, any>[]) {
 	for (const file of json) {
 		const identifier = file.Identifier ? file.Identifier : "Unknown";
 		const normalizedIdentifier = normalizeIdentifier(identifier);
@@ -1062,7 +1062,7 @@ function combineDeviceFiles(json: Array<object>) {
 /***
  * Combine zWave Alliance Device Files
  */
-function sanitizeFields(json: Array<object>) {
+function sanitizeFields(json: Record<string, any>[]) {
 	for (const file of json) {
 		if (file.ProductId) {
 			file.Identifier = file.Identifier
@@ -1269,7 +1269,6 @@ async function parseZWAProduct(
 	 **********************/
 	const parameters = product.ConfigurationParameters;
 
-	const requiresManualReview = false;
 	for (const param of parameters) {
 		const parsedParam =
 			newConfig.paramInformation[param.ParameterNumber] ?? {};
@@ -1294,13 +1293,12 @@ async function parseZWAProduct(
 		parsedParam.minValue = param.minValue;
 		parsedParam.maxValue = param.maxValue;
 		parsedParam.readOnly = param.flagReadOnly;
+		// zWave Alliance typically puts (write only) in the description
 		parsedParam.writeOnly = param.Description.toLowerCase().includes(
 			"write",
-		) // zWave Alliance typically puts (write only) in the description
-			? true
-			: false;
+		);
 		parsedParam.allowManualEntry =
-			param.ConfigurationParameterValues.length > 1 ? false : true;
+			param.ConfigurationParameterValues.length <= 1;
 		parsedParam.defaultValue = updateNumberOrDefault(
 			param.DefaultValue,
 			parsedParam.value,
@@ -1308,34 +1306,17 @@ async function parseZWAProduct(
 		);
 
 		// Setup the unit
-		if (
-			parsedParam.description.toLowerCase().includes("hour") ||
-			parsedParam.description.toLowerCase().includes("hours")
-		) {
+		if (/hours?/i.test(parsedParam.description)) {
 			parsedParam.unit = "hours";
-		} else if (
-			parsedParam.description.toLowerCase().includes("minute") ||
-			parsedParam.description.toLowerCase().includes("minutes")
-		) {
+		} else if (/minutes?/i.test(parsedParam.description)) {
 			parsedParam.unit = "minutes";
-		} else if (
-			parsedParam.description.toLowerCase().includes("second") ||
-			parsedParam.description.toLowerCase().includes("seconds")
-		) {
+		} else if (/seconds?/i.test(parsedParam.description)) {
 			parsedParam.unit = "seconds";
-		} else if (
-			parsedParam.description.toLowerCase().includes("percent") ||
-			parsedParam.description.toLowerCase().includes("percentage")
-		) {
+		} else if (/percent(age)?/i.test(parsedParam.description)) {
 			parsedParam.unit = "%";
-		} else if (
-			parsedParam.description.toLowerCase().includes("centigrade") ||
-			parsedParam.description.toLowerCase().includes("celsius")
-		) {
+		} else if (/centigrade|celsius/i.test(parsedParam.description)) {
 			parsedParam.unit = "°C";
-		} else if (
-			parsedParam.description.toLowerCase().includes("fahrenheit")
-		) {
+		} else if (/fahrenheit/i.test(parsedParam.description)) {
 			parsedParam.unit = "°F";
 		}
 
@@ -1376,20 +1357,24 @@ async function parseZWAProduct(
 						value: item.To,
 					};
 					parsedParam.options.push(opt);
-					if (item.From < parsedParam.minValue) {
-						parsedParam.minValue = item.From;
-					}
-					if (item.To > parsedParam.maxValue) {
-						parsedParam.maxValue = item.To;
-					}
+					parsedParam.minValue = Math.min(
+						parsedParam.minValue,
+						item.From,
+					);
+					parsedParam.maxValue = Math.max(
+						parsedParam.maxValue,
+						item.To,
+					);
 				} else {
 					parsedParam.allowManualEntry = true;
-					if (parsedParam.minValue > item.From) {
-						parsedParam.minValue = item.From;
-					}
-					if (parsedParam.maxValue < item.To) {
-						parsedParam.maxValue = item.To;
-					}
+					parsedParam.minValue = Math.min(
+						parsedParam.minValue,
+						item.From,
+					);
+					parsedParam.maxValue = Math.max(
+						parsedParam.maxValue,
+						item.To,
+					);
 				}
 			}
 		}
@@ -1450,12 +1435,8 @@ async function parseZWAProduct(
 			zwavePlus = false; // Required
 			addCompat = true;
 
-			if (newConfig.compat) {
-				newConfig.compat.treatBasicSetAsEvent = true;
-			} else {
-				newConfig.compat = {};
-				newConfig.compat.treatBasicSetAsEvent = true;
-			}
+			newConfig.compat ??= {};
+			newConfig.compat.treatBasicSetAsEvent = true;
 		}
 
 		newAssociations[ass.GroupNumber] = {
@@ -1497,23 +1478,21 @@ ${JSONC.stringify(normalizeConfig(newConfig), null, "\t")}`;
 }
 
 async function maintenanceParse(): Promise<void> {
-	await fs.ensureDir(zwaTempDir);
+	// Parse json files in the zwaTempDir
+	const zwaData = [];
 
 	// Load the zwa files
+	await fs.ensureDir(zwaTempDir);
 	const zwaFiles = await enumFilesRecursive(zwaTempDir, (file) =>
 		file.endsWith(".json"),
 	);
 	for (const file of zwaFiles) {
-		const j = await fs.readFile(file, "utf8");
-
-		/**
-		 * zWave Alliance numbering isn't always continuous and an html page is 
-		returned when a device number doesn't. Test for and delete such files.
-		 */
-		if (j.charAt(0) === "{") {
-			zwaData.push(JSON.parse(j));
-		} else {
-			void fs.unlink(file);
+		// zWave Alliance numbering isn't always continuous and an html page is
+		// returned when a device number doesn't. Test for and delete such files.
+		try {
+			zwaData.push(await fs.readJSON(file, { encoding: "utf8" }));
+		} catch {
+			await fs.unlink(file);
 		}
 	}
 
@@ -1531,14 +1510,12 @@ async function maintenanceParse(): Promise<void> {
 			console.log(`Error processing: ${file} - ${e}`);
 		}
 
-		let includedZwaFiles = [];
+		const includedZwaFiles: number[] = [];
 
 		try {
 			for (const device of jsonData.devices) {
-				if (Array.isArray(device.zwaveAllianceId)) {
-					includedZwaFiles = includedZwaFiles.concat(
-						device.zwaveAllianceId,
-					);
+				if (isArray(device.zwaveAllianceId)) {
+					includedZwaFiles.push(...device.zwaveAllianceId);
 				} else if (device.zwaveAllianceId) {
 					includedZwaFiles.push(device.zwaveAllianceId);
 				}
@@ -1589,14 +1566,6 @@ async function maintenanceParse(): Promise<void> {
 // ${jsonData.description}`) : ""}
 ${JSONC.stringify(normalizeConfig(jsonData), null, "\t")}`;
 			await fs.writeFile(file, output, "utf8");
-		}
-	}
-
-	function keepLongest(current_group: any, test_group: any) {
-		if (current_group.length >= test_group.length) {
-			return current_group;
-		} else {
-			return test_group;
 		}
 	}
 }
@@ -2276,18 +2245,6 @@ void (async () => {
 		}
 
 		if (program.source.includes("zwa")) {
-			if (
-				program.download &&
-				program.ids &&
-				!program.manufacturer_folder
-			) {
-				await downloadDevicesZWA(
-					program.ids
-						?.map((id) => parseInt(id as any))
-						.filter((num) => !Number.isNaN(num)),
-				);
-			}
-
 			if (program.manufacturer_folder) {
 				const deviceIds = await retrieveZWADeviceIds(
 					false,
@@ -2296,6 +2253,12 @@ void (async () => {
 						.filter((num) => !Number.isNaN(num)),
 				);
 				await downloadDevicesZWA(deviceIds);
+			} else if (program.download && program.ids) {
+				await downloadDevicesZWA(
+					program.ids
+						?.map((id) => parseInt(id as any))
+						.filter((num) => !Number.isNaN(num)),
+				);
 			}
 
 			if (program.manufacturers || program.devices) await parseZWAFiles();
