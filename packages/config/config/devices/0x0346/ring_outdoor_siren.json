@@ -108,7 +108,7 @@
 			"allowManualEntry": true
 		},
 		"9": {
-			"label": "QRBP switch Threshold",
+			"label": "QRBP Switch Threshold",
 			"description": "Once the rechargeable battery has charged to this threshold, device can switch to it if running on D-cells",
 			"valueSize": 1,
 			"unit": "%",
@@ -122,7 +122,7 @@
 		"10": {
 			"label": "LED Ramp Time",
 			"valueSize": 1,
-			"unit": "ten milliseconds",
+			"unit": "10 ms",
 			"minValue": 0,
 			"maxValue": 255,
 			"defaultValue": 50,
