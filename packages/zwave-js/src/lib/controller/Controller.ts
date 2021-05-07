@@ -1650,6 +1650,8 @@ export class ZWaveController extends EventEmitter {
 	}
 
 	private async healNodeInternal(nodeId: number): Promise<boolean> {
+		const node = this.nodes.getOrThrow(nodeId);
+
 		this.driver.controllerLog.logNode(nodeId, {
 			message: `healing node...`,
 			direction: "none",
@@ -1706,7 +1708,13 @@ export class ZWaveController extends EventEmitter {
 			}
 		}
 
-		// 2. delete all return routes so we can assign new ones
+		// 2. re-create the SUC return route, just in case
+		if (await this.deleteSUCReturnRoute(nodeId)) {
+			node.hasSUCReturnRoute = false;
+		}
+		node.hasSUCReturnRoute = await this.assignSUCReturnRoute(nodeId);
+
+		// 3. delete all return routes so we can assign new ones
 		for (let attempt = 1; attempt <= maxAttempts; attempt++) {
 			this.driver.controllerLog.logNode(nodeId, {
 				message: `deleting return routes (attempt ${attempt})...`,
@@ -1736,7 +1744,7 @@ export class ZWaveController extends EventEmitter {
 			}
 		}
 
-		// 3. Assign up to 4 return routes for associations, one of which should be the controller
+		// 4. Assign up to 4 return routes for associations, one of which should be the controller
 		let associatedNodes: number[] = [];
 		const maxReturnRoutes = 4;
 		try {
