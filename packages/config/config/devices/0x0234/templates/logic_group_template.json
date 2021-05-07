@@ -556,8 +556,8 @@
 		"writeOnly": false,
 		"allowManualEntry": true
 	},
-	"watt_threshold_power": {
-		"label": "Power Change Threshold: Power Off",
+	"power_overload_limit": {
+		"label": "Power Overload Limit",
 		"valueSize": 2,
 		"unit": "W",
 		"minValue": 0,
