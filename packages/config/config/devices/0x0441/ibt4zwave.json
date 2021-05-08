@@ -123,7 +123,7 @@
 			]
 		},
     "30[0xff0000]": {
-			"label": "Alarm Configuration - 1st Slot Notification Type",
+			"label": "Alarm Configuration - 1st Slot Notification Status",
 			"valueSize": 4,
 			"minValue": 0,
 			"maxValue": 255,
