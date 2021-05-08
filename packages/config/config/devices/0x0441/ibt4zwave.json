@@ -123,7 +123,7 @@
 			]
 		},
     "30[0xff0000]": {
-			"label": "Alarm Configuration - 1st Slot Notification Status",
+			"label": "Alarm Configuration - 1st Slot Notification Event",
 			"valueSize": 4,
 			"minValue": 0,
 			"maxValue": 255,
@@ -186,7 +186,7 @@
 		},		
 		"31[0xff0000]": {
 			"$import": "#30[0xff0000]",
-			"label": "Alarm Configuration - 2nd Slot Notification Status",
+			"label": "Alarm Configuration - 2nd Slot Notification Event",
 			"defaultValue": 255
 		},
 		"31[0xff00]": {
@@ -206,7 +206,7 @@
 		},		
 		"32[0xff0000]": {
 			"$import": "#30[0xff0000]",
-			"label": "Alarm Configuration - 3rd Slot Notification Status",
+			"label": "Alarm Configuration - 3rd Slot Notification Event",
 			"defaultValue": 255
 		},
 		"32[0xff00]": {
@@ -226,7 +226,7 @@
 		},		
 		"33[0xff0000]": {
 			"$import": "#30[0xff0000]",
-			"label": "Alarm Configuration - 4th Slot Notification Status",
+			"label": "Alarm Configuration - 4th Slot Notification Event",
 			"defaultValue": 255
 		},
 		"33[0xff00]": {
@@ -246,7 +246,7 @@
 		},		
 		"34[0xff0000]": {
 			"$import": "#30[0xff0000]",
-			"label": "Alarm Configuration - 5th Slot Notification Status",
+			"label": "Alarm Configuration - 5th Slot Notification Event",
 			"defaultValue": 255
 		},
 		"34[0xff00]": {
