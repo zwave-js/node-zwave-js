@@ -615,6 +615,14 @@ export class ZWaveNode extends Endpoint {
 		return this._deviceConfig?.label;
 	}
 
+	public get dbUrl(): string {
+		const manufacturerId = num2hex(this.manufacturerId);
+		const productType = num2hex(this.productType);
+		const productId = num2hex(this.productId);
+		const firmwareVersion = this.firmwareVersion || "0.0";
+		return `https://devices.zwave-js.io/?jumpTo=${manufacturerId}:${productType}:${productId}:${firmwareVersion}`;
+	}
+
 	private _neighbors: readonly number[] = [];
 	/**
 	 * The IDs of all direct neighbors of this node
