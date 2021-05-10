@@ -29,6 +29,7 @@ import {
 	ZWaveErrorCodes,
 } from "@zwave-js/core";
 import {
+	formatId,
 	getEnumMemberName,
 	JSONObject,
 	Mixin,
@@ -621,9 +622,9 @@ export class ZWaveNode extends Endpoint {
 			this.productType != undefined &&
 			this.productId != undefined
 		) {
-			const manufacturerId = num2hex(this.manufacturerId);
-			const productType = num2hex(this.productType);
-			const productId = num2hex(this.productId);
+			const manufacturerId = formatId(this.manufacturerId);
+			const productType = formatId(this.productType);
+			const productId = formatId(this.productId);
 			const firmwareVersion = this.firmwareVersion || "0.0";
 			return `https://devices.zwave-js.io/?jumpTo=${manufacturerId}:${productType}:${productId}:${firmwareVersion}`;
 		}
