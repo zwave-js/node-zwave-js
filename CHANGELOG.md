@@ -2,8 +2,41 @@
 <!--
 	Add placeholder for next release with `wip` snippet
 -->
+## __WORK IN PROGRESS__
+### Breaking changes
+
+### Features
+* Implement get/setPowerlevel, get/setRFRegion controller methods
+* Auto-enable TX status reports for later use in the driver
+* Add `controller.getNodeNeighbors` method, deprecate `node.neighbors` property
+
+### Bugfixes
+* Avoid polynomial regex in `isPrintableASCIIWithNewlines`
+* Validate that mandatory CCs make sense before appying them to nodes or endpoints
+* Eliminate `@zwave-js/maintenance` `devDependency` from packages
+* Query `Version CC` version before relying on it
+
+### Config file changes
+* Disable supervision for ZL-PD-100
+* Fix typos in ZTS-110
+* Add additional identifier for FGKF-601
+* Update Devolo Siren param 31
+* Add additional identifiers for FGWP102
+* Cleanup and template Aeotec configurations (part 3)
+* Add new power reporting parameter to ZEN25
+* Update zw97 device config for 2nd gen EvaLogik hardware
+* Remove Popp 701202 FW version limits
+* Add PoPP 10-Years Smoke Detector Without Siren
+* Update ZSE11 with ZWA import
+* Add Ring contact sensor v2
+* Add Ring Keypad v2
+* Add compat flag preserveRootApplicationCCValueIDs to zen20
+* Add FGFS-101 v3.4 productId
+
+### Changes under the hood
+* When linting config files, conditions are now correctly considered
+
 ## 7.3.0 (2021-04-29)
-<!-- ### Breaking changes -->
 ### Features
 * Added a driver option to specify a user-defined directory to prioritize loading device config files from. This can be used to simplify testing and developing new configs.
 * When a value is updated either by polling or through unsolicited updates, pending verification polls are canceled now. This reduces traffic for nodes that report status changes on their own.

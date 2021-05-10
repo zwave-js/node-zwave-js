@@ -164,6 +164,26 @@
 		"writeOnly": false,
 		"allowManualEntry": true
 	},
+	"base_true_false": {
+		"valueSize": 1,
+		"minValue": 0,
+		"maxValue": 1,
+		"defaultValue": 0,
+		"unsigned": true,
+		"readOnly": false,
+		"writeOnly": false,
+		"allowManualEntry": false,
+		"options": [
+			{
+				"label": "False",
+				"value": 0
+			},
+			{
+				"label": "True",
+				"value": 1
+			}
+		]
+	},
 	"dimming_timing_with_0": {
 		"description": "Set 0 to disable",
 		"valueSize": 1,

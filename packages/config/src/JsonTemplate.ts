@@ -5,7 +5,7 @@ import JSON5 from "json5";
 import * as path from "path";
 
 const IMPORT_KEY = "$import";
-const importSpecifierRegex = /^(?<filename>[\w\d\/\\\._-]+\.json)?(?:#(?<selector>[\w\d\/\._-]+))?$/i;
+const importSpecifierRegex = /^(?<filename>[\w\d\/\\\._-]+\.json)?(?:#(?<selector>[\w\d\/\._-]+(?:\[0x[0-9a-fA-F]+\])?))?$/i;
 type FileCache = Map<string, Record<string, unknown>>;
 
 /** Parses a JSON file with $import keys and replaces them with the selected objects */

@@ -20,6 +20,7 @@
 -   Advanced usage
 
     -   [Send custom messages](usage/custom.md)
+    -   [External config DB location](usage/external-config.md)
 
 -   Troubleshooting
 

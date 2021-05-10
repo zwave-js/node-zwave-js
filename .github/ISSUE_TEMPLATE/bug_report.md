@@ -2,7 +2,7 @@
 name: Bug report
 about: Use this template if something is not working correctly or to report errors in existing device config files.
 title: ""
-labels: bug
+labels:
 assignees:
 ---
 
