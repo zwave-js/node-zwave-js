@@ -180,82 +180,82 @@
 			]
 		},
 		"31[0xff000000]": {
-			"$import": "#30[0xff000000]",
+			"$import": "#paramInformation/30[0xff000000]",
 			"label": "Alarm Configuration - 2nd Slot Notification Type",
 			"defaultValue": 5
 		},		
 		"31[0xff0000]": {
-			"$import": "#30[0xff0000]",
+			"$import": "#paramInformation/30[0xff0000]",
 			"label": "Alarm Configuration - 2nd Slot Notification Event",
 			"defaultValue": 255
 		},
 		"31[0xff00]": {
-			"$import": "#30[0xff00]",
+			"$import": "#paramInformation/30[0xff00]",
 			"label": "Alarm Configuration - 2nd Slot Notification Event Parameter",
 			"defaultValue": 0
 		},
 		"31[0xff]": {
-			"$import": "#30[0xff]",
+			"$import": "#paramInformation/30[0xff]",
 			"label": "Alarm Configuration - 2nd Slot Action",
 			"defaultValue": 0
 		},		
 		"32[0xff000000]": {
-			"$import": "#30[0xff000000]",
+			"$import": "#paramInformation/30[0xff000000]",
 			"label": "Alarm Configuration - 3rd Slot Notification Type",
 			"defaultValue": 1
 		},		
 		"32[0xff0000]": {
-			"$import": "#30[0xff0000]",
+			"$import": "#paramInformation/30[0xff0000]",
 			"label": "Alarm Configuration - 3rd Slot Notification Event",
 			"defaultValue": 255
 		},
 		"32[0xff00]": {
-			"$import": "#30[0xff00]",
+			"$import": "#paramInformation/30[0xff00]",
 			"label": "Alarm Configuration - 3rd Slot Notification Event Parameter",
 			"defaultValue": 0
 		},
 		"32[0xff]": {
-			"$import": "#30[0xff]",
+			"$import": "#paramInformation/30[0xff]",
 			"label": "Alarm Configuration - 3rd Slot Action",
 			"defaultValue": 0
 		},
 		"33[0xff000000]": {
-			"$import": "#30[0xff000000]",
+			"$import": "#paramInformation/30[0xff000000]",
 			"label": "Alarm Configuration - 4th Slot Notification Type",
 			"defaultValue": 2
 		},		
 		"33[0xff0000]": {
-			"$import": "#30[0xff0000]",
+			"$import": "#paramInformation/30[0xff0000]",
 			"label": "Alarm Configuration - 4th Slot Notification Event",
 			"defaultValue": 255
 		},
 		"33[0xff00]": {
-			"$import": "#30[0xff00]",
+			"$import": "#paramInformation/30[0xff00]",
 			"label": "Alarm Configuration - 4th Slot Notification Event Parameter",
 			"defaultValue": 0
 		},
 		"33[0xff]": {
-			"$import": "#30[0xff]",
+			"$import": "#paramInformation/30[0xff]",
 			"label": "Alarm Configuration - 4th Slot Action",
 			"defaultValue": 0
 		},
 		"34[0xff000000]": {
-			"$import": "#30[0xff000000]",
+			"$import": "#paramInformation/30[0xff000000]",
 			"label": "Alarm Configuration - 5th Slot Notification Type",
 			"defaultValue": 4
 		},		
 		"34[0xff0000]": {
-			"$import": "#30[0xff0000]",
+			"$import": "#paramInformation/30[0xff0000]",
 			"label": "Alarm Configuration - 5th Slot Notification Event",
 			"defaultValue": 255
 		},
 		"34[0xff00]": {
-			"$import": "#30[0xff00]",
+			"$import": "#paramInformation/30[0xff00]",
 			"label": "Alarm Configuration - 5th Slot Notification Event Parameter",
 			"defaultValue": 0
 		},
 		"34[0xff]": {
-			"$import": "#30[0xff]",
+			"$import": "#paramInformation/30[0xff]",
 			"label": "Alarm Configuration - 5th Slot Action",
 			"defaultValue": 0
 		},
