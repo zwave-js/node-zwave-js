@@ -42,7 +42,7 @@
 			"allowManualEntry": true
 		},
 		"3": {
-			"label": "Application Level Retries",
+			"label": "Application Level Retry Base Wait Time Period",
 			"valueSize": 1,
 			"unit": "seconds",
 			"minValue": 1,
@@ -53,7 +53,7 @@
 			"allowManualEntry": true
 		},
 		"4": {
-			"label": "Led Indicator",
+			"label": "LED Indicator",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 2,
@@ -63,15 +63,15 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "Don't show green",
+					"label": "Disable",
 					"value": 0
 				},
 				{
-					"label": "Show green after Fault",
+					"label": "Light up after fault",
 					"value": 1
 				},
 				{
-					"label": "Show green after Intrusion and Intrusion clear",
+					"label": "Light up after intrusion and intrusion clear",
 					"value": 2
 				}
 			]
@@ -113,37 +113,15 @@
 			"allowManualEntry": true
 		},
 		"8": {
-			"label": "Motion Detection Mode",
-			"description": "Adjusts motion sensitivity",
+			"label": "Motion Detection Sensitivity",
+			"description": "0 = lowest, 4 = highest",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 4,
 			"defaultValue": 3,
 			"readOnly": false,
 			"writeOnly": false,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "0",
-					"value": 0
-				},
-				{
-					"label": "1",
-					"value": 1
-				},
-				{
-					"label": "2",
-					"value": 2
-				},
-				{
-					"label": "3",
-					"value": 3
-				},
-				{
-					"label": "4",
-					"value": 4
-				}
-			]
+			"allowManualEntry": true
 		},
 		"9": {
 			"label": "Lighting Sensor",
@@ -156,11 +134,11 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "Enabled",
+					"label": "Enable",
 					"value": 0
 				},
 				{
-					"label": "Disabled",
+					"label": "Disable",
 					"value": 1
 				}
 			]
@@ -178,9 +156,9 @@
 			"allowManualEntry": true
 		},
 		"11": {
-			"label": "Supervisory Report Timeout",
+			"label": "Supervision Report Timeout",
 			"valueSize": 2,
-			"unit": "milliseconds",
+			"unit": "ms",
 			"minValue": 500,
 			"maxValue": 30000,
 			"defaultValue": 10000,
