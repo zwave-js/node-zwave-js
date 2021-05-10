@@ -17,12 +17,11 @@
 		"max": "255.255"
 	},
 	"paramInformation": {
-		"30": {
-			"label": "Alarm Configuration - 1st Slot",
-			"description": "This parameter determines to which alarm frames and how the device should react. the parameters consist of 4 bytes, three most significant bytes are set according to the official Z-Wave protocol specification.  default value [0x00, 0x00, 0x00, 0x00] (disabled). the 4 bytes must be converted to a single decimal value to be entered in the gateway sending the configuration parameter value. example: event: home security (0x07) status: motion detected (0x08) parameter: none (0x00) action: open (0x01) = 0x07080001 which is 117964801 decimal to be entered in the gateway",
+		"30[0xff000000]": {
+			"label": "Alarm Configuration - 1st Slot Notification Type",
 			"valueSize": 4,
-			"minValue": 65535,
-			"maxValue": 4294967042,
+			"minValue": 0,
+			"maxValue": 22,
 			"defaultValue": 0,
 			"unsigned": true,
 			"readOnly": false,
@@ -30,123 +29,236 @@
 			"allowManualEntry": true,
 			"options": [
 				{
-					"label": "Event/state parameters",
-					"value": 65535
+					"label": "Disabled",
+					"value": 0
+				},
+								{
+					"label": "Smoke Alarm",
+					"value": 1
 				},
 				{
-					"label": "Notification status",
-					"value": 16777215
+					"label": "CO Alarm",
+					"value": 2
 				},
 				{
-					"label": "[msb] – notification type",
-					"value": 4294967042
+					"label": "CO2 Alarm",
+					"value": 3
+				},
+				{
+					"label": "Heat Alarm",
+					"value": 4
+				},
+				{
+					"label": "Water Alarm",
+					"value": 5
+				},
+				{
+					"label": "Access Control",
+					"value": 6
+				},
+				{
+					"label": "Home Security",
+					"value": 7
+				},
+				{
+					"label": "Power Management",
+					"value": 8
+				},
+				{
+					"label": "System",
+					"value": 9
+				},
+				{
+					"label": "Emergency Alarm",
+					"value": 10
+				},
+				{
+					"label": "Clock",
+					"value": 11
+				},
+				{
+					"label": "Appliance",
+					"value": 12
+				},
+				{
+					"label": "Home Health",
+					"value": 13
+				},
+				{
+					"label": "Siren",
+					"value": 14
+				},
+				{
+					"label": "Water Valve",
+					"value": 15
+				},
+				{
+					"label": "Weather Alarm",
+					"value": 16
+				},
+				{
+					"label": "Irrigation",
+					"value": 17
+				},
+				{
+					"label": "Gas Alarm",
+					"value": 18
+				},
+				{
+					"label": "Pest Control",
+					"value": 19
+				},
+				{
+					"label": "Light Sensor",
+					"value": 20
+				},
+				{
+					"label": "Water Quality Monitoring",
+					"value": 21
+				},
+				{
+					"label": "Home Monitoring",
+					"value": 22
 				}
 			]
 		},
-		"31": {
-			"label": "Alarm Configuration - 2nd Slot",
-			"description": "This parameter determines to which alarm frames and how the device should react. the parameters consist of 4 bytes, three most significant bytes are set according to the official Z-Wave protocol specification. default value [0x05, 0xff, 0x00, 0x00](water alarm, any notification, no action).  the 4 bytes must be converted to a single decimal value to be entered in the gateway sending the configuration parameter value. example: event: home security (0x07) status: motion detected (0x08) parameter: none (0x00) action: open (0x01) = 0x07080001 which is 117964801 decimal to be entered in the gateway",
+    "30[0xff0000]": {
+			"label": "Alarm Configuration - 1st Slot Notification Event",
 			"valueSize": 4,
-			"minValue": 65535,
-			"maxValue": 4294967042,
-			"defaultValue": 100597760,
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 0,
 			"unsigned": true,
 			"readOnly": false,
 			"writeOnly": false,
 			"allowManualEntry": true,
 			"options": [
 				{
-					"label": "Event/state parameters",
-					"value": 65535
+					"label": "Any Notification,",
+					"value": 255
 				},
 				{
-					"label": "Notification status",
-					"value": 16777215
-				},
-				{
-					"label": "[msb] – notification type",
-					"value": 4294967042
+					"label": "Disabled",
+					"value": 0
 				}
 			]
 		},
-		"32": {
-			"label": "Alarm Configuration - 3rd Slot",
-			"description": "This parameter determines to which alarm frames and how the device should react. the parameters consist of 4 bytes, three most significant bytes are set according to the official Z-Wave protocol specification. default value[0x01, 0xff, 0x00, 0x00](smoke alarm, any notification, no action).  the 4 bytes must be converted to a single decimal value to be entered in the gateway sending the configuration parameter value. example: event: home security (0x07) status: motion detected (0x08) parameter: none (0x00) action: open (0x01) = 0x07080001 which is 117964801 decimal to be entered in the gateway",
+        "30[0xff00]": {
+			"label": "Alarm Configuration - 1st Slot Notification Event Parameter",
 			"valueSize": 4,
-			"minValue": 65535,
-			"maxValue": 4294967042,
-			"defaultValue": 33488896,
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 0,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true,
+		},
+        "30[0xff]": {
+			"label": "Alarm Configuration - 1st Slot Action",
+			"valueSize": 4,
+			"minValue": 0,
+			"maxValue": 2,
+			"defaultValue": 0,
 			"unsigned": true,
 			"readOnly": false,
 			"writeOnly": false,
 			"allowManualEntry": true,
 			"options": [
 				{
-					"label": "Event/state parameters",
-					"value": 65535
+					"label": "No Action",
+					"value": 0
 				},
 				{
-					"label": "Notification status",
-					"value": 16777215
+					"label": "Open",
+					"value": 1
 				},
 				{
-					"label": "[msb] – notification type",
-					"value": 4294967042
+					"label": "Close",
+					"value": 2
 				}
 			]
 		},
-		"33": {
-			"label": "Alarm Configuration - 4rd Slot",
-			"description": "This parameter determines to which alarm frames and how the device should react. the parameters consist of 4 bytes, three most significant bytes are set according to the official Z-Wave protocol specification. default value [0x02, 0xff, 0x00, 0x00] (co alarm, any notification, no action). the 4 bytes must be converted to a single decimal value to be entered in the gateway sending the configuration parameter value. example: event: home security (0x07) status: motion detected (0x08) parameter: none (0x00) action: open (0x01) = 0x07080001 which is 117964801 decimal to be entered in the gateway",
-			"valueSize": 4,
-			"minValue": 65535,
-			"maxValue": 4294967042,
-			"defaultValue": 50266112,
-			"unsigned": true,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true,
-			"options": [
-				{
-					"label": "Event/state parameters",
-					"value": 65535
-				},
-				{
-					"label": "Notification status",
-					"value": 16777215
-				},
-				{
-					"label": "[msb] – notification type",
-					"value": 4294967042
-				}
-			]
+		"31[0xff000000]": {
+			"$import": "#paramInformation/30[0xff000000]",
+			"label": "Alarm Configuration - 2nd Slot Notification Type",
+			"defaultValue": 5
+		},		
+		"31[0xff0000]": {
+			"$import": "#paramInformation/30[0xff0000]",
+			"label": "Alarm Configuration - 2nd Slot Notification Event",
+			"defaultValue": 255
 		},
-		"34": {
-			"label": "Alarm Configuration - 5th Slot",
-			"description": "This parameter determines to which alarm frames and how the device should react. the parameters consist of 4 bytes, three most significant bytes are set according to the official Z-Wave protocol specification. default value [0x04, 0xff, 0x00, 0x00] (heat alarm, any notification, no action). the 4 bytes must be converted to a single decimal value to be entered in the gateway sending the configuration parameter value. example: event: home security (0x07) status: motion detected (0x08) parameter: none (0x00) action: open (0x01) = 0x07080001 which is 117964801 decimal to be entered in the gateway",
-			"valueSize": 4,
-			"minValue": 65535,
-			"maxValue": 4294967042,
-			"defaultValue": 83820544,
-			"unsigned": true,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true,
-			"options": [
-				{
-					"label": "Event/state parameters",
-					"value": 65535
-				},
-				{
-					"label": "Notification status",
-					"value": 16777215
-				},
-				{
-					"label": "[msb] – notification type",
-					"value": 4294967042
-				}
-			]
-		}
+		"31[0xff00]": {
+			"$import": "#paramInformation/30[0xff00]",
+			"label": "Alarm Configuration - 2nd Slot Notification Event Parameter",
+			"defaultValue": 0
+		},
+		"31[0xff]": {
+			"$import": "#paramInformation/30[0xff]",
+			"label": "Alarm Configuration - 2nd Slot Action",
+			"defaultValue": 0
+		},		
+		"32[0xff000000]": {
+			"$import": "#paramInformation/30[0xff000000]",
+			"label": "Alarm Configuration - 3rd Slot Notification Type",
+			"defaultValue": 1
+		},		
+		"32[0xff0000]": {
+			"$import": "#paramInformation/30[0xff0000]",
+			"label": "Alarm Configuration - 3rd Slot Notification Event",
+			"defaultValue": 255
+		},
+		"32[0xff00]": {
+			"$import": "#paramInformation/30[0xff00]",
+			"label": "Alarm Configuration - 3rd Slot Notification Event Parameter",
+			"defaultValue": 0
+		},
+		"32[0xff]": {
+			"$import": "#paramInformation/30[0xff]",
+			"label": "Alarm Configuration - 3rd Slot Action",
+			"defaultValue": 0
+		},
+		"33[0xff000000]": {
+			"$import": "#paramInformation/30[0xff000000]",
+			"label": "Alarm Configuration - 4th Slot Notification Type",
+			"defaultValue": 2
+		},		
+		"33[0xff0000]": {
+			"$import": "#paramInformation/30[0xff0000]",
+			"label": "Alarm Configuration - 4th Slot Notification Event",
+			"defaultValue": 255
+		},
+		"33[0xff00]": {
+			"$import": "#paramInformation/30[0xff00]",
+			"label": "Alarm Configuration - 4th Slot Notification Event Parameter",
+			"defaultValue": 0
+		},
+		"33[0xff]": {
+			"$import": "#paramInformation/30[0xff]",
+			"label": "Alarm Configuration - 4th Slot Action",
+			"defaultValue": 0
+		},
+		"34[0xff000000]": {
+			"$import": "#paramInformation/30[0xff000000]",
+			"label": "Alarm Configuration - 5th Slot Notification Type",
+			"defaultValue": 4
+		},		
+		"34[0xff0000]": {
+			"$import": "#paramInformation/30[0xff0000]",
+			"label": "Alarm Configuration - 5th Slot Notification Event",
+			"defaultValue": 255
+		},
+		"34[0xff00]": {
+			"$import": "#paramInformation/30[0xff00]",
+			"label": "Alarm Configuration - 5th Slot Notification Event Parameter",
+			"defaultValue": 0
+		},
+		"34[0xff]": {
+			"$import": "#paramInformation/30[0xff]",
+			"label": "Alarm Configuration - 5th Slot Action",
+			"defaultValue": 0
+		},
 	},
 	"metadata": {
 		"inclusion": "Install the external antenna before powering the device and adding to the Z-Wave network for the device to automatically detect and enable it (use only antennas and cables compliant with technical specification).\n\n01. Set the Z-Wave gateway into adding mode (see the Z-Wave gateway’s manual)\n02. On the IBT4ZWAVE press and release the S1 button 3 times x3 S1\n03. LEDs on the IBT4ZW AVE will start slow flashing alter nately\n04. If you are adding in Security S2 Authenticated, input the underlined part\nof the DSK (label on the box) DSK: XXXXX-XXXXX-XXXXX-XXXXX XXXXX-XXXXX-XXXXX-XXXXX\n05. When the adding process ends, the LEDs on the IBT4ZWAVE will show adding and antenna status (Table 1 in manual)",
