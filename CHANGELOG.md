@@ -3,18 +3,23 @@
 	Add placeholder for next release with `wip` snippet
 -->
 ## __WORK IN PROGRESS__
-### Breaking changes
-
 ### Features
 * Implement get/setPowerlevel, get/setRFRegion controller methods
 * Auto-enable TX status reports for later use in the driver
 * Add `controller.getNodeNeighbors` method, deprecate `node.neighbors` property
+* Define external config DB location with `ZWAVEJS_EXTERNAL_CONFIG` environment variable
+* Added the property `deviceDatabaseUrl` to `ZWaveNode` instances which includes the URL of a device's entry in the device database
+* Improve network healing strategy to avoid congestion. Healing now happens one by one, topologically, starting from the controller's neighbors. Listening nodes are prioritized over sleeping nodes.
+* Added daily log rotation for log files
 
 ### Bugfixes
 * Avoid polynomial regex in `isPrintableASCIIWithNewlines`
 * Validate that mandatory CCs make sense before appying them to nodes or endpoints
 * Eliminate `@zwave-js/maintenance` `devDependency` from packages
 * Query `Version CC` version before relying on it
+* Updating the embedded config now uses the `--production` flag for `npm install` and `yarn install`
+* Fixed a driver crash when the `SerialAPISetup` command is not supported
+* Fixed a driver crash during `Association Group Information CC` interview when a group has no members
 
 ### Config file changes
 * Disable supervision for ZL-PD-100
@@ -32,9 +37,19 @@
 * Add Ring Keypad v2
 * Add compat flag preserveRootApplicationCCValueIDs to zen20
 * Add FGFS-101 v3.4 productId
+* Add Clamp 3 meters to DSB28, fix bitmask
+* Add Ring Motion Sensor Gen2
+* Add config file for Nice IBT4 BusT4
+* Change Aeotec Minimote config to writeOnly
+* Add zso7300 to logic group
+* Add Ring Outdoor Siren
+* Add new variant of param 52 for LZW31-SN v1.54+
+* Remove duplicate association group for Shenzhen Neo AB01Z
+* Add associations and double tap to GE 12729
 
 ### Changes under the hood
 * When linting config files, conditions are now correctly considered
+* Allow `$import`-ing from partial parameters in config files
 
 ## 7.3.0 (2021-04-29)
 ### Features
