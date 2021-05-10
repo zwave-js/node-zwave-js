@@ -357,6 +357,6 @@ jobs:
         export SENTRY_VERSION=zwave-js@${{ steps.extract_release.outputs.VERSION }}
         sentry-cli releases new $SENTRY_VERSION
         # Commits disabled until the Github integration can be enabled
-        # sentry-cli releases set-commits $SENTRY_VERSION --auto
+        sentry-cli releases set-commits $SENTRY_VERSION --auto
         sentry-cli releases files $SENTRY_VERSION upload-sourcemaps ./packages/*/build
         sentry-cli releases finalize $SENTRY_VERSION
