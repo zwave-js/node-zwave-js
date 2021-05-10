@@ -492,6 +492,8 @@ export class ZWaveController extends EventEmitter {
 					)
 					.join("")}`,
 			);
+		} else {
+			this._supportedSerialAPISetupCommands = [];
 		}
 
 		// Enable TX status report if supported
