@@ -285,7 +285,6 @@ export class ZWaveLogContainer extends winston.Container {
 			filename: this.logConfig.filename,
 			datePattern: "YYYY-MM-DD",
 			zippedArchive: true,
-			maxSize: "100m",
 			maxFiles: "7d",
 			format: createDefaultTransportFormat(false, false),
 			silent: this.isFileTransportSilent(),
