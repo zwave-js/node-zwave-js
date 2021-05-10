@@ -1490,43 +1490,107 @@ export class ZWaveController extends EventEmitter {
 		}
 
 		// Do the heal process in the background
-		void (async () => {
-			const tasks = [...this._healNetworkProgress]
-				.filter(([, status]) => status === "pending")
-				.map(async ([nodeId]) => {
-					// await the heal process for each node and treat errors as a non-successful heal
-					const result = await this.healNodeInternal(nodeId).catch(
-						() => false,
-					);
-					if (!this._healNetworkActive) return;
-
-					// Track the success in a map
-					this._healNetworkProgress.set(
-						nodeId,
-						result ? "done" : "failed",
-					);
-					// Notify listeners about the progress
-					this.emit(
-						"heal network progress",
-						new Map(this._healNetworkProgress),
-					);
-				});
-			await Promise.all(tasks);
-			// Only emit the done event when the process wasn't stopped in the meantime
-			if (this._healNetworkActive) {
-				this.emit(
-					"heal network done",
-					new Map(this._healNetworkProgress),
-				);
-			}
-			// We're done!
-			this._healNetworkActive = false;
-		})();
+		void this.healNetwork().catch(() => {
+			/* ignore errors */
+		});
 
 		// And update the progress once at the start
 		this.emit("heal network progress", new Map(this._healNetworkProgress));
 
 		return true;
+	}
+
+	private async healNetwork(): Promise<void> {
+		const pendingNodes = new Set(
+			[...this._healNetworkProgress]
+				.filter(([, status]) => status === "pending")
+				.map(([nodeId]) => nodeId),
+		);
+
+		const todoListening: number[] = [];
+		const todoSleeping: number[] = [];
+
+		const addTodo = (nodeId: number) => {
+			if (pendingNodes.has(nodeId)) {
+				pendingNodes.delete(nodeId);
+				const node = this.nodes.getOrThrow(nodeId);
+				if (node.canSleep) {
+					this.driver.controllerLog.logNode(
+						nodeId,
+						"added to healing queue for sleeping nodes",
+					);
+					todoSleeping.push(nodeId);
+				} else {
+					this.driver.controllerLog.logNode(
+						nodeId,
+						"added to healing queue for listening nodes",
+					);
+					todoListening.push(nodeId);
+				}
+			}
+		};
+
+		// We heal outwards from the controller and start with non-sleeping nodes that are healed one by one
+		try {
+			const neighbors = await this.getNodeNeighbors(this._ownNodeId!);
+			neighbors.forEach((id) => addTodo(id));
+		} catch {
+			// ignore
+		}
+
+		const doHeal = async (nodeId: number) => {
+			// await the heal process for each node and treat errors as a non-successful heal
+			const result = await this.healNodeInternal(nodeId).catch(
+				() => false,
+			);
+			if (!this._healNetworkActive) return;
+
+			// Track the success in a map
+			this._healNetworkProgress.set(nodeId, result ? "done" : "failed");
+			// Notify listeners about the progress
+			this.emit(
+				"heal network progress",
+				new Map(this._healNetworkProgress),
+			);
+
+			// Figure out which nodes to heal next
+			try {
+				const neighbors = await this.getNodeNeighbors(nodeId);
+				neighbors.forEach((id) => addTodo(id));
+			} catch {
+				// ignore
+			}
+		};
+
+		// First try to heal as many nodes as possible one by one
+		while (todoListening.length > 0) {
+			const nodeId = todoListening.shift()!;
+			await doHeal(nodeId);
+			if (!this._healNetworkActive) return;
+		}
+
+		// We might end up with a few unconnected listening nodes, try to heal them too
+		pendingNodes.forEach((nodeId) => addTodo(nodeId));
+		while (todoListening.length > 0) {
+			const nodeId = todoListening.shift()!;
+			await doHeal(nodeId);
+			if (!this._healNetworkActive) return;
+		}
+
+		// Now heal all sleeping nodes at once
+		this.driver.controllerLog.print(
+			"Healing sleeping nodes in parallel. Wake them up to heal.",
+		);
+
+		const tasks = todoSleeping.map((nodeId) => doHeal(nodeId));
+		await Promise.all(tasks);
+
+		// Only emit the done event when the process wasn't stopped in the meantime
+		if (this._healNetworkActive) {
+			this.emit("heal network done", new Map(this._healNetworkProgress));
+		}
+		// We're done!
+		this._healNetworkActive = false;
 	}
 
 	/**
@@ -1543,7 +1607,6 @@ export class ZWaveController extends EventEmitter {
 		this.driver.rejectTransactions(
 			(t) =>
 				t.message instanceof RequestNodeNeighborUpdateRequest ||
-				t.message instanceof GetRoutingInfoRequest ||
 				t.message instanceof DeleteReturnRouteRequest ||
 				t.message instanceof AssignReturnRouteRequest,
 		);
@@ -1589,6 +1652,13 @@ export class ZWaveController extends EventEmitter {
 	}
 
 	private async healNodeInternal(nodeId: number): Promise<boolean> {
+		const node = this.nodes.getOrThrow(nodeId);
+
+		this.driver.controllerLog.logNode(nodeId, {
+			message: `healing node...`,
+			direction: "none",
+		});
+
 		// The healing process consists of four steps
 		// Each step is tried up to 5 times before the healing process is considered failed
 		const maxAttempts = 5;
@@ -1640,7 +1710,13 @@ export class ZWaveController extends EventEmitter {
 			}
 		}
 
-		// 2. delete all return routes so we can assign new ones
+		// 2. re-create the SUC return route, just in case
+		if (await this.deleteSUCReturnRoute(nodeId)) {
+			node.hasSUCReturnRoute = false;
+		}
+		node.hasSUCReturnRoute = await this.assignSUCReturnRoute(nodeId);
+
+		// 3. delete all return routes so we can assign new ones
 		for (let attempt = 1; attempt <= maxAttempts; attempt++) {
 			this.driver.controllerLog.logNode(nodeId, {
 				message: `deleting return routes (attempt ${attempt})...`,
@@ -1670,7 +1746,7 @@ export class ZWaveController extends EventEmitter {
 			}
 		}
 
-		// 3. Assign up to 4 return routes for associations, one of which should be the controller
+		// 4. Assign up to 4 return routes for associations, one of which should be the controller
 		let associatedNodes: number[] = [];
 		const maxReturnRoutes = 4;
 		try {
@@ -1729,6 +1805,11 @@ ${associatedNodes.join(", ")}`,
 				}
 			}
 		}
+
+		this.driver.controllerLog.logNode(nodeId, {
+			message: `healed successfully`,
+			direction: "none",
+		});
 
 		return true;
 	}
