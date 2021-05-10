@@ -2,7 +2,7 @@
 <!--
 	Add placeholder for next release with `wip` snippet
 -->
-## 7.4.0 (2021-05-10)
+## __WORK IN PROGRESS__
 ### Features
 * Implement get/setPowerlevel, get/setRFRegion controller methods
 * Auto-enable TX status reports for later use in the driver
