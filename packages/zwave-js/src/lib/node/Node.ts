@@ -615,7 +615,10 @@ export class ZWaveNode extends Endpoint {
 		return this._deviceConfig?.label;
 	}
 
-	public get deviceDatabaseUrl(): string {
+	public get deviceDatabaseUrl(): string | undefined {
+		if (this.manufacturerId === undefined || this.productType === undefined || this.productId === undefined) {
+			return undefined;
+		}
 		const manufacturerId = num2hex(this.manufacturerId);
 		const productType = num2hex(this.productType);
 		const productId = num2hex(this.productId);

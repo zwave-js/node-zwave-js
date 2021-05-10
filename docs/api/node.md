@@ -587,7 +587,7 @@ Contains additional information about this node, loaded from a [config file](/de
 ### `deviceDatabaseUrl`
 
 ```ts
-readonly deviceDatabaseUrl: string
+readonly deviceDatabaseUrl: string | undefined
 ```
 
 The URL to the device in the device database.
