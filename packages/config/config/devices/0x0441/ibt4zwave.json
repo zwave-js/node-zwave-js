@@ -32,7 +32,7 @@
 					"label": "Disabled",
 					"value": 0
 				},
-								{
+				{
 					"label": "Smoke Alarm",
 					"value": 1
 				},
@@ -122,7 +122,7 @@
 				}
 			]
 		},
-    "30[0xff0000]": {
+		"30[0xff0000]": {
 			"label": "Alarm Configuration - 1st Slot Notification Event",
 			"valueSize": 4,
 			"minValue": 0,
@@ -143,7 +143,7 @@
 				}
 			]
 		},
-        "30[0xff00]": {
+		"30[0xff00]": {
 			"label": "Alarm Configuration - 1st Slot Notification Event Parameter",
 			"valueSize": 4,
 			"minValue": 0,
@@ -152,9 +152,9 @@
 			"unsigned": true,
 			"readOnly": false,
 			"writeOnly": false,
-			"allowManualEntry": true,
+			"allowManualEntry": true
 		},
-        "30[0xff]": {
+		"30[0xff]": {
 			"label": "Alarm Configuration - 1st Slot Action",
 			"valueSize": 4,
 			"minValue": 0,
@@ -183,7 +183,7 @@
 			"$import": "#paramInformation/30[0xff000000]",
 			"label": "Alarm Configuration - 2nd Slot Notification Type",
 			"defaultValue": 5
-		},		
+		},
 		"31[0xff0000]": {
 			"$import": "#paramInformation/30[0xff0000]",
 			"label": "Alarm Configuration - 2nd Slot Notification Event",
@@ -198,12 +198,12 @@
 			"$import": "#paramInformation/30[0xff]",
 			"label": "Alarm Configuration - 2nd Slot Action",
 			"defaultValue": 0
-		},		
+		},
 		"32[0xff000000]": {
 			"$import": "#paramInformation/30[0xff000000]",
 			"label": "Alarm Configuration - 3rd Slot Notification Type",
 			"defaultValue": 1
-		},		
+		},
 		"32[0xff0000]": {
 			"$import": "#paramInformation/30[0xff0000]",
 			"label": "Alarm Configuration - 3rd Slot Notification Event",
@@ -223,7 +223,7 @@
 			"$import": "#paramInformation/30[0xff000000]",
 			"label": "Alarm Configuration - 4th Slot Notification Type",
 			"defaultValue": 2
-		},		
+		},
 		"33[0xff0000]": {
 			"$import": "#paramInformation/30[0xff0000]",
 			"label": "Alarm Configuration - 4th Slot Notification Event",
@@ -243,7 +243,7 @@
 			"$import": "#paramInformation/30[0xff000000]",
 			"label": "Alarm Configuration - 5th Slot Notification Type",
 			"defaultValue": 4
-		},		
+		},
 		"34[0xff0000]": {
 			"$import": "#paramInformation/30[0xff0000]",
 			"label": "Alarm Configuration - 5th Slot Notification Event",
@@ -258,7 +258,7 @@
 			"$import": "#paramInformation/30[0xff]",
 			"label": "Alarm Configuration - 5th Slot Action",
 			"defaultValue": 0
-		},
+		}
 	},
 	"metadata": {
 		"inclusion": "Install the external antenna before powering the device and adding to the Z-Wave network for the device to automatically detect and enable it (use only antennas and cables compliant with technical specification).\n\n01. Set the Z-Wave gateway into adding mode (see the Z-Wave gateway’s manual)\n02. On the IBT4ZWAVE press and release the S1 button 3 times x3 S1\n03. LEDs on the IBT4ZW AVE will start slow flashing alter nately\n04. If you are adding in Security S2 Authenticated, input the underlined part\nof the DSK (label on the box) DSK: XXXXX-XXXXX-XXXXX-XXXXX XXXXX-XXXXX-XXXXX-XXXXX\n05. When the adding process ends, the LEDs on the IBT4ZWAVE will show adding and antenna status (Table 1 in manual)",
