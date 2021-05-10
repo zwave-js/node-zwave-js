@@ -617,15 +617,16 @@ export class ZWaveNode extends Endpoint {
 
 	public get deviceDatabaseUrl(): string | undefined {
 		if (
-			(this.manufacturerId && this.productType && this.productId) ==
-			undefined
-		)
-			return undefined;
-		const manufacturerId = num2hex(this.manufacturerId);
-		const productType = num2hex(this.productType);
-		const productId = num2hex(this.productId);
-		const firmwareVersion = this.firmwareVersion || "0.0";
-		return `https://devices.zwave-js.io/?jumpTo=${manufacturerId}:${productType}:${productId}:${firmwareVersion}`;
+			this.manufacturerId != undefined &&
+			this.productType != undefined &&
+			this.productId != undefined
+		) {
+			const manufacturerId = num2hex(this.manufacturerId);
+			const productType = num2hex(this.productType);
+			const productId = num2hex(this.productId);
+			const firmwareVersion = this.firmwareVersion || "0.0";
+			return `https://devices.zwave-js.io/?jumpTo=${manufacturerId}:${productType}:${productId}:${firmwareVersion}`;
+		}
 	}
 
 	private _neighbors: readonly number[] = [];
