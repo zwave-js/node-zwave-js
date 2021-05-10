@@ -584,6 +584,14 @@ readonly deviceConfig: DeviceConfig | undefined
 
 Contains additional information about this node, loaded from a [config file](/development/config-files.md#device-configuration-files).
 
+### `deviceDatabaseUrl`
+
+```ts
+readonly deviceDatabaseUrl: string | undefined
+```
+
+The URL to the device in the device database.
+
 ### `keepAwake`
 
 ```ts
