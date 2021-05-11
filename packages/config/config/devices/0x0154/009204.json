@@ -25,8 +25,6 @@
 			"maxValue": 255,
 			"defaultValue": 1,
 			"unsigned": true,
-			"readOnly": false,
-			"writeOnly": false,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -51,8 +49,6 @@
 			"maxValue": 255,
 			"defaultValue": 1,
 			"unsigned": true,
-			"readOnly": false,
-			"writeOnly": false,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -77,8 +73,6 @@
 			"maxValue": 255,
 			"defaultValue": 8,
 			"unsigned": true,
-			"readOnly": false,
-			"writeOnly": false,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -127,8 +121,6 @@
 			"maxValue": 255,
 			"defaultValue": 8,
 			"unsigned": true,
-			"readOnly": false,
-			"writeOnly": false,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -177,8 +169,6 @@
 			"maxValue": 255,
 			"defaultValue": 8,
 			"unsigned": true,
-			"readOnly": false,
-			"writeOnly": false,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -227,8 +217,6 @@
 			"maxValue": 255,
 			"defaultValue": 8,
 			"unsigned": true,
-			"readOnly": false,
-			"writeOnly": false,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -276,8 +264,6 @@
 			"maxValue": 255,
 			"defaultValue": 1,
 			"unsigned": true,
-			"readOnly": false,
-			"writeOnly": false,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -301,8 +287,6 @@
 			"maxValue": 255,
 			"defaultValue": 0,
 			"unsigned": true,
-			"readOnly": false,
-			"writeOnly": false,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -321,8 +305,6 @@
 			"minValue": 0,
 			"maxValue": 1,
 			"defaultValue": 0,
-			"readOnly": false,
-			"writeOnly": false,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -342,8 +324,6 @@
 			"maxValue": 255,
 			"defaultValue": 1,
 			"unsigned": true,
-			"readOnly": false,
-			"writeOnly": false,
 			"allowManualEntry": false,
 			"options": [
 				{

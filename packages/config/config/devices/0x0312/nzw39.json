@@ -28,8 +28,6 @@
 			"minValue": 0,
 			"maxValue": 99,
 			"defaultValue": 0,
-			"readOnly": false,
-			"writeOnly": false,
 			"allowManualEntry": true
 		},
 		"2": {
@@ -39,8 +37,6 @@
 			"minValue": 1,
 			"maxValue": 99,
 			"defaultValue": 1,
-			"readOnly": false,
-			"writeOnly": false,
 			"allowManualEntry": true
 		},
 		"3": {
@@ -50,8 +46,6 @@
 			"minValue": 0,
 			"maxValue": 3,
 			"defaultValue": 1,
-			"readOnly": false,
-			"writeOnly": false,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -79,8 +73,6 @@
 			"minValue": 0,
 			"maxValue": 1,
 			"defaultValue": 0,
-			"readOnly": false,
-			"writeOnly": false,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -101,8 +93,6 @@
 			"minValue": 0,
 			"maxValue": 32767,
 			"defaultValue": 0,
-			"readOnly": false,
-			"writeOnly": false,
 			"allowManualEntry": true
 		},
 		"7": {
@@ -112,8 +102,6 @@
 			"minValue": 0,
 			"maxValue": 1,
 			"defaultValue": 0,
-			"readOnly": false,
-			"writeOnly": false,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -133,8 +121,6 @@
 			"minValue": 0,
 			"maxValue": 99,
 			"defaultValue": 0,
-			"readOnly": false,
-			"writeOnly": false,
 			"allowManualEntry": true
 		},
 		"9": {
@@ -144,8 +130,6 @@
 			"minValue": 0,
 			"maxValue": 99,
 			"defaultValue": 0,
-			"readOnly": false,
-			"writeOnly": false,
 			"allowManualEntry": true
 		},
 		"6[0x01]": {
@@ -155,8 +139,6 @@
 			"minValue": 0,
 			"maxValue": 1,
 			"defaultValue": 1,
-			"readOnly": false,
-			"writeOnly": false,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -176,8 +158,6 @@
 			"minValue": 0,
 			"maxValue": 1,
 			"defaultValue": 0,
-			"readOnly": false,
-			"writeOnly": false,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -197,8 +177,6 @@
 			"minValue": 0,
 			"maxValue": 1,
 			"defaultValue": 0,
-			"readOnly": false,
-			"writeOnly": false,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -218,8 +196,6 @@
 			"minValue": 0,
 			"maxValue": 1,
 			"defaultValue": 0,
-			"readOnly": false,
-			"writeOnly": false,
 			"allowManualEntry": false,
 			"options": [
 				{

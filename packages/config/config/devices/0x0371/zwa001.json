@@ -29,7 +29,6 @@
 			"maxValue": 1,
 			"defaultValue": 1,
 			"readOnly": true,
-			"writeOnly": false,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -50,7 +49,6 @@
 			"maxValue": 4999,
 			"defaultValue": 2700,
 			"readOnly": true,
-			"writeOnly": false,
 			"allowManualEntry": true,
 			"options": [
 				{
@@ -67,7 +65,6 @@
 			"maxValue": 6500,
 			"defaultValue": 6500,
 			"readOnly": true,
-			"writeOnly": false,
 			"allowManualEntry": true,
 			"options": [
 				{

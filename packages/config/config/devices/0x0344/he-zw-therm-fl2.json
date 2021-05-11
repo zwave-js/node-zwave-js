@@ -23,8 +23,6 @@
 			"minValue": 0,
 			"maxValue": 1,
 			"defaultValue": 0,
-			"readOnly": false,
-			"writeOnly": false,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -43,8 +41,6 @@
 			"minValue": 0,
 			"maxValue": 2,
 			"defaultValue": 1,
-			"readOnly": false,
-			"writeOnly": false,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -67,8 +63,6 @@
 			"minValue": 1,
 			"maxValue": 6,
 			"defaultValue": 2,
-			"readOnly": false,
-			"writeOnly": false,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -103,8 +97,6 @@
 			"minValue": 1,
 			"maxValue": 7,
 			"defaultValue": 3,
-			"readOnly": false,
-			"writeOnly": false,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -145,8 +137,6 @@
 			"minValue": 10,
 			"maxValue": 90,
 			"defaultValue": 15,
-			"readOnly": false,
-			"writeOnly": false,
 			"allowManualEntry": true
 		},
 		"6": {
@@ -157,8 +147,6 @@
 			"minValue": 10,
 			"maxValue": 90,
 			"defaultValue": 15,
-			"readOnly": false,
-			"writeOnly": false,
 			"allowManualEntry": true
 		},
 		"7": {
@@ -168,8 +156,6 @@
 			"minValue": 5,
 			"maxValue": 90,
 			"defaultValue": 30,
-			"readOnly": false,
-			"writeOnly": false,
 			"allowManualEntry": true
 		},
 		"8": {
@@ -178,8 +164,6 @@
 			"minValue": 0,
 			"maxValue": 1,
 			"defaultValue": 1,
-			"readOnly": false,
-			"writeOnly": false,
 			"allowManualEntry": true
 		},
 		"9": {
@@ -188,8 +172,6 @@
 			"minValue": 0,
 			"maxValue": 1,
 			"defaultValue": 0,
-			"readOnly": false,
-			"writeOnly": false,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -209,8 +191,6 @@
 			"minValue": 1,
 			"maxValue": 7,
 			"defaultValue": 1,
-			"readOnly": false,
-			"writeOnly": false,
 			"allowManualEntry": true
 		},
 		"11": {
@@ -221,8 +201,6 @@
 			"minValue": 0,
 			"maxValue": 23,
 			"defaultValue": 0,
-			"readOnly": false,
-			"writeOnly": false,
 			"allowManualEntry": true
 		},
 		"12": {
@@ -233,8 +211,6 @@
 			"minValue": 0,
 			"maxValue": 59,
 			"defaultValue": 0,
-			"readOnly": false,
-			"writeOnly": false,
 			"allowManualEntry": true
 		},
 		"13": {
@@ -244,8 +220,6 @@
 			"minValue": 40,
 			"maxValue": 360,
 			"defaultValue": 210,
-			"readOnly": false,
-			"writeOnly": false,
 			"allowManualEntry": true
 		},
 		"14": {
@@ -255,8 +229,6 @@
 			"minValue": 50,
 			"maxValue": 370,
 			"defaultValue": 270,
-			"readOnly": false,
-			"writeOnly": false,
 			"allowManualEntry": true
 		},
 		"15": {
@@ -266,8 +238,6 @@
 			"minValue": 40,
 			"maxValue": 360,
 			"defaultValue": 180,
-			"readOnly": false,
-			"writeOnly": false,
 			"allowManualEntry": true
 		},
 		"16": {
@@ -277,8 +247,6 @@
 			"minValue": 50,
 			"maxValue": 370,
 			"defaultValue": 320,
-			"readOnly": false,
-			"writeOnly": false,
 			"allowManualEntry": true
 		},
 		"17": {
@@ -288,8 +256,6 @@
 			"minValue": 1,
 			"maxValue": 100,
 			"defaultValue": 10,
-			"readOnly": false,
-			"writeOnly": false,
 			"allowManualEntry": true
 		},
 		"18": {
@@ -299,8 +265,6 @@
 			"minValue": -95,
 			"maxValue": 95,
 			"defaultValue": 0,
-			"readOnly": false,
-			"writeOnly": false,
 			"allowManualEntry": true
 		},
 		"19": {
@@ -310,8 +274,6 @@
 			"minValue": -95,
 			"maxValue": 95,
 			"defaultValue": 0,
-			"readOnly": false,
-			"writeOnly": false,
 			"allowManualEntry": true
 		},
 		"20": {
@@ -321,8 +283,6 @@
 			"minValue": 1,
 			"maxValue": 95,
 			"defaultValue": 5,
-			"readOnly": false,
-			"writeOnly": false,
 			"allowManualEntry": true
 		},
 		"21": {
@@ -332,8 +292,6 @@
 			"minValue": 1,
 			"maxValue": 10,
 			"defaultValue": 2,
-			"readOnly": false,
-			"writeOnly": false,
 			"allowManualEntry": true
 		},
 		"22": {
@@ -342,8 +300,6 @@
 			"minValue": 1,
 			"maxValue": 4,
 			"defaultValue": 4,
-			"readOnly": false,
-			"writeOnly": false,
 			"allowManualEntry": true
 		},
 		"23": {
@@ -352,8 +308,6 @@
 			"minValue": 1,
 			"maxValue": 4,
 			"defaultValue": 3,
-			"readOnly": false,
-			"writeOnly": false,
 			"allowManualEntry": true
 		},
 		"24": {
@@ -362,8 +316,6 @@
 			"minValue": 0,
 			"maxValue": 1,
 			"defaultValue": 1,
-			"readOnly": false,
-			"writeOnly": false,
 			"allowManualEntry": true
 		},
 		"25": {
@@ -373,8 +325,6 @@
 			"minValue": 0,
 			"maxValue": 5000,
 			"defaultValue": 30,
-			"readOnly": false,
-			"writeOnly": false,
 			"allowManualEntry": true
 		},
 		"26": {
@@ -384,8 +334,6 @@
 			"minValue": 0,
 			"maxValue": 5000,
 			"defaultValue": 200,
-			"readOnly": false,
-			"writeOnly": false,
 			"allowManualEntry": true
 		},
 		"27": {
@@ -395,8 +343,6 @@
 			"minValue": 0,
 			"maxValue": 5000,
 			"defaultValue": 3000,
-			"readOnly": false,
-			"writeOnly": false,
 			"allowManualEntry": true
 		},
 		"28": {
@@ -405,8 +351,6 @@
 			"minValue": 1,
 			"maxValue": 6,
 			"defaultValue": 6,
-			"readOnly": false,
-			"writeOnly": false,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -441,8 +385,6 @@
 			"minValue": 20,
 			"maxValue": 70,
 			"defaultValue": 50,
-			"readOnly": false,
-			"writeOnly": false,
 			"allowManualEntry": true
 		},
 		"52": {
@@ -452,8 +394,6 @@
 			"minValue": 0,
 			"maxValue": 2359,
 			"defaultValue": 600,
-			"readOnly": false,
-			"writeOnly": false,
 			"allowManualEntry": true
 		},
 		"53": {
@@ -463,8 +403,6 @@
 			"minValue": 0,
 			"maxValue": 2359,
 			"defaultValue": 900,
-			"readOnly": false,
-			"writeOnly": false,
 			"allowManualEntry": true
 		},
 		"54": {
@@ -474,8 +412,6 @@
 			"minValue": 0,
 			"maxValue": 2359,
 			"defaultValue": 1800,
-			"readOnly": false,
-			"writeOnly": false,
 			"allowManualEntry": true
 		},
 		"55": {
@@ -485,8 +421,6 @@
 			"minValue": 0,
 			"maxValue": 2359,
 			"defaultValue": 2300,
-			"readOnly": false,
-			"writeOnly": false,
 			"allowManualEntry": true
 		},
 		"56": {
@@ -495,8 +429,6 @@
 			"minValue": 40,
 			"maxValue": 370,
 			"defaultValue": 240,
-			"readOnly": false,
-			"writeOnly": false,
 			"allowManualEntry": true
 		},
 		"57": {
@@ -505,8 +437,6 @@
 			"minValue": 40,
 			"maxValue": 370,
 			"defaultValue": 200,
-			"readOnly": false,
-			"writeOnly": false,
 			"allowManualEntry": true
 		},
 		"58": {
@@ -515,8 +445,6 @@
 			"minValue": 40,
 			"maxValue": 370,
 			"defaultValue": 230,
-			"readOnly": false,
-			"writeOnly": false,
 			"allowManualEntry": true
 		},
 		"59": {
@@ -525,8 +453,6 @@
 			"minValue": 40,
 			"maxValue": 370,
 			"defaultValue": 180,
-			"readOnly": false,
-			"writeOnly": false,
 			"allowManualEntry": true
 		},
 		"60": {
@@ -535,8 +461,6 @@
 			"minValue": 40,
 			"maxValue": 370,
 			"defaultValue": 240,
-			"readOnly": false,
-			"writeOnly": false,
 			"allowManualEntry": true
 		},
 		"61": {
@@ -545,8 +469,6 @@
 			"minValue": 40,
 			"maxValue": 370,
 			"defaultValue": 200,
-			"readOnly": false,
-			"writeOnly": false,
 			"allowManualEntry": true
 		},
 		"62": {
@@ -555,8 +477,6 @@
 			"minValue": 40,
 			"maxValue": 370,
 			"defaultValue": 230,
-			"readOnly": false,
-			"writeOnly": false,
 			"allowManualEntry": true
 		},
 		"63": {
@@ -565,8 +485,6 @@
 			"minValue": 40,
 			"maxValue": 370,
 			"defaultValue": 180,
-			"readOnly": false,
-			"writeOnly": false,
 			"allowManualEntry": true
 		},
 		"64": {
@@ -575,8 +493,6 @@
 			"minValue": 40,
 			"maxValue": 370,
 			"defaultValue": 240,
-			"readOnly": false,
-			"writeOnly": false,
 			"allowManualEntry": true
 		},
 		"65": {
@@ -585,8 +501,6 @@
 			"minValue": 40,
 			"maxValue": 370,
 			"defaultValue": 200,
-			"readOnly": false,
-			"writeOnly": false,
 			"allowManualEntry": true
 		},
 		"66": {
@@ -595,8 +509,6 @@
 			"minValue": 40,
 			"maxValue": 370,
 			"defaultValue": 230,
-			"readOnly": false,
-			"writeOnly": false,
 			"allowManualEntry": true
 		},
 		"67": {
@@ -605,8 +517,6 @@
 			"minValue": 40,
 			"maxValue": 370,
 			"defaultValue": 180,
-			"readOnly": false,
-			"writeOnly": false,
 			"allowManualEntry": true
 		},
 		"68": {
@@ -615,8 +525,6 @@
 			"minValue": 40,
 			"maxValue": 370,
 			"defaultValue": 240,
-			"readOnly": false,
-			"writeOnly": false,
 			"allowManualEntry": true
 		},
 		"69": {
@@ -625,8 +533,6 @@
 			"minValue": 40,
 			"maxValue": 370,
 			"defaultValue": 200,
-			"readOnly": false,
-			"writeOnly": false,
 			"allowManualEntry": true
 		},
 		"70": {
@@ -635,8 +541,6 @@
 			"minValue": 40,
 			"maxValue": 370,
 			"defaultValue": 230,
-			"readOnly": false,
-			"writeOnly": false,
 			"allowManualEntry": true
 		},
 		"71": {
@@ -645,8 +549,6 @@
 			"minValue": 40,
 			"maxValue": 370,
 			"defaultValue": 180,
-			"readOnly": false,
-			"writeOnly": false,
 			"allowManualEntry": true
 		},
 		"72": {
@@ -655,8 +557,6 @@
 			"minValue": 40,
 			"maxValue": 370,
 			"defaultValue": 240,
-			"readOnly": false,
-			"writeOnly": false,
 			"allowManualEntry": true
 		},
 		"73": {
@@ -665,8 +565,6 @@
 			"minValue": 40,
 			"maxValue": 370,
 			"defaultValue": 200,
-			"readOnly": false,
-			"writeOnly": false,
 			"allowManualEntry": true
 		},
 		"74": {
@@ -675,8 +573,6 @@
 			"minValue": 40,
 			"maxValue": 370,
 			"defaultValue": 230,
-			"readOnly": false,
-			"writeOnly": false,
 			"allowManualEntry": true
 		},
 		"75": {
@@ -685,8 +581,6 @@
 			"minValue": 40,
 			"maxValue": 370,
 			"defaultValue": 180,
-			"readOnly": false,
-			"writeOnly": false,
 			"allowManualEntry": true
 		},
 		"76": {
@@ -695,8 +589,6 @@
 			"minValue": 40,
 			"maxValue": 370,
 			"defaultValue": 240,
-			"readOnly": false,
-			"writeOnly": false,
 			"allowManualEntry": true
 		},
 		"77": {
@@ -705,8 +597,6 @@
 			"minValue": 40,
 			"maxValue": 370,
 			"defaultValue": 200,
-			"readOnly": false,
-			"writeOnly": false,
 			"allowManualEntry": true
 		},
 		"78": {
@@ -715,8 +605,6 @@
 			"minValue": 40,
 			"maxValue": 370,
 			"defaultValue": 230,
-			"readOnly": false,
-			"writeOnly": false,
 			"allowManualEntry": true
 		},
 		"79": {
@@ -725,8 +613,6 @@
 			"minValue": 40,
 			"maxValue": 370,
 			"defaultValue": 180,
-			"readOnly": false,
-			"writeOnly": false,
 			"allowManualEntry": true
 		},
 		"80": {
@@ -735,8 +621,6 @@
 			"minValue": 40,
 			"maxValue": 370,
 			"defaultValue": 240,
-			"readOnly": false,
-			"writeOnly": false,
 			"allowManualEntry": true
 		},
 		"81": {
@@ -745,8 +629,6 @@
 			"minValue": 40,
 			"maxValue": 370,
 			"defaultValue": 200,
-			"readOnly": false,
-			"writeOnly": false,
 			"allowManualEntry": true
 		},
 		"82": {
@@ -755,8 +637,6 @@
 			"minValue": 40,
 			"maxValue": 370,
 			"defaultValue": 230,
-			"readOnly": false,
-			"writeOnly": false,
 			"allowManualEntry": true
 		},
 		"83": {
@@ -765,8 +645,6 @@
 			"minValue": 40,
 			"maxValue": 370,
 			"defaultValue": 180,
-			"readOnly": false,
-			"writeOnly": false,
 			"allowManualEntry": true
 		}
 	}

@@ -24,7 +24,6 @@
 			"maxValue": 99,
 			"defaultValue": -127,
 			"readOnly": true,
-			"writeOnly": false,
 			"allowManualEntry": true
 		},
 		"6": {
@@ -34,7 +33,6 @@
 			"minValue": -128,
 			"maxValue": 127,
 			"defaultValue": 0,
-			"readOnly": false,
 			"writeOnly": true,
 			"allowManualEntry": true
 		},
@@ -44,7 +42,6 @@
 			"minValue": -128,
 			"maxValue": 127,
 			"defaultValue": 0,
-			"readOnly": false,
 			"writeOnly": true,
 			"allowManualEntry": true
 		},
@@ -54,7 +51,6 @@
 			"minValue": -128,
 			"maxValue": 127,
 			"defaultValue": 0,
-			"readOnly": false,
 			"writeOnly": true,
 			"allowManualEntry": true
 		},
@@ -64,7 +60,6 @@
 			"minValue": -128,
 			"maxValue": 127,
 			"defaultValue": 0,
-			"readOnly": false,
 			"writeOnly": true,
 			"allowManualEntry": true
 		}

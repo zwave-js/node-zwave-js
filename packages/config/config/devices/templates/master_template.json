@@ -5,8 +5,6 @@
 		"maxValue": 1,
 		"defaultValue": 0,
 		"unsigned": true,
-		"readOnly": false,
-		"writeOnly": false,
 		"allowManualEntry": false,
 		"options": [
 			{
@@ -25,8 +23,6 @@
 		"maxValue": 255,
 		"defaultValue": 0,
 		"unsigned": true,
-		"readOnly": false,
-		"writeOnly": false,
 		"allowManualEntry": false,
 		"options": [
 			{
@@ -45,8 +41,6 @@
 		"maxValue": 1,
 		"defaultValue": 1,
 		"unsigned": true,
-		"readOnly": false,
-		"writeOnly": false,
 		"allowManualEntry": false,
 		"options": [
 			{
@@ -64,8 +58,6 @@
 		"minValue": 0,
 		"maxValue": 1,
 		"defaultValue": 0,
-		"readOnly": false,
-		"writeOnly": false,
 		"allowManualEntry": false
 	},
 	"base_0-10_nounit": {
@@ -73,8 +65,6 @@
 		"minValue": 0,
 		"maxValue": 10,
 		"defaultValue": 0,
-		"readOnly": false,
-		"writeOnly": false,
 		"allowManualEntry": true
 	},
 	"base_1-10_nounit": {
@@ -82,8 +72,6 @@
 		"minValue": 1,
 		"maxValue": 10,
 		"defaultValue": 1,
-		"readOnly": false,
-		"writeOnly": false,
 		"allowManualEntry": true
 	},
 	"base_0-99_nounit": {
@@ -92,8 +80,6 @@
 		"maxValue": 99,
 		"defaultValue": 1,
 		"unsigned": true,
-		"readOnly": false,
-		"writeOnly": false,
 		"allowManualEntry": true
 	},
 	"base_1-99_nounit": {
@@ -102,8 +88,6 @@
 		"maxValue": 99,
 		"defaultValue": 1,
 		"unsigned": true,
-		"readOnly": false,
-		"writeOnly": false,
 		"allowManualEntry": true
 	},
 	"base_0-100_nounit": {
@@ -112,8 +96,6 @@
 		"maxValue": 100,
 		"defaultValue": 1,
 		"unsigned": true,
-		"readOnly": false,
-		"writeOnly": false,
 		"allowManualEntry": true
 	},
 	"base_1-100_nounit": {
@@ -122,8 +104,6 @@
 		"maxValue": 100,
 		"defaultValue": 1,
 		"unsigned": true,
-		"readOnly": false,
-		"writeOnly": false,
 		"allowManualEntry": true
 	},
 	"base_0-255_nounit": {
@@ -132,8 +112,6 @@
 		"maxValue": 255,
 		"defaultValue": 1,
 		"unsigned": true,
-		"readOnly": false,
-		"writeOnly": false,
 		"allowManualEntry": true
 	},
 	"base_1-255_nounit": {
@@ -142,8 +120,6 @@
 		"maxValue": 255,
 		"defaultValue": 1,
 		"unsigned": true,
-		"readOnly": false,
-		"writeOnly": false,
 		"allowManualEntry": true
 	},
 	"base_0-180_nounit": {
@@ -151,8 +127,6 @@
 		"minValue": 0,
 		"maxValue": 180,
 		"unsigned": true,
-		"readOnly": false,
-		"writeOnly": false,
 		"allowManualEntry": true
 	},
 	"base_0-127_nounit": {
@@ -160,8 +134,6 @@
 		"minValue": 0,
 		"maxValue": 127,
 		"unsigned": true,
-		"readOnly": false,
-		"writeOnly": false,
 		"allowManualEntry": true
 	},
 	"base_true_false": {
@@ -170,8 +142,6 @@
 		"maxValue": 1,
 		"defaultValue": 0,
 		"unsigned": true,
-		"readOnly": false,
-		"writeOnly": false,
 		"allowManualEntry": false,
 		"options": [
 			{
@@ -192,8 +162,6 @@
 		"maxValue": 255,
 		"defaultValue": 3,
 		"unsigned": true,
-		"readOnly": false,
-		"writeOnly": false,
 		"allowManualEntry": true
 	},
 	"dimming_timing": {
@@ -203,8 +171,6 @@
 		"maxValue": 255,
 		"defaultValue": 3,
 		"unsigned": true,
-		"readOnly": false,
-		"writeOnly": false,
 		"allowManualEntry": true
 	},
 	"orientation": {
@@ -221,8 +187,6 @@
 		"minValue": 0,
 		"maxValue": 1,
 		"defaultValue": 1,
-		"readOnly": false,
-		"writeOnly": false,
 		"allowManualEntry": false,
 		"options": [
 			{
@@ -241,8 +205,6 @@
 		"minValue": 0,
 		"maxValue": 1,
 		"defaultValue": 1,
-		"readOnly": false,
-		"writeOnly": false,
 		"allowManualEntry": false,
 		"options": [
 			{
@@ -261,8 +223,6 @@
 		"minValue": 0,
 		"maxValue": 2,
 		"defaultValue": 0,
-		"readOnly": false,
-		"writeOnly": false,
 		"allowManualEntry": false,
 		"options": [
 			{
@@ -285,8 +245,6 @@
 		"minValue": 0,
 		"maxValue": 3,
 		"defaultValue": 0,
-		"readOnly": false,
-		"writeOnly": false,
 		"allowManualEntry": false,
 		"options": [
 			{
@@ -313,8 +271,6 @@
 		"minValue": 0,
 		"maxValue": 2,
 		"defaultValue": 0,
-		"readOnly": false,
-		"writeOnly": false,
 		"allowManualEntry": false,
 		"options": [
 			{
@@ -337,8 +293,6 @@
 		"minValue": 1,
 		"maxValue": 3,
 		"defaultValue": 3,
-		"readOnly": false,
-		"writeOnly": false,
 		"allowManualEntry": true,
 		"options": [
 			{

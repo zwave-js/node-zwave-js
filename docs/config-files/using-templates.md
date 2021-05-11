@@ -122,8 +122,6 @@ For example, commonly used definitions provided by the master template include:
 		"maxValue": 1,
 		"defaultValue": 0,
 		"unsigned": true,
-		"readOnly": false,
-		"writeOnly": false,
 		"allowManualEntry": false,
 		"options": [
 			{
@@ -147,8 +145,6 @@ or
 		"maxValue": 1,
 		"defaultValue": 1,
 		"unsigned": true,
-		"readOnly": false,
-		"writeOnly": false,
 		"allowManualEntry": false,
 		"options": [
 			{
@@ -172,8 +168,6 @@ or
 		"maxValue": 99,
 		"defaultValue": 1,
 		"unsigned": true,
-		"readOnly": false,
-		"writeOnly": false,
 		"allowManualEntry": true
 	},
 ```
@@ -200,8 +194,6 @@ or
 		"minValue": 0,
 		"maxValue": 2,
 		"defaultValue": 0,
-		"readOnly": false,
-		"writeOnly": false,
 		"allowManualEntry": false,
 		"options": [
 			{
@@ -236,8 +228,6 @@ Examples:
 		"maxValue": 3,
 		"defaultValue": 2,
 		"unsigned": true,
-		"readOnly": false,
-		"writeOnly": false,
 		"allowManualEntry": true,
 		"options": [
 			{
@@ -302,8 +292,6 @@ While you can override a label for an imported template in a device file, we pre
 		"maxValue": 4,
 		"defaultValue": 1,
 		"unsigned": true,
-		"readOnly": false,
-		"writeOnly": false,
 		"allowManualEntry": false,
 		"options": [
 			{

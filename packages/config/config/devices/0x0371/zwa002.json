@@ -27,8 +27,6 @@
 			"minValue": 0,
 			"maxValue": 2,
 			"defaultValue": 0,
-			"readOnly": false,
-			"writeOnly": false,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -51,8 +49,6 @@
 			"minValue": 0,
 			"maxValue": 1,
 			"defaultValue": 0,
-			"readOnly": false,
-			"writeOnly": false,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -72,8 +68,6 @@
 			"minValue": 5,
 			"maxValue": 8640000,
 			"defaultValue": 50,
-			"readOnly": false,
-			"writeOnly": false,
 			"allowManualEntry": true
 		},
 		"4": {
@@ -83,7 +77,6 @@
 			"maxValue": 255,
 			"defaultValue": 1,
 			"unsigned": true,
-			"readOnly": false,
 			"writeOnly": true,
 			"allowManualEntry": true
 		},
@@ -94,8 +87,6 @@
 			"minValue": 0,
 			"maxValue": 100,
 			"defaultValue": 20,
-			"readOnly": false,
-			"writeOnly": false,
 			"allowManualEntry": true
 		},
 		"80": {
@@ -105,8 +96,6 @@
 			"minValue": 0,
 			"maxValue": 1,
 			"defaultValue": 1,
-			"readOnly": false,
-			"writeOnly": false,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -126,8 +115,6 @@
 			"minValue": 2700,
 			"maxValue": 4999,
 			"defaultValue": 2700,
-			"readOnly": false,
-			"writeOnly": false,
 			"allowManualEntry": true
 		},
 		"82": {
@@ -137,8 +124,6 @@
 			"minValue": 5000,
 			"maxValue": 6500,
 			"defaultValue": 6500,
-			"readOnly": false,
-			"writeOnly": false,
 			"allowManualEntry": true
 		}
 	}

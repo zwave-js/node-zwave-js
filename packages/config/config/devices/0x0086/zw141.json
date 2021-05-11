@@ -39,8 +39,6 @@
 			"maxValue": 255,
 			"defaultValue": 150,
 			"unsigned": true,
-			"readOnly": false,
-			"writeOnly": false,
 			"allowManualEntry": true
 		},
 		"80": {
@@ -54,8 +52,6 @@
 			"maxValue": 1,
 			"defaultValue": 1,
 			"unsigned": true,
-			"readOnly": false,
-			"writeOnly": false,
 			"allowManualEntry": false,
 			"options": [
 				{

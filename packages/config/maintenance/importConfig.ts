@@ -431,6 +431,15 @@ function normalizeConfig(config: Record<string, any>): Record<string, any> {
 
 			original.unit = normalizeUnits(original.unit);
 
+			if (original.readOnly) {
+				original.writeOnly = undefined;
+			} else if (original.writeOnly) {
+				original.readOnly = undefined;
+			} else {
+				original.readOnly = undefined;
+				original.writeOnly = undefined;
+			}
+
 			// Remove undefined keys while preserving comments
 			for (const l of paramOrder) {
 				if (original[l] == undefined || original[l] === "") {
@@ -613,8 +622,8 @@ async function parseOZWProduct(
 				parsedParam.minValue = 0;
 				parsedParam.maxValue = 1;
 				parsedParam.defaultValue = !!(defaultValue & mask) ? 1 : 0;
-				parsedParam.readOnly = false;
-				parsedParam.writeOnly = false;
+				parsedParam.readOnly = undefined;
+				parsedParam.writeOnly = undefined;
 				parsedParam.allowManualEntry = true;
 
 				newConfig.paramInformation[id] = parsedParam;
@@ -648,10 +657,14 @@ async function parseOZWProduct(
 				// some config params have absurd value sizes, ignore them
 				parsedParam.maxValue = parsedParam.minValue;
 			}
-			parsedParam.readOnly =
-				param.read_only === true || param.read_only === "true";
-			parsedParam.writeOnly =
-				param.write_only === true || param.write_only === "true";
+			if (param.read_only === true || param.read_only === "true") {
+				parsedParam.readOnly = true;
+			} else if (
+				param.write_only === true ||
+				param.write_only === "true"
+			) {
+				parsedParam.writeOnly = true;
+			}
 			parsedParam.allowManualEntry = param.type !== "list";
 			parsedParam.defaultValue = updateNumberOrDefault(
 				param.value,
@@ -1282,11 +1295,12 @@ async function parseZWAProduct(
 		);
 		parsedParam.minValue = param.minValue;
 		parsedParam.maxValue = param.maxValue;
-		parsedParam.readOnly = param.flagReadOnly;
-		// zWave Alliance typically puts (write only) in the description
-		parsedParam.writeOnly = param.Description.toLowerCase().includes(
-			"write",
-		);
+		if (param.flagReadOnly === true) {
+			parsedParam.readOnly = true;
+		} else if (param.Description.toLowerCase().includes("write")) {
+			// zWave Alliance typically puts (write only) in the description
+			parsedParam.writeOnly = true;
+		}
 		parsedParam.allowManualEntry =
 			param.ConfigurationParameterValues.length <= 1;
 		parsedParam.defaultValue = updateNumberOrDefault(
@@ -1319,8 +1333,6 @@ async function parseZWAProduct(
 			parsedParam.maxValue >= parsedParam.defaultValue
 				? parsedParam.maxValue
 				: parsedParam.defaultValue;
-		parsedParam.writeOnly =
-			parsedParam.readOnly === false ? parsedParam.writeOnly : true;
 
 		// Setup unsigned
 		if (parsedParam.minValue >= 0) {
@@ -1833,8 +1845,8 @@ async function parseOHConfigFile(
 				minValue: parseInt(param.minimum, 10),
 				maxValue: parseInt(param.maximum, 10),
 				defaultValue: parseInt(param.default, 10),
-				readOnly: param.read_only === "1",
-				writeOnly: param.write_only === "1",
+				readOnly: param.read_only === "1" ? true : undefined,
+				writeOnly: param.write_only === "1" ? true : undefined,
 				allowManualEntry: param.limit_options === "1",
 			};
 			if (param.options?.length) {
