@@ -26,8 +26,6 @@
 			"maxValue": 2400,
 			"defaultValue": 2400,
 			"unsigned": true,
-			"readOnly": false,
-			"writeOnly": false,
 			"allowManualEntry": true
 		},
 		"3": {
@@ -39,8 +37,6 @@
 			"maxValue": 35400,
 			"defaultValue": 2400,
 			"unsigned": true,
-			"readOnly": false,
-			"writeOnly": false,
 			"allowManualEntry": true
 		},
 		"100": {
@@ -52,8 +48,6 @@
 			"maxValue": 16777215,
 			"defaultValue": 86400,
 			"unsigned": true,
-			"readOnly": false,
-			"writeOnly": false,
 			"allowManualEntry": true
 		}
 	},

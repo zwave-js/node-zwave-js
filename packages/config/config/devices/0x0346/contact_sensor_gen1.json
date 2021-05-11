@@ -27,8 +27,6 @@
 			"minValue": 255,
 			"maxValue": 4200,
 			"defaultValue": 4200,
-			"readOnly": false,
-			"writeOnly": false,
 			"allowManualEntry": true
 		}
 	},

@@ -26,8 +26,6 @@
 			"maxValue": 255,
 			"defaultValue": 12,
 			"unsigned": true,
-			"readOnly": false,
-			"writeOnly": false,
 			"allowManualEntry": true
 		}
 	},

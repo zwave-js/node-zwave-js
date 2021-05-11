@@ -24,8 +24,6 @@
 			"minValue": 0,
 			"maxValue": 30,
 			"defaultValue": 6,
-			"readOnly": false,
-			"writeOnly": false,
 			"allowManualEntry": true
 		},
 		"2": {
@@ -35,8 +33,6 @@
 			"minValue": 0,
 			"maxValue": 100,
 			"defaultValue": 37,
-			"readOnly": false,
-			"writeOnly": false,
 			"allowManualEntry": true
 		}
 	}

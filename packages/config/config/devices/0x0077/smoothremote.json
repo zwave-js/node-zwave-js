@@ -365,8 +365,6 @@
 			"maxValue": 255,
 			"defaultValue": 50,
 			"unsigned": true,
-			"readOnly": false,
-			"writeOnly": false,
 			"allowManualEntry": true
 		},
 		"1": {
@@ -376,8 +374,6 @@
 			"maxValue": 255,
 			"defaultValue": 100,
 			"unsigned": true,
-			"readOnly": false,
-			"writeOnly": false,
 			"allowManualEntry": true
 		},
 		"2": {
@@ -387,8 +383,6 @@
 			"maxValue": 255,
 			"defaultValue": 40,
 			"unsigned": true,
-			"readOnly": false,
-			"writeOnly": false,
 			"allowManualEntry": true
 		},
 		"3": {
@@ -398,8 +392,6 @@
 			"maxValue": 65535,
 			"defaultValue": 168,
 			"unsigned": true,
-			"readOnly": false,
-			"writeOnly": false,
 			"allowManualEntry": true
 		}
 	}

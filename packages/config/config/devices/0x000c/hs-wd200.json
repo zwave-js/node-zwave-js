@@ -30,8 +30,6 @@
 			"minValue": 0,
 			"maxValue": 90,
 			"defaultValue": 3,
-			"readOnly": false,
-			"writeOnly": false,
 			"allowManualEntry": true
 		},
 		"12": {
@@ -41,8 +39,6 @@
 			"minValue": 0,
 			"maxValue": 90,
 			"defaultValue": 3,
-			"readOnly": false,
-			"writeOnly": false,
 			"allowManualEntry": true
 		},
 		"13": {

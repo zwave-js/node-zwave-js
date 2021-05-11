@@ -6,8 +6,6 @@
 		"maxValue": 3,
 		"defaultValue": 2,
 		"unsigned": true,
-		"readOnly": false,
-		"writeOnly": false,
 		"allowManualEntry": true,
 		"options": [
 			{
@@ -31,8 +29,6 @@
 		"maxValue": 3,
 		"defaultValue": 2,
 		"unsigned": true,
-		"readOnly": false,
-		"writeOnly": false,
 		"allowManualEntry": true,
 		"options": [
 			{
@@ -75,8 +71,6 @@
 		"maxValue": 10,
 		"defaultValue": 5,
 		"unsigned": true,
-		"readOnly": false,
-		"writeOnly": false,
 		"allowManualEntry": true
 	},
 	"wrong_code_limit_3_to_10": {
@@ -87,8 +81,6 @@
 		"maxValue": 10,
 		"defaultValue": 5,
 		"unsigned": true,
-		"readOnly": false,
-		"writeOnly": false,
 		"allowManualEntry": true
 	},
 	"wrong_code_limit_7": {
@@ -99,8 +91,6 @@
 		"maxValue": 7,
 		"defaultValue": 5,
 		"unsigned": true,
-		"readOnly": false,
-		"writeOnly": false,
 		"allowManualEntry": true
 	},
 	"wrong_code_lockout": {
@@ -125,8 +115,6 @@
 		"maxValue": 20,
 		"defaultValue": 5,
 		"unsigned": true,
-		"readOnly": false,
-		"writeOnly": false,
 		"allowManualEntry": true
 	},
 	"wrong_tag_lockout": {
@@ -137,8 +125,6 @@
 		"maxValue": 250,
 		"defaultValue": 180,
 		"unsigned": true,
-		"readOnly": false,
-		"writeOnly": false,
 		"allowManualEntry": true
 	},
 	"language": {
@@ -148,8 +134,6 @@
 		"maxValue": 3,
 		"defaultValue": 1,
 		"unsigned": true,
-		"readOnly": false,
-		"writeOnly": false,
 		"allowManualEntry": false,
 		"options": [
 			{
@@ -173,8 +157,6 @@
 		"maxValue": 6,
 		"defaultValue": 2,
 		"unsigned": true,
-		"readOnly": false,
-		"writeOnly": false,
 		"allowManualEntry": false,
 		"options": [
 			{
@@ -202,8 +184,6 @@
 		"maxValue": 2,
 		"defaultValue": 0,
 		"unsigned": true,
-		"readOnly": false,
-		"writeOnly": false,
 		"allowManualEntry": false,
 		"options": [
 			{
@@ -239,8 +219,6 @@
 		"maxValue": 1,
 		"defaultValue": 0,
 		"unsigned": true,
-		"readOnly": false,
-		"writeOnly": false,
 		"allowManualEntry": false,
 		"options": [
 			{
@@ -315,8 +293,6 @@
 		"maxValue": 60,
 		"defaultValue": 7,
 		"unsigned": true,
-		"readOnly": false,
-		"writeOnly": false,
 		"allowManualEntry": true
 	},
 	"remote_relock_time": {
@@ -328,8 +304,6 @@
 		"maxValue": 90,
 		"defaultValue": 10,
 		"unsigned": true,
-		"readOnly": false,
-		"writeOnly": false,
 		"allowManualEntry": true
 	},
 	"alarm_map_keypad_limit": {
