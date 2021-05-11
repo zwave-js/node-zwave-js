@@ -108,8 +108,7 @@ Labels should be clear and concise. They should clearly explain what the paramet
 		"minValue": 0,
 		"maxValue": 99,
 		"defaultValue": 0,
-		"unsigned": true,
-		"allowManualEntry": true
+		"unsigned": true
 	}
 }
 ```
@@ -136,7 +135,6 @@ Descriptions should be **Sentence case**.
 		"maxValue": 255,
 		"defaultValue": 30,
 		"unsigned": true,
-		"allowManualEntry": true,
 		"options": [
 			{
 				"label": "Dimmer default",
@@ -212,7 +210,6 @@ For example:
 		"maxValue": 255,
 		"defaultValue": 0,
 		"unsigned": true,
-		"allowManualEntry": true,
 		"options": [
 			{
 				"label": "Dimmer default",
@@ -234,7 +231,6 @@ or
 		"maxValue": 99,
 		"defaultValue": 0,
 		"unsigned": true,
-		"allowManualEntry": true,
 		"options": [
 			{
 				"label": "Disable",
@@ -280,8 +276,7 @@ Some devices use multiples of the base units - these should be represented as a 
 		"minValue": 0,
 		"maxValue": 254,
 		"defaultValue": 0,
-		"unsigned": true,
-		"allowManualEntry": true
+		"unsigned": true
 	}
 ```
 
@@ -303,7 +298,6 @@ While somewhat rare, sometimes parameters can only be read or written. Typically
 		"maxValue": 254,
 		"defaultValue": 0,
 		"unsigned": true,
-+		"readOnly": true,
-		"allowManualEntry": true
++		"readOnly": true
 	}
 ```
