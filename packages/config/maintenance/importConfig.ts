@@ -431,6 +431,15 @@ function normalizeConfig(config: Record<string, any>): Record<string, any> {
 
 			original.unit = normalizeUnits(original.unit);
 
+			if (original.readOnly) {
+				original.writeOnly = undefined;
+			} else if (original.writeOnly) {
+				original.readOnly = undefined;
+			} else {
+				original.readOnly = undefined;
+				original.writeOnly = undefined;
+			}
+
 			// Remove undefined keys while preserving comments
 			for (const l of paramOrder) {
 				if (original[l] == undefined || original[l] === "") {
