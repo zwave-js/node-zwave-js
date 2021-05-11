@@ -2,6 +2,22 @@
 <!--
 	Add placeholder for next release with `wip` snippet
 -->
+## __WORK IN PROGRESS__
+<!-- ### Breaking changes
+
+### Features
+
+### Bugfixes -->
+
+### Config file changes
+* Corrected lifeline label for Aeon ZW100
+* Aligned Fantem FT100 Motion with ZW100
+
+### Changes under the hood
+* Reduced boilerplate for writing configuration files:
+  * `readOnly` and `writeOnly` default to `false` and must now be omitted if they are not `true`
+  * `allowManualEntry` is now optional and defaults to `true` unless the parameter is `readOnly`. This must be omitted or `false`.
+
 ## 7.4.0 (2021-05-10)
 ### Features
 * Implement get/setPowerlevel, get/setRFRegion controller methods
