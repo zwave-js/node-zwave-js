@@ -919,19 +919,14 @@ Parameter #${parameterNumber} has a non-numeric property defaultValue`,
 		}
 		this.defaultValue = definition.defaultValue;
 
-		if (this.readOnly) {
-			if (definition.allowManualEntry != undefined) {
-				throwInvalidConfig(
-					"devices",
-					`packages/config/config/devices/${parent.filename}:
-Parameter #${parameterNumber} is invalid: allowManualEntry is not allowed for readOnly parameters`,
-				);
-			}
-		} else if (typeof definition.allowManualEntry !== "boolean") {
+		if (
+			!this.readOnly &&
+			typeof definition.allowManualEntry !== "boolean"
+		) {
 			throwInvalidConfig(
 				"devices",
 				`packages/config/config/devices/${parent.filename}:
-Parameter #${parameterNumber}: allowManualEntry must be a boolean!`,
+Parameter #${parameterNumber}: when a parameter is not readOnly, allowManualEntry must be a boolean!`,
 			);
 		}
 		this.allowManualEntry = !!definition.allowManualEntry;
