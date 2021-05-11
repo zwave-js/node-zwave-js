@@ -30,8 +30,6 @@
 			"minValue": 0,
 			"maxValue": 32,
 			"defaultValue": 0,
-			"readOnly": false,
-			"writeOnly": false,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -174,7 +172,6 @@
 			"minValue": 0,
 			"maxValue": 4,
 			"readOnly": true,
-			"writeOnly": false,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -205,10 +202,7 @@
 			"minValue": 0,
 			"maxValue": 65535,
 			"defaultValue": 1,
-			"unsigned": true,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"unsigned": true
 		},
 		"30": {
 			"label": "Auto Report Condition By Room Temp Change",
@@ -216,8 +210,6 @@
 			"minValue": 0,
 			"maxValue": 8,
 			"defaultValue": 1,
-			"readOnly": false,
-			"writeOnly": false,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -261,8 +253,6 @@
 			"maxValue": 255,
 			"defaultValue": 255,
 			"unsigned": true,
-			"readOnly": false,
-			"writeOnly": false,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -281,8 +271,6 @@
 			"minValue": 0,
 			"maxValue": 1,
 			"defaultValue": 1,
-			"readOnly": false,
-			"writeOnly": false,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -301,10 +289,7 @@
 			"valueSize": 1,
 			"minValue": 1,
 			"maxValue": 8,
-			"defaultValue": 8,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"defaultValue": 8
 		},
 		"37": {
 			"label": "Calibrate Temperature Reading",
@@ -312,10 +297,7 @@
 			"valueSize": 1,
 			"minValue": -5,
 			"maxValue": 5,
-			"defaultValue": 0,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"defaultValue": 0
 		}
 	},
 	"metadata": {

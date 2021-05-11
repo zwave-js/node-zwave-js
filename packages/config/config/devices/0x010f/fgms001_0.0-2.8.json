@@ -68,10 +68,7 @@
 			"minValue": 8,
 			"maxValue": 255,
 			"defaultValue": 10,
-			"unsigned": true,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"unsigned": true
 		},
 		"2": {
 			"label": "Motion Sensor's Blind Time (Insensitive)",
@@ -79,10 +76,7 @@
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 15,
-			"defaultValue": 15,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"defaultValue": 15
 		},
 		"3": {
 			"label": "PIR Sensor’s “PULSE COUNTER”",
@@ -90,10 +84,7 @@
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 3,
-			"defaultValue": 1,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"defaultValue": 1
 		},
 		"4": {
 			"label": "PIR Sensor’s “WINDOW TIME”",
@@ -101,10 +92,7 @@
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 3,
-			"defaultValue": 2,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"defaultValue": 2
 		},
 		"6": {
 			"label": "Motion Alarm Cancellation Delay",
@@ -114,10 +102,7 @@
 			"minValue": 1,
 			"maxValue": 65535,
 			"defaultValue": 30,
-			"unsigned": true,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"unsigned": true
 		},
 		"8": {
 			"label": "PIR Sensor Operating Mode",
@@ -127,8 +112,6 @@
 			"maxValue": 255,
 			"defaultValue": 0,
 			"unsigned": true,
-			"readOnly": false,
-			"writeOnly": false,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -153,10 +136,7 @@
 			"minValue": 1,
 			"maxValue": 65535,
 			"defaultValue": 200,
-			"unsigned": true,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"unsigned": true
 		},
 		"12": {
 			"label": "BASIC command class configuration",
@@ -165,8 +145,6 @@
 			"minValue": 0,
 			"maxValue": 2,
 			"defaultValue": 0,
-			"readOnly": false,
-			"writeOnly": false,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -190,10 +168,7 @@
 			"minValue": 0,
 			"maxValue": 255,
 			"defaultValue": 255,
-			"unsigned": true,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"unsigned": true
 		},
 		"16": {
 			"label": "BASIC OFF command frame value",
@@ -202,10 +177,7 @@
 			"minValue": 0,
 			"maxValue": 255,
 			"defaultValue": 0,
-			"unsigned": true,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"unsigned": true
 		},
 		"20": {
 			"label": "Tamper Sensitivity",
@@ -213,10 +185,7 @@
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 122,
-			"defaultValue": 15,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"defaultValue": 15
 		},
 		"22": {
 			"label": "Tamper - alarm cancellation delay",
@@ -225,10 +194,7 @@
 			"minValue": 0,
 			"maxValue": 65535,
 			"defaultValue": 30,
-			"unsigned": true,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"unsigned": true
 		},
 		"24": {
 			"label": "Tamper Operating Modes",
@@ -238,8 +204,6 @@
 			"maxValue": 255,
 			"defaultValue": 0,
 			"unsigned": true,
-			"readOnly": false,
-			"writeOnly": false,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -272,8 +236,6 @@
 			"maxValue": 255,
 			"defaultValue": 0,
 			"unsigned": true,
-			"readOnly": false,
-			"writeOnly": false,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -294,10 +256,7 @@
 			"minValue": 0,
 			"maxValue": 65535,
 			"defaultValue": 200,
-			"unsigned": true,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"unsigned": true
 		},
 		"42": {
 			"label": "Illumination Reports Interval",
@@ -306,10 +265,7 @@
 			"minValue": 0,
 			"maxValue": 65535,
 			"defaultValue": 0,
-			"unsigned": true,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"unsigned": true
 		},
 		"60": {
 			"label": "Temperature Report Threshold",
@@ -318,10 +274,7 @@
 			"minValue": 0,
 			"maxValue": 255,
 			"defaultValue": 10,
-			"unsigned": true,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"unsigned": true
 		},
 		"62": {
 			"label": "Interval of Temperature Measuring",
@@ -331,10 +284,7 @@
 			"minValue": 0,
 			"maxValue": 65535,
 			"defaultValue": 900,
-			"unsigned": true,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"unsigned": true
 		},
 		"64": {
 			"label": "Temperature Reports Interval",
@@ -343,10 +293,7 @@
 			"minValue": 0,
 			"maxValue": 65535,
 			"defaultValue": 0,
-			"unsigned": true,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"unsigned": true
 		},
 		"66": {
 			"label": "Temperature Offset",
@@ -355,10 +302,7 @@
 			"minValue": 0,
 			"maxValue": 65535,
 			"defaultValue": 0,
-			"unsigned": true,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"unsigned": true
 		},
 		"80": {
 			"label": "LED Signalling Mode",
@@ -368,8 +312,6 @@
 			"maxValue": 255,
 			"defaultValue": 10,
 			"unsigned": true,
-			"readOnly": false,
-			"writeOnly": false,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -488,10 +430,7 @@
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 100,
-			"defaultValue": 50,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"defaultValue": 50
 		},
 		"82": {
 			"label": "Lower Ambient Illumination Level",
@@ -501,10 +440,7 @@
 			"minValue": 0,
 			"maxValue": 65535,
 			"defaultValue": 100,
-			"unsigned": true,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"unsigned": true
 		},
 		"83": {
 			"label": "Upper Ambient Illumination Level",
@@ -514,10 +450,7 @@
 			"minValue": 0,
 			"maxValue": 65535,
 			"defaultValue": 1000,
-			"unsigned": true,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"unsigned": true
 		},
 		"86": {
 			"label": "Min Temperature Resulting in Blue LED Illumination",
@@ -525,10 +458,7 @@
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 100,
-			"defaultValue": 18,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"defaultValue": 18
 		},
 		"87": {
 			"label": "Max Temperature Resulting in Red LED Illumination",
@@ -536,10 +466,7 @@
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 100,
-			"defaultValue": 28,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"defaultValue": 28
 		},
 		"89": {
 			"label": "LED indicating Tamper Alarm",
@@ -549,8 +476,6 @@
 			"maxValue": 255,
 			"defaultValue": 0,
 			"unsigned": true,
-			"readOnly": false,
-			"writeOnly": false,
 			"allowManualEntry": false,
 			"options": [
 				{

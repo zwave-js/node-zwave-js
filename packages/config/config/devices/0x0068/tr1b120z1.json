@@ -26,9 +26,6 @@
 			"maxValue": 127,
 			"defaultValue": 127,
 			"unsigned": true,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true,
 			"options": [
 				{
 					"label": "Always on",
@@ -44,9 +41,6 @@
 			"maxValue": 127,
 			"defaultValue": 127,
 			"unsigned": true,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true,
 			"options": [
 				{
 					"label": "Buzzer disable",

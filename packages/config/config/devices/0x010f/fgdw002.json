@@ -36,8 +36,6 @@
 			"minValue": 0,
 			"maxValue": 1,
 			"defaultValue": 0,
-			"readOnly": false,
-			"writeOnly": false,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -56,8 +54,6 @@
 			"minValue": 0,
 			"maxValue": 3,
 			"defaultValue": 3,
-			"readOnly": false,
-			"writeOnly": false,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -84,8 +80,6 @@
 			"minValue": 0,
 			"maxValue": 2,
 			"defaultValue": 0,
-			"readOnly": false,
-			"writeOnly": false,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -107,50 +101,35 @@
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 255,
-			"defaultValue": 255,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"defaultValue": 255
 		},
 		"13": {
 			"label": "Value of OFF command sent to 2nd association group",
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 255,
-			"defaultValue": 255,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"defaultValue": 255
 		},
 		"14": {
 			"label": "Association for opening - time delay",
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 32400,
-			"defaultValue": 0,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"defaultValue": 0
 		},
 		"15": {
 			"label": "Association for closing - time delay",
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 32400,
-			"defaultValue": 0,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"defaultValue": 0
 		},
 		"30": {
 			"label": "Tamper - alarm cancellation delay",
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 32400,
-			"defaultValue": 5,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"defaultValue": 5
 		},
 		"31": {
 			"label": "Tamper - reporting alarm cancellation",
@@ -158,8 +137,6 @@
 			"minValue": 0,
 			"maxValue": 1,
 			"defaultValue": 0,
-			"readOnly": false,
-			"writeOnly": false,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -177,40 +154,28 @@
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 32400,
-			"defaultValue": 300,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"defaultValue": 300
 		},
 		"51": {
 			"label": "Temperature reports threshold",
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 300,
-			"defaultValue": 10,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"defaultValue": 10
 		},
 		"52": {
 			"label": "Interval of temperature reports",
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 32400,
-			"defaultValue": 0,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"defaultValue": 0
 		},
 		"53": {
 			"label": "Temperature offset",
 			"valueSize": 2,
 			"minValue": -1000,
 			"maxValue": 1000,
-			"defaultValue": 0,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"defaultValue": 0
 		},
 		"54": {
 			"label": "Temperature alarm reports",
@@ -218,8 +183,6 @@
 			"minValue": 0,
 			"maxValue": 3,
 			"defaultValue": 0,
-			"readOnly": false,
-			"writeOnly": false,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -245,20 +208,14 @@
 			"valueSize": 2,
 			"minValue": 1,
 			"maxValue": 600,
-			"defaultValue": 350,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"defaultValue": 350
 		},
 		"56": {
 			"label": "Low temperature alarm threshold",
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 599,
-			"defaultValue": 100,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"defaultValue": 100
 		},
 		"2[0x01]": {
 			"label": "Visual LED indications - Open/close",
@@ -266,8 +223,6 @@
 			"minValue": 0,
 			"maxValue": 1,
 			"defaultValue": 0,
-			"readOnly": false,
-			"writeOnly": false,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -286,8 +241,6 @@
 			"minValue": 0,
 			"maxValue": 1,
 			"defaultValue": 1,
-			"readOnly": false,
-			"writeOnly": false,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -306,8 +259,6 @@
 			"minValue": 0,
 			"maxValue": 1,
 			"defaultValue": 1,
-			"readOnly": false,
-			"writeOnly": false,
 			"allowManualEntry": false,
 			"options": [
 				{

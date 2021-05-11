@@ -364,10 +364,7 @@
 			"minValue": 0,
 			"maxValue": 255,
 			"defaultValue": 50,
-			"unsigned": true,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"unsigned": true
 		},
 		"1": {
 			"label": "Button Multiple Press Time",
@@ -375,10 +372,7 @@
 			"minValue": 0,
 			"maxValue": 255,
 			"defaultValue": 100,
-			"unsigned": true,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"unsigned": true
 		},
 		"2": {
 			"label": "Button Hold Time",
@@ -386,10 +380,7 @@
 			"minValue": 0,
 			"maxValue": 255,
 			"defaultValue": 40,
-			"unsigned": true,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"unsigned": true
 		},
 		"3": {
 			"label": "Network Update Interval",
@@ -397,10 +388,7 @@
 			"minValue": 0,
 			"maxValue": 65535,
 			"defaultValue": 168,
-			"unsigned": true,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"unsigned": true
 		}
 	}
 }

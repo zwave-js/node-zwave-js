@@ -2,8 +2,6 @@
 	"dimming_mode": {
 		"valueSize": 2,
 		"defaultValue": 0,
-		"readOnly": false,
-		"writeOnly": false,
 		"minValue": 0,
 		"maxValue": 1,
 		"allowManualEntry": false,
@@ -22,8 +20,6 @@
 		"description": "When Power Up memory is enabled, the module will save the actual status of the associated channel output in case of power break",
 		"valueSize": 2,
 		"defaultValue": 0,
-		"readOnly": false,
-		"writeOnly": false,
 		"minValue": 0,
 		"maxValue": 1,
 		"allowManualEntry": false,
@@ -41,8 +37,6 @@
 	"button_type": {
 		"valueSize": 2,
 		"defaultValue": 1,
-		"readOnly": false,
-		"writeOnly": false,
 		"minValue": 1,
 		"maxValue": 4,
 		"allowManualEntry": false,
@@ -68,8 +62,6 @@
 	"soft_start": {
 		"valueSize": 2,
 		"defaultValue": 1,
-		"readOnly": false,
-		"writeOnly": false,
 		"minValue": 0,
 		"maxValue": 1,
 		"allowManualEntry": false,
@@ -87,20 +79,14 @@
 	"min_level": {
 		"valueSize": 2,
 		"defaultValue": 1,
-		"readOnly": false,
-		"writeOnly": false,
 		"minValue": 1,
-		"maxValue": 98,
-		"allowManualEntry": true
+		"maxValue": 98
 	},
 	"max_level": {
 		"valueSize": 2,
 		"defaultValue": 99,
-		"readOnly": false,
-		"writeOnly": false,
 		"minValue": 2,
 		"maxValue": 555,
-		"allowManualEntry": true,
 		"options": [
 			{
 				"label": "True Sine Mode",

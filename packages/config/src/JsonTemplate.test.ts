@@ -122,6 +122,7 @@ describe("readJsonWithTemplate", () => {
 			".json",
 			"#",
 			"file.json#",
+			"#30[0x]", // incomplete partial param
 		];
 		for (const specifier of tests) {
 			const test = {
@@ -525,6 +526,40 @@ describe("readJsonWithTemplate", () => {
 			},
 			baz: {
 				hello: "from the other side",
+			},
+		};
+
+		const content = await readJsonWithTemplate(
+			path.join(mockDir, "test.json"),
+		);
+		expect(content).toEqual(expected);
+	});
+
+	it("referencing partial parameters works", async () => {
+		const test = {
+			paramInformation: {
+				1: {
+					$import: "template.json#paramInformation/1[0x01]",
+				},
+			},
+		};
+		const template = {
+			paramInformation: {
+				"1[0x01]": {
+					hello: "from the other side",
+				},
+			},
+		};
+		await mockFs({
+			"/test.json": JSON.stringify(test),
+			"/template.json": JSON.stringify(template),
+		});
+
+		const expected = {
+			paramInformation: {
+				1: {
+					hello: "from the other side",
+				},
 			},
 		};
 

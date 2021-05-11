@@ -24,10 +24,7 @@
 			"minValue": 0,
 			"maxValue": 99,
 			"defaultValue": 99,
-			"unsigned": true,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"unsigned": true
 		},
 		"3": {
 			"label": "Sensitivity Level",
@@ -36,10 +33,7 @@
 			"minValue": 0,
 			"maxValue": 6,
 			"defaultValue": 6,
-			"unsigned": true,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"unsigned": true
 		},
 		"4": {
 			"label": "Re-trigger Interval",
@@ -49,10 +43,7 @@
 			"minValue": 0,
 			"maxValue": 180,
 			"defaultValue": 180,
-			"unsigned": true,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"unsigned": true
 		},
 		"5": {
 			"label": "Lux Level",
@@ -62,10 +53,7 @@
 			"minValue": 0,
 			"maxValue": 20,
 			"defaultValue": 20,
-			"unsigned": true,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"unsigned": true
 		},
 		"6": {
 			"label": "On - Off Duration",
@@ -75,10 +63,7 @@
 			"minValue": 0,
 			"maxValue": 15,
 			"defaultValue": 15,
-			"unsigned": true,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"unsigned": true
 		}
 	},
 	"metadata": {

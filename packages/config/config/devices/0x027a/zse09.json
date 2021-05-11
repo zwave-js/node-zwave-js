@@ -24,10 +24,7 @@
 			"minValue": 8,
 			"maxValue": 255,
 			"defaultValue": 12,
-			"unsigned": true,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"unsigned": true
 		},
 		"2": {
 			"label": "Trigger ON Duration",
@@ -36,10 +33,7 @@
 			"valueSize": 2,
 			"minValue": 5,
 			"maxValue": 600,
-			"defaultValue": 30,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"defaultValue": 30
 		},
 		"3": {
 			"label": "Trigger Action",
@@ -48,10 +42,7 @@
 			"minValue": 0,
 			"maxValue": 255,
 			"defaultValue": 255,
-			"unsigned": true,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"unsigned": true
 		},
 		"4": {
 			"label": "Motion Detection",
@@ -60,8 +51,6 @@
 			"maxValue": 255,
 			"defaultValue": 255,
 			"unsigned": true,
-			"readOnly": false,
-			"writeOnly": false,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -80,10 +69,7 @@
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 1000,
-			"defaultValue": 100,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"defaultValue": 100
 		},
 		"6": {
 			"label": "Motion Trigger Interval",
@@ -91,10 +77,7 @@
 			"valueSize": 1,
 			"minValue": 1,
 			"maxValue": 8,
-			"defaultValue": 8,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"defaultValue": 8
 		},
 		"7": {
 			"label": "Light Polling Interval",
@@ -103,10 +86,7 @@
 			"minValue": 60,
 			"maxValue": 36000,
 			"defaultValue": 180,
-			"unsigned": true,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"unsigned": true
 		},
 		"8": {
 			"label": "Light Trigger",
@@ -115,10 +95,7 @@
 			"minValue": 0,
 			"maxValue": 255,
 			"defaultValue": 0,
-			"unsigned": true,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"unsigned": true
 		},
 		"9": {
 			"label": "Light Report",
@@ -127,10 +104,7 @@
 			"minValue": 0,
 			"maxValue": 255,
 			"defaultValue": 255,
-			"unsigned": true,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"unsigned": true
 		},
 		"10": {
 			"label": "LED Notifications",
@@ -138,10 +112,7 @@
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 1,
-			"defaultValue": 1,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"defaultValue": 1
 		}
 	}
 }

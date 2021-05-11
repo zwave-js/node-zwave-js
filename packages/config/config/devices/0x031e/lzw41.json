@@ -24,8 +24,6 @@
 			"maxValue": 2,
 			"defaultValue": 0,
 			"unsigned": true,
-			"readOnly": false,
-			"writeOnly": false,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -48,10 +46,7 @@
 			"minValue": 2700,
 			"maxValue": 4999,
 			"defaultValue": 2700,
-			"unsigned": true,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"unsigned": true
 		},
 		"52": {
 			"label": "Color Temperature (Cool White)",
@@ -59,10 +54,7 @@
 			"minValue": 5000,
 			"maxValue": 6500,
 			"defaultValue": 5000,
-			"unsigned": true,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"unsigned": true
 		}
 	},
 	"metadata": {

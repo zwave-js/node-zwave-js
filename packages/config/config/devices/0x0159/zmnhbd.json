@@ -59,8 +59,6 @@
 			"maxValue": 255,
 			"defaultValue": 1,
 			"unsigned": true,
-			"readOnly": false,
-			"writeOnly": false,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -80,8 +78,6 @@
 			"maxValue": 255,
 			"defaultValue": 1,
 			"unsigned": true,
-			"readOnly": false,
-			"writeOnly": false,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -101,8 +97,6 @@
 			"minValue": 0,
 			"maxValue": 255,
 			"defaultValue": 255,
-			"readOnly": false,
-			"writeOnly": false,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -129,10 +123,7 @@
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 32535,
-			"defaultValue": 0,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"defaultValue": 0
 		},
 		"12": {
 			"label": "Automatic turning on output Q1 after set time",
@@ -140,10 +131,7 @@
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 32535,
-			"defaultValue": 0,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"defaultValue": 0
 		},
 		"13": {
 			"label": "Automatic turning off relay Q2 after set time",
@@ -151,10 +139,7 @@
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 32535,
-			"defaultValue": 0,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"defaultValue": 0
 		},
 		"14": {
 			"label": "Automatic turning on output Q2 after set time",
@@ -162,10 +147,7 @@
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 32535,
-			"defaultValue": 0,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"defaultValue": 0
 		},
 		"15": {
 			"label": "Seconds or milliseconds selection",
@@ -173,10 +155,7 @@
 			"minValue": 0,
 			"maxValue": 255,
 			"defaultValue": 0,
-			"unsigned": true,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"unsigned": true
 		},
 		"30": {
 			"label": "Saving the state after a power failure",
@@ -185,8 +164,6 @@
 			"maxValue": 255,
 			"defaultValue": 0,
 			"unsigned": true,
-			"readOnly": false,
-			"writeOnly": false,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -205,10 +182,7 @@
 			"unit": "%",
 			"minValue": 0,
 			"maxValue": 100,
-			"defaultValue": 10,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"defaultValue": 10
 		},
 		"41": {
 			"label": "Power reporting in Watts for Q2",
@@ -216,30 +190,21 @@
 			"unit": "%",
 			"minValue": 0,
 			"maxValue": 100,
-			"defaultValue": 10,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"defaultValue": 10
 		},
 		"42": {
 			"label": "Power reporting time interval for Q1",
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 32535,
-			"defaultValue": 300,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"defaultValue": 300
 		},
 		"43": {
 			"label": "Power reporting time interval for Q2",
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 32535,
-			"defaultValue": 300,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"defaultValue": 300
 		},
 		"63": {
 			"label": "Output Q1 Switch selection",
@@ -248,8 +213,6 @@
 			"maxValue": 255,
 			"defaultValue": 0,
 			"unsigned": true,
-			"readOnly": false,
-			"writeOnly": false,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -269,8 +232,6 @@
 			"maxValue": 255,
 			"defaultValue": 0,
 			"unsigned": true,
-			"readOnly": false,
-			"writeOnly": false,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -288,20 +249,14 @@
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 32536,
-			"defaultValue": 32536,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"defaultValue": 32536
 		},
 		"120": {
 			"label": "Digital temperature sensor reporting",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 127,
-			"defaultValue": 5,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"defaultValue": 5
 		}
 	},
 	"compat": {

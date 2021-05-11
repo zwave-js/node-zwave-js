@@ -29,10 +29,7 @@
 			"unit": "seconds",
 			"minValue": 0,
 			"maxValue": 90,
-			"defaultValue": 3,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"defaultValue": 3
 		},
 		"12": {
 			"label": "Ramp Rate (Manual)",
@@ -40,10 +37,7 @@
 			"unit": "seconds",
 			"minValue": 0,
 			"maxValue": 90,
-			"defaultValue": 3,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"defaultValue": 3
 		},
 		"13": {
 			"$import": "templates/homeseer_template.json#status_mode"

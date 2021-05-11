@@ -27,8 +27,6 @@
 			"minValue": 0,
 			"maxValue": 1,
 			"defaultValue": 1,
-			"readOnly": false,
-			"writeOnly": false,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -47,8 +45,6 @@
 			"minValue": 0,
 			"maxValue": 1,
 			"defaultValue": 1,
-			"readOnly": false,
-			"writeOnly": false,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -67,8 +63,6 @@
 			"minValue": 0,
 			"maxValue": 1,
 			"defaultValue": 1,
-			"readOnly": false,
-			"writeOnly": false,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -87,8 +81,6 @@
 			"minValue": 0,
 			"maxValue": 1,
 			"defaultValue": 0,
-			"readOnly": false,
-			"writeOnly": false,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -109,10 +101,7 @@
 			"minValue": 0,
 			"maxValue": 32767,
 			"defaultValue": 120,
-			"unsigned": true,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"unsigned": true
 		},
 		"6": {
 			"label": "Send meter reports",
@@ -120,8 +109,6 @@
 			"minValue": 0,
 			"maxValue": 1,
 			"defaultValue": 1,
-			"readOnly": false,
-			"writeOnly": false,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -141,10 +128,7 @@
 			"minValue": 30,
 			"maxValue": 32767,
 			"defaultValue": 300,
-			"unsigned": true,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"unsigned": true
 		},
 		"8": {
 			"label": "Maximum current",
@@ -153,10 +137,7 @@
 			"valueSize": 1,
 			"minValue": 1,
 			"maxValue": 16,
-			"defaultValue": 16,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"defaultValue": 16
 		},
 		"9": {
 			"label": "Power report threshold",
@@ -165,10 +146,7 @@
 			"valueSize": 2,
 			"minValue": 1,
 			"maxValue": 1600,
-			"defaultValue": 50,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"defaultValue": 50
 		},
 		"10": {
 			"label": "Alarm current thershold",
@@ -177,10 +155,7 @@
 			"valueSize": 1,
 			"minValue": 1,
 			"maxValue": 16,
-			"defaultValue": 13,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"defaultValue": 13
 		}
 	}
 }

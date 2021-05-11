@@ -23,8 +23,6 @@
 			"minValue": 0,
 			"maxValue": 2,
 			"defaultValue": 0,
-			"readOnly": false,
-			"writeOnly": false,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -49,9 +47,6 @@
 			"minValue": 0,
 			"maxValue": 65535,
 			"defaultValue": 10,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true,
 			"options": [
 				{
 					"label": "Disable",
@@ -65,10 +60,7 @@
 			"valueSize": 4,
 			"minValue": 30,
 			"maxValue": 2678400,
-			"defaultValue": 30,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"defaultValue": 30
 		},
 		"4": {
 			"label": "Energy Frequency",
@@ -76,10 +68,7 @@
 			"valueSize": 4,
 			"minValue": 30,
 			"maxValue": 2678400,
-			"defaultValue": 300,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"defaultValue": 300
 		},
 		"5": {
 			"label": "Voltage Frequency",
@@ -87,10 +76,7 @@
 			"valueSize": 4,
 			"minValue": 30,
 			"maxValue": 2678400,
-			"defaultValue": 300,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"defaultValue": 300
 		},
 		"6": {
 			"label": "Current Frequency",
@@ -99,10 +85,7 @@
 			"valueSize": 4,
 			"minValue": 30,
 			"maxValue": 2678400,
-			"defaultValue": 300,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"defaultValue": 300
 		},
 		"7": {
 			"label": "Overload Protection",
@@ -110,10 +93,7 @@
 			"valueSize": 1,
 			"minValue": 1,
 			"maxValue": 10,
-			"defaultValue": 10,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"defaultValue": 10
 		},
 		"8": {
 			"label": "Enable Auto-Off (Left)",
@@ -122,8 +102,6 @@
 			"minValue": 0,
 			"maxValue": 1,
 			"defaultValue": 0,
-			"readOnly": false,
-			"writeOnly": false,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -142,10 +120,7 @@
 			"valueSize": 4,
 			"minValue": 1,
 			"maxValue": 65535,
-			"defaultValue": 60,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"defaultValue": 60
 		},
 		"10": {
 			"label": "Enable Auto-On (Left)",
@@ -154,8 +129,6 @@
 			"minValue": 0,
 			"maxValue": 1,
 			"defaultValue": 0,
-			"readOnly": false,
-			"writeOnly": false,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -174,10 +147,7 @@
 			"valueSize": 4,
 			"minValue": 1,
 			"maxValue": 65535,
-			"defaultValue": 60,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"defaultValue": 60
 		},
 		"12": {
 			"label": "Enable Auto-Off (Right)",
@@ -186,8 +156,6 @@
 			"minValue": 0,
 			"maxValue": 1,
 			"defaultValue": 0,
-			"readOnly": false,
-			"writeOnly": false,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -205,10 +173,7 @@
 			"valueSize": 4,
 			"minValue": 1,
 			"maxValue": 65535,
-			"defaultValue": 60,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"defaultValue": 60
 		},
 		"14": {
 			"label": "Enable Auto-On (Right)",
@@ -217,8 +182,6 @@
 			"minValue": 0,
 			"maxValue": 1,
 			"defaultValue": 0,
-			"readOnly": false,
-			"writeOnly": false,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -236,10 +199,7 @@
 			"valueSize": 4,
 			"minValue": 1,
 			"maxValue": 65535,
-			"defaultValue": 60,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"defaultValue": 60
 		},
 		"16": {
 			"label": "Manual Control",
@@ -248,8 +208,6 @@
 			"minValue": 0,
 			"maxValue": 1,
 			"defaultValue": 1,
-			"readOnly": false,
-			"writeOnly": false,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -269,8 +227,6 @@
 			"minValue": 0,
 			"maxValue": 3,
 			"defaultValue": 1,
-			"readOnly": false,
-			"writeOnly": false,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -288,6 +244,37 @@
 				{
 					"label": "Always Off",
 					"value": 3
+				}
+			]
+		},
+		"18": {
+			"$if": "firmwareVersion >= 2.0",
+			"label": "Enable/Disable Power Reports",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 4,
+			"defaultValue": 0,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Enable all power monitoring and reporting",
+					"value": 0
+				},
+				{
+					"label": "Disable all power monitoring and reporting",
+					"value": 1
+				},
+				{
+					"label": "Disable power reporting of left outlet",
+					"value": 2
+				},
+				{
+					"label": "Disable power reporting of right outlet",
+					"value": 3
+				},
+				{
+					"label": "Disable power reporting of USB port",
+					"value": 4
 				}
 			]
 		}

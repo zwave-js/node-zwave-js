@@ -46,8 +46,6 @@
 			"minValue": 0,
 			"maxValue": 4,
 			"defaultValue": 1,
-			"readOnly": false,
-			"writeOnly": false,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -79,8 +77,6 @@
 			"minValue": 1,
 			"maxValue": 4,
 			"defaultValue": 1,
-			"readOnly": false,
-			"writeOnly": false,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -107,10 +103,7 @@
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 39,
-			"defaultValue": 0,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"defaultValue": 0
 		},
 		"4": {
 			"label": "Number of clicks that control the device",
@@ -119,8 +112,6 @@
 			"minValue": 1,
 			"maxValue": 2,
 			"defaultValue": 2,
-			"readOnly": false,
-			"writeOnly": false,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -138,20 +129,14 @@
 			"valueSize": 1,
 			"minValue": -1,
 			"maxValue": 106,
-			"defaultValue": 100,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"defaultValue": 100
 		},
 		"6": {
 			"label": "Level used to control association group 4 and 5.",
 			"valueSize": 1,
 			"minValue": -1,
 			"maxValue": 106,
-			"defaultValue": 100,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"defaultValue": 100
 		},
 		"10": {
 			"label": "Timer to switch OFF the Channel 1",
@@ -160,10 +145,7 @@
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 32000,
-			"defaultValue": 0,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"defaultValue": 0
 		},
 		"11": {
 			"label": "Timer to switch OFF the Channel 2",
@@ -172,10 +154,7 @@
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 32000,
-			"defaultValue": 0,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"defaultValue": 0
 		},
 		"12": {
 			"label": "Timer to switch ON the Channel 1",
@@ -184,10 +163,7 @@
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 32000,
-			"defaultValue": 0,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"defaultValue": 0
 		},
 		"13": {
 			"label": "Timer to switch ON the Channel 2",
@@ -197,9 +173,7 @@
 			"minValue": 0,
 			"maxValue": 32000,
 			"defaultValue": 0,
-			"readOnly": true,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"readOnly": true
 		},
 		"20": {
 			"label": "Status after Multi-Channel Basic Set command",
@@ -208,8 +182,6 @@
 			"minValue": 1,
 			"maxValue": 4,
 			"defaultValue": 1,
-			"readOnly": false,
-			"writeOnly": false,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -237,8 +209,6 @@
 			"minValue": 1,
 			"maxValue": 3,
 			"defaultValue": 3,
-			"readOnly": false,
-			"writeOnly": false,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -258,8 +228,6 @@
 			"minValue": 0,
 			"maxValue": 4,
 			"defaultValue": 4,
-			"readOnly": false,
-			"writeOnly": false,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -291,8 +259,6 @@
 			"minValue": 0,
 			"maxValue": 4,
 			"defaultValue": 4,
-			"readOnly": false,
-			"writeOnly": false,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -324,8 +290,6 @@
 			"minValue": 0,
 			"maxValue": 2,
 			"defaultValue": 1,
-			"readOnly": false,
-			"writeOnly": false,
 			"allowManualEntry": false,
 			"options": [
 				{

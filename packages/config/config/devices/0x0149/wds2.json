@@ -28,8 +28,6 @@
 			"minValue": 0,
 			"maxValue": 7,
 			"defaultValue": 7,
-			"readOnly": false,
-			"writeOnly": false,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -73,8 +71,6 @@
 			"minValue": 0,
 			"maxValue": 8,
 			"defaultValue": 8,
-			"readOnly": false,
-			"writeOnly": false,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -122,8 +118,6 @@
 			"maxValue": 255,
 			"defaultValue": 100,
 			"unsigned": true,
-			"readOnly": false,
-			"writeOnly": false,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -147,8 +141,6 @@
 			"maxValue": 255,
 			"defaultValue": 100,
 			"unsigned": true,
-			"readOnly": false,
-			"writeOnly": false,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -172,8 +164,6 @@
 			"maxValue": 255,
 			"defaultValue": 100,
 			"unsigned": true,
-			"readOnly": false,
-			"writeOnly": false,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -197,8 +187,6 @@
 			"maxValue": 255,
 			"defaultValue": 100,
 			"unsigned": true,
-			"readOnly": false,
-			"writeOnly": false,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -222,8 +210,6 @@
 			"maxValue": 255,
 			"defaultValue": 100,
 			"unsigned": true,
-			"readOnly": false,
-			"writeOnly": false,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -247,8 +233,6 @@
 			"maxValue": 255,
 			"defaultValue": 100,
 			"unsigned": true,
-			"readOnly": false,
-			"writeOnly": false,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -271,10 +255,7 @@
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 32000,
-			"defaultValue": 0,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"defaultValue": 0
 		},
 		"11": {
 			"label": "Timer to switch OFF the Channel 2",
@@ -282,10 +263,7 @@
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 32000,
-			"defaultValue": 0,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"defaultValue": 0
 		},
 		"12": {
 			"label": "Timer to switch ON the Channel 1",
@@ -293,10 +271,7 @@
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 32000,
-			"defaultValue": 0,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"defaultValue": 0
 		},
 		"13": {
 			"label": "Timer to switch ON the Channel 2",
@@ -304,10 +279,7 @@
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 32000,
-			"defaultValue": 0,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"defaultValue": 0
 		},
 		"40": {
 			"label": "Local Scenario",
@@ -316,8 +288,6 @@
 			"minValue": 0,
 			"maxValue": 2,
 			"defaultValue": 0,
-			"readOnly": false,
-			"writeOnly": false,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -341,8 +311,6 @@
 			"minValue": 0,
 			"maxValue": 4,
 			"defaultValue": 4,
-			"readOnly": false,
-			"writeOnly": false,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -374,8 +342,6 @@
 			"minValue": 0,
 			"maxValue": 2,
 			"defaultValue": 1,
-			"readOnly": false,
-			"writeOnly": false,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -399,8 +365,6 @@
 			"minValue": 0,
 			"maxValue": 3,
 			"defaultValue": 3,
-			"readOnly": false,
-			"writeOnly": false,
 			"allowManualEntry": false,
 			"options": [
 				{

@@ -12,8 +12,8 @@
 		}
 	],
 	"firmwareVersion": {
-		"min": "1.0",
-		"max": "1.0"
+		"min": "0.0",
+		"max": "255.255"
 	},
 	"supportsZWavePlus": true,
 	"paramInformation": {
@@ -24,9 +24,6 @@
 			"minValue": 0,
 			"maxValue": 100,
 			"defaultValue": 20,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true,
 			"options": [
 				{
 					"label": "disabled",
@@ -40,9 +37,6 @@
 			"minValue": 0,
 			"maxValue": 20,
 			"defaultValue": 7,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true,
 			"options": [
 				{
 					"label": "disabled",
@@ -57,9 +51,6 @@
 			"maxValue": 65535,
 			"defaultValue": 43200,
 			"unsigned": true,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true,
 			"options": [
 				{
 					"label": "disabled",
@@ -73,9 +64,6 @@
 			"minValue": 0,
 			"maxValue": 1000,
 			"defaultValue": 0,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true,
 			"options": [
 				{
 					"label": "disabled",
@@ -88,10 +76,7 @@
 			"valueSize": 2,
 			"minValue": -200,
 			"maxValue": 1000,
-			"defaultValue": 0,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"defaultValue": 0
 		},
 		"7": {
 			"label": "Humidity Upper Watermark",
@@ -99,9 +84,6 @@
 			"minValue": 0,
 			"maxValue": 100,
 			"defaultValue": 0,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true,
 			"options": [
 				{
 					"label": "disabled",
@@ -115,9 +97,6 @@
 			"minValue": 0,
 			"maxValue": 90,
 			"defaultValue": 0,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true,
 			"options": [
 				{
 					"label": "disabled",
@@ -132,10 +111,7 @@
 			"minValue": 0,
 			"maxValue": 255,
 			"defaultValue": 255,
-			"unsigned": true,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"unsigned": true
 		},
 		"10": {
 			"label": "High Temperature Trigger",
@@ -144,10 +120,7 @@
 			"minValue": 0,
 			"maxValue": 255,
 			"defaultValue": 0,
-			"unsigned": true,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"unsigned": true
 		},
 		"11": {
 			"label": "Low Humidity Trigger",
@@ -156,10 +129,7 @@
 			"minValue": 0,
 			"maxValue": 255,
 			"defaultValue": 255,
-			"unsigned": true,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"unsigned": true
 		},
 		"12": {
 			"label": "High Humidity Trigger",
@@ -168,10 +138,7 @@
 			"minValue": 0,
 			"maxValue": 255,
 			"defaultValue": 0,
-			"unsigned": true,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"unsigned": true
 		}
 	}
 }

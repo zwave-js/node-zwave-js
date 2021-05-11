@@ -8,6 +8,8 @@ import * as path from "path";
 
 // Errors in files matching any entry in this array will always be reported
 const pathWhitelists = ["node_modules/iobroker.zwave2"];
+// except if they are included in this array
+const pathBlacklists = ["node_modules/@serialport"];
 
 function isZWaveError(
 	err: Error | string | null | undefined,
@@ -158,6 +160,9 @@ export async function initSentry(
 				filename &&
 				pathWhitelists.some((w) =>
 					path.normalize(filename).includes(path.normalize(w)),
+				) &&
+				!pathBlacklists.some((b) =>
+					path.normalize(filename).includes(path.normalize(b)),
 				)
 			) {
 				ignore = false;

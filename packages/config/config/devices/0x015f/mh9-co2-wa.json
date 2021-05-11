@@ -22,10 +22,7 @@
 			"valueSize": 2,
 			"minValue": 1,
 			"maxValue": 2000,
-			"defaultValue": 1000,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"defaultValue": 1000
 		}
 	}
 }

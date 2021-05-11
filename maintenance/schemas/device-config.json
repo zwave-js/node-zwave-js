@@ -450,15 +450,15 @@
 					"description": "The factory default value of this parameter."
 				},
 				"readOnly": {
-					"type": "boolean",
+					"const": true,
 					"description": "Whether this parameter can only be read"
 				},
 				"writeOnly": {
-					"type": "boolean",
+					"const": true,
 					"description": "Whether this parameter can only be written"
 				},
 				"allowManualEntry": {
-					"type": "boolean",
+					"const": false,
 					"description": "Whether this parameter accepts any value between minValue and maxValue. If false, options must be used to specify the allowed values."
 				},
 				"options": {
@@ -508,8 +508,7 @@
 							"label",
 							"valueSize",
 							"minValue",
-							"maxValue",
-							"allowManualEntry"
+							"maxValue"
 						]
 					},
 					"else": {
@@ -518,8 +517,7 @@
 							"valueSize",
 							"minValue",
 							"maxValue",
-							"defaultValue",
-							"allowManualEntry"
+							"defaultValue"
 						]
 					}
 				},

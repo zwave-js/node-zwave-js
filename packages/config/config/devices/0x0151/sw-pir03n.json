@@ -24,10 +24,7 @@
 			"minValue": 0,
 			"maxValue": 180,
 			"defaultValue": 180,
-			"unsigned": true,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"unsigned": true
 		}
 	},
 	"metadata": {

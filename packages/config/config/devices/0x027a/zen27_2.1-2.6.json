@@ -33,8 +33,6 @@
 			"minValue": 0,
 			"maxValue": 1,
 			"defaultValue": 0,
-			"readOnly": false,
-			"writeOnly": false,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -53,8 +51,6 @@
 			"minValue": 0,
 			"maxValue": 3,
 			"defaultValue": 0,
-			"readOnly": false,
-			"writeOnly": false,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -81,8 +77,6 @@
 			"minValue": 0,
 			"maxValue": 1,
 			"defaultValue": 0,
-			"readOnly": false,
-			"writeOnly": false,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -101,10 +95,7 @@
 			"valueSize": 4,
 			"minValue": 1,
 			"maxValue": 65535,
-			"defaultValue": 60,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"defaultValue": 60
 		},
 		"5": {
 			"label": "Auto Turn-On Timer",
@@ -112,8 +103,6 @@
 			"minValue": 0,
 			"maxValue": 1,
 			"defaultValue": 0,
-			"readOnly": false,
-			"writeOnly": false,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -132,10 +121,7 @@
 			"valueSize": 4,
 			"minValue": 1,
 			"maxValue": 65535,
-			"defaultValue": 30,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"defaultValue": 30
 		},
 		"7[0x01]": {
 			"label": "Control Group 2 With Physical Switch",
@@ -143,8 +129,6 @@
 			"minValue": 0,
 			"maxValue": 1,
 			"defaultValue": 1,
-			"readOnly": false,
-			"writeOnly": false,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -163,8 +147,6 @@
 			"minValue": 0,
 			"maxValue": 1,
 			"defaultValue": 1,
-			"readOnly": false,
-			"writeOnly": false,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -183,8 +165,6 @@
 			"minValue": 0,
 			"maxValue": 1,
 			"defaultValue": 1,
-			"readOnly": false,
-			"writeOnly": false,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -203,8 +183,6 @@
 			"minValue": 0,
 			"maxValue": 1,
 			"defaultValue": 1,
-			"readOnly": false,
-			"writeOnly": false,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -223,8 +201,6 @@
 			"minValue": 0,
 			"maxValue": 2,
 			"defaultValue": 2,
-			"readOnly": false,
-			"writeOnly": false,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -248,10 +224,7 @@
 			"minValue": 0,
 			"maxValue": 99,
 			"defaultValue": 1,
-			"unit": "seconds",
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"unit": "seconds"
 		},
 		"10": {
 			"label": "Minimum Brightness",
@@ -259,10 +232,7 @@
 			"minValue": 1,
 			"maxValue": 99,
 			"defaultValue": 1,
-			"units": "%",
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"units": "%"
 		},
 		"11": {
 			"label": "Maximum Brightness",
@@ -270,10 +240,7 @@
 			"minValue": 1,
 			"maxValue": 99,
 			"defaultValue": 99,
-			"units": "%",
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"units": "%"
 		},
 		"12": {
 			"label": "Double-Tap Upper Paddle Behavior",
@@ -282,8 +249,6 @@
 			"minValue": 0,
 			"maxValue": 1,
 			"defaultValue": 0,
-			"readOnly": false,
-			"writeOnly": false,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -302,8 +267,6 @@
 			"minValue": 0,
 			"maxValue": 2,
 			"defaultValue": 0,
-			"readOnly": false,
-			"writeOnly": false,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -327,8 +290,6 @@
 			"minValue": 0,
 			"maxValue": 1,
 			"defaultValue": 0,
-			"readOnly": false,
-			"writeOnly": false,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -347,8 +308,6 @@
 			"minValue": 0,
 			"maxValue": 1,
 			"defaultValue": 1,
-			"readOnly": false,
-			"writeOnly": false,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -368,10 +327,7 @@
 			"minValue": 1,
 			"maxValue": 99,
 			"defaultValue": 4,
-			"units": "seconds",
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"units": "seconds"
 		}
 	}
 }

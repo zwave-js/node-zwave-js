@@ -28,8 +28,6 @@
 			"minValue": 0,
 			"maxValue": 11,
 			"defaultValue": 1,
-			"readOnly": false,
-			"writeOnly": false,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -58,8 +56,6 @@
 			"minValue": 0,
 			"maxValue": 5,
 			"defaultValue": 1,
-			"readOnly": false,
-			"writeOnly": false,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -96,8 +92,6 @@
 			"minValue": 0,
 			"maxValue": 5,
 			"defaultValue": 0,
-			"readOnly": false,
-			"writeOnly": false,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -132,10 +126,7 @@
 			"valueSize": 2,
 			"minValue": 3,
 			"maxValue": 30,
-			"defaultValue": 5,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"defaultValue": 5
 		},
 		"5": {
 			"label": "FLo, Floor min limit",
@@ -143,30 +134,21 @@
 			"valueSize": 2,
 			"minValue": 50,
 			"maxValue": 400,
-			"defaultValue": 50,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"defaultValue": 50
 		},
 		"6": {
 			"label": "FHi, Floor max limit",
 			"valueSize": 2,
 			"minValue": 50,
 			"maxValue": 400,
-			"defaultValue": 400,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"defaultValue": 400
 		},
 		"7": {
 			"label": "ALo, Air min limit",
 			"valueSize": 2,
 			"minValue": 50,
 			"maxValue": 400,
-			"defaultValue": 50,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"defaultValue": 50
 		},
 		"8": {
 			"label": "AHi, Air max limit",
@@ -174,20 +156,14 @@
 			"valueSize": 2,
 			"minValue": 50,
 			"maxValue": 400,
-			"defaultValue": 400,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"defaultValue": 400
 		},
 		"9": {
 			"label": "PLo, FP-mode P setting",
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 9,
-			"defaultValue": 0,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"defaultValue": 0
 		},
 		"10": {
 			"label": "CO mode setpoint",
@@ -195,10 +171,7 @@
 			"valueSize": 2,
 			"minValue": 50,
 			"maxValue": 400,
-			"defaultValue": 210,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"defaultValue": 210
 		},
 		"11": {
 			"label": "ECO mode setpoint",
@@ -206,10 +179,7 @@
 			"valueSize": 2,
 			"minValue": 50,
 			"maxValue": 400,
-			"defaultValue": 180,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"defaultValue": 180
 		},
 		"12": {
 			"label": "P setting",
@@ -217,10 +187,7 @@
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 10,
-			"defaultValue": 2,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"defaultValue": 2
 		},
 		"13": {
 			"label": "COOL setpoint",
@@ -228,10 +195,7 @@
 			"valueSize": 2,
 			"minValue": 50,
 			"maxValue": 400,
-			"defaultValue": 210,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"defaultValue": 210
 		}
 	}
 }

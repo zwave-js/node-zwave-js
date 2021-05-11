@@ -24,8 +24,6 @@
 			"minValue": 0,
 			"maxValue": 1,
 			"defaultValue": 0,
-			"readOnly": false,
-			"writeOnly": false,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -44,10 +42,7 @@
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 3,
-			"defaultValue": 2,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"defaultValue": 2
 		},
 		"3": {
 			"label": "Number of Cool Stages",
@@ -55,10 +50,7 @@
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 2,
-			"defaultValue": 2,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"defaultValue": 2
 		},
 		"4": {
 			"label": "Heat Fuel Type",
@@ -67,8 +59,6 @@
 			"minValue": 0,
 			"maxValue": 1,
 			"defaultValue": 1,
-			"readOnly": false,
-			"writeOnly": false,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -87,10 +77,7 @@
 			"valueSize": 4,
 			"minValue": -100,
 			"maxValue": 100,
-			"defaultValue": 0,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"defaultValue": 0
 		},
 		"6": {
 			"label": "Overshoot",
@@ -98,10 +85,7 @@
 			"valueSize": 4,
 			"minValue": 0,
 			"maxValue": 30,
-			"defaultValue": 5,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"defaultValue": 5
 		},
 		"7": {
 			"label": "Swing",
@@ -109,10 +93,7 @@
 			"valueSize": 4,
 			"minValue": 0,
 			"maxValue": 30,
-			"defaultValue": 0,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"defaultValue": 0
 		},
 		"8": {
 			"label": "Heat Staging Delay",
@@ -120,10 +101,7 @@
 			"unit": "minutes",
 			"minValue": 1,
 			"maxValue": 60,
-			"defaultValue": 10,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"defaultValue": 10
 		},
 		"9": {
 			"label": "Cool Staging Delay",
@@ -131,10 +109,7 @@
 			"unit": "minutes",
 			"minValue": 1,
 			"maxValue": 60,
-			"defaultValue": 10,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"defaultValue": 10
 		},
 		"10": {
 			"label": "Balance Setpoint",
@@ -142,10 +117,7 @@
 			"valueSize": 4,
 			"minValue": 0,
 			"maxValue": 950,
-			"defaultValue": 350,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"defaultValue": 350
 		},
 		"11": {
 			"label": "Recovery Settings",
@@ -154,8 +126,6 @@
 			"minValue": 0,
 			"maxValue": 1,
 			"defaultValue": 1,
-			"readOnly": false,
-			"writeOnly": false,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -175,10 +145,7 @@
 			"minValue": 10,
 			"maxValue": 240,
 			"defaultValue": 20,
-			"unsigned": true,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"unsigned": true
 		},
 		"13": {
 			"label": "Fan Circulation Duty Cycle",
@@ -186,10 +153,7 @@
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 100,
-			"defaultValue": 25,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"defaultValue": 25
 		},
 		"14": {
 			"label": "Fan Purge Time",
@@ -197,10 +161,7 @@
 			"valueSize": 2,
 			"minValue": 1,
 			"maxValue": 3600,
-			"defaultValue": 60,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"defaultValue": 60
 		},
 		"15": {
 			"label": "Maximum Heat Setpoint",
@@ -208,10 +169,7 @@
 			"valueSize": 4,
 			"minValue": 350,
 			"maxValue": 950,
-			"defaultValue": 950,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"defaultValue": 950
 		},
 		"16": {
 			"label": "Minimum Heat Setpoint",
@@ -219,10 +177,7 @@
 			"valueSize": 4,
 			"minValue": 350,
 			"maxValue": 950,
-			"defaultValue": 350,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"defaultValue": 350
 		},
 		"17": {
 			"label": "Maximum Cool Setpoint",
@@ -230,10 +185,7 @@
 			"valueSize": 4,
 			"minValue": 500,
 			"maxValue": 950,
-			"defaultValue": 950,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"defaultValue": 950
 		},
 		"18": {
 			"label": "Minimum Cool Setpoint",
@@ -241,10 +193,7 @@
 			"valueSize": 4,
 			"minValue": 500,
 			"maxValue": 950,
-			"defaultValue": 500,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"defaultValue": 500
 		},
 		"19": {
 			"label": "Thermostat Lock",
@@ -253,8 +202,6 @@
 			"minValue": 0,
 			"maxValue": 1,
 			"defaultValue": 0,
-			"readOnly": false,
-			"writeOnly": false,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -273,10 +220,7 @@
 			"unit": "minutes",
 			"minValue": 0,
 			"maxValue": 60,
-			"defaultValue": 5,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"defaultValue": 5
 		},
 		"21": {
 			"label": "Demand Response Period",
@@ -285,10 +229,7 @@
 			"minValue": 10,
 			"maxValue": 240,
 			"defaultValue": 10,
-			"unsigned": true,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"unsigned": true
 		},
 		"22": {
 			"label": "Demand Response Duty Cycle",
@@ -296,10 +237,7 @@
 			"unit": "%",
 			"minValue": 0,
 			"maxValue": 100,
-			"defaultValue": 25,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"defaultValue": 25
 		},
 		"23": {
 			"label": "Temperature Display Units",
@@ -308,8 +246,6 @@
 			"minValue": 0,
 			"maxValue": 1,
 			"defaultValue": 1,
-			"readOnly": false,
-			"writeOnly": false,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -329,8 +265,6 @@
 			"minValue": 3,
 			"maxValue": 31,
 			"defaultValue": 15,
-			"readOnly": false,
-			"writeOnly": false,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -370,8 +304,6 @@
 			"minValue": 0,
 			"maxValue": 3,
 			"defaultValue": 0,
-			"readOnly": false,
-			"writeOnly": false,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -399,8 +331,6 @@
 			"minValue": 0,
 			"maxValue": 1,
 			"defaultValue": 0,
-			"readOnly": false,
-			"writeOnly": false,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -419,10 +349,7 @@
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 100,
-			"defaultValue": 30,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"defaultValue": 30
 		},
 		"28": {
 			"label": "Battery Alert Threshold Very Low",
@@ -430,10 +357,7 @@
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 100,
-			"defaultValue": 15,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"defaultValue": 15
 		},
 		"30": {
 			"label": "Remote Temperature Enable",
@@ -442,8 +366,6 @@
 			"minValue": 0,
 			"maxValue": 1,
 			"defaultValue": 0,
-			"readOnly": false,
-			"writeOnly": false,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -462,10 +384,7 @@
 			"valueSize": 4,
 			"minValue": 10,
 			"maxValue": 100,
-			"defaultValue": 30,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"defaultValue": 30
 		},
 		"32": {
 			"label": "Cool Differential",
@@ -473,10 +392,7 @@
 			"valueSize": 4,
 			"minValue": 10,
 			"maxValue": 100,
-			"defaultValue": 30,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"defaultValue": 30
 		},
 		"33": {
 			"label": "Temperature Reporting Threshold",
@@ -484,10 +400,7 @@
 			"valueSize": 4,
 			"minValue": 5,
 			"maxValue": 20,
-			"defaultValue": 10,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"defaultValue": 10
 		},
 		"34": {
 			"label": "O/B Select",
@@ -496,8 +409,6 @@
 			"minValue": 0,
 			"maxValue": 1,
 			"defaultValue": 1,
-			"readOnly": false,
-			"writeOnly": false,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -517,8 +428,6 @@
 			"minValue": 0,
 			"maxValue": 1,
 			"defaultValue": 0,
-			"readOnly": false,
-			"writeOnly": false,
 			"allowManualEntry": false,
 			"options": [
 				{

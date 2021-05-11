@@ -25,7 +25,6 @@
 			"defaultValue": 19,
 			"unsigned": true,
 			"readOnly": true,
-			"writeOnly": false,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -53,10 +52,7 @@
 			"maxValue": 32767,
 			"unit": "seconds",
 			"defaultValue": 0,
-			"unsigned": true,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"unsigned": true
 		},
 		"5": {
 			"label": "Safety Off Period",
@@ -65,10 +61,7 @@
 			"maxValue": 32767,
 			"unit": "seconds",
 			"defaultValue": 600,
-			"unsigned": true,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"unsigned": true
 		},
 		"6": {
 			"label": "Safety On Period",
@@ -77,10 +70,7 @@
 			"maxValue": 32767,
 			"unit": "seconds",
 			"defaultValue": 300,
-			"unsigned": true,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"unsigned": true
 		},
 		"16": {
 			"label": "Back Unit Type",
@@ -90,7 +80,6 @@
 			"defaultValue": 2,
 			"unsigned": true,
 			"readOnly": true,
-			"writeOnly": false,
 			"allowManualEntry": false,
 			"options": [
 				{

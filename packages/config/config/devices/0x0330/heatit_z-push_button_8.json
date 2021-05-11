@@ -23,8 +23,6 @@
 			"minValue": 0,
 			"maxValue": 21930,
 			"defaultValue": 0,
-			"readOnly": false,
-			"writeOnly": false,
 			"allowManualEntry": false,
 			"options": [
 				{

@@ -23,10 +23,7 @@
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 1,
-			"defaultValue": 1,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"defaultValue": 1
 		},
 		"21": {
 			"label": "Device Status after Power Failure",
@@ -34,8 +31,6 @@
 			"minValue": 0,
 			"maxValue": 2,
 			"defaultValue": 0,
-			"readOnly": false,
-			"writeOnly": false,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -58,10 +53,7 @@
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 2,
-			"defaultValue": 1,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"defaultValue": 1
 		},
 		"27": {
 			"label": "Indicator Modes",
@@ -69,10 +61,7 @@
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 1,
-			"defaultValue": 0,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"defaultValue": 0
 		},
 		"151": {
 			"label": "Threshold of power report",
@@ -82,10 +71,7 @@
 			"minValue": 0,
 			"maxValue": 65535,
 			"defaultValue": 50,
-			"unsigned": true,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"unsigned": true
 		},
 		"152": {
 			"label": "Percentage Threshold of to Trigger Power Report",
@@ -94,10 +80,7 @@
 			"minValue": 0,
 			"maxValue": 255,
 			"defaultValue": 10,
-			"unsigned": true,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"unsigned": true
 		},
 		"171": {
 			"label": "Power Report Frequency",
@@ -106,10 +89,7 @@
 			"valueSize": 4,
 			"minValue": 5,
 			"maxValue": 2678400,
-			"defaultValue": 30,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"defaultValue": 30
 		},
 		"172": {
 			"label": "Energy Report Frequency",
@@ -118,10 +98,7 @@
 			"valueSize": 4,
 			"minValue": 5,
 			"maxValue": 2678400,
-			"defaultValue": 300,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"defaultValue": 300
 		},
 		"173": {
 			"label": "Voltage Report Frequency",
@@ -130,10 +107,7 @@
 			"valueSize": 4,
 			"minValue": 0,
 			"maxValue": 2678400,
-			"defaultValue": 0,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"defaultValue": 0
 		},
 		"174": {
 			"label": "Electricity Report Frequency",
@@ -142,10 +116,7 @@
 			"valueSize": 4,
 			"minValue": 0,
 			"maxValue": 2678400,
-			"defaultValue": 0,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"defaultValue": 0
 		}
 	}
 }

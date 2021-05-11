@@ -108,10 +108,7 @@ Labels should be clear and concise. They should clearly explain what the paramet
 		"minValue": 0,
 		"maxValue": 99,
 		"defaultValue": 0,
-		"unsigned": true,
-		"readOnly": false,
-		"writeOnly": false,
-		"allowManualEntry": true
+		"unsigned": true
 	}
 }
 ```
@@ -138,9 +135,6 @@ Descriptions should be **Sentence case**.
 		"maxValue": 255,
 		"defaultValue": 30,
 		"unsigned": true,
-		"readOnly": false,
-		"writeOnly": false,
-		"allowManualEntry": true,
 		"options": [
 			{
 				"label": "Dimmer default",
@@ -163,8 +157,6 @@ Descriptions should be **Sentence case**.
 		"maxValue": 255,
 		"defaultValue": 30,
 		"unsigned": true,
-		"readOnly": false,
-		"writeOnly": false,
 		"allowManualEntry": false
 	}
 }
@@ -187,8 +179,6 @@ Option labels should be **Sentence case**.
 		"maxValue": 1,
 		"defaultValue": 0,
 		"unsigned": true,
-		"readOnly": false,
-		"writeOnly": false,
 		"allowManualEntry": false,
 		"options": [
 			{
@@ -220,9 +210,6 @@ For example:
 		"maxValue": 255,
 		"defaultValue": 0,
 		"unsigned": true,
-		"readOnly": false,
-		"writeOnly": false,
-		"allowManualEntry": true,
 		"options": [
 			{
 				"label": "Dimmer default",
@@ -244,9 +231,6 @@ or
 		"maxValue": 99,
 		"defaultValue": 0,
 		"unsigned": true,
-		"readOnly": false,
-		"writeOnly": false,
-		"allowManualEntry": true,
 		"options": [
 			{
 				"label": "Disable",
@@ -292,10 +276,7 @@ Some devices use multiples of the base units - these should be represented as a 
 		"minValue": 0,
 		"maxValue": 254,
 		"defaultValue": 0,
-		"unsigned": true,
-		"readOnly": false,
-		"writeOnly": false,
-		"allowManualEntry": true
+		"unsigned": true
 	}
 ```
 
@@ -306,7 +287,7 @@ Some devices use multiples of the base units - these should be represented as a 
 
 ### Read/Write Only
 
-While somewhat rare, sometimes parameters can only be read or written. Typically, the description or manual would say so. If applicable, change the appropriate definition to true.
+While somewhat rare, sometimes parameters can only be read or written. Typically, the description or manual would say so. If applicable, add the appropriate field `readOnly` or `writeOnly`.
 
 ```diff
 	"1": {
@@ -317,9 +298,6 @@ While somewhat rare, sometimes parameters can only be read or written. Typically
 		"maxValue": 254,
 		"defaultValue": 0,
 		"unsigned": true,
--		"readOnly": false,
-+		"readOnly": true,
-		"writeOnly": false,
-		"allowManualEntry": true
++		"readOnly": true
 	}
 ```

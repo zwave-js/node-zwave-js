@@ -18,7 +18,12 @@ import { CompatConfig } from "./CompatConfig";
 import { readJsonWithTemplate } from "./JsonTemplate";
 import type { ConfigLogger } from "./Logger";
 import { evaluate } from "./Logic";
-import { configDir, hexKeyRegex4Digits, throwInvalidConfig } from "./utils";
+import {
+	configDir,
+	externalConfigDir,
+	hexKeyRegex4Digits,
+	throwInvalidConfig,
+} from "./utils";
 
 export interface FirmwareVersionRange {
 	min: string;
@@ -61,13 +66,22 @@ export type ParamInfoMap = ReadonlyObjectKeyMap<
 	ParamInformation
 >;
 
-export const devicesDir = path.join(configDir, "devices");
-export const indexPath = path.join(devicesDir, "index.json");
-export const fulltextIndexPath = path.join(devicesDir, "fulltext_index.json");
+const embeddedDevicesDir = path.join(configDir, "devices");
+const fulltextIndexPath = path.join(embeddedDevicesDir, "fulltext_index.json");
+
+function getDevicesPaths(
+	configDir: string,
+): { devicesDir: string; indexPath: string } {
+	const devicesDir = path.join(configDir, "devices");
+	const indexPath = path.join(devicesDir, "index.json");
+	return { devicesDir, indexPath };
+}
+
 export type DeviceConfigIndex = DeviceConfigIndexEntry[];
 export type FulltextDeviceConfigIndex = FulltextDeviceConfigIndexEntry[];
 
 async function hasChangedDeviceFiles(
+	devicesRoot: string,
 	dir: string,
 	lastChange: Date,
 ): Promise<boolean> {
@@ -79,14 +93,15 @@ async function hasChangedDeviceFiles(
 
 		const stat = await fs.stat(fullPath);
 		if (
-			(dir !== devicesDir || f !== "index.json") &&
+			(dir !== devicesRoot || f !== "index.json") &&
 			(stat.isFile() || stat.isDirectory()) &&
 			stat.mtime > lastChange
 		) {
 			return true;
 		} else if (stat.isDirectory()) {
 			// we need to go deeper!
-			if (await hasChangedDeviceFiles(fullPath, lastChange)) return true;
+			if (await hasChangedDeviceFiles(devicesRoot, fullPath, lastChange))
+				return true;
 		}
 	}
 	return false;
@@ -146,6 +161,7 @@ async function generateIndex<T extends Record<string, unknown>>(
 }
 
 async function loadDeviceIndexShared<T extends Record<string, unknown>>(
+	devicesDir: string,
 	indexPath: string,
 	extractIndexEntries: (config: DeviceConfig) => T[],
 	logger?: ConfigLogger,
@@ -179,7 +195,11 @@ async function loadDeviceIndexShared<T extends Record<string, unknown>>(
 
 	// ...or if there were any changes in the file system
 	if (!needsUpdate) {
-		needsUpdate = await hasChangedDeviceFiles(devicesDir, mtimeIndex!);
+		needsUpdate = await hasChangedDeviceFiles(
+			devicesDir,
+			devicesDir,
+			mtimeIndex!,
+		);
 		if (needsUpdate) {
 			logger?.print(
 				"Device configuration files on disk changed - regenerating index...",
@@ -254,8 +274,14 @@ export async function generatePriorityDeviceIndex(
  */
 export async function loadDeviceIndexInternal(
 	logger?: ConfigLogger,
+	externalConfig?: boolean,
 ): Promise<DeviceConfigIndex> {
+	const { devicesDir, indexPath } = getDevicesPaths(
+		(externalConfig && externalConfigDir) || configDir,
+	);
+
 	return loadDeviceIndexShared(
+		devicesDir,
 		indexPath,
 		(config) =>
 			config.devices.map((dev) => ({
@@ -278,8 +304,10 @@ export async function loadDeviceIndexInternal(
 export async function loadFulltextDeviceIndexInternal(
 	logger?: ConfigLogger,
 ): Promise<FulltextDeviceConfigIndex> {
+	// This method is not meant to operate with the external device index!
 	return loadDeviceIndexShared(
-		indexPath,
+		embeddedDevicesDir,
+		fulltextIndexPath,
 		(config) =>
 			config.devices.map((dev) => ({
 				manufacturerId: formatId(config.manufacturerId.toString(16)),
@@ -648,7 +676,7 @@ export class DeviceConfig {
 	) {
 		// A config file is treated as am embedded one when it is located under the devices root dir
 		this.isEmbedded = !path
-			.relative(devicesDir, this.filename)
+			.relative(embeddedDevicesDir, this.filename)
 			.startsWith("..");
 	}
 
@@ -856,20 +884,23 @@ Parameter #${parameterNumber} has a non-string unit`,
 		}
 		this.unit = definition.unit;
 
-		if (typeof definition.readOnly !== "boolean") {
+		if (definition.readOnly != undefined && definition.readOnly !== true) {
 			throwInvalidConfig(
 				"devices",
 				`packages/config/config/devices/${parent.filename}:
-Parameter #${parameterNumber}: readOnly must be a boolean!`,
+		Parameter #${parameterNumber}: readOnly must true or omitted!`,
 			);
 		}
 		this.readOnly = definition.readOnly;
 
-		if (typeof definition.writeOnly !== "boolean") {
+		if (
+			definition.writeOnly != undefined &&
+			definition.writeOnly !== true
+		) {
 			throwInvalidConfig(
 				"devices",
 				`packages/config/config/devices/${parent.filename}:
-Parameter #${parameterNumber}: writeOnly must be a boolean!`,
+		Parameter #${parameterNumber}: writeOnly must be true or omitted!`,
 			);
 		}
 		this.writeOnly = definition.writeOnly;
@@ -891,14 +922,19 @@ Parameter #${parameterNumber} has a non-numeric property defaultValue`,
 		}
 		this.defaultValue = definition.defaultValue;
 
-		if (typeof definition.allowManualEntry !== "boolean") {
+		if (
+			definition.allowManualEntry != undefined &&
+			definition.allowManualEntry !== false
+		) {
 			throwInvalidConfig(
 				"devices",
 				`packages/config/config/devices/${parent.filename}:
-Parameter #${parameterNumber}: allowManualEntry must be a boolean!`,
+Parameter #${parameterNumber}: allowManualEntry must be false or omitted!`,
 			);
 		}
-		this.allowManualEntry = definition.allowManualEntry;
+		// Default to allowing manual entry, except if the param is readonly
+		this.allowManualEntry =
+			definition.allowManualEntry ?? (this.readOnly ? false : true);
 
 		if (
 			isArray(definition.options) &&
@@ -933,8 +969,8 @@ Parameter #${parameterNumber}: options is malformed!`,
 	public readonly unsigned?: boolean;
 	public readonly defaultValue: number;
 	public readonly unit?: string;
-	public readonly readOnly: boolean;
-	public readonly writeOnly: boolean;
+	public readonly readOnly?: true;
+	public readonly writeOnly?: true;
 	public readonly allowManualEntry: boolean;
 	public readonly options: readonly ConditionalConfigOption[];
 

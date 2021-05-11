@@ -26,9 +26,6 @@
 			"maxValue": 55,
 			"defaultValue": 0,
 			"unsigned": true,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true,
 			"options": [
 				{
 					"label": "Default - 10 seconds",

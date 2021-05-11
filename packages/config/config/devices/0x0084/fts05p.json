@@ -64,10 +64,7 @@
 			"minValue": 0,
 			"maxValue": 255,
 			"defaultValue": 4,
-			"unsigned": true,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"unsigned": true
 		},
 		"2": {
 			"label": "Temperature High Threshold",
@@ -77,10 +74,7 @@
 			"minValue": 0,
 			"maxValue": 255,
 			"defaultValue": 70,
-			"unsigned": true,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"unsigned": true
 		},
 		"3": {
 			"label": "Normally Wet vs Normally Dry",
@@ -90,8 +84,6 @@
 			"maxValue": 240,
 			"defaultValue": 0,
 			"unsigned": true,
-			"readOnly": false,
-			"writeOnly": false,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -112,8 +104,6 @@
 			"maxValue": 240,
 			"defaultValue": 240,
 			"unsigned": true,
-			"readOnly": false,
-			"writeOnly": false,
 			"allowManualEntry": false,
 			"options": [
 				{

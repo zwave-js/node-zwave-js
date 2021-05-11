@@ -24,8 +24,6 @@
 			"minValue": 0,
 			"maxValue": 2,
 			"defaultValue": 2,
-			"readOnly": false,
-			"writeOnly": false,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -49,8 +47,6 @@
 			"minValue": 0,
 			"maxValue": 3,
 			"defaultValue": 3,
-			"readOnly": false,
-			"writeOnly": false,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -78,8 +74,6 @@
 			"minValue": 0,
 			"maxValue": 1,
 			"defaultValue": 0,
-			"readOnly": false,
-			"writeOnly": false,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -100,9 +94,6 @@
 			"minValue": 0,
 			"maxValue": 100,
 			"defaultValue": 10,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true,
 			"options": [
 				{
 					"label": "Power Auto-Polling Report Disable",
@@ -158,9 +149,6 @@
 			"minValue": 0,
 			"maxValue": 2000,
 			"defaultValue": 2000,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true,
 			"options": [
 				{
 					"label": "Overload Report Disable (Not Recommended)",
@@ -213,9 +201,6 @@
 			"maxValue": 65535,
 			"defaultValue": 1000,
 			"unsigned": true,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true,
 			"options": [
 				{
 					"label": "Energy Auto-Polling Report Disable",
@@ -280,9 +265,6 @@
 			"maxValue": 65535,
 			"defaultValue": 3600,
 			"unsigned": true,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true,
 			"options": [
 				{
 					"label": "Metering Pulse disable",
@@ -311,9 +293,6 @@
 			"maxValue": 65535,
 			"defaultValue": 20,
 			"unsigned": true,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true,
 			"options": [
 				{
 					"label": "Power High Threshold disable",
@@ -382,9 +361,6 @@
 			"maxValue": 65535,
 			"defaultValue": 5,
 			"unsigned": true,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true,
 			"options": [
 				{
 					"label": "Power Low Threshold disable",
@@ -455,8 +431,6 @@
 			"minValue": 0,
 			"maxValue": 20,
 			"defaultValue": 7,
-			"readOnly": false,
-			"writeOnly": false,
 			"allowManualEntry": false,
 			"options": [
 				{

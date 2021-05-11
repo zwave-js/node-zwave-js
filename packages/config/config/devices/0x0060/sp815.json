@@ -25,10 +25,7 @@
 			"minValue": 0,
 			"maxValue": 255,
 			"defaultValue": 30,
-			"unsigned": true,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"unsigned": true
 		},
 		"2": {
 			"label": "Re-trigger Interval Setting (for PIR Sensor Only)",
@@ -38,10 +35,7 @@
 			"minValue": 0,
 			"maxValue": 15,
 			"defaultValue": 15,
-			"unsigned": true,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"unsigned": true
 		},
 		"3": {
 			"label": "Trigger Off Interval Setting",
@@ -51,10 +45,7 @@
 			"minValue": 0,
 			"maxValue": 255,
 			"defaultValue": 15,
-			"unsigned": true,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"unsigned": true
 		}
 	},
 	"metadata": {

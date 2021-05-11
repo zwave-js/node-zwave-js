@@ -35,10 +35,7 @@
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 99,
-			"defaultValue": 99,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"defaultValue": 99
 		},
 		"2": {
 			"$if": "firmwareVersion >= 2.0",
@@ -47,8 +44,6 @@
 			"minValue": 0,
 			"maxValue": 1,
 			"defaultValue": 1,
-			"readOnly": false,
-			"writeOnly": false,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -68,10 +63,7 @@
 			"valueSize": 1,
 			"minValue": 1,
 			"maxValue": 10,
-			"defaultValue": 6,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"defaultValue": 6
 		},
 		"4": {
 			"$if": "firmwareVersion >= 2.0",
@@ -82,9 +74,6 @@
 			"minValue": 0,
 			"maxValue": 900,
 			"defaultValue": 0,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true,
 			"options": [
 				{
 					"label": "Set by knob on sensor",
@@ -105,9 +94,6 @@
 			"minValue": 0,
 			"maxValue": 720,
 			"defaultValue": 0,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true,
 			"options": [
 				{
 					"label": "Set by knob on sensor",
@@ -122,10 +108,7 @@
 			"valueSize": 2,
 			"minValue": 1,
 			"maxValue": 1440,
-			"defaultValue": 30,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"defaultValue": 30
 		},
 		"7": {
 			"$if": "firmwareVersion >= 2.0",
@@ -137,8 +120,6 @@
 			"maxValue": 720,
 			"defaultValue": 5,
 			"readOnly": true,
-			"writeOnly": false,
-			"allowManualEntry": true,
 			"options": [
 				{
 					"label": "5 seconds (Test mode)",
@@ -156,8 +137,6 @@
 			"maxValue": 900,
 			"defaultValue": 900,
 			"readOnly": true,
-			"writeOnly": false,
-			"allowManualEntry": true,
 			"options": [
 				{
 					"label": "900 lux (Test mode)",
