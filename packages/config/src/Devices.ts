@@ -884,22 +884,25 @@ Parameter #${parameterNumber} has a non-string unit`,
 		}
 		this.unit = definition.unit;
 
-		if (typeof definition.readOnly !== "boolean") {
-			throwInvalidConfig(
-				"devices",
-				`packages/config/config/devices/${parent.filename}:
-Parameter #${parameterNumber}: readOnly must be a boolean!`,
-			);
-		}
+		// 		if (definition.readOnly != undefined && definition.readOnly !== true) {
+		// 			throwInvalidConfig(
+		// 				"devices",
+		// 				`packages/config/config/devices/${parent.filename}:
+		// Parameter #${parameterNumber}: readOnly must true or omitted!`,
+		// 			);
+		// 		}
 		this.readOnly = definition.readOnly;
 
-		if (typeof definition.writeOnly !== "boolean") {
-			throwInvalidConfig(
-				"devices",
-				`packages/config/config/devices/${parent.filename}:
-Parameter #${parameterNumber}: writeOnly must be a boolean!`,
-			);
-		}
+		// 		if (
+		// 			definition.writeOnly != undefined &&
+		// 			definition.writeOnly !== true
+		// 		) {
+		// 			throwInvalidConfig(
+		// 				"devices",
+		// 				`packages/config/config/devices/${parent.filename}:
+		// Parameter #${parameterNumber}: writeOnly must be true or omitted!`,
+		// 			);
+		// 		}
 		this.writeOnly = definition.writeOnly;
 
 		if (definition.defaultValue == undefined) {
@@ -961,8 +964,8 @@ Parameter #${parameterNumber}: options is malformed!`,
 	public readonly unsigned?: boolean;
 	public readonly defaultValue: number;
 	public readonly unit?: string;
-	public readonly readOnly: boolean;
-	public readonly writeOnly: boolean;
+	public readonly readOnly?: true;
+	public readonly writeOnly?: true;
 	public readonly allowManualEntry: boolean;
 	public readonly options: readonly ConditionalConfigOption[];
 

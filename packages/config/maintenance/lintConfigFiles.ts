@@ -273,6 +273,41 @@ description: ${description}`,
 					}
 				}
 
+				// Check if there are options where readOnly and writeOnly are unnecessarily specified
+				for (const [
+					{ parameter },
+					value,
+				] of config.paramInformation.entries()) {
+					if (
+						!value.allowManualEntry &&
+						!value.readOnly &&
+						!value.options?.length
+					) {
+						addError(
+							file,
+							`Parameter #${parameter} must allow manual entry if there are no options defined!`,
+							variant,
+						);
+					}
+
+					if (value.readOnly && value.writeOnly) {
+						addError(
+							file,
+							`Parameter #${parameter} is invalid: readOnly and writeOnly are mutually exclusive!`,
+							variant,
+						);
+					} else if (
+						value.readOnly !== undefined &&
+						value.writeOnly !== undefined
+					) {
+						addError(
+							file,
+							`Parameter #${parameter} is invalid: readOnly and writeOnly must not both be specified!`,
+							variant,
+						);
+					}
+				}
+
 				// Check if there are options with duplicate values
 				for (const [
 					{ parameter },
