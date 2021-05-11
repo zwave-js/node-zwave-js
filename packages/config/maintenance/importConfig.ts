@@ -432,16 +432,13 @@ function normalizeConfig(config: Record<string, any>): Record<string, any> {
 			original.unit = normalizeUnits(original.unit);
 
 			if (original.readOnly) {
-<<<<<<< HEAD
 				original.allowManualEntry = undefined;
-=======
 				original.writeOnly = undefined;
 			} else if (original.writeOnly) {
 				original.readOnly = undefined;
 			} else {
 				original.readOnly = undefined;
 				original.writeOnly = undefined;
->>>>>>> master
 			}
 
 			// Remove undefined keys while preserving comments
@@ -661,14 +658,6 @@ async function parseOZWProduct(
 				// some config params have absurd value sizes, ignore them
 				parsedParam.maxValue = parsedParam.minValue;
 			}
-<<<<<<< HEAD
-			parsedParam.readOnly =
-				param.read_only === true || param.read_only === "true";
-			parsedParam.writeOnly =
-				param.write_only === true || param.write_only === "true";
-			parsedParam.allowManualEntry =
-				!parsedParam.readOnly && param.type !== "list";
-=======
 			if (param.read_only === true || param.read_only === "true") {
 				parsedParam.readOnly = true;
 			} else if (
@@ -677,8 +666,9 @@ async function parseOZWProduct(
 			) {
 				parsedParam.writeOnly = true;
 			}
-			parsedParam.allowManualEntry = param.type !== "list";
->>>>>>> master
+			parsedParam.allowManualEntry =
+				!parsedParam.readOnly && param.type !== "list";
+
 			parsedParam.defaultValue = updateNumberOrDefault(
 				param.value,
 				parsedParam.value,
