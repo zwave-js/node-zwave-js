@@ -671,7 +671,6 @@
 				"minValue": 0,
 				"maxValue": 2,
 				"defaultValue": 0,
-				"writeOnly": false,
 				"allowManualEntry": false,
 				"options": [
 					{
@@ -696,7 +695,6 @@
 				"minValue": 0,
 				"maxValue": 1,
 				"defaultValue": 0,
-				"writeOnly": false,
 				"allowManualEntry": false,
 				"options": [
 					{

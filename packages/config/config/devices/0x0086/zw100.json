@@ -124,7 +124,6 @@
 				"minValue": 10,
 				"maxValue": 2120,
 				"defaultValue": 20,
-				"writeOnly": false,
 				"allowManualEntry": true
 			},
 			{
@@ -135,7 +134,6 @@
 				"minValue": 10,
 				"maxValue": 2120,
 				"defaultValue": 20,
-				"writeOnly": false,
 				"allowManualEntry": true
 			}
 		],
@@ -218,7 +216,6 @@
 				"minValue": -400,
 				"maxValue": 2120,
 				"defaultValue": 280,
-				"writeOnly": false,
 				"allowManualEntry": true
 			},
 			{
@@ -229,7 +226,6 @@
 				"minValue": -400,
 				"maxValue": 2120,
 				"defaultValue": 280,
-				"writeOnly": false,
 				"allowManualEntry": true
 			}
 		],
@@ -256,7 +252,6 @@
 				"minValue": -400,
 				"maxValue": 2120,
 				"defaultValue": 0,
-				"writeOnly": false,
 				"allowManualEntry": true
 			},
 			{
@@ -267,7 +262,6 @@
 				"minValue": -400,
 				"maxValue": 2120,
 				"defaultValue": 0,
-				"writeOnly": false,
 				"allowManualEntry": true
 			}
 		],

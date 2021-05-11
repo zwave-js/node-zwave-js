@@ -159,7 +159,6 @@
 			"defaultValue": 0,
 			"unsigned": true,
 			"unsigned": true,
-			"writeOnly": false,
 			"allowManualEntry": false,
 			"options": [
 				{
