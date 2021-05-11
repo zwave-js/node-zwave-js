@@ -24,7 +24,7 @@
 			"productId": "0x0070",
 			"zwaveAllianceId": 2653
 		}
-	],	],
+	],
 	"firmwareVersion": {
 		"min": "0.0",
 		"max": "255.255"
