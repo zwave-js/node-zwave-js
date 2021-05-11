@@ -459,7 +459,7 @@
 			"label": "Reset Parameters 111-113 to Default Values"
 		},
 		"201[0xff]": {
-			"$if": "firmwareVersion >= 1.6",				   
+			"$if": "firmwareVersion >= 1.6",
 			"$import": "../0x0086/templates/aeotec_template.json#celsius_fahrenheit",
 			"label": "Temperature Calibration Unit",
 			"valueSize": 2
