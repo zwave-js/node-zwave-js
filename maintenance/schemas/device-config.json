@@ -509,11 +509,7 @@
 							"valueSize",
 							"minValue",
 							"maxValue"
-						],
-						"not": {
-							"$comment": "not required means forbidden in JSON schema",
-							"required": ["allowManualEntry"]
-						}
+						]
 					},
 					"else": {
 						"required": [
@@ -521,8 +517,7 @@
 							"valueSize",
 							"minValue",
 							"maxValue",
-							"defaultValue",
-							"allowManualEntry"
+							"defaultValue"
 						]
 					}
 				},
