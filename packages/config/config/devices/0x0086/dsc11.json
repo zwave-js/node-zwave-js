@@ -101,8 +101,7 @@
 			"defaultValue": 0,
 			"unsigned": true,
 			"readOnly": true,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"writeOnly": false
 		},
 		"101[0x01]": {
 			"$import": "templates/aeotec_template.json#auto_report_group1_watt",

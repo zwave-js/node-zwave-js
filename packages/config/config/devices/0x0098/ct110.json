@@ -263,8 +263,7 @@
 			"defaultValue": 255,
 			"unsigned": true,
 			"readOnly": true,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"writeOnly": false
 		},
 		"2[0xff]": {
 			"label": "HVAC Type",

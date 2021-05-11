@@ -184,8 +184,7 @@
 			"maxValue": 255,
 			"defaultValue": 0,
 			"readOnly": true,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"writeOnly": false
 		},
 		"26": {
 			"label": "ThresholdUpCmd",

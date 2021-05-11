@@ -315,8 +315,7 @@
 			"defaultValue": 37,
 			"unsigned": true,
 			"readOnly": true,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"writeOnly": false
 		},
 		"24": {
 			"label": "Calibrate Speaker",

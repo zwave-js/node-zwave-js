@@ -217,8 +217,7 @@
 			"maxValue": 3,
 			"defaultValue": 3,
 			"readOnly": true,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"writeOnly": false
 		},
 		"14": {
 			"label": "CO level for sending BASIC ON to 4th assoc group",
@@ -269,8 +268,7 @@
 			"maxValue": 255,
 			"defaultValue": 0,
 			"readOnly": true,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"writeOnly": false
 		},
 		"20": {
 			"label": "Temperature reporting time interval",

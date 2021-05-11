@@ -197,7 +197,6 @@
 			"defaultValue": 15,
 			"readOnly": true,
 			"writeOnly": false,
-			"allowManualEntry": true,
 			"options": [
 				{
 					"label": "Scenes for flick UP gesture enabled",

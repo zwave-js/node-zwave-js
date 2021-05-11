@@ -219,8 +219,7 @@
 			"maxValue": 0,
 			"defaultValue": 0,
 			"readOnly": true,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"writeOnly": false
 		},
 		"27": {
 			"label": "Long Press Key",

@@ -183,8 +183,7 @@
 			"maxValue": 2,
 			"defaultValue": 0,
 			"readOnly": true,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"writeOnly": false
 		},
 		"12": {
 			"label": "Load type",
@@ -193,8 +192,7 @@
 			"maxValue": 3,
 			"defaultValue": 0,
 			"readOnly": true,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"writeOnly": false
 		},
 		"13": {
 			"label": "Over current protection",

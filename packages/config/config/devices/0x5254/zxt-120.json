@@ -41,8 +41,7 @@
 			"maxValue": 4,
 			"defaultValue": 0,
 			"readOnly": true,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"writeOnly": false
 		},
 		"27": {
 			"label": "IR code number for built-in code library",
@@ -125,8 +124,7 @@
 			"maxValue": 65535,
 			"defaultValue": 0,
 			"readOnly": true,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"writeOnly": false
 		},
 		"37": {
 			"label": "Sensor temperature compensation",

@@ -138,7 +138,6 @@
 			"defaultValue": 5,
 			"readOnly": true,
 			"writeOnly": false,
-			"allowManualEntry": true,
 			"options": [
 				{
 					"label": "5 seconds (Test mode)",
@@ -157,7 +156,6 @@
 			"defaultValue": 900,
 			"readOnly": true,
 			"writeOnly": false,
-			"allowManualEntry": true,
 			"options": [
 				{
 					"label": "900 lux (Test mode)",

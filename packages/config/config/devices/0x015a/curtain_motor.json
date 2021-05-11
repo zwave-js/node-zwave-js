@@ -64,8 +64,7 @@
 			"maxValue": 99,
 			"defaultValue": 0,
 			"readOnly": true,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"writeOnly": false
 		},
 		"22": {
 			"label": "Motor revert direction",
@@ -97,8 +96,7 @@
 			"defaultValue": 0,
 			"unsigned": true,
 			"readOnly": true,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"writeOnly": false
 		},
 		"33": {
 			"label": "Enable manual pulling function",

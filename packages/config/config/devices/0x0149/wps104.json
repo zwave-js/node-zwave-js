@@ -427,8 +427,7 @@
 			"defaultValue": 0,
 			"unsigned": true,
 			"readOnly": true,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"writeOnly": false
 		},
 		"52": {
 			"label": "Current RMS value",
@@ -439,8 +438,7 @@
 			"defaultValue": 0,
 			"unsigned": true,
 			"readOnly": true,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"writeOnly": false
 		},
 		"53": {
 			"label": "Power Factor",
@@ -451,8 +449,7 @@
 			"defaultValue": 0,
 			"unsigned": true,
 			"readOnly": true,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"writeOnly": false
 		},
 		"54": {
 			"label": "Total energy consumed",
@@ -463,8 +460,7 @@
 			"defaultValue": 0,
 			"unsigned": true,
 			"readOnly": true,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"writeOnly": false
 		},
 		"55": {
 			"label": "Total energy produced",
@@ -475,8 +471,7 @@
 			"defaultValue": 0,
 			"unsigned": true,
 			"readOnly": true,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"writeOnly": false
 		},
 		"60": {
 			"label": "Start-up status",

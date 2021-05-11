@@ -24,8 +24,7 @@
 			"maxValue": 99,
 			"defaultValue": -127,
 			"readOnly": true,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"writeOnly": false
 		},
 		"6": {
 			"label": "Set motor direction",

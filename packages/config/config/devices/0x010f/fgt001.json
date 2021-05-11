@@ -52,8 +52,7 @@
 			"maxValue": 3,
 			"defaultValue": 0,
 			"readOnly": true,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"writeOnly": false
 		}
 	}
 }

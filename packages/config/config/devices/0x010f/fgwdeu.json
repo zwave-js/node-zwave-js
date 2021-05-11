@@ -311,8 +311,7 @@
 			"maxValue": 15,
 			"defaultValue": 0,
 			"readOnly": true,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"writeOnly": false
 		},
 		"60": {
 			"label": "Power reports – include self-consumption",
@@ -479,8 +478,7 @@
 			"maxValue": 1,
 			"defaultValue": 0,
 			"readOnly": true,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"writeOnly": false
 		},
 		"161": {
 			"label": "Burnt out bulb detection",
@@ -563,8 +561,7 @@
 			"maxValue": 1,
 			"defaultValue": 0,
 			"readOnly": true,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"writeOnly": false
 		},
 		"173": {
 			"label": "Dimmability of the load (read only)",
@@ -573,8 +570,7 @@
 			"maxValue": 1,
 			"defaultValue": 0,
 			"readOnly": true,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"writeOnly": false
 		},
 		"174": {
 			"label": "Soft-start functionality",

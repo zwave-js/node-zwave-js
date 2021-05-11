@@ -193,8 +193,7 @@
 			"maxValue": 99,
 			"defaultValue": 0,
 			"readOnly": true,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"writeOnly": false
 		},
 		"23": {
 			"label": "Calibration Required",

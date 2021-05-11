@@ -198,8 +198,7 @@
 			"maxValue": 32000,
 			"defaultValue": 0,
 			"readOnly": true,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"writeOnly": false
 		},
 		"20": {
 			"label": "Status after Multi-Channel Basic Set command",

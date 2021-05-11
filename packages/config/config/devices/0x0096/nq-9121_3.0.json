@@ -78,8 +78,7 @@
 			"maxValue": 32767,
 			"defaultValue": 0,
 			"readOnly": true,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"writeOnly": false
 		},
 		"12": {
 			"label": "Serial number",
@@ -89,8 +88,7 @@
 			"maxValue": 65535,
 			"defaultValue": 0,
 			"readOnly": true,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"writeOnly": false
 		},
 		"15": {
 			"label": "Calibration status",

@@ -26,8 +26,7 @@
 			"defaultValue": 255,
 			"unsigned": true,
 			"readOnly": true,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"writeOnly": false
 		},
 		"2": {
 			"label": "Flood Alarm Basic Off Value",
@@ -38,8 +37,7 @@
 			"defaultValue": 0,
 			"unsigned": true,
 			"readOnly": true,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"writeOnly": false
 		},
 		"3": {
 			"label": "Enable Buzzer Sound on Alarm",

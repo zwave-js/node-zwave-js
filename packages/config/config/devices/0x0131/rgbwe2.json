@@ -24,8 +24,7 @@
 			"maxValue": 0,
 			"defaultValue": 0,
 			"readOnly": true,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"writeOnly": false
 		},
 		"2": {
 			"label": "Strobe light interval",

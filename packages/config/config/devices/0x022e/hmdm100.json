@@ -48,8 +48,7 @@
 			"defaultValue": 1,
 			"unsigned": true,
 			"readOnly": true,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"writeOnly": false
 		},
 		"10": {
 			"label": "Platform",

@@ -2232,7 +2232,6 @@
 		"unsigned": true,
 		"readOnly": true,
 		"writeOnly": false,
-		"allowManualEntry": true,
 		"options": [
 			{
 				"label": "Not paired",

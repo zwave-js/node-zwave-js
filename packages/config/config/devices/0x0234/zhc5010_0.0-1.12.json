@@ -258,8 +258,7 @@
 			"maxValue": 100,
 			"defaultValue": 50,
 			"readOnly": true,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"writeOnly": false
 		},
 		"9": {
 			"label": "Percentage of light in the LED #3 when On",

@@ -94,8 +94,7 @@
 			"maxValue": 255,
 			"defaultValue": 0,
 			"readOnly": true,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"writeOnly": false
 		},
 		"7": {
 			"label": "Lock Specific Alarm Mode",
@@ -263,8 +262,7 @@
 			"maxValue": 2147483647,
 			"defaultValue": 0,
 			"readOnly": true,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"writeOnly": false
 		},
 		"13": {
 			"label": "Mechanical Transition Count",
@@ -273,8 +271,7 @@
 			"maxValue": 2147483647,
 			"defaultValue": 0,
 			"readOnly": true,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"writeOnly": false
 		},
 		"14": {
 			"label": "Electronic Failed Count",
@@ -283,8 +280,7 @@
 			"maxValue": 2147483647,
 			"defaultValue": 0,
 			"readOnly": true,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"writeOnly": false
 		},
 		"15": {
 			"label": "Auto Lock",
@@ -348,8 +344,7 @@
 			"defaultValue": 0,
 			"unsigned": true,
 			"readOnly": true,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"writeOnly": false
 		}
 	}
 }

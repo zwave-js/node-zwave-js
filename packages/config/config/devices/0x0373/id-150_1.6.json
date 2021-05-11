@@ -215,8 +215,7 @@
 			"maxValue": 0,
 			"defaultValue": 0,
 			"readOnly": true,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"writeOnly": false
 		},
 		"8": {
 			"label": "Updater Mode",

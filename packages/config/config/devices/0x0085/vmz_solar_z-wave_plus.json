@@ -93,8 +93,7 @@
 			"maxValue": 0,
 			"defaultValue": 0,
 			"readOnly": true,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"writeOnly": false
 		},
 		"6": {
 			"label": "STM active",
@@ -147,8 +146,7 @@
 			"defaultValue": 0,
 			"unsigned": true,
 			"readOnly": true,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"writeOnly": false
 		},
 		"21": {
 			"label": "Motor current",
@@ -158,8 +156,7 @@
 			"maxValue": 0,
 			"defaultValue": 0,
 			"readOnly": true,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"writeOnly": false
 		},
 		"77": {
 			"label": "CLOSE current",

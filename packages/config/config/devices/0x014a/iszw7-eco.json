@@ -86,8 +86,7 @@
 			"defaultValue": 30,
 			"unsigned": true,
 			"readOnly": true,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"writeOnly": false
 		},
 		"6": {
 			"label": "Emergency Sound Volume Adjustable",
