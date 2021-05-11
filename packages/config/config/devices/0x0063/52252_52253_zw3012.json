@@ -148,8 +148,7 @@
 			"minValue": 1,
 			"maxValue": 99,
 			"defaultValue": 1,
-			"unsigned": true,
-			"allowManualEntry": true
+			"unsigned": true
 		},
 		"31": {
 			"label": "Maximum Dim Threshold",
@@ -158,8 +157,7 @@
 			"minValue": 1,
 			"maxValue": 99,
 			"defaultValue": 99,
-			"unsigned": true,
-			"allowManualEntry": true
+			"unsigned": true
 		},
 		"32": {
 			"label": "Brightness Level",
@@ -168,8 +166,7 @@
 			"minValue": 0,
 			"maxValue": 99,
 			"defaultValue": 0,
-			"unsigned": true,
-			"allowManualEntry": true
+			"unsigned": true
 		},
 		"84": {
 			"label": "Reset factory default",

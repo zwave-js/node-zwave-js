@@ -27,8 +27,7 @@
 			"valueSize": 1,
 			"minValue": 1,
 			"maxValue": 100,
-			"defaultValue": 255,
-			"allowManualEntry": true
+			"defaultValue": 255
 		},
 		"2": {
 			"label": "Turn Off Light Time Configuration",
@@ -36,8 +35,7 @@
 			"valueSize": 1,
 			"minValue": 1,
 			"maxValue": 120,
-			"defaultValue": 20,
-			"allowManualEntry": true
+			"defaultValue": 20
 		},
 		"3": {
 			"label": "PIR Sensor Alarm Elemination Time Configuration",
@@ -45,8 +43,7 @@
 			"valueSize": 1,
 			"minValue": 1,
 			"maxValue": 120,
-			"defaultValue": 20,
-			"allowManualEntry": true
+			"defaultValue": 20
 		}
 	}
 }

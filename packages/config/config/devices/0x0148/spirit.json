@@ -46,7 +46,6 @@
 			"minValue": 0,
 			"maxValue": 30,
 			"defaultValue": 0,
-			"allowManualEntry": true,
 			"options": [
 				{
 					"label": "No Timeout LCD always on",
@@ -96,8 +95,7 @@
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 50,
-			"defaultValue": 5,
-			"allowManualEntry": true
+			"defaultValue": 5
 		},
 		"6": {
 			"label": "Valve opening percentage report",
@@ -105,8 +103,7 @@
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 100,
-			"defaultValue": 0,
-			"allowManualEntry": true
+			"defaultValue": 0
 		},
 		"7": {
 			"label": "Window open detection",
@@ -141,7 +138,6 @@
 			"minValue": -128,
 			"maxValue": 50,
 			"defaultValue": 0,
-			"allowManualEntry": true,
 			"options": [
 				{
 					"label": "Ext temp sensor be used for regul",

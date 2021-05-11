@@ -25,8 +25,7 @@
 			"minValue": 0,
 			"maxValue": 720,
 			"defaultValue": 720,
-			"unsigned": true,
-			"allowManualEntry": true
+			"unsigned": true
 		},
 		"2": {
 			"label": "Kwh Meter Report Period",
@@ -36,8 +35,7 @@
 			"minValue": 0,
 			"maxValue": 6,
 			"defaultValue": 6,
-			"unsigned": true,
-			"allowManualEntry": true
+			"unsigned": true
 		},
 		"3": {
 			"label": "Threshold of Current For Load Caution",
@@ -46,8 +44,7 @@
 			"minValue": 0,
 			"maxValue": 500,
 			"defaultValue": 500,
-			"unsigned": true,
-			"allowManualEntry": true
+			"unsigned": true
 		},
 		"4": {
 			"label": "Threshold of Kwh For Load Caution",
@@ -56,8 +53,7 @@
 			"minValue": 0,
 			"maxValue": 10000,
 			"defaultValue": 10000,
-			"unsigned": true,
-			"allowManualEntry": true
+			"unsigned": true
 		},
 		"5": {
 			"label": "External Switch Type",

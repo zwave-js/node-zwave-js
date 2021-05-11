@@ -92,8 +92,7 @@
 			"minValue": 1,
 			"maxValue": 99,
 			"defaultValue": 99,
-			"unsigned": true,
-			"allowManualEntry": true
+			"unsigned": true
 		},
 		"5": {
 			"label": "Minimum Level",
@@ -102,8 +101,7 @@
 			"minValue": 0,
 			"maxValue": 98,
 			"defaultValue": 0,
-			"unsigned": true,
-			"allowManualEntry": true
+			"unsigned": true
 		},
 		"6": {
 			"label": "Basic Duration Set",
@@ -113,8 +111,7 @@
 			"minValue": 0,
 			"maxValue": 127,
 			"defaultValue": 2,
-			"unsigned": true,
-			"allowManualEntry": true
+			"unsigned": true
 		}
 	},
 	"metadata": {

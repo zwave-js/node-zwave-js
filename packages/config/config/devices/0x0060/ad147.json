@@ -37,8 +37,7 @@
 			"minValue": 255,
 			"maxValue": 255,
 			"defaultValue": 255,
-			"unsigned": true,
-			"allowManualEntry": true
+			"unsigned": true
 		},
 		"2": {
 			"label": "The Delaying Time to Report to Group 1",
@@ -47,8 +46,7 @@
 			"minValue": 0,
 			"maxValue": 25,
 			"defaultValue": 3,
-			"unsigned": true,
-			"allowManualEntry": true
+			"unsigned": true
 		},
 		"3": {
 			"label": "Remember The Last Status",
@@ -57,8 +55,7 @@
 			"minValue": 0,
 			"maxValue": 1,
 			"defaultValue": 1,
-			"unsigned": true,
-			"allowManualEntry": true
+			"unsigned": true
 		},
 		"4": {
 			"label": "Output Mode Setting: Dimming, On/Off",
@@ -68,8 +65,7 @@
 			"minValue": 0,
 			"maxValue": 1,
 			"defaultValue": 0,
-			"unsigned": true,
-			"allowManualEntry": true
+			"unsigned": true
 		}
 	},
 	"metadata": {

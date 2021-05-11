@@ -47,8 +47,7 @@
 			"minValue": 1,
 			"maxValue": 99,
 			"defaultValue": 1,
-			"unsigned": true,
-			"allowManualEntry": true
+			"unsigned": true
 		},
 		"10": {
 			"label": "Dim Rate Timing",
@@ -58,8 +57,7 @@
 			"minValue": 1,
 			"maxValue": 255,
 			"defaultValue": 3,
-			"unsigned": true,
-			"allowManualEntry": true
+			"unsigned": true
 		}
 	},
 	"metadata": {

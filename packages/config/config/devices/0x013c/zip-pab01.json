@@ -24,8 +24,7 @@
 			"valueSize": 2,
 			"minValue": 1,
 			"maxValue": 32767,
-			"defaultValue": 720,
-			"allowManualEntry": true
+			"defaultValue": 720
 		},
 		"2": {
 			"label": "Energy meter report period",
@@ -34,8 +33,7 @@
 			"valueSize": 2,
 			"minValue": 1,
 			"maxValue": 32767,
-			"defaultValue": 720,
-			"allowManualEntry": true
+			"defaultValue": 720
 		},
 		"3": {
 			"label": "Selected default endpoint",
@@ -43,8 +41,7 @@
 			"valueSize": 1,
 			"minValue": 1,
 			"maxValue": 3,
-			"defaultValue": 1,
-			"allowManualEntry": true
+			"defaultValue": 1
 		}
 	}
 }

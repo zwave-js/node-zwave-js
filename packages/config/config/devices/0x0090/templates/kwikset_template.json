@@ -229,8 +229,7 @@
 		"minValue": 0,
 		"maxValue": 0,
 		"defaultValue": 0,
-		"unsigned": true,
-		"allowManualEntry": true
+		"unsigned": true
 	},
 	"dipswitch_sku_lastfour": {
 		"label": "SKU Number (Last 4 Bytes)",
@@ -238,8 +237,7 @@
 		"minValue": 0,
 		"maxValue": 0,
 		"defaultValue": 0,
-		"unsigned": true,
-		"allowManualEntry": true
+		"unsigned": true
 	},
 	"reset": {
 		"label": "Reset to Default",

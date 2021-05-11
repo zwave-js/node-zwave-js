@@ -24,7 +24,6 @@
 			"minValue": 0,
 			"maxValue": 100,
 			"defaultValue": 20,
-			"allowManualEntry": true,
 			"options": [
 				{
 					"label": "disabled",
@@ -38,7 +37,6 @@
 			"minValue": 0,
 			"maxValue": 20,
 			"defaultValue": 7,
-			"allowManualEntry": true,
 			"options": [
 				{
 					"label": "disabled",
@@ -53,7 +51,6 @@
 			"maxValue": 65535,
 			"defaultValue": 43200,
 			"unsigned": true,
-			"allowManualEntry": true,
 			"options": [
 				{
 					"label": "disabled",
@@ -67,7 +64,6 @@
 			"minValue": 0,
 			"maxValue": 1000,
 			"defaultValue": 0,
-			"allowManualEntry": true,
 			"options": [
 				{
 					"label": "disabled",
@@ -80,8 +76,7 @@
 			"valueSize": 2,
 			"minValue": -200,
 			"maxValue": 1000,
-			"defaultValue": 0,
-			"allowManualEntry": true
+			"defaultValue": 0
 		},
 		"7": {
 			"label": "Humidity Upper Watermark",
@@ -89,7 +84,6 @@
 			"minValue": 0,
 			"maxValue": 100,
 			"defaultValue": 0,
-			"allowManualEntry": true,
 			"options": [
 				{
 					"label": "disabled",
@@ -103,7 +97,6 @@
 			"minValue": 0,
 			"maxValue": 90,
 			"defaultValue": 0,
-			"allowManualEntry": true,
 			"options": [
 				{
 					"label": "disabled",
@@ -118,8 +111,7 @@
 			"minValue": 0,
 			"maxValue": 255,
 			"defaultValue": 255,
-			"unsigned": true,
-			"allowManualEntry": true
+			"unsigned": true
 		},
 		"10": {
 			"label": "High Temperature Trigger",
@@ -128,8 +120,7 @@
 			"minValue": 0,
 			"maxValue": 255,
 			"defaultValue": 0,
-			"unsigned": true,
-			"allowManualEntry": true
+			"unsigned": true
 		},
 		"11": {
 			"label": "Low Humidity Trigger",
@@ -138,8 +129,7 @@
 			"minValue": 0,
 			"maxValue": 255,
 			"defaultValue": 255,
-			"unsigned": true,
-			"allowManualEntry": true
+			"unsigned": true
 		},
 		"12": {
 			"label": "High Humidity Trigger",
@@ -148,8 +138,7 @@
 			"minValue": 0,
 			"maxValue": 255,
 			"defaultValue": 0,
-			"unsigned": true,
-			"allowManualEntry": true
+			"unsigned": true
 		}
 	}
 }

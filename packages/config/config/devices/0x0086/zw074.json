@@ -56,8 +56,7 @@
 			"minValue": 0,
 			"maxValue": 65535,
 			"defaultValue": 256,
-			"unsigned": true,
-			"allowManualEntry": true
+			"unsigned": true
 		},
 		"42": {
 			"label": "Humidity Change to Induce Automatic Report",
@@ -66,8 +65,7 @@
 			"minValue": 0,
 			"maxValue": 65535,
 			"defaultValue": 1280,
-			"unsigned": true,
-			"allowManualEntry": true
+			"unsigned": true
 		},
 		"43": {
 			"label": "Luminance Change to Induce Automatic Report",
@@ -76,8 +74,7 @@
 			"minValue": 0,
 			"maxValue": 1000,
 			"defaultValue": 100,
-			"unsigned": true,
-			"allowManualEntry": true
+			"unsigned": true
 		},
 		"44": {
 			"label": "Battery Change to Induce Automatic Report",
@@ -86,8 +83,7 @@
 			"minValue": 0,
 			"maxValue": 65535,
 			"defaultValue": 1280,
-			"unsigned": true,
-			"allowManualEntry": true
+			"unsigned": true
 		},
 		"46": {
 			"$import": "templates/aeotec_template.json#low_temp_alarm"

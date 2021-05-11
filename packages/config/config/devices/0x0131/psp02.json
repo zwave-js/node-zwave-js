@@ -25,7 +25,6 @@
 			"maxValue": 255,
 			"defaultValue": 255,
 			"unsigned": true,
-			"allowManualEntry": true,
 			"options": [
 				{
 					"label": "Off",
@@ -43,8 +42,7 @@
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 99,
-			"defaultValue": 80,
-			"allowManualEntry": true
+			"defaultValue": 80
 		},
 		"4": {
 			"label": "Light Threshold",
@@ -52,8 +50,7 @@
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 100,
-			"defaultValue": 99,
-			"allowManualEntry": true
+			"defaultValue": 99
 		},
 		"8": {
 			"label": "PIR motion re-trigger min interval",
@@ -61,8 +58,7 @@
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 127,
-			"defaultValue": 3,
-			"allowManualEntry": true
+			"defaultValue": 3
 		},
 		"9": {
 			"label": "Light on time hysteresis",
@@ -71,8 +67,7 @@
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 127,
-			"defaultValue": 4,
-			"allowManualEntry": true
+			"defaultValue": 4
 		},
 		"10": {
 			"label": "Battery level auto-report interval",
@@ -80,8 +75,7 @@
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 127,
-			"defaultValue": 12,
-			"allowManualEntry": true
+			"defaultValue": 12
 		},
 		"11": {
 			"label": "Door state report interval",
@@ -89,8 +83,7 @@
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 127,
-			"defaultValue": 12,
-			"allowManualEntry": true
+			"defaultValue": 12
 		},
 		"12": {
 			"label": "Illumination auto report interval",
@@ -98,8 +91,7 @@
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 127,
-			"defaultValue": 12,
-			"allowManualEntry": true
+			"defaultValue": 12
 		},
 		"13": {
 			"label": "Temperature report interval",
@@ -107,8 +99,7 @@
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 127,
-			"defaultValue": 12,
-			"allowManualEntry": true
+			"defaultValue": 12
 		},
 		"20": {
 			"label": "Tick duration",
@@ -118,8 +109,7 @@
 			"minValue": 0,
 			"maxValue": 255,
 			"defaultValue": 30,
-			"unsigned": true,
-			"allowManualEntry": true
+			"unsigned": true
 		},
 		"21": {
 			"label": "Temperature differential to report",
@@ -127,8 +117,7 @@
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 127,
-			"defaultValue": 1,
-			"allowManualEntry": true
+			"defaultValue": 1
 		},
 		"22": {
 			"label": "Min illumination differential",
@@ -136,8 +125,7 @@
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 63,
-			"defaultValue": 0,
-			"allowManualEntry": true
+			"defaultValue": 0
 		},
 		"5[0x02]": {
 			"label": "Operation mode",

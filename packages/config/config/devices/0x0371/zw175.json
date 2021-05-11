@@ -24,8 +24,7 @@
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 2415,
-			"defaultValue": 2415,
-			"allowManualEntry": true
+			"defaultValue": 2415
 		},
 		"8": {
 			"label": "Switch reaction to alarm",
@@ -60,8 +59,7 @@
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 1,
-			"defaultValue": 0,
-			"allowManualEntry": true
+			"defaultValue": 0
 		},
 		"9[0x0100]": {
 			"label": "Alarm reaction to Smoke Alarms",
@@ -69,8 +67,7 @@
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 1,
-			"defaultValue": 0,
-			"allowManualEntry": true
+			"defaultValue": 0
 		},
 		"9[0x0200]": {
 			"label": "Alarm reaction to CO Alarms",
@@ -78,8 +75,7 @@
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 1,
-			"defaultValue": 0,
-			"allowManualEntry": true
+			"defaultValue": 0
 		},
 		"9[0x0400]": {
 			"label": "Alarm reaction to CO2 Alarms",
@@ -87,8 +83,7 @@
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 1,
-			"defaultValue": 0,
-			"allowManualEntry": true
+			"defaultValue": 0
 		},
 		"9[0x0800]": {
 			"label": "Alarm reaction to Heart Alarms",
@@ -96,8 +91,7 @@
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 1,
-			"defaultValue": 0,
-			"allowManualEntry": true
+			"defaultValue": 0
 		},
 		"9[0x1000]": {
 			"label": "Alarm reaction to Water Alarms",
@@ -105,8 +99,7 @@
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 1,
-			"defaultValue": 0,
-			"allowManualEntry": true
+			"defaultValue": 0
 		},
 		"9[0x2000]": {
 			"label": "Alarm reaction to Access Control Alarms",
@@ -114,8 +107,7 @@
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 1,
-			"defaultValue": 0,
-			"allowManualEntry": true
+			"defaultValue": 0
 		},
 		"9[0x4000]": {
 			"label": "Alarm reaction to Home Security Alarms",
@@ -123,8 +115,7 @@
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 1,
-			"defaultValue": 0,
-			"allowManualEntry": true
+			"defaultValue": 0
 		},
 		"10": {
 			"label": "Release/Disable alarm",
@@ -133,8 +124,7 @@
 			"minValue": 0,
 			"maxValue": 255,
 			"defaultValue": 0,
-			"unsigned": true,
-			"allowManualEntry": true
+			"unsigned": true
 		},
 		"18": {
 			"label": "Flash frequency",
@@ -142,8 +132,7 @@
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 255,
-			"defaultValue": 2,
-			"allowManualEntry": true
+			"defaultValue": 2
 		},
 		"19": {
 			"label": "Start/Stop LED flash",
@@ -152,8 +141,7 @@
 			"minValue": 0,
 			"maxValue": 255,
 			"defaultValue": 0,
-			"writeOnly": true,
-			"allowManualEntry": true
+			"writeOnly": true
 		},
 		"20": {
 			"label": "Power restored state",
@@ -161,8 +149,7 @@
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 2,
-			"defaultValue": 0,
-			"allowManualEntry": true
+			"defaultValue": 0
 		},
 		"80": {
 			"label": "Status Update",
@@ -216,8 +203,7 @@
 			"valueSize": 4,
 			"minValue": 0,
 			"maxValue": 24,
-			"defaultValue": 18,
-			"allowManualEntry": true
+			"defaultValue": 18
 		},
 		"82[0xFF0000]": {
 			"label": "Night Light enable (minute)",
@@ -225,8 +211,7 @@
 			"valueSize": 4,
 			"minValue": 0,
 			"maxValue": 60,
-			"defaultValue": 0,
-			"allowManualEntry": true
+			"defaultValue": 0
 		},
 		"82[0xFF00]": {
 			"label": "Night Light disable (hour)",
@@ -234,8 +219,7 @@
 			"valueSize": 4,
 			"minValue": 0,
 			"maxValue": 24,
-			"defaultValue": 8,
-			"allowManualEntry": true
+			"defaultValue": 8
 		},
 		"82[0xFF]": {
 			"label": "Night Light disable (minute)",
@@ -243,8 +227,7 @@
 			"valueSize": 4,
 			"minValue": 0,
 			"maxValue": 60,
-			"defaultValue": 0,
-			"allowManualEntry": true
+			"defaultValue": 0
 		},
 		"91": {
 			"label": "Watt threshold",
@@ -252,8 +235,7 @@
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 2300,
-			"defaultValue": 0,
-			"allowManualEntry": true
+			"defaultValue": 0
 		},
 		"92": {
 			"label": "kWh threshold",
@@ -261,8 +243,7 @@
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 10000,
-			"defaultValue": 100,
-			"allowManualEntry": true
+			"defaultValue": 100
 		},
 		"93": {
 			"label": "Current threshold",
@@ -270,8 +251,7 @@
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 100,
-			"defaultValue": 0,
-			"allowManualEntry": true
+			"defaultValue": 0
 		},
 		"101[0x01]": {
 			"label": "Enable reporting of Power Consumption",
@@ -279,8 +259,7 @@
 			"valueSize": 4,
 			"minValue": 0,
 			"maxValue": 1,
-			"defaultValue": 1,
-			"allowManualEntry": true
+			"defaultValue": 1
 		},
 		"101[0x02]": {
 			"label": "Enable reporting of Power",
@@ -288,8 +267,7 @@
 			"valueSize": 4,
 			"minValue": 0,
 			"maxValue": 1,
-			"defaultValue": 1,
-			"allowManualEntry": true
+			"defaultValue": 1
 		},
 		"101[0x04]": {
 			"label": "Enable reporting of Voltage",
@@ -297,8 +275,7 @@
 			"valueSize": 4,
 			"minValue": 0,
 			"maxValue": 1,
-			"defaultValue": 1,
-			"allowManualEntry": true
+			"defaultValue": 1
 		},
 		"101[0x08]": {
 			"label": "Enable reporting of Current",
@@ -306,8 +283,7 @@
 			"valueSize": 4,
 			"minValue": 0,
 			"maxValue": 1,
-			"defaultValue": 1,
-			"allowManualEntry": true
+			"defaultValue": 1
 		},
 		"111": {
 			"label": "Timed report interval",
@@ -315,8 +291,7 @@
 			"valueSize": 4,
 			"minValue": 0,
 			"maxValue": 2592000,
-			"defaultValue": 600,
-			"allowManualEntry": true
+			"defaultValue": 600
 		},
 		"255": {
 			"label": "Factory reset",
@@ -324,8 +299,7 @@
 			"valueSize": 4,
 			"minValue": 0,
 			"maxValue": 0,
-			"defaultValue": 0,
-			"allowManualEntry": true
+			"defaultValue": 0
 		}
 	}
 }

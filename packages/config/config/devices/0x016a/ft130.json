@@ -98,8 +98,7 @@
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 50,
-			"defaultValue": 5,
-			"allowManualEntry": true
+			"defaultValue": 5
 		},
 		"255": {
 			"label": "Reset the WallMote Quad",

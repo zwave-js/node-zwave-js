@@ -37,8 +37,7 @@
 			"unit": "100ms",
 			"minValue": 0,
 			"maxValue": 120,
-			"defaultValue": 10,
-			"allowManualEntry": true
+			"defaultValue": 10
 		},
 		"2": {
 			"label": "Send Basic Command to Group 2",
@@ -66,8 +65,7 @@
 			"unit": "10s",
 			"minValue": 0,
 			"maxValue": 3240,
-			"defaultValue": 3,
-			"allowManualEntry": true
+			"defaultValue": 3
 		},
 		"4": {
 			"label": "Meter Report Period (kWh)",
@@ -76,8 +74,7 @@
 			"unit": "minutes",
 			"minValue": 0,
 			"maxValue": 10080,
-			"defaultValue": 1440,
-			"allowManualEntry": true
+			"defaultValue": 1440
 		}
 	}
 }

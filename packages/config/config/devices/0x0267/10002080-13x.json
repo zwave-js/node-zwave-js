@@ -109,8 +109,7 @@
 			"maxValue": 255,
 			"defaultValue": 255,
 			"unsigned": true,
-			"writeOnly": true,
-			"allowManualEntry": true
+			"writeOnly": true
 		},
 		"12": {
 			"label": "Behavior of LED in Repose",

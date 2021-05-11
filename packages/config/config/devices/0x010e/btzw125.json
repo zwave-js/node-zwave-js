@@ -97,16 +97,14 @@
 			"valueSize": 1,
 			"minValue": 1,
 			"maxValue": 100,
-			"defaultValue": 1,
-			"allowManualEntry": true
+			"defaultValue": 1
 		},
 		"5": {
 			"label": "Auto Latch time",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 60,
-			"defaultValue": 0,
-			"allowManualEntry": true
+			"defaultValue": 0
 		},
 		"6": {
 			"label": "Sound",
@@ -153,8 +151,7 @@
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 100,
-			"defaultValue": 0,
-			"allowManualEntry": true
+			"defaultValue": 0
 		},
 		"9": {
 			"label": "TurnAndGo",

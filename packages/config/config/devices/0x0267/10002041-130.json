@@ -64,7 +64,6 @@
 			"minValue": 0,
 			"maxValue": 99,
 			"defaultValue": 0,
-			"allowManualEntry": true,
 			"options": [
 				{
 					"label": "Disables the beacon function",
@@ -78,8 +77,7 @@
 			"minValue": 0,
 			"maxValue": 254,
 			"defaultValue": 0,
-			"unsigned": true,
-			"allowManualEntry": true
+			"unsigned": true
 		},
 		"11": {
 			"label": "Activation TIME",
@@ -87,8 +85,7 @@
 			"minValue": 0,
 			"maxValue": 254,
 			"defaultValue": 0,
-			"unsigned": true,
-			"allowManualEntry": true
+			"unsigned": true
 		},
 		"13": {
 			"label": "Lock Input",
@@ -136,8 +133,7 @@
 			"minValue": 0,
 			"maxValue": 254,
 			"defaultValue": 0,
-			"unsigned": true,
-			"allowManualEntry": true
+			"unsigned": true
 		},
 		"17": {
 			"label": "Post Reset State",
@@ -189,8 +185,7 @@
 			"maxValue": 255,
 			"defaultValue": 255,
 			"unsigned": true,
-			"writeOnly": true,
-			"allowManualEntry": true
+			"writeOnly": true
 		},
 		"21": {
 			"label": "Charge Status",

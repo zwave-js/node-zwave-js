@@ -28,7 +28,6 @@
 			"minValue": 0,
 			"maxValue": 2,
 			"defaultValue": 0,
-			"allowManualEntry": true,
 			"options": [
 				{
 					"label": "LED Light on when Z-Wave turned OFF",

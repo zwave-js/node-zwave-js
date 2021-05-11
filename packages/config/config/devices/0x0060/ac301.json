@@ -29,8 +29,7 @@
 			"valueSize": 2,
 			"minValue": 1,
 			"maxValue": 255,
-			"defaultValue": 120,
-			"allowManualEntry": true
+			"defaultValue": 120
 		},
 		"2": {
 			"label": "Temperature offset for internal sensor",
@@ -39,8 +38,7 @@
 			"unit": "1/10 °C",
 			"minValue": -80,
 			"maxValue": 80,
-			"defaultValue": 0,
-			"allowManualEntry": true
+			"defaultValue": 0
 		},
 		"3": {
 			"label": "Maximum Set point value",
@@ -48,8 +46,7 @@
 			"unit": "°C",
 			"minValue": 5,
 			"maxValue": 35,
-			"defaultValue": 35,
-			"allowManualEntry": true
+			"defaultValue": 35
 		},
 		"4": {
 			"label": "Minimum Set point value",
@@ -57,8 +54,7 @@
 			"unit": "°C",
 			"minValue": 5,
 			"maxValue": 35,
-			"defaultValue": 5,
-			"allowManualEntry": true
+			"defaultValue": 5
 		},
 		"5": {
 			"label": "Frost protection temperature",
@@ -66,8 +62,7 @@
 			"unit": "°C",
 			"minValue": 5,
 			"maxValue": 15,
-			"defaultValue": 5,
-			"allowManualEntry": true
+			"defaultValue": 5
 		},
 		"6": {
 			"label": "Open window detect function",
@@ -93,8 +88,7 @@
 			"valueSize": 1,
 			"minValue": 2,
 			"maxValue": 30,
-			"defaultValue": 15,
-			"allowManualEntry": true
+			"defaultValue": 15
 		},
 		"8": {
 			"label": "Open window detect temperature drop setting",
@@ -132,8 +126,7 @@
 			"valueSize": 1,
 			"minValue": 10,
 			"maxValue": 60,
-			"defaultValue": 30,
-			"allowManualEntry": true
+			"defaultValue": 30
 		}
 	},
 	"compat": {

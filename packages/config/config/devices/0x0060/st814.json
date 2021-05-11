@@ -35,7 +35,6 @@
 			"minValue": 0,
 			"maxValue": 99,
 			"defaultValue": 99,
-			"allowManualEntry": true,
 			"options": [
 				{
 					"label": "Disable",
@@ -50,7 +49,6 @@
 			"minValue": -20,
 			"maxValue": 99,
 			"defaultValue": 99,
-			"allowManualEntry": true,
 			"options": [
 				{
 					"label": "Disable",
@@ -65,7 +63,6 @@
 			"minValue": -20,
 			"maxValue": 99,
 			"defaultValue": 99,
-			"allowManualEntry": true,
 			"options": [
 				{
 					"label": "Disable",
@@ -80,7 +77,6 @@
 			"minValue": 20,
 			"maxValue": 99,
 			"defaultValue": 99,
-			"allowManualEntry": true,
 			"options": [
 				{
 					"label": "Disable",
@@ -95,7 +91,6 @@
 			"minValue": 20,
 			"maxValue": 99,
 			"defaultValue": 99,
-			"allowManualEntry": true,
 			"options": [
 				{
 					"label": "Disable",
@@ -110,7 +105,6 @@
 			"minValue": 0,
 			"maxValue": 1439,
 			"defaultValue": 0,
-			"allowManualEntry": true,
 			"options": [
 				{
 					"label": "Disable",
@@ -125,7 +119,6 @@
 			"minValue": 0,
 			"maxValue": 70,
 			"defaultValue": 0,
-			"allowManualEntry": true,
 			"options": [
 				{
 					"label": "Disable",
@@ -140,7 +133,6 @@
 			"minValue": 0,
 			"maxValue": 70,
 			"defaultValue": 0,
-			"allowManualEntry": true,
 			"options": [
 				{
 					"label": "Disable",

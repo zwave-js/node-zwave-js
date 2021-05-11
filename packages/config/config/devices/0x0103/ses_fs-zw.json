@@ -54,8 +54,7 @@
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 32767,
-			"defaultValue": 10,
-			"allowManualEntry": true
+			"defaultValue": 10
 		},
 		"3": {
 			"label": "Energy maximum report time",
@@ -64,8 +63,7 @@
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 32767,
-			"defaultValue": 120,
-			"allowManualEntry": true
+			"defaultValue": 120
 		},
 		"4": {
 			"label": "Power minimum report time",
@@ -74,8 +72,7 @@
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 32767,
-			"defaultValue": 10,
-			"allowManualEntry": true
+			"defaultValue": 10
 		},
 		"5": {
 			"label": "Power maximum report time",
@@ -84,8 +81,7 @@
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 32767,
-			"defaultValue": 120,
-			"allowManualEntry": true
+			"defaultValue": 120
 		},
 		"6": {
 			"label": "Energy delta value",
@@ -94,8 +90,7 @@
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 32767,
-			"defaultValue": 10,
-			"allowManualEntry": true
+			"defaultValue": 10
 		},
 		"7": {
 			"label": "Power delta value",
@@ -104,8 +99,7 @@
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 32767,
-			"defaultValue": 150,
-			"allowManualEntry": true
+			"defaultValue": 150
 		},
 		"8": {
 			"label": "Safety shutdown configuration",

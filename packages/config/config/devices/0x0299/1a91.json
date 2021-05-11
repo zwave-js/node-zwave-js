@@ -43,8 +43,7 @@
 			"unit": "10s",
 			"minValue": 0,
 			"maxValue": 8640,
-			"defaultValue": 3,
-			"allowManualEntry": true
+			"defaultValue": 3
 		},
 		"3": {
 			"label": "Energy meter report interval",
@@ -53,8 +52,7 @@
 			"unit": "minutes",
 			"minValue": 0,
 			"maxValue": 30240,
-			"defaultValue": 60,
-			"allowManualEntry": true
+			"defaultValue": 60
 		},
 		"4": {
 			"label": "Button mode",

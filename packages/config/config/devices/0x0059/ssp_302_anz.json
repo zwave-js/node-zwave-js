@@ -23,8 +23,7 @@
 			"minValue": 0,
 			"maxValue": 255,
 			"defaultValue": 1,
-			"unsigned": true,
-			"allowManualEntry": true
+			"unsigned": true
 		},
 		"2": {
 			"label": "Voltage Delta Based Configuration",
@@ -32,8 +31,7 @@
 			"minValue": 0,
 			"maxValue": 255,
 			"defaultValue": 0,
-			"unsigned": true,
-			"allowManualEntry": true
+			"unsigned": true
 		},
 		"3": {
 			"label": "Current Delta Based Configuration",
@@ -41,8 +39,7 @@
 			"minValue": 0,
 			"maxValue": 255,
 			"defaultValue": 0,
-			"unsigned": true,
-			"allowManualEntry": true
+			"unsigned": true
 		},
 		"4": {
 			"label": "Power Factor Delta Based Configuration",
@@ -52,7 +49,6 @@
 			"maxValue": 255,
 			"defaultValue": 0,
 			"unsigned": true,
-			"allowManualEntry": true,
 			"options": [
 				{
 					"label": "",
@@ -66,8 +62,7 @@
 			"minValue": 0,
 			"maxValue": 255,
 			"defaultValue": 0,
-			"unsigned": true,
-			"allowManualEntry": true
+			"unsigned": true
 		},
 		"6": {
 			"label": "Active Energy Delta Based Configuration",
@@ -75,8 +70,7 @@
 			"minValue": 0,
 			"maxValue": 255,
 			"defaultValue": 0,
-			"unsigned": true,
-			"allowManualEntry": true
+			"unsigned": true
 		},
 		"7": {
 			"label": "Apparent Energy Delta Based Configuration",
@@ -84,8 +78,7 @@
 			"minValue": 0,
 			"maxValue": 255,
 			"defaultValue": 0,
-			"unsigned": true,
-			"allowManualEntry": true
+			"unsigned": true
 		},
 		"8": {
 			"label": "Switch Status Time Interval Based",
@@ -93,8 +86,7 @@
 			"minValue": 0,
 			"maxValue": 255,
 			"defaultValue": 0,
-			"unsigned": true,
-			"allowManualEntry": true
+			"unsigned": true
 		},
 		"9": {
 			"label": "Voltage Time Interval Based",
@@ -102,8 +94,7 @@
 			"minValue": 0,
 			"maxValue": 255,
 			"defaultValue": 0,
-			"unsigned": true,
-			"allowManualEntry": true
+			"unsigned": true
 		},
 		"10": {
 			"label": "Current Time Interval Based",
@@ -111,8 +102,7 @@
 			"minValue": 0,
 			"maxValue": 255,
 			"defaultValue": 0,
-			"unsigned": true,
-			"allowManualEntry": true
+			"unsigned": true
 		},
 		"11": {
 			"label": "Power Factor Time Interval Based",
@@ -120,8 +110,7 @@
 			"minValue": 0,
 			"maxValue": 255,
 			"defaultValue": 0,
-			"unsigned": true,
-			"allowManualEntry": true
+			"unsigned": true
 		},
 		"12": {
 			"label": "Active Power Time Interval Based",
@@ -129,8 +118,7 @@
 			"minValue": 0,
 			"maxValue": 255,
 			"defaultValue": 0,
-			"unsigned": true,
-			"allowManualEntry": true
+			"unsigned": true
 		},
 		"13": {
 			"label": "Active Energy Time Interval Based",
@@ -138,8 +126,7 @@
 			"minValue": 0,
 			"maxValue": 255,
 			"defaultValue": 0,
-			"unsigned": true,
-			"allowManualEntry": true
+			"unsigned": true
 		},
 		"14": {
 			"label": "Apparent Energy Time Interval Based",
@@ -147,8 +134,7 @@
 			"minValue": 0,
 			"maxValue": 255,
 			"defaultValue": 0,
-			"unsigned": true,
-			"allowManualEntry": true
+			"unsigned": true
 		},
 		"15": {
 			"label": "Relay And LED Configuration",
@@ -184,8 +170,7 @@
 			"minValue": 0,
 			"maxValue": 255,
 			"defaultValue": 0,
-			"unsigned": true,
-			"allowManualEntry": true
+			"unsigned": true
 		}
 	},
 	"metadata": {

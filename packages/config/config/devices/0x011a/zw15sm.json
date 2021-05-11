@@ -42,8 +42,7 @@
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 1,
-			"defaultValue": 0,
-			"allowManualEntry": true
+			"defaultValue": 0
 		},
 		"8": {
 			"label": "METER_REPORT Instant Energy Interval",
@@ -52,8 +51,7 @@
 			"minValue": 0,
 			"maxValue": 255,
 			"defaultValue": 0,
-			"unsigned": true,
-			"allowManualEntry": true
+			"unsigned": true
 		},
 		"9": {
 			"label": "Instant Energy Autosend Interval",
@@ -62,8 +60,7 @@
 			"minValue": 0,
 			"maxValue": 255,
 			"defaultValue": 0,
-			"unsigned": true,
-			"allowManualEntry": true
+			"unsigned": true
 		},
 		"10": {
 			"label": "Accumulated Energy Autosend Interval report",
@@ -72,8 +69,7 @@
 			"minValue": 0,
 			"maxValue": 255,
 			"defaultValue": 0,
-			"unsigned": true,
-			"allowManualEntry": true
+			"unsigned": true
 		},
 		"11": {
 			"label": "Power change notification",
@@ -81,8 +77,7 @@
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 3,
-			"defaultValue": 1,
-			"allowManualEntry": true
+			"defaultValue": 1
 		},
 		"12": {
 			"label": "Power change notification threshold",
@@ -92,8 +87,7 @@
 			"minValue": 0,
 			"maxValue": 255,
 			"defaultValue": 10,
-			"unsigned": true,
-			"allowManualEntry": true
+			"unsigned": true
 		}
 	}
 }

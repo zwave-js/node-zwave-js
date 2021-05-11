@@ -23,8 +23,7 @@
 			"valueSize": 1,
 			"minValue": 1,
 			"maxValue": 7,
-			"defaultValue": 1,
-			"allowManualEntry": true
+			"defaultValue": 1
 		}
 	}
 }

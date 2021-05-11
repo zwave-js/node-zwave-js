@@ -36,16 +36,14 @@
 			"valueSize": 2,
 			"minValue": 1,
 			"maxValue": 32767,
-			"defaultValue": 720,
-			"allowManualEntry": true
+			"defaultValue": 720
 		},
 		"2": {
 			"label": "KWH Meter Report",
 			"valueSize": 2,
 			"minValue": 1,
 			"maxValue": 32767,
-			"defaultValue": 6,
-			"allowManualEntry": true
+			"defaultValue": 6
 		},
 		"3": {
 			"label": "Selected Relay",
@@ -96,8 +94,7 @@
 			"valueSize": 2,
 			"minValue": 10,
 			"maxValue": 600,
-			"defaultValue": 600,
-			"allowManualEntry": true
+			"defaultValue": 600
 		},
 		"6": {
 			"label": "Threshold of KWH for Load Caution",
@@ -105,8 +102,7 @@
 			"valueSize": 2,
 			"minValue": 1,
 			"maxValue": 10000,
-			"defaultValue": 10000,
-			"allowManualEntry": true
+			"defaultValue": 10000
 		},
 		"7": {
 			"label": "Relay control mode",

@@ -173,8 +173,7 @@
 			"valueSize": 2,
 			"minValue": 4,
 			"maxValue": 3084,
-			"defaultValue": 4,
-			"allowManualEntry": true
+			"defaultValue": 4
 		},
 		"9": {
 			"label": "Thermostat Recovery Mode",

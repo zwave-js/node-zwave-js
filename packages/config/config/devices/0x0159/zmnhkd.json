@@ -162,7 +162,6 @@
 			"minValue": 0,
 			"maxValue": 100,
 			"defaultValue": 0,
-			"allowManualEntry": true,
 			"options": [
 				{
 					"label": "Power consumption reporting disabled",
@@ -176,8 +175,7 @@
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 32767,
-			"defaultValue": 0,
-			"allowManualEntry": true
+			"defaultValue": 0
 		},
 		"43": {
 			"label": "Hysteresis heating On",
@@ -222,8 +220,7 @@
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 1255,
-			"defaultValue": 5,
-			"allowManualEntry": true
+			"defaultValue": 5
 		},
 		"46": {
 			"label": "Hysteresis Cooling Off",
@@ -231,8 +228,7 @@
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 1255,
-			"defaultValue": 1002,
-			"allowManualEntry": true
+			"defaultValue": 1002
 		},
 		"47": {
 			"label": "Antifreeze",
@@ -240,8 +236,7 @@
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 1127,
-			"defaultValue": 50,
-			"allowManualEntry": true
+			"defaultValue": 50
 		},
 		"60": {
 			"label": "Too low temperature limit",
@@ -249,8 +244,7 @@
 			"valueSize": 2,
 			"minValue": 1,
 			"maxValue": 1150,
-			"defaultValue": 50,
-			"allowManualEntry": true
+			"defaultValue": 50
 		},
 		"61": {
 			"label": "Too high temperature limit",
@@ -258,8 +252,7 @@
 			"valueSize": 2,
 			"minValue": 1,
 			"maxValue": 1000,
-			"defaultValue": 700,
-			"allowManualEntry": true
+			"defaultValue": 700
 		},
 		"64": {
 			"label": "Output Switch selection Q1",
@@ -303,8 +296,7 @@
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 32000,
-			"defaultValue": 0,
-			"allowManualEntry": true
+			"defaultValue": 0
 		},
 		"71": {
 			"label": "Input I1 status off delay",
@@ -312,8 +304,7 @@
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 32000,
-			"defaultValue": 0,
-			"allowManualEntry": true
+			"defaultValue": 0
 		},
 		"72": {
 			"label": "Input I2 status on delay",
@@ -321,8 +312,7 @@
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 32000,
-			"defaultValue": 0,
-			"allowManualEntry": true
+			"defaultValue": 0
 		},
 		"73": {
 			"label": "Input I2 status off delay",
@@ -330,8 +320,7 @@
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 32000,
-			"defaultValue": 0,
-			"allowManualEntry": true
+			"defaultValue": 0
 		},
 		"76": {
 			"label": "group 2, 10 - reporting on time interval",
@@ -339,8 +328,7 @@
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 127,
-			"defaultValue": 30,
-			"allowManualEntry": true
+			"defaultValue": 30
 		},
 		"77": {
 			"label": "group 10 delay before sending Basic Set ON",
@@ -348,8 +336,7 @@
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 32767,
-			"defaultValue": 3,
-			"allowManualEntry": true
+			"defaultValue": 3
 		},
 		"78": {
 			"label": "Scale Selection",
@@ -459,16 +446,14 @@
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 32536,
-			"defaultValue": 32536,
-			"allowManualEntry": true
+			"defaultValue": 32536
 		},
 		"120": {
 			"label": "Digital temperature sensor reporting",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 127,
-			"defaultValue": 5,
-			"allowManualEntry": true
+			"defaultValue": 5
 		},
 		"121": {
 			"label": "Digital temperature sensor / setpoint selector",
@@ -510,8 +495,7 @@
 			"minValue": 0,
 			"maxValue": 254,
 			"defaultValue": 0,
-			"unsigned": true,
-			"allowManualEntry": true
+			"unsigned": true
 		}
 	}
 }

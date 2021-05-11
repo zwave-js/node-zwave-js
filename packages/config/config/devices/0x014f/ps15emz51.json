@@ -22,8 +22,7 @@
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 100,
-			"defaultValue": 100,
-			"allowManualEntry": true
+			"defaultValue": 100
 		},
 		"3": {
 			"label": "Night Light",
@@ -56,8 +55,7 @@
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 255,
-			"defaultValue": 6,
-			"allowManualEntry": true
+			"defaultValue": 6
 		}
 	}
 }

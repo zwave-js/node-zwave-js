@@ -36,8 +36,7 @@
 			"maxValue": 65535,
 			"defaultValue": 720,
 			"unit": "5 seconds",
-			"unsigned": true,
-			"allowManualEntry": true
+			"unsigned": true
 		},
 		"2": {
 			"label": "kWh Meter Report Period (kWh)",
@@ -46,8 +45,7 @@
 			"maxValue": 65535,
 			"defaultValue": 6,
 			"unit": "10 minutes",
-			"unsigned": true,
-			"allowManualEntry": true
+			"unsigned": true
 		},
 		"3": {
 			"label": "Selected Relay",
@@ -104,8 +102,7 @@
 			"maxValue": 65535,
 			"defaultValue": 750,
 			"unit": "0.01 A",
-			"unsigned": true,
-			"allowManualEntry": true
+			"unsigned": true
 		},
 		"6": {
 			"label": "Threshold for Load Caution (kWh)",
@@ -115,8 +112,7 @@
 			"maxValue": 65535,
 			"defaultValue": 10000,
 			"unit": "kWh",
-			"unsigned": true,
-			"allowManualEntry": true
+			"unsigned": true
 		},
 		"7": {
 			"label": "State after Power Loss",
@@ -149,7 +145,6 @@
 			"defaultValue": 0,
 			"unit": "seconds",
 			"unsigned": true,
-			"allowManualEntry": true,
 			"options": [
 				{
 					"label": "Disable",

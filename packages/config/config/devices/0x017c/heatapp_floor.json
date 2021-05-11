@@ -23,8 +23,7 @@
 			"minValue": 10,
 			"maxValue": 240,
 			"defaultValue": 30,
-			"unsigned": true,
-			"allowManualEntry": true
+			"unsigned": true
 		},
 		"2": {
 			"label": "Relay type",

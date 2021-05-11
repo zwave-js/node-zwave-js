@@ -221,8 +221,7 @@
 			"valueSize": 1,
 			"minValue": 1,
 			"maxValue": 2,
-			"defaultValue": 2,
-			"allowManualEntry": true
+			"defaultValue": 2
 		},
 		"10": {
 			"label": "Temp Reporting Filter",
@@ -230,8 +229,7 @@
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 0,
-			"defaultValue": 0,
-			"allowManualEntry": true
+			"defaultValue": 0
 		},
 		"11": {
 			"label": "Simple UI Mode",
@@ -239,8 +237,7 @@
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 1,
-			"defaultValue": 1,
-			"allowManualEntry": true
+			"defaultValue": 1
 		},
 		"12": {
 			"label": "Multicast",
@@ -248,8 +245,7 @@
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 1,
-			"defaultValue": 0,
-			"allowManualEntry": true
+			"defaultValue": 0
 		}
 	}
 }

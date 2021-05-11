@@ -125,7 +125,6 @@
 			"maxValue": 255,
 			"defaultValue": 255,
 			"unsigned": true,
-			"allowManualEntry": true,
 			"options": [
 				{
 					"label": "Max Brightness",
@@ -173,7 +172,6 @@
 			"maxValue": 255,
 			"defaultValue": 99,
 			"unsigned": true,
-			"allowManualEntry": true,
 			"options": [
 				{
 					"label": "Max Brightness",
@@ -221,7 +219,6 @@
 			"maxValue": 255,
 			"defaultValue": 255,
 			"unsigned": true,
-			"allowManualEntry": true,
 			"options": [
 				{
 					"label": "Max Brightness",
@@ -269,7 +266,6 @@
 			"maxValue": 255,
 			"defaultValue": 255,
 			"unsigned": true,
-			"allowManualEntry": true,
 			"options": [
 				{
 					"label": "Max Brightness",
@@ -317,7 +313,6 @@
 			"maxValue": 255,
 			"defaultValue": 99,
 			"unsigned": true,
-			"allowManualEntry": true,
 			"options": [
 				{
 					"label": "Max Brightness",
@@ -365,7 +360,6 @@
 			"maxValue": 255,
 			"defaultValue": 255,
 			"unsigned": true,
-			"allowManualEntry": true,
 			"options": [
 				{
 					"label": "Max Brightness",
@@ -411,8 +405,7 @@
 			"minValue": 0,
 			"maxValue": 1,
 			"defaultValue": 1,
-			"unsigned": true,
-			"allowManualEntry": true
+			"unsigned": true
 		},
 		"1[0x02]": {
 			"label": "Scenes sent to the controller: Key Pressed 2 times",
@@ -420,8 +413,7 @@
 			"minValue": 0,
 			"maxValue": 1,
 			"defaultValue": 1,
-			"unsigned": true,
-			"allowManualEntry": true
+			"unsigned": true
 		},
 		"1[0x04]": {
 			"label": "Scenes sent to the controller: Key Pressed 3 times",
@@ -429,8 +421,7 @@
 			"minValue": 0,
 			"maxValue": 1,
 			"defaultValue": 1,
-			"unsigned": true,
-			"allowManualEntry": true
+			"unsigned": true
 		},
 		"1[0x08]": {
 			"label": "Scenes sent to the controller: Key Pressed 4 times",
@@ -438,8 +429,7 @@
 			"minValue": 0,
 			"maxValue": 1,
 			"defaultValue": 1,
-			"unsigned": true,
-			"allowManualEntry": true
+			"unsigned": true
 		},
 		"1[0x10]": {
 			"label": "Scenes sent to the controller: Key Pressed 5 times",
@@ -447,8 +437,7 @@
 			"minValue": 0,
 			"maxValue": 1,
 			"defaultValue": 1,
-			"unsigned": true,
-			"allowManualEntry": true
+			"unsigned": true
 		},
 		"1[0x20]": {
 			"label": "Scenes sent to the controller: Key Held Down",
@@ -456,8 +445,7 @@
 			"minValue": 0,
 			"maxValue": 1,
 			"defaultValue": 1,
-			"unsigned": true,
-			"allowManualEntry": true
+			"unsigned": true
 		},
 		"1[0x40]": {
 			"label": "Scenes sent to the controller: Key Released",
@@ -465,8 +453,7 @@
 			"minValue": 0,
 			"maxValue": 1,
 			"defaultValue": 1,
-			"unsigned": true,
-			"allowManualEntry": true
+			"unsigned": true
 		},
 		"3[0x01]": {
 			"label": "Associations: Send secure commands to 2nd group",
@@ -475,8 +462,7 @@
 			"minValue": 0,
 			"maxValue": 1,
 			"defaultValue": 1,
-			"unsigned": true,
-			"allowManualEntry": true
+			"unsigned": true
 		},
 		"3[0x02]": {
 			"label": "Associations: Send secure commands to 3rd group",
@@ -485,8 +471,7 @@
 			"minValue": 0,
 			"maxValue": 1,
 			"defaultValue": 1,
-			"unsigned": true,
-			"allowManualEntry": true
+			"unsigned": true
 		},
 		"3[0x04]": {
 			"label": "Associations: Send secure commands to 4th group",
@@ -495,8 +480,7 @@
 			"minValue": 0,
 			"maxValue": 1,
 			"defaultValue": 1,
-			"unsigned": true,
-			"allowManualEntry": true
+			"unsigned": true
 		},
 		"30[0x01]": {
 			"label": "Send Alarm Frame to 4th Association Group: Key Pressed 1 time",
@@ -504,8 +488,7 @@
 			"minValue": 0,
 			"maxValue": 1,
 			"defaultValue": 1,
-			"unsigned": true,
-			"allowManualEntry": true
+			"unsigned": true
 		},
 		"30[0x02]": {
 			"label": "Send Alarm Frame to 4th Association Group: Key Pressed 2 times",
@@ -513,8 +496,7 @@
 			"minValue": 0,
 			"maxValue": 1,
 			"defaultValue": 1,
-			"unsigned": true,
-			"allowManualEntry": true
+			"unsigned": true
 		},
 		"30[0x04]": {
 			"label": "Send Alarm Frame to 4th Association Group: Key Pressed 3 times",
@@ -522,8 +504,7 @@
 			"minValue": 0,
 			"maxValue": 1,
 			"defaultValue": 1,
-			"unsigned": true,
-			"allowManualEntry": true
+			"unsigned": true
 		},
 		"30[0x08]": {
 			"label": "Send Alarm Frame to 4th Association Group: Key Pressed 4 times",
@@ -531,8 +512,7 @@
 			"minValue": 0,
 			"maxValue": 1,
 			"defaultValue": 1,
-			"unsigned": true,
-			"allowManualEntry": true
+			"unsigned": true
 		},
 		"30[0x10]": {
 			"label": "Send Alarm Frame to 4th Association Group: Key Pressed 5 times",
@@ -540,8 +520,7 @@
 			"minValue": 0,
 			"maxValue": 1,
 			"defaultValue": 1,
-			"unsigned": true,
-			"allowManualEntry": true
+			"unsigned": true
 		},
 		"30[0x20]": {
 			"label": "Send Alarm Frame to 4th Association Group: Key Held Down",
@@ -549,8 +528,7 @@
 			"minValue": 0,
 			"maxValue": 1,
 			"defaultValue": 1,
-			"unsigned": true,
-			"allowManualEntry": true
+			"unsigned": true
 		},
 		"30[0x40]": {
 			"label": "Send Alarm Frame to 4th Association Group: Key Released",
@@ -558,8 +536,7 @@
 			"minValue": 0,
 			"maxValue": 1,
 			"defaultValue": 1,
-			"unsigned": true,
-			"allowManualEntry": true
+			"unsigned": true
 		}
 	},
 	"metadata": {

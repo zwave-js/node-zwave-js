@@ -82,8 +82,7 @@
 			"minValue": 0,
 			"maxValue": 99,
 			"defaultValue": 1,
-			"unsigned": true,
-			"allowManualEntry": true
+			"unsigned": true
 		},
 		"8": {
 			"label": "Dim Rate Timing (Z-Wave)",
@@ -93,8 +92,7 @@
 			"minValue": 1,
 			"maxValue": 255,
 			"defaultValue": 3,
-			"unsigned": true,
-			"allowManualEntry": true
+			"unsigned": true
 		},
 		"9": {
 			"label": "Dim Rate Steps (Manual)",
@@ -103,8 +101,7 @@
 			"minValue": 1,
 			"maxValue": 99,
 			"defaultValue": 1,
-			"unsigned": true,
-			"allowManualEntry": true
+			"unsigned": true
 		},
 		"10": {
 			"label": "Dim Rate Timing (Manual)",
@@ -114,8 +111,7 @@
 			"minValue": 1,
 			"maxValue": 255,
 			"defaultValue": 3,
-			"unsigned": true,
-			"allowManualEntry": true
+			"unsigned": true
 		},
 		"11": {
 			"label": "Dim Rate Steps (All-On/All-Off)",
@@ -124,8 +120,7 @@
 			"minValue": 1,
 			"maxValue": 99,
 			"defaultValue": 1,
-			"unsigned": true,
-			"allowManualEntry": true
+			"unsigned": true
 		},
 		"12": {
 			"label": "Dim Rate Timing (All-On/All-Off)",
@@ -135,8 +130,7 @@
 			"minValue": 1,
 			"maxValue": 255,
 			"defaultValue": 3,
-			"unsigned": true,
-			"allowManualEntry": true
+			"unsigned": true
 		}
 	}
 }

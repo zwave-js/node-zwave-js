@@ -42,7 +42,6 @@
 			"minValue": 0,
 			"maxValue": 30000,
 			"defaultValue": 0,
-			"allowManualEntry": true,
 			"options": [
 				{
 					"label": "Overload Disabled",
@@ -56,7 +55,6 @@
 			"minValue": 0,
 			"maxValue": 100,
 			"defaultValue": 15,
-			"allowManualEntry": true,
 			"options": [
 				{
 					"label": "Disables power reporting",
@@ -70,7 +68,6 @@
 			"minValue": 0,
 			"maxValue": 500,
 			"defaultValue": 10,
-			"allowManualEntry": true,
 			"options": [
 				{
 					"label": "Disables energy reporting",
@@ -84,7 +81,6 @@
 			"minValue": 0,
 			"maxValue": 32400,
 			"defaultValue": 3600,
-			"allowManualEntry": true,
 			"options": [
 				{
 					"label": "Disable",
@@ -98,7 +94,6 @@
 			"minValue": 0,
 			"maxValue": 32400,
 			"defaultValue": 3600,
-			"allowManualEntry": true,
 			"options": [
 				{
 					"label": "Disable",
@@ -131,8 +126,7 @@
 			"valueSize": 2,
 			"minValue": 100,
 			"maxValue": 30000,
-			"defaultValue": 500,
-			"allowManualEntry": true
+			"defaultValue": 500
 		},
 		"22": {
 			"label": "Down value",
@@ -140,8 +134,7 @@
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 29900,
-			"defaultValue": 300,
-			"allowManualEntry": true
+			"defaultValue": 300
 		},
 		"23": {
 			"label": "Controlling",
@@ -173,7 +166,6 @@
 			"minValue": 0,
 			"maxValue": 255,
 			"defaultValue": 255,
-			"allowManualEntry": true,
 			"options": [
 				{
 					"label": "Off",
@@ -192,7 +184,6 @@
 			"minValue": 0,
 			"maxValue": 255,
 			"defaultValue": 0,
-			"allowManualEntry": true,
 			"options": [
 				{
 					"label": "Off",
@@ -211,7 +202,6 @@
 			"minValue": 0,
 			"maxValue": 255,
 			"defaultValue": 255,
-			"allowManualEntry": true,
 			"options": [
 				{
 					"label": "Off",
@@ -230,7 +220,6 @@
 			"minValue": 0,
 			"maxValue": 255,
 			"defaultValue": 0,
-			"allowManualEntry": true,
 			"options": [
 				{
 					"label": "Off",
@@ -288,7 +277,6 @@
 			"minValue": 0,
 			"maxValue": 50,
 			"defaultValue": 0,
-			"allowManualEntry": true,
 			"options": [
 				{
 					"label": "No Reaction",
@@ -310,8 +298,7 @@
 			"valueSize": 2,
 			"minValue": 1,
 			"maxValue": 32400,
-			"defaultValue": 600,
-			"allowManualEntry": true
+			"defaultValue": 600
 		},
 		"40": {
 			"label": "Power load for violet color",
@@ -319,8 +306,7 @@
 			"valueSize": 2,
 			"minValue": 1000,
 			"maxValue": 30000,
-			"defaultValue": 30000,
-			"allowManualEntry": true
+			"defaultValue": 30000
 		},
 		"41": {
 			"label": "LED frame color On",

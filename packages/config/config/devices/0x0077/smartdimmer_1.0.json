@@ -32,8 +32,7 @@
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 99,
-			"defaultValue": 99,
-			"allowManualEntry": true
+			"defaultValue": 99
 		},
 		"1": {
 			"label": "Report node",
@@ -42,8 +41,7 @@
 			"minValue": 0,
 			"maxValue": 255,
 			"defaultValue": 0,
-			"unsigned": true,
-			"allowManualEntry": true
+			"unsigned": true
 		},
 		"2": {
 			"label": "B&O IR support",
@@ -91,8 +89,7 @@
 			"minValue": 1,
 			"maxValue": 255,
 			"defaultValue": 8,
-			"unsigned": true,
-			"allowManualEntry": true
+			"unsigned": true
 		},
 		"5": {
 			"label": "Set level duration",
@@ -101,8 +98,7 @@
 			"minValue": 1,
 			"maxValue": 255,
 			"defaultValue": 1,
-			"unsigned": true,
-			"allowManualEntry": true
+			"unsigned": true
 		},
 		"6": {
 			"label": "Long dim duration",
@@ -110,8 +106,7 @@
 			"minValue": 0,
 			"maxValue": 255,
 			"defaultValue": 158,
-			"unsigned": true,
-			"allowManualEntry": true
+			"unsigned": true
 		},
 		"7": {
 			"label": "Touch press time",
@@ -119,8 +114,7 @@
 			"minValue": 1,
 			"maxValue": 255,
 			"defaultValue": 50,
-			"unsigned": true,
-			"allowManualEntry": true
+			"unsigned": true
 		},
 		"8": {
 			"label": "Touch Multiple Press Time",
@@ -129,8 +123,7 @@
 			"minValue": 0,
 			"maxValue": 255,
 			"defaultValue": 100,
-			"unsigned": true,
-			"allowManualEntry": true
+			"unsigned": true
 		},
 		"9": {
 			"label": "Touch Hold Time",
@@ -138,8 +131,7 @@
 			"minValue": 0,
 			"maxValue": 255,
 			"defaultValue": 40,
-			"unsigned": true,
-			"allowManualEntry": true
+			"unsigned": true
 		},
 		"10": {
 			"label": "Network Update Interval",
@@ -147,8 +139,7 @@
 			"minValue": 0,
 			"maxValue": 65535,
 			"defaultValue": 168,
-			"unsigned": true,
-			"allowManualEntry": true
+			"unsigned": true
 		},
 		"11": {
 			"label": "Rediscover Interval",
@@ -157,8 +148,7 @@
 			"minValue": 0,
 			"maxValue": 65535,
 			"defaultValue": 2362,
-			"unsigned": true,
-			"allowManualEntry": true
+			"unsigned": true
 		}
 	}
 }

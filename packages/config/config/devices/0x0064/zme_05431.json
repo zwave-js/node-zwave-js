@@ -46,8 +46,7 @@
 			"minValue": 0,
 			"maxValue": 65535,
 			"defaultValue": 0,
-			"unsigned": true,
-			"allowManualEntry": true
+			"unsigned": true
 		},
 		"3": {
 			"label": "Function of RF off command",
@@ -301,7 +300,6 @@
 			"maxValue": 1800,
 			"defaultValue": 0,
 			"writeOnly": true,
-			"allowManualEntry": true,
 			"options": [
 				{
 					"label": "Disabled (default)",

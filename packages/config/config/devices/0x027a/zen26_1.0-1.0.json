@@ -78,8 +78,7 @@
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 32767,
-			"defaultValue": 60,
-			"allowManualEntry": true
+			"defaultValue": 60
 		},
 		"8": {
 			"label": "Switch State After Power Failure",

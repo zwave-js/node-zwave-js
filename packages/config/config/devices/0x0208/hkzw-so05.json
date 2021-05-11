@@ -110,8 +110,7 @@
 			"minValue": 0,
 			"maxValue": 65535,
 			"defaultValue": 50,
-			"unsigned": true,
-			"allowManualEntry": true
+			"unsigned": true
 		},
 		"152": {
 			"label": "Power Report Percentage Threshold",
@@ -121,8 +120,7 @@
 			"minValue": 0,
 			"maxValue": 255,
 			"defaultValue": 10,
-			"unsigned": true,
-			"allowManualEntry": true
+			"unsigned": true
 		},
 		"171": {
 			"label": "Power Report Frequence",
@@ -131,8 +129,7 @@
 			"valueSize": 4,
 			"minValue": 5,
 			"maxValue": 2678400,
-			"defaultValue": 30,
-			"allowManualEntry": true
+			"defaultValue": 30
 		},
 		"172": {
 			"label": "Energy Report Frequence",
@@ -141,8 +138,7 @@
 			"valueSize": 4,
 			"minValue": 5,
 			"maxValue": 2678400,
-			"defaultValue": 300,
-			"allowManualEntry": true
+			"defaultValue": 300
 		},
 		"173": {
 			"label": "Voltage Report Frequency",
@@ -151,8 +147,7 @@
 			"valueSize": 4,
 			"minValue": 0,
 			"maxValue": 2678400,
-			"defaultValue": 0,
-			"allowManualEntry": true
+			"defaultValue": 0
 		},
 		"174": {
 			"label": "Electricity Report Frequency",
@@ -161,8 +156,7 @@
 			"valueSize": 4,
 			"minValue": 0,
 			"maxValue": 2678400,
-			"defaultValue": 0,
-			"allowManualEntry": true
+			"defaultValue": 0
 		}
 	}
 }

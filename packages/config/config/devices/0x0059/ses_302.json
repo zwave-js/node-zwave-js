@@ -30,8 +30,7 @@
 			"minValue": 0,
 			"maxValue": 255,
 			"defaultValue": 0,
-			"unsigned": true,
-			"allowManualEntry": true
+			"unsigned": true
 		},
 		"2": {
 			"label": "Temp Reporting Interval",
@@ -40,8 +39,7 @@
 			"minValue": 0,
 			"maxValue": 255,
 			"defaultValue": 5,
-			"unsigned": true,
-			"allowManualEntry": true
+			"unsigned": true
 		}
 	}
 }

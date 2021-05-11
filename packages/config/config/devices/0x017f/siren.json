@@ -243,8 +243,7 @@
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 0,
-			"defaultValue": 0,
-			"allowManualEntry": true
+			"defaultValue": 0
 		}
 	}
 }

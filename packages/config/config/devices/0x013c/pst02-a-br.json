@@ -25,7 +25,6 @@
 			"maxValue": 255,
 			"defaultValue": 127,
 			"unsigned": true,
-			"allowManualEntry": true,
 			"options": [
 				{
 					"label": "Equipment 1 to 100 means the light strength. 0 means turn off the light",
@@ -45,7 +44,6 @@
 			"maxValue": 99,
 			"defaultValue": 80,
 			"unsigned": true,
-			"allowManualEntry": true,
 			"options": [
 				{
 					"label": "Disable the PIR motion",
@@ -69,7 +67,6 @@
 			"maxValue": 100,
 			"defaultValue": 99,
 			"unsigned": true,
-			"allowManualEntry": true,
 			"options": [
 				{
 					"label": "Disable illumination check",
@@ -229,8 +226,7 @@
 			"minValue": 0,
 			"maxValue": 255,
 			"defaultValue": 3,
-			"unsigned": true,
-			"allowManualEntry": true
+			"unsigned": true
 		},
 		"9": {
 			"label": "Turn Off Light Time",
@@ -240,8 +236,7 @@
 			"minValue": 0,
 			"maxValue": 255,
 			"defaultValue": 4,
-			"unsigned": true,
-			"allowManualEntry": true
+			"unsigned": true
 		},
 		"10": {
 			"label": "Auto Report Battery Time",
@@ -250,8 +245,7 @@
 			"minValue": 0,
 			"maxValue": 255,
 			"defaultValue": 12,
-			"unsigned": true,
-			"allowManualEntry": true
+			"unsigned": true
 		},
 		"11": {
 			"label": "Auto Report Door/Windo W State",
@@ -260,8 +254,7 @@
 			"minValue": 0,
 			"maxValue": 255,
 			"defaultValue": 12,
-			"unsigned": true,
-			"allowManualEntry": true
+			"unsigned": true
 		},
 		"12": {
 			"label": "Auto Report Illumination Time",
@@ -270,8 +263,7 @@
 			"minValue": 0,
 			"maxValue": 255,
 			"defaultValue": 12,
-			"unsigned": true,
-			"allowManualEntry": true
+			"unsigned": true
 		},
 		"13": {
 			"label": "Auto Report Temperature Time",
@@ -280,8 +272,7 @@
 			"minValue": 0,
 			"maxValue": 255,
 			"defaultValue": 12,
-			"unsigned": true,
-			"allowManualEntry": true
+			"unsigned": true
 		},
 		"20": {
 			"label": "Auto Report Tick Interval",
@@ -291,8 +282,7 @@
 			"minValue": 0,
 			"maxValue": 255,
 			"defaultValue": 30,
-			"unsigned": true,
-			"allowManualEntry": true
+			"unsigned": true
 		},
 		"21": {
 			"label": "Temperature Differential Report",
@@ -301,8 +291,7 @@
 			"minValue": 0,
 			"maxValue": 1,
 			"defaultValue": 1,
-			"unsigned": true,
-			"allowManualEntry": true
+			"unsigned": true
 		},
 		"22": {
 			"label": "Illumination Differential Report",
@@ -311,8 +300,7 @@
 			"minValue": 0,
 			"maxValue": 1,
 			"defaultValue": 0,
-			"unsigned": true,
-			"allowManualEntry": true
+			"unsigned": true
 		}
 	},
 	"metadata": {

@@ -69,8 +69,7 @@
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 5,
-			"defaultValue": 3,
-			"allowManualEntry": true
+			"defaultValue": 3
 		},
 		"18": {
 			"label": "Maximum Dimmer level control",
@@ -78,8 +77,7 @@
 			"valueSize": 1,
 			"minValue": 2,
 			"maxValue": 99,
-			"defaultValue": 99,
-			"allowManualEntry": true
+			"defaultValue": 99
 		},
 		"19": {
 			"label": "Minimum Dimmer level control",
@@ -87,8 +85,7 @@
 			"valueSize": 1,
 			"minValue": 1,
 			"maxValue": 98,
-			"defaultValue": 13,
-			"allowManualEntry": true
+			"defaultValue": 13
 		}
 	}
 }

@@ -30,7 +30,6 @@
 			"maxValue": 65535,
 			"defaultValue": 0,
 			"unsigned": true,
-			"allowManualEntry": true,
 			"options": [
 				{
 					"label": "Disabled",
@@ -45,7 +44,6 @@
 			"maxValue": 255,
 			"defaultValue": 255,
 			"unsigned": true,
-			"allowManualEntry": true,
 			"options": [
 				{
 					"label": "Off",

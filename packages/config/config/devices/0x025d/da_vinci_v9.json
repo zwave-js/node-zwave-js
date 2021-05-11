@@ -1759,24 +1759,21 @@
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 7,
-			"defaultValue": 7,
-			"allowManualEntry": true
+			"defaultValue": 7
 		},
 		"47": {
 			"label": "Device Led off intensity",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 7,
-			"defaultValue": 0,
-			"allowManualEntry": true
+			"defaultValue": 0
 		},
 		"48": {
 			"label": "Device Toggle or Pulse the output",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 1,
-			"defaultValue": 0,
-			"allowManualEntry": true
+			"defaultValue": 0
 		},
 		"49": {
 			"label": "Device Background LEDs Timeout",
@@ -1784,16 +1781,14 @@
 			"minValue": 0,
 			"maxValue": 255,
 			"defaultValue": 10,
-			"unsigned": true,
-			"allowManualEntry": true
+			"unsigned": true
 		},
 		"50": {
 			"label": "Device touch sensitivity",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 7,
-			"defaultValue": 2,
-			"allowManualEntry": true
+			"defaultValue": 2
 		},
 		"51": {
 			"label": "Save and Reset",

@@ -44,7 +44,6 @@
 			"maxValue": 255,
 			"defaultValue": 0,
 			"unsigned": true,
-			"allowManualEntry": true,
 			"options": [
 				{
 					"label": "Reset to default factory",
@@ -78,8 +77,7 @@
 			"valueSize": 1,
 			"minValue": -128,
 			"maxValue": 127,
-			"defaultValue": 0,
-			"allowManualEntry": true
+			"defaultValue": 0
 		},
 		"4": {
 			"label": "Feedback beeps per second",
@@ -88,8 +86,7 @@
 			"valueSize": 1,
 			"minValue": -128,
 			"maxValue": 127,
-			"defaultValue": 2,
-			"allowManualEntry": true
+			"defaultValue": 2
 		},
 		"5": {
 			"label": "The mode",

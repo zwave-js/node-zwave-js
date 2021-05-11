@@ -24,7 +24,6 @@
 			"maxValue": 22,
 			"defaultValue": 0,
 			"unsigned": true,
-			"allowManualEntry": true,
 			"options": [
 				{
 					"label": "Disabled",
@@ -127,7 +126,6 @@
 			"maxValue": 255,
 			"defaultValue": 0,
 			"unsigned": true,
-			"allowManualEntry": true,
 			"options": [
 				{
 					"label": "Any Notification,",
@@ -145,8 +143,7 @@
 			"minValue": 0,
 			"maxValue": 255,
 			"defaultValue": 0,
-			"unsigned": true,
-			"allowManualEntry": true
+			"unsigned": true
 		},
 		"30[0xff]": {
 			"label": "Alarm Configuration - 1st Slot Action",
@@ -155,7 +152,6 @@
 			"maxValue": 2,
 			"defaultValue": 0,
 			"unsigned": true,
-			"allowManualEntry": true,
 			"options": [
 				{
 					"label": "No Action",

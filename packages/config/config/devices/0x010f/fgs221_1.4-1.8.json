@@ -129,8 +129,7 @@
 			"minValue": 0,
 			"maxValue": 255,
 			"defaultValue": 20,
-			"unsigned": true,
-			"allowManualEntry": true
+			"unsigned": true
 		},
 		"5": {
 			"label": "Relay 2: OFF-delay time (10ms steps)",
@@ -139,8 +138,7 @@
 			"minValue": 0,
 			"maxValue": 255,
 			"defaultValue": 20,
-			"unsigned": true,
-			"allowManualEntry": true
+			"unsigned": true
 		},
 		"6": {
 			"label": "Separation of association sending (key 1)",
@@ -385,8 +383,7 @@
 			"minValue": 0,
 			"maxValue": 65535,
 			"defaultValue": 600,
-			"unsigned": true,
-			"allowManualEntry": true
+			"unsigned": true
 		},
 		"40": {
 			"label": "Relay 2: Response to General Alarm",

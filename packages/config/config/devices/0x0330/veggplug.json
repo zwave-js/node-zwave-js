@@ -23,8 +23,7 @@
 			"minValue": 0,
 			"maxValue": 255,
 			"defaultValue": 0,
-			"unsigned": true,
-			"allowManualEntry": true
+			"unsigned": true
 		},
 		"13": {
 			"label": "Absolute Value Threshold Level",
@@ -32,64 +31,56 @@
 			"minValue": 0,
 			"maxValue": 65535,
 			"defaultValue": 0,
-			"unsigned": true,
-			"allowManualEntry": true
+			"unsigned": true
 		},
 		"14": {
 			"label": "Time Interval Report Voltage",
 			"valueSize": 4,
 			"minValue": 0,
 			"maxValue": 2678400,
-			"defaultValue": 0,
-			"allowManualEntry": true
+			"defaultValue": 0
 		},
 		"15": {
 			"label": "Time Interval Report Current",
 			"valueSize": 4,
 			"minValue": 0,
 			"maxValue": 2678400,
-			"defaultValue": 0,
-			"allowManualEntry": true
+			"defaultValue": 0
 		},
 		"16": {
 			"label": "Time Interval Report Power",
 			"valueSize": 4,
 			"minValue": 0,
 			"maxValue": 2678400,
-			"defaultValue": 0,
-			"allowManualEntry": true
+			"defaultValue": 0
 		},
 		"17": {
 			"label": "Time Interval Report Energy",
 			"valueSize": 4,
 			"minValue": 0,
 			"maxValue": 2678400,
-			"defaultValue": 0,
-			"allowManualEntry": true
+			"defaultValue": 0
 		},
 		"18": {
 			"label": "Saving load state before power failure",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 2,
-			"defaultValue": 0,
-			"allowManualEntry": true
+			"defaultValue": 0
 		},
 		"19": {
 			"label": "Enable/Disable Switch Binary Report",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 1,
-			"defaultValue": 1,
-			"allowManualEntry": true
+			"defaultValue": 1
 		},
 		"20": {
 			"label": "Enable/Disable Current Protection Function",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 1,
-			"defaultValue": 1,
-			"allowManualEntry": true
+			"defaultValue": 1
 		}
 	}
 }

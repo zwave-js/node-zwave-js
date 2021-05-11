@@ -28,8 +28,7 @@
 			"minValue": 1,
 			"maxValue": 70,
 			"defaultValue": 70,
-			"unsigned": true,
-			"allowManualEntry": true
+			"unsigned": true
 		},
 		"2": {
 			"label": "Message Retry Attempt Limit",
@@ -37,8 +36,7 @@
 			"minValue": 0,
 			"maxValue": 5,
 			"defaultValue": 1,
-			"unsigned": true,
-			"allowManualEntry": true
+			"unsigned": true
 		},
 		"3": {
 			"label": "Delay Between Retry Attempts",
@@ -47,8 +45,7 @@
 			"minValue": 1,
 			"maxValue": 60,
 			"defaultValue": 5,
-			"unsigned": true,
-			"allowManualEntry": true
+			"unsigned": true
 		},
 		"4": {
 			"label": "Announcement Audio Volume",
@@ -56,8 +53,7 @@
 			"minValue": 0,
 			"maxValue": 10,
 			"defaultValue": 7,
-			"unsigned": true,
-			"allowManualEntry": true
+			"unsigned": true
 		},
 		"5": {
 			"label": "Key Tone Volume",
@@ -65,8 +61,7 @@
 			"minValue": 0,
 			"maxValue": 10,
 			"defaultValue": 6,
-			"unsigned": true,
-			"allowManualEntry": true
+			"unsigned": true
 		},
 		"6": {
 			"label": "Siren Volume",
@@ -74,8 +69,7 @@
 			"minValue": 0,
 			"maxValue": 10,
 			"defaultValue": 10,
-			"unsigned": true,
-			"allowManualEntry": true
+			"unsigned": true
 		},
 		"7": {
 			"label": "Long Press Duration: Emergency Buttons",
@@ -85,8 +79,7 @@
 			"minValue": 2,
 			"maxValue": 5,
 			"defaultValue": 3,
-			"unsigned": true,
-			"allowManualEntry": true
+			"unsigned": true
 		},
 		"8": {
 			"label": "Long Press Duration: Number Pad",
@@ -96,8 +89,7 @@
 			"minValue": 2,
 			"maxValue": 5,
 			"defaultValue": 3,
-			"unsigned": true,
-			"allowManualEntry": true
+			"unsigned": true
 		},
 		"9": {
 			"label": "Timeout: Proximity Display",
@@ -106,8 +98,7 @@
 			"minValue": 0,
 			"maxValue": 30,
 			"defaultValue": 5,
-			"unsigned": true,
-			"allowManualEntry": true
+			"unsigned": true
 		},
 		"10": {
 			"label": "Timeout: Display on Button Press",
@@ -116,8 +107,7 @@
 			"minValue": 0,
 			"maxValue": 30,
 			"defaultValue": 5,
-			"unsigned": true,
-			"allowManualEntry": true
+			"unsigned": true
 		},
 		"11": {
 			"label": "Timeout: Display on Status Change",
@@ -126,8 +116,7 @@
 			"minValue": 1,
 			"maxValue": 30,
 			"defaultValue": 5,
-			"unsigned": true,
-			"allowManualEntry": true
+			"unsigned": true
 		},
 		"12": {
 			"label": "Brightness: Security Mode",
@@ -136,8 +125,7 @@
 			"minValue": 0,
 			"maxValue": 100,
 			"defaultValue": 100,
-			"unsigned": true,
-			"allowManualEntry": true
+			"unsigned": true
 		},
 		"13": {
 			"label": "Brightness: Key Backlight",
@@ -146,8 +134,7 @@
 			"minValue": 0,
 			"maxValue": 100,
 			"defaultValue": 100,
-			"unsigned": true,
-			"allowManualEntry": true
+			"unsigned": true
 		},
 		"14": {
 			"label": "Key Backlight Ambient Light Sensor Level",
@@ -156,8 +143,7 @@
 			"minValue": 0,
 			"maxValue": 100,
 			"defaultValue": 20,
-			"unsigned": true,
-			"allowManualEntry": true
+			"unsigned": true
 		},
 		"15": {
 			"label": "Proximity Detection",
@@ -185,8 +171,7 @@
 			"minValue": 0,
 			"maxValue": 255,
 			"defaultValue": 50,
-			"unsigned": true,
-			"allowManualEntry": true
+			"unsigned": true
 		},
 		"17": {
 			"label": "Battery Low Threshold",
@@ -195,8 +180,7 @@
 			"minValue": 0,
 			"maxValue": 100,
 			"defaultValue": 15,
-			"unsigned": true,
-			"allowManualEntry": true
+			"unsigned": true
 		},
 		"19": {
 			"label": "Battery Warning Threshold",
@@ -205,8 +189,7 @@
 			"minValue": 0,
 			"maxValue": 100,
 			"defaultValue": 5,
-			"unsigned": true,
-			"allowManualEntry": true
+			"unsigned": true
 		},
 		"18": {
 			"label": "Keypad Language",
@@ -215,7 +198,6 @@
 			"maxValue": 31,
 			"defaultValue": 30,
 			"unsigned": true,
-			"allowManualEntry": true,
 			"options": [
 				{
 					"label": "English",
@@ -229,8 +211,7 @@
 			"minValue": 1,
 			"maxValue": 60,
 			"defaultValue": 2,
-			"unsigned": true,
-			"allowManualEntry": true
+			"unsigned": true
 		},
 		"21": {
 			"label": "Supervision Report Timeout",
@@ -239,8 +220,7 @@
 			"minValue": 500,
 			"maxValue": 30000,
 			"defaultValue": 10000,
-			"unsigned": true,
-			"allowManualEntry": true
+			"unsigned": true
 		},
 		"22": {
 			"label": "System Security Mode Display",
@@ -250,7 +230,6 @@
 			"maxValue": 601,
 			"defaultValue": 0,
 			"unsigned": true,
-			"allowManualEntry": true,
 			"options": [
 				{
 					"label": "Always off",

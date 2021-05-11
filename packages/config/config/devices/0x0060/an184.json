@@ -25,7 +25,6 @@
 			"maxValue": 255,
 			"defaultValue": 255,
 			"unsigned": true,
-			"allowManualEntry": true,
 			"options": [
 				{
 					"label": "0xff",
@@ -40,8 +39,7 @@
 			"minValue": 0,
 			"maxValue": 3,
 			"defaultValue": 3,
-			"unsigned": true,
-			"allowManualEntry": true
+			"unsigned": true
 		},
 		"3": {
 			"label": "Set Whether to Remember The Last Status",
@@ -50,8 +48,7 @@
 			"minValue": 0,
 			"maxValue": 1,
 			"defaultValue": 1,
-			"unsigned": true,
-			"allowManualEntry": true
+			"unsigned": true
 		},
 		"4": {
 			"label": "Set The Interval For Wattage Auto Report",
@@ -60,8 +57,7 @@
 			"minValue": 0,
 			"maxValue": 255,
 			"defaultValue": 1,
-			"unsigned": true,
-			"allowManualEntry": true
+			"unsigned": true
 		},
 		"5": {
 			"label": "Set The Interval For Kw*h Auto Report",
@@ -70,8 +66,7 @@
 			"minValue": 0,
 			"maxValue": 255,
 			"defaultValue": 60,
-			"unsigned": true,
-			"allowManualEntry": true
+			"unsigned": true
 		},
 		"6": {
 			"label": "Auto Report When Load Surpasses The Set Value of Wattage",
@@ -80,8 +75,7 @@
 			"minValue": 0,
 			"maxValue": 255,
 			"defaultValue": 0,
-			"unsigned": true,
-			"allowManualEntry": true
+			"unsigned": true
 		},
 		"7": {
 			"label": "Auto Report When The Change of Wattage Surpasses The Set Percentage",
@@ -90,8 +84,7 @@
 			"minValue": 0,
 			"maxValue": 255,
 			"defaultValue": 0,
-			"unsigned": true,
-			"allowManualEntry": true
+			"unsigned": true
 		}
 	},
 	"metadata": {

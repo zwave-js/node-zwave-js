@@ -47,7 +47,6 @@
 			"minValue": 0,
 			"maxValue": 1,
 			"defaultValue": 0,
-			"allowManualEntry": true,
 			"options": [
 				{
 					"label": "Normal",
@@ -64,8 +63,7 @@
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 1,
-			"defaultValue": 1,
-			"allowManualEntry": true
+			"defaultValue": 1
 		}
 	}
 }

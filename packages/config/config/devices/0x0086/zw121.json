@@ -145,7 +145,6 @@
 			"minValue": 0,
 			"maxValue": 31,
 			"defaultValue": 0,
-			"allowManualEntry": true,
 			"options": [
 				{
 					"label": "Constant speed",
@@ -163,7 +162,6 @@
 			"description": "Allowable range: 1-254",
 			"valueSize": 4,
 			"defaultValue": 0,
-			"allowManualEntry": true,
 			"options": [
 				{
 					"label": "Unlimited",

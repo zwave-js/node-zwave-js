@@ -25,7 +25,6 @@
 			"minValue": 0,
 			"maxValue": 900,
 			"defaultValue": 180,
-			"allowManualEntry": true,
 			"options": [
 				{
 					"label": "Duration of light after motion detection [s]",
@@ -41,7 +40,6 @@
 			"minValue": 0,
 			"maxValue": 2000,
 			"defaultValue": 2000,
-			"allowManualEntry": true,
 			"options": [
 				{
 					"label": "Light threshold [lx]",
@@ -56,8 +54,7 @@
 			"valueSize": 1,
 			"minValue": 2,
 			"maxValue": 100,
-			"defaultValue": 100,
-			"allowManualEntry": true
+			"defaultValue": 100
 		},
 		"6": {
 			"label": "Brightness measuring interval",
@@ -65,8 +62,7 @@
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 120,
-			"defaultValue": 0,
-			"allowManualEntry": true
+			"defaultValue": 0
 		},
 		"8": {
 			"label": "GLOBAL_LIGHT",
@@ -74,8 +70,7 @@
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 1,
-			"defaultValue": 1,
-			"allowManualEntry": true
+			"defaultValue": 1
 		},
 		"9": {
 			"label": "SLAVE_MODE",
@@ -83,8 +78,7 @@
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 4,
-			"defaultValue": 2,
-			"allowManualEntry": true
+			"defaultValue": 2
 		},
 		"10": {
 			"label": "OFF_BEHAVIOUR",
@@ -92,8 +86,7 @@
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 209,
-			"defaultValue": 10,
-			"allowManualEntry": true
+			"defaultValue": 10
 		},
 		"11": {
 			"label": "ON_BEHAVIOUR",
@@ -101,8 +94,7 @@
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 255,
-			"defaultValue": 255,
-			"allowManualEntry": true
+			"defaultValue": 255
 		},
 		"12": {
 			"label": "ON_TIME_OVER",
@@ -110,8 +102,7 @@
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 209,
-			"defaultValue": 204,
-			"allowManualEntry": true
+			"defaultValue": 204
 		},
 		"13": {
 			"label": "ON_OFF_BEHAVIOUR",
@@ -119,8 +110,7 @@
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 209,
-			"defaultValue": 204,
-			"allowManualEntry": true
+			"defaultValue": 204
 		},
 		"14": {
 			"label": "OFF_ON_BEHAVIOUR",
@@ -128,8 +118,7 @@
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 209,
-			"defaultValue": 204,
-			"allowManualEntry": true
+			"defaultValue": 204
 		},
 		"15": {
 			"label": "SEQUENCE_TIME",
@@ -138,8 +127,7 @@
 			"valueSize": 1,
 			"minValue": 10,
 			"maxValue": 50,
-			"defaultValue": 10,
-			"allowManualEntry": true
+			"defaultValue": 10
 		},
 		"16": {
 			"label": "MOTION_DISABLE",
@@ -147,8 +135,7 @@
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 209,
-			"defaultValue": 0,
-			"allowManualEntry": true
+			"defaultValue": 0
 		},
 		"17": {
 			"label": "BUTTON_BEHAVIOUR",
@@ -156,8 +143,7 @@
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 31,
-			"defaultValue": 8,
-			"allowManualEntry": true
+			"defaultValue": 8
 		},
 		"18": {
 			"label": "BUTTON_SCENES",
@@ -165,8 +151,7 @@
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 127,
-			"defaultValue": 1,
-			"allowManualEntry": true
+			"defaultValue": 1
 		},
 		"19": {
 			"label": "LEGACY_INACTIVITY_TIME )",
@@ -174,8 +159,7 @@
 			"valueSize": 2,
 			"minValue": 1,
 			"maxValue": 209,
-			"defaultValue": 103,
-			"allowManualEntry": true
+			"defaultValue": 103
 		}
 	}
 }

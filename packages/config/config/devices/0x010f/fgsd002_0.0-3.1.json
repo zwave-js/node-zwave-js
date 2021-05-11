@@ -52,8 +52,7 @@
 			"minValue": 0,
 			"maxValue": 255,
 			"defaultValue": 255,
-			"unsigned": true,
-			"allowManualEntry": true
+			"unsigned": true
 		},
 		"3": {
 			"label": "Visual indicator notifications status",
@@ -173,8 +172,7 @@
 			"valueSize": 2,
 			"minValue": 1,
 			"maxValue": 255,
-			"defaultValue": 255,
-			"allowManualEntry": true
+			"defaultValue": 255
 		},
 		"12": {
 			"label": "BASIC OFF frame value",
@@ -182,8 +180,7 @@
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 255,
-			"defaultValue": 255,
-			"allowManualEntry": true
+			"defaultValue": 255
 		},
 		"13": {
 			"label": "Alarm broadcast",
@@ -219,8 +216,7 @@
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 8640,
-			"defaultValue": 1,
-			"allowManualEntry": true
+			"defaultValue": 1
 		},
 		"21": {
 			"label": "Temperature report hysteresis",
@@ -228,8 +224,7 @@
 			"valueSize": 1,
 			"minValue": 1,
 			"maxValue": 100,
-			"defaultValue": 10,
-			"allowManualEntry": true
+			"defaultValue": 10
 		},
 		"30": {
 			"label": "Temperature threshold",
@@ -237,8 +232,7 @@
 			"valueSize": 1,
 			"minValue": 1,
 			"maxValue": 100,
-			"defaultValue": 55,
-			"allowManualEntry": true
+			"defaultValue": 55
 		},
 		"31": {
 			"label": "Excess temperature signaling interval",
@@ -246,8 +240,7 @@
 			"valueSize": 2,
 			"minValue": 1,
 			"maxValue": 8640,
-			"defaultValue": 1,
-			"allowManualEntry": true
+			"defaultValue": 1
 		},
 		"32": {
 			"label": "Lack of Z-Wave range indication interval",
@@ -255,8 +248,7 @@
 			"valueSize": 2,
 			"minValue": 1,
 			"maxValue": 8640,
-			"defaultValue": 180,
-			"allowManualEntry": true
+			"defaultValue": 180
 		}
 	}
 }

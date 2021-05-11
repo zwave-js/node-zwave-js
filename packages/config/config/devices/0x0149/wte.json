@@ -23,8 +23,7 @@
 			"valueSize": 1,
 			"minValue": -1,
 			"maxValue": 99,
-			"defaultValue": -1,
-			"allowManualEntry": true
+			"defaultValue": -1
 		},
 		"2": {
 			"label": "Fade On Time",
@@ -32,8 +31,7 @@
 			"valueSize": 1,
 			"minValue": -126,
 			"maxValue": 127,
-			"defaultValue": 1,
-			"allowManualEntry": true
+			"defaultValue": 1
 		},
 		"3": {
 			"label": "Fade Off Time",
@@ -41,8 +39,7 @@
 			"valueSize": 1,
 			"minValue": -126,
 			"maxValue": 127,
-			"defaultValue": 1,
-			"allowManualEntry": true
+			"defaultValue": 1
 		},
 		"4": {
 			"label": "Local Dimming Time",
@@ -50,8 +47,7 @@
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 60,
-			"defaultValue": 5,
-			"allowManualEntry": true
+			"defaultValue": 5
 		},
 		"10": {
 			"label": "Minimum Light Level",
@@ -59,8 +55,7 @@
 			"valueSize": 1,
 			"minValue": 1,
 			"maxValue": 98,
-			"defaultValue": 1,
-			"allowManualEntry": true
+			"defaultValue": 1
 		},
 		"11": {
 			"label": "Maximum Light Level",
@@ -68,8 +63,7 @@
 			"valueSize": 1,
 			"minValue": 2,
 			"maxValue": 99,
-			"defaultValue": 99,
-			"allowManualEntry": true
+			"defaultValue": 99
 		},
 		"20": {
 			"label": "Dimmable Load",

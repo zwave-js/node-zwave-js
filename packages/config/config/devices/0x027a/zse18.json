@@ -23,8 +23,7 @@
 			"valueSize": 1,
 			"minValue": 1,
 			"maxValue": 8,
-			"defaultValue": 4,
-			"allowManualEntry": true
+			"defaultValue": 4
 		},
 		"14": {
 			"label": "BASIC SET reports",
@@ -32,8 +31,7 @@
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 1,
-			"defaultValue": 0,
-			"allowManualEntry": true
+			"defaultValue": 0
 		},
 		"15": {
 			"label": "reverse BASIC SET",
@@ -41,8 +39,7 @@
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 1,
-			"defaultValue": 0,
-			"allowManualEntry": true
+			"defaultValue": 0
 		},
 		"17": {
 			"label": "vibration sensor",
@@ -50,8 +47,7 @@
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 1,
-			"defaultValue": 1,
-			"allowManualEntry": true
+			"defaultValue": 1
 		},
 		"18": {
 			"label": "trigger interval",
@@ -61,8 +57,7 @@
 			"minValue": 3,
 			"maxValue": 65535,
 			"defaultValue": 27,
-			"unsigned": true,
-			"allowManualEntry": true
+			"unsigned": true
 		},
 		"20": {
 			"label": "LED Indicator",
@@ -70,8 +65,7 @@
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 1,
-			"defaultValue": 1,
-			"allowManualEntry": true
+			"defaultValue": 1
 		},
 		"32": {
 			"label": "Low Battery Alert",
@@ -79,8 +73,7 @@
 			"valueSize": 1,
 			"minValue": 10,
 			"maxValue": 50,
-			"defaultValue": 10,
-			"allowManualEntry": true
+			"defaultValue": 10
 		}
 	}
 }

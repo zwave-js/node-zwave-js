@@ -35,8 +35,7 @@
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 99,
-			"defaultValue": 99,
-			"allowManualEntry": true
+			"defaultValue": 99
 		},
 		"2": {
 			"$if": "firmwareVersion >= 2.0",
@@ -64,8 +63,7 @@
 			"valueSize": 1,
 			"minValue": 1,
 			"maxValue": 10,
-			"defaultValue": 6,
-			"allowManualEntry": true
+			"defaultValue": 6
 		},
 		"4": {
 			"$if": "firmwareVersion >= 2.0",
@@ -76,7 +74,6 @@
 			"minValue": 0,
 			"maxValue": 900,
 			"defaultValue": 0,
-			"allowManualEntry": true,
 			"options": [
 				{
 					"label": "Set by knob on sensor",
@@ -97,7 +94,6 @@
 			"minValue": 0,
 			"maxValue": 720,
 			"defaultValue": 0,
-			"allowManualEntry": true,
 			"options": [
 				{
 					"label": "Set by knob on sensor",
@@ -112,8 +108,7 @@
 			"valueSize": 2,
 			"minValue": 1,
 			"maxValue": 1440,
-			"defaultValue": 30,
-			"allowManualEntry": true
+			"defaultValue": 30
 		},
 		"7": {
 			"$if": "firmwareVersion >= 2.0",

@@ -47,7 +47,6 @@
 			"maxValue": 21930,
 			"defaultValue": 0,
 			"unsigned": true,
-			"allowManualEntry": true,
 			"options": [
 				{
 					"label": "Normal Operation",

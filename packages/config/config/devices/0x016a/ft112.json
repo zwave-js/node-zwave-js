@@ -41,8 +41,7 @@
 			"valueSize": 1,
 			"minValue": 10,
 			"maxValue": 50,
-			"defaultValue": 20,
-			"allowManualEntry": true
+			"defaultValue": 20
 		},
 		"121": {
 			"label": "Reporting mode on open/close event",
@@ -94,8 +93,7 @@
 			"valueSize": 4,
 			"minValue": 0,
 			"maxValue": 2147483647,
-			"defaultValue": 1,
-			"allowManualEntry": true
+			"defaultValue": 1
 		}
 	}
 }

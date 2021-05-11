@@ -70,8 +70,7 @@
 			"valueSize": 1,
 			"minValue": 5,
 			"maxValue": 60,
-			"defaultValue": 5,
-			"allowManualEntry": true
+			"defaultValue": 5
 		},
 		"19": {
 			"label": "Alternate Exclusion",

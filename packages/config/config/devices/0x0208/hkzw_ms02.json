@@ -32,7 +32,6 @@
 			"minValue": 1,
 			"maxValue": 8,
 			"defaultValue": 8,
-			"allowManualEntry": true,
 			"options": [
 				{
 					"label": "Sensitivity 1 (min)",
@@ -131,8 +130,7 @@
 			"minValue": 0,
 			"maxValue": 65535,
 			"defaultValue": 0,
-			"unsigned": true,
-			"allowManualEntry": true
+			"unsigned": true
 		},
 		"32": {
 			"label": "Level of low battery",
@@ -140,8 +138,7 @@
 			"valueSize": 1,
 			"minValue": 10,
 			"maxValue": 50,
-			"defaultValue": 20,
-			"allowManualEntry": true
+			"defaultValue": 20
 		}
 	}
 }

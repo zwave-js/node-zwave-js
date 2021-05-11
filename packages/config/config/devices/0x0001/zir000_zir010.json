@@ -83,8 +83,7 @@
 			"unit": "seconds",
 			"minValue": 15,
 			"maxValue": 45,
-			"defaultValue": 30,
-			"allowManualEntry": true
+			"defaultValue": 30
 		}
 	}
 }

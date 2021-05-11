@@ -125,8 +125,7 @@
 			"minValue": 0,
 			"maxValue": 255,
 			"defaultValue": 16,
-			"unsigned": true,
-			"allowManualEntry": true
+			"unsigned": true
 		},
 		"30": {
 			"label": "General Alarm",

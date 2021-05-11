@@ -71,8 +71,7 @@
 			"minValue": 0,
 			"maxValue": 0,
 			"defaultValue": 0,
-			"writeOnly": true,
-			"allowManualEntry": true
+			"writeOnly": true
 		},
 		"80": {
 			"label": "Enable send to associated devices",
@@ -145,8 +144,7 @@
 			"minValue": 0,
 			"maxValue": 60000,
 			"defaultValue": 25,
-			"unsigned": true,
-			"allowManualEntry": true
+			"unsigned": true
 		},
 		"92": {
 			"label": "Wattage Percent Change",
@@ -155,8 +153,7 @@
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 100,
-			"defaultValue": 5,
-			"allowManualEntry": true
+			"defaultValue": 5
 		},
 		"100": {
 			"label": "Set 101‐103 to default.",
@@ -308,8 +305,7 @@
 			"valueSize": 4,
 			"minValue": 1,
 			"maxValue": 2147483647,
-			"defaultValue": 3,
-			"allowManualEntry": true
+			"defaultValue": 3
 		},
 		"112": {
 			"label": "Time interval for sending to group 2",
@@ -318,8 +314,7 @@
 			"valueSize": 4,
 			"minValue": 1,
 			"maxValue": 2147483647,
-			"defaultValue": 600,
-			"allowManualEntry": true
+			"defaultValue": 600
 		},
 		"113": {
 			"label": "Time interval for sending to group 3",
@@ -327,8 +322,7 @@
 			"valueSize": 4,
 			"minValue": 1,
 			"maxValue": 2147483647,
-			"defaultValue": 600,
-			"allowManualEntry": true
+			"defaultValue": 600
 		},
 		"252": {
 			"label": "Configuration Locked",
@@ -356,24 +350,21 @@
 			"minValue": 0,
 			"maxValue": 1,
 			"defaultValue": 0,
-			"writeOnly": true,
-			"allowManualEntry": true
+			"writeOnly": true
 		},
 		"83[0xff]": {
 			"label": "Blue night light color value",
 			"valueSize": 3,
 			"minValue": 0,
 			"maxValue": 255,
-			"defaultValue": 221,
-			"allowManualEntry": true
+			"defaultValue": 221
 		},
 		"83[0xff00]": {
 			"label": "Green night light color value",
 			"valueSize": 3,
 			"minValue": 0,
 			"maxValue": 255,
-			"defaultValue": 160,
-			"allowManualEntry": true
+			"defaultValue": 160
 		},
 		"83[0xff0000]": {
 			"label": "Red night light color value",
@@ -381,8 +372,7 @@
 			"valueSize": 3,
 			"minValue": 0,
 			"maxValue": 255,
-			"defaultValue": 221,
-			"allowManualEntry": true
+			"defaultValue": 221
 		},
 		"84[0xff]": {
 			"label": "Green brightness in energy mode (%)",
@@ -390,8 +380,7 @@
 			"valueSize": 3,
 			"minValue": 0,
 			"maxValue": 100,
-			"defaultValue": 50,
-			"allowManualEntry": true
+			"defaultValue": 50
 		},
 		"84[0xff00]": {
 			"label": "Yellow brightness in energy mode (%)",
@@ -399,8 +388,7 @@
 			"valueSize": 3,
 			"minValue": 0,
 			"maxValue": 100,
-			"defaultValue": 50,
-			"allowManualEntry": true
+			"defaultValue": 50
 		},
 		"84[0xff0000]": {
 			"label": "Red brightness in energy mode (%)",
@@ -408,8 +396,7 @@
 			"valueSize": 3,
 			"minValue": 0,
 			"maxValue": 100,
-			"defaultValue": 50,
-			"allowManualEntry": true
+			"defaultValue": 50
 		}
 	}
 }

@@ -118,7 +118,6 @@
 			"maxValue": 2120,
 			"defaultValue": 0,
 			"unsigned": true,
-			"allowManualEntry": true,
 			"options": [
 				{
 					"label": "Cut off temperature feature is disable",

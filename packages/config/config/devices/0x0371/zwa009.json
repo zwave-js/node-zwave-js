@@ -57,8 +57,7 @@
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 100,
-			"defaultValue": 20,
-			"allowManualEntry": true
+			"defaultValue": 20
 		},
 		"2": {
 			"label": "Minimum humidity change to report",
@@ -68,8 +67,7 @@
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 20,
-			"defaultValue": 5,
-			"allowManualEntry": true
+			"defaultValue": 5
 		},
 		"4": {
 			"label": "Periodic Reports",
@@ -79,8 +77,7 @@
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 65535,
-			"defaultValue": 43200,
-			"allowManualEntry": true
+			"defaultValue": 43200
 		},
 		"5": {
 			"label": "Temperature Upper Watermark value",
@@ -90,8 +87,7 @@
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 1000,
-			"defaultValue": 0,
-			"allowManualEntry": true
+			"defaultValue": 0
 		},
 		"6": {
 			"label": "Temperature Lower Watermark value",
@@ -101,8 +97,7 @@
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 1000,
-			"defaultValue": 0,
-			"allowManualEntry": true
+			"defaultValue": 0
 		},
 		"7": {
 			"label": "Humidity Upper Watermark value",
@@ -112,8 +107,7 @@
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 90,
-			"defaultValue": 0,
-			"allowManualEntry": true
+			"defaultValue": 0
 		},
 		"8": {
 			"label": "Humidity Lower Watermark value",
@@ -123,8 +117,7 @@
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 90,
-			"defaultValue": 0,
-			"allowManualEntry": true
+			"defaultValue": 0
 		},
 		"9": {
 			"label": "Low Temperature Trigger BASIC Set Command Value",
@@ -133,8 +126,7 @@
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 255,
-			"defaultValue": 255,
-			"allowManualEntry": true
+			"defaultValue": 255
 		},
 		"10": {
 			"label": "High Temperature Trigger BASIC Set Command Value",
@@ -143,8 +135,7 @@
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 255,
-			"defaultValue": 0,
-			"allowManualEntry": true
+			"defaultValue": 0
 		},
 		"11": {
 			"label": "Low Humidity Trigger BASIC Set Command Value",
@@ -153,8 +144,7 @@
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 255,
-			"defaultValue": 255,
-			"allowManualEntry": true
+			"defaultValue": 255
 		},
 		"12": {
 			"label": "High Humidity Trigger BASIC Set Command Value",
@@ -163,8 +153,7 @@
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 255,
-			"defaultValue": 0,
-			"allowManualEntry": true
+			"defaultValue": 0
 		},
 		"13": {
 			"label": "Offset value for Mould danger notification",
@@ -174,8 +163,7 @@
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 10,
-			"defaultValue": 0,
-			"allowManualEntry": true
+			"defaultValue": 0
 		},
 		"64": {
 			"label": "Temperature Report Unit",

@@ -44,8 +44,7 @@
 			"valueSize": 1,
 			"minValue": 1,
 			"maxValue": 3,
-			"defaultValue": 2,
-			"allowManualEntry": true
+			"defaultValue": 2
 		},
 		"2": {
 			"label": "Alarm music duration time",
@@ -53,8 +52,7 @@
 			"minValue": 0,
 			"maxValue": 255,
 			"defaultValue": 2,
-			"unsigned": true,
-			"allowManualEntry": true
+			"unsigned": true
 		},
 		"3": {
 			"label": "Door bell music duration time",
@@ -62,40 +60,35 @@
 			"minValue": 0,
 			"maxValue": 255,
 			"defaultValue": 1,
-			"unsigned": true,
-			"allowManualEntry": true
+			"unsigned": true
 		},
 		"4": {
 			"label": "Door bell music volume",
 			"valueSize": 1,
 			"minValue": 1,
 			"maxValue": 3,
-			"defaultValue": 2,
-			"allowManualEntry": true
+			"defaultValue": 2
 		},
 		"5": {
 			"label": "Alarm music index",
 			"valueSize": 1,
 			"minValue": 1,
 			"maxValue": 10,
-			"defaultValue": 9,
-			"allowManualEntry": true
+			"defaultValue": 9
 		},
 		"6": {
 			"label": "Door bell music index",
 			"valueSize": 1,
 			"minValue": 1,
 			"maxValue": 10,
-			"defaultValue": 10,
-			"allowManualEntry": true
+			"defaultValue": 10
 		},
 		"7": {
 			"label": "Default Siren on mode",
 			"valueSize": 1,
 			"minValue": 1,
 			"maxValue": 2,
-			"defaultValue": 1,
-			"allowManualEntry": true
+			"defaultValue": 1
 		}
 	}
 }

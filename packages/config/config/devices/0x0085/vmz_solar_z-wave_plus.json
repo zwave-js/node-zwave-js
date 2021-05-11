@@ -64,8 +64,7 @@
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 30,
-			"defaultValue": 0,
-			"allowManualEntry": true
+			"defaultValue": 0
 		},
 		"4": {
 			"label": "Level of sensitivity for day",
@@ -74,8 +73,7 @@
 			"valueSize": 1,
 			"minValue": 3,
 			"maxValue": 100,
-			"defaultValue": 3,
-			"allowManualEntry": true
+			"defaultValue": 3
 		},
 		"5": {
 			"label": "Temperature",
@@ -150,8 +148,7 @@
 			"minValue": 1,
 			"maxValue": 255,
 			"defaultValue": 1,
-			"unsigned": true,
-			"allowManualEntry": true
+			"unsigned": true
 		},
 		"78": {
 			"label": "OPEN current",
@@ -160,24 +157,21 @@
 			"minValue": 1,
 			"maxValue": 255,
 			"defaultValue": 1,
-			"unsigned": true,
-			"allowManualEntry": true
+			"unsigned": true
 		},
 		"79": {
 			"label": "CLOSE overload current",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 0,
-			"defaultValue": 0,
-			"allowManualEntry": true
+			"defaultValue": 0
 		},
 		"80": {
 			"label": "OPEN overload current",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 0,
-			"defaultValue": 0,
-			"allowManualEntry": true
+			"defaultValue": 0
 		},
 		"99": {
 			"label": "Restore default config values",

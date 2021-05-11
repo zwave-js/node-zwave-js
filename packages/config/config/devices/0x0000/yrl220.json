@@ -75,8 +75,7 @@
 			"minValue": 5,
 			"maxValue": 255,
 			"defaultValue": 30,
-			"unsigned": true,
-			"allowManualEntry": true
+			"unsigned": true
 		},
 		"4": {
 			"label": "Wrong Code Entry Limit",
@@ -84,8 +83,7 @@
 			"valueSize": 1,
 			"minValue": 1,
 			"maxValue": 7,
-			"defaultValue": 5,
-			"allowManualEntry": true
+			"defaultValue": 5
 		},
 		"5": {
 			"label": "Language",
@@ -118,8 +116,7 @@
 			"minValue": 1,
 			"maxValue": 255,
 			"defaultValue": 30,
-			"unsigned": true,
-			"allowManualEntry": true
+			"unsigned": true
 		},
 		"8": {
 			"label": "Operating Mode",

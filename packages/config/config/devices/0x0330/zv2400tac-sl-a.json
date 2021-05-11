@@ -90,16 +90,14 @@
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 50,
-			"defaultValue": 0,
-			"allowManualEntry": true
+			"defaultValue": 0
 		},
 		"6": {
 			"label": "Maximum brightness value",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 100,
-			"defaultValue": 100,
-			"allowManualEntry": true
+			"defaultValue": 100
 		},
 		"7": {
 			"label": "MOSFET driving type",
@@ -199,48 +197,42 @@
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 100,
-			"defaultValue": 10,
-			"allowManualEntry": true
+			"defaultValue": 10
 		},
 		"15": {
 			"label": "Threshold, unit is %",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 100,
-			"defaultValue": 20,
-			"allowManualEntry": true
+			"defaultValue": 20
 		},
 		"21": {
 			"label": "Power metering time cycle",
 			"valueSize": 4,
 			"minValue": 0,
 			"maxValue": 2678400,
-			"defaultValue": 600,
-			"allowManualEntry": true
+			"defaultValue": 600
 		},
 		"22": {
 			"label": "Energy metering time cycle",
 			"valueSize": 4,
 			"minValue": 0,
 			"maxValue": 2678400,
-			"defaultValue": 1800,
-			"allowManualEntry": true
+			"defaultValue": 1800
 		},
 		"23": {
 			"label": "Voltage metering time cycle",
 			"valueSize": 4,
 			"minValue": 0,
 			"maxValue": 0,
-			"defaultValue": 0,
-			"allowManualEntry": true
+			"defaultValue": 0
 		},
 		"24": {
 			"label": "Current metering time cycle",
 			"valueSize": 4,
 			"minValue": 0,
 			"maxValue": 0,
-			"defaultValue": 0,
-			"allowManualEntry": true
+			"defaultValue": 0
 		}
 	}
 }

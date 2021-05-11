@@ -220,7 +220,6 @@
 			"minValue": 0,
 			"maxValue": 100,
 			"defaultValue": 0,
-			"allowManualEntry": true,
 			"options": [
 				{
 					"label": "Power consumption reporting disabled",
@@ -233,16 +232,14 @@
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 32767,
-			"defaultValue": 0,
-			"allowManualEntry": true
+			"defaultValue": 0
 		},
 		"45": {
 			"label": "Antifreeze",
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 1127,
-			"defaultValue": 50,
-			"allowManualEntry": true
+			"defaultValue": 50
 		},
 		"50": {
 			"label": "PWM maximum value",
@@ -250,16 +247,14 @@
 			"valueSize": 1,
 			"minValue": 2,
 			"maxValue": 100,
-			"defaultValue": 100,
-			"allowManualEntry": true
+			"defaultValue": 100
 		},
 		"51": {
 			"label": "PWM minimum value",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 99,
-			"defaultValue": 0,
-			"allowManualEntry": true
+			"defaultValue": 0
 		},
 		"52": {
 			"label": "PWM cycle duration",
@@ -267,16 +262,14 @@
 			"valueSize": 1,
 			"minValue": 5,
 			"maxValue": 127,
-			"defaultValue": 10,
-			"allowManualEntry": true
+			"defaultValue": 10
 		},
 		"53": {
 			"label": "PID value inside deadband",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 127,
-			"defaultValue": 0,
-			"allowManualEntry": true
+			"defaultValue": 0
 		},
 		"54": {
 			"label": "PID deadband",
@@ -284,8 +277,7 @@
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 127,
-			"defaultValue": 5,
-			"allowManualEntry": true
+			"defaultValue": 5
 		},
 		"55": {
 			"label": "Integral sampling time",
@@ -293,32 +285,28 @@
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 127,
-			"defaultValue": 5,
-			"allowManualEntry": true
+			"defaultValue": 5
 		},
 		"56": {
 			"label": "P parameter",
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 1000,
-			"defaultValue": 100,
-			"allowManualEntry": true
+			"defaultValue": 100
 		},
 		"57": {
 			"label": "I parameter",
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 1000,
-			"defaultValue": 1,
-			"allowManualEntry": true
+			"defaultValue": 1
 		},
 		"58": {
 			"label": "D parameter",
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 1000,
-			"defaultValue": 0,
-			"allowManualEntry": true
+			"defaultValue": 0
 		},
 		"59": {
 			"label": "Thermostat mode",
@@ -344,8 +332,7 @@
 			"valueSize": 2,
 			"minValue": 1,
 			"maxValue": 1150,
-			"defaultValue": 50,
-			"allowManualEntry": true
+			"defaultValue": 50
 		},
 		"61": {
 			"label": "Too high temperature limit",
@@ -353,8 +340,7 @@
 			"valueSize": 2,
 			"minValue": 1,
 			"maxValue": 1000,
-			"defaultValue": 700,
-			"allowManualEntry": true
+			"defaultValue": 700
 		},
 		"63": {
 			"label": "Output Switch selection",
@@ -380,8 +366,7 @@
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 32000,
-			"defaultValue": 0,
-			"allowManualEntry": true
+			"defaultValue": 0
 		},
 		"71": {
 			"label": "Input I1 status off delay",
@@ -389,8 +374,7 @@
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 32000,
-			"defaultValue": 0,
-			"allowManualEntry": true
+			"defaultValue": 0
 		},
 		"72": {
 			"label": "Input I2 status on delay",
@@ -398,8 +382,7 @@
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 32000,
-			"defaultValue": 0,
-			"allowManualEntry": true
+			"defaultValue": 0
 		},
 		"73": {
 			"label": "Input I2 status off delay",
@@ -407,16 +390,14 @@
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 32000,
-			"defaultValue": 0,
-			"allowManualEntry": true
+			"defaultValue": 0
 		},
 		"74": {
 			"label": "Input 3 status ON delay",
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 32000,
-			"defaultValue": 0,
-			"allowManualEntry": true
+			"defaultValue": 0
 		},
 		"75": {
 			"label": "Input I3 status off delay",
@@ -424,8 +405,7 @@
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 32000,
-			"defaultValue": 0,
-			"allowManualEntry": true
+			"defaultValue": 0
 		},
 		"76": {
 			"label": "Reporting on time interval",
@@ -433,8 +413,7 @@
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 127,
-			"defaultValue": 30,
-			"allowManualEntry": true
+			"defaultValue": 30
 		},
 		"77": {
 			"label": "Group 10 - delay before sending Basic Set ON",
@@ -442,8 +421,7 @@
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 32767,
-			"defaultValue": 180,
-			"allowManualEntry": true
+			"defaultValue": 180
 		},
 		"78": {
 			"label": "Scale Selection",
@@ -595,16 +573,14 @@
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 32536,
-			"defaultValue": 32536,
-			"allowManualEntry": true
+			"defaultValue": 32536
 		},
 		"120": {
 			"label": "Digital temperature sensor reporting",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 127,
-			"defaultValue": 5,
-			"allowManualEntry": true
+			"defaultValue": 5
 		},
 		"121": {
 			"label": "Digital temperature sensor / setpoint selector",
@@ -646,8 +622,7 @@
 			"minValue": 0,
 			"maxValue": 254,
 			"defaultValue": 0,
-			"unsigned": true,
-			"allowManualEntry": true
+			"unsigned": true
 		}
 	}
 }

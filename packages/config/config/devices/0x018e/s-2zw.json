@@ -24,8 +24,7 @@
 			"minValue": 0,
 			"maxValue": 255,
 			"defaultValue": 240,
-			"unsigned": true,
-			"allowManualEntry": true
+			"unsigned": true
 		},
 		"2": {
 			"label": "Close Time Setting",
@@ -34,8 +33,7 @@
 			"minValue": 0,
 			"maxValue": 255,
 			"defaultValue": 240,
-			"unsigned": true,
-			"allowManualEntry": true
+			"unsigned": true
 		},
 		"3": {
 			"label": "Current Position",
@@ -44,8 +42,7 @@
 			"minValue": 0,
 			"maxValue": 99,
 			"defaultValue": 99,
-			"unsigned": true,
-			"allowManualEntry": true
+			"unsigned": true
 		}
 	},
 	"metadata": {

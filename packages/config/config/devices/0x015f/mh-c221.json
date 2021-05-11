@@ -36,8 +36,7 @@
 			"minValue": 1,
 			"maxValue": 32767,
 			"defaultValue": 720,
-			"unsigned": true,
-			"allowManualEntry": true
+			"unsigned": true
 		}
 	}
 }

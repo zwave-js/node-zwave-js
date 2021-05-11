@@ -84,8 +84,7 @@
 			"minValue": 3,
 			"maxValue": 99,
 			"defaultValue": 3,
-			"unsigned": true,
-			"allowManualEntry": true
+			"unsigned": true
 		},
 		"8": {
 			"label": "Dim Rate Timing (From Z-Wave Controller)",
@@ -95,8 +94,7 @@
 			"minValue": 1,
 			"maxValue": 255,
 			"defaultValue": 1,
-			"unsigned": true,
-			"allowManualEntry": true
+			"unsigned": true
 		},
 		"9": {
 			"label": "Dim Rate Steps (When Manually Controlled)",
@@ -105,8 +103,7 @@
 			"minValue": 3,
 			"maxValue": 99,
 			"defaultValue": 3,
-			"unsigned": true,
-			"allowManualEntry": true
+			"unsigned": true
 		},
 		"10": {
 			"label": "Dim Rate Timing (When Manually Controlled)",
@@ -116,8 +113,7 @@
 			"minValue": 1,
 			"maxValue": 255,
 			"defaultValue": 1,
-			"unsigned": true,
-			"allowManualEntry": true
+			"unsigned": true
 		},
 		"11": {
 			"label": "Dim Rate Steps (When Receiving All-On/Off Commands)",
@@ -126,8 +122,7 @@
 			"minValue": 3,
 			"maxValue": 99,
 			"defaultValue": 3,
-			"unsigned": true,
-			"allowManualEntry": true
+			"unsigned": true
 		},
 		"12": {
 			"label": "Dim Rate Timing (All-On/Off Command)",
@@ -137,8 +132,7 @@
 			"minValue": 1,
 			"maxValue": 255,
 			"defaultValue": 1,
-			"unsigned": true,
-			"allowManualEntry": true
+			"unsigned": true
 		}
 	},
 	"compat": {

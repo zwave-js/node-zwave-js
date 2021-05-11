@@ -23,8 +23,7 @@
 			"minValue": 0,
 			"maxValue": 99,
 			"defaultValue": 0,
-			"unsigned": true,
-			"allowManualEntry": true
+			"unsigned": true
 		},
 		"2": {
 			"label": "Basic Set On Level",
@@ -32,8 +31,7 @@
 			"minValue": 0,
 			"maxValue": 99,
 			"defaultValue": 99,
-			"unsigned": true,
-			"allowManualEntry": true
+			"unsigned": true
 		},
 		"10": {
 			"label": "Auto Report Battery Time",
@@ -42,8 +40,7 @@
 			"minValue": 1,
 			"maxValue": 127,
 			"defaultValue": 12,
-			"unsigned": true,
-			"allowManualEntry": true
+			"unsigned": true
 		},
 		"25": {
 			"label": "Dimmer Set Method",

@@ -130,8 +130,7 @@
 			"minValue": 0,
 			"maxValue": 65535,
 			"defaultValue": 0,
-			"unit": "minutes",
-			"allowManualEntry": true
+			"unit": "minutes"
 		},
 		"5": {
 			"label": "Auto Turn-On Timer",
@@ -140,8 +139,7 @@
 			"minValue": 0,
 			"maxValue": 65535,
 			"defaultValue": 0,
-			"unit": "minutes",
-			"allowManualEntry": true
+			"unit": "minutes"
 		},
 		"7[0x01]": {
 			"label": "Control Group 2 With Physical Switch",

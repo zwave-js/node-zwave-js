@@ -32,8 +32,7 @@
 			"minValue": -128,
 			"maxValue": 127,
 			"defaultValue": 0,
-			"writeOnly": true,
-			"allowManualEntry": true
+			"writeOnly": true
 		},
 		"7": {
 			"label": "Clear motor lead tail endpoint setting",
@@ -41,8 +40,7 @@
 			"minValue": -128,
 			"maxValue": 127,
 			"defaultValue": 0,
-			"writeOnly": true,
-			"allowManualEntry": true
+			"writeOnly": true
 		},
 		"8": {
 			"label": "Enable manual pull function",
@@ -50,8 +48,7 @@
 			"minValue": -128,
 			"maxValue": 127,
 			"defaultValue": 0,
-			"writeOnly": true,
-			"allowManualEntry": true
+			"writeOnly": true
 		},
 		"9": {
 			"label": "Disable manual pull function",
@@ -59,8 +56,7 @@
 			"minValue": -128,
 			"maxValue": 127,
 			"defaultValue": 0,
-			"writeOnly": true,
-			"allowManualEntry": true
+			"writeOnly": true
 		}
 	}
 }

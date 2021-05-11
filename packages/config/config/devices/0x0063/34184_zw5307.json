@@ -26,7 +26,6 @@
 			"maxValue": 55,
 			"defaultValue": 0,
 			"unsigned": true,
-			"allowManualEntry": true,
 			"options": [
 				{
 					"label": "Default - 10 seconds",

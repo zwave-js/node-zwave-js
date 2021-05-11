@@ -66,8 +66,7 @@
 			"maxValue": 255,
 			"defaultValue": 0,
 			"unsigned": true,
-			"writeOnly": true,
-			"allowManualEntry": true
+			"writeOnly": true
 		},
 		"4": {
 			"label": "C-Wire/Battery Status",
@@ -95,16 +94,14 @@
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 3,
-			"defaultValue": 2,
-			"allowManualEntry": true
+			"defaultValue": 2
 		},
 		"6": {
 			"label": "Auxiliary/Emergency Heat Pump Mode",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 1,
-			"defaultValue": 0,
-			"allowManualEntry": true
+			"defaultValue": 0
 		},
 		"7": {
 			"label": "Thermostat Swing Temp",
@@ -262,8 +259,7 @@
 			"minValue": 1,
 			"maxValue": 255,
 			"defaultValue": 2,
-			"unsigned": true,
-			"allowManualEntry": true
+			"unsigned": true
 		},
 		"15": {
 			"label": "Fan Timer",
@@ -271,16 +267,14 @@
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 60,
-			"defaultValue": 0,
-			"allowManualEntry": true
+			"defaultValue": 0
 		},
 		"17": {
 			"label": "Temperature Calibration",
 			"valueSize": 1,
 			"minValue": -6,
 			"maxValue": 6,
-			"defaultValue": 0,
-			"allowManualEntry": true
+			"defaultValue": 0
 		},
 		"18": {
 			"label": "Display Units",

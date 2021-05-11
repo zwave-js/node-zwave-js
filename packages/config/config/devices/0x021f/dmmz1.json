@@ -24,8 +24,7 @@
 			"minValue": 0,
 			"maxValue": 255,
 			"defaultValue": 255,
-			"unsigned": true,
-			"allowManualEntry": true
+			"unsigned": true
 		},
 		"2": {
 			"label": "Set Firing Mode",
@@ -52,8 +51,7 @@
 			"valueSize": 2,
 			"minValue": 64,
 			"maxValue": 168,
-			"defaultValue": 64,
-			"allowManualEntry": true
+			"defaultValue": 64
 		},
 		"4": {
 			"label": "Enable/Disable LED Alarm",
@@ -81,8 +79,7 @@
 			"minValue": 0,
 			"maxValue": 255,
 			"defaultValue": 0,
-			"unsigned": true,
-			"allowManualEntry": true
+			"unsigned": true
 		}
 	}
 }

@@ -44,8 +44,7 @@
 			"valueSize": 4,
 			"minValue": 120,
 			"maxValue": 40000,
-			"defaultValue": 400,
-			"allowManualEntry": true
+			"defaultValue": 400
 		},
 		"3": {
 			"label": "Analog electricity port mode",
@@ -74,16 +73,14 @@
 			"valueSize": 4,
 			"minValue": 120,
 			"maxValue": 40000,
-			"defaultValue": 400,
-			"allowManualEntry": true
+			"defaultValue": 400
 		},
 		"5": {
 			"label": "Digital port mode",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 2,
-			"defaultValue": 2,
-			"allowManualEntry": true
+			"defaultValue": 2
 		},
 		"255": {
 			"label": "Restart device",

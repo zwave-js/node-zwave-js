@@ -82,8 +82,7 @@
 			"valueSize": 4,
 			"minValue": 0,
 			"maxValue": 255,
-			"defaultValue": 0,
-			"allowManualEntry": true
+			"defaultValue": 0
 		},
 		"7": {
 			"label": "Alarm Mode",
@@ -271,8 +270,7 @@
 			"valueSize": 1,
 			"minValue": 4,
 			"maxValue": 8,
-			"defaultValue": 4,
-			"allowManualEntry": true
+			"defaultValue": 4
 		},
 		"17": {
 			"label": "Get Electrical High Preload Transition Count",

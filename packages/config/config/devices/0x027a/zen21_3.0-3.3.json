@@ -94,8 +94,7 @@
 			"valueSize": 4,
 			"minValue": 1,
 			"maxValue": 65535,
-			"defaultValue": 60,
-			"allowManualEntry": true
+			"defaultValue": 60
 		},
 		"5": {
 			"label": "Enable/Disable Auto On",
@@ -121,8 +120,7 @@
 			"valueSize": 4,
 			"minValue": 1,
 			"maxValue": 65535,
-			"defaultValue": 60,
-			"allowManualEntry": true
+			"defaultValue": 60
 		},
 		"8": {
 			"label": "Status after Power Failure",

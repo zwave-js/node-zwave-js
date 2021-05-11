@@ -24,7 +24,6 @@
 			"minValue": 0,
 			"maxValue": 255,
 			"defaultValue": 255,
-			"allowManualEntry": true,
 			"options": [
 				{
 					"label": "No Basic Set Command will be sent",
@@ -43,8 +42,7 @@
 			"valueSize": 1,
 			"minValue": 3,
 			"maxValue": 25,
-			"defaultValue": 3,
-			"allowManualEntry": true
+			"defaultValue": 3
 		},
 		"3": {
 			"label": "Remember status",
@@ -72,7 +70,6 @@
 			"minValue": 0,
 			"maxValue": 32767,
 			"defaultValue": 1,
-			"allowManualEntry": true,
 			"options": [
 				{
 					"label": "Does not report automatically",
@@ -87,7 +84,6 @@
 			"minValue": 0,
 			"maxValue": 32767,
 			"defaultValue": 60,
-			"allowManualEntry": true,
 			"options": [
 				{
 					"label": "Does not report automatically",
@@ -102,7 +98,6 @@
 			"minValue": 0,
 			"maxValue": 2500,
 			"defaultValue": 0,
-			"allowManualEntry": true,
 			"options": [
 				{
 					"label": "Does not report automatically",
@@ -118,7 +113,6 @@
 			"minValue": 0,
 			"maxValue": 100,
 			"defaultValue": 0,
-			"allowManualEntry": true,
 			"options": [
 				{
 					"label": "Does not report automatically",

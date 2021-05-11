@@ -22,8 +22,7 @@
 			"valueSize": 4,
 			"minValue": 0,
 			"maxValue": 1000000,
-			"defaultValue": 1000,
-			"allowManualEntry": true
+			"defaultValue": 1000
 		},
 		"2": {
 			"label": "Sensor type",
@@ -50,8 +49,7 @@
 			"valueSize": 4,
 			"minValue": 0,
 			"maxValue": 2147483647,
-			"defaultValue": 0,
-			"allowManualEntry": true
+			"defaultValue": 0
 		},
 		"10": {
 			"label": "Keep alive period",
@@ -59,8 +57,7 @@
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 32767,
-			"defaultValue": 5,
-			"allowManualEntry": true
+			"defaultValue": 5
 		},
 		"11": {
 			"label": "Real-time mode",
@@ -86,8 +83,7 @@
 			"valueSize": 4,
 			"minValue": 0,
 			"maxValue": 65535,
-			"defaultValue": 0,
-			"allowManualEntry": true
+			"defaultValue": 0
 		}
 	}
 }

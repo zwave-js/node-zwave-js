@@ -924,12 +924,12 @@ Parameter #${parameterNumber} has a non-numeric property defaultValue`,
 
 		if (
 			definition.allowManualEntry != undefined &&
-			typeof definition.allowManualEntry !== "boolean"
+			definition.allowManualEntry !== false
 		) {
 			throwInvalidConfig(
 				"devices",
 				`packages/config/config/devices/${parent.filename}:
-Parameter #${parameterNumber}: allowManualEntry must be a boolean!`,
+Parameter #${parameterNumber}: allowManualEntry must be false or omitted!`,
 			);
 		}
 		// Default to allowing manual entry, except if the param is readonly

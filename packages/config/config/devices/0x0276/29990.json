@@ -23,8 +23,7 @@
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 0,
-			"defaultValue": 0,
-			"allowManualEntry": true
+			"defaultValue": 0
 		},
 		"2": {
 			"label": "Filter - Period (read-only)",
@@ -32,8 +31,7 @@
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 12,
-			"defaultValue": 12,
-			"allowManualEntry": true
+			"defaultValue": 12
 		},
 		"3": {
 			"label": "Filter - Days",
@@ -41,8 +39,7 @@
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 0,
-			"defaultValue": 0,
-			"allowManualEntry": true
+			"defaultValue": 0
 		},
 		"4": {
 			"label": "Boost Mode Remaining Time",
@@ -50,8 +47,7 @@
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 0,
-			"defaultValue": 0,
-			"allowManualEntry": true
+			"defaultValue": 0
 		},
 		"5": {
 			"label": "Temperature Setpoint Step (read-only)",
@@ -59,8 +55,7 @@
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 0,
-			"defaultValue": 0,
-			"allowManualEntry": true
+			"defaultValue": 0
 		}
 	}
 }

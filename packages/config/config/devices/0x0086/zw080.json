@@ -35,7 +35,6 @@
 			"minValue": 1,
 			"maxValue": 5,
 			"defaultValue": 1,
-			"allowManualEntry": true,
 			"options": [
 				{
 					"label": "Sound 1",

@@ -24,8 +24,7 @@
 			"minValue": 0,
 			"maxValue": 1,
 			"defaultValue": 1,
-			"unsigned": true,
-			"allowManualEntry": true
+			"unsigned": true
 		},
 		"2": {
 			"label": "Set Clock",
@@ -55,8 +54,7 @@
 			"minValue": 0,
 			"maxValue": 100,
 			"defaultValue": 100,
-			"unsigned": true,
-			"allowManualEntry": true
+			"unsigned": true
 		},
 		"4": {
 			"label": "Eco Mode Channel 02",
@@ -65,8 +63,7 @@
 			"minValue": 0,
 			"maxValue": 100,
 			"defaultValue": 100,
-			"unsigned": true,
-			"allowManualEntry": true
+			"unsigned": true
 		},
 		"5": {
 			"label": "Eco Mode Channel 03",
@@ -75,8 +72,7 @@
 			"minValue": 0,
 			"maxValue": 100,
 			"defaultValue": 100,
-			"unsigned": true,
-			"allowManualEntry": true
+			"unsigned": true
 		},
 		"6": {
 			"label": "Eco Mode Channel 04",
@@ -85,8 +81,7 @@
 			"minValue": 0,
 			"maxValue": 100,
 			"defaultValue": 100,
-			"unsigned": true,
-			"allowManualEntry": true
+			"unsigned": true
 		},
 		"7": {
 			"label": "Eco Mode Channel 05",
@@ -95,8 +90,7 @@
 			"minValue": 0,
 			"maxValue": 100,
 			"defaultValue": 100,
-			"unsigned": true,
-			"allowManualEntry": true
+			"unsigned": true
 		},
 		"8": {
 			"label": "Eco Mode Channel 06",
@@ -105,8 +99,7 @@
 			"minValue": 0,
 			"maxValue": 100,
 			"defaultValue": 100,
-			"unsigned": true,
-			"allowManualEntry": true
+			"unsigned": true
 		},
 		"9": {
 			"label": "Dimmer Minimum Level Channel 01",
@@ -115,8 +108,7 @@
 			"minValue": 0,
 			"maxValue": 99,
 			"defaultValue": 29,
-			"unsigned": true,
-			"allowManualEntry": true
+			"unsigned": true
 		},
 		"10": {
 			"label": "Dimmer Minimum Level Channel 02",
@@ -125,8 +117,7 @@
 			"minValue": 0,
 			"maxValue": 29,
 			"defaultValue": 29,
-			"unsigned": true,
-			"allowManualEntry": true
+			"unsigned": true
 		},
 		"11": {
 			"label": "Dimmer Minimum Level Channel 03",
@@ -135,8 +126,7 @@
 			"minValue": 0,
 			"maxValue": 99,
 			"defaultValue": 29,
-			"unsigned": true,
-			"allowManualEntry": true
+			"unsigned": true
 		},
 		"12": {
 			"label": "Dimmer Minimum Level Channel 04",
@@ -145,8 +135,7 @@
 			"minValue": 0,
 			"maxValue": 99,
 			"defaultValue": 29,
-			"unsigned": true,
-			"allowManualEntry": true
+			"unsigned": true
 		},
 		"13": {
 			"label": "Dimmer Minimum Level Channel 05",
@@ -155,8 +144,7 @@
 			"minValue": 0,
 			"maxValue": 99,
 			"defaultValue": 29,
-			"unsigned": true,
-			"allowManualEntry": true
+			"unsigned": true
 		},
 		"14": {
 			"label": "Dimmer Minimum Level Channel 06",
@@ -165,8 +153,7 @@
 			"minValue": 0,
 			"maxValue": 99,
 			"defaultValue": 29,
-			"unsigned": true,
-			"allowManualEntry": true
+			"unsigned": true
 		},
 		"15": {
 			"label": "Reset to Factory Default",
@@ -174,8 +161,7 @@
 			"valueSize": 1,
 			"minValue": -1,
 			"maxValue": 0,
-			"defaultValue": 0,
-			"allowManualEntry": true
+			"defaultValue": 0
 		}
 	},
 	"metadata": {

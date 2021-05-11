@@ -80,15 +80,13 @@
 		"valueSize": 2,
 		"defaultValue": 1,
 		"minValue": 1,
-		"maxValue": 98,
-		"allowManualEntry": true
+		"maxValue": 98
 	},
 	"max_level": {
 		"valueSize": 2,
 		"defaultValue": 99,
 		"minValue": 2,
 		"maxValue": 555,
-		"allowManualEntry": true,
 		"options": [
 			{
 				"label": "True Sine Mode",

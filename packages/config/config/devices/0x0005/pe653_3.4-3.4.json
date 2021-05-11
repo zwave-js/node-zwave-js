@@ -24,8 +24,7 @@
 			"minValue": 0,
 			"maxValue": 255,
 			"defaultValue": 0,
-			"unsigned": true,
-			"allowManualEntry": true
+			"unsigned": true
 		},
 		"22": {
 			"label": "Pool - Spa Mode",
@@ -34,8 +33,7 @@
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 2,
-			"defaultValue": 0,
-			"allowManualEntry": true
+			"defaultValue": 0
 		},
 		"1[0xff]": {
 			"label": "Booster/Cleaner Pump Operation Mode",
@@ -44,8 +42,7 @@
 			"valueSize": 2,
 			"minValue": 1,
 			"maxValue": 6,
-			"defaultValue": 1,
-			"allowManualEntry": true
+			"defaultValue": 1
 		},
 		"1[0xff00]": {
 			"label": "Pump Type Operation Mode",
@@ -54,8 +51,7 @@
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 7,
-			"defaultValue": 0,
-			"allowManualEntry": true
+			"defaultValue": 0
 		}
 	}
 }

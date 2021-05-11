@@ -26,8 +26,7 @@
 			"unit": "seconds",
 			"minValue": 255,
 			"maxValue": 4200,
-			"defaultValue": 4200,
-			"allowManualEntry": true
+			"defaultValue": 4200
 		},
 		"2": {
 			"label": "Dwell Time",
@@ -35,8 +34,7 @@
 			"unit": "minutes",
 			"minValue": 1,
 			"maxValue": 9,
-			"defaultValue": 3,
-			"allowManualEntry": true
+			"defaultValue": 3
 		},
 		"3": {
 			"label": "Pet Immunity",

@@ -39,8 +39,7 @@
 			"minValue": 10,
 			"maxValue": 3600,
 			"defaultValue": 30,
-			"unsigned": true,
-			"allowManualEntry": true
+			"unsigned": true
 		},
 		"14": {
 			"label": "Motion Detection: Send Basic Set",
@@ -145,8 +144,7 @@
 			"minValue": 10,
 			"maxValue": 50,
 			"defaultValue": 10,
-			"unsigned": true,
-			"allowManualEntry": true
+			"unsigned": true
 		},
 		"172": {
 			"label": "Minimum Reporting Frequency",
@@ -155,8 +153,7 @@
 			"minValue": 1,
 			"maxValue": 744,
 			"defaultValue": 4,
-			"unsigned": true,
-			"allowManualEntry": true
+			"unsigned": true
 		},
 		"182": {
 			"label": "Battery Reporting Change Threshold",
@@ -166,7 +163,6 @@
 			"maxValue": 99,
 			"defaultValue": 0,
 			"unsigned": true,
-			"allowManualEntry": true,
 			"options": [
 				{
 					"label": "Disable",
@@ -181,8 +177,7 @@
 			"minValue": 1,
 			"maxValue": 144,
 			"defaultValue": 1,
-			"unsigned": true,
-			"allowManualEntry": true
+			"unsigned": true
 		},
 		"184": {
 			"label": "Humidity Reporting Change Threshold",
@@ -192,7 +187,6 @@
 			"maxValue": 80,
 			"defaultValue": 5,
 			"unsigned": true,
-			"allowManualEntry": true,
 			"options": [
 				{
 					"label": "Disable",
@@ -208,7 +202,6 @@
 			"maxValue": 30000,
 			"defaultValue": 50,
 			"unsigned": true,
-			"allowManualEntry": true,
 			"options": [
 				{
 					"label": "Disable",

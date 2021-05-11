@@ -23,7 +23,6 @@
 			"maxValue": 255,
 			"defaultValue": 85,
 			"unsigned": true,
-			"allowManualEntry": true,
 			"options": [
 				{
 					"label": "Set all config values to default values",

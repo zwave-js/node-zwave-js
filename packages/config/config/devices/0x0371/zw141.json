@@ -68,8 +68,7 @@
 			"minValue": 10,
 			"maxValue": 32767,
 			"defaultValue": 150,
-			"unsigned": true,
-			"allowManualEntry": true
+			"unsigned": true
 		},
 		"35": {
 			"label": "Curtain Trip Time",
@@ -78,8 +77,7 @@
 			"minValue": 500,
 			"maxValue": 32767,
 			"defaultValue": 15000,
-			"unsigned": true,
-			"allowManualEntry": true
+			"unsigned": true
 		},
 		"36": {
 			"label": "Enter/Exit Calibration",

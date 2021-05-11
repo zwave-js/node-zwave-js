@@ -43,7 +43,6 @@
 			"minValue": 0,
 			"maxValue": 2147483647,
 			"defaultValue": 0,
-			"allowManualEntry": true,
 			"options": [
 				{
 					"label": "Disabled",
@@ -76,8 +75,7 @@
 			"valueSize": 4,
 			"minValue": 0,
 			"maxValue": 2147483647,
-			"defaultValue": 0,
-			"allowManualEntry": true
+			"defaultValue": 0
 		},
 		"5": {
 			"label": "BLE Always Allowed",
@@ -103,8 +101,7 @@
 			"valueSize": 4,
 			"minValue": 0,
 			"maxValue": 2147483647,
-			"defaultValue": 0,
-			"allowManualEntry": true
+			"defaultValue": 0
 		}
 	}
 }

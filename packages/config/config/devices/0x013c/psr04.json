@@ -23,8 +23,7 @@
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 99,
-			"defaultValue": 0,
-			"allowManualEntry": true
+			"defaultValue": 0
 		},
 		"2": {
 			"label": "Basic Set ON level",
@@ -32,8 +31,7 @@
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 99,
-			"defaultValue": 99,
-			"allowManualEntry": true
+			"defaultValue": 99
 		},
 		"10": {
 			"label": "Auto Report Battery Time",
@@ -41,8 +39,7 @@
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 127,
-			"defaultValue": 12,
-			"allowManualEntry": true
+			"defaultValue": 12
 		},
 		"25": {
 			"label": "Customer Function",
@@ -50,8 +47,7 @@
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 1,
-			"defaultValue": 0,
-			"allowManualEntry": true
+			"defaultValue": 0
 		},
 		"26": {
 			"label": "Disable Scene Holding report",

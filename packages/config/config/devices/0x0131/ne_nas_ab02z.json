@@ -85,7 +85,6 @@
 			"maxValue": 255,
 			"defaultValue": 1,
 			"unsigned": true,
-			"allowManualEntry": true,
 			"options": [
 				{
 					"label": "Disabled",
@@ -124,8 +123,7 @@
 			"minValue": 1,
 			"maxValue": 10,
 			"defaultValue": 9,
-			"unsigned": true,
-			"allowManualEntry": true
+			"unsigned": true
 		},
 		"6": {
 			"label": "Configure doorbell music index",
@@ -134,8 +132,7 @@
 			"minValue": 1,
 			"maxValue": 10,
 			"defaultValue": 10,
-			"unsigned": true,
-			"allowManualEntry": true
+			"unsigned": true
 		}
 	},
 	"metadata": {

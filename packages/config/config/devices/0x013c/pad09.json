@@ -24,8 +24,7 @@
 			"minValue": 0,
 			"maxValue": 1,
 			"defaultValue": 1,
-			"unsigned": true,
-			"allowManualEntry": true
+			"unsigned": true
 		},
 		"2": {
 			"label": "Led Indication Mode",
@@ -34,8 +33,7 @@
 			"minValue": 1,
 			"maxValue": 3,
 			"defaultValue": 1,
-			"unsigned": true,
-			"allowManualEntry": true
+			"unsigned": true
 		},
 		"4": {
 			"label": "Restore Dimmer State",
@@ -44,8 +42,7 @@
 			"minValue": 0,
 			"maxValue": 2,
 			"defaultValue": 1,
-			"unsigned": true,
-			"allowManualEntry": true
+			"unsigned": true
 		}
 	},
 	"metadata": {

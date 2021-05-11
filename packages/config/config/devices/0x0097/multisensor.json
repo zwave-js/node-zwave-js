@@ -29,8 +29,7 @@
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 0,
-			"defaultValue": 0,
-			"allowManualEntry": true
+			"defaultValue": 0
 		},
 		"2": {
 			"label": "Mode Timeout",
@@ -39,8 +38,7 @@
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 3600,
-			"defaultValue": 900,
-			"allowManualEntry": true
+			"defaultValue": 900
 		},
 		"3": {
 			"label": "Switch off time",
@@ -49,8 +47,7 @@
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 7200,
-			"defaultValue": 2700,
-			"allowManualEntry": true
+			"defaultValue": 2700
 		},
 		"4": {
 			"label": "Sensitivity",
@@ -58,8 +55,7 @@
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 127,
-			"defaultValue": 80,
-			"allowManualEntry": true
+			"defaultValue": 80
 		},
 		"5": {
 			"label": "Mode",
@@ -67,8 +63,7 @@
 			"valueSize": 1,
 			"minValue": 1,
 			"maxValue": 3,
-			"defaultValue": 2,
-			"allowManualEntry": true
+			"defaultValue": 2
 		},
 		"6": {
 			"label": "The temperature offset",
@@ -76,8 +71,7 @@
 			"valueSize": 2,
 			"minValue": -10,
 			"maxValue": 10,
-			"defaultValue": 0,
-			"allowManualEntry": true
+			"defaultValue": 0
 		}
 	}
 }

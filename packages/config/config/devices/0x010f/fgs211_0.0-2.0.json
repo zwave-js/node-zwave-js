@@ -121,8 +121,7 @@
 			"minValue": 0,
 			"maxValue": 255,
 			"defaultValue": 20,
-			"unsigned": true,
-			"allowManualEntry": true
+			"unsigned": true
 		},
 		"6": {
 			"label": "Separation of association sending (key 1)",
@@ -342,8 +341,7 @@
 			"minValue": 0,
 			"maxValue": 65535,
 			"defaultValue": 600,
-			"unsigned": true,
-			"allowManualEntry": true
+			"unsigned": true
 		}
 	}
 }

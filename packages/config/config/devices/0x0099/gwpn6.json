@@ -46,8 +46,7 @@
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 100,
-			"defaultValue": 10,
-			"allowManualEntry": true
+			"defaultValue": 10
 		},
 		"1": {
 			"label": "No communication light",
@@ -56,8 +55,7 @@
 			"minValue": 0,
 			"maxValue": 255,
 			"defaultValue": 2,
-			"unsigned": true,
-			"allowManualEntry": true
+			"unsigned": true
 		},
 		"2": {
 			"label": "Wheel position",

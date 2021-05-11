@@ -157,7 +157,6 @@
 			"maxValue": 16777222,
 			"defaultValue": 1573017,
 			"unsigned": true,
-			"allowManualEntry": true,
 			"options": [
 				{
 					"label": "The minute value of on time",
@@ -181,7 +180,6 @@
 			"maxValue": 16777222,
 			"defaultValue": 2293760,
 			"unsigned": true,
-			"allowManualEntry": true,
 			"options": [
 				{
 					"label": "The minute value of on time",
@@ -222,8 +220,7 @@
 			"minValue": 0,
 			"maxValue": 60000,
 			"defaultValue": 25,
-			"unsigned": true,
-			"allowManualEntry": true
+			"unsigned": true
 		},
 		"92": {
 			"label": "Set The Threshold Value of Wattage",
@@ -231,8 +228,7 @@
 			"minValue": 0,
 			"maxValue": 100,
 			"defaultValue": 5,
-			"unsigned": true,
-			"allowManualEntry": true
+			"unsigned": true
 		},
 		"100": {
 			"label": "Set Parameter 101-103 to Default Value",
@@ -240,8 +236,7 @@
 			"minValue": 0,
 			"maxValue": 255,
 			"defaultValue": 0,
-			"unsigned": true,
-			"allowManualEntry": true
+			"unsigned": true
 		},
 		"101": {
 			"label": "To Set Which Reports Need to Be Sent in Report Group 1",
@@ -330,8 +325,7 @@
 			"minValue": 0,
 			"maxValue": 0,
 			"defaultValue": 0,
-			"unsigned": true,
-			"allowManualEntry": true
+			"unsigned": true
 		},
 		"111": {
 			"label": "Set The Interval of Automatic Report For Report Group 1",
@@ -339,8 +333,7 @@
 			"minValue": 0,
 			"maxValue": 2147483647,
 			"defaultValue": 3,
-			"unsigned": true,
-			"allowManualEntry": true
+			"unsigned": true
 		},
 		"112": {
 			"label": "Set The Interval of Automatic Report For Report Group 2",
@@ -348,8 +341,7 @@
 			"minValue": 0,
 			"maxValue": 2147483647,
 			"defaultValue": 600,
-			"unsigned": true,
-			"allowManualEntry": true
+			"unsigned": true
 		},
 		"113": {
 			"label": "Set The Interval of Automatic Report For Report Group 2",
@@ -357,8 +349,7 @@
 			"minValue": 0,
 			"maxValue": 2147483647,
 			"defaultValue": 600,
-			"unsigned": true,
-			"allowManualEntry": true
+			"unsigned": true
 		},
 		"120": {
 			"label": "Configure The External Switch Mode For S1",
@@ -495,8 +486,7 @@
 			"minValue": 1,
 			"maxValue": 255,
 			"defaultValue": 3,
-			"unsigned": true,
-			"allowManualEntry": true
+			"unsigned": true
 		},
 		"128": {
 			"label": "Get The Current Working Mode",
@@ -575,8 +565,7 @@
 			"minValue": 0,
 			"maxValue": 99,
 			"defaultValue": 0,
-			"unsigned": true,
-			"allowManualEntry": true
+			"unsigned": true
 		},
 		"132": {
 			"label": "Set The Max Brightness Level",
@@ -584,8 +573,7 @@
 			"minValue": 0,
 			"maxValue": 99,
 			"defaultValue": 99,
-			"unsigned": true,
-			"allowManualEntry": true
+			"unsigned": true
 		},
 		"249": {
 			"label": "Set The Recognition Way of Load",

@@ -30,8 +30,7 @@
 			"unit": "seconds",
 			"minValue": 0,
 			"maxValue": 127,
-			"defaultValue": 0,
-			"allowManualEntry": true
+			"defaultValue": 0
 		},
 		"2": {
 			"label": "Panic On Time",
@@ -39,8 +38,7 @@
 			"unit": "seconds",
 			"minValue": 0,
 			"maxValue": 127,
-			"defaultValue": 0,
-			"allowManualEntry": true
+			"defaultValue": 0
 		},
 		"3": {
 			"label": "Panic Off Time",
@@ -48,8 +46,7 @@
 			"unit": "seconds",
 			"minValue": 0,
 			"maxValue": 127,
-			"defaultValue": 0,
-			"allowManualEntry": true
+			"defaultValue": 0
 		},
 		"4": {
 			"label": "Basic Set Value",
@@ -58,8 +55,7 @@
 			"unit": "seconds",
 			"minValue": 0,
 			"maxValue": 127,
-			"defaultValue": 0,
-			"allowManualEntry": true
+			"defaultValue": 0
 		},
 		"5": {
 			"label": "Power p State",
@@ -107,8 +103,7 @@
 			"unit": "seconds",
 			"minValue": 0,
 			"maxValue": 127,
-			"defaultValue": 0,
-			"allowManualEntry": true
+			"defaultValue": 0
 		}
 	}
 }

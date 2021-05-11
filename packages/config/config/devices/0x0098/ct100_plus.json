@@ -226,8 +226,7 @@
 			"valueSize": 4,
 			"minValue": 0,
 			"maxValue": 124,
-			"defaultValue": 124,
-			"allowManualEntry": true
+			"defaultValue": 124
 		},
 		"11": {
 			"label": "Simple UI Mode",

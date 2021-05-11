@@ -22,8 +22,7 @@
 			"valueSize": 2,
 			"minValue": 1,
 			"maxValue": 100,
-			"defaultValue": 5,
-			"allowManualEntry": true
+			"defaultValue": 5
 		},
 		"2": {
 			"label": "Set-point display resolution",
@@ -32,8 +31,7 @@
 			"unit": "°C",
 			"minValue": 1,
 			"maxValue": 100,
-			"defaultValue": 5,
-			"allowManualEntry": true
+			"defaultValue": 5
 		},
 		"3": {
 			"label": "Min Set-point and override limit",
@@ -42,8 +40,7 @@
 			"unit": "°C",
 			"minValue": 0,
 			"maxValue": 40,
-			"defaultValue": 12,
-			"allowManualEntry": true
+			"defaultValue": 12
 		},
 		"4": {
 			"label": "Max Set-point and override limit",
@@ -52,8 +49,7 @@
 			"unit": "°C",
 			"minValue": 0,
 			"maxValue": 40,
-			"defaultValue": 28,
-			"allowManualEntry": true
+			"defaultValue": 28
 		},
 		"5": {
 			"label": "LED Flash period",
@@ -62,8 +58,7 @@
 			"unit": "seconds",
 			"minValue": 0,
 			"maxValue": 65535,
-			"defaultValue": 1,
-			"allowManualEntry": true
+			"defaultValue": 1
 		},
 		"6": {
 			"label": "Set-point control function",
@@ -134,8 +129,7 @@
 			"valueSize": 2,
 			"minValue": 1,
 			"maxValue": 5,
-			"defaultValue": 1,
-			"allowManualEntry": true
+			"defaultValue": 1
 		},
 		"10": {
 			"label": "Number of LED flashes (duration)",
@@ -144,8 +138,7 @@
 			"minValue": 0,
 			"maxValue": 255,
 			"defaultValue": 5,
-			"unsigned": true,
-			"allowManualEntry": true
+			"unsigned": true
 		},
 		"11": {
 			"label": "LED color",

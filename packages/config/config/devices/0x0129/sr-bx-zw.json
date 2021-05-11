@@ -24,8 +24,7 @@
 			"minValue": 1,
 			"maxValue": 10,
 			"defaultValue": 10,
-			"unsigned": true,
-			"allowManualEntry": true
+			"unsigned": true
 		},
 		"2": {
 			"$import": "../templates/master_template.json#base_enable_disable",
@@ -40,7 +39,6 @@
 			"maxValue": 25,
 			"defaultValue": 0,
 			"unsigned": true,
-			"allowManualEntry": true,
 			"options": [
 				{
 					"label": "Disable",

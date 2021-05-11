@@ -24,7 +24,6 @@
 			"minValue": 0,
 			"maxValue": 100,
 			"defaultValue": 3,
-			"allowManualEntry": true,
 			"options": [
 				{
 					"label": "Immediate",
@@ -39,7 +38,6 @@
 			"minValue": 0,
 			"maxValue": 101,
 			"defaultValue": 101,
-			"allowManualEntry": true,
 			"options": [
 				{
 					"label": "Immediate",
@@ -58,7 +56,6 @@
 			"minValue": 0,
 			"maxValue": 101,
 			"defaultValue": 101,
-			"allowManualEntry": true,
 			"options": [
 				{
 					"label": "Immediate",
@@ -77,7 +74,6 @@
 			"minValue": 0,
 			"maxValue": 101,
 			"defaultValue": 101,
-			"allowManualEntry": true,
 			"options": [
 				{
 					"label": "Immediate",
@@ -95,8 +91,7 @@
 			"valueSize": 1,
 			"minValue": 1,
 			"maxValue": 45,
-			"defaultValue": 1,
-			"allowManualEntry": true
+			"defaultValue": 1
 		},
 		"6": {
 			"label": "Maximum Dim Level",
@@ -104,8 +99,7 @@
 			"valueSize": 1,
 			"minValue": 55,
 			"maxValue": 99,
-			"defaultValue": 99,
-			"allowManualEntry": true
+			"defaultValue": 99
 		},
 		"7": {
 			"label": "Invert Switch",
@@ -131,8 +125,7 @@
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 32767,
-			"defaultValue": 0,
-			"allowManualEntry": true
+			"defaultValue": 0
 		},
 		"9": {
 			"label": "Default Level",
@@ -141,7 +134,6 @@
 			"minValue": 0,
 			"maxValue": 99,
 			"defaultValue": 0,
-			"allowManualEntry": true,
 			"options": [
 				{
 					"label": "Last State",
@@ -156,7 +148,6 @@
 			"minValue": 0,
 			"maxValue": 99,
 			"defaultValue": 0,
-			"allowManualEntry": true,
 			"options": [
 				{
 					"label": "Last State",
@@ -170,7 +161,6 @@
 			"minValue": 0,
 			"maxValue": 101,
 			"defaultValue": 0,
-			"allowManualEntry": true,
 			"options": [
 				{
 					"label": "Off",
@@ -262,7 +252,6 @@
 			"maxValue": 255,
 			"defaultValue": 170,
 			"unsigned": true,
-			"allowManualEntry": true,
 			"options": [
 				{
 					"label": "Red",
@@ -418,7 +407,6 @@
 			"minValue": 0,
 			"maxValue": 255,
 			"defaultValue": 0,
-			"allowManualEntry": true,
 			"options": [
 				{
 					"label": "Red",
@@ -519,8 +507,7 @@
 			"valueSize": 4,
 			"minValue": 0,
 			"maxValue": 255,
-			"defaultValue": 255,
-			"allowManualEntry": true
+			"defaultValue": 255
 		},
 		"16[0x7f000000]": {
 			"label": "LED Effect Type",
@@ -562,8 +549,7 @@
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 10,
-			"defaultValue": 3,
-			"allowManualEntry": true
+			"defaultValue": 3
 		},
 		"18": {
 			"label": "Active Power Reports",
@@ -571,8 +557,7 @@
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 100,
-			"defaultValue": 10,
-			"allowManualEntry": true
+			"defaultValue": 10
 		},
 		"19": {
 			"label": "Periodic Power & Energy Reports",
@@ -580,8 +565,7 @@
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 32767,
-			"defaultValue": 3600,
-			"allowManualEntry": true
+			"defaultValue": 3600
 		},
 		"20": {
 			"label": "Energy Reports",
@@ -589,8 +573,7 @@
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 100,
-			"defaultValue": 10,
-			"allowManualEntry": true
+			"defaultValue": 10
 		},
 		"21": {
 			"label": "AC Power Type",
@@ -639,8 +622,7 @@
 			"valueSize": 1,
 			"minValue": 1,
 			"maxValue": 9,
-			"defaultValue": 7,
-			"allowManualEntry": true
+			"defaultValue": 7
 		},
 		"51": {
 			"$if": "firmwareVersion >= 1.47",

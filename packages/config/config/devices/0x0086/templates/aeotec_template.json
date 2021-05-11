@@ -39,8 +39,7 @@
 		"minValue": 0,
 		"maxValue": 65535,
 		"defaultValue": 0,
-		"unsigned": true,
-		"allowManualEntry": true
+		"unsigned": true
 	},
 	"base_interval": {
 		"valueSize": 4,
@@ -48,8 +47,7 @@
 		"minValue": 1,
 		"maxValue": 2678400,
 		"defaultValue": 600,
-		"unsigned": true,
-		"allowManualEntry": true
+		"unsigned": true
 	},
 	"notification_type": {
 		"label": "Notification Type",
@@ -201,8 +199,7 @@
 		"minValue": 1,
 		"maxValue": 15300,
 		"defaultValue": 240,
-		"unsigned": true,
-		"allowManualEntry": true
+		"unsigned": true
 	},
 	"celsius_fahrenheit": {
 		"valueSize": 4,
@@ -290,8 +287,7 @@
 		"minValue": 1,
 		"maxValue": 65535,
 		"defaultValue": 720,
-		"unsigned": true,
-		"allowManualEntry": true
+		"unsigned": true
 	},
 	"factory_reset": {
 		"label": "Reset to Factory Defaults",
@@ -341,8 +337,7 @@
 		"minValue": 0,
 		"maxValue": 60000,
 		"defaultValue": 50,
-		"unsigned": true,
-		"allowManualEntry": true
+		"unsigned": true
 	},
 	"power_threshold_clamp1": {
 		"$import": "#power_threshold",
@@ -368,8 +363,7 @@
 		"minValue": 0,
 		"maxValue": 100,
 		"defaultValue": 5,
-		"unsigned": true,
-		"allowManualEntry": true
+		"unsigned": true
 	},
 	"percent_threshold_clamp1": {
 		"$import": "#percent_threshold",
@@ -569,8 +563,7 @@
 		"minValue": 10,
 		"maxValue": 50,
 		"defaultValue": 10,
-		"unsigned": true,
-		"allowManualEntry": true
+		"unsigned": true
 	},
 	"low_battery_interval": {
 		"label": "Low Battery Voltage Check Interval",
@@ -580,8 +573,7 @@
 		"minValue": 0,
 		"maxValue": 2147483647,
 		"defaultValue": 86640,
-		"unsigned": true,
-		"allowManualEntry": true
+		"unsigned": true
 	},
 	"report_power_voltage": {
 		"$import": "../../templates/master_template.json#base_0-1_nounit",
@@ -1022,8 +1014,7 @@
 		"minValue": 0,
 		"maxValue": 65535,
 		"defaultValue": 0,
-		"unsigned": true,
-		"allowManualEntry": true
+		"unsigned": true
 	},
 	"partner_id_aeotec": {
 		"label": "Partner ID",
@@ -1084,8 +1075,7 @@
 		"minValue": 0,
 		"maxValue": 32000,
 		"defaultValue": 50,
-		"unsigned": true,
-		"allowManualEntry": true
+		"unsigned": true
 	},
 	"wattage_percent_trigger": {
 		"label": "Minimum Power Percentage Change to Trigger Event",
@@ -1093,8 +1083,7 @@
 		"unit": "%",
 		"minValue": 0,
 		"maxValue": 100,
-		"defaultValue": 10,
-		"allowManualEntry": true
+		"defaultValue": 10
 	},
 	"external_switch_two": {
 		"$import": "../../templates/master_template.json#base_0-1_nounit",
@@ -1218,8 +1207,7 @@
 		"minValue": 0,
 		"maxValue": 255,
 		"defaultValue": 0,
-		"writeOnly": true,
-		"allowManualEntry": true
+		"writeOnly": true
 	},
 	"blink_length": {
 		"label": "LED Blink Cycle Length",
@@ -1229,8 +1217,7 @@
 		"minValue": 0,
 		"maxValue": 255,
 		"defaultValue": 0,
-		"writeOnly": true,
-		"allowManualEntry": true
+		"writeOnly": true
 	},
 	"motion_timeout": {
 		"label": "Motion Sensor Timeout",
@@ -1239,8 +1226,7 @@
 		"minValue": 1,
 		"maxValue": 15300,
 		"defaultValue": 240,
-		"unsigned": true,
-		"allowManualEntry": true
+		"unsigned": true
 	},
 	"enable_motion_sensor": {
 		"$import": "../../templates/master_template.json#base_enable_disable",
@@ -1322,8 +1308,7 @@
 		"minValue": 8,
 		"maxValue": 127,
 		"defaultValue": 15,
-		"unsigned": true,
-		"allowManualEntry": true
+		"unsigned": true
 	},
 	"current_power_mode": {
 		"label": "Current Power Mode",
@@ -1681,7 +1666,6 @@
 		"maxValue": 255,
 		"defaultValue": 0,
 		"unsigned": true,
-		"allowManualEntry": true,
 		"options": [
 			{
 				"label": "No interval",
@@ -1727,7 +1711,6 @@
 		"maxValue": 255,
 		"defaultValue": 1,
 		"unsigned": true,
-		"allowManualEntry": true,
 		"options": [
 			{
 				"label": "Unlimited",
@@ -1772,8 +1755,7 @@
 		"unit": "ms",
 		"minValue": 0,
 		"maxValue": 127,
-		"unsigned": true,
-		"allowManualEntry": true
+		"unsigned": true
 	},
 	"dim_duration_on_1": {
 		"$import": "#base_dim_duration",
@@ -2193,8 +2175,7 @@
 		"minValue": 1,
 		"maxValue": 255,
 		"defaultValue": 20,
-		"unsigned": true,
-		"allowManualEntry": true
+		"unsigned": true
 	},
 	"recover_limit_temp_unit": {
 		"$import": "#celsius_fahrenheit_0",
@@ -2208,8 +2189,7 @@
 		"minValue": 1,
 		"maxValue": 50,
 		"defaultValue": 5,
-		"unsigned": true,
-		"allowManualEntry": true
+		"unsigned": true
 	},
 	"recover_limit_lighting": {
 		"label": "Lighting Recover Limit",
@@ -2218,8 +2198,7 @@
 		"minValue": 10,
 		"maxValue": 255,
 		"defaultValue": 100,
-		"unsigned": true,
-		"allowManualEntry": true
+		"unsigned": true
 	},
 	"recover_limit_ultraviolet": {
 		"label": "Ultraviolet Recover Limit",
@@ -2227,8 +2206,7 @@
 		"minValue": 1,
 		"maxValue": 5,
 		"defaultValue": 2,
-		"unsigned": true,
-		"allowManualEntry": true
+		"unsigned": true
 	},
 	// Appointment times
 	"base_appointment_day": {
@@ -2237,7 +2215,6 @@
 		"minValue": 0,
 		"maxValue": 127,
 		"defaultValue": 0,
-		"allowManualEntry": true,
 		"options": [
 			{
 				"label": "Disable",
@@ -2249,15 +2226,13 @@
 		"valueSize": 4,
 		"minValue": 0,
 		"maxValue": 24,
-		"defaultValue": 0,
-		"allowManualEntry": true
+		"defaultValue": 0
 	},
 	"base_appointment_minute": {
 		"valueSize": 4,
 		"minValue": 0,
 		"maxValue": 59,
-		"defaultValue": 0,
-		"allowManualEntry": true
+		"defaultValue": 0
 	},
 	"enable_appointment_one": {
 		"$import": "../../templates/master_template.json#base_enable_disable",

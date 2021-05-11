@@ -89,8 +89,7 @@
 			"valueSize": 2,
 			"minValue": 3,
 			"maxValue": 1000,
-			"defaultValue": 5,
-			"allowManualEntry": true
+			"defaultValue": 5
 		},
 		"4": {
 			"label": "Upload time interval",
@@ -99,8 +98,7 @@
 			"minValue": 10,
 			"maxValue": 65535,
 			"defaultValue": 30,
-			"unsigned": true,
-			"allowManualEntry": true
+			"unsigned": true
 		},
 		"255": {
 			"label": "Factory Setting",
@@ -108,8 +106,7 @@
 			"minValue": 85,
 			"maxValue": 85,
 			"defaultValue": 85,
-			"writeOnly": true,
-			"allowManualEntry": true
+			"writeOnly": true
 		}
 	}
 }

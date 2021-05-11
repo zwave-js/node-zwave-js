@@ -29,8 +29,7 @@
 			"minValue": 0,
 			"maxValue": 10,
 			"defaultValue": 10,
-			"unsigned": true,
-			"allowManualEntry": true
+			"unsigned": true
 		},
 		"2": {
 			"label": "Temperature Report Interval For Association Group 2",
@@ -40,8 +39,7 @@
 			"minValue": 0,
 			"maxValue": 30,
 			"defaultValue": 30,
-			"unsigned": true,
-			"allowManualEntry": true
+			"unsigned": true
 		},
 		"3": {
 			"label": "Minimum Set Point Temperature",
@@ -51,8 +49,7 @@
 			"minValue": 0,
 			"maxValue": 5,
 			"defaultValue": 5,
-			"unsigned": true,
-			"allowManualEntry": true
+			"unsigned": true
 		},
 		"4": {
 			"label": "Maximum Set Point Temperature",
@@ -62,8 +59,7 @@
 			"minValue": 0,
 			"maxValue": 35,
 			"defaultValue": 35,
-			"unsigned": true,
-			"allowManualEntry": true
+			"unsigned": true
 		},
 		"5": {
 			"label": "Delta Temperature For Lifeline Group",
@@ -73,8 +69,7 @@
 			"minValue": 0,
 			"maxValue": 0,
 			"defaultValue": 0,
-			"unsigned": true,
-			"allowManualEntry": true
+			"unsigned": true
 		},
 		"6": {
 			"label": "Temperature Report Interval For Lifeline Group",
@@ -83,8 +78,7 @@
 			"unit": "°C",
 			"minValue": -128,
 			"maxValue": 127,
-			"defaultValue": 0,
-			"allowManualEntry": true
+			"defaultValue": 0
 		}
 	},
 	"metadata": {

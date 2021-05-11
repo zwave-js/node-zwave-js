@@ -103,8 +103,7 @@
 			"valueSize": 1,
 			"minValue": 3,
 			"maxValue": 6,
-			"defaultValue": 4,
-			"allowManualEntry": true
+			"defaultValue": 4
 		},
 		"10": {
 			"label": "Temp. Sensor Calibration",
@@ -113,8 +112,7 @@
 			"valueSize": 1,
 			"minValue": -10,
 			"maxValue": 10,
-			"defaultValue": 0,
-			"allowManualEntry": true
+			"defaultValue": 0
 		}
 	}
 }

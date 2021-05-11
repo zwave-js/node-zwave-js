@@ -85,8 +85,7 @@
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 100,
-			"defaultValue": 10,
-			"allowManualEntry": true
+			"defaultValue": 10
 		}
 	}
 }

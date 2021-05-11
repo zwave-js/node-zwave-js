@@ -28,16 +28,14 @@
 			"minValue": 1,
 			"maxValue": 255,
 			"defaultValue": 255,
-			"unsigned": true,
-			"allowManualEntry": true
+			"unsigned": true
 		},
 		"2": {
 			"label": "Turn Off Light Time Configuration",
 			"valueSize": 1,
 			"minValue": 1,
 			"maxValue": 120,
-			"defaultValue": 20,
-			"allowManualEntry": true
+			"defaultValue": 20
 		},
 		"3": {
 			"label": "Door Sensor Status Report",
@@ -46,8 +44,7 @@
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 24,
-			"defaultValue": 12,
-			"allowManualEntry": true
+			"defaultValue": 12
 		}
 	}
 }

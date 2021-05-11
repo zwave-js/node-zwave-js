@@ -23,8 +23,7 @@
 			"valueSize": 4,
 			"minValue": 0,
 			"maxValue": 65535,
-			"defaultValue": 4,
-			"allowManualEntry": true
+			"defaultValue": 4
 		},
 		"29": {
 			"label": "Disable Alarm",
@@ -32,16 +31,14 @@
 			"valueSize": 4,
 			"minValue": 0,
 			"maxValue": 0,
-			"defaultValue": 0,
-			"allowManualEntry": true
+			"defaultValue": 0
 		},
 		"31": {
 			"label": "Alarm Duration",
 			"valueSize": 4,
 			"minValue": 0,
 			"maxValue": 127,
-			"defaultValue": 6,
-			"allowManualEntry": true
+			"defaultValue": 6
 		}
 	}
 }

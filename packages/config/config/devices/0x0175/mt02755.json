@@ -63,8 +63,7 @@
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 127,
-			"defaultValue": 12,
-			"allowManualEntry": true
+			"defaultValue": 12
 		},
 		"13": {
 			"label": "Auto Report Temperature Time",
@@ -73,8 +72,7 @@
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 127,
-			"defaultValue": 12,
-			"allowManualEntry": true
+			"defaultValue": 12
 		},
 		"14": {
 			"label": "Auto Report Humidity Time",
@@ -83,8 +81,7 @@
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 127,
-			"defaultValue": 12,
-			"allowManualEntry": true
+			"defaultValue": 12
 		},
 		"20": {
 			"label": "Auto Report Tick Interval",
@@ -94,8 +91,7 @@
 			"minValue": 0,
 			"maxValue": 255,
 			"defaultValue": 30,
-			"unsigned": true,
-			"allowManualEntry": true
+			"unsigned": true
 		},
 		"21": {
 			"label": "Temperature Differential Report",
@@ -103,8 +99,7 @@
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 127,
-			"defaultValue": 1,
-			"allowManualEntry": true
+			"defaultValue": 1
 		},
 		"23": {
 			"label": "Humidity Differential Report",
@@ -112,8 +107,7 @@
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 60,
-			"defaultValue": 0,
-			"allowManualEntry": true
+			"defaultValue": 0
 		},
 		"7[0x10]": {
 			"label": "Customer Function: Notification Type",

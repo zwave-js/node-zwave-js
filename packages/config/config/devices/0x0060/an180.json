@@ -24,7 +24,6 @@
 			"minValue": 0,
 			"maxValue": 255,
 			"defaultValue": 255,
-			"allowManualEntry": true,
 			"options": [
 				{
 					"label": "On",
@@ -38,16 +37,14 @@
 			"valueSize": 1,
 			"minValue": 3,
 			"maxValue": 25,
-			"defaultValue": 3,
-			"allowManualEntry": true
+			"defaultValue": 3
 		},
 		"3": {
 			"label": "Remember the last status",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 1,
-			"defaultValue": 1,
-			"allowManualEntry": true
+			"defaultValue": 1
 		}
 	}
 }

@@ -24,8 +24,7 @@
 			"minValue": 0,
 			"maxValue": 65535,
 			"defaultValue": 30,
-			"unsigned": true,
-			"allowManualEntry": true
+			"unsigned": true
 		},
 		"2": {
 			"label": "Basic Set Level",
@@ -34,7 +33,6 @@
 			"maxValue": 255,
 			"defaultValue": 99,
 			"unsigned": true,
-			"allowManualEntry": true,
 			"options": [
 				{
 					"label": "Off",

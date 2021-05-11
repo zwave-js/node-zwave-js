@@ -75,8 +75,7 @@
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 4500,
-			"defaultValue": 4500,
-			"allowManualEntry": true
+			"defaultValue": 4500
 		},
 		"31": {
 			"label": "Overcurrent Time",
@@ -84,8 +83,7 @@
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 10800,
-			"defaultValue": 10,
-			"allowManualEntry": true
+			"defaultValue": 10
 		},
 		"32": {
 			"label": "Next State",
@@ -158,8 +156,7 @@
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 11250,
-			"defaultValue": 11250,
-			"allowManualEntry": true
+			"defaultValue": 11250
 		},
 		"36": {
 			"label": "UP Power Time",
@@ -167,8 +164,7 @@
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 10800,
-			"defaultValue": 10,
-			"allowManualEntry": true
+			"defaultValue": 10
 		},
 		"37": {
 			"label": "UP Power State",
@@ -203,8 +199,7 @@
 			"valueSize": 1,
 			"minValue": -1,
 			"maxValue": 99,
-			"defaultValue": 0,
-			"allowManualEntry": true
+			"defaultValue": 0
 		},
 		"39": {
 			"label": "DOWN Power Level",
@@ -212,8 +207,7 @@
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 11250,
-			"defaultValue": 0,
-			"allowManualEntry": true
+			"defaultValue": 0
 		},
 		"40": {
 			"label": "DOWN Power Time",
@@ -221,8 +215,7 @@
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 10800,
-			"defaultValue": 10,
-			"allowManualEntry": true
+			"defaultValue": 10
 		},
 		"41": {
 			"label": "DOWN Power State",
@@ -257,8 +250,7 @@
 			"valueSize": 1,
 			"minValue": -1,
 			"maxValue": 99,
-			"defaultValue": 0,
-			"allowManualEntry": true
+			"defaultValue": 0
 		},
 		"43": {
 			"label": "Energy Level",
@@ -266,8 +258,7 @@
 			"valueSize": 4,
 			"minValue": 0,
 			"maxValue": 2000000,
-			"defaultValue": 2000000,
-			"allowManualEntry": true
+			"defaultValue": 2000000
 		},
 		"44": {
 			"label": "Energy Limit State",
@@ -302,8 +293,7 @@
 			"valueSize": 1,
 			"minValue": 1,
 			"maxValue": 100,
-			"defaultValue": 10,
-			"allowManualEntry": true
+			"defaultValue": 10
 		},
 		"46": {
 			"label": "Report Time Frequency",
@@ -311,8 +301,7 @@
 			"valueSize": 1,
 			"minValue": 1,
 			"maxValue": 100,
-			"defaultValue": 10,
-			"allowManualEntry": true
+			"defaultValue": 10
 		},
 		"47": {
 			"label": "Variation Total Energy",
@@ -351,8 +340,7 @@
 			"valueSize": 2,
 			"minValue": 1100,
 			"maxValue": 2500,
-			"defaultValue": 2300,
-			"allowManualEntry": true
+			"defaultValue": 2300
 		},
 		"49": {
 			"label": "Fall In Maximum Voltage",
@@ -360,8 +348,7 @@
 			"valueSize": 1,
 			"minValue": 1,
 			"maxValue": 100,
-			"defaultValue": 10,
-			"allowManualEntry": true
+			"defaultValue": 10
 		},
 		"50": {
 			"label": "Electric parameters",
@@ -369,8 +356,7 @@
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 62,
-			"defaultValue": 30,
-			"allowManualEntry": true
+			"defaultValue": 30
 		},
 		"51": {
 			"label": "Voltage RMS value",

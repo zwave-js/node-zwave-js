@@ -245,8 +245,7 @@
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 100,
-			"defaultValue": 50,
-			"allowManualEntry": true
+			"defaultValue": 50
 		},
 		"8": {
 			"label": "Percentage of light in the LED #2 when On",
@@ -254,8 +253,7 @@
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 100,
-			"defaultValue": 50,
-			"allowManualEntry": true
+			"defaultValue": 50
 		},
 		"9": {
 			"label": "Percentage of light in the LED #3 when On",
@@ -263,8 +261,7 @@
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 100,
-			"defaultValue": 50,
-			"allowManualEntry": true
+			"defaultValue": 50
 		},
 		"10": {
 			"label": "Percentage of light in the LED #4 when On",
@@ -272,8 +269,7 @@
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 100,
-			"defaultValue": 50,
-			"allowManualEntry": true
+			"defaultValue": 50
 		},
 		"11": {
 			"label": "Percentage of light in the LED #1 when Off",
@@ -281,8 +277,7 @@
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 100,
-			"defaultValue": 0,
-			"allowManualEntry": true
+			"defaultValue": 0
 		},
 		"12": {
 			"label": "Percentage of light in the LED #2 when Off",
@@ -290,8 +285,7 @@
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 100,
-			"defaultValue": 0,
-			"allowManualEntry": true
+			"defaultValue": 0
 		},
 		"13": {
 			"label": "Percentage of light in the LED #3 when Off",
@@ -299,8 +293,7 @@
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 100,
-			"defaultValue": 0,
-			"allowManualEntry": true
+			"defaultValue": 0
 		},
 		"14": {
 			"label": "Percentage of light in the LED #4 when Off",
@@ -308,8 +301,7 @@
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 100,
-			"defaultValue": 0,
-			"allowManualEntry": true
+			"defaultValue": 0
 		},
 		"15": {
 			"label": "Relay mode",
@@ -514,8 +506,7 @@
 			"minValue": 0,
 			"maxValue": 255,
 			"defaultValue": 50,
-			"unsigned": true,
-			"allowManualEntry": true
+			"unsigned": true
 		},
 		"29": {
 			"label": "Threshold time for keypress detection of button 1",
@@ -524,8 +515,7 @@
 			"minValue": 0,
 			"maxValue": 255,
 			"defaultValue": 30,
-			"unsigned": true,
-			"allowManualEntry": true
+			"unsigned": true
 		},
 		"30": {
 			"label": "Threshold time for keypress detection of button 2",
@@ -534,8 +524,7 @@
 			"minValue": 0,
 			"maxValue": 255,
 			"defaultValue": 30,
-			"unsigned": true,
-			"allowManualEntry": true
+			"unsigned": true
 		},
 		"31": {
 			"label": "Threshold time for keypress detection of button 3",
@@ -544,8 +533,7 @@
 			"minValue": 0,
 			"maxValue": 255,
 			"defaultValue": 30,
-			"unsigned": true,
-			"allowManualEntry": true
+			"unsigned": true
 		},
 		"32": {
 			"label": "Threshold time for keypress detection of button 4",
@@ -554,8 +542,7 @@
 			"minValue": 0,
 			"maxValue": 255,
 			"defaultValue": 30,
-			"unsigned": true,
-			"allowManualEntry": true
+			"unsigned": true
 		},
 		"33": {
 			"label": "Non-secure commands for AG in logical device 1",
@@ -564,8 +551,7 @@
 			"minValue": 0,
 			"maxValue": 255,
 			"defaultValue": 0,
-			"unsigned": true,
-			"allowManualEntry": true
+			"unsigned": true
 		},
 		"34": {
 			"label": "Non-secure commands for AG in logical device 2",
@@ -574,8 +560,7 @@
 			"minValue": 0,
 			"maxValue": 255,
 			"defaultValue": 0,
-			"unsigned": true,
-			"allowManualEntry": true
+			"unsigned": true
 		},
 		"35": {
 			"label": "Non-secure commands for AG in logical device 3",
@@ -584,8 +569,7 @@
 			"minValue": 0,
 			"maxValue": 255,
 			"defaultValue": 0,
-			"unsigned": true,
-			"allowManualEntry": true
+			"unsigned": true
 		},
 		"36": {
 			"label": "Non-secure commands for AG in logical device 4",
@@ -594,8 +578,7 @@
 			"minValue": 0,
 			"maxValue": 255,
 			"defaultValue": 0,
-			"unsigned": true,
-			"allowManualEntry": true
+			"unsigned": true
 		},
 		"19[0x01]": {
 			"label": "Multilevel Switch (button #1) Disabled/Enabled",
@@ -621,16 +604,14 @@
 			"valueSize": 4,
 			"minValue": 0,
 			"maxValue": 255,
-			"defaultValue": 255,
-			"allowManualEntry": true
+			"defaultValue": 255
 		},
 		"19[0xff0000]": {
 			"label": "Lower switch value - (button #1)",
 			"valueSize": 4,
 			"minValue": 0,
 			"maxValue": 99,
-			"defaultValue": 0,
-			"allowManualEntry": true
+			"defaultValue": 0
 		},
 		"20[0x01]": {
 			"label": "Multilevel Switch (button #2) Disabled/Enabled",
@@ -656,16 +637,14 @@
 			"valueSize": 4,
 			"minValue": 0,
 			"maxValue": 255,
-			"defaultValue": 255,
-			"allowManualEntry": true
+			"defaultValue": 255
 		},
 		"20[0xff0000]": {
 			"label": "Lower switch value - (button #2)",
 			"valueSize": 4,
 			"minValue": 0,
 			"maxValue": 99,
-			"defaultValue": 0,
-			"allowManualEntry": true
+			"defaultValue": 0
 		},
 		"21[0x01]": {
 			"label": "Multilevel Switch (button #3) Disabled/Enabled",
@@ -691,16 +670,14 @@
 			"valueSize": 4,
 			"minValue": 0,
 			"maxValue": 255,
-			"defaultValue": 255,
-			"allowManualEntry": true
+			"defaultValue": 255
 		},
 		"21[0xff0000]": {
 			"label": "Lower switch value - (button #3)",
 			"valueSize": 4,
 			"minValue": 0,
 			"maxValue": 99,
-			"defaultValue": 0,
-			"allowManualEntry": true
+			"defaultValue": 0
 		},
 		"22[0x01]": {
 			"label": "Multilevel Switch (button #4) Disabled/Enabled",
@@ -726,16 +703,14 @@
 			"valueSize": 4,
 			"minValue": 0,
 			"maxValue": 255,
-			"defaultValue": 255,
-			"allowManualEntry": true
+			"defaultValue": 255
 		},
 		"22[0xff0000]": {
 			"label": "Lower switch value - (button #4)",
 			"valueSize": 4,
 			"minValue": 0,
 			"maxValue": 99,
-			"defaultValue": 0,
-			"allowManualEntry": true
+			"defaultValue": 0
 		}
 	},
 	"compat": {

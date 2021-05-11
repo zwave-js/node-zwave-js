@@ -40,8 +40,7 @@
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 3600,
-			"defaultValue": 0,
-			"allowManualEntry": true
+			"defaultValue": 0
 		},
 		"2": {
 			"label": "Alarm acoustic and visual signals",
@@ -95,24 +94,21 @@
 			"minValue": 1,
 			"maxValue": 255,
 			"defaultValue": 255,
-			"unsigned": true,
-			"allowManualEntry": true
+			"unsigned": true
 		},
 		"10": {
 			"label": "Interval between temperature readings",
 			"valueSize": 2,
 			"minValue": 1,
 			"maxValue": 32767,
-			"defaultValue": 300,
-			"allowManualEntry": true
+			"defaultValue": 300
 		},
 		"12": {
 			"label": "Insensitiveness to temperature changes.",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 100,
-			"defaultValue": 20,
-			"allowManualEntry": true
+			"defaultValue": 20
 		},
 		"13": {
 			"label": "Frame broadcast mode",
@@ -146,8 +142,7 @@
 			"valueSize": 2,
 			"minValue": -1000,
 			"maxValue": 1000,
-			"defaultValue": 0,
-			"allowManualEntry": true
+			"defaultValue": 0
 		},
 		"80": {
 			"label": "Z-Wave range test interval",
@@ -155,16 +150,14 @@
 			"minValue": 0,
 			"maxValue": 255,
 			"defaultValue": 1,
-			"unsigned": true,
-			"allowManualEntry": true
+			"unsigned": true
 		},
 		"81": {
 			"label": "Temperature alarm threshold",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 100,
-			"defaultValue": 54,
-			"allowManualEntry": true
+			"defaultValue": 54
 		},
 		"82": {
 			"label": "Smoke Sensor sensitivity",
@@ -216,32 +209,28 @@
 			"valueSize": 1,
 			"minValue": -126,
 			"maxValue": 127,
-			"defaultValue": 10,
-			"allowManualEntry": true
+			"defaultValue": 10
 		},
 		"85": {
 			"label": "Temperature alarm",
 			"valueSize": 1,
 			"minValue": -126,
 			"maxValue": 127,
-			"defaultValue": 5,
-			"allowManualEntry": true
+			"defaultValue": 5
 		},
 		"86": {
 			"label": "Lack of the Z-Wave range alarm",
 			"valueSize": 2,
 			"minValue": 1,
 			"maxValue": 17280,
-			"defaultValue": 360,
-			"allowManualEntry": true
+			"defaultValue": 360
 		},
 		"87": {
 			"label": "Low battery alarm",
 			"valueSize": 2,
 			"minValue": 1,
 			"maxValue": 17280,
-			"defaultValue": 360,
-			"allowManualEntry": true
+			"defaultValue": 360
 		},
 		"88": {
 			"label": "Temperature measurement compensation for report",

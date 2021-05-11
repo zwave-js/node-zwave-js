@@ -29,8 +29,7 @@
 			"minValue": 0,
 			"maxValue": 255,
 			"defaultValue": 120,
-			"unsigned": true,
-			"allowManualEntry": true
+			"unsigned": true
 		},
 		"2": {
 			"label": "Audio Alarm: Beep Interval",
@@ -40,8 +39,7 @@
 			"minValue": 1,
 			"maxValue": 255,
 			"defaultValue": 1,
-			"unsigned": true,
-			"allowManualEntry": true
+			"unsigned": true
 		},
 		"3": {
 			"label": "Audio Alarm: First Beep Duration",
@@ -51,8 +49,7 @@
 			"minValue": 10,
 			"maxValue": 255,
 			"defaultValue": 60,
-			"unsigned": true,
-			"allowManualEntry": true
+			"unsigned": true
 		},
 		"4": {
 			"label": "Audio Alarm: Beep Duration",
@@ -62,8 +59,7 @@
 			"minValue": 5,
 			"maxValue": 255,
 			"defaultValue": 5,
-			"unsigned": true,
-			"allowManualEntry": true
+			"unsigned": true
 		},
 		"5": {
 			"label": "Enable/Disable Audio Alarm",
@@ -71,16 +67,14 @@
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 1,
-			"defaultValue": 1,
-			"allowManualEntry": true
+			"defaultValue": 1
 		},
 		"6": {
 			"label": "Enable/Disable Water Detection",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 1,
-			"defaultValue": 1,
-			"allowManualEntry": true
+			"defaultValue": 1
 		},
 		"7": {
 			"label": "Trigger Action",
@@ -89,8 +83,7 @@
 			"minValue": 0,
 			"maxValue": 255,
 			"defaultValue": 255,
-			"unsigned": true,
-			"allowManualEntry": true
+			"unsigned": true
 		}
 	}
 }
