@@ -642,7 +642,7 @@ export class Driver extends EventEmitter {
 			.on("data", this.serialport_onData.bind(this))
 			.on("error", (err) => {
 				this.driverLog.print(
-					`serial port errored: ${err.message}`,
+					`Serial port errored: ${err.message}`,
 					"error",
 				);
 				if (this._isOpen) {
