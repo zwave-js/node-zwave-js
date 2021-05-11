@@ -23,8 +23,6 @@
 			"minValue": 0,
 			"maxValue": 1,
 			"defaultValue": 1,
-			"readOnly": false,
-			"writeOnly": false,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -43,8 +41,6 @@
 			"minValue": 0,
 			"maxValue": 1,
 			"defaultValue": 0,
-			"readOnly": false,
-			"writeOnly": false,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -63,8 +59,6 @@
 			"minValue": 0,
 			"maxValue": 100,
 			"defaultValue": 10,
-			"readOnly": false,
-			"writeOnly": false,
 			"allowManualEntry": true
 		},
 		"42": {
@@ -73,8 +67,6 @@
 			"minValue": 0,
 			"maxValue": 32767,
 			"defaultValue": 600,
-			"readOnly": false,
-			"writeOnly": false,
 			"allowManualEntry": true
 		},
 		"43": {
@@ -83,8 +75,6 @@
 			"minValue": 0,
 			"maxValue": 450,
 			"defaultValue": 5,
-			"readOnly": false,
-			"writeOnly": false,
 			"allowManualEntry": true
 		},
 		"44": {
@@ -93,8 +83,6 @@
 			"minValue": 0,
 			"maxValue": 450,
 			"defaultValue": 5,
-			"readOnly": false,
-			"writeOnly": false,
 			"allowManualEntry": true
 		},
 		"45": {
@@ -103,8 +91,6 @@
 			"minValue": -125,
 			"maxValue": 1000,
 			"defaultValue": 50,
-			"readOnly": false,
-			"writeOnly": false,
 			"allowManualEntry": true
 		},
 		"59": {
@@ -113,8 +99,6 @@
 			"minValue": 0,
 			"maxValue": 1,
 			"defaultValue": 0,
-			"readOnly": false,
-			"writeOnly": false,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -133,8 +117,6 @@
 			"minValue": -150,
 			"maxValue": 2120,
 			"defaultValue": 50,
-			"readOnly": false,
-			"writeOnly": false,
 			"allowManualEntry": true
 		},
 		"61": {
@@ -143,8 +125,6 @@
 			"minValue": 1,
 			"maxValue": 2120,
 			"defaultValue": 700,
-			"readOnly": false,
-			"writeOnly": false,
 			"allowManualEntry": true
 		},
 		"63": {
@@ -153,8 +133,6 @@
 			"minValue": 0,
 			"maxValue": 1,
 			"defaultValue": 0,
-			"readOnly": false,
-			"writeOnly": false,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -173,8 +151,6 @@
 			"minValue": 0,
 			"maxValue": 1,
 			"defaultValue": 0,
-			"readOnly": false,
-			"writeOnly": false,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -193,8 +169,6 @@
 			"minValue": -270,
 			"maxValue": 270,
 			"defaultValue": 0,
-			"readOnly": false,
-			"writeOnly": false,
 			"allowManualEntry": true
 		},
 		"120": {
@@ -203,8 +177,6 @@
 			"minValue": 0,
 			"maxValue": 270,
 			"defaultValue": 5,
-			"readOnly": false,
-			"writeOnly": false,
 			"allowManualEntry": true
 		}
 	}

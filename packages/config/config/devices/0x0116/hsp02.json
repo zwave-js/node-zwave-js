@@ -36,8 +36,6 @@
 			"minValue": 0,
 			"maxValue": 99,
 			"defaultValue": 99,
-			"readOnly": false,
-			"writeOnly": false,
 			"allowManualEntry": true
 		},
 		"2": {
@@ -47,8 +45,6 @@
 			"maxValue": 3,
 			"defaultValue": 1,
 			"unsigned": true,
-			"readOnly": false,
-			"writeOnly": false,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -71,8 +67,6 @@
 			"minValue": 1,
 			"maxValue": 10,
 			"defaultValue": 6,
-			"readOnly": false,
-			"writeOnly": false,
 			"allowManualEntry": true
 		},
 		"4": {
@@ -83,8 +77,6 @@
 			"defaultValue": 180,
 			"unsigned": true,
 			"unit": "seconds",
-			"readOnly": false,
-			"writeOnly": false,
 			"allowManualEntry": true
 		},
 		"5": {
@@ -95,8 +87,6 @@
 			"maxValue": 100,
 			"defaultValue": 10,
 			"unit": "lux",
-			"readOnly": false,
-			"writeOnly": false,
 			"allowManualEntry": true
 		},
 		"6": {
@@ -108,8 +98,6 @@
 			"defaultValue": 15,
 			"unsigned": true,
 			"unit": "seconds",
-			"readOnly": false,
-			"writeOnly": false,
 			"allowManualEntry": true
 		}
 	}

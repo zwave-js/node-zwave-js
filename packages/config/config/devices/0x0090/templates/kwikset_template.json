@@ -7,8 +7,6 @@
 		"maxValue": 4,
 		"defaultValue": 1,
 		"unsigned": true,
-		"readOnly": false,
-		"writeOnly": false,
 		"allowManualEntry": false,
 		"options": [
 			{
@@ -154,7 +152,6 @@
 		"defaultValue": 0,
 		"unsigned": true,
 		"readOnly": true,
-		"writeOnly": false,
 		"options": [
 			{
 				"label": "Disabled",
@@ -175,7 +172,6 @@
 		"defaultValue": 0,
 		"unsigned": true,
 		"readOnly": true,
-		"writeOnly": false,
 		"options": [
 			{
 				"label": "Disabled",
@@ -196,7 +192,6 @@
 		"defaultValue": 0,
 		"unsigned": true,
 		"readOnly": true,
-		"writeOnly": false,
 		"options": [
 			{
 				"label": "Disabled",
@@ -217,7 +212,6 @@
 		"defaultValue": 0,
 		"unsigned": true,
 		"readOnly": true,
-		"writeOnly": false,
 		"options": [
 			{
 				"label": "Disabled",
@@ -236,8 +230,6 @@
 		"maxValue": 0,
 		"defaultValue": 0,
 		"unsigned": true,
-		"readOnly": false,
-		"writeOnly": false,
 		"allowManualEntry": true
 	},
 	"dipswitch_sku_lastfour": {
@@ -247,8 +239,6 @@
 		"maxValue": 0,
 		"defaultValue": 0,
 		"unsigned": true,
-		"readOnly": false,
-		"writeOnly": false,
 		"allowManualEntry": true
 	},
 	"reset": {
@@ -259,7 +249,6 @@
 		"maxValue": 1,
 		"defaultValue": 0,
 		"unsigned": true,
-		"readOnly": false,
 		"writeOnly": true,
 		"allowManualEntry": false,
 		"options": [

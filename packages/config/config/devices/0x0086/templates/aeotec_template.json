@@ -5,7 +5,6 @@
 		"maxValue": 5,
 		"defaultValue": 0,
 		"unsigned": true,
-		"readOnly": false,
 		"writeOnly": true,
 		"allowManualEntry": false,
 		"options": [
@@ -41,8 +40,6 @@
 		"maxValue": 65535,
 		"defaultValue": 0,
 		"unsigned": true,
-		"readOnly": false,
-		"writeOnly": false,
 		"allowManualEntry": true
 	},
 	"base_interval": {
@@ -52,8 +49,6 @@
 		"maxValue": 2678400,
 		"defaultValue": 600,
 		"unsigned": true,
-		"readOnly": false,
-		"writeOnly": false,
 		"allowManualEntry": true
 	},
 	"notification_type": {
@@ -63,8 +58,6 @@
 		"maxValue": 11,
 		"defaultValue": 6,
 		"unsigned": true,
-		"readOnly": false,
-		"writeOnly": false,
 		"allowManualEntry": false,
 		"options": [
 			{
@@ -120,8 +113,6 @@
 		"maxValue": 2,
 		"defaultValue": 1,
 		"unsigned": true,
-		"readOnly": false,
-		"writeOnly": false,
 		"allowManualEntry": false,
 		"options": [
 			{
@@ -141,8 +132,6 @@
 		"maxValue": 256,
 		"defaultValue": 1,
 		"unsigned": true,
-		"readOnly": false,
-		"writeOnly": false,
 		"allowManualEntry": false,
 		"options": [
 			{
@@ -162,8 +151,6 @@
 		"maxValue": 3,
 		"defaultValue": 1,
 		"unsigned": true,
-		"readOnly": false,
-		"writeOnly": false,
 		"allowManualEntry": false,
 		"options": [
 			{
@@ -190,8 +177,6 @@
 		"maxValue": 2,
 		"defaultValue": 1,
 		"unsigned": true,
-		"readOnly": false,
-		"writeOnly": false,
 		"allowManualEntry": false,
 		"options": [
 			{
@@ -217,8 +202,6 @@
 		"maxValue": 15300,
 		"defaultValue": 240,
 		"unsigned": true,
-		"readOnly": false,
-		"writeOnly": false,
 		"allowManualEntry": true
 	},
 	"celsius_fahrenheit": {
@@ -226,8 +209,6 @@
 		"minValue": 1,
 		"maxValue": 2,
 		"defaultValue": 1,
-		"readOnly": false,
-		"writeOnly": false,
 		"allowManualEntry": false,
 		"options": [
 			{
@@ -310,8 +291,6 @@
 		"maxValue": 65535,
 		"defaultValue": 720,
 		"unsigned": true,
-		"readOnly": false,
-		"writeOnly": false,
 		"allowManualEntry": true
 	},
 	"factory_reset": {
@@ -321,7 +300,6 @@
 		"maxValue": 1,
 		"defaultValue": 0,
 		"unsigned": true,
-		"readOnly": false,
 		"writeOnly": true,
 		"allowManualEntry": false,
 		"options": [
@@ -342,7 +320,6 @@
 		"maxValue": 1431655765,
 		"defaultValue": 0,
 		"unsigned": true,
-		"readOnly": false,
 		"writeOnly": true,
 		"allowManualEntry": false,
 		"options": [
@@ -365,8 +342,6 @@
 		"maxValue": 60000,
 		"defaultValue": 50,
 		"unsigned": true,
-		"readOnly": false,
-		"writeOnly": false,
 		"allowManualEntry": true
 	},
 	"power_threshold_clamp1": {
@@ -394,8 +369,6 @@
 		"maxValue": 100,
 		"defaultValue": 5,
 		"unsigned": true,
-		"readOnly": false,
-		"writeOnly": false,
 		"allowManualEntry": true
 	},
 	"percent_threshold_clamp1": {
@@ -420,7 +393,6 @@
 		"maxValue": 1,
 		"defaultValue": 0,
 		"unsigned": true,
-		"readOnly": false,
 		"writeOnly": true,
 		"allowManualEntry": false,
 		"options": [
@@ -441,8 +413,6 @@
 		"maxValue": 1,
 		"defaultValue": 0,
 		"unsigned": true,
-		"readOnly": false,
-		"writeOnly": false,
 		"allowManualEntry": false,
 		"options": [
 			{
@@ -462,8 +432,6 @@
 		"maxValue": 1,
 		"defaultValue": 0,
 		"unsigned": true,
-		"readOnly": false,
-		"writeOnly": false,
 		"allowManualEntry": false,
 		"options": [
 			{
@@ -483,8 +451,6 @@
 		"maxValue": 2,
 		"defaultValue": 0,
 		"unsigned": true,
-		"readOnly": false,
-		"writeOnly": false,
 		"allowManualEntry": false,
 		"options": [
 			{
@@ -508,8 +474,6 @@
 		"maxValue": 3,
 		"defaultValue": 0,
 		"unsigned": true,
-		"readOnly": false,
-		"writeOnly": false,
 		"allowManualEntry": false,
 		"options": [
 			{
@@ -537,8 +501,6 @@
 		"maxValue": 4,
 		"defaultValue": 0,
 		"unsigned": true,
-		"readOnly": false,
-		"writeOnly": false,
 		"allowManualEntry": false,
 		"options": [
 			{
@@ -608,8 +570,6 @@
 		"maxValue": 50,
 		"defaultValue": 10,
 		"unsigned": true,
-		"readOnly": false,
-		"writeOnly": false,
 		"allowManualEntry": true
 	},
 	"low_battery_interval": {
@@ -621,8 +581,6 @@
 		"maxValue": 2147483647,
 		"defaultValue": 86640,
 		"unsigned": true,
-		"readOnly": false,
-		"writeOnly": false,
 		"allowManualEntry": true
 	},
 	"report_power_voltage": {
@@ -1065,8 +1023,6 @@
 		"maxValue": 65535,
 		"defaultValue": 0,
 		"unsigned": true,
-		"readOnly": false,
-		"writeOnly": false,
 		"allowManualEntry": true
 	},
 	"partner_id_aeotec": {
@@ -1076,8 +1032,6 @@
 		"maxValue": 0,
 		"defaultValue": 0,
 		"unsigned": true,
-		"readOnly": false,
-		"writeOnly": false,
 		"allowManualEntry": false,
 		"options": [
 			{
@@ -1093,8 +1047,6 @@
 		"maxValue": 1,
 		"defaultValue": 0,
 		"unsigned": true,
-		"readOnly": false,
-		"writeOnly": false,
 		"allowManualEntry": false,
 		"options": [
 			{
@@ -1114,8 +1066,6 @@
 		"maxValue": 1,
 		"defaultValue": 0,
 		"unsigned": true,
-		"readOnly": false,
-		"writeOnly": false,
 		"allowManualEntry": false,
 		"options": [
 			{
@@ -1135,8 +1085,6 @@
 		"maxValue": 32000,
 		"defaultValue": 50,
 		"unsigned": true,
-		"readOnly": false,
-		"writeOnly": false,
 		"allowManualEntry": true
 	},
 	"wattage_percent_trigger": {
@@ -1146,8 +1094,6 @@
 		"minValue": 0,
 		"maxValue": 100,
 		"defaultValue": 10,
-		"readOnly": false,
-		"writeOnly": false,
 		"allowManualEntry": true
 	},
 	"external_switch_two": {
@@ -1211,8 +1157,6 @@
 		"maxValue": 4,
 		"defaultValue": 0,
 		"unsigned": true,
-		"readOnly": false,
-		"writeOnly": false,
 		"allowManualEntry": false,
 		"options": [
 			{
@@ -1274,7 +1218,6 @@
 		"minValue": 0,
 		"maxValue": 255,
 		"defaultValue": 0,
-		"readOnly": false,
 		"writeOnly": true,
 		"allowManualEntry": true
 	},
@@ -1286,7 +1229,6 @@
 		"minValue": 0,
 		"maxValue": 255,
 		"defaultValue": 0,
-		"readOnly": false,
 		"writeOnly": true,
 		"allowManualEntry": true
 	},
@@ -1298,8 +1240,6 @@
 		"maxValue": 15300,
 		"defaultValue": 240,
 		"unsigned": true,
-		"readOnly": false,
-		"writeOnly": false,
 		"allowManualEntry": true
 	},
 	"enable_motion_sensor": {
@@ -1383,8 +1323,6 @@
 		"maxValue": 127,
 		"defaultValue": 15,
 		"unsigned": true,
-		"readOnly": false,
-		"writeOnly": false,
 		"allowManualEntry": true
 	},
 	"current_power_mode": {
@@ -1395,7 +1333,6 @@
 		"defaultValue": 0,
 		"unsigned": true,
 		"readOnly": true,
-		"writeOnly": false,
 		"allowManualEntry": false,
 		"options": [
 			{
@@ -1415,7 +1352,6 @@
 		"maxValue": 1,
 		"defaultValue": 0,
 		"readOnly": true,
-		"writeOnly": false,
 		"allowManualEntry": false,
 		"options": [
 			{
@@ -1436,7 +1372,6 @@
 		"defaultValue": 3,
 		"unsigned": true,
 		"readOnly": true,
-		"writeOnly": false,
 		"allowManualEntry": false,
 		"options": [
 			{
@@ -1461,7 +1396,6 @@
 		"defaultValue": 3,
 		"unsigned": true,
 		"readOnly": true,
-		"writeOnly": false,
 		"allowManualEntry": false,
 		"options": [
 			{
@@ -1492,7 +1426,6 @@
 		"defaultValue": 0,
 		"unsigned": true,
 		"readOnly": true,
-		"writeOnly": false,
 		"allowManualEntry": false,
 		"options": [
 			{
@@ -1532,7 +1465,6 @@
 		"defaultValue": 0,
 		"unsigned": true,
 		"readOnly": true,
-		"writeOnly": false,
 		"allowManualEntry": false,
 		"options": [
 			{
@@ -1570,8 +1502,6 @@
 		"maxValue": 2,
 		"defaultValue": 2,
 		"unsigned": true,
-		"readOnly": false,
-		"writeOnly": false,
 		"allowManualEntry": false,
 		"options": [
 			{
@@ -1595,8 +1525,6 @@
 		"maxValue": 127,
 		"defaultValue": 1,
 		"unsigned": true,
-		"readOnly": false,
-		"writeOnly": false,
 		"allowManualEntry": false,
 		"options": [
 			{
@@ -1671,8 +1599,6 @@
 		"maxValue": 255,
 		"defaultValue": 0,
 		"unsigned": true,
-		"readOnly": false,
-		"writeOnly": false,
 		"allowManualEntry": false,
 		"options": [
 			{
@@ -1708,8 +1634,6 @@
 		"maxValue": 255,
 		"defaultValue": 0,
 		"unsigned": true,
-		"readOnly": false,
-		"writeOnly": false,
 		"allowManualEntry": false,
 		"options": [
 			{
@@ -1757,8 +1681,6 @@
 		"maxValue": 255,
 		"defaultValue": 0,
 		"unsigned": true,
-		"readOnly": false,
-		"writeOnly": false,
 		"allowManualEntry": true,
 		"options": [
 			{
@@ -1805,8 +1727,6 @@
 		"maxValue": 255,
 		"defaultValue": 1,
 		"unsigned": true,
-		"readOnly": false,
-		"writeOnly": false,
 		"allowManualEntry": true,
 		"options": [
 			{
@@ -1853,8 +1773,6 @@
 		"minValue": 0,
 		"maxValue": 127,
 		"unsigned": true,
-		"readOnly": false,
-		"writeOnly": false,
 		"allowManualEntry": true
 	},
 	"dim_duration_on_1": {
@@ -2007,8 +1925,6 @@
 		"minValue": 0,
 		"maxValue": 4,
 		"unsigned": true,
-		"readOnly": false,
-		"writeOnly": false,
 		"allowManualEntry": false,
 		"options": [
 			{
@@ -2080,7 +1996,6 @@
 		"maxValue": 7,
 		"defaultValue": 0,
 		"unsigned": true,
-		"readOnly": false,
 		"writeOnly": true,
 		"allowManualEntry": false,
 		"options": [
@@ -2109,7 +2024,6 @@
 		"maxValue": 4,
 		"defaultValue": 0,
 		"unsigned": true,
-		"readOnly": false,
 		"writeOnly": true,
 		"allowManualEntry": false,
 		"options": [
@@ -2139,7 +2053,6 @@
 		"defaultValue": 0,
 		"unsigned": true,
 		"readOnly": true,
-		"writeOnly": false,
 		"allowManualEntry": false,
 		"options": [
 			{
@@ -2168,7 +2081,6 @@
 		"defaultValue": 0,
 		"unsigned": true,
 		"readOnly": true,
-		"writeOnly": false,
 		"allowManualEntry": false,
 		"options": [
 			{
@@ -2189,7 +2101,6 @@
 		"defaultValue": 0,
 		"unsigned": true,
 		"readOnly": true,
-		"writeOnly": false,
 		"allowManualEntry": false,
 		"options": [
 			{
@@ -2210,7 +2121,6 @@
 		"defaultValue": 0,
 		"unsigned": true,
 		"readOnly": true,
-		"writeOnly": false,
 		"allowManualEntry": false,
 		"options": [
 			{
@@ -2231,7 +2141,6 @@
 		"defaultValue": 0,
 		"unsigned": true,
 		"readOnly": true,
-		"writeOnly": false,
 		"options": [
 			{
 				"label": "Not paired",
@@ -2285,8 +2194,6 @@
 		"maxValue": 255,
 		"defaultValue": 20,
 		"unsigned": true,
-		"readOnly": false,
-		"writeOnly": false,
 		"allowManualEntry": true
 	},
 	"recover_limit_temp_unit": {
@@ -2302,8 +2209,6 @@
 		"maxValue": 50,
 		"defaultValue": 5,
 		"unsigned": true,
-		"readOnly": false,
-		"writeOnly": false,
 		"allowManualEntry": true
 	},
 	"recover_limit_lighting": {
@@ -2314,8 +2219,6 @@
 		"maxValue": 255,
 		"defaultValue": 100,
 		"unsigned": true,
-		"readOnly": false,
-		"writeOnly": false,
 		"allowManualEntry": true
 	},
 	"recover_limit_ultraviolet": {
@@ -2325,8 +2228,6 @@
 		"maxValue": 5,
 		"defaultValue": 2,
 		"unsigned": true,
-		"readOnly": false,
-		"writeOnly": false,
 		"allowManualEntry": true
 	},
 	// Appointment times
@@ -2336,8 +2237,6 @@
 		"minValue": 0,
 		"maxValue": 127,
 		"defaultValue": 0,
-		"readOnly": false,
-		"writeOnly": false,
 		"allowManualEntry": true,
 		"options": [
 			{
@@ -2351,8 +2250,6 @@
 		"minValue": 0,
 		"maxValue": 24,
 		"defaultValue": 0,
-		"readOnly": false,
-		"writeOnly": false,
 		"allowManualEntry": true
 	},
 	"base_appointment_minute": {
@@ -2360,8 +2257,6 @@
 		"minValue": 0,
 		"maxValue": 59,
 		"defaultValue": 0,
-		"readOnly": false,
-		"writeOnly": false,
 		"allowManualEntry": true
 	},
 	"enable_appointment_one": {
@@ -2445,8 +2340,6 @@
 		"maxValue": 3,
 		"defaultValue": 1,
 		"unsigned": true,
-		"readOnly": false,
-		"writeOnly": false,
 		"allowManualEntry": false,
 		"options": [
 			{

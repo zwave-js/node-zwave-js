@@ -37,8 +37,6 @@
 			"maxValue": 32767,
 			"defaultValue": 720,
 			"unsigned": true,
-			"readOnly": false,
-			"writeOnly": false,
 			"allowManualEntry": true
 		}
 	}

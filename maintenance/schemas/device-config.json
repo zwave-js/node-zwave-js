@@ -450,11 +450,11 @@
 					"description": "The factory default value of this parameter."
 				},
 				"readOnly": {
-					"type": "boolean",
+					"const": true,
 					"description": "Whether this parameter can only be read"
 				},
 				"writeOnly": {
-					"type": "boolean",
+					"const": true,
 					"description": "Whether this parameter can only be written"
 				},
 				"allowManualEntry": {

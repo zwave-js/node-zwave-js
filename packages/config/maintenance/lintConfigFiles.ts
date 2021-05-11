@@ -273,16 +273,48 @@ description: ${description}`,
 					}
 				}
 
+<<<<<<< HEAD
 				// Check if there are readOnly parameters with allowManualEntry = true
+=======
+				// Check if there are options where readOnly and writeOnly are unnecessarily specified
+>>>>>>> master
 				for (const [
 					{ parameter },
 					value,
 				] of config.paramInformation.entries()) {
+<<<<<<< HEAD
 					// We can't actually distinguish between `false` and missing, but this is good enough
 					if (value.readOnly && value.allowManualEntry) {
 						addError(
 							file,
 							`Parameter #${parameter} is invalid: allowManualEntry must be omitted for readOnly parameters!`,
+=======
+					if (
+						!value.allowManualEntry &&
+						!value.readOnly &&
+						!value.options?.length
+					) {
+						addError(
+							file,
+							`Parameter #${parameter} must allow manual entry if there are no options defined!`,
+							variant,
+						);
+					}
+
+					if (value.readOnly && value.writeOnly) {
+						addError(
+							file,
+							`Parameter #${parameter} is invalid: readOnly and writeOnly are mutually exclusive!`,
+							variant,
+						);
+					} else if (
+						value.readOnly !== undefined &&
+						value.writeOnly !== undefined
+					) {
+						addError(
+							file,
+							`Parameter #${parameter} is invalid: readOnly and writeOnly must not both be specified!`,
+>>>>>>> master
 							variant,
 						);
 					}

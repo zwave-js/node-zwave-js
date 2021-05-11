@@ -30,7 +30,6 @@
 			"maxValue": 4294967295,
 			"defaultValue": 0,
 			"unsigned": true,
-			"readOnly": false,
 			"writeOnly": true,
 			"allowManualEntry": true
 		},
@@ -41,7 +40,6 @@
 			"maxValue": 4294967295,
 			"defaultValue": 0,
 			"unsigned": true,
-			"readOnly": false,
 			"writeOnly": true,
 			"allowManualEntry": true
 		},
@@ -52,7 +50,6 @@
 			"maxValue": 4294967295,
 			"defaultValue": 0,
 			"unsigned": true,
-			"readOnly": false,
 			"writeOnly": true,
 			"allowManualEntry": true
 		},
@@ -63,8 +60,7 @@
 			"minValue": 0,
 			"maxValue": 99,
 			"defaultValue": 0,
-			"readOnly": true,
-			"writeOnly": false
+			"readOnly": true
 		},
 		"22": {
 			"label": "Motor revert direction",
@@ -73,7 +69,6 @@
 			"maxValue": 4294967295,
 			"defaultValue": 0,
 			"unsigned": true,
-			"readOnly": false,
 			"writeOnly": true,
 			"allowManualEntry": true
 		},
@@ -84,7 +79,6 @@
 			"maxValue": 255,
 			"defaultValue": 0,
 			"unsigned": true,
-			"readOnly": false,
 			"writeOnly": true,
 			"allowManualEntry": true
 		},
@@ -95,8 +89,7 @@
 			"maxValue": 255,
 			"defaultValue": 0,
 			"unsigned": true,
-			"readOnly": true,
-			"writeOnly": false
+			"readOnly": true
 		},
 		"33": {
 			"label": "Enable manual pulling function",
@@ -105,7 +98,6 @@
 			"maxValue": 4294967295,
 			"defaultValue": 0,
 			"unsigned": true,
-			"readOnly": false,
 			"writeOnly": true,
 			"allowManualEntry": true
 		},
@@ -116,7 +108,6 @@
 			"maxValue": 4294967295,
 			"defaultValue": 0,
 			"unsigned": true,
-			"readOnly": false,
 			"writeOnly": true,
 			"allowManualEntry": true
 		}

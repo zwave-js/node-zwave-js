@@ -23,8 +23,7 @@
 			"minValue": -127,
 			"maxValue": 99,
 			"defaultValue": -127,
-			"readOnly": true,
-			"writeOnly": false
+			"readOnly": true
 		},
 		"6": {
 			"label": "Set motor direction",
@@ -33,7 +32,6 @@
 			"minValue": -128,
 			"maxValue": 127,
 			"defaultValue": 0,
-			"readOnly": false,
 			"writeOnly": true,
 			"allowManualEntry": true
 		},
@@ -43,7 +41,6 @@
 			"minValue": -128,
 			"maxValue": 127,
 			"defaultValue": 0,
-			"readOnly": false,
 			"writeOnly": true,
 			"allowManualEntry": true
 		},
@@ -53,7 +50,6 @@
 			"minValue": -128,
 			"maxValue": 127,
 			"defaultValue": 0,
-			"readOnly": false,
 			"writeOnly": true,
 			"allowManualEntry": true
 		},
@@ -63,7 +59,6 @@
 			"minValue": -128,
 			"maxValue": 127,
 			"defaultValue": 0,
-			"readOnly": false,
 			"writeOnly": true,
 			"allowManualEntry": true
 		}

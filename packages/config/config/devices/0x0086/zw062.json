@@ -93,8 +93,6 @@
 			"minValue": 1,
 			"maxValue": 4,
 			"defaultValue": 1,
-			"readOnly": false,
-			"writeOnly": false,
 			"allowManualEntry": true
 		},
 		"37[0xff000000]": {
@@ -121,8 +119,6 @@
 			"minValue": 1,
 			"maxValue": 4,
 			"defaultValue": 2,
-			"readOnly": false,
-			"writeOnly": false,
 			"allowManualEntry": true
 		},
 		"38[0xff000000]": {
@@ -148,8 +144,6 @@
 			"minValue": 1,
 			"maxValue": 4,
 			"defaultValue": 3,
-			"readOnly": false,
-			"writeOnly": false,
 			"allowManualEntry": true
 		},
 		"39[0xff000000]": {
@@ -175,8 +169,6 @@
 			"minValue": 1,
 			"maxValue": 4,
 			"defaultValue": 3,
-			"readOnly": false,
-			"writeOnly": false,
 			"allowManualEntry": true
 		},
 		"40[0xff000000]": {
@@ -193,7 +185,6 @@
 			"defaultValue": 0,
 			"unsigned": true,
 			"readOnly": true,
-			"writeOnly": false,
 			"options": [
 				{
 					"label": "Sensor installed",
@@ -213,7 +204,6 @@
 			"defaultValue": 0,
 			"unsigned": true,
 			"readOnly": true,
-			"writeOnly": false,
 			"options": [
 				{
 					"label": "Normal",
@@ -248,8 +238,7 @@
 			"maxValue": 500,
 			"defaultValue": 0,
 			"unsigned": true,
-			"readOnly": true,
-			"writeOnly": false
+			"readOnly": true
 		},
 		"47": {
 			"$import": "../templates/master_template.json#base_0-1_nounit",
@@ -286,8 +275,6 @@
 			"maxValue": 1431655681,
 			"defaultValue": 0,
 			"unsigned": true,
-			"readOnly": false,
-			"writeOnly": false,
 			"allowManualEntry": true,
 			"options": [
 				{

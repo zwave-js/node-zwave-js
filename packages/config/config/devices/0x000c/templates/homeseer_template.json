@@ -4,8 +4,6 @@
 		"minValue": 0,
 		"maxValue": 7,
 		"defaultValue": 0,
-		"readOnly": false,
-		"writeOnly": false,
 		"allowManualEntry": false,
 		"options": [
 			{
@@ -47,8 +45,6 @@
 		"minValue": 0,
 		"maxValue": 6,
 		"defaultValue": 0,
-		"readOnly": false,
-		"writeOnly": false,
 		"allowManualEntry": false,
 		"options": [
 			{
@@ -115,8 +111,6 @@
 		"minValue": 0,
 		"maxValue": 1,
 		"defaultValue": 0,
-		"readOnly": false,
-		"writeOnly": false,
 		"allowManualEntry": false,
 		"options": [
 			{
@@ -136,8 +130,6 @@
 		"minValue": 10,
 		"maxValue": 50,
 		"defaultValue": 20,
-		"readOnly": false,
-		"writeOnly": false,
 		"allowManualEntry": true
 	},
 	"fan_type": {
@@ -146,8 +138,6 @@
 		"minValue": 0,
 		"maxValue": 1,
 		"defaultValue": 0,
-		"readOnly": false,
-		"writeOnly": false,
 		"allowManualEntry": false,
 		"options": [
 			{
@@ -175,8 +165,6 @@
 		"maxValue": 720,
 		"defaultValue": 180,
 		"unsigned": true,
-		"readOnly": false,
-		"writeOnly": false,
 		"allowManualEntry": true
 	},
 	"lux_trigger_threshold": {
@@ -187,8 +175,6 @@
 		"maxValue": 900,
 		"defaultValue": 50,
 		"unsigned": true,
-		"readOnly": false,
-		"writeOnly": false,
 		"allowManualEntry": true
 	},
 	"multilevel_sensor_interval": {
@@ -200,8 +186,6 @@
 		"maxValue": 1440,
 		"defaultValue": 10,
 		"unsigned": true,
-		"readOnly": false,
-		"writeOnly": false,
 		"allowManualEntry": true
 	},
 	"light_sensitivity": {
@@ -210,8 +194,6 @@
 		"minValue": 0,
 		"maxValue": 2,
 		"defaultValue": 2,
-		"readOnly": false,
-		"writeOnly": false,
 		"allowManualEntry": false,
 		"options": [
 			{
@@ -234,8 +216,6 @@
 		"minValue": 0,
 		"maxValue": 2,
 		"defaultValue": 2,
-		"readOnly": false,
-		"writeOnly": false,
 		"allowManualEntry": false,
 		"options": [
 			{
