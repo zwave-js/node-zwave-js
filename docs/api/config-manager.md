@@ -326,8 +326,8 @@ interface ConditionalParamInformation {
 	readonly unsigned?: boolean | undefined;
 	readonly defaultValue: number;
 	readonly unit?: string | undefined;
-	readonly readOnly: boolean;
-	readonly writeOnly: boolean;
+	readonly readOnly?: true | undefined;
+	readonly writeOnly?: true | undefined;
 	readonly allowManualEntry: boolean;
 	readonly options: readonly ConditionalConfigOption[];
 	readonly condition?: string | undefined;
