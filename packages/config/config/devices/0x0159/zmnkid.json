@@ -58,40 +58,35 @@
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 100,
-			"defaultValue": 10,
-			"allowManualEntry": true
+			"defaultValue": 10
 		},
 		"42": {
 			"label": "Power Consumption Reporting(Time)",
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 32767,
-			"defaultValue": 600,
-			"allowManualEntry": true
+			"defaultValue": 600
 		},
 		"43": {
 			"label": "Hysteresis Upper temperature offset",
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 450,
-			"defaultValue": 5,
-			"allowManualEntry": true
+			"defaultValue": 5
 		},
 		"44": {
 			"label": "Hysteresis Lower temperature offset",
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 450,
-			"defaultValue": 5,
-			"allowManualEntry": true
+			"defaultValue": 5
 		},
 		"45": {
 			"label": "Antifreeze",
 			"valueSize": 2,
 			"minValue": -125,
 			"maxValue": 1000,
-			"defaultValue": 50,
-			"allowManualEntry": true
+			"defaultValue": 50
 		},
 		"59": {
 			"label": "Thermostat mode",
@@ -116,16 +111,14 @@
 			"valueSize": 2,
 			"minValue": -150,
 			"maxValue": 2120,
-			"defaultValue": 50,
-			"allowManualEntry": true
+			"defaultValue": 50
 		},
 		"61": {
 			"label": "Too high temperature limit",
 			"valueSize": 2,
 			"minValue": 1,
 			"maxValue": 2120,
-			"defaultValue": 700,
-			"allowManualEntry": true
+			"defaultValue": 700
 		},
 		"63": {
 			"label": "Output switch selection",
@@ -168,16 +161,14 @@
 			"valueSize": 2,
 			"minValue": -270,
 			"maxValue": 270,
-			"defaultValue": 0,
-			"allowManualEntry": true
+			"defaultValue": 0
 		},
 		"120": {
 			"label": "Temperature Sensor Reporting Threshold",
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 270,
-			"defaultValue": 5,
-			"allowManualEntry": true
+			"defaultValue": 5
 		}
 	}
 }

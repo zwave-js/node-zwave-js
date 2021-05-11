@@ -57,8 +57,7 @@
 			"unit": "0.1°C",
 			"minValue": -100,
 			"maxValue": 100,
-			"defaultValue": 0,
-			"allowManualEntry": true
+			"defaultValue": 0
 		},
 		"8": {
 			"label": "PIR Sensitivity",

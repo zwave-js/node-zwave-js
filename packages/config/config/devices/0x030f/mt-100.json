@@ -24,8 +24,7 @@
 			"minValue": 8,
 			"maxValue": 255,
 			"defaultValue": 12,
-			"unsigned": true,
-			"allowManualEntry": true
+			"unsigned": true
 		},
 		"2": {
 			"label": "On/Off Duration",
@@ -34,8 +33,7 @@
 			"valueSize": 2,
 			"minValue": 5,
 			"maxValue": 600,
-			"defaultValue": 30,
-			"allowManualEntry": true
+			"defaultValue": 30
 		},
 		"3": {
 			"label": "Basic Set Level",
@@ -46,7 +44,6 @@
 			"maxValue": 255,
 			"defaultValue": 255,
 			"unsigned": true,
-			"allowManualEntry": true,
 			"options": [
 				{
 					"label": "OFF",
@@ -81,8 +78,7 @@
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 1000,
-			"defaultValue": 100,
-			"allowManualEntry": true
+			"defaultValue": 100
 		},
 		"6": {
 			"label": "Retrigger Interval Setting",
@@ -91,8 +87,7 @@
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 8,
-			"defaultValue": 8,
-			"allowManualEntry": true
+			"defaultValue": 8
 		},
 		"7": {
 			"label": "Light Sensor Polling Interva Time",
@@ -102,16 +97,14 @@
 			"minValue": 60,
 			"maxValue": 36000,
 			"defaultValue": 180,
-			"unsigned": true,
-			"allowManualEntry": true
+			"unsigned": true
 		},
 		"8": {
 			"label": "Lux Level Function Enable",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 1,
-			"defaultValue": 0,
-			"allowManualEntry": true
+			"defaultValue": 0
 		},
 		"9": {
 			"label": "Ambient illumination Lux Level Report",
@@ -119,8 +112,7 @@
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 255,
-			"defaultValue": 100,
-			"allowManualEntry": true
+			"defaultValue": 100
 		},
 		"10": {
 			"label": "Led Flash Enable",
@@ -128,8 +120,7 @@
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 1,
-			"defaultValue": 1,
-			"allowManualEntry": true
+			"defaultValue": 1
 		}
 	}
 }

@@ -42,8 +42,7 @@
 			"valueSize": 1,
 			"minValue": 1,
 			"maxValue": 4,
-			"defaultValue": 2,
-			"allowManualEntry": true
+			"defaultValue": 2
 		},
 		"2": {
 			"label": "Differntial",
@@ -51,8 +50,7 @@
 			"valueSize": 1,
 			"minValue": 1,
 			"maxValue": 4,
-			"defaultValue": 2,
-			"allowManualEntry": true
+			"defaultValue": 2
 		},
 		"3": {
 			"label": "Set Filter Counter",
@@ -60,8 +58,7 @@
 			"valueSize": 2,
 			"minValue": 500,
 			"maxValue": 4000,
-			"defaultValue": 500,
-			"allowManualEntry": true
+			"defaultValue": 500
 		},
 		"4": {
 			"label": "Report Filter Counter",
@@ -69,8 +66,7 @@
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 9999,
-			"defaultValue": 0,
-			"allowManualEntry": true
+			"defaultValue": 0
 		},
 		"5": {
 			"label": "Temperature Scale",
@@ -96,16 +92,14 @@
 			"valueSize": 2,
 			"minValue": 37,
 			"maxValue": 99,
-			"defaultValue": 99,
-			"allowManualEntry": true
+			"defaultValue": 99
 		},
 		"7": {
 			"label": "Lower Limit of Setpoint B",
 			"valueSize": 2,
 			"minValue": 5,
 			"maxValue": 95,
-			"defaultValue": 41,
-			"allowManualEntry": true
+			"defaultValue": 41
 		},
 		"8": {
 			"label": "Easy Mode",
@@ -153,32 +147,28 @@
 			"minValue": 0,
 			"maxValue": 255,
 			"defaultValue": 0,
-			"unsigned": true,
-			"allowManualEntry": true
+			"unsigned": true
 		},
 		"11": {
 			"label": "AUTO report by room temperature",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 8,
-			"defaultValue": 4,
-			"allowManualEntry": true
+			"defaultValue": 4
 		},
 		"12": {
 			"label": "Sensor temperature calibration.",
 			"valueSize": 1,
 			"minValue": -10,
 			"maxValue": 10,
-			"defaultValue": 0,
-			"allowManualEntry": true
+			"defaultValue": 0
 		},
 		"13": {
 			"label": "AUTO report by time interval.",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 16,
-			"defaultValue": 0,
-			"allowManualEntry": true
+			"defaultValue": 0
 		}
 	}
 }

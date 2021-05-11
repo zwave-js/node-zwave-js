@@ -23,16 +23,14 @@
 			"valueSize": 1,
 			"minValue": 30,
 			"maxValue": 120,
-			"defaultValue": 30,
-			"allowManualEntry": true
+			"defaultValue": 30
 		},
 		"3": {
 			"label": "MAX_REP_INTERVAL",
 			"valueSize": 1,
 			"minValue": 3,
 			"maxValue": 60,
-			"defaultValue": 6,
-			"allowManualEntry": true
+			"defaultValue": 6
 		},
 		"4": {
 			"label": "RES_ACTIVE_POWER",
@@ -40,24 +38,21 @@
 			"valueSize": 1,
 			"minValue": 1,
 			"maxValue": 100,
-			"defaultValue": 4,
-			"allowManualEntry": true
+			"defaultValue": 4
 		},
 		"5": {
 			"label": "RES_RMS_VOLTAGE",
 			"valueSize": 2,
 			"minValue": 1,
 			"maxValue": 1000,
-			"defaultValue": 10,
-			"allowManualEntry": true
+			"defaultValue": 10
 		},
 		"6": {
 			"label": "RES_RMS_CURRENT",
 			"valueSize": 2,
 			"minValue": 1,
 			"maxValue": 1000,
-			"defaultValue": 10,
-			"allowManualEntry": true
+			"defaultValue": 10
 		},
 		"8": {
 			"label": "CLAMP_REVERSED",
@@ -106,8 +101,7 @@
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 6,
-			"defaultValue": 1,
-			"allowManualEntry": true
+			"defaultValue": 1
 		}
 	}
 }

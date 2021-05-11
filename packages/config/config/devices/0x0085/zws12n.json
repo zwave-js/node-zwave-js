@@ -26,16 +26,14 @@
 			"valueSize": 1,
 			"minValue": 1,
 			"maxValue": 4,
-			"defaultValue": 2,
-			"allowManualEntry": true
+			"defaultValue": 2
 		},
 		"8": {
 			"label": "1 Motor speed II (rain sensor)",
 			"valueSize": 1,
 			"minValue": 1,
 			"maxValue": 4,
-			"defaultValue": 2,
-			"allowManualEntry": true
+			"defaultValue": 2
 		},
 		"12": {
 			"label": "Callibrate",
@@ -43,8 +41,7 @@
 			"valueSize": 1,
 			"minValue": 1,
 			"maxValue": 2,
-			"defaultValue": 1,
-			"allowManualEntry": true
+			"defaultValue": 1
 		},
 		"13": {
 			"label": "Last saved position",
@@ -52,8 +49,7 @@
 			"valueSize": 1,
 			"minValue": 1,
 			"maxValue": 2,
-			"defaultValue": 1,
-			"allowManualEntry": true
+			"defaultValue": 1
 		},
 		"15": {
 			"label": "Close after time",
@@ -61,8 +57,7 @@
 			"unit": "minutes",
 			"minValue": 0,
 			"maxValue": 120,
-			"defaultValue": 120,
-			"allowManualEntry": true
+			"defaultValue": 120
 		}
 	}
 }

@@ -32,8 +32,7 @@
 			"minValue": 500,
 			"maxValue": 5000,
 			"defaultValue": 1500,
-			"unsigned": true,
-			"allowManualEntry": true
+			"unsigned": true
 		},
 		"2": {
 			"label": "SuperVision retry count",
@@ -42,8 +41,7 @@
 			"minValue": 0,
 			"maxValue": 5,
 			"defaultValue": 1,
-			"unsigned": true,
-			"allowManualEntry": true
+			"unsigned": true
 		},
 		"3": {
 			"label": "SuperVision wait time",
@@ -53,8 +51,7 @@
 			"minValue": 1,
 			"maxValue": 60,
 			"defaultValue": 5,
-			"unsigned": true,
-			"allowManualEntry": true
+			"unsigned": true
 		}
 	},
 	"metadata": {

@@ -24,16 +24,14 @@
 			"valueSize": 2,
 			"minValue": 10,
 			"maxValue": 32767,
-			"defaultValue": 32768,
-			"allowManualEntry": true
+			"defaultValue": 32768
 		},
 		"2": {
 			"label": "Low Battery Level",
 			"valueSize": 2,
 			"minValue": 1000,
 			"maxValue": 2500,
-			"defaultValue": 2500,
-			"allowManualEntry": true
+			"defaultValue": 2500
 		},
 		"3": {
 			"label": "Temperature Reporting Threshold",
@@ -41,8 +39,7 @@
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 100,
-			"defaultValue": 100,
-			"allowManualEntry": true
+			"defaultValue": 100
 		},
 		"4": {
 			"label": "Configuration Bitmask",
@@ -67,24 +64,21 @@
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 255,
-			"defaultValue": 255,
-			"allowManualEntry": true
+			"defaultValue": 255
 		},
 		"7": {
 			"label": "Temperature Reporting Interval",
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 255,
-			"defaultValue": 0,
-			"allowManualEntry": true
+			"defaultValue": 0
 		},
 		"8": {
 			"label": "Temperature Calibration Offset",
 			"valueSize": 2,
 			"minValue": -100,
 			"maxValue": 100,
-			"defaultValue": 0,
-			"allowManualEntry": true
+			"defaultValue": 0
 		},
 		"9": {
 			"label": "Mandatory Temperature Reporting Interval",
@@ -93,8 +87,7 @@
 			"minValue": 60,
 			"maxValue": 64800,
 			"defaultValue": 64800,
-			"unsigned": true,
-			"allowManualEntry": true
+			"unsigned": true
 		}
 	}
 }

@@ -106,7 +106,6 @@
 			"maxValue": 65535,
 			"defaultValue": 50,
 			"unsigned": true,
-			"allowManualEntry": true,
 			"options": [
 				{
 					"label": "Disabled",
@@ -122,7 +121,6 @@
 			"minValue": 0,
 			"maxValue": 127,
 			"defaultValue": 10,
-			"allowManualEntry": true,
 			"options": [
 				{
 					"label": "Disabled",
@@ -155,7 +153,6 @@
 			"minValue": 0,
 			"maxValue": 2678400,
 			"defaultValue": 600,
-			"allowManualEntry": true,
 			"options": [
 				{
 					"label": "Disabled",
@@ -170,7 +167,6 @@
 			"minValue": 0,
 			"maxValue": 2678400,
 			"defaultValue": 3600,
-			"allowManualEntry": true,
 			"options": [
 				{
 					"label": "Disabled",
@@ -185,7 +181,6 @@
 			"minValue": 0,
 			"maxValue": 2678400,
 			"defaultValue": 0,
-			"allowManualEntry": true,
 			"options": [
 				{
 					"label": "Disabled",
@@ -200,7 +195,6 @@
 			"minValue": 0,
 			"maxValue": 2678400,
 			"defaultValue": 0,
-			"allowManualEntry": true,
 			"options": [
 				{
 					"label": "Disabled",

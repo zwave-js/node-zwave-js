@@ -59,16 +59,14 @@
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 32536,
-			"defaultValue": 0,
-			"allowManualEntry": true
+			"defaultValue": 0
 		},
 		"12": {
 			"label": "Turn Load 1 On Automatically with Timer",
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 32536,
-			"defaultValue": 0,
-			"allowManualEntry": true
+			"defaultValue": 0
 		},
 		"21": {
 			"label": "Enable/Disable the Double click function",
@@ -111,48 +109,42 @@
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 100,
-			"defaultValue": 10,
-			"allowManualEntry": true
+			"defaultValue": 10
 		},
 		"42": {
 			"label": "Power Consumption Threshold (time)",
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 32767,
-			"defaultValue": 0,
-			"allowManualEntry": true
+			"defaultValue": 0
 		},
 		"60": {
 			"label": "Minimum dimming value",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 98,
-			"defaultValue": 0,
-			"allowManualEntry": true
+			"defaultValue": 0
 		},
 		"61": {
 			"label": "Maximum dimming value",
 			"valueSize": 1,
 			"minValue": 1,
 			"maxValue": 99,
-			"defaultValue": 1,
-			"allowManualEntry": true
+			"defaultValue": 1
 		},
 		"65": {
 			"label": "Dimming time when key pressed",
 			"valueSize": 1,
 			"minValue": 1,
 			"maxValue": 127,
-			"defaultValue": 1,
-			"allowManualEntry": true
+			"defaultValue": 1
 		},
 		"66": {
 			"label": "Dimming time when key hold",
 			"valueSize": 2,
 			"minValue": 1,
 			"maxValue": 127,
-			"defaultValue": 3,
-			"allowManualEntry": true
+			"defaultValue": 3
 		},
 		"67": {
 			"label": "Ignore start level",
@@ -177,16 +169,14 @@
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 127,
-			"defaultValue": 0,
-			"allowManualEntry": true
+			"defaultValue": 0
 		},
 		"70": {
 			"label": "Overload safety switch",
 			"valueSize": 2,
 			"minValue": 1,
 			"maxValue": 200,
-			"defaultValue": 200,
-			"allowManualEntry": true
+			"defaultValue": 200
 		},
 		"71": {
 			"label": "Calibration trigger",
@@ -234,16 +224,14 @@
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 3,
-			"defaultValue": 0,
-			"allowManualEntry": true
+			"defaultValue": 0
 		},
 		"74": {
 			"label": "Alarm/Notification time interval",
 			"valueSize": 1,
 			"minValue": 1,
 			"maxValue": 125,
-			"defaultValue": 10,
-			"allowManualEntry": true
+			"defaultValue": 10
 		}
 	}
 }

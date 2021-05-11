@@ -25,8 +25,7 @@
 			"minValue": 0,
 			"maxValue": 255,
 			"defaultValue": 0,
-			"unsigned": true,
-			"allowManualEntry": true
+			"unsigned": true
 		},
 		"2": {
 			"label": "Panic ON time",
@@ -36,8 +35,7 @@
 			"minValue": 0,
 			"maxValue": 255,
 			"defaultValue": 0,
-			"unsigned": true,
-			"allowManualEntry": true
+			"unsigned": true
 		},
 		"3": {
 			"label": "Panic OFF time",
@@ -47,8 +45,7 @@
 			"minValue": 0,
 			"maxValue": 255,
 			"defaultValue": 0,
-			"unsigned": true,
-			"allowManualEntry": true
+			"unsigned": true
 		},
 		"5": {
 			"label": "Power Up State",
@@ -101,8 +98,7 @@
 			"minValue": 0,
 			"maxValue": 255,
 			"defaultValue": 1,
-			"unsigned": true,
-			"allowManualEntry": true
+			"unsigned": true
 		},
 		"8": {
 			"label": "Kickstart / Rapid Start",
@@ -128,56 +124,49 @@
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 0,
-			"defaultValue": 0,
-			"allowManualEntry": true
+			"defaultValue": 0
 		},
 		"11": {
 			"label": "Minimum Dimming Level",
 			"valueSize": 1,
 			"minValue": 1,
 			"maxValue": 99,
-			"defaultValue": 1,
-			"allowManualEntry": true
+			"defaultValue": 1
 		},
 		"12": {
 			"label": "Maximum Dimming Level",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 99,
-			"defaultValue": 99,
-			"allowManualEntry": true
+			"defaultValue": 99
 		},
 		"13": {
 			"label": "Blue LED brightness level while dimmer is ON",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 4,
-			"defaultValue": 4,
-			"allowManualEntry": true
+			"defaultValue": 4
 		},
 		"14": {
 			"label": "Blue LED brightness level while dimmer is OFF",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 4,
-			"defaultValue": 1,
-			"allowManualEntry": true
+			"defaultValue": 1
 		},
 		"15": {
 			"label": "Amber LED brightness level while the dimmer is ON",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 4,
-			"defaultValue": 0,
-			"allowManualEntry": true
+			"defaultValue": 0
 		},
 		"16": {
 			"label": "Amber LED brightness level while the dimmer is OFF",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 4,
-			"defaultValue": 2,
-			"allowManualEntry": true
+			"defaultValue": 2
 		}
 	}
 }

@@ -145,8 +145,7 @@
 			"minValue": 1,
 			"maxValue": 32000,
 			"defaultValue": 50,
-			"unsigned": true,
-			"allowManualEntry": true
+			"unsigned": true
 		},
 		"13": {
 			"label": "First channel - pulse time for flashing mode",
@@ -156,8 +155,7 @@
 			"minValue": 1,
 			"maxValue": 32000,
 			"defaultValue": 5,
-			"unsigned": true,
-			"allowManualEntry": true
+			"unsigned": true
 		},
 		"15": {
 			"label": "Second channel - operating mode",
@@ -228,8 +226,7 @@
 			"minValue": 1,
 			"maxValue": 32000,
 			"defaultValue": 50,
-			"unsigned": true,
-			"allowManualEntry": true
+			"unsigned": true
 		},
 		"18": {
 			"label": "Second channel - pulse time for flashing mode",
@@ -238,8 +235,7 @@
 			"minValue": 1,
 			"maxValue": 32000,
 			"defaultValue": 5,
-			"unsigned": true,
-			"allowManualEntry": true
+			"unsigned": true
 		},
 		"20": {
 			"label": "Switch type",
@@ -292,8 +288,7 @@
 			"minValue": 0,
 			"maxValue": 1,
 			"defaultValue": 1,
-			"unsigned": true,
-			"allowManualEntry": true
+			"unsigned": true
 		},
 		"27[0x02]": {
 			"label": "Associations: Send secure commands to 3rd group",
@@ -302,8 +297,7 @@
 			"minValue": 0,
 			"maxValue": 1,
 			"defaultValue": 1,
-			"unsigned": true,
-			"allowManualEntry": true
+			"unsigned": true
 		},
 		"27[0x04]": {
 			"label": "Associations: Send secure commands to 4th group",
@@ -312,8 +306,7 @@
 			"minValue": 0,
 			"maxValue": 1,
 			"defaultValue": 1,
-			"unsigned": true,
-			"allowManualEntry": true
+			"unsigned": true
 		},
 		"27[0x08]": {
 			"label": "Associations: Send secure commands to 5th group",
@@ -322,8 +315,7 @@
 			"minValue": 0,
 			"maxValue": 1,
 			"defaultValue": 1,
-			"unsigned": true,
-			"allowManualEntry": true
+			"unsigned": true
 		},
 		"28[0x01]": {
 			"label": "S1 switch - Send Scenes: Key pressed 1 time",
@@ -331,8 +323,7 @@
 			"minValue": 0,
 			"maxValue": 1,
 			"defaultValue": 0,
-			"unsigned": true,
-			"allowManualEntry": true
+			"unsigned": true
 		},
 		"28[0x02]": {
 			"label": "S1 switch - Send Scenes: Key pressed 2 times",
@@ -340,8 +331,7 @@
 			"minValue": 0,
 			"maxValue": 1,
 			"defaultValue": 0,
-			"unsigned": true,
-			"allowManualEntry": true
+			"unsigned": true
 		},
 		"28[0x04]": {
 			"label": "S1 switch - Send Scenes: Key pressed 3 times",
@@ -349,8 +339,7 @@
 			"minValue": 0,
 			"maxValue": 1,
 			"defaultValue": 0,
-			"unsigned": true,
-			"allowManualEntry": true
+			"unsigned": true
 		},
 		"28[0x08]": {
 			"label": "S1 switch - Send Scenes: Key held down and Key released",
@@ -358,8 +347,7 @@
 			"minValue": 0,
 			"maxValue": 1,
 			"defaultValue": 0,
-			"unsigned": true,
-			"allowManualEntry": true
+			"unsigned": true
 		},
 		"29[0x01]": {
 			"label": "S2 switch - Send Scenes: Key pressed 1 time",
@@ -367,8 +355,7 @@
 			"minValue": 0,
 			"maxValue": 1,
 			"defaultValue": 0,
-			"unsigned": true,
-			"allowManualEntry": true
+			"unsigned": true
 		},
 		"29[0x02]": {
 			"label": "S2 switch - Send Scenes: Key pressed 2 times",
@@ -376,8 +363,7 @@
 			"minValue": 0,
 			"maxValue": 1,
 			"defaultValue": 0,
-			"unsigned": true,
-			"allowManualEntry": true
+			"unsigned": true
 		},
 		"29[0x04]": {
 			"label": "S2 switch - Send Scenes: Key pressed 3 times",
@@ -385,8 +371,7 @@
 			"minValue": 0,
 			"maxValue": 1,
 			"defaultValue": 0,
-			"unsigned": true,
-			"allowManualEntry": true
+			"unsigned": true
 		},
 		"29[0x08]": {
 			"label": "S2 switch - Send Scenes: Key held down and Key released",
@@ -394,8 +379,7 @@
 			"minValue": 0,
 			"maxValue": 1,
 			"defaultValue": 0,
-			"unsigned": true,
-			"allowManualEntry": true
+			"unsigned": true
 		},
 		"30[0x01]": {
 			"label": "S1 switch associations - Ignore turning ON with 1 click",
@@ -403,8 +387,7 @@
 			"minValue": 0,
 			"maxValue": 1,
 			"defaultValue": 0,
-			"unsigned": true,
-			"allowManualEntry": true
+			"unsigned": true
 		},
 		"30[0x02]": {
 			"label": "S1 switch associations - Ignore turning OFF with 1 click",
@@ -412,8 +395,7 @@
 			"minValue": 0,
 			"maxValue": 1,
 			"defaultValue": 0,
-			"unsigned": true,
-			"allowManualEntry": true
+			"unsigned": true
 		},
 		"30[0x04]": {
 			"label": "S1 switch associations - Ignore holding and releasing",
@@ -421,8 +403,7 @@
 			"minValue": 0,
 			"maxValue": 1,
 			"defaultValue": 0,
-			"unsigned": true,
-			"allowManualEntry": true
+			"unsigned": true
 		},
 		"30[0x08]": {
 			"label": "S1 switch associations - Ignore double click",
@@ -430,8 +411,7 @@
 			"minValue": 0,
 			"maxValue": 1,
 			"defaultValue": 0,
-			"unsigned": true,
-			"allowManualEntry": true
+			"unsigned": true
 		},
 		"31": {
 			"label": "S1 Switch ON value sent to 2nd and 3rd association groups",
@@ -440,8 +420,7 @@
 			"minValue": 0,
 			"maxValue": 255,
 			"defaultValue": 255,
-			"unsigned": true,
-			"allowManualEntry": true
+			"unsigned": true
 		},
 		"32": {
 			"label": "S1 Switch OFF value sent to 2nd and 3rd association groups",
@@ -450,8 +429,7 @@
 			"minValue": 0,
 			"maxValue": 255,
 			"defaultValue": 0,
-			"unsigned": true,
-			"allowManualEntry": true
+			"unsigned": true
 		},
 		"33": {
 			"label": "S1 Switch Double Click value sent to 2nd and 3rd association groups",
@@ -460,8 +438,7 @@
 			"minValue": 0,
 			"maxValue": 255,
 			"defaultValue": 99,
-			"unsigned": true,
-			"allowManualEntry": true
+			"unsigned": true
 		},
 		"35[0x01]": {
 			"label": "S2 switch associations - Ignore turning ON with 1 click",
@@ -469,8 +446,7 @@
 			"minValue": 0,
 			"maxValue": 1,
 			"defaultValue": 0,
-			"unsigned": true,
-			"allowManualEntry": true
+			"unsigned": true
 		},
 		"35[0x02]": {
 			"label": "S2 switch associations - Ignore turning OFF with 1 click",
@@ -478,8 +454,7 @@
 			"minValue": 0,
 			"maxValue": 1,
 			"defaultValue": 0,
-			"unsigned": true,
-			"allowManualEntry": true
+			"unsigned": true
 		},
 		"35[0x04]": {
 			"label": "S2 switch associations - Ignore holding and releasing",
@@ -487,8 +462,7 @@
 			"minValue": 0,
 			"maxValue": 1,
 			"defaultValue": 0,
-			"unsigned": true,
-			"allowManualEntry": true
+			"unsigned": true
 		},
 		"35[0x08]": {
 			"label": "S2 switch associations - Ignore double click",
@@ -496,8 +470,7 @@
 			"minValue": 0,
 			"maxValue": 1,
 			"defaultValue": 0,
-			"unsigned": true,
-			"allowManualEntry": true
+			"unsigned": true
 		},
 		"36": {
 			"label": "S2 Switch ON value sent to 4th and 5th association groups",
@@ -506,8 +479,7 @@
 			"minValue": 0,
 			"maxValue": 255,
 			"defaultValue": 255,
-			"unsigned": true,
-			"allowManualEntry": true
+			"unsigned": true
 		},
 		"37": {
 			"label": "S2 Switch OFF value sent to 4th and 5th association groups",
@@ -516,8 +488,7 @@
 			"minValue": 0,
 			"maxValue": 255,
 			"defaultValue": 0,
-			"unsigned": true,
-			"allowManualEntry": true
+			"unsigned": true
 		},
 		"38": {
 			"label": "S2 Switch Double Click value sent to 4th and 5th association groups",
@@ -526,8 +497,7 @@
 			"minValue": 0,
 			"maxValue": 255,
 			"defaultValue": 99,
-			"unsigned": true,
-			"allowManualEntry": true
+			"unsigned": true
 		},
 		"40": {
 			"label": "Reaction to General Alarm",
@@ -649,8 +619,7 @@
 			"minValue": 1,
 			"maxValue": 32000,
 			"defaultValue": 600,
-			"unsigned": true,
-			"allowManualEntry": true
+			"unsigned": true
 		},
 		"50": {
 			"label": "First channel - power reports",
@@ -660,8 +629,7 @@
 			"minValue": 1,
 			"maxValue": 100,
 			"defaultValue": 20,
-			"unsigned": true,
-			"allowManualEntry": true
+			"unsigned": true
 		},
 		"51": {
 			"label": "First channel - minimal time between power reports",
@@ -671,8 +639,7 @@
 			"minValue": 1,
 			"maxValue": 120,
 			"defaultValue": 10,
-			"unsigned": true,
-			"allowManualEntry": true
+			"unsigned": true
 		},
 		"53": {
 			"label": "First channel - energy reports",
@@ -682,8 +649,7 @@
 			"minValue": 1,
 			"maxValue": 32000,
 			"defaultValue": 100,
-			"unsigned": true,
-			"allowManualEntry": true
+			"unsigned": true
 		},
 		"54": {
 			"label": "Second Channel - power reports",
@@ -693,8 +659,7 @@
 			"minValue": 1,
 			"maxValue": 100,
 			"defaultValue": 20,
-			"unsigned": true,
-			"allowManualEntry": true
+			"unsigned": true
 		},
 		"55": {
 			"label": "Second channel - minimal time between power reports",
@@ -704,8 +669,7 @@
 			"minValue": 1,
 			"maxValue": 120,
 			"defaultValue": 10,
-			"unsigned": true,
-			"allowManualEntry": true
+			"unsigned": true
 		},
 		"57": {
 			"label": "Second channel - energy reports",
@@ -715,8 +679,7 @@
 			"minValue": 1,
 			"maxValue": 32000,
 			"defaultValue": 100,
-			"unsigned": true,
-			"allowManualEntry": true
+			"unsigned": true
 		},
 		"58": {
 			"label": "Periodic power reports",
@@ -726,8 +689,7 @@
 			"minValue": 1,
 			"maxValue": 32000,
 			"defaultValue": 3600,
-			"unsigned": true,
-			"allowManualEntry": true
+			"unsigned": true
 		},
 		"59": {
 			"label": "Periodic energy reports",
@@ -737,8 +699,7 @@
 			"minValue": 1,
 			"maxValue": 32000,
 			"defaultValue": 3600,
-			"unsigned": true,
-			"allowManualEntry": true
+			"unsigned": true
 		},
 		"60": {
 			"label": "Measuring energy consumed by the device itself",

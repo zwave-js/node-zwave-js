@@ -31,7 +31,6 @@
 			"maxValue": 1,
 			"defaultValue": 0,
 			"writeOnly": true,
-			"allowManualEntry": true,
 			"options": [
 				{
 					"label": "Factory Default",

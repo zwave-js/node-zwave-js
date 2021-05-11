@@ -23,8 +23,7 @@
 			"minValue": 8,
 			"maxValue": 255,
 			"defaultValue": 12,
-			"unsigned": true,
-			"allowManualEntry": true
+			"unsigned": true
 		},
 		"2": {
 			"label": "Motion Cleared Time Delay",
@@ -33,8 +32,7 @@
 			"minValue": 5,
 			"maxValue": 600,
 			"defaultValue": 30,
-			"unsigned": true,
-			"allowManualEntry": true
+			"unsigned": true
 		},
 		"3": {
 			"label": "Basic Set Level",
@@ -43,7 +41,6 @@
 			"maxValue": 255,
 			"defaultValue": 255,
 			"unsigned": true,
-			"allowManualEntry": true,
 			"options": [
 				{
 					"label": "Off",
@@ -85,8 +82,7 @@
 			"minValue": 5,
 			"maxValue": 1000,
 			"defaultValue": 100,
-			"unsigned": true,
-			"allowManualEntry": true
+			"unsigned": true
 		},
 		"6": {
 			"label": "Retrigger Interval",
@@ -95,8 +91,7 @@
 			"minValue": 1,
 			"maxValue": 8,
 			"defaultValue": 8,
-			"unsigned": true,
-			"allowManualEntry": true
+			"unsigned": true
 		},
 		"7": {
 			"label": "Light Sensing Interval",
@@ -105,8 +100,7 @@
 			"minValue": 60,
 			"maxValue": 3600,
 			"defaultValue": 180,
-			"unsigned": true,
-			"allowManualEntry": true
+			"unsigned": true
 		},
 		"8": {
 			"label": "Enable/Disable Group 2 Ambient Light Threshold",
@@ -134,8 +128,7 @@
 			"minValue": 0,
 			"maxValue": 255,
 			"defaultValue": 100,
-			"unsigned": true,
-			"allowManualEntry": true
+			"unsigned": true
 		},
 		"10": {
 			"label": "Enable/Disable LED Indicator",

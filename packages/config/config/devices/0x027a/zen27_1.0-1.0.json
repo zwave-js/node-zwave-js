@@ -95,8 +95,7 @@
 			"valueSize": 4,
 			"minValue": 1,
 			"maxValue": 65535,
-			"defaultValue": 60,
-			"allowManualEntry": true
+			"defaultValue": 60
 		},
 		"5": {
 			"label": "Auto Turn-On Timer",
@@ -122,8 +121,7 @@
 			"valueSize": 4,
 			"minValue": 1,
 			"maxValue": 65535,
-			"defaultValue": 30,
-			"allowManualEntry": true
+			"defaultValue": 30
 		},
 		"8": {
 			"label": "Dimmer State After Power Failure",
@@ -154,8 +152,7 @@
 			"minValue": 0,
 			"maxValue": 99,
 			"defaultValue": 1,
-			"unit": "seconds",
-			"allowManualEntry": true
+			"unit": "seconds"
 		},
 		"10": {
 			"label": "Minimum Brightness",
@@ -163,8 +160,7 @@
 			"minValue": 1,
 			"maxValue": 99,
 			"defaultValue": 1,
-			"units": "%",
-			"allowManualEntry": true
+			"units": "%"
 		},
 		"11": {
 			"label": "Maximum Brightness",
@@ -172,8 +168,7 @@
 			"minValue": 1,
 			"maxValue": 99,
 			"defaultValue": 99,
-			"units": "%",
-			"allowManualEntry": true
+			"units": "%"
 		},
 		"12": {
 			"label": "Double-Tap Upper Paddle Behavior",

@@ -26,7 +26,6 @@
 			"maxValue": 127,
 			"defaultValue": 127,
 			"unsigned": true,
-			"allowManualEntry": true,
 			"options": [
 				{
 					"label": "Always on",
@@ -42,7 +41,6 @@
 			"maxValue": 127,
 			"defaultValue": 127,
 			"unsigned": true,
-			"allowManualEntry": true,
 			"options": [
 				{
 					"label": "Buzzer disable",

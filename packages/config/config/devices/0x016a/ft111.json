@@ -153,16 +153,14 @@
 			"valueSize": 4,
 			"minValue": 0,
 			"maxValue": 16843197,
-			"defaultValue": 0,
-			"allowManualEntry": true
+			"defaultValue": 0
 		},
 		"86": {
 			"label": "Set appointment 2",
 			"valueSize": 4,
 			"minValue": 0,
 			"maxValue": 16843197,
-			"defaultValue": 0,
-			"allowManualEntry": true
+			"defaultValue": 0
 		},
 		"90": {
 			"label": "(En/dis)able 91 and 92",
@@ -190,8 +188,7 @@
 			"minValue": 0,
 			"maxValue": 60000,
 			"defaultValue": 25,
-			"unsigned": true,
-			"allowManualEntry": true
+			"unsigned": true
 		},
 		"92": {
 			"label": "Set the threshold value of percent power",
@@ -200,8 +197,7 @@
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 100,
-			"defaultValue": 5,
-			"allowManualEntry": true
+			"defaultValue": 5
 		},
 		"100": {
 			"label": "Reset Parameters 101-103 to Default",
@@ -210,7 +206,6 @@
 			"maxValue": 0,
 			"defaultValue": 0,
 			"writeOnly": true,
-			"allowManualEntry": true,
 			"options": [
 				{
 					"label": "Reset the parameter 101-103",
@@ -224,8 +219,7 @@
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 0,
-			"defaultValue": 0,
-			"allowManualEntry": true
+			"defaultValue": 0
 		},
 		"102": {
 			"label": "Set group 2 reports",
@@ -233,16 +227,14 @@
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 0,
-			"defaultValue": 0,
-			"allowManualEntry": true
+			"defaultValue": 0
 		},
 		"103": {
 			"label": "Reports sent to Report group 3",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 15,
-			"defaultValue": 0,
-			"allowManualEntry": true
+			"defaultValue": 0
 		},
 		"110": {
 			"label": "Reset 111-113 to default",
@@ -251,7 +243,6 @@
 			"maxValue": 0,
 			"defaultValue": 0,
 			"writeOnly": true,
-			"allowManualEntry": true,
 			"options": [
 				{
 					"label": "Reset the parameter 111-113",
@@ -265,8 +256,7 @@
 			"valueSize": 4,
 			"minValue": 1,
 			"maxValue": 2147483647,
-			"defaultValue": 2147483647,
-			"allowManualEntry": true
+			"defaultValue": 2147483647
 		},
 		"112": {
 			"label": "Automatic report interval group 2",
@@ -274,8 +264,7 @@
 			"valueSize": 4,
 			"minValue": 1,
 			"maxValue": 2147483647,
-			"defaultValue": 2147483647,
-			"allowManualEntry": true
+			"defaultValue": 2147483647
 		},
 		"113": {
 			"label": "Automatic report interval group 3",
@@ -283,8 +272,7 @@
 			"valueSize": 4,
 			"minValue": 0,
 			"maxValue": 2147483647,
-			"defaultValue": 2147483647,
-			"allowManualEntry": true
+			"defaultValue": 2147483647
 		},
 		"120": {
 			"label": "Configure the external switch mode for S1",
@@ -416,8 +404,7 @@
 			"minValue": 1,
 			"maxValue": 255,
 			"defaultValue": 255,
-			"unsigned": true,
-			"allowManualEntry": true
+			"unsigned": true
 		},
 		"128": {
 			"label": "Get the current working mode",
@@ -490,16 +477,14 @@
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 99,
-			"defaultValue": 99,
-			"allowManualEntry": true
+			"defaultValue": 99
 		},
 		"132": {
 			"label": "Set the max brightness level",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 99,
-			"defaultValue": 99,
-			"allowManualEntry": true
+			"defaultValue": 99
 		},
 		"249": {
 			"label": "Set the recognition way of load",

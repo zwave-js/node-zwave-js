@@ -64,8 +64,7 @@
 			"minValue": 0,
 			"maxValue": 43200,
 			"defaultValue": 0,
-			"unsigned": true,
-			"allowManualEntry": true
+			"unsigned": true
 		},
 		"4": {
 			"label": "Parameter 4",
@@ -74,8 +73,7 @@
 			"minValue": 0,
 			"maxValue": 43200,
 			"defaultValue": 43200,
-			"unsigned": true,
-			"allowManualEntry": true
+			"unsigned": true
 		},
 		"5": {
 			"label": "Parameter 5",

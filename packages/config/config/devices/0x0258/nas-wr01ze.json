@@ -101,8 +101,7 @@
 			"minValue": 0,
 			"maxValue": 32767,
 			"defaultValue": 120,
-			"unsigned": true,
-			"allowManualEntry": true
+			"unsigned": true
 		},
 		"6": {
 			"label": "Send meter reports",
@@ -129,8 +128,7 @@
 			"minValue": 30,
 			"maxValue": 32767,
 			"defaultValue": 300,
-			"unsigned": true,
-			"allowManualEntry": true
+			"unsigned": true
 		},
 		"8": {
 			"label": "Maximum current",
@@ -139,8 +137,7 @@
 			"valueSize": 1,
 			"minValue": 1,
 			"maxValue": 16,
-			"defaultValue": 16,
-			"allowManualEntry": true
+			"defaultValue": 16
 		},
 		"9": {
 			"label": "Power report threshold",
@@ -149,8 +146,7 @@
 			"valueSize": 2,
 			"minValue": 1,
 			"maxValue": 1600,
-			"defaultValue": 50,
-			"allowManualEntry": true
+			"defaultValue": 50
 		},
 		"10": {
 			"label": "Alarm current thershold",
@@ -159,8 +155,7 @@
 			"valueSize": 1,
 			"minValue": 1,
 			"maxValue": 16,
-			"defaultValue": 13,
-			"allowManualEntry": true
+			"defaultValue": 13
 		}
 	}
 }

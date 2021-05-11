@@ -55,7 +55,6 @@
 			"maxValue": 98,
 			"defaultValue": 4,
 			"unsigned": true,
-			"allowManualEntry": true,
 			"options": [
 				{
 					"label": "Immediate",
@@ -71,7 +70,6 @@
 			"maxValue": 99,
 			"defaultValue": 99,
 			"unsigned": true,
-			"allowManualEntry": true,
 			"options": [
 				{
 					"label": "Immediate",
@@ -91,7 +89,6 @@
 			"maxValue": 99,
 			"defaultValue": 99,
 			"unsigned": true,
-			"allowManualEntry": true,
 			"options": [
 				{
 					"label": "Immediate",
@@ -111,7 +108,6 @@
 			"maxValue": 99,
 			"defaultValue": 99,
 			"unsigned": true,
-			"allowManualEntry": true,
 			"options": [
 				{
 					"label": "Immediate",
@@ -129,8 +125,7 @@
 			"minValue": 1,
 			"maxValue": 45,
 			"defaultValue": 1,
-			"unsigned": true,
-			"allowManualEntry": true
+			"unsigned": true
 		},
 		"6": {
 			"label": "Maximum Light Level",
@@ -138,8 +133,7 @@
 			"minValue": 55,
 			"maxValue": 99,
 			"defaultValue": 99,
-			"unsigned": true,
-			"allowManualEntry": true
+			"unsigned": true
 		},
 		"7": {
 			"label": "Minimum Fan Level",
@@ -147,8 +141,7 @@
 			"minValue": 1,
 			"maxValue": 45,
 			"defaultValue": 1,
-			"unsigned": true,
-			"allowManualEntry": true
+			"unsigned": true
 		},
 		"8": {
 			"label": "Maximum Fan Level",
@@ -156,8 +149,7 @@
 			"minValue": 55,
 			"maxValue": 99,
 			"defaultValue": 99,
-			"unsigned": true,
-			"allowManualEntry": true
+			"unsigned": true
 		},
 		"10": {
 			"label": "Auto Off Light Timer",
@@ -166,8 +158,7 @@
 			"minValue": 0,
 			"maxValue": 32767,
 			"defaultValue": 0,
-			"unsigned": true,
-			"allowManualEntry": true
+			"unsigned": true
 		},
 		"11": {
 			"label": "Auto Off Fan Timer",
@@ -176,8 +167,7 @@
 			"minValue": 0,
 			"maxValue": 32767,
 			"defaultValue": 0,
-			"unsigned": true,
-			"allowManualEntry": true
+			"unsigned": true
 		},
 		"12": {
 			"label": "Default Light Level",
@@ -186,7 +176,6 @@
 			"maxValue": 99,
 			"defaultValue": 0,
 			"unsigned": true,
-			"allowManualEntry": true,
 			"options": [
 				{
 					"label": "Last state",
@@ -201,7 +190,6 @@
 			"maxValue": 99,
 			"defaultValue": 0,
 			"unsigned": true,
-			"allowManualEntry": true,
 			"options": [
 				{
 					"label": "Last state",
@@ -270,7 +258,6 @@
 			"maxValue": 100,
 			"defaultValue": 0,
 			"unsigned": true,
-			"allowManualEntry": true,
 			"options": [
 				{
 					"label": "Off",
@@ -289,7 +276,6 @@
 			"maxValue": 100,
 			"defaultValue": 0,
 			"unsigned": true,
-			"allowManualEntry": true,
 			"options": [
 				{
 					"label": "Off",
@@ -321,7 +307,6 @@
 			"maxValue": 255,
 			"defaultValue": 170,
 			"unsigned": true,
-			"allowManualEntry": true,
 			"options": [
 				{
 					"label": "Red",
@@ -420,7 +405,6 @@
 			"maxValue": 255,
 			"defaultValue": 170,
 			"unsigned": true,
-			"allowManualEntry": true,
 			"options": [
 				{
 					"label": "Red",
@@ -518,7 +502,6 @@
 			"maxValue": 10,
 			"defaultValue": 1,
 			"unsigned": true,
-			"allowManualEntry": true,
 			"options": [
 				{
 					"label": "Off",
@@ -574,7 +557,6 @@
 			"maxValue": 10,
 			"defaultValue": 1,
 			"unsigned": true,
-			"allowManualEntry": true,
 			"options": [
 				{
 					"label": "Off",
@@ -664,8 +646,7 @@
 			"minValue": 1,
 			"maxValue": 255,
 			"defaultValue": 255,
-			"unsigned": true,
-			"allowManualEntry": true
+			"unsigned": true
 		},
 		"24[0xff00]": {
 			"label": "Light LED Effect Brightness",
@@ -730,7 +711,6 @@
 			"maxValue": 255,
 			"defaultValue": 0,
 			"unsigned": true,
-			"allowManualEntry": true,
 			"options": [
 				{
 					"label": "Red",
@@ -808,8 +788,7 @@
 			"minValue": 1,
 			"maxValue": 255,
 			"defaultValue": 255,
-			"unsigned": true,
-			"allowManualEntry": true
+			"unsigned": true
 		},
 		"25[0xff00]": {
 			"label": "Fan LED Effect Brightness",
@@ -874,7 +853,6 @@
 			"maxValue": 255,
 			"defaultValue": 0,
 			"unsigned": true,
-			"allowManualEntry": true,
 			"options": [
 				{
 					"label": "Red",
@@ -919,7 +897,6 @@
 			"maxValue": 10,
 			"defaultValue": 3,
 			"unsigned": true,
-			"allowManualEntry": true,
 			"options": [
 				{
 					"label": "Disable",
@@ -936,7 +913,6 @@
 			"maxValue": 10,
 			"defaultValue": 3,
 			"unsigned": true,
-			"allowManualEntry": true,
 			"options": [
 				{
 					"label": "Disable",
@@ -953,7 +929,6 @@
 			"maxValue": 100,
 			"defaultValue": 10,
 			"unsigned": true,
-			"allowManualEntry": true,
 			"options": [
 				{
 					"label": "Disable",
@@ -969,8 +944,7 @@
 			"minValue": 0,
 			"maxValue": 32767,
 			"defaultValue": 3600,
-			"unsigned": true,
-			"allowManualEntry": true
+			"unsigned": true
 		},
 		"30": {
 			"label": "Energy Reports",
@@ -980,8 +954,7 @@
 			"minValue": 0,
 			"maxValue": 100,
 			"defaultValue": 10,
-			"unsigned": true,
-			"allowManualEntry": true
+			"unsigned": true
 		},
 		"31": {
 			"label": "Local Protection",

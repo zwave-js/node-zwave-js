@@ -24,8 +24,7 @@
 			"minValue": 0,
 			"maxValue": 255,
 			"defaultValue": 0,
-			"unsigned": true,
-			"allowManualEntry": true
+			"unsigned": true
 		},
 		"2": {
 			"label": "Basic Set Dim Level (On)",
@@ -34,8 +33,7 @@
 			"minValue": 0,
 			"maxValue": 255,
 			"defaultValue": 255,
-			"unsigned": true,
-			"allowManualEntry": true
+			"unsigned": true
 		},
 		"5[0x01]": {
 			"label": "Flood Sensor Function",
@@ -196,7 +194,6 @@
 			"minValue": 0,
 			"maxValue": 127,
 			"defaultValue": 12,
-			"allowManualEntry": true,
 			"options": [
 				{
 					"label": "Disabled",
@@ -211,7 +208,6 @@
 			"minValue": 0,
 			"maxValue": 127,
 			"defaultValue": 12,
-			"allowManualEntry": true,
 			"options": [
 				{
 					"label": "Disabled",
@@ -226,7 +222,6 @@
 			"minValue": 0,
 			"maxValue": 127,
 			"defaultValue": 12,
-			"allowManualEntry": true,
 			"options": [
 				{
 					"label": "Disabled",
@@ -241,7 +236,6 @@
 			"minValue": 0,
 			"maxValue": 127,
 			"defaultValue": 12,
-			"allowManualEntry": true,
 			"options": [
 				{
 					"label": "Disabled",
@@ -258,7 +252,6 @@
 			"maxValue": 255,
 			"defaultValue": 30,
 			"unsigned": true,
-			"allowManualEntry": true,
 			"options": [
 				{
 					"label": "Disable all auto reports",
@@ -275,7 +268,6 @@
 			"maxValue": 127,
 			"defaultValue": 1,
 			"unsigned": true,
-			"allowManualEntry": true,
 			"options": [
 				{
 					"label": "Disabled",
@@ -292,7 +284,6 @@
 			"maxValue": 60,
 			"defaultValue": 1,
 			"unsigned": true,
-			"allowManualEntry": true,
 			"options": [
 				{
 					"label": "Disabled",

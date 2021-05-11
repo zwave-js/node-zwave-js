@@ -129,8 +129,7 @@
 		"unit": "%",
 		"minValue": 10,
 		"maxValue": 50,
-		"defaultValue": 20,
-		"allowManualEntry": true
+		"defaultValue": 20
 	},
 	"fan_type": {
 		"label": "Fan Type",
@@ -164,8 +163,7 @@
 		"minValue": 8,
 		"maxValue": 720,
 		"defaultValue": 180,
-		"unsigned": true,
-		"allowManualEntry": true
+		"unsigned": true
 	},
 	"lux_trigger_threshold": {
 		"label": "Light Level Threshold",
@@ -174,8 +172,7 @@
 		"minValue": 10,
 		"maxValue": 900,
 		"defaultValue": 50,
-		"unsigned": true,
-		"allowManualEntry": true
+		"unsigned": true
 	},
 	"multilevel_sensor_interval": {
 		"label": "Multilevel Sensor Report Interval",
@@ -185,8 +182,7 @@
 		"minValue": 1,
 		"maxValue": 1440,
 		"defaultValue": 10,
-		"unsigned": true,
-		"allowManualEntry": true
+		"unsigned": true
 	},
 	"light_sensitivity": {
 		"label": "Light Sensitvity",

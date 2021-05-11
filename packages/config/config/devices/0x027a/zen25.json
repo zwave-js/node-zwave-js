@@ -47,7 +47,6 @@
 			"minValue": 0,
 			"maxValue": 65535,
 			"defaultValue": 10,
-			"allowManualEntry": true,
 			"options": [
 				{
 					"label": "Disable",
@@ -61,8 +60,7 @@
 			"valueSize": 4,
 			"minValue": 30,
 			"maxValue": 2678400,
-			"defaultValue": 30,
-			"allowManualEntry": true
+			"defaultValue": 30
 		},
 		"4": {
 			"label": "Energy Frequency",
@@ -70,8 +68,7 @@
 			"valueSize": 4,
 			"minValue": 30,
 			"maxValue": 2678400,
-			"defaultValue": 300,
-			"allowManualEntry": true
+			"defaultValue": 300
 		},
 		"5": {
 			"label": "Voltage Frequency",
@@ -79,8 +76,7 @@
 			"valueSize": 4,
 			"minValue": 30,
 			"maxValue": 2678400,
-			"defaultValue": 300,
-			"allowManualEntry": true
+			"defaultValue": 300
 		},
 		"6": {
 			"label": "Current Frequency",
@@ -89,8 +85,7 @@
 			"valueSize": 4,
 			"minValue": 30,
 			"maxValue": 2678400,
-			"defaultValue": 300,
-			"allowManualEntry": true
+			"defaultValue": 300
 		},
 		"7": {
 			"label": "Overload Protection",
@@ -98,8 +93,7 @@
 			"valueSize": 1,
 			"minValue": 1,
 			"maxValue": 10,
-			"defaultValue": 10,
-			"allowManualEntry": true
+			"defaultValue": 10
 		},
 		"8": {
 			"label": "Enable Auto-Off (Left)",
@@ -126,8 +120,7 @@
 			"valueSize": 4,
 			"minValue": 1,
 			"maxValue": 65535,
-			"defaultValue": 60,
-			"allowManualEntry": true
+			"defaultValue": 60
 		},
 		"10": {
 			"label": "Enable Auto-On (Left)",
@@ -154,8 +147,7 @@
 			"valueSize": 4,
 			"minValue": 1,
 			"maxValue": 65535,
-			"defaultValue": 60,
-			"allowManualEntry": true
+			"defaultValue": 60
 		},
 		"12": {
 			"label": "Enable Auto-Off (Right)",
@@ -181,8 +173,7 @@
 			"valueSize": 4,
 			"minValue": 1,
 			"maxValue": 65535,
-			"defaultValue": 60,
-			"allowManualEntry": true
+			"defaultValue": 60
 		},
 		"14": {
 			"label": "Enable Auto-On (Right)",
@@ -208,8 +199,7 @@
 			"valueSize": 4,
 			"minValue": 1,
 			"maxValue": 65535,
-			"defaultValue": 60,
-			"allowManualEntry": true
+			"defaultValue": 60
 		},
 		"16": {
 			"label": "Manual Control",

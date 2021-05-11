@@ -85,7 +85,6 @@
 			"minValue": -20,
 			"maxValue": 60,
 			"defaultValue": 60,
-			"allowManualEntry": true,
 			"options": [
 				{
 					"label": "Temperature alarm level",
@@ -119,7 +118,6 @@
 			"minValue": -20,
 			"maxValue": 60,
 			"defaultValue": -20,
-			"allowManualEntry": true,
 			"options": [
 				{
 					"label": "Temperature alarm level",
@@ -172,7 +170,6 @@
 			"minValue": 1,
 			"maxValue": 100,
 			"defaultValue": 25,
-			"allowManualEntry": true,
 			"options": [
 				{
 					"label": "(1= almost dry, 100= soaking wet)",
@@ -187,7 +184,6 @@
 			"minValue": 0,
 			"maxValue": 120,
 			"defaultValue": 0,
-			"allowManualEntry": true,
 			"options": [
 				{
 					"label": "Number of hours between moisture reports",

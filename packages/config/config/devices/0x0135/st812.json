@@ -35,7 +35,6 @@
 			"minValue": 0,
 			"maxValue": 99,
 			"defaultValue": 99,
-			"allowManualEntry": true,
 			"options": [
 				{
 					"label": "OFF",

@@ -24,8 +24,7 @@
 			"minValue": 1,
 			"maxValue": 8,
 			"defaultValue": 8,
-			"unsigned": true,
-			"allowManualEntry": true
+			"unsigned": true
 		},
 		"14": {
 			"$import": "templates/homeseer_template.json#enable_basic_set_command"
@@ -43,8 +42,7 @@
 			"minValue": 0,
 			"maxValue": 65535,
 			"defaultValue": 600,
-			"unsigned": true,
-			"allowManualEntry": true
+			"unsigned": true
 		},
 		"32": {
 			"$import": "templates/homeseer_template.json#low_battery_level"

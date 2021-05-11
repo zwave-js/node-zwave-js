@@ -24,8 +24,7 @@
 			"minValue": 0,
 			"maxValue": 99,
 			"defaultValue": 0,
-			"unsigned": true,
-			"allowManualEntry": true
+			"unsigned": true
 		},
 		"2": {
 			"label": "Basic Set On Level",
@@ -34,8 +33,7 @@
 			"minValue": 0,
 			"maxValue": 99,
 			"defaultValue": 99,
-			"unsigned": true,
-			"allowManualEntry": true
+			"unsigned": true
 		},
 		"10": {
 			"label": "Auto Report Battery Time",
@@ -44,8 +42,7 @@
 			"minValue": 0,
 			"maxValue": 255,
 			"defaultValue": 12,
-			"unsigned": true,
-			"allowManualEntry": true
+			"unsigned": true
 		},
 		"25": {
 			"label": "Percentage Set Method",

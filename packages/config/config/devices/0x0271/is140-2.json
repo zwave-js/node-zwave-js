@@ -28,8 +28,7 @@
 			"valueSize": 2,
 			"minValue": 5,
 			"maxValue": 900,
-			"defaultValue": 180,
-			"allowManualEntry": true
+			"defaultValue": 180
 		},
 		"2": {
 			"label": "Light",
@@ -38,8 +37,7 @@
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 2000,
-			"defaultValue": 2000,
-			"allowManualEntry": true
+			"defaultValue": 2000
 		},
 		"5": {
 			"label": "Sensitivity",
@@ -48,8 +46,7 @@
 			"valueSize": 1,
 			"minValue": 2,
 			"maxValue": 100,
-			"defaultValue": 100,
-			"allowManualEntry": true
+			"defaultValue": 100
 		},
 		"8": {
 			"label": "Global_Light",
@@ -57,8 +54,7 @@
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 1,
-			"defaultValue": 1,
-			"allowManualEntry": true
+			"defaultValue": 1
 		},
 		"10": {
 			"label": "(OFF_BEHAVIOUR)",
@@ -66,8 +62,7 @@
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 255,
-			"defaultValue": 10,
-			"allowManualEntry": true
+			"defaultValue": 10
 		},
 		"11": {
 			"label": "ON_BEHAVIOUR",
@@ -75,8 +70,7 @@
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 255,
-			"defaultValue": 255,
-			"allowManualEntry": true
+			"defaultValue": 255
 		},
 		"12": {
 			"label": "ON_TIME_OVER",
@@ -84,8 +78,7 @@
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 255,
-			"defaultValue": 204,
-			"allowManualEntry": true
+			"defaultValue": 204
 		},
 		"13": {
 			"label": "ON_OFF_ BEHAVIOUR",
@@ -93,8 +86,7 @@
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 255,
-			"defaultValue": 204,
-			"allowManualEntry": true
+			"defaultValue": 204
 		},
 		"14": {
 			"label": "OFF_ON_ BEHAVIOUR",
@@ -102,8 +94,7 @@
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 255,
-			"defaultValue": 204,
-			"allowManualEntry": true
+			"defaultValue": 204
 		},
 		"15": {
 			"label": "SEQUENCE_ TIME",
@@ -111,8 +102,7 @@
 			"valueSize": 1,
 			"minValue": 10,
 			"maxValue": 50,
-			"defaultValue": 10,
-			"allowManualEntry": true
+			"defaultValue": 10
 		},
 		"16": {
 			"label": "MOTION_ DISABLE",
@@ -120,8 +110,7 @@
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 255,
-			"defaultValue": 0,
-			"allowManualEntry": true
+			"defaultValue": 0
 		},
 		"9[0x01]": {
 			"label": "Bit 0: Slave Mode",

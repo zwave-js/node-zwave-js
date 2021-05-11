@@ -24,8 +24,7 @@
 			"valueSize": 2,
 			"minValue": 1,
 			"maxValue": 32767,
-			"defaultValue": 720,
-			"allowManualEntry": true
+			"defaultValue": 720
 		},
 		"2": {
 			"label": "KWH Meter Report Period",
@@ -34,8 +33,7 @@
 			"valueSize": 2,
 			"minValue": 1,
 			"maxValue": 32767,
-			"defaultValue": 6,
-			"allowManualEntry": true
+			"defaultValue": 6
 		},
 		"3": {
 			"label": "Selected Relay",
@@ -88,8 +86,7 @@
 			"valueSize": 2,
 			"minValue": 10,
 			"maxValue": 750,
-			"defaultValue": 750,
-			"allowManualEntry": true
+			"defaultValue": 750
 		},
 		"6": {
 			"label": "Threshold of KWH for load caution",
@@ -97,8 +94,7 @@
 			"valueSize": 2,
 			"minValue": 1,
 			"maxValue": 10000,
-			"defaultValue": 10000,
-			"allowManualEntry": true
+			"defaultValue": 10000
 		},
 		"7": {
 			"label": "Restore switch state mode",
@@ -106,8 +102,7 @@
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 2,
-			"defaultValue": 1,
-			"allowManualEntry": true
+			"defaultValue": 1
 		},
 		"8": {
 			"label": "Auto off timer",
@@ -116,8 +111,7 @@
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 32767,
-			"defaultValue": 0,
-			"allowManualEntry": true
+			"defaultValue": 0
 		},
 		"9": {
 			"label": "RF off command mode",
@@ -125,8 +119,7 @@
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 3,
-			"defaultValue": 0,
-			"allowManualEntry": true
+			"defaultValue": 0
 		},
 		"10": {
 			"label": "Existence of endpoint 3",
@@ -134,8 +127,7 @@
 			"valueSize": 1,
 			"minValue": 1,
 			"maxValue": 2,
-			"defaultValue": 1,
-			"allowManualEntry": true
+			"defaultValue": 1
 		}
 	}
 }

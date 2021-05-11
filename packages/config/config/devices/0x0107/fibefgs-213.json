@@ -97,16 +97,14 @@
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 32000,
-			"defaultValue": 50,
-			"allowManualEntry": true
+			"defaultValue": 50
 		},
 		"13": {
 			"label": "1st ch. pulse time for flashing mode",
 			"valueSize": 2,
 			"minValue": 1,
 			"maxValue": 32000,
-			"defaultValue": 5,
-			"allowManualEntry": true
+			"defaultValue": 5
 		},
 		"20": {
 			"label": "Switch type",
@@ -188,7 +186,6 @@
 			"minValue": 0,
 			"maxValue": 15,
 			"defaultValue": 0,
-			"allowManualEntry": true,
 			"options": [
 				{
 					"label": "no scenes sent",
@@ -218,7 +215,6 @@
 			"minValue": 0,
 			"maxValue": 15,
 			"defaultValue": 0,
-			"allowManualEntry": true,
 			"options": [
 				{
 					"label": "no scenes sent",
@@ -248,7 +244,6 @@
 			"minValue": 0,
 			"maxValue": 15,
 			"defaultValue": 0,
-			"allowManualEntry": true,
 			"options": [
 				{
 					"label": "All actions are active by default",
@@ -277,24 +272,21 @@
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 255,
-			"defaultValue": 255,
-			"allowManualEntry": true
+			"defaultValue": 255
 		},
 		"32": {
 			"label": "S1 OFF val sent to 2nd and 3rd groups",
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 255,
-			"defaultValue": 0,
-			"allowManualEntry": true
+			"defaultValue": 0
 		},
 		"33": {
 			"label": "S1 DblClick val sent to 2nd and 3rd groups",
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 255,
-			"defaultValue": 99,
-			"allowManualEntry": true
+			"defaultValue": 99
 		},
 		"35": {
 			"label": "S2 assocs. sent to 4th and 5th group",
@@ -302,7 +294,6 @@
 			"minValue": 0,
 			"maxValue": 15,
 			"defaultValue": 0,
-			"allowManualEntry": true,
 			"options": [
 				{
 					"label": "All actions are active by default",
@@ -332,24 +323,21 @@
 			"minValue": 0,
 			"maxValue": 255,
 			"defaultValue": 255,
-			"unsigned": true,
-			"allowManualEntry": true
+			"unsigned": true
 		},
 		"37": {
 			"label": "S2 switch OFF sent to 4th and 5th groups",
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 255,
-			"defaultValue": 0,
-			"allowManualEntry": true
+			"defaultValue": 0
 		},
 		"38": {
 			"label": "S2 double click sent to 4th and 5th ass. grps.",
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 255,
-			"defaultValue": 99,
-			"allowManualEntry": true
+			"defaultValue": 99
 		},
 		"40": {
 			"label": "Reaction to General Alarm",
@@ -460,8 +448,7 @@
 			"valueSize": 2,
 			"minValue": 1,
 			"maxValue": 32000,
-			"defaultValue": 600,
-			"allowManualEntry": true
+			"defaultValue": 600
 		},
 		"50": {
 			"label": "Active power reports",
@@ -469,16 +456,14 @@
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 100,
-			"defaultValue": 20,
-			"allowManualEntry": true
+			"defaultValue": 20
 		},
 		"51": {
 			"label": "Minimal time between power report",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 120,
-			"defaultValue": 10,
-			"allowManualEntry": true
+			"defaultValue": 10
 		},
 		"53": {
 			"label": "Energy reports",
@@ -486,8 +471,7 @@
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 32000,
-			"defaultValue": 100,
-			"allowManualEntry": true
+			"defaultValue": 100
 		},
 		"58": {
 			"label": "Periodic power reports",
@@ -495,8 +479,7 @@
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 32000,
-			"defaultValue": 3600,
-			"allowManualEntry": true
+			"defaultValue": 3600
 		},
 		"59": {
 			"label": "Periodic energy reports",
@@ -504,8 +487,7 @@
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 32000,
-			"defaultValue": 3600,
-			"allowManualEntry": true
+			"defaultValue": 3600
 		},
 		"60": {
 			"label": "Measuring energy consumed by the device itself",

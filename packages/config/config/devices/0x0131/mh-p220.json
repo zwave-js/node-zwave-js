@@ -139,8 +139,7 @@
 			"unit": "%",
 			"minValue": 0,
 			"maxValue": 98,
-			"defaultValue": 1,
-			"allowManualEntry": true
+			"defaultValue": 1
 		},
 		"6": {
 			"label": "Maximum brightness level",
@@ -148,8 +147,7 @@
 			"unit": "%",
 			"minValue": 2,
 			"maxValue": 99,
-			"defaultValue": 63,
-			"allowManualEntry": true
+			"defaultValue": 63
 		},
 		"7": {
 			"label": "Single dimming step time(Manual)",
@@ -157,8 +155,7 @@
 			"valueSize": 2,
 			"minValue": 1,
 			"maxValue": 26,
-			"defaultValue": 3,
-			"allowManualEntry": true
+			"defaultValue": 3
 		},
 		"8": {
 			"label": "Single dimming step size (Manual)",
@@ -166,8 +163,7 @@
 			"valueSize": 1,
 			"minValue": 1,
 			"maxValue": 99,
-			"defaultValue": 1,
-			"allowManualEntry": true
+			"defaultValue": 1
 		},
 		"9": {
 			"label": "Single dimming step time (Auto)",
@@ -175,8 +171,7 @@
 			"valueSize": 2,
 			"minValue": 1,
 			"maxValue": 26,
-			"defaultValue": 3,
-			"allowManualEntry": true
+			"defaultValue": 3
 		},
 		"10": {
 			"label": "Single dimming step size (Auto)",
@@ -184,8 +179,7 @@
 			"valueSize": 1,
 			"minValue": 1,
 			"maxValue": 99,
-			"defaultValue": 1,
-			"allowManualEntry": true
+			"defaultValue": 1
 		},
 		"11": {
 			"label": "Timer function (Auto-off)",
@@ -193,8 +187,7 @@
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 255,
-			"defaultValue": 0,
-			"allowManualEntry": true
+			"defaultValue": 0
 		},
 		"13": {
 			"label": "One click of S1",
@@ -202,8 +195,7 @@
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 99,
-			"defaultValue": 99,
-			"allowManualEntry": true
+			"defaultValue": 99
 		},
 		"14": {
 			"label": "Double click of S1",
@@ -331,8 +323,7 @@
 			"minValue": 0,
 			"maxValue": 255,
 			"defaultValue": 0,
-			"unsigned": true,
-			"allowManualEntry": true
+			"unsigned": true
 		},
 		"20": {
 			"label": "Scene ID sent to AG1 when double click of S2",
@@ -341,8 +332,7 @@
 			"minValue": 0,
 			"maxValue": 255,
 			"defaultValue": 0,
-			"unsigned": true,
-			"allowManualEntry": true
+			"unsigned": true
 		},
 		"21": {
 			"label": "Scene ID sent to AG1 when hold S2",
@@ -351,8 +341,7 @@
 			"minValue": 0,
 			"maxValue": 255,
 			"defaultValue": 0,
-			"unsigned": true,
-			"allowManualEntry": true
+			"unsigned": true
 		},
 		"255": {
 			"label": "Factory setting",

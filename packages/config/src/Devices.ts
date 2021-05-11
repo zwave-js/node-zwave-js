@@ -922,14 +922,19 @@ Parameter #${parameterNumber} has a non-numeric property defaultValue`,
 		}
 		this.defaultValue = definition.defaultValue;
 
-		if (typeof definition.allowManualEntry !== "boolean") {
+		if (
+			definition.allowManualEntry != undefined &&
+			definition.allowManualEntry !== false
+		) {
 			throwInvalidConfig(
 				"devices",
 				`packages/config/config/devices/${parent.filename}:
-Parameter #${parameterNumber}: allowManualEntry must be a boolean!`,
+Parameter #${parameterNumber}: allowManualEntry must be false or omitted!`,
 			);
 		}
-		this.allowManualEntry = definition.allowManualEntry;
+		// Default to allowing manual entry, except if the param is readonly
+		this.allowManualEntry =
+			definition.allowManualEntry ?? (this.readOnly ? false : true);
 
 		if (
 			isArray(definition.options) &&

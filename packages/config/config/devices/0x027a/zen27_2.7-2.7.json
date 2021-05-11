@@ -95,8 +95,7 @@
 			"valueSize": 4,
 			"minValue": 1,
 			"maxValue": 65535,
-			"defaultValue": 60,
-			"allowManualEntry": true
+			"defaultValue": 60
 		},
 		"5": {
 			"label": "Auto Turn-On Timer",
@@ -122,8 +121,7 @@
 			"valueSize": 4,
 			"minValue": 1,
 			"maxValue": 65535,
-			"defaultValue": 30,
-			"allowManualEntry": true
+			"defaultValue": 30
 		},
 		"7[0x01]": {
 			"label": "Control Group 2 With Physical Switch",
@@ -226,8 +224,7 @@
 			"minValue": 0,
 			"maxValue": 99,
 			"defaultValue": 1,
-			"unit": "seconds",
-			"allowManualEntry": true
+			"unit": "seconds"
 		},
 		"17": {
 			"label": "Z-Wave Ramp Rate Control",
@@ -254,8 +251,7 @@
 			"minValue": 1,
 			"maxValue": 99,
 			"defaultValue": 1,
-			"units": "%",
-			"allowManualEntry": true
+			"units": "%"
 		},
 		"11": {
 			"label": "Maximum Brightness",
@@ -263,8 +259,7 @@
 			"minValue": 1,
 			"maxValue": 99,
 			"defaultValue": 99,
-			"units": "%",
-			"allowManualEntry": true
+			"units": "%"
 		},
 		"12": {
 			"label": "Double-Tap Upper Paddle Behavior",
@@ -375,8 +370,7 @@
 			"minValue": 1,
 			"maxValue": 99,
 			"defaultValue": 4,
-			"units": "seconds",
-			"allowManualEntry": true
+			"units": "seconds"
 		},
 		"18": {
 			"label": "Custom Brightness Level",
@@ -385,8 +379,7 @@
 			"minValue": 0,
 			"maxValue": 99,
 			"defaultValue": 0,
-			"units": "%",
-			"allowManualEntry": true
+			"units": "%"
 		}
 	}
 }

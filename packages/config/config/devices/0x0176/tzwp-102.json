@@ -104,7 +104,6 @@
 			"minValue": 0,
 			"maxValue": 2500,
 			"defaultValue": 50,
-			"allowManualEntry": true,
 			"options": [
 				{
 					"label": "Disabled",

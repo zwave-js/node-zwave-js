@@ -109,8 +109,7 @@
 			"maxValue": 255,
 			"defaultValue": 255,
 			"unsigned": true,
-			"writeOnly": true,
-			"allowManualEntry": true
+			"writeOnly": true
 		},
 		"12": {
 			"label": "Behavior of LED in Repose",
@@ -181,8 +180,7 @@
 			"minValue": 0,
 			"maxValue": 99,
 			"defaultValue": 0,
-			"readOnly": true,
-			"allowManualEntry": true
+			"readOnly": true
 		},
 		"23": {
 			"label": "Calibration Required",

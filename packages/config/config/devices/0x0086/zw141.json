@@ -38,8 +38,7 @@
 			"minValue": 5,
 			"maxValue": 255,
 			"defaultValue": 150,
-			"unsigned": true,
-			"allowManualEntry": true
+			"unsigned": true
 		},
 		"80": {
 			"$import": "templates/aeotec_template.json#enable_notification_basic_report_only"

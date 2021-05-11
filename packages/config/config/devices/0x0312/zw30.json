@@ -99,8 +99,7 @@
 			"minValue": 1,
 			"maxValue": 65535,
 			"defaultValue": 60,
-			"unsigned": true,
-			"allowManualEntry": true
+			"unsigned": true
 		},
 		"5": {
 			"label": "Enable/Disable Auto Turn-on Timer",
@@ -128,8 +127,7 @@
 			"minValue": 1,
 			"maxValue": 65535,
 			"defaultValue": 60,
-			"unsigned": true,
-			"allowManualEntry": true
+			"unsigned": true
 		},
 		"7[0x01]": {
 			"label": "Send Status Change Report: Local Control",

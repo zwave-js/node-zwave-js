@@ -273,6 +273,21 @@ description: ${description}`,
 					}
 				}
 
+				// Check if there are readOnly parameters with allowManualEntry = true
+				for (const [
+					{ parameter },
+					value,
+				] of config.paramInformation.entries()) {
+					// We can't actually distinguish between `false` and missing, but this is good enough
+					if (value.readOnly && value.allowManualEntry) {
+						addError(
+							file,
+							`Parameter #${parameter} is invalid: allowManualEntry must be omitted for readOnly parameters!`,
+							variant,
+						);
+					}
+				}
+
 				// Check if there are options where readOnly and writeOnly are unnecessarily specified
 				for (const [
 					{ parameter },

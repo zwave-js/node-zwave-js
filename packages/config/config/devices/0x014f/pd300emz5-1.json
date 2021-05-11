@@ -23,8 +23,7 @@
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 100,
-			"defaultValue": 100,
-			"allowManualEntry": true
+			"defaultValue": 100
 		},
 		"3": {
 			"label": "Night Light",
@@ -60,8 +59,7 @@
 			"valueSize": 1,
 			"minValue": 1,
 			"maxValue": 99,
-			"defaultValue": 3,
-			"allowManualEntry": true
+			"defaultValue": 3
 		},
 		"8": {
 			"label": "Remote Dim Time",
@@ -70,8 +68,7 @@
 			"valueSize": 2,
 			"minValue": 1,
 			"maxValue": 255,
-			"defaultValue": 1,
-			"allowManualEntry": true
+			"defaultValue": 1
 		},
 		"9": {
 			"label": "Local Dim Step",
@@ -80,8 +77,7 @@
 			"valueSize": 1,
 			"minValue": 1,
 			"maxValue": 99,
-			"defaultValue": 3,
-			"allowManualEntry": true
+			"defaultValue": 3
 		},
 		"11": {
 			"label": "Power Monitoring",
@@ -109,8 +105,7 @@
 			"valueSize": 2,
 			"minValue": 1,
 			"maxValue": 255,
-			"defaultValue": 60,
-			"allowManualEntry": true
+			"defaultValue": 60
 		},
 		"13": {
 			"label": "Engery report frequency",
@@ -119,8 +114,7 @@
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 255,
-			"defaultValue": 6,
-			"allowManualEntry": true
+			"defaultValue": 6
 		},
 		"16": {
 			"label": "Local Dim Time",
@@ -129,8 +123,7 @@
 			"valueSize": 2,
 			"minValue": 1,
 			"maxValue": 255,
-			"defaultValue": 1,
-			"allowManualEntry": true
+			"defaultValue": 1
 		},
 		"17": {
 			"label": "AllSwitch Dim Step",
@@ -139,8 +132,7 @@
 			"valueSize": 1,
 			"minValue": 1,
 			"maxValue": 99,
-			"defaultValue": 3,
-			"allowManualEntry": true
+			"defaultValue": 3
 		},
 		"18": {
 			"label": "AllSwitch Dim Time",
@@ -149,8 +141,7 @@
 			"valueSize": 2,
 			"minValue": 1,
 			"maxValue": 255,
-			"defaultValue": 1,
-			"allowManualEntry": true
+			"defaultValue": 1
 		}
 	}
 }

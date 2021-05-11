@@ -121,8 +121,7 @@
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 5,
-			"defaultValue": 0,
-			"allowManualEntry": true
+			"defaultValue": 0
 		},
 		"4[0x00ff]": {
 			"label": "Application Layer Retry Wait Time",
@@ -131,8 +130,7 @@
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 255,
-			"defaultValue": 0,
-			"allowManualEntry": true
+			"defaultValue": 0
 		},
 		"5": {
 			"label": "Supervision Report Wait Time",
@@ -141,8 +139,7 @@
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 50,
-			"defaultValue": 15,
-			"allowManualEntry": true
+			"defaultValue": 15
 		},
 		"81": {
 			"label": "LED Indicator",
@@ -179,8 +176,7 @@
 			"valueSize": 1,
 			"minValue": 10,
 			"maxValue": 50,
-			"defaultValue": 30,
-			"allowManualEntry": true
+			"defaultValue": 30
 		},
 		"101": {
 			"label": "Timed battery report",
@@ -189,8 +185,7 @@
 			"valueSize": 2,
 			"minValue": 1,
 			"maxValue": 14400,
-			"defaultValue": 70,
-			"allowManualEntry": true
+			"defaultValue": 70
 		}
 	}
 }

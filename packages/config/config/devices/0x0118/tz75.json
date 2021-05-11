@@ -23,8 +23,7 @@
 			"valueSize": 2,
 			"minValue": 1,
 			"maxValue": 32767,
-			"defaultValue": 720,
-			"allowManualEntry": true
+			"defaultValue": 720
 		},
 		"2": {
 			"label": "KWH Meter Report period",
@@ -32,8 +31,7 @@
 			"valueSize": 2,
 			"minValue": 1,
 			"maxValue": 32767,
-			"defaultValue": 6,
-			"allowManualEntry": true
+			"defaultValue": 6
 		},
 		"3": {
 			"label": "Treshold of watt for load caution",
@@ -41,8 +39,7 @@
 			"valueSize": 2,
 			"minValue": 10,
 			"maxValue": 1100,
-			"defaultValue": 1100,
-			"allowManualEntry": true
+			"defaultValue": 1100
 		},
 		"4": {
 			"label": "Treshold of KWH for load caution",
@@ -50,8 +47,7 @@
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 10000,
-			"defaultValue": 0,
-			"allowManualEntry": true
+			"defaultValue": 0
 		}
 	}
 }

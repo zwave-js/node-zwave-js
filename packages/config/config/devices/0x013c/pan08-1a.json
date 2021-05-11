@@ -23,8 +23,7 @@
 			"valueSize": 2,
 			"minValue": 1,
 			"maxValue": 32767,
-			"defaultValue": 720,
-			"allowManualEntry": true
+			"defaultValue": 720
 		},
 		"2": {
 			"label": "KWH Meter Report Interval (10min)",
@@ -32,8 +31,7 @@
 			"valueSize": 2,
 			"minValue": 1,
 			"maxValue": 32767,
-			"defaultValue": 6,
-			"allowManualEntry": true
+			"defaultValue": 6
 		},
 		"3": {
 			"label": "Threshold for Load Caution (10mA)",
@@ -41,8 +39,7 @@
 			"valueSize": 2,
 			"minValue": 1,
 			"maxValue": 1100,
-			"defaultValue": 500,
-			"allowManualEntry": true
+			"defaultValue": 500
 		},
 		"4": {
 			"label": "Threshold of KWh for Load Caution",
@@ -50,8 +47,7 @@
 			"valueSize": 2,
 			"minValue": 1,
 			"maxValue": 10000,
-			"defaultValue": 10000,
-			"allowManualEntry": true
+			"defaultValue": 10000
 		},
 		"5": {
 			"label": "External SwitchType",
@@ -59,8 +55,7 @@
 			"valueSize": 1,
 			"minValue": 1,
 			"maxValue": 2,
-			"defaultValue": 2,
-			"allowManualEntry": true
+			"defaultValue": 2
 		},
 		"6": {
 			"label": "Level report mode",
@@ -68,8 +63,7 @@
 			"valueSize": 1,
 			"minValue": 1,
 			"maxValue": 2,
-			"defaultValue": 2,
-			"allowManualEntry": true
+			"defaultValue": 2
 		}
 	}
 }

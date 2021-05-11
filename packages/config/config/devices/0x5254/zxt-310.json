@@ -33,8 +33,7 @@
 			"minValue": 0,
 			"maxValue": 65280,
 			"defaultValue": 0,
-			"unsigned": true,
-			"allowManualEntry": true
+			"unsigned": true
 		},
 		"22": {
 			"label": "Download Status Register",
@@ -75,8 +74,7 @@
 			"minValue": 0,
 			"maxValue": 65280,
 			"defaultValue": 0,
-			"unsigned": true,
-			"allowManualEntry": true
+			"unsigned": true
 		},
 		"26": {
 			"label": "Learning Status Register",
@@ -116,8 +114,7 @@
 			"minValue": 0,
 			"maxValue": 255,
 			"defaultValue": 255,
-			"unsigned": true,
-			"allowManualEntry": true
+			"unsigned": true
 		},
 		"29": {
 			"label": "IR Port Mapping",

@@ -33,7 +33,6 @@
 			"minValue": 0,
 			"maxValue": 32767,
 			"defaultValue": 30,
-			"allowManualEntry": true,
 			"options": [
 				{
 					"label": "Disable re-triggering until motion timeout",
@@ -48,8 +47,7 @@
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 32767,
-			"defaultValue": 240,
-			"allowManualEntry": true
+			"defaultValue": 240
 		},
 		"3": {
 			"label": "Motion Sensitivity",
@@ -58,7 +56,6 @@
 			"minValue": 0,
 			"maxValue": 11,
 			"defaultValue": 11,
-			"allowManualEntry": true,
 			"options": [
 				{
 					"label": "Motion sensor disabled",
@@ -154,8 +151,7 @@
 			"valueSize": 2,
 			"minValue": -400,
 			"maxValue": 1185,
-			"defaultValue": 239,
-			"allowManualEntry": true
+			"defaultValue": 239
 		},
 		"10": {
 			"label": "LED Indicate Disable",
@@ -387,8 +383,7 @@
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 250,
-			"defaultValue": 25,
-			"allowManualEntry": true
+			"defaultValue": 25
 		},
 		"22": {
 			"label": "Light intensity Threshold Value to Report",
@@ -397,8 +392,7 @@
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 10000,
-			"defaultValue": 100,
-			"allowManualEntry": true
+			"defaultValue": 100
 		},
 		"23": {
 			"label": "Temperature Sensor Report Interval",
@@ -407,8 +401,7 @@
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 32767,
-			"defaultValue": 3600,
-			"allowManualEntry": true
+			"defaultValue": 3600
 		},
 		"24": {
 			"label": "Light Sensor Report Interval",
@@ -417,8 +410,7 @@
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 32767,
-			"defaultValue": 3600,
-			"allowManualEntry": true
+			"defaultValue": 3600
 		},
 		"30": {
 			"label": "Temperature Offset Value",
@@ -427,8 +419,7 @@
 			"valueSize": 2,
 			"minValue": -200,
 			"maxValue": 200,
-			"defaultValue": 0,
-			"allowManualEntry": true
+			"defaultValue": 0
 		},
 		"31": {
 			"label": "Light Intensity Offset Value",
@@ -437,8 +428,7 @@
 			"valueSize": 2,
 			"minValue": -1000,
 			"maxValue": 1000,
-			"defaultValue": 0,
-			"allowManualEntry": true
+			"defaultValue": 0
 		},
 		"100": {
 			"label": "Light Sensor Calibrated Coefficient",
@@ -446,8 +436,7 @@
 			"valueSize": 2,
 			"minValue": 1,
 			"maxValue": 32767,
-			"defaultValue": 1024,
-			"allowManualEntry": true
+			"defaultValue": 1024
 		}
 	}
 }

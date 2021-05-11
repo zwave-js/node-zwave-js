@@ -65,7 +65,6 @@
 			"maxValue": 1440,
 			"defaultValue": 60,
 			"unsigned": true,
-			"allowManualEntry": true,
 			"options": [
 				{
 					"label": "5... 59 minutes",
@@ -97,7 +96,6 @@
 			"maxValue": 1440,
 			"defaultValue": 1440,
 			"unsigned": true,
-			"allowManualEntry": true,
 			"options": [
 				{
 					"label": "5... 60 minutes",
@@ -123,8 +121,7 @@
 			"valueSize": 2,
 			"minValue": -4,
 			"maxValue": 122,
-			"defaultValue": 33,
-			"allowManualEntry": true
+			"defaultValue": 33
 		},
 		"51": {
 			"label": "High Temp Alert Level",
@@ -132,8 +129,7 @@
 			"valueSize": 2,
 			"minValue": -4,
 			"maxValue": 122,
-			"defaultValue": 104,
-			"allowManualEntry": true
+			"defaultValue": 104
 		},
 		"52": {
 			"label": "Temp Report Freq.(usb)",

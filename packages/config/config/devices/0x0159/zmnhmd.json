@@ -94,16 +94,14 @@
 			"minValue": -2147483648,
 			"maxValue": 2147483647,
 			"defaultValue": 0,
-			"unit": "l",
-			"allowManualEntry": true
+			"unit": "l"
 		},
 		"50": {
 			"label": "Number of Liters per Pulse",
 			"valueSize": 2,
 			"minValue": 1,
 			"maxValue": 1000,
-			"defaultValue": 10,
-			"allowManualEntry": true
+			"defaultValue": 10
 		},
 		"51": {
 			"label": "Slow Leak: Threshold",
@@ -112,8 +110,7 @@
 			"minValue": 1,
 			"maxValue": 1000,
 			"defaultValue": 1,
-			"unit": "l",
-			"allowManualEntry": true
+			"unit": "l"
 		},
 		"52": {
 			"label": "Slow Leak: Time Interval",
@@ -121,8 +118,7 @@
 			"minValue": 1,
 			"maxValue": 24,
 			"defaultValue": 24,
-			"unit": "hours",
-			"allowManualEntry": true
+			"unit": "hours"
 		},
 		"60": {
 			"label": "Slow Leak: Close Valve on Alarm",
@@ -148,8 +144,7 @@
 			"valueSize": 2,
 			"minValue": 1,
 			"maxValue": 1000,
-			"defaultValue": 150,
-			"allowManualEntry": true
+			"defaultValue": 150
 		},
 		"54": {
 			"label": "Medium Leak: Time Interval",
@@ -157,8 +152,7 @@
 			"minValue": 1,
 			"maxValue": 24,
 			"defaultValue": 6,
-			"unit": "hours",
-			"allowManualEntry": true
+			"unit": "hours"
 		},
 		"61": {
 			"label": "Medium Leak: Close Valve on Alarm",
@@ -184,8 +178,7 @@
 			"valueSize": 2,
 			"minValue": 1,
 			"maxValue": 1000,
-			"defaultValue": 300,
-			"allowManualEntry": true
+			"defaultValue": 300
 		},
 		"56": {
 			"label": "Fast Leak: Time Interval",
@@ -193,8 +186,7 @@
 			"minValue": 1,
 			"maxValue": 24,
 			"defaultValue": 3,
-			"unit": "hours",
-			"allowManualEntry": true
+			"unit": "hours"
 		},
 		"62": {
 			"label": "Fast Leak: Close Valve on Alarm",

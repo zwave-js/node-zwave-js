@@ -49,7 +49,6 @@
 			"maxValue": 127,
 			"defaultValue": 1,
 			"unsigned": true,
-			"allowManualEntry": true,
 			"options": [
 				{
 					"label": "Timeout duration after detection in minutes",
@@ -88,8 +87,7 @@
 			"minValue": 1,
 			"maxValue": 1,
 			"defaultValue": 1,
-			"unsigned": true,
-			"allowManualEntry": true
+			"unsigned": true
 		},
 		"23": {
 			"label": "Battery Report Interval",
@@ -98,8 +96,7 @@
 			"minValue": 5,
 			"maxValue": 1440,
 			"defaultValue": 1440,
-			"unsigned": true,
-			"allowManualEntry": true
+			"unsigned": true
 		},
 		"28": {
 			"label": "Motion Action Blink Led",

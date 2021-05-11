@@ -29,8 +29,7 @@
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 22,
-			"defaultValue": 1,
-			"allowManualEntry": true
+			"defaultValue": 1
 		},
 		"26": {
 			"label": "Learning status register (Read Only)",
@@ -38,8 +37,7 @@
 			"minValue": 0,
 			"maxValue": 4,
 			"defaultValue": 0,
-			"readOnly": true,
-			"allowManualEntry": true
+			"readOnly": true
 		},
 		"27": {
 			"label": "IR code number for built-in code library",
@@ -47,8 +45,7 @@
 			"minValue": 0,
 			"maxValue": 65535,
 			"defaultValue": 0,
-			"unsigned": true,
-			"allowManualEntry": true
+			"unsigned": true
 		},
 		"28": {
 			"label": "External IR Emitter power level",
@@ -113,16 +110,14 @@
 			"minValue": 0,
 			"maxValue": 65535,
 			"defaultValue": 0,
-			"readOnly": true,
-			"allowManualEntry": true
+			"readOnly": true
 		},
 		"37": {
 			"label": "Sensor temperature compensation",
 			"valueSize": 1,
 			"minValue": -5,
 			"maxValue": 5,
-			"defaultValue": 0,
-			"allowManualEntry": true
+			"defaultValue": 0
 		}
 	}
 }

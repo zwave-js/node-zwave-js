@@ -63,16 +63,14 @@
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 32767,
-			"defaultValue": 0,
-			"allowManualEntry": true
+			"defaultValue": 0
 		},
 		"4": {
 			"label": "Association Behavior",
 			"valueSize": 1,
 			"minValue": 1,
 			"maxValue": 15,
-			"defaultValue": 15,
-			"allowManualEntry": true
+			"defaultValue": 15
 		},
 		"5": {
 			"label": "LED Indicator Color",
@@ -81,7 +79,6 @@
 			"minValue": 0,
 			"maxValue": 255,
 			"defaultValue": 170,
-			"allowManualEntry": true,
 			"options": [
 				{
 					"label": "Red",

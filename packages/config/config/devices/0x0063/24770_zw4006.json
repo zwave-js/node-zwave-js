@@ -60,8 +60,7 @@
 			"minValue": 255,
 			"maxValue": 255,
 			"defaultValue": 255,
-			"unsigned": true,
-			"allowManualEntry": true
+			"unsigned": true
 		},
 		"3": {
 			"label": "Operation Mode",
@@ -191,8 +190,7 @@
 			"minValue": 0,
 			"maxValue": 110,
 			"defaultValue": 2,
-			"unsigned": true,
-			"allowManualEntry": true
+			"unsigned": true
 		},
 		"19": {
 			"label": "Exclusion Mode",

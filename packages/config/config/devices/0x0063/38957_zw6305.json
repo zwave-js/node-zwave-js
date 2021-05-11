@@ -105,7 +105,6 @@
 			"maxValue": 1440,
 			"defaultValue": 1440,
 			"unsigned": true,
-			"allowManualEntry": true,
 			"options": [
 				{
 					"label": "5-60 minutes",

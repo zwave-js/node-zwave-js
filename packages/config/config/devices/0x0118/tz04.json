@@ -40,8 +40,7 @@
 			"minValue": 0,
 			"maxValue": 65535,
 			"defaultValue": 720,
-			"unsigned": true,
-			"allowManualEntry": true
+			"unsigned": true
 		},
 		"2": {
 			"label": "kWh meter report period",
@@ -50,8 +49,7 @@
 			"minValue": 0,
 			"maxValue": 65535,
 			"defaultValue": 6,
-			"unsigned": true,
-			"allowManualEntry": true
+			"unsigned": true
 		},
 		"3": {
 			"label": "Selected endpoint",
@@ -105,8 +103,7 @@
 			"valueSize": 2,
 			"minValue": 10,
 			"maxValue": 1500,
-			"defaultValue": 1500,
-			"allowManualEntry": true
+			"defaultValue": 1500
 		},
 		"6": {
 			"label": "Threshold of kWh for Load Caution",
@@ -114,8 +111,7 @@
 			"valueSize": 2,
 			"minValue": 1,
 			"maxValue": 10000,
-			"defaultValue": 10000,
-			"allowManualEntry": true
+			"defaultValue": 10000
 		},
 		"7": {
 			"label": "Restore switch state mode",
@@ -146,8 +142,7 @@
 			"minValue": 0,
 			"maxValue": 65535,
 			"defaultValue": 0,
-			"unsigned": true,
-			"allowManualEntry": true
+			"unsigned": true
 		},
 		"9": {
 			"label": "RF off command mode",

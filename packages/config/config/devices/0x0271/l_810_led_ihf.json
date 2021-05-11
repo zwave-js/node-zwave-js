@@ -23,8 +23,7 @@
 			"valueSize": 2,
 			"minValue": 5,
 			"maxValue": 900,
-			"defaultValue": 180,
-			"allowManualEntry": true
+			"defaultValue": 180
 		},
 		"2": {
 			"label": "Light",
@@ -32,8 +31,7 @@
 			"valueSize": 2,
 			"minValue": 2,
 			"maxValue": 2000,
-			"defaultValue": 2000,
-			"allowManualEntry": true
+			"defaultValue": 2000
 		},
 		"3": {
 			"label": "Dim",
@@ -41,8 +39,7 @@
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 60,
-			"defaultValue": 0,
-			"allowManualEntry": true
+			"defaultValue": 0
 		},
 		"4": {
 			"label": "Range",
@@ -50,8 +47,7 @@
 			"valueSize": 2,
 			"minValue": 100,
 			"maxValue": 500,
-			"defaultValue": 500,
-			"allowManualEntry": true
+			"defaultValue": 500
 		},
 		"5": {
 			"label": "Sensity",
@@ -59,8 +55,7 @@
 			"valueSize": 1,
 			"minValue": 2,
 			"maxValue": 100,
-			"defaultValue": 100,
-			"allowManualEntry": true
+			"defaultValue": 100
 		},
 		"6": {
 			"label": "Brighntes Meas Interval",
@@ -68,8 +63,7 @@
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 120,
-			"defaultValue": 0,
-			"allowManualEntry": true
+			"defaultValue": 0
 		},
 		"8": {
 			"label": "Global_Light",
@@ -77,8 +71,7 @@
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 1,
-			"defaultValue": 1,
-			"allowManualEntry": true
+			"defaultValue": 1
 		},
 		"9": {
 			"label": "Slave_Mode",
@@ -86,8 +79,7 @@
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 4,
-			"defaultValue": 2,
-			"allowManualEntry": true
+			"defaultValue": 2
 		},
 		"10": {
 			"label": "Off_Behaviour",
@@ -95,8 +87,7 @@
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 255,
-			"defaultValue": 10,
-			"allowManualEntry": true
+			"defaultValue": 10
 		},
 		"11": {
 			"label": "On_Behaviour",
@@ -104,8 +95,7 @@
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 255,
-			"defaultValue": 255,
-			"allowManualEntry": true
+			"defaultValue": 255
 		},
 		"12": {
 			"label": "On_Time_Over",
@@ -113,8 +103,7 @@
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 255,
-			"defaultValue": 204,
-			"allowManualEntry": true
+			"defaultValue": 204
 		},
 		"13": {
 			"label": "On_Off_Behaviour",
@@ -122,8 +111,7 @@
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 255,
-			"defaultValue": 204,
-			"allowManualEntry": true
+			"defaultValue": 204
 		},
 		"14": {
 			"label": "Off_On_Behaviour",
@@ -131,16 +119,14 @@
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 255,
-			"defaultValue": 204,
-			"allowManualEntry": true
+			"defaultValue": 204
 		},
 		"15": {
 			"label": "Sequence_Time",
 			"valueSize": 1,
 			"minValue": 10,
 			"maxValue": 50,
-			"defaultValue": 10,
-			"allowManualEntry": true
+			"defaultValue": 10
 		},
 		"16": {
 			"label": "Motion_Disable",
@@ -148,8 +134,7 @@
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 255,
-			"defaultValue": 209,
-			"allowManualEntry": true
+			"defaultValue": 209
 		}
 	}
 }

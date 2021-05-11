@@ -30,8 +30,7 @@
 			"maxValue": 4294967295,
 			"defaultValue": 0,
 			"unsigned": true,
-			"writeOnly": true,
-			"allowManualEntry": true
+			"writeOnly": true
 		},
 		"18": {
 			"label": "Motor Stop",
@@ -40,8 +39,7 @@
 			"maxValue": 4294967295,
 			"defaultValue": 0,
 			"unsigned": true,
-			"writeOnly": true,
-			"allowManualEntry": true
+			"writeOnly": true
 		},
 		"19": {
 			"label": "Motor Close, Go to Direction A",
@@ -50,8 +48,7 @@
 			"maxValue": 4294967295,
 			"defaultValue": 0,
 			"unsigned": true,
-			"writeOnly": true,
-			"allowManualEntry": true
+			"writeOnly": true
 		},
 		"20": {
 			"label": "Motor Position",
@@ -60,8 +57,7 @@
 			"minValue": 0,
 			"maxValue": 99,
 			"defaultValue": 0,
-			"readOnly": true,
-			"allowManualEntry": true
+			"readOnly": true
 		},
 		"22": {
 			"label": "Motor revert direction",
@@ -70,8 +66,7 @@
 			"maxValue": 4294967295,
 			"defaultValue": 0,
 			"unsigned": true,
-			"writeOnly": true,
-			"allowManualEntry": true
+			"writeOnly": true
 		},
 		"23": {
 			"label": "Clear motor lead tail endpoint setting",
@@ -80,8 +75,7 @@
 			"maxValue": 255,
 			"defaultValue": 0,
 			"unsigned": true,
-			"writeOnly": true,
-			"allowManualEntry": true
+			"writeOnly": true
 		},
 		"32": {
 			"label": "Return motor status flag",
@@ -90,8 +84,7 @@
 			"maxValue": 255,
 			"defaultValue": 0,
 			"unsigned": true,
-			"readOnly": true,
-			"allowManualEntry": true
+			"readOnly": true
 		},
 		"33": {
 			"label": "Enable manual pulling function",
@@ -100,8 +93,7 @@
 			"maxValue": 4294967295,
 			"defaultValue": 0,
 			"unsigned": true,
-			"writeOnly": true,
-			"allowManualEntry": true
+			"writeOnly": true
 		},
 		"34": {
 			"label": "Disable manual pulling function",
@@ -110,8 +102,7 @@
 			"maxValue": 4294967295,
 			"defaultValue": 0,
 			"unsigned": true,
-			"writeOnly": true,
-			"allowManualEntry": true
+			"writeOnly": true
 		}
 	}
 }

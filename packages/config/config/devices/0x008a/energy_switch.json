@@ -35,8 +35,7 @@
 			"minValue": 0,
 			"maxValue": 255,
 			"defaultValue": 0,
-			"unsigned": true,
-			"allowManualEntry": true
+			"unsigned": true
 		},
 		"2": {
 			"label": "Amount of decimals",
@@ -44,8 +43,7 @@
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 3,
-			"defaultValue": 0,
-			"allowManualEntry": true
+			"defaultValue": 0
 		},
 		"3": {
 			"label": "Power Limit",
@@ -53,8 +51,7 @@
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 4500,
-			"defaultValue": 4500,
-			"allowManualEntry": true
+			"defaultValue": 4500
 		},
 		"4": {
 			"label": "Start up with last known socket status",
@@ -62,8 +59,7 @@
 			"minValue": 0,
 			"maxValue": 255,
 			"defaultValue": 0,
-			"unsigned": true,
-			"allowManualEntry": true
+			"unsigned": true
 		},
 		"6": {
 			"label": "Auto report %",
@@ -71,8 +67,7 @@
 			"valueSize": 1,
 			"minValue": 10,
 			"maxValue": 100,
-			"defaultValue": 20,
-			"allowManualEntry": true
+			"defaultValue": 20
 		},
 		"7": {
 			"label": "Auto report Watt",
@@ -81,8 +76,7 @@
 			"minValue": 5,
 			"maxValue": 255,
 			"defaultValue": 10,
-			"unsigned": true,
-			"allowManualEntry": true
+			"unsigned": true
 		},
 		"8": {
 			"label": "Auto report time",
@@ -91,8 +85,7 @@
 			"minValue": 10,
 			"maxValue": 255,
 			"defaultValue": 20,
-			"unsigned": true,
-			"allowManualEntry": true
+			"unsigned": true
 		},
 		"9": {
 			"label": "Relais delay time",
@@ -101,8 +94,7 @@
 			"minValue": 0,
 			"maxValue": 255,
 			"defaultValue": 50,
-			"unsigned": true,
-			"allowManualEntry": true
+			"unsigned": true
 		},
 		"10": {
 			"label": "Led indicator",
@@ -110,8 +102,7 @@
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 2,
-			"defaultValue": 0,
-			"allowManualEntry": true
+			"defaultValue": 0
 		}
 	}
 }

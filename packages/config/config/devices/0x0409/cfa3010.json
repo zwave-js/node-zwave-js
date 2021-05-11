@@ -24,8 +24,7 @@
 			"valueSize": 1,
 			"minValue": 1,
 			"maxValue": 20,
-			"defaultValue": 3,
-			"allowManualEntry": true
+			"defaultValue": 3
 		},
 		"2": {
 			"label": "Latch Torque",

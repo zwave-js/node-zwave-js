@@ -202,8 +202,7 @@
 			"minValue": 0,
 			"maxValue": 65535,
 			"defaultValue": 1,
-			"unsigned": true,
-			"allowManualEntry": true
+			"unsigned": true
 		},
 		"30": {
 			"label": "Auto Report Condition By Room Temp Change",
@@ -290,8 +289,7 @@
 			"valueSize": 1,
 			"minValue": 1,
 			"maxValue": 8,
-			"defaultValue": 8,
-			"allowManualEntry": true
+			"defaultValue": 8
 		},
 		"37": {
 			"label": "Calibrate Temperature Reading",
@@ -299,8 +297,7 @@
 			"valueSize": 1,
 			"minValue": -5,
 			"maxValue": 5,
-			"defaultValue": 0,
-			"allowManualEntry": true
+			"defaultValue": 0
 		}
 	},
 	"metadata": {

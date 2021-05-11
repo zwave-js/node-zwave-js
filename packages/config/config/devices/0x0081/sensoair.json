@@ -31,8 +31,7 @@
 			"minValue": 0,
 			"maxValue": 143,
 			"defaultValue": 141,
-			"unsigned": true,
-			"allowManualEntry": true
+			"unsigned": true
 		},
 		"2": {
 			"label": "Interval for unsolicited Sensor Report Mode B",
@@ -41,8 +40,7 @@
 			"minValue": 5,
 			"maxValue": 65000,
 			"defaultValue": 30,
-			"unsigned": true,
-			"allowManualEntry": true
+			"unsigned": true
 		}
 	}
 }

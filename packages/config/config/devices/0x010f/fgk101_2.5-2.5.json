@@ -48,8 +48,7 @@
 			"minValue": 0,
 			"maxValue": 65535,
 			"defaultValue": 0,
-			"unsigned": true,
-			"allowManualEntry": true
+			"unsigned": true
 		},
 		"2": {
 			"label": "Status change signalled by LED",
@@ -142,8 +141,7 @@
 			"minValue": 1,
 			"maxValue": 255,
 			"defaultValue": 255,
-			"unsigned": true,
-			"allowManualEntry": true
+			"unsigned": true
 		},
 		"9": {
 			"label": "Enable/Disable cancelling alarm",
@@ -188,8 +186,7 @@
 			"minValue": 0,
 			"maxValue": 255,
 			"defaultValue": 8,
-			"unsigned": true,
-			"allowManualEntry": true
+			"unsigned": true
 		},
 		"13": {
 			"label": "Transmitting the alarm or control frame broadcast",

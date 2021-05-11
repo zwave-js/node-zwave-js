@@ -64,8 +64,7 @@
 			"minValue": 0,
 			"maxValue": 255,
 			"defaultValue": 4,
-			"unsigned": true,
-			"allowManualEntry": true
+			"unsigned": true
 		},
 		"2": {
 			"label": "Temperature High Threshold",
@@ -75,8 +74,7 @@
 			"minValue": 0,
 			"maxValue": 255,
 			"defaultValue": 70,
-			"unsigned": true,
-			"allowManualEntry": true
+			"unsigned": true
 		},
 		"3": {
 			"label": "Normally Wet vs Normally Dry",

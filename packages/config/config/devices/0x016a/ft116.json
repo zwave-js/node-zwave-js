@@ -60,8 +60,7 @@
 			"minValue": 0,
 			"maxValue": 255,
 			"defaultValue": 0,
-			"unsigned": true,
-			"allowManualEntry": true
+			"unsigned": true
 		},
 		"20": {
 			"label": "Output status after re-power",
@@ -178,8 +177,7 @@
 			"valueSize": 4,
 			"minValue": 0,
 			"maxValue": 0,
-			"defaultValue": 301991936,
-			"allowManualEntry": true
+			"defaultValue": 301991936
 		},
 		"86": {
 			"label": "Set appointment 1",
@@ -187,8 +185,7 @@
 			"valueSize": 4,
 			"minValue": 0,
 			"maxValue": 0,
-			"defaultValue": 8327680,
-			"allowManualEntry": true
+			"defaultValue": 8327680
 		},
 		"87": {
 			"label": "Set appointment 2",
@@ -196,8 +193,7 @@
 			"valueSize": 4,
 			"minValue": 0,
 			"maxValue": 8327680,
-			"defaultValue": 8327680,
-			"allowManualEntry": true
+			"defaultValue": 8327680
 		},
 		"90": {
 			"label": "Enables/disables parameter 91 and 92",
@@ -224,8 +220,7 @@
 			"minValue": 0,
 			"maxValue": 60000,
 			"defaultValue": 25,
-			"unsigned": true,
-			"allowManualEntry": true
+			"unsigned": true
 		},
 		"92": {
 			"label": "Set the threshold value of percent power",
@@ -233,8 +228,7 @@
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 100,
-			"defaultValue": 5,
-			"allowManualEntry": true
+			"defaultValue": 5
 		},
 		"100": {
 			"label": "Set parameter 101-103 to default value",
@@ -243,8 +237,7 @@
 			"minValue": 0,
 			"maxValue": 0,
 			"defaultValue": 0,
-			"writeOnly": true,
-			"allowManualEntry": true
+			"writeOnly": true
 		},
 		"101": {
 			"label": "Set group 1 reports",
@@ -333,24 +326,21 @@
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 0,
-			"defaultValue": 0,
-			"allowManualEntry": true
+			"defaultValue": 0
 		},
 		"111": {
 			"label": "Interval for automatic report group 1.",
 			"valueSize": 4,
 			"minValue": 1,
 			"maxValue": 2147483647,
-			"defaultValue": 600,
-			"allowManualEntry": true
+			"defaultValue": 600
 		},
 		"112": {
 			"label": "Interval for automatic report group 2",
 			"valueSize": 4,
 			"minValue": 1,
 			"maxValue": 2147483647,
-			"defaultValue": 600,
-			"allowManualEntry": true
+			"defaultValue": 600
 		},
 		"113": {
 			"label": "Interval for automatic group 3 report",
@@ -358,8 +348,7 @@
 			"valueSize": 4,
 			"minValue": 1,
 			"maxValue": 2147483647,
-			"defaultValue": 600,
-			"allowManualEntry": true
+			"defaultValue": 600
 		},
 		"120": {
 			"label": "External switch mode for S1",

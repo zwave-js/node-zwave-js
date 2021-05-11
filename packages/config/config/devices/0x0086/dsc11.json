@@ -100,8 +100,7 @@
 			"maxValue": 65535,
 			"defaultValue": 0,
 			"unsigned": true,
-			"readOnly": true,
-			"allowManualEntry": true
+			"readOnly": true
 		},
 		"101[0x01]": {
 			"$import": "templates/aeotec_template.json#auto_report_group1_watt",

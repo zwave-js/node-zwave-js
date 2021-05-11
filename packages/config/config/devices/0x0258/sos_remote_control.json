@@ -22,16 +22,14 @@
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 100,
-			"defaultValue": 100,
-			"allowManualEntry": true
+			"defaultValue": 100
 		},
 		"2": {
 			"label": "SOS Event Clear Time",
 			"valueSize": 2,
 			"minValue": 30,
 			"maxValue": 32767,
-			"defaultValue": 60,
-			"allowManualEntry": true
+			"defaultValue": 60
 		},
 		"3": {
 			"label": "SOS Configuration",

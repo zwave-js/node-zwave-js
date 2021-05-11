@@ -55,8 +55,7 @@
 			"minValue": 0,
 			"maxValue": 0,
 			"defaultValue": 0,
-			"readOnly": true,
-			"allowManualEntry": true
+			"readOnly": true
 		},
 		"3": {
 			"label": "Utility Lock Enable/Disable",
@@ -86,8 +85,7 @@
 			"minValue": 0,
 			"maxValue": 0,
 			"defaultValue": 0,
-			"readOnly": true,
-			"allowManualEntry": true
+			"readOnly": true
 		},
 		"5": {
 			"label": "Humidity Reporting Threshold",
@@ -228,8 +226,7 @@
 			"valueSize": 4,
 			"minValue": 0,
 			"maxValue": 124,
-			"defaultValue": 124,
-			"allowManualEntry": true
+			"defaultValue": 124
 		},
 		"11": {
 			"label": "Simple UI Mode",

@@ -119,8 +119,7 @@
 			"minValue": 5,
 			"maxValue": 50,
 			"defaultValue": 20,
-			"unsigned": true,
-			"allowManualEntry": true
+			"unsigned": true
 		},
 		"81": {
 			"label": "Enable/Disable LED on Wake Up",

@@ -36,7 +36,6 @@
 			"maxValue": 253,
 			"defaultValue": 2,
 			"unsigned": true,
-			"allowManualEntry": true,
 			"options": [
 				{
 					"label": "Instant on",
@@ -52,7 +51,6 @@
 			"maxValue": 253,
 			"defaultValue": 2,
 			"unsigned": true,
-			"allowManualEntry": true,
 			"options": [
 				{
 					"label": "Instant off",
@@ -66,8 +64,7 @@
 			"unit": "%",
 			"minValue": 0,
 			"maxValue": 100,
-			"defaultValue": 10,
-			"allowManualEntry": true
+			"defaultValue": 10
 		},
 		"4": {
 			"label": "Maximum Light Level",
@@ -75,8 +72,7 @@
 			"unit": "%",
 			"minValue": 0,
 			"maxValue": 100,
-			"defaultValue": 100,
-			"allowManualEntry": true
+			"defaultValue": 100
 		},
 		"7": {
 			"label": "LED Indicator",

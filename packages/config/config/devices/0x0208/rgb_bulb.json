@@ -135,7 +135,6 @@
 			"minValue": 1,
 			"maxValue": 1431655765,
 			"defaultValue": 1,
-			"allowManualEntry": true,
 			"options": [
 				{
 					"label": "Resetting to the factory default",

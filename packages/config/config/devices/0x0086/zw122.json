@@ -84,24 +84,21 @@
 			"valueSize": 4,
 			"minValue": 0,
 			"maxValue": 255,
-			"defaultValue": 10,
-			"allowManualEntry": true
+			"defaultValue": 10
 		},
 		"10[0xff00]": {
 			"label": "Buzzer On Time",
 			"valueSize": 4,
 			"minValue": 0,
 			"maxValue": 255,
-			"defaultValue": 20,
-			"allowManualEntry": true
+			"defaultValue": 20
 		},
 		"10[0xffff0000]": {
 			"label": "Buzzer Off Time",
 			"valueSize": 4,
 			"minValue": 0,
 			"maxValue": 32767,
-			"defaultValue": 120,
-			"allowManualEntry": true
+			"defaultValue": 120
 		},
 		"39": {
 			"$import": "templates/aeotec_template.json#low_battery_threshold",
@@ -116,8 +113,7 @@
 			"valueSize": 4,
 			"minValue": 0,
 			"maxValue": 32767,
-			"defaultValue": 4,
-			"allowManualEntry": true
+			"defaultValue": 4
 		},
 		"49[0xff00]": {
 			"$import": "templates/aeotec_template.json#celsius_fahrenheit_0",
@@ -128,8 +124,7 @@
 			"valueSize": 4,
 			"minValue": 0,
 			"maxValue": 32767,
-			"defaultValue": 1,
-			"allowManualEntry": true
+			"defaultValue": 1
 		},
 		"50[0xff00]": {
 			"$import": "templates/aeotec_template.json#celsius_fahrenheit_0",
@@ -363,8 +358,7 @@
 			"valueSize": 2,
 			"minValue": -128,
 			"maxValue": 127,
-			"defaultValue": 0,
-			"allowManualEntry": true
+			"defaultValue": 0
 		},
 		"201[0x0f]": {
 			"$import": "templates/aeotec_template.json#celsius_fahrenheit_0",

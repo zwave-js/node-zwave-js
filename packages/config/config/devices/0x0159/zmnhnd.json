@@ -89,7 +89,6 @@
 			"maxValue": 65535,
 			"defaultValue": 0,
 			"unsigned": true,
-			"allowManualEntry": true,
 			"options": [
 				{
 					"label": "Auto OFF disabled",
@@ -104,7 +103,6 @@
 			"maxValue": 65535,
 			"defaultValue": 0,
 			"unsigned": true,
-			"allowManualEntry": true,
 			"options": [
 				{
 					"label": "Auto ON disabled",
@@ -218,8 +216,7 @@
 			"minValue": 0,
 			"maxValue": 65535,
 			"defaultValue": 32536,
-			"unsigned": true,
-			"allowManualEntry": true
+			"unsigned": true
 		},
 		"120": {
 			"label": "Digital temperature sensor reporting",
@@ -227,8 +224,7 @@
 			"minValue": 0,
 			"maxValue": 255,
 			"defaultValue": 5,
-			"unsigned": true,
-			"allowManualEntry": true
+			"unsigned": true
 		}
 	}
 }

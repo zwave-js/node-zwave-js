@@ -32,8 +32,7 @@
 			"minValue": 8,
 			"maxValue": 255,
 			"defaultValue": 12,
-			"unsigned": true,
-			"allowManualEntry": true
+			"unsigned": true
 		},
 		"2": {
 			"label": "ON/OFF Duration Setting",
@@ -42,8 +41,7 @@
 			"valueSize": 2,
 			"minValue": 5,
 			"maxValue": 600,
-			"defaultValue": 30,
-			"allowManualEntry": true
+			"defaultValue": 30
 		},
 		"3": {
 			"label": "Basic Set Level",
@@ -52,8 +50,7 @@
 			"minValue": 0,
 			"maxValue": 255,
 			"defaultValue": 255,
-			"unsigned": true,
-			"allowManualEntry": true
+			"unsigned": true
 		},
 		"4": {
 			"label": "Enable/Disable PIR Function",
@@ -81,8 +78,7 @@
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 1000,
-			"defaultValue": 100,
-			"allowManualEntry": true
+			"defaultValue": 100
 		},
 		"6": {
 			"label": "Re-trigger Interval",
@@ -91,8 +87,7 @@
 			"valueSize": 1,
 			"minValue": 1,
 			"maxValue": 8,
-			"defaultValue": 8,
-			"allowManualEntry": true
+			"defaultValue": 8
 		},
 		"7": {
 			"label": "Light Sensor Polling Interval",
@@ -102,8 +97,7 @@
 			"minValue": 60,
 			"maxValue": 36000,
 			"defaultValue": 180,
-			"unsigned": true,
-			"allowManualEntry": true
+			"unsigned": true
 		},
 		"8": {
 			"label": "Lux Level Function Enable",
@@ -132,8 +126,7 @@
 			"minValue": 0,
 			"maxValue": 255,
 			"defaultValue": 100,
-			"unsigned": true,
-			"allowManualEntry": true
+			"unsigned": true
 		},
 		"10": {
 			"label": "Temperature Report",
@@ -141,8 +134,7 @@
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 127,
-			"defaultValue": 5,
-			"allowManualEntry": true
+			"defaultValue": 5
 		},
 		"11": {
 			"label": "LED Blink Enable",
@@ -188,8 +180,7 @@
 			"minValue": 1,
 			"maxValue": 65535,
 			"defaultValue": 1000,
-			"unsigned": true,
-			"allowManualEntry": true
+			"unsigned": true
 		}
 	}
 }

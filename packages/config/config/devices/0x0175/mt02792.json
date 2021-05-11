@@ -25,7 +25,6 @@
 			"minValue": 0,
 			"maxValue": 32767,
 			"defaultValue": 720,
-			"allowManualEntry": true,
 			"options": [
 				{
 					"label": "Disable",
@@ -41,7 +40,6 @@
 			"minValue": 0,
 			"maxValue": 32767,
 			"defaultValue": 6,
-			"allowManualEntry": true,
 			"options": [
 				{
 					"label": "Disable",
@@ -56,16 +54,14 @@
 			"valueSize": 2,
 			"minValue": 10,
 			"maxValue": 1300,
-			"defaultValue": 1300,
-			"allowManualEntry": true
+			"defaultValue": 1300
 		},
 		"4": {
 			"label": "load caution threshold",
 			"valueSize": 2,
 			"minValue": 1,
 			"maxValue": 10000,
-			"defaultValue": 10000,
-			"allowManualEntry": true
+			"defaultValue": 10000
 		},
 		"5": {
 			"label": "Mode for restoring status",
@@ -140,7 +136,6 @@
 			"minValue": 0,
 			"maxValue": 32767,
 			"defaultValue": 0,
-			"allowManualEntry": true,
 			"options": [
 				{
 					"label": "Disable",

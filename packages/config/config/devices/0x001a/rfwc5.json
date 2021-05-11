@@ -49,8 +49,7 @@
 			"minValue": 1,
 			"maxValue": 255,
 			"defaultValue": 10,
-			"unsigned": true,
-			"allowManualEntry": true
+			"unsigned": true
 		},
 		"2": {
 			"label": "Group 2 Level",
@@ -58,8 +57,7 @@
 			"minValue": 1,
 			"maxValue": 255,
 			"defaultValue": 20,
-			"unsigned": true,
-			"allowManualEntry": true
+			"unsigned": true
 		},
 		"3": {
 			"label": "Group 3 Level",
@@ -67,8 +65,7 @@
 			"minValue": 1,
 			"maxValue": 255,
 			"defaultValue": 30,
-			"unsigned": true,
-			"allowManualEntry": true
+			"unsigned": true
 		},
 		"4": {
 			"label": "Group 4 Level",
@@ -76,8 +73,7 @@
 			"minValue": 1,
 			"maxValue": 255,
 			"defaultValue": 40,
-			"unsigned": true,
-			"allowManualEntry": true
+			"unsigned": true
 		},
 		"5": {
 			"label": "Group 5 Level",
@@ -85,8 +81,7 @@
 			"minValue": 1,
 			"maxValue": 255,
 			"defaultValue": 50,
-			"unsigned": true,
-			"allowManualEntry": true
+			"unsigned": true
 		}
 	}
 }

@@ -22,8 +22,7 @@
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 99,
-			"defaultValue": 99,
-			"allowManualEntry": true
+			"defaultValue": 99
 		},
 		"2": {
 			"label": "Enable/Disable Detecting",
@@ -51,8 +50,7 @@
 			"valueSize": 1,
 			"minValue": 1,
 			"maxValue": 10,
-			"defaultValue": 6,
-			"allowManualEntry": true
+			"defaultValue": 6
 		},
 		"4": {
 			"label": "Re-trigger Interval",
@@ -60,8 +58,7 @@
 			"valueSize": 2,
 			"minValue": 5,
 			"maxValue": 3600,
-			"defaultValue": 5,
-			"allowManualEntry": true
+			"defaultValue": 5
 		},
 		"5": {
 			"label": "Lux Level",
@@ -69,8 +66,7 @@
 			"valueSize": 1,
 			"minValue": 1,
 			"maxValue": 100,
-			"defaultValue": 10,
-			"allowManualEntry": true
+			"defaultValue": 10
 		},
 		"6": {
 			"label": "On-Off Duration",
@@ -78,8 +74,7 @@
 			"minValue": 5,
 			"maxValue": 255,
 			"defaultValue": 5,
-			"unsigned": true,
-			"allowManualEntry": true
+			"unsigned": true
 		}
 	}
 }

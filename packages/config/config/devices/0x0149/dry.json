@@ -40,8 +40,7 @@
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 7,
-			"defaultValue": 7,
-			"allowManualEntry": true
+			"defaultValue": 7
 		},
 		"4": {
 			"label": "Value used for devices belonging to Group 2",
@@ -49,8 +48,7 @@
 			"valueSize": 1,
 			"minValue": -1,
 			"maxValue": 100,
-			"defaultValue": 100,
-			"allowManualEntry": true
+			"defaultValue": 100
 		},
 		"5": {
 			"label": "Value used for devices belonging to Group 3",
@@ -58,8 +56,7 @@
 			"valueSize": 1,
 			"minValue": -1,
 			"maxValue": 100,
-			"defaultValue": 100,
-			"allowManualEntry": true
+			"defaultValue": 100
 		},
 		"6": {
 			"label": "Value used for devices belonging to Group 4",
@@ -67,8 +64,7 @@
 			"valueSize": 1,
 			"minValue": -1,
 			"maxValue": 100,
-			"defaultValue": 100,
-			"allowManualEntry": true
+			"defaultValue": 100
 		},
 		"10": {
 			"label": "Timer to switch OFF the Relay",
@@ -76,8 +72,7 @@
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 32000,
-			"defaultValue": 0,
-			"allowManualEntry": true
+			"defaultValue": 0
 		},
 		"11": {
 			"label": "Timer to switch ON the Relay",
@@ -85,8 +80,7 @@
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 32000,
-			"defaultValue": 0,
-			"allowManualEntry": true
+			"defaultValue": 0
 		},
 		"15": {
 			"label": "Timer scale",
@@ -95,8 +89,7 @@
 			"minValue": 1,
 			"maxValue": 2,
 			"defaultValue": 1,
-			"writeOnly": true,
-			"allowManualEntry": true
+			"writeOnly": true
 		},
 		"20": {
 			"label": "One Click Scene Activation Set",
@@ -104,8 +97,7 @@
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 255,
-			"defaultValue": 0,
-			"allowManualEntry": true
+			"defaultValue": 0
 		},
 		"21": {
 			"label": "Two Clicks Scene Activation Set",
@@ -113,8 +105,7 @@
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 255,
-			"defaultValue": 0,
-			"allowManualEntry": true
+			"defaultValue": 0
 		},
 		"22": {
 			"label": "Three Clicks Scene Activation Set",
@@ -122,8 +113,7 @@
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 255,
-			"defaultValue": 0,
-			"allowManualEntry": true
+			"defaultValue": 0
 		},
 		"60": {
 			"label": "Start-up Status",

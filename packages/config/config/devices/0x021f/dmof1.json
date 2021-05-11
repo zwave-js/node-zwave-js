@@ -44,8 +44,7 @@
 			"minValue": 1,
 			"maxValue": 65535,
 			"defaultValue": 300,
-			"unsigned": true,
-			"allowManualEntry": true
+			"unsigned": true
 		},
 		"3": {
 			"label": "Set \"Overload\" Current level",
@@ -54,8 +53,7 @@
 			"valueSize": 1,
 			"minValue": 1,
 			"maxValue": 16,
-			"defaultValue": 13,
-			"allowManualEntry": true
+			"defaultValue": 13
 		},
 		"4": {
 			"label": "Set \"Alert\" Current Level",
@@ -64,8 +62,7 @@
 			"valueSize": 1,
 			"minValue": 1,
 			"maxValue": 16,
-			"defaultValue": 12,
-			"allowManualEntry": true
+			"defaultValue": 12
 		},
 		"5": {
 			"label": "Enable/Disable Indicator LED",
@@ -93,8 +90,7 @@
 			"valueSize": 1,
 			"minValue": 1,
 			"maxValue": 64,
-			"defaultValue": 5,
-			"allowManualEntry": true
+			"defaultValue": 5
 		},
 		"7": {
 			"label": "Remember On/Off status",
@@ -141,8 +137,7 @@
 			"valueSize": 4,
 			"minValue": 1,
 			"maxValue": 65535,
-			"defaultValue": 96,
-			"allowManualEntry": true
+			"defaultValue": 96
 		},
 		"10": {
 			"label": "Enable/Disable BUTTON",

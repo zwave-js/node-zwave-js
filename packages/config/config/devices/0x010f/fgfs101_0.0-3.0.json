@@ -45,8 +45,7 @@
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 3600,
-			"defaultValue": 0,
-			"allowManualEntry": true
+			"defaultValue": 0
 		},
 		"2": {
 			"label": "Acoustic/visual signals On/Off in case of flooding",
@@ -103,8 +102,7 @@
 			"minValue": 1,
 			"maxValue": 255,
 			"defaultValue": 255,
-			"unsigned": true,
-			"allowManualEntry": true
+			"unsigned": true
 		},
 		"9": {
 			"label": "Alarm cancelling or turning a device off",
@@ -131,8 +129,7 @@
 			"valueSize": 2,
 			"minValue": 1,
 			"maxValue": 32767,
-			"defaultValue": 300,
-			"allowManualEntry": true
+			"defaultValue": 300
 		},
 		"12": {
 			"label": "Insensitiveness to temperature changes.",
@@ -140,8 +137,7 @@
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 1000,
-			"defaultValue": 50,
-			"allowManualEntry": true
+			"defaultValue": 50
 		},
 		"13": {
 			"label": "Alarm BROADCAST",
@@ -177,8 +173,7 @@
 			"valueSize": 2,
 			"minValue": -10000,
 			"maxValue": 10000,
-			"defaultValue": 1500,
-			"allowManualEntry": true
+			"defaultValue": 1500
 		},
 		"51": {
 			"label": "High temperature alarm threshold",
@@ -186,8 +181,7 @@
 			"valueSize": 2,
 			"minValue": -10000,
 			"maxValue": 10000,
-			"defaultValue": 3500,
-			"allowManualEntry": true
+			"defaultValue": 3500
 		},
 		"61": {
 			"label": "Low temperature alarm indicator colour",
@@ -195,8 +189,7 @@
 			"valueSize": 4,
 			"minValue": 0,
 			"maxValue": 16777215,
-			"defaultValue": 255,
-			"allowManualEntry": true
+			"defaultValue": 255
 		},
 		"62": {
 			"label": "High temperature alarm indicator colour",
@@ -204,8 +197,7 @@
 			"valueSize": 4,
 			"minValue": 0,
 			"maxValue": 16777215,
-			"defaultValue": 16711680,
-			"allowManualEntry": true
+			"defaultValue": 16711680
 		},
 		"63": {
 			"label": "Managing a LED indicator under standard operation",
@@ -237,8 +229,7 @@
 			"valueSize": 2,
 			"minValue": -10000,
 			"maxValue": 10000,
-			"defaultValue": 0,
-			"allowManualEntry": true
+			"defaultValue": 0
 		},
 		"74": {
 			"label": "Alarm frame sent to 2nd Assoc Grp",
@@ -274,8 +265,7 @@
 			"minValue": 0,
 			"maxValue": 65535,
 			"defaultValue": 0,
-			"unsigned": true,
-			"allowManualEntry": true
+			"unsigned": true
 		},
 		"76": {
 			"label": "Alarm/basic retransmission time when flooding",
@@ -285,8 +275,7 @@
 			"minValue": 0,
 			"maxValue": 65535,
 			"defaultValue": 0,
-			"unsigned": true,
-			"allowManualEntry": true
+			"unsigned": true
 		},
 		"77": {
 			"label": "Flood sensor functionality turned off",

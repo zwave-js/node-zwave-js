@@ -60,8 +60,7 @@
 			"minValue": 0,
 			"maxValue": 255,
 			"defaultValue": 4,
-			"unsigned": true,
-			"allowManualEntry": true
+			"unsigned": true
 		},
 		"2": {
 			"label": "High Temperature Trigger Point",
@@ -69,8 +68,7 @@
 			"minValue": 0,
 			"maxValue": 255,
 			"defaultValue": 70,
-			"unsigned": true,
-			"allowManualEntry": true
+			"unsigned": true
 		}
 	}
 }

@@ -23,16 +23,14 @@
 			"minValue": 0,
 			"maxValue": 0,
 			"defaultValue": 0,
-			"readOnly": true,
-			"allowManualEntry": true
+			"readOnly": true
 		},
 		"2": {
 			"label": "Strobe light interval",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 25,
-			"defaultValue": 0,
-			"allowManualEntry": true
+			"defaultValue": 0
 		},
 		"3": {
 			"label": "Strobe light pulse count",
@@ -40,7 +38,6 @@
 			"minValue": 0,
 			"maxValue": 127,
 			"defaultValue": 0,
-			"allowManualEntry": true,
 			"options": [
 				{
 					"label": "Infinite flashing",
@@ -73,7 +70,6 @@
 			"maxValue": 255,
 			"defaultValue": 1,
 			"writeOnly": true,
-			"allowManualEntry": true,
 			"options": [
 				{
 					"label": "Reset bulb to factory settings",

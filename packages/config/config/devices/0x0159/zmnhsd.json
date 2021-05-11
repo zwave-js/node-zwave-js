@@ -112,7 +112,6 @@
 			"minValue": 0,
 			"maxValue": 32536,
 			"defaultValue": 0,
-			"allowManualEntry": true,
 			"options": [
 				{
 					"label": "Auto off DISABLED",
@@ -127,7 +126,6 @@
 			"minValue": 0,
 			"maxValue": 32536,
 			"defaultValue": 0,
-			"allowManualEntry": true,
 			"options": [
 				{
 					"label": "Auto on DISABLED",
@@ -181,8 +179,7 @@
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 100,
-			"defaultValue": 5,
-			"allowManualEntry": true
+			"defaultValue": 5
 		},
 		"42": {
 			"label": "Power reporting in Watts by time interval",
@@ -190,8 +187,7 @@
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 32767,
-			"defaultValue": 300,
-			"allowManualEntry": true
+			"defaultValue": 300
 		},
 		"60": {
 			"label": "Minimum dimming value",
@@ -199,8 +195,7 @@
 			"valueSize": 1,
 			"minValue": 1,
 			"maxValue": 98,
-			"defaultValue": 1,
-			"allowManualEntry": true
+			"defaultValue": 1
 		},
 		"61": {
 			"label": "Maximum dimming value",
@@ -208,8 +203,7 @@
 			"valueSize": 1,
 			"minValue": 2,
 			"maxValue": 99,
-			"defaultValue": 99,
-			"allowManualEntry": true
+			"defaultValue": 99
 		},
 		"65": {
 			"label": "Dimming time (soft on/off)",
@@ -217,8 +211,7 @@
 			"valueSize": 2,
 			"minValue": 1,
 			"maxValue": 255,
-			"defaultValue": 100,
-			"allowManualEntry": true
+			"defaultValue": 100
 		},
 		"66": {
 			"label": "Dimming time when key pressed",
@@ -226,8 +219,7 @@
 			"valueSize": 2,
 			"minValue": 1,
 			"maxValue": 255,
-			"defaultValue": 3,
-			"allowManualEntry": true
+			"defaultValue": 3
 		},
 		"67": {
 			"label": "Ignore start level",
@@ -255,8 +247,7 @@
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 127,
-			"defaultValue": 0,
-			"allowManualEntry": true
+			"defaultValue": 0
 		},
 		"110": {
 			"label": "Temperature sensor offset settings",
@@ -265,8 +256,7 @@
 			"valueSize": 2,
 			"minValue": 1,
 			"maxValue": 32536,
-			"defaultValue": 32536,
-			"allowManualEntry": true
+			"defaultValue": 32536
 		},
 		"120": {
 			"label": "Digital temperature sensor reporting",
@@ -275,8 +265,7 @@
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 127,
-			"defaultValue": 5,
-			"allowManualEntry": true
+			"defaultValue": 5
 		}
 	}
 }

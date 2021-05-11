@@ -43,7 +43,6 @@
 			"minValue": 0,
 			"maxValue": 30,
 			"defaultValue": 0,
-			"allowManualEntry": true,
 			"options": [
 				{
 					"label": "No Timeout LCD always on",
@@ -95,7 +94,6 @@
 			"minValue": 0,
 			"maxValue": 50,
 			"defaultValue": 5,
-			"allowManualEntry": true,
 			"options": [
 				{
 					"label": "Temperature reporting disabled",
@@ -111,7 +109,6 @@
 			"minValue": 0,
 			"maxValue": 100,
 			"defaultValue": 0,
-			"allowManualEntry": true,
 			"options": [
 				{
 					"label": "Valve position reporting disabled",
@@ -153,7 +150,6 @@
 			"minValue": -128,
 			"maxValue": 50,
 			"defaultValue": 0,
-			"allowManualEntry": true,
 			"options": [
 				{
 					"label": "Ext temp sensor is used for regulation",

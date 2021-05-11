@@ -52,8 +52,7 @@
 			"maxValue": 32767,
 			"unit": "seconds",
 			"defaultValue": 0,
-			"unsigned": true,
-			"allowManualEntry": true
+			"unsigned": true
 		},
 		"5": {
 			"label": "Safety Off Period",
@@ -62,8 +61,7 @@
 			"maxValue": 32767,
 			"unit": "seconds",
 			"defaultValue": 600,
-			"unsigned": true,
-			"allowManualEntry": true
+			"unsigned": true
 		},
 		"6": {
 			"label": "Safety On Period",
@@ -72,8 +70,7 @@
 			"maxValue": 32767,
 			"unit": "seconds",
 			"defaultValue": 300,
-			"unsigned": true,
-			"allowManualEntry": true
+			"unsigned": true
 		},
 		"16": {
 			"label": "Back Unit Type",

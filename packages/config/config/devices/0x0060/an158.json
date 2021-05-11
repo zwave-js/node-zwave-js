@@ -35,8 +35,7 @@
 			"minValue": 0,
 			"maxValue": 254,
 			"defaultValue": 10,
-			"unsigned": true,
-			"allowManualEntry": true
+			"unsigned": true
 		},
 		"2": {
 			"label": "Send Out Basic Command",
@@ -64,8 +63,7 @@
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 3240,
-			"defaultValue": 3,
-			"allowManualEntry": true
+			"defaultValue": 3
 		}
 	}
 }

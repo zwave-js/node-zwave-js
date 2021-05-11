@@ -89,8 +89,7 @@
 			"valueSize": 4,
 			"minValue": 1,
 			"maxValue": 65535,
-			"defaultValue": 60,
-			"allowManualEntry": true
+			"defaultValue": 60
 		},
 		"5": {
 			"label": "Enable/Disable Auto Turn-On",
@@ -116,8 +115,7 @@
 			"valueSize": 4,
 			"minValue": 1,
 			"maxValue": 65535,
-			"defaultValue": 60,
-			"allowManualEntry": true
+			"defaultValue": 60
 		},
 		"7[0x01]": {
 			"label": "Send Status Change Report: Local Control",
@@ -227,8 +225,7 @@
 			"unit": "seconds",
 			"minValue": 1,
 			"maxValue": 99,
-			"defaultValue": 1,
-			"allowManualEntry": true
+			"defaultValue": 1
 		},
 		"10": {
 			"label": "Minimum brightness level",
@@ -236,8 +233,7 @@
 			"valueSize": 1,
 			"minValue": 1,
 			"maxValue": 99,
-			"defaultValue": 1,
-			"allowManualEntry": true
+			"defaultValue": 1
 		},
 		"11": {
 			"label": "Maximum brightness level",
@@ -245,8 +241,7 @@
 			"valueSize": 1,
 			"minValue": 1,
 			"maxValue": 99,
-			"defaultValue": 99,
-			"allowManualEntry": true
+			"defaultValue": 99
 		},
 		"12": {
 			"label": "Double Tap: Brightness Level",
@@ -337,8 +332,7 @@
 			"unit": "seconds",
 			"minValue": 1,
 			"maxValue": 99,
-			"defaultValue": 4,
-			"allowManualEntry": true
+			"defaultValue": 4
 		},
 		"17": {
 			"label": "Z-Wave Ramp Rate",
@@ -365,8 +359,7 @@
 			"unit": "%",
 			"minValue": 0,
 			"maxValue": 99,
-			"defaultValue": 0,
-			"allowManualEntry": true
+			"defaultValue": 0
 		},
 		"19": {
 			"label": "3-Way Switch Type",

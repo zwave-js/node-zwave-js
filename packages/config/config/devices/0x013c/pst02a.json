@@ -25,7 +25,6 @@
 			"maxValue": 255,
 			"defaultValue": 255,
 			"unsigned": true,
-			"allowManualEntry": true,
 			"options": [
 				{
 					"label": "Turn light OFF",
@@ -43,7 +42,6 @@
 			"minValue": 0,
 			"maxValue": 99,
 			"defaultValue": 70,
-			"allowManualEntry": true,
 			"options": [
 				{
 					"label": "Disable Motion Detection",
@@ -58,7 +56,6 @@
 			"minValue": 0,
 			"maxValue": 100,
 			"defaultValue": 100,
-			"allowManualEntry": true,
 			"options": [
 				{
 					"label": "Disable Illumination Detection",
@@ -73,7 +70,6 @@
 			"minValue": 0,
 			"maxValue": 127,
 			"defaultValue": 0,
-			"allowManualEntry": true,
 			"options": [
 				{
 					"label": "Set Celsius",
@@ -91,8 +87,7 @@
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 127,
-			"defaultValue": 4,
-			"allowManualEntry": true
+			"defaultValue": 4
 		},
 		"7": {
 			"label": "Customer Function",
@@ -101,7 +96,6 @@
 			"minValue": 0,
 			"maxValue": 127,
 			"defaultValue": 20,
-			"allowManualEntry": true,
 			"options": [
 				{
 					"label": "Setting: 0010100",
@@ -119,8 +113,7 @@
 			"valueSize": 1,
 			"minValue": 1,
 			"maxValue": 127,
-			"defaultValue": 3,
-			"allowManualEntry": true
+			"defaultValue": 3
 		},
 		"9": {
 			"label": "Turn Off Light Time",
@@ -128,8 +121,7 @@
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 127,
-			"defaultValue": 4,
-			"allowManualEntry": true
+			"defaultValue": 4
 		},
 		"10": {
 			"label": "Auto Report Battery Time",
@@ -137,8 +129,7 @@
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 127,
-			"defaultValue": 12,
-			"allowManualEntry": true
+			"defaultValue": 12
 		},
 		"11": {
 			"label": "Auto Report Door/Window State Time",
@@ -146,8 +137,7 @@
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 127,
-			"defaultValue": 12,
-			"allowManualEntry": true
+			"defaultValue": 12
 		},
 		"12": {
 			"label": "Auto Report Illumination Time",
@@ -155,8 +145,7 @@
 			"valueSize": 1,
 			"minValue": 1,
 			"maxValue": 127,
-			"defaultValue": 12,
-			"allowManualEntry": true
+			"defaultValue": 12
 		},
 		"13": {
 			"label": "Auto Report Temperature Time",
@@ -164,8 +153,7 @@
 			"valueSize": 1,
 			"minValue": 1,
 			"maxValue": 127,
-			"defaultValue": 12,
-			"allowManualEntry": true
+			"defaultValue": 12
 		},
 		"20": {
 			"label": "Auto Report Tick Interval",
@@ -174,24 +162,21 @@
 			"minValue": 0,
 			"maxValue": 255,
 			"defaultValue": 30,
-			"unsigned": true,
-			"allowManualEntry": true
+			"unsigned": true
 		},
 		"21": {
 			"label": "Temperature Differential Report",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 127,
-			"defaultValue": 1,
-			"allowManualEntry": true
+			"defaultValue": 1
 		},
 		"22": {
 			"label": "Illumination Differential Report",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 99,
-			"defaultValue": 1,
-			"allowManualEntry": true
+			"defaultValue": 1
 		}
 	}
 }

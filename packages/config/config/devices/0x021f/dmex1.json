@@ -24,8 +24,7 @@
 			"minValue": 0,
 			"maxValue": 10,
 			"defaultValue": 5,
-			"unsigned": true,
-			"allowManualEntry": true
+			"unsigned": true
 		},
 		"2": {
 			"label": "Night Light On Threshold",
@@ -34,8 +33,7 @@
 			"minValue": 0,
 			"maxValue": 10,
 			"defaultValue": 5,
-			"unsigned": true,
-			"allowManualEntry": true
+			"unsigned": true
 		}
 	},
 	"metadata": {

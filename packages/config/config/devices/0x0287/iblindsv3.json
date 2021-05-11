@@ -30,8 +30,7 @@
 			"minValue": 16,
 			"maxValue": 32,
 			"defaultValue": 22,
-			"unsigned": true,
-			"allowManualEntry": true
+			"unsigned": true
 		},
 		"2": {
 			"label": "Reverse Direction",
@@ -79,8 +78,7 @@
 			"minValue": 0,
 			"maxValue": 100,
 			"defaultValue": 50,
-			"unsigned": true,
-			"allowManualEntry": true
+			"unsigned": true
 		},
 		"5": {
 			"label": "Reset Button Disable",
@@ -109,8 +107,7 @@
 			"minValue": 0,
 			"maxValue": 100,
 			"defaultValue": 0,
-			"unsigned": true,
-			"allowManualEntry": true
+			"unsigned": true
 		}
 	}
 }

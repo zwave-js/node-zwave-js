@@ -103,7 +103,6 @@
 			"maxValue": 255,
 			"defaultValue": 187,
 			"unsigned": true,
-			"allowManualEntry": true,
 			"options": [
 				{
 					"label": "Default (0xBB)",
@@ -118,7 +117,6 @@
 			"maxValue": 255,
 			"defaultValue": 171,
 			"unsigned": true,
-			"allowManualEntry": true,
 			"options": [
 				{
 					"label": "Default (0xAB)",
@@ -133,7 +131,6 @@
 			"maxValue": 255,
 			"defaultValue": 255,
 			"unsigned": true,
-			"allowManualEntry": true,
 			"options": [
 				{
 					"label": "Default (0xFF)",
@@ -148,7 +145,6 @@
 			"maxValue": 255,
 			"defaultValue": 254,
 			"unsigned": true,
-			"allowManualEntry": true,
 			"options": [
 				{
 					"label": "Default (0xFE)",
@@ -210,7 +206,6 @@
 			"maxValue": 255,
 			"defaultValue": 0,
 			"unsigned": true,
-			"allowManualEntry": true,
 			"options": [
 				{
 					"label": "Disabled",

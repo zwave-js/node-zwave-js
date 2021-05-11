@@ -24,8 +24,7 @@
 			"minValue": 1,
 			"maxValue": 5,
 			"defaultValue": 5,
-			"unsigned": true,
-			"allowManualEntry": true
+			"unsigned": true
 		},
 		"2": {
 			"label": "Heartbeat Notification Timing",
@@ -35,8 +34,7 @@
 			"minValue": 120,
 			"maxValue": 3600,
 			"defaultValue": 3600,
-			"unsigned": true,
-			"allowManualEntry": true
+			"unsigned": true
 		},
 		"3": {
 			"label": "Supervision Encapsulation",
@@ -66,8 +64,7 @@
 			"minValue": 0,
 			"maxValue": 255,
 			"defaultValue": 50,
-			"unsigned": true,
-			"allowManualEntry": true
+			"unsigned": true
 		},
 		"5": {
 			"label": "Sounds Available",
@@ -77,8 +74,7 @@
 			"maxValue": 30,
 			"defaultValue": 30,
 			"unsigned": true,
-			"readOnly": true,
-			"allowManualEntry": true
+			"readOnly": true
 		},
 		"6": {
 			"label": "Emergency Sound Volume Adjustable",

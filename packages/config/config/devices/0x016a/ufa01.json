@@ -81,8 +81,7 @@
 			"minValue": 10,
 			"maxValue": 50,
 			"defaultValue": 20,
-			"unsigned": true,
-			"allowManualEntry": true
+			"unsigned": true
 		},
 		"111": {
 			"label": "Battery Report Interval",
@@ -92,7 +91,6 @@
 			"maxValue": 606480,
 			"defaultValue": 86640,
 			"unsigned": true,
-			"allowManualEntry": true,
 			"options": [
 				{
 					"label": "Disabled",

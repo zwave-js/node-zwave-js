@@ -23,7 +23,6 @@
 			"minValue": 0,
 			"maxValue": 63,
 			"defaultValue": 2,
-			"allowManualEntry": true,
 			"options": [
 				{
 					"label": "OFF",
@@ -45,7 +44,6 @@
 			"minValue": 0,
 			"maxValue": 63,
 			"defaultValue": 0,
-			"allowManualEntry": true,
 			"options": [
 				{
 					"label": "Power Failure detection disable",

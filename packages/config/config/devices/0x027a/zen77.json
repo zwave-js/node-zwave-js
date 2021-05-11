@@ -134,8 +134,7 @@
 			"minValue": 0,
 			"maxValue": 65535,
 			"defaultValue": 0,
-			"unit": "minutes",
-			"allowManualEntry": true
+			"unit": "minutes"
 		},
 		"5": {
 			"label": "Auto Turn-On Timer",
@@ -144,8 +143,7 @@
 			"minValue": 0,
 			"maxValue": 65535,
 			"defaultValue": 0,
-			"unit": "minutes",
-			"allowManualEntry": true
+			"unit": "minutes"
 		},
 		"7[0x01]": {
 			"label": "Control Groups 2 and 3 With Physical Switch",
@@ -248,8 +246,7 @@
 			"minValue": 0,
 			"maxValue": 99,
 			"defaultValue": 1,
-			"unit": "seconds",
-			"allowManualEntry": true
+			"unit": "seconds"
 		},
 		"10": {
 			"label": "Minimum Brightness",
@@ -257,8 +254,7 @@
 			"minValue": 1,
 			"maxValue": 99,
 			"defaultValue": 1,
-			"unit": "%",
-			"allowManualEntry": true
+			"unit": "%"
 		},
 		"11": {
 			"label": "Maximum Brightness",
@@ -266,8 +262,7 @@
 			"minValue": 1,
 			"maxValue": 99,
 			"defaultValue": 99,
-			"unit": "%",
-			"allowManualEntry": true
+			"unit": "%"
 		},
 		"12": {
 			"label": "Double-Tap Upper Paddle Behavior",
@@ -412,8 +407,7 @@
 			"minValue": 1,
 			"maxValue": 99,
 			"defaultValue": 5,
-			"unit": "seconds",
-			"allowManualEntry": true
+			"unit": "seconds"
 		},
 		"18": {
 			"label": "Custom Brightness Level",
@@ -422,8 +416,7 @@
 			"minValue": 0,
 			"maxValue": 99,
 			"defaultValue": 0,
-			"units": "%",
-			"allowManualEntry": true
+			"units": "%"
 		},
 		"22": {
 			"label": "Night Light Mode",
@@ -432,8 +425,7 @@
 			"minValue": 0,
 			"maxValue": 99,
 			"defaultValue": 20,
-			"units": "%",
-			"allowManualEntry": true
+			"units": "%"
 		}
 	}
 }

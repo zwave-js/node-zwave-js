@@ -24,7 +24,6 @@
 			"minValue": 0,
 			"maxValue": 5,
 			"defaultValue": 0,
-			"allowManualEntry": true,
 			"options": [
 				{
 					"label": "disabled",
@@ -56,7 +55,6 @@
 			"minValue": 0,
 			"maxValue": 100,
 			"defaultValue": 50,
-			"allowManualEntry": true,
 			"options": [
 				{
 					"label": "reporting disabled",
@@ -72,7 +70,6 @@
 			"maxValue": 65535,
 			"defaultValue": 600,
 			"unsigned": true,
-			"allowManualEntry": true,
 			"options": [
 				{
 					"label": "reporting disabled",
@@ -89,7 +86,6 @@
 			"maxValue": 65535,
 			"defaultValue": 600,
 			"unsigned": true,
-			"allowManualEntry": true,
 			"options": [
 				{
 					"label": "reporting disabled",
@@ -144,8 +140,7 @@
 			"minValue": 0,
 			"maxValue": 60000,
 			"defaultValue": 0,
-			"unsigned": true,
-			"allowManualEntry": true
+			"unsigned": true
 		},
 		"112": {
 			"label": "Power threshold – Delay before power on",
@@ -154,7 +149,6 @@
 			"minValue": 0,
 			"maxValue": 32535,
 			"defaultValue": 0,
-			"allowManualEntry": true,
 			"options": [
 				{
 					"label": "External relay will not turn back on",

@@ -51,8 +51,7 @@
 			"minValue": 0,
 			"maxValue": 65535,
 			"defaultValue": 0,
-			"unsigned": true,
-			"allowManualEntry": true
+			"unsigned": true
 		},
 		"15": {
 			"$if": "firmwareVersion <= 1.5",
@@ -62,8 +61,7 @@
 			"minValue": 0,
 			"maxValue": 65535,
 			"defaultValue": 0,
-			"unsigned": true,
-			"allowManualEntry": true
+			"unsigned": true
 		},
 		"20": {
 			"$import": "../templates/master_template.json#state_after_power_failure"
@@ -177,7 +175,6 @@
 			"minValue": 0,
 			"maxValue": 31,
 			"defaultValue": 0,
-			"allowManualEntry": true,
 			"options": [
 				{
 					"label": "Constant speed",
@@ -195,7 +192,6 @@
 			"description": "Allowable range: 1-254",
 			"valueSize": 4,
 			"defaultValue": 0,
-			"allowManualEntry": true,
 			"options": [
 				{
 					"label": "Unlimited",

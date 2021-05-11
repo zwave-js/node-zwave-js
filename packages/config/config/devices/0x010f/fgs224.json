@@ -257,8 +257,7 @@
 			"maxValue": 32000,
 			"unit": "s",
 			"defaultValue": 5,
-			"unsigned": true,
-			"allowManualEntry": true
+			"unsigned": true
 		},
 		"155": {
 			"label": "Second channel – time parameter for delayed/auto OFF and flashing modes",
@@ -268,8 +267,7 @@
 			"maxValue": 32000,
 			"unit": "s",
 			"defaultValue": 5,
-			"unsigned": true,
-			"allowManualEntry": true
+			"unsigned": true
 		},
 		"156": {
 			"label": "S1 Switch ON value sent to 2nd association group",
@@ -278,8 +276,7 @@
 			"minValue": 0,
 			"maxValue": 255,
 			"defaultValue": 255,
-			"unsigned": true,
-			"allowManualEntry": true
+			"unsigned": true
 		},
 		"157": {
 			"label": "S1 Switch OFF value sent to 2nd association group",
@@ -288,8 +285,7 @@
 			"minValue": 0,
 			"maxValue": 255,
 			"defaultValue": 0,
-			"unsigned": true,
-			"allowManualEntry": true
+			"unsigned": true
 		},
 		"158": {
 			"label": "S1 Switch Double Click value sent to 2nd association groups",
@@ -298,8 +294,7 @@
 			"minValue": 0,
 			"maxValue": 255,
 			"defaultValue": 99,
-			"unsigned": true,
-			"allowManualEntry": true
+			"unsigned": true
 		},
 		"159": {
 			"label": "S2 Switch ON value sent to 3rd association group",
@@ -308,8 +303,7 @@
 			"minValue": 0,
 			"maxValue": 255,
 			"defaultValue": 255,
-			"unsigned": true,
-			"allowManualEntry": true
+			"unsigned": true
 		},
 		"160": {
 			"label": "S2 Switch OFF value sent to 3rd association group",
@@ -318,8 +312,7 @@
 			"minValue": 0,
 			"maxValue": 255,
 			"defaultValue": 0,
-			"unsigned": true,
-			"allowManualEntry": true
+			"unsigned": true
 		},
 		"161": {
 			"label": "S2 Switch Double Click value sent to 3rd association groups",
@@ -328,8 +321,7 @@
 			"minValue": 0,
 			"maxValue": 255,
 			"defaultValue": 99,
-			"unsigned": true,
-			"allowManualEntry": true
+			"unsigned": true
 		},
 		"162": {
 			"label": "Q/Q1 output type",

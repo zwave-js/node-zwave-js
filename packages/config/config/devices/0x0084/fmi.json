@@ -23,8 +23,7 @@
 			"valueSize": 1,
 			"minValue": -10,
 			"maxValue": 69,
-			"defaultValue": 4,
-			"allowManualEntry": true
+			"defaultValue": 4
 		},
 		"2": {
 			"label": "Temperature High Threshold",
@@ -32,8 +31,7 @@
 			"valueSize": 1,
 			"minValue": -9,
 			"maxValue": 70,
-			"defaultValue": 70,
-			"allowManualEntry": true
+			"defaultValue": 70
 		},
 		"3": {
 			"label": "Meter Count",
@@ -41,8 +39,7 @@
 			"valueSize": 4,
 			"minValue": 0,
 			"maxValue": 99999999,
-			"defaultValue": 0,
-			"allowManualEntry": true
+			"defaultValue": 0
 		},
 		"4": {
 			"label": "Meter Report Interval",
@@ -51,8 +48,7 @@
 			"minValue": 0,
 			"maxValue": 255,
 			"defaultValue": 6,
-			"unsigned": true,
-			"allowManualEntry": true
+			"unsigned": true
 		},
 		"5": {
 			"label": "Meter Leak Threshold",
@@ -61,8 +57,7 @@
 			"minValue": 0,
 			"maxValue": 65535,
 			"defaultValue": 50,
-			"unsigned": true,
-			"allowManualEntry": true
+			"unsigned": true
 		},
 		"6": {
 			"label": "Notification Commands MLS",
@@ -70,8 +65,7 @@
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 0,
-			"defaultValue": 0,
-			"allowManualEntry": true
+			"defaultValue": 0
 		}
 	}
 }

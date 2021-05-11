@@ -140,8 +140,7 @@
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 63,
-			"defaultValue": 63,
-			"allowManualEntry": true
+			"defaultValue": 63
 		},
 		"10": {
 			"label": "Commands sent to 2nd association group (CO Alarm)",
@@ -192,8 +191,7 @@
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 255,
-			"defaultValue": 0,
-			"allowManualEntry": true
+			"defaultValue": 0
 		},
 		"13": {
 			"label": "Commands sent to 4th association group (CO Level)",
@@ -202,8 +200,7 @@
 			"minValue": 1,
 			"maxValue": 3,
 			"defaultValue": 3,
-			"readOnly": true,
-			"allowManualEntry": true
+			"readOnly": true
 		},
 		"14": {
 			"label": "CO level for sending BASIC ON to 4th assoc group",
@@ -211,8 +208,7 @@
 			"valueSize": 2,
 			"minValue": 25,
 			"maxValue": 400,
-			"defaultValue": 40,
-			"allowManualEntry": true
+			"defaultValue": 40
 		},
 		"15": {
 			"label": "Time required for BASIC ON cmd to 4th assoc group",
@@ -220,24 +216,21 @@
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 2880,
-			"defaultValue": 0,
-			"allowManualEntry": true
+			"defaultValue": 0
 		},
 		"16": {
 			"label": "Value of BASIC ON cmd sent to 4th assoc group",
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 255,
-			"defaultValue": 255,
-			"allowManualEntry": true
+			"defaultValue": 255
 		},
 		"17": {
 			"label": "CO Level for sending BASIC OFF to 4th assoc group",
 			"valueSize": 2,
 			"minValue": 10,
 			"maxValue": 400,
-			"defaultValue": 25,
-			"allowManualEntry": true
+			"defaultValue": 25
 		},
 		"19": {
 			"label": "Value of BASIC OFF cmd sent to 4th assoc group",
@@ -245,8 +238,7 @@
 			"minValue": 0,
 			"maxValue": 255,
 			"defaultValue": 0,
-			"readOnly": true,
-			"allowManualEntry": true
+			"readOnly": true
 		},
 		"20": {
 			"label": "Temperature reporting time interval",
@@ -254,8 +246,7 @@
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 1440,
-			"defaultValue": 0,
-			"allowManualEntry": true
+			"defaultValue": 0
 		},
 		"21": {
 			"label": "Temperature reporting hysteresis",
@@ -263,8 +254,7 @@
 			"valueSize": 1,
 			"minValue": 1,
 			"maxValue": 20,
-			"defaultValue": 2,
-			"allowManualEntry": true
+			"defaultValue": 2
 		},
 		"22": {
 			"label": "Threshold of exceeding the temperature",
@@ -272,8 +262,7 @@
 			"valueSize": 1,
 			"minValue": 1,
 			"maxValue": 85,
-			"defaultValue": 55,
-			"allowManualEntry": true
+			"defaultValue": 55
 		},
 		"23": {
 			"label": "CO meter activation",
@@ -281,8 +270,7 @@
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 1,
-			"defaultValue": 1,
-			"allowManualEntry": true
+			"defaultValue": 1
 		},
 		"25": {
 			"label": "CO level reporting hysteresis",
@@ -290,8 +278,7 @@
 			"valueSize": 1,
 			"minValue": 2,
 			"maxValue": 6,
-			"defaultValue": 2,
-			"allowManualEntry": true
+			"defaultValue": 2
 		},
 		"26": {
 			"label": "Threshold of CO meter activation",
@@ -299,8 +286,7 @@
 			"valueSize": 2,
 			"minValue": 10,
 			"maxValue": 255,
-			"defaultValue": 30,
-			"allowManualEntry": true
+			"defaultValue": 30
 		}
 	}
 }

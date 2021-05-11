@@ -23,8 +23,7 @@
 			"maxValue": 255,
 			"defaultValue": 30,
 			"unit": "seconds",
-			"unsigned": true,
-			"allowManualEntry": true
+			"unsigned": true
 		},
 		"64": {
 			"label": "Power Up Memory",

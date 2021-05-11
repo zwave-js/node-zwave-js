@@ -24,8 +24,7 @@
 			"minValue": 1,
 			"maxValue": 65535,
 			"defaultValue": 30,
-			"unsigned": true,
-			"allowManualEntry": true
+			"unsigned": true
 		},
 		"2": {
 			"label": "BASIC_SET Level",

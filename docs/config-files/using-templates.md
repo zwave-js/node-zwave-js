@@ -167,8 +167,7 @@ or
 		"minValue": 0,
 		"maxValue": 99,
 		"defaultValue": 1,
-		"unsigned": true,
-		"allowManualEntry": true
+		"unsigned": true
 	},
 ```
 
@@ -228,7 +227,6 @@ Examples:
 		"maxValue": 3,
 		"defaultValue": 2,
 		"unsigned": true,
-		"allowManualEntry": true,
 		"options": [
 			{
 				"label": "High",

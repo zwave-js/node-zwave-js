@@ -21,8 +21,7 @@
 			"minValue": 30,
 			"maxValue": 32767,
 			"defaultValue": 900,
-			"unsigned": true,
-			"allowManualEntry": true
+			"unsigned": true
 		},
 		"2": {
 			"label": "Report temperature on change",
@@ -33,7 +32,6 @@
 			"maxValue": 50,
 			"defaultValue": 10,
 			"unsigned": true,
-			"allowManualEntry": true,
 			"options": [
 				{
 					"label": "Temperature reporting on change is disabled",
@@ -50,7 +48,6 @@
 			"maxValue": 50,
 			"defaultValue": 10,
 			"unsigned": true,
-			"allowManualEntry": true,
 			"options": [
 				{
 					"label": "Humidity reporting on change is disabled",
@@ -66,8 +63,7 @@
 			"minValue": -100,
 			"maxValue": 100,
 			"defaultValue": 0,
-			"unsigned": false,
-			"allowManualEntry": true
+			"unsigned": false
 		},
 		"5": {
 			"label": "Humidity sensor offset settings",
@@ -77,8 +73,7 @@
 			"minValue": -100,
 			"maxValue": 100,
 			"defaultValue": 0,
-			"unsigned": false,
-			"allowManualEntry": true
+			"unsigned": false
 		},
 		"6": {
 			"label": "Proximity sensor re-trigger interval",
@@ -88,8 +83,7 @@
 			"minValue": 2,
 			"maxValue": 270,
 			"defaultValue": 10,
-			"unsigned": true,
-			"allowManualEntry": true
+			"unsigned": true
 		},
 		"7": {
 			"label": "Proximity sensor Enable / Disable",
@@ -99,7 +93,6 @@
 			"maxValue": 1,
 			"defaultValue": 1,
 			"unsigned": true,
-			"allowManualEntry": true,
 			"options": [
 				{
 					"label": "Enable proximity sensor",
@@ -118,8 +111,7 @@
 			"minValue": 0,
 			"maxValue": 99,
 			"defaultValue": 50,
-			"unsigned": true,
-			"allowManualEntry": true
+			"unsigned": true
 		},
 		"9": {
 			"label": "LED display timeout",
@@ -129,8 +121,7 @@
 			"minValue": 3,
 			"maxValue": 300,
 			"defaultValue": 3,
-			"unsigned": true,
-			"allowManualEntry": true
+			"unsigned": true
 		},
 		"10": {
 			"label": "Temperature Control Hysteresis",
@@ -139,8 +130,7 @@
 			"minValue": 3,
 			"maxValue": 30,
 			"defaultValue": 5,
-			"unsigned": true,
-			"allowManualEntry": true
+			"unsigned": true
 		},
 		"11": {
 			"label": "Minimum Temperature Limit",
@@ -149,8 +139,7 @@
 			"minValue": 50,
 			"maxValue": 400,
 			"defaultValue": 50,
-			"unsigned": true,
-			"allowManualEntry": true
+			"unsigned": true
 		},
 		"12": {
 			"label": "Maximum Temperature Limit",
@@ -159,8 +148,7 @@
 			"minValue": 50,
 			"maxValue": 400,
 			"defaultValue": 400,
-			"unsigned": true,
-			"allowManualEntry": true
+			"unsigned": true
 		},
 		"13": {
 			"label": "External Relay and Operating State update interval",
@@ -170,7 +158,6 @@
 			"maxValue": 240,
 			"defaultValue": 0,
 			"unsigned": true,
-			"allowManualEntry": true,
 			"options": [
 				{
 					"label": "Send Relay and Operating State only when changed",
@@ -186,7 +173,6 @@
 			"maxValue": 1,
 			"defaultValue": 400,
 			"unsigned": true,
-			"allowManualEntry": true,
 			"options": [
 				{
 					"label": "Do NOT send report when presence is detected. Only at the defined interval",

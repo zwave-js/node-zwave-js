@@ -121,8 +121,7 @@
 			"valueSize": 2,
 			"minValue": -670,
 			"maxValue": 2570,
-			"defaultValue": 1040,
-			"allowManualEntry": true
+			"defaultValue": 1040
 		},
 		"21": {
 			"label": "Low Temperature Alarm",
@@ -149,8 +148,7 @@
 			"valueSize": 2,
 			"minValue": -670,
 			"maxValue": 2570,
-			"defaultValue": 0,
-			"allowManualEntry": true
+			"defaultValue": 0
 		},
 		"24": {
 			"label": "Blinking LED",
@@ -177,8 +175,7 @@
 			"valueSize": 1,
 			"minValue": 10,
 			"maxValue": 50,
-			"defaultValue": 20,
-			"allowManualEntry": true
+			"defaultValue": 20
 		}
 	}
 }

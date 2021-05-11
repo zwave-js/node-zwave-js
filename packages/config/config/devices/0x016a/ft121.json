@@ -199,8 +199,7 @@
 			"minValue": 0,
 			"maxValue": 255,
 			"defaultValue": 0,
-			"unsigned": true,
-			"allowManualEntry": true
+			"unsigned": true
 		},
 		"37[0x1f]": {
 			"label": "Color Change Speed Level",
@@ -209,7 +208,6 @@
 			"minValue": 0,
 			"maxValue": 30,
 			"defaultValue": 0,
-			"allowManualEntry": true,
 			"options": [
 				{
 					"label": "Constant Speed",
@@ -246,8 +244,7 @@
 			"valueSize": 4,
 			"minValue": 0,
 			"maxValue": 254,
-			"defaultValue": 0,
-			"allowManualEntry": true
+			"defaultValue": 0
 		},
 		"37[0xff0000]": {
 			"label": "Brightness",
@@ -255,8 +252,7 @@
 			"valueSize": 4,
 			"minValue": 1,
 			"maxValue": 99,
-			"defaultValue": 99,
-			"allowManualEntry": true
+			"defaultValue": 99
 		},
 		"37[0x07000000]": {
 			"label": "Color Display Cycle",

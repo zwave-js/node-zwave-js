@@ -168,16 +168,14 @@
 			"minValue": 0,
 			"maxValue": 60000,
 			"defaultValue": 25,
-			"unsigned": true,
-			"allowManualEntry": true
+			"unsigned": true
 		},
 		"92": {
 			"label": "Set the threshold value of percent power",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 100,
-			"defaultValue": 5,
-			"allowManualEntry": true
+			"defaultValue": 5
 		},
 		"100": {
 			"label": "Set parameter 101-103 to default value",
@@ -186,8 +184,7 @@
 			"minValue": 0,
 			"maxValue": 0,
 			"defaultValue": 0,
-			"writeOnly": true,
-			"allowManualEntry": true
+			"writeOnly": true
 		},
 		"101": {
 			"label": "Set group 1 reports",
@@ -370,32 +367,28 @@
 			"minValue": 0,
 			"maxValue": 0,
 			"defaultValue": 0,
-			"writeOnly": true,
-			"allowManualEntry": true
+			"writeOnly": true
 		},
 		"111": {
 			"label": "Automatic report interval for Report group 1.",
 			"valueSize": 4,
 			"minValue": 1,
 			"maxValue": 2147483647,
-			"defaultValue": 10,
-			"allowManualEntry": true
+			"defaultValue": 10
 		},
 		"112": {
 			"label": "Automatic report interval for Report group 2",
 			"valueSize": 4,
 			"minValue": 1,
 			"maxValue": 2147483647,
-			"defaultValue": 600,
-			"allowManualEntry": true
+			"defaultValue": 600
 		},
 		"113": {
 			"label": "Automatic report interval for Report group 3",
 			"valueSize": 4,
 			"minValue": 1,
 			"maxValue": 2147483647,
-			"defaultValue": 600,
-			"allowManualEntry": true
+			"defaultValue": 600
 		},
 		"120": {
 			"label": "Configure the external switch mode for S1",

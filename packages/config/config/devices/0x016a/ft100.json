@@ -47,8 +47,7 @@
 			"valueSize": 2,
 			"minValue": 10,
 			"maxValue": 3600,
-			"defaultValue": 240,
-			"allowManualEntry": true
+			"defaultValue": 240
 		},
 		"4": {
 			"label": "Motion sensor sensitivity",
@@ -109,8 +108,7 @@
 			"valueSize": 1,
 			"minValue": 10,
 			"maxValue": 50,
-			"defaultValue": 20,
-			"allowManualEntry": true
+			"defaultValue": 20
 		},
 		"40": {
 			"label": "Selective Reporting",

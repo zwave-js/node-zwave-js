@@ -53,7 +53,6 @@
 			"maxValue": 36000,
 			"defaultValue": 0,
 			"unsigned": true,
-			"allowManualEntry": true,
 			"options": [
 				{
 					"label": "Disabled",

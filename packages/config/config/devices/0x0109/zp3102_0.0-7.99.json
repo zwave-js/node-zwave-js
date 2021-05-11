@@ -51,8 +51,7 @@
 			"minValue": 1,
 			"maxValue": 255,
 			"defaultValue": 3,
-			"unsigned": true,
-			"allowManualEntry": true
+			"unsigned": true
 		},
 		"2": {
 			"label": "Celsius / Fahrenheit",
@@ -78,8 +77,7 @@
 			"valueSize": 1,
 			"minValue": 1,
 			"maxValue": 7,
-			"defaultValue": 4,
-			"allowManualEntry": true
+			"defaultValue": 4
 		}
 	},
 	"compat": {

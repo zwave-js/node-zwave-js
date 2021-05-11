@@ -24,7 +24,6 @@
 			"minValue": 0,
 			"maxValue": 1,
 			"defaultValue": 0,
-			"allowManualEntry": true,
 			"options": [
 				{
 					"label": "CENTRAL_SCENE",
@@ -43,7 +42,6 @@
 			"minValue": 0,
 			"maxValue": 1,
 			"defaultValue": 1,
-			"allowManualEntry": true,
 			"options": [
 				{
 					"label": "Gateway",

@@ -25,8 +25,7 @@
 			"minValue": 0,
 			"maxValue": 180,
 			"defaultValue": 180,
-			"unsigned": true,
-			"allowManualEntry": true
+			"unsigned": true
 		},
 		"2": {
 			"label": "Temperature/Humidity Auto Report Period Setting",
@@ -36,8 +35,7 @@
 			"minValue": 0,
 			"maxValue": 30,
 			"defaultValue": 30,
-			"unsigned": true,
-			"allowManualEntry": true
+			"unsigned": true
 		},
 		"3": {
 			"label": "Sound Playback",
@@ -46,8 +44,7 @@
 			"minValue": 0,
 			"maxValue": 0,
 			"defaultValue": 0,
-			"unsigned": true,
-			"allowManualEntry": true
+			"unsigned": true
 		}
 	},
 	"metadata": {

@@ -40,16 +40,14 @@
 			"valueSize": 1,
 			"minValue": 1,
 			"maxValue": 99,
-			"defaultValue": 1,
-			"allowManualEntry": true
+			"defaultValue": 1
 		},
 		"10": {
 			"label": "Dimming/Brightening Step Timing",
 			"valueSize": 1,
 			"minValue": 1,
 			"maxValue": 10,
-			"defaultValue": 3,
-			"allowManualEntry": true
+			"defaultValue": 3
 		}
 	}
 }

@@ -24,8 +24,7 @@
 			"minValue": 1,
 			"maxValue": 32767,
 			"defaultValue": 720,
-			"unsigned": true,
-			"allowManualEntry": true
+			"unsigned": true
 		},
 		"2": {
 			"label": "kWh Meter Report Period",
@@ -34,8 +33,7 @@
 			"minValue": 1,
 			"maxValue": 32767,
 			"defaultValue": 6,
-			"unsigned": true,
-			"allowManualEntry": true
+			"unsigned": true
 		},
 		"5": {
 			"label": "Level Report Trigger",
@@ -82,8 +80,7 @@
 			"minValue": 0,
 			"maxValue": 10,
 			"defaultValue": 10,
-			"unsigned": true,
-			"allowManualEntry": true
+			"unsigned": true
 		},
 		"9": {
 			"label": "Read Motor Data and Auto Calibrate",
@@ -129,8 +126,7 @@
 			"minValue": 0,
 			"maxValue": 98,
 			"defaultValue": 0,
-			"unsigned": true,
-			"allowManualEntry": true
+			"unsigned": true
 		},
 		"12": {
 			"label": "Max Level Shutter Open",
@@ -138,8 +134,7 @@
 			"minValue": 1,
 			"maxValue": 99,
 			"defaultValue": 99,
-			"unsigned": true,
-			"allowManualEntry": true
+			"unsigned": true
 		},
 		"13": {
 			"label": "External Switch Type",

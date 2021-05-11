@@ -35,8 +35,7 @@
 			"maxValue": 50,
 			"defaultValue": 5,
 			"unit": "x0.1 °C",
-			"unsigned": true,
-			"allowManualEntry": true
+			"unsigned": true
 		},
 		"2": {
 			"label": "Humidity on Change Reporting",
@@ -46,8 +45,7 @@
 			"maxValue": 10,
 			"defaultValue": 5,
 			"unit": "%rH",
-			"unsigned": true,
-			"allowManualEntry": true
+			"unsigned": true
 		},
 		"3": {
 			"label": "Temperature Scale",
@@ -125,8 +123,7 @@
 			"maxValue": 10,
 			"defaultValue": 5,
 			"unit": "x100 ppb",
-			"unsigned": true,
-			"allowManualEntry": true
+			"unsigned": true
 		},
 		"7": {
 			"label": "CO2eq on Change Reporting",
@@ -136,8 +133,7 @@
 			"maxValue": 10,
 			"defaultValue": 5,
 			"unit": "x100 ppb",
-			"unsigned": true,
-			"allowManualEntry": true
+			"unsigned": true
 		},
 		"8": {
 			"label": "Air quality indication via LED",

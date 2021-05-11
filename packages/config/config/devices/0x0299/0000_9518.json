@@ -62,8 +62,7 @@
 			"minValue": 0,
 			"maxValue": 99,
 			"defaultValue": 20,
-			"unsigned": true,
-			"allowManualEntry": true
+			"unsigned": true
 		}
 	},
 	"metadata": {

@@ -432,12 +432,17 @@ function normalizeConfig(config: Record<string, any>): Record<string, any> {
 			original.unit = normalizeUnits(original.unit);
 
 			if (original.readOnly) {
+				original.allowManualEntry = undefined;
 				original.writeOnly = undefined;
 			} else if (original.writeOnly) {
 				original.readOnly = undefined;
 			} else {
 				original.readOnly = undefined;
 				original.writeOnly = undefined;
+			}
+
+			if (original.allowManualEntry === true) {
+				original.allowManualEntry = undefined;
 			}
 
 			// Remove undefined keys while preserving comments
@@ -624,7 +629,7 @@ async function parseOZWProduct(
 				parsedParam.defaultValue = !!(defaultValue & mask) ? 1 : 0;
 				parsedParam.readOnly = undefined;
 				parsedParam.writeOnly = undefined;
-				parsedParam.allowManualEntry = true;
+				parsedParam.allowManualEntry = undefined;
 
 				newConfig.paramInformation[id] = parsedParam;
 			}
@@ -665,7 +670,9 @@ async function parseOZWProduct(
 			) {
 				parsedParam.writeOnly = true;
 			}
-			parsedParam.allowManualEntry = param.type !== "list";
+			parsedParam.allowManualEntry =
+				!parsedParam.readOnly && param.type !== "list";
+
 			parsedParam.defaultValue = updateNumberOrDefault(
 				param.value,
 				parsedParam.value,
@@ -1302,6 +1309,7 @@ async function parseZWAProduct(
 			parsedParam.writeOnly = true;
 		}
 		parsedParam.allowManualEntry =
+			!parsedParam.readOnly &&
 			param.ConfigurationParameterValues.length <= 1;
 		parsedParam.defaultValue = updateNumberOrDefault(
 			param.DefaultValue,
@@ -1347,7 +1355,7 @@ async function parseZWAProduct(
 
 		// Parse options list if manual entry is disallowed (i.e. options picker)
 		if (
-			parsedParam.allowManualEntry === false ||
+			parsedParam.allowManualEntry !== true ||
 			(parsedParam.minValue === 0 && parsedParam.maxValue === 0)
 		) {
 			parsedParam.options = [];

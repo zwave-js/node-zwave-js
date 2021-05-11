@@ -63,8 +63,7 @@
 			"valueSize": 1,
 			"minValue": 1,
 			"maxValue": 30,
-			"defaultValue": 3,
-			"allowManualEntry": true
+			"defaultValue": 3
 		},
 		"4": {
 			"label": "Level of sensitivity for day",
@@ -72,8 +71,7 @@
 			"valueSize": 1,
 			"minValue": 1,
 			"maxValue": 99,
-			"defaultValue": 60,
-			"allowManualEntry": true
+			"defaultValue": 60
 		},
 		"5": {
 			"label": "Temperature",
@@ -81,8 +79,7 @@
 			"minValue": 0,
 			"maxValue": 0,
 			"defaultValue": 0,
-			"readOnly": true,
-			"allowManualEntry": true
+			"readOnly": true
 		},
 		"6": {
 			"label": "Level of sensitivity for night",
@@ -90,8 +87,7 @@
 			"valueSize": 1,
 			"minValue": 1,
 			"maxValue": 9,
-			"defaultValue": 3,
-			"allowManualEntry": true
+			"defaultValue": 3
 		}
 	}
 }

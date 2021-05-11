@@ -83,8 +83,7 @@
 			"valueSize": 2,
 			"minValue": 3,
 			"maxValue": 1000,
-			"defaultValue": 5,
-			"allowManualEntry": true
+			"defaultValue": 5
 		},
 		"4": {
 			"label": "Upload time interval regularly",
@@ -93,8 +92,7 @@
 			"minValue": 19,
 			"maxValue": 65535,
 			"defaultValue": 30,
-			"unsigned": true,
-			"allowManualEntry": true
+			"unsigned": true
 		},
 		"5": {
 			"label": "Upload humidity difference",
@@ -103,8 +101,7 @@
 			"minValue": 2,
 			"maxValue": 255,
 			"defaultValue": 3,
-			"unsigned": true,
-			"allowManualEntry": true
+			"unsigned": true
 		},
 		"255": {
 			"label": "Factory setting",
@@ -114,8 +111,7 @@
 			"maxValue": 255,
 			"defaultValue": 0,
 			"unsigned": true,
-			"writeOnly": true,
-			"allowManualEntry": true
+			"writeOnly": true
 		}
 	}
 }
