@@ -1,4 +1,4 @@
-import type { ZWaveLogContainer } from "@zwave-js/core";
+import { ZWaveError, ZWaveErrorCodes, ZWaveLogContainer } from "@zwave-js/core";
 import * as net from "net";
 import { ZWaveSerialPortBase } from "./ZWaveSerialPortBase";
 
@@ -17,11 +17,29 @@ export class ZWaveSocket extends ZWaveSerialPortBase {
 				create: () => new net.Socket(),
 				open: (serial: net.Socket) =>
 					new Promise((resolve) => {
-						serial.connect(this.socketOptions, () => resolve());
+						serial.on("close", () => {
+							if (this.isOpen) {
+								this.emit(
+									"error",
+									new ZWaveError(
+										`The socket closed unexpectedly!`,
+										ZWaveErrorCodes.Driver_Failed,
+									),
+								);
+							}
+						});
+						serial.connect(this.socketOptions, () => {
+							serial.setKeepAlive(true, 2500);
+							resolve();
+						});
 					}),
 				close: (serial: net.Socket) =>
 					new Promise((resolve) => {
-						serial.once("close", () => resolve()).destroy();
+						if (serial.destroyed) {
+							resolve();
+						} else {
+							serial.once("close", () => resolve()).destroy();
+						}
 					}),
 			},
 			loggers,
