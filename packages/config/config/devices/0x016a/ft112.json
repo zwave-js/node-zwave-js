@@ -36,7 +36,7 @@
 			"isLifeline": true
 		}
 	},
-	// Fantem is an OEM for aeotec.
+	// Fantem is an OEM for Aeotec
 	"paramInformation": {
 		"1": {
 			"$import": "../0x0086/templates/aeotec_template.json#invert_state_report"
