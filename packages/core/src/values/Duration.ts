@@ -1,6 +1,7 @@
 import type { JSONObject } from "@zwave-js/shared";
 import { clamp } from "alcalzone-shared/math";
 import { ZWaveError, ZWaveErrorCodes } from "../error/ZWaveError";
+import { parseNumber } from "./Primitive";
 
 export type DurationUnit = "seconds" | "minutes" | "unknown" | "default";
 
@@ -45,6 +46,40 @@ export class Duration {
 		const isMinutes = !!(payload & 0b1000_0000);
 		const value = (payload & 0b0111_1111) + (isMinutes ? 1 : 0); // minutes start at 1
 		return new Duration(value, isMinutes ? "minutes" : "seconds");
+	}
+
+	/** Parse user-friendly duration string in format "Xs", "Xm" or "XmYs". For example "10m20s". */
+	public static parseString(text: string): Duration | undefined {
+		const parsedString = text.match(/^(?:([0-9]+)[mM])?(?:([0-9]+)[sS])?$/);
+		
+		if (!parsedString) {
+			return undefined;
+		}
+
+		const minutesString = parsedString[1];
+		const secondsString = parsedString[2];
+
+		if (minutesString && secondsString) {
+			return new Duration(60 * parseInt(minutesString) + parseInt(secondsString), "seconds");
+		} else if (minutesString) {
+			return new Duration(parseInt(minutesString), "minutes");
+		} else if (secondsString) {
+			return new Duration(parseInt(secondsString), "seconds");
+		} else {
+			return undefined;
+		}
+	}
+
+	/** Get either user-friendly duration string in format "Xs", "Xm" or "XmYs". Or direct duration */
+	public static getStringOrDuration(input?: Duration | string): Duration | undefined {
+		if (input instanceof Duration) {
+			return input;
+		}
+		else if (input) {
+			return Duration.parseString(input);
+		} else {
+			return undefined;
+		}
 	}
 
 	/** Serializes a duration for a Set command */
