@@ -126,7 +126,7 @@
 					"value": 1
 				},
 				{
-					"label": "Previous State",
+					"label": "Previous state",
 					"value": 2
 				}
 			]
@@ -169,7 +169,7 @@
 					"value": 1
 				},
 				{
-					"label": "Physical and Z-Wave Control Disabled",
+					"label": "Physical and Z-Wave control disabled",
 					"value": 2
 				}
 			]
@@ -203,11 +203,11 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "Binary switch CC report (Z-Wave); Basic CC Set (Manual)",
+					"label": "Binary Switch CC report (Z-Wave); Basic CC Set (Manual)",
 					"value": 0
 				},
 				{
-					"label": "Binary switch CC report (Z-Wave / Manual)",
+					"label": "Binary Switch CC report (Z-Wave / Manual)",
 					"value": 1
 				}
 			]

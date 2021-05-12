@@ -103,7 +103,7 @@
 					"value": 1
 				},
 				{
-					"label": "Previous State",
+					"label": "Previous state",
 					"value": 2
 				}
 			]
@@ -246,7 +246,7 @@
 					"value": 1
 				},
 				{
-					"label": "Physical and Z-Wave Control Disabled",
+					"label": "Physical and Z-Wave control disabled",
 					"value": 2
 				}
 			]
