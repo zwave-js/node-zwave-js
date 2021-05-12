@@ -11,11 +11,11 @@ assignees:
 
   Before opening an issue, please read and follow these steps:
 
-  1. Are you using HomeAssistant?
+  1. Is your problem within Home Assistant (Core or Z-Wave JS Integration)?
   If yes, please open your issue at https://github.com/home-assistant/core/issues
   UNLESS a developer told you to come here.
 
-  2. Are you using ZWaveJS2MQTT?
+  2. Is your problem within ZWaveJS2MQTT?
   If yes, please open your issue at https://github.com/zwave-js/zwavejs2mqtt/issues
   UNLESS a developer told you to come here.
 
@@ -31,8 +31,8 @@ assignees:
 
 **Checklist:**
 
--   [ ] I am **not** using HomeAssistant. **Or:** a developer has told me to come here.
--   [ ] I am **not** using ZWaveJS2MQTT. **Or:** a developer has told me to come here.
+-   [ ] My problem is **not** within Home Assistant or the ZWave JS integration. **Or:** a Home Assistant developer has told me to come here.
+-   [ ] My problem is **not** within ZWaveJS2MQTT. **Or:** a ZWaveJS2MQTT developer has told me to come here.
 -   [ ] I have checked the troubleshooting section and my problem is **not** described there.
 -   [ ] I have read the changelog and my problem was **not** mentioned there.
 
@@ -42,8 +42,8 @@ A clear and concise description of what the bug is. Describe what causes the bug
 
 **Device information**
 
-Which device(s) is/are affected (make/model)?  
-What are the node IDs?
+Which device(s) is/are affected (manufacturer/model)?  
+What is/are the node IDs?
 
 **Did you change anything?**
 
