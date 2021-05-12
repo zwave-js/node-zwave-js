@@ -66,6 +66,18 @@ export async function syncExternalConfigDir(
 	logger: ConfigLogger,
 ): Promise<boolean> {
 	if (!externalConfigDir) return false;
+
+	// Make sure the config dir exists
+	try {
+		await fs.ensureDir(externalConfigDir);
+	} catch {
+		logger.print(
+			`Synchronizing external config dir failed - directory could not be created`,
+			"error",
+		);
+		return false;
+	}
+
 	const externalVersionFilename = path.join(externalConfigDir, "version");
 	const currentVersion = (
 		await fs.readJSON(path.join(__dirname, "../package.json"))
