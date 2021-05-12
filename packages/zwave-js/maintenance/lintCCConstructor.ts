@@ -71,7 +71,13 @@ function getCommandClassFromClassOrParent(
 		const symbol = checker.getSymbolAtLocation(
 			parentTypeClause.types[0].expression,
 		);
-		if (!symbol || !ts.isClassDeclaration(symbol.valueDeclaration)) return;
+		if (
+			!symbol ||
+			!symbol.valueDeclaration ||
+			!ts.isClassDeclaration(symbol.valueDeclaration)
+		) {
+			return;
+		}
 		node = symbol.valueDeclaration;
 	}
 }
