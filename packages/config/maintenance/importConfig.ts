@@ -458,7 +458,7 @@ function normalizeConfig(config: Record<string, any>): Record<string, any> {
 			}
 
 			// Delete empty options arrays
-			if (original.options.length === 0) {
+			if (original.options?.length === 0) {
 				delete original.options;
 			} else if (program.source.includes("ozw")) {
 				const values = original.options.map((o: any) => o.value);
