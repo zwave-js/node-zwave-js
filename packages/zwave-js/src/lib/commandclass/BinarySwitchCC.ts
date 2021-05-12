@@ -96,7 +96,7 @@ export class BinarySwitchCCAPI extends CCAPI {
 	 * @param targetValue The target value to set
 	 * @param duration The duration after which the target value should be reached. Only supported in V2 and above
 	 */
-	public async set(targetValue: boolean, duration?: Duration): Promise<void> {
+	public async set(targetValue: boolean, duration?: Duration | string): Promise<void> {
 		this.assertSupportsCommand(
 			BinarySwitchCommand,
 			BinarySwitchCommand.Set,
@@ -106,7 +106,7 @@ export class BinarySwitchCCAPI extends CCAPI {
 			nodeId: this.endpoint.nodeId,
 			endpoint: this.endpoint.index,
 			targetValue,
-			duration,
+			duration: Duration.getStringOrDuration(duration),
 		});
 		await this.driver.sendCommand(cc, this.commandOptions);
 	}

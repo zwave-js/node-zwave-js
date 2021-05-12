@@ -154,7 +154,7 @@ export class MultilevelSwitchCCAPI extends CCAPI {
 	 */
 	public async set(
 		targetValue: number,
-		duration?: Duration,
+		duration?: Duration | string,
 	): Promise<boolean> {
 		this.assertSupportsCommand(
 			MultilevelSwitchCommand,
@@ -165,7 +165,7 @@ export class MultilevelSwitchCCAPI extends CCAPI {
 			nodeId: this.endpoint.nodeId,
 			endpoint: this.endpoint.index,
 			targetValue,
-			duration,
+			duration: Duration.getStringOrDuration(duration),
 		});
 
 		// Multilevel Switch commands may take some time to be executed.

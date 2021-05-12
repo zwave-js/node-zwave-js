@@ -81,7 +81,7 @@ export class SceneActivationCCAPI extends CCAPI {
 
 	public async set(
 		sceneId: number,
-		dimmingDuration?: Duration,
+		dimmingDuration?: Duration | string,
 	): Promise<void> {
 		this.assertSupportsCommand(
 			SceneActivationCommand,
@@ -92,7 +92,7 @@ export class SceneActivationCCAPI extends CCAPI {
 			nodeId: this.endpoint.nodeId,
 			endpoint: this.endpoint.index,
 			sceneId,
-			dimmingDuration,
+			dimmingDuration: Duration.getStringOrDuration(dimmingDuration),
 		});
 		await this.driver.sendCommand(cc, this.commandOptions);
 	}
