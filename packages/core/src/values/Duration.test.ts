@@ -154,34 +154,53 @@ describe("lib/util/Duration", () => {
 		});
 
 		it(`should return a duration for seconds`, () => {
-			expect(Duration.parseString("10s")).toEqual(new Duration(10, "seconds"));
-			expect(Duration.parseString("25s")).toEqual(new Duration(25, "seconds"));
-			expect(Duration.parseString("33S")).toEqual(new Duration(33, "seconds"));
+			expect(Duration.parseString("10s")).toEqual(
+				new Duration(10, "seconds"),
+			);
+			expect(Duration.parseString("25s")).toEqual(
+				new Duration(25, "seconds"),
+			);
+			expect(Duration.parseString("33S")).toEqual(
+				new Duration(33, "seconds"),
+			);
 		});
 
 		it(`should return a duration for minutes`, () => {
-			expect(Duration.parseString("17m")).toEqual(new Duration(17, "minutes"));
-			expect(Duration.parseString("22m")).toEqual(new Duration(22, "minutes"));
-			expect(Duration.parseString("99M")).toEqual(new Duration(99, "minutes"));
+			expect(Duration.parseString("17m")).toEqual(
+				new Duration(17, "minutes"),
+			);
+			expect(Duration.parseString("22m")).toEqual(
+				new Duration(22, "minutes"),
+			);
+			expect(Duration.parseString("99M")).toEqual(
+				new Duration(99, "minutes"),
+			);
 		});
 
 		it(`should return a duration for combined seconds and minutes`, () => {
-			expect(Duration.parseString("19m18s")).toEqual(new Duration(19 * 60 + 18, "seconds"));
-			expect(Duration.parseString("1m10s")).toEqual(new Duration(60 + 10, "seconds"));
-			expect(Duration.parseString("0m9s")).toEqual(new Duration(9, "seconds"));
+			expect(Duration.parseString("19m18s")).toEqual(
+				new Duration(19 * 60 + 18, "seconds"),
+			);
+			expect(Duration.parseString("1m10s")).toEqual(
+				new Duration(60 + 10, "seconds"),
+			);
+			expect(Duration.parseString("0m9s")).toEqual(
+				new Duration(9, "seconds"),
+			);
 		});
 	});
 
 	describe("getStringOrDuration()", () => {
 		it(`should return duration when string is passed`, () => {
 			expect(Duration.getStringOrDuration("")).toEqual(undefined);
-			expect(Duration.getStringOrDuration("88s")).toEqual(new Duration(88, "seconds"));
+			expect(Duration.getStringOrDuration("88s")).toEqual(
+				new Duration(88, "seconds"),
+			);
 		});
 
 		it(`should return passed duration when duration is passed`, () => {
-			const duration = new Duration(137, "minutes")
+			const duration = new Duration(137, "minutes");
 			expect(Duration.getStringOrDuration(duration)).toBe(duration);
 		});
 	});
-
 });
