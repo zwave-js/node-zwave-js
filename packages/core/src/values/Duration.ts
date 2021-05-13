@@ -4,6 +4,7 @@ import { ZWaveError, ZWaveErrorCodes } from "../error/ZWaveError";
 
 export type DurationUnit = "seconds" | "minutes" | "unknown" | "default";
 
+const durationStringRegex = /^(?:(?<hoursStr>\d+)h)?(?:(?<minutesStr>\d+)m)?(?:(?<secondsStr>\d+)s)?$/i;
 /** Represents a duration that is used by some command classes */
 export class Duration {
 	public constructor(value: number, public unit: DurationUnit) {
@@ -47,35 +48,36 @@ export class Duration {
 		return new Duration(value, isMinutes ? "minutes" : "seconds");
 	}
 
-	/** Parse user-friendly duration string in format "Xs", "Xm" or "XmYs". For example "10m20s". */
+	/**
+	 * Parses a user-friendly duration string in the format "Xs", "Xm" or "XmYs", for example "10m20s".
+	 * If that cannot be exactly represented as a Z-Wave duration, the nearest possible representation will be used.
+	 */
 	public static parseString(text: string): Duration | undefined {
-		const parsedString = /^(?:([0-9]+)[mM])?(?:([0-9]+)[sS])?$/.exec(text);
+		if (!text.length) return undefined;
+		const match = durationStringRegex.exec(text);
+		if (!match) return undefined;
 
-		if (!parsedString) {
-			return undefined;
-		}
+		const { hoursStr, minutesStr, secondsStr } = match.groups!;
+		const hours = hoursStr ? parseInt(hoursStr) : 0;
+		const minutes = minutesStr ? parseInt(minutesStr) : 0;
+		const seconds = secondsStr ? parseInt(secondsStr) : 0;
 
-		const minutesString = parsedString[1];
-		const secondsString = parsedString[2];
-
-		if (minutesString && secondsString) {
-			return new Duration(
-				60 * parseInt(minutesString) + parseInt(secondsString),
-				"seconds",
-			);
-		} else if (minutesString) {
-			return new Duration(parseInt(minutesString), "minutes");
-		} else if (secondsString) {
-			return new Duration(parseInt(secondsString), "seconds");
+		if (hours) {
+			// Up to 2h7m can be represented as a duration
+			if (hours * 60 + minutes <= 127) {
+				return new Duration(60 * hours + minutes, "minutes");
+			}
+		} else if (minutes * 60 + seconds > 127) {
+			// Up to 2m7s can be represented with seconds
+			// anything higher has to be minutes - we round to the nearest minute
+			return new Duration(minutes + Math.round(seconds / 60), "minutes");
 		} else {
-			return undefined;
+			return new Duration(minutes * 60 + seconds, "seconds");
 		}
 	}
 
 	/** Get either user-friendly duration string in format "Xs", "Xm" or "XmYs". Or direct duration */
-	public static getStringOrDuration(
-		input?: Duration | string,
-	): Duration | undefined {
+	public static from(input?: Duration | string): Duration | undefined {
 		if (input instanceof Duration) {
 			return input;
 		} else if (input) {
@@ -128,15 +130,20 @@ export class Duration {
 	}
 
 	public toString(): string {
+		let ret = "";
 		switch (this.unit) {
 			case "minutes":
-				return `[Duration: ${this._value} ${
-					this.value === 1 ? "minute" : "minutes"
-				}]`;
+				if (this._value > 60) {
+					ret += `${Math.floor(this._value / 60)}h`;
+				}
+				ret += `${this._value % 60}m`;
+				return ret;
 			case "seconds":
-				return `[Duration: ${this._value} ${
-					this.value === 1 ? "second" : "seconds"
-				}]`;
+				if (this._value > 60) {
+					ret += `${Math.floor(this._value / 60)}m`;
+				}
+				ret += `${this._value % 60}s`;
+				return ret;
 			default:
 				return `[Duration: ${this.unit}]`;
 		}

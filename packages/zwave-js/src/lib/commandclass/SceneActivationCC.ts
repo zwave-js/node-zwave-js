@@ -92,7 +92,7 @@ export class SceneActivationCCAPI extends CCAPI {
 			nodeId: this.endpoint.nodeId,
 			endpoint: this.endpoint.index,
 			sceneId,
-			dimmingDuration: Duration.getStringOrDuration(dimmingDuration),
+			dimmingDuration: Duration.from(dimmingDuration),
 		});
 		await this.driver.sendCommand(cc, this.commandOptions);
 	}

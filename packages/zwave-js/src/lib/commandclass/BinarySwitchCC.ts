@@ -109,7 +109,7 @@ export class BinarySwitchCCAPI extends CCAPI {
 			nodeId: this.endpoint.nodeId,
 			endpoint: this.endpoint.index,
 			targetValue,
-			duration: Duration.getStringOrDuration(duration),
+			duration: Duration.from(duration),
 		});
 		await this.driver.sendCommand(cc, this.commandOptions);
 	}

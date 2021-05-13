@@ -165,7 +165,7 @@ export class MultilevelSwitchCCAPI extends CCAPI {
 			nodeId: this.endpoint.nodeId,
 			endpoint: this.endpoint.index,
 			targetValue,
-			duration: Duration.getStringOrDuration(duration),
+			duration: Duration.from(duration),
 		});
 
 		// Multilevel Switch commands may take some time to be executed.
