@@ -100,5 +100,9 @@
 			"defaultValue": 15,
 			"unsigned": true
 		}
-	}
+	},
+	"compat": {
+		// The device is a Binary Sensor, but uses Basic Sets to report its status
+		"enableBasicSetMapping": true
+	}	
 }
