@@ -17,7 +17,7 @@
 	},
 	"associations": {
 		"1": {
-			"label": "Reports",
+			"label": "Lifeline",
 			"maxNodes": 8,
 			"isLifeline": true
 		},
@@ -31,9 +31,9 @@
 			"label": "Basic Set Level",
 			"description": "Setting the BASIC command value to turn on the light.",
 			"valueSize": 1,
-			"minValue": -1,
+			"minValue": 0,
 			"maxValue": 100,
-			"defaultValue": -1
+			"defaultValue": 255
 		},
 		"4": {
 			"label": "Light Threshold",
@@ -41,7 +41,7 @@
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 100,
-			"defaultValue": 100
+			"defaultValue": 99
 		},
 		"5": {
 			"label": "Operation Mode",
