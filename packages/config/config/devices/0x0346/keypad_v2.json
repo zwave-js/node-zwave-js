@@ -1,5 +1,3 @@
-// Ring 4AK1SZ-0EN0
-// Ring Keypad v2
 {
 	"manufacturer": "Ring",
 	"manufacturerId": "0x0346",
@@ -182,15 +180,6 @@
 			"defaultValue": 15,
 			"unsigned": true
 		},
-		"19": {
-			"label": "Battery Warning Threshold",
-			"valueSize": 1,
-			"unit": "%",
-			"minValue": 0,
-			"maxValue": 100,
-			"defaultValue": 5,
-			"unsigned": true
-		},
 		"18": {
 			"label": "Keypad Language",
 			"valueSize": 1,
@@ -204,6 +193,15 @@
 					"value": 0
 				}
 			]
+		},
+		"19": {
+			"label": "Battery Warning Threshold",
+			"valueSize": 1,
+			"unit": "%",
+			"minValue": 0,
+			"maxValue": 100,
+			"defaultValue": 5,
+			"unsigned": true
 		},
 		"20": {
 			"label": "System Security Mode Blink Duration",

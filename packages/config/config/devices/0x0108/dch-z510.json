@@ -1,5 +1,3 @@
-// D-Link DCH-Z510
-// Siren
 {
 	"manufacturer": "D-Link",
 	"manufacturerId": "0x0108",
@@ -18,6 +16,24 @@
 	},
 	"supportsZWavePlus": true,
 	"paramInformation": {
+		"7": {
+			"label": "Customer Function",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 16,
+			"defaultValue": 0,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Using Notification Report",
+					"value": 0
+				},
+				{
+					"label": "Using Sensor Binary Report",
+					"value": 16
+				}
+			]
+		},
 		"29": {
 			"label": "Disable Alarm",
 			"unit": "disable_alarm",
@@ -44,24 +60,6 @@
 			"minValue": 0,
 			"maxValue": 127,
 			"defaultValue": 0
-		},
-		"7": {
-			"label": "Customer Function",
-			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 16,
-			"defaultValue": 0,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "Using Notification Report",
-					"value": 0
-				},
-				{
-					"label": "Using Sensor Binary Report",
-					"value": 16
-				}
-			]
 		}
 	},
 	"metadata": {

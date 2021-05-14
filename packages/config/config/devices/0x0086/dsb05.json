@@ -1,5 +1,3 @@
-// AEON Labs DSB05
-// 4 in 1 MultiSensor
 {
 	"manufacturer": "AEON Labs",
 	"manufacturerId": "0x0086",
@@ -36,6 +34,21 @@
 		"5": {
 			"$import": "templates/aeotec_template.json#motion_report_type"
 		},
+		"111": {
+			"$import": "templates/aeotec_template.json#auto_report_interval_group1",
+			"maxValue": 167400
+		},
+		"112": {
+			"$import": "templates/aeotec_template.json#auto_report_interval_group2",
+			"maxValue": 167400
+		},
+		"113": {
+			"$import": "templates/aeotec_template.json#auto_report_interval_group3",
+			"maxValue": 167400
+		},
+		"255": {
+			"$import": "templates/aeotec_template.json#factory_reset"
+		},
 		"101[0x01]": {
 			"$import": "templates/aeotec_template.json#auto_report_group1_battery"
 		},
@@ -71,21 +84,6 @@
 		},
 		"103[0x80]": {
 			"$import": "templates/aeotec_template.json#auto_report_group3_luminance"
-		},
-		"111": {
-			"$import": "templates/aeotec_template.json#auto_report_interval_group1",
-			"maxValue": 167400
-		},
-		"112": {
-			"$import": "templates/aeotec_template.json#auto_report_interval_group2",
-			"maxValue": 167400
-		},
-		"113": {
-			"$import": "templates/aeotec_template.json#auto_report_interval_group3",
-			"maxValue": 167400
-		},
-		"255": {
-			"$import": "templates/aeotec_template.json#factory_reset"
 		}
 	}
 }

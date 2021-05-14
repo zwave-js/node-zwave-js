@@ -1,5 +1,3 @@
-// ThermoFloor TF016
-// ZWave Thermostat
 {
 	"manufacturer": "ThermoFloor",
 	"manufacturerId": "0x019b",

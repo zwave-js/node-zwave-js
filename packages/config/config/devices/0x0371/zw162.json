@@ -1,5 +1,3 @@
-// Aeotec Ltd. ZW162
-// Doorbell 6
 {
 	"manufacturer": "Aeotec Ltd.",
 	"manufacturerId": "0x0371",
@@ -27,6 +25,45 @@
 		"max": "255.255"
 	},
 	"paramInformation": {
+		"32": {
+			"$import": "../0x0086/templates/aeotec_template.json#basic_set_command_browse"
+		},
+		"33": {
+			"$import": "../0x0086/templates/aeotec_template.json#basic_set_command_tamper"
+		},
+		"34": {
+			"$import": "../0x0086/templates/aeotec_template.json#basic_set_command_doorbell_1"
+		},
+		"35": {
+			"$import": "../0x0086/templates/aeotec_template.json#basic_set_command_doorbell_2"
+		},
+		"36": {
+			"$import": "../0x0086/templates/aeotec_template.json#basic_set_command_doorbell_3"
+		},
+		"37": {
+			"$import": "../0x0086/templates/aeotec_template.json#basic_set_command_environment"
+		},
+		"38": {
+			"$import": "../0x0086/templates/aeotec_template.json#basic_set_command_security"
+		},
+		"39": {
+			"$import": "../0x0086/templates/aeotec_template.json#basic_set_command_emergency"
+		},
+		"48": {
+			"$import": "../0x0086/templates/aeotec_template.json#button_unpair"
+		},
+		"49": {
+			"$import": "../0x0086/templates/aeotec_template.json#button_pair"
+		},
+		"50": {
+			"$import": "../0x0086/templates/aeotec_template.json#button_pairing_status"
+		},
+		"96": {
+			"$import": "../0x0086/templates/aeotec_template.json#stop_action_button"
+		},
+		"255": {
+			"$import": "../0x0086/templates/aeotec_template.json#factory_reset_exclude"
+		},
 		"1[0xff000000]": {
 			"$import": "../0x0086/templates/aeotec_template.json#light_index_browse"
 		},
@@ -201,39 +238,6 @@
 		"22[0xff]": {
 			"$import": "../0x0086/templates/aeotec_template.json#led_duration_off_7"
 		},
-		"32": {
-			"$import": "../0x0086/templates/aeotec_template.json#basic_set_command_browse"
-		},
-		"33": {
-			"$import": "../0x0086/templates/aeotec_template.json#basic_set_command_tamper"
-		},
-		"34": {
-			"$import": "../0x0086/templates/aeotec_template.json#basic_set_command_doorbell_1"
-		},
-		"35": {
-			"$import": "../0x0086/templates/aeotec_template.json#basic_set_command_doorbell_2"
-		},
-		"36": {
-			"$import": "../0x0086/templates/aeotec_template.json#basic_set_command_doorbell_3"
-		},
-		"37": {
-			"$import": "../0x0086/templates/aeotec_template.json#basic_set_command_environment"
-		},
-		"38": {
-			"$import": "../0x0086/templates/aeotec_template.json#basic_set_command_security"
-		},
-		"39": {
-			"$import": "../0x0086/templates/aeotec_template.json#basic_set_command_emergency"
-		},
-		"48": {
-			"$import": "../0x0086/templates/aeotec_template.json#button_unpair"
-		},
-		"49": {
-			"$import": "../0x0086/templates/aeotec_template.json#button_pair"
-		},
-		"50": {
-			"$import": "../0x0086/templates/aeotec_template.json#button_pairing_status"
-		},
 		"51[0x01]": {
 			"$import": "../0x0086/templates/aeotec_template.json#button_status_1"
 		},
@@ -260,12 +264,6 @@
 		},
 		"54[0xffff]": {
 			"$import": "../0x0086/templates/aeotec_template.json#button_version_3"
-		},
-		"96": {
-			"$import": "../0x0086/templates/aeotec_template.json#stop_action_button"
-		},
-		"255": {
-			"$import": "../0x0086/templates/aeotec_template.json#factory_reset_exclude"
 		}
 	},
 	"metadata": {

@@ -1,5 +1,3 @@
-// Fibargroup FGR223
-// Roller Shutter 3
 {
 	"manufacturer": "Fibargroup",
 	"manufacturerId": "0x010f",
@@ -81,70 +79,6 @@
 					"value": 1
 				}
 			]
-		},
-		"40[0x01]": {
-			"label": "S1 scenes: Pressed 1 time",
-			"description": "Send a Central Scene notification when S1 is pressed 1 time",
-			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 1,
-			"defaultValue": 0
-		},
-		"40[0x02]": {
-			"label": "S1 scenes: Pressed 2 times",
-			"description": "Send a Central Scene notification when S1 is pressed 2 times",
-			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 1,
-			"defaultValue": 0
-		},
-		"40[0x04]": {
-			"label": "S1 scenes: Pressed 3 time",
-			"description": "Send a Central Scene notification when S1 is pressed 3 times",
-			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 1,
-			"defaultValue": 0
-		},
-		"40[0x08]": {
-			"label": "S1 scenes: Hold down / Release",
-			"description": "Send a Central Scene notification when S1 is held down or released",
-			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 1,
-			"defaultValue": 0
-		},
-		"41[0x01]": {
-			"label": "S2 scenes: Pressed 1 time",
-			"description": "Send a Central Scene notification when S2 is pressed 1 time",
-			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 1,
-			"defaultValue": 0
-		},
-		"41[0x02]": {
-			"label": "S2 scenes: Pressed 2 times",
-			"description": "Send a Central Scene notification when S2 is pressed 2 times",
-			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 1,
-			"defaultValue": 0
-		},
-		"41[0x04]": {
-			"label": "S2 scenes: Pressed 3 time",
-			"description": "Send a Central Scene notification when S2 is pressed 3 times",
-			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 1,
-			"defaultValue": 0
-		},
-		"41[0x08]": {
-			"label": "S2 scenes: Hold down / Release",
-			"description": "Send a Central Scene notification when S2 is held down or released",
-			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 1,
-			"defaultValue": 0
 		},
 		"60": {
 			"label": "Measuring power consumed by the device itself",
@@ -311,6 +245,70 @@
 			"minValue": 0,
 			"maxValue": 65535,
 			"defaultValue": 6000
+		},
+		"40[0x01]": {
+			"label": "S1 scenes: Pressed 1 time",
+			"description": "Send a Central Scene notification when S1 is pressed 1 time",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 0
+		},
+		"40[0x02]": {
+			"label": "S1 scenes: Pressed 2 times",
+			"description": "Send a Central Scene notification when S1 is pressed 2 times",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 0
+		},
+		"40[0x04]": {
+			"label": "S1 scenes: Pressed 3 time",
+			"description": "Send a Central Scene notification when S1 is pressed 3 times",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 0
+		},
+		"40[0x08]": {
+			"label": "S1 scenes: Hold down / Release",
+			"description": "Send a Central Scene notification when S1 is held down or released",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 0
+		},
+		"41[0x01]": {
+			"label": "S2 scenes: Pressed 1 time",
+			"description": "Send a Central Scene notification when S2 is pressed 1 time",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 0
+		},
+		"41[0x02]": {
+			"label": "S2 scenes: Pressed 2 times",
+			"description": "Send a Central Scene notification when S2 is pressed 2 times",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 0
+		},
+		"41[0x04]": {
+			"label": "S2 scenes: Pressed 3 time",
+			"description": "Send a Central Scene notification when S2 is pressed 3 times",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 0
+		},
+		"41[0x08]": {
+			"label": "S2 scenes: Hold down / Release",
+			"description": "Send a Central Scene notification when S2 is held down or released",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 0
 		},
 		"30[0xff]": {
 			"label": "Alarm #1: Action",

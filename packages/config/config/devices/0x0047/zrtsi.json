@@ -1,5 +1,3 @@
-// Somfy ZRTSI
-// Z-Wave to RTS Interface Controller
 {
 	"manufacturer": "Somfy",
 	"manufacturerId": "0x0047",

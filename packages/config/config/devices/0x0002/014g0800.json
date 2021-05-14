@@ -1,5 +1,3 @@
-// Danfoss 014G0800
-// EBV Connect Setpoint Thermostat
 {
 	"manufacturer": "Danfoss",
 	"manufacturerId": "0x0002",

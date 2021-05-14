@@ -1,5 +1,3 @@
-// STEINEL GmbH RS LED D2 Z-Wave
-// Indoor LED-light with motion sensor
 {
 	"manufacturer": "STEINEL GmbH",
 	"manufacturerId": "0x0271",

@@ -1,5 +1,3 @@
-// Schlage DWZWAVE1
-// Z-Wave Door/Window Sensor
 {
 	"manufacturer": "Schlage",
 	"manufacturerId": "0x011f",

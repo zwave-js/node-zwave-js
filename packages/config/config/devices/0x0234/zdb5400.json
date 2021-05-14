@@ -1,5 +1,3 @@
-// Logic Group ZDB5400
-// Wall Controller
 {
 	"manufacturer": "Logic Group",
 	"manufacturerId": "0x0234",
@@ -76,22 +74,6 @@
 		}
 	},
 	"paramInformation": {
-		"1[0x01]": {
-			"$import": "../templates/master_template.json#base_enable_disable",
-			"label": "Button 1"
-		},
-		"1[0x02]": {
-			"$import": "../templates/master_template.json#base_enable_disable",
-			"label": "Button 2"
-		},
-		"1[0x04]": {
-			"$import": "../templates/master_template.json#base_enable_disable",
-			"label": "Button 3"
-		},
-		"1[0x08]": {
-			"$import": "../templates/master_template.json#base_enable_disable",
-			"label": "Button 4"
-		},
 		"2": {
 			"$import": "templates/logic_group_template.json#dimming_duration"
 		},
@@ -135,6 +117,118 @@
 			"label": "Button Held Threshold Time",
 			"unit": "10 ms",
 			"defaultValue": 50
+		},
+		"16": {
+			"$import": "templates/logic_group_template.json#button_function_zdb5100",
+			"label": "Button 1 Functionality"
+		},
+		"17": {
+			"$import": "../templates/master_template.json#base_0-255_nounit",
+			"label": "Button 1 - Timer",
+			"valueSize": 2,
+			"unit": "seconds",
+			"maxValue": 43200,
+			"defaultValue": 300
+		},
+		"19": {
+			"$import": "templates/logic_group_template.json#binary_switch_set",
+			"label": "Button 1 - Binary Switch Support"
+		},
+		"20": {
+			"$import": "templates/logic_group_template.json#button_led_indicator",
+			"label": "Button 1 LED Indicator"
+		},
+		"21": {
+			"$import": "templates/logic_group_template.json#color_command_button",
+			"label": "Button 1 LED Indicator Color Commands"
+		},
+		"24": {
+			"$import": "templates/logic_group_template.json#button_function_zdb5100",
+			"label": "Button 2 Functionality"
+		},
+		"25": {
+			"$import": "../templates/master_template.json#base_0-255_nounit",
+			"label": "Button 2 - Timer",
+			"unit": "seconds",
+			"valueSize": 2,
+			"maxValue": 43200,
+			"defaultValue": 300
+		},
+		"27": {
+			"$import": "templates/logic_group_template.json#binary_switch_set",
+			"label": "Button 2 - Binary Switch Support"
+		},
+		"28": {
+			"$import": "templates/logic_group_template.json#button_led_indicator",
+			"label": "Button 2 LED Indicator"
+		},
+		"29": {
+			"$import": "templates/logic_group_template.json#color_command_button",
+			"label": "Button 2 LED Indicator Color Commands"
+		},
+		"32": {
+			"$import": "templates/logic_group_template.json#button_function_zdb5100",
+			"label": "Button 3 Functionality"
+		},
+		"33": {
+			"$import": "../templates/master_template.json#base_0-255_nounit",
+			"label": "Button 3 - Timer",
+			"unit": "seconds",
+			"valueSize": 2,
+			"maxValue": 43200,
+			"defaultValue": 300
+		},
+		"35": {
+			"$import": "templates/logic_group_template.json#binary_switch_set",
+			"label": "Button 3 - Binary Switch Support"
+		},
+		"36": {
+			"$import": "templates/logic_group_template.json#button_led_indicator",
+			"label": "Button 3 LED Indicator"
+		},
+		"37": {
+			"$import": "templates/logic_group_template.json#color_command_button",
+			"label": "Button 3 LED Indicator Color Commands"
+		},
+		"40": {
+			"$import": "templates/logic_group_template.json#button_function_zdb5100",
+			"label": "Button 4 Functionality"
+		},
+		"41": {
+			"$import": "../templates/master_template.json#base_0-255_nounit",
+			"label": "Button 4 - Timer",
+			"unit": "seconds",
+			"valueSize": 2,
+			"maxValue": 43200,
+			"defaultValue": 300
+		},
+		"43": {
+			"$import": "templates/logic_group_template.json#binary_switch_set",
+			"label": "Button 4 - Binary Switch Support"
+		},
+		"44": {
+			"$import": "templates/logic_group_template.json#button_led_indicator",
+			"label": "Button 4 LED Indicator"
+		},
+		"45": {
+			"$import": "templates/logic_group_template.json#color_command_button",
+			"label": "Button 4 LED Indicator Color Commands"
+		},
+		"1[0x01]": {
+			"$import": "../templates/master_template.json#base_enable_disable",
+			"label": "Button 1"
+		},
+		"1[0x02]": {
+			"$import": "../templates/master_template.json#base_enable_disable",
+			"label": "Button 2"
+		},
+		"1[0x04]": {
+			"$import": "../templates/master_template.json#base_enable_disable",
+			"label": "Button 3"
+		},
+		"1[0x08]": {
+			"$import": "../templates/master_template.json#base_enable_disable",
+			"label": "Button 4"
 		},
 		"14[0xff000000]": {
 			"$import": "templates/logic_group_template.json#global_brightness",
@@ -213,18 +307,6 @@
 			"label": "Send Association Group 14 Messages Securely",
 			"valueSize": 2
 		},
-		"16": {
-			"$import": "templates/logic_group_template.json#button_function_zdb5100",
-			"label": "Button 1 Functionality"
-		},
-		"17": {
-			"$import": "../templates/master_template.json#base_0-255_nounit",
-			"label": "Button 1 - Timer",
-			"valueSize": 2,
-			"unit": "seconds",
-			"maxValue": 43200,
-			"defaultValue": 300
-		},
 		"18[0xff000000]": {
 			"$import": "templates/logic_group_template.json#multilevel_enable",
 			"label": "Button 1 - Single Press"
@@ -236,18 +318,6 @@
 		"18[0xff00]": {
 			"$import": "templates/logic_group_template.json#multilevel_lower_function",
 			"label": "Button 1 - Single Press (Off Value)"
-		},
-		"19": {
-			"$import": "templates/logic_group_template.json#binary_switch_set",
-			"label": "Button 1 - Binary Switch Support"
-		},
-		"20": {
-			"$import": "templates/logic_group_template.json#button_led_indicator",
-			"label": "Button 1 LED Indicator"
-		},
-		"21": {
-			"$import": "templates/logic_group_template.json#color_command_button",
-			"label": "Button 1 LED Indicator Color Commands"
 		},
 		"22[0xff000000]": {
 			"$import": "templates/logic_group_template.json#led_indicator",
@@ -291,18 +361,6 @@
 			"valueSize": 4,
 			"defaultValue": 0
 		},
-		"24": {
-			"$import": "templates/logic_group_template.json#button_function_zdb5100",
-			"label": "Button 2 Functionality"
-		},
-		"25": {
-			"$import": "../templates/master_template.json#base_0-255_nounit",
-			"label": "Button 2 - Timer",
-			"unit": "seconds",
-			"valueSize": 2,
-			"maxValue": 43200,
-			"defaultValue": 300
-		},
 		"26[0xff000000]": {
 			"$import": "templates/logic_group_template.json#multilevel_enable",
 			"label": "Button 2 - Single Press"
@@ -314,18 +372,6 @@
 		"26[0xff00]": {
 			"$import": "templates/logic_group_template.json#multilevel_lower_function",
 			"label": "Button 2 - Single Press (Off Value)"
-		},
-		"27": {
-			"$import": "templates/logic_group_template.json#binary_switch_set",
-			"label": "Button 2 - Binary Switch Support"
-		},
-		"28": {
-			"$import": "templates/logic_group_template.json#button_led_indicator",
-			"label": "Button 2 LED Indicator"
-		},
-		"29": {
-			"$import": "templates/logic_group_template.json#color_command_button",
-			"label": "Button 2 LED Indicator Color Commands"
 		},
 		"30[0xff000000]": {
 			"$import": "templates/logic_group_template.json#led_indicator",
@@ -369,18 +415,6 @@
 			"valueSize": 4,
 			"defaultValue": 0
 		},
-		"32": {
-			"$import": "templates/logic_group_template.json#button_function_zdb5100",
-			"label": "Button 3 Functionality"
-		},
-		"33": {
-			"$import": "../templates/master_template.json#base_0-255_nounit",
-			"label": "Button 3 - Timer",
-			"unit": "seconds",
-			"valueSize": 2,
-			"maxValue": 43200,
-			"defaultValue": 300
-		},
 		"34[0xff000000]": {
 			"$import": "templates/logic_group_template.json#multilevel_enable",
 			"label": "Button 3 - Single Press"
@@ -392,18 +426,6 @@
 		"34[0xff00]": {
 			"$import": "templates/logic_group_template.json#multilevel_lower_function",
 			"label": "Button 3 - Single Press (Off Value)"
-		},
-		"35": {
-			"$import": "templates/logic_group_template.json#binary_switch_set",
-			"label": "Button 3 - Binary Switch Support"
-		},
-		"36": {
-			"$import": "templates/logic_group_template.json#button_led_indicator",
-			"label": "Button 3 LED Indicator"
-		},
-		"37": {
-			"$import": "templates/logic_group_template.json#color_command_button",
-			"label": "Button 3 LED Indicator Color Commands"
 		},
 		"38[0xff000000]": {
 			"$import": "templates/logic_group_template.json#led_indicator",
@@ -447,18 +469,6 @@
 			"valueSize": 4,
 			"defaultValue": 0
 		},
-		"40": {
-			"$import": "templates/logic_group_template.json#button_function_zdb5100",
-			"label": "Button 4 Functionality"
-		},
-		"41": {
-			"$import": "../templates/master_template.json#base_0-255_nounit",
-			"label": "Button 4 - Timer",
-			"unit": "seconds",
-			"valueSize": 2,
-			"maxValue": 43200,
-			"defaultValue": 300
-		},
 		"42[0xff000000]": {
 			"$import": "templates/logic_group_template.json#multilevel_enable",
 			"label": "Button 4 - Single Press"
@@ -470,18 +480,6 @@
 		"42[0xff00]": {
 			"$import": "templates/logic_group_template.json#multilevel_lower_function",
 			"label": "Button 4 - Single Press (Off Value)"
-		},
-		"43": {
-			"$import": "templates/logic_group_template.json#binary_switch_set",
-			"label": "Button 4 - Binary Switch Support"
-		},
-		"44": {
-			"$import": "templates/logic_group_template.json#button_led_indicator",
-			"label": "Button 4 LED Indicator"
-		},
-		"45": {
-			"$import": "templates/logic_group_template.json#color_command_button",
-			"label": "Button 4 LED Indicator Color Commands"
 		},
 		"46[0xff000000]": {
 			"$import": "templates/logic_group_template.json#led_indicator",

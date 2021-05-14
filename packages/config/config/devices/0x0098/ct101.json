@@ -1,5 +1,3 @@
-// Radio Thermostat Company of America (RTC) CT101
-// Z-Wave Thermostat
 {
 	"manufacturer": "Radio Thermostat Company of America (RTC)",
 	"manufacturerId": "0x0098",
@@ -65,66 +63,6 @@
 					"value": 4
 				}
 			]
-		},
-		"2[0xff000000]": {
-			"label": "HVAC Type",
-			"valueSize": 4,
-			"minValue": 1,
-			"maxValue": 2,
-			"defaultValue": 1,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "Normal",
-					"value": 1
-				},
-				{
-					"label": "Heat Pump",
-					"value": 2
-				}
-			]
-		},
-		"2[0x0f0000]": {
-			"label": "Number of Auxiliary or Heat Stages",
-			"valueSize": 4,
-			"minValue": 0,
-			"maxValue": 15,
-			"readOnly": true,
-			"allowManualEntry": false
-		},
-		"2[0xf00000]": {
-			"label": "Auxiliary Heat Type",
-			"valueSize": 4,
-			"minValue": 1,
-			"maxValue": 2,
-			"readOnly": true,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "Gas",
-					"value": 1
-				},
-				{
-					"label": "Electric",
-					"value": 2
-				}
-			]
-		},
-		"2[0xff00]": {
-			"label": "Number of Heat Pump Stages",
-			"valueSize": 4,
-			"minValue": 0,
-			"maxValue": 255,
-			"readOnly": true,
-			"allowManualEntry": false
-		},
-		"2[0xff]": {
-			"label": "Number of Cool Stages",
-			"valueSize": 4,
-			"minValue": 0,
-			"maxValue": 255,
-			"readOnly": true,
-			"allowManualEntry": false
 		},
 		"3": {
 			"label": "Lock Setpoint Changes",
@@ -253,6 +191,84 @@
 				}
 			]
 		},
+		"9": {
+			"label": "Thermostat Recovery Mode",
+			"valueSize": 1,
+			"minValue": 1,
+			"maxValue": 2,
+			"defaultValue": 2,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Fast recovery mode",
+					"value": 1
+				},
+				{
+					"label": "Economy recovery mode",
+					"value": 2
+				}
+			]
+		},
+		"2[0xff000000]": {
+			"label": "HVAC Type",
+			"valueSize": 4,
+			"minValue": 1,
+			"maxValue": 2,
+			"defaultValue": 1,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Normal",
+					"value": 1
+				},
+				{
+					"label": "Heat Pump",
+					"value": 2
+				}
+			]
+		},
+		"2[0x0f0000]": {
+			"label": "Number of Auxiliary or Heat Stages",
+			"valueSize": 4,
+			"minValue": 0,
+			"maxValue": 15,
+			"readOnly": true,
+			"allowManualEntry": false
+		},
+		"2[0xf00000]": {
+			"label": "Auxiliary Heat Type",
+			"valueSize": 4,
+			"minValue": 1,
+			"maxValue": 2,
+			"readOnly": true,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Gas",
+					"value": 1
+				},
+				{
+					"label": "Electric",
+					"value": 2
+				}
+			]
+		},
+		"2[0xff00]": {
+			"label": "Number of Heat Pump Stages",
+			"valueSize": 4,
+			"minValue": 0,
+			"maxValue": 255,
+			"readOnly": true,
+			"allowManualEntry": false
+		},
+		"2[0xff]": {
+			"label": "Number of Cool Stages",
+			"valueSize": 4,
+			"minValue": 0,
+			"maxValue": 255,
+			"readOnly": true,
+			"allowManualEntry": false
+		},
 		"8[0xff00]": {
 			"label": "Heating Differential Temperature",
 			"valueSize": 2,
@@ -310,24 +326,6 @@
 				{
 					"label": "6.0 °F",
 					"value": 12
-				}
-			]
-		},
-		"9": {
-			"label": "Thermostat Recovery Mode",
-			"valueSize": 1,
-			"minValue": 1,
-			"maxValue": 2,
-			"defaultValue": 2,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "Fast recovery mode",
-					"value": 1
-				},
-				{
-					"label": "Economy recovery mode",
-					"value": 2
 				}
 			]
 		}

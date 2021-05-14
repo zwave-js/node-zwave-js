@@ -1,5 +1,3 @@
-// Philio Technology Corp PAT02-A
-// Flood Sensor
 {
 	"manufacturer": "Philio Technology Corp",
 	"manufacturerId": "0x013c",
@@ -35,63 +33,6 @@
 			"defaultValue": 255,
 			"unsigned": true
 		},
-		"5[0x01]": {
-			"label": "Flood Sensor Function",
-			"description": "Enable or disable the flood function.",
-			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 1,
-			"defaultValue": 0,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "Disabled",
-					"value": 1
-				},
-				{
-					"label": "Enabled",
-					"value": 0
-				}
-			]
-		},
-		"5[0x08]": {
-			"label": "Temperature Scale",
-			"description": "Configure the temperature scale reported by the device.",
-			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 1,
-			"defaultValue": 0,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "Fahrenheit",
-					"value": 0
-				},
-				{
-					"label": "Celsius",
-					"value": 1
-				}
-			]
-		},
-		"5[0x20]": {
-			"label": "Temperature Report When Triggered",
-			"description": "Determines whether a temperature report is sent after an event is triggered.",
-			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 1,
-			"defaultValue": 0,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "Disabled",
-					"value": 1
-				},
-				{
-					"label": "Enabled",
-					"value": 0
-				}
-			]
-		},
 		"6": {
 			"label": "Humidity Report When Triggered",
 			"description": "Determines whether a temperature report is sent after an event is triggered.",
@@ -104,82 +45,6 @@
 				{
 					"label": "Disabled",
 					"value": 64
-				},
-				{
-					"label": "Enabled",
-					"value": 0
-				}
-			]
-		},
-		"7[0x08]": {
-			"label": "Disable Basic Off after flood",
-			"description": "Determines whether a Basic Off event is sent after a flood event is cleared.",
-			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 1,
-			"defaultValue": 0,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "Disabled",
-					"value": 1
-				},
-				{
-					"label": "Enabled",
-					"value": 0
-				}
-			]
-		},
-		"7[0x10]": {
-			"label": "Notification Type",
-			"description": "Determines the type of report sent.",
-			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 1,
-			"defaultValue": 0,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "Notification report",
-					"value": 0
-				},
-				{
-					"label": "Sensor binary report",
-					"value": 1
-				}
-			]
-		},
-		"7[0x20]": {
-			"label": "Send Multi CC Reports",
-			"description": "Determines whether a Multi CC report is sent when sending the automatic report.",
-			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 1,
-			"defaultValue": 0,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "Disabled",
-					"value": 1
-				},
-				{
-					"label": "Enabled",
-					"value": 0
-				}
-			]
-		},
-		"7[0x40]": {
-			"label": "Report Battery State When Triggered",
-			"description": "Determines whether the battery state is reported when the device is triggered.",
-			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 1,
-			"defaultValue": 0,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "Disabled",
-					"value": 1
 				},
 				{
 					"label": "Enabled",
@@ -287,6 +152,139 @@
 			"options": [
 				{
 					"label": "Disabled",
+					"value": 0
+				}
+			]
+		},
+		"5[0x01]": {
+			"label": "Flood Sensor Function",
+			"description": "Enable or disable the flood function.",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 0,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Disabled",
+					"value": 1
+				},
+				{
+					"label": "Enabled",
+					"value": 0
+				}
+			]
+		},
+		"5[0x08]": {
+			"label": "Temperature Scale",
+			"description": "Configure the temperature scale reported by the device.",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 0,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Fahrenheit",
+					"value": 0
+				},
+				{
+					"label": "Celsius",
+					"value": 1
+				}
+			]
+		},
+		"5[0x20]": {
+			"label": "Temperature Report When Triggered",
+			"description": "Determines whether a temperature report is sent after an event is triggered.",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 0,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Disabled",
+					"value": 1
+				},
+				{
+					"label": "Enabled",
+					"value": 0
+				}
+			]
+		},
+		"7[0x08]": {
+			"label": "Disable Basic Off after flood",
+			"description": "Determines whether a Basic Off event is sent after a flood event is cleared.",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 0,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Disabled",
+					"value": 1
+				},
+				{
+					"label": "Enabled",
+					"value": 0
+				}
+			]
+		},
+		"7[0x10]": {
+			"label": "Notification Type",
+			"description": "Determines the type of report sent.",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 0,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Notification report",
+					"value": 0
+				},
+				{
+					"label": "Sensor binary report",
+					"value": 1
+				}
+			]
+		},
+		"7[0x20]": {
+			"label": "Send Multi CC Reports",
+			"description": "Determines whether a Multi CC report is sent when sending the automatic report.",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 0,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Disabled",
+					"value": 1
+				},
+				{
+					"label": "Enabled",
+					"value": 0
+				}
+			]
+		},
+		"7[0x40]": {
+			"label": "Report Battery State When Triggered",
+			"description": "Determines whether the battery state is reported when the device is triggered.",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 0,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Disabled",
+					"value": 1
+				},
+				{
+					"label": "Enabled",
 					"value": 0
 				}
 			]

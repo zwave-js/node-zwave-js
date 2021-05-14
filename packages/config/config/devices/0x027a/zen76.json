@@ -1,5 +1,3 @@
-// Zooz ZEN76
-// Z-Wave Plus 700 Series S2 ON/OFF Switch
 {
 	"manufacturer": "Zooz",
 	"manufacturerId": "0x027a",
@@ -75,54 +73,6 @@
 				}
 			]
 		},
-		"14": {
-			"label": "LED Indicator Color",
-			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 3,
-			"defaultValue": 1,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "White",
-					"value": 0
-				},
-				{
-					"label": "Blue",
-					"value": 1
-				},
-				{
-					"label": "Green",
-					"value": 2
-				},
-				{
-					"label": "Red",
-					"value": 3
-				}
-			]
-		},
-		"15": {
-			"label": "LED Indicator Brightness",
-			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 2,
-			"defaultValue": 1,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "100%",
-					"value": 0
-				},
-				{
-					"label": "60%",
-					"value": 1
-				},
-				{
-					"label": "30%",
-					"value": 2
-				}
-			]
-		},
 		"3": {
 			"label": "Auto Turn-Off Timer",
 			"description": "Set the number of minutes to automatically turn off switch once it has been turned on (0 to disable).",
@@ -140,78 +90,6 @@
 			"maxValue": 65535,
 			"defaultValue": 0,
 			"unit": "minutes"
-		},
-		"7[0x01]": {
-			"label": "Control Group 2 With Physical Switch",
-			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 1,
-			"defaultValue": 1,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "Disabled",
-					"value": 0
-				},
-				{
-					"label": "Enabled",
-					"value": 1
-				}
-			]
-		},
-		"7[0x02]": {
-			"label": "Control Group 2 With Connected 3-Way Switch",
-			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 1,
-			"defaultValue": 1,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "Disabled",
-					"value": 0
-				},
-				{
-					"label": "Enabled",
-					"value": 1
-				}
-			]
-		},
-		"7[0x04]": {
-			"label": "Control Group 2 With Z-Wave Commands",
-			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 1,
-			"defaultValue": 1,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "Disabled",
-					"value": 0
-				},
-				{
-					"label": "Enabled",
-					"value": 1
-				}
-			]
-		},
-		"7[0x08]": {
-			"label": "Control Group 2 With On/Off Timers",
-			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 1,
-			"defaultValue": 1,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "Disabled",
-					"value": 0
-				},
-				{
-					"label": "Enabled",
-					"value": 1
-				}
-			]
 		},
 		"8": {
 			"label": "Switch State After Power Failure",
@@ -295,6 +173,54 @@
 				}
 			]
 		},
+		"14": {
+			"label": "LED Indicator Color",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 3,
+			"defaultValue": 1,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "White",
+					"value": 0
+				},
+				{
+					"label": "Blue",
+					"value": 1
+				},
+				{
+					"label": "Green",
+					"value": 2
+				},
+				{
+					"label": "Red",
+					"value": 3
+				}
+			]
+		},
+		"15": {
+			"label": "LED Indicator Brightness",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 2,
+			"defaultValue": 1,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "100%",
+					"value": 0
+				},
+				{
+					"label": "60%",
+					"value": 1
+				},
+				{
+					"label": "30%",
+					"value": 2
+				}
+			]
+		},
 		"16": {
 			"label": "Association Reports",
 			"description": "Report type for paddle control.",
@@ -310,6 +236,78 @@
 				},
 				{
 					"label": "Binary switch report",
+					"value": 1
+				}
+			]
+		},
+		"7[0x01]": {
+			"label": "Control Group 2 With Physical Switch",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 1,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Disabled",
+					"value": 0
+				},
+				{
+					"label": "Enabled",
+					"value": 1
+				}
+			]
+		},
+		"7[0x02]": {
+			"label": "Control Group 2 With Connected 3-Way Switch",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 1,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Disabled",
+					"value": 0
+				},
+				{
+					"label": "Enabled",
+					"value": 1
+				}
+			]
+		},
+		"7[0x04]": {
+			"label": "Control Group 2 With Z-Wave Commands",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 1,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Disabled",
+					"value": 0
+				},
+				{
+					"label": "Enabled",
+					"value": 1
+				}
+			]
+		},
+		"7[0x08]": {
+			"label": "Control Group 2 With On/Off Timers",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 1,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Disabled",
+					"value": 0
+				},
+				{
+					"label": "Enabled",
 					"value": 1
 				}
 			]
