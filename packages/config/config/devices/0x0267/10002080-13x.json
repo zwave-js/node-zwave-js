@@ -149,6 +149,37 @@
 				}
 			]
 		},
+		"21[0xff00]": {
+			"label": "Blind State: Direction",
+			"valueSize": 2,
+			"minValue": 0,
+			"maxValue": 2,
+			"defaultValue": 0,
+			"readOnly": true,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Stopped",
+					"value": 0
+				},
+				{
+					"label": "Moving down",
+					"value": 1
+				},
+				{
+					"label": "Moving up",
+					"value": 2
+				}
+			]
+		},
+		"21[0xff]": {
+			"label": "Blind State: Position",
+			"valueSize": 2,
+			"minValue": 0,
+			"maxValue": 99,
+			"defaultValue": 0,
+			"readOnly": true
+		},
 		"23": {
 			"label": "Calibration Required",
 			"valueSize": 1,
@@ -187,37 +218,6 @@
 					"value": 255
 				}
 			]
-		},
-		"21[0xff00]": {
-			"label": "Blind State: Direction",
-			"valueSize": 2,
-			"minValue": 0,
-			"maxValue": 2,
-			"defaultValue": 0,
-			"readOnly": true,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "Stopped",
-					"value": 0
-				},
-				{
-					"label": "Moving down",
-					"value": 1
-				},
-				{
-					"label": "Moving up",
-					"value": 2
-				}
-			]
-		},
-		"21[0xff]": {
-			"label": "Blind State: Position",
-			"valueSize": 2,
-			"minValue": 0,
-			"maxValue": 99,
-			"defaultValue": 0,
-			"readOnly": true
 		}
 	}
 }

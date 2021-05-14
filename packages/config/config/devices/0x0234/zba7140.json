@@ -65,22 +65,6 @@
 		"4": {
 			"$import": "templates/logic_group_template.json#led_indicator_zba7140"
 		},
-		"7": {
-			"$import": "templates/logic_group_template.json#button_functionality",
-			"label": "Button 1"
-		},
-		"10": {
-			"$import": "templates/logic_group_template.json#button_functionality",
-			"label": "Button 2"
-		},
-		"13": {
-			"$import": "templates/logic_group_template.json#button_functionality",
-			"label": "Button 3"
-		},
-		"16": {
-			"$import": "templates/logic_group_template.json#button_functionality",
-			"label": "Button 4"
-		},
 		"5[0xff000000]": {
 			"$import": "../templates/master_template.json#base_0-255_nounit",
 			"label": "LED Indicator: Red Value",
@@ -133,6 +117,22 @@
 			"$import": "../templates/master_template.json#base_enable_disable",
 			"label": "Send Association Group 8 Messages Securely",
 			"valueSize": 2
+		},
+		"7": {
+			"$import": "templates/logic_group_template.json#button_functionality",
+			"label": "Button 1"
+		},
+		"10": {
+			"$import": "templates/logic_group_template.json#button_functionality",
+			"label": "Button 2"
+		},
+		"13": {
+			"$import": "templates/logic_group_template.json#button_functionality",
+			"label": "Button 3"
+		},
+		"16": {
+			"$import": "templates/logic_group_template.json#button_functionality",
+			"label": "Button 4"
 		},
 		"8[0xff000000]": {
 			"$import": "templates/logic_group_template.json#multilevel_enable",

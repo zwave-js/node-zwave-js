@@ -170,6 +170,78 @@
 				}
 			]
 		},
+		"12[0x01]": {
+			"label": "Association Behavior: Local",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 1,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Disabled",
+					"value": 0
+				},
+				{
+					"label": "Enabled",
+					"value": 1
+				}
+			]
+		},
+		"12[0x02]": {
+			"label": "Association Behavior: 3-Way",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 1,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Disabled",
+					"value": 0
+				},
+				{
+					"label": "Enabled",
+					"value": 1
+				}
+			]
+		},
+		"12[0x04]": {
+			"label": "Association Behavior: Z-Wave Hub",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 1,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Disabled",
+					"value": 0
+				},
+				{
+					"label": "Enabled",
+					"value": 1
+				}
+			]
+		},
+		"12[0x08]": {
+			"label": "Association Behavior: Timer",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 1,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Disabled",
+					"value": 0
+				},
+				{
+					"label": "Enabled",
+					"value": 1
+				}
+			]
+		},
 		"13": {
 			"label": "LED Indicator Color",
 			"description": "Uses a scaled hue value (realHue / 360 * 255).",
@@ -326,6 +398,149 @@
 				}
 			]
 		},
+		"16[0xff]": {
+			"label": "LED Effect Color",
+			"description": "Uses a scaled hue value (realHue / 360 * 255).",
+			"valueSize": 4,
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 0,
+			"options": [
+				{
+					"label": "Red",
+					"value": 0
+				},
+				{
+					"label": "Orange",
+					"value": 21
+				},
+				{
+					"label": "Yellow",
+					"value": 42
+				},
+				{
+					"label": "Green",
+					"value": 85
+				},
+				{
+					"label": "Cyan",
+					"value": 127
+				},
+				{
+					"label": "Blue",
+					"value": 170
+				},
+				{
+					"label": "Violet",
+					"value": 212
+				},
+				{
+					"label": "Pink",
+					"value": 234
+				},
+				{
+					"$if": "firmwareVersion >= 1.47",
+					"label": "White",
+					"value": 255
+				}
+			]
+		},
+		"16[0xff00]": {
+			"label": "LED Effect Brightness",
+			"valueSize": 4,
+			"minValue": 0,
+			"maxValue": 10,
+			"defaultValue": 3,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Off",
+					"value": 0
+				},
+				{
+					"label": "10%",
+					"value": 1
+				},
+				{
+					"label": "20%",
+					"value": 2
+				},
+				{
+					"label": "30%",
+					"value": 3
+				},
+				{
+					"label": "40%",
+					"value": 4
+				},
+				{
+					"label": "50%",
+					"value": 5
+				},
+				{
+					"label": "60%",
+					"value": 6
+				},
+				{
+					"label": "70%",
+					"value": 7
+				},
+				{
+					"label": "80%",
+					"value": 8
+				},
+				{
+					"label": "90%",
+					"value": 9
+				},
+				{
+					"label": "100%",
+					"value": 10
+				}
+			]
+		},
+		"16[0xff0000]": {
+			"label": "LED Effect Duration",
+			"description": "1 to 60 = seconds, 61 to 120 = minutes (minus 60), 121 - 254 = hours (minus 120), 255 = indefinitely",
+			"valueSize": 4,
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 255
+		},
+		"16[0x7f000000]": {
+			"label": "LED Effect Type",
+			"valueSize": 4,
+			"minValue": 0,
+			"maxValue": 5,
+			"defaultValue": 0,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Off",
+					"value": 0
+				},
+				{
+					"label": "Solid",
+					"value": 1
+				},
+				{
+					"label": "Chase",
+					"value": 2
+				},
+				{
+					"label": "Fast Blink",
+					"value": 3
+				},
+				{
+					"label": "Slow Blink",
+					"value": 4
+				},
+				{
+					"label": "Pulse",
+					"value": 5
+				}
+			]
+		},
 		"17": {
 			"label": "LED Indicator Timeout",
 			"unit": "seconds",
@@ -472,221 +687,6 @@
 					}
 				]
 			}
-		],
-		"12[0x01]": {
-			"label": "Association Behavior: Local",
-			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 1,
-			"defaultValue": 1,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "Disabled",
-					"value": 0
-				},
-				{
-					"label": "Enabled",
-					"value": 1
-				}
-			]
-		},
-		"12[0x02]": {
-			"label": "Association Behavior: 3-Way",
-			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 1,
-			"defaultValue": 1,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "Disabled",
-					"value": 0
-				},
-				{
-					"label": "Enabled",
-					"value": 1
-				}
-			]
-		},
-		"12[0x04]": {
-			"label": "Association Behavior: Z-Wave Hub",
-			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 1,
-			"defaultValue": 1,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "Disabled",
-					"value": 0
-				},
-				{
-					"label": "Enabled",
-					"value": 1
-				}
-			]
-		},
-		"12[0x08]": {
-			"label": "Association Behavior: Timer",
-			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 1,
-			"defaultValue": 1,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "Disabled",
-					"value": 0
-				},
-				{
-					"label": "Enabled",
-					"value": 1
-				}
-			]
-		},
-		"16[0xff]": {
-			"label": "LED Effect Color",
-			"description": "Uses a scaled hue value (realHue / 360 * 255).",
-			"valueSize": 4,
-			"minValue": 0,
-			"maxValue": 255,
-			"defaultValue": 0,
-			"options": [
-				{
-					"label": "Red",
-					"value": 0
-				},
-				{
-					"label": "Orange",
-					"value": 21
-				},
-				{
-					"label": "Yellow",
-					"value": 42
-				},
-				{
-					"label": "Green",
-					"value": 85
-				},
-				{
-					"label": "Cyan",
-					"value": 127
-				},
-				{
-					"label": "Blue",
-					"value": 170
-				},
-				{
-					"label": "Violet",
-					"value": 212
-				},
-				{
-					"label": "Pink",
-					"value": 234
-				},
-				{
-					"$if": "firmwareVersion >= 1.47",
-					"label": "White",
-					"value": 255
-				}
-			]
-		},
-		"16[0xff00]": {
-			"label": "LED Effect Brightness",
-			"valueSize": 4,
-			"minValue": 0,
-			"maxValue": 10,
-			"defaultValue": 3,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "Off",
-					"value": 0
-				},
-				{
-					"label": "10%",
-					"value": 1
-				},
-				{
-					"label": "20%",
-					"value": 2
-				},
-				{
-					"label": "30%",
-					"value": 3
-				},
-				{
-					"label": "40%",
-					"value": 4
-				},
-				{
-					"label": "50%",
-					"value": 5
-				},
-				{
-					"label": "60%",
-					"value": 6
-				},
-				{
-					"label": "70%",
-					"value": 7
-				},
-				{
-					"label": "80%",
-					"value": 8
-				},
-				{
-					"label": "90%",
-					"value": 9
-				},
-				{
-					"label": "100%",
-					"value": 10
-				}
-			]
-		},
-		"16[0xff0000]": {
-			"label": "LED Effect Duration",
-			"description": "1 to 60 = seconds, 61 to 120 = minutes (minus 60), 121 - 254 = hours (minus 120), 255 = indefinitely",
-			"valueSize": 4,
-			"minValue": 0,
-			"maxValue": 255,
-			"defaultValue": 255
-		},
-		"16[0x7f000000]": {
-			"label": "LED Effect Type",
-			"valueSize": 4,
-			"minValue": 0,
-			"maxValue": 5,
-			"defaultValue": 0,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "Off",
-					"value": 0
-				},
-				{
-					"label": "Solid",
-					"value": 1
-				},
-				{
-					"label": "Chase",
-					"value": 2
-				},
-				{
-					"label": "Fast Blink",
-					"value": 3
-				},
-				{
-					"label": "Slow Blink",
-					"value": 4
-				},
-				{
-					"label": "Pulse",
-					"value": 5
-				}
-			]
-		}
+		]
 	}
 }

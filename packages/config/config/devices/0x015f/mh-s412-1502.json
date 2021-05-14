@@ -151,6 +151,44 @@
 				}
 			]
 		},
+		"10[0x01]": {
+			"label": "Button 1 Respond to Scenes",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 0,
+			"unsigned": true,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Disabled",
+					"value": 0
+				},
+				{
+					"label": "Enabled",
+					"value": 1
+				}
+			]
+		},
+		"10[0x02]": {
+			"label": "Button 2 Respond to Scenes",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 0,
+			"unsigned": true,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Disabled",
+					"value": 0
+				},
+				{
+					"label": "Enabled",
+					"value": 1
+				}
+			]
+		},
 		"11": {
 			"label": "Button 1 Scene Activate Mode",
 			"valueSize": 1,
@@ -255,44 +293,6 @@
 				{
 					"label": "Reset",
 					"value": 85
-				}
-			]
-		},
-		"10[0x01]": {
-			"label": "Button 1 Respond to Scenes",
-			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 1,
-			"defaultValue": 0,
-			"unsigned": true,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "Disabled",
-					"value": 0
-				},
-				{
-					"label": "Enabled",
-					"value": 1
-				}
-			]
-		},
-		"10[0x02]": {
-			"label": "Button 2 Respond to Scenes",
-			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 1,
-			"defaultValue": 0,
-			"unsigned": true,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "Disabled",
-					"value": 0
-				},
-				{
-					"label": "Enabled",
-					"value": 1
 				}
 			]
 		}

@@ -118,38 +118,6 @@
 			"defaultValue": 24,
 			"unit": "hours"
 		},
-		"53": {
-			"label": "Medium Leak: Threshold",
-			"description": "How much water must be consumed in the timespan defined by parameter 54 to trigger medium leak alarm",
-			"valueSize": 2,
-			"minValue": 1,
-			"maxValue": 1000,
-			"defaultValue": 150
-		},
-		"54": {
-			"label": "Medium Leak: Time Interval",
-			"valueSize": 1,
-			"minValue": 1,
-			"maxValue": 24,
-			"defaultValue": 6,
-			"unit": "hours"
-		},
-		"55": {
-			"label": "Fast Leak: Threshold",
-			"description": "How much water must be consumed in the timespan defined by parameter 56 to trigger fast leak alarm",
-			"valueSize": 2,
-			"minValue": 1,
-			"maxValue": 1000,
-			"defaultValue": 300
-		},
-		"56": {
-			"label": "Fast Leak: Time Interval",
-			"valueSize": 1,
-			"minValue": 1,
-			"maxValue": 24,
-			"defaultValue": 3,
-			"unit": "hours"
-		},
 		"60": {
 			"label": "Slow Leak: Close Valve on Alarm",
 			"valueSize": 1,
@@ -168,6 +136,22 @@
 				}
 			]
 		},
+		"53": {
+			"label": "Medium Leak: Threshold",
+			"description": "How much water must be consumed in the timespan defined by parameter 54 to trigger medium leak alarm",
+			"valueSize": 2,
+			"minValue": 1,
+			"maxValue": 1000,
+			"defaultValue": 150
+		},
+		"54": {
+			"label": "Medium Leak: Time Interval",
+			"valueSize": 1,
+			"minValue": 1,
+			"maxValue": 24,
+			"defaultValue": 6,
+			"unit": "hours"
+		},
 		"61": {
 			"label": "Medium Leak: Close Valve on Alarm",
 			"valueSize": 1,
@@ -185,6 +169,22 @@
 					"value": 1
 				}
 			]
+		},
+		"55": {
+			"label": "Fast Leak: Threshold",
+			"description": "How much water must be consumed in the timespan defined by parameter 56 to trigger fast leak alarm",
+			"valueSize": 2,
+			"minValue": 1,
+			"maxValue": 1000,
+			"defaultValue": 300
+		},
+		"56": {
+			"label": "Fast Leak: Time Interval",
+			"valueSize": 1,
+			"minValue": 1,
+			"maxValue": 24,
+			"defaultValue": 3,
+			"unit": "hours"
 		},
 		"62": {
 			"label": "Fast Leak: Close Valve on Alarm",

@@ -15,28 +15,6 @@
 	},
 	"supportsZWavePlus": true,
 	"paramInformation": {
-		"29": {
-			"label": "Disable Alarm",
-			"description": "Disables the alarm function entierly, including any tamper detection.",
-			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 1,
-			"defaultValue": 0
-		},
-		"31": {
-			"label": "Alarm Duration",
-			"unit": "30 seconds",
-			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 127,
-			"defaultValue": 6,
-			"options": [
-				{
-					"label": "Never stop",
-					"value": 0
-				}
-			]
-		},
 		"7[0x08]": {
 			"label": "Disable Sound",
 			"description": "Prevents audio from the siren - leaving only the strobe function.",
@@ -70,6 +48,28 @@
 				{
 					"label": "Sensor Binary Report",
 					"value": 1
+				}
+			]
+		},
+		"29": {
+			"label": "Disable Alarm",
+			"description": "Disables the alarm function entierly, including any tamper detection.",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 0
+		},
+		"31": {
+			"label": "Alarm Duration",
+			"unit": "30 seconds",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 127,
+			"defaultValue": 6,
+			"options": [
+				{
+					"label": "Never stop",
+					"value": 0
 				}
 			]
 		}

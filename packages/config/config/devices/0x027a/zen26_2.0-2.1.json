@@ -121,69 +121,6 @@
 			"maxValue": 65535,
 			"defaultValue": 30
 		},
-		"8": {
-			"label": "Switch State After Power Failure",
-			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 2,
-			"defaultValue": 2,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "Off",
-					"value": 0
-				},
-				{
-					"label": "On",
-					"value": 1
-				},
-				{
-					"label": "Previous State",
-					"value": 2
-				}
-			]
-		},
-		"10": {
-			"label": "Scene Control",
-			"description": "Send scene commands to hub on physical paddle presses.",
-			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 1,
-			"defaultValue": 0,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "Disabled",
-					"value": 0
-				},
-				{
-					"label": "Enabled",
-					"value": 1
-				}
-			]
-		},
-		"11": {
-			"label": "Enable Local and Z-Wave Control",
-			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 2,
-			"defaultValue": 1,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "Local control disabled, Z-Wave control enabled",
-					"value": 0
-				},
-				{
-					"label": "Local control and Z-Wave control enabled",
-					"value": 1
-				},
-				{
-					"label": "Local control and Z-Wave control disabled",
-					"value": 2
-				}
-			]
-		},
 		"7[0x01]": {
 			"label": "Control Group 2 With Physical Switch",
 			"valueSize": 1,
@@ -253,6 +190,69 @@
 				{
 					"label": "Enabled",
 					"value": 1
+				}
+			]
+		},
+		"8": {
+			"label": "Switch State After Power Failure",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 2,
+			"defaultValue": 2,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Off",
+					"value": 0
+				},
+				{
+					"label": "On",
+					"value": 1
+				},
+				{
+					"label": "Previous State",
+					"value": 2
+				}
+			]
+		},
+		"10": {
+			"label": "Scene Control",
+			"description": "Send scene commands to hub on physical paddle presses.",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 0,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Disabled",
+					"value": 0
+				},
+				{
+					"label": "Enabled",
+					"value": 1
+				}
+			]
+		},
+		"11": {
+			"label": "Enable Local and Z-Wave Control",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 2,
+			"defaultValue": 1,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Local control disabled, Z-Wave control enabled",
+					"value": 0
+				},
+				{
+					"label": "Local control and Z-Wave control enabled",
+					"value": 1
+				},
+				{
+					"label": "Local control and Z-Wave control disabled",
+					"value": 2
 				}
 			]
 		}

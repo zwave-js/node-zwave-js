@@ -141,6 +141,7 @@
 		},
 		"8": {
 			"label": "Dimming Step Size (Manual)",
+
 			"valueSize": 1,
 			"minValue": 1,
 			"maxValue": 99,
@@ -149,6 +150,7 @@
 		},
 		"9": {
 			"label": "Dimming Step Time (Auto)",
+
 			"valueSize": 2,
 			"unit": "10 ms",
 			"minValue": 0,
@@ -158,6 +160,7 @@
 		},
 		"10": {
 			"label": "Dimming Step Size (Auto)",
+
 			"valueSize": 1,
 			"minValue": 1,
 			"maxValue": 99,
@@ -244,152 +247,6 @@
 				}
 			]
 		},
-		"16": {
-			"label": "Energy Meter Report Interval",
-			"valueSize": 2,
-			"unit": "seconds",
-			"minValue": 0,
-			"maxValue": 32768,
-			"defaultValue": 16,
-			"unsigned": true
-		},
-		"17": {
-			"label": "Beep",
-			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 1,
-			"defaultValue": 1,
-			"unsigned": true,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "Disable",
-					"value": 0
-				},
-				{
-					"label": "Enable",
-					"value": 1
-				}
-			]
-		},
-		"32": {
-			"label": "Alarm Threshold: Current",
-			"valueSize": 2,
-			"unit": "0.01 A",
-			"minValue": 1,
-			"maxValue": 5000,
-			"defaultValue": 0,
-			"unsigned": true
-		},
-		"33": {
-			"label": "Alarm Threshold: Voltage",
-			"valueSize": 2,
-			"unit": "0.1 V",
-			"minValue": 1,
-			"maxValue": 10000,
-			"defaultValue": 0,
-			"unsigned": true
-		},
-		"34": {
-			"label": "Alarm Threshold: Wattage",
-			"valueSize": 2,
-			"unit": "0.1 W",
-			"minValue": 1,
-			"maxValue": 3000,
-			"defaultValue": 2000,
-			"unsigned": true
-		},
-		"35": {
-			"label": "Overload Shutoff Delay",
-			"valueSize": 1,
-			"unit": "seconds",
-			"minValue": 0,
-			"maxValue": 255,
-			"defaultValue": 20,
-			"unsigned": true
-		},
-		"36": {
-			"label": "Overload Shutoff",
-			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 1,
-			"defaultValue": 0,
-			"unsigned": true,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "Disable",
-					"value": 0
-				},
-				{
-					"label": "Enable",
-					"value": 1
-				}
-			]
-		},
-		"64": {
-			"label": "Overload Detected: Amps",
-			"valueSize": 2,
-			"unit": "0.01 A",
-			"minValue": 0,
-			"maxValue": 5000,
-			"defaultValue": 0,
-			"unsigned": true,
-			"readOnly": true,
-			"allowManualEntry": false
-		},
-		"65": {
-			"label": "Overload Detected: Volts",
-			"valueSize": 2,
-			"unit": "0.1 V",
-			"minValue": 0,
-			"maxValue": 10000,
-			"defaultValue": 0,
-			"unsigned": true,
-			"readOnly": true,
-			"allowManualEntry": false
-		},
-		"66": {
-			"label": "Overload Detected: Watts",
-			"valueSize": 2,
-			"unit": "0.1 W",
-			"minValue": 0,
-			"maxValue": 3000,
-			"defaultValue": 0,
-			"unsigned": true,
-			"readOnly": true,
-			"allowManualEntry": false
-		},
-		"67": {
-			"label": "Overload Detected: Duration",
-			"valueSize": 1,
-			"unit": "seconds",
-			"minValue": 0,
-			"maxValue": 255,
-			"defaultValue": 0,
-			"unsigned": true,
-			"readOnly": true,
-			"allowManualEntry": false
-		},
-		"255": {
-			"label": "Factory Reset",
-			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 85,
-			"defaultValue": 0,
-			"unsigned": true,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "Normal operation",
-					"value": 0
-				},
-				{
-					"label": "Factory reset",
-					"value": 85
-				}
-			]
-		},
 		"15[0x01]": {
 			"label": "Energy Meter Report (Watts)",
 			"valueSize": 1,
@@ -463,6 +320,160 @@
 				{
 					"label": "Enable",
 					"value": 1
+				}
+			]
+		},
+		"16": {
+			"label": "Energy Meter Report Interval",
+
+			"valueSize": 2,
+			"unit": "seconds",
+			"minValue": 0,
+			"maxValue": 32768,
+			"defaultValue": 16,
+			"unsigned": true
+		},
+		"17": {
+			"label": "Beep",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 1,
+			"unsigned": true,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Disable",
+					"value": 0
+				},
+				{
+					"label": "Enable",
+					"value": 1
+				}
+			]
+		},
+		"32": {
+			"label": "Alarm Threshold: Current",
+
+			"valueSize": 2,
+			"unit": "0.01 A",
+			"minValue": 1,
+			"maxValue": 5000,
+			"defaultValue": 0,
+			"unsigned": true
+		},
+		"33": {
+			"label": "Alarm Threshold: Voltage",
+
+			"valueSize": 2,
+			"unit": "0.1 V",
+			"minValue": 1,
+			"maxValue": 10000,
+			"defaultValue": 0,
+			"unsigned": true
+		},
+		"34": {
+			"label": "Alarm Threshold: Wattage",
+
+			"valueSize": 2,
+			"unit": "0.1 W",
+			"minValue": 1,
+			"maxValue": 3000,
+			"defaultValue": 2000,
+			"unsigned": true
+		},
+		"36": {
+			"label": "Overload Shutoff",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 0,
+			"unsigned": true,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Disable",
+					"value": 0
+				},
+				{
+					"label": "Enable",
+					"value": 1
+				}
+			]
+		},
+		"35": {
+			"label": "Overload Shutoff Delay",
+			"valueSize": 1,
+			"unit": "seconds",
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 20,
+			"unsigned": true
+		},
+		"64": {
+			"label": "Overload Detected: Amps",
+
+			"valueSize": 2,
+			"unit": "0.01 A",
+			"minValue": 0,
+			"maxValue": 5000,
+			"defaultValue": 0,
+			"unsigned": true,
+			"readOnly": true,
+			"allowManualEntry": false
+		},
+		"65": {
+			"label": "Overload Detected: Volts",
+
+			"valueSize": 2,
+			"unit": "0.1 V",
+			"minValue": 0,
+			"maxValue": 10000,
+			"defaultValue": 0,
+			"unsigned": true,
+			"readOnly": true,
+			"allowManualEntry": false
+		},
+		"66": {
+			"label": "Overload Detected: Watts",
+
+			"valueSize": 2,
+			"unit": "0.1 W",
+			"minValue": 0,
+			"maxValue": 3000,
+			"defaultValue": 0,
+			"unsigned": true,
+			"readOnly": true,
+			"allowManualEntry": false
+		},
+		"67": {
+			"label": "Overload Detected: Duration",
+
+			"valueSize": 1,
+			"unit": "seconds",
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 0,
+			"unsigned": true,
+			"readOnly": true,
+			"allowManualEntry": false
+		},
+		"255": {
+			"label": "Factory Reset",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 85,
+			"defaultValue": 0,
+			"unsigned": true,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Normal operation",
+					"value": 0
+				},
+				{
+					"label": "Factory reset",
+					"value": 85
 				}
 			]
 		}

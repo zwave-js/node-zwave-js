@@ -602,122 +602,6 @@
 				}
 			]
 		},
-		"26": {
-			"label": "Light LED Strip Timeout",
-			"description": "When light LED strip intensity is set to 0, this setting allows the LED strip to turn on temporarily while being adjusted",
-			"unit": "seconds",
-			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 10,
-			"defaultValue": 3,
-			"unsigned": true,
-			"options": [
-				{
-					"label": "Disable",
-					"value": 0
-				}
-			]
-		},
-		"27": {
-			"label": "Fan LED Strip Timeout",
-			"description": "When the fan LED strip intensity is set to 0, this setting allows the LED strip to turn on temporarily while being adjusted.",
-			"unit": "seconds",
-			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 10,
-			"defaultValue": 3,
-			"unsigned": true,
-			"options": [
-				{
-					"label": "Disable",
-					"value": 0
-				}
-			]
-		},
-		"28": {
-			"label": "Active Power Reports",
-			"description": "The power level change that will result in a new power report being sent.",
-			"unit": "%",
-			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 100,
-			"defaultValue": 10,
-			"unsigned": true,
-			"options": [
-				{
-					"label": "Disable",
-					"value": 0
-				}
-			]
-		},
-		"29": {
-			"label": "Periodic Power & Energy Reports",
-			"description": "Time period between consecutive power & energy reports being sent.",
-			"units": "seconds",
-			"valueSize": 2,
-			"minValue": 0,
-			"maxValue": 32767,
-			"defaultValue": 3600,
-			"unsigned": true
-		},
-		"30": {
-			"label": "Energy Reports",
-			"description": "The energy level change that will result in a new energy report being sent.",
-			"units": "%",
-			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 100,
-			"defaultValue": 10,
-			"unsigned": true
-		},
-		"31": {
-			"label": "Local Protection",
-			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 3,
-			"defaultValue": 0,
-			"unsigned": true,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "None",
-					"value": 0
-				},
-				{
-					"label": "light",
-					"value": 1
-				},
-				{
-					"label": "fan",
-					"value": 2
-				},
-				{
-					"label": "Both",
-					"value": 3
-				}
-			]
-		},
-		"51": {
-			"label": "Instant On",
-			"$if": "firmwareVersion >= 1.36",
-			"description": "Enabling this disables the 700ms button delay and multi-tap scenes.",
-			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 1,
-			"defaultValue": 1,
-			"unsigned": true,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "Enabled",
-					"value": 0
-				},
-				{
-					"label": "Disabled",
-					"value": 1
-				}
-			]
-		},
 		"24[0x7f000000]": {
 			"label": "Light LED Effect Type",
 			"valueSize": 4,
@@ -999,6 +883,122 @@
 				{
 					"label": "Pink",
 					"value": 234
+				}
+			]
+		},
+		"26": {
+			"label": "Light LED Strip Timeout",
+			"description": "When light LED strip intensity is set to 0, this setting allows the LED strip to turn on temporarily while being adjusted",
+			"unit": "seconds",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 10,
+			"defaultValue": 3,
+			"unsigned": true,
+			"options": [
+				{
+					"label": "Disable",
+					"value": 0
+				}
+			]
+		},
+		"27": {
+			"label": "Fan LED Strip Timeout",
+			"description": "When the fan LED strip intensity is set to 0, this setting allows the LED strip to turn on temporarily while being adjusted.",
+			"unit": "seconds",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 10,
+			"defaultValue": 3,
+			"unsigned": true,
+			"options": [
+				{
+					"label": "Disable",
+					"value": 0
+				}
+			]
+		},
+		"28": {
+			"label": "Active Power Reports",
+			"description": "The power level change that will result in a new power report being sent.",
+			"unit": "%",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 100,
+			"defaultValue": 10,
+			"unsigned": true,
+			"options": [
+				{
+					"label": "Disable",
+					"value": 0
+				}
+			]
+		},
+		"29": {
+			"label": "Periodic Power & Energy Reports",
+			"description": "Time period between consecutive power & energy reports being sent.",
+			"units": "seconds",
+			"valueSize": 2,
+			"minValue": 0,
+			"maxValue": 32767,
+			"defaultValue": 3600,
+			"unsigned": true
+		},
+		"30": {
+			"label": "Energy Reports",
+			"description": "The energy level change that will result in a new energy report being sent.",
+			"units": "%",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 100,
+			"defaultValue": 10,
+			"unsigned": true
+		},
+		"31": {
+			"label": "Local Protection",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 3,
+			"defaultValue": 0,
+			"unsigned": true,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "None",
+					"value": 0
+				},
+				{
+					"label": "light",
+					"value": 1
+				},
+				{
+					"label": "fan",
+					"value": 2
+				},
+				{
+					"label": "Both",
+					"value": 3
+				}
+			]
+		},
+		"51": {
+			"label": "Instant On",
+			"$if": "firmwareVersion >= 1.36",
+			"description": "Enabling this disables the 700ms button delay and multi-tap scenes.",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 1,
+			"unsigned": true,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Enabled",
+					"value": 0
+				},
+				{
+					"label": "Disabled",
+					"value": 1
 				}
 			]
 		}

@@ -137,6 +137,33 @@
 			"defaultValue": 99,
 			"unsigned": true
 		},
+		"25": {
+			"label": "Single Tap Behavior (Up)",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 3,
+			"defaultValue": 0,
+			"unsigned": true,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Last brightness level",
+					"value": 0
+				},
+				{
+					"label": "Custom brightness level (parameter 18)",
+					"value": 1
+				},
+				{
+					"label": "Maximum brightness level",
+					"value": 2
+				},
+				{
+					"label": "Full brightness",
+					"value": 3
+				}
+			]
+		},
 		"12": {
 			"label": "Double Tap Behavior (Up)",
 			"valueSize": 1,
@@ -161,6 +188,21 @@
 				{
 					"label": "Disable",
 					"value": 3
+				}
+			]
+		},
+		"18": {
+			"label": "Custom Brightness Level",
+			"description": "Allowable range: 1-99",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 99,
+			"defaultValue": 0,
+			"unsigned": true,
+			"options": [
+				{
+					"label": "Last brightness level",
+					"value": 0
 				}
 			]
 		},
@@ -216,21 +258,6 @@
 			"defaultValue": 5,
 			"unsigned": true
 		},
-		"18": {
-			"label": "Custom Brightness Level",
-			"description": "Allowable range: 1-99",
-			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 99,
-			"defaultValue": 0,
-			"unsigned": true,
-			"options": [
-				{
-					"label": "Last brightness level",
-					"value": 0
-				}
-			]
-		},
 		"20": {
 			"label": "Smart Bulb Mode: Reporting",
 			"description": "See manual for options",
@@ -271,33 +298,6 @@
 				{
 					"label": "Disable",
 					"value": 0
-				}
-			]
-		},
-		"25": {
-			"label": "Single Tap Behavior (Up)",
-			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 3,
-			"defaultValue": 0,
-			"unsigned": true,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "Last brightness level",
-					"value": 0
-				},
-				{
-					"label": "Custom brightness level (parameter 18)",
-					"value": 1
-				},
-				{
-					"label": "Maximum brightness level",
-					"value": 2
-				},
-				{
-					"label": "Full brightness",
-					"value": 3
 				}
 			]
 		}

@@ -165,55 +165,6 @@
 				}
 			]
 		},
-		"30": {
-			"label": "Alarm configuration - 1st slot",
-			"valueSize": 4,
-			"minValue": 0,
-			"maxValue": 255,
-			"defaultValue": 0
-		},
-		"31": {
-			"label": "Alarm configuration - 2nd slot",
-			"valueSize": 4,
-			"minValue": 0,
-			"maxValue": 255,
-			"defaultValue": 0
-		},
-		"32": {
-			"label": "Alarm configuration - 3rd slot",
-			"valueSize": 4,
-			"minValue": 0,
-			"maxValue": 255,
-			"defaultValue": 0
-		},
-		"33": {
-			"label": "Alarm configuration - 4th slot",
-			"valueSize": 4,
-			"minValue": 0,
-			"maxValue": 255,
-			"defaultValue": 0
-		},
-		"34": {
-			"label": "Alarm configuration - 5th slot",
-			"valueSize": 4,
-			"minValue": 0,
-			"maxValue": 255,
-			"defaultValue": 0
-		},
-		"35": {
-			"label": "Duration of alarm signalization",
-			"unit": "seconds",
-			"valueSize": 2,
-			"minValue": 0,
-			"maxValue": 32400,
-			"defaultValue": 600,
-			"options": [
-				{
-					"label": "infinite signalization",
-					"value": 0
-				}
-			]
-		},
 		"40": {
 			"label": "Input 1 - sent scenes",
 			"valueSize": 1,
@@ -365,6 +316,55 @@
 				{
 					"label": "Police (red-white-blue) sequence",
 					"value": 10
+				}
+			]
+		},
+		"30": {
+			"label": "Alarm configuration - 1st slot",
+			"valueSize": 4,
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 0
+		},
+		"31": {
+			"label": "Alarm configuration - 2nd slot",
+			"valueSize": 4,
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 0
+		},
+		"32": {
+			"label": "Alarm configuration - 3rd slot",
+			"valueSize": 4,
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 0
+		},
+		"33": {
+			"label": "Alarm configuration - 4th slot",
+			"valueSize": 4,
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 0
+		},
+		"34": {
+			"label": "Alarm configuration - 5th slot",
+			"valueSize": 4,
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 0
+		},
+		"35": {
+			"label": "Duration of alarm signalization",
+			"unit": "seconds",
+			"valueSize": 2,
+			"minValue": 0,
+			"maxValue": 32400,
+			"defaultValue": 600,
+			"options": [
+				{
+					"label": "infinite signalization",
+					"value": 0
 				}
 			]
 		},

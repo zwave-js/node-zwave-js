@@ -131,58 +131,6 @@
 				}
 			]
 		},
-		"40": {
-			"label": "Input 1 - sent scenes",
-			"description": "sending scene ID",
-			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 15,
-			"defaultValue": 0,
-			"options": [
-				{
-					"label": "Key pressed 1 time",
-					"value": 1
-				},
-				{
-					"label": "Key pressed 2 times",
-					"value": 2
-				},
-				{
-					"label": "Key pressed 3 times",
-					"value": 4
-				},
-				{
-					"label": "Key hold down and key released",
-					"value": 8
-				}
-			]
-		},
-		"41": {
-			"label": "Input 2 - sent scenes",
-			"description": "sending scene ID",
-			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 15,
-			"defaultValue": 0,
-			"options": [
-				{
-					"label": "Key pressed 1 time",
-					"value": 1
-				},
-				{
-					"label": "Key pressed 2 times",
-					"value": 2
-				},
-				{
-					"label": "Key pressed 3 times",
-					"value": 4
-				},
-				{
-					"label": "Key hold down and key released",
-					"value": 8
-				}
-			]
-		},
 		"47": {
 			"label": "Input 1 - 2nd group, activated",
 			"description": "value sent to 2nd association group when activated",
@@ -352,6 +300,58 @@
 			"minValue": 0,
 			"maxValue": 27000,
 			"defaultValue": 0
+		},
+		"40": {
+			"label": "Input 1 - sent scenes",
+			"description": "sending scene ID",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 15,
+			"defaultValue": 0,
+			"options": [
+				{
+					"label": "Key pressed 1 time",
+					"value": 1
+				},
+				{
+					"label": "Key pressed 2 times",
+					"value": 2
+				},
+				{
+					"label": "Key pressed 3 times",
+					"value": 4
+				},
+				{
+					"label": "Key hold down and key released",
+					"value": 8
+				}
+			]
+		},
+		"41": {
+			"label": "Input 2 - sent scenes",
+			"description": "sending scene ID",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 15,
+			"defaultValue": 0,
+			"options": [
+				{
+					"label": "Key pressed 1 time",
+					"value": 1
+				},
+				{
+					"label": "Key pressed 2 times",
+					"value": 2
+				},
+				{
+					"label": "Key pressed 3 times",
+					"value": 4
+				},
+				{
+					"label": "Key hold down and key released",
+					"value": 8
+				}
+			]
 		}
 	}
 }

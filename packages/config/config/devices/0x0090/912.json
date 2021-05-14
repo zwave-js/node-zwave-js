@@ -121,15 +121,6 @@
 		"30": {
 			"$import": "templates/kwikset_template.json#usercode_30"
 		},
-		"33": {
-			"$import": "templates/kwikset_template.json#dipswitch_sku_firstfour"
-		},
-		"34": {
-			"$import": "templates/kwikset_template.json#dipswitch_sku_lastfour"
-		},
-		"40": {
-			"$import": "templates/kwikset_template.json#reset"
-		},
 		"31[0x01]": {
 			"$import": "templates/kwikset_template.json#dipswitch_led"
 		},
@@ -141,6 +132,15 @@
 		},
 		"31[0x08]": {
 			"$import": "templates/kwikset_template.json#dipswitch_securescreen"
+		},
+		"33": {
+			"$import": "templates/kwikset_template.json#dipswitch_sku_firstfour"
+		},
+		"34": {
+			"$import": "templates/kwikset_template.json#dipswitch_sku_lastfour"
+		},
+		"40": {
+			"$import": "templates/kwikset_template.json#reset"
 		}
 	},
 	"compat": {
