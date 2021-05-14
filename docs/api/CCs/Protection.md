@@ -1,5 +1,7 @@
 # Protection CC
 
+?> CommandClass ID: `0x75`
+
 ## Protection CC methods
 
 ### `get`

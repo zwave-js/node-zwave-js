@@ -1,5 +1,7 @@
 # Multilevel Sensor CC
 
+?> CommandClass ID: `0x31`
+
 ## Multilevel Sensor CC methods
 
 ### `get`

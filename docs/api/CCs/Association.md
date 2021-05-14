@@ -1,5 +1,7 @@
 # Association CC
 
+?> CommandClass ID: `0x85`
+
 ## Association CC methods
 
 ### `getGroupCount`
