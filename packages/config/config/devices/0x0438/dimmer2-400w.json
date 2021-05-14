@@ -1,7 +1,7 @@
 {
 	"manufacturer": "Namron",
 	"manufacturerId": "0x0438",
-	"label": "Z-Wave dimmer 2 400W",
+	"label": "Z-Wave Dimmer 2 400W",
 	"description": "In-Wall Dimmer Module",
 	"devices": [
 		{
