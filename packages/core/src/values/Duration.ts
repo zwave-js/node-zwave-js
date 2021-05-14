@@ -5,6 +5,7 @@ import { ZWaveError, ZWaveErrorCodes } from "../error/ZWaveError";
 export type DurationUnit = "seconds" | "minutes" | "unknown" | "default";
 
 const durationStringRegex = /^(?:(?<hoursStr>\d+)h)?(?:(?<minutesStr>\d+)m)?(?:(?<secondsStr>\d+)s)?$/i;
+
 /** Represents a duration that is used by some command classes */
 export class Duration {
 	public constructor(value: number, public unit: DurationUnit) {
@@ -49,14 +50,18 @@ export class Duration {
 	}
 
 	/**
-	 * Parses a user-friendly duration string in the format "Xs", "Xm" or "XmYs", for example "10m20s".
+	 * Parses a user-friendly duration string in the format "Xs", "Xm", "XhYm" or "XmYs", for example "10m20s".
 	 * If that cannot be exactly represented as a Z-Wave duration, the nearest possible representation will be used.
 	 */
 	public static parseString(text: string): Duration | undefined {
 		if (!text.length) return undefined;
+
+		if (text === "default") return new Duration(0, "default");
+		// unknown durations shouldn't be parsed from strings because they are only ever reported
+
+		// Try to parse the numeric parts from a duration
 		const match = durationStringRegex.exec(text);
 		if (!match) return undefined;
-
 		const { hoursStr, minutesStr, secondsStr } = match.groups!;
 		const hours = hoursStr ? parseInt(hoursStr) : 0;
 		const minutes = minutesStr ? parseInt(minutesStr) : 0;
@@ -76,7 +81,9 @@ export class Duration {
 		}
 	}
 
-	/** Get either user-friendly duration string in format "Xs", "Xm" or "XmYs". Or direct duration */
+	/**
+	 * Takes a user-friendly duration string or a Duration instance and returns a Duration instance (if one was given)
+	 */
 	public static from(input?: Duration | string): Duration | undefined {
 		if (input instanceof Duration) {
 			return input;
@@ -145,7 +152,7 @@ export class Duration {
 				ret += `${this._value % 60}s`;
 				return ret;
 			default:
-				return `[Duration: ${this.unit}]`;
+				return this.unit;
 		}
 	}
 }
