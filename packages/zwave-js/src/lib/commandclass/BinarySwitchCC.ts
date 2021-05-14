@@ -94,7 +94,7 @@ export class BinarySwitchCCAPI extends CCAPI {
 	/**
 	 * Sets the switch to the given value
 	 * @param targetValue The target value to set
-	 * @param duration The duration after which the target value should be reached. Only supported in V2 and above
+	 * @param duration The duration after which the target value should be reached. Can be a Duration instance or a user-friendly duration string like `"1m17s"`. Only supported in V2 and above.
 	 */
 	public async set(
 		targetValue: boolean,

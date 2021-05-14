@@ -149,7 +149,7 @@ export class MultilevelSwitchCCAPI extends CCAPI {
 	/**
 	 * Sets the switch to a new value
 	 * @param targetValue The new target value for the switch
-	 * @param duration The optional duration to reach the target value. Available in V2+
+	 * @param duration The duration after which the target value should be reached. Can be a Duration instance or a user-friendly duration string like `"1m17s"`. Only supported in V2 and above.
 	 * @returns A promise indicating whether the command was completed
 	 */
 	public async set(
