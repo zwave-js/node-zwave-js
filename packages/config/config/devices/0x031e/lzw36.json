@@ -551,7 +551,7 @@
 		},
 		"23": {
 			"label": "Fan LED Strip Brightness When Off",
-			"description": "This is the intensity of the Fan LED strip when the switch is off. This is useful for users to see the light switch location when the lights are off. Range: 0-10 Default: 1",
+			"description": "This is useful for users to see the light switch location when the lights are off.",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 10,

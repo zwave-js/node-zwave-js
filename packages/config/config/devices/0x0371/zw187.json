@@ -170,22 +170,23 @@
 			]
 		},
 		"90": {
-			"label": "Low battery threshold",
-			"description": "Configure the low battery threshold percentage from 10-50. Induces battery report when battery level is less than or equal to threshold. Forward low battery report.",
+			"label": "Low Battery Threshold",
+			"description": "Send a Battery Report when the battery level is less than or equal to threshold.",
 			"unsigned": true,
 			"valueSize": 1,
 			"minValue": 10,
 			"maxValue": 50,
-			"defaultValue": 30
+			"defaultValue": 30,
+			"unit": "%"
 		},
 		"101": {
-			"label": "Timed battery report",
-			"description": "Configure timed battery report from 1-14400. Sets how often battery state is reported in minutes.",
+			"label": "Battery Report Interval",
 			"unsigned": true,
 			"valueSize": 2,
 			"minValue": 1,
 			"maxValue": 14400,
-			"defaultValue": 70
+			"defaultValue": 70,
+			"unit": "minutes"
 		}
 	}
 }

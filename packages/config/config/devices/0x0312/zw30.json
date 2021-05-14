@@ -93,7 +93,6 @@
 		},
 		"4": {
 			"label": "Auto Turn-off Time",
-			"description": "Auto turn-off time",
 			"valueSize": 4,
 			"unit": "minutes",
 			"minValue": 1,

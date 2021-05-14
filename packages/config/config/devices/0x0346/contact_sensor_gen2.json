@@ -75,7 +75,7 @@
 		},
 		"5": {
 			"label": "Force Wakeup After Delay",
-			"description": "Device will wakeup one time after the indidcated number of seconds",
+			"description": "Device will wakeup once after the configured delay",
 			"valueSize": 2,
 			"unit": "seconds",
 			"minValue": 5,
@@ -85,7 +85,7 @@
 		},
 		"6": {
 			"label": "Supervision Report Timeout",
-			"description": "This parameter is the number of milliseconds waiting for a Supervision Report response to a Supervision Get",
+			"description": "How long to wait for a Supervision Report response to a Supervision Get",
 			"valueSize": 2,
 			"unit": "ms",
 			"minValue": 500,

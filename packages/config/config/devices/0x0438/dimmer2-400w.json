@@ -96,7 +96,6 @@
 		},
 		"8": {
 			"label": "External Switch Type",
-			"description": "External switch type",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 2,

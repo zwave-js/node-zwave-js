@@ -19,12 +19,12 @@
 	"paramInformation": {
 		"1": {
 			"label": "Factory Reset",
-			"description": "Factory reset",
 			"valueSize": 2,
 			"minValue": 21930,
 			"maxValue": 21930,
 			"defaultValue": 21930,
-			"unsigned": true
+			"unsigned": true,
+			"writeOnly": true
 		}
 	},
 	"metadata": {
