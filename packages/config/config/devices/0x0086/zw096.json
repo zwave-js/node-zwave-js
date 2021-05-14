@@ -57,41 +57,6 @@
 		"81": {
 			"$import": "templates/aeotec_template.json#led_indicator_three_options"
 		},
-		"90": {
-			"$import": "templates/aeotec_template.json#send_automatic_reports"
-		},
-		"91": {
-			"$import": "templates/aeotec_template.json#wattage_trigger",
-			"defaultValue": 25
-		},
-		"92": {
-			"$import": "templates/aeotec_template.json#wattage_percent_trigger",
-			"defaultValue": 5
-		},
-		"111": {
-			"$import": "templates/aeotec_template.json#auto_report_interval_group1",
-			"maxValue": 2147483647
-		},
-		"112": {
-			"$import": "templates/aeotec_template.json#auto_report_interval_group2",
-			"maxValue": 2147483647
-		},
-		"113": {
-			"$import": "templates/aeotec_template.json#auto_report_interval_group3",
-			"maxValue": 2147483647
-		},
-		"200": {
-			"$import": "templates/aeotec_template.json#partner_id_other"
-		},
-		"252": {
-			"$import": "templates/aeotec_template.json#lock_configuration"
-		},
-		"254": {
-			"$import": "templates/aeotec_template.json#device_tag"
-		},
-		"255": {
-			"$import": "templates/aeotec_template.json#factory_reset_exclude"
-		},
 		"83[0xff]": {
 			"$import": "templates/aeotec_template.json#night_light_blue"
 		},
@@ -109,6 +74,17 @@
 		},
 		"84[0xff0000]": {
 			"$import": "templates/aeotec_template.json#night_light_red_brightness"
+		},
+		"90": {
+			"$import": "templates/aeotec_template.json#send_automatic_reports"
+		},
+		"91": {
+			"$import": "templates/aeotec_template.json#wattage_trigger",
+			"defaultValue": 25
+		},
+		"92": {
+			"$import": "templates/aeotec_template.json#wattage_percent_trigger",
+			"defaultValue": 5
 		},
 		"101[0x01]": {
 			"$import": "templates/aeotec_template.json#auto_report_group1_v"
@@ -145,6 +121,30 @@
 		},
 		"103[0x08]": {
 			"$import": "templates/aeotec_template.json#auto_report_group3_kwh"
+		},
+		"111": {
+			"$import": "templates/aeotec_template.json#auto_report_interval_group1",
+			"maxValue": 2147483647
+		},
+		"112": {
+			"$import": "templates/aeotec_template.json#auto_report_interval_group2",
+			"maxValue": 2147483647
+		},
+		"113": {
+			"$import": "templates/aeotec_template.json#auto_report_interval_group3",
+			"maxValue": 2147483647
+		},
+		"200": {
+			"$import": "templates/aeotec_template.json#partner_id_other"
+		},
+		"252": {
+			"$import": "templates/aeotec_template.json#lock_configuration"
+		},
+		"254": {
+			"$import": "templates/aeotec_template.json#device_tag"
+		},
+		"255": {
+			"$import": "templates/aeotec_template.json#factory_reset_exclude"
 		}
 	},
 	"metadata": {

@@ -83,29 +83,6 @@
 			"label": "Reset parameters 101-103 to Default Values",
 			"valueSize": 4
 		},
-		"110": {
-			"$import": "templates/aeotec_template.json#reset_parameters",
-			"label": "Reset Parameters 111-113 to Default Values",
-			"valueSize": 4
-		},
-		"111": {
-			"$import": "templates/aeotec_template.json#report_interval",
-			"label": "Report Interval (Group 1)",
-			"maxValue": 167400
-		},
-		"112": {
-			"$import": "templates/aeotec_template.json#report_interval",
-			"label": "Report Interval (Group 2)",
-			"maxValue": 167400
-		},
-		"113": {
-			"$import": "templates/aeotec_template.json#report_interval",
-			"label": "Report Interval (Group 3)",
-			"maxValue": 167400
-		},
-		"255": {
-			"$import": "templates/aeotec_template.json#factory_reset"
-		},
 		"101[0x01]": {
 			"$import": "../templates/master_template.json#base_enable_disable",
 			"label": "Automatic Report: Group 1 - Battery Report",
@@ -207,6 +184,29 @@
 		},
 		"103[0x2000]": {
 			"$import": "templates/aeotec_template.json#auto_report_group3_kwh_clamp3"
+		},
+		"110": {
+			"$import": "templates/aeotec_template.json#reset_parameters",
+			"label": "Reset Parameters 111-113 to Default Values",
+			"valueSize": 4
+		},
+		"111": {
+			"$import": "templates/aeotec_template.json#report_interval",
+			"label": "Report Interval (Group 1)",
+			"maxValue": 167400
+		},
+		"112": {
+			"$import": "templates/aeotec_template.json#report_interval",
+			"label": "Report Interval (Group 2)",
+			"maxValue": 167400
+		},
+		"113": {
+			"$import": "templates/aeotec_template.json#report_interval",
+			"label": "Report Interval (Group 3)",
+			"maxValue": 167400
+		},
+		"255": {
+			"$import": "templates/aeotec_template.json#factory_reset"
 		}
 	}
 }

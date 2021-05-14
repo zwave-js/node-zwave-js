@@ -62,31 +62,6 @@
 			"$import": "templates/aeotec_template.json#reset_parameters",
 			"label": "Reset Parameters 101-103 to Default Values"
 		},
-		"110": {
-			"$import": "templates/aeotec_template.json#reset_parameters",
-			"label": "Reset Parameters 111-113 to Default Values"
-		},
-		"111": {
-			"$import": "templates/aeotec_template.json#auto_report_interval_group1",
-			"maxValue": 2147483647
-		},
-		"112": {
-			"$import": "templates/aeotec_template.json#auto_report_interval_group2",
-			"maxValue": 2147483647
-		},
-		"113": {
-			"$import": "templates/aeotec_template.json#auto_report_interval_group3",
-			"maxValue": 2147483647
-		},
-		"200": {
-			"$import": "templates/aeotec_template.json#partner_id_other"
-		},
-		"252": {
-			"$import": "/templates/aeotec_template.json#lock_configuration"
-		},
-		"255": {
-			"$import": "/templates/aeotec_template.json#factory_reset_exclude"
-		},
 		"101[0x01]": {
 			"$import": "templates/aeotec_template.json#auto_report_group1_v"
 		},
@@ -122,6 +97,31 @@
 		},
 		"103[0x08]": {
 			"$import": "templates/aeotec_template.json#auto_report_group3_kwh"
+		},
+		"110": {
+			"$import": "templates/aeotec_template.json#reset_parameters",
+			"label": "Reset Parameters 111-113 to Default Values"
+		},
+		"111": {
+			"$import": "templates/aeotec_template.json#auto_report_interval_group1",
+			"maxValue": 2147483647
+		},
+		"112": {
+			"$import": "templates/aeotec_template.json#auto_report_interval_group2",
+			"maxValue": 2147483647
+		},
+		"113": {
+			"$import": "templates/aeotec_template.json#auto_report_interval_group3",
+			"maxValue": 2147483647
+		},
+		"200": {
+			"$import": "templates/aeotec_template.json#partner_id_other"
+		},
+		"252": {
+			"$import": "/templates/aeotec_template.json#lock_configuration"
+		},
+		"255": {
+			"$import": "/templates/aeotec_template.json#factory_reset_exclude"
 		}
 	},
 	"metadata": {

@@ -100,52 +100,6 @@
 			"unsigned": true,
 			"readOnly": true
 		},
-		"100": {
-			"$import": "templates/aeotec_template.json#reset_parameters",
-			"label": "Reset Parameters 101-103 to Default Values"
-		},
-		"110": {
-			"$import": "templates/aeotec_template.json#reset_parameters",
-			"label": "Reset Parameters 111-113 to Default Values"
-		},
-		"111": {
-			"$import": "templates/aeotec_template.json#auto_report_interval_group1"
-		},
-		"112": {
-			"$import": "templates/aeotec_template.json#auto_report_interval_group2"
-		},
-		"113": {
-			"$import": "templates/aeotec_template.json#auto_report_interval_group3"
-		},
-		"252": {
-			"$import": "templates/aeotec_template.json#lock_configuration"
-		},
-		"253": {
-			"label": "Meter Calibration Mode",
-			"valueSize": 4,
-			"minValue": 0,
-			"maxValue": 1,
-			"defaultValue": 0,
-			"unsigned": true,
-			"writeOnly": true,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "Normal Operation",
-					"value": 0
-				},
-				{
-					"label": "Enter Meter Calibration Mode",
-					"value": 1
-				}
-			]
-		},
-		"254": {
-			"$import": "templates/aeotec_template.json#device_tag"
-		},
-		"255": {
-			"$import": "templates/aeotec_template.json#factory_reset"
-		},
 		"101[0x01]": {
 			"$import": "templates/aeotec_template.json#auto_report_group1_watt",
 			"label": "Automatic Report: Group 1 - Power (Whole Strip)"
@@ -313,6 +267,52 @@
 		"103[0x4000]": {
 			"$import": "templates/aeotec_template.json#auto_report_group3_amp",
 			"label": "Automatic Report: Group 3 - Power (Socket 6)"
+		},
+		"100": {
+			"$import": "templates/aeotec_template.json#reset_parameters",
+			"label": "Reset Parameters 101-103 to Default Values"
+		},
+		"111": {
+			"$import": "templates/aeotec_template.json#auto_report_interval_group1"
+		},
+		"112": {
+			"$import": "templates/aeotec_template.json#auto_report_interval_group2"
+		},
+		"113": {
+			"$import": "templates/aeotec_template.json#auto_report_interval_group3"
+		},
+		"110": {
+			"$import": "templates/aeotec_template.json#reset_parameters",
+			"label": "Reset Parameters 111-113 to Default Values"
+		},
+		"252": {
+			"$import": "templates/aeotec_template.json#lock_configuration"
+		},
+		"253": {
+			"label": "Meter Calibration Mode",
+			"valueSize": 4,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 0,
+			"unsigned": true,
+			"writeOnly": true,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Normal Operation",
+					"value": 0
+				},
+				{
+					"label": "Enter Meter Calibration Mode",
+					"value": 1
+				}
+			]
+		},
+		"254": {
+			"$import": "templates/aeotec_template.json#device_tag"
+		},
+		"255": {
+			"$import": "templates/aeotec_template.json#factory_reset"
 		}
 	}
 }

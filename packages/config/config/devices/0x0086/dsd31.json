@@ -15,12 +15,6 @@
 	},
 	"supportsZWavePlus": true,
 	"paramInformation": {
-		"80": {
-			"$import": "templates/aeotec_template.json#enable_notifications"
-		},
-		"252": {
-			"$import": "templates/aeotec_template.json#lock_configuration"
-		},
 		"37[0xff00]": {
 			"label": "Siren Sound",
 			"valueSize": 2,
@@ -54,6 +48,12 @@
 		"37[0xff]": {
 			"$import": "../templates/master_template.json#volume_three",
 			"valueSize": 2
+		},
+		"80": {
+			"$import": "templates/aeotec_template.json#enable_notifications"
+		},
+		"252": {
+			"$import": "templates/aeotec_template.json#lock_configuration"
 		}
 	}
 }

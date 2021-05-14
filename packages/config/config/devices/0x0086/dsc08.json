@@ -24,31 +24,15 @@
 		"1": {
 			"$import": "templates/aeotec_template.json#report_power_voltage"
 		},
-		"100": {
-			"$import": "templates/aeotec_template.json#reset_parameters",
-			"label": "Reset Parameters 101-103 to Default Values"
-		},
-		"110": {
-			"$import": "templates/aeotec_template.json#reset_parameters",
-			"label": "Reset Parameters 111-113 to Default Values"
-		},
-		"111": {
-			"$import": "templates/aeotec_template.json#auto_report_interval_group1"
-		},
-		"112": {
-			"$import": "templates/aeotec_template.json#auto_report_interval_group2"
-		},
-		"113": {
-			"$import": "templates/aeotec_template.json#auto_report_interval_group3"
-		},
-		"254": {
-			"$import": "templates/aeotec_template.json#device_tag"
-		},
 		"2[0xff]": {
 			"$import": "templates/aeotec_template.json#blink_duration"
 		},
 		"2[0xff00]": {
 			"$import": "templates/aeotec_template.json#blink_length"
+		},
+		"100": {
+			"$import": "templates/aeotec_template.json#reset_parameters",
+			"label": "Reset Parameters 101-103 to Default Values"
 		},
 		"101[0x02]": {
 			"$import": "templates/aeotec_template.json#auto_report_group1_msrc"
@@ -76,6 +60,22 @@
 		},
 		"103[0x08]": {
 			"$import": "templates/aeotec_template.json#auto_report_group3_kwh"
+		},
+		"110": {
+			"$import": "templates/aeotec_template.json#reset_parameters",
+			"label": "Reset Parameters 111-113 to Default Values"
+		},
+		"111": {
+			"$import": "templates/aeotec_template.json#auto_report_interval_group1"
+		},
+		"112": {
+			"$import": "templates/aeotec_template.json#auto_report_interval_group2"
+		},
+		"113": {
+			"$import": "templates/aeotec_template.json#auto_report_interval_group3"
+		},
+		"254": {
+			"$import": "templates/aeotec_template.json#device_tag"
 		}
 	}
 }

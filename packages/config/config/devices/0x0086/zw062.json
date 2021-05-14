@@ -74,6 +74,103 @@
 			"readOnly": true,
 			"allowManualEntry": false
 		},
+		"37[0xff]": {
+			"$import": "../templates/master_template.json#base_enable_disable",
+			"label": "Opening Alarm",
+			"valueSize": 4
+		},
+		"37[0xff00]": {
+			"$import": "../templates/master_template.json#base_1-10_nounit",
+			"label": "Opening Alarm: Volume",
+			"valueSize": 4,
+			"defaultValue": 8
+		},
+		"37[0xff0000]": {
+			"label": "Opening Alarm: Sound Selection",
+			"valueSize": 4,
+			"minValue": 1,
+			"maxValue": 4,
+			"defaultValue": 1
+		},
+		"37[0xff000000]": {
+			"$import": "../templates/master_template.json#base_1-10_nounit",
+			"label": "Opening Alarm: LED Blinking Frequency",
+			"valueSize": 4,
+			"defaultValue": 10
+		},
+		"38[0xff]": {
+			"$import": "../templates/master_template.json#base_enable_disable",
+			"label": "Closing Alarm",
+			"valueSize": 4,
+			"defaultValue": 1
+		},
+		"38[0xff00]": {
+			"$import": "../templates/master_template.json#base_1-10_nounit",
+			"label": "Closing Alarm: Volume",
+			"valueSize": 4,
+			"defaultValue": 8
+		},
+		"38[0xff0000]": {
+			"label": "Closing Alarm: Sound Selection",
+			"valueSize": 4,
+			"minValue": 1,
+			"maxValue": 4,
+			"defaultValue": 2
+		},
+		"38[0xff000000]": {
+			"$import": "../templates/master_template.json#base_1-10_nounit",
+			"label": "Closing Alarm: LED Blinking Frequency",
+			"valueSize": 4,
+			"defaultValue": 6
+		},
+		"39[0xff]": {
+			"$import": "../templates/master_template.json#base_enable_disable",
+			"label": "Unknown State Alarm",
+			"valueSize": 4
+		},
+		"39[0xff00]": {
+			"$import": "../templates/master_template.json#base_1-10_nounit",
+			"label": "Unknown State Alarm: Volume",
+			"valueSize": 4,
+			"defaultValue": 8
+		},
+		"39[0xff0000]": {
+			"label": "Unknown State Alarm: Sound Selection",
+			"valueSize": 4,
+			"minValue": 1,
+			"maxValue": 4,
+			"defaultValue": 3
+		},
+		"39[0xff000000]": {
+			"$import": "../templates/master_template.json#base_1-10_nounit",
+			"label": "Unknown State Alarm: LED Blinking Frequency",
+			"valueSize": 4,
+			"defaultValue": 4
+		},
+		"40[0xff]": {
+			"$import": "../templates/master_template.json#base_enable_disable",
+			"label": "Closed Position Alarm",
+			"valueSize": 4
+		},
+		"40[0xff00]": {
+			"$import": "../templates/master_template.json#base_1-10_nounit",
+			"label": "Closed Position Alarm: Volume",
+			"valueSize": 4,
+			"defaultValue": 8
+		},
+		"40[0xff0000]": {
+			"label": "Closed Position Alarm: Sound Selection",
+			"valueSize": 4,
+			"minValue": 1,
+			"maxValue": 4,
+			"defaultValue": 3
+		},
+		"40[0xff000000]": {
+			"$import": "../templates/master_template.json#base_1-10_nounit",
+			"label": "Closed Position Alarm: LED Blinking Frequency",
+			"valueSize": 4,
+			"defaultValue": 4
+		},
 		"41": {
 			"label": "Tamper Sensor Status",
 			"valueSize": 1,
@@ -188,103 +285,6 @@
 		},
 		"255": {
 			"$import": "templates/aeotec_template.json#factory_reset_exclude"
-		},
-		"37[0xff]": {
-			"$import": "../templates/master_template.json#base_enable_disable",
-			"label": "Opening Alarm",
-			"valueSize": 4
-		},
-		"37[0xff00]": {
-			"$import": "../templates/master_template.json#base_1-10_nounit",
-			"label": "Opening Alarm: Volume",
-			"valueSize": 4,
-			"defaultValue": 8
-		},
-		"37[0xff0000]": {
-			"label": "Opening Alarm: Sound Selection",
-			"valueSize": 4,
-			"minValue": 1,
-			"maxValue": 4,
-			"defaultValue": 1
-		},
-		"37[0xff000000]": {
-			"$import": "../templates/master_template.json#base_1-10_nounit",
-			"label": "Opening Alarm: LED Blinking Frequency",
-			"valueSize": 4,
-			"defaultValue": 10
-		},
-		"38[0xff]": {
-			"$import": "../templates/master_template.json#base_enable_disable",
-			"label": "Closing Alarm",
-			"valueSize": 4,
-			"defaultValue": 1
-		},
-		"38[0xff00]": {
-			"$import": "../templates/master_template.json#base_1-10_nounit",
-			"label": "Closing Alarm: Volume",
-			"valueSize": 4,
-			"defaultValue": 8
-		},
-		"38[0xff0000]": {
-			"label": "Closing Alarm: Sound Selection",
-			"valueSize": 4,
-			"minValue": 1,
-			"maxValue": 4,
-			"defaultValue": 2
-		},
-		"38[0xff000000]": {
-			"$import": "../templates/master_template.json#base_1-10_nounit",
-			"label": "Closing Alarm: LED Blinking Frequency",
-			"valueSize": 4,
-			"defaultValue": 6
-		},
-		"39[0xff]": {
-			"$import": "../templates/master_template.json#base_enable_disable",
-			"label": "Unknown State Alarm",
-			"valueSize": 4
-		},
-		"39[0xff00]": {
-			"$import": "../templates/master_template.json#base_1-10_nounit",
-			"label": "Unknown State Alarm: Volume",
-			"valueSize": 4,
-			"defaultValue": 8
-		},
-		"39[0xff0000]": {
-			"label": "Unknown State Alarm: Sound Selection",
-			"valueSize": 4,
-			"minValue": 1,
-			"maxValue": 4,
-			"defaultValue": 3
-		},
-		"39[0xff000000]": {
-			"$import": "../templates/master_template.json#base_1-10_nounit",
-			"label": "Unknown State Alarm: LED Blinking Frequency",
-			"valueSize": 4,
-			"defaultValue": 4
-		},
-		"40[0xff]": {
-			"$import": "../templates/master_template.json#base_enable_disable",
-			"label": "Closed Position Alarm",
-			"valueSize": 4
-		},
-		"40[0xff00]": {
-			"$import": "../templates/master_template.json#base_1-10_nounit",
-			"label": "Closed Position Alarm: Volume",
-			"valueSize": 4,
-			"defaultValue": 8
-		},
-		"40[0xff0000]": {
-			"label": "Closed Position Alarm: Sound Selection",
-			"valueSize": 4,
-			"minValue": 1,
-			"maxValue": 4,
-			"defaultValue": 3
-		},
-		"40[0xff000000]": {
-			"$import": "../templates/master_template.json#base_1-10_nounit",
-			"label": "Closed Position Alarm: LED Blinking Frequency",
-			"valueSize": 4,
-			"defaultValue": 4
 		}
 	},
 	"metadata": {

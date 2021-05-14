@@ -27,18 +27,6 @@
 		}
 	},
 	"paramInformation": {
-		"80": {
-			"$import": "templates/aeotec_template.json#enable_notifications"
-		},
-		"200": {
-			"$import": "templates/aeotec_template.json#partner_id_aeotec"
-		},
-		"252": {
-			"$import": "templates/aeotec_template.json#lock_configuration"
-		},
-		"255": {
-			"$import": "templates/aeotec_template.json#factory_reset_exclude"
-		},
 		"37[0xff00]": {
 			"label": "Siren Sound",
 			"valueSize": 2,
@@ -71,6 +59,18 @@
 		"37[0xff]": {
 			"$import": "templates/aeotec_template.json#wattage_percent_trigger",
 			"valueSize": 2
+		},
+		"80": {
+			"$import": "templates/aeotec_template.json#enable_notifications"
+		},
+		"200": {
+			"$import": "templates/aeotec_template.json#partner_id_aeotec"
+		},
+		"252": {
+			"$import": "templates/aeotec_template.json#lock_configuration"
+		},
+		"255": {
+			"$import": "templates/aeotec_template.json#factory_reset_exclude"
 		}
 	},
 	"metadata": {

@@ -86,24 +86,6 @@
 		"46": {
 			"$import": "templates/aeotec_template.json#low_temp_alarm"
 		},
-		"111": {
-			"$import": "templates/aeotec_template.json#auto_report_interval_group1",
-			"defaultValue": 1800
-		},
-		"112": {
-			"$import": "templates/aeotec_template.json#auto_report_interval_group2",
-			"defaultValue": 1800
-		},
-		"113": {
-			"$import": "templates/aeotec_template.json#auto_report_interval_group3",
-			"defaultValue": 1800
-		},
-		"252": {
-			"$import": "templates/aeotec_template.json#lock_configuration"
-		},
-		"255": {
-			"$import": "templates/aeotec_template.json#factory_reset_exclude"
-		},
 		"101[0x01]": {
 			"$import": "templates/aeotec_template.json#auto_report_group1_battery"
 		},
@@ -139,6 +121,24 @@
 		},
 		"103[0x80]": {
 			"$import": "templates/aeotec_template.json#auto_report_group3_luminance"
+		},
+		"111": {
+			"$import": "templates/aeotec_template.json#auto_report_interval_group1",
+			"defaultValue": 1800
+		},
+		"112": {
+			"$import": "templates/aeotec_template.json#auto_report_interval_group2",
+			"defaultValue": 1800
+		},
+		"113": {
+			"$import": "templates/aeotec_template.json#auto_report_interval_group3",
+			"defaultValue": 1800
+		},
+		"252": {
+			"$import": "templates/aeotec_template.json#lock_configuration"
+		},
+		"255": {
+			"$import": "templates/aeotec_template.json#factory_reset_exclude"
 		}
 	},
 	"compat": {

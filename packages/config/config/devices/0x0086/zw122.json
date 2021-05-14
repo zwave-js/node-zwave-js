@@ -50,6 +50,54 @@
 		"8": {
 			"$import": "templates/aeotec_template.json#wake_up_timeout"
 		},
+		"9[0xff00]": {
+			"$import": "templates/aeotec_template.json#current_power_mode"
+		},
+		"9[0xff]": {
+			"label": "Current Power State",
+			"valueSize": 2,
+			"minValue": 0,
+			"maxValue": 2,
+			"defaultValue": 0,
+			"unsigned": true,
+			"readOnly": true,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Sleeping mode after re-power on",
+					"value": 0
+				},
+				{
+					"label": "Keep awake for 10 minutes after power-on",
+					"value": 1
+				},
+				{
+					"label": "Always awake",
+					"value": 2
+				}
+			]
+		},
+		"10[0xff]": {
+			"label": "Buzzer Repeat Cycles",
+			"valueSize": 4,
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 10
+		},
+		"10[0xff00]": {
+			"label": "Buzzer On Time",
+			"valueSize": 4,
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 20
+		},
+		"10[0xffff0000]": {
+			"label": "Buzzer Off Time",
+			"valueSize": 4,
+			"minValue": 0,
+			"maxValue": 32767,
+			"defaultValue": 120
+		},
 		"39": {
 			"$import": "templates/aeotec_template.json#low_battery_threshold",
 			"defaultValue": 20
@@ -58,10 +106,33 @@
 			"$import": "../templates/master_template.json#base_enable_disable",
 			"label": "Send Sensor Reports"
 		},
-		"64": {
+		"49[0xffff0000]": {
+			"label": "Overheat Temperature Threshold",
+			"valueSize": 4,
+			"minValue": 0,
+			"maxValue": 32767,
+			"defaultValue": 4
+		},
+		"49[0xff00]": {
 			"$import": "templates/aeotec_template.json#celsius_fahrenheit_0",
-			"label": "Temperature Unit for Reporting",
-			"valueSize": 1
+			"label": "Overheat Threshold Temperature Unit"
+		},
+		"50[0xffff0000]": {
+			"label": "Underheat Temperature Threshold",
+			"valueSize": 4,
+			"minValue": 0,
+			"maxValue": 32767,
+			"defaultValue": 1
+		},
+		"50[0xff00]": {
+			"$import": "templates/aeotec_template.json#celsius_fahrenheit_0",
+			"label": "Underheat Threshold Temperature Unit"
+		},
+		"57[0xff00]": {
+			"$import": "templates/aeotec_template.json#recover_limit_temp"
+		},
+		"57[0x0f]": {
+			"$import": "templates/aeotec_template.json#recover_limit_temp_unit"
 		},
 		"84": {
 			"label": "Tilt Sensor State",
@@ -87,6 +158,31 @@
 			"$import": "../templates/master_template.json#base_enable_disable",
 			"label": "Buzzer",
 			"defaultValue": 1
+		},
+		"87[0x01]": {
+			"$import": "../templates/master_template.json#base_enable_disable",
+			"label": "Buzzer: Water Leak",
+			"valueSize": 4
+		},
+		"87[0x02]": {
+			"$import": "../templates/master_template.json#base_enable_disable",
+			"label": "Buzzer: Vibration",
+			"valueSize": 4
+		},
+		"87[0x04]": {
+			"$import": "../templates/master_template.json#base_enable_disable",
+			"label": "Buzzer: Tilt Sensor",
+			"valueSize": 4
+		},
+		"87[0x10]": {
+			"$import": "../templates/master_template.json#base_enable_disable",
+			"label": "Buzzer: Underheat",
+			"valueSize": 4
+		},
+		"87[0x20]": {
+			"$import": "../templates/master_template.json#base_enable_disable",
+			"label": "Buzzer: Overheat",
+			"valueSize": 4
 		},
 		"88": {
 			"label": "Basic Set on Water Leak (Probe 1)",
@@ -150,37 +246,10 @@
 				}
 			]
 		},
-		"101": {
-			"label": "Automatic Secondary Report Type",
-			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 3,
-			"defaultValue": 3,
-			"unsigned": true,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "Disable",
-					"value": 0
-				},
-				{
-					"label": "Battery",
-					"value": 1
-				},
-				{
-					"label": "Temperature",
-					"value": 2
-				},
-				{
-					"label": "Battery and temperature",
-					"value": 3
-				}
-			]
-		},
-		"111": {
-			"$import": "templates/aeotec_template.json#auto_report_interval",
-			"label": "Audtomatic Secondary Report Interval",
-			"maxValue": 2678400
+		"64": {
+			"$import": "templates/aeotec_template.json#celsius_fahrenheit_0",
+			"label": "Temperature Unit for Reporting",
+			"valueSize": 1
 		},
 		"135": {
 			"label": "Automatic Report Type",
@@ -209,113 +278,6 @@
 					"value": 3
 				}
 			]
-		},
-		"252": {
-			"$import": "templates/aeotec_template.json#lock_configuration"
-		},
-		"255": {
-			"$import": "templates/aeotec_template.json#factory_reset_exclude"
-		},
-		"9[0xff00]": {
-			"$import": "templates/aeotec_template.json#current_power_mode"
-		},
-		"9[0xff]": {
-			"label": "Current Power State",
-			"valueSize": 2,
-			"minValue": 0,
-			"maxValue": 2,
-			"defaultValue": 0,
-			"unsigned": true,
-			"readOnly": true,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "Sleeping mode after re-power on",
-					"value": 0
-				},
-				{
-					"label": "Keep awake for 10 minutes after power-on",
-					"value": 1
-				},
-				{
-					"label": "Always awake",
-					"value": 2
-				}
-			]
-		},
-		"10[0xff]": {
-			"label": "Buzzer Repeat Cycles",
-			"valueSize": 4,
-			"minValue": 0,
-			"maxValue": 255,
-			"defaultValue": 10
-		},
-		"10[0xff00]": {
-			"label": "Buzzer On Time",
-			"valueSize": 4,
-			"minValue": 0,
-			"maxValue": 255,
-			"defaultValue": 20
-		},
-		"10[0xffff0000]": {
-			"label": "Buzzer Off Time",
-			"valueSize": 4,
-			"minValue": 0,
-			"maxValue": 32767,
-			"defaultValue": 120
-		},
-		"49[0xffff0000]": {
-			"label": "Overheat Temperature Threshold",
-			"valueSize": 4,
-			"minValue": 0,
-			"maxValue": 32767,
-			"defaultValue": 4
-		},
-		"49[0xff00]": {
-			"$import": "templates/aeotec_template.json#celsius_fahrenheit_0",
-			"label": "Overheat Threshold Temperature Unit"
-		},
-		"50[0xffff0000]": {
-			"label": "Underheat Temperature Threshold",
-			"valueSize": 4,
-			"minValue": 0,
-			"maxValue": 32767,
-			"defaultValue": 1
-		},
-		"50[0xff00]": {
-			"$import": "templates/aeotec_template.json#celsius_fahrenheit_0",
-			"label": "Underheat Threshold Temperature Unit"
-		},
-		"57[0xff00]": {
-			"$import": "templates/aeotec_template.json#recover_limit_temp"
-		},
-		"57[0x0f]": {
-			"$import": "templates/aeotec_template.json#recover_limit_temp_unit"
-		},
-		"87[0x01]": {
-			"$import": "../templates/master_template.json#base_enable_disable",
-			"label": "Buzzer: Water Leak",
-			"valueSize": 4
-		},
-		"87[0x02]": {
-			"$import": "../templates/master_template.json#base_enable_disable",
-			"label": "Buzzer: Vibration",
-			"valueSize": 4
-		},
-		"87[0x04]": {
-			"$import": "../templates/master_template.json#base_enable_disable",
-			"label": "Buzzer: Tilt Sensor",
-			"valueSize": 4
-		},
-		"87[0x10]": {
-			"$import": "../templates/master_template.json#base_enable_disable",
-			"label": "Buzzer: Underheat",
-			"valueSize": 4
-		},
-		"87[0x20]": {
-			"$import": "../templates/master_template.json#base_enable_disable",
-			"label": "Buzzer: Overheat",
-			"valueSize": 4
 		},
 		"136[0x01]": {
 			"label": "Water Leak Status: Probe 1",
@@ -357,6 +319,38 @@
 				}
 			]
 		},
+		"101": {
+			"label": "Automatic Secondary Report Type",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 3,
+			"defaultValue": 3,
+			"unsigned": true,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Disable",
+					"value": 0
+				},
+				{
+					"label": "Battery",
+					"value": 1
+				},
+				{
+					"label": "Temperature",
+					"value": 2
+				},
+				{
+					"label": "Battery and temperature",
+					"value": 3
+				}
+			]
+		},
+		"111": {
+			"$import": "templates/aeotec_template.json#auto_report_interval",
+			"label": "Audtomatic Secondary Report Interval",
+			"maxValue": 2678400
+		},
 		"201[0xff00]": {
 			"label": "Temperature Calibration",
 			"valueSize": 2,
@@ -368,6 +362,12 @@
 			"$import": "templates/aeotec_template.json#celsius_fahrenheit_0",
 			"label": "Temperature Calibration Unit",
 			"valueSize": 2
+		},
+		"252": {
+			"$import": "templates/aeotec_template.json#lock_configuration"
+		},
+		"255": {
+			"$import": "templates/aeotec_template.json#factory_reset_exclude"
 		}
 	},
 	"metadata": {
