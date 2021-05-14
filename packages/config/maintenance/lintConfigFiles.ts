@@ -634,26 +634,31 @@ Did you mean to use ${opt.value >>> shiftAmount}?`,
 
 				// Check if there are descriptions with common errors
 				for (const [
-					{ parameter },
+					{ parameter, valueBitMask },
 					value,
 				] of config.paramInformation.entries()) {
 					if (!value.description) continue;
 
+					const bitmaskString =
+						valueBitMask != undefined
+							? `[${num2hex(valueBitMask)}]`
+							: "";
+
 					if (/default:?\s+\d+/i.test(value.description)) {
 						addWarning(
 							file,
-							`Parameter #${parameter}: The description mentions a default value which should be handled by the "defaultValue" property instead!`,
+							`Parameter #${parameter}${bitmaskString}: The description mentions a default value which should be handled by the "defaultValue" property instead!`,
 							variant,
 						);
 					}
 					if (
-						/seconds|minutes|hours|percent(age)?|kwh|watts/i.test(
+						/seconds|minutes|hours|kwh|watts/i.test(
 							value.description,
 						)
 					) {
 						addWarning(
 							file,
-							`Parameter #${parameter}: The description mentions a unit which should be moved by the "unit" property instead!`,
+							`Parameter #${parameter}${bitmaskString}: The description mentions a unit which should be moved by the "unit" property instead!`,
 							variant,
 						);
 					}
