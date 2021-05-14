@@ -1479,11 +1479,7 @@ async function parseZWAProduct(
 	await fs.ensureDir(manufacturerDir);
 
 	// Write the file
-	// Add a comment explaining which device this is
-	// prettier-ignore
-	const output = `// ${newConfig.manufacturer} ${newConfig.label}${newConfig.description ? (`
-// ${newConfig.description}`) : ""}
-${JSONC.stringify(normalizeConfig(newConfig), null, "\t")}`;
+	const output = JSONC.stringify(normalizeConfig(newConfig), null, "\t");
 	await fs.writeFile(fileNameAbsolute, output, "utf8");
 }
 
@@ -1569,12 +1565,11 @@ async function maintenanceParse(): Promise<void> {
 			/*************************************
 			 *   Write the configuration file    *
 			 *************************************/
-
-			// Add a comment explaining which device this is
-			// prettier-ignore
-			const output = `// ${jsonData.manufacturer} ${jsonData.label}${jsonData.description ? (`
-// ${jsonData.description}`) : ""}
-${JSONC.stringify(normalizeConfig(jsonData), null, "\t")}`;
+			const output = JSONC.stringify(
+				normalizeConfig(jsonData),
+				null,
+				"\t",
+			);
 			await fs.writeFile(file, output, "utf8");
 		}
 	}
@@ -1917,11 +1912,7 @@ async function importConfigFilesOH(): Promise<void> {
 		outFilename += ".json";
 		await fs.ensureDir(path.dirname(outFilename));
 
-		// Add a comment explaining which device this is
-		// prettier-ignore
-		const output = `// ${parsed.manufacturer} ${parsed.label}${parsed.description ? (`
-// ${parsed.description}`) : ""}
-${stringify(parsed, "\t")}`;
+		const output = stringify(parsed, "\t");
 		await fs.writeFile(outFilename, output, "utf8");
 	}
 }
