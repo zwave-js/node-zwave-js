@@ -1,3 +1,4 @@
+import type { AssociationConfig } from "@zwave-js/config";
 import {
 	actuatorCCs,
 	CommandClasses,
@@ -2004,7 +2005,22 @@ ${associatedNodes.join(", ")}`,
 				CommandClasses["Association Group Information"],
 			)!;
 			for (let group = 1; group <= groupCount; group++) {
-				const assocConfig = node.deviceConfig?.associations?.get(group);
+				let assocConfig: AssociationConfig | undefined;
+				if (node.deviceConfig) {
+					if (endpointIndex === 0) {
+						// The root endpoint's associations may be configured separately or as part of "endpoints"
+						assocConfig =
+							node.deviceConfig.associations?.get(group) ??
+							node.deviceConfig.endpoints
+								?.get(0)
+								?.associations?.get(group);
+					} else {
+						// The other endpoints can only have a configuration as part of "endpoints"
+						assocConfig = node.deviceConfig.endpoints
+							?.get(endpointIndex)
+							?.associations?.get(group);
+					}
+				}
 				const multiChannel = !!mcInstance && group <= mcGroupCount;
 				ret.set(group, {
 					maxNodes:

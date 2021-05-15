@@ -426,6 +426,33 @@ firmwareVersion is malformed or invalid`,
 			this.firmwareVersion = { min, max };
 		}
 
+		if (definition.endpoints != undefined) {
+			const endpoints = new Map<number, ConditionalEndpointConfig>();
+			if (!isObject(definition.endpoints)) {
+				throwInvalidConfig(
+					`device`,
+					`packages/config/config/devices/${filename}:
+endpoints is not an object`,
+				);
+			}
+			for (const [key, ep] of entries(definition.endpoints)) {
+				if (!/^\d+$/.test(key)) {
+					throwInvalidConfig(
+						`device`,
+						`packages/config/config/devices/${filename}:
+found non-numeric endpoint index "${key}" in endpoints`,
+					);
+				}
+
+				const epIndex = parseInt(key, 10);
+				endpoints.set(
+					epIndex,
+					new ConditionalEndpointConfig(filename, epIndex, ep),
+				);
+			}
+			this.endpoints = endpoints;
+		}
+
 		if (definition.associations != undefined) {
 			const associations = new Map<
 				number,
@@ -580,6 +607,7 @@ metadata is not an object`,
 		productId: number;
 	}[];
 	public readonly firmwareVersion: FirmwareVersionRange;
+	public readonly endpoints?: ReadonlyMap<number, ConditionalEndpointConfig>;
 	public readonly associations?: ReadonlyMap<
 		number,
 		ConditionalAssociationConfig
@@ -602,6 +630,15 @@ metadata is not an object`,
 			for (const [group, assoc] of this.associations) {
 				const evaluated = assoc.evaluateCondition(deviceId);
 				if (evaluated) associations.set(group, evaluated);
+			}
+		}
+
+		let endpoints: Map<number, EndpointConfig> | undefined;
+		if (this.endpoints) {
+			endpoints = new Map();
+			for (const [group, assoc] of this.endpoints) {
+				const evaluated = assoc.evaluateCondition(deviceId);
+				if (evaluated) endpoints.set(group, evaluated);
 			}
 		}
 
@@ -630,6 +667,7 @@ metadata is not an object`,
 			this.description,
 			this.devices,
 			this.firmwareVersion,
+			endpoints,
 			associations,
 			paramInformation,
 			this.proprietary,
@@ -662,6 +700,7 @@ export class DeviceConfig {
 			productId: number;
 		}[],
 		public readonly firmwareVersion: FirmwareVersionRange,
+		public readonly endpoints?: ReadonlyMap<number, EndpointConfig>,
 		public readonly associations?: ReadonlyMap<number, AssociationConfig>,
 		public readonly paramInformation?: ParamInfoMap,
 		/**
@@ -683,6 +722,100 @@ export class DeviceConfig {
 	/** Whether this is an embedded configuration or not */
 	public readonly isEmbedded: boolean;
 }
+
+export class ConditionalEndpointConfig {
+	public constructor(
+		filename: string,
+		index: number,
+		definition: JSONObject,
+	) {
+		this.index = index;
+
+		if (definition.$if != undefined && typeof definition.$if !== "string") {
+			throwInvalidConfig(
+				"devices",
+				`packages/config/config/devices/${filename}:
+Endpoint ${index} has a non-string $if condition`,
+			);
+		}
+		this.condition = definition.$if;
+
+		if (definition.associations != undefined) {
+			const associations = new Map<
+				number,
+				ConditionalAssociationConfig
+			>();
+			if (!isObject(definition.associations)) {
+				throwInvalidConfig(
+					`device`,
+					`packages/config/config/devices/${filename}:
+Endpoint ${index}: associations is not an object`,
+				);
+			}
+			for (const [key, assocDefinition] of entries(
+				definition.associations,
+			)) {
+				if (!/^[1-9][0-9]*$/.test(key)) {
+					throwInvalidConfig(
+						`device`,
+						`packages/config/config/devices/${filename}:
+Endpoint ${index}: found non-numeric group id "${key}" in associations`,
+					);
+				}
+
+				const keyNum = parseInt(key, 10);
+				associations.set(
+					keyNum,
+					new ConditionalAssociationConfig(
+						filename,
+						keyNum,
+						assocDefinition,
+					),
+				);
+			}
+			this.associations = associations;
+		}
+	}
+
+	public readonly index: number;
+	public readonly condition?: string;
+
+	public readonly associations?: ReadonlyMap<
+		number,
+		ConditionalAssociationConfig
+	>;
+
+	public evaluateCondition(deviceId?: DeviceID): EndpointConfig | undefined {
+		if (
+			deviceId &&
+			this.condition &&
+			!conditionApplies(this.condition, deviceId)
+		) {
+			return;
+		}
+
+		let associations: Map<number, AssociationConfig> | undefined;
+		if (this.associations) {
+			associations = new Map();
+			for (const [group, assoc] of this.associations) {
+				const evaluated = assoc.evaluateCondition(deviceId);
+				if (evaluated) associations.set(group, evaluated);
+			}
+		}
+
+		return {
+			...pick(this, ["index"]),
+			associations,
+		};
+	}
+}
+
+export type EndpointConfig = Omit<
+	ConditionalEndpointConfig,
+	"condition" | "evaluateCondition" | "associations"
+> & {
+	associations: Map<number, AssociationConfig> | undefined;
+};
 
 export class ConditionalAssociationConfig {
 	public constructor(

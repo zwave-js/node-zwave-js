@@ -17,6 +17,7 @@ The logic supports the JavaScript operators `<`, `<=`, `>`, `>=` and `===`, as w
 
 You can use `"$if"` in the following locations:
 
+-   Inside endpoint definitions
 -   Inside association groups
 -   Inside config parameters
 -   Inside config parameter options
