@@ -59,7 +59,7 @@
 					"value": 1
 				}
 			]
-		},		
+		},
 		"5[0x04]": {
 			"label": "Door Window Function",
 			"valueSize": 1,
@@ -165,7 +165,7 @@
 					"value": 0
 				}
 			]
-		},		
+		},
 		"6[0x10]": {
 			"label": "5 Second Delay",
 			"description": "Disable delay 5 seconds to turn off the light, when door/window closed",
@@ -219,7 +219,7 @@
 					"value": 0
 				}
 			]
-		},		
+		},
 		"7[0x10]": {
 			"label": "Notification Type",
 			"valueSize": 1,
