@@ -69,7 +69,7 @@ Can be used to add instructions for the user to a device:
 
 ## `endpoints`
 
-Endpoint-specific configuration - for now this only includes associations. Example:
+Optional endpoint-specific configuration. For now this only includes associations. Example:
 
 ```json
 "endpoints": {
