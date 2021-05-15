@@ -32,7 +32,7 @@
 			"description": "Setting the BASIC command value to turn on the light",
 			"valueSize": 1,
 			"minValue": 0,
-			"maxValue": 100,
+			"maxValue": 255,
 			"defaultValue": 255
 		},
 		"4": {
@@ -95,7 +95,7 @@
 			]
 		},
 		"5[0x10]": {
-			"label": "Operation Mode",
+			"label": "Illumination report on trigger",
 			"description": "Disable the illumination report after event triggered",
 			"valueSize": 1,
 			"minValue": 0,
@@ -113,7 +113,7 @@
 			]
 		},
 		"5[0x20]": {
-			"label": "Operation Mode",
+			"label": "Temperature report on trigger",
 			"description": "Disable the temperature report after event triggered",
 			"valueSize": 1,
 			"minValue": 0,
@@ -131,7 +131,7 @@
 			]
 		},
 		"5[0x80]": {
-			"label": "Operation Mode",
+			"label": "Back key release",
 			"description": "Disable the back key release into test mode",
 			"valueSize": 1,
 			"minValue": 0,
