@@ -1,5 +1,7 @@
 # Wake Up CC
 
+?> CommandClass ID: `0x84`
+
 ## Wake Up CC methods
 
 ### `getInterval`

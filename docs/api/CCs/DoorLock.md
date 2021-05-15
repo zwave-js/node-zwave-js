@@ -1,5 +1,7 @@
 # Door Lock CC
 
+?> CommandClass ID: `0x62`
+
 ## Door Lock CC methods
 
 ### `getCapabilities`

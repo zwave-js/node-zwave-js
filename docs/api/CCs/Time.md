@@ -1,5 +1,7 @@
 # Time CC
 
+?> CommandClass ID: `0x8a`
+
 ## Time CC methods
 
 ### `getTime`

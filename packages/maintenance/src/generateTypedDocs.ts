@@ -5,8 +5,8 @@
 // wotan-disable no-useless-assertion
 // until fimbullinter/wotan#719 is fixed
 
-import { getCCName } from "@zwave-js/core";
-import { enumFilesRecursive } from "@zwave-js/shared";
+import { CommandClasses, getCCName } from "@zwave-js/core";
+import { enumFilesRecursive, num2hex } from "@zwave-js/shared";
 import { red } from "ansi-colors";
 import * as fs from "fs-extra";
 import * as path from "path";
@@ -332,8 +332,13 @@ async function generateCCDocs(program: Project): Promise<boolean> {
 		console.log(`generating documentation for ${ccName} CC...`);
 
 		const filename = APIClass.getName()!.replace("CCAPI", "") + ".md";
-		let text = `# ${ccName} CC\n\n`;
-		generatedIndex += `\n- [${ccName} CC](api/CCs/${filename})`;
+		let text = `# ${ccName} CC
+
+?> CommandClass ID: \`${num2hex((CommandClasses as any)[ccName])}\`
+`;
+		generatedIndex += `\n- [${ccName} CC](api/CCs/${filename}) · \`${num2hex(
+			(CommandClasses as any)[ccName],
+		)}\``;
 		generatedSidebar += `\n\t\t- [${ccName} CC](api/CCs/${filename})`;
 
 		// Enumerate all useful public methods

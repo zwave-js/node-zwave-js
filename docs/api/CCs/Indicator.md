@@ -1,5 +1,7 @@
 # Indicator CC
 
+?> CommandClass ID: `0x87`
+
 ## Indicator CC methods
 
 ### `get`

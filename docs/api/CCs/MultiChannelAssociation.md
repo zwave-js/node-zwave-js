@@ -1,5 +1,7 @@
 # Multi Channel Association CC
 
+?> CommandClass ID: `0x8e`
+
 ## Multi Channel Association CC methods
 
 ### `getGroupCount`

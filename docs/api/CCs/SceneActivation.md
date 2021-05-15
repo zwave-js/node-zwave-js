@@ -1,5 +1,7 @@
 # Scene Activation CC
 
+?> CommandClass ID: `0x2b`
+
 ## Scene Activation CC methods
 
 ### `set`

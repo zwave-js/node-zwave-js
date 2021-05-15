@@ -1,5 +1,7 @@
 # User Code CC
 
+?> CommandClass ID: `0x63`
+
 ## User Code CC methods
 
 ### `getUsersCount`
