@@ -866,12 +866,12 @@ maxNodes for association ${groupId} is not a number`,
 
 		if (
 			definition.isLifeline != undefined &&
-			definition.isLifeline !== true
+			typeof definition.isLifeline !== "boolean"
 		) {
 			throwInvalidConfig(
 				"devices",
 				`packages/config/config/devices/${filename}:
-isLifeline in association ${groupId} must be either true or left out`,
+isLifeline in association ${groupId} must be a boolean`,
 			);
 		}
 		this.isLifeline = !!definition.isLifeline;
