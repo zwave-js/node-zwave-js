@@ -2248,6 +2248,10 @@ protocol version:      ${this._protocolVersion}`;
 				] as CCAPI).withOptions({
 					// Tag the resulting transactions as compat queries
 					tag: "compat",
+					// Do not retry them or they may cause congestion if the node is asleep again
+					maxSendAttempts: 1,
+					// This is for a sleeping node - there's no point in keeping the transactions when the node is asleep
+					expire: 10000,
 				});
 			} catch {
 				this.driver.controllerLog.logNode(this.id, {
@@ -2301,6 +2305,13 @@ protocol version:      ${this._protocolVersion}`;
 					direction: "none",
 					level: "warn",
 				});
+				if (
+					isZWaveError(e) &&
+					e.code === ZWaveErrorCodes.Controller_MessageExpired
+				) {
+					// A compat query expired - no point in trying the others too
+					return;
+				}
 			}
 		}
 	}
