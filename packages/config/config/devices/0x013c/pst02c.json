@@ -48,7 +48,7 @@
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 1,
-			"defaultValue": 0
+			"defaultValue": 0,
 			"options": [
 				{
 					"label": "Disable",
@@ -65,7 +65,7 @@
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 1,
-			"defaultValue": 0
+			"defaultValue": 0,
 			"options": [
 				{
 					"label": "Disable",
@@ -82,7 +82,7 @@
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 1,
-			"defaultValue": 0
+			"defaultValue": 0,
 			"options": [
 				{
 					"label": "Fahrenheit",
@@ -100,8 +100,8 @@
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 1,
-			"defaultValue": 1
-				"options": [
+			"defaultValue": 1,
+			"options": [
 				{
 					"label": "Disable",
 					"value": 1
@@ -118,7 +118,7 @@
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 1,
-			"defaultValue": 1
+			"defaultValue": 1,
 			"options": [
 				{
 					"label": "Disable",
@@ -136,7 +136,7 @@
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 1,
-			"defaultValue": 1
+			"defaultValue": 1,
 			"options": [
 				{
 					"label": "Disable",
@@ -154,7 +154,7 @@
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 1,
-			"defaultValue": 1
+			"defaultValue": 1,
 			"options": [
 				{
 					"label": "Disable",
@@ -172,7 +172,7 @@
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 1,
-			"defaultValue": 1
+			"defaultValue": 1,
 			"options": [
 				{
 					"label": "Disable",
@@ -190,7 +190,7 @@
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 1,
-			"defaultValue": 1
+			"defaultValue": 1,
 			"options": [
 				{
 					"label": "Disable",
@@ -208,7 +208,7 @@
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 1,
-			"defaultValue": 1
+			"defaultValue": 1,
 			"options": [
 				{
 					"label": "Disable",
@@ -225,7 +225,7 @@
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 1,
-			"defaultValue": 0
+			"defaultValue": 0,
 			"options": [
 				{
 					"label": "Use Notification Report",
@@ -243,7 +243,7 @@
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 1,
-			"defaultValue": 1
+			"defaultValue": 1,
 			"options": [
 				{
 					"label": "Disable",
@@ -261,7 +261,7 @@
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 1,
-			"defaultValue": 1
+			"defaultValue": 1,
 			"options": [
 				{
 					"label": "Disable",
