@@ -170,13 +170,13 @@
 			]
 		},
 		"20": {
-			"label": "Poll Group 2 Interval (minutes)",
-			"description": "Polling Interval in minutes (default 2)",
+			"label": "Poll Group 2 Interval ",
 			"valueSize": 1,
 			"minValue": 1,
 			"maxValue": 255,
 			"defaultValue": 2,
-			"unsigned": true
+			"unsigned": true,
+			"unit": "minutes"
 		},
 		"22": {
 			"label": "Poll Group 2",

@@ -250,7 +250,7 @@
 		},
 		"18[0xff000000]": {
 			"$import": "templates/logic_group_template.json#multilevel_enable",
-			"label": "Button 4 - Double Press (On Value)"
+			"label": "Button 4 - Double Press"
 		},
 		"18[0xff0000]": {
 			"$import": "templates/logic_group_template.json#multilevel_upper_function",

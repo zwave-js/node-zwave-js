@@ -106,16 +106,15 @@
 		},
 		"24": {
 			"label": "Temperature And Light Sensor Sensing Frequency Setting",
-			"description": "5 min to 60 min",
 			"valueSize": 1,
 			"minValue": 5,
 			"maxValue": 60,
 			"defaultValue": 60,
+			"unit": "minutes",
 			"unsigned": true
 		},
 		"28": {
-			"label": "Enable And Disable The LED Indication When PIR Triggered And After Timeout",
-			"description": "Enable & disable the LED indication when PIR is triggered and after timeout",
+			"label": "LED Indication When PIR Triggered And After Timeout",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 1,

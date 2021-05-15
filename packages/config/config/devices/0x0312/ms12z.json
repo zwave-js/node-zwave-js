@@ -78,7 +78,7 @@
 			]
 		},
 		"3": {
-			"label": "Enable/Disable Auto-On Timer",
+			"label": "Enable/Disable Auto-Off Timer",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 1,

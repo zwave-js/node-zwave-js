@@ -256,7 +256,6 @@
 		},
 		"101[0x01]": {
 			"label": "Enable reporting of Power Consumption",
-			"description": "Enable regular reporting on Power Consumption",
 			"valueSize": 4,
 			"minValue": 0,
 			"maxValue": 1,
@@ -264,7 +263,6 @@
 		},
 		"101[0x02]": {
 			"label": "Enable reporting of Power",
-			"description": "Enable regular reporting on Power",
 			"valueSize": 4,
 			"minValue": 0,
 			"maxValue": 1,
@@ -272,7 +270,6 @@
 		},
 		"101[0x04]": {
 			"label": "Enable reporting of Voltage",
-			"description": "Enable regular reporting on Voltage",
 			"valueSize": 4,
 			"minValue": 0,
 			"maxValue": 1,
@@ -280,7 +277,6 @@
 		},
 		"101[0x08]": {
 			"label": "Enable reporting of Current",
-			"description": "Enable regular reporting on Current",
 			"valueSize": 4,
 			"minValue": 0,
 			"maxValue": 1,

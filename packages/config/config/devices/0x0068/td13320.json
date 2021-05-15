@@ -18,8 +18,7 @@
 	},
 	"paramInformation": {
 		"1": {
-			"label": "Meter Report Time",
-			"description": "How often to send a meter report(minute)",
+			"label": "Meter Report Interval",
 			"valueSize": 2,
 			"unit": "minutes",
 			"minValue": 0,
@@ -29,7 +28,6 @@
 		},
 		"2": {
 			"label": "Night Light Mode",
-			"description": "Sets the night light mode",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 255,
@@ -38,7 +36,6 @@
 		},
 		"3": {
 			"label": "Night Light Color Value",
-			"description": "Sets the night light color value",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 255,

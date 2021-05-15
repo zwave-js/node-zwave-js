@@ -215,7 +215,7 @@
 		},
 		"62": {
 			"label": "Power Report Frequency",
-			"description": "Power Report Frequency. Choose how often you want your RGBW Dimmer to report power consumption (W) to your controller. NOTE: must be 0, or an increment of 30. Default: 3600",
+			"description": "Choose how often you want your RGBW Dimmer to report power consumption (W) to your controller. NOTE: must be 0, or an increment of 30. Default: 3600",
 			"valueSize": 2,
 			"unit": "seconds",
 			"minValue": 0,
@@ -225,7 +225,7 @@
 		},
 		"65": {
 			"label": "Energy Report Threshold",
-			"description": "Energy Report Threshold. Choose how you want your RGBW Dimmer to report energy use (kWh) to your hub. The number entered as value corresponds to decimal values in energy useage change. So if 10 is entered by default, the RGBW Dimmer will report any change in energy use over 0.1 kWh. Energy reports are sent in t least 30-second intervals.",
+			"description": "Choose how you want your RGBW Dimmer to report energy use (kWh) to your hub. The number entered as value corresponds to decimal values in energy useage change. So if 10 is entered by default, the RGBW Dimmer will report any change in energy use over 0.1 kWh. Energy reports are sent in t least 30-second intervals.",
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 500,
@@ -234,7 +234,7 @@
 		},
 		"66": {
 			"label": "Energy Report Frequency",
-			"description": "Energy Report Frequency. Choose how often you want your RGBW Dimmer to report energy (kWh) to your controller. NOTE: must be 0, or an increment of 30. Default: 3600",
+			"description": "Choose how often you want your RGBW Dimmer to report energy (kWh) to your controller. NOTE: must be 0, or an increment of 30",
 			"valueSize": 2,
 			"unit": "seconds",
 			"minValue": 0,
@@ -244,7 +244,7 @@
 		},
 		"150": {
 			"label": "RGBW/HSB Wall Switch Mode",
-			"description": "RGBW/HSB Wall Switch Mode. Choose how switches connected to the input terminals control your LED strip. In the default RGBW mode, each switch connected to each input terminal controls the RGBW chnnels separately (so IN1 for red, IN2 for green, etc.) with a single click for ON/OFF, double click to full brightness, and press-and-hold to dim (momentary switches only). In the HSB, IN1 controls hue, IN2 - saturation, IN3 - brightness, IN4 - white with single click for last set value or value 0, double click to max value, and press-and-hold to set custom value. Default: RGBW mode",
+			"description": "Choose how switches connected to the input terminals control your LED strip. In the default RGBW mode, each switch connected to each input terminal controls the RGBW chnnels separately (so IN1 for red, IN2 for green, etc.) with a single click for ON/OFF, double click to full brightness, and press-and-hold to dim (momentary switches only). In the HSB, IN1 controls hue, IN2 - saturation, IN3 - brightness, IN4 - white with single click for last set value or value 0, double click to max value, and press-and-hold to set custom value. Default: RGBW mode",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 1,
@@ -264,27 +264,39 @@
 		},
 		"151": {
 			"label": "Ramp Rate (switch)",
-			"description": "Ramp Rate (switch). Adjust the ramp rate for your RGBW dimmer (fade-in/fade-out effect for on/off operation). Values correspond to the number of seconds it takes for the dimmer to reach full brightness or turn off when operated from the connected wall switch. Note that 0 is instant on/off. Default : 3 seconds",
+			"description": "How long it takes for the dimmer to reach full brightness or turn off when operated from the connected wall switch.",
 			"valueSize": 2,
 			"unit": "seconds",
 			"minValue": 0,
 			"maxValue": 127,
 			"defaultValue": 3,
-			"unsigned": true
+			"unsigned": true,
+			"options": [
+				{
+					"label": "Instant On/Off",
+					"value": 0
+				}
+			]
 		},
 		"152": {
 			"label": "Ramp Rate (Z-Wave)",
-			"description": "Ramp Rate (Z-Wave). Adjust the ramp rate for your RGBW dimmer (fade-in/fade-out effect for on/off operation). Values correspond to the number of seconds it takes for the dimmer to reach full brightness or turn off when operated remotely from the Z-Wave hub Note that 0 is instant on/off. Default : 3 seconds",
+			"description": "How long it takes for the dimmer to reach full brightness or turn off when operated remotely from the Z-Wave hub.",
 			"valueSize": 2,
 			"unit": "seconds",
 			"minValue": 0,
 			"maxValue": 127,
 			"defaultValue": 3,
-			"unsigned": true
+			"unsigned": true,
+			"options": [
+				{
+					"label": "Instant On/Off",
+					"value": 0
+				}
+			]
 		},
 		"157": {
 			"label": "Preset Programs",
-			"description": "Enable one of the preset animated color programs to set the mood with a click. Default: preset programs disabled",
+			"description": "Enable one of the preset animated color programs to set the mood with a click.",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 10,
@@ -293,27 +305,27 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "preset programs disabled",
+					"label": "Preset programs disabled",
 					"value": 0
 				},
 				{
-					"label": "fireplace",
+					"label": "Fireplace",
 					"value": 6
 				},
 				{
-					"label": "storm",
+					"label": "Storm",
 					"value": 7
 				},
 				{
-					"label": "rainbow",
+					"label": "Rainbow",
 					"value": 8
 				},
 				{
-					"label": "polar lights",
+					"label": "Polar lights",
 					"value": 9
 				},
 				{
-					"label": "police",
+					"label": "Police",
 					"value": 10
 				}
 			]

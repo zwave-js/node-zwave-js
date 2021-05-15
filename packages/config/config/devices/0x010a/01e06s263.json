@@ -234,8 +234,7 @@
 			"unsigned": true
 		},
 		"206": {
-			"label": "Buttons Max. Brightness",
-			"description": "Leds maximum brightness",
+			"label": "Buttons Maximum Brightness",
 			"valueSize": 1,
 			"minValue": 5,
 			"maxValue": 100,
@@ -243,8 +242,7 @@
 			"unsigned": true
 		},
 		"207": {
-			"label": "Buttons Min. Brightness",
-			"description": "Led minum brightness",
+			"label": "Buttons Minimum Brightness",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 100,

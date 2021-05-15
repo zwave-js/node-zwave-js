@@ -38,7 +38,7 @@
 			]
 		},
 		"7": {
-			"label": "Remote dim level increment",
+			"label": "Remote Dim Level Increment",
 			"description": "Number of dim levels to change for each dim step when remotely commanded",
 			"valueSize": 1,
 			"minValue": 1,
@@ -46,7 +46,7 @@
 			"defaultValue": 1
 		},
 		"8": {
-			"label": "Remote dim step duration",
+			"label": "Remote Dim Step Duration",
 			"description": "Interval between dimming steps when remotely commanded",
 			"unit": "10 ms",
 			"valueSize": 2,
@@ -65,7 +65,7 @@
 		},
 		"10": {
 			"label": "Step Duration",
-			"description": "The number of tens of milliseconds to delay on each dimming step.",
+			"description": "Interval between dimming steps",
 			"valueSize": 2,
 			"minValue": 1,
 			"maxValue": 255,

@@ -35,16 +35,15 @@
 		},
 		"4": {
 			"label": "Default fade time",
-			"description": "Default fade time (unit is second)",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 255,
 			"defaultValue": 1,
-			"unsigned": true
+			"unsigned": true,
+			"unit": "seconds"
 		},
 		"5": {
-			"label": "brightness value",
-			"description": "Setting minimum brightness value",
+			"label": "Minimum Brightness",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 50,
