@@ -29,7 +29,7 @@
 	"paramInformation": {
 		"2": {
 			"label": "Basic Set Level",
-			"description": "Setting the BASIC command value to turn on the light.",
+			"description": "Setting the BASIC command value to turn on the light",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 100,
@@ -37,7 +37,7 @@
 		},
 		"4": {
 			"label": "Light Threshold",
-			"description": "Setting the illumination threshold to turn on the light.",
+			"description": "Setting the illumination threshold to turn on the light",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 100,
@@ -132,7 +132,7 @@
 		},
 		"5[0x80]": {
 			"label": "Operation Mode",
-			"description": "Disable the back key release into test mode.",
+			"description": "Disable the back key release into test mode",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 1,
@@ -148,21 +148,130 @@
 				}
 			]
 		},
-		"6": {
-			"label": "Multi-Sensor Function Switch",
-			"description": "Parameter to set the sensor functions.",
+		"6[0x02]": {
+			"label": "Magnetic Illumination",
+			"description": "Disable magnetic integrate illumination to turn ON the lighting nodes in the association group 2",
 			"valueSize": 1,
 			"minValue": 0,
-			"maxValue": 127,
-			"defaultValue": 4
+			"maxValue": 1,
+			"defaultValue": 1
+			"options": [
+				{
+					"label": "Disable",
+					"value": 1
+				},
+				{
+					"label": "Disable",
+					"value": 0
+				}
+			]
+		},		
+		"6[0x10]": {
+			"label": "5 Second Delay",
+			"description": "Disable delay 5 seconds to turn off the light, when door/window closed",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 1
+			"options": [
+				{
+					"label": "Disable",
+					"value": 1
+				},
+				{
+					"label": "Enable",
+					"value": 0
+				}
+			]
 		},
-		"7": {
-			"label": "Customer Function",
-			"description": "Parameter to set the Customer Function.",
+		"6[0x20]": {
+			"label": "Auto turn off light",
+			"description": "Disable auto turn off the light, after door/window opened to turn on the light",
 			"valueSize": 1,
 			"minValue": 0,
-			"maxValue": 127,
-			"defaultValue": 4
+			"maxValue": 1,
+			"defaultValue": 1
+			"options": [
+				{
+					"label": "Disable",
+					"value": 1
+				},
+				{
+					"label": "Enable",
+					"value": 0
+				}
+			]
+		},
+		"7[0x08]": {
+			"label": "Base Off after door close",
+			"description": "Disable send out BASIC OFF after door closed",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 1
+			"options": [
+				{
+					"label": "Disable",
+					"value": 1
+				},
+				{
+					"label": "Disable",
+					"value": 0
+				}
+			]
+		},		
+		"7[0x10]": {
+			"label": "Notification Type",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 0
+			"options": [
+				{
+					"label": "Use Notification Report",
+					"value": 0
+				},
+				{
+					"label": "Use Sensor Binary Report",
+					"value": 1
+				}
+			]
+		},
+		"7[0x20]": {
+			"label": "Disable Multi CC",
+			"description": "Disable Multi CC in auto report",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 1
+			"options": [
+				{
+					"label": "Disable",
+					"value": 1
+				},
+				{
+					"label": "Enable",
+					"value": 0
+				}
+			]
+		},
+		"7[0x40]": {
+			"label": "Report battery state when triggered",
+			"description": "Disable to report battery state when the device triggered",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 1
+			"options": [
+				{
+					"label": "Disable",
+					"value": 1
+				},
+				{
+					"label": "Enable",
+					"value": 0
+				}
+			]
 		},
 		"8": {
 			"label": "PIR Re-Detect Interval Time",
