@@ -747,6 +747,14 @@ Did you mean to use ${opt.value >>> shiftAmount}?`,
 				}
 			}
 		}
+
+		// Check that either `endpoints` or `associations` are specified, not both
+		if (conditionalConfig.endpoints && conditionalConfig.associations) {
+			addError(
+				file,
+				`The properties "endpoints" and "associations" cannot be used together. To define associations for the root endpoint, specify them under endpoint "0"!`,
+			);
+		}
 	}
 
 	// Check for duplicate definitions

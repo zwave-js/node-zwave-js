@@ -1,3 +1,4 @@
+import type { AssociationConfig } from "@zwave-js/config";
 import type { Maybe, MessageRecord, ValueID } from "@zwave-js/core";
 import {
 	CommandClasses,
@@ -87,9 +88,21 @@ export function getLifelineGroupIds(endpoint: Endpoint): number[] {
 	}
 
 	// We have a device config file that tells us which (additional) association to assign
-	if (node.deviceConfig?.associations?.size) {
+	let associations: ReadonlyMap<number, AssociationConfig> | undefined;
+	if (endpoint.index === 0) {
+		// The root endpoint's associations may be configured separately or as part of "endpoints"
+		associations =
+			node.deviceConfig?.associations ??
+			node.deviceConfig?.endpoints?.get(0)?.associations;
+	} else {
+		// The other endpoints can only have a configuration as part of "endpoints"
+		associations = node.deviceConfig?.endpoints?.get(endpoint.index)
+			?.associations;
+	}
+
+	if (associations?.size) {
 		lifelineGroups.push(
-			...[...node.deviceConfig.associations.values()]
+			...[...associations.values()]
 				.filter((a) => a.isLifeline)
 				.map((a) => a.groupId),
 		);
