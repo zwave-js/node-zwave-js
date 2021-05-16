@@ -365,8 +365,21 @@ export class MultilevelSwitchCCAPI extends CCAPI {
 								value,
 							);
 						}
+					} else if (value === 255) {
+						// We generally don't want to poll for multicasts because of how much traffic it can cause
+						// However, when setting the value 255 (ON), we don't know the actual state
+
+						// We query currentValue instead of targetValue to make sure that unsolicited updates cancel the scheduled poll
+						// wotan-disable-next-line no-useless-predicate
+						if (property === "targetValue")
+							property = "currentValue";
+						// TODO: #1321
+						const duration = undefined as Duration | undefined;
+						this.schedulePoll(
+							{ property },
+							duration?.toMilliseconds(),
+						);
 					}
-					// For multicasts, do not schedule a refresh - this could cause a LOT of traffic
 				}
 			}
 		} else if (switchTypeProperties.includes(property as string)) {
