@@ -124,7 +124,6 @@
 		},
 		"6": {
 			"label": "VOC Change Reporting Threshold",
-			"description": "0: No on change reporting (only time-based reports) 1-10: report if VOC reading changed by 100ppb - 1000ppb Default: 5",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 10,
@@ -155,7 +154,6 @@
 		},
 		"8": {
 			"label": "Air Quality Indication via LED",
-			"description": "0: No air quality indication via LEDs 1: Indicate measuered air quality via LEDs Default: 1",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 1,

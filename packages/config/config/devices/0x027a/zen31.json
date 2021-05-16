@@ -1,9 +1,6 @@
 // Zooz ZEN31
 // RGBW Dimmer
 {
-	"revision": {
-		"ozw": 2
-	},
 	"manufacturer": "Zooz",
 	"manufacturerId": "0x027a",
 	"label": "ZEN31",
@@ -215,7 +212,7 @@
 		},
 		"62": {
 			"label": "Power Report Frequency",
-			"description": "Choose how often you want your RGBW Dimmer to report power consumption (W) to your controller. NOTE: must be 0, or an increment of 30. Default: 3600",
+			"description": "Choose how often you want your RGBW Dimmer to report power consumption (W) to your controller. NOTE: must be 0, or an increment of 30.",
 			"valueSize": 2,
 			"unit": "seconds",
 			"minValue": 0,

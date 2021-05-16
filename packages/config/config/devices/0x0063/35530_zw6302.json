@@ -19,7 +19,6 @@
 	"paramInformation": {
 		"6": {
 			"label": "Enable And Disable The PIR Sensor",
-			"description": "Enable and disable the PIR sensor",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 1,
@@ -38,8 +37,7 @@
 			]
 		},
 		"13": {
-			"label": "Pir Sensitivity Setting",
-			"description": "You can modify the sensitivity of PIR if changing the value in parameter 13",
+			"label": "PIR Sensitivity Setting",
 			"valueSize": 1,
 			"minValue": 1,
 			"maxValue": 3,
@@ -62,8 +60,7 @@
 			]
 		},
 		"18": {
-			"label": "Pir Timeout Duration",
-			"description": "Pir timeout duration",
+			"label": "PIR Timeout Duration",
 			"valueSize": 1,
 			"minValue": 1,
 			"maxValue": 255,
@@ -81,8 +78,7 @@
 			]
 		},
 		"20": {
-			"label": "Basic Set, Notification And Basic Report",
-			"description": "Changing parameter 20 can let the multisensor send out \"Basic Set\" command or \"basic report\" command or \"notification\" report to Z-Wave devices",
+			"label": "Motion Sensor Report Type",
 			"valueSize": 1,
 			"minValue": 1,
 			"maxValue": 3,
@@ -91,15 +87,15 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "Motion sensor will send out notification",
+					"label": "Notification CC",
 					"value": 1
 				},
 				{
-					"label": "Motion sensor will send out Basic Set",
+					"label": "Basic CC Set",
 					"value": 2
 				},
 				{
-					"label": "Motion sensor will sendout basic report",
+					"label": "Basic CC Report",
 					"value": 3
 				}
 			]

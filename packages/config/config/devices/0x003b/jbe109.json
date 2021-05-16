@@ -127,11 +127,10 @@
 			]
 		},
 		"16": {
-			"label": "User_code_pin_length",
-			"description": "User code pin length, a value between 4 and 8 (default 4)",
+			"label": "User Code PIN Length",
 			"valueSize": 1,
 			"minValue": 4,
-			"maxValue": 4,
+			"maxValue": 8,
 			"defaultValue": 4,
 			"unsigned": true
 		}
