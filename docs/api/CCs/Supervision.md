@@ -1,5 +1,7 @@
 # Supervision CC
 
+?> CommandClass ID: `0x6c`
+
 ## Supervision CC methods
 
 ### `sendEncapsulated`

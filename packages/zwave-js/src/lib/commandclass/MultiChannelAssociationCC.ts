@@ -478,7 +478,11 @@ export class MultiChannelAssociationCC extends CommandClass {
 					const groupSupportsMultiChannel = group <= mcGroupCount;
 					const mustUseNodeAssociation =
 						!supportsMultiChannel ||
-						node.deviceConfig?.associations?.get(group)?.noEndpoint;
+						node.deviceConfig?.associations?.get(group)
+							?.multiChannel === false ||
+						node.deviceConfig?.endpoints
+							?.get(0)
+							?.associations?.get(group)?.multiChannel === false;
 
 					const nodeIdsValueId = groupSupportsMultiChannel
 						? getNodeIdsValueId(this.endpointIndex, group)

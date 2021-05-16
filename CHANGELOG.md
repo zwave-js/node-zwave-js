@@ -3,20 +3,30 @@
 	Add placeholder for next release with `wip` snippet
 -->
 ## __WORK IN PROGRESS__
-<!-- ### Breaking changes
-
 ### Features
+* CC API methods that accept a duration now also accept user-friendly strings like `2m5s` and `60s` instead of only `Duration` class instances
+* Configuration files may now define association groups on endpoints
 
-### Bugfixes -->
+### Bugfixes
+* Disconnection of a serial-over-TCP socket is now detected and destroy the driver instead of silently failing
+* Ensure the external configuration directory exists
+* Prevent congestion through delayed wakeup compat queries to sleeping nodes
 
 ### Config file changes
 * Corrected lifeline label for Aeon ZW100
 * Aligned Fantem FT100 Motion with ZW100
+* Add additional device ID to Wenzhou ZW15S
+* Add support for Namron Dimmer 2 400W
+* Enable Basic Set mapping for EverSpring SP103
+* Align Fantem Door Window Sensor to Aeotec files
+* Add Zooz ZEN73/ZEN74; minor fix to importConfig.ts
+* Corrected lifeline label on Aeotec ZW112
 
 ### Changes under the hood
 * Reduced boilerplate for writing configuration files:
   * `readOnly` and `writeOnly` default to `false` and must now be omitted if they are not `true`
   * `allowManualEntry` is now optional and defaults to `true` unless the parameter is `readOnly`. This must be omitted or `false`.
+* The CC API documentation now mentions the numeric CC identifier
 
 ## 7.4.0 (2021-05-10)
 ### Features

@@ -1,5 +1,7 @@
 # Central Scene CC
 
+?> CommandClass ID: `0x5b`
+
 ## Central Scene CC methods
 
 ### `getSupported`

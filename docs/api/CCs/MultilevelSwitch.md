@@ -1,5 +1,7 @@
 # Multilevel Switch CC
 
+?> CommandClass ID: `0x26`
+
 ## Multilevel Switch CC methods
 
 ### `get`

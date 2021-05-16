@@ -1,5 +1,7 @@
 # Clock CC
 
+?> CommandClass ID: `0x81`
+
 ## Clock CC methods
 
 ### `get`

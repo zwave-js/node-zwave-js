@@ -1,5 +1,7 @@
 # Thermostat Fan Mode CC
 
+?> CommandClass ID: `0x44`
+
 ## Thermostat Fan Mode CC methods
 
 ### `get`

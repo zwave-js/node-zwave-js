@@ -1,5 +1,7 @@
 # Firmware Update Meta Data CC
 
+?> CommandClass ID: `0x7a`
+
 ## Firmware Update Meta Data CC methods
 
 ### `getMetaData`

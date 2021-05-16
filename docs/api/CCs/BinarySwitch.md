@@ -1,5 +1,7 @@
 # Binary Switch CC
 
+?> CommandClass ID: `0x25`
+
 ## Binary Switch CC methods
 
 ### `get`

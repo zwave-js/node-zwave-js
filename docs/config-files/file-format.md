@@ -11,6 +11,7 @@ The following properties are defined and should always be present in the same or
 | `devices`           | An array of product type and product ID combinations, [see below](#devices) for details.                                                                                                                   |
 | `firmwareVersion`   | The firmware version range this config file is valid for, [see below](#firmwareVersion) for details.                                                                                                       |
 | `supportsZWavePlus` | (deprecated)                                                                                                                                                                                               |
+| `endpoints`         | Endpoint-specific configuration, [see below](#endpoints) for details. If this is present, `associations` must be specified on endpoint `"0"` instead of on the root level.                                 |
 | `associations`      | The association groups the device supports, [see below](#associations) for details. Only needs to be present if the device does not support Z-Wave+ or requires changes to the default association config. |
 | `paramInformation`  | A dictionary of the configuration parameters the device supports. [See below](#paramInformation) for details.                                                                                              |
 | `proprietary`       | A dictionary of settings for the proprietary CC. The settings depend on each proprietary CC implementation.                                                                                                |
@@ -66,6 +67,26 @@ Can be used to add instructions for the user to a device:
 }
 ```
 
+## `endpoints`
+
+Optional endpoint-specific configuration. For now this only includes associations. Example:
+
+```json
+"endpoints": {
+	"0": {
+		"associations": {
+			// Association definitions for endpoint 0, see below for details
+		}
+	},
+	"1": {
+		"associations": {
+			// Association definitions for endpoint 1, see below for details
+		}
+	},
+	// etc.
+}
+```
+
 ## `associations`
 
 For devices which do not allow auto-discovering associations, the associations must be defined in the config file.
@@ -91,13 +112,73 @@ The property looks as follows:
 		"description": "A description what group #2 does", // optional, only add this if it adds additional value
 		"maxNodes": 1, // SHOULD be 1 for the lifeline, some devices support more nodes
 		"isLifeline": true, // Whether this is the Lifeline group. SHOULD exist exactly once, some nodes require more groups to report everything
-		"noEndpoint": true, // Whether node id associations must be used for this group, even if the device supports endpoint associations, (optional)
+		"multiChannel": false, // Set this to false to force node id associations for this group, even if endpoint associations are supported. Default: `true`
 	},
 	// ... more groups ...
 }
 ```
 
 The `isLifeline` key is used to determine which group sends the controller device status updates.
+
+To define associations for other endpoints than the root endpoint, you **must** specify `"associations"` inside the `"endpoints"` property.
+If the same associations exist on the root endpoint and other endpoints, it is **recommended** to self-reference them via `$import`s.
+
+> [!ATTENTION] Make sure to disable the `isLifeline` flag on endpoints if the **same** lifeline group is shared between multiple endpoints.
+
+Example:
+
+```json
+"endpoints": {
+	"0": {
+		"associations": {
+			"1": {
+				"label": "Lifeline",
+				"maxNodes": 5,
+				"isLifeline": true
+			},
+			"2": {
+				"label": "Button 1",
+				"maxNodes": 5
+			},
+			"3": {
+				"label": "Button 2",
+				"maxNodes": 5
+			},
+		}
+	},
+	"1": {
+		"associations": {
+			"1": {
+				// This group is shared with the root endpoint. Reference it from there, but don't auto-assign multiple times.
+				"$import": "#endpoints/0/associations/1",
+				"isLifeline": false
+			},
+			"2": {
+				// This association also exists as group 2 on the root endpoint, so we reference it
+				"$import": "#endpoints/0/associations/2"
+			}
+		}
+	},
+	"2": {
+		"associations": {
+			"1": {
+				// This group is shared with the root endpoint. Reference it from there, but don't auto-assign multiple times.
+				"$import": "#endpoints/0/associations/1",
+				"isLifeline": false
+			},
+			"2": {
+				// This association also exists as group 3 on the root endpoint, so we reference it
+				"$import": "#endpoints/0/associations/3"
+			},
+			"3": {
+				// This association only exists on endpoint 2
+				"label": "Button 2: Double Tap",
+				"maxNodes": 5
+			}
+		}
+	}
+}
+```
 
 ## `paramInformation`
 

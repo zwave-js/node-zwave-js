@@ -1,5 +1,7 @@
 # Multi Channel CC
 
+?> CommandClass ID: `0x60`
+
 ## Multi Channel CC methods
 
 ### `getEndpoints`
