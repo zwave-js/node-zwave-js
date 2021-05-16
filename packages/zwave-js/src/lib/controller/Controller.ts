@@ -2362,7 +2362,7 @@ ${associatedNodes.join(", ")}`,
 		const groupIsMultiChannel =
 			!!mcInstance &&
 			group <= mcGroupCount &&
-			!node.deviceConfig?.associations?.get(group)?.noEndpoint;
+			node.deviceConfig?.associations?.get(group)?.multiChannel !== false;
 
 		if (groupIsMultiChannel) {
 			// Check that all associations are allowed

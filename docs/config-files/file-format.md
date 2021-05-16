@@ -112,7 +112,7 @@ The property looks as follows:
 		"description": "A description what group #2 does", // optional, only add this if it adds additional value
 		"maxNodes": 1, // SHOULD be 1 for the lifeline, some devices support more nodes
 		"isLifeline": true, // Whether this is the Lifeline group. SHOULD exist exactly once, some nodes require more groups to report everything
-		"noEndpoint": true, // Whether node id associations must be used for this group, even if the device supports endpoint associations, (optional)
+		"multiChannel": false, // Set this to false to force node id associations for this group, even if endpoint associations are supported. Default: `true`
 	},
 	// ... more groups ...
 }
