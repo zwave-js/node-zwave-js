@@ -36,7 +36,8 @@
 			"label": "Lifeline",
 			"maxNodes": 5,
 			"isLifeline": true,
-			"noEndpoint": true
+			// The device does not like Endpoint Associations for the lifeline
+			"multiChannel": false
 		},
 		"2": {
 			"label": "Forward Received Commands",

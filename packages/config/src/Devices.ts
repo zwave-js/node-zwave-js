@@ -877,16 +877,17 @@ isLifeline in association ${groupId} must be a boolean`,
 		this.isLifeline = !!definition.isLifeline;
 
 		if (
-			definition.noEndpoint != undefined &&
-			definition.noEndpoint !== true
+			definition.multiChannel != undefined &&
+			definition.multiChannel !== false
 		) {
 			throwInvalidConfig(
 				"devices",
 				`packages/config/config/devices/${filename}:
-noEndpoint in association ${groupId} must be either true or left out`,
+multiChannel in association ${groupId} must be either false or left out`,
 			);
 		}
-		this.noEndpoint = !!definition.noEndpoint;
+		// Default to multi channel associations
+		this.multiChannel = definition.multiChannel ?? true;
 	}
 
 	public readonly condition?: string;
@@ -901,7 +902,7 @@ noEndpoint in association ${groupId} must be either true or left out`,
 	 */
 	public readonly isLifeline: boolean;
 	/** Some devices support multi channel associations but require some of its groups to use node id associations */
-	public readonly noEndpoint: boolean;
+	public readonly multiChannel: boolean;
 
 	public evaluateCondition(
 		deviceId?: DeviceID,
@@ -920,7 +921,7 @@ noEndpoint in association ${groupId} must be either true or left out`,
 			"description",
 			"maxNodes",
 			"isLifeline",
-			"noEndpoint",
+			"multiChannel",
 		]);
 	}
 }
