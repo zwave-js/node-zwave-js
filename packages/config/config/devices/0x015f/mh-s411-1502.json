@@ -1,5 +1,3 @@
-// McoHome Technology Co., Ltd. MH-S411
-// Touch Panel Switch 1 Button
 {
 	"manufacturer": "McoHome Technology Co., Ltd.",
 	"manufacturerId": "0x015f",
@@ -155,7 +153,6 @@
 			"minValue": 0,
 			"maxValue": 1,
 			"defaultValue": 0,
-			"unsigned": true,
 			"unsigned": true,
 			"allowManualEntry": false,
 			"options": [

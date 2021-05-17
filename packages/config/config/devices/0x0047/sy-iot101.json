@@ -1,5 +1,3 @@
-// Somfy SY-IOT101
-// Blind-curtain motor controller
 {
 	"manufacturer": "Somfy",
 	"manufacturerId": "0x0047",

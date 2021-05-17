@@ -1,5 +1,3 @@
-// BeNext Molite
-// Movement sensor with temperature and light sensor
 {
 	"manufacturer": "BeNext",
 	"manufacturerId": "0x008a",

@@ -1,5 +1,3 @@
-// Radio Thermostat Company of America (RTC) CT200
-// Vivint Element Thermostat w/ other sensors
 {
 	"manufacturer": "Radio Thermostat Company of America (RTC)",
 	"manufacturerId": "0x0098",

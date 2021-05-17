@@ -1,5 +1,3 @@
-// Namron 1402756
-// LED Dimmer
 {
 	"manufacturer": "Namron",
 	"manufacturerId": "0x0438",
@@ -15,7 +13,6 @@
 		"min": "0.0",
 		"max": "255.255"
 	},
-
 	"associations": {
 		"1": {
 			"label": "Lifeline",
