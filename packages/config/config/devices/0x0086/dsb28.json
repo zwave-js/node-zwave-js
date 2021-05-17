@@ -64,7 +64,7 @@
 			"$import": "templates/aeotec_template.json#power_threshold_clamp3"
 		},
 		"8": {
-			"$import": "templates/aeotec_template.json#power_threshold_wholehem"
+			"$import": "templates/aeotec_template.json#percent_threshold_wholehem"
 		},
 		"9": {
 			"$import": "templates/aeotec_template.json#percent_threshold_clamp1"
