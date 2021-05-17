@@ -6,6 +6,8 @@
 ### Features
 * CC API methods that accept a duration now also accept user-friendly strings like `2m5s` and `60s` instead of only `Duration` class instances
 * Configuration files may now define association groups on endpoints
+* Successful multicast commands now optimistically update the CC values
+* Successful multicast commands now verify the current value if the target value is `255`
 
 ### Bugfixes
 * Disconnection of a serial-over-TCP socket is now detected and destroy the driver instead of silently failing
@@ -21,12 +23,18 @@
 * Align Fantem Door Window Sensor to Aeotec files
 * Add Zooz ZEN73/ZEN74; minor fix to importConfig.ts
 * Corrected lifeline label on Aeotec ZW112
+* Corrected param 8 for Aeotec DSB28
+* Corrected labels of power related params for Aeotec DSC11
+* Add keypad mapping to Yale Conexis L1
+* Several warnings were fixed in config files
 
 ### Changes under the hood
 * Reduced boilerplate for writing configuration files:
   * `readOnly` and `writeOnly` default to `false` and must now be omitted if they are not `true`
   * `allowManualEntry` is now optional and defaults to `true` unless the parameter is `readOnly`. This must be omitted or `false`.
 * The CC API documentation now mentions the numeric CC identifier
+* The `noEndpoint` property for associations in config files has been renamed to `multiChannel` and its meaning was reversed.
+* The leading comments at the start of config files were removed
 
 ## 7.4.0 (2021-05-10)
 ### Features
