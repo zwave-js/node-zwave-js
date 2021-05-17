@@ -41,7 +41,6 @@
 		},
 		"18": {
 			"label": "Pir Timeout Duration",
-			"description": "Pir timeout duration",
 			"valueSize": 1,
 			"minValue": 1,
 			"maxValue": 255,
@@ -83,8 +82,7 @@
 			]
 		},
 		"28": {
-			"label": "Enable &amp;amp;amp;amp;amp;amp;amp; Disable The LED Indication When PIR is Triggered",
-			"description": "Enable & disable the LED indication when PIR is triggered",
+			"label": "LED Indication When PIR Is Triggered",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 1,

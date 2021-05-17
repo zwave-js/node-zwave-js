@@ -82,8 +82,7 @@
 			]
 		},
 		"5": {
-			"label": "Auto OFF",
-			"description": "Automatically turn switch off after this number of seconds",
+			"label": "Auto Off Timer",
 			"unit": "seconds",
 			"valueSize": 2,
 			"minValue": 0,
@@ -91,7 +90,7 @@
 			"defaultValue": 0
 		},
 		"7": {
-			"label": "Association Group 3 setting",
+			"label": "Association Group 3 Setting",
 			"description": "Change how devices respond when associated in group 3",
 			"valueSize": 1,
 			"minValue": 0,

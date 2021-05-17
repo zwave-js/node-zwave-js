@@ -281,34 +281,11 @@
 		},
 		"16": {
 			"label": "User Code PIN Length",
-			"description": "User Code PIN length, a value between 4 and 8 (default 4)",
 			"valueSize": 1,
 			"minValue": 4,
 			"maxValue": 8,
 			"defaultValue": 4,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "Four Digits",
-					"value": 4
-				},
-				{
-					"label": "Five Digits",
-					"value": 5
-				},
-				{
-					"label": "Six Digits",
-					"value": 6
-				},
-				{
-					"label": "Seven Digits",
-					"value": 7
-				},
-				{
-					"label": "Eight Digits",
-					"value": 8
-				}
-			]
+			"unsigned": true
 		},
 		"18": {
 			"label": "Get Bootloader Version",

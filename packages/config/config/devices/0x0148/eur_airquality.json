@@ -26,28 +26,37 @@
 	},
 	"paramInformation": {
 		"1": {
-			"label": "Temperature on Change Reporting",
-			"description": "0: No on change reporting (only time-based reports) 1-50: report if temperature changed by delta = 0,1°C - 5,0°C Default: 5",
+			"label": "Temperature Change Reporting Threshold",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 50,
 			"defaultValue": 5,
-			"unit": "x0.1 °C",
-			"unsigned": true
+			"unit": "0.1 °C",
+			"unsigned": true,
+			"options": [
+				{
+					"label": "Disable",
+					"value": 0
+				}
+			]
 		},
 		"2": {
-			"label": "Humidity on Change Reporting",
-			"description": "0: No on change reporting (only time-based reports) 1-10: report if humidity changed by delta = 1% ...10% Default: 5",
+			"label": "Humidity Change Reporting Threshold",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 10,
 			"defaultValue": 5,
 			"unit": "%rH",
-			"unsigned": true
+			"unsigned": true,
+			"options": [
+				{
+					"label": "Disable",
+					"value": 0
+				}
+			]
 		},
 		"3": {
 			"label": "Temperature Scale",
-			"description": "Temperature in Degrees Celcius Temperature in Degrees Fahrenheit Default: Temperature in Degrees Celcius",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 1,
@@ -67,7 +76,6 @@
 		},
 		"4": {
 			"label": "Temperature Resolution",
-			"description": "No resolution (example 22°C) 1/10 resolution (example 22.3°C) 1/100 resolution (example 22.35°C) Default: No resolution (example 22°C)",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 2,
@@ -76,22 +84,21 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "No resolution (example 22°C)",
+					"label": "No resolution (example 22 °C)",
 					"value": 0
 				},
 				{
-					"label": "1/10 resolution (example 22.3°C)",
+					"label": "1/10 resolution (example 22.3 °C)",
 					"value": 1
 				},
 				{
-					"label": "1/100 resolution (example 22.35°C)",
+					"label": "1/100 resolution (example 22.35 °C)",
 					"value": 2
 				}
 			]
 		},
 		"5": {
 			"label": "Humidity Resolution",
-			"description": "No resolution (example 33%) 1/10 resolution (example 33.4%) 1/100 resolution (example 33.45% Default: No resolution (example 33%)",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 2,
@@ -100,42 +107,51 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "No resolution (example 33%)",
+					"label": "No resolution (example 33 %)",
 					"value": 0
 				},
 				{
-					"label": "1/10 resolution (example 33.4%)",
+					"label": "1/10 resolution (example 33.4 %)",
 					"value": 1
 				},
 				{
-					"label": "1/100 resolution (example 33.45%)",
+					"label": "1/100 resolution (example 33.45 %)",
 					"value": 2
 				}
 			]
 		},
 		"6": {
-			"label": "VOC on Change Reporting",
-			"description": "0: No on change reporting (only time-based reports) 1-10: report if VOC reading changed by 100ppb - 1000ppb Default: 5",
+			"label": "VOC Change Reporting Threshold",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 10,
 			"defaultValue": 5,
 			"unit": "x100 ppb",
-			"unsigned": true
+			"unsigned": true,
+			"options": [
+				{
+					"label": "Disable",
+					"value": 0
+				}
+			]
 		},
 		"7": {
-			"label": "CO2eq on Change Reporting",
-			"description": "0: No on change reporting (only time-based reports) 1-10: report if CO2eq reading changed by 100ppm - 1000ppm Default: 5",
+			"label": "CO2eq Change Reporting Threshold",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 10,
 			"defaultValue": 5,
 			"unit": "x100 ppb",
-			"unsigned": true
+			"unsigned": true,
+			"options": [
+				{
+					"label": "Disable",
+					"value": 0
+				}
+			]
 		},
 		"8": {
-			"label": "Air quality indication via LED",
-			"description": "0: No air quality indication via LEDs 1: Indicate measuered air quality via LEDs Default: 1",
+			"label": "Air Quality Indication via LED",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 1,
@@ -144,11 +160,11 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "No air quality indication via LEDs",
+					"label": "Disable",
 					"value": 0
 				},
 				{
-					"label": "Indicate measuered air quality via LEDs",
+					"label": "Enable",
 					"value": 1
 				}
 			]

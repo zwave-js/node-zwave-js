@@ -96,7 +96,6 @@
 		},
 		"4": {
 			"label": "Auto Turn-off Time",
-			"description": "Auto turn-off time",
 			"valueSize": 4,
 			"unit": "minutes",
 			"minValue": 1,
@@ -282,7 +281,6 @@
 		},
 		"14": {
 			"label": "Double Tap Behavior",
-			"description": "Double tap behavior",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 2,

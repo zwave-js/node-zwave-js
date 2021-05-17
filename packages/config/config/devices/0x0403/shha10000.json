@@ -96,7 +96,7 @@
 			]
 		},
 		"16": {
-			"label": "Threshold Power Report",
+			"label": "Threshold Power Report: Wattage",
 			"description": "Minimum change in wattage as watt value for a meter report to be sent",
 			"valueSize": 2,
 			"unit": "W",
@@ -112,7 +112,7 @@
 			]
 		},
 		"17": {
-			"label": "Threshold Power Report",
+			"label": "Threshold Power Report: Percentage",
 			"description": "Minimum change in wattage as percent for a meter report to be sent",
 			"valueSize": 1,
 			"unit": "%",

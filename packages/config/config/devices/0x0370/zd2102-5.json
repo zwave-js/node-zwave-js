@@ -16,13 +16,8 @@
 	},
 	"paramInformation": {
 		"1": {
-			"label": "External Switch",
-			"description": "Enable the external switch",
-			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 0,
-			"defaultValue": 0,
-			"unsigned": true
+			"$import": "../templates/master_template.json#base_enable_disable_255",
+			"label": "External Switch"
 		}
 	},
 	"metadata": {

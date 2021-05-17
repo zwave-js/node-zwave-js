@@ -116,14 +116,19 @@
 			"unsigned": true
 		},
 		"9": {
-			"label": "Timer functionality (auto - off)",
-			"description": "This parameter allows to automatically switch off the device after specified time from switching on the light source. It may be useful when the Zerodim Z-Wave is installed in the stairway. Available settings: 0 - Function disabled. 1-32767 - time to turn off measured in seconds (1s-9.1h)",
+			"label": "Auto-Off Timer",
 			"valueSize": 2,
 			"unit": "seconds",
 			"minValue": 0,
 			"maxValue": 32767,
 			"defaultValue": 0,
-			"unsigned": true
+			"unsigned": true,
+			"options": [
+				{
+					"label": "Disable",
+					"value": 0
+				}
+			]
 		}
 	}
 }

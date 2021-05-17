@@ -17,7 +17,6 @@
 	"paramInformation": {
 		"21": {
 			"label": "Adjust Refresh",
-			"description": "Adjust refresh",
 			"valueSize": 1,
 			"unit": "seconds",
 			"minValue": 0,

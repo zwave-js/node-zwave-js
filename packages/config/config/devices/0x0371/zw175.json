@@ -139,6 +139,7 @@
 			"minValue": 0,
 			"maxValue": 255,
 			"defaultValue": 0,
+			"unit": "seconds",
 			"writeOnly": true
 		},
 		"20": {
@@ -195,7 +196,7 @@
 				}
 			]
 		},
-		"82[0xFF000000]": {
+		"82[0xff000000]": {
 			"label": "Night Light enable (hour)",
 			"description": "Enable or disable Night Light Mode during specific times",
 			"valueSize": 4,
@@ -203,7 +204,7 @@
 			"maxValue": 24,
 			"defaultValue": 18
 		},
-		"82[0xFF0000]": {
+		"82[0xff0000]": {
 			"label": "Night Light enable (minute)",
 			"description": "Enable or disable Night Light Mode during specific times",
 			"valueSize": 4,
@@ -211,7 +212,7 @@
 			"maxValue": 60,
 			"defaultValue": 0
 		},
-		"82[0xFF00]": {
+		"82[0xff00]": {
 			"label": "Night Light disable (hour)",
 			"description": "Enable or disable Night Light Mode during specific times",
 			"valueSize": 4,
@@ -219,7 +220,7 @@
 			"maxValue": 24,
 			"defaultValue": 8
 		},
-		"82[0xFF]": {
+		"82[0xff]": {
 			"label": "Night Light disable (minute)",
 			"description": "Enable or disable Night Light Mode during specific times",
 			"valueSize": 4,
@@ -253,7 +254,6 @@
 		},
 		"101[0x01]": {
 			"label": "Enable reporting of Power Consumption",
-			"description": "Enable regular reporting on Power Consumption",
 			"valueSize": 4,
 			"minValue": 0,
 			"maxValue": 1,
@@ -261,7 +261,6 @@
 		},
 		"101[0x02]": {
 			"label": "Enable reporting of Power",
-			"description": "Enable regular reporting on Power",
 			"valueSize": 4,
 			"minValue": 0,
 			"maxValue": 1,
@@ -269,7 +268,6 @@
 		},
 		"101[0x04]": {
 			"label": "Enable reporting of Voltage",
-			"description": "Enable regular reporting on Voltage",
 			"valueSize": 4,
 			"minValue": 0,
 			"maxValue": 1,
@@ -277,7 +275,6 @@
 		},
 		"101[0x08]": {
 			"label": "Enable reporting of Current",
-			"description": "Enable regular reporting on Current",
 			"valueSize": 4,
 			"minValue": 0,
 			"maxValue": 1,

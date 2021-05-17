@@ -35,7 +35,6 @@
 		},
 		"3": {
 			"label": "Watt Meter Report Period",
-			"description": "Watt meter report period",
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 720,
@@ -43,8 +42,7 @@
 			"unsigned": true
 		},
 		"4": {
-			"label": "Kwh Meter Report Period",
-			"description": "Kwh meter report period",
+			"label": "kWh Meter Report Period",
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 6,
@@ -53,7 +51,6 @@
 		},
 		"5": {
 			"label": "Threshold of Watt For Load Caution",
-			"description": "Threshold of watt for load caution",
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 3000,
@@ -61,8 +58,7 @@
 			"unsigned": true
 		},
 		"6": {
-			"label": "Threshold of Kwh For Load Caution",
-			"description": "Threshold of kwh for load caution",
+			"label": "Threshold of kWh For Load Caution",
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 10000,

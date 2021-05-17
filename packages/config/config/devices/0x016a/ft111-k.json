@@ -213,20 +213,22 @@
 			]
 		},
 		"91": {
-			"label": "Set The Threshold Value of Wattage",
+			"label": "Wattage Change Report Threshold (absolute)",
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 60000,
 			"defaultValue": 25,
-			"unsigned": true
+			"unsigned": true,
+			"unit": "W"
 		},
 		"92": {
-			"label": "Set The Threshold Value of Wattage",
+			"label": "Wattage Change Report Threshold (relative)",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 100,
 			"defaultValue": 5,
-			"unsigned": true
+			"unsigned": true,
+			"unit": "%"
 		},
 		"100": {
 			"label": "Set Parameter 101-103 to Default Value",
@@ -246,19 +248,19 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "Send meter report of voltage (v)",
+					"label": "Send meter report of voltage (V)",
 					"value": 1
 				},
 				{
-					"label": "Send meter report of current (a)",
+					"label": "Send meter report of current (A)",
 					"value": 2
 				},
 				{
-					"label": "Send meter report of wattage (w)",
+					"label": "Send meter report of wattage (W)",
 					"value": 4
 				},
 				{
-					"label": "Send meter report of energy (kwh)",
+					"label": "Send meter report of energy (kWh)",
 					"value": 8
 				}
 			]
@@ -273,19 +275,19 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "Send meter report of voltage (v)",
+					"label": "Send meter report of voltage (V)",
 					"value": 1
 				},
 				{
-					"label": "Send meter report of current (a)",
+					"label": "Send meter report of current (A)",
 					"value": 2
 				},
 				{
-					"label": "Send meter report of wattage (w)",
+					"label": "Send meter report of wattage (W)",
 					"value": 4
 				},
 				{
-					"label": "Send meter report of energy (kwh)",
+					"label": "Send meter report of energy (kWh)",
 					"value": 8
 				}
 			]
@@ -300,19 +302,19 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "Send meter report of voltage (v)",
+					"label": "Send meter report of voltage (V)",
 					"value": 1
 				},
 				{
-					"label": "Send meter report of current (a)",
+					"label": "Send meter report of current (A)",
 					"value": 2
 				},
 				{
-					"label": "Send meter report of wattage (w)",
+					"label": "Send meter report of wattage (W)",
 					"value": 4
 				},
 				{
-					"label": "Send meter report of energy (kwh)",
+					"label": "Send meter report of energy (kWh)",
 					"value": 8
 				}
 			]
@@ -342,7 +344,7 @@
 			"unsigned": true
 		},
 		"113": {
-			"label": "Set The Interval of Automatic Report For Report Group 2",
+			"label": "Set The Interval of Automatic Report For Report Group 3",
 			"valueSize": 4,
 			"minValue": 0,
 			"maxValue": 2147483647,

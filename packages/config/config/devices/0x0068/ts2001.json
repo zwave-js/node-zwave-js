@@ -27,7 +27,6 @@
 		},
 		"2": {
 			"label": "External Sensor Define",
-			"description": "External sensor define",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 255,

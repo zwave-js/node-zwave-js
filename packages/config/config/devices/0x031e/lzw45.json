@@ -80,12 +80,19 @@
 		},
 		"6": {
 			"label": "Auto Off Timer",
-			"description": "Automatically turns the strip off after this many seconds. When the strip is turned on a timer is started that is the duration of this setting. When the timer expires, the strip is turned off. 0 - Auto off is disabled.",
+			"description": "After the strip is turned on, turn it off automatically after this time.",
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 32767,
 			"defaultValue": 0,
-			"unsigned": true
+			"unsigned": true,
+			"unit": "seconds",
+			"options": [
+				{
+					"label": "Disable",
+					"value": 0
+				}
+			]
 		},
 		"7": {
 			"label": "Default Level (Local)",
@@ -107,16 +114,25 @@
 		},
 		"9[0xffff]": {
 			"label": "Default Color: Hue Color",
-			"description": "Set the default color to a Hue Color Wheel color.  0 represents the previous color, 1-360 represent the Hue Color Wheel Color, and 361 represents a random color.",
+			"description": "Set the default color to a Hue Color Wheel color. Allowable Range: 1 - 360.",
 			"valueSize": 4,
 			"minValue": 0,
 			"maxValue": 361,
 			"defaultValue": 0,
-			"unsigned": true
+			"unsigned": true,
+			"options": [
+				{
+					"label": "Previous color",
+					"value": 0
+				},
+				{
+					"label": "Random color",
+					"value": 361
+				}
+			]
 		},
 		"9[0xffff0000]": {
 			"label": "Default Color: Color Temperature",
-			"description": "Set the default color to a Color Temperature.",
 			"valueSize": 4,
 			"minValue": 2700,
 			"maxValue": 6500,
@@ -149,26 +165,33 @@
 		},
 		"17": {
 			"label": "Active Power Reports",
-			"description": "The power level change that will result in a new power report being sent. The value is a percentage of the previous report. 0 = disabled.",
+			"description": "The power level change that will result in a new power report being sent. The value is relative to the previous report.",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 100,
 			"defaultValue": 10,
-			"unsigned": true
+			"unsigned": true,
+			"unit": "%",
+			"options": [
+				{
+					"label": "Disable",
+					"value": 0
+				}
+			]
 		},
 		"18": {
 			"label": "Periodic Power & Energy Reports",
-			"description": "Time period between consecutive power & energy reports being sent (in seconds). The timer is reset after each report is sent.",
+			"description": "Time period between consecutive power & energy reports being sent. The timer is reset after each report is sent.",
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 32767,
 			"defaultValue": 3600,
 			"unsigned": true,
-			"unit": "Seconds"
+			"unit": "seconds"
 		},
 		"19": {
 			"label": "Energy Reports",
-			"description": "The energy level change that will result in a new energy report being sent (in kWh)\n\t  0 = 0.01kWh, 10 = 0.1kWh, 100 = 1kWh.",
+			"description": "The energy level change that will result in a new energy report being sent.",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 127,
@@ -187,7 +210,7 @@
 		},
 		"21[0x7f00]": {
 			"label": "Quick Strip Effect Intensity",
-			"description": "Intensity of the LED strip.  Coarse: 0 - 10, where 10 = 100%.  Fine: 0-99, where 99 = 100%.",
+			"description": "Intensity of the LED strip. Coarse: 0 - 10, where 10 = 100%. Fine: 0-99, where 99 = 100%.",
 			"valueSize": 4,
 			"minValue": 0,
 			"maxValue": 99,
@@ -196,7 +219,7 @@
 		},
 		"21[0x8000]": {
 			"label": "Quick Strip Effect Intensity Scale",
-			"description": "Changes the scale of the intensity.  0 = Coarse (10 x Intensity), 1 = Fine (1 x Intensity).",
+			"description": "Changes the scale of the intensity. 0 = Coarse (10 x Intensity), 1 = Fine (1 x Intensity).",
 			"valueSize": 4,
 			"minValue": 0,
 			"maxValue": 1,

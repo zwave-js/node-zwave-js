@@ -76,7 +76,7 @@
 			]
 		},
 		"3": {
-			"label": "Enable/Disable Auto Turn-off Timer",
+			"label": "Enable/Disable Auto-Off Timer",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 1,
@@ -95,8 +95,7 @@
 			]
 		},
 		"4": {
-			"label": "Auto Turn-off Time",
-			"description": "Auto turn-off time",
+			"label": "Auto-Off Timer",
 			"valueSize": 4,
 			"unit": "minutes",
 			"minValue": 1,
@@ -105,7 +104,7 @@
 			"unsigned": true
 		},
 		"5": {
-			"label": "Enable/Disable Auto Turn-on Timer",
+			"label": "Enable/Disable Auto-On Timer",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 1,
@@ -124,7 +123,7 @@
 			]
 		},
 		"6": {
-			"label": "Auto Turn-on Timer",
+			"label": "Auto-On Timer",
 			"valueSize": 4,
 			"unit": "minutes",
 			"minValue": 1,

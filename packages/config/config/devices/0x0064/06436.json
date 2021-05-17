@@ -63,8 +63,7 @@
 		},
 		"2": {
 			"label": "Automatically open or close after time",
-			"description": "Automatically open or close blind after time",
-			"unit": "Seconds",
+			"unit": "seconds",
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 65535,
@@ -78,11 +77,10 @@
 			]
 		},
 		"3": {
-			"label": "What to do on RF close command",
-			"description": "Defines how to interpret RF Off command.",
+			"label": "RF Close Command Interpretation",
 			"valueSize": 1,
 			"minValue": 0,
-			"maxValue": 255,
+			"maxValue": 3,
 			"defaultValue": 0,
 			"unsigned": true,
 			"allowManualEntry": false,

@@ -17,7 +17,6 @@
 	"paramInformation": {
 		"1": {
 			"label": "Heartbeat Notification Rate",
-			"description": "Heartbeat notification rate in minutes",
 			"valueSize": 2,
 			"unit": "minutes",
 			"minValue": 1,
