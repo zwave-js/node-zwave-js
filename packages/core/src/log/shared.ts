@@ -4,7 +4,9 @@ import type { Format, TransformableInfo, TransformFunction } from "logform";
 import * as path from "path";
 import { configs, MESSAGE } from "triple-beam";
 import winston, { Logger } from "winston";
+import DailyRotateFile from "winston-daily-rotate-file";
 import type Transport from "winston-transport";
+import type { ConsoleTransportInstance } from "winston/lib/winston/transports";
 import { colorizer } from "./Colorizer";
 
 const { combine, timestamp, label } = winston.format;
@@ -13,8 +15,11 @@ const loglevels = configs.npm.levels;
 const isTTY = process.stdout.isTTY;
 const isUnitTest = process.env.NODE_ENV === "test";
 
-export const timestampFormat = "HH:mm:ss.SSS";
-const timestampPadding = " ".repeat(timestampFormat.length + 1);
+export const timestampFormatShort = "HH:mm:ss.SSS";
+export const timestampPaddingShort = " ".repeat(
+	timestampFormatShort.length + 1,
+);
+export const timestampPadding = " ".repeat(new Date().toISOString().length + 1);
 const channelPadding = " ".repeat(7); // 6 chars channel name, 1 space
 
 export type DataDirection = "inbound" | "outbound" | "none";
@@ -84,7 +89,7 @@ export class ZWaveLoggerBase {
 
 export interface LogConfig {
 	enabled: boolean;
-	level: number;
+	level: string | number;
 	transports: Transport[];
 	logToFile: boolean;
 	nodeFilter?: number[];
@@ -101,22 +106,22 @@ function stringToNodeList(nodes?: string): number[] | undefined {
 }
 
 export class ZWaveLogContainer extends winston.Container {
-	private fileTransport: Transport | undefined;
-	private consoleTransport: Transport | undefined;
+	private fileTransport: DailyRotateFile | undefined;
+	private consoleTransport: ConsoleTransportInstance | undefined;
 	private loglevelVisibleCache = new Map<string, boolean>();
 
-	private logConfig: LogConfig = {
+	private logConfig: LogConfig & { level: string } = {
 		enabled: true,
-		level: getTransportLoglevelNumeric(),
+		level: getTransportLoglevel(),
 		logToFile: !!process.env.LOGTOFILE,
 		nodeFilter: stringToNodeList(process.env.LOG_NODES),
 		transports: undefined as any,
 		filename: require.main
 			? path.join(
 					path.dirname(require.main.filename),
-					`zwave-${process.pid}.log`,
+					`zwavejs_%DATE%.log`,
 			  )
-			: path.join(__dirname, "../../..", `zwave-${process.pid}.log`),
+			: path.join(__dirname, "../../..", `zwave_%DATE%.log`),
 		forceConsole: false,
 	};
 
@@ -128,8 +133,11 @@ export class ZWaveLogContainer extends winston.Container {
 	public getLogger(label: string): ZWaveLogger {
 		if (!this.has(label)) {
 			this.add(label, {
-				transports: this.getConfiguredTransports(),
-				format: this.createLoggerFormat(label),
+				transports: this.getAllTransports(),
+				format: createLoggerFormat(label),
+				// Accept all logs, no matter what. The individual loggers take care
+				// of filtering the wrong loglevels
+				level: "silly",
 			});
 		}
 
@@ -137,19 +145,56 @@ export class ZWaveLogContainer extends winston.Container {
 	}
 
 	public updateConfiguration(config: DeepPartial<LogConfig>): void {
+		const changedLoggingTarget =
+			(config.logToFile != undefined &&
+				config.logToFile !== this.logConfig.logToFile) ||
+			(config.forceConsole != undefined &&
+				config.forceConsole !== this.logConfig.forceConsole);
+
+		if (typeof config.level === "number") {
+			config.level = loglevelFromNumber(config.level);
+		}
+		const changedLogLevel =
+			config.level != undefined && config.level !== this.logConfig.level;
+
+		if (
+			config.filename != undefined &&
+			!config.filename.includes("%DATE%")
+		) {
+			config.filename += "_%DATE%.log";
+		}
+		const changedFilename =
+			config.filename != undefined &&
+			config.filename !== this.logConfig.filename;
+
 		this.logConfig = Object.assign(this.logConfig, config);
-		if (!this.logConfig.transports?.length) {
-			this.logConfig.transports = this.createLogTransports();
+
+		// If the loglevel changed, our cached "is visible" info is out of date
+		if (changedLogLevel) {
+			this.loglevelVisibleCache.clear();
 		}
 
-		for (const transport of this.logConfig.transports) {
-			if (transport === this.consoleTransport) {
-				transport.silent = this.isConsoleTransportSilent();
-			} else if (transport === this.fileTransport) {
-				transport.silent = this.isFileTransportSilent();
-			} else {
-				transport.silent = !this.logConfig.enabled;
-			}
+		// When the log target (console, file, filename) was changed, recreate the internal transports
+		// because at least the filename does not update dynamically
+		// Also do this when configuring the logger for the first time
+		const recreateInternalTransports =
+			(this.fileTransport == undefined &&
+				this.consoleTransport == undefined) ||
+			changedLoggingTarget ||
+			changedFilename;
+
+		if (recreateInternalTransports) {
+			this.fileTransport?.destroy();
+			this.fileTransport = undefined;
+			this.consoleTransport?.destroy();
+			this.consoleTransport = undefined;
+		}
+
+		// When the internal transports or the custom transports were changed, we need to update the loggers
+		if (recreateInternalTransports || config.transports != undefined) {
+			this.loggers.forEach((logger) =>
+				logger.configure({ transports: this.getAllTransports() }),
+			);
 		}
 	}
 
@@ -157,29 +202,135 @@ export class ZWaveLogContainer extends winston.Container {
 		return this.logConfig;
 	}
 
-	public getConfiguredTransports(): Transport[] {
-		return this.logConfig.transports;
+	/** Tests whether a log using the given loglevel will be logged */
+	public isLoglevelVisible(loglevel: string): boolean {
+		// If we are not connected to a TTY, not logging to a file and don't have any custom transports, we won't see anything
+		if (
+			!this.fileTransport &&
+			!this.consoleTransport &&
+			// wotan-disable-next-line no-useless-predicate
+			(!this.logConfig.transports ||
+				this.logConfig.transports.length === 0)
+		) {
+			return false;
+		}
+
+		if (!this.loglevelVisibleCache.has(loglevel)) {
+			this.loglevelVisibleCache.set(
+				loglevel,
+				loglevel in loglevels &&
+					loglevels[loglevel] <= loglevels[this.logConfig.level],
+			);
+		}
+		return this.loglevelVisibleCache.get(loglevel)!;
 	}
 
-	/** The common logger format for all channels */
-	public createLoggerFormat(channel: string): Format {
-		// Only colorize the output if logging to a TTY, otherwise we'll get
-		// ansi color codes in logfiles
-		const colorize = !this.logConfig.logToFile && (isTTY || isUnitTest);
-		const formats: Format[] = [];
-		formats.push(
-			label({ label: channel }),
-			timestamp({ format: timestampFormat }),
-			this.logMessageFormatter,
-		);
-		if (colorize) formats.push(colorizer());
-		formats.push(this.logMessagePrinter);
+	public destroy(): void {
+		for (const key in this.loggers) {
+			this.close(key);
+		}
 
-		return combine(...formats);
+		this.fileTransport = undefined;
+		this.consoleTransport = undefined;
+		this.logConfig.transports = [];
 	}
 
-	/** Prints a formatted and colorized log message */
-	public logMessagePrinter: Format = {
+	private getAllTransports(): Transport[] {
+		return [
+			...this.getInternalTransports(),
+			...(this.logConfig.transports ?? []),
+		];
+	}
+
+	private getInternalTransports(): Transport[] {
+		const ret: Transport[] = [];
+		if (this.logConfig.enabled && this.logConfig.logToFile) {
+			if (!this.fileTransport) {
+				this.fileTransport = this.createFileTransport();
+			}
+			ret.push(this.fileTransport);
+		} else if (!isUnitTest && (isTTY || this.logConfig.forceConsole)) {
+			if (!this.consoleTransport) {
+				this.consoleTransport = this.createConsoleTransport();
+			}
+			ret.push(this.consoleTransport);
+		}
+
+		return ret;
+	}
+
+	private createConsoleTransport(): ConsoleTransportInstance {
+		return new winston.transports.Console({
+			format: createDefaultTransportFormat(
+				// Only colorize the output if logging to a TTY, otherwise we'll get
+				// ansi color codes in logfiles or redirected shells
+				isTTY || isUnitTest,
+				// Only use short timestamps if logging to a TTY
+				isTTY,
+			),
+			silent: this.isConsoleTransportSilent(),
+		});
+	}
+
+	private isConsoleTransportSilent(): boolean {
+		return process.env.NODE_ENV === "test" || !this.logConfig.enabled;
+	}
+
+	private isFileTransportSilent(): boolean {
+		return !this.logConfig.enabled;
+	}
+
+	private createFileTransport(): DailyRotateFile {
+		const ret = new DailyRotateFile({
+			filename: this.logConfig.filename,
+			datePattern: "YYYY-MM-DD",
+			zippedArchive: true,
+			maxFiles: "7d",
+			format: createDefaultTransportFormat(false, false),
+			silent: this.isFileTransportSilent(),
+		});
+		ret.on("new", (newFilename: string) => {
+			console.log(`Logging to file:
+	${newFilename}`);
+		});
+		return ret;
+	}
+
+	/**
+	 * Checks the log configuration whether logs should be written for a given node id
+	 */
+	public shouldLogNode(nodeId: number): boolean {
+		// If no filters are set, every node gets logged
+		if (!this.logConfig.nodeFilter) return true;
+		return this.logConfig.nodeFilter.includes(nodeId);
+	}
+}
+
+function getTransportLoglevel(): string {
+	return process.env.LOGLEVEL! in loglevels ? process.env.LOGLEVEL! : "debug";
+}
+
+/** Performs a reverse lookup of the numeric loglevel */
+function loglevelFromNumber(numLevel: number | undefined): string | undefined {
+	if (numLevel == undefined) return;
+	for (const [level, value] of Object.entries(loglevels)) {
+		if (value === numLevel) return level;
+	}
+}
+
+/** Creates the common logger format for all loggers under a given channel */
+export function createLoggerFormat(channel: string): Format {
+	return combine(
+		// add the channel as a label
+		label({ label: channel }),
+		// default to short timestamps
+		timestamp(),
+	);
+}
+
+/** Prints a formatted and colorized log message */
+export function createLogMessagePrinter(shortTimestamps: boolean): Format {
+	return {
 		transform: (((info: ZWaveLogInfo) => {
 			// The formatter has already split the message into multiple lines
 			const messageLines = messageToLines(info.message);
@@ -211,7 +362,9 @@ export class ZWaveLogContainer extends winston.Container {
 					...messageLines.slice(1).map(
 						(line) =>
 							// Skip the columns for the timestamp and the channel name
-							timestampPadding +
+							(shortTimestamps
+								? timestampPaddingShort
+								: timestampPadding) +
 							channelPadding +
 							// Skip the columns for directional arrows
 							directionPrefixPadding +
@@ -223,138 +376,68 @@ export class ZWaveLogContainer extends winston.Container {
 			return info;
 		}) as unknown) as TransformFunction,
 	};
+}
 
-	/** Formats the log message and calculates the necessary paddings */
-	public logMessageFormatter: Format = {
-		transform: (((info: ZWaveLogInfo) => {
-			const messageLines = messageToLines(info.message);
-			const firstMessageLineLength = messageLines[0].length;
-			info.multiline =
-				messageLines.length > 1 ||
-				!messageFitsIntoOneLine(info, info.message.length);
-			// Align postfixes to the right
-			if (info.secondaryTags) {
-				// Calculate how many spaces are needed to right-align the postfix
-				// Subtract 1 because the parts are joined by spaces
-				info.secondaryTagPadding = Math.max(
-					// -1 has the special meaning that we don't print any padding,
-					// because the message takes all the available space
-					-1,
-					LOG_WIDTH -
-						1 -
-						calculateFirstLineLength(info, firstMessageLineLength),
-				);
-			}
-
-			if (info.multiline) {
-				// Break long messages into multiple lines
-				const lines: string[] = [];
-				let isFirstLine = true;
-				for (let message of messageLines) {
-					while (message.length) {
-						const cut = Math.min(
-							message.length,
-							isFirstLine
-								? LOG_WIDTH -
-										calculateFirstLineLength(info, 0) -
-										1
-								: LOG_WIDTH - CONTROL_CHAR_WIDTH,
-						);
-						isFirstLine = false;
-						lines.push(message.substr(0, cut));
-						message = message.substr(cut);
-					}
-				}
-				info.message = lines.join("\n");
-			}
-			return info;
-		}) as unknown) as TransformFunction,
-	};
-
-	/** Tests whether a log using the given loglevel will be logged */
-	public isLoglevelVisible(loglevel: string): boolean {
-		// If we are not connected to a TTY, not unit testing and not logging to a file, we won't see anything
-		if (isUnitTest) return true;
-		if (!isTTY && !this.logConfig.logToFile && !this.logConfig.forceConsole)
-			return false;
-
-		if (!this.loglevelVisibleCache.has(loglevel)) {
-			this.loglevelVisibleCache.set(
-				loglevel,
-				loglevel in loglevels &&
-					loglevels[loglevel] <= this.logConfig.level,
+/** Formats the log message and calculates the necessary paddings */
+export const logMessageFormatter: Format = {
+	transform: (((info: ZWaveLogInfo) => {
+		const messageLines = messageToLines(info.message);
+		const firstMessageLineLength = messageLines[0].length;
+		info.multiline =
+			messageLines.length > 1 ||
+			!messageFitsIntoOneLine(info, info.message.length);
+		// Align postfixes to the right
+		if (info.secondaryTags) {
+			// Calculate how many spaces are needed to right-align the postfix
+			// Subtract 1 because the parts are joined by spaces
+			info.secondaryTagPadding = Math.max(
+				// -1 has the special meaning that we don't print any padding,
+				// because the message takes all the available space
+				-1,
+				LOG_WIDTH -
+					1 -
+					calculateFirstLineLength(info, firstMessageLineLength),
 			);
 		}
-		return this.loglevelVisibleCache.get(loglevel)!;
-	}
 
-	public destroy(): void {
-		for (const key in this.loggers) {
-			this.close(key);
-		}
-
-		this.fileTransport = undefined;
-		this.consoleTransport = undefined;
-		this.logConfig.transports = [];
-	}
-
-	private createLogTransports(): Transport[] {
-		const ret: Transport[] = [];
-		if (this.logConfig.enabled && this.logConfig.logToFile) {
-			if (!this.fileTransport) {
-				console.log(`Logging to file:
-	${this.logConfig.filename}`);
-				this.fileTransport = this.createFileTransport();
+		if (info.multiline) {
+			// Break long messages into multiple lines
+			const lines: string[] = [];
+			let isFirstLine = true;
+			for (let message of messageLines) {
+				while (message.length) {
+					const cut = Math.min(
+						message.length,
+						isFirstLine
+							? LOG_WIDTH - calculateFirstLineLength(info, 0) - 1
+							: LOG_WIDTH - CONTROL_CHAR_WIDTH,
+					);
+					isFirstLine = false;
+					lines.push(message.substr(0, cut));
+					message = message.substr(cut);
+				}
 			}
-			ret.push(this.fileTransport);
-		} else {
-			if (!this.consoleTransport) {
-				this.consoleTransport = this.createConsoleTransport();
-			}
-			ret.push(this.consoleTransport);
+			info.message = lines.join("\n");
 		}
+		return info;
+	}) as unknown) as TransformFunction,
+};
 
-		return ret;
-	}
-
-	private createConsoleTransport(): Transport {
-		return new winston.transports.Console({
-			level: getTransportLoglevel(),
-			silent: this.isConsoleTransportSilent(),
-		});
-	}
-
-	private isConsoleTransportSilent(): boolean {
-		return process.env.NODE_ENV === "test" || !this.logConfig.enabled;
-	}
-
-	private isFileTransportSilent(): boolean {
-		return !this.logConfig.enabled;
-	}
-
-	private createFileTransport(): Transport {
-		return new winston.transports.File({
-			filename: this.logConfig.filename,
-			level: getTransportLoglevel(),
-			silent: this.isFileTransportSilent(),
-		});
-	}
-
-	/**
-	 * Checks the log configuration whether logs should be written for a given node id
-	 */
-	public shouldLogNode(nodeId: number): boolean {
-		// If no filters are set, every node gets logged
-		if (!this.logConfig.nodeFilter) return true;
-		return this.logConfig.nodeFilter.includes(nodeId);
-	}
-}
-
-function getTransportLoglevel(): string {
-	return process.env.LOGLEVEL! in loglevels ? process.env.LOGLEVEL! : "debug";
-}
-function getTransportLoglevelNumeric(): number {
-	return loglevels[getTransportLoglevel()];
+/** The common logger format for built-in transports */
+export function createDefaultTransportFormat(
+	colorize: boolean,
+	shortTimestamps: boolean,
+): Format {
+	const formats: Format[] = [
+		// overwrite the default timestamp format if necessary
+		shortTimestamps
+			? timestamp({ format: timestampFormatShort })
+			: undefined,
+		logMessageFormatter,
+		colorize ? colorizer() : undefined,
+		createLogMessagePrinter(shortTimestamps),
+	].filter((f): f is Format => !!f);
+	return combine(...formats);
 }
 
 /**

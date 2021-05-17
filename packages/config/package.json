@@ -1,6 +1,6 @@
 {
   "name": "@zwave-js/config",
-  "version": "6.6.1",
+  "version": "7.4.0",
   "description": "zwave-js: configuration files",
   "publishConfig": {
     "access": "public"
@@ -32,12 +32,12 @@
     "node": ">=10.0.0"
   },
   "dependencies": {
-    "@zwave-js/core": "6.6.0",
-    "@zwave-js/shared": "^6.5.0",
-    "alcalzone-shared": "^3.0.2",
+    "@zwave-js/core": "7.4.0",
+    "@zwave-js/shared": "7.4.0",
+    "alcalzone-shared": "^3.0.3",
     "ansi-colors": "^4.1.1",
     "fs-extra": "^9.0.1",
-    "json-logic-js": "^2.0.0",
+    "json-logic-js": "^2.0.1",
     "json5": "^2.2.0",
     "semver": "^7.3.2",
     "winston": "^3.3.3"
@@ -47,8 +47,5 @@
     "build": "tsc -b tsconfig.build.json",
     "clean": "tsc -b tsconfig.build.json --clean",
     "watch": "yarn run build -- --watch --pretty"
-  },
-  "devDependencies": {
-    "@zwave-js/maintenance": "^6.5.0"
   }
 }

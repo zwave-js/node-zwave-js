@@ -1,5 +1,3 @@
-// Yale YRD256-ZW3
-// Assure SL Lock
 {
 	"manufacturer": "Yale",
 	"manufacturerId": "0x0129",
@@ -55,6 +53,40 @@
 		"15": {
 			"$import": "templates/yale_template.json#reset_factory"
 		}
+	},
+	"compat": {
+		"alarmMapping": [
+			{
+				"$import": "templates/yale_template.json#alarm_map_keypad_limit"
+			},
+			{
+				"$import": "templates/yale_template.json#alarm_map_manual_unlock"
+			},
+			{
+				"$import": "templates/yale_template.json#alarm_map_rf_unlock"
+			},
+			{
+				"$import": "templates/yale_template.json#alarm_map_keypad_unlock"
+			},
+			{
+				"$import": "templates/yale_template.json#alarm_map_manual_lock"
+			},
+			{
+				"$import": "templates/yale_template.json#alarm_map_rf_lock"
+			},
+			{
+				"$import": "templates/yale_template.json#alarm_map_keypad_lock"
+			},
+			{
+				"$import": "templates/yale_template.json#alarm_map_deadbolt_jammed"
+			},
+			{
+				"$import": "templates/yale_template.json#alarm_map_low_battery"
+			},
+			{
+				"$import": "templates/yale_template.json#alarm_map_auto_relock"
+			}
+		]
 	},
 	"metadata": {
 		"inclusion": "Install Yale Smart Module into slot above battery compartment\nIMPORTANT: Batteries must be removed before inserting Yale Smart Module:\n• Remove battery cover\n• Remove batteries\n• Insert Yale Smart Module\n• Reinstall batteries\n• Reinstall battery cover\n2. Open Z-Wave system's smart home or alarm app on your smartphone or tablet\n3. If you have Smart Start* enabled with your Z-Wave System follow in-app prompts to add a new device\nIf you don't have smart start or are not sure, follow steps 4 - 6\n4. On your lock keypad, enter your master entry code followed by the gear icon\n5. Press the 7 key followed by the gear icon\n6. Press the 1 key followed by the gear icon",

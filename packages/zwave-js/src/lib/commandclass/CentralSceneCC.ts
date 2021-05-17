@@ -54,6 +54,13 @@ function getSceneLabel(sceneNumber: number): string {
 	return `Scene ${padStart(sceneNumber.toString(), 3, "0")}`;
 }
 
+export function getSlowRefreshValueId(): ValueID {
+	return {
+		commandClass: CommandClasses["Central Scene"],
+		property: "slowRefresh",
+	};
+}
+
 export enum CentralSceneCommand {
 	SupportedGet = 0x01,
 	SupportedReport = 0x02,
@@ -190,7 +197,7 @@ export class CentralSceneCC extends CommandClass {
 		return true;
 	}
 
-	public async interview(complete: boolean = true): Promise<void> {
+	public async interview(): Promise<void> {
 		const node = this.getNode()!;
 		const endpoint = this.getEndpoint()!;
 		const api = endpoint.commandClasses["Central Scene"].withOptions({
@@ -199,93 +206,84 @@ export class CentralSceneCC extends CommandClass {
 
 		this.driver.controllerLog.logNode(node.id, {
 			endpoint: this.endpointIndex,
-			message: `${this.constructor.name}: doing a ${
-				complete ? "complete" : "partial"
-			} interview...`,
+			message: `Interviewing ${this.ccName}...`,
 			direction: "none",
 		});
 
-		if (complete) {
-			// If one Association group issues CentralScene notifications,
-			// we need to associate ourselves with that channel
-			if (
-				node.supportsCC(
-					CommandClasses["Association Group Information"],
-				) &&
-				(node.supportsCC(CommandClasses.Association) ||
-					node.supportsCC(
-						CommandClasses["Multi Channel Association"],
-					))
-			) {
-				const groupsIssueingNotifications = node
-					.createCCInstance(AssociationGroupInfoCC)!
-					.findGroupsForIssuedCommand(
-						this.ccId,
-						CentralSceneCommand.Notification,
-					);
-				if (groupsIssueingNotifications.length > 0) {
-					// We always grab the first group - usually it should be the lifeline
-					const groupId = groupsIssueingNotifications[0];
-					const existingAssociations =
-						this.driver.controller
-							.getAssociations(node.id)
-							.get(groupId) ?? [];
+		// If one Association group issues CentralScene notifications,
+		// we need to associate ourselves with that channel
+		if (
+			node.supportsCC(CommandClasses["Association Group Information"]) &&
+			(node.supportsCC(CommandClasses.Association) ||
+				node.supportsCC(CommandClasses["Multi Channel Association"]))
+		) {
+			const groupsIssueingNotifications = node
+				.createCCInstance(AssociationGroupInfoCC)!
+				.findGroupsForIssuedCommand(
+					this.ccId,
+					CentralSceneCommand.Notification,
+				);
+			if (groupsIssueingNotifications.length > 0) {
+				// We always grab the first group - usually it should be the lifeline
+				const groupId = groupsIssueingNotifications[0];
+				const existingAssociations =
+					this.driver.controller
+						.getAssociations({ nodeId: node.id })
+						.get(groupId) ?? [];
 
-					if (
-						!existingAssociations.some(
-							(a) =>
-								a.nodeId === this.driver.controller.ownNodeId,
-						)
-					) {
-						this.driver.controllerLog.logNode(node.id, {
-							endpoint: this.endpointIndex,
-							message:
-								"Configuring associations to receive Central Scene notifications...",
-							direction: "outbound",
-						});
-						await this.driver.controller.addAssociations(
-							node.id,
-							groupId,
-							[{ nodeId: this.driver.controller.ownNodeId! }],
-						);
-					}
+				if (
+					!existingAssociations.some(
+						(a) => a.nodeId === this.driver.controller.ownNodeId,
+					)
+				) {
+					this.driver.controllerLog.logNode(node.id, {
+						endpoint: this.endpointIndex,
+						message:
+							"Configuring associations to receive Central Scene notifications...",
+						direction: "outbound",
+					});
+					await this.driver.controller.addAssociations(
+						{ nodeId: node.id },
+						groupId,
+						[{ nodeId: this.driver.controller.ownNodeId! }],
+					);
 				}
 			}
+		}
 
-			this.driver.controllerLog.logNode(node.id, {
-				endpoint: this.endpointIndex,
-				message: "Querying supported scenes...",
-				direction: "outbound",
-			});
-			const ccSupported = await api.getSupported();
-			if (ccSupported) {
-				const logMessage = `received supported scenes:
+		this.driver.controllerLog.logNode(node.id, {
+			endpoint: this.endpointIndex,
+			message: "Querying supported scenes...",
+			direction: "outbound",
+		});
+		const ccSupported = await api.getSupported();
+		if (ccSupported) {
+			const logMessage = `received supported scenes:
 # of scenes:           ${ccSupported.sceneCount}
 supports slow refresh: ${ccSupported.supportsSlowRefresh}`;
-				this.driver.controllerLog.logNode(node.id, {
-					endpoint: this.endpointIndex,
-					message: logMessage,
-					direction: "inbound",
-				});
-			} else {
-				this.driver.controllerLog.logNode(node.id, {
-					endpoint: this.endpointIndex,
-					message:
-						"Querying supported scenes timed out, skipping interview...",
-					level: "warn",
-				});
-				return;
-			}
+			this.driver.controllerLog.logNode(node.id, {
+				endpoint: this.endpointIndex,
+				message: logMessage,
+				direction: "inbound",
+			});
+		} else {
+			this.driver.controllerLog.logNode(node.id, {
+				endpoint: this.endpointIndex,
+				message:
+					"Querying supported scenes timed out, skipping interview...",
+				level: "warn",
+			});
+			return;
+		}
 
-			// The slow refresh capability should be enabled whenever possible
-			if (this.version >= 3 && ccSupported?.supportsSlowRefresh) {
-				this.driver.controllerLog.logNode(node.id, {
-					endpoint: this.endpointIndex,
-					message: "Enabling slow refresh capability...",
-					direction: "outbound",
-				});
-				await api.setConfiguration(true);
-			}
+		// The slow refresh capability should be enabled whenever possible
+		if (this.version >= 3 && ccSupported?.supportsSlowRefresh) {
+			this.driver.controllerLog.logNode(node.id, {
+				endpoint: this.endpointIndex,
+				message: "Enabling slow refresh capability...",
+				direction: "outbound",
+			});
+			await api.setConfiguration(true);
 		}
 
 		// Remember that the interview is complete
@@ -305,7 +303,10 @@ export class CentralSceneCCNotification extends CentralSceneCC {
 		this._sequenceNumber = this.payload[0];
 		this._keyAttribute = this.payload[1] & 0b111;
 		this._sceneNumber = this.payload[2];
-		if (this._keyAttribute === CentralSceneKeys.KeyHeldDown) {
+		if (
+			this._keyAttribute === CentralSceneKeys.KeyHeldDown &&
+			this.version >= 3
+		) {
 			// A receiving node MUST ignore this field if the command is not
 			// carrying the Key Held Down key attribute.
 			this._slowRefresh = !!(this.payload[1] & 0b1000_0000);
@@ -374,7 +375,8 @@ export class CentralSceneCCSupportedReport extends CentralSceneCC {
 
 		validatePayload(this.payload.length >= 2);
 		this._sceneCount = this.payload[0];
-		this._supportsSlowRefresh = !!(this.payload[1] & 0b1000_0000);
+		this._supportsSlowRefresh =
+			this.version >= 3 ? !!(this.payload[1] & 0b1000_0000) : undefined;
 		const bitMaskBytes = (this.payload[1] & 0b110) >>> 1;
 		const identicalKeyAttributes = !!(this.payload[1] & 0b1);
 		const numEntries = identicalKeyAttributes ? 1 : this.sceneCount;
@@ -423,9 +425,9 @@ export class CentralSceneCCSupportedReport extends CentralSceneCC {
 	}
 
 	// TODO: Only offer `slowRefresh` if this is true
-	private _supportsSlowRefresh: boolean;
+	private _supportsSlowRefresh: boolean | undefined;
 	@ccValue({ internal: true })
-	public get supportsSlowRefresh(): boolean {
+	public get supportsSlowRefresh(): boolean | undefined {
 		return this._supportsSlowRefresh;
 	}
 

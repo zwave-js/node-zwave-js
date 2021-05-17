@@ -1,0 +1,271 @@
+{
+	"manufacturer": "Logic Group",
+	"manufacturerId": "0x0234",
+	"label": "ZBA7140",
+	"description": "Battery Wall Controller",
+	"devices": [
+		{
+			"productType": "0x0004",
+			"productId": "0x0129"
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"associations": {
+		"1": {
+			"label": "Lifeline",
+			"maxNodes": 5,
+			"isLifeline": true
+		},
+		"2": {
+			"label": "Button 1 (Basic Set)",
+			"maxNodes": 5
+		},
+		"3": {
+			"label": "Button 1 (Multilevel Set)",
+			"maxNodes": 5
+		},
+		"4": {
+			"label": "Button 2 (Basic Set)",
+			"maxNodes": 5
+		},
+		"5": {
+			"label": "Button 2 (Multilevel Set)",
+			"maxNodes": 5
+		},
+		"6": {
+			"label": "Button 3 (Basic Set)",
+			"maxNodes": 5
+		},
+		"7": {
+			"label": "Button 3 (Multilevel Set)",
+			"maxNodes": 5
+		},
+		"8": {
+			"label": "Button 4 (Basic Set)",
+			"maxNodes": 5
+		},
+		"9": {
+			"label": "Button 4 (Multilevel Set)",
+			"maxNodes": 5
+		}
+	},
+	"paramInformation": {
+		"1": {
+			"$import": "templates/logic_group_template.json#enable_central_scene"
+		},
+		"2": {
+			"$import": "templates/logic_group_template.json#button_pressed_threshold_time"
+		},
+		"3": {
+			"$import": "templates/logic_group_template.json#button_held_threshold_time"
+		},
+		"4": {
+			"$import": "templates/logic_group_template.json#led_indicator_zba7140"
+		},
+		"5[0xff000000]": {
+			"$import": "../templates/master_template.json#base_0-255_nounit",
+			"label": "LED Indicator: Red Value",
+			"valueSize": 4,
+			"defaultValue": 127
+		},
+		"5[0xff0000]": {
+			"$import": "../templates/master_template.json#base_0-255_nounit",
+			"label": "LED Indicator: Green Value",
+			"valueSize": 4,
+			"defaultValue": 85
+		},
+		"5[0xff00]": {
+			"$import": "../templates/master_template.json#base_0-255_nounit",
+			"label": "LED Indicator: Blue Value",
+			"valueSize": 4,
+			"defaultValue": 85
+		},
+		"6[0x01]": {
+			"$import": "../templates/master_template.json#base_enable_disable",
+			"label": "Send Association Group 2 Messages Securely",
+			"valueSize": 2
+		},
+		"6[0x02]": {
+			"$import": "../templates/master_template.json#base_enable_disable",
+			"label": "Send Association Group 3 Messages Securely",
+			"valueSize": 2
+		},
+		"6[0x04]": {
+			"$import": "../templates/master_template.json#base_enable_disable",
+			"label": "Send Association Group 4 Messages Securely",
+			"valueSize": 2
+		},
+		"6[0x08]": {
+			"$import": "../templates/master_template.json#base_enable_disable",
+			"label": "Send Association Group 5 Messages Securely",
+			"valueSize": 2
+		},
+		"6[0x10]": {
+			"$import": "../templates/master_template.json#base_enable_disable",
+			"label": "Send Association Group 6 Messages Securely",
+			"valueSize": 2
+		},
+		"6[0x20]": {
+			"$import": "../templates/master_template.json#base_enable_disable",
+			"label": "Send Association Group 7 Messages Securely",
+			"valueSize": 2
+		},
+		"6[0x40]": {
+			"$import": "../templates/master_template.json#base_enable_disable",
+			"label": "Send Association Group 8 Messages Securely",
+			"valueSize": 2
+		},
+		"7": {
+			"$import": "templates/logic_group_template.json#button_functionality",
+			"label": "Button 1"
+		},
+		"10": {
+			"$import": "templates/logic_group_template.json#button_functionality",
+			"label": "Button 2"
+		},
+		"13": {
+			"$import": "templates/logic_group_template.json#button_functionality",
+			"label": "Button 3"
+		},
+		"16": {
+			"$import": "templates/logic_group_template.json#button_functionality",
+			"label": "Button 4"
+		},
+		"8[0xff000000]": {
+			"$import": "templates/logic_group_template.json#multilevel_enable",
+			"label": "Button 1 - Single Press"
+		},
+		"8[0xff0000]": {
+			"$import": "templates/logic_group_template.json#multilevel_upper_function",
+			"label": "Button 1 - Single Press (On Value)"
+		},
+		"8[0xff00]": {
+			"$import": "templates/logic_group_template.json#multilevel_lower_function",
+			"label": "Button 1 - Single Press (Off Value)"
+		},
+		"8[0xff]": {
+			"$import": "templates/logic_group_template.json#multilevel_duration_function",
+			"label": "Button 1 - Single Press (Duration)"
+		},
+		"9[0xff000000]": {
+			"$import": "templates/logic_group_template.json#multilevel_enable",
+			"label": "Button 1 - Double Press"
+		},
+		"9[0xff0000]": {
+			"$import": "templates/logic_group_template.json#multilevel_upper_function",
+			"label": "Button 1 - Double Press (On Value)"
+		},
+		"9[0xff00]": {
+			"$import": "templates/logic_group_template.json#multilevel_lower_function",
+			"label": "Button 1 - Double Press (Off Value)"
+		},
+		"9[0xff]": {
+			"$import": "templates/logic_group_template.json#multilevel_duration_function",
+			"label": "Button 1 - Double Press (Duration)"
+		},
+		"11[0xff000000]": {
+			"$import": "templates/logic_group_template.json#multilevel_enable",
+			"label": "Button 2 - Single Press"
+		},
+		"11[0xff0000]": {
+			"$import": "templates/logic_group_template.json#multilevel_upper_function",
+			"label": "Button 2 - Single Press (On Value)"
+		},
+		"11[0xff00]": {
+			"$import": "templates/logic_group_template.json#multilevel_lower_function",
+			"label": "Button 2 - Single Press (Off Value)"
+		},
+		"11[0xff]": {
+			"$import": "templates/logic_group_template.json#multilevel_duration_function",
+			"label": "Button 2 - Single Press (Duration)"
+		},
+		"12[0xff000000]": {
+			"$import": "templates/logic_group_template.json#multilevel_enable",
+			"label": "Button 2 - Double Press"
+		},
+		"12[0xff0000]": {
+			"$import": "templates/logic_group_template.json#multilevel_upper_function",
+			"label": "Button 2 - Double Press (On Value)"
+		},
+		"12[0xff00]": {
+			"$import": "templates/logic_group_template.json#multilevel_lower_function",
+			"label": "Button 2 - Double Press (Off Value)"
+		},
+		"12[0xff]": {
+			"$import": "templates/logic_group_template.json#multilevel_duration_function",
+			"label": "Button 2 - Double Press (Duration)"
+		},
+		"14[0xff000000]": {
+			"$import": "templates/logic_group_template.json#multilevel_enable",
+			"label": "Button 3 - Single Press"
+		},
+		"14[0xff0000]": {
+			"$import": "templates/logic_group_template.json#multilevel_upper_function",
+			"label": "Button 3 - Single Press (On Value)"
+		},
+		"14[0xff00]": {
+			"$import": "templates/logic_group_template.json#multilevel_lower_function",
+			"label": "Button 3 - Single Press (Off Value)"
+		},
+		"14[0xff]": {
+			"$import": "templates/logic_group_template.json#multilevel_duration_function",
+			"label": "Button 3 - Single Press (Duration)"
+		},
+		"15[0xff000000]": {
+			"$import": "templates/logic_group_template.json#multilevel_enable",
+			"label": "Button 3 - Double Press"
+		},
+		"15[0xff0000]": {
+			"$import": "templates/logic_group_template.json#multilevel_upper_function",
+			"label": "Button 3 - Double Press (On Value)"
+		},
+		"15[0xff00]": {
+			"$import": "templates/logic_group_template.json#multilevel_lower_function",
+			"label": "Button 3 - Double Press (Off Value)"
+		},
+		"15[0xff]": {
+			"$import": "templates/logic_group_template.json#multilevel_duration_function",
+			"label": "Button 3 - Double Press (Duration)"
+		},
+		"17[0xff000000]": {
+			"$import": "templates/logic_group_template.json#multilevel_enable",
+			"label": "Button 4 - Single Press"
+		},
+		"17[0xff0000]": {
+			"$import": "templates/logic_group_template.json#multilevel_upper_function",
+			"label": "Button 4 - Single Press (On Value)"
+		},
+		"17[0xff00]": {
+			"$import": "templates/logic_group_template.json#multilevel_lower_function",
+			"label": "Button 4 - Single Press (Off Value)"
+		},
+		"17[0xff]": {
+			"$import": "templates/logic_group_template.json#multilevel_duration_function",
+			"label": "Button 4 - Single Press (Duration)"
+		},
+		"18[0xff000000]": {
+			"$import": "templates/logic_group_template.json#multilevel_enable",
+			"label": "Button 4 - Double Press (On Value)"
+		},
+		"18[0xff0000]": {
+			"$import": "templates/logic_group_template.json#multilevel_upper_function",
+			"label": "Button 4 - Double Press (On Value)"
+		},
+		"18[0xff00]": {
+			"$import": "templates/logic_group_template.json#multilevel_lower_function",
+			"label": "Button 4 - Double Press (Off Value)"
+		},
+		"18[0xff]": {
+			"$import": "templates/logic_group_template.json#multilevel_duration_function",
+			"label": "Button 4 - Double Press (Duration)"
+		}
+	},
+	"metadata": {
+		"inclusion": "Remove white pushbutton cover and press on the center switch with a non-conductive object. The LEDs will now start blinking on pushbutton 1 (upper left pushbutton)",
+		"exclusion": "Remove white pushbutton cover and press on the center switch with a non-conductive object. The LEDs will now start blinking on pushbutton 1 (upper left pushbutton)",
+		"reset": "Remove white pushbutton cover and long-press the center switch for 10 seconds with a non-conductive object. Please use this procedure only when the network primary controller is missing or otherwise inoperable"
+	}
+}

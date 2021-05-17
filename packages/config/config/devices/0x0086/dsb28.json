@@ -1,5 +1,3 @@
-// AEON Labs DSB28
-// Home Energy Meter G2
 {
 	"manufacturer": "AEON Labs",
 	"manufacturerId": "0x0086",
@@ -18,7 +16,7 @@
 	},
 	"associations": {
 		"1": {
-			"label": "Group 1",
+			"label": "Lifeline",
 			"maxNodes": 5,
 			"isLifeline": true
 		},
@@ -35,210 +33,217 @@
 	},
 	"paramInformation": {
 		"2": {
-			"label": "Reverse clamping",
-			"description": "If the reverse clamping pliers, negative power is detected.",
-			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 1,
-			"defaultValue": 0,
-			"unsigned": true,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": false,
+			"$import": "../templates/master_template.json#base_0-1_nounit",
+			"label": "Energy Detection Mode",
 			"options": [
 				{
-					"label": "Disabled",
+					"label": "Power - Absolute value of energy",
 					"value": 0
 				},
 				{
-					"label": "Enabled",
+					"label": "Positive/Negative power - Algebraic sum of energy",
 					"value": 1
 				}
 			]
 		},
 		"3": {
-			"label": "Selective Reporting",
-			"description": "Report only when power change reaches a threshold set in 4-11 below.",
-			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 16,
-			"defaultValue": 1,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"$import": "templates/aeotec_template.json#selective_reporting"
 		},
 		"4": {
-			"label": "Power Threshold - Whole HEM",
-			"description": "Threshold change in power to induce an automatic report (Whole HEM).",
-			"valueSize": 2,
-			"minValue": 0,
-			"maxValue": 60000,
-			"defaultValue": 50,
-			"unsigned": true,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"$import": "templates/aeotec_template.json#power_threshold_wholehem"
 		},
 		"5": {
-			"label": "Power Threshold - Clamp 1",
-			"description": "Threshold change in power to induce an automatic report (Clamp 1)",
-			"valueSize": 2,
-			"minValue": 0,
-			"maxValue": 60000,
-			"defaultValue": 50,
-			"unsigned": true,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"$import": "templates/aeotec_template.json#power_threshold_clamp1"
 		},
 		"6": {
-			"label": "Power Threshold - Clamp 2",
-			"description": "Threshold change in power to induce a automatic report (Clamp 2).",
-			"valueSize": 2,
-			"minValue": 0,
-			"maxValue": 60000,
-			"defaultValue": 50,
-			"unsigned": true,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"$import": "templates/aeotec_template.json#power_threshold_clamp2"
 		},
 		"7": {
-			"label": "Power Threshold - Clamp 3",
-			"description": "Threshold change in power to induce an automatic report (Clamp 3).",
-			"valueSize": 2,
-			"minValue": 0,
-			"maxValue": 60000,
-			"defaultValue": 50,
-			"unsigned": true,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"$import": "templates/aeotec_template.json#power_threshold_clamp3"
 		},
 		"8": {
-			"label": "Percent Change - Whole HEM",
-			"description": "Percentage change in power to induce an automatic report (Whole HEM).",
-			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 100,
-			"defaultValue": 50,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"$import": "templates/aeotec_template.json#percent_threshold_wholehem"
 		},
 		"9": {
-			"label": "Percent Change - Clamp 1",
-			"description": "Percentage change in power to induce an automatic report (Clamp 1).",
-			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 100,
-			"defaultValue": 50,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"$import": "templates/aeotec_template.json#percent_threshold_clamp1"
 		},
 		"10": {
-			"label": "Percent Change - Clamp 2",
-			"description": "Percentage change in power to induce a automatic report (Clamp 2).",
-			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 100,
-			"defaultValue": 50,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"$import": "templates/aeotec_template.json#percent_threshold_clamp2"
 		},
 		"11": {
-			"label": "Percent Change - Clamp 3",
-			"description": "Percentage change in power to induce a automatic report (Clamp 3).",
-			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 100,
-			"defaultValue": 50,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"$import": "templates/aeotec_template.json#percent_threshold_clamp3"
 		},
-		"101": {
-			"label": "Reports for group 1",
-			"valueSize": 4,
-			"minValue": 0,
-			"maxValue": 1061109568,
-			"defaultValue": 8,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+		"100": {
+			"$import": "templates/aeotec_template.json#reset_parameters",
+			"label": "Reset Parameters 101-103 to Default Values",
+			"valueSize": 4
 		},
-		"102": {
-			"label": "Reports for group 2",
-			"valueSize": 4,
-			"minValue": 0,
-			"maxValue": 1061109568,
-			"defaultValue": 8,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+		"101[0x01]": {
+			"$import": "templates/aeotec_template.json#auto_report_group1_kwh_wholehem"
 		},
-		"103": {
-			"label": "Reports for group 3",
-			"valueSize": 4,
-			"minValue": 0,
-			"maxValue": 1061109568,
-			"defaultValue": 8,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+		"101[0x02]": {
+			"$import": "templates/aeotec_template.json#auto_report_group1_watt_wholehem"
+		},
+		"101[0x04]": {
+			"$import": "templates/aeotec_template.json#auto_report_group1_v_wholehem"
+		},
+		"101[0x08]": {
+			"$import": "templates/aeotec_template.json#auto_report_group1_amp_wholehem"
+		},
+		"101[0x0100]": {
+			"$import": "templates/aeotec_template.json#auto_report_group1_watt_clamp1"
+		},
+		"101[0x0200]": {
+			"$import": "templates/aeotec_template.json#auto_report_group1_watt_clamp2"
+		},
+		"101[0x0400]": {
+			"$import": "templates/aeotec_template.json#auto_report_group1_watt_clamp3"
+		},
+		"101[0x0800]": {
+			"$import": "templates/aeotec_template.json#auto_report_group1_kwh_clamp1"
+		},
+		"101[0x1000]": {
+			"$import": "templates/aeotec_template.json#auto_report_group1_kwh_clamp2"
+		},
+		"101[0x2000]": {
+			"$import": "templates/aeotec_template.json#auto_report_group1_kwh_clamp3"
+		},
+		"101[0x010000]": {
+			"$import": "templates/aeotec_template.json#auto_report_group1_v_clamp1"
+		},
+		"101[0x020000]": {
+			"$import": "templates/aeotec_template.json#auto_report_group1_v_clamp2"
+		},
+		"101[0x040000]": {
+			"$import": "templates/aeotec_template.json#auto_report_group1_v_clamp3"
+		},
+		"101[0x080000]": {
+			"$import": "templates/aeotec_template.json#auto_report_group1_amp_clamp1"
+		},
+		"101[0x100000]": {
+			"$import": "templates/aeotec_template.json#auto_report_group1_amp_clamp2"
+		},
+		"101[0x200000]": {
+			"$import": "templates/aeotec_template.json#auto_report_group1_amp_clamp3"
+		},
+		"102[0x01]": {
+			"$import": "templates/aeotec_template.json#auto_report_group2_kwh_wholehem"
+		},
+		"102[0x02]": {
+			"$import": "templates/aeotec_template.json#auto_report_group2_watt_wholehem"
+		},
+		"102[0x04]": {
+			"$import": "templates/aeotec_template.json#auto_report_group2_v_wholehem"
+		},
+		"102[0x08]": {
+			"$import": "templates/aeotec_template.json#auto_report_group2_amp_wholehem"
+		},
+		"102[0x0100]": {
+			"$import": "templates/aeotec_template.json#auto_report_group2_watt_clamp1"
+		},
+		"102[0x0200]": {
+			"$import": "templates/aeotec_template.json#auto_report_group2_watt_clamp2"
+		},
+		"102[0x0400]": {
+			"$import": "templates/aeotec_template.json#auto_report_group2_watt_clamp3"
+		},
+		"102[0x0800]": {
+			"$import": "templates/aeotec_template.json#auto_report_group2_kwh_clamp1"
+		},
+		"102[0x1000]": {
+			"$import": "templates/aeotec_template.json#auto_report_group2_kwh_clamp2"
+		},
+		"102[0x2000]": {
+			"$import": "templates/aeotec_template.json#auto_report_group2_kwh_clamp3"
+		},
+		"102[0x010000]": {
+			"$import": "templates/aeotec_template.json#auto_report_group2_v_clamp1"
+		},
+		"102[0x020000]": {
+			"$import": "templates/aeotec_template.json#auto_report_group2_v_clamp2"
+		},
+		"102[0x040000]": {
+			"$import": "templates/aeotec_template.json#auto_report_group2_v_clamp3"
+		},
+		"102[0x080000]": {
+			"$import": "templates/aeotec_template.json#auto_report_group2_amp_clamp1"
+		},
+		"102[0x100000]": {
+			"$import": "templates/aeotec_template.json#auto_report_group2_amp_clamp2"
+		},
+		"102[0x200000]": {
+			"$import": "templates/aeotec_template.json#auto_report_group2_amp_clamp3"
+		},
+		"103[0x01]": {
+			"$import": "templates/aeotec_template.json#auto_report_group3_kwh_wholehem"
+		},
+		"103[0x02]": {
+			"$import": "templates/aeotec_template.json#auto_report_group3_watt_wholehem"
+		},
+		"103[0x04]": {
+			"$import": "templates/aeotec_template.json#auto_report_group3_v_wholehem"
+		},
+		"103[0x08]": {
+			"$import": "templates/aeotec_template.json#auto_report_group3_amp_wholehem"
+		},
+		"103[0x0100]": {
+			"$import": "templates/aeotec_template.json#auto_report_group3_watt_clamp1"
+		},
+		"103[0x0200]": {
+			"$import": "templates/aeotec_template.json#auto_report_group3_watt_clamp2"
+		},
+		"103[0x0400]": {
+			"$import": "templates/aeotec_template.json#auto_report_group3_watt_clamp3"
+		},
+		"103[0x0800]": {
+			"$import": "templates/aeotec_template.json#auto_report_group3_kwh_clamp1"
+		},
+		"103[0x1000]": {
+			"$import": "templates/aeotec_template.json#auto_report_group3_kwh_clamp2"
+		},
+		"103[0x2000]": {
+			"$import": "templates/aeotec_template.json#auto_report_group3_kwh_clamp3"
+		},
+		"103[0x010000]": {
+			"$import": "templates/aeotec_template.json#auto_report_group3_v_clamp1"
+		},
+		"103[0x020000]": {
+			"$import": "templates/aeotec_template.json#auto_report_group3_v_clamp2"
+		},
+		"103[0x040000]": {
+			"$import": "templates/aeotec_template.json#auto_report_group3_v_clamp3"
+		},
+		"103[0x080000]": {
+			"$import": "templates/aeotec_template.json#auto_report_group3_amp_clamp1"
+		},
+		"103[0x100000]": {
+			"$import": "templates/aeotec_template.json#auto_report_group3_amp_clamp2"
+		},
+		"103[0x200000]": {
+			"$import": "templates/aeotec_template.json#auto_report_group3_amp_clamp3"
+		},
+		"110": {
+			"$import": "templates/aeotec_template.json#reset_parameters",
+			"label": "Reset Parameters 111-113 to Default Values",
+			"valueSize": 4
 		},
 		"111": {
-			"label": "Interval to send out reports of group 1",
-			"valueSize": 4,
-			"minValue": 1,
-			"maxValue": 2678400,
-			"defaultValue": 720,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"$import": "templates/aeotec_template.json#auto_report_interval_group1",
+			"maxValue": 167400
 		},
 		"112": {
-			"label": "Interval to send out reports of group 2",
-			"valueSize": 4,
-			"minValue": 1,
-			"maxValue": 2678400,
-			"defaultValue": 720,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"$import": "templates/aeotec_template.json#auto_report_interval_group2",
+			"maxValue": 167400
 		},
 		"113": {
-			"label": "Interval to send out reports of group 3",
-			"valueSize": 4,
-			"minValue": 1,
-			"maxValue": 2678400,
-			"defaultValue": 720,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"$import": "templates/aeotec_template.json#auto_report_interval_group3",
+			"maxValue": 167400
+		},
+		"252": {
+			"$import": "templates/aeotec_template.json#lock_configuration"
 		},
 		"255": {
-			"label": "Factory Reset",
-			"description": "Reset all settings to factory defaults",
-			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 1,
-			"defaultValue": 0,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "Do nothing",
-					"value": 0
-				},
-				{
-					"label": "Reset to Factory Defaults",
-					"value": 1
-				}
-			]
+			"$import": "templates/aeotec_template.json#factory_reset"
 		}
 	},
 	"compat": {

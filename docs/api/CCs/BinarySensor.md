@@ -1,5 +1,7 @@
 # Binary Sensor CC
 
+?> CommandClass ID: `0x30`
+
 ## Binary Sensor CC methods
 
 ### `get`

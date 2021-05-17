@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>Bitmask calculator</title>
+		<style>
+			body {
+				font-family: "Source Sans Pro", "Helvetica Neue", Arial,
+					sans-serif;
+				color: #34495e;
+				font-size: 15px;
+				margin: 0;
+			}
+			table {
+				border-collapse: collapse;
+				margin-top: 1em;
+			}
+			td {
+				padding: 4px;
+			}
+			tbody tr td:first-of-type {
+				font-weight: bold;
+				/* text-align: center; */
+			}
+
+			thead tr:last-of-type th {
+				border-bottom: 1px solid #ddd;
+			}
+			tfoot tr:first-of-type td {
+				border-top: 1px solid #ddd;
+			}
+			tfoot td:first-child {
+				font-weight: bold;
+			}
+			tfoot tr td:last-child {
+				text-align: right;
+				font-family: "Courier New", Courier, monospace;
+			}
+			input[type="checkbox"] {
+				cursor: pointer;
+			}
+		</style>
+
+		<script>
+			function num2hex(val) {
+				if (val == null) return "undefined";
+				let ret = val.toString(16);
+				if (ret.length % 2 !== 0) ret = "0" + ret;
+				return "0x" + ret;
+			}
+
+			function computeBitmask() {
+				let num = 0;
+				const checkboxes = bytesContainer.getElementsByTagName("input");
+				for (const chk of checkboxes) {
+					if (chk.checked) {
+						num +=
+							2 **
+							(parseInt(chk.dataset.byte) * 8 +
+								parseInt(chk.dataset.bit));
+					}
+				}
+				bitmaskHex.innerText = num2hex(num);
+				bitmaskDec.innerText = num;
+
+				// Compute the range
+				while (num > 0 && (num & 1) === 0) {
+					num = num >>> 1;
+				}
+				valueRange.innerText = `0–${num}`;
+			}
+
+			function setBytes(n) {
+				bytesContainer.innerHTML = "";
+				for (let i = n - 1; i >= 0; i--) {
+					const tr = document.createElement("tr");
+					const byteNum = document.createElement("td");
+					byteNum.innerText = i.toString();
+					if (n > 1 && i === n - 1) byteNum.innerText += " (MSB)";
+					if (n > 1 && i === 0) byteNum.innerText += " (LSB)";
+					tr.appendChild(byteNum);
+
+					for (let bit = 7; bit >= 0; bit--) {
+						const td = document.createElement("td");
+						const chk = document.createElement("input");
+						chk.type = "checkbox";
+						chk.dataset.byte = i;
+						chk.dataset.bit = bit;
+						chk.onchange = computeBitmask;
+
+						td.appendChild(chk);
+						tr.appendChild(td);
+					}
+					bytesContainer.appendChild(tr);
+				}
+			}
+		</script>
+	</head>
+
+	<body>
+		<label for="num_bytes">Value size:</label>&nbsp;
+		<input
+			id="num_bytes"
+			type="number"
+			min="1"
+			max="4"
+			value="1"
+			onchange="setBytes(this.valueAsNumber)"
+		/>
+
+		<table>
+			<thead>
+				<tr>
+					<th>byte \ bits</th>
+					<th>7</th>
+					<th>6</th>
+					<th>5</th>
+					<th>4</th>
+					<th>3</th>
+					<th>2</th>
+					<th>1</th>
+					<th>0</th>
+				</tr>
+			</thead>
+			<tbody id="bytes"></tbody>
+			<tfoot>
+				<tr>
+					<td>Hex:</td>
+					<td id="hex" colspan="8">0</td>
+				</tr>
+				<tr>
+					<td>Decimal:</td>
+					<td id="dec" colspan="8">0</td>
+				</tr>
+				<tr>
+					<td>Value range:</td>
+					<td id="range" colspan="8">0&ndash;0</td>
+				</tr>
+			</tfoot>
+		</table>
+
+		<script>
+			const bytesContainer = document.getElementById("bytes");
+			const bitmaskHex = document.getElementById("hex");
+			const bitmaskDec = document.getElementById("dec");
+			const valueRange = document.getElementById("range");
+			setBytes(document.getElementById("num_bytes").valueAsNumber);
+			computeBitmask();
+		</script>
+	</body>
+</html>

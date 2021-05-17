@@ -1,5 +1,3 @@
-// Zooz ZSE08
-// Z-Wave Plus Contact Sensor
 {
 	"manufacturer": "Zooz",
 	"manufacturerId": "0x027a",
@@ -24,10 +22,7 @@
 			"minValue": 0,
 			"maxValue": 65535,
 			"defaultValue": 0,
-			"unsigned": true,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"unsigned": true
 		},
 		"2": {
 			"label": "Trigger Value",
@@ -36,10 +31,7 @@
 			"minValue": 0,
 			"maxValue": 255,
 			"defaultValue": 255,
-			"unsigned": true,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"unsigned": true
 		}
 	}
 }

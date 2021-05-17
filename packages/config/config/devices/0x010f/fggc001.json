@@ -1,5 +1,3 @@
-// Fibargroup FGGC001
-// Fibaro Swipe Scene Controller
 {
 	"manufacturer": "Fibargroup",
 	"manufacturerId": "0x010f",
@@ -32,8 +30,6 @@
 			"minValue": 0,
 			"maxValue": 3,
 			"defaultValue": 0,
-			"readOnly": false,
-			"writeOnly": false,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -61,8 +57,6 @@
 			"minValue": 0,
 			"maxValue": 1,
 			"defaultValue": 1,
-			"readOnly": false,
-			"writeOnly": false,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -82,8 +76,6 @@
 			"minValue": 0,
 			"maxValue": 1,
 			"defaultValue": 0,
-			"readOnly": false,
-			"writeOnly": false,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -103,8 +95,6 @@
 			"minValue": 1,
 			"maxValue": 3,
 			"defaultValue": 3,
-			"readOnly": false,
-			"writeOnly": false,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -128,9 +118,6 @@
 			"minValue": 0,
 			"maxValue": 1080,
 			"defaultValue": 4,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true,
 			"options": [
 				{
 					"label": "Powering mode is not updated",
@@ -149,8 +136,6 @@
 			"minValue": 0,
 			"maxValue": 2,
 			"defaultValue": 0,
-			"readOnly": false,
-			"writeOnly": false,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -174,8 +159,6 @@
 			"minValue": 0,
 			"maxValue": 1,
 			"defaultValue": 0,
-			"readOnly": false,
-			"writeOnly": false,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -196,8 +179,6 @@
 			"maxValue": 63,
 			"defaultValue": 15,
 			"readOnly": true,
-			"writeOnly": false,
-			"allowManualEntry": true,
 			"options": [
 				{
 					"label": "Scenes for flick UP gesture enabled",
@@ -236,9 +217,6 @@
 			"minValue": 1,
 			"maxValue": 31,
 			"defaultValue": 31,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true,
 			"options": [
 				{
 					"label": "2nd group ”Flick UP” sent as secure",
@@ -269,9 +247,6 @@
 			"minValue": 1,
 			"maxValue": 15,
 			"defaultValue": 15,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true,
 			"options": [
 				{
 					"label": "Toggle Mode enabled for 2nd association group",
@@ -297,10 +272,7 @@
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 255,
-			"defaultValue": 255,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"defaultValue": 255
 		},
 		"20": {
 			"label": "SWITCH ON control frame value for FLICK UP gesture",
@@ -308,10 +280,7 @@
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 255,
-			"defaultValue": 255,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"defaultValue": 255
 		},
 		"21": {
 			"label": "SWITCH OFF frame value for FLICK UP",
@@ -319,10 +288,7 @@
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 255,
-			"defaultValue": 255,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"defaultValue": 255
 		},
 		"22": {
 			"label": "SWITCH ON frame value for FLICK DOWN",
@@ -330,10 +296,7 @@
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 255,
-			"defaultValue": 255,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"defaultValue": 255
 		},
 		"23": {
 			"label": "SWITCH OFF frame value for FLICK DOWN",
@@ -341,10 +304,7 @@
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 255,
-			"defaultValue": 255,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"defaultValue": 255
 		},
 		"24": {
 			"label": "SWITCH ON frame value for FLICK LEFT",
@@ -352,10 +312,7 @@
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 255,
-			"defaultValue": 255,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"defaultValue": 255
 		},
 		"25": {
 			"label": "SWITCH OFF frame value for FLICK LEFT",
@@ -363,10 +320,7 @@
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 255,
-			"defaultValue": 255,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"defaultValue": 255
 		},
 		"26": {
 			"label": "SWITCH ON frame value for FLICK RIGHT",
@@ -374,10 +328,7 @@
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 255,
-			"defaultValue": 255,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"defaultValue": 255
 		},
 		"27": {
 			"label": "SWITCH OFF frame value for FLICK RIGHT",
@@ -385,20 +336,14 @@
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 255,
-			"defaultValue": 255,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"defaultValue": 255
 		},
 		"30": {
 			"label": "Launch Sequence learning mode",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 6,
-			"defaultValue": 0,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"defaultValue": 0
 		},
 		"31": {
 			"label": "1st gestures sequence (SLOT 1)",
@@ -406,10 +351,7 @@
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 1076,
-			"defaultValue": 0,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"defaultValue": 0
 		},
 		"32": {
 			"label": "2nd gestures sequence (SLOT 2)",
@@ -417,10 +359,7 @@
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 1076,
-			"defaultValue": 0,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"defaultValue": 0
 		},
 		"33": {
 			"label": "3rd gestures sequence (SLOT 3)",
@@ -428,10 +367,7 @@
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 1076,
-			"defaultValue": 0,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"defaultValue": 0
 		},
 		"34": {
 			"label": "4th gestures sequence (SLOT 4)",
@@ -439,10 +375,7 @@
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 1076,
-			"defaultValue": 0,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"defaultValue": 0
 		},
 		"35": {
 			"label": "5th gestures sequence (SLOT 5)",
@@ -450,10 +383,7 @@
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 1076,
-			"defaultValue": 0,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"defaultValue": 0
 		},
 		"36": {
 			"label": "6th gestures sequence (SLOT 6)",
@@ -461,10 +391,7 @@
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 1076,
-			"defaultValue": 0,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"defaultValue": 0
 		}
 	}
 }

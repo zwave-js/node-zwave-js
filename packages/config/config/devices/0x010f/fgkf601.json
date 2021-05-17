@@ -1,5 +1,3 @@
-// Fibargroup FGKF601
-// Keyfob
 {
 	"manufacturer": "Fibargroup",
 	"manufacturerId": "0x010f",
@@ -17,6 +15,10 @@
 		{
 			"productType": "0x1001",
 			"productId": "0x3000"
+		},
+		{
+			"productType": "0x1001",
+			"productId": "0x4000"
 		}
 	],
 	"firmwareVersion": {
@@ -30,10 +32,7 @@
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 28086,
-			"defaultValue": 0,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"defaultValue": 0
 		},
 		"2": {
 			"label": "Lock Mode - time to lock and locking button",
@@ -42,10 +41,7 @@
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 1791,
-			"defaultValue": 60,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"defaultValue": 60
 		},
 		"3": {
 			"label": "First scene sequence",
@@ -53,10 +49,7 @@
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 28086,
-			"defaultValue": 0,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"defaultValue": 0
 		},
 		"4": {
 			"label": "Second scene sequence",
@@ -64,10 +57,7 @@
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 28086,
-			"defaultValue": 0,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"defaultValue": 0
 		},
 		"5": {
 			"label": "Third scene sequence",
@@ -75,10 +65,7 @@
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 28086,
-			"defaultValue": 0,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"defaultValue": 0
 		},
 		"6": {
 			"label": "Fourth scene sequence",
@@ -86,10 +73,7 @@
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 28086,
-			"defaultValue": 0,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"defaultValue": 0
 		},
 		"7": {
 			"label": "Fifth scene sequence",
@@ -97,10 +81,7 @@
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 28086,
-			"defaultValue": 0,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"defaultValue": 0
 		},
 		"8": {
 			"label": "Sixth scene sequence",
@@ -108,10 +89,7 @@
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 28086,
-			"defaultValue": 0,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"defaultValue": 0
 		},
 		"9": {
 			"label": "Sequences - timeout",
@@ -120,10 +98,7 @@
 			"valueSize": 1,
 			"minValue": 5,
 			"maxValue": 30,
-			"defaultValue": 10,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"defaultValue": 10
 		},
 		"10": {
 			"label": "Single button associations - operating mode",
@@ -132,8 +107,6 @@
 			"minValue": 0,
 			"maxValue": 2,
 			"defaultValue": 0,
-			"readOnly": false,
-			"writeOnly": false,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -156,10 +129,7 @@
 			"valueSize": 2,
 			"minValue": 1,
 			"maxValue": 255,
-			"defaultValue": 255,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"defaultValue": 255
 		},
 		"12": {
 			"label": "Value sent to Circle association group",
@@ -167,10 +137,7 @@
 			"valueSize": 2,
 			"minValue": 1,
 			"maxValue": 255,
-			"defaultValue": 255,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"defaultValue": 255
 		},
 		"13": {
 			"label": "Value sent to Crossx association group",
@@ -178,10 +145,7 @@
 			"valueSize": 2,
 			"minValue": 1,
 			"maxValue": 255,
-			"defaultValue": 255,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"defaultValue": 255
 		},
 		"14": {
 			"label": "Value sent to Triangle association group",
@@ -189,10 +153,7 @@
 			"valueSize": 2,
 			"minValue": 1,
 			"maxValue": 255,
-			"defaultValue": 255,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"defaultValue": 255
 		},
 		"15": {
 			"label": "Value sent to Minus association group",
@@ -200,10 +161,7 @@
 			"valueSize": 2,
 			"minValue": 1,
 			"maxValue": 255,
-			"defaultValue": 255,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"defaultValue": 255
 		},
 		"16": {
 			"label": "Value sent to Plus association group",
@@ -211,10 +169,7 @@
 			"valueSize": 2,
 			"minValue": 1,
 			"maxValue": 255,
-			"defaultValue": 255,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"defaultValue": 255
 		},
 		"17": {
 			"label": "Paired buttons association for Square and Circle",
@@ -222,8 +177,6 @@
 			"minValue": 0,
 			"maxValue": 1,
 			"defaultValue": 0,
-			"readOnly": false,
-			"writeOnly": false,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -242,8 +195,6 @@
 			"minValue": 0,
 			"maxValue": 1,
 			"defaultValue": 0,
-			"readOnly": false,
-			"writeOnly": false,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -262,8 +213,6 @@
 			"minValue": 0,
 			"maxValue": 1,
 			"defaultValue": 0,
-			"readOnly": false,
-			"writeOnly": false,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -282,10 +231,7 @@
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 15,
-			"defaultValue": 9,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"defaultValue": 9
 		},
 		"22": {
 			"label": "Scene activation for Circle button",
@@ -293,10 +239,7 @@
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 15,
-			"defaultValue": 9,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"defaultValue": 9
 		},
 		"23": {
 			"label": "Scene activation for Cross button",
@@ -304,10 +247,7 @@
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 15,
-			"defaultValue": 9,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"defaultValue": 9
 		},
 		"24": {
 			"label": "Scene activation for Triangle button",
@@ -315,10 +255,7 @@
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 15,
-			"defaultValue": 9,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"defaultValue": 9
 		},
 		"25": {
 			"label": "Scene activation for Minus button",
@@ -326,10 +263,7 @@
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 15,
-			"defaultValue": 9,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"defaultValue": 9
 		},
 		"26": {
 			"label": "Scene activation for Plus button",
@@ -337,10 +271,7 @@
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 15,
-			"defaultValue": 9,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"defaultValue": 9
 		},
 		"29": {
 			"label": "Associations in Z-Wave network security mode",
@@ -348,10 +279,7 @@
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 4095,
-			"defaultValue": 4095,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"defaultValue": 4095
 		}
 	}
 }

@@ -1,5 +1,3 @@
-// Vision Security ZSE40
-// Zooz 4-in-one motion/temperature/humidity/luminance sensor
 {
 	"manufacturer": "Vision Security",
 	"manufacturerId": "0x0109",
@@ -24,8 +22,6 @@
 			"minValue": 0,
 			"maxValue": 1,
 			"defaultValue": 0,
-			"readOnly": false,
-			"writeOnly": false,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -43,10 +39,7 @@
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 50,
-			"defaultValue": 1,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"defaultValue": 1
 		},
 		"3": {
 			"label": "Humidity",
@@ -55,10 +48,7 @@
 			"valueSize": 1,
 			"minValue": 1,
 			"maxValue": 50,
-			"defaultValue": 10,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"defaultValue": 10
 		},
 		"4": {
 			"label": "Light Sensor",
@@ -66,10 +56,7 @@
 			"valueSize": 1,
 			"minValue": 1,
 			"maxValue": 50,
-			"defaultValue": 10,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"defaultValue": 10
 		},
 		"5": {
 			"label": "Trigger Interval",
@@ -79,10 +66,7 @@
 			"minValue": 1,
 			"maxValue": 255,
 			"defaultValue": 180,
-			"unsigned": true,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"unsigned": true
 		},
 		"6": {
 			"label": "Motion Sensor Sensitivity",
@@ -91,8 +75,6 @@
 			"minValue": 1,
 			"maxValue": 7,
 			"defaultValue": 4,
-			"readOnly": false,
-			"writeOnly": false,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -131,8 +113,6 @@
 			"minValue": 1,
 			"maxValue": 3,
 			"defaultValue": 3,
-			"readOnly": false,
-			"writeOnly": false,
 			"allowManualEntry": false,
 			"options": [
 				{

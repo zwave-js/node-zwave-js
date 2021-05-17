@@ -1,5 +1,3 @@
-// Wink Inc. MOTION SENSOR
-// Motion Sensor
 {
 	"manufacturer": "Wink Inc.",
 	"manufacturerId": "0x017f",
@@ -23,10 +21,7 @@
 			"minValue": 8,
 			"maxValue": 255,
 			"defaultValue": 12,
-			"unsigned": true,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"unsigned": true
 		},
 		"2": {
 			"label": "Motion Cleared Time Delay",
@@ -35,10 +30,7 @@
 			"minValue": 5,
 			"maxValue": 600,
 			"defaultValue": 30,
-			"unsigned": true,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"unsigned": true
 		},
 		"3": {
 			"label": "Basic Set Level",
@@ -47,9 +39,6 @@
 			"maxValue": 255,
 			"defaultValue": 255,
 			"unsigned": true,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true,
 			"options": [
 				{
 					"label": "Off",
@@ -72,8 +61,6 @@
 			"maxValue": 1,
 			"defaultValue": 1,
 			"unsigned": true,
-			"readOnly": false,
-			"writeOnly": false,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -93,10 +80,7 @@
 			"minValue": 5,
 			"maxValue": 1000,
 			"defaultValue": 100,
-			"unsigned": true,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"unsigned": true
 		},
 		"6": {
 			"label": "Retrigger Interval",
@@ -105,10 +89,7 @@
 			"minValue": 1,
 			"maxValue": 8,
 			"defaultValue": 8,
-			"unsigned": true,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"unsigned": true
 		},
 		"7": {
 			"label": "Light Sensing Interval",
@@ -117,10 +98,7 @@
 			"minValue": 60,
 			"maxValue": 3600,
 			"defaultValue": 180,
-			"unsigned": true,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"unsigned": true
 		},
 		"8": {
 			"label": "Enable/Disable Group 2 Ambient Light Threshold",
@@ -129,8 +107,6 @@
 			"maxValue": 1,
 			"defaultValue": 0,
 			"unsigned": true,
-			"readOnly": false,
-			"writeOnly": false,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -150,10 +126,7 @@
 			"minValue": 0,
 			"maxValue": 255,
 			"defaultValue": 100,
-			"unsigned": true,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"unsigned": true
 		},
 		"10": {
 			"label": "Enable/Disable LED Indicator",
@@ -162,8 +135,6 @@
 			"maxValue": 1,
 			"defaultValue": 1,
 			"unsigned": true,
-			"readOnly": false,
-			"writeOnly": false,
 			"allowManualEntry": false,
 			"options": [
 				{

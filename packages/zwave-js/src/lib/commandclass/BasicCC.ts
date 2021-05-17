@@ -94,7 +94,11 @@ export class BasicCCAPI extends CCAPI {
 		// so UIs have immediate feedback
 		if (this.isSinglecast()) {
 			// Only update currentValue for valid target values
-			if (value >= 0 && value <= 99) {
+			if (
+				!this.driver.options.disableOptimisticValueUpdate &&
+				value >= 0 &&
+				value <= 99
+			) {
 				const valueDB = this.endpoint.getNodeUnsafe()?.valueDB;
 				valueDB?.setValue(
 					getCurrentValueValueId(this.endpoint.index),
@@ -102,8 +106,41 @@ export class BasicCCAPI extends CCAPI {
 				);
 			}
 
-			// and verify the current value after a delay
+			// and verify the current value after a delay. We query currentValue instead of targetValue to make sure
+			// that unsolicited updates cancel the scheduled poll
+			// wotan-disable-next-line no-useless-predicate
+			if (property === "targetValue") property = "currentValue";
 			this.schedulePoll({ property });
+		} else if (this.isMulticast()) {
+			// Only update currentValue for valid target values
+			if (
+				!this.driver.options.disableOptimisticValueUpdate &&
+				value >= 0 &&
+				value <= 99
+			) {
+				// Figure out which nodes were affected by this command
+				const affectedNodes = this.endpoint.node.physicalNodes.filter(
+					(node) =>
+						node
+							.getEndpoint(this.endpoint.index)
+							?.supportsCC(this.ccId),
+				);
+				// and optimistically update the currentValue
+				for (const node of affectedNodes) {
+					node.valueDB?.setValue(
+						getCurrentValueValueId(this.endpoint.index),
+						value,
+					);
+				}
+			} else if (value === 255) {
+				// We generally don't want to poll for multicasts because of how much traffic it can cause
+				// However, when setting the value 255 (ON), we don't know the actual state
+
+				// We query currentValue instead of targetValue to make sure that unsolicited updates cancel the scheduled poll
+				// wotan-disable-next-line no-useless-predicate
+				if (property === "targetValue") property = "currentValue";
+				this.schedulePoll({ property });
+			}
 		}
 	};
 
@@ -135,6 +172,11 @@ export class BasicCCAPI extends CCAPI {
 			this.commandOptions,
 		);
 		if (response) {
+			const valueDB = this.endpoint.getNodeUnsafe()?.valueDB;
+			valueDB?.setValue(
+				getCurrentValueValueId(this.endpoint.index),
+				response.currentValue,
+			);
 			return pick(response, ["currentValue", "targetValue", "duration"]);
 		}
 	}
@@ -156,19 +198,52 @@ export class BasicCCAPI extends CCAPI {
 export class BasicCC extends CommandClass {
 	declare ccCommand: BasicCommand;
 
-	public async interview(complete: boolean = true): Promise<void> {
+	public async interview(): Promise<void> {
+		const node = this.getNode()!;
+		const endpoint = this.getEndpoint()!;
+
+		this.driver.controllerLog.logNode(node.id, {
+			endpoint: this.endpointIndex,
+			message: `Interviewing ${this.ccName}...`,
+			direction: "none",
+		});
+
+		// try to query the current state
+		await this.refreshValues();
+
+		// create compat event value if necessary
+		if (node.deviceConfig?.compat?.treatBasicSetAsEvent) {
+			const valueId = getCompatEventValueId(this.endpointIndex);
+			if (!node.valueDB.hasMetadata(valueId)) {
+				node.valueDB.setMetadata(valueId, {
+					...ValueMetadata.ReadOnlyUInt8,
+					label: "Event value",
+				});
+			}
+		} else if (
+			this.getValueDB().getValue(
+				getCurrentValueValueId(this.endpointIndex),
+			) == undefined
+		) {
+			this.driver.controllerLog.logNode(node.id, {
+				endpoint: this.endpointIndex,
+				message:
+					"No response to Basic Get command, assuming the node does not support Basic CC...",
+			});
+			// SDS14223: A controlling node MUST conclude that the Basic Command Class is not supported by a node (or
+			// endpoint) if no Basic Report is returned.
+			endpoint.removeCC(CommandClasses.Basic);
+		}
+
+		// Remember that the interview is complete
+		this.interviewComplete = true;
+	}
+
+	public async refreshValues(): Promise<void> {
 		const node = this.getNode()!;
 		const endpoint = this.getEndpoint()!;
 		const api = endpoint.commandClasses.Basic.withOptions({
 			priority: MessagePriority.NodeQuery,
-		});
-
-		this.driver.controllerLog.logNode(node.id, {
-			endpoint: this.endpointIndex,
-			message: `${this.constructor.name}: doing a ${
-				complete ? "complete" : "partial"
-			} interview...`,
-			direction: "none",
 		});
 
 		// try to query the current state
@@ -192,30 +267,7 @@ remaining duration: ${basicResponse.duration?.toString() ?? "undefined"}`;
 				message: logMessage,
 				direction: "inbound",
 			});
-		} else {
-			this.driver.controllerLog.logNode(node.id, {
-				endpoint: this.endpointIndex,
-				message:
-					"No response to Basic Get command, assuming the node does not support Basic CC...",
-			});
-			// SDS14223: A controlling node MUST conclude that the Basic Command Class is not supported by a node (or
-			// endpoint) if no Basic Report is returned.
-			endpoint.removeCC(CommandClasses.Basic);
 		}
-
-		// create compat event value if necessary
-		if (node.deviceConfig?.compat?.treatBasicSetAsEvent) {
-			const valueId = getCompatEventValueId(this.endpointIndex);
-			if (!node.valueDB.hasMetadata(valueId)) {
-				node.valueDB.setMetadata(valueId, {
-					...ValueMetadata.ReadOnlyUInt8,
-					label: "Event value",
-				});
-			}
-		}
-
-		// Remember that the interview is complete
-		this.interviewComplete = true;
 	}
 }
 

@@ -7,7 +7,7 @@ _Alright, here's a short introduction if you're new to this stuff. If you know t
 `npm` and `yarn` are both package managers for `Node.js` projects. `npm` comes with `Node.js` by default, but especially new major releases are often buggy, so we've decided to use `yarn` instead.
 
 > [!WARNING]
-> When working with Linux, you might already have a `yarn` executable on your system, but that is [not the correct one](https://stackoverflow.com/a/45551189/10179833). To install the correct one, run `npm i -g yarn`, which installs `yarn` the package manager globally on your system.
+> When working with Linux, you might already have a `yarn` executable on your system, but that is [not the correct one](https://stackoverflow.com/a/45551189/10179833). To install the correct one, run `npm i -g yarn`, which installs `yarn` the package manager globally on your system. If you're on Windows, **DO NOT** install `yarn` with an installer, as this version can mess things up.
 
 `yarn` has a [bunch of commands](https://classic.yarnpkg.com/en/docs/usage) but you'll likely only need to use `yarn` (short for `yarn install`) to install all dependencies. **Don't** install missing dependencies one by one, **don't** install them globally.  
 `yarn` can also run package scripts for you, which we use extensively, e.g. `yarn run build` to compile TypeScript into JavaScript. You'll find most of the scripts in `package.json` under `"scripts"`.
@@ -41,10 +41,6 @@ Afterwards just execute `yarn` in the cloned directory, which will install all r
 ---
 
 For more details on the different development tasks, check the corresponding pages:
-
-## [Device configuration files](development/config-files.md)
-
-Since older versions of the Z-Wave standard don't allow us to request everything we need from the devices themselves, there is a need for configuration files. If you want to add a new device or edit an existing one, start here!
 
 ## [Implementing Command Classes](development/implementing-cc.md)
 

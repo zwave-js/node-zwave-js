@@ -1,5 +1,3 @@
-// Heatit Z-RELAY
-// Multipurpose relay
 {
 	"manufacturer": "Heatit",
 	"manufacturerId": "0x019b",
@@ -23,8 +21,6 @@
 			"minValue": 0,
 			"maxValue": 3,
 			"defaultValue": 1,
-			"readOnly": false,
-			"writeOnly": false,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -51,10 +47,7 @@
 			"unit": "%",
 			"minValue": 0,
 			"maxValue": 100,
-			"defaultValue": 50,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"defaultValue": 50
 		},
 		"3": {
 			"label": "Thermistor Type Input 1",
@@ -63,8 +56,6 @@
 			"minValue": 0,
 			"maxValue": 1,
 			"defaultValue": 0,
-			"readOnly": false,
-			"writeOnly": false,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -84,8 +75,6 @@
 			"minValue": 0,
 			"maxValue": 1,
 			"defaultValue": 0,
-			"readOnly": false,
-			"writeOnly": false,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -104,10 +93,7 @@
 			"unit": "0.1 °C",
 			"minValue": -40,
 			"maxValue": 40,
-			"defaultValue": 0,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"defaultValue": 0
 		},
 		"6": {
 			"label": "Input 2 Calibration",
@@ -115,10 +101,7 @@
 			"unit": "0.1 °C",
 			"minValue": -40,
 			"maxValue": 40,
-			"defaultValue": 0,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"defaultValue": 0
 		},
 		"7": {
 			"label": "Input 1 Report Interval",
@@ -126,10 +109,7 @@
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 8640,
-			"defaultValue": 6,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"defaultValue": 6
 		},
 		"8": {
 			"label": "Input 2 Report Interval",
@@ -137,10 +117,7 @@
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 8640,
-			"defaultValue": 6,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"defaultValue": 6
 		},
 		"9": {
 			"label": "Flood Sensor Report Interval",
@@ -148,10 +125,7 @@
 			"unit": "10 seconds",
 			"minValue": 0,
 			"maxValue": 8640,
-			"defaultValue": 2,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"defaultValue": 2
 		},
 		"10": {
 			"label": "Meter Reports Interval",
@@ -159,10 +133,7 @@
 			"unit": "10 seconds",
 			"minValue": 0,
 			"maxValue": 8640,
-			"defaultValue": 90,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"defaultValue": 90
 		},
 		"11": {
 			"label": "Input 3 Flood Steady Timer",
@@ -171,10 +142,7 @@
 			"unit": "seconds",
 			"minValue": 0,
 			"maxValue": 60,
-			"defaultValue": 6,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"defaultValue": 6
 		},
 		"12": {
 			"label": "Auto Relay On",
@@ -183,8 +151,6 @@
 			"minValue": 0,
 			"maxValue": 2,
 			"defaultValue": 1,
-			"readOnly": false,
-			"writeOnly": false,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -197,7 +163,7 @@
 				},
 				{
 					"label": "No flood detected",
-					"value": 1
+					"value": 2
 				}
 			]
 		},
@@ -208,8 +174,6 @@
 			"minValue": 0,
 			"maxValue": 2,
 			"defaultValue": 2,
-			"readOnly": false,
-			"writeOnly": false,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -222,7 +186,7 @@
 				},
 				{
 					"label": "No flood detected",
-					"value": 1
+					"value": 2
 				}
 			]
 		},
@@ -232,10 +196,7 @@
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 4095,
-			"defaultValue": 2048,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"defaultValue": 2048
 		},
 		"15": {
 			"label": "Voltage",
@@ -245,10 +206,7 @@
 			"minValue": 0,
 			"maxValue": 250,
 			"defaultValue": 220,
-			"unsigned": true,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"unsigned": true
 		},
 		"17": {
 			"label": "Digital Value Per Ampere",
@@ -257,10 +215,7 @@
 			"minValue": 0,
 			"maxValue": 255,
 			"defaultValue": 81,
-			"unsigned": true,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"unsigned": true
 		},
 		"18": {
 			"label": "Load Size Connect to Relay Output",
@@ -269,10 +224,7 @@
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 6000,
-			"defaultValue": 0,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"defaultValue": 0
 		}
 	}
 }

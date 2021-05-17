@@ -1,10 +1,8 @@
-// Inovelli LZW30
-// Base model On-Off switch
 {
 	"manufacturer": "Inovelli",
 	"manufacturerId": "0x031e",
 	"label": "LZW30",
-	"description": "Base model On-Off switch",
+	"description": "Black Series On/Off Switch",
 	"devices": [
 		{
 			"productType": "0x0004",
@@ -23,8 +21,6 @@
 			"minValue": 0,
 			"maxValue": 2,
 			"defaultValue": 0,
-			"readOnly": false,
-			"writeOnly": false,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -47,8 +43,6 @@
 			"minValue": 0,
 			"maxValue": 1,
 			"defaultValue": 0,
-			"readOnly": false,
-			"writeOnly": false,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -67,30 +61,22 @@
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 32767,
-			"defaultValue": 0,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"defaultValue": 0
 		},
 		"4": {
-			"label": "Association Behaviour",
+			"label": "Association Behavior",
 			"valueSize": 1,
 			"minValue": 1,
 			"maxValue": 15,
-			"defaultValue": 15,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"defaultValue": 15
 		},
 		"5": {
 			"label": "LED Indicator Color",
+			"description": "Uses a scaled hue value (realHue / 360 * 255).",
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 255,
 			"defaultValue": 170,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": false,
 			"options": [
 				{
 					"label": "Red",
@@ -123,6 +109,11 @@
 				{
 					"label": "Pink",
 					"value": 234
+				},
+				{
+					"$if": "firmwareVersion >= 1.19",
+					"label": "White",
+					"value": 255
 				}
 			]
 		},
@@ -132,8 +123,6 @@
 			"minValue": 0,
 			"maxValue": 10,
 			"defaultValue": 5,
-			"readOnly": false,
-			"writeOnly": false,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -188,8 +177,6 @@
 			"minValue": 0,
 			"maxValue": 10,
 			"defaultValue": 2,
-			"readOnly": false,
-			"writeOnly": false,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -238,16 +225,45 @@
 				}
 			]
 		},
-		"8": {
-			"label": "LED Strip Effect",
-			"description": "Calculated sum of parameters as per overview section",
-			"valueSize": 4,
+		"13": {
+			"$if": "firmwareVersion >= 1.17",
+			"label": "Special Load Type",
+			"description": "Can be used in certain 3-way dumb switch setups where the load is confusing the switch as to which state it should be in.",
+			"valueSize": 1,
 			"minValue": 0,
-			"maxValue": 83823359,
+			"maxValue": 1,
 			"defaultValue": 0,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Detect Load Type",
+					"value": 0
+				},
+				{
+					"label": "Manually set for special load type",
+					"value": 1
+				}
+			]
+		},
+		"51": {
+			"$if": "firmwareVersion >= 1.19",
+			"label": "Instant On",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 1,
+			"unsigned": true,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Enabled (no delay)",
+					"value": 0
+				},
+				{
+					"label": "Disabled (700ms delay)",
+					"value": 1
+				}
+			]
 		}
 	}
 }

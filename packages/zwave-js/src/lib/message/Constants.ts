@@ -60,7 +60,7 @@ export enum FunctionType {
 	UNKNOWN_FUNC_UNKNOWN_0x09 = 0x09, // ??
 	UNKNOWN_FUNC_UNKNOWN_0x0a = 0x0a, // ??
 
-	UNKNOWN_FUNC_SerialAPISetup = 0x0b,
+	SerialAPISetup = 0x0b, // Configure the Serial API
 
 	UNKNOWN_FUNC_RF_RECEIVE_MODE = 0x10, // Power down the RF section of the stick
 	UNKNOWN_FUNC_SET_SLEEP_MODE = 0x11, // Set the CPU into sleep mode
@@ -126,12 +126,11 @@ export enum FunctionType {
 	FUNC_ID_ZW_CREATE_NEW_PRIMARY = 0x4c, // Control the createnewprimary process...start, stop, etc.
 	FUNC_ID_ZW_CONTROLLER_CHANGE = 0x4d, // Control the transferprimary process...start, stop, etc.
 	FUNC_ID_ZW_SET_LEARN_MODE = 0x50, // Put a controller into learn mode for replication/ receipt of configuration info
-	FUNC_ID_ZW_ASSIGN_SUC_RETURN_ROUTE = 0x51, // Assign a return route to the SUC
+	AssignSUCReturnRoute = 0x51, // Assign a return route to the SUC
 	FUNC_ID_ZW_ENABLE_SUC = 0x52, // Make a controller a Static Update Controller
 	FUNC_ID_ZW_REQUEST_NETWORK_UPDATE = 0x53, // Network update for a SUC(?)
-	FUNC_ID_ZW_SET_SUC_NODE_ID = 0x54, // Identify a Static Update Controller node id
-	FUNC_ID_ZW_DELETE_SUC_RETURN_ROUTE = 0x55, // Remove return routes to the SUC
-
+	SetSUCNodeId = 0x54, // Configure a static/bridge controller to be a SUC/SIS node (or not)
+	DeleteSUCReturnRoute = 0x55, // Remove return routes to the SUC
 	GetSUCNodeId = 0x56, // Try to retrieve a Static Update Controller node id (zero if no SUC present)
 
 	UNKNOWN_FUNC_SEND_SUC_ID = 0x57,
@@ -180,6 +179,8 @@ export enum FunctionType {
 	FUNC_ID_ZW_IS_VIRTUAL_NODE = 0xa6, // Virtual node test
 
 	BridgeApplicationCommand = 0xa8, // A message from another node using the Bridge API
+	SendDataBridge = 0xa9, // Send data (Bridge API)
+	SendDataMulticastBridge = 0xab, // Send data using multicast (Bridge API)
 
 	UNKNOWN_FUNC_UNKNOWN_0xB4 = 0xb4, // ??
 

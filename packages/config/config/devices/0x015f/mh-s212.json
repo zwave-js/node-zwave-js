@@ -1,14 +1,16 @@
-// McoHome Technology Co., Ltd. MH-S212
-// Mini Combo Switch
 {
 	"manufacturer": "McoHome Technology Co., Ltd.",
 	"manufacturerId": "0x015f",
 	"label": "MH-S212",
-	"description": "Mini Combo Switch",
+	"description": "Mini Combo Switch Two-load",
 	"devices": [
 		{
 			"productType": "0x2121",
 			"productId": "0x1352"
+		},
+		{
+			"productType": "0x2121",
+			"productId": "0x1353"
 		}
 	],
 	"firmwareVersion": {
@@ -20,6 +22,170 @@
 			"label": "Report",
 			"maxNodes": 5,
 			"isLifeline": true
+		}
+	},
+	"paramInformation": {
+		"1": {
+			"label": "Restore State After Power Failure",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 1,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Disable",
+					"value": 0
+				},
+				{
+					"label": "Enable",
+					"value": 1
+				}
+			]
+		},
+		"2": {
+			"label": "External Switch Type",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 1,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Momentary Buttons",
+					"value": 0
+				},
+				{
+					"label": "2-State Switches",
+					"value": 1
+				}
+			]
+		},
+		"3": {
+			"label": "2-State Switches",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 1,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Toggle Switch without specified on/off position",
+					"value": 0
+				},
+				{
+					"label": "Toggle Switch with specified on/off position",
+					"value": 1
+				}
+			]
+		},
+		"4": {
+			"label": "Switch 1 - Operation Report to Association Group 1",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 2,
+			"defaultValue": 0,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Report both on/off",
+					"value": 0
+				},
+				{
+					"label": "Report on only",
+					"value": 1
+				},
+				{
+					"label": "Report off only",
+					"value": 2
+				}
+			]
+		},
+		"5": {
+			"label": "Switch 1 - Off Timer",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 1,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Disable",
+					"value": 0
+				},
+				{
+					"label": "Enable",
+					"value": 1
+				}
+			]
+		},
+		"6": {
+			"label": "Switch 1 - Off Timer Interval",
+			"unit": "100ms",
+			"valueSize": 2,
+			"minValue": 0,
+			"maxValue": 32767,
+			"defaultValue": 0
+		},
+		"7": {
+			"label": "Switch 1 - Operation Mode",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 0,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Switch Immediately",
+					"value": 0
+				},
+				{
+					"label": "Zero Crossing Switch",
+					"value": 1
+				}
+			]
+		},
+		"8": {
+			"label": "Switch 2 - Operation Report to Association Group 2",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 2,
+			"defaultValue": 0,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Report both on/off",
+					"value": 0
+				},
+				{
+					"label": "Report on only",
+					"value": 1
+				},
+				{
+					"label": "Report off only",
+					"value": 2
+				}
+			]
+		},
+		"255": {
+			"label": "Factory Reset",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 85,
+			"defaultValue": 0,
+			"unsigned": true,
+			"writeOnly": true,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "No",
+					"value": 0
+				},
+				{
+					"label": "Factory Reset",
+					"value": 85
+				}
+			]
 		}
 	}
 }

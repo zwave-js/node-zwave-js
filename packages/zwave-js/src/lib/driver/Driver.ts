@@ -6,9 +6,11 @@ import {
 	deserializeCacheValue,
 	Duration,
 	highResTimestamp,
+	isZWaveError,
 	LogConfig,
 	SecurityManager,
 	serializeCacheValue,
+	timespan,
 	ValueMetadata,
 	ZWaveError,
 	ZWaveErrorCodes,
@@ -20,14 +22,21 @@ import {
 	ZWaveSerialPortBase,
 	ZWaveSocket,
 } from "@zwave-js/serial";
-import { DeepPartial, num2hex, pick, stringify } from "@zwave-js/shared";
+import {
+	DeepPartial,
+	formatId,
+	num2hex,
+	pick,
+	stringify,
+} from "@zwave-js/shared";
 import { wait } from "alcalzone-shared/async";
 import {
 	createDeferredPromise,
 	DeferredPromise,
 } from "alcalzone-shared/deferred-promise";
 import { entries } from "alcalzone-shared/objects";
-import { isArray } from "alcalzone-shared/typeguards";
+import { isArray, isObject } from "alcalzone-shared/typeguards";
+import { randomBytes } from "crypto";
 import { EventEmitter } from "events";
 import fsExtra from "fs-extra";
 import path from "path";
@@ -36,10 +45,12 @@ import { URL } from "url";
 import * as util from "util";
 import { interpret } from "xstate";
 import { FirmwareUpdateStatus } from "../commandclass";
+import { AssociationGroupInfoCC } from "../commandclass/AssociationGroupInfoCC";
 import {
 	CommandClass,
 	getImplementedVersion,
 } from "../commandclass/CommandClass";
+import { ConfigurationCC } from "../commandclass/ConfigurationCC";
 import { DeviceResetLocallyCCNotification } from "../commandclass/DeviceResetLocallyCC";
 import {
 	isEncapsulatingCommandClass,
@@ -62,7 +73,10 @@ import {
 	SupervisionResult,
 	SupervisionStatus,
 } from "../commandclass/SupervisionCC";
-import { WakeUpCCNoMoreInformation } from "../commandclass/WakeUpCC";
+import {
+	getWakeUpIntervalValueId,
+	WakeUpCCNoMoreInformation,
+} from "../commandclass/WakeUpCC";
 import { ApplicationCommandRequest } from "../controller/ApplicationCommandRequest";
 import {
 	ApplicationUpdateRequest,
@@ -71,11 +85,19 @@ import {
 import { BridgeApplicationCommandRequest } from "../controller/BridgeApplicationCommandRequest";
 import { ZWaveController } from "../controller/Controller";
 import {
+	SendDataBridgeRequest,
+	SendDataMulticastBridgeRequest,
+} from "../controller/SendDataBridgeMessages";
+import {
 	MAX_SEND_ATTEMPTS,
 	SendDataAbort,
 	SendDataMulticastRequest,
 	SendDataRequest,
 } from "../controller/SendDataMessages";
+import {
+	isSendDataSinglecast,
+	SendDataMessage,
+} from "../controller/SendDataShared";
 import { ControllerLogger } from "../log/Controller";
 import { DriverLogger } from "../log/Driver";
 import {
@@ -87,7 +109,11 @@ import { getDefaultPriority, Message } from "../message/Message";
 import { isNodeQuery } from "../node/INodeQuery";
 import type { ZWaveNode } from "../node/Node";
 import { InterviewStage, NodeStatus } from "../node/Types";
-import type { FileSystem } from "./FileSystem";
+import {
+	AppInfo,
+	compileStatistics,
+	sendStatistics,
+} from "../telemetry/statistics";
 import {
 	createSendThreadMachine,
 	SendThreadInterpreter,
@@ -96,9 +122,13 @@ import {
 } from "./SendThreadMachine";
 import { throttlePresets } from "./ThrottlePresets";
 import { Transaction } from "./Transaction";
+import { checkForConfigUpdates, installConfigUpdate } from "./UpdateConfig";
+import type { ZWaveOptions } from "./ZWaveOptions";
 
-// eslint-disable-next-line
-const { version: libVersion } = require("../../../package.json");
+// eslint-disable-next-line @typescript-eslint/no-var-requires
+const packageJson = require("../../../package.json");
+const libVersion: string = packageJson.version;
+
 // This is made with cfonts:
 const libNameString = `
 ███████╗ ██╗    ██╗  █████╗  ██╗   ██╗ ███████╗             ██╗ ███████╗
@@ -108,83 +138,6 @@ const libNameString = `
 ███████╗ ╚███╔███╔╝ ██║  ██║  ╚████╔╝  ███████╗        ╚█████╔╝ ███████║
 ╚══════╝  ╚══╝╚══╝  ╚═╝  ╚═╝   ╚═══╝   ╚══════╝         ╚════╝  ╚══════╝
 `;
-
-export interface ZWaveOptions {
-	/** Specify timeouts in milliseconds */
-	timeouts: {
-		/** how long to wait for an ACK */
-		ack: number; // >=1, default: 1000 ms
-		/** not sure */
-		byte: number; // >=1, default: 150 ms
-		/**
-		 * How long to wait for a controller response. Usually this timeout should never elapse,
-		 * so this is merely a safeguard against the driver stalling
-		 */
-		response: number; // [500...5000], default: 1600 ms
-		/** How long to wait for a callback from the host for a SendData[Multicast]Request */
-		sendDataCallback: number; // >=10000, default: 65000 ms
-		/** How much time a node gets to process a request and send a response */
-		report: number; // [1000...40000], default: 10000 ms
-		/** How long generated nonces are valid */
-		nonce: number; // [3000...20000], default: 5000 ms
-
-		/**
-		 * @internal
-		 * How long to wait for a poll after setting a value
-		 */
-		refreshValue: number;
-	};
-
-	attempts: {
-		/** How often the driver should try communication with the controller before giving up */
-		controller: number; // [1...3], default: 3
-		/** How often the driver should try sending SendData commands before giving up */
-		sendData: number; // [1...5], default: 3
-		/** Whether a command should be retried when a node acknowledges the receipt but no response is received */
-		retryAfterTransmitReport: boolean; // default: false
-		/**
-		 * How many attempts should be made for each node interview before giving up
-		 */
-		nodeInterview: number; // [1...10], default: 5
-	};
-
-	/**
-	 * Optional log configuration
-	 */
-	logConfig?: LogConfig;
-
-	/**
-	 * @internal
-	 * Set this to true to skip the controller interview. Useful for testing purposes
-	 */
-	skipInterview?: boolean;
-
-	storage: {
-		/** Allows you to replace the default file system driver used to store and read the cache */
-		driver: FileSystem;
-		/** Allows you to specify a different cache directory */
-		cacheDir: string;
-		/**
-		 * How frequently the values and metadata should be written to the DB files. This is a compromise between data loss
-		 * in cause of a crash and disk wear:
-		 *
-		 * * `"fast"` immediately writes every change to disk
-		 * * `"slow"` writes at most every 5 minutes or after 500 changes - whichever happens first
-		 * * `"normal"` is a compromise between the two options
-		 */
-		throttle: "fast" | "normal" | "slow";
-	};
-
-	/** Specify the network key to use for encryption. This must be a Buffer of exactly 16 bytes. */
-	networkKey?: Buffer;
-
-	/**
-	 * Some Command Classes support reporting that a value is unknown.
-	 * When this flag is `false`, unknown values are exposed as `undefined`.
-	 * When it is `true`, unknown values are exposed as the literal string "unknown" (even if the value is normally numeric).
-	 * Default: `false` */
-	preserveUnknownValues?: boolean;
-}
 
 const defaultOptions: ZWaveOptions = {
 	timeouts: {
@@ -203,6 +156,7 @@ const defaultOptions: ZWaveOptions = {
 		nodeInterview: 5,
 	},
 	preserveUnknownValues: false,
+	disableOptimisticValueUpdate: false,
 	skipInterview: false,
 	storage: {
 		driver: fsExtra,
@@ -433,6 +387,10 @@ export class Driver extends EventEmitter {
 	}
 
 	public readonly configManager: ConfigManager;
+	private _configVersion: string;
+	public get configVersion(): string {
+		return this._configVersion;
+	}
 
 	private _logContainer: ZWaveLogContainer;
 	private _driverLog: DriverLogger;
@@ -479,20 +437,33 @@ export class Driver extends EventEmitter {
 		// And make sure they contain valid values
 		checkOptions(this.options);
 
-		this._logContainer = new ZWaveLogContainer(this.options.logConfig);
-		this._driverLog = new DriverLogger(this._logContainer);
-		this._controllerLog = new ControllerLogger(this._logContainer);
-
-		this.cacheDir = this.options.storage.cacheDir;
-
-		// Initialize config manager
-		this.configManager = new ConfigManager(this._logContainer);
-
 		// register some cleanup handlers in case the program doesn't get closed cleanly
 		this._cleanupHandler = this._cleanupHandler.bind(this);
 		process.on("exit", this._cleanupHandler);
 		process.on("SIGINT", this._cleanupHandler);
 		process.on("uncaughtException", this._cleanupHandler);
+
+		// Initialize logging
+		this._logContainer = new ZWaveLogContainer(this.options.logConfig);
+		this._driverLog = new DriverLogger(this._logContainer);
+		this._controllerLog = new ControllerLogger(this._logContainer);
+
+		// Initialize the cache
+		this.cacheDir = this.options.storage.cacheDir;
+
+		// Initialize config manager
+		try {
+			// eslint-disable-next-line @typescript-eslint/no-var-requires
+			this._configVersion = require("@zwave-js/config/package.json").version;
+		} catch {
+			this._configVersion =
+				packageJson?.dependencies?.["@zwave-js/config"] ?? libVersion;
+		}
+		this.configManager = new ConfigManager({
+			logContainer: this._logContainer,
+			deviceConfigPriorityDir: this.options.storage
+				.deviceConfigPriorityDir,
+		});
 
 		// And initialize but don't start the send thread machine
 		const sendThreadMachine = createSendThreadMachine(
@@ -620,7 +591,7 @@ export class Driver extends EventEmitter {
 	// wotan-disable async-function-assignability
 	public async start(): Promise<void> {
 		// avoid starting twice
-		if (this._wasDestroyed) {
+		if (this.wasDestroyed) {
 			throw new ZWaveError(
 				"The driver was destroyed. Create a new instance and start that one.",
 				ZWaveErrorCodes.Driver_Destroyed,
@@ -642,6 +613,11 @@ export class Driver extends EventEmitter {
 		// Log which version is running
 		this.driverLog.print(libNameString, "info");
 		this.driverLog.print(`version ${libVersion}`, "info");
+		// wotan-disable-next-line no-restricted-property-access
+		this.configManager["logger"].print(
+			`version ${this.configVersion}`,
+			"info",
+		);
 		this.driverLog.print("", "info");
 
 		this.driverLog.print("starting driver...");
@@ -666,7 +642,7 @@ export class Driver extends EventEmitter {
 			.on("data", this.serialport_onData.bind(this))
 			.on("error", (err) => {
 				this.driverLog.print(
-					`serial port errored: ${err.message}`,
+					`Serial port errored: ${err.message}`,
 					"error",
 				);
 				if (this._isOpen) {
@@ -707,14 +683,7 @@ export class Driver extends EventEmitter {
 			// Load the necessary configuration
 			this.driverLog.print("loading configuration...");
 			try {
-				await this.configManager.loadDeviceClasses();
-				await this.configManager.loadManufacturers();
-				await this.configManager.loadDeviceIndex();
-				await this.configManager.loadNotifications();
-				await this.configManager.loadNamedScales();
-				await this.configManager.loadSensorTypes();
-				await this.configManager.loadMeters();
-				await this.configManager.loadIndicators();
+				await this.configManager.loadAll();
 			} catch (e) {
 				const message = `Failed to load the configuration: ${e.message}`;
 				this.driverLog.print(message, "error");
@@ -732,7 +701,7 @@ export class Driver extends EventEmitter {
 			} catch (e: unknown) {
 				let message: string;
 				if (
-					e instanceof ZWaveError &&
+					isZWaveError(e) &&
 					e.code === ZWaveErrorCodes.Controller_MessageDropped
 				) {
 					message = `Failed to initialize the driver, no response from the controller. Are you sure this is a Z-Wave controller?`;
@@ -850,12 +819,41 @@ export class Driver extends EventEmitter {
 				this._controller.ownNodeId!,
 			)!;
 			await this.interviewNode(controllerNode);
+
 			// Then do all the nodes in parallel
 			for (const node of this._controller.nodes.values()) {
-				if (node.id === this._controller.ownNodeId) continue;
-				// don't await the interview, because it may take a very long time
-				// if a node is asleep
-				void this.interviewNode(node);
+				if (node.id === this._controller.ownNodeId) {
+					// The controller is always alive
+					node.markAsAlive();
+					continue;
+				} else if (node.canSleep) {
+					// A node that can sleep should be assumed to be sleeping after resuming from cache
+					node.markAsAsleep();
+				}
+
+				void (async () => {
+					// Continue the interview if necessary. If that is not necessary, at least
+					// determine the node's status
+					if (node.interviewStage < InterviewStage.Complete) {
+						// don't await the interview, because it may take a very long time
+						// if a node is asleep
+						await this.interviewNode(node);
+					} else if (node.isListening || node.isFrequentListening) {
+						// Ping non-sleeping nodes to determine their status
+						await node.ping();
+					}
+
+					// Previous versions of zwave-js didn't configure the SUC return route. Make sure each node has one
+					// and remember that we did. If the node is not responsive - tough luck, try again next time
+					if (
+						!node.hasSUCReturnRoute &&
+						node.status !== NodeStatus.Dead
+					) {
+						node.hasSUCReturnRoute = await this.controller.assignSUCReturnRoute(
+							node.id,
+						);
+					}
+				})();
 			}
 		}
 	}
@@ -871,7 +869,7 @@ export class Driver extends EventEmitter {
 	 */
 	public async interviewNode(node: ZWaveNode): Promise<void> {
 		if (node.interviewStage === InterviewStage.Complete) {
-			node.interviewStage = InterviewStage.RestartFromCache;
+			return;
 		}
 
 		// Avoid having multiple restart timeouts active
@@ -883,10 +881,11 @@ export class Driver extends EventEmitter {
 		// Drop all pending messages that come from a previous interview attempt
 		this.rejectTransactions(
 			(t) =>
-				t.priority === MessagePriority.NodeQuery &&
-				t.message.getNodeId() === node.id,
+				t.message.getNodeId() === node.id &&
+				(t.priority === MessagePriority.NodeQuery ||
+					t.tag === "interview"),
 			"The interview was restarted",
-			ZWaveErrorCodes.Controller_MessageDropped,
+			ZWaveErrorCodes.Controller_InterviewRestarted,
 		);
 
 		const maxInterviewAttempts = this.options.attempts.nodeInterview;
@@ -942,14 +941,89 @@ export class Driver extends EventEmitter {
 						maxAttempts: maxInterviewAttempts,
 					});
 				}
+			} else if (
+				node.manufacturerId != undefined &&
+				node.productType != undefined &&
+				node.productId != undefined &&
+				!node.deviceConfig &&
+				process.env.NODE_ENV !== "test"
+			) {
+				// The interview succeeded, but we don't have a device config for this node.
+				// Report it, so we can add a config file
+
+				let configFingerprint = `${formatId(
+					node.manufacturerId,
+				)}:${formatId(node.productType)}:${formatId(node.productId)}`;
+				if (node.firmwareVersion != undefined) {
+					configFingerprint += `:${node.firmwareVersion}`;
+				}
+				const message = `Missing device config: ${configFingerprint}`;
+
+				const deviceInfo: Record<string, any> = {
+					supportsConfigCCV3:
+						node.getCCVersion(CommandClasses.Configuration) >= 3,
+					supportsAGI: node.supportsCC(
+						CommandClasses["Association Group Information"],
+					),
+					supportsZWavePlus: node.supportsCC(
+						CommandClasses["Z-Wave Plus Info"],
+					),
+				};
+				try {
+					if (deviceInfo.supportsConfigCCV3) {
+						// Try to collect all info about config params we can get
+						const instance = node.createCCInstanceUnsafe(
+							ConfigurationCC,
+						)!;
+						deviceInfo.parameters = instance.getQueriedParamInfos();
+					}
+					if (deviceInfo.supportsAGI) {
+						// Try to collect all info about association groups we can get
+						const instance = node.createCCInstanceUnsafe(
+							AssociationGroupInfoCC,
+						)!;
+						// wotan-disable-next-line no-restricted-property-access
+						const associationGroupCount = instance[
+							"getAssociationGroupCountCached"
+						]();
+						const names: string[] = [];
+						for (
+							let group = 1;
+							group <= associationGroupCount;
+							group++
+						) {
+							names.push(
+								instance.getGroupNameCached(group) ?? "",
+							);
+						}
+						deviceInfo.associationGroups = names;
+					}
+					if (deviceInfo.supportsZWavePlus) {
+						deviceInfo.zWavePlusVersion = node.zwavePlusVersion;
+					}
+				} catch {
+					// Don't fail on the last meters :)
+				}
+				Sentry.captureMessage(message, (scope) => {
+					scope.clearBreadcrumbs();
+					// Group by device config, otherwise Sentry groups by "Unknown device config", which is nonsense
+					scope.setFingerprint([configFingerprint]);
+					scope.setExtras(deviceInfo);
+					return scope;
+				});
 			}
 		} catch (e: unknown) {
-			if (e instanceof ZWaveError) {
+			if (isZWaveError(e)) {
 				if (
 					e.code === ZWaveErrorCodes.Driver_NotReady ||
 					e.code === ZWaveErrorCodes.Controller_NodeRemoved
 				) {
 					// This only happens when a node is removed during the interview - we don't log this
+					return;
+				} else if (
+					e.code === ZWaveErrorCodes.Controller_InterviewRestarted
+				) {
+					// The interview was restarted by a user - we don't log this
 					return;
 				}
 				this.controllerLog.logNode(
@@ -1064,6 +1138,9 @@ export class Driver extends EventEmitter {
 		this._nodesReady.add(node.id);
 		this.controllerLog.logNode(node.id, "The node is ready to be used");
 
+		// Regularly query listening nodes for updated values
+		node.scheduleManualValueRefreshes();
+
 		this.checkAllNodesReady();
 	}
 
@@ -1082,6 +1159,135 @@ export class Driver extends EventEmitter {
 		this.controllerLog.print("All nodes are ready to be used");
 		this.emit("all nodes ready");
 		this._nodesReadyEventEmitted = true;
+
+		// We know we have all data, this is the time to send statistics (when enabled)
+		void this.compileAndSendStatistics().catch(() => {
+			/* ignore */
+		});
+	}
+
+	private _statisticsEnabled: boolean = false;
+	/** Whether reporting usage statistics is currently enabled */
+	public get statisticsEnabled(): boolean {
+		return this._statisticsEnabled;
+	}
+
+	private statisticsAppInfo:
+		| Pick<AppInfo, "applicationName" | "applicationVersion">
+		| undefined;
+
+	/**
+	 * Enable sending usage statistics. Although this does not include any sensitive information, we expect that you
+	 * inform your users before enabling statistics.
+	 */
+	public enableStatistics(
+		appInfo: Pick<AppInfo, "applicationName" | "applicationVersion">,
+	): void {
+		if (this._statisticsEnabled) return;
+		this._statisticsEnabled = true;
+
+		if (
+			!isObject(appInfo) ||
+			// wotan-disable-next-line no-useless-predicate
+			typeof appInfo.applicationName !== "string" ||
+			// wotan-disable-next-line no-useless-predicate
+			typeof appInfo.applicationVersion !== "string"
+		) {
+			throw new ZWaveError(
+				`The application statistics must be an object with two string properties "applicationName" and "applicationVersion"!`,
+				ZWaveErrorCodes.Driver_InvalidOptions,
+			);
+		} else if (appInfo.applicationName.length > 100) {
+			throw new ZWaveError(
+				`The applicationName for statistics must be maximum 100 characters long!`,
+				ZWaveErrorCodes.Driver_InvalidOptions,
+			);
+		} else if (appInfo.applicationVersion.length > 100) {
+			throw new ZWaveError(
+				`The applicationVersion for statistics must be maximum 100 characters long!`,
+				ZWaveErrorCodes.Driver_InvalidOptions,
+			);
+		}
+
+		this.statisticsAppInfo = appInfo;
+
+		// If we're already ready, send statistics
+		if (this._nodesReadyEventEmitted) {
+			void this.compileAndSendStatistics().catch(() => {
+				/* ignore */
+			});
+		}
+	}
+
+	/**
+	 * Disable sending usage statistics
+	 */
+	public disableStatistics(): void {
+		this._statisticsEnabled = false;
+		this.statisticsAppInfo = undefined;
+		if (this.statisticsTimeout) {
+			clearTimeout(this.statisticsTimeout);
+			this.statisticsTimeout = undefined;
+		}
+	}
+
+	/** @internal */
+	// eslint-disable-next-line @typescript-eslint/require-await
+	public async getUUID(): Promise<string> {
+		// To anonymously identify a network, we create a unique ID and use it to salt the Home ID
+		if (!this._valueDB!.has("uuid")) {
+			this._valueDB!.set("uuid", randomBytes(32).toString("hex"));
+		}
+		const ret = this._valueDB!.get("uuid") as string;
+		return ret;
+	}
+
+	private statisticsTimeout: NodeJS.Timeout | undefined;
+	private async compileAndSendStatistics(): Promise<void> {
+		// Don't send anything if statistics are not enabled
+		if (!this.statisticsEnabled || !this.statisticsAppInfo) return;
+
+		if (this.statisticsTimeout) {
+			clearTimeout(this.statisticsTimeout);
+			this.statisticsTimeout = undefined;
+		}
+
+		let success: number | boolean = false;
+		try {
+			const statistics = await compileStatistics(this, {
+				driverVersion: libVersion,
+				...this.statisticsAppInfo,
+			});
+			success = await sendStatistics(statistics);
+		} catch {
+			// Didn't work - try again in a few hours
+			success = false;
+		} finally {
+			if (typeof success === "number") {
+				this.driverLog.print(
+					`Sending usage statistics was rate limited - next attempt scheduled in ${success} seconds.`,
+					"verbose",
+				);
+				// Wait at most 6 hours to try again
+				const retryMs = Math.max(
+					timespan.minutes(1),
+					Math.min(success * 1000, timespan.hours(6)),
+				);
+				this.statisticsTimeout = setTimeout(() => {
+					void this.compileAndSendStatistics();
+				}, retryMs).unref();
+			} else {
+				this.driverLog.print(
+					success
+						? `Usage statistics sent - next transmission scheduled in 23 hours.`
+						: `Failed to send usage statistics - next transmission scheduled in 6 hours.`,
+					"verbose",
+				);
+				this.statisticsTimeout = setTimeout(() => {
+					void this.compileAndSendStatistics();
+				}, timespan.hours(success ? 23 : 6)).unref();
+			}
+		}
 	}
 
 	/** Is called when a node interview is completed */
@@ -1118,29 +1324,13 @@ export class Driver extends EventEmitter {
 			// but only if the node is not getting replaced, because the removal will interfere with
 			// bootstrapping the new node
 			this.controller
-				.removeNodeFromAllAssocations(node.id)
+				.removeNodeFromAllAssociations(node.id)
 				.catch((err) => {
 					this.driverLog.print(
 						`Failed to remove node ${node.id} from all associations: ${err.message}`,
 						"error",
 					);
 				});
-
-			// Remove the node id from all cached neighbor lists and asynchronously make the affected nodes update their neighbor lists
-			for (const otherNode of this.controller.nodes.values()) {
-				if (
-					otherNode !== node &&
-					otherNode.neighbors.includes(node.id)
-				) {
-					otherNode.removeNodeFromCachedNeighbors(node.id);
-					otherNode.queryNeighborsInternal().catch((err) => {
-						this.driverLog.print(
-							`Failed to update neighbors for node ${otherNode.id}: ${err.message}`,
-							"warn",
-						);
-					});
-				}
-			}
 		}
 
 		// And clean up all remaining resources used by the node
@@ -1275,13 +1465,16 @@ export class Driver extends EventEmitter {
 		void this.initializeControllerAndNodes();
 	}
 
-	private _wasDestroyed: boolean = false;
+	private _destroyPromise: DeferredPromise<void> | undefined;
+	private get wasDestroyed(): boolean {
+		return !!this._destroyPromise;
+	}
 	/**
 	 * Ensures that the driver is ready to communicate (serial port open and not destroyed).
 	 * If desired, also checks that the controller interview has been completed.
 	 */
 	private ensureReady(includingController: boolean = false): void {
-		if (!this._wasStarted || !this._isOpen || this._wasDestroyed) {
+		if (!this._wasStarted || !this._isOpen || this.wasDestroyed) {
 			throw new ZWaveError(
 				"The driver is not ready or has been destroyed",
 				ZWaveErrorCodes.Driver_NotReady,
@@ -1300,7 +1493,7 @@ export class Driver extends EventEmitter {
 		return (
 			this._wasStarted &&
 			this._isOpen &&
-			!this._wasDestroyed &&
+			!this.wasDestroyed &&
 			this._controllerInterviewed
 		);
 	}
@@ -1314,9 +1507,10 @@ export class Driver extends EventEmitter {
 	 * Must be called under any circumstances.
 	 */
 	public async destroy(): Promise<void> {
-		// Ensure this is only called once
-		if (this._wasDestroyed) return;
-		this._wasDestroyed = true;
+		// Ensure this is only called once and all subsequent calls block
+		if (this._destroyPromise) return this._destroyPromise;
+		this._destroyPromise = createDeferredPromise();
+
 		this.driverLog.print("destroying driver instance...");
 
 		// First stop the send thread machine and close the serial port, so nothing happens anymore
@@ -1352,6 +1546,7 @@ export class Driver extends EventEmitter {
 			this.saveToCacheTimer,
 			...this.sendNodeToSleepTimers.values(),
 			...this.retryNodeInterviewTimeouts.values(),
+			this.statisticsTimeout,
 		]) {
 			if (timeout) clearTimeout(timeout);
 		}
@@ -1365,6 +1560,8 @@ export class Driver extends EventEmitter {
 
 		// destroy loggers as the very last thing
 		this._logContainer.destroy();
+
+		this._destroyPromise.resolve();
 	}
 
 	private serialport_onError(err: Error): void {
@@ -1405,8 +1602,19 @@ export class Driver extends EventEmitter {
 			// all good, send ACK
 			await this.writeHeader(MessageHeaders.ACK);
 		} catch (e) {
-			const response = this.handleDecodeError(e, data);
-			if (response) await this.writeHeader(response);
+			try {
+				const response = this.handleDecodeError(e, data);
+				if (response) await this.writeHeader(response);
+			} catch (e) {
+				if (
+					e instanceof Error &&
+					/serial port is not open/.test(e.message)
+				) {
+					this.emit("error", e);
+					void this.destroy();
+					return;
+				}
+			}
 		}
 
 		// If the message could be decoded, forward it to the send thread
@@ -1458,7 +1666,7 @@ export class Driver extends EventEmitter {
 		e: Error,
 		data: Buffer,
 	): MessageHeaders | undefined {
-		if (e instanceof ZWaveError) {
+		if (isZWaveError(e)) {
 			switch (e.code) {
 				case ZWaveErrorCodes.PacketFormat_Invalid:
 				case ZWaveErrorCodes.PacketFormat_Checksum:
@@ -1522,12 +1730,13 @@ export class Driver extends EventEmitter {
 		transaction: Transaction,
 		e: ZWaveError,
 	): transaction is Transaction & {
-		message: SendDataRequest;
+		message: SendDataRequest | SendDataBridgeRequest;
 	} {
 		return (
 			// If the node does not acknowledge our request, it is either asleep or dead
 			e.code === ZWaveErrorCodes.Controller_CallbackNOK &&
-			transaction.message instanceof SendDataRequest &&
+			(transaction.message instanceof SendDataRequest ||
+				transaction.message instanceof SendDataBridgeRequest) &&
 			// Ignore pre-transmit handshakes because the actual transaction will be retried
 			transaction.priority !== MessagePriority.PreTransmitHandshake
 		);
@@ -1539,7 +1748,7 @@ export class Driver extends EventEmitter {
 	 */
 	private handleMissingNodeACK(
 		transaction: Transaction & {
-			message: SendDataRequest;
+			message: SendDataRequest | SendDataBridgeRequest;
 		},
 	): boolean {
 		const node = transaction.message.getNodeUnsafe();
@@ -1622,7 +1831,7 @@ It is probably asleep, moving its messages to the wakeup queue.`,
 					try {
 						command.mergePartialCCs(session);
 					} catch (e: unknown) {
-						if (e instanceof ZWaveError) {
+						if (isZWaveError(e)) {
 							switch (e.code) {
 								case ZWaveErrorCodes.Deserialization_NotImplemented:
 								case ZWaveErrorCodes.CC_NotImplemented:
@@ -1679,7 +1888,7 @@ It is probably asleep, moving its messages to the wakeup queue.`,
 				await this.handleRequest(msg);
 			} catch (e) {
 				if (
-					e instanceof ZWaveError &&
+					isZWaveError(e) &&
 					e.code === ZWaveErrorCodes.Driver_NotReady
 				) {
 					this.driverLog.print(
@@ -1851,18 +2060,8 @@ ${handlers.length} left`,
 					message: `The node was reset locally, removing it`,
 					direction: "inbound",
 				});
-				if (!(await this.controller.isFailedNode(msg.command.nodeId))) {
-					try {
-						// Force a ping of the node, so it gets added to the failed nodes list
-						node.markAsAwake();
-						await node.commandClasses["No Operation"].send();
-					} catch {
-						// this is expected
-					}
-				}
 
 				try {
-					// ...because we can only remove failed nodes
 					await this.controller.removeFailedNode(msg.command.nodeId);
 				} catch (e) {
 					this.controllerLog.logNode(msg.command.nodeId, {
@@ -1916,6 +2115,15 @@ ${handlers.length} left`,
 
 					// Tell the send thread that we received a NIF from the node
 					this.sendThread.send({ type: "NIF", nodeId: node.id });
+
+					if (
+						node.canSleep &&
+						node.supportsCC(CommandClasses["Wake Up"])
+					) {
+						// In case this is a sleeping node and there are no messages in the queue, the node may go back to sleep very soon
+						this.debounceSendNodeToSleep(node);
+					}
+
 					return;
 				}
 			}
@@ -2091,10 +2299,15 @@ ${handlers.length} left`,
 			// If we move multicasts to the wakeup queue, it is unlikely
 			// that there is ever a points where all targets are awake
 			!(msg instanceof SendDataMulticastRequest) &&
+			!(msg instanceof SendDataMulticastBridgeRequest) &&
 			// Handshake messages are meant to be sent immediately
 			options.priority !== MessagePriority.Handshake &&
 			options.priority !== MessagePriority.PreTransmitHandshake
 		) {
+			if (options.priority === MessagePriority.NodeQuery) {
+				// Remember that this transaction was part of an interview
+				options.tag = "interview";
+			}
 			options.priority = MessagePriority.WakeUp;
 		}
 
@@ -2138,14 +2351,18 @@ ${handlers.length} left`,
 		try {
 			const ret = await promise;
 			if (expirationTimeout) clearTimeout(expirationTimeout);
+			// Track and potentially update the status of the node when communication succeeds
 			if (node) {
 				if (node.canSleep) {
-					// If the node is not meant to be kept awake, try to send it back to sleep
-					if (!node.keepAwake) {
-						this.debounceSendNodeToSleep(node);
+					// Do not update the node status when we just responded to a nonce request
+					if (options.priority !== MessagePriority.Handshake) {
+						// If the node is not meant to be kept awake, try to send it back to sleep
+						if (!node.keepAwake) {
+							this.debounceSendNodeToSleep(node);
+						}
+						// The node must be awake because it answered
+						node.markAsAwake();
 					}
-					// The node must be awake because it answered
-					node.markAsAwake();
 				} else if (node.status !== NodeStatus.Alive) {
 					// The node status was unknown or dead - in either case it must be alive because it answered
 					node.markAsAlive();
@@ -2153,14 +2370,18 @@ ${handlers.length} left`,
 			}
 			return ret;
 		} catch (e) {
-			if (e instanceof ZWaveError) {
+			if (isZWaveError(e)) {
 				if (
 					// If a controller command failed (that is not SendData), pass the response/callback through
 					(e.code === ZWaveErrorCodes.Controller_ResponseNOK ||
 						e.code === ZWaveErrorCodes.Controller_CallbackNOK) &&
 					e.context instanceof Message &&
+					// We need to check the function type here because context can be the transmit reports
 					e.context.functionType !== FunctionType.SendData &&
-					e.context.functionType !== FunctionType.SendDataMulticast
+					e.context.functionType !== FunctionType.SendDataMulticast &&
+					e.context.functionType !== FunctionType.SendDataBridge &&
+					e.context.functionType !==
+						FunctionType.SendDataMulticastBridge
 				) {
 					return e.context as TResponse;
 				}
@@ -2181,11 +2402,25 @@ ${handlers.length} left`,
 		command: CommandClass,
 		options: SendCommandOptions = {},
 	): Promise<TResponse | undefined> {
-		let msg: SendDataRequest | SendDataMulticastRequest;
+		let msg: SendDataMessage;
 		if (command.isSinglecast()) {
-			msg = new SendDataRequest(this, { command });
+			if (
+				this.controller.isFunctionSupported(FunctionType.SendDataBridge)
+			) {
+				// Prioritize Bridge commands when they are supported
+				msg = new SendDataBridgeRequest(this, { command });
+			} else {
+				msg = new SendDataRequest(this, { command });
+			}
 		} else if (command.isMulticast()) {
-			msg = new SendDataMulticastRequest(this, { command });
+			if (
+				this.controller.isFunctionSupported(FunctionType.SendDataBridge)
+			) {
+				// Prioritize Bridge commands when they are supported
+				msg = new SendDataMulticastBridgeRequest(this, { command });
+			} else {
+				msg = new SendDataMulticastRequest(this, { command });
+			}
 		} else {
 			throw new ZWaveError(
 				`A CC must either be singlecast or multicast`,
@@ -2211,7 +2446,7 @@ ${handlers.length} left`,
 		} catch (e: unknown) {
 			// A timeout always has to be expected. In this case return nothing.
 			if (
-				e instanceof ZWaveError &&
+				isZWaveError(e) &&
 				e.code === ZWaveErrorCodes.Controller_NodeTimeout
 			) {
 				if (command.isSinglecast()) {
@@ -2380,13 +2615,21 @@ ${handlers.length} left`,
 			type: "requeue",
 			priority: MessagePriority.WakeUp,
 		};
+		const requeueAndTagAsInterview: TransactionReducerResult = {
+			...requeue,
+			tag: "interview",
+		};
 
 		const reducer: TransactionReducer = (transaction, _source) => {
 			const msg = transaction.message;
 			if (msg.getNodeId() !== nodeId) return { type: "keep" };
 			// Drop all messages that are not allowed in the wakeup queue
 			// For all other messages, change the priority to wakeup
-			return this.mayMoveToWakeupQueue(transaction) ? requeue : reject;
+			return this.mayMoveToWakeupQueue(transaction)
+				? transaction.priority === MessagePriority.NodeQuery
+					? requeueAndTagAsInterview
+					: requeue
+				: reject;
 		};
 
 		// Apply the reducer to the send thread
@@ -2557,28 +2800,127 @@ ${handlers.length} left`,
 			node.supportsCC(CommandClasses["Wake Up"]) &&
 			!this.hasPendingMessages(node)
 		) {
-			this.sendNodeToSleepTimers.set(
-				node.id,
-				setTimeout(() => sendNodeToSleep(node), 1000).unref(),
+			const wakeUpInterval = node.getValue<number>(
+				getWakeUpIntervalValueId(),
 			);
+			// GH#2179: when a device only wakes up manually, don't send it back to sleep
+			// Best case, the user wanted to interact with it.
+			// Worst case, the device won't ACK this and cause a delay
+			if (wakeUpInterval !== 0) {
+				this.sendNodeToSleepTimers.set(
+					node.id,
+					setTimeout(() => sendNodeToSleep(node), 1000).unref(),
+				);
+			}
 		}
 	}
 
 	/** Computes the maximum net CC payload size for the given CC or SendDataRequest */
 	public computeNetCCPayloadSize(
-		commandOrMsg: CommandClass | SendDataRequest,
+		commandOrMsg: CommandClass | SendDataRequest | SendDataBridgeRequest,
 	): number {
 		// Recreate the correct encapsulation structure
-		const msg =
-			commandOrMsg instanceof SendDataRequest
-				? commandOrMsg
-				: new SendDataRequest(this, { command: commandOrMsg });
+		let msg: SendDataRequest | SendDataBridgeRequest;
+		if (isSendDataSinglecast(commandOrMsg)) {
+			msg = commandOrMsg;
+		} else {
+			const SendDataConstructor = this.getSendDataSinglecastConstructor();
+			msg = new SendDataConstructor(this, { command: commandOrMsg });
+		}
 		this.encapsulateCommands(msg);
 		return msg.command.getMaxPayloadLength(msg.getMaxPayloadLength());
+	}
+
+	/** Returns the preferred constructor to use for singlecast SendData commands */
+	public getSendDataSinglecastConstructor():
+		| typeof SendDataRequest
+		| typeof SendDataBridgeRequest {
+		return this._controller?.isFunctionSupported(
+			FunctionType.SendDataBridge,
+		)
+			? SendDataBridgeRequest
+			: SendDataRequest;
+	}
+
+	/** Returns the preferred constructor to use for multicast SendData commands */
+	public getSendDataMulticastConstructor():
+		| typeof SendDataMulticastRequest
+		| typeof SendDataMulticastBridgeRequest {
+		return this._controller?.isFunctionSupported(
+			FunctionType.SendDataMulticastBridge,
+		)
+			? SendDataMulticastBridgeRequest
+			: SendDataMulticastRequest;
 	}
 
 	// This does not all need to be printed to the console
 	public [util.inspect.custom](): string {
 		return "[Driver]";
+	}
+
+	/**
+	 * Checks whether there is a compatible update for the currently installed config package.
+	 * Returns the new version if there is an update, `undefined` otherwise.
+	 */
+	public async checkForConfigUpdates(
+		silent: boolean = false,
+	): Promise<string | undefined> {
+		try {
+			if (!silent)
+				this.driverLog.print("Checking for configuration updates...");
+			const ret = await checkForConfigUpdates(this._configVersion);
+			if (ret) {
+				if (!silent)
+					this.driverLog.print(
+						`Configuration update available: ${ret}`,
+					);
+			} else {
+				if (!silent)
+					this.driverLog.print(
+						"No configuration update available...",
+					);
+			}
+			return ret;
+		} catch (e) {
+			this.driverLog.print(e.message, "error");
+		}
+	}
+
+	/**
+	 * Installs an update for the embedded configuration DB if there is a compatible one.
+	 * Returns `true` when an update was installed, `false` otherwise.
+	 *
+	 * **Note:** Bugfixes and changes to device configuration generally require a restart or re-interview to take effect.
+	 */
+	public async installConfigUpdate(): Promise<boolean> {
+		const newVersion = await this.checkForConfigUpdates(true);
+		if (!newVersion) return false;
+
+		try {
+			this.driverLog.print(
+				`Installing version ${newVersion} of configuration DB...`,
+			);
+			await installConfigUpdate(newVersion);
+		} catch (e) {
+			this.driverLog.print(e.message, "error");
+			return false;
+		}
+		this.driverLog.print(
+			`Configuration DB updated to version ${newVersion}, activating...`,
+		);
+		// Remember that we use the new version
+		this._configVersion = newVersion;
+		// and reload the config files
+		await this.configManager.loadAll();
+
+		// Now try to apply them to all known devices
+		if (this._controller) {
+			for (const node of this._controller.nodes.values()) {
+				// wotan-disable-next-line no-restricted-property-access
+				if (node.ready) await node["loadDeviceConfig"]();
+			}
+		}
+
+		return true;
 	}
 }

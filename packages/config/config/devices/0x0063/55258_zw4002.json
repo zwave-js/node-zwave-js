@@ -1,5 +1,3 @@
-// GE/Jasco 55258 / ZW4002
-// In-Wall 3-Speed Fan Control
 {
 	"manufacturer": "GE/Jasco",
 	"manufacturerId": "0x0063",
@@ -41,8 +39,6 @@
 			"maxValue": 1,
 			"defaultValue": 0,
 			"unsigned": true,
-			"readOnly": false,
-			"writeOnly": false,
 			"allowManualEntry": false,
 			"options": [
 				{

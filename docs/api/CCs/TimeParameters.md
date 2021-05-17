@@ -1,5 +1,7 @@
 # Time Parameters CC
 
+?> CommandClass ID: `0x8b`
+
 ## Time Parameters CC methods
 
 ### `get`

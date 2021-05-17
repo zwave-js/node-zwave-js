@@ -1,5 +1,7 @@
 # Color Switch CC
 
+?> CommandClass ID: `0x33`
+
 ## Color Switch CC methods
 
 ### `getSupported`

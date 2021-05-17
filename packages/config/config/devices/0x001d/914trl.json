@@ -1,5 +1,3 @@
-// Leviton 914TRL
-// Touchpad Electronic Deadbolt
 {
 	"manufacturer": "Leviton",
 	"manufacturerId": "0x001d",
@@ -30,9 +28,7 @@
 			"minValue": 0,
 			"maxValue": 1,
 			"defaultValue": 0,
-			"readOnly": false,
 			"writeOnly": true,
-			"allowManualEntry": true,
 			"options": [
 				{
 					"label": "Factory Default",
@@ -48,7 +44,6 @@
 			"maxValue": 1,
 			"defaultValue": 1,
 			"readOnly": true,
-			"writeOnly": false,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -69,7 +64,6 @@
 			"maxValue": 1,
 			"defaultValue": 0,
 			"readOnly": true,
-			"writeOnly": false,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -90,7 +84,6 @@
 			"maxValue": 1,
 			"defaultValue": 1,
 			"readOnly": true,
-			"writeOnly": false,
 			"allowManualEntry": false,
 			"options": [
 				{

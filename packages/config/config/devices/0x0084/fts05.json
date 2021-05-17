@@ -1,5 +1,3 @@
-// FortrezZ LLC FTS05
-// Flood & Temperature Sensor
 {
 	"manufacturer": "FortrezZ LLC",
 	"manufacturerId": "0x0084",
@@ -23,10 +21,7 @@
 			"valueSize": 1,
 			"minValue": -10,
 			"maxValue": 69,
-			"defaultValue": 4,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"defaultValue": 4
 		},
 		"2": {
 			"label": "Temperature High Threshold",
@@ -34,10 +29,7 @@
 			"valueSize": 1,
 			"minValue": -9,
 			"maxValue": 70,
-			"defaultValue": 70,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"defaultValue": 70
 		},
 		"4": {
 			"label": "Water Alarm Association Mode",
@@ -46,10 +38,7 @@
 			"minValue": 0,
 			"maxValue": 240,
 			"defaultValue": 240,
-			"unsigned": true,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"unsigned": true
 		}
 	},
 	"metadata": {

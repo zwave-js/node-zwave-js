@@ -49,7 +49,7 @@
 				"${workspaceFolder}/test/run.ts"
 			],
 			"env": {
-				"NO_CACHE": "true"
+				// "NO_CACHE": "true"
 				// "LOGLEVEL": "verbose"
 			},
 			"console": "integratedTerminal",
@@ -87,6 +87,27 @@
 			"console": "integratedTerminal",
 			"skipFiles": ["<node_internals>/**"],
 			"sourceMaps": true
+		},
+		{
+			"type": "node",
+			"name": "Process Staged ZWA Files",
+			"request": "launch",
+			"program": "${workspaceFolder}/packages/config/maintenance/importConfig.ts",
+			"cwd": "${workspaceFolder}",
+			"runtimeArgs": [
+				"--async-stack-traces",
+				"--inspect=9229",
+				"-r",
+				"ts-node/register/transpile-only",
+				"-r",
+				"tsconfig-paths/register",
+				"${workspaceFolder}/packages/config/maintenance/importConfig.ts",
+				"-dm -s zwa"
+				//"-p"
+			],
+			"console": "integratedTerminal",
+			//"internalConsoleOptions": "neverOpen",
+			"disableOptimisticBPs": true
 		}
 	]
 }

@@ -1,5 +1,3 @@
-// Fakro ARZ Z-WAV
-// ARZ Z-Wave
 {
 	"manufacturer": "Fakro",
 	"manufacturerId": "0x0085",
@@ -24,10 +22,7 @@
 			"minValue": 1,
 			"maxValue": 2,
 			"defaultValue": 1,
-			"unsigned": true,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"unsigned": true
 		},
 		"13": {
 			"label": "End Position",
@@ -36,10 +31,7 @@
 			"minValue": 1,
 			"maxValue": 2,
 			"defaultValue": 1,
-			"unsigned": true,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"unsigned": true
 		}
 	},
 	"metadata": {

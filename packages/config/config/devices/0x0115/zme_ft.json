@@ -1,5 +1,3 @@
-// Z-Wave.Me ZME_FT
-// Floor Thermostat
 {
 	"manufacturer": "Z-Wave.Me",
 	"manufacturerId": "0x0115",
@@ -29,10 +27,7 @@
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 1800,
-			"defaultValue": 1800,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"defaultValue": 1800
 		},
 		"2": {
 			"label": "Button mode",
@@ -40,8 +35,6 @@
 			"minValue": 0,
 			"maxValue": 2,
 			"defaultValue": 0,
-			"readOnly": false,
-			"writeOnly": false,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -64,8 +57,6 @@
 			"minValue": 0,
 			"maxValue": 4,
 			"defaultValue": 0,
-			"readOnly": false,
-			"writeOnly": false,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -96,10 +87,7 @@
 			"valueSize": 1,
 			"minValue": 1,
 			"maxValue": 60,
-			"defaultValue": 18,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"defaultValue": 18
 		},
 		"5": {
 			"label": "Maximum allowed temperature deviation",
@@ -107,10 +95,7 @@
 			"valueSize": 1,
 			"minValue": 1,
 			"maxValue": 60,
-			"defaultValue": 30,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"defaultValue": 30
 		},
 		"6": {
 			"label": "Maximal allowed temperature",
@@ -118,10 +103,7 @@
 			"valueSize": 1,
 			"minValue": 20,
 			"maxValue": 55,
-			"defaultValue": 27,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"defaultValue": 27
 		},
 		"10": {
 			"label": "Typical click timeout",
@@ -130,10 +112,7 @@
 			"valueSize": 1,
 			"minValue": 1,
 			"maxValue": 100,
-			"defaultValue": 50,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"defaultValue": 50
 		}
 	}
 }

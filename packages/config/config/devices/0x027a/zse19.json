@@ -1,5 +1,3 @@
-// Zooz ZSE19
-// S2 Multisiren
 {
 	"manufacturer": "Zooz",
 	"manufacturerId": "0x027a",
@@ -23,10 +21,7 @@
 			"valueSize": 2,
 			"minValue": 10,
 			"maxValue": 600,
-			"defaultValue": 180,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"defaultValue": 180
 		},
 		"2": {
 			"label": "Temperature & Humidity reporting interval",
@@ -34,20 +29,14 @@
 			"valueSize": 2,
 			"minValue": 1,
 			"maxValue": 1440,
-			"defaultValue": 30,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"defaultValue": 30
 		},
 		"3": {
 			"label": "Custom Sound Selection for Audio Speaker",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 99,
-			"defaultValue": 0,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"defaultValue": 0
 		}
 	}
 }

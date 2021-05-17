@@ -24,13 +24,45 @@ This starts the driver and opens the underlying serial port and performs an inte
 
 The following table gives you an overview of what happens during the startup process. Note that the promise resolves before the interview process is completed:
 
-| Step | What happens behind the scenes                                          | Library response                                                                                                          |
-| :--: | ----------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------- |
-|  1   | Serial port is opened                                                   | `start()` Promise resolves                                                                                                |
-|  2   | Controller interview is performed                                       | `"driver ready"` event is emitted                                                                                         |
-|  3   | Every node is interviewed in the background (This may take a long time) | `"ready"` event is emitted for every node as soon as it can be used                                                       |
-|  4   | -                                                                       | `"all nodes ready"` event is emitted for the driver when all nodes can be used                                            |
-|  5   | -                                                                       | `"interview completed"` event is emitted for every node when its interview is completed and all its values are up to date |
+| Step | What happens behind the scenes                                          | Library response                                                                                                                                                              |
+| :--: | ----------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+|  1   | Serial port is opened                                                   | `start()` Promise resolves                                                                                                                                                    |
+|  2   | Controller interview is performed                                       | `"driver ready"` event is emitted                                                                                                                                             |
+|  3   | Every node is interviewed in the background (This may take a long time) | `"ready"` event is emitted for every node as soon as it can be used                                                                                                           |
+|  4   | -                                                                       | `"all nodes ready"` event is emitted for the driver when all nodes can be used                                                                                                |
+|  5   | -                                                                       | `"interview completed"` event is emitted for every node when its interview is completed for the first time. This only gets emitted once, unless the node gets re-interviewed. |
+
+### `enableStatistics`
+
+```ts
+enableStatistics(appInfo: { applicationName: string; applicationVersion: string }): void
+```
+
+Enable sending usage statistics. Although this does not include any sensitive information, we expect you to inform your users about this before enabling statistics.
+
+`applicationName` is the name of your application. Please keep this consistent between versions. `applicationVersion` is the current version of your application. Both must be strings and have a maximum length of 100 characters.
+
+> [!NOTE] Sending usage statistics is optional, but **we kindly ask you** to enable it. It allows us to gain insight how much `zwave-js` is used, which manufacturers and devices are most prevalent and where to best focus our efforts in order to improve `zwave-js` the most.
+
+> A short description of the importance of collecting this data to the project to be shared with your users is included at [User Disclosure](data-collection/user-disclosure.md).
+
+> Details including which information is sent can be found under [Usage Statistics](data-collection/data-collection.md#usage-statistics).
+
+### `disableStatistics`
+
+```ts
+disableStatistics(): void
+```
+
+Disable sending usage statistics.
+
+### `statisticsEnabled`
+
+```ts
+statisticsEnabled(): boolean
+```
+
+Returns whether reporting usage statistics is currently enabled.
 
 ### `getSupportedCCVersionForEndpoint`
 
@@ -196,6 +228,32 @@ updateLogConfig(config: DeepPartial<LogConfig>): void
 
 Updates the logging configuration without having to restart the driver.
 
+### `getLogConfig`
+
+```ts
+getLogConfig(): LogConfig
+```
+
+Returns the current logging configuration.
+
+### `checkForConfigUpdates`
+
+```ts
+checkForConfigUpdates(): Promise<string | undefined>
+```
+
+Checks whether there is a compatible update for the currently installed config package. Returns the new version if there is an update, `undefined` otherwise.
+
+### `installConfigUpdate`
+
+```ts
+installConfigUpdate(): Promise<boolean>
+```
+
+Checks whether there is a compatible update for the currently installed config package and tries to install it. Returns `true` when an update was installed, `false` otherwise.
+
+> [!NOTE] Although the updated config gets loaded after the update, bugfixes and changes to device configuration generally require either a driver restart or re-interview of the changed devices to take effect.
+
 ## Driver properties
 
 ### `cacheDir`
@@ -280,10 +338,12 @@ interface FileSystem {
 
 The log configuration is passed to the driver constructor and can be used to influence the logging behavior. This config will overwrite the `LOGTOFILE` and `LOGLEVEL` environment variables if the corresponding properties are set. All properties are optional and will default to the values described below. To change these options on the fly, you can use the [`updateLogConfig`](#updateLogConfig) method.
 
+<!-- #import LogConfig from "@zwave-js/core" -->
+
 ```ts
 interface LogConfig {
 	enabled: boolean;
-	level: number;
+	level: string | number;
 	transports: Transport[];
 	logToFile: boolean;
 	nodeFilter?: number[];
@@ -293,7 +353,8 @@ interface LogConfig {
 ```
 
 -   `enable`: If `false`, logging will be disabled. Default: `true`.
--   `level`: The numeric loglevel (like the `npm` [loglevels](https://github.com/winstonjs/triple-beam/blob/master/config/npm.js)), ranging from `0` (error) to `6` (silly). Default: `5` (debug) or whatever is configured with the `LOGLEVEL` environment variable.
+-   `level`: The loglevel, ranging from `"error"` to `"silly"`, based on the `npm` [loglevels](https://github.com/winstonjs/triple-beam/blob/master/config/npm.js). The default is `"debug"` or whatever is configured with the `LOGLEVEL` environment variable.  
+    For convenience, the numeric loglevels `0` (`"error"`) to `6` (`"silly"`) can be used instead, but will be converted to their string counterpart internally.
 -   `transports`: Custom [`winston`](https://github.com/winstonjs/winston) log transports. Setting this property will override all configured and default transports. Use `getConfiguredTransports()` if you want to extend the default transports. Default: console transport if `logToFile` is `false`, otherwise a file transport.
 -   `logToFile`: Whether the log should go to a file instead of the console. Default: `false` or whatever is configured with the `LOGTOFILE` environment variable.
 -   `nodeFilter`: If set, only messages regarding the given node IDs are logged
@@ -416,17 +477,22 @@ interface ZWaveOptions {
 	timeouts: {
 		/** how long to wait for an ACK */
 		ack: number; // >=1, default: 1000 ms
+
 		/** not sure */
 		byte: number; // >=1, default: 150 ms
+
 		/**
 		 * How long to wait for a controller response. Usually this timeout should never elapse,
 		 * so this is merely a safeguard against the driver stalling
 		 */
 		response: number; // [500...5000], default: 1600 ms
+
 		/** How long to wait for a callback from the host for a SendData[Multicast]Request */
 		sendDataCallback: number; // >=10000, default: 65000 ms
+
 		/** How much time a node gets to process a request and send a response */
 		report: number; // [1000...40000], default: 10000 ms
+
 		/** How long generated nonces are valid */
 		nonce: number; // [3000...20000], default: 5000 ms
 	};
@@ -434,10 +500,13 @@ interface ZWaveOptions {
 	attempts: {
 		/** How often the driver should try communication with the controller before giving up */
 		controller: number; // [1...3], default: 3
+
 		/** How often the driver should try sending SendData commands before giving up */
 		sendData: number; // [1...5], default: 3
+
 		/** Whether a command should be retried when a node acknowledges the receipt but no response is received */
 		retryAfterTransmitReport: boolean; // default: false
+
 		/**
 		 * How many attempts should be made for each node interview before giving up
 		 */
@@ -453,6 +522,12 @@ interface ZWaveOptions {
 		driver: FileSystem;
 		/** Allows you to specify a different cache directory */
 		cacheDir: string;
+		/**
+		 * Allows you to specify a directory where device configuration files can be loaded from with higher priority than the included ones.
+		 * This directory does not get indexed and should be used sparingly, e.g. for testing.
+		 */
+		deviceConfigPriorityDir?: string;
+
 		/**
 		 * How frequently the values and metadata should be written to the DB files. This is a compromise between data loss
 		 * in cause of a crash and disk wear:
@@ -473,14 +548,24 @@ interface ZWaveOptions {
 	 * When it is `true`, unknown values are exposed as the literal string "unknown" (even if the value is normally numeric).
 	 * Default: `false` */
 	preserveUnknownValues?: boolean;
+
+	/**
+	 * Some SET-type commands optimistically update the current value to match the target value
+	 * when the device acknowledges the command.
+	 *
+	 * While this generally makes UIs feel more responsive, it is not necessary for devices which report their status
+	 * on their own and can lead to confusing behavior when dealing with slow devices like blinds.
+	 *
+	 * To disable the optimistic update, set this option to `true`.
+	 * Default: `false`
+	 */
+	disableOptimisticValueUpdate?: boolean;
 }
 ```
 
 The timeout values `ack` and `byte` are sent to the Z-Wave stick using the `SetSerialApiTimeouts` command. Change them only if you know what you're doing.
-
 The `report` timeout is used by this library to determine how long to wait for a node's response.
-
-If your network has connectivity issues, you can increase the number of interview attempts the driver makes before giving up. The default is 5.
+If your network has connectivity issues, you can increase the number of interview attempts the driver makes before giving up. The default is `5`.
 
 For more control over writing the cache files, you can use the `storage` options. By default, the cache is located inside `node_modules/zwave-js/cache` and written using Node.js built-in `fs` methods (promisified using `fs-extra`). The replacement file system must adhere to the [`FileSystem`](#FileSystem) interface.
 The `throttle` option allows you to fine-tune the filesystem. The default value `"normal"`

@@ -1,0 +1,74 @@
+{
+	"manufacturer": "Popp & Co",
+	"manufacturerId": "0x0154",
+	"label": "700854",
+	"description": "POPP Solar Outdoor Siren 2",
+	"devices": [
+		{
+			"productType": "0x0004",
+			"productId": "0x0002"
+		}
+	],
+	"firmwareVersion": {
+		"min": "2.0",
+		"max": "255.255"
+	},
+	"supportsZWavePlus": true,
+	"paramInformation": {
+		"1": {
+			"label": "Siren Tamper Mode",
+			"description": "Sets the tamper triggering mode when removed from the holder",
+			"unit": "int",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 2,
+			"defaultValue": 0,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Trigger, when removed from holder",
+					"value": 0
+				},
+				{
+					"label": "Triggers automatically",
+					"value": 1
+				},
+				{
+					"label": "not trigger",
+					"value": 2
+				}
+			]
+		},
+		"5": {
+			"label": "Siren mode",
+			"description": "Determines how the Siren shall react on alarm",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 2,
+			"defaultValue": 2,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Siren Only",
+					"value": 0
+				},
+				{
+					"label": "Flash Only",
+					"value": 1
+				},
+				{
+					"label": "Flash plus Siren",
+					"value": 2
+				}
+			]
+		},
+		"6": {
+			"label": "Auto Off",
+			"description": "If the value is set, the siren will be switched off automatically.",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 127,
+			"defaultValue": 5
+		}
+	}
+}

@@ -20,20 +20,14 @@ import {
 	getUserIconValueId,
 } from "../commandclass/ZWavePlusCC";
 import type { Driver } from "../driver/Driver";
+import type { DeviceClass } from "./DeviceClass";
 import type { ZWaveNode } from "./Node";
-
-export interface EndpointCapabilities {
-	isDynamic: boolean;
-	genericClass: number;
-	specificClass: number;
-	supportedCCs: CommandClasses[];
-}
 
 /**
  * Represents a physical endpoint of a Z-Wave node. This can either be the root
  * device itself (index 0) or a more specific endpoint like a single plug.
  *
- * Each endpoint may have different capabilities (supported/controlled CCs)
+ * Each endpoint may have different capabilities (device class/supported CCs)
  */
 export class Endpoint {
 	public constructor(
@@ -43,13 +37,22 @@ export class Endpoint {
 		protected readonly driver: Driver,
 		/** The index of this endpoint. 0 for the root device, 1+ otherwise */
 		public readonly index: number,
+		deviceClass?: DeviceClass,
 		supportedCCs?: CommandClasses[],
 	) {
+		this.applyDeviceClass(deviceClass);
+
+		// Add optional CCs
 		if (supportedCCs != undefined) {
 			for (const cc of supportedCCs) {
 				this.addCC(cc, { isSupported: true });
 			}
 		}
+	}
+
+	protected _deviceClass: DeviceClass | undefined;
+	public get deviceClass(): DeviceClass | undefined {
+		return this._deviceClass;
 	}
 
 	/** Resets all stored information of this endpoint */
@@ -74,11 +77,33 @@ export class Endpoint {
 	}
 
 	/**
+	 * Sets the device class of this endpoint and configures the mandatory CCs.
+	 * **Note:** This does nothing if the device class was already configured
+	 */
+	protected applyDeviceClass(deviceClass?: DeviceClass): void {
+		if (this._deviceClass) return;
+
+		this._deviceClass = deviceClass;
+		// Add mandatory CCs
+		if (deviceClass) {
+			for (const cc of deviceClass.mandatorySupportedCCs) {
+				this.addMandatoryCC(cc, { isSupported: true });
+			}
+			for (const cc of deviceClass.mandatoryControlledCCs) {
+				this.addMandatoryCC(cc, { isControlled: true });
+			}
+		}
+	}
+
+	/**
 	 * Adds a CC to the list of command classes implemented by the endpoint or updates the information.
 	 * You shouldn't need to call this yourself.
 	 * @param info The information about the command class. This is merged with existing information.
 	 */
 	public addCC(cc: CommandClasses, info: Partial<CommandClassInfo>): void {
+		// Endpoints cannot support Multi Channel CC
+		if (this.index > 0 && cc === CommandClasses["Multi Channel"]) return;
+
 		let ccInfo = this._implementedCommandClasses.get(cc) ?? {
 			isSupported: false,
 			isControlled: false,
@@ -87,6 +112,38 @@ export class Endpoint {
 		};
 		ccInfo = Object.assign(ccInfo, info);
 		this._implementedCommandClasses.set(cc, ccInfo);
+	}
+
+	/**
+	 * Adds a mandatory CC to the list of command classes implemented by the endpoint or updates the information.
+	 * Performs some sanity checks before adding so the behavior is in compliance with the specifications
+	 */
+	protected addMandatoryCC(
+		cc: CommandClasses,
+		info: Partial<CommandClassInfo>,
+	): void {
+		if (
+			this.getNodeUnsafe()?.isListening &&
+			(cc === CommandClasses.Battery || cc === CommandClasses["Wake Up"])
+		) {
+			// Avoid adding Battery and Wake Up CC to always listening nodes or their endpoints
+			return;
+		} else if (
+			this.index > 0 &&
+			[
+				CommandClasses["CRC-16 Encapsulation"],
+				CommandClasses["Device Reset Locally"],
+				CommandClasses["Manufacturer Specific"],
+				CommandClasses.Powerlevel,
+				CommandClasses.Version,
+				CommandClasses["Transport Service"],
+			].includes(cc)
+		) {
+			// Avoid adding CCs as mandatory to endpoints that should only be implemented by the root device
+			return;
+		}
+
+		this.addCC(cc, info);
 	}
 
 	/** Removes a CC from the list of command classes implemented by the endpoint */

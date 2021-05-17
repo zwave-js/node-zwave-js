@@ -1,5 +1,3 @@
-// wiDom WPS104
-// Energy Driven Switch
 {
 	"manufacturer": "wiDom",
 	"manufacturerId": "0x0149",
@@ -24,8 +22,6 @@
 			"minValue": 0,
 			"maxValue": 4,
 			"defaultValue": 1,
-			"readOnly": false,
-			"writeOnly": false,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -52,8 +48,6 @@
 			"minValue": 0,
 			"maxValue": 4,
 			"defaultValue": 1,
-			"readOnly": false,
-			"writeOnly": false,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -79,10 +73,7 @@
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 4500,
-			"defaultValue": 4500,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"defaultValue": 4500
 		},
 		"31": {
 			"label": "Overcurrent Time",
@@ -90,10 +81,7 @@
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 10800,
-			"defaultValue": 10,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"defaultValue": 10
 		},
 		"32": {
 			"label": "Next State",
@@ -102,8 +90,6 @@
 			"minValue": 0,
 			"maxValue": 3,
 			"defaultValue": 0,
-			"readOnly": false,
-			"writeOnly": false,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -131,8 +117,6 @@
 			"minValue": 0,
 			"maxValue": 65535,
 			"defaultValue": 1,
-			"readOnly": false,
-			"writeOnly": false,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -152,8 +136,6 @@
 			"minValue": 0,
 			"maxValue": 2,
 			"defaultValue": 1,
-			"readOnly": false,
-			"writeOnly": false,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -172,10 +154,7 @@
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 11250,
-			"defaultValue": 11250,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"defaultValue": 11250
 		},
 		"36": {
 			"label": "UP Power Time",
@@ -183,10 +162,7 @@
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 10800,
-			"defaultValue": 10,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"defaultValue": 10
 		},
 		"37": {
 			"label": "UP Power State",
@@ -195,8 +171,6 @@
 			"minValue": 0,
 			"maxValue": 3,
 			"defaultValue": 0,
-			"readOnly": false,
-			"writeOnly": false,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -223,10 +197,7 @@
 			"valueSize": 1,
 			"minValue": -1,
 			"maxValue": 99,
-			"defaultValue": 0,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"defaultValue": 0
 		},
 		"39": {
 			"label": "DOWN Power Level",
@@ -234,10 +205,7 @@
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 11250,
-			"defaultValue": 0,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"defaultValue": 0
 		},
 		"40": {
 			"label": "DOWN Power Time",
@@ -245,10 +213,7 @@
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 10800,
-			"defaultValue": 10,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"defaultValue": 10
 		},
 		"41": {
 			"label": "DOWN Power State",
@@ -257,8 +222,6 @@
 			"minValue": 0,
 			"maxValue": 3,
 			"defaultValue": 0,
-			"readOnly": false,
-			"writeOnly": false,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -285,10 +248,7 @@
 			"valueSize": 1,
 			"minValue": -1,
 			"maxValue": 99,
-			"defaultValue": 0,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"defaultValue": 0
 		},
 		"43": {
 			"label": "Energy Level",
@@ -296,10 +256,7 @@
 			"valueSize": 4,
 			"minValue": 0,
 			"maxValue": 2000000,
-			"defaultValue": 2000000,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"defaultValue": 2000000
 		},
 		"44": {
 			"label": "Energy Limit State",
@@ -308,8 +265,6 @@
 			"minValue": 0,
 			"maxValue": 3,
 			"defaultValue": 0,
-			"readOnly": false,
-			"writeOnly": false,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -336,10 +291,7 @@
 			"valueSize": 1,
 			"minValue": 1,
 			"maxValue": 100,
-			"defaultValue": 10,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"defaultValue": 10
 		},
 		"46": {
 			"label": "Report Time Frequency",
@@ -347,10 +299,7 @@
 			"valueSize": 1,
 			"minValue": 1,
 			"maxValue": 100,
-			"defaultValue": 10,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"defaultValue": 10
 		},
 		"47": {
 			"label": "Variation Total Energy",
@@ -359,8 +308,6 @@
 			"minValue": 0,
 			"maxValue": 4,
 			"defaultValue": 3,
-			"readOnly": false,
-			"writeOnly": false,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -391,10 +338,7 @@
 			"valueSize": 2,
 			"minValue": 1100,
 			"maxValue": 2500,
-			"defaultValue": 2300,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"defaultValue": 2300
 		},
 		"49": {
 			"label": "Fall In Maximum Voltage",
@@ -402,10 +346,7 @@
 			"valueSize": 1,
 			"minValue": 1,
 			"maxValue": 100,
-			"defaultValue": 10,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"defaultValue": 10
 		},
 		"50": {
 			"label": "Electric parameters",
@@ -413,10 +354,7 @@
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 62,
-			"defaultValue": 30,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"defaultValue": 30
 		},
 		"51": {
 			"label": "Voltage RMS value",
@@ -426,9 +364,7 @@
 			"maxValue": 65535,
 			"defaultValue": 0,
 			"unsigned": true,
-			"readOnly": true,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"readOnly": true
 		},
 		"52": {
 			"label": "Current RMS value",
@@ -438,9 +374,7 @@
 			"maxValue": 65535,
 			"defaultValue": 0,
 			"unsigned": true,
-			"readOnly": true,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"readOnly": true
 		},
 		"53": {
 			"label": "Power Factor",
@@ -450,9 +384,7 @@
 			"maxValue": 255,
 			"defaultValue": 0,
 			"unsigned": true,
-			"readOnly": true,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"readOnly": true
 		},
 		"54": {
 			"label": "Total energy consumed",
@@ -462,9 +394,7 @@
 			"maxValue": 4294967295,
 			"defaultValue": 0,
 			"unsigned": true,
-			"readOnly": true,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"readOnly": true
 		},
 		"55": {
 			"label": "Total energy produced",
@@ -474,9 +404,7 @@
 			"maxValue": 4294967295,
 			"defaultValue": 0,
 			"unsigned": true,
-			"readOnly": true,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"readOnly": true
 		},
 		"60": {
 			"label": "Start-up status",
@@ -485,8 +413,6 @@
 			"minValue": 0,
 			"maxValue": 3,
 			"defaultValue": 3,
-			"readOnly": false,
-			"writeOnly": false,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -510,8 +436,6 @@
 			"minValue": 0,
 			"maxValue": 4,
 			"defaultValue": 4,
-			"readOnly": false,
-			"writeOnly": false,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -539,8 +463,6 @@
 			"minValue": 0,
 			"maxValue": 4,
 			"defaultValue": 4,
-			"readOnly": false,
-			"writeOnly": false,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -568,8 +490,6 @@
 			"minValue": 1,
 			"maxValue": 4,
 			"defaultValue": 1,
-			"readOnly": false,
-			"writeOnly": false,
 			"allowManualEntry": false,
 			"options": [
 				{

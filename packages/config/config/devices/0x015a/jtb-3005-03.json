@@ -1,5 +1,3 @@
-// Jin Tao Bao JTB-3005-03
-// Thermostat Control Panel
 {
 	"manufacturer": "Jin Tao Bao",
 	"manufacturerId": "0x015a",
@@ -24,8 +22,6 @@
 			"minValue": -128,
 			"maxValue": 0,
 			"defaultValue": 1,
-			"readOnly": false,
-			"writeOnly": false,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -45,10 +41,7 @@
 			"minValue": 0,
 			"maxValue": 1,
 			"defaultValue": 1,
-			"unsigned": true,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"unsigned": true
 		}
 	},
 	"metadata": {

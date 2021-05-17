@@ -1,5 +1,3 @@
-// AEON Labs DSC25
-// Smart Energy Illuminator G2
 {
 	"manufacturer": "AEON Labs",
 	"manufacturerId": "0x0086",
@@ -18,27 +16,22 @@
 	},
 	"associations": {
 		"1": {
-			"label": "Hail Command / Basic Report",
+			"label": "Lifeline",
 			"maxNodes": 5,
 			"isLifeline": true
 		},
 		"2": {
-			"label": "Commands",
+			"label": "Group 2",
 			"maxNodes": 5,
 			"isLifeline": true
 		}
 	},
 	"paramInformation": {
-		"2": {
-			"label": "Configure Blinking LED",
-			"valueSize": 2,
-			"minValue": 1,
-			"maxValue": 33000,
-			"defaultValue": 1,
-			"unsigned": true,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+		"2[0xff]": {
+			"$import": "templates/aeotec_template.json#blink_duration"
+		},
+		"2[0xff00]": {
+			"$import": "templates/aeotec_template.json#blink_length"
 		}
 	}
 }

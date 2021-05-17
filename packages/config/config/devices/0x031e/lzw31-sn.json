@@ -1,0 +1,692 @@
+{
+	"manufacturer": "Inovelli",
+	"manufacturerId": "0x031e",
+	"label": "LZW31-SN",
+	"description": "Red Series Dimmer",
+	"devices": [
+		{
+			"productType": "0x0001",
+			"productId": "0x0001"
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"supportsZWavePlus": true,
+	"paramInformation": {
+		"1": {
+			"label": "Dimming Speed (Z-Wave)",
+			"unit": "seconds",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 100,
+			"defaultValue": 3,
+			"options": [
+				{
+					"label": "Immediate",
+					"value": 0
+				}
+			]
+		},
+		"2": {
+			"label": "Dimming Speed (Manual)",
+			"unit": "seconds",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 101,
+			"defaultValue": 101,
+			"options": [
+				{
+					"label": "Immediate",
+					"value": 0
+				},
+				{
+					"label": "Synced with Parameter 1",
+					"value": 101
+				}
+			]
+		},
+		"3": {
+			"label": "Ramp Rate (Z-Wave)",
+			"unit": "seconds",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 101,
+			"defaultValue": 101,
+			"options": [
+				{
+					"label": "Immediate",
+					"value": 0
+				},
+				{
+					"label": "Synced with Parameter 1",
+					"value": 101
+				}
+			]
+		},
+		"4": {
+			"label": "Ramp Rate (Manual)",
+			"unit": "seconds",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 101,
+			"defaultValue": 101,
+			"options": [
+				{
+					"label": "Immediate",
+					"value": 0
+				},
+				{
+					"label": "Synced with Parameter 1",
+					"value": 101
+				}
+			]
+		},
+		"5": {
+			"label": "Minimum Dim Level",
+			"unit": "%",
+			"valueSize": 1,
+			"minValue": 1,
+			"maxValue": 45,
+			"defaultValue": 1
+		},
+		"6": {
+			"label": "Maximum Dim Level",
+			"unit": "%",
+			"valueSize": 1,
+			"minValue": 55,
+			"maxValue": 99,
+			"defaultValue": 99
+		},
+		"7": {
+			"label": "Invert Switch",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 0,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Disabled",
+					"value": 0
+				},
+				{
+					"label": "Enabled",
+					"value": 1
+				}
+			]
+		},
+		"8": {
+			"label": "Auto Off Timer",
+			"unit": "seconds",
+			"valueSize": 2,
+			"minValue": 0,
+			"maxValue": 32767,
+			"defaultValue": 0
+		},
+		"9": {
+			"label": "Default Level",
+			"unit": "%",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 99,
+			"defaultValue": 0,
+			"options": [
+				{
+					"label": "Last State",
+					"value": 0
+				}
+			]
+		},
+		"10": {
+			"label": "Default Level (Z-Wave)",
+			"unit": "%",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 99,
+			"defaultValue": 0,
+			"options": [
+				{
+					"label": "Last State",
+					"value": 0
+				}
+			]
+		},
+		"11": {
+			"label": "Power On State",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 101,
+			"defaultValue": 0,
+			"options": [
+				{
+					"label": "Off",
+					"value": 0
+				},
+				{
+					"label": "Last State",
+					"value": 101
+				}
+			]
+		},
+		"12[0x01]": {
+			"label": "Association Behavior: Local",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 1,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Disabled",
+					"value": 0
+				},
+				{
+					"label": "Enabled",
+					"value": 1
+				}
+			]
+		},
+		"12[0x02]": {
+			"label": "Association Behavior: 3-Way",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 1,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Disabled",
+					"value": 0
+				},
+				{
+					"label": "Enabled",
+					"value": 1
+				}
+			]
+		},
+		"12[0x04]": {
+			"label": "Association Behavior: Z-Wave Hub",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 1,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Disabled",
+					"value": 0
+				},
+				{
+					"label": "Enabled",
+					"value": 1
+				}
+			]
+		},
+		"12[0x08]": {
+			"label": "Association Behavior: Timer",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 1,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Disabled",
+					"value": 0
+				},
+				{
+					"label": "Enabled",
+					"value": 1
+				}
+			]
+		},
+		"13": {
+			"label": "LED Indicator Color",
+			"description": "Uses a scaled hue value (realHue / 360 * 255).",
+			"valueSize": 2,
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 170,
+			"unsigned": true,
+			"options": [
+				{
+					"label": "Red",
+					"value": 0
+				},
+				{
+					"label": "Orange",
+					"value": 21
+				},
+				{
+					"label": "Yellow",
+					"value": 42
+				},
+				{
+					"label": "Green",
+					"value": 85
+				},
+				{
+					"label": "Cyan",
+					"value": 127
+				},
+				{
+					"label": "Blue",
+					"value": 170
+				},
+				{
+					"label": "Violet",
+					"value": 212
+				},
+				{
+					"label": "Pink",
+					"value": 234
+				},
+				{
+					"$if": "firmwareVersion >= 1.47",
+					"label": "White",
+					"value": 255
+				}
+			]
+		},
+		"14": {
+			"label": "LED Indicator Brightness",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 10,
+			"defaultValue": 5,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Off",
+					"value": 0
+				},
+				{
+					"label": "10%",
+					"value": 1
+				},
+				{
+					"label": "20%",
+					"value": 2
+				},
+				{
+					"label": "30%",
+					"value": 3
+				},
+				{
+					"label": "40%",
+					"value": 4
+				},
+				{
+					"label": "50%",
+					"value": 5
+				},
+				{
+					"label": "60%",
+					"value": 6
+				},
+				{
+					"label": "70%",
+					"value": 7
+				},
+				{
+					"label": "80%",
+					"value": 8
+				},
+				{
+					"label": "90%",
+					"value": 9
+				},
+				{
+					"label": "100%",
+					"value": 10
+				}
+			]
+		},
+		"15": {
+			"label": "LED Indicator Brightness When Off",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 10,
+			"defaultValue": 1,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Off",
+					"value": 0
+				},
+				{
+					"label": "10%",
+					"value": 1
+				},
+				{
+					"label": "20%",
+					"value": 2
+				},
+				{
+					"label": "30%",
+					"value": 3
+				},
+				{
+					"label": "40%",
+					"value": 4
+				},
+				{
+					"label": "50%",
+					"value": 5
+				},
+				{
+					"label": "60%",
+					"value": 6
+				},
+				{
+					"label": "70%",
+					"value": 7
+				},
+				{
+					"label": "80%",
+					"value": 8
+				},
+				{
+					"label": "90%",
+					"value": 9
+				},
+				{
+					"label": "100%",
+					"value": 10
+				}
+			]
+		},
+		"16[0xff]": {
+			"label": "LED Effect Color",
+			"description": "Uses a scaled hue value (realHue / 360 * 255).",
+			"valueSize": 4,
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 0,
+			"options": [
+				{
+					"label": "Red",
+					"value": 0
+				},
+				{
+					"label": "Orange",
+					"value": 21
+				},
+				{
+					"label": "Yellow",
+					"value": 42
+				},
+				{
+					"label": "Green",
+					"value": 85
+				},
+				{
+					"label": "Cyan",
+					"value": 127
+				},
+				{
+					"label": "Blue",
+					"value": 170
+				},
+				{
+					"label": "Violet",
+					"value": 212
+				},
+				{
+					"label": "Pink",
+					"value": 234
+				},
+				{
+					"$if": "firmwareVersion >= 1.47",
+					"label": "White",
+					"value": 255
+				}
+			]
+		},
+		"16[0xff00]": {
+			"label": "LED Effect Brightness",
+			"valueSize": 4,
+			"minValue": 0,
+			"maxValue": 10,
+			"defaultValue": 3,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Off",
+					"value": 0
+				},
+				{
+					"label": "10%",
+					"value": 1
+				},
+				{
+					"label": "20%",
+					"value": 2
+				},
+				{
+					"label": "30%",
+					"value": 3
+				},
+				{
+					"label": "40%",
+					"value": 4
+				},
+				{
+					"label": "50%",
+					"value": 5
+				},
+				{
+					"label": "60%",
+					"value": 6
+				},
+				{
+					"label": "70%",
+					"value": 7
+				},
+				{
+					"label": "80%",
+					"value": 8
+				},
+				{
+					"label": "90%",
+					"value": 9
+				},
+				{
+					"label": "100%",
+					"value": 10
+				}
+			]
+		},
+		"16[0xff0000]": {
+			"label": "LED Effect Duration",
+			"description": "1 to 60 = seconds, 61 to 120 = minutes (minus 60), 121 - 254 = hours (minus 120), 255 = indefinitely",
+			"valueSize": 4,
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 255
+		},
+		"16[0x7f000000]": {
+			"label": "LED Effect Type",
+			"valueSize": 4,
+			"minValue": 0,
+			"maxValue": 5,
+			"defaultValue": 0,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Off",
+					"value": 0
+				},
+				{
+					"label": "Solid",
+					"value": 1
+				},
+				{
+					"label": "Chase",
+					"value": 2
+				},
+				{
+					"label": "Fast Blink",
+					"value": 3
+				},
+				{
+					"label": "Slow Blink",
+					"value": 4
+				},
+				{
+					"label": "Pulse",
+					"value": 5
+				}
+			]
+		},
+		"17": {
+			"label": "LED Indicator Timeout",
+			"unit": "seconds",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 10,
+			"defaultValue": 3
+		},
+		"18": {
+			"label": "Active Power Reports",
+			"unit": "%",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 100,
+			"defaultValue": 10
+		},
+		"19": {
+			"label": "Periodic Power & Energy Reports",
+			"unit": "seconds",
+			"valueSize": 2,
+			"minValue": 0,
+			"maxValue": 32767,
+			"defaultValue": 3600
+		},
+		"20": {
+			"label": "Energy Reports",
+			"unit": "%",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 100,
+			"defaultValue": 10
+		},
+		"21": {
+			"label": "AC Power Type",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 1,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "No Neutral",
+					"value": 0
+				},
+				{
+					"label": "Neutral",
+					"value": 1
+				}
+			]
+		},
+		"22": {
+			"label": "Switch Type",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 2,
+			"defaultValue": 0,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Single-Pole (One Switch)",
+					"value": 0
+				},
+				{
+					"label": "Multi-Switch (Dumb Switch)",
+					"value": 1
+				},
+				{
+					"label": "Multi-Switch (Auxiliary Switch)",
+					"value": 2
+				}
+			]
+		},
+		"50": {
+			"$if": "firmwareVersion >= 1.49",
+			"label": "Physical Button Delay Period",
+			"unit": "100ms",
+			"valueSize": 1,
+			"minValue": 1,
+			"maxValue": 9,
+			"defaultValue": 7
+		},
+		"51": {
+			"$if": "firmwareVersion >= 1.47",
+			"label": "Button Delay and Scene Control",
+			"description": "Disabling this allows the switch to respond instantly to physical actions",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 1,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Disable",
+					"value": 0
+				},
+				{
+					"label": "Enable",
+					"value": 1
+				}
+			]
+		},
+		"52": [
+			{
+				"$if": "firmwareVersion >= 1.54",
+				"label": "Smart Bulb Mode",
+				"description": "Change the working mode of the dimmer. Choose either on / off only which makes the device work like an on / off switch. Or choose smart bulb mode which optimized the device for interaction with smart bulbs. (firmware 1.54+)",
+				"valueSize": 1,
+				"minValue": 0,
+				"maxValue": 2,
+				"defaultValue": 0,
+				"allowManualEntry": false,
+				"options": [
+					{
+						"label": "Disabled",
+						"value": 0
+					},
+					{
+						"label": "On / Off Only",
+						"value": 1
+					},
+					{
+						"label": "Smart Bulb",
+						"value": 2
+					}
+				]
+			},
+			{
+				"$if": "firmwareVersion >= 1.47 && firmwareVersion < 1.54",
+				"label": "Smart Bulb Mode",
+				"description": "Optimize power output to be more compatible with smart bulbs. This prevents the dimmer from being able to dim & makes it act like an ON / OFF switch.",
+				"valueSize": 1,
+				"minValue": 0,
+				"maxValue": 1,
+				"defaultValue": 0,
+				"allowManualEntry": false,
+				"options": [
+					{
+						"label": "Disable",
+						"value": 0
+					},
+					{
+						"label": "Enable",
+						"value": 1
+					}
+				]
+			}
+		]
+	}
+}

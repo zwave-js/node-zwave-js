@@ -1,0 +1,20 @@
+{
+	"manufacturer": "Sunricher",
+	"manufacturerId": "0x0330",
+	"label": "ZV9001K4-DIM-G2",
+	"description": "2 group single color wall mounted remote",
+	"devices": [
+		{
+			"productType": "0x0003",
+			"productId": "0xa306",
+			"zwaveAllianceId": 3783
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"metadata": {
+		"manual": "https://products.z-wavealliance.org/ProductManual/File?folder=&filename=product_documents/3783/SR-ZV9001K4-DIM-G2%20Instruction.pdf"
+	}
+}

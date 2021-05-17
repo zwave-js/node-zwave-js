@@ -1,5 +1,3 @@
-// GE/Jasco 53831 / ZW5314
-// Portable Remote, 4 Button
 {
 	"manufacturer": "GE/Jasco",
 	"manufacturerId": "0x0063",
@@ -41,8 +39,6 @@
 			"maxValue": 1,
 			"defaultValue": 1,
 			"unsigned": true,
-			"readOnly": false,
-			"writeOnly": false,
 			"allowManualEntry": false,
 			"options": [
 				{

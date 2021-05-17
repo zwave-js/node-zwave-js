@@ -1,0 +1,306 @@
+{
+	"manufacturer": "Namron",
+	"manufacturerId": "0x0438",
+	"label": "Z-Wave Dimmer 2 400W",
+	"description": "In-Wall Dimmer Module",
+	"devices": [
+		{
+			"productType": "0x0200",
+			"productId": "0xd00c"
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"paramInformation": {
+		"2": {
+			"label": "State After Power Failure",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 2,
+			"defaultValue": 2,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Turn off",
+					"value": 0
+				},
+				{
+					"label": "Turn on",
+					"value": 1
+				},
+				{
+					"label": "Restore previous state",
+					"value": 2
+				}
+			]
+		},
+		"3": {
+			"label": "Send Basic Report",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 1,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Disable",
+					"value": 0
+				},
+				{
+					"label": "Enable",
+					"value": 1
+				}
+			]
+		},
+		"4": {
+			"label": "Default Fade Time",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 127,
+			"defaultValue": 1,
+			"unsigned": true
+		},
+		"5": {
+			"label": "Minimum Brightness Value",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 50,
+			"defaultValue": 15
+		},
+		"6": {
+			"label": "Maximum Brightness Value",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 100,
+			"defaultValue": 100
+		},
+		"7": {
+			"label": "MOSFET driving type",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 0,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Trailing edge",
+					"value": 0
+				},
+				{
+					"label": "Leading edge",
+					"value": 1
+				}
+			]
+		},
+		"8": {
+			"label": "External Switch Type",
+			"description": "External switch type",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 2,
+			"defaultValue": 0,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Push button switch",
+					"value": 0
+				},
+				{
+					"label": "Normal on / off switch",
+					"value": 1
+				},
+				{
+					"label": "3-way switch",
+					"value": 2
+				}
+			]
+		},
+		"9": {
+			"label": "Added / Removed From a Network Through External Switch",
+			"description": "When enabling this, triple press the external switch within 1.5 seconds to be added to or removed from a network",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 0,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Disable",
+					"value": 0
+				},
+				{
+					"label": "Enable",
+					"value": 1
+				}
+			]
+		},
+		"11": {
+			"label": "Wiring Type",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 2,
+			"defaultValue": 0,
+			"readOnly": true,
+			"options": [
+				{
+					"label": "Unknown",
+					"value": 0
+				},
+				{
+					"label": "2 wire with no neutral",
+					"value": 1
+				},
+				{
+					"label": "3 wire with neutral",
+					"value": 2
+				}
+			]
+		},
+		"12": {
+			"label": "Load type",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 3,
+			"defaultValue": 0,
+			"readOnly": true,
+			"options": [
+				{
+					"label": "Unknown",
+					"value": 0
+				},
+				{
+					"label": "Resistive",
+					"value": 1
+				},
+				{
+					"label": "Inductive",
+					"value": 2
+				},
+				{
+					"label": "Capacitive",
+					"value": 3
+				}
+			]
+		},
+		"13": {
+			"label": "Over Current Protection",
+			"description": "Must be over 2.1A for 20 seconds continously",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 1,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Disable",
+					"value": 0
+				},
+				{
+					"label": "Enable",
+					"value": 1
+				}
+			]
+		},
+		"14": {
+			"label": "Power Automatic Report Absolute Threshold",
+			"description": "When power changes above the absolute threshold, immediately report current power value",
+			"valueSize": 2,
+			"unit": "W",
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 10
+		},
+		"15": {
+			"label": "Power Automatic Report Percentage Threshold",
+			"description": "When power changes above the percentage threshold, immediately report current power value",
+			"valueSize": 1,
+			"unit": "%",
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 20
+		},
+		"21": {
+			"label": "Power Metering Automatic Report Time Cycle",
+			"valueSize": 4,
+			"unit": "seconds",
+			"minValue": 0,
+			"maxValue": 2678400,
+			"defaultValue": 600,
+			"options": [
+				{
+					"label": "Disable",
+					"value": 0
+				}
+			]
+		},
+		"22": {
+			"label": "Energy Metering Automatic Report Time Cycle",
+			"valueSize": 4,
+			"unit": "seconds",
+			"minValue": 0,
+			"maxValue": 2678400,
+			"defaultValue": 1800,
+			"options": [
+				{
+					"label": "Disable",
+					"value": 0
+				}
+			]
+		},
+		"23": {
+			"label": "Voltage Metering Automatic Report Time Cycle",
+			"valueSize": 4,
+			"unit": "seconds",
+			"minValue": 0,
+			"maxValue": 2678400,
+			"defaultValue": 3600,
+			"options": [
+				{
+					"label": "Disable",
+					"value": 0
+				}
+			]
+		},
+		"24": {
+			"label": "Current Metering Automatic Report Time Cycle",
+			"valueSize": 4,
+			"unit": "seconds",
+			"minValue": 0,
+			"maxValue": 2678400,
+			"defaultValue": 3600,
+			"options": [
+				{
+					"label": "Disable",
+					"value": 0
+				}
+			]
+		},
+		"31": {
+			"label": "Set Dimming Curve",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 0,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Linear dimming",
+					"value": 0
+				},
+				{
+					"label": "Logarithmic dimming",
+					"value": 1
+				}
+			]
+		},
+		"32": {
+			"label": "Set Startup Brightness",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 99,
+			"defaultValue": 0
+		}
+	}
+}

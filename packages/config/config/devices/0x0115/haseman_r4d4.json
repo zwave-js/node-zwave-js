@@ -1,0 +1,149 @@
+{
+	"manufacturer": "Haseman",
+	"manufacturerId": "0x0115",
+	"label": "R4D4",
+	"description": "4x Relay and 4x Universal Dimmer",
+	"devices": [
+		{
+			"productType": "0xf222",
+			"productId": "0x2111"
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"paramInformation": {
+		"64": {
+			"$import": "templates/haseman_template.json#power_up_memory",
+			"label": "Power Up Memory: Channel 1"
+		},
+		"65": {
+			"$import": "templates/haseman_template.json#power_up_memory",
+			"label": "Power Up Memory: Channel 2"
+		},
+		"66": {
+			"$import": "templates/haseman_template.json#power_up_memory",
+			"label": "Power Up Memory: Channel 3"
+		},
+		"67": {
+			"$import": "templates/haseman_template.json#power_up_memory",
+			"label": "Power Up Memory: Channel 4"
+		},
+		"68": {
+			"$import": "templates/haseman_template.json#power_up_memory",
+			"label": "Power Up Memory: Channel 5"
+		},
+		"69": {
+			"$import": "templates/haseman_template.json#power_up_memory",
+			"label": "Power Up Memory: Channel 6"
+		},
+		"70": {
+			"$import": "templates/haseman_template.json#power_up_memory",
+			"label": "Power Up Memory: Channel 7"
+		},
+		"71": {
+			"$import": "templates/haseman_template.json#power_up_memory",
+			"label": "Power Up Memory: Channel 8"
+		},
+		"72": {
+			"$import": "templates/haseman_template.json#button_type",
+			"label": "Button Type: Channel 1"
+		},
+		"73": {
+			"$import": "templates/haseman_template.json#button_type",
+			"label": "Button Type: Channel 2"
+		},
+		"74": {
+			"$import": "templates/haseman_template.json#button_type",
+			"label": "Button Type: Channel 3"
+		},
+		"75": {
+			"$import": "templates/haseman_template.json#button_type",
+			"label": "Button Type: Channel 4"
+		},
+		"76": {
+			"$import": "templates/haseman_template.json#button_type",
+			"label": "Button Type: Channel 5"
+		},
+		"77": {
+			"$import": "templates/haseman_template.json#button_type",
+			"label": "Button Type: Channel 6"
+		},
+		"78": {
+			"$import": "templates/haseman_template.json#button_type",
+			"label": "Button Type: Channel 7"
+		},
+		"79": {
+			"$import": "templates/haseman_template.json#button_type",
+			"label": "Button Type: Channel 8"
+		},
+		"80": {
+			"$import": "templates/haseman_template.json#dimming_mode",
+			"label": "Dimming Mode: Channel 1"
+		},
+		"81": {
+			"$import": "templates/haseman_template.json#dimming_mode",
+			"label": "Dimming Mode: Channel 2"
+		},
+		"82": {
+			"$import": "templates/haseman_template.json#dimming_mode",
+			"label": "Dimming Mode: Channel 3"
+		},
+		"83": {
+			"$import": "templates/haseman_template.json#dimming_mode",
+			"label": "Dimming Mode: Channel 4"
+		},
+		"84": {
+			"$import": "templates/haseman_template.json#soft_start",
+			"label": "Soft Start: Channel 1"
+		},
+		"85": {
+			"$import": "templates/haseman_template.json#soft_start",
+			"label": "Soft Start: Channel 2"
+		},
+		"86": {
+			"$import": "templates/haseman_template.json#soft_start",
+			"label": "Soft Start: Channel 3"
+		},
+		"87": {
+			"$import": "templates/haseman_template.json#soft_start",
+			"label": "Soft Start: Channel 4"
+		},
+		"88": {
+			"$import": "templates/haseman_template.json#min_level",
+			"label": "Min Level: Channel 1"
+		},
+		"89": {
+			"$import": "templates/haseman_template.json#min_level",
+			"label": "Min Level: Channel 2"
+		},
+		"90": {
+			"$import": "templates/haseman_template.json#min_level",
+			"label": "Min Level: Channel 3"
+		},
+		"91": {
+			"$import": "templates/haseman_template.json#min_level",
+			"label": "Min Level: Channel 4"
+		},
+		"92": {
+			"$import": "templates/haseman_template.json#max_level",
+			"label": "Max Level: Channel 1"
+		},
+		"93": {
+			"$import": "templates/haseman_template.json#max_level",
+			"label": "Max Level: Channel 2"
+		},
+		"94": {
+			"$import": "templates/haseman_template.json#max_level",
+			"label": "Max Level: Channel 3"
+		},
+		"95": {
+			"$import": "templates/haseman_template.json#max_level",
+			"label": "Max Level: Channel 4"
+		}
+	},
+	"metadata": {
+		"manual": "http://ekitzone.com/image/catalog/PDF/Haseman_R4D4_Manual.pdf"
+	}
+}

@@ -1,5 +1,3 @@
-// Remotec ZXT-600
-// AC Master
 {
 	"manufacturer": "Remotec",
 	"manufacturerId": "0x5254",
@@ -23,92 +21,286 @@
 		"min": "1.3",
 		"max": "255.255"
 	},
-	"supportsZWavePlus": true,
 	"paramInformation": {
 		"25": {
 			"label": "Learn IR Code",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 32,
-			"defaultValue": 32,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"defaultValue": 0,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Off",
+					"value": 0
+				},
+				{
+					"label": "On (Resume)",
+					"value": 1
+				},
+				{
+					"label": "17 °C Cool",
+					"value": 2
+				},
+				{
+					"label": "18 °C Cool",
+					"value": 3
+				},
+				{
+					"label": "19 °C Cool",
+					"value": 4
+				},
+				{
+					"label": "20 °C Cool",
+					"value": 5
+				},
+				{
+					"label": "21 °C Cool",
+					"value": 6
+				},
+				{
+					"label": "22 °C Cool",
+					"value": 7
+				},
+				{
+					"label": "23 °C Cool",
+					"value": 8
+				},
+				{
+					"label": "24 °C Cool",
+					"value": 9
+				},
+				{
+					"label": "25 °C Cool",
+					"value": 10
+				},
+				{
+					"label": "26 °C Cool",
+					"value": 11
+				},
+				{
+					"label": "27 °C Cool",
+					"value": 12
+				},
+				{
+					"label": "28 °C Cool",
+					"value": 13
+				},
+				{
+					"label": "29 °C Cool",
+					"value": 14
+				},
+				{
+					"label": "30 °C Cool",
+					"value": 15
+				},
+				{
+					"label": "17 °C Heat",
+					"value": 16
+				},
+				{
+					"label": "18 °C Heat",
+					"value": 17
+				},
+				{
+					"label": "19 °C Heat",
+					"value": 18
+				},
+				{
+					"label": "20 °C Heat",
+					"value": 19
+				},
+				{
+					"label": "21 °C Heat",
+					"value": 20
+				},
+				{
+					"label": "22 °C Heat",
+					"value": 21
+				},
+				{
+					"label": "23 °C Heat",
+					"value": 22
+				},
+				{
+					"label": "24 °C Heat",
+					"value": 23
+				},
+				{
+					"label": "25 °C Heat",
+					"value": 24
+				},
+				{
+					"label": "26 °C Heat",
+					"value": 25
+				},
+				{
+					"label": "27 °C Heat",
+					"value": 26
+				},
+				{
+					"label": "28 °C Heat",
+					"value": 27
+				},
+				{
+					"label": "29 °C Heat",
+					"value": 28
+				},
+				{
+					"label": "30 °C Heat",
+					"value": 29
+				},
+				{
+					"label": "Dry mode",
+					"value": 30
+				},
+				{
+					"label": "Auto mode",
+					"value": 31
+				},
+				{
+					"label": "Fan mode",
+					"value": 32
+				}
+			]
 		},
 		"26": {
-			"label": "Check IR Code Learning Status",
+			"label": "IR Code Learning Status",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 4,
-			"defaultValue": 4,
 			"readOnly": true,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Idle - IR Channel idle",
+					"value": 0
+				},
+				{
+					"label": "OK - the last learning operation was completed successfully",
+					"value": 1
+				},
+				{
+					"label": "Learning - ZXT-600 is busy processing previous learning request",
+					"value": 2
+				},
+				{
+					"label": "Full – All locations are being used",
+					"value": 3
+				},
+				{
+					"label": "The last learning request was failed",
+					"value": 4
+				}
+			]
 		},
 		"27": {
-			"label": "Set IR Code Number from built-in code library",
+			"label": "IR Code Number From Built-in Code Library",
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 65535,
 			"defaultValue": 1,
-			"unsigned": true,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"unsigned": true
 		},
 		"30": {
-			"label": "Auto Report condition Trig by Room Temp change",
+			"label": "Auto Report Condition By Room Temp Change",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 8,
-			"defaultValue": 8,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"defaultValue": 1,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "0.5 °C",
+					"value": 1
+				},
+				{
+					"label": "1 °C",
+					"value": 2
+				},
+				{
+					"label": "1.5 °C",
+					"value": 3
+				},
+				{
+					"label": "2 °C",
+					"value": 4
+				},
+				{
+					"label": "2.5 °C",
+					"value": 5
+				},
+				{
+					"label": "3 °C",
+					"value": 6
+				},
+				{
+					"label": "3.5 °C",
+					"value": 7
+				},
+				{
+					"label": "4 °C",
+					"value": 8
+				}
+			]
 		},
 		"32": {
-			"label": "Set built-in IR Emitter Control",
+			"label": "Built-in IR Emitter Control",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 255,
 			"defaultValue": 255,
 			"unsigned": true,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Disable",
+					"value": 0
+				},
+				{
+					"label": "Enable",
+					"value": 255
+				}
+			]
 		},
 		"33": {
-			"label": "Control AC SWING function",
-			"description": "Control AC &amp;amp;quot;SWING&amp;amp;quot; function",
+			"label": "AC Swing Function",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 1,
 			"defaultValue": 1,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Swing OFF",
+					"value": 0
+				},
+				{
+					"label": "Swing Auto",
+					"value": 1
+				}
+			]
 		},
 		"34": {
-			"label": "Set Auto Report Cond by Time Interval",
+			"label": "Auto Report Time Interval",
 			"unit": "hours",
 			"valueSize": 1,
 			"minValue": 1,
 			"maxValue": 8,
-			"defaultValue": 8,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"defaultValue": 8
 		},
 		"37": {
-			"label": "Calibrate Temperature reading",
+			"label": "Calibrate Temperature Reading",
+			"unit": "°C",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 255,
-			"defaultValue": 5,
-			"unsigned": true,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"minValue": -5,
+			"maxValue": 5,
+			"defaultValue": 0
 		}
+	},
+	"metadata": {
+		"inclusion": "When it is prompted to enter it, please triple click the PROG button within 1 second. Green Indicator flashes TWICE then stay off.",
+		"exclusion": "When it is prompted to enter it, please triple click the PROG button within 1 second. Green Indicator flashes TWICE then stay off.",
+		"reset": "Press and Hold “PROG” button for 3 seconds on AC Master, the Green Indicator will light up. DO NOT Release the “PROG” Button until Green Indicator flashes TWICE."
 	}
 }

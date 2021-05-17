@@ -1,17 +1,23 @@
 name: Test and Release
 
-# Run this job on all pushes and pull requests
+# Run this job on all pushes to master, for pull requests
 # as well as tags with a semantic version
 on:
   push:
     branches:
-      - "*"
+      # This avoids having duplicate builds in non-forked PRs
+      - "master"
     tags:
       # normal versions
       - "v[0-9]+.[0-9]+.[0-9]+"
       # pre-releases
       - "v[0-9]+.[0-9]+.[0-9]+-**"
   pull_request: {}
+
+# Cancel previous PR/branch runs when a new commit is pushed
+concurrency: 
+  group: ${{ github.ref }}
+  cancel-in-progress: true
 
 jobs:
   lint:
@@ -351,10 +357,12 @@ jobs:
       run: |
         npm i -g @sentry/cli
         export SENTRY_AUTH_TOKEN=${{ secrets.SENTRY_AUTH_TOKEN }}
-        export SENTRY_ORG=alcalzone
-        export SENTRY_PROJECT=iobroker_zwave
+        export SENTRY_URL=https://sentry.iobroker.net
+        export SENTRY_ORG=iobroker
+        export SENTRY_PROJECT=zwave-js
         export SENTRY_VERSION=zwave-js@${{ steps.extract_release.outputs.VERSION }}
         sentry-cli releases new $SENTRY_VERSION
+        # Commits disabled until the Github integration can be enabled
         sentry-cli releases set-commits $SENTRY_VERSION --auto
         sentry-cli releases files $SENTRY_VERSION upload-sourcemaps ./packages/*/build
         sentry-cli releases finalize $SENTRY_VERSION

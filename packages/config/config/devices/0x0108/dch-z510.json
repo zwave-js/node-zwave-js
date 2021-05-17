@@ -1,5 +1,3 @@
-// D-Link DCH-Z510
-// Siren
 {
 	"manufacturer": "D-Link",
 	"manufacturerId": "0x0108",
@@ -25,8 +23,6 @@
 			"minValue": 0,
 			"maxValue": 1,
 			"defaultValue": 0,
-			"readOnly": false,
-			"writeOnly": false,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -45,10 +41,7 @@
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 127,
-			"defaultValue": 0,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"defaultValue": 0
 		},
 		"7": {
 			"label": "Customer Function",
@@ -56,8 +49,6 @@
 			"minValue": 0,
 			"maxValue": 16,
 			"defaultValue": 0,
-			"readOnly": false,
-			"writeOnly": false,
 			"allowManualEntry": false,
 			"options": [
 				{

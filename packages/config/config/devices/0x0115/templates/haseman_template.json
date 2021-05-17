@@ -1,0 +1,97 @@
+{
+	"dimming_mode": {
+		"valueSize": 2,
+		"defaultValue": 0,
+		"minValue": 0,
+		"maxValue": 1,
+		"allowManualEntry": false,
+		"options": [
+			{
+				"label": "Trailing Edge",
+				"value": 0
+			},
+			{
+				"label": "Leading Edge",
+				"value": 1
+			}
+		]
+	},
+	"power_up_memory": {
+		"description": "When Power Up memory is enabled, the module will save the actual status of the associated channel output in case of power break",
+		"valueSize": 2,
+		"defaultValue": 0,
+		"minValue": 0,
+		"maxValue": 1,
+		"allowManualEntry": false,
+		"options": [
+			{
+				"label": "Disabled",
+				"value": 0
+			},
+			{
+				"label": "Enabled",
+				"value": 1
+			}
+		]
+	},
+	"button_type": {
+		"valueSize": 2,
+		"defaultValue": 1,
+		"minValue": 1,
+		"maxValue": 4,
+		"allowManualEntry": false,
+		"options": [
+			{
+				"label": "Push Button",
+				"value": 1
+			},
+			{
+				"label": "Toggle Switch",
+				"value": 2
+			},
+			{
+				"label": "Follower Switch",
+				"value": 3
+			},
+			{
+				"label": "Pulse",
+				"value": 4
+			}
+		]
+	},
+	"soft_start": {
+		"valueSize": 2,
+		"defaultValue": 1,
+		"minValue": 0,
+		"maxValue": 1,
+		"allowManualEntry": false,
+		"options": [
+			{
+				"label": "Disabled",
+				"value": 0
+			},
+			{
+				"label": "Enabled",
+				"value": 1
+			}
+		]
+	},
+	"min_level": {
+		"valueSize": 2,
+		"defaultValue": 1,
+		"minValue": 1,
+		"maxValue": 98
+	},
+	"max_level": {
+		"valueSize": 2,
+		"defaultValue": 99,
+		"minValue": 2,
+		"maxValue": 555,
+		"options": [
+			{
+				"label": "True Sine Mode",
+				"value": 555
+			}
+		]
+	}
+}

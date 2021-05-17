@@ -1,5 +1,3 @@
-// Nortek Security & Control LLC PD300Z-2
-// Plug-in Wall Dimmer
 {
 	"manufacturer": "Nortek Security & Control LLC",
 	"manufacturerId": "0x014f",
@@ -18,22 +16,19 @@
 	"paramInformation": {
 		"29": {
 			"label": "Load Sense",
-			"description": "Turn load sense on with 1, off with 0",
 			"valueSize": 1,
 			"minValue": 0,
-			"maxValue": 255,
+			"maxValue": 1,
 			"defaultValue": 1,
 			"unsigned": true,
-			"readOnly": false,
-			"writeOnly": false,
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "Disable load sense",
+					"label": "Disable",
 					"value": 0
 				},
 				{
-					"label": "Enable load sense",
+					"label": "Enable",
 					"value": 1
 				}
 			]

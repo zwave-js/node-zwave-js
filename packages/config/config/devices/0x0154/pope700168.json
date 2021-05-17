@@ -1,5 +1,3 @@
-// Popp & Co POPE700168
-// POPP Rain-Sensor
 {
 	"manufacturer": "Popp & Co",
 	"manufacturerId": "0x0154",
@@ -15,7 +13,21 @@
 		"min": "0.0",
 		"max": "255.255"
 	},
-	"supportsZWavePlus": true,
+	"associations": {
+		"1": {
+			"label": "Lifeline",
+			"maxNodes": 5,
+			"isLifeline": true
+		},
+		"2": {
+			"label": "Rain detected (Basic Set)",
+			"maxNodes": 5
+		},
+		"3": {
+			"label": "Heavy rain detected (Basic Set)",
+			"maxNodes": 5
+		}
+	},
 	"paramInformation": {
 		"1": {
 			"label": "Rain Counter",
@@ -24,10 +36,7 @@
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 32000,
-			"defaultValue": 0,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"defaultValue": 0
 		},
 		"2": {
 			"label": "Rain Start Command",
@@ -35,10 +44,7 @@
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 99,
-			"defaultValue": 99,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"defaultValue": 99
 		},
 		"3": {
 			"label": "Rain Stop Command",
@@ -46,10 +52,7 @@
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 99,
-			"defaultValue": 0,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"defaultValue": 0
 		},
 		"4": {
 			"label": "Meter Multiplier",
@@ -57,10 +60,7 @@
 			"valueSize": 2,
 			"minValue": 1,
 			"maxValue": 1000,
-			"defaultValue": 1,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"defaultValue": 1
 		},
 		"5": {
 			"label": "Heavy Rain",
@@ -70,10 +70,7 @@
 			"minValue": 0,
 			"maxValue": 255,
 			"defaultValue": 255,
-			"unsigned": true,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"unsigned": true
 		},
 		"6": {
 			"label": "Heavy Rain Start Command",
@@ -81,10 +78,7 @@
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 99,
-			"defaultValue": 99,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"defaultValue": 99
 		},
 		"7": {
 			"label": "Heavy Rain Stop Command",
@@ -92,10 +86,19 @@
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 99,
-			"defaultValue": 0,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"defaultValue": 0
+		}
+	},
+	"compat": {
+		"commandClasses": {
+			"add": {
+				// The device uses Basic Set commands to report rain.
+				// We don't set up an association in group 2 or 3 by default, but if a user does,
+				// this is needed or the Basic CC will be hidden
+				"0x20": {
+					"isSupported": true
+				}
+			}
 		}
 	}
 }

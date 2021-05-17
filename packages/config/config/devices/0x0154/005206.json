@@ -1,5 +1,3 @@
-// Popp & Co 005206
-// Z-Weather
 {
 	"manufacturer": "Popp & Co",
 	"manufacturerId": "0x0154",
@@ -23,10 +21,7 @@
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 30,
-			"defaultValue": 6,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"defaultValue": 6
 		},
 		"2": {
 			"label": "Twilight Action Threshold",
@@ -34,10 +29,7 @@
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 100,
-			"defaultValue": 37,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"defaultValue": 37
 		}
 	}
 }

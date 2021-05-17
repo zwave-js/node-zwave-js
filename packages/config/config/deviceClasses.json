@@ -2,6 +2,7 @@
 // legacy Z-Wave standard (SDS10242)
 {
 	"basic": {
+		// The GetNodeProtocolInfo messages rely on these values - double-check there when changing anything
 		"0x01": "Controller",
 		"0x02": "Static Controller",
 		"0x03": "Slave",
@@ -80,7 +81,7 @@
 						"Association", // V2+
 						"Association Group Information",
 						"CRC-16 Encapsulation",
-						"Device Reset Locally",
+						// "Device Reset Locally", (we can't know if the device can be reset)
 						"Inclusion Controller",
 						"Powerlevel",
 						"Manufacturer Specific",
@@ -111,7 +112,7 @@
 						"Association", // V2+
 						"Association Group Information",
 						"CRC-16 Encapsulation",
-						"Device Reset Locally",
+						// "Device Reset Locally", (we can't know if the device can be reset)
 						"Inclusion Controller",
 						"Manufacturer Specific",
 						"Powerlevel",
@@ -135,7 +136,7 @@
 						"Association", // V2+
 						"Association Group Information",
 						"CRC-16 Encapsulation",
-						"Device Reset Locally",
+						// "Device Reset Locally", (we can't know if the device can be reset)
 						"Inclusion Controller",
 						"Manufacturer Specific",
 						"Powerlevel",
@@ -182,7 +183,7 @@
 						"Basic",
 						"Battery",
 						"Sound Switch",
-						"Device Reset Locally",
+						// "Device Reset Locally", (we can't know if the device can be reset)
 						"Manufacturer Specific",
 						"Powerlevel",
 						"Security 2",
@@ -327,7 +328,7 @@
 					"supportedCCs": [
 						"Association", // V2+
 						"Association Group Information",
-						"Device Reset Locally",
+						// "Device Reset Locally", (we can't know if the device can be reset)
 						"IR Repeater",
 						"Manufacturer Specific",
 						"Powerlevel",
@@ -358,7 +359,7 @@
 						"Basic",
 						"Binary Switch",
 						"Color Switch",
-						"Device Reset Locally",
+						// "Device Reset Locally", (we can't know if the device can be reset)
 						"Manufacturer Specific",
 						"Powerlevel",
 						"Security 2",
@@ -385,7 +386,7 @@
 						"Association Group Information",
 						"Basic",
 						"Binary Switch",
-						"Device Reset Locally",
+						// "Device Reset Locally", (we can't know if the device can be reset)
 						"Manufacturer Specific",
 						"Multi Channel", // V4+
 						"Multi Channel Association", // V3+
@@ -406,7 +407,7 @@
 						"Basic",
 						"Battery",
 						"Binary Switch",
-						"Device Reset Locally",
+						// "Device Reset Locally", (we can't know if the device can be reset)
 						"Manufacturer Specific",
 						"Powerlevel",
 						"Security 2",
@@ -425,7 +426,7 @@
 						"Basic",
 						"Battery",
 						"Binary Switch",
-						"Device Reset Locally",
+						// "Device Reset Locally", (we can't know if the device can be reset)
 						"Manufacturer Specific",
 						"Powerlevel",
 						"Security 2",
@@ -443,7 +444,7 @@
 						"Association Group Information",
 						"Basic",
 						"Binary Switch",
-						"Device Reset Locally",
+						// "Device Reset Locally", (we can't know if the device can be reset)
 						"Manufacturer Specific",
 						"Powerlevel",
 						"Security 2",
@@ -472,7 +473,7 @@
 						"Association Group Information",
 						"Basic",
 						"Color Switch",
-						"Device Reset Locally",
+						// "Device Reset Locally", (we can't know if the device can be reset)
 						"Manufacturer Specific",
 						"Multilevel Switch",
 						"Powerlevel",
@@ -533,7 +534,7 @@
 						"Association", // V2+
 						"Association Group Information",
 						"Basic",
-						"Device Reset Locally",
+						// "Device Reset Locally", (we can't know if the device can be reset)
 						"Manufacturer Specific",
 						"Multilevel Switch",
 						"Powerlevel",
@@ -669,7 +670,7 @@
 						"Association Group Information",
 						"Battery",
 						"CRC-16 Encapsulation",
-						"Device Reset Locally",
+						// "Device Reset Locally", (we can't know if the device can be reset)
 						"Manufacturer Specific",
 						"Meter", // V2+
 						"Powerlevel",
@@ -708,7 +709,7 @@
 						"Association Group Information",
 						"Barrier Operator",
 						"Battery",
-						"Device Reset Locally",
+						// "Device Reset Locally", (we can't know if the device can be reset)
 						"Manufacturer Specific",
 						"Notification", // V4+
 						"Powerlevel",
@@ -729,7 +730,7 @@
 						"Association Group Information",
 						"Barrier Operator",
 						"Battery",
-						"Device Reset Locally",
+						// "Device Reset Locally", (we can't know if the device can be reset)
 						"Manufacturer Specific",
 						"Notification", // V4+
 						"Powerlevel",
@@ -750,7 +751,7 @@
 						"Association Group Information",
 						"Barrier Operator",
 						"Battery",
-						"Device Reset Locally",
+						// "Device Reset Locally", (we can't know if the device can be reset)
 						"Manufacturer Specific",
 						"Notification", // V4+
 						"Powerlevel",
@@ -771,7 +772,7 @@
 						"Association Group Information",
 						"Barrier Operator",
 						"Battery",
-						"Device Reset Locally",
+						// "Device Reset Locally", (we can't know if the device can be reset)
 						"Manufacturer Specific",
 						"Notification", // V4+
 						"Powerlevel",
@@ -792,7 +793,7 @@
 						"Association Group Information",
 						"Barrier Operator",
 						"Battery",
-						"Device Reset Locally",
+						// "Device Reset Locally", (we can't know if the device can be reset)
 						"Manufacturer Specific",
 						"Notification", // V4+
 						"Powerlevel",
@@ -821,7 +822,7 @@
 					"label": "Secure Keypad",
 					"zwavePlusDeviceType": "Entry Control Keypad",
 					"supportedCCs": [
-						"Device Reset Locally",
+						// "Device Reset Locally", (we can't know if the device can be reset)
 						"Entry Control",
 						"Manufacturer Specific",
 						"Security",

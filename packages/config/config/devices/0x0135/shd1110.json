@@ -1,5 +1,3 @@
-// ZyXEL SHD1110
-// Temperature/Humidity Sensor
 {
 	"manufacturer": "ZyXEL",
 	"manufacturerId": "0x0135",

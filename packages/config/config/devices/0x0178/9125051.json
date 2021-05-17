@@ -1,5 +1,3 @@
-// Nexia Home Intelligence 9125051
-// VeriLock Translator
 {
 	"manufacturer": "Nexia Home Intelligence",
 	"manufacturerId": "0x0178",
@@ -23,10 +21,7 @@
 			"minValue": 0,
 			"maxValue": 100,
 			"defaultValue": 100,
-			"unsigned": true,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"unsigned": true
 		},
 		"2": {
 			"label": "Discovery Mode",
@@ -36,8 +31,6 @@
 			"maxValue": 3,
 			"defaultValue": 0,
 			"unsigned": true,
-			"readOnly": false,
-			"writeOnly": false,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -65,8 +58,6 @@
 			"maxValue": 1,
 			"defaultValue": 0,
 			"unsigned": true,
-			"readOnly": false,
-			"writeOnly": false,
 			"allowManualEntry": false,
 			"options": [
 				{

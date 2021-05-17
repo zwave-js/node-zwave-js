@@ -1,5 +1,3 @@
-// Zooz ZEN17
-// Universal Relay
 {
 	"manufacturer": "Zooz",
 	"manufacturerId": "0x027a",
@@ -38,8 +36,6 @@
 			"maxValue": 4,
 			"defaultValue": 1,
 			"unsigned": true,
-			"readOnly": false,
-			"writeOnly": false,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -66,14 +62,12 @@
 		},
 		"2": {
 			"label": "Input Type for S1 Terminal",
-			"description": "Note: The device must be reinterviewed after changing",
+			"description": "Note: The device must be excluded (without resetting it) and re-included after changing to/from values 4-10",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 10,
 			"defaultValue": 1,
 			"unsigned": true,
-			"readOnly": false,
-			"writeOnly": false,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -124,14 +118,12 @@
 		},
 		"3": {
 			"label": "Input Type for S2 Terminal",
-			"description": "Note: The device must be reinterviewed after changing",
+			"description": "Note: The device must be excluded (without resetting it) and re-included after changing to/from values 4-10",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 10,
 			"defaultValue": 1,
 			"unsigned": true,
-			"readOnly": false,
-			"writeOnly": false,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -187,8 +179,6 @@
 			"maxValue": 3,
 			"defaultValue": 0,
 			"unsigned": true,
-			"readOnly": false,
-			"writeOnly": false,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -216,10 +206,7 @@
 			"minValue": 0,
 			"maxValue": 65535,
 			"defaultValue": 0,
-			"unsigned": true,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"unsigned": true
 		},
 		"7": {
 			"label": "Auto Turn-On Timer (Relay 1)",
@@ -228,10 +215,7 @@
 			"minValue": 0,
 			"maxValue": 65535,
 			"defaultValue": 0,
-			"unsigned": true,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"unsigned": true
 		},
 		"8": {
 			"label": "Auto Turn-Off Timer (Relay 2)",
@@ -240,10 +224,7 @@
 			"minValue": 0,
 			"maxValue": 65535,
 			"defaultValue": 0,
-			"unsigned": true,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"unsigned": true
 		},
 		"9": {
 			"label": "Auto Turn-On Timer (Relay 2)",
@@ -252,51 +233,44 @@
 			"minValue": 0,
 			"maxValue": 65535,
 			"defaultValue": 0,
-			"unsigned": true,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"unsigned": true
 		},
 		"10": {
 			"label": "Control Relay 1 with S1 Input",
-			"description": "If disabled a Z-Wave report will be sent, but R1 will not be triggered",
+			"description": "If disabled and Parameter 2 is values 4-10, a Z-Wave report will be sent but R1 will not be triggered",
 			"valueSize": 1,
 			"minValue": 0,
-			"maxValue": 2,
+			"maxValue": 1,
 			"defaultValue": 1,
 			"unsigned": true,
-			"readOnly": false,
-			"writeOnly": false,
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "Control R1",
+					"label": "Disable",
 					"value": 0
 				},
 				{
-					"label": "Z-Wave report only",
+					"label": "Enable",
 					"value": 1
 				}
 			]
 		},
 		"11": {
 			"label": "Control Relay 2 with S2 Input",
-			"description": "If disabled a Z-Wave report will be sent, but R2 will not be triggered",
+			"description": "If disabled and Parameter 3 is values 4-10, a Z-Wave report will be sent but R2 will not be triggered",
 			"valueSize": 1,
 			"minValue": 0,
-			"maxValue": 2,
+			"maxValue": 1,
 			"defaultValue": 1,
 			"unsigned": true,
-			"readOnly": false,
-			"writeOnly": false,
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "Control R2",
+					"label": "Disable",
 					"value": 0
 				},
 				{
-					"label": "Z-Wave report only",
+					"label": "Enable",
 					"value": 1
 				}
 			]
@@ -306,10 +280,8 @@
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 2,
-			"defaultValue": 0,
+			"defaultValue": 1,
 			"unsigned": true,
-			"readOnly": false,
-			"writeOnly": false,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -333,8 +305,6 @@
 			"maxValue": 2,
 			"defaultValue": 0,
 			"unsigned": true,
-			"readOnly": false,
-			"writeOnly": false,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -359,8 +329,6 @@
 			"maxValue": 2,
 			"defaultValue": 0,
 			"unsigned": true,
-			"readOnly": false,
-			"writeOnly": false,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -384,8 +352,6 @@
 			"maxValue": 2,
 			"defaultValue": 0,
 			"unsigned": true,
-			"readOnly": false,
-			"writeOnly": false,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -410,8 +376,6 @@
 			"maxValue": 1,
 			"defaultValue": 0,
 			"unsigned": true,
-			"readOnly": false,
-			"writeOnly": false,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -424,5 +388,9 @@
 				}
 			]
 		}
+	},
+	"compat": {
+		// This device improperly reports the state of R2 (endpoint 2) through the root endpoint in a way that also changes the state of R1 (endpoint 1)
+		"preserveRootApplicationCCValueIDs": true
 	}
 }

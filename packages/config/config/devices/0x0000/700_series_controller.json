@@ -1,0 +1,17 @@
+// Note: This device file is shared by multiple manufacturers
+{
+	"manufacturer": "Silicon Labs",
+	"manufacturerId": "0x0000",
+	"label": "ZST10-700",
+	"description": "700 Series-based Controller",
+	"devices": [
+		{
+			"productType": "0x0004",
+			"productId": "0x0004"
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	}
+}

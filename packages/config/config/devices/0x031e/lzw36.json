@@ -2,7 +2,7 @@
 	"manufacturer": "Inovelli",
 	"manufacturerId": "0x031e",
 	"label": "LZW36",
-	"description": "Fan/Light Dimmer",
+	"description": "Red Series Fan + Light Switch",
 	"devices": [
 		{
 			"productType": "0x000e",
@@ -46,165 +46,166 @@
 	},
 	"paramInformation": {
 		"1": {
-			"label": "Light Dimming Speed",
-			"description": "This changes the speed in which the attached light dims up or down. A setting of 0 should turn the light immediately on or off (almost like an on/off switch). Increasing the value should slow down the transition speed. Range:0-98 Default: 4",
+			"label": "Light Dimming Speed (Z-Wave)",
+			"units": "seconds",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 98,
 			"defaultValue": 4,
 			"unsigned": true,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"options": [
+				{
+					"label": "Immediate",
+					"value": 0
+				}
+			]
 		},
 		"2": {
-			"label": "Light Dimming Speed (From Switch)",
-			"description": "This changes the speed in which the attached light dims up or down when controlled from the physical switch. A setting of 0 should turn the light immediately on or off (almost like an on/off switch). Increasing the value should slow down the transition speed. A setting of 99 should keep this in sync with parameter 1. Range:0-99 Default: 99",
+			"label": "Light Dimming Speed",
+			"units": "seconds",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 99,
 			"defaultValue": 99,
 			"unsigned": true,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"options": [
+				{
+					"label": "Immediate",
+					"value": 0
+				},
+				{
+					"label": "Synced with parameter 1",
+					"value": 99
+				}
+			]
 		},
 		"3": {
-			"label": "Light Ramp Rate",
-			"description": "This changes the speed in which the attached light turns on or off. For example, when a user sends the switch a basicSet(value: 0xFF) or basicSet(value: 0x00), this is the speed in which those actions take place. A setting of 0 should turn the light immediately on or off (almost like an on/off switch). Increasing the value should slow down the transition speed. A setting of 99 should keep this in sync with parameter 1. Range:0-99 Default: 99",
+			"label": "Light Ramp Rate (Z-Wave)",
+			"units": "seconds",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 99,
 			"defaultValue": 99,
 			"unsigned": true,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"options": [
+				{
+					"label": "Immediate",
+					"value": 0
+				},
+				{
+					"label": "Synced with parameter 1",
+					"value": 99
+				}
+			]
 		},
 		"4": {
-			"label": "Light Ramp Rate (From Switch)",
-			"description": "This changes the speed in which the attached light turns on or off from the physical switch. For example, when a user presses the up or down button, this is the speed in which those actions take place. A setting of 0 should turn the light immediately on or off (almost like an on/off switch). Increasing the value should slow down the transition speed. A setting of 99 should keep this in sync with parameter 1. Range:0-99 Default: 99",
+			"label": "Light Ramp Rate",
+			"units": "seconds",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 99,
 			"defaultValue": 99,
 			"unsigned": true,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"options": [
+				{
+					"label": "Immediate",
+					"value": 0
+				},
+				{
+					"label": "Synced with parameter 1",
+					"value": 99
+				}
+			]
 		},
 		"5": {
 			"label": "Minimum Light Level",
-			"description": "The minimum level that the dimmer allows the bulb to be dimmed to. Useful when the user has an LED bulb that does not turn on or flickers at a lower level. Range:1-45 Default: 1",
 			"valueSize": 1,
 			"minValue": 1,
 			"maxValue": 45,
 			"defaultValue": 1,
-			"unsigned": true,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"unsigned": true
 		},
 		"6": {
 			"label": "Maximum Light Level",
-			"description": "The maximum level that the dimmer allows the bulb to be dimmed to. Useful when the user has an LED bulb that reaches its maximum level before the dimmer value of 99. Range:55-99 Default: 99",
 			"valueSize": 1,
 			"minValue": 55,
 			"maxValue": 99,
 			"defaultValue": 99,
-			"unsigned": true,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"unsigned": true
 		},
 		"7": {
 			"label": "Minimum Fan Level",
-			"description": "The minimum level that the dimmer allows the fan to be dimmed to. Useful when the user has a fan that does not turn at a lower level. Range:1-45 Default: 1",
 			"valueSize": 1,
 			"minValue": 1,
 			"maxValue": 45,
 			"defaultValue": 1,
-			"unsigned": true,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"unsigned": true
 		},
 		"8": {
 			"label": "Maximum Fan Level",
-			"description": "The maximum level that the dimmer allows the fan to be dimmed to. Range:55-99 Default: 99",
 			"valueSize": 1,
 			"minValue": 55,
 			"maxValue": 99,
 			"defaultValue": 99,
-			"unsigned": true,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"unsigned": true
 		},
 		"10": {
 			"label": "Auto Off Light Timer",
-			"description": "Automatically turns the light switch off after this many seconds. When the switch is turned on a timer is started that is the duration of this setting. When the timer expires, the switch is turned off. Range:0-32767 Default: 0",
-			"unit": "s",
+			"unit": "seconds",
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 32767,
 			"defaultValue": 0,
-			"unsigned": true,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"unsigned": true
 		},
 		"11": {
 			"label": "Auto Off Fan Timer",
-			"description": "Automatically turns the fan switch off after this many seconds. When the switch is turned on a timer is started that is the duration of this setting. When the timer expires, the switch is turned off. Range:0-32767 Default: 0",
-			"units": "s",
+			"units": "seconds",
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 32767,
 			"defaultValue": 0,
-			"unsigned": true,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"unsigned": true
 		},
 		"12": {
-			"label": "Default Light Level (Local)",
-			"description": "Default level for the dimmer when it is powered on from the local switch. A setting of 0 means that the switch will return to the level that it was on before it was turned off. Range:1-99 Default: 0",
-			"valueSize": 1,
-			"minValue": 1,
-			"maxValue": 99,
-			"defaultValue": 0,
-			"unsigned": true,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
-		},
-		"13": {
-			"label": "Default Light Level (Z-Wave)",
-			"description": "Default level for the dimmer when it is powered on from a Z-Wave command. A setting of 0 means that the switch will return to the level that it was on before it was turned off. Range:1-99 Default: 0",
-			"valueSize": 1,
-			"minValue": 1,
-			"maxValue": 99,
-			"defaultValue": 0,
-			"unsigned": true,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
-		},
-		"14": {
-			"label": "Default Fan Level (Local)",
-			"description": "Default level for the fan dimmer when it is powered on from the local switch. Default: Last State",
+			"label": "Default Light Level",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 99,
 			"defaultValue": 0,
 			"unsigned": true,
-			"readOnly": false,
-			"writeOnly": false,
+			"options": [
+				{
+					"label": "Last state",
+					"value": 0
+				}
+			]
+		},
+		"13": {
+			"label": "Default Light Level (Z-Wave)",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 99,
+			"defaultValue": 0,
+			"unsigned": true,
+			"options": [
+				{
+					"label": "Last state",
+					"value": 0
+				}
+			]
+		},
+		"14": {
+			"label": "Default Fan Speed",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 99,
+			"defaultValue": 0,
+			"unsigned": true,
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "Last State",
+					"label": "Last state",
 					"value": 0
 				},
 				{
@@ -222,19 +223,16 @@
 			]
 		},
 		"15": {
-			"label": "Default Fan Level (Z-Wave)",
-			"description": "Default level for the fan dimmer when it is powered on from the local switch. Default: Last State",
+			"label": "Default Fan Speed (Z-Wave)",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 99,
 			"defaultValue": 0,
 			"unsigned": true,
-			"readOnly": false,
-			"writeOnly": false,
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "Last State",
+					"label": "Last state",
 					"value": 0
 				},
 				{
@@ -252,111 +250,365 @@
 			]
 		},
 		"16": {
-			"label": "Light State After Power Restored",
-			"description": "The state the switch should return to once power is restored after power failure. 0 = off, 1-99 = level, 100=previous. Range:0-100 Default: 100",
+			"label": "Light Brightness After Power Restored",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 100,
 			"defaultValue": 0,
 			"unsigned": true,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"options": [
+				{
+					"label": "Off",
+					"value": 0
+				},
+				{
+					"label": "Last state",
+					"value": 100
+				}
+			]
 		},
 		"17": {
-			"label": "Fan State After Power Restored",
-			"description": "The state the switch should return to once power is restored after power failure. Default: Off",
+			"label": "Fan Speed After Power Restored",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 100,
 			"defaultValue": 0,
 			"unsigned": true,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"options": [
+				{
+					"label": "Off",
+					"value": 0
+				},
+				{
+					"label": "Low",
+					"value": 33
+				},
+				{
+					"label": "Medium",
+					"value": 66
+				},
+				{
+					"label": "High",
+					"value": 99
+				},
+				{
+					"label": "Last state",
+					"value": 100
+				}
+			]
 		},
 		"18": {
 			"label": "Light LED Indicator Color",
-			"description": "This is the color of the Light LED strip represented as part of the HUE color wheel. Since the wheel has 360 values and this parameter only has 255, the following equation can be used to determine the color: value/255 * 360 = Hue color wheel value Range: 0 to 255 Default: 170",
+			"description": "Uses a scaled hue value (realHue / 360 * 255).",
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 255,
 			"defaultValue": 170,
 			"unsigned": true,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"options": [
+				{
+					"label": "Red",
+					"value": 0
+				},
+				{
+					"label": "Orange",
+					"value": 21
+				},
+				{
+					"label": "Yellow",
+					"value": 42
+				},
+				{
+					"label": "Green",
+					"value": 85
+				},
+				{
+					"label": "Cyan",
+					"value": 127
+				},
+				{
+					"label": "Blue",
+					"value": 170
+				},
+				{
+					"label": "Violet",
+					"value": 212
+				},
+				{
+					"label": "Pink",
+					"value": 234
+				}
+			]
 		},
 		"19": {
-			"label": "Light LED Strip Intensity",
-			"description": "This is the intensity of the Light LED strip. Range: 0-10 Default: 5",
+			"label": "Light LED Strip Brightness",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 10,
 			"defaultValue": 5,
 			"unsigned": true,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Off",
+					"value": 0
+				},
+				{
+					"label": "10%",
+					"value": 1
+				},
+				{
+					"label": "20%",
+					"value": 2
+				},
+				{
+					"label": "30%",
+					"value": 3
+				},
+				{
+					"label": "40%",
+					"value": 4
+				},
+				{
+					"label": "50%",
+					"value": 5
+				},
+				{
+					"label": "60%",
+					"value": 6
+				},
+				{
+					"label": "70%",
+					"value": 7
+				},
+				{
+					"label": "80%",
+					"value": 8
+				},
+				{
+					"label": "90%",
+					"value": 9
+				},
+				{
+					"label": "100%",
+					"value": 10
+				}
+			]
 		},
 		"20": {
 			"label": "Fan LED Indicator Color",
-			"description": "This is the color of the Fan LED strip represented as part of the HUE color wheel. Since the wheel has 360 values and this parameter only has 255, the following equation can be used to determine the color: value/255 * 360 = Hue color wheel value Range: 0 to 255 Default: 170",
+			"description": "Uses a scaled hue value (realHue / 360 * 255).",
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 255,
 			"defaultValue": 170,
 			"unsigned": true,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"options": [
+				{
+					"label": "Red",
+					"value": 0
+				},
+				{
+					"label": "Orange",
+					"value": 21
+				},
+				{
+					"label": "Yellow",
+					"value": 42
+				},
+				{
+					"label": "Green",
+					"value": 85
+				},
+				{
+					"label": "Cyan",
+					"value": 127
+				},
+				{
+					"label": "Blue",
+					"value": 170
+				},
+				{
+					"label": "Violet",
+					"value": 212
+				},
+				{
+					"label": "Pink",
+					"value": 234
+				}
+			]
 		},
 		"21": {
-			"label": "Fan LED Strip Intensity",
-			"description": "This is the intensity of the Fan LED strip. Range: 0-10 Default: 5",
+			"label": "Fan LED Strip Brightness",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 10,
 			"defaultValue": 5,
 			"unsigned": true,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Off",
+					"value": 0
+				},
+				{
+					"label": "10%",
+					"value": 1
+				},
+				{
+					"label": "20%",
+					"value": 2
+				},
+				{
+					"label": "30%",
+					"value": 3
+				},
+				{
+					"label": "40%",
+					"value": 4
+				},
+				{
+					"label": "50%",
+					"value": 5
+				},
+				{
+					"label": "60%",
+					"value": 6
+				},
+				{
+					"label": "70%",
+					"value": 7
+				},
+				{
+					"label": "80%",
+					"value": 8
+				},
+				{
+					"label": "90%",
+					"value": 9
+				},
+				{
+					"label": "100%",
+					"value": 10
+				}
+			]
 		},
 		"22": {
-			"label": "Light LED Strip Intensity (When OFF)",
-			"description": "This is the intensity of the Light LED strip when the switch is off. This is useful for users to see the light switch location when the lights are off. Range: 0-10 Default: 1",
+			"label": "Light LED Strip Brightness When Off",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 10,
 			"defaultValue": 1,
 			"unsigned": true,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"options": [
+				{
+					"label": "Off",
+					"value": 0
+				},
+				{
+					"label": "10%",
+					"value": 1
+				},
+				{
+					"label": "20%",
+					"value": 2
+				},
+				{
+					"label": "30%",
+					"value": 3
+				},
+				{
+					"label": "40%",
+					"value": 4
+				},
+				{
+					"label": "50%",
+					"value": 5
+				},
+				{
+					"label": "60%",
+					"value": 6
+				},
+				{
+					"label": "70%",
+					"value": 7
+				},
+				{
+					"label": "80%",
+					"value": 8
+				},
+				{
+					"label": "90%",
+					"value": 9
+				},
+				{
+					"label": "100%",
+					"value": 10
+				}
+			]
 		},
 		"23": {
-			"label": "Fan LED Strip Intensity (When OFF)",
+			"label": "Fan LED Strip Brightness When Off",
 			"description": "This is the intensity of the Fan LED strip when the switch is off. This is useful for users to see the light switch location when the lights are off. Range: 0-10 Default: 1",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 10,
 			"defaultValue": 1,
 			"unsigned": true,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"options": [
+				{
+					"label": "Off",
+					"value": 0
+				},
+				{
+					"label": "10%",
+					"value": 1
+				},
+				{
+					"label": "20%",
+					"value": 2
+				},
+				{
+					"label": "30%",
+					"value": 3
+				},
+				{
+					"label": "40%",
+					"value": 4
+				},
+				{
+					"label": "50%",
+					"value": 5
+				},
+				{
+					"label": "60%",
+					"value": 6
+				},
+				{
+					"label": "70%",
+					"value": 7
+				},
+				{
+					"label": "80%",
+					"value": 8
+				},
+				{
+					"label": "90%",
+					"value": 9
+				},
+				{
+					"label": "100%",
+					"value": 10
+				}
+			]
 		},
 		"24[0x7f000000]": {
-			"label": "Light LED Strip Effect",
-			"description": "Light LED Strip Effect. 0 = Off, 1 = Solid, 2 = Slow Blink, 3 = Fast Blink, 4 = Chase, 5 = Pulse Default: 0",
+			"label": "Light LED Effect Type",
 			"valueSize": 4,
 			"minValue": 0,
 			"maxValue": 5,
 			"defaultValue": 0,
 			"unsigned": true,
-			"readOnly": false,
-			"writeOnly": false,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -368,15 +620,15 @@
 					"value": 1
 				},
 				{
-					"label": "Slow Blink",
+					"label": "Chase",
 					"value": 2
 				},
 				{
-					"label": "Fast Blink",
+					"label": "Fast blink",
 					"value": 3
 				},
 				{
-					"label": "Chase",
+					"label": "Slow blink",
 					"value": 4
 				},
 				{
@@ -386,40 +638,77 @@
 			]
 		},
 		"24[0xff0000]": {
-			"label": "Light LED Strip Effect Duration",
-			"description": "Light LED Strip Effect Duration. 1 to 60 = seconds, 61 to 120 minutes, 121 - 254 = hours, 255 = Indefinitely Default: 0",
+			"label": "Light LED Effect Duration",
+			"description": "1 to 60 = seconds, 61 to 120 = minutes (minus 60), 121 - 254 = hours (minus 120), 255 = indefinitely",
 			"valueSize": 4,
-			"minValue": 0,
+			"minValue": 1,
 			"maxValue": 255,
-			"defaultValue": 0,
-			"unsigned": true,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"defaultValue": 255,
+			"unsigned": true
 		},
 		"24[0xff00]": {
-			"label": "Light LED Strip Effect Intensity",
-			"description": "Light LED Strip Effect Intensity. 0 to 9. 0 = dim, 9 = bright Default: 3",
+			"label": "Light LED Effect Brightness",
 			"valueSize": 4,
 			"minValue": 0,
-			"maxValue": 9,
+			"maxValue": 10,
 			"defaultValue": 3,
 			"unsigned": true,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Off",
+					"value": 0
+				},
+				{
+					"label": "10%",
+					"value": 1
+				},
+				{
+					"label": "20%",
+					"value": 2
+				},
+				{
+					"label": "30%",
+					"value": 3
+				},
+				{
+					"label": "40%",
+					"value": 4
+				},
+				{
+					"label": "50%",
+					"value": 5
+				},
+				{
+					"label": "60%",
+					"value": 6
+				},
+				{
+					"label": "70%",
+					"value": 7
+				},
+				{
+					"label": "80%",
+					"value": 8
+				},
+				{
+					"label": "90%",
+					"value": 9
+				},
+				{
+					"label": "100%",
+					"value": 10
+				}
+			]
 		},
 		"24[0xff]": {
-			"label": "Light LED Strip Effect Color",
-			"description": "Light LED Strip Effect Color. Color - 0 - 255. Hue color wheel. value/255 * 360 = Hue color wheel value Range: 0-255 Default: 0",
+			"label": "Light LED Effect Color",
+			"description": "Uses a scaled hue value (realHue / 360 * 255).",
 			"valueSize": 4,
 			"minValue": 0,
 			"maxValue": 255,
 			"defaultValue": 0,
 			"unsigned": true,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true,
 			"options": [
 				{
 					"label": "Red",
@@ -456,15 +745,12 @@
 			]
 		},
 		"25[0x7f000000]": {
-			"label": "Fan LED Strip Effect",
-			"description": "Fan LED Strip Effect. 0 = Off, 1 = Solid, 2 = Slow Blink, 3 = Fast Blink, 4 = Chase, 5 = Pulse Default: 0",
+			"label": "Fan LED Effect Type",
 			"valueSize": 4,
 			"minValue": 0,
 			"maxValue": 5,
 			"defaultValue": 0,
 			"unsigned": true,
-			"readOnly": false,
-			"writeOnly": false,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -476,15 +762,15 @@
 					"value": 1
 				},
 				{
-					"label": "Slow Blink",
+					"label": "Chase",
 					"value": 2
 				},
 				{
-					"label": "Fast Blink",
+					"label": "Fast blink",
 					"value": 3
 				},
 				{
-					"label": "Chase",
+					"label": "Slow blink",
 					"value": 4
 				},
 				{
@@ -494,40 +780,77 @@
 			]
 		},
 		"25[0xff0000]": {
-			"label": "Fan LED Strip Effect Duration",
-			"description": "Fan LED Strip Duration. 1 to 60 = seconds, 61 to 120 minutes, 121 - 254 = hours, 255 = Indefinitely Default: 0",
+			"label": "Fan LED Effect Duration",
+			"description": "1 to 60 = seconds, 61 to 120 = minutes (minus 60), 121 - 254 = hours (minus 120), 255 = indefinitely",
 			"valueSize": 4,
-			"minValue": 0,
+			"minValue": 1,
 			"maxValue": 255,
-			"defaultValue": 0,
-			"unsigned": true,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"defaultValue": 255,
+			"unsigned": true
 		},
 		"25[0xff00]": {
-			"label": "Fan LED Strip Effect Intensity",
-			"description": "Fan LED Strip Intensity 0 to 9. 0 = dim, 9 = bright Default: 3",
+			"label": "Fan LED Effect Brightness",
 			"valueSize": 4,
 			"minValue": 0,
-			"maxValue": 9,
+			"maxValue": 10,
 			"defaultValue": 3,
 			"unsigned": true,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Off",
+					"value": 0
+				},
+				{
+					"label": "10%",
+					"value": 1
+				},
+				{
+					"label": "20%",
+					"value": 2
+				},
+				{
+					"label": "30%",
+					"value": 3
+				},
+				{
+					"label": "40%",
+					"value": 4
+				},
+				{
+					"label": "50%",
+					"value": 5
+				},
+				{
+					"label": "60%",
+					"value": 6
+				},
+				{
+					"label": "70%",
+					"value": 7
+				},
+				{
+					"label": "80%",
+					"value": 8
+				},
+				{
+					"label": "90%",
+					"value": 9
+				},
+				{
+					"label": "100%",
+					"value": 10
+				}
+			]
 		},
 		"25[0xff]": {
-			"label": "Fan LED Strip Effect Color",
-			"description": "Fan LED Color 0 - 255. Hue color wheel. value/255 * 360 = Hue color wheel value Range: 0-255 Default: 0",
+			"label": "Fan LED Effect Color",
+			"description": "Uses a scaled hue value (realHue / 360 * 255).",
 			"valueSize": 4,
 			"minValue": 0,
 			"maxValue": 255,
 			"defaultValue": 0,
 			"unsigned": true,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true,
 			"options": [
 				{
 					"label": "Red",
@@ -565,77 +888,79 @@
 		},
 		"26": {
 			"label": "Light LED Strip Timeout",
-			"description": "When the LED strip is disabled (Light LED Strip Intensity is set to 0), this setting allows the LED strip to turn on temporarily while being adjusted. Range: 0-10 Default: 3 Disabled: 0",
-			"unit": "s",
+			"description": "When light LED strip intensity is set to 0, this setting allows the LED strip to turn on temporarily while being adjusted",
+			"unit": "seconds",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 10,
 			"defaultValue": 3,
 			"unsigned": true,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"options": [
+				{
+					"label": "Disable",
+					"value": 0
+				}
+			]
 		},
 		"27": {
 			"label": "Fan LED Strip Timeout",
-			"description": "When the LED strip is disabled (Fan LED Strip Intensity is set to 0), this setting allows the LED strip to turn on temporarily while being adjusted. Range: 0-10 Default: 3 Disabled: 0",
-			"unit": "s",
+			"description": "When the fan LED strip intensity is set to 0, this setting allows the LED strip to turn on temporarily while being adjusted.",
+			"unit": "seconds",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 10,
 			"defaultValue": 3,
 			"unsigned": true,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"options": [
+				{
+					"label": "Disable",
+					"value": 0
+				}
+			]
 		},
 		"28": {
 			"label": "Active Power Reports",
-			"description": "The power level change that will result in a new power report being sent. The value is a percentage of the previous report. 0 = disabled. Range:0-100 Default: 10",
+			"description": "The power level change that will result in a new power report being sent.",
+			"unit": "%",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 100,
 			"defaultValue": 10,
 			"unsigned": true,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"options": [
+				{
+					"label": "Disable",
+					"value": 0
+				}
+			]
 		},
 		"29": {
 			"label": "Periodic Power & Energy Reports",
-			"description": "Time period between consecutive power & energy reports being sent (in seconds). The timer is reset after each report is sent. Range:0-32767 Default: 3600",
-			"units": "s",
+			"description": "Time period between consecutive power & energy reports being sent.",
+			"units": "seconds",
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 32767,
 			"defaultValue": 3600,
-			"unsigned": true,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"unsigned": true
 		},
 		"30": {
 			"label": "Energy Reports",
-			"description": "The energy level change that will result in a new energy report being sent. The value is a percentage of the previous report. Range:0-100 Default: 10",
+			"description": "The energy level change that will result in a new energy report being sent.",
+			"units": "%",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 100,
 			"defaultValue": 10,
-			"unsigned": true,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"unsigned": true
 		},
 		"31": {
 			"label": "Local Protection",
-			"description": "Enable local protection on these buttons. 0 = none, 1 = light, 2 = fan, 3 = both.",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 3,
 			"defaultValue": 0,
 			"unsigned": true,
-			"readOnly": false,
-			"writeOnly": false,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -658,25 +983,36 @@
 		},
 		"51": {
 			"label": "Instant On",
-			"description": "Enables instant on (ie: disables the 700ms button delay). Note, if you disable the delay, it will also disable scene control except for the following: Light on/off pressed, held, released, Fan on/off pressed, held, released & light up/down fan up/down pressed (firmware 1.36+).",
+			"$if": "firmwareVersion >= 1.36",
+			"description": "Enabling this disables the 700ms button delay and multi-tap scenes.",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 1,
 			"defaultValue": 1,
 			"unsigned": true,
-			"readOnly": false,
-			"writeOnly": false,
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "Enabled (no delay)",
+					"label": "Enabled",
 					"value": 0
 				},
 				{
-					"label": "Disabled (700ms delay)",
+					"label": "Disabled",
 					"value": 1
 				}
 			]
 		}
+	},
+	"compat": {
+		"commandClasses": {
+			"remove": {
+				"0x6c": {
+					// Supervision commands cause this device to crash after ~2 hours of operation due to a firmware bug
+					"endpoints": "*"
+				}
+			}
+		},
+		// This device improperly reports the state of endpoint 2 through the root endpoint in a way that also changes the state of endpoint 1
+		"preserveRootApplicationCCValueIDs": true
 	}
 }

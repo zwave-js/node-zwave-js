@@ -1,5 +1,3 @@
-// Flex Automation FX-S69
-// Meter Switch
 {
 	"manufacturer": "Flex Automation",
 	"manufacturerId": "0x004f",
@@ -24,10 +22,7 @@
 			"minValue": 0,
 			"maxValue": 1,
 			"defaultValue": 1,
-			"unsigned": true,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"unsigned": true
 		},
 		"2": {
 			"label": "Memory Function",
@@ -36,10 +31,7 @@
 			"minValue": 0,
 			"maxValue": 1,
 			"defaultValue": 1,
-			"unsigned": true,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"unsigned": true
 		},
 		"3": {
 			"label": "Watt Meter Report Period",
@@ -48,10 +40,7 @@
 			"minValue": 0,
 			"maxValue": 720,
 			"defaultValue": 720,
-			"unsigned": true,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"unsigned": true
 		},
 		"4": {
 			"label": "Kwh Meter Report Period",
@@ -60,10 +49,7 @@
 			"minValue": 0,
 			"maxValue": 6,
 			"defaultValue": 6,
-			"unsigned": true,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"unsigned": true
 		},
 		"5": {
 			"label": "Threshold of Watt For Load Caution",
@@ -72,10 +58,7 @@
 			"minValue": 0,
 			"maxValue": 3000,
 			"defaultValue": 3000,
-			"unsigned": true,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"unsigned": true
 		},
 		"6": {
 			"label": "Threshold of Kwh For Load Caution",
@@ -84,10 +67,7 @@
 			"minValue": 0,
 			"maxValue": 10000,
 			"defaultValue": 10000,
-			"unsigned": true,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"unsigned": true
 		}
 	},
 	"metadata": {

@@ -1,5 +1,3 @@
-// GE/Jasco 55250 / ZW4104
-// Plug-in Smart Switch (Dual Plug with Pass through Outlet)
 {
 	"manufacturer": "GE/Jasco",
 	"manufacturerId": "0x0063",
@@ -41,8 +39,6 @@
 			"maxValue": 2,
 			"defaultValue": 0,
 			"unsigned": true,
-			"readOnly": false,
-			"writeOnly": false,
 			"allowManualEntry": false,
 			"options": [
 				{

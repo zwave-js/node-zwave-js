@@ -14,31 +14,7 @@ import {
 	priority,
 } from "../message/Message";
 import { DeviceClass } from "../node/DeviceClass";
-
-enum ProtocolFlags {
-	Listening = 0b10_000_000,
-	Routing = 0b01_000_000,
-
-	Baudrate_100k = 0b00_011_000,
-	Baudrate_40k = 0b00_010_000,
-	Baudrate_9k6 = 0b00_001_000,
-	BaudrateMask = 0b00_111_000,
-
-	VersionMask = 0b111,
-}
-
-enum DeviceCapabilityFlags {
-	Security = 1 << 0,
-	Controller = 1 << 1,
-	SpecificDevice = 1 << 2, // ?
-	RoutingSlave = 1 << 3, // ?
-	BeamCapability = 1 << 4,
-	Sensor250ms = 1 << 5,
-	Sensor1000ms = 1 << 6,
-	OptionalFunctionality = 1 << 7,
-}
-
-export type Baudrate = 9600 | 40000 | 100000;
+import { DataRate, FLiRS, NodeType, ProtocolVersion } from "../node/Types";
 
 interface GetNodeProtocolInfoRequestOptions extends MessageBaseOptions {
 	requestedNodeId: number;
@@ -78,44 +54,59 @@ export class GetNodeProtocolInfoResponse extends Message {
 		super(driver, options);
 
 		const protocol = this.payload[0];
-		this.isListening = (protocol & ProtocolFlags.Listening) !== 0;
-		this.isRouting = (protocol & ProtocolFlags.Routing) !== 0;
+		this.isListening = !!(protocol & 0b10_000_000);
+		this.isRouting = !!(protocol & 0b01_000_000);
 
-		// This is an educated guess. OZW only checks for the 40k flag
-		switch (protocol & ProtocolFlags.BaudrateMask) {
-			case ProtocolFlags.Baudrate_100k:
-				this.maxBaudRate = 100000;
-				break;
-			case ProtocolFlags.Baudrate_40k:
-				this.maxBaudRate = 40000;
-				break;
-			case ProtocolFlags.Baudrate_9k6:
-				this.maxBaudRate = 9600;
-				break;
-			default:
-				// We don't know this baudrate yet, encode it as 0
-				this.maxBaudRate = (0 as any) as Baudrate;
+		const supportedDataRates: DataRate[] = [];
+		const maxSpeed = protocol & 0b00_011_000;
+		const speedExtension = this.payload[2] & 0b111;
+		if (maxSpeed & 0b00_010_000) {
+			supportedDataRates.push(40000);
 		}
+		if (maxSpeed & 0b00_001_000) {
+			supportedDataRates.push(9600);
+		}
+		if (speedExtension & 0b001) {
+			supportedDataRates.push(100000);
+		}
+		if (supportedDataRates.length === 0) {
+			supportedDataRates.push(9600);
+		}
+		this.supportedDataRates = supportedDataRates;
 
-		this.version = (protocol & ProtocolFlags.VersionMask) + 1;
+		this.protocolVersion = protocol & 0b111;
 
 		const capability = this.payload[1];
-		this.isSecure = !!(capability & DeviceCapabilityFlags.Security);
-		this.isFrequentListening = !!(
-			capability &
-			(DeviceCapabilityFlags.Sensor1000ms |
-				DeviceCapabilityFlags.Sensor250ms)
-		);
-		this.isBeaming = !!(capability & DeviceCapabilityFlags.BeamCapability);
-		this.isRoutingSlave = !!(
-			capability & DeviceCapabilityFlags.RoutingSlave
-		);
-		this.isController = !!(capability & DeviceCapabilityFlags.Controller);
+		this.optionalFunctionality = !!(capability & 0b1000_0000);
+		switch (capability & 0b0110_0000) {
+			case 0b0100_0000:
+				this.isFrequentListening = "1000ms";
+				break;
+			case 0b0010_0000:
+				this.isFrequentListening = "250ms";
+				break;
+			default:
+				this.isFrequentListening = false;
+		}
+		this.supportsBeaming = !!(capability & 0b0001_0000);
+
+		switch (capability & 0b1010) {
+			case 0b1000:
+				this.nodeType = NodeType["Routing End Node"];
+				break;
+			case 0b0010:
+			default:
+				this.nodeType = NodeType.Controller;
+				break;
+		}
+
+		const containsSpecificDeviceClass = !!(capability & 0b100);
+		this.supportsSecurity = !!(capability & 0b1);
 
 		// parse the device class
 		const basic = this.payload[3];
 		const generic = this.payload[4];
-		const specific = this.payload[5];
+		const specific = containsSpecificDeviceClass ? this.payload[5] : 0x00;
 		this.deviceClass = new DeviceClass(
 			this.driver.configManager,
 			basic,
@@ -124,27 +115,21 @@ export class GetNodeProtocolInfoResponse extends Message {
 		);
 	}
 
+	/** Whether this node is always listening or not */
 	public readonly isListening: boolean;
-	public readonly isFrequentListening: boolean;
+	/** Indicates the wakeup interval if this node is a FLiRS node. `false` if it isn't. */
+	public readonly isFrequentListening: FLiRS;
+	/** Whether the node supports routing/forwarding messages. */
 	public readonly isRouting: boolean;
-	public readonly maxBaudRate: Baudrate;
-	public readonly isController: boolean;
-	public readonly isRoutingSlave: boolean;
-	public readonly isSecure: boolean;
-	public readonly version: number;
-	public readonly isBeaming: boolean;
+	public readonly supportedDataRates: readonly DataRate[];
+	public readonly protocolVersion: ProtocolVersion;
+	/** Whether this node supports additional CCs besides the mandatory minimum */
+	public readonly optionalFunctionality: boolean;
+	/** Whether this node is a controller (can calculate routes) or an end node (relies on route info) */
+	public readonly nodeType: NodeType;
+	/** Whether this node supports security (S0 or S2) */
+	public readonly supportsSecurity: boolean;
+	/** Whether this node can issue wakeup beams to FLiRS nodes */
+	public readonly supportsBeaming: boolean;
 	public readonly deviceClass: DeviceClass;
-
-	public toJSON(): JSONObject {
-		return super.toJSONInherited({
-			isListening: this.isListening,
-			isFrequentListening: this.isFrequentListening,
-			isRouting: this.isRouting,
-			maxBaudRate: this.maxBaudRate,
-			isSecure: this.isSecure,
-			version: this.version,
-			isBeaming: this.isBeaming,
-			deviceClass: this.deviceClass,
-		});
-	}
 }

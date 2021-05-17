@@ -1,5 +1,3 @@
-// Alphonsus Tech IDL-101
-// Z-Wave Lock
 {
 	"manufacturer": "Alphonsus Tech",
 	"manufacturerId": "0x0230",
@@ -24,8 +22,6 @@
 			"minValue": 0,
 			"maxValue": 3,
 			"defaultValue": 1,
-			"readOnly": false,
-			"writeOnly": false,
 			"allowManualEntry": false,
 			"options": [
 				{

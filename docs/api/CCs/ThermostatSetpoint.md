@@ -1,5 +1,7 @@
 # Thermostat Setpoint CC
 
+?> CommandClass ID: `0x43`
+
 ## Thermostat Setpoint CC methods
 
 ### `get`

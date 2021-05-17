@@ -94,9 +94,12 @@ export class BinarySwitchCCAPI extends CCAPI {
 	/**
 	 * Sets the switch to the given value
 	 * @param targetValue The target value to set
-	 * @param duration The duration after which the target value should be reached. Only supported in V2 and above
+	 * @param duration The duration after which the target value should be reached. Can be a Duration instance or a user-friendly duration string like `"1m17s"`. Only supported in V2 and above.
 	 */
-	public async set(targetValue: boolean, duration?: Duration): Promise<void> {
+	public async set(
+		targetValue: boolean,
+		duration?: Duration | string,
+	): Promise<void> {
 		this.assertSupportsCommand(
 			BinarySwitchCommand,
 			BinarySwitchCommand.Set,
@@ -106,7 +109,7 @@ export class BinarySwitchCCAPI extends CCAPI {
 			nodeId: this.endpoint.nodeId,
 			endpoint: this.endpoint.index,
 			targetValue,
-			duration,
+			duration: Duration.from(duration),
 		});
 		await this.driver.sendCommand(cc, this.commandOptions);
 	}
@@ -126,16 +129,39 @@ export class BinarySwitchCCAPI extends CCAPI {
 		// If the command did not fail, assume that it succeeded and update the currentValue accordingly
 		// so UIs have immediate feedback
 		if (this.isSinglecast()) {
-			const valueDB = this.endpoint.getNodeUnsafe()?.valueDB;
-			valueDB?.setValue(
-				getCurrentValueValueId(this.endpoint.index),
-				value,
-			);
+			if (!this.driver.options.disableOptimisticValueUpdate) {
+				const valueDB = this.endpoint.getNodeUnsafe()?.valueDB;
+				valueDB?.setValue(
+					getCurrentValueValueId(this.endpoint.index),
+					value,
+				);
+			}
 
 			// Verify the current value after a delay
 			// TODO: #1321
 			const duration = undefined as Duration | undefined;
+			// We query currentValue instead of targetValue to make sure that unsolicited updates cancel the scheduled poll
+			// wotan-disable-next-line no-useless-predicate
+			if (property === "targetValue") property = "currentValue";
 			this.schedulePoll({ property }, duration?.toMilliseconds() ?? 1000);
+		} else if (this.isMulticast()) {
+			if (!this.driver.options.disableOptimisticValueUpdate) {
+				// Figure out which nodes were affected by this command
+				const affectedNodes = this.endpoint.node.physicalNodes.filter(
+					(node) =>
+						node
+							.getEndpoint(this.endpoint.index)
+							?.supportsCC(this.ccId),
+				);
+				// and optimistically update the currentValue
+				for (const node of affectedNodes) {
+					node.valueDB?.setValue(
+						getCurrentValueValueId(this.endpoint.index),
+						value,
+					);
+				}
+			}
+			// For multicasts, do not schedule a refresh - this could cause a LOT of traffic
 		}
 	};
 
@@ -158,22 +184,29 @@ export class BinarySwitchCCAPI extends CCAPI {
 export class BinarySwitchCC extends CommandClass {
 	declare ccCommand: BinarySwitchCommand;
 
-	public async interview(complete: boolean = true): Promise<void> {
+	public async interview(): Promise<void> {
+		const node = this.getNode()!;
+
+		this.driver.controllerLog.logNode(node.id, {
+			endpoint: this.endpointIndex,
+			message: `Interviewing ${this.ccName}...`,
+			direction: "none",
+		});
+
+		await this.refreshValues();
+
+		// Remember that the interview is complete
+		this.interviewComplete = true;
+	}
+
+	public async refreshValues(): Promise<void> {
 		const node = this.getNode()!;
 		const endpoint = this.getEndpoint()!;
 		const api = endpoint.commandClasses["Binary Switch"].withOptions({
 			priority: MessagePriority.NodeQuery,
 		});
 
-		this.driver.controllerLog.logNode(node.id, {
-			endpoint: this.endpointIndex,
-			message: `${this.constructor.name}: doing a ${
-				complete ? "complete" : "partial"
-			} interview...`,
-			direction: "none",
-		});
-
-		// always query the current state
+		// Query the current state
 		this.driver.controllerLog.logNode(node.id, {
 			endpoint: this.endpointIndex,
 			message: "querying Binary Switch state...",
@@ -195,9 +228,6 @@ remaining duration: ${resp.duration?.toString() ?? "undefined"}`;
 				direction: "inbound",
 			});
 		}
-
-		// Remember that the interview is complete
-		this.interviewComplete = true;
 	}
 
 	public setMappedBasicValue(value: number): boolean {

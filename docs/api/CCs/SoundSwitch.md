@@ -1,5 +1,7 @@
 # Sound Switch CC
 
+?> CommandClass ID: `0x79`
+
 ## Sound Switch CC methods
 
 ### `getToneCount`

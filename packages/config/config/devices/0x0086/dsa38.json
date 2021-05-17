@@ -1,5 +1,3 @@
-// AEON Labs DSA38-ZW
-// Panic Button Key Fob
 {
 	"manufacturer": "AEON Labs",
 	"manufacturerId": "0x0086",
@@ -25,15 +23,12 @@
 	},
 	"paramInformation": {
 		"250": {
-			"label": "Mode of Button 1",
-			"description": "Defines the switching mode of Button 1",
+			"label": "Button 1 Mode",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 1,
 			"defaultValue": 0,
 			"unsigned": true,
-			"readOnly": false,
-			"writeOnly": false,
 			"allowManualEntry": false,
 			"options": [
 				{

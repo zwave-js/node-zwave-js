@@ -1,5 +1,7 @@
 # Multilevel Switch CC
 
+?> CommandClass ID: `0x26`
+
 ## Multilevel Switch CC methods
 
 ### `get`
@@ -13,7 +15,7 @@ async get(): Promise<Pick<MultilevelSwitchCCReport, "currentValue" | "targetValu
 ```ts
 async set(
 	targetValue: number,
-	duration?: Duration,
+	duration?: Duration | string,
 ): Promise<boolean>;
 ```
 
@@ -22,7 +24,7 @@ Sets the switch to a new value.
 **Parameters:**
 
 -   `targetValue`: The new target value for the switch
--   `duration`: The optional duration to reach the target value. Available in V2+
+-   `duration`: The duration after which the target value should be reached. Can be a Duration instance or a user-friendly duration string like `"1m17s"`. Only supported in V2 and above.
 
 ### `startLevelChange`
 

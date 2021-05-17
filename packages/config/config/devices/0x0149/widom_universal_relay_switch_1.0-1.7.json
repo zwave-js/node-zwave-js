@@ -1,5 +1,3 @@
-// wiDom UBS104
-// WiDom Universal Relay Switch
 {
 	"manufacturer": "wiDom",
 	"manufacturerId": "0x0149",
@@ -47,8 +45,6 @@
 			"minValue": 1,
 			"maxValue": 4,
 			"defaultValue": 1,
-			"readOnly": false,
-			"writeOnly": false,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -76,8 +72,6 @@
 			"minValue": 1,
 			"maxValue": 4,
 			"defaultValue": 1,
-			"readOnly": false,
-			"writeOnly": false,
 			"allowManualEntry": false,
 			"options": [
 				{

@@ -5,7 +5,7 @@ import * as path from "path";
 // By installing source map support, we get the original source
 // locations in error messages
 import "source-map-support/register";
-import { initSentry } from "./lib/sentry";
+import { initSentry } from "./lib/telemetry/sentry";
 
 /** The version of zwave-js, exported for your convenience */
 // eslint-disable-next-line @typescript-eslint/no-var-requires
@@ -14,8 +14,12 @@ const libraryRootDir = path.join(__dirname, "..");
 const libName: string = packageJson.name;
 const libVersion: string = packageJson.version;
 
-// Init sentry
-if (process.env.NODE_ENV !== "test") {
+// Init sentry, unless we're running a a test or some custom-built userland or PR test versions
+if (
+	process.env.NODE_ENV !== "test" &&
+	!/\-[a-f0-9]{7,}$/.test(libVersion) &&
+	!/\-pr\-\d+\-$/.test(libVersion)
+) {
 	void initSentry(libraryRootDir, libName, libVersion).catch(() => {
 		/* ignore */
 	});

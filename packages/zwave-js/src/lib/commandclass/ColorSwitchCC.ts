@@ -17,6 +17,7 @@ import { entries } from "alcalzone-shared/objects";
 import { isObject } from "alcalzone-shared/typeguards";
 import type { Driver } from "../driver/Driver";
 import { MessagePriority } from "../message/Constants";
+import type { ZWaveNode } from "../node/Node";
 import {
 	CCAPI,
 	PollValueImplementation,
@@ -235,72 +236,90 @@ export class ColorSwitchCCAPI extends CCAPI {
 		// TODO: The API methods should not modify the value DB directly, but to do so
 		// this requires a nicer way of synchronizing hexColor with the others
 		if (this.isSinglecast()) {
-			const valueDB = this.endpoint.getNodeUnsafe()?.valueDB;
-			if (valueDB) {
+			const node = this.endpoint.getNodeUnsafe();
+			if (node) {
 				// Update each color component separately and record the changes to the compound value
-				let updatedRGB = false;
-				const currentCompoundValue =
-					valueDB.getValue<Partial<Record<ColorKey, number>>>(
-						getCurrentColorValueID(this.endpoint.index),
-					) ?? {};
-				const targetCompoundValue =
-					valueDB.getValue<Partial<Record<ColorKey, number>>>(
-						getCurrentColorValueID(this.endpoint.index),
-					) ?? {};
-				for (const [key, value] of entries(cc.colorTable)) {
-					const component = colorTableKeyToComponent(key);
-					if (
-						component === ColorComponent.Red ||
-						component === ColorComponent.Green ||
-						component === ColorComponent.Blue
-					) {
-						updatedRGB = true;
-					}
-
-					valueDB.setValue(
-						getCurrentColorValueID(this.endpoint.index, component),
-						value,
-					);
-
-					// Update the compound value
-					if (key in ColorComponentMap) {
-						currentCompoundValue[key as ColorKey] = value;
-						targetCompoundValue[key as ColorKey] = value;
-					}
-				}
-				// And store the updated compound values
-				valueDB.setValue(
-					getCurrentColorValueID(this.endpoint.index),
-					currentCompoundValue,
-				);
-				valueDB.setValue(
-					getTargetColorValueID(this.endpoint.index),
-					targetCompoundValue,
-				);
-
-				// and hex color if necessary
-				const supportsHex = valueDB.getValue<boolean>(
-					getSupportsHexColorValueID(this.endpoint.index),
-				);
-				if (supportsHex && updatedRGB) {
-					const hexValueId = getHexColorValueID(this.endpoint.index);
-					const [r, g, b] = [
-						ColorComponent.Red,
-						ColorComponent.Green,
-						ColorComponent.Blue,
-					].map(
-						(c) =>
-							valueDB.getValue<number>(
-								getCurrentColorValueID(this.endpoint.index, c),
-							) ?? 0,
-					);
-					const hexValue = (r << 16) | (g << 8) | b;
-					valueDB.setValue(
-						hexValueId,
-						hexValue.toString(16).padStart(6, "0"),
-					);
-				}
+				this.updateCurrentColor(node, cc.colorTable);
 			}
+		} else if (this.isMulticast()) {
+			// Figure out which nodes were affected by this command
+			const affectedNodes = this.endpoint.node.physicalNodes.filter(
+				(node) =>
+					node
+						.getEndpoint(this.endpoint.index)
+						?.supportsCC(this.ccId),
+			);
+			// and optimistically update the currentColor
+			for (const node of affectedNodes) {
+				this.updateCurrentColor(node, cc.colorTable);
+			}
+		}
+	}
+
+	/** Updates the current color for a given node by merging in the given changes */
+	private updateCurrentColor(node: ZWaveNode, colorTable: ColorTable) {
+		const valueDB = node.valueDB;
+		let updatedRGB = false;
+		const currentCompoundValue =
+			valueDB.getValue<Partial<Record<ColorKey, number>>>(
+				getCurrentColorValueID(this.endpoint.index),
+			) ?? {};
+		const targetCompoundValue =
+			valueDB.getValue<Partial<Record<ColorKey, number>>>(
+				getCurrentColorValueID(this.endpoint.index),
+			) ?? {};
+		for (const [key, value] of entries(colorTable)) {
+			const component = colorTableKeyToComponent(key);
+			if (
+				component === ColorComponent.Red ||
+				component === ColorComponent.Green ||
+				component === ColorComponent.Blue
+			) {
+				updatedRGB = true;
+			}
+
+			valueDB.setValue(
+				getCurrentColorValueID(this.endpoint.index, component),
+				value,
+			);
+
+			// Update the compound value
+			if (key in ColorComponentMap) {
+				currentCompoundValue[key as ColorKey] = value;
+				targetCompoundValue[key as ColorKey] = value;
+			}
+		}
+		// And store the updated compound values
+		valueDB.setValue(
+			getCurrentColorValueID(this.endpoint.index),
+			currentCompoundValue,
+		);
+		valueDB.setValue(
+			getTargetColorValueID(this.endpoint.index),
+			targetCompoundValue,
+		);
+
+		// and hex color if necessary
+		const supportsHex = valueDB.getValue<boolean>(
+			getSupportsHexColorValueID(this.endpoint.index),
+		);
+		if (supportsHex && updatedRGB) {
+			const hexValueId = getHexColorValueID(this.endpoint.index);
+			const [r, g, b] = [
+				ColorComponent.Red,
+				ColorComponent.Green,
+				ColorComponent.Blue,
+			].map(
+				(c) =>
+					valueDB.getValue<number>(
+						getCurrentColorValueID(this.endpoint.index, c),
+					) ?? 0,
+			);
+			const hexValue = (r << 16) | (g << 8) | b;
+			valueDB.setValue(
+				hexValueId,
+				hexValue.toString(16).padStart(6, "0"),
+			);
 		}
 	}
 
@@ -385,7 +404,26 @@ export class ColorSwitchCCAPI extends CCAPI {
 					);
 				}
 
-				await this.set(value);
+				// GH#2527: strip unsupported color components, because some devices don't react otherwise
+				if (this.isSinglecast()) {
+					const node = this.endpoint.getNodeUnsafe();
+					const supportedColors = node?.getValue<
+						readonly ColorComponent[]
+					>(getSupportedColorComponentsValueID(this.endpoint.index));
+					if (supportedColors) {
+						value = pick(
+							value,
+							supportedColors
+								.map((c) => colorComponentToTableKey(c))
+								.filter((c) => !!c) as ColorKey[],
+						);
+					}
+				}
+
+				// Avoid sending empty commands
+				if (Object.keys(value as any).length === 0) return;
+
+				await this.set(value as ColorTable);
 
 				// We're not going to poll each color component separately
 			}
@@ -443,7 +481,7 @@ export class ColorSwitchCC extends CommandClass {
 		this.registerValue(getSupportsHexColorValueID(0).property, true);
 	}
 
-	public async interview(complete: boolean = true): Promise<void> {
+	public async interview(): Promise<void> {
 		const node = this.getNode()!;
 		const endpoint = this.getEndpoint()!;
 		const api = endpoint.commandClasses["Color Switch"].withOptions({
@@ -453,91 +491,101 @@ export class ColorSwitchCC extends CommandClass {
 
 		this.driver.controllerLog.logNode(node.id, {
 			endpoint: this.endpointIndex,
-			message: `${this.constructor.name}: doing a ${
-				complete ? "complete" : "partial"
-			} interview...`,
+			message: `Interviewing ${this.ccName}...`,
 			direction: "none",
 		});
 
-		let supportedColors: readonly ColorComponent[] | undefined;
-		if (complete) {
+		this.driver.controllerLog.logNode(node.id, {
+			endpoint: this.endpointIndex,
+			message: "querying supported colors...",
+			direction: "outbound",
+		});
+		const supportedColors = await api.getSupported();
+		if (!supportedColors) {
 			this.driver.controllerLog.logNode(node.id, {
 				endpoint: this.endpointIndex,
-				message: "querying supported colors...",
-				direction: "outbound",
+				message:
+					"Querying supported colors timed out, skipping interview...",
+				level: "warn",
 			});
-			supportedColors = await api.getSupported();
-			if (!supportedColors) {
-				this.driver.controllerLog.logNode(node.id, {
-					endpoint: this.endpointIndex,
-					message:
-						"Querying supported colors timed out, skipping interview...",
-					level: "warn",
-				});
-				return;
-			}
-
-			this.driver.controllerLog.logNode(node.id, {
-				endpoint: this.endpointIndex,
-				message: `received supported colors:${supportedColors
-					.map((c) => `\n· ${getEnumMemberName(ColorComponent, c)}`)
-					.join("")}`,
-				direction: "outbound",
-			});
-
-			// Create metadata for the separate color channels
-			for (const color of supportedColors) {
-				const colorName = getEnumMemberName(ColorComponent, color);
-				valueDB.setMetadata(
-					getCurrentColorValueID(this.endpointIndex, color),
-					{
-						...ValueMetadata.ReadOnlyUInt8,
-						label: `Current value (${colorName})`,
-						description: `The current value of the ${colorName} color.`,
-					},
-				);
-				valueDB.setMetadata(
-					getTargetColorValueID(this.endpointIndex, color),
-					{
-						...ValueMetadata.UInt8,
-						label: `Target value (${colorName})`,
-						description: `The target value of the ${colorName} color.`,
-					},
-				);
-			}
-			// And the compound one
-			valueDB.setMetadata(getCurrentColorValueID(this.endpointIndex), {
-				...ValueMetadata.ReadOnly,
-				label: `Current Color`,
-			});
-			valueDB.setMetadata(getTargetColorValueID(this.endpointIndex), {
-				...ValueMetadata.Any,
-				label: `Target Color`,
-			});
-
-			// Create the collective HEX color values
-			const supportsHex = [
-				ColorComponent.Red,
-				ColorComponent.Green,
-				ColorComponent.Blue,
-			].every((c) => supportedColors!.includes(c));
-			valueDB.setValue(
-				getSupportsHexColorValueID(this.endpointIndex),
-				supportsHex,
-			);
-			if (supportsHex) {
-				valueDB.setMetadata(getHexColorValueID(this.endpointIndex), {
-					...ValueMetadata.Color,
-					minLength: 6,
-					maxLength: 7, // to allow #rrggbb
-					label: `RGB Color`,
-				});
-			}
-		} else {
-			supportedColors = valueDB.getValue<ColorComponent[]>(
-				getSupportedColorComponentsValueID(this.endpointIndex),
-			)!;
+			return;
 		}
+
+		this.driver.controllerLog.logNode(node.id, {
+			endpoint: this.endpointIndex,
+			message: `received supported colors:${supportedColors
+				.map((c) => `\n· ${getEnumMemberName(ColorComponent, c)}`)
+				.join("")}`,
+			direction: "outbound",
+		});
+
+		// Create metadata for the separate color channels
+		for (const color of supportedColors) {
+			const colorName = getEnumMemberName(ColorComponent, color);
+			valueDB.setMetadata(
+				getCurrentColorValueID(this.endpointIndex, color),
+				{
+					...ValueMetadata.ReadOnlyUInt8,
+					label: `Current value (${colorName})`,
+					description: `The current value of the ${colorName} color.`,
+				},
+			);
+			valueDB.setMetadata(
+				getTargetColorValueID(this.endpointIndex, color),
+				{
+					...ValueMetadata.UInt8,
+					label: `Target value (${colorName})`,
+					description: `The target value of the ${colorName} color.`,
+				},
+			);
+		}
+		// And the compound one
+		valueDB.setMetadata(getCurrentColorValueID(this.endpointIndex), {
+			...ValueMetadata.ReadOnly,
+			label: `Current Color`,
+		});
+		valueDB.setMetadata(getTargetColorValueID(this.endpointIndex), {
+			...ValueMetadata.Any,
+			label: `Target Color`,
+		});
+
+		// Create the collective HEX color values
+		const supportsHex = [
+			ColorComponent.Red,
+			ColorComponent.Green,
+			ColorComponent.Blue,
+		].every((c) => supportedColors.includes(c));
+		valueDB.setValue(
+			getSupportsHexColorValueID(this.endpointIndex),
+			supportsHex,
+		);
+		if (supportsHex) {
+			valueDB.setMetadata(getHexColorValueID(this.endpointIndex), {
+				...ValueMetadata.Color,
+				minLength: 6,
+				maxLength: 7, // to allow #rrggbb
+				label: `RGB Color`,
+			});
+		}
+
+		// Query all color components
+		await this.refreshValues();
+
+		// Remember that the interview is complete
+		this.interviewComplete = true;
+	}
+
+	public async refreshValues(): Promise<void> {
+		const node = this.getNode()!;
+		const endpoint = this.getEndpoint()!;
+		const api = endpoint.commandClasses["Color Switch"].withOptions({
+			priority: MessagePriority.NodeQuery,
+		});
+
+		const supportedColors: readonly ColorComponent[] =
+			this.getValueDB().getValue(
+				getSupportedColorComponentsValueID(this.endpointIndex),
+			) ?? [];
 
 		for (const color of supportedColors) {
 			const colorName = getEnumMemberName(ColorComponent, color);
@@ -548,9 +596,6 @@ export class ColorSwitchCC extends CommandClass {
 			});
 			await api.get(color);
 		}
-
-		// Remember that the interview is complete
-		this.interviewComplete = true;
 	}
 
 	public translatePropertyKey(

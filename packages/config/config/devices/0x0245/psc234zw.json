@@ -1,5 +1,3 @@
-// permundo GmbH PSC234ZW
-// Metering Plug switching 16A
 {
 	"manufacturer": "permundo GmbH",
 	"manufacturerId": "0x0245",
@@ -24,8 +22,6 @@
 			"minValue": 0,
 			"maxValue": 1,
 			"defaultValue": 0,
-			"readOnly": false,
-			"writeOnly": false,
 			"allowManualEntry": false,
 			"options": [
 				{

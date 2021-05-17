@@ -1,5 +1,3 @@
-// Climax Technology, Ltd. S-2ZW
-// Shutter Control
 {
 	"manufacturer": "Climax Technology, Ltd.",
 	"manufacturerId": "0x018e",
@@ -24,10 +22,7 @@
 			"minValue": 0,
 			"maxValue": 255,
 			"defaultValue": 240,
-			"unsigned": true,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"unsigned": true
 		},
 		"2": {
 			"label": "Close Time Setting",
@@ -36,10 +31,7 @@
 			"minValue": 0,
 			"maxValue": 255,
 			"defaultValue": 240,
-			"unsigned": true,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"unsigned": true
 		},
 		"3": {
 			"label": "Current Position",
@@ -48,10 +40,7 @@
 			"minValue": 0,
 			"maxValue": 99,
 			"defaultValue": 99,
-			"unsigned": true,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"unsigned": true
 		}
 	},
 	"metadata": {

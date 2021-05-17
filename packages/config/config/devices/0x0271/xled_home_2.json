@@ -1,5 +1,3 @@
-// STEINEL GmbH XLED Home 2
-// PIR sensor with relay and light
 {
 	"manufacturer": "STEINEL GmbH",
 	"manufacturerId": "0x0271",
@@ -23,10 +21,7 @@
 			"valueSize": 2,
 			"minValue": 5,
 			"maxValue": 900,
-			"defaultValue": 180,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"defaultValue": 180
 		},
 		"2": {
 			"label": "LIGHT",
@@ -34,10 +29,7 @@
 			"valueSize": 2,
 			"minValue": 2,
 			"maxValue": 2000,
-			"defaultValue": 2000,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"defaultValue": 2000
 		},
 		"5": {
 			"label": "SENSITIVITY",
@@ -45,10 +37,7 @@
 			"valueSize": 1,
 			"minValue": 2,
 			"maxValue": 100,
-			"defaultValue": 100,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"defaultValue": 100
 		},
 		"6": {
 			"label": "BRIGHTNES MEAS 1 INTERVAL",
@@ -56,10 +45,7 @@
 			"valueSize": 1,
 			"minValue": 5,
 			"maxValue": 120,
-			"defaultValue": 0,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"defaultValue": 0
 		},
 		"8": {
 			"label": "GLOBAL_LIGHT",
@@ -67,10 +53,7 @@
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 1,
-			"defaultValue": 1,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"defaultValue": 1
 		},
 		"9": {
 			"label": "SLAVE_MODE",
@@ -78,10 +61,7 @@
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 4,
-			"defaultValue": 2,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"defaultValue": 2
 		},
 		"10": {
 			"label": "(OFF_BEHAVIOUR)",
@@ -90,9 +70,6 @@
 			"minValue": 0,
 			"maxValue": 255,
 			"defaultValue": 10,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true,
 			"options": [
 				{
 					"label": "Lamp/relay is switched off for TIME (cfg 1)",
@@ -106,10 +83,7 @@
 			"valueSize": 2,
 			"minValue": 2,
 			"maxValue": 209,
-			"defaultValue": 255,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"defaultValue": 255
 		},
 		"12": {
 			"label": "ON_TIME_OVER",
@@ -117,10 +91,7 @@
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 209,
-			"defaultValue": 204,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"defaultValue": 204
 		},
 		"13": {
 			"label": "ON_OFF_ BEHAVIOUR",
@@ -128,10 +99,7 @@
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 209,
-			"defaultValue": 204,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"defaultValue": 204
 		},
 		"14": {
 			"label": "OFF_ON_ BEHAVIOUR",
@@ -139,10 +107,7 @@
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 209,
-			"defaultValue": 204,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"defaultValue": 204
 		},
 		"15": {
 			"label": "SEQUENCE_ TIME",
@@ -150,10 +115,7 @@
 			"valueSize": 1,
 			"minValue": 10,
 			"maxValue": 50,
-			"defaultValue": 10,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"defaultValue": 10
 		},
 		"16": {
 			"label": "MOTION_ DISABLE",
@@ -161,10 +123,7 @@
 			"valueSize": 2,
 			"minValue": 2,
 			"maxValue": 209,
-			"defaultValue": 0,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"defaultValue": 0
 		}
 	}
 }

@@ -6,10 +6,11 @@ process.on("unhandledRejection", (_r) => {
 	// debugger;
 });
 
-import { MultilevelSensorCCGet } from "../packages/zwave-js/src/lib/commandclass/MultilevelSensorCC";
+// Uncomment this to test Sentry reporting
+// import "../packages/zwave-js";
 import { Driver } from "../packages/zwave-js/src/lib/driver/Driver";
 
-const driver = new Driver("COM4", {
+const driver = new Driver("COM5", {
 	// prettier-ignore
 	networkKey: Buffer.from([
 		1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16,
@@ -17,18 +18,6 @@ const driver = new Driver("COM4", {
 })
 	.on("error", console.error)
 	.once("driver ready", async () => {
-		await require("alcalzone-shared/async").wait(2000);
-
-		const node = driver.controller.nodes.get(22)!;
-		const resp = await driver.sendCommand(
-			new MultilevelSensorCCGet(driver, {
-				nodeId: node.id,
-				sensorType: 1,
-				scale: 2,
-			}),
-		);
-		console.dir(resp);
-
 		// const cc = new CommandClass(driver, {
 		// 	nodeId: 24,
 		// 	ccId: 0x5d,
@@ -207,6 +196,10 @@ const driver = new Driver("COM4", {
 		// 		// );
 	});
 void driver.start();
+// driver.enableStatistics({
+// 	applicationName: "test",
+// 	applicationVersion: "0.0.1",
+// });
 
 // // // @ts-check
 // // require("reflect-metadata");

@@ -1,0 +1,184 @@
+{
+	"manufacturer": "Logic Group",
+	"manufacturerId": "0x0234",
+	"label": "ZIF5029",
+	"description": "DIN Rail Metering",
+	"devices": [
+		{
+			"productType": "0x0003",
+			"productId": "0x0122"
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"associations": {
+		"1": {
+			"label": "Lifeline",
+			"maxNodes": 1,
+			"isLifeline": true
+		}
+	},
+	"paramInformation": {
+		"1": {
+			"$import": "templates/logic_group_template.json#status_led"
+		},
+		"2": {
+			"$import": "templates/logic_group_template.json#led_brightness"
+		},
+		"3": {
+			"$import": "templates/logic_group_template.json#output_function_relay",
+			"label": "Output 1 - Function"
+		},
+		"4": {
+			"$import": "templates/logic_group_template.json#output_function_relay",
+			"label": "Output 2 - Function"
+		},
+		"5": {
+			"$import": "templates/logic_group_template.json#output_function_relay",
+			"label": "Output 3 - Function"
+		},
+		"6": {
+			"$import": "templates/logic_group_template.json#output_function_relay",
+			"label": "Output 4 - Function"
+		},
+		"7": {
+			"$import": "templates/logic_group_template.json#output_function_relay",
+			"label": "Output 5 - Function"
+		},
+		"8": {
+			"$import": "templates/logic_group_template.json#output_function_relay",
+			"label": "Output 6 - Function"
+		},
+		"9": {
+			"$import": "templates/logic_group_template.json#meter_type",
+			"label": "Input 1 - Meter Type"
+		},
+		"10": {
+			"$import": "templates/logic_group_template.json#input_scale",
+			"label": "Input 1 - Scale Type"
+		},
+		"11": {
+			"$import": "templates/logic_group_template.json#input_precision",
+			"label": "Input 1 - Precision"
+		},
+		"12": {
+			"$import": "templates/logic_group_template.json#pulse_unit",
+			"label": "Input 1 - Pulses Per Unit"
+		},
+		"13": {
+			"$import": "templates/logic_group_template.json#rate_type",
+			"label": "Input 1 - Rate Type"
+		},
+		"14": {
+			"$import": "templates/logic_group_template.json#meter_type",
+			"label": "Input 2 - Meter Type"
+		},
+		"15": {
+			"$import": "templates/logic_group_template.json#input_scale",
+			"label": "Input 2 - Scale Type"
+		},
+		"16": {
+			"$import": "templates/logic_group_template.json#input_precision",
+			"label": "Input 2 - Precision"
+		},
+		"17": {
+			"$import": "templates/logic_group_template.json#pulse_unit",
+			"label": "Input 2 - Pulses Per Unit"
+		},
+		"18": {
+			"$import": "templates/logic_group_template.json#rate_type",
+			"label": "Input 2 - Rate Type"
+		},
+		"19": {
+			"$import": "templates/logic_group_template.json#meter_type",
+			"label": "Input 3 - Meter Type"
+		},
+		"20": {
+			"$import": "templates/logic_group_template.json#input_scale",
+			"label": "Input 3 - Scale Type"
+		},
+		"21": {
+			"$import": "templates/logic_group_template.json#input_precision",
+			"label": "Input 3 - Precision"
+		},
+		"22": {
+			"$import": "templates/logic_group_template.json#pulse_unit",
+			"label": "Input 3 - Pulses Per Unit"
+		},
+		"23": {
+			"$import": "templates/logic_group_template.json#rate_type",
+			"label": "Input 3 - Rate Type"
+		},
+		"24": {
+			"$import": "templates/logic_group_template.json#meter_type",
+			"label": "Input 4 - Meter Type"
+		},
+		"25": {
+			"$import": "templates/logic_group_template.json#input_scale",
+			"label": "Input 4 - Scale Type"
+		},
+		"26": {
+			"$import": "templates/logic_group_template.json#input_precision",
+			"label": "Input 4 - Precision"
+		},
+		"27": {
+			"$import": "templates/logic_group_template.json#pulse_unit",
+			"label": "Input 4 - Pulses Per Unit"
+		},
+		"28": {
+			"$import": "templates/logic_group_template.json#rate_type",
+			"label": "Input 4 - Rate Type"
+		},
+		"29": {
+			"$import": "templates/logic_group_template.json#meter_type",
+			"label": "Input 5 - Meter Type"
+		},
+		"30": {
+			"$import": "templates/logic_group_template.json#input_scale",
+			"label": "Input 5 - Scale Type"
+		},
+		"31": {
+			"$import": "templates/logic_group_template.json#input_precision",
+			"label": "Input 5 - Precision"
+		},
+		"32": {
+			"$import": "templates/logic_group_template.json#pulse_unit",
+			"label": "Input 5 - Pulses Per Unit"
+		},
+		"33": {
+			"$import": "templates/logic_group_template.json#rate_type",
+			"label": "Input 5 - Rate Type"
+		},
+		"34": {
+			"$import": "templates/logic_group_template.json#meter_type",
+			"label": "Input 6 - Meter Type"
+		},
+		"35": {
+			"$import": "templates/logic_group_template.json#input_precision",
+			"label": "Input 6 - Scale Type"
+		},
+		"36": {
+			"$import": "templates/logic_group_template.json#input_precision",
+			"label": "Input 6 - Precision"
+		},
+		"37": {
+			"$import": "templates/logic_group_template.json#pulse_unit",
+			"label": "Input 6 - Pulses Per Unit"
+		},
+		"38": {
+			"$import": "templates/logic_group_template.json#rate_type",
+			"label": "Input 6 - Rate Type"
+		},
+		"39": {
+			"$import": "templates/logic_group_template.json#time_interval_report",
+			"label": "Time Interval Between Meter Reports"
+		}
+	},
+	"metadata": {
+		"inclusion": "Push the button in the hole near the 'INCLUSION' text with a non-conductive object. The LED will now start blinking",
+		"exclusion": "Push the button in the hole near the 'INCLUSION' text with a non-conductive object. The LED will now start blinking",
+		"reset": "Push the button in the hole near the 'INCLUSION' text with a non-conductive object for 10 seconds. Please use this procedure only when the network primary controller is missing or otherwise inoperable"
+	}
+}

@@ -1,5 +1,3 @@
-// Remotec ZXT-310
-// AV IR Extender
 {
 	"manufacturer": "Remotec",
 	"manufacturerId": "0x5254",
@@ -9,6 +7,16 @@
 		{
 			"productType": "0x0102",
 			"productId": "0x8371"
+		},
+		{
+			"productType": "0x0100",
+			"productId": "0x8371",
+			"zwaveAllianceId": 1540
+		},
+		{
+			"productType": "0x0101",
+			"productId": "0x8370",
+			"zwaveAllianceId": 991
 		}
 	],
 	"firmwareVersion": {
@@ -16,37 +24,184 @@
 		"max": "255.255"
 	},
 	"paramInformation": {
-		"1": {
-			"label": "UIRD",
-			"description": "parameter 1 - 20 (0x01 - 0x14)",
-			"valueSize": 4,
-			"minValue": 0,
-			"maxValue": 0,
-			"defaultValue": 0,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
-		},
 		"21": {
-			"label": "The Simple AV command",
-			"description": "The Simple AV command number or key going to be downloaded to the ZXT‐310",
+			"label": "Download Code Learning",
+			"description": "Enter the command number or key to be downloaded to the device",
 			"valueSize": 2,
 			"minValue": 0,
-			"maxValue": 0,
+			"maxValue": 65280,
 			"defaultValue": 0,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"unsigned": true
 		},
 		"22": {
-			"label": "Download status register",
+			"label": "Download Status Register",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 4,
-			"defaultValue": 0,
+			"defaultValue": 1,
+			"unsigned": true,
 			"readOnly": true,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Idle",
+					"value": 0
+				},
+				{
+					"label": "Ok",
+					"value": 1
+				},
+				{
+					"label": "Learning",
+					"value": 2
+				},
+				{
+					"label": "Command full",
+					"value": 3
+				},
+				{
+					"label": "Learning fail",
+					"value": 4
+				}
+			]
+		},
+		"25": {
+			"label": "IR Code Learning",
+			"description": "Enter the command number or key to be learned. Hold your remote 1-3 cm from the 'L' mark on the device and hold the button to be learned for several seconds",
+			"valueSize": 2,
+			"minValue": 0,
+			"maxValue": 65280,
+			"defaultValue": 0,
+			"unsigned": true
+		},
+		"26": {
+			"label": "Learning Status Register",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 4,
+			"defaultValue": 1,
+			"unsigned": true,
+			"readOnly": true,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Idle",
+					"value": 0
+				},
+				{
+					"label": "Ok",
+					"value": 1
+				},
+				{
+					"label": "Learning",
+					"value": 2
+				},
+				{
+					"label": "Command full",
+					"value": 3
+				},
+				{
+					"label": "Learning fail",
+					"value": 4
+				}
+			]
+		},
+		"28": {
+			"label": "IR Output Power",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 255,
+			"unsigned": true
+		},
+		"29": {
+			"label": "IR Port Mapping",
+			"valueSize": 1,
+			"minValue": 1,
+			"maxValue": 6,
+			"defaultValue": 1,
+			"unsigned": true,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "IR Port 1",
+					"value": 1
+				},
+				{
+					"label": "IR Port 2",
+					"value": 2
+				},
+				{
+					"label": "IR Port 3",
+					"value": 3
+				},
+				{
+					"label": "IR Port 4",
+					"value": 4
+				},
+				{
+					"label": "IR Port 5",
+					"value": 5
+				},
+				{
+					"label": "IR Port 6",
+					"value": 6
+				}
+			]
+		},
+		"31": {
+			"label": "IR Transmission Mode",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 0,
+			"unsigned": true,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Continuous IR",
+					"value": 0
+				},
+				{
+					"label": "Single shot",
+					"value": 255
+				}
+			]
+		},
+		"38": {
+			"label": "Endpoint Selection Control",
+			"valueSize": 1,
+			"minValue": 1,
+			"maxValue": 6,
+			"defaultValue": 1,
+			"unsigned": true,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Endpoint 1",
+					"value": 1
+				},
+				{
+					"label": "Endpoint 2",
+					"value": 2
+				},
+				{
+					"label": "Endpoint 3",
+					"value": 3
+				},
+				{
+					"label": "Endpoint 4",
+					"value": 4
+				},
+				{
+					"label": "Endpoint 5",
+					"value": 5
+				},
+				{
+					"label": "Endpoint 6",
+					"value": 6
+				}
+			]
 		}
 	}
 }

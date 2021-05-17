@@ -1,5 +1,3 @@
-// AEON Labs DSA03XXX-ZW
-// Minimote 4 button remote control
 {
 	"manufacturer": "AEON Labs",
 	"manufacturerId": "0x0086",
@@ -40,330 +38,40 @@
 	},
 	"paramInformation": {
 		"241": {
-			"label": "Mode of Button 1 (upper left)",
-			"description": "Defines the switching mode of Button 1",
-			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 5,
-			"defaultValue": 0,
-			"unsigned": true,
-			"readOnly": false,
-			"writeOnly": true,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "Factory Default",
-					"value": 0
-				},
-				{
-					"label": "Scene Mode",
-					"value": 1
-				},
-				{
-					"label": "Add Mode",
-					"value": 2
-				},
-				{
-					"label": "Remove Mode",
-					"value": 3
-				},
-				{
-					"label": "Association Mode",
-					"value": 4
-				},
-				{
-					"label": "Learn Mode",
-					"value": 5
-				}
-			]
+			"$import": "templates/aeotec_template.json#base_remote_mode_5",
+			"label": "Button 1 (Upper Left) Mode"
 		},
 		"242": {
-			"label": "Mode of Button 2 (upper right)",
-			"description": "Defines the switching mode of Button 2",
-			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 5,
-			"defaultValue": 0,
-			"unsigned": true,
-			"readOnly": false,
-			"writeOnly": true,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "Factory Default",
-					"value": 0
-				},
-				{
-					"label": "Scene Mode",
-					"value": 1
-				},
-				{
-					"label": "Add Mode",
-					"value": 2
-				},
-				{
-					"label": "Remove Mode",
-					"value": 3
-				},
-				{
-					"label": "Association Mode",
-					"value": 4
-				},
-				{
-					"label": "Learn Mode",
-					"value": 5
-				}
-			]
+			"$import": "templates/aeotec_template.json#base_remote_mode_5",
+			"label": "Button 2 (Upper Right) Mode"
 		},
 		"243": {
-			"label": "Mode of Button 3 (lower left)",
-			"description": "Defines the switching mode of Button 3",
-			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 5,
-			"defaultValue": 0,
-			"unsigned": true,
-			"readOnly": false,
-			"writeOnly": true,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "Factory Default",
-					"value": 0
-				},
-				{
-					"label": "Scene Mode",
-					"value": 1
-				},
-				{
-					"label": "Add Mode",
-					"value": 2
-				},
-				{
-					"label": "Remove Mode",
-					"value": 3
-				},
-				{
-					"label": "Association Mode",
-					"value": 4
-				},
-				{
-					"label": "Learn Mode",
-					"value": 5
-				}
-			]
+			"$import": "templates/aeotec_template.json#base_remote_mode_5",
+			"label": "Button 3 (Lower Left) Mode"
 		},
 		"244": {
-			"label": "Mode of Button 4 (lower right)",
-			"description": "Defines the switching mode of Button 4",
-			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 5,
-			"defaultValue": 0,
-			"unsigned": true,
-			"readOnly": false,
-			"writeOnly": true,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "Factory Default",
-					"value": 0
-				},
-				{
-					"label": "Scene Mode",
-					"value": 1
-				},
-				{
-					"label": "Add Mode",
-					"value": 2
-				},
-				{
-					"label": "Remove Mode",
-					"value": 3
-				},
-				{
-					"label": "Association Mode",
-					"value": 4
-				},
-				{
-					"label": "Learn Mode",
-					"value": 5
-				}
-			]
+			"$import": "templates/aeotec_template.json#base_remote_mode_5",
+			"label": "Button 4 (Lower Right) Mode"
 		},
 		"245": {
-			"label": "Mode of Button 5 (Include)",
-			"description": "Defines the switching mode of Button 5",
-			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 5,
-			"defaultValue": 0,
-			"unsigned": true,
-			"readOnly": false,
-			"writeOnly": true,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "Factory Default",
-					"value": 0
-				},
-				{
-					"label": "Scene Mode",
-					"value": 1
-				},
-				{
-					"label": "Add Mode",
-					"value": 2
-				},
-				{
-					"label": "Remove Mode",
-					"value": 3
-				},
-				{
-					"label": "Association Mode",
-					"value": 4
-				},
-				{
-					"label": "Learn Mode",
-					"value": 5
-				}
-			]
+			"$import": "templates/aeotec_template.json#base_remote_mode_5",
+			"label": "Button 5 (Include) Mode"
 		},
 		"246": {
-			"label": "Mode of Button 6 (Exclude)",
-			"description": "Defines the switching mode of Button 6",
-			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 5,
-			"defaultValue": 0,
-			"unsigned": true,
-			"readOnly": false,
-			"writeOnly": true,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "Factory Default",
-					"value": 0
-				},
-				{
-					"label": "Scene Mode",
-					"value": 1
-				},
-				{
-					"label": "Add Mode",
-					"value": 2
-				},
-				{
-					"label": "Remove Mode",
-					"value": 3
-				},
-				{
-					"label": "Association Mode",
-					"value": 4
-				},
-				{
-					"label": "Learn Mode",
-					"value": 5
-				}
-			]
+			"$import": "templates/aeotec_template.json#base_remote_mode_5",
+			"label": "Button 6 (Exclude) Mode"
 		},
 		"247": {
-			"label": "Mode of Button 7 (Association)",
-			"description": "Defines the switching mode of Button 7",
-			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 5,
-			"defaultValue": 0,
-			"unsigned": true,
-			"readOnly": false,
-			"writeOnly": true,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "Factory Default",
-					"value": 0
-				},
-				{
-					"label": "Scene Mode",
-					"value": 1
-				},
-				{
-					"label": "Add Mode",
-					"value": 2
-				},
-				{
-					"label": "Remove Mode",
-					"value": 3
-				},
-				{
-					"label": "Association Mode",
-					"value": 4
-				},
-				{
-					"label": "Learn Mode",
-					"value": 5
-				}
-			]
+			"$import": "templates/aeotec_template.json#base_remote_mode_5",
+			"label": "Button 7 (Association) Mode"
 		},
 		"248": {
-			"label": "Mode of Button 8 (Learn)",
-			"description": "Defines the switching mode of Button 8",
-			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 5,
-			"defaultValue": 0,
-			"unsigned": true,
-			"readOnly": false,
-			"writeOnly": true,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "Factory Default",
-					"value": 0
-				},
-				{
-					"label": "Scene Mode",
-					"value": 1
-				},
-				{
-					"label": "Add Mode",
-					"value": 2
-				},
-				{
-					"label": "Remove Mode",
-					"value": 3
-				},
-				{
-					"label": "Association Mode",
-					"value": 4
-				},
-				{
-					"label": "Learn Mode",
-					"value": 5
-				}
-			]
+			"$import": "templates/aeotec_template.json#base_remote_mode_5",
+			"label": "Button 8 (Learn) Mode"
 		},
 		"250": {
-			"label": "Secondary Controller Mode",
-			"description": "Selects Group Mode or Scene Mode",
-			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 1,
-			"defaultValue": 0,
-			"unsigned": true,
-			"readOnly": false,
-			"writeOnly": true,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "Group Mode",
-					"value": 0
-				},
-				{
-					"label": "Scene Mode",
-					"value": 1
-				}
-			]
+			"$import": "../templates/master_template.json#base_enable_disable",
+			"label": "Scene Mode (Secondary Controller)"
 		}
 	},
 	"compat": {

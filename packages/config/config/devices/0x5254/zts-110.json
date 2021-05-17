@@ -1,5 +1,3 @@
-// Remotec ZTS-110
-// ZTS-110 Z Wave Thermostat
 {
 	"manufacturer": "Remotec",
 	"manufacturerId": "0x5254",
@@ -42,10 +40,7 @@
 			"valueSize": 1,
 			"minValue": 1,
 			"maxValue": 4,
-			"defaultValue": 2,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"defaultValue": 2
 		},
 		"2": {
 			"label": "Differntial",
@@ -53,10 +48,7 @@
 			"valueSize": 1,
 			"minValue": 1,
 			"maxValue": 4,
-			"defaultValue": 2,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"defaultValue": 2
 		},
 		"3": {
 			"label": "Set Filter Counter",
@@ -64,10 +56,7 @@
 			"valueSize": 2,
 			"minValue": 500,
 			"maxValue": 4000,
-			"defaultValue": 500,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"defaultValue": 500
 		},
 		"4": {
 			"label": "Report Filter Counter",
@@ -75,21 +64,15 @@
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 9999,
-			"defaultValue": 0,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"defaultValue": 0
 		},
 		"5": {
-			"label": "Scale of Temperature",
-			"description": "Set Temperature Scale to Farhenheit or Centigrade. DEFAULT =1 Farhenheit",
+			"label": "Temperature Scale",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 1,
 			"defaultValue": 1,
 			"unsigned": true,
-			"readOnly": false,
-			"writeOnly": false,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -97,7 +80,7 @@
 					"value": 0
 				},
 				{
-					"label": "Farhenheit",
+					"label": "Fahrenheit",
 					"value": 1
 				}
 			]
@@ -107,20 +90,14 @@
 			"valueSize": 2,
 			"minValue": 37,
 			"maxValue": 99,
-			"defaultValue": 99,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"defaultValue": 99
 		},
 		"7": {
 			"label": "Lower Limit of Setpoint B",
 			"valueSize": 2,
 			"minValue": 5,
 			"maxValue": 95,
-			"defaultValue": 41,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"defaultValue": 41
 		},
 		"8": {
 			"label": "Easy Mode",
@@ -130,8 +107,6 @@
 			"maxValue": 1,
 			"defaultValue": 1,
 			"unsigned": true,
-			"readOnly": false,
-			"writeOnly": false,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -152,8 +127,6 @@
 			"maxValue": 1,
 			"defaultValue": 1,
 			"unsigned": true,
-			"readOnly": false,
-			"writeOnly": false,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -172,40 +145,28 @@
 			"minValue": 0,
 			"maxValue": 255,
 			"defaultValue": 0,
-			"unsigned": true,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"unsigned": true
 		},
 		"11": {
 			"label": "AUTO report by room temperature",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 8,
-			"defaultValue": 4,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"defaultValue": 4
 		},
 		"12": {
 			"label": "Sensor temperature calibration.",
 			"valueSize": 1,
 			"minValue": -10,
 			"maxValue": 10,
-			"defaultValue": 0,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"defaultValue": 0
 		},
 		"13": {
 			"label": "AUTO report by time interval.",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 16,
-			"defaultValue": 0,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"defaultValue": 0
 		}
 	}
 }

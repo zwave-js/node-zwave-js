@@ -1,5 +1,3 @@
-// Kwikset SmartCode 888
-// Touchpad Electronic Deadbolt
 {
 	"manufacturer": "Kwikset",
 	"manufacturerId": "0x0090",
@@ -36,8 +34,6 @@
 			"minValue": 0,
 			"maxValue": 1,
 			"defaultValue": 0,
-			"readOnly": false,
-			"writeOnly": false,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -57,8 +53,6 @@
 			"minValue": 0,
 			"maxValue": 1,
 			"defaultValue": 1,
-			"readOnly": false,
-			"writeOnly": false,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -80,8 +74,6 @@
 			"minValue": 0,
 			"maxValue": 1,
 			"defaultValue": 0,
-			"readOnly": false,
-			"writeOnly": false,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -100,8 +92,6 @@
 			"minValue": 0,
 			"maxValue": 1,
 			"defaultValue": 0,
-			"readOnly": false,
-			"writeOnly": false,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -120,8 +110,6 @@
 			"minValue": 30,
 			"maxValue": 180,
 			"defaultValue": 30,
-			"readOnly": false,
-			"writeOnly": false,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -146,6 +134,52 @@
 				}
 			]
 		}
+	},
+	"compat": {
+		"alarmMapping": [
+			{
+				"$import": "templates/kwikset_template.json#alarm_map_idle"
+			},
+			{
+				"$import": "templates/kwikset_template.json#alarm_map_lock_jammed"
+			},
+			{
+				"$import": "templates/kwikset_template.json#alarm_map_keypad_unlocked"
+			},
+			{
+				"$import": "templates/kwikset_template.json#alarm_map_keypad_lock"
+			},
+			{
+				"$import": "templates/kwikset_template.json#alarm_map_manual_lock"
+			},
+			{
+				"$import": "templates/kwikset_template.json#alarm_map_manual_unlock"
+			},
+			{
+				"$import": "templates/kwikset_template.json#alarm_map_rf_lock_jammed"
+			},
+			{
+				"$import": "templates/kwikset_template.json#alarm_map_rf_lock"
+			},
+			{
+				"$import": "templates/kwikset_template.json#alarm_map_rf_unlock"
+			},
+			{
+				"$import": "templates/kwikset_template.json#alarm_map_auto_lock_jammed"
+			},
+			{
+				"$import": "templates/kwikset_template.json#alarm_map_auto_lock"
+			},
+			{
+				"$import": "templates/kwikset_template.json#alarm_map_all_codes_deleted"
+			},
+			{
+				"$import": "templates/kwikset_template.json#alarm_map_code_deleted"
+			},
+			{
+				"$import": "templates/kwikset_template.json#alarm_map_low_battery"
+			}
+		]
 	},
 	"metadata": {
 		"inclusion": "Initiate the process to add the lock to your system at your smart home controller.\nWhen prompted by your smart home system to add the lock, press button “A” on the lock interior one time. The red LED will illuminate when the lock enters Add Mode.\nPlease allow time for the controller to add the lock to your system",

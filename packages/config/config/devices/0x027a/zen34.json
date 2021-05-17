@@ -1,5 +1,3 @@
-// Zooz ZEN34
-// Z-Wave Plus 700 Series Remote Switch
 {
 	"manufacturer": "Zooz",
 	"manufacturerId": "0x027a",
@@ -8,6 +6,10 @@
 	"devices": [
 		{
 			"productType": "0x7000",
+			"productId": "0xf001"
+		},
+		{
+			"productType": "0x0004",
 			"productId": "0xf001"
 		}
 	],
@@ -37,8 +39,6 @@
 			"minValue": 0,
 			"maxValue": 3,
 			"defaultValue": 1,
-			"readOnly": false,
-			"writeOnly": false,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -65,8 +65,6 @@
 			"minValue": 0,
 			"maxValue": 6,
 			"defaultValue": 1,
-			"readOnly": false,
-			"writeOnly": false,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -105,8 +103,6 @@
 			"minValue": 0,
 			"maxValue": 6,
 			"defaultValue": 0,
-			"readOnly": false,
-			"writeOnly": false,
 			"allowManualEntry": false,
 			"options": [
 				{

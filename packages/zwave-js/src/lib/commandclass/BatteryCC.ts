@@ -147,22 +147,29 @@ export class BatteryCCAPI extends PhysicalCCAPI {
 export class BatteryCC extends CommandClass {
 	declare ccCommand: BatteryCommand;
 
-	public async interview(complete: boolean = true): Promise<void> {
+	public async interview(): Promise<void> {
+		const node = this.getNode()!;
+
+		this.driver.controllerLog.logNode(node.id, {
+			endpoint: this.endpointIndex,
+			message: `Interviewing ${this.ccName}...`,
+			direction: "none",
+		});
+
+		// Query the Battery status
+		await this.refreshValues();
+
+		// Remember that the interview is complete
+		this.interviewComplete = true;
+	}
+
+	public async refreshValues(): Promise<void> {
 		const node = this.getNode()!;
 		const endpoint = this.getEndpoint()!;
 		const api = endpoint.commandClasses.Battery.withOptions({
 			priority: MessagePriority.NodeQuery,
 		});
 
-		this.driver.controllerLog.logNode(node.id, {
-			endpoint: this.endpointIndex,
-			message: `${this.constructor.name}: doing a ${
-				complete ? "complete" : "partial"
-			} interview...`,
-			direction: "none",
-		});
-
-		// always query the status
 		this.driver.controllerLog.logNode(node.id, {
 			endpoint: this.endpointIndex,
 			message: "querying battery status...",
@@ -217,9 +224,6 @@ temperature:   ${batteryHealth.temperature} °C`;
 				});
 			}
 		}
-
-		// Remember that the interview is complete
-		this.interviewComplete = true;
 	}
 }
 

@@ -1,5 +1,3 @@
-// Qolsys QZ2130-840
-// IQ Outlet Plug-In On/Off Switch
 {
 	"manufacturer": "Qolsys",
 	"manufacturerId": "0x012a",
@@ -24,10 +22,7 @@
 			"minValue": 0,
 			"maxValue": 2,
 			"defaultValue": 0,
-			"unsigned": true,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"unsigned": true
 		}
 	},
 	"metadata": {

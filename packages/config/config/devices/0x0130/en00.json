@@ -1,5 +1,3 @@
-// Quby EN00
-// Engie Meter Adapter
 {
 	"manufacturer": "Quby",
 	"manufacturerId": "0x0130",
@@ -23,8 +21,6 @@
 			"minValue": 0,
 			"maxValue": 2,
 			"defaultValue": 1,
-			"readOnly": false,
-			"writeOnly": false,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -46,10 +42,7 @@
 			"valueSize": 4,
 			"minValue": 120,
 			"maxValue": 40000,
-			"defaultValue": 400,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"defaultValue": 400
 		},
 		"3": {
 			"label": "Analog electricity port mode",
@@ -57,8 +50,6 @@
 			"minValue": 0,
 			"maxValue": 2,
 			"defaultValue": 1,
-			"readOnly": false,
-			"writeOnly": false,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -80,20 +71,14 @@
 			"valueSize": 4,
 			"minValue": 120,
 			"maxValue": 40000,
-			"defaultValue": 400,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"defaultValue": 400
 		},
 		"5": {
 			"label": "Digital port mode",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 2,
-			"defaultValue": 2,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"defaultValue": 2
 		},
 		"255": {
 			"label": "Restart device",
@@ -101,8 +86,6 @@
 			"minValue": 0,
 			"maxValue": 2,
 			"defaultValue": 0,
-			"readOnly": false,
-			"writeOnly": false,
 			"allowManualEntry": false,
 			"options": [
 				{

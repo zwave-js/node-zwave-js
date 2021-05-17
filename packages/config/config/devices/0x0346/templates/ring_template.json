@@ -1,0 +1,23 @@
+{
+	"supported_language": {
+		"$if": "productId === 0x0202",
+		"description": "If the language is supported you can use the Language parameter to change it",
+		"valueSize": 4,
+		"minValue": 0,
+		"maxValue": 1,
+		"unsigned": true,
+		"defaultValue": 0,
+		"readOnly": true,
+		"allowManualEntry": false,
+		"options": [
+			{
+				"label": "Not Supported",
+				"value": 0
+			},
+			{
+				"label": "Supported",
+				"value": 1
+			}
+		]
+	}
+}

@@ -1,5 +1,3 @@
-// NorthQ NQ-9121
-// Q-Gas 9121 (Firmware v3, 2016)
 {
 	"manufacturer": "NorthQ",
 	"manufacturerId": "0x0096",
@@ -22,10 +20,7 @@
 			"valueSize": 4,
 			"minValue": 0,
 			"maxValue": 1000000,
-			"defaultValue": 1000,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"defaultValue": 1000
 		},
 		"2": {
 			"label": "Sensor type",
@@ -34,8 +29,6 @@
 			"minValue": 1,
 			"maxValue": 2,
 			"defaultValue": 2,
-			"readOnly": false,
-			"writeOnly": false,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -54,10 +47,7 @@
 			"valueSize": 4,
 			"minValue": 0,
 			"maxValue": 2147483647,
-			"defaultValue": 0,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"defaultValue": 0
 		},
 		"10": {
 			"label": "Keep alive period",
@@ -65,10 +55,7 @@
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 32767,
-			"defaultValue": 5,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"defaultValue": 5
 		},
 		"11": {
 			"label": "Real-time mode",
@@ -77,9 +64,7 @@
 			"minValue": 0,
 			"maxValue": 32767,
 			"defaultValue": 0,
-			"readOnly": true,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"readOnly": true
 		},
 		"12": {
 			"label": "Serial number",
@@ -88,9 +73,7 @@
 			"minValue": 0,
 			"maxValue": 65535,
 			"defaultValue": 0,
-			"readOnly": true,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"readOnly": true
 		},
 		"15": {
 			"label": "Calibration status",
@@ -98,10 +81,7 @@
 			"valueSize": 4,
 			"minValue": 0,
 			"maxValue": 65535,
-			"defaultValue": 0,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"defaultValue": 0
 		}
 	}
 }

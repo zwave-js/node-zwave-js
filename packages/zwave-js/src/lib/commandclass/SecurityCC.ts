@@ -6,6 +6,7 @@ import {
 	generateAuthKey,
 	generateEncryptionKey,
 	getCCName,
+	isTransmissionError,
 	Maybe,
 	MessageOrCCLogEntry,
 	MessageRecord,
@@ -18,12 +19,11 @@ import {
 import { buffer2hex, num2hex, pick } from "@zwave-js/shared";
 import { randomBytes } from "crypto";
 import type { ZWaveController } from "../controller/Controller";
-import {
-	SendDataRequest,
-	TransmitOptions,
-} from "../controller/SendDataMessages";
+import { SendDataBridgeRequest } from "../controller/SendDataBridgeMessages";
+import { SendDataRequest } from "../controller/SendDataMessages";
+import { TransmitOptions } from "../controller/SendDataShared";
 import type { Driver } from "../driver/Driver";
-import { MessagePriority } from "../message/Constants";
+import { FunctionType, MessagePriority } from "../message/Constants";
 import { PhysicalCCAPI } from "./API";
 import {
 	API,
@@ -191,7 +191,12 @@ export class SecurityCCAPI extends PhysicalCCAPI {
 			endpoint: this.endpoint.index,
 			nonce,
 		});
-		const msg = new SendDataRequest(this.driver, {
+		const SendDataConstructor = this.driver.controller.isFunctionSupported(
+			FunctionType.SendDataBridge,
+		)
+			? SendDataBridgeRequest
+			: SendDataRequest;
+		const msg = new SendDataConstructor(this.driver, {
 			command: cc,
 			// Seems we need these options or some nodes won't accept the nonce
 			transmitOptions: TransmitOptions.ACK | TransmitOptions.AutoRoute,
@@ -202,13 +207,7 @@ export class SecurityCCAPI extends PhysicalCCAPI {
 				priority: MessagePriority.Handshake,
 			});
 		} catch (e) {
-			if (
-				e instanceof ZWaveError &&
-				(e.code === ZWaveErrorCodes.Controller_ResponseNOK ||
-					e.code === ZWaveErrorCodes.Controller_CallbackNOK ||
-					e.code === ZWaveErrorCodes.Controller_NodeTimeout ||
-					e.code === ZWaveErrorCodes.Controller_MessageDropped)
-			) {
+			if (isTransmissionError(e)) {
 				// The nonce could not be sent, invalidate it
 				this.driver.securityManager.deleteNonce(nonceId);
 				return false;
@@ -301,7 +300,7 @@ export class SecurityCC extends CommandClass {
 		};
 	};
 
-	public async interview(complete: boolean = true): Promise<void> {
+	public async interview(): Promise<void> {
 		const node = this.getNode()!;
 		const endpoint = this.getEndpoint()!;
 		const api = endpoint.commandClasses.Security.withOptions({
@@ -309,75 +308,73 @@ export class SecurityCC extends CommandClass {
 		});
 
 		// This only needs to be done once
-		if (complete) {
-			this.driver.controllerLog.logNode(node.id, {
-				message: "querying securely supported commands...",
-				direction: "outbound",
-			});
+		this.driver.controllerLog.logNode(node.id, {
+			message: "querying securely supported commands...",
+			direction: "outbound",
+		});
 
-			const resp = await api.getSupportedCommands();
-			if (!resp) {
-				if (node.isSecure === true) {
-					this.driver.controllerLog.logNode(node.id, {
-						endpoint: this.endpointIndex,
-						message:
-							"Querying securely supported commands timed out, skipping Security interview...",
-						level: "warn",
-					});
-					// TODO: Abort interview?
-				} else {
-					// We didn't know if the node was secure, assume that it is not actually included securely
-					this.driver.controllerLog.logNode(
-						node.id,
-						`The node is not included securely. Continuing interview non-securely.`,
-					);
-					node.isSecure = false;
-				}
-				return;
-			}
-
-			const logLines: string[] = [
-				"received secure commands",
-				"supported CCs:",
-			];
-			for (const cc of resp.supportedCCs) {
-				logLines.push(`· ${getCCName(cc)}`);
-			}
-			logLines.push("controlled CCs:");
-			for (const cc of resp.controlledCCs) {
-				logLines.push(`· ${getCCName(cc)}`);
-			}
-			this.driver.controllerLog.logNode(node.id, {
-				message: logLines.join("\n"),
-				direction: "inbound",
-			});
-
-			// Remember which commands are supported securely
-			for (const cc of resp.supportedCCs) {
-				endpoint.addCC(cc, {
-					isSupported: true,
-					secure: true,
+		const resp = await api.getSupportedCommands();
+		if (!resp) {
+			if (node.isSecure === true) {
+				this.driver.controllerLog.logNode(node.id, {
+					endpoint: this.endpointIndex,
+					message:
+						"Querying securely supported commands timed out, skipping Security interview...",
+					level: "warn",
 				});
-			}
-			for (const cc of resp.controlledCCs) {
-				endpoint.addCC(cc, {
-					isControlled: true,
-					secure: true,
-				});
-			}
-
-			// We know for sure that the node is included securely
-			if (node.isSecure !== true) {
-				node.isSecure = true;
+				// TODO: Abort interview?
+			} else {
+				// We didn't know if the node was secure, assume that it is not actually included securely
 				this.driver.controllerLog.logNode(
 					node.id,
-					`The node is included securely.`,
+					`The node is not included securely. Continuing interview non-securely.`,
 				);
+				node.isSecure = false;
 			}
-
-			// Remember that the interview is complete
-			this.interviewComplete = true;
+			return;
 		}
+
+		const logLines: string[] = [
+			"received secure commands",
+			"supported CCs:",
+		];
+		for (const cc of resp.supportedCCs) {
+			logLines.push(`· ${getCCName(cc)}`);
+		}
+		logLines.push("controlled CCs:");
+		for (const cc of resp.controlledCCs) {
+			logLines.push(`· ${getCCName(cc)}`);
+		}
+		this.driver.controllerLog.logNode(node.id, {
+			message: logLines.join("\n"),
+			direction: "inbound",
+		});
+
+		// Remember which commands are supported securely
+		for (const cc of resp.supportedCCs) {
+			endpoint.addCC(cc, {
+				isSupported: true,
+				secure: true,
+			});
+		}
+		for (const cc of resp.controlledCCs) {
+			endpoint.addCC(cc, {
+				isControlled: true,
+				secure: true,
+			});
+		}
+
+		// We know for sure that the node is included securely
+		if (node.isSecure !== true) {
+			node.isSecure = true;
+			this.driver.controllerLog.logNode(
+				node.id,
+				`The node is included securely.`,
+			);
+		}
+
+		// Remember that the interview is complete
+		this.interviewComplete = true;
 	}
 
 	/** Tests if a should be sent secure and thus requires encapsulation */

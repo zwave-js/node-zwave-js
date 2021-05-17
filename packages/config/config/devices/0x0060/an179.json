@@ -1,5 +1,3 @@
-// Everspring HAN02
-// In-Wall Switch Module
 {
 	"manufacturer": "Everspring",
 	"manufacturerId": "0x0060",
@@ -32,10 +30,7 @@
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 255,
-			"defaultValue": 255,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"defaultValue": 255
 		},
 		"2": {
 			"label": "Report time delay group 1",
@@ -43,10 +38,7 @@
 			"valueSize": 1,
 			"minValue": 3,
 			"maxValue": 25,
-			"defaultValue": 3,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"defaultValue": 3
 		},
 		"3": {
 			"label": "Remember last status after power loss",
@@ -56,8 +48,6 @@
 			"maxValue": 1,
 			"defaultValue": 1,
 			"unsigned": true,
-			"readOnly": false,
-			"writeOnly": false,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -78,8 +68,6 @@
 			"maxValue": 1,
 			"defaultValue": 0,
 			"unsigned": true,
-			"readOnly": false,
-			"writeOnly": false,
 			"allowManualEntry": false,
 			"options": [
 				{

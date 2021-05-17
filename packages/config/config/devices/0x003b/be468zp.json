@@ -1,5 +1,3 @@
-// Allegion BE468ZP
-// Schlage Connect Smart Deadbolt
 {
 	"manufacturer": "Allegion",
 	"manufacturerId": "0x003b",
@@ -24,8 +22,6 @@
 			"minValue": -1,
 			"maxValue": 0,
 			"defaultValue": -1,
-			"readOnly": false,
-			"writeOnly": false,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -45,8 +41,6 @@
 			"minValue": -1,
 			"maxValue": 0,
 			"defaultValue": 0,
-			"readOnly": false,
-			"writeOnly": false,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -66,8 +60,6 @@
 			"minValue": -1,
 			"maxValue": 0,
 			"defaultValue": -1,
-			"readOnly": false,
-			"writeOnly": false,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -87,10 +79,7 @@
 			"minValue": 0,
 			"maxValue": 0,
 			"defaultValue": 0,
-			"unsigned": true,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"unsigned": true
 		},
 		"12": {
 			"label": "Get Electronic Transition Count",
@@ -99,10 +88,7 @@
 			"minValue": 0,
 			"maxValue": 0,
 			"defaultValue": 0,
-			"unsigned": true,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"unsigned": true
 		},
 		"13": {
 			"label": "Get Mechanical Transition Count",
@@ -111,10 +97,7 @@
 			"minValue": 0,
 			"maxValue": 0,
 			"defaultValue": 0,
-			"unsigned": true,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"unsigned": true
 		},
 		"14": {
 			"label": "Get Electronic Failed Count",
@@ -123,10 +106,7 @@
 			"minValue": 0,
 			"maxValue": 0,
 			"defaultValue": 0,
-			"unsigned": true,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"unsigned": true
 		},
 		"15": {
 			"label": "Auto Lock",
@@ -136,8 +116,6 @@
 			"minValue": -1,
 			"maxValue": 0,
 			"defaultValue": 0,
-			"readOnly": false,
-			"writeOnly": false,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -157,10 +135,7 @@
 			"minValue": 0,
 			"maxValue": 4,
 			"defaultValue": 4,
-			"unsigned": true,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"unsigned": true
 		},
 		"17": {
 			"label": "Get Electrical High Preload Transition Count",
@@ -169,10 +144,7 @@
 			"minValue": 0,
 			"maxValue": 0,
 			"defaultValue": 0,
-			"unsigned": true,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"unsigned": true
 		},
 		"18": {
 			"label": "Get Bootloader Version",
@@ -181,10 +153,7 @@
 			"minValue": 0,
 			"maxValue": 0,
 			"defaultValue": 0,
-			"unsigned": true,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"unsigned": true
 		}
 	},
 	"metadata": {

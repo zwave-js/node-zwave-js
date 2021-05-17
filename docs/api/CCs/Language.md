@@ -1,5 +1,7 @@
 # Language CC
 
+?> CommandClass ID: `0x89`
+
 ## Language CC methods
 
 ### `get`

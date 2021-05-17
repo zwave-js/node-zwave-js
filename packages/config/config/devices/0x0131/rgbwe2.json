@@ -1,5 +1,3 @@
-// Zipato RGBWE2
-// RGBW Bulb V2
 {
 	"manufacturer": "Zipato",
 	"manufacturerId": "0x0131",
@@ -23,19 +21,14 @@
 			"minValue": 0,
 			"maxValue": 0,
 			"defaultValue": 0,
-			"readOnly": true,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"readOnly": true
 		},
 		"2": {
 			"label": "Strobe light interval",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 25,
-			"defaultValue": 0,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"defaultValue": 0
 		},
 		"3": {
 			"label": "Strobe light pulse count",
@@ -43,9 +36,6 @@
 			"minValue": 0,
 			"maxValue": 127,
 			"defaultValue": 0,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true,
 			"options": [
 				{
 					"label": "Infinite flashing",
@@ -59,8 +49,6 @@
 			"minValue": 0,
 			"maxValue": 1,
 			"defaultValue": 0,
-			"readOnly": false,
-			"writeOnly": false,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -79,9 +67,7 @@
 			"minValue": 1,
 			"maxValue": 255,
 			"defaultValue": 1,
-			"readOnly": false,
 			"writeOnly": true,
-			"allowManualEntry": true,
 			"options": [
 				{
 					"label": "Reset bulb to factory settings",

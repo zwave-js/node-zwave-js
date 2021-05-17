@@ -4,7 +4,7 @@
 	],
 	"useWorkspaces": true,
 	"npmClient": "yarn",
-	"version": "6.6.1",
+	"version": "7.4.0",
 	"command": {
 		"run": {
 			"stream": true

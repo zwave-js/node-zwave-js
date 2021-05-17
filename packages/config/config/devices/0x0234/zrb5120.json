@@ -1,0 +1,535 @@
+{
+	"manufacturer": "Logic Group",
+	"manufacturerId": "0x0234",
+	"label": "ZRB5120",
+	"description": "Wall Controller",
+	"devices": [
+		{
+			"productType": "0x0003",
+			"productId": "0x0125"
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"associations": {
+		"1": {
+			"label": "Lifeline",
+			"maxNodes": 5,
+			"isLifeline": true
+		},
+		"2": {
+			"label": "Button 1 (Basic Report)",
+			"maxNodes": 5
+		},
+		"3": {
+			"label": "Button 1 (Binary Switch Set)",
+			"maxNodes": 5
+		},
+		"4": {
+			"label": "Button 1 (Multilevel Set)",
+			"maxNodes": 5
+		},
+		"5": {
+			"label": "Button 2 (Basic Report)",
+			"maxNodes": 5
+		},
+		"6": {
+			"label": "Button 2 (Binary Switch Set)",
+			"maxNodes": 5
+		},
+		"7": {
+			"label": "Button 2 (Multilevel Set)",
+			"maxNodes": 5
+		},
+		"8": {
+			"label": "Button 3 (Basic Report)",
+			"maxNodes": 5
+		},
+		"9": {
+			"label": "Button 3  (Binary Switch Set)",
+			"maxNodes": 5
+		},
+		"10": {
+			"label": "Button 3 (Multilevel Set)",
+			"maxNodes": 5
+		},
+		"11": {
+			"label": "Button 4 (Basic Report)",
+			"maxNodes": 5
+		},
+		"12": {
+			"label": "Button 4 (Binary Switch Set)",
+			"maxNodes": 5
+		},
+		"13": {
+			"label": "Button 4 (Multilevel Set)",
+			"maxNodes": 5
+		},
+		"14": {
+			"label": "Relay 1 (Binary Report)",
+			"maxNodes": 5
+		},
+		"15": {
+			"label": "Relay 2 (Binary Report",
+			"maxNodes": 5
+		}
+	},
+	"paramInformation": {
+		"1[0x01]": {
+			"$import": "../templates/master_template.json#base_enable_disable",
+			"label": "Button 1 Controls Relay 1"
+		},
+		"1[0x02]": {
+			"$import": "../templates/master_template.json#base_enable_disable",
+			"label": "Button 2 Controls Relay 1"
+		},
+		"1[0x04]": {
+			"$import": "../templates/master_template.json#base_enable_disable",
+			"label": "Button 3 Controls Relay 1"
+		},
+		"1[0x08]": {
+			"$import": "../templates/master_template.json#base_enable_disable",
+			"label": "Button 4 Controls Relay 1"
+		},
+		"2[0x01]": {
+			"$import": "../templates/master_template.json#base_enable_disable",
+			"label": "Button 1 Controls Relay 2"
+		},
+		"2[0x02]": {
+			"$import": "../templates/master_template.json#base_enable_disable",
+			"label": "Button 2 Controls Relay 2"
+		},
+		"2[0x04]": {
+			"$import": "../templates/master_template.json#base_enable_disable",
+			"label": "Button 3 Controls Relay 2"
+		},
+		"2[0x08]": {
+			"$import": "../templates/master_template.json#base_enable_disable",
+			"label": "Button 4 Controls Relay 2"
+		},
+		"7": {
+			"$import": "templates/logic_group_template.json#enable_central_scene"
+		},
+		"8": {
+			"$import": "../templates/master_template.json#base_enable_disable",
+			"label": "Double Press",
+			"defaultValue": 1
+		},
+		"10": {
+			"$import": "../templates/master_template.json#base_enable_disable",
+			"label": "Enhanced LED Control"
+		},
+		"11": {
+			"$import": "templates/logic_group_template.json#button_debounce",
+			"unit": "10 ms",
+			"defaultValue": 5
+		},
+		"12": {
+			"$import": "../templates/master_template.json#base_1-255_nounit",
+			"label": "Button Press Threshold Time",
+			"unit": "10 ms",
+			"defaultValue": 20
+		},
+		"13": {
+			"$import": "../templates/master_template.json#base_1-255_nounit",
+			"label": "Button Held Threshold Time",
+			"unit": "10 ms",
+			"defaultValue": 50
+		},
+		"14[0xff000000]": {
+			"$import": "templates/logic_group_template.json#global_brightness",
+			"label": "LED Indicator Brightness: Red"
+		},
+		"14[0xff0000]": {
+			"$import": "templates/logic_group_template.json#global_brightness",
+			"label": "LED Indicator Brightness: Green"
+		},
+		"14[0xff00]": {
+			"$import": "templates/logic_group_template.json#global_brightness",
+			"label": "LED Indicator Brightness: Blue"
+		},
+		"15[0x01]": {
+			"$import": "../templates/master_template.json#base_enable_disable",
+			"label": "Send Association Group 2 Messages Securely",
+			"valueSize": 2
+		},
+		"15[0x02]": {
+			"$import": "../templates/master_template.json#base_enable_disable",
+			"label": "Send Association Group 3 Messages Securely",
+			"valueSize": 2
+		},
+		"15[0x04]": {
+			"$import": "../templates/master_template.json#base_enable_disable",
+			"label": "Send Association Group 4 Messages Securely",
+			"valueSize": 2
+		},
+		"15[0x08]": {
+			"$import": "../templates/master_template.json#base_enable_disable",
+			"label": "Send Association Group 5 Messages Securely",
+			"valueSize": 2
+		},
+		"15[0x10]": {
+			"$import": "../templates/master_template.json#base_enable_disable",
+			"label": "Send Association Group 6 Messages Securely",
+			"valueSize": 2
+		},
+		"15[0x20]": {
+			"$import": "../templates/master_template.json#base_enable_disable",
+			"label": "Send Association Group 7 Messages Securely",
+			"valueSize": 2
+		},
+		"15[0x40]": {
+			"$import": "../templates/master_template.json#base_enable_disable",
+			"label": "Send Association Group 8 Messages Securely",
+			"valueSize": 2
+		},
+		"15[0x80]": {
+			"$import": "../templates/master_template.json#base_enable_disable",
+			"label": "Send Association Group 9 Messages Securely",
+			"valueSize": 2
+		},
+		"15[0x100]": {
+			"$import": "../templates/master_template.json#base_enable_disable",
+			"label": "Send Association Group 10 Messages Securely",
+			"valueSize": 2
+		},
+		"15[0x0200]": {
+			"$import": "../templates/master_template.json#base_enable_disable",
+			"label": "Send Association Group 11 Messages Securely",
+			"valueSize": 2
+		},
+		"15[0x0400]": {
+			"$import": "../templates/master_template.json#base_enable_disable",
+			"label": "Send Association Group 12 Messages Securely",
+			"valueSize": 2
+		},
+		"15[0x0800]": {
+			"$import": "../templates/master_template.json#base_enable_disable",
+			"label": "Send Association Group 13 Messages Securely",
+			"valueSize": 2
+		},
+		"15[0x1000]": {
+			"$import": "../templates/master_template.json#base_enable_disable",
+			"label": "Send Association Group 14 Messages Securely",
+			"valueSize": 2
+		},
+		"16": {
+			"$import": "templates/logic_group_template.json#button_function_zdb5100",
+			"label": "Button 1 Functionality"
+		},
+		"17": {
+			"$import": "../templates/master_template.json#base_0-255_nounit",
+			"label": "Button 1 - Timer",
+			"unit": "seconds",
+			"valueSize": 2,
+			"maxValue": 43200,
+			"defaultValue": 300
+		},
+		"18[0xff000000]": {
+			"$import": "templates/logic_group_template.json#multilevel_enable",
+			"label": "Button 1 - Single Press"
+		},
+		"18[0xff0000]": {
+			"$import": "templates/logic_group_template.json#multilevel_upper_function",
+			"label": "Button 1 - Single Press (On Value)"
+		},
+		"18[0xff00]": {
+			"$import": "templates/logic_group_template.json#multilevel_lower_function",
+			"label": "Button 1 - Single Press (Off Value)"
+		},
+		"19": {
+			"$import": "templates/logic_group_template.json#binary_switch_set",
+			"label": "Button 1 - Binary Switch Support"
+		},
+		"20": {
+			"$import": "templates/logic_group_template.json#button_led_indicator",
+			"label": "Button 1 LED Indicator"
+		},
+		"21": {
+			"$import": "templates/logic_group_template.json#color_command_button",
+			"label": "Button 1 LED Indicator Color Commands"
+		},
+		"22[0xff000000]": {
+			"$import": "templates/logic_group_template.json#led_indicator",
+			"label": "Button 1 LED Indicator (On): Red"
+		},
+		"22[0xff0000]": {
+			"$import": "templates/logic_group_template.json#led_indicator",
+			"label": "Button 1 LED Indicator (On): Green"
+		},
+		"22[0xff00]": {
+			"$import": "templates/logic_group_template.json#led_indicator",
+			"label": "Button 1 LED Indicator (On): Blue",
+			"defaultValue": 127
+		},
+		"22[0xff]": {
+			"$import": "../templates/master_template.json#base_0-255_nounit",
+			"label": "LED Time For Button 1 (On): Blinking",
+			"unit": "100 ms",
+			"valueSize": 4,
+			"defaultValue": 0
+		},
+		"23[0xff000000]": {
+			"$import": "templates/logic_group_template.json#led_indicator",
+			"label": "Button 1 LED Indicator (Off): Red",
+			"defaultValue": 47
+		},
+		"23[0xff0000]": {
+			"$import": "templates/logic_group_template.json#led_indicator",
+			"label": "Button 1 LED Indicator (Off): Green",
+			"defaultValue": 47
+		},
+		"23[0xff00]": {
+			"$import": "templates/logic_group_template.json#led_indicator",
+			"label": "Button 1 LED Indicator (Off): Blue",
+			"defaultValue": 47
+		},
+		"23[0xff]": {
+			"$import": "../templates/master_template.json#base_0-255_nounit",
+			"label": "LED Time For Button 1 (Off): Blinking",
+			"unit": "100 ms",
+			"valueSize": 4,
+			"defaultValue": 0
+		},
+		"24": {
+			"$import": "templates/logic_group_template.json#button_function_zdb5100",
+			"label": "Button 2 Functionality"
+		},
+		"25": {
+			"$import": "../templates/master_template.json#base_0-255_nounit",
+			"label": "Button 2 - Timer",
+			"unit": "seconds",
+			"valueSize": 2,
+			"maxValue": 43200,
+			"defaultValue": 300
+		},
+		"26[0xff000000]": {
+			"$import": "templates/logic_group_template.json#multilevel_enable",
+			"label": "Button 2 - Single Press"
+		},
+		"26[0xff0000]": {
+			"$import": "templates/logic_group_template.json#multilevel_upper_function",
+			"label": "Button 2 - Single Press (On Value)"
+		},
+		"26[0xff00]": {
+			"$import": "templates/logic_group_template.json#multilevel_lower_function",
+			"label": "Button 2 - Single Press (Off Value)"
+		},
+		"27": {
+			"$import": "templates/logic_group_template.json#binary_switch_set",
+			"label": "Button 2 - Binary Switch Support"
+		},
+		"28": {
+			"$import": "templates/logic_group_template.json#button_led_indicator",
+			"label": "Button 2 LED Indicator"
+		},
+		"29": {
+			"$import": "templates/logic_group_template.json#color_command_button",
+			"label": "Button 2 LED Indicator Color Commands"
+		},
+		"30[0xff000000]": {
+			"$import": "templates/logic_group_template.json#led_indicator",
+			"label": "Button 2 LED Indicator (On): Red"
+		},
+		"30[0xff0000]": {
+			"$import": "templates/logic_group_template.json#led_indicator",
+			"label": "Button 2 LED Indicator (On): Green"
+		},
+		"30[0xff00]": {
+			"$import": "templates/logic_group_template.json#led_indicator",
+			"label": "Button 2 LED Indicator (On): Blue",
+			"defaultValue": 127
+		},
+		"30[0xff]": {
+			"$import": "../templates/master_template.json#base_0-255_nounit",
+			"label": "LED Time For Button 2 (On): Blinking",
+			"unit": "100 ms",
+			"valueSize": 4,
+			"defaultValue": 0
+		},
+		"31[0xff000000]": {
+			"$import": "templates/logic_group_template.json#led_indicator",
+			"label": "Button 2 LED Indicator (Off) Red",
+			"defaultValue": 47
+		},
+		"31[0xff0000]": {
+			"$import": "templates/logic_group_template.json#led_indicator",
+			"label": "Button 2 LED Indicator (Off) Green",
+			"defaultValue": 47
+		},
+		"31[0xff00]": {
+			"$import": "templates/logic_group_template.json#led_indicator",
+			"label": "Button 2 LED Indicator (Off) Blue",
+			"defaultValue": 47
+		},
+		"31[0xff]": {
+			"$import": "../templates/master_template.json#base_0-255_nounit",
+			"label": "LED Time For Button 2 (Off) Blinking",
+			"unit": "100 ms",
+			"valueSize": 4,
+			"defaultValue": 0
+		},
+		"32": {
+			"$import": "templates/logic_group_template.json#button_function_zdb5100",
+			"label": "Button 3 Functionality"
+		},
+		"33": {
+			"$import": "../templates/master_template.json#base_0-255_nounit",
+			"label": "Button 3 - Timer",
+			"unit": "seconds",
+			"valueSize": 2,
+			"maxValue": 43200,
+			"defaultValue": 300
+		},
+		"34[0xff000000]": {
+			"$import": "templates/logic_group_template.json#multilevel_enable",
+			"label": "Button 3 - Single Press"
+		},
+		"34[0xff0000]": {
+			"$import": "templates/logic_group_template.json#multilevel_upper_function",
+			"label": "Button 3 - Single Press (On Value)"
+		},
+		"34[0xff00]": {
+			"$import": "templates/logic_group_template.json#multilevel_lower_function",
+			"label": "Button 3 - Single Press (Off Value)"
+		},
+		"35": {
+			"$import": "templates/logic_group_template.json#binary_switch_set",
+			"label": "Button 3 - Binary Switch Support"
+		},
+		"36": {
+			"$import": "templates/logic_group_template.json#button_led_indicator",
+			"label": "Button 3 LED Indicator"
+		},
+		"37": {
+			"$import": "templates/logic_group_template.json#color_command_button",
+			"label": "Button 3 LED Indicator Color Commands"
+		},
+		"38[0xff000000]": {
+			"$import": "templates/logic_group_template.json#led_indicator",
+			"label": "Button 3 LED Indicator (On): Red"
+		},
+		"38[0xff0000]": {
+			"$import": "templates/logic_group_template.json#led_indicator",
+			"label": "Button 3 LED Indicator (On): Green"
+		},
+		"38[0xff00]": {
+			"$import": "templates/logic_group_template.json#led_indicator",
+			"label": "Button 3 LED Indicator (On): Blue",
+			"defaultValue": 127
+		},
+		"38[0xff]": {
+			"$import": "../templates/master_template.json#base_0-255_nounit",
+			"label": "LED Time For Button 3 (On): Blinking",
+			"unit": "100 ms",
+			"valueSize": 4,
+			"defaultValue": 0
+		},
+		"39[0xff000000]": {
+			"$import": "templates/logic_group_template.json#led_indicator",
+			"label": "Button 3 LED Indicator (Off): Red",
+			"defaultValue": 47
+		},
+		"39[0xff0000]": {
+			"$import": "templates/logic_group_template.json#led_indicator",
+			"label": "Button 3 LED Indicator (Off): Green",
+			"defaultValue": 47
+		},
+		"39[0xff00]": {
+			"$import": "templates/logic_group_template.json#led_indicator",
+			"label": "Button 3 LED Indicator (Off): Blue",
+			"defaultValue": 47
+		},
+		"39[0xff]": {
+			"$import": "../templates/master_template.json#base_0-255_nounit",
+			"label": "LED Time For Button 3 (Off): Blinking",
+			"unit": "100 ms",
+			"valueSize": 4,
+			"defaultValue": 0
+		},
+		"40": {
+			"$import": "templates/logic_group_template.json#button_function_zdb5100",
+			"label": "Button 4 Functionality"
+		},
+		"41": {
+			"$import": "../templates/master_template.json#base_0-255_nounit",
+			"label": "Button 4 - Timer",
+			"unit": "seconds",
+			"valueSize": 2,
+			"maxValue": 43200,
+			"defaultValue": 300
+		},
+		"42[0xff000000]": {
+			"$import": "templates/logic_group_template.json#multilevel_enable",
+			"label": "Button 4 - Single Press"
+		},
+		"42[0xff0000]": {
+			"$import": "templates/logic_group_template.json#multilevel_upper_function",
+			"label": "Button 4 - Single Press (On Value)"
+		},
+		"42[0xff00]": {
+			"$import": "templates/logic_group_template.json#multilevel_lower_function",
+			"label": "Button 4 - Single Press (Off Value)"
+		},
+		"43": {
+			"$import": "templates/logic_group_template.json#binary_switch_set",
+			"label": "Button 4 - Binary Switch Support"
+		},
+		"44": {
+			"$import": "templates/logic_group_template.json#button_led_indicator",
+			"label": "Button 4 LED Indicator"
+		},
+		"45": {
+			"$import": "templates/logic_group_template.json#color_command_button",
+			"label": "Button 4 LED Indicator Color Commands"
+		},
+		"46[0xff000000]": {
+			"$import": "templates/logic_group_template.json#led_indicator",
+			"label": "Button 4 LED Indicator (On): Red"
+		},
+		"46[0xff0000]": {
+			"$import": "templates/logic_group_template.json#led_indicator",
+			"label": "Button 4 LED Indicator (On): Green"
+		},
+		"46[0xff00]": {
+			"$import": "templates/logic_group_template.json#led_indicator",
+			"label": "Button 4 LED Indicator (On): Blue",
+			"defaultValue": 127
+		},
+		"46[0xff]": {
+			"$import": "../templates/master_template.json#base_0-255_nounit",
+			"label": "LED Time For Button 4 (On): Blinking",
+			"unit": "100 ms",
+			"valueSize": 4
+		},
+		"47[0xff000000]": {
+			"$import": "templates/logic_group_template.json#led_indicator",
+			"label": "Button 4 LED Indicator (Off): Red",
+			"defaultValue": 47
+		},
+		"47[0xff0000]": {
+			"$import": "templates/logic_group_template.json#led_indicator",
+			"label": "Button 4 LED Indicator (Off): Green",
+			"defaultValue": 47
+		},
+		"47[0xff00]": {
+			"$import": "templates/logic_group_template.json#led_indicator",
+			"label": "Button 4 LED Indicator (Off): Blue",
+			"defaultValue": 47
+		},
+		"47[0xff]": {
+			"$import": "../templates/master_template.json#base_0-255_nounit",
+			"label": "LED Time For Button 4 (Off): Blinking",
+			"unit": "100 ms",
+			"valueSize": 4,
+			"defaultValue": 0
+		}
+	},
+	"metadata": {
+		"inclusion": "Remove white pushbutton cover and press on the center switch with a non-conductive object. The LEDs will now start blinking on pushbutton 1 (upper left pushbutton)",
+		"exclusion": "Remove white pushbutton cover and press on the center switch with a non-conductive object. The LEDs will now start blinking on pushbutton 1 (upper left pushbutton)",
+		"reset": "Remove white pushbutton cover and long-press the center switch for 10 seconds with a non-conductive object. Please use this procedure only when the network primary controller is missing or otherwise inoperable"
+	}
+}

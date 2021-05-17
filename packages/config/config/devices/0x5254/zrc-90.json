@@ -1,5 +1,3 @@
-// Remotec BW8510
-// Scene master 8 button remote
 {
 	"manufacturer": "Remotec",
 	"manufacturerId": "0x5254",
@@ -19,6 +17,11 @@
 		{
 			"productType": "0x0002",
 			"productId": "0x8510"
+		},
+		{
+			"productType": "0x000b",
+			"productId": "0x8510",
+			"zwaveAllianceId": 1585
 		}
 	],
 	"firmwareVersion": {

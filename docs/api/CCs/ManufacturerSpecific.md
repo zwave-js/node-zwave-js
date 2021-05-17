@@ -1,5 +1,7 @@
 # Manufacturer Specific CC
 
+?> CommandClass ID: `0x72`
+
 ## Manufacturer Specific CC methods
 
 ### `get`

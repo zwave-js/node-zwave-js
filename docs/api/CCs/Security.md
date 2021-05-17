@@ -1,5 +1,7 @@
 # Security CC
 
+?> CommandClass ID: `0x98`
+
 ## Security CC methods
 
 ### `sendEncapsulated`

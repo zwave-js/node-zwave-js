@@ -1,0 +1,105 @@
+{
+	"manufacturer": "AEON Labs",
+	"manufacturerId": "0x0086",
+	"label": "ZW141",
+	"description": "Nano Shutter V.2",
+	"devices": [
+		{
+			"productType": "0x0003",
+			"productId": "0x008d"
+		},
+		{
+			"productType": "0x0103",
+			"productId": "0x008d",
+			"zwaveAllianceId": [2903, 3075]
+		},
+		{
+			"productType": "0x0303",
+			"productId": "0x008d",
+			"zwaveAllianceId": 3132
+		},
+		{
+			"productType": "0x0903",
+			"productId": "0x008d",
+			"zwaveAllianceId": 3269
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"paramInformation": {
+		"35": {
+			"label": "Moving Time From Up (Left) to Down (Right)",
+			"valueSize": 1,
+			"unit": "seconds",
+			"minValue": 5,
+			"maxValue": 255,
+			"defaultValue": 150,
+			"unsigned": true
+		},
+		"80": {
+			"$import": "templates/aeotec_template.json#enable_notification_basic_report_only"
+		},
+		"85": {
+			"label": "Operation Mode of External Switch",
+			"description": "Refer to user manual for a description of operation modes 1 or 2",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 1,
+			"unsigned": true,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Operation mode 1",
+					"value": 0
+				},
+				{
+					"label": "Operation mode 2",
+					"value": 1
+				}
+			]
+		},
+		"120": {
+			"$import": "templates/aeotec_template.json#external_switch_3way_auto",
+			"label": "External Switch Type: S1"
+		},
+		"121": {
+			"$import": "templates/aeotec_template.json#external_switch_3way_auto",
+			"label": "External Switch Type: S2"
+		},
+		"248[0x80]": {
+			"$if": "firmwareVersion >= 2.0",
+			"$import": "../templates/master_template.json#base_enable_disable",
+			"label": "Advanced Parameter Settings"
+		},
+		"248[0x01]": {
+			"$if": "firmwareVersion >= 2.0",
+			"$import": "../templates/master_template.json#base_enable_disable",
+			"label": "Advanced: Send NIFs"
+		},
+		"248[0x02]": {
+			"$if": "firmwareVersion >= 2.0",
+			"$import": "../templates/master_template.json#base_enable_disable",
+			"label": "Advanced: RF Power Level Test Mode"
+		},
+		"248[0x04]": {
+			"$if": "firmwareVersion >= 2.0",
+			"$import": "../templates/master_template.json#base_enable_disable",
+			"label": "Advanced: Factory Reset Function"
+		},
+		"252": {
+			"$import": "templates/aeotec_template.json#lock_configuration"
+		},
+		"255": {
+			"$import": "templates/aeotec_template.json#factory_reset_exclude"
+		}
+	},
+	"metadata": {
+		"inclusion": "Turn the primary controller of Z-Wave network into inclusion mode, short press the product’s Action button that you can find on the product's housing.\n\nIf the Nano Dimmer has been successfully added to your Z-Wave network, its RGB LED will be solid. If unsuccessful, the red LED will be on for 2 seconds and then remain a colorful gradient, repeat the instructions above from step 1.",
+		"exclusion": "Turn the primary controller of Z-Wave network into exclusion mode, quick press the product’s Action button 6 times that you can find on the product's housing or toggle the external manual switch 2 times in fast succession.\n\nIf the Nano Dimmer has been successfully removed from your Z-Wave network, its RGB LED will remain colorful gradient. If the removal was unsuccessful, the RGB LED will still be solid (following the state of the output load), repeat the instructions above from step 1",
+		"reset": "Press and hold the Action button that you can find on the product's housing for 20 seconds and then release. This procedure should only be used when the primary controller is missing or otherwise inoperable",
+		"manual": "https://products.z-wavealliance.org/ProductManual/File?folder=&filename=MarketCertificationFiles/3269/Aeon%20Labs%20Nano%20Shutter%20-manual%20-%202.pdf"
+	}
+}

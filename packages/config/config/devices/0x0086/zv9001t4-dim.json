@@ -1,10 +1,8 @@
-// AEON Labs ZV9001T4-DIM
-// 4 group single colour touch panel secondary controller
 {
 	"manufacturer": "AEON Labs",
 	"manufacturerId": "0x0086",
 	"label": "ZV9001T4-DIM",
-	"description": "4 group single colour touch panel secondary controller",
+	"description": "4 Group Touch Panel Secondary Controller",
 	"devices": [
 		{
 			"productType": "0x0003",
@@ -19,27 +17,42 @@
 		"min": "0.0",
 		"max": "255.255"
 	},
-	"supportsZWavePlus": true,
 	"paramInformation": {
 		"3": {
-			"label": "Scene_type",
+			"label": "Scene Type",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 1,
 			"defaultValue": 0,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Central scene",
+					"value": 0
+				},
+				{
+					"label": "Scene activation",
+					"value": 1
+				}
+			]
 		},
 		"4": {
-			"label": "Scene_send_to_where",
+			"label": "Scene Command Targer",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 1,
 			"defaultValue": 1,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Controller",
+					"value": 0
+				},
+				{
+					"label": "Assocciation Group",
+					"value": 1
+				}
+			]
 		}
 	}
 }

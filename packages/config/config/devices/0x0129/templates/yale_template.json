@@ -6,9 +6,6 @@
 		"maxValue": 3,
 		"defaultValue": 2,
 		"unsigned": true,
-		"readOnly": false,
-		"writeOnly": false,
-		"allowManualEntry": true,
 		"options": [
 			{
 				"label": "High",
@@ -31,9 +28,6 @@
 		"maxValue": 3,
 		"defaultValue": 2,
 		"unsigned": true,
-		"readOnly": false,
-		"writeOnly": false,
-		"allowManualEntry": true,
 		"options": [
 			{
 				"label": "Silent",
@@ -74,10 +68,7 @@
 		"minValue": 0,
 		"maxValue": 10,
 		"defaultValue": 5,
-		"unsigned": true,
-		"readOnly": false,
-		"writeOnly": false,
-		"allowManualEntry": true
+		"unsigned": true
 	},
 	"wrong_code_limit_3_to_10": {
 		"label": "Wrong Code Limit",
@@ -86,10 +77,7 @@
 		"minValue": 3,
 		"maxValue": 10,
 		"defaultValue": 5,
-		"unsigned": true,
-		"readOnly": false,
-		"writeOnly": false,
-		"allowManualEntry": true
+		"unsigned": true
 	},
 	"wrong_code_limit_7": {
 		"label": "Wrong Code Limit",
@@ -98,10 +86,7 @@
 		"minValue": 0,
 		"maxValue": 7,
 		"defaultValue": 5,
-		"unsigned": true,
-		"readOnly": false,
-		"writeOnly": false,
-		"allowManualEntry": true
+		"unsigned": true
 	},
 	"wrong_code_lockout": {
 		"$import": "../../templates/master_template.json#base_0-180_nounit",
@@ -124,10 +109,7 @@
 		"minValue": 1,
 		"maxValue": 20,
 		"defaultValue": 5,
-		"unsigned": true,
-		"readOnly": false,
-		"writeOnly": false,
-		"allowManualEntry": true
+		"unsigned": true
 	},
 	"wrong_tag_lockout": {
 		"label": "Wrong Tag Lockout Time",
@@ -136,10 +118,7 @@
 		"minValue": 1,
 		"maxValue": 250,
 		"defaultValue": 180,
-		"unsigned": true,
-		"readOnly": false,
-		"writeOnly": false,
-		"allowManualEntry": true
+		"unsigned": true
 	},
 	"language": {
 		"label": "Language",
@@ -148,8 +127,6 @@
 		"maxValue": 3,
 		"defaultValue": 1,
 		"unsigned": true,
-		"readOnly": false,
-		"writeOnly": false,
 		"allowManualEntry": false,
 		"options": [
 			{
@@ -173,8 +150,6 @@
 		"maxValue": 6,
 		"defaultValue": 2,
 		"unsigned": true,
-		"readOnly": false,
-		"writeOnly": false,
 		"allowManualEntry": false,
 		"options": [
 			{
@@ -202,8 +177,6 @@
 		"maxValue": 2,
 		"defaultValue": 0,
 		"unsigned": true,
-		"readOnly": false,
-		"writeOnly": false,
 		"allowManualEntry": false,
 		"options": [
 			{
@@ -239,8 +212,6 @@
 		"maxValue": 1,
 		"defaultValue": 0,
 		"unsigned": true,
-		"readOnly": false,
-		"writeOnly": false,
 		"allowManualEntry": false,
 		"options": [
 			{
@@ -314,10 +285,7 @@
 		"minValue": 7,
 		"maxValue": 60,
 		"defaultValue": 7,
-		"unsigned": true,
-		"readOnly": false,
-		"writeOnly": false,
-		"allowManualEntry": true
+		"unsigned": true
 	},
 	"remote_relock_time": {
 		"label": "Remote Relock Time",
@@ -327,9 +295,122 @@
 		"minValue": 10,
 		"maxValue": 90,
 		"defaultValue": 10,
-		"unsigned": true,
-		"readOnly": false,
-		"writeOnly": false,
-		"allowManualEntry": true
+		"unsigned": true
+	},
+	"alarm_map_keypad_limit": {
+		"from": {
+			"alarmType": 161,
+			"alarmLevel": 1
+		},
+		"to": {
+			"notificationType": 6, // Access Control
+			"notificationEvent": 19 // Manually enter user access code exceeds code limit
+		}
+	},
+	"alarm_map_manual_unlock": {
+		"from": {
+			"alarmType": 22,
+			"alarmLevel": 1
+		},
+		"to": {
+			"notificationType": 6, // Access Control
+			"notificationEvent": 2 // Manual unlock operation
+		}
+	},
+	"alarm_map_rf_unlock": {
+		"from": {
+			"alarmType": 25,
+			"alarmLevel": 1
+		},
+		"to": {
+			"notificationType": 6, // Access Control
+			"notificationEvent": 4 // RF unlock operation
+		}
+	},
+	"alarm_map_keypad_unlock": {
+		"from": {
+			"alarmType": 19
+		},
+		"to": {
+			"notificationType": 6, // Access Control
+			"notificationEvent": 6, // Keypad unlock operation
+			"eventParameters": {
+				"userId": "alarmLevel"
+			}
+		}
+	},
+	"alarm_map_manual_lock": {
+		"from": {
+			"alarmType": 21
+		},
+		"to": {
+			"notificationType": 6, // Access Control
+			"notificationEvent": 1 // Manual lock operation
+		}
+	},
+	"alarm_map_rf_lock": {
+		"from": {
+			"alarmType": 24,
+			"alarmLevel": 1
+		},
+		"to": {
+			"notificationType": 6, // Access Control
+			"notificationEvent": 3 // RF lock operation
+		}
+	},
+	"alarm_map_keypad_lock": {
+		"from": {
+			"alarmType": 18
+		},
+		"to": {
+			"notificationType": 6, // Access Control
+			"notificationEvent": 5, // Keypad lock operation
+			"eventParameters": {
+				"userId": "alarmLevel"
+			}
+		}
+	},
+	"alarm_map_deadbolt_jammed": {
+		"from": {
+			"alarmType": 9
+		},
+		"to": {
+			"notificationType": 6, // Access Control
+			"notificationEvent": 11 // Lock jammed
+		}
+	},
+	"alarm_map_low_battery": {
+		"from": {
+			"alarmType": 167
+		},
+		"to": {
+			"notificationType": 8, // Power Management
+			"notificationEvent": 10, // Replace battery soon
+			"eventParameters": {
+				"batteryLevel": "alarmLevel"
+			}
+		}
+	},
+	"alarm_map_auto_relock": {
+		"from": {
+			"alarmType": 27,
+			"alarmLevel": 1
+		},
+		"to": {
+			"notificationType": 6, // Access Control
+			"notificationEvent": 9 // Auto lock locked operation
+		}
+	},
+	"alarm_map_rfid_unlock": {
+		"from": {
+			"alarmType": 144
+		},
+		"to": {
+			"notificationType": 6, // Access Control
+			"notificationEvent": 6, // Keypad unlock operation
+			"eventParameters": {
+				"userId": "alarmLevel"
+			}
+		}
 	}
 }

@@ -1,17 +1,28 @@
-import { ZWaveError, ZWaveErrorCodes } from "@zwave-js/core";
+import { isZWaveError, ZWaveError, ZWaveErrorCodes } from "@zwave-js/core";
 import { JSONObject, num2hex } from "@zwave-js/shared";
 import { entries } from "alcalzone-shared/objects";
 import { isObject } from "alcalzone-shared/typeguards";
 import { pathExists, readFile } from "fs-extra";
 import JSON5 from "json5";
 import path from "path";
-import { configDir, hexKeyRegexNDigits, throwInvalidConfig } from "./utils";
+import {
+	configDir,
+	externalConfigDir,
+	hexKeyRegexNDigits,
+	throwInvalidConfig,
+} from "./utils";
 
-const configPath = path.join(configDir, "meters.json");
 export type MeterMap = ReadonlyMap<number, Meter>;
 
 /** @internal */
-export async function loadMetersInternal(): Promise<MeterMap> {
+export async function loadMetersInternal(
+	externalConfig?: boolean,
+): Promise<MeterMap> {
+	const configPath = path.join(
+		(externalConfig && externalConfigDir) || configDir,
+		"meters.json",
+	);
+
 	if (!(await pathExists(configPath))) {
 		throw new ZWaveError(
 			"The config file does not exist!",
@@ -39,7 +50,7 @@ export async function loadMetersInternal(): Promise<MeterMap> {
 		}
 		return meters;
 	} catch (e: unknown) {
-		if (e instanceof ZWaveError) {
+		if (isZWaveError(e)) {
 			throw e;
 		} else {
 			throwInvalidConfig("meters");

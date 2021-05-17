@@ -18,9 +18,14 @@ import { messageIsPing } from "../commandclass/NoOperationCC";
 import { ApplicationCommandRequest } from "../controller/ApplicationCommandRequest";
 import { BridgeApplicationCommandRequest } from "../controller/BridgeApplicationCommandRequest";
 import {
+	SendDataBridgeRequest,
+	SendDataMulticastBridgeRequest,
+} from "../controller/SendDataBridgeMessages";
+import {
 	SendDataMulticastRequest,
 	SendDataRequest,
 } from "../controller/SendDataMessages";
+import { isSendData } from "../controller/SendDataShared";
 import { MessagePriority } from "../message/Constants";
 import type { Message } from "../message/Message";
 import { InterviewStage, NodeStatus } from "../node/Types";
@@ -29,7 +34,6 @@ import {
 	CommandQueueInterpreter,
 	createCommandQueueMachine,
 } from "./CommandQueueMachine";
-import type { ZWaveOptions } from "./Driver";
 import type {
 	SerialAPICommandDoneData,
 	SerialAPICommandMachineParams,
@@ -39,6 +43,7 @@ import {
 	ServiceImplementations,
 } from "./StateMachineShared";
 import type { Transaction } from "./Transaction";
+import type { ZWaveOptions } from "./ZWaveOptions";
 
 /* eslint-disable @typescript-eslint/ban-types */
 export interface SendThreadStateSchema {
@@ -156,10 +161,11 @@ export type TransactionReducerResult =
 			message?: Message;
 	  }
 	| {
-			// Changes the priority of the transaction if a new one is given,
+			// Changes the priority (and tag) of the transaction if a new one is given,
 			// and moves the current transaction back to the queue
 			type: "requeue";
 			priority?: MessagePriority;
+			tag?: any;
 	  };
 
 export type TransactionReducer = (
@@ -212,13 +218,8 @@ const incrementSendDataAttempts: AssignAction<SendThreadContext, any> = assign({
 
 const forwardToCommandQueue = forwardTo<any, any>((ctx) => ctx.commandQueue);
 
-const currentTransactionIsSendData = (ctx: SendThreadContext) => {
-	const msg = ctx.currentTransaction?.message;
-	return (
-		msg instanceof SendDataRequest ||
-		msg instanceof SendDataMulticastRequest
-	);
-};
+const currentTransactionIsSendData = (ctx: SendThreadContext) =>
+	isSendData(ctx.currentTransaction?.message);
 
 const forwardNodeUpdate = pure<SendThreadContext, any>((ctx, evt) => {
 	return raise({
@@ -301,10 +302,13 @@ const guards: MachineOptions<SendThreadContext, SendThreadEvent>["guards"] = {
 	},
 	requiresNoHandshake: (ctx) => {
 		const msg = ctx.currentTransaction?.message;
-		if (!(msg instanceof SendDataRequest)) {
-			return true;
+		if (
+			msg instanceof SendDataRequest ||
+			msg instanceof SendDataBridgeRequest
+		) {
+			return !(msg.command as CommandClass).requiresPreTransmitHandshake();
 		}
-		return !(msg.command as CommandClass).requiresPreTransmitHandshake();
+		return true;
 	},
 	isForActiveTransaction: (ctx, evt: any, meta) => {
 		return (
@@ -317,13 +321,21 @@ const guards: MachineOptions<SendThreadContext, SendThreadEvent>["guards"] = {
 				evt.transaction === ctx.currentTransaction)
 		);
 	},
-	expectsNodeUpdate: (ctx) =>
-		ctx.currentTransaction?.message instanceof SendDataRequest &&
-		(ctx.currentTransaction
-			.message as SendDataRequest).command.expectsCCResponse(),
+	expectsNodeUpdate: (ctx) => {
+		const msg = ctx.currentTransaction?.message;
+		if (
+			msg instanceof SendDataRequest ||
+			msg instanceof SendDataBridgeRequest
+		) {
+			return (msg.command as CommandClass).expectsCCResponse();
+		}
+		return false;
+	},
 	isExpectedUpdate: (ctx, evt, meta) => {
 		if (!meta.state.matches("sending.waitForUpdate")) return false;
-		const sentMsg = ctx.currentTransaction!.message as SendDataRequest;
+		const sentMsg = ctx.currentTransaction!.message as
+			| SendDataRequest
+			| SendDataBridgeRequest;
 		const receivedMsg = (evt as any).message;
 		return (
 			(receivedMsg instanceof ApplicationCommandRequest ||
@@ -334,17 +346,18 @@ const guards: MachineOptions<SendThreadContext, SendThreadEvent>["guards"] = {
 	currentTransactionIsSendData,
 	mayRetry: (ctx, evt: any) => {
 		const msg = ctx.currentTransaction!.message;
-		if (msg instanceof SendDataMulticastRequest) {
+		if (!isSendData(msg)) return false;
+		if (
+			msg instanceof SendDataMulticastRequest ||
+			msg instanceof SendDataMulticastBridgeRequest
+		) {
 			// Don't try to resend multicast messages if they were already transmitted.
 			// One or more nodes might have already reacted
 			if (evt.reason === "callback NOK") {
 				return false;
 			}
 		}
-		return (
-			(msg as SendDataRequest | SendDataMulticastRequest)
-				.maxSendAttempts > ctx.sendDataAttempts
-		);
+		return msg.maxSendAttempts > ctx.sendDataAttempts;
 	},
 
 	/** Whether the message is an outgoing pre-transmit handshake */
@@ -356,18 +369,27 @@ const guards: MachineOptions<SendThreadContext, SendThreadEvent>["guards"] = {
 		const transaction = (evt as any).transaction as Transaction;
 		if (transaction.priority !== MessagePriority.PreTransmitHandshake)
 			return false;
-		if (!(transaction.message instanceof SendDataRequest)) return false;
-		// require the handshake to be for the same node
-		return (
-			transaction.message.command.nodeId ===
-			(ctx.currentTransaction!.message as SendDataRequest).command.nodeId
-		);
+		if (
+			transaction.message instanceof SendDataRequest ||
+			transaction.message instanceof SendDataBridgeRequest
+		) {
+			// require the handshake to be for the same node
+			return (
+				transaction.message.command.nodeId ===
+				(ctx.currentTransaction!.message as
+					| SendDataRequest
+					| SendDataBridgeRequest).command.nodeId
+			);
+		}
+		return false;
 	},
 	isExpectedHandshakeResponse: (ctx, evt, meta) => {
 		if (!ctx.handshakeTransaction) return false;
 		if (!meta.state.matches("sending.handshake.waitForHandshakeResponse"))
 			return false;
-		const sentMsg = ctx.handshakeTransaction.message as SendDataRequest;
+		const sentMsg = ctx.handshakeTransaction.message as
+			| SendDataRequest
+			| SendDataBridgeRequest;
 		const receivedMsg = (evt as any).message;
 		if (!isCommandClassContainer(receivedMsg)) return false;
 		return (
@@ -383,12 +405,19 @@ const guards: MachineOptions<SendThreadContext, SendThreadEvent>["guards"] = {
 		// Then ensure that the event transaction is also SendData
 		const transaction = (evt as any).transaction as Transaction;
 		if (transaction.priority !== MessagePriority.Handshake) return false;
-		if (!(transaction.message instanceof SendDataRequest)) return false;
-		// require the handshake to be for the same node
-		return (
-			transaction.message.command.nodeId ===
-			(ctx.currentTransaction!.message as SendDataRequest).command.nodeId
-		);
+		if (
+			transaction.message instanceof SendDataRequest ||
+			transaction.message instanceof SendDataBridgeRequest
+		) {
+			// require the handshake to be for the same node
+			return (
+				transaction.message.command.nodeId ===
+				(ctx.currentTransaction!.message as
+					| SendDataRequest
+					| SendDataBridgeRequest).command.nodeId
+			);
+		}
+		return false;
 	},
 	shouldNotKeepCurrentTransaction: (ctx, evt) => {
 		const reducer = (evt as any).reducer;
@@ -588,6 +617,9 @@ export function createSendThreadMachine(
 					case "requeue":
 						if (reducerResult.priority != undefined) {
 							transaction.priority = reducerResult.priority;
+						}
+						if (reducerResult.tag != undefined) {
+							transaction.tag = reducerResult.tag;
 						}
 						requeue.push(transaction);
 						break;
@@ -1009,8 +1041,9 @@ export function createSendThreadMachine(
 				preTransmitHandshake: async (ctx) => {
 					// Execute the pre transmit handshake and swallow all errors
 					try {
-						await (ctx.currentTransaction!
-							.message as SendDataRequest).command.preTransmitHandshake();
+						await (ctx.currentTransaction!.message as
+							| SendDataRequest
+							| SendDataBridgeRequest).command.preTransmitHandshake();
 					} catch (e) {}
 				},
 				notifyRetry: (ctx) => {
@@ -1019,8 +1052,9 @@ export function createSendThreadMachine(
 						undefined,
 						ctx.currentTransaction!.message,
 						ctx.sendDataAttempts,
-						(ctx.currentTransaction!.message as SendDataRequest)
-							.maxSendAttempts,
+						(ctx.currentTransaction!.message as
+							| SendDataRequest
+							| SendDataBridgeRequest).maxSendAttempts,
 						500,
 					);
 					return Promise.resolve();

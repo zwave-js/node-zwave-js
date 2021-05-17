@@ -1,5 +1,3 @@
-// Fibargroup FGFS101
-// Flood Sensor
 {
 	"manufacturer": "Fibargroup",
 	"manufacturerId": "0x010f",
@@ -45,10 +43,7 @@
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 3600,
-			"defaultValue": 0,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"defaultValue": 0
 		},
 		"2": {
 			"label": "Acoustic/visual signals On/Off in case of flooding",
@@ -58,8 +53,6 @@
 			"maxValue": 255,
 			"defaultValue": 3,
 			"unsigned": true,
-			"readOnly": false,
-			"writeOnly": false,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -88,8 +81,6 @@
 			"maxValue": 255,
 			"defaultValue": 255,
 			"unsigned": true,
-			"readOnly": false,
-			"writeOnly": false,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -109,10 +100,7 @@
 			"minValue": 1,
 			"maxValue": 255,
 			"defaultValue": 255,
-			"unsigned": true,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"unsigned": true
 		},
 		"9": {
 			"label": "Alarm cancelling or turning a device off",
@@ -122,8 +110,6 @@
 			"maxValue": 255,
 			"defaultValue": 1,
 			"unsigned": true,
-			"readOnly": false,
-			"writeOnly": false,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -141,10 +127,7 @@
 			"valueSize": 2,
 			"minValue": 1,
 			"maxValue": 32767,
-			"defaultValue": 300,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"defaultValue": 300
 		},
 		"12": {
 			"label": "Insensitiveness to temperature changes.",
@@ -152,10 +135,7 @@
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 1000,
-			"defaultValue": 50,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"defaultValue": 50
 		},
 		"13": {
 			"label": "Alarm BROADCAST",
@@ -165,8 +145,6 @@
 			"maxValue": 255,
 			"defaultValue": 0,
 			"unsigned": true,
-			"readOnly": false,
-			"writeOnly": false,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -193,10 +171,7 @@
 			"valueSize": 2,
 			"minValue": -10000,
 			"maxValue": 10000,
-			"defaultValue": 1500,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"defaultValue": 1500
 		},
 		"51": {
 			"label": "High temperature alarm threshold",
@@ -204,10 +179,7 @@
 			"valueSize": 2,
 			"minValue": -10000,
 			"maxValue": 10000,
-			"defaultValue": 3500,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"defaultValue": 3500
 		},
 		"61": {
 			"label": "Low temperature alarm indicator colour",
@@ -215,10 +187,7 @@
 			"valueSize": 4,
 			"minValue": 0,
 			"maxValue": 16777215,
-			"defaultValue": 255,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"defaultValue": 255
 		},
 		"62": {
 			"label": "High temperature alarm indicator colour",
@@ -226,10 +195,7 @@
 			"valueSize": 4,
 			"minValue": 0,
 			"maxValue": 16777215,
-			"defaultValue": 16711680,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"defaultValue": 16711680
 		},
 		"63": {
 			"label": "Managing a LED indicator under standard operation",
@@ -239,8 +205,6 @@
 			"maxValue": 255,
 			"defaultValue": 2,
 			"unsigned": true,
-			"readOnly": false,
-			"writeOnly": false,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -263,10 +227,7 @@
 			"valueSize": 2,
 			"minValue": -10000,
 			"maxValue": 10000,
-			"defaultValue": 0,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"defaultValue": 0
 		},
 		"74": {
 			"label": "Alarm frame sent to 2nd Assoc Grp",
@@ -276,8 +237,6 @@
 			"maxValue": 255,
 			"defaultValue": 2,
 			"unsigned": true,
-			"readOnly": false,
-			"writeOnly": false,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -304,10 +263,7 @@
 			"minValue": 0,
 			"maxValue": 65535,
 			"defaultValue": 0,
-			"unsigned": true,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"unsigned": true
 		},
 		"76": {
 			"label": "Alarm/basic retransmission time when flooding",
@@ -317,10 +273,7 @@
 			"minValue": 0,
 			"maxValue": 65535,
 			"defaultValue": 0,
-			"unsigned": true,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"unsigned": true
 		},
 		"77": {
 			"label": "Flood sensor functionality turned off",
@@ -330,8 +283,6 @@
 			"maxValue": 255,
 			"defaultValue": 0,
 			"unsigned": true,
-			"readOnly": false,
-			"writeOnly": false,
 			"allowManualEntry": false,
 			"options": [
 				{

@@ -1,5 +1,3 @@
-// AEON Labs DSC10
-// Heavy Duty Smart Switch
 {
 	"manufacturer": "AEON Labs",
 	"manufacturerId": "0x0086",
@@ -18,7 +16,7 @@
 	},
 	"associations": {
 		"1": {
-			"label": "Group 1",
+			"label": "Lifeline",
 			"maxNodes": 5,
 			"isLifeline": true
 		},
@@ -29,159 +27,84 @@
 	},
 	"paramInformation": {
 		"3": {
-			"label": "Current Overload Protection",
-			"description": "See overview",
-			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 1,
-			"defaultValue": 0,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true,
-			"options": [
-				{
-					"label": "Activate Overload Protection",
-					"value": 0
-				},
-				{
-					"label": "Deactivate Overload Protection",
-					"value": 1
-				}
-			]
+			"$import": "templates/aeotec_template.json#current_overload"
 		},
 		"20": {
-			"label": "Output Load Status",
-			"description": "Configure the output load status after re‐power on.",
-			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 2,
-			"defaultValue": 0,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true,
-			"options": [
-				{
-					"label": "Last Status",
-					"value": 0
-				},
-				{
-					"label": "Always ON",
-					"value": 1
-				},
-				{
-					"label": "Always OFF",
-					"value": 2
-				}
-			]
+			"$import": "../templates/master_template.json#state_after_power_failure"
 		},
 		"80": {
-			"label": "Notification on Status Change",
-			"description": "The type of report to send when the device status changes",
-			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 2,
-			"defaultValue": 0,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "Nothing",
-					"value": 0
-				},
-				{
-					"label": "Hail",
-					"value": 1
-				},
-				{
-					"label": "Basic CC Report",
-					"value": 2
-				}
-			]
+			"$import": "templates/aeotec_template.json#enable_notifications"
 		},
 		"90": {
-			"label": "Enables/disables parameter 91/92",
-			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 1,
-			"defaultValue": 0,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true,
-			"options": [
-				{
-					"label": "Enable parameters 91 and 92",
-					"value": 0
-				},
-				{
-					"label": "Disable parameters 91 and 92",
-					"value": 1
-				}
-			]
+			"$import": "templates/aeotec_template.json#send_automatic_reports"
 		},
 		"91": {
-			"label": "Minimum Change to send Report (Watt)",
-			"description": "The value represents the minimum change in wattage for a Report to be sent.",
-			"valueSize": 2,
-			"unit": "W",
-			"minValue": 0,
-			"maxValue": 32000,
-			"defaultValue": 50,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"$import": "templates/aeotec_template.json#wattage_trigger"
 		},
 		"92": {
-			"label": "Minimum Change to send Report (%)",
-			"description": "The minimum change in wattage Percent for a report to be sent",
-			"valueSize": 1,
-			"unit": "%",
-			"minValue": 0,
-			"maxValue": 100,
-			"defaultValue": 10,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"$import": "templates/aeotec_template.json#wattage_percent_trigger"
+		},
+		"100": {
+			"$import": "templates/aeotec_template.json#reset_parameters",
+			"label": "Reset Parameters 101-103 to Default Values"
+		},
+		"101[0x01]": {
+			"$import": "templates/aeotec_template.json#auto_report_group1_v"
+		},
+		"101[0x02]": {
+			"$import": "templates/aeotec_template.json#auto_report_group1_amp"
+		},
+		"101[0x04]": {
+			"$import": "templates/aeotec_template.json#auto_report_group1_watt"
+		},
+		"101[0x08]": {
+			"$import": "templates/aeotec_template.json#auto_report_group1_kwh"
+		},
+		"102[0x01]": {
+			"$import": "templates/aeotec_template.json#auto_report_group2_v"
+		},
+		"102[0x02]": {
+			"$import": "templates/aeotec_template.json#auto_report_group2_amp"
+		},
+		"102[0x04]": {
+			"$import": "templates/aeotec_template.json#auto_report_group2_watt"
+		},
+		"102[0x08]": {
+			"$import": "templates/aeotec_template.json#auto_report_group2_kwh"
+		},
+		"103[0x01]": {
+			"$import": "templates/aeotec_template.json#auto_report_group3_v"
+		},
+		"103[0x02]": {
+			"$import": "templates/aeotec_template.json#auto_report_group3_amp"
+		},
+		"103[0x04]": {
+			"$import": "templates/aeotec_template.json#auto_report_group3_watt"
+		},
+		"103[0x08]": {
+			"$import": "templates/aeotec_template.json#auto_report_group3_kwh"
+		},
+		"110": {
+			"$import": "templates/aeotec_template.json#reset_parameters",
+			"label": "Reset Parameters 111-113 to Default Values"
+		},
+		"111": {
+			"$import": "templates/aeotec_template.json#auto_report_interval_group1",
+			"maxValue": 2147483647
+		},
+		"112": {
+			"$import": "templates/aeotec_template.json#auto_report_interval_group2",
+			"maxValue": 2147483647
+		},
+		"113": {
+			"$import": "templates/aeotec_template.json#auto_report_interval_group3",
+			"maxValue": 2147483647
 		},
 		"200": {
-			"label": "Partner ID",
-			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 1,
-			"defaultValue": 0,
-			"readOnly": true,
-			"writeOnly": false,
-			"allowManualEntry": true,
-			"options": [
-				{
-					"label": "Aeon Labs",
-					"value": 0
-				},
-				{
-					"label": "Other",
-					"value": 1
-				}
-			]
+			"$import": "templates/aeotec_template.json#partner_id_other"
 		},
 		"252": {
-			"label": "Lock/unlock Configuration Changes",
-			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 1,
-			"defaultValue": 0,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true,
-			"options": [
-				{
-					"label": "Unlocked",
-					"value": 0
-				},
-				{
-					"label": "Locked",
-					"value": 1
-				}
-			]
+			"$import": "templates/aeotec_template.json#lock_configuration"
 		}
 	}
 }

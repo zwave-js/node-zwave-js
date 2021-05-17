@@ -111,5 +111,6 @@
 			"fileMatch": ["/packages/config/config/deviceClasses.json"],
 			"url": "/maintenance/schemas/deviceClasses.json"
 		}
-	]
+	],
+	"debug.javascript.unmapMissingSources": true
 }

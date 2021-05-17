@@ -1,5 +1,3 @@
-// AEON Labs ZW080
-// Siren Gen5
 {
 	"manufacturer": "AEON Labs",
 	"manufacturerId": "0x0086",
@@ -8,124 +6,77 @@
 	"devices": [
 		{
 			"productType": "0x0104",
-			"productId": "0x0050"
+			"productId": "0x0050",
+			"zwaveAllianceId": 1134
 		},
 		{
 			"productType": "0x0204",
-			"productId": "0x0050"
+			"productId": "0x0050",
+			"zwaveAllianceId": 1141
 		}
 	],
 	"firmwareVersion": {
 		"min": "0.0",
 		"max": "255.255"
 	},
-	"supportsZWavePlus": true,
+	"associations": {
+		"1": {
+			"label": "Lifeline",
+			"maxNodes": 5,
+			"isLifeline": true
+		}
+	},
 	"paramInformation": {
-		"80": {
-			"label": "Enable Notifications to Group 1",
-			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 255,
-			"defaultValue": 25,
-			"unsigned": true,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
-		},
-		"200": {
-			"label": "Partner ID",
-			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 255,
-			"defaultValue": 0,
-			"unsigned": true,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
-		},
-		"252": {
-			"label": "Enable/disable Configuration Updates",
-			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 1,
-			"defaultValue": 0,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true,
-			"options": [
-				{
-					"label": "Enabled",
-					"value": 0
-				},
-				{
-					"label": "Disabled",
-					"value": 1
-				}
-			]
-		},
 		"37[0xff00]": {
 			"label": "Siren Sound",
 			"valueSize": 2,
-			"minValue": 0,
+			"minValue": 1,
 			"maxValue": 5,
 			"defaultValue": 1,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true,
 			"options": [
 				{
-					"label": "Do not change the current Siren sound",
-					"value": 0
-				},
-				{
-					"label": "Siren sound 1 is selected",
+					"label": "Sound 1",
 					"value": 1
 				},
 				{
-					"label": "Siren sound 2 is selected",
+					"label": "Sound 2",
 					"value": 2
 				},
 				{
-					"label": "Siren sound 3 is selected",
+					"label": "Sound 3",
 					"value": 3
 				},
 				{
-					"label": "Siren sound 4 is selected",
+					"label": "Sound 4",
 					"value": 4
 				},
 				{
-					"label": "Siren sound 5 is selected",
+					"label": "Sound 5",
 					"value": 5
 				}
 			]
 		},
 		"37[0xff]": {
-			"label": "Siren Volume",
-			"valueSize": 2,
-			"minValue": 0,
-			"maxValue": 3,
-			"defaultValue": 3,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true,
-			"options": [
-				{
-					"label": "Do not change the current volume",
-					"value": 0
-				},
-				{
-					"label": "Set the volume to 88 dB",
-					"value": 1
-				},
-				{
-					"label": "Set the volume to 100 dB",
-					"value": 2
-				},
-				{
-					"label": "Set the volume to 105 dB",
-					"value": 3
-				}
-			]
+			"$import": "templates/aeotec_template.json#wattage_percent_trigger",
+			"valueSize": 2
+		},
+		"80": {
+			"$import": "templates/aeotec_template.json#enable_notifications"
+		},
+		"200": {
+			"$import": "templates/aeotec_template.json#partner_id_aeotec"
+		},
+		"252": {
+			"$import": "templates/aeotec_template.json#lock_configuration"
+		},
+		"255": {
+			"$import": "templates/aeotec_template.json#factory_reset_exclude"
 		}
+	},
+	"metadata": {
+		"inclusion": "Turn the primary controller of Z-Wave network into inclusion mode, short press the product’s Action button that you can find on the product's housing",
+		"exclusion": "Turn the primary controller of Z-Wave network into exclusion mode, short press the product’s Action button that you can find on the product's housing",
+		"reset": "Press and hold the Action button that you can find on the product's housing for 20 seconds and then release. This procedure should only be used when the primary controller is inoperable",
+		"manual": "https://products.z-wavealliance.org/ProductManual/File?folder=&filename=MarketCertificationFiles/1141/Siren%20Gen5%20Manual.pdf"
 	}
 }

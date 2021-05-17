@@ -1,5 +1,3 @@
-// Eaton RF96APM
-// Plug-In Module - ON/OFF
 {
 	"manufacturer": "Eaton",
 	"manufacturerId": "0x001a",
@@ -25,8 +23,6 @@
 			"maxValue": 1,
 			"defaultValue": 1,
 			"unsigned": true,
-			"readOnly": false,
-			"writeOnly": false,
 			"allowManualEntry": false,
 			"options": [
 				{

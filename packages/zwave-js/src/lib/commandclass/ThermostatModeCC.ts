@@ -187,7 +187,7 @@ export class ThermostatModeCCAPI extends CCAPI {
 export class ThermostatModeCC extends CommandClass {
 	declare ccCommand: ThermostatModeCommand;
 
-	public async interview(complete: boolean = true): Promise<void> {
+	public async interview(): Promise<void> {
 		const node = this.getNode()!;
 		const endpoint = this.getEndpoint()!;
 		const api = endpoint.commandClasses["Thermostat Mode"].withOptions({
@@ -196,45 +196,51 @@ export class ThermostatModeCC extends CommandClass {
 
 		this.driver.controllerLog.logNode(node.id, {
 			endpoint: this.endpointIndex,
-			message: `${this.constructor.name}: doing a ${
-				complete ? "complete" : "partial"
-			} interview...`,
+			message: `Interviewing ${this.ccName}...`,
 			direction: "none",
 		});
 
-		if (complete) {
-			// First query the possible modes to set the metadata
+		// First query the possible modes to set the metadata
+		this.driver.controllerLog.logNode(node.id, {
+			endpoint: this.endpointIndex,
+			message: "querying supported thermostat modes...",
+			direction: "outbound",
+		});
+
+		const supportedModes = await api.getSupportedModes();
+		if (supportedModes) {
+			const logMessage = `received supported thermostat modes:${supportedModes
+				.map((mode) => `\n· ${getEnumMemberName(ThermostatMode, mode)}`)
+				.join("")}`;
 			this.driver.controllerLog.logNode(node.id, {
 				endpoint: this.endpointIndex,
-				message: "querying supported thermostat modes...",
-				direction: "outbound",
+				message: logMessage,
+				direction: "inbound",
 			});
-
-			const supportedModes = await api.getSupportedModes();
-			if (supportedModes) {
-				const logMessage = `received supported thermostat modes:${supportedModes
-					.map(
-						(mode) =>
-							`\n· ${getEnumMemberName(ThermostatMode, mode)}`,
-					)
-					.join("")}`;
-				this.driver.controllerLog.logNode(node.id, {
-					endpoint: this.endpointIndex,
-					message: logMessage,
-					direction: "inbound",
-				});
-			} else {
-				this.driver.controllerLog.logNode(node.id, {
-					endpoint: this.endpointIndex,
-					message:
-						"Querying supported thermostat modes timed out, skipping interview...",
-					level: "warn",
-				});
-				return;
-			}
+		} else {
+			this.driver.controllerLog.logNode(node.id, {
+				endpoint: this.endpointIndex,
+				message:
+					"Querying supported thermostat modes timed out, skipping interview...",
+				level: "warn",
+			});
+			return;
 		}
 
-		// Always query the actual status
+		await this.refreshValues();
+
+		// Remember that the interview is complete
+		this.interviewComplete = true;
+	}
+
+	public async refreshValues(): Promise<void> {
+		const node = this.getNode()!;
+		const endpoint = this.getEndpoint()!;
+		const api = endpoint.commandClasses["Thermostat Mode"].withOptions({
+			priority: MessagePriority.NodeQuery,
+		});
+
+		// Query the current status
 		this.driver.controllerLog.logNode(node.id, {
 			endpoint: this.endpointIndex,
 			message: "querying current thermostat mode...",
@@ -250,9 +256,6 @@ export class ThermostatModeCC extends CommandClass {
 				direction: "inbound",
 			});
 		}
-
-		// Remember that the interview is complete
-		this.interviewComplete = true;
 	}
 }
 

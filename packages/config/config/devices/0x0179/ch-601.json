@@ -1,5 +1,3 @@
-// ConnectHome CH-601
-// CH-601 THE ELECTRIC CRANE
 {
 	"manufacturer": "ConnectHome",
 	"manufacturerId": "0x0179",
@@ -33,8 +31,6 @@
 			"minValue": 0,
 			"maxValue": 1,
 			"defaultValue": 1,
-			"readOnly": false,
-			"writeOnly": false,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -54,10 +50,7 @@
 			"minValue": 0,
 			"maxValue": 65000,
 			"defaultValue": 0,
-			"unsigned": true,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"unsigned": true
 		}
 	}
 }

@@ -1,15 +1,17 @@
-// Wintop 82
-// Wintop iDoorSensor
 {
 	"manufacturer": "Wintop",
 	"manufacturerId": "0x0097",
 	"label": "82",
-	"description": "Wintop iDoorSensor",
+	"description": "iDoorSensor",
 	"devices": [
 		{
 			"productType": "0x1182",
 			"productId": "0x4500",
 			"zwaveAllianceId": 754
+		},
+		{
+			"productType": "0x1182",
+			"productId": "0x5101"
 		}
 	],
 	"firmwareVersion": {

@@ -1,4 +1,4 @@
-import { ObjectKeyMap } from "./ObjectKeyMap";
+import { ObjectKeyMap, ReadonlyObjectKeyMap } from "./ObjectKeyMap";
 
 describe("lib/util/ObjectKeyMap", () => {
 	describe("get()", () => {
@@ -213,5 +213,19 @@ describe("lib/util/ObjectKeyMap", () => {
 				{ property: "foo", propertyKey: "1" },
 			]);
 		});
+	});
+
+	it("should be iterable", () => {
+		const map: ReadonlyObjectKeyMap<
+			{ key: string },
+			number
+		> = new ObjectKeyMap([[{ key: "test" }, 1]]);
+		expect([...map]).toEqual([[{ key: "test" }, 1]]);
+
+		const readonlyMap: ReadonlyObjectKeyMap<
+			{ key: string },
+			number
+		> = new ObjectKeyMap([[{ key: "test" }, 1]]);
+		expect([...readonlyMap]).toEqual([[{ key: "test" }, 1]]);
 	});
 });

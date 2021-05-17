@@ -1,5 +1,3 @@
-// Danfoss DTHERMZ5
-// Z-Wave room sensor
 {
 	"manufacturer": "Danfoss",
 	"manufacturerId": "0x0002",
@@ -22,10 +20,7 @@
 			"valueSize": 2,
 			"minValue": 1,
 			"maxValue": 100,
-			"defaultValue": 5,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"defaultValue": 5
 		},
 		"2": {
 			"label": "Set-point display resolution",
@@ -34,10 +29,7 @@
 			"unit": "°C",
 			"minValue": 1,
 			"maxValue": 100,
-			"defaultValue": 5,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"defaultValue": 5
 		},
 		"3": {
 			"label": "Min Set-point and override limit",
@@ -46,10 +38,7 @@
 			"unit": "°C",
 			"minValue": 0,
 			"maxValue": 40,
-			"defaultValue": 12,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"defaultValue": 12
 		},
 		"4": {
 			"label": "Max Set-point and override limit",
@@ -58,10 +47,7 @@
 			"unit": "°C",
 			"minValue": 0,
 			"maxValue": 40,
-			"defaultValue": 28,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"defaultValue": 28
 		},
 		"5": {
 			"label": "LED Flash period",
@@ -70,10 +56,7 @@
 			"unit": "seconds",
 			"minValue": 0,
 			"maxValue": 65535,
-			"defaultValue": 1,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"defaultValue": 1
 		},
 		"6": {
 			"label": "Set-point control function",
@@ -83,8 +66,6 @@
 			"minValue": 0,
 			"maxValue": 1,
 			"defaultValue": 1,
-			"readOnly": false,
-			"writeOnly": false,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -105,8 +86,6 @@
 			"minValue": 0,
 			"maxValue": 1,
 			"defaultValue": 1,
-			"readOnly": false,
-			"writeOnly": false,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -126,8 +105,6 @@
 			"minValue": 1,
 			"maxValue": 10,
 			"defaultValue": 1,
-			"readOnly": false,
-			"writeOnly": false,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -150,10 +127,7 @@
 			"valueSize": 2,
 			"minValue": 1,
 			"maxValue": 5,
-			"defaultValue": 1,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"defaultValue": 1
 		},
 		"10": {
 			"label": "Number of LED flashes (duration)",
@@ -162,10 +136,7 @@
 			"minValue": 0,
 			"maxValue": 255,
 			"defaultValue": 5,
-			"unsigned": true,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"unsigned": true
 		},
 		"11": {
 			"label": "LED color",
@@ -174,8 +145,6 @@
 			"minValue": 1,
 			"maxValue": 2,
 			"defaultValue": 1,
-			"readOnly": false,
-			"writeOnly": false,
 			"allowManualEntry": false,
 			"options": [
 				{

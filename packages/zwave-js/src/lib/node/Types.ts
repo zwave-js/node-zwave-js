@@ -7,7 +7,8 @@ import type {
 	ValueUpdatedArgs,
 } from "@zwave-js/core";
 import type { FirmwareUpdateStatus } from "../commandclass";
-import type { NotificationCCReport } from "../commandclass/NotificationCC";
+import type { ZWaveNotificationCallbackParams_EntryControlCC } from "../commandclass/EntryControlCC";
+import type { ZWaveNotificationCallbackParams_NotificationCC } from "../commandclass/NotificationCC";
 import type { ZWaveNode } from "./Node";
 
 export interface TranslatedValueID extends ValueID {
@@ -57,11 +58,6 @@ export type ZWaveNodeMetadataUpdatedCallback = (
 	node: ZWaveNode,
 	args: ZWaveNodeMetadataUpdatedArgs,
 ) => void;
-export type ZWaveNotificationCallback = (
-	node: ZWaveNode,
-	notificationLabel: string,
-	parameters?: NotificationCCReport["eventParameters"],
-) => void;
 export type ZWaveInterviewFailedCallback = (
 	node: ZWaveNode,
 	args: NodeInterviewFailedEventArgs,
@@ -79,6 +75,12 @@ export type ZWaveNodeFirmwareUpdateFinishedCallback = (
 export type ZWaveNodeStatusChangeCallback = (
 	node: ZWaveNode,
 	oldStatus: NodeStatus,
+) => void;
+
+export type ZWaveNotificationCallback = (
+	...args:
+		| ZWaveNotificationCallbackParams_NotificationCC
+		| ZWaveNotificationCallbackParams_EntryControlCC
 ) => void;
 
 export interface ZWaveNodeValueEventCallbacks {
@@ -100,6 +102,8 @@ export interface ZWaveNodeEventCallbacks extends ZWaveNodeValueEventCallbacks {
 	alive: ZWaveNodeStatusChangeCallback;
 	"interview completed": (node: ZWaveNode) => void;
 	ready: (node: ZWaveNode) => void;
+	"interview stage completed": (node: ZWaveNode, stageName: string) => void;
+	"interview started": (node: ZWaveNode) => void;
 }
 
 export type ZWaveNodeEvents = Extract<keyof ZWaveNodeEventCallbacks, string>;
@@ -112,16 +116,6 @@ export enum InterviewStage {
 	ProtocolInfo,
 	/** The node has been queried for supported and controlled command classes */
 	NodeInfo,
-
-	// ===== the stuff above should never change =====
-
-	/**
-	 * This marks the beginning of re-interviews on application startup.
-	 * RestartFromCache and later stages will be serialized as "Complete" in the cache
-	 */
-	RestartFromCache,
-
-	// ===== the stuff below changes frequently, so it has to be redone on every start =====
 
 	/**
 	 * Information for all command classes has been queried.
@@ -152,4 +146,20 @@ export enum NodeStatus {
 	Awake,
 	Dead,
 	Alive,
+}
+
+export enum ProtocolVersion {
+	"unknown" = 0,
+	"2.0" = 1,
+	"4.2x / 5.0x" = 2,
+	"4.5x / 6.0x" = 3,
+}
+
+export type FLiRS = false | "250ms" | "1000ms";
+
+export type DataRate = 9600 | 40000 | 100000;
+
+export enum NodeType {
+	Controller,
+	"Routing End Node",
 }

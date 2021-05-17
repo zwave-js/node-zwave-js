@@ -1,5 +1,3 @@
-// Remotec ZFM-80 / ZDW-80 / ZRW-80
-// Fixture Switch Module
 {
 	"manufacturer": "Remotec",
 	"manufacturerId": "0x5254",
@@ -31,8 +29,6 @@
 			"minValue": 0,
 			"maxValue": 4,
 			"defaultValue": 3,
-			"readOnly": false,
-			"writeOnly": false,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -65,10 +61,7 @@
 			"minValue": 0,
 			"maxValue": 240,
 			"defaultValue": 0,
-			"unsigned": true,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"unsigned": true
 		},
 		"3": {
 			"label": "NodeIdNumber",
@@ -77,10 +70,7 @@
 			"minValue": 0,
 			"maxValue": 232,
 			"defaultValue": 0,
-			"unsigned": true,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"unsigned": true
 		},
 		"4": {
 			"label": "OutputStatus",
@@ -88,10 +78,7 @@
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 1,
-			"defaultValue": 0,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"defaultValue": 0
 		}
 	}
 }

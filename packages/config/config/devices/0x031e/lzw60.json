@@ -1,10 +1,8 @@
-// Inovelli LZW60
-// 4-in-1 Sensor
 {
 	"manufacturer": "Inovelli",
 	"manufacturerId": "0x031e",
 	"label": "LZW60",
-	"description": "4-in-1 Sensor",
+	"description": "4-in-1 Motion Sensor",
 	"devices": [
 		{
 			"productType": "0x000d",
@@ -18,50 +16,46 @@
 	},
 	"paramInformation": {
 		"10": {
-			"label": "Low Battery Power Level Alarm",
+			"label": "Low Battery Alert Level",
+			"description": "At what battery level should the sensor send a low battery alert",
 			"valueSize": 1,
 			"unit": "%",
 			"minValue": 10,
 			"maxValue": 50,
 			"defaultValue": 10,
-			"unsigned": true,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"unsigned": true
 		},
 		"12": {
-			"label": "PIR Sensitivity",
-			"description": "Change the sensitivity of the PIR (motion) sensor; 0 = off, 1 (low) - 10 (high)",
+			"label": "Motion Sensor Sensitivity",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 10,
 			"defaultValue": 8,
 			"unsigned": true,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"options": [
+				{
+					"label": "Disable",
+					"value": 0
+				}
+			]
 		},
 		"13": {
-			"label": "PIR Trigger Time (Time Between PIR Readings)",
+			"label": "PIR Reset Time",
+			"description": "How long after motion stops should the sensor wait before sending a no-motion report",
 			"valueSize": 2,
 			"unit": "seconds",
 			"minValue": 5,
 			"maxValue": 15300,
 			"defaultValue": 30,
-			"unsigned": true,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"unsigned": true
 		},
 		"14": {
-			"label": "Basic Set Command Send After PIR Trigger",
+			"label": "Send Basic Set After PIR Trigger",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 1,
 			"defaultValue": 0,
 			"unsigned": true,
-			"readOnly": false,
-			"writeOnly": false,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -75,14 +69,12 @@
 			]
 		},
 		"15": {
-			"label": "Reverse Basic Set Behavior in Association Group 2",
+			"label": "Reverse Basic Set Behavior",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 1,
 			"defaultValue": 0,
 			"unsigned": true,
-			"readOnly": false,
-			"writeOnly": false,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -97,55 +89,73 @@
 		},
 		"101": {
 			"label": "Temperature Reporting Interval",
-			"description": "Note: The set value will round to the nearest minute. (0 = Off)",
+			"description": "Value will be rounded to the nearest minute",
 			"valueSize": 4,
 			"unit": "seconds",
 			"minValue": 0,
 			"maxValue": 2678400,
 			"defaultValue": 7200,
 			"unsigned": true,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"options": [
+				{
+					"label": "Disable",
+					"value": 0
+				}
+			]
 		},
 		"102": {
 			"label": "Humidity Reporting Interval",
-			"description": "Note: The set value will round to the nearest minute. (0 = Off)",
+			"description": "Value will be rounded to the nearest minute",
 			"valueSize": 4,
 			"unit": "seconds",
 			"minValue": 0,
 			"maxValue": 2678400,
 			"defaultValue": 7200,
 			"unsigned": true,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"options": [
+				{
+					"label": "Disable",
+					"value": 0
+				}
+			]
 		},
 		"103": {
 			"label": "Luminance Reporting Interval",
-			"description": "Note: The set value will round to the nearest minute. (0 = Off)",
+			"description": "Value will be rounded to nearest minute",
 			"valueSize": 4,
 			"unit": "seconds",
 			"minValue": 0,
 			"maxValue": 2678400,
 			"defaultValue": 7200,
-			"unsigned": true,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"unsigned": true
 		},
 		"104": {
 			"label": "Battery Reporting Interval",
-			"description": "Note: The set value will round to the nearest minute.",
+			"description": "Value will be rounded to nearest minute",
 			"valueSize": 4,
 			"unit": "seconds",
 			"minValue": 0,
 			"maxValue": 2678400,
-			"defaultValue": 86400,
-			"unsigned": true,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"defaultValue": 7200,
+			"unsigned": true
+		},
+		"110": {
+			"label": "Report Only When Thresholds Are Met",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 0,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Disable",
+					"value": 0
+				},
+				{
+					"label": "Enable",
+					"value": 1
+				}
+			]
 		},
 		"111": {
 			"label": "Temperature Report Threshold",
@@ -154,10 +164,7 @@
 			"minValue": 1,
 			"maxValue": 500,
 			"defaultValue": 10,
-			"unsigned": true,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"unsigned": true
 		},
 		"112": {
 			"label": "Humidity Report Threshold",
@@ -166,10 +173,7 @@
 			"minValue": 1,
 			"maxValue": 32,
 			"defaultValue": 5,
-			"unsigned": true,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"unsigned": true
 		},
 		"113": {
 			"label": "Luminance Report Threshold",
@@ -178,22 +182,16 @@
 			"minValue": 1,
 			"maxValue": 65528,
 			"defaultValue": 150,
-			"unsigned": true,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"unsigned": true
 		},
 		"114": {
 			"label": "Battery Report Threshold",
 			"valueSize": 1,
 			"unit": "%",
-			"minValue": 0,
+			"minValue": 1,
 			"maxValue": 100,
 			"defaultValue": 10,
-			"unsigned": true,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"unsigned": true
 		}
 	},
 	"metadata": {

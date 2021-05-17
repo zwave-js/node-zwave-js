@@ -1,5 +1,3 @@
-// Fantem FT100
-// Oomi Multisensor
 {
 	"manufacturer": "Fantem",
 	"manufacturerId": "0x016a",
@@ -8,6 +6,10 @@
 	"devices": [
 		{
 			"productType": "0x0002",
+			"productId": "0x0064"
+		},
+		{
+			"productType": "0x0202",
 			"productId": "0x0064"
 		}
 	],
@@ -18,130 +20,449 @@
 	"associations": {
 		"1": {
 			"label": "Lifeline",
-			"maxNodes": 1,
+			"maxNodes": 5,
 			"isLifeline": true
-		}
-	},
-	"paramInformation": {
+		},
 		"2": {
-			"label": "Stay Awake in Battery Mode",
-			"description": "Stay awake for 10 minutes at power on",
-			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 1,
-			"defaultValue": 0,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "disable",
-					"value": 0
-				},
-				{
-					"label": "enable",
-					"value": 1
-				}
-			]
+			"label": "Group 2",
+			"maxNodes": 5
 		},
 		"3": {
-			"label": "Default PIR time",
+			"label": "Group 3",
+			"maxNodes": 5
+		}
+	},
+	//Fantem is an OEM for Aeotec
+	"paramInformation": {
+		"2": {
+			"$import": "../0x0086/templates/aeotec_template.json#wake_up_10_minutes"
+		},
+		"3": {
+			"label": "PIR Sensor Timeout",
 			"valueSize": 2,
 			"minValue": 10,
 			"maxValue": 3600,
-			"defaultValue": 240,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"defaultValue": 240
 		},
 		"4": {
-			"label": "Motion sensor sensitivity",
-			"description": "Sensitivity level of PIR sensor (1=minimum, 5=maximum)",
+			"label": "PIR Sensitivity",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 5,
 			"defaultValue": 5,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "disable",
-					"value": 0
-				},
-				{
-					"label": "sensitivity level 1",
-					"value": 1
-				},
-				{
-					"label": "sensitivity level 2",
-					"value": 2
-				},
-				{
-					"label": "sensitivity level 3",
-					"value": 3
-				},
-				{
-					"label": "sensitivity level 4",
-					"value": 4
-				},
-				{
-					"label": "sensitivity level 5",
-					"value": 5
-				}
-			]
+			"unsigned": true
 		},
 		"5": {
-			"label": "Motion sensor command when triggered",
-			"valueSize": 1,
-			"minValue": 1,
-			"maxValue": 2,
-			"defaultValue": 1,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "Basic Set CC",
-					"value": 1
-				},
-				{
-					"label": "Sensor Binary Report CC",
-					"value": 2
-				}
-			]
+			"$import": "../0x0086/templates/aeotec_template.json#motion_report_type"
+		},
+		"8": {
+			"$if": "firmwareVersion >= 1.8",
+			"$import": "../0x0086/templates/aeotec_template.json#wake_up_timeout"
+		},
+		"9[0xff00]": {
+			"$import": "../0x0086/templates/aeotec_template.json#sleep_state"
+		},
+		"9[0xff]": {
+			"$import": "../0x0086/templates/aeotec_template.json#current_power_mode"
 		},
 		"39": {
-			"label": "Low battery value",
-			"unit": "Percentage",
-			"valueSize": 1,
-			"minValue": 10,
-			"maxValue": 50,
-			"defaultValue": 20,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"$import": "../0x0086/templates/aeotec_template.json#low_battery_threshold",
+			"defaultValue": 20
 		},
 		"40": {
-			"label": "Selective Reporting",
-			"description": "Select to report on thresholds",
+			"$import": "../0x0086/templates/aeotec_template.json#selective_reporting"
+		},
+		"41[0xffff]": {
+			"$if": "firmwareVersion <= 1.6",
+			"label": "Temperature Change Threshold",
+			"valueSize": 2,
+			"minValue": 10,
+			"maxValue": 2120,
+			"defaultValue": 200
+		},
+		"41[0x0f]": [
+			{
+				"$if": "firmwareVersion > 1.6 && firmwareVersion <= 1.9",
+				"$import": "../0x0086/templates/aeotec_template.json#celsius_fahrenheit",
+				"label": "Temperature Threshold Unit",
+				"valueSize": 3
+			},
+			{
+				"$if": "firmwareVersion >= 1.10",
+				"$import": "../0x0086/templates/aeotec_template.json#celsius_fahrenheit",
+				"label": "Temperature Threshold Unit",
+				"valueSize": 4
+			}
+		],
+		"41[0xffff00]": [
+			{
+				"$if": "firmwareVersion > 1.6 && firmwareVersion <= 1.9",
+				"label": "Temperature Change Threshold",
+				"unit": "0.1 °C/°F",
+				"valueSize": 3,
+				"minValue": 10,
+				"maxValue": 2120,
+				"defaultValue": 20
+			},
+			{
+				"$if": "firmwareVersion >= 1.10",
+				"label": "Temperature Change Threshold",
+				"unit": "0.1 °C/°F",
+				"valueSize": 4,
+				"minValue": 10,
+				"maxValue": 2120,
+				"defaultValue": 20
+			}
+		],
+		"42": {
+			"$import": "../templates/master_template.json#base_1-100_nounit",
+			"label": "Humidity Change Threshold",
+			"unit": "%",
+			"defaultValue": 10
+		},
+		"43": {
+			"label": "Luminance Change Threshold",
+			"valueSize": 2,
+			"unit": "lux",
+			"minValue": 1,
+			"maxValue": 1000,
+			"defaultValue": 100
+		},
+		"44": {
+			"$import": "../templates/master_template.json#base_1-100_nounit",
+			"label": "Battery Level Threshold",
+			"unit": "%",
+			"defaultValue": 10
+		},
+		"45": {
+			"label": "Ultraviolet Change Threshold",
+			"valueSize": 1,
+			"minValue": 1,
+			"maxValue": 11,
+			"defaultValue": 2
+		},
+		"46": {
+			"$import": "../0x0086/templates/aeotec_template.json#low_temp_alarm"
+		},
+		"48[0x01]": {
+			"$import": "../0x0086/templates/aeotec_template.json#below_temp_report"
+		},
+		"48[0x02]": {
+			"$import": "../0x0086/templates/aeotec_template.json#below_humidity_report"
+		},
+		"48[0x04]": {
+			"$import": "../0x0086/templates/aeotec_template.json#below_luminance_report"
+		},
+		"48[0x08]": {
+			"$import": "../0x0086/templates/aeotec_template.json#below_ultraviolet_report"
+		},
+		"48[0x10]": {
+			"$import": "../0x0086/templates/aeotec_template.json#above_temp_report"
+		},
+		"48[0x20]": {
+			"$import": "../0x0086/templates/aeotec_template.json#above_humidity_report"
+		},
+		"48[0x40]": {
+			"$import": "../0x0086/templates/aeotec_template.json#above_luminance_report"
+		},
+		"48[0x80]": {
+			"$import": "../0x0086/templates/aeotec_template.json#above_ultraviolet_report"
+		},
+		"49[0xff]": [
+			{
+				"$if": "firmwareVersion < 1.10",
+				"$import": "../0x0086/templates/aeotec_template.json#celsius_fahrenheit",
+				"label": "Upper Temperature Limit Unit",
+				"valueSize": 3
+			},
+			{
+				"$if": "firmwareVersion >= 1.10",
+				"$import": "../0x0086/templates/aeotec_template.json#celsius_fahrenheit",
+				"label": "Upper Temperature Limit Unit",
+				"valueSize": 4
+			}
+		],
+		"49[0xffff00]": [
+			{
+				"$if": "firmwareVersion < 1.10",
+				"label": "Upper Temperature Limit",
+				"valueSize": 3,
+				"unit": "0.1 °C/°F",
+				"minValue": -400,
+				"maxValue": 2120,
+				"defaultValue": 280
+			},
+			{
+				"$if": "firmwareVersion >= 1.10",
+				"label": "Upper Temperature Limit",
+				"valueSize": 4,
+				"unit": "0.1 °C/°F",
+				"minValue": -400,
+				"maxValue": 2120,
+				"defaultValue": 280
+			}
+		],
+		"50[0xff]": [
+			{
+				"$if": "firmwareVersion < 1.10",
+				"$import": "../0x0086/templates/aeotec_template.json#celsius_fahrenheit",
+				"label": "Lower Temperature Limit Unit",
+				"valueSize": 3
+			},
+			{
+				"$if": "firmwareVersion >= 1.10",
+				"$import": "../0x0086/templates/aeotec_template.json#celsius_fahrenheit",
+				"label": "Lower Temperature Limit Unit",
+				"valueSize": 3
+			}
+		],
+		"50[0xffff00]": [
+			{
+				"$if": "firmwareVersion < 1.10",
+				"label": "Lower Temperature Limit",
+				"valueSize": 3,
+				"unit": "0.1 °C/°F",
+				"minValue": -400,
+				"maxValue": 2120,
+				"defaultValue": 0
+			},
+			{
+				"$if": "firmwareVersion >= 1.10",
+				"label": "Lower Temperature Limit",
+				"valueSize": 3,
+				"unit": "0.1 °C/°F",
+				"minValue": -400,
+				"maxValue": 2120,
+				"defaultValue": 0
+			}
+		],
+		"51": {
+			"$import": "../templates/master_template.json#base_0-100_nounit",
+			"label": "Upper Humidity Limit",
+			"unit": "%",
+			"defaultValue": 60
+		},
+		"52": {
+			"$import": "../templates/master_template.json#base_0-100_nounit",
+			"label": "Lower Humidity Limit",
+			"unit": "%",
+			"defaultValue": 50
+		},
+		"53": {
+			"label": "Upper Lighting Limit",
+			"valueSize": 2,
+			"unit": "lux",
+			"minValue": 0,
+			"maxValue": 30000,
+			"defaultValue": 1000,
+			"unsigned": true
+		},
+		"54": {
+			"label": "Lower Lighting Limit",
+			"valueSize": 2,
+			"unit": "lux",
+			"minValue": 0,
+			"maxValue": 30000,
+			"defaultValue": 100,
+			"unsigned": true
+		},
+		"55": {
+			"label": "Upper Ultraviolet Limit",
 			"valueSize": 1,
 			"minValue": 0,
-			"maxValue": 1,
-			"defaultValue": 0,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "disable",
-					"value": 0
-				},
-				{
-					"label": "enable",
-					"value": 1
-				}
-			]
+			"maxValue": 11,
+			"defaultValue": 8,
+			"unsigned": true
+		},
+		"56": {
+			"label": "Lower Ultraviolet Limit",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 11,
+			"defaultValue": 4,
+			"unsigned": true
+		},
+		"57[0xff00]": {
+			"$import": "../0x0086/templates/aeotec_template.json#recover_limit_temp"
+		},
+		"57[0xff]": {
+			"$import": "../0x0086/templates/aeotec_template.json#recover_limit_temp_unit"
+		},
+		"58": {
+			"$import": "../0x0086/templates/aeotec_template.json#recover_limit_humidity"
+		},
+		"59": {
+			"$import": "../0x0086/templates/aeotec_template.json#recover_limit_lighting"
+		},
+		"60": {
+			"$import": "../0x0086/templates/aeotec_template.json#recover_limit_ultraviolet"
+		},
+		"61[0x01]": {
+			"$import": "../templates/master_template.json#base_true_false",
+			"label": "Temperature: Below Lower Limit",
+			"readOnly": true
+		},
+		"61[0x10]": {
+			"$import": "../templates/master_template.json#base_true_false",
+			"label": "Temperature: Above Lower Limit",
+			"readOnly": true
+		},
+		"61[0x02]": {
+			"$import": "../templates/master_template.json#base_true_false",
+			"label": "Humidity: Below Lower Limit",
+			"readOnly": true
+		},
+		"61[0x20]": {
+			"$import": "../templates/master_template.json#base_true_false",
+			"label": "Humidity: Above Lower Limit",
+			"readOnly": true
+		},
+		"61[0x04]": {
+			"$import": "../templates/master_template.json#base_true_false",
+			"label": "Luminance: Below Lower Limit",
+			"readOnly": true
+		},
+		"61[0x40]": {
+			"$import": "../templates/master_template.json#base_true_false",
+			"label": "Luminance: Above Lower Limit",
+			"readOnly": true
+		},
+		"61[0x08]": {
+			"$import": "../templates/master_template.json#base_true_false",
+			"label": "Ultraviolet: Below Lower Limit",
+			"readOnly": true
+		},
+		"61[0x80]": {
+			"$import": "../templates/master_template.json#base_true_false",
+			"label": "Ultraviolet: Above Lower Limit",
+			"readOnly": true
+		},
+		"81": {
+			"$if": "firmwareVersion >= 1.8",
+			"$import": "../templates/master_template.json#base_enable_disable",
+			"label": "LED Blinking"
+		},
+		"101[0x01]": {
+			"$import": "../0x0086/templates/aeotec_template.json#auto_report_group1_battery"
+		},
+		"101[0x10]": {
+			"$import": "../0x0086/templates/aeotec_template.json#auto_report_group1_ultraviolet"
+		},
+		"101[0x20]": {
+			"$import": "../0x0086/templates/aeotec_template.json#auto_report_group1_temp"
+		},
+		"101[0x40]": {
+			"$import": "../0x0086/templates/aeotec_template.json#auto_report_group1_humidity"
+		},
+		"101[0x80]": {
+			"$import": "../0x0086/templates/aeotec_template.json#auto_report_group1_luminance"
+		},
+		"102[0x01]": {
+			"$import": "../0x0086/templates/aeotec_template.json#auto_report_group2_battery"
+		},
+		"102[0x10]": {
+			"$import": "../0x0086/templates/aeotec_template.json#auto_report_group2_ultraviolet"
+		},
+		"102[0x20]": {
+			"$import": "../0x0086/templates/aeotec_template.json#auto_report_group2_temp"
+		},
+		"102[0x40]": {
+			"$import": "../0x0086/templates/aeotec_template.json#auto_report_group2_humidity"
+		},
+		"102[0x80]": {
+			"$import": "../0x0086/templates/aeotec_template.json#auto_report_group2_luminance"
+		},
+		"103[0x01]": {
+			"$import": "../0x0086/templates/aeotec_template.json#auto_report_group3_battery"
+		},
+		"103[0x10]": {
+			"$import": "../0x0086/templates/aeotec_template.json#auto_report_group3_ultraviolet"
+		},
+		"103[0x20]": {
+			"$import": "../0x0086/templates/aeotec_template.json#auto_report_group3_temp"
+		},
+		"103[0x40]": {
+			"$import": "../0x0086/templates/aeotec_template.json#auto_report_group3_humidity"
+		},
+		"103[0x80]": {
+			"$import": "../0x0086/templates/aeotec_template.json#auto_report_group3_luminance"
+		},
+		"64": {
+			"$import": "../0x0086/templates/aeotec_template.json#celsius_fahrenheit",
+			"label": "Automatic Temperature Reporting Unit"
+		},
+		"100": {
+			"$import": "../0x0086/templates/aeotec_template.json#reset_parameters",
+			"label": "Reset Parameters 101-103 to Default Values"
+		},
+		"111": {
+			"$import": "../0x0086/templates/aeotec_template.json#auto_report_interval_group1",
+			"maxValue": 2678400
+		},
+		"112": {
+			"$import": "../0x0086/templates/aeotec_template.json#auto_report_interval_group2",
+			"maxValue": 2678400
+		},
+		"113": {
+			"$import": "../0x0086/templates/aeotec_template.json#auto_report_interval_group3",
+			"maxValue": 2678400
+		},
+		"110": {
+			"$import": "../0x0086/templates/aeotec_template.json#reset_parameters",
+			"label": "Reset Parameters 111-113 to Default Values"
+		},
+		"201[0xff]": {
+			"$if": "firmwareVersion >= 1.6",
+			"$import": "../0x0086/templates/aeotec_template.json#celsius_fahrenheit",
+			"label": "Temperature Calibration Unit",
+			"valueSize": 2
+		},
+		"201[0xff00]": {
+			"$if": "firmwareVersion >= 1.6",
+			"label": "Temperature Calibration Offset",
+			"valueSize": 2,
+			"unit": "0.1 °C/°F",
+			"minValue": -128,
+			"maxValue": 127,
+			"defaultValue": 0
+		},
+		"202": {
+			"$if": "firmwareVersion >= 1.6",
+			"label": "Humidity Sensor Calibration",
+			"valueSize": 1,
+			"unit": "% rH",
+			"minValue": -50,
+			"maxValue": 50,
+			"defaultValue": 0
+		},
+		"203": {
+			"$if": "firmwareVersion >= 1.6",
+			"label": "Luminance Sensor Calibration",
+			"valueSize": 2,
+			"unit": "lux",
+			"minValue": -1000,
+			"maxValue": 1000,
+			"defaultValue": 0
+		},
+		"204": {
+			"$if": "firmwareVersion >= 1.6",
+			"label": "Ultraviolet Sensor Calibration",
+			"valueSize": 1,
+			"minValue": -10,
+			"maxValue": 10,
+			"defaultValue": 0
+		},
+		"252": {
+			"$import": "../0x0086/templates/aeotec_template.json#lock_configuration"
+		},
+		"255": {
+			"$import": "../0x0086/templates/aeotec_template.json#factory_reset_exclude"
 		}
+	},
+	"metadata": {
+		"inclusion": "Turn the primary controller of Z-Wave network into inclusion mode, short press the product’s Z-Wave button that you can find in the back of the product",
+		"exclusion": "Turn the primary controller of Z-Wave network into exclusion mode, short press the product’s Z-Wave button that you can find in back of the product",
+		"reset": "Press and hold the Z-Wave button that you can find in back of the product for 20 seconds and then release. This procedure should only be used when the primary controller is inoperable",
+		"manual": "https://products.z-wavealliance.org/ProductManual/File?folder=&filename=MarketCertificationFiles/2592/Oomi%20MultiSensor%20manual3.pdf"
 	}
 }

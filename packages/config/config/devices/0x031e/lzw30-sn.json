@@ -1,10 +1,8 @@
-// Inovelli LZW30-SN
-// Red Series On/Off switch
 {
 	"manufacturer": "Inovelli",
 	"manufacturerId": "0x031e",
 	"label": "LZW30-SN",
-	"description": "Red Series On/Off switch",
+	"description": "Red Series On/Off Switch",
 	"devices": [
 		{
 			"productType": "0x0002",
@@ -23,8 +21,6 @@
 			"minValue": 0,
 			"maxValue": 2,
 			"defaultValue": 0,
-			"readOnly": false,
-			"writeOnly": false,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -47,8 +43,6 @@
 			"minValue": 0,
 			"maxValue": 1,
 			"defaultValue": 0,
-			"readOnly": false,
-			"writeOnly": false,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -67,30 +61,22 @@
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 32767,
-			"defaultValue": 0,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"defaultValue": 0
 		},
 		"4": {
 			"label": "Association Behavior",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 15,
-			"defaultValue": 15,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"defaultValue": 15
 		},
 		"5": {
 			"label": "LED Indicator Color",
+			"description": "Uses a scaled hue value (realHue / 360 * 255).",
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 255,
 			"defaultValue": 170,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true,
 			"options": [
 				{
 					"label": "Red",
@@ -123,17 +109,20 @@
 				{
 					"label": "Pink",
 					"value": 234
+				},
+				{
+					"$if": "firmwareVersion >= 1.19",
+					"label": "White",
+					"value": 255
 				}
 			]
 		},
 		"6": {
-			"label": "LED Indicator Intensity",
+			"label": "LED Indicator Brightness",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 10,
 			"defaultValue": 5,
-			"readOnly": false,
-			"writeOnly": false,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -183,13 +172,11 @@
 			]
 		},
 		"7": {
-			"label": "LED Indicator Intensity (When Off)",
+			"label": "LED Indicator Brightness When Off",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 10,
 			"defaultValue": 1,
-			"readOnly": false,
-			"writeOnly": false,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -245,8 +232,6 @@
 			"minValue": 0,
 			"maxValue": 10,
 			"defaultValue": 0,
-			"readOnly": false,
-			"writeOnly": false,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -297,14 +282,11 @@
 		},
 		"10": {
 			"label": "Active Power Reports",
-			"unit": "percent",
+			"unit": "%",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 100,
-			"defaultValue": 10,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"defaultValue": 10
 		},
 		"11": {
 			"label": "Periodic Power & Energy Reports",
@@ -312,31 +294,62 @@
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 32767,
-			"defaultValue": 3600,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"defaultValue": 3600
 		},
 		"12": {
 			"label": "Energy Reports",
-			"unit": "percent",
+			"unit": "%",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 100,
-			"defaultValue": 10,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"defaultValue": 10
+		},
+		"13": {
+			"$if": "firmwareVersion >= 1.17",
+			"label": "Load Type",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 0,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Automatically detect load type",
+					"value": 0
+				},
+				{
+					"label": "Manually set for special load type",
+					"value": 1
+				}
+			]
+		},
+		"51": {
+			"$if": "firmwareVersion >= 1.19",
+			"label": "Instant On",
+			"description": "Enabling this disables the 700ms button delay and multi-tap scenes.",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 1,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Enabled",
+					"value": 0
+				},
+				{
+					"label": "Disabled",
+					"value": 1
+				}
+			]
 		},
 		"8[0xff]": {
-			"label": "LED Strip Effect (Color)",
+			"label": "LED Effect Color",
+			"description": "Uses a scaled hue value (realHue / 360 * 255).",
 			"valueSize": 4,
 			"minValue": 0,
 			"maxValue": 255,
 			"defaultValue": 0,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true,
 			"options": [
 				{
 					"label": "Red",
@@ -373,13 +386,11 @@
 			]
 		},
 		"8[0xff00]": {
-			"label": "LED Strip Effect (Brightness)",
+			"label": "LED Effect Brightness",
 			"valueSize": 4,
 			"minValue": 0,
 			"maxValue": 10,
-			"defaultValue": 0,
-			"readOnly": false,
-			"writeOnly": false,
+			"defaultValue": 3,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -429,23 +440,19 @@
 			]
 		},
 		"8[0xff0000]": {
-			"label": "LED Strip Effect (Duration)",
+			"label": "LED Effect Duration",
+			"description": "1 to 60 = seconds, 61 to 120 = minutes (minus 60), 121 - 254 = hours (minus 120), 255 = indefinitely",
 			"valueSize": 4,
 			"minValue": 0,
 			"maxValue": 255,
-			"defaultValue": 0,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"defaultValue": 255
 		},
 		"8[0x7f000000]": {
-			"label": "LED Strip Effect (Effect)",
+			"label": "LED Effect Type",
 			"valueSize": 4,
 			"minValue": 0,
 			"maxValue": 4,
 			"defaultValue": 0,
-			"readOnly": false,
-			"writeOnly": false,
 			"allowManualEntry": false,
 			"options": [
 				{

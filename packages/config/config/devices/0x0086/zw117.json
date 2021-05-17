@@ -1,5 +1,3 @@
-// AEON Labs ZW117
-// Range Extender 6
 {
 	"manufacturer": "AEON Labs",
 	"manufacturerId": "0x0086",
@@ -8,143 +6,72 @@
 	"devices": [
 		{
 			"productType": "0x0004",
-			"productId": "0x0075"
+			"productId": "0x0075",
+			"zwaveAllianceId": 1998
 		},
 		{
 			"productType": "0x0104",
-			"productId": "0x0075"
+			"productId": "0x0075",
+			"zwaveAllianceId": 1966
 		},
 		{
 			"productType": "0x0204",
-			"productId": "0x0075"
+			"productId": "0x0075",
+			"zwaveAllianceId": 1994
+		},
+		{
+			"productType": "0x0a04",
+			"productId": "0x0075",
+			"zwaveAllianceId": 2520
+		},
+		{
+			"productType": "0x1c04",
+			"productId": "0x0075",
+			"zwaveAllianceId": 3223
 		}
 	],
 	"firmwareVersion": {
 		"min": "0.0",
 		"max": "255.255"
 	},
-	"supportsZWavePlus": true,
+	"associations": {
+		"1": {
+			"label": "Lifeline",
+			"maxNodes": 1,
+			"isLifeline": true
+		}
+	},
 	"paramInformation": {
-		"33": {
-			"label": "RGB value",
-			"description": "Set the RGB value of the LED for the quality test of the LED diode.",
-			"valueSize": 3,
-			"minValue": 1,
-			"maxValue": 4,
-			"defaultValue": 2,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "Reserved",
-					"value": 1
-				},
-				{
-					"label": "Red value",
-					"value": 2
-				},
-				{
-					"label": "Green value",
-					"value": 3
-				},
-				{
-					"label": "Blue value",
-					"value": 4
-				}
-			]
-		},
 		"82": {
-			"label": "Default status of the LED",
-			"description": "Set the default status of the LED when the Range Extender relays Z-Wave message.",
-			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 1,
-			"defaultValue": 0,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": false,
+			"$import": "../templates/master_template.json#led_indicator_two_options",
 			"options": [
 				{
-					"label": "The green LED remains On for 2 seconds",
+					"label": "On for 2 seconds",
 					"value": 0
 				},
 				{
-					"label": "Off",
+					"label": "Disable",
 					"value": 1
 				}
 			]
 		},
 		"200": {
-			"label": "Partner ID",
-			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 1,
-			"defaultValue": 0,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "Aeon Labs Standard Product",
-					"value": 0
-				},
-				{
-					"label": "others",
-					"value": 1
-				}
-			]
+			"$import": "templates/aeotec_template.json#partner_id_other"
 		},
 		"252": {
-			"label": "Enable/disable the Configuration to be locked",
-			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 1,
-			"defaultValue": 0,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "disable",
-					"value": 0
-				},
-				{
-					"label": "enable",
-					"value": 1
-				}
-			]
+			"$import": "templates/aeotec_template.json#lock_configuration"
 		},
 		"254": {
-			"label": "Device Tag.",
-			"valueSize": 2,
-			"minValue": 0,
-			"maxValue": 0,
-			"defaultValue": 0,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"$import": "templates/aeotec_template.json#device_tag"
 		},
 		"255": {
-			"label": "Reset to factory default",
-			"description": "Reset to factory default settings and removed from the z-wave network",
-			"valueSize": 4,
-			"minValue": 1,
-			"maxValue": 1431655765,
-			"defaultValue": 1,
-			"readOnly": false,
-			"writeOnly": true,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "Reset to factory default settings",
-					"value": 1
-				},
-				{
-					"label": "Reset to factory default & remove from network",
-					"value": 1431655765
-				}
-			]
+			"$import": "templates/aeotec_template.json#factory_reset_exclude"
 		}
+	},
+	"metadata": {
+		"inclusion": "Turn the primary controller of Z-Wave network into inclusion mode, press the Z-Wave Button on Range Extender 6",
+		"exclusion": "Turn the primary controller of Z-Wave network into exclusion mode, press the Z-Wave Button on Range Extender 6",
+		"reset": "Press and hold the Z-Wave Button for 20 seconds and then release it.\nUse this procedure only in the event that your primary network controller is missing or inoperable",
+		"manual": "https://products.z-wavealliance.org/ProductManual/File?folder=&filename=MarketCertificationFiles/2520/Range%20Extender%206%20manual.pdf"
 	}
 }

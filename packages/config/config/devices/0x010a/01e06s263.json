@@ -1,5 +1,3 @@
-// VDA 01E06S263
-// Vitrum VI EU on-off 6 triac 868.4MHz
 {
 	"manufacturer": "VDA",
 	"manufacturerId": "0x010a",
@@ -24,10 +22,7 @@
 			"minValue": 0,
 			"maxValue": 7,
 			"defaultValue": 3,
-			"unsigned": true,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"unsigned": true
 		},
 		"8": {
 			"label": "Button N.2 Off Status Led",
@@ -36,10 +31,7 @@
 			"minValue": 0,
 			"maxValue": 7,
 			"defaultValue": 3,
-			"unsigned": true,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"unsigned": true
 		},
 		"9": {
 			"label": "Button N.3 Off Status Led",
@@ -48,10 +40,7 @@
 			"minValue": 0,
 			"maxValue": 7,
 			"defaultValue": 3,
-			"unsigned": true,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"unsigned": true
 		},
 		"10": {
 			"label": "Button N.4 Off Status Led",
@@ -60,10 +49,7 @@
 			"minValue": 0,
 			"maxValue": 7,
 			"defaultValue": 3,
-			"unsigned": true,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"unsigned": true
 		},
 		"11": {
 			"label": "Button N.5 Off Status Led",
@@ -72,10 +58,7 @@
 			"minValue": 0,
 			"maxValue": 7,
 			"defaultValue": 3,
-			"unsigned": true,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"unsigned": true
 		},
 		"12": {
 			"label": "Button N.6 Off Status Led",
@@ -84,10 +67,7 @@
 			"minValue": 0,
 			"maxValue": 7,
 			"defaultValue": 3,
-			"unsigned": true,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"unsigned": true
 		},
 		"13": {
 			"label": "Button N.1 On Status Led",
@@ -96,10 +76,7 @@
 			"minValue": 0,
 			"maxValue": 7,
 			"defaultValue": 4,
-			"unsigned": true,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"unsigned": true
 		},
 		"14": {
 			"label": "Button N.2 On Status Led",
@@ -108,10 +85,7 @@
 			"minValue": 0,
 			"maxValue": 7,
 			"defaultValue": 4,
-			"unsigned": true,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"unsigned": true
 		},
 		"15": {
 			"label": "Button N.3 On Status Led",
@@ -120,10 +94,7 @@
 			"minValue": 0,
 			"maxValue": 7,
 			"defaultValue": 4,
-			"unsigned": true,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"unsigned": true
 		},
 		"16": {
 			"label": "Button N.4 On Status Led",
@@ -132,10 +103,7 @@
 			"minValue": 0,
 			"maxValue": 7,
 			"defaultValue": 4,
-			"unsigned": true,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"unsigned": true
 		},
 		"17": {
 			"label": "Button N.5 On Status Led",
@@ -144,10 +112,7 @@
 			"minValue": 0,
 			"maxValue": 7,
 			"defaultValue": 4,
-			"unsigned": true,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"unsigned": true
 		},
 		"18": {
 			"label": "Button N.6 On Status Led",
@@ -156,10 +121,7 @@
 			"minValue": 0,
 			"maxValue": 7,
 			"defaultValue": 4,
-			"unsigned": true,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"unsigned": true
 		},
 		"25": {
 			"label": "Output Port Connected to Button N.1",
@@ -168,10 +130,7 @@
 			"minValue": 0,
 			"maxValue": 6,
 			"defaultValue": 1,
-			"unsigned": true,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"unsigned": true
 		},
 		"26": {
 			"label": "Output Port Connected to Button N.2",
@@ -180,10 +139,7 @@
 			"minValue": 0,
 			"maxValue": 6,
 			"defaultValue": 2,
-			"unsigned": true,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"unsigned": true
 		},
 		"27": {
 			"label": "Output Port Connected to Button N.3",
@@ -192,10 +148,7 @@
 			"minValue": 0,
 			"maxValue": 6,
 			"defaultValue": 3,
-			"unsigned": true,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"unsigned": true
 		},
 		"28": {
 			"label": "Output Port Connected to Button N.4",
@@ -204,10 +157,7 @@
 			"minValue": 0,
 			"maxValue": 6,
 			"defaultValue": 4,
-			"unsigned": true,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"unsigned": true
 		},
 		"29": {
 			"label": "Output Port Connected to Button N.5",
@@ -216,10 +166,7 @@
 			"minValue": 0,
 			"maxValue": 6,
 			"defaultValue": 5,
-			"unsigned": true,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"unsigned": true
 		},
 		"30": {
 			"label": "Output Port Connected to Button N.6",
@@ -228,10 +175,7 @@
 			"minValue": 0,
 			"maxValue": 6,
 			"defaultValue": 6,
-			"unsigned": true,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"unsigned": true
 		},
 		"31": {
 			"label": "Basic Set On From Group 2",
@@ -240,10 +184,7 @@
 			"minValue": 0,
 			"maxValue": 1,
 			"defaultValue": 1,
-			"unsigned": true,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"unsigned": true
 		},
 		"32": {
 			"label": "Basic Set On From Group 3",
@@ -252,10 +193,7 @@
 			"minValue": 0,
 			"maxValue": 1,
 			"defaultValue": 1,
-			"unsigned": true,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"unsigned": true
 		},
 		"33": {
 			"label": "Basic Set On From Group 4",
@@ -264,10 +202,7 @@
 			"minValue": 0,
 			"maxValue": 1,
 			"defaultValue": 1,
-			"unsigned": true,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"unsigned": true
 		},
 		"34": {
 			"label": "Basic Set On From Group 5",
@@ -276,10 +211,7 @@
 			"minValue": 0,
 			"maxValue": 1,
 			"defaultValue": 1,
-			"unsigned": true,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"unsigned": true
 		},
 		"35": {
 			"label": "Basic Set On From Group 6",
@@ -288,10 +220,7 @@
 			"minValue": 0,
 			"maxValue": 1,
 			"defaultValue": 1,
-			"unsigned": true,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"unsigned": true
 		},
 		"36": {
 			"label": "Basic Set On From Group 7",
@@ -300,10 +229,7 @@
 			"minValue": 0,
 			"maxValue": 1,
 			"defaultValue": 1,
-			"unsigned": true,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"unsigned": true
 		},
 		"206": {
 			"label": "Buttons Max. Brightness",
@@ -312,10 +238,7 @@
 			"minValue": 5,
 			"maxValue": 100,
 			"defaultValue": 100,
-			"unsigned": true,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"unsigned": true
 		},
 		"207": {
 			"label": "Buttons Min. Brightness",
@@ -324,10 +247,7 @@
 			"minValue": 0,
 			"maxValue": 100,
 			"defaultValue": 5,
-			"unsigned": true,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"unsigned": true
 		},
 		"209": {
 			"label": "Buzzer",
@@ -336,10 +256,7 @@
 			"minValue": 0,
 			"maxValue": 1,
 			"defaultValue": 1,
-			"unsigned": true,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"unsigned": true
 		},
 		"218": {
 			"label": "Front-end Buttons Lock",
@@ -348,10 +265,7 @@
 			"minValue": 0,
 			"maxValue": 1,
 			"defaultValue": 0,
-			"unsigned": true,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"unsigned": true
 		}
 	},
 	"metadata": {

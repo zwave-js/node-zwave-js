@@ -1,22 +1,28 @@
-// AEON Labs ZW098
-// LED Bulb
 {
 	"manufacturer": "AEON Labs",
 	"manufacturerId": "0x0086",
 	"label": "ZW098",
-	"description": "LED Bulb",
+	"description": "LED Bulb Gen5",
 	"devices": [
 		{
 			"productType": "0x0003",
-			"productId": "0x0062"
+			"productId": "0x0062",
+			"zwaveAllianceId": 1851
 		},
 		{
 			"productType": "0x0103",
-			"productId": "0x0062"
+			"productId": "0x0062",
+			"zwaveAllianceId": [1594, 1829]
 		},
 		{
 			"productType": "0x0203",
-			"productId": "0x0062"
+			"productId": "0x0062",
+			"zwaveAllianceId": 1844
+		},
+		{
+			"productType": "0x0303",
+			"productId": "0x0062",
+			"zwaveAllianceId": 2513
 		}
 	],
 	"firmwareVersion": {
@@ -31,110 +37,40 @@
 		},
 		"2": {
 			"label": "Group 2",
-			"maxNodes": 5,
-			"isLifeline": true
+			"maxNodes": 5
 		}
 	},
 	"paramInformation": {
+		"14": {
+			"$if": "firmwareVersion <= 1.5",
+			"label": "Sunrise Transition Time",
+			"valueSize": 2,
+			"unit": "3 seconds",
+			"minValue": 0,
+			"maxValue": 65535,
+			"defaultValue": 0,
+			"unsigned": true
+		},
+		"15": {
+			"$if": "firmwareVersion <= 1.5",
+			"label": "Sunset Transition Time",
+			"valueSize": 2,
+			"unit": "3 seconds",
+			"minValue": 0,
+			"maxValue": 65535,
+			"defaultValue": 0,
+			"unsigned": true
+		},
+		"20": {
+			"$import": "../templates/master_template.json#state_after_power_failure"
+		},
 		"32": {
-			"label": "Toggle send report on color change",
+			"label": "Color Change Report Type",
 			"valueSize": 1,
 			"minValue": 0,
-			"maxValue": 1,
-			"defaultValue": 0,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "disable color updates",
-					"value": 0
-				},
-				{
-					"label": "send HAIL CC",
-					"value": 1
-				}
-			]
-		},
-		"34": {
-			"label": "Allow external switch to toggle bulb",
-			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 1,
-			"defaultValue": 0,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "disabled",
-					"value": 0
-				},
-				{
-					"label": "enabled",
-					"value": 1
-				}
-			]
-		},
-		"35": {
-			"label": "Allow external switch to change color",
-			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 1,
-			"defaultValue": 1,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "disabled",
-					"value": 0
-				},
-				{
-					"label": "enabled",
-					"value": 1
-				}
-			]
-		},
-		"36": {
-			"label": "Control color mode",
-			"description": "Reboot/save/exit Colorful mode",
-			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 3,
-			"defaultValue": 0,
-			"readOnly": false,
-			"writeOnly": true,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "reboot normal mode",
-					"value": 0
-				},
-				{
-					"label": "boot into color programming",
-					"value": 1
-				},
-				{
-					"label": "exit color programming",
-					"value": 2
-				},
-				{
-					"label": "save and exit color programming",
-					"value": 3
-				}
-			]
-		},
-		"80": {
-			"label": "Enable notifications",
-			"description": "set send notifications type for Group 1",
-			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 255,
+			"maxValue": 2,
 			"defaultValue": 0,
 			"unsigned": true,
-			"readOnly": false,
-			"writeOnly": false,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -142,79 +78,118 @@
 					"value": 0
 				},
 				{
-					"label": "Hail",
+					"label": "Hail CC",
 					"value": 1
 				},
 				{
-					"label": "Basic",
+					"label": "Configuration report",
 					"value": 2
 				}
 			]
 		},
-		"252": {
-			"label": "Lock configuration",
-			"description": "Enable/disable the ability to configure the device.",
+		"33[0xff]": {
+			"$import": "../templates/master_template.json#base_0-255_nounit",
+			"label": "Blue Color Value",
+			"valueSize": 4,
+			"readOnly": true,
+			"allowManualEntry": false
+		},
+		"33[0xff00]": {
+			"$import": "../templates/master_template.json#base_0-255_nounit",
+			"label": "Green Color Value",
+			"valueSize": 4,
+			"readOnly": true,
+			"allowManualEntry": false
+		},
+		"33[0xff0000]": {
+			"$import": "../templates/master_template.json#base_0-255_nounit",
+			"label": "Red Color Value",
+			"valueSize": 4,
+			"readOnly": true,
+			"allowManualEntry": false
+		},
+		"34": {
+			"$import": "../templates/master_template.json#base_enable_disable",
+			"label": "External Switch (On/Off)"
+		},
+		"35": {
+			"$import": "../templates/master_template.json#base_enable_disable",
+			"label": "External Switch (Color)"
+		},
+		"36": {
+			"label": "Reboot/Save/Exit Colorful Mode",
 			"valueSize": 1,
 			"minValue": 0,
-			"maxValue": 255,
+			"maxValue": 3,
 			"defaultValue": 0,
 			"unsigned": true,
-			"readOnly": false,
-			"writeOnly": false,
+			"writeOnly": true,
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "disabled",
+					"label": "Un-reboot colorful mode",
 					"value": 0
 				},
 				{
-					"label": "enabled",
+					"label": "Reboot colorful mode",
 					"value": 1
+				},
+				{
+					"label": "Exit colorful mode",
+					"value": 2
+				},
+				{
+					"label": "Save current colorful mode then exit",
+					"value": 3
 				}
 			]
 		},
-		"37[0xff]": {
-			"label": "Colour Residence Time",
-			"unit": "1/10th sec",
+		"37[0xe0]": {
+			"label": "Time Base of Color Change Speed",
 			"valueSize": 4,
 			"minValue": 0,
-			"maxValue": 255,
+			"maxValue": 2,
 			"defaultValue": 0,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true,
+			"allowManualEntry": false,
 			"options": [
 				{
+					"label": "Slow (1s)",
+					"value": 0
+				},
+				{
+					"label": "Medium (10 ms)",
+					"value": 1
+				},
+				{
+					"label": "Fast (100 ms)",
+					"value": 2
+				}
+			]
+		},
+		"37[0x1f]": {
+			"label": "Color Change Speed Level",
+			"description": "Allowable range: 1-30",
+			"valueSize": 4,
+			"minValue": 0,
+			"maxValue": 31,
+			"defaultValue": 0,
+			"options": [
+				{
+					"label": "Constant speed",
+					"value": 0
+				},
+				{
 					"label": "Inactive",
-					"value": 255
+					"value": 31
 				}
 			]
 		},
 		"37[0xff00]": {
-			"label": "Colour Change Speed",
+			"$import": "../templates/master_template.json#base_0-255_nounit",
+			"label": "Cycle Count",
+			"description": "Allowable range: 1-254",
 			"valueSize": 4,
-			"minValue": 0,
-			"maxValue": 255,
 			"defaultValue": 0,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true,
-			"options": [
-				{
-					"label": "Inactive",
-					"value": 255
-				}
-			]
-		},
-		"37[0xff0000]": {
-			"label": "Cycle count",
-			"valueSize": 4,
-			"minValue": 0,
-			"maxValue": 255,
-			"defaultValue": 0,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true,
 			"options": [
 				{
 					"label": "Unlimited",
@@ -226,26 +201,36 @@
 				}
 			]
 		},
-		"37[0x0f000000]": {
+		"37[0xff0000]": {
+			"$import": "../templates/master_template.json#base_1-255_nounit",
+			"label": "Brightness",
+			"description": "Allowable range: 1-99",
+			"valueSize": 4,
+			"options": [
+				{
+					"label": "Inactive",
+					"value": 255
+				}
+			]
+		},
+		"37[0x07000000]": {
 			"label": "Color Display Cycle",
 			"valueSize": 4,
 			"minValue": 0,
-			"maxValue": 15,
+			"maxValue": 4,
 			"defaultValue": 0,
-			"readOnly": false,
-			"writeOnly": false,
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "Single Color Mode",
+					"label": "Inactive",
 					"value": 0
 				},
 				{
-					"label": "Rainbow Mode",
+					"label": "Rainbow mode",
 					"value": 1
 				},
 				{
-					"label": "Multi Color Mode",
+					"label": "Multi color mode",
 					"value": 2
 				},
 				{
@@ -253,8 +238,22 @@
 					"value": 3
 				},
 				{
+					"label": "Single color mode",
+					"value": 4
+				}
+			]
+		},
+		"37[0x38000000]": {
+			"label": "Color Change Speed Option",
+			"valueSize": 4,
+			"minValue": 0,
+			"maxValue": 0,
+			"defaultValue": 0,
+			"allowManualEntry": false,
+			"options": [
+				{
 					"label": "Inactive",
-					"value": 15
+					"value": 0
 				}
 			]
 		},
@@ -262,10 +261,8 @@
 			"label": "Color Transition Style",
 			"valueSize": 4,
 			"minValue": 0,
-			"maxValue": 3,
+			"maxValue": 1,
 			"defaultValue": 0,
-			"readOnly": false,
-			"writeOnly": false,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -275,400 +272,93 @@
 				{
 					"label": "Fast/Direct Color Transition",
 					"value": 1
+				}
+			]
+		},
+		"38[0xff]": {
+			"$import": "../templates/master_template.json#base_0-255_nounit",
+			"label": "Pause Time of Off",
+			"description": "Active only in Fade Out/Fade In Transition Style",
+			"valueSize": 4,
+			"defaultValue": 0
+		},
+		"38[0xff00]": {
+			"$import": "../templates/master_template.json#base_0-255_nounit",
+			"label": "Pause Time of On",
+			"valueSize": 4,
+			"defaultValue": 6
+		},
+		"38[0xff0000]": {
+			"$import": "../templates/master_template.json#base_0-255_nounit",
+			"label": "Transition Speed (On to Off)",
+			"description": "Active only in Fade Out/Fade In Transition Style",
+			"valueSize": 4,
+			"maxValue": 125,
+			"defaultValue": 0
+		},
+		"38[0xff000000]": {
+			"$import": "../templates/master_template.json#base_0-255_nounit",
+			"label": "Transition Speed (Off to On)",
+			"valueSize": 4,
+			"maxValue": 125,
+			"defaultValue": 24
+		},
+		"39[0xff00]": {
+			"$import": "../templates/master_template.json#base_0-255_nounit",
+			"label": "Single Color/Fade Out: Blue Value",
+			"valueSize": 4
+		},
+		"39[0xff0000]": {
+			"$import": "../templates/master_template.json#base_0-255_nounit",
+			"label": "Single Color/Fade Out: Green Value",
+			"valueSize": 4
+		},
+		"39[0xff000000]": {
+			"$import": "../templates/master_template.json#base_0-255_nounit",
+			"label": "Single Color/Fade Out: Red Value",
+			"valueSize": 4
+		},
+		"80": {
+			"$import": "templates/aeotec_template.json#enable_notifications"
+		},
+		"112": {
+			"label": "Dimmer Mode",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 3,
+			"defaultValue": 0,
+			"unsigned": true,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Parabolic curve mode",
+					"value": 0
 				},
 				{
-					"label": "Pulsating Dimming",
+					"label": "Index curve mode",
+					"value": 1
+				},
+				{
+					"label": "(Parabolic + Index) / 2",
 					"value": 2
 				},
 				{
-					"label": "Inactive",
+					"label": "Linear mode",
 					"value": 3
 				}
 			]
 		},
-		"38[0x0f]": {
-			"label": "Multi Mode: Color index 1",
-			"valueSize": 4,
-			"minValue": 0,
-			"maxValue": 8,
-			"defaultValue": 0,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"value": 0,
-					"label": "Off"
-				},
-				{
-					"value": 1,
-					"label": "Red"
-				},
-				{
-					"value": 2,
-					"label": "Orange"
-				},
-				{
-					"value": 3,
-					"label": "Yellow"
-				},
-				{
-					"value": 4,
-					"label": "Green"
-				},
-				{
-					"value": 5,
-					"label": "Cyan"
-				},
-				{
-					"value": 6,
-					"label": "Blue"
-				},
-				{
-					"value": 7,
-					"label": "Violet"
-				},
-				{
-					"value": 8,
-					"label": "Pinkish"
-				}
-			]
+		"252": {
+			"$import": "templates/aeotec_template.json#lock_configuration"
 		},
-		"38[0xf0]": {
-			"label": "Multi Mode: Color index 2",
-			"valueSize": 4,
-			"minValue": 0,
-			"maxValue": 8,
-			"defaultValue": 0,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"value": 0,
-					"label": "Off"
-				},
-				{
-					"value": 1,
-					"label": "Red"
-				},
-				{
-					"value": 2,
-					"label": "Orange"
-				},
-				{
-					"value": 3,
-					"label": "Yellow"
-				},
-				{
-					"value": 4,
-					"label": "Green"
-				},
-				{
-					"value": 5,
-					"label": "Cyan"
-				},
-				{
-					"value": 6,
-					"label": "Blue"
-				},
-				{
-					"value": 7,
-					"label": "Violet"
-				},
-				{
-					"value": 8,
-					"label": "Pinkish"
-				}
-			]
-		},
-		"38[0x0f00]": {
-			"label": "Multi Mode: Color index 3",
-			"valueSize": 4,
-			"minValue": 0,
-			"maxValue": 8,
-			"defaultValue": 0,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"value": 0,
-					"label": "Off"
-				},
-				{
-					"value": 1,
-					"label": "Red"
-				},
-				{
-					"value": 2,
-					"label": "Orange"
-				},
-				{
-					"value": 3,
-					"label": "Yellow"
-				},
-				{
-					"value": 4,
-					"label": "Green"
-				},
-				{
-					"value": 5,
-					"label": "Cyan"
-				},
-				{
-					"value": 6,
-					"label": "Blue"
-				},
-				{
-					"value": 7,
-					"label": "Violet"
-				},
-				{
-					"value": 8,
-					"label": "Pinkish"
-				}
-			]
-		},
-		"38[0xf000]": {
-			"label": "Multi Mode: Color index 4",
-			"valueSize": 4,
-			"minValue": 0,
-			"maxValue": 8,
-			"defaultValue": 0,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"value": 0,
-					"label": "Off"
-				},
-				{
-					"value": 1,
-					"label": "Red"
-				},
-				{
-					"value": 2,
-					"label": "Orange"
-				},
-				{
-					"value": 3,
-					"label": "Yellow"
-				},
-				{
-					"value": 4,
-					"label": "Green"
-				},
-				{
-					"value": 5,
-					"label": "Cyan"
-				},
-				{
-					"value": 6,
-					"label": "Blue"
-				},
-				{
-					"value": 7,
-					"label": "Violet"
-				},
-				{
-					"value": 8,
-					"label": "Pinkish"
-				}
-			]
-		},
-		"38[0x0f0000]": {
-			"label": "Multi Mode: Color index 5",
-			"valueSize": 4,
-			"minValue": 0,
-			"maxValue": 8,
-			"defaultValue": 0,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"value": 0,
-					"label": "Off"
-				},
-				{
-					"value": 1,
-					"label": "Red"
-				},
-				{
-					"value": 2,
-					"label": "Orange"
-				},
-				{
-					"value": 3,
-					"label": "Yellow"
-				},
-				{
-					"value": 4,
-					"label": "Green"
-				},
-				{
-					"value": 5,
-					"label": "Cyan"
-				},
-				{
-					"value": 6,
-					"label": "Blue"
-				},
-				{
-					"value": 7,
-					"label": "Violet"
-				},
-				{
-					"value": 8,
-					"label": "Pinkish"
-				}
-			]
-		},
-		"38[0xf00000]": {
-			"label": "Multi Mode: Color index 6",
-			"valueSize": 4,
-			"minValue": 0,
-			"maxValue": 8,
-			"defaultValue": 0,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"value": 0,
-					"label": "Off"
-				},
-				{
-					"value": 1,
-					"label": "Red"
-				},
-				{
-					"value": 2,
-					"label": "Orange"
-				},
-				{
-					"value": 3,
-					"label": "Yellow"
-				},
-				{
-					"value": 4,
-					"label": "Green"
-				},
-				{
-					"value": 5,
-					"label": "Cyan"
-				},
-				{
-					"value": 6,
-					"label": "Blue"
-				},
-				{
-					"value": 7,
-					"label": "Violet"
-				},
-				{
-					"value": 8,
-					"label": "Pinkish"
-				}
-			]
-		},
-		"38[0x0f000000]": {
-			"label": "Multi Mode: Color index 7",
-			"valueSize": 4,
-			"minValue": 0,
-			"maxValue": 8,
-			"defaultValue": 0,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"value": 0,
-					"label": "Off"
-				},
-				{
-					"value": 1,
-					"label": "Red"
-				},
-				{
-					"value": 2,
-					"label": "Orange"
-				},
-				{
-					"value": 3,
-					"label": "Yellow"
-				},
-				{
-					"value": 4,
-					"label": "Green"
-				},
-				{
-					"value": 5,
-					"label": "Cyan"
-				},
-				{
-					"value": 6,
-					"label": "Blue"
-				},
-				{
-					"value": 7,
-					"label": "Violet"
-				},
-				{
-					"value": 8,
-					"label": "Pinkish"
-				}
-			]
-		},
-		"38[0xf0000000]": {
-			"label": "Multi Mode: Color index 8",
-			"valueSize": 4,
-			"minValue": 0,
-			"maxValue": 8,
-			"defaultValue": 0,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"value": 0,
-					"label": "Off"
-				},
-				{
-					"value": 1,
-					"label": "Red"
-				},
-				{
-					"value": 2,
-					"label": "Orange"
-				},
-				{
-					"value": 3,
-					"label": "Yellow"
-				},
-				{
-					"value": 4,
-					"label": "Green"
-				},
-				{
-					"value": 5,
-					"label": "Cyan"
-				},
-				{
-					"value": 6,
-					"label": "Blue"
-				},
-				{
-					"value": 7,
-					"label": "Violet"
-				},
-				{
-					"value": 8,
-					"label": "Pinkish"
-				}
-			]
+		"255": {
+			"$import": "templates/aeotec_template.json#factory_reset_exclude"
 		}
+	},
+	"metadata": {
+		"inclusion": "Turn the primary controller of Z-Wave network into inclusion mode, press the external switch of LED Bulb to turn it off and then press the external switch again to turn it on",
+		"exclusion": "Turn the primary controller of Z-Wave network into exclusion mode, press the external switch of LED Bulb to turn off and then press the external switch again to turn on it, repeat the operation 3 times",
+		"reset": "Turn the controller of Z-Wave network into exclusion mode, press the external switch of LED Bulb to turn off and then press the external switch again to turn on it, repeat the operation 3 times.\nAfter the LED Bulb is excluded from network, it will be reset to factory default state.\nUse this procedure only in the event that your primary network controller is missing or inoperable",
+		"manual": "https://products.z-wavealliance.org/ProductManual/File?folder=&filename=MarketCertificationFiles/1851/LED%20Bulb%20manual.pdf"
 	}
 }

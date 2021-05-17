@@ -1,7 +1,7 @@
 import type { JsonlDB } from "@alcalzone/jsonl-db";
 import { EventEmitter } from "events";
-import type { CommandClasses } from "../capabilities/CommandClasses";
-import { ZWaveError, ZWaveErrorCodes } from "../error/ZWaveError";
+import { CommandClasses } from "../capabilities/CommandClasses";
+import { isZWaveError, ZWaveError, ZWaveErrorCodes } from "../error/ZWaveError";
 import type { ValueMetadata } from "../values/Metadata";
 
 /** Uniquely identifies to which CC, endpoint and property a value belongs to */
@@ -219,7 +219,7 @@ export class ValueDB extends EventEmitter {
 			dbKey = this.valueIdToDBKey(valueId);
 		} catch (e) {
 			if (
-				e instanceof ZWaveError &&
+				isZWaveError(e) &&
 				e.code === ZWaveErrorCodes.Argument_Invalid &&
 				options.noThrow === true
 			) {
@@ -244,10 +244,13 @@ export class ValueDB extends EventEmitter {
 
 			this._index.add(dbKey);
 			this._db.set(dbKey, value);
-			if (options.noEvent !== true) {
+			if (
+				valueId.commandClass !== CommandClasses._NONE &&
+				options.noEvent !== true
+			) {
 				this.emit(event, cbArg);
 			}
-		} else {
+		} else if (valueId.commandClass !== CommandClasses._NONE) {
 			// For non-stateful values just emit a notification
 			this.emit("value notification", {
 				...valueId,
@@ -270,11 +273,15 @@ export class ValueDB extends EventEmitter {
 		if (this._db.has(dbKey)) {
 			const prevValue = this._db.get(dbKey);
 			this._db.delete(dbKey);
-			const cbArg: ValueRemovedArgs = {
-				...valueId,
-				prevValue,
-			};
-			if (options.noEvent !== true) {
+
+			if (
+				valueId.commandClass !== CommandClasses._NONE &&
+				options.noEvent !== true
+			) {
+				const cbArg: ValueRemovedArgs = {
+					...valueId,
+					prevValue,
+				};
 				this.emit("value removed", cbArg);
 			}
 			return true;
@@ -338,7 +345,11 @@ export class ValueDB extends EventEmitter {
 			if (this._db.has(key)) {
 				const prevValue = this._db.get(key);
 				this._db.delete(key);
-				if (options.noEvent !== true) {
+
+				if (
+					valueId.commandClass !== CommandClasses._NONE &&
+					options.noEvent !== true
+				) {
 					const cbArg: ValueRemovedArgs = {
 						...valueId,
 						prevValue,
@@ -349,7 +360,10 @@ export class ValueDB extends EventEmitter {
 			if (this._metadata.has(key)) {
 				this._metadata.delete(key);
 
-				if (options.noEvent !== true) {
+				if (
+					valueId.commandClass !== CommandClasses._NONE &&
+					options.noEvent !== true
+				) {
 					const cbArg: MetadataUpdatedArgs = {
 						...valueId,
 						metadata: undefined,
@@ -374,7 +388,7 @@ export class ValueDB extends EventEmitter {
 			dbKey = this.valueIdToDBKey(valueId);
 		} catch (e) {
 			if (
-				e instanceof ZWaveError &&
+				isZWaveError(e) &&
 				e.code === ZWaveErrorCodes.Argument_Invalid &&
 				options.noThrow === true
 			) {
@@ -398,7 +412,10 @@ export class ValueDB extends EventEmitter {
 			...valueId,
 			metadata,
 		};
-		if (options.noEvent !== true) {
+		if (
+			valueId.commandClass !== CommandClasses._NONE &&
+			options.noEvent !== true
+		) {
 			this.emit("metadata updated", cbArg);
 		}
 	}
@@ -595,6 +612,7 @@ export function indexDBsByNode(databases: JsonlDB[]): Map<number, Set<string>> {
 	for (const db of databases) {
 		for (const key of db.keys()) {
 			const nodeId = extractNodeIdFromDBKeyFast(key);
+			if (nodeId == undefined) continue;
 			if (!indexes.has(nodeId)) {
 				indexes.set(nodeId, new Set());
 			}
@@ -604,11 +622,11 @@ export function indexDBsByNode(databases: JsonlDB[]): Map<number, Set<string>> {
 	return indexes;
 }
 
-function extractNodeIdFromDBKeyFast(key: string): number {
+function extractNodeIdFromDBKeyFast(key: string): number | undefined {
 	const start = 10; // {"nodeId":
 	if (key.charCodeAt(start - 1) !== 58) {
-		console.error(key.slice(start - 1));
-		throw new Error("Invalid input format!");
+		// Invalid input format for a node value, assume it is for the driver
+		return undefined;
 	}
 	let end = start + 1;
 	const len = key.length;

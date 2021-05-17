@@ -29,8 +29,6 @@
 			"maxValue": 2,
 			"defaultValue": 0,
 			"unsigned": true,
-			"readOnly": false,
-			"writeOnly": false,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -55,10 +53,7 @@
 			"maxValue": 4999,
 			"defaultValue": 2700,
 			"unit": "K",
-			"unsigned": true,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"unsigned": true
 		},
 		"82": {
 			"label": "Color Adjustment (Cold White)",
@@ -68,10 +63,7 @@
 			"maxValue": 6500,
 			"defaultValue": 6500,
 			"unit": "K",
-			"unsigned": true,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"unsigned": true
 		}
 	}
 }

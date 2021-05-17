@@ -205,7 +205,7 @@ export class MultilevelSensorCCAPI extends PhysicalCCAPI {
 export class MultilevelSensorCC extends CommandClass {
 	declare ccCommand: MultilevelSensorCommand;
 
-	public async interview(complete: boolean = true): Promise<void> {
+	public async interview(): Promise<void> {
 		const node = this.getNode()!;
 		const endpoint = this.getEndpoint()!;
 		const api = endpoint.commandClasses["Multilevel Sensor"].withOptions({
@@ -214,15 +214,98 @@ export class MultilevelSensorCC extends CommandClass {
 
 		this.driver.controllerLog.logNode(node.id, {
 			endpoint: this.endpointIndex,
-			message: `${this.constructor.name}: doing a ${
-				complete ? "complete" : "partial"
-			} interview...`,
+			message: `Interviewing ${this.ccName}...`,
 			direction: "none",
+		});
+
+		if (this.version >= 5) {
+			// Query the supported sensor types
+			this.driver.controllerLog.logNode(node.id, {
+				endpoint: this.endpointIndex,
+				message: "retrieving supported sensor types...",
+				direction: "outbound",
+			});
+			const sensorTypes = await api.getSupportedSensorTypes();
+			if (sensorTypes) {
+				const logMessage =
+					"received supported sensor types:\n" +
+					sensorTypes
+						.map((t) =>
+							this.driver.configManager.getSensorTypeName(t),
+						)
+						.map((name) => `· ${name}`)
+						.join("\n");
+				this.driver.controllerLog.logNode(node.id, {
+					endpoint: this.endpointIndex,
+					message: logMessage,
+					direction: "inbound",
+				});
+			} else {
+				this.driver.controllerLog.logNode(node.id, {
+					endpoint: this.endpointIndex,
+					message:
+						"Querying supported sensor types timed out, skipping interview...",
+					level: "warn",
+				});
+				return;
+			}
+
+			// As well as the supported scales for each sensor
+
+			for (const type of sensorTypes) {
+				this.driver.controllerLog.logNode(node.id, {
+					endpoint: this.endpointIndex,
+					message: `querying supported scales for ${this.driver.configManager.getSensorTypeName(
+						type,
+					)} sensor`,
+					direction: "outbound",
+				});
+				const sensorScales = await api.getSupportedScales(type);
+				if (sensorScales) {
+					const logMessage =
+						"received supported scales:\n" +
+						sensorScales
+							.map(
+								(s) =>
+									this.driver.configManager.lookupSensorScale(
+										type,
+										s,
+									).label,
+							)
+							.map((name) => `· ${name}`)
+							.join("\n");
+					this.driver.controllerLog.logNode(node.id, {
+						endpoint: this.endpointIndex,
+						message: logMessage,
+						direction: "inbound",
+					});
+				} else {
+					this.driver.controllerLog.logNode(node.id, {
+						endpoint: this.endpointIndex,
+						message:
+							"Querying supported scales timed out, skipping interview...",
+						level: "warn",
+					});
+					return;
+				}
+			}
+		}
+
+		await this.refreshValues();
+
+		// Remember that the interview is complete
+		this.interviewComplete = true;
+	}
+
+	public async refreshValues(): Promise<void> {
+		const node = this.getNode()!;
+		const endpoint = this.getEndpoint()!;
+		const api = endpoint.commandClasses["Multilevel Sensor"].withOptions({
+			priority: MessagePriority.NodeQuery,
 		});
 
 		if (this.version <= 4) {
 			// Sensors up to V4 only support a single value
-			// This needs to be requested every time
 			this.driver.controllerLog.logNode(node.id, {
 				endpoint: this.endpointIndex,
 				message: "querying current sensor reading...",
@@ -244,99 +327,23 @@ value:       ${mlsResponse.value} ${sensorScale.unit || ""}`;
 				});
 			}
 		} else {
-			// V5+
-
-			// If we haven't yet, query the supported sensor types
-			let sensorTypes: readonly number[] | undefined;
-			if (complete) {
-				this.driver.controllerLog.logNode(node.id, {
+			// Query all sensor values
+			const sensorTypes: readonly number[] =
+				this.getValueDB().getValue({
+					commandClass: this.ccId,
+					property: "supportedSensorTypes",
 					endpoint: this.endpointIndex,
-					message: "retrieving supported sensor types...",
-					direction: "outbound",
-				});
-				sensorTypes = await api.getSupportedSensorTypes();
-				if (sensorTypes) {
-					const logMessage =
-						"received supported sensor types:\n" +
-						sensorTypes
-							.map((t) =>
-								this.driver.configManager.getSensorTypeName(t),
-							)
-							.map((name) => `· ${name}`)
-							.join("\n");
-					this.driver.controllerLog.logNode(node.id, {
-						endpoint: this.endpointIndex,
-						message: logMessage,
-						direction: "inbound",
-					});
-				} else {
-					this.driver.controllerLog.logNode(node.id, {
-						endpoint: this.endpointIndex,
-						message:
-							"Querying supported sensor types timed out, skipping interview...",
-						level: "warn",
-					});
-					return;
-				}
-			} else {
-				sensorTypes =
-					this.getValueDB().getValue({
-						commandClass: this.ccId,
-						property: "supportedSensorTypes",
-						endpoint: this.endpointIndex,
-					}) || [];
-			}
+				}) || [];
 
 			for (const type of sensorTypes) {
-				// If we haven't yet, query the supported scales for each sensor
-				let sensorScales: readonly number[] | undefined;
-				if (complete) {
-					this.driver.controllerLog.logNode(node.id, {
+				const sensorScales: readonly number[] =
+					this.getValueDB().getValue({
+						commandClass: this.ccId,
 						endpoint: this.endpointIndex,
-						message: `querying supported scales for ${this.driver.configManager.getSensorTypeName(
-							type,
-						)} sensor`,
-						direction: "outbound",
-					});
-					sensorScales = await api.getSupportedScales(type);
-					if (sensorScales) {
-						const logMessage =
-							"received supported scales:\n" +
-							sensorScales
-								.map(
-									(s) =>
-										this.driver.configManager.lookupSensorScale(
-											type,
-											s,
-										).label,
-								)
-								.map((name) => `· ${name}`)
-								.join("\n");
-						this.driver.controllerLog.logNode(node.id, {
-							endpoint: this.endpointIndex,
-							message: logMessage,
-							direction: "inbound",
-						});
-					} else {
-						this.driver.controllerLog.logNode(node.id, {
-							endpoint: this.endpointIndex,
-							message:
-								"Querying supported scales timed out, skipping interview...",
-							level: "warn",
-						});
-						return;
-					}
-				} else {
-					sensorScales =
-						this.getValueDB().getValue({
-							commandClass: this.ccId,
-							endpoint: this.endpointIndex,
-							property: "supportedScales",
-							propertyKey: type,
-						}) || [];
-				}
+						property: "supportedScales",
+						propertyKey: type,
+					}) || [];
 
-				// Always query the current sensor reading
 				this.driver.controllerLog.logNode(node.id, {
 					endpoint: this.endpointIndex,
 					message: `querying ${this.driver.configManager.getSensorTypeName(
@@ -362,9 +369,6 @@ value:       ${mlsResponse.value} ${sensorScale.unit || ""}`;
 				}
 			}
 		}
-
-		// Remember that the interview is complete
-		this.interviewComplete = true;
 	}
 
 	public translatePropertyKey(

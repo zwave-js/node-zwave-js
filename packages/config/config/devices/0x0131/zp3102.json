@@ -1,5 +1,3 @@
-// Zipato ZP3102
-// Multi Sensor Dual: motion and temperature sensor
 {
 	"manufacturer": "Zipato",
 	"manufacturerId": "0x0131",
@@ -24,10 +22,7 @@
 			"minValue": 1,
 			"maxValue": 255,
 			"defaultValue": 3,
-			"unsigned": true,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"unsigned": true
 		},
 		"2": {
 			"label": "Temperature Unit",
@@ -35,8 +30,6 @@
 			"minValue": 0,
 			"maxValue": 1,
 			"defaultValue": 0,
-			"readOnly": false,
-			"writeOnly": false,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -55,10 +48,10 @@
 			"valueSize": 1,
 			"minValue": 1,
 			"maxValue": 7,
-			"defaultValue": 4,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"defaultValue": 4
 		}
+	},
+	"compat": {
+		"enableBasicSetMapping": true
 	}
 }

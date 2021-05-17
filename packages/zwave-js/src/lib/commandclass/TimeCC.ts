@@ -131,7 +131,7 @@ export class TimeCCAPI extends CCAPI {
 export class TimeCC extends CommandClass {
 	declare ccCommand: TimeCommand;
 
-	public async interview(complete: boolean = true): Promise<void> {
+	public async interview(): Promise<void> {
 		const node = this.getNode()!;
 		const endpoint = this.getEndpoint()!;
 		const api = endpoint.commandClasses.Time.withOptions({
@@ -140,13 +140,11 @@ export class TimeCC extends CommandClass {
 
 		this.driver.controllerLog.logNode(node.id, {
 			endpoint: this.endpointIndex,
-			message: `${this.constructor.name}: doing a ${
-				complete ? "complete" : "partial"
-			} interview...`,
+			message: `Interviewing ${this.ccName}...`,
 			direction: "none",
 		});
 
-		// Always keep the slave's time in sync
+		// Synchronize the slave's time
 		if (api.version >= 2) {
 			this.driver.controllerLog.logNode(node.id, {
 				endpoint: this.endpointIndex,

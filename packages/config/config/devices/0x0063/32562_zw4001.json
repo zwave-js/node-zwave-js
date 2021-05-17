@@ -1,5 +1,3 @@
-// GE/Jasco 32562 / ZW4001
-// Hinge Pin Smart Door Sensor
 {
 	"manufacturer": "GE/Jasco",
 	"manufacturerId": "0x0063",
@@ -24,8 +22,6 @@
 			"maxValue": 3,
 			"defaultValue": 1,
 			"unsigned": true,
-			"readOnly": false,
-			"writeOnly": false,
 			"allowManualEntry": false,
 			"options": [
 				{

@@ -1,0 +1,336 @@
+{
+	"manufacturer": "McoHome Technology Co., Ltd.",
+	"manufacturerId": "0x015f",
+	"label": "MH-S511",
+	"description": "Touch Panel Switch",
+	"devices": [
+		{
+			"productType": "0x5111",
+			"productId": "0x5103"
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"paramInformation": {
+		"2": {
+			"label": "Restore State After Power Failure",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 1,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Disable",
+					"value": 0
+				},
+				{
+					"label": "Enable",
+					"value": 1
+				}
+			]
+		},
+		"3": {
+			"label": "All On / All Off",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 255,
+			"unsigned": true,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Disable",
+					"value": 0
+				},
+				{
+					"label": "Enable All Off; Disable All On",
+					"value": 1
+				},
+				{
+					"label": "Enable All On; Disable All Off",
+					"value": 2
+				},
+				{
+					"label": "Enable",
+					"value": 255
+				}
+			]
+		},
+		"4": {
+			"label": "LED Backlight Brightness Level",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 10,
+			"defaultValue": 10
+		},
+		"5": {
+			"label": "Key Mode",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 6,
+			"defaultValue": 0,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Single click (On/Off)",
+					"value": 0
+				},
+				{
+					"label": "Auto off after 'Key on Duration' seconds",
+					"value": 1
+				},
+				{
+					"label": "Auto on after 'Key on Duration' seconds",
+					"value": 2
+				},
+				{
+					"label": "Held 3 seconds -> On; Release -> Off",
+					"value": 3
+				},
+				{
+					"label": "Single click (On/Off); Held 3 seconds -> On; Release -> Off",
+					"value": 4
+				},
+				{
+					"label": "Momentary switch; Held -> On; Release -> Off",
+					"value": 5
+				},
+				{
+					"label": "Held 3 seconds -> On; Held 3 seconds -> Off",
+					"value": 6
+				}
+			]
+		},
+		"6": {
+			"label": "Key On Duration",
+			"unit": "seconds",
+			"valueSize": 2,
+			"minValue": 0,
+			"maxValue": 65535,
+			"defaultValue": 0,
+			"unsigned": true
+		},
+		"8": {
+			"label": "Basic CC Integration Setting",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 3,
+			"defaultValue": 0,
+			"unsigned": true,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Key1 (Basic CC Set/Get); Reporting disabled",
+					"value": 0
+				},
+				{
+					"label": "Key1 (Basic CC Set/Get); Reporting enabled",
+					"value": 1
+				},
+				{
+					"label": "All keys (Basic CC Set only); Reporting disabled",
+					"value": 2
+				},
+				{
+					"label": "All keys (Basic CC Set only); Reporting enabled",
+					"value": 3
+				}
+			]
+		},
+		"10": {
+			"label": "Key 1 Mode",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 6,
+			"defaultValue": 0,
+			"unsigned": true,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Single click (On/Off)",
+					"value": 0
+				},
+				{
+					"label": "Auto off after 'Key on Duration' seconds",
+					"value": 1
+				},
+				{
+					"label": "Auto on after 'Key on Duration' seconds",
+					"value": 2
+				},
+				{
+					"label": "Held 3 seconds -> On; Release -> Off",
+					"value": 3
+				},
+				{
+					"label": "Single click (On/Off); Held 3 seconds -> On; Release -> Off",
+					"value": 4
+				},
+				{
+					"label": "Momentary switch; Held -> On; Release -> Off",
+					"value": 5
+				},
+				{
+					"label": "Held 3 seconds -> On; Held 3 seconds -> Off",
+					"value": 6
+				}
+			]
+		},
+		"14": {
+			"label": "Local Control",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 0,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Enable",
+					"value": 0
+				},
+				{
+					"label": "Disable",
+					"value": 1
+				}
+			]
+		},
+		"15": {
+			"label": "Remote Control",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 0,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Enable",
+					"value": 0
+				},
+				{
+					"label": "Disable",
+					"value": 1
+				}
+			]
+		},
+		"16": {
+			"label": "Scene Respond",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 7,
+			"defaultValue": 0,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Disable",
+					"value": 0
+				},
+				{
+					"label": "Key 1 responds",
+					"value": 1
+				},
+				{
+					"label": "Key 2 responds",
+					"value": 2
+				},
+				{
+					"label": "Keys 1 and 2 respond",
+					"value": 3
+				},
+				{
+					"label": "Key 3 responds",
+					"value": 4
+				},
+				{
+					"label": "Keys 1 and 3 respond",
+					"value": 5
+				},
+				{
+					"label": "Keys 2 and 3 respond",
+					"value": 6
+				},
+				{
+					"label": "All keys respond",
+					"value": 7
+				}
+			]
+		},
+		"17": {
+			"label": "Key 1 Scene Settings",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 3,
+			"defaultValue": 0,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Scene activation disabled",
+					"value": 0
+				},
+				{
+					"label": "Key 1 -> Scene ID1 (Any Key 1 relay state)",
+					"value": 1
+				},
+				{
+					"label": "Key 1 -> Scene ID 1 (Key 1 relay open)",
+					"value": 2
+				},
+				{
+					"label": "Upon clicking Key 1, always activate scene ID1 when Key 1's relay output is closed",
+					"value": 3
+				}
+			]
+		},
+		"18": {
+			"label": "Key 1 Activate Scene ID",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 0,
+			"unsigned": true,
+			"options": [
+				{
+					"label": "Scene activation disabled",
+					"value": 0
+				}
+			]
+		},
+		"19": {
+			"label": "Key 1 Activate Scene Duration",
+			"valueSize": 1,
+			"unit": "seconds",
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 0,
+			"unsigned": true,
+			"options": [
+				{
+					"label": "Instant",
+					"value": 0
+				}
+			]
+		},
+		"255": {
+			"label": "Factory reset",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 85,
+			"defaultValue": 0,
+			"unsigned": true,
+			"writeOnly": true,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Normal operation",
+					"value": 0
+				},
+				{
+					"label": "Factory reset",
+					"value": 85
+				}
+			]
+		}
+	}
+}

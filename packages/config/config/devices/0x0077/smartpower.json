@@ -1,5 +1,3 @@
-// INNOVUS SmartPower
-// RAone SmartPower
 {
 	"manufacturer": "INNOVUS",
 	"manufacturerId": "0x0077",
@@ -34,10 +32,7 @@
 			"minValue": 0,
 			"maxValue": 255,
 			"defaultValue": 0,
-			"unsigned": true,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"unsigned": true
 		},
 		"2": {
 			"label": "BO IR support",
@@ -47,8 +42,6 @@
 			"maxValue": 255,
 			"defaultValue": 1,
 			"unsigned": true,
-			"readOnly": false,
-			"writeOnly": false,
 			"allowManualEntry": false,
 			"options": [
 				{

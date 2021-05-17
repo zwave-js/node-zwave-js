@@ -1,5 +1,3 @@
-// Evolve LDM-15W
-// Lamp Module
 {
 	"manufacturer": "Evolve",
 	"manufacturerId": "0x0113",
@@ -14,5 +12,26 @@
 	"firmwareVersion": {
 		"min": "0.0",
 		"max": "255.255"
+	},
+	"paramInformation": {
+		"29": {
+			"label": "Load Sense",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 1,
+			"unsigned": true,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Disable",
+					"value": 0
+				},
+				{
+					"label": "Enable",
+					"value": 1
+				}
+			]
+		}
 	}
 }

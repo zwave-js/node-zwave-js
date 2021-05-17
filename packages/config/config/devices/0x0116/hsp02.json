@@ -1,0 +1,97 @@
+{
+	"manufacturer": "Chromagic Technologies Corporation",
+	"manufacturerId": "0x0116",
+	"label": "HSP02",
+	"description": "Motion Detector",
+	"devices": [
+		{
+			"productType": "0x0001",
+			"productId": "0x0001",
+			"zwaveAllianceId": 606
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"associations": {
+		"1": {
+			"label": "Tamper Event Report (Alarm Report)",
+			"maxNodes": 1,
+			"isLifeline": true
+		},
+		"2": {
+			"label": "Control other Z-Wave Devices",
+			"maxNodes": 5,
+			"isLifeline": true
+		}
+	},
+	"paramInformation": {
+		"1": {
+			"label": "Basic Set Level",
+			"description": "Value to be sent with a BASIC SET command",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 99,
+			"defaultValue": 99
+		},
+		"2": {
+			"label": "Sensor Detecting Function",
+			"valueSize": 1,
+			"minValue": 1,
+			"maxValue": 3,
+			"defaultValue": 1,
+			"unsigned": true,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Group 1 Enabled / Group 2 Enabled",
+					"value": 1
+				},
+				{
+					"label": "Group 1 Enabled / Group 2 Disabled",
+					"value": 2
+				},
+				{
+					"label": "Group 1 Disabled / Group 2 Disabled",
+					"value": 3
+				}
+			]
+		},
+		"3": {
+			"label": "Sensitivity Level",
+			"valueSize": 1,
+			"minValue": 1,
+			"maxValue": 10,
+			"defaultValue": 6
+		},
+		"4": {
+			"label": "Re-trigger Interval Setting",
+			"valueSize": 1,
+			"minValue": 5,
+			"maxValue": 255,
+			"defaultValue": 180,
+			"unsigned": true,
+			"unit": "seconds"
+		},
+		"5": {
+			"label": "Brightness Threshold",
+			"description": "Motion sensing is active while the brightness is below this value.",
+			"valueSize": 1,
+			"minValue": 1,
+			"maxValue": 100,
+			"defaultValue": 10,
+			"unit": "lux"
+		},
+		"6": {
+			"label": "On time",
+			"description": "The amount of time the module/lighting should stay ON for.",
+			"valueSize": 1,
+			"minValue": 5,
+			"maxValue": 255,
+			"defaultValue": 15,
+			"unsigned": true,
+			"unit": "seconds"
+		}
+	}
+}

@@ -15,7 +15,7 @@ Open an issue with the **feature request template** and fill it out. For complic
 
 ## Do you want to contribute device configuration files?
 
-Thanks, just go ahead and open a PR! Please make sure to follow the [necessary steps](https://zwave-js.github.io/node-zwave-js/#/development/config-files?id=contributing-configuration-files).
+Thanks, just go ahead and open a PR! Please make sure to follow the [[Style guide](config-files/style-guide.md) and use the [available templates](config-files/using-templates.md), while following the other documentation on [conditional parameters and settings](config-files/conditional-settings.md) and [partial parameters](config-files/partial-parameters.md).
 
 ## Do you want to help out with a PR?
 

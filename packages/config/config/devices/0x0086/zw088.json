@@ -1,0 +1,47 @@
+{
+	"manufacturer": "AEON Labs",
+	"manufacturerId": "0x0086",
+	"label": "ZW088",
+	"description": "4 button keyfob - Gen 5",
+	"devices": [
+		{
+			"productType": "0x0001",
+			"productId": "0x0058",
+			"zwaveAllianceId": 1178
+		},
+		{
+			"productType": "0x0101",
+			"productId": "0x0058",
+			"zwaveAllianceId": 1165
+		},
+		{
+			"productType": "0x0201",
+			"productId": "0x0058",
+			"zwaveAllianceId": 1177
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"associations": {
+		"1": {
+			"label": "Lifeline",
+			"maxNodes": 5,
+			"isLifeline": true
+		}
+	},
+	"paramInformation": {
+		"250": {
+			"$import": "../templates/master_template.json#base_enable_disable",
+			"label": "Scene Mode"
+		},
+		"255": {
+			"$import": "templates/aeotec_template.json#factory_reset"
+		}
+	},
+	"metadata": {
+		"reset": "Use this procedure only in the event that the primary controller is missing or otherwise inoperable.\n\nPress and hold the “Mode” button and “Learn” button for 20 seconds and then release",
+		"manual": "https://products.z-wavealliance.org/ProductManual/File?folder=&filename=MarketCertificationFiles/1165/Instructions%20-%20Aeon%20Labs%20Key%20Fob%20Gen5%20MCert.pdf"
+	}
+}

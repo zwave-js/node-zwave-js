@@ -74,45 +74,8 @@
 		"supportsZWavePlus": {
 			"const": true
 		},
-		"associations": {
-			"type": "object",
-			"description": "Define association groups for devices that don't support Z-Wave+ or modify the reported associations for devices that do.",
-			"properties": {
-				"$import": { "$ref": "#/definitions/import" }
-			},
-			"patternProperties": {
-				"^\\d+$": {
-					"type": "object",
-					"properties": {
-						"$if": { "$ref": "#/definitions/condition" },
-						"label": {
-							"type": "string",
-							"description": "How this association group is called"
-						},
-						"description": {
-							"type": "string",
-							"description": "What this association group does"
-						},
-						"maxNodes": {
-							"type": "number",
-							"description": "How many nodes may be assigned to this group",
-							"minimum": 1
-						},
-						"isLifeline": {
-							"const": true,
-							"description": "Whether this is a Lifeline group. SHOULD exist exactly once, some nodes require more groups to report everything."
-						},
-						"noEndpoint": {
-							"const": true,
-							"description": "Whether node id associations must be used for this group, even if the device supports endpoint associations"
-						}
-					},
-					"required": ["label", "maxNodes"],
-					"additionalProperties": false
-				}
-			},
-			"additionalProperties": false
-		},
+		"endpoints": { "$ref": "#/definitions/endpoints" },
+		"associations": { "$ref": "#/definitions/associations" },
 		"paramInformation": {
 			"type": "object",
 			"description": "Defines all the existing configuration parameters",
@@ -141,6 +104,77 @@
 			"type": "object",
 			"properties": {
 				"$import": { "$ref": "#/definitions/import" },
+				"alarmMapping": {
+					"description": "Is used to map legacy V1 alarm values to V2+ Notification events",
+					"type": "array",
+					"items": {
+						"type": "object",
+						"properties": {
+							"$import": { "$ref": "#/definitions/import" },
+							"from": {
+								"type": "object",
+								"properties": {
+									"alarmType": {
+										"type": "integer",
+										"minimum": 0,
+										"maximum": 255
+									},
+									"alarmLevel": {
+										"type": "integer",
+										"minimum": 0,
+										"maximum": 255
+									}
+								},
+								"additionalProperties": false,
+								"required": ["alarmType"]
+							},
+							"to": {
+								"type": "object",
+								"properties": {
+									"notificationType": {
+										"type": "integer",
+										"minimum": 0,
+										"maximum": 255
+									},
+									"notificationEvent": {
+										"type": "integer",
+										"minimum": 0,
+										"maximum": 255
+									},
+									"eventParameters": {
+										"type": "object",
+										"additionalProperties": {
+											"anyOf": [
+												{
+													"type": "integer"
+												},
+												{
+													"enum": ["alarmLevel"]
+												}
+											]
+										}
+									}
+								},
+								"additionalProperties": false,
+								"required": [
+									"notificationType",
+									"notificationEvent"
+								]
+							}
+						},
+						"additionalProperties": false,
+						"anyOf": [
+							{
+								"required": ["from", "to"]
+							},
+							{
+								"required": ["$import"]
+							}
+						]
+					},
+					"minItems": 1,
+					"additionalItems": false
+				},
 				"commandClasses": {
 					"type": "object",
 					"properties": {
@@ -184,6 +218,19 @@
 				"disableBasicMapping": {
 					"const": true
 				},
+				"disableStrictEntryControlDataValidation": {
+					"const": true
+				},
+				"enableBasicSetMapping": {
+					"const": true
+				},
+				"forceNotificationIdleReset": {
+					"const": true
+				},
+				"manualValueRefreshDelayMs": {
+					"type": "number",
+					"minimum": 0
+				},
 				"overrideFloatEncoding": {
 					"type": "object",
 					"properties": {
@@ -223,10 +270,6 @@
 				},
 				"treatBasicSetAsEvent": {
 					"const": true
-				},
-				"manualValueRefreshDelayMs": {
-					"type": "number",
-					"minimum": 0
 				}
 			},
 			"additionalProperties": false
@@ -234,6 +277,10 @@
 		"metadata": {
 			"type": "object",
 			"properties": {
+				"wakeup": {
+					"type": "string",
+					"description": "How to wake up the device manually"
+				},
 				"inclusion": {
 					"type": "string",
 					"description": "Inclusion instructions for this device"
@@ -275,11 +322,74 @@
 		"import": {
 			"type": "string",
 			"description": "Used to import another config file or parts thereof",
-			"pattern": "^((?<dir>([\\w\\d_-\\.]+/)+)?(?<filename>[\\w\\d_-]+\\.json))?(?<selector>#([\\w\\d_-]+/)*[\\w\\d_-]+)?$"
+			"pattern": "^((?<dir>([\\w\\d_\\.-]+/)+)?(?<filename>[\\w\\d_-]+\\.json))?(?<selector>#([\\w\\d_-]+/)*[\\w\\d_-]+)?$"
 		},
 		"condition": {
 			"type": "string",
 			"description": "A condition that must be fulfilled for this entry to exit."
+		},
+		"endpoints": {
+			"type": "object",
+			"description": "Endpoint-specific configuration",
+			"patternProperties": {
+				"^\\d+$": {
+					"type": "object",
+					"properties": {
+						"$import": { "$ref": "#/definitions/import" },
+						"$if": { "$ref": "#/definitions/condition" },
+						"associations": { "$ref": "#/definitions/associations" }
+					},
+					"additionalProperties": false
+				},
+				"additionalProperties": false
+			}
+		},
+		"associations": {
+			"type": "object",
+			"description": "Define association groups for devices that don't support Z-Wave+ or modify the reported associations for devices that do.",
+			"properties": {
+				"$import": { "$ref": "#/definitions/import" }
+			},
+			"patternProperties": {
+				"^\\d+$": {
+					"type": "object",
+					"properties": {
+						"$import": { "$ref": "#/definitions/import" },
+						"$if": { "$ref": "#/definitions/condition" },
+						"label": {
+							"type": "string",
+							"description": "How this association group is called"
+						},
+						"description": {
+							"type": "string",
+							"description": "What this association group does"
+						},
+						"maxNodes": {
+							"type": "number",
+							"description": "How many nodes may be assigned to this group",
+							"minimum": 1
+						},
+						"isLifeline": {
+							"type": "boolean",
+							"description": "Whether this is a Lifeline group. SHOULD exist exactly once, some nodes require more groups to report everything."
+						},
+						"multiChannel": {
+							"const": false,
+							"description": "Set this to `false` to force node id associations for this group, even if endpoint associations are supported."
+						}
+					},
+					"anyOf": [
+						{
+							"required": ["label", "maxNodes"]
+						},
+						{
+							"required": ["$import"]
+						}
+					],
+					"additionalProperties": false
+				}
+			},
+			"additionalProperties": false
 		},
 		"ccInfo": {
 			"type": "object",
@@ -353,6 +463,10 @@
 					"type": "number",
 					"description": "The maximum allowed value for this parameter"
 				},
+				"unit": {
+					"type": "string",
+					"description": "In which unit the value is interpreted"
+				},
 				"unsigned": {
 					"type": "boolean",
 					"description": "Whether this parameter is interpreted as an unsigned value by the device (default: false). This simplifies usage for the end user."
@@ -362,15 +476,15 @@
 					"description": "The factory default value of this parameter."
 				},
 				"readOnly": {
-					"type": "boolean",
+					"const": true,
 					"description": "Whether this parameter can only be read"
 				},
 				"writeOnly": {
-					"type": "boolean",
+					"const": true,
 					"description": "Whether this parameter can only be written"
 				},
 				"allowManualEntry": {
-					"type": "boolean",
+					"const": false,
 					"description": "Whether this parameter accepts any value between minValue and maxValue. If false, options must be used to specify the allowed values."
 				},
 				"options": {
@@ -420,8 +534,7 @@
 							"label",
 							"valueSize",
 							"minValue",
-							"maxValue",
-							"allowManualEntry"
+							"maxValue"
 						]
 					},
 					"else": {
@@ -430,8 +543,7 @@
 							"valueSize",
 							"minValue",
 							"maxValue",
-							"defaultValue",
-							"allowManualEntry"
+							"defaultValue"
 						]
 					}
 				},

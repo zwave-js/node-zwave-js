@@ -1,5 +1,3 @@
-// Zipato PH-PSG01
-// Smoke Sensor
 {
 	"manufacturer": "Zipato",
 	"manufacturerId": "0x0131",
@@ -22,20 +20,14 @@
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 4,
-			"defaultValue": 4,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"defaultValue": 4
 		},
 		"10": {
 			"label": "Auto Report Battery Time",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 127,
-			"defaultValue": 127,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"defaultValue": 127
 		}
 	}
 }

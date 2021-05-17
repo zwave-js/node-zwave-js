@@ -1,7 +1,5 @@
-// NIE Technology Co., Ltd. MP20Z
-// Zwave Plug 2 channel plugin outlet
 {
-	"manufacturer": "NIE Technology Co., Ltd.",
+	"manufacturer": "Minoston",
 	"manufacturerId": "0x0312",
 	"label": "MP20Z",
 	"description": "Zwave Plug 2 channel plugin outlet",

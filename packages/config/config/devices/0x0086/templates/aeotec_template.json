@@ -1,0 +1,2563 @@
+{
+	"base_remote_mode_5": {
+		"valueSize": 1,
+		"minValue": 0,
+		"maxValue": 5,
+		"defaultValue": 0,
+		"unsigned": true,
+		"writeOnly": true,
+		"allowManualEntry": false,
+		"options": [
+			{
+				"label": "Factory Default",
+				"value": 0
+			},
+			{
+				"label": "Scene Mode",
+				"value": 1
+			},
+			{
+				"label": "Add Mode",
+				"value": 2
+			},
+			{
+				"label": "Remove Mode",
+				"value": 3
+			},
+			{
+				"label": "Association Mode",
+				"value": 4
+			},
+			{
+				"label": "Learn Mode",
+				"value": 5
+			}
+		]
+	},
+	"base_0-65535": {
+		"valueSize": 4,
+		"minValue": 0,
+		"maxValue": 65535,
+		"defaultValue": 0,
+		"unsigned": true
+	},
+	"base_interval": {
+		"valueSize": 4,
+		"unit": "seconds",
+		"minValue": 1,
+		"maxValue": 2678400,
+		"defaultValue": 600,
+		"unsigned": true
+	},
+	"notification_type": {
+		"label": "Notification Type",
+		"valueSize": 1,
+		"minValue": 1,
+		"maxValue": 11,
+		"defaultValue": 6,
+		"unsigned": true,
+		"allowManualEntry": false,
+		"options": [
+			{
+				"label": "Smoke alarm",
+				"value": 1
+			},
+			{
+				"label": "CO alarm",
+				"value": 2
+			},
+			{
+				"label": "CO2 alarm",
+				"value": 3
+			},
+			{
+				"label": "Heat alarm",
+				"value": 4
+			},
+			{
+				"label": "Water alarm",
+				"value": 5
+			},
+			{
+				"label": "Access control",
+				"value": 6
+			},
+			{
+				"label": "Home security",
+				"value": 7
+			},
+			{
+				"label": "Power management",
+				"value": 8
+			},
+			{
+				"label": "System notification",
+				"value": 9
+			},
+			{
+				"label": "Emergency alarm notification",
+				"value": 10
+			},
+			{
+				"label": "Clock notification",
+				"value": 11
+			}
+		]
+	},
+	"motion_report_type": {
+		"label": "Motion Sensor Report Type to Send",
+		"valueSize": 1,
+		"minValue": 1,
+		"maxValue": 2,
+		"defaultValue": 1,
+		"unsigned": true,
+		"allowManualEntry": false,
+		"options": [
+			{
+				"label": "Basic CC Report",
+				"value": 1
+			},
+			{
+				"label": "Binary Sensor CC Report",
+				"value": 2
+			}
+		]
+	},
+	"sensor_report_type": {
+		"label": "Report Type to Send",
+		"valueSize": 4,
+		"minValue": 16,
+		"maxValue": 256,
+		"defaultValue": 1,
+		"unsigned": true,
+		"allowManualEntry": false,
+		"options": [
+			{
+				"label": "Binary Sensor CC Report",
+				"value": 16
+			},
+			{
+				"label": "Basic CC Report",
+				"value": 256
+			}
+		]
+	},
+	"binary_report_type": {
+		"label": "Motion Sensor Triggered Command",
+		"valueSize": 1,
+		"minValue": 0,
+		"maxValue": 3,
+		"defaultValue": 1,
+		"unsigned": true,
+		"allowManualEntry": false,
+		"options": [
+			{
+				"label": "Disable",
+				"value": 0
+			},
+			{
+				"label": "Basic CC Report",
+				"value": 1
+			},
+			{
+				"label": "Binary Sensor CC Report",
+				"value": 2
+			},
+			{
+				"label": "Basic CC Report and Binary Sensor CC Report",
+				"value": 3
+			}
+		]
+	},
+	"notification_report_type": {
+		"valueSize": 1,
+		"minValue": 0,
+		"maxValue": 2,
+		"defaultValue": 1,
+		"unsigned": true,
+		"allowManualEntry": false,
+		"options": [
+			{
+				"label": "Disable",
+				"value": 0
+			},
+			{
+				"label": "Basic CC Set",
+				"value": 1
+			},
+			{
+				"label": "MultiLevel Switch CC Report",
+				"value": 2
+			}
+		]
+	},
+	"trigger_off": {
+		"label": "Trigger Off Period",
+		"description": "Period after which to send Trigger Off command",
+		"valueSize": 2,
+		"unit": "seconds",
+		"minValue": 1,
+		"maxValue": 15300,
+		"defaultValue": 240,
+		"unsigned": true
+	},
+	"celsius_fahrenheit": {
+		"valueSize": 4,
+		"minValue": 1,
+		"maxValue": 2,
+		"defaultValue": 1,
+		"allowManualEntry": false,
+		"options": [
+			{
+				"label": "Celsius",
+				"value": 1
+			},
+			{
+				"label": "Fahrenheit",
+				"value": 2
+			}
+		]
+	},
+	"celsius_fahrenheit_0": {
+		"$import": "../../templates/master_template.json#base_0-1_nounit",
+		"valueSize": 4,
+		"options": [
+			{
+				"label": "Celsius",
+				"value": 0
+			},
+			{
+				"label": "Fahrenheit",
+				"value": 1
+			}
+		]
+	},
+	"selective_reporting": {
+		"$import": "../../templates/master_template.json#base_enable_disable",
+		"label": "Selective Reporting",
+		"description": "Report only when the defined threshold is exceeded"
+	},
+	"lock_configuration": {
+		"$import": "../../templates/master_template.json#base_enable_disable",
+		"label": "Lock Configuration"
+	},
+	"low_battery_button": {
+		"$import": "../../templates/master_template.json#base_enable_disable",
+		"label": "Wireless Button Low Battery Report"
+	},
+	"low_temp_alarm": {
+		"$import": "../../templates/master_template.json#base_enable_disable",
+		"label": "Low Temperature Alarm (-15°C)"
+	},
+	"below_temp_report": {
+		"$import": "../../templates/master_template.json#base_enable_disable",
+		"label": "Report Below Temperature Threshold"
+	},
+	"below_humidity_report": {
+		"$import": "../../templates/master_template.json#base_enable_disable",
+		"label": "Report Below Humidity Threshold"
+	},
+	"below_luminance_report": {
+		"$import": "../../templates/master_template.json#base_enable_disable",
+		"label": "Report Below Luminance Threshold"
+	},
+	"below_ultraviolet_report": {
+		"$import": "../../templates/master_template.json#base_enable_disable",
+		"label": "Report Below Ultraviolet Threshold"
+	},
+	"above_temp_report": {
+		"$import": "../../templates/master_template.json#base_enable_disable",
+		"label": "Report Above Temperature Threshold"
+	},
+	"above_humidity_report": {
+		"$import": "../../templates/master_template.json#base_enable_disable",
+		"label": "Report Above Humidity Threshold"
+	},
+	"above_luminance_report": {
+		"$import": "../../templates/master_template.json#base_enable_disable",
+		"label": "Report Above Luminance Threshold"
+	},
+	"above_ultraviolet_report": {
+		"$import": "../../templates/master_template.json#base_enable_disable",
+		"label": "Report Above Ultraviolet Threshold"
+	},
+	"report_interval": {
+		"valueSize": 4,
+		"unit": "seconds",
+		"minValue": 1,
+		"maxValue": 65535,
+		"defaultValue": 720,
+		"unsigned": true
+	},
+	"factory_reset": {
+		"label": "Reset to Factory Defaults",
+		"valueSize": 1,
+		"minValue": 0,
+		"maxValue": 1,
+		"defaultValue": 0,
+		"unsigned": true,
+		"writeOnly": true,
+		"allowManualEntry": false,
+		"options": [
+			{
+				"label": "Normal Operation",
+				"value": 0
+			},
+			{
+				"label": "Reset to Factory Default",
+				"value": 1
+			}
+		]
+	},
+	"factory_reset_exclude": {
+		"label": "Reset to Factory Default Setting",
+		"valueSize": 4,
+		"minValue": 1,
+		"maxValue": 1431655765,
+		"defaultValue": 0,
+		"unsigned": true,
+		"writeOnly": true,
+		"allowManualEntry": false,
+		"options": [
+			{
+				"label": "Reset the product to factory default setting and exclude from Z-Wave network",
+				"value": 1431655765
+			},
+			{
+				"label": "Resets all configuration parameters to default setting",
+				"value": 1
+			}
+		]
+	},
+	"power_threshold": {
+		"label": "Power Change Threshold",
+		"description": "Threshold change in power consumption to induce an automatic report",
+		"valueSize": 2,
+		"unit": "W",
+		"minValue": 0,
+		"maxValue": 60000,
+		"defaultValue": 50,
+		"unsigned": true
+	},
+	"power_threshold_clamp1": {
+		"$import": "#power_threshold",
+		"label": "Power Change Threshold (Clamp 1)"
+	},
+	"power_threshold_clamp2": {
+		"$import": "#power_threshold",
+		"label": "Power Change Threshold (Clamp 2)"
+	},
+	"power_threshold_clamp3": {
+		"$import": "#power_threshold",
+		"label": "Power Change Threshold (Clamp 3)"
+	},
+	"power_threshold_wholehem": {
+		"$import": "#power_threshold",
+		"label": "Power Change Threshold (Whole HEM)"
+	},
+	"percent_threshold": {
+		"label": "Power Percentage Change Threshold",
+		"description": "Threshold change in power consumption (on a percentage basis) to induce an automatic report",
+		"valueSize": 1,
+		"unit": "%",
+		"minValue": 0,
+		"maxValue": 100,
+		"defaultValue": 5,
+		"unsigned": true
+	},
+	"percent_threshold_clamp1": {
+		"$import": "#percent_threshold",
+		"label": "Power Percentage Threshold (Clamp 1)"
+	},
+	"percent_threshold_clamp2": {
+		"$import": "#percent_threshold",
+		"label": "Power Percentage Threshold (Clamp 2)"
+	},
+	"percent_threshold_clamp3": {
+		"$import": "#percent_threshold",
+		"label": "Power Percentage Threshold (Clamp 3)"
+	},
+	"percent_threshold_wholehem": {
+		"$import": "#percent_threshold",
+		"label": "Power Percentage Threshold (Whole HEM)"
+	},
+	"reset_parameters": {
+		"valueSize": 1,
+		"minValue": 0,
+		"maxValue": 1,
+		"defaultValue": 0,
+		"unsigned": true,
+		"writeOnly": true,
+		"allowManualEntry": false,
+		"options": [
+			{
+				"label": "Normal Operation",
+				"value": 0
+			},
+			{
+				"label": "Reset",
+				"value": 1
+			}
+		]
+	},
+	"enable_notification_basic_report_only": {
+		"label": "Send Notifications to Associated Devices (Group 1)",
+		"valueSize": 1,
+		"minValue": 0,
+		"maxValue": 1,
+		"defaultValue": 0,
+		"unsigned": true,
+		"allowManualEntry": false,
+		"options": [
+			{
+				"label": "Disabled",
+				"value": 0
+			},
+			{
+				"label": "Basic CC Report",
+				"value": 1
+			}
+		]
+	},
+	"enable_notification_basic_set_only": {
+		"label": "Send Notifications to Associated Devices (Group 1)",
+		"valueSize": 1,
+		"minValue": 0,
+		"maxValue": 1,
+		"defaultValue": 0,
+		"unsigned": true,
+		"allowManualEntry": false,
+		"options": [
+			{
+				"label": "Disabled",
+				"value": 0
+			},
+			{
+				"label": "Basic CC Set",
+				"value": 1
+			}
+		]
+	},
+	"enable_notifications": {
+		"label": "Send Notifications to Associated Devices (Group 1)",
+		"valueSize": 1,
+		"minValue": 0,
+		"maxValue": 2,
+		"defaultValue": 0,
+		"unsigned": true,
+		"allowManualEntry": false,
+		"options": [
+			{
+				"label": "Disable",
+				"value": 0
+			},
+			{
+				"label": "Hail CC",
+				"value": 1
+			},
+			{
+				"label": "Basic CC Report",
+				"value": 2
+			}
+		]
+	},
+	"enable_notifications_0-3": {
+		"label": "Send Notifications to Associated Devices (Group 1)",
+		"valueSize": 1,
+		"minValue": 0,
+		"maxValue": 3,
+		"defaultValue": 0,
+		"unsigned": true,
+		"allowManualEntry": false,
+		"options": [
+			{
+				"label": "Disable",
+				"value": 0
+			},
+			{
+				"label": "Hail CC",
+				"value": 1
+			},
+			{
+				"label": "Basic CC Report",
+				"value": 2
+			},
+			{
+				"label": "Hail CC (when using action button to change the output load state)",
+				"value": 3
+			}
+		]
+	},
+	"enable_notifications_0-4": {
+		"label": "Send Notifications to Associated Devices (Group 1)",
+		"valueSize": 1,
+		"minValue": 0,
+		"maxValue": 4,
+		"defaultValue": 0,
+		"unsigned": true,
+		"allowManualEntry": false,
+		"options": [
+			{
+				"label": "Disable",
+				"value": 0
+			},
+			{
+				"label": "Hail CC",
+				"value": 1
+			},
+			{
+				"label": "Basic CC Report",
+				"value": 2
+			},
+			{
+				"label": "Multilevel Switch CC Report",
+				"value": 3
+			},
+
+			{
+				"label": "Hail CC (when using the manual switch to change the load state)",
+				"value": 4
+			}
+		]
+	},
+	"invert_state_report": {
+		"$import": "../../templates/master_template.json#base_0-1_nounit",
+		"label": "Invert Binary Report Value",
+		"options": [
+			{
+				"label": "Report on when open",
+				"value": 0
+			},
+			{
+				"label": "Report on when closed",
+				"value": 1
+			}
+		]
+	},
+	"invert_basic_set": {
+		"$import": "../../templates/master_template.json#base_0-1_nounit",
+		"label": "Invert Basic Set on Open/Close Event",
+		"options": [
+			{
+				"label": "Set on when open",
+				"value": 0
+			},
+			{
+				"label": "Set on when closed",
+				"value": 1
+			}
+		]
+	},
+	"wake_up_10_minutes": {
+		"$import": "../../templates/master_template.json#base_enable_disable",
+		"label": "Wake Device for 10 minutes After Power On"
+	},
+	"low_battery_check": {
+		"$import": "../../templates/master_template.json#base_enable_disable",
+		"label": "Low Battery Voltage Check"
+	},
+	"low_battery_threshold": {
+		"label": "Low Battery Threshold",
+		"valueSize": 1,
+		"unit": "%",
+		"minValue": 10,
+		"maxValue": 50,
+		"defaultValue": 10,
+		"unsigned": true
+	},
+	"low_battery_interval": {
+		"label": "Low Battery Voltage Check Interval",
+		"description": "Minimum battery low check interval time is 4 minutes (240 seconds)",
+		"valueSize": 4,
+		"unit": "seconds",
+		"minValue": 0,
+		"maxValue": 2147483647,
+		"defaultValue": 86640,
+		"unsigned": true
+	},
+	"report_power_voltage": {
+		"$import": "../../templates/master_template.json#base_0-1_nounit",
+		"label": "Multilevel Sensor Report Content",
+		"options": [
+			{
+				"label": "Power",
+				"value": 0
+			},
+			{
+				"label": "Voltage",
+				"value": 1
+			}
+		]
+	},
+	"send_automatic_reports": {
+		"$import": "../../templates/master_template.json#base_enable_disable",
+		"label": "Send Automatic Reports When Exceeding Thresholds"
+	},
+	"current_overload": {
+		"$import": "../../templates/master_template.json#base_enable_disable",
+		"label": "Current Overload Protection"
+	},
+	"overheat_protection": {
+		"$import": "../../templates/master_template.json#base_enable_disable",
+		"label": "Overheat Protection",
+		"description": "Output will be turned off after 30 seconds if internal temperature exceeds 100°C"
+	},
+	"auto_report_interval": {
+		"$import": "#base_interval",
+		"label": "Automatic Reporting Interval"
+	},
+	"auto_report_interval_group1": {
+		"$import": "#base_interval",
+		"label": "Automatic Reporting Interval: Group 1"
+	},
+	"auto_report_interval_group2": {
+		"$import": "#base_interval",
+		"label": "Automatic Reporting Interval: Group 2"
+	},
+	"auto_report_interval_group3": {
+		"$import": "#base_interval",
+		"label": "Automatic Reporting Interval: Group 3"
+	},
+	"auto_report_group1_battery": {
+		"$import": "../../templates/master_template.json#base_enable_disable",
+		"label": "Automatic Report: Group 1 - Battery",
+		"valueSize": 4
+	},
+	"auto_report_group1_temp": {
+		"$import": "../../templates/master_template.json#base_enable_disable",
+		"label": "Automatic Report: Group 1 - Temperature",
+		"valueSize": 4
+	},
+	"auto_report_group1_humidity": {
+		"$import": "../../templates/master_template.json#base_enable_disable",
+		"label": "Automatic Report: Group 1 - Humidity",
+		"valueSize": 4
+	},
+	"auto_report_group1_luminance": {
+		"$import": "../../templates/master_template.json#base_enable_disable",
+		"label": "Automatic Report: Group 1 - Luminance",
+		"valueSize": 4
+	},
+	"auto_report_group1_ultraviolet": {
+		"$import": "../../templates/master_template.json#base_enable_disable",
+		"label": "Automatic Report: Group 1 - Ultraviolet",
+		"valueSize": 4
+	},
+	"auto_report_group1_v": {
+		"$import": "../../templates/master_template.json#base_enable_disable",
+		"label": "Automatic Report: Group 1 - Voltage",
+		"valueSize": 4
+	},
+	"auto_report_group1_v_clamp1": {
+		"$import": "../../templates/master_template.json#base_enable_disable",
+		"label": "Automatic Report: Group 1 - Voltage (Clamp 1)",
+		"valueSize": 4
+	},
+	"auto_report_group1_v_clamp2": {
+		"$import": "../../templates/master_template.json#base_enable_disable",
+		"label": "Automatic Report: Group 1 - Voltage (Clamp 2)",
+		"valueSize": 4
+	},
+	"auto_report_group1_v_clamp3": {
+		"$import": "../../templates/master_template.json#base_enable_disable",
+		"label": "Automatic Report: Group 1 - Voltage (Clamp 3)",
+		"valueSize": 4
+	},
+	"auto_report_group1_v_wholehem": {
+		"$import": "../../templates/master_template.json#base_enable_disable",
+		"label": "Automatic Report: Group 1 - Voltage (Whole HEM)",
+		"valueSize": 4
+	},
+	"auto_report_group1_amp": {
+		"$import": "../../templates/master_template.json#base_enable_disable",
+		"label": "Automatic Report: Group 1 - Current",
+		"valueSize": 4
+	},
+	"auto_report_group1_amp_clamp1": {
+		"$import": "../../templates/master_template.json#base_enable_disable",
+		"label": "Automatic Report: Group 1 - Current (Clamp 1)",
+		"valueSize": 4
+	},
+	"auto_report_group1_amp_clamp2": {
+		"$import": "../../templates/master_template.json#base_enable_disable",
+		"label": "Automatic Report: Group 1 - Current (Clamp 2)",
+		"valueSize": 4
+	},
+	"auto_report_group1_amp_clamp3": {
+		"$import": "../../templates/master_template.json#base_enable_disable",
+		"label": "Automatic Report: Group 1 - Current (Clamp 3)",
+		"valueSize": 4
+	},
+	"auto_report_group1_amp_wholehem": {
+		"$import": "../../templates/master_template.json#base_enable_disable",
+		"label": "Automatic Report: Group 1 - Current (Whole HEM)",
+		"valueSize": 4
+	},
+	"auto_report_group1_msrc": {
+		"$import": "../../templates/master_template.json#base_enable_disable",
+		"label": "Automatic Report: Group 1 - Multilevel Sensor Report - Power",
+		"valueSize": 4
+	},
+	"auto_report_group1_watt": {
+		"$import": "../../templates/master_template.json#base_enable_disable",
+		"label": "Automatic Report: Group 1 - Power",
+		"valueSize": 4
+	},
+	"auto_report_group1_watt_clamp1": {
+		"$import": "../../templates/master_template.json#base_enable_disable",
+		"label": "Automatic Report: Group 1 - Power (Clamp 1)",
+		"valueSize": 4
+	},
+	"auto_report_group1_watt_clamp2": {
+		"$import": "../../templates/master_template.json#base_enable_disable",
+		"label": "Automatic Report: Group 1 - Power (Clamp 2)",
+		"valueSize": 4
+	},
+	"auto_report_group1_watt_clamp3": {
+		"$import": "../../templates/master_template.json#base_enable_disable",
+		"label": "Automatic Report: Group 1 - Power (Clamp 3)",
+		"valueSize": 4
+	},
+	"auto_report_group1_watt_wholehem": {
+		"$import": "../../templates/master_template.json#base_enable_disable",
+		"label": "Automatic Report: Group 1 - Power (Whole HEM)",
+		"valueSize": 4
+	},
+	"auto_report_group1_kwh": {
+		"$import": "../../templates/master_template.json#base_enable_disable",
+		"label": "Automatic Report: Group 1 - kWh",
+		"valueSize": 4
+	},
+	"auto_report_group1_kwh_clamp1": {
+		"$import": "../../templates/master_template.json#base_enable_disable",
+		"label": "Automatic Report: Group 1 - kWh (Clamp 1)",
+		"valueSize": 4
+	},
+	"auto_report_group1_kwh_clamp2": {
+		"$import": "../../templates/master_template.json#base_enable_disable",
+		"label": "Automatic Report: Group 1 - kWh (Clamp 2)",
+		"valueSize": 4
+	},
+	"auto_report_group1_kwh_clamp3": {
+		"$import": "../../templates/master_template.json#base_enable_disable",
+		"label": "Automatic Report: Group 1 - kWh (Clamp 3)",
+		"valueSize": 4
+	},
+	"auto_report_group1_kwh_wholehem": {
+		"$import": "../../templates/master_template.json#base_enable_disable",
+		"label": "Automatic Report: Group 1 - kWh (Whole HEM)",
+		"valueSize": 4
+	},
+	"auto_report_group2_battery": {
+		"$import": "../../templates/master_template.json#base_enable_disable",
+		"label": "Automatic Report: Group 2 - Battery",
+		"valueSize": 4
+	},
+	"auto_report_group2_temp": {
+		"$import": "../../templates/master_template.json#base_enable_disable",
+		"label": "Automatic Report: Group 2 - Temperature",
+		"valueSize": 4
+	},
+	"auto_report_group2_humidity": {
+		"$import": "../../templates/master_template.json#base_enable_disable",
+		"label": "Automatic Report: Group 2 - Humidity",
+		"valueSize": 4
+	},
+	"auto_report_group2_luminance": {
+		"$import": "../../templates/master_template.json#base_enable_disable",
+		"label": "Automatic Report: Group 2 - Luminance",
+		"valueSize": 4
+	},
+	"auto_report_group2_ultraviolet": {
+		"$import": "../../templates/master_template.json#base_enable_disable",
+		"label": "Automatic Report: Group 2 - Ultraviolet",
+		"valueSize": 4
+	},
+	"auto_report_group2_v": {
+		"$import": "../../templates/master_template.json#base_enable_disable",
+		"label": "Automatic Report: Group 2 - Voltage",
+		"valueSize": 4
+	},
+	"auto_report_group2_v_clamp1": {
+		"$import": "../../templates/master_template.json#base_enable_disable",
+		"label": "Automatic Report: Group 2 - Voltage (Clamp 1)",
+		"valueSize": 4
+	},
+	"auto_report_group2_v_clamp2": {
+		"$import": "../../templates/master_template.json#base_enable_disable",
+		"label": "Automatic Report: Group 2 - Voltage (Clamp 2)",
+		"valueSize": 4
+	},
+	"auto_report_group2_v_clamp3": {
+		"$import": "../../templates/master_template.json#base_enable_disable",
+		"label": "Automatic Report: Group 2 - Voltage (Clamp 3)",
+		"valueSize": 4
+	},
+	"auto_report_group2_v_wholehem": {
+		"$import": "../../templates/master_template.json#base_enable_disable",
+		"label": "Automatic Report: Group 2 - Voltage (Whole HEM)",
+		"valueSize": 4
+	},
+	"auto_report_group2_amp": {
+		"$import": "../../templates/master_template.json#base_enable_disable",
+		"label": "Automatic Report: Group 2 - Current",
+		"valueSize": 4
+	},
+	"auto_report_group2_amp_clamp1": {
+		"$import": "../../templates/master_template.json#base_enable_disable",
+		"label": "Automatic Report: Group 2 - Current (Clamp 1)",
+		"valueSize": 4
+	},
+	"auto_report_group2_amp_clamp2": {
+		"$import": "../../templates/master_template.json#base_enable_disable",
+		"label": "Automatic Report: Group 2 - Current (Clamp 2)",
+		"valueSize": 4
+	},
+	"auto_report_group2_amp_clamp3": {
+		"$import": "../../templates/master_template.json#base_enable_disable",
+		"label": "Automatic Report: Group 2 - Current (Clamp 3)",
+		"valueSize": 4
+	},
+	"auto_report_group2_amp_wholehem": {
+		"$import": "../../templates/master_template.json#base_enable_disable",
+		"label": "Automatic Report: Group 2 - Current (Whole HEM)",
+		"valueSize": 4
+	},
+	"auto_report_group2_msrc": {
+		"$import": "../../templates/master_template.json#base_enable_disable",
+		"label": "Automatic Report: Group 2 - Multilevel Sensor Report - Power",
+		"valueSize": 4
+	},
+	"auto_report_group2_watt": {
+		"$import": "../../templates/master_template.json#base_enable_disable",
+		"label": "Automatic Report: Group 2 - Power",
+		"valueSize": 4
+	},
+	"auto_report_group2_watt_clamp1": {
+		"$import": "../../templates/master_template.json#base_enable_disable",
+		"label": "Automatic Report: Group 2 - Power (Clamp 1)",
+		"valueSize": 4
+	},
+	"auto_report_group2_watt_clamp2": {
+		"$import": "../../templates/master_template.json#base_enable_disable",
+		"label": "Automatic Report: Group 2 - Power (Clamp 2)",
+		"valueSize": 4
+	},
+	"auto_report_group2_watt_clamp3": {
+		"$import": "../../templates/master_template.json#base_enable_disable",
+		"label": "Automatic Report: Group 2 - Power (Clamp 3)",
+		"valueSize": 4
+	},
+	"auto_report_group2_watt_wholehem": {
+		"$import": "../../templates/master_template.json#base_enable_disable",
+		"label": "Automatic Report: Group 2 - Power (Whole HEM)",
+		"valueSize": 4
+	},
+	"auto_report_group2_kwh": {
+		"$import": "../../templates/master_template.json#base_enable_disable",
+		"label": "Automatic Report: Group 2 - kWh",
+		"valueSize": 4
+	},
+	"auto_report_group2_kwh_clamp1": {
+		"$import": "../../templates/master_template.json#base_enable_disable",
+		"label": "Automatic Report: Group 2 - kWh (Clamp 1)",
+		"valueSize": 4
+	},
+	"auto_report_group2_kwh_clamp2": {
+		"$import": "../../templates/master_template.json#base_enable_disable",
+		"label": "Automatic Report: Group 2 - kWh (Clamp 2)",
+		"valueSize": 4
+	},
+	"auto_report_group2_kwh_clamp3": {
+		"$import": "../../templates/master_template.json#base_enable_disable",
+		"label": "Automatic Report: Group 2 - kWh (Clamp 3)",
+		"valueSize": 4
+	},
+	"auto_report_group2_kwh_wholehem": {
+		"$import": "../../templates/master_template.json#base_enable_disable",
+		"label": "Automatic Report: Group 2 - kWh (Whole HEM)",
+		"valueSize": 4
+	},
+	"auto_report_group3_battery": {
+		"$import": "../../templates/master_template.json#base_enable_disable",
+		"label": "Automatic Report: Group 3 - Battery",
+		"valueSize": 4
+	},
+	"auto_report_group3_temp": {
+		"$import": "../../templates/master_template.json#base_enable_disable",
+		"label": "Automatic Report: Group 3 - Temperature",
+		"valueSize": 4
+	},
+	"auto_report_group3_humidity": {
+		"$import": "../../templates/master_template.json#base_enable_disable",
+		"label": "Automatic Report: Group 3 - Humidity",
+		"valueSize": 4
+	},
+	"auto_report_group3_luminance": {
+		"$import": "../../templates/master_template.json#base_enable_disable",
+		"label": "Automatic Report: Group 3 - Luminance",
+		"valueSize": 4
+	},
+	"auto_report_group3_ultraviolet": {
+		"$import": "../../templates/master_template.json#base_enable_disable",
+		"label": "Automatic Report: Group 3 - Ultraviolet",
+		"valueSize": 4
+	},
+	"auto_report_group3_v": {
+		"$import": "../../templates/master_template.json#base_enable_disable",
+		"label": "Automatic Report: Group 3 - Voltage",
+		"valueSize": 4
+	},
+	"auto_report_group3_v_clamp1": {
+		"$import": "../../templates/master_template.json#base_enable_disable",
+		"label": "Automatic Report: Group 3 - Voltage (Clamp 1)",
+		"valueSize": 4
+	},
+	"auto_report_group3_v_clamp2": {
+		"$import": "../../templates/master_template.json#base_enable_disable",
+		"label": "Automatic Report: Group 3 - Voltage (Clamp 2)",
+		"valueSize": 4
+	},
+	"auto_report_group3_v_clamp3": {
+		"$import": "../../templates/master_template.json#base_enable_disable",
+		"label": "Automatic Report: Group 3 - Voltage (Clamp 3)",
+		"valueSize": 4
+	},
+	"auto_report_group3_v_wholehem": {
+		"$import": "../../templates/master_template.json#base_enable_disable",
+		"label": "Automatic Report: Group 3 - Voltage (Whole HEM)",
+		"valueSize": 4
+	},
+	"auto_report_group3_amp": {
+		"$import": "../../templates/master_template.json#base_enable_disable",
+		"label": "Automatic Report: Group 3 - Current",
+		"valueSize": 4
+	},
+	"auto_report_group3_amp_clamp1": {
+		"$import": "../../templates/master_template.json#base_enable_disable",
+		"label": "Automatic Report: Group 3 - Current (Clamp 1)",
+		"valueSize": 4
+	},
+	"auto_report_group3_amp_clamp2": {
+		"$import": "../../templates/master_template.json#base_enable_disable",
+		"label": "Automatic Report: Group 3 - Current (Clamp 2)",
+		"valueSize": 4
+	},
+	"auto_report_group3_amp_clamp3": {
+		"$import": "../../templates/master_template.json#base_enable_disable",
+		"label": "Automatic Report: Group 3 - Current (Clamp 3)",
+		"valueSize": 4
+	},
+	"auto_report_group3_amp_wholehem": {
+		"$import": "../../templates/master_template.json#base_enable_disable",
+		"label": "Automatic Report: Group 3 - Current (Whole HEM)",
+		"valueSize": 4
+	},
+	"auto_report_group3_msrc": {
+		"$import": "../../templates/master_template.json#base_enable_disable",
+		"label": "Automatic Report: Group 3 - Multilevel Sensor Report - Power",
+		"valueSize": 4
+	},
+	"auto_report_group3_watt": {
+		"$import": "../../templates/master_template.json#base_enable_disable",
+		"label": "Automatic Report: Group 3 - Power",
+		"valueSize": 4
+	},
+	"auto_report_group3_watt_clamp1": {
+		"$import": "../../templates/master_template.json#base_enable_disable",
+		"label": "Automatic Report: Group 3 - Power (Clamp 1)",
+		"valueSize": 4
+	},
+	"auto_report_group3_watt_clamp2": {
+		"$import": "../../templates/master_template.json#base_enable_disable",
+		"label": "Automatic Report: Group 3 - Power (Clamp 2)",
+		"valueSize": 4
+	},
+	"auto_report_group3_watt_clamp3": {
+		"$import": "../../templates/master_template.json#base_enable_disable",
+		"label": "Automatic Report: Group 3 - Power (Clamp 3)",
+		"valueSize": 4
+	},
+	"auto_report_group3_watt_wholehem": {
+		"$import": "../../templates/master_template.json#base_enable_disable",
+		"label": "Automatic Report: Group 3 - Power (Whole HEM)",
+		"valueSize": 4
+	},
+	"auto_report_group3_kwh": {
+		"$import": "../../templates/master_template.json#base_enable_disable",
+		"label": "Automatic Report: Group 3 - kWh",
+		"valueSize": 4
+	},
+	"auto_report_group3_kwh_clamp1": {
+		"$import": "../../templates/master_template.json#base_enable_disable",
+		"label": "Automatic Report: Group 3 - kWh (Clamp 1)",
+		"valueSize": 4
+	},
+	"auto_report_group3_kwh_clamp2": {
+		"$import": "../../templates/master_template.json#base_enable_disable",
+		"label": "Automatic Report: Group 3 - kWh (Clamp 2)",
+		"valueSize": 4
+	},
+	"auto_report_group3_kwh_clamp3": {
+		"$import": "../../templates/master_template.json#base_enable_disable",
+		"label": "Automatic Report: Group 3 - kWh (Clamp 3)",
+		"valueSize": 4
+	},
+	"auto_report_group3_kwh_wholehem": {
+		"$import": "../../templates/master_template.json#base_enable_disable",
+		"label": "Automatic Report: Group 3 - kWh (Whole HEM)",
+		"valueSize": 4
+	},
+	"device_tag": {
+		"label": "Device Tag",
+		"valueSize": 2,
+		"minValue": 0,
+		"maxValue": 65535,
+		"defaultValue": 0,
+		"unsigned": true
+	},
+	"partner_id_aeotec": {
+		"label": "Partner ID",
+		"valueSize": 1,
+		"minValue": 0,
+		"maxValue": 0,
+		"defaultValue": 0,
+		"unsigned": true,
+		"allowManualEntry": false,
+		"options": [
+			{
+				"label": "Aeotec",
+				"value": 0
+			}
+		]
+	},
+	"partner_id_att": {
+		"label": "Partner ID",
+		"valueSize": 1,
+		"minValue": 0,
+		"maxValue": 1,
+		"defaultValue": 0,
+		"unsigned": true,
+		"allowManualEntry": false,
+		"options": [
+			{
+				"label": "Aeotec",
+				"value": 0
+			},
+			{
+				"label": "AT&T",
+				"value": 1
+			}
+		]
+	},
+	"partner_id_other": {
+		"label": "Partner ID",
+		"valueSize": 1,
+		"minValue": 0,
+		"maxValue": 1,
+		"defaultValue": 0,
+		"unsigned": true,
+		"allowManualEntry": false,
+		"options": [
+			{
+				"label": "Aeotec",
+				"value": 0
+			},
+			{
+				"label": "Other",
+				"value": 1
+			}
+		]
+	},
+	"wattage_trigger": {
+		"label": "Minimum Power Change to Trigger Event",
+		"valueSize": 2,
+		"minValue": 0,
+		"maxValue": 32000,
+		"defaultValue": 50,
+		"unsigned": true
+	},
+	"wattage_percent_trigger": {
+		"label": "Minimum Power Percentage Change to Trigger Event",
+		"valueSize": 1,
+		"unit": "%",
+		"minValue": 0,
+		"maxValue": 100,
+		"defaultValue": 10
+	},
+	"external_switch_two": {
+		"$import": "../../templates/master_template.json#base_0-1_nounit",
+		"label": "External Switch Type",
+		"options": [
+			{
+				"label": "Momentary mode",
+				"value": 0
+			},
+			{
+				"label": "Switch mode",
+				"value": 1
+			}
+		]
+	},
+	"external_switch_unidentified": {
+		"$import": "../../templates/master_template.json#base_0-255_nounit",
+		"label": "External Switch Type",
+		"options": [
+			{
+				"label": "Momentary mode",
+				"value": 0
+			},
+			{
+				"label": "Switch mode",
+				"value": 1
+			},
+			{
+				"label": "Unidentified mode",
+				"value": 255
+			}
+		]
+	},
+	"external_switch_3way": {
+		"$import": "../../templates/master_template.json#base_0-255_nounit",
+		"label": "External Switch Type",
+		"options": [
+			{
+				"label": "Momentary mode",
+				"value": 0
+			},
+			{
+				"label": "Switch mode",
+				"value": 1
+			},
+			{
+				"label": "3-way mode",
+				"value": 2
+			},
+			{
+				"label": "Unidentified mode",
+				"value": 255
+			}
+		]
+	},
+	"external_switch_3way_auto": {
+		"label": "External Switch Type",
+		"valueSize": 1,
+		"minValue": 0,
+		"maxValue": 4,
+		"defaultValue": 0,
+		"unsigned": true,
+		"allowManualEntry": false,
+		"options": [
+			{
+				"label": "Unidentified mode",
+				"value": 0
+			},
+			{
+				"label": "Switch",
+				"value": 1
+			},
+			{
+				"label": "3-way mode",
+				"value": 2
+			},
+			{
+				"label": "Momentary",
+				"value": 3
+			},
+			{
+				"label": "Automatic identification mode",
+				"value": 4
+			}
+		]
+	},
+	"switch_mode_state_s1": {
+		"$import": "../../templates/master_template.json#base_0-1_nounit",
+		"label": "Switch Mode (S1): State Sync",
+		"allowManualEntry": false,
+		"options": [
+			{
+				"label": "Toggle Switch",
+				"value": 0
+			},
+			{
+				"label": "On/Off Switch",
+				"value": 1
+			}
+		]
+	},
+	"switch_mode_state_s2": {
+		"$import": "../../templates/master_template.json#base_0-1_nounit",
+		"label": "Switch Mode (S2): State Sync",
+		"allowManualEntry": false,
+		"options": [
+			{
+				"label": "Toggle Switch",
+				"value": 0
+			},
+			{
+				"label": "On/Off Switch",
+				"value": 1
+			}
+		]
+	},
+	"blink_duration": {
+		"label": "LED Blink Duration",
+		"valueSize": 2,
+		"unit": "seconds",
+		"minValue": 0,
+		"maxValue": 255,
+		"defaultValue": 0,
+		"writeOnly": true
+	},
+	"blink_length": {
+		"label": "LED Blink Cycle Length",
+		"description": "Length of time LED will blink on/off per cycle",
+		"valueSize": 2,
+		"unit": "0.1 seconds",
+		"minValue": 0,
+		"maxValue": 255,
+		"defaultValue": 0,
+		"writeOnly": true
+	},
+	"motion_timeout": {
+		"label": "Motion Sensor Timeout",
+		"valueSize": 2,
+		"unit": "seconds",
+		"minValue": 1,
+		"maxValue": 15300,
+		"defaultValue": 240,
+		"unsigned": true
+	},
+	"enable_motion_sensor": {
+		"$import": "../../templates/master_template.json#base_enable_disable",
+		"label": "Motion Sensor"
+	},
+	"led_indicator_two_options": {
+		"$import": "../../templates/master_template.json#led_indicator_two_options",
+		"options": [
+			{
+				"label": "On when load is on",
+				"value": 0
+			},
+			{
+				"label": "Off after 5 seconds",
+				"value": 1
+			}
+		]
+	},
+	"led_indicator_three_options": {
+		"$import": "../../templates/master_template.json#led_indicator_three_options",
+		"options": [
+			{
+				"label": "On when load is on",
+				"value": 0
+			},
+			{
+				"label": "Off after 5 seconds",
+				"value": 1
+			},
+			{
+				"label": "Night light mode",
+				"value": 2
+			}
+		]
+	},
+	"night_light_blue": {
+		"$import": "../../templates/master_template.json#base_0-255_nounit",
+		"label": "Night Light: Blue Color",
+		"valueSize": 3,
+		"defaultValue": 221
+	},
+	"night_light_green": {
+		"$import": "../../templates/master_template.json#base_0-255_nounit",
+		"label": "Night Light: Green Color",
+		"valueSize": 3,
+		"defaultValue": 160
+	},
+	"night_light_red": {
+		"$import": "../../templates/master_template.json#base_0-255_nounit",
+		"label": "Night Light: Red Color",
+		"valueSize": 3,
+		"defaultValue": 221
+	},
+	"night_light_green_brightness": {
+		"$import": "../../templates/master_template.json#base_0-100_nounit",
+		"label": "Night Light: Green Brightness",
+		"valueSize": 3,
+		"unit": "%",
+		"defaultValue": 50
+	},
+	"night_light_yellow_brightness": {
+		"$import": "../../templates/master_template.json#base_0-100_nounit",
+		"label": "Night Light: Yellow Brightness",
+		"valueSize": 3,
+		"unit": "%",
+		"defaultValue": 50
+	},
+	"night_light_red_brightness": {
+		"$import": "../../templates/master_template.json#base_0-100_nounit",
+		"label": "Night Light: Red Brightness",
+		"valueSize": 3,
+		"unit": "%",
+		"defaultValue": 50
+	},
+	"wake_up_timeout": {
+		"label": "Wake Up Timeout",
+		"unit": "seconds",
+		"valueSize": 1,
+		"minValue": 8,
+		"maxValue": 127,
+		"defaultValue": 15,
+		"unsigned": true
+	},
+	"current_power_mode": {
+		"label": "Current Power Mode",
+		"valueSize": 2,
+		"minValue": 0,
+		"maxValue": 1,
+		"defaultValue": 0,
+		"unsigned": true,
+		"readOnly": true,
+		"allowManualEntry": false,
+		"options": [
+			{
+				"label": "USB Power",
+				"value": 0
+			},
+			{
+				"label": "Battery",
+				"value": 1
+			}
+		]
+	},
+	"sleep_state": {
+		"label": "Sleep State",
+		"valueSize": 2,
+		"minValue": 0,
+		"maxValue": 1,
+		"defaultValue": 0,
+		"readOnly": true,
+		"allowManualEntry": false,
+		"options": [
+			{
+				"label": "Asleep",
+				"value": 0
+			},
+			{
+				"label": "Awake",
+				"value": 1
+			}
+		]
+	},
+	"switch_destination_s1": {
+		"label": "Control Destination (S1)",
+		"valueSize": 1,
+		"minValue": 1,
+		"maxValue": 3,
+		"defaultValue": 3,
+		"unsigned": true,
+		"readOnly": true,
+		"allowManualEntry": false,
+		"options": [
+			{
+				"label": "Load",
+				"value": 1
+			},
+			{
+				"label": "Association group 3",
+				"value": 2
+			},
+			{
+				"label": "Load and association group 3",
+				"value": 3
+			}
+		]
+	},
+	"switch_destination_s2": {
+		"label": "Control Destination (S2)",
+		"valueSize": 1,
+		"minValue": 1,
+		"maxValue": 3,
+		"defaultValue": 3,
+		"unsigned": true,
+		"readOnly": true,
+		"allowManualEntry": false,
+		"options": [
+			{
+				"label": "Load",
+				"value": 1
+			},
+			{
+				"label": "Association group 4",
+				"value": 2
+			},
+			{
+				"label": "Load and association group 3",
+				"value": 3
+			}
+		]
+	},
+	"dimming_rate_255": {
+		"$import": "../../templates/master_template.json#base_1-255_nounit",
+		"label": "Dimming Rate",
+		"unit": "seconds",
+		"defaultValue": 3
+	},
+	"current_working_mode": {
+		"label": "Current Working Mode",
+		"valueSize": 1,
+		"minValue": 0,
+		"maxValue": 2,
+		"defaultValue": 0,
+		"unsigned": true,
+		"readOnly": true,
+		"allowManualEntry": false,
+		"options": [
+			{
+				"label": "Unknown",
+				"value": 0
+			},
+			{
+				"label": "2-wire mode (no neutral)",
+				"value": 1
+			},
+			{
+				"label": "3-wire mode",
+				"value": 2
+			}
+		]
+	},
+	"dimming_principle": {
+		"$import": "../../templates/master_template.json#base_0-1_nounit",
+		"label": "Dimming Principle",
+		"defaultValue": 1,
+		"options": [
+			{
+				"label": "Trailing edge mode",
+				"value": 0
+			},
+			{
+				"label": "Leading edge mode",
+				"value": 1
+			}
+		]
+	},
+	"load_type": {
+		"label": "Load Type",
+		"valueSize": 1,
+		"minValue": 0,
+		"maxValue": 3,
+		"defaultValue": 0,
+		"unsigned": true,
+		"readOnly": true,
+		"allowManualEntry": false,
+		"options": [
+			{
+				"label": "Unknown",
+				"value": 0
+			},
+			{
+				"label": "Resistive load",
+				"value": 1
+			},
+			{
+				"label": "Capacitive load",
+				"value": 2
+			},
+			{
+				"label": "Inductive load",
+				"value": 3
+			}
+		]
+	},
+	"min_brightness": {
+		"$import": "../../templates/master_template.json#base_0-99_nounit",
+		"label": "Minimum Brightness Level",
+		"defaultValue": 0
+	},
+	"max_brightness": {
+		"$import": "../../templates/master_template.json#base_0-99_nounit",
+		"label": "Maximum Brightness Level",
+		"defaultValue": 99
+	},
+	"load_recognition_method": {
+		"label": "Load Recognition Method",
+		"valueSize": 1,
+		"minValue": 0,
+		"maxValue": 2,
+		"defaultValue": 2,
+		"unsigned": true,
+		"allowManualEntry": false,
+		"options": [
+			{
+				"label": "Never",
+				"value": 0
+			},
+			{
+				"label": "Only on first power on",
+				"value": 1
+			},
+			{
+				"label": "Every power on",
+				"value": 2
+			}
+		]
+	},
+	// Doorbells/Sirens
+	"base_light_index": {
+		"valueSize": 4,
+		"minValue": 1,
+		"maxValue": 127,
+		"defaultValue": 1,
+		"unsigned": true,
+		"allowManualEntry": false,
+		"options": [
+			{
+				"label": "Light effect #1",
+				"value": 1
+			},
+			{
+				"label": "Light effect #2",
+				"value": 2
+			},
+			{
+				"label": "Light effect #3",
+				"value": 4
+			},
+			{
+				"label": "Light effect #4",
+				"value": 8
+			},
+			{
+				"label": "Light effect #5",
+				"value": 16
+			},
+			{
+				"label": "Light effect #6",
+				"value": 32
+			},
+			{
+				"label": "Light effect #7",
+				"value": 64
+			},
+			{
+				"label": "Last configuration value",
+				"value": 127
+			}
+		]
+	},
+	"light_index_browse": {
+		"$import": "#base_light_index",
+		"label": "Light Effect Index (Browse)"
+	},
+	"light_index_tamper": {
+		"$import": "#base_light_index",
+		"label": "Light Effect Index (Tamper)"
+	},
+	"light_index_doorbell_1": {
+		"$import": "#base_light_index",
+		"label": "Light Effect Index (Doorbell 1)"
+	},
+	"light_index_doorbell_2": {
+		"$import": "#base_light_index",
+		"label": "Light Effect Index (Doorbell 2)"
+	},
+	"light_index_doorbell_3": {
+		"$import": "#base_light_index",
+		"label": "Light Effect Index (Doorbell 3)"
+	},
+	"light_index_environment": {
+		"$import": "#base_light_index",
+		"label": "Light Effect Index (Environment)"
+	},
+	"light_index_security": {
+		"$import": "#base_light_index",
+		"label": "Light Effect Index (Security)"
+	},
+	"light_index_emergency": {
+		"$import": "#base_light_index",
+		"label": "Light Effect Index (Emergency)"
+	},
+	"base_tone_play_mode": {
+		"valueSize": 4,
+		"minValue": 0,
+		"maxValue": 255,
+		"defaultValue": 0,
+		"unsigned": true,
+		"allowManualEntry": false,
+		"options": [
+			{
+				"label": "Single playback",
+				"value": 0
+			},
+			{
+				"label": "Single loop playback",
+				"value": 1
+			},
+			{
+				"label": "Loop playback tones",
+				"value": 2
+			},
+			{
+				"label": "Random playback tones",
+				"value": 3
+			},
+			{
+				"label": "Last configuration value",
+				"value": 255
+			}
+		]
+	},
+	"tone_play_mode_browse": {
+		"$import": "#base_tone_play_mode",
+		"label": "Tone Play Mode (Browse)"
+	},
+	"base_tone_duration": {
+		"valueSize": 4,
+		"unit": "seconds",
+		"minValue": 0,
+		"maxValue": 255,
+		"defaultValue": 0,
+		"unsigned": true,
+		"allowManualEntry": false,
+		"options": [
+			{
+				"label": "Original tone length",
+				"value": 0
+			},
+			{
+				"label": "Last configuration value",
+				"value": 255
+			}
+		]
+	},
+	"tone_duration_tamper": {
+		"$import": "#base_tone_duration",
+		"label": "Tone Duration (Tamper)"
+	},
+	"tone_duration_doorbell_1": {
+		"$import": "#base_tone_duration",
+		"label": "Tone Duration (Doorbell 1)"
+	},
+	"tone_duration_doorbell_2": {
+		"$import": "#base_tone_duration",
+		"label": "Tone Duration (Doorbell 2)"
+	},
+	"tone_duration_doorbell_3": {
+		"$import": "#base_tone_duration",
+		"label": "Tone Duration (Doorbell 3)"
+	},
+	"tone_duration_environment": {
+		"$import": "#base_tone_duration",
+		"label": "Tone Duration (Environment)"
+	},
+	"tone_duration_security": {
+		"$import": "#base_tone_duration",
+		"label": "Tone Duration (Security)"
+	},
+	"tone_duration_emergency": {
+		"$import": "#base_tone_duration",
+		"label": "Tone Duration (Emergency)"
+	},
+	"base_tone_interval": {
+		"valueSize": 4,
+		"unit": "seconds",
+		"minValue": 0,
+		"maxValue": 255,
+		"defaultValue": 0,
+		"unsigned": true,
+		"options": [
+			{
+				"label": "No interval",
+				"value": 0
+			},
+			{
+				"label": "Last configuration value",
+				"value": 255
+			}
+		]
+	},
+	"tone_interval_tamper": {
+		"$import": "#base_tone_interval",
+		"label": "Interval Between Tones (Tamper)"
+	},
+	"tone_interval_doorbell_1": {
+		"$import": "#base_tone_interval",
+		"label": "Interval Between Tones (Doorbell 1)"
+	},
+	"tone_interval_doorbell_2": {
+		"$import": "#base_tone_interval",
+		"label": "Interval Between Tones (Doorbell 2)"
+	},
+	"tone_interval_doorbell_3": {
+		"$import": "#base_tone_interval",
+		"label": "Interval Between Tones (Doorbell 3)"
+	},
+	"tone_interval_environment": {
+		"$import": "#base_tone_interval",
+		"label": "Interval Between Tones (Environment)"
+	},
+	"tone_interval_security": {
+		"$import": "#base_tone_interval",
+		"label": "Interval Between Tones (Security)"
+	},
+	"tone_interval_emergency": {
+		"$import": "#base_tone_interval",
+		"label": "Interval Between Tones (Emergency)"
+	},
+	"base_tone_play_count": {
+		"valueSize": 4,
+		"minValue": 0,
+		"maxValue": 255,
+		"defaultValue": 1,
+		"unsigned": true,
+		"options": [
+			{
+				"label": "Unlimited",
+				"value": 0
+			},
+			{
+				"label": "Last configuration value",
+				"value": 255
+			}
+		]
+	},
+	"tone_play_count_tamper": {
+		"$import": "#base_tone_play_count",
+		"label": "Tone Play Count (Tamper)"
+	},
+	"tone_play_count_doorbell_1": {
+		"$import": "#base_tone_play_count",
+		"label": "Tone Play Count (Doorbell 1)"
+	},
+	"tone_play_count_doorbell_2": {
+		"$import": "#base_tone_play_count",
+		"label": "Tone Play Count (Doorbell 2)"
+	},
+	"tone_play_count_doorbell_3": {
+		"$import": "#base_tone_play_count",
+		"label": "Tone Play Count (Doorbell 3)"
+	},
+	"tone_play_count_environment": {
+		"$import": "#base_tone_play_count",
+		"label": "Tone Play Count (Environment)"
+	},
+	"tone_play_count_security": {
+		"$import": "#base_tone_play_count",
+		"label": "Tone Play Count (Security)"
+	},
+	"tone_play_count_emergency": {
+		"$import": "#base_tone_play_count",
+		"label": "Tone Play Count (Emergency)"
+	},
+	"base_dim_duration": {
+		"valueSize": 4,
+		"unit": "ms",
+		"minValue": 0,
+		"maxValue": 127,
+		"unsigned": true
+	},
+	"dim_duration_on_1": {
+		"$import": "#base_dim_duration",
+		"label": "Light Effect No. 1: Dim On Duration",
+		"defaultValue": 75
+	},
+	"dim_duration_off_1": {
+		"$import": "#base_dim_duration",
+		"label": "Light Effect No. 1: Dim Off Duration",
+		"defaultValue": 25
+	},
+	"dim_duration_on_2": {
+		"$import": "#base_dim_duration",
+		"label": "Light Effect No. 2: Dim On Duration",
+		"defaultValue": 50
+	},
+	"dim_duration_off_2": {
+		"$import": "#base_dim_duration",
+		"label": "Light Effect No. 2: Dim Off Duration",
+		"defaultValue": 50
+	},
+	"dim_duration_on_3": {
+		"$import": "#base_dim_duration",
+		"label": "Light Effect No. 3: Dim On Duration",
+		"defaultValue": 0
+	},
+	"dim_duration_off_3": {
+		"$import": "#base_dim_duration",
+		"label": "Light Effect No. 3: Dim Off Duration",
+		"defaultValue": 33
+	},
+	"dim_duration_on_4": {
+		"$import": "#base_dim_duration",
+		"label": "Light Effect No. 4: Dim On Duration",
+		"defaultValue": 33
+	},
+	"dim_duration_off_4": {
+		"$import": "#base_dim_duration",
+		"label": "Light Effect No. 4: Dim Off Duration",
+		"defaultValue": 0
+	},
+	"dim_duration_on_5": {
+		"$import": "#base_dim_duration",
+		"label": "Light Effect No. 5: Dim On Duration",
+		"defaultValue": 33
+	},
+	"dim_duration_off_5": {
+		"$import": "#base_dim_duration",
+		"label": "Light Effect No. 5: Dim Off Duration",
+		"defaultValue": 0
+	},
+	"dim_duration_on_6": {
+		"$import": "#base_dim_duration",
+		"label": "Light Effect No. 6: Dim On Duration",
+		"defaultValue": 0
+	},
+	"dim_duration_off_6": {
+		"$import": "#base_dim_duration",
+		"label": "Light Effect No. 6: Dim Off Duration",
+		"defaultValue": 0
+	},
+	"dim_duration_on_7": {
+		"$import": "#base_dim_duration",
+		"label": "Light Effect No. 7: Dim On Duration",
+		"defaultValue": 0
+	},
+	"dim_duration_off_7": {
+		"$import": "#base_dim_duration",
+		"label": "Light Effect No. 7: Dim Off Duration",
+		"defaultValue": 0
+	},
+	"base_led_duration": {
+		"$import": "../../templates/master_template.json#base_0-255_nounit",
+		"valueSize": 4,
+		"unit": "ms"
+	},
+	"led_duration_on_1": {
+		"$import": "#base_led_duration",
+		"label": "Light Effect No. 1: LED Indicator On Duration",
+		"defaultValue": 20
+	},
+	"led_duration_off_1": {
+		"$import": "#base_led_duration",
+		"label": "Light Effect No. 1: LED Indicator Off Duration",
+		"defaultValue": 3
+	},
+	"led_duration_on_2": {
+		"$import": "#base_led_duration",
+		"label": "Light Effect No. 2: LED Indicator On Duration",
+		"defaultValue": 0
+	},
+	"led_duration_off_2": {
+		"$import": "#base_led_duration",
+		"label": "Light Effect No. 2: LED Indicator Off Duration",
+		"defaultValue": 3
+	},
+	"led_duration_on_3": {
+		"$import": "#base_led_duration",
+		"label": "Light Effect No. 3: LED Indicator On Duration",
+		"defaultValue": 1
+	},
+	"led_duration_off_3": {
+		"$import": "#base_led_duration",
+		"label": "Light Effect No. 3: LED Indicator Off Duration",
+		"defaultValue": 3
+	},
+	"led_duration_on_4": {
+		"$import": "#base_led_duration",
+		"label": "Light Effect No. 4: LED Indicator On Duration",
+		"defaultValue": 0
+	},
+	"led_duration_off_4": {
+		"$import": "#base_led_duration",
+		"label": "Light Effect No. 4: LED Indicator Off Duration",
+		"defaultValue": 3
+	},
+	"led_duration_on_5": {
+		"$import": "#base_led_duration",
+		"label": "Light Effect No. 5: LED Indicator On Duration",
+		"defaultValue": 0
+	},
+	"led_duration_off_5": {
+		"$import": "#base_led_duration",
+		"label": "Light Effect No. 5: LED Indicator Off Duration",
+		"defaultValue": 3
+	},
+	"led_duration_on_6": {
+		"$import": "#base_led_duration",
+		"label": "Light Effect No. 6: LED Indicator On Duration",
+		"defaultValue": 10
+	},
+	"led_duration_off_6": {
+		"$import": "#base_led_duration",
+		"label": "Light Effect No. 6: LED Indicator Off Duration",
+		"defaultValue": 0
+	},
+	"led_duration_on_7": {
+		"$import": "#base_led_duration",
+		"label": "Light Effect No. 7: LED Indicator On Duration",
+		"defaultValue": 0
+	},
+	"led_duration_off_7": {
+		"$import": "#base_led_duration",
+		"label": "Light Effect No. 7: LED Indicator Off Duration",
+		"defaultValue": 1
+	},
+	"base_basic_set_command": {
+		"valueSize": 1,
+		"minValue": 0,
+		"maxValue": 4,
+		"unsigned": true,
+		"allowManualEntry": false,
+		"options": [
+			{
+				"label": "Disable",
+				"value": 0
+			},
+			{
+				"label": "Start playing -> On; Stop playing -> None",
+				"value": 1
+			},
+			{
+				"label": "Start playing -> Off; Stop playing -> None",
+				"value": 2
+			},
+			{
+				"label": "Start playing -> On; Stop playing -> Off",
+				"value": 3
+			},
+			{
+				"label": "Start playing -> Off; Stop playing -> On",
+				"value": 4
+			}
+		]
+	},
+	"basic_set_command_browse": {
+		"$import": "#base_basic_set_command",
+		"label": "Group 2 Basic Set Command (Browse)",
+		"defaultValue": 3
+	},
+	"basic_set_command_tamper": {
+		"$import": "#base_basic_set_command",
+		"label": "Group 3 Basic Set Command (Tampering)",
+		"defaultValue": 3
+	},
+	"basic_set_command_doorbell_1": {
+		"$import": "#base_basic_set_command",
+		"label": "Group 4 Basic Set Command (Doorbell 1)",
+		"defaultValue": 3
+	},
+	"basic_set_command_doorbell_2": {
+		"$import": "#base_basic_set_command",
+		"label": "Group 5 Basic Set Command (Doorbell 2)",
+		"defaultValue": 3
+	},
+	"basic_set_command_doorbell_3": {
+		"$import": "#base_basic_set_command",
+		"label": "Group 6 Basic Set Command (Doorbell 3)",
+		"defaultValue": 3
+	},
+	"basic_set_command_environment": {
+		"$import": "#base_basic_set_command",
+		"label": "Group 7 Basic Set Command (Environment)",
+		"defaultValue": 3
+	},
+	"basic_set_command_security": {
+		"$import": "#base_basic_set_command",
+		"label": "Group 8 Basic Set Command (Security)",
+		"defaultValue": 3
+	},
+	"basic_set_command_emergency": {
+		"$import": "#base_basic_set_command",
+		"label": "Group 9 Basic Set Command (Emergency)",
+		"defaultValue": 3
+	},
+	"button_unpair": {
+		"label": "Button Unpairing",
+		"valueSize": 1,
+		"minValue": 0,
+		"maxValue": 7,
+		"defaultValue": 0,
+		"unsigned": true,
+		"writeOnly": true,
+		"allowManualEntry": false,
+		"options": [
+			{
+				"label": "Normal Operation",
+				"value": 0
+			},
+			{
+				"label": "Unpair Button No. 1",
+				"value": 1
+			},
+			{
+				"label": "Unpair Button No. 2",
+				"value": 2
+			},
+			{
+				"label": "Unpair Button No. 3",
+				"value": 4
+			}
+		]
+	},
+	"button_pair": {
+		"label": "Button Pairing",
+		"valueSize": 1,
+		"minValue": 0,
+		"maxValue": 4,
+		"defaultValue": 0,
+		"unsigned": true,
+		"writeOnly": true,
+		"allowManualEntry": false,
+		"options": [
+			{
+				"label": "Stop pairing",
+				"value": 0
+			},
+			{
+				"label": "Pair Button No. 1",
+				"value": 1
+			},
+			{
+				"label": "Pair Button No. 2",
+				"value": 2
+			},
+			{
+				"label": "Pair Button No. 3",
+				"value": 4
+			}
+		]
+	},
+	"button_pairing_status": {
+		"label": "Pairing Mode Status",
+		"valueSize": 1,
+		"minValue": 0,
+		"maxValue": 4,
+		"defaultValue": 0,
+		"unsigned": true,
+		"readOnly": true,
+		"allowManualEntry": false,
+		"options": [
+			{
+				"label": "Not pairing",
+				"value": 0
+			},
+			{
+				"label": "Pairing Button No. 1",
+				"value": 1
+			},
+			{
+				"label": "Pairing Button No. 1",
+				"value": 2
+			},
+			{
+				"label": "Pairing Button No. 1",
+				"value": 4
+			}
+		]
+	},
+	"button_status_1": {
+		"label": "Status: Button 1",
+		"valueSize": 1,
+		"minValue": 0,
+		"maxValue": 1,
+		"defaultValue": 0,
+		"unsigned": true,
+		"readOnly": true,
+		"allowManualEntry": false,
+		"options": [
+			{
+				"label": "Not paired",
+				"value": 0
+			},
+			{
+				"label": "Paired",
+				"value": 1
+			}
+		]
+	},
+	"button_status_2": {
+		"label": "Status: Button 2",
+		"valueSize": 1,
+		"minValue": 0,
+		"maxValue": 1,
+		"defaultValue": 0,
+		"unsigned": true,
+		"readOnly": true,
+		"allowManualEntry": false,
+		"options": [
+			{
+				"label": "Not paired",
+				"value": 0
+			},
+			{
+				"label": "Paired",
+				"value": 1
+			}
+		]
+	},
+	"button_status_3": {
+		"label": "Status: Button 3",
+		"valueSize": 1,
+		"minValue": 0,
+		"maxValue": 1,
+		"defaultValue": 0,
+		"unsigned": true,
+		"readOnly": true,
+		"allowManualEntry": false,
+		"options": [
+			{
+				"label": "Not paired",
+				"value": 0
+			},
+			{
+				"label": "Paired",
+				"value": 1
+			}
+		]
+	},
+	"base_button_battery_voltage": {
+		"valueSize": 4,
+		"unit": "mV",
+		"minValue": 0,
+		"maxValue": 32767,
+		"defaultValue": 0,
+		"unsigned": true,
+		"readOnly": true,
+		"options": [
+			{
+				"label": "Not paired",
+				"value": 0
+			}
+		]
+	},
+	"button_battery_voltage_1": {
+		"$import": "#base_button_battery_voltage",
+		"label": "Button 1: Battery Voltage"
+	},
+	"button_battery_voltage_2": {
+		"$import": "#base_button_battery_voltage",
+		"label": "Button 2: Battery Voltage"
+	},
+	"button_battery_voltage_3": {
+		"$import": "#base_button_battery_voltage",
+		"label": "Button 3: Battery Voltage"
+	},
+	"base_button_version": {
+		"$import": "#base_0-65535",
+		"options": [
+			{
+				"label": "Not paired",
+				"value": 0
+			}
+		]
+	},
+	"button_version_1": {
+		"$import": "#base_button_version",
+		"label": "Button 1: Software Version"
+	},
+	"button_version_2": {
+		"$import": "#base_button_version",
+		"label": "Button 2: Software Version"
+	},
+	"button_version_3": {
+		"$import": "#base_button_version",
+		"label": "Button 3: Software Version"
+	},
+	"stop_action_button": {
+		"$import": "../../templates/master_template.json#base_enable_disable",
+		"label": "Stop Playing Tone on Action Button"
+	},
+	// Recover limits
+	"recover_limit_temp": {
+		"label": "Temperature Recover Limit",
+		"description": "Defines the difference below or above the upper/lower limit after which the limit is reenabled",
+		"valueSize": 2,
+		"minValue": 1,
+		"maxValue": 255,
+		"defaultValue": 20,
+		"unsigned": true
+	},
+	"recover_limit_temp_unit": {
+		"$import": "#celsius_fahrenheit_0",
+		"label": "Recover Limit Temperature Unit",
+		"valueSize": 2
+	},
+	"recover_limit_humidity": {
+		"label": "Humidity Recover Limit",
+		"valueSize": 1,
+		"unit": "%",
+		"minValue": 1,
+		"maxValue": 50,
+		"defaultValue": 5,
+		"unsigned": true
+	},
+	"recover_limit_lighting": {
+		"label": "Lighting Recover Limit",
+		"valueSize": 1,
+		"unit": "lux",
+		"minValue": 10,
+		"maxValue": 255,
+		"defaultValue": 100,
+		"unsigned": true
+	},
+	"recover_limit_ultraviolet": {
+		"label": "Ultraviolet Recover Limit",
+		"valueSize": 1,
+		"minValue": 1,
+		"maxValue": 5,
+		"defaultValue": 2,
+		"unsigned": true
+	},
+	// Appointment times
+	"base_appointment_day": {
+		"description": "Sum values to select day(s) of week: Disable = 0; Monday = 1; Tuesday = 2; Wednesday = 4; Thursday = 8; Friday = 16; Saturday = 32; Sunday = 64",
+		"valueSize": 4,
+		"minValue": 0,
+		"maxValue": 127,
+		"defaultValue": 0,
+		"options": [
+			{
+				"label": "Disable",
+				"value": 0
+			}
+		]
+	},
+	"base_appointment_hour": {
+		"valueSize": 4,
+		"minValue": 0,
+		"maxValue": 24,
+		"defaultValue": 0
+	},
+	"base_appointment_minute": {
+		"valueSize": 4,
+		"minValue": 0,
+		"maxValue": 59,
+		"defaultValue": 0
+	},
+	"enable_appointment_one": {
+		"$import": "../../templates/master_template.json#base_enable_disable",
+		"label": "Auto-On Schedule One",
+		"valueSize": 4
+	},
+	"appointment_one_day": {
+		"$import": "#base_appointment_day",
+		"label": "Auto-On Schedule One: Day"
+	},
+	"appointment_one_hour": {
+		"$import": "#base_appointment_hour",
+		"label": "Auto-On Schedule One: Hour",
+		"valueSize": 4
+	},
+	"appointment_one_minute": {
+		"$import": "#base_appointment_minute",
+		"label": "Auto-On Schedule One: Minute"
+	},
+	"appointment_one_brightness": {
+		"$import": "../../templates/master_template.json#base_0-99_nounit",
+		"label": "Auto-On Schedule One: Brightness",
+		"valueSize": 4
+	},
+	"enable_appointment_two": {
+		"$import": "../../templates/master_template.json#base_enable_disable",
+		"label": "Auto-On Schedule Two",
+		"valueSize": 4
+	},
+	"appointment_two_day": {
+		"$import": "#base_appointment_day",
+		"label": "Auto-On Schedule Two: Day"
+	},
+	"appointment_two_hour": {
+		"$import": "#base_appointment_hour",
+		"label": "Auto-On Schedule Two: Hour"
+	},
+	"appointment_two_minute": {
+		"$import": "#base_appointment_minute",
+		"label": "Auto-On Schedule Two: Minute"
+	},
+	"appointment_two_brightness": {
+		"$import": "../../templates/master_template.json#base_0-99_nounit",
+		"label": "Auto-On Schedule Two: Brightness",
+		"valueSize": 4
+	},
+	"night_light_hour_on": {
+		"$import": "#base_appointment_hour",
+		"label": "Night Light (On): Hour"
+	},
+	"night_light_minute_on": {
+		"$import": "#base_appointment_minute",
+		"label": "Night Light (On): Minute"
+	},
+	"night_light_hour_off": {
+		"$import": "#base_appointment_hour",
+		"label": "Night Light (Off): Hour"
+	},
+	"night_light_minute_off": {
+		"$import": "#base_appointment_minute",
+		"label": "Night Light (Off): Minute"
+	},
+	// WallMote Settings
+	"enable_touch_sound": {
+		"$import": "../../templates/master_template.json#base_enable_disable",
+		"label": "Touch Sound"
+	},
+	"enable_touch_vibration": {
+		"$import": "../../templates/master_template.json#base_enable_disable",
+		"label": "Touch Vibration"
+	},
+	"enable_button_slide": {
+		"$import": "../../templates/master_template.json#base_enable_disable",
+		"label": "Button Slide Function"
+	},
+	"wallmote_report_type": {
+		"label": "Report Type",
+		"valueSize": 1,
+		"minValue": 1,
+		"maxValue": 3,
+		"defaultValue": 1,
+		"unsigned": true,
+		"allowManualEntry": false,
+		"options": [
+			{
+				"label": "Central scene CC",
+				"value": 1
+			},
+			{
+				"label": "Central scene CC and Configuration CC",
+				"value": 3
+			}
+		]
+	},
+	"wallmote_command_type": {
+		"$import": "../../templates/master_template.json#base_0-1_nounit",
+		"label": "Command Type to Send Association Groups",
+		"options": [
+			{
+				"label": "Basic CC Set",
+				"value": 0
+			},
+			{
+				"label": "Binary Switch CC Set",
+				"value": 1
+			}
+		]
+	},
+	"wakeup_led": {
+		"$import": "../../templates/master_template.json#base_enable_disable",
+		"label": "Wake Up Notification LED",
+		"description": "Blink the orange LED when wallmote sends out wake up notification",
+		"defaultValue": 0
+	},
+	"message_failure_led": {
+		"$import": "../../templates/master_template.json#base_enable_disable",
+		"label": "Blink LED on Message Send Failure"
+	},
+	"charging_led": {
+		"$import": "../../templates/master_template.json#base_enable_disable",
+		"label": "Charging Status LED"
+	},
+	"button_press_led": {
+		"$import": "../../templates/master_template.json#base_enable_disable",
+		"label": "Button Press LED"
+	},
+	// WallSwipe Options
+	"scene_control": {
+		"$import": "../../templates/master_template.json#base_enable_disable",
+		"label": "Scene Control (All Waves)",
+		"valueSize": 4,
+		"defaultValue": 1
+	},
+	"scene_control_left_right_wave": {
+		"$import": "../../templates/master_template.json#base_enable_disable",
+		"label": "Scene Control (Left/Right Wave)",
+		"valueSize": 4,
+		"defaultValue": 1
+	},
+	"wave_option": {
+		"$import": "../../templates/master_template.json#base_0-1_nounit",
+		"label": "Wave Option",
+		"valueSize": 4,
+		"defaultValue": 1,
+		"options": [
+			{
+				"label": "Wave Option 1",
+				"value": 0
+			},
+			{
+				"label": "Wave Option 2",
+				"value": 1
+			}
+		]
+	},
+	"enable_disable_ir_sensor": {
+		"$import": "../../templates/master_template.json#base_enable_disable",
+		"label": "WallSwipe IR sensor",
+		"valueSize": 4
+	},
+	"button_color_brightness": {
+		"$import": "../../templates/master_template.json#base_0-99_nounit",
+		"label": "WallSwipe Button Brightness",
+		"valueSize": 4,
+		"defaultValue": 87
+	},
+	"button_color_red": {
+		"$import": "../../templates/master_template.json#base_0-255_nounit",
+		"label": "WallSwipe Button Color: Red",
+		"valueSize": 4,
+		"defaultValue": 255
+	},
+	"button_color_green": {
+		"$import": "../../templates/master_template.json#base_0-255_nounit",
+		"label": "WallSwipe Button Color: Green",
+		"valueSize": 4,
+		"defaultValue": 255
+	},
+	"button_color_blue": {
+		"$import": "../../templates/master_template.json#base_0-255_nounit",
+		"label": "WallSwipe Button Color: Blue",
+		"valueSize": 4,
+		"defaultValue": 255
+	},
+	"button_color_up_brightness": {
+		"$import": "../../templates/master_template.json#base_0-99_nounit",
+		"label": "LED Indicator on Up Gesture: Brightness",
+		"valueSize": 4,
+		"defaultValue": 23
+	},
+	"button_color_up_red": {
+		"$import": "../../templates/master_template.json#base_0-255_nounit",
+		"label": "LED Indicator on Up Gesture: Brightness: Red",
+		"valueSize": 4,
+		"defaultValue": 255
+	},
+	"button_color_up_green": {
+		"$import": "../../templates/master_template.json#base_0-255_nounit",
+		"label": "LED Indicator on Up Gesture: Brightness: Green",
+		"valueSize": 4,
+		"defaultValue": 255
+	},
+	"button_color_up_blue": {
+		"$import": "../../templates/master_template.json#base_0-255_nounit",
+		"label": "LED Indicator on Up Gesture: Brightness: Blue",
+		"valueSize": 4,
+		"defaultValue": 255
+	},
+	"button_color_down_brightness": {
+		"$import": "../../templates/master_template.json#base_0-99_nounit",
+		"label": "LED Indicator on Down Gesture: Brightness",
+		"valueSize": 4,
+		"defaultValue": 23
+	},
+	"button_color_down_red": {
+		"$import": "../../templates/master_template.json#base_0-255_nounit",
+		"label": "LED Indicator on Down Gesture: Brightness: Red",
+		"valueSize": 4,
+		"defaultValue": 255
+	},
+	"button_color_down_green": {
+		"$import": "../../templates/master_template.json#base_0-255_nounit",
+		"label": "LED Indicator on Down Gesture: Brightness: Green",
+		"valueSize": 4,
+		"defaultValue": 255
+	},
+	"button_color_down_blue": {
+		"$import": "../../templates/master_template.json#base_0-255_nounit",
+		"label": "LED Indicator on Down Gesture: Brightness: Blue",
+		"valueSize": 4,
+		"defaultValue": 255
+	},
+	"button_color_left_brightness": {
+		"$import": "../../templates/master_template.json#base_0-99_nounit",
+		"label": "LED Indicator on Left Gesture: Brightness",
+		"valueSize": 4,
+		"defaultValue": 23
+	},
+	"button_color_left_red": {
+		"$import": "../../templates/master_template.json#base_0-255_nounit",
+		"label": "LED Indicator on Left Gesture: Brightness: Red",
+		"valueSize": 4,
+		"defaultValue": 255
+	},
+	"button_color_left_green": {
+		"$import": "../../templates/master_template.json#base_0-255_nounit",
+		"label": "LED Indicator on Left Gesture: Brightness: Green",
+		"valueSize": 4,
+		"defaultValue": 255
+	},
+	"button_color_left_blue": {
+		"$import": "../../templates/master_template.json#base_0-255_nounit",
+		"label": "LED Indicator on Left Gesture: Brightness: Blue",
+		"valueSize": 4,
+		"defaultValue": 255
+	},
+	"button_color_right_brightness": {
+		"$import": "../../templates/master_template.json#base_0-99_nounit",
+		"label": "LED Indicator on Right Gesture: Brightness",
+		"valueSize": 4,
+		"defaultValue": 23
+	},
+	"button_color_right_red": {
+		"$import": "../../templates/master_template.json#base_0-255_nounit",
+		"label": "LED Indicator on Right Gesture: Brightness: Red",
+		"valueSize": 4,
+		"defaultValue": 255
+	},
+	"button_color_right_green": {
+		"$import": "../../templates/master_template.json#base_0-255_nounit",
+		"label": "LED Indicator on Right Gesture: Brightness: Green",
+		"valueSize": 4,
+		"defaultValue": 255
+	},
+	"button_color_right_blue": {
+		"$import": "../../templates/master_template.json#base_0-255_nounit",
+		"label": "LED Indicator on Right Gesture: Brightness: Blue",
+		"valueSize": 4,
+		"defaultValue": 255
+	},
+	"button_color_night_brightness": {
+		"$import": "../../templates/master_template.json#base_0-99_nounit",
+		"label": "LED Indicator (Night): Brightness",
+		"valueSize": 4,
+		"defaultValue": 23
+	},
+	"button_color_night_red": {
+		"$import": "../../templates/master_template.json#base_0-255_nounit",
+		"label": "LED Indicator (Night): Brightness: Red",
+		"valueSize": 4,
+		"defaultValue": 255
+	},
+	"button_color_night_green": {
+		"$import": "../../templates/master_template.json#base_0-255_nounit",
+		"label": "LED Indicator (Night): Brightness: Green",
+		"valueSize": 4,
+		"defaultValue": 255
+	},
+	"button_color_night_blue": {
+		"$import": "../../templates/master_template.json#base_0-255_nounit",
+		"label": "LED Indicator (Night): Brightness: Blue",
+		"valueSize": 4,
+		"defaultValue": 255
+	},
+	"wallswipe_recalibrate": {
+		"$import": "../../templates/master_template.json#base_0-255_nounit",
+		"label": "WallSwipe Sensitivity"
+	},
+	"wallswipe_status": {
+		"$import": "../../templates/master_template.json#base_0-1_nounit",
+		"label": "WallSwipe Status",
+		"options": [
+			{
+				"label": "Disconnected",
+				"value": 0
+			},
+			{
+				"label": "Connected",
+				"value": 1
+			}
+		]
+	},
+	"wallswipe_reset": {
+		"$import": "../../templates/master_template.json#base_enable_disable",
+		"label": "WallSwipe Reset Function",
+		"defaultValue": 1
+	}
+}

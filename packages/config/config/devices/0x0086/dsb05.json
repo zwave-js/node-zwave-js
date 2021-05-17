@@ -1,10 +1,8 @@
-// AEON Labs DSB05
-// 4 in One MultiSensor
 {
 	"manufacturer": "AEON Labs",
 	"manufacturerId": "0x0086",
 	"label": "DSB05",
-	"description": "4 in One MultiSensor",
+	"description": "4 in 1 MultiSensor",
 	"devices": [
 		{
 			"productType": "0x0002",
@@ -18,171 +16,74 @@
 	},
 	"associations": {
 		"1": {
-			"label": "Group 1 devices",
+			"label": "Lifeline",
 			"maxNodes": 5,
 			"isLifeline": true
 		}
 	},
 	"paramInformation": {
 		"2": {
-			"label": "Wake up for 10 minutes when batteries are inserted",
-			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 1,
-			"defaultValue": 0,
-			"unsigned": true,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "disable (default)",
-					"value": 0
-				},
-				{
-					"label": "enable",
-					"value": 1
-				}
-			]
+			"$import": "templates/aeotec_template.json#wake_up_10_minutes"
 		},
 		"3": {
-			"label": "On time",
-			"description": "On time before sending off command",
-			"valueSize": 2,
-			"unit": "seconds",
-			"minValue": 1,
-			"maxValue": 15300,
-			"defaultValue": 240,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"$import": "templates/aeotec_template.json#trigger_off"
 		},
 		"4": {
-			"label": "Motion sensor",
-			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 1,
-			"defaultValue": 1,
-			"unsigned": true,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "Disabled",
-					"value": 0
-				},
-				{
-					"label": "Enabled",
-					"value": 1
-				}
-			]
+			"$import": "templates/aeotec_template.json#enable_motion_sensor"
 		},
 		"5": {
-			"label": "Command to send when movement",
-			"valueSize": 1,
-			"minValue": 1,
-			"maxValue": 2,
-			"defaultValue": 1,
-			"unsigned": true,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "Send Basic Set",
-					"value": 1
-				},
-				{
-					"label": "send Sensor Binary report",
-					"value": 2
-				}
-			]
+			"$import": "templates/aeotec_template.json#motion_report_type"
 		},
-		"101": {
-			"label": "Which reports to send to group 1",
-			"description": "Group 1 automatic report list",
-			"valueSize": 4,
-			"minValue": 0,
-			"maxValue": 225,
-			"defaultValue": 0,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+		"101[0x01]": {
+			"$import": "templates/aeotec_template.json#auto_report_group1_battery"
 		},
-		"102": {
-			"label": "Which reports to send to group 2",
-			"description": "Group 2 automatic report list",
-			"valueSize": 4,
-			"minValue": 0,
-			"maxValue": 225,
-			"defaultValue": 0,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+		"101[0x20]": {
+			"$import": "templates/aeotec_template.json#auto_report_group1_temp"
 		},
-		"103": {
-			"label": "Which reports to send to group 3",
-			"description": "Group 3 automatic report list",
-			"valueSize": 4,
-			"minValue": 0,
-			"maxValue": 225,
-			"defaultValue": 0,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+		"101[0x40]": {
+			"$import": "templates/aeotec_template.json#auto_report_group1_humidity"
+		},
+		"101[0x80]": {
+			"$import": "templates/aeotec_template.json#auto_report_group1_luminance"
+		},
+		"102[0x01]": {
+			"$import": "templates/aeotec_template.json#auto_report_group2_battery"
+		},
+		"102[0x20]": {
+			"$import": "templates/aeotec_template.json#auto_report_group2_temp"
+		},
+		"102[0x40]": {
+			"$import": "templates/aeotec_template.json#auto_report_group2_humidity"
+		},
+		"102[0x80]": {
+			"$import": "templates/aeotec_template.json#auto_report_group2_luminance"
+		},
+		"103[0x01]": {
+			"$import": "templates/aeotec_template.json#auto_report_group3_battery"
+		},
+		"103[0x20]": {
+			"$import": "templates/aeotec_template.json#auto_report_group3_temp"
+		},
+		"103[0x40]": {
+			"$import": "templates/aeotec_template.json#auto_report_group3_humidity"
+		},
+		"103[0x80]": {
+			"$import": "templates/aeotec_template.json#auto_report_group3_luminance"
 		},
 		"111": {
-			"label": "Interval to send out reports of group 1",
-			"valueSize": 4,
-			"minValue": 1,
-			"maxValue": 2678400,
-			"defaultValue": 720,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"$import": "templates/aeotec_template.json#auto_report_interval_group1",
+			"maxValue": 167400
 		},
 		"112": {
-			"label": "Interval to send out reports of group 2",
-			"valueSize": 4,
-			"minValue": 1,
-			"maxValue": 2678400,
-			"defaultValue": 720,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"$import": "templates/aeotec_template.json#auto_report_interval_group2",
+			"maxValue": 167400
 		},
 		"113": {
-			"label": "Interval to send out reports of group 3",
-			"valueSize": 4,
-			"minValue": 1,
-			"maxValue": 2678400,
-			"defaultValue": 720,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"$import": "templates/aeotec_template.json#auto_report_interval_group3",
+			"maxValue": 167400
 		},
 		"255": {
-			"label": "Reset to the default",
-			"description": "Set to 1 to reset to factory default",
-			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 1,
-			"defaultValue": 0,
-			"unsigned": true,
-			"readOnly": false,
-			"writeOnly": true,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "Normal Operation",
-					"value": 0
-				},
-				{
-					"label": "Reset to Factory Default",
-					"value": 1
-				}
-			]
+			"$import": "templates/aeotec_template.json#factory_reset"
 		}
 	}
 }

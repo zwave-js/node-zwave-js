@@ -10,7 +10,7 @@ import {
 	ZWaveError,
 	ZWaveErrorCodes,
 } from "@zwave-js/core";
-import { getEnumMemberName, num2hex } from "@zwave-js/shared";
+import { cpp2js, getEnumMemberName, num2hex } from "@zwave-js/shared";
 import type { Driver } from "../driver/Driver";
 import { MessagePriority } from "../message/Constants";
 import { PhysicalCCAPI } from "./API";
@@ -247,29 +247,43 @@ export interface AssociationGroup {
 }
 
 /** Returns the ValueID used to store the name of an association group */
-function getGroupNameValueID(groupId: number): ValueID {
+function getGroupNameValueID(endpointIndex: number, groupId: number): ValueID {
 	return {
 		commandClass: CommandClasses["Association Group Information"],
+		endpoint: endpointIndex,
 		property: "name",
 		propertyKey: groupId,
 	};
 }
 
 /** Returns the ValueID used to store info for an association group */
-function getGroupInfoValueID(groupId: number): ValueID {
+function getGroupInfoValueID(endpointIndex: number, groupId: number): ValueID {
 	return {
 		commandClass: CommandClasses["Association Group Information"],
+		endpoint: endpointIndex,
 		property: "info",
 		propertyKey: groupId,
 	};
 }
 
 /** Returns the ValueID used to store info for an association group */
-function getIssuedCommandsValueID(groupId: number): ValueID {
+function getIssuedCommandsValueID(
+	endpointIndex: number,
+	groupId: number,
+): ValueID {
 	return {
 		commandClass: CommandClasses["Association Group Information"],
+		endpoint: endpointIndex,
 		property: "issuedCommands",
 		propertyKey: groupId,
+	};
+}
+
+function getHasDynamicInfoValueID(endpointIndex: number): ValueID {
+	return {
+		commandClass: CommandClasses["Association Group Information"],
+		endpoint: endpointIndex,
+		property: "hasDynamicInfo",
 	};
 }
 
@@ -320,8 +334,10 @@ export class AssociationGroupInfoCCAPI extends PhysicalCCAPI {
 			cc,
 			this.commandOptions,
 		);
-		if (response) {
-			// SDS13782: If List Mode is set to 0, the Group Count field MUST be set to 1.
+		// SDS13782 says: If List Mode is set to 0, the Group Count field MUST be set to 1.
+		// But that's not always the case. Apparently some endpoints return 0 groups
+		// although they support AGI CC
+		if (response && response.groups.length > 0) {
 			const { groupId: _, ...info } = response.groups[0];
 			return {
 				hasDynamicInfo: response.hasDynamicInfo,
@@ -362,8 +378,8 @@ export class AssociationGroupInfoCC extends CommandClass {
 
 	public constructor(driver: Driver, options: CommandClassOptions) {
 		super(driver, options);
-		this.registerValue(getGroupNameValueID(0).property, true);
-		this.registerValue(getGroupInfoValueID(0).property, true);
+		this.registerValue(getGroupNameValueID(0, 0).property, true);
+		this.registerValue(getGroupInfoValueID(0, 0).property, true);
 	}
 
 	public determineRequiredCCInterviews(): readonly CommandClasses[] {
@@ -375,14 +391,11 @@ export class AssociationGroupInfoCC extends CommandClass {
 		];
 	}
 
-	public skipEndpointInterview(): boolean {
-		// The associations are managed on the root device
-		return true;
-	}
-
 	/** Returns the name of an association group */
 	public getGroupNameCached(groupId: number): string | undefined {
-		return this.getValueDB().getValue(getGroupNameValueID(groupId));
+		return this.getValueDB().getValue(
+			getGroupNameValueID(this.endpointIndex, groupId),
+		);
 	}
 
 	/** Returns the association profile for an association group */
@@ -391,14 +404,16 @@ export class AssociationGroupInfoCC extends CommandClass {
 	): AssociationGroupInfoProfile | undefined {
 		return this.getValueDB().getValue<{
 			profile: AssociationGroupInfoProfile;
-		}>(getGroupInfoValueID(groupId))?.profile;
+		}>(getGroupInfoValueID(this.endpointIndex, groupId))?.profile;
 	}
 
 	/** Returns the dictionary of all commands issued by the given association group */
 	public getIssuedCommandsCached(
 		groupId: number,
 	): ReadonlyMap<CommandClasses, readonly number[]> | undefined {
-		return this.getValueDB().getValue(getIssuedCommandsValueID(groupId));
+		return this.getValueDB().getValue(
+			getIssuedCommandsValueID(this.endpointIndex, groupId),
+		);
 	}
 
 	public findGroupsForIssuedCommand(
@@ -445,7 +460,7 @@ export class AssociationGroupInfoCC extends CommandClass {
 		);
 	}
 
-	public async interview(complete: boolean = true): Promise<void> {
+	public async interview(): Promise<void> {
 		const node = this.getNode()!;
 		const endpoint = this.getEndpoint()!;
 		const api = endpoint.commandClasses[
@@ -454,82 +469,83 @@ export class AssociationGroupInfoCC extends CommandClass {
 
 		this.driver.controllerLog.logNode(node.id, {
 			endpoint: this.endpointIndex,
-			message: `${this.constructor.name}: doing a ${
-				complete ? "complete" : "partial"
-			} interview...`,
+			message: `Interviewing ${this.ccName}...`,
 			direction: "none",
 		});
 
 		const associationGroupCount = this.getAssociationGroupCountCached();
 
 		for (let groupId = 1; groupId <= associationGroupCount; groupId++) {
-			if (complete) {
-				// First get the group's name
+			// First get the group's name
+			this.driver.controllerLog.logNode(node.id, {
+				endpoint: this.endpointIndex,
+				message: `Association group #${groupId}: Querying name...`,
+				direction: "outbound",
+			});
+			const name = await api.getGroupName(groupId);
+			if (name) {
+				const logMessage = `Association group #${groupId} has name "${name}"`;
 				this.driver.controllerLog.logNode(node.id, {
 					endpoint: this.endpointIndex,
-					message: `Association group #${groupId}: Querying name...`,
-					direction: "outbound",
-				});
-				const name = await api.getGroupName(groupId);
-				if (name) {
-					const logMessage = `Association group #${groupId} has name "${name}"`;
-					this.driver.controllerLog.logNode(node.id, {
-						endpoint: this.endpointIndex,
-						message: logMessage,
-						direction: "inbound",
-					});
-				}
-			}
-
-			// Even if this is a partial interview, we need to refresh information
-			// for nodes with dynamic associations
-			let hasDynamicInfo: boolean | undefined;
-			if (!complete) {
-				hasDynamicInfo = this.getValueDB().getValue({
-					commandClass: this.ccId,
-					property: "hasDynamicInfo",
+					message: logMessage,
+					direction: "inbound",
 				});
 			}
 
-			if (complete || hasDynamicInfo) {
-				// Then its information
-				this.driver.controllerLog.logNode(node.id, {
-					endpoint: this.endpointIndex,
-					message: `Association group #${groupId}: Querying info...`,
-					direction: "outbound",
-				});
-				const info = await api.getGroupInfo(groupId, !!hasDynamicInfo);
-				if (info) {
-					const logMessage = `Received info for association group #${groupId}:
-info is dynamic: ${info.hasDynamicInfo}
-profile:         ${getEnumMemberName(
-						AssociationGroupInfoProfile,
-						info.profile,
-					)}`;
-					this.driver.controllerLog.logNode(node.id, {
-						endpoint: this.endpointIndex,
-						message: logMessage,
-						direction: "inbound",
-					});
-				}
-			}
-
-			if (complete) {
-				this.driver.controllerLog.logNode(node.id, {
-					endpoint: this.endpointIndex,
-					message: `Association group #${groupId}: Querying command list...`,
-					direction: "outbound",
-				});
-				await api.getCommands(groupId);
-				// Not sure how to log this
-			}
+			// Then the command list
+			this.driver.controllerLog.logNode(node.id, {
+				endpoint: this.endpointIndex,
+				message: `Association group #${groupId}: Querying command list...`,
+				direction: "outbound",
+			});
+			await api.getCommands(groupId);
+			// Not sure how to log this
 		}
+
+		// Finally query each group for its information
+		await this.refreshValues();
 
 		// Remember that the interview is complete
 		this.interviewComplete = true;
 	}
-}
 
+	public async refreshValues(): Promise<void> {
+		const node = this.getNode()!;
+		const endpoint = this.getEndpoint()!;
+		const api = endpoint.commandClasses[
+			"Association Group Information"
+		].withOptions({ priority: MessagePriority.NodeQuery });
+
+		// Query the information for each group (this is the only thing that could be dynamic)
+		const associationGroupCount = this.getAssociationGroupCountCached();
+		const hasDynamicInfo = this.getValueDB().getValue(
+			getHasDynamicInfoValueID(this.endpointIndex),
+		);
+
+		for (let groupId = 1; groupId <= associationGroupCount; groupId++) {
+			// Then its information
+			this.driver.controllerLog.logNode(node.id, {
+				endpoint: this.endpointIndex,
+				message: `Association group #${groupId}: Querying info...`,
+				direction: "outbound",
+			});
+			const info = await api.getGroupInfo(groupId, !!hasDynamicInfo);
+			if (info) {
+				const logMessage = `Received info for association group #${groupId}:
+info is dynamic: ${info.hasDynamicInfo}
+profile:         ${getEnumMemberName(
+					AssociationGroupInfoProfile,
+					info.profile,
+				)}`;
+				this.driver.controllerLog.logNode(node.id, {
+					endpoint: this.endpointIndex,
+					message: logMessage,
+					direction: "inbound",
+				});
+			}
+		}
+	}
+}
 @CCCommand(AssociationGroupInfoCommand.NameReport)
 export class AssociationGroupInfoCCNameReport extends AssociationGroupInfoCC {
 	public constructor(
@@ -541,12 +557,16 @@ export class AssociationGroupInfoCCNameReport extends AssociationGroupInfoCC {
 		this.groupId = this.payload[0];
 		const nameLength = this.payload[1];
 		validatePayload(this.payload.length >= 2 + nameLength);
-		this.name = this.payload.slice(2, 2 + nameLength).toString("utf8");
+		// The specs don't allow 0-terminated string, but some devices use them
+		// So we need to cut them off
+		this.name = cpp2js(
+			this.payload.slice(2, 2 + nameLength).toString("utf8"),
+		);
 		this.persistValues();
 	}
 
 	public persistValues(): boolean {
-		const valueId = getGroupNameValueID(this.groupId);
+		const valueId = getGroupNameValueID(this.endpointIndex, this.groupId);
 		this.getValueDB().setValue(valueId, this.name);
 		return true;
 	}
@@ -645,7 +665,7 @@ export class AssociationGroupInfoCCInfoReport extends AssociationGroupInfoCC {
 		if (!super.persistValues()) return false;
 		for (const group of this.groups) {
 			const { groupId, mode, profile, eventCode } = group;
-			const valueId = getGroupInfoValueID(groupId);
+			const valueId = getGroupInfoValueID(this.endpointIndex, groupId);
 			this.getValueDB().setValue(valueId, {
 				mode,
 				profile,

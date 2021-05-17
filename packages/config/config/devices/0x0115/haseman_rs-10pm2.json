@@ -1,0 +1,305 @@
+{
+	"manufacturer": "Haseman",
+	"manufacturerId": "0x0115",
+	"label": "RS-10PM2",
+	"description": "MultiRelay",
+	"devices": [
+		{
+			"productType": "0xf111",
+			"productId": "0x1111"
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"paramInformation": {
+		"11": {
+			"label": "Reporting Time",
+			"valueSize": 1,
+			"minValue": 1,
+			"maxValue": 255,
+			"defaultValue": 30,
+			"unit": "seconds",
+			"unsigned": true
+		},
+		"64": {
+			"label": "Power Up Memory",
+			"valueSize": 2,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 0,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Disable",
+					"value": 0
+				},
+				{
+					"label": "Enable",
+					"value": 1
+				}
+			]
+		},
+		"65": {
+			"label": "Button Type - Channel 1",
+			"valueSize": 2,
+			"minValue": 0,
+			"maxValue": 3,
+			"defaultValue": 1,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Inactive",
+					"value": 0
+				},
+				{
+					"label": "Push Button",
+					"value": 1
+				},
+				{
+					"label": "Toggle Switch",
+					"value": 2
+				},
+				{
+					"label": "Follower Switch",
+					"value": 3
+				}
+			]
+		},
+		"66": {
+			"label": "Button Type - Channel 2",
+			"valueSize": 2,
+			"minValue": 0,
+			"maxValue": 3,
+			"defaultValue": 1,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Inactive",
+					"value": 0
+				},
+				{
+					"label": "Push Button",
+					"value": 1
+				},
+				{
+					"label": "Toggle Switch",
+					"value": 2
+				},
+				{
+					"label": "Follower Switch",
+					"value": 3
+				}
+			]
+		},
+		"67": {
+			"label": "Button Type - Channel 3",
+			"valueSize": 2,
+			"minValue": 0,
+			"maxValue": 3,
+			"defaultValue": 1,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Inactive",
+					"value": 0
+				},
+				{
+					"label": "Push Button",
+					"value": 1
+				},
+				{
+					"label": "Toggle Switch",
+					"value": 2
+				},
+				{
+					"label": "Follower Switch",
+					"value": 3
+				}
+			]
+		},
+		"68": {
+			"label": "Button Type - Channel 4",
+			"valueSize": 2,
+			"minValue": 0,
+			"maxValue": 3,
+			"defaultValue": 1,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Inactive",
+					"value": 0
+				},
+				{
+					"label": "Push Button",
+					"value": 1
+				},
+				{
+					"label": "Toggle Switch",
+					"value": 2
+				},
+				{
+					"label": "Follower Switch",
+					"value": 3
+				}
+			]
+		},
+		"69": {
+			"label": "Button Type - Channel 5",
+			"valueSize": 2,
+			"minValue": 0,
+			"maxValue": 3,
+			"defaultValue": 1,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Inactive",
+					"value": 0
+				},
+				{
+					"label": "Push Button",
+					"value": 1
+				},
+				{
+					"label": "Toggle Switch",
+					"value": 2
+				},
+				{
+					"label": "Follower Switch",
+					"value": 3
+				}
+			]
+		},
+		"70": {
+			"label": "Button Type - Channel 6",
+			"valueSize": 2,
+			"minValue": 0,
+			"maxValue": 3,
+			"defaultValue": 1,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Inactive",
+					"value": 0
+				},
+				{
+					"label": "Push Button",
+					"value": 1
+				},
+				{
+					"label": "Toggle Switch",
+					"value": 2
+				},
+				{
+					"label": "Follower Switch",
+					"value": 3
+				}
+			]
+		},
+		"71": {
+			"label": "Button Type - Channel 7",
+			"valueSize": 2,
+			"minValue": 0,
+			"maxValue": 3,
+			"defaultValue": 1,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Inactive",
+					"value": 0
+				},
+				{
+					"label": "Push Button",
+					"value": 1
+				},
+				{
+					"label": "Toggle Switch",
+					"value": 2
+				},
+				{
+					"label": "Follower Switch",
+					"value": 3
+				}
+			]
+		},
+		"72": {
+			"label": "Button Type - Channel 8",
+			"valueSize": 2,
+			"minValue": 0,
+			"maxValue": 3,
+			"defaultValue": 1,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Inactive",
+					"value": 0
+				},
+				{
+					"label": "Push Button",
+					"value": 1
+				},
+				{
+					"label": "Toggle Switch",
+					"value": 2
+				},
+				{
+					"label": "Follower Switch",
+					"value": 3
+				}
+			]
+		},
+		"73": {
+			"label": "Button Type - Channel 9",
+			"valueSize": 2,
+			"minValue": 0,
+			"maxValue": 3,
+			"defaultValue": 1,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Inactive",
+					"value": 0
+				},
+				{
+					"label": "Push Button",
+					"value": 1
+				},
+				{
+					"label": "Toggle Switch",
+					"value": 2
+				},
+				{
+					"label": "Follower Switch",
+					"value": 3
+				}
+			]
+		},
+		"74": {
+			"label": "Button Type - Channel 10",
+			"valueSize": 2,
+			"minValue": 0,
+			"maxValue": 3,
+			"defaultValue": 1,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Inactive",
+					"value": 0
+				},
+				{
+					"label": "Push Button",
+					"value": 1
+				},
+				{
+					"label": "Toggle Switch",
+					"value": 2
+				},
+				{
+					"label": "Follower Switch",
+					"value": 3
+				}
+			]
+		}
+	}
+}

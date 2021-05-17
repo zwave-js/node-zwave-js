@@ -7,7 +7,7 @@ import {
 	ZWaveError,
 	ZWaveErrorCodes,
 } from "@zwave-js/core";
-import { getEnumMemberName, ObjectKeyMap } from "@zwave-js/shared";
+import { getEnumMemberName } from "@zwave-js/shared";
 import { isArray } from "alcalzone-shared/typeguards";
 import type { Driver, SendCommandOptions } from "../driver/Driver";
 import type { Endpoint } from "../node/Endpoint";
@@ -84,7 +84,6 @@ export class CCAPI {
 		protected readonly endpoint: Endpoint | VirtualEndpoint,
 	) {
 		this.ccId = getCommandClass(this);
-		this.scheduledPolls = new ObjectKeyMap();
 	}
 
 	/**
@@ -114,22 +113,9 @@ export class CCAPI {
 	 */
 	public get pollValue(): PollValueImplementation | undefined {
 		// wotan-disable-next-line no-restricted-property-access
-		const implementation = this[POLL_VALUE]?.bind(this);
-		if (!implementation) return;
-		// Polling manually should cancel scheduled polls to avoid polling too often
-		// Therefore return a wrapper which takes care of that
-		return (property) => {
-			// Cancel any scheduled polls
-			if (this.scheduledPolls.has(property)) {
-				clearTimeout(this.scheduledPolls.get(property)!);
-				this.scheduledPolls.delete(property);
-			}
-			// Call the implementation
-			return implementation(property);
-		};
+		return this[POLL_VALUE]?.bind(this);
 	}
 
-	protected scheduledPolls: ObjectKeyMap<ValueIDProperties, NodeJS.Timeout>;
 	/**
 	 * Schedules a value to be polled after a given time. Schedules are deduplicated on a per-property basis.
 	 * @returns `true` if the poll was scheduled, `false` otherwise
@@ -138,21 +124,42 @@ export class CCAPI {
 		property: ValueIDProperties,
 		timeoutMs: number = this.driver.options.timeouts.refreshValue,
 	): boolean {
-		if (this.scheduledPolls.has(property)) return false;
-		// wotan-disable-next-line no-restricted-property-access
-		if (!this[POLL_VALUE]) return false;
+		if (this.isSinglecast()) {
+			const node = this.endpoint.getNodeUnsafe();
+			if (!node) return false;
 
-		this.scheduledPolls.set(
-			property,
-			setTimeout(async () => {
-				try {
-					await this.pollValue!(property);
-				} catch {
-					/* ignore */
-				}
-			}, timeoutMs).unref(),
-		);
-		return true;
+			return node.schedulePoll(
+				{
+					commandClass: this.ccId,
+					endpoint: this.endpoint.index,
+					...property,
+				},
+				timeoutMs,
+			);
+		} else if (this.isMulticast()) {
+			// Only poll supporting nodes in multicast
+			const supportingNodes = this.endpoint.node.physicalNodes.filter(
+				(node) =>
+					node
+						.getEndpoint(this.endpoint.index)
+						?.supportsCC(this.ccId),
+			);
+			let ret = false;
+			for (const node of supportingNodes) {
+				ret ||= node.schedulePoll(
+					{
+						commandClass: this.ccId,
+						endpoint: this.endpoint.index,
+						...property,
+					},
+					timeoutMs,
+				);
+			}
+			return ret;
+		} else {
+			// Don't poll the broadcast node
+			return false;
+		}
 	}
 
 	/**
@@ -304,6 +311,7 @@ export interface CCAPIs {
 	"Color Switch": import("./ColorSwitchCC").ColorSwitchCCAPI;
 	Configuration: import("./ConfigurationCC").ConfigurationCCAPI;
 	"Door Lock": import("./DoorLockCC").DoorLockCCAPI;
+	"Entry Control": import("./EntryControlCC").EntryControlCCAPI;
 	"Firmware Update Meta Data": import("./FirmwareUpdateMetaDataCC").FirmwareUpdateMetaDataCCAPI;
 	Indicator: import("./IndicatorCC").IndicatorCCAPI;
 	Language: import("./LanguageCC").LanguageCCAPI;

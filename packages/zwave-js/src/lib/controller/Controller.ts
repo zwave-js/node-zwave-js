@@ -1,14 +1,25 @@
+import type { AssociationConfig } from "@zwave-js/config";
 import {
 	actuatorCCs,
 	CommandClasses,
 	indexDBsByNode,
+	isRecoverableZWaveError,
 	isTransmissionError,
+	isZWaveError,
 	NODE_ID_BROADCAST,
 	ValueDB,
 	ZWaveError,
 	ZWaveErrorCodes,
 } from "@zwave-js/core";
-import { flatMap, JSONObject, num2hex } from "@zwave-js/shared";
+import {
+	flatMap,
+	getEnumMemberName,
+	JSONObject,
+	num2hex,
+	ObjectKeyMap,
+	pick,
+	ReadonlyObjectKeyMap,
+} from "@zwave-js/shared";
 import { distinct } from "alcalzone-shared/arrays";
 import {
 	createDeferredPromise,
@@ -31,23 +42,51 @@ import {
 	getProductTypeValueMetadata,
 } from "../commandclass/ManufacturerSpecificCC";
 import type {
-	Association,
+	AssociationAddress,
 	EndpointAddress,
 	MultiChannelAssociationCC,
 } from "../commandclass/MultiChannelAssociationCC";
 import type { Driver, RequestHandler } from "../driver/Driver";
 import { FunctionType } from "../message/Constants";
+import type { Message } from "../message/Message";
+import type { SuccessIndicator } from "../message/SuccessIndicator";
 import { DeviceClass } from "../node/DeviceClass";
 import { ZWaveNode } from "../node/Node";
 import { InterviewStage, NodeStatus } from "../node/Types";
 import { VirtualNode } from "../node/VirtualNode";
+import {
+	NodeIDType,
+	RFRegion,
+	SerialAPISetupCommand,
+	SerialAPISetup_CommandUnsupportedResponse,
+	SerialAPISetup_GetLRMaximumPayloadSizeRequest,
+	SerialAPISetup_GetLRMaximumPayloadSizeResponse,
+	SerialAPISetup_GetMaximumPayloadSizeRequest,
+	SerialAPISetup_GetMaximumPayloadSizeResponse,
+	SerialAPISetup_GetPowerlevelRequest,
+	SerialAPISetup_GetPowerlevelResponse,
+	SerialAPISetup_GetRFRegionRequest,
+	SerialAPISetup_GetRFRegionResponse,
+	SerialAPISetup_GetSupportedCommandsRequest,
+	SerialAPISetup_GetSupportedCommandsResponse,
+	SerialAPISetup_SetNodeIDTypeRequest,
+	SerialAPISetup_SetNodeIDTypeResponse,
+	SerialAPISetup_SetPowerlevelRequest,
+	SerialAPISetup_SetPowerlevelResponse,
+	SerialAPISetup_SetRFRegionRequest,
+	SerialAPISetup_SetRFRegionResponse,
+	SerialAPISetup_SetTXStatusReportRequest,
+	SerialAPISetup_SetTXStatusReportResponse,
+} from "../serialapi/misc/SerialAPISetupMessages";
 import {
 	AddNodeStatus,
 	AddNodeToNetworkRequest,
 	AddNodeType,
 } from "./AddNodeToNetworkRequest";
 import { AssignReturnRouteRequest } from "./AssignReturnRouteMessages";
+import { AssignSUCReturnRouteRequest } from "./AssignSUCReturnRouteMessages";
 import { DeleteReturnRouteRequest } from "./DeleteReturnRouteMessages";
+import { DeleteSUCReturnRouteRequest } from "./DeleteSUCReturnRouteMessages";
 import {
 	GetControllerCapabilitiesRequest,
 	GetControllerCapabilitiesResponse,
@@ -60,7 +99,10 @@ import {
 	GetControllerVersionRequest,
 	GetControllerVersionResponse,
 } from "./GetControllerVersionMessages";
-import { GetRoutingInfoRequest } from "./GetRoutingInfoMessages";
+import {
+	GetRoutingInfoRequest,
+	GetRoutingInfoResponse,
+} from "./GetRoutingInfoMessages";
 import {
 	GetSerialApiCapabilitiesRequest,
 	GetSerialApiCapabilitiesResponse,
@@ -106,6 +148,7 @@ import {
 	SetSerialApiTimeoutsRequest,
 	SetSerialApiTimeoutsResponse,
 } from "./SetSerialApiTimeoutsMessages";
+import { SetSUCNodeIdRequest } from "./SetSUCNodeIDMessages";
 import { ZWaveLibraryTypes } from "./ZWaveLibraryTypes";
 
 export type HealNodeStatus = "pending" | "done" | "failed" | "skipped";
@@ -284,6 +327,28 @@ export class ZWaveController extends EventEmitter {
 		return this._supportedFunctionTypes.indexOf(functionType) > -1;
 	}
 
+	private _supportedSerialAPISetupCommands:
+		| SerialAPISetupCommand[]
+		| undefined;
+	public get supportedSerialAPISetupCommands():
+		| readonly SerialAPISetupCommand[]
+		| undefined {
+		return this._supportedSerialAPISetupCommands;
+	}
+
+	/** Checks if a given Serial API setup command is supported by this controller */
+	public isSerialAPISetupCommandSupported(
+		command: SerialAPISetupCommand,
+	): boolean {
+		if (!this._supportedSerialAPISetupCommands) {
+			throw new ZWaveError(
+				"Cannot check yet if a Serial API setup command is supported by the controller. The interview process has not been completed.",
+				ZWaveErrorCodes.Driver_NotReady,
+			);
+		}
+		return this._supportedSerialAPISetupCommands.indexOf(command) > -1;
+	}
+
 	private _sucNodeId: number | undefined;
 	public get sucNodeId(): number | undefined {
 		return this._sucNodeId;
@@ -406,8 +471,50 @@ export class ZWaveController extends EventEmitter {
 		.map((fn) => `\n  · ${FunctionType[fn]} (${num2hex(fn)})`)
 		.join("")}`,
 		);
-
 		// now we can check if a function is supported
+
+		// Figure out which sub commands of SerialAPISetup are supported
+		if (this.isFunctionSupported(FunctionType.SerialAPISetup)) {
+			this.driver.controllerLog.print(
+				`querying serial API setup capabilities...`,
+			);
+			const setupCaps = await this.driver.sendMessage<SerialAPISetup_GetSupportedCommandsResponse>(
+				new SerialAPISetup_GetSupportedCommandsRequest(this.driver),
+			);
+			this._supportedSerialAPISetupCommands = setupCaps.supportedCommands;
+			this.driver.controllerLog.print(
+				`supported serial API setup commands:${this._supportedSerialAPISetupCommands
+					.map(
+						(cmd) =>
+							`\n· ${getEnumMemberName(
+								SerialAPISetupCommand,
+								cmd,
+							)}`,
+					)
+					.join("")}`,
+			);
+		} else {
+			this._supportedSerialAPISetupCommands = [];
+		}
+
+		// Enable TX status report if supported
+		if (
+			this.isSerialAPISetupCommandSupported(
+				SerialAPISetupCommand.SetTxStatusReport,
+			)
+		) {
+			this.driver.controllerLog.print(`Enabling TX status report...`);
+			const resp = await this.driver.sendMessage<SerialAPISetup_SetTXStatusReportResponse>(
+				new SerialAPISetup_SetTXStatusReportRequest(this.driver, {
+					enabled: true,
+				}),
+			);
+			this.driver.controllerLog.print(
+				`Enabling TX status report ${
+					resp.success ? "successful" : "failed"
+				}...`,
+			);
+		}
 
 		// find the SUC
 		this.driver.controllerLog.print(`finding SUC...`);
@@ -417,14 +524,43 @@ export class ZWaveController extends EventEmitter {
 		);
 		this._sucNodeId = suc.sucNodeId;
 		if (this._sucNodeId === 0) {
-			this.driver.controllerLog.print(`no SUC present`);
+			this.driver.controllerLog.print(`No SUC present in the network`);
+		} else if (this._sucNodeId === this._ownNodeId) {
+			this.driver.controllerLog.print(`This is the SUC`);
 		} else {
 			this.driver.controllerLog.print(
 				`SUC has node ID ${this.sucNodeId}`,
 			);
 		}
-		// TODO: if configured, enable this controller as SIS if there's no SUC
-		// https://github.com/OpenZWave/open-zwave/blob/a46f3f36271f88eed5aea58899a6cb118ad312a2/cpp/src/Driver.cpp#L2586
+
+		// There needs to be a SUC/SIS in the network. If not, we promote ourselves to one if the following conditions are met:
+		// We are the primary controller, but we are not SUC, there is no SUC and there is no SIS
+		if (
+			!this._isSecondary &&
+			this._sucNodeId === 0 &&
+			!this._isStaticUpdateController &&
+			!this._isSISPresent
+		) {
+			this.driver.controllerLog.print(
+				`There is no SUC/SIS in the network - promoting ourselves...`,
+			);
+			try {
+				const result = await this.configureSUC(
+					this._ownNodeId,
+					true,
+					true,
+				);
+				this.driver.controllerLog.print(
+					`Promotion to SUC/SIS ${result ? "succeeded" : "failed"}.`,
+					result ? undefined : "warn",
+				);
+			} catch (e) {
+				this.driver.controllerLog.print(
+					`Error while promoting to SUC/SIS: ${e.message}`,
+					"error",
+				);
+			}
+		}
 
 		// if it's a bridge controller, request the virtual nodes
 		if (
@@ -457,6 +593,7 @@ export class ZWaveController extends EventEmitter {
   controller supports timers: ${this._supportsTimers}
   nodes in the network:       ${initData.nodeIds.join(", ")}`,
 		);
+
 		// Index the value DB for optimal performance
 		const valueDBIndexes = indexDBsByNode([
 			this.driver.valueDB!,
@@ -818,7 +955,7 @@ export class ZWaveController extends EventEmitter {
 				node.isSecure = true;
 			} catch (e: unknown) {
 				let errorMessage = `Security bootstrapping failed, the node is included insecurely`;
-				if (!(e instanceof ZWaveError)) {
+				if (!isZWaveError(e)) {
 					errorMessage += `: ${e as any}`;
 				} else if (
 					e.code === ZWaveErrorCodes.Controller_MessageExpired
@@ -873,8 +1010,11 @@ export class ZWaveController extends EventEmitter {
 							endpoints: [{ nodeId: ownNodeId, endpoint: 0 }],
 						});
 					}
+
+					// After setting the association, make sure the node knows how to reach us
+					await this.assignReturnRoute(node.id, ownNodeId);
 				} catch (e: unknown) {
-					if (isTransmissionError(e)) {
+					if (isTransmissionError(e) || isRecoverableZWaveError(e)) {
 						this.driver.controllerLog.logNode(node.id, {
 							message: `Failed to configure Z-Wave+ Lifeline association: ${e.message}`,
 							direction: "none",
@@ -895,11 +1035,16 @@ export class ZWaveController extends EventEmitter {
 
 		if (node.supportsCC(CommandClasses["Wake Up"])) {
 			try {
-				// Query the version, so we can setup the wakeup destination correctly
-				const supportedVersion = await node.commandClasses.Version.getCCVersion(
-					CommandClasses["Wake Up"],
-				);
-				if (supportedVersion != undefined && supportedVersion > 0) {
+				// Query the version, so we can setup the wakeup destination correctly.
+				let supportedVersion: number | undefined;
+				if (node.supportsCC(CommandClasses.Version)) {
+					supportedVersion = await node.commandClasses.Version.getCCVersion(
+						CommandClasses["Wake Up"],
+					);
+				}
+				// If querying the version can't be done, we should at least assume that it supports V1
+				supportedVersion ??= 1;
+				if (supportedVersion > 0) {
 					node.addCC(CommandClasses["Wake Up"], {
 						version: supportedVersion,
 					});
@@ -909,7 +1054,7 @@ export class ZWaveController extends EventEmitter {
 					await instance.interview();
 				}
 			} catch (e: unknown) {
-				if (isTransmissionError(e)) {
+				if (isTransmissionError(e) || isRecoverableZWaveError(e)) {
 					this.driver.controllerLog.logNode(node.id, {
 						message: `Cannot configure wakeup destination: ${e.message}`,
 						direction: "none",
@@ -1017,7 +1162,7 @@ export class ZWaveController extends EventEmitter {
 						new Set(),
 					),
 				);
-				// TODO: According to INS13954-7, there are several more steps and different timeouts when including a controller
+				// TODO: According to INS13954, there are several more steps and different timeouts when including a controller
 				// For now do the absolute minimum - that is include the controller
 				return true; // Don't invoke any more handlers
 			}
@@ -1040,7 +1185,14 @@ export class ZWaveController extends EventEmitter {
 				if (this._stopInclusionPromise != null)
 					this._stopInclusionPromise.resolve(true);
 
-				if (this._nodePendingInclusion != null) {
+				if (msg.statusContext!.nodeId === NODE_ID_BROADCAST) {
+					// No idea how this can happen but it dit at least once
+					this.driver.controllerLog.print(
+						`Cannot add a node with the Node ID ${NODE_ID_BROADCAST}, aborting...`,
+						"warn",
+					);
+					this._nodePendingInclusion = undefined;
+				} else if (this._nodePendingInclusion != null) {
 					const newNode = this._nodePendingInclusion;
 					const supportedCommandClasses = [
 						...newNode.implementedCommandClasses.entries(),
@@ -1072,23 +1224,10 @@ export class ZWaveController extends EventEmitter {
 					// If it is actually a sleeping device, it will be marked as such later
 					newNode.markAsAlive();
 
-					// Assign return route to make sure the node's responses reach us
-					try {
-						this.driver.controllerLog.logNode(newNode.id, {
-							message: `Assigning return route to controller...`,
-							direction: "outbound",
-						});
-						await this.assignReturnRoute(
-							newNode.id,
-							this._ownNodeId!,
-						);
-					} catch (e) {
-						this.driver.controllerLog.logNode(
-							newNode.id,
-							`assigning return route failed: ${e.message}`,
-							"warn",
-						);
-					}
+					// Assign SUC return route to make sure the node knows where to get its routes from
+					newNode.hasSUCReturnRoute = await this.assignSUCReturnRoute(
+						newNode.id,
+					);
 
 					if (!this._includeNonSecure) {
 						await this.secureBootstrapS0(newNode);
@@ -1181,23 +1320,10 @@ export class ZWaveController extends EventEmitter {
 					// If it is actually a sleeping device, it will be marked as such later
 					newNode.markAsAlive();
 
-					// Assign return route to make sure the node's responses reach us
-					try {
-						this.driver.controllerLog.logNode(newNode.id, {
-							message: `Assigning return route to controller...`,
-							direction: "outbound",
-						});
-						await this.assignReturnRoute(
-							newNode.id,
-							this._ownNodeId!,
-						);
-					} catch (e) {
-						this.driver.controllerLog.logNode(
-							newNode.id,
-							`assigning return route failed: ${e.message}`,
-							"warn",
-						);
-					}
+					// Assign SUC return route to make sure the node knows where to get its routes from
+					newNode.hasSUCReturnRoute = await this.assignSUCReturnRoute(
+						newNode.id,
+					);
 
 					// Try perform the security bootstrap process
 					if (!this._includeNonSecure) {
@@ -1330,7 +1456,9 @@ export class ZWaveController extends EventEmitter {
 	private _healNetworkProgress = new Map<number, HealNodeStatus>();
 
 	/**
-	 * Requests all alive slave nodes to update their neighbor lists
+	 * Performs a healing process for all alive nodes in the network,
+	 * requesting updated neighbor lists and assigning fresh routes to
+	 * association targets.
 	 */
 	public beginHealingNetwork(): boolean {
 		// Don't start the process twice
@@ -1351,7 +1479,7 @@ export class ZWaveController extends EventEmitter {
 				(node.status === NodeStatus.Asleep &&
 					node.interviewStage === InterviewStage.ProtocolInfo)
 			) {
-				// Don't interview dead nodes
+				// Don't heal dead nodes
 				this.driver.controllerLog.logNode(
 					id,
 					`Skipping heal because the node is not responding.`,
@@ -1363,43 +1491,107 @@ export class ZWaveController extends EventEmitter {
 		}
 
 		// Do the heal process in the background
-		void (async () => {
-			const tasks = [...this._healNetworkProgress]
-				.filter(([, status]) => status === "pending")
-				.map(async ([nodeId]) => {
-					// await the heal process for each node and treat errors as a non-successful heal
-					const result = await this.healNode(nodeId).catch(
-						() => false,
-					);
-					if (!this._healNetworkActive) return;
-
-					// Track the success in a map
-					this._healNetworkProgress.set(
-						nodeId,
-						result ? "done" : "failed",
-					);
-					// Notify listeners about the progress
-					this.emit(
-						"heal network progress",
-						new Map(this._healNetworkProgress),
-					);
-				});
-			await Promise.all(tasks);
-			// Only emit the done event when the process wasn't stopped in the meantime
-			if (this._healNetworkActive) {
-				this.emit(
-					"heal network done",
-					new Map(this._healNetworkProgress),
-				);
-			}
-			// We're done!
-			this._healNetworkActive = false;
-		})();
+		void this.healNetwork().catch(() => {
+			/* ignore errors */
+		});
 
 		// And update the progress once at the start
 		this.emit("heal network progress", new Map(this._healNetworkProgress));
 
 		return true;
+	}
+
+	private async healNetwork(): Promise<void> {
+		const pendingNodes = new Set(
+			[...this._healNetworkProgress]
+				.filter(([, status]) => status === "pending")
+				.map(([nodeId]) => nodeId),
+		);
+
+		const todoListening: number[] = [];
+		const todoSleeping: number[] = [];
+
+		const addTodo = (nodeId: number) => {
+			if (pendingNodes.has(nodeId)) {
+				pendingNodes.delete(nodeId);
+				const node = this.nodes.getOrThrow(nodeId);
+				if (node.canSleep) {
+					this.driver.controllerLog.logNode(
+						nodeId,
+						"added to healing queue for sleeping nodes",
+					);
+					todoSleeping.push(nodeId);
+				} else {
+					this.driver.controllerLog.logNode(
+						nodeId,
+						"added to healing queue for listening nodes",
+					);
+					todoListening.push(nodeId);
+				}
+			}
+		};
+
+		// We heal outwards from the controller and start with non-sleeping nodes that are healed one by one
+		try {
+			const neighbors = await this.getNodeNeighbors(this._ownNodeId!);
+			neighbors.forEach((id) => addTodo(id));
+		} catch {
+			// ignore
+		}
+
+		const doHeal = async (nodeId: number) => {
+			// await the heal process for each node and treat errors as a non-successful heal
+			const result = await this.healNodeInternal(nodeId).catch(
+				() => false,
+			);
+			if (!this._healNetworkActive) return;
+
+			// Track the success in a map
+			this._healNetworkProgress.set(nodeId, result ? "done" : "failed");
+			// Notify listeners about the progress
+			this.emit(
+				"heal network progress",
+				new Map(this._healNetworkProgress),
+			);
+
+			// Figure out which nodes to heal next
+			try {
+				const neighbors = await this.getNodeNeighbors(nodeId);
+				neighbors.forEach((id) => addTodo(id));
+			} catch {
+				// ignore
+			}
+		};
+
+		// First try to heal as many nodes as possible one by one
+		while (todoListening.length > 0) {
+			const nodeId = todoListening.shift()!;
+			await doHeal(nodeId);
+			if (!this._healNetworkActive) return;
+		}
+
+		// We might end up with a few unconnected listening nodes, try to heal them too
+		pendingNodes.forEach((nodeId) => addTodo(nodeId));
+		while (todoListening.length > 0) {
+			const nodeId = todoListening.shift()!;
+			await doHeal(nodeId);
+			if (!this._healNetworkActive) return;
+		}
+
+		// Now heal all sleeping nodes at once
+		this.driver.controllerLog.print(
+			"Healing sleeping nodes in parallel. Wake them up to heal.",
+		);
+
+		const tasks = todoSleeping.map((nodeId) => doHeal(nodeId));
+		await Promise.all(tasks);
+
+		// Only emit the done event when the process wasn't stopped in the meantime
+		if (this._healNetworkActive) {
+			this.emit("heal network done", new Map(this._healNetworkProgress));
+		}
+		// We're done!
+		this._healNetworkActive = false;
 	}
 
 	/**
@@ -1416,7 +1608,6 @@ export class ZWaveController extends EventEmitter {
 		this.driver.rejectTransactions(
 			(t) =>
 				t.message instanceof RequestNodeNeighborUpdateRequest ||
-				t.message instanceof GetRoutingInfoRequest ||
 				t.message instanceof DeleteReturnRouteRequest ||
 				t.message instanceof AssignReturnRouteRequest,
 		);
@@ -1425,9 +1616,50 @@ export class ZWaveController extends EventEmitter {
 	}
 
 	/**
-	 * Performs the healing process for a node
+	 * Performs a healing process for a single alive node in the network,
+	 * updating the neighbor list and assigning fresh routes to
+	 * association targets.
+	 *
+	 * Returns `true` if the process succeeded, `false` otherwise.
 	 */
 	public async healNode(nodeId: number): Promise<boolean> {
+		// Don't start the process twice
+		if (this._healNetworkActive) return false;
+		this._healNetworkActive = true;
+
+		// Don't try to heal dead nodes
+		const node = this.nodes.getOrThrow(nodeId);
+		if (
+			// The node is known to be dead
+			node.status === NodeStatus.Dead ||
+			// The node is assumed asleep but has never been interviewed.
+			// It is most likely dead
+			(node.status === NodeStatus.Asleep &&
+				node.interviewStage === InterviewStage.ProtocolInfo)
+		) {
+			this.driver.controllerLog.logNode(
+				nodeId,
+				`Skipping heal because the node is not responding.`,
+			);
+			return false;
+		}
+
+		try {
+			this.driver.controllerLog.logNode(nodeId, `Healing node...`);
+			return await this.healNodeInternal(nodeId);
+		} finally {
+			this._healNetworkActive = false;
+		}
+	}
+
+	private async healNodeInternal(nodeId: number): Promise<boolean> {
+		const node = this.nodes.getOrThrow(nodeId);
+
+		this.driver.controllerLog.logNode(nodeId, {
+			message: `healing node...`,
+			direction: "none",
+		});
+
 		// The healing process consists of four steps
 		// Each step is tried up to 5 times before the healing process is considered failed
 		const maxAttempts = 5;
@@ -1479,36 +1711,11 @@ export class ZWaveController extends EventEmitter {
 			}
 		}
 
-		// 2. retrieve the updated list
-		for (let attempt = 1; attempt <= maxAttempts; attempt++) {
-			// If the process was stopped in the meantime, cancel
-			if (!this._healNetworkActive) return false;
-
-			this.driver.controllerLog.logNode(nodeId, {
-				message: `retrieving updated neighbor list (attempt ${attempt})...`,
-				direction: "outbound",
-			});
-
-			try {
-				// Retrieve the updated list from the node
-				await this.nodes.get(nodeId)!.queryNeighborsInternal();
-				break;
-			} catch (e) {
-				this.driver.controllerLog.logNode(
-					nodeId,
-					`retrieving the updated neighbor list failed: ${e.message}`,
-					"warn",
-				);
-			}
-			if (attempt === maxAttempts) {
-				this.driver.controllerLog.logNode(nodeId, {
-					message: `failed to retrieve the updated neighbor list after ${maxAttempts} attempts, healing failed`,
-					level: "warn",
-					direction: "none",
-				});
-				return false;
-			}
+		// 2. re-create the SUC return route, just in case
+		if (await this.deleteSUCReturnRoute(nodeId)) {
+			node.hasSUCReturnRoute = false;
 		}
+		node.hasSUCReturnRoute = await this.assignSUCReturnRoute(nodeId);
 
 		// 3. delete all return routes so we can assign new ones
 		for (let attempt = 1; attempt <= maxAttempts; attempt++) {
@@ -1545,9 +1752,10 @@ export class ZWaveController extends EventEmitter {
 		const maxReturnRoutes = 4;
 		try {
 			associatedNodes = distinct(
-				flatMap<number, Association[]>(
-					[...(this.getAssociations(nodeId).values() as any)],
-					(assocs: Association[]) => assocs.map((a) => a.nodeId),
+				flatMap<number, AssociationAddress[]>(
+					[...(this.getAssociations({ nodeId }).values() as any)],
+					(assocs: AssociationAddress[]) =>
+						assocs.map((a) => a.nodeId),
 				),
 			).sort();
 		} catch {
@@ -1599,46 +1807,188 @@ ${associatedNodes.join(", ")}`,
 			}
 		}
 
+		this.driver.controllerLog.logNode(nodeId, {
+			message: `healed successfully`,
+			direction: "none",
+		});
+
 		return true;
+	}
+
+	/** Configures the given Node to be SUC/SIS or not */
+	public async configureSUC(
+		nodeId: number,
+		enableSUC: boolean,
+		enableSIS: boolean,
+	): Promise<boolean> {
+		const result = await this.driver.sendMessage<
+			Message & SuccessIndicator
+		>(
+			new SetSUCNodeIdRequest(this.driver, {
+				sucNodeId: nodeId,
+				enableSUC,
+				enableSIS,
+			}),
+		);
+
+		return result.isOK();
+	}
+
+	public async assignSUCReturnRoute(nodeId: number): Promise<boolean> {
+		this.driver.controllerLog.logNode(nodeId, {
+			message: `Assigning SUC return route...`,
+			direction: "outbound",
+		});
+
+		try {
+			const result = await this.driver.sendMessage<
+				Message & SuccessIndicator
+			>(
+				new AssignSUCReturnRouteRequest(this.driver, {
+					nodeId,
+				}),
+			);
+
+			return result.isOK();
+		} catch (e) {
+			this.driver.controllerLog.logNode(
+				nodeId,
+				`Assigning SUC return route failed: ${e.message}`,
+				"error",
+			);
+			return false;
+		}
+	}
+
+	public async deleteSUCReturnRoute(nodeId: number): Promise<boolean> {
+		this.driver.controllerLog.logNode(nodeId, {
+			message: `Deleting SUC return route...`,
+			direction: "outbound",
+		});
+
+		try {
+			const result = await this.driver.sendMessage<
+				Message & SuccessIndicator
+			>(
+				new DeleteSUCReturnRouteRequest(this.driver, {
+					nodeId,
+				}),
+			);
+
+			return result.isOK();
+		} catch (e) {
+			this.driver.controllerLog.logNode(
+				nodeId,
+				`Deleting SUC return route failed: ${e.message}`,
+				"error",
+			);
+			return false;
+		}
 	}
 
 	public async assignReturnRoute(
 		nodeId: number,
 		destinationNodeId: number,
-	): Promise<void> {
-		await this.driver.sendMessage(
-			new AssignReturnRouteRequest(this.driver, {
+	): Promise<boolean> {
+		this.driver.controllerLog.logNode(nodeId, {
+			message: `Assigning return route to node ${destinationNodeId}...`,
+			direction: "outbound",
+		});
+
+		try {
+			const result = await this.driver.sendMessage<
+				Message & SuccessIndicator
+			>(
+				new AssignReturnRouteRequest(this.driver, {
+					nodeId,
+					destinationNodeId,
+				}),
+			);
+
+			return result.isOK();
+		} catch (e) {
+			this.driver.controllerLog.logNode(
 				nodeId,
-				destinationNodeId,
-			}),
-		);
+				`Assigning return route failed: ${e.message}`,
+				"error",
+			);
+			return false;
+		}
 	}
+
+	public async deleteReturnRoute(nodeId: number): Promise<boolean> {
+		this.driver.controllerLog.logNode(nodeId, {
+			message: `Deleting all return routes...`,
+			direction: "outbound",
+		});
+
+		try {
+			const result = await this.driver.sendMessage<
+				Message & SuccessIndicator
+			>(
+				new DeleteReturnRouteRequest(this.driver, {
+					nodeId,
+				}),
+			);
+
+			return result.isOK();
+		} catch (e) {
+			this.driver.controllerLog.logNode(
+				nodeId,
+				`Deleting return routes failed: ${e.message}`,
+				"error",
+			);
+			return false;
+		}
+	}
+
 	/**
-	 * Returns a dictionary of all association groups of this node and their information.
+	 * Returns a dictionary of all association groups of this node or endpoint and their information.
+	 * If no endpoint is given, the associations of the root device (endpoint 0) are returned.
 	 * This only works AFTER the interview process
 	 */
 	public getAssociationGroups(
+		source: AssociationAddress,
+	): ReadonlyMap<number, AssociationGroup>;
+
+	/**
+	 * Returns a dictionary of all association groups for the root device (endpoint 0) of this node.
+	 *
+	 * @deprecated Use the overload with `source: AssociationAddress` instead
+	 */
+	public getAssociationGroups(
 		nodeId: number,
+	): ReadonlyMap<number, AssociationGroup>;
+
+	public getAssociationGroups(
+		source: number | AssociationAddress,
 	): ReadonlyMap<number, AssociationGroup> {
+		const nodeId = typeof source === "number" ? source : source.nodeId;
+		const endpointIndex =
+			typeof source === "number" ? 0 : source.endpoint ?? 0;
+
 		const node = this.nodes.getOrThrow(nodeId);
+		const endpoint = node.getEndpointOrThrow(endpointIndex);
 
 		// Check whether we have multi channel support or not
 		let assocInstance: AssociationCC;
 		let mcInstance: MultiChannelAssociationCC | undefined;
-		if (node.supportsCC(CommandClasses.Association)) {
-			assocInstance = node.createCCInstanceUnsafe<AssociationCC>(
+		if (endpoint.supportsCC(CommandClasses.Association)) {
+			assocInstance = endpoint.createCCInstanceUnsafe<AssociationCC>(
 				CommandClasses.Association,
 			)!;
 		} else {
 			throw new ZWaveError(
-				`Node ${nodeId} does not support associations!`,
+				`Node ${nodeId}${
+					endpointIndex > 0 ? `, endpoint ${endpointIndex}` : ""
+				} does not support associations!`,
 				ZWaveErrorCodes.CC_NotSupported,
 			);
 		}
-		if (node.supportsCC(CommandClasses["Multi Channel Association"])) {
-			mcInstance = node.createCCInstanceUnsafe<MultiChannelAssociationCC>(
+		if (endpoint.supportsCC(CommandClasses["Multi Channel Association"])) {
+			mcInstance = endpoint.createCCInstanceUnsafe<MultiChannelAssociationCC>(
 				CommandClasses["Multi Channel Association"],
-			)!;
+			);
 		}
 
 		const assocGroupCount = assocInstance.getGroupCountCached() ?? 0;
@@ -1647,13 +1997,30 @@ ${associatedNodes.join(", ")}`,
 
 		const ret = new Map<number, AssociationGroup>();
 
-		if (node.supportsCC(CommandClasses["Association Group Information"])) {
+		if (
+			endpoint.supportsCC(CommandClasses["Association Group Information"])
+		) {
 			// We can read all information we need from the AGI CC
-			const agiInstance = node.createCCInstance<AssociationGroupInfoCC>(
+			const agiInstance = endpoint.createCCInstance<AssociationGroupInfoCC>(
 				CommandClasses["Association Group Information"],
 			)!;
 			for (let group = 1; group <= groupCount; group++) {
-				const assocConfig = node.deviceConfig?.associations?.get(group);
+				let assocConfig: AssociationConfig | undefined;
+				if (node.deviceConfig) {
+					if (endpointIndex === 0) {
+						// The root endpoint's associations may be configured separately or as part of "endpoints"
+						assocConfig =
+							node.deviceConfig.associations?.get(group) ??
+							node.deviceConfig.endpoints
+								?.get(0)
+								?.associations?.get(group);
+					} else {
+						// The other endpoints can only have a configuration as part of "endpoints"
+						assocConfig = node.deviceConfig.endpoints
+							?.get(endpointIndex)
+							?.associations?.get(group);
+					}
+				}
 				const multiChannel = !!mcInstance && group <= mcGroupCount;
 				ret.set(group, {
 					maxNodes:
@@ -1697,16 +2064,60 @@ ${associatedNodes.join(", ")}`,
 		return ret;
 	}
 
-	/** Returns all Associations (Multi Channel or normal) that are configured on a node */
-	public getAssociations(
+	/**
+	 * Returns all association groups that exist on a node and all its endpoints.
+	 * The returned map uses the endpoint index as keys and its values are maps of group IDs to their definition
+	 */
+	public getAllAssociationGroups(
 		nodeId: number,
-	): ReadonlyMap<number, readonly Association[]> {
+	): ReadonlyMap<number, ReadonlyMap<number, AssociationGroup>> {
 		const node = this.nodes.getOrThrow(nodeId);
 
-		const ret = new Map<number, readonly Association[]>();
+		const ret = new Map<number, ReadonlyMap<number, AssociationGroup>>();
+		for (const endpoint of node.getAllEndpoints()) {
+			if (endpoint.supportsCC(CommandClasses.Association)) {
+				ret.set(
+					endpoint.index,
+					this.getAssociationGroups({
+						nodeId,
+						endpoint: endpoint.index,
+					}),
+				);
+			}
+		}
+		return ret;
+	}
 
-		if (node.supportsCC(CommandClasses.Association)) {
-			const cc = node.createCCInstanceUnsafe<AssociationCC>(
+	/**
+	 * Returns all associations (Multi Channel or normal) that are configured on the root device or an endpoint of a node.
+	 * If no endpoint is given, the associations of the root device (endpoint 0) are returned.
+	 */
+	public getAssociations(
+		source: AssociationAddress,
+	): ReadonlyMap<number, readonly AssociationAddress[]>;
+
+	/**
+	 * Returns all associations (Multi Channel or normal) that are configured on the root device (endpoint 0) of this node.
+	 * @deprecated Use the overload with `source: AssociationAddress` instead
+	 */
+	public getAssociations(
+		nodeId: number,
+	): ReadonlyMap<number, readonly AssociationAddress[]>;
+
+	public getAssociations(
+		source: number | AssociationAddress,
+	): ReadonlyMap<number, readonly AssociationAddress[]> {
+		const nodeId = typeof source === "number" ? source : source.nodeId;
+		const endpointIndex =
+			typeof source === "number" ? 0 : source.endpoint ?? 0;
+
+		const node = this.nodes.getOrThrow(nodeId);
+		const endpoint = node.getEndpointOrThrow(endpointIndex);
+
+		const ret = new Map<number, readonly AssociationAddress[]>();
+
+		if (endpoint.supportsCC(CommandClasses.Association)) {
+			const cc = endpoint.createCCInstanceUnsafe<AssociationCC>(
 				CommandClasses.Association,
 			)!;
 			const destinations = cc.getAllDestinationsCached();
@@ -1715,14 +2126,16 @@ ${associatedNodes.join(", ")}`,
 			}
 		} else {
 			throw new ZWaveError(
-				`Node ${nodeId} does not support associations!`,
+				`Node ${nodeId}${
+					endpointIndex > 0 ? `, endpoint ${endpointIndex}` : ""
+				} does not support associations!`,
 				ZWaveErrorCodes.CC_NotSupported,
 			);
 		}
 
 		// Merge the "normal" destinations with multi channel destinations
-		if (node.supportsCC(CommandClasses["Multi Channel Association"])) {
-			const cc = node.createCCInstanceUnsafe<MultiChannelAssociationCC>(
+		if (endpoint.supportsCC(CommandClasses["Multi Channel Association"])) {
+			const cc = endpoint.createCCInstanceUnsafe<MultiChannelAssociationCC>(
 				CommandClasses["Multi Channel Association"],
 			)!;
 			const destinations = cc.getAllDestinationsCached();
@@ -1750,24 +2163,70 @@ ${associatedNodes.join(", ")}`,
 		return ret;
 	}
 
-	/** Checks if a given association is allowed */
+	/**
+	 * Returns all associations (Multi Channel or normal) that are configured on a node and all its endpoints.
+	 * The returned map uses the source node+endpoint as keys and its values are a map of association group IDs to target node+endpoint.
+	 */
+	public getAllAssociations(
+		nodeId: number,
+	): ReadonlyObjectKeyMap<
+		AssociationAddress,
+		ReadonlyMap<number, readonly AssociationAddress[]>
+	> {
+		const node = this.nodes.getOrThrow(nodeId);
+
+		const ret = new ObjectKeyMap<
+			AssociationAddress,
+			ReadonlyMap<number, readonly AssociationAddress[]>
+		>();
+		for (const endpoint of node.getAllEndpoints()) {
+			const address: AssociationAddress = {
+				nodeId,
+				endpoint: endpoint.index,
+			};
+			if (endpoint.supportsCC(CommandClasses.Association)) {
+				ret.set(address, this.getAssociations(address));
+			}
+		}
+		return ret;
+	}
+
+	/**
+	 * Checks if a given association is allowed.
+	 */
+	public isAssociationAllowed(
+		source: AssociationAddress,
+		group: number,
+		destination: AssociationAddress,
+	): boolean;
+
+	/**
+	 * Checks if a given association is allowed.
+	 * @deprecated Use the overload with param type `source: AssociationAddress` instead.
+	 */
 	public isAssociationAllowed(
 		nodeId: number,
 		group: number,
-		association: Association,
-	): boolean {
-		const node = this.nodes.getOrThrow(nodeId);
-		const targetNode = this.nodes.getOrThrow(association.nodeId);
+		destination: AssociationAddress,
+	): boolean;
 
-		const targetEndpoint = targetNode.getEndpoint(
-			association.endpoint ?? 0,
-		);
-		if (!targetEndpoint) {
-			throw new ZWaveError(
-				`The endpoint ${association.endpoint} was not found on node ${association.nodeId}!`,
-				ZWaveErrorCodes.Controller_EndpointNotFound,
-			);
+	public isAssociationAllowed(
+		source: number | AssociationAddress,
+		group: number,
+		destination: AssociationAddress,
+	): boolean {
+		if (typeof source === "number") {
+			source = { nodeId: source };
 		}
+		const node = this.nodes.getOrThrow(source.nodeId);
+		const endpoint = node.getEndpointOrThrow(source.endpoint ?? 0);
+
+		// Check that the target endpoint exists except when adding an association to the controller
+		const targetNode = this.nodes.getOrThrow(destination.nodeId);
+		const targetEndpoint =
+			destination.nodeId === this._ownNodeId
+				? targetNode
+				: targetNode.getEndpointOrThrow(destination.endpoint ?? 0);
 
 		// SDS14223:
 		// A controlling node MUST NOT associate Node A to a Node B destination that does not support
@@ -1776,23 +2235,27 @@ ${associatedNodes.join(", ")}`,
 		// To determine this, the node must support the AGI CC or we have no way of knowing which
 		// CCs the node will control
 		if (
-			!node.supportsCC(CommandClasses.Association) &&
-			!node.supportsCC(CommandClasses["Multi Channel Association"])
+			!endpoint.supportsCC(CommandClasses.Association) &&
+			!endpoint.supportsCC(CommandClasses["Multi Channel Association"])
 		) {
 			throw new ZWaveError(
-				`Node ${nodeId} does not support associations!`,
+				`Node ${node.id}${
+					endpoint.index > 0 ? `, endpoint ${endpoint.index}` : ""
+				} does not support associations!`,
 				ZWaveErrorCodes.CC_NotSupported,
 			);
 		} else if (
-			!node.supportsCC(CommandClasses["Association Group Information"])
+			!endpoint.supportsCC(
+				CommandClasses["Association Group Information"],
+			)
 		) {
 			return true;
 		}
 
 		// The following checks don't apply to Lifeline associations
-		if (association.nodeId === this._ownNodeId) return true;
+		if (destination.nodeId === this._ownNodeId) return true;
 
-		const groupCommandList = node
+		const groupCommandList = endpoint
 			.createCCInstanceInternal<AssociationGroupInfoCC>(
 				CommandClasses["Association Group Information"],
 			)!
@@ -1807,55 +2270,81 @@ ${associatedNodes.join(", ")}`,
 		// actuator Command Class if the actual association group sends Basic Control Command Class.
 		if (
 			groupCCs.includes(CommandClasses.Basic) &&
-			actuatorCCs.some((cc) => targetEndpoint.supportsCC(cc))
+			actuatorCCs.some((cc) => targetEndpoint?.supportsCC(cc))
 		) {
 			return true;
 		}
 
 		// Enforce that at least one issued CC is supported
-		return groupCCs.some((cc) => targetEndpoint.supportsCC(cc));
+		return groupCCs.some((cc) => targetEndpoint?.supportsCC(cc));
 	}
 
 	/**
-	 * Adds associations to a node
+	 * Adds associations to a node or endpoint
 	 */
-	public async addAssociations(
+	public addAssociations(
+		source: AssociationAddress,
+		group: number,
+		destinations: AssociationAddress[],
+	): Promise<void>;
+
+	/**
+	 * Adds associations to a node or endpoint
+	 * @deprecated Use the overload with param type `source: AssociationAddress` instead.
+	 */
+	public addAssociations(
 		nodeId: number,
 		group: number,
-		associations: Association[],
+		destinations: AssociationAddress[],
+	): Promise<void>;
+
+	/**
+	 * Adds associations to a node or endpoint
+	 */
+	public async addAssociations(
+		source: number | AssociationAddress,
+		group: number,
+		destinations: AssociationAddress[],
 	): Promise<void> {
-		const node = this.nodes.getOrThrow(nodeId);
+		if (typeof source === "number") {
+			source = { nodeId: source };
+		}
+		const node = this.nodes.getOrThrow(source.nodeId);
+		const endpoint = node.getEndpointOrThrow(source.endpoint ?? 0);
+		const nodeAndEndpointString = `${node.id}${
+			endpoint.index > 0 ? `, endpoint ${endpoint.index}` : ""
+		}`;
 
 		// Check whether we should add any associations the device does not have support for
 		let assocInstance: AssociationCC | undefined;
 		let mcInstance: MultiChannelAssociationCC | undefined;
 		// Split associations into conventional and endpoint associations
 		const nodeAssociations = distinct(
-			associations
+			destinations
 				.filter((a) => a.endpoint == undefined)
 				.map((a) => a.nodeId),
 		);
-		const endpointAssociations = associations.filter(
+		const endpointAssociations = destinations.filter(
 			(a) => a.endpoint != undefined,
 		) as EndpointAddress[];
 
-		if (node.supportsCC(CommandClasses.Association)) {
-			assocInstance = node.createCCInstanceUnsafe<AssociationCC>(
+		if (endpoint.supportsCC(CommandClasses.Association)) {
+			assocInstance = endpoint.createCCInstanceUnsafe<AssociationCC>(
 				CommandClasses.Association,
-			)!;
+			);
 		} else if (nodeAssociations.length > 0) {
 			throw new ZWaveError(
-				`Node ${nodeId} does not support associations!`,
+				`Node ${nodeAndEndpointString} does not support associations!`,
 				ZWaveErrorCodes.CC_NotSupported,
 			);
 		}
-		if (node.supportsCC(CommandClasses["Multi Channel Association"])) {
-			mcInstance = node.createCCInstanceUnsafe<MultiChannelAssociationCC>(
+		if (endpoint.supportsCC(CommandClasses["Multi Channel Association"])) {
+			mcInstance = endpoint.createCCInstanceUnsafe<MultiChannelAssociationCC>(
 				CommandClasses["Multi Channel Association"],
-			)!;
+			);
 		} else if (endpointAssociations.length > 0) {
 			throw new ZWaveError(
-				`Node ${nodeId} does not support multi channel associations!`,
+				`Node ${nodeAndEndpointString} does not support multi channel associations!`,
 				ZWaveErrorCodes.CC_NotSupported,
 			);
 		}
@@ -1865,7 +2354,7 @@ ${associatedNodes.join(", ")}`,
 		const groupCount = Math.max(assocGroupCount, mcGroupCount);
 		if (group > groupCount) {
 			throw new ZWaveError(
-				`Group ${group} does not exist on node ${nodeId}`,
+				`Group ${group} does not exist on node ${nodeAndEndpointString}`,
 				ZWaveErrorCodes.AssociationCC_InvalidGroup,
 			);
 		}
@@ -1873,12 +2362,17 @@ ${associatedNodes.join(", ")}`,
 		const groupIsMultiChannel =
 			!!mcInstance &&
 			group <= mcGroupCount &&
-			!node.deviceConfig?.associations?.get(group)?.noEndpoint;
+			node.deviceConfig?.associations?.get(group)?.multiChannel !== false;
 
 		if (groupIsMultiChannel) {
 			// Check that all associations are allowed
-			const disallowedAssociations = associations.filter(
-				(a) => !this.isAssociationAllowed(nodeId, group, a),
+			const disallowedAssociations = destinations.filter(
+				(a) =>
+					!this.isAssociationAllowed(
+						source as AssociationAddress,
+						group,
+						a,
+					),
 			);
 			if (disallowedAssociations.length) {
 				let message = `The following associations are not allowed:`;
@@ -1897,7 +2391,7 @@ ${associatedNodes.join(", ")}`,
 			}
 
 			// And add them
-			await node.commandClasses[
+			await endpoint.commandClasses[
 				"Multi Channel Association"
 			].addDestinations({
 				groupId: group,
@@ -1905,21 +2399,26 @@ ${associatedNodes.join(", ")}`,
 				endpoints: endpointAssociations,
 			});
 			// Refresh the association list
-			await node.commandClasses["Multi Channel Association"].getGroup(
+			await endpoint.commandClasses["Multi Channel Association"].getGroup(
 				group,
 			);
 		} else {
 			// Although the node supports multi channel associations, this group only supports "normal" associations
-			if (associations.some((a) => a.endpoint != undefined)) {
+			if (destinations.some((a) => a.endpoint != undefined)) {
 				throw new ZWaveError(
-					`Node ${nodeId}, group ${group} does not support multi channel associations!`,
+					`Node ${nodeAndEndpointString}, group ${group} does not support multi channel associations!`,
 					ZWaveErrorCodes.CC_NotSupported,
 				);
 			}
 
 			// Check that all associations are allowed
-			const disallowedAssociations = associations.filter(
-				(a) => !this.isAssociationAllowed(nodeId, group, a),
+			const disallowedAssociations = destinations.filter(
+				(a) =>
+					!this.isAssociationAllowed(
+						source as AssociationAddress,
+						group,
+						a,
+					),
 			);
 			if (disallowedAssociations.length) {
 				throw new ZWaveError(
@@ -1930,46 +2429,72 @@ ${associatedNodes.join(", ")}`,
 				);
 			}
 
-			await node.commandClasses.Association.addNodeIds(
+			await endpoint.commandClasses.Association.addNodeIds(
 				group,
-				...associations.map((a) => a.nodeId),
+				...destinations.map((a) => a.nodeId),
 			);
 			// Refresh the association list
-			await node.commandClasses.Association.getGroup(group);
+			await endpoint.commandClasses.Association.getGroup(group);
 		}
 	}
 
 	/**
-	 * Removes the specific associations from a node
+	 * Removes the given associations from a node or endpoint
 	 */
-	public async removeAssociations(
+	public removeAssociations(
+		source: AssociationAddress,
+		group: number,
+		destinations: AssociationAddress[],
+	): Promise<void>;
+
+	/**
+	 * Removes the given associations from a node or endpoint
+	 * @deprecated Use the overload with param type `source: AssociationAddress` instead.
+	 */
+	public removeAssociations(
 		nodeId: number,
 		group: number,
-		associations: Association[],
+		destinations: AssociationAddress[],
+	): Promise<void>;
+
+	/**
+	 * Removes the given associations from a node or endpoint
+	 */
+	public async removeAssociations(
+		source: number | AssociationAddress,
+		group: number,
+		destinations: AssociationAddress[],
 	): Promise<void> {
-		const node = this.nodes.getOrThrow(nodeId);
+		if (typeof source === "number") {
+			source = { nodeId: source };
+		}
+		const node = this.nodes.getOrThrow(source.nodeId);
+		const endpoint = node.getEndpointOrThrow(source.endpoint ?? 0);
+		const nodeAndEndpointString = `${node.id}${
+			endpoint.index > 0 ? `, endpoint ${endpoint.index}` : ""
+		}`;
 
 		let groupExistsAsMultiChannel = false;
 		// Split associations into conventional and endpoint associations
 		const nodeAssociations = distinct(
-			associations
+			destinations
 				.filter((a) => a.endpoint == undefined)
 				.map((a) => a.nodeId),
 		);
-		const endpointAssociations = associations.filter(
+		const endpointAssociations = destinations.filter(
 			(a) => a.endpoint != undefined,
 		) as EndpointAddress[];
 
 		// Removing associations is not either/or - we could have a device with duplicated associations between
 		// Association CC and Multi Channel Association CC
-		if (node.supportsCC(CommandClasses["Multi Channel Association"])) {
+		if (endpoint.supportsCC(CommandClasses["Multi Channel Association"])) {
 			// Prefer multi channel associations
-			const cc = node.createCCInstanceUnsafe<MultiChannelAssociationCC>(
+			const cc = endpoint.createCCInstanceUnsafe<MultiChannelAssociationCC>(
 				CommandClasses["Multi Channel Association"],
 			)!;
 			if (group > cc.getGroupCountCached()) {
 				throw new ZWaveError(
-					`Group ${group} does not exist on node ${nodeId}`,
+					`Group ${group} does not exist on node ${nodeAndEndpointString}`,
 					ZWaveErrorCodes.AssociationCC_InvalidGroup,
 				);
 			} else {
@@ -1978,7 +2503,7 @@ ${associatedNodes.join(", ")}`,
 				groupExistsAsMultiChannel = true;
 			}
 
-			await node.commandClasses[
+			await endpoint.commandClasses[
 				"Multi Channel Association"
 			].removeDestinations({
 				groupId: group,
@@ -1986,39 +2511,39 @@ ${associatedNodes.join(", ")}`,
 				endpoints: endpointAssociations,
 			});
 			// Refresh the multi channel association list
-			await node.commandClasses["Multi Channel Association"].getGroup(
+			await endpoint.commandClasses["Multi Channel Association"].getGroup(
 				group,
 			);
 		} else if (endpointAssociations.length > 0) {
 			throw new ZWaveError(
-				`Node ${nodeId} does not support multi channel associations!`,
+				`Node ${nodeAndEndpointString} does not support multi channel associations!`,
 				ZWaveErrorCodes.CC_NotSupported,
 			);
 		}
 
-		if (node.supportsCC(CommandClasses.Association)) {
+		if (endpoint.supportsCC(CommandClasses.Association)) {
 			// Use normal associations as a fallback
-			const cc = node.createCCInstanceUnsafe<AssociationCC>(
+			const cc = endpoint.createCCInstanceUnsafe<AssociationCC>(
 				CommandClasses.Association,
 			)!;
 			if (group > cc.getGroupCountCached()) {
 				// Don't throw if the group existed as multi channel - this branch is only a fallback
 				if (groupExistsAsMultiChannel) return;
 				throw new ZWaveError(
-					`Group ${group} does not exist on node ${nodeId}`,
+					`Group ${group} does not exist on node ${nodeAndEndpointString}`,
 					ZWaveErrorCodes.AssociationCC_InvalidGroup,
 				);
 			}
 			// Remove the remaining node associations
-			await node.commandClasses.Association.removeNodeIds({
+			await endpoint.commandClasses.Association.removeNodeIds({
 				groupId: group,
 				nodeIds: nodeAssociations,
 			});
 			// Refresh the association list
-			await node.commandClasses.Association.getGroup(group);
+			await endpoint.commandClasses.Association.getGroup(group);
 		} else if (nodeAssociations.length > 0) {
 			throw new ZWaveError(
-				`Node ${nodeId} does not support associations!`,
+				`Node ${nodeAndEndpointString} does not support associations!`,
 				ZWaveErrorCodes.CC_NotSupported,
 			);
 		}
@@ -2028,29 +2553,30 @@ ${associatedNodes.join(", ")}`,
 	 * Removes a node from all other nodes' associations
 	 * WARNING: It is not recommended to await this method
 	 */
-	public async removeNodeFromAllAssocations(nodeId: number): Promise<void> {
-		// Create all async tasks
-		const tasks = [...this.nodes.values()]
-			.filter((node) => node.id !== this._ownNodeId && node.id !== nodeId)
-			.map((node) => {
+	public async removeNodeFromAllAssociations(nodeId: number): Promise<void> {
+		const tasks: Promise<any>[] = [];
+		for (const node of this.nodes.values()) {
+			if (node.id === this._ownNodeId || node.id === nodeId) continue;
+			for (const endpoint of node.getAllEndpoints()) {
 				// Prefer multi channel associations if that is available
 				if (
-					node.commandClasses[
+					endpoint.commandClasses[
 						"Multi Channel Association"
 					].isSupported()
 				) {
-					return node.commandClasses[
+					return endpoint.commandClasses[
 						"Multi Channel Association"
 					].removeDestinations({
 						nodeIds: [nodeId],
 					});
-				} else if (node.commandClasses.Association.isSupported()) {
-					return node.commandClasses.Association.removeNodeIdsFromAllGroups(
+				} else if (endpoint.commandClasses.Association.isSupported()) {
+					return endpoint.commandClasses.Association.removeNodeIdsFromAllGroups(
 						[nodeId],
 					);
 				}
-			})
-			.filter((task) => !!task) as Promise<void>[];
+			}
+		}
+
 		await Promise.all(tasks);
 	}
 
@@ -2223,6 +2749,171 @@ ${associatedNodes.join(", ")}`,
 			this._nodePendingReplace = this.nodes.get(nodeId);
 			this._replaceFailedPromise = createDeferredPromise();
 			return this._replaceFailedPromise;
+		}
+	}
+
+	/** Configure the RF region at the Z-Wave API Module */
+	public async setRFRegion(region: RFRegion): Promise<boolean> {
+		const result = await this.driver.sendMessage<
+			| SerialAPISetup_SetRFRegionResponse
+			| SerialAPISetup_CommandUnsupportedResponse
+		>(new SerialAPISetup_SetRFRegionRequest(this.driver, { region }));
+		if (result instanceof SerialAPISetup_CommandUnsupportedResponse) {
+			throw new ZWaveError(
+				`Your hardware does not support setting the RF region!`,
+				ZWaveErrorCodes.Driver_NotSupported,
+			);
+		}
+		// TODO: Issue soft reset
+		return result.success;
+	}
+
+	/** Request the current RF region configured at the Z-Wave API Module */
+	public async getRFRegion(): Promise<RFRegion> {
+		const result = await this.driver.sendMessage<
+			| SerialAPISetup_GetRFRegionResponse
+			| SerialAPISetup_CommandUnsupportedResponse
+		>(new SerialAPISetup_GetRFRegionRequest(this.driver));
+		if (result instanceof SerialAPISetup_CommandUnsupportedResponse) {
+			throw new ZWaveError(
+				`Your hardware does not support getting the RF region!`,
+				ZWaveErrorCodes.Driver_NotSupported,
+			);
+		}
+		return result.region;
+	}
+
+	/** Configure the Powerlevel setting of the Z-Wave API */
+	public async setPowerlevel(
+		powerlevel: number,
+		measured0dBm: number,
+	): Promise<boolean> {
+		const result = await this.driver.sendMessage<
+			| SerialAPISetup_SetPowerlevelResponse
+			| SerialAPISetup_CommandUnsupportedResponse
+		>(
+			new SerialAPISetup_SetPowerlevelRequest(this.driver, {
+				powerlevel,
+				measured0dBm,
+			}),
+		);
+		if (result instanceof SerialAPISetup_CommandUnsupportedResponse) {
+			throw new ZWaveError(
+				`Your hardware does not support setting the powerlevel!`,
+				ZWaveErrorCodes.Driver_NotSupported,
+			);
+		}
+		return result.success;
+	}
+
+	/** Request the Powerlevel setting of the Z-Wave API */
+	public async getPowerlevel(): Promise<
+		Pick<
+			SerialAPISetup_GetPowerlevelResponse,
+			"powerlevel" | "measured0dBm"
+		>
+	> {
+		const result = await this.driver.sendMessage<
+			| SerialAPISetup_GetPowerlevelResponse
+			| SerialAPISetup_CommandUnsupportedResponse
+		>(new SerialAPISetup_GetPowerlevelRequest(this.driver));
+		if (result instanceof SerialAPISetup_CommandUnsupportedResponse) {
+			throw new ZWaveError(
+				`Your hardware does not support getting the powerlevel!`,
+				ZWaveErrorCodes.Driver_NotSupported,
+			);
+		}
+		return pick(result, ["powerlevel", "measured0dBm"]);
+	}
+
+	/**
+	 * @internal
+	 * Configure whether the Z-Wave API should use short (8 bit) or long (16 bit) Node IDs
+	 */
+	public async setNodeIDType(nodeIdType: NodeIDType): Promise<boolean> {
+		const result = await this.driver.sendMessage<
+			| SerialAPISetup_SetNodeIDTypeResponse
+			| SerialAPISetup_CommandUnsupportedResponse
+		>(
+			new SerialAPISetup_SetNodeIDTypeRequest(this.driver, {
+				nodeIdType,
+			}),
+		);
+		if (result instanceof SerialAPISetup_CommandUnsupportedResponse) {
+			throw new ZWaveError(
+				`Your hardware does not support switching between short and long node IDs!`,
+				ZWaveErrorCodes.Driver_NotSupported,
+			);
+		}
+		return result.success;
+	}
+
+	/**
+	 * @internal
+	 * Request the maximum payload that the Z-Wave API Module can accept for transmitting Z-Wave frames. This value depends on the RF Profile
+	 */
+	public async getMaxPayloadSize(): Promise<number> {
+		const result = await this.driver.sendMessage<
+			| SerialAPISetup_GetMaximumPayloadSizeResponse
+			| SerialAPISetup_CommandUnsupportedResponse
+		>(new SerialAPISetup_GetMaximumPayloadSizeRequest(this.driver), {
+			supportCheck: false,
+		});
+		if (result instanceof SerialAPISetup_CommandUnsupportedResponse) {
+			throw new ZWaveError(
+				`Your hardware does not support getting the max. payload size!`,
+				ZWaveErrorCodes.Driver_NotSupported,
+			);
+		}
+		return result.maxPayloadSize;
+	}
+
+	/**
+	 * @internal
+	 * Request the maximum payload that the Z-Wave API Module can accept for transmitting Z-Wave Long Range frames. This value depends on the RF Profile
+	 */
+	public async getMaxPayloadSizeLongRange(): Promise<number> {
+		const result = await this.driver.sendMessage<
+			| SerialAPISetup_GetLRMaximumPayloadSizeResponse
+			| SerialAPISetup_CommandUnsupportedResponse
+		>(new SerialAPISetup_GetLRMaximumPayloadSizeRequest(this.driver));
+		if (result instanceof SerialAPISetup_CommandUnsupportedResponse) {
+			throw new ZWaveError(
+				`Your hardware does not support getting the max. long range payload size!`,
+				ZWaveErrorCodes.Driver_NotSupported,
+			);
+		}
+		return result.maxPayloadSize;
+	}
+
+	/**
+	 * Returns the known list of neighbors for a node
+	 */
+	public async getNodeNeighbors(nodeId: number): Promise<readonly number[]> {
+		this.driver.controllerLog.logNode(nodeId, {
+			message: "requesting node neighbors...",
+			direction: "outbound",
+		});
+		try {
+			const resp = await this.driver.sendMessage<GetRoutingInfoResponse>(
+				new GetRoutingInfoRequest(this.driver, {
+					nodeId,
+					removeBadLinks: false,
+					removeNonRepeaters: false,
+				}),
+			);
+			this.driver.controllerLog.logNode(nodeId, {
+				message: `node neighbors received: ${resp.nodeIds.join(", ")}`,
+				direction: "inbound",
+			});
+			return resp.nodeIds;
+		} catch (e) {
+			this.driver.controllerLog.logNode(
+				nodeId,
+				`requesting the node neighbors failed: ${e.message}`,
+				"error",
+			);
+			throw e;
 		}
 	}
 

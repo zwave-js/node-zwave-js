@@ -1,5 +1,3 @@
-// Bönig und Kallenbach oHG POPE005206
-// Z Weather
 {
 	"manufacturer": "Bönig und Kallenbach oHG",
 	"manufacturerId": "0x0169",
@@ -23,10 +21,7 @@
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 30,
-			"defaultValue": 6,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"defaultValue": 6
 		},
 		"2": {
 			"label": "Twilight Action Threshold",
@@ -34,10 +29,7 @@
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 100,
-			"defaultValue": 37,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"defaultValue": 37
 		}
 	}
 }

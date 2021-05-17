@@ -1,0 +1,65 @@
+{
+	"manufacturer": "Nortek Security & Control LLC",
+	"manufacturerId": "0x014f",
+	"label": "PIR-200",
+	"description": "PIR Motion Detector",
+	"devices": [
+		{
+			"productType": "0x2024",
+			"productId": "0x2401"
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"paramInformation": {
+		"5": {
+			"label": "Trigger Re-Activation Delay",
+			"valueSize": 1,
+			"unit": "minutes",
+			"minValue": 1,
+			"maxValue": 255,
+			"defaultValue": 3,
+			"unsigned": true
+		},
+		"6": {
+			"label": "Motion Sensor Sensitivity",
+			"valueSize": 1,
+			"minValue": 1,
+			"maxValue": 7,
+			"defaultValue": 4,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Highest",
+					"value": 1
+				},
+				{
+					"label": "Higher",
+					"value": 2
+				},
+				{
+					"label": "High",
+					"value": 3
+				},
+				{
+					"label": "Normal",
+					"value": 4
+				},
+				{
+					"label": "Low",
+					"value": 5
+				},
+				{
+					"label": "Lower",
+					"value": 6
+				},
+				{
+					"label": "Lowest",
+					"value": 7
+				}
+			]
+		}
+	}
+}

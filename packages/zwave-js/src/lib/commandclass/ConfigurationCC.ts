@@ -8,6 +8,8 @@ import {
 	CacheMetadata,
 	CacheValue,
 	CommandClasses,
+	ConfigurationMetadata,
+	ConfigValueFormat,
 	encodeBitMask,
 	getIntegerLimits,
 	getMinimumShiftForBitMask,
@@ -18,7 +20,6 @@ import {
 	stripUndefined,
 	validatePayload,
 	ValueMetadata,
-	ValueMetadataAny,
 	ZWaveError,
 	ZWaveErrorCodes,
 } from "@zwave-js/core";
@@ -67,39 +68,8 @@ export enum ConfigurationCommand {
 	DefaultReset = 0x01,
 }
 
-export enum ValueFormat {
-	SignedInteger = 0x00,
-	UnsignedInteger = 0x01,
-	Enumerated = 0x02, // UnsignedInt, Radio Buttons
-	BitField = 0x03, // Check Boxes
-}
-
-export interface ConfigurationMetadata extends ValueMetadataAny {
-	// readable and writeable are inherited from ValueMetadataAny
-	min?: ConfigValue;
-	max?: ConfigValue;
-	default?: ConfigValue;
-	unit?: string;
-	valueSize?: number;
-	format?: ValueFormat;
-	name?: string;
-	info?: string;
-	noBulkSupport?: boolean;
-	isAdvanced?: boolean;
-	requiresReInclusion?: boolean;
-	// The following information cannot be detected by scanning.
-	// We have to rely on configuration to support them
-	// options?: readonly ConfigOption[];
-	states?: Record<number, string>;
-	allowManualEntry?: boolean;
-	isFromConfig?: boolean;
-}
-
-// A configuration value is either a single number or a bit map
-/**
- * @publicAPI
- */
-export type ConfigValue = number | Set<number>;
+/** @publicAPI */
+export type ConfigValue = import("@zwave-js/core").ConfigValue;
 
 function configValueToString(value: ConfigValue): string {
 	if (typeof value === "number") return value.toString();
@@ -177,7 +147,7 @@ export class ConfigurationCCAPI extends PhysicalCCAPI {
 		let valueSize = ccInstance.getParamInformation(property).valueSize;
 		const valueFormat =
 			ccInstance.getParamInformation(property).format ||
-			ValueFormat.SignedInteger;
+			ConfigValueFormat.SignedInteger;
 
 		let targetValue: number;
 		if (propertyKey) {
@@ -203,7 +173,7 @@ export class ConfigurationCCAPI extends PhysicalCCAPI {
 			// If there's no value size configured, figure out a matching value size
 			valueSize = getMinIntegerSize(
 				targetValue,
-				valueFormat === ValueFormat.SignedInteger,
+				valueFormat === ConfigValueFormat.SignedInteger,
 			);
 			// Throw if the value is too large or too small
 			if (!valueSize) {
@@ -483,8 +453,18 @@ export class ConfigurationCC extends CommandClass {
 		this.registerValue("isParamInformationFromConfig" as any, true);
 	}
 
-	public async interview(complete: boolean = true): Promise<void> {
+	public async interview(): Promise<void> {
 		const node = this.getNode()!;
+		const endpoint = this.getEndpoint()!;
+		const api = endpoint.commandClasses.Configuration.withOptions({
+			priority: MessagePriority.NodeQuery,
+		});
+
+		this.driver.controllerLog.logNode(node.id, {
+			endpoint: this.endpointIndex,
+			message: `Interviewing ${this.ccName}...`,
+			direction: "none",
+		});
 
 		const config = node.deviceConfig?.paramInformation;
 		if (config) {
@@ -496,21 +476,121 @@ export class ConfigurationCC extends CommandClass {
 			this.deserializeParamInformationFromConfig(config);
 		}
 
+		if (this.version >= 3) {
+			this.driver.controllerLog.logNode(node.id, {
+				endpoint: this.endpointIndex,
+				message: "finding first configuration parameter...",
+				direction: "outbound",
+			});
+			const param0props = await api.getProperties(0);
+			let param: number;
+			if (param0props) {
+				param = param0props.nextParameter;
+				if (param === 0) {
+					this.driver.controllerLog.logNode(node.id, {
+						endpoint: this.endpointIndex,
+						message: `didn't report any config params, trying #1 just to be sure...`,
+						direction: "inbound",
+					});
+					param = 1;
+				}
+			} else {
+				this.driver.controllerLog.logNode(node.id, {
+					endpoint: this.endpointIndex,
+					message:
+						"Finding first configuration parameter timed out, skipping interview...",
+					level: "warn",
+				});
+				return;
+			}
+
+			while (param > 0) {
+				this.driver.controllerLog.logNode(node.id, {
+					endpoint: this.endpointIndex,
+					message: `querying parameter #${param} information...`,
+					direction: "outbound",
+				});
+
+				// Query properties and the next param
+				const props = await api.getProperties(param);
+				if (!props) {
+					this.driver.controllerLog.logNode(node.id, {
+						endpoint: this.endpointIndex,
+						message: `Querying parameter #${param} information timed out, skipping interview...`,
+						level: "warn",
+					});
+					return;
+				}
+				const { nextParameter, ...properties } = props;
+
+				let logMessage: string;
+				if (properties.valueSize === 0) {
+					logMessage = `Parameter #${param} is unsupported. Next parameter: ${nextParameter}`;
+				} else {
+					// Query name and info only if the parameter is supported
+					const name = (await api.getName(param)) ?? "(unknown)";
+					// Skip the info query for bugged devices
+					if (
+						!node.deviceConfig?.compat?.skipConfigurationInfoQuery
+					) {
+						await api.getInfo(param);
+					}
+
+					logMessage = `received information for parameter #${param}:
+parameter name:      ${name}
+value format:        ${getEnumMemberName(
+						ConfigValueFormat,
+						properties.valueFormat,
+					)}
+value size:          ${properties.valueSize} bytes
+min value:           ${properties.minValue?.toString() ?? "undefined"}
+max value:           ${properties.maxValue?.toString() ?? "undefined"}
+default value:       ${properties.defaultValue?.toString() ?? "undefined"}
+is read-only:        ${!!properties.isReadonly}
+is advanced (UI):    ${!!properties.isAdvanced}
+has bulk support:    ${!properties.noBulkSupport}
+alters capabilities: ${!!properties.altersCapabilities}`;
+				}
+				this.driver.controllerLog.logNode(node.id, {
+					endpoint: this.endpointIndex,
+					message: logMessage,
+					direction: "inbound",
+				});
+
+				// Some devices report their parameter 1 instead of 0 as the next one
+				// when reaching the end. To avoid infinite loops, stop scanning
+				// once the next parameter is lower than the current one
+				if (nextParameter > param) {
+					param = nextParameter;
+				} else {
+					break;
+				}
+			}
+		}
+
+		await this.refreshValues();
+
+		// Remember that the interview is complete
+		this.interviewComplete = true;
+	}
+
+	public async refreshValues(): Promise<void> {
+		const node = this.getNode()!;
 		const endpoint = this.getEndpoint()!;
 		const api = endpoint.commandClasses.Configuration.withOptions({
 			priority: MessagePriority.NodeQuery,
 		});
 
 		if (this.version < 3) {
+			// V1/V2: Query all values defined in the config file
 			const paramInfo = node.deviceConfig?.paramInformation;
 			if (paramInfo?.size) {
-				// Query all values
 				// Because partial params share the same parameter number,
 				// we need to remember which ones we have already queried.
 				const alreadyQueried = new Set<number>();
 				for (const param of paramInfo.keys()) {
 					// No need to query writeonly params
-					if (paramInfo.get(param)!.writeOnly) continue;
+					if (paramInfo.get(param)?.writeOnly) continue;
 					// Don't double-query params
 					if (alreadyQueried.has(param.parameter)) continue;
 					alreadyQueried.add(param.parameter);
@@ -546,124 +626,29 @@ export class ConfigurationCC extends CommandClass {
 				});
 			}
 		} else {
-			// Version >= 3
-			this.driver.controllerLog.logNode(node.id, {
-				endpoint: this.endpointIndex,
-				message: `${this.constructor.name}: doing a ${
-					complete ? "complete" : "partial"
-				} interview...`,
-				direction: "none",
-			});
-
-			if (complete) {
-				// Only scan all parameters during complete interviews
-				this.driver.controllerLog.logNode(node.id, {
-					endpoint: this.endpointIndex,
-					message: "finding first configuration parameter...",
-					direction: "outbound",
-				});
-				const param0props = await api.getProperties(0);
-				let param: number;
-				if (param0props) {
-					param = param0props.nextParameter;
-					if (param === 0) {
-						this.driver.controllerLog.logNode(node.id, {
-							endpoint: this.endpointIndex,
-							message: `didn't report any config params, trying #1 just to be sure...`,
-							direction: "inbound",
-						});
-						param = 1;
-					}
-				} else {
-					this.driver.controllerLog.logNode(node.id, {
-						endpoint: this.endpointIndex,
-						message:
-							"Finding first configuration parameter timed out, skipping interview...",
-						level: "warn",
-					});
-					return;
-				}
-
-				while (param > 0) {
-					this.driver.controllerLog.logNode(node.id, {
-						endpoint: this.endpointIndex,
-						message: `querying parameter #${param} information...`,
-						direction: "outbound",
-					});
-
-					// Query properties and the next param
-					const props = await api.getProperties(param);
-					if (!props) {
-						this.driver.controllerLog.logNode(node.id, {
-							endpoint: this.endpointIndex,
-							message: `Querying parameter #${param} information timed out, skipping interview...`,
-							level: "warn",
-						});
-						return;
-					}
-					const { nextParameter, ...properties } = props;
-
-					let logMessage: string;
-					if (properties.valueSize === 0) {
-						logMessage = `Parameter #${param} is unsupported. Next parameter: ${nextParameter}`;
-					} else {
-						// Query name and info only if the parameter is supported
-						const name = (await api.getName(param)) ?? "(unknown)";
-						// Skip the info query for bugged devices
-						if (
-							!node.deviceConfig?.compat
-								?.skipConfigurationInfoQuery
-						) {
-							await api.getInfo(param);
-						}
-
-						logMessage = `received information for parameter #${param}:
-parameter name:      ${name}
-value format:        ${getEnumMemberName(ValueFormat, properties.valueFormat)}
-value size:          ${properties.valueSize} bytes
-min value:           ${properties.minValue?.toString() ?? "undefined"}
-max value:           ${properties.maxValue?.toString() ?? "undefined"}
-default value:       ${properties.defaultValue?.toString() ?? "undefined"}
-is read-only:        ${!!properties.isReadonly}
-is advanced (UI):    ${!!properties.isAdvanced}
-has bulk support:    ${!properties.noBulkSupport}
-alters capabilities: ${!!properties.altersCapabilities}`;
-					}
-					this.driver.controllerLog.logNode(node.id, {
-						endpoint: this.endpointIndex,
-						message: logMessage,
-						direction: "inbound",
-					});
-
-					// Some devices report their parameter 1 instead of 0 as the next one
-					// when reaching the end. To avoid infinite loops, stop scanning
-					// once the next parameter is lower than the current one
-					if (nextParameter > param) {
-						param = nextParameter;
-					} else {
-						break;
-					}
-				}
-			}
-
-			// Query the values of supported parameters during every interview
+			// V3+: Query the values of discovered parameters
 			const parameters = distinct(
 				this.getDefinedValueIDs()
 					.map((v) => v.property)
 					.filter((p): p is number => typeof p === "number"),
 			);
 			for (const param of parameters) {
-				this.driver.controllerLog.logNode(node.id, {
-					endpoint: this.endpointIndex,
-					message: `querying parameter #${param} value...`,
-					direction: "outbound",
-				});
-				await api.get(param);
+				if (this.getParamInformation(param).readable !== false) {
+					this.driver.controllerLog.logNode(node.id, {
+						endpoint: this.endpointIndex,
+						message: `querying parameter #${param} value...`,
+						direction: "outbound",
+					});
+					await api.get(param);
+				} else {
+					this.driver.controllerLog.logNode(node.id, {
+						endpoint: this.endpointIndex,
+						message: `not querying parameter #${param} value, because it is writeonly`,
+						direction: "none",
+					});
+				}
 			}
 		}
-
-		// Remember that the interview is complete
-		this.interviewComplete = true;
 	}
 
 	/**
@@ -712,6 +697,22 @@ alters capabilities: ${!!properties.altersCapabilities}`;
 			(valueDB.getMetadata(valueId) as ConfigurationMetadata) ?? {
 				...ValueMetadata.Any,
 			}
+		);
+	}
+
+	/**
+	 * @internal
+	 * Returns the param info that was queried for this node. This returns the information that was returned by the node
+	 * and does not include partial parameters.
+	 */
+	public getQueriedParamInfos(): Record<number, ConfigurationMetadata> {
+		const parameters = distinct(
+			this.getDefinedValueIDs()
+				.map((v) => v.property)
+				.filter((p): p is number => typeof p === "number"),
+		);
+		return composeObject(
+			parameters.map((p) => [p as any, this.getParamInformation(p)]),
 		);
 	}
 
@@ -810,8 +811,8 @@ alters capabilities: ${!!properties.altersCapabilities}`;
 				default: info.defaultValue,
 				unit: info.unit,
 				format: info.unsigned
-					? ValueFormat.UnsignedInteger
-					: ValueFormat.SignedInteger,
+					? ConfigValueFormat.UnsignedInteger
+					: ConfigValueFormat.SignedInteger,
 				readable: !info.writeOnly,
 				writeable: !info.readOnly,
 				allowManualEntry: info.allowManualEntry,
@@ -901,13 +902,13 @@ export class ConfigurationCCReport extends ConfigurationCC {
 			// In Config CC v1/v2, this must be SignedInteger
 			// As those nodes don't communicate any parameter information
 			// we fall back to that default value anyways
-			oldParamInformation.format || ValueFormat.SignedInteger,
+			oldParamInformation.format || ConfigValueFormat.SignedInteger,
 		);
 		// Store the parameter size and value
 		this.extendParamInformation(this._parameter, undefined, {
 			valueSize: this._valueSize,
 			type:
-				oldParamInformation.format === ValueFormat.BitField
+				oldParamInformation.format === ConfigValueFormat.BitField
 					? "number[]"
 					: "number",
 		});
@@ -919,7 +920,7 @@ export class ConfigurationCCReport extends ConfigurationCC {
 		) {
 			const isSigned =
 				oldParamInformation.format == undefined ||
-				oldParamInformation.format === ValueFormat.SignedInteger;
+				oldParamInformation.format === ConfigValueFormat.SignedInteger;
 			this.extendParamInformation(
 				this._parameter,
 				undefined,
@@ -1100,7 +1101,7 @@ export class ConfigurationCCSet extends ConfigurationCC {
 		if (!this.resetToDefault) {
 			const valueFormat =
 				this.getParamInformation(this.parameter).format ||
-				ValueFormat.SignedInteger;
+				ConfigValueFormat.SignedInteger;
 
 			// Make sure that the given value fits into the value size
 			if (
@@ -1251,7 +1252,7 @@ export class ConfigurationCCBulkSet extends ConfigurationCC {
 				const param = this._parameters[i];
 				const valueFormat =
 					this.getParamInformation(param).format ||
-					ValueFormat.SignedInteger;
+					ConfigValueFormat.SignedInteger;
 
 				// Make sure that the given value fits into the value size
 				if (!isSafeValue(value, valueSize, valueFormat)) {
@@ -1336,7 +1337,7 @@ export class ConfigurationCCBulkReport extends ConfigurationCC {
 					this.payload.slice(5 + i * this.valueSize),
 					this.valueSize,
 					this.getParamInformation(param).format ||
-						ValueFormat.SignedInteger,
+						ConfigValueFormat.SignedInteger,
 				),
 			);
 		}
@@ -1682,7 +1683,7 @@ export class ConfigurationCCPropertiesReport extends ConfigurationCC {
 		validatePayload(this.payload.length >= nextParameterOffset + 2);
 
 		if (this.valueSize > 0) {
-			if (this._valueFormat !== ValueFormat.BitField) {
+			if (this._valueFormat !== ConfigValueFormat.BitField) {
 				this._minValue = parseValue(
 					this.payload.slice(3),
 					this._valueSize,
@@ -1723,8 +1724,8 @@ export class ConfigurationCCPropertiesReport extends ConfigurationCC {
 		// If we actually received parameter info, store it
 		if (this._valueSize > 0) {
 			const valueType =
-				this._valueFormat === ValueFormat.SignedInteger ||
-				this._valueFormat === ValueFormat.UnsignedInteger
+				this._valueFormat === ConfigValueFormat.SignedInteger ||
+				this._valueFormat === ConfigValueFormat.UnsignedInteger
 					? "number"
 					: "number[]";
 			const paramInfo: Partial<ConfigurationMetadata> = stripUndefined({
@@ -1753,8 +1754,8 @@ export class ConfigurationCCPropertiesReport extends ConfigurationCC {
 		return this._valueSize;
 	}
 
-	private _valueFormat: ValueFormat;
-	public get valueFormat(): ValueFormat {
+	private _valueFormat: ConfigValueFormat;
+	public get valueFormat(): ConfigValueFormat {
 		return this._valueFormat;
 	}
 
@@ -1803,7 +1804,10 @@ export class ConfigurationCCPropertiesReport extends ConfigurationCC {
 			"parameter #": this._parameter,
 			"next param #": this._nextParameter,
 			"value size": this._valueSize,
-			"value format": getEnumMemberName(ValueFormat, this._valueFormat),
+			"value format": getEnumMemberName(
+				ConfigValueFormat,
+				this._valueFormat,
+			),
 		};
 		if (this._minValue != undefined) {
 			message["min value"] = configValueToString(this._minValue);
@@ -1874,21 +1878,21 @@ export class ConfigurationCCDefaultReset extends ConfigurationCC {}
 function isSafeValue(
 	value: number,
 	size: number,
-	format: ValueFormat,
+	format: ConfigValueFormat,
 ): boolean {
 	let minValue: number;
 	let maxValue: number;
 	switch (format) {
-		case ValueFormat.SignedInteger:
+		case ConfigValueFormat.SignedInteger:
 			minValue = -Math.pow(2, 8 * size - 1);
 			maxValue = Math.pow(2, 8 * size - 1) - 1;
 			break;
-		case ValueFormat.UnsignedInteger:
-		case ValueFormat.Enumerated:
+		case ConfigValueFormat.UnsignedInteger:
+		case ConfigValueFormat.Enumerated:
 			minValue = 0;
 			maxValue = Math.pow(2, 8 * size);
 			break;
-		case ValueFormat.BitField:
+		case ConfigValueFormat.BitField:
 		default:
 			throw new Error("not implemented");
 	}
@@ -1899,15 +1903,15 @@ function isSafeValue(
 function parseValue(
 	raw: Buffer,
 	size: number,
-	format: ValueFormat,
+	format: ConfigValueFormat,
 ): ConfigValue {
 	switch (format) {
-		case ValueFormat.SignedInteger:
+		case ConfigValueFormat.SignedInteger:
 			return raw.readIntBE(0, size);
-		case ValueFormat.UnsignedInteger:
-		case ValueFormat.Enumerated:
+		case ConfigValueFormat.UnsignedInteger:
+		case ConfigValueFormat.Enumerated:
 			return raw.readUIntBE(0, size);
-		case ValueFormat.BitField:
+		case ConfigValueFormat.BitField:
 			return new Set(parseBitMask(raw.slice(0, size)));
 	}
 }
@@ -1916,11 +1920,11 @@ function throwInvalidValueError(
 	value: any,
 	parameter: number,
 	valueSize: number,
-	valueFormat: ValueFormat,
+	valueFormat: ConfigValueFormat,
 ): never {
 	throw new ZWaveError(
 		`The value ${value} is invalid for configuration parameter ${parameter} (size = ${valueSize}, format = ${getEnumMemberName(
-			ValueFormat,
+			ConfigValueFormat,
 			valueFormat,
 		)})!`,
 		ZWaveErrorCodes.Argument_Invalid,
@@ -1932,7 +1936,7 @@ function tryCatchOutOfBoundsError(
 	value: any,
 	parameter: number,
 	valueSize: number,
-	valueFormat: ValueFormat,
+	valueFormat: ConfigValueFormat,
 ): void {
 	if (e.message.includes("out of bounds")) {
 		throwInvalidValueError(value, parameter, valueSize, valueFormat);
@@ -1946,18 +1950,18 @@ function serializeValue(
 	payload: Buffer,
 	offset: number,
 	size: number,
-	format: ValueFormat,
+	format: ConfigValueFormat,
 	value: ConfigValue,
 ): void {
 	switch (format) {
-		case ValueFormat.SignedInteger:
+		case ConfigValueFormat.SignedInteger:
 			payload.writeIntBE(value as number, offset, size);
 			return;
-		case ValueFormat.UnsignedInteger:
-		case ValueFormat.Enumerated:
+		case ConfigValueFormat.UnsignedInteger:
+		case ConfigValueFormat.Enumerated:
 			payload.writeUIntBE(value as number, offset, size);
 			return;
-		case ValueFormat.BitField: {
+		case ConfigValueFormat.BitField: {
 			const mask = encodeBitMask(
 				[...(value as Set<number>).values()],
 				size * 8,

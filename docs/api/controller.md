@@ -41,6 +41,14 @@ async stopExclusion(): Promise<boolean>
 
 Stops the exclusion process to remove a node from the network.The returned promise resolves to `true` if stopping the exclusion was successful, `false` if it failed or if it was not active.
 
+### `getNodeNeighbors`
+
+```ts
+async getNodeNeighbors(nodeId: number): Promise<readonly number[]>
+```
+
+Returns the known list of neighbors for a node.
+
 ### `healNode`
 
 ```ts
@@ -50,6 +58,8 @@ async healNode(nodeId: number): Promise<boolean>
 A Z-Wave network needs to be reorganized (healed) from time to time. To do so, the nodes must update their neighbor list and the controller must update the return routes for optimal lifeline associations.
 
 The `healNode` method performs this step for a given node. The returned promise resolves to `true` if the process was completed, or `false` if it was unsuccessful.
+
+> [!ATTENTION] Healing a Z-Wave network causes a lot of traffic and can take very long. Degraded performance **must** be expected while a healing process is active.
 
 ### `beginHealingNetwork`
 
@@ -107,22 +117,33 @@ By default, the node will be included securely (with encryption) if a network ke
 
 ### Managing associations
 
-The following methods can be used to manage associations between nodes. This only works AFTER the interview process!
+The following methods can be used to manage associations between nodes and/or endpoints. This only works AFTER the interview process!
 
 ```ts
-getAssociationGroups(nodeId: number): ReadonlyMap<number, AssociationGroup>;
-getAssociations(nodeId: number): ReadonlyMap<number, readonly Association[]>;
-isAssociationAllowed(nodeId: number, group: number, association: Association): boolean;
-addAssociations(nodeId: number, group: number, associations: Association[]): Promise<void>;
-removeAssociations(nodeId: number, group: number, associations: Association[]): Promise<void>;
-removeNodeFromAllAssocations(nodeId: number): Promise<void>;
+getAssociationGroups(source: AssociationAddress): ReadonlyMap<number, AssociationGroup>;
+getAllAssociationGroups(nodeId: number): ReadonlyMap<number, ReadonlyMap<number, AssociationGroup>>;
+
+getAssociations(source: AssociationAddress): ReadonlyMap<number, readonly AssociationAddress[]>;
+getAllAssociations(nodeId: number): ReadonlyObjectKeyMap<
+	AssociationAddress,
+	ReadonlyMap<number, readonly AssociationAddress[]>
+>;
+
+isAssociationAllowed(source: AssociationAddress, group: number, destination: AssociationAddress): boolean;
+
+addAssociations(source: AssociationAddress, group: number, destinations: AssociationAddress[]): Promise<void>;
+
+removeAssociations(source: AssociationAddress, group: number, destinations: AssociationAddress[]): Promise<void>;
+removeNodeFromAllAssociations(nodeId: number): Promise<void>;
 ```
 
--   `getAssociationGroups` returns all association groups for a given node.
--   `getAssociations` returns all defined associations of a given node.
--   `addAssociations` can be used to add one or more associations to a node's group. You should check if each association is allowed using `isAssociationAllowed` before doing so.
+-   `getAssociationGroups` returns all association groups for a given node **or** endpoint.
+-   `getAllAssociationGroups` returns all association groups of a given **node and all its endpoints**. The returned `Map` uses the endpoint index as keys and its values are `Map`s of group IDs to their definition
+-   `getAssociations` returns all defined associations of a given node **or** endpoint. If no endpoint is given, the associations for the root endpoint (`0`) are returned.
+-   `getAllAssociations` returns all defined associations of a given **node and all its endpoints**. The returned `Map` uses the source node+endpoint as keys and its values are `Map`s of association group IDs to target node+endpoint.
+-   `addAssociations` can be used to add one or more associations to a node's or endpoint's group. You should check if each association is allowed using `isAssociationAllowed` before doing so.
 -   To remove a previously added association, use `removeAssociations`
--   A node can be removed from all other nodes' associations using `removeNodeFromAllAssocations`
+-   A node can be removed from all other nodes' associations using `removeNodeFromAllAssociations`
 
 #### `AssociationGroup` interface
 
@@ -147,14 +168,14 @@ interface AssociationGroup {
 }
 ```
 
-#### `Association` interface
+#### `AssociationAddress` interface
 
-This defines the target of a node's association:
+This defines the source and target node/endpoint of an association:
 
-<!-- #import Association from "zwave-js" -->
+<!-- #import AssociationAddress from "zwave-js" -->
 
 ```ts
-interface Association {
+interface AssociationAddress {
 	nodeId: number;
 	endpoint?: number;
 }
@@ -188,6 +209,48 @@ Creates a virtual node that can be used to send commands to multiple supporting 
 >
 > -   Broadcasting or multicasting commands is not possible using `Security S0`.
 > -   Secure multicast requires `Security S2`, which is not yet supported by `zwave-js` and requires devices that support it.
+
+### Configure RF region
+
+```ts
+setRFRegion(region: RFRegion): Promise<boolean>
+getRFRegion(): Promise<RFRegion>
+```
+
+Configure or read the RF region at the Z-Wave API Module. The possible regions are:
+
+```ts
+export enum RFRegion {
+	"Europe" = 0x00,
+	"USA" = 0x01,
+	"Australia/New Zealand" = 0x02,
+	"Hong Kong" = 0x03,
+	"India" = 0x05,
+	"Israel" = 0x06,
+	"Russia" = 0x07,
+	"China" = 0x08,
+	"USA (Long Range)" = 0x09,
+	"Japan" = 0x20,
+	"Korea" = 0x21,
+	"Unknown" = 0xfe,
+	"Default (EU)" = 0xff,
+}
+```
+
+> [!ATTENTION] Not all controllers support configuring the RF region. These methods will throw if they are not supported
+
+### Configure TX powerlevel
+
+```ts
+setPowerlevel(powerlevel: number, measured0dBm: number): Promise<boolean>;
+getPowerlevel(): Promise<{powerlevel: number, measured0dBm: number}>;
+```
+
+Configure or read the TX powerlevel setting of the Z-Wave API. `powerlevel` is the normal powerlevel, `measured0dBm` the measured output power at 0 dBm. Both are in dBm and must be between -12.8 and +12.7.
+
+> [!ATTENTION] Not all controllers support configuring the TX powerlevel. These methods will throw if they are not supported.
+
+> [!WARNING] Increasing the powerlevel (i.e. "shouting louder") does not improve reception of the controller and may even be **against the law**. Use at your own risk!
 
 ## Controller properties
 

@@ -1,10 +1,8 @@
-// McoHome Technology Co., Ltd MH-DT311/MH-DT411
-// MCOHome Dimmer Switch
 {
 	"manufacturer": "McoHome Technology Co., Ltd.",
 	"manufacturerId": "0x015f",
-	"label": "MH-DT311/MH-DT411",
-	"description": "MCOHome Dimmer Switch",
+	"label": "MH-DT311 / MH-DT411 / MH-DT511",
+	"description": "Dimmer Switch",
 	"devices": [
 		{
 			"productType": "0xd311",
@@ -13,6 +11,10 @@
 		{
 			"productType": "0xd411",
 			"productId": "0x5102"
+		},
+		{
+			"productType": "0xd511",
+			"productId": "0x5103"
 		}
 	],
 	"firmwareVersion": {
@@ -26,14 +28,14 @@
 			"isLifeline": true
 		},
 		"2": {
-			"label": "Dim %",
+			"label": "Multilevel",
 			"maxNodes": 5
 		},
-		"3": {
+		"5": {
 			"label": "Plus Button",
 			"maxNodes": 5
 		},
-		"4": {
+		"8": {
 			"label": "Minus Button",
 			"maxNodes": 5
 		}
@@ -46,16 +48,14 @@
 			"maxValue": 1,
 			"defaultValue": 0,
 			"unsigned": true,
-			"readOnly": false,
-			"writeOnly": false,
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "Disabled",
+					"label": "Disable",
 					"value": 0
 				},
 				{
-					"label": "Enabled",
+					"label": "Enable",
 					"value": 1
 				}
 			]
@@ -67,8 +67,6 @@
 			"maxValue": 2,
 			"defaultValue": 1,
 			"unsigned": true,
-			"readOnly": false,
-			"writeOnly": false,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -86,14 +84,12 @@
 			]
 		},
 		"3": {
-			"label": "Auto Detection Of Load Type When Powered On",
+			"label": "Auto Detection of Load Type When Powered On",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 2,
 			"defaultValue": 1,
 			"unsigned": true,
-			"readOnly": false,
-			"writeOnly": false,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -116,106 +112,90 @@
 			"minValue": 0,
 			"maxValue": 10,
 			"defaultValue": 10,
-			"unsigned": true,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"unsigned": true
 		},
 		"5": {
-			"label": "Minimum Brightness Level",
+			"label": "Minimum Brightness",
 			"valueSize": 1,
 			"minValue": 1,
 			"maxValue": 98,
 			"defaultValue": 1,
-			"unsigned": true,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"unsigned": true
 		},
 		"6": {
-			"label": "Maximum Brightness Level",
+			"label": "Maximum Brightness",
 			"valueSize": 1,
 			"minValue": 2,
 			"maxValue": 99,
 			"defaultValue": 99,
-			"unsigned": true,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"unsigned": true
 		},
 		"7": {
-			"label": "Single Dimming Step Time (Manual)",
-			"unit": "10 ms",
+			"label": "Dimming Step Time (Manual)",
 			"valueSize": 2,
+			"unit": "10 ms",
 			"minValue": 0,
 			"maxValue": 255,
 			"defaultValue": 3,
-			"unsigned": true,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"unsigned": true
 		},
 		"8": {
-			"label": "Single Dimming Step Size (Manual)",
-			"unit": "%",
+			"label": "Dimming Step Size (Manual)",
+
 			"valueSize": 1,
 			"minValue": 1,
 			"maxValue": 99,
 			"defaultValue": 1,
-			"unsigned": true,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"unsigned": true
 		},
 		"9": {
-			"label": "Single Dimming Step Time (Auto)",
-			"unit": "10 ms",
+			"label": "Dimming Step Time (Auto)",
+
 			"valueSize": 2,
+			"unit": "10 ms",
 			"minValue": 0,
 			"maxValue": 255,
 			"defaultValue": 3,
-			"unsigned": true,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"unsigned": true
 		},
 		"10": {
-			"label": "Single Dimming Step Size (Auto)",
-			"unit": "%",
+			"label": "Dimming Step Size (Auto)",
+
 			"valueSize": 1,
 			"minValue": 1,
 			"maxValue": 99,
 			"defaultValue": 1,
-			"unsigned": true,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"unsigned": true
 		},
 		"11": {
 			"label": "Dimming Amount Per Tap",
-			"description": "0 for repeat last button-held amount",
 			"unit": "%",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 99,
 			"defaultValue": 0,
 			"unsigned": true,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"options": [
+				{
+					"label": "Repeat last button held amount",
+					"value": 0
+				}
+			]
 		},
 		"12": {
-			"label": "Reporting Interval For Dimming Level",
-			"description": "0 for no reports",
-			"unit": "10 ms",
+			"label": "Dimming Level Reporting Interval",
 			"valueSize": 1,
+			"unit": "10 ms",
 			"minValue": 0,
 			"maxValue": 255,
 			"defaultValue": 10,
 			"unsigned": true,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"options": [
+				{
+					"label": "Disable",
+					"value": 0
+				}
+			]
 		},
 		"13": {
 			"label": "External Switch Type",
@@ -224,16 +204,14 @@
 			"maxValue": 1,
 			"defaultValue": 0,
 			"unsigned": true,
-			"readOnly": false,
-			"writeOnly": false,
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "Button (Momentary buttons)",
+					"label": "Momentary",
 					"value": 0
 				},
 				{
-					"label": "Toogle (2-state switches)",
+					"label": "Switch",
 					"value": 1
 				}
 			]
@@ -245,127 +223,115 @@
 			"maxValue": 4,
 			"defaultValue": 0,
 			"unsigned": true,
-			"readOnly": false,
-			"writeOnly": false,
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "Function disabled",
+					"label": "Disable",
 					"value": 0
 				},
 				{
-					"label": "External switch wired to S1",
+					"label": "External switch (S1)",
 					"value": 1
 				},
 				{
-					"label": "External switch wired to S2",
+					"label": "External switch (S2)",
 					"value": 2
 				},
 				{
-					"label": "Switches wired to S1 and S2, each control both dimming directions",
+					"label": "Switches S1/S2 - each control both dimming directions",
 					"value": 3
 				},
 				{
-					"label": "Switches wired to S1 and S2, S1 for up, S2 for down",
+					"label": "Switches S1/S2 - S1 -> up; S2 -> down",
 					"value": 4
 				}
 			]
 		},
 		"15[0x01]": {
-			"label": "Energy Meter Report Watts",
+			"label": "Energy Meter Report (Watts)",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 1,
 			"defaultValue": 0,
 			"unsigned": true,
-			"readOnly": false,
-			"writeOnly": false,
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "Disabled",
+					"label": "Disable",
 					"value": 0
 				},
 				{
-					"label": "Enabled",
+					"label": "Enable",
 					"value": 1
 				}
 			]
 		},
 		"15[0x02]": {
-			"label": "Energy Meter Report kWh",
+			"label": "Energy Meter Report (kWh)",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 1,
 			"defaultValue": 0,
 			"unsigned": true,
-			"readOnly": false,
-			"writeOnly": false,
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "Disabled",
+					"label": "Disable",
 					"value": 0
 				},
 				{
-					"label": "Enabled",
+					"label": "Enable",
 					"value": 1
 				}
 			]
 		},
 		"15[0x04]": {
-			"label": "Energy Meter Report Amps",
+			"label": "Energy Meter Report (Amps)",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 1,
 			"defaultValue": 0,
 			"unsigned": true,
-			"readOnly": false,
-			"writeOnly": false,
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "Disabled",
+					"label": "Disable",
 					"value": 0
 				},
 				{
-					"label": "Enabled",
+					"label": "Enable",
 					"value": 1
 				}
 			]
 		},
 		"15[0x08]": {
-			"label": "Energy Meter Report Voltage",
+			"label": "Energy Meter Report (Voltage)",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 1,
 			"defaultValue": 0,
 			"unsigned": true,
-			"readOnly": false,
-			"writeOnly": false,
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "Disabled",
+					"label": "Disable",
 					"value": 0
 				},
 				{
-					"label": "Enabled",
+					"label": "Enable",
 					"value": 1
 				}
 			]
 		},
 		"16": {
 			"label": "Energy Meter Report Interval",
-			"unit": "seconds",
+
 			"valueSize": 2,
+			"unit": "seconds",
 			"minValue": 0,
 			"maxValue": 32768,
 			"defaultValue": 16,
-			"unsigned": true,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"unsigned": true
 		},
 		"17": {
 			"label": "Beep",
@@ -374,136 +340,122 @@
 			"maxValue": 1,
 			"defaultValue": 1,
 			"unsigned": true,
-			"readOnly": false,
-			"writeOnly": false,
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "Disabled",
+					"label": "Disable",
 					"value": 0
 				},
 				{
-					"label": "Enabled",
+					"label": "Enable",
 					"value": 1
 				}
 			]
 		},
 		"32": {
-			"label": "Ampere Alarm Threshold",
-			"unit": "0.01 A",
+			"label": "Alarm Threshold: Current",
+
 			"valueSize": 2,
+			"unit": "0.01 A",
 			"minValue": 1,
 			"maxValue": 5000,
 			"defaultValue": 0,
-			"unsigned": true,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"unsigned": true
 		},
 		"33": {
-			"label": "Voltage Alarm Threshold",
-			"unit": "0.1 V",
+			"label": "Alarm Threshold: Voltage",
+
 			"valueSize": 2,
+			"unit": "0.1 V",
 			"minValue": 1,
 			"maxValue": 10000,
 			"defaultValue": 0,
-			"unsigned": true,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"unsigned": true
 		},
 		"34": {
-			"label": "Wattage Alarm Threshold",
-			"unit": "0.1 W",
+			"label": "Alarm Threshold: Wattage",
+
 			"valueSize": 2,
+			"unit": "0.1 W",
 			"minValue": 1,
 			"maxValue": 3000,
 			"defaultValue": 2000,
-			"unsigned": true,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
-		},
-		"35": {
-			"label": "Time Before Overload Shutoff",
-			"unit": "seconds",
-			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 255,
-			"defaultValue": 20,
-			"unsigned": true,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"unsigned": true
 		},
 		"36": {
-			"label": "Shutoff When Overloaded",
-			"unit": "seconds",
+			"label": "Overload Shutoff",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 1,
 			"defaultValue": 0,
 			"unsigned": true,
-			"readOnly": false,
-			"writeOnly": false,
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "Disabled",
+					"label": "Disable",
 					"value": 0
 				},
 				{
-					"label": "Enabled",
+					"label": "Enable",
 					"value": 1
 				}
 			]
 		},
+		"35": {
+			"label": "Overload Shutoff Delay",
+			"valueSize": 1,
+			"unit": "seconds",
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 20,
+			"unsigned": true
+		},
 		"64": {
-			"label": "Overloaded Amps Detected",
-			"unit": "0.01 A",
+			"label": "Overload Detected: Amps",
+
 			"valueSize": 2,
+			"unit": "0.01 A",
 			"minValue": 0,
 			"maxValue": 5000,
 			"defaultValue": 0,
 			"unsigned": true,
 			"readOnly": true,
-			"writeOnly": false,
 			"allowManualEntry": false
 		},
 		"65": {
-			"label": "Overloaded Volts Detected",
-			"unit": "0.1 V",
+			"label": "Overload Detected: Volts",
+
 			"valueSize": 2,
+			"unit": "0.1 V",
 			"minValue": 0,
 			"maxValue": 10000,
 			"defaultValue": 0,
 			"unsigned": true,
 			"readOnly": true,
-			"writeOnly": false,
 			"allowManualEntry": false
 		},
 		"66": {
-			"label": "Overloaded Watts Detected",
-			"unit": "0.1 W",
+			"label": "Overload Detected: Watts",
+
 			"valueSize": 2,
+			"unit": "0.1 W",
 			"minValue": 0,
 			"maxValue": 3000,
 			"defaultValue": 0,
 			"unsigned": true,
 			"readOnly": true,
-			"writeOnly": false,
 			"allowManualEntry": false
 		},
 		"67": {
-			"label": "Overload Duration",
-			"unit": "seconds",
+			"label": "Overload Detected: Duration",
+
 			"valueSize": 1,
+			"unit": "seconds",
 			"minValue": 0,
 			"maxValue": 255,
 			"defaultValue": 0,
 			"unsigned": true,
 			"readOnly": true,
-			"writeOnly": false,
 			"allowManualEntry": false
 		},
 		"255": {
@@ -513,16 +465,14 @@
 			"maxValue": 85,
 			"defaultValue": 0,
 			"unsigned": true,
-			"readOnly": false,
-			"writeOnly": false,
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "Normal Operation",
+					"label": "Normal operation",
 					"value": 0
 				},
 				{
-					"label": "Reset",
+					"label": "Factory reset",
 					"value": 85
 				}
 			]
