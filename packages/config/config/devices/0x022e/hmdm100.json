@@ -1,5 +1,3 @@
-// Samsung SDS hmdm100
-// Doorlock Control Module for Samsung Locks
 {
 	"manufacturer": "Samsung SDS",
 	"manufacturerId": "0x022e",

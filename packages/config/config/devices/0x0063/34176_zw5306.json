@@ -1,5 +1,3 @@
-// GE/Jasco 34176 / ZW5306
-// 4 Scene Z-Wave controller
 {
 	"manufacturer": "GE/Jasco",
 	"manufacturerId": "0x0063",

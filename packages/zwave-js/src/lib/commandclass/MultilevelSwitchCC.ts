@@ -312,32 +312,74 @@ export class MultilevelSwitchCCAPI extends CCAPI {
 
 			// If the command did not fail, assume that it succeeded and update the currentValue accordingly
 			// so UIs have immediate feedback
-			if (this.isSinglecast() && completed) {
-				// Only update currentValue for valid target values
-				if (
-					!this.driver.options.disableOptimisticValueUpdate &&
-					value >= 0 &&
-					value <= 99
-				) {
-					const valueDB = this.endpoint.getNodeUnsafe()?.valueDB;
-					valueDB?.setValue(
-						getCurrentValueValueId(this.endpoint.index),
-						value,
-					);
-				}
+			if (completed) {
+				if (this.isSinglecast()) {
+					// Only update currentValue for valid target values
+					if (
+						!this.driver.options.disableOptimisticValueUpdate &&
+						value >= 0 &&
+						value <= 99
+					) {
+						const valueDB = this.endpoint.getNodeUnsafe()?.valueDB;
+						valueDB?.setValue(
+							getCurrentValueValueId(this.endpoint.index),
+							value,
+						);
+					}
 
-				// Verify the current value after a delay if the node does not support Supervision
-				if (
-					!this.endpoint
-						.getNodeUnsafe()
-						?.supportsCC(CommandClasses.Supervision)
-				) {
-					// TODO: #1321
-					const duration = undefined as Duration | undefined;
-					// We query currentValue instead of targetValue to make sure that unsolicited updates cancel the scheduled poll
-					// wotan-disable-next-line no-useless-predicate
-					if (property === "targetValue") property = "currentValue";
-					this.schedulePoll({ property }, duration?.toMilliseconds());
+					// Verify the current value after a delay if the node does not support Supervision
+					if (
+						!this.endpoint
+							.getNodeUnsafe()
+							?.supportsCC(CommandClasses.Supervision)
+					) {
+						// TODO: #1321
+						const duration = undefined as Duration | undefined;
+						// We query currentValue instead of targetValue to make sure that unsolicited updates cancel the scheduled poll
+						// wotan-disable-next-line no-useless-predicate
+						if (property === "targetValue")
+							property = "currentValue";
+						this.schedulePoll(
+							{ property },
+							duration?.toMilliseconds(),
+						);
+					}
+				} else if (this.isMulticast()) {
+					// Only update currentValue for valid target values
+					if (
+						!this.driver.options.disableOptimisticValueUpdate &&
+						value >= 0 &&
+						value <= 99
+					) {
+						// Figure out which nodes were affected by this command
+						const affectedNodes = this.endpoint.node.physicalNodes.filter(
+							(node) =>
+								node
+									.getEndpoint(this.endpoint.index)
+									?.supportsCC(this.ccId),
+						);
+						// and optimistically update the currentValue
+						for (const node of affectedNodes) {
+							node.valueDB?.setValue(
+								getCurrentValueValueId(this.endpoint.index),
+								value,
+							);
+						}
+					} else if (value === 255) {
+						// We generally don't want to poll for multicasts because of how much traffic it can cause
+						// However, when setting the value 255 (ON), we don't know the actual state
+
+						// We query currentValue instead of targetValue to make sure that unsolicited updates cancel the scheduled poll
+						// wotan-disable-next-line no-useless-predicate
+						if (property === "targetValue")
+							property = "currentValue";
+						// TODO: #1321
+						const duration = undefined as Duration | undefined;
+						this.schedulePoll(
+							{ property },
+							duration?.toMilliseconds(),
+						);
+					}
 				}
 			}
 		} else if (switchTypeProperties.includes(property as string)) {

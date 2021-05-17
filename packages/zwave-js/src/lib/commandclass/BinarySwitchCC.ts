@@ -144,6 +144,24 @@ export class BinarySwitchCCAPI extends CCAPI {
 			// wotan-disable-next-line no-useless-predicate
 			if (property === "targetValue") property = "currentValue";
 			this.schedulePoll({ property }, duration?.toMilliseconds() ?? 1000);
+		} else if (this.isMulticast()) {
+			if (!this.driver.options.disableOptimisticValueUpdate) {
+				// Figure out which nodes were affected by this command
+				const affectedNodes = this.endpoint.node.physicalNodes.filter(
+					(node) =>
+						node
+							.getEndpoint(this.endpoint.index)
+							?.supportsCC(this.ccId),
+				);
+				// and optimistically update the currentValue
+				for (const node of affectedNodes) {
+					node.valueDB?.setValue(
+						getCurrentValueValueId(this.endpoint.index),
+						value,
+					);
+				}
+			}
+			// For multicasts, do not schedule a refresh - this could cause a LOT of traffic
 		}
 	};
 

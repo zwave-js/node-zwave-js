@@ -1,5 +1,3 @@
-// Yale SD-L1000-CH
-// Conexis L1
 {
 	"manufacturer": "Yale",
 	"manufacturerId": "0x0129",
@@ -69,6 +67,9 @@
 			},
 			{
 				"$import": "templates/yale_template.json#alarm_map_auto_relock"
+			},
+			{
+				"$import": "templates/yale_template.json#alarm_map_rfid_unlock"
 			}
 		]
 	},

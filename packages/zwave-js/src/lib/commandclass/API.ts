@@ -124,17 +124,42 @@ export class CCAPI {
 		property: ValueIDProperties,
 		timeoutMs: number = this.driver.options.timeouts.refreshValue,
 	): boolean {
-		const node = this.endpoint.getNodeUnsafe();
-		if (!node) return false;
+		if (this.isSinglecast()) {
+			const node = this.endpoint.getNodeUnsafe();
+			if (!node) return false;
 
-		return node.schedulePoll(
-			{
-				commandClass: this.ccId,
-				endpoint: this.endpoint.index,
-				...property,
-			},
-			timeoutMs,
-		);
+			return node.schedulePoll(
+				{
+					commandClass: this.ccId,
+					endpoint: this.endpoint.index,
+					...property,
+				},
+				timeoutMs,
+			);
+		} else if (this.isMulticast()) {
+			// Only poll supporting nodes in multicast
+			const supportingNodes = this.endpoint.node.physicalNodes.filter(
+				(node) =>
+					node
+						.getEndpoint(this.endpoint.index)
+						?.supportsCC(this.ccId),
+			);
+			let ret = false;
+			for (const node of supportingNodes) {
+				ret ||= node.schedulePoll(
+					{
+						commandClass: this.ccId,
+						endpoint: this.endpoint.index,
+						...property,
+					},
+					timeoutMs,
+				);
+			}
+			return ret;
+		} else {
+			// Don't poll the broadcast node
+			return false;
+		}
 	}
 
 	/**

@@ -1,5 +1,3 @@
-// Honeywell 39357 / ZW3004
-// Z-Wave in-wall Smart Dimmer
 {
 	"manufacturer": "Honeywell",
 	"manufacturerId": "0x0039",
