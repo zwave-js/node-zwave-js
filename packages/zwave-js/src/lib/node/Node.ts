@@ -119,9 +119,10 @@ import {
 	GetNodeProtocolInfoRequest,
 	GetNodeProtocolInfoResponse,
 } from "../controller/GetNodeProtocolInfoMessages";
-import type { Driver } from "../driver/Driver";
+import type { Driver, SendCommandOptions } from "../driver/Driver";
 import { Extended, interpretEx } from "../driver/StateMachineShared";
 import type { Transaction } from "../driver/Transaction";
+import { MessagePriority } from "../message/Constants";
 import { DeviceClass } from "./DeviceClass";
 import { Endpoint } from "./Endpoint";
 import {
@@ -797,6 +798,7 @@ export class ZWaveNode extends Endpoint {
 	// wotan-disable-next-line no-misused-generics
 	public pollValue<T extends unknown = unknown>(
 		valueId: ValueID,
+		sendCommandOptions: SendCommandOptions = {},
 	): Promise<T | undefined> {
 		// Try to retrieve the corresponding CC API
 		const endpointInstance = this.getEndpoint(valueId.endpoint || 0);
@@ -807,9 +809,15 @@ export class ZWaveNode extends Endpoint {
 			);
 		}
 
-		const api = (endpointInstance.commandClasses as any)[
+		const api = ((endpointInstance.commandClasses as any)[
 			valueId.commandClass
-		] as CCAPI;
+		] as CCAPI).withOptions({
+			// We do not want to delay more important communication by polling, so give it
+			// the lowest priority and don't retry unless overwritten by the options
+			maxSendAttempts: 1,
+			priority: MessagePriority.Poll,
+			...sendCommandOptions,
+		});
 
 		// Check if the pollValue method is implemented
 		if (!api.pollValue) {
@@ -845,9 +853,14 @@ export class ZWaveNode extends Endpoint {
 		const endpointInstance = this.getEndpoint(valueId.endpoint || 0);
 		if (!endpointInstance) return false;
 
-		const api = (endpointInstance.commandClasses as any)[
+		const api = ((endpointInstance.commandClasses as any)[
 			valueId.commandClass
-		] as CCAPI;
+		] as CCAPI).withOptions({
+			// We do not want to delay more important communication by polling, so give it
+			// the lowest priority and don't retry unless overwritten by the options
+			maxSendAttempts: 1,
+			priority: MessagePriority.Poll,
+		});
 
 		// Check if the pollValue method is implemented
 		if (!api.pollValue) return false;
