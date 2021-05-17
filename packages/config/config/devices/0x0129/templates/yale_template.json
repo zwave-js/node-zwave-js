@@ -400,5 +400,17 @@
 			"notificationType": 6, // Access Control
 			"notificationEvent": 9 // Auto lock locked operation
 		}
+	},
+	"alarm_map_rfid_unlock": {
+		"from": {
+			"alarmType": 144
+		},
+		"to": {
+			"notificationType": 6, // Access Control
+			"notificationEvent": 6, // Keypad unlock operation
+			"eventParameters": {
+				"userId": "alarmLevel"
+			}
+		}
 	}
 }
