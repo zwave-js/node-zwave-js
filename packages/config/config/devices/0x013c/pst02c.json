@@ -97,7 +97,6 @@
 		},
 		"5[0x10]": {
 			"label": "Illumination report on trigger",
-			"description": "Disable the illumination report after event triggered",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 1,
@@ -115,7 +114,6 @@
 		},
 		"5[0x20]": {
 			"label": "Temperature report on trigger",
-			"description": "Disable the temperature report after event triggered",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 1,
@@ -216,7 +214,7 @@
 					"value": 1
 				},
 				{
-					"label": "Disable",
+					"label": "Enable",
 					"value": 0
 				}
 			]
