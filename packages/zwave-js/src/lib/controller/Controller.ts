@@ -3096,7 +3096,7 @@ ${associatedNodes.join(", ")}`,
 		const ret = Buffer.allocUnsafe(size);
 		let offset = 0;
 		// Try reading the maximum size at first, the Serial API will return chunks in a size it supports
-		// TODO: use Serial API SERIAL_API_SETUP_CMD_TX_GET_MAX_PAYLOAD_SIZE to figure this out
+		// For some reason, there is no documentation and no official command for this
 		let chunkSize: number = Math.min(0xffff, ret.length);
 		while (offset < ret.length) {
 			const chunk = await this.externalNVMReadBuffer(
