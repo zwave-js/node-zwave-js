@@ -1,5 +1,3 @@
-// McoHome Technology Co., Ltd. MH-S411
-// Touch Panel Switch 1 Button
 {
 	"manufacturer": "McoHome Technology Co., Ltd.",
 	"manufacturerId": "0x015f",
@@ -34,8 +32,6 @@
 			"maxValue": 1,
 			"defaultValue": 1,
 			"unsigned": true,
-			"readOnly": false,
-			"writeOnly": false,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -55,8 +51,6 @@
 			"maxValue": 255,
 			"defaultValue": 255,
 			"unsigned": true,
-			"readOnly": false,
-			"writeOnly": false,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -83,10 +77,7 @@
 			"minValue": 0,
 			"maxValue": 10,
 			"defaultValue": 10,
-			"unsigned": true,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"unsigned": true
 		},
 		"5": {
 			"label": "Button Mode",
@@ -95,8 +86,6 @@
 			"maxValue": 4,
 			"defaultValue": 0,
 			"unsigned": true,
-			"readOnly": false,
-			"writeOnly": false,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -129,10 +118,7 @@
 			"minValue": 0,
 			"maxValue": 65535,
 			"defaultValue": 0,
-			"unsigned": true,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"unsigned": true
 		},
 		"8": {
 			"label": "Basic CC Mode",
@@ -141,8 +127,6 @@
 			"maxValue": 3,
 			"defaultValue": 0,
 			"unsigned": true,
-			"readOnly": false,
-			"writeOnly": false,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -170,9 +154,6 @@
 			"maxValue": 1,
 			"defaultValue": 0,
 			"unsigned": true,
-			"readOnly": false,
-			"unsigned": true,
-			"writeOnly": false,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -192,8 +173,6 @@
 			"maxValue": 3,
 			"defaultValue": 0,
 			"unsigned": true,
-			"readOnly": false,
-			"writeOnly": false,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -220,10 +199,7 @@
 			"minValue": 1,
 			"maxValue": 255,
 			"defaultValue": 1,
-			"unsigned": true,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"unsigned": true
 		},
 		"13": {
 			"label": "Button 1 Activate Scene Dim Duration",
@@ -232,10 +208,7 @@
 			"minValue": 0,
 			"maxValue": 255,
 			"defaultValue": 0,
-			"unsigned": true,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"unsigned": true
 		},
 		"255": {
 			"label": "Factory Reset",
@@ -244,8 +217,6 @@
 			"maxValue": 85,
 			"defaultValue": 0,
 			"unsigned": true,
-			"readOnly": false,
-			"writeOnly": false,
 			"allowManualEntry": false,
 			"options": [
 				{

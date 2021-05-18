@@ -33,10 +33,7 @@
 		"unit": "1 ms",
 		"minValue": 1,
 		"maxValue": 1000,
-		"defaultValue": 400,
-		"readOnly": false,
-		"writeOnly": false,
-		"allowManualEntry": true
+		"defaultValue": 400
 	},
 	"button_held_threshold_time": {
 		"label": "Button Held Threshold Time",
@@ -44,10 +41,7 @@
 		"unit": "1 ms",
 		"minValue": 1,
 		"maxValue": 5000,
-		"defaultValue": 600,
-		"readOnly": false,
-		"writeOnly": false,
-		"allowManualEntry": true
+		"defaultValue": 600
 	},
 	"led_indicator_zba7140": {
 		"label": "LED Mode",
@@ -56,8 +50,6 @@
 		"maxValue": 2,
 		"defaultValue": 0,
 		"unsigned": true,
-		"readOnly": false,
-		"writeOnly": false,
 		"allowManualEntry": false,
 		"options": [
 			{
@@ -81,8 +73,6 @@
 		"maxValue": 3,
 		"defaultValue": 0,
 		"unsigned": true,
-		"readOnly": false,
-		"writeOnly": false,
 		"allowManualEntry": false,
 		"options": [
 			{
@@ -116,8 +106,6 @@
 		"maxValue": 2,
 		"defaultValue": 0,
 		"unsigned": true,
-		"readOnly": false,
-		"writeOnly": false,
 		"allowManualEntry": false,
 		"options": [
 			{
@@ -152,8 +140,6 @@
 		"maxValue": 2,
 		"defaultValue": 1,
 		"unsigned": true,
-		"readOnly": false,
-		"writeOnly": false,
 		"allowManualEntry": false,
 		"options": [
 			{
@@ -232,8 +218,6 @@
 		"maxValue": 2,
 		"defaultValue": 0,
 		"unsigned": true,
-		"readOnly": false,
-		"writeOnly": false,
 		"allowManualEntry": false,
 		"options": [
 			{
@@ -256,8 +240,6 @@
 		"maxValue": 4,
 		"defaultValue": 0,
 		"unsigned": true,
-		"readOnly": false,
-		"writeOnly": false,
 		"allowManualEntry": false,
 		"options": [
 			{
@@ -350,8 +332,6 @@
 		"minValue": 0,
 		"maxValue": 5,
 		"defaultValue": 1,
-		"readOnly": false,
-		"writeOnly": false,
 		"allowManualEntry": false,
 		"options": [
 			{
@@ -387,10 +367,7 @@
 		"minValue": 0,
 		"maxValue": 6,
 		"defaultValue": 3,
-		"unsigned": true,
-		"readOnly": false,
-		"writeOnly": false,
-		"allowManualEntry": true
+		"unsigned": true
 	},
 	"input_precision": {
 		//number of decimal points
@@ -399,10 +376,7 @@
 		"minValue": 0,
 		"maxValue": 7,
 		"defaultValue": 0,
-		"unsigned": true,
-		"readOnly": false,
-		"writeOnly": false,
-		"allowManualEntry": true
+		"unsigned": true
 	},
 	"pulse_unit": {
 		"label": "Input 5: Pulses Per Unit",
@@ -410,10 +384,7 @@
 		"minValue": 0,
 		"maxValue": 65000,
 		"defaultValue": 1,
-		"unsigned": true,
-		"readOnly": false,
-		"writeOnly": false,
-		"allowManualEntry": true
+		"unsigned": true
 	},
 	"rate_type": {
 		"label": "Input: Rate Type",
@@ -422,8 +393,6 @@
 		"maxValue": 2,
 		"defaultValue": 1,
 		"unsigned": true,
-		"readOnly": false,
-		"writeOnly": false,
 		"allowManualEntry": false,
 		"options": [
 			{
@@ -447,10 +416,7 @@
 		"minValue": 0,
 		"maxValue": 8640,
 		"defaultValue": 90,
-		"unsigned": true,
-		"readOnly": false,
-		"writeOnly": false,
-		"allowManualEntry": true
+		"unsigned": true
 	},
 	"led_brightness": {
 		"$import": "../../templates/master_template.json#base_0-99_nounit",
@@ -473,10 +439,7 @@
 		"minValue": 0,
 		"maxValue": 8640,
 		"defaultValue": 6,
-		"unsigned": true,
-		"readOnly": false,
-		"writeOnly": false,
-		"allowManualEntry": true
+		"unsigned": true
 	},
 	"input_function_setup": {
 		"label": "Input: Function",
@@ -485,9 +448,6 @@
 		"maxValue": 6,
 		"defaultValue": 3,
 		"unsigned": true,
-		"readOnly": false,
-		"writeOnly": false,
-		"allowManualEntry": true,
 		"options": [
 			{
 				"label": "Level-controlled, NO",
@@ -551,10 +511,7 @@
 		"minValue": 0,
 		"maxValue": 500,
 		"defaultValue": 50,
-		"unsigned": true,
-		"readOnly": false,
-		"writeOnly": false,
-		"allowManualEntry": true
+		"unsigned": true
 	},
 	"power_overload_limit": {
 		"label": "Power Overload Limit",
@@ -563,10 +520,7 @@
 		"minValue": 0,
 		"maxValue": 3000,
 		"defaultValue": 2900,
-		"unsigned": true,
-		"readOnly": false,
-		"writeOnly": false,
-		"allowManualEntry": true
+		"unsigned": true
 	},
 	"led_power_consumption_mode": {
 		"label": "LED Mode",
@@ -574,8 +528,6 @@
 		"minValue": 0,
 		"maxValue": 2,
 		"defaultValue": 0,
-		"readOnly": false,
-		"writeOnly": false,
 		"allowManualEntry": false,
 		"options": [
 			{

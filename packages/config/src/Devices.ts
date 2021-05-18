@@ -18,7 +18,12 @@ import { CompatConfig } from "./CompatConfig";
 import { readJsonWithTemplate } from "./JsonTemplate";
 import type { ConfigLogger } from "./Logger";
 import { evaluate } from "./Logic";
-import { configDir, hexKeyRegex4Digits, throwInvalidConfig } from "./utils";
+import {
+	configDir,
+	externalConfigDir,
+	hexKeyRegex4Digits,
+	throwInvalidConfig,
+} from "./utils";
 
 export interface FirmwareVersionRange {
 	min: string;
@@ -61,13 +66,22 @@ export type ParamInfoMap = ReadonlyObjectKeyMap<
 	ParamInformation
 >;
 
-export const devicesDir = path.join(configDir, "devices");
-export const indexPath = path.join(devicesDir, "index.json");
-export const fulltextIndexPath = path.join(devicesDir, "fulltext_index.json");
+const embeddedDevicesDir = path.join(configDir, "devices");
+const fulltextIndexPath = path.join(embeddedDevicesDir, "fulltext_index.json");
+
+function getDevicesPaths(
+	configDir: string,
+): { devicesDir: string; indexPath: string } {
+	const devicesDir = path.join(configDir, "devices");
+	const indexPath = path.join(devicesDir, "index.json");
+	return { devicesDir, indexPath };
+}
+
 export type DeviceConfigIndex = DeviceConfigIndexEntry[];
 export type FulltextDeviceConfigIndex = FulltextDeviceConfigIndexEntry[];
 
 async function hasChangedDeviceFiles(
+	devicesRoot: string,
 	dir: string,
 	lastChange: Date,
 ): Promise<boolean> {
@@ -79,14 +93,15 @@ async function hasChangedDeviceFiles(
 
 		const stat = await fs.stat(fullPath);
 		if (
-			(dir !== devicesDir || f !== "index.json") &&
+			(dir !== devicesRoot || f !== "index.json") &&
 			(stat.isFile() || stat.isDirectory()) &&
 			stat.mtime > lastChange
 		) {
 			return true;
 		} else if (stat.isDirectory()) {
 			// we need to go deeper!
-			if (await hasChangedDeviceFiles(fullPath, lastChange)) return true;
+			if (await hasChangedDeviceFiles(devicesRoot, fullPath, lastChange))
+				return true;
 		}
 	}
 	return false;
@@ -146,6 +161,7 @@ async function generateIndex<T extends Record<string, unknown>>(
 }
 
 async function loadDeviceIndexShared<T extends Record<string, unknown>>(
+	devicesDir: string,
 	indexPath: string,
 	extractIndexEntries: (config: DeviceConfig) => T[],
 	logger?: ConfigLogger,
@@ -179,7 +195,11 @@ async function loadDeviceIndexShared<T extends Record<string, unknown>>(
 
 	// ...or if there were any changes in the file system
 	if (!needsUpdate) {
-		needsUpdate = await hasChangedDeviceFiles(devicesDir, mtimeIndex!);
+		needsUpdate = await hasChangedDeviceFiles(
+			devicesDir,
+			devicesDir,
+			mtimeIndex!,
+		);
 		if (needsUpdate) {
 			logger?.print(
 				"Device configuration files on disk changed - regenerating index...",
@@ -254,8 +274,14 @@ export async function generatePriorityDeviceIndex(
  */
 export async function loadDeviceIndexInternal(
 	logger?: ConfigLogger,
+	externalConfig?: boolean,
 ): Promise<DeviceConfigIndex> {
+	const { devicesDir, indexPath } = getDevicesPaths(
+		(externalConfig && externalConfigDir) || configDir,
+	);
+
 	return loadDeviceIndexShared(
+		devicesDir,
 		indexPath,
 		(config) =>
 			config.devices.map((dev) => ({
@@ -278,8 +304,10 @@ export async function loadDeviceIndexInternal(
 export async function loadFulltextDeviceIndexInternal(
 	logger?: ConfigLogger,
 ): Promise<FulltextDeviceConfigIndex> {
+	// This method is not meant to operate with the external device index!
 	return loadDeviceIndexShared(
-		indexPath,
+		embeddedDevicesDir,
+		fulltextIndexPath,
 		(config) =>
 			config.devices.map((dev) => ({
 				manufacturerId: formatId(config.manufacturerId.toString(16)),
@@ -396,6 +424,33 @@ firmwareVersion is malformed or invalid`,
 		} else {
 			const { min, max } = definition.firmwareVersion;
 			this.firmwareVersion = { min, max };
+		}
+
+		if (definition.endpoints != undefined) {
+			const endpoints = new Map<number, ConditionalEndpointConfig>();
+			if (!isObject(definition.endpoints)) {
+				throwInvalidConfig(
+					`device`,
+					`packages/config/config/devices/${filename}:
+endpoints is not an object`,
+				);
+			}
+			for (const [key, ep] of entries(definition.endpoints)) {
+				if (!/^\d+$/.test(key)) {
+					throwInvalidConfig(
+						`device`,
+						`packages/config/config/devices/${filename}:
+found non-numeric endpoint index "${key}" in endpoints`,
+					);
+				}
+
+				const epIndex = parseInt(key, 10);
+				endpoints.set(
+					epIndex,
+					new ConditionalEndpointConfig(filename, epIndex, ep),
+				);
+			}
+			this.endpoints = endpoints;
 		}
 
 		if (definition.associations != undefined) {
@@ -552,6 +607,7 @@ metadata is not an object`,
 		productId: number;
 	}[];
 	public readonly firmwareVersion: FirmwareVersionRange;
+	public readonly endpoints?: ReadonlyMap<number, ConditionalEndpointConfig>;
 	public readonly associations?: ReadonlyMap<
 		number,
 		ConditionalAssociationConfig
@@ -574,6 +630,15 @@ metadata is not an object`,
 			for (const [group, assoc] of this.associations) {
 				const evaluated = assoc.evaluateCondition(deviceId);
 				if (evaluated) associations.set(group, evaluated);
+			}
+		}
+
+		let endpoints: Map<number, EndpointConfig> | undefined;
+		if (this.endpoints) {
+			endpoints = new Map();
+			for (const [group, assoc] of this.endpoints) {
+				const evaluated = assoc.evaluateCondition(deviceId);
+				if (evaluated) endpoints.set(group, evaluated);
 			}
 		}
 
@@ -602,6 +667,7 @@ metadata is not an object`,
 			this.description,
 			this.devices,
 			this.firmwareVersion,
+			endpoints,
 			associations,
 			paramInformation,
 			this.proprietary,
@@ -634,6 +700,7 @@ export class DeviceConfig {
 			productId: number;
 		}[],
 		public readonly firmwareVersion: FirmwareVersionRange,
+		public readonly endpoints?: ReadonlyMap<number, EndpointConfig>,
 		public readonly associations?: ReadonlyMap<number, AssociationConfig>,
 		public readonly paramInformation?: ParamInfoMap,
 		/**
@@ -648,13 +715,107 @@ export class DeviceConfig {
 	) {
 		// A config file is treated as am embedded one when it is located under the devices root dir
 		this.isEmbedded = !path
-			.relative(devicesDir, this.filename)
+			.relative(embeddedDevicesDir, this.filename)
 			.startsWith("..");
 	}
 
 	/** Whether this is an embedded configuration or not */
 	public readonly isEmbedded: boolean;
 }
+
+export class ConditionalEndpointConfig {
+	public constructor(
+		filename: string,
+		index: number,
+		definition: JSONObject,
+	) {
+		this.index = index;
+
+		if (definition.$if != undefined && typeof definition.$if !== "string") {
+			throwInvalidConfig(
+				"devices",
+				`packages/config/config/devices/${filename}:
+Endpoint ${index} has a non-string $if condition`,
+			);
+		}
+		this.condition = definition.$if;
+
+		if (definition.associations != undefined) {
+			const associations = new Map<
+				number,
+				ConditionalAssociationConfig
+			>();
+			if (!isObject(definition.associations)) {
+				throwInvalidConfig(
+					`device`,
+					`packages/config/config/devices/${filename}:
+Endpoint ${index}: associations is not an object`,
+				);
+			}
+			for (const [key, assocDefinition] of entries(
+				definition.associations,
+			)) {
+				if (!/^[1-9][0-9]*$/.test(key)) {
+					throwInvalidConfig(
+						`device`,
+						`packages/config/config/devices/${filename}:
+Endpoint ${index}: found non-numeric group id "${key}" in associations`,
+					);
+				}
+
+				const keyNum = parseInt(key, 10);
+				associations.set(
+					keyNum,
+					new ConditionalAssociationConfig(
+						filename,
+						keyNum,
+						assocDefinition,
+					),
+				);
+			}
+			this.associations = associations;
+		}
+	}
+
+	public readonly index: number;
+	public readonly condition?: string;
+
+	public readonly associations?: ReadonlyMap<
+		number,
+		ConditionalAssociationConfig
+	>;
+
+	public evaluateCondition(deviceId?: DeviceID): EndpointConfig | undefined {
+		if (
+			deviceId &&
+			this.condition &&
+			!conditionApplies(this.condition, deviceId)
+		) {
+			return;
+		}
+
+		let associations: Map<number, AssociationConfig> | undefined;
+		if (this.associations) {
+			associations = new Map();
+			for (const [group, assoc] of this.associations) {
+				const evaluated = assoc.evaluateCondition(deviceId);
+				if (evaluated) associations.set(group, evaluated);
+			}
+		}
+
+		return {
+			...pick(this, ["index"]),
+			associations,
+		};
+	}
+}
+
+export type EndpointConfig = Omit<
+	ConditionalEndpointConfig,
+	"condition" | "evaluateCondition" | "associations"
+> & {
+	associations: Map<number, AssociationConfig> | undefined;
+};
 
 export class ConditionalAssociationConfig {
 	public constructor(
@@ -705,27 +866,28 @@ maxNodes for association ${groupId} is not a number`,
 
 		if (
 			definition.isLifeline != undefined &&
-			definition.isLifeline !== true
+			typeof definition.isLifeline !== "boolean"
 		) {
 			throwInvalidConfig(
 				"devices",
 				`packages/config/config/devices/${filename}:
-isLifeline in association ${groupId} must be either true or left out`,
+isLifeline in association ${groupId} must be a boolean`,
 			);
 		}
 		this.isLifeline = !!definition.isLifeline;
 
 		if (
-			definition.noEndpoint != undefined &&
-			definition.noEndpoint !== true
+			definition.multiChannel != undefined &&
+			definition.multiChannel !== false
 		) {
 			throwInvalidConfig(
 				"devices",
 				`packages/config/config/devices/${filename}:
-noEndpoint in association ${groupId} must be either true or left out`,
+multiChannel in association ${groupId} must be either false or left out`,
 			);
 		}
-		this.noEndpoint = !!definition.noEndpoint;
+		// Default to multi channel associations
+		this.multiChannel = definition.multiChannel ?? true;
 	}
 
 	public readonly condition?: string;
@@ -740,7 +902,7 @@ noEndpoint in association ${groupId} must be either true or left out`,
 	 */
 	public readonly isLifeline: boolean;
 	/** Some devices support multi channel associations but require some of its groups to use node id associations */
-	public readonly noEndpoint: boolean;
+	public readonly multiChannel: boolean;
 
 	public evaluateCondition(
 		deviceId?: DeviceID,
@@ -759,7 +921,7 @@ noEndpoint in association ${groupId} must be either true or left out`,
 			"description",
 			"maxNodes",
 			"isLifeline",
-			"noEndpoint",
+			"multiChannel",
 		]);
 	}
 }
@@ -856,20 +1018,23 @@ Parameter #${parameterNumber} has a non-string unit`,
 		}
 		this.unit = definition.unit;
 
-		if (typeof definition.readOnly !== "boolean") {
+		if (definition.readOnly != undefined && definition.readOnly !== true) {
 			throwInvalidConfig(
 				"devices",
 				`packages/config/config/devices/${parent.filename}:
-Parameter #${parameterNumber}: readOnly must be a boolean!`,
+		Parameter #${parameterNumber}: readOnly must true or omitted!`,
 			);
 		}
 		this.readOnly = definition.readOnly;
 
-		if (typeof definition.writeOnly !== "boolean") {
+		if (
+			definition.writeOnly != undefined &&
+			definition.writeOnly !== true
+		) {
 			throwInvalidConfig(
 				"devices",
 				`packages/config/config/devices/${parent.filename}:
-Parameter #${parameterNumber}: writeOnly must be a boolean!`,
+		Parameter #${parameterNumber}: writeOnly must be true or omitted!`,
 			);
 		}
 		this.writeOnly = definition.writeOnly;
@@ -891,14 +1056,19 @@ Parameter #${parameterNumber} has a non-numeric property defaultValue`,
 		}
 		this.defaultValue = definition.defaultValue;
 
-		if (typeof definition.allowManualEntry !== "boolean") {
+		if (
+			definition.allowManualEntry != undefined &&
+			definition.allowManualEntry !== false
+		) {
 			throwInvalidConfig(
 				"devices",
 				`packages/config/config/devices/${parent.filename}:
-Parameter #${parameterNumber}: allowManualEntry must be a boolean!`,
+Parameter #${parameterNumber}: allowManualEntry must be false or omitted!`,
 			);
 		}
-		this.allowManualEntry = definition.allowManualEntry;
+		// Default to allowing manual entry, except if the param is readonly
+		this.allowManualEntry =
+			definition.allowManualEntry ?? (this.readOnly ? false : true);
 
 		if (
 			isArray(definition.options) &&
@@ -933,8 +1103,8 @@ Parameter #${parameterNumber}: options is malformed!`,
 	public readonly unsigned?: boolean;
 	public readonly defaultValue: number;
 	public readonly unit?: string;
-	public readonly readOnly: boolean;
-	public readonly writeOnly: boolean;
+	public readonly readOnly?: true;
+	public readonly writeOnly?: true;
 	public readonly allowManualEntry: boolean;
 	public readonly options: readonly ConditionalConfigOption[];
 

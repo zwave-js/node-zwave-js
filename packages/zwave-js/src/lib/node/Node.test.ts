@@ -24,10 +24,6 @@ import {
 	GetNodeProtocolInfoRequest,
 	GetNodeProtocolInfoResponse,
 } from "../controller/GetNodeProtocolInfoMessages";
-import {
-	GetRoutingInfoRequest,
-	GetRoutingInfoResponse,
-} from "../controller/GetRoutingInfoMessages";
 import { SendDataRequest } from "../controller/SendDataMessages";
 import type { Driver } from "../driver/Driver";
 import { assertCC } from "../test/assertCC";
@@ -471,37 +467,37 @@ describe("lib/node/Node", () => {
 		// 	it.todo("Test the behavior when the request succeeds");
 		// });
 
-		describe(`queryNeighbors()`, () => {
-			let expected: GetRoutingInfoResponse;
+		// describe(`queryNeighbors()`, () => {
+		// 	let expected: GetRoutingInfoResponse;
 
-			beforeAll(() => {
-				fakeDriver.sendMessage.mockClear();
+		// 	beforeAll(() => {
+		// 		fakeDriver.sendMessage.mockClear();
 
-				expected = {
-					nodeIds: [1, 4, 5],
-				} as GetRoutingInfoResponse;
-				fakeDriver.sendMessage.mockResolvedValue(expected);
-			});
+		// 		expected = {
+		// 			nodeIds: [1, 4, 5],
+		// 		} as GetRoutingInfoResponse;
+		// 		fakeDriver.sendMessage.mockResolvedValue(expected);
+		// 	});
 
-			it("should send a GetRoutingInfoRequest", async () => {
-				await node["queryNeighbors"]();
+		// 	it("should send a GetRoutingInfoRequest", async () => {
+		// 		await node["queryNeighbors"]();
 
-				expect(fakeDriver.sendMessage).toBeCalled();
-				const request: GetRoutingInfoRequest =
-					fakeDriver.sendMessage.mock.calls[0][0];
-				expect(request).toBeInstanceOf(GetRoutingInfoRequest);
-				expect(request.nodeId).toBe(node.id);
-			});
+		// 		expect(fakeDriver.sendMessage).toBeCalled();
+		// 		const request: GetRoutingInfoRequest =
+		// 			fakeDriver.sendMessage.mock.calls[0][0];
+		// 		expect(request).toBeInstanceOf(GetRoutingInfoRequest);
+		// 		expect(request.sourceNodeId).toBe(node.id);
+		// 	});
 
-			it("should remember the neighbor list", async () => {
-				await node["queryNeighbors"]();
-				expect(node.neighbors).toContainAllValues(expected.nodeIds);
-			});
+		// 	it("should remember the neighbor list", async () => {
+		// 		await node["queryNeighbors"]();
+		// 		expect(node.neighbors).toContainAllValues(expected.nodeIds);
+		// 	});
 
-			it("should set the interview stage to Neighbors", () => {
-				expect(node.interviewStage).toBe(InterviewStage.Neighbors);
-			});
-		});
+		// 	it("should set the interview stage to Neighbors", () => {
+		// 		expect(node.interviewStage).toBe(InterviewStage.Neighbors);
+		// 	});
+		// });
 
 		describe("interview sequence", () => {
 			let originalMethods: Partial<Record<keyof TestNode, any>>;

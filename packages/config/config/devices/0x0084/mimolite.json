@@ -1,5 +1,3 @@
-// FortrezZ LLC MIMOlite
-// Digital or Analog Voltage input and/or Dry Contact Relay
 {
 	"manufacturer": "FortrezZ LLC",
 	"manufacturerId": "0x0084",
@@ -68,8 +66,6 @@
 			"maxValue": 0,
 			"defaultValue": 0,
 			"unsigned": true,
-			"readOnly": false,
-			"writeOnly": false,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -86,8 +82,6 @@
 			"maxValue": 1,
 			"defaultValue": 0,
 			"unsigned": true,
-			"readOnly": false,
-			"writeOnly": false,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -107,9 +101,6 @@
 			"maxValue": 255,
 			"defaultValue": 187,
 			"unsigned": true,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true,
 			"options": [
 				{
 					"label": "Default (0xBB)",
@@ -124,9 +115,6 @@
 			"maxValue": 255,
 			"defaultValue": 171,
 			"unsigned": true,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true,
 			"options": [
 				{
 					"label": "Default (0xAB)",
@@ -141,9 +129,6 @@
 			"maxValue": 255,
 			"defaultValue": 255,
 			"unsigned": true,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true,
 			"options": [
 				{
 					"label": "Default (0xFF)",
@@ -158,9 +143,6 @@
 			"maxValue": 255,
 			"defaultValue": 254,
 			"unsigned": true,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true,
 			"options": [
 				{
 					"label": "Default (0xFE)",
@@ -175,8 +157,6 @@
 			"maxValue": 3,
 			"defaultValue": 3,
 			"unsigned": true,
-			"readOnly": false,
-			"writeOnly": false,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -204,8 +184,6 @@
 			"maxValue": 3,
 			"defaultValue": 3,
 			"unsigned": true,
-			"readOnly": false,
-			"writeOnly": false,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -226,9 +204,6 @@
 			"maxValue": 255,
 			"defaultValue": 0,
 			"unsigned": true,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true,
 			"options": [
 				{
 					"label": "Disabled",

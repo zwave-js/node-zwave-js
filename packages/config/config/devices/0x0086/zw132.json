@@ -1,5 +1,3 @@
-// AEON Labs ZW132
-// Dual Nano Switch with Energy Metering
 {
 	"manufacturer": "AEON Labs",
 	"manufacturerId": "0x0086",
@@ -37,7 +35,7 @@
 			"maxNodes": 5,
 			"isLifeline": true,
 			// The device does not like Endpoint Associations for the lifeline
-			"noEndpoint": true
+			"multiChannel": false
 		},
 		"2": {
 			"label": "Forward Received Commands",

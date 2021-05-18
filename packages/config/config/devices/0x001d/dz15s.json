@@ -1,5 +1,3 @@
-// Leviton DZ15S
-// Scene Capable Push On/Off
 {
 	"manufacturer": "Leviton",
 	"manufacturerId": "0x001d",
@@ -24,8 +22,6 @@
 			"maxValue": 255,
 			"defaultValue": 255,
 			"unsigned": true,
-			"readOnly": false,
-			"writeOnly": false,
 			"allowManualEntry": false,
 			"options": [
 				{

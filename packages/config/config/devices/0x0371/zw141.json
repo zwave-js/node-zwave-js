@@ -1,0 +1,377 @@
+{
+	"manufacturer": "Aeotec Ltd.",
+	"manufacturerId": "0x0371",
+	"label": "ZW141",
+	"description": "Nano Shutter V.3",
+	"devices": [
+		{
+			"productType": "0x0003",
+			"productId": "0x008d",
+			"zwaveAllianceId": [3693, 3742]
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"paramInformation": {
+		"20": {
+			"$import": "../templates/master_template.json#state_after_power_failure",
+			"options": [
+				{
+					"label": "Current position",
+					"value": 0
+				},
+				{
+					"label": "Open",
+					"value": 1
+				},
+				{
+					"label": "Close",
+					"value": 2
+				}
+			]
+		},
+		"22": {
+			"label": "Motor Run Direction",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 3,
+			"defaultValue": 0,
+			"unsigned": true,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Shutter / Venetian Mode (Output 1 - Up; Output 2 - Down)",
+					"value": 0
+				},
+				{
+					"label": "Shutter (Output 1 - Down; Output 2 - Up); Venetian (Output 1 - Up; Output 2 - Down)",
+					"value": 1
+				},
+				{
+					"label": "Shutter (Output 1 - Up; Output 2 - Down); Venetian (Output 1 - Down; Output 2 - Up)",
+					"value": 2
+				},
+				{
+					"label": "Shutter / Venetian Mode (Output 1 - Down; Output 2 - Up)",
+					"value": 3
+				}
+			]
+		},
+		"34": {
+			"label": "Blade Turn Time",
+			"valueSize": 2,
+			"unit": "0.1 seconds",
+			"minValue": 10,
+			"maxValue": 32767,
+			"defaultValue": 150,
+			"unsigned": true
+		},
+		"35": {
+			"label": "Curtain Trip Time",
+			"valueSize": 2,
+			"unit": "0.1 seconds",
+			"minValue": 500,
+			"maxValue": 32767,
+			"defaultValue": 15000,
+			"unsigned": true
+		},
+		"36": {
+			"label": "Enter/Exit Calibration",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 2,
+			"defaultValue": 0,
+			"unsigned": true,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Exit calibration",
+					"value": 0
+				},
+				{
+					"label": "Enter shutter mode calibration",
+					"value": 1
+				},
+				{
+					"label": "Enter venetian mode calibration",
+					"value": 2
+				}
+			]
+		},
+		"37": {
+			"label": "User Confirmation For Calibration",
+			"valueSize": 1,
+			"minValue": 1,
+			"maxValue": 1,
+			"defaultValue": 1,
+			"unsigned": true,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Confirm - Go to next step",
+					"value": 1
+				}
+			]
+		},
+		"38": {
+			"label": "Calibration Status",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 5,
+			"defaultValue": 0,
+			"unsigned": true,
+			"readOnly": true,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Calibration complete",
+					"value": 0
+				},
+				{
+					"label": "Calibrating - Going to reference point a",
+					"value": 1
+				},
+				{
+					"label": "Calibrating - Going to reference point b",
+					"value": 2
+				},
+				{
+					"label": "Calibrating - Waiting for blade turn calibraion (venetian mode)",
+					"value": 3
+				},
+				{
+					"label": "Calibrating - Going to reference point c (venetian mode)",
+					"value": 4
+				},
+				{
+					"label": "Calibration terminated",
+					"value": 5
+				}
+			]
+		},
+		"39": {
+			"label": "Curtain Type",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 0,
+			"unsigned": true,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Shutter",
+					"value": 0
+				},
+				{
+					"label": "Venetian",
+					"value": 1
+				}
+			]
+		},
+		"40": {
+			"label": "Inititiate Repositioning",
+			"valueSize": 1,
+			"minValue": 1,
+			"maxValue": 1,
+			"defaultValue": 1,
+			"unsigned": true,
+			"writeOnly": true,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Begin repositioning",
+					"value": 1
+				}
+			]
+		},
+		"41": {
+			"label": "Repositioning Status",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 0,
+			"unsigned": true,
+			"readOnly": true,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Complete",
+					"value": 0
+				},
+				{
+					"label": "Repositioning",
+					"value": 1
+				}
+			]
+		},
+		"42": {
+			"label": "Calibration Lock",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 2,
+			"defaultValue": 1,
+			"unsigned": true,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Disable calibration",
+					"value": 0
+				},
+				{
+					"label": "Enable action button/command calibration",
+					"value": 1
+				},
+				{
+					"label": "Enable action button/command/S1/S2 calibration",
+					"value": 2
+				}
+			]
+		},
+		"80": {
+			"$import": "../0x0086/templates/aeotec_template.json#notification_report_type",
+			"label": "Command Report Type",
+			"options": [
+				{
+					"label": "Disable",
+					"value": 0
+				},
+				{
+					"label": "Basic CC Report",
+					"value": 1
+				},
+				{
+					"label": "MultiLevel Switch CC Report",
+					"value": 2
+				}
+			]
+		},
+		"85": {
+			"label": "External Button Mode",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 2,
+			"defaultValue": 0,
+			"unsigned": true,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Map S1/S2 to Z-Wave Button",
+					"value": 0
+				},
+				{
+					"label": "S1 -> Open; S2 -> Close",
+					"value": 1
+				},
+				{
+					"label": "(Push Button) - Blind actions; (Other types) S1 -> Open, S2 -> Close",
+					"value": 2
+				}
+			]
+		},
+		"120": {
+			"label": "Switch S1 Type",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 4,
+			"defaultValue": 0,
+			"unsigned": true,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Unidentified",
+					"value": 0
+				},
+				{
+					"label": "2-state switch",
+					"value": 1
+				},
+				{
+					"label": "3-way switch",
+					"value": 2
+				},
+				{
+					"label": "Push button",
+					"value": 3
+				},
+				{
+					"label": "Enter automatic identification mode",
+					"value": 4
+				}
+			]
+		},
+		"121": {
+			"label": "Switch S2 Type",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 4,
+			"defaultValue": 0,
+			"unsigned": true,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Unidentified",
+					"value": 0
+				},
+				{
+					"label": "2-state switch",
+					"value": 1
+				},
+				{
+					"label": "3-way switch",
+					"value": 2
+				},
+				{
+					"label": "Push button",
+					"value": 3
+				},
+				{
+					"label": "Enter automatic identification mode",
+					"value": 4
+				}
+			]
+		},
+		"243": {
+			"label": "Device Specific Key",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 0,
+			"defaultValue": 0,
+			"unsigned": true,
+			"readOnly": true
+		},
+		"248": {
+			"label": "External Switch: Network/Reset Functions",
+			"valueSize": 1,
+			"minValue": 1,
+			"maxValue": 3,
+			"defaultValue": 1,
+			"unsigned": true,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Enable network function (inclusion/exclusion)",
+					"value": 1
+				},
+				{
+					"label": "Enable reset to factory default function",
+					"value": 2
+				},
+				{
+					"label": "Enable both functions",
+					"value": 3
+				}
+			]
+		},
+		"255": {
+			"$import": "../0x0086/templates/aeotec_template.json#factory_reset_exclude"
+		}
+	},
+	"metadata": {
+		"inclusion": "3.5.2 Classic inclusion Learn Mode\n1. Set your Z-Wave Controller into its 'Add Device' mode in order to add the product into your Z-Wave system. Refer to the Controller's manual if you are unsure of how to perform this step.\n2. Make sure the product is powered. If not, plug it into a wall socket and power on; its LED will be breathing blue light all the time.\n3. Click Action Button once, it will quickly flash blue light for 30 seconds until it is added into the network. It will become constantly bright yellow light after being assigned a NodeID.\n4. If your Z-Wave Controller supports S2 encryption, enter the first 5 digits of DSK into your Controller's interface if/when requested. The DSK is printed on its housing.\n5. If Adding fails, it will bright red light for 2s and then become breathing blue light; repeat steps 1 to 4. Contact us for further support if needed.\n6. If Adding succeeds, it will bright blue light for 2s and then turn to Load Indicator Mode. Now, this product is a part of your Z-Wave home control system. You can configure it and its automations via your Z-Wave system; please refer to your software's user guide for precise instructions",
+		"exclusion": "3.6 How to Remove the device from Z-Wave network\n1. Set your Z-Wave Controller into its 'Remove Device' mode in order to remove the product from your Z-Wave system.Refer to the Controller's manual if you are unsure of how to perform this step.\n2. Click Action Button/S1/S2(external switch need to be identified first) 6 times will enter exclusion mode.\n3. If Removing fails, it will bright red light for 2s then turn back to Regular Light Mode, repeat steps 1-2. Contact us for further support if needed.\n4. If Removing succeeds, it will become breathing blue light. Now, it is removed from Z-Wave network successfully",
+		"reset": "3.7 How to Factory Reset\nManually, press and hold the Action Button for at least 20s and then release. The LED indicator will become breathing blue light, which indicates the reset operation is successful. Otherwise, please try again. Contact us for further support if needed.\nNote:\n1. This procedure should only be used when the primary controller is missing or inoperable.\n2. Factory Reset will:\na) Remove the product from Z-Wave network;\nb) Delete the Association setting;",
+		"manual": "https://products.z-wavealliance.org/ProductManual/File?folder=&filename=product_documents/3693/Nano%20Shutter%20-%20Product%20Manual.pdf"
+	}
+}

@@ -57,13 +57,8 @@ export enum SceneActivationCommand {
 @API(CommandClasses["Scene Activation"])
 export class SceneActivationCCAPI extends CCAPI {
 	public supportsCommand(_cmd: SceneActivationCommand): Maybe<boolean> {
-		// There is only one command
+		// There is only one mandatory command
 		return true;
-		// switch (cmd) {
-		// 	case SceneActivationCommand.Set:
-		// 		return true; // This is mandatory
-		// }
-		// return super.supportsCommand(cmd);
 	}
 
 	protected [SET_VALUE]: SetValueImplementation = async (
@@ -79,9 +74,13 @@ export class SceneActivationCCAPI extends CCAPI {
 		await this.set(value);
 	};
 
+	/**
+	 * Activates the Scene with the given ID
+	 * @param duration The duration specifying how long the transition should take. Can be a Duration instance or a user-friendly duration string like `"1m17s"`.
+	 */
 	public async set(
 		sceneId: number,
-		dimmingDuration?: Duration,
+		dimmingDuration?: Duration | string,
 	): Promise<void> {
 		this.assertSupportsCommand(
 			SceneActivationCommand,
@@ -92,7 +91,7 @@ export class SceneActivationCCAPI extends CCAPI {
 			nodeId: this.endpoint.nodeId,
 			endpoint: this.endpoint.index,
 			sceneId,
-			dimmingDuration,
+			dimmingDuration: Duration.from(dimmingDuration),
 		});
 		await this.driver.sendCommand(cc, this.commandOptions);
 	}

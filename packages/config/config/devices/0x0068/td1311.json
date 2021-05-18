@@ -1,5 +1,3 @@
-// Good Way Technology Co., Ltd. TD1311
-// In wall Power Monitor Switch
 {
 	"manufacturer": "Good Way Technology Co., Ltd.",
 	"manufacturerId": "0x0068",
@@ -22,10 +20,7 @@
 			"valueSize": 2,
 			"minValue": 5,
 			"maxValue": 1092,
-			"defaultValue": 30,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"defaultValue": 30
 		}
 	}
 }

@@ -1,5 +1,3 @@
-// Domitech Products, LLC DTA19
-// Smart LED Light
 {
 	"manufacturer": "Domitech Products, LLC",
 	"manufacturerId": "0x020e",
@@ -37,8 +35,6 @@
 			"minValue": 0,
 			"maxValue": 1,
 			"defaultValue": 0,
-			"readOnly": false,
-			"writeOnly": false,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -57,20 +53,14 @@
 			"valueSize": 1,
 			"minValue": 1,
 			"maxValue": 99,
-			"defaultValue": 1,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"defaultValue": 1
 		},
 		"10": {
 			"label": "Dimming / brightening step timing",
 			"valueSize": 1,
 			"minValue": 1,
 			"maxValue": 10,
-			"defaultValue": 3,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"defaultValue": 3
 		}
 	}
 }

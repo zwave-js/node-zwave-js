@@ -1,5 +1,3 @@
-// D-Link DCH-Z310
-// Smoke Detector
 {
 	"manufacturer": "D-Link",
 	"manufacturerId": "0x0108",
@@ -25,8 +23,6 @@
 			"minValue": 0,
 			"maxValue": 127,
 			"defaultValue": 4,
-			"readOnly": false,
-			"writeOnly": false,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -46,10 +42,7 @@
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 127,
-			"defaultValue": 12,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"defaultValue": 12
 		}
 	},
 	"metadata": {

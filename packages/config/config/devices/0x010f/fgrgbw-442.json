@@ -1,5 +1,3 @@
-// Fibargroup FGRGBW-442
-// RGBW CONTROLLER 2
 {
 	"manufacturer": "Fibargroup",
 	"manufacturerId": "0x010f",
@@ -35,8 +33,6 @@
 			"minValue": 0,
 			"maxValue": 1,
 			"defaultValue": 0,
-			"readOnly": false,
-			"writeOnly": false,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -55,8 +51,6 @@
 			"minValue": 0,
 			"maxValue": 4,
 			"defaultValue": 2,
-			"readOnly": false,
-			"writeOnly": false,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -87,8 +81,6 @@
 			"minValue": 0,
 			"maxValue": 4,
 			"defaultValue": 2,
-			"readOnly": false,
-			"writeOnly": false,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -119,8 +111,6 @@
 			"minValue": 0,
 			"maxValue": 4,
 			"defaultValue": 2,
-			"readOnly": false,
-			"writeOnly": false,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -151,8 +141,6 @@
 			"minValue": 0,
 			"maxValue": 4,
 			"defaultValue": 2,
-			"readOnly": false,
-			"writeOnly": false,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -182,40 +170,28 @@
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 15,
-			"defaultValue": 15,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"defaultValue": 15
 		},
 		"41": {
 			"label": "Input 2 - sent scenes",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 15,
-			"defaultValue": 15,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"defaultValue": 15
 		},
 		"42": {
 			"label": "Input 3 - sent scenes",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 15,
-			"defaultValue": 15,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"defaultValue": 15
 		},
 		"43": {
 			"label": "Input 4 - sent scenes",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 15,
-			"defaultValue": 15,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"defaultValue": 15
 		},
 		"62": {
 			"label": "Power reports - periodic",
@@ -223,20 +199,14 @@
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 32400,
-			"defaultValue": 3600,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"defaultValue": 3600
 		},
 		"63": {
 			"label": "Analog inputs output change on input change",
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 100,
-			"defaultValue": 5,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"defaultValue": 5
 		},
 		"64": {
 			"label": "Analog inputs reports - periodic",
@@ -244,20 +214,14 @@
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 32400,
-			"defaultValue": 0,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"defaultValue": 0
 		},
 		"65": {
 			"label": "Energy reports - on change",
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 500,
-			"defaultValue": 10,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"defaultValue": 10
 		},
 		"66": {
 			"label": "Energy reports - periodic",
@@ -265,10 +229,7 @@
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 32400,
-			"defaultValue": 3600,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"defaultValue": 3600
 		},
 		"150": {
 			"label": "Inputs - LED colour control mode",
@@ -276,8 +237,6 @@
 			"minValue": 0,
 			"maxValue": 1,
 			"defaultValue": 0,
-			"readOnly": false,
-			"writeOnly": false,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -296,10 +255,7 @@
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 254,
-			"defaultValue": 3,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"defaultValue": 3
 		},
 		"152": {
 			"label": "Remote control - transition time",
@@ -307,10 +263,7 @@
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 254,
-			"defaultValue": 3,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"defaultValue": 3
 		},
 		"157": {
 			"label": "Start programmed sequence",
@@ -318,8 +271,6 @@
 			"minValue": 0,
 			"maxValue": 10,
 			"defaultValue": 0,
-			"readOnly": false,
-			"writeOnly": false,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -373,50 +324,35 @@
 			"valueSize": 4,
 			"minValue": 0,
 			"maxValue": 255,
-			"defaultValue": 0,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"defaultValue": 0
 		},
 		"31": {
 			"label": "Alarm configuration - 2nd slot",
 			"valueSize": 4,
 			"minValue": 0,
 			"maxValue": 255,
-			"defaultValue": 0,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"defaultValue": 0
 		},
 		"32": {
 			"label": "Alarm configuration - 3rd slot",
 			"valueSize": 4,
 			"minValue": 0,
 			"maxValue": 255,
-			"defaultValue": 0,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"defaultValue": 0
 		},
 		"33": {
 			"label": "Alarm configuration - 4th slot",
 			"valueSize": 4,
 			"minValue": 0,
 			"maxValue": 255,
-			"defaultValue": 0,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"defaultValue": 0
 		},
 		"34": {
 			"label": "Alarm configuration - 5th slot",
 			"valueSize": 4,
 			"minValue": 0,
 			"maxValue": 255,
-			"defaultValue": 0,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"defaultValue": 0
 		},
 		"35": {
 			"label": "Duration of alarm signalization",
@@ -425,9 +361,6 @@
 			"minValue": 0,
 			"maxValue": 32400,
 			"defaultValue": 600,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true,
 			"options": [
 				{
 					"label": "infinite signalization",
@@ -440,120 +373,84 @@
 			"valueSize": 4,
 			"minValue": 0,
 			"maxValue": 255,
-			"defaultValue": 255,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"defaultValue": 255
 		},
 		"154[0xff00]": {
 			"label": "ON frame value for single click IN2",
 			"valueSize": 4,
 			"minValue": 0,
 			"maxValue": 255,
-			"defaultValue": 255,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"defaultValue": 255
 		},
 		"154[0xff0000]": {
 			"label": "ON frame value for single click IN3",
 			"valueSize": 4,
 			"minValue": 0,
 			"maxValue": 255,
-			"defaultValue": 255,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"defaultValue": 255
 		},
 		"154[0xff000000]": {
 			"label": "ON frame value for single click IN4",
 			"valueSize": 4,
 			"minValue": 0,
 			"maxValue": 255,
-			"defaultValue": 255,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"defaultValue": 255
 		},
 		"155[0xff]": {
 			"label": "OFF frame value for single click IN1",
 			"valueSize": 4,
 			"minValue": 0,
 			"maxValue": 255,
-			"defaultValue": 255,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"defaultValue": 255
 		},
 		"155[0xff00]": {
 			"label": "OFF frame value for single click IN2",
 			"valueSize": 4,
 			"minValue": 0,
 			"maxValue": 255,
-			"defaultValue": 255,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"defaultValue": 255
 		},
 		"155[0xff0000]": {
 			"label": "OFF frame value for single click IN3",
 			"valueSize": 4,
 			"minValue": 0,
 			"maxValue": 255,
-			"defaultValue": 255,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"defaultValue": 255
 		},
 		"155[0xff000000]": {
 			"label": "OFF frame value for single click IN4",
 			"valueSize": 4,
 			"minValue": 0,
 			"maxValue": 255,
-			"defaultValue": 255,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"defaultValue": 255
 		},
 		"156[0xff]": {
 			"label": "ON frame value for double click IN1",
 			"valueSize": 4,
 			"minValue": 0,
 			"maxValue": 255,
-			"defaultValue": 255,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"defaultValue": 255
 		},
 		"156[0xff00]": {
 			"label": "ON frame value for double click IN2",
 			"valueSize": 4,
 			"minValue": 0,
 			"maxValue": 255,
-			"defaultValue": 255,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"defaultValue": 255
 		},
 		"156[0xff0000]": {
 			"label": "ON frame value for double click IN3",
 			"valueSize": 4,
 			"minValue": 0,
 			"maxValue": 255,
-			"defaultValue": 255,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"defaultValue": 255
 		},
 		"156[0xff000000]": {
 			"label": "ON frame value for double click IN4",
 			"valueSize": 4,
 			"minValue": 0,
 			"maxValue": 255,
-			"defaultValue": 255,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"defaultValue": 255
 		}
 	}
 }

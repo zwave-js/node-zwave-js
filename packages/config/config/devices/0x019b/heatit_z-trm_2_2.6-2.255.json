@@ -1,5 +1,3 @@
-// ThermoFloor Heatit Z-TRM 2
-// Floor thermostat
 {
 	"manufacturer": "ThermoFloor",
 	"manufacturerId": "0x019b",
@@ -23,8 +21,6 @@
 			"minValue": 0,
 			"maxValue": 11,
 			"defaultValue": 0,
-			"readOnly": false,
-			"writeOnly": false,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -51,8 +47,6 @@
 			"minValue": 0,
 			"maxValue": 5,
 			"defaultValue": 1,
-			"readOnly": false,
-			"writeOnly": false,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -87,8 +81,6 @@
 			"minValue": 0,
 			"maxValue": 5,
 			"defaultValue": 0,
-			"readOnly": false,
-			"writeOnly": false,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -122,10 +114,7 @@
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 30,
-			"defaultValue": 5,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"defaultValue": 5
 		},
 		"5": {
 			"label": "Floor minimum temperature limit (FLo)",
@@ -133,10 +122,7 @@
 			"valueSize": 2,
 			"minValue": 50,
 			"maxValue": 400,
-			"defaultValue": 50,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"defaultValue": 50
 		},
 		"6": {
 			"label": "Floor maximum temperature (FHi)",
@@ -144,10 +130,7 @@
 			"valueSize": 2,
 			"minValue": 50,
 			"maxValue": 400,
-			"defaultValue": 400,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"defaultValue": 400
 		},
 		"7": {
 			"label": "Air minimum temperature limit (ALo)",
@@ -155,10 +138,7 @@
 			"valueSize": 2,
 			"minValue": 50,
 			"maxValue": 400,
-			"defaultValue": 50,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"defaultValue": 50
 		},
 		"8": {
 			"label": "Air maximum temperature limit (AHi)",
@@ -166,20 +146,14 @@
 			"valueSize": 2,
 			"minValue": 50,
 			"maxValue": 400,
-			"defaultValue": 400,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"defaultValue": 400
 		},
 		"9": {
 			"label": "FP mode P setting (PLo)",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 9,
-			"defaultValue": 0,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"defaultValue": 0
 		},
 		"10": {
 			"label": "Heating mode setpoint (CO)",
@@ -187,10 +161,7 @@
 			"valueSize": 2,
 			"minValue": 50,
 			"maxValue": 400,
-			"defaultValue": 210,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"defaultValue": 210
 		},
 		"11": {
 			"label": "Energy saving mode setpoint (ECO)",
@@ -198,10 +169,7 @@
 			"valueSize": 2,
 			"minValue": 50,
 			"maxValue": 400,
-			"defaultValue": 180,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"defaultValue": 180
 		},
 		"12": {
 			"label": "P setting",
@@ -209,10 +177,7 @@
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 10,
-			"defaultValue": 2,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"defaultValue": 2
 		},
 		"13": {
 			"label": "Cooling setpoint (COOL)",
@@ -220,10 +185,7 @@
 			"valueSize": 2,
 			"minValue": 50,
 			"maxValue": 400,
-			"defaultValue": 210,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"defaultValue": 210
 		},
 		"14": {
 			"label": "Room sensor calibration",
@@ -231,10 +193,7 @@
 			"valueSize": 1,
 			"minValue": -40,
 			"maxValue": 40,
-			"defaultValue": 0,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"defaultValue": 0
 		},
 		"15": {
 			"label": "Floor sensor calibration",
@@ -242,10 +201,7 @@
 			"valueSize": 1,
 			"minValue": -40,
 			"maxValue": 40,
-			"defaultValue": 0,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"defaultValue": 0
 		},
 		"16": {
 			"label": "External sensor calibration",
@@ -253,10 +209,7 @@
 			"valueSize": 1,
 			"minValue": -40,
 			"maxValue": 40,
-			"defaultValue": 0,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"defaultValue": 0
 		},
 		"17": {
 			"label": "Temperature display",
@@ -264,8 +217,6 @@
 			"minValue": 0,
 			"maxValue": 1,
 			"defaultValue": 0,
-			"readOnly": false,
-			"writeOnly": false,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -284,10 +235,7 @@
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 100,
-			"defaultValue": 50,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"defaultValue": 50
 		},
 		"19": {
 			"label": "Button brightness - active state",
@@ -295,10 +243,7 @@
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 100,
-			"defaultValue": 100,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"defaultValue": 100
 		},
 		"20": {
 			"label": "Display brightness - dimmed state",
@@ -306,10 +251,7 @@
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 100,
-			"defaultValue": 50,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"defaultValue": 50
 		},
 		"21": {
 			"label": "Display brightness - active state",
@@ -317,10 +259,7 @@
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 100,
-			"defaultValue": 100,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"defaultValue": 100
 		},
 		"22": {
 			"label": "Temperature report interval",
@@ -328,10 +267,7 @@
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 32767,
-			"defaultValue": 60,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"defaultValue": 60
 		},
 		"23": {
 			"label": "Temperature report hysteresis",
@@ -339,10 +275,7 @@
 			"valueSize": 1,
 			"minValue": 1,
 			"maxValue": 100,
-			"defaultValue": 10,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"defaultValue": 10
 		},
 		"24": {
 			"label": "Meter report interval",
@@ -350,10 +283,7 @@
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 32767,
-			"defaultValue": 60,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"defaultValue": 60
 		},
 		"25": {
 			"label": "Meter report delta value",
@@ -362,10 +292,7 @@
 			"minValue": 0,
 			"maxValue": 255,
 			"defaultValue": 10,
-			"unsigned": true,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"unsigned": true
 		}
 	}
 }

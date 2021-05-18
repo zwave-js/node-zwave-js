@@ -1,5 +1,3 @@
-// Inovelli LZW40
-// Smart Bulb
 {
 	"manufacturer": "Inovelli",
 	"manufacturerId": "0x031e",
@@ -24,8 +22,6 @@
 			"maxValue": 1,
 			"defaultValue": 0,
 			"unsigned": true,
-			"readOnly": false,
-			"writeOnly": false,
 			"allowManualEntry": false,
 			"options": [
 				{

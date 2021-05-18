@@ -1,5 +1,3 @@
-// Reitz-Group.de ZW ESJ 300
-// Duwi ZW ESJ 300 Blind Control
 {
 	"manufacturer": "Reitz-Group.de",
 	"manufacturerId": "0x0064",
@@ -23,10 +21,7 @@
 			"minValue": 0,
 			"maxValue": 255,
 			"defaultValue": 0,
-			"unsigned": true,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"unsigned": true
 		},
 		"1": {
 			"label": "Stop-functionality",
@@ -34,8 +29,6 @@
 			"minValue": 0,
 			"maxValue": 1,
 			"defaultValue": 1,
-			"readOnly": false,
-			"writeOnly": false,
 			"allowManualEntry": false,
 			"options": [
 				{

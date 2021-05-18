@@ -1,5 +1,7 @@
 # Entry Control CC
 
+?> CommandClass ID: `0x6f`
+
 ## Entry Control CC methods
 
 ### `getSupportedKeys`

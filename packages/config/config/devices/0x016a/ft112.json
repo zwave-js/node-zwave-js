@@ -1,5 +1,3 @@
-// Fantem FT112
-// Door/Window Sensor 6
 {
 	"manufacturer": "Fantem",
 	"manufacturerId": "0x016a",
@@ -9,103 +7,63 @@
 		{
 			"productType": "0x0002",
 			"productId": "0x0070"
+		},
+		{
+			"productType": "0x0202",
+			"productId": "0x004a"
+		},
+		{
+			"productType": "0x0202",
+			"productId": "0x0070",
+			"zwaveAllianceId": 1616
+		},
+		{
+			"productType": "0x1d02",
+			"productId": "0x0070",
+			"zwaveAllianceId": 2653
 		}
 	],
 	"firmwareVersion": {
 		"min": "0.0",
 		"max": "255.255"
 	},
-	"supportsZWavePlus": true,
+	"associations": {
+		"1": {
+			"label": "Lifeline",
+			"maxNodes": 5,
+			"isLifeline": true
+		}
+	},
+	// Fantem is an OEM for Aeotec
 	"paramInformation": {
 		"1": {
-			"label": "Value that will be sent on open/close events",
-			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 1,
-			"defaultValue": 0,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "On for opened, Off for closed",
-					"value": 0
-				},
-				{
-					"label": "Off for opened On for Closed",
-					"value": 1
-				}
-			]
+			"$import": "../0x0086/templates/aeotec_template.json#invert_state_report"
 		},
 		"39": {
-			"label": "Low battery threshold (10% to 50%)",
-			"description": "The value the sensor will use to determine a low battery level",
-			"valueSize": 1,
-			"minValue": 10,
-			"maxValue": 50,
-			"defaultValue": 20,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"$import": "../0x0086/templates/aeotec_template.json#low_battery_threshold",
+			"defaultValue": 20
+		},
+		"101": {
+			"$import": "../templates/master_template.json#base_enable_disable",
+			"label": "Enable/Disable The Function of Parameter 111"
+		},
+		"111": {
+			"$import": "../0x0086/templates/aeotec_template.json#low_battery_interval"
 		},
 		"121": {
-			"label": "Reporting mode on open/close event",
-			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 3,
-			"defaultValue": 1,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "Send nothing",
-					"value": 0
-				},
-				{
-					"label": "Send Basic Set CC",
-					"value": 1
-				},
-				{
-					"label": "Send Sensor Binary Report CC",
-					"value": 2
-				},
-				{
-					"label": "Send Basic Set CC and Sensor Binary Report CC",
-					"value": 3
-				}
-			]
+			"$import": "../0x0086/templates/aeotec_template.json#binary_report_type"
 		},
 		"252": {
-			"label": "Lock/Unlock all configuration parameters",
-			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 1,
-			"defaultValue": 0,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "Unlock",
-					"value": 0
-				},
-				{
-					"label": "Lock",
-					"value": 1
-				}
-			]
+			"$import": "../0x0086/templates/aeotec_template.json#lock_configuration"
 		},
 		"255": {
-			"label": "Reset sensor",
-			"description": "Reset sensor to factory default and remove from network",
-			"valueSize": 4,
-			"minValue": 0,
-			"maxValue": 2147483647,
-			"defaultValue": 1,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"$import": "../0x0086/templates/aeotec_template.json#factory_reset_exclude"
 		}
+	},
+	"metadata": {
+		"inclusion": "Turn the primary controller of Z-Wave network into inclusion mode, short press the product’s Action Button that you can find in the back of the product",
+		"exclusion": "Turn the primary controller of Z-Wave network into exclusion mode, short press the product’s Action Button that you can find in back of the product",
+		"reset": "Press the Action Button once that you can find in back of the product for 20 seconds and then release. This procedure should only be used when the primary controller is inoperable",
+		"manual": "https://products.z-wavealliance.org/ProductManual/File?folder=&filename=MarketCertificationFiles/1616/Door%20Window%20Sensor%206%20manual.pdf"
 	}
 }

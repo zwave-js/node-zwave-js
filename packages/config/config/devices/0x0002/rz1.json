@@ -1,5 +1,3 @@
-// Danfoss RZ1
-// Danfoss Randall - (Single Channel RF Relay Switching Unit)
 {
 	"manufacturer": "Danfoss",
 	"manufacturerId": "0x0002",

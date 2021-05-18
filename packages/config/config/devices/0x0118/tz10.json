@@ -1,5 +1,3 @@
-// TKB Home TZ10
-// Thermostat with LCD Screen
 {
 	"manufacturer": "TKB Home",
 	"manufacturerId": "0x0118",
@@ -24,8 +22,6 @@
 			"minValue": 0,
 			"maxValue": 1,
 			"defaultValue": 1,
-			"readOnly": false,
-			"writeOnly": false,
 			"allowManualEntry": false,
 			"options": [
 				{

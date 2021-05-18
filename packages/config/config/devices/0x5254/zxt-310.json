@@ -1,5 +1,3 @@
-// Remotec ZXT-310
-// AV IR Extender
 {
 	"manufacturer": "Remotec",
 	"manufacturerId": "0x5254",
@@ -33,10 +31,7 @@
 			"minValue": 0,
 			"maxValue": 65280,
 			"defaultValue": 0,
-			"unsigned": true,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"unsigned": true
 		},
 		"22": {
 			"label": "Download Status Register",
@@ -46,7 +41,6 @@
 			"defaultValue": 1,
 			"unsigned": true,
 			"readOnly": true,
-			"writeOnly": false,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -78,10 +72,7 @@
 			"minValue": 0,
 			"maxValue": 65280,
 			"defaultValue": 0,
-			"unsigned": true,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"unsigned": true
 		},
 		"26": {
 			"label": "Learning Status Register",
@@ -91,7 +82,6 @@
 			"defaultValue": 1,
 			"unsigned": true,
 			"readOnly": true,
-			"writeOnly": false,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -122,10 +112,7 @@
 			"minValue": 0,
 			"maxValue": 255,
 			"defaultValue": 255,
-			"unsigned": true,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"unsigned": true
 		},
 		"29": {
 			"label": "IR Port Mapping",
@@ -134,8 +121,6 @@
 			"maxValue": 6,
 			"defaultValue": 1,
 			"unsigned": true,
-			"readOnly": false,
-			"writeOnly": false,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -171,8 +156,6 @@
 			"maxValue": 255,
 			"defaultValue": 0,
 			"unsigned": true,
-			"readOnly": false,
-			"writeOnly": false,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -192,8 +175,6 @@
 			"maxValue": 6,
 			"defaultValue": 1,
 			"unsigned": true,
-			"readOnly": false,
-			"writeOnly": false,
 			"allowManualEntry": false,
 			"options": [
 				{

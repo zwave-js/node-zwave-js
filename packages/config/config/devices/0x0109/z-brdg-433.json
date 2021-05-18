@@ -1,5 +1,3 @@
-// Vision Security Z-BRDG-433
-// Plug in Z-Wave to 433Mhz bridge plus lamp dimmer
 {
 	"manufacturer": "Vision Security",
 	"manufacturerId": "0x0109",

@@ -1,5 +1,7 @@
 # Thermostat Setback CC
 
+?> CommandClass ID: `0x47`
+
 ## Thermostat Setback CC methods
 
 ### `get`

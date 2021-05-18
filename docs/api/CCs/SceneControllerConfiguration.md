@@ -1,5 +1,7 @@
 # Scene Controller Configuration CC
 
+?> CommandClass ID: `0x2d`
+
 ## Scene Controller Configuration CC methods
 
 ### `disable`

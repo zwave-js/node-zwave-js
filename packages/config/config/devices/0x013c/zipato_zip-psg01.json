@@ -1,5 +1,3 @@
-// Philio Technology Corp ZIPATO ZIP-PSG01
-// Daaf Zipato Smoke Sensor
 {
 	"manufacturer": "Philio Technology Corp",
 	"manufacturerId": "0x013c",
@@ -23,8 +21,6 @@
 			"minValue": 0,
 			"maxValue": 16,
 			"defaultValue": 0,
-			"readOnly": false,
-			"writeOnly": false,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -42,10 +38,7 @@
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 127,
-			"defaultValue": 127,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"defaultValue": 127
 		}
 	}
 }

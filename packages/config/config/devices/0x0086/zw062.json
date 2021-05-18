@@ -1,5 +1,3 @@
-// AEON Labs ZW062
-// Aeon Labs Garage Door Controller Gen5
 {
 	"manufacturer": "AEON Labs",
 	"manufacturerId": "0x0086",
@@ -73,7 +71,8 @@
 		"36": {
 			"$import": "../templates/master_template.json#base_0-100_nounit",
 			"label": "Get Current Alarm Music Number",
-			"readOnly": true
+			"readOnly": true,
+			"allowManualEntry": false
 		},
 		"37[0xff]": {
 			"$import": "../templates/master_template.json#base_enable_disable",
@@ -91,10 +90,7 @@
 			"valueSize": 4,
 			"minValue": 1,
 			"maxValue": 4,
-			"defaultValue": 1,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"defaultValue": 1
 		},
 		"37[0xff000000]": {
 			"$import": "../templates/master_template.json#base_1-10_nounit",
@@ -119,10 +115,7 @@
 			"valueSize": 4,
 			"minValue": 1,
 			"maxValue": 4,
-			"defaultValue": 2,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"defaultValue": 2
 		},
 		"38[0xff000000]": {
 			"$import": "../templates/master_template.json#base_1-10_nounit",
@@ -146,10 +139,7 @@
 			"valueSize": 4,
 			"minValue": 1,
 			"maxValue": 4,
-			"defaultValue": 3,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"defaultValue": 3
 		},
 		"39[0xff000000]": {
 			"$import": "../templates/master_template.json#base_1-10_nounit",
@@ -173,10 +163,7 @@
 			"valueSize": 4,
 			"minValue": 1,
 			"maxValue": 4,
-			"defaultValue": 3,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"defaultValue": 3
 		},
 		"40[0xff000000]": {
 			"$import": "../templates/master_template.json#base_1-10_nounit",
@@ -192,8 +179,6 @@
 			"defaultValue": 0,
 			"unsigned": true,
 			"readOnly": true,
-			"writeOnly": false,
-			"allowManualEntry": false,
 			"options": [
 				{
 					"label": "Sensor installed",
@@ -213,8 +198,6 @@
 			"defaultValue": 0,
 			"unsigned": true,
 			"readOnly": true,
-			"writeOnly": false,
-			"allowManualEntry": false,
 			"options": [
 				{
 					"label": "Normal",
@@ -249,9 +232,7 @@
 			"maxValue": 500,
 			"defaultValue": 0,
 			"unsigned": true,
-			"readOnly": true,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"readOnly": true
 		},
 		"47": {
 			"$import": "../templates/master_template.json#base_0-1_nounit",
@@ -288,9 +269,6 @@
 			"maxValue": 1431655681,
 			"defaultValue": 0,
 			"unsigned": true,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true,
 			"options": [
 				{
 					"label": "Stop pairing",

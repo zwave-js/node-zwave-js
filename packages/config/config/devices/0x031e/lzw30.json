@@ -1,5 +1,3 @@
-// Inovelli LZW30
-// Black Series On/Off Switch
 {
 	"manufacturer": "Inovelli",
 	"manufacturerId": "0x031e",
@@ -23,8 +21,6 @@
 			"minValue": 0,
 			"maxValue": 2,
 			"defaultValue": 0,
-			"readOnly": false,
-			"writeOnly": false,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -47,8 +43,6 @@
 			"minValue": 0,
 			"maxValue": 1,
 			"defaultValue": 0,
-			"readOnly": false,
-			"writeOnly": false,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -67,20 +61,14 @@
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 32767,
-			"defaultValue": 0,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"defaultValue": 0
 		},
 		"4": {
 			"label": "Association Behavior",
 			"valueSize": 1,
 			"minValue": 1,
 			"maxValue": 15,
-			"defaultValue": 15,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"defaultValue": 15
 		},
 		"5": {
 			"label": "LED Indicator Color",
@@ -89,9 +77,6 @@
 			"minValue": 0,
 			"maxValue": 255,
 			"defaultValue": 170,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true,
 			"options": [
 				{
 					"label": "Red",
@@ -138,8 +123,6 @@
 			"minValue": 0,
 			"maxValue": 10,
 			"defaultValue": 5,
-			"readOnly": false,
-			"writeOnly": false,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -194,8 +177,6 @@
 			"minValue": 0,
 			"maxValue": 10,
 			"defaultValue": 2,
-			"readOnly": false,
-			"writeOnly": false,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -252,8 +233,6 @@
 			"minValue": 0,
 			"maxValue": 1,
 			"defaultValue": 0,
-			"readOnly": false,
-			"writeOnly": false,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -274,8 +253,6 @@
 			"maxValue": 1,
 			"defaultValue": 1,
 			"unsigned": true,
-			"readOnly": false,
-			"writeOnly": false,
 			"allowManualEntry": false,
 			"options": [
 				{

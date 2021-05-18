@@ -1,0 +1,278 @@
+{
+	"manufacturer": "Ring",
+	"manufacturerId": "0x0346",
+	"label": "4AK1SZ-0EN0",
+	"description": "Ring Keypad v2",
+	"devices": [
+		{
+			"productType": "0x0101",
+			"productId": "0x0301",
+			"zwaveAllianceId": 3870
+		},
+		{
+			"productType": "0x0101",
+			"productId": "0x0401"
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"paramInformation": {
+		"1": {
+			"label": "Heartbeat Interval",
+			"valueSize": 1,
+			"unit": "minutes",
+			"minValue": 1,
+			"maxValue": 70,
+			"defaultValue": 70,
+			"unsigned": true
+		},
+		"2": {
+			"label": "Message Retry Attempt Limit",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 5,
+			"defaultValue": 1,
+			"unsigned": true
+		},
+		"3": {
+			"label": "Delay Between Retry Attempts",
+			"valueSize": 1,
+			"unit": "seconds",
+			"minValue": 1,
+			"maxValue": 60,
+			"defaultValue": 5,
+			"unsigned": true
+		},
+		"4": {
+			"label": "Announcement Audio Volume",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 10,
+			"defaultValue": 7,
+			"unsigned": true
+		},
+		"5": {
+			"label": "Key Tone Volume",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 10,
+			"defaultValue": 6,
+			"unsigned": true
+		},
+		"6": {
+			"label": "Siren Volume",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 10,
+			"defaultValue": 10,
+			"unsigned": true
+		},
+		"7": {
+			"label": "Long Press Duration: Emergency Buttons",
+			"description": "Hold time required to capture a long press",
+			"valueSize": 1,
+			"unit": "seconds",
+			"minValue": 2,
+			"maxValue": 5,
+			"defaultValue": 3,
+			"unsigned": true
+		},
+		"8": {
+			"label": "Long Press Duration: Number Pad",
+			"description": "Hold time required to capture a long press",
+			"valueSize": 1,
+			"unit": "seconds",
+			"minValue": 2,
+			"maxValue": 5,
+			"defaultValue": 3,
+			"unsigned": true
+		},
+		"9": {
+			"label": "Timeout: Proximity Display",
+			"valueSize": 1,
+			"unit": "seconds",
+			"minValue": 0,
+			"maxValue": 30,
+			"defaultValue": 5,
+			"unsigned": true
+		},
+		"10": {
+			"label": "Timeout: Display on Button Press",
+			"valueSize": 1,
+			"unit": "seconds",
+			"minValue": 0,
+			"maxValue": 30,
+			"defaultValue": 5,
+			"unsigned": true
+		},
+		"11": {
+			"label": "Timeout: Display on Status Change",
+			"valueSize": 1,
+			"unit": "seconds",
+			"minValue": 1,
+			"maxValue": 30,
+			"defaultValue": 5,
+			"unsigned": true
+		},
+		"12": {
+			"label": "Brightness: Security Mode",
+			"valueSize": 1,
+			"unit": "%",
+			"minValue": 0,
+			"maxValue": 100,
+			"defaultValue": 100,
+			"unsigned": true
+		},
+		"13": {
+			"label": "Brightness: Key Backlight",
+			"valueSize": 1,
+			"unit": "%",
+			"minValue": 0,
+			"maxValue": 100,
+			"defaultValue": 100,
+			"unsigned": true
+		},
+		"14": {
+			"label": "Key Backlight Ambient Light Sensor Level",
+			"valueSize": 1,
+			"unit": "%",
+			"minValue": 0,
+			"maxValue": 100,
+			"defaultValue": 20,
+			"unsigned": true
+		},
+		"15": {
+			"label": "Proximity Detection",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 1,
+			"unsigned": true,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Disable",
+					"value": 0
+				},
+				{
+					"label": "Enable",
+					"value": 1
+				}
+			]
+		},
+		"16": {
+			"label": "LED Ramp Time",
+			"valueSize": 1,
+			"unit": "seconds",
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 50,
+			"unsigned": true
+		},
+		"17": {
+			"label": "Battery Low Threshold",
+			"valueSize": 1,
+			"unit": "%",
+			"minValue": 0,
+			"maxValue": 100,
+			"defaultValue": 15,
+			"unsigned": true
+		},
+		"19": {
+			"label": "Battery Warning Threshold",
+			"valueSize": 1,
+			"unit": "%",
+			"minValue": 0,
+			"maxValue": 100,
+			"defaultValue": 5,
+			"unsigned": true
+		},
+		"18": {
+			"label": "Keypad Language",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 31,
+			"defaultValue": 30,
+			"unsigned": true,
+			"options": [
+				{
+					"label": "English",
+					"value": 0
+				}
+			]
+		},
+		"20": {
+			"label": "System Security Mode Blink Duration",
+			"valueSize": 1,
+			"minValue": 1,
+			"maxValue": 60,
+			"defaultValue": 2,
+			"unsigned": true
+		},
+		"21": {
+			"label": "Supervision Report Timeout",
+			"valueSize": 2,
+			"unit": "ms",
+			"minValue": 500,
+			"maxValue": 30000,
+			"defaultValue": 10000,
+			"unsigned": true
+		},
+		"22": {
+			"label": "System Security Mode Display",
+			"description": "Allowable range: 1-600",
+			"valueSize": 2,
+			"minValue": 0,
+			"maxValue": 601,
+			"defaultValue": 0,
+			"unsigned": true,
+			"options": [
+				{
+					"label": "Always off",
+					"value": 0
+				},
+				{
+					"label": "Always on",
+					"value": 601
+				}
+			]
+		},
+		"23": {
+			"label": "Languages Supported Report",
+			"description": "This parameter reports a bitmask of supported languages",
+			"valueSize": 4,
+			"minValue": 0,
+			"maxValue": 4294967295,
+			"defaultValue": 37,
+			"unsigned": true,
+			"readOnly": true
+		},
+		"24": {
+			"label": "Calibrate Speaker",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 0,
+			"unsigned": true,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Disable",
+					"value": 0
+				},
+				{
+					"label": "Enable",
+					"value": 1
+				}
+			]
+		}
+	},
+	"metadata": {
+		"inclusion": "After powering on the device, press and hold the #1 button for ~3 seconds. Release the button and the device will enter Classic inclusion mode which implements both classic inclusion with a Node Information Frame, and Network Wide Inclusion. During Classic Inclusion mode, the green Connection LED will blink three times followed by a brief pause, repeatedly. When Classic inclusion times-out, the device will blink alternating red and green a few times",
+		"exclusion": "Exclusion Instructions: \n1. Initiate remove “Ring Alarm Keypad” flow in the Ring Alarm mobile application – Select the settings icon from device details page and choose “Remove Device” to remove the device. This will place the controller into Remove or “Z-Wave Exclusion” mode. \n2. Locate the pinhole reset button on the back of the device. \n3. With the controller in Remove (Z-Wave Exclusion) mode, use a paper clip or similar object and tap the pinhole button. The device’s Connection LED turns on solid red to indicate the device was removed from the network.",
+		"reset": "Factory Default Instructions \n1. To restore Ring Alarm Keypad to factory default settings, locate the pinhole reset button on the device. This is found on the back of the device after removing the back bracket. \n2. Using a paperclip or similar object, insert it into the pinhole, press and hold the button down for 10 seconds. \n3. The device’s Connection icon LED will rapidly blink green continuously for 10 seconds. After about 10 seconds, when the green blinking stops, release the button. The red LED will turn on solid to indicate the device was removed from the network. \n\nNote: Use this procedure only in the event that the network primary controller is missing or otherwise inoperable.",
+		"manual": "https://products.z-wavealliance.org/ProductManual/File?folder=&filename=product_documents/3870/Z-WaveUserManual_Keypad_700.pdf"
+	}
+}

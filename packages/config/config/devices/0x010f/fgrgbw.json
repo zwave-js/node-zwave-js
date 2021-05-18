@@ -1,5 +1,3 @@
-// Fibargroup FGRGBW
-// RGBW Controller
 {
 	"manufacturer": "Fibargroup",
 	"manufacturerId": "0x010f",
@@ -61,8 +59,6 @@
 			"maxValue": 255,
 			"defaultValue": 255,
 			"unsigned": true,
-			"readOnly": false,
-			"writeOnly": false,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -90,8 +86,6 @@
 			"maxValue": 4,
 			"defaultValue": 0,
 			"unsigned": true,
-			"readOnly": false,
-			"writeOnly": false,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -124,8 +118,6 @@
 			"maxValue": 1,
 			"defaultValue": 0,
 			"unsigned": true,
-			"readOnly": false,
-			"writeOnly": false,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -144,10 +136,7 @@
 			"minValue": 1,
 			"maxValue": 255,
 			"defaultValue": 1,
-			"unsigned": true,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"unsigned": true
 		},
 		"10": {
 			"label": "Time between steps (relevant for MODE1)",
@@ -155,10 +144,7 @@
 			"minValue": 0,
 			"maxValue": 60000,
 			"defaultValue": 10,
-			"unsigned": true,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"unsigned": true
 		},
 		"11": {
 			"label": "Time for changing from start to end value",
@@ -167,10 +153,7 @@
 			"minValue": 0,
 			"maxValue": 255,
 			"defaultValue": 67,
-			"unsigned": true,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"unsigned": true
 		},
 		"12": {
 			"label": "Maximum Brightening level",
@@ -178,10 +161,7 @@
 			"minValue": 3,
 			"maxValue": 255,
 			"defaultValue": 255,
-			"unsigned": true,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"unsigned": true
 		},
 		"13": {
 			"label": "Minimum dim level",
@@ -189,10 +169,7 @@
 			"minValue": 2,
 			"maxValue": 255,
 			"defaultValue": 2,
-			"unsigned": true,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"unsigned": true
 		},
 		"14": {
 			"label": "Inputs/Outputs configuration",
@@ -201,10 +178,7 @@
 			"minValue": 0,
 			"maxValue": 65535,
 			"defaultValue": 4369,
-			"unsigned": true,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"unsigned": true
 		},
 		"16": {
 			"label": "Remember device status after power failure",
@@ -213,8 +187,6 @@
 			"minValue": 0,
 			"maxValue": 1,
 			"defaultValue": 1,
-			"readOnly": false,
-			"writeOnly": false,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -233,8 +205,6 @@
 			"minValue": 0,
 			"maxValue": 3,
 			"defaultValue": 0,
-			"readOnly": false,
-			"writeOnly": false,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -260,10 +230,7 @@
 			"valueSize": 1,
 			"minValue": 1,
 			"maxValue": 10,
-			"defaultValue": 10,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"defaultValue": 10
 		},
 		"39": {
 			"label": "Active PROGRAM alarm time",
@@ -271,10 +238,7 @@
 			"minValue": 1,
 			"maxValue": 65534,
 			"defaultValue": 600,
-			"unsigned": true,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"unsigned": true
 		},
 		"42": {
 			"label": "Command class reporting Outputs status change",
@@ -282,8 +246,6 @@
 			"minValue": 0,
 			"maxValue": 2,
 			"defaultValue": 0,
-			"readOnly": false,
-			"writeOnly": false,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -306,10 +268,7 @@
 			"valueSize": 1,
 			"minValue": 1,
 			"maxValue": 100,
-			"defaultValue": 5,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"defaultValue": 5
 		},
 		"44": {
 			"label": "Power load reporting frequency",
@@ -318,10 +277,7 @@
 			"minValue": 0,
 			"maxValue": 65534,
 			"defaultValue": 30,
-			"unsigned": true,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"unsigned": true
 		},
 		"45": {
 			"label": "Reporting energy consumption changes",
@@ -329,10 +285,7 @@
 			"minValue": 0,
 			"maxValue": 255,
 			"defaultValue": 1,
-			"unsigned": true,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"unsigned": true
 		},
 		"71": {
 			"label": "Response to BRIGHTNESS set to 0%",
@@ -340,8 +293,6 @@
 			"minValue": 0,
 			"maxValue": 1,
 			"defaultValue": 1,
-			"readOnly": false,
-			"writeOnly": false,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -360,10 +311,7 @@
 			"valueSize": 1,
 			"minValue": 1,
 			"maxValue": 10,
-			"defaultValue": 1,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"defaultValue": 1
 		},
 		"73": {
 			"label": "Triple click action",
@@ -372,8 +320,6 @@
 			"minValue": 0,
 			"maxValue": 1,
 			"defaultValue": 0,
-			"readOnly": false,
-			"writeOnly": false,
 			"allowManualEntry": false,
 			"options": [
 				{

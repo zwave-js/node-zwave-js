@@ -1,5 +1,3 @@
-// Ningbo Sentek Electronics Co., Ltd. ZM-800
-// PIR motion sensor
 {
 	"manufacturer": "Ningbo Sentek Electronics Co., Ltd.",
 	"manufacturerId": "0x0185",
@@ -24,8 +22,6 @@
 			"maxValue": 1,
 			"defaultValue": 1,
 			"unsigned": true,
-			"readOnly": false,
-			"writeOnly": false,
 			"allowManualEntry": false,
 			"options": [
 				{

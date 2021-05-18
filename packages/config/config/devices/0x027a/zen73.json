@@ -1,0 +1,220 @@
+{
+	"manufacturer": "Zooz",
+	"manufacturerId": "0x027a",
+	"label": "ZEN73",
+	"description": "700 Toggle Switch",
+	"devices": [
+		{
+			"productType": "0x7000",
+			"productId": "0xa003",
+			"zwaveAllianceId": 4161
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"associations": {
+		"1": {
+			"label": "Lifeline",
+			"maxNodes": 3,
+			"isLifeline": true
+		},
+		"2": {
+			"label": "Group 2",
+			"maxNodes": 5
+		}
+	},
+	"paramInformation": {
+		"1": {
+			"label": "Orientation",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 2,
+			"defaultValue": 0,
+			"unsigned": true,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Normal orientation",
+					"value": 0
+				},
+				{
+					"label": "Inverted orientation",
+					"value": 1
+				},
+				{
+					"label": "Pushbutton mode",
+					"value": 2
+				}
+			]
+		},
+		"2": {
+			"label": "Led Indicator",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 3,
+			"defaultValue": 0,
+			"unsigned": true,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "On when switch is off",
+					"value": 0
+				},
+				{
+					"label": "On when switch is on",
+					"value": 1
+				},
+				{
+					"label": "Always off",
+					"value": 2
+				},
+				{
+					"label": "Always on",
+					"value": 3
+				}
+			]
+		},
+		"3": {
+			"label": "Auto Off Timer",
+			"valueSize": 4,
+			"unit": "minutes",
+			"minValue": 0,
+			"maxValue": 65535,
+			"defaultValue": 0,
+			"unsigned": true,
+			"options": [
+				{
+					"label": "Disable",
+					"value": 0
+				}
+			]
+		},
+		"5": {
+			"label": "Auto On Timer",
+			"valueSize": 4,
+			"unit": "minutes",
+			"minValue": 0,
+			"maxValue": 65535,
+			"defaultValue": 0,
+			"unsigned": true,
+			"options": [
+				{
+					"label": "Disable",
+					"value": 0
+				}
+			]
+		},
+		"8": {
+			"label": "Status After Power Failure",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 2,
+			"defaultValue": 2,
+			"unsigned": true,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Turn off",
+					"value": 0
+				},
+				{
+					"label": "Turn on",
+					"value": 1
+				},
+				{
+					"label": "Previous state",
+					"value": 2
+				}
+			]
+		},
+		"10": {
+			"label": "Scene Control",
+			"description": "Activated with quick double tap triggers",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 0,
+			"unsigned": true,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Disable",
+					"value": 0
+				},
+				{
+					"label": "Enable",
+					"value": 1
+				}
+			]
+		},
+		"12": {
+			"label": "Smart Bulb Mode: Control",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 2,
+			"defaultValue": 0,
+			"unsigned": true,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Physical control disabled",
+					"value": 0
+				},
+				{
+					"label": "Physical control enabled",
+					"value": 1
+				},
+				{
+					"label": "Physical and Z-Wave control disabled",
+					"value": 2
+				}
+			]
+		},
+		"13": {
+			"label": "Smart Bulb Mode: Report Status if Physical Control Disabled",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 0,
+			"unsigned": true,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Enable",
+					"value": 0
+				},
+				{
+					"label": "Disable",
+					"value": 1
+				}
+			]
+		},
+		"16": {
+			"label": "Association Reports",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 1,
+			"unsigned": true,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Binary Switch CC report (Z-Wave); Basic CC Set (Manual)",
+					"value": 0
+				},
+				{
+					"label": "Binary Switch CC report (Z-Wave / Manual)",
+					"value": 1
+				}
+			]
+		}
+	},
+	"metadata": {
+		"inclusion": "1. Initiate inclusion (pairing) in the app (or web interface).\n2. TAP UP 3 TIMES QUICKLY if using traditional Z-Wave inclusion.\n3. The LED indicator will blink blue to signal communication and turn green for 3 seconds if inclusion is successful or turn red for 3 seconds if the pairing attempt fails.",
+		"exclusion": "1. Bring your Z-Wave gateway (hub) close to the switch if possible\n2. Put the Z-Wave hub into exclusion mode (not sure how to do that? ask@getzooz.com) \n3. Tap the switch down 3 times quickly (the LED indicator will start blinking blue)\n4. Your hub will confirm exclusion, the LED indicator on the switch will turn green for 3 seconds, and the device will disappear from your controller's device list reset",
+		"reset": "If your primary controller is missing or inoperable, you may need to reset the device to factory settings. To reset the switch, hold the toggle down for 10 seconds until the LED indicator starts blinking. Release the toggle, and immediately after, toggle the switch down 5 times to complete the reset. The LED indicator will flash blue 3 times and turn red for 3 seconds to confirm successful reset",
+		"manual": "https://products.z-wavealliance.org/ProductManual/File?folder=&filename=product_documents/4161/zooz-700-series-toggle-switch-zen73-manual-online.pdf"
+	}
+}

@@ -1,5 +1,3 @@
-// Everspring AN196-0
-// Dual Relay In-Wall Module
 {
 	"manufacturer": "Everspring",
 	"manufacturerId": "0x0060",
@@ -25,8 +23,6 @@
 			"maxValue": 1,
 			"defaultValue": 0,
 			"unsigned": true,
-			"readOnly": false,
-			"writeOnly": false,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -47,8 +43,6 @@
 			"maxValue": 1,
 			"defaultValue": 0,
 			"unsigned": true,
-			"readOnly": false,
-			"writeOnly": false,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -68,10 +62,7 @@
 			"minValue": 0,
 			"maxValue": 43200,
 			"defaultValue": 0,
-			"unsigned": true,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"unsigned": true
 		},
 		"4": {
 			"label": "Parameter 4",
@@ -80,10 +71,7 @@
 			"minValue": 0,
 			"maxValue": 43200,
 			"defaultValue": 43200,
-			"unsigned": true,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"unsigned": true
 		},
 		"5": {
 			"label": "Parameter 5",
@@ -93,8 +81,6 @@
 			"maxValue": 1,
 			"defaultValue": 1,
 			"unsigned": true,
-			"readOnly": false,
-			"writeOnly": false,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -115,8 +101,6 @@
 			"maxValue": 1,
 			"defaultValue": 1,
 			"unsigned": true,
-			"readOnly": false,
-			"writeOnly": false,
 			"allowManualEntry": false,
 			"options": [
 				{

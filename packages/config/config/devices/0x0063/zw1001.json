@@ -1,5 +1,3 @@
-// GE/Jasco ZW1001
-// Smart Outlet
 {
 	"manufacturer": "GE/Jasco",
 	"manufacturerId": "0x0063",
@@ -24,8 +22,6 @@
 			"maxValue": 255,
 			"defaultValue": 0,
 			"unsigned": true,
-			"readOnly": false,
-			"writeOnly": false,
 			"allowManualEntry": false,
 			"options": [
 				{

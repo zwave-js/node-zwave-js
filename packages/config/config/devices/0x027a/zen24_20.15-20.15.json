@@ -1,5 +1,3 @@
-// Zooz ZEN24
-// Z-Wave Plus Toggle Dimmer Light Switch Ver 2.0
 {
 	"manufacturer": "Zooz",
 	"manufacturerId": "0x027a",
@@ -23,10 +21,7 @@
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 1,
-			"defaultValue": 0,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"defaultValue": 0
 		}
 	}
 }

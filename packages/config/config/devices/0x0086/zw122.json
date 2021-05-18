@@ -1,5 +1,3 @@
-// AEON Labs ZW122
-// Water Sensor 6
 {
 	"manufacturer": "AEON Labs",
 	"manufacturerId": "0x0086",
@@ -8,246 +6,334 @@
 	"devices": [
 		{
 			"productType": "0x0002",
-			"productId": "0x007a"
+			"productId": "0x007a",
+			"zwaveAllianceId": 2437
 		},
 		{
 			"productType": "0x0102",
-			"productId": "0x007a"
+			"productId": "0x007a",
+			"zwaveAllianceId": 2407
 		},
 		{
 			"productType": "0x0202",
-			"productId": "0x007a"
+			"productId": "0x007a",
+			"zwaveAllianceId": 2411
 		}
 	],
 	"firmwareVersion": {
 		"min": "0.0",
 		"max": "255.255"
 	},
-	"supportsZWavePlus": true,
+	"associations": {
+		"1": {
+			"label": "Lifeline",
+			"maxNodes": 5,
+			"isLifeline": true
+		},
+		"2": {
+			"label": "Retransmit",
+			"maxNodes": 5
+		},
+		"3": {
+			"label": "Sensor Probe 1",
+			"maxNodes": 5
+		},
+		"4": {
+			"label": "Sensor Probe 2",
+			"maxNodes": 5
+		}
+	},
 	"paramInformation": {
 		"2": {
-			"label": "Enable/Disable Power On Wake Period",
-			"description": "Enables or disables a wake period of 10 minutes after power up.",
-			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 1,
-			"defaultValue": 0,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "Disabled",
-					"value": 0
-				},
-				{
-					"label": "Enabled",
-					"value": 1
-				}
-			]
+			"$import": "templates/aeotec_template.json#wake_up_10_minutes"
 		},
 		"8": {
-			"label": "WakeUp Time Out",
-			"description": "The number of seconds for the device to stay awake after the WakeUp is sent out.",
-			"unit": "Seconds",
-			"valueSize": 1,
-			"minValue": 15,
-			"maxValue": 255,
-			"defaultValue": 30,
-			"unsigned": true,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"$import": "templates/aeotec_template.json#wake_up_timeout"
 		},
-		"9": {
-			"label": "Current power mode",
+		"9[0xff00]": {
+			"$import": "templates/aeotec_template.json#current_power_mode"
+		},
+		"9[0xff]": {
+			"label": "Current Power State",
 			"valueSize": 2,
 			"minValue": 0,
-			"maxValue": 0,
+			"maxValue": 2,
 			"defaultValue": 0,
+			"unsigned": true,
 			"readOnly": true,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Sleeping mode after re-power on",
+					"value": 0
+				},
+				{
+					"label": "Keep awake for 10 minutes after power-on",
+					"value": 1
+				},
+				{
+					"label": "Always awake",
+					"value": 2
+				}
+			]
+		},
+		"10[0xff]": {
+			"label": "Buzzer Repeat Cycles",
+			"valueSize": 4,
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 10
+		},
+		"10[0xff00]": {
+			"label": "Buzzer On Time",
+			"valueSize": 4,
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 20
+		},
+		"10[0xffff0000]": {
+			"label": "Buzzer Off Time",
+			"valueSize": 4,
+			"minValue": 0,
+			"maxValue": 32767,
+			"defaultValue": 120
 		},
 		"39": {
-			"label": "Low Battery Threshold",
-			"description": "Set the low battery value. (Range: 10% to 50%)",
-			"unit": "Percent",
-			"valueSize": 1,
-			"minValue": 10,
-			"maxValue": 50,
-			"defaultValue": 20,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"$import": "templates/aeotec_template.json#low_battery_threshold",
+			"defaultValue": 20
 		},
 		"48": {
-			"label": "Enable/Disable Sensor report",
-			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 1,
-			"defaultValue": 1,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "Disable Sensor report",
-					"value": 0
-				},
-				{
-					"label": "Enable Sensor report",
-					"value": 1
-				}
-			]
+			"$import": "../templates/master_template.json#base_enable_disable",
+			"label": "Send Sensor Reports"
 		},
-		"64": {
-			"label": "Default Temperature Unit",
-			"valueSize": 1,
+		"49[0xffff0000]": {
+			"label": "Overheat Temperature Threshold",
+			"valueSize": 4,
 			"minValue": 0,
-			"maxValue": 1,
-			"defaultValue": 1,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "Celsius",
-					"value": 0
-				},
-				{
-					"label": "Fahrenheit",
-					"value": 1
-				}
-			]
+			"maxValue": 32767,
+			"defaultValue": 4
+		},
+		"49[0xff00]": {
+			"$import": "templates/aeotec_template.json#celsius_fahrenheit_0",
+			"label": "Overheat Threshold Temperature Unit"
+		},
+		"50[0xffff0000]": {
+			"label": "Underheat Temperature Threshold",
+			"valueSize": 4,
+			"minValue": 0,
+			"maxValue": 32767,
+			"defaultValue": 1
+		},
+		"50[0xff00]": {
+			"$import": "templates/aeotec_template.json#celsius_fahrenheit_0",
+			"label": "Underheat Threshold Temperature Unit"
+		},
+		"57[0xff00]": {
+			"$import": "templates/aeotec_template.json#recover_limit_temp"
+		},
+		"57[0x0f]": {
+			"$import": "templates/aeotec_template.json#recover_limit_temp_unit"
 		},
 		"84": {
-			"label": "State of tilt sensor",
+			"label": "Tilt Sensor State",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 1,
 			"defaultValue": 0,
+			"unsigned": true,
 			"readOnly": true,
-			"writeOnly": false,
-			"allowManualEntry": true
-		},
-		"86": {
-			"label": "Enable/Disable the buzzer",
-			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 1,
-			"defaultValue": 1,
-			"readOnly": false,
-			"writeOnly": false,
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "Disabled",
+					"label": "Horizontal",
 					"value": 0
 				},
 				{
-					"label": "Enabled",
+					"label": "Vertical",
 					"value": 1
 				}
 			]
 		},
-		"87": {
-			"label": "Buzzer Trigger(s)",
-			"description": "Sets which of the alarms should trigger the buzzer.",
-			"valueSize": 1,
-			"minValue": 1,
-			"maxValue": 55,
-			"defaultValue": 55,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+		"86": {
+			"$import": "../templates/master_template.json#base_enable_disable",
+			"label": "Buzzer",
+			"defaultValue": 1
+		},
+		"87[0x01]": {
+			"$import": "../templates/master_template.json#base_enable_disable",
+			"label": "Buzzer: Water Leak",
+			"valueSize": 4
+		},
+		"87[0x02]": {
+			"$import": "../templates/master_template.json#base_enable_disable",
+			"label": "Buzzer: Vibration",
+			"valueSize": 4
+		},
+		"87[0x04]": {
+			"$import": "../templates/master_template.json#base_enable_disable",
+			"label": "Buzzer: Tilt Sensor",
+			"valueSize": 4
+		},
+		"87[0x10]": {
+			"$import": "../templates/master_template.json#base_enable_disable",
+			"label": "Buzzer: Underheat",
+			"valueSize": 4
+		},
+		"87[0x20]": {
+			"$import": "../templates/master_template.json#base_enable_disable",
+			"label": "Buzzer: Overheat",
+			"valueSize": 4
 		},
 		"88": {
-			"label": "Basic Set sent to association group 3",
+			"label": "Basic Set on Water Leak (Probe 1)",
+			"description": "Report is sent to Association Group 3",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 2,
 			"defaultValue": 0,
-			"readOnly": false,
-			"writeOnly": false,
+			"unsigned": true,
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "Send nothing",
+					"label": "Disable",
 					"value": 0
 				},
 				{
-					"label": "Water present 0xFF, no water present 0x00",
+					"label": "On when wet",
 					"value": 1
 				},
 				{
-					"label": "Water present 0x00, no water present 0xFF",
+					"label": "On when dry",
 					"value": 2
 				}
 			]
 		},
 		"89": {
-			"label": "Basic Set sent to association group 4",
+			"label": "Basic Set on Water Leak (Probe 2)",
+			"description": "Report is sent to Association Group 4",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 2,
 			"defaultValue": 0,
-			"readOnly": false,
-			"writeOnly": false,
+			"unsigned": true,
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "Send nothing",
+					"label": "Disable",
 					"value": 0
 				},
 				{
-					"label": "Water present 0xFF, no water present 0x00",
+					"label": "On when wet",
 					"value": 1
 				},
 				{
-					"label": "Water present 0x00, no water present 0xFF",
+					"label": "On when dry",
 					"value": 2
 				}
 			]
 		},
 		"94": {
-			"label": "Power source level reported",
-			"description": "0=report USB, 1=report Battery",
+			"$import": "../templates/master_template.json#base_0-1_nounit",
+			"label": "Battery Source to Report",
+			"options": [
+				{
+					"label": "USB power level",
+					"value": 0
+				},
+				{
+					"label": "Battery level",
+					"value": 1
+				}
+			]
+		},
+		"64": {
+			"$import": "templates/aeotec_template.json#celsius_fahrenheit_0",
+			"label": "Temperature Unit for Reporting",
+			"valueSize": 1
+		},
+		"135": {
+			"label": "Automatic Report Type",
+			"description": "For non-multichannel devices - Configuration CC will report to the Water Leak Status parameters",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 3,
+			"defaultValue": 1,
+			"unsigned": true,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Disable",
+					"value": 0
+				},
+				{
+					"label": "Notification CC (Association Group 1)",
+					"value": 1
+				},
+				{
+					"label": "Configuration CC (Association Group 2)",
+					"value": 2
+				},
+				{
+					"label": "Notification CC and Configuration CC",
+					"value": 3
+				}
+			]
+		},
+		"136[0x01]": {
+			"label": "Water Leak Status: Probe 1",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 1,
 			"defaultValue": 0,
-			"readOnly": false,
-			"writeOnly": false,
+			"unsigned": true,
+			"readOnly": true,
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "Report USB power level",
+					"label": "Dry",
 					"value": 0
 				},
 				{
-					"label": "Report Battery power level",
+					"label": "Wet",
+					"value": 1
+				}
+			]
+		},
+		"136[0x02]": {
+			"label": "Water Leak Status: Probe 2",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 0,
+			"unsigned": true,
+			"readOnly": true,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Dry",
+					"value": 0
+				},
+				{
+					"label": "Wet",
 					"value": 1
 				}
 			]
 		},
 		"101": {
-			"label": "Lifeline Report Type",
-			"description": "To set what unsolicited report would be sent to the Lifeline group.",
+			"label": "Automatic Secondary Report Type",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 3,
 			"defaultValue": 3,
-			"readOnly": false,
-			"writeOnly": false,
+			"unsigned": true,
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "Send Nothing",
+					"label": "Disable",
 					"value": 0
 				},
 				{
-					"label": "Battery Report",
+					"label": "Battery",
 					"value": 1
 				},
 				{
@@ -255,236 +341,39 @@
 					"value": 2
 				},
 				{
-					"label": "Battery and Temperature",
+					"label": "Battery and temperature",
 					"value": 3
 				}
 			]
 		},
 		"111": {
-			"label": "Lifeline Report Interval",
-			"description": "Set the interval time for sending the unsolicited report.",
-			"unit": "Seconds (USB Only)",
-			"valueSize": 4,
-			"minValue": 5,
-			"maxValue": 2678400,
-			"defaultValue": 3600,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
-		},
-		"135": {
-			"label": "Sensor reports for non multichannel devices",
-			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 3,
-			"defaultValue": 1,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
-		},
-		"136": {
-			"label": "Sensor probe status",
-			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 0,
-			"defaultValue": 0,
-			"readOnly": true,
-			"writeOnly": false,
-			"allowManualEntry": true
-		},
-		"252": {
-			"label": "Lock configuration",
-			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 1,
-			"defaultValue": 0,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "Disable configuration locked",
-					"value": 0
-				},
-				{
-					"label": "Enable configuration locked",
-					"value": 1
-				}
-			]
-		},
-		"255": {
-			"label": "Reset device to factory default",
-			"valueSize": 4,
-			"minValue": 1,
-			"maxValue": 1431655765,
-			"defaultValue": 1,
-			"readOnly": true,
-			"writeOnly": false,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "do nothing",
-					"value": 1
-				},
-				{
-					"label": "Reset device to factory defaults",
-					"value": 1431655765
-				}
-			]
-		},
-		"10[0xff]": {
-			"label": "Repeat cyle",
-			"description": "Repeat cylce of buzzer alarm",
-			"valueSize": 4,
-			"minValue": 0,
-			"maxValue": 255,
-			"defaultValue": 10,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
-		},
-		"10[0xff00]": {
-			"label": "Time of buzzer keeping ON state",
-			"valueSize": 4,
-			"minValue": 0,
-			"maxValue": 255,
-			"defaultValue": 10,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
-		},
-		"10[0x7fff0000]": {
-			"label": "Time of buzzer keeping OFF state",
-			"valueSize": 4,
-			"minValue": 0,
-			"maxValue": 32767,
-			"defaultValue": 30,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
-		},
-		"49[0xff00]": {
-			"label": "Temperature Unit",
-			"description": "Celsius or Fahrenheit",
-			"valueSize": 4,
-			"minValue": 0,
-			"maxValue": 255,
-			"defaultValue": 1,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "Celsius",
-					"value": 0
-				},
-				{
-					"label": "Fahrenheit",
-					"value": 1
-				}
-			]
-		},
-		"49[0x7fff0000]": {
-			"label": "Temperature value",
-			"valueSize": 4,
-			"minValue": 0,
-			"maxValue": 32767,
-			"defaultValue": 4,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
-		},
-		"50[0xff00]": {
-			"label": "Temperature underheat unit",
-			"description": "Celsius or Fahrenheit",
-			"valueSize": 4,
-			"minValue": 0,
-			"maxValue": 255,
-			"defaultValue": 1,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "Celsius",
-					"value": 0
-				},
-				{
-					"label": "Fahrenheit",
-					"value": 1
-				}
-			]
-		},
-		"50[0x7fff0000]": {
-			"label": "Temperature limit value",
-			"valueSize": 4,
-			"minValue": 0,
-			"maxValue": 32767,
-			"defaultValue": 1,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
-		},
-		"57[0x0f]": {
-			"label": "Temperature recover limit (Unit)",
-			"valueSize": 2,
-			"minValue": 1,
-			"maxValue": 2,
-			"defaultValue": 1,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "Celsius",
-					"value": 1
-				},
-				{
-					"label": "Fahrenheit",
-					"value": 2
-				}
-			]
-		},
-		"57[0xff00]": {
-			"label": "Temperature recover limit (Value)",
-			"unit": "1/10",
-			"valueSize": 2,
-			"minValue": 1,
-			"maxValue": 255,
-			"defaultValue": 20,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
-		},
-		"201[0x0f]": {
-			"label": "Temperature unit",
-			"valueSize": 2,
-			"minValue": 0,
-			"maxValue": 1,
-			"defaultValue": 1,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "Celsius",
-					"value": 0
-				},
-				{
-					"label": "Fahrenheit",
-					"value": 1
-				}
-			]
+			"$import": "templates/aeotec_template.json#auto_report_interval",
+			"label": "Audtomatic Secondary Report Interval",
+			"maxValue": 2678400
 		},
 		"201[0xff00]": {
-			"label": "Calibration value",
+			"label": "Temperature Calibration",
 			"valueSize": 2,
 			"minValue": -128,
 			"maxValue": 127,
-			"defaultValue": 0,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"defaultValue": 0
+		},
+		"201[0x0f]": {
+			"$import": "templates/aeotec_template.json#celsius_fahrenheit_0",
+			"label": "Temperature Calibration Unit",
+			"valueSize": 2
+		},
+		"252": {
+			"$import": "templates/aeotec_template.json#lock_configuration"
+		},
+		"255": {
+			"$import": "templates/aeotec_template.json#factory_reset_exclude"
 		}
+	},
+	"metadata": {
+		"inclusion": "Turn the primary controller of Z-Wave network into inclusion mode, short press the product’s Action Button that you can find on the product",
+		"exclusion": "Turn the primary controller of Z-Wave network into exclusion mode, short press the product’s Action Button that you can find on the product",
+		"reset": "Press and hold the Action Button that you can find on the product for 20 seconds and then release. This procedure should only be used when the primary controller is inoperable",
+		"manual": "https://products.z-wavealliance.org/ProductManual/File?folder=&filename=MarketCertificationFiles/2407/Aeon%20Labs%20Water%20Sensor%206%20manual.pdf"
 	}
 }

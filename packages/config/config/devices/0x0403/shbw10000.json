@@ -1,5 +1,3 @@
-// ABUS Security-Center GmbH & Co. KG SHBW10000
-// PIR Multisensor
 {
 	"manufacturer": "ABUS Security-Center GmbH & Co. KG",
 	"manufacturerId": "0x0403",
@@ -23,10 +21,7 @@
 			"valueSize": 1,
 			"minValue": 10,
 			"maxValue": 50,
-			"defaultValue": 10,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"defaultValue": 10
 		},
 		"12": {
 			"label": "PIR sensitivity",
@@ -34,9 +29,6 @@
 			"minValue": 0,
 			"maxValue": 10,
 			"defaultValue": 10,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true,
 			"options": [
 				{
 					"label": "Disabled",
@@ -50,10 +42,7 @@
 			"valueSize": 2,
 			"minValue": 5,
 			"maxValue": 15300,
-			"defaultValue": 30,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"defaultValue": 30
 		},
 		"14": {
 			"label": "BASIC SET Command after PIR triggering",
@@ -61,8 +50,6 @@
 			"minValue": 0,
 			"maxValue": 1,
 			"defaultValue": 0,
-			"readOnly": false,
-			"writeOnly": false,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -81,8 +68,6 @@
 			"minValue": 0,
 			"maxValue": 1,
 			"defaultValue": 0,
-			"readOnly": false,
-			"writeOnly": false,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -101,9 +86,6 @@
 			"minValue": 0,
 			"maxValue": 1,
 			"defaultValue": 0,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true,
 			"options": [
 				{
 					"label": "Reset parametera 101 - 104",
@@ -117,9 +99,6 @@
 			"minValue": 0,
 			"maxValue": 2678400,
 			"defaultValue": 7200,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true,
 			"options": [
 				{
 					"label": "Disabled",
@@ -133,9 +112,6 @@
 			"minValue": 0,
 			"maxValue": 2678400,
 			"defaultValue": 7200,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true,
 			"options": [
 				{
 					"label": "Disabled",
@@ -148,10 +124,7 @@
 			"valueSize": 4,
 			"minValue": 0,
 			"maxValue": 2678400,
-			"defaultValue": 7200,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"defaultValue": 7200
 		},
 		"104": {
 			"label": "Battery report Time",
@@ -159,9 +132,6 @@
 			"minValue": 0,
 			"maxValue": 2678400,
 			"defaultValue": 7200,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true,
 			"options": [
 				{
 					"label": "Disabled",
@@ -175,8 +145,6 @@
 			"minValue": 0,
 			"maxValue": 1,
 			"defaultValue": 0,
-			"readOnly": false,
-			"writeOnly": false,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -194,10 +162,7 @@
 			"valueSize": 2,
 			"minValue": 1,
 			"maxValue": 500,
-			"defaultValue": 10,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"defaultValue": 10
 		},
 		"112": {
 			"label": "Humidity report Threshold",
@@ -205,10 +170,7 @@
 			"valueSize": 1,
 			"minValue": 1,
 			"maxValue": 32,
-			"defaultValue": 5,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"defaultValue": 5
 		},
 		"113": {
 			"label": "Brightness report Threshold",
@@ -217,10 +179,7 @@
 			"minValue": 1,
 			"maxValue": 65528,
 			"defaultValue": 150,
-			"unsigned": true,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"unsigned": true
 		},
 		"114": {
 			"label": "Battery report Threshold",
@@ -228,10 +187,7 @@
 			"valueSize": 1,
 			"minValue": 1,
 			"maxValue": 100,
-			"defaultValue": 10,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"defaultValue": 10
 		}
 	}
 }

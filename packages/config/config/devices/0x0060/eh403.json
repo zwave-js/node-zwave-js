@@ -1,5 +1,3 @@
-// Everspring EH403
-// Z-Wave Floodlight with Motion Detector
 {
 	"manufacturer": "Everspring",
 	"manufacturerId": "0x0060",
@@ -24,10 +22,7 @@
 			"minValue": 8,
 			"maxValue": 720,
 			"defaultValue": 15,
-			"unsigned": true,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"unsigned": true
 		},
 		"2": {
 			"label": "Lux Sensor Threshold",
@@ -37,9 +32,7 @@
 			"maxValue": 200,
 			"defaultValue": 50,
 			"unsigned": true,
-			"readOnly": false,
-			"writeOnly": true,
-			"allowManualEntry": true
+			"writeOnly": true
 		},
 		"3": {
 			"label": "Lux Auto Report",
@@ -49,10 +42,7 @@
 			"minValue": 0,
 			"maxValue": 1440,
 			"defaultValue": 0,
-			"unsigned": true,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"unsigned": true
 		}
 	},
 	"metadata": {

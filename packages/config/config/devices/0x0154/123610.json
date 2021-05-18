@@ -1,5 +1,3 @@
-// Popp & Co 123610
-// Wall Plug Switch
 {
 	"manufacturer": "Popp & Co",
 	"manufacturerId": "0x0154",
@@ -30,8 +28,6 @@
 			"maxValue": 255,
 			"defaultValue": 1,
 			"unsigned": true,
-			"readOnly": false,
-			"writeOnly": false,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -59,10 +55,7 @@
 			"minValue": 0,
 			"maxValue": 65535,
 			"defaultValue": 0,
-			"unsigned": true,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"unsigned": true
 		},
 		"3": {
 			"label": "RF Off command",
@@ -71,8 +64,6 @@
 			"maxValue": 255,
 			"defaultValue": 0,
 			"unsigned": true,
-			"readOnly": false,
-			"writeOnly": false,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -100,8 +91,6 @@
 			"maxValue": 255,
 			"defaultValue": 1,
 			"unsigned": true,
-			"readOnly": false,
-			"writeOnly": false,
 			"allowManualEntry": false,
 			"options": [
 				{

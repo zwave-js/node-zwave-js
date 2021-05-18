@@ -1,5 +1,3 @@
-// Fakro AMZ Solar
-// Solar Awning
 {
 	"manufacturer": "Fakro",
 	"manufacturerId": "0x0085",
@@ -40,60 +38,42 @@
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 2,
-			"defaultValue": 0,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"defaultValue": 0
 		},
 		"2": {
 			"label": "Season",
 			"valueSize": 1,
 			"minValue": 1,
 			"maxValue": 2,
-			"defaultValue": 1,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"defaultValue": 1
 		},
 		"3": {
 			"label": "Time",
 			"valueSize": 1,
 			"minValue": 1,
 			"maxValue": 30,
-			"defaultValue": 3,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"defaultValue": 3
 		},
 		"4": {
 			"label": "Sensitivity",
 			"valueSize": 1,
 			"minValue": 3,
 			"maxValue": 100,
-			"defaultValue": 60,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"defaultValue": 60
 		},
 		"12": {
 			"label": "Calibration",
 			"valueSize": 1,
 			"minValue": 1,
 			"maxValue": 2,
-			"defaultValue": 1,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"defaultValue": 1
 		},
 		"13": {
 			"label": "Positioning",
 			"valueSize": 1,
 			"minValue": 1,
 			"maxValue": 2,
-			"defaultValue": 1,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"defaultValue": 1
 		}
 	}
 }

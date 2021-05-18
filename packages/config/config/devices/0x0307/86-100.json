@@ -1,5 +1,3 @@
-// SATCO Products, Inc. 86-100
-// Z-Wave Plug-In On/Off Appliance Module
 {
 	"manufacturer": "SATCO Products, Inc.",
 	"manufacturerId": "0x0307",
@@ -25,8 +23,6 @@
 			"maxValue": 2,
 			"defaultValue": 0,
 			"unsigned": true,
-			"readOnly": false,
-			"writeOnly": false,
 			"allowManualEntry": false,
 			"options": [
 				{

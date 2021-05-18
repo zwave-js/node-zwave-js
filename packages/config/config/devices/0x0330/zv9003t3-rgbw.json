@@ -1,5 +1,3 @@
-// Sunricher ZV9003T3-RGBW
-// RGBW 3 Scene Wall Controller
 {
 	"manufacturer": "Sunricher",
 	"manufacturerId": "0x0330",
@@ -24,9 +22,6 @@
 			"minValue": 0,
 			"maxValue": 1,
 			"defaultValue": 0,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true,
 			"options": [
 				{
 					"label": "CENTRAL_SCENE",
@@ -45,9 +40,6 @@
 			"minValue": 0,
 			"maxValue": 1,
 			"defaultValue": 1,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true,
 			"options": [
 				{
 					"label": "Gateway",

@@ -1,5 +1,3 @@
-// Merten 508244
-// Battery Powered Wall Controller MOVE
 {
 	"manufacturer": "Merten",
 	"manufacturerId": "0x007a",
@@ -29,20 +27,14 @@
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 127,
-			"defaultValue": 0,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"defaultValue": 0
 		},
 		"44": {
 			"label": "Doorbell function",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 127,
-			"defaultValue": 0,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"defaultValue": 0
 		},
 		"52": {
 			"label": "LOWER shutter as long as button is pressed",
@@ -50,30 +42,21 @@
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 127,
-			"defaultValue": 0,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"defaultValue": 0
 		},
 		"54": {
 			"label": "Move shutter single-surface",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 127,
-			"defaultValue": 0,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"defaultValue": 0
 		},
 		"55": {
 			"label": "RAISE shutter as long as button is pressed",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 127,
-			"defaultValue": 0,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"defaultValue": 0
 		}
 	}
 }

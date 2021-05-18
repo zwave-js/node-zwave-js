@@ -1,5 +1,3 @@
-// ATSUMI Electric Co., Ltd. ZNS10
-// 4 in 1 Multi Sensor
 {
 	"manufacturer": "ATSUMI Electric Co., Ltd.",
 	"manufacturerId": "0x0427",
@@ -25,8 +23,6 @@
 			"maxValue": 1,
 			"defaultValue": 0,
 			"unsigned": true,
-			"readOnly": false,
-			"writeOnly": false,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -47,8 +43,6 @@
 			"maxValue": 8,
 			"defaultValue": 0,
 			"unsigned": true,
-			"readOnly": false,
-			"writeOnly": false,
 			"allowManualEntry": false,
 			"options": [
 				{

@@ -1,4 +1,3 @@
-// Avadesign Technology Co. Da Vinci Switch Default
 {
 	"manufacturer": "Avadesign Technology Co.",
 	"manufacturerId": "0x025d",
@@ -21,290 +20,203 @@
 			"valueSize": 1,
 			"minValue": 1,
 			"maxValue": 6,
-			"defaultValue": 1,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"defaultValue": 1
 		},
 		"2": {
 			"label": "EP 1 Partner Id",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 9,
-			"defaultValue": 0,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"defaultValue": 0
 		},
 		"3": {
 			"label": "EP 1 Blind Duration",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 127,
-			"defaultValue": 0,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"defaultValue": 0
 		},
 		"4": {
 			"label": "EP 1 Output",
 			"valueSize": 1,
 			"minValue": 1,
 			"maxValue": 6,
-			"defaultValue": 1,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"defaultValue": 1
 		},
 		"5": {
 			"label": "EP 1 Button attribute",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 7,
-			"defaultValue": 7,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"defaultValue": 7
 		},
 		"6": {
 			"label": "EP 2 Type",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 6,
-			"defaultValue": 1,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"defaultValue": 1
 		},
 		"7": {
 			"label": "EP 2 Partner Id",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 9,
-			"defaultValue": 0,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"defaultValue": 0
 		},
 		"8": {
 			"label": "EP 2 Blind Duration",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 127,
-			"defaultValue": 0,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"defaultValue": 0
 		},
 		"11": {
 			"label": "EP 3 Type",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 6,
-			"defaultValue": 1,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"defaultValue": 1
 		},
 		"12": {
 			"label": "EP 3 Partner-Id",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 9,
-			"defaultValue": 0,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"defaultValue": 0
 		},
 		"13": {
 			"label": "EP 3 Blind Duration",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 127,
-			"defaultValue": 0,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"defaultValue": 0
 		},
 		"16": {
 			"label": "EP 4 Type",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 6,
-			"defaultValue": 1,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"defaultValue": 1
 		},
 		"17": {
 			"label": "EP 4 Partner-Id",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 9,
-			"defaultValue": 0,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"defaultValue": 0
 		},
 		"18": {
 			"label": "EP 4 Blind Duration",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 127,
-			"defaultValue": 0,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"defaultValue": 0
 		},
 		"21": {
 			"label": "EP 5 Type",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 6,
-			"defaultValue": 1,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"defaultValue": 1
 		},
 		"22": {
 			"label": "EP 5 Partner-Id",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 9,
-			"defaultValue": 0,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"defaultValue": 0
 		},
 		"23": {
 			"label": "EP 5 Blind Duration",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 127,
-			"defaultValue": 0,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"defaultValue": 0
 		},
 		"26": {
 			"label": "EP 6 Type",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 6,
-			"defaultValue": 1,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"defaultValue": 1
 		},
 		"27": {
 			"label": "EP 6 Partner-Id",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 9,
-			"defaultValue": 0,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"defaultValue": 0
 		},
 		"28": {
 			"label": "EP 6 Blind Duration",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 127,
-			"defaultValue": 0,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"defaultValue": 0
 		},
 		"31": {
 			"label": "EP 7 Type",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 6,
-			"defaultValue": 1,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"defaultValue": 1
 		},
 		"32": {
 			"label": "EP 7 Partner-Id",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 9,
-			"defaultValue": 0,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"defaultValue": 0
 		},
 		"33": {
 			"label": "EP 7 Blind Duration",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 127,
-			"defaultValue": 0,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"defaultValue": 0
 		},
 		"36": {
 			"label": "EP 8 Type",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 6,
-			"defaultValue": 1,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"defaultValue": 1
 		},
 		"37": {
 			"label": "EP 8 Partner-Id",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 9,
-			"defaultValue": 0,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"defaultValue": 0
 		},
 		"38": {
 			"label": "EP 8 Blind Duration",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 127,
-			"defaultValue": 0,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"defaultValue": 0
 		},
 		"41": {
 			"label": "EP 9 Type",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 6,
-			"defaultValue": 1,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"defaultValue": 1
 		},
 		"42": {
 			"label": "EP 9 Partner-Id",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 9,
-			"defaultValue": 0,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"defaultValue": 0
 		},
 		"43": {
 			"label": "EP 9 Blind Duration",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 127,
-			"defaultValue": 0,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"defaultValue": 0
 		}
 	}
 }

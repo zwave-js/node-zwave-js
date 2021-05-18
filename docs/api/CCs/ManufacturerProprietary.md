@@ -1,5 +1,7 @@
 # Manufacturer Proprietary CC
 
+?> CommandClass ID: `0x91`
+
 ## Manufacturer Proprietary CC methods
 
 ### `sendData`

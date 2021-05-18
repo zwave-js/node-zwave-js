@@ -1,5 +1,3 @@
-// Philio Technology Corp PAT02-B
-// Z-Wave room sensor
 {
 	"manufacturer": "Philio Technology Corp",
 	"manufacturerId": "0x013c",
@@ -24,10 +22,7 @@
 			"minValue": 0,
 			"maxValue": 255,
 			"defaultValue": 0,
-			"unsigned": true,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"unsigned": true
 		},
 		"7": {
 			"label": "Customer Function",
@@ -36,10 +31,7 @@
 			"minValue": 0,
 			"maxValue": 255,
 			"defaultValue": 0,
-			"unsigned": true,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"unsigned": true
 		},
 		"10": {
 			"label": "Auto Report Battery Time",
@@ -47,10 +39,7 @@
 			"valueSize": 1,
 			"minValue": 1,
 			"maxValue": 127,
-			"defaultValue": 12,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"defaultValue": 12
 		},
 		"13": {
 			"label": "Auto Report Temperature Time",
@@ -58,10 +47,7 @@
 			"valueSize": 1,
 			"minValue": 1,
 			"maxValue": 127,
-			"defaultValue": 12,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"defaultValue": 12
 		},
 		"14": {
 			"label": "Auto Report Humidity Time",
@@ -69,10 +55,7 @@
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 127,
-			"defaultValue": 0,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"defaultValue": 0
 		},
 		"20": {
 			"label": "Auto Report Tick Interval",
@@ -81,30 +64,21 @@
 			"minValue": 0,
 			"maxValue": 255,
 			"defaultValue": 30,
-			"unsigned": true,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"unsigned": true
 		},
 		"21": {
 			"label": "Temperature Differential Report",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 127,
-			"defaultValue": 0,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"defaultValue": 0
 		},
 		"23": {
 			"label": "Humidity Differential Report",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 60,
-			"defaultValue": 5,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"defaultValue": 5
 		}
 	}
 }

@@ -1,5 +1,3 @@
-// Shenzhen 3nod Acousticlink Co., Ltd. UPOWERSWITCH
-// UPowerSwitch
 {
 	"manufacturer": "Shenzhen 3nod Acousticlink Co., Ltd.",
 	"manufacturerId": "0x0357",
@@ -35,10 +33,7 @@
 			"minValue": 60,
 			"maxValue": 3600,
 			"defaultValue": 600,
-			"unsigned": true,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"unsigned": true
 		},
 		"2": {
 			"label": "TempSensor",
@@ -48,10 +43,7 @@
 			"minValue": 10,
 			"maxValue": 30,
 			"defaultValue": 20,
-			"unsigned": true,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"unsigned": true
 		},
 		"3": {
 			"label": "HumSensor",
@@ -61,10 +53,7 @@
 			"minValue": 5,
 			"maxValue": 20,
 			"defaultValue": 10,
-			"unsigned": true,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"unsigned": true
 		}
 	},
 	"metadata": {

@@ -1,5 +1,3 @@
-// Popp & Co 005107
-// Solar Powered Outdoor Siren
 {
 	"manufacturer": "Popp & Co",
 	"manufacturerId": "0x0154",
@@ -24,8 +22,6 @@
 			"minValue": 0,
 			"maxValue": 2,
 			"defaultValue": 0,
-			"readOnly": false,
-			"writeOnly": false,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -50,9 +46,6 @@
 			"maxValue": 255,
 			"defaultValue": 0,
 			"unsigned": true,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true,
 			"options": [
 				{
 					"label": "Temperature adjustments",
@@ -67,10 +60,7 @@
 			"minValue": 0,
 			"maxValue": 255,
 			"defaultValue": 10,
-			"unsigned": true,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"unsigned": true
 		},
 		"4": {
 			"label": "temperature report",
@@ -80,9 +70,6 @@
 			"maxValue": 65535,
 			"defaultValue": 15,
 			"unsigned": true,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true,
 			"options": [
 				{
 					"label": "Disable report",
@@ -97,8 +84,6 @@
 			"minValue": 0,
 			"maxValue": 2,
 			"defaultValue": 2,
-			"readOnly": false,
-			"writeOnly": false,
 			"allowManualEntry": false,
 			"options": [
 				{

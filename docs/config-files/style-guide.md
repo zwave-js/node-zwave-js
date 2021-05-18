@@ -10,27 +10,17 @@ Please use only **American English**.
 
 ## Comments
 
-Our device files begin with a series of two comments that describe the manufacturer/brand, label and description.
+Our device files are parsed as JSON5 and may contain comments. Comments may (and should) also be used to explain parameters that were omitted on purpose or to explain the necessity for a compat flag. Example:
 
 ```json
-// HomeSeer Technologies HS-PA100+
-// Appliance Module
 {
-	"manufacturer": "HomeSeer Technologies",
-	"manufacturerId": "0x000c",
-	"label": "HS-PA100+",
-	"description": "Appliance Module",
-	"devices": [
-		{
-			"productType": "0x4447",
-			"productId": "0x3031"
-		}
-	]
 	// ...
+	"compat": {
+		// The device is a Binary Sensor, but uses Basic Sets to report its status
+		"enableBasicSetMapping": true
+	}
 }
 ```
-
-Comments may (and should) also be used to explain parameters that were omitted on purpose or to explain the necessity for a compat flag.
 
 ## Manufacturer/Brand
 
@@ -39,9 +29,6 @@ Sometimes a manufacturer makes a device for another company. The field `manufact
 > [!WARNING] Please ensure the manufacturer exactly matches other devices from that same manufacturer. Failing to do so will result in duplicate but slightly different entries in the device database website.
 
 ```diff
--	// Assa Abloy YDM3109
-+	// Yale YDM3109
-	// Smart Door Lock
 	{
 -		"manufacturer": "Assa Abloy",
 +		"manufacturer": "Yale",
@@ -67,9 +54,6 @@ These should generally conform to the **model number** (or **SKU**) of the devic
 These should generally conform to the **name** under which the device is sold. This should not just mirror the label, unless the device is actually being marketed as such. Remove the manufacturer name from the description, if present. For example:
 
 ```diff
-	// Yale YDM3109
--	// Yale Smart Door Lock
-+	// Smart Door Lock
 	{
 		"manufacturer": "Yale",
 		"manufacturerId": "0x0129",
@@ -108,10 +92,7 @@ Labels should be clear and concise. They should clearly explain what the paramet
 		"minValue": 0,
 		"maxValue": 99,
 		"defaultValue": 0,
-		"unsigned": true,
-		"readOnly": false,
-		"writeOnly": false,
-		"allowManualEntry": true
+		"unsigned": true
 	}
 }
 ```
@@ -138,9 +119,6 @@ Descriptions should be **Sentence case**.
 		"maxValue": 255,
 		"defaultValue": 30,
 		"unsigned": true,
-		"readOnly": false,
-		"writeOnly": false,
-		"allowManualEntry": true,
 		"options": [
 			{
 				"label": "Dimmer default",
@@ -163,8 +141,6 @@ Descriptions should be **Sentence case**.
 		"maxValue": 255,
 		"defaultValue": 30,
 		"unsigned": true,
-		"readOnly": false,
-		"writeOnly": false,
 		"allowManualEntry": false
 	}
 }
@@ -187,8 +163,6 @@ Option labels should be **Sentence case**.
 		"maxValue": 1,
 		"defaultValue": 0,
 		"unsigned": true,
-		"readOnly": false,
-		"writeOnly": false,
 		"allowManualEntry": false,
 		"options": [
 			{
@@ -220,9 +194,6 @@ For example:
 		"maxValue": 255,
 		"defaultValue": 0,
 		"unsigned": true,
-		"readOnly": false,
-		"writeOnly": false,
-		"allowManualEntry": true,
 		"options": [
 			{
 				"label": "Dimmer default",
@@ -244,9 +215,6 @@ or
 		"maxValue": 99,
 		"defaultValue": 0,
 		"unsigned": true,
-		"readOnly": false,
-		"writeOnly": false,
-		"allowManualEntry": true,
 		"options": [
 			{
 				"label": "Disable",
@@ -292,10 +260,7 @@ Some devices use multiples of the base units - these should be represented as a 
 		"minValue": 0,
 		"maxValue": 254,
 		"defaultValue": 0,
-		"unsigned": true,
-		"readOnly": false,
-		"writeOnly": false,
-		"allowManualEntry": true
+		"unsigned": true
 	}
 ```
 
@@ -306,7 +271,7 @@ Some devices use multiples of the base units - these should be represented as a 
 
 ### Read/Write Only
 
-While somewhat rare, sometimes parameters can only be read or written. Typically, the description or manual would say so. If applicable, change the appropriate definition to true.
+While somewhat rare, sometimes parameters can only be read or written. Typically, the description or manual would say so. If applicable, add the appropriate field `readOnly` or `writeOnly`.
 
 ```diff
 	"1": {
@@ -317,9 +282,6 @@ While somewhat rare, sometimes parameters can only be read or written. Typically
 		"maxValue": 254,
 		"defaultValue": 0,
 		"unsigned": true,
--		"readOnly": false,
-+		"readOnly": true,
-		"writeOnly": false,
-		"allowManualEntry": true
++		"readOnly": true
 	}
 ```

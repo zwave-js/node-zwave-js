@@ -1,5 +1,3 @@
-// Nortek Security & Control LLC PS15Z
-// Plug-In Appliance Module
 {
 	"manufacturer": "Nortek Security & Control LLC",
 	"manufacturerId": "0x014f",
@@ -22,8 +20,6 @@
 			"minValue": 0,
 			"maxValue": 1,
 			"defaultValue": 0,
-			"readOnly": false,
-			"writeOnly": false,
 			"allowManualEntry": false,
 			"options": [
 				{

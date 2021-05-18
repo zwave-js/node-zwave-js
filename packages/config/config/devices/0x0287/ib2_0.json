@@ -1,5 +1,3 @@
-// HAB Home Intelligence, LLC IB2.0
-// Window Blind Controller
 {
 	"manufacturer": "HAB Home Intelligence, LLC",
 	"manufacturerId": "0x0287",
@@ -24,8 +22,6 @@
 			"minValue": 1,
 			"maxValue": 5,
 			"defaultValue": 1,
-			"readOnly": false,
-			"writeOnly": false,
 			"allowManualEntry": false,
 			"options": [
 				{

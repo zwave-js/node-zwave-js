@@ -1,5 +1,3 @@
-// Zipato RGBWE27ZW
-// RGBW bulb
 {
 	"manufacturer": "Zipato",
 	"manufacturerId": "0x0131",
@@ -23,10 +21,7 @@
 			"valueSize": 1,
 			"minValue": 1,
 			"maxValue": 100,
-			"defaultValue": 50,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"defaultValue": 50
 		},
 		"2": {
 			"label": "Shock sensor sensitivity",
@@ -34,10 +29,7 @@
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 31,
-			"defaultValue": 16,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"defaultValue": 16
 		},
 		"3": {
 			"label": "Strobe Light Interval",
@@ -45,10 +37,7 @@
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 25,
-			"defaultValue": 0,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"defaultValue": 0
 		},
 		"4": {
 			"label": "Strobe Light Pulse Count",
@@ -57,10 +46,7 @@
 			"minValue": 0,
 			"maxValue": 255,
 			"defaultValue": 0,
-			"unsigned": true,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"unsigned": true
 		},
 		"5": {
 			"label": "Enable or Disable Random Strobe Pulse Colors",
@@ -69,8 +55,6 @@
 			"minValue": 0,
 			"maxValue": 1,
 			"defaultValue": 0,
-			"readOnly": false,
-			"writeOnly": false,
 			"allowManualEntry": false,
 			"options": [
 				{

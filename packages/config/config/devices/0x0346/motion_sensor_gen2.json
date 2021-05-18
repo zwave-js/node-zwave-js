@@ -1,0 +1,140 @@
+{
+	"manufacturer": "Ring",
+	"manufacturerId": "0x0346",
+	"label": "- / 4SP1SZ-0EU0",
+	"description": "Motion Sensor Gen2",
+	"devices": [
+		{
+			"productType": "0x0301",
+			"productId": "0x0301"
+		},
+		{
+			"productType": "0x0301",
+			"productId": "0x0401"
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"paramInformation": {
+		"1": {
+			"label": "Heartbeat Interval",
+			"valueSize": 1,
+			"unit": "minutes",
+			"minValue": 1,
+			"maxValue": 70,
+			"defaultValue": 70
+		},
+		"2": {
+			"label": "Application Retries",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 5,
+			"defaultValue": 5
+		},
+		"3": {
+			"label": "Application Level Retry Base Wait Time Period",
+			"valueSize": 1,
+			"unit": "seconds",
+			"minValue": 1,
+			"maxValue": 96,
+			"defaultValue": 5
+		},
+		"4": {
+			"label": "LED Indicator",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 2,
+			"defaultValue": 1,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Disable",
+					"value": 0
+				},
+				{
+					"label": "Light up after fault",
+					"value": 1
+				},
+				{
+					"label": "Light up after intrusion and intrusion clear",
+					"value": 2
+				}
+			]
+		},
+		"5": {
+			"label": "Occupancy Clear Delay",
+			"valueSize": 1,
+			"unit": "seconds",
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 0,
+			"unsigned": true
+		},
+		"6": {
+			"label": "Instrusion Clear Delay",
+			"valueSize": 1,
+			"unit": "seconds",
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 0,
+			"unsigned": true
+		},
+		"7": {
+			"label": "Standard Clear Delay",
+			"valueSize": 1,
+			"unit": "seconds",
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 1,
+			"unsigned": true
+		},
+		"8": {
+			"label": "Motion Detection Sensitivity",
+			"description": "0 = lowest, 4 = highest",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 4,
+			"defaultValue": 3
+		},
+		"9": {
+			"label": "Lighting Sensor",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 0,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Enable",
+					"value": 0
+				},
+				{
+					"label": "Disable",
+					"value": 1
+				}
+			]
+		},
+		"10": {
+			"label": "Lighting Delay",
+			"description": "Used to turn off lights when motion is no longer detected",
+			"valueSize": 1,
+			"unit": "seconds",
+			"minValue": 0,
+			"maxValue": 60,
+			"defaultValue": 2
+		},
+		"11": {
+			"label": "Supervision Report Timeout",
+			"valueSize": 2,
+			"unit": "ms",
+			"minValue": 500,
+			"maxValue": 30000,
+			"defaultValue": 10000
+		}
+	},
+	"metadata": {
+		"manual": "https://products.z-wavealliance.org/ProductManual/File?folder=&filename=product_documents/3869/Z-WaveUserManual_Motion_Detector_700.pdf"
+	}
+}

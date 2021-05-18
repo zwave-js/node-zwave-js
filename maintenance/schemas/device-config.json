@@ -74,45 +74,8 @@
 		"supportsZWavePlus": {
 			"const": true
 		},
-		"associations": {
-			"type": "object",
-			"description": "Define association groups for devices that don't support Z-Wave+ or modify the reported associations for devices that do.",
-			"properties": {
-				"$import": { "$ref": "#/definitions/import" }
-			},
-			"patternProperties": {
-				"^\\d+$": {
-					"type": "object",
-					"properties": {
-						"$if": { "$ref": "#/definitions/condition" },
-						"label": {
-							"type": "string",
-							"description": "How this association group is called"
-						},
-						"description": {
-							"type": "string",
-							"description": "What this association group does"
-						},
-						"maxNodes": {
-							"type": "number",
-							"description": "How many nodes may be assigned to this group",
-							"minimum": 1
-						},
-						"isLifeline": {
-							"const": true,
-							"description": "Whether this is a Lifeline group. SHOULD exist exactly once, some nodes require more groups to report everything."
-						},
-						"noEndpoint": {
-							"const": true,
-							"description": "Whether node id associations must be used for this group, even if the device supports endpoint associations"
-						}
-					},
-					"required": ["label", "maxNodes"],
-					"additionalProperties": false
-				}
-			},
-			"additionalProperties": false
-		},
+		"endpoints": { "$ref": "#/definitions/endpoints" },
+		"associations": { "$ref": "#/definitions/associations" },
 		"paramInformation": {
 			"type": "object",
 			"description": "Defines all the existing configuration parameters",
@@ -365,6 +328,69 @@
 			"type": "string",
 			"description": "A condition that must be fulfilled for this entry to exit."
 		},
+		"endpoints": {
+			"type": "object",
+			"description": "Endpoint-specific configuration",
+			"patternProperties": {
+				"^\\d+$": {
+					"type": "object",
+					"properties": {
+						"$import": { "$ref": "#/definitions/import" },
+						"$if": { "$ref": "#/definitions/condition" },
+						"associations": { "$ref": "#/definitions/associations" }
+					},
+					"additionalProperties": false
+				},
+				"additionalProperties": false
+			}
+		},
+		"associations": {
+			"type": "object",
+			"description": "Define association groups for devices that don't support Z-Wave+ or modify the reported associations for devices that do.",
+			"properties": {
+				"$import": { "$ref": "#/definitions/import" }
+			},
+			"patternProperties": {
+				"^\\d+$": {
+					"type": "object",
+					"properties": {
+						"$import": { "$ref": "#/definitions/import" },
+						"$if": { "$ref": "#/definitions/condition" },
+						"label": {
+							"type": "string",
+							"description": "How this association group is called"
+						},
+						"description": {
+							"type": "string",
+							"description": "What this association group does"
+						},
+						"maxNodes": {
+							"type": "number",
+							"description": "How many nodes may be assigned to this group",
+							"minimum": 1
+						},
+						"isLifeline": {
+							"type": "boolean",
+							"description": "Whether this is a Lifeline group. SHOULD exist exactly once, some nodes require more groups to report everything."
+						},
+						"multiChannel": {
+							"const": false,
+							"description": "Set this to `false` to force node id associations for this group, even if endpoint associations are supported."
+						}
+					},
+					"anyOf": [
+						{
+							"required": ["label", "maxNodes"]
+						},
+						{
+							"required": ["$import"]
+						}
+					],
+					"additionalProperties": false
+				}
+			},
+			"additionalProperties": false
+		},
 		"ccInfo": {
 			"type": "object",
 			"properties": {
@@ -450,15 +476,15 @@
 					"description": "The factory default value of this parameter."
 				},
 				"readOnly": {
-					"type": "boolean",
+					"const": true,
 					"description": "Whether this parameter can only be read"
 				},
 				"writeOnly": {
-					"type": "boolean",
+					"const": true,
 					"description": "Whether this parameter can only be written"
 				},
 				"allowManualEntry": {
-					"type": "boolean",
+					"const": false,
 					"description": "Whether this parameter accepts any value between minValue and maxValue. If false, options must be used to specify the allowed values."
 				},
 				"options": {
@@ -508,8 +534,7 @@
 							"label",
 							"valueSize",
 							"minValue",
-							"maxValue",
-							"allowManualEntry"
+							"maxValue"
 						]
 					},
 					"else": {
@@ -518,8 +543,7 @@
 							"valueSize",
 							"minValue",
 							"maxValue",
-							"defaultValue",
-							"allowManualEntry"
+							"defaultValue"
 						]
 					}
 				},

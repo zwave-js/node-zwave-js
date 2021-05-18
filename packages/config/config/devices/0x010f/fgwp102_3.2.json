@@ -1,5 +1,3 @@
-// Fibargroup FGWP102
-// Metered Wall Plug Switch
 {
 	"manufacturer": "Fibargroup",
 	"manufacturerId": "0x010f",
@@ -13,6 +11,10 @@
 		{
 			"productType": "0x0602",
 			"productId": "0x1003"
+		},
+		{
+			"productType": "0x0602",
+			"productId": "0x4003"
 		}
 	],
 	"firmwareVersion": {
@@ -28,8 +30,6 @@
 			"minValue": 0,
 			"maxValue": 1,
 			"defaultValue": 0,
-			"readOnly": false,
-			"writeOnly": false,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -49,8 +49,6 @@
 			"minValue": 0,
 			"maxValue": 1,
 			"defaultValue": 1,
-			"readOnly": false,
-			"writeOnly": false,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -70,9 +68,6 @@
 			"minValue": 0,
 			"maxValue": 30000,
 			"defaultValue": 0,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true,
 			"options": [
 				{
 					"label": "function inactive",
@@ -86,10 +81,7 @@
 			"valueSize": 1,
 			"minValue": 1,
 			"maxValue": 100,
-			"defaultValue": 80,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"defaultValue": 80
 		},
 		"11": {
 			"label": "Standard power report",
@@ -97,10 +89,7 @@
 			"valueSize": 1,
 			"minValue": 1,
 			"maxValue": 100,
-			"defaultValue": 15,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"defaultValue": 15
 		},
 		"12": {
 			"label": "Power reporting interval",
@@ -108,10 +97,7 @@
 			"valueSize": 2,
 			"minValue": 5,
 			"maxValue": 600,
-			"defaultValue": 30,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"defaultValue": 30
 		},
 		"13": {
 			"label": "Energy reporting threshold",
@@ -120,9 +106,6 @@
 			"minValue": 0,
 			"maxValue": 500,
 			"defaultValue": 10,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true,
 			"options": [
 				{
 					"label": "energy reports inactive",
@@ -137,9 +120,6 @@
 			"minValue": 0,
 			"maxValue": 32400,
 			"defaultValue": 3600,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true,
 			"options": [
 				{
 					"label": "periodic reports inactive",
@@ -154,8 +134,6 @@
 			"minValue": 0,
 			"maxValue": 1,
 			"defaultValue": 0,
-			"readOnly": false,
-			"writeOnly": false,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -174,8 +152,6 @@
 			"minValue": 0,
 			"maxValue": 1,
 			"defaultValue": 0,
-			"readOnly": false,
-			"writeOnly": false,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -193,20 +169,14 @@
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 24900,
-			"defaultValue": 300,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"defaultValue": 300
 		},
 		"22": {
 			"label": "UP value - association group (3)",
 			"valueSize": 2,
 			"minValue": 100,
 			"maxValue": 25000,
-			"defaultValue": 500,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"defaultValue": 500
 		},
 		"23": {
 			"label": "The response after exceeding defined power values",
@@ -215,8 +185,6 @@
 			"minValue": 1,
 			"maxValue": 6,
 			"defaultValue": 6,
-			"readOnly": false,
-			"writeOnly": false,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -251,9 +219,6 @@
 			"minValue": 0,
 			"maxValue": 255,
 			"defaultValue": 255,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true,
 			"options": [
 				{
 					"label": "Default",
@@ -268,8 +233,6 @@
 			"minValue": 1,
 			"maxValue": 63,
 			"defaultValue": 63,
-			"readOnly": false,
-			"writeOnly": false,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -308,10 +271,7 @@
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 50,
-			"defaultValue": 0,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"defaultValue": 0
 		},
 		"32": {
 			"label": "Alarm state duration",
@@ -319,10 +279,7 @@
 			"valueSize": 2,
 			"minValue": 1,
 			"maxValue": 32400,
-			"defaultValue": 600,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"defaultValue": 600
 		},
 		"40": {
 			"label": "Power load for violet colour",
@@ -330,10 +287,7 @@
 			"valueSize": 2,
 			"minValue": 1000,
 			"maxValue": 30000,
-			"defaultValue": 25000,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"defaultValue": 25000
 		},
 		"41": {
 			"label": "LED ring colour (device is ON)",
@@ -341,8 +295,6 @@
 			"minValue": 0,
 			"maxValue": 9,
 			"defaultValue": 1,
-			"readOnly": false,
-			"writeOnly": false,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -393,8 +345,6 @@
 			"minValue": 0,
 			"maxValue": 9,
 			"defaultValue": 0,
-			"readOnly": false,
-			"writeOnly": false,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -441,8 +391,6 @@
 			"minValue": 0,
 			"maxValue": 9,
 			"defaultValue": 2,
-			"readOnly": false,
-			"writeOnly": false,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -494,8 +442,6 @@
 			"minValue": 0,
 			"maxValue": 3,
 			"defaultValue": 3,
-			"readOnly": false,
-			"writeOnly": false,
 			"allowManualEntry": false,
 			"options": [
 				{

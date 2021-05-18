@@ -1,5 +1,3 @@
-// Fibargroup FGT001
-// Thermostatic Valve
 {
 	"manufacturer": "Fibargroup",
 	"manufacturerId": "0x010f",
@@ -28,10 +26,7 @@
 			"valueSize": 4,
 			"minValue": 10,
 			"maxValue": 10000,
-			"defaultValue": 240,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"defaultValue": 240
 		},
 		"2": {
 			"label": "Additional functions",
@@ -39,10 +34,7 @@
 			"valueSize": 4,
 			"minValue": 0,
 			"maxValue": 31,
-			"defaultValue": 1,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"defaultValue": 1
 		},
 		"3": {
 			"label": "Additional functions status (READ-ONLY)",
@@ -51,9 +43,7 @@
 			"minValue": 0,
 			"maxValue": 3,
 			"defaultValue": 0,
-			"readOnly": true,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"readOnly": true
 		}
 	}
 }

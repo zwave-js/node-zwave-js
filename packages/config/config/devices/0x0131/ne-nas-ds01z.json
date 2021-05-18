@@ -1,5 +1,3 @@
-// Zipato NE-NAS-DS01Z
-// Door sensor
 {
 	"manufacturer": "Zipato",
 	"manufacturerId": "0x0131",
@@ -30,9 +28,6 @@
 			"maxValue": 65535,
 			"defaultValue": 0,
 			"unsigned": true,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true,
 			"options": [
 				{
 					"label": "Disabled",
@@ -47,9 +42,6 @@
 			"maxValue": 255,
 			"defaultValue": 255,
 			"unsigned": true,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true,
 			"options": [
 				{
 					"label": "Off",

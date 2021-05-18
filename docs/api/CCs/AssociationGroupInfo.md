@@ -1,5 +1,7 @@
 # Association Group Information CC
 
+?> CommandClass ID: `0x59`
+
 ## Association Group Information CC methods
 
 ### `getGroupName`

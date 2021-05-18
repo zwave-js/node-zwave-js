@@ -1,5 +1,3 @@
-// Fibargroup FGFS101
-// Flood Sensor
 {
 	"manufacturer": "Fibargroup",
 	"manufacturerId": "0x010f",
@@ -24,6 +22,10 @@
 		},
 		{
 			"productType": "0x0b01",
+			"productId": "0x2003"
+		},
+		{
+			"productType": "0x0b01",
 			"productId": "0x3002"
 		}
 	],
@@ -40,10 +42,7 @@
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 3600,
-			"defaultValue": 0,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"defaultValue": 0
 		},
 		"2": {
 			"label": "Select alarm type (visual/acoustic)",
@@ -52,8 +51,6 @@
 			"minValue": 0,
 			"maxValue": 3,
 			"defaultValue": 3,
-			"readOnly": false,
-			"writeOnly": false,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -81,10 +78,7 @@
 			"minValue": 1,
 			"maxValue": 255,
 			"defaultValue": 255,
-			"unsigned": true,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"unsigned": true
 		},
 		"9": {
 			"label": "Device off and alarm cancellations",
@@ -93,8 +87,6 @@
 			"minValue": 0,
 			"maxValue": 1,
 			"defaultValue": 1,
-			"readOnly": false,
-			"writeOnly": false,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -114,10 +106,7 @@
 			"valueSize": 4,
 			"minValue": 1,
 			"maxValue": 65535,
-			"defaultValue": 300,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"defaultValue": 300
 		},
 		"12": {
 			"label": "Temperature measurement hysteresis",
@@ -126,10 +115,7 @@
 			"valueSize": 2,
 			"minValue": 1,
 			"maxValue": 1000,
-			"defaultValue": 50,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"defaultValue": 50
 		},
 		"50": {
 			"label": "Low temperature alarm threshold",
@@ -138,10 +124,7 @@
 			"valueSize": 2,
 			"minValue": -10000,
 			"maxValue": 10000,
-			"defaultValue": 1500,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"defaultValue": 1500
 		},
 		"51": {
 			"label": "High temperature alarm threshold",
@@ -150,10 +133,7 @@
 			"valueSize": 2,
 			"minValue": -10000,
 			"maxValue": 10000,
-			"defaultValue": 3500,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"defaultValue": 3500
 		},
 		"61": {
 			"label": "Low temperature alarm indicator colour",
@@ -161,10 +141,7 @@
 			"valueSize": 4,
 			"minValue": 0,
 			"maxValue": 16777215,
-			"defaultValue": 255,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"defaultValue": 255
 		},
 		"62": {
 			"label": "High temperature alarm indicator colour",
@@ -172,10 +149,7 @@
 			"valueSize": 4,
 			"minValue": 0,
 			"maxValue": 16777215,
-			"defaultValue": 16711680,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"defaultValue": 16711680
 		},
 		"63": {
 			"label": "Visual temperature indicator",
@@ -184,8 +158,6 @@
 			"minValue": 0,
 			"maxValue": 2,
 			"defaultValue": 2,
-			"readOnly": false,
-			"writeOnly": false,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -209,10 +181,7 @@
 			"valueSize": 2,
 			"minValue": -10000,
 			"maxValue": 10000,
-			"defaultValue": 0,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"defaultValue": 0
 		},
 		"74": {
 			"label": "Alarm frame for movement/tamper",
@@ -221,8 +190,6 @@
 			"minValue": 0,
 			"maxValue": 3,
 			"defaultValue": 2,
-			"readOnly": false,
-			"writeOnly": false,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -250,10 +217,7 @@
 			"valueSize": 4,
 			"minValue": 0,
 			"maxValue": 65535,
-			"defaultValue": 0,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"defaultValue": 0
 		},
 		"76": {
 			"label": "Alarm signalization reactivation period",
@@ -262,10 +226,7 @@
 			"valueSize": 4,
 			"minValue": 0,
 			"maxValue": 65535,
-			"defaultValue": 0,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"defaultValue": 0
 		},
 		"77": {
 			"label": "Flood sensor functionality turned off",
@@ -274,8 +235,6 @@
 			"minValue": 0,
 			"maxValue": 1,
 			"defaultValue": 0,
-			"readOnly": false,
-			"writeOnly": false,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -295,8 +254,6 @@
 			"minValue": 0,
 			"maxValue": 7,
 			"defaultValue": 7,
-			"readOnly": false,
-			"writeOnly": false,
 			"allowManualEntry": false,
 			"options": [
 				{

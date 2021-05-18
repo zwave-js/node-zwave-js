@@ -1,5 +1,3 @@
-// AEON Labs DSA03XXX-ZW
-// Minimote 4 button remote control
 {
 	"manufacturer": "AEON Labs",
 	"manufacturerId": "0x0086",
@@ -40,35 +38,35 @@
 	},
 	"paramInformation": {
 		"241": {
-			"$import": "templates/aeotec_template.json#base_mode_5",
+			"$import": "templates/aeotec_template.json#base_remote_mode_5",
 			"label": "Button 1 (Upper Left) Mode"
 		},
 		"242": {
-			"$import": "templates/aeotec_template.json#base_mode_5",
+			"$import": "templates/aeotec_template.json#base_remote_mode_5",
 			"label": "Button 2 (Upper Right) Mode"
 		},
 		"243": {
-			"$import": "templates/aeotec_template.json#base_mode_5",
+			"$import": "templates/aeotec_template.json#base_remote_mode_5",
 			"label": "Button 3 (Lower Left) Mode"
 		},
 		"244": {
-			"$import": "templates/aeotec_template.json#base_mode_5",
+			"$import": "templates/aeotec_template.json#base_remote_mode_5",
 			"label": "Button 4 (Lower Right) Mode"
 		},
 		"245": {
-			"$import": "templates/aeotec_template.json#base_mode_5",
+			"$import": "templates/aeotec_template.json#base_remote_mode_5",
 			"label": "Button 5 (Include) Mode"
 		},
 		"246": {
-			"$import": "templates/aeotec_template.json#base_mode_5",
+			"$import": "templates/aeotec_template.json#base_remote_mode_5",
 			"label": "Button 6 (Exclude) Mode"
 		},
 		"247": {
-			"$import": "templates/aeotec_template.json#base_mode_5",
+			"$import": "templates/aeotec_template.json#base_remote_mode_5",
 			"label": "Button 7 (Association) Mode"
 		},
 		"248": {
-			"$import": "templates/aeotec_template.json#base_mode_5",
+			"$import": "templates/aeotec_template.json#base_remote_mode_5",
 			"label": "Button 8 (Learn) Mode"
 		},
 		"250": {

@@ -1,5 +1,3 @@
-// Radio Thermostat Company of America (RTC) CT200
-// Vivint Element Thermostat w/ other sensors
 {
 	"manufacturer": "Radio Thermostat Company of America (RTC)",
 	"manufacturerId": "0x0098",
@@ -29,7 +27,6 @@
 			"minValue": 0,
 			"maxValue": 4,
 			"defaultValue": 2,
-			"readOnly": false,
 			"writeOnly": true,
 			"allowManualEntry": false,
 			"options": [
@@ -58,9 +55,7 @@
 			"minValue": 0,
 			"maxValue": 0,
 			"defaultValue": 0,
-			"readOnly": true,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"readOnly": true
 		},
 		"3": {
 			"label": "Utility Lock",
@@ -70,9 +65,7 @@
 			"maxValue": 255,
 			"defaultValue": 0,
 			"unsigned": true,
-			"readOnly": false,
-			"writeOnly": true,
-			"allowManualEntry": true
+			"writeOnly": true
 		},
 		"4": {
 			"label": "C-Wire/Battery Status",
@@ -82,7 +75,6 @@
 			"maxValue": 2,
 			"defaultValue": 0,
 			"readOnly": true,
-			"writeOnly": false,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -101,20 +93,14 @@
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 3,
-			"defaultValue": 2,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"defaultValue": 2
 		},
 		"6": {
 			"label": "Auxiliary/Emergency Heat Pump Mode",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 1,
-			"defaultValue": 0,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"defaultValue": 0
 		},
 		"7": {
 			"label": "Thermostat Swing Temp",
@@ -124,8 +110,6 @@
 			"minValue": 1,
 			"maxValue": 8,
 			"defaultValue": 2,
-			"readOnly": false,
-			"writeOnly": false,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -169,8 +153,6 @@
 			"minValue": 4,
 			"maxValue": 12,
 			"defaultValue": 4,
-			"readOnly": false,
-			"writeOnly": false,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -202,8 +184,6 @@
 			"minValue": 1,
 			"maxValue": 2,
 			"defaultValue": 2,
-			"readOnly": false,
-			"writeOnly": false,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -222,8 +202,6 @@
 			"minValue": 0,
 			"maxValue": 1,
 			"defaultValue": 1,
-			"readOnly": false,
-			"writeOnly": false,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -243,8 +221,6 @@
 			"minValue": 0,
 			"maxValue": 1,
 			"defaultValue": 0,
-			"readOnly": false,
-			"writeOnly": false,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -264,8 +240,6 @@
 			"minValue": 1,
 			"maxValue": 2,
 			"defaultValue": 1,
-			"readOnly": false,
-			"writeOnly": false,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -284,10 +258,7 @@
 			"minValue": 1,
 			"maxValue": 255,
 			"defaultValue": 2,
-			"unsigned": true,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"unsigned": true
 		},
 		"15": {
 			"label": "Fan Timer",
@@ -295,20 +266,14 @@
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 60,
-			"defaultValue": 0,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"defaultValue": 0
 		},
 		"17": {
 			"label": "Temperature Calibration",
 			"valueSize": 1,
 			"minValue": -6,
 			"maxValue": 6,
-			"defaultValue": 0,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"defaultValue": 0
 		},
 		"18": {
 			"label": "Display Units",
@@ -317,8 +282,6 @@
 			"minValue": 0,
 			"maxValue": 1,
 			"defaultValue": 0,
-			"readOnly": false,
-			"writeOnly": false,
 			"allowManualEntry": false,
 			"options": [
 				{

@@ -1,5 +1,3 @@
-// TKB Home TZ77
-// RGB dimmer switch
 {
 	"manufacturer": "TKB Home",
 	"manufacturerId": "0x0118",
@@ -23,10 +21,7 @@
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 1,
-			"defaultValue": 1,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"defaultValue": 1
 		},
 		"2": {
 			"label": "Memory function",
@@ -34,10 +29,7 @@
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 1,
-			"defaultValue": 1,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"defaultValue": 1
 		}
 	}
 }

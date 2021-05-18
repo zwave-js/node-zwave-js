@@ -1,5 +1,3 @@
-// Logic Group ZBA7140
-// Battery Wall Controller
 {
 	"manufacturer": "Logic Group",
 	"manufacturerId": "0x0234",
@@ -250,7 +248,7 @@
 		},
 		"18[0xff000000]": {
 			"$import": "templates/logic_group_template.json#multilevel_enable",
-			"label": "Button 4 - Double Press (On Value)"
+			"label": "Button 4 - Double Press"
 		},
 		"18[0xff0000]": {
 			"$import": "templates/logic_group_template.json#multilevel_upper_function",

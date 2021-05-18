@@ -1,5 +1,3 @@
-// ConnectHome CH-201
-// CH-201 Thermostat
 {
 	"manufacturer": "ConnectHome",
 	"manufacturerId": "0x0179",
@@ -29,8 +27,6 @@
 			"minValue": 0,
 			"maxValue": 1,
 			"defaultValue": 0,
-			"readOnly": false,
-			"writeOnly": false,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -49,10 +45,7 @@
 			"valueSize": 1,
 			"minValue": 1,
 			"maxValue": 7,
-			"defaultValue": 1,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"defaultValue": 1
 		},
 		"3": {
 			"label": "Point mode",
@@ -60,8 +53,6 @@
 			"minValue": 0,
 			"maxValue": 2,
 			"defaultValue": 2,
-			"readOnly": false,
-			"writeOnly": false,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -85,8 +76,6 @@
 			"minValue": 0,
 			"maxValue": 1,
 			"defaultValue": 1,
-			"readOnly": false,
-			"writeOnly": false,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -106,10 +95,7 @@
 			"valueSize": 2,
 			"minValue": 100,
 			"maxValue": 30000,
-			"defaultValue": 30000,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"defaultValue": 30000
 		},
 		"6": {
 			"label": "Minimum allowable temperature",
@@ -117,10 +103,7 @@
 			"valueSize": 2,
 			"minValue": -127,
 			"maxValue": 127,
-			"defaultValue": 4,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"defaultValue": 4
 		},
 		"7": {
 			"label": "Maximum alowable temperature",
@@ -128,10 +111,7 @@
 			"valueSize": 2,
 			"minValue": -127,
 			"maxValue": 127,
-			"defaultValue": 30,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"defaultValue": 30
 		},
 		"8": {
 			"label": "Time turbo mode",
@@ -139,10 +119,7 @@
 			"valueSize": 2,
 			"minValue": 100,
 			"maxValue": 1200,
-			"defaultValue": 120,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"defaultValue": 120
 		},
 		"9": {
 			"label": "Power on turbo mode",
@@ -150,10 +127,7 @@
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 1,
-			"defaultValue": 0,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"defaultValue": 0
 		},
 		"10": {
 			"label": "Temperature sensor mode",
@@ -161,8 +135,6 @@
 			"minValue": 0,
 			"maxValue": 2,
 			"defaultValue": 0,
-			"readOnly": false,
-			"writeOnly": false,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -185,10 +157,7 @@
 			"valueSize": 2,
 			"minValue": 15,
 			"maxValue": 600,
-			"defaultValue": 300,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"defaultValue": 300
 		},
 		"12": {
 			"label": "Temprature threshold to send data",
@@ -197,20 +166,14 @@
 			"valueSize": 1,
 			"minValue": 1,
 			"maxValue": 16,
-			"defaultValue": 1,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"defaultValue": 1
 		},
 		"13": {
 			"label": "Interval for forced sending data",
 			"valueSize": 2,
 			"minValue": 100,
 			"maxValue": 600,
-			"defaultValue": 300,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"defaultValue": 300
 		},
 		"15": {
 			"label": "Type of switch 1",
@@ -219,8 +182,6 @@
 			"minValue": 0,
 			"maxValue": 3,
 			"defaultValue": 0,
-			"readOnly": false,
-			"writeOnly": false,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -248,8 +209,6 @@
 			"minValue": 0,
 			"maxValue": 3,
 			"defaultValue": 0,
-			"readOnly": false,
-			"writeOnly": false,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -277,8 +236,6 @@
 			"minValue": 0,
 			"maxValue": 10,
 			"defaultValue": 0,
-			"readOnly": false,
-			"writeOnly": false,
 			"allowManualEntry": false,
 			"options": [
 				{

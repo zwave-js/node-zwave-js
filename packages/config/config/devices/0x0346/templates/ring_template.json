@@ -8,7 +8,6 @@
 		"unsigned": true,
 		"defaultValue": 0,
 		"readOnly": true,
-		"writeOnly": false,
 		"allowManualEntry": false,
 		"options": [
 			{

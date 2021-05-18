@@ -51,6 +51,20 @@ export class VirtualNode extends VirtualEndpoint {
 				},
 				value,
 			);
+			if (api.isSetValueOptimistic(valueId)) {
+				// If the call did not throw, assume that the call was successful and remember the new value
+				// for each node that was affected by this command
+				const affectedNodes = endpointInstance.node.physicalNodes.filter(
+					(node) =>
+						node
+							.getEndpoint(endpointInstance.index)
+							?.supportsCC(valueId.commandClass),
+				);
+				for (const node of affectedNodes) {
+					node.valueDB.setValue(valueId, value);
+				}
+			}
+
 			return true;
 		} catch (e: unknown) {
 			// Define which errors during setValue are expected and won't crash

@@ -1,0 +1,255 @@
+{
+	"manufacturer": "NICE Spa",
+	"manufacturerId": "0x0441",
+	"label": "IBT4ZWAVE",
+	"description": "BusT4-Z-Wave interface",
+	"devices": [
+		{
+			"productType": "0x2400",
+			"productId": "0x1000",
+			"zwaveAllianceId": 3837
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"paramInformation": {
+		"30[0xff000000]": {
+			"label": "Alarm Configuration - 1st Slot Notification Type",
+			"valueSize": 4,
+			"minValue": 0,
+			"maxValue": 22,
+			"defaultValue": 0,
+			"unsigned": true,
+			"options": [
+				{
+					"label": "Disabled",
+					"value": 0
+				},
+				{
+					"label": "Smoke Alarm",
+					"value": 1
+				},
+				{
+					"label": "CO Alarm",
+					"value": 2
+				},
+				{
+					"label": "CO2 Alarm",
+					"value": 3
+				},
+				{
+					"label": "Heat Alarm",
+					"value": 4
+				},
+				{
+					"label": "Water Alarm",
+					"value": 5
+				},
+				{
+					"label": "Access Control",
+					"value": 6
+				},
+				{
+					"label": "Home Security",
+					"value": 7
+				},
+				{
+					"label": "Power Management",
+					"value": 8
+				},
+				{
+					"label": "System",
+					"value": 9
+				},
+				{
+					"label": "Emergency Alarm",
+					"value": 10
+				},
+				{
+					"label": "Clock",
+					"value": 11
+				},
+				{
+					"label": "Appliance",
+					"value": 12
+				},
+				{
+					"label": "Home Health",
+					"value": 13
+				},
+				{
+					"label": "Siren",
+					"value": 14
+				},
+				{
+					"label": "Water Valve",
+					"value": 15
+				},
+				{
+					"label": "Weather Alarm",
+					"value": 16
+				},
+				{
+					"label": "Irrigation",
+					"value": 17
+				},
+				{
+					"label": "Gas Alarm",
+					"value": 18
+				},
+				{
+					"label": "Pest Control",
+					"value": 19
+				},
+				{
+					"label": "Light Sensor",
+					"value": 20
+				},
+				{
+					"label": "Water Quality Monitoring",
+					"value": 21
+				},
+				{
+					"label": "Home Monitoring",
+					"value": 22
+				}
+			]
+		},
+		"30[0xff0000]": {
+			"label": "Alarm Configuration - 1st Slot Notification Event",
+			"valueSize": 4,
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 0,
+			"unsigned": true,
+			"options": [
+				{
+					"label": "Any Notification,",
+					"value": 255
+				},
+				{
+					"label": "Disabled",
+					"value": 0
+				}
+			]
+		},
+		"30[0xff00]": {
+			"label": "Alarm Configuration - 1st Slot Notification Event Parameter",
+			"valueSize": 4,
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 0,
+			"unsigned": true
+		},
+		"30[0xff]": {
+			"label": "Alarm Configuration - 1st Slot Action",
+			"valueSize": 4,
+			"minValue": 0,
+			"maxValue": 2,
+			"defaultValue": 0,
+			"unsigned": true,
+			"options": [
+				{
+					"label": "No Action",
+					"value": 0
+				},
+				{
+					"label": "Open",
+					"value": 1
+				},
+				{
+					"label": "Close",
+					"value": 2
+				}
+			]
+		},
+		"31[0xff000000]": {
+			"$import": "#paramInformation/30[0xff000000]",
+			"label": "Alarm Configuration - 2nd Slot Notification Type",
+			"defaultValue": 5
+		},
+		"31[0xff0000]": {
+			"$import": "#paramInformation/30[0xff0000]",
+			"label": "Alarm Configuration - 2nd Slot Notification Event",
+			"defaultValue": 255
+		},
+		"31[0xff00]": {
+			"$import": "#paramInformation/30[0xff00]",
+			"label": "Alarm Configuration - 2nd Slot Notification Event Parameter",
+			"defaultValue": 0
+		},
+		"31[0xff]": {
+			"$import": "#paramInformation/30[0xff]",
+			"label": "Alarm Configuration - 2nd Slot Action",
+			"defaultValue": 0
+		},
+		"32[0xff000000]": {
+			"$import": "#paramInformation/30[0xff000000]",
+			"label": "Alarm Configuration - 3rd Slot Notification Type",
+			"defaultValue": 1
+		},
+		"32[0xff0000]": {
+			"$import": "#paramInformation/30[0xff0000]",
+			"label": "Alarm Configuration - 3rd Slot Notification Event",
+			"defaultValue": 255
+		},
+		"32[0xff00]": {
+			"$import": "#paramInformation/30[0xff00]",
+			"label": "Alarm Configuration - 3rd Slot Notification Event Parameter",
+			"defaultValue": 0
+		},
+		"32[0xff]": {
+			"$import": "#paramInformation/30[0xff]",
+			"label": "Alarm Configuration - 3rd Slot Action",
+			"defaultValue": 0
+		},
+		"33[0xff000000]": {
+			"$import": "#paramInformation/30[0xff000000]",
+			"label": "Alarm Configuration - 4th Slot Notification Type",
+			"defaultValue": 2
+		},
+		"33[0xff0000]": {
+			"$import": "#paramInformation/30[0xff0000]",
+			"label": "Alarm Configuration - 4th Slot Notification Event",
+			"defaultValue": 255
+		},
+		"33[0xff00]": {
+			"$import": "#paramInformation/30[0xff00]",
+			"label": "Alarm Configuration - 4th Slot Notification Event Parameter",
+			"defaultValue": 0
+		},
+		"33[0xff]": {
+			"$import": "#paramInformation/30[0xff]",
+			"label": "Alarm Configuration - 4th Slot Action",
+			"defaultValue": 0
+		},
+		"34[0xff000000]": {
+			"$import": "#paramInformation/30[0xff000000]",
+			"label": "Alarm Configuration - 5th Slot Notification Type",
+			"defaultValue": 4
+		},
+		"34[0xff0000]": {
+			"$import": "#paramInformation/30[0xff0000]",
+			"label": "Alarm Configuration - 5th Slot Notification Event",
+			"defaultValue": 255
+		},
+		"34[0xff00]": {
+			"$import": "#paramInformation/30[0xff00]",
+			"label": "Alarm Configuration - 5th Slot Notification Event Parameter",
+			"defaultValue": 0
+		},
+		"34[0xff]": {
+			"$import": "#paramInformation/30[0xff]",
+			"label": "Alarm Configuration - 5th Slot Action",
+			"defaultValue": 0
+		}
+	},
+	"metadata": {
+		"inclusion": "Install the external antenna before powering the device and adding to the Z-Wave network for the device to automatically detect and enable it (use only antennas and cables compliant with technical specification).\n\n01. Set the Z-Wave gateway into adding mode (see the Z-Wave gateway’s manual)\n02. On the IBT4ZWAVE press and release the S1 button 3 times x3 S1\n03. LEDs on the IBT4ZW AVE will start slow flashing alter nately\n04. If you are adding in Security S2 Authenticated, input the underlined part\nof the DSK (label on the box) DSK: XXXXX-XXXXX-XXXXX-XXXXX XXXXX-XXXXX-XXXXX-XXXXX\n05. When the adding process ends, the LEDs on the IBT4ZWAVE will show adding and antenna status (Table 1 in manual)",
+		"exclusion": "01. Set the Z-Wave gateway into remove mode (see the Z-Wave gateway’s manual)\n02. On the IBT4ZWAVE press and release the S1 button 3 times x3 S1\n03. LEDs on the IBT4ZW AVE will start slow flashing alternately\n04. Wait for the removing process to end",
+		"reset": "01. Press and hold the S1 button\n03. Wait 3 seconds\n04. LEDs will show adding and antenna status (Table 1 in manual) for 3 seconds\n05. LEDs will turn off for 3 seconds\n06. LEDs will show selected antenna (Table 2 in manual) for 3 seconds\n07. When both LEDs light up simultaneously, release the button\n08. Press and release the S1 button\n09. Both LEDs will flash once at the end of the procedure",
+		"manual": "https://products.z-wavealliance.org/ProductManual/File?folder=&filename=product_documents/3837/IBT4ZWAVE-T-v0.7.pdf"
+	}
+}

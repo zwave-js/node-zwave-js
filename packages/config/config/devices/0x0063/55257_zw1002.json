@@ -1,5 +1,3 @@
-// GE/Jasco 55257 / ZW1002
-// In-Wall Tamper Resistant Smart Outlet
 {
 	"manufacturer": "GE/Jasco",
 	"manufacturerId": "0x0063",
@@ -41,8 +39,6 @@
 			"maxValue": 2,
 			"defaultValue": 1,
 			"unsigned": true,
-			"readOnly": false,
-			"writeOnly": false,
 			"allowManualEntry": false,
 			"options": [
 				{

@@ -1,5 +1,3 @@
-// Sunricher Heatit Z-Push Button 8
-// Wall Mounted Switch
 {
 	"manufacturer": "Sunricher",
 	"manufacturerId": "0x0330",
@@ -23,8 +21,6 @@
 			"minValue": 0,
 			"maxValue": 21930,
 			"defaultValue": 0,
-			"readOnly": false,
-			"writeOnly": false,
 			"allowManualEntry": false,
 			"options": [
 				{

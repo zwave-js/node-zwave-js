@@ -1,5 +1,3 @@
-// GE/Jasco 28169 / Jasco 28168
-// Plug in Smart Switch
 {
 	"manufacturer": "GE/Jasco",
 	"manufacturerId": "0x0063",
@@ -28,9 +26,6 @@
 			"minValue": 0,
 			"maxValue": 2,
 			"defaultValue": 0,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true,
 			"options": [
 				{
 					"label": "LED Light on when Z-Wave turned OFF",

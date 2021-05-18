@@ -1,0 +1,47 @@
+{
+	"manufacturer": "Aeotec Ltd.",
+	"manufacturerId": "0x0371",
+	"label": "ZWA004",
+	"description": "NanoMote One",
+	"devices": [
+		{
+			"productType": "0x0002",
+			"productId": "0x0004",
+			"zwaveAllianceId": 2816
+		},
+		{
+			"productType": "0x0102",
+			"productId": "0x0004",
+			"zwaveAllianceId": 2811
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"paramInformation": {
+		"32": {
+			"$import": "../0x0086/templates/aeotec_template.json#low_battery_threshold",
+			"label": "Level of Low Battery",
+			"defaultValue": 20
+		},
+		"41": {
+			"$import": "../templates/master_template.json#base_enable_disable",
+			"label": "Central Scene Notifications",
+			"defaultValue": 1
+		},
+		"42": {
+			"$import": "../templates/master_template.json#base_0-255_nounit",
+			"label": "Multilevel Command Duration",
+			"defaultValue": 255
+		},
+		"43": {
+			"$import": "../templates/master_template.json#base_enable_disable",
+			"label": "Low Battery Buzzer"
+		}
+	},
+	"metadata": {
+		"reset": "Pressing and holding the button for 20 seconds. Release the button after 20 seconds, LED will keep in yellow for 3 seconds. Scene Controller will be reset to factory defaults if you short press the button within this 3 seconds.\nUsing this procedure only in the event that the network primary controller is missing or otherwise inoperable",
+		"manual": "https://products.z-wavealliance.org/ProductManual/File?folder=&filename=MarketCertificationFiles/2811/NanoMote%20One%20USER%20MANUAL%20.pdf"
+	}
+}

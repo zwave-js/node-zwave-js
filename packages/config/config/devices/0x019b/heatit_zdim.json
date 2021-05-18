@@ -1,5 +1,3 @@
-// ThermoFloor HeatIt ZDim
-// Knob Smart Dimmer
 {
 	"manufacturer": "ThermoFloor",
 	"manufacturerId": "0x019b",
@@ -24,10 +22,7 @@
 			"minValue": 0,
 			"maxValue": 200,
 			"defaultValue": 0,
-			"unsigned": true,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"unsigned": true
 		},
 		"2": {
 			"label": "Minimum Dim level",
@@ -35,10 +30,7 @@
 			"valueSize": 1,
 			"minValue": 1,
 			"maxValue": 98,
-			"defaultValue": 20,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"defaultValue": 20
 		},
 		"3": {
 			"label": "Maximum Dim level",
@@ -46,10 +38,7 @@
 			"valueSize": 1,
 			"minValue": 2,
 			"maxValue": 99,
-			"defaultValue": 85,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"defaultValue": 85
 		},
 		"4": {
 			"label": "Total steps",
@@ -58,10 +47,7 @@
 			"minValue": 5,
 			"maxValue": 255,
 			"defaultValue": 15,
-			"unsigned": true,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"unsigned": true
 		},
 		"5": {
 			"label": "Double press function",
@@ -70,7 +56,6 @@
 			"maxValue": 1,
 			"defaultValue": 0,
 			"readOnly": true,
-			"writeOnly": false,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -89,8 +74,6 @@
 			"minValue": 0,
 			"maxValue": 1,
 			"defaultValue": 1,
-			"readOnly": false,
-			"writeOnly": false,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -110,10 +93,7 @@
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 99,
-			"defaultValue": 0,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"defaultValue": 0
 		},
 		"8": {
 			"label": "Dimming Duration",
@@ -122,10 +102,7 @@
 			"minValue": 0,
 			"maxValue": 255,
 			"defaultValue": 1,
-			"unsigned": true,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"unsigned": true
 		},
 		"9": {
 			"label": "Meter Report Interval",
@@ -133,10 +110,7 @@
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 32767,
-			"defaultValue": 60,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"defaultValue": 60
 		},
 		"10": {
 			"label": "Power restore level",
@@ -145,10 +119,7 @@
 			"valueSize": 1,
 			"minValue": 1,
 			"maxValue": 99,
-			"defaultValue": 50,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"defaultValue": 50
 		}
 	}
 }

@@ -1,5 +1,3 @@
-// Aeotec Ltd. ZWA002
-// Bulb 6 Multi-Color
 {
 	"manufacturer": "Aeotec Ltd.",
 	"manufacturerId": "0x0371",
@@ -27,8 +25,6 @@
 			"minValue": 0,
 			"maxValue": 2,
 			"defaultValue": 0,
-			"readOnly": false,
-			"writeOnly": false,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -51,8 +47,6 @@
 			"minValue": 0,
 			"maxValue": 1,
 			"defaultValue": 0,
-			"readOnly": false,
-			"writeOnly": false,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -71,10 +65,7 @@
 			"valueSize": 4,
 			"minValue": 5,
 			"maxValue": 8640000,
-			"defaultValue": 50,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"defaultValue": 50
 		},
 		"4": {
 			"label": "Set color that LED Bulb blinks in (Blink Mode)",
@@ -83,9 +74,7 @@
 			"maxValue": 255,
 			"defaultValue": 1,
 			"unsigned": true,
-			"readOnly": false,
-			"writeOnly": true,
-			"allowManualEntry": true
+			"writeOnly": true
 		},
 		"16": {
 			"label": "Ramp rate when dimming using Multilevel Switch",
@@ -93,10 +82,7 @@
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 100,
-			"defaultValue": 20,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"defaultValue": 20
 		},
 		"80": {
 			"label": "Enable notifications",
@@ -105,8 +91,6 @@
 			"minValue": 0,
 			"maxValue": 1,
 			"defaultValue": 1,
-			"readOnly": false,
-			"writeOnly": false,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -125,10 +109,7 @@
 			"valueSize": 2,
 			"minValue": 2700,
 			"maxValue": 4999,
-			"defaultValue": 2700,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"defaultValue": 2700
 		},
 		"82": {
 			"label": "Adjust color component of Cold White",
@@ -136,10 +117,7 @@
 			"valueSize": 2,
 			"minValue": 5000,
 			"maxValue": 6500,
-			"defaultValue": 6500,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"defaultValue": 6500
 		}
 	}
 }

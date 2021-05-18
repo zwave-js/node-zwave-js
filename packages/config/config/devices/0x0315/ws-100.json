@@ -1,5 +1,3 @@
-// zwaveproducts.com WS-100
-// Switch
 {
 	"manufacturer": "zwaveproducts.com",
 	"manufacturerId": "0x0315",
@@ -25,8 +23,6 @@
 			"maxValue": 255,
 			"defaultValue": 0,
 			"unsigned": true,
-			"readOnly": false,
-			"writeOnly": false,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -51,8 +47,6 @@
 			"maxValue": 255,
 			"defaultValue": 0,
 			"unsigned": true,
-			"readOnly": false,
-			"writeOnly": false,
 			"allowManualEntry": false,
 			"options": [
 				{

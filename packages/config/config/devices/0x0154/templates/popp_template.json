@@ -4,19 +4,13 @@
 		"valueSize": 1,
 		"minValue": 0,
 		"maxValue": 1,
-		"defaultValue": 0,
-		"readOnly": false,
-		"writeOnly": false,
-		"allowManualEntry": true
+		"defaultValue": 0
 	},
 	"shut_off_controller_behavior": {
 		"label": "Shut-Off Controller Behavior",
 		"valueSize": 1,
 		"minValue": 0,
 		"maxValue": 4,
-		"defaultValue": 0,
-		"readOnly": false,
-		"writeOnly": false,
-		"allowManualEntry": true
+		"defaultValue": 0
 	}
 }

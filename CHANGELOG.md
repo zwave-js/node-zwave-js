@@ -2,8 +2,90 @@
 <!--
 	Add placeholder for next release with `wip` snippet
 -->
-## __WORK IN PROGRESS__
-<!-- ### Breaking changes -->
+## 7.5.0 (2021-05-17)
+### Features
+* CC API methods that accept a duration now also accept user-friendly strings like `2m5s` and `60s` instead of only `Duration` class instances
+* Configuration files may now define association groups on endpoints
+* Successful multicast commands now optimistically update the CC values
+* Successful multicast commands now verify the current value if the target value is `255`
+
+### Bugfixes
+* Disconnection of a serial-over-TCP socket is now detected and destroy the driver instead of silently failing
+* Ensure the external configuration directory exists
+* Prevent congestion through delayed wakeup compat queries to sleeping nodes
+
+### Config file changes
+* Corrected lifeline label for Aeon ZW100
+* Aligned Fantem FT100 Motion with ZW100
+* Add additional device ID to Wenzhou ZW15S
+* Add support for Namron Dimmer 2 400W
+* Enable Basic Set mapping for EverSpring SP103
+* Align Fantem Door Window Sensor to Aeotec files
+* Add Zooz ZEN73/ZEN74; minor fix to importConfig.ts
+* Corrected lifeline label on Aeotec ZW112
+* Corrected param 8 for Aeotec DSB28
+* Corrected labels of power related params for Aeotec DSC11
+* Add keypad mapping to Yale Conexis L1
+* Several warnings were fixed in config files
+
+### Changes under the hood
+* Reduced boilerplate for writing configuration files:
+  * `readOnly` and `writeOnly` default to `false` and must now be omitted if they are not `true`
+  * `allowManualEntry` is now optional and defaults to `true` unless the parameter is `readOnly`. This must be omitted or `false`.
+* The CC API documentation now mentions the numeric CC identifier
+* The `noEndpoint` property for associations in config files has been renamed to `multiChannel` and its meaning was reversed.
+* The leading comments at the start of config files were removed
+
+## 7.4.0 (2021-05-10)
+### Features
+* Implement get/setPowerlevel, get/setRFRegion controller methods
+* Auto-enable TX status reports for later use in the driver
+* Add `controller.getNodeNeighbors` method, deprecate `node.neighbors` property
+* Define external config DB location with `ZWAVEJS_EXTERNAL_CONFIG` environment variable
+* Added the property `deviceDatabaseUrl` to `ZWaveNode` instances which includes the URL of a device's entry in the device database
+* Improve network healing strategy to avoid congestion. Healing now happens one by one, topologically, starting from the controller's neighbors. Listening nodes are prioritized over sleeping nodes.
+* Added daily log rotation for log files
+
+### Bugfixes
+* Avoid polynomial regex in `isPrintableASCIIWithNewlines`
+* Validate that mandatory CCs make sense before appying them to nodes or endpoints
+* Eliminate `@zwave-js/maintenance` `devDependency` from packages
+* Query `Version CC` version before relying on it
+* Updating the embedded config now uses the `--production` flag for `npm install` and `yarn install`
+* Fixed a driver crash when the `SerialAPISetup` command is not supported
+* Fixed a driver crash during `Association Group Information CC` interview when a group has no members
+
+### Config file changes
+* Disable supervision for ZL-PD-100
+* Fix typos in ZTS-110
+* Add additional identifier for FGKF-601
+* Update Devolo Siren param 31
+* Add additional identifiers for FGWP102
+* Cleanup and template Aeotec configurations (part 3)
+* Add new power reporting parameter to ZEN25
+* Update zw97 device config for 2nd gen EvaLogik hardware
+* Remove Popp 701202 FW version limits
+* Add PoPP 10-Years Smoke Detector Without Siren
+* Update ZSE11 with ZWA import
+* Add Ring contact sensor v2
+* Add Ring Keypad v2
+* Add compat flag preserveRootApplicationCCValueIDs to zen20
+* Add FGFS-101 v3.4 productId
+* Add Clamp 3 meters to DSB28, fix bitmask
+* Add Ring Motion Sensor Gen2
+* Add config file for Nice IBT4 BusT4
+* Change Aeotec Minimote config to writeOnly
+* Add zso7300 to logic group
+* Add Ring Outdoor Siren
+* Add new variant of param 52 for LZW31-SN v1.54+
+* Remove duplicate association group for Shenzhen Neo AB01Z
+* Add associations and double tap to GE 12729
+
+### Changes under the hood
+* When linting config files, conditions are now correctly considered
+* Allow `$import`-ing from partial parameters in config files
+
+## 7.3.0 (2021-04-29)
 ### Features
 * Added a driver option to specify a user-defined directory to prioritize loading device config files from. This can be used to simplify testing and developing new configs.
 * When a value is updated either by polling or through unsolicited updates, pending verification polls are canceled now. This reduces traffic for nodes that report status changes on their own.
@@ -17,6 +99,7 @@
 * `ObjectKeyMap` and `ReadonlyObjectKeyMap` are now iterable
 * The controller can no longer be re-interviewed with `refreshInfo`
 * Handle error when logging a `Notification CC Report` before the config is loaded
+* Consider custom transports to determine loglevel visibility
 
 ### Config file changes
 * Add `forceNotificationIdleReset` compat flag to Aeotec MultiSensor Gen5
@@ -46,6 +129,7 @@
 * Add Fibaro outlet FWPG-121 (UK version)
 * Map Basic Set to Binary Sensor Reports for Fibaro FGK101
 * Add battery low mapping to Kwikset locks
+* Make invert switch parameter writable on Nortek WD500Z-1, Linear WD500Z-1 and Evolve LRM-AS
 
 ### Changes under the hood
 * Update several dependencies

@@ -334,8 +334,10 @@ export class AssociationGroupInfoCCAPI extends PhysicalCCAPI {
 			cc,
 			this.commandOptions,
 		);
-		if (response) {
-			// SDS13782: If List Mode is set to 0, the Group Count field MUST be set to 1.
+		// SDS13782 says: If List Mode is set to 0, the Group Count field MUST be set to 1.
+		// But that's not always the case. Apparently some endpoints return 0 groups
+		// although they support AGI CC
+		if (response && response.groups.length > 0) {
 			const { groupId: _, ...info } = response.groups[0];
 			return {
 				hasDynamicInfo: response.hasDynamicInfo,

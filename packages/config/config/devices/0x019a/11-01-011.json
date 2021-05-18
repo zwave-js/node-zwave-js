@@ -1,5 +1,3 @@
-// Sensative AB 11-01-011
-// Strips-MaZw
 {
 	"manufacturer": "Sensative AB",
 	"manufacturerId": "0x019a",
@@ -30,8 +28,6 @@
 			"maxValue": 255,
 			"defaultValue": 1,
 			"unsigned": true,
-			"readOnly": false,
-			"writeOnly": false,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -56,8 +52,6 @@
 			"maxValue": 255,
 			"defaultValue": 1,
 			"unsigned": true,
-			"readOnly": false,
-			"writeOnly": false,
 			"allowManualEntry": false,
 			"options": [
 				{

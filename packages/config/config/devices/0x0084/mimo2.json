@@ -1,5 +1,3 @@
-// FortrezZ LLC MIMO2+
-// Dual Digital or Analog Voltage input and Dual Contact Relay
 {
 	"manufacturer": "FortrezZ LLC",
 	"manufacturerId": "0x0084",
@@ -26,80 +24,56 @@
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 4095,
-			"defaultValue": 0,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"defaultValue": 0
 		},
 		"5": {
 			"label": "Sensor 1 Lower Threshold Low",
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 4095,
-			"defaultValue": 0,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"defaultValue": 0
 		},
 		"6": {
 			"label": "Sensor 1 Upper Threshold High",
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 4095,
-			"defaultValue": 0,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"defaultValue": 0
 		},
 		"7": {
 			"label": "Sensor 1 Upper Threshold Low",
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 4095,
-			"defaultValue": 0,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"defaultValue": 0
 		},
 		"10": {
 			"label": "Sensor 2 Lower Threshold High",
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 4095,
-			"defaultValue": 0,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"defaultValue": 0
 		},
 		"11": {
 			"label": "Sensor 2 Lower Threshold Low",
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 4095,
-			"defaultValue": 0,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"defaultValue": 0
 		},
 		"12": {
 			"label": "Sensor 2 Upper Threshold High",
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 4095,
-			"defaultValue": 0,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"defaultValue": 0
 		},
 		"13": {
 			"label": "Sensor 2 Upper Threshold Low",
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 4095,
-			"defaultValue": 0,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"defaultValue": 0
 		},
 		"1[0x1f]": {
 			"label": "Relay 1 Trigger Interval",
@@ -108,10 +82,7 @@
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 31,
-			"defaultValue": 0,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"defaultValue": 0
 		},
 		"1[0xe0]": {
 			"label": "Relay 1 Trigger Configuration on Sensor Input",
@@ -119,8 +90,6 @@
 			"minValue": 0,
 			"maxValue": 7,
 			"defaultValue": 0,
-			"readOnly": false,
-			"writeOnly": false,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -155,10 +124,7 @@
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 31,
-			"defaultValue": 0,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"defaultValue": 0
 		},
 		"2[0xe0]": {
 			"label": "Relay 2 Trigger on Sensor Input",
@@ -166,8 +132,6 @@
 			"minValue": 0,
 			"maxValue": 7,
 			"defaultValue": 0,
-			"readOnly": false,
-			"writeOnly": false,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -202,10 +166,7 @@
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 63,
-			"defaultValue": 0,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"defaultValue": 0
 		},
 		"3[0x40]": {
 			"label": "Sensor 1 Report Mode",
@@ -214,8 +175,6 @@
 			"minValue": 0,
 			"maxValue": 1,
 			"defaultValue": 1,
-			"readOnly": false,
-			"writeOnly": false,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -235,8 +194,6 @@
 			"minValue": 0,
 			"maxValue": 1,
 			"defaultValue": 1,
-			"readOnly": false,
-			"writeOnly": false,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -255,10 +212,7 @@
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 63,
-			"defaultValue": 0,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"defaultValue": 0
 		},
 		"9[0x40]": {
 			"label": "Sensor 2 Report Mode",
@@ -267,8 +221,6 @@
 			"minValue": 0,
 			"maxValue": 1,
 			"defaultValue": 1,
-			"readOnly": false,
-			"writeOnly": false,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -288,8 +240,6 @@
 			"minValue": 0,
 			"maxValue": 1,
 			"defaultValue": 1,
-			"readOnly": false,
-			"writeOnly": false,
 			"allowManualEntry": false,
 			"options": [
 				{

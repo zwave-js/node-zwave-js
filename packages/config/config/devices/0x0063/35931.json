@@ -1,5 +1,3 @@
-// GE/Jasco 35931
-// Enbrighten 60W Dimmable Light Bulb
 {
 	"manufacturer": "GE/Jasco",
 	"manufacturerId": "0x0063",
@@ -23,8 +21,6 @@
 			"minValue": 0,
 			"maxValue": 1,
 			"defaultValue": 0,
-			"readOnly": false,
-			"writeOnly": false,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -42,20 +38,14 @@
 			"valueSize": 1,
 			"minValue": 1,
 			"maxValue": 99,
-			"defaultValue": 1,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"defaultValue": 1
 		},
 		"10": {
 			"label": "Dimming/Brightening Step Timing",
 			"valueSize": 1,
 			"minValue": 1,
 			"maxValue": 10,
-			"defaultValue": 3,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"defaultValue": 3
 		}
 	}
 }

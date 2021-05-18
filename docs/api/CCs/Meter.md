@@ -1,5 +1,7 @@
 # Meter CC
 
+?> CommandClass ID: `0x32`
+
 ## Meter CC methods
 
 ### `get`

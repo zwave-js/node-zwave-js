@@ -1,5 +1,3 @@
-// Logic Group ZDB5100
-// Wall Controller
 {
 	"manufacturer": "Logic Group",
 	"manufacturerId": "0x0234",
@@ -16,63 +14,151 @@
 		"min": "0.0",
 		"max": "255.255"
 	},
-	"associations": {
+	"endpoints": {
+		"0": {
+			"associations": {
+				"1": {
+					"label": "Lifeline",
+					"maxNodes": 5,
+					"isLifeline": true
+				},
+				"2": {
+					"label": "Button 1 (Basic Report)",
+					"maxNodes": 5
+				},
+				"3": {
+					"label": "Button 1 (Binary Switch Set)",
+					"maxNodes": 5
+				},
+				"4": {
+					"label": "Button 1 (Multilevel Set)",
+					"maxNodes": 5
+				},
+				"5": {
+					"label": "Button 2 (Basic Report)",
+					"maxNodes": 5
+				},
+				"6": {
+					"label": "Button 2 (Binary Switch Set)",
+					"maxNodes": 5
+				},
+				"7": {
+					"label": "Button 2 (Multilevel Set)",
+					"maxNodes": 5
+				},
+				"8": {
+					"label": "Button 3 (Basic Report)",
+					"maxNodes": 5
+				},
+				"9": {
+					"label": "Button 3  (Binary Switch Set)",
+					"maxNodes": 5
+				},
+				"10": {
+					"label": "Button 3 (Multilevel Set)",
+					"maxNodes": 5
+				},
+				"11": {
+					"label": "Button 4 (Basic Report)",
+					"maxNodes": 5
+				},
+				"12": {
+					"label": "Button 4 (Binary Switch Set)",
+					"maxNodes": 5
+				},
+				"13": {
+					"label": "Button 4 (Multilevel Set)",
+					"maxNodes": 5
+				},
+				"14": {
+					"label": "Dimmer (Basic Report)",
+					"maxNodes": 5
+				}
+			}
+		},
 		"1": {
-			"label": "Lifeline",
-			"maxNodes": 5,
-			"isLifeline": true
+			"associations": {
+				"1": {
+					"$import": "#endpoints/0/associations/1",
+					// This group is shared with the root endpoint, don't auto-assign multiple times
+					"isLifeline": false
+				},
+				"2": {
+					"$import": "#endpoints/0/associations/2"
+				},
+				"3": {
+					"$import": "#endpoints/0/associations/3"
+				},
+				"4": {
+					"$import": "#endpoints/0/associations/4"
+				}
+			}
 		},
 		"2": {
-			"label": "Button 1 (Basic Report)",
-			"maxNodes": 5
+			"associations": {
+				"1": {
+					"$import": "#endpoints/0/associations/1",
+					// This group is shared with the root endpoint, don't auto-assign multiple times
+					"isLifeline": false
+				},
+				"2": {
+					"$import": "#endpoints/0/associations/5"
+				},
+				"3": {
+					"$import": "#endpoints/0/associations/6"
+				},
+				"4": {
+					"$import": "#endpoints/0/associations/7"
+				}
+			}
 		},
 		"3": {
-			"label": "Button 1 (Binary Switch Set)",
-			"maxNodes": 5
+			"associations": {
+				"1": {
+					"$import": "#endpoints/0/associations/1",
+					// This group is shared with the root endpoint, don't auto-assign multiple times
+					"isLifeline": false
+				},
+				"2": {
+					"$import": "#endpoints/0/associations/8"
+				},
+				"3": {
+					"$import": "#endpoints/0/associations/9"
+				},
+				"4": {
+					"$import": "#endpoints/0/associations/10"
+				}
+			}
 		},
 		"4": {
-			"label": "Button 1 (Multilevel Set)",
-			"maxNodes": 5
+			"associations": {
+				"1": {
+					"$import": "#endpoints/0/associations/1",
+					// This group is shared with the root endpoint, don't auto-assign multiple times
+					"isLifeline": false
+				},
+				"2": {
+					"$import": "#endpoints/0/associations/11"
+				},
+				"3": {
+					"$import": "#endpoints/0/associations/12"
+				},
+				"4": {
+					"$import": "#endpoints/0/associations/13"
+				}
+			}
 		},
 		"5": {
-			"label": "Button 2 (Basic Report)",
-			"maxNodes": 5
-		},
-		"6": {
-			"label": "Button 2 (Binary Switch Set)",
-			"maxNodes": 5
-		},
-		"7": {
-			"label": "Button 2 (Multilevel Set)",
-			"maxNodes": 5
-		},
-		"8": {
-			"label": "Button 3 (Basic Report)",
-			"maxNodes": 5
-		},
-		"9": {
-			"label": "Button 3  (Binary Switch Set)",
-			"maxNodes": 5
-		},
-		"10": {
-			"label": "Button 3 (Multilevel Set)",
-			"maxNodes": 5
-		},
-		"11": {
-			"label": "Button 4 (Basic Report)",
-			"maxNodes": 5
-		},
-		"12": {
-			"label": "Button 4 (Binary Switch Set)",
-			"maxNodes": 5
-		},
-		"13": {
-			"label": "Button 4 (Multilevel Set)",
-			"maxNodes": 5
-		},
-		"14": {
-			"label": "Dimmer (Basic Report)",
-			"maxNodes": 5
+			"associations": {
+				"1": {
+					"$import": "#endpoints/0/associations/1",
+					// This group is shared with the root endpoint, don't auto-assign multiple times
+					"isLifeline": false
+				},
+				"2": {
+					"$import": "#endpoints/0/associations/14"
+				}
+			}
 		}
 	},
 	"paramInformation": {

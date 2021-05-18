@@ -1,5 +1,3 @@
-// FortrezZ LLC WV-01
-// Wireless Z-Wave Water Valve
 {
 	"manufacturer": "FortrezZ LLC",
 	"manufacturerId": "0x0084",
@@ -40,8 +38,6 @@
 			"maxValue": 255,
 			"defaultValue": 0,
 			"unsigned": true,
-			"readOnly": false,
-			"writeOnly": false,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -59,10 +55,7 @@
 			"valueSize": 2,
 			"minValue": 1,
 			"maxValue": 32767,
-			"defaultValue": 60,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"defaultValue": 60
 		}
 	}
 }

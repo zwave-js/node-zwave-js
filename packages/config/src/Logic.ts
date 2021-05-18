@@ -11,7 +11,7 @@ add_operation("ver <=", (a, b) => semver.lte(padVersion(a), padVersion(b)));
 add_operation("ver <", (a, b) => semver.lt(padVersion(a), padVersion(b)));
 add_operation("ver ===", (a, b) => semver.eq(padVersion(a), padVersion(b)));
 
-function parseLogic(logic: string): RulesLogic {
+export function parseLogic(logic: string): RulesLogic {
 	return parse(logic);
 }
 

@@ -1,5 +1,3 @@
-// Zooz ZEN07
-// Mini Plug On / Off Module ZEN07
 {
 	"manufacturer": "Zooz",
 	"manufacturerId": "0x027a",
@@ -23,8 +21,6 @@
 			"minValue": 0,
 			"maxValue": 1,
 			"defaultValue": 1,
-			"readOnly": false,
-			"writeOnly": false,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -45,10 +41,7 @@
 			"minValue": 1,
 			"maxValue": 65535,
 			"defaultValue": 300,
-			"unsigned": true,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"unsigned": true
 		},
 		"3": {
 			"label": "Overload Protection",
@@ -57,10 +50,7 @@
 			"valueSize": 1,
 			"minValue": 1,
 			"maxValue": 16,
-			"defaultValue": 13,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"defaultValue": 13
 		},
 		"4": {
 			"label": "Overload Protection Notification",
@@ -69,10 +59,7 @@
 			"valueSize": 1,
 			"minValue": 1,
 			"maxValue": 13,
-			"defaultValue": 12,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"defaultValue": 12
 		},
 		"5": {
 			"label": "LED Notifications",
@@ -81,8 +68,6 @@
 			"minValue": 0,
 			"maxValue": 1,
 			"defaultValue": 1,
-			"readOnly": false,
-			"writeOnly": false,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -102,10 +87,7 @@
 			"valueSize": 1,
 			"minValue": 1,
 			"maxValue": 100,
-			"defaultValue": 5,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"defaultValue": 5
 		},
 		"7": {
 			"label": "On/Off Status Recovery After Power Failure",
@@ -114,8 +96,6 @@
 			"minValue": 0,
 			"maxValue": 1,
 			"defaultValue": 1,
-			"readOnly": false,
-			"writeOnly": false,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -135,8 +115,6 @@
 			"minValue": 0,
 			"maxValue": 1,
 			"defaultValue": 0,
-			"readOnly": false,
-			"writeOnly": false,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -157,10 +135,7 @@
 			"minValue": 1,
 			"maxValue": 65535,
 			"defaultValue": 150,
-			"unsigned": true,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"unsigned": true
 		},
 		"10": {
 			"label": "Manual Control",
@@ -169,8 +144,6 @@
 			"minValue": 0,
 			"maxValue": 1,
 			"defaultValue": 1,
-			"readOnly": false,
-			"writeOnly": false,
 			"allowManualEntry": false,
 			"options": [
 				{

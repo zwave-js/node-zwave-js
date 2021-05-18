@@ -1,3 +1,4 @@
+import type { AssociationConfig } from "@zwave-js/config";
 import {
 	actuatorCCs,
 	CommandClasses,
@@ -12,9 +13,11 @@ import {
 } from "@zwave-js/core";
 import {
 	flatMap,
+	getEnumMemberName,
 	JSONObject,
 	num2hex,
 	ObjectKeyMap,
+	pick,
 	ReadonlyObjectKeyMap,
 } from "@zwave-js/shared";
 import { distinct } from "alcalzone-shared/arrays";
@@ -52,6 +55,30 @@ import { ZWaveNode } from "../node/Node";
 import { InterviewStage, NodeStatus } from "../node/Types";
 import { VirtualNode } from "../node/VirtualNode";
 import {
+	NodeIDType,
+	RFRegion,
+	SerialAPISetupCommand,
+	SerialAPISetup_CommandUnsupportedResponse,
+	SerialAPISetup_GetLRMaximumPayloadSizeRequest,
+	SerialAPISetup_GetLRMaximumPayloadSizeResponse,
+	SerialAPISetup_GetMaximumPayloadSizeRequest,
+	SerialAPISetup_GetMaximumPayloadSizeResponse,
+	SerialAPISetup_GetPowerlevelRequest,
+	SerialAPISetup_GetPowerlevelResponse,
+	SerialAPISetup_GetRFRegionRequest,
+	SerialAPISetup_GetRFRegionResponse,
+	SerialAPISetup_GetSupportedCommandsRequest,
+	SerialAPISetup_GetSupportedCommandsResponse,
+	SerialAPISetup_SetNodeIDTypeRequest,
+	SerialAPISetup_SetNodeIDTypeResponse,
+	SerialAPISetup_SetPowerlevelRequest,
+	SerialAPISetup_SetPowerlevelResponse,
+	SerialAPISetup_SetRFRegionRequest,
+	SerialAPISetup_SetRFRegionResponse,
+	SerialAPISetup_SetTXStatusReportRequest,
+	SerialAPISetup_SetTXStatusReportResponse,
+} from "../serialapi/misc/SerialAPISetupMessages";
+import {
 	AddNodeStatus,
 	AddNodeToNetworkRequest,
 	AddNodeType,
@@ -72,7 +99,10 @@ import {
 	GetControllerVersionRequest,
 	GetControllerVersionResponse,
 } from "./GetControllerVersionMessages";
-import { GetRoutingInfoRequest } from "./GetRoutingInfoMessages";
+import {
+	GetRoutingInfoRequest,
+	GetRoutingInfoResponse,
+} from "./GetRoutingInfoMessages";
 import {
 	GetSerialApiCapabilitiesRequest,
 	GetSerialApiCapabilitiesResponse,
@@ -297,6 +327,28 @@ export class ZWaveController extends EventEmitter {
 		return this._supportedFunctionTypes.indexOf(functionType) > -1;
 	}
 
+	private _supportedSerialAPISetupCommands:
+		| SerialAPISetupCommand[]
+		| undefined;
+	public get supportedSerialAPISetupCommands():
+		| readonly SerialAPISetupCommand[]
+		| undefined {
+		return this._supportedSerialAPISetupCommands;
+	}
+
+	/** Checks if a given Serial API setup command is supported by this controller */
+	public isSerialAPISetupCommandSupported(
+		command: SerialAPISetupCommand,
+	): boolean {
+		if (!this._supportedSerialAPISetupCommands) {
+			throw new ZWaveError(
+				"Cannot check yet if a Serial API setup command is supported by the controller. The interview process has not been completed.",
+				ZWaveErrorCodes.Driver_NotReady,
+			);
+		}
+		return this._supportedSerialAPISetupCommands.indexOf(command) > -1;
+	}
+
 	private _sucNodeId: number | undefined;
 	public get sucNodeId(): number | undefined {
 		return this._sucNodeId;
@@ -419,8 +471,50 @@ export class ZWaveController extends EventEmitter {
 		.map((fn) => `\n  · ${FunctionType[fn]} (${num2hex(fn)})`)
 		.join("")}`,
 		);
-
 		// now we can check if a function is supported
+
+		// Figure out which sub commands of SerialAPISetup are supported
+		if (this.isFunctionSupported(FunctionType.SerialAPISetup)) {
+			this.driver.controllerLog.print(
+				`querying serial API setup capabilities...`,
+			);
+			const setupCaps = await this.driver.sendMessage<SerialAPISetup_GetSupportedCommandsResponse>(
+				new SerialAPISetup_GetSupportedCommandsRequest(this.driver),
+			);
+			this._supportedSerialAPISetupCommands = setupCaps.supportedCommands;
+			this.driver.controllerLog.print(
+				`supported serial API setup commands:${this._supportedSerialAPISetupCommands
+					.map(
+						(cmd) =>
+							`\n· ${getEnumMemberName(
+								SerialAPISetupCommand,
+								cmd,
+							)}`,
+					)
+					.join("")}`,
+			);
+		} else {
+			this._supportedSerialAPISetupCommands = [];
+		}
+
+		// Enable TX status report if supported
+		if (
+			this.isSerialAPISetupCommandSupported(
+				SerialAPISetupCommand.SetTxStatusReport,
+			)
+		) {
+			this.driver.controllerLog.print(`Enabling TX status report...`);
+			const resp = await this.driver.sendMessage<SerialAPISetup_SetTXStatusReportResponse>(
+				new SerialAPISetup_SetTXStatusReportRequest(this.driver, {
+					enabled: true,
+				}),
+			);
+			this.driver.controllerLog.print(
+				`Enabling TX status report ${
+					resp.success ? "successful" : "failed"
+				}...`,
+			);
+		}
 
 		// find the SUC
 		this.driver.controllerLog.print(`finding SUC...`);
@@ -1397,43 +1491,107 @@ export class ZWaveController extends EventEmitter {
 		}
 
 		// Do the heal process in the background
-		void (async () => {
-			const tasks = [...this._healNetworkProgress]
-				.filter(([, status]) => status === "pending")
-				.map(async ([nodeId]) => {
-					// await the heal process for each node and treat errors as a non-successful heal
-					const result = await this.healNodeInternal(nodeId).catch(
-						() => false,
-					);
-					if (!this._healNetworkActive) return;
-
-					// Track the success in a map
-					this._healNetworkProgress.set(
-						nodeId,
-						result ? "done" : "failed",
-					);
-					// Notify listeners about the progress
-					this.emit(
-						"heal network progress",
-						new Map(this._healNetworkProgress),
-					);
-				});
-			await Promise.all(tasks);
-			// Only emit the done event when the process wasn't stopped in the meantime
-			if (this._healNetworkActive) {
-				this.emit(
-					"heal network done",
-					new Map(this._healNetworkProgress),
-				);
-			}
-			// We're done!
-			this._healNetworkActive = false;
-		})();
+		void this.healNetwork().catch(() => {
+			/* ignore errors */
+		});
 
 		// And update the progress once at the start
 		this.emit("heal network progress", new Map(this._healNetworkProgress));
 
 		return true;
+	}
+
+	private async healNetwork(): Promise<void> {
+		const pendingNodes = new Set(
+			[...this._healNetworkProgress]
+				.filter(([, status]) => status === "pending")
+				.map(([nodeId]) => nodeId),
+		);
+
+		const todoListening: number[] = [];
+		const todoSleeping: number[] = [];
+
+		const addTodo = (nodeId: number) => {
+			if (pendingNodes.has(nodeId)) {
+				pendingNodes.delete(nodeId);
+				const node = this.nodes.getOrThrow(nodeId);
+				if (node.canSleep) {
+					this.driver.controllerLog.logNode(
+						nodeId,
+						"added to healing queue for sleeping nodes",
+					);
+					todoSleeping.push(nodeId);
+				} else {
+					this.driver.controllerLog.logNode(
+						nodeId,
+						"added to healing queue for listening nodes",
+					);
+					todoListening.push(nodeId);
+				}
+			}
+		};
+
+		// We heal outwards from the controller and start with non-sleeping nodes that are healed one by one
+		try {
+			const neighbors = await this.getNodeNeighbors(this._ownNodeId!);
+			neighbors.forEach((id) => addTodo(id));
+		} catch {
+			// ignore
+		}
+
+		const doHeal = async (nodeId: number) => {
+			// await the heal process for each node and treat errors as a non-successful heal
+			const result = await this.healNodeInternal(nodeId).catch(
+				() => false,
+			);
+			if (!this._healNetworkActive) return;
+
+			// Track the success in a map
+			this._healNetworkProgress.set(nodeId, result ? "done" : "failed");
+			// Notify listeners about the progress
+			this.emit(
+				"heal network progress",
+				new Map(this._healNetworkProgress),
+			);
+
+			// Figure out which nodes to heal next
+			try {
+				const neighbors = await this.getNodeNeighbors(nodeId);
+				neighbors.forEach((id) => addTodo(id));
+			} catch {
+				// ignore
+			}
+		};
+
+		// First try to heal as many nodes as possible one by one
+		while (todoListening.length > 0) {
+			const nodeId = todoListening.shift()!;
+			await doHeal(nodeId);
+			if (!this._healNetworkActive) return;
+		}
+
+		// We might end up with a few unconnected listening nodes, try to heal them too
+		pendingNodes.forEach((nodeId) => addTodo(nodeId));
+		while (todoListening.length > 0) {
+			const nodeId = todoListening.shift()!;
+			await doHeal(nodeId);
+			if (!this._healNetworkActive) return;
+		}
+
+		// Now heal all sleeping nodes at once
+		this.driver.controllerLog.print(
+			"Healing sleeping nodes in parallel. Wake them up to heal.",
+		);
+
+		const tasks = todoSleeping.map((nodeId) => doHeal(nodeId));
+		await Promise.all(tasks);
+
+		// Only emit the done event when the process wasn't stopped in the meantime
+		if (this._healNetworkActive) {
+			this.emit("heal network done", new Map(this._healNetworkProgress));
+		}
+		// We're done!
+		this._healNetworkActive = false;
 	}
 
 	/**
@@ -1450,7 +1608,6 @@ export class ZWaveController extends EventEmitter {
 		this.driver.rejectTransactions(
 			(t) =>
 				t.message instanceof RequestNodeNeighborUpdateRequest ||
-				t.message instanceof GetRoutingInfoRequest ||
 				t.message instanceof DeleteReturnRouteRequest ||
 				t.message instanceof AssignReturnRouteRequest,
 		);
@@ -1496,6 +1653,13 @@ export class ZWaveController extends EventEmitter {
 	}
 
 	private async healNodeInternal(nodeId: number): Promise<boolean> {
+		const node = this.nodes.getOrThrow(nodeId);
+
+		this.driver.controllerLog.logNode(nodeId, {
+			message: `healing node...`,
+			direction: "none",
+		});
+
 		// The healing process consists of four steps
 		// Each step is tried up to 5 times before the healing process is considered failed
 		const maxAttempts = 5;
@@ -1547,36 +1711,11 @@ export class ZWaveController extends EventEmitter {
 			}
 		}
 
-		// 2. retrieve the updated list
-		for (let attempt = 1; attempt <= maxAttempts; attempt++) {
-			// If the process was stopped in the meantime, cancel
-			if (!this._healNetworkActive) return false;
-
-			this.driver.controllerLog.logNode(nodeId, {
-				message: `retrieving updated neighbor list (attempt ${attempt})...`,
-				direction: "outbound",
-			});
-
-			try {
-				// Retrieve the updated list from the node
-				await this.nodes.get(nodeId)!.queryNeighborsInternal();
-				break;
-			} catch (e) {
-				this.driver.controllerLog.logNode(
-					nodeId,
-					`retrieving the updated neighbor list failed: ${e.message}`,
-					"warn",
-				);
-			}
-			if (attempt === maxAttempts) {
-				this.driver.controllerLog.logNode(nodeId, {
-					message: `failed to retrieve the updated neighbor list after ${maxAttempts} attempts, healing failed`,
-					level: "warn",
-					direction: "none",
-				});
-				return false;
-			}
+		// 2. re-create the SUC return route, just in case
+		if (await this.deleteSUCReturnRoute(nodeId)) {
+			node.hasSUCReturnRoute = false;
 		}
+		node.hasSUCReturnRoute = await this.assignSUCReturnRoute(nodeId);
 
 		// 3. delete all return routes so we can assign new ones
 		for (let attempt = 1; attempt <= maxAttempts; attempt++) {
@@ -1667,6 +1806,11 @@ ${associatedNodes.join(", ")}`,
 				}
 			}
 		}
+
+		this.driver.controllerLog.logNode(nodeId, {
+			message: `healed successfully`,
+			direction: "none",
+		});
 
 		return true;
 	}
@@ -1861,7 +2005,22 @@ ${associatedNodes.join(", ")}`,
 				CommandClasses["Association Group Information"],
 			)!;
 			for (let group = 1; group <= groupCount; group++) {
-				const assocConfig = node.deviceConfig?.associations?.get(group);
+				let assocConfig: AssociationConfig | undefined;
+				if (node.deviceConfig) {
+					if (endpointIndex === 0) {
+						// The root endpoint's associations may be configured separately or as part of "endpoints"
+						assocConfig =
+							node.deviceConfig.associations?.get(group) ??
+							node.deviceConfig.endpoints
+								?.get(0)
+								?.associations?.get(group);
+					} else {
+						// The other endpoints can only have a configuration as part of "endpoints"
+						assocConfig = node.deviceConfig.endpoints
+							?.get(endpointIndex)
+							?.associations?.get(group);
+					}
+				}
 				const multiChannel = !!mcInstance && group <= mcGroupCount;
 				ret.set(group, {
 					maxNodes:
@@ -2203,7 +2362,7 @@ ${associatedNodes.join(", ")}`,
 		const groupIsMultiChannel =
 			!!mcInstance &&
 			group <= mcGroupCount &&
-			!node.deviceConfig?.associations?.get(group)?.noEndpoint;
+			node.deviceConfig?.associations?.get(group)?.multiChannel !== false;
 
 		if (groupIsMultiChannel) {
 			// Check that all associations are allowed
@@ -2590,6 +2749,171 @@ ${associatedNodes.join(", ")}`,
 			this._nodePendingReplace = this.nodes.get(nodeId);
 			this._replaceFailedPromise = createDeferredPromise();
 			return this._replaceFailedPromise;
+		}
+	}
+
+	/** Configure the RF region at the Z-Wave API Module */
+	public async setRFRegion(region: RFRegion): Promise<boolean> {
+		const result = await this.driver.sendMessage<
+			| SerialAPISetup_SetRFRegionResponse
+			| SerialAPISetup_CommandUnsupportedResponse
+		>(new SerialAPISetup_SetRFRegionRequest(this.driver, { region }));
+		if (result instanceof SerialAPISetup_CommandUnsupportedResponse) {
+			throw new ZWaveError(
+				`Your hardware does not support setting the RF region!`,
+				ZWaveErrorCodes.Driver_NotSupported,
+			);
+		}
+		// TODO: Issue soft reset
+		return result.success;
+	}
+
+	/** Request the current RF region configured at the Z-Wave API Module */
+	public async getRFRegion(): Promise<RFRegion> {
+		const result = await this.driver.sendMessage<
+			| SerialAPISetup_GetRFRegionResponse
+			| SerialAPISetup_CommandUnsupportedResponse
+		>(new SerialAPISetup_GetRFRegionRequest(this.driver));
+		if (result instanceof SerialAPISetup_CommandUnsupportedResponse) {
+			throw new ZWaveError(
+				`Your hardware does not support getting the RF region!`,
+				ZWaveErrorCodes.Driver_NotSupported,
+			);
+		}
+		return result.region;
+	}
+
+	/** Configure the Powerlevel setting of the Z-Wave API */
+	public async setPowerlevel(
+		powerlevel: number,
+		measured0dBm: number,
+	): Promise<boolean> {
+		const result = await this.driver.sendMessage<
+			| SerialAPISetup_SetPowerlevelResponse
+			| SerialAPISetup_CommandUnsupportedResponse
+		>(
+			new SerialAPISetup_SetPowerlevelRequest(this.driver, {
+				powerlevel,
+				measured0dBm,
+			}),
+		);
+		if (result instanceof SerialAPISetup_CommandUnsupportedResponse) {
+			throw new ZWaveError(
+				`Your hardware does not support setting the powerlevel!`,
+				ZWaveErrorCodes.Driver_NotSupported,
+			);
+		}
+		return result.success;
+	}
+
+	/** Request the Powerlevel setting of the Z-Wave API */
+	public async getPowerlevel(): Promise<
+		Pick<
+			SerialAPISetup_GetPowerlevelResponse,
+			"powerlevel" | "measured0dBm"
+		>
+	> {
+		const result = await this.driver.sendMessage<
+			| SerialAPISetup_GetPowerlevelResponse
+			| SerialAPISetup_CommandUnsupportedResponse
+		>(new SerialAPISetup_GetPowerlevelRequest(this.driver));
+		if (result instanceof SerialAPISetup_CommandUnsupportedResponse) {
+			throw new ZWaveError(
+				`Your hardware does not support getting the powerlevel!`,
+				ZWaveErrorCodes.Driver_NotSupported,
+			);
+		}
+		return pick(result, ["powerlevel", "measured0dBm"]);
+	}
+
+	/**
+	 * @internal
+	 * Configure whether the Z-Wave API should use short (8 bit) or long (16 bit) Node IDs
+	 */
+	public async setNodeIDType(nodeIdType: NodeIDType): Promise<boolean> {
+		const result = await this.driver.sendMessage<
+			| SerialAPISetup_SetNodeIDTypeResponse
+			| SerialAPISetup_CommandUnsupportedResponse
+		>(
+			new SerialAPISetup_SetNodeIDTypeRequest(this.driver, {
+				nodeIdType,
+			}),
+		);
+		if (result instanceof SerialAPISetup_CommandUnsupportedResponse) {
+			throw new ZWaveError(
+				`Your hardware does not support switching between short and long node IDs!`,
+				ZWaveErrorCodes.Driver_NotSupported,
+			);
+		}
+		return result.success;
+	}
+
+	/**
+	 * @internal
+	 * Request the maximum payload that the Z-Wave API Module can accept for transmitting Z-Wave frames. This value depends on the RF Profile
+	 */
+	public async getMaxPayloadSize(): Promise<number> {
+		const result = await this.driver.sendMessage<
+			| SerialAPISetup_GetMaximumPayloadSizeResponse
+			| SerialAPISetup_CommandUnsupportedResponse
+		>(new SerialAPISetup_GetMaximumPayloadSizeRequest(this.driver), {
+			supportCheck: false,
+		});
+		if (result instanceof SerialAPISetup_CommandUnsupportedResponse) {
+			throw new ZWaveError(
+				`Your hardware does not support getting the max. payload size!`,
+				ZWaveErrorCodes.Driver_NotSupported,
+			);
+		}
+		return result.maxPayloadSize;
+	}
+
+	/**
+	 * @internal
+	 * Request the maximum payload that the Z-Wave API Module can accept for transmitting Z-Wave Long Range frames. This value depends on the RF Profile
+	 */
+	public async getMaxPayloadSizeLongRange(): Promise<number> {
+		const result = await this.driver.sendMessage<
+			| SerialAPISetup_GetLRMaximumPayloadSizeResponse
+			| SerialAPISetup_CommandUnsupportedResponse
+		>(new SerialAPISetup_GetLRMaximumPayloadSizeRequest(this.driver));
+		if (result instanceof SerialAPISetup_CommandUnsupportedResponse) {
+			throw new ZWaveError(
+				`Your hardware does not support getting the max. long range payload size!`,
+				ZWaveErrorCodes.Driver_NotSupported,
+			);
+		}
+		return result.maxPayloadSize;
+	}
+
+	/**
+	 * Returns the known list of neighbors for a node
+	 */
+	public async getNodeNeighbors(nodeId: number): Promise<readonly number[]> {
+		this.driver.controllerLog.logNode(nodeId, {
+			message: "requesting node neighbors...",
+			direction: "outbound",
+		});
+		try {
+			const resp = await this.driver.sendMessage<GetRoutingInfoResponse>(
+				new GetRoutingInfoRequest(this.driver, {
+					nodeId,
+					removeBadLinks: false,
+					removeNonRepeaters: false,
+				}),
+			);
+			this.driver.controllerLog.logNode(nodeId, {
+				message: `node neighbors received: ${resp.nodeIds.join(", ")}`,
+				direction: "inbound",
+			});
+			return resp.nodeIds;
+		} catch (e) {
+			this.driver.controllerLog.logNode(
+				nodeId,
+				`requesting the node neighbors failed: ${e.message}`,
+				"error",
+			);
+			throw e;
 		}
 	}
 

@@ -1,5 +1,3 @@
-// HELTUN HE-ZW-THERM-FL2
-// Wall Heating Thermostat
 {
 	"manufacturer": "HELTUN",
 	"manufacturerId": "0x0344",
@@ -23,8 +21,6 @@
 			"minValue": 0,
 			"maxValue": 1,
 			"defaultValue": 0,
-			"readOnly": false,
-			"writeOnly": false,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -43,8 +39,6 @@
 			"minValue": 0,
 			"maxValue": 2,
 			"defaultValue": 1,
-			"readOnly": false,
-			"writeOnly": false,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -67,8 +61,6 @@
 			"minValue": 1,
 			"maxValue": 6,
 			"defaultValue": 2,
-			"readOnly": false,
-			"writeOnly": false,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -103,8 +95,6 @@
 			"minValue": 1,
 			"maxValue": 7,
 			"defaultValue": 3,
-			"readOnly": false,
-			"writeOnly": false,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -144,10 +134,7 @@
 			"valueSize": 1,
 			"minValue": 10,
 			"maxValue": 90,
-			"defaultValue": 15,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"defaultValue": 15
 		},
 		"6": {
 			"label": "Power reg off",
@@ -156,10 +143,7 @@
 			"valueSize": 1,
 			"minValue": 10,
 			"maxValue": 90,
-			"defaultValue": 15,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"defaultValue": 15
 		},
 		"7": {
 			"label": "Dry time",
@@ -167,20 +151,14 @@
 			"valueSize": 1,
 			"minValue": 5,
 			"maxValue": 90,
-			"defaultValue": 30,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"defaultValue": 30
 		},
 		"8": {
 			"label": "Time by controller",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 1,
-			"defaultValue": 1,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"defaultValue": 1
 		},
 		"9": {
 			"label": "Time format",
@@ -188,8 +166,6 @@
 			"minValue": 0,
 			"maxValue": 1,
 			"defaultValue": 0,
-			"readOnly": false,
-			"writeOnly": false,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -208,10 +184,7 @@
 			"valueSize": 1,
 			"minValue": 1,
 			"maxValue": 7,
-			"defaultValue": 1,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"defaultValue": 1
 		},
 		"11": {
 			"label": "Hour",
@@ -220,10 +193,7 @@
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 23,
-			"defaultValue": 0,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"defaultValue": 0
 		},
 		"12": {
 			"label": "Mins",
@@ -232,10 +202,7 @@
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 59,
-			"defaultValue": 0,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"defaultValue": 0
 		},
 		"13": {
 			"label": "Air temp min",
@@ -243,10 +210,7 @@
 			"valueSize": 2,
 			"minValue": 40,
 			"maxValue": 360,
-			"defaultValue": 210,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"defaultValue": 210
 		},
 		"14": {
 			"label": "Air temp max",
@@ -254,10 +218,7 @@
 			"valueSize": 2,
 			"minValue": 50,
 			"maxValue": 370,
-			"defaultValue": 270,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"defaultValue": 270
 		},
 		"15": {
 			"label": "Floor temp min",
@@ -265,10 +226,7 @@
 			"valueSize": 2,
 			"minValue": 40,
 			"maxValue": 360,
-			"defaultValue": 180,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"defaultValue": 180
 		},
 		"16": {
 			"label": "Floor temp max",
@@ -276,10 +234,7 @@
 			"valueSize": 2,
 			"minValue": 50,
 			"maxValue": 370,
-			"defaultValue": 320,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"defaultValue": 320
 		},
 		"17": {
 			"label": "Floor sensor resistance",
@@ -287,10 +242,7 @@
 			"valueSize": 1,
 			"minValue": 1,
 			"maxValue": 100,
-			"defaultValue": 10,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"defaultValue": 10
 		},
 		"18": {
 			"label": "Air temp calibration",
@@ -298,10 +250,7 @@
 			"valueSize": 1,
 			"minValue": -95,
 			"maxValue": 95,
-			"defaultValue": 0,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"defaultValue": 0
 		},
 		"19": {
 			"label": "Floor temp calibration",
@@ -309,10 +258,7 @@
 			"valueSize": 1,
 			"minValue": -95,
 			"maxValue": 95,
-			"defaultValue": 0,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"defaultValue": 0
 		},
 		"20": {
 			"label": "Temp hysteresis",
@@ -320,10 +266,7 @@
 			"valueSize": 1,
 			"minValue": 1,
 			"maxValue": 95,
-			"defaultValue": 5,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"defaultValue": 5
 		},
 		"21": {
 			"label": "Temp diff to send values",
@@ -331,40 +274,28 @@
 			"valueSize": 1,
 			"minValue": 1,
 			"maxValue": 10,
-			"defaultValue": 2,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"defaultValue": 2
 		},
 		"22": {
 			"label": "Active display brightness",
 			"valueSize": 1,
 			"minValue": 1,
 			"maxValue": 4,
-			"defaultValue": 4,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"defaultValue": 4
 		},
 		"23": {
 			"label": "Inactive display brightness",
 			"valueSize": 1,
 			"minValue": 1,
 			"maxValue": 4,
-			"defaultValue": 3,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"defaultValue": 3
 		},
 		"24": {
 			"label": "Auto LCD brightness",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 1,
-			"defaultValue": 1,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"defaultValue": 1
 		},
 		"25": {
 			"label": "Auto bright level 1",
@@ -372,10 +303,7 @@
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 5000,
-			"defaultValue": 30,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"defaultValue": 30
 		},
 		"26": {
 			"label": "Auto bright level 2",
@@ -383,10 +311,7 @@
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 5000,
-			"defaultValue": 200,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"defaultValue": 200
 		},
 		"27": {
 			"label": "Auto bright level 3",
@@ -394,10 +319,7 @@
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 5000,
-			"defaultValue": 3000,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"defaultValue": 3000
 		},
 		"28": {
 			"label": "Basic set action",
@@ -405,8 +327,6 @@
 			"minValue": 1,
 			"maxValue": 6,
 			"defaultValue": 6,
-			"readOnly": false,
-			"writeOnly": false,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -440,10 +360,7 @@
 			"valueSize": 1,
 			"minValue": 20,
 			"maxValue": 70,
-			"defaultValue": 50,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"defaultValue": 50
 		},
 		"52": {
 			"label": "Morning start time",
@@ -451,10 +368,7 @@
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 2359,
-			"defaultValue": 600,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"defaultValue": 600
 		},
 		"53": {
 			"label": "Day start time",
@@ -462,10 +376,7 @@
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 2359,
-			"defaultValue": 900,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"defaultValue": 900
 		},
 		"54": {
 			"label": "Evening start time",
@@ -473,10 +384,7 @@
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 2359,
-			"defaultValue": 1800,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"defaultValue": 1800
 		},
 		"55": {
 			"label": "Night Start time",
@@ -484,290 +392,203 @@
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 2359,
-			"defaultValue": 2300,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"defaultValue": 2300
 		},
 		"56": {
 			"label": "Monday morning temp",
 			"valueSize": 2,
 			"minValue": 40,
 			"maxValue": 370,
-			"defaultValue": 240,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"defaultValue": 240
 		},
 		"57": {
 			"label": "Monday day temp",
 			"valueSize": 2,
 			"minValue": 40,
 			"maxValue": 370,
-			"defaultValue": 200,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"defaultValue": 200
 		},
 		"58": {
 			"label": "Monday evening temp",
 			"valueSize": 2,
 			"minValue": 40,
 			"maxValue": 370,
-			"defaultValue": 230,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"defaultValue": 230
 		},
 		"59": {
 			"label": "Monday night temp",
 			"valueSize": 2,
 			"minValue": 40,
 			"maxValue": 370,
-			"defaultValue": 180,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"defaultValue": 180
 		},
 		"60": {
 			"label": "Tuesday morning temp",
 			"valueSize": 2,
 			"minValue": 40,
 			"maxValue": 370,
-			"defaultValue": 240,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"defaultValue": 240
 		},
 		"61": {
 			"label": "Tuesday day temp",
 			"valueSize": 2,
 			"minValue": 40,
 			"maxValue": 370,
-			"defaultValue": 200,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"defaultValue": 200
 		},
 		"62": {
 			"label": "Tuesday evening temp",
 			"valueSize": 2,
 			"minValue": 40,
 			"maxValue": 370,
-			"defaultValue": 230,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"defaultValue": 230
 		},
 		"63": {
 			"label": "Tuesday night temp",
 			"valueSize": 2,
 			"minValue": 40,
 			"maxValue": 370,
-			"defaultValue": 180,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"defaultValue": 180
 		},
 		"64": {
 			"label": "Wednesday morning temp",
 			"valueSize": 2,
 			"minValue": 40,
 			"maxValue": 370,
-			"defaultValue": 240,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"defaultValue": 240
 		},
 		"65": {
 			"label": "Wednesday day temp",
 			"valueSize": 2,
 			"minValue": 40,
 			"maxValue": 370,
-			"defaultValue": 200,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"defaultValue": 200
 		},
 		"66": {
 			"label": "Wednesday evening temp",
 			"valueSize": 2,
 			"minValue": 40,
 			"maxValue": 370,
-			"defaultValue": 230,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"defaultValue": 230
 		},
 		"67": {
 			"label": "Wednesday night temp",
 			"valueSize": 2,
 			"minValue": 40,
 			"maxValue": 370,
-			"defaultValue": 180,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"defaultValue": 180
 		},
 		"68": {
 			"label": "Thursday morning temp",
 			"valueSize": 2,
 			"minValue": 40,
 			"maxValue": 370,
-			"defaultValue": 240,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"defaultValue": 240
 		},
 		"69": {
 			"label": "Thursday day temp",
 			"valueSize": 2,
 			"minValue": 40,
 			"maxValue": 370,
-			"defaultValue": 200,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"defaultValue": 200
 		},
 		"70": {
 			"label": "Thursday evening temp",
 			"valueSize": 2,
 			"minValue": 40,
 			"maxValue": 370,
-			"defaultValue": 230,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"defaultValue": 230
 		},
 		"71": {
 			"label": "Thursday night temp",
 			"valueSize": 2,
 			"minValue": 40,
 			"maxValue": 370,
-			"defaultValue": 180,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"defaultValue": 180
 		},
 		"72": {
 			"label": "Friday morning temp",
 			"valueSize": 2,
 			"minValue": 40,
 			"maxValue": 370,
-			"defaultValue": 240,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"defaultValue": 240
 		},
 		"73": {
 			"label": "Friday day temp",
 			"valueSize": 2,
 			"minValue": 40,
 			"maxValue": 370,
-			"defaultValue": 200,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"defaultValue": 200
 		},
 		"74": {
 			"label": "Friday evening temp",
 			"valueSize": 2,
 			"minValue": 40,
 			"maxValue": 370,
-			"defaultValue": 230,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"defaultValue": 230
 		},
 		"75": {
 			"label": "Friday night temp",
 			"valueSize": 2,
 			"minValue": 40,
 			"maxValue": 370,
-			"defaultValue": 180,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"defaultValue": 180
 		},
 		"76": {
 			"label": "Saturday morning temp",
 			"valueSize": 2,
 			"minValue": 40,
 			"maxValue": 370,
-			"defaultValue": 240,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"defaultValue": 240
 		},
 		"77": {
 			"label": "Saturday day temp",
 			"valueSize": 2,
 			"minValue": 40,
 			"maxValue": 370,
-			"defaultValue": 200,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"defaultValue": 200
 		},
 		"78": {
 			"label": "Saturday evening temp",
 			"valueSize": 2,
 			"minValue": 40,
 			"maxValue": 370,
-			"defaultValue": 230,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"defaultValue": 230
 		},
 		"79": {
 			"label": "Saturday night temp",
 			"valueSize": 2,
 			"minValue": 40,
 			"maxValue": 370,
-			"defaultValue": 180,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"defaultValue": 180
 		},
 		"80": {
 			"label": "Sunday morning temp",
 			"valueSize": 2,
 			"minValue": 40,
 			"maxValue": 370,
-			"defaultValue": 240,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"defaultValue": 240
 		},
 		"81": {
 			"label": "Sunday day temp",
 			"valueSize": 2,
 			"minValue": 40,
 			"maxValue": 370,
-			"defaultValue": 200,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"defaultValue": 200
 		},
 		"82": {
 			"label": "Sunday evening temp",
 			"valueSize": 2,
 			"minValue": 40,
 			"maxValue": 370,
-			"defaultValue": 230,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"defaultValue": 230
 		},
 		"83": {
 			"label": "Sunday night temp",
 			"valueSize": 2,
 			"minValue": 40,
 			"maxValue": 370,
-			"defaultValue": 180,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"defaultValue": 180
 		}
 	}
 }

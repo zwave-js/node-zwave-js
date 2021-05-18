@@ -1,5 +1,3 @@
-// GE/Jasco 55249 / ZW4106
-// Plug-in Smart Switch (Dual Plug with Simultaneous Control)
 {
 	"manufacturer": "GE/Jasco",
 	"manufacturerId": "0x0063",
@@ -41,8 +39,6 @@
 			"maxValue": 2,
 			"defaultValue": 0,
 			"unsigned": true,
-			"readOnly": false,
-			"writeOnly": false,
 			"allowManualEntry": false,
 			"options": [
 				{

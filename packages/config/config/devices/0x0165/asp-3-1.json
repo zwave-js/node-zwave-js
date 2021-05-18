@@ -1,5 +1,3 @@
-// ID-RF ASP-3-1
-// Smart Plug
 {
 	"manufacturer": "ID-RF",
 	"manufacturerId": "0x0165",
@@ -23,9 +21,6 @@
 			"minValue": 0,
 			"maxValue": 63,
 			"defaultValue": 2,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true,
 			"options": [
 				{
 					"label": "OFF",
@@ -47,9 +42,6 @@
 			"minValue": 0,
 			"maxValue": 63,
 			"defaultValue": 0,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true,
 			"options": [
 				{
 					"label": "Power Failure detection disable",
@@ -87,8 +79,6 @@
 			"minValue": 0,
 			"maxValue": 3,
 			"defaultValue": 3,
-			"readOnly": false,
-			"writeOnly": false,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -115,8 +105,6 @@
 			"minValue": 0,
 			"maxValue": 1,
 			"defaultValue": 0,
-			"readOnly": false,
-			"writeOnly": false,
 			"allowManualEntry": false,
 			"options": [
 				{

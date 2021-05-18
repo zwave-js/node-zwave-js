@@ -1,5 +1,3 @@
-// Nortek Security & Control LLC PS15EMZ51
-// Appliance Module
 {
 	"manufacturer": "Nortek Security & Control LLC",
 	"manufacturerId": "0x014f",
@@ -22,10 +20,7 @@
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 100,
-			"defaultValue": 100,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"defaultValue": 100
 		},
 		"3": {
 			"label": "Night Light",
@@ -33,8 +28,6 @@
 			"minValue": 0,
 			"maxValue": 3,
 			"defaultValue": 3,
-			"readOnly": false,
-			"writeOnly": false,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -60,10 +53,7 @@
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 255,
-			"defaultValue": 6,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"defaultValue": 6
 		}
 	}
 }

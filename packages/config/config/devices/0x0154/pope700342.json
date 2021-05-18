@@ -1,0 +1,53 @@
+{
+	"manufacturer": "Popp & Co",
+	"manufacturerId": "0x0154",
+	"label": "POPE700342",
+	"description": "10-Years Smoke Detector Without Siren",
+	"devices": [
+		{
+			"productType": "0x0004",
+			"productId": "0x000D"
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"associations": {
+		"1": {
+			"label": "Lifeline",
+			"maxNodes": 10,
+			"isLifeline": true
+		},
+		"2": {
+			"label": "Switching Command",
+			"maxNodes": 10,
+			"description": "All devices in this group will receive a BASIC SET command on Smoke Alarms. Configuration parameter 3 and 4 will define the BASIC command sent."
+		}
+	},
+	"paramInformation": {
+		"3": {
+			"label": "Value of On-Command",
+			"description": "This value is sent as BASIC Set to Association Group 2 when an Smoke Alarm occurs.",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 99,
+			"defaultValue": 99
+		},
+		"4": {
+			"label": "Value of Off-Command",
+			"description": "This value is sent as BASIC Set to Association Group 2 when an Smoke Alarm is cleared.",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 99,
+			"defaultValue": 0
+		}
+	},
+	"metadata": {
+		"wakeup": " A double click on the Z-Wave button wakes up the device.",
+		"inclusion": "Secure Inclusion: Push the button for 3 seconds, Unsecure Inclusion: Push the button for 1 seconds",
+		"exclusion": "Push the button for 1 second",
+		"reset": "To reset the device keep the button pushed for 10 seconds. After 5 seconds the led starts flashing and after another 5 seconds there is a short beep signaling the successful reset back to factory defaults.",
+		"manual": "https://manuals.zwave.eu/backend/make.php?lang=en&sku=pope700342&type=popp"
+	}
+}

@@ -1,5 +1,3 @@
-// Intermatic PE653
-// Pool Control
 {
 	"manufacturer": "Intermatic",
 	"manufacturerId": "0x0005",
@@ -24,10 +22,7 @@
 			"minValue": 0,
 			"maxValue": 255,
 			"defaultValue": 0,
-			"unsigned": true,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"unsigned": true
 		},
 		"22": {
 			"label": "Pool - Spa Mode",
@@ -36,10 +31,7 @@
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 2,
-			"defaultValue": 0,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"defaultValue": 0
 		},
 		"1[0xff]": {
 			"label": "Booster/Cleaner Pump Operation Mode",
@@ -48,10 +40,7 @@
 			"valueSize": 2,
 			"minValue": 1,
 			"maxValue": 6,
-			"defaultValue": 1,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"defaultValue": 1
 		},
 		"1[0xff00]": {
 			"label": "Pump Type Operation Mode",
@@ -60,10 +49,7 @@
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 7,
-			"defaultValue": 0,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"defaultValue": 0
 		}
 	}
 }

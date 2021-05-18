@@ -1,5 +1,3 @@
-// Fibargroup FGMS001
-// Motion Sensor
 {
 	"manufacturer": "Fibargroup",
 	"manufacturerId": "0x010f",
@@ -55,10 +53,7 @@
 			"valueSize": 2,
 			"minValue": 8,
 			"maxValue": 255,
-			"defaultValue": 15,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"defaultValue": 15
 		},
 		"2": {
 			"label": "Motion detection - blind time",
@@ -66,10 +61,7 @@
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 15,
-			"defaultValue": 3,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"defaultValue": 3
 		},
 		"3": {
 			"label": "Motion detection - pulse counter",
@@ -78,8 +70,6 @@
 			"minValue": 0,
 			"maxValue": 3,
 			"defaultValue": 1,
-			"readOnly": false,
-			"writeOnly": false,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -107,8 +97,6 @@
 			"minValue": 0,
 			"maxValue": 3,
 			"defaultValue": 2,
-			"readOnly": false,
-			"writeOnly": false,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -136,10 +124,7 @@
 			"valueSize": 2,
 			"minValue": 1,
 			"maxValue": 32767,
-			"defaultValue": 30,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"defaultValue": 30
 		},
 		"8": {
 			"label": "Motion detection - operating mode",
@@ -148,8 +133,6 @@
 			"minValue": 0,
 			"maxValue": 2,
 			"defaultValue": 0,
-			"readOnly": false,
-			"writeOnly": false,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -173,10 +156,7 @@
 			"valueSize": 2,
 			"minValue": 1,
 			"maxValue": 32767,
-			"defaultValue": 200,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"defaultValue": 200
 		},
 		"12": {
 			"label": "BASIC command class configuration",
@@ -185,8 +165,6 @@
 			"minValue": 0,
 			"maxValue": 2,
 			"defaultValue": 0,
-			"readOnly": false,
-			"writeOnly": false,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -209,10 +187,7 @@
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 255,
-			"defaultValue": 255,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"defaultValue": 255
 		},
 		"16": {
 			"label": "BASIC OFF command frame value",
@@ -220,10 +195,7 @@
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 255,
-			"defaultValue": 0,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"defaultValue": 0
 		},
 		"18": {
 			"label": "Associations in Z-Wave network Security Mode",
@@ -231,10 +203,7 @@
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 15,
-			"defaultValue": 15,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"defaultValue": 15
 		},
 		"20": {
 			"label": "Tamper - sensitivity",
@@ -242,10 +211,7 @@
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 121,
-			"defaultValue": 20,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"defaultValue": 20
 		},
 		"22": {
 			"label": "Tamper - alarm cancellation delay",
@@ -254,10 +220,7 @@
 			"valueSize": 2,
 			"minValue": 1,
 			"maxValue": 32767,
-			"defaultValue": 30,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"defaultValue": 30
 		},
 		"24": {
 			"label": "Tamper - operating modes",
@@ -266,8 +229,6 @@
 			"minValue": 0,
 			"maxValue": 2,
 			"defaultValue": 0,
-			"readOnly": false,
-			"writeOnly": false,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -291,8 +252,6 @@
 			"minValue": 0,
 			"maxValue": 1,
 			"defaultValue": 1,
-			"readOnly": false,
-			"writeOnly": false,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -312,8 +271,6 @@
 			"minValue": 0,
 			"maxValue": 1,
 			"defaultValue": 0,
-			"readOnly": false,
-			"writeOnly": false,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -333,8 +290,6 @@
 			"minValue": 0,
 			"maxValue": 1,
 			"defaultValue": 0,
-			"readOnly": false,
-			"writeOnly": false,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -354,10 +309,7 @@
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 32767,
-			"defaultValue": 200,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"defaultValue": 200
 		},
 		"42": {
 			"label": "Illuminance report - interval",
@@ -366,10 +318,7 @@
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 32767,
-			"defaultValue": 3600,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"defaultValue": 3600
 		},
 		"60": {
 			"label": "Temperature report - threshold",
@@ -377,10 +326,7 @@
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 255,
-			"defaultValue": 20,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"defaultValue": 20
 		},
 		"62": {
 			"label": "Temperature measuring - interval",
@@ -389,10 +335,7 @@
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 32767,
-			"defaultValue": 900,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"defaultValue": 900
 		},
 		"64": {
 			"label": "Temperature report - interval",
@@ -401,10 +344,7 @@
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 32767,
-			"defaultValue": 0,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"defaultValue": 0
 		},
 		"66": {
 			"label": "Temperature offset",
@@ -413,10 +353,7 @@
 			"valueSize": 2,
 			"minValue": -1000,
 			"maxValue": 1000,
-			"defaultValue": 0,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"defaultValue": 0
 		},
 		"80": {
 			"label": "LED - signalling mode",
@@ -425,8 +362,6 @@
 			"maxValue": 255,
 			"defaultValue": 10,
 			"unsigned": true,
-			"readOnly": false,
-			"writeOnly": false,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -545,10 +480,7 @@
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 100,
-			"defaultValue": 50,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"defaultValue": 50
 		},
 		"82": {
 			"label": "LED - illuminance for low indicator brightness",
@@ -557,10 +489,7 @@
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 32767,
-			"defaultValue": 100,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"defaultValue": 100
 		},
 		"83": {
 			"label": "LED - illuminance for high indicator brightness",
@@ -569,10 +498,7 @@
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 32767,
-			"defaultValue": 1000,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"defaultValue": 1000
 		},
 		"86": {
 			"label": "LED - temperature for blue colour",
@@ -581,10 +507,7 @@
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 255,
-			"defaultValue": 18,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"defaultValue": 18
 		},
 		"87": {
 			"label": "LED - temperature for red colour",
@@ -592,10 +515,7 @@
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 255,
-			"defaultValue": 28,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"defaultValue": 28
 		},
 		"89": {
 			"label": "LED - tamper alarm",
@@ -604,8 +524,6 @@
 			"minValue": 0,
 			"maxValue": 1,
 			"defaultValue": 1,
-			"readOnly": false,
-			"writeOnly": false,
 			"allowManualEntry": false,
 			"options": [
 				{

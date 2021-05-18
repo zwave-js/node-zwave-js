@@ -1,5 +1,3 @@
-// BeNext Alarm Sound
-// Alarm sound
 {
 	"manufacturer": "BeNext",
 	"manufacturerId": "0x008a",
@@ -36,10 +34,7 @@
 			"minValue": 1,
 			"maxValue": 255,
 			"defaultValue": 1,
-			"unsigned": true,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"unsigned": true
 		},
 		"2": {
 			"label": "Destination routine on/off",
@@ -48,10 +43,7 @@
 			"minValue": 0,
 			"maxValue": 255,
 			"defaultValue": 255,
-			"unsigned": true,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"unsigned": true
 		},
 		"3": {
 			"label": "Desitnation routine succes time",
@@ -59,10 +51,7 @@
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 60,
-			"defaultValue": 60,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"defaultValue": 60
 		},
 		"4": {
 			"label": "Destination routine failed time",
@@ -71,10 +60,7 @@
 			"minValue": 0,
 			"maxValue": 240,
 			"defaultValue": 240,
-			"unsigned": true,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"unsigned": true
 		},
 		"7": {
 			"label": "Select index sound/light mode",
@@ -82,10 +68,7 @@
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 6,
-			"defaultValue": 1,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"defaultValue": 1
 		},
 		"8": {
 			"label": "power offline sound/light mode",
@@ -93,10 +76,7 @@
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 6,
-			"defaultValue": 6,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"defaultValue": 6
 		}
 		// TODO: This device uses 18 configuration parameters (10..27, etc.) as 1
 		// Refer to https://www.benext.eu/static/manual/alarmsound.pdf

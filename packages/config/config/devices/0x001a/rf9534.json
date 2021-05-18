@@ -1,5 +1,3 @@
-// Eaton RF9534
-// Smart Dimmer
 {
 	"manufacturer": "Eaton",
 	"manufacturerId": "0x001a",
@@ -29,30 +27,21 @@
 			"valueSize": 1,
 			"minValue": -128,
 			"maxValue": 127,
-			"defaultValue": 0,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"defaultValue": 0
 		},
 		"2": {
 			"label": "Panic On Time",
 			"valueSize": 1,
 			"minValue": -128,
 			"maxValue": 127,
-			"defaultValue": 0,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"defaultValue": 0
 		},
 		"3": {
 			"label": "Panic Off Time",
 			"valueSize": 1,
 			"minValue": -128,
 			"maxValue": 127,
-			"defaultValue": 0,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"defaultValue": 0
 		},
 		"5": {
 			"label": "Power Up State",
@@ -60,8 +49,6 @@
 			"minValue": 1,
 			"maxValue": 3,
 			"defaultValue": 1,
-			"readOnly": false,
-			"writeOnly": false,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -84,8 +71,6 @@
 			"minValue": 0,
 			"maxValue": 1,
 			"defaultValue": 0,
-			"readOnly": false,
-			"writeOnly": false,
 			"allowManualEntry": false,
 			"options": [
 				{

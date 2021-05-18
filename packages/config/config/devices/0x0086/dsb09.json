@@ -1,5 +1,3 @@
-// AEON Labs DSB09
-// Home Energy Meter
 {
 	"manufacturer": "AEON Labs",
 	"manufacturerId": "0x0086",
@@ -40,8 +38,6 @@
 			"minValue": 120,
 			"maxValue": 240,
 			"defaultValue": 240,
-			"readOnly": false,
-			"writeOnly": false,
 			"allowManualEntry": false,
 			"options": [
 				{

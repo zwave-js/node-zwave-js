@@ -7,8 +7,6 @@
 		"maxValue": 4,
 		"defaultValue": 1,
 		"unsigned": true,
-		"readOnly": false,
-		"writeOnly": false,
 		"allowManualEntry": false,
 		"options": [
 			{
@@ -154,8 +152,6 @@
 		"defaultValue": 0,
 		"unsigned": true,
 		"readOnly": true,
-		"writeOnly": false,
-		"allowManualEntry": true,
 		"options": [
 			{
 				"label": "Disabled",
@@ -176,8 +172,6 @@
 		"defaultValue": 0,
 		"unsigned": true,
 		"readOnly": true,
-		"writeOnly": false,
-		"allowManualEntry": true,
 		"options": [
 			{
 				"label": "Disabled",
@@ -198,8 +192,6 @@
 		"defaultValue": 0,
 		"unsigned": true,
 		"readOnly": true,
-		"writeOnly": false,
-		"allowManualEntry": true,
 		"options": [
 			{
 				"label": "Disabled",
@@ -220,8 +212,6 @@
 		"defaultValue": 0,
 		"unsigned": true,
 		"readOnly": true,
-		"writeOnly": false,
-		"allowManualEntry": true,
 		"options": [
 			{
 				"label": "Disabled",
@@ -239,10 +229,7 @@
 		"minValue": 0,
 		"maxValue": 0,
 		"defaultValue": 0,
-		"unsigned": true,
-		"readOnly": false,
-		"writeOnly": false,
-		"allowManualEntry": true
+		"unsigned": true
 	},
 	"dipswitch_sku_lastfour": {
 		"label": "SKU Number (Last 4 Bytes)",
@@ -250,10 +237,7 @@
 		"minValue": 0,
 		"maxValue": 0,
 		"defaultValue": 0,
-		"unsigned": true,
-		"readOnly": false,
-		"writeOnly": false,
-		"allowManualEntry": true
+		"unsigned": true
 	},
 	"reset": {
 		"label": "Reset to Default",
@@ -263,7 +247,6 @@
 		"maxValue": 1,
 		"defaultValue": 0,
 		"unsigned": true,
-		"readOnly": false,
 		"writeOnly": true,
 		"allowManualEntry": false,
 		"options": [

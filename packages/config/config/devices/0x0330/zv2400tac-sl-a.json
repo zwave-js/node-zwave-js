@@ -1,5 +1,3 @@
-// Sunricher ZV2400TAC-SL-A
-// Knob Smart Dimmer
 {
 	"manufacturer": "Sunricher",
 	"manufacturerId": "0x0330",
@@ -23,8 +21,6 @@
 			"minValue": 0,
 			"maxValue": 2,
 			"defaultValue": 2,
-			"readOnly": false,
-			"writeOnly": false,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -48,8 +44,6 @@
 			"minValue": 0,
 			"maxValue": 1,
 			"defaultValue": 1,
-			"readOnly": false,
-			"writeOnly": false,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -69,8 +63,6 @@
 			"maxValue": 255,
 			"defaultValue": 0,
 			"unsigned": true,
-			"readOnly": false,
-			"writeOnly": false,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -96,20 +88,14 @@
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 50,
-			"defaultValue": 0,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"defaultValue": 0
 		},
 		"6": {
 			"label": "Maximum brightness value",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 100,
-			"defaultValue": 100,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"defaultValue": 100
 		},
 		"7": {
 			"label": "MOSFET driving type",
@@ -117,8 +103,6 @@
 			"minValue": 0,
 			"maxValue": 1,
 			"defaultValue": 0,
-			"readOnly": false,
-			"writeOnly": false,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -137,8 +121,6 @@
 			"minValue": 0,
 			"maxValue": 1,
 			"defaultValue": 1,
-			"readOnly": false,
-			"writeOnly": false,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -158,8 +140,6 @@
 			"minValue": 0,
 			"maxValue": 2,
 			"defaultValue": 0,
-			"readOnly": false,
-			"writeOnly": false,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -182,9 +162,7 @@
 			"minValue": 0,
 			"maxValue": 2,
 			"defaultValue": 0,
-			"readOnly": true,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"readOnly": true
 		},
 		"12": {
 			"label": "Load type",
@@ -192,9 +170,7 @@
 			"minValue": 0,
 			"maxValue": 3,
 			"defaultValue": 0,
-			"readOnly": true,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"readOnly": true
 		},
 		"13": {
 			"label": "Over current protection",
@@ -202,8 +178,6 @@
 			"minValue": 0,
 			"maxValue": 1,
 			"defaultValue": 1,
-			"readOnly": false,
-			"writeOnly": false,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -221,60 +195,42 @@
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 100,
-			"defaultValue": 10,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"defaultValue": 10
 		},
 		"15": {
 			"label": "Threshold, unit is %",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 100,
-			"defaultValue": 20,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"defaultValue": 20
 		},
 		"21": {
 			"label": "Power metering time cycle",
 			"valueSize": 4,
 			"minValue": 0,
 			"maxValue": 2678400,
-			"defaultValue": 600,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"defaultValue": 600
 		},
 		"22": {
 			"label": "Energy metering time cycle",
 			"valueSize": 4,
 			"minValue": 0,
 			"maxValue": 2678400,
-			"defaultValue": 1800,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"defaultValue": 1800
 		},
 		"23": {
 			"label": "Voltage metering time cycle",
 			"valueSize": 4,
 			"minValue": 0,
 			"maxValue": 0,
-			"defaultValue": 0,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"defaultValue": 0
 		},
 		"24": {
 			"label": "Current metering time cycle",
 			"valueSize": 4,
 			"minValue": 0,
 			"maxValue": 0,
-			"defaultValue": 0,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"defaultValue": 0
 		}
 	}
 }

@@ -1,5 +1,3 @@
-// Electronic Solutions DBMZ
-// DC Motor Controller - Window coverings
 {
 	"manufacturer": "Electronic Solutions",
 	"manufacturerId": "0x0033",
@@ -25,8 +23,6 @@
 			"maxValue": 129,
 			"defaultValue": 0,
 			"unsigned": true,
-			"readOnly": false,
-			"writeOnly": false,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -49,9 +45,6 @@
 			"minValue": 0,
 			"maxValue": 1,
 			"defaultValue": 0,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true,
 			"options": [
 				{
 					"label": "Normal",
@@ -68,10 +61,7 @@
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 1,
-			"defaultValue": 1,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"defaultValue": 1
 		}
 	}
 }

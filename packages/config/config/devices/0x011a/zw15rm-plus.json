@@ -1,5 +1,3 @@
-// Wenzhou MTLC Electric Appliances Co., Ltd. ZW15RM-PLUS
-// In-Wall Smart Meter Duplex Receptacle (15A)
 {
 	"manufacturer": "Wenzhou MTLC Electric Appliances Co., Ltd.",
 	"manufacturerId": "0x011a",
@@ -24,8 +22,6 @@
 			"minValue": 0,
 			"maxValue": 1,
 			"defaultValue": 0,
-			"readOnly": false,
-			"writeOnly": false,
 			"allowManualEntry": false,
 			"options": [
 				{

@@ -1,5 +1,3 @@
-// Nexia Home Intelligence TH100NX
-// Remote Temperature and Humidity Sensor
 {
 	"manufacturer": "Nexia Home Intelligence",
 	"manufacturerId": "0x0178",
@@ -25,9 +23,6 @@
 			"maxValue": 127,
 			"defaultValue": 0,
 			"unsigned": true,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true,
 			"options": [
 				{
 					"label": "Disabled",
@@ -42,9 +37,6 @@
 			"maxValue": 121,
 			"defaultValue": 121,
 			"unsigned": false,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true,
 			"options": [
 				{
 					"label": "Disabled",
@@ -59,9 +51,6 @@
 			"maxValue": 121,
 			"defaultValue": 121,
 			"unsigned": false,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true,
 			"options": [
 				{
 					"label": "Disabled",
@@ -76,9 +65,6 @@
 			"maxValue": 121,
 			"defaultValue": 121,
 			"unsigned": false,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true,
 			"options": [
 				{
 					"label": "Disabled",
@@ -93,9 +79,6 @@
 			"maxValue": 121,
 			"defaultValue": 121,
 			"unsigned": false,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true,
 			"options": [
 				{
 					"label": "Disabled",
@@ -111,9 +94,6 @@
 			"maxValue": 5,
 			"defaultValue": 0,
 			"unsigned": true,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true,
 			"options": [
 				{
 					"label": "Disabled",
@@ -128,8 +108,6 @@
 			"maxValue": 1,
 			"defaultValue": 1,
 			"unsigned": true,
-			"readOnly": false,
-			"writeOnly": false,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -149,10 +127,7 @@
 			"minValue": 1,
 			"maxValue": 200,
 			"defaultValue": 10,
-			"unsigned": true,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"unsigned": true
 		},
 		"9": {
 			"label": "Periodic Temperature Report Interval (Group 1)",
@@ -162,9 +137,6 @@
 			"maxValue": 120,
 			"defaultValue": 0,
 			"unsigned": true,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true,
 			"options": [
 				{
 					"label": "Disabled",
@@ -179,10 +151,7 @@
 			"minValue": 0,
 			"maxValue": 50,
 			"defaultValue": 10,
-			"unsigned": true,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"unsigned": true
 		},
 		"11": {
 			"label": "Periodic Temperature Report Interval (Group 2)",
@@ -192,9 +161,6 @@
 			"maxValue": 120,
 			"defaultValue": 0,
 			"unsigned": true,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true,
 			"options": [
 				{
 					"label": "Disabled",
@@ -210,9 +176,6 @@
 			"maxValue": 100,
 			"defaultValue": 0,
 			"unsigned": true,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true,
 			"options": [
 				{
 					"label": "Disabled",
@@ -228,9 +191,6 @@
 			"maxValue": 100,
 			"defaultValue": 0,
 			"unsigned": true,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true,
 			"options": [
 				{
 					"label": "Disabled",
@@ -246,9 +206,6 @@
 			"maxValue": 100,
 			"defaultValue": 0,
 			"unsigned": true,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true,
 			"options": [
 				{
 					"label": "Disabled",
@@ -264,9 +221,6 @@
 			"maxValue": 100,
 			"defaultValue": 0,
 			"unsigned": true,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true,
 			"options": [
 				{
 					"label": "Disabled",
@@ -281,10 +235,7 @@
 			"minValue": 1,
 			"maxValue": 50,
 			"defaultValue": 5,
-			"unsigned": true,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"unsigned": true
 		},
 		"17": {
 			"label": "Group 1 Humidity Report Interval",
@@ -294,9 +245,6 @@
 			"maxValue": 120,
 			"defaultValue": 0,
 			"unsigned": true,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true,
 			"options": [
 				{
 					"label": "Disabled",
@@ -311,10 +259,7 @@
 			"minValue": 1,
 			"maxValue": 30,
 			"defaultValue": 5,
-			"unsigned": true,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"unsigned": true
 		},
 		"19": {
 			"label": "Group 3 Humidity Report Interval",
@@ -324,9 +269,6 @@
 			"maxValue": 120,
 			"defaultValue": 0,
 			"unsigned": true,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true,
 			"options": [
 				{
 					"label": "Disabled",
@@ -342,8 +284,6 @@
 			"maxValue": 4,
 			"defaultValue": 1,
 			"unsigned": true,
-			"readOnly": false,
-			"writeOnly": false,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -372,10 +312,7 @@
 			"minValue": -7,
 			"maxValue": 7,
 			"defaultValue": 0,
-			"unsigned": false,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"unsigned": false
 		},
 		"22": {
 			"label": "Humidity Offset Correction",
@@ -385,10 +322,7 @@
 			"minValue": -7,
 			"maxValue": 7,
 			"defaultValue": 0,
-			"unsigned": false,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"unsigned": false
 		},
 		"23": {
 			"label": "Humidity Filter Time Constant",
@@ -397,10 +331,7 @@
 			"minValue": 1,
 			"maxValue": 60,
 			"defaultValue": 30,
-			"unsigned": true,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"unsigned": true
 		}
 	},
 	"metadata": {

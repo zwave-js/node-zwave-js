@@ -4,11 +4,9 @@ import type { Format, TransformableInfo, TransformFunction } from "logform";
 import * as path from "path";
 import { configs, MESSAGE } from "triple-beam";
 import winston, { Logger } from "winston";
+import DailyRotateFile from "winston-daily-rotate-file";
 import type Transport from "winston-transport";
-import type {
-	ConsoleTransportInstance,
-	FileTransportInstance,
-} from "winston/lib/winston/transports";
+import type { ConsoleTransportInstance } from "winston/lib/winston/transports";
 import { colorizer } from "./Colorizer";
 
 const { combine, timestamp, label } = winston.format;
@@ -108,7 +106,7 @@ function stringToNodeList(nodes?: string): number[] | undefined {
 }
 
 export class ZWaveLogContainer extends winston.Container {
-	private fileTransport: FileTransportInstance | undefined;
+	private fileTransport: DailyRotateFile | undefined;
 	private consoleTransport: ConsoleTransportInstance | undefined;
 	private loglevelVisibleCache = new Map<string, boolean>();
 
@@ -121,9 +119,9 @@ export class ZWaveLogContainer extends winston.Container {
 		filename: require.main
 			? path.join(
 					path.dirname(require.main.filename),
-					`zwave-${process.pid}.log`,
+					`zwavejs_%DATE%.log`,
 			  )
-			: path.join(__dirname, "../../..", `zwave-${process.pid}.log`),
+			: path.join(__dirname, "../../..", `zwave_%DATE%.log`),
 		forceConsole: false,
 	};
 
@@ -159,6 +157,12 @@ export class ZWaveLogContainer extends winston.Container {
 		const changedLogLevel =
 			config.level != undefined && config.level !== this.logConfig.level;
 
+		if (
+			config.filename != undefined &&
+			!config.filename.includes("%DATE%")
+		) {
+			config.filename += "_%DATE%.log";
+		}
 		const changedFilename =
 			config.filename != undefined &&
 			config.filename !== this.logConfig.filename;
@@ -242,8 +246,6 @@ export class ZWaveLogContainer extends winston.Container {
 		const ret: Transport[] = [];
 		if (this.logConfig.enabled && this.logConfig.logToFile) {
 			if (!this.fileTransport) {
-				console.log(`Logging to file:
-	${this.logConfig.filename}`);
 				this.fileTransport = this.createFileTransport();
 			}
 			ret.push(this.fileTransport);
@@ -278,12 +280,20 @@ export class ZWaveLogContainer extends winston.Container {
 		return !this.logConfig.enabled;
 	}
 
-	private createFileTransport(): FileTransportInstance {
-		return new winston.transports.File({
+	private createFileTransport(): DailyRotateFile {
+		const ret = new DailyRotateFile({
 			filename: this.logConfig.filename,
+			datePattern: "YYYY-MM-DD",
+			zippedArchive: true,
+			maxFiles: "7d",
 			format: createDefaultTransportFormat(false, false),
 			silent: this.isFileTransportSilent(),
 		});
+		ret.on("new", (newFilename: string) => {
+			console.log(`Logging to file:
+	${newFilename}`);
+		});
+		return ret;
 	}
 
 	/**

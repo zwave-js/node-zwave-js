@@ -1,5 +1,3 @@
-// Popp & Co 123580
-// Wall Plug Dimmer
 {
 	"manufacturer": "Popp & Co",
 	"manufacturerId": "0x0154",
@@ -29,8 +27,6 @@
 			"minValue": 0,
 			"maxValue": 3,
 			"defaultValue": 1,
-			"readOnly": false,
-			"writeOnly": false,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -58,10 +54,7 @@
 			"minValue": 0,
 			"maxValue": 65535,
 			"defaultValue": 0,
-			"unsigned": true,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"unsigned": true
 		},
 		"3": {
 			"label": "RF Off command",
@@ -69,8 +62,6 @@
 			"minValue": 0,
 			"maxValue": 3,
 			"defaultValue": 0,
-			"readOnly": false,
-			"writeOnly": false,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -97,8 +88,6 @@
 			"minValue": 0,
 			"maxValue": 1,
 			"defaultValue": 1,
-			"readOnly": false,
-			"writeOnly": false,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -117,10 +106,7 @@
 			"minValue": 0,
 			"maxValue": 255,
 			"defaultValue": 30,
-			"unsigned": true,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"unsigned": true
 		},
 		"6": {
 			"label": "Speed for slow dimming",
@@ -128,10 +114,7 @@
 			"minValue": 0,
 			"maxValue": 255,
 			"defaultValue": 3,
-			"unsigned": true,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"unsigned": true
 		},
 		"7": {
 			"label": "Behavior when ON received",
@@ -139,8 +122,6 @@
 			"minValue": 0,
 			"maxValue": 2,
 			"defaultValue": 0,
-			"readOnly": false,
-			"writeOnly": false,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -162,30 +143,21 @@
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 99,
-			"defaultValue": 0,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"defaultValue": 0
 		},
 		"9": {
 			"label": "Baby target light level",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 100,
-			"defaultValue": 0,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"defaultValue": 0
 		},
 		"10": {
 			"label": "Baby target time level",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 100,
-			"defaultValue": 50,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"defaultValue": 50
 		},
 		"17": {
 			"label": "Limit minimum light level",
@@ -193,10 +165,7 @@
 			"valueSize": 1,
 			"minValue": 1,
 			"maxValue": 95,
-			"defaultValue": 1,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"defaultValue": 1
 		},
 		"18": {
 			"label": "Limit maximum light level",
@@ -204,50 +173,35 @@
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 99,
-			"defaultValue": 1,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"defaultValue": 1
 		},
 		"19": {
 			"label": "Dim Level on 'Switch On'",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 99,
-			"defaultValue": 1,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"defaultValue": 1
 		},
 		"51": {
 			"label": "Pause before pulse",
 			"valueSize": 1,
 			"minValue": 5,
 			"maxValue": 60,
-			"defaultValue": 28,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"defaultValue": 28
 		},
 		"52": {
 			"label": "Pause after pulse",
 			"valueSize": 1,
 			"minValue": 5,
 			"maxValue": 60,
-			"defaultValue": 28,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"defaultValue": 28
 		},
 		"53": {
 			"label": "Pulse width",
 			"valueSize": 1,
 			"minValue": 3,
 			"maxValue": 20,
-			"defaultValue": 10,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"defaultValue": 10
 		},
 		"54": {
 			"label": "Pulse type",
@@ -256,8 +210,6 @@
 			"minValue": 0,
 			"maxValue": 1,
 			"defaultValue": 0,
-			"readOnly": false,
-			"writeOnly": false,
 			"allowManualEntry": false,
 			"options": [
 				{

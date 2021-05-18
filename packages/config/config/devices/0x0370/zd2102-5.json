@@ -1,5 +1,3 @@
-// Raylios ZD2102-5
-// Door Sensor
 {
 	"manufacturer": "Raylios",
 	"manufacturerId": "0x0370",
@@ -18,16 +16,8 @@
 	},
 	"paramInformation": {
 		"1": {
-			"label": "External Switch",
-			"description": "Enable the external switch",
-			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 0,
-			"defaultValue": 0,
-			"unsigned": true,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"$import": "../templates/master_template.json#base_enable_disable_255",
+			"label": "External Switch"
 		}
 	},
 	"metadata": {

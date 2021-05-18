@@ -1,5 +1,3 @@
-// DEFARO DSI-101 binary switch
-// DSI-101 binary switch
 {
 	"manufacturer": "DEFARO",
 	"manufacturerId": "0x032e",
@@ -22,80 +20,56 @@
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 5,
-			"defaultValue": 0,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"defaultValue": 0
 		},
 		"2": {
 			"label": "B2 operation mode",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 5,
-			"defaultValue": 0,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"defaultValue": 0
 		},
 		"3": {
 			"label": "B3 operation mode",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 5,
-			"defaultValue": 0,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"defaultValue": 0
 		},
 		"4": {
 			"label": "B4 operation mode",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 5,
-			"defaultValue": 0,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"defaultValue": 0
 		},
 		"5": {
 			"label": "B5 operation mode",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 5,
-			"defaultValue": 0,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"defaultValue": 0
 		},
 		"6": {
 			"label": "B6 operation mode",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 5,
-			"defaultValue": 0,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"defaultValue": 0
 		},
 		"7": {
 			"label": "B7 operation mode",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 5,
-			"defaultValue": 0,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"defaultValue": 0
 		},
 		"8": {
 			"label": "B8 operation mode",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 5,
-			"defaultValue": 0,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"defaultValue": 0
 		},
 		"9": {
 			"label": "Long press delay",
@@ -103,150 +77,105 @@
 			"valueSize": 1,
 			"minValue": 1,
 			"maxValue": 50,
-			"defaultValue": 5,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"defaultValue": 5
 		},
 		"10": {
 			"label": "B1 value for AG 11",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 99,
-			"defaultValue": 0,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"defaultValue": 0
 		},
 		"11": {
 			"label": "B2 value to send",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 99,
-			"defaultValue": 0,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"defaultValue": 0
 		},
 		"12": {
 			"label": "B3 value to send for AG 13",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 99,
-			"defaultValue": 0,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"defaultValue": 0
 		},
 		"13": {
 			"label": "B4 value to send",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 99,
-			"defaultValue": 0,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"defaultValue": 0
 		},
 		"14": {
 			"label": "B5 value to send",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 99,
-			"defaultValue": 0,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"defaultValue": 0
 		},
 		"15": {
 			"label": "B6 value to send",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 99,
-			"defaultValue": 0,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"defaultValue": 0
 		},
 		"16": {
 			"label": "B7 value to send",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 99,
-			"defaultValue": 0,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"defaultValue": 0
 		},
 		"17": {
 			"label": "B8 value to send",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 99,
-			"defaultValue": 0,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"defaultValue": 0
 		},
 		"20": {
 			"label": "Sensor 1 turn on value",
 			"valueSize": 2,
 			"minValue": -60,
 			"maxValue": 1000,
-			"defaultValue": 0,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"defaultValue": 0
 		},
 		"21": {
 			"label": "Sensor 1 command off value",
 			"valueSize": 2,
 			"minValue": -60,
 			"maxValue": 1000,
-			"defaultValue": 0,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"defaultValue": 0
 		},
 		"22": {
 			"label": "Sensor 1 conversion rules",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 6,
-			"defaultValue": 0,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"defaultValue": 0
 		},
 		"23": {
 			"label": "Sensor 2 command on value",
 			"valueSize": 2,
 			"minValue": -60,
 			"maxValue": 1000,
-			"defaultValue": 0,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"defaultValue": 0
 		},
 		"24": {
 			"label": "Sensor 2 command off value",
 			"valueSize": 2,
 			"minValue": -60,
 			"maxValue": 1000,
-			"defaultValue": 0,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"defaultValue": 0
 		},
 		"25": {
 			"label": "Sensor 2 conversion rules",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 6,
-			"defaultValue": 0,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"defaultValue": 0
 		}
 	}
 }

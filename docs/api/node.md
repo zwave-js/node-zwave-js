@@ -584,13 +584,13 @@ readonly deviceConfig: DeviceConfig | undefined
 
 Contains additional information about this node, loaded from a [config file](/development/config-files.md#device-configuration-files).
 
-### `neighbors`
+### `deviceDatabaseUrl`
 
 ```ts
-readonly neighbors: number[]
+readonly deviceDatabaseUrl: string | undefined
 ```
 
-The IDs of all nodes this node is connected to or is communicating through.
+The URL to the device in the device database.
 
 ### `keepAwake`
 
@@ -692,6 +692,22 @@ There are two situations when this event is emitted:
 
 > [!NOTE]
 > This event does not imply that the node is currently awake or will respond to requests.
+
+### `"firmware update progress"`
+
+```ts
+(node: ZWaveNode, sentFragments: number, totalFragments: number) => void;
+```
+
+Firmware update progress has been made. The callback takes the node itself, the already sent fragments, and the total fragments to be sent:
+
+### `"firmware update finished"`
+
+```ts
+(node: ZWaveNode, status: FirmwareUpdateStatus, waitTime?: number) => void;
+```
+
+The firmware update process is finished. The returned status indicates whether the update was successful and if it was, a wait time may be needed before the device is functional again.
 
 ### `"value added"` / `"value updated"` / `"value removed"`
 

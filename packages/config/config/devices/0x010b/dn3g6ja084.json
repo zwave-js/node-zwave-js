@@ -1,5 +1,3 @@
-// Sharp DN3G6JA084
-// Motion Detect Sensor
 {
 	"manufacturer": "Sharp",
 	"manufacturerId": "0x010b",
@@ -25,8 +23,6 @@
 			"maxValue": 1,
 			"defaultValue": 1,
 			"unsigned": true,
-			"readOnly": false,
-			"writeOnly": false,
 			"allowManualEntry": false,
 			"options": [
 				{

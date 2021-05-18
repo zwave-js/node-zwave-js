@@ -1,10 +1,8 @@
-// Aeotec ZWA009
-// aerQ Temperature and Humidity Sensor
 {
 	"manufacturer": "Aeotec Ltd.",
 	"manufacturerId": "0x0371",
 	"label": "ZWA009",
-	"description": "aerQ Temperature and Humidity Sensor",
+	"description": "aërQ Temperature and Humidity Sensor",
 	"devices": [
 		{
 			"productType": "0x0002",
@@ -50,167 +48,168 @@
 	},
 	"paramInformation": {
 		"1": {
-			"label": "Minimum Temperature change to report",
-			"description": "This value defines the minimum change of temperature to cause an unsolicited report of humidity to the central controller using Lifeline. If the value is set to 0, there will be no reports sent to the controller, when the temperature changes. However, periodic reports, managed by configuration parameter 4, may still be active. Valid values are 0-100. Unit is 1/10 degree. Default: 20.",
+			"label": "Minimum Temperature Change to Report",
 			"unit": "1/10 degree",
 			"unsigned": true,
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 100,
 			"defaultValue": 20,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"options": [
+				{
+					"label": "Disable",
+					"value": 0
+				}
+			]
 		},
 		"2": {
-			"label": "Minimum humidity change to report",
-			"description": "This value defines the minimum change of humidity to cause an unsolicited report of humidity to the central controller using Lifeline. If the value is set to 0, there will be no reports sent to the controller, when the humidity changes. However, periodic reports, managed by configuration parameter 4, may still be active. Valid values are 0-20. Unit is %. Default: 5.",
+			"label": "Minimum Humidity Change to Report",
 			"unit": "%",
 			"unsigned": true,
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 20,
 			"defaultValue": 5,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"options": [
+				{
+					"label": "Disable",
+					"value": 0
+				}
+			]
 		},
 		"4": {
 			"label": "Periodic Reports",
-			"description": "This parameter defines the time interval to send an unsolicited report. If the value is set to 0, there will be no periodic reports sent to the controller. However, reports on temperature/humidity changes, managed by configuration parameters 1 and 2, may still be active. Valid values are 0, 900-65535. Unit is seconds. Default: 43200",
+			"description": "Allowable Range: 900-65535",
 			"unit": "seconds",
 			"unsigned": true,
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 65535,
 			"defaultValue": 43200,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"options": [
+				{
+					"label": "Disable",
+					"value": 0
+				}
+			]
 		},
 		"5": {
 			"label": "Temperature Upper Watermark value",
-			"description": "This parameter defines a temperature. If the measured temperature surpasses this watermark a BASIC command is sent into Association Group 2. Valid values are 0-1000. 0 means disabled. Unit is 1/10 degree. Default: 0",
+			"description": "If the measured temperature surpasses this watermark, a Basic Set is sent into Association Group 2.",
 			"unit": "1/10 degree",
 			"unsigned": true,
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 1000,
 			"defaultValue": 0,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"options": [
+				{
+					"label": "Disable",
+					"value": 0
+				}
+			]
 		},
 		"6": {
 			"label": "Temperature Lower Watermark value",
-			"description": "This parameter defines a temperature. If the measured temperature drops below this watermark a BASIC command is sent into Association Group 3. Valid values are 0, 200-1000. 0 means disabled. Unit is 1/10 degree. Default: 0",
+			"description": "If the measured temperature drops below this watermark, a Basic Set is sent into Association Group 3. Allowable Range: 200-1000.",
 			"unit": "1/10 degree",
 			"unsigned": true,
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 1000,
 			"defaultValue": 0,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"options": [
+				{
+					"label": "Disable",
+					"value": 0
+				}
+			]
 		},
 		"7": {
 			"label": "Humidity Upper Watermark value",
-			"description": "This parameter defines a relative humidity. If the measured relative humidity surpasses this watermark a BASIC command is sent into Association Group 4. Valid values are 0-90. 0 means disabled. Unit is %. Default: 0",
+			"description": "If the measured relative humidity surpasses this watermark, a Basic Set is sent into Association Group 4.",
 			"unit": "%",
 			"unsigned": true,
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 90,
 			"defaultValue": 0,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"options": [
+				{
+					"label": "Disable",
+					"value": 0
+				}
+			]
 		},
 		"8": {
 			"label": "Humidity Lower Watermark value",
-			"description": "This parameter defines a relative humidity. If the measured temperature drops below this relative humidity a BASIC command is sent into Association Group 5. Valid values are 0-90. 0 means disabled. Unit is %. Default: 0",
+			"description": "If the measured relative humidity drops below this watermark, a Basic Set is sent into Association Group 5.",
 			"unit": "%",
 			"unsigned": true,
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 90,
 			"defaultValue": 0,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"options": [
+				{
+					"label": "Disable",
+					"value": 0
+				}
+			]
 		},
 		"9": {
-			"label": "Low Temperature Trigger BASIC Set Command Value",
-			"description": "This defines what BASIC command shall be sent out into association group 3. Valid values are 0-255. Default: 255.",
+			"label": "Low Temperature Trigger Basic Set Value",
+			"description": "This defines what Basic command shall be sent out into association group 3. Allowable Range: 0-99, 255.",
 			"unsigned": true,
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 255,
-			"defaultValue": 255,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"defaultValue": 255
 		},
 		"10": {
-			"label": "High Temperature Trigger BASIC Set Command Value",
-			"description": "This defines what BASIC command shall be sent out into association group 2. Valid values are 0-255. Default: 0.",
+			"label": "High Temperature Trigger Basic Set Value",
+			"description": "This defines what Basic command shall be sent out into association group 2. Allowable Range: 0-99, 255.",
 			"unsigned": true,
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 255,
-			"defaultValue": 0,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"defaultValue": 0
 		},
 		"11": {
-			"label": "Low Humidity Trigger BASIC Set Command Value",
-			"description": "This defines what BASIC command shall be sent out into association group 5. Valid values are 0-255. Default: 255.",
+			"label": "Low Humidity Trigger Basic Set Value",
+			"description": "This defines what Basic command shall be sent out into association group 5. Allowable Range: 0-99, 255.",
 			"unsigned": true,
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 255,
-			"defaultValue": 255,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"defaultValue": 255
 		},
 		"12": {
-			"label": "High Humidity Trigger BASIC Set Command Value",
-			"description": "This defines what BASIC command shall be sent out into association group 4. Valid values are 0-255. Default: 0.",
+			"label": "High Humidity Trigger Basic Set Value",
+			"description": "This defines what Basic command shall be sent out into association group 4. Allowable Range: 0-99, 255.",
 			"unsigned": true,
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 255,
-			"defaultValue": 0,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"defaultValue": 0
 		},
 		"13": {
-			"label": "Offset value for Mould danger notification",
-			"description": "This value allows to increase the humidity threshold for mould danger notification by max 10%. Valid values are 0-10. Unit is %. Default: 0.",
+			"label": "Humidity Offset for Mould Danger Notification",
 			"unit": "%",
 			"unsigned": true,
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 10,
-			"defaultValue": 0,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"defaultValue": 0
 		},
 		"64": {
 			"label": "Temperature Report Unit",
-			"description": "This value allows to switch between Celcius and Fahrenheit unit of temperature report. Default: Celcius (EU version) or Fahrenheit (US version).",
+			"description": "Default: Celcius (EU version) or Fahrenheit (US version).",
 			"unsigned": true,
 			"valueSize": 1,
 			"minValue": 1,
 			"maxValue": 2,
 			"defaultValue": 1,
-			"readOnly": false,
-			"writeOnly": false,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -231,10 +230,12 @@
 			"minValue": 0,
 			"maxValue": 4294967295,
 			"defaultValue": 0,
-			"readOnly": false,
-			"writeOnly": false,
 			"allowManualEntry": false,
 			"options": [
+				{
+					"label": "Normal operation",
+					"value": 0
+				},
 				{
 					"label": "Reset all Parameter settings to their default settings.",
 					"value": 1

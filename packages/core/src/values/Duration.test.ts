@@ -144,4 +144,70 @@ describe("lib/util/Duration", () => {
 			}
 		});
 	});
+
+	describe("parseString()", () => {
+		it(`should return undefined for unknown or unrepresentable values`, () => {
+			expect(Duration.parseString("")).toEqual(undefined);
+			expect(Duration.parseString("15")).toEqual(undefined);
+			expect(Duration.parseString("33h")).toEqual(undefined);
+			expect(Duration.parseString("not_a_number")).toEqual(undefined);
+		});
+
+		it(`should return a duration for seconds`, () => {
+			expect(Duration.parseString("10s")).toEqual(
+				new Duration(10, "seconds"),
+			);
+			expect(Duration.parseString("25s")).toEqual(
+				new Duration(25, "seconds"),
+			);
+			expect(Duration.parseString("33S")).toEqual(
+				new Duration(33, "seconds"),
+			);
+		});
+
+		it(`should return a duration for minutes`, () => {
+			expect(Duration.parseString("17m")).toEqual(
+				new Duration(17, "minutes"),
+			);
+			expect(Duration.parseString("22m")).toEqual(
+				new Duration(22, "minutes"),
+			);
+			expect(Duration.parseString("99M")).toEqual(
+				new Duration(99, "minutes"),
+			);
+		});
+
+		it(`should return a duration for hours`, () => {
+			expect(Duration.parseString("2h")).toEqual(
+				new Duration(120, "minutes"),
+			);
+			expect(Duration.parseString("1h8s")).toEqual(
+				new Duration(60, "minutes"),
+			);
+		});
+
+		it(`should return the nearest possible duration for combined seconds and minutes`, () => {
+			expect(Duration.parseString("19m18s")).toEqual(
+				new Duration(19, "minutes"),
+			);
+			expect(Duration.parseString("1m10s")).toEqual(
+				new Duration(60 + 10, "seconds"),
+			);
+			expect(Duration.parseString("0m9s")).toEqual(
+				new Duration(9, "seconds"),
+			);
+		});
+	});
+
+	describe("from()", () => {
+		it(`should return a duration when a string is passed`, () => {
+			expect(Duration.from("")).toEqual(undefined);
+			expect(Duration.from("88s")).toEqual(new Duration(88, "seconds"));
+		});
+
+		it(`should return the passed duration when a duration instance is passed`, () => {
+			const duration = new Duration(137, "minutes");
+			expect(Duration.from(duration)).toBe(duration);
+		});
+	});
 });

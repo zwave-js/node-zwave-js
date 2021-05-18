@@ -1,5 +1,3 @@
-// Flex Automation FXA-0404
-// Touch Panel- 4 Dimmers plus 4 ON-OFF- 5 Scenes
 {
 	"manufacturer": "Flex Automation",
 	"manufacturerId": "0x004f",
@@ -22,10 +20,7 @@
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 1,
-			"defaultValue": 1,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"defaultValue": 1
 		}
 	}
 }
