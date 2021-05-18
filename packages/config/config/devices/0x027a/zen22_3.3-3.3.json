@@ -46,7 +46,7 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "LED on when switch off, LED off when switch off",
+					"label": "LED on when switch off, LED off when switch on",
 					"value": 0
 				},
 				{
