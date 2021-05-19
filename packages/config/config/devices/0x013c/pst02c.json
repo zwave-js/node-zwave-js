@@ -96,7 +96,7 @@
 			]
 		},
 		"5[0x10]": {
-			"label": "Illumination report on trigger",
+			"label": "Illumination Report on Trigger",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 1,
@@ -130,7 +130,7 @@
 			]
 		},
 		"5[0x80]": {
-			"label": "Back key release in test mode",
+			"label": "Back Key Release in Test Mode",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 1,
@@ -148,7 +148,6 @@
 		},
 		"6[0x02]": {
 			"label": "Magnetic Illumination",
-			"description": "Disable magnetic integrate illumination to turn ON the lighting nodes in the association group 2",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 1,
@@ -165,8 +164,7 @@
 			]
 		},
 		"6[0x10]": {
-			"label": "5 Second Delay",
-			"description": "Disable delay 5 seconds to turn off the light, when door/window closed",
+			"label": "5 Second Delay Light Off",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 1,
@@ -183,7 +181,7 @@
 			]
 		},
 		"6[0x20]": {
-			"label": "Auto turn off light",
+			"label": "Auto Turn Off Light",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 1,
@@ -200,7 +198,7 @@
 			]
 		},
 		"7[0x08]": {
-			"label": "Base Off after door close",
+			"label": "Base Off After Door Close",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 1,
@@ -251,8 +249,7 @@
 			]
 		},
 		"7[0x40]": {
-			"label": "Report battery state when triggered",
-			"description": "Disable to report battery state when the device triggered",
+			"label": "Report Battery State When Triggered",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 1,
@@ -297,8 +294,7 @@
 			"defaultValue": 12
 		},
 		"12": {
-			"label": "Auto Report Illumination Time",
-			"description": "The Interval time for auto reporting the illumination state.",
+			"label": "Auto Report Illumination Interval Time",
 			"valueSize": 1,
 			"minValue": 1,
 			"maxValue": 127,
@@ -306,7 +302,6 @@
 		},
 		"13": {
 			"label": "Auto Report Temperature Time",
-			"description": "The interval time for auto reporting the temperature state.",
 			"valueSize": 1,
 			"minValue": 1,
 			"maxValue": 127,
@@ -314,7 +309,6 @@
 		},
 		"20": {
 			"label": "Auto Report Tick Interval",
-			"description": "The interval time for each auto report tick.",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 255,
