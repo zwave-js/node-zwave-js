@@ -1,4 +1,5 @@
 module.exports = {
+	approveWorkflows: (...args) => require("./approveWorkflows")(...args),
 	checkAuthorized: (...args) => require("./checkAuthorized")(...args),
 	fixLintFeedback: (...args) => require("./fixLintFeedback")(...args),
 	getFixLintInfo: (...args) => require("./getFixLintInfo")(...args),
