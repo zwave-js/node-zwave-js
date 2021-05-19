@@ -35,7 +35,6 @@ async function main(param) {
 		data: { artifacts },
 	} = await github.actions.listWorkflowRunArtifacts({
 		...options,
-		// @ts-expect-error for some reason job is `never`
 		run_id: job.run_id,
 	});
 
