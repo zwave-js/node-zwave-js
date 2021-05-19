@@ -4,7 +4,7 @@ const github = require("@actions/github");
 const core = require("@actions/core");
 
 const githubToken = core.getInput("githubToken");
-const octokit = github.getOctokit(githubToken);
+const octokit = github.getOctokit(githubToken).rest;
 const context = github.context;
 
 (async function main() {
@@ -12,20 +12,26 @@ const context = github.context;
 
 	const options = {};
 	options.listeners = {
-		stdout: data => {
+		stdout: (data) => {
 			ccTable += data.toString();
 		},
 	};
 
-	await exec.exec("yarn", ["run", "implemented_ccs", "--flavor=github"], options);
+	await exec.exec(
+		"yarn",
+		["run", "implemented_ccs", "--flavor=github"],
+		options,
+	);
 
 	ccTable = ccTable
 		.split("\n")
-		.filter(line => line.startsWith("| "))
+		.filter((line) => line.startsWith("| "))
 		.join("\n");
 	ccTable = c.stripColor(ccTable);
 
-	const { data: { body: oldBody } } = await octokit.issues.get({
+	const {
+		data: { body: oldBody },
+	} = await octokit.issues.get({
 		...context.repo,
 		issue_number: 6,
 	});
