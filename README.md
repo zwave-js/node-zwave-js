@@ -33,6 +33,8 @@ If you'd like to help support the future of the project and make the Z-Wave worl
 -   Giving funds by becoming a [supporter](https://github.com/sponsors/AlCalzone). Personally or with your company, monthly or one-time - every little bit helps.
 -   Providing a part-time salary for @AlCalzone by becoming a [sponsor](https://github.com/sponsors/AlCalzone) - [read more](https://zwave-js.github.io/node-zwave-js/#/getting-started/sponsoring).
 
+unnecessary edit
+
 ## Quick Links
 
 -   [License](LICENSE)
