@@ -17,7 +17,7 @@ async function main(param) {
 
 	const {
 		data: { workflow_runs },
-	} = await githubactions.listWorkflowRunsForRepo({
+	} = await github.actions.listWorkflowRunsForRepo({
 		...options,
 		status: "action_required",
 	});
@@ -71,7 +71,7 @@ async function main(param) {
 
 	github.log.info(`Approving workflow runs...`);
 	for (const run of whitelistedRuns) {
-		await githubrequest(
+		await github.request(
 			"POST /repos/{owner}/{repo}/actions/runs/{run_id}/approve",
 			{
 				...options,
