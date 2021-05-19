@@ -6,7 +6,7 @@ on:
     - cron:  '*/5 * * * *'
 
 jobs:
-  stale:
+  approve-workflows:
     runs-on: [ubuntu-latest]
 
     strategy:
