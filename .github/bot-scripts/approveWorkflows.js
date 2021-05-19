@@ -1,6 +1,6 @@
 const { makeRe } = require("minimatch");
 
-/// <reference path="types.d.ts" />
+/// <reference path="./types.d.ts" />
 
 // @ts-check
 
@@ -15,22 +15,31 @@ async function main(param) {
 		repo: context.repo.repo,
 	};
 
+	// Figure out which workflow IDs the whitelisted workflows have
+	const {
+		data: { workflows: repoWorkflows },
+	} = await github.actions.listRepoWorkflows({
+		...options,
+	});
+	const workflowIDs = repoWorkflows
+		.filter((w) => workflows.includes(w.path))
+		.map((w) => w.id);
+
+	// Only look at the runs that part of the whitelisted workflows
 	const {
 		data: { workflow_runs },
 	} = await github.actions.listWorkflowRunsForRepo({
 		...options,
 		status: "action_required",
 	});
-
-	// Only look at the runs that part of the whitelisted workflows
 	const pendingRuns = workflow_runs.filter((run) =>
-		workflows.includes(run.name),
+		workflowIDs.includes(run.workflow_id),
 	);
 
-	/** @type {typeof pendingRuns} */
+	/** @type {number[]} */
 	const whitelistedRuns = [];
 	runs: for (const run of pendingRuns) {
-		github.log.info(`Checking run ${run.id}...`);
+		console.log(`Checking run ${run.id}...`);
 
 		// Find the pull request for the current run
 		const { data: pulls } = await github.pulls.list({
@@ -39,9 +48,10 @@ async function main(param) {
 		});
 
 		if (!pulls.length) {
-			github.log.info(
+			console.log(
 				`No pull request found for workflow run ${run.id} - skipping...`,
 			);
+			continue;
 		}
 
 		// List all the files in there
@@ -59,26 +69,33 @@ async function main(param) {
 		const patterns = whitelist.map((p) => makeRe(p));
 		for (const file of filenames) {
 			if (!patterns.some((p) => p.test(file))) {
-				github.log.info(
+				console.log(
 					`File ${file} does not match any whitelist - not approving workflow run!`,
 				);
 				continue runs;
 			}
 		}
-		github.log.info(`Check okay... workflow run will be approved`);
-		whitelistedRuns.push(run);
+
+		console.log(
+			`Changed files in PR #${pulls[0].number}: ${[...filenames]
+				.map((f) => `\n· ${f}`)
+				.join("")}`,
+		);
+
+		console.log(`Check okay... workflow run will be approved`);
+		whitelistedRuns.push(run.id);
 	}
 
-	github.log.info(`Approving workflow runs...`);
-	for (const run of whitelistedRuns) {
+	console.log(`Approving workflow runs...`);
+	for (const run_id of whitelistedRuns) {
 		await github.request(
 			"POST /repos/{owner}/{repo}/actions/runs/{run_id}/approve",
 			{
 				...options,
-				run_id: run.id,
+				run_id,
 			},
 		);
 	}
-	github.log.info(`Done!`);
+	console.log(`Done!`);
 }
 module.exports = main;
