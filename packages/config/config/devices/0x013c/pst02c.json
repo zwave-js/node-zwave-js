@@ -113,7 +113,7 @@
 			]
 		},
 		"5[0x20]": {
-			"label": "Temperature report on trigger",
+			"label": "Temperature Report on Trigger",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 1,
@@ -130,8 +130,7 @@
 			]
 		},
 		"5[0x80]": {
-			"label": "Back key release",
-			"description": "Disable the back key release into test mode",
+			"label": "Back key release in test mode",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 1,
@@ -185,7 +184,6 @@
 		},
 		"6[0x20]": {
 			"label": "Auto turn off light",
-			"description": "Disable auto turn off the light, after door/window opened to turn on the light",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 1,
@@ -203,7 +201,6 @@
 		},
 		"7[0x08]": {
 			"label": "Base Off after door close",
-			"description": "Disable send out BASIC OFF after door closed",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 1,
@@ -237,8 +234,7 @@
 			]
 		},
 		"7[0x20]": {
-			"label": "Disable Multi CC",
-			"description": "Disable Multi CC in auto report",
+			"label": "Disable Multi CC Auto Report",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 1,
