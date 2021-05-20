@@ -19,7 +19,7 @@ async function main(param) {
 		await github.issues.createComment({
 			...options,
 			issue_number: context.payload.issue.number,
-			body: `❌ Sorry, importing the files yielded no changes.`,
+			body: `❌ Sorry, adding the compat flag(s) yielded no changes.`,
 		});
 		return;
 	}

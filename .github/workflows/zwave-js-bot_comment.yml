@@ -483,3 +483,140 @@ jobs:
           return bot.importConfigCreatePR({github, context});
 
 
+  # #########################################################################
+  # Adds a compat flag to an existing file when an authorized person posts
+  # @zwave-js-bot add compat flag to <deviceId>
+  # ```
+  # enableBasicSetMapping: true
+  # ```
+  add-compat-flag:
+    if: |
+      contains(github.event.issue.html_url, '/issues/') &&
+      contains(github.event.comment.body, '@zwave-js-bot add compat flag') &&
+      (github.event.comment.user.login != 'zwave-js-bot' && github.event.comment.user.login != 'zwave-js-assistant[bot]')
+
+    runs-on: [ubuntu-latest]
+    strategy:
+      matrix:
+        node-version: [14.x]
+
+    steps:
+    - name: Checkout master branch
+      uses: actions/checkout@v2
+ 
+    - name: Check user's permissions to do this
+      id: check-permissions
+      uses: actions/github-script@v3
+      with:
+        github-token: ${{secrets.BOT_TOKEN}}
+        result-encoding: string
+        script: |
+          const bot = require(`${process.env.GITHUB_WORKSPACE}/.github/bot-scripts/index.js`);
+          return bot.checkAuthorized({github, context});
+
+    # These steps only run if the check was successful
+    - name: Use Node.js ${{ matrix.node-version }}
+      if: steps.check-permissions.outputs.result == 'true'
+      uses: actions/setup-node@v1
+      with:
+        node-version: ${{ matrix.node-version }}
+
+    - name: Get Yarn cache directory
+      if: steps.check-permissions.outputs.result == 'true'
+      id: yarn-cache-dir-path
+      run: echo "::set-output name=dir::$(yarn cache dir)"
+
+    - name: Use Yarn cache
+      if: steps.check-permissions.outputs.result == 'true'
+      uses: actions/cache@v2
+      id: yarn-cache
+      with:
+        path: ${{ steps.yarn-cache-dir-path.outputs.dir }}
+        key: ${{ runner.os }}-yarn-${{ matrix.node-version }}-${{ hashFiles('**/yarn.lock') }}
+        restore-keys: |
+          ${{ runner.os }}-yarn-
+
+    - name: Install dependencies
+      if: steps.check-permissions.outputs.result == 'true'
+      run: yarn install --prefer-offline --frozen-lockfile
+
+    - name: Compile TypeScript code
+      if: steps.check-permissions.outputs.result == 'true'
+      # We need this or the linter will complain about other stuff than the checks
+      run: yarn run build
+
+    - name: Parse command
+      if: steps.check-permissions.outputs.result == 'true'
+      id: parse-command
+      uses: actions/github-script@v3
+      with:
+        github-token: ${{secrets.BOT_TOKEN}}
+        script: |
+          const body = context.payload.comment.body;
+          const match1 = /add compat flag to (?<id>0x[0-9a-f]{4}:0x[0-9a-f]{4}:0x[0-9a-f]{4}(?::\d+\.\d+)?)\s/.exec(body);
+          const match2 = /```(?<flag>(?:.|\n|\r)*)```/.exec(body);
+          if (!match1 || !match2) return {skip: true};
+          return {
+            id: match1.groups.id,
+            flag: match2.groups.flag
+          }
+
+    - name: Add compat flag
+      if: |
+        steps.check-permissions.outputs.result == 'true' &&
+        !fromJSON(steps.parse-command.outputs.result).skip
+      uses: actions/github-script@v3
+      env:
+        id: ${{ fromJSON(steps.parse-command.outputs.result).id }}
+        flag: ${{ fromJSON(steps.parse-command.outputs.result).flag }}
+      with:
+        github-token: ${{secrets.BOT_TOKEN}}
+        script: |
+          const bot = require(`${process.env.GITHUB_WORKSPACE}/.github/bot-scripts/index.js`);
+          return bot.addCompatFlag({github, context});
+
+    - name: Commit changes
+      if: |
+        steps.check-permissions.outputs.result == 'true' &&
+        !fromJSON(steps.parse-command.outputs.result).skip
+      id: commit-changes
+      env:
+        id: ${{ fromJSON(steps.parse-command.outputs.result).id }}
+      run: |
+        branchname="add-compat-flag-$(date +'%s')"
+        commitmessage="fix(config): add compat flag to $id"
+
+        # Check if something changed
+        git config user.email "bot@zwave-js.io"
+        git config user.name "Z-Wave JS Bot"
+        git checkout -b "$branchname"
+        git add -A
+
+        if ! git diff --quiet HEAD -- packages/config/config/devices/ ; then
+          git commit -m "$commitmessage"
+          git push --set-upstream origin "$branchname"
+
+          echo "::set-output name=result::success"
+          echo "::set-output name=branchname::$branchname"
+          echo "::set-output name=commitmessage::$commitmessage"
+        else
+          echo "::set-output name=result::unchanged"
+          exit 0
+        fi
+
+    - name: Create PR
+      if: |
+        steps.check-permissions.outputs.result == 'true' &&
+        !fromJSON(steps.parse-command.outputs.result).skip
+      uses: actions/github-script@v3
+      env:
+        RESULT: ${{ steps.commit-changes.outputs.result }}
+        branchname: ${{ steps.commit-changes.outputs.branchname }}
+        commitmessage: ${{ steps.commit-changes.outputs.commitmessage }}
+      with:
+        github-token: ${{secrets.BOT_TOKEN}}
+        script: |
+          const bot = require(`${process.env.GITHUB_WORKSPACE}/.github/bot-scripts/index.js`);
+          return bot.addCompatFlagCreatePR({github, context});
+
+
