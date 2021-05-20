@@ -198,7 +198,7 @@
 			]
 		},
 		"7[0x08]": {
-			"label": "Base Off After Door Close",
+			"label": "Send Basic CC Off After Door Close",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 1,
@@ -232,7 +232,7 @@
 			]
 		},
 		"7[0x20]": {
-			"label": "Disable Multi CC Auto Report",
+			"label": "Multi Command Encapsulated Auto Reports",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 1,
