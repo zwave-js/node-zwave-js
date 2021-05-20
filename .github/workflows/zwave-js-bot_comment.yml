@@ -554,7 +554,7 @@ jobs:
         script: |
           const body = context.payload.comment.body;
           const match1 = /add compat flag to (?<id>0x[0-9a-f]{4}:0x[0-9a-f]{4}:0x[0-9a-f]{4}(?::\d+\.\d+)?)\s/.exec(body);
-          const match2 = /```(?<flag>(?:.|\n|\r)*)```/.exec(body);
+          const match2 = /```(?:jsonc?)?(?<flag>(?:.|\n|\r)*)```/.exec(body);
           if (!match1 || !match2) return {skip: true};
           return {
             id: match1.groups.id,
