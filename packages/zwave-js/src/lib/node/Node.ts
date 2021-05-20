@@ -3423,8 +3423,17 @@ protocol version:      ${this._protocolVersion}`;
 			}
 		}
 
-		// And restore the device config
+		// Restore the device config
 		await this.loadDeviceConfig();
+
+		// And remove the Basic CC if it should be hidden
+		// TODO: Do this as part of loadDeviceConfig
+		const compat = this._deviceConfig?.compat;
+		if (!compat?.disableBasicMapping && !compat?.treatBasicSetAsEvent) {
+			for (const endpoint of this.getAllEndpoints()) {
+				endpoint.hideBasicCCInFavorOfActuatorCCs();
+			}
+		}
 	}
 
 	/**
