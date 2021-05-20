@@ -222,11 +222,11 @@
 			"defaultValue": 0,
 			"options": [
 				{
-					"label": "Use Notification Report",
+					"label": "Notification Report",
 					"value": 0
 				},
 				{
-					"label": "Use Sensor Binary Report",
+					"label": "Binary Sensor Report",
 					"value": 1
 				}
 			]
