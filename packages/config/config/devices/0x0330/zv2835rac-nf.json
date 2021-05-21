@@ -115,12 +115,12 @@
 				}
 			]
 		},
-   		"8": {
+		"8": {
 			"label": "Step of knob",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 50,
-			"defaultValue": 5,
+			"defaultValue": 5
 		},
 		"9": {
 			"label": "Added to and removed from a network",
