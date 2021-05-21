@@ -24,15 +24,15 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "shutoff load",
+					"label": "Turn off load",
 					"value": 0
 				},
 				{
-					"label": "turn on load",
+					"label": "Turn on load",
 					"value": 1
 				},
 				{
-					"label": "save load state before power failure",
+					"label": "Save load state before power failure",
 					"value": 2
 				}
 			]
@@ -106,11 +106,11 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "trailing edge",
+					"label": "Trailing edge",
 					"value": 0
 				},
 				{
-					"label": "leading edge",
+					"label": "Leading edge",
 					"value": 1
 				}
 			]
@@ -131,11 +131,11 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "disable",
+					"label": "Disable",
 					"value": 0
 				},
 				{
-					"label": "enable",
+					"label": "Enable",
 					"value": 1
 				}
 			]
@@ -150,15 +150,15 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "disable",
+					"label": "Disable",
 					"value": 0
 				},
 				{
-					"label": "enable",
+					"label": "Enable",
 					"value": 1
 				},
 				{
-					"label": "enable to detect only after first re-power",
+					"label": "Enable to detect only after first re-power",
 					"value": 2
 				}
 			]
@@ -188,25 +188,27 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "disable",
+					"label": "Disable",
 					"value": 0
 				},
 				{
-					"label": "enable",
+					"label": "Enable",
 					"value": 1
 				}
 			]
 		},
 		"14": {
-			"label": "Threshold, unit is W",
+			"label": "Power automatic report absolute threshold",
 			"valueSize": 2,
+			"unit": "W",
 			"minValue": 0,
 			"maxValue": 100,
 			"defaultValue": 10
 		},
 		"15": {
-			"label": "Threshold, unit is %",
+			"label": "Power automatic report threshold,",
 			"valueSize": 1,
+			"unit": "%",
 			"minValue": 0,
 			"maxValue": 100,
 			"defaultValue": 20
@@ -214,6 +216,7 @@
 		"21": {
 			"label": "Power metering time cycle",
 			"valueSize": 4,
+			"unit": "seconds",
 			"minValue": 0,
 			"maxValue": 2678400,
 			"defaultValue": 600
@@ -221,6 +224,7 @@
 		"22": {
 			"label": "Energy metering time cycle",
 			"valueSize": 4,
+			"unit": "seconds",
 			"minValue": 0,
 			"maxValue": 2678400,
 			"defaultValue": 1800
@@ -228,15 +232,41 @@
 		"23": {
 			"label": "Voltage metering time cycle",
 			"valueSize": 4,
-			"minValue": 0,
-			"maxValue": 0,
-			"defaultValue": 0
+			"unit": "seconds",
+			"minValue": 5,
+			"maxValue": 2678400,
+			"defaultValue": 3600
 		},
 		"24": {
 			"label": "Current metering time cycle",
 			"valueSize": 4,
+			"unit": "seconds",
+			"minValue": 5,
+			"maxValue": 2678400,
+			"defaultValue": 3600
+		},
+		"31": {
+			"label": "Dimming curve",
+			"valueSize": 1,
 			"minValue": 0,
-			"maxValue": 0,
+			"maxValue": 1,
+			"defaultValue": 0,
+			"options": [
+				{
+					"label": "Linear",
+					"value": 0
+				},
+				{
+					"label": "Logarithmic",
+					"value": 1
+				}
+			]
+		},
+		"32": {
+			"label": "Starting brightness",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 99,
 			"defaultValue": 0
 		}
 	}
