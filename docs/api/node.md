@@ -269,7 +269,7 @@ Aborts an active firmware update process.
 ping(): Promise<boolean>
 ```
 
-Pings the node and returns if it responded or not.
+Pings the node and returns whether it responded or not.
 
 ## ZWaveNode properties
 
