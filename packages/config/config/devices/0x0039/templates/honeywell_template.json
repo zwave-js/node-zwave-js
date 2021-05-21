@@ -65,79 +65,79 @@
 				"value": 0
 			},
 			{
-				"label": "10 Run time days",
+				"label": "10 run time days",
 				"value": 1
 			},
 			{
-				"label": "20 Run time days",
+				"label": "20 run time days",
 				"value": 2
 			},
 			{
-				"label": "30 Run time days",
+				"label": "30 run time days",
 				"value": 3
 			},
 			{
-				"label": "45 Run time days",
+				"label": "45 run time days",
 				"value": 4
 			},
 			{
-				"label": "60 Run time days",
+				"label": "60 run time days",
 				"value": 5
 			},
 			{
-				"label": "90 Run time days",
+				"label": "90 run time days",
 				"value": 6
 			},
 			{
-				"label": "120 Run time days",
+				"label": "120 run time days",
 				"value": 7
 			},
 			{
-				"label": "150 Run time days",
+				"label": "150 run time days",
 				"value": 8
 			},
 			{
-				"label": "30 Days",
+				"label": "30 days",
 				"value": 9
 			},
 			{
-				"label": "45 Days",
+				"label": "45 days",
 				"value": 10
 			},
 			{
-				"label": "60 Days",
+				"label": "60 days",
 				"value": 11
 			},
 			{
-				"label": "75 Days",
+				"label": "75 days",
 				"value": 12
 			},
 			{
-				"label": "3 Months",
+				"label": "3 months",
 				"value": 13
 			},
 			{
-				"label": "4 Months",
+				"label": "4 months",
 				"value": 14
 			},
 			{
-				"label": "5 Months",
+				"label": "5 months",
 				"value": 15
 			},
 			{
-				"label": "6 Months",
+				"label": "6 months",
 				"value": 16
 			},
 			{
-				"label": "9 Months",
+				"label": "9 months",
 				"value": 17
 			},
 			{
-				"label": "12 Months",
+				"label": "12 months",
 				"value": 18
 			},
 			{
-				"label": "15 Months",
+				"label": "15 months",
 				"value": 19
 			}
 		]
@@ -160,7 +160,6 @@
 		"minValue": 0,
 		"maxValue": 12,
 		"defaultValue": 0,
-		"unit": "months",
 		"allowManualEntry": false,
 		"options": [
 			{
@@ -168,19 +167,19 @@
 				"value": 0
 			},
 			{
-				"label": "3",
+				"label": "3 months",
 				"value": 3
 			},
 			{
-				"label": "6",
+				"label": "6 months",
 				"value": 6
 			},
 			{
-				"label": "9",
+				"label": "9 months",
 				"value": 9
 			},
 			{
-				"label": "12",
+				"label": "12 months",
 				"value": 12
 			}
 		]
@@ -190,7 +189,6 @@
 		"minValue": 0,
 		"maxValue": 24,
 		"defaultValue": 0,
-		"unit": "months",
 		"allowManualEntry": false,
 		"options": [
 			{
@@ -198,15 +196,15 @@
 				"value": 0
 			},
 			{
-				"label": "6",
+				"label": "6 months",
 				"value": 6
 			},
 			{
-				"label": "12",
+				"label": "12 months",
 				"value": 12
 			},
 			{
-				"label": "24",
+				"label": "24 months",
 				"value": 24
 			}
 		]
