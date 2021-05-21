@@ -186,17 +186,7 @@
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 1431655765,
-			"defaultValue": 0,
-			"options": [
-				{
-					"label": "Reset Parameter",
-					"value": 1
-				},
-				{
-					"label": "Factory default (exclude the device)",
-					"value": 1431655765
-				}
-			]
+			"defaultValue": 0
 		}
 	}
 }
