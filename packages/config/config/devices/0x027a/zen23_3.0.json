@@ -105,26 +105,7 @@
 			"defaultValue": 60
 		},
 		"8": {
-			"label": "Status After Power Failure",
-			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 2,
-			"defaultValue": 2,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "Forced to OFF",
-					"value": 0
-				},
-				{
-					"label": "Forced to ON",
-					"value": 1
-				},
-				{
-					"label": "Restore Previous Status",
-					"value": 2
-				}
-			]
+			"$import": "../templates/master_template.json#state_after_power_failure_off_on_prev"
 		},
 		"9": {
 			"label": "Enable/Disable Scene Control",

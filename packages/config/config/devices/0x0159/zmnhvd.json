@@ -72,22 +72,7 @@
 			"defaultValue": 0
 		},
 		"30": {
-			"label": "Saving the state after a power failure",
-			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 1,
-			"defaultValue": 0,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "Module saves it state",
-					"value": 0
-				},
-				{
-					"label": "Module turns OFF",
-					"value": 1
-				}
-			]
+			"$import": "../templates/master_template.json#state_after_power_failure_prev_off"
 		},
 		"52": {
 			"label": "Auto or manual selection",

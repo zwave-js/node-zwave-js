@@ -16,11 +16,7 @@
 	"supportsZWavePlus": true,
 	"paramInformation": {
 		"2": {
-			"label": "Save state on power failure",
-			"description": "Shut off load (default), turn on load or restore saved state after power failure",
-			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 2,
+			"$import": "../templates/master_template.json#state_after_power_failure_off_on_prev",
 			"defaultValue": 0
 		},
 		"3": {

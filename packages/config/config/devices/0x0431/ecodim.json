@@ -39,28 +39,8 @@
 	},
 	"paramInformation": {
 		"1": {
-			"label": "State After Power Restored",
-			"description": "The state the switch should return to once power is restored after power failure.",
-			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 2,
-			"defaultValue": 0,
-			"unsigned": true,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "Off",
-					"value": 0
-				},
-				{
-					"label": "On",
-					"value": 1
-				},
-				{
-					"label": "Returns to level before Power Outage",
-					"value": 2
-				}
-			]
+			"$import": "../templates/master_template.json#state_after_power_failure_off_on_prev",
+			"defaultValue": 0
 		},
 		"2": {
 			"label": "Notification when Load status change",

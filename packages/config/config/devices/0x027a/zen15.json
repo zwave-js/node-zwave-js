@@ -34,27 +34,7 @@
 			]
 		},
 		"21": {
-			"label": "On/Off Status Recovery After Power Failure",
-			"description": "Choose the recovery state for your Power Switch if power outage occurs.",
-			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 2,
-			"defaultValue": 0,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "Previous state",
-					"value": 0
-				},
-				{
-					"label": "ON",
-					"value": 1
-				},
-				{
-					"label": "OFF",
-					"value": 2
-				}
-			]
+			"$import": "../templates/master_template.json#state_after_power_failure_prev_on_off"
 		},
 		"24": {
 			"label": "On/Off Status Change Notifications",

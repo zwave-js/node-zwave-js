@@ -16,26 +16,7 @@
 	"supportsZWavePlus": true,
 	"paramInformation": {
 		"2": {
-			"label": "State before power failure",
-			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 2,
-			"defaultValue": 2,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "shutoff load",
-					"value": 0
-				},
-				{
-					"label": "turn on load",
-					"value": 1
-				},
-				{
-					"label": "save load state before power failure",
-					"value": 2
-				}
-			]
+			"$import": "../templates/master_template.json#state_after_power_failure_off_on_prev"
 		},
 		"3": {
 			"label": "Send Basic report",

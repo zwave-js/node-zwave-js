@@ -111,23 +111,7 @@
 			"unsigned": true
 		},
 		"30": {
-			"label": "Saving Q1 and Q2 after a power failure",
-			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 255,
-			"defaultValue": 0,
-			"unsigned": true,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "Saves state before power failure",
-					"value": 0
-				},
-				{
-					"label": "Do not save state after a power failure",
-					"value": 1
-				}
-			]
+			"$import": "../templates/master_template.json#state_after_power_failure_prev_off"
 		},
 		"40": {
 			"label": "Power reporting in Watts on power change for Q1",

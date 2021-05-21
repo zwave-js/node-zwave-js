@@ -93,27 +93,7 @@
 			"defaultValue": 0
 		},
 		"8": {
-			"label": "On Off Status After Power Failure",
-			"description": "How switch reacts to power failures",
-			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 2,
-			"defaultValue": 2,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "Forced to off (regardless of state prior to power outage)",
-					"value": 0
-				},
-				{
-					"label": "Forced to on (regardless of state prior to power outage)",
-					"value": 1
-				},
-				{
-					"label": "Remembers and restores on/off status after power failure",
-					"value": 2
-				}
-			]
+			"$import": "../templates/master_template.json#state_after_power_failure_off_on_prev"
 		},
 		"9": {
 			"label": "Enable/Disable Scene Control",

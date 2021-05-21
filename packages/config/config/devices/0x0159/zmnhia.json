@@ -181,23 +181,7 @@
 			"unsigned": true
 		},
 		"30": {
-			"label": "Saving the state after a power failure",
-			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 255,
-			"defaultValue": 0,
-			"unsigned": true,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "Module saves its state",
-					"value": 0
-				},
-				{
-					"label": "Module does not save state",
-					"value": 1
-				}
-			]
+			"$import": "../templates/master_template.json#state_after_power_failure_prev_off"
 		},
 		"40": {
 			"label": "Power reporting in Watts on power change for Q1",

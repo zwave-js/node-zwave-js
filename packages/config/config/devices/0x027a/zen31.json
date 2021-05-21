@@ -67,15 +67,15 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "forced to OFF",
+					"label": "Always off",
 					"value": 0
 				},
 				{
-					"label": "restore to previous state",
+					"label": "Previous state",
 					"value": 1
 				},
 				{
-					"label": "forced to on",
+					"label": "Always on",
 					"value": 2
 				}
 			]
