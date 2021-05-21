@@ -392,7 +392,6 @@
 		"minValue": 0,
 		"maxValue": 15,
 		"defaultValue": 0,
-		"unit": "°F",
 		"allowManualEntry": false,
 		"options": [
 			{
@@ -400,59 +399,59 @@
 				"value": 0
 			},
 			{
-				"label": "2",
+				"label": "2 °F",
 				"value": 2
 			},
 			{
-				"label": "3",
+				"label": "3 °F",
 				"value": 3
 			},
 			{
-				"label": "4",
+				"label": "4 °F",
 				"value": 4
 			},
 			{
-				"label": "5",
+				"label": "5 °F",
 				"value": 5
 			},
 			{
-				"label": "6",
+				"label": "6 °F",
 				"value": 6
 			},
 			{
-				"label": "7",
+				"label": "7 °F",
 				"value": 7
 			},
 			{
-				"label": "8",
+				"label": "8 °F",
 				"value": 8
 			},
 			{
-				"label": "9",
+				"label": "9 °F",
 				"value": 9
 			},
 			{
-				"label": "10",
+				"label": "10 °F",
 				"value": 10
 			},
 			{
-				"label": "11",
+				"label": "11 °F",
 				"value": 11
 			},
 			{
-				"label": "12",
+				"label": "12 °F",
 				"value": 12
 			},
 			{
-				"label": "13",
+				"label": "13 °F",
 				"value": 13
 			},
 			{
-				"label": "14",
+				"label": "14 °F",
 				"value": 14
 			},
 			{
-				"label": "15",
+				"label": "15 °F",
 				"value": 15
 			}
 		]
