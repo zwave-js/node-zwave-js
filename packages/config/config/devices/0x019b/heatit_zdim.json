@@ -125,6 +125,7 @@
 	"compat": {
 		"commandClasses": {
 			"remove": {
+				// This device does not support Supervision despite it being a mandatory CC for this device type
 				"0x6c": {
 					"endpoints": "*"
 				}
