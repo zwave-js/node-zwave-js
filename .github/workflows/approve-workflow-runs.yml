@@ -1,6 +1,7 @@
 name: 'Automatically approve workflow runs'
 
 on:
+  workflow_dispatch: {}
   schedule:
     # every 5 minutes
     - cron:  '*/5 * * * *'
