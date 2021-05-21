@@ -263,6 +263,14 @@ abortFirmwareUpdate(): Promise<void>
 
 Aborts an active firmware update process.
 
+### `ping`
+
+```ts
+ping(): Promise<boolean>
+```
+
+Pings the node and returns if it responded or not.
+
 ## ZWaveNode properties
 
 ### `id`
