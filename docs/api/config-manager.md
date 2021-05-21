@@ -263,6 +263,87 @@ Looks up the definition of a given device in the configuration DB. It is not nec
 
 For details on the available properties, refer to the [config file documentation](development/config-files.md).
 
+### `lookupDevicePreserveConditions`
+
+```ts
+lookupDevicePreserveConditions(manufacturerId: number, productType: number, productId: number, firmwareVersion?: string): Promise<ConditionalDeviceConfig | undefined>;
+```
+
+Like `lookupDevice`, but does not evaluate `$if` conditions. The resulting object will contain all settings that are defined regardless if they apply or not. For details, refer to the type definitions:
+
+<!-- This was originally imported, but cleaned up manually -->
+
+```ts
+interface ConditionalDeviceConfig {
+	readonly filename: string;
+	readonly manufacturer: string;
+	readonly manufacturerId: number;
+	readonly label: string;
+	readonly description: string;
+	readonly devices: readonly {
+		productType: number;
+		productId: number;
+	}[];
+	readonly firmwareVersion: FirmwareVersionRange;
+	readonly associations?: ReadonlyMap<number, ConditionalAssociationConfig>;
+	readonly paramInformation?: ReadonlyObjectKeyMap<
+		{ parameter: number; valueBitMask?: number },
+		ConditionalParamInformation[]
+	>;
+	readonly proprietary?: Record<string, unknown>;
+	readonly compat?: CompatConfig;
+	readonly metadata?: DeviceMetadata;
+}
+```
+
+> [!NOTE] Each entry of `paramInformation` is guaranteed to be an array (one entry per variant/condition), regardless of how it was defined in the config file.
+
+<!-- #import ConditionalAssociationConfig from "@zwave-js/config" -->
+
+```ts
+interface ConditionalAssociationConfig {
+	readonly condition?: string | undefined;
+	readonly groupId: number;
+	readonly label: string;
+	readonly description?: string | undefined;
+	readonly maxNodes: number;
+	readonly isLifeline: boolean;
+	readonly multiChannel: boolean;
+}
+```
+
+<!-- #import ConditionalParamInformation from "@zwave-js/config" -->
+
+```ts
+interface ConditionalParamInformation {
+	readonly parameterNumber: number;
+	readonly valueBitMask?: number | undefined;
+	readonly label: string;
+	readonly description?: string | undefined;
+	readonly valueSize: number;
+	readonly minValue: number;
+	readonly maxValue: number;
+	readonly unsigned?: boolean | undefined;
+	readonly defaultValue: number;
+	readonly unit?: string | undefined;
+	readonly readOnly?: true | undefined;
+	readonly writeOnly?: true | undefined;
+	readonly allowManualEntry: boolean;
+	readonly options: readonly ConditionalConfigOption[];
+	readonly condition?: string | undefined;
+}
+```
+
+<!-- #import ConditionalConfigOption from "@zwave-js/config" -->
+
+```ts
+interface ConditionalConfigOption {
+	readonly value: number;
+	readonly label: string;
+	readonly condition?: string | undefined;
+}
+```
+
 ### `loadNotifications`
 
 ```ts

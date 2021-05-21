@@ -1,5 +1,7 @@
 # Alarm Sensor CC
 
+?> CommandClass ID: `0x9c`
+
 ## Alarm Sensor CC methods
 
 ### `get`

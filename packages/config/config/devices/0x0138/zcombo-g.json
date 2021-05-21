@@ -1,5 +1,3 @@
-// First Alert (BRK Brands Inc) ZCOMBO
-// ZCombo-G Smoke/CO Alarm
 {
 	"manufacturer": "First Alert (BRK Brands Inc)",
 	"manufacturerId": "0x0138",
@@ -32,10 +30,7 @@
 			"minValue": 500,
 			"maxValue": 5000,
 			"defaultValue": 1500,
-			"unsigned": true,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"unsigned": true
 		},
 		"2": {
 			"label": "SuperVision retry count",
@@ -44,10 +39,7 @@
 			"minValue": 0,
 			"maxValue": 5,
 			"defaultValue": 1,
-			"unsigned": true,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"unsigned": true
 		},
 		"3": {
 			"label": "SuperVision wait time",
@@ -57,10 +49,7 @@
 			"minValue": 1,
 			"maxValue": 60,
 			"defaultValue": 5,
-			"unsigned": true,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"unsigned": true
 		}
 	},
 	"metadata": {

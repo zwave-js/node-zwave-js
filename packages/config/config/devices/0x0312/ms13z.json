@@ -1,5 +1,3 @@
-// Minoston MS13Z
-// Smart Dimmer Toggle Switch
 {
 	"manufacturer": "Ministon",
 	"manufacturerId": "0x0312",
@@ -34,8 +32,6 @@
 			"maxValue": 2,
 			"defaultValue": 0,
 			"unsigned": true,
-			"readOnly": false,
-			"writeOnly": false,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -59,8 +55,6 @@
 			"maxValue": 3,
 			"defaultValue": 0,
 			"unsigned": true,
-			"readOnly": false,
-			"writeOnly": false,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -88,8 +82,6 @@
 			"maxValue": 1,
 			"defaultValue": 0,
 			"unsigned": true,
-			"readOnly": false,
-			"writeOnly": false,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -104,16 +96,12 @@
 		},
 		"4": {
 			"label": "Auto Turn-off Time",
-			"description": "Auto turn-off time",
 			"valueSize": 4,
 			"unit": "minutes",
 			"minValue": 1,
 			"maxValue": 65535,
 			"defaultValue": 60,
-			"unsigned": true,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"unsigned": true
 		},
 		"5": {
 			"label": "Enable/Disable Auto Turn-on Timer",
@@ -122,8 +110,6 @@
 			"maxValue": 1,
 			"defaultValue": 0,
 			"unsigned": true,
-			"readOnly": false,
-			"writeOnly": false,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -143,10 +129,7 @@
 			"minValue": 1,
 			"maxValue": 65535,
 			"defaultValue": 60,
-			"unsigned": true,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"unsigned": true
 		},
 		"7[0x01]": {
 			"label": "Send Status Change Report: Local Control",
@@ -156,8 +139,6 @@
 			"maxValue": 1,
 			"defaultValue": 1,
 			"unsigned": true,
-			"readOnly": false,
-			"writeOnly": false,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -178,8 +159,6 @@
 			"maxValue": 1,
 			"defaultValue": 1,
 			"unsigned": true,
-			"readOnly": false,
-			"writeOnly": false,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -200,8 +179,6 @@
 			"maxValue": 1,
 			"defaultValue": 1,
 			"unsigned": true,
-			"readOnly": false,
-			"writeOnly": false,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -222,8 +199,6 @@
 			"maxValue": 1,
 			"defaultValue": 1,
 			"unsigned": true,
-			"readOnly": false,
-			"writeOnly": false,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -243,8 +218,6 @@
 			"maxValue": 2,
 			"defaultValue": 2,
 			"unsigned": true,
-			"readOnly": false,
-			"writeOnly": false,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -267,10 +240,7 @@
 			"minValue": 0,
 			"maxValue": 99,
 			"defaultValue": 1,
-			"unsigned": true,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"unsigned": true
 		},
 		"10": {
 			"label": "Minimum Dim Level",
@@ -279,10 +249,7 @@
 			"minValue": 1,
 			"maxValue": 99,
 			"defaultValue": 1,
-			"unsigned": true,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"unsigned": true
 		},
 		"11": {
 			"label": "Maximum Dim Level",
@@ -291,10 +258,7 @@
 			"minValue": 1,
 			"maxValue": 99,
 			"defaultValue": 99,
-			"unsigned": true,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"unsigned": true
 		},
 		"12": {
 			"label": "Dim Level on Double Tap",
@@ -303,8 +267,6 @@
 			"maxValue": 1,
 			"defaultValue": 0,
 			"unsigned": true,
-			"readOnly": false,
-			"writeOnly": false,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -319,14 +281,11 @@
 		},
 		"14": {
 			"label": "Double Tap Behavior",
-			"description": "Double tap behavior",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 2,
 			"defaultValue": 0,
 			"unsigned": true,
-			"readOnly": false,
-			"writeOnly": false,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -350,8 +309,6 @@
 			"maxValue": 1,
 			"defaultValue": 1,
 			"unsigned": true,
-			"readOnly": false,
-			"writeOnly": false,
 			"allowManualEntry": false,
 			"options": [
 				{

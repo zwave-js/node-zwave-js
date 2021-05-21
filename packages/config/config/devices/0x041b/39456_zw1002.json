@@ -1,5 +1,3 @@
-// Resideo 39456 / ZW1002
-// In-Wall Tamper Resistant Outlet
 {
 	"manufacturer": "Resideo",
 	"manufacturerId": "0x041b",
@@ -41,8 +39,6 @@
 			"maxValue": 2,
 			"defaultValue": 1,
 			"unsigned": true,
-			"readOnly": false,
-			"writeOnly": false,
 			"allowManualEntry": false,
 			"options": [
 				{

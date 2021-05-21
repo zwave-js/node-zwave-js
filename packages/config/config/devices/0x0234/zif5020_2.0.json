@@ -1,0 +1,199 @@
+{
+	"manufacturer": "Logic Group",
+	"manufacturerId": "0x0234",
+	"label": "ZIF5020",
+	"description": "DIN Rail Interface",
+	"devices": [
+		{
+			"productType": "0x0003",
+			"productId": "0x010d"
+		}
+	],
+	"firmwareVersion": {
+		"min": "2.0",
+		"max": "255.255"
+	},
+	"associations": {
+		"1": {
+			"label": "Lifeline",
+			"maxNodes": 1,
+			"isLifeline": true
+		},
+		"2": {
+			"label": "Input 1 (Basic Report)",
+			"maxNodes": 5
+		},
+		"3": {
+			"label": "Input 1 (Binary Report)",
+			"maxNodes": 5
+		},
+		"4": {
+			"label": "Input 1 (Multilevel Report)",
+			"maxNodes": 5
+		},
+		"5": {
+			"label": "Input 2 (Basic Report)",
+			"maxNodes": 5
+		},
+		"6": {
+			"label": "Input 2 (Binary Report)",
+			"maxNodes": 5
+		},
+		"7": {
+			"label": "Input 2 (Multilevel Report)",
+			"maxNodes": 5
+		},
+		"8": {
+			"label": "Input 3 (Basic Report)",
+			"maxNodes": 5
+		},
+		"9": {
+			"label": "Input 3 (Binary Report)",
+			"maxNodes": 5
+		},
+		"10": {
+			"label": "Input 3 (Multilevel Report)",
+			"maxNodes": 5
+		},
+		"11": {
+			"label": "Input 4 (Basic Report)",
+			"maxNodes": 5
+		},
+		"12": {
+			"label": "Input 4 (Binary Report)",
+			"maxNodes": 5
+		},
+		"13": {
+			"label": "Input 4 (Multilevel Report)",
+			"maxNodes": 5
+		}
+	},
+	"paramInformation": {
+		"1": {
+			"$import": "templates/logic_group_template.json#status_led"
+		},
+		"2": {
+			"$import": "templates/logic_group_template.json#led_brightness"
+		},
+		"3": {
+			"$import": "templates/logic_group_template.json#input_function_setup",
+			"label": "Function Setup Of Input 1"
+		},
+		"4": {
+			"$import": "templates/logic_group_template.json#input_timer",
+			"label": "Timer For Input 1"
+		},
+		"5": {
+			"$import": "templates/logic_group_template.json#input_function_setup",
+			"label": "Function Setup Of Input 2"
+		},
+		"6": {
+			"$import": "templates/logic_group_template.json#input_timer",
+			"label": "Timer For Input 2"
+		},
+		"7": {
+			"$import": "templates/logic_group_template.json#input_function_setup",
+			"label": "Function Setup Of Input 3"
+		},
+		"8": {
+			"$import": "templates/logic_group_template.json#input_timer",
+			"label": "Timer For Input 3"
+		},
+		"9": {
+			"$import": "templates/logic_group_template.json#input_function_setup",
+			"label": "Function Setup Of Input 4"
+		},
+		"10": {
+			"$import": "templates/logic_group_template.json#input_timer",
+			"label": "Timer For Input 4"
+		},
+		"11": {
+			"$import": "../templates/master_template.json#base_0-255_nounit",
+			"label": "Input Snubber-filter Time Constant.",
+			"unit": "50 ms",
+			"defaultValue": 5
+		},
+		"12": {
+			"$import": "../templates/master_template.json#base_0-255_nounit",
+			"label": "Threshold Value For Activation Of Inputs.",
+			"unit": "200 ms",
+			"defaultValue": 20
+		},
+		"13": {
+			"$import": "../templates/master_template.json#base_0-255_nounit",
+			"label": "Threshold For Input In Latched Mode.",
+			"unit": "50 ms",
+			"defaultValue": 50
+		},
+		"14": {
+			"$import": "../templates/master_template.json#base_enable_disable_inverted",
+			"label": "Central Scene",
+			"defaultValue": 0
+		},
+		"15[0x01]": {
+			"$import": "../templates/master_template.json#base_enable_disable",
+			"label": "Association Group 2 Secure Message",
+			"valueSize": 2
+		},
+		"15[0x02]": {
+			"$import": "../templates/master_template.json#base_enable_disable",
+			"label": "Association Group 3 Secure Message",
+			"valueSize": 2
+		},
+		"15[0x04]": {
+			"$import": "../templates/master_template.json#base_enable_disable",
+			"label": "Association Group 4 Secure Message",
+			"valueSize": 2
+		},
+		"15[0x08]": {
+			"$import": "../templates/master_template.json#base_enable_disable",
+			"label": "Association Group 5 Secure Message",
+			"valueSize": 2
+		},
+		"15[0x10]": {
+			"$import": "../templates/master_template.json#base_enable_disable",
+			"label": "Association Group 6 Secure Message",
+			"valueSize": 2
+		},
+		"15[0x20]": {
+			"$import": "../templates/master_template.json#base_enable_disable",
+			"label": "Association Group 7 Secure Message",
+			"valueSize": 2
+		},
+		"15[0x40]": {
+			"$import": "../templates/master_template.json#base_enable_disable",
+			"label": "Association Group 8 Secure Message",
+			"valueSize": 2
+		},
+		"15[0x80]": {
+			"$import": "../templates/master_template.json#base_enable_disable",
+			"label": "Association Group 9 Secure Message",
+			"valueSize": 2
+		},
+		"15[0x100]": {
+			"$import": "../templates/master_template.json#base_enable_disable",
+			"label": "Association Group 10 Secure Message",
+			"valueSize": 2
+		},
+		"15[0x0200]": {
+			"$import": "../templates/master_template.json#base_enable_disable",
+			"label": "Association Group 11 Secure Message",
+			"valueSize": 2
+		},
+		"15[0x0400]": {
+			"$import": "../templates/master_template.json#base_enable_disable",
+			"label": "Association Group 12 Secure Message",
+			"valueSize": 2
+		},
+		"15[0x0800]": {
+			"$import": "../templates/master_template.json#base_enable_disable",
+			"label": "Association Group 13 Secure Message",
+			"valueSize": 2
+		}
+	},
+	"metadata": {
+		"inclusion": "Push the button in the hole near the 'INCLUSION' text with a non-conductive object. The LED will now start blinking",
+		"exclusion": "Push the button in the hole near the 'INCLUSION' text with a non-conductive object. The LED will now start blinking",
+		"reset": "Push the button in the hole near the 'INCLUSION' text with a non-conductive object for 10 seconds. Please use this procedure only when the network primary controller is missing or otherwise inoperable"
+	}
+}

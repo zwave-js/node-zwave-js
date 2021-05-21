@@ -1,3 +1,4 @@
+import { ConfigManager } from "@zwave-js/config";
 import {
 	assertZWaveError,
 	CommandClasses,
@@ -9,6 +10,7 @@ import "../commandclass/index";
 import { VersionCCAPI } from "../commandclass/VersionCC";
 import type { Driver } from "../driver/Driver";
 import { createEmptyMockDriver } from "../test/mocks";
+import { DeviceClass } from "./DeviceClass";
 import { Endpoint } from "./Endpoint";
 import { ZWaveNode } from "./Node";
 
@@ -108,6 +110,55 @@ describe("lib/node/Endpoint", () => {
 			endpoint.addCC(cc, { isSupported: true });
 			const instance = endpoint.createCCInstance(cc);
 			expect(instance).toBeUndefined();
+		});
+	});
+
+	describe("Device Class quirks", () => {
+		it("A non-root endpoint with the `Power Strip Switch` device class does not support the Multi Channel CC", async () => {
+			const cm = new ConfigManager();
+			await cm.loadDeviceClasses();
+			const powerStripSwitch = new DeviceClass(cm, 0x01, 0x10, 0x04);
+
+			const fakeDriver = (createEmptyMockDriver() as unknown) as Driver;
+
+			const node = new ZWaveNode(1, fakeDriver, powerStripSwitch);
+			expect(node.supportsCC(CommandClasses["Multi Channel"])).toBeTrue();
+			const ep = new Endpoint(1, fakeDriver, 1, powerStripSwitch);
+			expect(ep.supportsCC(CommandClasses["Multi Channel"])).toBeFalse();
+		});
+
+		it("Non-root endpoints should not have the Manufacturer Specific CC (among others) added as mandatory", async () => {
+			const cm = new ConfigManager();
+			await cm.loadDeviceClasses();
+			const soundSwitch = new DeviceClass(cm, 0x01, 0x03, 0x01);
+
+			const fakeDriver = (createEmptyMockDriver() as unknown) as Driver;
+			const node = new ZWaveNode(1, fakeDriver, soundSwitch);
+			(fakeDriver.controller.nodes as any).set(1, node);
+
+			expect(
+				node.supportsCC(CommandClasses["Manufacturer Specific"]),
+			).toBeTrue();
+			const ep = new Endpoint(1, fakeDriver, 1, soundSwitch);
+			expect(
+				ep.supportsCC(CommandClasses["Manufacturer Specific"]),
+			).toBeFalse();
+		});
+
+		it("Always-listening nodes should not have the Battery CC added as mandatory", async () => {
+			const cm = new ConfigManager();
+			await cm.loadDeviceClasses();
+			const soundSwitch = new DeviceClass(cm, 0x01, 0x03, 0x01);
+
+			const fakeDriver = (createEmptyMockDriver() as unknown) as Driver;
+			const node = new ZWaveNode(1, fakeDriver);
+			(fakeDriver.controller.nodes as any).set(1, node);
+			node["_isListening"] = true;
+			node["applyDeviceClass"](soundSwitch);
+
+			expect(node.supportsCC(CommandClasses.Battery)).toBeFalse();
+			const ep = new Endpoint(1, fakeDriver, 1, soundSwitch);
+			expect(ep.supportsCC(CommandClasses.Battery)).toBeFalse();
 		});
 	});
 });

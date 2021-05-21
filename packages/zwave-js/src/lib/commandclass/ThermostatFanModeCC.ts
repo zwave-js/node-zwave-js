@@ -38,7 +38,6 @@ import {
 	gotDeserializationOptions,
 	implementedVersion,
 } from "./CommandClass";
-import { ThermostatModeCCGet } from "./ThermostatModeCC";
 
 // All the supported commands
 export enum ThermostatFanModeCommand {
@@ -164,7 +163,7 @@ export class ThermostatFanModeCCAPI extends CCAPI {
 			ThermostatFanModeCommand.Get,
 		);
 
-		const cc = new ThermostatModeCCGet(this.driver, {
+		const cc = new ThermostatFanModeCCGet(this.driver, {
 			nodeId: this.endpoint.nodeId,
 			endpoint: this.endpoint.index,
 		});
@@ -239,7 +238,7 @@ export class ThermostatFanModeCC extends CommandClass {
 
 		const supportedModes = await api.getSupportedModes();
 		if (supportedModes) {
-			const logMessage = `received supported thermostat modes:${supportedModes
+			const logMessage = `received supported thermostat fan modes:${supportedModes
 				.map(
 					(mode) =>
 						`\n· ${getEnumMemberName(ThermostatFanMode, mode)}`,

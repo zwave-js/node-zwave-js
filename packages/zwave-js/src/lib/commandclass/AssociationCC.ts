@@ -1,3 +1,4 @@
+import type { AssociationConfig } from "@zwave-js/config";
 import type { Maybe, MessageRecord, ValueID } from "@zwave-js/core";
 import {
 	CommandClasses,
@@ -10,6 +11,7 @@ import {
 import { distinct } from "alcalzone-shared/arrays";
 import type { Driver } from "../driver/Driver";
 import { MessagePriority } from "../message/Constants";
+import type { Endpoint } from "../node/Endpoint";
 import type { ZWaveNode } from "../node/Node";
 import { PhysicalCCAPI } from "./API";
 import {
@@ -25,56 +27,82 @@ import {
 	gotDeserializationOptions,
 	implementedVersion,
 } from "./CommandClass";
-import type { Association } from "./MultiChannelAssociationCC";
+import type { AssociationAddress } from "./MultiChannelAssociationCC";
 
 /** Returns the ValueID used to store the maximum number of nodes of an association group */
-export function getMaxNodesValueId(groupId: number): ValueID {
+export function getMaxNodesValueId(
+	endpointIndex: number,
+	groupId: number,
+): ValueID {
 	return {
 		commandClass: CommandClasses.Association,
+		endpoint: endpointIndex,
 		property: "maxNodes",
 		propertyKey: groupId,
 	};
 }
 
 /** Returns the ValueID used to store the node IDs of an association group */
-export function getNodeIdsValueId(groupId: number): ValueID {
+export function getNodeIdsValueId(
+	endpointIndex: number,
+	groupId: number,
+): ValueID {
 	return {
 		commandClass: CommandClasses.Association,
+		endpoint: endpointIndex,
 		property: "nodeIds",
 		propertyKey: groupId,
 	};
 }
 
 /** Returns the ValueID used to store the group count of an association group */
-export function getGroupCountValueId(): ValueID {
+export function getGroupCountValueId(endpointIndex?: number): ValueID {
 	return {
 		commandClass: CommandClasses.Association,
+		endpoint: endpointIndex,
 		property: "groupCount",
 	};
 }
 
 /** Returns the ValueID used to store whether a node has a lifeline association */
-export function getHasLifelineValueId(): ValueID {
+export function getHasLifelineValueId(endpointIndex?: number): ValueID {
 	return {
 		commandClass: CommandClasses.Association,
+		endpoint: endpointIndex,
 		property: "hasLifeline",
 	};
 }
 
-export function getLifelineGroupIds(node: ZWaveNode): number[] {
+export function getLifelineGroupIds(endpoint: Endpoint): number[] {
+	// For now only support this for the root endpoint - i.e. node
+	if (endpoint.index > 0) return [];
+	const node = endpoint as ZWaveNode;
+
 	// Some nodes define multiple lifeline groups, so we need to assign us to
 	// all of them
 	const lifelineGroups: number[] = [];
 
 	// If the target node supports Z-Wave+ info that means the lifeline MUST be group #1
-	if (node.supportsCC(CommandClasses["Z-Wave Plus Info"])) {
+	if (endpoint.supportsCC(CommandClasses["Z-Wave Plus Info"])) {
 		lifelineGroups.push(1);
 	}
 
 	// We have a device config file that tells us which (additional) association to assign
-	if (node.deviceConfig?.associations?.size) {
+	let associations: ReadonlyMap<number, AssociationConfig> | undefined;
+	if (endpoint.index === 0) {
+		// The root endpoint's associations may be configured separately or as part of "endpoints"
+		associations =
+			node.deviceConfig?.associations ??
+			node.deviceConfig?.endpoints?.get(0)?.associations;
+	} else {
+		// The other endpoints can only have a configuration as part of "endpoints"
+		associations = node.deviceConfig?.endpoints?.get(endpoint.index)
+			?.associations;
+	}
+
+	if (associations?.size) {
 		lifelineGroups.push(
-			...[...node.deviceConfig.associations.values()]
+			...[...associations.values()]
 				.filter((a) => a.isLifeline)
 				.map((a) => a.groupId),
 		);
@@ -222,7 +250,9 @@ export class AssociationCCAPI extends PhysicalCCAPI {
 			// We have to remove the node manually from all groups
 			const node = this.endpoint.getNodeUnsafe()!;
 			const groupCount =
-				node.valueDB.getValue<number>(getGroupCountValueId()) ?? 0;
+				node.valueDB.getValue<number>(
+					getGroupCountValueId(this.endpoint.index),
+				) ?? 0;
 			for (let groupId = 1; groupId <= groupCount; groupId++) {
 				await this.removeNodeIds({ nodeIds, groupId });
 			}
@@ -237,7 +267,7 @@ export class AssociationCC extends CommandClass {
 
 	public constructor(driver: Driver, options: CommandClassOptions) {
 		super(driver, options);
-		this.registerValue(getHasLifelineValueId().property, true);
+		this.registerValue(getHasLifelineValueId(0).property, true);
 	}
 
 	public determineRequiredCCInterviews(): readonly CommandClasses[] {
@@ -248,17 +278,16 @@ export class AssociationCC extends CommandClass {
 		];
 	}
 
-	public skipEndpointInterview(): boolean {
-		// The associations are managed on the root device
-		return true;
-	}
-
 	/**
-	 * Returns the number of association groups reported by the node.
+	 * Returns the number of association groups reported by the node/endpoint.
 	 * This only works AFTER the interview process
 	 */
 	public getGroupCountCached(): number {
-		return this.getValueDB().getValue(getGroupCountValueId()) || 0;
+		return (
+			this.getValueDB().getValue(
+				getGroupCountValueId(this.endpointIndex),
+			) || 0
+		);
 	}
 
 	/**
@@ -266,24 +295,30 @@ export class AssociationCC extends CommandClass {
 	 * This only works AFTER the interview process
 	 */
 	public getMaxNodesCached(groupId: number): number {
-		return this.getValueDB().getValue(getMaxNodesValueId(groupId)) || 1;
+		return (
+			this.getValueDB().getValue(
+				getMaxNodesValueId(this.endpointIndex, groupId),
+			) || 1
+		);
 	}
 
 	/**
-	 * Returns all the destinations of all association groups reported by the node.
+	 * Returns all the destinations of all association groups reported by the node/endpoint.
 	 * This only works AFTER the interview process
 	 */
 	public getAllDestinationsCached(): ReadonlyMap<
 		number,
-		readonly Association[]
+		readonly AssociationAddress[]
 	> {
-		const ret = new Map<number, Association[]>();
+		const ret = new Map<number, AssociationAddress[]>();
 		const groupCount = this.getGroupCountCached();
 		const valueDB = this.getValueDB();
 		for (let i = 1; i <= groupCount; i++) {
 			// Add all root destinations
 			const nodes =
-				valueDB.getValue<number[]>(getNodeIdsValueId(i)) ?? [];
+				valueDB.getValue<number[]>(
+					getNodeIdsValueId(this.endpointIndex, i),
+				) ?? [];
 
 			ret.set(
 				i,
@@ -350,43 +385,55 @@ export class AssociationCC extends CommandClass {
 		// Query each association group for its members
 		await this.refreshValues();
 
-		// Assign the controller to all lifeline groups (Z-Wave+ and configured)
-		const lifelineGroups = getLifelineGroupIds(node);
-		const ownNodeId = this.driver.controller.ownNodeId!;
-		const valueDB = this.getValueDB();
+		// TODO: Improve how the assignments are handled. For now only auto-assign associations on the root endpoint
+		if (this.endpointIndex === 0) {
+			// Assign the controller to all lifeline groups (Z-Wave+ and configured)
+			const lifelineGroups = getLifelineGroupIds(endpoint);
+			const ownNodeId = this.driver.controller.ownNodeId!;
+			const valueDB = this.getValueDB();
 
-		if (lifelineGroups.length) {
-			for (const group of lifelineGroups) {
-				// Check if we are already in the lifeline group
-				const lifelineValueId = getNodeIdsValueId(group);
-				const lifelineNodeIds: number[] =
-					valueDB.getValue(lifelineValueId) ?? [];
-				if (!lifelineNodeIds.includes(ownNodeId)) {
-					this.driver.controllerLog.logNode(node.id, {
-						endpoint: this.endpointIndex,
-						message: `Controller missing from lifeline group #${group}, assigning ourselves...`,
-						direction: "outbound",
-					});
-					// Add a new destination
-					await api.addNodeIds(group, ownNodeId);
-					// and refresh it - don't trust that it worked
-					await api.getGroup(group);
-					// TODO: check if it worked
+			if (lifelineGroups.length) {
+				for (const group of lifelineGroups) {
+					// Check if we are already in the lifeline group
+					const lifelineValueId = getNodeIdsValueId(
+						this.endpointIndex,
+						group,
+					);
+					const lifelineNodeIds: number[] =
+						valueDB.getValue(lifelineValueId) ?? [];
+					if (!lifelineNodeIds.includes(ownNodeId)) {
+						this.driver.controllerLog.logNode(node.id, {
+							endpoint: this.endpointIndex,
+							message: `Controller missing from lifeline group #${group}, assigning ourselves...`,
+							direction: "outbound",
+						});
+						// Add a new destination
+						await api.addNodeIds(group, ownNodeId);
+						// and refresh it - don't trust that it worked
+						await api.getGroup(group);
+						// TODO: check if it worked
+					}
 				}
-			}
 
-			// Remember that we have a lifeline association
-			valueDB.setValue(getHasLifelineValueId(), true);
-		} else {
-			this.driver.controllerLog.logNode(node.id, {
-				endpoint: this.endpointIndex,
-				message:
-					"No information about Lifeline associations, cannot assign ourselves!",
-				direction: "outbound",
-				level: "warn",
-			});
-			// Remember that we have NO lifeline association
-			valueDB.setValue(getHasLifelineValueId(), false);
+				// Remember that we have a lifeline association
+				valueDB.setValue(
+					getHasLifelineValueId(this.endpointIndex),
+					true,
+				);
+			} else {
+				this.driver.controllerLog.logNode(node.id, {
+					endpoint: this.endpointIndex,
+					message:
+						"No information about Lifeline associations, cannot assign ourselves!",
+					direction: "outbound",
+					level: "warn",
+				});
+				// Remember that we have NO lifeline association
+				valueDB.setValue(
+					getHasLifelineValueId(this.endpointIndex),
+					false,
+				);
+			}
 		}
 
 		// Remember that the interview is complete
@@ -613,11 +660,11 @@ export class AssociationCCReport extends AssociationCC {
 
 		// Persist values
 		this.getValueDB().setValue(
-			getMaxNodesValueId(this._groupId),
+			getMaxNodesValueId(this.endpointIndex, this._groupId),
 			this._maxNodes,
 		);
 		this.getValueDB().setValue(
-			getNodeIdsValueId(this._groupId),
+			getNodeIdsValueId(this.endpointIndex, this._groupId),
 			this._nodeIds,
 		);
 	}

@@ -1,5 +1,3 @@
-// Vision Security ZD2102-5
-// Door Window Sensor
 {
 	"manufacturer": "Vision Security",
 	"manufacturerId": "0x0109",
@@ -31,8 +29,6 @@
 			"maxValue": 255,
 			"defaultValue": 0,
 			"unsigned": true,
-			"readOnly": false,
-			"writeOnly": false,
 			"allowManualEntry": false,
 			"options": [
 				{

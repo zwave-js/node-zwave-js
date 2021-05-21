@@ -1,5 +1,3 @@
-// Vision Security ZM1601-5
-// Siren with LED strobe light
 {
 	"manufacturer": "Vision Security",
 	"manufacturerId": "0x0109",
@@ -36,10 +34,7 @@
 			"minValue": 0,
 			"maxValue": 2,
 			"defaultValue": 0,
-			"unsigned": true,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"unsigned": true
 		},
 		"2": {
 			"label": "Alarm Auto Stop Time",
@@ -48,10 +43,7 @@
 			"minValue": 0,
 			"maxValue": 3,
 			"defaultValue": 0,
-			"unsigned": true,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"unsigned": true
 		}
 	},
 	"metadata": {

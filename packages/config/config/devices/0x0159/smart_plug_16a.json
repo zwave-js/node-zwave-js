@@ -1,5 +1,3 @@
-// Qubino Smart Plug 16A
-// Smart Plug
 {
 	"manufacturer": "Qubino",
 	"manufacturerId": "0x0159",
@@ -23,8 +21,6 @@
 			"minValue": 0,
 			"maxValue": 255,
 			"defaultValue": 255,
-			"readOnly": false,
-			"writeOnly": false,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -46,39 +42,30 @@
 			]
 		},
 		"11": {
-			"label": "Automatic turning OFF relay after set time",
+			"label": "Auto-Off Timer",
 			"description": "When the relay is turned ON, it automatically turns OFF after the defined time",
-			"unit": "s",
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 32535,
 			"defaultValue": 0,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true,
+			"unit": "seconds",
 			"options": [
 				{
-					"label": "Auto OFF disabled",
+					"label": "Disabled",
 					"value": 0
 				}
 			]
 		},
 		"12": {
-			"label": "On automatically with timer",
+			"label": "Auto-On Timer",
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 32535,
 			"defaultValue": 0,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": false,
+			"unit": "seconds",
 			"options": [
 				{
-					"label": "Auto ON Disabled",
-					"value": 0
-				},
-				{
-					"label": "please delete this option",
+					"label": "Disabled",
 					"value": 0
 				}
 			]
@@ -90,8 +77,6 @@
 			"minValue": 0,
 			"maxValue": 1,
 			"defaultValue": 0,
-			"readOnly": false,
-			"writeOnly": false,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -110,8 +95,6 @@
 			"minValue": 0,
 			"maxValue": 1,
 			"defaultValue": 0,
-			"readOnly": false,
-			"writeOnly": false,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -130,10 +113,7 @@
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 100,
-			"defaultValue": 20,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"defaultValue": 20
 		},
 		"42": {
 			"label": "Power Consumption (Watt) Reporting Interval",
@@ -141,10 +121,7 @@
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 32535,
-			"defaultValue": 0,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"defaultValue": 0
 		}
 	}
 }

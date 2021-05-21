@@ -4,6 +4,7 @@ import {
 	CommandClasses,
 	deserializeCacheValue,
 	getCCName,
+	isZWaveError,
 	MessageOrCCLogEntry,
 	MessageRecord,
 	NODE_ID_BROADCAST,
@@ -381,6 +382,13 @@ export class CommandClass {
 		return stripUndefined({ ...ret, ...props });
 	}
 
+	protected throwMissingCriticalInterviewResponse(): never {
+		throw new ZWaveError(
+			`The node did not respond to a critical interview query in time.`,
+			ZWaveErrorCodes.Controller_NodeTimeout,
+		);
+	}
+
 	/**
 	 * Performs the interview procedure for this CC according to SDS14223
 	 */
@@ -451,10 +459,7 @@ export class CommandClass {
 			return this.getNode();
 		} catch (e: unknown) {
 			// This was expected
-			if (
-				e instanceof ZWaveError &&
-				e.code === ZWaveErrorCodes.Driver_NotReady
-			) {
+			if (isZWaveError(e) && e.code === ZWaveErrorCodes.Driver_NotReady) {
 				return undefined;
 			}
 			// Something else happened

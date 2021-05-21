@@ -1,22 +1,23 @@
-// AEON Labs ZW074
-// 4 in One MultiSensor (G5)
 {
 	"manufacturer": "AEON Labs",
 	"manufacturerId": "0x0086",
 	"label": "ZW074",
-	"description": "4 in One MultiSensor (G5)",
+	"description": "MultiSensor Gen5",
 	"devices": [
 		{
 			"productType": "0x0002",
-			"productId": "0x004a"
+			"productId": "0x004a",
+			"zwaveAllianceId": 1170
 		},
 		{
 			"productType": "0x0102",
-			"productId": "0x004a"
+			"productId": "0x004a",
+			"zwaveAllianceId": 1163
 		},
 		{
 			"productType": "0x0202",
-			"productId": "0x004a"
+			"productId": "0x004a",
+			"zwaveAllianceId": 1169
 		}
 	],
 	"firmwareVersion": {
@@ -28,274 +29,125 @@
 			"label": "Lifeline",
 			"maxNodes": 1,
 			"isLifeline": true
-		},
-		"2": {
-			"label": "Basic Set",
-			"maxNodes": 5
-		},
-		"3": {
-			"label": "Dimmer Start/Stop",
-			"maxNodes": 5
-		},
-		"4": {
-			"label": "Dimmer Set",
-			"maxNodes": 5
-		},
-		"5": {
-			"label": "Temperature Report",
-			"maxNodes": 5
 		}
 	},
 	"paramInformation": {
 		"2": {
-			"label": "Wake up for 10 minutes when batteries are inserted",
-			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 255,
-			"defaultValue": 0,
-			"unsigned": true,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"$import": "templates/aeotec_template.json#wake_up_10_minutes"
 		},
 		"3": {
-			"label": "On time",
-			"description": "Time to keep state On before sending Off command",
-			"valueSize": 2,
-			"minValue": 1,
-			"maxValue": 15300,
-			"defaultValue": 240,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"$import": "templates/aeotec_template.json#motion_timeout"
 		},
 		"4": {
-			"label": "Motion sensor",
-			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 255,
-			"defaultValue": 1,
-			"unsigned": true,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "Disabled",
-					"value": 0
-				},
-				{
-					"label": "Enabled",
-					"value": 1
-				}
-			]
+			"$import": "templates/aeotec_template.json#enable_motion_sensor"
 		},
 		"5": {
-			"label": "Command Class",
-			"description": "Which command would be sent when the motion sensor triggered.",
-			"valueSize": 1,
-			"minValue": 1,
-			"maxValue": 2,
-			"defaultValue": 1,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "Basic Set",
-					"value": 1
-				},
-				{
-					"label": "Sensor Binary Report",
-					"value": 2
-				}
-			]
+			"$import": "templates/aeotec_template.json#motion_report_type"
 		},
 		"40": {
-			"label": "Enable/disable the selective reporting",
-			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 255,
-			"defaultValue": 0,
-			"unsigned": true,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "Disable",
-					"value": 0
-				},
-				{
-					"label": "Enable",
-					"value": 1
-				}
-			]
+			"$import": "templates/aeotec_template.json#selective_reporting"
 		},
 		"41": {
-			"label": "Temperature threshold to trigger a report.",
+			"label": "Temperature Change to Induce Automatic Report",
+			"description": "Formula: (256 * integer + fraction). Ex: 5.0% threshold = (256 * 5) + 0 = 1280",
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 65535,
-			"defaultValue": 0,
-			"unsigned": true,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"defaultValue": 256,
+			"unsigned": true
 		},
 		"42": {
-			"label": "Humidity threshold to trigger a report.",
+			"label": "Humidity Change to Induce Automatic Report",
+			"description": "Formula: (256 * integer + fraction). Ex: 5.0% threshold = (256 * 5) + 0 = 1280",
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 65535,
-			"defaultValue": 0,
-			"unsigned": true,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"defaultValue": 1280,
+			"unsigned": true
 		},
 		"43": {
-			"label": "luminance report threshold",
+			"label": "Luminance Change to Induce Automatic Report",
+			"description": "Formula: (256 * value). Ex: 100 lux threshold = (256 * 100) = 25600",
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 1000,
-			"defaultValue": 0,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"defaultValue": 100,
+			"unsigned": true
 		},
 		"44": {
-			"label": "Battery level to induce an automatic report.",
+			"label": "Battery Change to Induce Automatic Report",
+			"description": "Formula: (256 * integer + fraction). Ex: 5.0% threshold = (256 * 5) + 0 = 1280",
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 65535,
-			"defaultValue": 0,
-			"unsigned": true,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"defaultValue": 1280,
+			"unsigned": true
 		},
 		"46": {
-			"label": "Enable/disable low temperature alarm report",
-			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 255,
-			"defaultValue": 0,
-			"unsigned": true,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "Disable",
-					"value": 0
-				},
-				{
-					"label": "Enabled",
-					"value": 1
-				}
-			]
+			"$import": "templates/aeotec_template.json#low_temp_alarm"
 		},
-		"101": {
-			"label": "Reports sent automatically for group 1",
-			"valueSize": 4,
-			"minValue": 0,
-			"maxValue": 65535,
-			"defaultValue": 0,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+		"101[0x01]": {
+			"$import": "templates/aeotec_template.json#auto_report_group1_battery"
 		},
-		"102": {
-			"label": "Reports sent automatically for group 2",
-			"valueSize": 4,
-			"minValue": 0,
-			"maxValue": 65535,
-			"defaultValue": 0,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+		"101[0x20]": {
+			"$import": "templates/aeotec_template.json#auto_report_group1_temp"
 		},
-		"103": {
-			"label": "Reports sent automatically for group 3",
-			"valueSize": 4,
-			"minValue": 0,
-			"maxValue": 65535,
-			"defaultValue": 0,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+		"101[0x40]": {
+			"$import": "templates/aeotec_template.json#auto_report_group1_humidity"
+		},
+		"101[0x80]": {
+			"$import": "templates/aeotec_template.json#auto_report_group1_luminance"
+		},
+		"102[0x01]": {
+			"$import": "templates/aeotec_template.json#auto_report_group2_battery"
+		},
+		"102[0x20]": {
+			"$import": "templates/aeotec_template.json#auto_report_group2_temp"
+		},
+		"102[0x40]": {
+			"$import": "templates/aeotec_template.json#auto_report_group2_humidity"
+		},
+		"102[0x80]": {
+			"$import": "templates/aeotec_template.json#auto_report_group2_luminance"
+		},
+		"103[0x01]": {
+			"$import": "templates/aeotec_template.json#auto_report_group3_battery"
+		},
+		"103[0x20]": {
+			"$import": "templates/aeotec_template.json#auto_report_group3_temp"
+		},
+		"103[0x40]": {
+			"$import": "templates/aeotec_template.json#auto_report_group3_humidity"
+		},
+		"103[0x80]": {
+			"$import": "templates/aeotec_template.json#auto_report_group3_luminance"
 		},
 		"111": {
-			"label": "Interval to send out reports of group 1",
-			"valueSize": 4,
-			"minValue": 1,
-			"maxValue": 2678400,
-			"defaultValue": 720,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"$import": "templates/aeotec_template.json#auto_report_interval_group1",
+			"defaultValue": 1800
 		},
 		"112": {
-			"label": "Interval to send out reports of group 2",
-			"valueSize": 4,
-			"minValue": 1,
-			"maxValue": 2678400,
-			"defaultValue": 720,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"$import": "templates/aeotec_template.json#auto_report_interval_group2",
+			"defaultValue": 1800
 		},
 		"113": {
-			"label": "Interval to send out reports of group 3",
-			"valueSize": 4,
-			"minValue": 1,
-			"maxValue": 2678400,
-			"defaultValue": 720,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"$import": "templates/aeotec_template.json#auto_report_interval_group3",
+			"defaultValue": 1800
 		},
 		"252": {
-			"label": "Enable/disable Configuration Locked",
-			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 255,
-			"defaultValue": 0,
-			"unsigned": true,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "Disable",
-					"value": 0
-				},
-				{
-					"label": "Enabled",
-					"value": 1
-				}
-			]
+			"$import": "templates/aeotec_template.json#lock_configuration"
 		},
 		"255": {
-			"label": "Reset to default factory setting.",
-			"valueSize": 4,
-			"minValue": 0,
-			"maxValue": 1431655765,
-			"defaultValue": 1,
-			"readOnly": false,
-			"writeOnly": true,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "Reset all configuration to default",
-					"value": 1
-				},
-				{
-					"label": "Reset to default exclude from the network",
-					"value": 1431655765
-				}
-			]
+			"$import": "templates/aeotec_template.json#factory_reset_exclude"
 		}
+	},
+	"compat": {
+		"forceNotificationIdleReset": true
+	},
+	"metadata": {
+		"inclusion": "Turn the primary controller of Z-Wave network into inclusion mode, short press the product’s Z-Wave button that you can find in the back of the product",
+		"exclusion": "Turn the primary controller of Z-Wave network into exclusion mode, short press the product’s Z-Wave button that you can find in back of the product",
+		"reset": "Press and hold the Z-Wave button that you can find in back of the product for 20 seconds and then release. This procedure should only be used when the primary controller is inoperable",
+		"manual": "https://products.z-wavealliance.org/ProductManual/File?folder=&filename=MarketCertificationFiles/1163/Instructions%20-%20MultiSensor%20Gen5%20MCert1.pdf"
 	}
 }

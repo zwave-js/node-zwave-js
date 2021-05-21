@@ -1,0 +1,167 @@
+{
+	"manufacturer": "Shenzhen Neo Electronics Co., Ltd.",
+	"manufacturerId": "0x0258",
+	"label": "NAS-WR01Z",
+	"description": "Wall Plug Switch",
+	"devices": [
+		{
+			"productType": "0x0003",
+			"productId": "0x0087"
+		},
+		{
+			"productType": "0x0003",
+			"productId": "0x1087"
+		},
+		{
+			"productType": "0x0003",
+			"productId": "0x2087"
+		},
+		{
+			"productType": "0x0003",
+			"productId": "0x1483"
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"supportsZWavePlus": true,
+	"paramInformation": {
+		"1": {
+			"label": "Send meter reports",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 1,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Disable",
+					"value": 0
+				},
+				{
+					"label": "Enable",
+					"value": 1
+				}
+			]
+		},
+		"2": {
+			"label": "Meter report interval",
+			"unit": "seconds",
+			"valueSize": 2,
+			"minValue": 1,
+			"maxValue": 65535,
+			"defaultValue": 300,
+			"unsigned": true
+		},
+		"3": {
+			"label": "Maximum current",
+			"description": "Maximum current the plug can provide to load",
+			"unit": "A",
+			"valueSize": 1,
+			"minValue": 1,
+			"maxValue": 16,
+			"defaultValue": 13
+		},
+		"4": {
+			"label": "Alarm current threshold",
+			"description": "An over-current notification is sent when the current is higher than this value",
+			"unit": "A",
+			"valueSize": 1,
+			"minValue": 1,
+			"maxValue": 15,
+			"defaultValue": 12
+		},
+		"5": {
+			"label": "LED indication",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 1,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Disable",
+					"value": 0
+				},
+				{
+					"label": "Enable",
+					"value": 1
+				}
+			]
+		},
+		"6": {
+			"label": "Power report threshold",
+			"description": "Change in power consumption that triggers a report",
+			"unit": "%",
+			"valueSize": 1,
+			"minValue": 1,
+			"maxValue": 100,
+			"defaultValue": 5
+		},
+		"7": {
+			"label": "Remember relay ON/OFF status after power failure",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 1,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Do not remember",
+					"value": 0
+				},
+				{
+					"label": "Remember",
+					"value": 1
+				}
+			]
+		},
+		"8": {
+			"label": "Timed auto-off",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 0,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Disable",
+					"value": 0
+				},
+				{
+					"label": "Enable",
+					"value": 1
+				}
+			]
+		},
+		"9": {
+			"label": "Timed auto-off period",
+			"description": "Delay time after which the plug is automatically switched off",
+			"unit": "minutes",
+			"valueSize": 2,
+			"minValue": 1,
+			"maxValue": 65535,
+			"defaultValue": 150,
+			"unsigned": true
+		},
+		"10": {
+			"label": "Top button function",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 1,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Disable",
+					"value": 0
+				},
+				{
+					"label": "Enable",
+					"value": 1
+				}
+			]
+		}
+	}
+}

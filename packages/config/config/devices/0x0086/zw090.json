@@ -1,5 +1,3 @@
-// AEON Labs ZW090
-// Z‐Stick Gen5 USB Controller
 {
 	"manufacturer": "AEON Labs",
 	"manufacturerId": "0x0086",
@@ -29,100 +27,31 @@
 	"associations": {
 		"1": {
 			"label": "Lifeline",
-			"description": "Z-Wave Plus Lifeline",
 			"maxNodes": 5
 		}
 	},
 	"paramInformation": {
 		"81": {
-			"label": "Enable/disable the LED indicator",
-			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 1,
-			"defaultValue": 1,
-			"unsigned": true,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "Enable",
-					"value": 1
-				},
-				{
-					"label": "Disable",
-					"value": 0
-				}
-			]
+			"$import": "../templates/master_template.json#enable_led_indicator"
 		},
 		"220": {
-			"label": "Configure the RF power level",
-			"description": "There are 10 levels can be configured for the RF power level",
-			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 10,
-			"defaultValue": 10,
-			"unsigned": true,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"$import": "../templates/master_template.json#base_0-10_nounit",
+			"label": "Rf Power Level",
+			"defaultValue": 10
 		},
 		"242": {
-			"label": "Enable/disable Security network",
-			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 1,
-			"defaultValue": 0,
-			"unsigned": true,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "Disable",
-					"value": 0
-				},
-				{
-					"label": "Enable",
-					"value": 1
-				}
-			]
+			"$import": "../templates/master_template.json#base_enable_disable",
+			"label": "Security Network"
 		},
 		"252": {
-			"label": "Enable/disable the configuration parameters to be locked",
-			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 1,
-			"defaultValue": 0,
-			"unsigned": true,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "Disable",
-					"value": 0
-				},
-				{
-					"label": "Enable",
-					"value": 1
-				}
-			]
+			"$import": "templates/aeotec_template.json#lock_configuration"
 		},
 		"255": {
-			"label": "Reset the configuration parameter to default factory setting",
-			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 0,
-			"defaultValue": 0,
-			"unsigned": true,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"$import": "templates/aeotec_template.json#factory_reset"
 		}
 	},
 	"metadata": {
 		"reset": "Use this procedure only in the event that the primary controller is missing or otherwise inoperable.\n\nPress and hold the Action Button on Z-Stick for 20 seconds and then release",
-		"manual": "https://products.z-wavealliance.org/ProductManual/File?folder=&filename=MarketCertificationFiles/1355/Z%20Stick%20Gen5%20manual%201.pdf"
+		"manual": "https://products.z-wavealliance.org/ProductManual/File?folder=&filename=MarketCertificationFiles/1345/Z%20Stick%20Gen5%20manual%201.pdf"
 	}
 }

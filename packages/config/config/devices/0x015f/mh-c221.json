@@ -1,5 +1,3 @@
-// McoHome Technology Co., Ltd. MH-C221
-// MCO HOME Micro Shutter
 {
 	"manufacturer": "McoHome Technology Co., Ltd.",
 	"manufacturerId": "0x015f",
@@ -36,10 +34,7 @@
 			"minValue": 1,
 			"maxValue": 32767,
 			"defaultValue": 720,
-			"unsigned": true,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"unsigned": true
 		}
 	}
 }

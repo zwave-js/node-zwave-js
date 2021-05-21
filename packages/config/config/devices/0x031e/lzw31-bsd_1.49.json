@@ -1,5 +1,3 @@
-// Inovelli LZW31
-// Black Series Dimmer
 {
 	"manufacturer": "Inovelli",
 	"manufacturerId": "0x031e",
@@ -23,10 +21,7 @@
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 100,
-			"defaultValue": 3,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"defaultValue": 3
 		},
 		"2": {
 			"label": "Dimming Speed (Z-Wave)",
@@ -34,10 +29,7 @@
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 101,
-			"defaultValue": 101,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"defaultValue": 101
 		},
 		"3": {
 			"label": "Ramp Rate",
@@ -45,10 +37,7 @@
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 101,
-			"defaultValue": 101,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"defaultValue": 101
 		},
 		"4": {
 			"label": "Ramp Rate (Z-Wave)",
@@ -56,10 +45,7 @@
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 101,
-			"defaultValue": 101,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"defaultValue": 101
 		},
 		"5": {
 			"label": "Minimum Dim Level",
@@ -67,10 +53,7 @@
 			"valueSize": 1,
 			"minValue": 1,
 			"maxValue": 45,
-			"defaultValue": 1,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"defaultValue": 1
 		},
 		"6": {
 			"label": "Maximum Dim Level",
@@ -78,10 +61,7 @@
 			"valueSize": 1,
 			"minValue": 55,
 			"maxValue": 99,
-			"defaultValue": 99,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"defaultValue": 99
 		},
 		"7": {
 			"label": "Invert Switch",
@@ -89,8 +69,6 @@
 			"minValue": 0,
 			"maxValue": 1,
 			"defaultValue": 0,
-			"readOnly": false,
-			"writeOnly": false,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -109,10 +87,7 @@
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 32767,
-			"defaultValue": 0,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"defaultValue": 0
 		},
 		"9": {
 			"label": "Default Level (Local)",
@@ -120,10 +95,7 @@
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 99,
-			"defaultValue": 0,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"defaultValue": 0
 		},
 		"10": {
 			"label": "Default Level (Z-Wave)",
@@ -131,20 +103,14 @@
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 99,
-			"defaultValue": 0,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"defaultValue": 0
 		},
 		"11": {
 			"label": "Power On State",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 101,
-			"defaultValue": 0,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"defaultValue": 0
 		},
 		"12[0x01]": {
 			"label": "Association Behavior: Local",
@@ -152,8 +118,6 @@
 			"minValue": 0,
 			"maxValue": 1,
 			"defaultValue": 1,
-			"readOnly": false,
-			"writeOnly": false,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -172,8 +136,6 @@
 			"minValue": 0,
 			"maxValue": 1,
 			"defaultValue": 1,
-			"readOnly": false,
-			"writeOnly": false,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -192,8 +154,6 @@
 			"minValue": 0,
 			"maxValue": 1,
 			"defaultValue": 1,
-			"readOnly": false,
-			"writeOnly": false,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -212,8 +172,6 @@
 			"minValue": 0,
 			"maxValue": 1,
 			"defaultValue": 1,
-			"readOnly": false,
-			"writeOnly": false,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -228,34 +186,65 @@
 		},
 		"13": {
 			"label": "LED Indicator Color",
+			"description": "Uses a scaled hue value (realHue / 360 * 255).",
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 255,
 			"defaultValue": 170,
 			"unsigned": true,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"options": [
+				{
+					"label": "Red",
+					"value": 0
+				},
+				{
+					"label": "Orange",
+					"value": 21
+				},
+				{
+					"label": "Yellow",
+					"value": 42
+				},
+				{
+					"label": "Green",
+					"value": 85
+				},
+				{
+					"label": "Cyan",
+					"value": 127
+				},
+				{
+					"label": "Blue",
+					"value": 170
+				},
+				{
+					"label": "Violet",
+					"value": 212
+				},
+				{
+					"label": "Pink",
+					"value": 234
+				},
+				{
+					"$if": "firmwareVersion >= 1.45",
+					"label": "White",
+					"value": 255
+				}
+			]
 		},
 		"14": {
 			"label": "LED Indicator Intensity",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 10,
-			"defaultValue": 5,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"defaultValue": 5
 		},
 		"15": {
 			"label": "LED Indicator Intensity (When Off)",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 10,
-			"defaultValue": 1,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"defaultValue": 1
 		},
 		"17": {
 			"label": "LED Indicator Timeout",
@@ -263,10 +252,7 @@
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 10,
-			"defaultValue": 3,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"defaultValue": 3
 		},
 		"21": {
 			"label": "AC Power Type",
@@ -274,8 +260,6 @@
 			"minValue": 0,
 			"maxValue": 1,
 			"defaultValue": 1,
-			"readOnly": false,
-			"writeOnly": false,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -294,8 +278,6 @@
 			"minValue": 0,
 			"maxValue": 2,
 			"defaultValue": 0,
-			"readOnly": false,
-			"writeOnly": false,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -318,10 +300,7 @@
 			"valueSize": 1,
 			"minValue": 1,
 			"maxValue": 9,
-			"defaultValue": 7,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"defaultValue": 7
 		},
 		"51": {
 			"label": "Physical On/Off Delay",
@@ -330,8 +309,6 @@
 			"minValue": 0,
 			"maxValue": 1,
 			"defaultValue": 1,
-			"readOnly": false,
-			"writeOnly": false,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -351,8 +328,6 @@
 			"minValue": 0,
 			"maxValue": 1,
 			"defaultValue": 0,
-			"readOnly": false,
-			"writeOnly": false,
 			"allowManualEntry": false,
 			"options": [
 				{

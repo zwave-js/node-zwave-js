@@ -1,5 +1,3 @@
-// Zipato ZD2102-5
-// Door Window Sensor
 {
 	"manufacturer": "Zipato",
 	"manufacturerId": "0x0131",
@@ -25,8 +23,6 @@
 			"maxValue": 255,
 			"defaultValue": 0,
 			"unsigned": true,
-			"readOnly": false,
-			"writeOnly": false,
 			"allowManualEntry": false,
 			"options": [
 				{

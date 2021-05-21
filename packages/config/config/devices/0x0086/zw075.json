@@ -1,0 +1,147 @@
+{
+	"manufacturer": "AEON Labs",
+	"manufacturerId": "0x0086",
+	"label": "ZW075",
+	"description": "Smart Switch Gen5",
+	"devices": [
+		{
+			"productType": "0x0003",
+			"productId": "0x004b",
+			"zwaveAllianceId": 1045
+		},
+		{
+			"productType": "0x0103",
+			"productId": "0x004b",
+			"zwaveAllianceId": 1053
+		},
+		{
+			"productType": "0x0203",
+			"productId": "0x004b",
+			"zwaveAllianceId": 1056
+		},
+		{
+			"productType": "0x001b",
+			"productId": "0x0048",
+			"zwaveAllianceId": 1416
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"associations": {
+		"1": {
+			"label": "Lifeline",
+			"maxNodes": 1,
+			"isLifeline": true
+		},
+		"2": {
+			"label": "Group 2",
+			"maxNodes": 5
+		}
+	},
+	"paramInformation": {
+		"2[0xff]": {
+			"$import": "templates/aeotec_template.json#blink_duration"
+		},
+		"2[0xff00]": {
+			"$import": "templates/aeotec_template.json#blink_length"
+		},
+		"3": {
+			"$import": "templates/aeotec_template.json#current_overload"
+		},
+		"20": {
+			"$if": "firmwareVersion >= 4.0",
+			"$import": "../templates/master_template.json#state_after_power_failure"
+		},
+		"80": {
+			"$import": "templates/aeotec_template.json#enable_notifications"
+		},
+		"81": {
+			"$if": "firmwareVersion >= 3.255",
+			"$import": "templates/aeotec_template.json#led_indicator_two_options"
+		},
+		"90": {
+			"$import": "templates/aeotec_template.json#send_automatic_reports"
+		},
+		"91": {
+			"$import": "templates/aeotec_template.json#wattage_trigger",
+			"defaultValue": 25
+		},
+		"92": {
+			"$import": "templates/aeotec_template.json#wattage_percent_trigger",
+			"defaultValue": 5
+		},
+		"100": {
+			"$if": "firmwareVersion >= 3.255",
+			"$import": "templates/aeotec_template.json#reset_parameters",
+			"label": "Reset Parameters 101-103 to Default Values"
+		},
+		"101[0x01]": {
+			"$import": "templates/aeotec_template.json#auto_report_group1_v"
+		},
+		"101[0x02]": {
+			"$import": "templates/aeotec_template.json#auto_report_group1_amp"
+		},
+		"101[0x04]": {
+			"$import": "templates/aeotec_template.json#auto_report_group1_watt"
+		},
+		"101[0x08]": {
+			"$import": "templates/aeotec_template.json#auto_report_group1_kwh"
+		},
+		"102[0x01]": {
+			"$import": "templates/aeotec_template.json#auto_report_group2_v"
+		},
+		"102[0x02]": {
+			"$import": "templates/aeotec_template.json#auto_report_group2_amp"
+		},
+		"102[0x04]": {
+			"$import": "templates/aeotec_template.json#auto_report_group2_watt"
+		},
+		"102[0x08]": {
+			"$import": "templates/aeotec_template.json#auto_report_group2_kwh"
+		},
+		"103[0x01]": {
+			"$import": "templates/aeotec_template.json#auto_report_group3_v"
+		},
+		"103[0x02]": {
+			"$import": "templates/aeotec_template.json#auto_report_group3_amp"
+		},
+		"103[0x04]": {
+			"$import": "templates/aeotec_template.json#auto_report_group3_watt"
+		},
+		"103[0x08]": {
+			"$import": "templates/aeotec_template.json#auto_report_group3_kwh"
+		},
+		"111": {
+			"$import": "templates/aeotec_template.json#auto_report_interval_group1",
+			"maxValue": 2147483647
+		},
+		"112": {
+			"$import": "templates/aeotec_template.json#auto_report_interval_group2",
+			"maxValue": 2147483647
+		},
+		"113": {
+			"$import": "templates/aeotec_template.json#auto_report_interval_group3",
+			"maxValue": 2147483647
+		},
+		"200": {
+			"$import": "templates/aeotec_template.json#partner_id_att"
+		},
+		"252": {
+			"$import": "templates/aeotec_template.json#lock_configuration"
+		},
+		"254": {
+			"$import": "templates/aeotec_template.json#device_tag"
+		},
+		"255": {
+			"$import": "templates/aeotec_template.json#factory_reset_exclude"
+		}
+	},
+	"metadata": {
+		"inclusion": "Turn the primary controller of Z-Wave network into inclusion mode, short press the product’s Action button that you can find on the product's housing",
+		"exclusion": "Turn the primary controller of Z-Wave network into exclusion mode, short press the product’s Action button that you can find on the product's housing",
+		"reset": "Press and hold the Action button that you can find on the product's housing for 20 seconds and then release. This procedure should only be used when the primary controller is inoperable",
+		"manual": "https://products.z-wavealliance.org/ProductManual/File?folder=&filename=MarketCertificationFiles/1056/Aeon%20Labs%20Smart%20Switch%20Gen5_Update%202.pdf"
+	}
+}

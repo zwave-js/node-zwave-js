@@ -1,5 +1,3 @@
-// Axis Communications Ab T8344
-// Power On/Off Plug
 {
 	"manufacturer": "Axis Communications Ab",
 	"manufacturerId": "0x0364",
@@ -25,8 +23,6 @@
 			"maxValue": 1,
 			"defaultValue": 1,
 			"unsigned": true,
-			"readOnly": false,
-			"writeOnly": false,
 			"allowManualEntry": false,
 			"options": [
 				{

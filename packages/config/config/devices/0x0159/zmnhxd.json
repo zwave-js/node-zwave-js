@@ -1,5 +1,3 @@
-// Qubino ZMNHXD
-// Qubino 3-Phase Smart Meter
 {
 	"manufacturer": "Qubino",
 	"manufacturerId": "0x0159",
@@ -24,9 +22,6 @@
 			"minValue": 0,
 			"maxValue": 5,
 			"defaultValue": 0,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true,
 			"options": [
 				{
 					"label": "disabled",
@@ -58,9 +53,6 @@
 			"minValue": 0,
 			"maxValue": 100,
 			"defaultValue": 50,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true,
 			"options": [
 				{
 					"label": "reporting disabled",
@@ -76,9 +68,6 @@
 			"maxValue": 65535,
 			"defaultValue": 600,
 			"unsigned": true,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true,
 			"options": [
 				{
 					"label": "reporting disabled",
@@ -95,9 +84,6 @@
 			"maxValue": 65535,
 			"defaultValue": 600,
 			"unsigned": true,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true,
 			"options": [
 				{
 					"label": "reporting disabled",
@@ -111,8 +97,6 @@
 			"minValue": 0,
 			"maxValue": 2,
 			"defaultValue": 0,
-			"readOnly": false,
-			"writeOnly": false,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -135,8 +119,6 @@
 			"minValue": 0,
 			"maxValue": 1,
 			"defaultValue": 0,
-			"readOnly": false,
-			"writeOnly": false,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -156,10 +138,7 @@
 			"minValue": 0,
 			"maxValue": 60000,
 			"defaultValue": 0,
-			"unsigned": true,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"unsigned": true
 		},
 		"112": {
 			"label": "Power threshold – Delay before power on",
@@ -168,9 +147,6 @@
 			"minValue": 0,
 			"maxValue": 32535,
 			"defaultValue": 0,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true,
 			"options": [
 				{
 					"label": "External relay will not turn back on",

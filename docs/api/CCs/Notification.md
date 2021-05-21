@@ -1,5 +1,7 @@
 # Notification CC
 
+?> CommandClass ID: `0x71`
+
 ## Notification CC methods
 
 ### `getInternal`

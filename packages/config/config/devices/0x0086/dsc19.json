@@ -1,5 +1,3 @@
-// AEON Labs DSC19
-// Micro Smart Energy Illuminator G2
 {
 	"manufacturer": "AEON Labs",
 	"manufacturerId": "0x0086",
@@ -18,221 +16,87 @@
 	},
 	"associations": {
 		"1": {
-			"label": "Target for automatic meter reports",
+			"label": "Lifeline",
 			"maxNodes": 5,
 			"isLifeline": true
 		},
 		"2": {
-			"label": "Target for automatic reports",
+			"label": "Group 2",
 			"maxNodes": 5,
 			"isLifeline": true
 		}
 	},
 	"paramInformation": {
-		"2": {
-			"label": "Make Micro Smart Dimmer 2nd Edition Blink",
-			"description": "The LSB defines the total time the device need to blink.",
-			"valueSize": 2,
-			"minValue": 0,
-			"maxValue": 65535,
-			"defaultValue": 0,
-			"unsigned": true,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+		"2[0xff]": {
+			"$import": "templates/aeotec_template.json#blink_duration"
+		},
+		"2[0xff00]": {
+			"$import": "templates/aeotec_template.json#blink_length"
 		},
 		"3": {
-			"label": "Current Overload Protection",
-			"description": "Load will be closed when current more that 2.7A and time more than 2 minutes",
-			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 1,
-			"defaultValue": 0,
-			"unsigned": true,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "Deactivate",
-					"value": 0
-				},
-				{
-					"label": "Activate",
-					"value": 1
-				}
-			]
-		},
-		"13": {
-			"label": "Enable/Disable CRC16 encapsulation",
-			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 255,
-			"defaultValue": 0,
-			"unsigned": true,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"$import": "templates/aeotec_template.json#current_overload"
 		},
 		"80": {
-			"label": "Notification on Status Change",
-			"description": "Send load notification to associated devices",
-			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 2,
-			"defaultValue": 0,
-			"unsigned": true,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "Deactivate",
-					"value": 0
-				},
-				{
-					"label": "Hail CC Sent",
-					"value": 1
-				},
-				{
-					"label": "Basic CC Report Sent",
-					"value": 2
-				}
-			]
+			"$import": "templates/aeotec_template.json#enable_notifications"
 		},
 		"90": {
-			"label": "Sending a Report triggered by min change of value",
-			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 1,
-			"defaultValue": 0,
-			"unsigned": true,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "Deavtivate",
-					"value": 0
-				},
-				{
-					"label": "Activate",
-					"value": 1
-				}
-			]
+			"$import": "templates/aeotec_template.json#send_automatic_reports"
 		},
 		"91": {
-			"label": "Minimum Change to send Report (Watt)",
-			"description": "The value represents the minimum change in Wattage for a Report to be sent.",
-			"valueSize": 2,
-			"minValue": 0,
-			"maxValue": 65535,
-			"defaultValue": 25,
-			"unsigned": true,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"$import": "templates/aeotec_template.json#wattage_trigger",
+			"defaultValue": 25
 		},
 		"92": {
-			"label": "Minimum Change to send Report (%)",
-			"description": "The minimum change in Watage Percent for a report to be sent.",
-			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 255,
-			"defaultValue": 5,
-			"unsigned": true,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"$import": "templates/aeotec_template.json#wattage_percent_trigger",
+			"defaultValue": 5
 		},
-		"101": {
-			"label": "Reports for Group 1",
-			"description": "Which reports need to send automatically in timing intervals for group 1",
-			"valueSize": 4,
-			"minValue": 0,
-			"maxValue": 65535,
-			"defaultValue": 4,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+		"101[0x01]": {
+			"$import": "templates/aeotec_template.json#auto_report_group1_v"
 		},
-		"102": {
-			"label": "Reports for Group 2",
-			"description": "Which reports need to send automatically in timing intervals for group 2",
-			"valueSize": 4,
-			"minValue": 0,
-			"maxValue": 65535,
-			"defaultValue": 8,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+		"101[0x02]": {
+			"$import": "templates/aeotec_template.json#auto_report_group1_amp"
 		},
-		"103": {
-			"label": "Reports for Group 3",
-			"description": "Which reports need to send automatically in timing intervals for group 3",
-			"valueSize": 4,
-			"minValue": 0,
-			"maxValue": 65535,
-			"defaultValue": 0,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+		"101[0x04]": {
+			"$import": "templates/aeotec_template.json#auto_report_group1_watt"
+		},
+		"101[0x08]": {
+			"$import": "templates/aeotec_template.json#auto_report_group1_kwh"
+		},
+		"102[0x01]": {
+			"$import": "templates/aeotec_template.json#auto_report_group2_v"
+		},
+		"102[0x02]": {
+			"$import": "templates/aeotec_template.json#auto_report_group2_amp"
+		},
+		"102[0x04]": {
+			"$import": "templates/aeotec_template.json#auto_report_group2_watt"
+		},
+		"102[0x08]": {
+			"$import": "templates/aeotec_template.json#auto_report_group2_kwh"
+		},
+		"103[0x01]": {
+			"$import": "templates/aeotec_template.json#auto_report_group3_v"
+		},
+		"103[0x02]": {
+			"$import": "templates/aeotec_template.json#auto_report_group3_amp"
+		},
+		"103[0x04]": {
+			"$import": "templates/aeotec_template.json#auto_report_group3_watt"
+		},
+		"103[0x08]": {
+			"$import": "templates/aeotec_template.json#auto_report_group3_kwh"
 		},
 		"111": {
-			"label": "Interval to send out reports of group 1",
-			"valueSize": 4,
-			"minValue": 1,
-			"maxValue": 2678400,
-			"defaultValue": 3,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"$import": "templates/aeotec_template.json#auto_report_interval_group1"
 		},
 		"112": {
-			"label": "Interval to send out reports of group 2",
-			"valueSize": 4,
-			"minValue": 1,
-			"maxValue": 2678400,
-			"defaultValue": 600,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"$import": "templates/aeotec_template.json#auto_report_interval_group2"
 		},
 		"113": {
-			"label": "Interval to send out reports of group 3",
-			"valueSize": 4,
-			"minValue": 1,
-			"maxValue": 2678400,
-			"defaultValue": 600,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"$import": "templates/aeotec_template.json#auto_report_interval_group3"
 		},
 		"120": {
-			"label": "Turn External Button Mode",
-			"description": "Parameter to set External button type",
-			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 2,
-			"defaultValue": 255,
-			"unsigned": true,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "Momentary Button Mode",
-					"value": 0
-				},
-				{
-					"label": "2 State Switch Mode",
-					"value": 1
-				},
-				{
-					"label": "3 Way Switch Mode",
-					"value": 2
-				}
-			]
+			"$import": "templates/aeotec_template.json#external_switch_3way"
 		}
 	}
 }

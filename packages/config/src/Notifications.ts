@@ -1,11 +1,16 @@
-import { ZWaveError, ZWaveErrorCodes } from "@zwave-js/core";
+import { isZWaveError, ZWaveError, ZWaveErrorCodes } from "@zwave-js/core";
 import { JSONObject, num2hex } from "@zwave-js/shared";
 import { entries } from "alcalzone-shared/objects";
 import { isArray, isObject } from "alcalzone-shared/typeguards";
 import { pathExists, readFile } from "fs-extra";
 import JSON5 from "json5";
 import path from "path";
-import { configDir, hexKeyRegexNDigits, throwInvalidConfig } from "./utils";
+import {
+	configDir,
+	externalConfigDir,
+	hexKeyRegexNDigits,
+	throwInvalidConfig,
+} from "./utils";
 
 interface NotificationStateDefinition {
 	type: "state";
@@ -27,11 +32,17 @@ export type NotificationValueDefinition = (
 	parameter?: NotificationParameter;
 };
 
-const configPath = path.join(configDir, "notifications.json");
 export type NotificationMap = ReadonlyMap<number, Notification>;
 
 /** @internal */
-export async function loadNotificationsInternal(): Promise<NotificationMap> {
+export async function loadNotificationsInternal(
+	externalConfig?: boolean,
+): Promise<NotificationMap> {
+	const configPath = path.join(
+		(externalConfig && externalConfigDir) || configDir,
+		"notifications.json",
+	);
+
 	if (!(await pathExists(configPath))) {
 		throw new ZWaveError(
 			"The config file does not exist!",
@@ -65,7 +76,7 @@ export async function loadNotificationsInternal(): Promise<NotificationMap> {
 		}
 		return notifications;
 	} catch (e: unknown) {
-		if (e instanceof ZWaveError) {
+		if (isZWaveError(e)) {
 			throw e;
 		} else {
 			throwInvalidConfig("notifications");

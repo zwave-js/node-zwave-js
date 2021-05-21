@@ -1,5 +1,3 @@
-// Yale SR-BX-ZW
-// External siren
 {
 	"manufacturer": "Yale",
 	"manufacturerId": "0x0129",
@@ -24,10 +22,7 @@
 			"minValue": 1,
 			"maxValue": 10,
 			"defaultValue": 10,
-			"unsigned": true,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"unsigned": true
 		},
 		"2": {
 			"$import": "../templates/master_template.json#base_enable_disable",
@@ -42,9 +37,6 @@
 			"maxValue": 25,
 			"defaultValue": 0,
 			"unsigned": true,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true,
 			"options": [
 				{
 					"label": "Disable",

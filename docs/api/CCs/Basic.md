@@ -1,5 +1,7 @@
 # Basic CC
 
+?> CommandClass ID: `0x20`
+
 ## Basic CC methods
 
 ### `get`

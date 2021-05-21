@@ -1,5 +1,3 @@
-// Eaton RFTR9605-T
-// Eatons Z-Wave Plus Wireless Receptacle
 {
 	"manufacturer": "Eaton",
 	"manufacturerId": "0x001a",
@@ -19,15 +17,11 @@
 	"paramInformation": {
 		"1": {
 			"label": "Delayed Off Time",
-			"description": "Delayed off time",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 10,
 			"defaultValue": 10,
-			"unsigned": true,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"unsigned": true
 		},
 		"2": {
 			"label": "Panic On Time",
@@ -36,10 +30,7 @@
 			"minValue": 0,
 			"maxValue": 1,
 			"defaultValue": 1,
-			"unsigned": true,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"unsigned": true
 		},
 		"3": {
 			"label": "Panic Off Time",
@@ -48,55 +39,47 @@
 			"minValue": 0,
 			"maxValue": 1,
 			"defaultValue": 1,
-			"unsigned": true,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"unsigned": true
 		},
 		"5": {
-			"label": "Power Up State",
+			"label": "State After Power Restored",
 			"description": "1 = off 2 = on 3 = last state",
 			"valueSize": 1,
 			"minValue": 1,
 			"maxValue": 3,
 			"defaultValue": 1,
 			"unsigned": true,
-			"readOnly": false,
-			"writeOnly": false,
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "Turn off when power is restored",
+					"label": "Turn off",
 					"value": 1
 				},
 				{
-					"label": "Turn on when power is restored",
+					"label": "Turn on",
 					"value": 2
 				},
 				{
-					"label": "Return to last state when power is restored",
+					"label": "Previous state",
 					"value": 3
 				}
 			]
 		},
 		"6": {
-			"label": "Panic Mode Enabled",
-			"description": "0=off 1=on",
+			"label": "Panic Mode",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 1,
 			"defaultValue": 0,
 			"unsigned": true,
-			"readOnly": false,
-			"writeOnly": false,
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "Disable panic mode",
+					"label": "Disable",
 					"value": 0
 				},
 				{
-					"label": "Enable panic mode",
+					"label": "Enable",
 					"value": 1
 				}
 			]
@@ -109,8 +92,6 @@
 			"maxValue": 4,
 			"defaultValue": 3,
 			"unsigned": true,
-			"readOnly": false,
-			"writeOnly": false,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -131,8 +112,6 @@
 			"maxValue": 4,
 			"defaultValue": 1,
 			"unsigned": true,
-			"readOnly": false,
-			"writeOnly": false,
 			"allowManualEntry": false,
 			"options": [
 				{

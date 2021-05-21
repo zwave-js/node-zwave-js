@@ -1,0 +1,49 @@
+{
+	"manufacturer": "Logic Group",
+	"manufacturerId": "0x0234",
+	"label": "ZDI5200",
+	"description": "Dimmer",
+	"devices": [
+		{
+			"productType": "0x0003",
+			"productId": "0x0123"
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"associations": {
+		"1": {
+			"label": "Lifeline",
+			"maxNodes": 5,
+			"isLifeline": true
+		},
+		"2": {
+			"label": "Basic Report",
+			"maxNodes": 5
+		}
+	},
+	"paramInformation": {
+		"1": {
+			"$import": "templates/logic_group_template.json#dimming_duration"
+		},
+		"2": {
+			"$import": "templates/logic_group_template.json#dimmer_mode"
+		},
+		"3": {
+			"$import": "templates/logic_group_template.json#dimmer_min"
+		},
+		"4": {
+			"$import": "templates/logic_group_template.json#dimmer_max"
+		},
+		"5": {
+			"$import": "templates/logic_group_template.json#dimmer_max"
+		}
+	},
+	"metadata": {
+		"inclusion": "Push the ON logo 3 times and the LED will start to blink",
+		"exclusion": "Push the ON logo 3 times and the LED will start to blink",
+		"reset": "Push and hold the ON logo for 10 seconds"
+	}
+}

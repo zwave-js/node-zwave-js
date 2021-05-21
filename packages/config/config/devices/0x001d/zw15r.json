@@ -1,5 +1,3 @@
-// Leviton ZW15R
-// Receptacle
 {
 	"manufacturer": "Leviton",
 	"manufacturerId": "0x001d",
@@ -24,8 +22,6 @@
 			"maxValue": 255,
 			"defaultValue": 0,
 			"unsigned": true,
-			"readOnly": false,
-			"writeOnly": false,
 			"allowManualEntry": false,
 			"options": [
 				{

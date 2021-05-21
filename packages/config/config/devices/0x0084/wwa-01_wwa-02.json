@@ -1,5 +1,3 @@
-// FortrezZ LLC WWA-02
-// Wireless Water and Temperature Alarm
 {
 	"manufacturer": "FortrezZ LLC",
 	"manufacturerId": "0x0084",
@@ -60,10 +58,7 @@
 			"minValue": 0,
 			"maxValue": 255,
 			"defaultValue": 4,
-			"unsigned": true,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"unsigned": true
 		},
 		"2": {
 			"label": "High Temperature Trigger Point",
@@ -71,10 +66,7 @@
 			"minValue": 0,
 			"maxValue": 255,
 			"defaultValue": 70,
-			"unsigned": true,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"unsigned": true
 		}
 	}
 }

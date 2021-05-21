@@ -1,4 +1,3 @@
-// Evolve LFM-20
 {
 	"manufacturer": "Evolve",
 	"manufacturerId": "0x0113",
@@ -22,8 +21,6 @@
 			"maxValue": 255,
 			"defaultValue": 1,
 			"unsigned": true,
-			"readOnly": false,
-			"writeOnly": false,
 			"allowManualEntry": false,
 			"options": [
 				{

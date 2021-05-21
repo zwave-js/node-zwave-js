@@ -1,5 +1,3 @@
-// BeNext P1-dongle
-// P1-dongle
 {
 	"manufacturer": "BeNext",
 	"manufacturerId": "0x008a",
@@ -24,10 +22,7 @@
 			"minValue": 0,
 			"maxValue": 40000,
 			"defaultValue": 1152,
-			"unsigned": true,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"unsigned": true
 		}
 	}
 }

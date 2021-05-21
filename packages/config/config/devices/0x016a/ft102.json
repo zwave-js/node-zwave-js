@@ -1,5 +1,3 @@
-// Fantem FT102
-// Oomi Touch
 {
 	"manufacturer": "Fantem",
 	"manufacturerId": "0x016a",
@@ -24,8 +22,6 @@
 			"maxValue": 1,
 			"defaultValue": 0,
 			"unsigned": true,
-			"readOnly": false,
-			"writeOnly": false,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -45,8 +41,6 @@
 			"maxValue": 1431655765,
 			"defaultValue": 0,
 			"unsigned": true,
-			"readOnly": false,
-			"writeOnly": false,
 			"allowManualEntry": false,
 			"options": [
 				{

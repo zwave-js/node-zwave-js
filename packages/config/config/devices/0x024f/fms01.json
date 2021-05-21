@@ -1,5 +1,3 @@
-// Smartly AS FMS01
-// Multifunction Switch
 {
 	"manufacturer": "Smartly AS",
 	"manufacturerId": "0x024f",
@@ -23,10 +21,7 @@
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 32767,
-			"defaultValue": 0,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"defaultValue": 0
 		},
 		"5": {
 			"label": "Safety OFF Period",
@@ -34,10 +29,7 @@
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 32767,
-			"defaultValue": 600,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"defaultValue": 600
 		},
 		"6": {
 			"label": "Safety ON Period",
@@ -45,10 +37,7 @@
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 32767,
-			"defaultValue": 300,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"defaultValue": 300
 		},
 		"10": {
 			"label": "Dimming speed",
@@ -57,10 +46,7 @@
 			"valueSize": 2,
 			"minValue": 30,
 			"maxValue": 32767,
-			"defaultValue": 300,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"defaultValue": 300
 		},
 		"11": {
 			"label": "Dimmer mode",
@@ -68,30 +54,21 @@
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 1,
-			"defaultValue": 1,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"defaultValue": 1
 		},
 		"12": {
 			"label": "Maximum Level",
 			"valueSize": 1,
 			"minValue": 1,
 			"maxValue": 99,
-			"defaultValue": 90,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"defaultValue": 90
 		},
 		"13": {
 			"label": "Minimum Level",
 			"valueSize": 1,
 			"minValue": 1,
 			"maxValue": 99,
-			"defaultValue": 15,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"defaultValue": 15
 		},
 		"14": {
 			"label": "Button mode",
@@ -99,40 +76,28 @@
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 4,
-			"defaultValue": 0,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"defaultValue": 0
 		},
 		"15": {
 			"label": "Light Zone Control Mode",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 30,
-			"defaultValue": 0,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"defaultValue": 0
 		},
 		"17": {
 			"label": "Back Unit Role",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 2,
-			"defaultValue": 1,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"defaultValue": 1
 		},
 		"18": {
 			"label": "Back Unit Light Zone",
 			"valueSize": 1,
 			"minValue": 1,
 			"maxValue": 4,
-			"defaultValue": 1,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"defaultValue": 1
 		},
 		"32": {
 			"label": "Thermostat Set Point Max",
@@ -141,10 +106,7 @@
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 500,
-			"defaultValue": 270,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"defaultValue": 270
 		},
 		"34": {
 			"label": "Thermostat Set Point Min",
@@ -152,10 +114,7 @@
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 500,
-			"defaultValue": 50,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"defaultValue": 50
 		},
 		"36": {
 			"label": "Thermostat Control Resend Interval",
@@ -164,10 +123,7 @@
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 32767,
-			"defaultValue": 3600,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"defaultValue": 3600
 		},
 		"37": {
 			"label": "Thermostat Minimum On/Off Interval",
@@ -176,10 +132,7 @@
 			"valueSize": 2,
 			"minValue": 60,
 			"maxValue": 32767,
-			"defaultValue": 300,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"defaultValue": 300
 		},
 		"38": {
 			"label": "Thermostat Floor Temp Max",
@@ -188,30 +141,21 @@
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 500,
-			"defaultValue": 270,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"defaultValue": 270
 		},
 		"40": {
 			"label": "Temperature Sensor Select",
 			"valueSize": 1,
 			"minValue": 1,
 			"maxValue": 3,
-			"defaultValue": 3,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"defaultValue": 3
 		},
 		"44": {
 			"label": "Cold Start Minimum Level",
 			"valueSize": 1,
 			"minValue": 1,
 			"maxValue": 99,
-			"defaultValue": 20,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"defaultValue": 20
 		},
 		"64": {
 			"label": "Temperature Report Inteval",
@@ -220,10 +164,7 @@
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 32767,
-			"defaultValue": 600,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"defaultValue": 600
 		},
 		"66": {
 			"label": "Temperature Report Threshold",
@@ -232,10 +173,7 @@
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 127,
-			"defaultValue": 10,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"defaultValue": 10
 		},
 		"67": {
 			"label": "Thermostat On∕Off Interval Override Threshold",
@@ -243,20 +181,14 @@
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 127,
-			"defaultValue": 0,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"defaultValue": 0
 		},
 		"80": {
 			"label": "Button LED Mode",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 2,
-			"defaultValue": 0,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"defaultValue": 0
 		},
 		"240": {
 			"label": "Floor Sensor Temperature Offset",
@@ -265,10 +197,7 @@
 			"valueSize": 1,
 			"minValue": -128,
 			"maxValue": 127,
-			"defaultValue": 0,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"defaultValue": 0
 		},
 		"241": {
 			"label": "Room Sensor Temperature Offset",
@@ -277,10 +206,7 @@
 			"valueSize": 1,
 			"minValue": -128,
 			"maxValue": 127,
-			"defaultValue": 0,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"defaultValue": 0
 		}
 	}
 }

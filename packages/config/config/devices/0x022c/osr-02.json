@@ -1,5 +1,3 @@
-// LG U+ OSR-02
-// Open Sensor
 {
 	"manufacturer": "LG U+",
 	"manufacturerId": "0x022c",
@@ -24,10 +22,7 @@
 			"minValue": 1,
 			"maxValue": 127,
 			"defaultValue": 24,
-			"unsigned": true,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"unsigned": true
 		}
 	},
 	"metadata": {

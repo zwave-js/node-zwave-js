@@ -1,5 +1,3 @@
-// Philio Technology Corp PSE02
-// Siren
 {
 	"manufacturer": "Philio Technology Corp",
 	"manufacturerId": "0x013c",
@@ -23,10 +21,7 @@
 			"valueSize": 4,
 			"minValue": 0,
 			"maxValue": 65535,
-			"defaultValue": 4,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"defaultValue": 4
 		},
 		"29": {
 			"label": "Disable Alarm",
@@ -34,20 +29,14 @@
 			"valueSize": 4,
 			"minValue": 0,
 			"maxValue": 0,
-			"defaultValue": 0,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"defaultValue": 0
 		},
 		"31": {
 			"label": "Alarm Duration",
 			"valueSize": 4,
 			"minValue": 0,
 			"maxValue": 127,
-			"defaultValue": 6,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"defaultValue": 6
 		}
 	}
 }

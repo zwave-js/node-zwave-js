@@ -1,9 +1,7 @@
-// AEON Labs DSC26103-ZW
-// Micro Switch G2
 {
 	"manufacturer": "AEON Labs",
 	"manufacturerId": "0x0086",
-	"label": "DSC26103-ZW",
+	"label": "DSC26",
 	"description": "Micro Switch G2",
 	"devices": [
 		{
@@ -23,218 +21,34 @@
 			"isLifeline": true
 		},
 		"2": {
-			"label": "Retransmit",
+			"label": "Group 2",
 			"maxNodes": 5
 		}
 	},
 	"paramInformation": {
-		"80": {
-			"label": "Notification on Status Change",
-			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 2,
-			"defaultValue": 0,
-			"unsigned": true,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "Do nothing",
-					"value": 0
-				},
-				{
-					"label": "Hail CC Sent",
-					"value": 1
-				},
-				{
-					"label": "Basic CC Report Sent",
-					"value": 2
-				}
-			]
-		},
-		"101": {
-			"label": "Group 1 report values to send",
-			"valueSize": 4,
-			"minValue": 0,
-			"maxValue": 65535,
-			"defaultValue": 4,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
-		},
-		"102": {
-			"label": "Group 2 report variables to send",
-			"valueSize": 4,
-			"minValue": 0,
-			"maxValue": 65535,
-			"defaultValue": 8,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
-		},
-		"103": {
-			"label": "Group 3 report variables to send",
-			"valueSize": 4,
-			"minValue": 0,
-			"maxValue": 65535,
-			"defaultValue": 0,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
-		},
-		"111": {
-			"label": "Interval to send out reports to group 1",
-			"valueSize": 4,
-			"minValue": 1,
-			"maxValue": 2678400,
-			"defaultValue": 3,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
-		},
-		"112": {
-			"label": "Interval to send out reports to group 2",
-			"valueSize": 4,
-			"minValue": 1,
-			"maxValue": 2678400,
-			"defaultValue": 600,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
-		},
-		"113": {
-			"label": "Interval to send out reports to group 3",
-			"valueSize": 4,
-			"minValue": 1,
-			"maxValue": 2678400,
-			"defaultValue": 600,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
-		},
-		"120": {
-			"label": "External Button Type",
-			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 2,
-			"defaultValue": 255,
-			"unsigned": true,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "Momentary Button",
-					"value": 0
-				},
-				{
-					"label": "2 State Switch",
-					"value": 1
-				},
-				{
-					"label": "3 Way Switch",
-					"value": 2
-				}
-			]
-		},
-		"200": {
-			"label": "Partner ID",
-			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 1,
-			"defaultValue": 0,
-			"unsigned": true,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "Aeon Labs Standard Product",
-					"value": 0
-				},
-				{
-					"label": "ATandT",
-					"value": 1
-				}
-			]
-		},
-		"250": {
-			"label": "CHECK AND DELETE ME formerly parameter 2",
-			"valueSize": 2,
-			"minValue": 0,
-			"maxValue": 65535,
-			"defaultValue": 0,
-			"unsigned": true,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
-		},
-		"252": {
-			"label": "Enable/disable Lock Configuration",
-			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 1,
-			"defaultValue": 0,
-			"unsigned": true,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "Configuration unlocked",
-					"value": 0
-				},
-				{
-					"label": "Configuration locked",
-					"value": 1
-				}
-			]
-		},
-		"254": {
-			"label": "Device Tag",
-			"valueSize": 2,
-			"minValue": 0,
-			"maxValue": 65535,
-			"defaultValue": 0,
-			"unsigned": true,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
-		},
-		"255": {
-			"label": "Reset configuration set up to default setting",
-			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 255,
-			"defaultValue": 5,
-			"unsigned": true,
-			"readOnly": false,
-			"writeOnly": true,
-			"allowManualEntry": true
-		},
 		"2[0xff]": {
-			"label": "LED blink repeat",
-			"description": "Number of times LED should blink",
-			"valueSize": 2,
-			"minValue": 0,
-			"maxValue": 255,
-			"defaultValue": 0,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"$import": "templates/aeotec_template.json#blink_duration"
 		},
 		"2[0xff00]": {
-			"label": "LED duty time",
-			"description": "length of time LED will blink on/off per cycle",
-			"unit": "0.1s",
-			"valueSize": 2,
-			"minValue": 0,
-			"maxValue": 255,
-			"defaultValue": 0,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"$import": "templates/aeotec_template.json#blink_length"
+		},
+		"80": {
+			"$import": "templates/aeotec_template.json#enable_notifications"
+		},
+		"120": {
+			"$import": "templates/aeotec_template.json#external_switch_3way"
+		},
+		"200": {
+			"$import": "templates/aeotec_template.json#partner_id_att"
+		},
+		"252": {
+			"$import": "templates/aeotec_template.json#lock_configuration"
+		},
+		"254": {
+			"$import": "templates/aeotec_template.json#device_tag"
+		},
+		"255": {
+			"$import": "templates/aeotec_template.json#factory_reset"
 		}
 	}
 }

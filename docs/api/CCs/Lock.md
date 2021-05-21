@@ -1,5 +1,7 @@
 # Lock CC
 
+?> CommandClass ID: `0x76`
+
 ## Lock CC methods
 
 ### `get`

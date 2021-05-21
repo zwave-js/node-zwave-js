@@ -1,5 +1,3 @@
-// ZyXEL ST812
-// Flood sensor
 {
 	"manufacturer": "ZyXEL",
 	"manufacturerId": "0x0135",
@@ -35,9 +33,6 @@
 			"minValue": 0,
 			"maxValue": 99,
 			"defaultValue": 99,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true,
 			"options": [
 				{
 					"label": "OFF",

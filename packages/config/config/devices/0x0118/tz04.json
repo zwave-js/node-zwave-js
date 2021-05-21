@@ -1,5 +1,3 @@
-// TKB Home TZ04U
-// In Wall Dual Relay Switch
 {
 	"manufacturer": "TKB Home",
 	"manufacturerId": "0x0118",
@@ -40,10 +38,7 @@
 			"minValue": 0,
 			"maxValue": 65535,
 			"defaultValue": 720,
-			"unsigned": true,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"unsigned": true
 		},
 		"2": {
 			"label": "kWh meter report period",
@@ -52,10 +47,7 @@
 			"minValue": 0,
 			"maxValue": 65535,
 			"defaultValue": 6,
-			"unsigned": true,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"unsigned": true
 		},
 		"3": {
 			"label": "Selected endpoint",
@@ -64,8 +56,6 @@
 			"minValue": 1,
 			"maxValue": 3,
 			"defaultValue": 1,
-			"readOnly": false,
-			"writeOnly": false,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -89,8 +79,6 @@
 			"minValue": 1,
 			"maxValue": 3,
 			"defaultValue": 1,
-			"readOnly": false,
-			"writeOnly": false,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -113,10 +101,7 @@
 			"valueSize": 2,
 			"minValue": 10,
 			"maxValue": 1500,
-			"defaultValue": 1500,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"defaultValue": 1500
 		},
 		"6": {
 			"label": "Threshold of kWh for Load Caution",
@@ -124,10 +109,7 @@
 			"valueSize": 2,
 			"minValue": 1,
 			"maxValue": 10000,
-			"defaultValue": 10000,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"defaultValue": 10000
 		},
 		"7": {
 			"label": "Restore switch state mode",
@@ -136,8 +118,6 @@
 			"maxValue": 2,
 			"defaultValue": 1,
 			"unsigned": true,
-			"readOnly": false,
-			"writeOnly": false,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -160,10 +140,7 @@
 			"minValue": 0,
 			"maxValue": 65535,
 			"defaultValue": 0,
-			"unsigned": true,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"unsigned": true
 		},
 		"9": {
 			"label": "RF off command mode",
@@ -172,8 +149,6 @@
 			"maxValue": 3,
 			"defaultValue": 1,
 			"unsigned": true,
-			"readOnly": false,
-			"writeOnly": false,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -201,8 +176,6 @@
 			"maxValue": 2,
 			"defaultValue": 1,
 			"unsigned": true,
-			"readOnly": false,
-			"writeOnly": false,
 			"allowManualEntry": false,
 			"options": [
 				{

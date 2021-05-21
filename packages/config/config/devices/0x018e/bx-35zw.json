@@ -1,5 +1,3 @@
-// Climax Technology, Ltd. BX-35ZW
-// Bellbox
 {
 	"manufacturer": "Climax Technology, Ltd.",
 	"manufacturerId": "0x018e",
@@ -25,10 +23,7 @@
 			"minValue": 1,
 			"maxValue": 10,
 			"defaultValue": 10,
-			"unsigned": true,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"unsigned": true
 		},
 		"2": {
 			"label": "Alarm LED Flash",
@@ -37,10 +32,7 @@
 			"minValue": 0,
 			"maxValue": 1,
 			"defaultValue": 1,
-			"unsigned": true,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"unsigned": true
 		},
 		"3": {
 			"label": "Comfort Led",
@@ -49,10 +41,7 @@
 			"minValue": 0,
 			"maxValue": 250,
 			"defaultValue": 0,
-			"unsigned": true,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"unsigned": true
 		},
 		"4": {
 			"label": "Tamper",
@@ -61,10 +50,7 @@
 			"minValue": 0,
 			"maxValue": 1,
 			"defaultValue": 1,
-			"unsigned": true,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"unsigned": true
 		}
 	},
 	"metadata": {

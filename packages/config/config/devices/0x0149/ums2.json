@@ -1,5 +1,3 @@
-// wiDom UMS2
-// WiDom Smart Roller Shutter
 {
 	"manufacturer": "wiDom",
 	"manufacturerId": "0x0149",
@@ -23,8 +21,6 @@
 			"minValue": 0,
 			"maxValue": 3,
 			"defaultValue": 3,
-			"readOnly": false,
-			"writeOnly": false,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -50,80 +46,56 @@
 			"valueSize": 1,
 			"minValue": 50,
 			"maxValue": 100,
-			"defaultValue": 100,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"defaultValue": 100
 		},
 		"3": {
 			"label": "Favorite level for OFF position",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 49,
-			"defaultValue": 0,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"defaultValue": 0
 		},
 		"4": {
 			"label": "Value for Group 2 with 1 click on UP button",
 			"valueSize": 1,
 			"minValue": -1,
 			"maxValue": 99,
-			"defaultValue": -1,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"defaultValue": -1
 		},
 		"5": {
 			"label": "Value for Group 2 with 1 click on DOWN button",
 			"valueSize": 1,
 			"minValue": -1,
 			"maxValue": 99,
-			"defaultValue": 0,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"defaultValue": 0
 		},
 		"6": {
 			"label": "Value for Group 3 with 2 clicks on UP button",
 			"valueSize": 1,
 			"minValue": -1,
 			"maxValue": 99,
-			"defaultValue": -1,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"defaultValue": -1
 		},
 		"7": {
 			"label": "Value for Group 3 with 2 clicks on DOWN button",
 			"valueSize": 1,
 			"minValue": -1,
 			"maxValue": 99,
-			"defaultValue": 0,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"defaultValue": 0
 		},
 		"8": {
 			"label": "Value for Group 4 with 3 clicks on UP button",
 			"valueSize": 1,
 			"minValue": -1,
 			"maxValue": 99,
-			"defaultValue": -1,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"defaultValue": -1
 		},
 		"9": {
 			"label": "Value for Group 4 with 3 clicks on DOWN button",
 			"valueSize": 1,
 			"minValue": -1,
 			"maxValue": 99,
-			"defaultValue": 0,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"defaultValue": 0
 		},
 		"20": {
 			"label": "Calibration",
@@ -131,30 +103,21 @@
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 2,
-			"defaultValue": 0,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"defaultValue": 0
 		},
 		"21": {
 			"label": "Motor idle state definition",
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 3000,
-			"defaultValue": 1000,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"defaultValue": 1000
 		},
 		"22": {
 			"label": "Limit switch recognition",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 127,
-			"defaultValue": 30,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"defaultValue": 30
 		}
 	}
 }

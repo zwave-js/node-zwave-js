@@ -1,5 +1,3 @@
-// Popp & Co POPE700397
-// Popp Smart Outdoor Plug - IP44 rated
 {
 	"manufacturer": "Popp & Co",
 	"manufacturerId": "0x0154",
@@ -24,8 +22,6 @@
 			"minValue": 0,
 			"maxValue": 1,
 			"defaultValue": 1,
-			"readOnly": false,
-			"writeOnly": false,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -45,10 +41,7 @@
 			"minValue": 0,
 			"maxValue": 65535,
 			"defaultValue": 0,
-			"unsigned": true,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"unsigned": true
 		},
 		"3": {
 			"label": "Switching behavior",
@@ -57,8 +50,6 @@
 			"minValue": 0,
 			"maxValue": 3,
 			"defaultValue": 0,
-			"readOnly": false,
-			"writeOnly": false,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -86,8 +77,6 @@
 			"minValue": 0,
 			"maxValue": 1,
 			"defaultValue": 0,
-			"readOnly": false,
-			"writeOnly": false,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -106,8 +95,6 @@
 			"minValue": 0,
 			"maxValue": 1,
 			"defaultValue": 1,
-			"readOnly": false,
-			"writeOnly": false,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -126,8 +113,6 @@
 			"minValue": 0,
 			"maxValue": 2,
 			"defaultValue": 0,
-			"readOnly": false,
-			"writeOnly": false,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -150,8 +135,6 @@
 			"minValue": 0,
 			"maxValue": 2,
 			"defaultValue": 2,
-			"readOnly": false,
-			"writeOnly": false,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -174,10 +157,7 @@
 			"minValue": 0,
 			"maxValue": 250,
 			"defaultValue": 100,
-			"unsigned": true,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"unsigned": true
 		},
 		"24": {
 			"label": "Current Reporting Threshold",
@@ -185,10 +165,7 @@
 			"minValue": 0,
 			"maxValue": 255,
 			"defaultValue": 10,
-			"unsigned": true,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"unsigned": true
 		},
 		"25": {
 			"label": "Power Reporting Threshold",
@@ -196,20 +173,14 @@
 			"minValue": 0,
 			"maxValue": 255,
 			"defaultValue": 50,
-			"unsigned": true,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"unsigned": true
 		},
 		"26": {
 			"label": "Soft Circuit Breaker Threshold",
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 3600,
-			"defaultValue": 3600,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"defaultValue": 3600
 		},
 		"27": {
 			"label": "Soft Circuit Breaker Recovery Time",
@@ -217,10 +188,7 @@
 			"minValue": 0,
 			"maxValue": 255,
 			"defaultValue": 0,
-			"unsigned": true,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"unsigned": true
 		},
 		"28": {
 			"label": "Soft Circuit Breaker Delay Time",
@@ -228,10 +196,7 @@
 			"minValue": 0,
 			"maxValue": 255,
 			"defaultValue": 10,
-			"unsigned": true,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"unsigned": true
 		}
 	}
 }

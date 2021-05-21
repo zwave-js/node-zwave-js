@@ -1,5 +1,3 @@
-// Ecolink PIRZWAVE1
-// Z-Wave PIR Motion Sensor
 {
 	"manufacturer": "Ecolink",
 	"manufacturerId": "0x014a",
@@ -34,8 +32,6 @@
 			"minValue": 0,
 			"maxValue": 1,
 			"defaultValue": 0,
-			"readOnly": false,
-			"writeOnly": false,
 			"allowManualEntry": false,
 			"options": [
 				{

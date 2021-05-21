@@ -1,5 +1,3 @@
-// Vision Security ZW4101
-// Drapery controller (up/stop/down)
 {
 	"manufacturer": "Vision Security",
 	"manufacturerId": "0x0109",
@@ -23,10 +21,7 @@
 			"minValue": 1,
 			"maxValue": 255,
 			"defaultValue": 1,
-			"unsigned": true,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"unsigned": true
 		},
 		"2": {
 			"label": "Stop output time",
@@ -35,10 +30,7 @@
 			"minValue": 1,
 			"maxValue": 255,
 			"defaultValue": 1,
-			"unsigned": true,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"unsigned": true
 		},
 		"3": {
 			"label": "Down output time",
@@ -47,10 +39,7 @@
 			"minValue": 1,
 			"maxValue": 255,
 			"defaultValue": 1,
-			"unsigned": true,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"unsigned": true
 		}
 	}
 }

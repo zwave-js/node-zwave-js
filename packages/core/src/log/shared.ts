@@ -4,11 +4,9 @@ import type { Format, TransformableInfo, TransformFunction } from "logform";
 import * as path from "path";
 import { configs, MESSAGE } from "triple-beam";
 import winston, { Logger } from "winston";
+import DailyRotateFile from "winston-daily-rotate-file";
 import type Transport from "winston-transport";
-import type {
-	ConsoleTransportInstance,
-	FileTransportInstance,
-} from "winston/lib/winston/transports";
+import type { ConsoleTransportInstance } from "winston/lib/winston/transports";
 import { colorizer } from "./Colorizer";
 
 const { combine, timestamp, label } = winston.format;
@@ -108,7 +106,7 @@ function stringToNodeList(nodes?: string): number[] | undefined {
 }
 
 export class ZWaveLogContainer extends winston.Container {
-	private fileTransport: FileTransportInstance | undefined;
+	private fileTransport: DailyRotateFile | undefined;
 	private consoleTransport: ConsoleTransportInstance | undefined;
 	private loglevelVisibleCache = new Map<string, boolean>();
 
@@ -121,9 +119,9 @@ export class ZWaveLogContainer extends winston.Container {
 		filename: require.main
 			? path.join(
 					path.dirname(require.main.filename),
-					`zwave-${process.pid}.log`,
+					`zwavejs_%DATE%.log`,
 			  )
-			: path.join(__dirname, "../../..", `zwave-${process.pid}.log`),
+			: path.join(__dirname, "../../..", `zwave_%DATE%.log`),
 		forceConsole: false,
 	};
 
@@ -135,8 +133,11 @@ export class ZWaveLogContainer extends winston.Container {
 	public getLogger(label: string): ZWaveLogger {
 		if (!this.has(label)) {
 			this.add(label, {
-				transports: this.getConfiguredTransports(),
+				transports: this.getAllTransports(),
 				format: createLoggerFormat(label),
+				// Accept all logs, no matter what. The individual loggers take care
+				// of filtering the wrong loglevels
+				level: "silly",
 			});
 		}
 
@@ -145,8 +146,10 @@ export class ZWaveLogContainer extends winston.Container {
 
 	public updateConfiguration(config: DeepPartial<LogConfig>): void {
 		const changedLoggingTarget =
-			config.logToFile != undefined &&
-			config.logToFile !== this.logConfig.logToFile;
+			(config.logToFile != undefined &&
+				config.logToFile !== this.logConfig.logToFile) ||
+			(config.forceConsole != undefined &&
+				config.forceConsole !== this.logConfig.forceConsole);
 
 		if (typeof config.level === "number") {
 			config.level = loglevelFromNumber(config.level);
@@ -154,6 +157,12 @@ export class ZWaveLogContainer extends winston.Container {
 		const changedLogLevel =
 			config.level != undefined && config.level !== this.logConfig.level;
 
+		if (
+			config.filename != undefined &&
+			!config.filename.includes("%DATE%")
+		) {
+			config.filename += "_%DATE%.log";
+		}
 		const changedFilename =
 			config.filename != undefined &&
 			config.filename !== this.logConfig.filename;
@@ -165,24 +174,26 @@ export class ZWaveLogContainer extends winston.Container {
 			this.loglevelVisibleCache.clear();
 		}
 
-		// When the log target (console, file, filename) was changed, recreate the transport
+		// When the log target (console, file, filename) was changed, recreate the internal transports
 		// because at least the filename does not update dynamically
-		if (
-			(this.logConfig.transports as any) == undefined ||
+		// Also do this when configuring the logger for the first time
+		const recreateInternalTransports =
+			(this.fileTransport == undefined &&
+				this.consoleTransport == undefined) ||
 			changedLoggingTarget ||
-			changedFilename
-		) {
+			changedFilename;
+
+		if (recreateInternalTransports) {
 			this.fileTransport?.destroy();
 			this.fileTransport = undefined;
+			this.consoleTransport?.destroy();
+			this.consoleTransport = undefined;
+		}
 
-			this.logConfig.transports =
-				((config.transports as any) as Transport[] | undefined) ??
-				this.createLogTransports();
-
+		// When the internal transports or the custom transports were changed, we need to update the loggers
+		if (recreateInternalTransports || config.transports != undefined) {
 			this.loggers.forEach((logger) =>
-				logger.configure({
-					transports: this.logConfig.transports,
-				}),
+				logger.configure({ transports: this.getAllTransports() }),
 			);
 		}
 	}
@@ -191,16 +202,18 @@ export class ZWaveLogContainer extends winston.Container {
 		return this.logConfig;
 	}
 
-	public getConfiguredTransports(): Transport[] {
-		return this.logConfig.transports;
-	}
-
 	/** Tests whether a log using the given loglevel will be logged */
 	public isLoglevelVisible(loglevel: string): boolean {
-		// If we are not connected to a TTY, not unit testing and not logging to a file, we won't see anything
-		if (isUnitTest) return true;
-		if (!isTTY && !this.logConfig.logToFile && !this.logConfig.forceConsole)
+		// If we are not connected to a TTY, not logging to a file and don't have any custom transports, we won't see anything
+		if (
+			!this.fileTransport &&
+			!this.consoleTransport &&
+			// wotan-disable-next-line no-useless-predicate
+			(!this.logConfig.transports ||
+				this.logConfig.transports.length === 0)
+		) {
 			return false;
+		}
 
 		if (!this.loglevelVisibleCache.has(loglevel)) {
 			this.loglevelVisibleCache.set(
@@ -222,16 +235,21 @@ export class ZWaveLogContainer extends winston.Container {
 		this.logConfig.transports = [];
 	}
 
-	private createLogTransports(): Transport[] {
+	private getAllTransports(): Transport[] {
+		return [
+			...this.getInternalTransports(),
+			...(this.logConfig.transports ?? []),
+		];
+	}
+
+	private getInternalTransports(): Transport[] {
 		const ret: Transport[] = [];
 		if (this.logConfig.enabled && this.logConfig.logToFile) {
 			if (!this.fileTransport) {
-				console.log(`Logging to file:
-	${this.logConfig.filename}`);
 				this.fileTransport = this.createFileTransport();
 			}
 			ret.push(this.fileTransport);
-		} else {
+		} else if (!isUnitTest && (isTTY || this.logConfig.forceConsole)) {
 			if (!this.consoleTransport) {
 				this.consoleTransport = this.createConsoleTransport();
 			}
@@ -243,7 +261,6 @@ export class ZWaveLogContainer extends winston.Container {
 
 	private createConsoleTransport(): ConsoleTransportInstance {
 		return new winston.transports.Console({
-			level: getTransportLoglevel(),
 			format: createDefaultTransportFormat(
 				// Only colorize the output if logging to a TTY, otherwise we'll get
 				// ansi color codes in logfiles or redirected shells
@@ -263,13 +280,20 @@ export class ZWaveLogContainer extends winston.Container {
 		return !this.logConfig.enabled;
 	}
 
-	private createFileTransport(): FileTransportInstance {
-		return new winston.transports.File({
+	private createFileTransport(): DailyRotateFile {
+		const ret = new DailyRotateFile({
 			filename: this.logConfig.filename,
-			level: getTransportLoglevel(),
+			datePattern: "YYYY-MM-DD",
+			zippedArchive: true,
+			maxFiles: "7d",
 			format: createDefaultTransportFormat(false, false),
 			silent: this.isFileTransportSilent(),
 		});
+		ret.on("new", (newFilename: string) => {
+			console.log(`Logging to file:
+	${newFilename}`);
+		});
+		return ret;
 	}
 
 	/**

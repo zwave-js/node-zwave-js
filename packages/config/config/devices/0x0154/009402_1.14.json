@@ -1,5 +1,3 @@
-// Popp & Co 009402
-// 10 Year Smoke Detector
 {
 	"manufacturer": "Popp & Co",
 	"manufacturerId": "0x0154",
@@ -23,50 +21,35 @@
 			"minValue": 3,
 			"maxValue": 129,
 			"defaultValue": 10,
-			"unsigned": true,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"unsigned": true
 		},
 		"2": {
 			"label": "Siren alarm tone length",
 			"valueSize": 1,
 			"minValue": 1,
 			"maxValue": 99,
-			"defaultValue": 8,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"defaultValue": 8
 		},
 		"3": {
 			"label": "Value of On-Command",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 99,
-			"defaultValue": 99,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"defaultValue": 99
 		},
 		"4": {
 			"label": "Value of Off-Command",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 99,
-			"defaultValue": 99,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"defaultValue": 99
 		},
 		"10": {
 			"label": "Auto Report Battery Time",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 127,
-			"defaultValue": 127,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"defaultValue": 127
 		}
 	}
 }

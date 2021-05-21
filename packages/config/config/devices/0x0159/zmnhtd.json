@@ -1,5 +1,3 @@
-// Qubino ZMNHTD
-// Smart Meter
 {
 	"manufacturer": "Qubino",
 	"manufacturerId": "0x0159",
@@ -24,8 +22,6 @@
 			"minValue": 0,
 			"maxValue": 5,
 			"defaultValue": 4,
-			"readOnly": false,
-			"writeOnly": false,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -57,9 +53,6 @@
 			"minValue": 0,
 			"maxValue": 32535,
 			"defaultValue": 0,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true,
 			"options": [
 				{
 					"label": "Disabled",
@@ -73,10 +66,7 @@
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 32535,
-			"defaultValue": 0,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"defaultValue": 0
 		},
 		"13": {
 			"label": "Timer turning off External relay output",
@@ -84,20 +74,14 @@
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 32535,
-			"defaultValue": 0,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"defaultValue": 0
 		},
 		"14": {
 			"label": "Timer turning on External relay after output",
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 32535,
-			"defaultValue": 0,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"defaultValue": 0
 		},
 		"40": {
 			"label": "Power reporting (Watts) on power change",
@@ -105,10 +89,7 @@
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 100,
-			"defaultValue": 10,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"defaultValue": 10
 		},
 		"42": {
 			"label": "Power reporting (Watts) by time interval",
@@ -116,10 +97,7 @@
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 32535,
-			"defaultValue": 0,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"defaultValue": 0
 		},
 		"45": {
 			"label": "Reset Power counters",
@@ -127,8 +105,6 @@
 			"minValue": 0,
 			"maxValue": 15,
 			"defaultValue": 0,
-			"readOnly": false,
-			"writeOnly": false,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -159,8 +135,6 @@
 			"minValue": 0,
 			"maxValue": 3,
 			"defaultValue": 0,
-			"readOnly": false,
-			"writeOnly": false,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -187,9 +161,6 @@
 			"minValue": 0,
 			"maxValue": 15000,
 			"defaultValue": 0,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true,
 			"options": [
 				{
 					"label": "No function",
@@ -207,10 +178,7 @@
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 32525,
-			"defaultValue": 30,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"defaultValue": 30
 		},
 		"112": {
 			"label": "Relay to power off",
@@ -218,8 +186,6 @@
 			"minValue": 0,
 			"maxValue": 3,
 			"defaultValue": 0,
-			"readOnly": false,
-			"writeOnly": false,
 			"allowManualEntry": false,
 			"options": [
 				{

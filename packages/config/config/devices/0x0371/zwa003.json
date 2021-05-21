@@ -1,0 +1,57 @@
+{
+	"manufacturer": "Aeotec Ltd.",
+	"manufacturerId": "0x0371",
+	"label": "ZWA003",
+	"description": "NanoMote Quad",
+	"devices": [
+		{
+			"productType": "0x0002",
+			"productId": "0x0003",
+			"zwaveAllianceId": 2820
+		},
+		{
+			"productType": "0x0102",
+			"productId": "0x0003",
+			"zwaveAllianceId": 2817
+		},
+		{
+			"productType": "0x1c02",
+			"productId": "0x0003",
+			"zwaveAllianceId": 3247
+		},
+		{
+			"productType": "0x0902",
+			"productId": "0x0003",
+			"zwaveAllianceId": 3268
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"paramInformation": {
+		"32": {
+			"$import": "../0x0086/templates/aeotec_template.json#low_battery_threshold",
+			"label": "Level of Low Battery",
+			"defaultValue": 20
+		},
+		"41": {
+			"$import": "../templates/master_template.json#base_enable_disable",
+			"label": "Central Scene Notifications",
+			"defaultValue": 1
+		},
+		"42": {
+			"$import": "../templates/master_template.json#base_0-255_nounit",
+			"label": "Multilevel Command Duration",
+			"defaultValue": 255
+		},
+		"43": {
+			"$import": "../templates/master_template.json#base_enable_disable",
+			"label": "Low Battery Buzzer"
+		}
+	},
+	"metadata": {
+		"reset": "Pressing and holding a button for 20 seconds. Release the button after 20 seconds, LED will keep in yellow for 3 seconds. Scene Controller will be reset to factory defaults if you short press the button within this 3 seconds.\nPlease use this procedure only when the network primary controller is missing or otherwise inoperable",
+		"manual": "https://products.z-wavealliance.org/ProductManual/File?folder=&filename=MarketCertificationFiles/2817/NanoMote%20Quad%20USER%20MANUAL%20.pdf"
+	}
+}

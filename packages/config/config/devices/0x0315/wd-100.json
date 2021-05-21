@@ -1,5 +1,3 @@
-// zwaveproducts.com WD-100
-// In-Wall Dimmer
 {
 	"manufacturer": "zwaveproducts.com",
 	"manufacturerId": "0x0315",
@@ -25,8 +23,6 @@
 			"maxValue": 255,
 			"defaultValue": 0,
 			"unsigned": true,
-			"readOnly": false,
-			"writeOnly": false,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -40,50 +36,39 @@
 			]
 		},
 		"7": {
-			"label": "Remote dim level increment",
+			"label": "Remote Dim Level Increment",
 			"description": "Number of dim levels to change for each dim step when remotely commanded",
 			"valueSize": 1,
 			"minValue": 1,
 			"maxValue": 99,
-			"defaultValue": 1,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"defaultValue": 1
 		},
 		"8": {
-			"label": "Remote dim step duration",
+			"label": "Remote Dim Step Duration",
 			"description": "Interval between dimming steps when remotely commanded",
-			"unit": "10ms",
+			"unit": "10 ms",
+			"valueSize": 2,
+			"minValue": 1,
+			"maxValue": 255,
+			"defaultValue": 3
+		},
+		"9": {
+			"label": "Dim Level Increment",
+			"description": "Indicates the number of levels to change dimming each step",
+			"valueSize": 1,
+			"minValue": 1,
+			"maxValue": 99,
+			"defaultValue": 1,
+			"unsigned": true
+		},
+		"10": {
+			"label": "Step Duration",
+			"description": "Interval between dimming steps",
 			"valueSize": 2,
 			"minValue": 1,
 			"maxValue": 255,
 			"defaultValue": 3,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
-		},
-		"9": {
-			"label": "Dim Level Increment",
-			"description": "Indicates the number of levels (1-99) to change dimming each step",
-			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 255,
-			"defaultValue": 1,
-			"unsigned": true,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
-		},
-		"10": {
-			"label": "Step Duration",
-			"description": "The number of tens of milliseconds (1-255) to delay on each dimming step.",
-			"valueSize": 2,
-			"minValue": 0,
-			"maxValue": 255,
-			"defaultValue": 3,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"unit": "10 ms"
 		}
 	}
 }

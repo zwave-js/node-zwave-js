@@ -1,5 +1,3 @@
-// Remotec ZTS-500
-// Thermostat
 {
 	"manufacturer": "Remotec",
 	"manufacturerId": "0x5254",
@@ -28,8 +26,6 @@
 			"minValue": 0,
 			"maxValue": 1,
 			"defaultValue": 1,
-			"readOnly": false,
-			"writeOnly": false,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -50,8 +46,6 @@
 			"minValue": 1,
 			"maxValue": 4,
 			"defaultValue": 2,
-			"readOnly": false,
-			"writeOnly": false,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -80,8 +74,6 @@
 			"minValue": 1,
 			"maxValue": 4,
 			"defaultValue": 2,
-			"readOnly": false,
-			"writeOnly": false,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -109,10 +101,7 @@
 			"valueSize": 1,
 			"minValue": 3,
 			"maxValue": 6,
-			"defaultValue": 4,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"defaultValue": 4
 		},
 		"10": {
 			"label": "Temp. Sensor Calibration",
@@ -121,10 +110,7 @@
 			"valueSize": 1,
 			"minValue": -10,
 			"maxValue": 10,
-			"defaultValue": 0,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"defaultValue": 0
 		}
 	}
 }

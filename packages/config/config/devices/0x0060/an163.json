@@ -1,5 +1,3 @@
-// Everspring AN163
-// Metering Power Switch
 {
 	"manufacturer": "Everspring",
 	"manufacturerId": "0x0060",
@@ -37,10 +35,7 @@
 			"unit": "100ms",
 			"minValue": 0,
 			"maxValue": 120,
-			"defaultValue": 10,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"defaultValue": 10
 		},
 		"2": {
 			"label": "Send Basic Command to Group 2",
@@ -49,8 +44,6 @@
 			"minValue": 0,
 			"maxValue": 1,
 			"defaultValue": 0,
-			"readOnly": false,
-			"writeOnly": false,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -70,10 +63,7 @@
 			"unit": "10s",
 			"minValue": 0,
 			"maxValue": 3240,
-			"defaultValue": 3,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"defaultValue": 3
 		},
 		"4": {
 			"label": "Meter Report Period (kWh)",
@@ -82,10 +72,7 @@
 			"unit": "minutes",
 			"minValue": 0,
 			"maxValue": 10080,
-			"defaultValue": 1440,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"defaultValue": 1440
 		}
 	}
 }

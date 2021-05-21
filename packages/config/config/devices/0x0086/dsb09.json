@@ -1,5 +1,3 @@
-// AEON Labs DSB09
-// Home Energy Meter
 {
 	"manufacturer": "AEON Labs",
 	"manufacturerId": "0x0086",
@@ -18,908 +16,197 @@
 	},
 	"associations": {
 		"1": {
-			"label": "Report group 1",
+			"label": "Lifeline",
 			"maxNodes": 5,
 			"isLifeline": true
 		},
 		"2": {
-			"label": "Report group 2",
+			"label": "Group 2",
 			"maxNodes": 5,
 			"isLifeline": true
 		},
 		"3": {
-			"label": "Report group 3",
+			"label": "Group 3",
 			"maxNodes": 5,
 			"isLifeline": true
 		}
 	},
 	"paramInformation": {
 		"1": {
-			"label": "Voltage",
-			"description": "Voltage to calculate wattage from amperage.",
+			"label": "Operating Voltage",
 			"valueSize": 2,
-			"unit": "V",
-			"minValue": 0,
-			"maxValue": 32000,
+			"minValue": 120,
+			"maxValue": 240,
 			"defaultValue": 240,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "120 V",
+					"value": 120
+				},
+				{
+					"label": "240 V",
+					"value": 240
+				}
+			]
+		},
+		"3": {
+			"$import": "templates/aeotec_template.json#selective_reporting",
+			"label": "Selective Reporting"
 		},
 		"4": {
-			"label": "Current Threshold - Whole HEM",
-			"description": "Threshold change in wattage to induce an automatic report (Whole HEM).",
-			"valueSize": 2,
-			"unit": "W",
-			"minValue": 0,
-			"maxValue": 60000,
-			"defaultValue": 50,
-			"unsigned": true,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"$import": "templates/aeotec_template.json#power_threshold_wholehem"
 		},
 		"5": {
-			"label": "Current Threshold - Clamp 1",
-			"description": "Threshold change in wattage to induce an automatic report (Clamp 1)",
-			"valueSize": 2,
-			"unit": "W",
-			"minValue": 0,
-			"maxValue": 60000,
-			"defaultValue": 50,
-			"unsigned": true,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"$import": "templates/aeotec_template.json#power_threshold_clamp1"
 		},
 		"6": {
-			"label": "Current Threshold - Clamp 2",
-			"description": "Threshold change in wattage to induce an automatic report (Clamp 2)",
-			"valueSize": 2,
-			"unit": "W",
-			"minValue": 0,
-			"maxValue": 60000,
-			"defaultValue": 50,
-			"unsigned": true,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"$import": "templates/aeotec_template.json#power_threshold_clamp2"
 		},
 		"7": {
-			"label": "Current Threshold - Clamp 3",
-			"description": "Threshold change in wattage to induce an automatic report (Clamp 3)",
-			"valueSize": 2,
-			"unit": "W",
-			"minValue": 0,
-			"maxValue": 60000,
-			"defaultValue": 50,
-			"unsigned": true,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"$import": "templates/aeotec_template.json#power_threshold_clamp3"
 		},
 		"8": {
-			"label": "Percent Change - Whole HEM",
-			"description": "Percentage change in wattage to induce an automatic report (Whole HEM)",
-			"valueSize": 1,
-			"unit": "%",
-			"minValue": 0,
-			"maxValue": 100,
-			"defaultValue": 50,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"$import": "templates/aeotec_template.json#percent_threshold_wholehem"
 		},
 		"9": {
-			"label": "Percent Change - Clamp 1",
-			"description": "Percentage change in wattage to induce an automatic report (Clamp 1)",
-			"valueSize": 1,
-			"unit": "%",
-			"minValue": 0,
-			"maxValue": 100,
-			"defaultValue": 50,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"$import": "templates/aeotec_template.json#percent_threshold_clamp1"
 		},
 		"10": {
-			"label": "Percent Change - Clamp 2",
-			"description": "Percentage change in wattage to induce an automatic report (Clamp 2)",
-			"valueSize": 1,
-			"unit": "%",
-			"minValue": 0,
-			"maxValue": 100,
-			"defaultValue": 50,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"$import": "templates/aeotec_template.json#percent_threshold_clamp2"
 		},
 		"11": {
-			"label": "Percent Change - Clamp 3",
-			"description": "Percentage change in wattage to induce an automatic report (Clamp 3)",
-			"valueSize": 1,
-			"unit": "%",
-			"minValue": 0,
-			"maxValue": 100,
-			"defaultValue": 50,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"$import": "templates/aeotec_template.json#percent_threshold_clamp3"
 		},
 		"100": {
-			"label": "Set parameters 101-103 to default values",
-			"valueSize": 4,
-			"minValue": 0,
-			"maxValue": 1,
-			"defaultValue": 0,
-			"readOnly": false,
-			"writeOnly": true,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "No change",
-					"value": 0
-				},
-				{
-					"label": "Reset",
-					"value": 1
-				}
-			]
-		},
-		"110": {
-			"label": "Set parameters 111-113 to default values",
-			"valueSize": 4,
-			"minValue": 0,
-			"maxValue": 1,
-			"defaultValue": 0,
-			"readOnly": false,
-			"writeOnly": true,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "No change",
-					"value": 0
-				},
-				{
-					"label": "Reset",
-					"value": 1
-				}
-			]
-		},
-		"111": {
-			"label": "Interval to send Report Group 1",
-			"valueSize": 4,
-			"unit": "seconds",
-			"minValue": 1,
-			"maxValue": 2678400,
-			"defaultValue": 720,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
-		},
-		"112": {
-			"label": "Interval to send Report Group 2",
-			"valueSize": 4,
-			"unit": "seconds",
-			"minValue": 1,
-			"maxValue": 2678400,
-			"defaultValue": 720,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
-		},
-		"113": {
-			"label": "Interval to send Report Group 3",
-			"valueSize": 4,
-			"unit": "seconds",
-			"minValue": 1,
-			"maxValue": 2678400,
-			"defaultValue": 720,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
-		},
-		"255": {
-			"label": "Reset to Factory",
-			"description": "Reset all settings to factory defaults",
-			"valueSize": 4,
-			"minValue": 0,
-			"maxValue": 1,
-			"defaultValue": 0,
-			"readOnly": false,
-			"writeOnly": true,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "Do nothing",
-					"value": 0
-				},
-				{
-					"label": "Reset to factory defaults",
-					"value": 1
-				}
-			]
-		},
-		"3[0x01]": {
-			"label": "Selective Reporting: Whole HEM",
-			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 1,
-			"defaultValue": 0,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "Disable",
-					"value": 0
-				},
-				{
-					"label": "Enable",
-					"value": 1
-				}
-			]
-		},
-		"3[0x02]": {
-			"label": "Selective Reporting: Clamp 1",
-			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 1,
-			"defaultValue": 0,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "Disable",
-					"value": 0
-				},
-				{
-					"label": "Enable",
-					"value": 1
-				}
-			]
-		},
-		"3[0x04]": {
-			"label": "Selective Reporting: Clamp 2",
-			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 1,
-			"defaultValue": 0,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "Disable",
-					"value": 0
-				},
-				{
-					"label": "Enable",
-					"value": 1
-				}
-			]
-		},
-		"3[0x08]": {
-			"label": "Selective Reporting: Clamp 3",
-			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 1,
-			"defaultValue": 0,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "Disable",
-					"value": 0
-				},
-				{
-					"label": "Enable",
-					"value": 1
-				}
-			]
+			"$import": "templates/aeotec_template.json#reset_parameters",
+			"label": "Reset parameters 101-103 to Default Values",
+			"valueSize": 4
 		},
 		"101[0x01]": {
-			"label": "Report Group 1: Battery Report",
-			"valueSize": 4,
-			"minValue": 0,
-			"maxValue": 1,
-			"defaultValue": 0,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "Disable",
-					"value": 0
-				},
-				{
-					"label": "Enable",
-					"value": 1
-				}
-			]
+			"$import": "../templates/master_template.json#base_enable_disable",
+			"label": "Automatic Report: Group 1 - Battery Report",
+			"valueSize": 4
 		},
 		"101[0x02]": {
-			"label": "Group 1: MultiSensor Report for Watt (whole HEM)",
-			"valueSize": 4,
-			"minValue": 0,
-			"maxValue": 1,
-			"defaultValue": 0,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "Disable",
-					"value": 0
-				},
-				{
-					"label": "Enable",
-					"value": 1
-				}
-			]
+			"$import": "../templates/master_template.json#base_enable_disable",
+			"label": "Automatic Report: Group 1 - MultiSensor Wattage (Whole HEM)",
+			"valueSize": 4
 		},
 		"101[0x04]": {
-			"label": "Group 1: Meter Report for Watt (whole device)",
-			"valueSize": 4,
-			"minValue": 0,
-			"maxValue": 1,
-			"defaultValue": 0,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "Disable",
-					"value": 0
-				},
-				{
-					"label": "Enable",
-					"value": 1
-				}
-			]
+			"$import": "templates/aeotec_template.json#auto_report_group1_watt_wholehem"
 		},
 		"101[0x08]": {
-			"label": "Group 1: Meter Report for kWh (whole HEM)",
-			"valueSize": 4,
-			"minValue": 0,
-			"maxValue": 1,
-			"defaultValue": 0,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "Disable",
-					"value": 0
-				},
-				{
-					"label": "Enable",
-					"value": 1
-				}
-			]
+			"$import": "templates/aeotec_template.json#auto_report_group1_kwh_wholehem"
 		},
 		"101[0x0100]": {
-			"label": "Group 1: Meter Report for Watt (clamp 1)",
-			"valueSize": 4,
-			"minValue": 0,
-			"maxValue": 1,
-			"defaultValue": 0,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "Disable",
-					"value": 0
-				},
-				{
-					"label": "Enable",
-					"value": 1
-				}
-			]
+			"$import": "templates/aeotec_template.json#auto_report_group1_watt_clamp1"
 		},
 		"101[0x0200]": {
-			"label": "Group 1: Meter Report for Watt (clamp 2)",
-			"valueSize": 4,
-			"minValue": 0,
-			"maxValue": 1,
-			"defaultValue": 0,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "Disable",
-					"value": 0
-				},
-				{
-					"label": "Enable",
-					"value": 1
-				}
-			]
+			"$import": "templates/aeotec_template.json#auto_report_group1_watt_clamp2"
 		},
 		"101[0x0400]": {
-			"label": "Report Group 1: Meter Report for Watt (clamp 3)",
-			"valueSize": 4,
-			"minValue": 0,
-			"maxValue": 1,
-			"defaultValue": 0,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "Disable",
-					"value": 0
-				},
-				{
-					"label": "Enable",
-					"value": 1
-				}
-			]
+			"$import": "templates/aeotec_template.json#auto_report_group1_watt_clamp3"
 		},
 		"101[0x0800]": {
-			"label": "Report Group 1: Meter Report for kWh (clamp 1)",
-			"valueSize": 4,
-			"minValue": 0,
-			"maxValue": 1,
-			"defaultValue": 0,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "Disable",
-					"value": 0
-				},
-				{
-					"label": "Enable",
-					"value": 1
-				}
-			]
+			"$import": "templates/aeotec_template.json#auto_report_group1_kwh_clamp1"
 		},
 		"101[0x1000]": {
-			"label": "Report Group 1: Meter Report for kWh (clamp 2)",
-			"valueSize": 4,
-			"minValue": 0,
-			"maxValue": 1,
-			"defaultValue": 0,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "Disable",
-					"value": 0
-				},
-				{
-					"label": "Enable",
-					"value": 1
-				}
-			]
+			"$import": "templates/aeotec_template.json#auto_report_group1_kwh_clamp2"
 		},
 		"101[0x2000]": {
-			"label": "Report Group 1: Meter Report for kWh (clamp 3)",
-			"valueSize": 4,
-			"minValue": 0,
-			"maxValue": 1,
-			"defaultValue": 0,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "Disable",
-					"value": 0
-				},
-				{
-					"label": "Enable",
-					"value": 1
-				}
-			]
+			"$import": "templates/aeotec_template.json#auto_report_group1_kwh_clamp3"
 		},
 		"102[0x01]": {
-			"label": "Report Group 2: Battery Report",
-			"valueSize": 4,
-			"minValue": 0,
-			"maxValue": 1,
-			"defaultValue": 0,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "Disable",
-					"value": 0
-				},
-				{
-					"label": "Enable",
-					"value": 1
-				}
-			]
+			"$import": "../templates/master_template.json#base_enable_disable",
+			"label": "Automatic Report: Group 2 - Battery Report",
+			"valueSize": 4
 		},
 		"102[0x02]": {
-			"label": "Group 2: MultiSensor Report for Watt (whole HEM)",
-			"valueSize": 4,
-			"minValue": 0,
-			"maxValue": 1,
-			"defaultValue": 0,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "Disable",
-					"value": 0
-				},
-				{
-					"label": "Enable",
-					"value": 1
-				}
-			]
+			"$import": "../templates/master_template.json#base_enable_disable",
+			"label": "Automatic Report: Group 2 - MultiSensor Wattage (Whole HEM)",
+			"valueSize": 4
 		},
 		"102[0x04]": {
-			"label": "Group 2: Meter Report for Watt (whole device)",
-			"valueSize": 4,
-			"minValue": 0,
-			"maxValue": 1,
-			"defaultValue": 0,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "Disable",
-					"value": 0
-				},
-				{
-					"label": "Enable",
-					"value": 1
-				}
-			]
+			"$import": "templates/aeotec_template.json#auto_report_group2_watt_wholehem"
 		},
 		"102[0x08]": {
-			"label": "Group 2: Meter Report for kWh (whole HEM)",
-			"valueSize": 4,
-			"minValue": 0,
-			"maxValue": 1,
-			"defaultValue": 0,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "Disable",
-					"value": 0
-				},
-				{
-					"label": "Enable",
-					"value": 1
-				}
-			]
+			"$import": "templates/aeotec_template.json#auto_report_group2_kwh_wholehem"
 		},
 		"102[0x0100]": {
-			"label": "Report Group 2: Meter Report for Watt (clamp 1)",
-			"valueSize": 4,
-			"minValue": 0,
-			"maxValue": 1,
-			"defaultValue": 0,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "Disable",
-					"value": 0
-				},
-				{
-					"label": "Enable",
-					"value": 1
-				}
-			]
+			"$import": "templates/aeotec_template.json#auto_report_group2_watt_clamp1"
 		},
 		"102[0x0200]": {
-			"label": "Report Group 2: Meter Report for Watt (clamp 2)",
-			"valueSize": 4,
-			"minValue": 0,
-			"maxValue": 1,
-			"defaultValue": 0,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "Disable",
-					"value": 0
-				},
-				{
-					"label": "Enable",
-					"value": 1
-				}
-			]
+			"$import": "templates/aeotec_template.json#auto_report_group2_watt_clamp2"
 		},
 		"102[0x0400]": {
-			"label": "Report Group 2: Meter Report for Watt (clamp 3)",
-			"valueSize": 4,
-			"minValue": 0,
-			"maxValue": 1,
-			"defaultValue": 0,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "Disable",
-					"value": 0
-				},
-				{
-					"label": "Enable",
-					"value": 1
-				}
-			]
+			"$import": "templates/aeotec_template.json#auto_report_group2_watt_clamp3"
 		},
 		"102[0x0800]": {
-			"label": "Report Group 2: Meter Report for kWh (clamp 1)",
-			"valueSize": 4,
-			"minValue": 0,
-			"maxValue": 1,
-			"defaultValue": 0,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "Disable",
-					"value": 0
-				},
-				{
-					"label": "Enable",
-					"value": 1
-				}
-			]
+			"$import": "templates/aeotec_template.json#auto_report_group2_kwh_clamp1"
 		},
 		"102[0x1000]": {
-			"label": "Report Group 2: Meter Report for kWh (clamp 2)",
-			"valueSize": 4,
-			"minValue": 0,
-			"maxValue": 1,
-			"defaultValue": 0,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "Disable",
-					"value": 0
-				},
-				{
-					"label": "Enable",
-					"value": 1
-				}
-			]
+			"$import": "templates/aeotec_template.json#auto_report_group2_kwh_clamp2"
 		},
 		"102[0x2000]": {
-			"label": "Report Group 2: Meter Report for kWh (clamp 3)",
-			"valueSize": 4,
-			"minValue": 0,
-			"maxValue": 1,
-			"defaultValue": 0,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "Disable",
-					"value": 0
-				},
-				{
-					"label": "Enable",
-					"value": 1
-				}
-			]
+			"$import": "templates/aeotec_template.json#auto_report_group2_kwh_clamp3"
 		},
 		"103[0x01]": {
-			"label": "Report Group 3: Battery Report",
-			"valueSize": 4,
-			"minValue": 0,
-			"maxValue": 1,
-			"defaultValue": 0,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "Disable",
-					"value": 0
-				},
-				{
-					"label": "Enable",
-					"value": 1
-				}
-			]
+			"$import": "../templates/master_template.json#base_enable_disable",
+			"label": "Automatic Report: Group 3 - Battery Report",
+			"valueSize": 4
 		},
 		"103[0x02]": {
-			"label": "Group 3: MultiSensor Report for Watt (whole HEM)",
-			"valueSize": 4,
-			"minValue": 0,
-			"maxValue": 1,
-			"defaultValue": 0,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "Disable",
-					"value": 0
-				},
-				{
-					"label": "Enable",
-					"value": 1
-				}
-			]
+			"$import": "../templates/master_template.json#base_enable_disable",
+			"label": "Automatic Report: Group 3 - MultiSensor Wattage (Whole HEM)",
+			"valueSize": 4
 		},
 		"103[0x04]": {
-			"label": "Group 3: Meter Report for Watt (whole device)",
-			"valueSize": 4,
-			"minValue": 0,
-			"maxValue": 1,
-			"defaultValue": 0,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "Disable",
-					"value": 0
-				},
-				{
-					"label": "Enable",
-					"value": 1
-				}
-			]
+			"$import": "templates/aeotec_template.json#auto_report_group3_watt_wholehem"
 		},
 		"103[0x08]": {
-			"label": "Report Group 3: Meter Report for kWh (whole HEM)",
-			"valueSize": 4,
-			"minValue": 0,
-			"maxValue": 1,
-			"defaultValue": 0,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "Disable",
-					"value": 0
-				},
-				{
-					"label": "Enable",
-					"value": 1
-				}
-			]
+			"$import": "templates/aeotec_template.json#auto_report_group3_kwh_wholehem"
 		},
 		"103[0x0100]": {
-			"label": "Report Group 3: Meter Report for Watt (clamp 1)",
-			"valueSize": 4,
-			"minValue": 0,
-			"maxValue": 1,
-			"defaultValue": 0,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "Disable",
-					"value": 0
-				},
-				{
-					"label": "Enable",
-					"value": 1
-				}
-			]
+			"$import": "templates/aeotec_template.json#auto_report_group3_watt_clamp1"
 		},
 		"103[0x0200]": {
-			"label": "Report Group 3: Meter Report for Watt (clamp 2)",
-			"valueSize": 4,
-			"unit": "W",
-			"minValue": 0,
-			"maxValue": 1,
-			"defaultValue": 0,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "Disable",
-					"value": 0
-				},
-				{
-					"label": "Enable",
-					"value": 1
-				}
-			]
+			"$import": "templates/aeotec_template.json#auto_report_group3_watt_clamp2"
 		},
 		"103[0x0400]": {
-			"label": "Report Group 3: Meter Report for Watt (clamp 3)",
-			"valueSize": 4,
-			"minValue": 0,
-			"maxValue": 1,
-			"defaultValue": 0,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "Disable",
-					"value": 0
-				},
-				{
-					"label": "Enable",
-					"value": 1
-				}
-			]
+			"$import": "templates/aeotec_template.json#auto_report_group3_watt_clamp3"
 		},
 		"103[0x0800]": {
-			"label": "Report Group 3: Meter Report for kWh (clamp 1)",
-			"valueSize": 4,
-			"minValue": 0,
-			"maxValue": 1,
-			"defaultValue": 0,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "Disable",
-					"value": 0
-				},
-				{
-					"label": "Enable",
-					"value": 1
-				}
-			]
+			"$import": "templates/aeotec_template.json#auto_report_group3_kwh_clamp1"
 		},
 		"103[0x1000]": {
-			"label": "Report Group 3: Meter Report for kWh (clamp 2)",
-			"valueSize": 4,
-			"minValue": 0,
-			"maxValue": 1,
-			"defaultValue": 0,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "Disable",
-					"value": 0
-				},
-				{
-					"label": "Enable",
-					"value": 1
-				}
-			]
+			"$import": "templates/aeotec_template.json#auto_report_group3_kwh_clamp2"
 		},
 		"103[0x2000]": {
-			"label": "Report Group 3: Meter Report for kWh (clamp 3)",
-			"valueSize": 4,
-			"minValue": 0,
-			"maxValue": 1,
-			"defaultValue": 0,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "Disable",
-					"value": 0
-				},
-				{
-					"label": "Enable",
-					"value": 1
-				}
-			]
+			"$import": "templates/aeotec_template.json#auto_report_group3_kwh_clamp3"
+		},
+		"110": {
+			"$import": "templates/aeotec_template.json#reset_parameters",
+			"label": "Reset Parameters 111-113 to Default Values",
+			"valueSize": 4
+		},
+		"111": {
+			"$import": "templates/aeotec_template.json#report_interval",
+			"label": "Report Interval (Group 1)",
+			"maxValue": 167400
+		},
+		"112": {
+			"$import": "templates/aeotec_template.json#report_interval",
+			"label": "Report Interval (Group 2)",
+			"maxValue": 167400
+		},
+		"113": {
+			"$import": "templates/aeotec_template.json#report_interval",
+			"label": "Report Interval (Group 3)",
+			"maxValue": 167400
+		},
+		"255": {
+			"$import": "templates/aeotec_template.json#factory_reset"
 		}
 	}
 }

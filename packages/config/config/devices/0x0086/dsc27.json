@@ -1,5 +1,3 @@
-// AEON Labs DSC27
-// Micro Illuminator G2
 {
 	"manufacturer": "AEON Labs",
 	"manufacturerId": "0x0086",
@@ -18,63 +16,17 @@
 	},
 	"associations": {
 		"1": {
-			"label": "Target for automatic reports",
+			"label": "Lifeline",
 			"maxNodes": 5,
 			"isLifeline": true
 		}
 	},
 	"paramInformation": {
 		"80": {
-			"label": "Notification on Status Change",
-			"description": "Send notification to Group 1 when the load has changed",
-			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 2,
-			"defaultValue": 0,
-			"unsigned": true,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "Deactivate",
-					"value": 0
-				},
-				{
-					"label": "Hail CC Sent",
-					"value": 1
-				},
-				{
-					"label": "Basic CC Report Sent",
-					"value": 2
-				}
-			]
+			"$import": "templates/aeotec_template.json#enable_notifications"
 		},
 		"120": {
-			"label": "Turn External Button Mode",
-			"description": "Parameter to set External button type",
-			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 2,
-			"defaultValue": 255,
-			"unsigned": true,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "Momentary Button Mode",
-					"value": 0
-				},
-				{
-					"label": "2 State Switch Mode",
-					"value": 1
-				},
-				{
-					"label": "3 Way Switch Mode",
-					"value": 2
-				}
-			]
+			"$import": "templates/aeotec_template.json#external_switch_3way"
 		}
 	}
 }

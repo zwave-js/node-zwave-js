@@ -1,5 +1,3 @@
-// Radio Thermostat Company of America (RTC) CT101
-// Z-Wave Thermostat
 {
 	"manufacturer": "Radio Thermostat Company of America (RTC)",
 	"manufacturerId": "0x0098",
@@ -30,7 +28,7 @@
 	},
 	"associations": {
 		"1": {
-			"label": "Group 1",
+			"label": "Lifeline",
 			"maxNodes": 2,
 			"isLifeline": true
 		}
@@ -38,121 +36,295 @@
 	"paramInformation": {
 		"1": {
 			"label": "Temperature Reporting Threshold",
-			"description": "Reporting threshold for changes in the ambient temperature.",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 4,
 			"defaultValue": 2,
-			"readOnly": false,
-			"writeOnly": false,
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "Disabled",
+					"label": "Disable",
 					"value": 0
 				},
 				{
-					"label": "0.5°",
+					"label": "0.5 °F",
 					"value": 1
 				},
 				{
-					"label": "1.0°",
+					"label": "1.0 °F",
 					"value": 2
 				},
 				{
-					"label": "1.5°",
+					"label": "1.5 °F",
 					"value": 3
 				},
 				{
-					"label": "2.0°",
+					"label": "2.0 °F",
 					"value": 4
 				}
 			]
 		},
+		"2[0xff000000]": {
+			"label": "HVAC Type",
+			"valueSize": 4,
+			"minValue": 1,
+			"maxValue": 2,
+			"defaultValue": 1,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Normal",
+					"value": 1
+				},
+				{
+					"label": "Heat Pump",
+					"value": 2
+				}
+			]
+		},
+		"2[0x0f0000]": {
+			"label": "Number of Auxiliary or Heat Stages",
+			"valueSize": 4,
+			"minValue": 0,
+			"maxValue": 15,
+			"readOnly": true,
+			"allowManualEntry": false
+		},
+		"2[0xf00000]": {
+			"label": "Auxiliary Heat Type",
+			"valueSize": 4,
+			"minValue": 1,
+			"maxValue": 2,
+			"readOnly": true,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Gas",
+					"value": 1
+				},
+				{
+					"label": "Electric",
+					"value": 2
+				}
+			]
+		},
+		"2[0xff00]": {
+			"label": "Number of Heat Pump Stages",
+			"valueSize": 4,
+			"minValue": 0,
+			"maxValue": 255,
+			"readOnly": true,
+			"allowManualEntry": false
+		},
+		"2[0xff]": {
+			"label": "Number of Cool Stages",
+			"valueSize": 4,
+			"minValue": 0,
+			"maxValue": 255,
+			"readOnly": true,
+			"allowManualEntry": false
+		},
 		"3": {
-			"label": "Utility Lock Enable/Disable",
-			"description": "Prevents setpoint changes at thermostat.",
+			"label": "Lock Setpoint Changes",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 1,
 			"defaultValue": 0,
 			"unsigned": true,
-			"readOnly": false,
-			"writeOnly": false,
+			"writeOnly": true,
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "Utility lock disabled",
+					"label": "Disable",
 					"value": 0
 				},
 				{
-					"label": "Utility lock enabled",
+					"label": "Enable",
+					"value": 1
+				}
+			]
+		},
+		"4": {
+			"label": "Thermostat Power Type",
+			"valueSize": 1,
+			"minValue": 1,
+			"maxValue": 2,
+			"readOnly": true,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "C-Wire",
+					"value": 1
+				},
+				{
+					"label": "Batteries",
+					"value": 2
+				}
+			]
+		},
+		"5": {
+			"label": "Humidity Reporting Threshold",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 3,
+			"defaultValue": 2,
+			"unsigned": true,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Disable",
+					"value": 0
+				},
+				{
+					"label": "3 %rH",
+					"value": 1
+				},
+				{
+					"label": "5 %rH",
+					"value": 2
+				},
+				{
+					"label": "10 %rH",
+					"value": 3
+				}
+			]
+		},
+		"6": {
+			"label": "Auxiliary/Emergency Heating",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 0,
+			"unsigned": true,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Disable",
+					"value": 0
+				},
+				{
+					"label": "Enable",
 					"value": 1
 				}
 			]
 		},
 		"7": {
-			"label": "Thermostat Swing Temperature",
-			"description": "Variance allowed from setpoint",
+			"label": "Thermostat Hysteresis",
+			"description": "Variance allowed from setpoint to engage HVAC",
 			"valueSize": 1,
 			"minValue": 1,
 			"maxValue": 8,
 			"defaultValue": 2,
-			"readOnly": false,
-			"writeOnly": false,
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "0.5°",
+					"label": "0.5 °F",
 					"value": 1
 				},
 				{
-					"label": "1.0°",
+					"label": "1.0 °F",
 					"value": 2
 				},
 				{
-					"label": "1.5°",
+					"label": "1.5 °F",
 					"value": 3
 				},
 				{
-					"label": "2.0°",
+					"label": "2.0 °F",
 					"value": 4
 				},
 				{
-					"label": "2.5°",
+					"label": "2.5 °F",
 					"value": 5
 				},
 				{
-					"label": "3.0°",
+					"label": "3.0 °F",
 					"value": 6
 				},
 				{
-					"label": "3.5°",
+					"label": "3.5 °F",
 					"value": 7
 				},
 				{
-					"label": "4.0°",
+					"label": "4.0 °F",
 					"value": 8
+				}
+			]
+		},
+		"8[0xff00]": {
+			"label": "Heating Differential Temperature",
+			"valueSize": 2,
+			"minValue": 4,
+			"maxValue": 12,
+			"defaultValue": 4,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "2.0 °F",
+					"value": 4
+				},
+				{
+					"label": "3.0 °F",
+					"value": 6
+				},
+				{
+					"label": "4.0 °F",
+					"value": 8
+				},
+				{
+					"label": "5.0 °F",
+					"value": 10
+				},
+				{
+					"label": "6.0 °F",
+					"value": 12
+				}
+			]
+		},
+		"8[0xff]": {
+			"label": "Cooling Differential Temperature",
+			"valueSize": 2,
+			"minValue": 4,
+			"maxValue": 12,
+			"defaultValue": 4,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "2.0 °F",
+					"value": 4
+				},
+				{
+					"label": "3.0 °F",
+					"value": 6
+				},
+				{
+					"label": "4.0 °F",
+					"value": 8
+				},
+				{
+					"label": "5.0 °F",
+					"value": 10
+				},
+				{
+					"label": "6.0 °F",
+					"value": 12
 				}
 			]
 		},
 		"9": {
 			"label": "Thermostat Recovery Mode",
-			"description": "Fast or Economy recovery mode.",
 			"valueSize": 1,
 			"minValue": 1,
 			"maxValue": 2,
 			"defaultValue": 2,
-			"readOnly": false,
-			"writeOnly": false,
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "Fast recovery Mode",
+					"label": "Fast recovery mode",
 					"value": 1
 				},
 				{
-					"label": "Economy recovery Mode",
+					"label": "Economy recovery mode",
 					"value": 2
 				}
 			]

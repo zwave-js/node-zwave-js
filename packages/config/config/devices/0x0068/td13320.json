@@ -1,5 +1,3 @@
-// Good Way Technology Co., Ltd. TD13320
-// Smart Meter Switch
 {
 	"manufacturer": "Good Way Technology Co., Ltd.",
 	"manufacturerId": "0x0068",
@@ -18,41 +16,29 @@
 	},
 	"paramInformation": {
 		"1": {
-			"label": "Meter Report Time",
-			"description": "How often to send a meter report(minute)",
+			"label": "Meter Report Interval",
 			"valueSize": 2,
 			"unit": "minutes",
 			"minValue": 0,
 			"maxValue": 255,
 			"defaultValue": 30,
-			"unsigned": true,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"unsigned": true
 		},
 		"2": {
 			"label": "Night Light Mode",
-			"description": "Sets the night light mode",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 255,
 			"defaultValue": 0,
-			"unsigned": true,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"unsigned": true
 		},
 		"3": {
 			"label": "Night Light Color Value",
-			"description": "Sets the night light color value",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 255,
 			"defaultValue": 0,
-			"unsigned": true,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"unsigned": true
 		}
 	},
 	"metadata": {

@@ -1,5 +1,3 @@
-// Everspring AN158
-// Switch Meter Plugin
 {
 	"manufacturer": "Everspring",
 	"manufacturerId": "0x0060",
@@ -35,10 +33,7 @@
 			"minValue": 0,
 			"maxValue": 254,
 			"defaultValue": 10,
-			"unsigned": true,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"unsigned": true
 		},
 		"2": {
 			"label": "Send Out Basic Command",
@@ -48,8 +43,6 @@
 			"maxValue": 1,
 			"defaultValue": 0,
 			"unsigned": true,
-			"readOnly": false,
-			"writeOnly": false,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -68,10 +61,7 @@
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 3240,
-			"defaultValue": 3,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"defaultValue": 3
 		}
 	}
 }

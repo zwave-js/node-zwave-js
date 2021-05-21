@@ -1,5 +1,3 @@
-// AEON Labs ZW130
-// WallMote Quad
 {
 	"manufacturer": "AEON Labs",
 	"manufacturerId": "0x0086",
@@ -8,136 +6,123 @@
 	"devices": [
 		{
 			"productType": "0x0002",
-			"productId": "0x0082"
+			"productId": "0x0082",
+			"zwaveAllianceId": 2153
 		},
 		{
 			"productType": "0x0102",
-			"productId": "0x0082"
+			"productId": "0x0082",
+			"zwaveAllianceId": 2130
 		},
 		{
 			"productType": "0x0202",
-			"productId": "0x0082"
+			"productId": "0x0082",
+			"zwaveAllianceId": 2152
+		},
+		{
+			"productType": "0x0302",
+			"productId": "0x0082",
+			"zwaveAllianceId": 3153
+		},
+		{
+			"productType": "0x0902",
+			"productId": "0x0082",
+			"zwaveAllianceId": 3264
 		}
 	],
 	"firmwareVersion": {
 		"min": "0.0",
 		"max": "255.255"
 	},
-	"supportsZWavePlus": true,
-	"paramInformation": {
+	"associations": {
 		"1": {
-			"label": "Touch sound",
-			"description": "Enable/disable the touch sound.",
-			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 1,
-			"defaultValue": 1,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "Disable",
-					"value": 0
-				},
-				{
-					"label": "Enable",
-					"value": 1
-				}
-			]
+			"label": "Lifeline",
+			"maxNodes": 1,
+			"isLifeline": true
 		},
 		"2": {
-			"label": "Touch vibration",
-			"description": "Enable/disable the touch vibration.",
-			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 1,
-			"defaultValue": 1,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "Disable",
-					"value": 0
-				},
-				{
-					"label": "Enable",
-					"value": 1
-				}
-			]
+			"label": "Button 1 (Basic Set)",
+			"maxNodes": 5
 		},
 		"3": {
-			"label": "Button slide",
-			"description": "Enable/disable the function of button slide.",
-			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 1,
-			"defaultValue": 1,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "Disable",
-					"value": 0
-				},
-				{
-					"label": "Enable",
-					"value": 1
-				}
-			]
+			"label": "Button 1 (Multilevel)",
+			"maxNodes": 5
 		},
 		"4": {
-			"label": "Notification report",
-			"description": "Which notification to be sent to the associated devices.",
-			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 3,
-			"defaultValue": 1,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "Central scene",
-					"value": 1
-				},
-				{
-					"label": "Central scene and config",
-					"value": 3
-				}
-			]
+			"label": "Button 2 (Basic Set)",
+			"maxNodes": 5
+		},
+		"5": {
+			"label": "Button 2 (Multilevel)",
+			"maxNodes": 5
+		},
+		"6": {
+			"label": "Button 3 (Basic Set)",
+			"maxNodes": 5
+		},
+		"7": {
+			"label": "Button 3 (Multilevel)",
+			"maxNodes": 5
+		},
+		"8": {
+			"label": "Button 4 (Basic Set)",
+			"maxNodes": 5
+		},
+		"9": {
+			"label": "Button 4 (Multilevel)",
+			"maxNodes": 5
+		}
+	},
+	"paramInformation": {
+		"1": {
+			"$import": "templates/aeotec_template.json#enable_touch_sound"
+		},
+		"2": {
+			"$import": "templates/aeotec_template.json#enable_touch_vibration"
+		},
+		"3": {
+			"$import": "templates/aeotec_template.json#enable_button_slide"
+		},
+		"4": {
+			"$import": "templates/aeotec_template.json#wallmote_report_type"
+		},
+		"11": {
+			"$if": "firmwareVersion >= 2.0",
+			"$import": "templates/aeotec_template.json#wallmote_command_type"
 		},
 		"39": {
-			"label": "Low battery value",
-			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 50,
-			"defaultValue": 5,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"$if": "firmwareVersion >= 2.0",
+			"$import": "templates/aeotec_template.json#low_battery_threshold",
+			"minValue": 5,
+			"defaultValue": 20
+		},
+		"81": {
+			"$if": "firmwareVersion >= 2.0",
+			"$import": "templates/aeotec_template.json#wakeup_led"
+		},
+		"82": {
+			"$if": "firmwareVersion >= 2.0",
+			"$import": "templates/aeotec_template.json#message_failure_led"
+		},
+		"83": {
+			"$if": "firmwareVersion >= 2.0",
+			"$import": "templates/aeotec_template.json#charging_led"
+		},
+		"84": {
+			"$if": "firmwareVersion >= 2.0",
+			"$import": "templates/aeotec_template.json#button_press_led"
+		},
+		"252": {
+			"$import": "templates/aeotec_template.json#lock_configuration"
 		},
 		"255": {
-			"label": "Reset the WallMote Quad",
-			"valueSize": 4,
-			"minValue": 0,
-			"maxValue": 1431655765,
-			"defaultValue": 0,
-			"readOnly": false,
-			"writeOnly": true,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "Reset to factory default",
-					"value": 0
-				},
-				{
-					"label": "Reset and remove",
-					"value": 1431655765
-				}
-			]
+			"$import": "templates/aeotec_template.json#factory_reset_exclude"
 		}
+	},
+	"metadata": {
+		"inclusion": "Turn the primary controller of Z-Wave network into inclusion mode, short press the product’s Action button that you can find on the product's housing",
+		"exclusion": "Turn the primary controller of Z-Wave network into exclusion mode, short press the product’s Action button that you can find on the product's housing",
+		"reset": "Press and hold the Action button that you can find on the product's housing for 20 seconds and then release. This procedure should only be used when the primary controller is missing or inoperable",
+		"manual": "https://products.z-wavealliance.org/ProductManual/File?folder=&filename=MarketCertificationFiles/3264/Aeon%20Labs%20WallMote%20Quad%20manual.pdf"
 	}
 }

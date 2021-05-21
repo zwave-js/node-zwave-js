@@ -1,0 +1,204 @@
+{
+	"manufacturer": "Logic Group",
+	"manufacturerId": "0x0234",
+	"label": "ZIF5028",
+	"description": "DIN Rail Interface",
+	"devices": [
+		{
+			"productType": "0x0003",
+			"productId": "0x0112"
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"associations": {
+		"1": {
+			"label": "Lifeline",
+			"maxNodes": 1,
+			"isLifeline": true
+		},
+		"2": {
+			"label": "Input 1 (Basic Report)",
+			"maxNodes": 5
+		},
+		"3": {
+			"label": "Input 1 (Binary Report)",
+			"maxNodes": 5
+		},
+		"4": {
+			"label": "Input 1 (Multilevel Report)",
+			"maxNodes": 5
+		},
+		"5": {
+			"label": "Input 2 (Basic Report)",
+			"maxNodes": 5
+		},
+		"6": {
+			"label": "Input 2 (Binary Report)",
+			"maxNodes": 5
+		},
+		"7": {
+			"label": "Input 2 (Multilevel Report)",
+			"maxNodes": 5
+		},
+		"8": {
+			"label": "Input 3 (Basic Report)",
+			"maxNodes": 5
+		},
+		"9": {
+			"label": "Input 3 (Binary Report)",
+			"maxNodes": 5
+		},
+		"10": {
+			"label": "Input 3 (Multilevel Report)",
+			"maxNodes": 5
+		},
+		"11": {
+			"label": "Input 4 (Basic Report)",
+			"maxNodes": 5
+		},
+		"12": {
+			"label": "Input 4 (Binary Report)",
+			"maxNodes": 5
+		},
+		"13": {
+			"label": "Input 4 (Multilevel Report)",
+			"maxNodes": 5
+		},
+		"14": {
+			"label": "Input 5 (Basic Report)",
+			"maxNodes": 5
+		},
+		"15": {
+			"label": "Input 5 (Binary Report)",
+			"maxNodes": 5
+		},
+		"16": {
+			"label": "Input 5 (Multilevel Report)",
+			"maxNodes": 5
+		},
+		"17": {
+			"label": "Input 6 (Basic Report)",
+			"maxNodes": 5
+		},
+		"18": {
+			"label": "Input 6 (Binary Report)",
+			"maxNodes": 5
+		},
+		"19": {
+			"label": "Input 6 (Multilevel Report)",
+			"maxNodes": 5
+		}
+	},
+	"paramInformation": {
+		"1": {
+			"$import": "templates/logic_group_template.json#status_led"
+		},
+		"2": {
+			"$import": "templates/logic_group_template.json#led_brightness"
+		},
+		"3": {
+			"$import": "templates/logic_group_template.json#input_funtion_relay",
+			"label": "Input 1 - Function"
+		},
+		"4": {
+			"$import": "templates/logic_group_template.json#input_timer",
+			"label": "Input 1 - Timer"
+		},
+		"5": {
+			"$import": "templates/logic_group_template.json#input_funtion_relay",
+			"label": "Input 2 - Function"
+		},
+		"6": {
+			"$import": "templates/logic_group_template.json#input_timer",
+			"label": "Input 2 - Timer"
+		},
+		"7": {
+			"$import": "templates/logic_group_template.json#input_funtion_relay",
+			"label": "Input 3 - Function"
+		},
+		"8": {
+			"$import": "templates/logic_group_template.json#input_timer",
+			"label": "Input 3 - Timer"
+		},
+		"9": {
+			"$import": "templates/logic_group_template.json#input_funtion_relay",
+			"label": "Input 4 - Function"
+		},
+		"10": {
+			"$import": "templates/logic_group_template.json#input_timer",
+			"label": "Input 4 - Timer"
+		},
+		"11": {
+			"$import": "templates/logic_group_template.json#input_funtion_relay",
+			"label": "Input 5 - Function"
+		},
+		"12": {
+			"$import": "templates/logic_group_template.json#input_timer",
+			"label": "Input 5 - Timer"
+		},
+		"13": {
+			"$import": "templates/logic_group_template.json#input_funtion_relay",
+			"label": "Input 6 - Function"
+		},
+		"14": {
+			"$import": "../templates/master_template.json#base_0-255_nounit",
+			"label": "Input 6 - Timer",
+			"defaultValue": 0
+		},
+		"15": {
+			"$import": "../templates/master_template.json#base_0-255_nounit",
+			"label": "Input Snubber-filter Time Constant.",
+			"unit": "10 ms",
+			"defaultValue": 5
+		},
+		"16": {
+			"$import": "../templates/master_template.json#base_0-255_nounit",
+			"label": "Threshold Value For Activation Of Inputs.",
+			"unit": "10 ms",
+			"defaultValue": 200
+		},
+		"17": {
+			"$import": "../templates/master_template.json#base_0-255_nounit",
+			"label": "Threshold For Input In Latched Mode.",
+			"unit": "10 ms",
+			"defaultValue": 50
+		},
+		"18": {
+			"$import": "../templates/master_template.json#base_enable_disable_inverted",
+			"label": "Central Scene",
+			"defaultValue": 0
+		},
+		"19": {
+			"$import": "templates/logic_group_template.json#output_function_relay",
+			"label": "Output 1 - Function"
+		},
+		"20": {
+			"$import": "templates/logic_group_template.json#output_function_relay",
+			"label": "Output 2 - Function"
+		},
+		"21": {
+			"$import": "templates/logic_group_template.json#output_function_relay",
+			"label": "Output 3 - Function"
+		},
+		"22": {
+			"$import": "templates/logic_group_template.json#output_function_relay",
+			"label": "Output 4 - Function"
+		},
+		"23": {
+			"$import": "templates/logic_group_template.json#output_function_relay",
+			"label": "Output 5 - Function"
+		},
+		"24": {
+			"$import": "templates/logic_group_template.json#output_function_relay",
+			"label": "Output 6 - Function"
+		}
+	},
+	"metadata": {
+		"inclusion": "Push the button in the hole near the 'INCLUSION' text with a non-conductive object. The LED will now start blinking",
+		"exclusion": "Push the button in the hole near the 'INCLUSION' text with a non-conductive object. The LED will now start blinking",
+		"reset": "Push the button in the hole near the 'INCLUSION' text with a non-conductive object for 10 seconds. Please use this procedure only when the network primary controller is missing or otherwise inoperable"
+	}
+}

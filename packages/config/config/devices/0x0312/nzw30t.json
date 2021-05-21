@@ -1,5 +1,3 @@
-// NIE Technology Co., Ltd. NZW30T
-// Inovelli In-Wall Switch (On/Off) Scene Enabled
 {
 	"manufacturer": "Inovelli",
 	"manufacturerId": "0x0312",
@@ -24,8 +22,6 @@
 			"minValue": 0,
 			"maxValue": 1,
 			"defaultValue": 0,
-			"readOnly": false,
-			"writeOnly": false,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -45,10 +41,7 @@
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 32767,
-			"defaultValue": 0,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"defaultValue": 0
 		}
 	}
 }

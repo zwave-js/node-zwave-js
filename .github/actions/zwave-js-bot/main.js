@@ -7,7 +7,7 @@ const core = require("@actions/core");
 const githubToken = core.getInput("githubToken");
 const npmToken = core.getInput("npmToken");
 const task = core.getInput("task");
-const octokit = github.getOctokit(githubToken);
+const octokit = github.getOctokit(githubToken).rest;
 const semver = require("semver");
 
 const options = {
@@ -20,7 +20,7 @@ if (task === "publish-pr") {
 }
 
 async function publishPr() {
-	const pr = core.getInput("pr");
+	const pr = parseInt(core.getInput("pr"));
 	const { data: pull } = await octokit.pulls.get({
 		...options,
 		pull_number: pr,

@@ -1,5 +1,3 @@
-// Philio Technology Corp ZIP-PAB01
-// Zipato Micromodule Energy Meter
 {
 	"manufacturer": "Philio Technology Corp",
 	"manufacturerId": "0x013c",
@@ -24,10 +22,7 @@
 			"valueSize": 2,
 			"minValue": 1,
 			"maxValue": 32767,
-			"defaultValue": 720,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"defaultValue": 720
 		},
 		"2": {
 			"label": "Energy meter report period",
@@ -36,10 +31,7 @@
 			"valueSize": 2,
 			"minValue": 1,
 			"maxValue": 32767,
-			"defaultValue": 720,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"defaultValue": 720
 		},
 		"3": {
 			"label": "Selected default endpoint",
@@ -47,10 +39,7 @@
 			"valueSize": 1,
 			"minValue": 1,
 			"maxValue": 3,
-			"defaultValue": 1,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"defaultValue": 1
 		}
 	}
 }

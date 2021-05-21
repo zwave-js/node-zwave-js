@@ -1,4 +1,4 @@
-import { ZWaveError, ZWaveErrorCodes } from "@zwave-js/core";
+import { isZWaveError, ZWaveError, ZWaveErrorCodes } from "@zwave-js/core";
 import { JSONObject, num2hex } from "@zwave-js/shared";
 import { entries } from "alcalzone-shared/objects";
 import { isObject } from "alcalzone-shared/typeguards";
@@ -7,16 +7,25 @@ import JSON5 from "json5";
 import path from "path";
 import type { ConfigManager } from "./ConfigManager";
 import { Scale } from "./Scales";
-import { configDir, hexKeyRegexNDigits, throwInvalidConfig } from "./utils";
-
-const configPath = path.join(configDir, "sensorTypes.json");
+import {
+	configDir,
+	externalConfigDir,
+	hexKeyRegexNDigits,
+	throwInvalidConfig,
+} from "./utils";
 
 export type SensorTypeMap = ReadonlyMap<number, SensorType>;
 
 /** @internal */
 export async function loadSensorTypesInternal(
 	manager: ConfigManager,
+	externalConfig?: boolean,
 ): Promise<SensorTypeMap> {
+	const configPath = path.join(
+		(externalConfig && externalConfigDir) || configDir,
+		"sensorTypes.json",
+	);
+
 	if (!(await pathExists(configPath))) {
 		throw new ZWaveError(
 			"The sensor types config file does not exist!",
@@ -50,7 +59,7 @@ export async function loadSensorTypesInternal(
 		}
 		return sensorTypes;
 	} catch (e: unknown) {
-		if (e instanceof ZWaveError) {
+		if (isZWaveError(e)) {
 			throw e;
 		} else {
 			throwInvalidConfig("sensor types");

@@ -30,27 +30,7 @@ import {
 	priority,
 } from "../message/Message";
 import type { SuccessIndicator } from "../message/SuccessIndicator";
-
-export enum TransmitOptions {
-	NotSet = 0,
-
-	ACK = 1 << 0,
-	LowPower = 1 << 1,
-	AutoRoute = 1 << 2,
-
-	NoRoute = 1 << 4,
-	Explore = 1 << 5,
-
-	DEFAULT = ACK | AutoRoute | Explore,
-}
-
-export enum TransmitStatus {
-	OK = 0x00, // Transmission complete and ACK received
-	NoAck = 0x01, // Transmission complete, no ACK received
-	Fail = 0x02, // Transmission failed
-	NotIdle = 0x03, // Transmission failed, network busy
-	NoRoute = 0x04, // Transmission complete, no return route
-}
+import { TransmitOptions, TransmitStatus } from "./SendDataShared";
 
 export const MAX_SEND_ATTEMPTS = 5;
 
@@ -450,25 +430,3 @@ export class SendDataMulticastResponse
 @messageTypes(MessageType.Request, FunctionType.SendDataAbort)
 @priority(MessagePriority.Controller)
 export class SendDataAbort extends Message {}
-
-/** Checks whether the message is a report that tells us that a message was sent */
-export function isSendReport(
-	msg: Message,
-): msg is SendDataResponse | SendDataMulticastResponse {
-	return (
-		msg instanceof SendDataResponse ||
-		msg instanceof SendDataMulticastResponse
-	);
-}
-
-/** Checks whether the message is a report that contains the transmit status of a message */
-export function isTransmitReport(
-	msg: Message,
-): msg is
-	| SendDataRequestTransmitReport
-	| SendDataMulticastRequestTransmitReport {
-	return (
-		msg instanceof SendDataRequestTransmitReport ||
-		msg instanceof SendDataMulticastRequestTransmitReport
-	);
-}

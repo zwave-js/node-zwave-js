@@ -42,8 +42,6 @@
 		"minValue": 0,
 		"maxValue": 2,
 		"defaultValue": 2,
-		"readOnly": false,
-		"writeOnly": false,
 		"allowManualEntry": false,
 		"options": [
 			{

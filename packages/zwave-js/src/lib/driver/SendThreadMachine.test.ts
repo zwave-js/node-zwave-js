@@ -23,8 +23,8 @@ import {
 import {
 	SendDataRequest,
 	SendDataRequestTransmitReport,
-	TransmitStatus,
 } from "../controller/SendDataMessages";
+import { TransmitStatus } from "../controller/SendDataShared";
 import { MessagePriority } from "../message/Constants";
 import type { Message } from "../message/Message";
 import { createEmptyMockDriver } from "../test/mocks";

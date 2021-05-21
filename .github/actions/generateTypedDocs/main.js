@@ -3,7 +3,7 @@ const github = require("@actions/github");
 const core = require("@actions/core");
 
 const githubToken = core.getInput("githubToken");
-const octokit = github.getOctokit(githubToken);
+const octokit = github.getOctokit(githubToken).rest;
 
 const options = {
 	owner: "zwave-js",

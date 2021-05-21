@@ -1,5 +1,3 @@
-// AEON Labs DSC35
-// Micro Double Switch
 {
 	"manufacturer": "AEON Labs",
 	"manufacturerId": "0x0086",
@@ -17,35 +15,14 @@
 	},
 	"associations": {
 		"1": {
-			"label": "Reporting",
+			"label": "Lifeline",
 			"maxNodes": 5,
 			"isLifeline": true
 		}
 	},
 	"paramInformation": {
 		"80": {
-			"label": "Enable Automatic Notificaitons",
-			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 2,
-			"defaultValue": 0,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "Nothing",
-					"value": 0
-				},
-				{
-					"label": "Send Hail CC",
-					"value": 1
-				},
-				{
-					"label": "Send Basic Report CC",
-					"value": 2
-				}
-			]
+			"$import": "templates/aeotec_template.json#enable_notifications"
 		}
 	}
 }

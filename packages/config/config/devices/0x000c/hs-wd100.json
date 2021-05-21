@@ -1,9 +1,7 @@
-// HomeSeer Technologies WD-100
-// Scene Capable Wall Dimmer Switch
 {
 	"manufacturer": "HomeSeer Technologies",
 	"manufacturerId": "0x000c",
-	"label": "WD-100",
+	"label": "HS-WD100+",
 	"description": "Scene Capable Wall Dimmer Switch",
 	"devices": [
 		{
@@ -39,6 +37,16 @@
 		"10": {
 			"$import": "templates/homeseer_template.json#dimming_step",
 			"label": "Local Dimming Step Duration"
+		}
+	},
+	"compat": {
+		"commandClasses": {
+			"remove": {
+				"0x6c": {
+					// The device does not support supervision although it is mandatory for the device type
+					"endpoints": "*"
+				}
+			}
 		}
 	},
 	"metadata": {

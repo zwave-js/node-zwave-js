@@ -1,5 +1,3 @@
-// AEON Labs ZW089
-// Recessed Door Sensor Gen5
 {
 	"manufacturer": "AEON Labs",
 	"manufacturerId": "0x0086",
@@ -8,15 +6,18 @@
 	"devices": [
 		{
 			"productType": "0x0002",
-			"productId": "0x0059"
+			"productId": "0x0059",
+			"zwaveAllianceId": 1184
 		},
 		{
 			"productType": "0x0102",
-			"productId": "0x0059"
+			"productId": "0x0059",
+			"zwaveAllianceId": 1179
 		},
 		{
 			"productType": "0x0202",
-			"productId": "0x0059"
+			"productId": "0x0059",
+			"zwaveAllianceId": 1183
 		}
 	],
 	"firmwareVersion": {
@@ -25,7 +26,7 @@
 	},
 	"associations": {
 		"1": {
-			"label": "State Updates",
+			"label": "Lifeline",
 			"maxNodes": 5,
 			"isLifeline": true
 		},
@@ -36,151 +37,34 @@
 	},
 	"paramInformation": {
 		"1": {
-			"label": "Send Sensor binary report on open/close events",
-			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 1,
-			"defaultValue": 0,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "On for opened, Off for closed",
-					"value": 0
-				},
-				{
-					"label": "Off for opened, On for closed",
-					"value": 1
-				}
-			]
+			"$import": "templates/aeotec_template.json#invert_state_report"
 		},
 		"3": {
-			"label": "Send Basic Set on open/close event",
-			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 1,
-			"defaultValue": 0,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "On for opened, Off for closed",
-					"value": 0
-				},
-				{
-					"label": "Off for opened, On for closed",
-					"value": 1
-				}
-			]
+			"$import": "templates/aeotec_template.json#invert_basic_set"
 		},
 		"101": {
-			"label": "Low battery voltage check",
-			"description": "low battery check when voltage is less than warn voltage",
-			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 1,
-			"defaultValue": 0,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "Disable",
-					"value": 0
-				},
-				{
-					"label": "Enable",
-					"value": 1
-				}
-			]
+			"$import": "templates/aeotec_template.json#low_battery_check"
 		},
 		"111": {
-			"label": "Low battery voltage check time",
-			"description": "Minimum battery low check Interval time is 4 minutes",
-			"unit": "seconds",
-			"valueSize": 4,
-			"minValue": 240,
-			"maxValue": 2147483647,
-			"defaultValue": 86640,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"$import": "templates/aeotec_template.json#low_battery_interval"
+		},
+		"121": {
+			"$import": "templates/aeotec_template.json#sensor_report_type"
 		},
 		"252": {
-			"label": "Permit other configurations",
-			"description": "Lock or Unlock other configuration set function",
-			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 1,
-			"defaultValue": 0,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "Unlock",
-					"value": 0
-				},
-				{
-					"label": "Lock",
-					"value": 1
-				}
-			]
+			"$import": "templates/aeotec_template.json#lock_configuration"
+		},
+		"254": {
+			"$import": "templates/aeotec_template.json#device_tag"
 		},
 		"255": {
-			"label": "Reset to default",
-			"description": "Reset to the default configuration",
-			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 255,
-			"defaultValue": 0,
-			"unsigned": true,
-			"readOnly": false,
-			"writeOnly": true,
-			"allowManualEntry": true
-		},
-		"121[0xff]": {
-			"label": "Configuration Value 4(LSB) SENSOR BINARY",
-			"valueSize": 4,
-			"minValue": 0,
-			"maxValue": 255,
-			"defaultValue": 0,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "disable SENSOR BINARY (factory)",
-					"value": 0
-				},
-				{
-					"label": "enable SENSOR BINARY",
-					"value": 16
-				}
-			]
-		},
-		"121[0xff00]": {
-			"label": "Config value 3 - BASIC SET",
-			"description": "Set BASIC SET reporting",
-			"valueSize": 4,
-			"minValue": 0,
-			"maxValue": 255,
-			"defaultValue": 1,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "do not send BASIC SET",
-					"value": 0
-				},
-				{
-					"label": "send BASIC SET (factory default)",
-					"value": 1
-				}
-			]
+			"$import": "templates/aeotec_template.json#factory_reset"
 		}
+	},
+	"metadata": {
+		"inclusion": "Turn the primary controller of Z-Wave network into inclusion mode, short press the product’s Z-Wave button that you can find in the back of the product",
+		"exclusion": "Turn the primary controller of Z-Wave network into exclusion mode, short press the product’s Z-Wave button that you can find in back of the product",
+		"reset": "Press and hold the Z-Wave button that you can find in back of the product for 20 seconds and then release. This procedure should only be used when the primary controller is inoperable",
+		"manual": "https://products.z-wavealliance.org/ProductManual/File?folder=&filename=MarketCertificationFiles/1179/Recessed%20Door%20Sensor%20Gen5%20-%20Manual%20MCert.pdf"
 	}
 }

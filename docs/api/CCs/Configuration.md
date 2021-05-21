@@ -1,5 +1,7 @@
 # Configuration CC
 
+?> CommandClass ID: `0x70`
+
 ## Configuration CC methods
 
 ### `get`

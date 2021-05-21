@@ -1,5 +1,3 @@
-// Elexa Consumer Products Inc. DMOF1
-// Dome On/Off zwave wall plug for controlling small appliances and lights.
 {
 	"manufacturer": "Elexa Consumer Products Inc.",
 	"manufacturerId": "0x021f",
@@ -24,8 +22,6 @@
 			"minValue": 0,
 			"maxValue": 1,
 			"defaultValue": 1,
-			"readOnly": false,
-			"writeOnly": false,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -46,10 +42,7 @@
 			"minValue": 1,
 			"maxValue": 65535,
 			"defaultValue": 300,
-			"unsigned": true,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"unsigned": true
 		},
 		"3": {
 			"label": "Set \"Overload\" Current level",
@@ -58,10 +51,7 @@
 			"valueSize": 1,
 			"minValue": 1,
 			"maxValue": 16,
-			"defaultValue": 13,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"defaultValue": 13
 		},
 		"4": {
 			"label": "Set \"Alert\" Current Level",
@@ -70,10 +60,7 @@
 			"valueSize": 1,
 			"minValue": 1,
 			"maxValue": 16,
-			"defaultValue": 12,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"defaultValue": 12
 		},
 		"5": {
 			"label": "Enable/Disable Indicator LED",
@@ -82,8 +69,6 @@
 			"minValue": 0,
 			"maxValue": 1,
 			"defaultValue": 1,
-			"readOnly": false,
-			"writeOnly": false,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -103,10 +88,7 @@
 			"valueSize": 1,
 			"minValue": 1,
 			"maxValue": 64,
-			"defaultValue": 5,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"defaultValue": 5
 		},
 		"7": {
 			"label": "Remember On/Off status",
@@ -115,8 +97,6 @@
 			"minValue": 0,
 			"maxValue": 1,
 			"defaultValue": 1,
-			"readOnly": false,
-			"writeOnly": false,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -136,8 +116,6 @@
 			"minValue": 0,
 			"maxValue": 1,
 			"defaultValue": 0,
-			"readOnly": false,
-			"writeOnly": false,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -157,10 +135,7 @@
 			"valueSize": 4,
 			"minValue": 1,
 			"maxValue": 65535,
-			"defaultValue": 96,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"defaultValue": 96
 		},
 		"10": {
 			"label": "Enable/Disable BUTTON",
@@ -169,8 +144,6 @@
 			"minValue": 0,
 			"maxValue": 1,
 			"defaultValue": 1,
-			"readOnly": false,
-			"writeOnly": false,
 			"allowManualEntry": false,
 			"options": [
 				{

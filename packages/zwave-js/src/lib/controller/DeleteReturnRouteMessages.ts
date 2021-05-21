@@ -23,10 +23,10 @@ import {
 } from "../message/Message";
 import type { SuccessIndicator } from "../message/SuccessIndicator";
 import type { INodeQuery } from "../node/INodeQuery";
-import { TransmitStatus } from "./SendDataMessages";
+import { TransmitStatus } from "./SendDataShared";
 
 @messageTypes(MessageType.Request, FunctionType.DeleteReturnRoute)
-@priority(MessagePriority.NodeQuery)
+@priority(MessagePriority.Normal)
 export class DeleteReturnRouteRequestBase extends Message {
 	public constructor(driver: Driver, options: MessageOptions) {
 		if (

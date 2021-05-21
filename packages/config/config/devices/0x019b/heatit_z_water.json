@@ -1,5 +1,3 @@
-// Heatit Z Water
-// Relay control
 {
 	"manufacturer": "Heatit",
 	"manufacturerId": "0x019b",
@@ -23,8 +21,6 @@
 			"minValue": 0,
 			"maxValue": 3,
 			"defaultValue": 1,
-			"readOnly": false,
-			"writeOnly": false,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -51,10 +47,7 @@
 			"unit": "%",
 			"minValue": 0,
 			"maxValue": 100,
-			"defaultValue": 50,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"defaultValue": 50
 		},
 		"3": {
 			"label": "Thermistor Type Input 1",
@@ -63,8 +56,6 @@
 			"minValue": 0,
 			"maxValue": 1,
 			"defaultValue": 0,
-			"readOnly": false,
-			"writeOnly": false,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -84,8 +75,6 @@
 			"minValue": 0,
 			"maxValue": 1,
 			"defaultValue": 0,
-			"readOnly": false,
-			"writeOnly": false,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -105,8 +94,6 @@
 			"minValue": 0,
 			"maxValue": 1,
 			"defaultValue": 0,
-			"readOnly": false,
-			"writeOnly": false,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -126,8 +113,6 @@
 			"minValue": 0,
 			"maxValue": 1,
 			"defaultValue": 0,
-			"readOnly": false,
-			"writeOnly": false,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -146,10 +131,7 @@
 			"unit": "0.1 °C",
 			"minValue": -40,
 			"maxValue": 40,
-			"defaultValue": 0,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"defaultValue": 0
 		},
 		"8": {
 			"label": "Input 2 Calibration",
@@ -157,10 +139,7 @@
 			"unit": "0.1 °C",
 			"minValue": -40,
 			"maxValue": 40,
-			"defaultValue": 0,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"defaultValue": 0
 		},
 		"9": {
 			"label": "Input 3 Calibration",
@@ -168,10 +147,7 @@
 			"unit": "0.1 °C",
 			"minValue": -40,
 			"maxValue": 40,
-			"defaultValue": 0,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"defaultValue": 0
 		},
 		"10": {
 			"label": "Input 4 Calibration",
@@ -179,10 +155,7 @@
 			"unit": "0.1 °C",
 			"minValue": -40,
 			"maxValue": 40,
-			"defaultValue": 0,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"defaultValue": 0
 		},
 		"11": {
 			"label": "Input 1 Report Interval",
@@ -191,10 +164,7 @@
 			"unit": "10 seconds",
 			"minValue": 0,
 			"maxValue": 8640,
-			"defaultValue": 6,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"defaultValue": 6
 		},
 		"12": {
 			"label": "Input 2 Report Interval",
@@ -203,10 +173,7 @@
 			"unit": "10 seconds",
 			"minValue": 0,
 			"maxValue": 8640,
-			"defaultValue": 6,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"defaultValue": 6
 		},
 		"13": {
 			"label": "Input 3 Report Interval",
@@ -215,10 +182,7 @@
 			"unit": "10 seconds",
 			"minValue": 0,
 			"maxValue": 8640,
-			"defaultValue": 6,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"defaultValue": 6
 		},
 		"14": {
 			"label": "Input 4 Report Interval",
@@ -227,10 +191,7 @@
 			"unit": "10 seconds",
 			"minValue": 0,
 			"maxValue": 8640,
-			"defaultValue": 6,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"defaultValue": 6
 		}
 	}
 }

@@ -1,5 +1,3 @@
-// Popp & Co 700793
-// Power Plug
 {
 	"manufacturer": "Popp & Co",
 	"manufacturerId": "0x0154",
@@ -30,8 +28,6 @@
 			"minValue": 0,
 			"maxValue": 2,
 			"defaultValue": 0,
-			"readOnly": false,
-			"writeOnly": false,
 			"allowManualEntry": false,
 			"options": [
 				{

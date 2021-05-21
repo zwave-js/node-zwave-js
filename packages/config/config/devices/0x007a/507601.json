@@ -1,5 +1,3 @@
-// Merten 507601
-// Dual Pole Wall Switch
 {
 	"manufacturer": "Merten",
 	"manufacturerId": "0x007a",
@@ -29,20 +27,14 @@
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 127,
-			"defaultValue": 0,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"defaultValue": 0
 		},
 		"177": {
 			"label": "Staircase timer byte 2",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 127,
-			"defaultValue": 0,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"defaultValue": 0
 		},
 		"183": {
 			"label": "Additional limit duration",
@@ -50,10 +42,7 @@
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 127,
-			"defaultValue": 30,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"defaultValue": 30
 		}
 	}
 }

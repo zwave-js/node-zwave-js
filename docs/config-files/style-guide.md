@@ -10,27 +10,17 @@ Please use only **American English**.
 
 ## Comments
 
-Our device files begin with a series of two comments that describe the manufacturer/brand, label and description.
+Our device files are parsed as JSON5 and may contain comments. Comments may (and should) also be used to explain parameters that were omitted on purpose or to explain the necessity for a compat flag. Example:
 
 ```json
-// HomeSeer Technologies HS-PA100+
-// Appliance Module
 {
-	"manufacturer": "HomeSeer Technologies",
-	"manufacturerId": "0x000c",
-	"label": "HS-PA100+",
-	"description": "Appliance Module",
-	"devices": [
-		{
-			"productType": "0x4447",
-			"productId": "0x3031"
-		}
-	]
 	// ...
+	"compat": {
+		// The device is a Binary Sensor, but uses Basic Sets to report its status
+		"enableBasicSetMapping": true
+	}
 }
 ```
-
-Comments may (and should) also be used to explain parameters that were omitted on purpose or to explain the necessity for a compat flag.
 
 ## Manufacturer/Brand
 
@@ -39,9 +29,6 @@ Sometimes a manufacturer makes a device for another company. The field `manufact
 > [!WARNING] Please ensure the manufacturer exactly matches other devices from that same manufacturer. Failing to do so will result in duplicate but slightly different entries in the device database website.
 
 ```diff
--	// Assa Abloy YDM3109
-+	// Yale YDM3109
-	// Smart Door Lock
 	{
 -		"manufacturer": "Assa Abloy",
 +		"manufacturer": "Yale",
@@ -58,14 +45,15 @@ Sometimes a manufacturer makes a device for another company. The field `manufact
 	}
 ```
 
+## Device Label
+
+These should generally conform to the **model number** (or **SKU**) of the device. Remove the manufacturer name from the label, if present.
+
 ## Device Descriptions
 
-These should generally conform to the name under which the device is sold. If the description merely mirrors the label, it should be omitted instead. Remove the manufacturer name from the description, if present. For example:
+These should generally conform to the **name** under which the device is sold. This should not just mirror the label, unless the device is actually being marketed as such. Remove the manufacturer name from the description, if present. For example:
 
 ```diff
-	// Yale YDM3109
--	// Yale Smart Door Lock
-+	// Smart Door Lock
 	{
 		"manufacturer": "Yale",
 		"manufacturerId": "0x0129",
@@ -75,7 +63,17 @@ These should generally conform to the name under which the device is sold. If th
 		"devices": [
 ```
 
-Descriptions should be **Title Case**.
+Device descriptions should be **Title Case**.
+
+## Association Groups
+
+The association group labels should be clear and concise. They should clearly explain what the association group is for, e.g. `Multilevel Sensor Reports`. Avoid generic names like `Group #1`.
+
+The primary reporting group (usually group 1 for Z-Wave Plus) **must** be called `Lifeline`.
+
+Labels should be **Title Case**.
+
+> [!NOTE] Association Groups should only be defined if necessary. Refer to the [property definition](config-files/file-format.md#associations) to figure out when that is the case.
 
 ## Configuration Parameters
 
@@ -94,19 +92,16 @@ Labels should be clear and concise. They should clearly explain what the paramet
 		"minValue": 0,
 		"maxValue": 99,
 		"defaultValue": 0,
-		"unsigned": true,
-		"readOnly": false,
-		"writeOnly": false,
-		"allowManualEntry": true
+		"unsigned": true
 	}
 }
 ```
 
 Labels should be **Title Case**.
 
-### Descriptions
+### Parameter Descriptions
 
-Descriptions can be helpful, but they clutter UIs. As such, unnecessary descriptions that merely restate the label **must** be removed. Additionally, information like units or available ranges should be removed as that information is provided to UIs through other properties.
+Parameter descriptions can be helpful, but they clutter UIs. As such, unnecessary descriptions that merely restate the label **must** be removed. Additionally, information like units or available ranges should be removed as that information is provided to UIs through other properties.
 
 As a rule of thumb: Only include a description if it is necessary, helpful, and adds significant value.
 
@@ -124,9 +119,6 @@ Descriptions should be **Sentence case**.
 		"maxValue": 255,
 		"defaultValue": 30,
 		"unsigned": true,
-		"readOnly": false,
-		"writeOnly": false,
-		"allowManualEntry": true,
 		"options": [
 			{
 				"label": "Dimmer default",
@@ -149,8 +141,6 @@ Descriptions should be **Sentence case**.
 		"maxValue": 255,
 		"defaultValue": 30,
 		"unsigned": true,
-		"readOnly": false,
-		"writeOnly": false,
 		"allowManualEntry": false
 	}
 }
@@ -173,8 +163,6 @@ Option labels should be **Sentence case**.
 		"maxValue": 1,
 		"defaultValue": 0,
 		"unsigned": true,
-		"readOnly": false,
-		"writeOnly": false,
 		"allowManualEntry": false,
 		"options": [
 			{
@@ -206,9 +194,6 @@ For example:
 		"maxValue": 255,
 		"defaultValue": 0,
 		"unsigned": true,
-		"readOnly": false,
-		"writeOnly": false,
-		"allowManualEntry": true,
 		"options": [
 			{
 				"label": "Dimmer default",
@@ -230,9 +215,6 @@ or
 		"maxValue": 99,
 		"defaultValue": 0,
 		"unsigned": true,
-		"readOnly": false,
-		"writeOnly": false,
-		"allowManualEntry": true,
 		"options": [
 			{
 				"label": "Disable",
@@ -251,7 +233,7 @@ Whenever a parameter only allows two options, formulate the label and/or descrip
 
 A parameter must define the range of min/max values, however, that range should only be as large as is necessary. Frequently, imported config files have a range of 0-255 when the only possible range is 0-1. Please check the manual.
 
-An exception are parameters which accept a single special value outside the normal range, e.g. `10-255` and `0 (disable)`. There isn't a simple way to represent these gaps, so the value range should be `0-255` in this case.
+An exception is parameters that accept a single special value outside the normal range, e.g. `10-255` and `0 (disable)`. There isn't a simple way to represent these gaps, so the value range should be `0-255` in that case.
 
 ### Units
 
@@ -262,7 +244,7 @@ Whenever possible, a unit should be defined for configuration parameters. Unit s
 -   `°F` instead of `Fahrenheit`/...
 -   `W`/`V`/`A`/... instead of `watts`/`volts`/`Ampere`/...
 
-Time units (`seconds`, `minutes`, `hours`) should not be abbreviated. `ms` for `milliseconds` are an exception to keep the units short.
+Time units (`seconds`, `minutes`, `hours`) should not be abbreviated. `ms` for `milliseconds` is an exception to keep the units short.
 
 Some devices use multiples of the base units - these should be represented as a decimal number in front of the base unit, e.g.
 
@@ -278,10 +260,7 @@ Some devices use multiples of the base units - these should be represented as a 
 		"minValue": 0,
 		"maxValue": 254,
 		"defaultValue": 0,
-		"unsigned": true,
-		"readOnly": false,
-		"writeOnly": false,
-		"allowManualEntry": true
+		"unsigned": true
 	}
 ```
 
@@ -292,7 +271,7 @@ Some devices use multiples of the base units - these should be represented as a 
 
 ### Read/Write Only
 
-While somewhat rare, sometimes parameters can only be read or written. Typically, the description or manual would say so. If applicable, change the appropriate definition to true.
+While somewhat rare, sometimes parameters can only be read or written. Typically, the description or manual would say so. If applicable, add the appropriate field `readOnly` or `writeOnly`.
 
 ```diff
 	"1": {
@@ -303,9 +282,6 @@ While somewhat rare, sometimes parameters can only be read or written. Typically
 		"maxValue": 254,
 		"defaultValue": 0,
 		"unsigned": true,
--		"readOnly": false,
-+		"readOnly": true,
-		"writeOnly": false,
-		"allowManualEntry": true
++		"readOnly": true
 	}
 ```

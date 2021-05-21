@@ -1,5 +1,3 @@
-// Wink Inc. Siren
-// Wink Siren
 {
 	"manufacturer": "Wink Inc.",
 	"manufacturerId": "0x017f",
@@ -24,8 +22,6 @@
 			"minValue": 0,
 			"maxValue": 3,
 			"defaultValue": 2,
-			"readOnly": false,
-			"writeOnly": false,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -49,8 +45,6 @@
 			"maxValue": 255,
 			"defaultValue": 2,
 			"unsigned": true,
-			"readOnly": false,
-			"writeOnly": false,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -78,8 +72,6 @@
 			"maxValue": 255,
 			"defaultValue": 1,
 			"unsigned": true,
-			"readOnly": false,
-			"writeOnly": false,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -110,8 +102,6 @@
 			"minValue": 1,
 			"maxValue": 3,
 			"defaultValue": 2,
-			"readOnly": false,
-			"writeOnly": false,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -134,8 +124,6 @@
 			"minValue": 1,
 			"maxValue": 10,
 			"defaultValue": 9,
-			"readOnly": false,
-			"writeOnly": false,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -186,8 +174,6 @@
 			"minValue": 1,
 			"maxValue": 10,
 			"defaultValue": 9,
-			"readOnly": false,
-			"writeOnly": false,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -238,8 +224,6 @@
 			"minValue": 1,
 			"maxValue": 2,
 			"defaultValue": 1,
-			"readOnly": false,
-			"writeOnly": false,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -257,10 +241,7 @@
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 0,
-			"defaultValue": 0,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"defaultValue": 0
 		}
 	}
 }

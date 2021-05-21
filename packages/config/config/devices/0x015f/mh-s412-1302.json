@@ -1,5 +1,3 @@
-// McoHome Technology Co., Ltd. MH-S412
-// Touch Panel Switch 2 Button
 {
 	"manufacturer": "McoHome Technology Co., Ltd.",
 	"manufacturerId": "0x015f",
@@ -38,8 +36,6 @@
 			"maxValue": 1,
 			"defaultValue": 1,
 			"unsigned": true,
-			"readOnly": false,
-			"writeOnly": false,
 			"allowManualEntry": false,
 			"options": [
 				{

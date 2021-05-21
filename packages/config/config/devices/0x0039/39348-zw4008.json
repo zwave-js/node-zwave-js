@@ -1,5 +1,3 @@
-// Honeywell 39348 / ZW4008
-// In-Wall Smart Switch
 {
 	"manufacturer": "Honeywell",
 	"manufacturerId": "0x0039",
@@ -41,8 +39,6 @@
 			"maxValue": 3,
 			"defaultValue": 0,
 			"unsigned": true,
-			"readOnly": false,
-			"writeOnly": false,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -71,8 +67,6 @@
 			"maxValue": 1,
 			"defaultValue": 0,
 			"unsigned": true,
-			"readOnly": false,
-			"writeOnly": false,
 			"allowManualEntry": false,
 			"options": [
 				{

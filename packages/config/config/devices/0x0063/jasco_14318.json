@@ -1,5 +1,3 @@
-// GE/Jasco Jasco 14318
-// Jasco 3-way Light Switch
 {
 	"manufacturer": "GE/Jasco",
 	"manufacturerId": "0x0063",
@@ -23,8 +21,6 @@
 			"minValue": 1,
 			"maxValue": 2,
 			"defaultValue": 1,
-			"readOnly": false,
-			"writeOnly": false,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -43,9 +39,6 @@
 			"minValue": 0,
 			"maxValue": 1,
 			"defaultValue": 0,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true,
 			"options": [
 				{
 					"label": "Invert Switch",

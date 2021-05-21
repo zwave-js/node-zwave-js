@@ -1,22 +1,28 @@
-// AEON Labs ZW120
-// Door/Window sensor Gen5
 {
 	"manufacturer": "AEON Labs",
 	"manufacturerId": "0x0086",
 	"label": "ZW120",
-	"description": "Door/Window sensor Gen5",
+	"description": "Door/Window Sensor Gen5",
 	"devices": [
 		{
 			"productType": "0x0002",
-			"productId": "0x0078"
+			"productId": "0x0078",
+			"zwaveAllianceId": 1579
 		},
 		{
 			"productType": "0x0102",
-			"productId": "0x0078"
+			"productId": "0x0078",
+			"zwaveAllianceId": 1574
 		},
 		{
 			"productType": "0x0202",
-			"productId": "0x0078"
+			"productId": "0x0078",
+			"zwaveAllianceId": 1578
+		},
+		{
+			"productType": "0x0302",
+			"productId": "0x0078",
+			"zwaveAllianceId": 3149
 		}
 	],
 	"firmwareVersion": {
@@ -32,124 +38,51 @@
 	},
 	"paramInformation": {
 		"1": {
-			"label": "Magnet ON/OFF",
-			"description": "Value sent when the Magnet is triggered On/Off.",
-			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 1,
-			"defaultValue": 0,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "Close=0xFF, Open=0x00",
-					"value": 0
-				},
-				{
-					"label": "Close=0x00, Open=0xFF",
-					"value": 1
-				}
-			]
+			"$import": "templates/aeotec_template.json#invert_state_report"
 		},
 		"2": {
-			"label": "Wake up 10 minutes",
-			"description": "Default setting: Disable",
-			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 1,
-			"defaultValue": 1,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "Disable",
-					"value": 0
-				},
-				{
-					"label": "Enable",
-					"value": 1
-				}
-			]
+			"$import": "templates/aeotec_template.json#wake_up_10_minutes"
 		},
 		"3": {
-			"label": "Basic Set Report",
-			"description": "Which value of the Basic Set will be sent when the door is Opened/Closed",
-			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 1,
-			"defaultValue": 0,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "Open: 0xFF, Close: 0x00",
-					"value": 0
-				},
-				{
-					"label": "Open: 0x00, Close: 0xFF",
-					"value": 1
-				}
-			]
+			"$import": "templates/aeotec_template.json#invert_basic_set"
 		},
 		"39": {
-			"label": "Set the low battery value.",
-			"description": "10% to 50%",
-			"valueSize": 1,
-			"minValue": 10,
-			"maxValue": 50,
-			"defaultValue": 10,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"$import": "templates/aeotec_template.json#low_battery_threshold"
 		},
 		"111": {
-			"label": "Set the interval time of low battery checking.",
-			"description": "Minimum interval is 4 minutes, Range is 0 to 2147483647",
-			"valueSize": 4,
-			"minValue": 0,
-			"maxValue": 2147483647,
-			"defaultValue": 86640,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"$import": "templates/aeotec_template.json#low_battery_interval"
 		},
 		"121": {
-			"label": "Report type",
-			"description": "Sensor report sent when triggered Opened/Closed",
+			"label": "Sensor Report Type",
 			"valueSize": 4,
-			"minValue": 0,
-			"maxValue": 65535,
+			"minValue": 1,
+			"maxValue": 17,
 			"defaultValue": 1,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
-		},
-		"255": {
-			"label": "Reset To Factory Defaults.",
-			"valueSize": 4,
-			"minValue": 0,
-			"maxValue": 1431655765,
-			"defaultValue": 1,
-			"readOnly": false,
-			"writeOnly": false,
+			"unsigned": true,
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "Reset to factory default setting",
-					"value": 0
-				},
-				{
-					"label": "Normal",
+					"label": "Basic CC Set",
 					"value": 1
 				},
 				{
-					"label": "Reset to factory default",
-					"value": 1431655765
+					"label": "Binary Sensor CC Report",
+					"value": 16
+				},
+				{
+					"label": "Basic CC Set and Binary Sensor CC Report",
+					"value": 17
 				}
 			]
+		},
+		"255": {
+			"$import": "templates/aeotec_template.json#factory_reset_exclude"
 		}
+	},
+	"metadata": {
+		"inclusion": "Turn the primary controller of Z-Wave network into inclusion mode, short press the product’s Action Button that you can find in the back of the product",
+		"exclusion": "Turn the primary controller of Z-Wave network into exclusion mode, short press the product’s Action Button that you can find in back of the product",
+		"reset": "Press the Action Button once that you can find in back of the product for 20 seconds and then release. This procedure should only be used when the primary controller is inoperable",
+		"manual": "https://products.z-wavealliance.org/ProductManual/File?folder=&filename=MarketCertificationFiles/1574/Door%20Window%20Sensor%20Gen5%20manual.pdf"
 	}
 }

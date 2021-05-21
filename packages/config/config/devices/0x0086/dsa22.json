@@ -1,5 +1,3 @@
-// AEON Labs DSA22
-// 4 button keyfob
 {
 	"manufacturer": "AEON Labs",
 	"manufacturerId": "0x0086",
@@ -39,92 +37,20 @@
 	},
 	"paramInformation": {
 		"241": {
-			"label": "Mode of Button 1 (upper left)",
-			"description": "Defines the switching mode of Button 1",
-			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 255,
-			"defaultValue": 0,
-			"unsigned": true,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "Factory Default",
-					"value": 0
-				},
-				{
-					"label": "Scene Mode",
-					"value": 1
-				}
-			]
+			"$import": "../templates/master_template.json#base_enable_disable",
+			"label": "Button 1 (Upper Left) - Scene Mode"
 		},
 		"242": {
-			"label": "Mode of Button 2 (upper right)",
-			"description": "Defines the switching mode of Button 2",
-			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 255,
-			"defaultValue": 0,
-			"unsigned": true,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "Factory Default",
-					"value": 0
-				},
-				{
-					"label": "Scene Mode",
-					"value": 1
-				}
-			]
+			"$import": "../templates/master_template.json#base_enable_disable",
+			"label": "Button 2 (Upper Right) - Scene Mode"
 		},
 		"243": {
-			"label": "Mode of Button 3 (lower left)",
-			"description": "Defines the switching mode of Button 3",
-			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 255,
-			"defaultValue": 0,
-			"unsigned": true,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "Factory Default",
-					"value": 0
-				},
-				{
-					"label": "Scene Mode",
-					"value": 1
-				}
-			]
+			"$import": "../templates/master_template.json#base_enable_disable",
+			"label": "Button 3 (Lower Left) - Scene Mode"
 		},
 		"244": {
-			"label": "Mode of Button 4 (lower right)",
-			"description": "Defines the switching mode of Button 4",
-			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 255,
-			"defaultValue": 0,
-			"unsigned": true,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "Factory Default",
-					"value": 0
-				},
-				{
-					"label": "Scene Mode",
-					"value": 1
-				}
-			]
+			"$import": "../templates/master_template.json#base_enable_disable",
+			"label": "Button 4 (Lower Right) - Scene Mode"
 		}
 	}
 }

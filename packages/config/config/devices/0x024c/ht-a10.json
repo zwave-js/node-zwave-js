@@ -1,5 +1,3 @@
-// Gas Keeper HT-A10
-// Smart Gas Keeper
 {
 	"manufacturer": "Gas Keeper",
 	"manufacturerId": "0x024c",
@@ -24,10 +22,7 @@
 			"minValue": 0,
 			"maxValue": 54,
 			"defaultValue": 1,
-			"unsigned": true,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"unsigned": true
 		},
 		"2": {
 			"label": "Remained Time",
@@ -36,10 +31,7 @@
 			"minValue": 0,
 			"maxValue": 540,
 			"defaultValue": 0,
-			"unsigned": true,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"unsigned": true
 		}
 	},
 	"metadata": {

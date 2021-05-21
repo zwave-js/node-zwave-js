@@ -1,5 +1,3 @@
-// Ecolink ISZW7-ECO
-// Chime+Siren
 {
 	"manufacturer": "Ecolink",
 	"manufacturerId": "0x014a",
@@ -24,10 +22,7 @@
 			"minValue": 1,
 			"maxValue": 5,
 			"defaultValue": 5,
-			"unsigned": true,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"unsigned": true
 		},
 		"2": {
 			"label": "Heartbeat Notification Timing",
@@ -37,30 +32,25 @@
 			"minValue": 120,
 			"maxValue": 3600,
 			"defaultValue": 3600,
-			"unsigned": true,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"unsigned": true
 		},
 		"3": {
 			"label": "Supervision Encapsulation",
-			"description": "Encapsulate unsolicited notifications in supervision get requests. 0: disabled 1: enabled",
+			"description": "Encapsulate unsolicited notifications in supervision get requests.",
 			"valueSize": 1,
 			"minValue": 0,
-			"maxValue": 0,
+			"maxValue": 1,
 			"defaultValue": 1,
 			"unsigned": true,
-			"readOnly": false,
-			"writeOnly": false,
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "Disabled",
+					"label": "Disable",
 					"value": 0
 				},
 				{
-					"label": "Enabled",
-					"value": 0
+					"label": "Enable",
+					"value": 1
 				}
 			]
 		},
@@ -72,10 +62,7 @@
 			"minValue": 0,
 			"maxValue": 255,
 			"defaultValue": 50,
-			"unsigned": true,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"unsigned": true
 		},
 		"5": {
 			"label": "Sounds Available",
@@ -85,9 +72,7 @@
 			"maxValue": 30,
 			"defaultValue": 30,
 			"unsigned": true,
-			"readOnly": true,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"readOnly": true
 		},
 		"6": {
 			"label": "Emergency Sound Volume Adjustable",
@@ -97,8 +82,6 @@
 			"maxValue": 1,
 			"defaultValue": 0,
 			"unsigned": true,
-			"readOnly": false,
-			"writeOnly": false,
 			"allowManualEntry": false,
 			"options": [
 				{

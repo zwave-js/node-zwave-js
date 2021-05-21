@@ -1,5 +1,3 @@
-// McoHome Technology Co., Ltd. MH-P220
-// Micro Dimmer
 {
 	"manufacturer": "McoHome Technology Co., Ltd.",
 	"manufacturerId": "0x015f",
@@ -13,134 +11,159 @@
 		{
 			"productType": "0x220a",
 			"productId": "0x5102"
+		},
+		{
+			"productType": "0x220a",
+			"productId": "0x5103"
 		}
 	],
 	"firmwareVersion": {
 		"min": "0.0",
 		"max": "255.255"
 	},
-	"supportsZWavePlus": true,
 	"paramInformation": {
 		"1": {
-			"label": "Dimmer state after power down",
+			"label": "Restore State After Power Failure",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 1,
 			"defaultValue": 1,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Disable",
+					"value": 0
+				},
+				{
+					"label": "Enable",
+					"value": 1
+				}
+			]
 		},
 		"2": {
-			"label": "External switch type",
+			"label": "External Switch Type",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 2,
-			"defaultValue": 0,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"defaultValue": 1,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Momentary",
+					"value": 0
+				},
+				{
+					"label": "Switch",
+					"value": 1
+				},
+				{
+					"label": "Roller Blind Switch - S1 -> Up; S2 -> Down",
+					"value": 2
+				}
+			]
 		},
 		"3": {
-			"label": "2-state Switches",
+			"label": "Switch States",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 1,
 			"defaultValue": 1,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Toggle",
+					"value": 0
+				},
+				{
+					"label": "On/off switch",
+					"value": 1
+				}
+			]
 		},
 		"4": {
-			"label": "ALL ON/ALL OFF",
+			"label": "All On / All Off",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 255,
 			"defaultValue": 255,
 			"unsigned": true,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Disable",
+					"value": 0
+				},
+				{
+					"label": "Enable All Off; Disable All On",
+					"value": 1
+				},
+				{
+					"label": "Enable All On; Disable All Off",
+					"value": 2
+				},
+				{
+					"label": "Enable",
+					"value": 255
+				}
+			]
 		},
 		"5": {
-			"label": "Minimum brightness level",
+			"label": "Minimum Brightness",
 			"valueSize": 1,
 			"minValue": 1,
 			"maxValue": 98,
-			"defaultValue": 1,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"defaultValue": 1
 		},
 		"6": {
-			"label": "Maximum brightness level",
+			"label": "Maximum Brightness",
 			"valueSize": 1,
 			"minValue": 2,
 			"maxValue": 99,
-			"defaultValue": 99,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"defaultValue": 99
 		},
 		"7": {
-			"label": "Single dimming step time(Manual)",
+			"label": "Dimming Step Time (Manual)",
 			"valueSize": 2,
+			"unit": "10ms",
 			"minValue": 1,
 			"maxValue": 255,
-			"defaultValue": 3,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"defaultValue": 3
 		},
 		"8": {
-			"label": "Single dimming step size (Manual)",
+			"label": "Dimming Step Size (Manual)",
 			"valueSize": 1,
 			"minValue": 1,
 			"maxValue": 99,
-			"defaultValue": 1,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"defaultValue": 1
 		},
 		"9": {
-			"label": "Single dimming step time (Auto)",
+			"label": "Dimming Step Time (Auto)",
 			"valueSize": 2,
+			"unit": "10ms",
 			"minValue": 1,
 			"maxValue": 255,
-			"defaultValue": 3,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"defaultValue": 3
 		},
 		"10": {
-			"label": "Single dimming step size (Auto)",
+			"label": "Dimming Step Size (Auto)",
 			"valueSize": 1,
 			"minValue": 1,
 			"maxValue": 99,
-			"defaultValue": 1,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"defaultValue": 1
 		},
 		"11": {
-			"label": "Timer function (Auto-off)",
+			"label": "Auto-Off Timer",
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 255,
-			"defaultValue": 0,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"defaultValue": 0
 		},
 		"13": {
 			"label": "One click of S1",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 99,
-			"defaultValue": 99,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"defaultValue": 99
 		},
 		"14": {
 			"label": "Double click of S1",
@@ -148,85 +171,145 @@
 			"minValue": 0,
 			"maxValue": 1,
 			"defaultValue": 1,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Disable",
+					"value": 0
+				},
+				{
+					"label": "Max brightness",
+					"value": 1
+				}
+			]
 		},
 		"15": {
-			"label": "Operation report Switch1 to Assoc Group 2 & 3",
+			"label": "Operation Report Switch1 to Association Groups 2 & 3",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 255,
 			"defaultValue": 0,
-			"unsigned": true,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"unsigned": true
 		},
 		"16": {
-			"label": "Operation report Switch1 to Association Group 2",
+			"label": "Operation Report Switch1 to Association Group 2",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 1,
 			"defaultValue": 1,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "On = 0xff",
+					"value": 0
+				},
+				{
+					"label": "On = Current dimmer value",
+					"value": 1
+				}
+			]
 		},
 		"17": {
-			"label": "Switch 2 function",
+			"label": "Switch 2 Function",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 255,
 			"defaultValue": 1,
 			"unsigned": true,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Wire with Roller Blinds Switch",
+					"value": 0
+				},
+				{
+					"label": "Scene activation; Control Association Group 4",
+					"value": 1
+				},
+				{
+					"label": "Scene Activation",
+					"value": 2
+				},
+				{
+					"label": "Send Basic CC Set",
+					"value": 3
+				},
+				{
+					"label": "Disable",
+					"value": 255
+				}
+			]
 		},
 		"18": {
-			"label": "Operation report Switch2 to Association Group 4",
+			"label": "Association Group 4 Commands",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 255,
 			"defaultValue": 0,
 			"unsigned": true,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Basic CC Set (On/Off)",
+					"value": 0
+				},
+				{
+					"label": "Basic CC Set (On)",
+					"value": 1
+				},
+				{
+					"label": "Basic CC Set (Off)",
+					"value": 2
+				},
+				{
+					"label": "Disable",
+					"value": 255
+				}
+			]
 		},
 		"19": {
-			"label": "Scene ID sent to AG1 when one click of S2",
+			"label": "Scene ID - One Click of S2 (Association Group 1)",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 255,
 			"defaultValue": 0,
-			"unsigned": true,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"unsigned": true
 		},
 		"20": {
-			"label": "Scene ID sent to AG1 double click of S2",
+			"label": "Scene ID - Double Click of S2 (Association Group 1)",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 255,
 			"defaultValue": 0,
-			"unsigned": true,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"unsigned": true
 		},
 		"21": {
-			"label": "Scene ID sent to AG1 when hold S2",
+			"label": "Scene ID - Hold of S2 (Association Group 1)",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 255,
 			"defaultValue": 0,
+			"unsigned": true
+		},
+		"255": {
+			"label": "Factory reset",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 85,
+			"defaultValue": 0,
 			"unsigned": true,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"writeOnly": true,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Normal operation",
+					"value": 0
+				},
+				{
+					"label": "Factory reset",
+					"value": 85
+				}
+			]
 		}
 	}
 }

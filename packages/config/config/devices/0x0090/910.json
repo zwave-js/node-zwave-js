@@ -1,5 +1,3 @@
-// Kwikset 910
-// Smart Code with Home Connect Technology
 {
 	"manufacturer": "Kwikset",
 	"manufacturerId": "0x0090",
@@ -145,6 +143,52 @@
 		"40": {
 			"$import": "templates/kwikset_template.json#reset"
 		}
+	},
+	"compat": {
+		"alarmMapping": [
+			{
+				"$import": "templates/kwikset_template.json#alarm_map_idle"
+			},
+			{
+				"$import": "templates/kwikset_template.json#alarm_map_lock_jammed"
+			},
+			{
+				"$import": "templates/kwikset_template.json#alarm_map_keypad_unlocked"
+			},
+			{
+				"$import": "templates/kwikset_template.json#alarm_map_keypad_lock"
+			},
+			{
+				"$import": "templates/kwikset_template.json#alarm_map_manual_lock"
+			},
+			{
+				"$import": "templates/kwikset_template.json#alarm_map_manual_unlock"
+			},
+			{
+				"$import": "templates/kwikset_template.json#alarm_map_rf_lock_jammed"
+			},
+			{
+				"$import": "templates/kwikset_template.json#alarm_map_rf_lock"
+			},
+			{
+				"$import": "templates/kwikset_template.json#alarm_map_rf_unlock"
+			},
+			{
+				"$import": "templates/kwikset_template.json#alarm_map_auto_lock_jammed"
+			},
+			{
+				"$import": "templates/kwikset_template.json#alarm_map_auto_lock"
+			},
+			{
+				"$import": "templates/kwikset_template.json#alarm_map_all_codes_deleted"
+			},
+			{
+				"$import": "templates/kwikset_template.json#alarm_map_code_deleted"
+			},
+			{
+				"$import": "templates/kwikset_template.json#alarm_map_low_battery"
+			}
+		]
 	},
 	"metadata": {
 		"inclusion": "Initiate the process to add the lock to your system at your smart home controller.\nWhen prompted by your smart home system to add the lock, press button “A” on the lock interior one time. The red LED will illuminate when the lock enters Add Mode.\nPlease allow time for the controller to add the lock to your system",

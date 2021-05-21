@@ -1,5 +1,3 @@
-// Fibargroup FGWPB-121
-// Fibaro Wall Plug
 {
 	"manufacturer": "Fibargroup",
 	"manufacturerId": "0x010f",
@@ -19,42 +17,36 @@
 		"min": "0.0",
 		"max": "255.255"
 	},
-	"supportsZWavePlus": true,
 	"paramInformation": {
 		"2": {
 			"label": "Power Failure",
-			"description": "Remember device status before the power failure.",
+			"description": "Remember device status before the power failure",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 1,
 			"defaultValue": 1,
-			"readOnly": false,
-			"writeOnly": false,
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "Switched OFF.",
+					"label": "Switched Off",
 					"value": 0
 				},
 				{
-					"label": "Restore State.",
+					"label": "Restore State",
 					"value": 1
 				}
 			]
 		},
 		"3": {
 			"label": "Overload",
-			"description": "Overload safety switch.",
+			"description": "Overload safety switch",
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 18000,
 			"defaultValue": 0,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true,
 			"options": [
 				{
-					"label": "Overload Disabled.",
+					"label": "Overload Disabled",
 					"value": 0
 				}
 			]
@@ -65,12 +57,9 @@
 			"minValue": 0,
 			"maxValue": 100,
 			"defaultValue": 15,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true,
 			"options": [
 				{
-					"label": "Disables power reporting.",
+					"label": "Disables power reporting",
 					"value": 0
 				}
 			]
@@ -81,441 +70,391 @@
 			"minValue": 0,
 			"maxValue": 500,
 			"defaultValue": 10,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true,
 			"options": [
 				{
-					"label": "Disables energy reporting.",
+					"label": "Disables energy reporting",
 					"value": 0
 				}
 			]
 		},
 		"13": {
-			"label": "ReportingInterval",
-			"description": "Periodic power reporting.",
+			"label": "Power Reporting Interval",
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 32400,
 			"defaultValue": 3600,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true,
 			"options": [
 				{
-					"label": "Disables reporting.",
+					"label": "Disable",
 					"value": 0
 				}
 			]
 		},
 		"14": {
-			"label": "ReportingEnergyInterval",
-			"description": "Periodic energy reporting.",
+			"label": "Energy Reporting Interval",
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 32400,
 			"defaultValue": 3600,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true,
 			"options": [
 				{
-					"label": "Disables reporting.",
+					"label": "Disable",
 					"value": 0
 				}
 			]
 		},
 		"15": {
 			"label": "Consumption",
-			"description": "Measuring energy consumed by the Wall Plug itself.",
+			"description": "Measure energy consumed by the Wall Plug itself",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 1,
 			"defaultValue": 0,
-			"readOnly": false,
-			"writeOnly": false,
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "Disables energy consumption.",
+					"label": "Disable",
 					"value": 0
 				},
 				{
-					"label": "Enables energy consumption.",
+					"label": "Enable",
 					"value": 1
 				}
 			]
 		},
 		"21": {
 			"label": "Up Value",
-			"description": "Upper power threshold.",
+			"description": "Upper power threshold",
 			"valueSize": 2,
 			"minValue": 100,
 			"maxValue": 18000,
-			"defaultValue": 500,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"defaultValue": 500
 		},
 		"22": {
 			"label": "Down value",
-			"description": "Lower power threshold.",
+			"description": "Lower power threshold",
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 17900,
-			"defaultValue": 300,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"defaultValue": 300
 		},
 		"23": {
 			"label": "Controlling",
-			"description": "Controlling 3rd association group devices.",
+			"description": "Controlling 3rd association group devices",
 			"valueSize": 1,
 			"minValue": 1,
 			"maxValue": 3,
 			"defaultValue": 3,
-			"readOnly": false,
-			"writeOnly": false,
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "Power Exceeded.",
+					"label": "Power Exceeded",
 					"value": 1
 				},
 				{
-					"label": "Power Dropped.",
+					"label": "Power Dropped",
 					"value": 2
 				},
 				{
-					"label": "Power Dropped or Exceeded.",
+					"label": "Power Dropped or Exceeded",
 					"value": 3
 				}
 			]
 		},
 		"24": {
 			"label": "Switch On",
-			"description": "Command frame sent to devices in 2nd group.",
+			"description": "Command frame sent to devices in 2nd group",
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 255,
 			"defaultValue": 255,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true,
 			"options": [
 				{
-					"label": "OFF.",
+					"label": "Off",
 					"value": 0
 				},
 				{
-					"label": "Last State/ON.",
+					"label": "Last State/On",
 					"value": 255
 				}
 			]
 		},
 		"25": {
 			"label": "Switch Off",
-			"description": "Command frame sent to devices in 2nd group.",
+			"description": "Command frame sent to devices in 2nd group",
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 255,
 			"defaultValue": 0,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true,
 			"options": [
 				{
-					"label": "OFF.",
+					"label": "Off",
 					"value": 0
 				},
 				{
-					"label": "Last State/ON.",
+					"label": "Last State/On",
 					"value": 255
 				}
 			]
 		},
 		"26": {
-			"label": "Threshold Up.",
-			"description": "Command frame sent to the devices in 3rd group.",
+			"label": "Threshold Up",
+			"description": "Command frame sent to the devices in 3rd group",
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 255,
 			"defaultValue": 255,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true,
 			"options": [
 				{
-					"label": "OFF.",
+					"label": "Off",
 					"value": 0
 				},
 				{
-					"label": "Last State/ON.",
+					"label": "Last State/On",
 					"value": 255
 				}
 			]
 		},
 		"27": {
-			"label": "Threshold Down.",
-			"description": "Command frame sent to the devices in 3rd group.",
+			"label": "Threshold Down",
+			"description": "Command frame sent to the devices in 3rd group",
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 255,
 			"defaultValue": 0,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true,
 			"options": [
 				{
-					"label": "OFF.",
+					"label": "Off",
 					"value": 0
 				},
 				{
-					"label": "Last State/ON.",
+					"label": "Last State/On",
 					"value": 255
 				}
 			]
 		},
 		"30": {
 			"label": "Active Alarms",
-			"description": "Network alarms to which the Wall Plug will respond.",
+			"description": "Network alarms to which the Wall Plug will respond",
 			"valueSize": 1,
 			"minValue": 1,
 			"maxValue": 63,
 			"defaultValue": 63,
-			"readOnly": false,
-			"writeOnly": false,
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "General.",
+					"label": "General",
 					"value": 1
 				},
 				{
-					"label": "Smoke.",
+					"label": "Smoke",
 					"value": 2
 				},
 				{
-					"label": "Carbon Monoxide.",
+					"label": "Carbon Monoxide",
 					"value": 4
 				},
 				{
-					"label": "Carbon Dioxide.",
+					"label": "Carbon Dioxide",
 					"value": 8
 				},
 				{
-					"label": "High Temperature.",
+					"label": "High Temperature",
 					"value": 16
 				},
 				{
-					"label": "Flood.",
+					"label": "Flood",
 					"value": 32
 				},
 				{
-					"label": "All Alarms (default).",
+					"label": "All Alarms (default)",
 					"value": 63
 				}
 			]
 		},
 		"31": {
-			"label": "Response to alarm frames.",
-			"description": "Wall plug response to alarms.",
+			"label": "Response to alarm frames",
+			"description": "Wall plug response to alarms",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 50,
 			"defaultValue": 0,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true,
 			"options": [
 				{
-					"label": "No Reaction.",
+					"label": "No Reaction",
 					"value": 0
 				},
 				{
-					"label": "ON.",
+					"label": "On",
 					"value": 1
 				},
 				{
-					"label": "OFF.",
+					"label": "Off",
 					"value": 2
 				}
 			]
 		},
 		"32": {
-			"label": "Alarm state duration.",
-			"description": "Specifies the duration of the alarm state.",
+			"label": "Alarm state duration",
+			"description": "Specifies the duration of the alarm state",
 			"valueSize": 2,
 			"minValue": 1,
 			"maxValue": 32400,
-			"defaultValue": 600,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"defaultValue": 600
 		},
 		"40": {
-			"label": "Power load for violet color.",
-			"description": "Maximum active power to flash the LED frame Violet.",
+			"label": "Power load for violet color",
+			"description": "Maximum active power to flash the LED frame Violet",
 			"valueSize": 2,
 			"minValue": 1000,
 			"maxValue": 18000,
-			"defaultValue": 18000,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"defaultValue": 18000
 		},
 		"41": {
-			"label": "LED frame color ON.",
-			"description": "LED frame color when controlled device is on.",
+			"label": "LED frame color On",
+			"description": "LED frame color when controlled device is on",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 9,
 			"defaultValue": 1,
-			"readOnly": false,
-			"writeOnly": false,
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "Disable Illumination.",
+					"label": "Disable Illumination",
 					"value": 0
 				},
 				{
-					"label": "Active Power (Smooth).",
+					"label": "Active Power (Smooth)",
 					"value": 1
 				},
 				{
-					"label": "Active Power (Steps).",
+					"label": "Active Power (Steps)",
 					"value": 2
 				},
 				{
-					"label": "White.",
+					"label": "White",
 					"value": 3
 				},
 				{
-					"label": "Red.",
+					"label": "Red",
 					"value": 4
 				},
 				{
-					"label": "Green.",
+					"label": "Green",
 					"value": 5
 				},
 				{
-					"label": "Blue.",
+					"label": "Blue",
 					"value": 6
 				},
 				{
-					"label": "Yellow.",
+					"label": "Yellow",
 					"value": 7
 				},
 				{
-					"label": "Cyan.",
+					"label": "Cyan",
 					"value": 8
 				},
 				{
-					"label": "Magenta.",
+					"label": "Magenta",
 					"value": 9
 				}
 			]
 		},
 		"42": {
-			"label": "LED frame color OFF.",
-			"description": "LED frame color when controlled device is off.",
+			"label": "LED frame color Off",
+			"description": "LED frame color when controlled device is off",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 9,
 			"defaultValue": 0,
-			"readOnly": false,
-			"writeOnly": false,
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "Disable Illumination.",
+					"label": "Disable Illumination",
 					"value": 0
 				},
 				{
-					"label": "Last Measured Load.",
+					"label": "Last Measured Load",
 					"value": 1
 				},
 				{
-					"label": "White.",
+					"label": "White",
 					"value": 3
 				},
 				{
-					"label": "Red.",
+					"label": "Red",
 					"value": 4
 				},
 				{
-					"label": "Green.",
+					"label": "Green",
 					"value": 5
 				},
 				{
-					"label": "Blue.",
+					"label": "Blue",
 					"value": 6
 				},
 				{
-					"label": "Yellow.",
+					"label": "Yellow",
 					"value": 7
 				},
 				{
-					"label": "Cyan.",
+					"label": "Cyan",
 					"value": 8
 				},
 				{
-					"label": "Magenta.",
+					"label": "Magenta",
 					"value": 9
 				}
 			]
 		},
 		"43": {
-			"label": "LED frame color Z-Wave.",
-			"description": "Z-Wave alarm illumination.",
+			"label": "LED frame color Z-Wave",
+			"description": "Z-Wave alarm illumination",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 9,
 			"defaultValue": 2,
-			"readOnly": false,
-			"writeOnly": false,
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "Disable Illumination.",
+					"label": "Disable Illumination",
 					"value": 0
 				},
 				{
-					"label": "No change in color.",
+					"label": "No change in color",
 					"value": 1
 				},
 				{
-					"label": "Red/White/Blue.",
+					"label": "Red/White/Blue",
 					"value": 2
 				},
 				{
-					"label": "White.",
+					"label": "White",
 					"value": 3
 				},
 				{
-					"label": "Red.",
+					"label": "Red",
 					"value": 4
 				},
 				{
-					"label": "Green.",
+					"label": "Green",
 					"value": 5
 				},
 				{
-					"label": "Blue.",
+					"label": "Blue",
 					"value": 6
 				},
 				{
-					"label": "Yellow.",
+					"label": "Yellow",
 					"value": 7
 				},
 				{
-					"label": "Cyan.",
+					"label": "Cyan",
 					"value": 8
 				},
 				{
-					"label": "Magenta.",
+					"label": "Magenta",
 					"value": 9
 				}
 			]

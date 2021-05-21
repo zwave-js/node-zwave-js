@@ -1,17 +1,28 @@
-import { ZWaveError, ZWaveErrorCodes } from "@zwave-js/core";
+import { isZWaveError, ZWaveError, ZWaveErrorCodes } from "@zwave-js/core";
 import { formatId, stringify } from "@zwave-js/shared";
 import { entries } from "alcalzone-shared/objects";
 import { isObject } from "alcalzone-shared/typeguards";
 import { pathExists, readFile, writeFile } from "fs-extra";
 import JSON5 from "json5";
 import path from "path";
-import { configDir, hexKeyRegex4Digits, throwInvalidConfig } from "./utils";
+import {
+	configDir,
+	externalConfigDir,
+	hexKeyRegex4Digits,
+	throwInvalidConfig,
+} from "./utils";
 
-const configPath = path.join(configDir, "manufacturers.json");
 export type ManufacturersMap = Map<number, string>;
 
 /** @internal */
-export async function loadManufacturersInternal(): Promise<ManufacturersMap> {
+export async function loadManufacturersInternal(
+	externalConfig?: boolean,
+): Promise<ManufacturersMap> {
+	const configPath = path.join(
+		(externalConfig && externalConfigDir) || configDir,
+		"manufacturers.json",
+	);
+
 	if (!(await pathExists(configPath))) {
 		throw new ZWaveError(
 			"The manufacturer config file does not exist!",
@@ -48,7 +59,7 @@ export async function loadManufacturersInternal(): Promise<ManufacturersMap> {
 
 		return manufacturers;
 	} catch (e: unknown) {
-		if (e instanceof ZWaveError) {
+		if (isZWaveError(e)) {
 			throw e;
 		} else {
 			throwInvalidConfig("manufacturers");
@@ -72,5 +83,6 @@ export async function saveManufacturersInternal(
 		data[formatId(id)] = name;
 	}
 
+	const configPath = path.join(configDir, "manufacturers.json");
 	await writeFile(configPath, stringify(data, "\t") + "\n");
 }

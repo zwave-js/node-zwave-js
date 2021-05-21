@@ -94,7 +94,11 @@ export class BasicCCAPI extends CCAPI {
 		// so UIs have immediate feedback
 		if (this.isSinglecast()) {
 			// Only update currentValue for valid target values
-			if (value >= 0 && value <= 99) {
+			if (
+				!this.driver.options.disableOptimisticValueUpdate &&
+				value >= 0 &&
+				value <= 99
+			) {
 				const valueDB = this.endpoint.getNodeUnsafe()?.valueDB;
 				valueDB?.setValue(
 					getCurrentValueValueId(this.endpoint.index),
@@ -102,8 +106,41 @@ export class BasicCCAPI extends CCAPI {
 				);
 			}
 
-			// and verify the current value after a delay
+			// and verify the current value after a delay. We query currentValue instead of targetValue to make sure
+			// that unsolicited updates cancel the scheduled poll
+			// wotan-disable-next-line no-useless-predicate
+			if (property === "targetValue") property = "currentValue";
 			this.schedulePoll({ property });
+		} else if (this.isMulticast()) {
+			// Only update currentValue for valid target values
+			if (
+				!this.driver.options.disableOptimisticValueUpdate &&
+				value >= 0 &&
+				value <= 99
+			) {
+				// Figure out which nodes were affected by this command
+				const affectedNodes = this.endpoint.node.physicalNodes.filter(
+					(node) =>
+						node
+							.getEndpoint(this.endpoint.index)
+							?.supportsCC(this.ccId),
+				);
+				// and optimistically update the currentValue
+				for (const node of affectedNodes) {
+					node.valueDB?.setValue(
+						getCurrentValueValueId(this.endpoint.index),
+						value,
+					);
+				}
+			} else if (value === 255) {
+				// We generally don't want to poll for multicasts because of how much traffic it can cause
+				// However, when setting the value 255 (ON), we don't know the actual state
+
+				// We query currentValue instead of targetValue to make sure that unsolicited updates cancel the scheduled poll
+				// wotan-disable-next-line no-useless-predicate
+				if (property === "targetValue") property = "currentValue";
+				this.schedulePoll({ property });
+			}
 		}
 	};
 
@@ -135,6 +172,11 @@ export class BasicCCAPI extends CCAPI {
 			this.commandOptions,
 		);
 		if (response) {
+			const valueDB = this.endpoint.getNodeUnsafe()?.valueDB;
+			valueDB?.setValue(
+				getCurrentValueValueId(this.endpoint.index),
+				response.currentValue,
+			);
 			return pick(response, ["currentValue", "targetValue", "duration"]);
 		}
 	}

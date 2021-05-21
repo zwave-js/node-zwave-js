@@ -1,5 +1,3 @@
-// Fibargroup FGWPB-111
-// FIBARO Wall Plug
 {
 	"manufacturer": "Fibargroup",
 	"manufacturerId": "0x010f",
@@ -24,8 +22,6 @@
 			"minValue": 0,
 			"maxValue": 1,
 			"defaultValue": 1,
-			"readOnly": false,
-			"writeOnly": false,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -45,10 +41,7 @@
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 18000,
-			"defaultValue": 0,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"defaultValue": 0
 		},
 		"11": {
 			"label": "Power Reporting",
@@ -57,10 +50,7 @@
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 100,
-			"defaultValue": 15,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"defaultValue": 15
 		},
 		"12": {
 			"label": "Energy Reporting Threshold",
@@ -68,10 +58,7 @@
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 500,
-			"defaultValue": 10,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"defaultValue": 10
 		},
 		"13": {
 			"label": "Periodic Power Report",
@@ -79,10 +66,7 @@
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 32400,
-			"defaultValue": 3600,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"defaultValue": 3600
 		},
 		"14": {
 			"label": "Periodic Energy Report",
@@ -90,10 +74,7 @@
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 32400,
-			"defaultValue": 3600,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"defaultValue": 3600
 		},
 		"15": {
 			"label": "SelfConsumption",
@@ -102,8 +83,6 @@
 			"minValue": 0,
 			"maxValue": 1,
 			"defaultValue": 0,
-			"readOnly": false,
-			"writeOnly": false,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -123,10 +102,7 @@
 			"valueSize": 2,
 			"minValue": 100,
 			"maxValue": 18000,
-			"defaultValue": 500,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"defaultValue": 500
 		},
 		"22": {
 			"label": "DOWNvalue",
@@ -135,10 +111,7 @@
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 17900,
-			"defaultValue": 300,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"defaultValue": 300
 		},
 		"23": {
 			"label": "ControlMode",
@@ -147,8 +120,6 @@
 			"minValue": 1,
 			"maxValue": 3,
 			"defaultValue": 3,
-			"readOnly": false,
-			"writeOnly": false,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -171,10 +142,7 @@
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 255,
-			"defaultValue": 255,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"defaultValue": 255
 		},
 		"25": {
 			"label": "SwitchOff",
@@ -183,9 +151,7 @@
 			"minValue": 0,
 			"maxValue": 255,
 			"defaultValue": 0,
-			"readOnly": true,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"readOnly": true
 		},
 		"26": {
 			"label": "ThresholdUpCmd",
@@ -193,10 +159,7 @@
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 255,
-			"defaultValue": 255,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"defaultValue": 255
 		},
 		"27": {
 			"label": "ThresholdDownCmd",
@@ -204,10 +167,7 @@
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 255,
-			"defaultValue": 0,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"defaultValue": 0
 		},
 		"30": {
 			"label": "ActiveAlarm",
@@ -216,8 +176,6 @@
 			"minValue": 0,
 			"maxValue": 63,
 			"defaultValue": 63,
-			"readOnly": false,
-			"writeOnly": false,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -257,9 +215,6 @@
 			"minValue": 0,
 			"maxValue": 50,
 			"defaultValue": 0,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true,
 			"options": [
 				{
 					"label": "no reaction",
@@ -282,10 +237,7 @@
 			"valueSize": 2,
 			"minValue": 1,
 			"maxValue": 32400,
-			"defaultValue": 600,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"defaultValue": 600
 		},
 		"40": {
 			"label": "PwrLoadViolet",
@@ -294,10 +246,7 @@
 			"valueSize": 2,
 			"minValue": 1000,
 			"maxValue": 18000,
-			"defaultValue": 18000,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"defaultValue": 18000
 		},
 		"41": {
 			"label": "LEDwhenOn",
@@ -306,8 +255,6 @@
 			"minValue": 0,
 			"maxValue": 9,
 			"defaultValue": 1,
-			"readOnly": false,
-			"writeOnly": false,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -359,8 +306,6 @@
 			"minValue": 0,
 			"maxValue": 9,
 			"defaultValue": 1,
-			"readOnly": false,
-			"writeOnly": false,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -408,8 +353,6 @@
 			"minValue": 0,
 			"maxValue": 9,
 			"defaultValue": 2,
-			"readOnly": false,
-			"writeOnly": false,
 			"allowManualEntry": false,
 			"options": [
 				{

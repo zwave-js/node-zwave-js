@@ -1,5 +1,3 @@
-// Everspring SP817
-// SP817 Motion Sensor
 {
 	"manufacturer": "Everspring",
 	"manufacturerId": "0x0060",
@@ -22,20 +20,14 @@
 			"valueSize": 1,
 			"minValue": 1,
 			"maxValue": 99,
-			"defaultValue": 99,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"defaultValue": 99
 		},
 		"3": {
 			"label": "Sensitivity Level",
 			"valueSize": 1,
 			"minValue": 1,
 			"maxValue": 10,
-			"defaultValue": 6,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"defaultValue": 6
 		},
 		"4": {
 			"label": "Re-trigger Interval",
@@ -43,10 +35,7 @@
 			"valueSize": 2,
 			"minValue": 5,
 			"maxValue": 3600,
-			"defaultValue": 180,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"defaultValue": 180
 		},
 		"5": {
 			"label": "Lux Level",
@@ -54,10 +43,7 @@
 			"valueSize": 1,
 			"minValue": 1,
 			"maxValue": 100,
-			"defaultValue": 20,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"defaultValue": 20
 		},
 		"6": {
 			"label": "On-Off Duration",
@@ -65,10 +51,7 @@
 			"valueSize": 2,
 			"minValue": 5,
 			"maxValue": 3600,
-			"defaultValue": 15,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"defaultValue": 15
 		}
 	}
 }

@@ -1,0 +1,226 @@
+{
+	"manufacturer": "Qubino",
+	"manufacturerId": "0x0159",
+	"label": "ZMNHMD",
+	"description": "Smart Leak Protector",
+	"devices": [
+		{
+			"productType": "0x0006",
+			"productId": "0x0051"
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"paramInformation": {
+		"1": {
+			"label": "Output 1 Valve Type",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 0,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "NO (Normally Open)",
+					"value": 0
+				},
+				{
+					"label": "NC (Normally Closed)",
+					"value": 1
+				}
+			]
+		},
+		"2": {
+			"label": "Input 2 Contact Type",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 0,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "NO (Normally Open)",
+					"value": 0
+				},
+				{
+					"label": "NC (Normally Closed)",
+					"value": 1
+				}
+			]
+		},
+		"3": {
+			"label": "Input 3 Contact Type",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 0,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "NO (Normally Open)",
+					"value": 0
+				},
+				{
+					"label": "NC (Normally Closed) ",
+					"value": 1
+				}
+			]
+		},
+		"30": {
+			"label": "State After Power Failure",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 0,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Restore previous state",
+					"value": 0
+				},
+				{
+					"label": "Remain off",
+					"value": 1
+				}
+			]
+		},
+		"48": {
+			"label": "Total Water Consumption",
+			"valueSize": 4,
+			"minValue": -2147483648,
+			"maxValue": 2147483647,
+			"defaultValue": 0,
+			"unit": "l"
+		},
+		"50": {
+			"label": "Number of Liters per Pulse",
+			"valueSize": 2,
+			"minValue": 1,
+			"maxValue": 1000,
+			"defaultValue": 10
+		},
+		"51": {
+			"label": "Slow Leak: Threshold",
+			"description": "How much water must be consumed in the timespan defined by parameter 52 to trigger slow leak alarm",
+			"valueSize": 2,
+			"minValue": 1,
+			"maxValue": 1000,
+			"defaultValue": 1,
+			"unit": "l"
+		},
+		"52": {
+			"label": "Slow Leak: Time Interval",
+			"valueSize": 1,
+			"minValue": 1,
+			"maxValue": 24,
+			"defaultValue": 24,
+			"unit": "hours"
+		},
+		"60": {
+			"label": "Slow Leak: Close Valve on Alarm",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 1,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Enable",
+					"value": 0
+				},
+				{
+					"label": "Disable",
+					"value": 1
+				}
+			]
+		},
+		"53": {
+			"label": "Medium Leak: Threshold",
+			"description": "How much water must be consumed in the timespan defined by parameter 54 to trigger medium leak alarm",
+			"valueSize": 2,
+			"minValue": 1,
+			"maxValue": 1000,
+			"defaultValue": 150
+		},
+		"54": {
+			"label": "Medium Leak: Time Interval",
+			"valueSize": 1,
+			"minValue": 1,
+			"maxValue": 24,
+			"defaultValue": 6,
+			"unit": "hours"
+		},
+		"61": {
+			"label": "Medium Leak: Close Valve on Alarm",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 0,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Enable",
+					"value": 0
+				},
+				{
+					"label": "Disable",
+					"value": 1
+				}
+			]
+		},
+		"55": {
+			"label": "Fast Leak: Threshold",
+			"description": "How much water must be consumed in the timespan defined by parameter 56 to trigger fast leak alarm",
+			"valueSize": 2,
+			"minValue": 1,
+			"maxValue": 1000,
+			"defaultValue": 300
+		},
+		"56": {
+			"label": "Fast Leak: Time Interval",
+			"valueSize": 1,
+			"minValue": 1,
+			"maxValue": 24,
+			"defaultValue": 3,
+			"unit": "hours"
+		},
+		"62": {
+			"label": "Fast Leak: Close Valve on Alarm",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 0,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Enable",
+					"value": 0
+				},
+				{
+					"label": "Disable",
+					"value": 1
+				}
+			]
+		},
+		"63": {
+			"label": "Hardware Leak: Close Valve on Alarm",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 0,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Enable",
+					"value": 0
+				},
+				{
+					"label": "Disable",
+					"value": 1
+				}
+			]
+		}
+	}
+}

@@ -56,3 +56,8 @@ autoLabel:
     only: true # Whether non-matching files should be allowed
     remove: false # Whether to remove the label if the rule no longer applies
     label: 'config ⚙' # Which label to add/remove
+
+# Whitelist which workflows from forks may be auto-approved:
+approveWorkflow:
+  # Auto-approve only workflows for config file changes
+  files: 'packages/config/config/**/*.json' # May also be an array of strings

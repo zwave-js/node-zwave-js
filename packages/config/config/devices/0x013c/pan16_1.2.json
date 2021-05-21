@@ -1,5 +1,3 @@
-// Philio Technology Corp PAN16
-// Smart Energy Plug In Switch
 {
 	"manufacturer": "Philio Technology Corp",
 	"manufacturerId": "0x013c",
@@ -26,30 +24,21 @@
 			"valueSize": 2,
 			"minValue": 1,
 			"maxValue": 32767,
-			"defaultValue": 720,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"defaultValue": 720
 		},
 		"2": {
 			"label": "KWH Meter Report Period",
 			"valueSize": 2,
 			"minValue": 1,
 			"maxValue": 32767,
-			"defaultValue": 6,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"defaultValue": 6
 		},
 		"3": {
 			"label": "Threshold of current for Load caution",
 			"valueSize": 2,
 			"minValue": 10,
 			"maxValue": 1300,
-			"defaultValue": 1300,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"defaultValue": 1300
 		},
 		"4": {
 			"label": "Threshold of KWh for Load caution",
@@ -57,10 +46,7 @@
 			"valueSize": 2,
 			"minValue": 1,
 			"maxValue": 10000,
-			"defaultValue": 10000,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"defaultValue": 10000
 		},
 		"5": {
 			"label": "Restore switch state mode",
@@ -68,8 +54,6 @@
 			"minValue": 0,
 			"maxValue": 2,
 			"defaultValue": 1,
-			"readOnly": false,
-			"writeOnly": false,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -92,8 +76,6 @@
 			"minValue": 0,
 			"maxValue": 1,
 			"defaultValue": 1,
-			"readOnly": false,
-			"writeOnly": false,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -112,8 +94,6 @@
 			"minValue": 1,
 			"maxValue": 3,
 			"defaultValue": 1,
-			"readOnly": false,
-			"writeOnly": false,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -135,10 +115,7 @@
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 32767,
-			"defaultValue": 0,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"defaultValue": 0
 		},
 		"9": {
 			"label": "RF off command mode",
@@ -146,8 +123,6 @@
 			"minValue": 0,
 			"maxValue": 3,
 			"defaultValue": 0,
-			"readOnly": false,
-			"writeOnly": false,
 			"allowManualEntry": false,
 			"options": [
 				{

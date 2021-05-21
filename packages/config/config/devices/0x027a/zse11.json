@@ -1,0 +1,217 @@
+{
+	"manufacturer": "Zooz",
+	"manufacturerId": "0x027a",
+	"label": "ZSE11",
+	"description": "Q Sensor",
+	"devices": [
+		{
+			"productType": "0x0201",
+			"productId": "0x0006",
+			"zwaveAllianceId": 4152
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"paramInformation": {
+		"12": {
+			"label": "Motion Sensor Sensitivity",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 8,
+			"defaultValue": 6,
+			"unsigned": true,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Disable",
+					"value": 0
+				}
+			]
+		},
+		"13": {
+			"label": "Motion Detection: Timeout",
+			"valueSize": 2,
+			"unit": "seconds",
+			"minValue": 10,
+			"maxValue": 3600,
+			"defaultValue": 30,
+			"unsigned": true
+		},
+		"14": {
+			"label": "Motion Detection: Send Basic Set",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 1,
+			"unsigned": true,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Disable",
+					"value": 0
+				},
+				{
+					"label": "Enable",
+					"value": 1
+				}
+			]
+		},
+		"15": {
+			"label": "Motion Detection: Basic Set Value",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 0,
+			"unsigned": true,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "0xff for Motion; 0x00 for Clear",
+					"value": 0
+				},
+				{
+					"label": "0x00 for Motion; 0xff for Clear",
+					"value": 1
+				}
+			]
+		},
+		"16": {
+			"label": "Motion Detection: Send Binary Sensor Reports",
+			"description": "If disabled, notification reports will be sent instead",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 1,
+			"unsigned": true,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Disable",
+					"value": 0
+				},
+				{
+					"label": "Enable",
+					"value": 1
+				}
+			]
+		},
+		"18": {
+			"label": "Temperature Scale",
+			"valueSize": 1,
+			"minValue": 1,
+			"maxValue": 2,
+			"defaultValue": 2,
+			"unsigned": true,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Celsius",
+					"value": 1
+				},
+				{
+					"label": "Fahrenheit",
+					"value": 2
+				}
+			]
+		},
+		"19": {
+			"label": "Flash LED on Motion",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 1,
+			"unsigned": true,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Disable",
+					"value": 0
+				},
+				{
+					"label": "Enable",
+					"value": 1
+				}
+			]
+		},
+		"32": {
+			"label": "Low Battery Alert",
+			"valueSize": 1,
+			"unit": "%",
+			"minValue": 10,
+			"maxValue": 50,
+			"defaultValue": 10,
+			"unsigned": true
+		},
+		"172": {
+			"label": "Minimum Reporting Frequency",
+			"valueSize": 2,
+			"unit": "hours",
+			"minValue": 1,
+			"maxValue": 744,
+			"defaultValue": 4,
+			"unsigned": true
+		},
+		"182": {
+			"label": "Battery Reporting Change Threshold",
+			"valueSize": 1,
+			"unit": "%",
+			"minValue": 0,
+			"maxValue": 99,
+			"defaultValue": 0,
+			"unsigned": true,
+			"options": [
+				{
+					"label": "Disable",
+					"value": 0
+				}
+			]
+		},
+		"183": {
+			"label": "Temperature Reporting Change Threshold",
+			"valueSize": 2,
+			"unit": "°F",
+			"minValue": 1,
+			"maxValue": 144,
+			"defaultValue": 1,
+			"unsigned": true
+		},
+		"184": {
+			"label": "Humidity Reporting Change Threshold",
+			"valueSize": 1,
+			"unit": "%",
+			"minValue": 0,
+			"maxValue": 80,
+			"defaultValue": 5,
+			"unsigned": true,
+			"options": [
+				{
+					"label": "Disable",
+					"value": 0
+				}
+			]
+		},
+		"185": {
+			"label": "Brightness Reporting Change Threshold",
+			"valueSize": 2,
+			"unit": "lux",
+			"minValue": 0,
+			"maxValue": 30000,
+			"defaultValue": 50,
+			"unsigned": true,
+			"options": [
+				{
+					"label": "Disable",
+					"value": 0
+				}
+			]
+		}
+	},
+	"metadata": {
+		"inclusion": "Put your Z-Wave hub into inclusion mode and click the Z-Wave button 3 times as quickly as possible. The LED indicator will start blinking to confirm inclusion mode and turn off once inclusion is completed. The sensor will automatically pair as a repeater if connected to USB power, no special button sequence required",
+		"exclusion": "1. Bring the sensor within direct range of your Z-Wave gateway (hub).\n2. Put the Z-Wave hub into exclusion mode (not sure how to do that? ask@getzooz.com).\n3. Press and release the Z-Wave button 3 times quickly.\n4. Your hub will confirm exclusion and the sensor will disappear from your controller's device list",
+		"reset": "When your network’s primary controller is missing or otherwise inoperable, you may need to reset the device to factory settings manually. In order to complete the process, make sure the sensor is powered, then press and hold the Z-Wave button for at least 20 seconds.\nThe LED indicator will start flashing and turn solid on for a couple of seconds to indicate successful reset.\nNOTE: All previously recorded activity and custom settings will be erased from the device’s memory",
+		"manual": "https://products.z-wavealliance.org/ProductManual/File?folder=&filename=product_documents/4152/zooz-q-sensor-zse11-ver1-manual-online.pdf"
+	}
+}

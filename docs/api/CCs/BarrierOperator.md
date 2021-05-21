@@ -1,5 +1,7 @@
 # Barrier Operator CC
 
+?> CommandClass ID: `0x66`
+
 ## Barrier Operator CC methods
 
 ### `get`

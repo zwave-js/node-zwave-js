@@ -1,8 +1,6 @@
 import { CommandClasses } from "@zwave-js/core";
-import {
-	SendDataRequest,
-	TransmitOptions,
-} from "../controller/SendDataMessages";
+import { SendDataRequest } from "../controller/SendDataMessages";
+import { TransmitOptions } from "../controller/SendDataShared";
 import type { Driver } from "../driver/Driver";
 import { ZWaveNode } from "../node/Node";
 import { assertCC } from "../test/assertCC";

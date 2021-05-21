@@ -1,5 +1,3 @@
-// Fantem FT111
-// Nano Dimmer
 {
 	"manufacturer": "Fantem",
 	"manufacturerId": "0x016a",
@@ -13,614 +11,390 @@
 		{
 			"productType": "0x0203",
 			"productId": "0x006f"
+		},
+		{
+			"productType": "0x1d03",
+			"productId": "0x006f",
+			"zwaveAllianceId": 2765
 		}
 	],
 	"firmwareVersion": {
 		"min": "0.0",
 		"max": "255.255"
 	},
-	"supportsZWavePlus": true,
-	"paramInformation": {
+	"associations": {
+		"1": {
+			"label": "Lifeline",
+			"maxNodes": 1,
+			"isLifeline": true
+		},
+		"2": {
+			"label": "Forward Received Commands",
+			"maxNodes": 5
+		},
 		"3": {
-			"label": "Current Overload Protection",
-			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 1,
-			"defaultValue": 1,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "Disable",
-					"value": 0
-				},
-				{
-					"label": "Enable",
-					"value": 1
-				}
-			]
+			"label": "Basic Set for Switch S1",
+			"maxNodes": 5
 		},
 		"4": {
-			"label": "Overheat protection",
-			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 1,
-			"defaultValue": 0,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "Disable",
-					"value": 0
-				},
-				{
-					"label": "Enable",
-					"value": 1
-				}
-			]
+			"label": "Basic Set for Switch S2",
+			"maxNodes": 5
+		}
+	},
+	//Fantem is an OEM for aeotec
+	"paramInformation": {
+		"3": {
+			"$import": "../0x0086/templates/aeotec_template.json#current_overload"
+		},
+		"4": {
+			"$import": "../0x0086/templates/aeotec_template.json#overheat_protection"
 		},
 		"20": {
-			"label": "Configure the output status after re-power on it",
-			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 2,
-			"defaultValue": 0,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "Last status",
-					"value": 0
-				},
-				{
-					"label": "Always on",
-					"value": 1
-				},
-				{
-					"label": "Always off",
-					"value": 2
-				}
-			]
+			"$import": "../templates/master_template.json#state_after_power_failure"
 		},
 		"80": {
-			"label": "Group 1 notificaiton",
-			"description": "Set notification sent to associated nodes (group 1)",
-			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 4,
-			"defaultValue": 0,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "Send Nothing",
-					"value": 0
-				},
-				{
-					"label": "Send Hail CC",
-					"value": 1
-				},
-				{
-					"label": "Send Basic CC report",
-					"value": 2
-				},
-				{
-					"label": "Send Multilevel Switch report",
-					"value": 3
-				},
-				{
-					"label": "Send Hail CC when using the manual switch",
-					"value": 4
-				}
-			]
+			"$import": "../0x0086/templates/aeotec_template.json#enable_notifications_0-4"
 		},
 		"81": {
-			"label": "Group 3 notificaiton",
-			"description": "Set notification sent to associated nodes (group 3)",
-			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 1,
-			"defaultValue": 0,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "Send Nothing",
-					"value": 0
-				},
-				{
-					"label": "Send Basic Set CC",
-					"value": 1
-				}
-			]
+			"$import": "../0x0086/templates/aeotec_template.json#notification_report_type",
+			"label": "Send Notifications to Associated Devices (Group 3)"
 		},
 		"82": {
-			"label": "Group 4 notificaiton",
-			"description": "Set notification sent to associated nodes (group 4)",
-			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 1,
-			"defaultValue": 1,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "Send Nothing",
-					"value": 0
-				},
-				{
-					"label": "Send Basic Set CC",
-					"value": 1
-				}
-			]
+			"$import": "../0x0086/templates/aeotec_template.json#notification_report_type",
+			"label": "Send Notifications to Associated Devices (Group 4)"
 		},
-		"85": {
-			"label": "Set appointment 1",
-			"valueSize": 4,
-			"minValue": 0,
-			"maxValue": 16843197,
-			"defaultValue": 0,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+		"83": {
+			"$if": "firmwareVersion >= 2.0",
+			"$import": "../0x0086/templates/aeotec_template.json#led_indicator_three_options"
 		},
-		"86": {
-			"label": "Set appointment 2",
-			"valueSize": 4,
-			"minValue": 0,
-			"maxValue": 16843197,
-			"defaultValue": 0,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+		"84[0xff000000]": {
+			"$if": "firmwareVersion >= 2.0",
+			"$import": "../0x0086/templates/aeotec_template.json#night_light_hour_on"
+		},
+		"84[0xff0000]": {
+			"$if": "firmwareVersion >= 2.0",
+			"$import": "../0x0086/templates/aeotec_template.json#night_light_minute_on"
+		},
+		"84[0xff00]": {
+			"$if": "firmwareVersion >= 2.0",
+			"$import": "../0x0086/templates/aeotec_template.json#night_light_hour_off"
+		},
+		"84[0xff]": {
+			"$if": "firmwareVersion >= 2.0",
+			"$import": "../0x0086/templates/aeotec_template.json#night_light_minute_off"
+		},
+		"85[0xff000000]": {
+			"$import": "../0x0086/templates/aeotec_template.json#appointment_one_day"
+		},
+		"85[0xff0000]": {
+			"$import": "../0x0086/templates/aeotec_template.json#appointment_one_hour"
+		},
+		"85[0xff00]": {
+			"$import": "../0x0086/templates/aeotec_template.json#appointment_one_minute"
+		},
+		"85[0xff]": {
+			"$import": "../0x0086/templates/aeotec_template.json#appointment_one_brightness"
+		},
+		"86[0xff000000]": {
+			"$import": "../0x0086/templates/aeotec_template.json#appointment_two_day"
+		},
+		"86[0xff0000]": {
+			"$import": "../0x0086/templates/aeotec_template.json#appointment_two_hour"
+		},
+		"86[0xff00]": {
+			"$import": "../0x0086/templates/aeotec_template.json#appointment_two_minute"
+		},
+		"86[0xff]": {
+			"$import": "../0x0086/templates/aeotec_template.json#appointment_two_brightness"
 		},
 		"90": {
-			"label": "(En/dis)able 91 and 92",
-			"description": "Enables/disables parameter 91 and 92",
-			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 1,
-			"defaultValue": 0,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "Disable",
-					"value": 0
-				},
-				{
-					"label": "Enable",
-					"value": 1
-				}
-			]
+			"$import": "../0x0086/templates/aeotec_template.json#send_automatic_reports"
 		},
 		"91": {
-			"label": "Set the threshold value of wattage",
-			"description": "Threshold change in wattage (in terms of wattage) to induce an automatic report",
-			"valueSize": 2,
-			"minValue": 0,
-			"maxValue": 60000,
-			"defaultValue": 25,
-			"unsigned": true,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"$import": "../0x0086/templates/aeotec_template.json#wattage_trigger",
+			"defaultValue": 25
 		},
 		"92": {
-			"label": "Set the threshold value of percent power",
-			"description": "Threshold change in wattage (in terms of percentage)",
-			"unit": "watt",
-			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 100,
-			"defaultValue": 5,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"$import": "../0x0086/templates/aeotec_template.json#wattage_percent_trigger",
+			"defaultValue": 5
 		},
 		"100": {
-			"label": "Reset Parameters 101-103 to Default",
-			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 0,
-			"defaultValue": 0,
-			"readOnly": false,
-			"writeOnly": true,
-			"allowManualEntry": true,
-			"options": [
-				{
-					"label": "Reset the parameter 101-103",
-					"value": 0
-				}
-			]
+			"$import": "../0x0086/templates/aeotec_template.json#reset_parameters",
+			"label": "Reset Parameters 101-103 to Default Values"
 		},
-		"101": {
-			"label": "Set group 1 reports",
-			"description": "To set which reports need to be sent in Report group 1",
-			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 0,
-			"defaultValue": 0,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+		"101[0x01]": {
+			"$import": "../0x0086/templates/aeotec_template.json#auto_report_group1_v"
 		},
-		"102": {
-			"label": "Set group 2 reports",
-			"description": "To set which reports need to be sent in Report group 2",
-			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 0,
-			"defaultValue": 0,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+		"101[0x02]": {
+			"$import": "../0x0086/templates/aeotec_template.json#auto_report_group1_amp"
 		},
-		"103": {
-			"label": "Reports sent to Report group 3",
-			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 15,
-			"defaultValue": 0,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+		"101[0x04]": {
+			"$import": "../0x0086/templates/aeotec_template.json#auto_report_group1_watt"
+		},
+		"101[0x08]": {
+			"$import": "../0x0086/templates/aeotec_template.json#auto_report_group1_kwh"
+		},
+		"102[0x01]": {
+			"$import": "../0x0086/templates/aeotec_template.json#auto_report_group2_v"
+		},
+		"102[0x02]": {
+			"$import": "../0x0086/templates/aeotec_template.json#auto_report_group2_amp"
+		},
+		"102[0x04]": {
+			"$import": "../0x0086/templates/aeotec_template.json#auto_report_group2_watt"
+		},
+		"102[0x08]": {
+			"$import": "../0x0086/templates/aeotec_template.json#auto_report_group2_kwh"
+		},
+		"103[0x01]": {
+			"$import": "../0x0086/templates/aeotec_template.json#auto_report_group3_v"
+		},
+		"103[0x02]": {
+			"$import": "../0x0086/templates/aeotec_template.json#auto_report_group3_amp"
+		},
+		"103[0x04]": {
+			"$import": "../0x0086/templates/aeotec_template.json#auto_report_group3_watt"
+		},
+		"103[0x08]": {
+			"$import": "../0x0086/templates/aeotec_template.json#auto_report_group3_kwh"
 		},
 		"110": {
-			"label": "Reset 111-113 to default",
-			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 0,
-			"defaultValue": 0,
-			"readOnly": false,
-			"writeOnly": true,
-			"allowManualEntry": true,
-			"options": [
-				{
-					"label": "Reset the parameter 111-113",
-					"value": 0
-				}
-			]
+			"$import": "../0x0086/templates/aeotec_template.json#reset_parameters",
+			"label": "Reset Parameters 111-113 to Default Values"
 		},
 		"111": {
-			"label": "Automatic report interval group 1",
-			"description": "Set the interval of automatic report for Report group 1",
-			"valueSize": 4,
-			"minValue": 1,
-			"maxValue": 2147483647,
-			"defaultValue": 2147483647,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"$import": "../0x0086/templates/aeotec_template.json#auto_report_interval_group1",
+			"maxValue": 2147483647
 		},
 		"112": {
-			"label": "Automatic report interval group 2",
-			"description": "Set the interval of automatic report for Report group 2",
-			"valueSize": 4,
-			"minValue": 1,
-			"maxValue": 2147483647,
-			"defaultValue": 2147483647,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"$import": "../0x0086/templates/aeotec_template.json#auto_report_interval_group2",
+			"maxValue": 2147483647
 		},
 		"113": {
-			"label": "Automatic report interval group 3",
-			"description": "Set the interval of automatic report for Report group 3",
-			"valueSize": 4,
-			"minValue": 0,
-			"maxValue": 2147483647,
-			"defaultValue": 2147483647,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"$import": "../0x0086/templates/aeotec_template.json#auto_report_interval_group3",
+			"maxValue": 2147483647
 		},
 		"120": {
-			"label": "Configure the external switch mode for S1",
-			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 4,
-			"defaultValue": 0,
-			"readOnly": false,
-			"writeOnly": true,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "Unknown mode",
-					"value": 0
-				},
-				{
-					"label": "2-state switch mode",
-					"value": 1
-				},
-				{
-					"label": "3 way switch mode",
-					"value": 2
-				},
-				{
-					"label": "Momentary push button mode",
-					"value": 3
-				},
-				{
-					"label": "Enter automatic identification mode",
-					"value": 4
-				}
-			]
+			"$import": "../0x0086/templates/aeotec_template.json#external_switch_3way_auto",
+			"label": "External Switch Type: S1"
+		},
+		"247[0x01]": {
+			"$import": "../0x0086/templates/aeotec_template.json#switch_mode_state_s1"
 		},
 		"121": {
-			"label": "Configure the external switch mode for S2",
-			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 4,
-			"defaultValue": 0,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "Unknown mode",
-					"value": 0
-				},
-				{
-					"label": "2-state switch mode",
-					"value": 1
-				},
-				{
-					"label": "3 way switch mode",
-					"value": 2
-				},
-				{
-					"label": "Momentary push button mode",
-					"value": 3
-				},
-				{
-					"label": "Enter automatic identification mode",
-					"value": 4
-				}
-			]
+			"$import": "../0x0086/templates/aeotec_template.json#external_switch_3way_auto",
+			"label": "External Switch Type: S2"
 		},
-		"122": {
-			"label": "Get the state of touch panel port",
-			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 5,
-			"defaultValue": 0,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "the touch panel is not connected.",
-					"value": 0
-				},
-				{
-					"label": "the touch panel is connected",
-					"value": 5
-				}
-			]
+		"247[0x02]": {
+			"$import": "../0x0086/templates/aeotec_template.json#switch_mode_state_s2"
 		},
 		"123": {
-			"label": "Set the control destination for external switch S1",
-			"valueSize": 1,
-			"minValue": 1,
-			"maxValue": 3,
-			"defaultValue": 3,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "control the output loads of itself",
-					"value": 1
-				},
-				{
-					"label": "control the other nodes",
-					"value": 2
-				},
-				{
-					"label": "Control the output loads of itself and others",
-					"value": 3
-				}
-			]
+			"$import": "../0x0086/templates/aeotec_template.json#switch_destination_s1"
 		},
 		"124": {
-			"label": "Set the control destination for external switch S2",
-			"valueSize": 1,
-			"minValue": 1,
-			"maxValue": 3,
-			"defaultValue": 3,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "control the output loads of itself",
-					"value": 1
-				},
-				{
-					"label": "control the other nodes",
-					"value": 2
-				},
-				{
-					"label": "Control the output loads of itself and others",
-					"value": 3
-				}
-			]
+			"$import": "../0x0086/templates/aeotec_template.json#switch_destination_s2"
 		},
 		"125": {
-			"label": "Set the default dimming rate",
-			"description": "The value range is 1 to 255 seconds",
-			"valueSize": 1,
-			"minValue": 1,
-			"maxValue": 255,
-			"defaultValue": 255,
-			"unsigned": true,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"$import": "../0x0086/templates/aeotec_template.json#dimming_rate_255"
 		},
 		"128": {
-			"label": "Get the current working mode",
-			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 2,
-			"defaultValue": 0,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "Unknown working mode",
-					"value": 0
-				},
-				{
-					"label": "2-wire mode",
-					"value": 1
-				},
-				{
-					"label": "3-wire mode",
-					"value": 2
-				}
-			]
+			"$import": "../0x0086/templates/aeotec_template.json#current_working_mode"
 		},
 		"129": {
-			"label": "Set the dimming principle",
-			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 1,
-			"defaultValue": 1,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "Trailing edge mode",
-					"value": 0
-				},
-				{
-					"label": "Leading edge mode",
-					"value": 1
-				}
-			]
+			"$import": "../0x0086/templates/aeotec_template.json#dimming_principle"
 		},
 		"130": {
-			"label": "Type of load the Dimmer is connected to",
-			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 3,
-			"defaultValue": 0,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "Unknown load",
-					"value": 0
-				},
-				{
-					"label": "Resistive load",
-					"value": 1
-				},
-				{
-					"label": "Capacitive load",
-					"value": 2
-				},
-				{
-					"label": "Inductive load",
-					"value": 3
-				}
-			]
+			"$import": "../0x0086/templates/aeotec_template.json#load_type"
 		},
 		"131": {
-			"label": "Set the min brightness level",
-			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 99,
-			"defaultValue": 99,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"$import": "../0x0086/templates/aeotec_template.json#min_brightness"
 		},
 		"132": {
-			"label": "Set the max brightness level",
-			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 99,
-			"defaultValue": 99,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"$import": "../0x0086/templates/aeotec_template.json#max_brightness"
 		},
 		"249": {
-			"label": "Set the recognition way of load",
+			"$import": "../0x0086/templates/aeotec_template.json#load_recognition_method"
+		},
+		// WallSwipe Settings
+		"144": {
+			"$if": "firmwareVersion >= 2.0",
+			"$import": "../0x0086/templates/aeotec_template.json#wallswipe_status"
+		},
+		"21[0xff]": {
+			"$if": "firmwareVersion >= 2.0",
+			"$import": "../0x0086/templates/aeotec_template.json#scene_control"
+		},
+		"21[0xff00]": {
+			"$if": "firmwareVersion >= 2.0",
+			"$import": "../0x0086/templates/aeotec_template.json#scene_control_left_right_wave"
+		},
+		"21[0xff0000]": {
+			"$if": "firmwareVersion >= 2.0",
+			"$import": "../0x0086/templates/aeotec_template.json#wave_option"
+		},
+		"21[0xff000000]": {
+			"$if": "firmwareVersion >= 2.0",
+			"$import": "../0x0086/templates/aeotec_template.json#enable_disable_ir_sensor"
+		},
+		"64[0xff]": {
+			"$if": "firmwareVersion >= 2.0",
+			"$import": "../0x0086/templates/aeotec_template.json#button_color_brightness"
+		},
+		"64[0xff00]": {
+			"$if": "firmwareVersion >= 2.0",
+			"$import": "../0x0086/templates/aeotec_template.json#button_color_red"
+		},
+		"64[0xff0000]": {
+			"$if": "firmwareVersion >= 2.0",
+			"$import": "../0x0086/templates/aeotec_template.json#button_color_green"
+		},
+		"64[0xff000000]": {
+			"$if": "firmwareVersion >= 2.0",
+			"$import": "../0x0086/templates/aeotec_template.json#button_color_blue"
+		},
+		"65[0xff]": {
+			"$if": "firmwareVersion >= 2.0",
+			"$import": "../0x0086/templates/aeotec_template.json#button_color_up_brightness"
+		},
+		"65[0xff00]": {
+			"$if": "firmwareVersion >= 2.0",
+			"$import": "../0x0086/templates/aeotec_template.json#button_color_up_red"
+		},
+		"65[0xff0000]": {
+			"$if": "firmwareVersion >= 2.0",
+			"$import": "../0x0086/templates/aeotec_template.json#button_color_up_green"
+		},
+		"65[0xff000000]": {
+			"$if": "firmwareVersion >= 2.0",
+			"$import": "../0x0086/templates/aeotec_template.json#button_color_up_blue"
+		},
+		"66[0xff]": {
+			"$if": "firmwareVersion >= 2.0",
+			"$import": "../0x0086/templates/aeotec_template.json#button_color_down_brightness"
+		},
+		"66[0xff00]": {
+			"$if": "firmwareVersion >= 2.0",
+			"$import": "../0x0086/templates/aeotec_template.json#button_color_down_red"
+		},
+		"66[0xff0000]": {
+			"$if": "firmwareVersion >= 2.0",
+			"$import": "../0x0086/templates/aeotec_template.json#button_color_down_green"
+		},
+		"66[0xff000000]": {
+			"$if": "firmwareVersion >= 2.0",
+			"$import": "../0x0086/templates/aeotec_template.json#button_color_down_blue"
+		},
+		"67[0xff]": {
+			"$if": "firmwareVersion >= 2.0",
+			"$import": "../0x0086/templates/aeotec_template.json#button_color_left_brightness"
+		},
+		"67[0xff00]": {
+			"$if": "firmwareVersion >= 2.0",
+			"$import": "../0x0086/templates/aeotec_template.json#button_color_left_red"
+		},
+		"67[0xff0000]": {
+			"$if": "firmwareVersion >= 2.0",
+			"$import": "../0x0086/templates/aeotec_template.json#button_color_left_green"
+		},
+		"67[0xff000000]": {
+			"$if": "firmwareVersion >= 2.0",
+			"$import": "../0x0086/templates/aeotec_template.json#button_color_left_blue"
+		},
+		"68[0xff]": {
+			"$if": "firmwareVersion >= 2.0",
+			"$import": "../0x0086/templates/aeotec_template.json#button_color_right_brightness"
+		},
+		"68[0xff00]": {
+			"$if": "firmwareVersion >= 2.0",
+			"$import": "../0x0086/templates/aeotec_template.json#button_color_right_red"
+		},
+		"68[0xff0000]": {
+			"$if": "firmwareVersion >= 2.0",
+			"$import": "../0x0086/templates/aeotec_template.json#button_color_right_green"
+		},
+		"68[0xff000000]": {
+			"$if": "firmwareVersion >= 2.0",
+			"$import": "../0x0086/templates/aeotec_template.json#button_color_right_blue"
+		},
+		"69[0xff]": {
+			"$if": "firmwareVersion >= 2.0",
+			"$import": "../0x0086/templates/aeotec_template.json#button_color_night_brightness"
+		},
+		"69[0xff00]": {
+			"$if": "firmwareVersion >= 2.0",
+			"$import": "../0x0086/templates/aeotec_template.json#button_color_night_red"
+		},
+		"69[0xff0000]": {
+			"$if": "firmwareVersion >= 2.0",
+			"$import": "../0x0086/templates/aeotec_template.json#button_color_night_green"
+		},
+		"69[0xff000000]": {
+			"$if": "firmwareVersion >= 2.0",
+			"$import": "../0x0086/templates/aeotec_template.json#button_color_night_blue"
+		},
+		"70": {
+			"$if": "firmwareVersion >= 2.0",
+			"label": "LED Indicator When Off",
 			"valueSize": 1,
 			"minValue": 0,
-			"maxValue": 2,
-			"defaultValue": 2,
-			"readOnly": false,
-			"writeOnly": false,
+			"maxValue": 255,
+			"defaultValue": 0,
+			"unsigned": true,
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "Never recognize the load when power on",
-					"value": 0
-				},
-				{
-					"label": "Only recognize once when first power on",
+					"label": "Solid red",
 					"value": 1
 				},
 				{
-					"label": "Recognize the load once power on",
-					"value": 2
+					"label": "Last brightness",
+					"value": 0
 				}
 			]
+		},
+		"71": {
+			"$if": "firmwareVersion >= 2.0",
+			"$import": "../0x0086/templates/aeotec_template.json#wallswipe_recalibrate"
+		},
+		"251": {
+			"$if": "firmwareVersion >= 2.0",
+			"$import": "../0x0086/templates/aeotec_template.json#wallswipe_reset"
+		},
+		// End of WallSwipe Settings
+		"248[0x80]": {
+			"$if": "firmwareVersion >= 2.0",
+			"$import": "../templates/master_template.json#base_enable_disable",
+			"label": "Advanced Parameter Settings"
+		},
+		"248[0x01]": {
+			"$if": "firmwareVersion >= 2.0",
+			"$import": "../templates/master_template.json#base_enable_disable",
+			"label": "Advanced: Send NIFs"
+		},
+		"248[0x02]": {
+			"$if": "firmwareVersion >= 2.0",
+			"$import": "../templates/master_template.json#base_enable_disable",
+			"label": "Advanced: RF Power Level Test Mode"
+		},
+		"248[0x04]": {
+			"$if": "firmwareVersion >= 2.0",
+			"$import": "../templates/master_template.json#base_enable_disable",
+			"label": "Advanced: Factory Reset Function"
 		},
 		"252": {
-			"label": "Lock/unlock configuration parameters",
-			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 1,
-			"defaultValue": 0,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "Unlock",
-					"value": 0
-				},
-				{
-					"label": "Lock",
-					"value": 1
-				}
-			]
+			"$import": "../0x0086/templates/aeotec_template.json#lock_configuration"
 		},
 		"255": {
-			"label": "Reset the Nano Dimmer",
-			"valueSize": 4,
-			"minValue": 0,
-			"maxValue": 1431655765,
-			"defaultValue": 0,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "factory default",
-					"value": 0
-				},
-				{
-					"label": "factory default and remove",
-					"value": 1431655765
-				}
-			]
+			"$import": "../0x0086/templates/aeotec_template.json#factory_reset_exclude"
 		}
+	},
+	"compat": {
+		"treatBasicSetAsEvent": true
+	},
+	"metadata": {
+		"inclusion": "Turn the primary controller of Z-Wave network into inclusion mode, short press the product’s Action button that you can find on the product's housing",
+		"exclusion": "Turn the primary controller of Z-Wave network into exclusion mode, short press the product’s Action button that you can find on the product's housing",
+		"reset": "Press and hold the Action button that you can find on the product's housing for 20 seconds and then release. This procedure should only be used when the primary controller is inoperable",
+		"manual": "https://products.z-wavealliance.org/ProductManual/File?folder=&filename=MarketCertificationFiles/2765/Oomi%20In-Wall%20Dimmer%20manual%20(FT111-K)%20-%202.pdf"
 	}
 }

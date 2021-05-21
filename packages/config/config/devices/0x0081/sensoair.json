@@ -1,5 +1,3 @@
-// SIEGENIA-AUBI KG SENSOAIR
-// Air quality sensor for indoor use
 {
 	"manufacturer": "SIEGENIA-AUBI KG",
 	"manufacturerId": "0x0081",
@@ -31,10 +29,7 @@
 			"minValue": 0,
 			"maxValue": 143,
 			"defaultValue": 141,
-			"unsigned": true,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"unsigned": true
 		},
 		"2": {
 			"label": "Interval for unsolicited Sensor Report Mode B",
@@ -43,10 +38,7 @@
 			"minValue": 5,
 			"maxValue": 65000,
 			"defaultValue": 30,
-			"unsigned": true,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"unsigned": true
 		}
 	}
 }

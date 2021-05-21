@@ -1,1662 +1,275 @@
-// Aeotec Ltd. ZW164
-// Indoor Siren 6 and Doorbell 6
 {
 	"manufacturer": "Aeotec Ltd.",
 	"manufacturerId": "0x0371",
 	"label": "ZW164",
-	"description": "Indoor Siren 6 and Doorbell 6",
+	"description": "Indoor Siren 6",
 	"devices": [
 		{
 			"productType": "0x0003",
-			"productId": "0x00a2"
-		},
-		{
-			"productType": "0x0003",
-			"productId": "0x00a4"
+			"productId": "0x00a4",
+			"zwaveAllianceId": 3301
 		},
 		{
 			"productType": "0x0103",
-			"productId": "0x00a2"
-		},
-		{
-			"productType": "0x0103",
-			"productId": "0x00a4"
+			"productId": "0x00a4",
+			"zwaveAllianceId": 3284
 		},
 		{
 			"productType": "0x0203",
-			"productId": "0x00a4"
+			"productId": "0x00a4",
+			"zwaveAllianceId": 3300
 		}
 	],
 	"firmwareVersion": {
 		"min": "0.0",
 		"max": "255.255"
 	},
-	"supportsZWavePlus": true,
 	"paramInformation": {
-		"32": {
-			"label": "Sending Basic Set to nodes in Group 2.",
-			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 4,
-			"defaultValue": 3,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "Don’t send Basic Set.",
-					"value": 0
-				},
-				{
-					"label": "Option 1",
-					"value": 1
-				},
-				{
-					"label": "Option 2",
-					"value": 2
-				},
-				{
-					"label": "Option 3 (default)",
-					"value": 3
-				},
-				{
-					"label": "Option 4",
-					"value": 4
-				}
-			]
-		},
-		"33": {
-			"label": "Sending Basic Set to nodes in Group 3 .",
-			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 4,
-			"defaultValue": 3,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "Don’t send Basic Set.",
-					"value": 0
-				},
-				{
-					"label": "Option 1",
-					"value": 1
-				},
-				{
-					"label": "Option 2",
-					"value": 2
-				},
-				{
-					"label": "Option 3 (default)",
-					"value": 3
-				},
-				{
-					"label": "Option 4",
-					"value": 4
-				}
-			]
-		},
-		"34": {
-			"label": "Sending Basic Set to nodes in Group 4.",
-			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 4,
-			"defaultValue": 3,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "Don’t send Basic Set.",
-					"value": 0
-				},
-				{
-					"label": "Option 1",
-					"value": 1
-				},
-				{
-					"label": "Option 2",
-					"value": 2
-				},
-				{
-					"label": "Option 3 (default)",
-					"value": 3
-				},
-				{
-					"label": "Option 4",
-					"value": 4
-				}
-			]
-		},
-		"35": {
-			"label": "Sending Basic Set to nodes in Group 5.",
-			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 4,
-			"defaultValue": 3,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "Don’t send Basic Set.",
-					"value": 0
-				},
-				{
-					"label": "Option 1",
-					"value": 1
-				},
-				{
-					"label": "Option 2",
-					"value": 2
-				},
-				{
-					"label": "Option 3 (default)",
-					"value": 3
-				},
-				{
-					"label": "Option 4",
-					"value": 4
-				}
-			]
-		},
-		"36": {
-			"label": "Sending Basic Set to nodes in Group 6 .",
-			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 4,
-			"defaultValue": 3,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "Don’t send Basic Set.",
-					"value": 0
-				},
-				{
-					"label": "Option 1",
-					"value": 1
-				},
-				{
-					"label": "Option 2",
-					"value": 2
-				},
-				{
-					"label": "Option 3 (default)",
-					"value": 3
-				},
-				{
-					"label": "Option 4",
-					"value": 4
-				}
-			]
-		},
-		"37": {
-			"label": "Sending Basic Set to nodes in Group 7 .",
-			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 4,
-			"defaultValue": 3,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "Don’t send Basic Set.",
-					"value": 0
-				},
-				{
-					"label": "Option 1",
-					"value": 1
-				},
-				{
-					"label": "Option 2",
-					"value": 2
-				},
-				{
-					"label": "Option 3 (default)",
-					"value": 3
-				},
-				{
-					"label": "Option 4",
-					"value": 4
-				}
-			]
-		},
-		"38": {
-			"label": "Sending Basic Set to nodes in Group 8 .",
-			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 4,
-			"defaultValue": 3,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "Don’t send Basic Set.",
-					"value": 0
-				},
-				{
-					"label": "Option 1",
-					"value": 1
-				},
-				{
-					"label": "Option 2",
-					"value": 2
-				},
-				{
-					"label": "Option 3 (default)",
-					"value": 3
-				},
-				{
-					"label": "Option 4",
-					"value": 4
-				}
-			]
-		},
-		"39": {
-			"label": "Sending Basic Set to nodes in Group 9 .",
-			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 4,
-			"defaultValue": 3,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "Don’t send Basic Set.",
-					"value": 0
-				},
-				{
-					"label": "Option 1",
-					"value": 1
-				},
-				{
-					"label": "Option 2",
-					"value": 2
-				},
-				{
-					"label": "Option 3 (default)",
-					"value": 3
-				},
-				{
-					"label": "Option 4",
-					"value": 4
-				}
-			]
-		},
-		"48": {
-			"label": "Trigger Unpairing Button Mode (Write Only)",
-			"valueSize": 1,
-			"minValue": 1,
-			"maxValue": 7,
-			"defaultValue": 1,
-			"readOnly": false,
-			"writeOnly": true,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "Trigger Unpairing #1 Button Mode .",
-					"value": 1
-				},
-				{
-					"label": "Trigger Unpairing #2 Button Mode .",
-					"value": 2
-				},
-				{
-					"label": "Trigger Unpairing #2 and #1 Button Mode .",
-					"value": 3
-				},
-				{
-					"label": "Trigger Unpairing #3 Button Mode.",
-					"value": 4
-				},
-				{
-					"label": "Trigger Unpairing #3 and #1 Button Mode.",
-					"value": 5
-				},
-				{
-					"label": "Trigger Unpairing #3 and #2 Button Mode.",
-					"value": 6
-				},
-				{
-					"label": "Trigger Unpairing #3, #2 and #1 Button Mode.",
-					"value": 7
-				}
-			]
-		},
-		"49": {
-			"label": "Trigger Pairing Button Mode (Write Only)",
-			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 4,
-			"defaultValue": 1,
-			"readOnly": false,
-			"writeOnly": true,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "Exit Pairing Button Mode.",
-					"value": 0
-				},
-				{
-					"label": "Trigger Pairing #1 Button Mode .",
-					"value": 1
-				},
-				{
-					"label": "Trigger Pairing #2 Button Mode .",
-					"value": 2
-				},
-				{
-					"label": "Trigger Pairing #3 Button Mode .",
-					"value": 4
-				}
-			]
-		},
-		"50": {
-			"label": "Report which Pairing Button Mode is triggered",
-			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 4,
-			"defaultValue": 0,
-			"readOnly": true,
-			"writeOnly": false,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "There is no Pairing Button Mode being triggered.",
-					"value": 0
-				},
-				{
-					"label": "Pairing #1 Button Mode is triggered.",
-					"value": 1
-				},
-				{
-					"label": "Pairing #2 Button Mode is triggered.",
-					"value": 2
-				},
-				{
-					"label": "Pairing #3 Button Mode is triggered.",
-					"value": 4
-				}
-			]
-		},
-		"51": {
-			"label": "Report which Buttons had been paired",
-			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 7,
-			"defaultValue": 0,
-			"readOnly": true,
-			"writeOnly": false,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "There is no paired Button .",
-					"value": 0
-				},
-				{
-					"label": "#1 Button had been paired.",
-					"value": 1
-				},
-				{
-					"label": "#2 Button had been paired.",
-					"value": 2
-				},
-				{
-					"label": "#2 and #1 Button had been paired.",
-					"value": 3
-				},
-				{
-					"label": "#3 Button had been paired.",
-					"value": 4
-				},
-				{
-					"label": "#3 and #1 Button had been paired.",
-					"value": 5
-				},
-				{
-					"label": "#3 and #2 Button had been paired.",
-					"value": 6
-				},
-				{
-					"label": "#3, #2 and #1 Button had been paired.",
-					"value": 7
-				}
-			]
-		},
-		"96": {
-			"label": "Click the Action Button to stop a playing tone",
-			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 1,
-			"defaultValue": 0,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "Disable",
-					"value": 0
-				},
-				{
-					"label": "Enable",
-					"value": 1
-				}
-			]
-		},
-		"255": {
-			"label": "Factory Reset or Initialization",
-			"valueSize": 4,
-			"minValue": 0,
-			"maxValue": 1431655765,
-			"defaultValue": 0,
-			"readOnly": false,
-			"writeOnly": true,
-			"allowManualEntry": true
+		"1[0xff000000]": {
+			"$import": "../0x0086/templates/aeotec_template.json#light_index_browse"
 		},
 		"1[0xff0000]": {
-			"label": "Tone Play Mode for Endpoint 1 (Browse)",
-			"valueSize": 4,
-			"minValue": 0,
-			"maxValue": 255,
-			"defaultValue": 0,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "Single Playback",
-					"value": 0
-				},
-				{
-					"label": "Single Loop Playback",
-					"value": 1
-				},
-				{
-					"label": "List loop playback for auto-selecting tone",
-					"value": 2
-				},
-				{
-					"label": "List random playback for auto-selecting tone",
-					"value": 3
-				},
-				{
-					"label": "Use the last valid configuration value.",
-					"value": 255
-				}
-			]
+			"$import": "../0x0086/templates/aeotec_template.json#tone_play_mode_browse"
 		},
-		"1[0x7f000000]": {
-			"label": "Light Effect Index for Endpoint 1 (Browse)",
-			"valueSize": 4,
-			"minValue": 1,
-			"maxValue": 127,
-			"defaultValue": 1,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "#1 Light Effect, mapping to Parameter 16 .",
-					"value": 1
-				},
-				{
-					"label": "#2 Light Effect, mapping to Parameter 17.",
-					"value": 2
-				},
-				{
-					"label": "#3 Light Effect, mapping to Parameter 18 .",
-					"value": 4
-				},
-				{
-					"label": "#4 Light Effect, mapping to Parameter 19 .",
-					"value": 8
-				},
-				{
-					"label": "#5 Light Effect, mapping to Parameter 20 .",
-					"value": 16
-				},
-				{
-					"label": "#6 Light Effect, mapping to Parameter 21 .",
-					"value": 32
-				},
-				{
-					"label": "#7 Light Effect, mapping to Parameter 22 .",
-					"value": 64
-				},
-				{
-					"label": "Use the last valid configuration value.",
-					"value": 127
-				}
-			]
-		},
-		"2[0xff]": {
-			"label": "Tone Play Count for Endpoint 2 (Tampering)",
-			"valueSize": 4,
-			"minValue": 0,
-			"maxValue": 255,
-			"defaultValue": 1,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true,
-			"options": [
-				{
-					"label": "Unlimited playback until stop by user.",
-					"value": 0
-				},
-				{
-					"label": "(1) time (default)",
-					"value": 1
-				},
-				{
-					"label": "Use the last valid configuration value.",
-					"value": 255
-				}
-			]
-		},
-		"2[0xff00]": {
-			"label": "Interval between 2 tones for EP 2 (Tampering)",
-			"valueSize": 4,
-			"minValue": 0,
-			"maxValue": 255,
-			"defaultValue": 0,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true,
-			"options": [
-				{
-					"label": "No interval. (default)",
-					"value": 0
-				},
-				{
-					"label": "Use the last valid configuration value.",
-					"value": 255
-				}
-			]
+		"2[0xff000000]": {
+			"$import": "../0x0086/templates/aeotec_template.json#light_index_tamper"
 		},
 		"2[0xff0000]": {
-			"label": "Intercepting tone duration for EP 2 (Tampering)",
-			"valueSize": 4,
-			"minValue": 0,
-			"maxValue": 255,
-			"defaultValue": 0,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true,
-			"options": [
-				{
-					"label": "No Interception (default)",
-					"value": 0
-				},
-				{
-					"label": "Use the last valid configuration value.",
-					"value": 255
-				}
-			]
+			"$import": "../0x0086/templates/aeotec_template.json#tone_duration_tamper"
 		},
-		"2[0x7f000000]": {
-			"label": "Light Effect for EP 2 (Tampering)",
-			"valueSize": 4,
-			"minValue": 1,
-			"maxValue": 127,
-			"defaultValue": 1,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "#1 Light Effect, mapping to Parameter 16 .",
-					"value": 1
-				},
-				{
-					"label": "#2 Light Effect, mapping to Parameter 17 .",
-					"value": 2
-				},
-				{
-					"label": "#3 Light Effect, mapping to Parameter 18 .",
-					"value": 4
-				},
-				{
-					"label": "#4 Light Effect, mapping to Parameter 19 .",
-					"value": 8
-				},
-				{
-					"label": "#5 Light Effect, mapping to Parameter 20 .",
-					"value": 16
-				},
-				{
-					"label": "#6 Light Effect, mapping to Parameter 21 .",
-					"value": 32
-				},
-				{
-					"label": "#7 Light Effect, mapping to Parameter 22.",
-					"value": 64
-				},
-				{
-					"label": "Use the last valid configuration value.",
-					"value": 127
-				}
-			]
+		"2[0xff00]": {
+			"$import": "../0x0086/templates/aeotec_template.json#tone_interval_tamper"
 		},
-		"3[0xff]": {
-			"label": "Tone Play Count for EP3 (Doorbell 1)",
-			"valueSize": 4,
-			"minValue": 0,
-			"maxValue": 255,
-			"defaultValue": 1,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true,
-			"options": [
-				{
-					"label": "Unlimited playback until stop by user.",
-					"value": 0
-				},
-				{
-					"label": "(1) Time (default)",
-					"value": 1
-				},
-				{
-					"label": "Use the last valid configuration value.",
-					"value": 255
-				}
-			]
+		"2[0xff]": {
+			"$import": "../0x0086/templates/aeotec_template.json#tone_play_count_tamper"
 		},
-		"3[0xff00]": {
-			"label": "Interval between 2 tones for EP3 (Doorbell 1)",
-			"valueSize": 4,
-			"minValue": 0,
-			"maxValue": 255,
-			"defaultValue": 0,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true,
-			"options": [
-				{
-					"label": "No interval.",
-					"value": 0
-				},
-				{
-					"label": "Use the last valid configuration value.",
-					"value": 255
-				}
-			]
+		"3[0xff000000]": {
+			"$import": "../0x0086/templates/aeotec_template.json#light_index_doorbell_1"
 		},
 		"3[0xff0000]": {
-			"label": "Intercepting duration of a tone EP 3(Doorbell 1)",
-			"valueSize": 4,
-			"minValue": 0,
-			"maxValue": 255,
-			"defaultValue": 0,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true,
-			"options": [
-				{
-					"label": "Keep the original duration of a tone",
-					"value": 0
-				},
-				{
-					"label": "Use the last valid configuration value.",
-					"value": 255
-				}
-			]
+			"$import": "../0x0086/templates/aeotec_template.json#tone_duration_doorbell_1"
 		},
-		"3[0x7f000000]": {
-			"label": "Light Effect for Endpoint 3(Doorbell 1)",
-			"valueSize": 4,
-			"minValue": 1,
-			"maxValue": 127,
-			"defaultValue": 2,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "#1 Light Effect, mapping to Parameter 16.",
-					"value": 1
-				},
-				{
-					"label": "#2 Light Effect, mapping to Parameter 17.",
-					"value": 2
-				},
-				{
-					"label": "#3 Light Effect, mapping to Parameter 18.",
-					"value": 4
-				},
-				{
-					"label": "#4 Light Effect, mapping to Parameter 19.",
-					"value": 8
-				},
-				{
-					"label": "#5 Light Effect, mapping to Parameter 20.",
-					"value": 16
-				},
-				{
-					"label": "#6 Light Effect, mapping to Parameter 21.",
-					"value": 32
-				},
-				{
-					"label": "#7 Light Effect, mapping to Parameter 22.",
-					"value": 64
-				},
-				{
-					"label": "Use the last valid configuration value.",
-					"value": 127
-				}
-			]
+		"3[0xff00]": {
+			"$import": "../0x0086/templates/aeotec_template.json#tone_interval_doorbell_1"
 		},
-		"4[0xff]": {
-			"label": "Tone Play Count for EP4 (Doorbell 2)",
-			"valueSize": 4,
-			"minValue": 0,
-			"maxValue": 255,
-			"defaultValue": 1,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true,
-			"options": [
-				{
-					"label": "Unlimited playback until stop by user.",
-					"value": 0
-				},
-				{
-					"label": "(1) Time (default)",
-					"value": 1
-				},
-				{
-					"label": "Use the last valid configuration value.",
-					"value": 255
-				}
-			]
+		"3[0xff]": {
+			"$import": "../0x0086/templates/aeotec_template.json#tone_play_count_doorbell_1"
 		},
-		"4[0xff00]": {
-			"label": "Tone Interval for EP4 (Doorbell 2)",
-			"valueSize": 4,
-			"minValue": 0,
-			"maxValue": 255,
-			"defaultValue": 0,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true,
-			"options": [
-				{
-					"label": "No interval. (default)",
-					"value": 0
-				},
-				{
-					"label": "Use the last valid configuration value.",
-					"value": 255
-				}
-			]
+		"4[0xff000000]": {
+			"$import": "../0x0086/templates/aeotec_template.json#light_index_doorbell_2"
 		},
 		"4[0xff0000]": {
-			"label": "Duration of Tone for EP4(Doorbell 2)",
-			"valueSize": 4,
-			"minValue": 0,
-			"maxValue": 255,
-			"defaultValue": 0,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true,
-			"options": [
-				{
-					"label": "Keep the original duration of a tone",
-					"value": 0
-				},
-				{
-					"label": "Use the last valid configuration value.",
-					"value": 255
-				}
-			]
+			"$import": "../0x0086/templates/aeotec_template.json#tone_duration_doorbell_2"
 		},
-		"4[0x7f000000]": {
-			"label": "Light Effect for EP 4 (Doorbell 2)",
-			"valueSize": 4,
-			"minValue": 1,
-			"maxValue": 127,
-			"defaultValue": 2,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "#1 Light Effect, mapping to Parameter 16.",
-					"value": 1
-				},
-				{
-					"label": "#2 Light Effect, mapping to Parameter 17.",
-					"value": 2
-				},
-				{
-					"label": "#3 Light Effect, mapping to Parameter 18.",
-					"value": 4
-				},
-				{
-					"label": "#4 Light Effect, mapping to Parameter 19.",
-					"value": 8
-				},
-				{
-					"label": "#5 Light Effect, mapping to Parameter 20.",
-					"value": 16
-				},
-				{
-					"label": "#6 Light Effect, mapping to Parameter 21.",
-					"value": 32
-				},
-				{
-					"label": "#7 Light Effect, mapping to Parameter 22.",
-					"value": 64
-				},
-				{
-					"label": "Use the last valid configuration value.",
-					"value": 127
-				}
-			]
+		"4[0xff00]": {
+			"$import": "../0x0086/templates/aeotec_template.json#tone_interval_doorbell_2"
 		},
-		"5[0xff]": {
-			"label": "Tone Play Count for EP5 (Doorbell 3)",
-			"valueSize": 4,
-			"minValue": 0,
-			"maxValue": 255,
-			"defaultValue": 1,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true,
-			"options": [
-				{
-					"label": "Unlimited playback until stop by user.",
-					"value": 0
-				},
-				{
-					"label": "(1) time (default)",
-					"value": 1
-				},
-				{
-					"label": "Use the last valid configuration value.",
-					"value": 255
-				}
-			]
+		"4[0xff]": {
+			"$import": "../0x0086/templates/aeotec_template.json#tone_play_count_doorbell_2"
 		},
-		"5[0xff00]": {
-			"label": "Interval between 2 tones for EP5 (Doorbell 3)",
-			"valueSize": 4,
-			"minValue": 0,
-			"maxValue": 255,
-			"defaultValue": 0,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true,
-			"options": [
-				{
-					"label": "No interval. (default)",
-					"value": 0
-				},
-				{
-					"label": "Use the last valid configuration value.",
-					"value": 255
-				}
-			]
+		"5[0xff000000]": {
+			"$import": "../0x0086/templates/aeotec_template.json#light_index_doorbell_3"
 		},
 		"5[0xff0000]": {
-			"label": "Intercepting tone duration for EP5 (Doorbell 3)",
-			"valueSize": 4,
-			"minValue": 0,
-			"maxValue": 255,
-			"defaultValue": 0,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true,
-			"options": [
-				{
-					"label": "Keep the original duration of a tone",
-					"value": 0
-				},
-				{
-					"label": "Use the last valid configuration value.",
-					"value": 255
-				}
-			]
+			"$import": "../0x0086/templates/aeotec_template.json#tone_duration_doorbell_3"
 		},
-		"5[0x7f000000]": {
-			"label": "Light Effect for EP 5 (Doorbell 3) .",
-			"valueSize": 4,
-			"minValue": 1,
-			"maxValue": 127,
-			"defaultValue": 2,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "#1 Light Effect, mapping to Parameter 16.",
-					"value": 1
-				},
-				{
-					"label": "#2 Light Effect, mapping to Parameter 17.",
-					"value": 2
-				},
-				{
-					"label": "#3 Light Effect, mapping to Parameter 18.",
-					"value": 4
-				},
-				{
-					"label": "#4 Light Effect, mapping to Parameter 19.",
-					"value": 8
-				},
-				{
-					"label": "#5 Light Effect, mapping to Parameter 20.",
-					"value": 16
-				},
-				{
-					"label": "#6 Light Effect, mapping to Parameter 21.",
-					"value": 32
-				},
-				{
-					"label": "#7 Light Effect, mapping to Parameter 22.",
-					"value": 64
-				},
-				{
-					"label": "Use the last valid configuration value.",
-					"value": 127
-				}
-			]
+		"5[0xff00]": {
+			"$import": "../0x0086/templates/aeotec_template.json#tone_interval_doorbell_3"
 		},
-		"6[0xff]": {
-			"label": "Tone Play Count for EP 6 (Environment)",
-			"valueSize": 4,
-			"minValue": 0,
-			"maxValue": 255,
-			"defaultValue": 0,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true,
-			"options": [
-				{
-					"label": "Unlimited playback until stop by user.",
-					"value": 0
-				},
-				{
-					"label": "Use the last valid configuration value.",
-					"value": 255
-				}
-			]
+		"5[0xff]": {
+			"$import": "../0x0086/templates/aeotec_template.json#tone_play_count_doorbell_3"
 		},
-		"6[0xff00]": {
-			"label": "Interval between 2 tones for EP 6 (Environment)",
-			"valueSize": 4,
-			"minValue": 0,
-			"maxValue": 255,
-			"defaultValue": 0,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true,
-			"options": [
-				{
-					"label": "No interval.",
-					"value": 0
-				},
-				{
-					"label": "Use the last valid configuration value.",
-					"value": 255
-				}
-			]
+		"6[0xff000000]": {
+			"$import": "../0x0086/templates/aeotec_template.json#light_index_environment"
 		},
 		"6[0xff0000]": {
-			"label": "Duration of a tone for EP 6 (Environment)",
-			"valueSize": 4,
-			"minValue": 0,
-			"maxValue": 255,
-			"defaultValue": 0,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true,
-			"options": [
-				{
-					"label": "Keep the original duration of a tone",
-					"value": 0
-				},
-				{
-					"label": "Use the last valid configuration value.",
-					"value": 255
-				}
-			]
+			"$import": "../0x0086/templates/aeotec_template.json#tone_duration_environment"
 		},
-		"6[0x7f000000]": {
-			"label": "Light Effect for EP 6 (Environment)",
-			"valueSize": 4,
-			"minValue": 1,
-			"maxValue": 127,
-			"defaultValue": 4,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "#1 Light Effect, mapping to Parameter 16.",
-					"value": 1
-				},
-				{
-					"label": "#2 Light Effect, mapping to Parameter 17.",
-					"value": 2
-				},
-				{
-					"label": "#3 Light Effect, mapping to Parameter 18.",
-					"value": 4
-				},
-				{
-					"label": "#4 Light Effect, mapping to Parameter 19.",
-					"value": 8
-				},
-				{
-					"label": "#5 Light Effect, mapping to Parameter 20.",
-					"value": 16
-				},
-				{
-					"label": "#6 Light Effect, mapping to Parameter 21.",
-					"value": 32
-				},
-				{
-					"label": "#7 Light Effect, mapping to Parameter 22.",
-					"value": 64
-				},
-				{
-					"label": "Use the last valid configuration value.",
-					"value": 127
-				}
-			]
+		"6[0xff00]": {
+			"$import": "../0x0086/templates/aeotec_template.json#tone_interval_environment"
 		},
-		"7[0xff]": {
-			"label": "Tone play count for EP7 (Security)",
-			"valueSize": 4,
-			"minValue": 0,
-			"maxValue": 255,
-			"defaultValue": 0,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true,
-			"options": [
-				{
-					"label": "Unlimited playback until stop by user.",
-					"value": 0
-				},
-				{
-					"label": "Use the last valid configuration value.",
-					"value": 255
-				}
-			]
+		"6[0xff]": {
+			"$import": "../0x0086/templates/aeotec_template.json#tone_play_count_environment"
 		},
-		"7[0xff00]": {
-			"label": "Interval between 2 tones for EP7 (Security)",
-			"valueSize": 4,
-			"minValue": 0,
-			"maxValue": 255,
-			"defaultValue": 0,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true,
-			"options": [
-				{
-					"label": "No interval. (default)",
-					"value": 0
-				},
-				{
-					"label": "Use the last valid configuration value.",
-					"value": 255
-				}
-			]
+		"7[0xff000000]": {
+			"$import": "../0x0086/templates/aeotec_template.json#light_index_security"
 		},
 		"7[0xff0000]": {
-			"label": "Duration of a tone for EP 7 (Security)",
-			"valueSize": 4,
-			"minValue": 0,
-			"maxValue": 255,
-			"defaultValue": 0,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true,
-			"options": [
-				{
-					"label": "Keep the original duration of a tone",
-					"value": 0
-				},
-				{
-					"label": "Use the last valid configuration value.",
-					"value": 255
-				}
-			]
+			"$import": "../0x0086/templates/aeotec_template.json#tone_duration_security"
 		},
-		"7[0x7f000000]": {
-			"label": "Light Effect for EP 7 (Security)",
-			"valueSize": 4,
-			"minValue": 1,
-			"maxValue": 127,
-			"defaultValue": 4,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "#1 Light Effect, mapping to Parameter 16.",
-					"value": 1
-				},
-				{
-					"label": "#2 Light Effect, mapping to Parameter 17.",
-					"value": 2
-				},
-				{
-					"label": "#3 Light Effect, mapping to Parameter 18.",
-					"value": 4
-				},
-				{
-					"label": "#4 Light Effect, mapping to Parameter 19.",
-					"value": 8
-				},
-				{
-					"label": "#5 Light Effect, mapping to Parameter 20.",
-					"value": 16
-				},
-				{
-					"label": "#6 Light Effect, mapping to Parameter 21.",
-					"value": 32
-				},
-				{
-					"label": "#7 Light Effect, mapping to Parameter 22.",
-					"value": 64
-				},
-				{
-					"label": "Use the last valid configuration value.",
-					"value": 127
-				}
-			]
+		"7[0xff00]": {
+			"$import": "../0x0086/templates/aeotec_template.json#tone_interval_security"
 		},
-		"8[0xff]": {
-			"label": "Tone Play Count for EP8 (Emergency)",
-			"valueSize": 4,
-			"minValue": 0,
-			"maxValue": 255,
-			"defaultValue": 0,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true,
-			"options": [
-				{
-					"label": "Unlimited playback until stop by user.",
-					"value": 0
-				},
-				{
-					"label": "Use the last valid configuration value.",
-					"value": 255
-				}
-			]
+		"7[0xff]": {
+			"$import": "../0x0086/templates/aeotec_template.json#tone_play_count_security"
 		},
-		"8[0xff00]": {
-			"label": "Interval between 2 tones for EP8 (Emergency)",
-			"valueSize": 4,
-			"minValue": 0,
-			"maxValue": 255,
-			"defaultValue": 0,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true,
-			"options": [
-				{
-					"label": "No interval. (default)",
-					"value": 0
-				},
-				{
-					"label": "Use the last valid configuration value.",
-					"value": 255
-				}
-			]
+		"8[0xff000000]": {
+			"$import": "../0x0086/templates/aeotec_template.json#light_index_emergency"
 		},
 		"8[0xff0000]": {
-			"label": "Tone Duration for EP8 (Emergency)",
-			"valueSize": 4,
-			"minValue": 0,
-			"maxValue": 255,
-			"defaultValue": 0,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true,
-			"options": [
-				{
-					"label": "Keep the original duration of a tone",
-					"value": 0
-				},
-				{
-					"label": "Use the last valid configuration value.",
-					"value": 255
-				}
-			]
+			"$import": "../0x0086/templates/aeotec_template.json#tone_duration_emergency"
 		},
-		"8[0x7f000000]": {
-			"label": "Light Effect for EP8 (Emergency)",
-			"valueSize": 4,
-			"minValue": 1,
-			"maxValue": 127,
-			"defaultValue": 4,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "#1 Light Effect, mapping to Parameter 16.",
-					"value": 1
-				},
-				{
-					"label": "#2 Light Effect, mapping to Parameter 17.",
-					"value": 2
-				},
-				{
-					"label": "#3 Light Effect, mapping to Parameter 18.",
-					"value": 4
-				},
-				{
-					"label": "#4 Light Effect, mapping to Parameter 19.",
-					"value": 8
-				},
-				{
-					"label": "#5 Light Effect, mapping to Parameter 20.",
-					"value": 16
-				},
-				{
-					"label": "#6 Light Effect, mapping to Parameter 21.",
-					"value": 32
-				},
-				{
-					"label": "#7 Light Effect, mapping to Parameter 22.",
-					"value": 64
-				},
-				{
-					"label": "Use the last valid configuration value.",
-					"value": 127
-				}
-			]
+		"8[0xff00]": {
+			"$import": "../0x0086/templates/aeotec_template.json#tone_interval_emergency"
 		},
-		"16[0xff]": {
-			"label": "Time Off for Light Effect #1",
-			"valueSize": 4,
-			"minValue": 0,
-			"maxValue": 255,
-			"defaultValue": 3,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+		"8[0xff]": {
+			"$import": "../0x0086/templates/aeotec_template.json#tone_play_count_emergency"
+		},
+		"16[0xff000000]": {
+			"$import": "../0x0086/templates/aeotec_template.json#dim_duration_on_1"
+		},
+		"16[0xff0000]": {
+			"$import": "../0x0086/templates/aeotec_template.json#dim_duration_off_1"
 		},
 		"16[0xff00]": {
-			"label": "Time On for Light Effect #1",
-			"valueSize": 4,
-			"minValue": 0,
-			"maxValue": 255,
-			"defaultValue": 20,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"$import": "../0x0086/templates/aeotec_template.json#led_duration_on_1"
 		},
-		"16[0x7f0000]": {
-			"label": "Dim Off duration for Light Effect #1",
-			"valueSize": 4,
-			"minValue": 0,
-			"maxValue": 127,
-			"defaultValue": 25,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+		"16[0xff]": {
+			"$import": "../0x0086/templates/aeotec_template.json#led_duration_off_1"
 		},
-		"16[0x7f000000]": {
-			"label": "Dim On Duration for Light Effect #1",
-			"valueSize": 4,
-			"minValue": 0,
-			"maxValue": 127,
-			"defaultValue": 75,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+		"17[0xff000000]": {
+			"$import": "../0x0086/templates/aeotec_template.json#dim_duration_on_2"
 		},
-		"17[0xff]": {
-			"label": "Light Off Duration for Light Effect #2",
-			"valueSize": 4,
-			"minValue": 0,
-			"maxValue": 255,
-			"defaultValue": 3,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+		"17[0xff0000]": {
+			"$import": "../0x0086/templates/aeotec_template.json#dim_duration_off_2"
 		},
 		"17[0xff00]": {
-			"label": "Light On duration for Light Effect #2",
-			"valueSize": 4,
-			"minValue": 0,
-			"maxValue": 255,
-			"defaultValue": 0,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"$import": "../0x0086/templates/aeotec_template.json#led_duration_on_2"
 		},
-		"17[0x7f0000]": {
-			"label": "Dim Off duration for Light Effect #2",
-			"valueSize": 4,
-			"minValue": 0,
-			"maxValue": 127,
-			"defaultValue": 50,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+		"17[0xff]": {
+			"$import": "../0x0086/templates/aeotec_template.json#led_duration_off_2"
 		},
-		"17[0x7f000000]": {
-			"label": "Dim On duration for Light Effect #2",
-			"valueSize": 4,
-			"minValue": 0,
-			"maxValue": 127,
-			"defaultValue": 50,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+		"18[0xff000000]": {
+			"$import": "../0x0086/templates/aeotec_template.json#dim_duration_on_3"
 		},
-		"18[0xff]": {
-			"label": "Light Off duration for Light Effect #3",
-			"valueSize": 4,
-			"minValue": 0,
-			"maxValue": 255,
-			"defaultValue": 3,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+		"18[0xff0000]": {
+			"$import": "../0x0086/templates/aeotec_template.json#dim_duration_off_3"
 		},
 		"18[0xff00]": {
-			"label": "Light On duration for Light Effect #3",
-			"valueSize": 4,
-			"minValue": 0,
-			"maxValue": 255,
-			"defaultValue": 1,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"$import": "../0x0086/templates/aeotec_template.json#led_duration_on_3"
 		},
-		"18[0x7f0000]": {
-			"label": "Dim Off duration for Light Effect #3",
-			"valueSize": 4,
-			"minValue": 0,
-			"maxValue": 127,
-			"defaultValue": 33,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+		"18[0xff]": {
+			"$import": "../0x0086/templates/aeotec_template.json#led_duration_off_3"
 		},
-		"18[0x7f000000]": {
-			"label": "Dim On duration for Light Effect #3",
-			"valueSize": 4,
-			"minValue": 0,
-			"maxValue": 127,
-			"defaultValue": 0,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+		"19[0xff000000]": {
+			"$import": "../0x0086/templates/aeotec_template.json#dim_duration_on_4"
 		},
-		"19[0xff]": {
-			"label": "Light Off duration for Light Effect #4",
-			"valueSize": 4,
-			"minValue": 0,
-			"maxValue": 255,
-			"defaultValue": 3,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+		"19[0xff0000]": {
+			"$import": "../0x0086/templates/aeotec_template.json#dim_duration_off_4"
 		},
 		"19[0xff00]": {
-			"label": "Light On duration for Light Effect #4",
-			"valueSize": 4,
-			"minValue": 0,
-			"maxValue": 255,
-			"defaultValue": 0,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"$import": "../0x0086/templates/aeotec_template.json#led_duration_on_4"
 		},
-		"19[0x7f0000]": {
-			"label": "Dim Off duration for Light Effect #4",
-			"valueSize": 4,
-			"minValue": 0,
-			"maxValue": 127,
-			"defaultValue": 0,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+		"19[0xff]": {
+			"$import": "../0x0086/templates/aeotec_template.json#led_duration_off_4"
 		},
-		"19[0x7f000000]": {
-			"label": "Dim On duration for Light Effect #4",
-			"valueSize": 4,
-			"minValue": 0,
-			"maxValue": 127,
-			"defaultValue": 33,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+		"20[0xff000000]": {
+			"$import": "../0x0086/templates/aeotec_template.json#dim_duration_on_5"
 		},
-		"20[0xff]": {
-			"label": "Light Off duration for Light Effect #5",
-			"valueSize": 4,
-			"minValue": 0,
-			"maxValue": 255,
-			"defaultValue": 10,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+		"20[0xff0000]": {
+			"$import": "../0x0086/templates/aeotec_template.json#dim_duration_off_5"
 		},
 		"20[0xff00]": {
-			"label": "Light On duration for Light Effect #5",
-			"valueSize": 4,
-			"minValue": 0,
-			"maxValue": 255,
-			"defaultValue": 0,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"$import": "../0x0086/templates/aeotec_template.json#led_duration_on_5"
 		},
-		"20[0x7f0000]": {
-			"label": "Dim Off duration for Light Effect #5",
-			"valueSize": 4,
-			"minValue": 0,
-			"maxValue": 127,
-			"defaultValue": 0,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+		"20[0xff]": {
+			"$import": "../0x0086/templates/aeotec_template.json#led_duration_off_5"
 		},
-		"20[0x7f000000]": {
-			"label": "Dim On duration for Light Effect #5",
-			"valueSize": 4,
-			"minValue": 0,
-			"maxValue": 127,
-			"defaultValue": 0,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+		"21[0xff000000]": {
+			"$import": "../0x0086/templates/aeotec_template.json#dim_duration_on_6"
 		},
-		"21[0xff]": {
-			"label": "Light Off duration for Light Effect #6",
-			"valueSize": 4,
-			"minValue": 0,
-			"maxValue": 255,
-			"defaultValue": 0,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+		"21[0xff0000]": {
+			"$import": "../0x0086/templates/aeotec_template.json#dim_duration_off_6"
 		},
 		"21[0xff00]": {
-			"label": "Light On duration for Light Effect #6",
-			"valueSize": 4,
-			"minValue": 0,
-			"maxValue": 255,
-			"defaultValue": 10,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"$import": "../0x0086/templates/aeotec_template.json#led_duration_on_6"
 		},
-		"21[0x7f0000]": {
-			"label": "Dim Off duration for Light Effect #6",
-			"valueSize": 4,
-			"minValue": 0,
-			"maxValue": 127,
-			"defaultValue": 0,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+		"21[0xff]": {
+			"$import": "../0x0086/templates/aeotec_template.json#led_duration_off_6"
 		},
-		"21[0x7f000000]": {
-			"label": "Dim On duration for Light Effect #6",
-			"valueSize": 4,
-			"minValue": 0,
-			"maxValue": 127,
-			"defaultValue": 0,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+		"22[0xff000000]": {
+			"$import": "../0x0086/templates/aeotec_template.json#dim_duration_on_7"
 		},
-		"22[0xff]": {
-			"label": "Light Off duration for Light Effect #7",
-			"valueSize": 4,
-			"minValue": 0,
-			"maxValue": 255,
-			"defaultValue": 1,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+		"22[0xff0000]": {
+			"$import": "../0x0086/templates/aeotec_template.json#dim_duration_off_7"
 		},
 		"22[0xff00]": {
-			"label": "Light On duration for Light Effect #7",
-			"valueSize": 4,
-			"minValue": 0,
-			"maxValue": 255,
-			"defaultValue": 0,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"$import": "../0x0086/templates/aeotec_template.json#led_duration_on_7"
 		},
-		"22[0x7f0000]": {
-			"label": "Dim Off duration for Light Effect #7",
-			"valueSize": 4,
-			"minValue": 0,
-			"maxValue": 127,
-			"defaultValue": 0,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+		"22[0xff]": {
+			"$import": "../0x0086/templates/aeotec_template.json#led_duration_off_7"
 		},
-		"22[0x7f000000]": {
-			"label": "Dim On duration for Light Effect #7",
-			"valueSize": 4,
-			"minValue": 0,
-			"maxValue": 127,
-			"defaultValue": 33,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+		"32": {
+			"$import": "../0x0086/templates/aeotec_template.json#basic_set_command_browse"
+		},
+		"33": {
+			"$import": "../0x0086/templates/aeotec_template.json#basic_set_command_tamper"
+		},
+		"34": {
+			"$import": "../0x0086/templates/aeotec_template.json#basic_set_command_doorbell_1"
+		},
+		"35": {
+			"$import": "../0x0086/templates/aeotec_template.json#basic_set_command_doorbell_2"
+		},
+		"36": {
+			"$import": "../0x0086/templates/aeotec_template.json#basic_set_command_doorbell_3"
+		},
+		"37": {
+			"$import": "../0x0086/templates/aeotec_template.json#basic_set_command_environment"
+		},
+		"38": {
+			"$import": "../0x0086/templates/aeotec_template.json#basic_set_command_security"
+		},
+		"39": {
+			"$import": "../0x0086/templates/aeotec_template.json#basic_set_command_emergency"
+		},
+		"48": {
+			"$import": "../0x0086/templates/aeotec_template.json#button_unpair"
+		},
+		"49": {
+			"$import": "../0x0086/templates/aeotec_template.json#button_pair"
+		},
+		"50": {
+			"$import": "../0x0086/templates/aeotec_template.json#button_pairing_status"
+		},
+		"51[0x01]": {
+			"$import": "../0x0086/templates/aeotec_template.json#button_status_1"
+		},
+		"51[0x02]": {
+			"$import": "../0x0086/templates/aeotec_template.json#button_status_2"
+		},
+		"51[0x04]": {
+			"$import": "../0x0086/templates/aeotec_template.json#button_status_3"
+		},
+		"52[0xffff0000]": {
+			"$import": "../0x0086/templates/aeotec_template.json#button_battery_voltage_1"
 		},
 		"52[0xffff]": {
-			"label": "Button #1 Software Version",
-			"valueSize": 4,
-			"minValue": 0,
-			"maxValue": 65535,
-			"defaultValue": 0,
-			"readOnly": true,
-			"writeOnly": false,
-			"allowManualEntry": true,
-			"options": [
-				{
-					"label": "Button is Unpaired",
-					"value": 0
-				}
-			]
+			"$import": "../0x0086/templates/aeotec_template.json#button_version_1"
 		},
-		"52[0x7fff0000]": {
-			"label": "Button #1 Battery Voltage",
-			"unit": "mV",
-			"valueSize": 4,
-			"minValue": 0,
-			"maxValue": 32767,
-			"defaultValue": 0,
-			"readOnly": true,
-			"writeOnly": false,
-			"allowManualEntry": true,
-			"options": [
-				{
-					"label": "Button is Unpaired",
-					"value": 0
-				}
-			]
+		"53[0xffff0000]": {
+			"$import": "../0x0086/templates/aeotec_template.json#button_battery_voltage_2"
 		},
 		"53[0xffff]": {
-			"label": "Button #2 Software Version",
-			"valueSize": 4,
-			"minValue": 0,
-			"maxValue": 65535,
-			"defaultValue": 0,
-			"readOnly": true,
-			"writeOnly": false,
-			"allowManualEntry": true,
-			"options": [
-				{
-					"label": "Button is unpaired.",
-					"value": 0
-				}
-			]
+			"$import": "../0x0086/templates/aeotec_template.json#button_version_2"
 		},
-		"53[0x7fff0000]": {
-			"label": "Button #2 Battery Voltage",
-			"unit": "mV",
-			"valueSize": 4,
-			"minValue": 0,
-			"maxValue": 32767,
-			"defaultValue": 0,
-			"readOnly": true,
-			"writeOnly": false,
-			"allowManualEntry": true,
-			"options": [
-				{
-					"label": "Button is unpaired.",
-					"value": 0
-				}
-			]
+		"54[0xffff0000]": {
+			"$import": "../0x0086/templates/aeotec_template.json#button_battery_voltage_3"
 		},
 		"54[0xffff]": {
-			"label": "Button #3 Software Version",
-			"valueSize": 4,
-			"minValue": 0,
-			"maxValue": 65535,
-			"defaultValue": 0,
-			"readOnly": true,
-			"writeOnly": false,
-			"allowManualEntry": true,
-			"options": [
-				{
-					"label": "Button is unpaired.",
-					"value": 0
-				}
-			]
+			"$import": "../0x0086/templates/aeotec_template.json#button_version_3"
 		},
-		"54[0x7fff0000]": {
-			"label": "Button #3 Battery Voltage",
-			"unit": "mV",
-			"valueSize": 4,
-			"minValue": 0,
-			"maxValue": 32767,
-			"defaultValue": 0,
-			"readOnly": true,
-			"writeOnly": false,
-			"allowManualEntry": true,
-			"options": [
-				{
-					"label": "Button is unpaired.",
-					"value": 0
-				}
-			]
+		"96": {
+			"$import": "../0x0086/templates/aeotec_template.json#stop_action_button"
+		},
+		"255": {
+			"$import": "../0x0086/templates/aeotec_template.json#factory_reset_exclude"
 		}
+	},
+	"metadata": {
+		"inclusion": "This product supports Security 2 Command Class. While a Security S2 enabled Controller is needed in order to fully use the security feature. This product can be included and operated in any Z-Wave network with other Z-Wave certified devices from other manufacturers and/or other applications. All non-battery operated nodes within the network will\nact as repeaters regardless of vendor to increase reliability of the network.\n\n1. Set your Z-Wave Controller into its 'Add Device' mode in order to add Chime into your Z-Wave system. Refer to the Controller's manual if you are unsure of how to perform this step.\n\n2. Power on Chime via the provided power adapter; its LED will be breathing white light all the time.\n\n3. Click Chime Action Button once, it will quickly flash white light for 30 seconds until Chime is added into the network. It will become constantly bright white light after being assigned a NodeID.\n\n4. If your Z-Wave Controller supports S2 encryption, enter the first 5 digits of DSK into your Controller's interface if/when requested. The DSK is printed on Chime's housing.\n\n5. If Adding fails, it will slowly flash white light 3 times and then become breathing white light; repeat steps 1 to 4. Contact us for further support if needed.\n\n6. If Adding succeeds, it will quickly flash white light 3 times and then become off. Now, Chime is a part of your Z-Wave home control system. You can configure it and its automations via your Z-Wave system; please refer to your software's user guide for precise instructions.\n\nNote:\nIf Action Button is clicked again during the Learn Mode, the Learn Mode will exit. At the same time, Indicator Light will extinguish immediately, and then become breathing white light",
+		"exclusion": "1. Set your Z-Wave Controller into its ' Remove Device' mode in order to remove Chime from your Z-Wave system. Refer to the Controller's manual if you are unsure of how to perform this step.\n\n2. Power on Chime via the provided power adapter; its LED will be off.\n\n3. Click Chime Action Button 6 times quickly; it will bright white light, up to 2s.\n\n4. If Removing fails, it will keep off; repeat steps 1 to 3. Contact us for further support if needed.\n\n5. If Removing succeeds, it will quickly flash white light 3 times and then become breathing white light. Now, Chime is removed from Z-Wave network successfully",
+		"reset": "If the primary controller is missing or inoperable, you may need to reset the device to factory settings.\n\nMake sure the Chime is powered. To complete the reset process manually, press and hold the Action Button for at least 20s. The LED indicator will quickly flash white light 3 times and then become breathing white light, which indicates the reset operation is successful. Otherwise, please try again. Contact us for further support if needed.\n\nNote:\n1. This procedure should only be used when the primary controller is missing or inoperable.\n2. Factory Reset Chime will:\n(a) Remove Chime from Z-Wave network;\n(b) Delete the Association setting;\n(c) Restore the configuration settings to the default.(Except configuration parameter 51/52/53/54)",
+		"manual": "https://products.z-wavealliance.org/ProductManual/File?folder=&filename=MarketCertificationFiles/3301/Indoor%20Siren%206%20product%20manual.pdf"
 	}
 }

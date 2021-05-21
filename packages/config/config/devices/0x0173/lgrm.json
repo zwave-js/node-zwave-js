@@ -1,5 +1,3 @@
-// Leak Intelligence, LLC LGRM
-// Leak Gopher Meter Reader
 {
 	"manufacturer": "Leak Intelligence, LLC",
 	"manufacturerId": "0x0173",
@@ -24,10 +22,7 @@
 			"minValue": 1,
 			"maxValue": 255,
 			"defaultValue": 10,
-			"unsigned": true,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"unsigned": true
 		},
 		"2": {
 			"label": "Report Rate Interval (Controller)",
@@ -37,9 +32,6 @@
 			"maxValue": 255,
 			"defaultValue": 10,
 			"unsigned": true,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true,
 			"options": [
 				{
 					"label": "Disabled",
@@ -55,9 +47,6 @@
 			"maxValue": 255,
 			"defaultValue": 0,
 			"unsigned": true,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true,
 			"options": [
 				{
 					"label": "Disabled",

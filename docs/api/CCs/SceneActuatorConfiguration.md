@@ -1,5 +1,7 @@
 # Scene Actuator Configuration CC
 
+?> CommandClass ID: `0x2c`
+
 ## Scene Actuator Configuration CC methods
 
 ### `set`

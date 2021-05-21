@@ -1,10 +1,8 @@
-// AEON Labs DSD31
-// Outlet Plugable Siren
 {
 	"manufacturer": "AEON Labs",
 	"manufacturerId": "0x0086",
 	"label": "DSD31",
-	"description": "Outlet Plugable Siren",
+	"description": "Siren Gen5",
 	"devices": [
 		{
 			"productType": "0x0004",
@@ -17,61 +15,12 @@
 	},
 	"supportsZWavePlus": true,
 	"paramInformation": {
-		"80": {
-			"label": "Send Notifications",
-			"description": "send notifications to associated devices",
-			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 255,
-			"defaultValue": 0,
-			"unsigned": true,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "Nothing",
-					"value": 0
-				},
-				{
-					"label": "Hail CC",
-					"value": 1
-				},
-				{
-					"label": "Basic CC Report",
-					"value": 2
-				}
-			]
-		},
-		"252": {
-			"label": "Enable/Disable 'Lock' - Configuration",
-			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 255,
-			"defaultValue": 0,
-			"unsigned": true,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "Disable",
-					"value": 0
-				},
-				{
-					"label": "Enable",
-					"value": 1
-				}
-			]
-		},
-		"37[0x0f]": {
+		"37[0xff00]": {
 			"label": "Siren Sound",
 			"valueSize": 2,
 			"minValue": 1,
 			"maxValue": 5,
 			"defaultValue": 1,
-			"readOnly": false,
-			"writeOnly": false,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -96,29 +45,15 @@
 				}
 			]
 		},
-		"37[0x0f00]": {
-			"label": "Siren Volume",
-			"valueSize": 2,
-			"minValue": 1,
-			"maxValue": 3,
-			"defaultValue": 3,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "88dB",
-					"value": 1
-				},
-				{
-					"label": "100dB",
-					"value": 2
-				},
-				{
-					"label": "105dB",
-					"value": 3
-				}
-			]
+		"37[0xff]": {
+			"$import": "../templates/master_template.json#volume_three",
+			"valueSize": 2
+		},
+		"80": {
+			"$import": "templates/aeotec_template.json#enable_notifications"
+		},
+		"252": {
+			"$import": "templates/aeotec_template.json#lock_configuration"
 		}
 	}
 }

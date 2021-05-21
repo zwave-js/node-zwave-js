@@ -1,0 +1,24 @@
+{
+	"manufacturer": "Popp & Co",
+	"manufacturerId": "0x0154",
+	"label": "POPE009501",
+	"description": "Flow Stop",
+	"devices": [
+		{
+			"productType": "0x0003",
+			"productId": "0x0512"
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"paramInformation": {
+		"0": {
+			"$import": "templates/popp_template.json#led_status"
+		},
+		"1": {
+			"$import": "templates/popp_template.json#shut_off_controller_behavior"
+		}
+	}
+}

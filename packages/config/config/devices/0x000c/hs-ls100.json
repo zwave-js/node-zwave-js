@@ -1,5 +1,3 @@
-// HomeSeer Technologies HS-LS100+
-// Z-Wave Plus Leak Sensor
 {
 	"manufacturer": "HomeSeer Technologies",
 	"manufacturerId": "0x000c",
@@ -43,10 +41,7 @@
 			"unit": "0.1°F",
 			"minValue": -670,
 			"maxValue": 2570,
-			"defaultValue": 1040,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"defaultValue": 1040
 		},
 		"22": {
 			"label": "Temperature (Low) Trigger Threshold",
@@ -54,10 +49,7 @@
 			"unit": "0.1°F",
 			"minValue": -670,
 			"maxValue": 2570,
-			"defaultValue": 320,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"defaultValue": 320
 		},
 		"24": {
 			"$import": "../templates/master_template.json#base_enable_disable",

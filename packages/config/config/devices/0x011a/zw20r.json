@@ -1,5 +1,3 @@
-// Wenzhou MTLC Electric Appliances Co., Ltd. ZW20R
-// 20A Tamper Resistant Duplex Receptacle
 {
 	"manufacturer": "Wenzhou MTLC Electric Appliances Co., Ltd.",
 	"manufacturerId": "0x011a",
@@ -23,8 +21,6 @@
 			"minValue": 0,
 			"maxValue": 1,
 			"defaultValue": 0,
-			"readOnly": false,
-			"writeOnly": false,
 			"allowManualEntry": false,
 			"options": [
 				{

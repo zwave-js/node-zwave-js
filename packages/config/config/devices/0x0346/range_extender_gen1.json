@@ -1,5 +1,3 @@
-// Ring 4AR1S7-0EN0 / 4AR1E9-0EU0
-// Range Extender (1st generation)
 {
 	"manufacturer": "Ring",
 	"manufacturerId": "0x0346",
@@ -26,10 +24,7 @@
 			"unit": "minutes",
 			"minValue": 4,
 			"maxValue": 70,
-			"defaultValue": 70,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"defaultValue": 70
 		},
 		"2": {
 			"$if": "firmwareVersion >= 2.4",
@@ -39,10 +34,7 @@
 			"unit": "seconds",
 			"minValue": 5,
 			"maxValue": 50,
-			"defaultValue": 15,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"defaultValue": 15
 		},
 		"3": {
 			"$if": "firmwareVersion >= 2.4",
@@ -51,10 +43,7 @@
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 5,
-			"defaultValue": 1,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"defaultValue": 1
 		},
 		"4": {
 			"$if": "firmwareVersion >= 2.4",
@@ -64,10 +53,7 @@
 			"unit": "seconds",
 			"minValue": 1,
 			"maxValue": 60,
-			"defaultValue": 5,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"defaultValue": 5
 		},
 		"5": {
 			"$if": "firmwareVersion >= 2.4",
@@ -76,10 +62,7 @@
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 31,
-			"defaultValue": 5,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"defaultValue": 5
 		},
 		"6": {
 			"$if": "firmwareVersion >= 2.4",
@@ -90,7 +73,6 @@
 			"maxValue": 255,
 			"unsigned": true,
 			"readOnly": true,
-			"writeOnly": false,
 			"allowManualEntry": false
 		}
 	},

@@ -1,6 +1,6 @@
 {
   "name": "@zwave-js/shared",
-  "version": "6.5.0",
+  "version": "7.4.0",
   "description": "zwave-js: shared utilities",
   "publishConfig": {
     "access": "public"
@@ -31,7 +31,7 @@
     "node": ">=10.0.0"
   },
   "dependencies": {
-    "alcalzone-shared": "^3.0.2"
+    "alcalzone-shared": "^3.0.3"
   },
   "scripts": {
     "build": "tsc -b tsconfig.build.json",

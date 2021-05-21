@@ -1,5 +1,3 @@
-// BeNext Tag Reader
-// Tag Reader
 {
 	"manufacturer": "BeNext",
 	"manufacturerId": "0x008a",
@@ -31,10 +29,7 @@
 			"minValue": 0,
 			"maxValue": 255,
 			"defaultValue": 0,
-			"unsigned": true,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"unsigned": true
 		},
 		"2": {
 			"label": "Feedback time",
@@ -43,10 +38,7 @@
 			"minValue": 0,
 			"maxValue": 255,
 			"defaultValue": 15,
-			"unsigned": true,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"unsigned": true
 		},
 		"3": {
 			"label": "Feedback time-out",
@@ -55,20 +47,14 @@
 			"minValue": 0,
 			"maxValue": 255,
 			"defaultValue": 0,
-			"unsigned": true,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"unsigned": true
 		},
 		"4": {
 			"label": "feedback beeps per second",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 5,
-			"defaultValue": 2,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"defaultValue": 2
 		},
 		"5": {
 			"label": "Mode",
@@ -77,10 +63,7 @@
 			"minValue": 0,
 			"maxValue": 255,
 			"defaultValue": 1,
-			"unsigned": true,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"unsigned": true
 		},
 		"6": {
 			"label": "RFID circuit start-up time",
@@ -89,10 +72,7 @@
 			"minValue": 0,
 			"maxValue": 255,
 			"defaultValue": 100,
-			"unsigned": true,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"unsigned": true
 		}
 	}
 }

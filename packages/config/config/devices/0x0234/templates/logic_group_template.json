@@ -1,0 +1,547 @@
+{
+	"enable_central_scene": {
+		"$import": "../../templates/master_template.json#base_enable_disable",
+		"label": "Central Scene",
+		"defaultValue": 1
+	},
+	"multilevel_enable": {
+		"$import": "../../templates/master_template.json#base_enable_disable",
+		"valueSize": 4,
+		"defaultValue": 1
+	},
+	"multilevel_upper_function": {
+		"$import": "../../templates/master_template.json#base_0-99_nounit",
+		"label": "Upper Switch Value",
+		"valueSize": 4,
+		"defaultValue": 255
+	},
+	"multilevel_lower_function": {
+		"$import": "../../templates/master_template.json#base_0-99_nounit",
+		"label": "Lower Switch Value",
+		"valueSize": 4,
+		"defaultValue": 0
+	},
+	"multilevel_duration_function": {
+		"$import": "../../templates/master_template.json#base_0-255_nounit",
+		"label": "Duration",
+		"description": "Values 1-127 = seconds; 128-255 = minutes (minus 127)",
+		"valueSize": 4
+	},
+	"button_pressed_threshold_time": {
+		"label": "Button Press Threshold Time",
+		"valueSize": 2,
+		"unit": "1 ms",
+		"minValue": 1,
+		"maxValue": 1000,
+		"defaultValue": 400
+	},
+	"button_held_threshold_time": {
+		"label": "Button Held Threshold Time",
+		"valueSize": 2,
+		"unit": "1 ms",
+		"minValue": 1,
+		"maxValue": 5000,
+		"defaultValue": 600
+	},
+	"led_indicator_zba7140": {
+		"label": "LED Mode",
+		"valueSize": 1,
+		"minValue": 0,
+		"maxValue": 2,
+		"defaultValue": 0,
+		"unsigned": true,
+		"allowManualEntry": false,
+		"options": [
+			{
+				"label": "Disable",
+				"value": 0
+			},
+			{
+				"label": "Battery level",
+				"value": 1
+			},
+			{
+				"label": "LED set by parameter 5",
+				"value": 2
+			}
+		]
+	},
+	"button_functionality": {
+		"label": "Button",
+		"valueSize": 1,
+		"minValue": 0,
+		"maxValue": 3,
+		"defaultValue": 0,
+		"unsigned": true,
+		"allowManualEntry": false,
+		"options": [
+			{
+				"label": "Toggle",
+				"value": 0
+			},
+			{
+				"label": "Turn on, Dim up",
+				"value": 1
+			},
+			{
+				"label": "Turn off, Dim down",
+				"value": 2
+			},
+			{
+				"label": "Momentary",
+				"value": 3
+			}
+		]
+	},
+	"global_brightness": {
+		"$import": "../../templates/master_template.json#base_0-255_nounit",
+		"label": "LED Indicator Brightness",
+		"valueSize": 4,
+		"defaultValue": 255
+	},
+	"color_command_button": {
+		"label": "Color Commands LED Indicator",
+		"valueSize": 1,
+		"minValue": 0,
+		"maxValue": 2,
+		"defaultValue": 0,
+		"unsigned": true,
+		"allowManualEntry": false,
+		"options": [
+			{
+				"label": "Direct control",
+				"value": 0
+			},
+			{
+				"label": "Color for off state",
+				"value": 1
+			},
+			{
+				"label": "Color for on state",
+				"value": 2
+			}
+		]
+	},
+	"dimming_duration": {
+		"$import": "../../templates/master_template.json#base_0-255_nounit",
+		"label": "Duration of Dimming",
+		"unit": "seconds",
+		"defaultValue": 5
+	},
+	"duration_on_off": {
+		"$import": "../../templates/master_template.json#base_0-255_nounit",
+		"label": "Duration of On/Off",
+		"defaultValue": 0
+	},
+	"dimmer_mode": {
+		"label": "Dimmer Mode",
+		"valueSize": 1,
+		"minValue": 0,
+		"maxValue": 2,
+		"defaultValue": 1,
+		"unsigned": true,
+		"allowManualEntry": false,
+		"options": [
+			{
+				"label": "Switch only",
+				"value": 0
+			},
+			{
+				"label": "Trailing edge",
+				"value": 1
+			},
+			{
+				"label": "Leading edge",
+				"value": 2
+			}
+		]
+	},
+	"dimmer_min": {
+		"$import": "../../templates/master_template.json#base_0-99_nounit",
+		"label": "Dimmer: Minimum Level",
+		"defaultValue": 0
+	},
+	"dimmer_max": {
+		"$import": "../../templates/master_template.json#base_0-99_nounit",
+		"label": "Dimmer: Maximum Level",
+		"defaultValue": 99
+	},
+	"dimmer_metering": {
+		"$import": "../../templates/master_template.json#base_0-255_nounit",
+		"label": "Meter Report Time",
+		"defaultValue": 60
+	},
+	"led_indicator": {
+		"$import": "../../templates/master_template.json#base_0-255_nounit",
+		"label": "Button LED Indicator",
+		"unsigned": true,
+		"valueSize": 4,
+		"defaultValue": 0
+	},
+	"button_led_indicator": {
+		"$import": "../../templates/master_template.json#base_0-255_nounit",
+		"label": "Button LED Indicator",
+		"maxValue": 7,
+		"defaultValue": 7,
+		"allowManualEntry": false,
+		"options": [
+			{
+				"label": "Disable",
+				"value": 0
+			},
+			{
+				"label": "Follow switch",
+				"value": 1
+			},
+			{
+				"label": "Follow switch - inverted",
+				"value": 2
+			},
+			{
+				"label": "Follow internal dimmer",
+				"value": 5
+			},
+			{
+				"label": "Follow internal dimmer - inverted",
+				"value": 6
+			},
+			{
+				"label": "On for 5 seconds",
+				"value": 7
+			}
+		]
+	},
+	"binary_switch_set": {
+		"label": "Binary Switch Set support",
+		"valueSize": 1,
+		"minValue": 0,
+		"maxValue": 2,
+		"defaultValue": 0,
+		"unsigned": true,
+		"allowManualEntry": false,
+		"options": [
+			{
+				"label": "LED",
+				"value": 0
+			},
+			{
+				"label": "Switch and LED",
+				"value": 1
+			},
+			{
+				"label": "Button activated",
+				"value": 2
+			}
+		]
+	},
+	"button_function_zdb5100": {
+		"valueSize": 1,
+		"minValue": 0,
+		"maxValue": 4,
+		"defaultValue": 0,
+		"unsigned": true,
+		"allowManualEntry": false,
+		"options": [
+			{
+				"label": "Toggle",
+				"value": 0
+			},
+			{
+				"label": "Automatic turn off after time expired",
+				"value": 1
+			},
+			{
+				"label": "Automatic turn on after time expired",
+				"value": 2
+			},
+			{
+				"label": "Always turn off or dim down",
+				"value": 3
+			},
+			{
+				"label": "Always turn on or dim up",
+				"value": 4
+			}
+		]
+	},
+	"input_funtion_relay": {
+		"$import": "../../templates/master_template.json#base_0-255_nounit",
+		"label": "Input - Function",
+		"maxValue": 3,
+		"defaultValue": 3,
+		"allowManualEntry": false,
+		"options": [
+			{
+				"label": "Disabled",
+				"value": 0
+			},
+			{
+				"label": "Level controlled input",
+				"value": 1
+			},
+			{
+				"label": "Falling-edge controlled input",
+				"value": 2
+			},
+			{
+				"label": "Rising-edge controlled input",
+				"value": 3
+			}
+		]
+	},
+	"output_function_relay": {
+		"$import": "../../templates/master_template.json#base_enable_disable",
+		"label": "Output - Function",
+		"options": [
+			{
+				"label": "Controlled via Z-Wave messages",
+				"value": 0
+			},
+			{
+				"label": "Controlled by Input 1",
+				"value": 1
+			}
+		]
+	},
+	"status_led": {
+		"$import": "../../templates/master_template.json#led_indicator_four_options",
+		"label": "Status of LED",
+		"defaultValue": 1,
+		"options": [
+			{
+				"label": "Disable",
+				"value": 0
+			},
+			{
+				"label": "Enable",
+				"value": 1
+			},
+			{
+				"label": "Flashes in 1 second interval",
+				"value": 2
+			},
+			{
+				"label": "Flashes in 1/2 second interval",
+				"value": 3
+			}
+		]
+	},
+	"meter_type": {
+		"label": "Input - Meter Type",
+		"valueSize": 1,
+		"minValue": 0,
+		"maxValue": 5,
+		"defaultValue": 1,
+		"allowManualEntry": false,
+		"options": [
+			{
+				"label": "Disable",
+				"value": 0
+			},
+			{
+				"label": "Electricity meter",
+				"value": 1
+			},
+			{
+				"label": "Gas meter",
+				"value": 2
+			},
+			{
+				"label": "Water meter",
+				"value": 3
+			},
+			{
+				"label": "Heat meter",
+				"value": 4
+			},
+			{
+				"label": "Cooling meter",
+				"value": 5
+			}
+		]
+	},
+	"input_scale": {
+		// The meaning of this parameter's values change depending on parameter "meter_type"
+		"label": "Input - Scale Type",
+		"valueSize": 1,
+		"minValue": 0,
+		"maxValue": 6,
+		"defaultValue": 3,
+		"unsigned": true
+	},
+	"input_precision": {
+		//number of decimal points
+		"label": "Input: Precision",
+		"valueSize": 1,
+		"minValue": 0,
+		"maxValue": 7,
+		"defaultValue": 0,
+		"unsigned": true
+	},
+	"pulse_unit": {
+		"label": "Input 5: Pulses Per Unit",
+		"valueSize": 2,
+		"minValue": 0,
+		"maxValue": 65000,
+		"defaultValue": 1,
+		"unsigned": true
+	},
+	"rate_type": {
+		"label": "Input: Rate Type",
+		"valueSize": 1,
+		"minValue": 0,
+		"maxValue": 2,
+		"defaultValue": 1,
+		"unsigned": true,
+		"allowManualEntry": false,
+		"options": [
+			{
+				"label": "Unspecified",
+				"value": 0
+			},
+			{
+				"label": "Import",
+				"value": 1
+			},
+			{
+				"label": "Export",
+				"value": 2
+			}
+		]
+	},
+	"time_interval_report": {
+		"label": "Time Interval Between Meter Reports",
+		"valueSize": 2,
+		"unit": "100 ms",
+		"minValue": 0,
+		"maxValue": 8640,
+		"defaultValue": 90,
+		"unsigned": true
+	},
+	"led_brightness": {
+		"$import": "../../templates/master_template.json#base_0-99_nounit",
+		"label": "Brightness of Status LED",
+		"defaultValue": 50
+	},
+	"input_calibration": {
+		"$import": "../../templates/master_template.json#base_0-99_nounit",
+		"label": "Input: Calibration",
+		"unit": "0.1 °C",
+		"minValue": -40,
+		"maxValue": 40,
+		"defaultValue": 0,
+		"unsigned": false
+	},
+	"input_report_interval": {
+		"label": "Input Report Interval",
+		"unit": "10 seconds",
+		"valueSize": 2,
+		"minValue": 0,
+		"maxValue": 8640,
+		"defaultValue": 6,
+		"unsigned": true
+	},
+	"input_function_setup": {
+		"label": "Input: Function",
+		"valueSize": 1,
+		"minValue": 0,
+		"maxValue": 6,
+		"defaultValue": 3,
+		"unsigned": true,
+		"options": [
+			{
+				"label": "Level-controlled, NO",
+				"value": 0
+			},
+			{
+				"label": "Level-controlled, NC",
+				"value": 1
+			},
+			{
+				"label": "Toggle-controlled, NO",
+				"value": 2
+			},
+			{
+				"label": "Toggle-controlled, NC",
+				"value": 3
+			},
+			{
+				"label": "Timer-controlled, NO",
+				"value": 4
+			},
+			{
+				"label": "Timer-controlled, NC",
+				"value": 5
+			}
+		]
+	},
+	"button_debounce": {
+		"$import": "../../templates/master_template.json#base_1-255_nounit",
+		"label": "Button Debounce Timer",
+		"unit": "10 ms",
+		"valueSize": 1,
+		"defaultValue": 5
+	},
+	"input_timer": {
+		"$import": "../../templates/master_template.json#base_0-255_nounit",
+		"label": "Input: Timer",
+		"defaultValue": 0
+	},
+	"startup_relay": {
+		"$import": "../../templates/master_template.json#state_after_power_failure",
+		"options": [
+			{
+				"label": "Always off",
+				"value": 0
+			},
+			{
+				"label": "Always on",
+				"value": 1
+			},
+			{
+				"label": "Previous state",
+				"value": 2
+			}
+		]
+	},
+	"watt_threshold_change": {
+		"label": "Power Change Threshold",
+		"valueSize": 2,
+		"unit": "W",
+		"minValue": 0,
+		"maxValue": 500,
+		"defaultValue": 50,
+		"unsigned": true
+	},
+	"power_overload_limit": {
+		"label": "Power Overload Limit",
+		"valueSize": 2,
+		"unit": "W",
+		"minValue": 0,
+		"maxValue": 3000,
+		"defaultValue": 2900,
+		"unsigned": true
+	},
+	"led_power_consumption_mode": {
+		"label": "LED Mode",
+		"valueSize": 1,
+		"minValue": 0,
+		"maxValue": 2,
+		"defaultValue": 0,
+		"allowManualEntry": false,
+		"options": [
+			{
+				"label": "Basic",
+				"value": 0
+			},
+			{
+				"label": "Power consumption indicator",
+				"value": 1
+			},
+			{
+				"label": "LED set by parameters 6 and 7",
+				"value": 2
+			}
+		]
+	}
+}

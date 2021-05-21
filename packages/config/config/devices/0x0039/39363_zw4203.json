@@ -1,5 +1,3 @@
-// Honeywell 39363 / ZW4203
-// Plug-in Outdoor Smart Switch
 {
 	"manufacturer": "Honeywell",
 	"manufacturerId": "0x0039",
@@ -41,8 +39,6 @@
 			"maxValue": 2,
 			"defaultValue": 0,
 			"unsigned": true,
-			"readOnly": false,
-			"writeOnly": false,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -66,8 +62,6 @@
 			"maxValue": 1,
 			"defaultValue": 0,
 			"unsigned": true,
-			"readOnly": false,
-			"writeOnly": false,
 			"allowManualEntry": false,
 			"options": [
 				{

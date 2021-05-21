@@ -33,6 +33,9 @@ export enum ZWaveErrorCodes {
 	Controller_InclusionFailed,
 	Controller_ExclusionFailed,
 
+	/** The interview for this node was restarted by the user */
+	Controller_InterviewRestarted,
+
 	/** The node with the given node ID was not found */
 	Controller_NodeNotFound,
 	/** The endpoint with the given index was not found on the node */
@@ -59,6 +62,13 @@ export enum ZWaveErrorCodes {
 	Config_NotFound,
 	/** A compound config file has circular imports */
 	Config_CircularImport,
+
+	/** Failed to download the npm registry info for config updates */
+	Config_Update_RegistryError,
+	/** Could not detect which package manager to use for updates */
+	Config_Update_PackageManagerNotFound,
+	/** Installing the configuration update failed */
+	Config_Update_InstallFailed,
 
 	// Here follow message specific errors
 
@@ -144,23 +154,50 @@ export class ZWaveError extends Error {
 		// We need to set the prototype explicitly
 		Object.setPrototypeOf(this, ZWaveError.prototype);
 		Object.getPrototypeOf(this).name = "ZWaveError";
+
+		// If there's a better stack, use it
+		if (typeof transactionSource === "string") {
+			this.stack = `ZWaveError: ${this.message}\n${transactionSource}`;
+		}
 	}
+}
+
+export function isZWaveError(e: unknown): e is ZWaveError {
+	return e instanceof Error && Object.getPrototypeOf(e).name === "ZWaveError";
 }
 
 export function isTransmissionError(
 	e: unknown,
 ): e is ZWaveError & {
 	code:
+		| ZWaveErrorCodes.Controller_Timeout
 		| ZWaveErrorCodes.Controller_MessageDropped
 		| ZWaveErrorCodes.Controller_CallbackNOK
 		| ZWaveErrorCodes.Controller_ResponseNOK
 		| ZWaveErrorCodes.Controller_NodeTimeout;
 } {
 	return (
-		e instanceof ZWaveError &&
-		(e.code === ZWaveErrorCodes.Controller_MessageDropped ||
+		isZWaveError(e) &&
+		(e.code === ZWaveErrorCodes.Controller_Timeout ||
+			e.code === ZWaveErrorCodes.Controller_MessageDropped ||
 			e.code === ZWaveErrorCodes.Controller_CallbackNOK ||
 			e.code === ZWaveErrorCodes.Controller_ResponseNOK ||
 			e.code === ZWaveErrorCodes.Controller_NodeTimeout)
 	);
+}
+
+/**
+ * Tests is the given error is a "recoverable" error - i.e. something that shouldn't happen unless
+ * someone interacted with zwave-js in a weird way, but something we can deal with.
+ *
+ * This explicitly does not include transmission errors.
+ */
+export function isRecoverableZWaveError(e: unknown): e is ZWaveError {
+	if (!isZWaveError(e)) return false;
+	switch (e.code) {
+		case ZWaveErrorCodes.Controller_InterviewRestarted:
+		case ZWaveErrorCodes.Controller_NodeRemoved:
+			return true;
+	}
+	return false;
 }

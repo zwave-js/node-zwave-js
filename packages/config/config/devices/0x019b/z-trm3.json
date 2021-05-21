@@ -1,5 +1,3 @@
-// ThermoFloor Heatit Z-TRM3
-// Floor thermostat
 {
 	"manufacturer": "ThermoFloor",
 	"manufacturerId": "0x019b",
@@ -23,8 +21,6 @@
 			"minValue": 0,
 			"maxValue": 4,
 			"defaultValue": 1,
-			"readOnly": false,
-			"writeOnly": false,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -55,8 +51,6 @@
 			"minValue": 0,
 			"maxValue": 5,
 			"defaultValue": 0,
-			"readOnly": false,
-			"writeOnly": false,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -91,10 +85,7 @@
 			"valueSize": 1,
 			"minValue": 3,
 			"maxValue": 30,
-			"defaultValue": 5,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"defaultValue": 5
 		},
 		"5": {
 			"label": "Floor minimum temperature limit (FLo)",
@@ -102,10 +93,7 @@
 			"valueSize": 2,
 			"minValue": 50,
 			"maxValue": 400,
-			"defaultValue": 50,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"defaultValue": 50
 		},
 		"6": {
 			"label": "Floor maximum temperature (FHi)",
@@ -113,10 +101,7 @@
 			"unit": "0.1°C",
 			"minValue": 50,
 			"maxValue": 400,
-			"defaultValue": 400,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"defaultValue": 400
 		},
 		"7": {
 			"label": "Air minimum temperature limit (ALo)",
@@ -124,10 +109,7 @@
 			"valueSize": 2,
 			"minValue": 50,
 			"maxValue": 400,
-			"defaultValue": 50,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"defaultValue": 50
 		},
 		"8": {
 			"label": "Air maximum temperature limit (AHi)",
@@ -135,10 +117,7 @@
 			"valueSize": 2,
 			"minValue": 50,
 			"maxValue": 400,
-			"defaultValue": 400,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"defaultValue": 400
 		},
 		"10": {
 			"label": "Room sensor calibration",
@@ -146,10 +125,7 @@
 			"valueSize": 1,
 			"minValue": -60,
 			"maxValue": 60,
-			"defaultValue": 0,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"defaultValue": 0
 		},
 		"11": {
 			"label": "Floor sensor calibration",
@@ -157,10 +133,7 @@
 			"valueSize": 1,
 			"minValue": -60,
 			"maxValue": 60,
-			"defaultValue": 0,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"defaultValue": 0
 		},
 		"12": {
 			"label": "External sensor calibration",
@@ -168,10 +141,7 @@
 			"valueSize": 1,
 			"minValue": -60,
 			"maxValue": 60,
-			"defaultValue": 0,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"defaultValue": 0
 		},
 		"13": {
 			"label": "Temperature display",
@@ -180,8 +150,6 @@
 			"minValue": 0,
 			"maxValue": 1,
 			"defaultValue": 0,
-			"readOnly": false,
-			"writeOnly": false,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -200,10 +168,7 @@
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 100,
-			"defaultValue": 50,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"defaultValue": 50
 		},
 		"15": {
 			"label": "Button brightness - active state",
@@ -211,10 +176,7 @@
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 100,
-			"defaultValue": 100,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"defaultValue": 100
 		},
 		"16": {
 			"label": "Display brightness - dimmed state",
@@ -222,10 +184,7 @@
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 100,
-			"defaultValue": 50,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"defaultValue": 50
 		},
 		"17": {
 			"label": "Display brightness - active state",
@@ -233,10 +192,7 @@
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 100,
-			"defaultValue": 100,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"defaultValue": 100
 		},
 		"18": {
 			"label": "Temperature report interval",
@@ -244,10 +200,7 @@
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 32767,
-			"defaultValue": 60,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"defaultValue": 60
 		},
 		"19": {
 			"label": "Temperature report hysteresis",
@@ -255,10 +208,7 @@
 			"valueSize": 1,
 			"minValue": 1,
 			"maxValue": 100,
-			"defaultValue": 10,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"defaultValue": 10
 		},
 		"20": {
 			"label": "Meter report interval",
@@ -266,10 +216,7 @@
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 32767,
-			"defaultValue": 90,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"defaultValue": 90
 		},
 		"21": {
 			"label": "Meter report delta value",
@@ -278,10 +225,7 @@
 			"minValue": 0,
 			"maxValue": 255,
 			"defaultValue": 10,
-			"unsigned": true,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"unsigned": true
 		}
 	},
 	"compat": {

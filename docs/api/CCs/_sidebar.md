@@ -4,6 +4,7 @@
     -   [Quick Start](getting-started/quickstart.md)
     -   [Migrating to v6](getting-started/migrating-to-v6.md)
     -   [Migrating to v7](getting-started/migrating-to-v7.md)
+    -   [Sponsoring the development](getting-started/sponsoring.md)
 
 -   API
 
@@ -70,6 +71,13 @@
 -   Advanced usage
 
     -   [Send custom messages](usage/custom.md)
+    -   [External config DB location](usage/external-config.md)
+
+-   Troubleshooting
+
+    -   [Overview](troubleshooting/index.md)
+    -   [A device does not respond](troubleshooting/no-device-response.md)
+    -   [Missing updates from a device](troubleshooting/no-updates.md)
 
 -   Device Configuration Files
 
@@ -83,7 +91,12 @@
     -   [Guide on partial parameters](config-files/partial-parameters.md)
 
 -   Development
+
     -   [Introduction](development/intro.md)
     -   [Implementing a Command Class](development/implementing-cc.md)
-    -   [Troubleshooting](development/troubleshooting.md)
     -   [Installing from GitHub](development/installing-from-github.md)
+
+-   Data Collection & Use Practices
+
+    -   [Data Collection Notice](data-collection/data-collection.md)
+    -   [User Disclosure](data-collection/user-disclosure.md)

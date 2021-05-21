@@ -1,5 +1,3 @@
-// Shenzhen Neo Electronics Co., Ltd. EU-1
-// Light Switch 1 Channel
 {
 	"manufacturer": "Shenzhen Neo Electronics Co., Ltd.",
 	"manufacturerId": "0x0258",
@@ -28,8 +26,6 @@
 			"minValue": 0,
 			"maxValue": 1,
 			"defaultValue": 1,
-			"readOnly": false,
-			"writeOnly": false,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -49,8 +45,6 @@
 			"minValue": 0,
 			"maxValue": 1,
 			"defaultValue": 1,
-			"readOnly": false,
-			"writeOnly": false,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -70,8 +64,6 @@
 			"minValue": 0,
 			"maxValue": 1,
 			"defaultValue": 1,
-			"readOnly": false,
-			"writeOnly": false,
 			"allowManualEntry": false,
 			"options": [
 				{

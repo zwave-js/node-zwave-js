@@ -7,8 +7,6 @@
 		"maxValue": 4,
 		"defaultValue": 1,
 		"unsigned": true,
-		"readOnly": false,
-		"writeOnly": false,
 		"allowManualEntry": false,
 		"options": [
 			{
@@ -154,8 +152,6 @@
 		"defaultValue": 0,
 		"unsigned": true,
 		"readOnly": true,
-		"writeOnly": false,
-		"allowManualEntry": true,
 		"options": [
 			{
 				"label": "Disabled",
@@ -176,8 +172,6 @@
 		"defaultValue": 0,
 		"unsigned": true,
 		"readOnly": true,
-		"writeOnly": false,
-		"allowManualEntry": true,
 		"options": [
 			{
 				"label": "Disabled",
@@ -198,8 +192,6 @@
 		"defaultValue": 0,
 		"unsigned": true,
 		"readOnly": true,
-		"writeOnly": false,
-		"allowManualEntry": true,
 		"options": [
 			{
 				"label": "Disabled",
@@ -220,8 +212,6 @@
 		"defaultValue": 0,
 		"unsigned": true,
 		"readOnly": true,
-		"writeOnly": false,
-		"allowManualEntry": true,
 		"options": [
 			{
 				"label": "Disabled",
@@ -239,10 +229,7 @@
 		"minValue": 0,
 		"maxValue": 0,
 		"defaultValue": 0,
-		"unsigned": true,
-		"readOnly": false,
-		"writeOnly": false,
-		"allowManualEntry": true
+		"unsigned": true
 	},
 	"dipswitch_sku_lastfour": {
 		"label": "SKU Number (Last 4 Bytes)",
@@ -250,10 +237,7 @@
 		"minValue": 0,
 		"maxValue": 0,
 		"defaultValue": 0,
-		"unsigned": true,
-		"readOnly": false,
-		"writeOnly": false,
-		"allowManualEntry": true
+		"unsigned": true
 	},
 	"reset": {
 		"label": "Reset to Default",
@@ -263,7 +247,6 @@
 		"maxValue": 1,
 		"defaultValue": 0,
 		"unsigned": true,
-		"readOnly": false,
 		"writeOnly": true,
 		"allowManualEntry": false,
 		"options": [
@@ -276,5 +259,140 @@
 				"value": 1
 			}
 		]
+	},
+	"alarm_map_idle": {
+		"from": {
+			"alarmType": 0 // No status reported
+		},
+		"to": {
+			"notificationType": 6, // Access Control
+			"notificationEvent": 0 // idle
+		}
+	},
+	"alarm_map_lock_jammed": {
+		"from": {
+			"alarmType": 9 // Lock Jammed
+		},
+		"to": {
+			"notificationType": 6, // Access Control
+			"notificationEvent": 11 // Lock state: Lock Jammed
+		}
+	},
+	"alarm_map_keypad_lock": {
+		"from": {
+			"alarmType": 18 // Keypad Lock
+		},
+		"to": {
+			"notificationType": 6, // Access Control
+			"notificationEvent": 5, // Keypad lock operation
+			"eventParameters": {
+				"userId": "alarmLevel"
+			}
+		}
+	},
+	"alarm_map_keypad_unlocked": {
+		"from": {
+			"alarmType": 19 // Keypad Unlock
+		},
+		"to": {
+			"notificationType": 6, // Access Control
+			"notificationEvent": 6, // Lock state: Lock Jammed
+			"eventParameters": {
+				"userId": "alarmLevel"
+			}
+		}
+	},
+	"alarm_map_manual_lock": {
+		"from": {
+			"alarmType": 21 // Manual Lock
+		},
+		"to": {
+			"notificationType": 6, // Access Control
+			"notificationEvent": 1 // Manual lock operation
+		}
+	},
+	"alarm_map_manual_unlock": {
+		"from": {
+			"alarmType": 22 // Manual Unlock
+		},
+		"to": {
+			"notificationType": 6, // Access Control
+			"notificationEvent": 2 // Manual unlock operation
+		}
+	},
+	"alarm_map_rf_lock_jammed": {
+		"from": {
+			"alarmType": 23 // RF Lock Jammed
+		},
+		"to": {
+			"notificationType": 6, // Access Control
+			"notificationEvent": 8 // RF not fully locked
+		}
+	},
+	"alarm_map_rf_lock": {
+		"from": {
+			"alarmType": 24 // RF Lock
+		},
+		"to": {
+			"notificationType": 6, // Access Control
+			"notificationEvent": 3 // RF lock operation
+		}
+	},
+	"alarm_map_rf_unlock": {
+		"from": {
+			"alarmType": 25 // RF Unlock
+		},
+		"to": {
+			"notificationType": 6, // Access Control
+			"notificationEvent": 4 // RF unlock operation
+		}
+	},
+	"alarm_map_auto_lock_jammed": {
+		"from": {
+			"alarmType": 26 // Auto Lock Jammed
+		},
+		"to": {
+			"notificationType": 6, // Access Control
+			"notificationEvent": 10 // Auto lock not fully locked
+		}
+	},
+	"alarm_map_auto_lock": {
+		"from": {
+			"alarmType": 27 // Auto Lock
+		},
+		"to": {
+			"notificationType": 6, // Access Control
+			"notificationEvent": 9 // Auto lock locked
+		}
+	},
+	"alarm_map_all_codes_deleted": {
+		"from": {
+			"alarmType": 32 // All Codes Deleted
+		},
+		"to": {
+			"notificationType": 6, // Access Control
+			"notificationEvent": 12 // All user codes deleted
+		}
+	},
+	"alarm_map_code_deleted": {
+		"from": {
+			"alarmType": 33 // Code Deleted
+		},
+		"to": {
+			"notificationType": 6, // Access Control
+			"notificationEvent": 13, // Single user code deleted
+			"eventParameters": {
+				"userId": "alarmLevel"
+			}
+		}
+	},
+	"alarm_map_low_battery": {
+		"from": {
+			"alarmType": 167
+		},
+		"to": {
+			"notificationType": 8, // Power Management
+			"notificationEvent": 10 // Replace battery soon
+		}
 	}
 }

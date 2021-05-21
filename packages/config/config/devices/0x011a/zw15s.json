@@ -1,11 +1,13 @@
-// Wenzhou MTLC Electric Appliances Co., Ltd. ZW15S
-// Binary Switch
 {
 	"manufacturer": "Wenzhou MTLC Electric Appliances Co., Ltd.",
 	"manufacturerId": "0x011a",
 	"label": "ZW15S",
 	"description": "Binary Switch",
 	"devices": [
+		{
+			"productType": "0x0101",
+			"productId": "0x0101"
+		},
 		{
 			"productType": "0x0101",
 			"productId": "0x0102"
@@ -33,8 +35,6 @@
 			"minValue": 0,
 			"maxValue": 1,
 			"defaultValue": 0,
-			"readOnly": false,
-			"writeOnly": false,
 			"allowManualEntry": false,
 			"options": [
 				{

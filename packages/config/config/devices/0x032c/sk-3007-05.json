@@ -1,5 +1,3 @@
-// Shenzhen Saykey Technology Co., Ltd. SK-3007-05
-// Curtain Motor Control external module
 {
 	"manufacturer": "Shenzhen Saykey Technology Co., Ltd.",
 	"manufacturerId": "0x032c",
@@ -23,9 +21,7 @@
 			"minValue": -127,
 			"maxValue": 99,
 			"defaultValue": -127,
-			"readOnly": true,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"readOnly": true
 		},
 		"6": {
 			"label": "Set motor direction",
@@ -34,9 +30,7 @@
 			"minValue": -128,
 			"maxValue": 127,
 			"defaultValue": 0,
-			"readOnly": false,
-			"writeOnly": true,
-			"allowManualEntry": true
+			"writeOnly": true
 		},
 		"7": {
 			"label": "Clear motor lead tail endpoint setting",
@@ -44,9 +38,7 @@
 			"minValue": -128,
 			"maxValue": 127,
 			"defaultValue": 0,
-			"readOnly": false,
-			"writeOnly": true,
-			"allowManualEntry": true
+			"writeOnly": true
 		},
 		"8": {
 			"label": "Enable manual pull function",
@@ -54,9 +46,7 @@
 			"minValue": -128,
 			"maxValue": 127,
 			"defaultValue": 0,
-			"readOnly": false,
-			"writeOnly": true,
-			"allowManualEntry": true
+			"writeOnly": true
 		},
 		"9": {
 			"label": "Disable manual pull function",
@@ -64,9 +54,7 @@
 			"minValue": -128,
 			"maxValue": 127,
 			"defaultValue": 0,
-			"readOnly": false,
-			"writeOnly": true,
-			"allowManualEntry": true
+			"writeOnly": true
 		}
 	}
 }

@@ -1,5 +1,3 @@
-// Allegion BE468ZP
-// Schlage Connect Smart Deadbolt
 {
 	"manufacturer": "Allegion",
 	"manufacturerId": "0x003b",
@@ -19,172 +17,139 @@
 	"paramInformation": {
 		"3": {
 			"label": "Beeper",
-			"description": "This configuration setting controls the keypad beeper of the deadbolt allowing the keypad beeper to be turned on or off",
 			"valueSize": 1,
-			"minValue": -1,
-			"maxValue": 0,
-			"defaultValue": -1,
-			"readOnly": false,
-			"writeOnly": false,
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 255,
+			"unsigned": true,
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "Enable beeper",
-					"value": -1
+					"label": "Enable",
+					"value": 255
 				},
 				{
-					"label": "Disable beeper",
+					"label": "Disable",
 					"value": 0
 				}
 			]
 		},
 		"4": {
 			"label": "Vacation Mode",
-			"description": "This configuration setting controls the keypad entry of user codes allowing all user codes to be turned on (disable vacation mode) or off (enable vacation mode)",
+			"description": "Enabling this disables all user codes on the keypad.",
 			"valueSize": 1,
-			"minValue": -1,
-			"maxValue": 0,
+			"minValue": 0,
+			"maxValue": 255,
 			"defaultValue": 0,
-			"readOnly": false,
-			"writeOnly": false,
+			"unsigned": true,
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "Enable vacation mode",
-					"value": -1
+					"label": "Enable",
+					"value": 255
 				},
 				{
-					"label": "Disable vacation mode",
+					"label": "Disable",
 					"value": 0
 				}
 			]
 		},
 		"5": {
 			"label": "Lock And Leave Mode",
-			"description": "This configuration setting controls the use of the \"schlage\" button on the keypad for single button push for throwing the deadbolt",
+			"description": "Controls the use of the \"Schlage\" button on the keypad for single button push for throwing the deadbolt",
 			"valueSize": 1,
-			"minValue": -1,
-			"maxValue": 0,
-			"defaultValue": -1,
-			"readOnly": false,
-			"writeOnly": false,
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 255,
+			"unsigned": true,
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "Enable lock and leave mode",
-					"value": -1
+					"label": "Enable",
+					"value": 255
 				},
 				{
-					"label": "Disable lock and leave mode",
+					"label": "Disable",
 					"value": 0
 				}
 			]
 		},
 		"6": {
 			"label": "User Slot Bit Field",
-			"description": "User slot bit field",
 			"valueSize": 4,
 			"minValue": 0,
 			"maxValue": 0,
-			"defaultValue": 0,
-			"unsigned": true,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"readOnly": true,
+			"unsigned": true
 		},
 		"12": {
 			"label": "Get Electronic Transition Count",
-			"description": "Electronic state change count",
 			"valueSize": 4,
 			"minValue": 0,
 			"maxValue": 0,
-			"defaultValue": 0,
-			"unsigned": true,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"readOnly": true,
+			"unsigned": true
 		},
 		"13": {
 			"label": "Get Mechanical Transition Count",
-			"description": "Mechanical state change count",
 			"valueSize": 4,
 			"minValue": 0,
 			"maxValue": 0,
-			"defaultValue": 0,
-			"unsigned": true,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"readOnly": true,
+			"unsigned": true
 		},
 		"14": {
 			"label": "Get Electronic Failed Count",
-			"description": "Failed electronic activation count",
 			"valueSize": 4,
 			"minValue": 0,
 			"maxValue": 0,
-			"defaultValue": 0,
-			"unsigned": true,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"readOnly": true,
+			"unsigned": true
 		},
 		"15": {
 			"label": "Auto Lock",
-			"description": "This configuration setting controls the lock feature that automatically throws the deadbolt 30 seconds after a valid user code has been entered at the keypad",
+			"description": "Automatically throws the deadbolt 30 seconds after a valid user code has been entered at the keypad",
 			"valueSize": 1,
 			"unit": "seconds",
-			"minValue": -1,
-			"maxValue": 0,
+			"minValue": 0,
+			"maxValue": 255,
 			"defaultValue": 0,
-			"readOnly": false,
-			"writeOnly": false,
+			"unsigned": true,
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "Enable auto lock",
-					"value": -1
+					"label": "Enable",
+					"value": 255
 				},
 				{
-					"label": "Disable auto lock",
+					"label": "Disable",
 					"value": 0
 				}
 			]
 		},
 		"16": {
-			"label": "User Code Pin Length",
-			"description": "User code pin length",
+			"label": "User Code PIN Length",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 4,
+			"minValue": 4,
+			"maxValue": 8,
 			"defaultValue": 4,
-			"unsigned": true,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"unsigned": true
 		},
 		"17": {
 			"label": "Get Electrical High Preload Transition Count",
-			"description": "Electronic state change count with high preload",
 			"valueSize": 4,
 			"minValue": 0,
 			"maxValue": 0,
-			"defaultValue": 0,
-			"unsigned": true,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"readOnly": true,
+			"unsigned": true
 		},
 		"18": {
 			"label": "Get Bootloader Version",
-			"description": "Get bootloader version",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 0,
-			"defaultValue": 0,
-			"unsigned": true,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"readOnly": true,
+			"unsigned": true
 		}
 	},
 	"metadata": {

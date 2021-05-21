@@ -1,5 +1,3 @@
-// TechniSat Digital GmbH 0000/9518
-// Door/Window Sensor
 {
 	"manufacturer": "TechniSat Digital GmbH",
 	"manufacturerId": "0x0299",
@@ -24,8 +22,6 @@
 			"maxValue": 1,
 			"defaultValue": 0,
 			"unsigned": true,
-			"readOnly": false,
-			"writeOnly": false,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -46,8 +42,6 @@
 			"maxValue": 1,
 			"defaultValue": 0,
 			"unsigned": true,
-			"readOnly": false,
-			"writeOnly": false,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -66,10 +60,7 @@
 			"minValue": 0,
 			"maxValue": 99,
 			"defaultValue": 20,
-			"unsigned": true,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"unsigned": true
 		}
 	},
 	"metadata": {

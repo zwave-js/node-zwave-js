@@ -1,5 +1,3 @@
-// Zooz ZSE40
-// 4-in-1 Sensor
 {
 	"manufacturer": "Zooz",
 	"manufacturerId": "0x027a",
@@ -23,8 +21,6 @@
 			"minValue": 0,
 			"maxValue": 1,
 			"defaultValue": 0,
-			"readOnly": false,
-			"writeOnly": false,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -43,10 +39,7 @@
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 50,
-			"defaultValue": 1,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"defaultValue": 1
 		},
 		"3": {
 			"label": "Humidity",
@@ -55,10 +48,7 @@
 			"valueSize": 1,
 			"minValue": 1,
 			"maxValue": 50,
-			"defaultValue": 10,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"defaultValue": 10
 		},
 		"4": {
 			"label": "Light Sensor",
@@ -66,24 +56,43 @@
 			"valueSize": 1,
 			"minValue": 1,
 			"maxValue": 50,
-			"defaultValue": 10,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"defaultValue": 10
 		},
-		"5": {
-			"label": "Trigger Interval",
-			"description": "Set the trigger interval for motion sensor re-activation.",
-			"unit": "minutes",
-			"valueSize": 1,
-			"minValue": 1,
-			"maxValue": 255,
-			"defaultValue": 3,
-			"unsigned": true,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
-		},
+		"5": [
+			{
+				"$if": "firmwareVersion < 17.9",
+				"label": "Trigger Interval",
+				"description": "Set the trigger interval for motion sensor re-activation.",
+				"unit": "minutes",
+				"valueSize": 1,
+				"minValue": 1,
+				"maxValue": 255,
+				"defaultValue": 3,
+				"unsigned": true
+			},
+			{
+				"$if": "firmwareVersion >= 17.9 && firmwareVersion < 24.2",
+				"label": "Trigger Interval",
+				"description": "Set the trigger interval for motion sensor re-activation.",
+				"unit": "seconds",
+				"valueSize": 1,
+				"minValue": 15,
+				"maxValue": 60,
+				"defaultValue": 15,
+				"unsigned": true
+			},
+			{
+				"$if": "firmwareVersion >= 24.2",
+				"label": "Trigger Interval",
+				"description": "Set the trigger interval for motion sensor re-activation.",
+				"unit": "seconds",
+				"valueSize": 1,
+				"minValue": 15,
+				"maxValue": 255,
+				"defaultValue": 15,
+				"unsigned": true
+			}
+		],
 		"6": {
 			"label": "Motion Sensor Sensitivity",
 			"description": "Adjust sensitivity of the motion sensor.",
@@ -91,8 +100,6 @@
 			"minValue": 1,
 			"maxValue": 7,
 			"defaultValue": 4,
-			"readOnly": false,
-			"writeOnly": false,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -131,8 +138,6 @@
 			"minValue": 1,
 			"maxValue": 4,
 			"defaultValue": 3,
-			"readOnly": false,
-			"writeOnly": false,
 			"allowManualEntry": false,
 			"options": [
 				{

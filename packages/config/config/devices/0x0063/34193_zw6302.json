@@ -1,5 +1,3 @@
-// GE/Jasco 34193/ZW6302
-// Portable Smart Motion Sensor
 {
 	"manufacturer": "GE/Jasco",
 	"manufacturerId": "0x0063",
@@ -18,15 +16,12 @@
 	},
 	"paramInformation": {
 		"13": {
-			"label": "Pir Sensitiivity Setting",
-			"description": "You can modify the sensitivity of PIR if changing the value in parameter 13",
+			"label": "PIR Sensitivity Setting",
 			"valueSize": 1,
 			"minValue": 1,
 			"maxValue": 3,
 			"defaultValue": 3,
 			"unsigned": true,
-			"readOnly": false,
-			"writeOnly": false,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -44,16 +39,12 @@
 			]
 		},
 		"18": {
-			"label": "Pir Timeout Duration",
-			"description": "Pir timeout duration",
+			"label": "PIR Timeout Duration",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 255,
 			"defaultValue": 4,
 			"unsigned": true,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true,
 			"options": [
 				{
 					"label": "1 min to 60 min",
@@ -66,41 +57,35 @@
 			]
 		},
 		"20": {
-			"label": "Basic Set, Notification And Basic Report",
-			"description": "Changing parameter 20 can let the motion sensor send out \"Basic Set\" command or \"basic report\" command or \"notification\" report to Z-Wave devices",
+			"label": "Motion Sensor Report Type",
 			"valueSize": 1,
 			"minValue": 1,
 			"maxValue": 3,
 			"defaultValue": 1,
 			"unsigned": true,
-			"readOnly": false,
-			"writeOnly": false,
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "Motion sensor will send out notification",
+					"label": "Notification CC",
 					"value": 1
 				},
 				{
-					"label": "Motion sensor will send out Basic Set",
+					"label": "Basic CC Set",
 					"value": 2
 				},
 				{
-					"label": "Motion sensor will sendout basic report",
+					"label": "Basic CC Report",
 					"value": 3
 				}
 			]
 		},
 		"28": {
-			"label": "Enable &amp; Disable The LED Indication When PIR is Triggered",
-			"description": "Enable & disable the LED indication when PIR is triggered",
+			"label": "LED Indication When PIR is Triggered",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 1,
 			"defaultValue": 1,
 			"unsigned": true,
-			"readOnly": false,
-			"writeOnly": false,
 			"allowManualEntry": false,
 			"options": [
 				{

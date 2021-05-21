@@ -1,5 +1,3 @@
-// HANK Electronics Ltd. SCN01
-// One-key Scene Controller
 {
 	"manufacturer": "HANK Electronics Ltd.",
 	"manufacturerId": "0x0208",
@@ -28,10 +26,7 @@
 			"minValue": 0,
 			"maxValue": 255,
 			"defaultValue": 255,
-			"unsigned": true,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"unsigned": true
 		},
 		"254": {
 			"label": "Configuration Lock",
@@ -40,8 +35,6 @@
 			"minValue": 0,
 			"maxValue": 1,
 			"defaultValue": 0,
-			"readOnly": false,
-			"writeOnly": false,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -61,8 +54,6 @@
 			"minValue": 0,
 			"maxValue": 2147483647,
 			"defaultValue": 1,
-			"readOnly": false,
-			"writeOnly": false,
 			"allowManualEntry": false,
 			"options": [
 				{

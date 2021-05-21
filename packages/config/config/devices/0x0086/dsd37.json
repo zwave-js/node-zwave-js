@@ -1,5 +1,3 @@
-// AEON Labs DSD37
-// Range Extender
 {
 	"manufacturer": "AEON Labs",
 	"manufacturerId": "0x0086",
@@ -27,7 +25,7 @@
 			"isLifeline": true
 		},
 		"2": {
-			"label": "Retransmit",
+			"label": "Group 2",
 			"maxNodes": 5
 		}
 	},
@@ -38,12 +36,10 @@
 			"minValue": 0,
 			"maxValue": 4,
 			"defaultValue": 0,
-			"readOnly": false,
-			"writeOnly": false,
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "Aeon Labs’s Standard Product",
+					"label": "Aeon Labs",
 					"value": 0
 				},
 				{
@@ -59,31 +55,16 @@
 					"value": 3
 				},
 				{
-					"label": "Reserved for other Partner",
+					"label": "Other",
 					"value": 4
 				}
 			]
 		},
 		"254": {
-			"label": "Device Tag",
-			"description": "When Repeater removed from z-wave network, Device Tag will not change",
-			"valueSize": 2,
-			"minValue": 0,
-			"maxValue": 1,
-			"defaultValue": 0,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"$import": "templates/aeotec_template.json#device_tag"
 		},
 		"255": {
-			"label": "Reset configuration settings to default values",
-			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 1,
-			"defaultValue": 0,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"$import": "templates/aeotec_template.json#factory_reset"
 		}
 	}
 }

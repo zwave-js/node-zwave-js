@@ -1,5 +1,3 @@
-// Nexia Home Intelligence DB100Z
-// Doorbell
 {
 	"manufacturer": "Nexia Home Intelligence",
 	"manufacturerId": "0x0178",
@@ -23,8 +21,6 @@
 			"minValue": 0,
 			"maxValue": 1,
 			"defaultValue": 0,
-			"readOnly": false,
-			"writeOnly": false,
 			"allowManualEntry": false,
 			"options": [
 				{

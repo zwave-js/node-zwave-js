@@ -1,5 +1,3 @@
-// Qubino ZMNHWD
-// Qubino Flush RGBW Dimmer
 {
 	"manufacturer": "Qubino",
 	"manufacturerId": "0x0159",
@@ -23,8 +21,6 @@
 			"minValue": 1,
 			"maxValue": 10,
 			"defaultValue": 4,
-			"readOnly": false,
-			"writeOnly": false,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -75,8 +71,6 @@
 			"minValue": 1,
 			"maxValue": 10,
 			"defaultValue": 7,
-			"readOnly": false,
-			"writeOnly": false,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -127,8 +121,6 @@
 			"minValue": 1,
 			"maxValue": 10,
 			"defaultValue": 8,
-			"readOnly": false,
-			"writeOnly": false,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -179,8 +171,6 @@
 			"minValue": 1,
 			"maxValue": 10,
 			"defaultValue": 1,
-			"readOnly": false,
-			"writeOnly": false,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -232,8 +222,6 @@
 			"minValue": 1,
 			"maxValue": 6,
 			"defaultValue": 1,
-			"readOnly": false,
-			"writeOnly": false,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -268,10 +256,7 @@
 			"valueSize": 2,
 			"minValue": 1,
 			"maxValue": 1127,
-			"defaultValue": 3,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"defaultValue": 3
 		},
 		"7": {
 			"label": "Memorize device status at power cut",
@@ -280,8 +265,6 @@
 			"minValue": 0,
 			"maxValue": 1,
 			"defaultValue": 0,
-			"readOnly": false,
-			"writeOnly": false,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -299,60 +282,42 @@
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 32536,
-			"defaultValue": 0,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"defaultValue": 0
 		},
 		"9": {
 			"label": "Automatic turning on output after set time",
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 32536,
-			"defaultValue": 0,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"defaultValue": 0
 		},
 		"10": {
 			"label": "MAX dimming value",
 			"valueSize": 1,
 			"minValue": 2,
 			"maxValue": 99,
-			"defaultValue": 99,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"defaultValue": 99
 		},
 		"11": {
 			"label": "MIN dimming value",
 			"valueSize": 1,
 			"minValue": 1,
 			"maxValue": 98,
-			"defaultValue": 1,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"defaultValue": 1
 		},
 		"12": {
 			"label": "Dimming time (soft on/off)",
 			"valueSize": 1,
 			"minValue": 5,
 			"maxValue": 25,
-			"defaultValue": 10,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"defaultValue": 10
 		},
 		"13": {
 			"label": "Dimming time when key pressed",
 			"valueSize": 1,
 			"minValue": 1,
 			"maxValue": 127,
-			"defaultValue": 3,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"defaultValue": 3
 		},
 		"14": {
 			"label": "4 Dimmers mode",
@@ -360,8 +325,6 @@
 			"minValue": 0,
 			"maxValue": 4,
 			"defaultValue": 0,
-			"readOnly": false,
-			"writeOnly": false,
 			"allowManualEntry": false,
 			"options": [
 				{

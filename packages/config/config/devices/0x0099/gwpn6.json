@@ -1,5 +1,3 @@
-// GreenWave Reality Inc. NP240 / NP242
-// Multi-socket PowerNode (6-plug)
 {
 	"manufacturer": "GreenWave Reality Inc.",
 	"manufacturerId": "0x0099",
@@ -46,10 +44,7 @@
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 100,
-			"defaultValue": 10,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"defaultValue": 10
 		},
 		"1": {
 			"label": "No communication light",
@@ -58,10 +53,7 @@
 			"minValue": 0,
 			"maxValue": 255,
 			"defaultValue": 2,
-			"unsigned": true,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"unsigned": true
 		},
 		"2": {
 			"label": "Wheel position",
@@ -72,7 +64,6 @@
 			"defaultValue": 0,
 			"unsigned": true,
 			"readOnly": true,
-			"writeOnly": false,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -124,8 +115,6 @@
 			"minValue": 0,
 			"maxValue": 2,
 			"defaultValue": 2,
-			"readOnly": false,
-			"writeOnly": false,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -149,8 +138,6 @@
 			"minValue": 0,
 			"maxValue": 1,
 			"defaultValue": 1,
-			"readOnly": false,
-			"writeOnly": false,
 			"allowManualEntry": false,
 			"options": [
 				{

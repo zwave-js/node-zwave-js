@@ -1,5 +1,3 @@
-// Qubino ZMNHID
-// Flush on/off thermostat
 {
 	"manufacturer": "Qubino",
 	"manufacturerId": "0x0159",
@@ -50,8 +48,6 @@
 			"maxValue": 255,
 			"defaultValue": 1,
 			"unsigned": true,
-			"readOnly": false,
-			"writeOnly": false,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -71,8 +67,6 @@
 			"maxValue": 255,
 			"defaultValue": 1,
 			"unsigned": true,
-			"readOnly": false,
-			"writeOnly": false,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -92,8 +86,6 @@
 			"maxValue": 255,
 			"defaultValue": 1,
 			"unsigned": true,
-			"readOnly": false,
-			"writeOnly": false,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -113,8 +105,6 @@
 			"maxValue": 255,
 			"defaultValue": 0,
 			"unsigned": true,
-			"readOnly": false,
-			"writeOnly": false,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -134,8 +124,6 @@
 			"maxValue": 255,
 			"defaultValue": 0,
 			"unsigned": true,
-			"readOnly": false,
-			"writeOnly": false,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -156,8 +144,6 @@
 			"maxValue": 255,
 			"defaultValue": 0,
 			"unsigned": true,
-			"readOnly": false,
-			"writeOnly": false,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -177,8 +163,6 @@
 			"minValue": 0,
 			"maxValue": 255,
 			"defaultValue": 255,
-			"readOnly": false,
-			"writeOnly": false,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -206,10 +190,7 @@
 			"minValue": 0,
 			"maxValue": 65535,
 			"defaultValue": 1,
-			"unsigned": true,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"unsigned": true
 		},
 		"12": {
 			"label": "Parameter no. 12",
@@ -218,10 +199,7 @@
 			"minValue": 0,
 			"maxValue": 65535,
 			"defaultValue": 0,
-			"unsigned": true,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"unsigned": true
 		},
 		"13": {
 			"label": "Parameter no. 13",
@@ -230,10 +208,7 @@
 			"minValue": 0,
 			"maxValue": 65535,
 			"defaultValue": 32767,
-			"unsigned": true,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"unsigned": true
 		},
 		"40": {
 			"label": "Parameter no. 40",
@@ -242,10 +217,7 @@
 			"minValue": 0,
 			"maxValue": 255,
 			"defaultValue": 0,
-			"unsigned": true,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"unsigned": true
 		},
 		"42": {
 			"label": "Parameter no. 42",
@@ -253,10 +225,7 @@
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 32767,
-			"defaultValue": 0,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"defaultValue": 0
 		},
 		"43": {
 			"label": "Parameter no. 43",
@@ -265,10 +234,7 @@
 			"minValue": 0,
 			"maxValue": 65535,
 			"defaultValue": 1005,
-			"unsigned": true,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"unsigned": true
 		},
 		"44": {
 			"label": "Parameter no. 44",
@@ -277,10 +243,7 @@
 			"minValue": 0,
 			"maxValue": 65535,
 			"defaultValue": 5,
-			"unsigned": true,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"unsigned": true
 		},
 		"45": {
 			"label": "Parameter no. 45",
@@ -289,10 +252,7 @@
 			"minValue": 0,
 			"maxValue": 65535,
 			"defaultValue": 50,
-			"unsigned": true,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"unsigned": true
 		},
 		"59": {
 			"label": "Parameter no. 59",
@@ -301,8 +261,6 @@
 			"minValue": 0,
 			"maxValue": 1,
 			"defaultValue": 0,
-			"readOnly": false,
-			"writeOnly": false,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -322,10 +280,7 @@
 			"minValue": 0,
 			"maxValue": 65535,
 			"defaultValue": 50,
-			"unsigned": true,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"unsigned": true
 		},
 		"61": {
 			"label": "Parameter no. 61",
@@ -334,10 +289,7 @@
 			"minValue": 0,
 			"maxValue": 65535,
 			"defaultValue": 700,
-			"unsigned": true,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"unsigned": true
 		},
 		"63": {
 			"label": "Parameter no. 63",
@@ -346,8 +298,6 @@
 			"minValue": 0,
 			"maxValue": 1,
 			"defaultValue": 0,
-			"readOnly": false,
-			"writeOnly": false,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -367,10 +317,7 @@
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 32000,
-			"defaultValue": 0,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"defaultValue": 0
 		},
 		"71": {
 			"label": "Input 1 status off delay",
@@ -379,10 +326,7 @@
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 32000,
-			"defaultValue": 0,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"defaultValue": 0
 		},
 		"72": {
 			"label": "Input 2 status on delay",
@@ -391,10 +335,7 @@
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 32000,
-			"defaultValue": 0,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"defaultValue": 0
 		},
 		"73": {
 			"label": "Input 2 status off delay",
@@ -403,10 +344,7 @@
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 32000,
-			"defaultValue": 0,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"defaultValue": 0
 		},
 		"74": {
 			"label": "Input 3 status on delay",
@@ -415,10 +353,7 @@
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 32000,
-			"defaultValue": 0,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"defaultValue": 0
 		},
 		"75": {
 			"label": "Input 3 status off delay",
@@ -427,10 +362,7 @@
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 32000,
-			"defaultValue": 0,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"defaultValue": 0
 		},
 		"100": {
 			"label": "Parameter no. 100",
@@ -439,10 +371,7 @@
 			"minValue": 0,
 			"maxValue": 255,
 			"defaultValue": 0,
-			"unsigned": true,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"unsigned": true
 		},
 		"101": {
 			"label": "Parameter no. 101",
@@ -451,10 +380,7 @@
 			"minValue": 0,
 			"maxValue": 255,
 			"defaultValue": 0,
-			"unsigned": true,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"unsigned": true
 		},
 		"102": {
 			"label": "Parameter no. 102",
@@ -463,10 +389,7 @@
 			"minValue": 0,
 			"maxValue": 255,
 			"defaultValue": 0,
-			"unsigned": true,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"unsigned": true
 		},
 		"110": {
 			"label": "Parameter no. 110",
@@ -475,10 +398,7 @@
 			"minValue": 0,
 			"maxValue": 65535,
 			"defaultValue": 32536,
-			"unsigned": true,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"unsigned": true
 		},
 		"120": {
 			"label": "Parameter no. 120",
@@ -486,10 +406,7 @@
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 127,
-			"defaultValue": 5,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"defaultValue": 5
 		},
 		"121": {
 			"label": "Parameter no. 121",
@@ -498,10 +415,7 @@
 			"minValue": 0,
 			"maxValue": 255,
 			"defaultValue": 0,
-			"unsigned": true,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"unsigned": true
 		},
 		"122": {
 			"label": "Parameter no. 122",
@@ -510,10 +424,7 @@
 			"minValue": 0,
 			"maxValue": 254,
 			"defaultValue": 0,
-			"unsigned": true,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"unsigned": true
 		}
 	}
 }

@@ -1,5 +1,3 @@
-// Honeywell 39354
-// In-Wall Smart Toggle Switch
 {
 	"manufacturer": "Honeywell",
 	"manufacturerId": "0x0039",
@@ -46,8 +44,6 @@
 			"maxValue": 3,
 			"defaultValue": 0,
 			"unsigned": true,
-			"readOnly": false,
-			"writeOnly": false,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -74,10 +70,7 @@
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 1,
-			"defaultValue": 0,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"defaultValue": 0
 		},
 		"19": {
 			"label": "Alternate Exclusion",
@@ -87,8 +80,6 @@
 			"maxValue": 1,
 			"defaultValue": 0,
 			"unsigned": true,
-			"readOnly": false,
-			"writeOnly": false,
 			"allowManualEntry": false,
 			"options": [
 				{

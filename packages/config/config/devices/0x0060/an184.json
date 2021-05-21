@@ -1,5 +1,3 @@
-// Everspring AN184
-// Mini plug with metering
 {
 	"manufacturer": "Everspring",
 	"manufacturerId": "0x0060",
@@ -18,94 +16,94 @@
 	},
 	"paramInformation": {
 		"1": {
-			"label": "Set Basic Set Command Value",
-			"description": "Value can be set 0~99, 255",
+			"label": "Basic Set Command Value",
+			"description": "Allowable Range: 0-99",
 			"valueSize": 2,
-			"minValue": 255,
+			"minValue": 0,
 			"maxValue": 255,
 			"defaultValue": 255,
 			"unsigned": true,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true,
 			"options": [
 				{
-					"label": "0xff",
+					"label": "On",
 					"value": 255
 				}
 			]
 		},
 		"2": {
-			"label": "Set The Delaying Time to Report to Group 1",
+			"label": "Group 1: Report Delay",
 			"description": "Delaying time to report to group 1",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 3,
+			"minValue": 3,
+			"maxValue": 25,
 			"defaultValue": 3,
-			"unsigned": true,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"unit": "seconds",
+			"unsigned": true
 		},
 		"3": {
-			"label": "Set Whether to Remember The Last Status",
-			"description": "Remember or not remember the last status",
+			"label": "Restore State After Power Loss",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 1,
 			"defaultValue": 1,
 			"unsigned": true,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"options": [
+				{
+					"label": "Disable",
+					"value": 0
+				},
+				{
+					"label": "Enable",
+					"value": 1
+				}
+			]
 		},
 		"4": {
-			"label": "Set The Interval For Wattage Auto Report",
-			"description": "The interval for wattage auto report",
+			"label": "Wattage Report Interval",
 			"valueSize": 2,
 			"minValue": 0,
-			"maxValue": 255,
+			"maxValue": 32767,
 			"defaultValue": 1,
-			"unsigned": true,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"unit": "minutes",
+			"unsigned": true
 		},
 		"5": {
-			"label": "Set The Interval For Kw*h Auto Report",
-			"description": "The interval for kw*h auto report",
+			"label": "kWh Report Interval",
 			"valueSize": 2,
 			"minValue": 0,
-			"maxValue": 255,
+			"maxValue": 32767,
 			"defaultValue": 60,
-			"unsigned": true,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"unit": "minutes",
+			"unsigned": true
 		},
 		"6": {
-			"label": "Auto Report When Load Surpasses The Set Value of Wattage",
-			"description": "0: does not report automatically",
+			"label": "Wattage Report Threshold",
 			"valueSize": 2,
 			"minValue": 0,
-			"maxValue": 255,
+			"maxValue": 3500,
 			"defaultValue": 0,
+			"unit": "W",
 			"unsigned": true,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"options": [
+				{
+					"label": "Disable",
+					"value": 0
+				}
+			]
 		},
 		"7": {
-			"label": "Auto Report When The Change of Wattage Surpasses The Set Percentage",
-			"description": "0: does not report automatically",
+			"label": "Wattage Report Relative Change Threshold",
 			"valueSize": 1,
 			"minValue": 0,
-			"maxValue": 255,
+			"maxValue": 100,
 			"defaultValue": 0,
 			"unsigned": true,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"options": [
+				{
+					"label": "Disable",
+					"value": 0
+				}
+			]
 		}
 	},
 	"metadata": {

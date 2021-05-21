@@ -5,8 +5,6 @@
 		"maxValue": 1,
 		"defaultValue": 0,
 		"unsigned": true,
-		"readOnly": false,
-		"writeOnly": false,
 		"allowManualEntry": false,
 		"options": [
 			{
@@ -25,8 +23,6 @@
 		"maxValue": 255,
 		"defaultValue": 0,
 		"unsigned": true,
-		"readOnly": false,
-		"writeOnly": false,
 		"allowManualEntry": false,
 		"options": [
 			{
@@ -45,8 +41,6 @@
 		"maxValue": 1,
 		"defaultValue": 1,
 		"unsigned": true,
-		"readOnly": false,
-		"writeOnly": false,
 		"allowManualEntry": false,
 		"options": [
 			{
@@ -59,64 +53,96 @@
 			}
 		]
 	},
+	"base_0-1_nounit": {
+		"valueSize": 1,
+		"minValue": 0,
+		"maxValue": 1,
+		"defaultValue": 0,
+		"allowManualEntry": false
+	},
+	"base_0-10_nounit": {
+		"valueSize": 1,
+		"minValue": 0,
+		"maxValue": 10,
+		"defaultValue": 0
+	},
+	"base_1-10_nounit": {
+		"valueSize": 1,
+		"minValue": 1,
+		"maxValue": 10,
+		"defaultValue": 1
+	},
 	"base_0-99_nounit": {
 		"valueSize": 1,
 		"minValue": 0,
 		"maxValue": 99,
 		"defaultValue": 1,
-		"unsigned": true,
-		"readOnly": false,
-		"writeOnly": false,
-		"allowManualEntry": true
+		"unsigned": true
 	},
 	"base_1-99_nounit": {
 		"valueSize": 1,
 		"minValue": 1,
 		"maxValue": 99,
 		"defaultValue": 1,
-		"unsigned": true,
-		"readOnly": false,
-		"writeOnly": false,
-		"allowManualEntry": true
+		"unsigned": true
+	},
+	"base_0-100_nounit": {
+		"valueSize": 1,
+		"minValue": 0,
+		"maxValue": 100,
+		"defaultValue": 1,
+		"unsigned": true
+	},
+	"base_1-100_nounit": {
+		"valueSize": 1,
+		"minValue": 1,
+		"maxValue": 100,
+		"defaultValue": 1,
+		"unsigned": true
 	},
 	"base_0-255_nounit": {
-		"description": "Set 0 to disable",
 		"valueSize": 1,
 		"minValue": 0,
 		"maxValue": 255,
 		"defaultValue": 1,
-		"unsigned": true,
-		"readOnly": false,
-		"writeOnly": false,
-		"allowManualEntry": true
+		"unsigned": true
 	},
 	"base_1-255_nounit": {
 		"valueSize": 1,
 		"minValue": 1,
 		"maxValue": 255,
 		"defaultValue": 1,
-		"unsigned": true,
-		"readOnly": false,
-		"writeOnly": false,
-		"allowManualEntry": true
+		"unsigned": true
 	},
 	"base_0-180_nounit": {
 		"valueSize": 1,
 		"minValue": 0,
 		"maxValue": 180,
-		"unsigned": true,
-		"readOnly": false,
-		"writeOnly": false,
-		"allowManualEntry": true
+		"unsigned": true
 	},
 	"base_0-127_nounit": {
 		"valueSize": 1,
 		"minValue": 0,
 		"maxValue": 127,
+		"unsigned": true
+	},
+	"base_true_false": {
+		"valueSize": 1,
+		"minValue": 0,
+		"maxValue": 1,
+		"defaultValue": 0,
 		"unsigned": true,
-		"readOnly": false,
-		"writeOnly": false,
-		"allowManualEntry": true
+		"allowManualEntry": false,
+		"options": [
+			{
+				"label": "False",
+				"value": 0
+			},
+			{
+				"label": "True",
+				"value": 1
+			}
+		]
 	},
 	"dimming_timing_with_0": {
 		"description": "Set 0 to disable",
@@ -125,10 +151,7 @@
 		"minValue": 0,
 		"maxValue": 255,
 		"defaultValue": 3,
-		"unsigned": true,
-		"readOnly": false,
-		"writeOnly": false,
-		"allowManualEntry": true
+		"unsigned": true
 	},
 	"dimming_timing": {
 		"valueSize": 1,
@@ -136,14 +159,15 @@
 		"minValue": 1,
 		"maxValue": 255,
 		"defaultValue": 3,
-		"unsigned": true,
-		"readOnly": false,
-		"writeOnly": false,
-		"allowManualEntry": true
+		"unsigned": true
 	},
 	"orientation": {
 		"$import": "#base_enable_disable",
 		"label": "Inverted Orientation"
+	},
+	"enable_led_indicator": {
+		"$import": "#base_enable_disable",
+		"label": "LED Indicator"
 	},
 	"led_indicator_two_options": {
 		"label": "LED Indicator",
@@ -151,8 +175,6 @@
 		"minValue": 0,
 		"maxValue": 1,
 		"defaultValue": 1,
-		"readOnly": false,
-		"writeOnly": false,
 		"allowManualEntry": false,
 		"options": [
 			{
@@ -171,8 +193,6 @@
 		"minValue": 0,
 		"maxValue": 1,
 		"defaultValue": 1,
-		"readOnly": false,
-		"writeOnly": false,
 		"allowManualEntry": false,
 		"options": [
 			{
@@ -191,8 +211,6 @@
 		"minValue": 0,
 		"maxValue": 2,
 		"defaultValue": 0,
-		"readOnly": false,
-		"writeOnly": false,
 		"allowManualEntry": false,
 		"options": [
 			{
@@ -215,8 +233,6 @@
 		"minValue": 0,
 		"maxValue": 3,
 		"defaultValue": 0,
-		"readOnly": false,
-		"writeOnly": false,
 		"allowManualEntry": false,
 		"options": [
 			{
@@ -233,6 +249,49 @@
 			},
 			{
 				"label": "Always on",
+				"value": 3
+			}
+		]
+	},
+	"state_after_power_failure": {
+		"label": "State After Power Failure",
+		"valueSize": 1,
+		"minValue": 0,
+		"maxValue": 2,
+		"defaultValue": 0,
+		"allowManualEntry": false,
+		"options": [
+			{
+				"label": "Previous state",
+				"value": 0
+			},
+			{
+				"label": "Always on",
+				"value": 1
+			},
+			{
+				"label": "Always off",
+				"value": 2
+			}
+		]
+	},
+	"volume_three": {
+		"label": "Volume",
+		"valueSize": 1,
+		"minValue": 1,
+		"maxValue": 3,
+		"defaultValue": 3,
+		"options": [
+			{
+				"label": "Low",
+				"value": 1
+			},
+			{
+				"label": "Medium",
+				"value": 2
+			},
+			{
+				"label": "High",
 				"value": 3
 			}
 		]

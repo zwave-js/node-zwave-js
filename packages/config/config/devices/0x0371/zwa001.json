@@ -1,5 +1,3 @@
-// Aeotec Ltd. ZWA001
-// Bulb 6 Multi-White
 {
 	"manufacturer": "Aeotec Ltd.",
 	"manufacturerId": "0x0371",
@@ -29,7 +27,6 @@
 			"maxValue": 1,
 			"defaultValue": 1,
 			"readOnly": true,
-			"writeOnly": false,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -50,8 +47,6 @@
 			"maxValue": 4999,
 			"defaultValue": 2700,
 			"readOnly": true,
-			"writeOnly": false,
-			"allowManualEntry": true,
 			"options": [
 				{
 					"label": "Warm White(0x0A8C(2700k) ~ 0x1387 (4999k))",
@@ -67,8 +62,6 @@
 			"maxValue": 6500,
 			"defaultValue": 6500,
 			"readOnly": true,
-			"writeOnly": false,
-			"allowManualEntry": true,
 			"options": [
 				{
 					"label": "Cold White (0x1388 (5000k) ~ 0x1964 (6500k))",

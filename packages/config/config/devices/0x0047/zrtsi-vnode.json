@@ -1,5 +1,3 @@
-// Somfy ZRTSI-VNODE
-// Z-Wave to RTS Interface Virtual Node
 {
 	"manufacturer": "Somfy",
 	"manufacturerId": "0x0047",

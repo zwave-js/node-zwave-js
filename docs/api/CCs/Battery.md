@@ -1,5 +1,7 @@
 # Battery CC
 
+?> CommandClass ID: `0x80`
+
 ## Battery CC methods
 
 ### `get`

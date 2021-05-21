@@ -1,5 +1,3 @@
-// TKB Home TZ08
-// Rollershutter Controller
 {
 	"manufacturer": "TKB Home",
 	"manufacturerId": "0x0118",
@@ -29,40 +27,28 @@
 			"valueSize": 2,
 			"minValue": 1,
 			"maxValue": 32767,
-			"defaultValue": 720,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"defaultValue": 720
 		},
 		"2": {
 			"label": "KWh meter report period",
 			"valueSize": 2,
 			"minValue": 1,
 			"maxValue": 32767,
-			"defaultValue": 6,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"defaultValue": 6
 		},
 		"3": {
 			"label": "Watt load caution threshold",
 			"valueSize": 2,
 			"minValue": 10,
 			"maxValue": 1100,
-			"defaultValue": 1100,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"defaultValue": 1100
 		},
 		"4": {
 			"label": "KWh load caution threshold",
 			"valueSize": 2,
 			"minValue": 1,
 			"maxValue": 10000,
-			"defaultValue": 10000,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"defaultValue": 10000
 		}
 	}
 }

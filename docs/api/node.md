@@ -164,7 +164,17 @@ refreshInfo(): Promise<void>
 
 Resets all information about this node and forces a fresh interview.
 
-**WARNING:** Take care NOT to call this method when the node is already being interviewed. Otherwise the node information may become inconsistent.
+> [!WARNING] After calling this method, the node will no longer be `ready`. Keep this in mind if you rely on the `ready` state in your application.
+
+### `interviewCC`
+
+```ts
+interviewCC(cc: CommandClasses): Promise<void>
+```
+
+Rediscovers all capabilities of a single CC on this node and all endpoints. Although this method returns a `Promise`, it should generally **not** be `await`ed, since the update may take a long time.
+
+> [!NOTE] This method should only be used when necessary, for example when CC capabilities were not discovered correctly. It can be considered to be a more targeted version of `refreshInfo`.
 
 ### `beginFirmwareUpdate`
 
@@ -293,7 +303,7 @@ readonly status: NodeStatus;
 
 This property tracks the status a node in the network currently has (or is believed to have). Consumers of this library should treat the status as readonly. Valid values are defined in the `NodeStatus` enumeration:
 
--   `NodeStatus.Unknown (0)` - this is the default status of a node. A node is assigned this status before it is being interviewed and after it "returns" from the dead.
+-   `NodeStatus.Unknown (0)` - this is the default status of a node. A node is assigned this status before it is being interviewed (including manual re-interviews when calling `refreshInfo`).
 -   `NodeStatus.Asleep (1)` - Nodes that support the `WakeUp` CC and failed to respond to a message are assumed asleep.
 -   `NodeStatus.Awake (2)` - Sleeping nodes that recently sent a wake up notification are marked awake until they are sent back to sleep or fail to respond to a message.
 -   `NodeStatus.Dead (3)` - Nodes that **don't** support the `WakeUp` CC are marked dead when they fail to respond. Examples are plugs that have been pulled out of their socket. Whenever a message is received from a presumably dead node, they are marked as unknown.
@@ -574,13 +584,13 @@ readonly deviceConfig: DeviceConfig | undefined
 
 Contains additional information about this node, loaded from a [config file](/development/config-files.md#device-configuration-files).
 
-### `neighbors`
+### `deviceDatabaseUrl`
 
 ```ts
-readonly neighbors: number[]
+readonly deviceDatabaseUrl: string | undefined
 ```
 
-The IDs of all nodes this node is connected to or is communicating through.
+The URL to the device in the device database.
 
 ### `keepAwake`
 
@@ -611,9 +621,25 @@ A non-sleeping node has stopped responding or just started responding again. The
 (node: ZWaveNode) => void
 ```
 
+### `"interview started"`
+
+The initial interview or reinterview process for this node has started. The node is passed as the single argument to the callback:
+
+```ts
+(node: ZWaveNode) => void
+```
+
+### `"interview stage completed"`
+
+A state of the interview process for this node was completed. Only the name of the stage is provided and should not be relied on as stage names are subject to change:
+
+```ts
+(node: ZWaveNode, stageName: string) => void
+```
+
 ### `"interview completed"`
 
-The initial interview process for this node was completed. The node is passed as the single argument to the callback:
+The initial interview or reinterview process for this node was completed. The node is passed as the single argument to the callback:
 
 ```ts
 (node: ZWaveNode) => void
@@ -666,6 +692,22 @@ There are two situations when this event is emitted:
 
 > [!NOTE]
 > This event does not imply that the node is currently awake or will respond to requests.
+
+### `"firmware update progress"`
+
+```ts
+(node: ZWaveNode, sentFragments: number, totalFragments: number) => void;
+```
+
+Firmware update progress has been made. The callback takes the node itself, the already sent fragments, and the total fragments to be sent:
+
+### `"firmware update finished"`
+
+```ts
+(node: ZWaveNode, status: FirmwareUpdateStatus, waitTime?: number) => void;
+```
+
+The firmware update process is finished. The returned status indicates whether the update was successful and if it was, a wait time may be needed before the device is functional again.
 
 ### `"value added"` / `"value updated"` / `"value removed"`
 

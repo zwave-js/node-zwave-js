@@ -1,5 +1,3 @@
-// Zipato NE-NAS-AB02Z
-// Indoor Siren
 {
 	"manufacturer": "Zipato",
 	"manufacturerId": "0x0131",
@@ -37,8 +35,6 @@
 			"maxValue": 3,
 			"defaultValue": 2,
 			"unsigned": true,
-			"readOnly": false,
-			"writeOnly": false,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -62,8 +58,6 @@
 			"maxValue": 3,
 			"defaultValue": 2,
 			"unsigned": true,
-			"readOnly": false,
-			"writeOnly": false,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -89,9 +83,6 @@
 			"maxValue": 255,
 			"defaultValue": 1,
 			"unsigned": true,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true,
 			"options": [
 				{
 					"label": "Disabled",
@@ -107,8 +98,6 @@
 			"maxValue": 3,
 			"defaultValue": 2,
 			"unsigned": true,
-			"readOnly": false,
-			"writeOnly": false,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -132,10 +121,7 @@
 			"minValue": 1,
 			"maxValue": 10,
 			"defaultValue": 9,
-			"unsigned": true,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"unsigned": true
 		},
 		"6": {
 			"label": "Configure doorbell music index",
@@ -144,10 +130,7 @@
 			"minValue": 1,
 			"maxValue": 10,
 			"defaultValue": 10,
-			"unsigned": true,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"unsigned": true
 		}
 	},
 	"metadata": {

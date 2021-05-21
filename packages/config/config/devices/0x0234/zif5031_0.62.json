@@ -1,0 +1,100 @@
+{
+	"manufacturer": "Logic Group",
+	"manufacturerId": "0x0234",
+	"label": "ZIF5031",
+	"description": "DIN Rail Interface",
+	"devices": [
+		{
+			"productType": "0x0003",
+			"productId": "0x0111"
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.62",
+		"max": "255.255"
+	},
+	"associations": {
+		"1": {
+			"label": "Lifeline",
+			"maxNodes": 1,
+			"isLifeline": true
+		},
+		"2": {
+			"label": "Input 1 (Multilevel Report)",
+			"maxNodes": 5
+		},
+		"3": {
+			"label": "Input 2 (Multilevel Report)",
+			"maxNodes": 5
+		},
+		"4": {
+			"label": "Input 3 (Multilevel Report)",
+			"maxNodes": 5
+		},
+		"5": {
+			"label": "Input 4 (Multilevel Report)",
+			"maxNodes": 5
+		}
+	},
+	"paramInformation": {
+		"1": {
+			"$import": "templates/logic_group_template.json#status_led"
+		},
+		"2": {
+			"$import": "templates/logic_group_template.json#led_brightness"
+		},
+		"3": {
+			"$import": "../templates/master_template.json#base_enable_disable",
+			"label": "Input 1 - Thermistor"
+		},
+		"4": {
+			"$import": "../templates/master_template.json#base_enable_disable",
+			"label": "Input 2 - Thermistor"
+		},
+		"5": {
+			"$import": "../templates/master_template.json#base_enable_disable",
+			"label": "Input 3 - Thermistor"
+		},
+		"6": {
+			"$import": "../templates/master_template.json#base_enable_disable",
+			"label": "Input 4 - Thermistor"
+		},
+		"7": {
+			"$import": "templates/logic_group_template.json#input_calibration",
+			"label": "Input 1 - Calibration"
+		},
+		"8": {
+			"$import": "templates/logic_group_template.json#input_calibration",
+			"label": "Input 2 - Calibration"
+		},
+		"9": {
+			"$import": "templates/logic_group_template.json#input_calibration",
+			"label": "Input 3 - Calibration"
+		},
+		"10": {
+			"$import": "templates/logic_group_template.json#input_calibration",
+			"label": "Input 4 - Calibration"
+		},
+		"11": {
+			"$import": "templates/logic_group_template.json#input_report_interval",
+			"label": "Input 1 Report Interval"
+		},
+		"12": {
+			"$import": "templates/logic_group_template.json#input_report_interval",
+			"label": "Input 2 Report Interval"
+		},
+		"13": {
+			"$import": "templates/logic_group_template.json#input_report_interval",
+			"label": "Input 3 Report Interval"
+		},
+		"14": {
+			"$import": "templates/logic_group_template.json#input_report_interval",
+			"label": "Input 4 Report Interval"
+		}
+	},
+	"metadata": {
+		"inclusion": "Push the button in the hole near the 'INCLUSION' text with a non-conductive object. The LED will now start blinking",
+		"exclusion": "Push the button in the hole near the 'INCLUSION' text with a non-conductive object. The LED will now start blinking",
+		"reset": "Push the button in the hole near the 'INCLUSION' text with a non-conductive object for 10 seconds. Please use this procedure only when the network primary controller is missing or otherwise inoperable"
+	}
+}

@@ -54,11 +54,26 @@ export enum MultiChannelCommand {
 
 // @noSetValueAPI
 
+export function getEndpointIndizesValueId(): ValueID {
+	return {
+		commandClass: CommandClasses["Multi Channel"],
+		property: "endpointIndizes",
+	};
+}
+
 export function getEndpointCCsValueId(endpointIndex: number): ValueID {
 	return {
 		commandClass: CommandClasses["Multi Channel"],
 		endpoint: endpointIndex,
 		property: "commandClasses",
+	};
+}
+
+export function getEndpointDeviceClassValueId(endpointIndex: number): ValueID {
+	return {
+		commandClass: CommandClasses["Multi Channel"],
+		endpoint: endpointIndex,
+		property: "deviceClass",
 	};
 }
 
@@ -266,6 +281,7 @@ export class MultiChannelCC extends CommandClass {
 	public constructor(driver: Driver, options: CommandClassOptions) {
 		super(driver, options);
 		this.registerValue(getEndpointCCsValueId(0).property, true);
+		this.registerValue(getEndpointDeviceClassValueId(0).property, true);
 	}
 
 	/** Tests if a command targets a specific endpoint and thus requires encapsulation */
@@ -286,6 +302,11 @@ export class MultiChannelCC extends CommandClass {
 			encapsulated: cc,
 			destination: cc.endpointIndex,
 		});
+	}
+
+	public skipEndpointInterview(): boolean {
+		// The endpoints are discovered by querying the root device
+		return true;
 	}
 
 	public async interview(): Promise<void> {
@@ -315,10 +336,10 @@ export class MultiChannelCC extends CommandClass {
 			this.driver.controllerLog.logNode(node.id, {
 				endpoint: this.endpointIndex,
 				message:
-					"Querying device endpoint information timed out, skipping interview...",
+					"Querying device endpoint information timed out, aborting interview...",
 				level: "warn",
 			});
-			return;
+			return this.throwMissingCriticalInterviewResponse();
 		}
 
 		let logMessage = `received response for device endpoints:
@@ -334,7 +355,7 @@ identical capabilities:      ${multiResponse.identicalCapabilities}`;
 			direction: "inbound",
 		});
 
-		const endpointsToQuery: number[] = [];
+		const allEndpoints: number[] = [];
 		const addSequentialEndpoints = (): void => {
 			for (
 				let i = 1;
@@ -343,7 +364,7 @@ identical capabilities:      ${multiResponse.identicalCapabilities}`;
 					(multiResponse.aggregatedEndpointCount ?? 0);
 				i++
 			) {
-				endpointsToQuery.push(i);
+				allEndpoints.push(i);
 			}
 		};
 		if (api.supportsCommand(MultiChannelCommand.EndPointFind)) {
@@ -355,8 +376,8 @@ identical capabilities:      ${multiResponse.identicalCapabilities}`;
 			});
 
 			const foundEndpoints = await api.findEndpoints(0xff, 0xff);
-			if (foundEndpoints) endpointsToQuery.push(...foundEndpoints);
-			if (!endpointsToQuery.length) {
+			if (foundEndpoints) allEndpoints.push(...foundEndpoints);
+			if (!allEndpoints.length) {
 				// Create a sequential list of endpoints
 				this.driver.controllerLog.logNode(node.id, {
 					endpoint: this.endpointIndex,
@@ -367,7 +388,7 @@ identical capabilities:      ${multiResponse.identicalCapabilities}`;
 			} else {
 				this.driver.controllerLog.logNode(node.id, {
 					endpoint: this.endpointIndex,
-					message: `received endpoints: ${endpointsToQuery
+					message: `received endpoints: ${allEndpoints
 						.map(String)
 						.join(", ")}`,
 					direction: "inbound",
@@ -385,7 +406,7 @@ identical capabilities:      ${multiResponse.identicalCapabilities}`;
 
 		// Step 3: Query endpoints
 		let hasQueriedCapabilities = false;
-		for (const endpoint of endpointsToQuery) {
+		for (const endpoint of allEndpoints) {
 			if (
 				endpoint > multiResponse.individualEndpointCount &&
 				this.version >= 4
@@ -419,7 +440,7 @@ identical capabilities:      ${multiResponse.identicalCapabilities}`;
 
 				// copy the capabilities from the first endpoint
 				const ep1Caps = this.getValueDB().getValue<CommandClasses[]>(
-					getEndpointCCsValueId(endpointsToQuery[0]),
+					getEndpointCCsValueId(allEndpoints[0]),
 				)!;
 				this.getValueDB().setValue(getEndpointCCsValueId(endpoint), [
 					...ep1Caps,
@@ -450,8 +471,18 @@ supported CCs:`;
 					message: logMessage,
 					direction: "inbound",
 				});
+			} else {
+				this.driver.controllerLog.logNode(node.id, {
+					endpoint: this.endpointIndex,
+					message: `Querying endpoint #${endpoint} capabilities timed out, aborting interview...`,
+					level: "warn",
+				});
+				return this.throwMissingCriticalInterviewResponse();
 			}
 		}
+
+		// Now that all endpoints have been interviewed, remember which ones are there
+		this.getValueDB().setValue(getEndpointIndizesValueId(), allEndpoints);
 
 		// Remember that the interview is complete
 		this.interviewComplete = true;
@@ -619,14 +650,21 @@ export class MultiChannelCCCapabilityReport extends MultiChannelCC {
 	}
 
 	public persistValues(): boolean {
+		const deviceClassValueId = getEndpointDeviceClassValueId(
+			this.endpointIndex,
+		);
 		const ccsValueId = getEndpointCCsValueId(this.endpointIndex);
+
+		const valueDB = this.getValueDB();
 		if (this.capability.wasRemoved) {
-			this.getValueDB().removeValue(ccsValueId);
+			valueDB.removeValue(deviceClassValueId);
+			valueDB.removeValue(ccsValueId);
 		} else {
-			this.getValueDB().setValue(
-				ccsValueId,
-				this.capability.supportedCCs,
-			);
+			valueDB.setValue(deviceClassValueId, {
+				generic: this.capability.generic.key,
+				specific: this.capability.specific.key,
+			});
+			valueDB.setValue(ccsValueId, this.capability.supportedCCs);
 		}
 		return true;
 	}

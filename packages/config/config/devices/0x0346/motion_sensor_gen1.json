@@ -1,5 +1,3 @@
-// Ring 4SP1S7-0EN0 / 4SPAE9-0EU0
-// Motion Sensor
 {
 	"manufacturer": "Ring",
 	"manufacturerId": "0x0346",
@@ -26,10 +24,7 @@
 			"unit": "seconds",
 			"minValue": 255,
 			"maxValue": 4200,
-			"defaultValue": 4200,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"defaultValue": 4200
 		},
 		"2": {
 			"label": "Dwell Time",
@@ -37,10 +32,7 @@
 			"unit": "minutes",
 			"minValue": 1,
 			"maxValue": 9,
-			"defaultValue": 3,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"defaultValue": 3
 		},
 		"3": {
 			"label": "Pet Immunity",
@@ -48,8 +40,6 @@
 			"minValue": 0,
 			"maxValue": 2,
 			"defaultValue": 2,
-			"readOnly": false,
-			"writeOnly": false,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -73,8 +63,6 @@
 			"maxValue": 255,
 			"defaultValue": 0,
 			"unsigned": true,
-			"readOnly": false,
-			"writeOnly": false,
 			"allowManualEntry": false,
 			"options": [
 				{

@@ -1,5 +1,3 @@
-// GE/Jasco 35211/ZW6302
-// Portable Smart Multi Sensor
 {
 	"manufacturer": "GE/Jasco",
 	"manufacturerId": "0x0063",
@@ -19,14 +17,11 @@
 	"paramInformation": {
 		"6": {
 			"label": "Enable And Disable The PIR Sensor",
-			"description": "Enable and disable the PIR sensor",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 1,
 			"defaultValue": 1,
 			"unsigned": true,
-			"readOnly": false,
-			"writeOnly": false,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -40,15 +35,12 @@
 			]
 		},
 		"13": {
-			"label": "Pir Sensitivity Setting",
-			"description": "You can modify the sensitivity of PIR if changing the value in parameter 13",
+			"label": "PIR Sensitivity",
 			"valueSize": 1,
 			"minValue": 1,
 			"maxValue": 3,
 			"defaultValue": 3,
 			"unsigned": true,
-			"readOnly": false,
-			"writeOnly": false,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -66,15 +58,12 @@
 			]
 		},
 		"18": {
-			"label": "Pir Timeout Duration",
-			"description": "Pir timeout duration",
+			"label": "PIR Timeout Duration",
 			"valueSize": 1,
 			"minValue": 1,
 			"maxValue": 255,
 			"defaultValue": 4,
 			"unsigned": true,
-			"readOnly": false,
-			"writeOnly": false,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -88,53 +77,44 @@
 			]
 		},
 		"20": {
-			"label": "Basic Set, Notification And Basic Report",
-			"description": "Changing parameter 20 can let the multisensor send out \"Basic Set\" command or \"basic report\" command or \"notification\" report to Z-Wave devices",
+			"label": "Motion Sensor Report Type",
 			"valueSize": 1,
 			"minValue": 1,
 			"maxValue": 3,
 			"defaultValue": 1,
 			"unsigned": true,
-			"readOnly": false,
-			"writeOnly": false,
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "Motion sensor will send out notification",
+					"label": "Notification CC",
 					"value": 1
 				},
 				{
-					"label": "Motion sensor will send out Basic Set",
+					"label": "Basic CC Set",
 					"value": 2
 				},
 				{
-					"label": "Motion sensor will sendout basic report",
+					"label": "Basic CC Report",
 					"value": 3
 				}
 			]
 		},
 		"24": {
-			"label": "Temperature And Light Sensor Sensing Frequency Setting",
-			"description": "5 min to 60 min",
+			"label": "Temperature And Light Sensor Sensing Frequency",
 			"valueSize": 1,
 			"minValue": 5,
 			"maxValue": 60,
 			"defaultValue": 60,
-			"unsigned": true,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"unit": "minutes",
+			"unsigned": true
 		},
 		"28": {
 			"label": "Enable And Disable The LED Indication When PIR Triggered And After Timeout",
-			"description": "Enable & disable the LED indication when PIR is triggered and after timeout",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 1,
 			"defaultValue": 1,
 			"unsigned": true,
-			"readOnly": false,
-			"writeOnly": false,
 			"allowManualEntry": false,
 			"options": [
 				{

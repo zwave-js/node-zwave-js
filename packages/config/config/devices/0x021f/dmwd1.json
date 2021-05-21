@@ -1,5 +1,3 @@
-// Elexa Consumer Products Inc. DMWD1
-// Dome door & window sensor
 {
 	"manufacturer": "Elexa Consumer Products Inc.",
 	"manufacturerId": "0x021f",
@@ -24,10 +22,7 @@
 			"minValue": 1,
 			"maxValue": 65535,
 			"defaultValue": 30,
-			"unsigned": true,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"unsigned": true
 		},
 		"2": {
 			"label": "BASIC_SET Level",
@@ -37,8 +32,6 @@
 			"maxValue": 255,
 			"defaultValue": 255,
 			"unsigned": true,
-			"readOnly": false,
-			"writeOnly": false,
 			"allowManualEntry": false,
 			"options": [
 				{

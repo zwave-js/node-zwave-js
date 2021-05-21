@@ -1,5 +1,3 @@
-// Schneider Electric SQR14101**Z
-// Z-Wave Switch Single Pole
 {
 	"manufacturer": "Schneider Electric",
 	"manufacturerId": "0x0447",
@@ -24,8 +22,6 @@
 			"maxValue": 1,
 			"defaultValue": 1,
 			"unsigned": true,
-			"readOnly": false,
-			"writeOnly": false,
 			"allowManualEntry": false,
 			"options": [
 				{
