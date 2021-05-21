@@ -2,7 +2,7 @@
 <!--
 	Add placeholder for next release with `wip` snippet
 -->
-## __WORK IN PROGRESS__
+## 7.5.1 (2021-05-22)
 ### Bugfixes
 * Check support for `Association CC` before using it in `Multi Channel Association CC` interview and aborting it
 * Improve logging for `Notification CC`
