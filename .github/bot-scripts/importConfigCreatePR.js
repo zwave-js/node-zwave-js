@@ -41,12 +41,12 @@ async function main(param) {
 	await github.pulls.requestReviewers({
 		...options,
 		pull_number: prNumber,
-		reviewers: reviewers,
+		reviewers: reviewers.config,
 	});
 	await github.issues.addAssignees({
 		...options,
 		issue_number: prNumber,
-		assignees: reviewers,
+		assignees: reviewers.config,
 	});
 
 	await github.issues.createComment({
