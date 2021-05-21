@@ -2,6 +2,23 @@
 <!--
 	Add placeholder for next release with `wip` snippet
 -->
+## __WORK IN PROGRESS__
+### Bugfixes
+* Check support for `Association CC` before using it in `Multi Channel Association CC` interview and aborting it
+* Improve logging for `Notification CC`
+* The module exports `zwave-js` and `zwave-js/CommandClass` now export all CC classes
+* `Basic CC` is now also hidden in favor of better CCs when restoring the network from cache
+
+### Config file changes
+* Corrected partial paramaters in Philio Technology Corp PST02-C
+* Fix wording of Zooz ZEN22 switch/dimmer led parameter
+* Aligned Fantem FT111 to original Aeotec config
+* Add languages to Ring Keypad v2
+
+### Changes under the hood
+* Workflows in PRs from first-time contributors are now regularly auto-approved if they only edit config files until GitHub figures out how to make this "feature" less tedious
+* Added a bot command to add compat flags to existing files (limited to collaborators with write access)
+
 ## 7.5.0 (2021-05-17)
 ### Features
 * CC API methods that accept a duration now also accept user-friendly strings like `2m5s` and `60s` instead of only `Duration` class instances
