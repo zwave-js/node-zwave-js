@@ -8,6 +8,7 @@
 * Improve logging for `Notification CC`
 * The module exports `zwave-js` and `zwave-js/CommandClass` now export all CC classes
 * `Basic CC` is now also hidden in favor of better CCs when restoring the network from cache
+* Fixed how the supported CCs for each endpoint are computed in `Multi Channel CC V1`
 
 ### Config file changes
 * Corrected partial paramaters in Philio Technology Corp PST02-C
