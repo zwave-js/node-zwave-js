@@ -200,6 +200,14 @@
 				{
 					"label": "English",
 					"value": 0
+				},
+				{
+					"label": "French",
+					"value": 2
+				},
+				{
+					"label": "Spanish",
+					"value": 5
 				}
 			]
 		},
