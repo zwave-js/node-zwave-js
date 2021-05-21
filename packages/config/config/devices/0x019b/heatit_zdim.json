@@ -121,5 +121,14 @@
 			"maxValue": 99,
 			"defaultValue": 50
 		}
+	},
+	"compat": {
+		"commandClasses": {
+			"remove": {
+				"0x6c": {
+					"endpoints": "*"
+				}
+			}
+		}
 	}
 }
