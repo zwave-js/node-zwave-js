@@ -20,7 +20,7 @@ import {
 	ZWaveError,
 	ZWaveErrorCodes,
 } from "@zwave-js/core";
-import { JSONObject, num2hex, pick } from "@zwave-js/shared";
+import { buffer2hex, JSONObject, num2hex, pick } from "@zwave-js/shared";
 import { isArray } from "alcalzone-shared/typeguards";
 import type { Driver } from "../driver/Driver";
 import { MessagePriority } from "../message/Constants";
@@ -894,9 +894,15 @@ export class NotificationCCReport extends NotificationCC {
 						this.notificationType!,
 					),
 					"notification status": this.notificationStatus,
-					[`notification ${valueConfig?.type ?? "event"}`]:
-						valueConfig?.label ??
+					[`notification ${valueConfig.type}`]:
+						valueConfig.label ??
 						`Unknown (${num2hex(this.notificationEvent)})`,
+				};
+			} else if (this.notificationEvent === 0x00) {
+				message = {
+					"notification type": this.notificationType,
+					"notification status": this.notificationStatus,
+					"notification state": "idle",
 				};
 			} else {
 				message = {
@@ -913,7 +919,17 @@ export class NotificationCCReport extends NotificationCC {
 			message["sequence number"] = this.sequenceNumber;
 		}
 		if (this.eventParameters != undefined) {
-			message["event parameters"] = String(this.eventParameters);
+			if (Buffer.isBuffer(this.eventParameters)) {
+				message["event parameters"] = buffer2hex(this.eventParameters);
+			} else if (this.eventParameters instanceof Duration) {
+				message["event parameters"] = this.eventParameters.toString();
+			} else {
+				message["event parameters"] = Object.entries(
+					this.eventParameters,
+				)
+					.map(([param, val]) => `\n  ${param}: ${num2hex(val)}`)
+					.join("");
+			}
 		}
 		return {
 			...super.toLogEntry(),
@@ -1321,7 +1337,7 @@ export class NotificationCCEventSupportedReport extends NotificationCC {
 					.map(
 						(e) =>
 							`\n· ${
-								notification?.events.get(e)?.label ??
+								notification?.lookupValue(e)?.label ??
 								`Unknown (${num2hex(e)})`
 							}`,
 					)
