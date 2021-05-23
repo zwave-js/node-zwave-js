@@ -141,7 +141,6 @@
 		},
 		"10": {
 			"label": "Detect load",
-			"description": "Enable/disable to detect load",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 2,
