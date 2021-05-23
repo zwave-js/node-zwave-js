@@ -38,8 +38,7 @@
 			]
 		},
 		"3": {
-			"label": "Send Basic report",
-			"description": "send the basic report to the Lifeline when the load state changed",
+			"label": "Send Basic Report",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 1,
@@ -47,11 +46,11 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "Disable to send Basic report",
+					"label": "Disable",
 					"value": 0
 				},
 				{
-					"label": "Enable to send Basic report",
+					"label": "Enable",
 					"value": 1
 				}
 			]
