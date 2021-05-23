@@ -16,7 +16,7 @@
 	"supportsZWavePlus": true,
 	"paramInformation": {
 		"2": {
-			"label": "State before power failure",
+			"label": "State After Power Failure",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 2,
@@ -24,15 +24,15 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "Turn off load",
+					"label": "Off",
 					"value": 0
 				},
 				{
-					"label": "Turn on load",
+					"label": "On",
 					"value": 1
 				},
 				{
-					"label": "Save load state before power failure",
+					"label": "Previous State",
 					"value": 2
 				}
 			]
