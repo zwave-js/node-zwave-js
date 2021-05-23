@@ -158,7 +158,7 @@
 					"value": 1
 				},
 				{
-					"label": "Enable to detect only after first re-power",
+					"label": "Only after first re-power",
 					"value": 2
 				}
 			]
