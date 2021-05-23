@@ -323,6 +323,7 @@ export type SendSupervisedCommandOptions = SendCommandOptions &
 export interface DriverEventCallbacks {
 	"driver ready": () => void;
 	"all nodes ready": () => void;
+	"log config updated": (config: LogConfig) => void;
 	error: (err: Error) => void;
 }
 
@@ -568,6 +569,7 @@ export class Driver extends EventEmitter {
 	/** Updates the logging configuration without having to restart the driver. */
 	public updateLogConfig(config: DeepPartial<LogConfig>): void {
 		this._logContainer.updateConfiguration(config);
+		this.emit("log config updated", this._logContainer.getConfiguration());
 	}
 
 	/** Returns the current logging configuration. */

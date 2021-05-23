@@ -303,11 +303,12 @@ Returns `true` after the `"all nodes ready"` event has been emitted. This is use
 
 The `Driver` class inherits from the Node.js [EventEmitter](https://nodejs.org/api/events.html#events_class_eventemitter) and thus also supports its methods like `on`, `removeListener`, etc. The following events are implemented:
 
-| Event               | Description                                                                                                                                                                                          |
-| ------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `"error"`           | Is emitted when the underlying serial port emits an error or invalid data is received. You **must** add a listener for this event, otherwise unhandled `"error"` events will crash your application! |
-| `"driver ready"`    | Is emitted after the controller interview is completed but before the node interview is started.                                                                                                     |
-| `"all nodes ready"` | Is emitted when all nodes are safe to be used (i.e. the `"ready"` event has been emitted for all nodes).                                                                                             |
+| Event                  | Description                                                                                                                                                                                          |
+| ---------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `"error"`              | Is emitted when the underlying serial port emits an error or invalid data is received. You **must** add a listener for this event, otherwise unhandled `"error"` events will crash your application! |
+| `"driver ready"`       | Is emitted after the controller interview is completed but before the node interview is started.                                                                                                     |
+| `"all nodes ready"`    | Is emitted when all nodes are safe to be used (i.e. the `"ready"` event has been emitted for all nodes).                                                                                             |
+| `"log config updated"` | Is emitted when the log config has been updated. Includes the updated log config as an argument to the callback.                                                                                     |
 
 ## Interfaces
 
