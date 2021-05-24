@@ -261,7 +261,7 @@
 			]
 		},
 		"32": {
-			"label": "Starting brightness",
+			"label": "Starting Brightness",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 99,
