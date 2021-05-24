@@ -236,7 +236,7 @@
 			"defaultValue": 3600
 		},
 		"24": {
-			"label": "Current metering time cycle",
+			"label": "CurrentMetering Time Cycle",
 			"valueSize": 4,
 			"unit": "seconds",
 			"minValue": 5,
