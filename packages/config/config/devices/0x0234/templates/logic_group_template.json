@@ -487,23 +487,6 @@
 		"label": "Input: Timer",
 		"defaultValue": 0
 	},
-	"startup_relay": {
-		"$import": "../../templates/master_template.json#state_after_power_failure",
-		"options": [
-			{
-				"label": "Always off",
-				"value": 0
-			},
-			{
-				"label": "Always on",
-				"value": 1
-			},
-			{
-				"label": "Previous state",
-				"value": 2
-			}
-		]
-	},
 	"watt_threshold_change": {
 		"label": "Power Change Threshold",
 		"valueSize": 2,
