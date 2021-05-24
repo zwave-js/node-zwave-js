@@ -116,7 +116,7 @@
 		},
 		"9": {
 			"label": "Added Removed A Network",
-			"Description": "Allows external switch to be excluded or included by triple pressing within 1.5 seconds",
+			"description": "Allows external switch to be excluded or included by triple pressing within 1.5 seconds",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 1,
