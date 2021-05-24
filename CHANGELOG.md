@@ -2,6 +2,28 @@
 <!--
 	Add placeholder for next release with `wip` snippet
 -->
+## __WORK IN PROGRESS__
+### Bugfixes
+* `VirtualEndpoint` and `VirtualNode` are now exported through `zwave-js` and `zwave-js/Node`
+* After a supervised `Multilevel Switch::Set` with `targetValue` 255, the `currentValue` is now refreshed
+* The compat flag `disableStrictEntryControlDataValidation` now also disables the sequence number validation for `Entry Control` notifications
+* When a V1 alarm report is mapped to a V2+ notification, the alarm values `alarmType` and `alarmLevel` are no longer deleted. This should avoid breaking changes when we add a new mapping.
+* A failed transmission of a `NonceReport` is no longer retried and no longer has an influence on the device status
+* Avoid setting the device clock too often
+* Avoid multiple value refreshes when a node hails multiple times
+
+### Config file changes
+* Add additional device ID to CT101 thermostat
+* Add support for Weiser SmartCode 5
+* Added a new product ID for iblinds V3.10+
+* Corrected some Logic Group config files
+* Add GED2150 config
+* Enable Basic Set mapping for Everspring HAC01
+* Enable Basic Set mapping for Aeotec ZW100 and Fantem FT100
+
+### Changes under the hood
+* Document `ping` method for nodes
+
 ## 7.5.1 (2021-05-22)
 ### Bugfixes
 * Check support for `Association CC` before using it in `Multi Channel Association CC` interview and aborting it
