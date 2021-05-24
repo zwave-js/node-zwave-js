@@ -144,8 +144,6 @@ export class MultilevelSwitchCCAPI extends CCAPI {
 		}
 	}
 
-	private refreshTimeout: NodeJS.Timeout | undefined;
-
 	/**
 	 * Sets the switch to a new value
 	 * @param targetValue The new target value for the switch
@@ -327,8 +325,9 @@ export class MultilevelSwitchCCAPI extends CCAPI {
 						);
 					}
 
-					// Verify the current value after a delay if the node does not support Supervision
+					// Verify the current value after a delay, unless the device supports Supervision and we know the actual value
 					if (
+						value === 255 ||
 						!this.endpoint
 							.getNodeUnsafe()
 							?.supportsCC(CommandClasses.Supervision)
