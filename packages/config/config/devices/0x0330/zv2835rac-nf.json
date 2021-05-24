@@ -90,7 +90,7 @@
 			"defaultValue": 0
 		},
 		"6": {
-			"label": "Maximum brightness value",
+			"label": "Maximum Brightness Value",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 100,
