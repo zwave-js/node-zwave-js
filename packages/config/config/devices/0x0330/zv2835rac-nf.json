@@ -56,7 +56,7 @@
 			]
 		},
 		"4": {
-			"label": "Default fade time",
+			"label": "Default Fade Time",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 255,
