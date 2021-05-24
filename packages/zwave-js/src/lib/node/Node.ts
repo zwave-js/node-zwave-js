@@ -2620,7 +2620,10 @@ protocol version:      ${this._protocolVersion}`;
 		}
 	}
 
-	private handleClockReport(command: ClockCCReport): void {
+	private busySettingClock: boolean = false;
+	private async handleClockReport(command: ClockCCReport): Promise<void> {
+		if (this.busySettingClock) return;
+
 		// A Z-Wave Plus node SHOULD issue a Clock Report Command via the Lifeline Association Group if they
 		// suspect to have inaccurate time and/or weekdays (e.g. after battery removal).
 		// A controlling node SHOULD compare the received time and weekday with its current time and set the
@@ -2654,11 +2657,17 @@ protocol version:      ${this._protocolVersion}`;
 				this.nodeId,
 				`detected a deviation of the node's clock, updating it...`,
 			);
-			endpoint.commandClasses.Clock.set(hours, minutes, weekday).catch(
-				() => {
-					// Don't throw when the update fails
-				},
-			);
+			this.busySettingClock = true;
+			try {
+				await endpoint.commandClasses.Clock.set(
+					hours,
+					minutes,
+					weekday,
+				);
+			} catch {
+				// ignore
+			}
+			this.busySettingClock = false;
 		}
 	}
 
