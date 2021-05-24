@@ -3114,24 +3114,28 @@ protocol version:      ${this._protocolVersion}`;
 		command: EntryControlCCNotification,
 	): void {
 		if (
-			this.recentEntryControlNotificationSequenceNumbers.includes(
-				command.sequenceNumber,
-			)
+			!this._deviceConfig?.compat?.disableStrictEntryControlDataValidation
 		) {
-			this.driver.controllerLog.logNode(
-				this.id,
-				`Received duplicate Entry Control Notification (sequence number ${command.sequenceNumber}), ignoring...`,
-				"warn",
-			);
-			return;
-		}
+			if (
+				this.recentEntryControlNotificationSequenceNumbers.includes(
+					command.sequenceNumber,
+				)
+			) {
+				this.driver.controllerLog.logNode(
+					this.id,
+					`Received duplicate Entry Control Notification (sequence number ${command.sequenceNumber}), ignoring...`,
+					"warn",
+				);
+				return;
+			}
 
-		// Keep track of the last 5 sequence numbers
-		this.recentEntryControlNotificationSequenceNumbers.unshift(
-			command.sequenceNumber,
-		);
-		if (this.recentEntryControlNotificationSequenceNumbers.length > 5) {
-			this.recentEntryControlNotificationSequenceNumbers.pop();
+			// Keep track of the last 5 sequence numbers
+			this.recentEntryControlNotificationSequenceNumbers.unshift(
+				command.sequenceNumber,
+			);
+			if (this.recentEntryControlNotificationSequenceNumbers.length > 5) {
+				this.recentEntryControlNotificationSequenceNumbers.pop();
+			}
 		}
 
 		// Notify listeners
