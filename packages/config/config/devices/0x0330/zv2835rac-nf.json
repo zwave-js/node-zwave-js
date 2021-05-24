@@ -93,8 +93,8 @@
 			"label": "Maximum Brightness Value",
 			"valueSize": 1,
 			"minValue": 0,
-			"maxValue": 100,
-			"defaultValue": 100
+			"maxValue": 99,
+			"defaultValue": 99
 		},
 		"7": {
 			"label": "MOSFET driving type",
