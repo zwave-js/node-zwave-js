@@ -810,11 +810,14 @@ export class NotificationCCReport extends NotificationCC {
 								}
 							}
 						}
-						this.alarmType = undefined;
-						this.alarmLevel = undefined;
+						// After mapping we do not set the legacy V1 values to undefined
+						// Otherwise, adding a new mapping will be a breaking change
 					}
 				}
 			}
+
+			// Store the V1 alarm values if they exist
+			this.persistValues();
 		} else {
 			// Create a notification to send
 			if ("alarmType" in options) {

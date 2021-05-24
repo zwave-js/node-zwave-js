@@ -2456,17 +2456,15 @@ protocol version:      ${this._protocolVersion}`;
 	 * Handles the receipt of a Notification Report
 	 */
 	private handleNotificationReport(command: NotificationCCReport): void {
-		if (command.alarmType) {
-			// This is a V1 alarm, just store the only two values it has
-			command.persistValues();
-			return;
-		} else if (command.notificationType == undefined) {
-			this.driver.controllerLog.logNode(this.id, {
-				message: `received unsupported notification ${stringify(
-					command,
-				)}`,
-				direction: "inbound",
-			});
+		if (command.notificationType == undefined) {
+			if (command.alarmType == undefined) {
+				this.driver.controllerLog.logNode(this.id, {
+					message: `received unsupported notification ${stringify(
+						command,
+					)}`,
+					direction: "inbound",
+				});
+			}
 			return;
 		}
 
