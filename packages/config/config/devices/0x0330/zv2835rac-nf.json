@@ -228,7 +228,7 @@
 			"defaultValue": 1800
 		},
 		"23": {
-			"label": "Voltage metering time cycle",
+			"label": "Voltage Metering Time Cycle",
 			"valueSize": 4,
 			"unit": "seconds",
 			"minValue": 5,
