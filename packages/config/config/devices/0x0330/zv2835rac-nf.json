@@ -244,7 +244,7 @@
 			"defaultValue": 3600
 		},
 		"31": {
-			"label": "Dimming curve",
+			"label": "Dimming Curve",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 1,
