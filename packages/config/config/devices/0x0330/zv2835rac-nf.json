@@ -83,7 +83,7 @@
 			]
 		},
 		"5": {
-			"label": "Minimum brightness value",
+			"label": "Minimum Brightness Value",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 50,
