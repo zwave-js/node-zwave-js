@@ -86,8 +86,8 @@
 			"label": "Maximum Brightness Value",
 			"valueSize": 1,
 			"minValue": 0,
-			"maxValue": 99,
-			"defaultValue": 99
+			"maxValue": 100,
+			"defaultValue": 100
 		},
 		"7": {
 			"label": "MOSFET Driving Type",
@@ -115,7 +115,8 @@
 			"defaultValue": 5
 		},
 		"9": {
-			"label": "Added to and Removed From a Network",
+			"label": "Added Removed A Network",
+			"Description": "Allows external switch to be excluded or included by triple pressing within 1.5 seconds"
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 1,
