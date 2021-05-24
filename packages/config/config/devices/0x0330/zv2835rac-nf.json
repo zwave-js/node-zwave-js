@@ -62,7 +62,7 @@
 			"maxValue": 255,
 			"defaultValue": 0,
 			"unsigned": true,
-			"allowManualEntry": false,
+			"allowManualEntry": true,
 			"options": [
 				{
 					"label": "Instantly",
@@ -97,7 +97,7 @@
 			"defaultValue": 99
 		},
 		"7": {
-			"label": "MOSFET driving type",
+			"label": "MOSFET Driving Type",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 1,
@@ -115,14 +115,14 @@
 			]
 		},
 		"8": {
-			"label": "Step of knob",
+			"label": "Step Of Knob",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 50,
 			"defaultValue": 5
 		},
 		"9": {
-			"label": "Added to and removed from a network",
+			"label": "Added to and Removed From a Network",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 1,
@@ -140,7 +140,7 @@
 			]
 		},
 		"10": {
-			"label": "Detect load",
+			"label": "Detect Load",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 2,
@@ -162,7 +162,7 @@
 			]
 		},
 		"11": {
-			"label": "Wiring type",
+			"label": "Wiring Type",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 2,
@@ -170,7 +170,7 @@
 			"readOnly": true
 		},
 		"12": {
-			"label": "Load type",
+			"label": "Load Type",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 3,
@@ -178,7 +178,7 @@
 			"readOnly": true
 		},
 		"13": {
-			"label": "Over current protection",
+			"label": "Over Current Protection",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 1,
@@ -196,7 +196,7 @@
 			]
 		},
 		"14": {
-			"label": "Power automatic report absolute threshold",
+			"label": "Power Automatic Report Absolute Threshold",
 			"valueSize": 2,
 			"unit": "W",
 			"minValue": 0,
@@ -204,7 +204,7 @@
 			"defaultValue": 10
 		},
 		"15": {
-			"label": "Power automatic report threshold,",
+			"label": "Power Automatic Report Threshold,",
 			"valueSize": 1,
 			"unit": "%",
 			"minValue": 0,
@@ -212,7 +212,7 @@
 			"defaultValue": 20
 		},
 		"21": {
-			"label": "Power metering time cycle",
+			"label": "Power Metering Time Cycle",
 			"valueSize": 4,
 			"unit": "seconds",
 			"minValue": 0,
@@ -220,7 +220,7 @@
 			"defaultValue": 600
 		},
 		"22": {
-			"label": "Energy metering time cycle",
+			"label": "Energy Metering Time Cycle",
 			"valueSize": 4,
 			"unit": "seconds",
 			"minValue": 0,
@@ -236,7 +236,7 @@
 			"defaultValue": 3600
 		},
 		"24": {
-			"label": "CurrentMetering Time Cycle",
+			"label": "Current Metering Time Cycle",
 			"valueSize": 4,
 			"unit": "seconds",
 			"minValue": 5,
