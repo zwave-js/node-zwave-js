@@ -57,6 +57,7 @@
 		},
 		"4": {
 			"label": "Default Fade Time",
+			"description": "Values 1-127 = seconds; 128-254 = minutes (minus 127)",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 255,
@@ -67,14 +68,6 @@
 				{
 					"label": "Instantly",
 					"value": 0
-				},
-				{
-					"label": "from 1 to 127 seconds",
-					"value": 1
-				},
-				{
-					"label": "1 to 127 minutes",
-					"value": 80
 				},
 				{
 					"label": "Factory default duration. (3 second)",
@@ -249,6 +242,7 @@
 			"minValue": 0,
 			"maxValue": 1,
 			"defaultValue": 0,
+			"allowManualEntry": false,
 			"options": [
 				{
 					"label": "Linear",
