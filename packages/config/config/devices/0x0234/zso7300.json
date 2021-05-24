@@ -49,37 +49,37 @@
 			"$import": "templates/logic_group_template.json#led_power_consumption_mode"
 		},
 		"6[0xff000000]": {
-			"$import": "../templates/master_template.json#base_enable_disable",
+			"$import": "templates/logic_group_template.json#led_indicator",
 			"label": "LED Indicator (On): Red",
 			"valueSize": 4,
 			"defaultValue": 0
 		},
 		"6[0xff0000]": {
-			"$import": "../templates/master_template.json#base_enable_disable",
+			"$import": "templates/logic_group_template.json#led_indicator",
 			"label": "LED Indicator (On): Green",
 			"valueSize": 4,
 			"defaultValue": 255
 		},
 		"6[0xff00]": {
-			"$import": "../templates/master_template.json#base_enable_disable",
+			"$import": "templates/logic_group_template.json#led_indicator",
 			"label": "LED Indicator (On): Blue",
 			"valueSize": 4,
 			"defaultValue": 0
 		},
 		"7[0xff000000]": {
-			"$import": "../templates/master_template.json#base_enable_disable",
+			"$import": "templates/logic_group_template.json#led_indicator",
 			"label": "LED Indicator (Off): Red",
 			"valueSize": 4,
 			"defaultValue": 143
 		},
 		"7[0xff0000]": {
-			"$import": "../templates/master_template.json#base_enable_disable",
+			"$import": "templates/logic_group_template.json#led_indicator",
 			"label": "LED Indicator (Off): Green",
 			"valueSize": 4,
 			"defaultValue": 0
 		},
 		"7[0xff00]": {
-			"$import": "../templates/master_template.json#base_enable_disable",
+			"$import": "templates/logic_group_template.json#led_indicator",
 			"label": "LED Indicator (Off): Blue",
 			"valueSize": 4,
 			"defaultValue": 255
