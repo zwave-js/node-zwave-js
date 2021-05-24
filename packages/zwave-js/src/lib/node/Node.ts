@@ -2063,14 +2063,28 @@ protocol version:      ${this._protocolVersion}`;
 		);
 	}
 
-	private handleHail(_command: HailCC): void {
+	private busyPollingAfterHail: boolean = false;
+	private async handleHail(_command: HailCC): Promise<void> {
 		// treat this as a sign that the node is awake
 		this.markAsAwake();
 
+		if (this.busyPollingAfterHail) {
+			this.driver.controllerLog.logNode(this.nodeId, {
+				message: `Hail received from node, but still busy with previous one...`,
+			});
+			return;
+		}
+
+		this.busyPollingAfterHail = true;
 		this.driver.controllerLog.logNode(this.nodeId, {
 			message: `Hail received from node, refreshing actuator and sensor values...`,
 		});
-		void this.refreshValues();
+		try {
+			await this.refreshValues();
+		} catch {
+			// ignore
+		}
+		this.busyPollingAfterHail = false;
 	}
 
 	/** Stores information about a currently held down key */
