@@ -40,5 +40,8 @@
 			"maxValue": 127,
 			"defaultValue": 1
 		}
+	},
+	"compat": {
+		"enableBasicSetMapping": true
 	}
 }
