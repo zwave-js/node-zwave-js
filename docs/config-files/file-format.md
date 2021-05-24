@@ -341,7 +341,7 @@ By default, received `Basic CC::Report` commands are mapped to a more appropriat
 
 ### `disableStrictEntryControlDataValidation`
 
-The specifications mandate strict rules for the data in `Entry Control CC Notifications`, which some devices do not follow, causing the notifications to get dropped. Setting `disableStrictEntryControlDataValidation` to `true` disables these strict checks.
+The specifications mandate strict rules for the data and sequence numbers in `Entry Control CC Notifications`, which some devices do not follow, causing the notifications to get dropped. Setting `disableStrictEntryControlDataValidation` to `true` disables these strict checks.
 
 ### `enableBasicSetMapping`
 
