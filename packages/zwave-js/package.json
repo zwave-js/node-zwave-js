@@ -1,6 +1,6 @@
 {
   "name": "zwave-js",
-  "version": "7.5.1",
+  "version": "7.5.2",
   "description": "Z-Wave driver written entirely in JavaScript/TypeScript",
   "keywords": [],
   "main": "index.js",
@@ -64,7 +64,7 @@
     "@alcalzone/pak": "^0.6.0",
     "@sentry/integrations": "^6.3.0",
     "@sentry/node": "^6.3.0",
-    "@zwave-js/config": "7.5.1",
+    "@zwave-js/config": "7.5.2",
     "@zwave-js/core": "7.5.0",
     "@zwave-js/serial": "7.5.0",
     "@zwave-js/shared": "7.4.0",

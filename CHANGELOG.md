@@ -2,7 +2,7 @@
 <!--
 	Add placeholder for next release with `wip` snippet
 -->
-## __WORK IN PROGRESS__
+## 7.5.2 (2021-05-25)
 ### Bugfixes
 * `VirtualEndpoint` and `VirtualNode` are now exported through `zwave-js` and `zwave-js/Node`
 * After a supervised `Multilevel Switch::Set` with `targetValue` 255, the `currentValue` is now refreshed
