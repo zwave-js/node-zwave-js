@@ -214,7 +214,7 @@
 		},
 		"103[0x01]": {
 			"$import": "templates/aeotec_template.json#auto_report_group3_watt",
-			"label": "Automatic Report: Group 3 - kWh (Whole Strip)"
+			"label": "Automatic Report: Group 3 - Power (Whole Strip)"
 		},
 		"103[0x02]": {
 			"$import": "templates/aeotec_template.json#auto_report_group3_watt",
