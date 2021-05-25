@@ -100,6 +100,9 @@ export interface ValueMetadataDuration extends ValueMetadataAny {
 	default?: Duration;
 }
 
+/**
+ * Defines how a configuration value is encoded
+ */
 export enum ConfigValueFormat {
 	SignedInteger = 0x00,
 	UnsignedInteger = 0x01,

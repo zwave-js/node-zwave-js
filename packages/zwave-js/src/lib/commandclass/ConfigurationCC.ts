@@ -30,7 +30,7 @@ import { padStart } from "alcalzone-shared/strings";
 import type { Driver } from "../driver/Driver";
 import { MessagePriority } from "../message/Constants";
 import {
-	PhysicalCCAPI,
+	CCAPI,
 	PollValueImplementation,
 	POLL_VALUE,
 	SetValueImplementation,
@@ -106,7 +106,7 @@ const isParamInfoFromConfigValueId: ValueID = {
 };
 
 @API(CommandClasses.Configuration)
-export class ConfigurationCCAPI extends PhysicalCCAPI {
+export class ConfigurationCCAPI extends CCAPI {
 	public supportsCommand(cmd: ConfigurationCommand): Maybe<boolean> {
 		switch (cmd) {
 			case ConfigurationCommand.Get:
@@ -143,10 +143,60 @@ export class ConfigurationCCAPI extends PhysicalCCAPI {
 			throwWrongValueType(this.ccId, property, "number", typeof value);
 		}
 
-		const ccInstance = this.endpoint.createCCInstance(ConfigurationCC)!;
+		let ccInstance: ConfigurationCC;
+		if (this.isSinglecast()) {
+			ccInstance = this.endpoint.createCCInstance(ConfigurationCC)!;
+		} else if (this.isMulticast()) {
+			// Multicast is only possible if the parameter definition is the same on all target nodes
+			const nodes = this.endpoint.node.physicalNodes;
+			if (
+				!nodes.every((node) =>
+					node
+						.getEndpoint(this.endpoint.index)
+						?.supportsCC(CommandClasses.Configuration),
+				)
+			) {
+				throw new ZWaveError(
+					`The multicast setValue API for Configuration CC requires all virtual target endpoints to support Configuration CC!`,
+					ZWaveErrorCodes.CC_Invalid,
+				);
+			}
+			// Figure out if all the relevant info is the same
+			const paramInfos = this.endpoint.node.physicalNodes.map((node) =>
+				node
+					.getEndpoint(this.endpoint.index)!
+					.createCCInstance(ConfigurationCC)!
+					.getParamInformation(property, propertyKey),
+			);
+			if (
+				!paramInfos.length ||
+				!paramInfos.every((info, index) => {
+					if (index === 0) return true;
+					return (
+						info.valueSize === paramInfos[0].valueSize &&
+						info.format === paramInfos[0].format
+					);
+				})
+			) {
+				throw new ZWaveError(
+					`The multicast setValue API for Configuration CC requires all virtual target nodes to have the same parameter definition!`,
+					ZWaveErrorCodes.CC_Invalid,
+				);
+			}
+			// If it is, just use the first node to create the CC instance
+			ccInstance = this.endpoint.node.physicalNodes[0]
+				.getEndpoint(this.endpoint.index)!
+				.createCCInstance(ConfigurationCC)!;
+		} else {
+			throw new ZWaveError(
+				`The setValue API for Configuration CC is not supported via broadcast!`,
+				ZWaveErrorCodes.CC_NotSupported,
+			);
+		}
+
 		let valueSize = ccInstance.getParamInformation(property).valueSize;
 		const valueFormat =
-			ccInstance.getParamInformation(property).format ||
+			ccInstance.getParamInformation(property).format ??
 			ConfigValueFormat.SignedInteger;
 
 		let targetValue: number;
@@ -190,10 +240,15 @@ export class ConfigurationCCAPI extends PhysicalCCAPI {
 			throwInvalidValueError(value, property, valueSize, valueFormat);
 		}
 
-		await this.set(property, targetValue, valueSize as any);
+		await this.set(property, targetValue, valueSize as any, valueFormat);
 
-		// Verify the current value after a delay
-		this.schedulePoll({ property, propertyKey }, 1000);
+		if ((this as ConfigurationCCAPI).isSinglecast()) {
+			// Verify the current value after a delay
+			(this as ConfigurationCCAPI).schedulePoll(
+				{ property, propertyKey },
+				1000,
+			);
+		}
 	};
 
 	protected [POLL_VALUE]: PollValueImplementation = async ({
@@ -224,6 +279,9 @@ export class ConfigurationCCAPI extends PhysicalCCAPI {
 			allowUnexpectedResponse?: boolean;
 		},
 	): Promise<ConfigValue | undefined> {
+		// Get-type commands are only possible in singlecast
+		this.assertPhysicalEndpoint(this.endpoint);
+
 		this.assertSupportsCommand(
 			ConfigurationCommand,
 			ConfigurationCommand.Get,
@@ -273,6 +331,7 @@ export class ConfigurationCCAPI extends PhysicalCCAPI {
 		parameter: number,
 		value: ConfigValue,
 		valueSize: 1 | 2 | 4,
+		valueFormat: ConfigValueFormat = ConfigValueFormat.SignedInteger,
 	): Promise<void> {
 		this.assertSupportsCommand(
 			ConfigurationCommand,
@@ -285,6 +344,7 @@ export class ConfigurationCCAPI extends PhysicalCCAPI {
 			parameter,
 			value,
 			valueSize,
+			valueFormat,
 		});
 		await this.driver.sendCommand(cc, this.commandOptions);
 	}
@@ -311,6 +371,9 @@ export class ConfigurationCCAPI extends PhysicalCCAPI {
 
 	/** Resets all configuration parameters to their default value */
 	public async resetAll(): Promise<void> {
+		// This is dangerous - don't allow resetting all parameters via multicast
+		this.assertPhysicalEndpoint(this.endpoint);
+
 		this.assertSupportsCommand(
 			ConfigurationCommand,
 			ConfigurationCommand.DefaultReset,
@@ -325,6 +388,9 @@ export class ConfigurationCCAPI extends PhysicalCCAPI {
 
 	// eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
 	public async getProperties(parameter: number) {
+		// Get-type commands are only possible in singlecast
+		this.assertPhysicalEndpoint(this.endpoint);
+
 		const cc = new ConfigurationCCPropertiesGet(this.driver, {
 			nodeId: this.endpoint.nodeId,
 			// Don't set an endpoint here, Configuration is device specific, not endpoint specific
@@ -352,6 +418,9 @@ export class ConfigurationCCAPI extends PhysicalCCAPI {
 
 	/** Requests the name of a configuration parameter from the node */
 	public async getName(parameter: number): Promise<string | undefined> {
+		// Get-type commands are only possible in singlecast
+		this.assertPhysicalEndpoint(this.endpoint);
+
 		const cc = new ConfigurationCCNameGet(this.driver, {
 			nodeId: this.endpoint.nodeId,
 			// Don't set an endpoint here, Configuration is device specific, not endpoint specific
@@ -366,6 +435,9 @@ export class ConfigurationCCAPI extends PhysicalCCAPI {
 
 	/** Requests usage info for a configuration parameter from the node */
 	public async getInfo(parameter: number): Promise<string | undefined> {
+		// Get-type commands are only possible in singlecast
+		this.assertPhysicalEndpoint(this.endpoint);
+
 		const cc = new ConfigurationCCInfoGet(this.driver, {
 			nodeId: this.endpoint.nodeId,
 			// Don't set an endpoint here, Configuration is device specific, not endpoint specific
@@ -396,6 +468,9 @@ export class ConfigurationCCAPI extends PhysicalCCAPI {
 				ZWaveErrorCodes.ConfigurationCC_NoLegacyScanOnNewDevices,
 			);
 		}
+
+		// Get-type commands are only possible in singlecast
+		this.assertPhysicalEndpoint(this.endpoint);
 
 		// TODO: Reduce the priority of the messages
 		this.driver.controllerLog.logNode(
@@ -902,7 +977,7 @@ export class ConfigurationCCReport extends ConfigurationCC {
 			// In Config CC v1/v2, this must be SignedInteger
 			// As those nodes don't communicate any parameter information
 			// we fall back to that default value anyways
-			oldParamInformation.format || ConfigValueFormat.SignedInteger,
+			oldParamInformation.format ?? ConfigValueFormat.SignedInteger,
 		);
 		// Store the parameter size and value
 		this.extendParamInformation(this._parameter, undefined, {
@@ -1049,6 +1124,8 @@ type ConfigurationCCSetOptions = CCCommandOptions &
 				parameter: number;
 				resetToDefault?: false;
 				valueSize: number;
+				/** How the value is encoded. Defaults to SignedInteger */
+				valueFormat?: ConfigValueFormat;
 				value: ConfigValue;
 		  }
 	);
@@ -1081,6 +1158,8 @@ export class ConfigurationCCSet extends ConfigurationCC {
 			if (!options.resetToDefault) {
 				// TODO: Default to the stored value size
 				this.valueSize = options.valueSize;
+				this.valueFormat =
+					options.valueFormat ?? ConfigValueFormat.SignedInteger;
 				this.value = options.value;
 			}
 		}
@@ -1089,6 +1168,7 @@ export class ConfigurationCCSet extends ConfigurationCC {
 	public resetToDefault: boolean;
 	public parameter: number;
 	public valueSize: number | undefined;
+	public valueFormat: ConfigValueFormat | undefined;
 	public value: ConfigValue | undefined;
 
 	public serialize(): Buffer {
@@ -1099,21 +1179,17 @@ export class ConfigurationCCSet extends ConfigurationCC {
 		this.payload[1] =
 			(this.resetToDefault ? 0b1000_0000 : 0) | (valueSize & 0b111);
 		if (!this.resetToDefault) {
-			const valueFormat =
-				this.getParamInformation(this.parameter).format ||
-				ConfigValueFormat.SignedInteger;
-
 			// Make sure that the given value fits into the value size
 			if (
 				typeof this.value === "number" &&
-				!isSafeValue(this.value, valueSize, valueFormat)
+				!isSafeValue(this.value, valueSize, this.valueFormat!)
 			) {
 				// If there is a value size configured, check that the given value is compatible
 				throwInvalidValueError(
 					this.value,
 					this.parameter,
 					valueSize,
-					valueFormat,
+					this.valueFormat!,
 				);
 			}
 
@@ -1122,7 +1198,7 @@ export class ConfigurationCCSet extends ConfigurationCC {
 					this.payload,
 					2,
 					valueSize,
-					valueFormat,
+					this.valueFormat!,
 					this.value!,
 				);
 			} catch (e) {
@@ -1131,7 +1207,7 @@ export class ConfigurationCCSet extends ConfigurationCC {
 					this.value,
 					this.parameter,
 					valueSize,
-					valueFormat,
+					this.valueFormat!,
 				);
 			}
 		}
@@ -1145,6 +1221,12 @@ export class ConfigurationCCSet extends ConfigurationCC {
 		};
 		if (this.valueSize != undefined) {
 			message["value size"] = this.valueSize;
+		}
+		if (this.valueFormat != undefined) {
+			message["value format"] = getEnumMemberName(
+				ConfigValueFormat,
+				this.valueFormat,
+			);
 		}
 		if (this.value != undefined) {
 			message.value = configValueToString(this.value);
@@ -1251,7 +1333,7 @@ export class ConfigurationCCBulkSet extends ConfigurationCC {
 				const value = this._values[i];
 				const param = this._parameters[i];
 				const valueFormat =
-					this.getParamInformation(param).format ||
+					this.getParamInformation(param).format ??
 					ConfigValueFormat.SignedInteger;
 
 				// Make sure that the given value fits into the value size
@@ -1336,7 +1418,7 @@ export class ConfigurationCCBulkReport extends ConfigurationCC {
 				parseValue(
 					this.payload.slice(5 + i * this.valueSize),
 					this.valueSize,
-					this.getParamInformation(param).format ||
+					this.getParamInformation(param).format ??
 						ConfigValueFormat.SignedInteger,
 				),
 			);
