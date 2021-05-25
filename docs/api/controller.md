@@ -341,6 +341,14 @@ Returns the ID of the controller in the current network.
 * readonly supportsTimers: boolean
 -->
 
+### `isHealNetworkActive`
+
+```ts
+isHealNetworkActive: boolean
+```
+
+Returns whether or not the network or a node is currently being healed.
+
 ## Controller events
 
 The `Controller` class inherits from the Node.js [EventEmitter](https://nodejs.org/api/events.html#events_class_eventemitter) and thus also supports its methods like `on`, `removeListener`, etc. The available events are avaiable:
