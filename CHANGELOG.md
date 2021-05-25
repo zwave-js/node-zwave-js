@@ -2,7 +2,7 @@
 <!--
 	Add placeholder for next release with `wip` snippet
 -->
-## __WORK IN PROGRESS__
+## 7.6.0 (2021-05-26)
 ### Features
 * Add multicast support to `Configuration CC`
 * Add isHealNetworkActive property to controller
