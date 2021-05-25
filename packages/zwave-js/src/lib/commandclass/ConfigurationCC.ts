@@ -30,7 +30,7 @@ import { padStart } from "alcalzone-shared/strings";
 import type { Driver } from "../driver/Driver";
 import { MessagePriority } from "../message/Constants";
 import {
-	PhysicalCCAPI,
+	CCAPI,
 	PollValueImplementation,
 	POLL_VALUE,
 	SetValueImplementation,
@@ -106,7 +106,7 @@ const isParamInfoFromConfigValueId: ValueID = {
 };
 
 @API(CommandClasses.Configuration)
-export class ConfigurationCCAPI extends PhysicalCCAPI {
+export class ConfigurationCCAPI extends CCAPI {
 	public supportsCommand(cmd: ConfigurationCommand): Maybe<boolean> {
 		switch (cmd) {
 			case ConfigurationCommand.Get:
@@ -143,7 +143,57 @@ export class ConfigurationCCAPI extends PhysicalCCAPI {
 			throwWrongValueType(this.ccId, property, "number", typeof value);
 		}
 
-		const ccInstance = this.endpoint.createCCInstance(ConfigurationCC)!;
+		let ccInstance: ConfigurationCC;
+		if (this.isSinglecast()) {
+			ccInstance = this.endpoint.createCCInstance(ConfigurationCC)!;
+		} else if (this.isMulticast()) {
+			// Multicast is only possible if the parameter definition is the same on all target nodes
+			const nodes = this.endpoint.node.physicalNodes;
+			if (
+				!nodes.every((node) =>
+					node
+						.getEndpoint(this.endpoint.index)
+						?.supportsCC(CommandClasses.Configuration),
+				)
+			) {
+				throw new ZWaveError(
+					`The multicast setValue API for Configuration CC requires all virtual target endpoints to support Configuration CC!`,
+					ZWaveErrorCodes.CC_Invalid,
+				);
+			}
+			// Figure out if all the relevant info is the same
+			const paramInfos = this.endpoint.node.physicalNodes.map((node) =>
+				node
+					.getEndpoint(this.endpoint.index)!
+					.createCCInstance(ConfigurationCC)!
+					.getParamInformation(property, propertyKey),
+			);
+			if (
+				!paramInfos.length ||
+				!paramInfos.every((info, index) => {
+					if (index === 0) return true;
+					return (
+						info.valueSize === paramInfos[0].valueSize &&
+						info.format === paramInfos[0].format
+					);
+				})
+			) {
+				throw new ZWaveError(
+					`The multicast setValue API for Configuration CC requires all virtual target nodes to have the same parameter definition!`,
+					ZWaveErrorCodes.CC_Invalid,
+				);
+			}
+			// If it is, just use the first node to create the CC instance
+			ccInstance = this.endpoint.node.physicalNodes[0]
+				.getEndpoint(this.endpoint.index)!
+				.createCCInstance(ConfigurationCC)!;
+		} else {
+			throw new ZWaveError(
+				`The setValue API for Configuration CC is not supported via broadcast!`,
+				ZWaveErrorCodes.CC_NotSupported,
+			);
+		}
+
 		let valueSize = ccInstance.getParamInformation(property).valueSize;
 		const valueFormat =
 			ccInstance.getParamInformation(property).format ??
@@ -192,8 +242,13 @@ export class ConfigurationCCAPI extends PhysicalCCAPI {
 
 		await this.set(property, targetValue, valueSize as any, valueFormat);
 
-		// Verify the current value after a delay
-		this.schedulePoll({ property, propertyKey }, 1000);
+		if ((this as ConfigurationCCAPI).isSinglecast()) {
+			// Verify the current value after a delay
+			(this as ConfigurationCCAPI).schedulePoll(
+				{ property, propertyKey },
+				1000,
+			);
+		}
 	};
 
 	protected [POLL_VALUE]: PollValueImplementation = async ({
@@ -224,6 +279,9 @@ export class ConfigurationCCAPI extends PhysicalCCAPI {
 			allowUnexpectedResponse?: boolean;
 		},
 	): Promise<ConfigValue | undefined> {
+		// Get-type commands are only possible in singlecast
+		this.assertPhysicalEndpoint(this.endpoint);
+
 		this.assertSupportsCommand(
 			ConfigurationCommand,
 			ConfigurationCommand.Get,
@@ -313,6 +371,9 @@ export class ConfigurationCCAPI extends PhysicalCCAPI {
 
 	/** Resets all configuration parameters to their default value */
 	public async resetAll(): Promise<void> {
+		// This is dangerous - don't allow resetting all parameters via multicast
+		this.assertPhysicalEndpoint(this.endpoint);
+
 		this.assertSupportsCommand(
 			ConfigurationCommand,
 			ConfigurationCommand.DefaultReset,
@@ -327,6 +388,9 @@ export class ConfigurationCCAPI extends PhysicalCCAPI {
 
 	// eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
 	public async getProperties(parameter: number) {
+		// Get-type commands are only possible in singlecast
+		this.assertPhysicalEndpoint(this.endpoint);
+
 		const cc = new ConfigurationCCPropertiesGet(this.driver, {
 			nodeId: this.endpoint.nodeId,
 			// Don't set an endpoint here, Configuration is device specific, not endpoint specific
@@ -354,6 +418,9 @@ export class ConfigurationCCAPI extends PhysicalCCAPI {
 
 	/** Requests the name of a configuration parameter from the node */
 	public async getName(parameter: number): Promise<string | undefined> {
+		// Get-type commands are only possible in singlecast
+		this.assertPhysicalEndpoint(this.endpoint);
+
 		const cc = new ConfigurationCCNameGet(this.driver, {
 			nodeId: this.endpoint.nodeId,
 			// Don't set an endpoint here, Configuration is device specific, not endpoint specific
@@ -368,6 +435,9 @@ export class ConfigurationCCAPI extends PhysicalCCAPI {
 
 	/** Requests usage info for a configuration parameter from the node */
 	public async getInfo(parameter: number): Promise<string | undefined> {
+		// Get-type commands are only possible in singlecast
+		this.assertPhysicalEndpoint(this.endpoint);
+
 		const cc = new ConfigurationCCInfoGet(this.driver, {
 			nodeId: this.endpoint.nodeId,
 			// Don't set an endpoint here, Configuration is device specific, not endpoint specific
@@ -398,6 +468,9 @@ export class ConfigurationCCAPI extends PhysicalCCAPI {
 				ZWaveErrorCodes.ConfigurationCC_NoLegacyScanOnNewDevices,
 			);
 		}
+
+		// Get-type commands are only possible in singlecast
+		this.assertPhysicalEndpoint(this.endpoint);
 
 		// TODO: Reduce the priority of the messages
 		this.driver.controllerLog.logNode(
