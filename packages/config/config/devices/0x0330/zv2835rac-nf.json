@@ -63,14 +63,13 @@
 			"maxValue": 255,
 			"defaultValue": 0,
 			"unsigned": true,
-			"allowManualEntry": true,
 			"options": [
 				{
 					"label": "Instantly",
 					"value": 0
 				},
 				{
-					"label": "Factory default duration. (3 second)",
+					"label": "Factory default duration (3 seconds)",
 					"value": 255
 				}
 			]
