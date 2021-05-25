@@ -48,7 +48,7 @@ export async function loadSensorTypesInternal(
 			if (!hexKeyRegexNDigits.test(key)) {
 				throwInvalidConfig(
 					"sensor types",
-					`found non-hex key "${key}" at the root`,
+					`found invalid key "${key}" at the root. Sensor types must have lowercase hexadecimal IDs.`,
 				);
 			}
 			const keyNum = parseInt(key.slice(2), 16);
@@ -115,9 +115,9 @@ export class SensorType {
 				if (!hexKeyRegexNDigits.test(scaleKey))
 					throwInvalidConfig(
 						"sensor types",
-						`found non-hex key "${scaleKey}" in sensor type ${num2hex(
+						`found invalid key "${scaleKey}" in sensor type ${num2hex(
 							key,
-						)}`,
+						)}. Sensor  scales must have lowercase hexadecimal IDs.`,
 					);
 				const scaleKeyNum = parseInt(scaleKey.slice(2), 16);
 				scales.set(

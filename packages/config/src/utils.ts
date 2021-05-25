@@ -15,9 +15,9 @@ export const externalConfigDir = (() => {
 	return extPath;
 })();
 
-export const hexKeyRegexNDigits = /^0x[a-fA-F0-9]+$/;
-export const hexKeyRegex4Digits = /^0x[a-fA-F0-9]{4}$/;
-export const hexKeyRegex2Digits = /^0x[a-fA-F0-9]{2}$/;
+export const hexKeyRegexNDigits = /^0x[a-f0-9]+$/;
+export const hexKeyRegex4Digits = /^0x[a-f0-9]{4}$/;
+export const hexKeyRegex2Digits = /^0x[a-f0-9]{2}$/;
 
 export function throwInvalidConfig(which: string, reason?: string): never {
 	throw new ZWaveError(

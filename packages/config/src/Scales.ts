@@ -56,7 +56,7 @@ export async function loadNamedScalesInternal(
 				if (!hexKeyRegexNDigits.test(key)) {
 					throwInvalidConfig(
 						"named scales",
-						`found non-hex key "${key}" in the definition for "${name}"`,
+						`found invalid key "${key}" in the definition for "${name}". Scales must have lowercase hexadecimal IDs.`,
 					);
 				}
 				const keyNum = parseInt(key.slice(2), 16);
