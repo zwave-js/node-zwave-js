@@ -28,6 +28,7 @@ async set(
 	parameter: number,
 	value: ConfigValue,
 	valueSize: 1 | 2 | 4,
+	valueFormat: ConfigValueFormat = ConfigValueFormat.SignedInteger,
 ): Promise<void>;
 ```
 
