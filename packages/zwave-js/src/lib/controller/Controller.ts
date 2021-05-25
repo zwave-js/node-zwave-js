@@ -366,7 +366,7 @@ export class ZWaveController extends EventEmitter {
 	}
 
 	private _healNetworkActive: boolean = false;
-	/** Returns wheether network/node is being healed. */
+	/** Returns whether the network or a node is currently being healed. */
 	public get isHealNetworkActive(): boolean {
 		return this._healNetworkActive;
 	}
