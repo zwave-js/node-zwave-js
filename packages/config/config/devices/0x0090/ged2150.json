@@ -2,7 +2,7 @@
 	"manufacturer": "Weiser",
 	"manufacturerId": "0x0090",
 	"label": "GED2150",
-	"description": "SmartCode 10 Toucscreen Electronic Deadbolt",
+	"description": "SmartCode 10 Touchscreen Electronic Deadbolt",
 	"devices": [
 		{
 			"productType": "0x0006",
