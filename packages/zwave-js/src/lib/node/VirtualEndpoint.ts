@@ -89,6 +89,7 @@ export class VirtualEndpoint {
 					property !== "ccId" &&
 					property !== "endpoint" &&
 					property !== "isSupported" &&
+					property !== "withOptions" &&
 					!target.isSupported()
 				) {
 					const hasNodeId = typeof this.nodeId === "number";
