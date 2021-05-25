@@ -347,7 +347,7 @@ Returns the ID of the controller in the current network.
 isHealNetworkActive: boolean
 ```
 
-Returns whether or not the network or a node is currently being healed.
+Returns whether the network or a node is currently being healed.
 
 ## Controller events
 
