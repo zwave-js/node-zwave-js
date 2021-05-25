@@ -2764,7 +2764,7 @@ ${handlers.length} left`,
 				`Restoring the network from cache was successful!`,
 			);
 		} catch (e) {
-			const message = `Restoring the network from cache failed: ${e}`;
+			const message = `Restoring the network from cache failed: ${e.stack}`;
 			this.emit(
 				"error",
 				new ZWaveError(message, ZWaveErrorCodes.Driver_InvalidCache),

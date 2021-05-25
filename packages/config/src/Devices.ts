@@ -343,7 +343,7 @@ function conditionApplies(condition: string, context: unknown): boolean {
 		return !!evaluate(condition, context);
 	} catch (e) {
 		throw new ZWaveError(
-			`Invalid condition "condition"!`,
+			`Invalid condition "${condition}"!`,
 			ZWaveErrorCodes.Config_Invalid,
 		);
 	}
