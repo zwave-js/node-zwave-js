@@ -295,5 +295,41 @@
 				"value": 3
 			}
 		]
+	},
+	"temperature_scale": {
+		"label": "Temperature Scale",
+		"valueSize": 1,
+		"minValue": 0,
+		"maxValue": 1,
+		"defaultValue": 0,
+		"allowManualEntry": false,
+		"options": [
+			{
+				"label": "Fahrenheit",
+				"value": 0
+			},
+			{
+				"label": "Celsius",
+				"value": 1
+			}
+		]
+	},
+	"clock_format": {
+		"label": "Clock Format",
+		"valueSize": 1,
+		"minValue": 0,
+		"maxValue": 1,
+		"defaultValue": 0,
+		"allowManualEntry": false,
+		"options": [
+			{
+				"label": "12 hour",
+				"value": 0
+			},
+			{
+				"label": "24 hour",
+				"value": 1
+			}
+		]
 	}
 }
