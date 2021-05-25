@@ -365,6 +365,12 @@ export class ZWaveController extends EventEmitter {
 		return this._nodes;
 	}
 
+	private _healNetworkActive: boolean = false;
+	/** Returns whether the network or a node is currently being healed. */
+	public get isHealNetworkActive(): boolean {
+		return this._healNetworkActive;
+	}
+
 	/** Returns a reference to the (virtual) broadcast node, which allows sending commands to all nodes */
 	public getBroadcastNode(): VirtualNode {
 		return new VirtualNode(
@@ -1452,7 +1458,6 @@ export class ZWaveController extends EventEmitter {
 		return true; // Don't invoke any more handlers
 	}
 
-	private _healNetworkActive: boolean = false;
 	private _healNetworkProgress = new Map<number, HealNodeStatus>();
 
 	/**
