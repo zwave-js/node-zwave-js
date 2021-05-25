@@ -260,7 +260,7 @@ error in compat option commandClasses.add`,
 					throwInvalidConfig(
 						"devices",
 						`config/devices/${filename}:
-All keys in compat option commandClasses.add must be 2-digit hex numbers!`,
+All keys in compat option commandClasses.add must be 2-digit lowercase hex numbers!`,
 					);
 				} else if (
 					!Object.values(definition.commandClasses.add).every((v) =>
@@ -301,7 +301,7 @@ error in compat option commandClasses.remove`,
 					throwInvalidConfig(
 						"devices",
 						`config/devices/${filename}:
-All keys in compat option commandClasses.remove must be 2-digit hex numbers!`,
+All keys in compat option commandClasses.remove must be 2-digit lowercase hex numbers!`,
 					);
 				}
 

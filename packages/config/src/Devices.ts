@@ -373,7 +373,7 @@ export class ConditionalDeviceConfig {
 			throwInvalidConfig(
 				`device`,
 				`packages/config/config/devices/${filename}:
-manufacturer id must be a hexadecimal number with 4 digits`,
+manufacturer id must be a lowercase hexadecimal number with 4 digits`,
 			);
 		}
 		this.manufacturerId = parseInt(definition.manufacturerId, 16);
@@ -401,7 +401,7 @@ ${prop} is not a string`,
 			throwInvalidConfig(
 				`device`,
 				`packages/config/config/devices/${filename}:
-devices is malformed (not an object or type/id that is not a 4-digit hex key)`,
+devices is malformed (not an object or type/id that is not a lowercase 4-digit hex key)`,
 			);
 		}
 		this.devices = (definition.devices as any[]).map(
