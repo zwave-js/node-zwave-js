@@ -1,12 +1,16 @@
 {
 	"manufacturer": "Eaton",
 	"manufacturerId": "0x001a",
-	"label": "RFWC5",
+	"label": "RFWC5 / RFWDC",
 	"description": "5-Scene Keypad",
 	"devices": [
 		{
 			"productType": "0x574d",
 			"productId": "0x0000"
+		}
+		{
+			"productType": "0x574d",
+			"productId": "0xCC09"
 		}
 	],
 	"firmwareVersion": {
