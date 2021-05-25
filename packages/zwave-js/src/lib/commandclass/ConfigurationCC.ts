@@ -146,7 +146,7 @@ export class ConfigurationCCAPI extends PhysicalCCAPI {
 		const ccInstance = this.endpoint.createCCInstance(ConfigurationCC)!;
 		let valueSize = ccInstance.getParamInformation(property).valueSize;
 		const valueFormat =
-			ccInstance.getParamInformation(property).format ||
+			ccInstance.getParamInformation(property).format ??
 			ConfigValueFormat.SignedInteger;
 
 		let targetValue: number;
@@ -190,7 +190,7 @@ export class ConfigurationCCAPI extends PhysicalCCAPI {
 			throwInvalidValueError(value, property, valueSize, valueFormat);
 		}
 
-		await this.set(property, targetValue, valueSize as any);
+		await this.set(property, targetValue, valueSize as any, valueFormat);
 
 		// Verify the current value after a delay
 		this.schedulePoll({ property, propertyKey }, 1000);
@@ -273,6 +273,7 @@ export class ConfigurationCCAPI extends PhysicalCCAPI {
 		parameter: number,
 		value: ConfigValue,
 		valueSize: 1 | 2 | 4,
+		valueFormat: ConfigValueFormat = ConfigValueFormat.SignedInteger,
 	): Promise<void> {
 		this.assertSupportsCommand(
 			ConfigurationCommand,
@@ -285,6 +286,7 @@ export class ConfigurationCCAPI extends PhysicalCCAPI {
 			parameter,
 			value,
 			valueSize,
+			valueFormat,
 		});
 		await this.driver.sendCommand(cc, this.commandOptions);
 	}
@@ -902,7 +904,7 @@ export class ConfigurationCCReport extends ConfigurationCC {
 			// In Config CC v1/v2, this must be SignedInteger
 			// As those nodes don't communicate any parameter information
 			// we fall back to that default value anyways
-			oldParamInformation.format || ConfigValueFormat.SignedInteger,
+			oldParamInformation.format ?? ConfigValueFormat.SignedInteger,
 		);
 		// Store the parameter size and value
 		this.extendParamInformation(this._parameter, undefined, {
@@ -1049,6 +1051,8 @@ type ConfigurationCCSetOptions = CCCommandOptions &
 				parameter: number;
 				resetToDefault?: false;
 				valueSize: number;
+				/** How the value is encoded. Defaults to SignedInteger */
+				valueFormat?: ConfigValueFormat;
 				value: ConfigValue;
 		  }
 	);
@@ -1081,6 +1085,8 @@ export class ConfigurationCCSet extends ConfigurationCC {
 			if (!options.resetToDefault) {
 				// TODO: Default to the stored value size
 				this.valueSize = options.valueSize;
+				this.valueFormat =
+					options.valueFormat ?? ConfigValueFormat.SignedInteger;
 				this.value = options.value;
 			}
 		}
@@ -1089,6 +1095,7 @@ export class ConfigurationCCSet extends ConfigurationCC {
 	public resetToDefault: boolean;
 	public parameter: number;
 	public valueSize: number | undefined;
+	public valueFormat: ConfigValueFormat | undefined;
 	public value: ConfigValue | undefined;
 
 	public serialize(): Buffer {
@@ -1099,21 +1106,17 @@ export class ConfigurationCCSet extends ConfigurationCC {
 		this.payload[1] =
 			(this.resetToDefault ? 0b1000_0000 : 0) | (valueSize & 0b111);
 		if (!this.resetToDefault) {
-			const valueFormat =
-				this.getParamInformation(this.parameter).format ||
-				ConfigValueFormat.SignedInteger;
-
 			// Make sure that the given value fits into the value size
 			if (
 				typeof this.value === "number" &&
-				!isSafeValue(this.value, valueSize, valueFormat)
+				!isSafeValue(this.value, valueSize, this.valueFormat!)
 			) {
 				// If there is a value size configured, check that the given value is compatible
 				throwInvalidValueError(
 					this.value,
 					this.parameter,
 					valueSize,
-					valueFormat,
+					this.valueFormat!,
 				);
 			}
 
@@ -1122,7 +1125,7 @@ export class ConfigurationCCSet extends ConfigurationCC {
 					this.payload,
 					2,
 					valueSize,
-					valueFormat,
+					this.valueFormat!,
 					this.value!,
 				);
 			} catch (e) {
@@ -1131,7 +1134,7 @@ export class ConfigurationCCSet extends ConfigurationCC {
 					this.value,
 					this.parameter,
 					valueSize,
-					valueFormat,
+					this.valueFormat!,
 				);
 			}
 		}
@@ -1145,6 +1148,12 @@ export class ConfigurationCCSet extends ConfigurationCC {
 		};
 		if (this.valueSize != undefined) {
 			message["value size"] = this.valueSize;
+		}
+		if (this.valueFormat != undefined) {
+			message["value format"] = getEnumMemberName(
+				ConfigValueFormat,
+				this.valueFormat,
+			);
 		}
 		if (this.value != undefined) {
 			message.value = configValueToString(this.value);
@@ -1251,7 +1260,7 @@ export class ConfigurationCCBulkSet extends ConfigurationCC {
 				const value = this._values[i];
 				const param = this._parameters[i];
 				const valueFormat =
-					this.getParamInformation(param).format ||
+					this.getParamInformation(param).format ??
 					ConfigValueFormat.SignedInteger;
 
 				// Make sure that the given value fits into the value size
@@ -1336,7 +1345,7 @@ export class ConfigurationCCBulkReport extends ConfigurationCC {
 				parseValue(
 					this.payload.slice(5 + i * this.valueSize),
 					this.valueSize,
-					this.getParamInformation(param).format ||
+					this.getParamInformation(param).format ??
 						ConfigValueFormat.SignedInteger,
 				),
 			);
