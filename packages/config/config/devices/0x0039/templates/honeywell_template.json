@@ -387,7 +387,6 @@
 	},
 	"auxiliary_heat_droop": {
 		"label": "Auxiliary Heat Droop",
-		"description": "Allowable range: 2-15",
 		"valueSize": 1,
 		"minValue": 0,
 		"maxValue": 15,
@@ -626,11 +625,11 @@
 				"value": 0
 			},
 			{
-				"label": "6 Months",
+				"label": "6 months",
 				"value": 1
 			},
 			{
-				"label": "12 Months",
+				"label": "12 months",
 				"value": 2
 			}
 		]
