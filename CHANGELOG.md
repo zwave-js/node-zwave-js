@@ -2,6 +2,25 @@
 <!--
 	Add placeholder for next release with `wip` snippet
 -->
+## __WORK IN PROGRESS__
+### Features
+* Add multicast support to `Configuration CC`
+* Add isHealNetworkActive property to controller
+
+### Bugfixes
+* Change GED2150 config file extension to json, so it gets picked up
+* Fixed typo in error message for "invalid condition"
+* Fixed an error during `Multi Channel Association CC` when `Association CC` is not supported
+
+### Config file changes
+* Add additional version of Eaton 5-Scene Keypad
+* Correct parameter label for Aeotec DSC11
+* Added support for Sunricher ZV2835RAC-NF
+* Update Honeywell TH6320ZW2003 and add template
+
+### Changes under the hood
+* Enforce hex keys in config files to be lowercase
+
 ## 7.5.2 (2021-05-25)
 ### Bugfixes
 * `VirtualEndpoint` and `VirtualNode` are now exported through `zwave-js` and `zwave-js/Node`
