@@ -218,7 +218,9 @@ Creates a virtual node that can be used to send commands to multiple supporting 
 > -   Broadcasting or multicasting commands is not possible using `Security S0`.
 > -   Secure multicast requires `Security S2`, which is not yet supported by `zwave-js` and requires devices that support it.
 
-### Configure RF region
+### Configuring the Z-Wave radio
+
+#### Configure RF region
 
 ```ts
 setRFRegion(region: RFRegion): Promise<boolean>
@@ -247,7 +249,7 @@ export enum RFRegion {
 
 > [!ATTENTION] Not all controllers support configuring the RF region. These methods will throw if they are not supported
 
-### Configure TX powerlevel
+#### Configure TX powerlevel
 
 ```ts
 setPowerlevel(powerlevel: number, measured0dBm: number): Promise<boolean>;
@@ -260,7 +262,7 @@ Configure or read the TX powerlevel setting of the Z-Wave API. `powerlevel` is t
 
 > [!WARNING] Increasing the powerlevel (i.e. "shouting louder") does not improve reception of the controller and may even be **against the law**. Use at your own risk!
 
-### Turn Z-Wave Radio on/off
+#### Turn Z-Wave Radio on/off
 
 ```ts
 toggleRF(enabled: boolean): Promise<boolean>
