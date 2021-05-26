@@ -268,6 +268,8 @@ toggleRF(enabled: boolean): Promise<boolean>
 
 When accessing the controller memory, the Z-Wave radio **must** be turned off with `toggleRF(false)` to avoid resource conflicts and inconsistent data. Afterwards the radio can be turned back on with `toggleRF(true)`.
 
+This method returns `true` when turning the radio on or off succeeded, `false` otherwise.
+
 ### Reading from and writing to the controller memory (external NVM)
 
 > [!WARNING] The Z-Wave radio **must** be turned off when accessing the NVM.
