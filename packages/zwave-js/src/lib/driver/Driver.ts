@@ -47,6 +47,7 @@ import { interpret } from "xstate";
 import { FirmwareUpdateStatus } from "../commandclass";
 import { AssociationGroupInfoCC } from "../commandclass/AssociationGroupInfoCC";
 import {
+	assertValidCCs,
 	CommandClass,
 	getImplementedVersion,
 } from "../commandclass/CommandClass";
@@ -1598,12 +1599,16 @@ export class Driver extends EventEmitter {
 
 		let msg: Message | undefined;
 		try {
+			// Parse the message while remembering potential decoding errors in embedded CCs
+			// This way we can log the invalid CC contents
 			msg = Message.from(this, data);
+			// Then ensure there are no errors
+			if (isCommandClassContainer(msg)) assertValidCCs(msg);
 			// all good, send ACK
 			await this.writeHeader(MessageHeaders.ACK);
 		} catch (e) {
 			try {
-				const response = this.handleDecodeError(e, data);
+				const response = this.handleDecodeError(e, data, msg);
 				if (response) await this.writeHeader(response);
 			} catch (e) {
 				if (
@@ -1615,6 +1620,8 @@ export class Driver extends EventEmitter {
 					return;
 				}
 			}
+			// Don't keep handling the message
+			msg = undefined;
 		}
 
 		// If the message could be decoded, forward it to the send thread
@@ -1665,6 +1672,7 @@ export class Driver extends EventEmitter {
 	private handleDecodeError(
 		e: Error,
 		data: Buffer,
+		msg: Message | undefined,
 	): MessageHeaders | undefined {
 		if (isZWaveError(e)) {
 			switch (e.code) {
@@ -1693,15 +1701,32 @@ export class Driver extends EventEmitter {
 					return MessageHeaders.ACK;
 
 				case ZWaveErrorCodes.PacketFormat_InvalidPayload:
-					this.driverLog.print(
-						`Dropping message with invalid data${
-							typeof e.context === "string"
-								? ` (Reason: ${e.context})`
-								: ""
-						}:
+					if (msg) {
+						this.driverLog.print(
+							`Dropping message with invalid payload`,
+							"warn",
+						);
+						try {
+							this.driverLog.logMessage(msg, {
+								direction: "inbound",
+							});
+						} catch (e) {
+							// We shouldn't throw just because logging a message fails
+							this.driverLog.print(
+								`Logging a message failed: ${e.message}`,
+							);
+						}
+					} else {
+						this.driverLog.print(
+							`Dropping message with invalid payload${
+								typeof e.context === "string"
+									? ` (Reason: ${e.context})`
+									: ""
+							}:
 0x${data.toString("hex")}`,
-						"warn",
-					);
+							"warn",
+						);
+					}
 					return MessageHeaders.ACK;
 
 				case ZWaveErrorCodes.Driver_NoSecurity:

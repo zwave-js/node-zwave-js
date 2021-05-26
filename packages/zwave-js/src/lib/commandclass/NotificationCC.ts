@@ -38,6 +38,7 @@ import {
 	expectedCCResponse,
 	gotDeserializationOptions,
 	implementedVersion,
+	InvalidCC,
 } from "./CommandClass";
 import { UserCodeCommand } from "./UserCodeCC";
 
@@ -1009,6 +1010,8 @@ export class NotificationCCReport extends NotificationCC {
 						fromEncapsulation: true,
 						encapCC: this,
 					});
+					validatePayload(!(cc instanceof InvalidCC));
+
 					let json = cc.toJSON();
 					// If a CC has no good toJSON() representation, we're only interested in the payload
 					if (

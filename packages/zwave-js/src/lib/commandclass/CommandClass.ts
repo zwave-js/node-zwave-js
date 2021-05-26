@@ -36,6 +36,10 @@ import {
 	EncapsulatingCommandClass,
 	isEncapsulatingCommandClass,
 } from "./EncapsulatingCommandClass";
+import {
+	ICommandClassContainer,
+	isCommandClassContainer,
+} from "./ICommandClassContainer";
 
 export type MulticastDestination = [number, number, ...number[]];
 
@@ -137,6 +141,8 @@ export class CommandClass {
 			this.ccCommand = ccCommand;
 			this.payload = payload;
 		}
+
+		if (this instanceof InvalidCC) return;
 
 		if (this.isSinglecast() && this.nodeId !== NODE_ID_BROADCAST) {
 			// For singlecast CCs, set the CC version as high as possible
@@ -332,8 +338,24 @@ export class CommandClass {
 	): CommandClass {
 		// Fall back to unspecified command class in case we receive one that is not implemented
 		const Constructor = CommandClass.getConstructor(options.data);
-		const ret = new Constructor(driver, options);
-		return ret;
+		try {
+			const ret = new Constructor(driver, options);
+			return ret;
+		} catch (e: unknown) {
+			// Indicate invalid payloads with a special CC type
+			if (
+				isZWaveError(e) &&
+				e.code === ZWaveErrorCodes.PacketFormat_InvalidPayload
+			) {
+				return new InvalidCC(driver, {
+					nodeId: options.fromEncapsulation
+						? options.encapCC.nodeId
+						: options.nodeId,
+					ccId: CommandClass.getCommandClass(options.data),
+				});
+			}
+			throw e;
+		}
 	}
 
 	/** Generates a representation of this CC for the log */
@@ -955,6 +977,42 @@ export class CommandClass {
 			}
 		}
 		return false;
+	}
+}
+
+export interface InvalidCCCreationOptions extends CommandClassCreationOptions {
+	reason?: string;
+}
+
+export class InvalidCC extends CommandClass {
+	public constructor(driver: Driver, options: InvalidCCCreationOptions) {
+		super(driver, options);
+		this.reason = options.reason;
+	}
+
+	public readonly reason?: string;
+
+	public toLogEntry(): MessageOrCCLogEntry {
+		return {
+			tags: [`${getCCName(this.ccId)} CC`, "INVALID"],
+			message: this.reason
+				? {
+						error: this.reason,
+				  }
+				: undefined,
+		};
+	}
+}
+
+export function assertValidCCs(container: ICommandClassContainer): void {
+	if (container.command instanceof InvalidCC) {
+		throw new ZWaveError(
+			"The message payload is invalid!",
+			ZWaveErrorCodes.PacketFormat_InvalidPayload,
+			container.command.reason,
+		);
+	} else if (isCommandClassContainer(container.command)) {
+		assertValidCCs(container.command);
 	}
 }
 

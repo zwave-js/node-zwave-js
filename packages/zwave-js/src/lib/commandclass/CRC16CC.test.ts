@@ -1,8 +1,7 @@
-import { assertZWaveError, ZWaveErrorCodes } from "@zwave-js/core";
 import type { Driver } from "../driver/Driver";
 import { createEmptyMockDriver } from "../test/mocks";
 import { BasicCCGet, BasicCCSet } from "./BasicCC";
-import { CommandClass } from "./CommandClass";
+import { CommandClass, InvalidCC } from "./CommandClass";
 import { CRC16CC, CRC16CCCommandEncapsulation } from "./CRC16CC";
 import { isEncapsulatingCommandClass } from "./EncapsulatingCommandClass";
 
@@ -52,7 +51,7 @@ describe("lib/commandclass/CRC16 => ", () => {
 			);
 		});
 
-		it("deserializing a CC with a wrong checksum should throw", () => {
+		it("deserializing a CC with a wrong checksum should result in an invalid CC", () => {
 			const basicCCSet = new BasicCCSet(fakeDriver, {
 				nodeId: 3,
 				targetValue: 89,
@@ -63,16 +62,11 @@ describe("lib/commandclass/CRC16 => ", () => {
 			const serialized = crc16.serialize();
 			serialized[serialized.length - 1] ^= 0xff;
 
-			assertZWaveError(
-				() =>
-					CommandClass.from(fakeDriver, {
-						nodeId: basicCCSet.nodeId as number,
-						data: serialized,
-					}),
-				{
-					errorCode: ZWaveErrorCodes.PacketFormat_InvalidPayload,
-				},
-			);
+			const decoded = CommandClass.from(fakeDriver, {
+				nodeId: basicCCSet.nodeId as number,
+				data: serialized,
+			});
+			expect(decoded).toBeInstanceOf(InvalidCC);
 		});
 	});
 });
