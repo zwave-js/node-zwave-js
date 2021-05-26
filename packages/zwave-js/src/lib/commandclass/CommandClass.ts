@@ -994,7 +994,7 @@ export class InvalidCC extends CommandClass {
 
 	public toLogEntry(): MessageOrCCLogEntry {
 		return {
-			tags: ["Invalid CC"],
+			tags: [`${getCCName(this.ccId)} CC`, "INVALID"],
 			message: this.reason
 				? {
 						error: this.reason,

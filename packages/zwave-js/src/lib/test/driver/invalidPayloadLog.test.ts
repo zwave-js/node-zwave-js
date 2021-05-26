@@ -90,7 +90,7 @@ describe("regression tests", () => {
 		await wait(10);
 		assertMessage(spyTransport, {
 			callNumber: 1,
-			predicate: (msg) => msg.includes("└─[Invalid CC]"),
+			predicate: (msg) => msg.includes("└─[Binary Sensor CC] [INVALID]"),
 		});
 		expect(serialport.lastWrite).toEqual(ACK);
 	});
