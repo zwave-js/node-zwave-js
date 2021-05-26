@@ -2,6 +2,18 @@
 <!--
 	Add placeholder for next release with `wip` snippet
 -->
+## __WORK IN PROGRESS__
+### Features
+* Add APIs to read and write external NVM
+* Add API to toggle Z-Wave radio on/off
+* Partially decode dropped commands and give insight by logging them as good as possible
+
+### Bugfixes
+* Fixed a crash that could be caused by loading device configuration files with conditions when a node's firmware version is unknown
+
+### Config file changes
+* Remove invalid device ID for MINI KEYPAD RFID
+
 ## 7.6.0 (2021-05-26)
 ### Features
 * Add multicast support to `Configuration CC`
