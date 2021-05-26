@@ -49,6 +49,14 @@ async getNodeNeighbors(nodeId: number): Promise<readonly number[]>
 
 Returns the known list of neighbors for a node.
 
+> [!ATTENTION] Especially older Z-Wave sticks can get stuck if you call this too often while the Z-Wave radio is still on.
+
+To get around this:
+
+1. Turn the radio off with `controller.toggleRF(false)`
+2. Batch all `getNodeNeighbors` requests together
+3. Turn the radio back on with `controller.toggleRF(true`)
+
 ### `healNode`
 
 ```ts
@@ -210,7 +218,9 @@ Creates a virtual node that can be used to send commands to multiple supporting 
 > -   Broadcasting or multicasting commands is not possible using `Security S0`.
 > -   Secure multicast requires `Security S2`, which is not yet supported by `zwave-js` and requires devices that support it.
 
-### Configure RF region
+### Configuring the Z-Wave radio
+
+#### Configure RF region
 
 ```ts
 setRFRegion(region: RFRegion): Promise<boolean>
@@ -239,7 +249,7 @@ export enum RFRegion {
 
 > [!ATTENTION] Not all controllers support configuring the RF region. These methods will throw if they are not supported
 
-### Configure TX powerlevel
+#### Configure TX powerlevel
 
 ```ts
 setPowerlevel(powerlevel: number, measured0dBm: number): Promise<boolean>;
@@ -251,6 +261,86 @@ Configure or read the TX powerlevel setting of the Z-Wave API. `powerlevel` is t
 > [!ATTENTION] Not all controllers support configuring the TX powerlevel. These methods will throw if they are not supported.
 
 > [!WARNING] Increasing the powerlevel (i.e. "shouting louder") does not improve reception of the controller and may even be **against the law**. Use at your own risk!
+
+#### Turn Z-Wave Radio on/off
+
+```ts
+toggleRF(enabled: boolean): Promise<boolean>
+```
+
+When accessing the controller memory, the Z-Wave radio **must** be turned off with `toggleRF(false)` to avoid resource conflicts and inconsistent data. Afterwards the radio can be turned back on with `toggleRF(true)`.
+
+This method returns `true` when turning the radio on or off succeeded, `false` otherwise.
+
+### Reading from and writing to the controller memory (external NVM)
+
+> [!WARNING] The Z-Wave radio **must** be turned off when accessing the NVM.
+
+#### Retrieving information about the NVM
+
+```ts
+getNVMId(): Promise<NVMId>
+```
+
+Returns information of the controller's external NVM. The return value has the following shape:
+
+```ts
+interface NVMId {
+	readonly nvmManufacturerId: number;
+	readonly memoryType: NVMType;
+	readonly memorySize: NVMSize;
+}
+```
+
+#### Reading from the NVM
+
+```ts
+externalNVMReadByte(offset: number): Promise<number>
+```
+
+Reads a byte from the external NVM at the given offset.
+
+```ts
+externalNVMReadBuffer(offset: number, length: number): Promise<Buffer>
+```
+
+Reads a buffer from the external NVM at the given offset. The returned buffer length is limited by the Serial API capabilities and not guaranteed to equal `length`.
+
+#### Writing to the NVM
+
+```ts
+externalNVMWriteByte(offset: number, data: number): Promise<boolean>
+```
+
+Writes a byte to the external NVM at the given offset
+
+```ts
+externalNVMWriteBuffer(offset: number, buffer: Buffer): Promise<boolean>
+```
+
+Writes a buffer to the external NVM at the given offset.
+
+> [!WARNING] These methods can write in the full NVM address space and are not offset to start at the application area. Take care not to accidentally overwrite the protocol NVM area!
+
+#### NVM backup and restore
+
+```ts
+backupNVMRaw(onProgress?: (bytesRead: number, total: number) => void): Promise<Buffer>
+```
+
+Creates a backup of the NVM and returns the raw data as a Buffer. The optional argument can be used to monitor the progress of the operation, which may take several seconds up to a few minutes depending on the NVM size.
+
+> [!NOTE] `backupNVMRaw` automatically turns the Z-Wave radio on/off during the backup.
+
+```ts
+restoreNVMRaw(nvmData: Buffer, onProgress?: (bytesWritten: number, total: number) => void): Promise<void>
+```
+
+Restores an NVM backup that was created with `backupNVMRaw`. The optional 2nd argument can be used to monitor the progress of the operation, which may take several seconds up to a few minutes depending on the NVM size.
+
+> [!NOTE] `restoreNVMRaw` automatically turns the Z-Wave radio on/off during the restore.
+
+> [!WARNING] A failure during this process may brick your controller. Use at your own risk!
 
 ## Controller properties
 

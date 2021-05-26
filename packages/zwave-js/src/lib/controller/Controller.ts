@@ -79,6 +79,32 @@ import {
 	SerialAPISetup_SetTXStatusReportResponse,
 } from "../serialapi/misc/SerialAPISetupMessages";
 import {
+	SetRFReceiveModeRequest,
+	SetRFReceiveModeResponse,
+} from "../serialapi/misc/SetRFReceiveModeMessages";
+import {
+	ExtNVMReadLongBufferRequest,
+	ExtNVMReadLongBufferResponse,
+} from "../serialapi/nvm/ExtNVMReadLongBufferMessages";
+import {
+	ExtNVMReadLongByteRequest,
+	ExtNVMReadLongByteResponse,
+} from "../serialapi/nvm/ExtNVMReadLongByteMessages";
+import {
+	ExtNVMWriteLongBufferRequest,
+	ExtNVMWriteLongBufferResponse,
+} from "../serialapi/nvm/ExtNVMWriteLongBufferMessages";
+import {
+	ExtNVMWriteLongByteRequest,
+	ExtNVMWriteLongByteResponse,
+} from "../serialapi/nvm/ExtNVMWriteLongByteMessages";
+import {
+	GetNVMIdRequest,
+	GetNVMIdResponse,
+	NVMId,
+	nvmSizeToBufferSize,
+} from "../serialapi/nvm/GetNVMIdMessages";
+import {
 	AddNodeStatus,
 	AddNodeToNetworkRequest,
 	AddNodeType,
@@ -2963,5 +2989,197 @@ ${associatedNodes.join(", ")}`,
 				}
 			}
 		}
+	}
+
+	/** Turns the Z-Wave radio on or off */
+	public async toggleRF(enabled: boolean): Promise<boolean> {
+		try {
+			this.driver.controllerLog.print(
+				`Turning RF ${enabled ? "on" : "off"}...`,
+			);
+			const ret = await this.driver.sendMessage<SetRFReceiveModeResponse>(
+				new SetRFReceiveModeRequest(this.driver, { enabled }),
+			);
+			return ret.isOK();
+		} catch (e) {
+			this.driver.controllerLog.print(
+				`Error turning RF ${enabled ? "on" : "off"}: ${e.message}`,
+				"error",
+			);
+			return false;
+		}
+	}
+
+	/** Returns information of the controller's external NVM */
+	public async getNVMId(): Promise<NVMId> {
+		const ret = await this.driver.sendMessage<GetNVMIdResponse>(
+			new GetNVMIdRequest(this.driver),
+		);
+		return pick(ret, ["nvmManufacturerId", "memoryType", "memorySize"]);
+	}
+
+	/** Reads a byte from the external NVM at the given offset */
+	public async externalNVMReadByte(offset: number): Promise<number> {
+		const ret = await this.driver.sendMessage<ExtNVMReadLongByteResponse>(
+			new ExtNVMReadLongByteRequest(this.driver, { offset }),
+		);
+		return ret.byte;
+	}
+
+	/**
+	 * Writes a byte to the external NVM at the given offset
+	 * **WARNING:** This function can write in the full NVM address space and is not offset to start at the application area.
+	 * Take care not to accidentally overwrite the protocol NVM area!
+	 *
+	 * @returns `true` when writing succeeded, `false` otherwise
+	 */
+	public async externalNVMWriteByte(
+		offset: number,
+		data: number,
+	): Promise<boolean> {
+		const ret = await this.driver.sendMessage<ExtNVMWriteLongByteResponse>(
+			new ExtNVMWriteLongByteRequest(this.driver, { offset, byte: data }),
+		);
+		return ret.success;
+	}
+
+	/** Reads a buffer from the external NVM at the given offset */
+	public async externalNVMReadBuffer(
+		offset: number,
+		length: number,
+	): Promise<Buffer> {
+		const ret = await this.driver.sendMessage<ExtNVMReadLongBufferResponse>(
+			new ExtNVMReadLongBufferRequest(this.driver, { offset, length }),
+		);
+		return ret.buffer;
+	}
+
+	/**
+	 * Writes a buffer to the external NVM at the given offset
+	 * **WARNING:** This function can write in the full NVM address space and is not offset to start at the application area.
+	 * Take care not to accidentally overwrite the protocol NVM area!
+	 *
+	 * @returns `true` when writing succeeded, `false` otherwise
+	 */
+	public async externalNVMWriteBuffer(
+		offset: number,
+		buffer: Buffer,
+	): Promise<boolean> {
+		const ret = await this.driver.sendMessage<ExtNVMWriteLongBufferResponse>(
+			new ExtNVMWriteLongBufferRequest(this.driver, {
+				offset,
+				buffer,
+			}),
+		);
+		return ret.success;
+	}
+
+	/**
+	 * Creates a backup of the NVM and returns the raw data as a Buffer. The Z-Wave radio is turned off/on automatically.
+	 * @param onProgress Can be used to monitor the progress of the operation, which may take several seconds up to a few minutes depending on the NVM size
+	 * @returns The raw NVM buffer
+	 */
+	public async backupNVMRaw(
+		onProgress?: (bytesRead: number, total: number) => void,
+	): Promise<Buffer> {
+		// Turn Z-Wave radio off to avoid having the protocol write to the NVM while dumping it
+		if (!(await this.toggleRF(false))) {
+			throw new ZWaveError(
+				"Could not turn off the Z-Wave radio before creating NVM backup!",
+				ZWaveErrorCodes.Controller_ResponseNOK,
+			);
+		}
+
+		const size = nvmSizeToBufferSize((await this.getNVMId()).memorySize);
+		if (!size) {
+			throw new ZWaveError(
+				"Unknown NVM size - cannot backup!",
+				ZWaveErrorCodes.Controller_NotSupported,
+			);
+		}
+
+		const ret = Buffer.allocUnsafe(size);
+		let offset = 0;
+		// Try reading the maximum size at first, the Serial API will return chunks in a size it supports
+		// For some reason, there is no documentation and no official command for this
+		let chunkSize: number = Math.min(0xffff, ret.length);
+		while (offset < ret.length) {
+			const chunk = await this.externalNVMReadBuffer(
+				offset,
+				Math.min(chunkSize, ret.length - offset),
+			);
+			chunk.copy(ret, offset);
+			offset += chunk.length;
+			if (chunkSize > chunk.length) chunkSize = chunk.length;
+
+			// Report progress for listeners
+			if (onProgress) setImmediate(() => onProgress(offset, size));
+		}
+
+		// TODO: You can also get away with eliding all the 0xff pages. The NVR also holds the page size of the NVM (NVMP),
+		// so you can figure out which pages you don't have to save or restore. If you do this, you need to make sure to issue a
+		// "factory reset" before restoring the NVM - that'll blank out the NVM to 0xffs before initializing it.
+
+		// Turn Z-Wave radio back on
+		await this.toggleRF(true);
+
+		return ret;
+	}
+
+	/**
+	 * Restores an NVM backup that was created with `backupNVMRaw`. The Z-Wave radio is turned off/on automatically.
+	 *
+	 * **WARNING:** A failure during this process may brick your controller. Use at your own risk!
+	 * @param nvmData The raw NVM backup to be restored
+	 * @param onProgress Can be used to monitor the progress of the operation, which may take several seconds up to a few minutes depending on the NVM size
+	 */
+	public async restoreNVMRaw(
+		nvmData: Buffer,
+		onProgress?: (bytesWritten: number, total: number) => void,
+	): Promise<void> {
+		// Turn Z-Wave radio off to avoid having the protocol write to the NVM while dumping it
+		if (!(await this.toggleRF(false))) {
+			throw new ZWaveError(
+				"Could not turn off the Z-Wave radio before restoring NVM backup!",
+				ZWaveErrorCodes.Controller_ResponseNOK,
+			);
+		}
+
+		const size = nvmSizeToBufferSize((await this.getNVMId()).memorySize);
+		if (!size) {
+			throw new ZWaveError(
+				"Unknown NVM size - cannot restore!",
+				ZWaveErrorCodes.Controller_NotSupported,
+			);
+		} else if (size !== nvmData.length) {
+			throw new ZWaveError(
+				"The given data does not match the NVM size - cannot restore!",
+				ZWaveErrorCodes.Argument_Invalid,
+			);
+		}
+
+		// TODO: You can also get away with eliding all the 0xff pages. The NVR also holds the page size of the NVM (NVMP),
+		// so you can figure out which pages you don't have to save or restore. If you do this, you need to make sure to issue a
+		// "factory reset" before restoring the NVM - that'll blank out the NVM to 0xffs before initializing it.
+
+		// Figure out the maximum chunk size the Serial API supports
+		// For some reason, there is no documentation and no official command for this
+		// The write requests need 5 bytes more than the read response, so subtract 5 from the returned length
+		const chunkSize =
+			(await this.externalNVMReadBuffer(0, 0xffff)).length - 5;
+
+		for (let offset = 0; offset < nvmData.length; offset += chunkSize) {
+			await this.externalNVMWriteBuffer(
+				offset,
+				nvmData.slice(offset, offset + chunkSize),
+			);
+			// Report progress for listeners
+			if (onProgress) setImmediate(() => onProgress(offset, size));
+		}
+
+		// Turn Z-Wave radio back on
+		await this.toggleRF(true);
+
+		// TODO: Soft Reset
 	}
 }

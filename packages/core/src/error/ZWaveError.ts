@@ -33,6 +33,9 @@ export enum ZWaveErrorCodes {
 	Controller_InclusionFailed,
 	Controller_ExclusionFailed,
 
+	/** Tried to do something the controller does not support */
+	Controller_NotSupported,
+
 	/** The interview for this node was restarted by the user */
 	Controller_InterviewRestarted,
 
