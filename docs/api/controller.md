@@ -49,6 +49,14 @@ async getNodeNeighbors(nodeId: number): Promise<readonly number[]>
 
 Returns the known list of neighbors for a node.
 
+> [!ATTENTION] Especially older Z-Wave sticks can get stuck if you call this too often while the Z-Wave radio is still on.
+
+To get around this:
+
+1. Turn the radio off with `controller.toggleRF(false)`
+2. Batch all `getNodeNeighbors` requests together
+3. Turn the radio back on with `controller.toggleRF(true`)
+
 ### `healNode`
 
 ```ts
