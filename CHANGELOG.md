@@ -2,7 +2,7 @@
 <!--
 	Add placeholder for next release with `wip` snippet
 -->
-## __WORK IN PROGRESS__
+## 7.7.0 (2021-05-27)
 ### Features
 * Add APIs to read and write external NVM
 * Add API to toggle Z-Wave radio on/off
