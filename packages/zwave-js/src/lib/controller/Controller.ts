@@ -3074,6 +3074,11 @@ ${associatedNodes.join(", ")}`,
 		return ret.success;
 	}
 
+	/**
+	 * Creates a backup of the NVM and returns the raw data as a Buffer. The Z-Wave radio is turned off/on automatically.
+	 * @param onProgress Can be used to monitor the progress of the operation, which may take several seconds up to a few minutes depending on the NVM size
+	 * @returns The raw NVM buffer
+	 */
 	public async backupNVMRaw(
 		onProgress?: (bytesRead: number, total: number) => void,
 	): Promise<Buffer> {
@@ -3119,5 +3124,62 @@ ${associatedNodes.join(", ")}`,
 		await this.toggleRF(true);
 
 		return ret;
+	}
+
+	/**
+	 * Restores an NVM backup that was created with `backupNVMRaw`. The Z-Wave radio is turned off/on automatically.
+	 *
+	 * **WARNING:** A failure during this process may brick your controller. Use at your own risk!
+	 * @param nvmData The raw NVM backup to be restored
+	 * @param onProgress Can be used to monitor the progress of the operation, which may take several seconds up to a few minutes depending on the NVM size
+	 */
+	public async restoreNVMRaw(
+		nvmData: Buffer,
+		onProgress?: (bytesWritten: number, total: number) => void,
+	): Promise<void> {
+		// Turn Z-Wave radio off to avoid having the protocol write to the NVM while dumping it
+		if (!(await this.toggleRF(false))) {
+			throw new ZWaveError(
+				"Could not turn off the Z-Wave radio before restoring NVM backup!",
+				ZWaveErrorCodes.Controller_ResponseNOK,
+			);
+		}
+
+		const size = nvmSizeToBufferSize((await this.getNVMId()).memorySize);
+		if (!size) {
+			throw new ZWaveError(
+				"Unknown NVM size - cannot restore!",
+				ZWaveErrorCodes.Controller_NotSupported,
+			);
+		} else if (size !== nvmData.length) {
+			throw new ZWaveError(
+				"The given data does not match the NVM size - cannot restore!",
+				ZWaveErrorCodes.Argument_Invalid,
+			);
+		}
+
+		// TODO: You can also get away with eliding all the 0xff pages. The NVR also holds the page size of the NVM (NVMP),
+		// so you can figure out which pages you don't have to save or restore. If you do this, you need to make sure to issue a
+		// "factory reset" before restoring the NVM - that'll blank out the NVM to 0xffs before initializing it.
+
+		// Figure out the maximum chunk size the Serial API supports
+		// For some reason, there is no documentation and no official command for this
+		// The write requests need 5 bytes more than the read response, so subtract 5 from the returned length
+		const chunkSize =
+			(await this.externalNVMReadBuffer(0, 0xffff)).length - 5;
+
+		for (let offset = 0; offset < nvmData.length; offset += chunkSize) {
+			await this.externalNVMWriteBuffer(
+				offset,
+				nvmData.slice(offset, offset + chunkSize),
+			);
+			// Report progress for listeners
+			if (onProgress) setImmediate(() => onProgress(offset, size));
+		}
+
+		// Turn Z-Wave radio back on
+		await this.toggleRF(true);
+
+		// TODO: Soft Reset
 	}
 }

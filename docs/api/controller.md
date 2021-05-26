@@ -328,6 +328,16 @@ Creates a backup of the NVM and returns the raw data as a Buffer. The optional a
 
 > [!NOTE] `backupNVMRaw` automatically turns the Z-Wave radio on/off during the backup.
 
+```ts
+restoreNVMRaw(nvmData: Buffer, onProgress?: (bytesWritten: number, total: number) => void): Promise<void>
+```
+
+Restores an NVM backup that was created with `backupNVMRaw`. The optional 2nd argument can be used to monitor the progress of the operation, which may take several seconds up to a few minutes depending on the NVM size.
+
+> [!NOTE] `restoreNVMRaw` automatically turns the Z-Wave radio on/off during the restore.
+
+> [!WARNING] A failure during this process may brick your controller. Use at your own risk!
+
 ## Controller properties
 
 ### `nodes`
