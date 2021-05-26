@@ -5,10 +5,6 @@
 	"description": "Keypad with alarm activation rfid tag",
 	"devices": [
 		{
-			"productType": "0x4501",
-			"productId": "0x6131"
-		},
-		{
 			"productType": "0x6131",
 			"productId": "0x4101"
 		},
