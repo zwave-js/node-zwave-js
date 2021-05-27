@@ -2,7 +2,7 @@
 	"manufacturer": "Sunricher",
 	"manufacturerId": "0x0330",
 	"label": "ZV9001K4-RGBW",
-	"description": "Touch Panel RGBW Z Wave Wall Controller",
+	"description": "Touch Panel RGBW Wall Controller",
 	"devices": [
 		{
 			"productType": "0x0300",
@@ -12,6 +12,5 @@
 	"firmwareVersion": {
 		"min": "0.0",
 		"max": "255.255"
-	},
-	"supportsZWavePlus": true
+	}
 }
