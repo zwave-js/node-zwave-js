@@ -44,8 +44,7 @@
 	"associations": {
 		"1": {
 			"label": "Motion Sensor Status",
-			"maxNodes": 16,
-			"isLifeline": true
+			"maxNodes": 16
 		},
 		"2": {
 			"label": "Tamper Alarm",
