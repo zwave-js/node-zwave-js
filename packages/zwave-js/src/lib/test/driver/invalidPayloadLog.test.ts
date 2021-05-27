@@ -6,6 +6,7 @@ import { MessageHeaders, MockSerialPort } from "@zwave-js/serial";
 import { assertMessage, SpyTransport } from "@zwave-js/testing";
 import { wait } from "alcalzone-shared/async";
 import MockDate from "mockdate";
+import type { ThrowingMap } from "../../controller/Controller";
 import type { Driver } from "../../driver/Driver";
 import { DriverLogger } from "../../log/Driver";
 import { ZWaveNode } from "../../node/Node";
@@ -67,7 +68,7 @@ describe("regression tests", () => {
 		]!.isFunctionSupported = isFunctionSupported_NoBridge;
 
 		const node33 = new ZWaveNode(33, driver);
-		(driver.controller.nodes as Map<number, ZWaveNode>).set(
+		(driver.controller.nodes as ThrowingMap<number, ZWaveNode>).set(
 			node33.id,
 			node33,
 		);
@@ -90,7 +91,8 @@ describe("regression tests", () => {
 		await wait(10);
 		assertMessage(spyTransport, {
 			callNumber: 1,
-			predicate: (msg) => msg.includes("└─[Binary Sensor CC] [INVALID]"),
+			message: `« [Node 033] [REQ] [ApplicationCommand]
+  └─[BinarySensorCCReport] [INVALID]`,
 		});
 		expect(serialport.lastWrite).toEqual(ACK);
 	});

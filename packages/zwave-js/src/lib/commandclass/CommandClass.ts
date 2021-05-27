@@ -347,12 +347,20 @@ export class CommandClass {
 				isZWaveError(e) &&
 				e.code === ZWaveErrorCodes.PacketFormat_InvalidPayload
 			) {
-				return new InvalidCC(driver, {
-					nodeId: options.fromEncapsulation
-						? options.encapCC.nodeId
-						: options.nodeId,
-					ccId: CommandClass.getCommandClass(options.data),
-				});
+				const nodeId = options.fromEncapsulation
+					? options.encapCC.nodeId
+					: options.nodeId;
+				let ccName: string | undefined;
+				const ccId = CommandClass.getCommandClass(options.data);
+				const ccCommand = CommandClass.getCCCommand(options.data);
+				if (ccCommand != undefined) {
+					ccName = getCCCommandConstructor(ccId, ccCommand)?.name;
+				}
+				// Fall back to the unspecified CC if the command cannot be determined
+				if (!ccName) {
+					ccName = `${getCCName(ccId)} CC`;
+				}
+				return new InvalidCC(driver, { nodeId, ccId, ccName });
 			}
 			throw e;
 		}
@@ -981,20 +989,26 @@ export class CommandClass {
 }
 
 export interface InvalidCCCreationOptions extends CommandClassCreationOptions {
+	ccName: string;
 	reason?: string;
 }
 
 export class InvalidCC extends CommandClass {
 	public constructor(driver: Driver, options: InvalidCCCreationOptions) {
 		super(driver, options);
+		this._ccName = options.ccName;
 		this.reason = options.reason;
 	}
 
+	private _ccName: string;
+	public get ccName(): string {
+		return this._ccName;
+	}
 	public readonly reason?: string;
 
 	public toLogEntry(): MessageOrCCLogEntry {
 		return {
-			tags: [`${getCCName(this.ccId)} CC`, "INVALID"],
+			tags: [this.ccName, "INVALID"],
 			message: this.reason
 				? {
 						error: this.reason,
