@@ -2,7 +2,7 @@
 <!--
 	Add placeholder for next release with `wip` snippet
 -->
-## __WORK IN PROGRESS__
+## 7.7.1 (2021-05-29)
 ### Bugfixes
 * Use lock files to limit access to Value DB to a single instance, do not auto-compress on startup. This should avoid cache corruption when the driver is restarted multiple times in a short time
 * Fixed an error during `Multi Channel Association CC` when `Association CC` is not supported
