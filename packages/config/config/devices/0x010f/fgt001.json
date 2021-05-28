@@ -18,6 +18,15 @@
 		"max": "255.255"
 	},
 	"supportsZWavePlus": true,
+	"compat": {
+		"commandClasses": {
+			"remove": {
+				"0x80": {
+					"endpoints": [0]
+				}
+			}
+		}
+	},
 	"paramInformation": {
 		"1": {
 			"label": "Override Schedule duration",
@@ -28,22 +37,121 @@
 			"maxValue": 10000,
 			"defaultValue": 240
 		},
-		"2": {
-			"label": "Additional functions",
-			"description": "This parameter allows to enable different additional functions of the device.",
-			"valueSize": 4,
-			"minValue": 0,
-			"maxValue": 31,
-			"defaultValue": 1
+		"2[0x01]": {
+			"label": "Enable open window detector (normal)",
+			"$import": "../templates/master_template.json#base_enable_disable",
+			"defaultValue": 1,
+			"valueSize": 4
 		},
-		"3": {
-			"label": "Additional functions status (READ-ONLY)",
-			"description": "This parameter allows to check statuses of different additional functions.",
+		"2[0x02]": {
+			"label": "Enable open window detector (rapid)",
+			"$import": "../templates/master_template.json#base_enable_disable",
+			"valueSize": 4
+		},
+		"2[0x04]": {
+			"label": "Increase receiver sensitivity",
+			"description": "This paramater allows to increase receiver sensitivity, but shortens battery life",
+			"$import": "../templates/master_template.json#base_enable_disable",
+			"valueSize": 4
+		},
+		"2[0x08]": {
+			"label": "Enable remote LED",
+			"description": "Enable LED indications when controlling remotely",
+			"$import": "../templates/master_template.json#base_enable_disable",
+			"valueSize": 4
+		},
+		"2[0x10]": {
+			"label": "Protect setting Full ON/OFF",
+			"description": "Protect from setting Full ON and Full OFF mode by turning the knob manually",
+			"$import": "../templates/master_template.json#base_enable_disable",
+			"valueSize": 4
+		},
+		"2[0x20]": {
+			"$if": "firmwareVersion >= 4.7",
+			"label": "Vertical mount",
+			"description": "Device mounted in vertical position",
+			"$import": "../templates/master_template.json#base_enable_disable",
+			"valueSize": 4
+		},
+		"2[0x40]": {
+			"$if": "firmwareVersion >= 4.7",
+			"label": "Moderate regulator behaviour",
+			"description": "Set moderate regulator behaviour instead of rapid",
+			"$import": "../templates/master_template.json#base_enable_disable",
+			"valueSize": 4
+		},
+		"2[0x80]": {
+			"$if": "firmwareVersion >= 4.7",
+			"label": "Inverted knob operation",
+			"$import": "../templates/master_template.json#base_enable_disable",
+			"valueSize": 4
+		},
+		"2[0x100]": {
+			"$if": "firmwareVersion >= 4.7",
+			"label": "Heating medium demand reports",
+			"$import": "../templates/master_template.json#base_enable_disable",
+			"valueSize": 4
+		},
+		"2[0x200]": {
+			"$if": "firmwareVersion >= 4.7",
+			"label": "Detecting heating system failures",
+			"$import": "../templates/master_template.json#base_enable_disable",
+			"valueSize": 4
+		},
+		"3[0x01]": {
+			"label": "Temperature sensor",
+			"description": "Optional temperature sensor connected and operational",
+			"$import": "../templates/master_template.json#base_true_false",
 			"valueSize": 4,
-			"minValue": 0,
-			"maxValue": 3,
-			"defaultValue": 0,
 			"readOnly": true
+		},
+		"3[0x02]": {
+			"label": "Open window detected",
+			"$import": "../templates/master_template.json#base_true_false",
+			"valueSize": 4,
+			"readOnly": true
+		},
+		"3[0x04]": {
+			"$if": "firmwareVersion >= 4.7",
+			"label": "Provide heat in order to maintain set temperature",
+			"$import": "../templates/master_template.json#base_true_false",
+			"valueSize": 4,
+			"readOnly": true
+		},
+		"3[0x08]": {
+			"$if": "firmwareVersion >= 4.7",
+			"label": "Malfunctioning heating system",
+			"description": "Malfunctioning heating system (cannot reach set temperature)",
+			"$import": "../templates/master_template.json#base_true_false",
+			"valueSize": 4,
+			"readOnly": true
+		}
+	},
+	"endpoints": {
+		"0": {
+			"associations": {
+				"1": {
+					"label": "Lifeline",
+					"maxNodes": 1,
+					"isLifeline": true
+				}
+			}
+		},
+		"1": {
+			"associations": {
+				"1": {
+					"$import": "#endpoints/0/associations/1",
+					"isLifeline": false
+				}
+			}
+		},
+		"2": {
+			"associations": {
+				"1": {
+					"$import": "#endpoints/0/associations/1",
+					"isLifeline": false
+				}
+			}
 		}
 	}
 }

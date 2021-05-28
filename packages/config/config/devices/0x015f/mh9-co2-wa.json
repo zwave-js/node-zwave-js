@@ -19,8 +19,45 @@
 			"label": "CO2 Notification Threshold",
 			"valueSize": 2,
 			"minValue": 1,
-			"maxValue": 2000,
+			"maxValue": 5000,
 			"defaultValue": 1000
+		},
+		"2": {
+			"label": "CO2 reporting threshold",
+			"description": "0 report disabled, base on 5ppm unit, 10 by default, 10*5ppm=50ppm",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 10,
+			"unsigned": true
+		},
+		"3": {
+			"label": "Temperature reporting threshold",
+			"description": "0 report disabled, base on 0.5C unit, 1 by default, 1*0.5C=0.5C",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 1,
+			"unsigned": true
+		},
+		"4": {
+			"label": "Humidity reporting threshold",
+			"description": "0 report disabled, base on 1% unit, 2 by default, 2*1C=2C",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 100,
+			"defaultValue": 2,
+			"unsigned": true
+		},
+		"255": {
+			"label": "Factory setting",
+			"description": "Restore the factory setting - write only, set to 85 to reset",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 0,
+			"unsigned": true,
+			"writeOnly": true
 		}
 	}
 }
