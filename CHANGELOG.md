@@ -2,6 +2,18 @@
 <!--
 	Add placeholder for next release with `wip` snippet
 -->
+## __WORK IN PROGRESS__
+### Bugfixes
+* Use lock files to limit access to Value DB to a single instance, do not auto-compress on startup. This should avoid cache corruption when the driver is restarted multiple times in a short time
+* Fixed an error during `Multi Channel Association CC` when `Association CC` is not supported
+
+### Config file changes
+* Remove auto-assignment to Motion Sensor group from Fibaro FGMS001
+* Add Sunricher ZV9001K4-RGBW
+
+### Changes under the hood
+* Include command name in "invalid CC" logs
+
 ## 7.7.0 (2021-05-27)
 ### Features
 * Add APIs to read and write external NVM
@@ -22,7 +34,6 @@
 ### Bugfixes
 * Change GED2150 config file extension to json, so it gets picked up
 * Fixed typo in error message for "invalid condition"
-* Fixed an error during `Multi Channel Association CC` when `Association CC` is not supported
 
 ### Config file changes
 * Add additional version of Eaton 5-Scene Keypad
