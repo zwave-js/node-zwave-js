@@ -60,7 +60,7 @@
     "node": ">=10.0.0"
   },
   "dependencies": {
-    "@alcalzone/jsonl-db": "^1.2.4",
+    "@alcalzone/jsonl-db": "^1.2.5",
     "@alcalzone/pak": "^0.6.0",
     "@sentry/integrations": "^6.3.0",
     "@sentry/node": "^6.3.0",
@@ -68,7 +68,7 @@
     "@zwave-js/core": "7.7.0",
     "@zwave-js/serial": "7.7.0",
     "@zwave-js/shared": "7.4.0",
-    "alcalzone-shared": "^3.0.3",
+    "alcalzone-shared": "^3.0.4",
     "ansi-colors": "^4.1.1",
     "axios": "^0.21.1",
     "fs-extra": "^9.0.1",

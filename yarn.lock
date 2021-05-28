@@ -36,13 +36,14 @@
   resolved "https://registry.yarnpkg.com/@actions/io/-/io-1.0.2.tgz#2f614b6e69ce14d191180451eb38e6576a6e6b27"
   integrity sha512-J8KuFqVPr3p6U8W93DOXlXW6zFvrQAJANdS+vw0YhusLIq+bszW8zmK2Fh1C2kDPX8FMvwIl1OUcFgvJoXLbAg==
 
-"@alcalzone/jsonl-db@^1.2.4":
-  version "1.2.4"
-  resolved "https://registry.yarnpkg.com/@alcalzone/jsonl-db/-/jsonl-db-1.2.4.tgz#a54c352a9b9e17c23013496d30452ab8d9a9d65d"
-  integrity sha512-cnFdlBlPFeI3uXO1Nz7che91dD0YmTwJFTTCHevGHL8m/K0cLR3cYbZ1djudaTf5/dWNsfSCOyH91j9MTd1yjw==
+"@alcalzone/jsonl-db@^1.2.5":
+  version "1.2.5"
+  resolved "https://registry.yarnpkg.com/@alcalzone/jsonl-db/-/jsonl-db-1.2.5.tgz#c05e4346568d64a8d115b13ed80f131405160919"
+  integrity sha512-3DODBBUZq16bPIoOVf8CF46pLvZn1NXo+vPv+uPpuKMc88yL2oFNiR36AVky8BDj+tvgm/PmuiBCAG1necK+LQ==
   dependencies:
-    alcalzone-shared "^3.0.2"
+    alcalzone-shared "^3.0.4"
     fs-extra "^9.1.0"
+    proper-lockfile "^4.1.2"
 
 "@alcalzone/pak@^0.6.0":
   version "0.6.0"
@@ -3005,10 +3006,17 @@ ajv@^7.0.2:
     require-from-string "^2.0.2"
     uri-js "^4.2.2"
 
-alcalzone-shared@^3.0.1, alcalzone-shared@^3.0.2, alcalzone-shared@^3.0.3:
+alcalzone-shared@^3.0.1:
   version "3.0.3"
   resolved "https://registry.yarnpkg.com/alcalzone-shared/-/alcalzone-shared-3.0.3.tgz#b9eb6f97b3bb8906d762eb968b8ebea899c29f82"
   integrity sha512-DHScJbVDE9VT5ZBahgmeLHnWf5+KdnukWeqMfkVg9CUtI0CWEKWjRazKo17wr4PGQmnA4MYx/alZMADrd0gaYg==
+  dependencies:
+    debug "^4.3.1"
+
+alcalzone-shared@^3.0.4:
+  version "3.0.4"
+  resolved "https://registry.yarnpkg.com/alcalzone-shared/-/alcalzone-shared-3.0.4.tgz#0438990e0793bf664fdffd82e88f4ece81db1bf0"
+  integrity sha512-QVnZWWRLVV0NGbR+AszgR3Y/BpPjGKgAyoiKuNegtYbLVTadbFbKLfYQd+4YYkB9PSaj+Qc5Z81U6UtQwzGeQA==
   dependencies:
     debug "^4.3.1"
 
@@ -9041,6 +9049,15 @@ promzard@^0.3.0:
   integrity sha1-JqXW7ox97kyxIggwWs+5O6OCqe4=
   dependencies:
     read "1"
+
+proper-lockfile@^4.1.2:
+  version "4.1.2"
+  resolved "https://registry.yarnpkg.com/proper-lockfile/-/proper-lockfile-4.1.2.tgz#c8b9de2af6b2f1601067f98e01ac66baa223141f"
+  integrity sha512-TjNPblN4BwAWMXU8s9AEz4JmQxnD1NNL7bNOY/AKUzyamc379FWASUhc/K1pL2noVb+XmZKLL68cjzLsiOAMaA==
+  dependencies:
+    graceful-fs "^4.2.4"
+    retry "^0.12.0"
+    signal-exit "^3.0.2"
 
 proto-list@~1.2.1:
   version "1.2.4"
