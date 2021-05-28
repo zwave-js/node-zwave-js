@@ -60,6 +60,31 @@ describe("lib/node/Endpoint", () => {
 			});
 		});
 
+		it("throws when trying to use a command of an unsupported CC", () => {
+			const endpoint = new Endpoint(1, fakeDriver, 1);
+			assertZWaveError(() => endpoint.commandClasses.Battery.get(), {
+				errorCode: ZWaveErrorCodes.CC_NotSupported,
+				messageMatches: "does not support the Command Class Battery",
+			});
+		});
+
+		it("does not throw when checking support of a CC", () => {
+			const endpoint = new Endpoint(1, fakeDriver, 1);
+			expect(endpoint.commandClasses.Battery.isSupported()).toBeFalse();
+		});
+
+		it("does not throw when accessing the ID of a CC", () => {
+			const endpoint = new Endpoint(1, fakeDriver, 1);
+			expect(endpoint.commandClasses.Battery.ccId).toBe(
+				CommandClasses.Battery,
+			);
+		});
+
+		it("does not throw when scoping the API options", () => {
+			const endpoint = new Endpoint(1, fakeDriver, 1);
+			endpoint.commandClasses.Battery.withOptions({});
+		});
+
 		it("returns all supported CCs when being enumerated", () => {
 			// No supported CCs, empty array
 			let node = new ZWaveNode(2, fakeDriver, undefined, []);

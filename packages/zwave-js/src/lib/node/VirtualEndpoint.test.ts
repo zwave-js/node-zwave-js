@@ -106,9 +106,14 @@ describe("lib/node/VirtualEndpoint", () => {
 	});
 
 	describe("commandClasses dictionary", () => {
+		let node2: ZWaveNode;
+		let node3: ZWaveNode;
+		beforeEach(() => {
+			node2 = makePhysicalNode(2);
+			node3 = makePhysicalNode(3);
+		});
+
 		it("throws when trying to access a non-implemented CC", () => {
-			makePhysicalNode(2);
-			makePhysicalNode(3);
 			const broadcast = driver.controller.getBroadcastNode();
 
 			assertZWaveError(() => (broadcast.commandClasses as any).FOOBAR, {
@@ -117,10 +122,39 @@ describe("lib/node/VirtualEndpoint", () => {
 			});
 		});
 
+		it("throws when trying to use a command of an unsupported CC", () => {
+			const broadcast = driver.controller.getBroadcastNode();
+			assertZWaveError(
+				() => broadcast.commandClasses["Binary Switch"].set(true),
+				{
+					errorCode: ZWaveErrorCodes.CC_NotSupported,
+					messageMatches:
+						"does not support the Command Class Binary Switch",
+				},
+			);
+		});
+
+		it("does not throw when checking support of a CC", () => {
+			const broadcast = driver.controller.getBroadcastNode();
+			expect(
+				broadcast.commandClasses["Binary Switch"].isSupported(),
+			).toBeFalse();
+		});
+
+		it("does not throw when accessing the ID of a CC", () => {
+			const broadcast = driver.controller.getBroadcastNode();
+			expect(broadcast.commandClasses["Binary Switch"].ccId).toBe(
+				CommandClasses["Binary Switch"],
+			);
+		});
+
+		it("does not throw when scoping the API options", () => {
+			const broadcast = driver.controller.getBroadcastNode();
+			broadcast.commandClasses["Binary Switch"].withOptions({});
+		});
+
 		it("returns all supported CCs when being enumerated", () => {
 			// No supported CCs, empty array
-			const node2 = makePhysicalNode(2);
-			const node3 = makePhysicalNode(3);
 			let broadcast = driver.controller.getBroadcastNode();
 			let actual = [...broadcast.commandClasses];
 			expect(actual).toEqual([]);
@@ -142,8 +176,6 @@ describe("lib/node/VirtualEndpoint", () => {
 		});
 
 		it("returns [object Object] when turned into a string", () => {
-			makePhysicalNode(2);
-			makePhysicalNode(3);
 			const broadcast = driver.controller.getBroadcastNode();
 			expect((broadcast.commandClasses as any)[Symbol.toStringTag]).toBe(
 				"[object Object]",
@@ -151,8 +183,6 @@ describe("lib/node/VirtualEndpoint", () => {
 		});
 
 		it("returns undefined for other symbol properties", () => {
-			makePhysicalNode(2);
-			makePhysicalNode(3);
 			const broadcast = driver.controller.getBroadcastNode();
 			expect(
 				(broadcast.commandClasses as any)[Symbol.unscopables],
@@ -178,8 +208,8 @@ describe("lib/node/VirtualEndpoint", () => {
 		it("multicast", () => {
 			makePhysicalNode(2);
 			makePhysicalNode(3);
-			const broadcast = driver.controller.getMulticastGroup([2, 3]);
-			broadcast.commandClasses.Basic.set(99);
+			const multicast = driver.controller.getMulticastGroup([2, 3]);
+			multicast.commandClasses.Basic.set(99);
 			// » [Node 2, 3] [REQ] [SendData]
 			//   │ transmit options: 0x25
 			//   │ callback id:        1
