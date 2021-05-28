@@ -7,7 +7,6 @@ export const throttlePresets: Record<
 > = {
 	slow: {
 		autoCompress: {
-			onOpen: true,
 			intervalMs: 60 * 60000, // compress every 60 minutes
 			intervalMinChanges: 100, // if there were at least 100 changes
 			sizeFactor: 3, // only compress large DBs after they have grown 3x
@@ -20,7 +19,6 @@ export const throttlePresets: Record<
 	},
 	normal: {
 		autoCompress: {
-			onOpen: true,
 			intervalMs: 60000,
 			intervalMinChanges: 5,
 			sizeFactor: 2,
@@ -33,7 +31,6 @@ export const throttlePresets: Record<
 	},
 	fast: {
 		autoCompress: {
-			onOpen: true,
 			intervalMs: 60000,
 			intervalMinChanges: 5,
 			sizeFactor: 2,
