@@ -7,7 +7,14 @@ export function Mixin(baseCtors: Constructor[]) {
 			Object.getOwnPropertyNames(baseCtor.prototype).forEach((name) => {
 				// Do not override the constructor
 				if (name !== "constructor") {
-					derivedCtor.prototype[name] = baseCtor.prototype[name];
+					Object.defineProperty(
+						derivedCtor.prototype,
+						name,
+						Object.getOwnPropertyDescriptor(
+							baseCtor.prototype,
+							name,
+						) ?? Object.create(null),
+					);
 				}
 			});
 		});
