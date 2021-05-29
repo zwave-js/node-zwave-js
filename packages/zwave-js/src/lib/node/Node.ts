@@ -37,6 +37,7 @@ import {
 	ObjectKeyMap,
 	pick,
 	stringify,
+	TypedEventEmitter,
 } from "@zwave-js/shared";
 import type { Comparer, CompareResult } from "alcalzone-shared/comparable";
 import { padStart } from "alcalzone-shared/strings";
@@ -143,7 +144,6 @@ import type {
 	FLiRS,
 	TranslatedValueID,
 	ZWaveNodeEventCallbacks,
-	ZWaveNodeEvents,
 	ZWaveNodeValueEventCallbacks,
 } from "./Types";
 import { InterviewStage, NodeStatus, NodeType, ProtocolVersion } from "./Types";
@@ -156,30 +156,8 @@ function getNodeMetaValueID(property: string): ValueID {
 	};
 }
 
-export interface ZWaveNode {
-	on<TEvent extends ZWaveNodeEvents>(
-		event: TEvent,
-		callback: ZWaveNodeEventCallbacks[TEvent],
-	): this;
-	once<TEvent extends ZWaveNodeEvents>(
-		event: TEvent,
-		callback: ZWaveNodeEventCallbacks[TEvent],
-	): this;
-	removeListener<TEvent extends ZWaveNodeEvents>(
-		event: TEvent,
-		callback: ZWaveNodeEventCallbacks[TEvent],
-	): this;
-	off<TEvent extends ZWaveNodeEvents>(
-		event: TEvent,
-		callback: ZWaveNodeEventCallbacks[TEvent],
-	): this;
-	removeAllListeners(event?: ZWaveNodeEvents): this;
-
-	emit<TEvent extends ZWaveNodeEvents>(
-		event: TEvent,
-		...args: Parameters<ZWaveNodeEventCallbacks[TEvent]>
-	): boolean;
-}
+// eslint-disable-next-line @typescript-eslint/no-empty-interface
+export interface ZWaveNode extends TypedEventEmitter<ZWaveNodeEventCallbacks> {}
 
 /**
  * A ZWaveNode represents a node in a Z-Wave network. It is also an instance
@@ -197,7 +175,6 @@ export class ZWaveNode extends Endpoint {
 	) {
 		// Define this node's intrinsic endpoint as the root device (0)
 		super(id, driver, 0, deviceClass, supportedCCs);
-
 		this._valueDB =
 			valueDB ?? new ValueDB(id, driver.valueDB!, driver.metadataDB!);
 		// Pass value events to our listeners

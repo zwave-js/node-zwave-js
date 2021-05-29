@@ -1,5 +1,5 @@
 import type { JsonlDB } from "@alcalzone/jsonl-db";
-import { EventEmitter } from "events";
+import { TypedEventEmitter } from "@zwave-js/shared";
 import { CommandClasses } from "../capabilities/CommandClasses";
 import { isZWaveError, ZWaveError, ZWaveErrorCodes } from "../error/ZWaveError";
 import type { ValueMetadata } from "../values/Metadata";
@@ -91,27 +91,6 @@ export function assertValueID(
 	}
 }
 
-export interface ValueDB {
-	on<TEvent extends ValueDBEvents>(
-		event: TEvent,
-		callback: ValueDBEventCallbacks[TEvent],
-	): this;
-	once<TEvent extends ValueDBEvents>(
-		event: TEvent,
-		callback: ValueDBEventCallbacks[TEvent],
-	): this;
-	removeListener<TEvent extends ValueDBEvents>(
-		event: TEvent,
-		callback: ValueDBEventCallbacks[TEvent],
-	): this;
-	removeAllListeners(event?: ValueDBEvents): this;
-
-	emit<TEvent extends ValueDBEvents>(
-		event: TEvent,
-		...args: Parameters<ValueDBEventCallbacks[TEvent]>
-	): boolean;
-}
-
 /**
  * Ensures all Value ID properties are in the same order and there are no extraneous properties.
  * A normalized value ID can be used as a database key */
@@ -149,7 +128,7 @@ export interface SetValueOptions {
 /**
  * The value store for a single node
  */
-export class ValueDB extends EventEmitter {
+export class ValueDB extends TypedEventEmitter<ValueDBEventCallbacks> {
 	// This is a wrapper around the driver's on-disk value and metadata key value stores
 
 	/**

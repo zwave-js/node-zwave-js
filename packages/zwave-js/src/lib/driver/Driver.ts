@@ -28,6 +28,7 @@ import {
 	num2hex,
 	pick,
 	stringify,
+	TypedEventEmitter,
 } from "@zwave-js/shared";
 import { wait } from "alcalzone-shared/async";
 import {
@@ -37,7 +38,7 @@ import {
 import { entries } from "alcalzone-shared/objects";
 import { isArray, isObject } from "alcalzone-shared/typeguards";
 import { randomBytes } from "crypto";
-import { EventEmitter } from "events";
+import type { EventEmitter } from "events";
 import fsExtra from "fs-extra";
 import path from "path";
 import SerialPort from "serialport";
@@ -329,38 +330,13 @@ export interface DriverEventCallbacks {
 
 export type DriverEvents = Extract<keyof DriverEventCallbacks, string>;
 
-export interface Driver {
-	on<TEvent extends DriverEvents>(
-		event: TEvent,
-		callback: DriverEventCallbacks[TEvent],
-	): this;
-	once<TEvent extends DriverEvents>(
-		event: TEvent,
-		callback: DriverEventCallbacks[TEvent],
-	): this;
-	removeListener<TEvent extends DriverEvents>(
-		event: TEvent,
-		callback: DriverEventCallbacks[TEvent],
-	): this;
-	off<TEvent extends DriverEvents>(
-		event: TEvent,
-		callback: DriverEventCallbacks[TEvent],
-	): this;
-	removeAllListeners(event?: DriverEvents): this;
-
-	emit<TEvent extends DriverEvents>(
-		event: TEvent,
-		...args: Parameters<DriverEventCallbacks[TEvent]>
-	): boolean;
-}
-
 /**
  * The driver is the core of this library. It controls the serial interface,
  * handles transmission and receipt of messages and manages the network cache.
  * Any action you want to perform on the Z-Wave network must go through a driver
  * instance or its associated nodes.
  */
-export class Driver extends EventEmitter {
+export class Driver extends TypedEventEmitter<DriverEventCallbacks> {
 	/** The serial port instance */
 	private serial: ZWaveSerialPortBase | undefined;
 	/** An instance of the Send Thread state machine */
@@ -602,7 +578,7 @@ export class Driver extends EventEmitter {
 		this._wasStarted = true;
 
 		// Enforce that an error handler is attached
-		if ((this as EventEmitter).listenerCount("error") === 0) {
+		if (((this as unknown) as EventEmitter).listenerCount("error") === 0) {
 			throw new ZWaveError(
 				`Before starting the driver, a handler for the "error" event must be attached.`,
 				ZWaveErrorCodes.Driver_NoErrorHandler,

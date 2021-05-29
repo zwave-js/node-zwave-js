@@ -29,8 +29,16 @@ import EventEmitter from "events";
  * ```
  */
 
+export type EventHandler =
+	// Add more overloads as necessary
+	| ((arg1: any, arg2: any, arg3: any, arg4: any) => void)
+	| ((arg1: any, arg2: any, arg3: any) => void)
+	| ((arg1: any, arg2: any) => void)
+	| ((arg1: any) => void)
+	| ((...args: any[]) => void);
+
 export interface TypedEventEmitter<
-	TEvents extends Record<keyof TEvents, (...args: any[]) => void>
+	TEvents extends Record<keyof TEvents, EventHandler>
 > {
 	on<TEvent extends keyof TEvents>(
 		event: TEvent,
@@ -57,5 +65,5 @@ export interface TypedEventEmitter<
 }
 
 export class TypedEventEmitter<
-	TEvents extends Record<keyof TEvents, (...args: any[]) => void>
+	TEvents extends Record<keyof TEvents, EventHandler>
 > extends (EventEmitter as any) {}
