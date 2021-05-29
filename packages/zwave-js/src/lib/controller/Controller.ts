@@ -15,10 +15,12 @@ import {
 	flatMap,
 	getEnumMemberName,
 	JSONObject,
+	Mixin,
 	num2hex,
 	ObjectKeyMap,
 	pick,
 	ReadonlyObjectKeyMap,
+	TypedEventEmitter,
 } from "@zwave-js/shared";
 import { distinct } from "alcalzone-shared/arrays";
 import {
@@ -47,6 +49,7 @@ import type {
 	MultiChannelAssociationCC,
 } from "../commandclass/MultiChannelAssociationCC";
 import type { Driver, RequestHandler } from "../driver/Driver";
+import type { StatisticsEventCallbacks } from "../driver/Statistics";
 import { FunctionType } from "../message/Constants";
 import type { Message } from "../message/Message";
 import type { SuccessIndicator } from "../message/SuccessIndicator";
@@ -111,6 +114,10 @@ import {
 } from "./AddNodeToNetworkRequest";
 import { AssignReturnRouteRequest } from "./AssignReturnRouteMessages";
 import { AssignSUCReturnRouteRequest } from "./AssignSUCReturnRouteMessages";
+import {
+	ControllerStatistics,
+	ControllerStatisticsHost,
+} from "./ControllerStatistics";
 import { DeleteReturnRouteRequest } from "./DeleteReturnRouteMessages";
 import { DeleteSUCReturnRouteRequest } from "./DeleteSUCReturnRouteMessages";
 import {
@@ -202,36 +209,17 @@ interface ControllerEventCallbacks {
 
 export type ControllerEvents = Extract<keyof ControllerEventCallbacks, string>;
 
-export interface ZWaveController {
-	on<TEvent extends ControllerEvents>(
-		event: TEvent,
-		callback: ControllerEventCallbacks[TEvent],
-	): this;
-	once<TEvent extends ControllerEvents>(
-		event: TEvent,
-		callback: ControllerEventCallbacks[TEvent],
-	): this;
-	removeListener<TEvent extends ControllerEvents>(
-		event: TEvent,
-		callback: ControllerEventCallbacks[TEvent],
-	): this;
-	off<TEvent extends ControllerEvents>(
-		event: TEvent,
-		callback: ControllerEventCallbacks[TEvent],
-	): this;
-	removeAllListeners(event?: ControllerEvents): this;
+export interface ZWaveController
+	extends ControllerStatisticsHost,
+		TypedEventEmitter<
+			ControllerEventCallbacks &
+				StatisticsEventCallbacks<ControllerStatistics>
+		> {}
 
-	emit<TEvent extends ControllerEvents>(
-		event: TEvent,
-		...args: Parameters<ControllerEventCallbacks[TEvent]>
-	): boolean;
-}
-
-export class ZWaveController extends EventEmitter {
+@Mixin([EventEmitter, ControllerStatisticsHost])
+export class ZWaveController {
 	/** @internal */
 	public constructor(private readonly driver: Driver) {
-		super();
-
 		this._nodes = new Map<number, ZWaveNode>() as ThrowingMap<
 			number,
 			ZWaveNode

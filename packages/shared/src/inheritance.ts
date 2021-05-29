@@ -4,19 +4,32 @@ import type { Constructor } from "./types";
 export function Mixin(baseCtors: Constructor[]) {
 	return function (derivedCtor: Constructor): void {
 		baseCtors.forEach((baseCtor) => {
-			Object.getOwnPropertyNames(baseCtor.prototype).forEach((name) => {
-				// Do not override the constructor
-				if (name !== "constructor") {
-					Object.defineProperty(
-						derivedCtor.prototype,
-						name,
-						Object.getOwnPropertyDescriptor(
-							baseCtor.prototype,
-							name,
-						) ?? Object.create(null),
-					);
+			// Figure out the inheritance chain of the mixin
+			const inheritanceChain: Constructor[] = [baseCtor];
+			while (true) {
+				const current = inheritanceChain[0];
+				const base = Object.getPrototypeOf(current);
+				if (base?.prototype) {
+					inheritanceChain.unshift(base);
+				} else {
+					break;
 				}
-			});
+			}
+			for (const ctor of inheritanceChain) {
+				for (const prop of Object.getOwnPropertyNames(ctor.prototype)) {
+					// Do not override the constructor
+					if (prop !== "constructor") {
+						Object.defineProperty(
+							derivedCtor.prototype,
+							prop,
+							Object.getOwnPropertyDescriptor(
+								ctor.prototype,
+								prop,
+							) ?? Object.create(null),
+						);
+					}
+				}
+			}
 		});
 	};
 }

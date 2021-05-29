@@ -97,6 +97,7 @@ import {
 	SendDataRequest,
 } from "../controller/SendDataMessages";
 import {
+	isSendData,
 	isSendDataSinglecast,
 	SendDataMessage,
 } from "../controller/SendDataShared";
@@ -1564,10 +1565,12 @@ export class Driver extends TypedEventEmitter<DriverEventCallbacks> {
 				}
 				case MessageHeaders.NAK: {
 					this.sendThread.send("NAK");
+					this.controller.incrementStatistics("NAK");
 					return;
 				}
 				case MessageHeaders.CAN: {
 					this.sendThread.send("CAN");
+					this.controller.incrementStatistics("CAN");
 					return;
 				}
 			}
@@ -1579,13 +1582,23 @@ export class Driver extends TypedEventEmitter<DriverEventCallbacks> {
 			// This way we can log the invalid CC contents
 			msg = Message.from(this, data);
 			// Then ensure there are no errors
-			if (isCommandClassContainer(msg)) assertValidCCs(msg);
+			if (isCommandClassContainer(msg)) {
+				assertValidCCs(msg);
+				// TODO: Update node statistics
+			} else {
+				this.controller.incrementStatistics("messagesRX");
+			}
 			// all good, send ACK
 			await this.writeHeader(MessageHeaders.ACK);
 		} catch (e) {
 			try {
 				const response = this.handleDecodeError(e, data, msg);
 				if (response) await this.writeHeader(response);
+				if (isCommandClassContainer(msg)) {
+					// TODO: Update node statistics
+				} else {
+					this.controller.incrementStatistics("messagesDropped");
+				}
 			} catch (e) {
 				if (
 					e instanceof Error &&
@@ -2351,7 +2364,14 @@ ${handlers.length} left`,
 
 		try {
 			const ret = await promise;
+			// The message was transmitted, so it can no longer expire
 			if (expirationTimeout) clearTimeout(expirationTimeout);
+			// Update statistics
+			if (isSendData(msg)) {
+				// TODO: update node statistics
+			} else {
+				this.controller.incrementStatistics("messagesTX");
+			}
 			// Track and potentially update the status of the node when communication succeeds
 			if (node) {
 				if (node.canSleep) {
