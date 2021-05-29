@@ -60,6 +60,10 @@
 		"20": {
 			"$import": "../templates/master_template.json#state_after_power_failure"
 		},
+		"71": {
+			"$if": "firmwareVersion >= 2.0",
+			"$import": "templates/aeotec_template.json#wallswipe_recalibrate"
+		},
 		"80": {
 			"$import": "templates/aeotec_template.json#enable_notifications_0-3"
 		},
@@ -73,6 +77,68 @@
 		},
 		"83": {
 			"$import": "templates/aeotec_template.json#led_indicator_three_options"
+		},
+		"90": {
+			"$import": "templates/aeotec_template.json#send_automatic_reports"
+		},
+		"91": {
+			"$import": "templates/aeotec_template.json#wattage_trigger",
+			"defaultValue": 25
+		},
+		"92": {
+			"$import": "templates/aeotec_template.json#wattage_percent_trigger",
+			"defaultValue": 5
+		},
+		"100": {
+			"$import": "templates/aeotec_template.json#reset_parameters",
+			"label": "Reset Parameters 101-103 to Default Values"
+		},
+		"110": {
+			"$import": "templates/aeotec_template.json#reset_parameters",
+			"label": "Reset Parameters 111-113 to Default Values"
+		},
+		"111": {
+			"$import": "templates/aeotec_template.json#auto_report_interval_group1",
+			"maxValue": 2147483647
+		},
+		"112": {
+			"$import": "templates/aeotec_template.json#auto_report_interval_group2",
+			"maxValue": 2147483647
+		},
+		"113": {
+			"$import": "templates/aeotec_template.json#auto_report_interval_group3",
+			"maxValue": 2147483647
+		},
+		"120": {
+			"$import": "templates/aeotec_template.json#external_switch_3way_auto",
+			"label": "External Switch Type: S1"
+		},
+		"121": {
+			"$import": "templates/aeotec_template.json#external_switch_3way_auto",
+			"label": "External Switch Type: S2"
+		},
+		"122": {
+			"$import": "templates/aeotec_template.json#switch_destination_s1"
+		},
+		"123": {
+			"$if": "firmwareVersion >= 2.0",
+			"$import": "templates/aeotec_template.json#switch_destination_s2"
+		},
+		// WallSwipe Settings
+		"144": {
+			"$if": "firmwareVersion >= 2.0",
+			"$import": "templates/aeotec_template.json#wallswipe_status"
+		},
+		"251": {
+			"$if": "firmwareVersion >= 2.0",
+			"$import": "templates/aeotec_template.json#wallswipe_reset"
+		},
+		// End of WallSwipe Settings
+		"252": {
+			"$import": "templates/aeotec_template.json#lock_configuration"
+		},
+		"255": {
+			"$import": "templates/aeotec_template.json#factory_reset_exclude"
 		},
 		"84[0xff000000]": {
 			"$if": "firmwareVersion >= 2.0",
@@ -114,21 +180,6 @@
 		"87[0xff]": {
 			"$import": "templates/aeotec_template.json#appointment_two_minute"
 		},
-		"90": {
-			"$import": "templates/aeotec_template.json#send_automatic_reports"
-		},
-		"91": {
-			"$import": "templates/aeotec_template.json#wattage_trigger",
-			"defaultValue": 25
-		},
-		"92": {
-			"$import": "templates/aeotec_template.json#wattage_percent_trigger",
-			"defaultValue": 5
-		},
-		"100": {
-			"$import": "templates/aeotec_template.json#reset_parameters",
-			"label": "Reset Parameters 101-103 to Default Values"
-		},
 		"101[0x01]": {
 			"$import": "templates/aeotec_template.json#auto_report_group1_kwh"
 		},
@@ -165,50 +216,11 @@
 		"103[0x08]": {
 			"$import": "templates/aeotec_template.json#auto_report_group3_amp"
 		},
-		"110": {
-			"$import": "templates/aeotec_template.json#reset_parameters",
-			"label": "Reset Parameters 111-113 to Default Values"
-		},
-		"111": {
-			"$import": "templates/aeotec_template.json#auto_report_interval_group1",
-			"maxValue": 2147483647
-		},
-		"112": {
-			"$import": "templates/aeotec_template.json#auto_report_interval_group2",
-			"maxValue": 2147483647
-		},
-		"113": {
-			"$import": "templates/aeotec_template.json#auto_report_interval_group3",
-			"maxValue": 2147483647
-		},
-		"120": {
-			"$import": "templates/aeotec_template.json#external_switch_3way_auto",
-			"label": "External Switch Type: S1"
-		},
 		"247[0x01]": {
 			"$import": "templates/aeotec_template.json#switch_mode_state_s1"
 		},
-		"121": {
-			"$import": "templates/aeotec_template.json#external_switch_3way_auto",
-			"label": "External Switch Type: S2"
-		},
 		"247[0x02]": {
 			"$import": "templates/aeotec_template.json#switch_mode_state_s2"
-		},
-		"122": {
-			"$import": "templates/aeotec_template.json#switch_destination_s1"
-		},
-		"123": {
-			"$if": "firmwareVersion >= 2.0",
-			"$import": "templates/aeotec_template.json#switch_destination_s2"
-		},
-		"252": {
-			"$import": "templates/aeotec_template.json#lock_configuration"
-		},
-		// WallSwipe Settings
-		"144": {
-			"$if": "firmwareVersion >= 2.0",
-			"$import": "templates/aeotec_template.json#wallswipe_status"
 		},
 		"21[0xff]": {
 			"$if": "firmwareVersion >= 2.0",
@@ -321,25 +333,12 @@
 		"69[0xff000000]": {
 			"$if": "firmwareVersion >= 2.0",
 			"$import": "templates/aeotec_template.json#button_color_night_blue"
-		},
-		"71": {
-			"$if": "firmwareVersion >= 2.0",
-			"$import": "templates/aeotec_template.json#wallswipe_recalibrate"
-		},
-		"251": {
-			"$if": "firmwareVersion >= 2.0",
-			"$import": "templates/aeotec_template.json#wallswipe_reset"
-		},
-		// End of WallSwipe Settings
-		"252": {
-			"$import": "templates/aeotec_template.json#lock_configuration"
-		},
-		"255": {
-			"$import": "templates/aeotec_template.json#factory_reset_exclude"
 		}
 	},
 	"compat": {
-		"preserveRootApplicationCCValueIDs": true
+		"preserveRootApplicationCCValueIDs": true,
+		// The device can report S1/S2 switch operation via Basic Set to groups 3 and 4
+		"treatBasicSetAsEvent": true
 	},
 	"metadata": {
 		"inclusion": "Turn the primary controller of Z-Wave network into inclusion mode, short press the product’s Action button that you can find on the product's housing",
