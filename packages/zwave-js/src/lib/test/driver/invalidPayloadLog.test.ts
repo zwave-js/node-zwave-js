@@ -50,6 +50,7 @@ describe("regression tests", () => {
 		driver["_controller"] = {
 			ownNodeId: 1,
 			nodes: new Map(),
+			incrementStatistics: () => {},
 		} as any;
 		driver["_driverLog"] = driverLogger;
 	});

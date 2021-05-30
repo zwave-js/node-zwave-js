@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-empty-function */
 /* wotan-disable no-restricted-property-access */
 
 import { MockSerialPort } from "@zwave-js/serial";
@@ -57,6 +58,7 @@ export async function createAndStartDriver(
 		ownNodeId: 1,
 		isFunctionSupported: () => true,
 		nodes: new Map(),
+		incrementStatistics: () => {},
 	} as any;
 
 	return {

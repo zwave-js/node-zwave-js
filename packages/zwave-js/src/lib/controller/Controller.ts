@@ -29,7 +29,6 @@ import {
 } from "alcalzone-shared/deferred-promise";
 import { composeObject } from "alcalzone-shared/objects";
 import { isObject } from "alcalzone-shared/typeguards";
-import { EventEmitter } from "events";
 import type { AssociationCC } from "../commandclass/AssociationCC";
 import type {
 	AssociationGroup,
@@ -192,7 +191,8 @@ export type ReadonlyThrowingMap<K, V> = ReadonlyMap<K, V> & {
 };
 
 // Strongly type the event emitter events
-interface ControllerEventCallbacks {
+interface ControllerEventCallbacks
+	extends StatisticsEventCallbacks<ControllerStatistics> {
 	"inclusion failed": () => void;
 	"exclusion failed": () => void;
 	"inclusion started": (secure: boolean) => void;
@@ -209,17 +209,12 @@ interface ControllerEventCallbacks {
 
 export type ControllerEvents = Extract<keyof ControllerEventCallbacks, string>;
 
-export interface ZWaveController
-	extends ControllerStatisticsHost,
-		TypedEventEmitter<
-			ControllerEventCallbacks &
-				StatisticsEventCallbacks<ControllerStatistics>
-		> {}
-
-@Mixin([EventEmitter, ControllerStatisticsHost])
-export class ZWaveController {
+@Mixin([ControllerStatisticsHost])
+export class ZWaveController extends TypedEventEmitter<ControllerEventCallbacks> {
 	/** @internal */
 	public constructor(private readonly driver: Driver) {
+		super();
+
 		this._nodes = new Map<number, ZWaveNode>() as ThrowingMap<
 			number,
 			ZWaveNode

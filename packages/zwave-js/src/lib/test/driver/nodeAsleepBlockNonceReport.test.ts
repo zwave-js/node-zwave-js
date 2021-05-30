@@ -30,6 +30,7 @@ describe("regression tests", () => {
 			ownNodeId: 1,
 			isFunctionSupported: isFunctionSupported_NoBridge,
 			nodes: new Map(),
+			incrementStatistics: () => {},
 		} as any;
 	});
 
