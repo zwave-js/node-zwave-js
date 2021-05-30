@@ -1,6 +1,7 @@
 import { EventEmitter } from "events";
 import { TypedEventEmitter } from "./EventEmitter";
-import { Mixin } from "./inheritance";
+import { AllOf, Mixin } from "./inheritance";
+import type { Constructor } from "./types";
 
 interface TestEvents {
 	test1: (arg1: number) => void;
@@ -44,6 +45,34 @@ describe("Type-Safe EventEmitter (standalone)", () => {
 	}
 	it("works", (done) => {
 		const t = new Test();
+		t.on("test1", (arg1) => {
+			expect(arg1).toBe(1);
+			done();
+		});
+		t.emit1();
+	});
+});
+
+describe("Type-Safe EventEmitter (with multi-inheritance)", () => {
+	class Base {
+		get baseProp() {
+			return "base";
+		}
+		baseProp2 = "base";
+	}
+
+	class Test extends AllOf(
+		Base,
+		TypedEventEmitter as Constructor<TypedEventEmitter<TestEvents>>,
+	) {
+		emit1() {
+			this.emit("test1", 1);
+		}
+	}
+	it("works", (done) => {
+		const t = new Test();
+		expect(t.baseProp).toBe("base");
+		expect(t.baseProp2).toBe("base");
 		t.on("test1", (arg1) => {
 			expect(arg1).toBe(1);
 			done();
