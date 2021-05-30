@@ -19,7 +19,7 @@
 			"label": "Dim level when light is turned ON",
 			"valueSize": 1,
 			"minValue": 0,
-			"maxValue": 1,
+			"maxValue": 2,
 			"defaultValue": 0,
 			"allowManualEntry": false,
 			"options": [
@@ -30,6 +30,10 @@
 				{
 					"label": "Last brightness setting",
 					"value": 1
+				},
+				{
+					"label": "Last lamp status",
+					"value": 2
 				}
 			]
 		},
