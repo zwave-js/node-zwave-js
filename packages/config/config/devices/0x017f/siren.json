@@ -237,11 +237,38 @@
 			]
 		},
 		"8": {
-			"label": "Power Level",
+			"label": "Primary Strobe (LED Ring)",
 			"valueSize": 1,
 			"minValue": 0,
-			"maxValue": 0,
-			"defaultValue": 0
+			"maxValue": 1,
+			"defaultValue": 0,
+			"options": [
+				{
+					"label": "Strobe Disabled",
+					"value": 0
+				},
+				{
+					"label": "Strobe Enabled",
+					"value": 1
+				}
+			]
+		},
+		"9": {
+			"label": "Secondary Strobe (LED Ring)",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 0,
+			"options": [
+				{
+					"label": "Strobe Disabled",
+					"value": 0
+				},
+				{
+					"label": "Strobe Enabled",
+					"value": 1
+				}
+			]
 		}
 	}
 }
