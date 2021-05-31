@@ -244,11 +244,11 @@
 			"defaultValue": 0,
 			"options": [
 				{
-					"label": "Strobe Disabled",
+					"label": "Disable",
 					"value": 0
 				},
 				{
-					"label": "Strobe Enabled",
+					"label": "Enable",
 					"value": 1
 				}
 			]
@@ -261,11 +261,11 @@
 			"defaultValue": 0,
 			"options": [
 				{
-					"label": "Strobe Disabled",
+					"label": "Disable",
 					"value": 0
 				},
 				{
-					"label": "Strobe Enabled",
+					"label": "Enable",
 					"value": 1
 				}
 			]
