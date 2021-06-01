@@ -53,7 +53,7 @@
     "@types/json5": "2.2.0",
     "@types/minimatch": "^3.0.4",
     "@types/mockdate": "^2.0.0",
-    "@types/node": "^15.0.1",
+    "@types/node": "^15.6.1",
     "@types/pegjs": "^0.10.2",
     "@types/prettier": "^2.2.3",
     "@types/semver": "^7.3.5",
