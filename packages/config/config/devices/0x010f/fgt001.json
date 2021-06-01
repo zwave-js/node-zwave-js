@@ -19,7 +19,7 @@
 	},
 	"paramInformation": {
 		"1": {
-			"label": "Override Schedule duration",
+			"label": "Override Schedule Duration",
 			"description": "Duration of Override Schedule after turning knob",
 			"unit": "minutes",
 			"valueSize": 4,
@@ -29,18 +29,18 @@
 		},
 		"2[0x01]": {
 			"$import": "../templates/master_template.json#base_enable_disable",
-			"label": "Open window detector (normal)",
+			"label": "Open Window Detector (Normal)",
 			"defaultValue": 1,
 			"valueSize": 4
 		},
 		"2[0x02]": {
 			"$import": "../templates/master_template.json#base_enable_disable",
-			"label": "Open window detector (rapid)",
+			"label": "Open Window Detector (Rapid)",
 			"valueSize": 4
 		},
 		"2[0x04]": {
 			"$import": "../templates/master_template.json#base_enable_disable",
-			"label": "Increase receiver sensitivity",
+			"label": "Increase Receiver Sensitivity",
 			"description": "Increase receiver sensitivity, but shortens battery life",
 			"valueSize": 4
 		},
@@ -52,59 +52,59 @@
 		},
 		"2[0x10]": {
 			"$import": "../templates/master_template.json#base_enable_disable",
-			"label": "Protect setting Full ON/OFF",
+			"label": "Protect Setting Full ON/OFF",
 			"description": "Protect from setting Full ON and Full OFF mode by turning the knob manually",
 			"valueSize": 4
 		},
 		"2[0x20]": {
 			"$if": "firmwareVersion >= 4.7",
 			"$import": "../templates/master_template.json#base_enable_disable",
-			"label": "Vertical mount",
+			"label": "Vertical Mount",
 			"description": "Device mounted in vertical position",
 			"valueSize": 4
 		},
 		"2[0x40]": {
 			"$if": "firmwareVersion >= 4.7",
 			"$import": "../templates/master_template.json#base_enable_disable",
-			"label": "Moderate regulator behaviour",
+			"label": "Moderate Regulator Behaviour",
 			"description": "Set moderate regulator behaviour instead of rapid",
 			"valueSize": 4
 		},
 		"2[0x80]": {
 			"$if": "firmwareVersion >= 4.7",
 			"$import": "../templates/master_template.json#base_enable_disable",
-			"label": "Inverted knob operation",
+			"label": "Inverted Knob Operation",
 			"valueSize": 4
 		},
 		"2[0x100]": {
 			"$if": "firmwareVersion >= 4.7",
 			"$import": "../templates/master_template.json#base_enable_disable",
-			"label": "Heating medium demand reports",
+			"label": "Heating Medium Demand Reports",
 			"valueSize": 4
 		},
 		"2[0x200]": {
 			"$if": "firmwareVersion >= 4.7",
 			"$import": "../templates/master_template.json#base_enable_disable",
-			"label": "Detecting heating system failures",
+			"label": "Detecting Heating System Failures",
 			"valueSize": 4
 		},
 		"3[0x01]": {
 			"$import": "../templates/master_template.json#base_true_false",
-			"label": "Temperature sensor",
+			"label": "Temperature Sensor",
 			"description": "Optional temperature sensor connected and operational",
 			"valueSize": 4,
 			"readOnly": true
 		},
 		"3[0x02]": {
 			"$import": "../templates/master_template.json#base_true_false",
-			"label": "Open window detected",
+			"label": "Open Window Detected",
 			"valueSize": 4,
 			"readOnly": true
 		},
 		"3[0x04]": {
 			"$if": "firmwareVersion >= 4.7",
 			"$import": "../templates/master_template.json#base_true_false",
-			"label": "Provide heat",
+			"label": "Provide Heat",
 			"description": "Provide heat in order to maintain set temperature",
 			"valueSize": 4,
 			"readOnly": true
@@ -112,7 +112,7 @@
 		"3[0x08]": {
 			"$if": "firmwareVersion >= 4.7",
 			"$import": "../templates/master_template.json#base_true_false",
-			"label": "Malfunctioning heating system",
+			"label": "Malfunctioning Heating System",
 			"description": "Malfunctioning heating system - cannot reach set temperature",
 			"valueSize": 4,
 			"readOnly": true

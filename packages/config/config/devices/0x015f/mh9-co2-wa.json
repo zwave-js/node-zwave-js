@@ -19,7 +19,8 @@
 			"valueSize": 2,
 			"minValue": 1,
 			"maxValue": 5000,
-			"defaultValue": 1000
+			"defaultValue": 1000,
+			"unit": "ppm"
 		},
 		"2": {
 			"label": "CO2 Reporting Threshold",
@@ -28,7 +29,7 @@
 			"maxValue": 255,
 			"defaultValue": 10,
 			"unsigned": true,
-			"unit": "5ppm",
+			"unit": "5 ppm",
 			"options": [
 				{
 					"label": "Disable",
@@ -43,7 +44,7 @@
 			"maxValue": 255,
 			"defaultValue": 1,
 			"unsigned": true,
-			"unit": "0.5C",
+			"unit": "0.5 °C",
 			"options": [
 				{
 					"label": "Disable",
@@ -67,7 +68,7 @@
 			]
 		},
 		"255": {
-			"label": "Factory setting",
+			"label": "Factory Setting",
 			"description": "Restore the factory setting",
 			"valueSize": 1,
 			"minValue": 0,
@@ -77,10 +78,6 @@
 			"writeOnly": true,
 			"allowManualEntry": false,
 			"options": [
-				{
-					"label": "Idle",
-					"value": 0
-				},
 				{
 					"label": "Reset",
 					"value": 85
