@@ -202,9 +202,6 @@
 			"$if": "firmwareVersion >= 2.0",
 			"$import": "templates/aeotec_template.json#switch_destination_s2"
 		},
-		"252": {
-			"$import": "templates/aeotec_template.json#lock_configuration"
-		},
 		// WallSwipe Settings
 		"144": {
 			"$if": "firmwareVersion >= 2.0",
@@ -339,7 +336,9 @@
 		}
 	},
 	"compat": {
-		"preserveRootApplicationCCValueIDs": true
+		"preserveRootApplicationCCValueIDs": true,
+		// The device can report S1/S2 switch operation via Basic Set to groups 3 and 4
+		"treatBasicSetAsEvent": true
 	},
 	"metadata": {
 		"inclusion": "Turn the primary controller of Z-Wave network into inclusion mode, short press the product’s Action button that you can find on the product's housing",
