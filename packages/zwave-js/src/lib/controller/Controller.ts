@@ -209,6 +209,9 @@ interface ControllerEventCallbacks
 
 export type ControllerEvents = Extract<keyof ControllerEventCallbacks, string>;
 
+// eslint-disable-next-line @typescript-eslint/no-empty-interface
+export interface ZWaveController extends ControllerStatisticsHost {}
+
 @Mixin([ControllerStatisticsHost])
 export class ZWaveController extends TypedEventEmitter<ControllerEventCallbacks> {
 	/** @internal */

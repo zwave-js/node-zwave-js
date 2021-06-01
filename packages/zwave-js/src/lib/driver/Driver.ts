@@ -471,9 +471,15 @@ export class Driver extends TypedEventEmitter<DriverEventCallbacks> {
 						switch (lastError) {
 							case "response timeout":
 								errorReason = "No response from controller";
+								this.controller.incrementStatistics(
+									"timeoutResponse",
+								);
 								break;
 							case "callback timeout":
 								errorReason = "No callback from controller";
+								this.controller.incrementStatistics(
+									"timeoutCallback",
+								);
 								break;
 							case "response NOK":
 								errorReason =
@@ -484,6 +490,10 @@ export class Driver extends TypedEventEmitter<DriverEventCallbacks> {
 									"The controller callback indicated failure";
 								break;
 							case "ACK timeout":
+								this.controller.incrementStatistics(
+									"timeoutACK",
+								);
+							// fall through
 							case "CAN":
 							case "NAK":
 							default:
@@ -1597,7 +1607,7 @@ export class Driver extends TypedEventEmitter<DriverEventCallbacks> {
 				if (isCommandClassContainer(msg)) {
 					// TODO: Update node statistics
 				} else {
-					this.controller.incrementStatistics("messagesDropped");
+					this.controller.incrementStatistics("messagesDroppedRX");
 				}
 			} catch (e) {
 				if (
