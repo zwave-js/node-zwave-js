@@ -888,7 +888,7 @@ export class ColorSwitchCCSet extends ColorSwitchCC {
 		for (const [key, value] of entries(this.colorTable)) {
 			const component = colorTableKeyToComponent(key);
 			this.payload[i] = component;
-			this.payload[i + 1] = clamp(value!, 0, 0xff);
+			this.payload[i + 1] = clamp(value, 0, 0xff);
 			i += 2;
 		}
 		if (this.version >= 2 && this.duration) {
@@ -900,7 +900,6 @@ export class ColorSwitchCCSet extends ColorSwitchCC {
 	public toLogEntry(): MessageOrCCLogEntry {
 		const message: MessageRecord = {};
 		for (const [key, value] of Object.entries(this.colorTable)) {
-			if (value == undefined) continue;
 			const realKey: string =
 				key in ColorComponentMap
 					? (ColorComponent as any)[(ColorComponentMap as any)[key]]
