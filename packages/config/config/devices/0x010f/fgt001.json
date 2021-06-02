@@ -30,7 +30,7 @@
 		"2[0x01]": {
 			"$import": "../templates/master_template.json#base_enable_disable",
 			"label": "Open Window Detector (Normal)",
-			"defaultValue": 1,
+			"defaultValue": 1, // Enable
 			"valueSize": 4
 		},
 		"2[0x02]": {
@@ -121,9 +121,7 @@
 	"compat": {
 		"commandClasses": {
 			"remove": {
-				// Root endpoint duplicates endpoint 1
-				// We need to delete battery class on either root or 1st endpoint
-				// in order to see only one main battery value
+				// Root endpoint duplicates endpoint 1, causing duplicated Battery CC values
 				"0x80": {
 					"endpoints": [0]
 				}
