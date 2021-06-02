@@ -26,6 +26,7 @@ import {
 import type { SuccessIndicator } from "../../message/SuccessIndicator";
 
 export enum SerialAPISetupCommand {
+	Unsupported = 0x00,
 	GetSupportedCommands = 0x01,
 	SetTxStatusReport = 0x02,
 	SetPowerlevel = 0x04,

@@ -269,6 +269,16 @@ async function processImports(program: Project): Promise<boolean> {
 	return hasErrors;
 }
 
+function fixPrinterErrors(text: string): string {
+	return (
+		text
+			// The text includes one too many tabs at the start of each line
+			.replace(/^\t(\t*)/gm, "$1")
+			// TS 4.2+ has some weird printing bug for aliases: https://github.com/microsoft/TypeScript/issues/43031
+			.replace(/(\w+) \| \("unknown" & { __brand: \1; }\)/g, "Maybe<$1>")
+	);
+}
+
 function printMethodDeclaration(method: MethodDeclaration): string {
 	method = method.toggleModifier("public", false);
 	const start = method.getStart();
@@ -281,14 +291,12 @@ function printMethodDeclaration(method: MethodDeclaration): string {
 		ret += ": " + method.getSignature().getReturnType().getText(method);
 	}
 	ret += ";";
-	// The text might include one too many tabs at the start of each line
-	return ret.replace(/^\t(\t*)/gm, "$1");
+	return fixPrinterErrors(ret);
 }
 
 function printOverload(method: MethodDeclaration): string {
 	method = method.toggleModifier("public", false);
-	// The text includes one too many tabs at the start of each line
-	return method.getText().replace(/^\t(\t*)/gm, "$1");
+	return fixPrinterErrors(method.getText());
 }
 
 /** Generates CC documentation, returns true if there was an error */
