@@ -1,5 +1,3 @@
-// AEON Labs ZW140
-// Dual Nano Switch
 {
 	"manufacturer": "AEON Labs",
 	"manufacturerId": "0x0086",
@@ -36,7 +34,8 @@
 			"label": "Lifeline",
 			"maxNodes": 5,
 			"isLifeline": true,
-			"noEndpoint": true
+			// The device does not like Endpoint Associations for the lifeline
+			"multiChannel": false
 		},
 		"2": {
 			"label": "Forward Received Commands",

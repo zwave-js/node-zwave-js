@@ -1,5 +1,3 @@
-// Minoston MS10Z
-// Smart On/Off Switch
 {
 	"manufacturer": "Minoston",
 	"manufacturerId": "0x0312",
@@ -98,7 +96,6 @@
 		},
 		"4": {
 			"label": "Auto Turn-off Time",
-			"description": "Auto turn-off time",
 			"valueSize": 4,
 			"unit": "minutes",
 			"minValue": 1,

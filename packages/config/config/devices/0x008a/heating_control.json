@@ -1,5 +1,3 @@
-// BeNext Heating Control
-// Thermostat for controlling the opentherm protocol
 {
 	"manufacturer": "BeNext",
 	"manufacturerId": "0x008a",

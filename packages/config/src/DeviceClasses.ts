@@ -68,7 +68,7 @@ export async function loadDeviceClassesInternal(
 			if (!hexKeyRegexNDigits.test(key)) {
 				throwInvalidConfig(
 					"device classes",
-					`found non-hex key "${key}" in the basic device class definition`,
+					`found invalid key "${key}" in the basic device class definition. Device classes must have lowercase hexadecimal IDs.`,
 				);
 			}
 			const keyNum = parseInt(key.slice(2), 16);
@@ -80,7 +80,7 @@ export async function loadDeviceClassesInternal(
 			if (!hexKeyRegexNDigits.test(key)) {
 				throwInvalidConfig(
 					"device classes",
-					`found non-hex key "${key}" in the generic device class definition`,
+					`found invalid key "${key}" in the generic device class definition. Device classes must have lowercase hexadecimal IDs.`,
 				);
 			}
 			const keyNum = parseInt(key.slice(2), 16);
@@ -229,9 +229,11 @@ export class GenericDeviceClass {
 				if (!hexKeyRegexNDigits.test(specificKey))
 					throwInvalidConfig(
 						"device classes",
-						`found non-hex key "${specificKey}" in device class ${
+						`found invalid key "${specificKey}" in device class ${
 							this.label
-						} (${num2hex(this.key)})`,
+						} (${num2hex(
+							this.key,
+						)}). Device classes must have lowercase hexadecimal IDs.`,
 					);
 				const specificKeyNum = parseInt(specificKey.slice(2), 16);
 				specific.set(

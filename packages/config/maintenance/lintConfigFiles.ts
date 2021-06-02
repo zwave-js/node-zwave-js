@@ -129,6 +129,12 @@ function getAllConditions(
 	return ret;
 }
 
+function paramNoToString(parameter: number, valueBitMask?: number): string {
+	const bitmaskString =
+		valueBitMask != undefined ? `[${num2hex(valueBitMask)}]` : "";
+	return `Parameter #${parameter}${bitmaskString}`;
+}
+
 async function lintDevices(): Promise<void> {
 	process.env.NODE_ENV = "test";
 	await configManager.loadDeviceIndex();
@@ -225,7 +231,7 @@ async function lintDevices(): Promise<void> {
 
 			if (config.paramInformation?.size) {
 				for (const [
-					{ parameter },
+					{ parameter, valueBitMask },
 					{ label, description },
 				] of config.paramInformation.entries()) {
 					// Check if the description is too similar to the label
@@ -236,7 +242,10 @@ async function lintDevices(): Promise<void> {
 						if (normalizedDistance < 0.5) {
 							addWarning(
 								file,
-								`Parameter #${parameter} has a very similar label and description (normalized distance ${normalizedDistance.toFixed(
+								`${paramNoToString(
+									parameter,
+									valueBitMask,
+								)} has a very similar label and description (normalized distance ${normalizedDistance.toFixed(
 									2,
 								)}). Consider removing the description if it does not add any information:
 label:       ${label}
@@ -249,7 +258,7 @@ description: ${description}`,
 
 				// Check if there are options when manual entry is forbidden
 				for (const [
-					{ parameter },
+					{ parameter, valueBitMask },
 					value,
 				] of config.paramInformation.entries()) {
 					if (
@@ -259,7 +268,10 @@ description: ${description}`,
 					) {
 						addError(
 							file,
-							`Parameter #${parameter} must allow manual entry if there are no options defined!`,
+							`${paramNoToString(
+								parameter,
+								valueBitMask,
+							)} must allow manual entry if there are no options defined!`,
 							variant,
 						);
 					}
@@ -267,7 +279,10 @@ description: ${description}`,
 					if (value.readOnly && value.writeOnly) {
 						addError(
 							file,
-							`Parameter #${parameter} is invalid: readOnly and writeOnly are mutually exclusive!`,
+							`${paramNoToString(
+								parameter,
+								valueBitMask,
+							)} is invalid: readOnly and writeOnly are mutually exclusive!`,
 							variant,
 						);
 					}
@@ -275,14 +290,17 @@ description: ${description}`,
 
 				// Check if there are readOnly parameters with allowManualEntry = true
 				for (const [
-					{ parameter },
+					{ parameter, valueBitMask },
 					value,
 				] of config.paramInformation.entries()) {
 					// We can't actually distinguish between `false` and missing, but this is good enough
 					if (value.readOnly && value.allowManualEntry) {
 						addError(
 							file,
-							`Parameter #${parameter} is invalid: allowManualEntry must be omitted for readOnly parameters!`,
+							`${paramNoToString(
+								parameter,
+								valueBitMask,
+							)} is invalid: allowManualEntry must be omitted for readOnly parameters!`,
 							variant,
 						);
 					}
@@ -290,7 +308,7 @@ description: ${description}`,
 
 				// Check if there are options where readOnly and writeOnly are unnecessarily specified
 				for (const [
-					{ parameter },
+					{ parameter, valueBitMask },
 					value,
 				] of config.paramInformation.entries()) {
 					if (
@@ -300,7 +318,10 @@ description: ${description}`,
 					) {
 						addError(
 							file,
-							`Parameter #${parameter} must allow manual entry if there are no options defined!`,
+							`${paramNoToString(
+								parameter,
+								valueBitMask,
+							)} must allow manual entry if there are no options defined!`,
 							variant,
 						);
 					}
@@ -308,7 +329,10 @@ description: ${description}`,
 					if (value.readOnly && value.writeOnly) {
 						addError(
 							file,
-							`Parameter #${parameter} is invalid: readOnly and writeOnly are mutually exclusive!`,
+							`${paramNoToString(
+								parameter,
+								valueBitMask,
+							)} is invalid: readOnly and writeOnly are mutually exclusive!`,
 							variant,
 						);
 					} else if (
@@ -317,7 +341,10 @@ description: ${description}`,
 					) {
 						addError(
 							file,
-							`Parameter #${parameter} is invalid: readOnly and writeOnly must not both be specified!`,
+							`${paramNoToString(
+								parameter,
+								valueBitMask,
+							)} is invalid: readOnly and writeOnly must not both be specified!`,
 							variant,
 						);
 					}
@@ -325,7 +352,7 @@ description: ${description}`,
 
 				// Check if there are options with duplicate values
 				for (const [
-					{ parameter },
+					{ parameter, valueBitMask },
 					value,
 				] of config.paramInformation.entries()) {
 					for (let i = 0; i < value.options.length; i++) {
@@ -336,7 +363,14 @@ description: ${description}`,
 						if (firstIndex !== i) {
 							addError(
 								file,
-								`Parameter #${parameter} is invalid: option value ${option.value} duplicated between "${value.options[firstIndex].label}" and "${option.label}"!`,
+								`${paramNoToString(
+									parameter,
+									valueBitMask,
+								)} is invalid: option value ${
+									option.value
+								} duplicated between "${
+									value.options[firstIndex].label
+								}" and "${option.label}"!`,
 								variant,
 							);
 						}
@@ -345,20 +379,26 @@ description: ${description}`,
 
 				// Check if there are options where min/max values is not compatible with the valueSize
 				for (const [
-					{ parameter },
+					{ parameter, valueBitMask },
 					value,
 				] of config.paramInformation.entries()) {
 					if (value.valueSize < 1 || value.valueSize > 4) {
 						addError(
 							file,
-							`Parameter #${parameter} is invalid: valueSize must be in the range 1...4!`,
+							`${paramNoToString(
+								parameter,
+								valueBitMask,
+							)} is invalid: valueSize must be in the range 1...4!`,
 							variant,
 						);
 					} else {
 						if (value.minValue > value.maxValue) {
 							addError(
 								file,
-								`Parameter #${parameter} is invalid: minValue must not be greater than maxValue!`,
+								`${paramNoToString(
+									parameter,
+									valueBitMask,
+								)} is invalid: minValue must not be greater than maxValue!`,
 								variant,
 							);
 						}
@@ -375,7 +415,12 @@ description: ${description}`,
 						if (!limits) {
 							addError(
 								file,
-								`Parameter #${parameter} is invalid: cannot determine limits for valueSize ${value.valueSize}!`,
+								`${paramNoToString(
+									parameter,
+									valueBitMask,
+								)} is invalid: cannot determine limits for valueSize ${
+									value.valueSize
+								}!`,
 								variant,
 							);
 						} else {
@@ -394,7 +439,10 @@ description: ${description}`,
 								if (fitsUnsignedLimits) {
 									addError(
 										file,
-										`Parameter #${parameter} is invalid: min/maxValue is incompatible with valueSize ${
+										`${paramNoToString(
+											parameter,
+											valueBitMask,
+										)} is invalid: min/maxValue is incompatible with valueSize ${
 											value.valueSize
 										} (min = ${limits.min}, max = ${
 											limits.max
@@ -408,14 +456,28 @@ Consider converting this parameter to unsigned using ${white(
 									if (value.minValue < limits.min) {
 										addError(
 											file,
-											`Parameter #${parameter} is invalid: minValue ${value.minValue} is incompatible with valueSize ${value.valueSize} (min = ${limits.min})!`,
+											`${paramNoToString(
+												parameter,
+												valueBitMask,
+											)} is invalid: minValue ${
+												value.minValue
+											} is incompatible with valueSize ${
+												value.valueSize
+											} (min = ${limits.min})!`,
 											variant,
 										);
 									}
 									if (value.maxValue > limits.max) {
 										addError(
 											file,
-											`Parameter #${parameter} is invalid: maxValue ${value.maxValue} is incompatible with valueSize ${value.valueSize} (max = ${limits.max})!`,
+											`${paramNoToString(
+												parameter,
+												valueBitMask,
+											)} is invalid: maxValue ${
+												value.maxValue
+											} is incompatible with valueSize ${
+												value.valueSize
+											} (max = ${limits.max})!`,
 											variant,
 										);
 									}
@@ -424,14 +486,28 @@ Consider converting this parameter to unsigned using ${white(
 								if (value.minValue < unsignedLimits.min) {
 									addError(
 										file,
-										`Parameter #${parameter} is invalid: minValue ${value.minValue} is incompatible with valueSize ${value.valueSize} (min = ${unsignedLimits.min})!`,
+										`${paramNoToString(
+											parameter,
+											valueBitMask,
+										)} is invalid: minValue ${
+											value.minValue
+										} is incompatible with valueSize ${
+											value.valueSize
+										} (min = ${unsignedLimits.min})!`,
 										variant,
 									);
 								}
 								if (value.maxValue > unsignedLimits.max) {
 									addError(
 										file,
-										`Parameter #${parameter} is invalid: maxValue ${value.maxValue} is incompatible with valueSize ${value.valueSize} (max = ${unsignedLimits.max})!`,
+										`${paramNoToString(
+											parameter,
+											valueBitMask,
+										)} is invalid: maxValue ${
+											value.maxValue
+										} is incompatible with valueSize ${
+											value.valueSize
+										} (max = ${unsignedLimits.max})!`,
 										variant,
 									);
 								}
@@ -442,7 +518,7 @@ Consider converting this parameter to unsigned using ${white(
 
 				// Check if there are parameters with predefined options that are not compatible with min/maxValue
 				for (const [
-					{ parameter },
+					{ parameter, valueBitMask },
 					value,
 				] of config.paramInformation.entries()) {
 					if (!value.options.length) continue;
@@ -453,7 +529,14 @@ Consider converting this parameter to unsigned using ${white(
 						) {
 							addError(
 								file,
-								`Parameter #${parameter} is invalid: The option value ${option.value} must be in the range ${value.minValue}...${value.maxValue}!`,
+								`${paramNoToString(
+									parameter,
+									valueBitMask,
+								)} is invalid: The option value ${
+									option.value
+								} must be in the range ${value.minValue}...${
+									value.maxValue
+								}!`,
 								variant,
 							);
 						}
@@ -634,7 +717,7 @@ Did you mean to use ${opt.value >>> shiftAmount}?`,
 
 				// Check if there are descriptions with common errors
 				for (const [
-					{ parameter },
+					{ parameter, valueBitMask },
 					value,
 				] of config.paramInformation.entries()) {
 					if (!value.description) continue;
@@ -642,21 +725,41 @@ Did you mean to use ${opt.value >>> shiftAmount}?`,
 					if (/default:?\s+\d+/i.test(value.description)) {
 						addWarning(
 							file,
-							`Parameter #${parameter}: The description mentions a default value which should be handled by the "defaultValue" property instead!`,
+							`${paramNoToString(
+								parameter,
+								valueBitMask,
+							)}: The description mentions a default value which should be handled by the "defaultValue" property instead!`,
 							variant,
 						);
 					}
-					if (
-						/seconds|minutes|hours|percent(age)?|kwh|watts/i.test(
-							value.description,
-						)
-					) {
-						addWarning(
-							file,
-							`Parameter #${parameter}: The description mentions a unit which should be moved by the "unit" property instead!`,
-							variant,
-						);
-					}
+
+					// // Complain about parameters where the description mention the unit. We treat the mention of exactly one unit as a warning,
+					// // because some parameters have changing units and need to explain them in the description
+					// if (
+					// 	[
+					// 		"second",
+					// 		"minute",
+					// 		"hour",
+					// 		"day",
+					// 		"week",
+					// 		"kwh",
+					// 		"watt",
+					// 	].filter((unit) =>
+					// 		value.description!.toLowerCase().includes(unit),
+					// 	).length === 1
+					// ) {
+					// 	// Exclude some false positives
+					// 	if (!/rounded/i.test(value.description)) {
+					// 		addWarning(
+					// 			file,
+					// 			`${paramNoToString(
+					// 				parameter,
+					// 				valueBitMask,
+					// 			)}: The description mentions a unit which should be moved by the "unit" property instead!`,
+					// 			variant,
+					// 		);
+					// 	}
+					// }
 				}
 			}
 
@@ -746,6 +849,14 @@ Did you mean to use ${opt.value >>> shiftAmount}?`,
 					);
 				}
 			}
+		}
+
+		// Check that either `endpoints` or `associations` are specified, not both
+		if (conditionalConfig.endpoints && conditionalConfig.associations) {
+			addError(
+				file,
+				`The properties "endpoints" and "associations" cannot be used together. To define associations for the root endpoint, specify them under endpoint "0"!`,
+			);
 		}
 	}
 

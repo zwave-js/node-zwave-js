@@ -119,9 +119,10 @@ import {
 	GetNodeProtocolInfoRequest,
 	GetNodeProtocolInfoResponse,
 } from "../controller/GetNodeProtocolInfoMessages";
-import type { Driver } from "../driver/Driver";
+import type { Driver, SendCommandOptions } from "../driver/Driver";
 import { Extended, interpretEx } from "../driver/StateMachineShared";
 import type { Transaction } from "../driver/Transaction";
+import { MessagePriority } from "../message/Constants";
 import { DeviceClass } from "./DeviceClass";
 import { Endpoint } from "./Endpoint";
 import {
@@ -797,6 +798,7 @@ export class ZWaveNode extends Endpoint {
 	// wotan-disable-next-line no-misused-generics
 	public pollValue<T extends unknown = unknown>(
 		valueId: ValueID,
+		sendCommandOptions: SendCommandOptions = {},
 	): Promise<T | undefined> {
 		// Try to retrieve the corresponding CC API
 		const endpointInstance = this.getEndpoint(valueId.endpoint || 0);
@@ -807,9 +809,15 @@ export class ZWaveNode extends Endpoint {
 			);
 		}
 
-		const api = (endpointInstance.commandClasses as any)[
+		const api = ((endpointInstance.commandClasses as any)[
 			valueId.commandClass
-		] as CCAPI;
+		] as CCAPI).withOptions({
+			// We do not want to delay more important communication by polling, so give it
+			// the lowest priority and don't retry unless overwritten by the options
+			maxSendAttempts: 1,
+			priority: MessagePriority.Poll,
+			...sendCommandOptions,
+		});
 
 		// Check if the pollValue method is implemented
 		if (!api.pollValue) {
@@ -845,9 +853,14 @@ export class ZWaveNode extends Endpoint {
 		const endpointInstance = this.getEndpoint(valueId.endpoint || 0);
 		if (!endpointInstance) return false;
 
-		const api = (endpointInstance.commandClasses as any)[
+		const api = ((endpointInstance.commandClasses as any)[
 			valueId.commandClass
-		] as CCAPI;
+		] as CCAPI).withOptions({
+			// We do not want to delay more important communication by polling, so give it
+			// the lowest priority and don't retry unless overwritten by the options
+			maxSendAttempts: 1,
+			priority: MessagePriority.Poll,
+		});
 
 		// Check if the pollValue method is implemented
 		if (!api.pollValue) return false;
@@ -2050,14 +2063,28 @@ protocol version:      ${this._protocolVersion}`;
 		);
 	}
 
-	private handleHail(_command: HailCC): void {
+	private busyPollingAfterHail: boolean = false;
+	private async handleHail(_command: HailCC): Promise<void> {
 		// treat this as a sign that the node is awake
 		this.markAsAwake();
 
+		if (this.busyPollingAfterHail) {
+			this.driver.controllerLog.logNode(this.nodeId, {
+				message: `Hail received from node, but still busy with previous one...`,
+			});
+			return;
+		}
+
+		this.busyPollingAfterHail = true;
 		this.driver.controllerLog.logNode(this.nodeId, {
 			message: `Hail received from node, refreshing actuator and sensor values...`,
 		});
-		void this.refreshValues();
+		try {
+			await this.refreshValues();
+		} catch {
+			// ignore
+		}
+		this.busyPollingAfterHail = false;
 	}
 
 	/** Stores information about a currently held down key */
@@ -2248,6 +2275,10 @@ protocol version:      ${this._protocolVersion}`;
 				] as CCAPI).withOptions({
 					// Tag the resulting transactions as compat queries
 					tag: "compat",
+					// Do not retry them or they may cause congestion if the node is asleep again
+					maxSendAttempts: 1,
+					// This is for a sleeping node - there's no point in keeping the transactions when the node is asleep
+					expire: 10000,
 				});
 			} catch {
 				this.driver.controllerLog.logNode(this.id, {
@@ -2301,6 +2332,13 @@ protocol version:      ${this._protocolVersion}`;
 					direction: "none",
 					level: "warn",
 				});
+				if (
+					isZWaveError(e) &&
+					e.code === ZWaveErrorCodes.Controller_MessageExpired
+				) {
+					// A compat query expired - no point in trying the others too
+					return;
+				}
 			}
 		}
 	}
@@ -2432,17 +2470,15 @@ protocol version:      ${this._protocolVersion}`;
 	 * Handles the receipt of a Notification Report
 	 */
 	private handleNotificationReport(command: NotificationCCReport): void {
-		if (command.alarmType) {
-			// This is a V1 alarm, just store the only two values it has
-			command.persistValues();
-			return;
-		} else if (command.notificationType == undefined) {
-			this.driver.controllerLog.logNode(this.id, {
-				message: `received unsupported notification ${stringify(
-					command,
-				)}`,
-				direction: "inbound",
-			});
+		if (command.notificationType == undefined) {
+			if (command.alarmType == undefined) {
+				this.driver.controllerLog.logNode(this.id, {
+					message: `received unsupported notification ${stringify(
+						command,
+					)}`,
+					direction: "inbound",
+				});
+			}
 			return;
 		}
 
@@ -2598,7 +2634,10 @@ protocol version:      ${this._protocolVersion}`;
 		}
 	}
 
-	private handleClockReport(command: ClockCCReport): void {
+	private busySettingClock: boolean = false;
+	private async handleClockReport(command: ClockCCReport): Promise<void> {
+		if (this.busySettingClock) return;
+
 		// A Z-Wave Plus node SHOULD issue a Clock Report Command via the Lifeline Association Group if they
 		// suspect to have inaccurate time and/or weekdays (e.g. after battery removal).
 		// A controlling node SHOULD compare the received time and weekday with its current time and set the
@@ -2632,11 +2671,17 @@ protocol version:      ${this._protocolVersion}`;
 				this.nodeId,
 				`detected a deviation of the node's clock, updating it...`,
 			);
-			endpoint.commandClasses.Clock.set(hours, minutes, weekday).catch(
-				() => {
-					// Don't throw when the update fails
-				},
-			);
+			this.busySettingClock = true;
+			try {
+				await endpoint.commandClasses.Clock.set(
+					hours,
+					minutes,
+					weekday,
+				);
+			} catch {
+				// ignore
+			}
+			this.busySettingClock = false;
 		}
 	}
 
@@ -3090,24 +3135,28 @@ protocol version:      ${this._protocolVersion}`;
 		command: EntryControlCCNotification,
 	): void {
 		if (
-			this.recentEntryControlNotificationSequenceNumbers.includes(
-				command.sequenceNumber,
-			)
+			!this._deviceConfig?.compat?.disableStrictEntryControlDataValidation
 		) {
-			this.driver.controllerLog.logNode(
-				this.id,
-				`Received duplicate Entry Control Notification (sequence number ${command.sequenceNumber}), ignoring...`,
-				"warn",
-			);
-			return;
-		}
+			if (
+				this.recentEntryControlNotificationSequenceNumbers.includes(
+					command.sequenceNumber,
+				)
+			) {
+				this.driver.controllerLog.logNode(
+					this.id,
+					`Received duplicate Entry Control Notification (sequence number ${command.sequenceNumber}), ignoring...`,
+					"warn",
+				);
+				return;
+			}
 
-		// Keep track of the last 5 sequence numbers
-		this.recentEntryControlNotificationSequenceNumbers.unshift(
-			command.sequenceNumber,
-		);
-		if (this.recentEntryControlNotificationSequenceNumbers.length > 5) {
-			this.recentEntryControlNotificationSequenceNumbers.pop();
+			// Keep track of the last 5 sequence numbers
+			this.recentEntryControlNotificationSequenceNumbers.unshift(
+				command.sequenceNumber,
+			);
+			if (this.recentEntryControlNotificationSequenceNumbers.length > 5) {
+				this.recentEntryControlNotificationSequenceNumbers.pop();
+			}
 		}
 
 		// Notify listeners
@@ -3399,8 +3448,17 @@ protocol version:      ${this._protocolVersion}`;
 			}
 		}
 
-		// And restore the device config
+		// Restore the device config
 		await this.loadDeviceConfig();
+
+		// And remove the Basic CC if it should be hidden
+		// TODO: Do this as part of loadDeviceConfig
+		const compat = this._deviceConfig?.compat;
+		if (!compat?.disableBasicMapping && !compat?.treatBasicSetAsEvent) {
+			for (const endpoint of this.getAllEndpoints()) {
+				endpoint.hideBasicCCInFavorOfActuatorCCs();
+			}
+		}
 	}
 
 	/**

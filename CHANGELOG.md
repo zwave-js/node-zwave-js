@@ -2,21 +2,121 @@
 <!--
 	Add placeholder for next release with `wip` snippet
 -->
-## __WORK IN PROGRESS__
-<!-- ### Breaking changes
+## 7.7.1 (2021-05-29)
+### Bugfixes
+* Use lock files to limit access to Value DB to a single instance, do not auto-compress on startup. This should avoid cache corruption when the driver is restarted multiple times in a short time
+* Fixed an error during `Multi Channel Association CC` when `Association CC` is not supported
 
+### Config file changes
+* Remove auto-assignment to Motion Sensor group from Fibaro FGMS001
+* Add Sunricher ZV9001K4-RGBW
+
+### Changes under the hood
+* Include command name in "invalid CC" logs
+
+## 7.7.0 (2021-05-27)
 ### Features
+* Add APIs to read and write external NVM
+* Add API to toggle Z-Wave radio on/off
+* Partially decode dropped commands and give insight by logging them as good as possible
 
-### Bugfixes -->
+### Bugfixes
+* Fixed a crash that could be caused by loading device configuration files with conditions when a node's firmware version is unknown
+
+### Config file changes
+* Remove invalid device ID for MINI KEYPAD RFID
+
+## 7.6.0 (2021-05-26)
+### Features
+* Add multicast support to `Configuration CC`
+* Add isHealNetworkActive property to controller
+
+### Bugfixes
+* Change GED2150 config file extension to json, so it gets picked up
+* Fixed typo in error message for "invalid condition"
+
+### Config file changes
+* Add additional version of Eaton 5-Scene Keypad
+* Correct parameter label for Aeotec DSC11
+* Added support for Sunricher ZV2835RAC-NF
+* Update Honeywell TH6320ZW2003 and add template
+
+### Changes under the hood
+* Enforce hex keys in config files to be lowercase
+
+## 7.5.2 (2021-05-25)
+### Bugfixes
+* `VirtualEndpoint` and `VirtualNode` are now exported through `zwave-js` and `zwave-js/Node`
+* After a supervised `Multilevel Switch::Set` with `targetValue` 255, the `currentValue` is now refreshed
+* The compat flag `disableStrictEntryControlDataValidation` now also disables the sequence number validation for `Entry Control` notifications
+* When a V1 alarm report is mapped to a V2+ notification, the alarm values `alarmType` and `alarmLevel` are no longer deleted. This should avoid breaking changes when we add a new mapping.
+* A failed transmission of a `NonceReport` is no longer retried and no longer has an influence on the device status
+* Avoid setting the device clock too often
+* Avoid multiple value refreshes when a node hails multiple times
+
+### Config file changes
+* Add additional device ID to CT101 thermostat
+* Add support for Weiser SmartCode 5
+* Added a new product ID for iblinds V3.10+
+* Corrected some Logic Group config files
+* Add GED2150 config
+* Enable Basic Set mapping for Everspring HAC01
+* Enable Basic Set mapping for Aeotec ZW100 and Fantem FT100
+
+### Changes under the hood
+* Document `ping` method for nodes
+
+## 7.5.1 (2021-05-22)
+### Bugfixes
+* Check support for `Association CC` before using it in `Multi Channel Association CC` interview and aborting it
+* Improve logging for `Notification CC`
+* The module exports `zwave-js` and `zwave-js/CommandClass` now export all CC classes
+* `Basic CC` is now also hidden in favor of better CCs when restoring the network from cache
+* Fixed how the supported CCs for each endpoint are computed in `Multi Channel CC V1`
+
+### Config file changes
+* Corrected partial paramaters in Philio Technology Corp PST02-C
+* Fix wording of Zooz ZEN22 switch/dimmer led parameter
+* Aligned Fantem FT111 to original Aeotec config
+* Add languages to Ring Keypad v2
+
+### Changes under the hood
+* Workflows in PRs from first-time contributors are now regularly auto-approved if they only edit config files until GitHub figures out how to make this "feature" less tedious
+* Added a bot command to add compat flags to existing files (limited to collaborators with write access)
+
+## 7.5.0 (2021-05-17)
+### Features
+* CC API methods that accept a duration now also accept user-friendly strings like `2m5s` and `60s` instead of only `Duration` class instances
+* Configuration files may now define association groups on endpoints
+* Successful multicast commands now optimistically update the CC values
+* Successful multicast commands now verify the current value if the target value is `255`
+
+### Bugfixes
+* Disconnection of a serial-over-TCP socket is now detected and destroy the driver instead of silently failing
+* Ensure the external configuration directory exists
+* Prevent congestion through delayed wakeup compat queries to sleeping nodes
 
 ### Config file changes
 * Corrected lifeline label for Aeon ZW100
 * Aligned Fantem FT100 Motion with ZW100
+* Add additional device ID to Wenzhou ZW15S
+* Add support for Namron Dimmer 2 400W
+* Enable Basic Set mapping for EverSpring SP103
+* Align Fantem Door Window Sensor to Aeotec files
+* Add Zooz ZEN73/ZEN74; minor fix to importConfig.ts
+* Corrected lifeline label on Aeotec ZW112
+* Corrected param 8 for Aeotec DSB28
+* Corrected labels of power related params for Aeotec DSC11
+* Add keypad mapping to Yale Conexis L1
+* Several warnings were fixed in config files
 
 ### Changes under the hood
 * Reduced boilerplate for writing configuration files:
   * `readOnly` and `writeOnly` default to `false` and must now be omitted if they are not `true`
   * `allowManualEntry` is now optional and defaults to `true` unless the parameter is `readOnly`. This must be omitted or `false`.
+* The CC API documentation now mentions the numeric CC identifier
+* The `noEndpoint` property for associations in config files has been renamed to `multiChannel` and its meaning was reversed.
+* The leading comments at the start of config files were removed
 
 ## 7.4.0 (2021-05-10)
 ### Features

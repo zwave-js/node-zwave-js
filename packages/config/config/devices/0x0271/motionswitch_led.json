@@ -1,5 +1,3 @@
-// STEINEL GmbH MotionSwitch LED
-// Infrared motion detector with orientation light
 {
 	"manufacturer": "STEINEL GmbH",
 	"manufacturerId": "0x0271",

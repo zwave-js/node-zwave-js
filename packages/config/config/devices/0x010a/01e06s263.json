@@ -1,5 +1,3 @@
-// VDA 01E06S263
-// Vitrum VI EU on-off 6 triac 868.4MHz
 {
 	"manufacturer": "VDA",
 	"manufacturerId": "0x010a",
@@ -234,8 +232,7 @@
 			"unsigned": true
 		},
 		"206": {
-			"label": "Buttons Max. Brightness",
-			"description": "Leds maximum brightness",
+			"label": "Buttons Maximum Brightness",
 			"valueSize": 1,
 			"minValue": 5,
 			"maxValue": 100,
@@ -243,8 +240,7 @@
 			"unsigned": true
 		},
 		"207": {
-			"label": "Buttons Min. Brightness",
-			"description": "Led minum brightness",
+			"label": "Buttons Minimum Brightness",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 100,

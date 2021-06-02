@@ -1,5 +1,3 @@
-// Fibargroup FGS222
-// Double Relay Switch 2x1.5kW
 {
 	"manufacturer": "Fibargroup",
 	"manufacturerId": "0x010f",
@@ -86,22 +84,34 @@
 			]
 		},
 		"4": {
-			"label": "Relay 1: OFF-delay time (100ms steps)",
-			"description": "Auto off relay 1 after set time, in 100ms increments (default: 0 - off)",
+			"label": "Relay 1: Auto-Off Delay",
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 65535,
 			"defaultValue": 0,
-			"unsigned": true
+			"unsigned": true,
+			"unit": "0.1s",
+			"options": [
+				{
+					"label": "Disable",
+					"value": 0
+				}
+			]
 		},
 		"5": {
-			"label": "Relay 2: OFF-delay time (100ms steps)",
-			"description": "Auto off relay 2 after set time, in 100ms increments (default: 0 - off)",
+			"label": "Relay 2: Auto-Off Delay",
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 65535,
 			"defaultValue": 0,
-			"unsigned": true
+			"unsigned": true,
+			"unit": "0.1s",
+			"options": [
+				{
+					"label": "Disable",
+					"value": 0
+				}
+			]
 		},
 		"6": {
 			"label": "Separation of association sending (key 1)",

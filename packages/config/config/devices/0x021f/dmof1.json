@@ -1,5 +1,3 @@
-// Elexa Consumer Products Inc. DMOF1
-// Dome On/Off zwave wall plug for controlling small appliances and lights.
 {
 	"manufacturer": "Elexa Consumer Products Inc.",
 	"manufacturerId": "0x021f",

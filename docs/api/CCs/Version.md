@@ -1,5 +1,7 @@
 # Version CC
 
+?> CommandClass ID: `0x86`
+
 ## Version CC methods
 
 ### `get`

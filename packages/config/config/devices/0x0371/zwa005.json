@@ -1,5 +1,3 @@
-// Aeotec Ltd. ZWA005
-// Motion, light, and temperature sensor
 {
 	"manufacturer": "Aeotec Ltd.",
 	"manufacturerId": "0x0371",

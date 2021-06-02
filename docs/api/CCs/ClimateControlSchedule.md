@@ -1,5 +1,7 @@
 # Climate Control Schedule CC
 
+?> CommandClass ID: `0x46`
+
 ## Climate Control Schedule CC methods
 
 ### `set`

@@ -1,5 +1,7 @@
 # Binary Switch CC
 
+?> CommandClass ID: `0x25`
+
 ## Binary Switch CC methods
 
 ### `get`
@@ -11,7 +13,10 @@ async get(): Promise<{ currentValue: Maybe<boolean>; targetValue: boolean | unde
 ### `set`
 
 ```ts
-async set(targetValue: boolean, duration?: Duration): Promise<void>;
+async set(
+	targetValue: boolean,
+	duration?: Duration | string,
+): Promise<void>;
 ```
 
 Sets the switch to the given value.
@@ -19,4 +24,4 @@ Sets the switch to the given value.
 **Parameters:**
 
 -   `targetValue`: The target value to set
--   `duration`: The duration after which the target value should be reached. Only supported in V2 and above
+-   `duration`: The duration after which the target value should be reached. Can be a Duration instance or a user-friendly duration string like `"1m17s"`. Only supported in V2 and above.

@@ -1,5 +1,3 @@
-// GE/Jasco 52190 / ZW7105
-// Z-Wave LED Light Bulb
 {
 	"manufacturer": "GE/Jasco",
 	"manufacturerId": "0x0063",

@@ -1,5 +1,7 @@
 # Node Naming and Location CC
 
+?> CommandClass ID: `0x77`
+
 ## Node Naming and Location CC methods
 
 ### `getName`

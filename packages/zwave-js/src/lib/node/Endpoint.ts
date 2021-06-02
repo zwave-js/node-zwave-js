@@ -320,6 +320,8 @@ export class Endpoint {
 					property !== "ccId" &&
 					property !== "endpoint" &&
 					property !== "isSupported" &&
+					property !== "withOptions" &&
+					property !== "commandOptions" &&
 					!target.isSupported()
 				) {
 					throw new ZWaveError(

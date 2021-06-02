@@ -1,6 +1,6 @@
 /// <reference path="types.d.ts" />
 
-const { authorizedUsers } = require("./authorizedUsers");
+const { reviewers } = require("./users");
 
 // @ts-check
 
@@ -41,12 +41,12 @@ async function main(param) {
 	await github.pulls.requestReviewers({
 		...options,
 		pull_number: prNumber,
-		reviewers: authorizedUsers,
+		reviewers: reviewers.config,
 	});
 	await github.issues.addAssignees({
 		...options,
 		issue_number: prNumber,
-		assignees: authorizedUsers,
+		assignees: reviewers.config,
 	});
 
 	await github.issues.createComment({

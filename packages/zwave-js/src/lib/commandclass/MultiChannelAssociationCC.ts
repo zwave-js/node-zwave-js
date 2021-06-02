@@ -478,7 +478,11 @@ export class MultiChannelAssociationCC extends CommandClass {
 					const groupSupportsMultiChannel = group <= mcGroupCount;
 					const mustUseNodeAssociation =
 						!supportsMultiChannel ||
-						node.deviceConfig?.associations?.get(group)?.noEndpoint;
+						node.deviceConfig?.associations?.get(group)
+							?.multiChannel === false ||
+						node.deviceConfig?.endpoints
+							?.get(0)
+							?.associations?.get(group)?.multiChannel === false;
 
 					const nodeIdsValueId = groupSupportsMultiChannel
 						? getNodeIdsValueId(this.endpointIndex, group)
@@ -510,16 +514,25 @@ export class MultiChannelAssociationCC extends CommandClass {
 						!groupSupportsMultiChannel &&
 						!isAssignedAsNodeAssociation
 					) {
-						// Use normal association if this is not a multi channel association group
-						this.driver.controllerLog.logNode(node.id, {
-							endpoint: this.endpointIndex,
-							message: `Lifeline group #${group} does not support multi channel - assigning controller with Association CC...`,
-							direction: "outbound",
-						});
+						if (assocAPI.isSupported()) {
+							// Use normal association if this is not a multi channel association group
+							this.driver.controllerLog.logNode(node.id, {
+								endpoint: this.endpointIndex,
+								message: `Lifeline group #${group} does not support multi channel - assigning controller with Association CC...`,
+								direction: "outbound",
+							});
 
-						await assocAPI.addNodeIds(group, ownNodeId);
-						// refresh the associations - don't trust that it worked
-						await assocAPI.getGroup(group);
+							await assocAPI.addNodeIds(group, ownNodeId);
+							// refresh the associations - don't trust that it worked
+							await assocAPI.getGroup(group);
+						} else {
+							this.driver.controllerLog.logNode(node.id, {
+								endpoint: this.endpointIndex,
+								message: `Lifeline group #${group} does not support multi channel, but Association CC is not supported. Skipping...`,
+								direction: "none",
+								level: "warn",
+							});
+						}
 					} else if (
 						(this.version < 3 || mustUseNodeAssociation) &&
 						!isAssignedAsNodeAssociation
@@ -580,15 +593,24 @@ export class MultiChannelAssociationCC extends CommandClass {
 
 					// Fallback to Association CC if endpoint association didn't work
 					if (!didMCAssignmentWork) {
-						this.driver.controllerLog.logNode(node.id, {
-							endpoint: this.endpointIndex,
-							message: `Lifeline group #${group}: Multi Channel Association assignment failed, falling back to Association CC`,
-							direction: "none",
-							level: "warn",
-						});
-						await assocAPI.addNodeIds(group, ownNodeId);
-						// and refresh the associations - don't trust that it worked
-						await assocAPI.getGroup(group);
+						if (assocAPI.isSupported()) {
+							this.driver.controllerLog.logNode(node.id, {
+								endpoint: this.endpointIndex,
+								message: `Lifeline group #${group}: Multi Channel Association assignment failed, falling back to Association CC`,
+								direction: "none",
+								level: "warn",
+							});
+							await assocAPI.addNodeIds(group, ownNodeId);
+							// and refresh the associations - don't trust that it worked
+							await assocAPI.getGroup(group);
+						} else {
+							this.driver.controllerLog.logNode(node.id, {
+								endpoint: this.endpointIndex,
+								message: `Lifeline group #${group}: Multi Channel Association assignment failed, but Association CC is not supported. Skipping...`,
+								direction: "none",
+								level: "warn",
+							});
+						}
 					}
 				}
 				// Remember that we have a lifeline association
@@ -668,7 +690,7 @@ currently assigned endpoints: ${group.endpoints
 		}
 
 		// Check if there are more non-multi-channel association groups we haven't queried yet
-		if (assocGroupCount > mcGroupCount) {
+		if (assocAPI.isSupported() && assocGroupCount > mcGroupCount) {
 			this.driver.controllerLog.logNode(node.id, {
 				endpoint: this.endpointIndex,
 				message: `querying additional non-multi-channel association groups...`,

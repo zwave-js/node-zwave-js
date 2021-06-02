@@ -1,5 +1,3 @@
-// Vemmio DS100
-// Double Switch in a dual relay in-wall module.
 {
 	"manufacturer": "Vemmio",
 	"manufacturerId": "0x030f",

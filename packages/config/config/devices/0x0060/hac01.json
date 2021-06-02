@@ -1,5 +1,3 @@
-// Everspring HAC01
-// In-Wall Remote Insert
 {
 	"manufacturer": "Everspring",
 	"manufacturerId": "0x0060",
@@ -42,5 +40,8 @@
 			"maxValue": 127,
 			"defaultValue": 1
 		}
+	},
+	"compat": {
+		"enableBasicSetMapping": true
 	}
 }

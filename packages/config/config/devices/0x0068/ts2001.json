@@ -1,5 +1,3 @@
-// Good Way Technology Co., Ltd. TS2001
-// Door/Window Sensor
 {
 	"manufacturer": "Good Way Technology Co., Ltd.",
 	"manufacturerId": "0x0068",
@@ -29,7 +27,6 @@
 		},
 		"2": {
 			"label": "External Sensor Define",
-			"description": "External sensor define",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 255,

@@ -1,5 +1,7 @@
 # Configuration CC
 
+?> CommandClass ID: `0x70`
+
 ## Configuration CC methods
 
 ### `get`
@@ -26,6 +28,7 @@ async set(
 	parameter: number,
 	value: ConfigValue,
 	valueSize: 1 | 2 | 4,
+	valueFormat: ConfigValueFormat = ConfigValueFormat.SignedInteger,
 ): Promise<void>;
 ```
 

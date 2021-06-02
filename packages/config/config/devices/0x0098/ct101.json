@@ -1,5 +1,3 @@
-// Radio Thermostat Company of America (RTC) CT101
-// Z-Wave Thermostat
 {
 	"manufacturer": "Radio Thermostat Company of America (RTC)",
 	"manufacturerId": "0x0098",
@@ -22,6 +20,10 @@
 		{
 			"productType": "0x6501",
 			"productId": "0x000d"
+		},
+		{
+			"productType": "0x6501",
+			"productId": "0x00fd"
 		}
 	],
 	"firmwareVersion": {

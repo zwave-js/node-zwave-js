@@ -1,5 +1,3 @@
-// Fibargroup FGMS001
-// Motion Sensor
 {
 	"manufacturer": "Fibargroup",
 	"manufacturerId": "0x010f",
@@ -46,8 +44,7 @@
 	"associations": {
 		"1": {
 			"label": "Motion Sensor Status",
-			"maxNodes": 16,
-			"isLifeline": true
+			"maxNodes": 16
 		},
 		"2": {
 			"label": "Tamper Alarm",

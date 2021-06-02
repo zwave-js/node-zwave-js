@@ -1,5 +1,7 @@
 # Thermostat Mode CC
 
+?> CommandClass ID: `0x40`
+
 ## Thermostat Mode CC methods
 
 ### `get`

@@ -230,7 +230,7 @@ export function createCommandQueueMachine(
 						);
 					} catch (e) {
 						implementations.log(
-							`Unexpected error during SerialAPI command: ${e}`,
+							`Unexpected error during SerialAPI command: ${e.stack}`,
 							"error",
 						);
 						return Promise.reject(e);

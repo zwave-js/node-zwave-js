@@ -1,5 +1,3 @@
-// Fibargroup FGS211 / FGS221
-// Double Relay Switch 2x1.5kW
 {
 	"manufacturer": "Fibargroup",
 	"manufacturerId": "0x010f",
@@ -46,6 +44,10 @@
 		{
 			"productType": "0x0202",
 			"productId": "0x3002"
+		},
+		{
+			"productType": "0x0200",
+			"productId": "0x400a"
 		}
 	],
 	"firmwareVersion": {

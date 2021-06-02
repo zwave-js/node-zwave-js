@@ -200,11 +200,16 @@ export class SecurityCCAPI extends PhysicalCCAPI {
 			command: cc,
 			// Seems we need these options or some nodes won't accept the nonce
 			transmitOptions: TransmitOptions.ACK | TransmitOptions.AutoRoute,
+			// Only try sending a nonce once
+			maxSendAttempts: 1,
 		});
 		try {
 			await this.driver.sendMessage(msg, {
 				...this.commandOptions,
+				// Nonce requests must be handled immediately
 				priority: MessagePriority.Handshake,
+				// We don't want failures causing us to treat the node as asleep or dead
+				changeNodeStatusOnMissingACK: false,
 			});
 		} catch (e) {
 			if (isTransmissionError(e)) {
