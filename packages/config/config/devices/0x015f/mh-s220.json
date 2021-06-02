@@ -1,0 +1,115 @@
+{
+	"revision": 4,
+	"manufacturer": "McoHome Technology Co., Ltd",
+	"manufacturerId": "0x015f",
+	"label": "MH-S220",
+	"description": "Micro Switch",
+	"devices": [
+		{
+			"productType": "0x2201",
+			"productId": "0x1252"
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"associations": {
+		"1": {
+			"label": "SW 1",
+			"maxNodes": 5
+		},
+		"2": {
+			"label": "SW 2",
+			"maxNodes": 5
+		},
+		"3": {
+			"label": "Controller",
+			"maxNodes": 5,
+			"isLifeline": true
+		}
+	},
+	"paramInformation": {
+		"1": {
+			"label": "Switch state saved or not when power down",
+			"description": "Switch state saved or not when power down",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 1,
+			"allowManualEntry": false
+		},
+		"2": {
+			"label": "External switch type",
+			"description": "External switch type",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 1,
+			"allowManualEntry": false
+		},
+		"3": {
+			"label": "2-state switches",
+			"description": "2-state switches",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 0,
+			"allowManualEntry": false
+		},
+		"4": {
+			"label": "Report from Switch 1 to Association Group 1",
+			"description": "Report from Switch 1 to Association Group 1",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 2,
+			"defaultValue": 0,
+			"allowManualEntry": false
+		},
+		"5": {
+			"label": "OFF timer",
+			"description": "OFF timer",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 1,
+			"allowManualEntry": false
+		},
+		"6": {
+			"label": "Timing function",
+			"description": "Timing function",
+			"valueSize": 2,
+			"minValue": 0,
+			"maxValue": 0,
+			"defaultValue": 0,
+			"allowManualEntry": false
+		},
+		"7": {
+			"label": "Operation mode of Switch 1",
+			"description": "Operation mode of Switch 1",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 0,
+			"allowManualEntry": false
+		},
+		"8": {
+			"label": "Operation report from Sw 2 to Assoc Group 2",
+			"description": "Operation report from Switch 2 to Association Group 2",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 2,
+			"defaultValue": 0,
+			"allowManualEntry": false
+		},
+		"255": {
+			"label": "Factory setting",
+			"description": "Factory setting",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 55,
+			"defaultValue": 0,
+			"allowManualEntry": false
+		}
+	}
+}
