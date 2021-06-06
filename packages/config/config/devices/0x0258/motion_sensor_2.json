@@ -124,7 +124,7 @@
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 127,
-			"defaultValue": 5,
+			"defaultValue": 5
 		},
 		"11": {
 			"label": "LED Blink Enable",
