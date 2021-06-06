@@ -9,11 +9,7 @@ import type { ConfigLogger } from "./Logger";
 /** The absolute path of the embedded configuration directory */
 export const configDir = path.resolve(__dirname, "../config");
 /** The (optional) absolute path of an external configuration directory */
-export const externalConfigDir = (() => {
-	const extPath = process.env.ZWAVEJS_EXTERNAL_CONFIG;
-	if (!extPath || !fs.existsSync(extPath)) return;
-	return extPath;
-})();
+export const externalConfigDir = process.env.ZWAVEJS_EXTERNAL_CONFIG;
 
 export const hexKeyRegexNDigits = /^0x[a-f0-9]+$/;
 export const hexKeyRegex4Digits = /^0x[a-f0-9]{4}$/;
