@@ -10,7 +10,7 @@ Here's an example how to turn off the LED on a **Aeotec Gen 5 stick**.
 ```ts
 const turnLEDOff = new Message(driver, {
 	type: MessageType.Request,
-	functionType: 0xF2,
+	functionType: 0xf2,
 	payload: Buffer.from("5101000501", "hex"),
 });
 await driver.sendMessage(turnLEDOff, {
