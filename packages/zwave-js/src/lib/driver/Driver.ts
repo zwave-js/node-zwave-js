@@ -22,13 +22,7 @@ import {
 	ZWaveSerialPortBase,
 	ZWaveSocket,
 } from "@zwave-js/serial";
-import {
-	DeepPartial,
-	formatId,
-	num2hex,
-	pick,
-	stringify,
-} from "@zwave-js/shared";
+import { DeepPartial, num2hex, pick, stringify } from "@zwave-js/shared";
 import { wait } from "alcalzone-shared/async";
 import {
 	createDeferredPromise,
@@ -45,13 +39,11 @@ import { URL } from "url";
 import * as util from "util";
 import { interpret } from "xstate";
 import { FirmwareUpdateStatus } from "../commandclass";
-import { AssociationGroupInfoCC } from "../commandclass/AssociationGroupInfoCC";
 import {
 	assertValidCCs,
 	CommandClass,
 	getImplementedVersion,
 } from "../commandclass/CommandClass";
-import { ConfigurationCC } from "../commandclass/ConfigurationCC";
 import { DeviceResetLocallyCCNotification } from "../commandclass/DeviceResetLocallyCC";
 import {
 	isEncapsulatingCommandClass,
@@ -110,6 +102,7 @@ import { getDefaultPriority, Message } from "../message/Message";
 import { isNodeQuery } from "../node/INodeQuery";
 import type { ZWaveNode } from "../node/Node";
 import { InterviewStage, NodeStatus } from "../node/Types";
+import { reportMissingDeviceConfig } from "../telemetry/deviceConfig";
 import {
 	AppInfo,
 	compileStatistics,
@@ -946,72 +939,15 @@ export class Driver extends EventEmitter {
 				node.manufacturerId != undefined &&
 				node.productType != undefined &&
 				node.productId != undefined &&
+				node.firmwareVersion != undefined &&
 				!node.deviceConfig &&
 				process.env.NODE_ENV !== "test"
 			) {
 				// The interview succeeded, but we don't have a device config for this node.
 				// Report it, so we can add a config file
 
-				let configFingerprint = `${formatId(
-					node.manufacturerId,
-				)}:${formatId(node.productType)}:${formatId(node.productId)}`;
-				if (node.firmwareVersion != undefined) {
-					configFingerprint += `:${node.firmwareVersion}`;
-				}
-				const message = `Missing device config: ${configFingerprint}`;
-
-				const deviceInfo: Record<string, any> = {
-					supportsConfigCCV3:
-						node.getCCVersion(CommandClasses.Configuration) >= 3,
-					supportsAGI: node.supportsCC(
-						CommandClasses["Association Group Information"],
-					),
-					supportsZWavePlus: node.supportsCC(
-						CommandClasses["Z-Wave Plus Info"],
-					),
-				};
-				try {
-					if (deviceInfo.supportsConfigCCV3) {
-						// Try to collect all info about config params we can get
-						const instance = node.createCCInstanceUnsafe(
-							ConfigurationCC,
-						)!;
-						deviceInfo.parameters = instance.getQueriedParamInfos();
-					}
-					if (deviceInfo.supportsAGI) {
-						// Try to collect all info about association groups we can get
-						const instance = node.createCCInstanceUnsafe(
-							AssociationGroupInfoCC,
-						)!;
-						// wotan-disable-next-line no-restricted-property-access
-						const associationGroupCount = instance[
-							"getAssociationGroupCountCached"
-						]();
-						const names: string[] = [];
-						for (
-							let group = 1;
-							group <= associationGroupCount;
-							group++
-						) {
-							names.push(
-								instance.getGroupNameCached(group) ?? "",
-							);
-						}
-						deviceInfo.associationGroups = names;
-					}
-					if (deviceInfo.supportsZWavePlus) {
-						deviceInfo.zWavePlusVersion = node.zwavePlusVersion;
-					}
-				} catch {
-					// Don't fail on the last meters :)
-				}
-				Sentry.captureMessage(message, (scope) => {
-					scope.clearBreadcrumbs();
-					// Group by device config, otherwise Sentry groups by "Unknown device config", which is nonsense
-					scope.setFingerprint([configFingerprint]);
-					scope.setExtras(deviceInfo);
-					return scope;
-				});
+				// eslint-disable-next-line @typescript-eslint/no-empty-function
+				void reportMissingDeviceConfig(node as any).catch(() => {});
 			}
 		} catch (e: unknown) {
 			if (isZWaveError(e)) {
