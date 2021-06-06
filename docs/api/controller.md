@@ -434,7 +434,7 @@ Returns the ID of the controller in the current network.
 ### `isHealNetworkActive`
 
 ```ts
-isHealNetworkActive: boolean
+isHealNetworkActive: boolean;
 ```
 
 Returns whether the network or a node is currently being healed.
