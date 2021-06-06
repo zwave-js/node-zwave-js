@@ -2,6 +2,17 @@
 <!--
 	Add placeholder for next release with `wip` snippet
 -->
+## __WORK IN PROGRESS__
+### Bugfixes
+* The external config directory defined with the env variable `ZWAVEJS_EXTERNAL_CONFIG` is now created when it doesn't exist
+
+### Config file changes
+* Added additional product ids to some Fibaro devices
+* Added parameters for primary and secondary strobe to Wink Siren
+* Add `treatBasicSetAsEvent` compat flag to Aeotec ZW132
+* Define partial parameters for Fibaro FGT001, add additional parameters for MH9 CO2
+* Add a config file for Leviton RZI10-1L
+
 ## 7.7.1 (2021-05-29)
 ### Bugfixes
 * Use lock files to limit access to Value DB to a single instance, do not auto-compress on startup. This should avoid cache corruption when the driver is restarted multiple times in a short time
