@@ -2,7 +2,7 @@
 <!--
 	Add placeholder for next release with `wip` snippet
 -->
-## __WORK IN PROGRESS__
+## 7.7.2 (2021-06-06)
 ### Bugfixes
 * The external config directory defined with the env variable `ZWAVEJS_EXTERNAL_CONFIG` is now created when it doesn't exist
 
