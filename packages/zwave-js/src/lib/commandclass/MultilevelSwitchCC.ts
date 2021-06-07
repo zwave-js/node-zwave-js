@@ -192,7 +192,7 @@ export class MultilevelSwitchCCAPI extends CCAPI {
 	}
 
 	public async startLevelChange(
-		options: MultilevelSwitchCCStartLevelChangeOptions,
+		options?: MultilevelSwitchCCStartLevelChangeOptions,
 	): Promise<void> {
 		this.assertSupportsCommand(
 			MultilevelSwitchCommand,
