@@ -87,24 +87,7 @@
 			"unsigned": true
 		},
 		"7": {
-			"label": "Memory function after power failure",
-			"description": "Set the desired value from 0 to 1 to turn on/off the memory function.Setting this value to 0 turns off the dimmer's Memory fucntion.Setting this value to 1 truns on the dimmer's Memory function.",
-			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 1,
-			"defaultValue": 1,
-			"unsigned": true,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "Device does not save the state before a power failure, it returns to off position",
-					"value": 0
-				},
-				{
-					"label": "Device restores it's state before power failure",
-					"value": 1
-				}
-			]
+			"$import": "../templates/master_template.json#state_after_power_failure_off_prev"
 		},
 		"8": {
 			"label": "Scene ID set",

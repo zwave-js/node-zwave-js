@@ -54,22 +54,7 @@
 			]
 		},
 		"5": {
-			"label": "Switch state after power failure",
-			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 1,
-			"defaultValue": 1,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "Switch is OFF",
-					"value": 0
-				},
-				{
-					"label": "Switch saves its state before power failure.",
-					"value": 1
-				}
-			]
+			"$import": "../templates/master_template.json#state_after_power_failure_off_prev"
 		},
 		"13": {
 			"label": "Double click option",

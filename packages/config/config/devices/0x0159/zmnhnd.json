@@ -128,23 +128,7 @@
 			]
 		},
 		"30": {
-			"label": "Save state after power failure",
-			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 255,
-			"defaultValue": 0,
-			"unsigned": true,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "Saves state before power failure",
-					"value": 0
-				},
-				{
-					"label": "Do not save state after power failure",
-					"value": 1
-				}
-			]
+			"$import": "../templates/master_template.json#state_after_power_failure_prev_off"
 		},
 		"63": {
 			"label": "Output Switch selection",

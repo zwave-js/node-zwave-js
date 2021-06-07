@@ -42,12 +42,7 @@
 	},
 	"paramInformation": {
 		"2": {
-			"label": "Switch state saved or not when power failure",
-			"description": "1=Saved 0=not saved",
-			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 1,
-			"defaultValue": 1
+			"$import": "../templates/master_template.json#state_after_power_failure_off_prev"
 		},
 		"3": {
 			"label": "ALL ON/ALL OFF",

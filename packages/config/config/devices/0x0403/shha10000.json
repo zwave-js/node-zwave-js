@@ -34,26 +34,7 @@
 			]
 		},
 		"2": {
-			"label": "Device Status After Power Failure",
-			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 2,
-			"defaultValue": 0,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "State before failure",
-					"value": 0
-				},
-				{
-					"label": "On",
-					"value": 1
-				},
-				{
-					"label": "Off",
-					"value": 2
-				}
-			]
+			"$import": "../templates/master_template.json#state_after_power_failure_prev_on_off"
 		},
 		"3": {
 			"label": "Notification Load Status Change",

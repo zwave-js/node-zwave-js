@@ -146,23 +146,7 @@
 			]
 		},
 		"30": {
-			"label": "Saving the state",
-			"description": "Saving the state of the relay after a power failure",
-			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 1,
-			"defaultValue": 0,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "HC Switch relay module saves its state",
-					"value": 0
-				},
-				{
-					"label": "HC Switch relay module returns to \"off\" position",
-					"value": 1
-				}
-			]
+			"$import": "../templates/master_template.json#state_after_power_failure_prev_off"
 		},
 		"40": {
 			"label": "Power reporting (W) on power change",

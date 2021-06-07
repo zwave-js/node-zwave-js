@@ -90,22 +90,7 @@
 			]
 		},
 		"30": {
-			"label": "Restore state ofter power failure",
-			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 1,
-			"defaultValue": 0,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "Restore state after power failure",
-					"value": 0
-				},
-				{
-					"label": "Do not restore state after power failure",
-					"value": 1
-				}
-			]
+			"$import": "../templates/master_template.json#state_after_power_failure_prev_off"
 		},
 		"40": {
 			"label": "Power Consumption (Watt) Reporting Threshold",

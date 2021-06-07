@@ -242,24 +242,7 @@
 			]
 		},
 		"16": {
-			"label": "Saving state of the device after power failure",
-			"description": "Returns to the last position saved",
-			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 1,
-			"defaultValue": 1,
-			"unsigned": true,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "Switch does not save state after power failure",
-					"value": 0
-				},
-				{
-					"label": "Fibaro Switch saves its state before power failure",
-					"value": 1
-				}
-			]
+			"$import": "../templates/master_template.json#state_after_power_failure_off_prev"
 		},
 		"30": {
 			"label": "Relay 1: Response to General Alarm",

@@ -36,27 +36,7 @@
 			]
 		},
 		"21": {
-			"label": "Device Status After Power Failure.",
-			"description": "Define how the Plug reacts after the power supply is back on.",
-			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 2,
-			"defaultValue": 0,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "Memorizes its state after a power failure",
-					"value": 0
-				},
-				{
-					"label": "Always on after power failure.",
-					"value": 1
-				},
-				{
-					"label": "Always off after power failure.",
-					"value": 2
-				}
-			]
+			"$import": "../templates/master_template.json#state_after_power_failure_prev_on_off"
 		},
 		"24": {
 			"label": "Load Status Change Notification",

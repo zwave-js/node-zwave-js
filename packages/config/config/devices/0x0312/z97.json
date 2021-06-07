@@ -89,26 +89,7 @@
 			"unsigned": true
 		},
 		"6": {
-			"label": "Restore State After Power Failure",
-			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 2,
-			"defaultValue": 2,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "Outlet off",
-					"value": 0
-				},
-				{
-					"label": "Outlet on",
-					"value": 1
-				},
-				{
-					"label": "Outlet previous state",
-					"value": 2
-				}
-			]
+			"$import": "../templates/master_template.json#state_after_power_failure_off_on_prev"
 		}
 	},
 	"metadata": {

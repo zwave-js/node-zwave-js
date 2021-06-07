@@ -253,7 +253,51 @@
 			}
 		]
 	},
-	"state_after_power_failure": {
+	"state_after_power_failure_off_on_prev": {
+		"label": "State After Power Failure",
+		"valueSize": 1,
+		"minValue": 0,
+		"maxValue": 2,
+		"defaultValue": 2,
+		"allowManualEntry": false,
+		"options": [
+			{
+				"label": "Always off",
+				"value": 0
+			},
+			{
+				"label": "Always on",
+				"value": 1
+			},
+			{
+				"label": "Previous state",
+				"value": 2
+			}
+		]
+	},
+	"state_after_power_failure_off_prev_on": {
+		"label": "State After Power Failure",
+		"valueSize": 1,
+		"minValue": 0,
+		"maxValue": 2,
+		"defaultValue": 1,
+		"allowManualEntry": false,
+		"options": [
+			{
+				"label": "Always off",
+				"value": 0
+			},
+			{
+				"label": "Previous state",
+				"value": 1
+			},
+			{
+				"label": "Always on",
+				"value": 2
+			}
+		]
+	},
+	"state_after_power_failure_prev_off_on": {
 		"label": "State After Power Failure",
 		"valueSize": 1,
 		"minValue": 0,
@@ -272,6 +316,64 @@
 			{
 				"label": "Always off",
 				"value": 2
+			}
+		]
+	},
+	"state_after_power_failure_prev_on_off": {
+		"label": "State After Power Failure",
+		"valueSize": 1,
+		"minValue": 0,
+		"maxValue": 2,
+		"defaultValue": 0,
+		"allowManualEntry": false,
+		"options": [
+			{
+				"label": "Previous state",
+				"value": 0
+			},
+			{
+				"label": "Always on",
+				"value": 1
+			},
+			{
+				"label": "Always off",
+				"value": 2
+			}
+		]
+	},
+	"state_after_power_failure_off_prev": {
+		"label": "State After Power Failure",
+		"valueSize": 1,
+		"minValue": 0,
+		"maxValue": 1,
+		"defaultValue": 1,
+		"allowManualEntry": false,
+		"options": [
+			{
+				"label": "Always off",
+				"value": 0
+			},
+			{
+				"label": "Previous state",
+				"value": 1
+			}
+		]
+	},
+	"state_after_power_failure_prev_off": {
+		"label": "State After Power Failure",
+		"valueSize": 1,
+		"minValue": 0,
+		"maxValue": 1,
+		"defaultValue": 0,
+		"allowManualEntry": false,
+		"options": [
+			{
+				"label": "Previous state",
+				"value": 0
+			},
+			{
+				"label": "Always off",
+				"value": 1
 			}
 		]
 	},

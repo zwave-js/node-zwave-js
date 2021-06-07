@@ -16,7 +16,7 @@
 	},
 	"paramInformation": {
 		"20": {
-			"$import": "../templates/master_template.json#state_after_power_failure",
+			"$import": "../templates/master_template.json#state_after_power_failure_prev_on_off",
 			"options": [
 				{
 					"label": "Current position",

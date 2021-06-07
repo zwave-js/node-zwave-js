@@ -465,27 +465,7 @@
 			"unsigned": true
 		},
 		"18": {
-			"label": "Status After Power Failure",
-			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 2,
-			"defaultValue": 0,
-			"unsigned": true,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "Relay and buttons - Prior state",
-					"value": 0
-				},
-				{
-					"label": "All off",
-					"value": 1
-				},
-				{
-					"label": "All on",
-					"value": 2
-				}
-			]
+			"$import": "../templates/master_template.json#state_after_power_failure_prev_off_on"
 		},
 		"19": {
 			"label": "Relay Control",
