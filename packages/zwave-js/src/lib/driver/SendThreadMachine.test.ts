@@ -109,7 +109,7 @@ interface TestContext {
 	preTransmitHandshakePromise: DeferredPromise<void>;
 }
 
-jest.useFakeTimers();
+jest.useFakeTimers("legacy");
 jest.mock("./CommandQueueMachine");
 const mockCommandQueueMachine = jest.requireMock("./CommandQueueMachine")
 	.createCommandQueueMachine as jest.Mock;

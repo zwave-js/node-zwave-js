@@ -39,7 +39,7 @@ class TestMessage extends Message {}
 
 describe("lib/driver/Driver => ", () => {
 	beforeEach(() => {
-		jest.useFakeTimers();
+		jest.useFakeTimers("legacy");
 	});
 
 	afterEach(() => {
