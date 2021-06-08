@@ -76,7 +76,7 @@
     "serialport": "^9.0.7",
     "source-map-support": "^0.5.19",
     "winston": "^3.3.3",
-    "xstate": "^4.19.0"
+    "xstate": "^4.20.0"
   },
   "scripts": {
     "build:full": "gulp build",
