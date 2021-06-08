@@ -192,14 +192,24 @@ export class Endpoint {
 	public getCCVersion(cc: CommandClasses): number {
 		const ccInfo = this._implementedCommandClasses.get(cc);
 		const ret = ccInfo?.version ?? 0;
-		// A controlling node interviewing a Multi Channel End Point MUST request the End Point’s
-		// Command Class version from the Root Device if the End Point does not advertise support
-		// for the Version Command Class.
-		if (
-			ret === 0 &&
-			this.index > 0 &&
-			!this.supportsCC(CommandClasses.Version)
-		) {
+
+		// The specs are contracting themselves here...
+		//
+		// CC Control Specification:
+		// A controlling node interviewing a Multi Channel End Point
+		// MUST request the End Point’s Command Class version from the Root Device
+		// if the End Point does not advertise support for the Version Command Class.
+		//   - vs -
+		// Management CC Specification:
+		// [...] the Version Command Class SHOULD NOT be supported by individual End Points
+		// The Root Device MUST respond to Version requests for any Command Class
+		// implemented by the Multi Channel device; also in cases where the actual
+		// Command Class is only provided by an End Point.
+		//
+		// We go with the 2nd interpretation since the other either results in
+		// an unnecessary Version CC interview for each endpoint or an incorrect V1 for endpoints
+
+		if (ret === 0 && this.index > 0) {
 			return this.getNodeUnsafe()!.getCCVersion(cc);
 		}
 		return ret;
