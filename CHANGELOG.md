@@ -2,7 +2,7 @@
 <!--
 	Add placeholder for next release with `wip` snippet
 -->
-## __WORK IN PROGRESS__
+## 7.7.3 (2021-06-08)
 ### Bugfixes
 * The `commandClasses.add` and `commandClasses.remove` compat flags are now applied at the appropriate CC interview steps
 * When determining an endpoint's CC version, the root endpoint's version is always checked as a fallback
