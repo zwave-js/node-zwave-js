@@ -79,10 +79,13 @@
     "xstate": "^4.20.0"
   },
   "scripts": {
-    "build:full": "gulp build",
+    "b": "yarn ts maintenance/.build.ts",
+    "build:full": "yarn b prebuild:full && yarn build && yarn b postbuild:full",
     "build": "tsc -b tsconfig.build.json",
     "clean": "tsc -b tsconfig.build.json --clean",
-    "prewatch": "gulp prebuild",
-    "watch": "tsc -b tsconfig.build.json --watch --pretty"
+    "prewatch": "yarn b prebuild",
+    "watch": "tsc -b tsconfig.build.json --watch --pretty",
+    "lint:zwave": "yarn b lint",
+    "ts": "node -r esbuild-register"
   }
 }

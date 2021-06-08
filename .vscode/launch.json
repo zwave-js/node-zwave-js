@@ -14,8 +14,6 @@
 				"--inspect-brk=9229",
 				"-r",
 				"ts-node/register/transpile-only",
-				"-r",
-				"tsconfig-paths/register",
 				"${workspaceFolder}/test/run.ts"
 			],
 			"env": {
@@ -36,8 +34,6 @@
 				"--inspect-brk=9229",
 				"-r",
 				"ts-node/register/transpile-only",
-				"-r",
-				"tsconfig-paths/register",
 				"${workspaceFolder}/packages/maintenance/src/generateTypedDocs.ts"
 			],
 			"console": "integratedTerminal",
@@ -69,8 +65,6 @@
 				"--inspect=9229",
 				"-r",
 				"ts-node/register/transpile-only",
-				"-r",
-				"tsconfig-paths/register",
 				"${workspaceFolder}/packages/config/maintenance/importConfig.ts",
 				"-dm -s zwa"
 			],

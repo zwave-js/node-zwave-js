@@ -87,13 +87,9 @@
     "ts-morph": "^11.0.0",
     "ts-node": "^9.0.0",
     "ts-pegjs": "^0.3.1",
-    "tsconfig-paths": "^3.9.0",
     "typescript": "^4.3.2",
     "xml2json": "^0.12.0",
     "yargs": "^16.0.3"
-  },
-  "resolutions": {
-    "typescript": "^4.3.2"
   },
   "scripts": {
     "build": "lerna run build --scope=zwave-js",
@@ -109,7 +105,7 @@
     "show-coverage": "yarn run coverage && start ./coverage/index.html",
     "lint:ts": "eslint --ext .ts \"packages/*/src/**/*.ts\"",
     "lint:wotan": "wotan",
-    "lint:config": "lerna exec --scope=@zwave-js/config -- gulp lintConfigFiles",
+    "lint:config": "lerna run lint:config",
     "lint:configjson": "prettier -c \"packages/config/config/**/*.json\"",
     "lint:zwave": "lerna exec --scope=zwave-js -- gulp lint",
     "lint": "yarn run lint:wotan && yarn run lint:ts && yarn run lint:configjson",
@@ -128,7 +124,7 @@
     "docs:generate": "ts-node -P packages/maintenance/tsconfig.json packages/maintenance/src/generateTypedDocs.ts",
     "test:perf": "yarn ts test/valuedb-perf.ts",
     "test:firmware": "yarn ts test/firmware-extraction.ts",
-    "ts": "node -r tsconfig-paths/register -r esbuild-register"
+    "ts": "node -r esbuild-register"
   },
   "readme": "README.md",
   "config": {
