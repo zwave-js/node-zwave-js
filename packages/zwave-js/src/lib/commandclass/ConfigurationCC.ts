@@ -396,10 +396,11 @@ export class ConfigurationCCAPI extends CCAPI {
 			// Don't set an endpoint here, Configuration is device specific, not endpoint specific
 			parameter,
 		});
-		const response = await this.driver.sendCommand<ConfigurationCCPropertiesReport>(
-			cc,
-			this.commandOptions,
-		);
+		const response =
+			await this.driver.sendCommand<ConfigurationCCPropertiesReport>(
+				cc,
+				this.commandOptions,
+			);
 		if (response) {
 			return pick(response, [
 				"valueSize",
@@ -426,10 +427,11 @@ export class ConfigurationCCAPI extends CCAPI {
 			// Don't set an endpoint here, Configuration is device specific, not endpoint specific
 			parameter,
 		});
-		const response = await this.driver.sendCommand<ConfigurationCCNameReport>(
-			cc,
-			this.commandOptions,
-		);
+		const response =
+			await this.driver.sendCommand<ConfigurationCCNameReport>(
+				cc,
+				this.commandOptions,
+			);
 		return response?.name;
 	}
 
@@ -443,10 +445,11 @@ export class ConfigurationCCAPI extends CCAPI {
 			// Don't set an endpoint here, Configuration is device specific, not endpoint specific
 			parameter,
 		});
-		const response = await this.driver.sendCommand<ConfigurationCCInfoReport>(
-			cc,
-			this.commandOptions,
-		);
+		const response =
+			await this.driver.sendCommand<ConfigurationCCInfoReport>(
+				cc,
+				this.commandOptions,
+			);
 		return response?.info;
 	}
 
@@ -1789,9 +1792,8 @@ export class ConfigurationCCPropertiesReport extends ConfigurationCC {
 				this.payload.length - 2,
 			);
 		} else {
-			this._nextParameter = this.payload.readUInt16BE(
-				nextParameterOffset,
-			);
+			this._nextParameter =
+				this.payload.readUInt16BE(nextParameterOffset);
 
 			// Ensure the payload contains a byte for the 2nd option flags
 			validatePayload(this.payload.length >= nextParameterOffset + 3);

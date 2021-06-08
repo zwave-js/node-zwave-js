@@ -9,7 +9,7 @@ import {
 	ManufacturerSpecificCCGet,
 } from "./ManufacturerSpecificCC";
 
-const fakeDriver = (createEmptyMockDriver() as unknown) as Driver;
+const fakeDriver = createEmptyMockDriver() as unknown as Driver;
 
 describe("lib/commandclass/ManufacturerSpecificCC => ", () => {
 	const cc = new ManufacturerSpecificCCGet(fakeDriver, { nodeId: 2 });
@@ -40,7 +40,7 @@ describe("lib/commandclass/ManufacturerSpecificCC => ", () => {
 
 	describe(`interview()`, () => {
 		const fakeDriver = createEmptyMockDriver();
-		const node = new ZWaveNode(2, (fakeDriver as unknown) as Driver);
+		const node = new ZWaveNode(2, fakeDriver as unknown as Driver);
 		let cc: ManufacturerSpecificCC;
 
 		function doInterview() {

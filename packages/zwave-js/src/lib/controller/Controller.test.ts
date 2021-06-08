@@ -8,7 +8,7 @@ describe("lib/controller/Controller", () => {
 	describe("nodes.getOrThrow()", () => {
 		let fakeDriver: Driver;
 		beforeAll(() => {
-			fakeDriver = (createEmptyMockDriver() as unknown) as Driver;
+			fakeDriver = createEmptyMockDriver() as unknown as Driver;
 			fakeDriver.registerRequestHandler = () => {};
 		});
 

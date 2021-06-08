@@ -25,7 +25,7 @@ describe("lib/commandclass/ThermostatFanModeCC => ", () => {
 	let node5: ZWaveNode;
 
 	beforeAll(() => {
-		fakeDriver = (createEmptyMockDriver() as unknown) as Driver;
+		fakeDriver = createEmptyMockDriver() as unknown as Driver;
 		node1 = new ZWaveNode(1, fakeDriver as any);
 		node5 = new ZWaveNode(5, fakeDriver as any);
 		(fakeDriver.controller.nodes as any).set(1, node1);

@@ -572,12 +572,7 @@ describe("lib/driver/Driver => ", () => {
 			expect(driver["assemblePartialCCs"](msg2)).toBeTrue();
 
 			expect((msg2.command as AssociationCCReport).nodeIds).toEqual([
-				1,
-				2,
-				3,
-				4,
-				5,
-				6,
+				1, 2, 3, 4, 5, 6,
 			]);
 		});
 

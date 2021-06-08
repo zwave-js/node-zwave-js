@@ -115,7 +115,8 @@ export class SetSUCNodeIdResponse extends Message implements SuccessIndicator {
 
 export class SetSUCNodeIdRequestStatusReport
 	extends SetSUCNodeIdRequestBase
-	implements SuccessIndicator {
+	implements SuccessIndicator
+{
 	public constructor(driver: Driver, options: MessageDeserializationOptions) {
 		super(driver, options);
 

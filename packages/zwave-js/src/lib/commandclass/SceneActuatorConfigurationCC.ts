@@ -205,10 +205,11 @@ export class SceneActuatorConfigurationCCAPI extends CCAPI {
 			endpoint: this.endpoint.index,
 			sceneId: 0,
 		});
-		const response = await this.driver.sendCommand<SceneActuatorConfigurationCCReport>(
-			cc,
-			this.commandOptions,
-		);
+		const response =
+			await this.driver.sendCommand<SceneActuatorConfigurationCCReport>(
+				cc,
+				this.commandOptions,
+			);
 
 		if (response) {
 			return pick(response, ["sceneId", "level", "dimmingDuration"]);
@@ -238,10 +239,11 @@ export class SceneActuatorConfigurationCCAPI extends CCAPI {
 			endpoint: this.endpoint.index,
 			sceneId: sceneId,
 		});
-		const response = await this.driver.sendCommand<SceneActuatorConfigurationCCReport>(
-			cc,
-			this.commandOptions,
-		);
+		const response =
+			await this.driver.sendCommand<SceneActuatorConfigurationCCReport>(
+				cc,
+				this.commandOptions,
+			);
 
 		if (response) {
 			return pick(response, ["level", "dimmingDuration"]);

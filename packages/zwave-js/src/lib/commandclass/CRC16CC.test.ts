@@ -5,7 +5,7 @@ import { CommandClass, InvalidCC } from "./CommandClass";
 import { CRC16CC, CRC16CCCommandEncapsulation } from "./CRC16CC";
 import { isEncapsulatingCommandClass } from "./EncapsulatingCommandClass";
 
-const fakeDriver = (createEmptyMockDriver() as unknown) as Driver;
+const fakeDriver = createEmptyMockDriver() as unknown as Driver;
 
 describe("lib/commandclass/CRC16 => ", () => {
 	describe("CommandEncapsulation (V1)", () => {
@@ -42,8 +42,9 @@ describe("lib/commandclass/CRC16 => ", () => {
 				data: serialized,
 			});
 			expect(deserialized.nodeId).toBe(basicCCSet.nodeId);
-			const deserializedPayload = (deserialized as CRC16CCCommandEncapsulation)
-				.encapsulated as BasicCCSet;
+			const deserializedPayload = (
+				deserialized as CRC16CCCommandEncapsulation
+			).encapsulated as BasicCCSet;
 			expect(deserializedPayload).toBeInstanceOf(BasicCCSet);
 			expect(deserializedPayload.nodeId).toBe(basicCCSet.nodeId);
 			expect(deserializedPayload.targetValue).toBe(

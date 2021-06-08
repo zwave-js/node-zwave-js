@@ -65,7 +65,8 @@ export class SetRFReceiveModeRequest extends Message {
 @messageTypes(MessageType.Response, FunctionType.SetRFReceiveMode)
 export class SetRFReceiveModeResponse
 	extends Message
-	implements SuccessIndicator {
+	implements SuccessIndicator
+{
 	public constructor(driver: Driver, options: MessageDeserializationOptions) {
 		super(driver, options);
 		this.success = this.payload[0] !== 0;

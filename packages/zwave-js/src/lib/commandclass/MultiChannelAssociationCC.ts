@@ -156,9 +156,10 @@ function serializeMultiChannelAssociationDestination(
 	return payload;
 }
 
-function deserializeMultiChannelAssociationDestination(
-	data: Buffer,
-): { nodeIds: number[]; endpoints: EndpointAddress[] } {
+function deserializeMultiChannelAssociationDestination(data: Buffer): {
+	nodeIds: number[];
+	endpoints: EndpointAddress[];
+} {
 	const nodeIds: number[] = [];
 	let endpointOffset = data.length;
 	// Scan node ids until we find the marker
@@ -228,10 +229,11 @@ export class MultiChannelAssociationCCAPI extends PhysicalCCAPI {
 				endpoint: this.endpoint.index,
 			},
 		);
-		const response = await this.driver.sendCommand<MultiChannelAssociationCCSupportedGroupingsReport>(
-			cc,
-			this.commandOptions,
-		);
+		const response =
+			await this.driver.sendCommand<MultiChannelAssociationCCSupportedGroupingsReport>(
+				cc,
+				this.commandOptions,
+			);
 		return response?.groupCount;
 	}
 
@@ -250,10 +252,11 @@ export class MultiChannelAssociationCCAPI extends PhysicalCCAPI {
 			endpoint: this.endpoint.index,
 			groupId,
 		});
-		const response = await this.driver.sendCommand<MultiChannelAssociationCCReport>(
-			cc,
-			this.commandOptions,
-		);
+		const response =
+			await this.driver.sendCommand<MultiChannelAssociationCCReport>(
+				cc,
+				this.commandOptions,
+			);
 		if (response) {
 			return pick(response, ["maxNodes", "nodeIds", "endpoints"]);
 		}
@@ -500,13 +503,14 @@ export class MultiChannelAssociationCC extends CommandClass {
 					const lifelineDestinations: EndpointAddress[] =
 						this.getValueDB().getValue(endpointsValueId) ?? [];
 
-					const isAssignedAsNodeAssociation = lifelineNodeIds.includes(
-						ownNodeId,
-					);
-					const isAssignedAsEndpointAssociation = lifelineDestinations.some(
-						(addr) =>
-							addr.nodeId === ownNodeId && addr.endpoint === 0,
-					);
+					const isAssignedAsNodeAssociation =
+						lifelineNodeIds.includes(ownNodeId);
+					const isAssignedAsEndpointAssociation =
+						lifelineDestinations.some(
+							(addr) =>
+								addr.nodeId === ownNodeId &&
+								addr.endpoint === 0,
+						);
 
 					let didMCAssignmentWork = true;
 
@@ -558,9 +562,8 @@ export class MultiChannelAssociationCC extends CommandClass {
 						});
 						// refresh the associations - don't trust that it worked
 						const groupReport = await mcAPI.getGroup(group);
-						didMCAssignmentWork = !!groupReport?.nodeIds.includes(
-							ownNodeId,
-						);
+						didMCAssignmentWork =
+							!!groupReport?.nodeIds.includes(ownNodeId);
 					} else if (
 						this.version >= 3 &&
 						!mustUseNodeAssociation &&
@@ -887,12 +890,10 @@ export class MultiChannelAssociationCCReport extends MultiChannelAssociationCC {
 		this._groupId = this.payload[0];
 		this._maxNodes = this.payload[1];
 		this._reportsToFollow = this.payload[2];
-		({
-			nodeIds: this._nodeIds,
-			endpoints: this._endpoints,
-		} = deserializeMultiChannelAssociationDestination(
-			this.payload.slice(3),
-		));
+		({ nodeIds: this._nodeIds, endpoints: this._endpoints } =
+			deserializeMultiChannelAssociationDestination(
+				this.payload.slice(3),
+			));
 	}
 
 	private _groupId: number;

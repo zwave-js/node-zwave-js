@@ -153,13 +153,13 @@ export class DoorLockCCAPI extends PhysicalCCAPI {
 			} as DoorLockCCConfigurationSetOptions;
 			for (const param of configurationSetParameters) {
 				if (param !== property) {
-					(config as any)[
-						param
-					] = this.endpoint.getNodeUnsafe()?.valueDB.getValue({
-						commandClass: this.ccId,
-						endpoint: this.endpoint.index,
-						property: param,
-					});
+					(config as any)[param] = this.endpoint
+						.getNodeUnsafe()
+						?.valueDB.getValue({
+							commandClass: this.ccId,
+							endpoint: this.endpoint.index,
+							property: param,
+						});
 				}
 			}
 
@@ -225,10 +225,11 @@ export class DoorLockCCAPI extends PhysicalCCAPI {
 			nodeId: this.endpoint.nodeId,
 			endpoint: this.endpoint.index,
 		});
-		const response = await this.driver.sendCommand<DoorLockCCCapabilitiesReport>(
-			cc,
-			this.commandOptions,
-		);
+		const response =
+			await this.driver.sendCommand<DoorLockCCCapabilitiesReport>(
+				cc,
+				this.commandOptions,
+			);
 		if (response) {
 			return pick(response, [
 				"autoRelockSupported",
@@ -259,10 +260,11 @@ export class DoorLockCCAPI extends PhysicalCCAPI {
 			nodeId: this.endpoint.nodeId,
 			endpoint: this.endpoint.index,
 		});
-		const response = await this.driver.sendCommand<DoorLockCCOperationReport>(
-			cc,
-			this.commandOptions,
-		);
+		const response =
+			await this.driver.sendCommand<DoorLockCCOperationReport>(
+				cc,
+				this.commandOptions,
+			);
 		if (response) {
 			return pick(response, [
 				"currentMode",
@@ -319,10 +321,11 @@ export class DoorLockCCAPI extends PhysicalCCAPI {
 			nodeId: this.endpoint.nodeId,
 			endpoint: this.endpoint.index,
 		});
-		const response = await this.driver.sendCommand<DoorLockCCConfigurationReport>(
-			cc,
-			this.commandOptions,
-		);
+		const response =
+			await this.driver.sendCommand<DoorLockCCConfigurationReport>(
+				cc,
+				this.commandOptions,
+			);
 		if (response) {
 			return pick(response, [
 				"operationType",
@@ -786,12 +789,10 @@ export class DoorLockCCConfigurationReport extends DoorLockCC {
 				DoorLockOperationType,
 				this.operationType,
 			),
-			"outside handle configuration": this.outsideHandlesCanOpenDoorConfiguration.join(
-				", ",
-			),
-			"inside handle configuration": this.insideHandlesCanOpenDoorConfiguration.join(
-				", ",
-			),
+			"outside handle configuration":
+				this.outsideHandlesCanOpenDoorConfiguration.join(", "),
+			"inside handle configuration":
+				this.insideHandlesCanOpenDoorConfiguration.join(", "),
 		};
 		if (this.lockTimeoutConfiguration != undefined) {
 			message[

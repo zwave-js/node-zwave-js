@@ -225,10 +225,11 @@ export class SceneControllerConfigurationCCAPI extends CCAPI {
 			endpoint: this.endpoint.index,
 			groupId: 0,
 		});
-		const response = await this.driver.sendCommand<SceneControllerConfigurationCCReport>(
-			cc,
-			this.commandOptions,
-		);
+		const response =
+			await this.driver.sendCommand<SceneControllerConfigurationCCReport>(
+				cc,
+				this.commandOptions,
+			);
 
 		// Return value includes "groupId", because
 		// the returned report will include the actual groupId of the
@@ -264,10 +265,11 @@ export class SceneControllerConfigurationCCAPI extends CCAPI {
 			endpoint: this.endpoint.index,
 			groupId,
 		});
-		const response = await this.driver.sendCommand<SceneControllerConfigurationCCReport>(
-			cc,
-			this.commandOptions,
-		);
+		const response =
+			await this.driver.sendCommand<SceneControllerConfigurationCCReport>(
+				cc,
+				this.commandOptions,
+			);
 
 		// Since groupId is not allowed to be 0, only Reports with
 		// groupId equal to the requested groupId will be accepted,

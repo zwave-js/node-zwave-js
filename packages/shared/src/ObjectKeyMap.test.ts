@@ -216,16 +216,12 @@ describe("lib/util/ObjectKeyMap", () => {
 	});
 
 	it("should be iterable", () => {
-		const map: ReadonlyObjectKeyMap<
-			{ key: string },
-			number
-		> = new ObjectKeyMap([[{ key: "test" }, 1]]);
+		const map: ReadonlyObjectKeyMap<{ key: string }, number> =
+			new ObjectKeyMap([[{ key: "test" }, 1]]);
 		expect([...map]).toEqual([[{ key: "test" }, 1]]);
 
-		const readonlyMap: ReadonlyObjectKeyMap<
-			{ key: string },
-			number
-		> = new ObjectKeyMap([[{ key: "test" }, 1]]);
+		const readonlyMap: ReadonlyObjectKeyMap<{ key: string }, number> =
+			new ObjectKeyMap([[{ key: "test" }, 1]]);
 		expect([...readonlyMap]).toEqual([[{ key: "test" }, 1]]);
 	});
 });

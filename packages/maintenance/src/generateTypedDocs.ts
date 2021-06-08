@@ -196,7 +196,8 @@ interface ImportRange {
 	};
 }
 
-const importRegex = /(?<import><!-- #import (?<symbol>.*?) from "(?<module>.*?)"(?: with (?<options>[\w\-, ]*?))? -->)(?:[\s\r\n]*```ts[\r\n]*(?<source>(.|\n)*?)```)?/g;
+const importRegex =
+	/(?<import><!-- #import (?<symbol>.*?) from "(?<module>.*?)"(?: with (?<options>[\w\-, ]*?))? -->)(?:[\s\r\n]*```ts[\r\n]*(?<source>(.|\n)*?)```)?/g;
 
 export function findImportRanges(docFile: string): ImportRange[] {
 	const matches = [...docFile.matchAll(importRegex)];

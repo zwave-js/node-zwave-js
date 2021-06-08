@@ -26,7 +26,7 @@ describe("lib/commandclass/MeterCC => ", () => {
 	let fakeDriver: Driver;
 	let node1: ZWaveNode;
 	beforeAll(async () => {
-		fakeDriver = (createEmptyMockDriver() as unknown) as Driver;
+		fakeDriver = createEmptyMockDriver() as unknown as Driver;
 		node1 = new ZWaveNode(1, fakeDriver);
 		(fakeDriver.controller.nodes as any).set(1, node1);
 		await fakeDriver.configManager.loadMeters();

@@ -44,9 +44,11 @@ export function parseNumber(val: number): number | undefined {
 }
 
 /** Parses a floating point value with a scale from a buffer */
-export function parseFloatWithScale(
-	payload: Buffer,
-): { value: number; scale: number; bytesRead: number } {
+export function parseFloatWithScale(payload: Buffer): {
+	value: number;
+	scale: number;
+	bytesRead: number;
+} {
 	validatePayload(payload.length >= 1);
 	const precision = (payload[0] & 0b111_00_000) >>> 5;
 	const scale = (payload[0] & 0b000_11_000) >>> 3;

@@ -33,7 +33,8 @@ const RSSI_RESERVED_START = 11;
 @priority(MessagePriority.Normal)
 export class BridgeApplicationCommandRequest
 	extends Message
-	implements ICommandClassContainer {
+	implements ICommandClassContainer
+{
 	public constructor(driver: Driver, options: MessageDeserializationOptions) {
 		super(driver, options);
 		// if (gotDeserializationOptions(options)) {

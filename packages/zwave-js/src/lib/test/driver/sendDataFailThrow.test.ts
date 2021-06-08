@@ -31,9 +31,8 @@ describe("regression tests", () => {
 	it("when a SendData request fails, the `sendMessage/sendCommand` call should be rejected", async () => {
 		jest.setTimeout(5000);
 		// Use the normal SendData commands
-		driver[
-			"_controller"
-		]!.isFunctionSupported = isFunctionSupported_NoBridge;
+		driver["_controller"]!.isFunctionSupported =
+			isFunctionSupported_NoBridge;
 
 		const node2 = new ZWaveNode(2, driver);
 		(driver.controller.nodes as Map<number, ZWaveNode>).set(2, node2);

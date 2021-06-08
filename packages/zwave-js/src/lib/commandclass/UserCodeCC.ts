@@ -211,9 +211,10 @@ export function getSupportsMultipleUserCodeSetValueID(
 	};
 }
 
-function parseExtendedUserCode(
-	payload: Buffer,
-): { code: UserCode; bytesRead: number } {
+function parseExtendedUserCode(payload: Buffer): {
+	code: UserCode;
+	bytesRead: number;
+} {
 	validatePayload(payload.length >= 4);
 	const userId = payload.readUInt16BE(0);
 	const status: UserIDStatus = payload[2];
@@ -462,10 +463,11 @@ export class UserCodeCCAPI extends PhysicalCCAPI {
 			nodeId: this.endpoint.nodeId,
 			endpoint: this.endpoint.index,
 		});
-		const response = await this.driver.sendCommand<UserCodeCCUsersNumberReport>(
-			cc,
-			this.commandOptions,
-		);
+		const response =
+			await this.driver.sendCommand<UserCodeCCUsersNumberReport>(
+				cc,
+				this.commandOptions,
+			);
 		return response?.supportedUsers;
 	}
 
@@ -493,10 +495,11 @@ export class UserCodeCCAPI extends PhysicalCCAPI {
 				userId,
 				reportMore: multiple,
 			});
-			const response = await this.driver.sendCommand<UserCodeCCExtendedUserCodeReport>(
-				cc,
-				this.commandOptions,
-			);
+			const response =
+				await this.driver.sendCommand<UserCodeCCExtendedUserCodeReport>(
+					cc,
+					this.commandOptions,
+				);
 			if (!response) {
 				return;
 			} else if (multiple) {
@@ -597,10 +600,11 @@ export class UserCodeCCAPI extends PhysicalCCAPI {
 			nodeId: this.endpoint.nodeId,
 			endpoint: this.endpoint.index,
 		});
-		const response = await this.driver.sendCommand<UserCodeCCCapabilitiesReport>(
-			cc,
-			this.commandOptions,
-		);
+		const response =
+			await this.driver.sendCommand<UserCodeCCCapabilitiesReport>(
+				cc,
+				this.commandOptions,
+			);
 		if (response) {
 			return pick(response, [
 				"supportsMasterCode",
@@ -625,10 +629,11 @@ export class UserCodeCCAPI extends PhysicalCCAPI {
 			nodeId: this.endpoint.nodeId,
 			endpoint: this.endpoint.index,
 		});
-		const response = await this.driver.sendCommand<UserCodeCCKeypadModeReport>(
-			cc,
-			this.commandOptions,
-		);
+		const response =
+			await this.driver.sendCommand<UserCodeCCKeypadModeReport>(
+				cc,
+				this.commandOptions,
+			);
 		return response?.keypadMode;
 	}
 
@@ -657,10 +662,11 @@ export class UserCodeCCAPI extends PhysicalCCAPI {
 			nodeId: this.endpoint.nodeId,
 			endpoint: this.endpoint.index,
 		});
-		const response = await this.driver.sendCommand<UserCodeCCMasterCodeReport>(
-			cc,
-			this.commandOptions,
-		);
+		const response =
+			await this.driver.sendCommand<UserCodeCCMasterCodeReport>(
+				cc,
+				this.commandOptions,
+			);
 		return response?.masterCode;
 	}
 
@@ -689,10 +695,11 @@ export class UserCodeCCAPI extends PhysicalCCAPI {
 			nodeId: this.endpoint.nodeId,
 			endpoint: this.endpoint.index,
 		});
-		const response = await this.driver.sendCommand<UserCodeCCUserCodeChecksumReport>(
-			cc,
-			this.commandOptions,
-		);
+		const response =
+			await this.driver.sendCommand<UserCodeCCUserCodeChecksumReport>(
+				cc,
+				this.commandOptions,
+			);
 		return response?.userCodeChecksum;
 	}
 }
@@ -1190,13 +1197,13 @@ export class UserCodeCCCapabilitiesReport extends UserCodeCC {
 			...super.toLogEntry(),
 			message: {
 				"supports master code": this.supportsMasterCode,
-				"supports master code deactivation": this
-					.supportsMasterCodeDeactivation,
+				"supports master code deactivation":
+					this.supportsMasterCodeDeactivation,
 				"supports user code checksum": this.supportsUserCodeChecksum,
-				"supports multiple codes in report": this
-					.supportsMultipleUserCodeReport,
-				"supports multiple codes in set": this
-					.supportsMultipleUserCodeSet,
+				"supports multiple codes in report":
+					this.supportsMultipleUserCodeReport,
+				"supports multiple codes in set":
+					this.supportsMultipleUserCodeSet,
 				"supported user id statuses": this.supportedUserIDStatuses
 					.map(
 						(status) =>

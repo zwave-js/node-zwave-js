@@ -657,11 +657,11 @@ export class CommandClass {
 		// If not specified otherwise, persist all registered values in the value db
 		// But filter out those that don't match the minimum version
 		if (!valueNames) {
-			valueNames = ([
+			valueNames = [
 				...this._registeredCCValues.keys(),
 				...ccValueDefinitions.map(([key]) => key),
 				...keyValuePairs.map(([key]) => key),
-			] as unknown) as (keyof this)[];
+			] as unknown as (keyof this)[];
 		}
 		let db: ValueDB;
 		try {
@@ -687,10 +687,9 @@ export class CommandClass {
 				// This value is one or more key value pair(s) to be stored in a map
 				if (sourceValue instanceof Map) {
 					// Just copy the entries
-					for (const [propertyKey, value] of (sourceValue as Map<
-						string | number,
-						unknown
-					>).entries()) {
+					for (const [propertyKey, value] of (
+						sourceValue as Map<string | number, unknown>
+					).entries()) {
 						db.setValue(
 							{
 								commandClass: cc,
@@ -702,7 +701,7 @@ export class CommandClass {
 						);
 					}
 				} else if (isArray(sourceValue)) {
-					const [propertyKey, value] = (sourceValue as any) as [
+					const [propertyKey, value] = sourceValue as any as [
 						string | number,
 						unknown,
 					];
@@ -1066,7 +1065,7 @@ type APIConstructor = new (
 type TypedClassDecorator<TTarget extends Object> = <
 	// wotan-disable-next-line no-misused-generics
 	T extends TTarget,
-	TConstructor extends new (...args: any[]) => T
+	TConstructor extends new (...args: any[]) => T,
 >(
 	apiClass: TConstructor,
 ) => TConstructor | void;
@@ -1084,7 +1083,7 @@ function getCCCommandMapKey(ccId: CommandClasses, ccCommand: number): string {
  */
 export type DynamicCCResponse<
 	TSent extends CommandClass,
-	TReceived extends CommandClass = CommandClass
+	TReceived extends CommandClass = CommandClass,
 > = (
 	sentCC: TSent,
 ) => Constructable<TReceived> | Constructable<TReceived>[] | undefined;
@@ -1098,7 +1097,7 @@ export type CCResponseRole =
  */
 export type CCResponsePredicate<
 	TSent extends CommandClass,
-	TReceived extends CommandClass = CommandClass
+	TReceived extends CommandClass = CommandClass,
 > = (sentCommand: TSent, receivedCommand: TReceived) => CCResponseRole;
 
 /**
@@ -1114,7 +1113,7 @@ export function commandClass(
 		const map: CommandClassMap =
 			Reflect.getMetadata(METADATA_commandClassMap, CommandClass) ||
 			new Map();
-		map.set(cc, (messageClass as any) as Constructable<CommandClass>);
+		map.set(cc, messageClass as any as Constructable<CommandClass>);
 		Reflect.defineMetadata(METADATA_commandClassMap, map, CommandClass);
 	};
 }
@@ -1212,7 +1211,7 @@ export function getImplementedVersion<T extends CommandClass>(
  * Retrieves the implemented version defined for a Z-Wave command class
  */
 export function getImplementedVersionStatic<
-	T extends Constructable<CommandClass>
+	T extends Constructable<CommandClass>,
 >(classConstructor: T): number {
 	// retrieve the current metadata
 	const ret =
@@ -1231,14 +1230,14 @@ export function CCCommand(command: number): TypedClassDecorator<CommandClass> {
 
 		// also store a map in the Message metadata for lookup.
 		const ccId = getCommandClassStatic(
-			(ccClass as unknown) as typeof CommandClass,
+			ccClass as unknown as typeof CommandClass,
 		);
 		const map: CCCommandMap =
 			Reflect.getMetadata(METADATA_ccCommandMap, CommandClass) ||
 			new Map();
 		map.set(
 			getCCCommandMapKey(ccId, command),
-			(ccClass as unknown) as Constructable<CommandClass>,
+			ccClass as unknown as Constructable<CommandClass>,
 		);
 		Reflect.defineMetadata(METADATA_ccCommandMap, map, CommandClass);
 	};
@@ -1272,7 +1271,7 @@ function getCCCommandConstructor<TBase extends CommandClass>(
 		| CCCommandMap
 		| undefined;
 	if (map != undefined)
-		return (map.get(getCCCommandMapKey(ccId, ccCommand)) as unknown) as
+		return map.get(getCCCommandMapKey(ccId, ccCommand)) as unknown as
 			| Constructable<TBase>
 			| undefined;
 }
@@ -1282,7 +1281,7 @@ function getCCCommandConstructor<TBase extends CommandClass>(
  */
 export function expectedCCResponse<
 	TSent extends CommandClass,
-	TReceived extends CommandClass
+	TReceived extends CommandClass,
 >(
 	cc: Constructable<TReceived> | DynamicCCResponse<TSent, TReceived>,
 	predicate?: CCResponsePredicate<TSent, TReceived>,
@@ -1480,7 +1479,7 @@ export function API(cc: CommandClasses): TypedClassDecorator<CCAPI> {
 		// also store a map in the CCAPI metadata for lookup.
 		const map = (Reflect.getMetadata(METADATA_APIMap, CCAPI) ||
 			new Map()) as APIMap;
-		map.set(cc, (apiClass as any) as APIConstructor);
+		map.set(cc, apiClass as any as APIConstructor);
 		Reflect.defineMetadata(METADATA_APIMap, map, CCAPI);
 	};
 }

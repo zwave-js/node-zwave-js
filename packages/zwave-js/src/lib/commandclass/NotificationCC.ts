@@ -229,10 +229,11 @@ export class NotificationCCAPI extends PhysicalCCAPI {
 			nodeId: this.endpoint.nodeId,
 			endpoint: this.endpoint.index,
 		});
-		const response = await this.driver.sendCommand<NotificationCCSupportedReport>(
-			cc,
-			this.commandOptions,
-		);
+		const response =
+			await this.driver.sendCommand<NotificationCCSupportedReport>(
+				cc,
+				this.commandOptions,
+			);
 		if (response) {
 			return pick(response, [
 				"supportsV1Alarm",
@@ -254,10 +255,11 @@ export class NotificationCCAPI extends PhysicalCCAPI {
 			endpoint: this.endpoint.index,
 			notificationType,
 		});
-		const response = await this.driver.sendCommand<NotificationCCEventSupportedReport>(
-			cc,
-			this.commandOptions,
-		);
+		const response =
+			await this.driver.sendCommand<NotificationCCEventSupportedReport>(
+				cc,
+				this.commandOptions,
+			);
 		return response?.supportedEvents;
 	}
 }
@@ -525,9 +527,8 @@ export class NotificationCC extends CommandClass {
 				for (let i = 0; i < supportedNotificationTypes.length; i++) {
 					const type = supportedNotificationTypes[i];
 					const name = supportedNotificationNames[i];
-					const notificationConfig = this.driver.configManager.lookupNotification(
-						type,
-					);
+					const notificationConfig =
+						this.driver.configManager.lookupNotification(type);
 
 					// Enable reports for each notification type
 					this.driver.controllerLog.logNode(node.id, {
@@ -676,9 +677,10 @@ export class NotificationCCSet extends NotificationCC {
 		return {
 			...super.toLogEntry(),
 			message: {
-				"notification type": this.driver.configManager.getNotificationName(
-					this.notificationType,
-				),
+				"notification type":
+					this.driver.configManager.getNotificationName(
+						this.notificationType,
+					),
 				status: this.notificationStatus,
 			},
 		};
@@ -783,8 +785,9 @@ export class NotificationCCReport extends NotificationCC {
 					}
 				} else {
 					// V1 Alarm, check if there is a compat option to map this V1 report to a V2+ report
-					const mapping = this.getNodeUnsafe()?.deviceConfig?.compat
-						?.alarmMapping;
+					const mapping =
+						this.getNodeUnsafe()?.deviceConfig?.compat
+							?.alarmMapping;
 					const match = mapping?.find(
 						(m) =>
 							m.from.alarmType === this.alarmType &&
@@ -894,9 +897,10 @@ export class NotificationCCReport extends NotificationCC {
 			}
 			if (valueConfig) {
 				message = {
-					"notification type": this.driver.configManager.getNotificationName(
-						this.notificationType!,
-					),
+					"notification type":
+						this.driver.configManager.getNotificationName(
+							this.notificationType!,
+						),
 					"notification status": this.notificationStatus,
 					[`notification ${valueConfig.type}`]:
 						valueConfig.label ??
@@ -1063,11 +1067,11 @@ export class NotificationCCReport extends NotificationCC {
 		) {
 			// The parameters contain a named value
 			this.eventParameters = {
-				[valueConfig.parameter
-					.propertyName]: this.eventParameters.readUIntBE(
-					0,
-					this.eventParameters.length,
-				),
+				[valueConfig.parameter.propertyName]:
+					this.eventParameters.readUIntBE(
+						0,
+						this.eventParameters.length,
+					),
 			};
 		}
 	}
@@ -1190,11 +1194,10 @@ export class NotificationCCGet extends NotificationCC {
 			message["V1 alarm type"] = this.alarmType;
 		}
 		if (this.notificationType != undefined) {
-			message[
-				"notification type"
-			] = this.driver.configManager.getNotificationName(
-				this.notificationType,
-			);
+			message["notification type"] =
+				this.driver.configManager.getNotificationName(
+					this.notificationType,
+				);
 			if (this.notificationEvent != undefined) {
 				message["notification event"] =
 					this.driver.configManager
@@ -1336,9 +1339,10 @@ export class NotificationCCEventSupportedReport extends NotificationCC {
 		return {
 			...super.toLogEntry(),
 			message: {
-				"notification type": this.driver.configManager.getNotificationName(
-					this.notificationType,
-				),
+				"notification type":
+					this.driver.configManager.getNotificationName(
+						this.notificationType,
+					),
 				"supported events": this.supportedEvents
 					.map(
 						(e) =>
@@ -1389,9 +1393,10 @@ export class NotificationCCEventSupportedGet extends NotificationCC {
 		return {
 			...super.toLogEntry(),
 			message: {
-				"notification type": this.driver.configManager.getNotificationName(
-					this.notificationType,
-				),
+				"notification type":
+					this.driver.configManager.getNotificationName(
+						this.notificationType,
+					),
 			},
 		};
 	}

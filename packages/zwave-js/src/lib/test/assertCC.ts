@@ -5,7 +5,7 @@ import { SendDataRequest } from "../controller/SendDataMessages";
 
 /** Performs assertions on a sendMessage call argument that's supposed to be a CC */
 export function assertCC<
-	TConst extends Constructable<CommandClass> = Constructable<CommandClass>
+	TConst extends Constructable<CommandClass> = Constructable<CommandClass>,
 >(
 	callArg: any,
 	options: {

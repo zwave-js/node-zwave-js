@@ -35,7 +35,7 @@ class DummyCCSubClass2 extends DummyCC {
 	private y: any;
 }
 
-const fakeDriver = (createEmptyMockDriver() as unknown) as Driver;
+const fakeDriver = createEmptyMockDriver() as unknown as Driver;
 
 describe("lib/commandclass/CommandClass => ", () => {
 	describe("creating and serializing()", () => {

@@ -218,10 +218,11 @@ export class ThermostatSetpointCCAPI extends CCAPI {
 			endpoint: this.endpoint.index,
 			setpointType,
 		});
-		const response = await this.driver.sendCommand<ThermostatSetpointCCReport>(
-			cc,
-			this.commandOptions,
-		);
+		const response =
+			await this.driver.sendCommand<ThermostatSetpointCCReport>(
+				cc,
+				this.commandOptions,
+			);
 		if (!response) return;
 		return response.type === ThermostatSetpointType["N/A"]
 			? // not supported
@@ -265,10 +266,11 @@ export class ThermostatSetpointCCAPI extends CCAPI {
 			endpoint: this.endpoint.index,
 			setpointType,
 		});
-		const response = await this.driver.sendCommand<ThermostatSetpointCCCapabilitiesReport>(
-			cc,
-			this.commandOptions,
-		);
+		const response =
+			await this.driver.sendCommand<ThermostatSetpointCCCapabilitiesReport>(
+				cc,
+				this.commandOptions,
+			);
 		if (response) {
 			return pick(response, [
 				"minValue",
@@ -296,10 +298,11 @@ export class ThermostatSetpointCCAPI extends CCAPI {
 			nodeId: this.endpoint.nodeId,
 			endpoint: this.endpoint.index,
 		});
-		const response = await this.driver.sendCommand<ThermostatSetpointCCSupportedReport>(
-			cc,
-			this.commandOptions,
-		);
+		const response =
+			await this.driver.sendCommand<ThermostatSetpointCCSupportedReport>(
+				cc,
+				this.commandOptions,
+			);
 		return response?.supportedSetpointTypes;
 	}
 }
@@ -352,9 +355,8 @@ export class ThermostatSetpointCC extends CommandClass {
 			// Whether our tests changed the assumed bitmask interpretation
 			let interpretationChanged = false;
 
-			const supportedSetpointTypesValueId = getSupportedSetpointTypesValueID(
-				this.endpointIndex,
-			);
+			const supportedSetpointTypesValueId =
+				getSupportedSetpointTypesValueID(this.endpointIndex);
 
 			// Query the supported setpoint types
 			this.driver.controllerLog.logNode(node.id, {
@@ -623,8 +625,8 @@ export class ThermostatSetpointCCSet extends ThermostatSetpointCC {
 
 	public serialize(): Buffer {
 		// If a config file overwrites how the float should be encoded, use that information
-		const override = this.getNodeUnsafe()?.deviceConfig?.compat
-			?.overrideFloatEncoding;
+		const override =
+			this.getNodeUnsafe()?.deviceConfig?.compat?.overrideFloatEncoding;
 		this.payload = Buffer.concat([
 			Buffer.from([this.setpointType & 0b1111]),
 			encodeFloatWithScale(this.value, this.scale, override),
@@ -799,10 +801,8 @@ export class ThermostatSetpointCCCapabilitiesReport extends ThermostatSetpointCC
 			scale: this._minValueScale,
 			bytesRead,
 		} = parseFloatWithScale(this.payload.slice(1)));
-		({
-			value: this._maxValue,
-			scale: this._maxValueScale,
-		} = parseFloatWithScale(this.payload.slice(1 + bytesRead)));
+		({ value: this._maxValue, scale: this._maxValueScale } =
+			parseFloatWithScale(this.payload.slice(1 + bytesRead)));
 
 		// Predefine the metadata
 		const valueId = getSetpointValueID(this.endpointIndex, this._type);

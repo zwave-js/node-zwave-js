@@ -141,7 +141,7 @@ export class ZWaveLogContainer extends winston.Container {
 			});
 		}
 
-		return (this.get(label) as unknown) as ZWaveLogger;
+		return this.get(label) as unknown as ZWaveLogger;
 	}
 
 	public updateConfiguration(config: DeepPartial<LogConfig>): void {
@@ -331,7 +331,7 @@ export function createLoggerFormat(channel: string): Format {
 /** Prints a formatted and colorized log message */
 export function createLogMessagePrinter(shortTimestamps: boolean): Format {
 	return {
-		transform: (((info: ZWaveLogInfo) => {
+		transform: ((info: ZWaveLogInfo) => {
 			// The formatter has already split the message into multiple lines
 			const messageLines = messageToLines(info.message);
 			// Also this can only happen if the user forgot to call the formatter first
@@ -374,13 +374,13 @@ export function createLogMessagePrinter(shortTimestamps: boolean): Format {
 			}
 			info[MESSAGE as any] = lines.join("\n");
 			return info;
-		}) as unknown) as TransformFunction,
+		}) as unknown as TransformFunction,
 	};
 }
 
 /** Formats the log message and calculates the necessary paddings */
 export const logMessageFormatter: Format = {
-	transform: (((info: ZWaveLogInfo) => {
+	transform: ((info: ZWaveLogInfo) => {
 		const messageLines = messageToLines(info.message);
 		const firstMessageLineLength = messageLines[0].length;
 		info.multiline =
@@ -420,7 +420,7 @@ export const logMessageFormatter: Format = {
 			info.message = lines.join("\n");
 		}
 		return info;
-	}) as unknown) as TransformFunction,
+	}) as unknown as TransformFunction,
 };
 
 /** The common logger format for built-in transports */

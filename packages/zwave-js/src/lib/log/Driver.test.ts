@@ -19,7 +19,7 @@ import { Message } from "../message/Message";
 import { createEmptyMockDriver } from "../test/mocks";
 import { DriverLogger } from "./Driver";
 
-const fakeDriver = (createEmptyMockDriver() as unknown) as Driver;
+const fakeDriver = createEmptyMockDriver() as unknown as Driver;
 
 interface CreateMessageOptions {
 	type: MessageType;

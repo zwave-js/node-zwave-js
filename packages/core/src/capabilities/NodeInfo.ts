@@ -55,9 +55,7 @@ export function parseCCId(
 	}
 }
 
-export function parseCCList(
-	payload: Buffer,
-): {
+export function parseCCList(payload: Buffer): {
 	supportedCCs: CommandClasses[];
 	controlledCCs: CommandClasses[];
 } {

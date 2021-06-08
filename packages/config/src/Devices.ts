@@ -69,9 +69,10 @@ export type ParamInfoMap = ReadonlyObjectKeyMap<
 const embeddedDevicesDir = path.join(configDir, "devices");
 const fulltextIndexPath = path.join(embeddedDevicesDir, "fulltext_index.json");
 
-function getDevicesPaths(
-	configDir: string,
-): { devicesDir: string; indexPath: string } {
+function getDevicesPaths(configDir: string): {
+	devicesDir: string;
+	indexPath: string;
+} {
 	const devicesDir = path.join(configDir, "devices");
 	const indexPath = path.join(devicesDir, "index.json");
 	return { devicesDir, indexPath };
