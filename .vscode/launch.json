@@ -13,7 +13,7 @@
 				"--async-stack-traces",
 				"--inspect-brk=9229",
 				"-r",
-				"ts-node/register/transpile-only",
+				"esbuild-register",
 				"${workspaceFolder}/test/run.ts"
 			],
 			"env": {
@@ -33,7 +33,7 @@
 				"--async-stack-traces",
 				"--inspect-brk=9229",
 				"-r",
-				"ts-node/register/transpile-only",
+				"esbuild-register",
 				"${workspaceFolder}/packages/maintenance/src/generateTypedDocs.ts"
 			],
 			"console": "integratedTerminal",
@@ -64,7 +64,7 @@
 				"--async-stack-traces",
 				"--inspect=9229",
 				"-r",
-				"ts-node/register/transpile-only",
+				"esbuild-register",
 				"${workspaceFolder}/packages/config/maintenance/importConfig.ts",
 				"-dm -s zwa"
 			],

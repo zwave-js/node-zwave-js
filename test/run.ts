@@ -1,14 +1,15 @@
 /* wotan-disable async-function-assignability */
 
-require("reflect-metadata");
+// To test with Sentry reporting:
+// import { Driver } from "../packages/zwave-js";
+
+// To test without Sentry reporting
+import "reflect-metadata";
+import { Driver } from "../packages/zwave-js/src/lib/driver/Driver";
 
 process.on("unhandledRejection", (_r) => {
 	// debugger;
 });
-
-// Uncomment this to test Sentry reporting
-// import "../packages/zwave-js";
-import { Driver } from "../packages/zwave-js/src/lib/driver/Driver";
 
 const driver = new Driver("COM5", {
 	// prettier-ignore
@@ -18,6 +19,7 @@ const driver = new Driver("COM5", {
 })
 	.on("error", console.error)
 	.once("driver ready", async () => {
+		debugger;
 		// const cc = new CommandClass(driver, {
 		// 	nodeId: 24,
 		// 	ccId: 0x5d,
