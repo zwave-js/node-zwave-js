@@ -1,5 +1,6 @@
 import {
 	ConfigManager,
+	Notification,
 	NotificationParameterWithCommandClass,
 	NotificationParameterWithDuration,
 	NotificationParameterWithValue,
@@ -264,6 +265,44 @@ export class NotificationCCAPI extends PhysicalCCAPI {
 	}
 }
 
+/** Returns the metadata to use for a notification value with an unknown notification type */
+export function getNotificationValueMetadataUnknownType(
+	type: number,
+): ValueMetadataNumeric {
+	return {
+		...ValueMetadata.ReadOnlyUInt8,
+		label: `Unknown notification (${num2hex(type)})`,
+		ccSpecific: {
+			notificationType: type,
+		},
+	};
+}
+
+/**
+ * Returns the metadata to use for a known notification value.
+ * Can be used to extend a previously defined metadata,
+ * e.g. for V2 notifications that don't allow discovering supported events.
+ */
+export function getNotificationValueMetadata(
+	previous: ValueMetadataNumeric | undefined,
+	notificationConfig: Notification,
+	valueConfig: NotificationValueDefinition & { type: "state" },
+): ValueMetadataNumeric {
+	const metadata: ValueMetadataNumeric = previous ?? {
+		...ValueMetadata.ReadOnlyUInt8,
+		label: valueConfig.variableName,
+		states: {},
+		ccSpecific: {
+			notificationType: notificationConfig.id,
+		},
+	};
+	if (valueConfig.idle) {
+		metadata.states![0] = "idle";
+	}
+	metadata.states![valueConfig.value] = valueConfig.label;
+	return metadata;
+}
+
 function defineMetadataForNotificationEvents(
 	configManager: ConfigManager,
 	endpoint: number,
@@ -280,13 +319,10 @@ function defineMetadataForNotificationEvents(
 			endpoint,
 			property,
 		};
-		ret.set(JSON.stringify(valueId), {
-			...ValueMetadata.ReadOnlyUInt8,
-			label: `Unknown notification (${num2hex(type)})`,
-			ccSpecific: {
-				notificationType: type,
-			},
-		});
+		ret.set(
+			JSON.stringify(valueId),
+			getNotificationValueMetadataUnknownType(type),
+		);
 		return ret;
 	}
 
@@ -303,18 +339,11 @@ function defineMetadataForNotificationEvents(
 			};
 
 			const dictKey = JSON.stringify(valueId);
-			const metadata: ValueMetadataNumeric = ret.get(dictKey) || {
-				...ValueMetadata.ReadOnlyUInt8,
-				label: valueConfig.variableName,
-				states: {},
-				ccSpecific: {
-					notificationType: type,
-				},
-			};
-			if (valueConfig.idle) {
-				metadata.states![0] = "idle";
-			}
-			metadata.states![value] = valueConfig.label;
+			const metadata = getNotificationValueMetadata(
+				ret.get(dictKey),
+				notificationConfig,
+				valueConfig,
+			);
 			ret.set(dictKey, metadata);
 		}
 	}
