@@ -95,7 +95,7 @@ interface TestContext {
 	respondedUnsolicited?: boolean;
 }
 
-jest.useFakeTimers();
+jest.useFakeTimers("legacy");
 
 const machineParams: SerialAPICommandMachineParams = {
 	timeouts: {
