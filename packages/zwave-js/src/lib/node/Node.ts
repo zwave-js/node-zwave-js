@@ -1499,17 +1499,6 @@ protocol version:      ${this._protocolVersion}`;
 			}
 
 			try {
-				if (cc === CommandClasses.Version && endpoint.index === 0) {
-					// After the version CC interview of the root endpoint, we have enough info to load the correct device config file
-					await this.loadDeviceConfig();
-					if (this._deviceConfig?.compat?.treatBasicSetAsEvent) {
-						// To create the compat event value, we need to force a Basic CC interview
-						this.addCC(CommandClasses.Basic, {
-							isSupported: true,
-							version: 1,
-						});
-					}
-				}
 				await this.driver.saveNetworkToCache();
 			} catch (e) {
 				this.driver.controllerLog.print(
@@ -1561,20 +1550,49 @@ protocol version:      ${this._protocolVersion}`;
 			this._isSecure = false;
 		}
 
+		// Manufacturer Specific and Version CC need to be handled before the other CCs because they are needed to
+		// identify the device and apply device configurations
+		if (this.supportsCC(CommandClasses["Manufacturer Specific"])) {
+			await interviewEndpoint(
+				this,
+				CommandClasses["Manufacturer Specific"],
+			);
+		}
+
+		if (this.supportsCC(CommandClasses.Version)) {
+			await interviewEndpoint(this, CommandClasses.Version);
+
+			// After the version CC interview of the root endpoint, we have enough info to load the correct device config file
+			await this.loadDeviceConfig();
+
+			// At this point we may need to make some changes to the CCs the device reports
+			this.applyCommandClassesCompatFlag();
+		}
+
 		// Don't offer or interview the Basic CC if any actuator CC is supported - except if the config files forbid us
 		// to map the Basic CC to other CCs or expose Basic Set as an event
 		const compat = this._deviceConfig?.compat;
-		if (!compat?.disableBasicMapping && !compat?.treatBasicSetAsEvent) {
+		if (compat?.treatBasicSetAsEvent) {
+			// To create the compat event value, we need to force a Basic CC interview
+			this.addCC(CommandClasses.Basic, {
+				isSupported: true,
+				version: 1,
+			});
+		} else if (!compat?.disableBasicMapping) {
 			this.hideBasicCCInFavorOfActuatorCCs();
 		}
 
-		// We determine the correct interview order by topologically sorting a dependency graph
-		const rootInterviewGraph = this.buildCCInterviewGraph();
+		// We determine the correct interview order of the remaining CCs by topologically sorting a dependency graph
+		const rootInterviewGraph = this.buildCCInterviewGraph([
+			CommandClasses.Security,
+			CommandClasses["Security 2"],
+			CommandClasses["Manufacturer Specific"],
+			CommandClasses.Version,
+		]);
 		let rootInterviewOrder: CommandClasses[];
 
 		// In order to avoid emitting unnecessary value events for the root endpoint,
-		// we defer the application CC interview until after the other endpoints
-		// have been interviewed
+		// we defer the application CC interview until after the other endpoints have been interviewed
 		const deferApplicationCCs: Comparer<CommandClasses> = (cc1, cc2) => {
 			const cc1IsApplicationCC = applicationCCs.includes(cc1);
 			const cc2IsApplicationCC = applicationCCs.includes(cc2);
@@ -1605,6 +1623,10 @@ protocol version:      ${this._protocolVersion}`;
 			else if (typeof action === "boolean") return action;
 		}
 
+		// Before querying the endpoints, we may need to make some more changes to the CCs the device reports
+		// This time, the non-root endpoints are relevant
+		this.applyCommandClassesCompatFlag();
+
 		// Now query ALL endpoints
 		for (const endpointIndex of this.getEndpointIndizes()) {
 			const endpoint = this.getEndpoint(endpointIndex);
@@ -1634,7 +1656,10 @@ protocol version:      ${this._protocolVersion}`;
 				endpoint.hideBasicCCInFavorOfActuatorCCs();
 			}
 
-			const endpointInterviewGraph = endpoint.buildCCInterviewGraph();
+			const endpointInterviewGraph = endpoint.buildCCInterviewGraph([
+				CommandClasses.Security,
+				CommandClasses["Security 2"],
+			]);
 			let endpointInterviewOrder: CommandClasses[];
 			try {
 				endpointInterviewOrder = topologicalSort(
@@ -1848,6 +1873,39 @@ protocol version:      ${this._protocolVersion}`;
 						)}, endpoint ${endpoint.index}: ${e.message}`,
 						"error",
 					);
+				}
+			}
+		}
+	}
+
+	/**
+	 * Uses the `commandClasses` compat flag defined in the node's config file to
+	 * override the reported command classes.
+	 */
+	private applyCommandClassesCompatFlag(): void {
+		if (this.deviceConfig) {
+			// Add CCs the device config file tells us to
+			const addCCs = this.deviceConfig.compat?.addCCs;
+			if (addCCs) {
+				for (const [cc, { endpoints }] of addCCs) {
+					for (const [ep, info] of endpoints) {
+						this.getEndpoint(ep)?.addCC(cc, info);
+					}
+				}
+			}
+			// And remove those that it marks as unsupported
+			const removeCCs = this.deviceConfig.compat?.removeCCs;
+			if (removeCCs) {
+				for (const [cc, endpoints] of removeCCs) {
+					if (endpoints === "*") {
+						for (const ep of this.getAllEndpoints()) {
+							ep.removeCC(cc);
+						}
+					} else {
+						for (const ep of endpoints) {
+							this.getEndpoint(ep)?.removeCC(cc);
+						}
+					}
 				}
 			}
 		}
