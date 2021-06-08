@@ -88,6 +88,14 @@ export type ZWaveNotificationCallbackParams_NotificationCC = [
 	args: ZWaveNotificationCallbackArgs_NotificationCC,
 ];
 
+/** Returns the ValueID used to store whether a node supports V1 Alarms */
+export function getSupportsV1AlarmValueId(): ValueID {
+	return {
+		commandClass: CommandClasses.Notification,
+		property: "supportsV1Alarm",
+	};
+}
+
 /** Returns the ValueID used to store the supported notification types of a node */
 export function getSupportedNotificationTypesValueId(): ValueID {
 	return {
@@ -724,12 +732,24 @@ export class NotificationCCReport extends NotificationCC {
 			// Don't use the version to decide because we might discard notifications
 			// before the interview is complete
 			if (this.payload.length >= 7) {
-				// Ignore the legacy alarm bytes
-				this.alarmType = undefined;
-				this.alarmLevel = undefined;
 				this.notificationStatus = this.payload[3];
 				this.notificationType = this.payload[4];
 				this.notificationEvent = this.payload[5];
+
+				// Ignore the legacy alarm bytes unless we're dealing with an unknown notification
+				// and V1 alarms are explicitly supported and they have a valid value. This allows
+				// us to handle "unknown" notifications which incorrectly convey their info via alarm values.
+				const needsV1Values =
+					this.notificationEvent === 0xfe &&
+					this.getValueDB().getValue<boolean>(
+						getSupportsV1AlarmValueId(),
+					) &&
+					this.alarmType !== 0;
+				if (!needsV1Values) {
+					this.alarmType = undefined;
+					this.alarmLevel = undefined;
+				}
+
 				const containsSeqNum = !!(this.payload[6] & 0b1000_0000);
 				const numEventParams = this.payload[6] & 0b11111;
 				if (numEventParams > 0) {
@@ -839,8 +859,6 @@ export class NotificationCCReport extends NotificationCC {
 		}
 	}
 
-	// @noCCValues - Persisting this CC is handled by ZWaveNode
-
 	public persistValues(): boolean {
 		if (!super.persistValues()) return false;
 
@@ -860,8 +878,6 @@ export class NotificationCCReport extends NotificationCC {
 
 		return true;
 	}
-
-	// Disable the lint error temporarily
 
 	public alarmType: number | undefined;
 	public alarmLevel: number | undefined;
@@ -1238,7 +1254,8 @@ export class NotificationCCSupportedReport extends NotificationCC {
 	}
 
 	private _supportsV1Alarm: boolean;
-	@ccValue({ internal: true }) public get supportsV1Alarm(): boolean {
+	@ccValue({ internal: true })
+	public get supportsV1Alarm(): boolean {
 		return this._supportsV1Alarm;
 	}
 
