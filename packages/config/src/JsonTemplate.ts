@@ -5,7 +5,8 @@ import JSON5 from "json5";
 import * as path from "path";
 
 const IMPORT_KEY = "$import";
-const importSpecifierRegex = /^(?<filename>[\w\d\/\\\._-]+\.json)?(?:#(?<selector>[\w\d\/\._-]+(?:\[0x[0-9a-fA-F]+\])?))?$/i;
+const importSpecifierRegex =
+	/^(?<filename>[\w\d\/\\\._-]+\.json)?(?:#(?<selector>[\w\d\/\._-]+(?:\[0x[0-9a-fA-F]+\])?))?$/i;
 type FileCache = Map<string, Record<string, unknown>>;
 
 /** Parses a JSON file with $import keys and replaces them with the selected objects */
@@ -128,10 +129,8 @@ async function resolveJsonImports(
 		if (prop === IMPORT_KEY) {
 			// This is an import statement. Make sure we're working with a string
 			assertImportSpecifier(val, visited.join(" -> "));
-			const {
-				filename: importFilename,
-				selector,
-			} = importSpecifierRegex.exec(val)!.groups!;
+			const { filename: importFilename, selector } =
+				importSpecifierRegex.exec(val)!.groups!;
 
 			// const importFilename = path.join(path.dirname(filename), val);
 			const imported = await readJsonWithTemplateInternal(

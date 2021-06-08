@@ -30,7 +30,7 @@ describe("lib/commandclass/EntryControlCC => ", () => {
 	let node1: ZWaveNode;
 
 	beforeAll(() => {
-		fakeDriver = (createEmptyMockDriver() as unknown) as Driver;
+		fakeDriver = createEmptyMockDriver() as unknown as Driver;
 		node1 = new ZWaveNode(1, fakeDriver as any);
 		(fakeDriver.controller.nodes as any).set(1, node1);
 		node1.addCC(CommandClasses["Entry Control"], {

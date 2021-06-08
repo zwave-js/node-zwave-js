@@ -9,13 +9,13 @@ function tryOr<T extends (...args: any[]) => any>(
 	operation: T,
 	onError: ReturnType<T>,
 ): T {
-	return (((...args: any[]) => {
+	return ((...args: any[]) => {
 		try {
 			return operation(...args);
 		} catch {
 			return onError;
 		}
-	}) as any) as T;
+	}) as any as T;
 }
 
 add_operation(

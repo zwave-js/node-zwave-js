@@ -63,9 +63,8 @@ describe("regression tests", () => {
 	it("when an invalid CC is received, this is printed in the logs", async () => {
 		jest.setTimeout(5000);
 		// Use the normal SendData commands
-		driver[
-			"_controller"
-		]!.isFunctionSupported = isFunctionSupported_NoBridge;
+		driver["_controller"]!.isFunctionSupported =
+			isFunctionSupported_NoBridge;
 
 		const node33 = new ZWaveNode(33, driver);
 		(driver.controller.nodes as ThrowingMap<number, ZWaveNode>).set(

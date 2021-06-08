@@ -4,7 +4,7 @@ import { createEmptyMockDriver } from "../test/mocks";
 import { CommandClass, getCommandClass } from "./CommandClass";
 import { VersionCC } from "./VersionCC";
 
-const fakeDriver = (createEmptyMockDriver() as unknown) as Driver;
+const fakeDriver = createEmptyMockDriver() as unknown as Driver;
 
 describe("lib/commandclass/VersionCC => ", () => {
 	const cc = new VersionCC(fakeDriver, { nodeId: 9 });

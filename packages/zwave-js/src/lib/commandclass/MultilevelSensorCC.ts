@@ -121,10 +121,11 @@ export class MultilevelSensorCCAPI extends PhysicalCCAPI {
 			sensorType,
 			scale,
 		});
-		const response = await this.driver.sendCommand<MultilevelSensorCCReport>(
-			cc,
-			this.commandOptions,
-		);
+		const response =
+			await this.driver.sendCommand<MultilevelSensorCCReport>(
+				cc,
+				this.commandOptions,
+			);
 		if (!response) return;
 
 		if (sensorType === undefined) {
@@ -152,10 +153,11 @@ export class MultilevelSensorCCAPI extends PhysicalCCAPI {
 			nodeId: this.endpoint.nodeId,
 			endpoint: this.endpoint.index,
 		});
-		const response = await this.driver.sendCommand<MultilevelSensorCCSupportedSensorReport>(
-			cc,
-			this.commandOptions,
-		);
+		const response =
+			await this.driver.sendCommand<MultilevelSensorCCSupportedSensorReport>(
+				cc,
+				this.commandOptions,
+			);
 		return response?.supportedSensorTypes;
 	}
 
@@ -172,10 +174,11 @@ export class MultilevelSensorCCAPI extends PhysicalCCAPI {
 			endpoint: this.endpoint.index,
 			sensorType,
 		});
-		const response = await this.driver.sendCommand<MultilevelSensorCCSupportedScaleReport>(
-			cc,
-			this.commandOptions,
-		);
+		const response =
+			await this.driver.sendCommand<MultilevelSensorCCSupportedScaleReport>(
+				cc,
+				this.commandOptions,
+			);
 		return response?.sensorSupportedScales;
 	}
 
@@ -377,9 +380,8 @@ value:       ${mlsResponse.value} ${sensorScale.unit || ""}`;
 	): string | undefined {
 		// TODO: check this
 		if (property === "values" && typeof propertyKey === "number") {
-			const type = this.driver.configManager.lookupSensorType(
-				propertyKey,
-			);
+			const type =
+				this.driver.configManager.lookupSensorType(propertyKey);
 			if (type) return type.label;
 		}
 		return super.translatePropertyKey(property, propertyKey);

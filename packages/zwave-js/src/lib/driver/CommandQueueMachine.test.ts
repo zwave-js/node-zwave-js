@@ -69,7 +69,7 @@ const mockSerialAPIMachine = jest.requireMock("./SerialAPICommandMachine")
 	.createSerialAPICommandMachine as jest.Mock;
 
 describe("lib/driver/CommandQueueMachine", () => {
-	const fakeDriver = (createEmptyMockDriver() as unknown) as Driver;
+	const fakeDriver = createEmptyMockDriver() as unknown as Driver;
 	const sm = new SecurityManager({
 		ownNodeId: 1,
 		nonceTimeout: 500,

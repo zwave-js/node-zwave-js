@@ -68,8 +68,9 @@ export class RequestNodeNeighborUpdateRequest extends RequestNodeNeighborUpdateR
 		const node = this.getNodeUnsafe();
 		const allNodes = [...this.driver.controller.nodes.values()];
 		const numListeningNodes = allNodes.filter((n) => n.isListening).length;
-		const numFlirsNodes = allNodes.filter((n) => n.isFrequentListening)
-			.length;
+		const numFlirsNodes = allNodes.filter(
+			(n) => n.isFrequentListening,
+		).length;
 		const numNodes = allNodes.length;
 
 		return (
@@ -90,7 +91,8 @@ export class RequestNodeNeighborUpdateRequest extends RequestNodeNeighborUpdateR
 
 export class RequestNodeNeighborUpdateReport
 	extends RequestNodeNeighborUpdateRequestBase
-	implements SuccessIndicator, MultiStageCallback {
+	implements SuccessIndicator, MultiStageCallback
+{
 	public constructor(driver: Driver, options: MessageDeserializationOptions) {
 		super(driver, options);
 

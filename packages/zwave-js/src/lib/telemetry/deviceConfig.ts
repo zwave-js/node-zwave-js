@@ -68,10 +68,9 @@ export async function reportMissingDeviceConfig(
 			const instance = node.createCCInstanceUnsafe(
 				AssociationGroupInfoCC,
 			)!;
-			// wotan-disable-next-line no-restricted-property-access
-			const associationGroupCount = instance[
-				"getAssociationGroupCountCached"
-			]();
+			const associationGroupCount =
+				// wotan-disable-next-line no-restricted-property-access
+				instance["getAssociationGroupCountCached"]();
 			const names: string[] = [];
 			for (let group = 1; group <= associationGroupCount; group++) {
 				names.push(instance.getGroupNameCached(group) ?? "");

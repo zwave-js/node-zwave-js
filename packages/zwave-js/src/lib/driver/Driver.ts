@@ -447,16 +447,17 @@ export class Driver extends EventEmitter {
 
 		// Initialize config manager
 		try {
-			// eslint-disable-next-line @typescript-eslint/no-var-requires
-			this._configVersion = require("@zwave-js/config/package.json").version;
+			this._configVersion =
+				// eslint-disable-next-line @typescript-eslint/no-var-requires
+				require("@zwave-js/config/package.json").version;
 		} catch {
 			this._configVersion =
 				packageJson?.dependencies?.["@zwave-js/config"] ?? libVersion;
 		}
 		this.configManager = new ConfigManager({
 			logContainer: this._logContainer,
-			deviceConfigPriorityDir: this.options.storage
-				.deviceConfigPriorityDir,
+			deviceConfigPriorityDir:
+				this.options.storage.deviceConfigPriorityDir,
 		});
 
 		// And initialize but don't start the send thread machine
@@ -843,9 +844,8 @@ export class Driver extends EventEmitter {
 						!node.hasSUCReturnRoute &&
 						node.status !== NodeStatus.Dead
 					) {
-						node.hasSUCReturnRoute = await this.controller.assignSUCReturnRoute(
-							node.id,
-						);
+						node.hasSUCReturnRoute =
+							await this.controller.assignSUCReturnRoute(node.id);
 					}
 				})();
 			}

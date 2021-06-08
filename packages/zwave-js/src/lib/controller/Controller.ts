@@ -429,12 +429,13 @@ export class ZWaveController extends EventEmitter {
 
 		// get basic controller version info
 		this.driver.controllerLog.print(`querying version info...`);
-		const version = await this.driver.sendMessage<GetControllerVersionResponse>(
-			new GetControllerVersionRequest(this.driver),
-			{
-				supportCheck: false,
-			},
-		);
+		const version =
+			await this.driver.sendMessage<GetControllerVersionResponse>(
+				new GetControllerVersionRequest(this.driver),
+				{
+					supportCheck: false,
+				},
+			);
 		this._libraryVersion = version.libraryVersion;
 		this._type = version.controllerType;
 		this.driver.controllerLog.print(
@@ -459,12 +460,13 @@ export class ZWaveController extends EventEmitter {
 
 		// find out what the controller can do
 		this.driver.controllerLog.print(`querying controller capabilities...`);
-		const ctrlCaps = await this.driver.sendMessage<GetControllerCapabilitiesResponse>(
-			new GetControllerCapabilitiesRequest(this.driver),
-			{
-				supportCheck: false,
-			},
-		);
+		const ctrlCaps =
+			await this.driver.sendMessage<GetControllerCapabilitiesResponse>(
+				new GetControllerCapabilitiesRequest(this.driver),
+				{
+					supportCheck: false,
+				},
+			);
 		this._isSecondary = ctrlCaps.isSecondary;
 		this._isUsingHomeIdFromOtherNetwork =
 			ctrlCaps.isUsingHomeIdFromOtherNetwork;
@@ -482,12 +484,13 @@ export class ZWaveController extends EventEmitter {
 
 		// find out which part of the API is supported
 		this.driver.controllerLog.print(`querying API capabilities...`);
-		const apiCaps = await this.driver.sendMessage<GetSerialApiCapabilitiesResponse>(
-			new GetSerialApiCapabilitiesRequest(this.driver),
-			{
-				supportCheck: false,
-			},
-		);
+		const apiCaps =
+			await this.driver.sendMessage<GetSerialApiCapabilitiesResponse>(
+				new GetSerialApiCapabilitiesRequest(this.driver),
+				{
+					supportCheck: false,
+				},
+			);
 		this._serialApiVersion = apiCaps.serialApiVersion;
 		this._manufacturerId = apiCaps.manufacturerId;
 		this._productType = apiCaps.productType;
@@ -510,9 +513,10 @@ export class ZWaveController extends EventEmitter {
 			this.driver.controllerLog.print(
 				`querying serial API setup capabilities...`,
 			);
-			const setupCaps = await this.driver.sendMessage<SerialAPISetup_GetSupportedCommandsResponse>(
-				new SerialAPISetup_GetSupportedCommandsRequest(this.driver),
-			);
+			const setupCaps =
+				await this.driver.sendMessage<SerialAPISetup_GetSupportedCommandsResponse>(
+					new SerialAPISetup_GetSupportedCommandsRequest(this.driver),
+				);
 			this._supportedSerialAPISetupCommands = setupCaps.supportedCommands;
 			this.driver.controllerLog.print(
 				`supported serial API setup commands:${this._supportedSerialAPISetupCommands
@@ -536,11 +540,12 @@ export class ZWaveController extends EventEmitter {
 			)
 		) {
 			this.driver.controllerLog.print(`Enabling TX status report...`);
-			const resp = await this.driver.sendMessage<SerialAPISetup_SetTXStatusReportResponse>(
-				new SerialAPISetup_SetTXStatusReportRequest(this.driver, {
-					enabled: true,
-				}),
-			);
+			const resp =
+				await this.driver.sendMessage<SerialAPISetup_SetTXStatusReportResponse>(
+					new SerialAPISetup_SetTXStatusReportRequest(this.driver, {
+						enabled: true,
+					}),
+				);
 			this.driver.controllerLog.print(
 				`Enabling TX status report ${
 					resp.success ? "successful" : "failed"
@@ -607,9 +612,10 @@ export class ZWaveController extends EventEmitter {
 
 		// Request information about all nodes with the GetInitData message
 		this.driver.controllerLog.print(`querying node information...`);
-		const initData = await this.driver.sendMessage<GetSerialApiInitDataResponse>(
-			new GetSerialApiInitDataRequest(this.driver),
-		);
+		const initData =
+			await this.driver.sendMessage<GetSerialApiInitDataResponse>(
+				new GetSerialApiInitDataRequest(this.driver),
+			);
 		// override the information we might already have
 		this._isSecondary = initData.isSecondary;
 		this._isStaticUpdateController = initData.isStaticUpdateController;
@@ -682,12 +688,13 @@ export class ZWaveController extends EventEmitter {
 			this.driver.controllerLog.print(
 				`setting serial API timeouts: ack = ${ack} ms, byte = ${byte} ms`,
 			);
-			const resp = await this.driver.sendMessage<SetSerialApiTimeoutsResponse>(
-				new SetSerialApiTimeoutsRequest(this.driver, {
-					ackTimeout: ack,
-					byteTimeout: byte,
-				}),
-			);
+			const resp =
+				await this.driver.sendMessage<SetSerialApiTimeoutsResponse>(
+					new SetSerialApiTimeoutsRequest(this.driver, {
+						ackTimeout: ack,
+						byteTimeout: byte,
+					}),
+				);
 			this.driver.controllerLog.print(
 				`serial API timeouts overwritten. The old values were: ack = ${resp.oldAckTimeout} ms, byte = ${resp.oldByteTimeout} ms`,
 			);
@@ -1070,9 +1077,10 @@ export class ZWaveController extends EventEmitter {
 				// Query the version, so we can setup the wakeup destination correctly.
 				let supportedVersion: number | undefined;
 				if (node.supportsCC(CommandClasses.Version)) {
-					supportedVersion = await node.commandClasses.Version.getCCVersion(
-						CommandClasses["Wake Up"],
-					);
+					supportedVersion =
+						await node.commandClasses.Version.getCCVersion(
+							CommandClasses["Wake Up"],
+						);
 				}
 				// If querying the version can't be done, we should at least assume that it supports V1
 				supportedVersion ??= 1;
@@ -1705,11 +1713,12 @@ export class ZWaveController extends EventEmitter {
 				direction: "outbound",
 			});
 			try {
-				const resp = await this.driver.sendMessage<RequestNodeNeighborUpdateReport>(
-					new RequestNodeNeighborUpdateRequest(this.driver, {
-						nodeId,
-					}),
-				);
+				const resp =
+					await this.driver.sendMessage<RequestNodeNeighborUpdateReport>(
+						new RequestNodeNeighborUpdateRequest(this.driver, {
+							nodeId,
+						}),
+					);
 				if (resp.updateStatus === NodeNeighborUpdateStatus.UpdateDone) {
 					this.driver.controllerLog.logNode(nodeId, {
 						message: "neighbor list refreshed...",
@@ -2017,9 +2026,10 @@ ${associatedNodes.join(", ")}`,
 			);
 		}
 		if (endpoint.supportsCC(CommandClasses["Multi Channel Association"])) {
-			mcInstance = endpoint.createCCInstanceUnsafe<MultiChannelAssociationCC>(
-				CommandClasses["Multi Channel Association"],
-			);
+			mcInstance =
+				endpoint.createCCInstanceUnsafe<MultiChannelAssociationCC>(
+					CommandClasses["Multi Channel Association"],
+				);
 		}
 
 		const assocGroupCount = assocInstance.getGroupCountCached() ?? 0;
@@ -2032,9 +2042,10 @@ ${associatedNodes.join(", ")}`,
 			endpoint.supportsCC(CommandClasses["Association Group Information"])
 		) {
 			// We can read all information we need from the AGI CC
-			const agiInstance = endpoint.createCCInstance<AssociationGroupInfoCC>(
-				CommandClasses["Association Group Information"],
-			)!;
+			const agiInstance =
+				endpoint.createCCInstance<AssociationGroupInfoCC>(
+					CommandClasses["Association Group Information"],
+				)!;
 			for (let group = 1; group <= groupCount; group++) {
 				let assocConfig: AssociationConfig | undefined;
 				if (node.deviceConfig) {
@@ -2166,9 +2177,10 @@ ${associatedNodes.join(", ")}`,
 
 		// Merge the "normal" destinations with multi channel destinations
 		if (endpoint.supportsCC(CommandClasses["Multi Channel Association"])) {
-			const cc = endpoint.createCCInstanceUnsafe<MultiChannelAssociationCC>(
-				CommandClasses["Multi Channel Association"],
-			)!;
+			const cc =
+				endpoint.createCCInstanceUnsafe<MultiChannelAssociationCC>(
+					CommandClasses["Multi Channel Association"],
+				)!;
 			const destinations = cc.getAllDestinationsCached();
 			for (const [groupId, assocs] of destinations) {
 				if (ret.has(groupId)) {
@@ -2370,9 +2382,10 @@ ${associatedNodes.join(", ")}`,
 			);
 		}
 		if (endpoint.supportsCC(CommandClasses["Multi Channel Association"])) {
-			mcInstance = endpoint.createCCInstanceUnsafe<MultiChannelAssociationCC>(
-				CommandClasses["Multi Channel Association"],
-			);
+			mcInstance =
+				endpoint.createCCInstanceUnsafe<MultiChannelAssociationCC>(
+					CommandClasses["Multi Channel Association"],
+				);
 		} else if (endpointAssociations.length > 0) {
 			throw new ZWaveError(
 				`Node ${nodeAndEndpointString} does not support multi channel associations!`,
@@ -2520,9 +2533,10 @@ ${associatedNodes.join(", ")}`,
 		// Association CC and Multi Channel Association CC
 		if (endpoint.supportsCC(CommandClasses["Multi Channel Association"])) {
 			// Prefer multi channel associations
-			const cc = endpoint.createCCInstanceUnsafe<MultiChannelAssociationCC>(
-				CommandClasses["Multi Channel Association"],
-			)!;
+			const cc =
+				endpoint.createCCInstanceUnsafe<MultiChannelAssociationCC>(
+					CommandClasses["Multi Channel Association"],
+				)!;
 			if (group > cc.getGroupCountCached()) {
 				throw new ZWaveError(
 					`Group ${group} does not exist on node ${nodeAndEndpointString}`,
@@ -3065,12 +3079,13 @@ ${associatedNodes.join(", ")}`,
 		offset: number,
 		buffer: Buffer,
 	): Promise<boolean> {
-		const ret = await this.driver.sendMessage<ExtNVMWriteLongBufferResponse>(
-			new ExtNVMWriteLongBufferRequest(this.driver, {
-				offset,
-				buffer,
-			}),
-		);
+		const ret =
+			await this.driver.sendMessage<ExtNVMWriteLongBufferResponse>(
+				new ExtNVMWriteLongBufferRequest(this.driver, {
+					offset,
+					buffer,
+				}),
+			);
 		return ret.success;
 	}
 

@@ -374,9 +374,10 @@ describe("lib/driver/SendThreadMachine", () => {
 									),
 								).toBeTrue();
 								expect(
-									(testTransactions.BasicSetSecure
-										.message as SendDataRequest).command
-										.preTransmitHandshake,
+									(
+										testTransactions.BasicSetSecure
+											.message as SendDataRequest
+									).command.preTransmitHandshake,
 								).toBeCalled();
 							},
 						},
@@ -514,11 +515,8 @@ describe("lib/driver/SendThreadMachine", () => {
 			},
 			SUCCESS_SENDDATA: {
 				exec: (context) => {
-					const {
-						interpreter,
-						sentTransaction,
-						fakeDriver,
-					} = context;
+					const { interpreter, sentTransaction, fakeDriver } =
+						context;
 					const result = new SendDataRequestTransmitReport(
 						fakeDriver,
 						{
@@ -591,11 +589,8 @@ describe("lib/driver/SendThreadMachine", () => {
 			},
 			HANDSHAKE_SUCCESS_SECURE: {
 				exec: (context) => {
-					const {
-						interpreter,
-						sentTransaction,
-						fakeDriver,
-					} = context;
+					const { interpreter, sentTransaction, fakeDriver } =
+						context;
 					const result = new SendDataRequestTransmitReport(
 						fakeDriver,
 						{
@@ -717,9 +712,13 @@ describe("lib/driver/SendThreadMachine", () => {
 					// }
 
 					it(path.description, () => {
-						const fakeDriver = (createEmptyMockDriver() as unknown) as Driver;
-						fakeDriver.options.attempts.sendData = (machineParams.attempts as any).sendData;
-						fakeDriver.options.attempts.retryAfterTransmitReport = retryAfterTransmitReport;
+						const fakeDriver =
+							createEmptyMockDriver() as unknown as Driver;
+						fakeDriver.options.attempts.sendData = (
+							machineParams.attempts as any
+						).sendData;
+						fakeDriver.options.attempts.retryAfterTransmitReport =
+							retryAfterTransmitReport;
 						const sm = new SecurityManager({
 							ownNodeId: 1,
 							nonceTimeout: 500,
@@ -749,15 +748,13 @@ describe("lib/driver/SendThreadMachine", () => {
 							},
 						);
 
-						const sendDataBasicReport = new ApplicationCommandRequest(
-							fakeDriver,
-							{
+						const sendDataBasicReport =
+							new ApplicationCommandRequest(fakeDriver, {
 								command: new BasicCCReport(fakeDriver, {
 									nodeId: 2,
 									currentValue: 50,
 								}),
-							},
-						);
+							});
 
 						const sendDataBasicSet = new SendDataRequest(
 							fakeDriver,
@@ -797,15 +794,13 @@ describe("lib/driver/SendThreadMachine", () => {
 							},
 						);
 
-						const sendDataNonceResponse = new ApplicationCommandRequest(
-							fakeDriver,
-							{
+						const sendDataNonceResponse =
+							new ApplicationCommandRequest(fakeDriver, {
 								command: new SecurityCCNonceReport(fakeDriver, {
 									nodeId: 2,
 									nonce: Buffer.allocUnsafe(8),
 								}),
-							},
-						);
+							});
 						function createTransaction(
 							msg: Message,
 							priority: MessagePriority = MessagePriority.Normal,
@@ -823,12 +818,10 @@ describe("lib/driver/SendThreadMachine", () => {
 						}
 
 						const testTransactions = {
-							GetControllerIdRequest: createTransaction(
-								ctrlrIdRequest,
-							),
-							GetControllerIdResponse: createTransaction(
-								ctrlrIdResponse,
-							),
+							GetControllerIdRequest:
+								createTransaction(ctrlrIdRequest),
+							GetControllerIdResponse:
+								createTransaction(ctrlrIdResponse),
 							BasicSet: createTransaction(sendDataBasicSet),
 							BasicGet: createTransaction(sendDataBasicGet),
 							BasicReport: createTransaction(sendDataBasicReport),
@@ -863,16 +856,18 @@ describe("lib/driver/SendThreadMachine", () => {
 							preTransmitHandshakePromise: undefined as any,
 						};
 
-						sendDataBasicSetSecure.command.preTransmitHandshake = jest
-							.fn()
-							.mockImplementation(() => {
-								context.preTransmitHandshakePromise = createDeferredPromise();
+						sendDataBasicSetSecure.command.preTransmitHandshake =
+							jest.fn().mockImplementation(() => {
+								context.preTransmitHandshakePromise =
+									createDeferredPromise();
 								return context.preTransmitHandshakePromise;
 							});
 
-						const sentCommand = (path.segments.find(
-							(s) => s.event.type === "ADD_SENDDATA",
-						)?.event as any)?.command;
+						const sentCommand = (
+							path.segments.find(
+								(s) => s.event.type === "ADD_SENDDATA",
+							)?.event as any
+						)?.command;
 						if (sentCommand) {
 							context.sentTransaction = (testTransactions as any)[
 								sentCommand

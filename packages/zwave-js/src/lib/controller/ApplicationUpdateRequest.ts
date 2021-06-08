@@ -80,7 +80,8 @@ export class ApplicationUpdateRequestNodeInfoReceived extends ApplicationUpdateR
 
 export class ApplicationUpdateRequestNodeInfoRequestFailed
 	extends ApplicationUpdateRequest
-	implements SuccessIndicator {
+	implements SuccessIndicator
+{
 	isOK(): boolean {
 		return false;
 	}

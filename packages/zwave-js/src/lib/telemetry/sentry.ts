@@ -69,9 +69,9 @@ export async function initSentry(
 			let ignore = false;
 			// By default we ignore errors that original outside this library
 			// Look at the last stackframe to figure out the filename
-			const filename = event.exception?.values?.[0]?.stacktrace?.frames?.slice(
-				-1,
-			)[0]?.filename;
+			const filename =
+				event.exception?.values?.[0]?.stacktrace?.frames?.slice(-1)[0]
+					?.filename;
 
 			if (filename && !isPartOfThisLib(filename)) {
 				ignore = true;

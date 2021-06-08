@@ -128,7 +128,7 @@ export class ZWaveSerialPortBase extends PassThrough {
 		this.on("pipe" as any, (source: Readable) => {
 			source.unpipe(this as any);
 			// Pass all written data to the serialport unchanged
-			source.pipe((this.serial as unknown) as Writable, { end: false });
+			source.pipe(this.serial as unknown as Writable, { end: false });
 		});
 
 		// Delegate iterating to the parser stream

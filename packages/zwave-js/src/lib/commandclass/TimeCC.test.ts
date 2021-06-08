@@ -10,7 +10,7 @@ import {
 	TimeCommand,
 } from "./TimeCC";
 
-const fakeDriver = (createEmptyMockDriver() as unknown) as Driver;
+const fakeDriver = createEmptyMockDriver() as unknown as Driver;
 
 function buildCCBuffer(payload: Buffer): Buffer {
 	return Buffer.concat([
