@@ -1,4 +1,8 @@
-import type { DeviceConfig } from "@zwave-js/config";
+import type {
+	DeviceConfig,
+	Notification,
+	NotificationValueDefinition,
+} from "@zwave-js/config";
 import {
 	actuatorCCs,
 	applicationCCs,
@@ -23,6 +27,7 @@ import {
 	ValueID,
 	valueIdToString,
 	ValueMetadata,
+	ValueMetadataNumeric,
 	ValueRemovedArgs,
 	ValueUpdatedArgs,
 	ZWaveError,
@@ -90,6 +95,8 @@ import {
 	getNodeNameValueId,
 } from "../commandclass/NodeNamingCC";
 import {
+	getNotificationValueMetadata,
+	getNotificationValueMetadataUnknownType,
 	NotificationCC,
 	NotificationCCReport,
 } from "../commandclass/NotificationCC";
@@ -2542,6 +2549,36 @@ protocol version:      ${this._protocolVersion}`;
 			return;
 		}
 
+		// Fallback for V2 notifications that don't allow us to predefine the metadata during the interview.
+		// Instead of defining useless values for each possible notification event, we build the metadata on demand
+		const extendValueMetadata = (
+			valueId: ValueID,
+			notificationConfig: Notification,
+			valueConfig: NotificationValueDefinition & { type: "state" },
+		) => {
+			if (command.version === 2 || !this.valueDB.hasMetadata(valueId)) {
+				const metadata = getNotificationValueMetadata(
+					this.valueDB.getMetadata(valueId) as
+						| ValueMetadataNumeric
+						| undefined,
+					notificationConfig,
+					valueConfig,
+				);
+				this.valueDB.setMetadata(valueId, metadata);
+			}
+		};
+		const ensureValueMetadataUnknownType = (
+			valueId: ValueID,
+			notificationConfig: Notification,
+		) => {
+			if (command.version === 2 && !this.valueDB.hasMetadata(valueId)) {
+				const metadata = getNotificationValueMetadataUnknownType(
+					notificationConfig.id,
+				);
+				this.valueDB.setMetadata(valueId, metadata);
+			}
+		};
+
 		// Look up the received notification in the config
 		const notificationConfig = this.driver.configManager.lookupNotification(
 			command.notificationType,
@@ -2568,6 +2605,7 @@ protocol version:      ${this._protocolVersion}`;
 				};
 				// Since the node has reset the notification itself, we don't need the idle reset
 				this.clearNotificationIdleReset(valueId);
+				extendValueMetadata(valueId, notificationConfig, valueConfig);
 				this.valueDB.setValue(valueId, 0 /* idle */);
 			};
 
@@ -2632,7 +2670,13 @@ protocol version:      ${this._protocolVersion}`;
 				property,
 				propertyKey,
 			};
+			if (valueConfig) {
+				extendValueMetadata(valueId, notificationConfig, valueConfig);
+			} else {
+				ensureValueMetadataUnknownType(valueId, notificationConfig);
+			}
 			this.valueDB.setValue(valueId, value);
+
 			// Nodes before V8 (and some misbehaving V8 ones) don't necessarily reset the notification to idle.
 			// The specifications advise to auto-reset the variables, but it has been found that this interferes
 			// with some motion sensors that don't refresh their active notification. Therefore, we set a fallback
