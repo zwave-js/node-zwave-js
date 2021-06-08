@@ -727,7 +727,7 @@ export class MeterCCGet extends MeterCC {
 				getTypeValueId(this.endpointIndex),
 			);
 			if (type != undefined) {
-				message.duration = this.driver.configManager.lookupMeterScale(
+				message.scale = this.driver.configManager.lookupMeterScale(
 					type,
 					this.scale,
 				).label;
