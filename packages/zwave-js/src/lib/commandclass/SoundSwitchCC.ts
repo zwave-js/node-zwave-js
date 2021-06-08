@@ -99,10 +99,11 @@ export class SoundSwitchCCAPI extends CCAPI {
 			nodeId: this.endpoint.nodeId,
 			endpoint: this.endpoint.index,
 		});
-		const response = await this.driver.sendCommand<SoundSwitchCCTonesNumberReport>(
-			cc,
-			this.commandOptions,
-		);
+		const response =
+			await this.driver.sendCommand<SoundSwitchCCTonesNumberReport>(
+				cc,
+				this.commandOptions,
+			);
 		return response?.toneCount;
 	}
 
@@ -118,10 +119,11 @@ export class SoundSwitchCCAPI extends CCAPI {
 			endpoint: this.endpoint.index,
 			toneId,
 		});
-		const response = await this.driver.sendCommand<SoundSwitchCCToneInfoReport>(
-			cc,
-			this.commandOptions,
-		);
+		const response =
+			await this.driver.sendCommand<SoundSwitchCCToneInfoReport>(
+				cc,
+				this.commandOptions,
+			);
 		if (response) return pick(response, ["duration", "name"]);
 	}
 
@@ -154,10 +156,11 @@ export class SoundSwitchCCAPI extends CCAPI {
 			nodeId: this.endpoint.nodeId,
 			endpoint: this.endpoint.index,
 		});
-		const response = await this.driver.sendCommand<SoundSwitchCCConfigurationReport>(
-			cc,
-			this.commandOptions,
-		);
+		const response =
+			await this.driver.sendCommand<SoundSwitchCCConfigurationReport>(
+				cc,
+				this.commandOptions,
+			);
 		if (response) {
 			return pick(response, ["defaultToneId", "defaultVolume"]);
 		}
@@ -211,10 +214,11 @@ export class SoundSwitchCCAPI extends CCAPI {
 			nodeId: this.endpoint.nodeId,
 			endpoint: this.endpoint.index,
 		});
-		const response = await this.driver.sendCommand<SoundSwitchCCTonePlayReport>(
-			cc,
-			this.commandOptions,
-		);
+		const response =
+			await this.driver.sendCommand<SoundSwitchCCTonePlayReport>(
+				cc,
+				this.commandOptions,
+			);
 		if (response) {
 			return pick(response, ["toneId", "volume"]);
 		}

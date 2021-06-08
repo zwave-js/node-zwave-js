@@ -59,7 +59,8 @@ interface SendDataRequestOptions<CCType extends CommandClass = CommandClass>
 @expectedCallback(FunctionType.SendData)
 export class SendDataRequest<CCType extends CommandClass = CommandClass>
 	extends SendDataRequestBase
-	implements ICommandClassContainer {
+	implements ICommandClassContainer
+{
 	public constructor(
 		driver: Driver,
 		options: SendDataRequestOptions<CCType>,
@@ -139,7 +140,8 @@ interface SendDataRequestTransmitReportOptions extends MessageBaseOptions {
 
 export class SendDataRequestTransmitReport
 	extends SendDataRequestBase
-	implements SuccessIndicator {
+	implements SuccessIndicator
+{
 	public constructor(
 		driver: Driver,
 		options:
@@ -250,10 +252,11 @@ interface SendDataMulticastRequestOptions<CCType extends CommandClass>
 @expectedResponse(FunctionType.SendDataMulticast)
 @expectedCallback(FunctionType.SendDataMulticast)
 export class SendDataMulticastRequest<
-		CCType extends CommandClass = CommandClass
+		CCType extends CommandClass = CommandClass,
 	>
 	extends SendDataMulticastRequestBase
-	implements ICommandClassContainer {
+	implements ICommandClassContainer
+{
 	public constructor(
 		driver: Driver,
 		options: SendDataMulticastRequestOptions<CCType>,
@@ -344,7 +347,8 @@ interface SendDataMulticastRequestTransmitReportOptions
 
 export class SendDataMulticastRequestTransmitReport
 	extends SendDataMulticastRequestBase
-	implements SuccessIndicator {
+	implements SuccessIndicator
+{
 	public constructor(
 		driver: Driver,
 		options:
@@ -397,7 +401,8 @@ export class SendDataMulticastRequestTransmitReport
 @messageTypes(MessageType.Response, FunctionType.SendDataMulticast)
 export class SendDataMulticastResponse
 	extends Message
-	implements SuccessIndicator {
+	implements SuccessIndicator
+{
 	public constructor(driver: Driver, options: MessageDeserializationOptions) {
 		super(driver, options);
 		this._wasSent = this.payload[0] !== 0;

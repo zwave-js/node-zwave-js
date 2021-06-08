@@ -141,7 +141,7 @@ export class VirtualEndpoint {
 					ccId = +ccNameOrId;
 				} else {
 					// If a name was given, retrieve the corresponding ID
-					ccId = (CommandClasses[ccNameOrId as any] as unknown) as
+					ccId = CommandClasses[ccNameOrId as any] as unknown as
 						| CommandClasses
 						| undefined;
 					if (ccId == undefined) {
@@ -192,7 +192,7 @@ export class VirtualEndpoint {
 	 * all other API calls will throw if the API is not supported
 	 */
 	public get commandClasses(): CCAPIs {
-		return (this._commandClassAPIsProxy as unknown) as CCAPIs;
+		return this._commandClassAPIsProxy as unknown as CCAPIs;
 	}
 
 	/**

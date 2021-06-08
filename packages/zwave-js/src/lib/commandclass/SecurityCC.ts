@@ -102,9 +102,11 @@ export class SecurityCCAPI extends PhysicalCCAPI {
 			);
 		}
 
-		const cc = new (requestNextNonce
-			? SecurityCCCommandEncapsulationNonceGet
-			: SecurityCCCommandEncapsulation)(this.driver, {
+		const cc = new (
+			requestNextNonce
+				? SecurityCCCommandEncapsulationNonceGet
+				: SecurityCCCommandEncapsulation
+		)(this.driver, {
 			nodeId: this.endpoint.nodeId,
 			encapsulated,
 		});
@@ -281,10 +283,11 @@ export class SecurityCCAPI extends PhysicalCCAPI {
 			nodeId: this.endpoint.nodeId,
 			endpoint: this.endpoint.index,
 		});
-		const response = await this.driver.sendCommand<SecurityCCCommandsSupportedReport>(
-			cc,
-			this.commandOptions,
-		);
+		const response =
+			await this.driver.sendCommand<SecurityCCCommandsSupportedReport>(
+				cc,
+				this.commandOptions,
+			);
 		if (response) {
 			return pick(response, ["supportedCCs", "controlledCCs"]);
 		}

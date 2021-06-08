@@ -322,9 +322,8 @@ export class ZWaveNode extends Endpoint {
 		const outArg = this.translateValueID(arg);
 		// If this is a metadata event, make sure we return the merged metadata
 		if ("metadata" in outArg) {
-			((outArg as unknown) as MetadataUpdatedArgs).metadata = this.getValueMetadata(
-				arg,
-			);
+			(outArg as unknown as MetadataUpdatedArgs).metadata =
+				this.getValueMetadata(arg);
 		}
 		// Log the value change
 		const ccInstance = this.createCCInstanceInternal(arg.commandClass);
@@ -809,9 +808,11 @@ export class ZWaveNode extends Endpoint {
 			);
 		}
 
-		const api = ((endpointInstance.commandClasses as any)[
-			valueId.commandClass
-		] as CCAPI).withOptions({
+		const api = (
+			(endpointInstance.commandClasses as any)[
+				valueId.commandClass
+			] as CCAPI
+		).withOptions({
 			// We do not want to delay more important communication by polling, so give it
 			// the lowest priority and don't retry unless overwritten by the options
 			maxSendAttempts: 1,
@@ -853,9 +854,11 @@ export class ZWaveNode extends Endpoint {
 		const endpointInstance = this.getEndpoint(valueId.endpoint || 0);
 		if (!endpointInstance) return false;
 
-		const api = ((endpointInstance.commandClasses as any)[
-			valueId.commandClass
-		] as CCAPI).withOptions({
+		const api = (
+			(endpointInstance.commandClasses as any)[
+				valueId.commandClass
+			] as CCAPI
+		).withOptions({
 			// We do not want to delay more important communication by polling, so give it
 			// the lowest priority and don't retry unless overwritten by the options
 			maxSendAttempts: 1,
@@ -2066,9 +2069,8 @@ protocol version:      ${this._protocolVersion}`;
 		});
 
 		// Ensure that we're not flooding the queue with unnecessary NonceReports (GH#1059)
-		const { queue, currentTransaction } = this.driver[
-			"sendThread"
-		].state.context;
+		const { queue, currentTransaction } =
+			this.driver["sendThread"].state.context;
 		const isNonceReport = (t: Transaction | undefined) =>
 			!!t &&
 			t.message.getNodeId() === this.nodeId &&
@@ -2328,9 +2330,9 @@ protocol version:      ${this._protocolVersion}`;
 			// Try to access the API - if it doesn't work, skip this option
 			let API: CCAPI;
 			try {
-				API = ((this.commandClasses as any)[
-					ccName
-				] as CCAPI).withOptions({
+				API = (
+					(this.commandClasses as any)[ccName] as CCAPI
+				).withOptions({
 					// Tag the resulting transactions as compat queries
 					tag: "compat",
 					// Do not retry them or they may cause congestion if the node is asleep again
@@ -3015,9 +3017,8 @@ protocol version:      ${this._protocolVersion}`;
 		// Refresh the get timeout
 		if (this._firmwareUpdateStatus.getTimeout) {
 			// console.warn("refreshed get timeout");
-			this._firmwareUpdateStatus.getTimeout = this._firmwareUpdateStatus.getTimeout
-				.refresh()
-				.unref();
+			this._firmwareUpdateStatus.getTimeout =
+				this._firmwareUpdateStatus.getTimeout.refresh().unref();
 		}
 
 		// When a node requests a firmware update fragment, it must be awake
@@ -3029,12 +3030,8 @@ protocol version:      ${this._protocolVersion}`;
 
 		// Send the response(s) in the background
 		void (async () => {
-			const {
-				numFragments,
-				data,
-				fragmentSize,
-				abort,
-			} = this._firmwareUpdateStatus!;
+			const { numFragments, data, fragmentSize, abort } =
+				this._firmwareUpdateStatus!;
 			for (
 				let num = command.reportNumber;
 				num < command.reportNumber + command.numReports;
@@ -3153,14 +3150,15 @@ protocol version:      ${this._protocolVersion}`;
 
 	private async finishFirmwareUpdate(): Promise<void> {
 		try {
-			const report = await this.driver.waitForCommand<FirmwareUpdateMetaDataCCStatusReport>(
-				(cc) =>
-					cc.nodeId === this.nodeId &&
-					cc instanceof FirmwareUpdateMetaDataCCStatusReport,
-				// Wait up to 5 minutes. It should never take that long, but the specs
-				// don't say anything specific
-				5 * 60000,
-			);
+			const report =
+				await this.driver.waitForCommand<FirmwareUpdateMetaDataCCStatusReport>(
+					(cc) =>
+						cc.nodeId === this.nodeId &&
+						cc instanceof FirmwareUpdateMetaDataCCStatusReport,
+					// Wait up to 5 minutes. It should never take that long, but the specs
+					// don't say anything specific
+					5 * 60000,
+				);
 
 			this.handleFirmwareUpdateStatusReport(report);
 		} catch (e: unknown) {
@@ -3255,9 +3253,9 @@ protocol version:      ${this._protocolVersion}`;
 			commandClasses: {} as JSONObject,
 		};
 		// Sort the CCs by their key before writing to the object
-		const sortedCCs = [
-			...this.implementedCommandClasses.keys(),
-		].sort((a, b) => Math.sign(a - b));
+		const sortedCCs = [...this.implementedCommandClasses.keys()].sort(
+			(a, b) => Math.sign(a - b),
+		);
 		for (const cc of sortedCCs) {
 			const serializedCC = {
 				name: CommandClasses[cc],
@@ -3267,14 +3265,13 @@ protocol version:      ${this._protocolVersion}`;
 			// Therefore request the information from all endpoints
 			for (const endpoint of this.getAllEndpoints()) {
 				if (endpoint.implementedCommandClasses.has(cc)) {
-					serializedCC.endpoints[
-						endpoint.index.toString()
-					] = endpoint.implementedCommandClasses.get(cc)!;
+					serializedCC.endpoints[endpoint.index.toString()] =
+						endpoint.implementedCommandClasses.get(cc)!;
 				}
 			}
 			ret.commandClasses[num2hex(cc)] = serializedCC as any;
 		}
-		return (ret as any) as JSONObject;
+		return ret as any as JSONObject;
 	}
 
 	/**

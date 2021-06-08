@@ -16,7 +16,7 @@ import { ZWaveNode } from "./Node";
 
 describe("lib/node/Endpoint", () => {
 	describe("createAPI", () => {
-		const fakeDriver = (createEmptyMockDriver() as unknown) as Driver;
+		const fakeDriver = createEmptyMockDriver() as unknown as Driver;
 		it("throws if a non-implemented API should be created", () => {
 			const endpoint = new Endpoint(1, fakeDriver, 1);
 
@@ -51,7 +51,7 @@ describe("lib/node/Endpoint", () => {
 	});
 
 	describe("commandClasses dictionary", () => {
-		const fakeDriver = (createEmptyMockDriver() as unknown) as Driver;
+		const fakeDriver = createEmptyMockDriver() as unknown as Driver;
 		it("throws when trying to access a non-implemented CC", () => {
 			const endpoint = new Endpoint(1, fakeDriver, 1);
 			assertZWaveError(() => (endpoint.commandClasses as any).FOOBAR, {
@@ -127,7 +127,7 @@ describe("lib/node/Endpoint", () => {
 	});
 
 	describe("createCCInstance()", () => {
-		const fakeDriver = (createEmptyMockDriver() as unknown) as Driver;
+		const fakeDriver = createEmptyMockDriver() as unknown as Driver;
 
 		it("returns undefined if the node supports the CC but it is not yet implemented", () => {
 			const endpoint = new Endpoint(1, fakeDriver, 1);
@@ -144,7 +144,7 @@ describe("lib/node/Endpoint", () => {
 			await cm.loadDeviceClasses();
 			const powerStripSwitch = new DeviceClass(cm, 0x01, 0x10, 0x04);
 
-			const fakeDriver = (createEmptyMockDriver() as unknown) as Driver;
+			const fakeDriver = createEmptyMockDriver() as unknown as Driver;
 
 			const node = new ZWaveNode(1, fakeDriver, powerStripSwitch);
 			expect(node.supportsCC(CommandClasses["Multi Channel"])).toBeTrue();
@@ -157,7 +157,7 @@ describe("lib/node/Endpoint", () => {
 			await cm.loadDeviceClasses();
 			const soundSwitch = new DeviceClass(cm, 0x01, 0x03, 0x01);
 
-			const fakeDriver = (createEmptyMockDriver() as unknown) as Driver;
+			const fakeDriver = createEmptyMockDriver() as unknown as Driver;
 			const node = new ZWaveNode(1, fakeDriver, soundSwitch);
 			(fakeDriver.controller.nodes as any).set(1, node);
 
@@ -175,7 +175,7 @@ describe("lib/node/Endpoint", () => {
 			await cm.loadDeviceClasses();
 			const soundSwitch = new DeviceClass(cm, 0x01, 0x03, 0x01);
 
-			const fakeDriver = (createEmptyMockDriver() as unknown) as Driver;
+			const fakeDriver = createEmptyMockDriver() as unknown as Driver;
 			const node = new ZWaveNode(1, fakeDriver);
 			(fakeDriver.controller.nodes as any).set(1, node);
 			node["_isListening"] = true;

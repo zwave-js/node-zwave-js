@@ -174,10 +174,11 @@ export class ThermostatModeCCAPI extends CCAPI {
 			nodeId: this.endpoint.nodeId,
 			endpoint: this.endpoint.index,
 		});
-		const response = await this.driver.sendCommand<ThermostatModeCCSupportedReport>(
-			cc,
-			this.commandOptions,
-		);
+		const response =
+			await this.driver.sendCommand<ThermostatModeCCSupportedReport>(
+				cc,
+				this.commandOptions,
+			);
 		return response?.supportedModes;
 	}
 }

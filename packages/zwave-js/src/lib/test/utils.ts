@@ -7,9 +7,8 @@ import type { ZWaveOptions } from "../driver/ZWaveOptions";
 
 // load the driver with stubbed out Serialport
 jest.mock("@zwave-js/serial", () => {
-	const mdl: typeof import("@zwave-js/serial") = jest.requireActual(
-		"@zwave-js/serial",
-	);
+	const mdl: typeof import("@zwave-js/serial") =
+		jest.requireActual("@zwave-js/serial");
 	return {
 		...mdl,
 		ZWaveSerialPort: mdl.MockSerialPort,

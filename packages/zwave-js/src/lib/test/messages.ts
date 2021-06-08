@@ -4,9 +4,7 @@ import { MessageType } from "../message/Constants";
 import type { Message } from "../message/Message";
 
 export const createSendDataResolvesNever = () =>
-	jest.fn().mockImplementation(
-		() => new Promise<unknown>(() => {}),
-	);
+	jest.fn().mockImplementation(() => new Promise<unknown>(() => {}));
 export const createSendDataResolvesImmediately = () =>
 	jest.fn().mockResolvedValue(undefined);
 export const createSendDataRejectsImmediately = () =>
@@ -21,7 +19,7 @@ const defaultImplementations = {
 	getCallbackTimeout: () => undefined,
 };
 
-export const dummyResponseOK = ({
+export const dummyResponseOK = {
 	type: MessageType.Response,
 	expectedResponse: undefined,
 	expectedCallback: undefined,
@@ -30,8 +28,8 @@ export const dummyResponseOK = ({
 	expectsCallback: () => false,
 	isOK: () => true,
 	...defaultImplementations,
-} as any) as Message;
-export const dummyCallbackOK = ({
+} as any as Message;
+export const dummyCallbackOK = {
 	type: MessageType.Request,
 	expectedResponse: undefined,
 	expectedCallback: undefined,
@@ -40,12 +38,12 @@ export const dummyCallbackOK = ({
 	expectsCallback: () => false,
 	isOK: () => true,
 	...defaultImplementations,
-} as any) as Message;
-export const dummyCallbackPartial = ({
+} as any as Message;
+export const dummyCallbackPartial = {
 	...dummyCallbackOK,
 	isFinal: () => false,
-} as any) as Message;
-export const dummyResponseNOK = ({
+} as any as Message;
+export const dummyResponseNOK = {
 	type: MessageType.Response,
 	expectedResponse: undefined,
 	expectedCallback: undefined,
@@ -54,8 +52,8 @@ export const dummyResponseNOK = ({
 	expectsCallback: () => false,
 	isOK: () => false,
 	...defaultImplementations,
-} as any) as Message;
-export const dummyCallbackNOK = ({
+} as any as Message;
+export const dummyCallbackNOK = {
 	type: MessageType.Request,
 	expectedResponse: undefined,
 	expectedCallback: undefined,
@@ -64,25 +62,25 @@ export const dummyCallbackNOK = ({
 	expectsCallback: () => false,
 	isOK: () => false,
 	...defaultImplementations,
-} as any) as Message;
-export const dummyMessageUnrelated = ({
+} as any as Message;
+export const dummyMessageUnrelated = {
 	expectedResponse: undefined,
 	expectedCallback: undefined,
 	hasCallbackId: () => false,
 	expectsResponse: () => false,
 	expectsCallback: () => false,
 	...defaultImplementations,
-} as any) as Message;
+} as any as Message;
 
-export const dummyMessageNoResponseNoCallback = ({
+export const dummyMessageNoResponseNoCallback = {
 	expectedResponse: undefined,
 	expectedCallback: undefined,
 	hasCallbackId: () => false,
 	expectsResponse: () => false,
 	expectsCallback: () => false,
 	...defaultImplementations,
-} as any) as Message;
-export const dummyMessageWithResponseNoCallback = ({
+} as any as Message;
+export const dummyMessageWithResponseNoCallback = {
 	expectedResponse: 0xff,
 	expectedCallback: undefined,
 	hasCallbackId: () => false,
@@ -91,8 +89,8 @@ export const dummyMessageWithResponseNoCallback = ({
 	isExpectedResponse: (msg: any) =>
 		msg === dummyResponseOK || msg === dummyResponseNOK,
 	...defaultImplementations,
-} as any) as Message;
-export const dummyMessageNoResponseWithCallback = ({
+} as any as Message;
+export const dummyMessageNoResponseWithCallback = {
 	expectedResponse: undefined,
 	expectedCallback: true,
 	hasCallbackId: () => true,
@@ -102,8 +100,8 @@ export const dummyMessageNoResponseWithCallback = ({
 	isExpectedCallback: (msg: any) =>
 		msg === dummyCallbackOK || msg === dummyCallbackNOK,
 	...defaultImplementations,
-} as any) as Message;
-export const dummyMessageWithResponseWithCallback = ({
+} as any as Message;
+export const dummyMessageWithResponseWithCallback = {
 	expectedResponse: true,
 	expectedCallback: true,
 	expectsResponse: () => true,
@@ -113,4 +111,4 @@ export const dummyMessageWithResponseWithCallback = ({
 	isExpectedCallback: (msg: any) =>
 		msg === dummyCallbackOK || msg === dummyCallbackNOK,
 	...defaultImplementations,
-} as any) as Message;
+} as any as Message;

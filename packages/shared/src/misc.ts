@@ -2,7 +2,7 @@ import { num2hex } from "./strings";
 
 /** Object.keys, but with `(keyof T)[]` as the return type */
 export function keysOf<T>(obj: T): (keyof T)[] {
-	return (Object.keys(obj) as unknown) as (keyof T)[];
+	return Object.keys(obj) as unknown as (keyof T)[];
 }
 
 /** Returns a subset of `obj` that contains only the given keys */

@@ -53,17 +53,17 @@ export function expressionToCommandClass(
 		return;
 	if (ts.isPropertyAccessExpression(enumExpr)) {
 		return CommandClasses[
-			(enumExpr.name.getText(
+			enumExpr.name.getText(
 				sourceFile,
-			) as unknown) as keyof typeof CommandClasses
+			) as unknown as keyof typeof CommandClasses
 		];
 	} else if (
 		ts.isElementAccessExpression(enumExpr) &&
 		ts.isStringLiteral(enumExpr.argumentExpression)
 	) {
 		return CommandClasses[
-			(enumExpr.argumentExpression
-				.text as unknown) as keyof typeof CommandClasses
+			enumExpr.argumentExpression
+				.text as unknown as keyof typeof CommandClasses
 		];
 	}
 }

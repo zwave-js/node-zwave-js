@@ -84,7 +84,8 @@ export class ReplaceFailedNodeRequest extends ReplaceFailedNodeRequestBase {
 @messageTypes(MessageType.Response, FunctionType.ReplaceFailedNode)
 export class ReplaceFailedNodeResponse
 	extends Message
-	implements SuccessIndicator {
+	implements SuccessIndicator
+{
 	public constructor(driver: Driver, options: MessageDeserializationOptions) {
 		super(driver, options);
 		this._replaceStatus = this.payload[0];
@@ -102,7 +103,8 @@ export class ReplaceFailedNodeResponse
 
 export class ReplaceFailedNodeRequestStatusReport
 	extends ReplaceFailedNodeRequestBase
-	implements SuccessIndicator {
+	implements SuccessIndicator
+{
 	public constructor(driver: Driver, options: MessageDeserializationOptions) {
 		super(driver, options);
 

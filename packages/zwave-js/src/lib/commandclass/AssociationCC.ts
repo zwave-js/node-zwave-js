@@ -96,8 +96,9 @@ export function getLifelineGroupIds(endpoint: Endpoint): number[] {
 			node.deviceConfig?.endpoints?.get(0)?.associations;
 	} else {
 		// The other endpoints can only have a configuration as part of "endpoints"
-		associations = node.deviceConfig?.endpoints?.get(endpoint.index)
-			?.associations;
+		associations = node.deviceConfig?.endpoints?.get(
+			endpoint.index,
+		)?.associations;
 	}
 
 	if (associations?.size) {
@@ -166,10 +167,11 @@ export class AssociationCCAPI extends PhysicalCCAPI {
 			nodeId: this.endpoint.nodeId,
 			endpoint: this.endpoint.index,
 		});
-		const response = await this.driver.sendCommand<AssociationCCSupportedGroupingsReport>(
-			cc,
-			this.commandOptions,
-		);
+		const response =
+			await this.driver.sendCommand<AssociationCCSupportedGroupingsReport>(
+				cc,
+				this.commandOptions,
+			);
 		if (response) return response.groupCount;
 	}
 

@@ -113,9 +113,11 @@ export function sendDataErrorToZWaveError(
 				transaction.message instanceof SendDataRequest ||
 				transaction.message instanceof SendDataBridgeRequest
 			) {
-				const status = (receivedMessage as
-					| SendDataRequestTransmitReport
-					| SendDataBridgeRequestTransmitReport).transmitStatus;
+				const status = (
+					receivedMessage as
+						| SendDataRequestTransmitReport
+						| SendDataBridgeRequestTransmitReport
+				).transmitStatus;
 				return new ZWaveError(
 					`Failed to send the command after ${
 						transaction.message.maxSendAttempts
@@ -133,10 +135,11 @@ export function sendDataErrorToZWaveError(
 				transaction.message instanceof SendDataMulticastRequest ||
 				transaction.message instanceof SendDataMulticastBridgeRequest
 			) {
-				const status = (receivedMessage as
-					| SendDataMulticastRequestTransmitReport
-					| SendDataMulticastBridgeRequestTransmitReport)
-					.transmitStatus;
+				const status = (
+					receivedMessage as
+						| SendDataMulticastRequestTransmitReport
+						| SendDataMulticastBridgeRequestTransmitReport
+				).transmitStatus;
 				return new ZWaveError(
 					`One or more nodes did not respond to the multicast request (Status ${getEnumMemberName(
 						TransmitStatus,
@@ -213,22 +216,21 @@ export type ExtendedInterpreter<
 	TContext = DefaultContext,
 	TStateSchema extends StateSchema = any,
 	TEvent extends EventObject = EventObject,
-	TTypestate extends Typestate<TContext> = { value: any; context: TContext }
+	TTypestate extends Typestate<TContext> = { value: any; context: TContext },
 > = Interpreter<TContext, TStateSchema, TEvent, TTypestate> & {
 	restart(): Interpreter<TContext, TStateSchema, TEvent, TTypestate>;
 };
-export type Extended<
-	TInterpreter extends Interpreter<any, any, any, any>
-> = TInterpreter extends Interpreter<infer A, infer B, infer C, infer D>
-	? ExtendedInterpreter<A, B, C, D>
-	: never;
+export type Extended<TInterpreter extends Interpreter<any, any, any, any>> =
+	TInterpreter extends Interpreter<infer A, infer B, infer C, infer D>
+		? ExtendedInterpreter<A, B, C, D>
+		: never;
 
 /** Extends the default xstate interpreter with a restart function that re-attaches all event handlers */
 export function interpretEx<
 	TContext = DefaultContext,
 	TStateSchema extends StateSchema = any,
 	TEvent extends EventObject = EventObject,
-	TTypestate extends Typestate<TContext> = { value: any; context: TContext }
+	TTypestate extends Typestate<TContext> = { value: any; context: TContext },
 >(
 	machine: StateMachine<TContext, TStateSchema, TEvent, TTypestate>,
 	options?: Partial<InterpreterOptions>,

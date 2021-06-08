@@ -47,7 +47,8 @@ interface ApplicationCommandRequestOptions extends MessageBaseOptions {
 @priority(MessagePriority.Normal)
 export class ApplicationCommandRequest
 	extends Message
-	implements ICommandClassContainer {
+	implements ICommandClassContainer
+{
 	public constructor(
 		driver: Driver,
 		options:

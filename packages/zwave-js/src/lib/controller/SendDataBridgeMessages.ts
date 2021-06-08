@@ -48,7 +48,7 @@ export class SendDataBridgeRequestBase extends Message {
 }
 
 interface SendDataBridgeRequestOptions<
-	CCType extends CommandClass = CommandClass
+	CCType extends CommandClass = CommandClass,
 > extends MessageBaseOptions {
 	command: CCType;
 	sourceNodeId?: number;
@@ -61,7 +61,8 @@ interface SendDataBridgeRequestOptions<
 @expectedCallback(FunctionType.SendDataBridge)
 export class SendDataBridgeRequest<CCType extends CommandClass = CommandClass>
 	extends SendDataBridgeRequestBase
-	implements ICommandClassContainer {
+	implements ICommandClassContainer
+{
 	public constructor(
 		driver: Driver,
 		options: SendDataBridgeRequestOptions<CCType>,
@@ -173,7 +174,8 @@ interface SendDataBridgeRequestTransmitReportOptions
 
 export class SendDataBridgeRequestTransmitReport
 	extends SendDataBridgeRequestBase
-	implements SuccessIndicator {
+	implements SuccessIndicator
+{
 	public constructor(
 		driver: Driver,
 		options:
@@ -225,7 +227,8 @@ export class SendDataBridgeRequestTransmitReport
 @messageTypes(MessageType.Response, FunctionType.SendDataBridge)
 export class SendDataBridgeResponse
 	extends Message
-	implements SuccessIndicator {
+	implements SuccessIndicator
+{
 	public constructor(driver: Driver, options: MessageDeserializationOptions) {
 		super(driver, options);
 		this._wasSent = this.payload[0] !== 0;
@@ -282,10 +285,11 @@ interface SendDataMulticastBridgeRequestOptions<CCType extends CommandClass>
 @expectedResponse(FunctionType.SendDataMulticastBridge)
 @expectedCallback(FunctionType.SendDataMulticastBridge)
 export class SendDataMulticastBridgeRequest<
-		CCType extends CommandClass = CommandClass
+		CCType extends CommandClass = CommandClass,
 	>
 	extends SendDataMulticastBridgeRequestBase
-	implements ICommandClassContainer {
+	implements ICommandClassContainer
+{
 	public constructor(
 		driver: Driver,
 		options: SendDataMulticastBridgeRequestOptions<CCType>,
@@ -384,7 +388,8 @@ interface SendDataMulticastBridgeRequestTransmitReportOptions
 
 export class SendDataMulticastBridgeRequestTransmitReport
 	extends SendDataMulticastBridgeRequestBase
-	implements SuccessIndicator {
+	implements SuccessIndicator
+{
 	public constructor(
 		driver: Driver,
 		options:
@@ -435,7 +440,8 @@ export class SendDataMulticastBridgeRequestTransmitReport
 @messageTypes(MessageType.Response, FunctionType.SendDataMulticastBridge)
 export class SendDataMulticastBridgeResponse
 	extends Message
-	implements SuccessIndicator {
+	implements SuccessIndicator
+{
 	public constructor(driver: Driver, options: MessageDeserializationOptions) {
 		super(driver, options);
 		this._wasSent = this.payload[0] !== 0;
