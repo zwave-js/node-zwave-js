@@ -2,6 +2,23 @@
 <!--
 	Add placeholder for next release with `wip` snippet
 -->
+## __WORK IN PROGRESS__
+### Bugfixes
+* The `commandClasses.add` and `commandClasses.remove` compat flags are now applied at the appropriate CC interview steps
+* When determining an endpoint's CC version, the root endpoint's version is always checked as a fallback
+* When an unknown notification contains V1 alarm values, those are now preserved
+* Metadata for `Notification CC V2` values is now created when a corresponding report is received
+
+### Config file changes
+* The "state after power failure" settings are now templated
+* Force-add support for Multi Channel CC to `UFairy GR-B3-3`
+* Add GE/Jasco/Enbrighten 14296
+* Update default values for Zooz ZSE40
+
+### Changes under the hood
+* Updated dependencies
+* In case of a missing configuration, the device configuration DB is now queried before reporting it via telemetry to eliminate false positives
+
 ## 7.7.2 (2021-06-06)
 ### Bugfixes
 * The external config directory defined with the env variable `ZWAVEJS_EXTERNAL_CONFIG` is now created when it doesn't exist
