@@ -16,8 +16,7 @@
 	},
 	"associations": {
 		"1": {
-			"label": "Alarm Reports",
-			"description": "Alarm reports are sent out to all devices in the association group",
+			"label": "Lifeline",
 			"maxNodes": 5,
 			"isLifeline": true
 		}
