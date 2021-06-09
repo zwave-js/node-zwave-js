@@ -16,7 +16,7 @@
 	},
 	"associations": {
 		"1": {
-			"label": "Receive Alarms",
+			"label": "Lifeline",
 			"description": "Group that will receive alarm notices from the lock",
 			"maxNodes": 5,
 			"isLifeline": true
