@@ -43,7 +43,7 @@
 			"unsigned": true
 		},
 		"4": {
-			"label": "Enable/Disable PIR Function",
+			"label": "PIR Detector",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 255,
