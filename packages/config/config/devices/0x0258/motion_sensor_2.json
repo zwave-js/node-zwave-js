@@ -145,8 +145,7 @@
 			]
 		},
 		"99": {
-			"label": "Ambient light intensity calibration",
-			"description": "Define the calibrated scale for ambient light intensity",
+			"label": "Ambient Light Intensity Calibration",
 			"valueSize": 2,
 			"minValue": 1,
 			"maxValue": 65535,
