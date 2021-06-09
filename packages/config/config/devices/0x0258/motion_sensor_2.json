@@ -90,8 +90,8 @@
 			"unsigned": true
 		},
 		"8": {
-			"label": "Lux Level Function Enable",
-			"description": "0 = Off, 1 =On",
+			"label": "Lux Level Function",
+			"description": "When enabled, send Basic Set if brighness falls below threshold.",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 1,
