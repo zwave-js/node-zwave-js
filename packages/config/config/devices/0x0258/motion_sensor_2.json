@@ -135,11 +135,11 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "Disable LED blinking",
+					"label": "Disable",
 					"value": 0
 				},
 				{
-					"label": "Enable LED blinking",
+					"label": "Enable",
 					"value": 1
 				}
 			]
