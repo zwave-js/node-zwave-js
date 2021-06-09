@@ -16,7 +16,7 @@
 	"supportsZWavePlus": true,
 	"paramInformation": {
 		"1": {
-			"label": "Sensitivity Level Setting",
+			"label": "Sensitivity Level",
 			"description": "Defines the sensitivity of PIR sensor.",
 			"valueSize": 1,
 			"minValue": 8,
