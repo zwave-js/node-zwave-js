@@ -119,8 +119,8 @@
 			"unsigned": true
 		},
 		"10": {
-			"label": "Temperature Differential Report",
-			"description": "Differential between current & previous report",
+			"label": "Temperature Differential Report Threshold",
+			"unit": "0.1 °C",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 127,
