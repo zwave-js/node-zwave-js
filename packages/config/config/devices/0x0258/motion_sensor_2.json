@@ -111,7 +111,7 @@
 		"9": {
 			"label": "Lux Level Changed Report",
 			"description": "How much the Lux Level must change",
-			"unit": "LUX",
+			"unit": "lux",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 255,
