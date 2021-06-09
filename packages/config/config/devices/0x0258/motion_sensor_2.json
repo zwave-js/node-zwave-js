@@ -25,8 +25,8 @@
 			"unsigned": true
 		},
 		"2": {
-			"label": "ON/OFF Duration Setting",
-			"description": "Determines how long the associated devices should stay ON status",
+			"label": "On/Off Duration",
+			"description": "Determines how long the associated devices should stay on",
 			"unit": "seconds",
 			"valueSize": 2,
 			"minValue": 5,
