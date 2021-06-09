@@ -127,8 +127,7 @@
 			"defaultValue": 5
 		},
 		"11": {
-			"label": "LED Blink Enable",
-			"description": "Defines whether the LED blinking is on / off",
+			"label": "LED: Blink on Motion",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 1,
