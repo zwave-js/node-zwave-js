@@ -84,5 +84,8 @@
 				}
 			]
 		}
+	},
+	"compat": {
+		"forceNotificationIdleReset": true
 	}
 }
