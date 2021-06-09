@@ -24,7 +24,7 @@
 	},
 	"associations": {
 		"1": {
-			"label": "Alarm Reports",
+			"label": "Lifeline",
 			"maxNodes": 4,
 			"isLifeline": true
 		}
