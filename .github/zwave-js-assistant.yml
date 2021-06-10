@@ -59,5 +59,9 @@ autoLabel:
 
 # Whitelist which workflows from forks may be auto-approved:
 approveWorkflow:
-  # Auto-approve only workflows for config file changes
-  files: 'packages/config/config/**/*.json' # May also be an array of strings
+  files:
+    - 'packages/config/config/**/*.json' # Config file changes
+    - '*.md' # root-level markdown files
+    - 'docs/**/*.md' # Documentation
+    - 'docs/index.html' # Also documentation
+    - 'packages/config/config/README.md' # more documentation
