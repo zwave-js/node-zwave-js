@@ -82,7 +82,8 @@
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 31,
-			"defaultValue": 0
+			"defaultValue": 0,
+			"unsigned": true
 		},
 		"1[0xe0]": {
 			"label": "Relay 1 Trigger Configuration on Sensor Input",
@@ -91,6 +92,7 @@
 			"maxValue": 7,
 			"defaultValue": 0,
 			"allowManualEntry": false,
+			"unsigned": true,
 			"options": [
 				{
 					"label": "Disabled",
@@ -124,7 +126,8 @@
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 31,
-			"defaultValue": 0
+			"defaultValue": 0,
+			"unsigned": true
 		},
 		"2[0xe0]": {
 			"label": "Relay 2 Trigger on Sensor Input",
@@ -133,6 +136,7 @@
 			"maxValue": 7,
 			"defaultValue": 0,
 			"allowManualEntry": false,
+			"unsigned": true,
 			"options": [
 				{
 					"label": "Disabled",
@@ -166,7 +170,8 @@
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 63,
-			"defaultValue": 0
+			"defaultValue": 0,
+			"unsigned": true
 		},
 		"3[0x40]": {
 			"label": "Sensor 1 Report Mode",
@@ -175,6 +180,7 @@
 			"minValue": 0,
 			"maxValue": 1,
 			"defaultValue": 1,
+			"unsigned": true,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -194,6 +200,7 @@
 			"minValue": 0,
 			"maxValue": 1,
 			"defaultValue": 1,
+			"unsigned": true,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -212,7 +219,8 @@
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 63,
-			"defaultValue": 0
+			"defaultValue": 0,
+			"unsigned": true
 		},
 		"9[0x40]": {
 			"label": "Sensor 2 Report Mode",
@@ -221,6 +229,7 @@
 			"minValue": 0,
 			"maxValue": 1,
 			"defaultValue": 1,
+			"unsigned": true,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -240,6 +249,7 @@
 			"minValue": 0,
 			"maxValue": 1,
 			"defaultValue": 1,
+			"unsigned": true,
 			"allowManualEntry": false,
 			"options": [
 				{
