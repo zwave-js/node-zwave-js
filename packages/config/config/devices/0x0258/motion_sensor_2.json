@@ -1,20 +1,12 @@
 {
 	"manufacturer": "Shenzhen Neo Electronics Co., Ltd.",
 	"manufacturerId": "0x0258",
-	"label": "Motion Sensor",
-	"description": "PIR Motion Sensor",
+	"label": "Motion Sensor 2",
+	"description": "PIR Motion Sensor 2",
 	"devices": [
 		{
 			"productType": "0x0003",
-			"productId": "0x0083"
-		},
-		{
-			"productType": "0x0003",
-			"productId": "0x1083"
-		},
-		{
-			"productType": "0x0003",
-			"productId": "0x2083"
+			"productId": "0x008d"
 		}
 	],
 	"firmwareVersion": {
@@ -24,7 +16,7 @@
 	"supportsZWavePlus": true,
 	"paramInformation": {
 		"1": {
-			"label": "Sensitivity Level Setting",
+			"label": "Sensitivity Level",
 			"description": "Defines the sensitivity of PIR sensor.",
 			"valueSize": 1,
 			"minValue": 8,
@@ -33,9 +25,9 @@
 			"unsigned": true
 		},
 		"2": {
-			"label": "ON/OFF Duration Setting",
-			"description": "Determined how long the associated devices should stay ON status",
-			"unit": "Seconds",
+			"label": "On/Off Duration",
+			"description": "Determines how long the associated devices should stay on",
+			"unit": "seconds",
 			"valueSize": 2,
 			"minValue": 5,
 			"maxValue": 600,
@@ -43,15 +35,15 @@
 		},
 		"3": {
 			"label": "Basic Set Level",
-			"description": "Basic Set Command will be sent when the door/window is opened or closed",
+			"description": "Basic Set Command will be sent when motion is triggered",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 255,
-			"defaultValue": 255,
+			"defaultValue": 99,
 			"unsigned": true
 		},
 		"4": {
-			"label": "Enable/Disable PIR Function",
+			"label": "PIR Detector",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 255,
@@ -60,28 +52,28 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "Disable PIR Detector Function",
+					"label": "Disable",
 					"value": 0
 				},
 				{
-					"label": "Enable PIR Detector Function",
+					"label": "Enable",
 					"value": 255
 				}
 			]
 		},
 		"5": {
-			"label": "Lux Level Set",
-			"description": "Set a lux level value which determines when the light sensor is activated.",
-			"unit": "LUX",
+			"label": "Light Sensor Brightness Threshold",
+			"description": "The light sensor is active when the brightness is above this level",
+			"unit": "lux",
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 1000,
 			"defaultValue": 100
 		},
 		"6": {
-			"label": "Re-trigger Interval",
-			"description": "Adjust the interval of PIR being re-triggered",
-			"unit": "Seconds",
+			"label": "PIR Re-trigger Interval",
+			"description": "Must be less than the On/Off Duration",
+			"unit": "seconds",
 			"valueSize": 1,
 			"minValue": 1,
 			"maxValue": 8,
@@ -89,8 +81,8 @@
 		},
 		"7": {
 			"label": "Light Sensor Polling Interval",
-			"description": "The Intervall after which the Light Sensor Measure is polled.",
-			"unit": "Seconds",
+			"description": "The Interval after which the Light Sensor Measure is polled.",
+			"unit": "seconds",
 			"valueSize": 2,
 			"minValue": 60,
 			"maxValue": 36000,
@@ -98,8 +90,8 @@
 			"unsigned": true
 		},
 		"8": {
-			"label": "Lux Level Function Enable",
-			"description": "0 = Off, 1 =On",
+			"label": "Lux Level Function",
+			"description": "When enabled, send Basic Set if brighness falls below threshold.",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 1,
@@ -107,11 +99,11 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "Disable Lux Level Function",
+					"label": "Disable",
 					"value": 0
 				},
 				{
-					"label": "Enable Lux Level Function",
+					"label": "Enable",
 					"value": 1
 				}
 			]
@@ -119,15 +111,23 @@
 		"9": {
 			"label": "Lux Level Changed Report",
 			"description": "How much the Lux Level must change",
-			"unit": "LUX",
-			"valueSize": 2,
+			"unit": "lux",
+			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 255,
-			"defaultValue": 100
+			"defaultValue": 100,
+			"unsigned": true
 		},
 		"10": {
-			"label": "LED Blink Enable",
-			"description": "Defines whether the LED blinking is on / off",
+			"label": "Temperature Differential Report Threshold",
+			"unit": "0.1 °C",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 127,
+			"defaultValue": 5
+		},
+		"11": {
+			"label": "LED: Blink on Motion",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 1,
@@ -135,22 +135,21 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "Disable LED blinking",
+					"label": "Disable",
 					"value": 0
 				},
 				{
-					"label": "Enable LED blinking",
+					"label": "Enable",
 					"value": 1
 				}
 			]
 		},
 		"99": {
-			"label": "Ambient light intensity calibration",
-			"description": "Define the calibrated scale for ambient light intensity",
+			"label": "Ambient Light Intensity Calibration",
 			"valueSize": 2,
 			"minValue": 1,
 			"maxValue": 65535,
-			"defaultValue": 1000,
+			"defaultValue": 10,
 			"unsigned": true
 		}
 	}
