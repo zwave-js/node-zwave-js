@@ -14,6 +14,28 @@
 		"max": "255.255"
 	},
 	"supportsZWavePlus": true,
+	"associations": {
+		"1": {
+			"label": "Lifeline",
+			"maxNodes": 5,
+			"isLifeline": true
+		},
+		"2": {
+			"label": "Basic_Set",
+			"description": "The Door/Window Sensor sends a Basic Set command to Association Group 2 (or the Control Group) to directly trigger devices (like a light, chime, etc.) in response to events.",
+			"maxNodes": 5
+		},
+		"3": {
+			"label": "Notification_Report",
+			"description": "The Door/Window Sensor sends it a NOTIFICATION_REPORT when the door either opens or closes.",
+			"maxNodes": 5
+		},
+		"4": {
+			"label": "Sensor_Binary_Report",
+			"description": "The Door/Window Sensor sends it a SENSOR_BINARY_REPORT when the door either opens or closes.",
+			"maxNodes": 5
+		}
+	},
 	"paramInformation": {
 		"1": {
 			"label": "Enable/Disable LED Indicator",
