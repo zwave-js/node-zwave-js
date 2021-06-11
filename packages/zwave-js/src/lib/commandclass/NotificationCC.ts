@@ -766,14 +766,10 @@ export class NotificationCCReport extends NotificationCC {
 				this.notificationEvent = this.payload[5];
 
 				// Ignore the legacy alarm bytes unless we're dealing with an unknown notification
-				// and V1 alarms are explicitly supported and they have a valid value. This allows
-				// us to handle "unknown" notifications which incorrectly convey their info via alarm values.
+				// and the alarmType has a valid value. This allows us to handle "unknown" notifications
+				// which incorrectly convey their info via alarm values.
 				const needsV1Values =
-					this.notificationEvent === 0xfe &&
-					this.getValueDB().getValue<boolean>(
-						getSupportsV1AlarmValueId(),
-					) &&
-					this.alarmType !== 0;
+					this.notificationEvent === 0xfe && this.alarmType !== 0;
 				if (!needsV1Values) {
 					this.alarmType = undefined;
 					this.alarmLevel = undefined;
