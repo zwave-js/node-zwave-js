@@ -237,7 +237,12 @@ export class ConfigurationCCAPI extends CCAPI {
 		// Make sure that the given value fits into the value size
 		if (!isSafeValue(targetValue, valueSize, valueFormat)) {
 			// If there is a value size configured, check that the given value is compatible
-			throwInvalidValueError(value, property, valueSize, valueFormat);
+			throwInvalidValueError(
+				targetValue,
+				property,
+				valueSize,
+				valueFormat,
+			);
 		}
 
 		await this.set(property, targetValue, valueSize as any, valueFormat);
