@@ -1,7 +1,7 @@
 {
 	"manufacturer": "Wenzhou MTLC Electric Appliances Co., Ltd.",
 	"manufacturerId": "0x011a",
-	"label": "ZWN-RSM1 / ZWN-RSM2",
+	"label": "ZWN-RSM2 / ZWN-RSM2-PLUS",
 	"description": "Smart Dual Relay Switch Module",
 	"devices": [
 		{
@@ -10,12 +10,8 @@
 		},
 		{
 			"productType": "0x0111",
-			"productId": "0x0605",
-			"zwaveAllianceId": [1777, 2242]
-		},
-		{
-			"productType": "0x0111",
-			"productId": "0x0606"
+			"productId": "0x0606",
+			"zwaveAllianceId": [2242]
 		}
 	],
 	"firmwareVersion": {
