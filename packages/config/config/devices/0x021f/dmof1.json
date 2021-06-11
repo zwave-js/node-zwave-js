@@ -14,6 +14,23 @@
 		"max": "255.255"
 	},
 	"supportsZWavePlus": true,
+	"associations": {
+		"1": {
+			"label": "Lifeline",
+			"maxNodes": 5,
+			"isLifeline": true
+		},
+		"2": {
+			"label": "Basic_Set",
+			"description": "The On/Off Plug-In Switch sends a BASIC_SET(FF) command to Association Group 2 to directly trigger devices (like a siren, chime, etc.) when the current passes above the level set in Parameter 3.",
+			"maxNodes": 5
+		},
+		"3": {
+			"label": "Notification_Report",
+			"description": "The On/Off Plug-In Switch sends Notification Reports to Group 3, and it can hold five devices.",
+			"maxNodes": 5
+		}
+	},
 	"paramInformation": {
 		"1": {
 			"label": "Disable Meter Functionality",
