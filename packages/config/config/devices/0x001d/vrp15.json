@@ -41,11 +41,11 @@
 					"value": 0
 				},
 				{
-					"label": "LED on when switch is ON",
+					"label": "LED on when switch is on",
 					"value": 254
 				},
 				{
-					"label": "LED on when switch is OFF",
+					"label": "LED on when switch is off",
 					"value": 255
 				}
 			]
