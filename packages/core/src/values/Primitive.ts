@@ -1,5 +1,9 @@
 import { ZWaveError, ZWaveErrorCodes } from "../error/ZWaveError";
-import { validatePayload } from "../util/misc";
+import {
+	getBitMaskWidth,
+	getMinimumShiftForBitMask,
+	validatePayload,
+} from "../util/misc";
 
 type Brand<K, T> = K & { __brand: T };
 
@@ -166,6 +170,22 @@ export function encodeBitMask(values: number[], maxValue: number): Buffer {
 		const byteNum = (val - 1) >>> 3; // id / 8
 		const bitNum = (val - 1) % 8;
 		ret[byteNum] |= 2 ** bitNum;
+	}
+	return ret;
+}
+
+export function parsePartial(
+	value: number,
+	bitMask: number,
+	signed: boolean,
+): number {
+	const shift = getMinimumShiftForBitMask(bitMask);
+	const width = getBitMaskWidth(bitMask);
+	let ret = (value & bitMask) >>> shift;
+	// If the high bit is set and this value should be signed, we need to convert it
+	if (signed && !!(ret & (2 ** (width - 1)))) {
+		// To represent a negative partial as signed, the high bits must be set to 1
+		ret = ~(~ret & (bitMask >>> shift));
 	}
 	return ret;
 }

@@ -10,6 +10,7 @@ import {
 	parseMaybeBoolean,
 	parseMaybeNumber,
 	parseNumber,
+	parsePartial,
 	unknownBoolean,
 	unknownNumber,
 } from "./Primitive";
@@ -379,6 +380,54 @@ describe("lib/values/Primitive", () => {
 				4294967296,
 				Number.MAX_SAFE_INTEGER,
 			].forEach(test);
+		});
+	});
+
+	describe.only("parsePartial()", () => {
+		it("should work correctly for unsigned partials", () => {
+			const tests = [
+				{
+					value: 0b11110000,
+					bitMask: 0b00111100,
+					expected: 0b1100,
+				},
+				{
+					value: -128, // 10000000
+					bitMask: 0b11000000,
+					expected: 2,
+				},
+			];
+			for (const { value, bitMask, expected } of tests) {
+				expect(parsePartial(value, bitMask, false)).toBe(expected);
+			}
+		});
+
+		it("should work correctly for signed partials", () => {
+			const tests = [
+				{
+					value: 0b11_1110_00,
+					bitMask: 0b00_1111_00,
+					expected: -2, // 1...110
+				},
+				{
+					value: -8, // same as above
+					bitMask: 0b00_1111_00,
+					expected: -2, // 1...110
+				},
+				{
+					value: 0b11_1110_00,
+					bitMask: 0b11_0000_00,
+					expected: -1, // 1...1
+				},
+				{
+					value: 0b11_0110_00,
+					bitMask: 0b00_1111_00,
+					expected: 6,
+				},
+			];
+			for (const { value, bitMask, expected } of tests) {
+				expect(parsePartial(value, bitMask, true)).toBe(expected);
+			}
 		});
 	});
 });

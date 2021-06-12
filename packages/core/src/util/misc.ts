@@ -69,3 +69,24 @@ export function getMinimumShiftForBitMask(mask: number): number {
 	}
 	return i;
 }
+
+/**
+ * Determines how many wide a given bit mask is
+ * Example:
+ * ```txt
+ *   Mask = 00110000
+ *            ^^---- => 2 bits
+ *
+ *   Mask = 00110001
+ *            ^....^ => 6 bits
+ * ```
+ */
+export function getBitMaskWidth(mask: number): number {
+	mask = mask >>> getMinimumShiftForBitMask(mask);
+	let i = 0;
+	while (mask > 0) {
+		mask >>>= 1;
+		i++;
+	}
+	return i;
+}
