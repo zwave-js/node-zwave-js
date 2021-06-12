@@ -20,5 +20,24 @@
 	"firmwareVersion": {
 		"min": "0.0",
 		"max": "255.255"
+	},
+	"supportsZWavePlus": true,
+	"associations": {
+		"1": {
+			"label": "Lifeline",
+			"maxNodes": 5,
+			"isLifeline": true
+		},
+		"2": {
+			"label": "Basic - Local Load",
+			"maxNodes": 5,
+			"description": "Supports Basic Set and is controlled with the local load."
+		},
+		"3": {
+			"label": "Basic - Double Tap", // required
+			"maxNodes": 5,
+			"isLifeline": true,
+			"description": "Supports Basic Set and is controlled by double pressing on/off button."
+		}
 	}
 }
