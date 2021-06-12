@@ -23,7 +23,8 @@
 		},
 		"2": {
 			"label": "Basic - Local Load",
-			"maxNodes": 5
+			"maxNodes": 5,
+			"description": "Supports Basic Set and is controlled by pressing On/Off button with local load."
 		},
 		"3": {
 			"label": "Basic - Double Tap", // required
