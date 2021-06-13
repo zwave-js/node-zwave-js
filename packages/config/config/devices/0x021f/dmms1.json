@@ -21,18 +21,18 @@
 			"isLifeline": true
 		},
 		"2": {
-			"label": "Basic_Set",
-			"description": "When motion is detected and when it stops, send a Basic Set command to directly trigger devices in this group (like a siren, chime, etc.)",
+			"label": "Basic Set",
+			"description": "When motion is detected and when it stops, send a Basic Set command to trigger devices in this group.",
 			"maxNodes": 5
 		},
 		"3": {
-			"label": "Notification_Report",
+			"label": "Notification Report",
 			"description": "Send a Notification Report when motion is detected and when it stops.",
 			"maxNodes": 5
 		},
 		"4": {
-			"label": "Sensor_Binary_Report",
-			"description": "Supports up to 5 members and the Motion Detector sends it a SENSOR_BINARY_REPORT when motion is detected and when it stops.",
+			"label": "Binary Sensor Report",
+			"description": "The Motion Detector sends a Binary Sensor Report when motion is detected and when it stops.",
 			"maxNodes": 5
 		}
 	},
