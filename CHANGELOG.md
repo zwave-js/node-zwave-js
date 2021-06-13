@@ -2,7 +2,7 @@
 <!--
 	Add placeholder for next release with `wip` snippet
 -->
-## __WORK IN PROGRESS__
+## 7.7.4 (2021-06-14)
 ### Bugfixes
 * Don't require V1 alarms to be supported to preserve legacy alarm values
 * Correct the error message for incompatible config value when setting partial params
