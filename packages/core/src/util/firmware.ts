@@ -108,17 +108,15 @@ function extractFirmwareAeotec(data: Buffer): Firmware {
 		);
 	}
 
-	// The Aeotec updaters are .net assemblies which are normally 16-byte-aligned
-	// The additional firmware data (also 16-byte-aligned), the firmware name (256 bytes)
-	// and some control bytes are added at the end, so we can deduce which kind of information
-	// is included here
-	let numControlBytes = data.length % 16;
-	// The control bytes are as follows:
-	// [2 bytes checksum]? [4 bytes offset] [4 bytes length]
-
 	// The exe file contains the firmware data and filename at the end
 	const firmwareStart = data.readUInt32BE(data.length - 8);
 	const firmwareLength = data.readUInt32BE(data.length - 4);
+	let numControlBytes = 8;
+
+	// Some exe files also contain a 2-byte checksum. The method "ImageCalcCrc16" is used to compute the checksum
+	if (data.includes(Buffer.from("ImageCalcCrc16", "ascii"))) {
+		numControlBytes += 2;
+	}
 
 	// Some files don't have such a strict alignment - in that case fall back to ignoring the non-aligned control bytes
 	switch (true) {
