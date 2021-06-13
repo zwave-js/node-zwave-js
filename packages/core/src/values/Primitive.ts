@@ -174,6 +174,19 @@ export function encodeBitMask(values: number[], maxValue: number): Buffer {
 	return ret;
 }
 
+/**
+ * Parses a partial value from a "full" value. Example:
+ * ```txt
+ *   Value = 01110000
+ *   Mask  = 00110000
+ *   ----------------
+ *             11     => 3 (unsigned) or -1 (signed)
+ * ```
+ *
+ * @param value The full value the partial should be extracted from
+ * @param bitMask The bit mask selecting the partial value
+ * @param signed Whether the partial value should be interpreted as signed
+ */
 export function parsePartial(
 	value: number,
 	bitMask: number,
@@ -188,4 +201,29 @@ export function parsePartial(
 		ret = ~(~ret & (bitMask >>> shift));
 	}
 	return ret;
+}
+
+/**
+ * Encodes a partial value into a "full" value. Example:
+ * ```txt
+ *   Value   = 01··0000
+ * + Partial =   10     (2 or -2 depending on signed interpretation)
+ *   Mask    = 00110000
+ *   ------------------
+ *             01100000
+ * ```
+ *
+ * @param fullValue The full value the partial should be merged into
+ * @param partialValue The partial to be merged
+ * @param bitMask The bit mask selecting the partial value
+ */
+export function encodePartial(
+	fullValue: number,
+	partialValue: number,
+	bitMask: number,
+): number {
+	return (
+		(fullValue & ~bitMask) |
+		((partialValue << getMinimumShiftForBitMask(bitMask)) & bitMask)
+	);
 }

@@ -1,9 +1,4 @@
 import type { ParamInfoMap } from "@zwave-js/config";
-import type {
-	MessageOrCCLogEntry,
-	MessageRecord,
-	ValueID,
-} from "@zwave-js/core";
 import {
 	CacheMetadata,
 	CacheValue,
@@ -11,14 +6,18 @@ import {
 	ConfigurationMetadata,
 	ConfigValueFormat,
 	encodeBitMask,
+	encodePartial,
 	getIntegerLimits,
-	getMinimumShiftForBitMask,
 	getMinIntegerSize,
 	isConsecutiveArray,
 	Maybe,
+	MessageOrCCLogEntry,
+	MessageRecord,
 	parseBitMask,
+	parsePartial,
 	stripUndefined,
 	validatePayload,
+	ValueID,
 	ValueMetadata,
 	ZWaveError,
 	ZWaveErrorCodes,
@@ -195,7 +194,7 @@ export class ConfigurationCCAPI extends CCAPI {
 		}
 
 		let valueSize = ccInstance.getParamInformation(property).valueSize;
-		const valueFormat =
+		let valueFormat =
 			ccInstance.getParamInformation(property).format ??
 			ConfigValueFormat.SignedInteger;
 
@@ -215,6 +214,8 @@ export class ConfigurationCCAPI extends CCAPI {
 				propertyKey,
 				value,
 			);
+			// Partial parameters are internally converted to unsigned values - update the valueFormat accordingly
+			valueFormat = ConfigValueFormat.UnsignedInteger;
 		} else {
 			targetValue = value;
 		}
@@ -310,9 +311,15 @@ export class ConfigurationCCAPI extends CCAPI {
 		if (response.parameter === parameter) {
 			if (!valueBitMask) return response.value;
 			// If a partial parameter was requested, extract that value
-			return (
-				((response.value as any) & valueBitMask) >>>
-				getMinimumShiftForBitMask(valueBitMask)
+			const paramInfo = cc.getParamInformation(
+				response.parameter,
+				valueBitMask,
+			);
+			return parsePartial(
+				response.value as any,
+				valueBitMask,
+				(paramInfo.format ?? ConfigValueFormat.SignedInteger) ===
+					ConfigValueFormat.SignedInteger,
 			);
 		}
 		this.driver.controllerLog.logNode(this.endpoint.nodeId, {
@@ -823,25 +830,22 @@ alters capabilities: ${!!properties.altersCapabilities}`;
 		maskedValue: number,
 	): number {
 		const valueDB = this.getValueDB();
-		// Add the other values
-		const otherValues = valueDB
-			.findValues(
-				(id) =>
-					id.commandClass === this.ccId &&
-					id.property === parameter &&
-					id.propertyKey != undefined,
-			)
-			.map(({ propertyKey, value }) =>
-				propertyKey === valueBitMask
-					? 0
-					: (value as number) <<
-					  getMinimumShiftForBitMask(propertyKey as number),
-			)
-			.reduce((prev, cur) => prev | cur, 0);
-		return (
-			(otherValues & ~valueBitMask) |
-			(maskedValue << getMinimumShiftForBitMask(valueBitMask))
+		// Add the other values together
+		const otherValues = valueDB.findValues(
+			(id) =>
+				id.commandClass === this.ccId &&
+				id.property === parameter &&
+				id.propertyKey != undefined &&
+				id.propertyKey !== valueBitMask,
 		);
+		let ret = 0;
+		for (const {
+			propertyKey: bitMask,
+			value: partialValue,
+		} of otherValues) {
+			ret = encodePartial(ret, partialValue as number, bitMask as number);
+		}
+		return encodePartial(ret, maskedValue, valueBitMask);
 	}
 
 	public serializeValuesForCache(): CacheValue[] {
@@ -1022,8 +1026,13 @@ export class ConfigurationCCReport extends ConfigurationCC {
 							property: this._parameter,
 							propertyKey: param.propertyKey,
 						},
-						((this._value as any) & param.propertyKey) >>>
-							getMinimumShiftForBitMask(param.propertyKey),
+						parsePartial(
+							this._value as any,
+							param.propertyKey,
+							(param.metadata.format ??
+								ConfigValueFormat.SignedInteger) ===
+								ConfigValueFormat.SignedInteger,
+						),
 					);
 				}
 			}

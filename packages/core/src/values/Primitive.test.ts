@@ -3,6 +3,7 @@ import { assertZWaveError } from "../test/assertZWaveError";
 import {
 	encodeBitMask,
 	encodeFloatWithScale,
+	encodePartial,
 	getMinIntegerSize,
 	parseBitMask,
 	parseBoolean,
@@ -383,7 +384,7 @@ describe("lib/values/Primitive", () => {
 		});
 	});
 
-	describe.only("parsePartial()", () => {
+	describe("parsePartial()", () => {
 		it("should work correctly for unsigned partials", () => {
 			const tests = [
 				{
@@ -427,6 +428,35 @@ describe("lib/values/Primitive", () => {
 			];
 			for (const { value, bitMask, expected } of tests) {
 				expect(parsePartial(value, bitMask, true)).toBe(expected);
+			}
+		});
+	});
+
+	describe("encodePartial()", () => {
+		it("should work correctly for signed and unsigned partials", () => {
+			const tests = [
+				{
+					fullValue: 0b11_01_1111,
+					partialValue: 0b10,
+					bitMask: 0b00_11_0000,
+					expected: 0b11_10_1111,
+				},
+				{
+					fullValue: 0b11_01_1111,
+					partialValue: -2, // same as above, but interpreted as signed
+					bitMask: 0b00_11_0000,
+					expected: 0b11_10_1111,
+				},
+			];
+			for (const {
+				fullValue,
+				partialValue,
+				bitMask,
+				expected,
+			} of tests) {
+				expect(encodePartial(fullValue, partialValue, bitMask)).toBe(
+					expected,
+				);
 			}
 		});
 	});
