@@ -27,7 +27,7 @@
 		},
 		"3": {
 			"label": "Notification_Report",
-			"description": "Supports up to 5 members and the Motion Detector sends it a NOTIFICATION_REPORT when motion is detected and when it stops.",
+			"description": "Send a Notification Report when motion is detected and when it stops.",
 			"maxNodes": 5
 		},
 		"4": {
