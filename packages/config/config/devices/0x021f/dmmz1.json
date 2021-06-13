@@ -13,7 +13,6 @@
 		"min": "0.0",
 		"max": "255.255"
 	},
-	"supportsZWavePlus": true,
 	"associations": {
 		"1": {
 			"label": "Lifeline",
@@ -21,18 +20,18 @@
 			"isLifeline": true
 		},
 		"2": {
-			"label": "Basic_Set",
-			"description": "The Mouser sends a Basic Set command to Association Group 2 (or the Control Group) to directly trigger devices (like a light, chime, etc.) when it is tripped.",
+			"label": "Basic Set",
+			"description": "The Mouser sends a Basic Set command to directly trigger devices when it is tripped.",
 			"maxNodes": 5
 		},
 		"3": {
-			"label": "Notification_Report",
+			"label": "Notification Report",
 			"description": "Send a Notification Report when tripped, reset, armed, and disarmed.",
 			"maxNodes": 5
 		},
 		"4": {
-			"label": "Sensor_Binary_Report",
-			"description": "Group 4 supports up to 5 members and the Mouser sends it a SENSOR_BINARY_REPORT when tripped, reset, armed, and disarmed.",
+			"label": "Binary Sensor Report",
+			"description": "The Mouser sends it a Binary Sensor Report when tripped, reset, armed, and disarmed.",
 			"maxNodes": 5
 		}
 	},
