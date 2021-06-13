@@ -22,7 +22,7 @@
 		},
 		"2": {
 			"label": "Basic_Set",
-			"description": "The Motion Detector sends a BASIC_SET command to directly trigger devices (like a siren, chime, etc.) when motion is detected and when it stops.",
+			"description": "When motion is detected and when it stops, send a Basic Set command to directly trigger devices in this group (like a siren, chime, etc.)",
 			"maxNodes": 5
 		},
 		"3": {
