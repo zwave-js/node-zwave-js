@@ -31,7 +31,7 @@
 			"maxNodes": 5
 		},
 		"4": {
-			"label": "Sensor_Binary_Report",
+			"label": "Binary Sensor Report",
 			"description": "The Door/Window Sensor sends it a SENSOR_BINARY_REPORT when the door either opens or closes.",
 			"maxNodes": 5
 		}
