@@ -2,6 +2,26 @@
 <!--
 	Add placeholder for next release with `wip` snippet
 -->
+## __WORK IN PROGRESS__
+### Bugfixes
+* Don't require V1 alarms to be supported to preserve legacy alarm values
+* Correct the error message for incompatible config value when setting partial params
+* Signed partial config parameters are now decoded correctly
+* Simplify Aeotec firmware extraction method and support non-aligned files
+
+### Config file changes
+* Rename primary association groups to "Lifeline" for Yale Door Locks
+* Enable auto-idling notifications for MH9-CO2
+* Add additional product ID for Leviton VRCS1
+* Add additional product ID for Leviton VRP15, add config param
+* Add Alarm Mapping to Yale YRD120, YRD220, YRL210, and YRL220 
+* Add Neo Coolcam Motion Sensor 2
+* Mark parameters with high bit as unsigned for MIMO2+
+* Correct identification of Enerwave ZWN-RSM / ZWN-RSM-Plus variants
+
+### Changes under the hood
+* Correct label in MeterGet logging
+
 ## 7.7.3 (2021-06-08)
 ### Bugfixes
 * The `commandClasses.add` and `commandClasses.remove` compat flags are now applied at the appropriate CC interview steps
