@@ -21,18 +21,18 @@
 			"isLifeline": true
 		},
 		"2": {
-			"label": "Basic_Set",
-			"description": "The Door/Window Sensor sends a Basic Set command to Association Group 2 (or the Control Group) to directly trigger devices (like a light, chime, etc.) in response to events.",
+			"label": "Basic Set",
+			"description": "The sensor sends a Basic Set command to directly trigger devices in response to events.",
 			"maxNodes": 5
 		},
 		"3": {
-			"label": "Notification_Report",
-			"description": "The Door/Window Sensor sends it a NOTIFICATION_REPORT when the door either opens or closes.",
+			"label": "Notification Report",
+			"description": "The sensor sends a Notification Report when the door either opens or closes.",
 			"maxNodes": 5
 		},
 		"4": {
 			"label": "Binary Sensor Report",
-			"description": "The Door/Window Sensor sends it a SENSOR_BINARY_REPORT when the door either opens or closes.",
+			"description": "The sensor sends a Binary Sensor Report when the door either opens or closes.",
 			"maxNodes": 5
 		}
 	},
