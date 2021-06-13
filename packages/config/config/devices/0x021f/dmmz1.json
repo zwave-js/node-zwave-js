@@ -27,7 +27,7 @@
 		},
 		"3": {
 			"label": "Notification_Report",
-			"description": "Group 3 supports up to 5 members and the Mouser sends it a NOTIFICATION_REPORT when tripped, reset, armed, and disarmed.",
+			"description": "Send a Notification Report when tripped, reset, armed, and disarmed.",
 			"maxNodes": 5
 		},
 		"4": {
