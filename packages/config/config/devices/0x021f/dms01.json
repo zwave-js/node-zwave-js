@@ -13,7 +13,6 @@
 		"min": "0.0",
 		"max": "255.255"
 	},
-	"supportsZWavePlus": true,
 	"associations": {
 		"1": {
 			"label": "Lifeline",
@@ -21,13 +20,13 @@
 			"isLifeline": true
 		},
 		"2": {
-			"label": "Basic_Set",
-			"description": "Group 2 can hold five members, and the Siren sends a single command to this Association Group, the Binary Switch Report, whenever the Siren is turned on or off.",
+			"label": "Basic Set",
+			"description": "The Siren sends a single command to this group whenever the Siren is turned on or off.",
 			"maxNodes": 5
 		},
 		"3": {
-			"label": "Notification_Report",
-			"description": "Group 3 can hold five members, and the Siren sends a single command to this Association Group, a Notification Report, whenever the Siren is turned on or off.",
+			"label": "Notification Report",
+			"description": "The Siren sends a single command to this group, a Notification Report, whenever the Siren is turned on or off.",
 			"maxNodes": 5
 		}
 	},
