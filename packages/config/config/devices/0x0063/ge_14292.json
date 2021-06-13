@@ -13,7 +13,6 @@
 		"min": "0.0",
 		"max": "255.255"
 	},
-	"supportsZWavePlus": true,
 	"associations": {
 		// One entry for each association group
 		"1": {
@@ -27,7 +26,7 @@
 			"description": "Supports Basic Set and is controlled by pressing On/Off button with local load."
 		},
 		"3": {
-			"label": "Basic - Double Tap", // required
+			"label": "Basic - Double Tap",
 			"maxNodes": 5,
 			"isLifeline": true
 		}
