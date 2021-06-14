@@ -20,7 +20,7 @@ It is recommended to either use TypeScript when consuming the library or work in
 # Top Sponsors
 
 <p>
-  <a href="https://www.nabucasa.com/" target="_blank"><img src="sponsors/nabucasa.png" style="max-width: 120px; max-height: 120px" alt="Nabu Casa" /></a>
+  <a href="https://www.nabucasa.com/" target="_blank"><img src="sponsors/nabucasa.png" width="120" alt="Nabu Casa" /></a>
 </p>
 
 <!--
