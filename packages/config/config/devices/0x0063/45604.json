@@ -30,7 +30,7 @@
 		"2": {
 			"label": "Basic Set - Local Load",
 			"maxNodes": 5,
-			"description": "Supports Basic Set and is controlled with the local load."
+			"description": "Controlled with the local load."
 		},
 		"3": {
 			"label": "Basic Set - Double Tap",
