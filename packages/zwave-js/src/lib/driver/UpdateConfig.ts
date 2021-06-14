@@ -4,6 +4,8 @@ import { isObject } from "alcalzone-shared/typeguards";
 import axios from "axios";
 import * as semver from "semver";
 
+let _installConfigLock = false;
+
 /**
  * Checks whether there is a compatible update for the currently installed config package.
  * Returns the new version if there is an update, `undefined` otherwise.
@@ -50,6 +52,14 @@ export async function checkForConfigUpdates(
  * Installs the update for @zwave-js/config with the given version.
  */
 export async function installConfigUpdate(newVersion: string): Promise<void> {
+	if (_installConfigLock) {
+		throw new ZWaveError(
+			`Config update failed: another installation is in progress`,
+			ZWaveErrorCodes.Config_Update_InstallFailed,
+		);
+	}
+
+	_installConfigLock = true;
 	// Check which package manager to use for the update
 	let pak: PackageManager;
 	try {
