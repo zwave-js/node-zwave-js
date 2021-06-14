@@ -68,20 +68,28 @@ export async function installConfigUpdate(newVersion: string): Promise<void> {
 			requireLockfile: false,
 		});
 	} catch {
+		_installConfigLock = false;
 		throw new ZWaveError(
 			`Config update failed: No package manager detected or package.json not found!`,
 			ZWaveErrorCodes.Config_Update_PackageManagerNotFound,
 		);
 	}
 
-	// And install it
-	const result = await pak.overrideDependencies({
-		"@zwave-js/config": newVersion,
-	});
-	if (result.success) return;
-	throw new ZWaveError(
-		`Config update failed: Package manager exited with code ${result.exitCode}
+	try {
+		// And install it
+		const result = await pak.overrideDependencies({
+			"@zwave-js/config": newVersion,
+		});
+
+		if (result.success) return;
+
+		throw new ZWaveError(
+			`Config update failed: Package manager exited with code ${result.exitCode}
 ${result.stderr}`,
-		ZWaveErrorCodes.Config_Update_InstallFailed,
-	);
+			ZWaveErrorCodes.Config_Update_InstallFailed,
+		);
+	} catch (error) {
+		_installConfigLock = false;
+		throw error;
+	}
 }
