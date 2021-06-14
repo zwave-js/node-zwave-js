@@ -21,7 +21,7 @@
 		},
 		"2": {
 			"label": "Basic Set",
-			"description": "When motion is detected and when it stops, send a Basic Set command to trigger devices in this group.",
+			"description": "Send a Basic Set command when motion is detected.",
 			"maxNodes": 5
 		},
 		"3": {
@@ -31,7 +31,7 @@
 		},
 		"4": {
 			"label": "Binary Sensor Report",
-			"description": "The Motion Detector sends a Binary Sensor Report when motion is detected and when it stops.",
+			"description": "Set a Binary Sensor when motion is detected and when it stops.",
 			"maxNodes": 5
 		}
 	},
