@@ -21,17 +21,17 @@
 		},
 		"2": {
 			"label": "Basic Set",
-			"description": "The Mouser sends a Basic Set command to directly trigger devices when it is tripped.",
+			"description": "Send a Basic Set command to trigger a device when the trap is tripped.",
 			"maxNodes": 5
 		},
 		"3": {
 			"label": "Notification Report",
-			"description": "Send a Notification Report when tripped, reset, armed, and disarmed.",
+			"description": "Send a Notification Report when tripped, reset, armed, or disarmed.",
 			"maxNodes": 5
 		},
 		"4": {
 			"label": "Binary Sensor Report",
-			"description": "The Mouser sends it a Binary Sensor Report when tripped, reset, armed, and disarmed.",
+			"description": "Set a Binary Sensor when the device is tripped, reset, armed, or disarmed.",
 			"maxNodes": 5
 		}
 	},
