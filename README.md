@@ -45,5 +45,5 @@ If you'd like to help support the future of the project and make the Z-Wave worl
 **Top Sponsors:**
 
 <p>
-  <a href="https://www.nabucasa.com/" target="_blank"><img src="docs/sponsors/nabucasa.png" style="max-width: 120px; max-height: 120px" alt="Nabu Casa" /></a>
+  <a href="https://www.nabucasa.com/" target="_blank"><img src="docs/sponsors/nabucasa.png" width="120" alt="Nabu Casa" /></a>
 </p>
