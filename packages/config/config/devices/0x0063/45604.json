@@ -36,7 +36,7 @@
 			"label": "Basic Set - Double Tap",
 			"maxNodes": 5,
 			"isLifeline": true,
-			"description": "Supports Basic Set and is controlled by double pressing on/off button."
+			"description": "Controlled by double pressing on/off button."
 		}
 	},
 	"compat": {
