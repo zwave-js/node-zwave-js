@@ -31,7 +31,7 @@
 		"3": {
 			"label": "Group 3 Basic Set",
 			"maxNodes": 5,
-			"description": "Supports Basic Set and is controlled by pressing On/Off button with local load"
+			"description": "Controlled by pressing On/Off button with local load"
 		}
 	},
 	"paramInformation": {
