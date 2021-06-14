@@ -81,6 +81,8 @@ export async function installConfigUpdate(newVersion: string): Promise<void> {
 			"@zwave-js/config": newVersion,
 		});
 
+		_installConfigLock = false;
+
 		if (result.success) return;
 
 		throw new ZWaveError(
