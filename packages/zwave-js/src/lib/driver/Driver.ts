@@ -1304,11 +1304,16 @@ export class Driver extends EventEmitter {
 
 	/** Checks if there are any pending messages for the given node */
 	private hasPendingMessages(node: ZWaveNode): boolean {
+		// First check if there are messages in the queue
 		const { queue, currentTransaction } = this.sendThread.state.context;
-		return (
+		if (
 			!!queue.find((t) => t.message.getNodeId() === node.id) ||
 			currentTransaction?.message.getNodeId() === node.id
-		);
+		) {
+			return true;
+		}
+		// Then check if there are scheduled polls
+		return node.scheduledPolls.size > 0;
 	}
 
 	/**
