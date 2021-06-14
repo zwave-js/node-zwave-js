@@ -24,7 +24,7 @@ Built on Node.js, **Z-Wave JS** runs on almost anything with a little bit of com
 
 ## Quick Links
 
-<p align="center">
+<p>
   <a href="LICENSE">License</a> &middot;
   <a href="CHANGELOG.md">Changelog</a> &middot;
   <a href="https://zwave-js.github.io/node-zwave-js/">Documentation</a> &middot;
