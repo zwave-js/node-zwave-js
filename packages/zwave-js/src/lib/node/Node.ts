@@ -844,7 +844,12 @@ export class ZWaveNode extends Endpoint {
 		});
 	}
 
-	protected scheduledPolls = new ObjectKeyMap<ValueID, NodeJS.Timeout>();
+	/**
+	 * @internal
+	 * All polls that are currently scheduled for this node
+	 */
+	public scheduledPolls = new ObjectKeyMap<ValueID, NodeJS.Timeout>();
+
 	/**
 	 * @internal
 	 * Schedules a value to be polled after a given time. Only one schedule can be active for a given value ID.
