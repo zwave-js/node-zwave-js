@@ -169,7 +169,7 @@ jobs:
 
     # Do a full build so the package files are regenerated
     - name: Compile TypeScript code
-      run: yarn run build:full
+      run: yarn run build
 
     - name: Import main entry point
       run: yarn node -e 'require("./packages/zwave-js")'
@@ -264,7 +264,7 @@ jobs:
       run: yarn install --immutable
 
     - name: Create a clean build
-      run: yarn run build:full
+      run: yarn run build
 
     - name: Publish packages to npm
       env:

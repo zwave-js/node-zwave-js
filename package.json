@@ -83,8 +83,9 @@
     "@ts-morph/common": "patch:@ts-morph/common@~0.10.0#.yarn/sdks/ts-morph/patch.diff"
   },
   "scripts": {
-    "build": "lerna run build --scope=zwave-js",
-    "build:full": "lerna run build --scope=\"@zwave-js/*\" && lerna run build_full",
+    "build": "lerna run build",
+    "deprecated": "node -p '\"\\n \\n \\033[31;1;4mThe \\\"build:full\\\" script has been deprecated. Use \\\"build\\\" instead!\\033[0m\\n \\n\"'",
+    "build:full": "yarn run deprecated && yarn run build",
     "watch": "lerna run watch --parallel",
     "test:reset": "jest --clear-cache",
     "test:ts": "jest",
