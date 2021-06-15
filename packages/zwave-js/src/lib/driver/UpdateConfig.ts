@@ -2,6 +2,7 @@ import { detectPackageManager, PackageManager } from "@alcalzone/pak";
 import { ZWaveError, ZWaveErrorCodes } from "@zwave-js/core";
 import { isObject } from "alcalzone-shared/typeguards";
 import axios from "axios";
+import * as path from "path";
 import * as lockfile from "proper-lockfile";
 import * as semver from "semver";
 
@@ -66,17 +67,16 @@ export async function installConfigUpdate(newVersion: string): Promise<void> {
 		);
 	}
 
-	const pkgFilepath = `${pak.cwd}/package.json`;
-
+	const packageJsonPath = path.join(pak.cwd, "package.json");
 	try {
-		await lockfile.lock(pkgFilepath, {
-			onCompromised: /* istanbul ignore next */ () => {
+		await lockfile.lock(packageJsonPath, {
+			onCompromised: () => {
 				// do nothing
 			},
 		});
 	} catch {
 		throw new ZWaveError(
-			`Config update failed: Cannot lock ${pkgFilepath}`,
+			`Config update failed: Another installation is already in progress!`,
 			ZWaveErrorCodes.Config_Update_InstallFailed,
 		);
 	}
@@ -88,8 +88,8 @@ export async function installConfigUpdate(newVersion: string): Promise<void> {
 
 	// Free the lock
 	try {
-		if (await lockfile.check(pkgFilepath))
-			await lockfile.unlock(pkgFilepath);
+		if (await lockfile.check(packageJsonPath))
+			await lockfile.unlock(packageJsonPath);
 	} catch {
 		// whatever - just don't crash
 	}
