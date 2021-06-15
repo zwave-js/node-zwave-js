@@ -4,8 +4,15 @@
   "description": "zwave-js: testing utilities",
   "private": true,
   "keywords": [],
-  "main": "build/index.js",
-  "types": "build/index.d.ts",
+  "main": "build/cjs/index.js",
+  "module": "build/esm/index.js",
+  "exports": {
+    ".": {
+        "import": "./build/esm/index.js",
+        "require": "./build/cjs/index.js"
+    }
+  },
+  "types": "build/esm/index.d.ts",
   "files": [
     "build/**/*.{js,d.ts,map}"
   ],
@@ -33,6 +40,7 @@
   },
   "scripts": {
     "build": "tsc -b tsconfig.build.json",
+    "postbuild": "node ../../maintenance/esm2cjs.js --in=build/esm --out=build/cjs",
     "clean": "yarn run build --clean",
     "watch": "yarn run build --watch --pretty"
   },
