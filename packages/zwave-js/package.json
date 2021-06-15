@@ -7,8 +7,8 @@
   "module": "build/esm/index.js",
   "exports": {
     ".": {
-        "import": "./build/esm/index.js",
-        "require": "./build/cjs/index.js"
+      "import": "./build/esm/index.js",
+      "require": "./build/cjs/index.js"
     },
     "./package.json": "./package.json",
     "./*": {
@@ -19,9 +19,15 @@
   "types": "build/esm/index.d.ts",
   "typesVersions": {
     "*": {
-      "build/esm/index.d.ts": [ "build/esm/index.d.ts" ],
-      "build/cjs/index.d.ts": [ "build/esm/index.d.ts" ],
-      "*": [ "build/esm/*" ]
+      "build/esm/index.d.ts": [
+        "build/esm/index.d.ts"
+      ],
+      "build/cjs/index.d.ts": [
+        "build/esm/index.d.ts"
+      ],
+      "*": [
+        "build/esm/*"
+      ]
     }
   },
   "files": [

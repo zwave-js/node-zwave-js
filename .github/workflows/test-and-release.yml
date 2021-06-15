@@ -145,7 +145,7 @@ jobs:
 
     - if: matrix.node-version != '10.x'
       name: Import main entry point (ESM)
-      run: yarn node --input-type=module  -e 'import "zwave-js"'
+      run: yarn node --input-type=module --es-module-specifier-resolution=node -e 'import "zwave-js"'
 
     - name: Run component tests
       run: yarn run test:ci

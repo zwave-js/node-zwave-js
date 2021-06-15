@@ -3,11 +3,13 @@
 // This module is the main entry point. Requiring reflect-metadata here avoids forgetting it
 import "reflect-metadata";
 
-import * as path from "path";
 // By installing source map support, we get the original source
 // locations in error messages
-import "source-map-support/register";
-import { initSentry } from "./lib/telemetry/sentry";
+import { install as installSourceMapSupport } from "source-map-support";
+installSourceMapSupport();
+
+import * as path from "path";
+import { initSentry } from "./lib/telemetry/sentry.js";
 
 /** The version of zwave-js, exported for your convenience */
 const packageJsonPath = require.resolve("zwave-js/package.json");
