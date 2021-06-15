@@ -10,6 +10,7 @@
         "import": "./build/esm/index.js",
         "require": "./build/cjs/index.js"
     },
+    "./package.json": "./package.json",
     "./*": {
       "import": "./build/esm/*.js",
       "require": "./build/cjs/*.js"
