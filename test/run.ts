@@ -19,7 +19,7 @@ const driver = new Driver("COM5", {
 })
 	.on("error", console.error)
 	.once("driver ready", async () => {
-		debugger;
+		// debugger;
 		// const cc = new CommandClass(driver, {
 		// 	nodeId: 24,
 		// 	ccId: 0x5d,
