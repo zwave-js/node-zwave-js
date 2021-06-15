@@ -12,8 +12,8 @@
 		"typescriptreact"
 	],
 	"files.exclude": {
-		"node_modules/": true,
-		"coverage/": true,
+		"node_modules/": false,
+		"coverage/": false,
 		".*": false,
 		"**/node_modules/": true,
 		"**/*.test.js": true,
