@@ -110,5 +110,5 @@
 		}
 	],
 	"debug.javascript.unmapMissingSources": true,
-	"jest.jestCommandLine": "yarn run test:ts"
+	"jest.jestCommandLine": "npx jest"
 }

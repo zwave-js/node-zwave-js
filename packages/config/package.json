@@ -43,9 +43,11 @@
     "winston": "^3.3.3"
   },
   "scripts": {
-    "prebuild": "ts-node maintenance/prebuild.ts",
+    "prebuild": "yarn ts maintenance/prebuild.ts",
     "build": "tsc -b tsconfig.build.json",
     "clean": "tsc -b tsconfig.build.json --clean",
-    "watch": "yarn run build -- --watch --pretty"
+    "watch": "yarn run build -- --watch --pretty",
+    "lint:config": "yarn ts maintenance/lintConfigFiles.ts",
+    "ts": "node -r esbuild-register"
   }
 }
