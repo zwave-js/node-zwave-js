@@ -25,7 +25,8 @@ const argv = yargs(hideBin(process.argv))
 		bundle: false,
 		minify: false,
 		sourcemap: true,
-		logLevel: "info",
+		// ESBuild will complain about TypeScript's decorator code without this
+		logLevel: "error",
 		platform: "node",
 		format: "cjs",
 		target: "node10",
