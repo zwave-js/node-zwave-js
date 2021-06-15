@@ -68,17 +68,18 @@ export async function installConfigUpdate(newVersion: string): Promise<void> {
 
 	const pkgFilepath = `${pak.cwd}/package.json`;
 
-	await lockfile.lock(pkgFilepath, {
-		stale:
-			// Avoid timeouts during testing
-			process.env.NODE_ENV === "test"
-				? 100000
-				: /* istanbul ignore next - this is impossible to test */ undefined,
-
-		onCompromised: /* istanbul ignore next */ () => {
-			// do nothing
-		},
-	});
+	try {
+		await lockfile.lock(pkgFilepath, {
+			onCompromised: /* istanbul ignore next */ () => {
+				// do nothing
+			},
+		});
+	} catch {
+		throw new ZWaveError(
+			`Config update failed: Cannot lock ${pkgFilepath}`,
+			ZWaveErrorCodes.Config_Update_InstallFailed,
+		);
+	}
 
 	// And install it
 	const result = await pak.overrideDependencies({
@@ -87,8 +88,8 @@ export async function installConfigUpdate(newVersion: string): Promise<void> {
 
 	// Free the lock
 	try {
-		if (await lockfile.check(pkgFilepath, { realpath: false }))
-			await lockfile.unlock(pkgFilepath, { realpath: false });
+		if (await lockfile.check(pkgFilepath))
+			await lockfile.unlock(pkgFilepath);
 	} catch {
 		// whatever - just don't crash
 	}
