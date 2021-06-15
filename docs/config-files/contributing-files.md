@@ -12,6 +12,14 @@ We provide scripts to allow you to import a pre-existing device file from the Op
 
 Additional information is available at: [Importing files from other sources](config-files/importing-from-others.md)
 
+## Style Guide
+
+As mentioned, we have standards and specific expectations for how things will be described and options presented. Labels and descriptions from other projects will likely need to be amended. Descriptions provided in manufacturer documentation will also likely need to be shortened and simplified. To aid you, we have created a Style Guide. Converting existing files is a work-in-progress, so please do not be offended if you are asked to fix something despite having seen it used elsewhere.
+
+> [!NOTE] The style guide is mandatory. Configuration files that don't follow it will not be accepted.
+
+Additional information is available at: [Style guide](config-files/style-guide.md)
+
 ## Partial Parameters
 
 Some devices use a single parameter number to configure several, sometimes unrelated options. We present these complex bitmask-type parameters as individual parameters. Doing so requires converting such parameters to what we call [partial parameters](config-files/file-format.md#partial-parameters).
@@ -31,14 +39,6 @@ In order to ensure consistency among devices and to ease future improvements, we
 > [!NOTE] You **must** use available templates when adding new devices. If a template does not yet exist for the applicable manufacturer, you will be expected to add, at minimum, the necessary templates to add the device you wish to add.
 
 Additional information is available at: [Using templates](config-files/using-templates.md)
-
-## Style Guide
-
-As mentioned, we have standards and specific expectations for how things will be described and options presented. Labels and descriptions from other projects will likely need to be amended. Descriptions provided in manufacturer documentation will also likely need to be shortened and simplified. To aid you, we have created a Style Guide. Converting existing files is a work-in-progress, so please do not be offended if you are asked to fix something despite having seen it used elsewhere.
-
-> [!NOTE] The style guide is mandatory. Configuration files that don't follow it will not be accepted.
-
-Additional information is available at: [Style guide](config-files/style-guide.md)
 
 ## Process to Submit Device Files
 
