@@ -12,14 +12,16 @@ const argv = yargs(hideBin(process.argv))
 	.demandOption(["in", "out"]).argv;
 
 (async () => {
-	let entryPoints = await glob(path.join(argv.in, "**/*.ts"));
-	const dts = entryPoints.filter((ep) => ep.endsWith(".d.ts"));
-	const dtsMap = await glob(path.join(argv.in, "**/*.d.ts.map"));
-	entryPoints = entryPoints.filter((ep) => !ep.endsWith(".d.ts"));
+	const inDir = path.join(process.cwd(), argv.in);
+	const outDir = path.join(process.cwd(), argv.out);
+	await fs.emptyDir(outDir);
+
 	// Compile CJS
+	const entryPoints = await glob("**/*.js", { cwd: inDir });
 	await build({
+		absWorkingDir: inDir,
 		entryPoints,
-		outdir: argv.out,
+		outdir: outDir,
 		bundle: false,
 		minify: false,
 		sourcemap: true,
@@ -28,8 +30,23 @@ const argv = yargs(hideBin(process.argv))
 		format: "cjs",
 		target: "node10",
 	});
-	// Copy declarations over
-	for (const file of [...dts, ...dtsMap]) {
-		await fs.copy(file, path.join(argv.out, path.relative(argv.in, file)));
-	}
-})().catch(() => process.exit(1));
+
+	// Define the module type of each build directory separately
+	await fs.writeJSON(
+		path.join(inDir, "package.json"),
+		{ type: "module" },
+		{
+			spaces: 4,
+		},
+	);
+	await fs.writeJSON(
+		path.join(outDir, "package.json"),
+		{ type: "commonjs" },
+		{
+			spaces: 4,
+		},
+	);
+})().catch((e) => {
+	console.error(e);
+	process.exit(1);
+});
