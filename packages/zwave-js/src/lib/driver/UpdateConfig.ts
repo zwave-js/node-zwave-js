@@ -2,9 +2,8 @@ import { detectPackageManager, PackageManager } from "@alcalzone/pak";
 import { ZWaveError, ZWaveErrorCodes } from "@zwave-js/core";
 import { isObject } from "alcalzone-shared/typeguards";
 import axios from "axios";
+import * as lockfile from "proper-lockfile";
 import * as semver from "semver";
-
-let _installConfigLock = false;
 
 /**
  * Checks whether there is a compatible update for the currently installed config package.
@@ -52,14 +51,6 @@ export async function checkForConfigUpdates(
  * Installs the update for @zwave-js/config with the given version.
  */
 export async function installConfigUpdate(newVersion: string): Promise<void> {
-	if (_installConfigLock) {
-		throw new ZWaveError(
-			`Config update failed: another installation is in progress`,
-			ZWaveErrorCodes.Config_Update_InstallFailed,
-		);
-	}
-
-	_installConfigLock = true;
 	// Check which package manager to use for the update
 	let pak: PackageManager;
 	try {
@@ -68,30 +59,47 @@ export async function installConfigUpdate(newVersion: string): Promise<void> {
 			requireLockfile: false,
 		});
 	} catch {
-		_installConfigLock = false;
 		throw new ZWaveError(
 			`Config update failed: No package manager detected or package.json not found!`,
 			ZWaveErrorCodes.Config_Update_PackageManagerNotFound,
 		);
 	}
 
+	const pkgFilepath = `${pak.cwd}/package.json`;
+
+	await lockfile.lock(pkgFilepath, {
+		// We cannot be sure that the file exists before acquiring the lock
+		realpath: false,
+
+		stale:
+			// Avoid timeouts during testing
+			process.env.NODE_ENV === "test"
+				? 100000
+				: /* istanbul ignore next - this is impossible to test */ undefined,
+
+		onCompromised: /* istanbul ignore next */ () => {
+			// do nothing
+		},
+	});
+
+	// And install it
+	const result = await pak.overrideDependencies({
+		"@zwave-js/config": newVersion,
+	});
+
+	// Free the lock
 	try {
-		// And install it
-		const result = await pak.overrideDependencies({
-			"@zwave-js/config": newVersion,
-		});
-
-		_installConfigLock = false;
-
-		if (result.success) return;
-
-		throw new ZWaveError(
-			`Config update failed: Package manager exited with code ${result.exitCode}
-${result.stderr}`,
-			ZWaveErrorCodes.Config_Update_InstallFailed,
-		);
-	} catch (error) {
-		_installConfigLock = false;
-		throw error;
+		if (await lockfile.check(pkgFilepath, { realpath: false }))
+			await lockfile.unlock(pkgFilepath, { realpath: false });
+	} catch {
+		// whatever - just don't crash
 	}
+
+	if (result.success) return;
+
+	throw new ZWaveError(
+		`Config update failed: Package manager exited with code ${result.exitCode}
+${result.stderr}`,
+		ZWaveErrorCodes.Config_Update_InstallFailed,
+	);
 }

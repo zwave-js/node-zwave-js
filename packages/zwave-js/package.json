@@ -72,6 +72,7 @@
     "ansi-colors": "^4.1.1",
     "axios": "^0.21.1",
     "fs-extra": "^9.0.1",
+    "proper-lockfile": "^4.1.2",
     "reflect-metadata": "^0.1.13",
     "serialport": "^9.1.0",
     "source-map-support": "^0.5.19",
@@ -84,5 +85,8 @@
     "clean": "tsc -b tsconfig.build.json --clean",
     "prewatch": "gulp prebuild",
     "watch": "tsc -b tsconfig.build.json --watch --pretty"
+  },
+  "devDependencies": {
+    "@types/proper-lockfile": "^4.1.1"
   }
 }
