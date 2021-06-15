@@ -1,5 +1,4 @@
-import moment from "moment";
-import { tz } from "moment-timezone";
+import dayjs from "dayjs";
 
 export interface DSTInfo {
 	startDate: Date;
@@ -26,53 +25,76 @@ export function getDefaultDSTInfo(defaultOffset?: number): DSTInfo {
 	};
 }
 
-/** Returns the current system's daylight savings time information if possible */
-export function getDSTInfo(): DSTInfo | undefined {
-	const thisYear = new Date().getUTCFullYear();
-	// find out which timezone we're in
-	const zoneName = tz.guess();
-	const zone = tz.zone(zoneName);
-	if (!zone) return;
+/**
+ * Finds the first date on which the given timezone offset is in effect.
+ * date1 must be the smaller one of the two dates
+ */
+function findSwitchDate(
+	date1: Date,
+	date2: Date,
+	offset: number,
+): Date | undefined {
+	const stepSize = 60000; // 1 minute
 
-	// moment-timezone stores the end dates of each timespan in zone.untils
-	// iterate through them to find this year's dates
-	const indizes: number[] = [];
-	const dates: Date[] = [];
-	const offsets: number[] = [];
-	for (let i = 0; i < zone.untils.length; i++) {
-		const date = new Date(zone.untils[i]);
-		if (date.getUTCFullYear() === thisYear) {
-			indizes.push(i);
-			dates.push(date);
-			// Javascript has the offsets inverted, we use the normal interpretation
-			offsets.push(-zone.offsets[i]);
+	function middleDate(date1: Date, date2: Date): Date {
+		const middleTime =
+			Math.floor((date1.getTime() + date2.getTime()) / 2 / stepSize) *
+			stepSize;
+		return new Date(middleTime);
+	}
+
+	while (date1 < date2) {
+		const mid = middleDate(date1, date2);
+		if (mid.getTimezoneOffset() === offset) {
+			date2 = mid;
+		} else {
+			date1 = new Date(mid.getTime() + stepSize);
 		}
 	}
-	// We can only work with exactly two dates -> start and end of DST
-	switch (indizes.length) {
-		case 1:
-			// if we have exactly 1 index, we use that offset information to construct the fallback info
-			return getDefaultDSTInfo(offsets[0]);
-		case 2:
-			// if we have exactly 2 indizes, we know there's a start and end date
-			break; // continue further down
-		default:
-			// otherwise we cannot construct dst info
-			return undefined;
+
+	if (date1.getTimezoneOffset() !== offset) return undefined;
+	return date1;
+}
+
+/** Returns the current system's daylight savings time information if possible */
+export function getDSTInfo(now: Date = new Date()): DSTInfo {
+	const halfAYearAgo = dayjs(now).subtract(6, "months").toDate();
+	const inAHalfYear = dayjs(now).add(6, "months").toDate();
+	if (
+		now.getTimezoneOffset() === halfAYearAgo.getTimezoneOffset() ||
+		now.getTimezoneOffset() === inAHalfYear.getTimezoneOffset()
+	) {
+		// There is no DST in this timezone
+		return getDefaultDSTInfo();
 	}
+
+	// Javascript has the offsets inverted, we use the normal interpretation
+	const offsets = [
+		-now.getTimezoneOffset(),
+		-inAHalfYear.getTimezoneOffset(),
+	];
+	const dates = [
+		findSwitchDate(halfAYearAgo, now, -offsets[0]),
+		findSwitchDate(now, inAHalfYear, -offsets[1]),
+	];
+	if (dates[0] == undefined || dates[1] == undefined) {
+		// This shouldn't happen, but better be sure
+		return getDefaultDSTInfo();
+	}
+
 	if (offsets[0] > offsets[1]) {
-		// index 0 is end of DST, index 1 is start
+		// DST is always the higher offset
 		return {
-			endDate: dates[0],
-			startDate: dates[1],
+			startDate: dates[0],
+			endDate: dates[1],
 			dstOffset: offsets[0],
 			standardOffset: offsets[1],
 		};
 	} else {
-		// index 0 is start of DST, index 1 is end
 		return {
-			startDate: dates[0],
-			endDate: dates[1],
+			// We don't have DST now, this is the next start date
+			startDate: dates[1],
+			endDate: dates[0],
 			dstOffset: offsets[1],
 			standardOffset: offsets[0],
 		};
@@ -93,5 +115,5 @@ export const timespan = Object.freeze({
 });
 
 export function formatDate(date: Date, format: string): string {
-	return moment(date).format(format);
+	return dayjs(date).format(format);
 }
