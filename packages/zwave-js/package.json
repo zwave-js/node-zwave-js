@@ -85,8 +85,5 @@
     "clean": "tsc -b tsconfig.build.json --clean",
     "prewatch": "gulp prebuild",
     "watch": "tsc -b tsconfig.build.json --watch --pretty"
-  },
-  "devDependencies": {
-    "@types/proper-lockfile": "^4.1.1"
   }
 }
