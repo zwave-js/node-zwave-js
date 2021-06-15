@@ -57,6 +57,7 @@ export async function installConfigUpdate(newVersion: string): Promise<void> {
 		pak = await detectPackageManager({
 			cwd: __dirname,
 			requireLockfile: false,
+			setCwdToPackageRoot: true,
 		});
 	} catch {
 		throw new ZWaveError(
@@ -68,9 +69,6 @@ export async function installConfigUpdate(newVersion: string): Promise<void> {
 	const pkgFilepath = `${pak.cwd}/package.json`;
 
 	await lockfile.lock(pkgFilepath, {
-		// We cannot be sure that the file exists before acquiring the lock
-		realpath: false,
-
 		stale:
 			// Avoid timeouts during testing
 			process.env.NODE_ENV === "test"
