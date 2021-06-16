@@ -850,5 +850,11 @@
 			"maxValue": 500,
 			"defaultValue": 0
 		}
+	},
+	"metadata": {
+		"inclusion": "Turn the primary controller of Z-Wave network into inclusion mode, quickly press key S1 or B-button product's housing three times",
+		"exclusion": "Turn the primary controller of Z-Wave network into exclusion mode, quickly press key S1 or B-button product's housing three times",
+		"reset": "1. Power-cycle the device\n2. Press and hold the B-button to enter the menu\n3. Wait for the LED to turn yellow\n4. Quickly release and click B-button again\n5. Device will restart and LED will turn red",
+		"manual": "https://products.z-wavealliance.org/ProductManual/File?folder=&filename=MarketCertificationFiles/2836/FGD-212-EN-T-v1.3.pdf"
 	}
 }
