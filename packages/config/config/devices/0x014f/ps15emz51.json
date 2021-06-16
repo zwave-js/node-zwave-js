@@ -70,14 +70,14 @@
 		"12": {
 			"label": "LED Power Monitoring Seconds",
 			"valueSize": 2,
-			"minValue": 0,
+			"minValue": 1,
 			"maxValue": 255,
 			"defaultValue": 60
 		},
 		"13": {
 			"label": "Energy Monitoring",
 			"valueSize": 2,
-			"minValue": 1,
+			"minValue": 0,
 			"maxValue": 255,
 			"defaultValue": 6
 		}
