@@ -117,7 +117,7 @@
 			"label": "ALL ON/ALL OFF Function",
 			"valueSize": 2,
 			"minValue": 0,
-			"maxValue": 65535,
+			"maxValue": 255,
 			"defaultValue": 255,
 			"unsigned": true,
 			"allowManualEntry": false,
