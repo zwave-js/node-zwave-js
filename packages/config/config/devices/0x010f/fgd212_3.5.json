@@ -219,7 +219,7 @@
 			"defaultValue": 0,
 			"options": [
 				{
-					"label": "Disabled, previous value is used",
+					"label": "Disable, previous value is used",
 					"value": 0
 				}
 			]
@@ -379,11 +379,11 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "Forced leading edge",
+					"label": "Force leading edge",
 					"value": 0
 				},
 				{
-					"label": "Forced trailing edge",
+					"label": "Force trailing edge",
 					"value": 1
 				},
 				{
@@ -422,11 +422,11 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "Disabled (dimming is possible)",
+					"label": "Disable (dimming is possible)",
 					"value": 0
 				},
 				{
-					"label": "Enabled (dimming is not possible)",
+					"label": "Enable (dimming is not possible)",
 					"value": 1
 				},
 				{
@@ -537,11 +537,11 @@
 			"defaultValue": 255,
 			"options": [
 				{
-					"label": "Disabled",
+					"label": "Disable",
 					"value": 0
 				},
 				{
-					"label": "Always enabled",
+					"label": "Always enable",
 					"value": 255
 				}
 			]
@@ -781,7 +781,7 @@
 			"defaultValue": 10,
 			"options": [
 				{
-					"label": "Disabled",
+					"label": "Disable",
 					"value": 0
 				}
 			]
@@ -795,7 +795,7 @@
 			"defaultValue": 3600,
 			"options": [
 				{
-					"label": "Disabled",
+					"label": "Disable",
 					"value": 0
 				}
 			]
@@ -809,7 +809,7 @@
 			"defaultValue": 10,
 			"options": [
 				{
-					"label": "Disabled",
+					"label": "Disable",
 					"value": 0
 				}
 			]
