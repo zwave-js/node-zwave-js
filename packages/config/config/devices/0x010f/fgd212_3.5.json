@@ -185,6 +185,7 @@
 		"15": {
 			"label": "Burnt Out Bulb Detection Power Variation (LOAD ERROR)",
 			"description": "Percentage value of standard power consumption as measured during calibration",
+			"unit": "%",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 99,
