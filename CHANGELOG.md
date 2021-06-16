@@ -2,7 +2,7 @@
 <!--
 	Add placeholder for next release with `wip` snippet
 -->
-## __WORK IN PROGRESS__
+## 7.7.5 (2021-06-16)
 ### Bugfixes
 * Nodes are no longer sent to sleep while a scheduled verification poll is pending
 * Simultaneous config DB updates are now prevented with a lockfile
