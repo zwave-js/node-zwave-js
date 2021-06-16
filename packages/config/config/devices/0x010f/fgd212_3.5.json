@@ -123,19 +123,19 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "ALL ON not Active, ALL OFF not Active",
+					"label": "ALL ON not active, ALL OFF not active",
 					"value": 0
 				},
 				{
-					"label": "ALL ON not Active, ALL OFF Active",
+					"label": "ALL ON not active, ALL OFF active",
 					"value": 1
 				},
 				{
-					"label": "ALL ON Active, ALL OFF not Active",
+					"label": "ALL ON active, ALL OFF not active",
 					"value": 2
 				},
 				{
-					"label": "ALL ON Active, ALL OFF Active",
+					"label": "ALL ON active, ALL OFF active",
 					"value": 255
 				}
 			]
@@ -154,11 +154,11 @@
 					"value": 0
 				},
 				{
-					"label": "Force Auto-calibration Without Fibaro Bypass",
+					"label": "Force auto-calibration without Fibaro Bypass",
 					"value": 1
 				},
 				{
-					"label": "Force Auto-calibration With Fibaro Bypass",
+					"label": "Force auto-calibration with Fibaro Bypass",
 					"value": 2
 				}
 			]
@@ -173,11 +173,11 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "No Calibration or Manual Settings",
+					"label": "No calibration or manual settings",
 					"value": 0
 				},
 				{
-					"label": "Dimmer Operates on Auto-calibration",
+					"label": "Dimmer operates on auto-calibration",
 					"value": 1
 				}
 			]
@@ -218,7 +218,7 @@
 			"defaultValue": 0,
 			"options": [
 				{
-					"label": "Disable, Previous Value is Used",
+					"label": "Disabled, previous value is used",
 					"value": 0
 				}
 			]
@@ -233,21 +233,21 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "Mono-stable Input (Button)",
+					"label": "Mono-stable input (button)",
 					"value": 0
 				},
 				{
-					"label": "Bi-stable Input (Switch)",
+					"label": "Bi-stable input (switch)",
 					"value": 1
 				},
 				{
-					"label": "Roller Blind Switch (UP / DOWN)",
+					"label": "Roller blind switch (UP / DOWN)",
 					"value": 2
 				}
 			]
 		},
 		"21": {
-			"label": "Value Sent to Associated Devices on Single Click",
+			"label": "Value sent to associated devices on Single Click",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 1,
@@ -256,7 +256,7 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "Set Associated Devices to Last State",
+					"label": "Set associated devices to last state",
 					"value": 0
 				},
 				{
@@ -275,11 +275,11 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "Output Changes on Input Switch Change",
+					"label": "Output changes on input switch change",
 					"value": 0
 				},
 				{
-					"label": "Output Synced with Input Switch Position",
+					"label": "Output synced with input switch position",
 					"value": 1
 				}
 			]
@@ -515,11 +515,11 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "Standard Mode",
+					"label": "Standard mode",
 					"value": 0
 				},
 				{
-					"label": "S1 Operates as S2, S2 Operates as S1",
+					"label": "S1 operates as S2, S2 operates as S1",
 					"value": 1
 				}
 			]
@@ -534,15 +534,15 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "Forced Leading Edge",
+					"label": "Forced leading edge",
 					"value": 0
 				},
 				{
-					"label": "Forced Trailing Edge",
+					"label": "Forced trailing edge",
 					"value": 1
 				},
 				{
-					"label": "Select from Auto-calibration",
+					"label": "Select from auto-calibration",
 					"value": 2
 				}
 			]
@@ -557,11 +557,11 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "Leading Edge",
+					"label": "Leading edge",
 					"value": 0
 				},
 				{
-					"label": "Trailing Edge",
+					"label": "Trailing edge",
 					"value": 1
 				}
 			]
@@ -577,15 +577,15 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "Disabled (Dimming is Possible)",
+					"label": "Disabled (dimming is possible)",
 					"value": 0
 				},
 				{
-					"label": "Enabled (Dimming is not Possible)",
+					"label": "Enabled (dimming is not possible)",
 					"value": 1
 				},
 				{
-					"label": "Select From Auto-calibration",
+					"label": "Select from auto-calibration",
 					"value": 2
 				}
 			]
@@ -600,11 +600,11 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "Dimming Possible",
+					"label": "Dimming possible",
 					"value": 0
 				},
 				{
-					"label": "Dimming not Possible",
+					"label": "Dimming not possible",
 					"value": 1
 				}
 			]
@@ -620,15 +620,15 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "No Soft-start",
+					"label": "No soft-start",
 					"value": 0
 				},
 				{
-					"label": "Short Soft-start (0,1s)",
+					"label": "Short soft-start (0,1s)",
 					"value": 1
 				},
 				{
-					"label": "Long Soft-start (0,5s)",
+					"label": "Long soft-start (0,5s)",
 					"value": 2
 				}
 			]
@@ -647,19 +647,19 @@
 					"value": 0
 				},
 				{
-					"label": "After First Power On",
+					"label": "After first power On",
 					"value": 1
 				},
 				{
-					"label": "After Each Power On",
+					"label": "After each power On",
 					"value": 2
 				},
 				{
-					"label": "After First Power Up or Each LOAD ERROR, SURGE or OVERCURRENT",
+					"label": "After first power up or each LOAD ERROR, SURGE or OVERCURRENT",
 					"value": 3
 				},
 				{
-					"label": "After Each Power Up or Each LOAD ERROR, SURGE or OVERCURRENT",
+					"label": "After each power up or each LOAD ERROR, SURGE or OVERCURRENT",
 					"value": 4
 				}
 			]
@@ -674,11 +674,11 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "Device Permanently Disabled",
+					"label": "Device permanently disabled",
 					"value": 0
 				},
 				{
-					"label": "Three Attempts to Turn On the Load",
+					"label": "Three attempts to turn on the load",
 					"value": 1
 				}
 			]
@@ -696,7 +696,7 @@
 					"value": 0
 				},
 				{
-					"label": "Always Enabled",
+					"label": "Always enabled",
 					"value": 255
 				}
 			]
@@ -720,19 +720,19 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "No Reaction",
+					"label": "No reaction",
 					"value": 0
 				},
 				{
-					"label": "Turn On the Load",
+					"label": "Turn on the load",
 					"value": 1
 				},
 				{
-					"label": "Turn Off the Load",
+					"label": "Turn off the load",
 					"value": 2
 				},
 				{
-					"label": "Load Blinking",
+					"label": "Load blinking",
 					"value": 3
 				}
 			]
@@ -747,19 +747,19 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "No Reaction",
+					"label": "No reaction",
 					"value": 0
 				},
 				{
-					"label": "Turn On the Load",
+					"label": "Turn on the load",
 					"value": 1
 				},
 				{
-					"label": "Turn Off the Load",
+					"label": "Turn off the load",
 					"value": 2
 				},
 				{
-					"label": "Load Blinking",
+					"label": "Load blinking",
 					"value": 3
 				}
 			]
@@ -774,19 +774,19 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "No Reaction",
+					"label": "No reaction",
 					"value": 0
 				},
 				{
-					"label": "Turn On the Load",
+					"label": "Turn on the load",
 					"value": 1
 				},
 				{
-					"label": "Turn Off the Load",
+					"label": "Turn off the load",
 					"value": 2
 				},
 				{
-					"label": "Load Blinking",
+					"label": "Load blinking",
 					"value": 3
 				}
 			]
@@ -801,19 +801,19 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "No Reaction",
+					"label": "No reaction",
 					"value": 0
 				},
 				{
-					"label": "Turn On the Load",
+					"label": "Turn on the load",
 					"value": 1
 				},
 				{
-					"label": "Turn Off the Load",
+					"label": "Turn off the load",
 					"value": 2
 				},
 				{
-					"label": "Load Blinking",
+					"label": "Load blinking",
 					"value": 3
 				}
 			]
@@ -837,11 +837,11 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "No Reaction",
+					"label": "No reaction",
 					"value": 0
 				},
 				{
-					"label": "Send an Alarm Frame",
+					"label": "Send an alarm frame",
 					"value": 1
 				}
 			]
@@ -857,11 +857,11 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "No Reaction",
+					"label": "No reaction",
 					"value": 0
 				},
 				{
-					"label": "Send an Alarm Frame",
+					"label": "Send an alarm frame",
 					"value": 1
 				}
 			]
@@ -877,11 +877,11 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "No Reaction",
+					"label": "No reaction",
 					"value": 0
 				},
 				{
-					"label": "Send an Alarm Frame",
+					"label": "Send an alarm frame",
 					"value": 1
 				}
 			]
@@ -897,11 +897,11 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "No Reaction",
+					"label": "No reaction",
 					"value": 0
 				},
 				{
-					"label": "Send an Alarm Frame",
+					"label": "Send an alarm frame",
 					"value": 1
 				}
 			]
@@ -917,11 +917,11 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "No Reaction",
+					"label": "No reaction",
 					"value": 0
 				},
 				{
-					"label": "Send an Alarm Frame",
+					"label": "Send an alarm frame",
 					"value": 1
 				}
 			]
@@ -984,15 +984,15 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "Measurement Based on the Standard Algorithm",
+					"label": "Measurement based on the standard algorithm",
 					"value": 0
 				},
 				{
-					"label": "Approximation Based on the Calibration Data",
+					"label": "Approximation based on the calibration data",
 					"value": 1
 				},
 				{
-					"label": "Approximation Based on the Control Angle",
+					"label": "Approximation based on the control angle",
 					"value": 2
 				}
 			]
