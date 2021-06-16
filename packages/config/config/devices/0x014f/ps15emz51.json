@@ -48,10 +48,36 @@
 				}
 			]
 		},
+		"11": {
+			"label": "LED Power Monitoring",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 1
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Power Monitoring ON",
+					"value": 1
+				},
+				{
+					"label": "Power Monitoring OFF",
+					"value": 0
+				}
+			]
+
+		},
+		"12": {
+			"label": "LED Power Monitoring Seconds",
+			"valueSize": 2,
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 60
+		},
 		"13": {
 			"label": "Energy Monitoring",
 			"valueSize": 2,
-			"minValue": 0,
+			"minValue": 1,
 			"maxValue": 255,
 			"defaultValue": 6
 		}
