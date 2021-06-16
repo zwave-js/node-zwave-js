@@ -260,7 +260,7 @@
 					"value": 0
 				},
 				{
-					"label": "This Dimmers Current State Synchronizes Brightness Level",
+					"label": "This dimmer's current brightness",
 					"value": 1
 				}
 			]
