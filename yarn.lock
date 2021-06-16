@@ -49,6 +49,20 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@alcalzone/esm2cjs@npm:^1.0.0":
+  version: 1.1.0
+  resolution: "@alcalzone/esm2cjs@npm:1.1.0"
+  dependencies:
+    esbuild: ^0.12.9
+    fs-extra: ^10.0.0
+    tiny-glob: ^0.2.9
+    yargs: ^16.2.0
+  bin:
+    esm2cjs: bin/esm2cjs.js
+  checksum: 4a35054d182130c6bfe6124ad5c9ead0038d90ce3480812851997d158a43cdf970198ac9763a47fc2fb8a26bbd31cb4e03f85de21fa982ab912a027fc923c1fe
+  languageName: node
+  linkType: hard
+
 "@alcalzone/jsonl-db@npm:^1.3.0":
   version: 1.3.0
   resolution: "@alcalzone/jsonl-db@npm:1.3.0"
@@ -3854,6 +3868,7 @@ __metadata:
     "@actions/core": ^1.4.0
     "@actions/exec": ^1.1.0
     "@actions/github": ^5.0.0
+    "@alcalzone/esm2cjs": ^1.0.0
     "@alcalzone/jsonl-db": ^1.3.0
     "@alcalzone/release-script": ^2.2.0
     "@babel/core": ^7.14.6
@@ -6041,7 +6056,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"esbuild@npm:^0.12.8":
+"esbuild@npm:^0.12.8, esbuild@npm:^0.12.9":
   version: 0.12.14
   resolution: "esbuild@npm:0.12.14"
   bin:

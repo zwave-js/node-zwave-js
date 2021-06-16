@@ -42,7 +42,7 @@
   "scripts": {
     "prebuild": "yarn ts maintenance/prebuild.ts",
     "build": "tsc -b tsconfig.build.json",
-    "postbuild": "node ../../maintenance/esm2cjs.js --in=build/esm --out=build/cjs",
+    "postbuild": "yarn esm2cjs --in=build/esm --out=build/cjs -l error",
     "clean": "tsc -b tsconfig.build.json --clean",
     "watch": "yarn run build --watch --pretty",
     "lint_config": "yarn ts maintenance/lintConfigFiles.ts",

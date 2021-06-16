@@ -57,7 +57,7 @@
     "deprecated": "node -p '\"\\n \\n \\033[31;1;4mThe \\\"build:full\\\" script has been deprecated. Use \\\"build\\\" instead!\\033[0m\\n \\n\"'",
     "build_full": "yarn run deprecated && yarn run build",
     "build": "tsc -b tsconfig.build.json",
-    "postbuild": "node ../../maintenance/esm2cjs.js --in=build/esm --out=build/cjs",
+    "postbuild": "esm2cjs --in=build/esm --out=build/cjs -l error",
     "clean": "tsc -b tsconfig.build.json --clean",
     "prewatch": "yarn b prebuild",
     "watch": "tsc -b tsconfig.build.json --watch --pretty",
