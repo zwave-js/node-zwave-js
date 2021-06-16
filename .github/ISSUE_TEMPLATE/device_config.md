@@ -32,7 +32,7 @@ Product ID: 0x0101
   🚨🚨🚨 WARNING: We will close this issue without warning if the following points do not apply. 🚨🚨🚨
 -->
 
-- [ ] It is not in the [configuration DB](https://devices.zwave-js.io/)
+- [ ] It is not in the [configuration DB](https://devices.zwave-js.io/?search=3)
 - [ ] It was not [merged recently](https://github.com/zwave-js/node-zwave-js/pulls?q=is%3Apr+is%3Aclosed) or has a [pending PR](https://github.com/zwave-js/node-zwave-js/pulls?q=is%3Aopen+is%3Apr)
 - [ ] It is not in the [TODO list](https://github.com/zwave-js/node-zwave-js/issues/1600)
 
