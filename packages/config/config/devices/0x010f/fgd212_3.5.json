@@ -212,7 +212,8 @@
 			]
 		},
 		"19": {
-			"label": "Forced Switch On Brightness Level",
+			"label": "Forced Switch On Brightness",
+			"description": "Scale is relative to the range set by minimum and maximum brightness level configuration",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 99,
