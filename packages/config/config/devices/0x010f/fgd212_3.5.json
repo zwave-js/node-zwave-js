@@ -212,7 +212,6 @@
 		},
 		"19": {
 			"label": "Forced Switch On Brightness Level",
-			"description": "Percentage value.",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 99,
