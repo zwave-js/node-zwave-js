@@ -2,6 +2,18 @@
 <!--
 	Add placeholder for next release with `wip` snippet
 -->
+## __WORK IN PROGRESS__
+### Bugfixes
+* Nodes are no longer sent to sleep while a scheduled verification poll is pending
+* Simultaneous config DB updates are now prevented with a lockfile
+
+### Changes under the hood
+* The build process now uses ESBuild instead of `ts-node` and `gulp`
+* Replaced the `moment` package with the much smaller `Day.js`
+* Removed the `moment-timezone` package
+* Security updates to some dependencies
+* Added Node.js 16 to the testing suite
+
 ## 7.7.4 (2021-06-14)
 ### Bugfixes
 * Don't require V1 alarms to be supported to preserve legacy alarm values
