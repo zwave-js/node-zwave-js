@@ -928,7 +928,8 @@
 			]
 		},
 		"50": {
-			"label": "Active Power Report: Relative Change Since Previous Report",
+			"label": "Active Power Report: Threshold",
+			"description": "Relative change since previous report sent",
 			"valueSize": 1,
 			"unit": "%",
 			"minValue": 0,
@@ -956,7 +957,7 @@
 			]
 		},
 		"53": {
-			"label": "Energy Report: Change Threshold",
+			"label": "Energy Report: Threshold",
 			"unit": "0.01 kWh",
 			"valueSize": 2,
 			"minValue": 0,
