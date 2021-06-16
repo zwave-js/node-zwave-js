@@ -6,7 +6,7 @@ We're happy that you're considering helping us out. Although the goal of this pr
 
 ## Do you have a problem? Something not working? Configuration missing?
 
-Please read the [troubleshooting](https://zwave-js.github.io/node-zwave-js/#/development/troubleshooting) section of the documentation. Your problem might already be answered there.
+Please read the [troubleshooting](https://zwave-js.github.io/node-zwave-js/#/troubleshooting/index) section of the documentation. Your problem might already be answered there.
 If not, consider opening an issue. Please **use the issue templates** and fill them out as best as you can.
 
 ## Do you want to propose a new feature?
