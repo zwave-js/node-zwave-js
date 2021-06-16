@@ -290,194 +290,52 @@
 			"defaultValue": 1
 		},
 		"24[0x01]": {
+			"$import": "../templates/master_template.json#base_enable_disable_inverted",
 			"label": "Send Command Frames in 2nd and 3rd Association Groups when Switching ON (Single Click)",
-			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 1,
-			"defaultValue": 0,
-			"unsigned": true,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "Enabled",
-					"value": 0
-				},
-				{
-					"label": "Disabled",
-					"value": 1
-				}
-			]
+			"defaultValue": 0
 		},
 		"24[0x02]": {
+			"$import": "../templates/master_template.json#base_enable_disable_inverted",
 			"label": "Send Command Frames in 2nd and 3rd Association Groups when Switching OFF (Single Click)",
-			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 1,
-			"defaultValue": 0,
-			"unsigned": true,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "Enabled",
-					"value": 0
-				},
-				{
-					"label": "Disabled",
-					"value": 1
-				}
-			]
+			"defaultValue": 0
 		},
 		"24[0x04]": {
+			"$import": "../templates/master_template.json#base_enable_disable_inverted",
 			"label": "Send Command Frames in 2nd and 3rd Association Groups when Changing Dimming Level",
-			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 1,
-			"defaultValue": 0,
-			"unsigned": true,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "Enabled",
-					"value": 0
-				},
-				{
-					"label": "Disabled",
-					"value": 1
-				}
-			]
+			"defaultValue": 0
 		},
 		"24[0x08]": {
+			"$import": "../templates/master_template.json#base_enable_disable_inverted",
 			"label": "Send Command Frames in 2nd and 3rd Association Groups on Double Click",
-			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 1,
-			"defaultValue": 0,
-			"unsigned": true,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "Enabled",
-					"value": 0
-				},
-				{
-					"label": "Disabled",
-					"value": 1
-				}
-			]
+			"defaultValue": 0
 		},
 		"24[0x10]": {
-			"label": "Send Command Frames in 2nd and 3rd Association Groups with 0xFF Value on Double Click",
-			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 1,
-			"defaultValue": 0,
-			"unsigned": true,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "Disabled",
-					"value": 0
-				},
-				{
-					"label": "Enabled",
-					"value": 1
-				}
-			]
+			"$import": "../templates/master_template.json#base_enable_disable",
+			"label": "Send Command Frames in 2nd and 3rd Association Groups with 0xFF Value on Double Click"
 		},
 		"25[0x01]": {
+			"$import": "../templates/master_template.json#base_enable_disable_inverted",
 			"label": "Send Command Frames in 4th and 5th Association Groups when Switching ON (Single Click)",
-			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 1,
-			"defaultValue": 0,
-			"unsigned": true,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "Enabled",
-					"value": 0
-				},
-				{
-					"label": "Disabled",
-					"value": 1
-				}
-			]
+			"defaultValue": 0
 		},
 		"25[0x02]": {
+			"$import": "../templates/master_template.json#base_enable_disable_inverted",
 			"label": "Send Command Frames in 4th and 5th Association Groups when Switching OFF (Single Click)",
-			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 1,
-			"defaultValue": 0,
-			"unsigned": true,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "Enabled",
-					"value": 0
-				},
-				{
-					"label": "Disabled",
-					"value": 1
-				}
-			]
+			"defaultValue": 0
 		},
 		"25[0x04]": {
+			"$import": "../templates/master_template.json#base_enable_disable_inverted",
 			"label": "Send Command Frames in 4th and 5th Association Groups when Changing Dimming Level",
-			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 1,
-			"defaultValue": 0,
-			"unsigned": true,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "Enabled",
-					"value": 0
-				},
-				{
-					"label": "Disabled",
-					"value": 1
-				}
-			]
+			"defaultValue": 0
 		},
 		"25[0x08]": {
+			"$import": "../templates/master_template.json#base_enable_disable_inverted",
 			"label": "Send Command Frames in 4th and 5th Association Groups on Double Click",
-			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 1,
-			"defaultValue": 0,
-			"unsigned": true,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "Enabled",
-					"value": 0
-				},
-				{
-					"label": "Disabled",
-					"value": 1
-				}
-			]
+			"defaultValue": 0
 		},
 		"25[0x10]": {
-			"label": "Send Command Frames in 4th and 5th Association Groups with 0xFF Value on Double Click",
-			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 1,
-			"defaultValue": 0,
-			"unsigned": true,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "Disabled",
-					"value": 0
-				},
-				{
-					"label": "Enabled",
-					"value": 1
-				}
-			]
+			"$import": "../templates/master_template.json#base_enable_disable",
+			"label": "Send Command Frames in 4th and 5th Association Groups with 0xFF Value on Double Click"
 		},
 		"26": {
 			"$import": "../templates/master_template.json#base_enable_disable",
