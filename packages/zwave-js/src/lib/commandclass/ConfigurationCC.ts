@@ -871,7 +871,7 @@ alters capabilities: ${!!properties.altersCapabilities}`;
 		const valueDB = this.getValueDB();
 		const valueId = getParamInformationValueID(parameter, valueBitMask);
 		return (
-			(valueDB.getMetadata(valueId) as ConfigurationMetadata) ?? {
+			valueDB.getMetadata(valueId) ?? {
 				...ValueMetadata.Any,
 			}
 		);
@@ -909,12 +909,27 @@ alters capabilities: ${!!properties.altersCapabilities}`;
 	}
 
 	/**
-	 * Returns stored config parameter metadata for all partial config params addressed with the given parameter number
+	 * Computes the full value of a parameter after applying a partial param value
 	 */
 	public composePartialParamValue(
 		parameter: number,
-		valueBitMask: number,
-		maskedValue: number,
+		bitMask: number,
+		partialValue: number,
+	): number {
+		return this.composePartialParamValues(parameter, [
+			{ bitMask, partialValue },
+		]);
+	}
+
+	/**
+	 * Computes the full value of a parameter after applying multiple partial param values
+	 */
+	public composePartialParamValues(
+		parameter: number,
+		partials: {
+			bitMask: number;
+			partialValue: number;
+		}[],
 	): number {
 		const valueDB = this.getValueDB();
 		// Add the other values together
@@ -923,7 +938,7 @@ alters capabilities: ${!!properties.altersCapabilities}`;
 				id.commandClass === this.ccId &&
 				id.property === parameter &&
 				id.propertyKey != undefined &&
-				id.propertyKey !== valueBitMask,
+				!partials.some((p) => id.propertyKey === p.bitMask),
 		);
 		let ret = 0;
 		for (const {
@@ -932,9 +947,11 @@ alters capabilities: ${!!properties.altersCapabilities}`;
 		} of otherValues) {
 			ret = encodePartial(ret, partialValue as number, bitMask as number);
 		}
-		return encodePartial(ret, maskedValue, valueBitMask);
+		for (const { bitMask, partialValue } of partials) {
+			ret = encodePartial(ret, partialValue, bitMask);
+		}
+		return ret;
 	}
-
 	public serializeValuesForCache(): CacheValue[] {
 		// Leave out the paramInformation if we have loaded it from a config file
 		let values = super.serializeValuesForCache();
@@ -1303,7 +1320,7 @@ export class ConfigurationCCSet extends ConfigurationCC {
 					2,
 					valueSize,
 					this.valueFormat!,
-					this.value!,
+					this.value,
 				);
 			} catch (e) {
 				tryCatchOutOfBoundsError(
