@@ -28,6 +28,8 @@ import { composeObject } from "alcalzone-shared/objects";
 import { padStart } from "alcalzone-shared/strings";
 import type { Driver } from "../driver/Driver";
 import { MessagePriority } from "../message/Constants";
+import { Endpoint } from "../node/Endpoint";
+import type { VirtualEndpoint } from "../node/VirtualEndpoint";
 import {
 	CCAPI,
 	PollValueImplementation,
@@ -103,6 +105,146 @@ const isParamInfoFromConfigValueId: ValueID = {
 	commandClass: CommandClasses.Configuration,
 	property: "isParamInformationFromConfig",
 };
+
+export type ConfigurationCCAPISetOptions = {
+	parameter: number;
+} & (
+	| {
+			// Variant 1: Normal parameter, defined in a config file
+			bitMask?: undefined;
+			value: ConfigValue;
+	  }
+	| {
+			// Variant 2: Normal parameter, not defined in a config file
+			bitMask?: undefined;
+			value: ConfigValue;
+			valueSize: 1 | 2 | 4;
+			valueFormat: ConfigValueFormat;
+	  }
+	| {
+			// Variant 3: Partial parameter, must be defined in a config file
+			bitMask: number;
+			value: number;
+	  }
+);
+type NormalizedConfigurationCCAPISetOptions = {
+	parameter: number;
+	valueSize: 1 | 2 | 4;
+	valueFormat: ConfigValueFormat;
+} & (
+	| { bitMask?: undefined; value: ConfigValue }
+	| { bitMask: number; value: number }
+);
+
+function normalizeConfigurationCCAPISetOptions(
+	endpoint: Endpoint | VirtualEndpoint,
+	options: ConfigurationCCAPISetOptions,
+): NormalizedConfigurationCCAPISetOptions {
+	if ("bitMask" in options && options.bitMask) {
+		// Variant 3: Partial param, look it up in the device config
+		// TODO: This is fucking ugly
+		const ccc =
+			endpoint instanceof Endpoint
+				? endpoint.createCCInstance(ConfigurationCC)!
+				: endpoint.node.physicalNodes[0].createCCInstance(
+						ConfigurationCC,
+				  )!;
+		const paramInfo = ccc.getParamInformation(
+			options.parameter,
+			options.bitMask,
+		);
+		if (!paramInfo.isFromConfig) {
+			throw new ZWaveError(
+				"Setting a partial configuration parameter requires it to be defined in a device config file!",
+				ZWaveErrorCodes.Argument_Invalid,
+			);
+		}
+		return {
+			parameter: options.parameter,
+			bitMask: options.bitMask,
+			value: options.value,
+			valueSize: paramInfo.valueSize as any,
+			valueFormat: paramInfo.format!,
+		};
+	} else if ("valueSize" in options) {
+		// Variant 2: Normal parameter, not defined in a config file
+		return pick(options, [
+			"parameter",
+			"value",
+			"valueSize",
+			"valueFormat",
+		]);
+	} else {
+		// Variant 1: Normal parameter, defined in a config file
+		// TODO: This is fucking ugly
+		const ccc =
+			endpoint instanceof Endpoint
+				? endpoint.createCCInstance(ConfigurationCC)!
+				: endpoint.node.physicalNodes[0].createCCInstance(
+						ConfigurationCC,
+				  )!;
+		const paramInfo = ccc.getParamInformation(
+			options.parameter,
+			options.bitMask,
+		);
+		if (!paramInfo.isFromConfig) {
+			throw new ZWaveError(
+				"Setting a configuration parameter without specifying a value size and format requires it to be defined in a device config file!",
+				ZWaveErrorCodes.Argument_Invalid,
+			);
+		}
+		return {
+			parameter: options.parameter,
+			value: options.value,
+			valueSize: paramInfo.valueSize as any,
+			valueFormat: paramInfo.format!,
+		};
+	}
+}
+
+function bulkMergePartialParamValues(
+	endpoint: Endpoint | VirtualEndpoint,
+	options: NormalizedConfigurationCCAPISetOptions[],
+): (NormalizedConfigurationCCAPISetOptions & { bitMask?: undefined })[] {
+	// Merge partial parameters before doing anything else. Therefore, take the non-partials, ...
+	const allParams = options.filter((o) => o.bitMask == undefined);
+	// ... group the partials by parameter
+	const unmergedPartials = new Map<
+		number,
+		NormalizedConfigurationCCAPISetOptions[]
+	>();
+	for (const partial of options.filter((o) => o.bitMask != undefined)) {
+		if (!unmergedPartials.has(partial.parameter)) {
+			unmergedPartials.set(partial.parameter, []);
+		}
+		unmergedPartials.get(partial.parameter)!.push(partial);
+	}
+	// and push the merged result into the array we'll be working with
+	if (unmergedPartials.size) {
+		const ccc =
+			endpoint instanceof Endpoint
+				? endpoint.createCCInstance(ConfigurationCC)!
+				: endpoint.node.physicalNodes[0].createCCInstance(
+						ConfigurationCC,
+				  )!;
+
+		for (const [parameter, partials] of unmergedPartials) {
+			allParams.push({
+				parameter,
+				value: ccc.composePartialParamValues(
+					parameter,
+					partials.map((p) => ({
+						bitMask: p.bitMask!,
+						partialValue: p.value as number,
+					})),
+				),
+				valueSize: partials[0].valueSize,
+				valueFormat: partials[0].valueFormat,
+			});
+		}
+	}
+	return allParams as any;
+}
 
 @API(CommandClasses.Configuration)
 export class ConfigurationCCAPI extends CCAPI {
@@ -246,7 +388,12 @@ export class ConfigurationCCAPI extends CCAPI {
 			);
 		}
 
-		await this.set(property, targetValue, valueSize as any, valueFormat);
+		await this.set({
+			parameter: property,
+			value: targetValue,
+			valueSize: valueSize as any,
+			valueFormat,
+		});
 
 		if ((this as ConfigurationCCAPI).isSinglecast()) {
 			// Verify the current value after a delay
@@ -338,57 +485,115 @@ export class ConfigurationCCAPI extends CCAPI {
 
 	/**
 	 * Sets a new value for a given config parameter of the device.
+	 * @deprecated Use the overload with an options object instead
 	 */
 	public async set(
 		parameter: number,
 		value: ConfigValue,
 		valueSize: 1 | 2 | 4,
-		valueFormat: ConfigValueFormat = ConfigValueFormat.SignedInteger,
+		valueFormat?: ConfigValueFormat,
+	): Promise<void>;
+
+	/**
+	 * Sets a new value for a given config parameter of the device.
+	 */
+	public async set(options: ConfigurationCCAPISetOptions): Promise<void>;
+
+	/**
+	 * Sets a new value for a given config parameter of the device.
+	 */
+	public async set(
+		...args:
+			| [
+					parameter: number,
+					value: ConfigValue,
+					valueSize: 1 | 2 | 4,
+					valueFormat?: ConfigValueFormat,
+			  ]
+			| [ConfigurationCCAPISetOptions]
 	): Promise<void> {
 		this.assertSupportsCommand(
 			ConfigurationCommand,
 			ConfigurationCommand.Set,
 		);
 
-		const cc = new ConfigurationCCSet(this.driver, {
-			nodeId: this.endpoint.nodeId,
-			// Don't set an endpoint here, Configuration is device specific, not endpoint specific
-			parameter,
-			value,
-			valueSize,
-			valueFormat,
-		});
+		let cc: ConfigurationCCSet;
+		if (args.length === 1) {
+			const options = normalizeConfigurationCCAPISetOptions(
+				this.endpoint,
+				args[0],
+			);
+			let value = options.value;
+			if (options.bitMask) {
+				const ccc =
+					this.endpoint instanceof Endpoint
+						? this.endpoint.createCCInstance(ConfigurationCC)!
+						: this.endpoint.node.physicalNodes[0].createCCInstance(
+								ConfigurationCC,
+						  )!;
+				value = ccc.composePartialParamValue(
+					options.parameter,
+					options.bitMask,
+					options.value,
+				);
+			}
+			cc = new ConfigurationCCSet(this.driver, {
+				nodeId: this.endpoint.nodeId,
+				// Don't set an endpoint here, Configuration is device specific, not endpoint specific
+				resetToDefault: false,
+				parameter: options.parameter,
+				value,
+				valueSize: options.valueSize,
+				valueFormat: options.valueFormat,
+			});
+		} else {
+			cc = new ConfigurationCCSet(this.driver, {
+				nodeId: this.endpoint.nodeId,
+				// Don't set an endpoint here, Configuration is device specific, not endpoint specific
+				resetToDefault: false,
+				parameter: args[0],
+				value: args[1],
+				valueSize: args[2],
+				valueFormat: args[3] ?? ConfigValueFormat.SignedInteger,
+			});
+		}
+
 		await this.driver.sendCommand(cc, this.commandOptions);
 	}
 
 	/**
-	 * Sets a new value for multiple config parameters of the device. Uses BulkSet if supported, otherwise falls back to individual Set commands.
+	 * Sets new values for multiple config parameters of the device. Uses the `BulkSet` command if supported, otherwise falls back to individual `Set` commands.
 	 */
 	public async setBulk(
-		values: {
-			parameter: number;
-			value: ConfigValue;
-			valueSize: 1 | 2 | 4;
-			valueFormat?: ConfigValueFormat;
-		}[],
+		values: ConfigurationCCAPISetOptions[],
 	): Promise<void> {
+		// Normalize the values so we can better work with them
+		const normalized = values.map((v) =>
+			normalizeConfigurationCCAPISetOptions(this.endpoint, v),
+		);
+		// And merge multiple partials that belong the same "full" value
+		const allParams = bulkMergePartialParamValues(
+			this.endpoint,
+			normalized,
+		);
+
 		const canUseBulkSet =
 			this.supportsCommand(ConfigurationCommand.BulkSet) &&
 			// For Bulk Set we need consecutive parameters
-			isConsecutiveArray(values.map((v) => v.parameter)) &&
+			isConsecutiveArray(allParams.map((v) => v.parameter)) &&
 			// and identical format
-			new Set(values.map((v) => v.valueFormat)).size === 1 &&
+			new Set(allParams.map((v) => v.valueFormat)).size === 1 &&
 			// and identical size
-			new Set(values.map((v) => v.valueSize)).size === 1;
+			new Set(allParams.map((v) => v.valueSize)).size === 1;
 
 		if (canUseBulkSet) {
 			const cc = new ConfigurationCCBulkSet(this.driver, {
 				nodeId: this.endpoint.nodeId,
 				// Don't set an endpoint here, Configuration is device specific, not endpoint specific
-				parameters: values.map((v) => v.parameter),
-				valueSize: values[0].valueSize,
-				valueFormat: values[0].valueFormat,
-				values: values.map((v) => v.value as number),
+				parameters: allParams.map((v) => v.parameter),
+				valueSize: allParams[0].valueSize,
+				valueFormat: allParams[0].valueFormat,
+				values: allParams.map((v) => v.value as number),
 				handshake: true,
 			});
 			await this.driver.sendCommand(cc, this.commandOptions);
@@ -397,7 +602,12 @@ export class ConfigurationCCAPI extends CCAPI {
 				ConfigurationCommand,
 				ConfigurationCommand.Set,
 			);
-			for (const { parameter, value, valueSize, valueFormat } of values) {
+			for (const {
+				parameter,
+				value,
+				valueSize,
+				valueFormat,
+			} of allParams) {
 				const cc = new ConfigurationCCSet(this.driver, {
 					nodeId: this.endpoint.nodeId,
 					// Don't set an endpoint here, Configuration is device specific, not endpoint specific
@@ -870,11 +1080,9 @@ alters capabilities: ${!!properties.altersCapabilities}`;
 	): ConfigurationMetadata {
 		const valueDB = this.getValueDB();
 		const valueId = getParamInformationValueID(parameter, valueBitMask);
-		return (
-			valueDB.getMetadata(valueId) ?? {
-				...ValueMetadata.Any,
-			}
-		);
+		return (valueDB.getMetadata(valueId) ?? {
+			...ValueMetadata.Any,
+		}) as ConfigurationMetadata;
 	}
 
 	/**
@@ -1320,7 +1528,7 @@ export class ConfigurationCCSet extends ConfigurationCC {
 					2,
 					valueSize,
 					this.valueFormat!,
-					this.value,
+					this.value!,
 				);
 			} catch (e) {
 				tryCatchOutOfBoundsError(
