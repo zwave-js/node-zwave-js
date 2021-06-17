@@ -362,6 +362,56 @@ export class ConfigurationCCAPI extends CCAPI {
 	}
 
 	/**
+	 * Sets a new value for multiple config parameters of the device. Uses BulkSet if supported, otherwise falls back to individual Set commands.
+	 */
+	public async setBulk(
+		values: {
+			parameter: number;
+			value: ConfigValue;
+			valueSize: 1 | 2 | 4;
+			valueFormat?: ConfigValueFormat;
+		}[],
+	): Promise<void> {
+		const canUseBulkSet =
+			this.supportsCommand(ConfigurationCommand.BulkSet) &&
+			// For Bulk Set we need consecutive parameters
+			isConsecutiveArray(values.map((v) => v.parameter)) &&
+			// and identical format
+			new Set(values.map((v) => v.valueFormat)).size === 1 &&
+			// and identical size
+			new Set(values.map((v) => v.valueSize)).size === 1;
+
+		if (canUseBulkSet) {
+			const cc = new ConfigurationCCBulkSet(this.driver, {
+				nodeId: this.endpoint.nodeId,
+				// Don't set an endpoint here, Configuration is device specific, not endpoint specific
+				parameters: values.map((v) => v.parameter),
+				valueSize: values[0].valueSize,
+				valueFormat: values[0].valueFormat,
+				values: values.map((v) => v.value as number),
+				handshake: true,
+			});
+			await this.driver.sendCommand(cc, this.commandOptions);
+		} else {
+			this.assertSupportsCommand(
+				ConfigurationCommand,
+				ConfigurationCommand.Set,
+			);
+			for (const { parameter, value, valueSize, valueFormat } of values) {
+				const cc = new ConfigurationCCSet(this.driver, {
+					nodeId: this.endpoint.nodeId,
+					// Don't set an endpoint here, Configuration is device specific, not endpoint specific
+					parameter,
+					value,
+					valueSize,
+					valueFormat,
+				});
+				await this.driver.sendCommand(cc, this.commandOptions);
+			}
+		}
+	}
+
+	/**
 	 * Resets a configuration parameter to its default value.
 	 *
 	 * WARNING: This will throw on legacy devices (ConfigurationCC v3 and below)
@@ -379,6 +429,43 @@ export class ConfigurationCCAPI extends CCAPI {
 			resetToDefault: true,
 		});
 		await this.driver.sendCommand(cc, this.commandOptions);
+	}
+
+	/**
+	 * Resets multiple configuration parameters to their default value. Uses BulkSet if supported, otherwise falls back to individual Set commands.
+	 *
+	 * WARNING: This will throw on legacy devices (ConfigurationCC v3 and below)
+	 */
+	public async resetBulk(parameters: number[]): Promise<void> {
+		if (
+			isConsecutiveArray(parameters) &&
+			this.supportsCommand(ConfigurationCommand.BulkSet)
+		) {
+			const cc = new ConfigurationCCBulkSet(this.driver, {
+				nodeId: this.endpoint.nodeId,
+				// Don't set an endpoint here, Configuration is device specific, not endpoint specific
+				parameters,
+				resetToDefault: true,
+			});
+			await this.driver.sendCommand(cc, this.commandOptions);
+		} else {
+			this.assertSupportsCommand(
+				ConfigurationCommand,
+				ConfigurationCommand.Set,
+			);
+			const CCs = distinct(parameters).map(
+				(parameter) =>
+					new ConfigurationCCSet(this.driver, {
+						nodeId: this.endpoint.nodeId,
+						// Don't set an endpoint here, Configuration is device specific, not endpoint specific
+						parameter,
+						resetToDefault: true,
+					}),
+			);
+			for (const cc of CCs) {
+				await this.driver.sendCommand(cc, this.commandOptions);
+			}
+		}
 	}
 
 	/** Resets all configuration parameters to their default value */
@@ -1265,6 +1352,7 @@ type ConfigurationCCBulkSetOptions = CCCommandOptions & {
 		| {
 				resetToDefault?: false;
 				valueSize: number;
+				valueFormat?: ConfigValueFormat;
 				values: number[];
 		  }
 	);
@@ -1306,9 +1394,14 @@ export class ConfigurationCCBulkSet extends ConfigurationCC {
 			this._resetToDefault = !!options.resetToDefault;
 			if (!!options.resetToDefault) {
 				this._valueSize = 1;
+				this._valueFormat = ConfigValueFormat.SignedInteger;
 				this._values = this._parameters.map(() => 0);
 			} else {
 				this._valueSize = options.valueSize;
+				this._valueFormat =
+					options.valueFormat ??
+					this.getParamInformation(this._parameters[0]).format ??
+					ConfigValueFormat.SignedInteger;
 				this._values = options.values;
 			}
 		}
@@ -1325,6 +1418,10 @@ export class ConfigurationCCBulkSet extends ConfigurationCC {
 	private _valueSize: number;
 	public get valueSize(): number {
 		return this._valueSize;
+	}
+	private _valueFormat: ConfigValueFormat;
+	public get valueFormat(): ConfigValueFormat {
+		return this._valueFormat;
 	}
 	private _values: number[];
 	public get values(): number[] {
@@ -1349,18 +1446,15 @@ export class ConfigurationCCBulkSet extends ConfigurationCC {
 			for (let i = 0; i < this.parameters.length; i++) {
 				const value = this._values[i];
 				const param = this._parameters[i];
-				const valueFormat =
-					this.getParamInformation(param).format ??
-					ConfigValueFormat.SignedInteger;
 
 				// Make sure that the given value fits into the value size
-				if (!isSafeValue(value, valueSize, valueFormat)) {
+				if (!isSafeValue(value, valueSize, this._valueFormat)) {
 					// If there is a value size configured, check that the given value is compatible
 					throwInvalidValueError(
 						value,
 						param,
 						valueSize,
-						valueFormat,
+						this._valueFormat,
 					);
 				}
 
@@ -1369,7 +1463,7 @@ export class ConfigurationCCBulkSet extends ConfigurationCC {
 						this.payload,
 						4 + i * valueSize,
 						valueSize,
-						valueFormat,
+						this._valueFormat,
 						value,
 					);
 				} catch (e) {
@@ -1378,7 +1472,7 @@ export class ConfigurationCCBulkSet extends ConfigurationCC {
 						value,
 						param,
 						valueSize,
-						valueFormat,
+						this._valueFormat,
 					);
 				}
 			}

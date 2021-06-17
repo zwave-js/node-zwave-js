@@ -34,6 +34,21 @@ async set(
 
 Sets a new value for a given config parameter of the device.
 
+### `setBulk`
+
+```ts
+async setBulk(
+	values: {
+		parameter: number;
+		value: ConfigValue;
+		valueSize: 1 | 2 | 4;
+		valueFormat?: ConfigValueFormat;
+	}[],
+): Promise<void>;
+```
+
+Sets a new value for multiple config parameters of the device. Uses BulkSet if supported, otherwise falls back to individual Set commands.
+
 ### `reset`
 
 ```ts
@@ -41,6 +56,16 @@ async reset(parameter: number): Promise<void>;
 ```
 
 Resets a configuration parameter to its default value.
+
+WARNING: This will throw on legacy devices (ConfigurationCC v3 and below).
+
+### `resetBulk`
+
+```ts
+async resetBulk(parameters: number[]): Promise<void>;
+```
+
+Resets multiple configuration parameters to their default value. Uses BulkSet if supported, otherwise falls back to individual Set commands.
 
 WARNING: This will throw on legacy devices (ConfigurationCC v3 and below).
 
