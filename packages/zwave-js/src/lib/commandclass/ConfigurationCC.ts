@@ -127,6 +127,7 @@ export type ConfigurationCCAPISetOptions = {
 			value: number;
 	  }
 );
+
 type NormalizedConfigurationCCAPISetOptions = {
 	parameter: number;
 	valueSize: 1 | 2 | 4;

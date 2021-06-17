@@ -21,6 +21,26 @@ This may timeout and return `undefined` if the node does not respond.
 If the node replied with a different parameter number, a `ConfigurationCCError`
 is thrown with the `argument` property set to the reported parameter number.
 
+### `getBulk`
+
+```ts
+async getBulk(
+	options: {
+		parameter: number;
+		bitMask?: number;
+	}[],
+): Promise<
+	{
+		parameter: number;
+		bitMask?: number;
+		value: ConfigValue | undefined;
+	}[]
+>;
+```
+
+Requests the current value of the config parameters from the device.
+When the node does not respond due to a timeout, the `value` in the returned array will be `undefined`.
+
 ### `set`
 
 ```ts
@@ -28,8 +48,10 @@ async set(
 	parameter: number,
 	value: ConfigValue,
 	valueSize: 1 | 2 | 4,
-	valueFormat: ConfigValueFormat = ConfigValueFormat.SignedInteger,
+	valueFormat?: ConfigValueFormat,
 ): Promise<void>;
+
+async set(options: ConfigurationCCAPISetOptions): Promise<void>;
 ```
 
 Sets a new value for a given config parameter of the device.
@@ -38,16 +60,11 @@ Sets a new value for a given config parameter of the device.
 
 ```ts
 async setBulk(
-	values: {
-		parameter: number;
-		value: ConfigValue;
-		valueSize: 1 | 2 | 4;
-		valueFormat?: ConfigValueFormat;
-	}[],
+	values: ConfigurationCCAPISetOptions[],
 ): Promise<void>;
 ```
 
-Sets a new value for multiple config parameters of the device. Uses BulkSet if supported, otherwise falls back to individual Set commands.
+Sets new values for multiple config parameters of the device. Uses the `BulkSet` command if supported, otherwise falls back to individual `Set` commands.
 
 ### `reset`
 
