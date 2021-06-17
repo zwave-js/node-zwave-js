@@ -484,6 +484,89 @@ export class ConfigurationCCAPI extends CCAPI {
 	}
 
 	/**
+	 * Requests the current value of the config parameters from the device.
+	 * When the node does not respond due to a timeout, the `value` in the returned array will be `undefined`.
+	 */
+	public async getBulk(
+		options: {
+			parameter: number;
+			bitMask?: number;
+		}[],
+	): Promise<
+		{
+			parameter: number;
+			bitMask?: number;
+			value: ConfigValue | undefined;
+		}[]
+	> {
+		// Get-type commands are only possible in singlecast
+		this.assertPhysicalEndpoint(this.endpoint);
+
+		let values: ReadonlyMap<number, ConfigValue>;
+
+		// If the parameters are consecutive, we may use BulkGet
+		const distinctParameters = distinct(options.map((o) => o.parameter));
+		if (
+			this.supportsCommand(ConfigurationCommand.BulkGet) &&
+			isConsecutiveArray(distinctParameters)
+		) {
+			const cc = new ConfigurationCCBulkGet(this.driver, {
+				nodeId: this.endpoint.nodeId,
+				// Don't set an endpoint here, Configuration is device specific, not endpoint specific
+				parameters: distinctParameters,
+			});
+			const response =
+				await this.driver.sendCommand<ConfigurationCCBulkReport>(
+					cc,
+					this.commandOptions,
+				);
+			if (response) values = response.values;
+		} else {
+			this.assertSupportsCommand(
+				ConfigurationCommand,
+				ConfigurationCommand.Get,
+			);
+
+			const _values = new Map<number, ConfigValue>();
+			for (const parameter of distinctParameters) {
+				const cc = new ConfigurationCCGet(this.driver, {
+					nodeId: this.endpoint.nodeId,
+					// Don't set an endpoint here, Configuration is device specific, not endpoint specific
+					parameter,
+				});
+				const response =
+					await this.driver.sendCommand<ConfigurationCCReport>(
+						cc,
+						this.commandOptions,
+					);
+				if (response) {
+					_values.set(response.parameter, response.value);
+				}
+			}
+			values = _values;
+		}
+
+		// Combine the returned values with the requested ones
+		const cc = this.endpoint.createCCInstance(ConfigurationCC)!;
+		return options.map((o) => {
+			let value = values.get(o.parameter);
+			if (typeof value === "number" && o.bitMask) {
+				const paramInfo = cc.getParamInformation(
+					o.parameter,
+					o.bitMask,
+				);
+				value = parsePartial(
+					value,
+					o.bitMask,
+					(paramInfo.format ?? ConfigValueFormat.SignedInteger) ===
+						ConfigValueFormat.SignedInteger,
+				);
+			}
+			return { ...o, value };
+		});
+	}
+
+	/**
 	 * Sets a new value for a given config parameter of the device.
 	 * @deprecated Use the overload with an options object instead
 	 */
