@@ -21,17 +21,14 @@
 		},
 		"2": {
 			"label": "Basic Set",
-			"description": "Send a Basic Set command when the contact opens or closes.",
 			"maxNodes": 5
 		},
 		"3": {
 			"label": "Notification Report",
-			"description": "Send a Notification Report when the contact opens or closes.",
 			"maxNodes": 5
 		},
 		"4": {
 			"label": "Binary Sensor Report",
-			"description": "Sets a Binary Sensor when the contact opens or closes.",
 			"maxNodes": 5
 		}
 	},
