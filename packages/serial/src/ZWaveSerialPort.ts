@@ -1,6 +1,10 @@
-import type { ZWaveLogContainer } from "@zwave-js/core";
+import { ZWaveError, ZWaveErrorCodes, ZWaveLogContainer } from "@zwave-js/core";
 import type SerialPort from "serialport";
 import { ZWaveSerialPortBase } from "./ZWaveSerialPortBase";
+
+interface DisconnectError extends Error {
+	disconnected: boolean;
+}
 
 /** The default version of the Z-Wave serial binding that works using node-serialport */
 export class ZWaveSerialPort extends ZWaveSerialPortBase {
@@ -27,6 +31,18 @@ export class ZWaveSerialPort extends ZWaveSerialPortBase {
 					}),
 				open: (serial: SerialPort) =>
 					new Promise((resolve) => {
+						// detect serial disconnection errors
+						serial.on("close", (err: DisconnectError) => {
+							if (err?.disconnected === true) {
+								this.emit(
+									"error",
+									new ZWaveError(
+										`The socket closed unexpectedly!`,
+										ZWaveErrorCodes.Driver_Failed,
+									),
+								);
+							}
+						});
 						serial.once("open", resolve).open();
 					}),
 				close: (serial: SerialPort) =>

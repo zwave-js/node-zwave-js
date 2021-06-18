@@ -6,10 +6,6 @@ export type ZWaveSocketOptions =
 	| Omit<net.TcpSocketConnectOpts, "onread">
 	| Omit<net.IpcSocketConnectOpts, "onread">;
 
-export interface DisconnectError extends Error {
-	disconnected: boolean;
-}
-
 /** A version of the Z-Wave serial binding that works using a socket (TCP or IPC) */
 export class ZWaveSocket extends ZWaveSerialPortBase {
 	constructor(
@@ -21,8 +17,8 @@ export class ZWaveSocket extends ZWaveSerialPortBase {
 				create: () => new net.Socket(),
 				open: (serial: net.Socket) =>
 					new Promise((resolve) => {
-						serial.on("close", (err: DisconnectError) => {
-							if (err?.disconnected === true) {
+						serial.on("close", () => {
+							if (!this.isOpen) {
 								this.emit(
 									"error",
 									new ZWaveError(
