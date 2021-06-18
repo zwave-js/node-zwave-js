@@ -1,7 +1,7 @@
 {
 	"manufacturer": "Nortek Security & Control LLC",
 	"manufacturerId": "0x014f",
-	"label": "PS15EMZ51",
+	"label": "PS15EMZ5-1",
 	"description": "Appliance Module",
 	"devices": [
 		{
@@ -13,17 +13,16 @@
 		"min": "0.0",
 		"max": "255.255"
 	},
-	"supportsZWavePlus": true,
 	"paramInformation": {
 		"2": {
-			"label": "LED Intensity",
+			"label": "LED Indicator: Brightness",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 100,
 			"defaultValue": 100
 		},
 		"3": {
-			"label": "Night Light",
+			"label": "LED Indicator: Mode",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 3,
@@ -31,55 +30,69 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "LED ON when the load is ON",
+					"label": "On when the load is on",
 					"value": 0
 				},
 				{
-					"label": "LED OFF when the load is on",
+					"label": "On when the load is off",
 					"value": 1
 				},
 				{
-					"label": "LED is always ON",
+					"label": "Always ON",
 					"value": 2
 				},
 				{
-					"label": "LED is always off",
+					"label": "Always off",
 					"value": 3
 				}
 			]
 		},
 		"11": {
-			"label": "LED Power Monitoring",
+			"label": "LED Indicator: Power Monitoring Display",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 1,
-			"defaultValue": 1
+			"defaultValue": 1,
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "Power Monitoring ON",
-					"value": 1
+					"label": "Disable",
+					"value": 0
 				},
 				{
-					"label": "Power Monitoring OFF",
+					"label": "Enable",
+					"value": 1
+				}
+			]
+		},
+		"12": {
+			"label": "LED Indicator: Power Monitoring Display Duration",
+			"description": "Sets the length of time for which the LED will reflect the current power usage",
+			"valueSize": 2,
+			"unit": "seconds",
+			"minValue": 1,
+			"maxValue": 255,
+			"defaultValue": 60,
+			"options": [
+				{
+					"label": "Continuous",
+					"value": 255
+				}
+			]
+		},
+		"13": {
+			"label": "Energy Usage Reporting Interval",
+			"valueSize": 2,
+			"unit": "minutes",
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 6,
+			"options": [
+				{
+					"label": "Disable",
 					"value": 0
 				}
 			]
-
-		},
-		"12": {
-			"label": "LED Power Monitoring Seconds",
-			"valueSize": 2,
-			"minValue": 1,
-			"maxValue": 255,
-			"defaultValue": 60
-		},
-		"13": {
-			"label": "Energy Monitoring",
-			"valueSize": 2,
-			"minValue": 0,
-			"maxValue": 255,
-			"defaultValue": 6
 		}
 	}
 }
