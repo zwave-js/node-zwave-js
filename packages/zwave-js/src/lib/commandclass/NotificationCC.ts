@@ -889,16 +889,24 @@ export class NotificationCCReport extends NotificationCC {
 
 		const valueDB = this.getValueDB();
 		if (this.alarmType != undefined) {
-			valueDB.setValue(
-				getAlarmTypeValueId(this.endpointIndex),
-				this.alarmType,
-			);
+			const valueId = getAlarmTypeValueId(this.endpointIndex);
+			if (!valueDB.hasMetadata(valueId)) {
+				valueDB.setMetadata(valueId, {
+					...ValueMetadata.ReadOnlyUInt8,
+					label: "Alarm Type",
+				});
+			}
+			valueDB.setValue(valueId, this.alarmType);
 		}
 		if (this.alarmLevel != undefined) {
-			valueDB.setValue(
-				getAlarmLevelValueId(this.endpointIndex),
-				this.alarmLevel,
-			);
+			const valueId = getAlarmLevelValueId(this.endpointIndex);
+			if (!valueDB.hasMetadata(valueId)) {
+				valueDB.setMetadata(valueId, {
+					...ValueMetadata.ReadOnlyUInt8,
+					label: "Alarm Level",
+				});
+			}
+			valueDB.setValue(valueId, this.alarmLevel);
 		}
 
 		return true;
