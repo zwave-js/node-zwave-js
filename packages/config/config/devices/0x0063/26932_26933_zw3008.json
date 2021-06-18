@@ -24,12 +24,7 @@
 			"isLifeline": true
 		},
 		"2": {
-			"label": "Group 2 Basic Set",
-			"maxNodes": 5,
-			"description": "Controlled by pressing On/Off button with local load"
-		},
-		"3": {
-			"label": "Group 3 Basic Set",
+			"label": "Basic Set",
 			"maxNodes": 5,
 			"description": "Controlled by pressing On/Off button with local load"
 		}
