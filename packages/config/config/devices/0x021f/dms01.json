@@ -21,12 +21,10 @@
 		},
 		"2": {
 			"label": "Basic Set",
-			"description": "The Siren sends a single command to this group whenever the Siren is turned on or off.",
 			"maxNodes": 5
 		},
 		"3": {
 			"label": "Notification Report",
-			"description": "The Siren sends a single command to this group, a Notification Report, whenever the Siren is turned on or off.",
 			"maxNodes": 5
 		}
 	},
