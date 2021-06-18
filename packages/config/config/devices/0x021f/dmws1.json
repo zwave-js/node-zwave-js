@@ -21,17 +21,14 @@
 		},
 		"2": {
 			"label": "Basic Set",
-			"description": "The Leak Sensor sends a Basic Set command to directly trigger devices in response to a detected leak.",
 			"maxNodes": 5
 		},
 		"3": {
 			"label": "Notification Report",
-			"description": "The Leak Sensor sends it a Notification Report when water is detected or removed.",
 			"maxNodes": 5
 		},
 		"4": {
 			"label": "Binary Sensor Report",
-			"description": "The Leak Sensor sends it a Binary Sensor Report when water is detected or removed.",
 			"maxNodes": 5
 		}
 	},
