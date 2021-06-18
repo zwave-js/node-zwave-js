@@ -28,11 +28,11 @@
 					"value": 0
 				},
 				{
-					"label": "Last brightness setting",
+					"label": "Last non-zero brightness",
 					"value": 1
 				},
 				{
-					"label": "Last lamp status",
+					"label": "Previous state",
 					"value": 2
 				}
 			]
