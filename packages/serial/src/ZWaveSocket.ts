@@ -18,7 +18,7 @@ export class ZWaveSocket extends ZWaveSerialPortBase {
 				open: (serial: net.Socket) =>
 					new Promise((resolve) => {
 						serial.on("close", () => {
-							if (!this.isOpen) {
+							if (this.isOpen) {
 								this.emit(
 									"error",
 									new ZWaveError(
