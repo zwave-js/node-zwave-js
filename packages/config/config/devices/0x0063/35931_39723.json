@@ -1,7 +1,7 @@
 {
 	"manufacturer": "GE/Jasco",
 	"manufacturerId": "0x0063",
-	"label": "35931",
+	"label": "35931 / 39723",
 	"description": "Enbrighten 60W Dimmable Light Bulb",
 	"devices": [
 		{
@@ -19,7 +19,7 @@
 			"label": "Dim level when light is turned ON",
 			"valueSize": 1,
 			"minValue": 0,
-			"maxValue": 1,
+			"maxValue": 2,
 			"defaultValue": 0,
 			"allowManualEntry": false,
 			"options": [
@@ -28,8 +28,12 @@
 					"value": 0
 				},
 				{
-					"label": "Last brightness setting",
+					"label": "Last non-zero brightness",
 					"value": 1
+				},
+				{
+					"label": "Previous state",
+					"value": 2
 				}
 			]
 		},
