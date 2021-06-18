@@ -32,12 +32,12 @@ export class ZWaveSerialPort extends ZWaveSerialPortBase {
 				open: (serial: SerialPort) =>
 					new Promise((resolve) => {
 						// detect serial disconnection errors
-						serial.on("close", (err: DisconnectError) => {
+						serial.on("close", (err?: DisconnectError) => {
 							if (err?.disconnected === true) {
 								this.emit(
 									"error",
 									new ZWaveError(
-										`The socket closed unexpectedly!`,
+										`The serial port closed unexpectedly!`,
 										ZWaveErrorCodes.Driver_Failed,
 									),
 								);
