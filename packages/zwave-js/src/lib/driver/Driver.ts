@@ -644,8 +644,8 @@ export class Driver extends EventEmitter {
 					this.serialport_onError(err);
 				} else {
 					spOpenPromise.reject(err);
-					void this.destroy();
 				}
+				void this.destroy();
 			});
 		// If the port is already open, close it first
 		if (this.serial.isOpen) await this.serial.close();
