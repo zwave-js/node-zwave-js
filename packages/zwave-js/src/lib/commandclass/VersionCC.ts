@@ -39,6 +39,13 @@ export function getFirmwareVersionsValueId(): ValueID {
 	};
 }
 
+export function getFirmwareVersionsMetadata(): ValueMetadata {
+	return {
+		...ValueMetadata.ReadOnly,
+		label: "Z-Wave chip firmware versions",
+	};
+}
+
 export enum VersionCommand {
 	Get = 0x11,
 	Report = 0x12,
@@ -400,10 +407,7 @@ export class VersionCCReport extends VersionCC {
 
 	private _firmwareVersions: string[];
 	@ccValue()
-	@ccValueMetadata({
-		...ValueMetadata.ReadOnly,
-		label: "Z-Wave chip firmware versions",
-	})
+	@ccValueMetadata(getFirmwareVersionsMetadata())
 	public get firmwareVersions(): string[] {
 		return this._firmwareVersions;
 	}
