@@ -21,12 +21,10 @@
 		},
 		"2": {
 			"label": "Basic Set",
-			"description": "The Plug-In Switch sends a Basic Set command to directly trigger devices when the current passes above the level set in Parameter 3.",
 			"maxNodes": 5
 		},
 		"3": {
 			"label": "Notification Report",
-			"description": "The Plug-In Switch sends Notification Reports to devices in this group.",
 			"maxNodes": 5
 		}
 	},
