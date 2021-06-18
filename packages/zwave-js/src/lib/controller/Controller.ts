@@ -46,6 +46,10 @@ import type {
 	EndpointAddress,
 	MultiChannelAssociationCC,
 } from "../commandclass/MultiChannelAssociationCC";
+import {
+	getFirmwareVersionsMetadata,
+	getFirmwareVersionsValueId,
+} from "../commandclass/VersionCC";
 import type { Driver, RequestHandler } from "../driver/Driver";
 import { FunctionType } from "../message/Constants";
 import type { Message } from "../message/Message";
@@ -679,6 +683,15 @@ export class ZWaveController extends EventEmitter {
 		);
 		controllerValueDB.setValue(getProductTypeValueId(), this._productType);
 		controllerValueDB.setValue(getProductIdValueId(), this._productId);
+
+		// Set firmware version information for the controller node
+		controllerValueDB.setMetadata(
+			getFirmwareVersionsValueId(),
+			getFirmwareVersionsMetadata(),
+		);
+		controllerValueDB.setValue(getFirmwareVersionsValueId(), [
+			this._serialApiVersion,
+		]);
 
 		if (
 			this.type !== ZWaveLibraryTypes["Bridge Controller"] &&
