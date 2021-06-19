@@ -1002,15 +1002,25 @@ export class MultiChannelCCCommandEncapsulation extends MultiChannelCC {
 		super(driver, options);
 		if (gotDeserializationOptions(options)) {
 			validatePayload(this.payload.length >= 2);
-			this.endpointIndex = this.payload[0] & 0b0111_1111;
-			const isBitMask = !!(this.payload[1] & 0b1000_0000);
-			const destination = this.payload[1] & 0b0111_1111;
-			if (isBitMask) {
-				this.destination = parseBitMask(
-					Buffer.from([destination]),
-				) as any;
+			if (
+				this.getNodeUnsafe()?.deviceConfig?.compat
+					?.treatDestinationEndpointAsSource
+			) {
+				// This device incorrectly uses the destination field to indicate the source endpoint
+				this.endpointIndex = this.payload[1] & 0b0111_1111;
+				this.destination = 0;
 			} else {
-				this.destination = destination;
+				// Parse normally
+				this.endpointIndex = this.payload[0] & 0b0111_1111;
+				const isBitMask = !!(this.payload[1] & 0b1000_0000);
+				const destination = this.payload[1] & 0b0111_1111;
+				if (isBitMask) {
+					this.destination = parseBitMask(
+						Buffer.from([destination]),
+					) as any;
+				} else {
+					this.destination = destination;
+				}
 			}
 			// No need to validate further, each CC does it for itself
 			this.encapsulated = CommandClass.from(this.driver, {
