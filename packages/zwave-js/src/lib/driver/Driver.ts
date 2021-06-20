@@ -2360,6 +2360,7 @@ ${handlers.length} left`,
 					e.context.functionType !==
 						FunctionType.SendDataMulticastBridge
 				) {
+					this.controller.incrementStatistics("messagesDroppedTX");
 					return e.context as TResponse;
 				}
 			}
