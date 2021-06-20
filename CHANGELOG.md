@@ -2,6 +2,27 @@
 <!--
 	Add placeholder for next release with `wip` snippet
 -->
+## __WORK IN PROGRESS__
+### Features
+* The `firmwareVersion` property for the controller node now returns the serial API version
+* Support bulk-setting, bulk-getting and bulk-resetting configuration parameters, handle partial parameters automatically
+
+### Bugfixes
+* Detect serial disconnection, destroy driver on serial/socket failure
+* V1 alarm metadata is now created on demand, even if the device claims it does not support V1 alarms
+
+### Config file changes
+* Add compat flag to treat destination endpoint as source, apply to Greenwave GWPN6
+* Add alarm mapping for First Alert ZCOMBO
+* Add missing param 1 config option to Jasco 35931
+* Add additional association groups for Elexa/Dome Home Automation Products
+* Add additional productID for the Yale YKFCON
+* Update Nortek Device Configs
+* Add fingerprint to Kwikset 912
+
+### Changes under the hood
+* Handle internal and filename-less stack traces in Sentry filter
+
 ## 7.7.5 (2021-06-16)
 ### Bugfixes
 * Nodes are no longer sent to sleep while a scheduled verification poll is pending
