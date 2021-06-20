@@ -129,6 +129,7 @@ import {
 } from "../controller/GetNodeProtocolInfoMessages";
 import type { Driver, SendCommandOptions } from "../driver/Driver";
 import { Extended, interpretEx } from "../driver/StateMachineShared";
+import type { StatisticsEventCallbacks } from "../driver/Statistics";
 import type { Transaction } from "../driver/Transaction";
 import { MessagePriority } from "../message/Constants";
 import { DeviceClass } from "./DeviceClass";
@@ -137,6 +138,7 @@ import {
 	createNodeReadyMachine,
 	NodeReadyInterpreter,
 } from "./NodeReadyMachine";
+import { NodeStatistics, NodeStatisticsHost } from "./NodeStatistics";
 import {
 	createNodeStatusMachine,
 	NodeStatusInterpreter,
@@ -163,14 +165,17 @@ function getNodeMetaValueID(property: string): ValueID {
 	};
 }
 
-// eslint-disable-next-line @typescript-eslint/no-empty-interface
-export interface ZWaveNode extends TypedEventEmitter<ZWaveNodeEventCallbacks> {}
+export interface ZWaveNode
+	extends TypedEventEmitter<
+			ZWaveNodeEventCallbacks & StatisticsEventCallbacks<NodeStatistics>
+		>,
+		NodeStatisticsHost {}
 
 /**
  * A ZWaveNode represents a node in a Z-Wave network. It is also an instance
  * of its root endpoint (index 0)
  */
-@Mixin([EventEmitter])
+@Mixin([EventEmitter, NodeStatisticsHost])
 export class ZWaveNode extends Endpoint {
 	public constructor(
 		public readonly id: number,

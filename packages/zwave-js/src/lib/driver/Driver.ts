@@ -1540,7 +1540,7 @@ export class Driver extends TypedEventEmitter<DriverEventCallbacks> {
 			// Then ensure there are no errors
 			if (isCommandClassContainer(msg)) {
 				assertValidCCs(msg);
-				// TODO: Update node statistics
+				msg.getNodeUnsafe()?.incrementStatistics("commandsRX");
 			} else {
 				this.controller.incrementStatistics("messagesRX");
 			}
@@ -1551,7 +1551,9 @@ export class Driver extends TypedEventEmitter<DriverEventCallbacks> {
 				const response = this.handleDecodeError(e, data, msg);
 				if (response) await this.writeHeader(response);
 				if (isCommandClassContainer(msg)) {
-					// TODO: Update node statistics
+					msg.getNodeUnsafe()?.incrementStatistics(
+						"commandsDroppedRX",
+					);
 				} else {
 					this.controller.incrementStatistics("messagesDroppedRX");
 				}
@@ -2324,7 +2326,7 @@ ${handlers.length} left`,
 			if (expirationTimeout) clearTimeout(expirationTimeout);
 			// Update statistics
 			if (isSendData(msg)) {
-				// TODO: update node statistics
+				node?.incrementStatistics("commandsTX");
 			} else {
 				this.controller.incrementStatistics("messagesTX");
 			}
@@ -2362,6 +2364,9 @@ ${handlers.length} left`,
 				) {
 					this.controller.incrementStatistics("messagesDroppedTX");
 					return e.context as TResponse;
+				} else if (e.code === ZWaveErrorCodes.Controller_NodeTimeout) {
+					// If the node failed to respond in time, remember this for the statistics
+					node?.incrementStatistics("timeoutResponse");
 				}
 			}
 			throw e;
