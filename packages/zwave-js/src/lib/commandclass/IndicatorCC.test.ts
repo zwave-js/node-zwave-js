@@ -33,6 +33,9 @@ describe("lib/commandclass/IndicatorCC => ", () => {
 			isSupported: true,
 			version: 3,
 		});
+
+		// Loading configuration may take a while on CI
+		if (process.env.CI) jest.setTimeout(30000);
 		await fakeDriver.configManager.loadIndicators();
 	});
 

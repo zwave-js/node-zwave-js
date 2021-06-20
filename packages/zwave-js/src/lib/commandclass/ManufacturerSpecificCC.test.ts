@@ -53,7 +53,10 @@ describe("lib/commandclass/ManufacturerSpecificCC => ", () => {
 		}
 
 		beforeAll(async () => {
+			// Loading configuration may take a while on CI
+			if (process.env.CI) jest.setTimeout(30000);
 			await fakeDriver.configManager.loadManufacturers();
+
 			resetSendMessageImplementation();
 			fakeDriver.controller.nodes.set(node.id, node);
 			node.addCC(CommandClasses["Manufacturer Specific"], {

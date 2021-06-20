@@ -88,9 +88,12 @@ describe("lib/node/Node", () => {
 	});
 
 	describe("constructor", () => {
-		const fakeDriver = createEmptyMockDriver() as unknown as Driver;
+		let fakeDriver: Driver;
 
 		beforeAll(async () => {
+			fakeDriver = createEmptyMockDriver() as unknown as Driver;
+			// Loading configuration may take a while on CI
+			if (process.env.CI) jest.setTimeout(30000);
 			await fakeDriver.configManager.loadDeviceClasses();
 		});
 
@@ -199,6 +202,9 @@ describe("lib/node/Node", () => {
 			fakeDriver = createEmptyMockDriver();
 			node = new ZWaveNode(2, fakeDriver as any);
 			(fakeDriver.controller.nodes as any).set(node.id, node);
+
+			// Loading configuration may take a while on CI
+			if (process.env.CI) jest.setTimeout(30000);
 			await fakeDriver.configManager.loadDeviceClasses();
 		});
 
@@ -838,7 +844,11 @@ describe("lib/node/Node", () => {
 		let node: ZWaveNode;
 		beforeEach(async () => {
 			const fakeDriver = createEmptyMockDriver();
+
+			// Loading configuration may take a while on CI
+			if (process.env.CI) jest.setTimeout(30000);
 			await fakeDriver.configManager.loadDeviceClasses();
+
 			node = new ZWaveNode(
 				2,
 				fakeDriver as any,
@@ -947,6 +957,8 @@ describe("lib/node/Node", () => {
 		const fakeDriver = createEmptyMockDriver() as unknown as Driver;
 
 		beforeAll(async () => {
+			// Loading configuration may take a while on CI
+			if (process.env.CI) jest.setTimeout(30000);
 			await fakeDriver.configManager.loadDeviceClasses();
 		});
 
