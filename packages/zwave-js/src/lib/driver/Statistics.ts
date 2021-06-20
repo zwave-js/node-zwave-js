@@ -20,11 +20,12 @@ export abstract class StatisticsHost<T> {
 		this._statistics = updater(this._statistics ?? this.createEmpty());
 		if (!this._emitUpdate) {
 			this._emitUpdate = throttle(
-				((this as unknown) as EventEmitter).emit.bind(
+				(this as unknown as EventEmitter).emit.bind(
 					this,
 					"statistics updated",
 				),
 				250,
+				true,
 			);
 		}
 		this._emitUpdate(this._statistics);
