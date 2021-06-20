@@ -46,74 +46,74 @@
 			]
 		}
 	},
-	"compat":{
-		"alarmMapping":[
+	"compat": {
+		"alarmMapping": [
 			{
-				"from":{
+				"from": {
 					"alarmType": 1,
 					"alarmLevel": 255
 				},
-				"to":{
+				"to": {
 					"notificationType": 1,
 					"notificationEvent": 2
 				}
 			},
 			{
-				"from":{
+				"from": {
 					"alarmType": 1,
 					"alarmLevel": 0
 				},
-				"to":{
+				"to": {
 					"notificationType": 1,
 					"notificationEvent": 0
 				}
 			},
 			{
-				"from":{
+				"from": {
 					"alarmType": 2,
 					"alarmLevel": 255
 				},
-				"to":{
+				"to": {
 					"notificationType": 2,
 					"notificationEvent": 2
 				}
 			},
 			{
-				"from":{
+				"from": {
 					"alarmType": 2,
 					"alarmLevel": 0
 				},
-				"to":{
+				"to": {
 					"notificationType": 2,
 					"notificationEvent": 0
 				}
 			},
 			{
-				"from":{
+				"from": {
 					"alarmType": 12,
 					"alarmLevel": 255
 				},
-				"to":{
+				"to": {
 					"notificationType": 1,
 					"notificationEvent": 3
 				}
 			},
 			{
-				"from":{
+				"from": {
 					"alarmType": 12,
 					"alarmLevel": 0
 				},
-				"to":{
+				"to": {
 					"notificationType": 1,
 					"notificationEvent": 0
 				}
 			},
 			{
-				"from":{
+				"from": {
 					"alarmType": 13,
 					"alarmLevel": 255
 				},
-				"to":{
+				"to": {
 					"notificationType": 1,
 					"notificationEvent": 0
 				}
