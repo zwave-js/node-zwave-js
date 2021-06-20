@@ -2,7 +2,7 @@
 <!--
 	Add placeholder for next release with `wip` snippet
 -->
-## __WORK IN PROGRESS__
+## 7.8.0 (2021-06-20)
 ### Features
 * The `firmwareVersion` property for the controller node now returns the serial API version
 * Support bulk-setting, bulk-getting and bulk-resetting configuration parameters, handle partial parameters automatically
