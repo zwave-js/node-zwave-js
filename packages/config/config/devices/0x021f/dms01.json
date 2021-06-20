@@ -13,7 +13,21 @@
 		"min": "0.0",
 		"max": "255.255"
 	},
-	"supportsZWavePlus": true,
+	"associations": {
+		"1": {
+			"label": "Lifeline",
+			"maxNodes": 5,
+			"isLifeline": true
+		},
+		"2": {
+			"label": "Basic Set",
+			"maxNodes": 5
+		},
+		"3": {
+			"label": "Notification Report",
+			"maxNodes": 5
+		}
+	},
 	"paramInformation": {
 		"1": {
 			"label": "Primary Notification Volume",

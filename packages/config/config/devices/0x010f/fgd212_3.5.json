@@ -94,23 +94,7 @@
 			"defaultValue": 5
 		},
 		"9": {
-			"label": "Saving state before power failure",
-			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 255,
-			"defaultValue": 1,
-			"unsigned": true,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "All outputs are set to OFF upon power restore",
-					"value": 0
-				},
-				{
-					"label": "Outputs set to previous state upon power restore",
-					"value": 1
-				}
-			]
+			"$import": "../templates/master_template.json#state_after_power_failure_off_prev"
 		},
 		"10": {
 			"label": "Timer functionality (auto - off)",

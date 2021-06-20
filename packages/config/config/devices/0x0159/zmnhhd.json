@@ -85,22 +85,7 @@
 			]
 		},
 		"30": {
-			"label": "Restore on/off status for load after power failure",
-			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 1,
-			"defaultValue": 0,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "Save last on/off status",
-					"value": 0
-				},
-				{
-					"label": "Don't save last on/off status",
-					"value": 1
-				}
-			]
+			"$import": "../templates/master_template.json#state_after_power_failure_prev_off"
 		},
 		"40": {
 			"label": "Power Consumption Threshold",

@@ -39,6 +39,13 @@ export function getFirmwareVersionsValueId(): ValueID {
 	};
 }
 
+export function getFirmwareVersionsMetadata(): ValueMetadata {
+	return {
+		...ValueMetadata.ReadOnly,
+		label: "Z-Wave chip firmware versions",
+	};
+}
+
 export enum VersionCommand {
 	Get = 0x11,
 	Report = 0x12,
@@ -123,10 +130,11 @@ export class VersionCCAPI extends PhysicalCCAPI {
 			endpoint: this.endpoint.index,
 			requestedCC,
 		});
-		const response = await this.driver.sendCommand<VersionCCCommandClassReport>(
-			cc,
-			this.commandOptions,
-		);
+		const response =
+			await this.driver.sendCommand<VersionCCCommandClassReport>(
+				cc,
+				this.commandOptions,
+			);
 		return response?.ccVersion;
 	}
 
@@ -141,10 +149,11 @@ export class VersionCCAPI extends PhysicalCCAPI {
 			nodeId: this.endpoint.nodeId,
 			endpoint: this.endpoint.index,
 		});
-		const response = await this.driver.sendCommand<VersionCCCapabilitiesReport>(
-			cc,
-			this.commandOptions,
-		);
+		const response =
+			await this.driver.sendCommand<VersionCCCapabilitiesReport>(
+				cc,
+				this.commandOptions,
+			);
 		if (response) {
 			return pick(response, ["supportsZWaveSoftwareGet"]);
 		}
@@ -161,10 +170,11 @@ export class VersionCCAPI extends PhysicalCCAPI {
 			nodeId: this.endpoint.nodeId,
 			endpoint: this.endpoint.index,
 		});
-		const response = await this.driver.sendCommand<VersionCCZWaveSoftwareReport>(
-			cc,
-			this.commandOptions,
-		);
+		const response =
+			await this.driver.sendCommand<VersionCCZWaveSoftwareReport>(
+				cc,
+				this.commandOptions,
+			);
 		if (response) {
 			return pick(response, [
 				"sdkVersion",
@@ -397,10 +407,7 @@ export class VersionCCReport extends VersionCC {
 
 	private _firmwareVersions: string[];
 	@ccValue()
-	@ccValueMetadata({
-		...ValueMetadata.ReadOnly,
-		label: "Z-Wave chip firmware versions",
-	})
+	@ccValueMetadata(getFirmwareVersionsMetadata())
 	public get firmwareVersions(): string[] {
 		return this._firmwareVersions;
 	}
@@ -552,8 +559,8 @@ export class VersionCCCapabilitiesReport extends VersionCC {
 		return {
 			...super.toLogEntry(),
 			message: {
-				"supports Z-Wave Software Get command": this
-					._supportsZWaveSoftwareGet,
+				"supports Z-Wave Software Get command":
+					this._supportsZWaveSoftwareGet,
 			},
 		};
 	}
@@ -577,9 +584,8 @@ export class VersionCCZWaveSoftwareReport extends VersionCC {
 			this.payload.slice(3),
 		);
 		if (this._applicationFrameworkAPIVersion !== "unused") {
-			this._applicationFrameworkBuildNumber = this.payload.readUInt16BE(
-				6,
-			);
+			this._applicationFrameworkBuildNumber =
+				this.payload.readUInt16BE(6);
 		} else {
 			this._applicationFrameworkBuildNumber = 0;
 		}
@@ -654,25 +660,21 @@ export class VersionCCZWaveSoftwareReport extends VersionCC {
 		const message: MessageRecord = {
 			"SDK version": this._sdkVersion,
 		};
-		message[
-			"appl. framework API version"
-		] = this._applicationFrameworkAPIVersion;
+		message["appl. framework API version"] =
+			this._applicationFrameworkAPIVersion;
 		if (this._applicationFrameworkAPIVersion !== "unused") {
-			message[
-				"appl. framework build number"
-			] = this._applicationFrameworkBuildNumber;
+			message["appl. framework build number"] =
+				this._applicationFrameworkBuildNumber;
 		}
 		message["host interface version"] = this._hostInterfaceVersion;
 		if (this._hostInterfaceVersion !== "unused") {
-			message[
-				"host interface  build number"
-			] = this._hostInterfaceBuildNumber;
+			message["host interface  build number"] =
+				this._hostInterfaceBuildNumber;
 		}
 		message["Z-Wave protocol version"] = this._zWaveProtocolVersion;
 		if (this._zWaveProtocolVersion !== "unused") {
-			message[
-				"Z-Wave protocol build number"
-			] = this._zWaveProtocolBuildNumber;
+			message["Z-Wave protocol build number"] =
+				this._zWaveProtocolBuildNumber;
 		}
 		message["application version"] = this._applicationVersion;
 		if (this._applicationVersion !== "unused") {

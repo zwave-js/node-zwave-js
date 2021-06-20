@@ -149,11 +149,11 @@ export class ControllerLogger extends ZWaveLoggerBase {
 		switch (change) {
 			case "added":
 				message += `: ${this.formatValue(
-					((args as unknown) as ValueAddedArgs).newValue,
+					(args as unknown as ValueAddedArgs).newValue,
 				)}`;
 				break;
 			case "updated": {
-				const _args = (args as unknown) as ValueUpdatedArgs;
+				const _args = args as unknown as ValueUpdatedArgs;
 				message += `: ${this.formatValue(
 					_args.prevValue,
 				)} => ${this.formatValue(_args.newValue)}`;
@@ -161,12 +161,12 @@ export class ControllerLogger extends ZWaveLoggerBase {
 			}
 			case "removed":
 				message += ` (was ${this.formatValue(
-					((args as unknown) as ValueRemovedArgs).prevValue,
+					(args as unknown as ValueRemovedArgs).prevValue,
 				)})`;
 				break;
 			case "notification":
 				message += `: ${this.formatValue(
-					((args as unknown) as ValueNotificationArgs).value,
+					(args as unknown as ValueNotificationArgs).value,
 				)}`;
 				break;
 		}

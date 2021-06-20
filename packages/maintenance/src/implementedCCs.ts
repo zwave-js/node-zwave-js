@@ -107,9 +107,11 @@ interface CCInfo {
 		name,
 		{ version, interview, API, setValue, pollValue },
 	] of allCCs.entries()) {
-		const { version: latest, deprecated, obsolete } = getLatestVersion(
-			name,
-		);
+		const {
+			version: latest,
+			deprecated,
+			obsolete,
+		} = getLatestVersion(name);
 		if (obsolete) continue;
 		const implementationStatus =
 			version === latest && interview && API && setValue
@@ -328,7 +330,7 @@ const ccVersions: Record<
 };
 
 function getLatestVersion(ccName: string) {
-	const cc = (CommandClasses[ccName as any] as any) as number;
+	const cc = CommandClasses[ccName as any] as any as number;
 	const version = ccVersions[num2hex(cc, true)];
 	if (version == undefined) {
 		return { version: 0, obsolete: true };

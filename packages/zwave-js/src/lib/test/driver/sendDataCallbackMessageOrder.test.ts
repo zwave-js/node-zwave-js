@@ -33,9 +33,8 @@ describe("regression tests", () => {
 			ownNodeId: 1,
 			nonceTimeout: driver.options.timeouts.nonce,
 		});
-		driver[
-			"_controller"
-		]!.isFunctionSupported = isFunctionSupported_NoBridge;
+		driver["_controller"]!.isFunctionSupported =
+			isFunctionSupported_NoBridge;
 
 		// We need to create a fake driver instance for Node 17 to support receiving encrypted messages
 		({ driver: driver17 } = await createAndStartDriver({
@@ -101,13 +100,14 @@ describe("regression tests", () => {
 		const ACK = Buffer.from([MessageHeaders.ACK]);
 
 		const configGetPromise = node17.commandClasses.Configuration.get(43);
-		const getRoutingInfoPromise = driver.sendMessage<GetRoutingInfoResponse>(
-			new GetRoutingInfoRequest(driver, {
-				nodeId: 15,
-				removeBadLinks: false,
-				removeNonRepeaters: false,
-			}),
-		);
+		const getRoutingInfoPromise =
+			driver.sendMessage<GetRoutingInfoResponse>(
+				new GetRoutingInfoRequest(driver, {
+					nodeId: 15,
+					removeBadLinks: false,
+					removeNonRepeaters: false,
+				}),
+			);
 
 		// » [Node 017] [REQ] [SendData]
 		//   │ transmit options: 0x25

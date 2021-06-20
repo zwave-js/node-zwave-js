@@ -5,7 +5,7 @@ import { createEmptyMockDriver } from "../test/mocks";
 import { FunctionType, MessageType } from "./Constants";
 import { Message, messageTypes } from "./Message";
 
-const fakeDriver = (createEmptyMockDriver() as unknown) as Driver;
+const fakeDriver = createEmptyMockDriver() as unknown as Driver;
 
 describe("lib/message", () => {
 	describe("Message", () => {
@@ -13,33 +13,14 @@ describe("lib/message", () => {
 			// actual messages from OZW
 			const okayMessages = [
 				Buffer.from([
-					0x01,
-					0x09,
-					0x00,
-					0x13,
-					0x03,
-					0x02,
-					0x00,
-					0x00,
-					0x25,
-					0x0b,
+					0x01, 0x09, 0x00, 0x13, 0x03, 0x02, 0x00, 0x00, 0x25, 0x0b,
 					0xca,
 				]),
 				Buffer.from([0x01, 0x05, 0x00, 0x47, 0x04, 0x20, 0x99]),
 				Buffer.from([0x01, 0x06, 0x00, 0x46, 0x0c, 0x0d, 0x32, 0x8c]),
 				Buffer.from([
-					0x01,
-					0x0a,
-					0x00,
-					0x13,
-					0x03,
-					0x03,
-					0x8e,
-					0x02,
-					0x04,
-					0x25,
-					0x40,
-					0x0b,
+					0x01, 0x0a, 0x00, 0x13, 0x03, 0x03, 0x8e, 0x02, 0x04, 0x25,
+					0x40, 0x0b,
 				]),
 			];
 			for (const original of okayMessages) {
@@ -107,33 +88,14 @@ describe("lib/message", () => {
 			// actual messages from OZW
 			const okayMessages = [
 				Buffer.from([
-					0x01,
-					0x09,
-					0x00,
-					0x13,
-					0x03,
-					0x02,
-					0x00,
-					0x00,
-					0x25,
-					0x0b,
+					0x01, 0x09, 0x00, 0x13, 0x03, 0x02, 0x00, 0x00, 0x25, 0x0b,
 					0xca,
 				]),
 				Buffer.from([0x01, 0x05, 0x00, 0x47, 0x04, 0x20, 0x99]),
 				Buffer.from([0x01, 0x06, 0x00, 0x46, 0x0c, 0x0d, 0x32, 0x8c]),
 				Buffer.from([
-					0x01,
-					0x0a,
-					0x00,
-					0x13,
-					0x03,
-					0x03,
-					0x8e,
-					0x02,
-					0x04,
-					0x25,
-					0x40,
-					0x0b,
+					0x01, 0x0a, 0x00, 0x13, 0x03, 0x03, 0x8e, 0x02, 0x04, 0x25,
+					0x40, 0x0b,
 				]),
 			];
 			for (const msg of okayMessages) {
@@ -148,16 +110,7 @@ describe("lib/message", () => {
 				Buffer.from([0x01, 0x09]),
 				Buffer.from([0x01, 0x09, 0x00]),
 				Buffer.from([
-					0x01,
-					0x09,
-					0x00,
-					0x13,
-					0x03,
-					0x02,
-					0x00,
-					0x00,
-					0x25,
-					0x0b,
+					0x01, 0x09, 0x00, 0x13, 0x03, 0x02, 0x00, 0x00, 0x25, 0x0b,
 				]),
 			];
 			for (const msg of truncatedMessages) {
@@ -167,33 +120,14 @@ describe("lib/message", () => {
 			// faulty but non-truncated messages should be detected as complete
 			const faultyMessages = [
 				Buffer.from([
-					0x01,
-					0x09,
-					0x00,
-					0x13,
-					0x03,
-					0x02,
-					0x00,
-					0x00,
-					0x25,
-					0x0b,
+					0x01, 0x09, 0x00, 0x13, 0x03, 0x02, 0x00, 0x00, 0x25, 0x0b,
 					0xca,
 				]),
 				Buffer.from([0x01, 0x05, 0x00, 0x47, 0x04, 0x20, 0x99]),
 				Buffer.from([0x01, 0x06, 0x00, 0x46, 0x0c, 0x0d, 0x32, 0x8c]),
 				Buffer.from([
-					0x01,
-					0x0a,
-					0x00,
-					0x13,
-					0x03,
-					0x03,
-					0x8e,
-					0x02,
-					0x04,
-					0x25,
-					0x40,
-					0x0b,
+					0x01, 0x0a, 0x00, 0x13, 0x03, 0x03, 0x8e, 0x02, 0x04, 0x25,
+					0x40, 0x0b,
 				]),
 			];
 			for (const msg of faultyMessages) {
@@ -203,57 +137,19 @@ describe("lib/message", () => {
 			// actual messages from OZW, appended with some random data
 			const tooLongMessages = [
 				Buffer.from([
-					0x01,
-					0x09,
-					0x00,
-					0x13,
-					0x03,
-					0x02,
-					0x00,
-					0x00,
-					0x25,
-					0x0b,
-					0xca,
-					0x00,
+					0x01, 0x09, 0x00, 0x13, 0x03, 0x02, 0x00, 0x00, 0x25, 0x0b,
+					0xca, 0x00,
 				]),
 				Buffer.from([
-					0x01,
-					0x05,
-					0x00,
-					0x47,
-					0x04,
-					0x20,
-					0x99,
-					0x01,
-					0x02,
+					0x01, 0x05, 0x00, 0x47, 0x04, 0x20, 0x99, 0x01, 0x02,
 				]),
 				Buffer.from([
-					0x01,
-					0x06,
-					0x00,
-					0x46,
-					0x0c,
-					0x0d,
-					0x32,
-					0x8c,
-					0xab,
-					0xcd,
+					0x01, 0x06, 0x00, 0x46, 0x0c, 0x0d, 0x32, 0x8c, 0xab, 0xcd,
 					0xef,
 				]),
 				Buffer.from([
-					0x01,
-					0x0a,
-					0x00,
-					0x13,
-					0x03,
-					0x03,
-					0x8e,
-					0x02,
-					0x04,
-					0x25,
-					0x40,
-					0x0b,
-					0x12,
+					0x01, 0x0a, 0x00, 0x13, 0x03, 0x03, 0x8e, 0x02, 0x04, 0x25,
+					0x40, 0x0b, 0x12,
 				]),
 			];
 			for (const msg of tooLongMessages) {
@@ -429,9 +325,9 @@ describe("lib/message", () => {
 
 		describe("getNodeUnsafe()", () => {
 			it("returns undefined when the controller is not initialized yet", () => {
-				const fakeDriver = ({
+				const fakeDriver = {
 					getSafeCCVersionForNode() {},
-				} as any) as Driver;
+				} as any as Driver;
 				const msg = new Message(fakeDriver, {
 					type: MessageType.Request,
 					functionType: 0xff,
@@ -440,10 +336,10 @@ describe("lib/message", () => {
 			});
 
 			it("returns undefined when the message is no node query", () => {
-				const fakeDriver = ({
+				const fakeDriver = {
 					getSafeCCVersionForNode() {},
 					controller: { nodes: new Map() },
-				} as any) as Driver;
+				} as any as Driver;
 				const msg = new Message(fakeDriver, {
 					type: MessageType.Request,
 					functionType: 0xff,
@@ -452,10 +348,10 @@ describe("lib/message", () => {
 			});
 
 			it("returns the associated node otherwise", () => {
-				const fakeDriver = ({
+				const fakeDriver = {
 					getSafeCCVersionForNode() {},
 					controller: { nodes: new Map() },
-				} as any) as Driver;
+				} as any as Driver;
 				// @ts-ignore We need write access
 				fakeDriver.controller.nodes.set(1, {} as any);
 
@@ -465,13 +361,13 @@ describe("lib/message", () => {
 				});
 
 				// This node exists
-				((msg as any) as INodeQuery).nodeId = 1;
+				(msg as any as INodeQuery).nodeId = 1;
 				expect(msg.getNodeUnsafe()).toBe(
 					fakeDriver.controller.nodes.get(1),
 				);
 
 				// This one does
-				((msg as any) as INodeQuery).nodeId = 2;
+				(msg as any as INodeQuery).nodeId = 2;
 				expect(msg.getNodeUnsafe()).toBeUndefined();
 			});
 		});

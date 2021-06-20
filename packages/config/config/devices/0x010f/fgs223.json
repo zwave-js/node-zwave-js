@@ -59,23 +59,7 @@
 	},
 	"paramInformation": {
 		"9": {
-			"label": "Restore state after power failure",
-			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 1,
-			"defaultValue": 1,
-			"unsigned": true,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "State NOT saved at power failure, all outputs are set to OFF upon power restore",
-					"value": 0
-				},
-				{
-					"label": "State saved at power failure, all outputs are set to previous state upon power restore",
-					"value": 1
-				}
-			]
+			"$import": "../templates/master_template.json#state_after_power_failure_off_prev"
 		},
 		"10": {
 			"label": "First channel - operating mode",

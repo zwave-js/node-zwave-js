@@ -2,6 +2,7 @@ import {
 	assertZWaveError,
 	CommandClasses,
 	SecurityManager,
+	ValueID,
 	ZWaveError,
 	ZWaveErrorCodes,
 } from "@zwave-js/core";
@@ -574,12 +575,7 @@ describe("lib/driver/Driver => ", () => {
 			expect(driver["assemblePartialCCs"](msg2)).toBeTrue();
 
 			expect((msg2.command as AssociationCCReport).nodeIds).toEqual([
-				1,
-				2,
-				3,
-				4,
-				5,
-				6,
+				1, 2, 3, 4, 5, 6,
 			]);
 		});
 
@@ -756,6 +752,42 @@ describe("lib/driver/Driver => ", () => {
 				command: cc,
 			});
 			expect(() => driver["assemblePartialCCs"](msg)).toThrow("invalid");
+		});
+	});
+
+	describe("hasPendingMessages()", () => {
+		let driver: Driver;
+		let node2: ZWaveNode;
+
+		beforeEach(async () => {
+			({ driver } = await createAndStartDriver());
+			node2 = new ZWaveNode(2, driver);
+			driver["_controller"] = {
+				ownNodeId: 1,
+				nodes: {
+					has: () => true,
+					get: () => node2,
+					forEach: () => {},
+				},
+				isFunctionSupported,
+			} as any;
+		});
+
+		afterEach(async () => {
+			await driver.destroy();
+			driver.removeAllListeners();
+		});
+
+		it("should return true when there is a poll scheduled for a node", () => {
+			expect(driver["hasPendingMessages"](node2)).toBeFalse();
+			const valueId: ValueID = {
+				commandClass: CommandClasses.Basic,
+				property: "currentValue",
+			};
+			node2.schedulePoll(valueId, 1000);
+			expect(driver["hasPendingMessages"](node2)).toBeTrue();
+			node2.cancelScheduledPoll(valueId);
+			expect(driver["hasPendingMessages"](node2)).toBeFalse();
 		});
 	});
 });

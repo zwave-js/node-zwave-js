@@ -2,6 +2,99 @@
 <!--
 	Add placeholder for next release with `wip` snippet
 -->
+## 7.8.0 (2021-06-20)
+### Features
+* The `firmwareVersion` property for the controller node now returns the serial API version
+* Support bulk-setting, bulk-getting and bulk-resetting configuration parameters, handle partial parameters automatically
+
+### Bugfixes
+* Detect serial disconnection, destroy driver on serial/socket failure
+* V1 alarm metadata is now created on demand, even if the device claims it does not support V1 alarms
+
+### Config file changes
+* Add compat flag to treat destination endpoint as source, apply to Greenwave GWPN6
+* Add alarm mapping for First Alert ZCOMBO
+* Add missing param 1 config option to Jasco 35931
+* Add additional association groups for Elexa/Dome Home Automation Products
+* Add additional productID for the Yale YKFCON
+* Update Nortek Device Configs
+* Add fingerprint to Kwikset 912
+
+### Changes under the hood
+* Handle internal and filename-less stack traces in Sentry filter
+
+## 7.7.5 (2021-06-16)
+### Bugfixes
+* Nodes are no longer sent to sleep while a scheduled verification poll is pending
+* Simultaneous config DB updates are now prevented with a lockfile
+
+### Changes under the hood
+* The build process now uses ESBuild instead of `ts-node` and `gulp`
+* Replaced the `moment` package with the much smaller `Day.js`
+* Removed the `moment-timezone` package
+* Security updates to some dependencies
+* Added Node.js 16 to the testing suite
+
+## 7.7.4 (2021-06-14)
+### Bugfixes
+* Don't require V1 alarms to be supported to preserve legacy alarm values
+* Correct the error message for incompatible config value when setting partial params
+* Signed partial config parameters are now decoded correctly
+* Simplify Aeotec firmware extraction method and support non-aligned files
+
+### Config file changes
+* Rename primary association groups to "Lifeline" for Yale Door Locks
+* Enable auto-idling notifications for MH9-CO2
+* Add additional product ID for Leviton VRCS1
+* Add additional product ID for Leviton VRP15, add config param
+* Add Alarm Mapping to Yale YRD120, YRD220, YRL210, and YRL220 
+* Add Neo Coolcam Motion Sensor 2
+* Mark parameters with high bit as unsigned for MIMO2+
+* Correct identification of Enerwave ZWN-RSM / ZWN-RSM-Plus variants
+
+### Changes under the hood
+* Correct label in MeterGet logging
+
+## 7.7.3 (2021-06-08)
+### Bugfixes
+* The `commandClasses.add` and `commandClasses.remove` compat flags are now applied at the appropriate CC interview steps
+* When determining an endpoint's CC version, the root endpoint's version is always checked as a fallback
+* When an unknown notification contains V1 alarm values, those are now preserved
+* Metadata for `Notification CC V2` values is now created when a corresponding report is received
+
+### Config file changes
+* The "state after power failure" settings are now templated
+* Force-add support for Multi Channel CC to `UFairy GR-B3-3`
+* Add GE/Jasco/Enbrighten 14296
+* Update default values for Zooz ZSE40
+
+### Changes under the hood
+* Updated dependencies
+* In case of a missing configuration, the device configuration DB is now queried before reporting it via telemetry to eliminate false positives
+
+## 7.7.2 (2021-06-06)
+### Bugfixes
+* The external config directory defined with the env variable `ZWAVEJS_EXTERNAL_CONFIG` is now created when it doesn't exist
+
+### Config file changes
+* Added additional product ids to some Fibaro devices
+* Added parameters for primary and secondary strobe to Wink Siren
+* Add `treatBasicSetAsEvent` compat flag to Aeotec ZW132
+* Define partial parameters for Fibaro FGT001, add additional parameters for MH9 CO2
+* Add a config file for Leviton RZI10-1L
+
+## 7.7.1 (2021-05-29)
+### Bugfixes
+* Use lock files to limit access to Value DB to a single instance, do not auto-compress on startup. This should avoid cache corruption when the driver is restarted multiple times in a short time
+* Fixed an error during `Multi Channel Association CC` when `Association CC` is not supported
+
+### Config file changes
+* Remove auto-assignment to Motion Sensor group from Fibaro FGMS001
+* Add Sunricher ZV9001K4-RGBW
+
+### Changes under the hood
+* Include command name in "invalid CC" logs
+
 ## 7.7.0 (2021-05-27)
 ### Features
 * Add APIs to read and write external NVM
@@ -22,7 +115,6 @@
 ### Bugfixes
 * Change GED2150 config file extension to json, so it gets picked up
 * Fixed typo in error message for "invalid condition"
-* Fixed an error during `Multi Channel Association CC` when `Association CC` is not supported
 
 ### Config file changes
 * Add additional version of Eaton 5-Scene Keypad

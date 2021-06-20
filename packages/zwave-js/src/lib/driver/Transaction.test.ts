@@ -114,7 +114,7 @@ describe("lib/driver/Transaction => ", () => {
 			nodeId: number | undefined,
 			priority: MessagePriority = MessagePriority.NodeQuery,
 		) {
-			const driver = (driverMock as any) as Driver;
+			const driver = driverMock as any as Driver;
 			const msg =
 				nodeId != undefined
 					? new SendDataRequest(driver, {
@@ -190,7 +190,7 @@ describe("lib/driver/Transaction => ", () => {
 	});
 
 	it("Messages in the wakeup queue should be preferred over lesser priorities only if the node is awake", () => {
-		const driverMock = ({
+		const driverMock = {
 			controller: {
 				nodes: new Map<number, MockNode>([
 					// 1: awake
@@ -223,10 +223,10 @@ describe("lib/driver/Transaction => ", () => {
 			options: {
 				attempts: {},
 			},
-		} as unknown) as Driver;
+		} as unknown as Driver;
 
 		function createTransaction(nodeId: number, priority: MessagePriority) {
-			const driver = (driverMock as any) as Driver;
+			const driver = driverMock as any as Driver;
 			const msg = new SendDataRequest(driver, {
 				command: new NoOperationCC(driver, { nodeId }),
 			});
@@ -283,7 +283,7 @@ describe("lib/driver/Transaction => ", () => {
 
 	// Repro for #550
 	it("Controller message should be preferred over messages for sleeping nodes", () => {
-		const driverMock = ({
+		const driverMock = {
 			controller: {
 				nodes: new Map<number, MockNode>([
 					// 1: non-sleeping
@@ -316,7 +316,7 @@ describe("lib/driver/Transaction => ", () => {
 			options: {
 				attempts: {},
 			},
-		} as unknown) as Driver;
+		} as unknown as Driver;
 
 		let creationTimestamp = 0;
 		function createTransaction(

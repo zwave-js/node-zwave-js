@@ -16,9 +16,11 @@ import {
 } from "../message/Message";
 import type { ZWaveNode } from "../node/Node";
 
-const MockRequestMessageWithExpectation_FunctionType = (0xfa as unknown) as FunctionType;
-const MockRequestMessageWithoutExpectation_FunctionType = (0xfb as unknown) as FunctionType;
-const MockResponseMessage_FunctionType = (0xff as unknown) as FunctionType;
+const MockRequestMessageWithExpectation_FunctionType =
+	0xfa as unknown as FunctionType;
+const MockRequestMessageWithoutExpectation_FunctionType =
+	0xfb as unknown as FunctionType;
+const MockResponseMessage_FunctionType = 0xff as unknown as FunctionType;
 
 @messageTypes(
 	MessageType.Request,
@@ -61,9 +63,8 @@ export function createEmptyMockDriver() {
 						ret.controller?.nodes instanceof Map &&
 						ret.controller.nodes.has(nodeId)
 					) {
-						const node: ZWaveNode = ret.controller.nodes.get(
-							nodeId,
-						);
+						const node: ZWaveNode =
+							ret.controller.nodes.get(nodeId);
 						const ccVersion = node
 							.getEndpoint(endpointIndex)!
 							.getCCVersion(ccId);
@@ -119,7 +120,7 @@ export function createEmptyMockDriver() {
 		configManager: new ConfigManager(),
 	};
 	ret.sendCommand.mockImplementation(async (command, options) => {
-		const msg = new SendDataRequest((ret as unknown) as Driver, {
+		const msg = new SendDataRequest(ret as unknown as Driver, {
 			command,
 		});
 		const resp = await ret.sendMessage(msg, options);

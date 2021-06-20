@@ -84,27 +84,7 @@
 			]
 		},
 		"8": {
-			"label": "Status After Power Failure",
-			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 2,
-			"defaultValue": 2,
-			"unsigned": true,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "Turn off",
-					"value": 0
-				},
-				{
-					"label": "Turn on",
-					"value": 1
-				},
-				{
-					"label": "Previous state",
-					"value": 2
-				}
-			]
+			"$import": "../templates/master_template.json#state_after_power_failure_off_on_prev"
 		},
 		"9": {
 			"label": "Ramp Rate Control (Manual)",

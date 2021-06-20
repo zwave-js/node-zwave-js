@@ -1,6 +1,6 @@
 {
   "name": "zwave-js",
-  "version": "7.7.0",
+  "version": "7.8.0",
   "description": "Z-Wave driver written entirely in JavaScript/TypeScript",
   "keywords": [],
   "main": "index.js",
@@ -60,29 +60,33 @@
     "node": ">=10.0.0"
   },
   "dependencies": {
-    "@alcalzone/jsonl-db": "^1.2.4",
+    "@alcalzone/jsonl-db": "^1.2.5",
     "@alcalzone/pak": "^0.6.0",
-    "@sentry/integrations": "^6.3.0",
-    "@sentry/node": "^6.3.0",
-    "@zwave-js/config": "7.7.0",
-    "@zwave-js/core": "7.7.0",
-    "@zwave-js/serial": "7.7.0",
-    "@zwave-js/shared": "7.4.0",
-    "alcalzone-shared": "^3.0.3",
+    "@sentry/integrations": "^6.5.1",
+    "@sentry/node": "^6.5.1",
+    "@zwave-js/config": "7.8.0",
+    "@zwave-js/core": "7.7.5",
+    "@zwave-js/serial": "7.8.0",
+    "@zwave-js/shared": "7.7.3",
+    "alcalzone-shared": "^3.0.4",
     "ansi-colors": "^4.1.1",
     "axios": "^0.21.1",
     "fs-extra": "^9.0.1",
+    "proper-lockfile": "^4.1.2",
     "reflect-metadata": "^0.1.13",
-    "serialport": "^9.0.7",
+    "serialport": "^9.1.0",
     "source-map-support": "^0.5.19",
     "winston": "^3.3.3",
-    "xstate": "^4.18.0"
+    "xstate": "^4.20.0"
   },
   "scripts": {
-    "build:full": "gulp build",
+    "b": "yarn ts maintenance/_build.ts",
+    "build:full": "yarn b prebuild:full && yarn build && yarn b postbuild:full",
     "build": "tsc -b tsconfig.build.json",
     "clean": "tsc -b tsconfig.build.json --clean",
-    "prewatch": "gulp prebuild",
-    "watch": "tsc -b tsconfig.build.json --watch --pretty"
+    "prewatch": "yarn b prebuild",
+    "watch": "tsc -b tsconfig.build.json --watch --pretty",
+    "lint:zwave": "yarn b lint",
+    "ts": "node -r esbuild-register"
   }
 }

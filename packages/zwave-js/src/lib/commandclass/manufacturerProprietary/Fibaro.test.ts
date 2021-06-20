@@ -22,11 +22,14 @@ describe("lib/commandclass/manufacturerProprietary/Fibaro => ", () => {
 	let node2: ZWaveNode;
 
 	beforeAll(async () => {
-		fakeDriver = (createEmptyMockDriver() as unknown) as Driver;
+		fakeDriver = createEmptyMockDriver() as unknown as Driver;
 		node2 = new ZWaveNode(2, fakeDriver as any);
 		(fakeDriver.controller.nodes as any).set(node2.id, node2);
+
+		// Loading configuration may take a while on CI
+		if (process.env.CI) jest.setTimeout(30000);
 		await fakeDriver.configManager.loadDeviceIndex();
-	}, 60000);
+	});
 
 	afterAll(() => {
 		node2.destroy();

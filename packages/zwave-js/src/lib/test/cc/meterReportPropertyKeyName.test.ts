@@ -12,6 +12,9 @@ describe("regression tests", () => {
 	process.env.LOGLEVEL = "debug";
 
 	beforeEach(async () => {
+		// Loading configuration may take a while on CI
+		if (process.env.CI) jest.setTimeout(30000);
+
 		({ driver, serialport } = await createAndStartDriver());
 
 		driver["_controller"] = {

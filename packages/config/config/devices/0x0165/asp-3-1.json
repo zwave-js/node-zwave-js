@@ -16,25 +16,7 @@
 	"supportsZWavePlus": true,
 	"paramInformation": {
 		"1": {
-			"label": "Default State",
-			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 63,
-			"defaultValue": 2,
-			"options": [
-				{
-					"label": "OFF",
-					"value": 0
-				},
-				{
-					"label": "ON",
-					"value": 1
-				},
-				{
-					"label": "Status before Power Failure",
-					"value": 2
-				}
-			]
+			"$import": "../templates/master_template.json#state_after_power_failure_off_on_prev"
 		},
 		"2": {
 			"label": "Power Failure",

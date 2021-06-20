@@ -194,26 +194,7 @@
 			]
 		},
 		"8": {
-			"label": "Dimmer State After Power Failure",
-			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 2,
-			"defaultValue": 2,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "Off",
-					"value": 0
-				},
-				{
-					"label": "On",
-					"value": 1
-				},
-				{
-					"label": "Previous State",
-					"value": 2
-				}
-			]
+			"$import": "../templates/master_template.json#state_after_power_failure_off_on_prev"
 		},
 		"9": {
 			"label": "Ramp Rate Control",

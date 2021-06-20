@@ -26,9 +26,12 @@ describe("lib/commandclass/MeterCC => ", () => {
 	let fakeDriver: Driver;
 	let node1: ZWaveNode;
 	beforeAll(async () => {
-		fakeDriver = (createEmptyMockDriver() as unknown) as Driver;
+		fakeDriver = createEmptyMockDriver() as unknown as Driver;
 		node1 = new ZWaveNode(1, fakeDriver);
 		(fakeDriver.controller.nodes as any).set(1, node1);
+
+		// Loading configuration may take a while on CI
+		if (process.env.CI) jest.setTimeout(30000);
 		await fakeDriver.configManager.loadMeters();
 	});
 

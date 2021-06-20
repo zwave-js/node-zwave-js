@@ -196,26 +196,7 @@
 			]
 		},
 		"8": {
-			"label": "Status after Power failure",
-			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 2,
-			"defaultValue": 2,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "Forced to off",
-					"value": 0
-				},
-				{
-					"label": "Forced to on",
-					"value": 1
-				},
-				{
-					"label": "Prior State",
-					"value": 2
-				}
-			]
+			"$import": "../templates/master_template.json#state_after_power_failure_off_on_prev"
 		},
 		"9": {
 			"label": "Dimmer Ramp Rate",

@@ -107,10 +107,11 @@ export class ManufacturerSpecificCCAPI extends PhysicalCCAPI {
 			nodeId: this.endpoint.nodeId,
 			endpoint: this.endpoint.index,
 		});
-		const response = await this.driver.sendCommand<ManufacturerSpecificCCReport>(
-			cc,
-			this.commandOptions,
-		);
+		const response =
+			await this.driver.sendCommand<ManufacturerSpecificCCReport>(
+				cc,
+				this.commandOptions,
+			);
 		if (response) {
 			return pick(response, [
 				"manufacturerId",
@@ -133,10 +134,11 @@ export class ManufacturerSpecificCCAPI extends PhysicalCCAPI {
 			endpoint: this.endpoint.index,
 			deviceIdType,
 		});
-		const response = await this.driver.sendCommand<ManufacturerSpecificCCDeviceSpecificReport>(
-			cc,
-			this.commandOptions,
-		);
+		const response =
+			await this.driver.sendCommand<ManufacturerSpecificCCDeviceSpecificReport>(
+				cc,
+				this.commandOptions,
+			);
 		return response?.deviceId;
 	}
 }

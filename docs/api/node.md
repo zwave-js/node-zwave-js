@@ -247,9 +247,7 @@ try {
 			actualFirmware.data,
 			actualFirmware.firmwareTarget,
 		);
-	console.log(
-		`Node ${nodeId}: Firmware update started`,
-	);
+	console.log(`Node ${nodeId}: Firmware update started`);
 } catch (e) {
 	// handle error
 }

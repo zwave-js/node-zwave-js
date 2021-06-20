@@ -24,7 +24,6 @@ import {
 } from "@zwave-js/serial";
 import {
 	DeepPartial,
-	formatId,
 	num2hex,
 	pick,
 	stringify,
@@ -46,13 +45,11 @@ import { URL } from "url";
 import * as util from "util";
 import { interpret } from "xstate";
 import { FirmwareUpdateStatus } from "../commandclass";
-import { AssociationGroupInfoCC } from "../commandclass/AssociationGroupInfoCC";
 import {
 	assertValidCCs,
 	CommandClass,
 	getImplementedVersion,
 } from "../commandclass/CommandClass";
-import { ConfigurationCC } from "../commandclass/ConfigurationCC";
 import { DeviceResetLocallyCCNotification } from "../commandclass/DeviceResetLocallyCC";
 import {
 	isEncapsulatingCommandClass,
@@ -112,6 +109,7 @@ import { getDefaultPriority, Message } from "../message/Message";
 import { isNodeQuery } from "../node/INodeQuery";
 import type { ZWaveNode } from "../node/Node";
 import { InterviewStage, NodeStatus } from "../node/Types";
+import { reportMissingDeviceConfig } from "../telemetry/deviceConfig";
 import {
 	AppInfo,
 	compileStatistics,
@@ -431,16 +429,17 @@ export class Driver extends TypedEventEmitter<DriverEventCallbacks> {
 
 		// Initialize config manager
 		try {
-			// eslint-disable-next-line @typescript-eslint/no-var-requires
-			this._configVersion = require("@zwave-js/config/package.json").version;
+			this._configVersion =
+				// eslint-disable-next-line @typescript-eslint/no-var-requires
+				require("@zwave-js/config/package.json").version;
 		} catch {
 			this._configVersion =
 				packageJson?.dependencies?.["@zwave-js/config"] ?? libVersion;
 		}
 		this.configManager = new ConfigManager({
 			logContainer: this._logContainer,
-			deviceConfigPriorityDir: this.options.storage
-				.deviceConfigPriorityDir,
+			deviceConfigPriorityDir:
+				this.options.storage.deviceConfigPriorityDir,
 		});
 
 		// And initialize but don't start the send thread machine
@@ -589,7 +588,7 @@ export class Driver extends TypedEventEmitter<DriverEventCallbacks> {
 		this._wasStarted = true;
 
 		// Enforce that an error handler is attached
-		if (((this as unknown) as EventEmitter).listenerCount("error") === 0) {
+		if ((this as unknown as EventEmitter).listenerCount("error") === 0) {
 			throw new ZWaveError(
 				`Before starting the driver, a handler for the "error" event must be attached.`,
 				ZWaveErrorCodes.Driver_NoErrorHandler,
@@ -637,8 +636,8 @@ export class Driver extends TypedEventEmitter<DriverEventCallbacks> {
 					this.serialport_onError(err);
 				} else {
 					spOpenPromise.reject(err);
-					void this.destroy();
 				}
+				void this.destroy();
 			});
 		// If the port is already open, close it first
 		if (this.serial.isOpen) await this.serial.close();
@@ -837,9 +836,8 @@ export class Driver extends TypedEventEmitter<DriverEventCallbacks> {
 						!node.hasSUCReturnRoute &&
 						node.status !== NodeStatus.Dead
 					) {
-						node.hasSUCReturnRoute = await this.controller.assignSUCReturnRoute(
-							node.id,
-						);
+						node.hasSUCReturnRoute =
+							await this.controller.assignSUCReturnRoute(node.id);
 					}
 				})();
 			}
@@ -933,72 +931,15 @@ export class Driver extends TypedEventEmitter<DriverEventCallbacks> {
 				node.manufacturerId != undefined &&
 				node.productType != undefined &&
 				node.productId != undefined &&
+				node.firmwareVersion != undefined &&
 				!node.deviceConfig &&
 				process.env.NODE_ENV !== "test"
 			) {
 				// The interview succeeded, but we don't have a device config for this node.
 				// Report it, so we can add a config file
 
-				let configFingerprint = `${formatId(
-					node.manufacturerId,
-				)}:${formatId(node.productType)}:${formatId(node.productId)}`;
-				if (node.firmwareVersion != undefined) {
-					configFingerprint += `:${node.firmwareVersion}`;
-				}
-				const message = `Missing device config: ${configFingerprint}`;
-
-				const deviceInfo: Record<string, any> = {
-					supportsConfigCCV3:
-						node.getCCVersion(CommandClasses.Configuration) >= 3,
-					supportsAGI: node.supportsCC(
-						CommandClasses["Association Group Information"],
-					),
-					supportsZWavePlus: node.supportsCC(
-						CommandClasses["Z-Wave Plus Info"],
-					),
-				};
-				try {
-					if (deviceInfo.supportsConfigCCV3) {
-						// Try to collect all info about config params we can get
-						const instance = node.createCCInstanceUnsafe(
-							ConfigurationCC,
-						)!;
-						deviceInfo.parameters = instance.getQueriedParamInfos();
-					}
-					if (deviceInfo.supportsAGI) {
-						// Try to collect all info about association groups we can get
-						const instance = node.createCCInstanceUnsafe(
-							AssociationGroupInfoCC,
-						)!;
-						// wotan-disable-next-line no-restricted-property-access
-						const associationGroupCount = instance[
-							"getAssociationGroupCountCached"
-						]();
-						const names: string[] = [];
-						for (
-							let group = 1;
-							group <= associationGroupCount;
-							group++
-						) {
-							names.push(
-								instance.getGroupNameCached(group) ?? "",
-							);
-						}
-						deviceInfo.associationGroups = names;
-					}
-					if (deviceInfo.supportsZWavePlus) {
-						deviceInfo.zWavePlusVersion = node.zwavePlusVersion;
-					}
-				} catch {
-					// Don't fail on the last meters :)
-				}
-				Sentry.captureMessage(message, (scope) => {
-					scope.clearBreadcrumbs();
-					// Group by device config, otherwise Sentry groups by "Unknown device config", which is nonsense
-					scope.setFingerprint([configFingerprint]);
-					scope.setExtras(deviceInfo);
-					return scope;
-				});
+				// eslint-disable-next-line @typescript-eslint/no-empty-function
+				void reportMissingDeviceConfig(node as any).catch(() => {});
 			}
 		} catch (e: unknown) {
 			if (isZWaveError(e)) {
@@ -1355,11 +1296,16 @@ export class Driver extends TypedEventEmitter<DriverEventCallbacks> {
 
 	/** Checks if there are any pending messages for the given node */
 	private hasPendingMessages(node: ZWaveNode): boolean {
+		// First check if there are messages in the queue
 		const { queue, currentTransaction } = this.sendThread.state.context;
-		return (
+		if (
 			!!queue.find((t) => t.message.getNodeId() === node.id) ||
 			currentTransaction?.message.getNodeId() === node.id
-		);
+		) {
+			return true;
+		}
+		// Then check if there are scheduled polls
+		return node.scheduledPolls.size > 0;
 	}
 
 	/**

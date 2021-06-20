@@ -26,6 +26,7 @@ import {
 import type { SuccessIndicator } from "../../message/SuccessIndicator";
 
 export enum SerialAPISetupCommand {
+	Unsupported = 0x00,
 	GetSupportedCommands = 0x01,
 	SetTxStatusReport = 0x02,
 	SetPowerlevel = 0x04,
@@ -109,7 +110,8 @@ export class SerialAPISetupResponse extends Message {
 				CommandConstructor = SerialAPISetup_SetTXStatusReportResponse;
 				break;
 			case SerialAPISetupCommand.GetSupportedCommands:
-				CommandConstructor = SerialAPISetup_GetSupportedCommandsResponse;
+				CommandConstructor =
+					SerialAPISetup_GetSupportedCommandsResponse;
 				break;
 			case SerialAPISetupCommand.SetRFRegion:
 				CommandConstructor = SerialAPISetup_SetRFRegionResponse;
@@ -124,10 +126,12 @@ export class SerialAPISetupResponse extends Message {
 				CommandConstructor = SerialAPISetup_GetPowerlevelResponse;
 				break;
 			case SerialAPISetupCommand.GetMaximumPayloadSize:
-				CommandConstructor = SerialAPISetup_GetMaximumPayloadSizeResponse;
+				CommandConstructor =
+					SerialAPISetup_GetMaximumPayloadSizeResponse;
 				break;
 			case SerialAPISetupCommand.GetLRMaximumPayloadSize:
-				CommandConstructor = SerialAPISetup_GetLRMaximumPayloadSizeResponse;
+				CommandConstructor =
+					SerialAPISetup_GetLRMaximumPayloadSizeResponse;
 				break;
 			case SerialAPISetupCommand.SetNodeIDType:
 				CommandConstructor = SerialAPISetup_SetNodeIDTypeResponse;
@@ -274,7 +278,8 @@ export class SerialAPISetup_SetTXStatusReportRequest extends SerialAPISetupReque
 
 export class SerialAPISetup_SetTXStatusReportResponse
 	extends SerialAPISetupResponse
-	implements SuccessIndicator {
+	implements SuccessIndicator
+{
 	public constructor(driver: Driver, options: MessageDeserializationOptions) {
 		super(driver, options);
 		this.success = this.payload[0] !== 0;
@@ -342,7 +347,8 @@ export class SerialAPISetup_SetNodeIDTypeRequest extends SerialAPISetupRequest {
 
 export class SerialAPISetup_SetNodeIDTypeResponse
 	extends SerialAPISetupResponse
-	implements SuccessIndicator {
+	implements SuccessIndicator
+{
 	public constructor(driver: Driver, options: MessageDeserializationOptions) {
 		super(driver, options);
 		this.success = this.payload[0] !== 0;
@@ -432,7 +438,8 @@ export class SerialAPISetup_SetRFRegionRequest extends SerialAPISetupRequest {
 
 export class SerialAPISetup_SetRFRegionResponse
 	extends SerialAPISetupResponse
-	implements SuccessIndicator {
+	implements SuccessIndicator
+{
 	public constructor(driver: Driver, options: MessageDeserializationOptions) {
 		super(driver, options);
 		this.success = this.payload[0] !== 0;
@@ -557,7 +564,8 @@ export class SerialAPISetup_SetPowerlevelRequest extends SerialAPISetupRequest {
 
 export class SerialAPISetup_SetPowerlevelResponse
 	extends SerialAPISetupResponse
-	implements SuccessIndicator {
+	implements SuccessIndicator
+{
 	public constructor(driver: Driver, options: MessageDeserializationOptions) {
 		super(driver, options);
 		this.success = this.payload[0] !== 0;

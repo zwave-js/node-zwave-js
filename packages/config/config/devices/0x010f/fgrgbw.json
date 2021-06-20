@@ -181,23 +181,7 @@
 			"unsigned": true
 		},
 		"16": {
-			"label": "Remember device status after power failure",
-			"description": "Define how will the Plug react after the power supply is back on.",
-			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 1,
-			"defaultValue": 1,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "Do not remember state",
-					"value": 0
-				},
-				{
-					"label": "Remember state before power failure",
-					"value": 1
-				}
-			]
+			"$import": "../templates/master_template.json#state_after_power_failure_off_prev"
 		},
 		"30": {
 			"label": "Alarm response",

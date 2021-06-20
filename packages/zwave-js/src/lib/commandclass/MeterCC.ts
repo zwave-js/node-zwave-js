@@ -70,9 +70,11 @@ function toPropertyKey(
 	return (meterType << 16) | (scale << 8) | rateType;
 }
 
-function splitPropertyKey(
-	key: number,
-): { meterType: number; rateType: RateType; scale: number } {
+function splitPropertyKey(key: number): {
+	meterType: number;
+	rateType: RateType;
+	scale: number;
+} {
 	return {
 		rateType: key & 0xff,
 		scale: (key >>> 8) & 0xff,
@@ -466,9 +468,8 @@ supports reset:       ${suppResp.supportsReset}`;
 		propertyKey: string | number,
 	): string | undefined {
 		if (property === "value" && typeof propertyKey === "number") {
-			const { meterType, rateType, scale } = splitPropertyKey(
-				propertyKey,
-			);
+			const { meterType, rateType, scale } =
+				splitPropertyKey(propertyKey);
 			let ret: string;
 			if (meterType !== 0) {
 				ret = `${this.driver.configManager.getMeterName(meterType)}_${
@@ -502,9 +503,11 @@ export class MeterCCReport extends MeterCC {
 		this._rateType = (this.payload[0] & 0b0_11_00000) >>> 5;
 		const scale1Bit2 = (this.payload[0] & 0b1_00_00000) >>> 7;
 
-		const { scale: scale1Bits10, value, bytesRead } = parseFloatWithScale(
-			this.payload.slice(1),
-		);
+		const {
+			scale: scale1Bits10,
+			value,
+			bytesRead,
+		} = parseFloatWithScale(this.payload.slice(1));
 		let offset = 2 + (bytesRead - 1);
 		// The scale is composed of two fields (see SDS13781)
 		const scale1 = (scale1Bit2 << 2) | scale1Bits10;
@@ -724,7 +727,7 @@ export class MeterCCGet extends MeterCC {
 				getTypeValueId(this.endpointIndex),
 			);
 			if (type != undefined) {
-				message.duration = this.driver.configManager.lookupMeterScale(
+				message.scale = this.driver.configManager.lookupMeterScale(
 					type,
 					this.scale,
 				).label;

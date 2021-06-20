@@ -8,6 +8,10 @@
 			"productType": "0x0600",
 			"productId": "0x1000",
 			"zwaveAllianceId": 993
+		},
+		{
+			"productType": "0x0600",
+			"productId": "0x4000"
 		}
 	],
 	"firmwareVersion": {
@@ -51,24 +55,7 @@
 			]
 		},
 		"16": {
-			"label": "Remember device status after power failure",
-			"description": "Define how will the Plug react after the power supply is back on.",
-			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 1,
-			"defaultValue": 1,
-			"unsigned": true,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "Do not remember state",
-					"value": 0
-				},
-				{
-					"label": "Remember state before power failure",
-					"value": 1
-				}
-			]
+			"$import": "../templates/master_template.json#state_after_power_failure_off_prev"
 		},
 		"34": {
 			"label": "Reaction to alarms",

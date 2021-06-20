@@ -138,10 +138,11 @@ export class MultiChannelCCAPI extends CCAPI {
 			nodeId: this.endpoint.nodeId,
 			endpoint: this.endpoint.index,
 		});
-		const response = await this.driver.sendCommand<MultiChannelCCEndPointReport>(
-			cc,
-			this.commandOptions,
-		);
+		const response =
+			await this.driver.sendCommand<MultiChannelCCEndPointReport>(
+				cc,
+				this.commandOptions,
+			);
 		if (response) {
 			return {
 				isDynamicEndpointCount: response.countIsDynamic,
@@ -165,10 +166,11 @@ export class MultiChannelCCAPI extends CCAPI {
 			endpoint: this.endpoint.index,
 			requestedEndpoint: endpoint,
 		});
-		const response = await this.driver.sendCommand<MultiChannelCCCapabilityReport>(
-			cc,
-			this.commandOptions,
-		);
+		const response =
+			await this.driver.sendCommand<MultiChannelCCCapabilityReport>(
+				cc,
+				this.commandOptions,
+			);
 		return response?.capability;
 	}
 
@@ -187,10 +189,11 @@ export class MultiChannelCCAPI extends CCAPI {
 			genericClass,
 			specificClass,
 		});
-		const response = await this.driver.sendCommand<MultiChannelCCEndPointFindReport>(
-			cc,
-			this.commandOptions,
-		);
+		const response =
+			await this.driver.sendCommand<MultiChannelCCEndPointFindReport>(
+				cc,
+				this.commandOptions,
+			);
 		return response?.foundEndpoints;
 	}
 
@@ -207,10 +210,11 @@ export class MultiChannelCCAPI extends CCAPI {
 			endpoint: this.endpoint.index,
 			requestedEndpoint: endpoint,
 		});
-		const response = await this.driver.sendCommand<MultiChannelCCAggregatedMembersReport>(
-			cc,
-			this.commandOptions,
-		);
+		const response =
+			await this.driver.sendCommand<MultiChannelCCAggregatedMembersReport>(
+				cc,
+				this.commandOptions,
+			);
 		return response?.members;
 	}
 
@@ -790,13 +794,15 @@ export class MultiChannelCCEndPointFindReport extends MultiChannelCC {
 		return {
 			...super.toLogEntry(),
 			message: {
-				"generic device class": this.driver.configManager.lookupGenericDeviceClass(
-					this.genericClass,
-				).label,
-				"specific device class": this.driver.configManager.lookupSpecificDeviceClass(
-					this.genericClass,
-					this.specificClass,
-				).label,
+				"generic device class":
+					this.driver.configManager.lookupGenericDeviceClass(
+						this.genericClass,
+					).label,
+				"specific device class":
+					this.driver.configManager.lookupSpecificDeviceClass(
+						this.genericClass,
+						this.specificClass,
+					).label,
 				"found endpoints": this._foundEndpoints.join(", "),
 				"# of reports to follow": this._reportsToFollow,
 			},
@@ -843,13 +849,15 @@ export class MultiChannelCCEndPointFind extends MultiChannelCC {
 		return {
 			...super.toLogEntry(),
 			message: {
-				"generic device class": this.driver.configManager.lookupGenericDeviceClass(
-					this.genericClass,
-				).label,
-				"specific device class": this.driver.configManager.lookupSpecificDeviceClass(
-					this.genericClass,
-					this.specificClass,
-				).label,
+				"generic device class":
+					this.driver.configManager.lookupGenericDeviceClass(
+						this.genericClass,
+					).label,
+				"specific device class":
+					this.driver.configManager.lookupSpecificDeviceClass(
+						this.genericClass,
+						this.specificClass,
+					).label,
 			},
 		};
 	}
@@ -957,10 +965,10 @@ function getCCResponseForCommandEncapsulation(
 	) {
 		// Allow both versions of the encapsulation command
 		// Our implementation check is a bit too strict, so change the return type
-		return ([
+		return [
 			MultiChannelCCCommandEncapsulation,
 			MultiChannelCCV1CommandEncapsulation,
-		] as any) as typeof MultiChannelCCCommandEncapsulation[];
+		] as any as typeof MultiChannelCCCommandEncapsulation[];
 	}
 }
 
@@ -994,15 +1002,25 @@ export class MultiChannelCCCommandEncapsulation extends MultiChannelCC {
 		super(driver, options);
 		if (gotDeserializationOptions(options)) {
 			validatePayload(this.payload.length >= 2);
-			this.endpointIndex = this.payload[0] & 0b0111_1111;
-			const isBitMask = !!(this.payload[1] & 0b1000_0000);
-			const destination = this.payload[1] & 0b0111_1111;
-			if (isBitMask) {
-				this.destination = parseBitMask(
-					Buffer.from([destination]),
-				) as any;
+			if (
+				this.getNodeUnsafe()?.deviceConfig?.compat
+					?.treatDestinationEndpointAsSource
+			) {
+				// This device incorrectly uses the destination field to indicate the source endpoint
+				this.endpointIndex = this.payload[1] & 0b0111_1111;
+				this.destination = 0;
 			} else {
-				this.destination = destination;
+				// Parse normally
+				this.endpointIndex = this.payload[0] & 0b0111_1111;
+				const isBitMask = !!(this.payload[1] & 0b1000_0000);
+				const destination = this.payload[1] & 0b0111_1111;
+				if (isBitMask) {
+					this.destination = parseBitMask(
+						Buffer.from([destination]),
+					) as any;
+				} else {
+					this.destination = destination;
+				}
 			}
 			// No need to validate further, each CC does it for itself
 			this.encapsulated = CommandClass.from(this.driver, {

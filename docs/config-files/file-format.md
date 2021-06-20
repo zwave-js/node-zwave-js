@@ -371,3 +371,7 @@ By default, `Basic CC::Set` commands are interpreted as status updates. This fla
 
 > [!NOTE]
 > If this option is `true`, it has precedence over `disableBasicMapping`.
+
+### `treatDestinationEndpointAsSource`
+
+Some devices incorrectly use the multi channel **destination** endpoint in reports to indicate the **source** endpoint the report originated from. When this flag is `true`, the destination endpoint is instead interpreted to be the source and the original source endpoint gets ignored.

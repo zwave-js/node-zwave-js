@@ -423,7 +423,7 @@ export function messageTypes(
 		) || new Map()) as MessageTypeMap;
 		map.set(
 			getMessageTypeMapKey(messageType, functionType),
-			(messageClass as any) as Constructable<Message>,
+			messageClass as any as Constructable<Message>,
 		);
 		Reflect.defineMetadata(METADATA_messageTypeMap, map, Message);
 	};

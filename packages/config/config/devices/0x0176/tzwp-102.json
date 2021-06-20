@@ -35,26 +35,7 @@
 			]
 		},
 		"2": {
-			"label": "device status after power failure",
-			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 2,
-			"defaultValue": 0,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "Remember Status",
-					"value": 0
-				},
-				{
-					"label": "Always ON",
-					"value": 1
-				},
-				{
-					"label": "Always OFF",
-					"value": 2
-				}
-			]
+			"$import": "../templates/master_template.json#state_after_power_failure_prev_on_off"
 		},
 		"3": {
 			"label": "Send Status When Load Changes",

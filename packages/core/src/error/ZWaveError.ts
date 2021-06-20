@@ -169,9 +169,7 @@ export function isZWaveError(e: unknown): e is ZWaveError {
 	return e instanceof Error && Object.getPrototypeOf(e).name === "ZWaveError";
 }
 
-export function isTransmissionError(
-	e: unknown,
-): e is ZWaveError & {
+export function isTransmissionError(e: unknown): e is ZWaveError & {
 	code:
 		| ZWaveErrorCodes.Controller_Timeout
 		| ZWaveErrorCodes.Controller_MessageDropped

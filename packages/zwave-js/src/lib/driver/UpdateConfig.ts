@@ -2,6 +2,8 @@ import { detectPackageManager, PackageManager } from "@alcalzone/pak";
 import { ZWaveError, ZWaveErrorCodes } from "@zwave-js/core";
 import { isObject } from "alcalzone-shared/typeguards";
 import axios from "axios";
+import * as path from "path";
+import * as lockfile from "proper-lockfile";
 import * as semver from "semver";
 
 /**
@@ -56,6 +58,7 @@ export async function installConfigUpdate(newVersion: string): Promise<void> {
 		pak = await detectPackageManager({
 			cwd: __dirname,
 			requireLockfile: false,
+			setCwdToPackageRoot: true,
 		});
 	} catch {
 		throw new ZWaveError(
@@ -64,11 +67,35 @@ export async function installConfigUpdate(newVersion: string): Promise<void> {
 		);
 	}
 
+	const packageJsonPath = path.join(pak.cwd, "package.json");
+	try {
+		await lockfile.lock(packageJsonPath, {
+			onCompromised: () => {
+				// do nothing
+			},
+		});
+	} catch {
+		throw new ZWaveError(
+			`Config update failed: Another installation is already in progress!`,
+			ZWaveErrorCodes.Config_Update_InstallFailed,
+		);
+	}
+
 	// And install it
 	const result = await pak.overrideDependencies({
 		"@zwave-js/config": newVersion,
 	});
+
+	// Free the lock
+	try {
+		if (await lockfile.check(packageJsonPath))
+			await lockfile.unlock(packageJsonPath);
+	} catch {
+		// whatever - just don't crash
+	}
+
 	if (result.success) return;
+
 	throw new ZWaveError(
 		`Config update failed: Package manager exited with code ${result.exitCode}
 ${result.stderr}`,

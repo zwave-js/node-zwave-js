@@ -88,9 +88,12 @@ describe("lib/node/Node", () => {
 	});
 
 	describe("constructor", () => {
-		const fakeDriver = (createEmptyMockDriver() as unknown) as Driver;
+		let fakeDriver: Driver;
 
 		beforeAll(async () => {
+			fakeDriver = createEmptyMockDriver() as unknown as Driver;
+			// Loading configuration may take a while on CI
+			if (process.env.CI) jest.setTimeout(30000);
 			await fakeDriver.configManager.loadDeviceClasses();
 		});
 
@@ -199,6 +202,9 @@ describe("lib/node/Node", () => {
 			fakeDriver = createEmptyMockDriver();
 			node = new ZWaveNode(2, fakeDriver as any);
 			(fakeDriver.controller.nodes as any).set(node.id, node);
+
+			// Loading configuration may take a while on CI
+			if (process.env.CI) jest.setTimeout(30000);
 			await fakeDriver.configManager.loadDeviceClasses();
 		});
 
@@ -215,7 +221,7 @@ describe("lib/node/Node", () => {
 			beforeAll(() => {
 				fakeDriver.sendMessage.mockClear();
 
-				expected = ({
+				expected = {
 					isListening: true,
 					isFrequentListening: false,
 					isRouting: true,
@@ -230,7 +236,7 @@ describe("lib/node/Node", () => {
 						0x03,
 						0x02,
 					),
-				} as unknown) as GetNodeProtocolInfoResponse;
+				} as unknown as GetNodeProtocolInfoResponse;
 
 				fakeDriver.sendMessage.mockResolvedValue(expected);
 			});
@@ -649,7 +655,7 @@ describe("lib/node/Node", () => {
 		const fakeDriver = createEmptyMockDriver();
 
 		function makeNode(canSleep: boolean = false): ZWaveNode {
-			const node = new ZWaveNode(2, (fakeDriver as unknown) as Driver);
+			const node = new ZWaveNode(2, fakeDriver as unknown as Driver);
 			node["_isListening"] = !canSleep;
 			node["_isFrequentListening"] = false;
 			// node.addCC(CommandClasses["Wake Up"], { isSupported: true });
@@ -713,7 +719,7 @@ describe("lib/node/Node", () => {
 		const fakeDriver = createEmptyMockDriver();
 
 		function makeNode(): ZWaveNode {
-			const node = new ZWaveNode(2, (fakeDriver as unknown) as Driver);
+			const node = new ZWaveNode(2, fakeDriver as unknown as Driver);
 			node["_isListening"] = false;
 			node["_isFrequentListening"] = false;
 			node.addCC(CommandClasses["Wake Up"], { isSupported: true });
@@ -771,7 +777,7 @@ describe("lib/node/Node", () => {
 	});
 
 	describe("getCCVersion()", () => {
-		const fakeDriver = (createEmptyMockDriver() as unknown) as Driver;
+		const fakeDriver = createEmptyMockDriver() as unknown as Driver;
 
 		it("should return 0 if a command class is not supported", () => {
 			const node = new ZWaveNode(2, fakeDriver);
@@ -791,7 +797,7 @@ describe("lib/node/Node", () => {
 	});
 
 	describe("removeCC()", () => {
-		const fakeDriver = (createEmptyMockDriver() as unknown) as Driver;
+		const fakeDriver = createEmptyMockDriver() as unknown as Driver;
 
 		it("should mark a CC as not supported", () => {
 			const node = new ZWaveNode(2, fakeDriver);
@@ -838,7 +844,11 @@ describe("lib/node/Node", () => {
 		let node: ZWaveNode;
 		beforeEach(async () => {
 			const fakeDriver = createEmptyMockDriver();
+
+			// Loading configuration may take a while on CI
+			if (process.env.CI) jest.setTimeout(30000);
 			await fakeDriver.configManager.loadDeviceClasses();
+
 			node = new ZWaveNode(
 				2,
 				fakeDriver as any,
@@ -944,9 +954,11 @@ describe("lib/node/Node", () => {
 	});
 
 	describe("serialize() / deserialize()", () => {
-		const fakeDriver = (createEmptyMockDriver() as unknown) as Driver;
+		const fakeDriver = createEmptyMockDriver() as unknown as Driver;
 
 		beforeAll(async () => {
+			// Loading configuration may take a while on CI
+			if (process.env.CI) jest.setTimeout(30000);
 			await fakeDriver.configManager.loadDeviceClasses();
 		});
 
@@ -1255,7 +1267,7 @@ describe("lib/node/Node", () => {
 		const onValueRemoved = jest.fn();
 
 		function createNode(): void {
-			node = new ZWaveNode(1, (fakeDriver as unknown) as Driver)
+			node = new ZWaveNode(1, fakeDriver as unknown as Driver)
 				.on("value added", onValueAdded)
 				.on("value updated", onValueUpdated)
 				.on("value removed", onValueRemoved);
@@ -1332,7 +1344,7 @@ describe("lib/node/Node", () => {
 		}
 
 		function performTest(options: TestOptions): void {
-			const node = new ZWaveNode(1, (fakeDriver as unknown) as Driver);
+			const node = new ZWaveNode(1, fakeDriver as unknown as Driver);
 			node["_status"] = undefined as any;
 			const spy = jest.fn();
 			node.on(options.expectedEvent, spy);
@@ -1449,7 +1461,7 @@ describe("lib/node/Node", () => {
 		};
 
 		beforeEach(() => {
-			node = new ZWaveNode(1, (fakeDriver as unknown) as Driver);
+			node = new ZWaveNode(1, fakeDriver as unknown as Driver);
 			fakeDriver.controller.nodes.set(1, node);
 		});
 
@@ -1498,7 +1510,7 @@ describe("lib/node/Node", () => {
 		function makeNode(
 			ccs: [CommandClasses, Partial<CommandClassInfo>][] = [],
 		): ZWaveNode {
-			const node = new ZWaveNode(2, (fakeDriver as unknown) as Driver);
+			const node = new ZWaveNode(2, fakeDriver as unknown as Driver);
 			fakeDriver.controller.nodes.set(node.id, node);
 			for (const [cc, info] of ccs) {
 				node.addCC(cc, info);
@@ -1538,7 +1550,7 @@ describe("lib/node/Node", () => {
 
 			// Handle a command for the root endpoint
 			const command = new BinarySwitchCCReport(
-				(fakeDriver as unknown) as Driver,
+				fakeDriver as unknown as Driver,
 				{
 					nodeId: 2,
 					data: Buffer.from([
@@ -1590,7 +1602,7 @@ describe("lib/node/Node", () => {
 			]);
 
 			const command = new EntryControlCCNotification(
-				(fakeDriver as unknown) as Driver,
+				fakeDriver as unknown as Driver,
 				{
 					nodeId: node.id,
 					data: buf,

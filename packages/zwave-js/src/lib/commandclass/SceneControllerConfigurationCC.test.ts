@@ -28,7 +28,7 @@ describe("lib/commandclass/SceneControllerConfigurationCC => ", () => {
 	let node2: ZWaveNode;
 
 	beforeAll(() => {
-		fakeDriver = (createEmptyMockDriver() as unknown) as Driver;
+		fakeDriver = createEmptyMockDriver() as unknown as Driver;
 
 		node2 = new ZWaveNode(2, fakeDriver as any);
 		(fakeDriver.controller.nodes as any).set(2, node2);

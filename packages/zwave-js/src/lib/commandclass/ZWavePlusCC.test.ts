@@ -8,7 +8,7 @@ import { createEmptyMockDriver } from "../test/mocks";
 import { CommandClass, getCommandClass } from "./CommandClass";
 import { ZWavePlusCC, ZWavePlusCommand } from "./ZWavePlusCC";
 
-const fakeDriver = (createEmptyMockDriver() as unknown) as Driver;
+const fakeDriver = createEmptyMockDriver() as unknown as Driver;
 
 describe("lib/commandclass/ZWavePlusCC => ", () => {
 	const cc = new ZWavePlusCC(fakeDriver, { nodeId: 9 });
@@ -37,7 +37,7 @@ describe("lib/commandclass/ZWavePlusCC => ", () => {
 
 	describe(`interview()`, () => {
 		const fakeDriver = createEmptyMockDriver();
-		const node = new ZWaveNode(2, (fakeDriver as unknown) as Driver);
+		const node = new ZWaveNode(2, fakeDriver as unknown as Driver);
 
 		beforeAll(() => {
 			fakeDriver.sendMessage.mockImplementation(() =>

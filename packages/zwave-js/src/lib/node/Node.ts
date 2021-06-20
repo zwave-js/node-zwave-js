@@ -1,4 +1,8 @@
-import type { DeviceConfig } from "@zwave-js/config";
+import type {
+	DeviceConfig,
+	Notification,
+	NotificationValueDefinition,
+} from "@zwave-js/config";
 import {
 	actuatorCCs,
 	applicationCCs,
@@ -23,6 +27,7 @@ import {
 	ValueID,
 	valueIdToString,
 	ValueMetadata,
+	ValueMetadataNumeric,
 	ValueRemovedArgs,
 	ValueUpdatedArgs,
 	ZWaveError,
@@ -91,6 +96,8 @@ import {
 	getNodeNameValueId,
 } from "../commandclass/NodeNamingCC";
 import {
+	getNotificationValueMetadata,
+	getNotificationValueMetadataUnknownType,
 	NotificationCC,
 	NotificationCCReport,
 } from "../commandclass/NotificationCC";
@@ -299,9 +306,8 @@ export class ZWaveNode extends Endpoint {
 		const outArg = this.translateValueID(arg);
 		// If this is a metadata event, make sure we return the merged metadata
 		if ("metadata" in outArg) {
-			((outArg as unknown) as MetadataUpdatedArgs).metadata = this.getValueMetadata(
-				arg,
-			);
+			(outArg as unknown as MetadataUpdatedArgs).metadata =
+				this.getValueMetadata(arg);
 		}
 		// Log the value change
 		const ccInstance = this.createCCInstanceInternal(arg.commandClass);
@@ -786,9 +792,11 @@ export class ZWaveNode extends Endpoint {
 			);
 		}
 
-		const api = ((endpointInstance.commandClasses as any)[
-			valueId.commandClass
-		] as CCAPI).withOptions({
+		const api = (
+			(endpointInstance.commandClasses as any)[
+				valueId.commandClass
+			] as CCAPI
+		).withOptions({
 			// We do not want to delay more important communication by polling, so give it
 			// the lowest priority and don't retry unless overwritten by the options
 			maxSendAttempts: 1,
@@ -813,7 +821,12 @@ export class ZWaveNode extends Endpoint {
 		});
 	}
 
-	protected scheduledPolls = new ObjectKeyMap<ValueID, NodeJS.Timeout>();
+	/**
+	 * @internal
+	 * All polls that are currently scheduled for this node
+	 */
+	public scheduledPolls = new ObjectKeyMap<ValueID, NodeJS.Timeout>();
+
 	/**
 	 * @internal
 	 * Schedules a value to be polled after a given time. Only one schedule can be active for a given value ID.
@@ -830,9 +843,11 @@ export class ZWaveNode extends Endpoint {
 		const endpointInstance = this.getEndpoint(valueId.endpoint || 0);
 		if (!endpointInstance) return false;
 
-		const api = ((endpointInstance.commandClasses as any)[
-			valueId.commandClass
-		] as CCAPI).withOptions({
+		const api = (
+			(endpointInstance.commandClasses as any)[
+				valueId.commandClass
+			] as CCAPI
+		).withOptions({
 			// We do not want to delay more important communication by polling, so give it
 			// the lowest priority and don't retry unless overwritten by the options
 			maxSendAttempts: 1,
@@ -1476,17 +1491,6 @@ protocol version:      ${this._protocolVersion}`;
 			}
 
 			try {
-				if (cc === CommandClasses.Version && endpoint.index === 0) {
-					// After the version CC interview of the root endpoint, we have enough info to load the correct device config file
-					await this.loadDeviceConfig();
-					if (this._deviceConfig?.compat?.treatBasicSetAsEvent) {
-						// To create the compat event value, we need to force a Basic CC interview
-						this.addCC(CommandClasses.Basic, {
-							isSupported: true,
-							version: 1,
-						});
-					}
-				}
 				await this.driver.saveNetworkToCache();
 			} catch (e) {
 				this.driver.controllerLog.print(
@@ -1538,20 +1542,49 @@ protocol version:      ${this._protocolVersion}`;
 			this._isSecure = false;
 		}
 
+		// Manufacturer Specific and Version CC need to be handled before the other CCs because they are needed to
+		// identify the device and apply device configurations
+		if (this.supportsCC(CommandClasses["Manufacturer Specific"])) {
+			await interviewEndpoint(
+				this,
+				CommandClasses["Manufacturer Specific"],
+			);
+		}
+
+		if (this.supportsCC(CommandClasses.Version)) {
+			await interviewEndpoint(this, CommandClasses.Version);
+
+			// After the version CC interview of the root endpoint, we have enough info to load the correct device config file
+			await this.loadDeviceConfig();
+
+			// At this point we may need to make some changes to the CCs the device reports
+			this.applyCommandClassesCompatFlag();
+		}
+
 		// Don't offer or interview the Basic CC if any actuator CC is supported - except if the config files forbid us
 		// to map the Basic CC to other CCs or expose Basic Set as an event
 		const compat = this._deviceConfig?.compat;
-		if (!compat?.disableBasicMapping && !compat?.treatBasicSetAsEvent) {
+		if (compat?.treatBasicSetAsEvent) {
+			// To create the compat event value, we need to force a Basic CC interview
+			this.addCC(CommandClasses.Basic, {
+				isSupported: true,
+				version: 1,
+			});
+		} else if (!compat?.disableBasicMapping) {
 			this.hideBasicCCInFavorOfActuatorCCs();
 		}
 
-		// We determine the correct interview order by topologically sorting a dependency graph
-		const rootInterviewGraph = this.buildCCInterviewGraph();
+		// We determine the correct interview order of the remaining CCs by topologically sorting a dependency graph
+		const rootInterviewGraph = this.buildCCInterviewGraph([
+			CommandClasses.Security,
+			CommandClasses["Security 2"],
+			CommandClasses["Manufacturer Specific"],
+			CommandClasses.Version,
+		]);
 		let rootInterviewOrder: CommandClasses[];
 
 		// In order to avoid emitting unnecessary value events for the root endpoint,
-		// we defer the application CC interview until after the other endpoints
-		// have been interviewed
+		// we defer the application CC interview until after the other endpoints have been interviewed
 		const deferApplicationCCs: Comparer<CommandClasses> = (cc1, cc2) => {
 			const cc1IsApplicationCC = applicationCCs.includes(cc1);
 			const cc2IsApplicationCC = applicationCCs.includes(cc2);
@@ -1582,6 +1615,10 @@ protocol version:      ${this._protocolVersion}`;
 			else if (typeof action === "boolean") return action;
 		}
 
+		// Before querying the endpoints, we may need to make some more changes to the CCs the device reports
+		// This time, the non-root endpoints are relevant
+		this.applyCommandClassesCompatFlag();
+
 		// Now query ALL endpoints
 		for (const endpointIndex of this.getEndpointIndizes()) {
 			const endpoint = this.getEndpoint(endpointIndex);
@@ -1611,7 +1648,10 @@ protocol version:      ${this._protocolVersion}`;
 				endpoint.hideBasicCCInFavorOfActuatorCCs();
 			}
 
-			const endpointInterviewGraph = endpoint.buildCCInterviewGraph();
+			const endpointInterviewGraph = endpoint.buildCCInterviewGraph([
+				CommandClasses.Security,
+				CommandClasses["Security 2"],
+			]);
 			let endpointInterviewOrder: CommandClasses[];
 			try {
 				endpointInterviewOrder = topologicalSort(
@@ -1830,6 +1870,39 @@ protocol version:      ${this._protocolVersion}`;
 		}
 	}
 
+	/**
+	 * Uses the `commandClasses` compat flag defined in the node's config file to
+	 * override the reported command classes.
+	 */
+	private applyCommandClassesCompatFlag(): void {
+		if (this.deviceConfig) {
+			// Add CCs the device config file tells us to
+			const addCCs = this.deviceConfig.compat?.addCCs;
+			if (addCCs) {
+				for (const [cc, { endpoints }] of addCCs) {
+					for (const [ep, info] of endpoints) {
+						this.getEndpoint(ep)?.addCC(cc, info);
+					}
+				}
+			}
+			// And remove those that it marks as unsupported
+			const removeCCs = this.deviceConfig.compat?.removeCCs;
+			if (removeCCs) {
+				for (const [cc, endpoints] of removeCCs) {
+					if (endpoints === "*") {
+						for (const ep of this.getAllEndpoints()) {
+							ep.removeCC(cc);
+						}
+					} else {
+						for (const ep of endpoints) {
+							this.getEndpoint(ep)?.removeCC(cc);
+						}
+					}
+				}
+			}
+		}
+	}
+
 	/** Overwrites the reported configuration with information from a config file */
 	protected async overwriteConfig(): Promise<void> {
 		if (this.isControllerNode()) {
@@ -1985,9 +2058,8 @@ protocol version:      ${this._protocolVersion}`;
 		});
 
 		// Ensure that we're not flooding the queue with unnecessary NonceReports (GH#1059)
-		const { queue, currentTransaction } = this.driver[
-			"sendThread"
-		].state.context;
+		const { queue, currentTransaction } =
+			this.driver["sendThread"].state.context;
 		const isNonceReport = (t: Transaction | undefined) =>
 			!!t &&
 			t.message.getNodeId() === this.nodeId &&
@@ -2247,9 +2319,9 @@ protocol version:      ${this._protocolVersion}`;
 			// Try to access the API - if it doesn't work, skip this option
 			let API: CCAPI;
 			try {
-				API = ((this.commandClasses as any)[
-					ccName
-				] as CCAPI).withOptions({
+				API = (
+					(this.commandClasses as any)[ccName] as CCAPI
+				).withOptions({
 					// Tag the resulting transactions as compat queries
 					tag: "compat",
 					// Do not retry them or they may cause congestion if the node is asleep again
@@ -2459,6 +2531,36 @@ protocol version:      ${this._protocolVersion}`;
 			return;
 		}
 
+		// Fallback for V2 notifications that don't allow us to predefine the metadata during the interview.
+		// Instead of defining useless values for each possible notification event, we build the metadata on demand
+		const extendValueMetadata = (
+			valueId: ValueID,
+			notificationConfig: Notification,
+			valueConfig: NotificationValueDefinition & { type: "state" },
+		) => {
+			if (command.version === 2 || !this.valueDB.hasMetadata(valueId)) {
+				const metadata = getNotificationValueMetadata(
+					this.valueDB.getMetadata(valueId) as
+						| ValueMetadataNumeric
+						| undefined,
+					notificationConfig,
+					valueConfig,
+				);
+				this.valueDB.setMetadata(valueId, metadata);
+			}
+		};
+		const ensureValueMetadataUnknownType = (
+			valueId: ValueID,
+			notificationConfig: Notification,
+		) => {
+			if (command.version === 2 && !this.valueDB.hasMetadata(valueId)) {
+				const metadata = getNotificationValueMetadataUnknownType(
+					notificationConfig.id,
+				);
+				this.valueDB.setMetadata(valueId, metadata);
+			}
+		};
+
 		// Look up the received notification in the config
 		const notificationConfig = this.driver.configManager.lookupNotification(
 			command.notificationType,
@@ -2485,6 +2587,7 @@ protocol version:      ${this._protocolVersion}`;
 				};
 				// Since the node has reset the notification itself, we don't need the idle reset
 				this.clearNotificationIdleReset(valueId);
+				extendValueMetadata(valueId, notificationConfig, valueConfig);
 				this.valueDB.setValue(valueId, 0 /* idle */);
 			};
 
@@ -2549,7 +2652,13 @@ protocol version:      ${this._protocolVersion}`;
 				property,
 				propertyKey,
 			};
+			if (valueConfig) {
+				extendValueMetadata(valueId, notificationConfig, valueConfig);
+			} else {
+				ensureValueMetadataUnknownType(valueId, notificationConfig);
+			}
 			this.valueDB.setValue(valueId, value);
+
 			// Nodes before V8 (and some misbehaving V8 ones) don't necessarily reset the notification to idle.
 			// The specifications advise to auto-reset the variables, but it has been found that this interferes
 			// with some motion sensors that don't refresh their active notification. Therefore, we set a fallback
@@ -2934,9 +3043,8 @@ protocol version:      ${this._protocolVersion}`;
 		// Refresh the get timeout
 		if (this._firmwareUpdateStatus.getTimeout) {
 			// console.warn("refreshed get timeout");
-			this._firmwareUpdateStatus.getTimeout = this._firmwareUpdateStatus.getTimeout
-				.refresh()
-				.unref();
+			this._firmwareUpdateStatus.getTimeout =
+				this._firmwareUpdateStatus.getTimeout.refresh().unref();
 		}
 
 		// When a node requests a firmware update fragment, it must be awake
@@ -2948,12 +3056,8 @@ protocol version:      ${this._protocolVersion}`;
 
 		// Send the response(s) in the background
 		void (async () => {
-			const {
-				numFragments,
-				data,
-				fragmentSize,
-				abort,
-			} = this._firmwareUpdateStatus!;
+			const { numFragments, data, fragmentSize, abort } =
+				this._firmwareUpdateStatus!;
 			for (
 				let num = command.reportNumber;
 				num < command.reportNumber + command.numReports;
@@ -3072,14 +3176,15 @@ protocol version:      ${this._protocolVersion}`;
 
 	private async finishFirmwareUpdate(): Promise<void> {
 		try {
-			const report = await this.driver.waitForCommand<FirmwareUpdateMetaDataCCStatusReport>(
-				(cc) =>
-					cc.nodeId === this.nodeId &&
-					cc instanceof FirmwareUpdateMetaDataCCStatusReport,
-				// Wait up to 5 minutes. It should never take that long, but the specs
-				// don't say anything specific
-				5 * 60000,
-			);
+			const report =
+				await this.driver.waitForCommand<FirmwareUpdateMetaDataCCStatusReport>(
+					(cc) =>
+						cc.nodeId === this.nodeId &&
+						cc instanceof FirmwareUpdateMetaDataCCStatusReport,
+					// Wait up to 5 minutes. It should never take that long, but the specs
+					// don't say anything specific
+					5 * 60000,
+				);
 
 			this.handleFirmwareUpdateStatusReport(report);
 		} catch (e: unknown) {
@@ -3174,9 +3279,9 @@ protocol version:      ${this._protocolVersion}`;
 			commandClasses: {} as JSONObject,
 		};
 		// Sort the CCs by their key before writing to the object
-		const sortedCCs = [
-			...this.implementedCommandClasses.keys(),
-		].sort((a, b) => Math.sign(a - b));
+		const sortedCCs = [...this.implementedCommandClasses.keys()].sort(
+			(a, b) => Math.sign(a - b),
+		);
 		for (const cc of sortedCCs) {
 			const serializedCC = {
 				name: CommandClasses[cc],
@@ -3186,14 +3291,13 @@ protocol version:      ${this._protocolVersion}`;
 			// Therefore request the information from all endpoints
 			for (const endpoint of this.getAllEndpoints()) {
 				if (endpoint.implementedCommandClasses.has(cc)) {
-					serializedCC.endpoints[
-						endpoint.index.toString()
-					] = endpoint.implementedCommandClasses.get(cc)!;
+					serializedCC.endpoints[endpoint.index.toString()] =
+						endpoint.implementedCommandClasses.get(cc)!;
 				}
 			}
 			ret.commandClasses[num2hex(cc)] = serializedCC as any;
 		}
-		return (ret as any) as JSONObject;
+		return ret as any as JSONObject;
 	}
 
 	/**

@@ -270,6 +270,9 @@
 				},
 				"treatBasicSetAsEvent": {
 					"const": true
+				},
+				"treatDestinationEndpointAsSource": {
+					"const": true
 				}
 			},
 			"additionalProperties": false

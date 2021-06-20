@@ -16,26 +16,7 @@
 	"supportsZWavePlus": true,
 	"paramInformation": {
 		"1": {
-			"label": "On/Off Status Recovery After Power Failure",
-			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 2,
-			"defaultValue": 0,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "Remember Previous State After Power Failure",
-					"value": 0
-				},
-				{
-					"label": "Power Strip Automatically ON After Power Failure",
-					"value": 1
-				},
-				{
-					"label": "Power Strip Automatically OFF After Power Failure",
-					"value": 2
-				}
-			]
+			"$import": "../templates/master_template.json#state_after_power_failure_prev_on_off"
 		},
 		"2": {
 			"label": "Power Wattage Report Value Threshold",

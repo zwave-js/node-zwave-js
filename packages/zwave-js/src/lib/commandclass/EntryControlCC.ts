@@ -147,10 +147,11 @@ export class EntryControlCCAPI extends CCAPI {
 			nodeId: this.endpoint.nodeId,
 			endpoint: this.endpoint.index,
 		});
-		const response = await this.driver.sendCommand<EntryControlCCKeySupportedReport>(
-			cc,
-			this.commandOptions,
-		);
+		const response =
+			await this.driver.sendCommand<EntryControlCCKeySupportedReport>(
+				cc,
+				this.commandOptions,
+			);
 		return response?.supportedKeys;
 	}
 
@@ -165,10 +166,11 @@ export class EntryControlCCAPI extends CCAPI {
 			nodeId: this.endpoint.nodeId,
 			endpoint: this.endpoint.index,
 		});
-		const response = await this.driver.sendCommand<EntryControlCCEventSupportedReport>(
-			cc,
-			this.commandOptions,
-		);
+		const response =
+			await this.driver.sendCommand<EntryControlCCEventSupportedReport>(
+				cc,
+				this.commandOptions,
+			);
 		if (response) {
 			return pick(response, [
 				"supportedDataTypes",
@@ -192,10 +194,11 @@ export class EntryControlCCAPI extends CCAPI {
 			nodeId: this.endpoint.nodeId,
 			endpoint: this.endpoint.index,
 		});
-		const response = await this.driver.sendCommand<EntryControlCCConfigurationReport>(
-			cc,
-			this.commandOptions,
-		);
+		const response =
+			await this.driver.sendCommand<EntryControlCCConfigurationReport>(
+				cc,
+				this.commandOptions,
+			);
 		if (response) {
 			return pick(response, ["keyCacheSize", "keyCacheTimeout"]);
 		}
@@ -217,10 +220,11 @@ export class EntryControlCCAPI extends CCAPI {
 			keyCacheSize,
 			keyCacheTimeout,
 		});
-		const response = await this.driver.sendCommand<EntryControlCCConfigurationReport>(
-			cc,
-			this.commandOptions,
-		);
+		const response =
+			await this.driver.sendCommand<EntryControlCCConfigurationReport>(
+				cc,
+				this.commandOptions,
+			);
 		if (response) {
 			return pick(response, ["keyCacheSize", "keyCacheTimeout"]);
 		}
@@ -381,8 +385,9 @@ export class EntryControlCCNotification extends EntryControlCC {
 			// But as always - manufacturers don't care and send ASCII data with 0 bytes...
 
 			// We also need to disable the strict validation for some devices to make them work
-			const noStrictValidation = !!this.getNodeUnsafe()?.deviceConfig
-				?.compat?.disableStrictEntryControlDataValidation;
+			const noStrictValidation =
+				!!this.getNodeUnsafe()?.deviceConfig?.compat
+					?.disableStrictEntryControlDataValidation;
 
 			const eventData = Buffer.from(
 				this.payload.slice(offset, offset + eventDataLength),

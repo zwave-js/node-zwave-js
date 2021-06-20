@@ -14,6 +14,9 @@ describe("map Notification CC to Door Lock CC", () => {
 	process.env.LOGLEVEL = "debug";
 
 	beforeEach(async () => {
+		// Loading configuration may take a while on CI
+		if (process.env.CI) jest.setTimeout(30000);
+
 		({ driver } = await createAndStartDriver());
 
 		driver["_controller"] = {

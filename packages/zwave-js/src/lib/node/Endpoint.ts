@@ -192,14 +192,24 @@ export class Endpoint {
 	public getCCVersion(cc: CommandClasses): number {
 		const ccInfo = this._implementedCommandClasses.get(cc);
 		const ret = ccInfo?.version ?? 0;
-		// A controlling node interviewing a Multi Channel End Point MUST request the End Point’s
-		// Command Class version from the Root Device if the End Point does not advertise support
-		// for the Version Command Class.
-		if (
-			ret === 0 &&
-			this.index > 0 &&
-			!this.supportsCC(CommandClasses.Version)
-		) {
+
+		// The specs are contracting themselves here...
+		//
+		// CC Control Specification:
+		// A controlling node interviewing a Multi Channel End Point
+		// MUST request the End Point’s Command Class version from the Root Device
+		// if the End Point does not advertise support for the Version Command Class.
+		//   - vs -
+		// Management CC Specification:
+		// [...] the Version Command Class SHOULD NOT be supported by individual End Points
+		// The Root Device MUST respond to Version requests for any Command Class
+		// implemented by the Multi Channel device; also in cases where the actual
+		// Command Class is only provided by an End Point.
+		//
+		// We go with the 2nd interpretation since the other either results in
+		// an unnecessary Version CC interview for each endpoint or an incorrect V1 for endpoints
+
+		if (ret === 0 && this.index > 0) {
 			return this.getNodeUnsafe()!.getCCVersion(cc);
 		}
 		return ret;
@@ -272,16 +282,14 @@ export class Endpoint {
 	}
 
 	/** Builds the dependency graph used to automatically determine the order of CC interviews */
-	public buildCCInterviewGraph(): GraphNode<CommandClasses>[] {
+	public buildCCInterviewGraph(
+		skipCCs: CommandClasses[],
+	): GraphNode<CommandClasses>[] {
 		const supportedCCs = this.getSupportedCCInstances()
 			.map((instance) => instance.ccId)
-			// Security must be interviewed before all others, so we do that outside of the loop
-			.filter(
-				(ccId) =>
-					ccId !== CommandClasses.Security &&
-					ccId !== CommandClasses["Security 2"],
-			);
-		// Create GraphNodes from all supported CCs
+			.filter((ccId) => !skipCCs.includes(ccId));
+
+		// Create GraphNodes from all supported CCs that should not be skipped
 		const ret = supportedCCs.map((cc) => new GraphNode(cc));
 		// Create the dependencies
 		for (const node of ret) {
@@ -321,6 +329,7 @@ export class Endpoint {
 					property !== "endpoint" &&
 					property !== "isSupported" &&
 					property !== "withOptions" &&
+					property !== "commandOptions" &&
 					!target.isSupported()
 				) {
 					throw new ZWaveError(
@@ -368,7 +377,7 @@ export class Endpoint {
 					ccId = +ccNameOrId;
 				} else {
 					// If a name was given, retrieve the corresponding ID
-					ccId = (CommandClasses[ccNameOrId as any] as unknown) as
+					ccId = CommandClasses[ccNameOrId as any] as unknown as
 						| CommandClasses
 						| undefined;
 					if (ccId == undefined) {
@@ -406,7 +415,7 @@ export class Endpoint {
 	 * all other API calls will throw if the API is not supported
 	 */
 	public get commandClasses(): CCAPIs {
-		return (this._commandClassAPIsProxy as unknown) as CCAPIs;
+		return this._commandClassAPIsProxy as unknown as CCAPIs;
 	}
 
 	/**

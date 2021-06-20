@@ -32,10 +32,7 @@
 		"strictFunctionTypes": true,
 		"watch": false, // true breaks CI scripts
 		"pretty": true,
-		"types": [
-			"node",
-			"jest-extended"
-		],
+		"types": ["node", "jest-extended"],
 		"noErrorTruncation": true
 	},
 	"include": [
@@ -45,9 +42,5 @@
 		"maintenance/**/*.ts",
 		"test/**/*.ts"
 	],
-	"exclude": [
-		"**/build/**",
-		"node_modules/**",
-		"packages/**/node_modules"
-	]
+	"exclude": ["**/build/**", "node_modules/**", "packages/**/node_modules"]
 }

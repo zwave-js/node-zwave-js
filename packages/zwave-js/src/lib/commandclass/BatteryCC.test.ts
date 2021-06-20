@@ -12,7 +12,7 @@ import {
 	BatteryReplacementStatus,
 } from "./BatteryCC";
 
-const fakeDriver = (createEmptyMockDriver() as unknown) as Driver;
+const fakeDriver = createEmptyMockDriver() as unknown as Driver;
 
 describe("lib/commandclass/BatteryCC => ", () => {
 	it("the Get command should serialize correctly", () => {
@@ -128,7 +128,7 @@ describe("lib/commandclass/BatteryCC => ", () => {
 
 	describe(`interview()`, () => {
 		const fakeDriver = createEmptyMockDriver();
-		const node = new ZWaveNode(2, (fakeDriver as unknown) as Driver);
+		const node = new ZWaveNode(2, fakeDriver as unknown as Driver);
 
 		beforeAll(() => {
 			fakeDriver.sendMessage.mockImplementation(() =>

@@ -17,6 +17,12 @@ For the following explanations it is assumed that you are familiar with `async/a
 
 It is recommended to either use TypeScript when consuming the library or work in an IDE that understands TypeScript definitions (like VSCode or WebStorm).
 
+# Top Sponsors
+
+<p>
+  <a href="https://www.nabucasa.com/" target="_blank"><img src="sponsors/nabucasa.png" width="120" alt="Nabu Casa" /></a>
+</p>
+
 <!--
 TODO: Move all this to the documentation
 ## Development

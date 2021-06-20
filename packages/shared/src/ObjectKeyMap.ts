@@ -106,7 +106,7 @@ type PickSymbolIterator<T> = T extends { [Symbol.iterator]: infer V }
 
 export type ReadonlyObjectKeyMap<
 	TKey extends Record<string | number, any>,
-	TValue
+	TValue,
 > = Pick<
 	ObjectKeyMap<TKey, TValue>,
 	"has" | "get" | "entries" | "keys" | "values" | "size"

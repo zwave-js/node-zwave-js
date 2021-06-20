@@ -416,9 +416,7 @@ export class ValueDB extends TypedEventEmitter<ValueDBEventCallbacks> {
 	}
 
 	/** Returns all metadata that is stored for a given CC */
-	public getAllMetadata(
-		forCC: CommandClasses,
-	): (ValueID & {
+	public getAllMetadata(forCC: CommandClasses): (ValueID & {
 		metadata: ValueMetadata;
 	})[] {
 		const ret: ReturnType<ValueDB["getAllMetadata"]> = [];
@@ -436,9 +434,7 @@ export class ValueDB extends TypedEventEmitter<ValueDBEventCallbacks> {
 	}
 
 	/** Returns all values whose id matches the given predicate */
-	public findMetadata(
-		predicate: (id: ValueID) => boolean,
-	): (ValueID & {
+	public findMetadata(predicate: (id: ValueID) => boolean): (ValueID & {
 		metadata: ValueMetadata;
 	})[] {
 		const ret: ReturnType<ValueDB["findMetadata"]> = [];

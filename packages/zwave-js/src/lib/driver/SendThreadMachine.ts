@@ -306,7 +306,9 @@ const guards: MachineOptions<SendThreadContext, SendThreadEvent>["guards"] = {
 			msg instanceof SendDataRequest ||
 			msg instanceof SendDataBridgeRequest
 		) {
-			return !(msg.command as CommandClass).requiresPreTransmitHandshake();
+			return !(
+				msg.command as CommandClass
+			).requiresPreTransmitHandshake();
 		}
 		return true;
 	},
@@ -376,9 +378,11 @@ const guards: MachineOptions<SendThreadContext, SendThreadEvent>["guards"] = {
 			// require the handshake to be for the same node
 			return (
 				transaction.message.command.nodeId ===
-				(ctx.currentTransaction!.message as
-					| SendDataRequest
-					| SendDataBridgeRequest).command.nodeId
+				(
+					ctx.currentTransaction!.message as
+						| SendDataRequest
+						| SendDataBridgeRequest
+				).command.nodeId
 			);
 		}
 		return false;
@@ -412,9 +416,11 @@ const guards: MachineOptions<SendThreadContext, SendThreadEvent>["guards"] = {
 			// require the handshake to be for the same node
 			return (
 				transaction.message.command.nodeId ===
-				(ctx.currentTransaction!.message as
-					| SendDataRequest
-					| SendDataBridgeRequest).command.nodeId
+				(
+					ctx.currentTransaction!.message as
+						| SendDataRequest
+						| SendDataBridgeRequest
+				).command.nodeId
 			);
 		}
 		return false;
@@ -446,13 +452,14 @@ export function createSendThreadMachine(
 	implementations: ServiceImplementations,
 	params: SendThreadMachineParams,
 ): SendThreadMachine {
-	const resolveCurrentTransaction: AssignAction<
-		SendThreadContext,
-		any
-	> = assign((ctx, evt) => {
-		implementations.resolveTransaction(ctx.currentTransaction!, evt.result);
-		return ctx;
-	});
+	const resolveCurrentTransaction: AssignAction<SendThreadContext, any> =
+		assign((ctx, evt) => {
+			implementations.resolveTransaction(
+				ctx.currentTransaction!,
+				evt.result,
+			);
+			return ctx;
+		});
 	const resolveCurrentTransactionWithoutMessage: AssignAction<
 		SendThreadContext,
 		any
@@ -461,20 +468,18 @@ export function createSendThreadMachine(
 		return ctx;
 	});
 
-	const rejectCurrentTransaction: AssignAction<
-		SendThreadContext,
-		any
-	> = assign((ctx, evt) => {
-		implementations.rejectTransaction(
-			ctx.currentTransaction!,
-			sendDataErrorToZWaveError(
-				evt.reason,
+	const rejectCurrentTransaction: AssignAction<SendThreadContext, any> =
+		assign((ctx, evt) => {
+			implementations.rejectTransaction(
 				ctx.currentTransaction!,
-				evt.result,
-			),
-		);
-		return ctx;
-	});
+				sendDataErrorToZWaveError(
+					evt.reason,
+					ctx.currentTransaction!,
+					evt.result,
+				),
+			);
+			return ctx;
+		});
 
 	const rejectCurrentTransactionWithError: AssignAction<
 		SendThreadContext,
@@ -502,31 +507,27 @@ export function createSendThreadMachine(
 		return ctx;
 	});
 
-	const resolveHandshakeTransaction: AssignAction<
-		SendThreadContext,
-		any
-	> = assign((ctx, evt) => {
-		implementations.resolveTransaction(
-			ctx.handshakeTransaction!,
-			evt.result,
-		);
-		return ctx;
-	});
-
-	const rejectHandshakeTransaction: AssignAction<
-		SendThreadContext,
-		any
-	> = assign((ctx, evt) => {
-		implementations.rejectTransaction(
-			ctx.handshakeTransaction!,
-			sendDataErrorToZWaveError(
-				evt.reason,
+	const resolveHandshakeTransaction: AssignAction<SendThreadContext, any> =
+		assign((ctx, evt) => {
+			implementations.resolveTransaction(
 				ctx.handshakeTransaction!,
 				evt.result,
-			),
-		);
-		return ctx;
-	});
+			);
+			return ctx;
+		});
+
+	const rejectHandshakeTransaction: AssignAction<SendThreadContext, any> =
+		assign((ctx, evt) => {
+			implementations.rejectTransaction(
+				ctx.handshakeTransaction!,
+				sendDataErrorToZWaveError(
+					evt.reason,
+					ctx.handshakeTransaction!,
+					evt.result,
+				),
+			);
+			return ctx;
+		});
 
 	const rejectHandshakeTransactionWithError: AssignAction<
 		SendThreadContext,
@@ -557,13 +558,11 @@ export function createSendThreadMachine(
 		return ctx;
 	});
 
-	const resolveEventTransaction: AssignAction<
-		SendThreadContext,
-		any
-	> = assign((ctx, evt) => {
-		implementations.resolveTransaction(evt.transaction, evt.result);
-		return ctx;
-	});
+	const resolveEventTransaction: AssignAction<SendThreadContext, any> =
+		assign((ctx, evt) => {
+			implementations.resolveTransaction(evt.transaction, evt.result);
+			return ctx;
+		});
 
 	const rejectEventTransaction: AssignAction<SendThreadContext, any> = assign(
 		(ctx, evt) => {
@@ -607,9 +606,11 @@ export function createSendThreadMachine(
 			const reduceTransaction: (
 				...args: Parameters<TransactionReducer>
 			) => void = (transaction, source) => {
-				const reducerResult = (evt as SendThreadEvent & {
-					type: "reduce";
-				}).reducer(transaction, source);
+				const reducerResult = (
+					evt as SendThreadEvent & {
+						type: "reduce";
+					}
+				).reducer(transaction, source);
 				switch (reducerResult.type) {
 					case "drop":
 						drop.push(transaction);
@@ -878,7 +879,8 @@ export function createSendThreadMachine(
 											// On failure, retry SendData commands if possible
 											{
 												cond: "mayRetry",
-												actions: rejectHandshakeTransaction,
+												actions:
+													rejectHandshakeTransaction,
 												target: "#sending.retryWait",
 											},
 											// Otherwise reject the transaction
@@ -894,7 +896,8 @@ export function createSendThreadMachine(
 											// On failure, retry SendData commands if possible
 											{
 												cond: "mayRetry",
-												actions: rejectHandshakeTransactionWithError,
+												actions:
+													rejectHandshakeTransactionWithError,
 												target: "#sending.retryWait",
 											},
 											// Otherwise reject the transaction
@@ -918,9 +921,9 @@ export function createSendThreadMachine(
 												? [
 														{
 															cond: "mayRetry",
-															target:
-																"#sending.retryWait",
-															actions: rejectHandshakeTransactionWithNodeTimeout,
+															target: "#sending.retryWait",
+															actions:
+																rejectHandshakeTransactionWithNodeTimeout,
 														},
 												  ]
 												: []),
@@ -980,7 +983,8 @@ export function createSendThreadMachine(
 									},
 									// Otherwise reject the transaction
 									{
-										actions: rejectCurrentTransactionWithError,
+										actions:
+											rejectCurrentTransactionWithError,
 										target: "done",
 									},
 								],
@@ -1006,7 +1010,8 @@ export function createSendThreadMachine(
 										  ]
 										: []),
 									{
-										actions: rejectCurrentTransactionWithNodeTimeout,
+										actions:
+											rejectCurrentTransactionWithNodeTimeout,
 										target: "done",
 									},
 								],
@@ -1041,9 +1046,11 @@ export function createSendThreadMachine(
 				preTransmitHandshake: async (ctx) => {
 					// Execute the pre transmit handshake and swallow all errors
 					try {
-						await (ctx.currentTransaction!.message as
-							| SendDataRequest
-							| SendDataBridgeRequest).command.preTransmitHandshake();
+						await (
+							ctx.currentTransaction!.message as
+								| SendDataRequest
+								| SendDataBridgeRequest
+						).command.preTransmitHandshake();
 					} catch (e) {}
 				},
 				notifyRetry: (ctx) => {
@@ -1052,9 +1059,11 @@ export function createSendThreadMachine(
 						undefined,
 						ctx.currentTransaction!.message,
 						ctx.sendDataAttempts,
-						(ctx.currentTransaction!.message as
-							| SendDataRequest
-							| SendDataBridgeRequest).maxSendAttempts,
+						(
+							ctx.currentTransaction!.message as
+								| SendDataRequest
+								| SendDataBridgeRequest
+						).maxSendAttempts,
 						500,
 					);
 					return Promise.resolve();

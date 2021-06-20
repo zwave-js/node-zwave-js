@@ -30,5 +30,16 @@
 			"label": "K3",
 			"maxNodes": 1
 		}
+	},
+	"compat": {
+		"commandClasses": {
+			"add": {
+				"0x60": {
+					// This device has 3 channels, but it responds to the CC version request with 0
+					"isSupported": true,
+					"version": 2
+				}
+			}
+		}
 	}
 }

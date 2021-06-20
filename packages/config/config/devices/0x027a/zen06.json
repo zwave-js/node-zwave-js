@@ -41,27 +41,7 @@
 			]
 		},
 		"21": {
-			"label": "On/Off Status Recovery After Power Failure",
-			"description": "Recovery state for power failure",
-			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 2,
-			"defaultValue": 0,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "Previous setting",
-					"value": 0
-				},
-				{
-					"label": "ON",
-					"value": 1
-				},
-				{
-					"label": "OFF",
-					"value": 2
-				}
-			]
+			"$import": "../templates/master_template.json#state_after_power_failure_prev_on_off"
 		},
 		"24": {
 			"label": "On/Off Status Change Notifications",

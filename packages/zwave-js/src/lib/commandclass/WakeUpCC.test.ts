@@ -17,7 +17,7 @@ import {
 	WakeUpCCNoMoreInformation,
 } from "./WakeUpCC";
 
-const fakeDriver = (createEmptyMockDriver() as unknown) as Driver;
+const fakeDriver = createEmptyMockDriver() as unknown as Driver;
 
 describe("lib/commandclass/WakeUpCC => ", () => {
 	const cc = new WakeUpCC(fakeDriver, { nodeId: 9 });
@@ -47,7 +47,7 @@ describe("lib/commandclass/WakeUpCC => ", () => {
 
 	describe(`interview()`, () => {
 		const fakeDriver = createEmptyMockDriver();
-		const node = new ZWaveNode(2, (fakeDriver as unknown) as Driver);
+		const node = new ZWaveNode(2, fakeDriver as unknown as Driver);
 		let cc: WakeUpCC;
 
 		beforeAll(() => {
