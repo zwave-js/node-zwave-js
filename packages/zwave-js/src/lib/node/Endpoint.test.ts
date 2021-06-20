@@ -140,6 +140,9 @@ describe("lib/node/Endpoint", () => {
 
 	describe("Device Class quirks", () => {
 		it("A non-root endpoint with the `Power Strip Switch` device class does not support the Multi Channel CC", async () => {
+			// Loading configuration may take a while on CI
+			if (process.env.CI) jest.setTimeout(30000);
+
 			const cm = new ConfigManager();
 			await cm.loadDeviceClasses();
 			const powerStripSwitch = new DeviceClass(cm, 0x01, 0x10, 0x04);
@@ -153,6 +156,9 @@ describe("lib/node/Endpoint", () => {
 		});
 
 		it("Non-root endpoints should not have the Manufacturer Specific CC (among others) added as mandatory", async () => {
+			// Loading configuration may take a while on CI
+			if (process.env.CI) jest.setTimeout(30000);
+
 			const cm = new ConfigManager();
 			await cm.loadDeviceClasses();
 			const soundSwitch = new DeviceClass(cm, 0x01, 0x03, 0x01);
@@ -171,6 +177,9 @@ describe("lib/node/Endpoint", () => {
 		});
 
 		it("Always-listening nodes should not have the Battery CC added as mandatory", async () => {
+			// Loading configuration may take a while on CI
+			if (process.env.CI) jest.setTimeout(30000);
+
 			const cm = new ConfigManager();
 			await cm.loadDeviceClasses();
 			const soundSwitch = new DeviceClass(cm, 0x01, 0x03, 0x01);
