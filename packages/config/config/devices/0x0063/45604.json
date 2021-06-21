@@ -28,9 +28,8 @@
 			"isLifeline": true
 		},
 		"2": {
-			"label": "Local Load",
-			"maxNodes": 5,
-			"description": "Controlled with the local load."
+			"label": "Basic Set",
+			"maxNodes": 5
 		},
 		"3": {
 			"label": "Double Tap",
