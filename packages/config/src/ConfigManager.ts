@@ -275,7 +275,7 @@ export class ConfigManager {
 		return this.namedScales.get(name);
 	}
 
-	/** Looks up a scale definition for a given sensor type */
+	/** Looks up a scale definition for a given scale type */
 	public lookupNamedScale(name: string, scale: number): Scale {
 		const group = this.lookupNamedScaleGroup(name);
 		return group?.get(scale) ?? getDefaultScale(scale);

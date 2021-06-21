@@ -24,6 +24,7 @@ import {
 } from "@zwave-js/serial";
 import {
 	DeepPartial,
+	mergeDeep,
 	num2hex,
 	pick,
 	stringify,
@@ -34,7 +35,6 @@ import {
 	createDeferredPromise,
 	DeferredPromise,
 } from "alcalzone-shared/deferred-promise";
-import { entries } from "alcalzone-shared/objects";
 import { isArray, isObject } from "alcalzone-shared/typeguards";
 import { randomBytes } from "crypto";
 import type { EventEmitter } from "events";
@@ -164,31 +164,12 @@ const defaultOptions: ZWaveOptions = {
 		cacheDir: path.resolve(__dirname, "../../..", "cache"),
 		throttle: "normal",
 	},
+	preferences: {
+		scales: {
+			temperature: "Celsius",
+		},
+	},
 };
-
-/**
- * Merges the user-defined options with the default options
- */
-function applyDefaultOptions(
-	target: Record<string, any> | undefined,
-	source: Record<string, any>,
-): Record<string, any> {
-	target = target || {};
-	for (const [key, value] of entries(source)) {
-		if (!(key in target)) {
-			target[key] = value;
-		} else {
-			if (typeof value === "object") {
-				// merge objects
-				target[key] = applyDefaultOptions(target[key], value);
-			} else if (typeof target[key] === "undefined") {
-				// don't override single keys
-				target[key] = value;
-			}
-		}
-	}
-	return target;
-}
 
 /** Ensures that the options are valid */
 function checkOptions(options: ZWaveOptions): void {
@@ -406,10 +387,7 @@ export class Driver extends TypedEventEmitter<DriverEventCallbacks> {
 		super();
 
 		// merge given options with defaults
-		this.options = applyDefaultOptions(
-			options,
-			defaultOptions,
-		) as ZWaveOptions;
+		this.options = mergeDeep(options, defaultOptions) as ZWaveOptions;
 		// And make sure they contain valid values
 		checkOptions(this.options);
 
@@ -560,6 +538,16 @@ export class Driver extends TypedEventEmitter<DriverEventCallbacks> {
 	/** Returns the current logging configuration. */
 	public getLogConfig(): LogConfig {
 		return this._logContainer.getConfiguration();
+	}
+
+	/** Updates the preferred sensor scales to use for node queries */
+	public setPreferredScales(
+		scales: ZWaveOptions["preferences"]["scales"],
+	): void {
+		this.options.preferences.scales = mergeDeep(
+			defaultOptions.preferences.scales,
+			scales,
+		);
 	}
 
 	/** Enumerates all existing serial ports */

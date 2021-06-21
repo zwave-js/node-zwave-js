@@ -6,7 +6,7 @@ import { pathExists, readFile } from "fs-extra";
 import JSON5 from "json5";
 import path from "path";
 import type { ConfigManager } from "./ConfigManager";
-import { Scale } from "./Scales";
+import { Scale, ScaleGroup } from "./Scales";
 import {
 	configDir,
 	externalConfigDir,
@@ -131,5 +131,5 @@ export class SensorType {
 
 	public readonly key: number;
 	public readonly label: string;
-	public readonly scales: ReadonlyMap<number, Scale>;
+	public readonly scales: ScaleGroup;
 }

@@ -62,3 +62,27 @@ export function throttle<T extends any[]>(
 		}
 	};
 }
+
+/**
+ * Merges the user-defined options with the default options
+ */
+export function mergeDeep(
+	target: Record<string, any> | undefined,
+	source: Record<string, any>,
+): Record<string, any> {
+	target = target || {};
+	for (const [key, value] of Object.entries(source)) {
+		if (!(key in target)) {
+			target[key] = value;
+		} else {
+			if (typeof value === "object") {
+				// merge objects
+				target[key] = mergeDeep(target[key], value);
+			} else if (typeof target[key] === "undefined") {
+				// don't override single keys
+				target[key] = value;
+			}
+		}
+	}
+	return target;
+}

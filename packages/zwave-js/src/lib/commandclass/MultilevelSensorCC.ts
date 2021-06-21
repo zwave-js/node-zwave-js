@@ -15,6 +15,7 @@ import {
 	ZWaveError,
 	ZWaveErrorCodes,
 } from "@zwave-js/core";
+import { pick } from "@zwave-js/shared";
 import type { Driver } from "../driver/Driver";
 import { MessagePriority } from "../message/Constants";
 import {
@@ -65,6 +66,82 @@ export type MultilevelSensorValueMetadata = ValueMetadata & {
 	};
 };
 
+/**
+ * Determine the scale to use to query a sensor reading. Uses the user-preferred scale if given,
+ * otherwise falls back to the first supported one.
+ */
+function getPreferredSensorScale(
+	driver: Driver,
+	nodeId: number,
+	endpointIndex: number,
+	sensorType: number,
+	supportedScales: readonly number[],
+): number {
+	const scaleGroup =
+		driver.configManager.lookupSensorType(sensorType)?.scales;
+	// If the sensor type is unknown, we have no default. Use the user-provided scale or 0
+	if (!scaleGroup) {
+		const preferred = driver.options.preferences.scales[sensorType];
+		// We cannot look up strings for unknown sensor types, so this must be a number or we use the fallback
+		if (typeof preferred !== "number") return 0;
+		return preferred;
+	}
+
+	// Look up the preference for the scale
+	let preferred: number | string | undefined;
+	// Named scales apply to multiple sensor types. To be able to override the scale for single types
+	// we need to look at the preferences by sensor type first
+	preferred = driver.options.preferences.scales[sensorType];
+	// If the scale is named, we can then try to use the named preference
+	if (preferred == undefined && scaleGroup.name) {
+		preferred = driver.options.preferences.scales[scaleGroup.name];
+	}
+	// Then fall back to the first supported scale
+	if (preferred == undefined) {
+		preferred = supportedScales[0] ?? 0;
+		driver.controllerLog.logNode(nodeId, {
+			endpoint: endpointIndex,
+			message: `No scale preference for sensor type ${sensorType}, using the first supported scale ${preferred}`,
+		});
+		return preferred;
+	}
+
+	// If the scale name or unit was given, try to look it up
+	if (typeof preferred === "string") {
+		for (const scale of scaleGroup.values()) {
+			if (scale.label === preferred || scale.unit === preferred) {
+				preferred = scale.key;
+				break;
+			}
+		}
+	}
+
+	if (typeof preferred === "string") {
+		// Looking up failed
+		driver.controllerLog.logNode(nodeId, {
+			endpoint: endpointIndex,
+			message: `Preferred scale "${preferred}" for sensor type ${sensorType} not found, using the first supported scale ${
+				supportedScales[0] ?? 0
+			}`,
+		});
+		return supportedScales[0] ?? 0;
+	}
+
+	// We have a numeric scale key, nothing to look up. Make sure it is supported though
+	if (!supportedScales.length) {
+		// No info about supported scales, just use the preferred one
+		return preferred;
+	} else if (!supportedScales.includes(preferred)) {
+		driver.controllerLog.logNode(nodeId, {
+			endpoint: endpointIndex,
+			message: `Preferred scale ${preferred} not supported for sensor type ${sensorType}, using the first supported scale`,
+		});
+		return supportedScales[0];
+	} else {
+		return preferred;
+	}
+}
+
 // @noSetValueAPI This CC is read-only
 
 @API(CommandClasses["Multilevel Sensor"])
@@ -101,9 +178,15 @@ export class MultilevelSensorCCAPI extends PhysicalCCAPI {
 		return this.get(sensorType, scale);
 	};
 
+	/** Query the default sensor value */
 	public async get(): Promise<
 		(MultilevelSensorValue & { type: number }) | undefined
 	>;
+	/** Query the sensor value for the given sensor type using the preferred sensor scale */
+	public async get(
+		sensorType: number,
+	): Promise<MultilevelSensorValue | undefined>;
+	/** Query the sensor value for the given sensor type using the given sensor scale */
 	public async get(
 		sensorType: number,
 		scale: number,
@@ -115,11 +198,31 @@ export class MultilevelSensorCCAPI extends PhysicalCCAPI {
 			MultilevelSensorCommand.Get,
 		);
 
+		// Figure out the preferred scale if none was given
+		let preferredScale: number | undefined;
+		if (sensorType != undefined && scale == undefined) {
+			const supportedScales: readonly number[] =
+				this.endpoint.getNodeUnsafe()?.getValue({
+					commandClass: this.ccId,
+					endpoint: this.endpoint.index,
+					property: "supportedScales",
+					propertyKey: sensorType,
+				}) ?? [];
+
+			preferredScale = getPreferredSensorScale(
+				this.driver,
+				this.endpoint.nodeId,
+				this.endpoint.index,
+				sensorType,
+				supportedScales,
+			);
+		}
+
 		const cc = new MultilevelSensorCCGet(this.driver, {
 			nodeId: this.endpoint.nodeId,
 			endpoint: this.endpoint.index,
 			sensorType,
-			scale,
+			scale: scale ?? preferredScale,
 		});
 		const response =
 			await this.driver.sendCommand<MultilevelSensorCCReport>(
@@ -128,15 +231,18 @@ export class MultilevelSensorCCAPI extends PhysicalCCAPI {
 			);
 		if (!response) return;
 
-		if (sensorType === undefined) {
+		if (sensorType == undefined) {
 			// Overload #1: return the full response
 			return {
 				type: response.type,
 				value: response.value,
 				scale: response.scale,
 			};
+		} else if (scale == undefined) {
+			// Overload #2: return value and scale
+			return pick(response, ["value", "scale"]);
 		} else {
-			// Overload #2: return only the value
+			// Overload #3: return only the value
 			return response.value;
 		}
 	}
@@ -339,14 +445,6 @@ value:       ${mlsResponse.value} ${sensorScale.unit || ""}`;
 				}) || [];
 
 			for (const type of sensorTypes) {
-				const sensorScales: readonly number[] =
-					this.getValueDB().getValue({
-						commandClass: this.ccId,
-						endpoint: this.endpointIndex,
-						property: "supportedScales",
-						propertyKey: type,
-					}) || [];
-
 				this.driver.controllerLog.logNode(node.id, {
 					endpoint: this.endpointIndex,
 					message: `querying ${this.driver.configManager.getSensorTypeName(
@@ -354,16 +452,14 @@ value:       ${mlsResponse.value} ${sensorScale.unit || ""}`;
 					)} sensor reading...`,
 					direction: "outbound",
 				});
-				// TODO: Add some way to select the scale. For now use the first available one
-				const value = await api.get(type, sensorScales[0]);
-				if (value != undefined) {
-					const scale = this.driver.configManager.lookupSensorScale(
-						type,
-						sensorScales[0],
-					);
+
+				const value = await api.get(type);
+				if (value) {
 					const logMessage = `received current ${this.driver.configManager.getSensorTypeName(
 						type,
-					)} sensor reading: ${value} ${scale.unit || ""}`;
+					)} sensor reading: ${value.value} ${
+						value.scale.unit || ""
+					}`;
 					this.driver.controllerLog.logNode(node.id, {
 						endpoint: this.endpointIndex,
 						message: logMessage,
