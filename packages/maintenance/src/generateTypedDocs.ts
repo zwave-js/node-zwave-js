@@ -9,7 +9,9 @@ import { CommandClasses, getCCName } from "@zwave-js/core";
 import { enumFilesRecursive, num2hex } from "@zwave-js/shared";
 import { red } from "ansi-colors";
 import * as fs from "fs-extra";
+import * as os from "os";
 import * as path from "path";
+import Piscina from "piscina";
 import {
 	CommentRange,
 	ExportedDeclarations,
@@ -21,9 +23,11 @@ import {
 	OptionalKind,
 	Project,
 	PropertySignatureStructure,
+	SourceFile,
 	SyntaxKind,
 	TypeLiteralNode,
 } from "ts-morph";
+import { isMainThread } from "worker_threads";
 import { formatWithPrettier } from "./prettier";
 import {
 	getCommandClassFromClassDeclaration,
@@ -215,6 +219,9 @@ export function findImportRanges(docFile: string): ImportRange[] {
 	}));
 }
 
+const docsDir = path.join(projectRoot, "docs");
+const ccDocsDir = path.join(docsDir, "api/CCs");
+
 export async function processDocFile(
 	program: Project,
 	docFile: string,
@@ -248,6 +255,7 @@ ${source}
 \`\`\`${fileContent.slice(range.end)}`;
 		}
 	}
+	console.log(`formatting ${docFile}...`);
 	fileContent = fileContent.replace(/\r\n/g, "\n");
 	fileContent = formatWithPrettier(docFile, fileContent);
 	if (!hasErrors) {
@@ -257,16 +265,16 @@ ${source}
 }
 
 /** Processes all imports, returns true if there was an error */
-async function processImports(program: Project): Promise<boolean> {
+async function processImports(piscina: Piscina): Promise<boolean> {
 	const files = await enumFilesRecursive(
 		path.join(projectRoot, "docs"),
 		(f) =>
 			!f.includes("/CCs/") && !f.includes("\\CCs\\") && f.endsWith(".md"),
 	);
-	let hasErrors = false;
-	for (const file of files) {
-		hasErrors ||= await processDocFile(program, file);
-	}
+
+	const tasks = files.map((f) => piscina.run(f, { name: "processImport" }));
+
+	const hasErrors = (await Promise.all(tasks)).some((result) => result);
 	return hasErrors;
 }
 
@@ -300,11 +308,117 @@ function printOverload(method: MethodDeclaration): string {
 	return fixPrinterErrors(method.getText());
 }
 
+async function processCCDocFile(
+	file: SourceFile,
+): Promise<{ generatedIndex: string; generatedSidebar: any } | undefined> {
+	const APIClass = file
+		.getClasses()
+		.find((c) => c.getName()?.endsWith("CCAPI"));
+	if (!APIClass) return;
+
+	const ccId = getCommandClassFromClassDeclaration(
+		file.compilerNode,
+		APIClass.compilerNode,
+	);
+	if (ccId == undefined) return;
+	const ccName = getCCName(ccId);
+	console.log(`generating documentation for ${ccName} CC...`);
+
+	const filename = APIClass.getName()!.replace("CCAPI", "") + ".md";
+	let text = `# ${ccName} CC
+
+?> CommandClass ID: \`${num2hex((CommandClasses as any)[ccName])}\`
+`;
+	const generatedIndex = `\n- [${ccName} CC](api/CCs/${filename}) · \`${num2hex(
+		(CommandClasses as any)[ccName],
+	)}\``;
+	const generatedSidebar = `\n\t\t- [${ccName} CC](api/CCs/${filename})`;
+
+	// Enumerate all useful public methods
+	const ignoredMethods: string[] = [
+		"supportsCommand",
+		"isSetValueOptimistic",
+	];
+	const methods = APIClass.getInstanceMethods()
+		.filter((m) => m.hasModifier(SyntaxKind.PublicKeyword))
+		.filter((m) => !ignoredMethods.includes(m.getName()));
+
+	if (methods.length) {
+		text += `## ${ccName} CC methods\n\n`;
+	}
+
+	for (const method of methods) {
+		const signatures = method.getOverloads();
+
+		text += `### \`${method.getName()}\`
+\`\`\`ts
+${
+	signatures.length > 0
+		? signatures.map(printOverload).join("\n\n")
+		: printMethodDeclaration(method)
+}
+\`\`\`
+
+`;
+		const doc = method.getStructure().docs?.[0];
+		if (typeof doc === "string") {
+			text += doc + "\n\n";
+		} else if (doc != undefined) {
+			if (typeof doc.description === "string") {
+				let description = doc.description.trim();
+				if (!description.endsWith(".")) {
+					description += ".";
+				}
+				text += description + "\n\n";
+			}
+			if (doc.tags) {
+				const paramTags = doc.tags
+					.filter(
+						(
+							t,
+						): t is OptionalKind<JSDocTagStructure> & {
+							text: string;
+						} =>
+							t.tagName === "param" && typeof t.text === "string",
+					)
+					.map((t) => {
+						const firstSpace = t.text.indexOf(" ");
+						if (firstSpace === -1) return undefined;
+						return [
+							t.text.slice(0, firstSpace),
+							t.text.slice(firstSpace + 1),
+						] as const;
+					})
+					.filter((t): t is [string, string] => !!t);
+
+				if (paramTags.length > 0) {
+					text += "**Parameters:**  \n\n";
+					text += paramTags
+						.map(
+							([param, description]) =>
+								`* \`${param}\`: ${description.trim()}`,
+						)
+						.join("\n");
+					text += "\n\n";
+				}
+			}
+		}
+	}
+
+	text = text.replace(/\r\n/g, "\n");
+	text = formatWithPrettier(filename, text);
+
+	await fs.writeFile(path.join(ccDocsDir, filename), text, "utf8");
+
+	return { generatedIndex, generatedSidebar };
+}
+
 /** Generates CC documentation, returns true if there was an error */
-async function generateCCDocs(program: Project): Promise<boolean> {
+async function generateCCDocs(
+	program: Project,
+	piscina: Piscina,
+): Promise<boolean> {
 	// Delete old cruft
-	const docsDir = path.join(projectRoot, "docs");
-	const ccDocsDir = path.join(docsDir, "api/CCs");
 
 	// Load the index file before it gets deleted
 	const indexFilename = path.join(ccDocsDir, "index.md");
@@ -326,106 +440,16 @@ async function generateCCDocs(program: Project): Promise<boolean> {
 	let generatedIndex = "";
 	let generatedSidebar = "";
 
-	for (const file of ccFiles) {
-		const APIClass = file
-			.getClasses()
-			.find((c) => c.getName()?.endsWith("CCAPI"));
-		if (!APIClass) continue;
-
-		const ccId = getCommandClassFromClassDeclaration(
-			file.compilerNode,
-			APIClass.compilerNode,
-		);
-		if (ccId == undefined) continue;
-		const ccName = getCCName(ccId);
-		console.log(`generating documentation for ${ccName} CC...`);
-
-		const filename = APIClass.getName()!.replace("CCAPI", "") + ".md";
-		let text = `# ${ccName} CC
-
-?> CommandClass ID: \`${num2hex((CommandClasses as any)[ccName])}\`
-`;
-		generatedIndex += `\n- [${ccName} CC](api/CCs/${filename}) · \`${num2hex(
-			(CommandClasses as any)[ccName],
-		)}\``;
-		generatedSidebar += `\n\t\t- [${ccName} CC](api/CCs/${filename})`;
-
-		// Enumerate all useful public methods
-		const ignoredMethods: string[] = [
-			"supportsCommand",
-			"isSetValueOptimistic",
-		];
-		const methods = APIClass.getInstanceMethods()
-			.filter((m) => m.hasModifier(SyntaxKind.PublicKeyword))
-			.filter((m) => !ignoredMethods.includes(m.getName()));
-
-		if (methods.length) {
-			text += `## ${ccName} CC methods\n\n`;
+	// Process them in parallel
+	const tasks = ccFiles.map((f) =>
+		piscina.run(f.getFilePath(), { name: "processCC" }),
+	);
+	const results = await Promise.all(tasks);
+	for (const result of results) {
+		if (result) {
+			generatedIndex += result.generatedIndex;
+			generatedSidebar += result.generatedSidebar;
 		}
-
-		for (const method of methods) {
-			const signatures = method.getOverloads();
-
-			text += `### \`${method.getName()}\`
-\`\`\`ts
-${
-	signatures.length > 0
-		? signatures.map(printOverload).join("\n\n")
-		: printMethodDeclaration(method)
-}
-\`\`\`
-
-`;
-			const doc = method.getStructure().docs?.[0];
-			if (typeof doc === "string") {
-				text += doc + "\n\n";
-			} else if (doc != undefined) {
-				if (typeof doc.description === "string") {
-					let description = doc.description.trim();
-					if (!description.endsWith(".")) {
-						description += ".";
-					}
-					text += description + "\n\n";
-				}
-				if (doc.tags) {
-					const paramTags = doc.tags
-						.filter(
-							(
-								t,
-							): t is OptionalKind<JSDocTagStructure> & {
-								text: string;
-							} =>
-								t.tagName === "param" &&
-								typeof t.text === "string",
-						)
-						.map((t) => {
-							const firstSpace = t.text.indexOf(" ");
-							if (firstSpace === -1) return undefined;
-							return [
-								t.text.slice(0, firstSpace),
-								t.text.slice(firstSpace + 1),
-							] as const;
-						})
-						.filter((t): t is [string, string] => !!t);
-
-					if (paramTags.length > 0) {
-						text += "**Parameters:**  \n\n";
-						text += paramTags
-							.map(
-								([param, description]) =>
-									`* \`${param}\`: ${description.trim()}`,
-							)
-							.join("\n");
-						text += "\n\n";
-					}
-				}
-			}
-		}
-
-		text = text.replace(/\r\n/g, "\n");
-		text = formatWithPrettier(filename, text);
-
-		await fs.writeFile(path.join(ccDocsDir, filename), text, "utf8");
 	}
 
 	// Write the generated index file and sidebar
@@ -465,21 +489,49 @@ ${
 
 async function main(): Promise<void> {
 	const program = new Project({ tsConfigFilePath });
+	const piscina = new Piscina({
+		filename: path.join(__dirname, "generateTypedDocsWorker.js"),
+		maxThreads: Math.ceil(os.cpus().length / 2),
+	});
 
-	const hasErrors = (
-		await Promise.all([
-			// Replace all imports
-			processImports(program),
-			// Regenerate all CC documentation files
-			generateCCDocs(program),
-		])
-	).some((err) => err === true);
+	let hasErrors = false;
+	// Replace all imports
+	hasErrors ||= await processImports(piscina);
+	// Regenerate all CC documentation files
+	if (!hasErrors) hasErrors ||= await generateCCDocs(program, piscina);
 
 	if (hasErrors) {
 		process.exit(1);
 	}
 }
 
-if (require.main === module) {
-	void main();
+if (isMainThread) {
+	if (require.main === module) {
+		void main();
+	}
+} else {
+	// Worker thread, export the available methods
+	let _program: Project | undefined;
+	function getProgram(): Project {
+		if (!_program) {
+			_program = new Project({ tsConfigFilePath });
+		}
+		return _program;
+	}
+
+	function processImport(filename: string): Promise<boolean> {
+		return processDocFile(getProgram(), filename);
+	}
+
+	function processCC(
+		filename: string,
+	): Promise<{ generatedIndex: string; generatedSidebar: any } | undefined> {
+		const sourceFile = getProgram().getSourceFileOrThrow(filename);
+		return processCCDocFile(sourceFile);
+	}
+
+	module.exports = {
+		processImport,
+		processCC,
+	};
 }
