@@ -9,7 +9,6 @@ import { CommandClasses, getCCName } from "@zwave-js/core";
 import { enumFilesRecursive, num2hex } from "@zwave-js/shared";
 import { red } from "ansi-colors";
 import * as fs from "fs-extra";
-import * as os from "os";
 import * as path from "path";
 import Piscina from "piscina";
 import {
@@ -491,7 +490,7 @@ async function main(): Promise<void> {
 	const program = new Project({ tsConfigFilePath });
 	const piscina = new Piscina({
 		filename: path.join(__dirname, "generateTypedDocsWorker.js"),
-		maxThreads: Math.ceil(os.cpus().length / 2),
+		maxThreads: 4,
 	});
 
 	let hasErrors = false;
