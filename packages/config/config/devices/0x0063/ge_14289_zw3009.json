@@ -20,9 +20,8 @@
 			"isLifeline": true
 		},
 		"2": {
-			"label": "Local Load",
-			"maxNodes": 5,
-			"description": "Basic Set and is controlled with the local load."
+			"label": "Basic Set",
+			"maxNodes": 5
 		}
 	},
 	"paramInformation": {
