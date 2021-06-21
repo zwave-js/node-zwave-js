@@ -21,9 +21,8 @@
 			"isLifeline": true
 		},
 		"2": {
-			"label": "Local Load",
-			"maxNodes": 5,
-			"description": "Supports Basic Set and is controlled by pressing On/Off button with local load."
+			"label": "Basic Set",
+			"maxNodes": 5
 		},
 		"3": {
 			"label": "Double Tap",
