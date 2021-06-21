@@ -1,4 +1,4 @@
-import type { ValueID } from "@zwave-js/core";
+import type { Duration, ValueID } from "@zwave-js/core";
 import {
 	CommandClasses,
 	Maybe,
@@ -21,7 +21,18 @@ export const SET_VALUE: unique symbol = Symbol.for("CCAPI_SET_VALUE");
 export type SetValueImplementation = (
 	property: ValueIDProperties,
 	value: unknown,
+	options?: SetValueAPIOptions,
 ) => Promise<void>;
+
+/**
+ * A generic options bag for the `setValue` API.
+ * Each implementation will choose the options that are relevant for it, so you can use the same options everywhere.
+ * @publicAPI
+ */
+export type SetValueAPIOptions = Partial<{
+	/** A duration to be used for transitions like dimming lights or activating scenes. */
+	transitionDuration: Duration | string;
+}>;
 
 /** Used to identify the method on the CC API class that handles polling values from nodes */
 export const POLL_VALUE: unique symbol = Symbol.for("CCAPI_POLL_VALUE");

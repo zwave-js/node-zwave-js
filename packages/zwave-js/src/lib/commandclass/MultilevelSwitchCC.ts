@@ -296,6 +296,7 @@ export class MultilevelSwitchCCAPI extends CCAPI {
 	protected [SET_VALUE]: SetValueImplementation = async (
 		{ property },
 		value,
+		options,
 	): Promise<void> => {
 		if (property === "targetValue") {
 			if (typeof value !== "number") {
@@ -306,7 +307,8 @@ export class MultilevelSwitchCCAPI extends CCAPI {
 					typeof value,
 				);
 			}
-			const completed = await this.set(value);
+			const duration = Duration.from(options?.transitionDuration);
+			const completed = await this.set(value, duration);
 
 			// If the command did not fail, assume that it succeeded and update the currentValue accordingly
 			// so UIs have immediate feedback
@@ -332,8 +334,6 @@ export class MultilevelSwitchCCAPI extends CCAPI {
 							.getNodeUnsafe()
 							?.supportsCC(CommandClasses.Supervision)
 					) {
-						// TODO: #1321
-						const duration = undefined as Duration | undefined;
 						// We query currentValue instead of targetValue to make sure that unsolicited updates cancel the scheduled poll
 						// wotan-disable-next-line no-useless-predicate
 						if (property === "targetValue")
@@ -409,10 +409,12 @@ export class MultilevelSwitchCCAPI extends CCAPI {
 						getCurrentValueValueId(this.endpoint.index),
 					);
 				// And perform the level change
+				const duration = Duration.from(options?.transitionDuration);
 				await this.startLevelChange({
 					direction,
 					ignoreStartLevel: true,
 					startLevel,
+					duration,
 				});
 			} else {
 				await this.stopLevelChange();

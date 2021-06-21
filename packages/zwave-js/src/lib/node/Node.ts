@@ -48,7 +48,11 @@ import { padStart } from "alcalzone-shared/strings";
 import { isArray, isObject } from "alcalzone-shared/typeguards";
 import { randomBytes } from "crypto";
 import { EventEmitter } from "events";
-import type { CCAPI, PollValueImplementation } from "../commandclass/API";
+import type {
+	CCAPI,
+	PollValueImplementation,
+	SetValueAPIOptions,
+} from "../commandclass/API";
 import { getHasLifelineValueId } from "../commandclass/AssociationCC";
 import {
 	BasicCC,
@@ -747,7 +751,11 @@ export class ZWaveNode extends Endpoint {
 	 * Updates a value for a given property of a given CommandClass on the node.
 	 * This will communicate with the node!
 	 */
-	public async setValue(valueId: ValueID, value: unknown): Promise<boolean> {
+	public async setValue(
+		valueId: ValueID,
+		value: unknown,
+		options?: SetValueAPIOptions,
+	): Promise<boolean> {
 		// Try to retrieve the corresponding CC API
 		try {
 			// Access the CC API by name
@@ -765,6 +773,7 @@ export class ZWaveNode extends Endpoint {
 					propertyKey: valueId.propertyKey,
 				},
 				value,
+				options,
 			);
 			if (api.isSetValueOptimistic(valueId)) {
 				// If the call did not throw, assume that the call was successful and remember the new value

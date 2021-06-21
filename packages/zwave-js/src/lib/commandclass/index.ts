@@ -11,6 +11,7 @@ export {
 } from "./AlarmSensorCC";
 export type { AlarmSensorValueMetadata } from "./AlarmSensorCC";
 export { CCAPI } from "./API";
+export type { SetValueAPIOptions } from "./API";
 export {
 	AssociationCC,
 	AssociationCCGet,
