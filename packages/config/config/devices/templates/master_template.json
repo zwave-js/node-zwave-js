@@ -377,6 +377,32 @@
 			}
 		]
 	},
+	"state_after_power_failure_prev_on_off_schedule": {
+		"label": "State After Power Failure",
+		"valueSize": 1,
+		"minValue": 0,
+		"maxValue": 3,
+		"defaultValue": 3,
+		"allowManualEntry": false,
+		"options": [
+			{
+				"label": "Previous state",
+				"value": 0
+			},
+			{
+				"label": "Always on",
+				"value": 1
+			},
+			{
+				"label": "Always off",
+				"value": 2
+			},
+			{
+				"label": "Return to schedule (Schedule CC)",
+				"value": 3
+			}
+		]
+	},
 	"volume_three": {
 		"label": "Volume",
 		"valueSize": 1,

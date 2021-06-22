@@ -1,27 +1,18 @@
 {
 	"manufacturer": "Aeotec Ltd.",
 	"manufacturerId": "0x0371",
-	"label": "ZWA008",
-	"description": "Door/Window Sensor 7",
+	"label": "ZWA012",
+	"description": "Door / Window Sensor 7 Pro",
 	"devices": [
 		{
-			"productType": "0x0000",
-			"productId": "0x0007",
-			"zwaveAllianceId": 3472
-		},
-		{
 			"productType": "0x0002",
-			"productId": "0x0007"
+			"productId": "0x000c",
+			"zwaveAllianceId": 3866
 		},
 		{
 			"productType": "0x0102",
-			"productId": "0x0007",
-			"zwaveAllianceId": 3574
-		},
-		{
-			"productType": "0x0202",
-			"productId": "0x0007",
-			"zwaveAllianceId": 3573
+			"productId": "0x000c",
+			"zwaveAllianceId": 3950
 		}
 	],
 	"firmwareVersion": {
@@ -35,15 +26,19 @@
 			"isLifeline": true
 		},
 		"2": {
-			"label": "Group 2",
+			"label": "Control",
 			"maxNodes": 5
 		},
 		"3": {
-			"label": "Group 3",
+			"label": "Alarm sensor",
 			"maxNodes": 5
 		},
 		"4": {
-			"label": "Group 4",
+			"label": "Tamper",
+			"maxNodes": 5
+		},
+		"5": {
+			"label": "Tilt",
 			"maxNodes": 5
 		}
 	},
@@ -98,12 +93,11 @@
 		},
 		"15": {
 			"$import": "../0x0086/templates/aeotec_template.json#tilt_sensor_sensitivity"
-		}
 	},
 	"metadata": {
-		"inclusion": "Tripple clicking the tamper button includes (adds) the device",
-		"exclusion": "Tripple clicking the tamper button excludes (removes) the device",
-		"reset": "This device also allows to be reset without any involvement of a Z-Wave controller. This procedure should only be used when the primary controller is inoperable.\nOnce Cover is removed and tamper switch is tripped, push the tamper for 5 seconds until red LED blinks. Then release tamper and push it again for 5 seconds until LED blinks",
-		"manual": "https://products.z-wavealliance.org/ProductManual/File?folder=&filename=MarketCertificationFiles/3472/User%20manual%20-%20Aeotec%20Door%20Window%20Sensor%207%20ZWA008.pdf"
+		"inclusion": "Inclusion\n1. Open the housing.\n2. Remove the battery protection.\n3. Press the tamper on the side of the appliance three times quickly",
+		"exclusion": "Exclusion\n1. Open the housing.\n2. Press the tamper on the side of the appliance three times quickly",
+		"reset": "Reset to factory default\nThis device also allows to be reset without any involvement of a Z-Wave controller. This procedure should only be used when the primary controller is inoperable.\n Once Cover is removed and the tamper switch is tripped, push the tamper for 5 seconds until the RED LED\n blinks once. Then release tamper and push it again for 5 seconds while the RED LED is blinking until the\n GREEN LED blinks once",
+		"manual": "https://products.z-wavealliance.org/ProductManual/File?folder=&filename=product_documents/3866/DWS7Pro_Manual_Extended-2-8.pdf"
 	}
 }
