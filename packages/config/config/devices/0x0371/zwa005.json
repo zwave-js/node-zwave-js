@@ -36,11 +36,11 @@
 			"isLifeline": true
 		},
 		"2": {
-			"label": "Group 2",
+			"label": "Home Security",
 			"maxNodes": 5
 		},
 		"3": {
-			"label": "Group 3",
+			"label": "Temperature",
 			"maxNodes": 5
 		}
 	},
@@ -55,7 +55,7 @@
 			"label": "Motion Clear Time",
 			"valueSize": 2,
 			"unit": "seconds",
-			"minValue": 0,
+			"minValue": 1,
 			"maxValue": 32767,
 			"defaultValue": 240,
 			"unsigned": true
@@ -144,10 +144,9 @@
 			"label": "Temperature Alarm Threshhold (High)",
 			"valueSize": 2,
 			"unit": "0.1 °(C/F)",
-			"minValue": 0,
-			"maxValue": 239,
-			"defaultValue": 239,
-			"unsigned": true
+			"minValue": -400,
+			"maxValue": 1185,
+			"defaultValue": 239
 		},
 		"10": {
 			"$import": "../0x0086/templates/aeotec_template.json#enable_led_indicator"
@@ -193,7 +192,7 @@
 			"label": "Timed Temperature Report Interval",
 			"valueSize": 2,
 			"unit": "seconds",
-			"minValue": 0,
+			"minValue": 1,
 			"maxValue": 32767,
 			"defaultValue": 3600,
 			"unsigned": true
@@ -202,7 +201,7 @@
 			"label": "Timed Light Sensor Report Interval",
 			"valueSize": 2,
 			"unit": "seconds",
-			"minValue": 0,
+			"minValue": 1,
 			"maxValue": 32767,
 			"defaultValue": 3600,
 			"unsigned": true
