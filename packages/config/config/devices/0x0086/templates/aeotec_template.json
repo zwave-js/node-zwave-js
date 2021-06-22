@@ -1637,7 +1637,7 @@
 		]
 	},
 	"led_indicator_three_options_alt": {
-		"$import": "../../templates/master_template.json#led_indicator_three_option",
+		"$import": "../../templates/master_template.json#led_indicator_three_options",
 		"defaultValue": 2,
 		"options": [
 			{
