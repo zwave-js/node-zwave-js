@@ -145,7 +145,7 @@
 			"$import": "../templates/master_template.json#state_after_power_failure_prev_on_off"
 		},
 		"80": {
-			"$import": "../templates/master_template.json#binary_report_type"
+			"$import": "../0x0086/templates/aeotec_template.json#binary_report_type"
 		},
 		"81": {
 			"$import": "../templates/master_template.json#led_indicator_three_options_alt"
