@@ -854,7 +854,7 @@
 		"label": "Automatic Report: Current",
 		"valueSize": 4
 	},
-	"auto_report_kv": {
+	"auto_report_v": {
 		"$import": "../../templates/master_template.json#base_enable_disable",
 		"label": "Automatic Report: Voltage",
 		"valueSize": 4
