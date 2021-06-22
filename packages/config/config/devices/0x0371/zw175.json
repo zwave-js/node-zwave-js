@@ -142,7 +142,7 @@
 			"$import": "../0x0086/templates/aeotec_template.json#blink_duration"
 		},
 		"20": {
-			"$import": "../templates/master_template.json#state_after_power_failure"
+			"$import": "../templates/master_template.json#state_after_power_failure_prev_on_off"
 		},
 		"80": {
 			"$import": "../templates/master_template.json#binary_report_type"
