@@ -55,7 +55,7 @@
 			"$import": "../0x0086/templates/aeotec_template.json#blink_duration"
 		},
 		"5": {
-			"label": "Led Blink Speed",
+			"label": "LED Blink Speed",
 			"description": "Number of blinks per second",
 			"valueSize": 1,
 			"minValue": 1,

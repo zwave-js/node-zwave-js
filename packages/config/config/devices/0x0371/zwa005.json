@@ -153,17 +153,17 @@
 		},
 		"11": {
 			"$import": "../0x0086/templates/aeotec_template.json#base_color_options",
-			"label": "Led Color: Motion Event Report",
+			"label": "LED Color: Motion Event Report",
 			"defaultValue": 2
 		},
 		"12": {
 			"$import": "../0x0086/templates/aeotec_template.json#base_color_options",
-			"label": "Led Color: Temperature Sensor Report",
+			"label": "LED Color: Temperature Sensor Report",
 			"defaultValue": 0
 		},
 		"13": {
 			"$import": "../0x0086/templates/aeotec_template.json#base_color_options",
-			"label": "Led Color: Light Sensor Report",
+			"label": "LED Color: Light Sensor Report",
 			"defaultValue": 0
 		},
 		"14": {
@@ -234,7 +234,7 @@
 	"metadata": {
 		"inclusion": "Press once TriSensor’s Action Button. If it is the first installation, the yellow LED will keep solid until whole network processing is complete. If successful, the LED will flash white -> green -> white -> green, after 2 seconds finished. If failed, the yellow LED lasts for 30 seconds, then the green LED flashes once.\nIf it is the S2 encryption network, please enter the first 5 digits of DSK.",
 		"exclusion": "Press once TriSensor’s Action Button, the Purple LED will keep solid until whole network processing is complete. If the exclusion is successful, the LED will flash white -> green ->white -> green and then LED will pulse a blue. If failed, the yellow LED lasts for 30 seconds, then the green LED flashes once",
-		"reset": "1. Power up the device. \n2. Press and hold the button for 15s until Red Led is blinking,then release the button\nNote: Please use this procedure only when the network primary controller is missing or otherwise inoperable",
+		"reset": "1. Power up the device. \n2. Press and hold the button for 15s until Red LED is blinking,then release the button\nNote: Please use this procedure only when the network primary controller is missing or otherwise inoperable",
 		"manual": "https://products.z-wavealliance.org/ProductManual/File?folder=&filename=MarketCertificationFiles/2898/TriSensor%20user%20manual%2020180416.pdf"
 	}
 }
