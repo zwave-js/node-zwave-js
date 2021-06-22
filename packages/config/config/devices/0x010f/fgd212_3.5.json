@@ -547,7 +547,7 @@
 			]
 		},
 		"39": {
-			"label": "Power Limit (Overload)",
+			"label": "Power Limit",
 			"description": "Defined value turns off load",
 			"valueSize": 2,
 			"unit": "W",
@@ -672,7 +672,7 @@
 			"defaultValue": 600
 		},
 		"45": {
-			"label": "Overload Alarm Report",
+			"label": "Power Limit Alarm Report",
 			"description": "Load power consumption too high",
 			"valueSize": 1,
 			"minValue": 0,
