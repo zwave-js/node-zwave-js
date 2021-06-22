@@ -122,7 +122,7 @@
 			"valueSize": 1
 		},
 		"255": {
-			"$import": "../0x0086/emplates/aeotec_template.json#factory_reset_exclude"
+			"$import": "../0x0086/templates/aeotec_template.json#factory_reset_exclude"
 		}
 	},
 	"metadata": {

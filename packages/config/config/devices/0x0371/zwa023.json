@@ -31,7 +31,7 @@
 	},
 	"paramInformation": {
 		"1": {
-			"$import": "../templates/master_template.json#led_indicator_three_options_alt"
+			"$import": "../0x0086/templates/aeotec_template.json#led_indicator_three_options_alt"
 		},
 		"2": {
 			"label": "Night Light: On Time",
@@ -40,10 +40,7 @@
 			"minValue": 0,
 			"maxValue": 2316633,
 			"defaultValue": 1572864,
-			"unsigned": true,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"unsigned": true
 		},
 		"3": {
 			"label": "Night Light: Off Time",
@@ -52,10 +49,7 @@
 			"minValue": 0,
 			"maxValue": 2316633,
 			"defaultValue": 393216,
-			"unsigned": true,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"unsigned": true
 		},
 		"4": {
 			"$import": "../0x0086/templates/aeotec_template.json#blink_duration"
@@ -67,10 +61,7 @@
 			"minValue": 1,
 			"maxValue": 24,
 			"defaultValue": 5,
-			"unsigned": true,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"unsigned": true
 		},
 		"6": {
 			"label": "Power Report Threshhold",
@@ -81,9 +72,6 @@
 			"maxValue": 3000,
 			"defaultValue": 100,
 			"unsigned": true,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true,
 			"options": [
 				{
 					"label": "Disable",
@@ -98,9 +86,6 @@
 			"maxValue": 2,
 			"defaultValue": 0,
 			"unsigned": true,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true,
 			"options": [
 				{
 					"label": "Normal operation",
@@ -117,7 +102,7 @@
 			]
 		},
 		"8": {
-			"$import": "../templates/master_template.json#state_after_power_failure"
+			"$import": "../templates/master_template.json#state_after_power_failure_prev_on_off"
 		},
 		"9": {
 			"label": "Scene Id (Group 3)",
@@ -126,10 +111,7 @@
 			"minValue": 1,
 			"maxValue": 255,
 			"defaultValue": 255,
-			"unsigned": true,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
+			"unsigned": true
 		},
 		"10": {
 			"$import": "../0x0086/templates/aeotec_template.json#current_overload_threshold",
@@ -138,15 +120,13 @@
 		},
 		"11": {
 			"label": "Voltage Overload Protection",
+			"description": "Allowable range: 95-255",
 			"valueSize": 1,
 			"unit": "V",
-			"minValue": 95,
+			"minValue": 0,
 			"maxValue": 255,
 			"defaultValue": 135,
 			"unsigned": true,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true,
 			"options": [
 				{
 					"label": "Disable",
@@ -230,9 +210,6 @@
 			"maxValue": 255,
 			"defaultValue": 0,
 			"unsigned": true,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true,
 			"options": [
 				{
 					"label": "Disable",
@@ -257,9 +234,6 @@
 			"maxValue": 255,
 			"defaultValue": 1,
 			"unsigned": true,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true,
 			"options": [
 				{
 					"label": "Tap action button once",
@@ -286,7 +260,7 @@
 			"$import": "../0x0086/templates/aeotec_template.json#auto_on_timer"
 		},
 		"42": {
-			"$import": "../templates/master_template.json#binary_report_type"
+			"$import": "../0x0086/templates/aeotec_template.json#binary_report_type"
 		}
 	},
 	"metadata": {

@@ -137,15 +137,11 @@
 			]
 		},
 		"90": {
-			"$import": "../0x0086/templates/aeotec_template.json#invert_state_report",
+			"$import": "../0x0086/templates/aeotec_template.json#low_battery_threshold",
 			"defaultValue": 30
 		},
 		"101": {
-			"$import": "../0x0086/templates/aeotec_template.json#low_battery_interval",
-			"valueSize": 2,
-			"unit": "minutes",
-			"maxValue": 14400,
-			"defaultValue": 70
+			"$import": "../0x0086/templates/aeotec_template.json#auto_report_battery"
 		}
 	},
 	"metadata": {

@@ -274,6 +274,7 @@
 		"unsigned": true
 	},
 	"celsius_fahrenheit": {
+		"label": "Temperature Unit",
 		"valueSize": 4,
 		"minValue": 1,
 		"maxValue": 2,
@@ -292,6 +293,7 @@
 	},
 	"celsius_fahrenheit_0": {
 		"$import": "../../templates/master_template.json#base_0-1_nounit",
+		"label": "Temperature Unit",
 		"valueSize": 4,
 		"options": [
 			{
@@ -384,7 +386,7 @@
 	"factory_reset_exclude": {
 		"label": "Reset to Factory Default Setting",
 		"valueSize": 4,
-		"minValue": 1,
+		"minValue": 0,
 		"maxValue": 1431655765,
 		"defaultValue": 0,
 		"unsigned": true,
@@ -404,7 +406,7 @@
 	"factory_reset_complete": {
 		"label": "Reset to Factory Default Setting",
 		"valueSize": 4,
-		"minValue": 1,
+		"minValue": 0,
 		"maxValue": 4294967295,
 		"defaultValue": 0,
 		"unsigned": true,
@@ -426,16 +428,13 @@
 		]
 	},
 	"current_threshold": {
-		"label": "Automatic Report: Current",
+		"label": "Current Change Threshold",
 		"valueSize": 1,
 		"unit": "A",
 		"minValue": 0,
 		"maxValue": 150,
 		"defaultValue": 0,
 		"unsigned": true,
-		"readOnly": false,
-		"writeOnly": false,
-		"allowManualEntry": true,
 		"options": [
 			{
 				"label": "Disable",
@@ -444,16 +443,13 @@
 		]
 	},
 	"kwh_threshold": {
-		"label": "Automatic Report: kWh",
+		"label": "Power (kWh) Change Threshold",
 		"valueSize": 2,
 		"unit": "KwH",
 		"minValue": 0,
 		"maxValue": 10000,
 		"defaultValue": 100,
 		"unsigned": true,
-		"readOnly": false,
-		"writeOnly": false,
-		"allowManualEntry": true,
 		"options": [
 			{
 				"label": "Disable",
@@ -711,8 +707,6 @@
 		"maxValue": 86400,
 		"defaultValue": 0,
 		"unsigned": true,
-		"readOnly": false,
-		"writeOnly": false,
 		"options": [
 			{
 				"label": "Disable",
@@ -858,6 +852,20 @@
 		"$import": "../../templates/master_template.json#base_enable_disable",
 		"label": "Automatic Report: Voltage",
 		"valueSize": 4
+	},
+	"auto_report_battery": {
+		"label": "Automatic Report: Battery",
+		"valueSize": 2,
+		"unit": "minutes",
+		"minValue": 0,
+		"maxValue": 14400,
+		"defaultValue": 70,
+		"options": [
+			{
+				"label": "Disable",
+				"value": 0
+			}
+		]
 	},
 	"auto_report_interval_group1": {
 		"$import": "#base_interval",
