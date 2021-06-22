@@ -93,6 +93,7 @@
 		},
 		"15": {
 			"$import": "../0x0086/templates/aeotec_template.json#tilt_sensor_sensitivity"
+		}
 	},
 	"metadata": {
 		"inclusion": "Inclusion\n1. Open the housing.\n2. Remove the battery protection.\n3. Press the tamper on the side of the appliance three times quickly",
