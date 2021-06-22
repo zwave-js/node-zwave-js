@@ -2,7 +2,7 @@
 	"manufacturer": "Evolve",
 	"manufacturerId": "0x0113",
 	"label": "LFM-20",
-	"description": "",
+	"description": "20A Relay Fixture Module",
 	"devices": [
 		{
 			"productType": "0x5246",
