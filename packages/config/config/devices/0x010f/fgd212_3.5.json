@@ -182,7 +182,7 @@
 			]
 		},
 		"15": {
-			"label": "Burnt Out Bulb Detection Power Variation (LOAD ERROR)",
+			"label": "Burnt Out Bulb Detection Power Variation",
 			"description": "Percentage value of standard power consumption as measured during calibration",
 			"valueSize": 1,
 			"unit": "%",
@@ -197,7 +197,7 @@
 			]
 		},
 		"16": {
-			"label": "Burnt Out Bulb Detection Time Delay (LOAD ERROR)",
+			"label": "Burnt Out Bulb Detection Time Delay",
 			"valueSize": 2,
 			"unit": "seconds",
 			"minValue": 0,
@@ -500,17 +500,17 @@
 					"value": 2
 				},
 				{
-					"label": "After first power up or each LOAD ERROR, SURGE or OVERCURRENT",
+					"label": "After first power up or each load error, surge or overcurrent",
 					"value": 3
 				},
 				{
-					"label": "After each power up or each LOAD ERROR, SURGE or OVERCURRENT",
+					"label": "After each power up or each load error, surge or overcurrent",
 					"value": 4
 				}
 			]
 		},
 		"37": {
-			"label": "Behavior After OVERCURRENT or SURGE",
+			"label": "Behavior After Overcurrent or Surge",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 1,
@@ -547,7 +547,7 @@
 			]
 		},
 		"39": {
-			"label": "Power Limit - OVERLOAD",
+			"label": "Power Limit (Overload)",
 			"description": "Defined value turns off load",
 			"valueSize": 2,
 			"unit": "W",
@@ -672,7 +672,7 @@
 			"defaultValue": 600
 		},
 		"45": {
-			"label": "OVERLOAD Alarm Report",
+			"label": "Overload Alarm Report",
 			"description": "Load power consumption too high",
 			"valueSize": 1,
 			"minValue": 0,
@@ -692,7 +692,7 @@
 			]
 		},
 		"46": {
-			"label": "LOAD ERROR Alarm Report",
+			"label": "Load Error Alarm Report",
 			"description": "No load, load failure, burnt out bulb",
 			"valueSize": 1,
 			"minValue": 0,
@@ -712,7 +712,7 @@
 			]
 		},
 		"47": {
-			"label": "OVERCURRENT Alarm Report",
+			"label": "Overcurrent Alarm Report",
 			"description": "Short circuit, burnt out bulb causing overcurrent",
 			"valueSize": 1,
 			"minValue": 0,
@@ -732,7 +732,7 @@
 			]
 		},
 		"48": {
-			"label": "SURGE Alarm Report",
+			"label": "Surge Alarm Report",
 			"description": "Dimmer output overvoltage",
 			"valueSize": 1,
 			"minValue": 0,
@@ -752,7 +752,7 @@
 			]
 		},
 		"49": {
-			"label": "OVERHEAT and VOLTAGE DROP Alarm Report",
+			"label": "Overheat and Voltage Drop Alarm Report",
 			"description": "Critical temperature and low voltage",
 			"valueSize": 1,
 			"minValue": 0,
