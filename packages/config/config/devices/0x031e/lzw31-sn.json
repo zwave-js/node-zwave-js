@@ -501,7 +501,7 @@
 		},
 		"16[0xff0000]": {
 			"label": "LED Effect Duration",
-			"description": "1 to 60 = seconds, 61 to 120 = minutes (minus 60), 121 - 254 = hours (minus 120), 255 = indefinitely",
+			"description": "0 = disabled, 1 to 60 = seconds, 61 to 120 = minutes (minus 60), 121 - 254 = hours (minus 120), 255 = indefinitely",
 			"valueSize": 4,
 			"minValue": 0,
 			"maxValue": 255,
