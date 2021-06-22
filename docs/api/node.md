@@ -55,23 +55,32 @@ When building a user interface for a Z-Wave application, you might need to know 
 ### `setValue`
 
 ```ts
-async setValue(valueId: ValueID, value: unknown): Promise<boolean>
+async setValue(valueId: ValueID, value: unknown, options?: SetValueAPIOptions): Promise<boolean>
 ```
 
-Updates a value on the node. This method takes two arguments:
+Updates a value on the node. This method takes the following arguments:
 
 -   `valueId: ValueID` - specifies which value to update
 -   `value: unknown` - The new value to set
+-   `options?: SetValueAPIOptions` - Optional options for the resulting commands
 
 This method automatically figures out which commands to send to the node, so you don't have to use the specific commands yourself. The returned promise resolves to `true` after the value was successfully updated on the node. It resolves to `false` if any of the following conditions are met:
 
-<!-- TODO: Document API and setValue API -->
-
 -   The `setValue` API is not implemented in the required Command Class
+-   The required Command Class is not supported by the node/endpoint
 -   The required Command Class is not implemented in this library yet
 -   The API for the required Command Class is not implemented in this library yet
 
-<!-- TODO: Check what happens if the CC is not supported by the node -->
+The `options` bag contains options that influence the resulting commands, for example a transition duration. Each implementation will choose the options that are relevant for it, so you can use the same options everywhere.
+
+<!-- #import SetValueAPIOptions from "zwave-js" -->
+
+```ts
+type SetValueAPIOptions = Partial<{
+	/** A duration to be used for transitions like dimming lights or activating scenes. */
+	transitionDuration: Duration | string;
+}>;
+```
 
 ### `pollValue`
 

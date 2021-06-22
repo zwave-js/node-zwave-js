@@ -117,6 +117,7 @@ export class BinarySwitchCCAPI extends CCAPI {
 	protected [SET_VALUE]: SetValueImplementation = async (
 		{ property },
 		value,
+		options,
 	): Promise<void> => {
 		if (property !== "targetValue") {
 			throwUnsupportedProperty(this.ccId, property);
@@ -124,7 +125,8 @@ export class BinarySwitchCCAPI extends CCAPI {
 		if (typeof value !== "boolean") {
 			throwWrongValueType(this.ccId, property, "boolean", typeof value);
 		}
-		await this.set(value);
+		const duration = Duration.from(options?.transitionDuration);
+		await this.set(value, duration);
 
 		// If the command did not fail, assume that it succeeded and update the currentValue accordingly
 		// so UIs have immediate feedback
@@ -138,8 +140,6 @@ export class BinarySwitchCCAPI extends CCAPI {
 			}
 
 			// Verify the current value after a delay
-			// TODO: #1321
-			const duration = undefined as Duration | undefined;
 			// We query currentValue instead of targetValue to make sure that unsolicited updates cancel the scheduled poll
 			// wotan-disable-next-line no-useless-predicate
 			if (property === "targetValue") property = "currentValue";

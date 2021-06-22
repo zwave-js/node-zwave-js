@@ -362,8 +362,10 @@ export class ColorSwitchCCAPI extends CCAPI {
 	protected [SET_VALUE]: SetValueImplementation = async (
 		{ property, propertyKey },
 		value,
+		options,
 	) => {
 		if (property === "targetColor") {
+			const duration = Duration.from(options?.transitionDuration);
 			if (propertyKey != undefined) {
 				// Single color component, only accepts numbers
 				if (typeof propertyKey !== "number") {
@@ -380,13 +382,10 @@ export class ColorSwitchCCAPI extends CCAPI {
 						typeof value,
 					);
 				}
-
-				await this.set({ [propertyKey]: value });
+				await this.set({ [propertyKey]: value, duration });
 
 				if (this.isSinglecast()) {
 					// Verify the current value after a delay
-					// TODO: #1321
-					const duration = undefined as Duration | undefined;
 					this.schedulePoll(
 						{ property, propertyKey },
 						duration?.toMilliseconds(),
@@ -425,7 +424,7 @@ export class ColorSwitchCCAPI extends CCAPI {
 				// Avoid sending empty commands
 				if (Object.keys(value as any).length === 0) return;
 
-				await this.set(value as ColorTable);
+				await this.set({ ...(value as ColorTable), duration });
 
 				// We're not going to poll each color component separately
 			}
@@ -440,7 +439,8 @@ export class ColorSwitchCCAPI extends CCAPI {
 				);
 			}
 
-			await this.set({ hexColor: value });
+			const duration = Duration.from(options?.transitionDuration);
+			await this.set({ hexColor: value, duration });
 		} else {
 			throwUnsupportedProperty(this.ccId, property);
 		}
