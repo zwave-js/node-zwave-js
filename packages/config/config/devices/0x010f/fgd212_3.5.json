@@ -98,7 +98,7 @@
 			"$import": "../templates/master_template.json#state_after_power_failure_off_prev"
 		},
 		"10": {
-			"label": "Timer Functionality (auto - off)",
+			"label": "Timer Functionality (Auto - Off)",
 			"description": "Will automatically turn off after the specified time from switching on",
 			"valueSize": 2,
 			"unit": "seconds",
@@ -248,7 +248,7 @@
 			]
 		},
 		"21": {
-			"label": "Value sent to associated devices on Single Click",
+			"label": "Value Sent to Associated Devices on Single Click",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 1,
@@ -267,7 +267,7 @@
 			]
 		},
 		"22": {
-			"label": "Change Bi-stable Input Switch Behavior",
+			"label": "Change Bi-Stable Input Switch Behavior",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 1,
