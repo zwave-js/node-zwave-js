@@ -140,7 +140,7 @@
 			]
 		},
 		"13": {
-			"label": "Force Auto-calibration",
+			"label": "Force Auto-Calibration",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 2,
@@ -163,7 +163,7 @@
 			]
 		},
 		"14": {
-			"label": "Auto-calibration Status",
+			"label": "Auto-Calibration Status",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 1,
@@ -393,7 +393,7 @@
 			]
 		},
 		"31": {
-			"label": "Dimmer Mode Recognized During Auto-calibration",
+			"label": "Dimmer Mode Recognized During Auto-Calibration",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 1,
@@ -436,7 +436,7 @@
 			]
 		},
 		"33": {
-			"label": "Dimmability of the Load Recognized During Auto-calibration",
+			"label": "Dimmability of the Load Recognized During Auto-Calibration",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 1,
@@ -479,7 +479,7 @@
 			]
 		},
 		"35": {
-			"label": "Perform Auto-calibration",
+			"label": "Perform Auto-Calibration",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 4,
