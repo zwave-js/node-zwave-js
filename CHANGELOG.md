@@ -2,7 +2,7 @@
 <!--
 	Add placeholder for next release with `wip` snippet
 -->
-## __WORK IN PROGRESS__
+## 7.9.0 (2021-06-22)
 ### Features
 * Add the ability to pass options (like a transition duration) to `setValue` API calls
 * Add options to configure the preferred sensor scales
