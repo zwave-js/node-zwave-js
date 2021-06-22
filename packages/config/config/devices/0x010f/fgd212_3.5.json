@@ -56,8 +56,8 @@
 		},
 		"4": {
 			"label": "Incandescence Time of Dimmable CFL*",
-			"unit": "100 ms",
 			"valueSize": 2,
+			"unit": "100 ms",
 			"minValue": 0,
 			"maxValue": 255,
 			"defaultValue": 0
@@ -72,8 +72,8 @@
 		},
 		"6": {
 			"label": "Automatic Control: Dimming Step Timing",
-			"unit": "10 ms",
 			"valueSize": 2,
+			"unit": "10 ms",
 			"minValue": 0,
 			"maxValue": 255,
 			"defaultValue": 1
@@ -88,8 +88,8 @@
 		},
 		"8": {
 			"label": "Manual Control: Dimming Step Timing",
-			"unit": "100 ms",
 			"valueSize": 2,
+			"unit": "100 ms",
 			"minValue": 0,
 			"maxValue": 255,
 			"defaultValue": 5
@@ -184,8 +184,8 @@
 		"15": {
 			"label": "Burnt Out Bulb Detection Power Variation (LOAD ERROR)",
 			"description": "Percentage value of standard power consumption as measured during calibration",
-			"unit": "%",
 			"valueSize": 1,
+			"unit": "%",
 			"minValue": 0,
 			"maxValue": 99,
 			"defaultValue": 30,
@@ -802,8 +802,8 @@
 		},
 		"53": {
 			"label": "Energy Report: Threshold",
-			"unit": "0.01 kWh",
 			"valueSize": 2,
+			"unit": "0.01 kWh",
 			"minValue": 0,
 			"maxValue": 255,
 			"defaultValue": 10,
