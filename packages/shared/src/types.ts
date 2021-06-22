@@ -7,4 +7,11 @@ export type DeepPartial<T> = { [P in keyof T]+?: DeepPartial<T[P]> };
 
 export type JSONObject = Record<string, any>;
 
-export type Constructor = new (...args: any[]) => any;
+// eslint-disable-next-line @typescript-eslint/ban-types
+export type Constructor<T = {}> = new (...args: any[]) => T;
+
+export type UnionToIntersection<T> = (
+	T extends any ? (x: T) => any : never
+) extends (x: infer R) => any
+	? R
+	: never;

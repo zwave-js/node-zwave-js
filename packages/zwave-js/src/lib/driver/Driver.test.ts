@@ -406,6 +406,7 @@ describe("lib/driver/Driver => ", () => {
 					forEach: () => {},
 				},
 				isFunctionSupported,
+				incrementStatistics: () => {},
 			} as any;
 		});
 
@@ -480,6 +481,7 @@ describe("lib/driver/Driver => ", () => {
 					forEach: () => {},
 				},
 				isFunctionSupported,
+				incrementStatistics: () => {},
 			} as any;
 		});
 

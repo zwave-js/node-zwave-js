@@ -42,6 +42,7 @@ import {
 	ObjectKeyMap,
 	pick,
 	stringify,
+	TypedEventEmitter,
 } from "@zwave-js/shared";
 import type { Comparer, CompareResult } from "alcalzone-shared/comparable";
 import { padStart } from "alcalzone-shared/strings";
@@ -128,6 +129,7 @@ import {
 } from "../controller/GetNodeProtocolInfoMessages";
 import type { Driver, SendCommandOptions } from "../driver/Driver";
 import { Extended, interpretEx } from "../driver/StateMachineShared";
+import type { StatisticsEventCallbacks } from "../driver/Statistics";
 import type { Transaction } from "../driver/Transaction";
 import { MessagePriority } from "../message/Constants";
 import { DeviceClass } from "./DeviceClass";
@@ -136,6 +138,7 @@ import {
 	createNodeReadyMachine,
 	NodeReadyInterpreter,
 } from "./NodeReadyMachine";
+import { NodeStatistics, NodeStatisticsHost } from "./NodeStatistics";
 import {
 	createNodeStatusMachine,
 	NodeStatusInterpreter,
@@ -150,7 +153,6 @@ import type {
 	FLiRS,
 	TranslatedValueID,
 	ZWaveNodeEventCallbacks,
-	ZWaveNodeEvents,
 	ZWaveNodeValueEventCallbacks,
 } from "./Types";
 import { InterviewStage, NodeStatus, NodeType, ProtocolVersion } from "./Types";
@@ -163,36 +165,17 @@ function getNodeMetaValueID(property: string): ValueID {
 	};
 }
 
-export interface ZWaveNode {
-	on<TEvent extends ZWaveNodeEvents>(
-		event: TEvent,
-		callback: ZWaveNodeEventCallbacks[TEvent],
-	): this;
-	once<TEvent extends ZWaveNodeEvents>(
-		event: TEvent,
-		callback: ZWaveNodeEventCallbacks[TEvent],
-	): this;
-	removeListener<TEvent extends ZWaveNodeEvents>(
-		event: TEvent,
-		callback: ZWaveNodeEventCallbacks[TEvent],
-	): this;
-	off<TEvent extends ZWaveNodeEvents>(
-		event: TEvent,
-		callback: ZWaveNodeEventCallbacks[TEvent],
-	): this;
-	removeAllListeners(event?: ZWaveNodeEvents): this;
-
-	emit<TEvent extends ZWaveNodeEvents>(
-		event: TEvent,
-		...args: Parameters<ZWaveNodeEventCallbacks[TEvent]>
-	): boolean;
-}
+export interface ZWaveNode
+	extends TypedEventEmitter<
+			ZWaveNodeEventCallbacks & StatisticsEventCallbacks<NodeStatistics>
+		>,
+		NodeStatisticsHost {}
 
 /**
  * A ZWaveNode represents a node in a Z-Wave network. It is also an instance
  * of its root endpoint (index 0)
  */
-@Mixin([EventEmitter])
+@Mixin([EventEmitter, NodeStatisticsHost])
 export class ZWaveNode extends Endpoint {
 	public constructor(
 		public readonly id: number,
@@ -204,7 +187,6 @@ export class ZWaveNode extends Endpoint {
 	) {
 		// Define this node's intrinsic endpoint as the root device (0)
 		super(id, driver, 0, deviceClass, supportedCCs);
-
 		this._valueDB =
 			valueDB ?? new ValueDB(id, driver.valueDB!, driver.metadataDB!);
 		// Pass value events to our listeners

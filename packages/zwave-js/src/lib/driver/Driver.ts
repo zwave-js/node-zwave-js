@@ -22,7 +22,13 @@ import {
 	ZWaveSerialPortBase,
 	ZWaveSocket,
 } from "@zwave-js/serial";
-import { DeepPartial, num2hex, pick, stringify } from "@zwave-js/shared";
+import {
+	DeepPartial,
+	num2hex,
+	pick,
+	stringify,
+	TypedEventEmitter,
+} from "@zwave-js/shared";
 import { wait } from "alcalzone-shared/async";
 import {
 	createDeferredPromise,
@@ -31,7 +37,7 @@ import {
 import { entries } from "alcalzone-shared/objects";
 import { isArray, isObject } from "alcalzone-shared/typeguards";
 import { randomBytes } from "crypto";
-import { EventEmitter } from "events";
+import type { EventEmitter } from "events";
 import fsExtra from "fs-extra";
 import path from "path";
 import SerialPort from "serialport";
@@ -88,6 +94,7 @@ import {
 	SendDataRequest,
 } from "../controller/SendDataMessages";
 import {
+	isSendData,
 	isSendDataSinglecast,
 	SendDataMessage,
 } from "../controller/SendDataShared";
@@ -322,38 +329,13 @@ export interface DriverEventCallbacks {
 
 export type DriverEvents = Extract<keyof DriverEventCallbacks, string>;
 
-export interface Driver {
-	on<TEvent extends DriverEvents>(
-		event: TEvent,
-		callback: DriverEventCallbacks[TEvent],
-	): this;
-	once<TEvent extends DriverEvents>(
-		event: TEvent,
-		callback: DriverEventCallbacks[TEvent],
-	): this;
-	removeListener<TEvent extends DriverEvents>(
-		event: TEvent,
-		callback: DriverEventCallbacks[TEvent],
-	): this;
-	off<TEvent extends DriverEvents>(
-		event: TEvent,
-		callback: DriverEventCallbacks[TEvent],
-	): this;
-	removeAllListeners(event?: DriverEvents): this;
-
-	emit<TEvent extends DriverEvents>(
-		event: TEvent,
-		...args: Parameters<DriverEventCallbacks[TEvent]>
-	): boolean;
-}
-
 /**
  * The driver is the core of this library. It controls the serial interface,
  * handles transmission and receipt of messages and manages the network cache.
  * Any action you want to perform on the Z-Wave network must go through a driver
  * instance or its associated nodes.
  */
-export class Driver extends EventEmitter {
+export class Driver extends TypedEventEmitter<DriverEventCallbacks> {
 	/** The serial port instance */
 	private serial: ZWaveSerialPortBase | undefined;
 	/** An instance of the Send Thread state machine */
@@ -488,9 +470,15 @@ export class Driver extends EventEmitter {
 						switch (lastError) {
 							case "response timeout":
 								errorReason = "No response from controller";
+								this.controller.incrementStatistics(
+									"timeoutResponse",
+								);
 								break;
 							case "callback timeout":
 								errorReason = "No callback from controller";
+								this.controller.incrementStatistics(
+									"timeoutCallback",
+								);
 								break;
 							case "response NOK":
 								errorReason =
@@ -501,6 +489,10 @@ export class Driver extends EventEmitter {
 									"The controller callback indicated failure";
 								break;
 							case "ACK timeout":
+								this.controller.incrementStatistics(
+									"timeoutACK",
+								);
+							// fall through
 							case "CAN":
 							case "NAK":
 							default:
@@ -596,7 +588,7 @@ export class Driver extends EventEmitter {
 		this._wasStarted = true;
 
 		// Enforce that an error handler is attached
-		if ((this as EventEmitter).listenerCount("error") === 0) {
+		if ((this as unknown as EventEmitter).listenerCount("error") === 0) {
 			throw new ZWaveError(
 				`Before starting the driver, a handler for the "error" event must be attached.`,
 				ZWaveErrorCodes.Driver_NoErrorHandler,
@@ -1529,10 +1521,12 @@ export class Driver extends EventEmitter {
 				}
 				case MessageHeaders.NAK: {
 					this.sendThread.send("NAK");
+					this.controller.incrementStatistics("NAK");
 					return;
 				}
 				case MessageHeaders.CAN: {
 					this.sendThread.send("CAN");
+					this.controller.incrementStatistics("CAN");
 					return;
 				}
 			}
@@ -1544,13 +1538,25 @@ export class Driver extends EventEmitter {
 			// This way we can log the invalid CC contents
 			msg = Message.from(this, data);
 			// Then ensure there are no errors
-			if (isCommandClassContainer(msg)) assertValidCCs(msg);
+			if (isCommandClassContainer(msg)) {
+				assertValidCCs(msg);
+				msg.getNodeUnsafe()?.incrementStatistics("commandsRX");
+			} else {
+				this.controller.incrementStatistics("messagesRX");
+			}
 			// all good, send ACK
 			await this.writeHeader(MessageHeaders.ACK);
 		} catch (e) {
 			try {
 				const response = this.handleDecodeError(e, data, msg);
 				if (response) await this.writeHeader(response);
+				if (isCommandClassContainer(msg)) {
+					msg.getNodeUnsafe()?.incrementStatistics(
+						"commandsDroppedRX",
+					);
+				} else {
+					this.controller.incrementStatistics("messagesDroppedRX");
+				}
 			} catch (e) {
 				if (
 					e instanceof Error &&
@@ -2316,7 +2322,14 @@ ${handlers.length} left`,
 
 		try {
 			const ret = await promise;
+			// The message was transmitted, so it can no longer expire
 			if (expirationTimeout) clearTimeout(expirationTimeout);
+			// Update statistics
+			if (isSendData(msg)) {
+				node?.incrementStatistics("commandsTX");
+			} else {
+				this.controller.incrementStatistics("messagesTX");
+			}
 			// Track and potentially update the status of the node when communication succeeds
 			if (node) {
 				if (node.canSleep) {
@@ -2349,7 +2362,11 @@ ${handlers.length} left`,
 					e.context.functionType !==
 						FunctionType.SendDataMulticastBridge
 				) {
+					this.controller.incrementStatistics("messagesDroppedTX");
 					return e.context as TResponse;
+				} else if (e.code === ZWaveErrorCodes.Controller_NodeTimeout) {
+					// If the node failed to respond in time, remember this for the statistics
+					node?.incrementStatistics("timeoutResponse");
 				}
 			}
 			throw e;

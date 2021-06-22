@@ -1,3 +1,4 @@
+export * from "./EventEmitter";
 export * from "./fs";
 export * from "./inheritance";
 export * from "./misc";

@@ -15,10 +15,12 @@ import {
 	flatMap,
 	getEnumMemberName,
 	JSONObject,
+	Mixin,
 	num2hex,
 	ObjectKeyMap,
 	pick,
 	ReadonlyObjectKeyMap,
+	TypedEventEmitter,
 } from "@zwave-js/shared";
 import { distinct } from "alcalzone-shared/arrays";
 import {
@@ -27,7 +29,6 @@ import {
 } from "alcalzone-shared/deferred-promise";
 import { composeObject } from "alcalzone-shared/objects";
 import { isObject } from "alcalzone-shared/typeguards";
-import { EventEmitter } from "events";
 import type { AssociationCC } from "../commandclass/AssociationCC";
 import type {
 	AssociationGroup,
@@ -51,6 +52,7 @@ import {
 	getFirmwareVersionsValueId,
 } from "../commandclass/VersionCC";
 import type { Driver, RequestHandler } from "../driver/Driver";
+import type { StatisticsEventCallbacks } from "../driver/Statistics";
 import { FunctionType } from "../message/Constants";
 import type { Message } from "../message/Message";
 import type { SuccessIndicator } from "../message/SuccessIndicator";
@@ -115,6 +117,10 @@ import {
 } from "./AddNodeToNetworkRequest";
 import { AssignReturnRouteRequest } from "./AssignReturnRouteMessages";
 import { AssignSUCReturnRouteRequest } from "./AssignSUCReturnRouteMessages";
+import {
+	ControllerStatistics,
+	ControllerStatisticsHost,
+} from "./ControllerStatistics";
 import { DeleteReturnRouteRequest } from "./DeleteReturnRouteMessages";
 import { DeleteSUCReturnRouteRequest } from "./DeleteSUCReturnRouteMessages";
 import {
@@ -189,7 +195,8 @@ export type ReadonlyThrowingMap<K, V> = ReadonlyMap<K, V> & {
 };
 
 // Strongly type the event emitter events
-interface ControllerEventCallbacks {
+interface ControllerEventCallbacks
+	extends StatisticsEventCallbacks<ControllerStatistics> {
 	"inclusion failed": () => void;
 	"exclusion failed": () => void;
 	"inclusion started": (secure: boolean) => void;
@@ -206,32 +213,11 @@ interface ControllerEventCallbacks {
 
 export type ControllerEvents = Extract<keyof ControllerEventCallbacks, string>;
 
-export interface ZWaveController {
-	on<TEvent extends ControllerEvents>(
-		event: TEvent,
-		callback: ControllerEventCallbacks[TEvent],
-	): this;
-	once<TEvent extends ControllerEvents>(
-		event: TEvent,
-		callback: ControllerEventCallbacks[TEvent],
-	): this;
-	removeListener<TEvent extends ControllerEvents>(
-		event: TEvent,
-		callback: ControllerEventCallbacks[TEvent],
-	): this;
-	off<TEvent extends ControllerEvents>(
-		event: TEvent,
-		callback: ControllerEventCallbacks[TEvent],
-	): this;
-	removeAllListeners(event?: ControllerEvents): this;
+// eslint-disable-next-line @typescript-eslint/no-empty-interface
+export interface ZWaveController extends ControllerStatisticsHost {}
 
-	emit<TEvent extends ControllerEvents>(
-		event: TEvent,
-		...args: Parameters<ControllerEventCallbacks[TEvent]>
-	): boolean;
-}
-
-export class ZWaveController extends EventEmitter {
+@Mixin([ControllerStatisticsHost])
+export class ZWaveController extends TypedEventEmitter<ControllerEventCallbacks> {
 	/** @internal */
 	public constructor(private readonly driver: Driver) {
 		super();

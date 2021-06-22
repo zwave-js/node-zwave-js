@@ -19,7 +19,17 @@ const driver = new Driver("COM5", {
 })
 	.on("error", console.error)
 	.once("driver ready", async () => {
-		// debugger;
+		// driver.controller.on("statistics updated", (s) => {
+		// 	console.debug(s);
+		// });
+		// for (const node of driver.controller.nodes.values()) {
+		// 	node.on("statistics updated", (s) => {
+		// 		console.debug({
+		// 			node: node.id,
+		// 			...s,
+		// 		});
+		// 	});
+		// }
 		// const cc = new CommandClass(driver, {
 		// 	nodeId: 24,
 		// 	ccId: 0x5d,

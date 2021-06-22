@@ -34,3 +34,31 @@ export function getEnumMemberName(enumeration: unknown, value: number): string {
 export function skipBytes(buf: Buffer, n: number): Buffer {
 	return Buffer.from(buf.slice(n));
 }
+
+/**
+ * Returns a throttled version of the given function. No matter how often the throttled version is called,
+ * the underlying function is only called at maximum every `intervalMs` milliseconds.
+ */
+export function throttle<T extends any[]>(
+	fn: (...args: T) => void,
+	intervalMs: number,
+	trailing: boolean = false,
+): (...args: T) => void {
+	let lastCall = 0;
+	let timeout: NodeJS.Timeout | undefined;
+	return (...args: T) => {
+		const now = Date.now();
+		if (now >= lastCall + intervalMs) {
+			// waited long enough, call now
+			lastCall = now;
+			fn(...args);
+		} else if (trailing) {
+			if (timeout) clearTimeout(timeout);
+			const delay = lastCall + intervalMs - now;
+			timeout = setTimeout(() => {
+				lastCall = now;
+				fn(...args);
+			}, delay);
+		}
+	};
+}
