@@ -2,6 +2,22 @@
 <!--
 	Add placeholder for next release with `wip` snippet
 -->
+## __WORK IN PROGRESS__
+### Features
+* Add the ability to pass options (like a transition duration) to `setValue` API calls
+* Add options to configure the preferred sensor scales
+
+### Bugfixes
+* Upgrade JsonlDB to try and handle the (hopefully) remaining edge cases that can lead to cache corruption
+
+### Config file changes
+* Define association groups for multiple Jasco devices
+* Add treatBasicSetAsEvent compat flag to multiple Evolve devices
+
+### Changes under the hood
+* Parallelize documentation generation
+* The documentation now highlights better when to use sentence case vs. title case
+
 ## 7.8.0 (2021-06-20)
 ### Features
 * The `firmwareVersion` property for the controller node now returns the serial API version
