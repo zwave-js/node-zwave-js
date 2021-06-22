@@ -148,7 +148,7 @@
 			"$import": "../0x0086/templates/aeotec_template.json#binary_report_type"
 		},
 		"81": {
-			"$import": "../templates/master_template.json#led_indicator_three_options_alt"
+			"$import": "../0x0086/templates/aeotec_template.json#led_indicator_three_options_alt"
 		},
 		"82[0xff000000]": {
 			"label": "Night Light (Enable): Hour",
