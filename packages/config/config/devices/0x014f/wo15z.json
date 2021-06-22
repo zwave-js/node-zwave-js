@@ -34,5 +34,8 @@
 				}
 			]
 		}
+	},
+	"compat": {
+		"treatBasicSetAsEvent": true
 	}
 }
