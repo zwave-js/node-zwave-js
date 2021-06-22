@@ -87,8 +87,29 @@ export class ConfigManager {
 	private indicators: IndicatorMap | undefined;
 	private indicatorProperties: IndicatorPropertiesMap | undefined;
 	private manufacturers: ManufacturersMap | undefined;
-	private namedScales: NamedScalesGroupMap | undefined;
-	private sensorTypes: SensorTypeMap | undefined;
+
+	private _namedScales: NamedScalesGroupMap | undefined;
+	public get namedScales(): NamedScalesGroupMap {
+		if (!this._namedScales) {
+			throw new ZWaveError(
+				"The config has not been loaded yet!",
+				ZWaveErrorCodes.Driver_NotReady,
+			);
+		}
+		return this._namedScales;
+	}
+
+	private _sensorTypes: SensorTypeMap | undefined;
+	public get sensorTypes(): SensorTypeMap {
+		if (!this._sensorTypes) {
+			throw new ZWaveError(
+				"The config has not been loaded yet!",
+				ZWaveErrorCodes.Driver_NotReady,
+			);
+		}
+		return this._sensorTypes;
+	}
+
 	private meters: MeterMap | undefined;
 	private basicDeviceClasses: BasicDeviceClassMap | undefined;
 	private genericDeviceClasses: GenericDeviceClassMap | undefined;
@@ -241,7 +262,7 @@ export class ConfigManager {
 
 	public async loadNamedScales(): Promise<void> {
 		try {
-			this.namedScales = await loadNamedScalesInternal(
+			this._namedScales = await loadNamedScalesInternal(
 				this.useExternalConfig,
 			);
 		} catch (e: unknown) {
@@ -253,7 +274,7 @@ export class ConfigManager {
 						"error",
 					);
 				}
-				if (!this.namedScales) this.namedScales = new Map();
+				if (!this._namedScales) this._namedScales = new Map();
 			} else {
 				// This is an unexpected error
 				throw e;
@@ -265,17 +286,17 @@ export class ConfigManager {
 	 * Looks up all scales defined under a given name
 	 */
 	public lookupNamedScaleGroup(name: string): ScaleGroup | undefined {
-		if (!this.namedScales) {
+		if (!this._namedScales) {
 			throw new ZWaveError(
 				"The config has not been loaded yet!",
 				ZWaveErrorCodes.Driver_NotReady,
 			);
 		}
 
-		return this.namedScales.get(name);
+		return this._namedScales.get(name);
 	}
 
-	/** Looks up a scale definition for a given sensor type */
+	/** Looks up a scale definition for a given scale type */
 	public lookupNamedScale(name: string, scale: number): Scale {
 		const group = this.lookupNamedScaleGroup(name);
 		return group?.get(scale) ?? getDefaultScale(scale);
@@ -283,7 +304,7 @@ export class ConfigManager {
 
 	public async loadSensorTypes(): Promise<void> {
 		try {
-			this.sensorTypes = await loadSensorTypesInternal(
+			this._sensorTypes = await loadSensorTypesInternal(
 				this,
 				this.useExternalConfig,
 			);
@@ -296,7 +317,7 @@ export class ConfigManager {
 						"error",
 					);
 				}
-				if (!this.sensorTypes) this.sensorTypes = new Map();
+				if (!this._sensorTypes) this._sensorTypes = new Map();
 			} else {
 				// This is an unexpected error
 				throw e;
@@ -308,14 +329,14 @@ export class ConfigManager {
 	 * Looks up the configuration for a given sensor type
 	 */
 	public lookupSensorType(sensorType: number): SensorType | undefined {
-		if (!this.sensorTypes) {
+		if (!this._sensorTypes) {
 			throw new ZWaveError(
 				"The config has not been loaded yet!",
 				ZWaveErrorCodes.Driver_NotReady,
 			);
 		}
 
-		return this.sensorTypes.get(sensorType);
+		return this._sensorTypes.get(sensorType);
 	}
 
 	/** Looks up a scale definition for a given sensor type */

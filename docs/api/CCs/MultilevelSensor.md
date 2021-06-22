@@ -13,6 +13,10 @@ async get(): Promise<
 
 async get(
 	sensorType: number,
+): Promise<MultilevelSensorValue | undefined>;
+
+async get(
+	sensorType: number,
 	scale: number,
 ): Promise<number | undefined>;
 ```

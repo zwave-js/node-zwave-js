@@ -12,7 +12,10 @@ import {
 	throwInvalidConfig,
 } from "./utils";
 
-export type ScaleGroup = ReadonlyMap<number, Scale>;
+export type ScaleGroup = ReadonlyMap<number, Scale> & {
+	/** The name of the scale group if it is named */
+	readonly name?: string;
+};
 export type NamedScalesGroupMap = ReadonlyMap<string, ScaleGroup>;
 
 /** @internal */
@@ -41,7 +44,7 @@ export async function loadNamedScalesInternal(
 			);
 		}
 
-		const namedScales = new Map();
+		const namedScales = new Map<string, ScaleGroup>();
 		for (const [name, scales] of entries(definition)) {
 			if (!/[\w\d]+/.test(name)) {
 				throwInvalidConfig(
@@ -49,7 +52,11 @@ export async function loadNamedScalesInternal(
 					`Name ${name} contains other characters than letters and numbers`,
 				);
 			}
-			const named = new Map<number, Scale>();
+			const named: Map<number, Scale> & { name?: string } = new Map<
+				number,
+				Scale
+			>();
+			named.name = name;
 			for (const [key, scaleDefinition] of entries(
 				scales as JSONObject,
 			)) {

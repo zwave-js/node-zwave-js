@@ -236,6 +236,14 @@ getLogConfig(): LogConfig
 
 Returns the current logging configuration.
 
+### `setPreferredScales`
+
+```ts
+setPreferredScales(scales: ZWaveOptions["preferences"]["scales"]): void
+```
+
+Configures a new set of preferred sensor scales without having to restart the driver. The `scales` argument has the same type as `preferences.scales` in [`ZWaveOptions`](#ZWaveOptions).
+
 ### `checkForConfigUpdates`
 
 ```ts
@@ -471,7 +479,7 @@ This interface specifies the optional options object that is passed to the `Driv
 
 <!-- #import ZWaveOptions from "zwave-js" with comments -->
 
-```ts
+````ts
 interface ZWaveOptions {
 	/** Specify timeouts in milliseconds */
 	timeouts: {
@@ -560,8 +568,38 @@ interface ZWaveOptions {
 	 * Default: `false`
 	 */
 	disableOptimisticValueUpdate?: boolean;
+
+	preferences: {
+		/**
+		 * The preferred scales to use when querying sensors. The key is either:
+		 * - the name of a named scale group, e.g. "temperature", which applies to every sensor type that uses this scale group.
+		 * - or the numeric sensor type to specify the scale for a single sensor type
+		 *
+		 * Single-type preferences have a higher priority than named ones. For example, the following preference
+		 * ```js
+		 * {
+		 *     temperature: "°F",
+		 *     0x01: "°C",
+		 * }
+		 * ```
+		 * will result in using the Fahrenheit scale for all temperature sensors, except the air temperature (0x01).
+		 *
+		 * The value must match what is defined in the sensor type config file and contain either:
+		 * - the label (e.g. "Celsius", "Fahrenheit")
+		 * - the unit (e.g. "°C", "°F")
+		 * - or the numeric key of the scale (e.g. 0 or 1).
+		 *
+		 * Default:
+		 * ```js
+		 * {
+		 *     temperature: "Celsius"
+		 * }
+		 * ```
+		 */
+		scales: Partial<Record<string | number, string | number>>;
+	};
 }
-```
+````
 
 The timeout values `ack` and `byte` are sent to the Z-Wave stick using the `SetSerialApiTimeouts` command. Change them only if you know what you're doing.
 The `report` timeout is used by this library to determine how long to wait for a node's response.
