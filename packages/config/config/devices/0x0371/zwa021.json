@@ -150,10 +150,11 @@
 		},
 		"8": {
 			"label": "Temperature Offset",
+			"description": "Allowable ranges: 0-50 (0°C to 50°C), 206-255 (-5°C to 0.1°C)",
 			"valueSize": 1,
 			"unit": "0.1°C",
 			"minValue": -128,
-			"maxValue": 50,
+			"maxValue": 255,
 			"defaultValue": 0,
 			"options": [
 				{

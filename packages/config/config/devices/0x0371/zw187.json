@@ -83,7 +83,7 @@
 			]
 		},
 		"4[0xff00]": {
-			"label": "Max Number of Retries",
+			"label": "Max Number of Transmission Retries",
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 5,
@@ -91,7 +91,7 @@
 			"unsigned": true
 		},
 		"4[0x00ff]": {
-			"label": "Retry Wait Time",
+			"label": "Transmission Retry Wait Time",
 			"valueSize": 2,
 			"unit": "100 ms",
 			"minValue": 0,

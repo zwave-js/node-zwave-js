@@ -40,7 +40,7 @@
 			"maxNodes": 5
 		},
 		"6": {
-			"label": "Air Temperature (MultiLevel)",
+			"label": "Air Temperature (Multilevel)",
 			"maxNodes": 5
 		}
 	},

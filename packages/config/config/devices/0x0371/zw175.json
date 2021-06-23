@@ -111,7 +111,7 @@
 		},
 		"10": {
 			"label": "Method to Disable Alarm",
-			"description": "Allowable range: 10-255 - defines alarm duration",
+			"description": "Allowable range: 10-255 - Sets the method to disable the alarm or alarm duration",
 			"valueSize": 2,
 			"unit": "seconds",
 			"minValue": 0,
