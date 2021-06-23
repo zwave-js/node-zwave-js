@@ -70,7 +70,7 @@
 			"$import": "templates/aeotec_template.json#low_battery_interval"
 		},
 		"121": {
-			"$import": "templates/aeotec_template.json#binary_report_type"
+			"$import": "templates/aeotec_template.json#binary_report_type_3"
 		},
 		"252": {
 			"$import": "templates/aeotec_template.json#lock_configuration"
