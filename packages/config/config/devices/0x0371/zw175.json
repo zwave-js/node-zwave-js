@@ -131,7 +131,7 @@
 		},
 		"18": {
 			"label": "LED Blinking Frequency",
-			"description": "Defines the number of blinks per second during alarm activation",
+			"unit": "Hz",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 9,
