@@ -108,7 +108,7 @@
 			]
 		},
 		"6": {
-			"label": "Valve position Report",
+			"label": "Valve Position Report",
 			"valueSize": 1,
 			"unit": "%",
 			"minValue": 0,
