@@ -46,7 +46,7 @@
 	},
 	"paramInformation": {
 		"1": {
-			"label": "Temperature Change Report Threshhold",
+			"label": "Temperature Change Report Threshold",
 			"unit": "0.1 °(C/F)",
 			"unsigned": true,
 			"valueSize": 1,
