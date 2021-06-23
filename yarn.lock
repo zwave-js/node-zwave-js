@@ -3135,6 +3135,23 @@
     "@xstate/graph" "^1.1.0"
     chalk "^2.4.2"
 
+"@zwave-js/file-stream-rotator@^0.5.8-0":
+  version "0.5.8-0"
+  resolved "https://registry.yarnpkg.com/@zwave-js/file-stream-rotator/-/file-stream-rotator-0.5.8-0.tgz#6e21e453c22b6020321783d82b5cc7861f6dde22"
+  integrity sha512-gy9G4vCjjyG08pOKvXu0mSZPqk3gYtBSstZXVFAF8QZeJcKgsJCwZpsAXw26MR5297VqPtqR8XRwxyCyjaj6uQ==
+  dependencies:
+    moment "^2.11.2"
+
+"@zwave-js/winston-daily-rotate-file@^4.5.6-0":
+  version "4.5.6-0"
+  resolved "https://registry.yarnpkg.com/@zwave-js/winston-daily-rotate-file/-/winston-daily-rotate-file-4.5.6-0.tgz#32be357a287ab1e2d0b0630c73cda39c7ed77056"
+  integrity sha512-vvOiyg5X3CZyk9x5OwjxCJJKxiCtNJ48Ksz6xa/1mwFEOUXA5LnaiHynGhZ+77RNnFtt75SOwYSPr24Ue2MJpw==
+  dependencies:
+    "@zwave-js/file-stream-rotator" "^0.5.8-0"
+    object-hash "^2.0.1"
+    triple-beam "^1.3.0"
+    winston-transport "^4.4.0"
+
 JSONStream@^1.0.4:
   version "1.3.5"
   resolved "https://registry.yarnpkg.com/JSONStream/-/JSONStream-1.3.5.tgz#3208c1f08d3a4d99261ab64f92302bc15e111ca0"
@@ -5159,13 +5176,6 @@ file-entry-cache@^6.0.1:
   integrity sha512-7Gps/XWymbLk2QLYK4NzpMOrYjMhdIxXuIvy2QBsLE6ljuodKvdkWs/cpyJJ3CVIVpH0Oi1Hvg1ovbMzLdFBBg==
   dependencies:
     flat-cache "^3.0.4"
-
-file-stream-rotator@^0.5.7:
-  version "0.5.7"
-  resolved "https://registry.yarnpkg.com/file-stream-rotator/-/file-stream-rotator-0.5.7.tgz#868a2e5966f7640a17dd86eda0e4467c089f6286"
-  integrity sha512-VYb3HZ/GiAGUCrfeakO8Mp54YGswNUHvL7P09WQcXAJNSj3iQ5QraYSp3cIn1MUyw6uzfgN/EFOarCNa4JvUHQ==
-  dependencies:
-    moment "^2.11.2"
 
 file-uri-to-path@1.0.0:
   version "1.0.0"
@@ -10323,16 +10333,6 @@ wide-align@^1.1.0:
   integrity sha512-QGkOQc8XL6Bt5PwnsExKBPuMKBxnGxWWW3fU55Xt4feHozMUhdUMaBCk290qpm/wG5u/RSKzwdAC4i51YigihA==
   dependencies:
     string-width "^1.0.2 || 2"
-
-winston-daily-rotate-file@^4.5.5:
-  version "4.5.5"
-  resolved "https://registry.yarnpkg.com/winston-daily-rotate-file/-/winston-daily-rotate-file-4.5.5.tgz#cfa3a89f4eb0e4126917592b375759b772bcd972"
-  integrity sha512-ds0WahIjiDhKCiMXmY799pDBW+58ByqIBtUcsqr4oDoXrAI3Zn+hbgFdUxzMfqA93OG0mPLYVMiotqTgE/WeWQ==
-  dependencies:
-    file-stream-rotator "^0.5.7"
-    object-hash "^2.0.1"
-    triple-beam "^1.3.0"
-    winston-transport "^4.4.0"
 
 winston-transport@^4.4.0:
   version "4.4.0"
