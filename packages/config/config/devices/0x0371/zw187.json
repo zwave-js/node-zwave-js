@@ -44,7 +44,7 @@
 			"$import": "../0x0086/templates/aeotec_template.json#invert_state_report"
 		},
 		"3": {
-			"label": "Association Group 2 Settings",
+			"label": "Association Group 2: Basic Set Value",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 6,
