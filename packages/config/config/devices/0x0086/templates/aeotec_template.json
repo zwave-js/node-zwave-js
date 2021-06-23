@@ -799,7 +799,7 @@
 	},
 	"auto_report_interval_kwh": {
 		"$import": "#base_0-65535",
-		"label": "Automatic Reporting Interval: KwH",
+		"label": "Automatic Reporting Interval: kWh",
 		"unit": "seconds",
 		"defaultValue": 600,
 		"options": [
