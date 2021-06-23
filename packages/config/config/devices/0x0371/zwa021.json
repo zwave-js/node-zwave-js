@@ -150,7 +150,7 @@
 		},
 		"8": {
 			"label": "Temperature Offset",
-			"description": "Allowable ranges: -50 to 50 (-5 °C to +5 °C)",
+			"description": "Allowable range: -50 to 50 (-5 °C to +5 °C)",
 			"valueSize": 1,
 			"unit": "0.1 °C",
 			"minValue": -128,
