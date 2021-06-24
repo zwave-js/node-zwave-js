@@ -51,6 +51,7 @@ interface ValueMetadataAny {
 	description?: string;
 	label?: string;
 	ccSpecific?: Record<string, any>;
+	setValueOptions?: string[];
 }
 ```
 
@@ -60,6 +61,7 @@ interface ValueMetadataAny {
 -   `description`: A description of the value
 -   `label`: A human-readable label for the property
 -   `ccSpecific`: CC specific information to help identify this value [(see below)](#CC-specific-fields)
+-   `setValueOptions`: Parameters that can be passed as `options` to the [`setValue`](api/node.md#setvalue) command for this value.
 
 ### Value types
 
