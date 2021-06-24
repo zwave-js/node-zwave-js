@@ -53,6 +53,8 @@ export interface ValueMetadataAny {
 	label?: string;
 	/** CC-specific information to help identify this value */
 	ccSpecific?: Record<string, any>;
+	/** Options that can be included in a setValue call for this value. */
+	setValueOptions?: string[];
 }
 
 export interface ValueMetadataNumeric extends ValueMetadataAny {

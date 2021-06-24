@@ -135,11 +135,10 @@ export class MultilevelSwitchCCAPI extends CCAPI {
 			nodeId: this.endpoint.nodeId,
 			endpoint: this.endpoint.index,
 		});
-		const response =
-			await this.driver.sendCommand<MultilevelSwitchCCReport>(
-				cc,
-				this.commandOptions,
-			);
+		const response = await this.driver.sendCommand<MultilevelSwitchCCReport>(
+			cc,
+			this.commandOptions,
+		);
 		if (response) {
 			return pick(response, ["currentValue", "targetValue", "duration"]);
 		}
@@ -213,8 +212,9 @@ export class MultilevelSwitchCCAPI extends CCAPI {
 
 		if (mayUseSupervision) {
 			// Try to supervise the command execution
-			const supervisionResult =
-				await this.driver.trySendCommandSupervised(cc);
+			const supervisionResult = await this.driver.trySendCommandSupervised(
+				cc,
+			);
 
 			if (supervisionResult?.status === SupervisionStatus.Fail) {
 				throw new ZWaveError(
@@ -253,8 +253,9 @@ export class MultilevelSwitchCCAPI extends CCAPI {
 
 		if (mayUseSupervision) {
 			// Try to supervise the command execution
-			const supervisionResult =
-				await this.driver.trySendCommandSupervised(cc);
+			const supervisionResult = await this.driver.trySendCommandSupervised(
+				cc,
+			);
 
 			if (supervisionResult?.status === SupervisionStatus.Fail) {
 				throw new ZWaveError(
@@ -285,11 +286,10 @@ export class MultilevelSwitchCCAPI extends CCAPI {
 			nodeId: this.endpoint.nodeId,
 			endpoint: this.endpoint.index,
 		});
-		const response =
-			await this.driver.sendCommand<MultilevelSwitchCCSupportedReport>(
-				cc,
-				this.commandOptions,
-			);
+		const response = await this.driver.sendCommand<MultilevelSwitchCCSupportedReport>(
+			cc,
+			this.commandOptions,
+		);
 		return response?.switchType;
 	}
 
@@ -351,12 +351,12 @@ export class MultilevelSwitchCCAPI extends CCAPI {
 						value <= 99
 					) {
 						// Figure out which nodes were affected by this command
-						const affectedNodes =
-							this.endpoint.node.physicalNodes.filter((node) =>
+						const affectedNodes = this.endpoint.node.physicalNodes.filter(
+							(node) =>
 								node
 									.getEndpoint(this.endpoint.index)
 									?.supportsCC(this.ccId),
-							);
+						);
 						// and optimistically update the currentValue
 						for (const node of affectedNodes) {
 							node.valueDB?.setValue(
@@ -635,6 +635,7 @@ export class MultilevelSwitchCCReport extends MultilevelSwitchCC {
 	@ccValueMetadata({
 		...ValueMetadata.Level,
 		label: "Target value",
+		setValueOptions: ["transitionDuration"],
 	})
 	public readonly targetValue: number | undefined;
 

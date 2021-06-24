@@ -326,6 +326,7 @@ export class BinarySwitchCCReport extends BinarySwitchCC {
 	@ccValueMetadata({
 		...ValueMetadata.Boolean,
 		label: "Target value",
+		setValueOptions: ["transitionDuration"],
 	})
 	public get targetValue(): boolean | undefined {
 		return this._targetValue;

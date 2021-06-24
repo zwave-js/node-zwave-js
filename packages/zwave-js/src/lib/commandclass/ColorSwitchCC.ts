@@ -84,8 +84,7 @@ const ColorComponentMap = {
 };
 type ColorKey = keyof typeof ColorComponentMap;
 
-const hexColorRegex =
-	/^#?(?<red>[0-9a-f]{2})(?<green>[0-9a-f]{2})(?<blue>[0-9a-f]{2})$/i;
+const hexColorRegex = /^#?(?<red>[0-9a-f]{2})(?<green>[0-9a-f]{2})(?<blue>[0-9a-f]{2})$/i;
 
 // Accept both the kebabCase names and numeric components as table keys
 /**
@@ -197,11 +196,10 @@ export class ColorSwitchCCAPI extends CCAPI {
 			nodeId: this.endpoint.nodeId,
 			endpoint: this.endpoint.index,
 		});
-		const response =
-			await this.driver.sendCommand<ColorSwitchCCSupportedReport>(
-				cc,
-				this.commandOptions,
-			);
+		const response = await this.driver.sendCommand<ColorSwitchCCSupportedReport>(
+			cc,
+			this.commandOptions,
+		);
 		return response?.supportedColorComponents;
 	}
 
@@ -549,6 +547,7 @@ export class ColorSwitchCC extends CommandClass {
 		valueDB.setMetadata(getTargetColorValueID(this.endpointIndex), {
 			...ValueMetadata.Any,
 			label: `Target Color`,
+			setValueOptions: ["transitionDuration"],
 		});
 
 		// Create the collective HEX color values
