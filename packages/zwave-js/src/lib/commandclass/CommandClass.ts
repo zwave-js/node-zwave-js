@@ -360,7 +360,16 @@ export class CommandClass {
 				if (!ccName) {
 					ccName = `${getCCName(ccId)} CC`;
 				}
-				return new InvalidCC(driver, { nodeId, ccId, ccName });
+				// Preserve why the command was invalid
+				let reason: string | undefined;
+				if (typeof e.context === "string") reason = e.context;
+
+				return new InvalidCC(driver, {
+					nodeId,
+					ccId,
+					ccName,
+					reason,
+				});
 			}
 			throw e;
 		}
