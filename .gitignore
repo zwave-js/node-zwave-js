@@ -3,11 +3,12 @@ node_modules/
 
 # Yarn config and stuff
 .yarn/*
-!.yarn/cache
+!.yarn/patches
 !.yarn/releases
 !.yarn/plugins
 !.yarn/sdks
 !.yarn/versions
+.pnp.*
 
 # compiled test-files
 *.test.js
