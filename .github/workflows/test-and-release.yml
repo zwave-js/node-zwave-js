@@ -51,7 +51,7 @@ jobs:
           ${{ runner.os }}-yarn-
 
     - name: Install dependencies
-      run: yarn install --prefer-offline --frozen-lockfile
+      run: yarn install --immutable
 
     - name: Compile TypeScript code
       run: npx lerna run build
@@ -123,7 +123,7 @@ jobs:
           ${{ runner.os }}-yarn-
 
     - name: Install dependencies
-      run: yarn install --prefer-offline --frozen-lockfile
+      run: yarn install --immutable
 
     - name: Compile TypeScript code
       run: npx lerna run build
@@ -168,7 +168,7 @@ jobs:
           ${{ runner.os }}-yarn-
 
     - name: Install dependencies
-      run: yarn install --prefer-offline --frozen-lockfile
+      run: yarn install --immutable
 
     # Compilation is necessary, or the tests won't run
     - name: Compile TypeScript code
@@ -213,7 +213,7 @@ jobs:
           ${{ runner.os }}-yarn-
 
     - name: Install dependencies
-      run: yarn install --prefer-offline --frozen-lockfile
+      run: yarn install --immutable
 
     # Do a full build so the package files are regenerated
     - name: Compile TypeScript code
@@ -261,7 +261,7 @@ jobs:
           ${{ runner.os }}-yarn-
 
     - name: Install dependencies
-      run: yarn install --prefer-offline --frozen-lockfile
+      run: yarn install --immutable
 
     # Compilation is necessary, or the tests won't run
     - name: Compile TypeScript code
@@ -330,7 +330,7 @@ jobs:
           ${{ runner.os }}-yarn-
 
     - name: Install dependencies
-      run: yarn install --prefer-offline --frozen-lockfile
+      run: yarn install --immutable
 
     - name: Create a clean build
       run: yarn run build:full

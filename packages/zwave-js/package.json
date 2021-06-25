@@ -84,8 +84,7 @@
     "build:full": "yarn b prebuild:full && yarn build && yarn b postbuild:full",
     "build": "tsc -b tsconfig.build.json",
     "clean": "tsc -b tsconfig.build.json --clean",
-    "prewatch": "yarn b prebuild",
-    "watch": "tsc -b tsconfig.build.json --watch --pretty",
+    "watch": "yarn b prebuild && tsc -b tsconfig.build.json --watch --pretty",
     "lint:zwave": "yarn b lint",
     "ts": "node -r esbuild-register"
   }

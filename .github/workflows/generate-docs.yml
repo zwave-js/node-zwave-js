@@ -44,7 +44,7 @@ jobs:
           ${{ runner.os }}-yarn-
 
     - name: Install dependencies
-      run: yarn install --prefer-offline --frozen-lockfile
+      run: yarn install --immutable
 
     - name: Compile TypeScript code
       run: yarn run build

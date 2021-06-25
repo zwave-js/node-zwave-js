@@ -53,7 +53,7 @@ jobs:
         # ===============================
 
         npm i -g yarn
-        yarn install --frozen-lockfile
+        yarn install --immutable
 
         # ===============================
         # Double-check changes with lerna
