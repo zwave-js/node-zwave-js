@@ -1,5 +1,5 @@
 {
-	"typescript.tsdk": "node_modules/typescript/lib",
+	"typescript.tsdk": ".yarn/sdks/typescript/lib",
 	"typescript.enablePromptUseWorkspaceTsdk": true,
 	"jest.showCoverageOnLoad": false,
 	"jest.enableCodeLens": true,
@@ -110,5 +110,11 @@
 		}
 	],
 	"debug.javascript.unmapMissingSources": true,
-	"jest.jestCommandLine": "npx jest"
+	"jest.jestCommandLine": "npx jest",
+	"search.exclude": {
+		"**/.yarn": true,
+		"**/.pnp.*": true
+	},
+	"eslint.nodePath": ".yarn/sdks",
+	"prettier.prettierPath": ".yarn/sdks/prettier/index.js"
 }
