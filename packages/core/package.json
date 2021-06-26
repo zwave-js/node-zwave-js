@@ -36,9 +36,12 @@
     "alcalzone-shared": "^3.0.4",
     "ansi-colors": "^4.1.1",
     "dayjs": "^1.10.5",
+    "logform": "*",
     "nrf-intel-hex": "^1.3.0",
+    "triple-beam": "*",
     "winston": "^3.3.3",
-    "winston-daily-rotate-file": "^4.5.5"
+    "winston-daily-rotate-file": "^4.5.5",
+    "winston-transport": "*"
   },
   "scripts": {
     "build": "tsc -b tsconfig.build.json",
