@@ -44,5 +44,8 @@
     "build": "tsc -b tsconfig.build.json",
     "clean": "yarn run build --clean",
     "watch": "yarn run build --watch --pretty"
+  },
+  "devDependencies": {
+    "typescript": "^4.3.2"
   }
 }

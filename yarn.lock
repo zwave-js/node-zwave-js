@@ -4073,6 +4073,7 @@ __metadata:
     json-logic-js: ^2.0.1
     json5: ^2.2.0
     semver: ^7.3.2
+    typescript: ^4.3.2
     winston: ^3.3.3
   languageName: unknown
   linkType: soft
@@ -4087,6 +4088,7 @@ __metadata:
     ansi-colors: ^4.1.1
     dayjs: ^1.10.5
     nrf-intel-hex: ^1.3.0
+    typescript: ^4.3.2
     winston: ^3.3.3
     winston-daily-rotate-file: ^4.5.5
   languageName: unknown
@@ -4095,6 +4097,8 @@ __metadata:
 "@zwave-js/maintenance@workspace:packages/maintenance":
   version: 0.0.0-use.local
   resolution: "@zwave-js/maintenance@workspace:packages/maintenance"
+  dependencies:
+    typescript: ^4.3.2
   languageName: unknown
   linkType: soft
 
@@ -4172,6 +4176,7 @@ __metadata:
     "@zwave-js/core": 7.9.0
     alcalzone-shared: ^3.0.4
     serialport: ^9.1.0
+    typescript: ^4.3.2
     winston: ^3.3.3
   languageName: unknown
   linkType: soft
@@ -4181,12 +4186,15 @@ __metadata:
   resolution: "@zwave-js/shared@workspace:packages/shared"
   dependencies:
     alcalzone-shared: ^3.0.4
+    typescript: ^4.3.2
   languageName: unknown
   linkType: soft
 
 "@zwave-js/testing@workspace:packages/testing":
   version: 0.0.0-use.local
   resolution: "@zwave-js/testing@workspace:packages/testing"
+  dependencies:
+    typescript: ^4.3.2
   languageName: unknown
   linkType: soft
 
@@ -13989,6 +13997,7 @@ typescript@^4.3.2:
     reflect-metadata: ^0.1.13
     serialport: ^9.1.0
     source-map-support: ^0.5.19
+    typescript: ^4.3.2
     winston: ^3.3.3
     xstate: ^4.20.0
   languageName: unknown

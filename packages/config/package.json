@@ -48,5 +48,8 @@
     "watch": "yarn run build --watch --pretty",
     "lint:config": "yarn ts maintenance/lintConfigFiles.ts",
     "ts": "node -r esbuild-register"
+  },
+  "devDependencies": {
+    "typescript": "^4.3.2"
   }
 }
