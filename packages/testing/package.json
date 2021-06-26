@@ -34,8 +34,10 @@
     "watch": "yarn run build --watch --pretty"
   },
   "devDependencies": {
+    "@types/node": "^15.12.4",
     "@zwave-js/core": "workspace:packages/core",
     "ansi-colors": "^4.1.1",
+    "esbuild-register": "^2.6.0",
     "triple-beam": "*",
     "typescript": "^4.3.2",
     "winston-transport": "*"

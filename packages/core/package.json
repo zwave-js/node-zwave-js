@@ -49,6 +49,8 @@
     "watch": "yarn run build --watch --pretty"
   },
   "devDependencies": {
+    "@types/node": "^15.12.4",
+    "esbuild-register": "^2.6.0",
     "typescript": "^4.3.2"
   }
 }

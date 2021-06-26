@@ -91,12 +91,16 @@
   },
   "devDependencies": {
     "@types/fs-extra": "^9.0.11",
+    "@types/node": "^15.12.4",
     "@types/proper-lockfile": "^4",
     "@types/semver": "^7.3.6",
+    "@types/serialport": "^8.0.1",
     "@types/source-map-support": "^0",
     "@xstate/test": "^0.4.2",
     "@zwave-js/maintenance": "workspace:packages/maintenance",
     "@zwave-js/testing": "workspace:packages/testing",
+    "esbuild-register": "^2.6.0",
+    "jest-extended": "^0.11.5",
     "mockdate": "^3.0.5",
     "typescript": "^4.3.2"
   }

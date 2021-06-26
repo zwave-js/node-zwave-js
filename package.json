@@ -54,7 +54,6 @@
     "fs-extra": "^9.0.1",
     "husky": "^6.0.0",
     "jest": "^26.4.2",
-    "jest-extended": "^0.11.5",
     "lerna": "^4.0.0",
     "prettier": "^2.3.1",
     "prettier-plugin-organize-imports": "^2.1.0",
@@ -64,6 +63,7 @@
     "zwave-js": "workspace:packages/zwave-js"
   },
   "scripts": {
+    "run-all": "yarn workspaces foreach -vip --topological-dev --exclude @zwave-js/repo run",
     "build": "lerna run build --scope=zwave-js",
     "build:full": "lerna run build --scope=@zwave-js/* && lerna run build:full",
     "watch": "lerna run watch --parallel",

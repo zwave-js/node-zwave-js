@@ -41,6 +41,8 @@
   },
   "devDependencies": {
     "@types/fs-extra": "^9.0.11",
+    "@types/node": "^15.12.4",
+    "esbuild-register": "^2.6.0",
     "typescript": "^4.3.2"
   }
 }

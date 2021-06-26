@@ -45,8 +45,10 @@
   },
   "devDependencies": {
     "@serialport/binding-mock": "^9.0.7",
+    "@types/node": "^15.12.4",
     "@zwave-js/testing": "workspace:packages/testing",
     "ansi-colors": "^4.1.1",
+    "esbuild-register": "^2.6.0",
     "typescript": "^4.3.2"
   }
 }
