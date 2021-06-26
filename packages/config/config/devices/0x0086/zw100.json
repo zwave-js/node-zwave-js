@@ -184,12 +184,12 @@
 			"$if": "firmwareVersion < 1.10",
 			"$import": "templates/aeotec_template.json#celsius_fahrenheit",
 			"label": "Upper Temperature Limit Unit",
-			"valueSize": 2
+			"valueSize": 3
 		},
 		"49[0xffff00]": {
 			"$if": "firmwareVersion < 1.10",
 			"label": "Upper Temperature Limit",
-			"valueSize": 2,
+			"valueSize": 3,
 			"unit": "0.1 °C/°F",
 			"minValue": -400,
 			"maxValue": 2120,
