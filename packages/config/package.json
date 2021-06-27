@@ -46,7 +46,7 @@
     "build": "yarn ts maintenance/prebuild.ts && tsc -b tsconfig.build.json",
     "clean": "tsc -b tsconfig.build.json --clean",
     "watch": "yarn run build --watch --pretty",
-    "lint:config": "yarn ts maintenance/lintConfigFiles.ts",
+    "lint_config": "yarn ts maintenance/lintConfigFiles.ts",
     "ts": "node -r esbuild-register"
   },
   "devDependencies": {
