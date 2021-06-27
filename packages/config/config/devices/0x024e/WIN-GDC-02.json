@@ -95,7 +95,7 @@
 			"description": "Relay 1 will be switched OFF with predefined delay."
 		},
 		"7": {
-			"$import": "../../templates/master_template.json#state_after_power_failure_prev_off",
+			"$import": "../templates/master_template.json#state_after_power_failure_prev_off",
 			"label": "Restore to the last known state for relay 1 after power was interrupted."
 		},
 		"8": {
@@ -124,7 +124,7 @@
 			]
 		},
 		"9": {
-			"$import": "../../templates/master_template.json#base_enable_disable",
+			"$import": "../templates/master_template.json#base_enable_disable",
 			"label": "Hide relay 2 in controller interface"
 		},
 		"10": {
@@ -147,7 +147,7 @@
 			"description": "Relay 2 will be switched OFF with predefined delay."
 		},
 		"14": {
-			"$import": "../../templates/master_template.json#state_after_power_failure_prev_off",
+			"$import": "../templates/master_template.json#state_after_power_failure_prev_off",
 			"label": "Restore to the last known state for relay 2 after power was interrupted."
 		}
 	},
