@@ -32,8 +32,8 @@
   },
   "dependencies": {
     "@sentry/node": "^6.5.1",
-    "@zwave-js/core": "7.9.0",
-    "@zwave-js/shared": "7.9.0",
+    "@zwave-js/core": "workspace:packages/core",
+    "@zwave-js/shared": "workspace:packages/shared",
     "alcalzone-shared": "^3.0.4",
     "serialport": "^9.1.0",
     "winston": "^3.3.3"
