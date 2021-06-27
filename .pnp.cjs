@@ -5181,17 +5181,6 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
           "linkType": "HARD",
         }]
       ]],
-      ["@types/jest", [
-        ["npm:26.0.23", {
-          "packageLocation": "./.yarn/cache/@types-jest-npm-26.0.23-f0d419e70e-69db26061e.zip/node_modules/@types/jest/",
-          "packageDependencies": [
-            ["@types/jest", "npm:26.0.23"],
-            ["jest-diff", "npm:26.6.2"],
-            ["pretty-format", "npm:26.6.2"]
-          ],
-          "linkType": "HARD",
-        }]
-      ]],
       ["@types/js-levenshtein", [
         ["npm:1.1.0", {
           "packageLocation": "./.yarn/cache/@types-js-levenshtein-npm-1.1.0-ff9cc070c1-607aef621c.zip/node_modules/@types/js-levenshtein/",
@@ -16681,7 +16670,6 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["@sentry/integrations", "npm:6.5.1"],
             ["@sentry/node", "npm:6.5.1"],
             ["@types/fs-extra", "npm:9.0.11"],
-            ["@types/jest", "npm:26.0.23"],
             ["@types/node", "npm:15.12.4"],
             ["@types/proper-lockfile", "npm:4.1.1"],
             ["@types/semver", "npm:7.3.6"],

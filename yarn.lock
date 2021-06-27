@@ -3752,16 +3752,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/jest@npm:^26.0.23":
-  version: 26.0.23
-  resolution: "@types/jest@npm:26.0.23"
-  dependencies:
-    jest-diff: ^26.0.0
-    pretty-format: ^26.0.0
-  checksum: 69db26061e6be34de2a440c8a470b651c53ba6ee0057614a278c4f756ff00281f46cc075b24e5bd761f399f175f49d0a5758b50dd921342a8592461548dea29a
-  languageName: node
-  linkType: hard
-
 "@types/js-levenshtein@npm:^1.1.0":
   version: 1.1.0
   resolution: "@types/js-levenshtein@npm:1.1.0"
@@ -8549,7 +8539,7 @@ fsevents@^2.1.2:
   languageName: node
   linkType: hard
 
-"jest-diff@npm:^26.0.0, jest-diff@npm:^26.6.2":
+"jest-diff@npm:^26.6.2":
   version: 26.6.2
   resolution: "jest-diff@npm:26.6.2"
   dependencies:
@@ -11250,7 +11240,7 @@ fsevents@^2.1.2:
   languageName: node
   linkType: hard
 
-"pretty-format@npm:^26.0.0, pretty-format@npm:^26.6.2":
+"pretty-format@npm:^26.6.2":
   version: 26.6.2
   resolution: "pretty-format@npm:26.6.2"
   dependencies:
@@ -13982,7 +13972,6 @@ typescript@^4.3.2:
     "@sentry/integrations": ^6.5.1
     "@sentry/node": ^6.5.1
     "@types/fs-extra": ^9.0.11
-    "@types/jest": ^26.0.23
     "@types/node": ^15.12.4
     "@types/proper-lockfile": ^4
     "@types/semver": ^7.3.6
