@@ -65,41 +65,43 @@
 	"paramInformation": {
 		"1": {
 			"$import": "templates/zconnect_template.json#relay_mode_selection",
-			"label": "Relay 1 mode selection"
+			"label": "Relay 1 Mode"
 		},
 		"2": {
 			"$import": "templates/zconnect_template.json#interval_1-65000",
-			"label": "Strobe closed interval",
+			"label": "Strobe Closed Interval",
 			"description": "Relay 1 and 2 closed contacts time interval in strobe mode.",
 			"defaultValue": 10
 		},
 		"3": {
 			"$import": "templates/zconnect_template.json#interval_1-65000",
-			"label": "Strobe open interval",
+			"label": "Strobe Open Interval",
 			"description": "Relay 1 and 2 open contacts time interval in strobe mode.",
 			"defaultValue": 10
 		},
 		"4": {
 			"$import": "templates/zconnect_template.json#interval_1-65000_disable",
-			"label": "Auto OFF with delay for relay 1",
+			"label": "Relay 1 Auto OFF Delay",
 			"description": "Relay will turn off automatically after time specified in this parameter. After receiving command ON Relay 1 will be switched OFF automatically with predefined delay."
 		},
 		"5": {
 			"$import": "templates/zconnect_template.json#interval_1-65000_disable",
-			"label": "Time delay interval for command ON for relay 1",
+			"label": "Relay 1 ON Delay",
 			"description": "Relay 1 will be switched ON with predefined delay."
 		},
 		"6": {
 			"$import": "templates/zconnect_template.json#interval_1-65000_disable",
-			"label": "Time delay interval for command OFF for relay 1",
+			"label": "Relay 1 OFF Delay",
 			"description": "Relay 1 will be switched OFF with predefined delay."
 		},
 		"7": {
 			"$import": "../templates/master_template.json#state_after_power_failure_prev_off",
-			"label": "Restore to the last known state for relay 1 after power was interrupted."
+			"label": "Relay 1 Restore After Power Loss",
+			"description": "Restore to the last known state for relay 1 after power was interrupted."
 		},
 		"8": {
-			"label": "Broadband command turn all ON/ turn all OFF settings",
+			"label": "Broadband Command Action",
+			"description": "Broadband command turn all ON/ turn all OFF settings",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 3,
@@ -125,30 +127,32 @@
 		},
 		"9": {
 			"$import": "../templates/master_template.json#base_enable_disable",
-			"label": "Hide relay 2 in controller interface"
+			"label": "Hide Relay ",
+			"description": "Hide relay 2 in controller interface"
 		},
 		"10": {
 			"$import": "templates/zconnect_template.json#relay_mode_selection",
-			"label": "Relay 2 mode selection"
+			"label": "Relay 2 Mode"
 		},
 		"11": {
 			"$import": "templates/zconnect_template.json#interval_1-65000_disable",
-			"label": "Auto OFF with delay for relay 2",
-			"description": "Relay will turn off automatically after time specified in this parameter. After receiving command ON Relay 1 will be switched OFF automatically with predefined delay."
+			"label": "Relay 2 Auto OFF Delay",
+			"description": "Relay will turn off automatically after time specified in this parameter. After receiving command ON Relay 2 will be switched OFF automatically with predefined delay."
 		},
 		"12": {
 			"$import": "templates/zconnect_template.json#interval_1-65000_disable",
-			"label": "Time delay interval for command ON for relay 2",
+			"label": "Relay 2 ON Delay",
 			"description": "Relay 2 will be switched ON with predefined delay."
 		},
 		"13": {
 			"$import": "templates/zconnect_template.json#interval_1-65000_disable",
-			"label": "Time delay interval for command OFF for relay 2",
+			"label": "Relay 2 OFF Delay",
 			"description": "Relay 2 will be switched OFF with predefined delay."
 		},
 		"14": {
 			"$import": "../templates/master_template.json#state_after_power_failure_prev_off",
-			"label": "Restore to the last known state for relay 2 after power was interrupted."
+			"label": "Relay 2 Restore After Power Loss",
+			"description": "Restore to the last known state for relay 2 after power was interrupted."
 		}
 	},
 	"metadata": {
