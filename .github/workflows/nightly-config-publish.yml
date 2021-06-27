@@ -73,7 +73,7 @@ jobs:
         # ===============================
 
         # Create a clean build
-        npx lerna run build
+        yarn run-deps build
 
         # Lint config files
         yarn run lint:config

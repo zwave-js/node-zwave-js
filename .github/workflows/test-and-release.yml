@@ -54,7 +54,7 @@ jobs:
       run: yarn install --immutable
 
     - name: Compile TypeScript code
-      run: npx lerna run build
+      run: yarn run-all build
 
     - name: Run linters
       run: yarn run lint
@@ -126,7 +126,7 @@ jobs:
       run: yarn install --immutable
 
     - name: Compile TypeScript code
-      run: npx lerna run build
+      run: yarn run-all build
 
     - name: Lint config files
       run: yarn run lint:config

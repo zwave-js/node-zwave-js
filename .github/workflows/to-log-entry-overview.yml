@@ -41,7 +41,7 @@ jobs:
       run: yarn install --immutable
 
     - name: Compile TypeScript code
-      run: npx lerna run build
+      run: yarn run-all build
 
     - name: Update overview
       uses: ./.github/actions/toLogEntry
