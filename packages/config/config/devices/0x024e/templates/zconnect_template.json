@@ -9,6 +9,12 @@
 		"$import": "#base_0-65000",
 		"minValue": 1
 	},
+	"base_-60-1000": {
+		"valueSize": 4,
+		"minValue": -60,
+		"maxValue": 1000,
+		"unsigned": false
+	},
 	"interval_1-65000": {
 		"$import": "#base_1-65000",
 		"unit": "0.1 seconds"
@@ -23,6 +29,11 @@
 				"value": 0
 			}
 		]
+	},
+	"interval_1-600_disable": {
+		"$import": "#interval_1-65000_disable",
+		"unit": "seconds",
+		"maxValue": 600
 	},
 	"relay_mode_selection": {
 		"label": "Relay mode selection",
@@ -42,6 +53,78 @@
 			{
 				"label": "Strobe mode - Strobe when On, open contacts when Off.",
 				"value": 2
+			}
+		]
+	},
+	"sensor_relay_control": {
+		"valueSize": 1,
+		"minValue": 0,
+		"maxValue": 4,
+		"defaultValue": 0,
+		"options": [
+			{
+				"label": "Sensors don't control relay.",
+				"value": 0
+			},
+			{
+				"label": "Sensor 1 controlls relay.",
+				"value": 1
+			},
+			{
+				"label": "Sensor 2 controlls relay.",
+				"value": 2
+			},
+			{
+				"label": "Sensor 3 controlls relay via S-Bus.",
+				"value": 3
+			},
+			{
+				"label": "Sensor 4(temperature) controlls relay via S-Bus.",
+				"value": 4
+			}
+		]
+	},
+	"sensor_processing_options": {
+		"valueSize": 1,
+		"minValue": 0,
+		"maxValue": 8,
+		"defaultValue": 0,
+		"options": [
+			{
+				"label": "Do not react on On/Off actions.",
+				"value": 0
+			},
+			{
+				"label": "Send command On during time without action and send command Off on event/trigger.",
+				"value": 1
+			},
+			{
+				"label": "Send command Off during time without action and send command On on event/trigger.",
+				"value": 2
+			},
+			{
+				"label": "Send command On during time without action.",
+				"value": 3
+			},
+			{
+				"label": "Send command Off during time without action.",
+				"value": 4
+			},
+			{
+				"label": "Send command On on event/trigger.",
+				"value": 5
+			},
+			{
+				"label": "Send command Off on event/trigger.",
+				"value": 6
+			},
+			{
+				"label": "Send real sensor value to other device.",
+				"value": 7
+			},
+			{
+				"label": "Every event will change relay status to oposite, only for binary sensor grouped with relay (parameter 20/21 = 4)",
+				"value": 8
 			}
 		]
 	}

@@ -174,7 +174,6 @@
 		},
 		"16": {
 			"label": "Relay 1 and S1 Association",
-			"description": "Relay 1 and sensor S1 integration.",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 1,
@@ -189,6 +188,130 @@
 					"value": 1
 				}
 			]
+		},
+		"20": {
+			"$import": "templates/zconnect_template.json#sensor_relay_control",
+			"label": "Relay 1 And Connected Sensor Integration"
+		},
+		"21": {
+			"$import": "templates/zconnect_template.json#sensor_relay_control",
+			"label": "Relay 2 And Connected Sensor Integration"
+		},
+		"24": {
+			"$import": "templates/zconnect_template.json#sensor_processing_options",
+			"label": "Sensor 1 Processing Options",
+			"description": "Values of sensor 1 options for processing. Devices included in association group 2 will be using this parameter for controlling sensor 1."
+		},
+		"25": {
+			"$import": "templates/zconnect_template.json#interval_1-600_disable",
+			"label": "Sensor 1 Send Interval",
+			"description": "Time interval to submit Sensor 1 readings to controller.",
+			"defaultValue": 300
+		},
+		"29": {
+			"$import": "templates/zconnect_template.json#sensor_processing_options",
+			"label": "Sensor 2 Processing Options",
+			"description": "Values of sensor 2 options for processing. Devices included in association group 3 will be using this parameter for controlling sensor 2."
+		},
+		"31": {
+			"$import": "templates/zconnect_template.json#interval_1-600_disable",
+			"label": "Sensor 2 Send Interval",
+			"description": "Time interval to submit Sensor 2 readings to controller.",
+			"defaultValue": 300
+		},
+		"32": {
+			"$import": "templates/zconnect_template.json#base_-60-1000",
+			"label": "Sensor 3 On Value",
+			"description": "Multilevel sensor 3 values for turning devices On in association group 4 or device itself. Note: Value selection depends on sensor type and its readings.",
+			"defaultValue": 0
+		},
+		"33": {
+			"$import": "templates/zconnect_template.json#base_-60-1000",
+			"label": "Sensor 3 Off Value",
+			"description": "Multilevel sensor 3 values for turning devices Off in association group 4 or device itself. Note: Value selection depends on sensor type and its readings.",
+			"defaultValue": 0
+		},
+		"34": {
+			"$import": "templates/zconnect_template.json#sensor_processing_options",
+			"label": "Sensor 3 Processing Options",
+			"description": "Values of sensor 3 options for processing. Devices included in association group 4 will be using this parameter for controlling sensor 3."
+		},
+		"35": {
+			"$import": "../templates/master_template.json#base_1-100_nounit",
+			// I suspect the documentation is incorrect regarding this parameter
+			// as it doesn't make sense as documented. (same as 36).
+			// I think this is about sensor value change.
+			"label": "Sensor 3 Value Change",
+			"description": "Value change interval to trigger sensor change to controller. Default values depends on connected sensor type: temperature =1; humidity=5; luminosity=100 lux; power=50 Watt.",
+			"defaultValue": 1
+		},
+		"36": {
+			"$import": "templates/zconnect_template.json#interval_1-600_disable",
+			"label": "Sensor 3 Send Interval",
+			"description": "Time interval to submit Sensor 3 readings to association group 1.",
+			"defaultValue": 300
+		},
+		"37": {
+			"$import": "templates/zconnect_template.json#base_-60-1000",
+			"label": "Sensor 4 On Value",
+			"description": "Multilevel sensor 4 values for turning devices On in association group 5 or device itself. Note: Value selection depends on sensor type and its readings.",
+			"defaultValue": 0
+		},
+		"38": {
+			"$import": "templates/zconnect_template.json#base_-60-1000",
+			"label": "Sensor 4 Off Value",
+			"description": "Multilevel sensor 4 values for turning devices Off in association group 5 or device itself. Note: Value selection depends on sensor type and its readings.",
+			"defaultValue": 0
+		},
+		"39": {
+			"$import": "templates/zconnect_template.json#sensor_processing_options",
+			"label": "Sensor 4 Processing Options",
+			"description": "Values of sensor 4 options for processing. Devices included in association group 5 will be using this parameter for controlling sensor 4."
+		},
+		"40": {
+			"$import": "../templates/master_template.json#base_1-100_nounit",
+			// I suspect the documentation is incorrect regarding this parameter
+			// as it doesn't make sense as documented. (same as 41).
+			// I think this is about sensor value change.
+			"label": "Sensor 4 Value Change",
+			"description": "Value change interval to trigger sensor change to controller. Default values depends on connected sensor type: temperature =1; humidity=5; luminosity=100 lux; power=50 Watt.",
+			"defaultValue": 1
+		},
+		"41": {
+			"$import": "templates/zconnect_template.json#interval_1-600_disable",
+			"label": "Sensor 4 Send Interval",
+			"description": "Time interval to submit Sensor 4 readings to association group 1.",
+			"defaultValue": 300
+		},
+		"50": {
+			"$import": "../templates/master_template.json#base_enable_disable",
+			"label": "Require Secure Commands",
+			"description": "React only to secure commands when device is in secure mode.",
+			"defaultValue": 0
+		},
+		"51": {
+			"$import": "../templates/master_template.json#base_enable_disable",
+			"label": "Secure Send Group 2",
+			"description": "Send secure command signals for association group 2.",
+			"defaultValue": 0
+		},
+		"52": {
+			"$import": "../templates/master_template.json#base_enable_disable",
+			"label": "Secure Send Group 3",
+			"description": "Send secure command signals for association group 3.",
+			"defaultValue": 0
+		},
+		"53": {
+			"$import": "../templates/master_template.json#base_enable_disable",
+			"label": "Secure Send Group 4",
+			"description": "Send secure command signals for association group 4.",
+			"defaultValue": 0
+		},
+		"54": {
+			"$import": "../templates/master_template.json#base_enable_disable",
+			"label": "Secure Send Group 5",
+			"description": "Send secure command signals for association group 5.",
+			"defaultValue": 0
 		}
 	},
 	"metadata": {
