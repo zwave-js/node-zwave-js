@@ -202,7 +202,7 @@
 			"label": "Sensor 1 Processing Options",
 			"description": "Values of sensor 1 options for processing. Devices included in association group 2 will be using this parameter for controlling sensor 1."
 		},
-		"25": {
+		"26": {
 			"$import": "templates/zconnect_template.json#interval_1-600_disable",
 			"label": "Sensor 1 Send Interval",
 			"description": "Time interval to submit Sensor 1 readings to controller.",
