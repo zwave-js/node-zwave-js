@@ -2,7 +2,7 @@
 	"base_0-65000": {
 		"valueSize": 2,
 		"minValue": 0,
-		"maxValue": 65535,
+		"maxValue": 65000,
 		"defaultValue": 0,
 		"unsigned": true
 	},
@@ -31,7 +31,7 @@
 				"value": 0
 			},
 			{
-				"label": "Reverse mode -  Closed contacts when OFF, open contacts when ON",
+				"label": "Reverse mode - Closed contacts when OFF, open contacts when ON",
 				"value": 1
 			},
 			{
