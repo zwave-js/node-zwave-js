@@ -81,18 +81,18 @@
 		},
 		"4": {
 			"$import": "templates/zconnect_template.json#interval_1-65000_disable",
-			"label": "Relay 1 Auto OFF Delay",
-			"description": "Relay will turn off automatically after time specified in this parameter. After receiving command ON Relay 1 will be switched OFF automatically with predefined delay."
+			"label": "Relay 1 Auto Off Delay",
+			"description": "Relay will turn off automatically after time specified in this parameter. After receiving command On Relay 1 will be switched Off automatically with predefined delay."
 		},
 		"5": {
 			"$import": "templates/zconnect_template.json#interval_1-65000_disable",
-			"label": "Relay 1 ON Delay",
-			"description": "Relay 1 will be switched ON with predefined delay."
+			"label": "Relay 1 On Delay",
+			"description": "Relay 1 will be switched On with predefined delay."
 		},
 		"6": {
 			"$import": "templates/zconnect_template.json#interval_1-65000_disable",
-			"label": "Relay 1 OFF Delay",
-			"description": "Relay 1 will be switched OFF with predefined delay."
+			"label": "Relay 1 Off Delay",
+			"description": "Relay 1 will be switched Off with predefined delay."
 		},
 		"7": {
 			"$import": "../templates/master_template.json#state_after_power_failure_prev_off",
@@ -101,26 +101,26 @@
 		},
 		"8": {
 			"label": "Broadband Command Action",
-			"description": "Broadband command turn all ON/ turn all OFF settings.",
+			"description": "Broadband command turn all On/ turn all Off settings.",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 3,
 			"defaultValue": 0,
 			"options": [
 				{
-					"label": "Accept broadband command turn all ON/ turn all OFF",
+					"label": "Accept broadband command turn all On/ turn all Off",
 					"value": 0
 				},
 				{
-					"label": "Ignore broadband command turn all ON/ turn all OFF",
+					"label": "Ignore broadband command turn all On/ turn all Off",
 					"value": 1
 				},
 				{
-					"label": "Ignore broadband command turn all ON, accept broadband command turn all OFF",
+					"label": "Ignore broadband command turn all On, accept broadband command turn all Off",
 					"value": 2
 				},
 				{
-					"label": "Accept broadband command turn all ON, ignore broadband command turn all OFF",
+					"label": "Accept broadband command turn all On, ignore broadband command turn all Off",
 					"value": 3
 				}
 			]
@@ -136,18 +136,18 @@
 		},
 		"11": {
 			"$import": "templates/zconnect_template.json#interval_1-65000_disable",
-			"label": "Relay 2 Auto OFF Delay",
-			"description": "Relay will turn off automatically after time specified in this parameter. After receiving command ON Relay 2 will be switched OFF automatically with predefined delay."
+			"label": "Relay 2 Auto Off Delay",
+			"description": "Relay will turn off automatically after time specified in this parameter. After receiving command On Relay 2 will be switched Off automatically with predefined delay."
 		},
 		"12": {
 			"$import": "templates/zconnect_template.json#interval_1-65000_disable",
-			"label": "Relay 2 ON Delay",
-			"description": "Relay 2 will be switched ON with predefined delay."
+			"label": "Relay 2 On Delay",
+			"description": "Relay 2 will be switched On with predefined delay."
 		},
 		"13": {
 			"$import": "templates/zconnect_template.json#interval_1-65000_disable",
-			"label": "Relay 2 OFF Delay",
-			"description": "Relay 2 will be switched OFF with predefined delay."
+			"label": "Relay 2 Off Delay",
+			"description": "Relay 2 will be switched Off with predefined delay."
 		},
 		"14": {
 			"$import": "../templates/master_template.json#state_after_power_failure_prev_off",
@@ -156,7 +156,7 @@
 		},
 		"15": {
 			"label": "Relay 1&2 Association",
-			"description": "Association between Relay1 and Relay2. When Relay1 will be switched ON Relay2 will be ON as well.",
+			"description": "Association between Relay1 and Relay2. When Relay1 will be switched On Relay2 will be On as well.",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 1,
@@ -167,7 +167,7 @@
 					"value": 0
 				},
 				{
-					"label": "When Relay1 will be switched ON Relay2 will be ON as well",
+					"label": "When Relay1 will be switched On Relay2 will be On as well",
 					"value": 1
 				}
 			]
@@ -185,7 +185,7 @@
 					"value": 0
 				},
 				{
-					"label": "Sensor S1 does control Relay 1 by blocking command ON.",
+					"label": "Sensor S1 does control Relay 1 by blocking command On.",
 					"value": 1
 				}
 			]

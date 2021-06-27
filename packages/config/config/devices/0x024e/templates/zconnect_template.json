@@ -32,15 +32,15 @@
 		"defaultValue": 0,
 		"options": [
 			{
-				"label": "Normal mode - Closed contacts when ON, open contacts when OFF.",
+				"label": "Normal mode - Closed contacts when On, open contacts when Off.",
 				"value": 0
 			},
 			{
-				"label": "Reverse mode - Closed contacts when OFF, open contacts when ON.",
+				"label": "Reverse mode - Closed contacts when Off, open contacts when On.",
 				"value": 1
 			},
 			{
-				"label": "Strobe mode - Strobe when ON, open contacts when OFF.",
+				"label": "Strobe mode - Strobe when On, open contacts when Off.",
 				"value": 2
 			}
 		]
