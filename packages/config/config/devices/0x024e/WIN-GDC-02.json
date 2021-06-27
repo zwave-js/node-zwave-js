@@ -1,0 +1,160 @@
+{
+	"manufacturer": "zConnect",
+	"manufacturerId": "0x024e",
+	"label": "DHS-WIN-GDC-02",
+	"description": "Garage Door Opener",
+	"devices": [
+		{
+			"productType": "0x0021",
+			"productId": "0x0014"
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"endpoints": {
+		"0": {
+			"associations": {
+				"1": {
+					"label": "Lifeline",
+					"maxNodes": 3,
+					"isLifeline": true
+				},
+				"2": {
+					"label": "Sensor 1",
+					"maxNodes": 10
+				},
+				"3": {
+					"label": "Sensor 2",
+					"maxNodes": 10
+				},
+				"4": {
+					"label": "Sensor 3",
+					"maxNodes": 10
+				},
+				"5": {
+					"label": "Sensor 4 (optional temp sensor)",
+					"maxNodes": 10
+				}
+			}
+		},
+		"1": {
+			"associations": {
+				"1": {
+					"$import": "#endpoints/0/associations/1",
+					"isLifeline": false
+				},
+				"2": {
+					"$import": "#endpoints/0/associations/2"
+				}
+			}
+		},
+		"2": {
+			"associations": {
+				"1": {
+					"$import": "#endpoints/0/associations/1",
+					"isLifeline": false
+				},
+				"2": {
+					"$import": "#endpoints/0/associations/3"
+				}
+			}
+		}
+	},
+	"paramInformation": {
+		"1": {
+			"$import": "templates/zconnect_template.json#relay_mode_selection",
+			"label": "Relay 1 mode selection"
+		},
+		"2": {
+			"$import": "templates/zconnect_template.json#interval_1-65000",
+			"label": "Strobe closed interval",
+			"description": "Relay 1 and 2 closed contacts time interval in strobe mode.",
+			"defaultValue": 10
+		},
+		"3": {
+			"$import": "templates/zconnect_template.json#interval_1-65000",
+			"label": "Strobe open interval",
+			"description": "Relay 1 and 2 open contacts time interval in strobe mode.",
+			"defaultValue": 10
+		},
+		"4": {
+			"$import": "templates/zconnect_template.json#interval_1-65000_disable",
+			"label": "Auto OFF with delay for relay 1",
+			"description": "Relay will turn off automatically after time specified in this parameter. After receiving command ON Relay 1 will be switched OFF automatically with predefined delay."
+		},
+		"5": {
+			"$import": "templates/zconnect_template.json#interval_1-65000_disable",
+			"label": "Time delay interval for command ON for relay 1",
+			"description": "Relay 1 will be switched ON with predefined delay."
+		},
+		"6": {
+			"$import": "templates/zconnect_template.json#interval_1-65000_disable",
+			"label": "Time delay interval for command OFF for relay 1",
+			"description": "Relay 1 will be switched OFF with predefined delay."
+		},
+		"7": {
+			"$import": "../../templates/master_template.json#state_after_power_failure_prev_off",
+			"label": "Restore to the last known state for relay 1 after power was interrupted."
+		},
+		"8": {
+			"label": "Broadband command turn all ON/ turn all OFF settings",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 3,
+			"defaultValue": 0,
+			"options": [
+				{
+					"label": "Accept broadband command turn all ON/ turn all OFF",
+					"value": 0
+				},
+				{
+					"label": "Ignore broadband command turn all ON/ turn all OFF",
+					"value": 1
+				},
+				{
+					"label": "Ignore broadband command turn all ON, accept broadband command turn all OFF",
+					"value": 2
+				},
+				{
+					"label": "Accept broadband command turn all ON, ignore broadband command turn all OFF",
+					"value": 3
+				}
+			]
+		},
+		"9": {
+			"$import": "../../templates/master_template.json#base_enable_disable",
+			"label": "Hide relay 2 in controller interface"
+		},
+		"10": {
+			"$import": "templates/zconnect_template.json#relay_mode_selection",
+			"label": "Relay 2 mode selection"
+		},
+		"11": {
+			"$import": "templates/zconnect_template.json#interval_1-65000_disable",
+			"label": "Auto OFF with delay for relay 2",
+			"description": "Relay will turn off automatically after time specified in this parameter. After receiving command ON Relay 1 will be switched OFF automatically with predefined delay."
+		},
+		"12": {
+			"$import": "templates/zconnect_template.json#interval_1-65000_disable",
+			"label": "Time delay interval for command ON for relay 2",
+			"description": "Relay 2 will be switched ON with predefined delay."
+		},
+		"13": {
+			"$import": "templates/zconnect_template.json#interval_1-65000_disable",
+			"label": "Time delay interval for command OFF for relay 2",
+			"description": "Relay 2 will be switched OFF with predefined delay."
+		},
+		"14": {
+			"$import": "../../templates/master_template.json#state_after_power_failure_prev_off",
+			"label": "Restore to the last known state for relay 2 after power was interrupted."
+		}
+	},
+	"metadata": {
+		"inclusion": "Put the controller into inclusion mode, with security if supported. Connect power to the Z-Wave garage door controller. If already powered click inclusion/exclusion button on garage door controller three times.",
+		"exclusion": "Put the controller into exclusion mode, Click the inclusion/exclusion button three times.",
+		"reset": "The device is factory reset on exclusion from the network.",
+		"manual": "https://www.digitalhomesystems.com.au/documentation/ZWaveGarageDoorControllerManual.pdf"
+	}
+}

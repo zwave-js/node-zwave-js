@@ -1,0 +1,43 @@
+{
+	"base_0-65000": {
+		"valueSize": 2,
+		"minValue": 0,
+		"maxValue": 65535,
+		"defaultValue": 0,
+		"unsigned": true
+	},
+	"base_1-65000": {
+		"$import": "#base_0-65000",
+		"minValue": 1
+	},
+	"interval_1-65000": {
+		"$import": "#base_1-65000",
+		"unit": "0.1 sec (10 = 1sec)"
+	},
+	"interval_1-65000_disable": {
+		"$import": "#base_0-65000",
+		"unit": "0.1 sec (0 = disable)",
+		"defaultValue": 0
+	},
+	"relay_mode_selection": {
+		"label": "Relay mode selection",
+		"valueSize": 1,
+		"minValue": 0,
+		"maxValue": 2,
+		"defaultValue": 0,
+		"options": [
+			{
+				"label": "Normal mode - Closed contacts when ON, open contacts when OFF",
+				"value": 0
+			},
+			{
+				"label": "Reverse mode -  Closed contacts when OFF, open contacts when ON",
+				"value": 1
+			},
+			{
+				"label": "Strobe mode - Strobe when ON, open contacts when OFF",
+				"value": 2
+			}
+		]
+	}
+}
