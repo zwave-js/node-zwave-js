@@ -32,7 +32,7 @@ jobs:
 
     - name: Get Yarn cache directory
       id: yarn-cache-dir-path
-      run: echo "::set-output name=dir::$(yarn cache dir)"
+      run: echo "::set-output name=dir::$(yarn config get cacheFolder)"
 
     - name: Use Yarn cache
       uses: actions/cache@v2

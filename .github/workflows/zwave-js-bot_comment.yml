@@ -405,7 +405,7 @@ jobs:
     - name: Get Yarn cache directory
       if: steps.check-permissions.outputs.result == 'true'
       id: yarn-cache-dir-path
-      run: echo "::set-output name=dir::$(yarn cache dir)"
+      run: echo "::set-output name=dir::$(yarn config get cacheFolder)"
 
     - name: Use Yarn cache
       if: steps.check-permissions.outputs.result == 'true'
@@ -527,7 +527,7 @@ jobs:
     - name: Get Yarn cache directory
       if: steps.check-permissions.outputs.result == 'true'
       id: yarn-cache-dir-path
-      run: echo "::set-output name=dir::$(yarn cache dir)"
+      run: echo "::set-output name=dir::$(yarn config get cacheFolder)"
 
     - name: Use Yarn cache
       if: steps.check-permissions.outputs.result == 'true'
