@@ -220,7 +220,7 @@ jobs:
       run: yarn run build:full
 
     - name: Import main entry point
-      run: node -e 'require("./packages/zwave-js")'
+      run: yarn node -e 'require("./packages/zwave-js")'
 
   # ===================
 
