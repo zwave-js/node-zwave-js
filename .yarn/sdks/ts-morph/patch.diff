@@ -1,0 +1,39 @@
+diff --git a/dist/pnp-typescript.js b/dist/pnp-typescript.js
+new file mode 100644
+index 0000000000000000000000000000000000000000..85b689e4d2b64b6578607ea1cf948787c7396a9e
+--- /dev/null
++++ b/dist/pnp-typescript.js
+@@ -0,0 +1,20 @@
++#!/usr/bin/env node
++
++const {existsSync} = require(`fs`);
++const {createRequire, createRequireFromPath} = require(`module`);
++const {resolve} = require(`path`);
++
++const relPnpApiPath = `${process.cwd()}/.pnp.cjs`;
++
++const absPnpApiPath = resolve(__dirname, relPnpApiPath);
++const absRequire = (createRequire || createRequireFromPath)(absPnpApiPath);
++
++if (existsSync(absPnpApiPath)) {
++  if (!process.versions.pnp) {
++    // Setup the environment to be able to require typescript/lib/typescript.js
++    require(absPnpApiPath).setup();
++  }
++}
++
++// Defer to the real typescript/lib/typescript.js your application uses
++module.exports = absRequire(`typescript`);
+diff --git a/dist/ts-morph-common.js b/dist/ts-morph-common.js
+index 5c96fa08a1afd5146ff90171c2df9d9be5fe071c..cee60af51f7c1c287c406055255785458402a66e 100644
+--- a/dist/ts-morph-common.js
++++ b/dist/ts-morph-common.js
+@@ -2,7 +2,7 @@
+ 
+ Object.defineProperty(exports, '__esModule', { value: true });
+ 
+-var ts = require('./typescript');
++var ts = require('./pnp-typescript');
+ var minimatch = require('minimatch');
+ var fastGlob = require('fast-glob');
+ var fs$1 = require('fs');

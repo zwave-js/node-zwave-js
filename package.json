@@ -69,6 +69,9 @@
     "typescript": "^4.3.2",
     "zwave-js": "workspace:packages/zwave-js"
   },
+  "resolutions": {
+    "@ts-morph/common": "patch:@ts-morph/common@~0.10.0#.yarn/sdks/ts-morph/patch.diff"
+  },
   "scripts": {
     "run-all": "yarn workspaces foreach -vip --topological-dev --exclude @zwave-js/repo run",
     "run-all:p": "yarn workspaces foreach -vip --exclude @zwave-js/repo run",

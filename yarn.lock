@@ -3779,7 +3779,19 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@ts-morph/common@npm:~0.10.0":
+"@ts-morph/common@patch:@ts-morph/common@~0.10.0#.yarn/sdks/ts-morph/patch.diff::locator=%40zwave-js%2Frepo%40workspace%3A.":
+  version: 0.10.0
+  resolution: "@ts-morph/common@patch:@ts-morph/common@npm%3A0.10.0#.yarn/sdks/ts-morph/patch.diff::version=0.10.0&hash=107b7d&locator=%40zwave-js%2Frepo%40workspace%3A."
+  dependencies:
+    fast-glob: ^3.2.5
+    minimatch: ^3.0.4
+    mkdirp: ^1.0.4
+    path-browserify: ^1.0.1
+  checksum: ed2bb947b3dec70d8b3acc2ea93b245a7027418b73f7319d308acdecdf988d4183c130ee7a51840c14d39c7a048668f2ae90b62238d56505282431cdcd0ee8d6
+  languageName: node
+  linkType: hard
+
+"@ts-morph/common@~0.10.0":
   version: 0.10.0
   resolution: "@ts-morph/common@npm:0.10.0"
   dependencies:
