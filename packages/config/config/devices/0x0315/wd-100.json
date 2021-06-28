@@ -70,5 +70,15 @@
 			"defaultValue": 3,
 			"unit": "10 ms"
 		}
+	},
+	"compat": {
+		"commandClasses": {
+			"remove": {
+				"0x6c": {
+					// The device does not support supervision although it is mandatory for the device type
+					"endpoints": "*"
+				}
+			}
+		}
 	}
 }
