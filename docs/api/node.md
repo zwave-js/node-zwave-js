@@ -76,10 +76,7 @@ The `options` bag contains options that influence the resulting commands, for ex
 <!-- #import SetValueAPIOptions from "zwave-js" -->
 
 ```ts
-type SetValueAPIOptions = Partial<{
-	/** A duration to be used for transitions like dimming lights or activating scenes. */
-	transitionDuration: Duration | string;
-}>;
+type SetValueAPIOptions = Partial<ValueChangeOptions>;
 ```
 
 ### `pollValue`
