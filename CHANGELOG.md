@@ -2,7 +2,7 @@
 <!--
 	Add placeholder for next release with `wip` snippet
 -->
-## __WORK IN PROGRESS__
+## 7.10.0 (2021-06-28)
 ### Features
 * Value metadata can now include a property `valueChangeOptions` that indicates which option properties are respected when changing the value with `node.setValue`.
 
