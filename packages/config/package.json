@@ -42,6 +42,9 @@
     "semver": "^7.3.2",
     "winston": "^3.3.3"
   },
+  "devDependencies": {
+    "@zwave-js/maintenance": "7.9.0"
+  },
   "scripts": {
     "prebuild": "yarn ts maintenance/prebuild.ts",
     "build": "tsc -b tsconfig.build.json",

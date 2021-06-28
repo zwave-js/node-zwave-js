@@ -32,5 +32,9 @@
     "build": "tsc -b tsconfig.build.json",
     "clean": "yarn run build -- --clean",
     "watch": "yarn run build -- --watch --pretty"
+  },
+  "devDependencies": {
+    "@zwave-js/core": "7.9.0",
+    "@zwave-js/shared": "7.9.0"
   }
 }
