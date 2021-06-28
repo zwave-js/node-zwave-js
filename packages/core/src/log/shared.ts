@@ -1,10 +1,10 @@
 import { DeepPartial, flatMap } from "@zwave-js/shared";
+import DailyRotateFile from "@zwave-js/winston-daily-rotate-file";
 import { padStart } from "alcalzone-shared/strings";
 import type { Format, TransformableInfo, TransformFunction } from "logform";
 import * as path from "path";
 import { configs, MESSAGE } from "triple-beam";
 import winston, { Logger } from "winston";
-import DailyRotateFile from "winston-daily-rotate-file";
 import type Transport from "winston-transport";
 import type { ConsoleTransportInstance } from "winston/lib/winston/transports";
 import { colorizer } from "./Colorizer";
