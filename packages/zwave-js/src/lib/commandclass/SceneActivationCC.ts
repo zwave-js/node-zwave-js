@@ -137,6 +137,7 @@ export class SceneActivationCCSet extends SceneActivationCC {
 		...ValueMetadata.UInt8,
 		min: 1,
 		label: "Scene ID",
+		valueChangeOptions: ["transitionDuration"],
 	})
 	public sceneId: number;
 
