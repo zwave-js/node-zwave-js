@@ -38,6 +38,15 @@ export type ValueType =
 	| "buffer"
 	| "any";
 
+/**
+ * Defines options that can be provided when changing a value on a device via its value ID.
+ * Each implementation will choose the options that are relevant for it, so the same options can be used everywhere.
+ */
+export interface ValueChangeOptions {
+	/** A duration to be used for transitions like dimming lights or activating scenes. */
+	transitionDuration: Duration | string;
+}
+
 export interface ValueMetadataAny {
 	/** The type of the value */
 	type: ValueType;
@@ -53,8 +62,8 @@ export interface ValueMetadataAny {
 	label?: string;
 	/** CC-specific information to help identify this value */
 	ccSpecific?: Record<string, any>;
-	/** Options that can be included in a setValue call for this value. */
-	setValueOptions?: string[];
+	/** Options that can be provided when changing this value on a device via its value ID. */
+	valueChangeOptions?: (keyof ValueChangeOptions)[];
 }
 
 export interface ValueMetadataNumeric extends ValueMetadataAny {

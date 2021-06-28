@@ -549,7 +549,7 @@ export class ColorSwitchCC extends CommandClass {
 		valueDB.setMetadata(getTargetColorValueID(this.endpointIndex), {
 			...ValueMetadata.Any,
 			label: `Target Color`,
-			setValueOptions: ["transitionDuration"],
+			valueChangeOptions: ["transitionDuration"],
 		});
 
 		// Create the collective HEX color values
