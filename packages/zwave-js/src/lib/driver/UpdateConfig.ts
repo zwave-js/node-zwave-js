@@ -182,6 +182,7 @@ export async function installConfigUpdateInDocker(
 	const tmpDir = path.join(os.tmpdir(), "zjs-config-update");
 	const tarFilename = path.join(tmpDir, "zjs-config-update.tgz");
 	try {
+		await fs.ensureDir(tmpDir);
 		const fstream = fs.createWriteStream(tarFilename, { autoClose: true });
 		const response = await axios({
 			method: "GET",
@@ -203,18 +204,28 @@ export async function installConfigUpdateInDocker(
 		);
 	}
 
+	// This should not be necessary in Docker. Leaving it here anyways in case
+	// we want to use this method on Windows at some point
+	function normalizeToUnixStyle(path: string): string {
+		path = path.replace(/:/g, "");
+		path = path.replace(/\\/g, "/");
+		if (!path.startsWith("/")) path = `/${path}`;
+		return path;
+	}
+
 	// Extract it into a temporary folder, then overwrite the config node_modules with it
 	try {
+		await fs.emptyDir(configModuleDir + "_tmp");
 		await execa("tar", [
 			"--strip-components=1",
 			"-xzf",
-			tarFilename,
+			normalizeToUnixStyle(tarFilename),
 			"-C",
-			configModuleDir + "_tmp",
+			normalizeToUnixStyle(configModuleDir + "_tmp"),
 		]);
 		await fs.remove(configModuleDir);
 		await fs.rename(configModuleDir + "_tmp", configModuleDir);
-	} catch {
+	} catch (e) {
 		await freeLock();
 		throw new ZWaveError(
 			`Config update failed: Could not extract tarball`,

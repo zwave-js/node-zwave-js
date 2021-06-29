@@ -2876,7 +2876,7 @@ ${handlers.length} left`,
 			this.driverLog.print(
 				`Installing version ${newVersion} of configuration DB...`,
 			);
-			if (true || isDocker()) {
+			if (isDocker()) {
 				await installConfigUpdateInDocker(newVersion);
 			} else {
 				await installConfigUpdate(newVersion);
