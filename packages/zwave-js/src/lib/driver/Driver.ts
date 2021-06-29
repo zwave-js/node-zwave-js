@@ -24,6 +24,7 @@ import {
 } from "@zwave-js/serial";
 import {
 	DeepPartial,
+	isDocker,
 	mergeDeep,
 	num2hex,
 	pick,
@@ -123,7 +124,11 @@ import {
 } from "./SendThreadMachine";
 import { throttlePresets } from "./ThrottlePresets";
 import { Transaction } from "./Transaction";
-import { checkForConfigUpdates, installConfigUpdate } from "./UpdateConfig";
+import {
+	checkForConfigUpdates,
+	installConfigUpdate,
+	installConfigUpdateInDocker,
+} from "./UpdateConfig";
 import type { ZWaveOptions } from "./ZWaveOptions";
 
 // eslint-disable-next-line @typescript-eslint/no-var-requires
@@ -2871,7 +2876,11 @@ ${handlers.length} left`,
 			this.driverLog.print(
 				`Installing version ${newVersion} of configuration DB...`,
 			);
-			await installConfigUpdate(newVersion);
+			if (true || isDocker()) {
+				await installConfigUpdateInDocker(newVersion);
+			} else {
+				await installConfigUpdate(newVersion);
+			}
 		} catch (e) {
 			this.driverLog.print(e.message, "error");
 			return false;
