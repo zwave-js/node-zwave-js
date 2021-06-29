@@ -722,6 +722,23 @@ export class DeviceConfig {
 
 	/** Whether this is an embedded configuration or not */
 	public readonly isEmbedded: boolean;
+
+	/** Returns the association config for a given endpoint */
+	public getAssociationConfigForEndpoint(
+		endpointIndex: number,
+		group: number,
+	): AssociationConfig | undefined {
+		if (endpointIndex === 0) {
+			// The root endpoint's associations may be configured separately or as part of "endpoints"
+			return (
+				this.associations?.get(group) ??
+				this.endpoints?.get(0)?.associations?.get(group)
+			);
+		} else {
+			// The other endpoints can only have a configuration as part of "endpoints"
+			return this.endpoints?.get(endpointIndex)?.associations?.get(group);
+		}
+	}
 }
 
 export class ConditionalEndpointConfig {
