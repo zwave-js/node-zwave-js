@@ -2,10 +2,28 @@
 <!--
 	Add placeholder for next release with `wip` snippet
 -->
+## 7.10.0 (2021-06-28)
+### Features
+* Value metadata can now include a property `valueChangeOptions` that indicates which option properties are respected when changing the value with `node.setValue`.
+
+### Bugfixes
+* When an invalid CC is dropped, the reason should now be logged aswell
+* Update `winston-daily-rotate-file` to our forked version to fix a crash
+
+### Config file changes
+* Templated and cleaned up more Aeotec device configurations
+* Added support for clearing inovelli notifications
+* Fixed incorrect partial parameters 41, 49, and 50 of Aeotec ZW100
+* Force Binary Switch CC to be supported for Everspring HAC01
+
+### Changes under the hood
+* Added a previously forgottn note about the statistics feature to the changelog for version `7.9.0`
+
 ## 7.9.0 (2021-06-22)
 ### Features
 * Add the ability to pass options (like a transition duration) to `setValue` API calls
 * Add options to configure the preferred sensor scales
+* Implemented statistics events for the controller and individual nodes to get some insight into the traffic and connection health
 
 ### Bugfixes
 * Upgrade JsonlDB to try and handle the (hopefully) remaining edge cases that can lead to cache corruption

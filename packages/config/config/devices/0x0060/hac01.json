@@ -42,6 +42,15 @@
 		}
 	},
 	"compat": {
-		"enableBasicSetMapping": true
+		"enableBasicSetMapping": true,
+		// The device supports Binary Switch CC, despite the Version query telling otherwise
+		"commandClasses": {
+			"add": {
+				"0x25": {
+					"isSupported": true,
+					"version": 1
+				}
+			}
+		}
 	}
 }

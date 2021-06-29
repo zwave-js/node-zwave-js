@@ -1,6 +1,6 @@
 {
   "name": "@zwave-js/config",
-  "version": "7.9.0",
+  "version": "7.10.0",
   "description": "zwave-js: configuration files",
   "publishConfig": {
     "access": "public"
@@ -31,6 +31,13 @@
   "engines": {
     "node": ">=10.0.0"
   },
+  "scripts": {
+    "build": "yarn ts maintenance/prebuild.ts && tsc -b tsconfig.build.json",
+    "clean": "tsc -b tsconfig.build.json --clean",
+    "watch": "yarn run build --watch --pretty",
+    "lint_config": "yarn ts maintenance/lintConfigFiles.ts",
+    "ts": "node -r esbuild-register"
+  },
   "dependencies": {
     "@zwave-js/core": "workspace:packages/core",
     "@zwave-js/shared": "workspace:packages/shared",
@@ -41,13 +48,6 @@
     "json5": "^2.2.0",
     "semver": "^7.3.2",
     "winston": "^3.3.3"
-  },
-  "scripts": {
-    "build": "yarn ts maintenance/prebuild.ts && tsc -b tsconfig.build.json",
-    "clean": "tsc -b tsconfig.build.json --clean",
-    "watch": "yarn run build --watch --pretty",
-    "lint_config": "yarn ts maintenance/lintConfigFiles.ts",
-    "ts": "node -r esbuild-register"
   },
   "devDependencies": {
     "@types/fs-extra": "^9.0.11",

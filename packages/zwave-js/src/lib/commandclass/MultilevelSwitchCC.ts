@@ -635,6 +635,7 @@ export class MultilevelSwitchCCReport extends MultilevelSwitchCC {
 	@ccValueMetadata({
 		...ValueMetadata.Level,
 		label: "Target value",
+		valueChangeOptions: ["transitionDuration"],
 	})
 	public readonly targetValue: number | undefined;
 
