@@ -335,11 +335,12 @@ jobs:
     - name: Create a clean build
       run: yarn run build:full
 
-    - name: Publish package to npm
+    - name: Publish packages to npm
       run: |
-        npm config set //registry.npmjs.org/:_authToken=${{ secrets.NPM_TOKEN }}
-        npm whoami
-        npx lerna publish from-package --yes
+        yarn config set npmPublishRegistry 'https://registry.npmjs.org'
+        yarn config set 'npmRegistries["//registry.npmjs.org"].npmAuthToken' "${{ secrets.NPM_TOKEN }}"
+        yarn npm whoami
+        yarn workspaces foreach exec npm publish --tolerate-republish
 
     - name: Create Github Release
       uses: actions/create-release@v1

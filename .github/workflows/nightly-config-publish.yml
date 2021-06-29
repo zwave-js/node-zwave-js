@@ -56,15 +56,15 @@ jobs:
         yarn install --immutable
 
         # ===============================
-        # Double-check changes with lerna
+        # Double-check changes
         # ===============================
 
         # Verify that only @zwave-js/config and zwave-js are changed
-        LERNA_CHANGED=$(npx lerna changed)
-        if [[ $(echo -e "@zwave-js/config\nzwave-js") != "$LERNA_CHANGED" ]]; then
-          echo "❌ Lerna detected unexpected package changes, aborting..."
+        WORKSPACE_CHANGED=$(yarn version check | grep "has been modified" | cut -d" " -f3 | sed -E "s/@workspace.+//")
+        if [[ $(echo -e "@zwave-js/config\nzwave-js") != "$WORKSPACE_CHANGED" ]]; then
+          echo "❌ Detected unexpected package changes, aborting..."
           echo "These packages are changed:"
-          echo "$LERNA_CHANGED"
+          echo "$WORKSPACE_CHANGED"
           exit 0
         fi
 
@@ -82,14 +82,10 @@ jobs:
         # Bump the version and publish
         # ===============================
 
-        cd packages/config
-        npm config set //registry.npmjs.org/:_authToken=${{ secrets.NPM_TOKEN }}
-        npm whoami
-
         # Figure out next version
         cat > ./script.js << 'EOF'
         const semver = require("semver");
-        let v = require("../config/package.json").version;
+        let v = require("@zwave-js/config/package.json").version;
         const now = new Date();
         const today = new Date(now.getTime() - now.getTimezoneOffset()*60000);
         const dateStr = today.toISOString().split("T")[0].replace(/-/g, "");
@@ -108,5 +104,9 @@ jobs:
 
         VERSION=$(node script.js)
         echo "Next version is $VERSION"
-        npm version "$VERSION" --ignore-scripts --no-git-tag-version
-        npm publish
+        yarn workspace @zwave-js/config version "$VERSION"
+
+        yarn config set npmPublishRegistry 'https://registry.npmjs.org'
+        yarn config set 'npmRegistries["//registry.npmjs.org"].npmAuthToken' "${{ secrets.NPM_TOKEN }}"
+        yarn npm whoami
+        yarn workspace @zwave-js/config npm publish
