@@ -66,6 +66,7 @@ import {
 	configDir,
 	externalConfigDir,
 	getDeviceEntryPredicate,
+	getEmbeddedConfigVersion,
 	syncExternalConfigDir,
 } from "./utils";
 
@@ -80,6 +81,14 @@ export class ConfigManager {
 			options.logContainer ?? new ZWaveLogContainer({ enabled: false }),
 		);
 		this.deviceConfigPriorityDir = options.deviceConfigPriorityDir;
+		this._configVersion =
+			// eslint-disable-next-line @typescript-eslint/no-var-requires
+			require("@zwave-js/config/package.json").version;
+	}
+
+	private _configVersion: string;
+	public get configVersion(): string {
+		return this._configVersion;
 	}
 
 	private logger: ConfigLogger;
@@ -124,12 +133,18 @@ export class ConfigManager {
 	public async loadAll(): Promise<void> {
 		// If the environment option for an external config dir is set
 		// try to sync it and then use it
-		this.useExternalConfig = await syncExternalConfigDir(this.logger);
-		if (this.useExternalConfig) {
+		const syncResult = await syncExternalConfigDir(this.logger);
+		if (syncResult.success) {
+			this.useExternalConfig = true;
 			this.logger.print(
 				`Using external configuration dir ${externalConfigDir}`,
 			);
+			this._configVersion = syncResult.version;
+		} else {
+			this.useExternalConfig = false;
+			this._configVersion = await getEmbeddedConfigVersion();
 		}
+		this.logger.print(`version ${this._configVersion}`, "info");
 
 		await this.loadDeviceClasses();
 		await this.loadManufacturers();

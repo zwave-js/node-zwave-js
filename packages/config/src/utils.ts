@@ -55,13 +55,26 @@ export function padVersion(version: string): string {
 	return version + ".0";
 }
 
+export async function getEmbeddedConfigVersion(): Promise<string> {
+	return (await fs.readJSON(path.join(__dirname, "../package.json"))).version;
+}
+
+export type SyncExternalConfigDirResult =
+	| {
+			success: false;
+	  }
+	| {
+			success: true;
+			version: string;
+	  };
+
 /**
  * Synchronizes or updates the external config directory and returns whether the directory is in a state that can be used
  */
 export async function syncExternalConfigDir(
 	logger: ConfigLogger,
-): Promise<boolean> {
-	if (!externalConfigDir) return false;
+): Promise<SyncExternalConfigDirResult> {
+	if (!externalConfigDir) return { success: false };
 
 	// Make sure the config dir exists
 	try {
@@ -71,13 +84,11 @@ export async function syncExternalConfigDir(
 			`Synchronizing external config dir failed - directory could not be created`,
 			"error",
 		);
-		return false;
+		return { success: false };
 	}
 
 	const externalVersionFilename = path.join(externalConfigDir, "version");
-	const currentVersion = (
-		await fs.readJSON(path.join(__dirname, "../package.json"))
-	).version;
+	const currentVersion = await getEmbeddedConfigVersion();
 	const supportedRange = `>=${currentVersion} <${semver.inc(
 		currentVersion,
 		"patch",
@@ -90,12 +101,13 @@ export async function syncExternalConfigDir(
 	// ...doesn't contain a matching version (>= current && nightly)
 	// wipe the external config dir and recreate it
 	let wipe = false;
+	let externalVersion: string | undefined;
 	try {
-		const version = await fs.readFile(externalVersionFilename, "utf8");
-		if (!semver.valid(version)) {
+		externalVersion = await fs.readFile(externalVersionFilename, "utf8");
+		if (!semver.valid(externalVersion)) {
 			wipe = true;
 		} else if (
-			!semver.satisfies(version, supportedRange, {
+			!semver.satisfies(externalVersion, supportedRange, {
 				includePrerelease: true,
 			})
 		) {
@@ -106,7 +118,7 @@ export async function syncExternalConfigDir(
 	}
 
 	// Nothing to wipe, the external dir is good to go
-	if (!wipe) return true;
+	if (!wipe) return { success: true, version: externalVersion! };
 
 	// Wipe and override the external dir
 	try {
@@ -121,14 +133,15 @@ export async function syncExternalConfigDir(
 			},
 		});
 		await fs.writeFile(externalVersionFilename, currentVersion, "utf8");
+		externalVersion = currentVersion;
 	} catch {
 		// Something went wrong
 		logger.print(
 			`Synchronizing external config dir failed - using embedded config`,
 			"error",
 		);
-		return false;
+		return { success: false };
 	}
 
-	return true;
+	return { success: true, version: externalVersion };
 }
