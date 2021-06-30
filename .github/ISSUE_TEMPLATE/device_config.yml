@@ -77,7 +77,7 @@ body:
         We can automatically create a rough configuration file template from that information, greatly speeding up the process.
       placeholder: 'https://products.z-wavealliance.org/products/1234'
 
-- type: textarea
+  - type: textarea
     id: manual
     attributes:
       label: Do you have a manual?
