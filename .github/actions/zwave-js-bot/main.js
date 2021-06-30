@@ -36,34 +36,43 @@ async function publishPr() {
 		await exec.exec("git", ["config", "user.email", "bot@zwave-js.io"]);
 		await exec.exec("git", ["config", "user.name", "Z-Wave JS Bot"]);
 
-		// Configure npm
-		await exec.exec("npm", [
+		// Configure yarn
+		await exec.exec("yarn", [
+			"config",
+			"npmPublishRegistry",
+			`'https://registry.npmjs.org'`,
+		]);
+		await exec.exec("yarn", [
 			"config",
 			"set",
-			`//registry.npmjs.org/:_authToken=${npmToken}`,
+			`'npmRegistries["//registry.npmjs.org"].npmAuthToken'`,
+			npmToken,
 		]);
 
 		// Figure out the next version
 		newVersion = `${semver.inc(
-			require(`${process.env.GITHUB_WORKSPACE}/lerna.json`).version,
+			require(`${process.env.GITHUB_WORKSPACE}/package.json`).version,
 			"prerelease",
 		)}-pr-${pr}-${pull.merge_commit_sha.slice(0, 7)}`;
 
 		// Bump versions
-		await exec.exec(
-			"npx",
-			`lerna version ${newVersion} --exact --allow-branch * --ignore-scripts --no-commit-hooks --yes`.split(
-				" ",
-			),
-		);
+		await exec.exec("yarn", [
+			"workspaces",
+			"foreach",
+			"version",
+			newVersion,
+			"--deferred",
+		]);
+		await exec.exec("yarn", ["version", "apply", "--all"]);
 
 		// and release
-		await exec.exec("npx", [
-			"lerna",
+		await exec.exec("yarn", [
+			"workspaces",
+			"foreach",
+			"npm",
 			"publish",
-			"from-package",
-			"--yes",
-			"--dist-tag",
+			"--tolerate-republish",
+			"--tag",
 			"next",
 		]);
 		success = true;
