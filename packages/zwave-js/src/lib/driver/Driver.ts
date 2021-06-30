@@ -24,6 +24,7 @@ import {
 } from "@zwave-js/serial";
 import {
 	DeepPartial,
+	isDocker,
 	mergeDeep,
 	num2hex,
 	pick,
@@ -123,7 +124,11 @@ import {
 } from "./SendThreadMachine";
 import { throttlePresets } from "./ThrottlePresets";
 import { Transaction } from "./Transaction";
-import { checkForConfigUpdates, installConfigUpdate } from "./UpdateConfig";
+import {
+	checkForConfigUpdates,
+	installConfigUpdate,
+	installConfigUpdateInDocker,
+} from "./UpdateConfig";
 import type { ZWaveOptions } from "./ZWaveOptions";
 
 // eslint-disable-next-line @typescript-eslint/no-var-requires
@@ -344,9 +349,12 @@ export class Driver extends TypedEventEmitter<DriverEventCallbacks> {
 	}
 
 	public readonly configManager: ConfigManager;
-	private _configVersion: string;
 	public get configVersion(): string {
-		return this._configVersion;
+		return (
+			this.configManager?.configVersion ??
+			packageJson?.dependencies?.["@zwave-js/config"] ??
+			libVersion
+		);
 	}
 
 	private _logContainer: ZWaveLogContainer;
@@ -406,14 +414,6 @@ export class Driver extends TypedEventEmitter<DriverEventCallbacks> {
 		this.cacheDir = this.options.storage.cacheDir;
 
 		// Initialize config manager
-		try {
-			this._configVersion =
-				// eslint-disable-next-line @typescript-eslint/no-var-requires
-				require("@zwave-js/config/package.json").version;
-		} catch {
-			this._configVersion =
-				packageJson?.dependencies?.["@zwave-js/config"] ?? libVersion;
-		}
 		this.configManager = new ConfigManager({
 			logContainer: this._logContainer,
 			deviceConfigPriorityDir:
@@ -588,11 +588,6 @@ export class Driver extends TypedEventEmitter<DriverEventCallbacks> {
 		// Log which version is running
 		this.driverLog.print(libNameString, "info");
 		this.driverLog.print(`version ${libVersion}`, "info");
-		// wotan-disable-next-line no-restricted-property-access
-		this.configManager["logger"].print(
-			`version ${this.configVersion}`,
-			"info",
-		);
 		this.driverLog.print("", "info");
 
 		this.driverLog.print("starting driver...");
@@ -2836,10 +2831,12 @@ ${handlers.length} left`,
 	public async checkForConfigUpdates(
 		silent: boolean = false,
 	): Promise<string | undefined> {
+		this.ensureReady();
+
 		try {
 			if (!silent)
 				this.driverLog.print("Checking for configuration updates...");
-			const ret = await checkForConfigUpdates(this._configVersion);
+			const ret = await checkForConfigUpdates(this.configVersion);
 			if (ret) {
 				if (!silent)
 					this.driverLog.print(
@@ -2864,6 +2861,8 @@ ${handlers.length} left`,
 	 * **Note:** Bugfixes and changes to device configuration generally require a restart or re-interview to take effect.
 	 */
 	public async installConfigUpdate(): Promise<boolean> {
+		this.ensureReady();
+
 		const newVersion = await this.checkForConfigUpdates(true);
 		if (!newVersion) return false;
 
@@ -2871,7 +2870,11 @@ ${handlers.length} left`,
 			this.driverLog.print(
 				`Installing version ${newVersion} of configuration DB...`,
 			);
-			await installConfigUpdate(newVersion);
+			if (isDocker()) {
+				await installConfigUpdateInDocker(newVersion);
+			} else {
+				await installConfigUpdate(newVersion);
+			}
 		} catch (e) {
 			this.driverLog.print(e.message, "error");
 			return false;
@@ -2879,9 +2882,8 @@ ${handlers.length} left`,
 		this.driverLog.print(
 			`Configuration DB updated to version ${newVersion}, activating...`,
 		);
-		// Remember that we use the new version
-		this._configVersion = newVersion;
-		// and reload the config files
+
+		// Reload the config files
 		await this.configManager.loadAll();
 
 		// Now try to apply them to all known devices
