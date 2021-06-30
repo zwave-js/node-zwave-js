@@ -1175,6 +1175,8 @@ export class Driver extends TypedEventEmitter<DriverEventCallbacks> {
 				driverVersion: libVersion,
 				...this.statisticsAppInfo,
 				nodeVersion: process.versions.node,
+				os: process.platform,
+				arch: process.arch,
 			});
 			success = await sendStatistics(statistics);
 		} catch {

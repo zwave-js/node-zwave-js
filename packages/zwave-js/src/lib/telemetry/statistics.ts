@@ -12,6 +12,8 @@ export interface AppInfo {
 	applicationName: string;
 	applicationVersion: string;
 	nodeVersion: string;
+	os: NodeJS.Platform;
+	arch: string;
 }
 
 export async function compileStatistics(
