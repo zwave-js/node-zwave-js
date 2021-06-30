@@ -219,7 +219,7 @@
 			"defaultValue": 0,
 			"options": [
 				{
-					"label": "Disable, previous value is used",
+					"label": "Previous level",
 					"value": 0
 				}
 			]
