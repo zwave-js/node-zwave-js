@@ -2,6 +2,17 @@
 <!--
 	Add placeholder for next release with `wip` snippet
 -->
+## __WORK IN PROGRESS__
+### Bugfixes
+* Config updates in Docker now download the tarball from the `npm` registry and extract it instead of deferring to the package manager
+* `controller.getAssociationGroups` now returns the correct association group label when a config file has definitions for multiple endpoints and `Association Group Info CC` is not supported 
+
+### Config file changes
+* Remove Supervision support from zwaveproducts.com WD-100
+
+### Changes under the hood
+* Our issues now use the new Github Issue Forms to give better guidance when opening issues
+
 ## 7.10.0 (2021-06-28)
 ### Features
 * Value metadata can now include a property `valueChangeOptions` that indicates which option properties are respected when changing the value with `node.setValue`.
@@ -17,7 +28,7 @@
 * Force Binary Switch CC to be supported for Everspring HAC01
 
 ### Changes under the hood
-* Added a previously forgottn note about the statistics feature to the changelog for version `7.9.0`
+* Added a previously forgotten note about the statistics feature to the changelog for version `7.9.0`
 
 ## 7.9.0 (2021-06-22)
 ### Features
