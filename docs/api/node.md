@@ -206,8 +206,8 @@ extractFirmware(rawData: Buffer, format: FirmwareFileFormat): Firmware
 -   `"aeotec"` - A Windows executable (`.exe` or `.ex_`) that contains Aeotec's upload tool
 -   `"otz"` - A compressed firmware file in Intel HEX format
 -   `"ota"` or `"hex"` - An uncompressed firmware file in Intel HEX format
+-   `"hec"` - An encrypted Intel HEX firmware file
 -   `"gecko"` - A binary gecko bootloader firmware file with `.gbl` extension
--   `"hec"` An encrypted Intel HEX format
 
 You can use the helper method `guessFirmwareFileFormat` to guess which firmware format a file has based on the file extension and contents.
 
