@@ -2831,6 +2831,8 @@ ${handlers.length} left`,
 	public async checkForConfigUpdates(
 		silent: boolean = false,
 	): Promise<string | undefined> {
+		this.ensureReady();
+
 		try {
 			if (!silent)
 				this.driverLog.print("Checking for configuration updates...");
@@ -2859,6 +2861,8 @@ ${handlers.length} left`,
 	 * **Note:** Bugfixes and changes to device configuration generally require a restart or re-interview to take effect.
 	 */
 	public async installConfigUpdate(): Promise<boolean> {
+		this.ensureReady();
+
 		const newVersion = await this.checkForConfigUpdates(true);
 		if (!newVersion) return false;
 
