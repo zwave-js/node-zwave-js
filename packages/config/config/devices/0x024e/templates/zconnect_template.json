@@ -43,15 +43,15 @@
 		"defaultValue": 0,
 		"options": [
 			{
-				"label": "Normal mode - Closed contacts when On, open contacts when Off.",
+				"label": "Normal - Closed when On",
 				"value": 0
 			},
 			{
-				"label": "Reverse mode - Closed contacts when Off, open contacts when On.",
+				"label": "Reversed - Open when On",
 				"value": 1
 			},
 			{
-				"label": "Strobe mode - Strobe when On, open contacts when Off.",
+				"label": "Strobe - Strobe when On, Open when Off",
 				"value": 2
 			}
 		]
@@ -67,19 +67,19 @@
 				"value": 0
 			},
 			{
-				"label": "Sensor 1 controlls relay.",
+				"label": "Sensor 1 controls relay.",
 				"value": 1
 			},
 			{
-				"label": "Sensor 2 controlls relay.",
+				"label": "Sensor 2 controls relay.",
 				"value": 2
 			},
 			{
-				"label": "Sensor 3 controlls relay via S-Bus.",
+				"label": "Sensor 3 controls relay via S-Bus.",
 				"value": 3
 			},
 			{
-				"label": "Sensor 4(temperature) controlls relay via S-Bus.",
+				"label": "Sensor 4 (Temp) controls relay via S-Bus.",
 				"value": 4
 			}
 		]
@@ -91,39 +91,39 @@
 		"defaultValue": 0,
 		"options": [
 			{
-				"label": "Do not react on On/Off actions.",
+				"label": "Ignore sensor events",
 				"value": 0
 			},
 			{
-				"label": "Send command On during time without action and send command Off on event/trigger.",
+				"label": "On when inactive and Off on event",
 				"value": 1
 			},
 			{
-				"label": "Send command Off during time without action and send command On on event/trigger.",
+				"label": "Off when inactive and On on event",
 				"value": 2
 			},
 			{
-				"label": "Send command On during time without action.",
+				"label": "On when inactive",
 				"value": 3
 			},
 			{
-				"label": "Send command Off during time without action.",
+				"label": "Off when inactive",
 				"value": 4
 			},
 			{
-				"label": "Send command On on event/trigger.",
+				"label": "On on event",
 				"value": 5
 			},
 			{
-				"label": "Send command Off on event/trigger.",
+				"label": "Off on event",
 				"value": 6
 			},
 			{
-				"label": "Send real sensor value to other device.",
+				"label": "Send sensor value to other device",
 				"value": 7
 			},
 			{
-				"label": "Every event will change relay status to oposite, only for binary sensor grouped with relay (parameter 20/21 = 4)",
+				"label": "Toggle with every event, only for binary sensor grouped with relay (parameter 20/21 = 4)",
 				"value": 8
 			}
 		]
