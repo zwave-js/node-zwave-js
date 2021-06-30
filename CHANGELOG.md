@@ -2,7 +2,7 @@
 <!--
 	Add placeholder for next release with `wip` snippet
 -->
-## __WORK IN PROGRESS__
+## 7.10.1 (2021-06-30)
 ### Bugfixes
 * Config updates in Docker now download the tarball from the `npm` registry and extract it instead of deferring to the package manager
 * `controller.getAssociationGroups` now returns the correct association group label when a config file has definitions for multiple endpoints and `Association Group Info CC` is not supported 
