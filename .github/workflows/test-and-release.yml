@@ -340,7 +340,7 @@ jobs:
         yarn config set npmPublishRegistry 'https://registry.npmjs.org'
         yarn config set 'npmRegistries["//registry.npmjs.org"].npmAuthToken' "${{ secrets.NPM_TOKEN }}"
         yarn npm whoami
-        yarn workspaces foreach exec npm publish --tolerate-republish
+        yarn workspaces foreach npm publish --tolerate-republish
 
     - name: Create Github Release
       uses: actions/create-release@v1
