@@ -11,6 +11,7 @@ module.exports = {
 	testRegex: "(\\.|/)test\\.tsx?$",
 	moduleFileExtensions: ["ts", "tsx", "js", "jsx", "json", "node"],
 	moduleNameMapper: {
+		"^@zwave-js/(.*)/package.json": "<rootDir>/packages/$1/package.json",
 		"^@zwave-js/config(.*)": "<rootDir>/packages/config/src$1",
 		"^@zwave-js/core(.*)": "<rootDir>/packages/core/src$1",
 		"^@zwave-js/maintenance(.*)": "<rootDir>/packages/maintenance/src$1",

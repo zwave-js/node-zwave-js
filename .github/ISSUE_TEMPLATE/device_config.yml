@@ -39,6 +39,7 @@ body:
     id: manufacturerId
     attributes:
       label: Manufacturer ID
+      description: As a hexadecimal number, can be found in logs or your application
       placeholder: '0x1234'
     validations:
       required: true
@@ -47,6 +48,7 @@ body:
     id: productType
     attributes:
       label: Product Type
+      description: As a hexadecimal number, can be found in logs or your application
       placeholder: '0x4321'
     validations:
       required: true
@@ -55,6 +57,7 @@ body:
     id: productId
     attributes:
       label: Product ID
+      description: As a hexadecimal number, can be found in logs or your application
       placeholder: '0x1001'
     validations:
       required: true
@@ -64,6 +67,15 @@ body:
     attributes:
       label: Firmware Version
       placeholder: '1.23'
+
+  - type: input
+    id: zwaLink
+    attributes:
+      label: 'Is the device listed on the Z-Wave Alliance website?'
+      description: |
+        Please search [here](https://products.z-wavealliance.org/products/) and enter the link below.
+        We can automatically create a rough configuration file template from that information, greatly speeding up the process.
+      placeholder: 'https://products.z-wavealliance.org/products/1234'
 
   - type: textarea
     id: manual

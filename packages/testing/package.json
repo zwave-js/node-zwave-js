@@ -1,6 +1,6 @@
 {
   "name": "@zwave-js/testing",
-  "version": "7.10.0",
+  "version": "7.10.1",
   "description": "zwave-js: testing utilities",
   "private": true,
   "keywords": [],
