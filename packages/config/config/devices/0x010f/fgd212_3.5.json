@@ -345,19 +345,19 @@
 		},
 		"27[0x01]": {
 			"$import": "../templates/master_template.json#base_enable_disable",
-			"label": "Send secure Z-wave commands to 2nd association group"
+			"label": "Send Secure Z-wave Commands to 2nd Association Group"
 		},
 		"27[0x02]": {
 			"$import": "../templates/master_template.json#base_enable_disable",
-			"label": "Send secure Z-wave commands to 3rd association group"
+			"label": "Send Secure Z-wave Commands to 3rd Association Group"
 		},
 		"27[0x04]": {
 			"$import": "../templates/master_template.json#base_enable_disable",
-			"label": "Send secure Z-wave commands to 4th association group"
+			"label": "Send Secure Z-wave Commands to 4th Association Group"
 		},
 		"27[0x08]": {
 			"$import": "../templates/master_template.json#base_enable_disable",
-			"label": "Send secure Z-wave commands to 5th association group"
+			"label": "Send Secure Z-wave Commands to 5th Association Group"
 		},
 		"28": {
 			"$import": "../templates/master_template.json#base_enable_disable",
