@@ -68,7 +68,16 @@ body:
       label: Firmware Version
       placeholder: '1.23'
 
-  - type: textarea
+  - type: input
+    id: zwaLink
+    attributes:
+      label: 'Is the device listed on the Z-Wave Alliance website?'
+      description: |
+        Please search [here](https://products.z-wavealliance.org/products/) and enter the link below.
+        We can automatically create a rough configuration file template from that information, greatly speeding up the process.
+      placeholder: 'https://products.z-wavealliance.org/products/1234'
+
+- type: textarea
     id: manual
     attributes:
       label: Do you have a manual?
