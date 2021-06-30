@@ -48,7 +48,7 @@
 		},
 		"3": {
 			"label": "Incandescence Level of Dimmable CFL*",
-			"description": "Virtual value (percentage between 1% and 99%)",
+			"description": "Scale is the range defined by minimum and maximum brightness level configuration",
 			"valueSize": 1,
 			"minValue": 1,
 			"maxValue": 99,
@@ -64,8 +64,8 @@
 		},
 		"5": {
 			"label": "Automatic Control: Dimming Step Size",
+			"description": "Scale is the range defined by minimum and maximum brightness level configuration",
 			"valueSize": 1,
-			"unit": "%",
 			"minValue": 1,
 			"maxValue": 99,
 			"defaultValue": 1
@@ -80,8 +80,8 @@
 		},
 		"7": {
 			"label": "Manual Control: Dimming Step Size",
+			"description": "Scale is the range defined by minimum and maximum brightness level configuration",
 			"valueSize": 1,
-			"unit": "%",
 			"minValue": 1,
 			"maxValue": 99,
 			"defaultValue": 1
@@ -212,7 +212,7 @@
 		},
 		"19": {
 			"label": "Forced Switch On Brightness",
-			"description": "Scale is relative to the range set by minimum and maximum brightness level configuration",
+			"description": "Scale is the range defined by minimum and maximum brightness level configuration",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 99,
