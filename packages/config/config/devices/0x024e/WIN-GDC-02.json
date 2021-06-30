@@ -156,7 +156,7 @@
 		},
 		"15": {
 			"$import": "../templates/master_template.json#base_enable_disable",
-			"label": "Control Relay 2 with Relay 1",
+			"label": "Control Relay 1 & 2 together",
 			"description": "When enabled, Relay 2 will be switched On when Relay 1 is switched."
 		},
 		"16": {
