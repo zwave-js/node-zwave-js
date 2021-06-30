@@ -11,6 +11,7 @@ export interface AppInfo {
 	driverVersion: string;
 	applicationName: string;
 	applicationVersion: string;
+	nodeVersion: string;
 }
 
 export async function compileStatistics(
