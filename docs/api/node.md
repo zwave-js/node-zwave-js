@@ -208,9 +208,6 @@ extractFirmware(rawData: Buffer, format: FirmwareFileFormat): Firmware
 -   `"ota"` or `"hex"` - An uncompressed firmware file in Intel HEX format
 -   `"gecko"` - A binary gecko bootloader firmware file with `.gbl` extension
 
-> [!NOTE]  
-> `.hec` firmware update files are encrypted with proprietary encryption and not supported by `zwave-js`
-
 You can use the helper method `guessFirmwareFileFormat` to guess which firmware format a file has based on the file extension and contents.
 
 ```ts
