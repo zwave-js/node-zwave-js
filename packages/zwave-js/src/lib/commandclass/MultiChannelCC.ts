@@ -1034,6 +1034,14 @@ export class MultiChannelCCCommandEncapsulation extends MultiChannelCC {
 			this.destination = options.destination;
 			// If the encapsulated command requires security, so does this one
 			if (this.encapsulated.secure) this.secure = true;
+			if (
+				this.getNodeUnsafe()?.deviceConfig?.compat
+					?.treatDestinationEndpointAsSource
+			) {
+				// This device incorrectly responds from the endpoint we've passed as our source endpoint
+				if (typeof this.destination === "number")
+					this.endpointIndex = this.destination;
+			}
 		}
 	}
 
