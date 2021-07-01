@@ -53,7 +53,6 @@
     "babel-jest": "^26.6.3",
     "commitizen": "^4.2.4",
     "coveralls": "^3.1.0",
-    "cross-env": "^7.0.3",
     "cz-conventional-changelog": "^3.2.0",
     "esbuild-register": "^2.6.0",
     "eslint": "^7.28.0",
@@ -108,8 +107,7 @@
     "docs:generate": "yarn ts packages/maintenance/src/generateTypedDocs.ts",
     "test:perf": "yarn ts test/valuedb-perf.ts",
     "test:firmware": "yarn ts test/firmware-extraction.ts",
-    "//": "remove cross-env when https://github.com/evanw/esbuild/issues/1406 is fixed",
-    "ts": "cross-env ESBUILD_WORKER_THREADS=0 yarn node -r esbuild-register"
+    "ts": "node -r esbuild-register"
   },
   "readme": "README.md",
   "config": {
