@@ -100,8 +100,7 @@
 			"description": "Restore to the last known state for relay 1 after power was interrupted."
 		},
 		"8": {
-			"label": "Broadcast Command Action",
-			"description": "Broadcast command turn all On/ turn all Off settings.",
+			"label": "Reaction To Broadcast Commands",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 3,
