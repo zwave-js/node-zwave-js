@@ -71,9 +71,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@alcalzone/release-script@npm:^2.1.0":
-  version: 2.1.0
-  resolution: "@alcalzone/release-script@npm:2.1.0"
+"@alcalzone/release-script@npm:^2.2.0":
+  version: 2.2.0
+  resolution: "@alcalzone/release-script@npm:2.2.0"
   dependencies:
     alcalzone-shared: ^4.0.0
     axios: ^0.21.1
@@ -84,7 +84,7 @@ __metadata:
     yargs: ^17.0.1
   bin:
     release-script: bin/release.js
-  checksum: 8d309dce3919b57742d77ee15dffa6bbff3220ea900c38c66c67aafd248e907ba9a0797968eadcec7c60fdcbb224c44d7ed49f85c9fcf73cd52577217ae8a4c7
+  checksum: ac42c2a99e845dcca764f2cc91b8076b670bcc157e34cd7ae6702f5a0bf2d22db1eec10f198cba5d2fd703f3ada4a206eed98031903c3d480d9b17fb1a5c4f04
   languageName: node
   linkType: hard
 
@@ -2060,10 +2060,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@octokit/openapi-types@npm:^8.1.3":
-  version: 8.1.3
-  resolution: "@octokit/openapi-types@npm:8.1.3"
-  checksum: 780b2b41db322e8f7139b7534f0cf1e05dd9acc076998ae48bd98be44337b8c06de2a81e7787997a314ae40e69de6f4e15d4a5b85f8e6f81be50dbb7a37307ac
+"@octokit/openapi-types@npm:^8.1.4":
+  version: 8.1.4
+  resolution: "@octokit/openapi-types@npm:8.1.4"
+  checksum: c2b76de98db1430997e44a190e52ff7a4dbd86285375f3b241b00bb97b1099fb189b5ee746848ea570670a685002a3784eed8f8233b0c0ff6c1df9eaf8d4e982
   languageName: node
   linkType: hard
 
@@ -2079,14 +2079,14 @@ __metadata:
   linkType: hard
 
 "@octokit/plugin-rest-endpoint-methods@npm:^5.1.1":
-  version: 5.3.6
-  resolution: "@octokit/plugin-rest-endpoint-methods@npm:5.3.6"
+  version: 5.3.7
+  resolution: "@octokit/plugin-rest-endpoint-methods@npm:5.3.7"
   dependencies:
-    "@octokit/types": ^6.17.3
+    "@octokit/types": ^6.17.4
     deprecation: ^2.3.1
   peerDependencies:
     "@octokit/core": ">=3"
-  checksum: e6fea10bc1562cdbac156173b162359c5237fd9dcbd7295b3159c258af7714e759195be8d16a017442bd1df5524d6f778f0b6203f7dc575d9264cc22944070d1
+  checksum: 7482f94c8af6df68d68eb03e0ca521e6c8dd28a718d8d35afe6f1996f8e5f8922a4271f8377cf0173ca138213073e43ee6f870cd94a52a0ab62b78d9a68a98b9
   languageName: node
   linkType: hard
 
@@ -2115,12 +2115,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@octokit/types@npm:^6.0.3, @octokit/types@npm:^6.16.1, @octokit/types@npm:^6.17.3":
-  version: 6.17.3
-  resolution: "@octokit/types@npm:6.17.3"
+"@octokit/types@npm:^6.0.3, @octokit/types@npm:^6.16.1, @octokit/types@npm:^6.17.3, @octokit/types@npm:^6.17.4":
+  version: 6.17.4
+  resolution: "@octokit/types@npm:6.17.4"
   dependencies:
-    "@octokit/openapi-types": ^8.1.3
-  checksum: eabade095f876830af17f5789445df26a2ab85437f6d5b0939f9ce9ea8392243bf6b9aa639e1bbe99c5d139731222d021bd31a9a8ebcefe3a6b316f15083f349
+    "@octokit/openapi-types": ^8.1.4
+  checksum: b13a4b9f689ba776d3d40b5824f6e7b5b9071edc6715d2fc233b9f9bb10dc54fe7af65407520e0f76dfbb995bb63347fef712677e57dce255ed3b7a4079b3501
   languageName: node
   linkType: hard
 
@@ -2762,7 +2762,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@zwave-js/config@workspace:packages/config":
+"@zwave-js/config@7.10.1, @zwave-js/config@workspace:packages/config":
   version: 0.0.0-use.local
   resolution: "@zwave-js/config@workspace:packages/config"
   dependencies:
@@ -2775,9 +2775,9 @@ __metadata:
     "@types/semver": ^7.3.6
     "@types/xml2json": ^0.11.3
     "@types/yargs": ^16.0.1
-    "@zwave-js/core": "workspace:packages/core"
-    "@zwave-js/maintenance": "workspace:packages/maintenance"
-    "@zwave-js/shared": "workspace:packages/shared"
+    "@zwave-js/core": 7.10.1
+    "@zwave-js/maintenance": 7.10.1
+    "@zwave-js/shared": 7.10.1
     alcalzone-shared: ^3.0.4
     ansi-colors: ^4.1.1
     axios: ^0.21.1
@@ -2798,7 +2798,7 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@zwave-js/core@workspace:packages/core":
+"@zwave-js/core@7.10.1, @zwave-js/core@workspace:packages/core":
   version: 0.0.0-use.local
   resolution: "@zwave-js/core@workspace:packages/core"
   dependencies:
@@ -2806,7 +2806,7 @@ __metadata:
     "@types/jest": ^26.0.23
     "@types/node": ^15.12.5
     "@types/triple-beam": ^1.3.2
-    "@zwave-js/shared": "workspace:packages/shared"
+    "@zwave-js/shared": 7.10.1
     "@zwave-js/winston-daily-rotate-file": ^4.5.6-0
     alcalzone-shared: ^3.0.4
     ansi-colors: ^4.1.1
@@ -2831,7 +2831,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@zwave-js/maintenance@workspace:packages/maintenance":
+"@zwave-js/maintenance@7.10.1, @zwave-js/maintenance@workspace:packages/maintenance":
   version: 0.0.0-use.local
   resolution: "@zwave-js/maintenance@workspace:packages/maintenance"
   dependencies:
@@ -2841,8 +2841,8 @@ __metadata:
     "@types/node": ^15.12.5
     "@types/prettier": ^2
     "@types/yargs": ^16.0.1
-    "@zwave-js/core": "workspace:packages/core"
-    "@zwave-js/shared": "workspace:packages/shared"
+    "@zwave-js/core": 7.10.1
+    "@zwave-js/shared": 7.10.1
     ansi-colors: ^4.1.1
     clipboardy: ^2.3.0
     esbuild-register: ^2.6.0
@@ -2865,7 +2865,7 @@ __metadata:
     "@actions/exec": ^1.1.0
     "@actions/github": ^5.0.0
     "@alcalzone/jsonl-db": ^1.3.0
-    "@alcalzone/release-script": ^2.1.0
+    "@alcalzone/release-script": ^2.2.0
     "@babel/core": ^7.14.6
     "@babel/plugin-proposal-class-properties": "*"
     "@babel/plugin-proposal-decorators": ^7.14.2
@@ -2881,8 +2881,8 @@ __metadata:
     "@types/node": ^15.12.5
     "@typescript-eslint/eslint-plugin": ^4.26.1
     "@typescript-eslint/parser": ^4.26.1
-    "@zwave-js/config": "workspace:packages/config"
-    "@zwave-js/core": "workspace:packages/core"
+    "@zwave-js/config": 7.10.1
+    "@zwave-js/core": 7.10.1
     babel-jest: ^26.6.3
     commitizen: ^4.2.4
     coveralls: ^3.1.0
@@ -2901,11 +2901,11 @@ __metadata:
     reflect-metadata: ^0.1.13
     ts-node: ^9.0.0
     typescript: ^4.3.2
-    zwave-js: "workspace:packages/zwave-js"
+    zwave-js: 7.10.1
   languageName: unknown
   linkType: soft
 
-"@zwave-js/serial@workspace:packages/serial":
+"@zwave-js/serial@7.10.1, @zwave-js/serial@workspace:packages/serial":
   version: 0.0.0-use.local
   resolution: "@zwave-js/serial@workspace:packages/serial"
   dependencies:
@@ -2914,9 +2914,9 @@ __metadata:
     "@types/jest": ^26.0.23
     "@types/node": ^15.12.5
     "@types/serialport": ^8.0.1
-    "@zwave-js/core": "workspace:packages/core"
-    "@zwave-js/shared": "workspace:packages/shared"
-    "@zwave-js/testing": "workspace:packages/testing"
+    "@zwave-js/core": 7.10.1
+    "@zwave-js/shared": 7.10.1
+    "@zwave-js/testing": 7.10.1
     alcalzone-shared: ^3.0.4
     ansi-colors: ^4.1.1
     esbuild-register: ^2.6.0
@@ -2927,7 +2927,7 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@zwave-js/shared@workspace:packages/shared":
+"@zwave-js/shared@7.10.1, @zwave-js/shared@workspace:packages/shared":
   version: 0.0.0-use.local
   resolution: "@zwave-js/shared@workspace:packages/shared"
   dependencies:
@@ -2942,14 +2942,14 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@zwave-js/testing@workspace:packages/testing":
+"@zwave-js/testing@7.10.1, @zwave-js/testing@workspace:packages/testing":
   version: 0.0.0-use.local
   resolution: "@zwave-js/testing@workspace:packages/testing"
   dependencies:
     "@types/jest": ^26.0.23
     "@types/node": ^15.12.5
     "@types/triple-beam": ^1.3.2
-    "@zwave-js/core": "workspace:packages/core"
+    "@zwave-js/core": 7.10.1
     ansi-colors: ^4.1.1
     esbuild-register: ^2.6.0
     jest-extended: ^0.11.5
@@ -4615,9 +4615,9 @@ __metadata:
   linkType: hard
 
 "electron-to-chromium@npm:^1.3.723":
-  version: 1.3.762
-  resolution: "electron-to-chromium@npm:1.3.762"
-  checksum: bcd6db90d896a7e1e49f48bacd924d7128ff8fafff5960dfe2cf485d00a50a0675fe4efbb11151c198df673168c0d8b288c99fe2428b02f6eec63615a026be05
+  version: 1.3.763
+  resolution: "electron-to-chromium@npm:1.3.763"
+  checksum: a9e8ce410dfa7de6122f2106dd1ef64623640889c9f80a07a0395d6772ad18d220a316dc1c8aa89b04062deb4be269eced3e087ebf9c0b4e36ffc9e6bf2eb509
   languageName: node
   linkType: hard
 
@@ -4703,11 +4703,11 @@ __metadata:
   linkType: hard
 
 "esbuild@npm:^0.12.8":
-  version: 0.12.12
-  resolution: "esbuild@npm:0.12.12"
+  version: 0.12.13
+  resolution: "esbuild@npm:0.12.13"
   bin:
     esbuild: bin/esbuild
-  checksum: c6bb94603e67457c43858e96f0f22735fb7867ff2bfac5b49131ebd6f8d61fe1e905d994c388af9a0b84cb803b7036c5f901639d480d3f46e2e112bdd078098b
+  checksum: 2fec44e13c93fe812764d06b0d05718299330cd213328025b3bbc39496204605bbb276b8b0a5e38e8d5edd0c8bd3df4d8b0f11a715d1df3464d45e9227f50052
   languageName: node
   linkType: hard
 
@@ -10128,22 +10128,22 @@ fsevents@^2.1.2:
   linkType: hard
 
 typescript@^4.3.2:
-  version: 4.3.4
-  resolution: "typescript@npm:4.3.4"
+  version: 4.3.5
+  resolution: "typescript@npm:4.3.5"
   bin:
     tsc: bin/tsc
     tsserver: bin/tsserver
-  checksum: 75e1f2769c7ff38c718523d05eaf1c2611dbf92c0ab0f85f603ead9bb23416af2009a5dac46e76ef6a207a8508fa53f51b43a41f2a91b1241b53cd744c16128c
+  checksum: bab033b5e2b0790dd35b77fd005df976ef80b8d84fd2c6e63cc31808151875beae9216e5a315fe7068e8499905c3c354248fe83272cdfc13b7705635f0c66c97
   languageName: node
   linkType: hard
 
 "typescript@patch:typescript@^4.3.2#~builtin<compat/typescript>":
-  version: 4.3.4
-  resolution: "typescript@patch:typescript@npm%3A4.3.4#~builtin<compat/typescript>::version=4.3.4&hash=d8b4e7"
+  version: 4.3.5
+  resolution: "typescript@patch:typescript@npm%3A4.3.5#~builtin<compat/typescript>::version=4.3.5&hash=d8b4e7"
   bin:
     tsc: bin/tsc
     tsserver: bin/tsserver
-  checksum: a6b1a3674b60971691b89fa8187a4905e132cb8061724b4bd485e5d5441caa61166fe3bcf2b47aa679a6d860cae823022ca51db713cc3446296274c005dd02e5
+  checksum: bc2c4fdf0f1557fdafe4ef74848c72ebd9c8c60829568248f869121aea2bb20e16649a252431d0acb185ec118143be22bed73d08f64379557810d82756afedde
   languageName: node
   linkType: hard
 
@@ -10550,9 +10550,9 @@ typescript@^4.3.2:
   linkType: hard
 
 "xstate@npm:^4.20.0":
-  version: 4.20.1
-  resolution: "xstate@npm:4.20.1"
-  checksum: 08e3ed59b6fc1a7e90cb398bcdb8844eafe51a493bea077b7db3aecf71efaf5fdbc0816e0b2fed32c38ff334872885216f2118b4e36d08c3afd9deb56f9d60a0
+  version: 4.20.2
+  resolution: "xstate@npm:4.20.2"
+  checksum: f69af812a9623614d3f306b2d729907e4be57b9dba09acd2c466f0c347a1f489beeb3969220e9857f2500036c271a6a008788d352e45c8fe3887c46549ad8d44
   languageName: node
   linkType: hard
 
@@ -10664,7 +10664,7 @@ typescript@^4.3.2:
   languageName: node
   linkType: hard
 
-"zwave-js@workspace:packages/zwave-js":
+"zwave-js@7.10.1, zwave-js@workspace:packages/zwave-js":
   version: 0.0.0-use.local
   resolution: "zwave-js@workspace:packages/zwave-js"
   dependencies:
@@ -10680,12 +10680,12 @@ typescript@^4.3.2:
     "@types/serialport": ^8.0.1
     "@types/source-map-support": ^0
     "@xstate/test": ^0.4.2
-    "@zwave-js/config": "workspace:packages/config"
-    "@zwave-js/core": "workspace:packages/core"
-    "@zwave-js/maintenance": "workspace:packages/maintenance"
-    "@zwave-js/serial": "workspace:packages/serial"
-    "@zwave-js/shared": "workspace:packages/shared"
-    "@zwave-js/testing": "workspace:packages/testing"
+    "@zwave-js/config": 7.10.1
+    "@zwave-js/core": 7.10.1
+    "@zwave-js/maintenance": 7.10.1
+    "@zwave-js/serial": 7.10.1
+    "@zwave-js/shared": 7.10.1
+    "@zwave-js/testing": 7.10.1
     alcalzone-shared: ^3.0.4
     ansi-colors: ^4.1.1
     axios: ^0.21.1

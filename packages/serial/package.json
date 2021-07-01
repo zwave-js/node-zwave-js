@@ -37,8 +37,8 @@
   },
   "dependencies": {
     "@sentry/node": "^6.5.1",
-    "@zwave-js/core": "workspace:packages/core",
-    "@zwave-js/shared": "workspace:packages/shared",
+    "@zwave-js/core": "7.10.1",
+    "@zwave-js/shared": "7.10.1",
     "alcalzone-shared": "^3.0.4",
     "serialport": "^9.1.0",
     "winston": "^3.3.3"
@@ -48,7 +48,7 @@
     "@types/jest": "^26.0.23",
     "@types/node": "^15.12.5",
     "@types/serialport": "^8.0.1",
-    "@zwave-js/testing": "workspace:packages/testing",
+    "@zwave-js/testing": "7.10.1",
     "ansi-colors": "^4.1.1",
     "esbuild-register": "^2.6.0",
     "jest-extended": "^0.11.5",
