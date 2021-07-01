@@ -1,0 +1,113 @@
+{
+	"manufacturer": "McoHome Technology Co., Ltd.",
+	"manufacturerId": "0x015f",
+	"label": "A8-9",
+	"description": "9 in 1 MULTI-SENSOR",
+	"devices": [
+		{
+			"productType": "0xa803",
+			"productId": "0x135a",
+			"zwaveAllianceId": 3995
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"associations": {
+		"1": {
+			"label": "Lifeline",
+			"maxNodes": 1,
+			"isLifeline": true
+		}
+	},
+	"paramInformation": {
+		"1": {
+			"label": "Parameter 1",
+			"description": "Value=0 indicates turn off report , value>=1 indicates to report current pm2.5 value when change > n * 1ug/m3",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 127,
+			"defaultValue": 0,
+			"unsigned": true
+		},
+		"2": {
+			"label": "Parameter 2",
+			"description": "Value=0 indicates turn off report , value>=1 indicates to report current co2 value when change > n * 5ppm",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 127,
+			"defaultValue": 0,
+			"unsigned": true
+		},
+		"3": {
+			"label": "Parameter 3",
+			"description": "Value=0 indicates turn off report , value>=1 indicates to report current temperature value when change > n * 0.5℃",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 127,
+			"defaultValue": 0,
+			"unsigned": true
+		},
+		"4": {
+			"label": "Parameter 4",
+			"description": "Value=0 indicates turn off report , value>=1 indicates to report current humidity value when change >n%",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 127,
+			"defaultValue": 0,
+			"unsigned": true
+		},
+		"5": {
+			"label": "Parameter 5",
+			"description": "Value=0 indicates turn off report , value>=1-127*5ppb report change",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 127,
+			"defaultValue": 0,
+			"unsigned": true
+		},
+		"6": {
+			"label": "Parameter 6",
+			"description": "Value=0 indicates turn off report , value>=1 indicates to report current illumination value when change >n*1 lux",
+			"valueSize": 2,
+			"minValue": 0,
+			"maxValue": 32767,
+			"defaultValue": 0,
+			"unsigned": true
+		},
+		"7": {
+			"label": "Parameter 7",
+			"description": "Value=0 indicates turn off report , value>=1 indicates to report current noise value when change >n*1 db",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 127,
+			"defaultValue": 0,
+			"unsigned": true
+		},
+		"8": {
+			"label": "Parameter 8",
+			"description": "Value=0 indicates turn off report , value=1 indicates report change",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 0,
+			"unsigned": true
+		},
+		"9": {
+			"label": "Parameter 9",
+			"description": "Value=0 indicates turn off report , value=1 indicates report change",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 1,
+			"unsigned": true
+		}
+	},
+	"metadata": {
+		"inclusion": "Activate Add mode in the gateway. When device is powered on, hold F1 to choose interface for Add Z-Wave network. Click F2 five times until double curved arrow icon turns blue.  Hold F2 and the device enters into learning mode, then Wifi icon turns blue and the device is added into Z-Wave network",
+		"exclusion": "Activate Remove mode in the gateway. When device is powered on, hold F1 to choose interface for Remove Z-Wave network. Click F2 five times until double curved arrow icon turns blue. Hold F2 and the device enters into learning mode, then Wifi icon turns blue and the device is removed from Z-Wave network",
+		"reset": "1, Press & hold F1 to enter Z-Wave setting interface, then press & hold F1 again to enter parameters setting interface;\n2, Press & hold F2 to enter setting interface and select “default”;\n3, Click F2 3 times and displays “OFF”-->“ON”-->“OK”-->“OFF”, factory setting is restored.\nPlease use this procedure only when the network primary controller is missing or otherwise inoperable.",
+		"manual": "https://products.z-wavealliance.org/ProductManual/File?folder=&filename=product_documents/3995/A8-9_5.pdf"
+	}
+}
