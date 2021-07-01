@@ -23,85 +23,323 @@
 	},
 	"paramInformation": {
 		"1": {
-			"label": "Parameter 1",
-			"description": "Value=0 indicates turn off report , value>=1 indicates to report current pm2.5 value when change > n * 1ug/m3",
+			"label": "PM2.5 Report: Change Threshold",
+			"unit": "µg/m³",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 127,
 			"defaultValue": 0,
-			"unsigned": true
+			"unsigned": true,
+			"options": [
+				{
+					"label": "Disable",
+					"value": 0
+				}
+			]
 		},
 		"2": {
-			"label": "Parameter 2",
-			"description": "Value=0 indicates turn off report , value>=1 indicates to report current co2 value when change > n * 5ppm",
+			"label": "CO2 Report: Change Threshold",
+			"unit": "5 ppm",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 127,
 			"defaultValue": 0,
-			"unsigned": true
+			"unsigned": true,
+			"options": [
+				{
+					"label": "Disable",
+					"value": 0
+				}
+			]
 		},
 		"3": {
-			"label": "Parameter 3",
-			"description": "Value=0 indicates turn off report , value>=1 indicates to report current temperature value when change > n * 0.5℃",
+			"label": "Temperature Report: Change Threshold",
+			"unit": "0.5 °C",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 127,
 			"defaultValue": 0,
-			"unsigned": true
+			"unsigned": true,
+			"options": [
+				{
+					"label": "Disable",
+					"value": 0
+				}
+			]
 		},
 		"4": {
-			"label": "Parameter 4",
-			"description": "Value=0 indicates turn off report , value>=1 indicates to report current humidity value when change >n%",
+			"label": "Humidity Report: Change Threshold",
+			"unit": "%rF",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 127,
 			"defaultValue": 0,
-			"unsigned": true
+			"unsigned": true,
+			"options": [
+				{
+					"label": "Disable",
+					"value": 0
+				}
+			]
 		},
 		"5": {
-			"label": "Parameter 5",
-			"description": "Value=0 indicates turn off report , value>=1-127*5ppb report change",
+			"label": "VOC Report: Change Threshold",
+			"unit": "5 ppb",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 127,
 			"defaultValue": 0,
-			"unsigned": true
+			"unsigned": true,
+			"options": [
+				{
+					"label": "Disable",
+					"value": 0
+				}
+			]
 		},
 		"6": {
-			"label": "Parameter 6",
-			"description": "Value=0 indicates turn off report , value>=1 indicates to report current illumination value when change >n*1 lux",
+			"label": "Brightness Report: Change Threshold",
+			"unit": "lux",
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 32767,
 			"defaultValue": 0,
-			"unsigned": true
+			"unsigned": true,
+			"options": [
+				{
+					"label": "Disable",
+					"value": 0
+				}
+			]
 		},
 		"7": {
-			"label": "Parameter 7",
-			"description": "Value=0 indicates turn off report , value>=1 indicates to report current noise value when change >n*1 db",
+			"label": "dB Report: Change Threshold",
+			"unit": "dB",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 127,
 			"defaultValue": 0,
-			"unsigned": true
+			"unsigned": true,
+			"options": [
+				{
+					"label": "Disable",
+					"value": 0
+				}
+			]
 		},
 		"8": {
-			"label": "Parameter 8",
-			"description": "Value=0 indicates turn off report , value=1 indicates report change",
+			"label": "PIR Sensor: Report Changes",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 0,
+			"unsigned": true,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Disable",
+					"value": 0
+				},
+				{
+					"label": "Enable",
+					"value": 1
+				}
+			]
+		},
+		"9": {
+			"label": "Smoke Sensor: Report Changes",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 1,
+			"unsigned": true,
+			"options": [
+				{
+					"label": "Disable",
+					"value": 0
+				},
+				{
+					"label": "Enable",
+					"value": 1
+				}
+			]
+		},
+		"10": {
+			"label": "Smoke_timer",
+			"description": "amp;gt;=35 report every n*1s interval",
+			"valueSize": 2,
+			"minValue": 0,
+			"maxValue": 60,
+			"defaultValue": 60,
+			"unsigned": true
+		},
+		"11": {
+			"label": "Pir_timer",
+			"description": "amp;gt;=35 report every n*1s interval",
+			"valueSize": 2,
+			"minValue": 0,
+			"maxValue": 60,
+			"defaultValue": 60,
+			"unsigned": true
+		},
+		"12": {
+			"label": "Pm25_timer",
+			"description": "amp;gt;=35report every n*1s interval",
+			"valueSize": 2,
+			"minValue": 0,
+			"maxValue": 120,
+			"defaultValue": 120,
+			"unsigned": true
+		},
+		"13": {
+			"label": "Co2_timer",
+			"description": "amp;gt;=35 report every n*1s interval",
+			"valueSize": 2,
+			"minValue": 0,
+			"maxValue": 120,
+			"defaultValue": 120,
+			"unsigned": true
+		},
+		"14": {
+			"label": "Temp_timer",
+			"description": "amp;gt;=35 report every n*1s interval",
+			"valueSize": 2,
+			"minValue": 0,
+			"maxValue": 180,
+			"defaultValue": 180,
+			"unsigned": true
+		},
+		"15": {
+			"label": "Humidity_timer",
+			"description": "gt;=35 report every n*1s interval",
+			"valueSize": 2,
+			"minValue": 0,
+			"maxValue": 180,
+			"defaultValue": 180,
+			"unsigned": true
+		},
+		"16": {
+			"label": "Voc_timer",
+			"description": "gt;=35 report every n*1s interval",
+			"valueSize": 2,
+			"minValue": 0,
+			"maxValue": 180,
+			"defaultValue": 180,
+			"unsigned": true
+		},
+		"17": {
+			"label": "Lux_timer",
+			"description": "gt;=35 report every n*1s interval",
+			"valueSize": 2,
+			"minValue": 0,
+			"maxValue": 300,
+			"defaultValue": 300,
+			"unsigned": true
+		},
+		"18": {
+			"label": "Db_timer",
+			"description": "gt;=35 report every n*1s interval",
+			"valueSize": 2,
+			"minValue": 0,
+			"maxValue": 300,
+			"defaultValue": 300,
+			"unsigned": true
+		},
+		"47": {
+			"label": "Temp. Unit",
+			"description": "=0 ℃ =1 ℉",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 1,
 			"defaultValue": 0,
 			"unsigned": true
 		},
-		"9": {
-			"label": "Parameter 9",
-			"description": "Value=0 indicates turn off report , value=1 indicates report change",
+		"50": {
+			"label": "T_offset",
+			"description": "0 ~ 127: ((n-100)/10)=(-10~2.7)℃ -128 ~ -1: ((156+n)/10)=(2.8~15.5)℃",
 			"valueSize": 1,
 			"minValue": 0,
-			"maxValue": 1,
-			"defaultValue": 1,
+			"maxValue": 100,
+			"defaultValue": 100,
 			"unsigned": true
+		},
+		"51": {
+			"label": "Rh_offset",
+			"description": "N-20=(-20~20)%",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 20,
+			"defaultValue": 20,
+			"unsigned": true
+		},
+		"52": {
+			"label": "Co2_offset",
+			"description": "(n-500)=(-500~500)ppm",
+			"valueSize": 2,
+			"minValue": 0,
+			"maxValue": 500,
+			"defaultValue": 500,
+			"unsigned": true
+		},
+		"53": {
+			"label": "Pm2.5_offset",
+			"description": "0 ~ 127: n-100=(-100~27)ug/m3 -128 ~ -1: 156+n=(28~155)ug/m3",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 100,
+			"defaultValue": 100,
+			"unsigned": true
+		},
+		"54": {
+			"label": "Lux_offset",
+			"description": "N-5000=(-5000~5000)lux",
+			"valueSize": 2,
+			"minValue": 0,
+			"maxValue": 5000,
+			"defaultValue": 5000,
+			"unsigned": true
+		},
+		"55": {
+			"label": "Voc_correct",
+			"description": "0 ~ 127: n-100=(-100~27)ppb -128 ~ -1: 156+n=(28~155)ppb",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 100,
+			"defaultValue": 100,
+			"unsigned": true
+		},
+		"56": {
+			"label": "Db_correct",
+			"description": "(n-50)=-50~50",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 50,
+			"defaultValue": 50,
+			"unsigned": true
+		},
+		"255": {
+			"label": "Reset to Factory Default Setting",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 170,
+			"defaultValue": 0,
+			"unsigned": true,
+			"writeOnly": true,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Normal operation",
+					"value": 0
+				},
+				{
+					"label": "Completely factory reset sensor",
+					"value": 85
+				},
+				{
+					"label": "Reset all configuration parameters to default settings",
+					"value": 170
+				}
+			]
 		}
 	},
 	"metadata": {
