@@ -2940,10 +2940,12 @@
   resolved "https://registry.yarnpkg.com/@types/minimist/-/minimist-1.2.1.tgz#283f669ff76d7b8260df8ab7a4262cc83d988256"
   integrity sha512-fZQQafSREFyuZcdWFAExYjBiCL7AUCdgsk80iO0q4yihYYdcIiH28CcuPTGFgLOCC8RlW49GSQxdHwZP+I7CNg==
 
-"@types/mockdate@^2.0.0":
-  version "2.0.0"
-  resolved "https://registry.yarnpkg.com/@types/mockdate/-/mockdate-2.0.0.tgz#aaf388a1ead3b0f5ed6dc1611956ea7b40a57d3c"
-  integrity sha1-qvOIoerTsPXtbcFhGVbqe0ClfTw=
+"@types/mockdate@^3.0.0":
+  version "3.0.0"
+  resolved "https://registry.yarnpkg.com/@types/mockdate/-/mockdate-3.0.0.tgz#ed140c46c4542964621e553d181faf62cadc973a"
+  integrity sha512-p2mDrXSBlcpz1JFRTzeF12g4yGpHgh8HKoOWUw6gE/+W/s+oXPfip/n1Z+qLyE7wU1NSWCslexEEd1FAlNCWPQ==
+  dependencies:
+    mockdate "*"
 
 "@types/node@*", "@types/node@>= 8":
   version "14.14.20"
@@ -7615,7 +7617,7 @@ mock-require@^3.0.2:
     get-caller-file "^1.0.2"
     normalize-path "^2.1.1"
 
-mockdate@^3.0.5:
+mockdate@*, mockdate@^3.0.5:
   version "3.0.5"
   resolved "https://registry.yarnpkg.com/mockdate/-/mockdate-3.0.5.tgz#789be686deb3149e7df2b663d2bc4392bc3284fb"
   integrity sha512-iniQP4rj1FhBdBYS/+eQv7j1tadJ9lJtdzgOpvsOHng/GbcDh2Fhdeq+ZRldrPYdXvCyfFUmFeEwEGXZB5I/AQ==

@@ -43,7 +43,7 @@
     "@types/jest": "^26.0.23",
     "@types/js-levenshtein": "^1.1.0",
     "@types/json-logic-js": "^1.2.1",
-    "@types/mockdate": "^2.0.0",
+    "@types/mockdate": "^3.0.0",
     "@types/node": "^15.12.2",
     "@types/pegjs": "^0.10.2",
     "@types/prettier": "^2.2.3",
