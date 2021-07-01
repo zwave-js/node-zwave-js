@@ -37,12 +37,23 @@
     "alcalzone-shared": "^3.0.4",
     "ansi-colors": "^4.1.1",
     "dayjs": "^1.10.5",
+    "logform": "*",
     "nrf-intel-hex": "^1.3.0",
-    "winston": "^3.3.3"
+    "triple-beam": "*",
+    "winston": "^3.3.3",
+    "winston-transport": "*"
   },
   "scripts": {
     "build": "tsc -b tsconfig.build.json",
-    "clean": "yarn run build -- --clean",
-    "watch": "yarn run build -- --watch --pretty"
+    "clean": "yarn run build --clean",
+    "watch": "yarn run build --watch --pretty"
+  },
+  "devDependencies": {
+    "@types/jest": "^26.0.23",
+    "@types/node": "^15.12.5",
+    "@types/triple-beam": "^1.3.2",
+    "esbuild-register": "^2.6.0",
+    "jest-extended": "^0.11.5",
+    "typescript": "^4.3.2"
   }
 }

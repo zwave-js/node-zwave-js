@@ -1,13 +1,15 @@
 node_modules/
 /packages/*/package-lock.json
 
-# Yarn config and stuff
+# Yarn config and stuff - we're not using Zero-Installs
+# because that would blow up the repo size even more
 .yarn/*
-!.yarn/cache
+!.yarn/patches
 !.yarn/releases
 !.yarn/plugins
 !.yarn/sdks
 !.yarn/versions
+.pnp.*
 
 # compiled test-files
 *.test.js
@@ -18,7 +20,7 @@ coverage/
 zwave-js-*.tgz
 
 # ZWave cache
-**/cache
+packages/*/cache
 
 # Temporary (import) config files
 .tmp

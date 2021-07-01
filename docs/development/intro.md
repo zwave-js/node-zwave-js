@@ -13,7 +13,7 @@ _Alright, here's a short introduction if you're new to this stuff. If you know t
 `yarn` can also run package scripts for you, which we use extensively, e.g. `yarn run build` to compile TypeScript into JavaScript. You'll find most of the scripts in `package.json` under `"scripts"`.
 
 [`lerna`](https://github.com/lerna/lerna) is a tool to manage monorepos (multiple dependent packages in a single repo) that works hand in hand with `yarn`. Since it allows running package scripts of sub-packages, we use it for some of our workflows.  
-To use `lerna`, you need to install it globally with `npm i -g lerna`. If you prefer not to, you can alternatively just prefix the commands with `npx`, e.g. `npx lerna run <scriptname>`.
+To use `lerna`, you need to install it globally with `npm i -g lerna`. If you prefer not to, you can alternatively just prefix the commands with `yarn`, e.g. `yarn lerna run <scriptname>`.
 
 ## Prerequisites
 

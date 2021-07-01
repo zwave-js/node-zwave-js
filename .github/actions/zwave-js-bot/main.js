@@ -51,14 +51,14 @@ async function publishPr() {
 
 		// Bump versions
 		await exec.exec(
-			"npx",
+			"yarn",
 			`lerna version ${newVersion} --exact --allow-branch * --ignore-scripts --no-commit-hooks --yes`.split(
 				" ",
 			),
 		);
 
 		// and release
-		await exec.exec("npx", [
+		await exec.exec("yarn", [
 			"lerna",
 			"publish",
 			"from-package",

@@ -1,5 +1,5 @@
 {
-	"typescript.tsdk": "node_modules/typescript/lib",
+	"typescript.tsdk": ".yarn/sdks/typescript/lib",
 	"typescript.enablePromptUseWorkspaceTsdk": true,
 	"jest.showCoverageOnLoad": false,
 	"jest.enableCodeLens": true,
@@ -87,7 +87,24 @@
 		"node_modules/zwave-js/index.js": true,
 		"**/cache": true,
 		"packages/zwave-js/**/fingerprint.txt": true,
-		"node_modules/zwave-js/**/fingerprint.txt": true
+		"node_modules/zwave-js/**/fingerprint.txt": true,
+		".husky/**/_": true,
+		"packages/*/package-lock.json": true,
+		".yarn/*": true,
+		".yarn/patches": false,
+		".yarn/releases": false,
+		".yarn/plugins": false,
+		".yarn/sdks": false,
+		".yarn/versions": false,
+		"**/.pnp.*": true,
+		"packages/*/cache": true,
+		"**/.tmp": true,
+		"**/.tmpoh/": true,
+		"**/.tmpozw/": true,
+		"**/.tmpzwa/": true,
+		"**/.secrets": true,
+		"**/.test-payloads": true,
+		"packages/config/config/devices/index.json": true
 	},
 	"files.associations": {
 		"**/config/**/*.json": "jsonc"
@@ -110,5 +127,11 @@
 		}
 	],
 	"debug.javascript.unmapMissingSources": true,
-	"jest.jestCommandLine": "npx jest"
+	"jest.jestCommandLine": "yarn jest",
+	"search.exclude": {
+		"**/.yarn": true,
+		"**/.pnp.*": true
+	},
+	"eslint.nodePath": ".yarn/sdks",
+	"prettier.prettierPath": ".yarn/sdks/prettier/index.js"
 }

@@ -32,7 +32,7 @@
 		"strictFunctionTypes": true,
 		"watch": false, // true breaks CI scripts
 		"pretty": true,
-		"types": ["node", "jest-extended"],
+		"types": ["node", "jest", "jest-extended"],
 		"noErrorTruncation": true
 	},
 	"include": [
