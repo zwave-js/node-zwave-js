@@ -59,6 +59,9 @@ export interface ZWaveOptions {
 	 */
 	skipInterview?: boolean;
 
+	/** Allows you to skip user code interview */
+	skipUserCodeInterview?: boolean;
+
 	storage: {
 		/** Allows you to replace the default file system driver used to store and read the cache */
 		driver: FileSystem;

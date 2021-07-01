@@ -756,7 +756,9 @@ export class UserCodeCC extends CommandClass {
 		}
 
 		// Synchronize user codes and settings
-		await this.refreshValues();
+		if (!this.driver.options.skipUserCodeInterview) {
+			await this.refreshValues();
+		}
 
 		// Remember that the interview is complete
 		this.interviewComplete = true;
