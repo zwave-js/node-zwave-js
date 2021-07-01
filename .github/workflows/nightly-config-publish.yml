@@ -56,15 +56,15 @@ jobs:
         yarn install --immutable
 
         # ===============================
-        # Double-check changes
+        # Double-check changes with lerna
         # ===============================
 
         # Verify that only @zwave-js/config and zwave-js are changed
-        WORKSPACE_CHANGED=$(yarn version check | grep "has been modified" | cut -d" " -f3 | sed -E "s/@workspace.+//")
-        if [[ $(echo -e "@zwave-js/config\nzwave-js") != "$WORKSPACE_CHANGED" ]]; then
-          echo "❌ Detected unexpected package changes, aborting..."
+        LERNA_CHANGED=$(yarn lerna changed)
+        if [[ $(echo -e "@zwave-js/config\nzwave-js") != "$LERNA_CHANGED" ]]; then
+          echo "❌ Lerna detected unexpected package changes, aborting..."
           echo "These packages are changed:"
-          echo "$WORKSPACE_CHANGED"
+          echo "$LERNA_CHANGED"
           exit 0
         fi
 
@@ -73,7 +73,7 @@ jobs:
         # ===============================
 
         # Create a clean build
-        yarn run-deps build
+        yarn lerna run build
 
         # Lint config files
         yarn run lint:config
@@ -81,6 +81,10 @@ jobs:
         # ===============================
         # Bump the version and publish
         # ===============================
+
+        cd packages/config
+        npm config set //registry.npmjs.org/:_authToken=${{ secrets.NPM_TOKEN }}
+        npm whoami
 
         # Figure out next version
         cat > ./script.js << 'EOF'
@@ -104,9 +108,5 @@ jobs:
 
         VERSION=$(node script.js)
         echo "Next version is $VERSION"
-        yarn workspace @zwave-js/config version "$VERSION"
-
-        yarn config set npmPublishRegistry 'https://registry.npmjs.org'
-        yarn config set 'npmRegistries["//registry.npmjs.org"].npmAuthToken' "${{ secrets.NPM_TOKEN }}"
-        yarn npm whoami
-        yarn workspace @zwave-js/config npm publish
+        npm version "$VERSION" --ignore-scripts --no-git-tag-version
+        npm publish

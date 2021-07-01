@@ -127,7 +127,7 @@
 		}
 	],
 	"debug.javascript.unmapMissingSources": true,
-	"jest.jestCommandLine": "npx jest",
+	"jest.jestCommandLine": "yarn jest",
 	"search.exclude": {
 		"**/.yarn": true,
 		"**/.pnp.*": true
