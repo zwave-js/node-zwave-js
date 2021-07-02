@@ -85,7 +85,7 @@
     "proper-lockfile": "^4.1.2",
     "reflect-metadata": "^0.1.13",
     "semver": "^7.3.5",
-    "serialport": "^9.1.0",
+    "serialport": "^9.2.0",
     "source-map-support": "^0.5.19",
     "winston": "^3.3.3",
     "xstate": "^4.20.0"

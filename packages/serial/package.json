@@ -40,7 +40,7 @@
     "@zwave-js/core": "7.10.1",
     "@zwave-js/shared": "7.10.1",
     "alcalzone-shared": "^3.0.4",
-    "serialport": "^9.1.0",
+    "serialport": "^9.2.0",
     "winston": "^3.3.3"
   },
   "devDependencies": {
