@@ -3515,12 +3515,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/xml2json@npm:^0.11.3":
-  version: 0.11.3
-  resolution: "@types/xml2json@npm:0.11.3"
+"@types/xml2json@npm:^0.11.4":
+  version: 0.11.4
+  resolution: "@types/xml2json@npm:0.11.4"
   dependencies:
     "@types/node": "*"
-  checksum: be8f000e799f357478f499ee7b75e95da8590a0c827e8e38c86d66178b678959de8d159876bc1d500d984b84f94eb156a90e62a2bf6bdcdef7613dca7d8de66b
+  checksum: 2db41f1171fa051538593a81392547710aaa2cdcd8cdb0cedb07c42fb79aad22793a47442b2978c5fafc709c0a4c0a55b369d122050fa491c176fcc8ac694e99
   languageName: node
   linkType: hard
 
@@ -3689,7 +3689,7 @@ __metadata:
     "@types/node": ^15.12.5
     "@types/pegjs": ^0.10.2
     "@types/semver": ^7.3.6
-    "@types/xml2json": ^0.11.3
+    "@types/xml2json": ^0.11.4
     "@types/yargs": ^16.0.3
     "@zwave-js/core": 7.10.1
     "@zwave-js/maintenance": 7.10.1
