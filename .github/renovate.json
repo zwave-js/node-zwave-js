@@ -8,7 +8,8 @@
 	"assignees": ["AlCalzone"],
 	"dependencyDashboard": true,
 	"major": {
-		"dependencyDashboardApproval": true
+		"dependencyDashboardApproval": true,
+		"prPriority": -1
 	},
 	"packageRules": [
 		{
