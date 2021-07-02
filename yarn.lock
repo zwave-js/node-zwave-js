@@ -3707,7 +3707,7 @@ __metadata:
     pegjs: ^0.10.0
     semver: ^7.3.2
     ts-pegjs: ^0.3.1
-    typescript: ^4.3.2
+    typescript: ^4.3.5
     winston: ^3.3.3
     xml2json: ^0.12.0
     yargs: ^16.2.0
@@ -3732,7 +3732,7 @@ __metadata:
     logform: "*"
     nrf-intel-hex: ^1.3.0
     triple-beam: "*"
-    typescript: ^4.3.2
+    typescript: ^4.3.5
     winston: ^3.3.3
     winston-transport: "*"
   languageName: unknown
@@ -3768,7 +3768,7 @@ __metadata:
     prettier: ^2.3.2
     reflect-metadata: ^0.1.13
     ts-morph: ^11.0.0
-    typescript: ^4.3.2
+    typescript: ^4.3.5
     yargs: ^16.2.0
   languageName: unknown
   linkType: soft
@@ -3816,7 +3816,7 @@ __metadata:
     prettier-plugin-organize-imports: ^2.2.0
     reflect-metadata: ^0.1.13
     ts-node: ^10.0.0
-    typescript: ^4.3.2
+    typescript: ^4.3.5
     zwave-js: 7.10.1
   languageName: unknown
   linkType: soft
@@ -3838,7 +3838,7 @@ __metadata:
     esbuild-register: ^2.6.0
     jest-extended: ^0.11.5
     serialport: ^9.1.0
-    typescript: ^4.3.2
+    typescript: ^4.3.5
     winston: ^3.3.3
   languageName: unknown
   linkType: soft
@@ -3854,7 +3854,7 @@ __metadata:
     esbuild-register: ^2.6.0
     fs-extra: ^9.0.1
     jest-extended: ^0.11.5
-    typescript: ^4.3.2
+    typescript: ^4.3.5
   languageName: unknown
   linkType: soft
 
@@ -3870,7 +3870,7 @@ __metadata:
     esbuild-register: ^2.6.0
     jest-extended: ^0.11.5
     triple-beam: "*"
-    typescript: ^4.3.2
+    typescript: ^4.3.5
     winston-transport: "*"
   languageName: unknown
   linkType: soft
@@ -12848,7 +12848,7 @@ fsevents@^2.1.2:
   languageName: node
   linkType: hard
 
-typescript@^4.3.2:
+typescript@^4.3.5:
   version: 4.3.5
   resolution: "typescript@npm:4.3.5"
   bin:
@@ -12858,7 +12858,7 @@ typescript@^4.3.2:
   languageName: node
   linkType: hard
 
-"typescript@patch:typescript@^4.3.2#~builtin<compat/typescript>":
+"typescript@patch:typescript@^4.3.5#~builtin<compat/typescript>":
   version: 4.3.5
   resolution: "typescript@patch:typescript@npm%3A4.3.5#~builtin<compat/typescript>::version=4.3.5&hash=d8b4e7"
   bin:
@@ -13580,7 +13580,7 @@ typescript@^4.3.2:
     semver: ^7.3.2
     serialport: ^9.1.0
     source-map-support: ^0.5.19
-    typescript: ^4.3.2
+    typescript: ^4.3.5
     winston: ^3.3.3
     xstate: ^4.20.0
   languageName: unknown
