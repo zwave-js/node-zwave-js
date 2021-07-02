@@ -7,7 +7,7 @@ import {
 	ZWaveErrorCodes,
 } from "@zwave-js/core";
 import { num2hex } from "@zwave-js/shared";
-import type { CCAPI, CCAPIs } from "../commandclass/API";
+import type { APIMethodsOf, CCAPI, CCAPIs } from "../commandclass/API";
 import {
 	CommandClass,
 	Constructable,
@@ -416,6 +416,31 @@ export class Endpoint {
 	 */
 	public get commandClasses(): CCAPIs {
 		return this._commandClassAPIsProxy as unknown as CCAPIs;
+	}
+
+	/** Allows checking whether a CC API is supported before calling it with {@link Endpoint.invokeCCAPI} */
+	public supportsCCAPI(cc: CommandClasses): boolean {
+		return ((this.commandClasses as any)[cc] as CCAPI).isSupported();
+	}
+
+	/**
+	 * Allows dynamically calling any CC API method on this endpoint by CC ID and method name.
+	 * Use {@link Endpoint.supportsCCAPI} to check support first.
+	 */
+	public invokeCCAPI<
+		CC extends CommandClasses,
+		TMethod extends keyof TAPI,
+		TAPI extends Record<
+			string,
+			(...args: any[]) => any
+		> = CommandClasses extends CC ? any : APIMethodsOf<CC>,
+	>(
+		cc: CC,
+		method: TMethod,
+		...args: Parameters<TAPI[TMethod]>
+	): ReturnType<TAPI[TMethod]> {
+		const CCAPI = (this.commandClasses as any)[cc];
+		return CCAPI[method](...args);
 	}
 
 	/**
