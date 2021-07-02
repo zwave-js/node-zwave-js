@@ -3837,7 +3837,7 @@ __metadata:
     ansi-colors: ^4.1.1
     esbuild-register: ^2.6.0
     jest-extended: ^0.11.5
-    serialport: ^9.1.0
+    serialport: ^9.2.0
     typescript: ^4.3.5
     winston: ^3.3.3
   languageName: unknown
@@ -11655,7 +11655,7 @@ fsevents@^2.1.2:
   languageName: node
   linkType: hard
 
-"serialport@npm:^9.1.0":
+"serialport@npm:^9.2.0":
   version: 9.2.0
   resolution: "serialport@npm:9.2.0"
   dependencies:
@@ -13578,7 +13578,7 @@ typescript@^4.3.5:
     proper-lockfile: ^4.1.2
     reflect-metadata: ^0.1.13
     semver: ^7.3.5
-    serialport: ^9.1.0
+    serialport: ^9.2.0
     source-map-support: ^0.5.19
     typescript: ^4.3.5
     winston: ^3.3.3
