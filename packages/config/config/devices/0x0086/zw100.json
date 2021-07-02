@@ -393,7 +393,8 @@
 		},
 		"64": {
 			"$import": "templates/aeotec_template.json#celsius_fahrenheit",
-			"label": "Automatic Temperature Reporting Unit"
+			"label": "Automatic Temperature Reporting Unit",
+			"valueSize": 1
 		},
 		"100": {
 			"$import": "templates/aeotec_template.json#reset_parameters",
