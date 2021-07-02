@@ -1,0 +1,20 @@
+{
+	"extends": ["config:base", "schedule:monthly"],
+	"baseBranches": ["next"],
+	"timezone": "Europe/Berlin",
+	"rangeStrategy": "replace",
+	"prConcurrentLimit": 7,
+	"assignees": ["AlCalzone"],
+	"packageRules": [
+		{
+			"matchDepTypes": ["devDependencies"],
+			"matchUpdateTypes": ["minor", "patch"],
+			"automerge": false
+		},
+		{
+			"matchDepTypes": ["dependencies"],
+			"matchUpdateTypes": ["patch"],
+			"automerge": false
+		}
+	]
+}
