@@ -3549,12 +3549,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/yargs@npm:^16.0.3":
-  version: 16.0.3
-  resolution: "@types/yargs@npm:16.0.3"
+"@types/yargs@npm:^16.0.4":
+  version: 16.0.4
+  resolution: "@types/yargs@npm:16.0.4"
   dependencies:
     "@types/yargs-parser": "*"
-  checksum: 0968b06d2f6df764cb180a4089b293ae313a310b0c3524c296f93ac896ca1ed8d857b595db0388355f9f45772226d25d6a4f7df359302f245040a63ba057ae5a
+  checksum: caa21d2c957592fe2184a8368c8cbe5a82a6c2e2f2893722e489f842dc5963293d2f3120bc06fe3933d60a3a0d1e2eb269649fd6b1947fe1820f8841ba611dd9
   languageName: node
   linkType: hard
 
@@ -3690,7 +3690,7 @@ __metadata:
     "@types/pegjs": ^0.10.2
     "@types/semver": ^7.3.6
     "@types/xml2json": ^0.11.4
-    "@types/yargs": ^16.0.3
+    "@types/yargs": ^16.0.4
     "@zwave-js/core": 7.10.1
     "@zwave-js/maintenance": 7.10.1
     "@zwave-js/shared": 7.10.1
@@ -3756,7 +3756,7 @@ __metadata:
     "@types/jest": ^26.0.23
     "@types/node": ^15.12.5
     "@types/prettier": ^2
-    "@types/yargs": ^16.0.3
+    "@types/yargs": ^16.0.4
     "@zwave-js/core": 7.10.1
     "@zwave-js/shared": 7.10.1
     ansi-colors: ^4.1.1
