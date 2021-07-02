@@ -1,0 +1,25 @@
+{
+	"extends": ["config:base"],
+	"baseBranches": ["next"],
+	"timezone": "Europe/Berlin",
+	"rangeStrategy": "replace",
+	"prConcurrentLimit": 7,
+	"prHourlyLimit": 0,
+	"assignees": ["AlCalzone"],
+	"dependencyDashboard": true,
+	"major": {
+		"dependencyDashboardApproval": true
+	},
+	"packageRules": [
+		{
+			"matchDepTypes": ["devDependencies"],
+			"matchUpdateTypes": ["minor", "patch"],
+			"automerge": false
+		},
+		{
+			"matchDepTypes": ["dependencies"],
+			"matchUpdateTypes": ["patch"],
+			"automerge": false
+		}
+	]
+}
