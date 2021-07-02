@@ -4,6 +4,7 @@
 	"timezone": "Europe/Berlin",
 	"rangeStrategy": "replace",
 	"prConcurrentLimit": 7,
+	"prHourlyLimit": 0,
 	"assignees": ["AlCalzone"],
 	"packageRules": [
 		{
