@@ -59,8 +59,8 @@ export interface ZWaveOptions {
 	 */
 	skipInterview?: boolean;
 
-	/** Allows you to skip user code interview */
-	skipUserCodeInterview?: boolean;
+	/** Allows you to query all user code during the interview of the UserCode CC */
+	queryAllUserCodes?: boolean;
 
 	storage: {
 		/** Allows you to replace the default file system driver used to store and read the cache */

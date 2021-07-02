@@ -236,6 +236,48 @@ function validateCode(code: string, supportedChars: string): boolean {
 	return [...code].every((char) => supportedChars.includes(char));
 }
 
+function setUserCodeMetadata(this: UserCodeCC, userId: number) {
+	const valueDB = this.getValueDB();
+	const statusValueId = getUserIdStatusValueID(this.endpointIndex, userId);
+	const codeValueId = getUserCodeValueID(this.endpointIndex, userId);
+	const supportedUserIDStatuses =
+		valueDB.getValue<UserIDStatus[]>(
+			getSupportedUserIDStatusesValueID(this.endpointIndex),
+		) ??
+		(this.version === 1
+			? [
+					UserIDStatus.Available,
+					UserIDStatus.Enabled,
+					UserIDStatus.Disabled,
+			  ]
+			: [
+					UserIDStatus.Available,
+					UserIDStatus.Enabled,
+					UserIDStatus.Disabled,
+					UserIDStatus.Messaging,
+					UserIDStatus.PassageMode,
+			  ]);
+	if (!valueDB.hasMetadata(statusValueId)) {
+		valueDB.setMetadata(statusValueId, {
+			...ValueMetadata.Number,
+			label: `User ID status (${userId})`,
+			states: enumValuesToMetadataStates(
+				UserIDStatus,
+				supportedUserIDStatuses,
+			),
+		});
+	}
+	const codeMetadata: ValueMetadata = {
+		...ValueMetadata.String,
+		minLength: 4,
+		maxLength: 10,
+		label: `User Code (${userId})`,
+	};
+	if (valueDB.getMetadata(codeValueId)?.type !== codeMetadata.type) {
+		valueDB.setMetadata(codeValueId, codeMetadata);
+	}
+}
+
 function persistUserCode(
 	this: UserCodeCC,
 	userId: number,
@@ -271,29 +313,8 @@ function persistUserCode(
 		valueDB.setMetadata(statusValueId, undefined);
 		valueDB.setMetadata(codeValueId, undefined);
 	} else {
-		// Always create metadata if it does not exist
-		if (!valueDB.hasMetadata(statusValueId)) {
-			valueDB.setMetadata(statusValueId, {
-				...ValueMetadata.Number,
-				label: `User ID status (${userId})`,
-				states: enumValuesToMetadataStates(
-					UserIDStatus,
-					supportedUserIDStatuses,
-				),
-			});
-		}
-		const codeMetadata: ValueMetadata = {
-			...(typeof userCode === "string"
-				? ValueMetadata.String
-				: ValueMetadata.Buffer),
-			minLength: 4,
-			maxLength: 10,
-			label: `User Code (${userId})`,
-		};
-		if (valueDB.getMetadata(codeValueId)?.type !== codeMetadata.type) {
-			valueDB.setMetadata(codeValueId, codeMetadata);
-		}
-
+		// Always create metadata in case it does not exist
+		setUserCodeMetadata.call(this, userId);
 		valueDB.setValue(statusValueId, userIdStatus);
 		valueDB.setValue(codeValueId, userCode);
 	}
@@ -755,8 +776,14 @@ export class UserCodeCC extends CommandClass {
 			return;
 		}
 
+		let nextUserId = 1;
+		while (nextUserId > 0 && nextUserId <= supportedUsers) {
+			setUserCodeMetadata.call(this, nextUserId);
+			nextUserId += 1;
+		}
+
 		// Synchronize user codes and settings
-		if (!this.driver.options.skipUserCodeInterview) {
+		if (this.driver.options.queryAllUserCodes) {
 			await this.refreshValues();
 		}
 
