@@ -15,12 +15,12 @@
 		{
 			"matchDepTypes": ["devDependencies"],
 			"matchUpdateTypes": ["minor", "patch"],
-			"automerge": false
+			"automerge": true
 		},
 		{
 			"matchDepTypes": ["dependencies"],
 			"matchUpdateTypes": ["patch"],
-			"automerge": false
+			"automerge": true
 		}
 	]
 }
