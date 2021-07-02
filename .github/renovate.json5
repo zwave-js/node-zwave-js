@@ -6,6 +6,10 @@
 	prConcurrentLimit: 7,
 	prHourlyLimit: 0,
 	assignees: ["AlCalzone"],
+	dependencyDashboard: true,
+	major: {
+		dependencyDashboardApproval: true,
+	},
 	packageRules: [
 		{
 			matchDepTypes: ["devDependencies"],
