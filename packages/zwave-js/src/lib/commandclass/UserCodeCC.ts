@@ -236,7 +236,11 @@ function validateCode(code: string, supportedChars: string): boolean {
 	return [...code].every((char) => supportedChars.includes(char));
 }
 
-function setUserCodeMetadata(this: UserCodeCC, userId: number) {
+function setUserCodeMetadata(
+	this: UserCodeCC,
+	userId: number,
+	userCode?: string | Buffer,
+) {
 	const valueDB = this.getValueDB();
 	const statusValueId = getUserIdStatusValueID(this.endpointIndex, userId);
 	const codeValueId = getUserCodeValueID(this.endpointIndex, userId);
@@ -268,7 +272,9 @@ function setUserCodeMetadata(this: UserCodeCC, userId: number) {
 		});
 	}
 	const codeMetadata: ValueMetadata = {
-		...ValueMetadata.String,
+		...(typeof userCode === "object"
+			? ValueMetadata.Buffer
+			: ValueMetadata.String),
 		minLength: 4,
 		maxLength: 10,
 		label: `User Code (${userId})`,
@@ -287,23 +293,6 @@ function persistUserCode(
 	const statusValueId = getUserIdStatusValueID(this.endpointIndex, userId);
 	const codeValueId = getUserCodeValueID(this.endpointIndex, userId);
 	const valueDB = this.getValueDB();
-	const supportedUserIDStatuses =
-		valueDB.getValue<UserIDStatus[]>(
-			getSupportedUserIDStatusesValueID(this.endpointIndex),
-		) ??
-		(this.version === 1
-			? [
-					UserIDStatus.Available,
-					UserIDStatus.Enabled,
-					UserIDStatus.Disabled,
-			  ]
-			: [
-					UserIDStatus.Available,
-					UserIDStatus.Enabled,
-					UserIDStatus.Disabled,
-					UserIDStatus.Messaging,
-					UserIDStatus.PassageMode,
-			  ]);
 
 	// Check if this code is supported
 	if (userIdStatus === UserIDStatus.StatusNotAvailable) {
@@ -314,7 +303,7 @@ function persistUserCode(
 		valueDB.setMetadata(codeValueId, undefined);
 	} else {
 		// Always create metadata in case it does not exist
-		setUserCodeMetadata.call(this, userId);
+		setUserCodeMetadata.call(this, userId, userCode);
 		valueDB.setValue(statusValueId, userIdStatus);
 		valueDB.setValue(codeValueId, userCode);
 	}
@@ -776,14 +765,12 @@ export class UserCodeCC extends CommandClass {
 			return;
 		}
 
-		let nextUserId = 1;
-		while (nextUserId > 0 && nextUserId <= supportedUsers) {
-			setUserCodeMetadata.call(this, nextUserId);
-			nextUserId += 1;
+		for (let userId = 1; userId <= supportedUsers; userId++) {
+			setUserCodeMetadata.call(this, userId);
 		}
 
 		// Synchronize user codes and settings
-		if (this.driver.options.queryAllUserCodes) {
+		if (this.driver.options.interview?.queryAllUserCodes) {
 			await this.refreshValues();
 		}
 
