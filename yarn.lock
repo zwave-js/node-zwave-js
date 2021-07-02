@@ -3802,7 +3802,7 @@ __metadata:
     babel-jest: ^26.6.3
     commitizen: ^4.2.4
     coveralls: ^3.1.1
-    cz-conventional-changelog: ^3.2.0
+    cz-conventional-changelog: ^3.3.0
     esbuild-register: ^2.6.0
     eslint: ^7.29.0
     eslint-config-prettier: ^8.3.0
@@ -5450,7 +5450,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"cz-conventional-changelog@npm:^3.2.0":
+"cz-conventional-changelog@npm:^3.3.0":
   version: 3.3.0
   resolution: "cz-conventional-changelog@npm:3.3.0"
   dependencies:
