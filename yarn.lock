@@ -3804,7 +3804,7 @@ __metadata:
     coveralls: ^3.1.0
     cz-conventional-changelog: ^3.2.0
     esbuild-register: ^2.6.0
-    eslint: ^7.28.0
+    eslint: ^7.29.0
     eslint-config-prettier: ^8.3.0
     eslint-plugin-prettier: ^3.4.0
     fs-extra: ^9.0.1
@@ -6081,7 +6081,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"eslint@npm:^7.28.0":
+"eslint@npm:^7.29.0":
   version: 7.29.0
   resolution: "eslint@npm:7.29.0"
   dependencies:
