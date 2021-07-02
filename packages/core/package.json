@@ -28,7 +28,7 @@
     "url": "https://github.com/sponsors/AlCalzone/"
   },
   "engines": {
-    "node": ">=12.0.0"
+    "node": ">=v12.22.2"
   },
   "dependencies": {
     "@alcalzone/jsonl-db": "^1.3.0",
