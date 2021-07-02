@@ -3809,7 +3809,7 @@ __metadata:
     eslint-plugin-prettier: ^3.4.0
     fs-extra: ^9.0.1
     husky: ^7.0.0
-    jest: ^26.4.2
+    jest: ^26.6.3
     jest-extended: ^0.11.5
     lerna: ^4.0.0
     prettier: ^2.3.2
@@ -8574,7 +8574,7 @@ fsevents@^2.1.2:
   languageName: node
   linkType: hard
 
-"jest@npm:^26.4.2":
+"jest@npm:^26.6.3":
   version: 26.6.3
   resolution: "jest@npm:26.6.3"
   dependencies:
