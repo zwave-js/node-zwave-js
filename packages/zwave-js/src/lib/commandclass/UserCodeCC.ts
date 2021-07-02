@@ -272,7 +272,7 @@ function setUserCodeMetadata(
 		});
 	}
 	const codeMetadata: ValueMetadata = {
-		...(typeof userCode === "object"
+		...(Buffer.isBuffer(userCode)
 			? ValueMetadata.Buffer
 			: ValueMetadata.String),
 		minLength: 4,
