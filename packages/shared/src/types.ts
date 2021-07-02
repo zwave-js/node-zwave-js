@@ -15,3 +15,13 @@ export type UnionToIntersection<T> = (
 ) extends (x: infer R) => any
 	? R
 	: never;
+
+export type MethodsNamesOf<T> = {
+	[K in keyof T]: T[K] extends (...args: any[]) => any ? K : never;
+}[keyof T];
+
+export type OnlyMethods<T> = {
+	[K in MethodsNamesOf<T>]: T[K];
+};
+
+export type IsAny<T> = 0 extends 1 & T ? true : false;
