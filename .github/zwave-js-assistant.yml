@@ -65,3 +65,6 @@ approveWorkflow:
     - 'docs/**/*.md' # Documentation
     - 'docs/index.html' # Also documentation
     - 'packages/config/config/README.md' # more documentation
+  # Careful, whitelisted users have higher precedence than files
+  users:
+    - sybohy
