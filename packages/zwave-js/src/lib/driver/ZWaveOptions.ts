@@ -53,15 +53,19 @@ export interface ZWaveOptions {
 	 */
 	logConfig?: LogConfig;
 
-	/**
-	 * @internal
-	 * Set this to true to skip the controller interview. Useful for testing purposes
-	 */
-	skipInterview?: boolean;
+	interview: {
+		/**
+		 * @internal
+		 * Set this to true to skip the controller interview. Useful for testing purposes
+		 */
+		skipInterview?: boolean;
 
-	/** Allows you to query all user code during the interview of the UserCode CC */
-	queryAllUserCodes?: boolean;
-
+		/**
+		 * Whether all user code should be queried during the interview of the UserCode CC.
+		 * Note that enabling this can cause a lot of traffic during the interview.
+		 */
+		queryAllUserCodes?: boolean;
+	};
 	storage: {
 		/** Allows you to replace the default file system driver used to store and read the cache */
 		driver: FileSystem;
