@@ -51,7 +51,7 @@
     "@zwave-js/core": "7.11.0",
     "babel-jest": "^26.6.3",
     "commitizen": "^4.2.4",
-    "coveralls": "^3.1.0",
+    "coveralls": "^3.1.1",
     "cz-conventional-changelog": "^3.2.0",
     "esbuild-register": "^2.6.0",
     "eslint": "^7.29.0",
