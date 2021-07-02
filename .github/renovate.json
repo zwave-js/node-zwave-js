@@ -2,7 +2,7 @@
 	"extends": ["config:base"],
 	"baseBranches": ["next"],
 	"timezone": "Europe/Berlin",
-	"rangeStrategy": "replace",
+	"rangeStrategy": "bump",
 	"prConcurrentLimit": 7,
 	"prHourlyLimit": 0,
 	"assignees": ["AlCalzone"],
