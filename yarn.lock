@@ -1718,6 +1718,24 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@humanwhocodes/config-array@npm:^0.5.0":
+  version: 0.5.0
+  resolution: "@humanwhocodes/config-array@npm:0.5.0"
+  dependencies:
+    "@humanwhocodes/object-schema": ^1.2.0
+    debug: ^4.1.1
+    minimatch: ^3.0.4
+  checksum: 44ee6a9f05d93dd9d5935a006b17572328ba9caff8002442f601736cbda79c580cc0f5a49ce9eb88fbacc5c3a6b62098357c2e95326cd17bb9f1a6c61d6e95e7
+  languageName: node
+  linkType: hard
+
+"@humanwhocodes/object-schema@npm:^1.2.0":
+  version: 1.2.0
+  resolution: "@humanwhocodes/object-schema@npm:1.2.0"
+  checksum: 40b75480376de8104d65f7c44a7dd76d30fb57823ca8ba3a3239b2b568323be894d93440578a72fd8e5e2cc3df3577ce0d2f0fe308b990dd51cf35392bf3c9a2
+  languageName: node
+  linkType: hard
+
 "@istanbuljs/load-nyc-config@npm:^1.0.0":
   version: 1.1.0
   resolution: "@istanbuljs/load-nyc-config@npm:1.1.0"
@@ -3804,7 +3822,7 @@ __metadata:
     coveralls: ^3.1.1
     cz-conventional-changelog: ^3.3.0
     esbuild-register: ^2.6.0
-    eslint: ^7.29.0
+    eslint: ^7.30.0
     eslint-config-prettier: ^8.3.0
     eslint-plugin-prettier: ^3.4.0
     fs-extra: ^10.0.0
@@ -6081,12 +6099,13 @@ __metadata:
   languageName: node
   linkType: hard
 
-"eslint@npm:^7.29.0":
-  version: 7.29.0
-  resolution: "eslint@npm:7.29.0"
+"eslint@npm:^7.30.0":
+  version: 7.30.0
+  resolution: "eslint@npm:7.30.0"
   dependencies:
     "@babel/code-frame": 7.12.11
     "@eslint/eslintrc": ^0.4.2
+    "@humanwhocodes/config-array": ^0.5.0
     ajv: ^6.10.0
     chalk: ^4.0.0
     cross-spawn: ^7.0.2
@@ -6126,7 +6145,7 @@ __metadata:
     v8-compile-cache: ^2.0.3
   bin:
     eslint: bin/eslint.js
-  checksum: 8a18377c761560a29fb48b27458517f260f7854882e40cf7e2d38f0ba60ac1038f39404e0ea849abdda18699530fe055adc5bdbf1ef726ce91ac1482cac9d38c
+  checksum: 872f90844b164dd61ec1bb949d2e33e7fbd189e0652fabe2cbbd0bdce1e4cd7ed08e72fa213795a453ae39fe24460771800608e765febb9e778deb28b9db3cc1
   languageName: node
   linkType: hard
 
