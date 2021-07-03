@@ -163,7 +163,10 @@ const defaultOptions: ZWaveOptions = {
 	},
 	preserveUnknownValues: false,
 	disableOptimisticValueUpdate: false,
-	skipInterview: false,
+	interview: {
+		skipInterview: false,
+		queryAllUserCodes: false,
+	},
 	storage: {
 		driver: fsExtra,
 		cacheDir: path.resolve(__dirname, "../../..", "cache"),
@@ -748,7 +751,7 @@ export class Driver extends TypedEventEmitter<DriverEventCallbacks> {
 			}
 		};
 
-		if (!this.options.skipInterview) {
+		if (!this.options.interview.skipInterview) {
 			// Interview the controller.
 			await this._controller.interview(initValueDBs, async () => {
 				// Try to restore the network information from the cache
@@ -782,7 +785,7 @@ export class Driver extends TypedEventEmitter<DriverEventCallbacks> {
 		this._nodesReady.clear();
 		this._nodesReadyEventEmitted = false;
 
-		if (!this.options.skipInterview) {
+		if (!this.options.interview.skipInterview) {
 			// Now interview all nodes
 			// First complete the controller interview
 			const controllerNode = this._controller.nodes.get(
@@ -1213,7 +1216,7 @@ export class Driver extends TypedEventEmitter<DriverEventCallbacks> {
 	/** This is called when a new node has been added to the network */
 	private onNodeAdded(node: ZWaveNode): void {
 		this.addNodeEventHandlers(node);
-		if (!this.options.skipInterview) {
+		if (!this.options.interview.skipInterview) {
 			// Interview the node
 			// don't await the interview, because it may take a very long time
 			// if a node is asleep

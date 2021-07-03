@@ -236,15 +236,14 @@ function validateCode(code: string, supportedChars: string): boolean {
 	return [...code].every((char) => supportedChars.includes(char));
 }
 
-function persistUserCode(
+function setUserCodeMetadata(
 	this: UserCodeCC,
 	userId: number,
-	userIdStatus: UserIDStatus,
-	userCode: string | Buffer,
+	userCode?: string | Buffer,
 ) {
+	const valueDB = this.getValueDB();
 	const statusValueId = getUserIdStatusValueID(this.endpointIndex, userId);
 	const codeValueId = getUserCodeValueID(this.endpointIndex, userId);
-	const valueDB = this.getValueDB();
 	const supportedUserIDStatuses =
 		valueDB.getValue<UserIDStatus[]>(
 			getSupportedUserIDStatusesValueID(this.endpointIndex),
@@ -262,6 +261,38 @@ function persistUserCode(
 					UserIDStatus.Messaging,
 					UserIDStatus.PassageMode,
 			  ]);
+	if (!valueDB.hasMetadata(statusValueId)) {
+		valueDB.setMetadata(statusValueId, {
+			...ValueMetadata.Number,
+			label: `User ID status (${userId})`,
+			states: enumValuesToMetadataStates(
+				UserIDStatus,
+				supportedUserIDStatuses,
+			),
+		});
+	}
+	const codeMetadata: ValueMetadata = {
+		...(Buffer.isBuffer(userCode)
+			? ValueMetadata.Buffer
+			: ValueMetadata.String),
+		minLength: 4,
+		maxLength: 10,
+		label: `User Code (${userId})`,
+	};
+	if (valueDB.getMetadata(codeValueId)?.type !== codeMetadata.type) {
+		valueDB.setMetadata(codeValueId, codeMetadata);
+	}
+}
+
+function persistUserCode(
+	this: UserCodeCC,
+	userId: number,
+	userIdStatus: UserIDStatus,
+	userCode: string | Buffer,
+) {
+	const statusValueId = getUserIdStatusValueID(this.endpointIndex, userId);
+	const codeValueId = getUserCodeValueID(this.endpointIndex, userId);
+	const valueDB = this.getValueDB();
 
 	// Check if this code is supported
 	if (userIdStatus === UserIDStatus.StatusNotAvailable) {
@@ -271,29 +302,8 @@ function persistUserCode(
 		valueDB.setMetadata(statusValueId, undefined);
 		valueDB.setMetadata(codeValueId, undefined);
 	} else {
-		// Always create metadata if it does not exist
-		if (!valueDB.hasMetadata(statusValueId)) {
-			valueDB.setMetadata(statusValueId, {
-				...ValueMetadata.Number,
-				label: `User ID status (${userId})`,
-				states: enumValuesToMetadataStates(
-					UserIDStatus,
-					supportedUserIDStatuses,
-				),
-			});
-		}
-		const codeMetadata: ValueMetadata = {
-			...(typeof userCode === "string"
-				? ValueMetadata.String
-				: ValueMetadata.Buffer),
-			minLength: 4,
-			maxLength: 10,
-			label: `User Code (${userId})`,
-		};
-		if (valueDB.getMetadata(codeValueId)?.type !== codeMetadata.type) {
-			valueDB.setMetadata(codeValueId, codeMetadata);
-		}
-
+		// Always create metadata in case it does not exist
+		setUserCodeMetadata.call(this, userId, userCode);
 		valueDB.setValue(statusValueId, userIdStatus);
 		valueDB.setValue(codeValueId, userCode);
 	}
@@ -755,8 +765,14 @@ export class UserCodeCC extends CommandClass {
 			return;
 		}
 
+		for (let userId = 1; userId <= supportedUsers; userId++) {
+			setUserCodeMetadata.call(this, userId);
+		}
+
 		// Synchronize user codes and settings
-		await this.refreshValues();
+		if (this.driver.options.interview.queryAllUserCodes) {
+			await this.refreshValues();
+		}
 
 		// Remember that the interview is complete
 		this.interviewComplete = true;
