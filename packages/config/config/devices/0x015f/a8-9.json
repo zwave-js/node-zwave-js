@@ -23,7 +23,7 @@
 	},
 	"paramInformation": {
 		"1": {
-			"label": "PM2.5 Report: Change Threshold",
+			"label": "PM2.5 Sensor: Change Report Threshold",
 			"unit": "µg/m³",
 			"valueSize": 1,
 			"minValue": 0,
@@ -38,7 +38,7 @@
 			]
 		},
 		"2": {
-			"label": "CO2 Report: Change Threshold",
+			"label": "CO2 Sensor: Change Report Threshold",
 			"unit": "5 ppm",
 			"valueSize": 1,
 			"minValue": 0,
@@ -53,7 +53,7 @@
 			]
 		},
 		"3": {
-			"label": "Temperature Report: Change Threshold",
+			"label": "Temperature Sensor: Change Report Threshold",
 			"unit": "0.5 °C",
 			"valueSize": 1,
 			"minValue": 0,
@@ -68,7 +68,7 @@
 			]
 		},
 		"4": {
-			"label": "Humidity Report: Change Threshold",
+			"label": "Humidity Sensor: Change Report Threshold",
 			"unit": "%rF",
 			"valueSize": 1,
 			"minValue": 0,
@@ -83,7 +83,7 @@
 			]
 		},
 		"5": {
-			"label": "VOC Report: Change Threshold",
+			"label": "VOC Sensor: Change Report Threshold",
 			"unit": "5 ppb",
 			"valueSize": 1,
 			"minValue": 0,
@@ -98,7 +98,7 @@
 			]
 		},
 		"6": {
-			"label": "Brightness Report: Change Threshold",
+			"label": "Brightness Sensor: Change Report Threshold",
 			"unit": "lux",
 			"valueSize": 2,
 			"minValue": 0,
@@ -113,7 +113,7 @@
 			]
 		},
 		"7": {
-			"label": "dB Report: Change Threshold",
+			"label": "dB Sensor: Change Report Threshold",
 			"unit": "dB",
 			"valueSize": 1,
 			"minValue": 0,
@@ -165,155 +165,234 @@
 			]
 		},
 		"10": {
-			"label": "Smoke_timer",
-			"description": "amp;gt;=35 report every n*1s interval",
+			"label": "Smoke Sensor: Auto-Report Timer",
+			"description": "Allowable Range: 35-32767 s",
+			"unit": "seconds",
 			"valueSize": 2,
 			"minValue": 0,
-			"maxValue": 60,
+			"maxValue": 32767,
 			"defaultValue": 60,
-			"unsigned": true
+			"unsigned": true,
+			"options": [
+				{
+					"label": "Disable",
+					"value": 0
+				}
+			]
 		},
 		"11": {
-			"label": "Pir_timer",
-			"description": "amp;gt;=35 report every n*1s interval",
+			"label": "PIR Sensor: Auto-Report Timer",
+			"description": "Allowable Range: 35-32767 s",
+			"unit": "seconds",
 			"valueSize": 2,
 			"minValue": 0,
-			"maxValue": 60,
+			"maxValue": 32767,
 			"defaultValue": 60,
-			"unsigned": true
+			"unsigned": true,
+			"options": [
+				{
+					"label": "Disable",
+					"value": 0
+				}
+			]
 		},
 		"12": {
-			"label": "Pm25_timer",
-			"description": "amp;gt;=35report every n*1s interval",
+			"label": "PM2.5 Sensor: Auto-Report Timer",
+			"description": "Allowable Range: 35-32767 s",
+			"unit": "seconds",
 			"valueSize": 2,
 			"minValue": 0,
-			"maxValue": 120,
+			"maxValue": 32767,
 			"defaultValue": 120,
-			"unsigned": true
+			"unsigned": true,
+			"options": [
+				{
+					"label": "Disable",
+					"value": 0
+				}
+			]
 		},
 		"13": {
-			"label": "Co2_timer",
-			"description": "amp;gt;=35 report every n*1s interval",
+			"label": "CO2 Sensor: Auto-Report Timer",
+			"description": "Allowable Range: 35-32767 s",
+			"unit": "seconds",
 			"valueSize": 2,
 			"minValue": 0,
-			"maxValue": 120,
+			"maxValue": 32767,
 			"defaultValue": 120,
-			"unsigned": true
+			"unsigned": true,
+			"options": [
+				{
+					"label": "Disable",
+					"value": 0
+				}
+			]
 		},
 		"14": {
-			"label": "Temp_timer",
-			"description": "amp;gt;=35 report every n*1s interval",
+			"label": "Temperature Sensor: Auto-Report Timer",
+			"description": "Allowable Range: 35-32767 s",
+			"unit": "seconds",
 			"valueSize": 2,
 			"minValue": 0,
-			"maxValue": 180,
+			"maxValue": 32767,
 			"defaultValue": 180,
-			"unsigned": true
+			"unsigned": true,
+			"options": [
+				{
+					"label": "Disable",
+					"value": 0
+				}
+			]
 		},
 		"15": {
-			"label": "Humidity_timer",
-			"description": "gt;=35 report every n*1s interval",
+			"label": "Humidity Sensor: Auto-Report Timer",
+			"description": "Allowable Range: 35-32767 s",
+			"unit": "seconds",
 			"valueSize": 2,
 			"minValue": 0,
-			"maxValue": 180,
+			"maxValue": 32767,
 			"defaultValue": 180,
-			"unsigned": true
+			"unsigned": true,
+			"options": [
+				{
+					"label": "Disable",
+					"value": 0
+				}
+			]
 		},
 		"16": {
-			"label": "Voc_timer",
-			"description": "gt;=35 report every n*1s interval",
+			"label": "VOC Sensor: Auto-Report Timer",
+			"description": "Allowable Range: 35-32767 s",
+			"unit": "seconds",
 			"valueSize": 2,
 			"minValue": 0,
-			"maxValue": 180,
+			"maxValue": 32767,
 			"defaultValue": 180,
-			"unsigned": true
+			"unsigned": true,
+			"options": [
+				{
+					"label": "Disable",
+					"value": 0
+				}
+			]
 		},
 		"17": {
-			"label": "Lux_timer",
-			"description": "gt;=35 report every n*1s interval",
+			"label": "Brightness Sensor: Auto-Report Timer",
+			"description": "Allowable Range: 35-32767 s",
+			"unit": "seconds",
 			"valueSize": 2,
 			"minValue": 0,
-			"maxValue": 300,
+			"maxValue": 32767,
 			"defaultValue": 300,
-			"unsigned": true
+			"unsigned": true,
+			"options": [
+				{
+					"label": "Disable",
+					"value": 0
+				}
+			]
 		},
 		"18": {
-			"label": "Db_timer",
-			"description": "gt;=35 report every n*1s interval",
+			"label": "dB Sensor: Auto-Report Timer",
+			"description": "Allowable Range: 35-32767 s",
+			"unit": "seconds",
 			"valueSize": 2,
 			"minValue": 0,
-			"maxValue": 300,
+			"maxValue": 32767,
 			"defaultValue": 300,
-			"unsigned": true
+			"unsigned": true,
+			"options": [
+				{
+					"label": "Disable",
+					"value": 0
+				}
+			]
 		},
 		"47": {
-			"label": "Temp. Unit",
-			"description": "=0 ℃ =1 ℉",
+			"label": "Temperature Unit",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 1,
 			"defaultValue": 0,
-			"unsigned": true
+			"unsigned": true,
+			"options": [
+				{
+					"label": "Celsius",
+					"value": 0
+				},
+				{
+					"label": "Fahrenheit",
+					"value": 0
+				}
+			]
 		},
 		"50": {
-			"label": "T_offset",
-			"description": "0 ~ 127: ((n-100)/10)=(-10~2.7)℃ -128 ~ -1: ((156+n)/10)=(2.8~15.5)℃",
+			"label": "Temperature Offset",
+			"description": "Offset = value minus 100. Example: 91 => -0.9 °",
+			"unit": "0.1 °C", // The manual says so, not sure if this is true for Fahrenheit aswell
 			"valueSize": 1,
 			"minValue": 0,
-			"maxValue": 100,
+			"maxValue": 255,
 			"defaultValue": 100,
 			"unsigned": true
 		},
 		"51": {
-			"label": "Rh_offset",
-			"description": "N-20=(-20~20)%",
+			"label": "Humidity Offset",
+			"description": "Offset = value minus 20. Example: 33 => +13 %",
+			"unit": "%",
 			"valueSize": 1,
 			"minValue": 0,
-			"maxValue": 20,
+			"maxValue": 40,
 			"defaultValue": 20,
 			"unsigned": true
 		},
 		"52": {
-			"label": "Co2_offset",
-			"description": "(n-500)=(-500~500)ppm",
+			"label": "CO2 Offset",
+			"description": "Offset = value minus 500. Example: 999 => +499 ppm",
+			"unit": "ppm",
 			"valueSize": 2,
 			"minValue": 0,
-			"maxValue": 500,
+			"maxValue": 1000,
 			"defaultValue": 500,
 			"unsigned": true
 		},
 		"53": {
-			"label": "Pm2.5_offset",
-			"description": "0 ~ 127: n-100=(-100~27)ug/m3 -128 ~ -1: 156+n=(28~155)ug/m3",
+			"label": "PM2.5 Offset",
+			"description": "Offset = value minus 100. Example: 101 => +1 µg/m³",
+			"unit": "µg/m³",
 			"valueSize": 1,
 			"minValue": 0,
-			"maxValue": 100,
+			"maxValue": 255,
 			"defaultValue": 100,
 			"unsigned": true
 		},
 		"54": {
-			"label": "Lux_offset",
-			"description": "N-5000=(-5000~5000)lux",
+			"label": "Brightness Offset",
+			"description": "Offset = value minus 5000. Example: 49 => -4951 lux",
+			"unit": "lux",
 			"valueSize": 2,
 			"minValue": 0,
-			"maxValue": 5000,
+			"maxValue": 10000,
 			"defaultValue": 5000,
 			"unsigned": true
 		},
 		"55": {
-			"label": "Voc_correct",
-			"description": "0 ~ 127: n-100=(-100~27)ppb -128 ~ -1: 156+n=(28~155)ppb",
+			"label": "VOC Offset",
+			"description": "Offset = value minus 100. Example: 101 => +1 ppb",
+			"unit": "ppb",
 			"valueSize": 1,
 			"minValue": 0,
-			"maxValue": 100,
+			"maxValue": 255,
 			"defaultValue": 100,
 			"unsigned": true
 		},
 		"56": {
-			"label": "Db_correct",
-			"description": "(n-50)=-50~50",
+			"label": "dB Offset",
+			"description": "Offset = value minus 50. Example: 98 => +48 dB",
+			"unit": "dB",
 			"valueSize": 1,
 			"minValue": 0,
-			"maxValue": 50,
+			"maxValue": 100,
 			"defaultValue": 50,
 			"unsigned": true
 		},
