@@ -43,6 +43,7 @@
     "watch": "yarn run build --watch --pretty"
   },
   "devDependencies": {
+    "@alcalzone/esm2cjs": "^1.1.0",
     "@types/clipboardy": "^2",
     "@types/fs-extra": "^9.0.11",
     "@types/jest": "^26.0.23",

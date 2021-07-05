@@ -53,6 +53,7 @@
     "winston": "^3.3.3"
   },
   "devDependencies": {
+    "@alcalzone/esm2cjs": "^1.1.0",
     "@serialport/binding-mock": "^9.0.7",
     "@types/jest": "^26.0.23",
     "@types/node": "^15.12.5",
