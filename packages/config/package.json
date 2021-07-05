@@ -41,7 +41,7 @@
   },
   "scripts": {
     "prebuild": "yarn ts maintenance/prebuild.ts",
-    "build": "tsc -b tsconfig.build.json",
+    "build": "yarn prebuild && tsc -b tsconfig.build.json && yarn postbuild",
     "postbuild": "yarn esm2cjs --in=build/esm --out=build/cjs -l error",
     "clean": "tsc -b tsconfig.build.json --clean",
     "watch": "yarn run build --watch --pretty",

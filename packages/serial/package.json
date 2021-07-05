@@ -39,7 +39,7 @@
     "node": ">=v12.22.2"
   },
   "scripts": {
-    "build": "tsc -b tsconfig.build.json",
+    "build": "tsc -b tsconfig.build.json && yarn postbuild",
     "postbuild": "yarn esm2cjs --in=build/esm --out=build/cjs -l error",
     "clean": "yarn run build --clean",
     "watch": "yarn run build --watch --pretty"
