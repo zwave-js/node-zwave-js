@@ -2,7 +2,7 @@
 <!--
 	Add placeholder for next release with `wip` snippet
 -->
-## __WORK IN PROGRESS__
+## 7.11.0 (2021-07-05)
 ### Features
 * Added `invokeCCAPI` to the `Endpoint` class, which allows to generically/dynamically invoke CC API
 

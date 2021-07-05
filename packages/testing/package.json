@@ -1,6 +1,6 @@
 {
   "name": "@zwave-js/testing",
-  "version": "7.10.1",
+  "version": "7.11.0",
   "description": "zwave-js: testing utilities",
   "private": true,
   "keywords": [],
@@ -34,6 +34,6 @@
     "watch": "yarn run build -- --watch --pretty"
   },
   "devDependencies": {
-    "@zwave-js/core": "7.10.1"
+    "@zwave-js/core": "7.11.0"
   }
 }
