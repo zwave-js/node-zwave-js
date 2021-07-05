@@ -256,6 +256,9 @@ jobs:
         BODY="${BODY//$'\n'/'%0A'}"
         BODY="${BODY//$'\r'/'%0D'}"
         echo "::set-output name=BODY::$BODY"
+        if [[ $VERSION == *"-"* ]] ; then
+          echo "::set-output name=TAG::--dist-tag next"
+        fi
 
     - name: Install dependencies
       run: yarn install --immutable
@@ -264,10 +267,12 @@ jobs:
       run: yarn run build:full
 
     - name: Publish packages to npm
+      env:
+        TAG: ${{ steps.extract_release.outputs.TAG }}
       run: |
         npm config set //registry.npmjs.org/:_authToken=${{ secrets.NPM_TOKEN }}
         npm whoami
-        yarn lerna publish from-package --yes
+        yarn lerna publish from-package --yes $TAG
 
     - name: Create Github Release
       uses: actions/create-release@v1

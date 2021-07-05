@@ -109,4 +109,4 @@ jobs:
         VERSION=$(node script.js)
         echo "Next version is $VERSION"
         npm version "$VERSION" --ignore-scripts --no-git-tag-version
-        npm publish
+        npm publish --tag nightly
