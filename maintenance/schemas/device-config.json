@@ -231,6 +231,10 @@
 					"type": "number",
 					"minimum": 0
 				},
+				"mapRootReportsToEndpoint": {
+					"type": "number",
+					"minimum": 1
+				},
 				"overrideFloatEncoding": {
 					"type": "object",
 					"properties": {

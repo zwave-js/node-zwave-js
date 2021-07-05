@@ -179,6 +179,29 @@ compat option manualValueRefreshDelayMs must be a non-negative integer!`,
 				definition.manualValueRefreshDelayMs;
 		}
 
+		if (definition.mapRootReportsToEndpoint != undefined) {
+			if (typeof definition.mapRootReportsToEndpoint !== "number") {
+				throwInvalidConfig(
+					"devices",
+					`config/devices/${filename}:
+compat option mapRootReportsToEndpoint must be a number!`,
+				);
+			}
+
+			if (
+				definition.mapRootReportsToEndpoint % 1 !== 0 ||
+				definition.mapRootReportsToEndpoint < 1
+			) {
+				throwInvalidConfig(
+					"devices",
+					`config/devices/${filename}:
+compat option mapRootReportsToEndpoint must be a positive integer!`,
+				);
+			}
+
+			this.mapRootReportsToEndpoint = definition.mapRootReportsToEndpoint;
+		}
+
 		if (definition.overrideFloatEncoding != undefined) {
 			if (!isObject(definition.overrideFloatEncoding)) {
 				throwInvalidConfig(
@@ -381,6 +404,7 @@ compat option alarmMapping must be an array where all items are objects!`,
 	public readonly enableBasicSetMapping?: boolean;
 	public readonly forceNotificationIdleReset?: boolean;
 	public readonly manualValueRefreshDelayMs?: number;
+	public readonly mapRootReportsToEndpoint?: number;
 	public readonly overrideFloatEncoding?: {
 		size?: number;
 		precision?: number;

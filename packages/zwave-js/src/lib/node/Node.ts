@@ -1982,21 +1982,20 @@ protocol version:      ${this._protocolVersion}`;
 			command.endpointIndex === 0 &&
 			command.constructor.name.endsWith("Report") &&
 			this.getEndpointCount() >= 1 &&
-			// skip the root to endpoint mapping if the root endpoint values are not meant to mirror endpoint 1
-			!this._deviceConfig?.compat?.preserveRootApplicationCCValueIDs
+			// Only map reports from the root device to an endpoint if we know which one
+			this._deviceConfig?.compat?.mapRootReportsToEndpoint != undefined
 		) {
-			// Find the first endpoint that supports the received CC - if there is none, we don't map the report
-			for (const endpoint of this.getAllEndpoints()) {
-				if (endpoint.index === 0) continue;
-				if (!endpoint.supportsCC(command.ccId)) continue;
+			const endpoint = this.getEndpoint(
+				this._deviceConfig?.compat?.mapRootReportsToEndpoint,
+			);
+			if (endpoint && endpoint.supportsCC(command.ccId)) {
 				// Force the CC to store its values again under the supporting endpoint
 				this.driver.controllerLog.logNode(
 					this.nodeId,
-					`Mapping unsolicited report from root device to first supporting endpoint #${endpoint.index}`,
+					`Mapping unsolicited report from root device to endpoint #${endpoint.index}`,
 				);
 				command.endpointIndex = endpoint.index;
 				command.persistValues();
-				break;
 			}
 		}
 
