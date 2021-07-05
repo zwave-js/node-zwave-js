@@ -2,6 +2,23 @@
 <!--
 	Add placeholder for next release with `wip` snippet
 -->
+## __WORK IN PROGRESS__
+### Features
+* Added `invokeCCAPI` to the `Endpoint` class, which allows to generically/dynamically invoke CC API
+
+### Device compatibility
+* The compat flag `treatDestinationEndpointAsSource` now also affects outgoing multi channel commands
+
+### Config file changes
+* Update Fibaro FGD212 configuration
+* Add fingerprint to Kwikset 910
+* Correct valueSize for param 64 on Aeotec ZW100 / Fantem FT100
+* Add param 19 and metadata for GE/Jasco 46201
+
+### Changes under the hood
+* Telemetry now includes `Node.js` version, OS and arch
+* Switched from Dependabot to Renovate
+
 ## 7.10.1 (2021-06-30)
 ### Bugfixes
 * Config updates in Docker now download the tarball from the `npm` registry and extract it instead of deferring to the package manager
