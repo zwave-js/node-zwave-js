@@ -361,6 +361,15 @@ Some legacy devices emit an NIF when a local event occurs (e.g. a button press) 
 
 Some multi-channel devices incorrectly report state changes for one of their endpoints via the root device, however there is no way to automatically detect for which endpoint these reports are meant. The flag `mapRootReportsToEndpoint` can be used to specify which endpoint these reports are mapped to. Without this flag, reports to the root device are silently ignored, unless `preserveRootApplicationCCValueIDs` is `true`.
 
+### `preserveEndpoints`
+
+Many devices unnecessarily use endpoints when they could (or do) provide all functionality via the root device. `zwave-js` tries to detect these cases and ignore all endpoints. To opt out of this behavior or to preserve single endpoints, `preserveEndpoints` can be used. Example:
+
+```js
+"preserveEndpoints": "*",    // to preserve all endpoints
+"preserveEndpoints": [2, 3], // to preserve endpoints 2 and 3, but ignore endpoint 1
+```
+
 ### `preserveRootApplicationCCValueIDs`
 
 The Z-Wave+ specs mandate that the root endpoint must **mirror** the application functionality of endpoint 1 (and potentially others). For this reason, `zwave-js` hides these superfluous values. However, some legacy devices offer additional functionality through the root endpoint, which should not be hidden. To achive this, set `preserveRootApplicationCCValueIDs` to `true`.
