@@ -3712,7 +3712,7 @@ __metadata:
     "@zwave-js/core": 7.11.0
     "@zwave-js/maintenance": 7.11.0
     "@zwave-js/shared": 7.11.0
-    alcalzone-shared: ^3.0.4
+    alcalzone-shared: ^4.0.0
     ansi-colors: ^4.1.1
     axios: ^0.21.1
     comment-json: ^4.1.0
@@ -3742,7 +3742,7 @@ __metadata:
     "@types/triple-beam": ^1.3.2
     "@zwave-js/shared": 7.11.0
     "@zwave-js/winston-daily-rotate-file": ^4.5.6-0
-    alcalzone-shared: ^3.0.4
+    alcalzone-shared: ^4.0.0
     ansi-colors: ^4.1.1
     dayjs: ^1.10.5
     esbuild-register: ^2.6.0
@@ -3851,7 +3851,7 @@ __metadata:
     "@zwave-js/core": 7.11.0
     "@zwave-js/shared": 7.11.0
     "@zwave-js/testing": 7.11.0
-    alcalzone-shared: ^3.0.4
+    alcalzone-shared: ^4.0.0
     ansi-colors: ^4.1.1
     esbuild-register: ^2.6.0
     jest-extended: ^0.11.5
@@ -3868,7 +3868,7 @@ __metadata:
     "@types/fs-extra": ^9.0.11
     "@types/jest": ^26.0.23
     "@types/node": ^15.12.5
-    alcalzone-shared: ^3.0.4
+    alcalzone-shared: ^4.0.0
     esbuild-register: ^2.6.0
     fs-extra: ^10.0.0
     jest-extended: ^0.11.5
@@ -13586,7 +13586,7 @@ typescript@^4.3.5:
     "@zwave-js/serial": 7.11.0
     "@zwave-js/shared": 7.11.0
     "@zwave-js/testing": 7.11.0
-    alcalzone-shared: ^3.0.4
+    alcalzone-shared: ^4.0.0
     ansi-colors: ^4.1.1
     axios: ^0.21.1
     esbuild-register: ^2.6.0
