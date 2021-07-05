@@ -315,6 +315,7 @@
 			"maxValue": 1,
 			"defaultValue": 0,
 			"unsigned": true,
+			"allowManualEntry": false,
 			"options": [
 				{
 					"label": "Celsius",
@@ -322,7 +323,7 @@
 				},
 				{
 					"label": "Fahrenheit",
-					"value": 0
+					"value": 1
 				}
 			]
 		},
