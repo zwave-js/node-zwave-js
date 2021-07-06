@@ -56,7 +56,7 @@
     "@types/json-logic-js": "^1.2.1",
     "@types/node": "^15.12.5",
     "@types/pegjs": "^0.10.2",
-    "@types/semver": "^7.3.6",
+    "@types/semver": "^7.3.7",
     "@types/xml2json": "^0.11.4",
     "@types/yargs": "^16.0.4",
     "@zwave-js/maintenance": "8.0.0-alpha.0",
