@@ -3347,6 +3347,15 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@types/fs-extra@npm:^9.0.12":
+  version: 9.0.12
+  resolution: "@types/fs-extra@npm:9.0.12"
+  dependencies:
+    "@types/node": "*"
+  checksum: c63834f0be8d0993c55abcc0b2c90f3c095cf3aa9e827973472167bd93687df9da546bd5e0823ddc9e83e1651c9cfb09bbac99fa57a15ab28fd21280426e472c
+  languageName: node
+  linkType: hard
+
 "@types/graceful-fs@npm:^4.1.2":
   version: 4.1.5
   resolution: "@types/graceful-fs@npm:4.1.5"
@@ -3844,6 +3853,7 @@ __metadata:
     "@commitlint/config-conventional": ^12.1.4
     "@fimbul/mithotyn": ^0.24.0
     "@fimbul/wotan": ^0.24.0
+    "@types/fs-extra": ^9.0.12
     "@types/jest": ^26.0.23
     "@types/node": ^15.12.5
     "@typescript-eslint/eslint-plugin": ^4.28.1
