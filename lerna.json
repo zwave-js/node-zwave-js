@@ -1,7 +1,5 @@
 {
-	"packages": [
-		"packages/*"
-	],
+	"packages": ["packages/*"],
 	"useWorkspaces": true,
 	"npmClient": "yarn",
 	"version": "7.11.0",
@@ -10,13 +8,8 @@
 			"stream": true
 		},
 		"version": {
-			"allowBranch": [
-				"master",
-				"release-*"
-			],
-			"ignoreChanges": [
-				"*.md"
-			],
+			"allowBranch": ["master", "release-*", "next"],
+			"ignoreChanges": ["*.md"],
 			"exact": true,
 			"amend": true,
 			"push": false
