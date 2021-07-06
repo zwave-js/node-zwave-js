@@ -96,7 +96,7 @@
     "@types/node": "^15.12.5",
     "@types/proper-lockfile": "^4",
     "@types/semver": "^7.3.7",
-    "@types/serialport": "^8.0.1",
+    "@types/serialport": "^8.0.2",
     "@types/source-map-support": "^0",
     "@xstate/test": "^0.4.2",
     "@zwave-js/maintenance": "8.0.0-alpha.0",

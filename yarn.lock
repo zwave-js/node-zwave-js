@@ -3503,12 +3503,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/serialport@npm:^8.0.1":
-  version: 8.0.1
-  resolution: "@types/serialport@npm:8.0.1"
+"@types/serialport@npm:^8.0.2":
+  version: 8.0.2
+  resolution: "@types/serialport@npm:8.0.2"
   dependencies:
     "@types/node": "*"
-  checksum: ad8a9b60ad409497b9c4f1f0242b383e8c1dcbf530d2edbec7b7d406598824625cfa2fc8f19e38fa01bc640a97c2975d7852dcbaa4bae14c8f370b414a219f86
+  checksum: c81152b0e8539b4141a07b398b13e6698550761462e9d8f1540ac636d68d68f4c5f53b1351089affa83fc3a30e87fd6d4b87dcd0e9641b7b566eb2e39a3e6f74
   languageName: node
   linkType: hard
 
@@ -3890,7 +3890,7 @@ __metadata:
     "@serialport/binding-mock": ^9.0.7
     "@types/jest": ^26.0.23
     "@types/node": ^15.12.5
-    "@types/serialport": ^8.0.1
+    "@types/serialport": ^8.0.2
     "@zwave-js/core": 8.0.0-alpha.0
     "@zwave-js/shared": 8.0.0-alpha.0
     "@zwave-js/testing": 8.0.0-alpha.0
@@ -13675,7 +13675,7 @@ typescript@^4.3.5:
     "@types/node": ^15.12.5
     "@types/proper-lockfile": ^4
     "@types/semver": ^7.3.7
-    "@types/serialport": ^8.0.1
+    "@types/serialport": ^8.0.2
     "@types/source-map-support": ^0
     "@xstate/test": ^0.4.2
     "@zwave-js/config": 8.0.0-alpha.0

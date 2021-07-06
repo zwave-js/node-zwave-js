@@ -47,7 +47,7 @@
     "@serialport/binding-mock": "^9.0.7",
     "@types/jest": "^26.0.23",
     "@types/node": "^15.12.5",
-    "@types/serialport": "^8.0.1",
+    "@types/serialport": "^8.0.2",
     "@zwave-js/testing": "8.0.0-alpha.0",
     "ansi-colors": "^4.1.1",
     "esbuild-register": "^2.6.0",
