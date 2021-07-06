@@ -316,5 +316,9 @@
 				}
 			]
 		}
+	},
+	"compat": {
+		// This device exposes the RGBW control on the root endpoint
+		"preserveRootApplicationCCValueIDs": true
 	}
 }
