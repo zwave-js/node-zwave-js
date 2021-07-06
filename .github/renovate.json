@@ -4,7 +4,7 @@
 	"timezone": "Europe/Berlin",
 	"rangeStrategy": "bump",
 	"schedule": [
-		"before 8 am on the last day of the month"
+		"before 8:00 am on the last day of the month"
 	],
 	"prConcurrentLimit": 7,
 	"prHourlyLimit": 0,
