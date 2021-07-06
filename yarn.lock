@@ -3496,10 +3496,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/semver@npm:^7.3.6":
-  version: 7.3.6
-  resolution: "@types/semver@npm:7.3.6"
-  checksum: 933b115a59b1665b4418f48264cc8e497fa8c72425554e97dad07a4fbad09ba3744a726a58fb11c739a944ac868ba4aef926697ad1facedf7858be3410c10d6f
+"@types/semver@npm:^7.3.7":
+  version: 7.3.7
+  resolution: "@types/semver@npm:7.3.7"
+  checksum: 2e4f968f8c08460e779a1ed15c5ee37b473ac68ec3fce776b5d34b6cacf2a124c7c471a98ab648061c64ef5c306165774d3152bd924f8941f51ff4c502263425
   languageName: node
   linkType: hard
 
@@ -3715,7 +3715,7 @@ __metadata:
     "@types/json-logic-js": ^1.2.1
     "@types/node": ^15.12.5
     "@types/pegjs": ^0.10.2
-    "@types/semver": ^7.3.6
+    "@types/semver": ^7.3.7
     "@types/xml2json": ^0.11.4
     "@types/yargs": ^16.0.4
     "@zwave-js/core": 8.0.0-alpha.0
@@ -13674,7 +13674,7 @@ typescript@^4.3.5:
     "@types/jest": ^26.0.23
     "@types/node": ^15.12.5
     "@types/proper-lockfile": ^4
-    "@types/semver": ^7.3.6
+    "@types/semver": ^7.3.7
     "@types/serialport": ^8.0.1
     "@types/source-map-support": ^0
     "@xstate/test": ^0.4.2
