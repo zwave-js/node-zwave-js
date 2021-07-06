@@ -28,7 +28,7 @@
     "url": "https://github.com/sponsors/AlCalzone/"
   },
   "engines": {
-    "node": ">=v12.22.2"
+    "node": ">=v12.22.3"
   },
   "dependencies": {
     "alcalzone-shared": "^4.0.0",
