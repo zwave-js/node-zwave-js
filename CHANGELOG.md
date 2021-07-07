@@ -2,7 +2,7 @@
 <!--
 	Add placeholder for next release with `wip` snippet
 -->
-## __WORK IN PROGRESS__
+## 8.0.0-alpha.2 (2021-07-07)
 ### Breaking changes
 * The repository has been migrated from `yarn v1` to `yarn v3`. This changes a few things, mainly regarding installing dependencies and editor support. The repo is configured to automatically use the correct `typescript` dependency, but if anything goes wrong, please read [this](https://yarnpkg.com/getting-started/editor-sdks#vscode). Also check out the updated documentation on [developing locally / installing from GitHub](https://zwave-js.github.io/node-zwave-js/#/development/installing-from-github).
 * The minimum required Node.js version is now `v12.22.2`
