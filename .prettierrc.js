@@ -7,6 +7,8 @@ module.exports = {
 	tabWidth: 4,
 	endOfLine: "lf",
 
+	plugins: [require("prettier-plugin-organize-imports")],
+
 	overrides: [
 		{
 			files: "packages/config/**/*.json",
