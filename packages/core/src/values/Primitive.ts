@@ -47,19 +47,55 @@ export function parseNumber(val: number): number | undefined {
 	return val <= 99 ? val : val === 0xff ? 99 : undefined;
 }
 
-/** Parses a floating point value with a scale from a buffer */
-export function parseFloatWithScale(payload: Buffer): {
+/**
+ * Parses a floating point value with a scale from a buffer.
+ */
+export function parseFloatWithScale(
+	payload: Buffer,
+	allowEmpty?: false,
+): {
 	value: number;
 	scale: number;
+	bytesRead: number;
+};
+
+/**
+ * Parses a floating point value with a scale from a buffer.
+ * @param allowEmpty Whether empty floats (precision = scale = size = 0 no value) are accepted
+ */
+export function parseFloatWithScale(
+	payload: Buffer,
+	allowEmpty: true,
+): {
+	value?: number;
+	scale?: number;
+	bytesRead: number;
+};
+
+/**
+ * Parses a floating point value with a scale from a buffer.
+ * @param allowEmpty Whether empty floats (precision = scale = size = 0 no value) are accepted
+ */
+export function parseFloatWithScale(
+	payload: Buffer,
+	allowEmpty: boolean = false,
+): {
+	value?: number;
+	scale?: number;
 	bytesRead: number;
 } {
 	validatePayload(payload.length >= 1);
 	const precision = (payload[0] & 0b111_00_000) >>> 5;
 	const scale = (payload[0] & 0b000_11_000) >>> 3;
 	const size = payload[0] & 0b111;
-	validatePayload(size >= 1, size <= 4, payload.length >= 1 + size);
-	const value = payload.readIntBE(1, size) / Math.pow(10, precision);
-	return { value, scale, bytesRead: 1 + size };
+	if (allowEmpty && size === 0) {
+		validatePayload(precision === 0, scale === 0);
+		return { bytesRead: 1 };
+	} else {
+		validatePayload(size >= 1, size <= 4, payload.length >= 1 + size);
+		const value = payload.readIntBE(1, size) / Math.pow(10, precision);
+		return { value, scale, bytesRead: 1 + size };
+	}
 }
 
 function getPrecision(num: number): number {
