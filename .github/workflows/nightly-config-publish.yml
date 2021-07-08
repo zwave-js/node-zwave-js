@@ -32,16 +32,19 @@ jobs:
         LAST_TAG=$(git describe --abbrev=0)
         echo "Checking for changes since last tag $LAST_TAG"
 
+        # Figure out what changed in the package directories
+        CHANGES=$(git diff "$LAST_TAG" --name-only | grep -E "^packages\/" || true)
+
         # Check if there were any config file changes
-        CHANGES=$(git diff "$LAST_TAG" --name-only | grep -E "packages\/config\/config\/(.*\/)?.+\.json" || true)
-        if [ -z "$CHANGES" ] ; then
+        CONFIG_CHANGES=$(echo "$CHANGES" | grep -E "^packages\/config\/config\/(.*\/)?.+\.json" || true)
+        if [ -z "$CONFIG_CHANGES" ] ; then
           echo "🔸 No config file changes since latest version, aborting..."
           exit 0
         fi
 
         # Check if there were changes except config files and .gitignore
-        CHANGES=$(git diff "$LAST_TAG" --name-only | grep -E -v "packages\/config\/config\/(.*\/)?.+\.json" | grep -v ".gitignore" || true)
-        if [ -n "$CHANGES" ] ; then
+        NON_CONFIG_CHANGES=$(echo "$CHANGES" | grep -E -v "^packages\/config\/config\/(.*\/)?.+\.json" | grep -v ".gitignore" || true)
+        if [ -n "$NON_CONFIG_CHANGES" ] ; then
           echo "❌ Found non-config changes, aborting..."
           exit 0
         else
