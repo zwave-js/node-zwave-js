@@ -2040,7 +2040,6 @@
 		"maxValue": 255,
 		"defaultValue": 0,
 		"unsigned": true,
-		"allowManualEntry": false,
 		"options": [
 			{
 				"label": "Original tone length",
