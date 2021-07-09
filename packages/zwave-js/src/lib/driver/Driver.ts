@@ -448,13 +448,13 @@ export class Driver extends TypedEventEmitter<DriverEventCallbacks> {
 						switch (lastError) {
 							case "response timeout":
 								errorReason = "No response from controller";
-								this.controller.incrementStatistics(
+								this._controller?.incrementStatistics(
 									"timeoutResponse",
 								);
 								break;
 							case "callback timeout":
 								errorReason = "No callback from controller";
-								this.controller.incrementStatistics(
+								this._controller?.incrementStatistics(
 									"timeoutCallback",
 								);
 								break;
@@ -467,7 +467,7 @@ export class Driver extends TypedEventEmitter<DriverEventCallbacks> {
 									"The controller callback indicated failure";
 								break;
 							case "ACK timeout":
-								this.controller.incrementStatistics(
+								this._controller?.incrementStatistics(
 									"timeoutACK",
 								);
 							// fall through
@@ -1308,10 +1308,7 @@ export class Driver extends TypedEventEmitter<DriverEventCallbacks> {
 		nodeId: number,
 		endpointIndex: number = 0,
 	): number {
-		if (
-			this._controller == undefined ||
-			!this.controller.nodes.has(nodeId)
-		) {
+		if (!this._controller?.nodes.has(nodeId)) {
 			return 0;
 		}
 		const node = this.controller.nodes.get(nodeId)!;
@@ -1507,12 +1504,12 @@ export class Driver extends TypedEventEmitter<DriverEventCallbacks> {
 				}
 				case MessageHeaders.NAK: {
 					this.sendThread.send("NAK");
-					this.controller.incrementStatistics("NAK");
+					this._controller?.incrementStatistics("NAK");
 					return;
 				}
 				case MessageHeaders.CAN: {
 					this.sendThread.send("CAN");
-					this.controller.incrementStatistics("CAN");
+					this._controller?.incrementStatistics("CAN");
 					return;
 				}
 			}
@@ -1528,7 +1525,7 @@ export class Driver extends TypedEventEmitter<DriverEventCallbacks> {
 				assertValidCCs(msg);
 				msg.getNodeUnsafe()?.incrementStatistics("commandsRX");
 			} else {
-				this.controller.incrementStatistics("messagesRX");
+				this._controller?.incrementStatistics("messagesRX");
 			}
 			// all good, send ACK
 			await this.writeHeader(MessageHeaders.ACK);
@@ -1541,7 +1538,7 @@ export class Driver extends TypedEventEmitter<DriverEventCallbacks> {
 						"commandsDroppedRX",
 					);
 				} else {
-					this.controller.incrementStatistics("messagesDroppedRX");
+					this._controller?.incrementStatistics("messagesDroppedRX");
 				}
 			} catch (e) {
 				if (
@@ -2314,7 +2311,7 @@ ${handlers.length} left`,
 			if (isSendData(msg)) {
 				node?.incrementStatistics("commandsTX");
 			} else {
-				this.controller.incrementStatistics("messagesTX");
+				this._controller?.incrementStatistics("messagesTX");
 			}
 			// Track and potentially update the status of the node when communication succeeds
 			if (node) {
@@ -2348,7 +2345,7 @@ ${handlers.length} left`,
 					e.context.functionType !==
 						FunctionType.SendDataMulticastBridge
 				) {
-					this.controller.incrementStatistics("messagesDroppedTX");
+					this._controller?.incrementStatistics("messagesDroppedTX");
 					return e.context as TResponse;
 				} else if (e.code === ZWaveErrorCodes.Controller_NodeTimeout) {
 					// If the node failed to respond in time, remember this for the statistics
