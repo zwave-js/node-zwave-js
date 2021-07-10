@@ -396,8 +396,8 @@
 							"description": "Whether this is a Lifeline group. SHOULD exist exactly once, some nodes require more groups to report everything."
 						},
 						"multiChannel": {
-							"const": false,
-							"description": "Set this to `false` to force node id associations for this group, even if endpoint associations are supported."
+							"type": "boolean",
+							"description": "`true`: Force a multi channel association (if possible); `false`: Force a node association (if possible)"
 						}
 					},
 					"anyOf": [
