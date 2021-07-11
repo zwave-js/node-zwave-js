@@ -1520,7 +1520,7 @@ describe("lib/node/Node", () => {
 
 		beforeEach(() => fakeDriver.sendMessage.mockClear());
 
-		it("should map commands from the root endpoint to endpoint 1 if MultiChannelAssociationCC is V1/V2", async () => {
+		it("should map commands from the root endpoint to endpoint 1 if configured", async () => {
 			const node = makeNode([
 				[
 					CommandClasses["Multi Channel Association"],
@@ -1547,6 +1547,12 @@ describe("lib/node/Node", () => {
 			node.getEndpoint(1)?.addCC(CommandClasses["Binary Switch"], {
 				isSupported: true,
 			});
+
+			node["_deviceConfig"] = {
+				compat: {
+					mapRootReportsToEndpoint: 1,
+				},
+			} as any;
 
 			// Handle a command for the root endpoint
 			const command = new BinarySwitchCCReport(
