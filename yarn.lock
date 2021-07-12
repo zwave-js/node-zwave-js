@@ -49,20 +49,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@alcalzone/esm2cjs@npm:^1.1.0":
-  version: 1.1.0
-  resolution: "@alcalzone/esm2cjs@npm:1.1.0"
-  dependencies:
-    esbuild: ^0.12.9
-    fs-extra: ^10.0.0
-    tiny-glob: ^0.2.9
-    yargs: ^16.2.0
-  bin:
-    esm2cjs: bin/esm2cjs.js
-  checksum: 4a35054d182130c6bfe6124ad5c9ead0038d90ce3480812851997d158a43cdf970198ac9763a47fc2fb8a26bbd31cb4e03f85de21fa982ab912a027fc923c1fe
-  languageName: node
-  linkType: hard
-
 "@alcalzone/jsonl-db@npm:^1.3.0":
   version: 1.3.0
   resolution: "@alcalzone/jsonl-db@npm:1.3.0"
@@ -3258,26 +3244,26 @@ __metadata:
   linkType: hard
 
 "@ts-morph/common@patch:@ts-morph/common@~0.10.0#.yarn/sdks/ts-morph/patch.diff::locator=%40zwave-js%2Frepo%40workspace%3A.":
-  version: 0.10.0
-  resolution: "@ts-morph/common@patch:@ts-morph/common@npm%3A0.10.0#.yarn/sdks/ts-morph/patch.diff::version=0.10.0&hash=107b7d&locator=%40zwave-js%2Frepo%40workspace%3A."
+  version: 0.10.1
+  resolution: "@ts-morph/common@patch:@ts-morph/common@npm%3A0.10.1#.yarn/sdks/ts-morph/patch.diff::version=0.10.1&hash=107b7d&locator=%40zwave-js%2Frepo%40workspace%3A."
   dependencies:
     fast-glob: ^3.2.5
     minimatch: ^3.0.4
     mkdirp: ^1.0.4
     path-browserify: ^1.0.1
-  checksum: ed2bb947b3dec70d8b3acc2ea93b245a7027418b73f7319d308acdecdf988d4183c130ee7a51840c14d39c7a048668f2ae90b62238d56505282431cdcd0ee8d6
+  checksum: 50730ef1d8b6a2f4c64386d6d10a8905552372b1bcbb3f41fe5c996ee971386d0901c43c2b944ea00e922f0f99922b821bf503e573b5ffef440ad9ce970471af
   languageName: node
   linkType: hard
 
 "@ts-morph/common@~0.10.0":
-  version: 0.10.0
-  resolution: "@ts-morph/common@npm:0.10.0"
+  version: 0.10.1
+  resolution: "@ts-morph/common@npm:0.10.1"
   dependencies:
     fast-glob: ^3.2.5
     minimatch: ^3.0.4
     mkdirp: ^1.0.4
     path-browserify: ^1.0.1
-  checksum: aa7be98877aec2dae39af607e0407e2e4d7ff3dc4f910bc5fe8fc90c97445cd0562a93c782486f6fa829f05316850c0ad08eaf2540450a5159073bb19cfc8568
+  checksum: 24c8185a2c165d18d683dd822ee2e2070f325e328f87281ff3bc53e555aabf331bb5498ff89e3d1364e462f2b4be237442c38e2920d1ecb7438f4e2f30804e63
   languageName: node
   linkType: hard
 
@@ -3728,7 +3714,6 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@zwave-js/config@workspace:packages/config"
   dependencies:
-    "@alcalzone/esm2cjs": ^1.1.0
     "@types/fs-extra": ^9.0.11
     "@types/jest": ^26.0.23
     "@types/js-levenshtein": ^1.1.0
@@ -3782,7 +3767,6 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@zwave-js/core@workspace:packages/core"
   dependencies:
-    "@alcalzone/esm2cjs": ^1.1.0
     "@alcalzone/jsonl-db": ^1.3.0
     "@types/jest": ^26.0.23
     "@types/node": ^15.12.5
@@ -3832,7 +3816,6 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@zwave-js/maintenance@workspace:packages/maintenance"
   dependencies:
-    "@alcalzone/esm2cjs": ^1.1.0
     "@types/clipboardy": ^2
     "@types/fs-extra": ^9.0.11
     "@types/jest": ^26.0.23
@@ -3862,7 +3845,6 @@ __metadata:
     "@actions/core": ^1.4.0
     "@actions/exec": ^1.1.0
     "@actions/github": ^5.0.0
-    "@alcalzone/esm2cjs": ^1.1.0
     "@alcalzone/jsonl-db": ^1.3.0
     "@alcalzone/release-script": ^2.2.0
     "@babel/core": ^7.14.6
@@ -3908,7 +3890,6 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@zwave-js/serial@workspace:packages/serial"
   dependencies:
-    "@alcalzone/esm2cjs": ^1.1.0
     "@sentry/node": ^6.8.0
     "@serialport/binding-mock": ^9.0.7
     "@types/jest": ^26.0.23
@@ -3943,7 +3924,6 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@zwave-js/shared@workspace:packages/shared"
   dependencies:
-    "@alcalzone/esm2cjs": ^1.1.0
     "@types/fs-extra": ^9.0.11
     "@types/jest": ^26.0.23
     "@types/node": ^15.12.5
@@ -3968,7 +3948,6 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@zwave-js/testing@workspace:packages/testing"
   dependencies:
-    "@alcalzone/esm2cjs": ^1.1.0
     "@types/jest": ^26.0.23
     "@types/node": ^15.12.5
     "@types/triple-beam": ^1.3.2
@@ -6034,7 +6013,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"esbuild@npm:^0.12.8, esbuild@npm:^0.12.9":
+"esbuild@npm:^0.12.8":
   version: 0.12.14
   resolution: "esbuild@npm:0.12.14"
   bin:
@@ -7118,13 +7097,6 @@ fsevents@^2.1.2:
   languageName: node
   linkType: hard
 
-"globalyzer@npm:0.1.0":
-  version: 0.1.0
-  resolution: "globalyzer@npm:0.1.0"
-  checksum: 419a0f95ba542534fac0842964d31b3dc2936a479b2b1a8a62bad7e8b61054faa9b0a06ad9f2e12593396b9b2621cac93358d9b3071d33723fb1778608d358a1
-  languageName: node
-  linkType: hard
-
 "globby@npm:^11.0.2, globby@npm:^11.0.3":
   version: 11.0.4
   resolution: "globby@npm:11.0.4"
@@ -7136,13 +7108,6 @@ fsevents@^2.1.2:
     merge2: ^1.3.0
     slash: ^3.0.0
   checksum: d3e02d5e459e02ffa578b45f040381c33e3c0538ed99b958f0809230c423337999867d7b0dbf752ce93c46157d3bbf154d3fff988a93ccaeb627df8e1841775b
-  languageName: node
-  linkType: hard
-
-"globrex@npm:^0.1.2":
-  version: 0.1.2
-  resolution: "globrex@npm:0.1.2"
-  checksum: adca162494a176ce9ecf4dd232f7b802956bb1966b37f60c15e49d2e7d961b66c60826366dc2649093cad5a0d69970cfa8875bd1695b5a1a2f33dcd2aa88da3c
   languageName: node
   linkType: hard
 
@@ -12427,16 +12392,6 @@ fsevents@^2.1.2:
   languageName: node
   linkType: hard
 
-"tiny-glob@npm:^0.2.9":
-  version: 0.2.9
-  resolution: "tiny-glob@npm:0.2.9"
-  dependencies:
-    globalyzer: 0.1.0
-    globrex: ^0.1.2
-  checksum: aea5801eb6663ddf77ebb74900b8f8bd9dfcfc9b6a1cc8018cb7421590c00bf446109ff45e4b64a98e6c95ddb1255a337a5d488fb6311930e2a95334151ec9c6
-  languageName: node
-  linkType: hard
-
 "tmp@npm:^0.0.33":
   version: 0.0.33
   resolution: "tmp@npm:0.0.33"
@@ -13490,7 +13445,6 @@ typescript@^4.3.5:
   version: 0.0.0-use.local
   resolution: "zwave-js@workspace:packages/zwave-js"
   dependencies:
-    "@alcalzone/esm2cjs": ^1.1.0
     "@alcalzone/jsonl-db": ^1.3.0
     "@alcalzone/pak": ^0.6.0
     "@sentry/integrations": ^6.8.0
