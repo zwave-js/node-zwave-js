@@ -3054,7 +3054,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@sentry/integrations@npm:^6.5.1, @sentry/integrations@npm:^6.8.0":
+"@sentry/integrations@npm:^6.8.0":
   version: 6.8.0
   resolution: "@sentry/integrations@npm:6.8.0"
   dependencies:
@@ -3077,7 +3077,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@sentry/node@npm:^6.5.1, @sentry/node@npm:^6.8.0":
+"@sentry/node@npm:^6.8.0":
   version: 6.8.0
   resolution: "@sentry/node@npm:6.8.0"
   dependencies:
@@ -3746,23 +3746,6 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@zwave-js/config@npm:7.11.0":
-  version: 7.11.0
-  resolution: "@zwave-js/config@npm:7.11.0"
-  dependencies:
-    "@zwave-js/core": 7.11.0
-    "@zwave-js/shared": 7.11.0
-    alcalzone-shared: ^3.0.4
-    ansi-colors: ^4.1.1
-    fs-extra: ^9.0.1
-    json-logic-js: ^2.0.1
-    json5: ^2.2.0
-    semver: ^7.3.2
-    winston: ^3.3.3
-  checksum: 2f6f4a4af2b3448ea6e2173acd1089074ca5b466a941c22b9c03f48a09bcf2eaf998bb0f49749c40a3064251ab74d79ec5a3a992deefc7380a3ebe9e12a5f03c
-  languageName: node
-  linkType: hard
-
 "@zwave-js/core@8.0.0-alpha.0, @zwave-js/core@workspace:packages/core":
   version: 0.0.0-use.local
   resolution: "@zwave-js/core@workspace:packages/core"
@@ -3786,22 +3769,6 @@ __metadata:
     winston-transport: "*"
   languageName: unknown
   linkType: soft
-
-"@zwave-js/core@npm:7.11.0":
-  version: 7.11.0
-  resolution: "@zwave-js/core@npm:7.11.0"
-  dependencies:
-    "@alcalzone/jsonl-db": ^1.3.0
-    "@zwave-js/shared": 7.11.0
-    "@zwave-js/winston-daily-rotate-file": ^4.5.6-0
-    alcalzone-shared: ^3.0.4
-    ansi-colors: ^4.1.1
-    dayjs: ^1.10.5
-    nrf-intel-hex: ^1.3.0
-    winston: ^3.3.3
-  checksum: 3a3ddfb79873163bdb489e4a1ffe20397fef6a87f7685a88b895e9343638f36fc1f30a9be806394c9ffc1ea3e8814732af4c17936fc176ab609a848b88c35e60
-  languageName: node
-  linkType: hard
 
 "@zwave-js/file-stream-rotator@npm:^0.5.8-0":
   version: 0.5.8-0
@@ -3863,8 +3830,8 @@ __metadata:
     "@types/node": ^15.12.5
     "@typescript-eslint/eslint-plugin": ^4.28.2
     "@typescript-eslint/parser": ^4.28.2
-    "@zwave-js/config": 7.11.0
-    "@zwave-js/core": 7.11.0
+    "@zwave-js/config": 8.0.0-alpha.1
+    "@zwave-js/core": 8.0.0-alpha.0
     commitizen: ^4.2.4
     coveralls: ^3.1.1
     cz-conventional-changelog: ^3.3.0
@@ -3882,7 +3849,7 @@ __metadata:
     reflect-metadata: ^0.1.13
     ts-node: ^10.0.0
     typescript: ^4.3.5
-    zwave-js: 7.11.0
+    zwave-js: 8.0.0-alpha.2
   languageName: unknown
   linkType: soft
 
@@ -3908,18 +3875,6 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@zwave-js/serial@npm:7.11.0":
-  version: 7.11.0
-  resolution: "@zwave-js/serial@npm:7.11.0"
-  dependencies:
-    "@zwave-js/core": 7.11.0
-    alcalzone-shared: ^3.0.4
-    serialport: ^9.1.0
-    winston: ^3.3.3
-  checksum: e02258d6a8a7f6b11129b6f14e1c9ce6b90ba001e167cf2146700014574766d16608e6d2c6e6ec764c13f3264b9eeaeacc050864d605d16331888a8919cd73a8
-  languageName: node
-  linkType: hard
-
 "@zwave-js/shared@8.0.0-alpha.0, @zwave-js/shared@workspace:packages/shared":
   version: 0.0.0-use.local
   resolution: "@zwave-js/shared@workspace:packages/shared"
@@ -3934,15 +3889,6 @@ __metadata:
     typescript: ^4.3.5
   languageName: unknown
   linkType: soft
-
-"@zwave-js/shared@npm:7.11.0":
-  version: 7.11.0
-  resolution: "@zwave-js/shared@npm:7.11.0"
-  dependencies:
-    alcalzone-shared: ^3.0.4
-  checksum: 7d22b7927cb29c5dcba9fddaa19906cee02c04121cf7b70067cca755e8d9bc436adb4c19180365cb3f6f55ab79fc4c53b27e862661af126503a121148d13e874
-  languageName: node
-  linkType: hard
 
 "@zwave-js/testing@8.0.0-alpha.0, @zwave-js/testing@workspace:packages/testing":
   version: 0.0.0-use.local
@@ -5553,13 +5499,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"dayjs@npm:^1.10.5":
-  version: 1.10.5
-  resolution: "dayjs@npm:1.10.5"
-  checksum: a4b6565becdb7607e381666bf1b64a48ade2fcf305c18e4e9c8f9346aa80436a0319a2856f86a6e4b12d6041e3ba3619e9995bde2b44ff9887dcb402e176aba1
-  languageName: node
-  linkType: hard
-
 "dayjs@npm:^1.10.6":
   version: 1.10.6
   resolution: "dayjs@npm:1.10.6"
@@ -6753,7 +6692,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"fs-extra@npm:^9.0.0, fs-extra@npm:^9.0.1, fs-extra@npm:^9.1.0":
+"fs-extra@npm:^9.0.0, fs-extra@npm:^9.1.0":
   version: 9.1.0
   resolution: "fs-extra@npm:9.1.0"
   dependencies:
@@ -11550,7 +11489,7 @@ fsevents@^2.1.2:
   languageName: node
   linkType: hard
 
-"serialport@npm:^9.1.0, serialport@npm:^9.2.0":
+"serialport@npm:^9.2.0":
   version: 9.2.0
   resolution: "serialport@npm:9.2.0"
   dependencies:
@@ -13271,13 +13210,6 @@ typescript@^4.3.5:
   languageName: node
   linkType: hard
 
-"xstate@npm:^4.20.0":
-  version: 4.22.0
-  resolution: "xstate@npm:4.22.0"
-  checksum: 1bf72c899e1c293c993e4c5dbbaa7141bd7d3cfbcea9938de1b36728d2c1ac9225940ce3b64640a097008972205f2a4203a96b6060350f7dac5e299240b2b615
-  languageName: node
-  linkType: hard
-
 "xstate@npm:^4.20.2":
   version: 4.20.2
   resolution: "xstate@npm:4.20.2"
@@ -13414,34 +13346,7 @@ typescript@^4.3.5:
   languageName: node
   linkType: hard
 
-"zwave-js@npm:7.11.0":
-  version: 7.11.0
-  resolution: "zwave-js@npm:7.11.0"
-  dependencies:
-    "@alcalzone/jsonl-db": ^1.3.0
-    "@alcalzone/pak": ^0.6.0
-    "@sentry/integrations": ^6.5.1
-    "@sentry/node": ^6.5.1
-    "@zwave-js/config": 7.11.0
-    "@zwave-js/core": 7.11.0
-    "@zwave-js/serial": 7.11.0
-    "@zwave-js/shared": 7.11.0
-    alcalzone-shared: ^3.0.4
-    ansi-colors: ^4.1.1
-    axios: ^0.21.1
-    execa: ^5.1.1
-    fs-extra: ^9.0.1
-    proper-lockfile: ^4.1.2
-    reflect-metadata: ^0.1.13
-    serialport: ^9.1.0
-    source-map-support: ^0.5.19
-    winston: ^3.3.3
-    xstate: ^4.20.0
-  checksum: 8b046db626ec835ff66fc926b3cf7fbc1136177c58c3ec4b9a1a72c770181282077c225c47f2e953314009e523ae5b7d2f355a14b5731e8b989225cceafb6a29
-  languageName: node
-  linkType: hard
-
-"zwave-js@workspace:packages/zwave-js":
+"zwave-js@8.0.0-alpha.2, zwave-js@workspace:packages/zwave-js":
   version: 0.0.0-use.local
   resolution: "zwave-js@workspace:packages/zwave-js"
   dependencies:
