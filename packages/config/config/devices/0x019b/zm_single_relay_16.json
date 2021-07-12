@@ -165,8 +165,9 @@
 			]
 		},
 		"8": {
-			"label": "Automatic Turn On",
-			"description": "Time to turn relay on after having been turned off (1-86400 seconds)",
+			"label": "Auto-On Delay",
+			"description": "Time to turn relay on after having been turned off",
+			"unit": "seconds",
 			"valueSize": 4,
 			"minValue": 0,
 			"maxValue": 86400,
