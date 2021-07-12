@@ -96,7 +96,7 @@
 					"value": 0
 				},
 				{
-					"label": "Button sends meter report + relay status, load can be only controlled wirelessly",
+					"label": "Button only sends status",
 					"value": 1
 				}
 			]
