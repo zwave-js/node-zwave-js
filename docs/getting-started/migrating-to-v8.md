@@ -1,6 +1,6 @@
-# Migrating to v7
+# Migrating to v8
 
-<!-- In version 8.x, we [INSERT XYZ], leading to several breaking changes. -->
+For version 8.x, we had several breaking changes lined up, so we also took the chance to sneak in a few more by reworking our dev environment.
 
 Please follow this guide if you're migrating from v7. If migrating from v6, please see the v7 migration guide first.
 
@@ -8,6 +8,15 @@ Please follow this guide if you're migrating from v7. If migrating from v6, plea
 
 We have migrated the repository to the latest version of `yarn`. This changes a few things, mainly regarding installing dependencies and editor support.
 The repo is configured to automatically use the correct `typescript` dependency, but if anything goes wrong, please read [this](https://yarnpkg.com/getting-started/editor-sdks#vscode). Also check out the updated documentation on [developing locally / installing from GitHub](https://zwave-js.github.io/node-zwave-js/#/development/installing-from-github).
+
+## Raise minimum supported Node.js version to 12.22
+
+Node.js 10 has been EOL since April 2021 and many Node.js packages have dropped support since then. In order to be able to properly maintain `zwave-js`, we now need to drop support aswell going forward. We chose to raise the bar a bit further (to Node.js `12.22`) in order to make use of some new features.
+
+## Change secondary exports to `package.json` subpath exports
+
+Since Node.js 12 officially supports `package.json` subpath exports, we removed our hand-rolled build step that has been causing some weirdness when developing on Windows for a while.
+Importing the secondary exports `zwave-js/Values` etc. should continue to work, but you won't be able to import internal paths like `zwave-js/build/lib` anymore. Make sure you import the official exports only.
 
 ## Skip querying user codes during the interview
 
