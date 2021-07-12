@@ -127,25 +127,7 @@
 			]
 		},
 		"6": {
-			"label": "Restore Power Level",
-			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 2,
-			"defaultValue": 2,
-			"unsigned": true,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "Always off on restored power",
-					"value": 0
-				},
-				{
-					"label": "Always on on restored power",
-					"value": 1
-				},
-				{
-					"label": "Restore last state on restored power (default)",
-					"value": 2
+			"$import": "templates/master_template.json#state_after_power_failure_off_on_prev
 				}
 			]
 		},
