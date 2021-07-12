@@ -40,7 +40,6 @@
 	"paramInformation": {
 		"1": {
 			"label": "Load Limit",
-			"description": "1-16",
 			"valueSize": 1,
 			"unit": "A",
 			"minValue": 1,
