@@ -3,13 +3,33 @@
   "version": "8.0.0-alpha.2",
   "description": "Z-Wave driver written entirely in JavaScript/TypeScript",
   "keywords": [],
-  "main": "build/index.js",
+  "main": "build/cjs/index.js",
+  "module": "build/esm/index.js",
   "exports": {
-    ".": "./build/index.js",
+    ".": {
+      "import": "./build/esm/index.js",
+      "require": "./build/cjs/index.js"
+    },
     "./package.json": "./package.json",
-    "./*": "./build/*.js"
+    "./*": {
+      "import": "./build/esm/*.js",
+      "require": "./build/cjs/*.js"
+    }
   },
-  "types": "build/index.d.ts",
+  "types": "build/esm/index.d.ts",
+  "typesVersions": {
+    "*": {
+      "build/esm/index.d.ts": [
+        "build/esm/index.d.ts"
+      ],
+      "build/cjs/index.d.ts": [
+        "build/esm/index.d.ts"
+      ],
+      "*": [
+        "build/esm/*"
+      ]
+    }
+  },
   "files": [
     "build/**/*.{js,d.ts,map}"
   ],
@@ -36,7 +56,8 @@
     "b": "yarn ts maintenance/_build.ts",
     "deprecated": "node -p '\\\"\\\\n \\\\n \\\\033[31;1;4mThe \\\\\"build:full\\\\\" script has been deprecated. Use \\\\\"build\\\\\" instead!\\\\033[0m\\\\n \\\\n\\\"'",
     "build_full": "yarn run deprecated && yarn run build",
-    "build": "yarn b prebuild && tsc -b tsconfig.build.json",
+    "build": "yarn b prebuild && tsc -b tsconfig.build.json && yarn postbuild",
+    "postbuild": "esm2cjs --in=build/esm --out=build/cjs -l error",
     "clean": "tsc -b tsconfig.build.json --clean",
     "prewatch": "yarn b prebuild",
     "watch": "yarn prewatch && tsc -b tsconfig.build.json --watch --pretty",
@@ -66,6 +87,7 @@
     "xstate": "^4.20.2"
   },
   "devDependencies": {
+    "@alcalzone/esm2cjs": "^1.1.0",
     "@types/fs-extra": "^9.0.11",
     "@types/jest": "^26.0.23",
     "@types/node": "^15.12.5",

@@ -139,8 +139,13 @@ jobs:
       run: yarn run build
 
     # Test that the generated packages are ok
-    - name: Import main entry point
+    - if: matrix.node-version == '10.x'
+      name: Import main entry point (CommonJS)
       run: yarn node -e 'require("zwave-js")'
+
+    - if: matrix.node-version != '10.x'
+      name: Import main entry point (ESM)
+      run: yarn node --input-type=module --es-module-specifier-resolution=node -e 'import "zwave-js"'
 
     - name: Run component tests
       run: yarn run test:ci
