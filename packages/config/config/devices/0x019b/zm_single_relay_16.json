@@ -25,7 +25,7 @@
 			"maxNodes": 5
 		},
 		"3": {
-			"label": "Control External Start/Stop S2",
+			"label": "External Relay Control: Start/Stop Multilevel Set S1",
 			"maxNodes": 5
 		},
 		"4": {
