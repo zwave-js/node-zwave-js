@@ -109,7 +109,7 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "Sends scene controller for s2. s1 disabled",
+					"label": "S2 Only",
 					"value": 0
 				},
 				{
