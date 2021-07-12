@@ -56,7 +56,7 @@
 			"unsigned": true,
 			"options": [
 				{
-					"label": "Disabled and will not retry. User needs to manually turn on afterwards. If temperature overload is on, device will not turn on until device has cooled down",
+					"label": "Disable",
 					"value": 0
 				}
 			]
