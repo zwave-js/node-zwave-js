@@ -48,8 +48,7 @@
 			"unsigned": true
 		},
 		"2": {
-			"label": "Power Shutdown Actions",
-			"description": "0: Disabled, 1-32767: minute(s) delay before attempting to turn back on",
+			"label": "Turn On Delay After Emergency Off",
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 32767,
