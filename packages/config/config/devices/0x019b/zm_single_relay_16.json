@@ -42,6 +42,7 @@
 			"label": "Load Limit",
 			"description": "1-16",
 			"valueSize": 1,
+			"unit": "A",
 			"minValue": 1,
 			"maxValue": 16,
 			"defaultValue": 16,
