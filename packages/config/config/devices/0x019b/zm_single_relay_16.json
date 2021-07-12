@@ -92,7 +92,7 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "Button turns load on/off and sends meter report + relay status",
+					"label": "Button turns on/off and sends status",
 					"value": 0
 				},
 				{
