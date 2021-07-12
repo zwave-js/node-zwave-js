@@ -174,7 +174,7 @@
 			"unsigned": true,
 			"options": [
 				{
-					"label": "Auto on disabled",
+					"label": "Disable",
 					"value": 0
 				}
 			]
