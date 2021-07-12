@@ -21,7 +21,7 @@
 			"isLifeline": true
 		},
 		"2": {
-			"label": "External Relay Control S1",
+			"label": "External Relay Control: Basic Set S1",
 			"maxNodes": 5
 		},
 		"3": {
