@@ -150,8 +150,8 @@
 			]
 		},
 		"7": {
-			"label": "Automatic Turn Off",
-			"description": "Time to turn relay off after having been turned on (1-86400 seconds)",
+			"label": "Auto-Off Delay",
+			"unit": "seconds",
 			"valueSize": 4,
 			"minValue": 0,
 			"maxValue": 86400,
