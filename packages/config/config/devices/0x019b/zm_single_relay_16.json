@@ -211,8 +211,8 @@
 		},
 		"11": {
 			"label": "Meter Report Delta Value",
-			"description": "5-3600 W",
 			"valueSize": 2,
+			"unit": "W",
 			"minValue": 5,
 			"maxValue": 3600,
 			"defaultValue": 75,
