@@ -665,6 +665,7 @@ export class SoundSwitchCCTonePlayReport extends SoundSwitchCC {
 	@ccValueMetadata({
 		...ValueMetadata.UInt8,
 		label: "Tone ID",
+		valueChangeOptions: ["volumeLevel"],
 	})
 	public readonly toneId: ToneId | number;
 
