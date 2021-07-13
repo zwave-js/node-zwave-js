@@ -32,7 +32,8 @@
     "node": ">=v12.22.2"
   },
   "scripts": {
-    "build": "yarn ts maintenance/prebuild.ts && tsc -b tsconfig.build.json",
+    "prebuild": "yarn ts maintenance/prebuild.ts",
+    "build": "yarn prebuild && tsc -b tsconfig.build.json",
     "clean": "tsc -b tsconfig.build.json --clean",
     "watch": "yarn run build --watch --pretty",
     "lint_config": "yarn ts maintenance/lintConfigFiles.ts",

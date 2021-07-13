@@ -30,6 +30,11 @@
   "engines": {
     "node": ">=v12.22.2"
   },
+  "scripts": {
+    "build": "tsc -b tsconfig.build.json",
+    "clean": "yarn run build --clean",
+    "watch": "yarn run build --watch --pretty"
+  },
   "dependencies": {
     "@alcalzone/jsonl-db": "^1.3.0",
     "@zwave-js/shared": "8.0.0-alpha.0",
@@ -42,11 +47,6 @@
     "triple-beam": "*",
     "winston": "^3.3.3",
     "winston-transport": "*"
-  },
-  "scripts": {
-    "build": "tsc -b tsconfig.build.json",
-    "clean": "yarn run build --clean",
-    "watch": "yarn run build --watch --pretty"
   },
   "devDependencies": {
     "@types/jest": "^26.0.23",
