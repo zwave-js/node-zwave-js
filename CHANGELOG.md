@@ -5,9 +5,15 @@
 -->
 ## __WORK IN PROGRESS__ · _There is no spoon_
 ### Breaking changes · [Migration guide](https://zwave-js.github.io/node-zwave-js/#/getting-started/migrating-to-v8)
-* The repository has been migrated from `yarn v1` to `yarn v3`. This changes a few things, mainly regarding installing dependencies and editor support and might require manual intervention after updating the repo.
-* The minimum required Node.js version is now `v12.22.2`
 * User codes are no longer queried during the interview in order to save battery
+* Restructured interview settings in `ZWaveOptions`
+* Reworked how endpoints and lifeline associations are handled
+* Removed `neighbors` property from `ZWaveNode` class and removed `InterviewStage.Neighbors`
+* Added missing `node` argument to nodes' `"statistics updated"` event
+* The minimum required Node.js version is now `v12.22.2`
+* The repository has been migrated from `yarn v1` to `yarn v3`. This changes a few things, mainly regarding installing dependencies and editor support and might require manual intervention after updating the repo.
+* Change secondary exports to `package.json` subpath exports
+* Both fields in `BatteryHealthReports` may be `undefined`
 
 <!-- ### Features
 

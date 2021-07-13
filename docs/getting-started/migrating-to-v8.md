@@ -103,6 +103,18 @@ interface ZWaveOptions {
 We have migrated the repository to the latest version of `yarn`. This changes a few things, mainly regarding installing dependencies and editor support.
 The repo is configured to automatically use the correct `typescript` dependency, but if anything goes wrong, please read [this](https://yarnpkg.com/getting-started/editor-sdks#vscode). Also check out the updated documentation on [developing locally / installing from GitHub](https://zwave-js.github.io/node-zwave-js/#/development/installing-from-github).
 
+If something is wrong after the update, try this:
+
+1.  Clean up package structure:
+    ```bash
+    yarn
+    rm packages/*/*.tsbuildinfo
+    rm -rf packages/*/build
+    yarn build
+    ```
+2.  Reload your editor
+3.  Choose the correct TypeScript version (workspace version, not VSCode's) for the language server
+
 ## Removed `neighbors` property from `ZWaveNode` class and removed `InterviewStage.Neighbors`
 
 The static `neighbors` property was deprecated in `v7.9.0` and is now removed. Use `controller.getNodeNeighbors` to retrieve the neighbor lists on demand instead of accessing stale data. Furthermore, the interview stage `Neighbors` was removed too, because the information is no longer stored.
