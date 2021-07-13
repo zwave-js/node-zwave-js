@@ -45,6 +45,8 @@ export type ValueType =
 export interface ValueChangeOptions {
 	/** A duration to be used for transitions like dimming lights or activating scenes. */
 	transitionDuration: Duration | string;
+	/** A volume level to be used for activating a Sound Switch CC. */
+	volumeLevel: number;
 }
 
 export interface ValueMetadataAny {

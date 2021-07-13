@@ -227,6 +227,7 @@ export class SoundSwitchCCAPI extends CCAPI {
 	protected [SET_VALUE]: SetValueImplementation = async (
 		{ property },
 		value,
+		options,
 	): Promise<void> => {
 		if (property === "defaultToneId") {
 			if (typeof value !== "number") {
@@ -258,10 +259,15 @@ export class SoundSwitchCCAPI extends CCAPI {
 				);
 			}
 			if (value > 0) {
+				let volume = options?.volumeLevel;
+				if (volume === undefined) {
+					volume = this.endpoint
+						.getNodeUnsafe()
+						?.getValue<number>(
+							getVolumeValueId(this.endpoint.index),
+						);
+				}
 				// Try to use the current volume if it exists
-				const volume = this.endpoint
-					.getNodeUnsafe()
-					?.getValue<number>(getVolumeValueId(this.endpoint.index));
 				await this.play(value, volume);
 			} else {
 				await this.stopPlaying();
