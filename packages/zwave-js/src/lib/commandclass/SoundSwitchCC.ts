@@ -259,7 +259,7 @@ export class SoundSwitchCCAPI extends CCAPI {
 				);
 			}
 			if (value > 0) {
-				let volume = options?.volumeLevel;
+				let volume = options?.volume;
 				if (volume === undefined) {
 					volume = this.endpoint
 						.getNodeUnsafe()
@@ -665,7 +665,7 @@ export class SoundSwitchCCTonePlayReport extends SoundSwitchCC {
 	@ccValueMetadata({
 		...ValueMetadata.UInt8,
 		label: "Tone ID",
-		valueChangeOptions: ["volumeLevel"],
+		valueChangeOptions: ["volume"],
 	})
 	public readonly toneId: ToneId | number;
 
