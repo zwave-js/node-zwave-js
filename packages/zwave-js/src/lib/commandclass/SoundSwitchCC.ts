@@ -259,6 +259,7 @@ export class SoundSwitchCCAPI extends CCAPI {
 				);
 			}
 			if (value > 0) {
+				// Use provided volume or try to use the current volume if it exists
 				const volume =
 					options?.volume !== undefined
 						? options.volume
@@ -267,7 +268,6 @@ export class SoundSwitchCCAPI extends CCAPI {
 								?.getValue<number>(
 									getVolumeValueId(this.endpoint.index),
 								);
-				// Try to use the current volume if it exists
 				await this.play(value, volume);
 			} else {
 				await this.stopPlaying();
