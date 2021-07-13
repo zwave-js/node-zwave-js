@@ -3,7 +3,7 @@
 	Add placeholder for next release with `wip` snippet
   ## __WORK IN PROGRESS__
 -->
-## __WORK IN PROGRESS__ · _There is no spoon_
+## 8.0.0-alpha.3 (2021-07-14) · _There is no spoon_
 ### Breaking changes · [Migration guide](https://zwave-js.github.io/node-zwave-js/#/getting-started/migrating-to-v8)
 * User codes are no longer queried during the interview in order to save battery
 * Restructured interview settings in `ZWaveOptions`

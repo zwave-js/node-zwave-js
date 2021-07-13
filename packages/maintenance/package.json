@@ -1,6 +1,6 @@
 {
   "name": "@zwave-js/maintenance",
-  "version": "8.0.0-alpha.0",
+  "version": "8.0.0-alpha.3",
   "description": "zwave-js: maintenance scripts",
   "private": true,
   "keywords": [],
@@ -40,8 +40,8 @@
     "@types/node": "^15.12.5",
     "@types/prettier": "^2",
     "@types/yargs": "^16.0.4",
-    "@zwave-js/core": "8.0.0-alpha.0",
-    "@zwave-js/shared": "8.0.0-alpha.0",
+    "@zwave-js/core": "8.0.0-alpha.3",
+    "@zwave-js/shared": "8.0.0-alpha.3",
     "ansi-colors": "^4.1.1",
     "clipboardy": "^2.3.0",
     "esbuild-register": "^2.6.0",
