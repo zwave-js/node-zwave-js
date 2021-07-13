@@ -2,6 +2,23 @@
 <!--
 	Add placeholder for next release with `wip` snippet
 -->
+## __WORK IN PROGRESS__
+### Features
+* The volume (for the Sound Switch CC) can now be passed as a `setValue` option
+
+### Bugfixes
+* Fixed a crash that happened when the driver tried to update statistics before the controller interview
+
+### Config file changes
+* Preserve root endpoint values on Fibaro RGBW 441
+* Allow manual entry for tone duration for Aeotec Doorbell and Siren
+* Add config file for MCOHome A8-9
+* Update MP20Z config file
+* Correct device fingerprint for Kwikset 912
+
+### Changes under the hood
+* Nightly config releases now ignore changes outside the `packages` directory when determining if a new release can be made
+
 ## 7.11.0 (2021-07-05)
 ### Features
 * Added `invokeCCAPI` to the `Endpoint` class, which allows to generically/dynamically invoke CC API
