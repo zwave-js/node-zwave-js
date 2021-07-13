@@ -4,10 +4,58 @@ For version 8.x, we had several breaking changes lined up, so we also took the c
 
 Please follow this guide if you're migrating from v7. If migrating from v6, please see the v7 migration guide first.
 
-## Migration from Yarn v1 to Yarn v3
+## Reworked handling of endpoints and lifeline associations
 
-We have migrated the repository to the latest version of `yarn`. This changes a few things, mainly regarding installing dependencies and editor support.
-The repo is configured to automatically use the correct `typescript` dependency, but if anything goes wrong, please read [this](https://yarnpkg.com/getting-started/editor-sdks#vscode). Also check out the updated documentation on [developing locally / installing from GitHub](https://zwave-js.github.io/node-zwave-js/#/development/installing-from-github).
+### A little background
+
+So called unsolicited updates (that weren't requested by `zwave-js`) are sent by devices via associations - usually the "Lifeline". The Z-Wave specifications do a terrible job at explaining how these should be configured and used, so as a result, most manufacturers got it wrong. Missing updates are usually caused by incorrect associations or devices that send incorrect or ambiguous reports or simply devices that are unnecessarily using endpoints.
+
+There are (what feels like) 20 different ways to configure these associations to the controller, all of them very dependent on the actual device that should be configured. But only a handful of variations can be automatically decided on, so it is more likely that we get it wrong than right.
+
+When a device sent us a report via the root device, we used to guess which endpoint that report was supposed to come from. No matter how we changed the guessing strategy, some use cases were broken.
+
+### Ignore unnecessary endpoints instead of the root device
+
+Our plan going forward is to detect when endpoints are unnecessary and should be ignored - as opposed to ignoring the root device when there are any endpoints like we do now. This should massively reduce our chances to get the associations wrong, remove the need to make these guesses and make the remaining edge cases easier to handle.
+
+If all endpoints have different device classes, they are most likely unnecessary and will be ignored, because all the functionality will also be exposed on the root device. Those devices that only report via the root device should now work out of the box.
+
+For the other devices that actually need their endpoints despite them being different, a new compat flag was added to restore the current behavior:
+
+```jsonc
+"preserveEndpoints": "*", // to preserve all endpoints and hide the root values instead
+"preserveEndpoints": [2, 3], // to preserve endpoints 2 and 3, but ignore endpoint 1.
+```
+
+For example, there are some thermostats which expose an external sensor with battery through a seemingly unnecessary endpoint, but it needs to be preserved
+
+If some endpoints share a device class, like multi-channel switches, the current behavior of hiding the root device's in favor of the endpoints' values will stay in place.
+
+### Define which endpoint to map root reports to
+
+Because the specs stated that the root device should mirror at least endpoint 1 (and possibly others), we used to map reports that came through the root device to the first supporting endpoint. This behavior has changed a couple of times and has never been perfect for everyone. With this PR, device configs need to opt-in instead to turn on the mapping and specify the target endpoint. Otherwise, reports to the root device get silently ignored if the root's values are hidden.
+
+To do so, a new compat flag was added:
+
+```jsonc
+"mapRootReportsToEndpoint": 1
+```
+
+This also needs to be used for some devices, e.g. dual channel switches, that partially report un-encapsulated through the root device.
+
+### Prefer node associations on each endpoint over multi channel associations
+
+Many manufacturers seem to get multi channel associations "wrong". We now prefer setting up node associations on each endpoint instead if possible. The default strategy for each endpoint is the following:
+
+1. Try a node association on the current endpoint/root
+2. If Association CC is not supported, try assigning a node association with the Multi Channel Association CC
+3. If that did not work, fall back to a multi channel association (target endpoint 0)
+4. If that did not work either, the endpoint index is `> 0` and the node supports Z-Wave+:  
+   Fall back to a multi channel association (target endpoint 0) on the root, if it doesn't have one yet.
+
+Incorrect lifeline associations like the ones set up by OZW with target endpoint 1 will automatically get cleaned up during the process.
+
+This strategy can be controlled with the `multiChannel` flag in the association config. `true` forces a multi channel association (if supported) and does not fall back to node associations. `false` forces a node association (if supported) and does not fall back to a node association.
 
 ## Raise minimum supported Node.js version to 12.22
 
@@ -49,6 +97,11 @@ interface ZWaveOptions {
 	};
 }
 ```
+
+## Migration from Yarn v1 to Yarn v3
+
+We have migrated the repository to the latest version of `yarn`. This changes a few things, mainly regarding installing dependencies and editor support.
+The repo is configured to automatically use the correct `typescript` dependency, but if anything goes wrong, please read [this](https://yarnpkg.com/getting-started/editor-sdks#vscode). Also check out the updated documentation on [developing locally / installing from GitHub](https://zwave-js.github.io/node-zwave-js/#/development/installing-from-github).
 
 ## Removed `neighbors` property from `ZWaveNode` class and removed `InterviewStage.Neighbors`
 

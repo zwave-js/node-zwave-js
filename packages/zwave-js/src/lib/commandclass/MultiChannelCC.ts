@@ -16,6 +16,7 @@ import {
 import { num2hex } from "@zwave-js/shared";
 import type { Driver } from "../driver/Driver";
 import { MessagePriority } from "../message/Constants";
+import type { ZWaveNode } from "../node/Node";
 import { CCAPI } from "./API";
 import {
 	API,
@@ -100,6 +101,27 @@ export function getAggregatedCountValueId(): ValueID {
 		commandClass: CommandClasses["Multi Channel"],
 		property: "aggregatedCount",
 	};
+}
+
+/**
+ * Many devices unnecessarily use endpoints when they could (or do) provide all functionality via the root device.
+ * This function gives an estimate if this is the case (i.e. all endpoints have a different device class)
+ */
+function areAllEndpointsDifferent(
+	node: ZWaveNode,
+	endpointIndizes: number[],
+): boolean {
+	// Endpoints are useless if all of them have different device classes
+	const deviceClasses = new Set<number>();
+	for (const endpoint of endpointIndizes) {
+		const devClassValueId = getEndpointDeviceClassValueId(endpoint);
+		const { generic, specific } =
+			node.getValue<{ generic: number; specific: number }>(
+				devClassValueId,
+			)!;
+		deviceClasses.add(generic * 256 + specific);
+	}
+	return deviceClasses.size === endpointIndizes.length;
 }
 
 @API(CommandClasses["Multi Channel"])
@@ -359,7 +381,7 @@ identical capabilities:      ${multiResponse.identicalCapabilities}`;
 			direction: "inbound",
 		});
 
-		const allEndpoints: number[] = [];
+		let allEndpoints: number[] = [];
 		const addSequentialEndpoints = (): void => {
 			for (
 				let i = 1;
@@ -486,6 +508,33 @@ supported CCs:`;
 		}
 
 		// Now that all endpoints have been interviewed, remember which ones are there
+		// But first figure out if they seem unnecessary and if they do, which ones should be preserved
+		if (
+			!multiResponse.identicalCapabilities &&
+			areAllEndpointsDifferent(node, allEndpoints)
+		) {
+			const preserve = node.deviceConfig?.compat?.preserveEndpoints;
+			if (!preserve) {
+				allEndpoints = [];
+				this.driver.controllerLog.logNode(node.id, {
+					message: `Endpoints seem unnecessary b/c they have different device classes, ignoring all...`,
+				});
+			} else if (preserve === "*") {
+				// preserve all endpoints, do nothing
+				this.driver.controllerLog.logNode(node.id, {
+					message: `Endpoints seem unnecessary, but are configured to be preserved.`,
+				});
+			} else {
+				allEndpoints = allEndpoints.filter((ep) =>
+					preserve.includes(ep),
+				);
+				this.driver.controllerLog.logNode(node.id, {
+					message: `Endpoints seem unnecessary, but endpoints ${allEndpoints.join(
+						", ",
+					)} are configured to be preserved.`,
+				});
+			}
+		}
 		this.getValueDB().setValue(getEndpointIndizesValueId(), allEndpoints);
 
 		// Remember that the interview is complete

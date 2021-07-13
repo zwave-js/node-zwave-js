@@ -28,7 +28,25 @@
 		"**/*.tsbuildinfo": true,
 		"**/cache": true,
 		"packages/zwave-js/**/fingerprint.txt": true,
-		"node_modules/zwave-js/**/fingerprint.txt": true
+		"node_modules/zwave-js/**/fingerprint.txt": true,
+		".husky/_/**/*": true,
+		"packages/config/config/devices/index.json": true,
+		"packages/*/package-lock.json": true,
+		".yarn/*": true,
+		".yarn/patches": false,
+		".yarn/releases": false,
+		".yarn/plugins": false,
+		".yarn/sdks": false,
+		".yarn/versions": false,
+		"**/.pnp.*": true,
+		"**/*.test.js": true,
+		"packages/*/cache": true,
+		"**/.tmp": true,
+		"**/.tmpoh/": true,
+		"**/.tmpozw/": true,
+		"**/.tmpzwa/": true,
+		"**/.secrets": true,
+		"**/.test-payloads": true
 	},
 	"files.associations": {
 		"**/config/**/*.json": "jsonc"

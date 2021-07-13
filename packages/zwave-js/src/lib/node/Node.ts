@@ -345,8 +345,8 @@ export class ZWaveNode extends Endpoint {
 			!arg.endpoint &&
 			// Only application CCs need to be filtered
 			applicationCCs.includes(arg.commandClass) &&
-			// and only if a config file does not force us to expose the root endpoint
-			!this._deviceConfig?.compat?.preserveRootApplicationCCValueIDs
+			// and only if the endpoints are not unnecessary and the root values mirror them
+			this.shouldHideRootApplicationCCValues()
 		) {
 			// Iterate through all possible non-root endpoints of this node and
 			// check if there is a value ID that mirrors root endpoint functionality
@@ -677,10 +677,12 @@ export class ZWaveNode extends Endpoint {
 			}
 		}
 
-		if (!this._deviceConfig?.compat?.preserveRootApplicationCCValueIDs) {
-			// Application command classes of the Root Device capabilities that are also advertised by at
-			// least one End Point SHOULD be filtered out by controlling nodes before presenting the functionalities
-			// via service discovery mechanisms like mDNS or to users in a GUI.
+		// Application command classes of the Root Device capabilities that are also advertised by at
+		// least one End Point SHOULD be filtered out by controlling nodes before presenting the functionalities
+		// via service discovery mechanisms like mDNS or to users in a GUI.
+
+		// We do this when there are endpoints that were explicitly preserved
+		if (this.shouldHideRootApplicationCCValues()) {
 			ret = this.filterRootApplicationCCValueIDs(ret);
 		}
 
@@ -688,7 +690,31 @@ export class ZWaveNode extends Endpoint {
 		return ret.map((id) => this.translateValueID(id));
 	}
 
-	private shouldHideValueID(
+	/** Determines whether the root application CC values should be hidden in favor of endpoint values */
+	private shouldHideRootApplicationCCValues(): boolean {
+		// This is not the case when the root values should explicitly be preserved
+		if (this._deviceConfig?.compat?.preserveRootApplicationCCValueIDs)
+			return false;
+
+		// This is not the case when there are no endpoints
+		const endpointIndizes = this.getEndpointIndizes();
+		if (endpointIndizes.length === 0) return false;
+
+		// This is not the case when only individual endpoints should be preserved in addition to the root
+		const preserveEndpoints = this._deviceConfig?.compat?.preserveEndpoints;
+		if (
+			preserveEndpoints != undefined &&
+			preserveEndpoints !== "*" &&
+			preserveEndpoints.length !== endpointIndizes.length
+		) {
+			return false;
+		}
+
+		// Otherwise they should be hidden
+		return true;
+	}
+
+	private shouldHideRootValueID(
 		valueId: ValueID,
 		allValueIds: ValueID[],
 	): boolean {
@@ -716,7 +742,7 @@ export class ZWaveNode extends Endpoint {
 	 */
 	private filterRootApplicationCCValueIDs(allValueIds: ValueID[]): ValueID[] {
 		return allValueIds.filter(
-			(vid) => !this.shouldHideValueID(vid, allValueIds),
+			(vid) => !this.shouldHideRootValueID(vid, allValueIds),
 		);
 	}
 
@@ -1953,21 +1979,20 @@ protocol version:      ${this._protocolVersion}`;
 			command.endpointIndex === 0 &&
 			command.constructor.name.endsWith("Report") &&
 			this.getEndpointCount() >= 1 &&
-			// skip the root to endpoint mapping if the root endpoint values are not meant to mirror endpoint 1
-			!this._deviceConfig?.compat?.preserveRootApplicationCCValueIDs
+			// Only map reports from the root device to an endpoint if we know which one
+			this._deviceConfig?.compat?.mapRootReportsToEndpoint != undefined
 		) {
-			// Find the first endpoint that supports the received CC - if there is none, we don't map the report
-			for (const endpoint of this.getAllEndpoints()) {
-				if (endpoint.index === 0) continue;
-				if (!endpoint.supportsCC(command.ccId)) continue;
+			const endpoint = this.getEndpoint(
+				this._deviceConfig?.compat?.mapRootReportsToEndpoint,
+			);
+			if (endpoint && endpoint.supportsCC(command.ccId)) {
 				// Force the CC to store its values again under the supporting endpoint
 				this.driver.controllerLog.logNode(
 					this.nodeId,
-					`Mapping unsolicited report from root device to first supporting endpoint #${endpoint.index}`,
+					`Mapping unsolicited report from root device to endpoint #${endpoint.index}`,
 				);
 				command.endpointIndex = endpoint.index;
 				command.persistValues();
-				break;
 			}
 		}
 

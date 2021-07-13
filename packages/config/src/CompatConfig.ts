@@ -117,6 +117,27 @@ error in compat option preserveRootApplicationCCValueIDs`,
 				definition.preserveRootApplicationCCValueIDs;
 		}
 
+		if (definition.preserveEndpoints != undefined) {
+			if (
+				definition.preserveEndpoints !== "*" &&
+				!(
+					isArray(definition.preserveEndpoints) &&
+					definition.preserveEndpoints.every(
+						(d: any) =>
+							typeof d === "number" && d % 1 === 0 && d > 0,
+					)
+				)
+			) {
+				throwInvalidConfig(
+					"devices",
+					`config/devices/${filename}:
+compat option preserveEndpoints must be "*" or an array of positive integers`,
+				);
+			}
+
+			this.preserveEndpoints = definition.preserveEndpoints;
+		}
+
 		if (definition.skipConfigurationInfoQuery != undefined) {
 			if (definition.skipConfigurationInfoQuery !== true) {
 				throwInvalidConfig(
@@ -177,6 +198,29 @@ compat option manualValueRefreshDelayMs must be a non-negative integer!`,
 
 			this.manualValueRefreshDelayMs =
 				definition.manualValueRefreshDelayMs;
+		}
+
+		if (definition.mapRootReportsToEndpoint != undefined) {
+			if (typeof definition.mapRootReportsToEndpoint !== "number") {
+				throwInvalidConfig(
+					"devices",
+					`config/devices/${filename}:
+compat option mapRootReportsToEndpoint must be a number!`,
+				);
+			}
+
+			if (
+				definition.mapRootReportsToEndpoint % 1 !== 0 ||
+				definition.mapRootReportsToEndpoint < 1
+			) {
+				throwInvalidConfig(
+					"devices",
+					`config/devices/${filename}:
+compat option mapRootReportsToEndpoint must be a positive integer!`,
+				);
+			}
+
+			this.mapRootReportsToEndpoint = definition.mapRootReportsToEndpoint;
 		}
 
 		if (definition.overrideFloatEncoding != undefined) {
@@ -381,11 +425,13 @@ compat option alarmMapping must be an array where all items are objects!`,
 	public readonly enableBasicSetMapping?: boolean;
 	public readonly forceNotificationIdleReset?: boolean;
 	public readonly manualValueRefreshDelayMs?: number;
+	public readonly mapRootReportsToEndpoint?: number;
 	public readonly overrideFloatEncoding?: {
 		size?: number;
 		precision?: number;
 	};
 	public readonly preserveRootApplicationCCValueIDs?: boolean;
+	public readonly preserveEndpoints?: "*" | readonly number[];
 	public readonly skipConfigurationInfoQuery?: boolean;
 	public readonly treatBasicSetAsEvent?: boolean;
 	public readonly treatDestinationEndpointAsSource?: boolean;
