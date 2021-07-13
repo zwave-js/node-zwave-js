@@ -2,7 +2,7 @@
 <!--
 	Add placeholder for next release with `wip` snippet
 -->
-## __WORK IN PROGRESS__
+## 7.12.0 (2021-07-14)
 ### Features
 * The volume (for the Sound Switch CC) can now be passed as a `setValue` option
 
