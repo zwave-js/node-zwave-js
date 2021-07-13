@@ -102,3 +102,11 @@ interface ZWaveOptions {
 
 We have migrated the repository to the latest version of `yarn`. This changes a few things, mainly regarding installing dependencies and editor support.
 The repo is configured to automatically use the correct `typescript` dependency, but if anything goes wrong, please read [this](https://yarnpkg.com/getting-started/editor-sdks#vscode). Also check out the updated documentation on [developing locally / installing from GitHub](https://zwave-js.github.io/node-zwave-js/#/development/installing-from-github).
+
+## Removed `neighbors` property from `ZWaveNode` class and removed `InterviewStage.Neighbors`
+
+The static `neighbors` property was deprecated in `v7.9.0` and is now removed. Use `controller.getNodeNeighbors` to retrieve the neighbor lists on demand instead of accessing stale data. Furthermore, the interview stage `Neighbors` was removed too, because the information is no longer stored.
+
+## Added missing `node` argument to nodes' `"statistics updated"` event
+
+It was found that the `"statistics"` updated event for a `ZWaveNode` was the only event that did not include a reference to the node as the first callback argument. This has been changed, causing the statistics object to be the **second** argument now. The controller's event is unchanged.

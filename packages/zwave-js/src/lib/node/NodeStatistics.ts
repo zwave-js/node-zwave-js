@@ -1,6 +1,11 @@
 import { StatisticsHost } from "../driver/Statistics";
 
 export class NodeStatisticsHost extends StatisticsHost<NodeStatistics> {
+	getAdditionalEventArgs(): any[] {
+		// The node events include the node as the first argument
+		return [this];
+	}
+
 	createEmpty(): NodeStatistics {
 		return {
 			commandsTX: 0,

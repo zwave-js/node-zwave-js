@@ -14,7 +14,6 @@ import {
 	getCCName,
 	isTransmissionError,
 	isZWaveError,
-	MAX_NODES,
 	Maybe,
 	MetadataUpdatedArgs,
 	NodeUpdatePayload,
@@ -133,7 +132,7 @@ import {
 } from "../controller/GetNodeProtocolInfoMessages";
 import type { Driver, SendCommandOptions } from "../driver/Driver";
 import { Extended, interpretEx } from "../driver/StateMachineShared";
-import type { StatisticsEventCallbacks } from "../driver/Statistics";
+import type { StatisticsEventCallbacksWithSelf } from "../driver/Statistics";
 import type { Transaction } from "../driver/Transaction";
 import { MessagePriority } from "../message/Constants";
 import { DeviceClass } from "./DeviceClass";
@@ -171,7 +170,8 @@ function getNodeMetaValueID(property: string): ValueID {
 
 export interface ZWaveNode
 	extends TypedEventEmitter<
-			ZWaveNodeEventCallbacks & StatisticsEventCallbacks<NodeStatistics>
+			ZWaveNodeEventCallbacks &
+				StatisticsEventCallbacksWithSelf<ZWaveNode, NodeStatistics>
 		>,
 		NodeStatisticsHost {}
 
@@ -621,15 +621,6 @@ export class ZWaveNode extends Endpoint {
 			const firmwareVersion = this.firmwareVersion || "0.0";
 			return `https://devices.zwave-js.io/?jumpTo=${manufacturerId}:${productType}:${productId}:${firmwareVersion}`;
 		}
-	}
-
-	private _neighbors: readonly number[] = [];
-	/**
-	 * The IDs of all direct neighbors of this node
-	 * @deprecated Request the current known neighbors using `controller.getNodeNeighbors` instead.
-	 */
-	public get neighbors(): readonly number[] {
-		return this._neighbors;
 	}
 
 	private _valueDB: ValueDB;
@@ -1147,7 +1138,6 @@ export class ZWaveNode extends Endpoint {
 		this._supportsSecurity = undefined;
 		this._supportsBeaming = undefined;
 		this._deviceConfig = undefined;
-		this._neighbors = [];
 		this._hasEmittedNoNetworkKeyError = false;
 		this._valueDB.clear({ noEvent: true });
 		this._endpointInstances.clear();
@@ -1253,14 +1243,6 @@ export class ZWaveNode extends Endpoint {
 		if (this.interviewStage === InterviewStage.CommandClasses) {
 			// Load a config file for this node if it exists and overwrite the previously reported information
 			await this.overwriteConfig();
-		}
-
-		if (this.interviewStage === InterviewStage.OverwriteConfig) {
-			// Request a list of this node's neighbors
-			// wotan-disable-next-line no-unstable-api-use
-			if (!(await tryInterviewStage(() => this.queryNeighbors()))) {
-				return false;
-			}
 		}
 
 		await this.setInterviewStage(InterviewStage.Complete);
@@ -1979,17 +1961,6 @@ protocol version:      ${this._protocolVersion}`;
 		}
 
 		await this.setInterviewStage(InterviewStage.OverwriteConfig);
-	}
-
-	/**
-	 * Queries the controller for a node's neighbor nodes during the node interview
-	 * @deprecated This should be done on demand, not once
-	 */
-	protected async queryNeighbors(): Promise<void> {
-		this._neighbors = await this.driver.controller.getNodeNeighbors(
-			this.id,
-		);
-		await this.setInterviewStage(InterviewStage.Neighbors);
 	}
 
 	/**
@@ -3302,7 +3273,6 @@ protocol version:      ${this._protocolVersion}`;
 				generic: this.deviceClass.generic.key,
 				specific: this.deviceClass.specific.key,
 			},
-			neighbors: [...this._neighbors].sort(),
 			isListening: this.isListening,
 			isFrequentListening: this.isFrequentListening,
 			isRouting: this.isRouting,
@@ -3421,13 +3391,6 @@ protocol version:      ${this._protocolVersion}`;
 			obj.supportedDataRates.every((r: unknown) => typeof r === "number")
 		) {
 			this._supportedDataRates = obj.supportedDataRates;
-		}
-
-		if (isArray(obj.neighbors)) {
-			// parse only valid node IDs
-			this._neighbors = obj.neighbors.filter(
-				(n: any) => typeof n === "number" && n > 0 && n <= MAX_NODES,
-			);
 		}
 
 		function enforceType(

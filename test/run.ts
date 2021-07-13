@@ -23,9 +23,9 @@ const driver = new Driver("COM5", {
 		// 	console.debug(s);
 		// });
 		// for (const node of driver.controller.nodes.values()) {
-		// 	node.on("statistics updated", (s) => {
+		// 	node.on("statistics updated", (_node, s) => {
 		// 		console.debug({
-		// 			node: node.id,
+		// 			node: _node.id,
 		// 			...s,
 		// 		});
 		// 	});
