@@ -52,4 +52,4 @@ interface ZWaveOptions {
 
 ## Removed `neighbors` property from `ZWaveNode` class and removed `InterviewStage.Neighbors`
 
-The static `neighbors` property was deprecated in `v7.9.0` and is now removed. Use `controller.getNodeNeighbors` instead to retrieve the neighbor lists on demand instead of accessing stale data. Furthermore, the interview stage `Neighbors` was removed too, because the information is no longer stored.
+The static `neighbors` property was deprecated in `v7.9.0` and is now removed. Use `controller.getNodeNeighbors` to retrieve the neighbor lists on demand instead of accessing stale data. Furthermore, the interview stage `Neighbors` was removed too, because the information is no longer stored.
