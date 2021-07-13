@@ -15,6 +15,11 @@ export abstract class StatisticsHost<T> {
 		this.updateStatistics(() => this.createEmpty());
 	}
 
+	/** Can be overridden in derived classes to specify additional args to be included in the statistics event callback. */
+	protected getAdditionalEventArgs(): any[] {
+		return [];
+	}
+
 	private _emitUpdate: ((stat: T) => void) | undefined;
 	public updateStatistics(updater: (current: Readonly<T>) => T): void {
 		this._statistics = updater(this._statistics ?? this.createEmpty());
@@ -23,6 +28,7 @@ export abstract class StatisticsHost<T> {
 				(this as unknown as EventEmitter).emit.bind(
 					this,
 					"statistics updated",
+					...this.getAdditionalEventArgs(),
 				),
 				250,
 				true,
@@ -49,4 +55,8 @@ export abstract class StatisticsHost<T> {
 
 export interface StatisticsEventCallbacks<T> {
 	"statistics updated": (statistics: T) => void;
+}
+
+export interface StatisticsEventCallbacksWithSelf<TSelf, TStats> {
+	"statistics updated": (self: TSelf, statistics: TStats) => void;
 }

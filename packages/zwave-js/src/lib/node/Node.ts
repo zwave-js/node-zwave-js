@@ -132,7 +132,7 @@ import {
 } from "../controller/GetNodeProtocolInfoMessages";
 import type { Driver, SendCommandOptions } from "../driver/Driver";
 import { Extended, interpretEx } from "../driver/StateMachineShared";
-import type { StatisticsEventCallbacks } from "../driver/Statistics";
+import type { StatisticsEventCallbacksWithSelf } from "../driver/Statistics";
 import type { Transaction } from "../driver/Transaction";
 import { MessagePriority } from "../message/Constants";
 import { DeviceClass } from "./DeviceClass";
@@ -170,7 +170,8 @@ function getNodeMetaValueID(property: string): ValueID {
 
 export interface ZWaveNode
 	extends TypedEventEmitter<
-			ZWaveNodeEventCallbacks & StatisticsEventCallbacks<NodeStatistics>
+			ZWaveNodeEventCallbacks &
+				StatisticsEventCallbacksWithSelf<ZWaveNode, NodeStatistics>
 		>,
 		NodeStatisticsHost {}
 
