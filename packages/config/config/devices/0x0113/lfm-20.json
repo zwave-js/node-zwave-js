@@ -38,7 +38,7 @@
 		"treatBasicSetAsEvent": true
 	},
 	"metadata": {
-			"inclusion": "Put your controller in INCLUDE mode, and double tap the button on the face of the device.",
-			"exclusion": "Put your controller in EXCLUDE mode, and double tap the button on the face of the device."
+		"inclusion": "Put your controller in INCLUDE mode, and double tap the button on the face of the device.",
+		"exclusion": "Put your controller in EXCLUDE mode, and double tap the button on the face of the device."
 	}
 }
