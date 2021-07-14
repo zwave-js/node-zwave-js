@@ -2,7 +2,7 @@
 	"manufacturer": "Leviton",
 	"manufacturerId": "0x001d",
 	"label": "DZ6HD",
-	"description": "600W Dimmer",
+	"description": "In-Wall 600W Dimmer",
 	"devices": [
 		{
 			"productType": "0x3201",
@@ -67,6 +67,21 @@
 			"maxValue": 255,
 			"defaultValue": 255,
 			"unsigned": true
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "LED Off",
+					"value": 0
+				},
+				{
+					"label": "Status Mode",
+					"value": 254
+				},
+				{
+					"label": "Locator Mode",
+					"value": 255
+				}
+			]
 		},
 		"8": {
 			"label": "Load Type",
@@ -74,6 +89,27 @@
 			"minValue": 0,
 			"maxValue": 2,
 			"defaultValue": 0
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Incandescent",
+					"value": 0
+				},
+				{
+					"label": "LED",
+					"value": 1
+				},
+				{
+					"label": "CFL",
+					"value": 2
+				}
+			]
 		}
+	}
+	"metadata": {
+			"inclusion": "Enter programming mode by holding down the top of the paddle for 7 seconds, the LED will blink Amber. Tap the top of the paddle one time. The LED will flash green. Upon successful addition to network, the LED will blink 3 times.",
+			"exclusion": "Enter programming mode by holding down the top of the paddle for 7 seconds, the LED will blink Amber. Tap the top of the paddle one time. The LED will flash green. Upon successful removal from network, the LED will blink 3 times.",
+			"reset": "Hold the top of the paddle down for 14 seconds. Upon successful reset, the LED with blink red/amber.",
+			"manual": "https://www.leviton.com/fr/docs/DI-000-DZ6HD-02A-W.pdf"
 	}
 }
