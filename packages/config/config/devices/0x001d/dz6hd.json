@@ -46,6 +46,7 @@
 		"3": {
 			"label": "Minimum Light Level",
 			"valueSize": 1,
+			"unit": "%",
 			"minValue": 0,
 			"maxValue": 100,
 			"defaultValue": 10
@@ -53,6 +54,7 @@
 		"4": {
 			"label": "Maximum Light Level",
 			"valueSize": 1,
+			"unit": "%",
 			"minValue": 0,
 			"maxValue": 100,
 			"defaultValue": 100
@@ -60,9 +62,9 @@
 		"5": {
 			"label": "Preset Light Level",
 			"valueSize": 1,
+			"unit": "%",
 			"minValue": 0,
 			"maxValue": 100,
-			"unit": "%",
 			"defaultValue": 0,
 			"options": [
 				{
