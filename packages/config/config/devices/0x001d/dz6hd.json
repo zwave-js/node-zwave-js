@@ -21,7 +21,12 @@
 			"minValue": 0,
 			"maxValue": 253,
 			"defaultValue": 2,
-			"unsigned": true
+			"unsigned": true,
+			"options": [
+				{
+					"label": "Instant on",
+					"value": 0
+				}
 		},
 		"2": {
 			"label": "Fade Off Time",
@@ -29,7 +34,12 @@
 			"minValue": 0,
 			"maxValue": 253,
 			"defaultValue": 2,
-			"unsigned": true
+			"unsigned": true,
+			"options": [
+				{
+					"label": "Instant off",
+					"value": 0
+				}
 		},
 		"3": {
 			"label": "Minimum Light Level",
@@ -50,7 +60,12 @@
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 100,
-			"defaultValue": 0
+			"defaultValue": 0,
+			"options": [
+				{
+					"label": "Memory Dim",
+					"value": 0
+				}
 		},
 		"6": {
 			"label": "LED Dim Level Indicator Timeout",
@@ -58,7 +73,12 @@
 			"minValue": 0,
 			"maxValue": 255,
 			"defaultValue": 3,
-			"unsigned": true
+			"unsigned": true,
+			"options": [
+				{
+					"label": "Level Indicators OFF",
+					"value": 0
+				}
 		},
 		"7": {
 			"label": "Locator LED Status",
