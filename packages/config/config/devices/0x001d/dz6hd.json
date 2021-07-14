@@ -62,6 +62,7 @@
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 100,
+			"unit": "%",
 			"defaultValue": 0,
 			"options": [
 				{
@@ -81,6 +82,10 @@
 				{
 					"label": "Always off",
 					"value": 0
+				},
+				{
+					"label": "Always on",
+					"value": 255
 				}
 			]
 		},
