@@ -65,7 +65,7 @@
 			"defaultValue": 0,
 			"options": [
 				{
-					"label": "Memory Dim",
+					"label": "Last non-zero level",
 					"value": 0
 				}
 			]
@@ -79,7 +79,7 @@
 			"unsigned": true,
 			"options": [
 				{
-					"label": "Level Indicators OFF",
+					"label": "Always off",
 					"value": 0
 				}
 			]
