@@ -50,6 +50,7 @@
 		"2": {
 			"label": "Turn On Delay After Emergency Off",
 			"valueSize": 2,
+			"unit": "seconds",
 			"minValue": 0,
 			"maxValue": 32767,
 			"unit": "seconds",
