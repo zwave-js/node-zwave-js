@@ -67,7 +67,7 @@
   },
   "devDependencies": {
     "@types/fs-extra": "^9.0.12",
-    "@types/jest": "^26.0.23",
+    "@types/jest": "^26.0.24",
     "@types/node": "^15.12.5",
     "@types/proper-lockfile": "^4",
     "@types/semver": "^7.3.7",
