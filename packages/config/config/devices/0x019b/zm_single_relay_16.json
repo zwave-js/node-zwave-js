@@ -53,7 +53,6 @@
 			"unit": "seconds",
 			"minValue": 0,
 			"maxValue": 32767,
-			"unit": "seconds",
 			"defaultValue": 20,
 			"unsigned": true,
 			"options": [
