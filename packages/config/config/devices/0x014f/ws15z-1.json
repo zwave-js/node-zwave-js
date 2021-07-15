@@ -70,5 +70,10 @@
 				}
 			]
 		}
+	},
+	"metadata": {
+		"inclusion": "With the controller in inclusion mode, press the top of the switch two times.",
+		"exclusion": "With the controller in exclusion mode, press the top of the switch two times.",
+		"manual": "https://www.nortekcontrol.com/wp-content/uploads/WS15Z1_manual.pdf"
 	}
 }
