@@ -40,7 +40,7 @@
     "watch": "yarn run build --watch --pretty"
   },
   "devDependencies": {
-    "@types/fs-extra": "^9.0.11",
+    "@types/fs-extra": "^9.0.12",
     "@types/jest": "^26.0.23",
     "@types/node": "^15.12.5",
     "esbuild-register": "^2.6.0",
