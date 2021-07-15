@@ -49,7 +49,7 @@
     "winston-transport": "*"
   },
   "devDependencies": {
-    "@types/jest": "^26.0.23",
+    "@types/jest": "^26.0.24",
     "@types/node": "^15.12.5",
     "@types/triple-beam": "^1.3.2",
     "esbuild-register": "^2.6.0",
