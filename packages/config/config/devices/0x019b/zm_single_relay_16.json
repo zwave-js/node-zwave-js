@@ -134,6 +134,7 @@
 		"7": {
 			"label": "Auto-Off Delay",
 			"valueSize": 4,
+			"unit": "seconds",
 			"minValue": 0,
 			"maxValue": 86400,
 			"defaultValue": 0,
