@@ -149,9 +149,9 @@
 		"8": {
 			"label": "Auto-On Delay",
 			"description": "Time to turn relay on after having been turned off",
-			
+
 			"valueSize": 4,
-          "unit": "seconds",
+			"unit": "seconds",
 			"minValue": 0,
 			"maxValue": 86400,
 			"defaultValue": 0,
