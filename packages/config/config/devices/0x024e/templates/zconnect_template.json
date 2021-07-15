@@ -1,0 +1,131 @@
+{
+	"base_0-65000": {
+		"valueSize": 2,
+		"minValue": 0,
+		"maxValue": 65000,
+		"unsigned": true
+	},
+	"base_1-65000": {
+		"$import": "#base_0-65000",
+		"minValue": 1
+	},
+	"base_-60-1000": {
+		"valueSize": 4,
+		"minValue": -60,
+		"maxValue": 1000,
+		"unsigned": false
+	},
+	"interval_1-65000": {
+		"$import": "#base_1-65000",
+		"unit": "0.1 seconds"
+	},
+	"interval_1-65000_disable": {
+		"$import": "#base_0-65000",
+		"unit": "0.1 seconds",
+		"defaultValue": 0,
+		"options": [
+			{
+				"label": "Disable",
+				"value": 0
+			}
+		]
+	},
+	"interval_1-600_disable": {
+		"$import": "#interval_1-65000_disable",
+		"unit": "seconds",
+		"maxValue": 600
+	},
+	"relay_mode_selection": {
+		"label": "Relay mode selection",
+		"valueSize": 1,
+		"minValue": 0,
+		"maxValue": 2,
+		"defaultValue": 0,
+		"options": [
+			{
+				"label": "Normal - Closed when On",
+				"value": 0
+			},
+			{
+				"label": "Reversed - Open when On",
+				"value": 1
+			},
+			{
+				"label": "Strobe - Strobe when On, Open when Off",
+				"value": 2
+			}
+		]
+	},
+	"sensor_relay_control": {
+		"valueSize": 1,
+		"minValue": 0,
+		"maxValue": 4,
+		"defaultValue": 0,
+		"options": [
+			{
+				"label": "Sensors don't control relay.",
+				"value": 0
+			},
+			{
+				"label": "Sensor 1 controls relay.",
+				"value": 1
+			},
+			{
+				"label": "Sensor 2 controls relay.",
+				"value": 2
+			},
+			{
+				"label": "Sensor 3 controls relay via S-Bus.",
+				"value": 3
+			},
+			{
+				"label": "Sensor 4 (Temp) controls relay via S-Bus.",
+				"value": 4
+			}
+		]
+	},
+	"sensor_processing_options": {
+		"valueSize": 1,
+		"minValue": 0,
+		"maxValue": 8,
+		"defaultValue": 0,
+		"options": [
+			{
+				"label": "Ignore sensor events",
+				"value": 0
+			},
+			{
+				"label": "On when inactive and Off on event",
+				"value": 1
+			},
+			{
+				"label": "Off when inactive and On on event",
+				"value": 2
+			},
+			{
+				"label": "On when inactive",
+				"value": 3
+			},
+			{
+				"label": "Off when inactive",
+				"value": 4
+			},
+			{
+				"label": "On on event",
+				"value": 5
+			},
+			{
+				"label": "Off on event",
+				"value": 6
+			},
+			{
+				"label": "Send sensor value to other device",
+				"value": 7
+			},
+			{
+				"label": "Toggle with every event, only for binary sensor grouped with relay (parameter 20/21 = 4)",
+				"value": 8
+			}
+		]
+	}
+}
