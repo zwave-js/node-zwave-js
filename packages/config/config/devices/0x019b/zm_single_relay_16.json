@@ -151,6 +151,7 @@
 			"description": "Time to turn relay on after having been turned off",
 			
 			"valueSize": 4,
+          "unit": "seconds",
 			"minValue": 0,
 			"maxValue": 86400,
 			"defaultValue": 0,
