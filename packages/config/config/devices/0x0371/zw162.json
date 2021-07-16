@@ -241,22 +241,22 @@
 		"51[0x04]": {
 			"$import": "../0x0086/templates/aeotec_template.json#button_status_3"
 		},
-		"52[0xffff0000]": {
+		"52[0xff00]": {
 			"$import": "../0x0086/templates/aeotec_template.json#button_battery_voltage_1"
 		},
-		"52[0xffff]": {
+		"52[0xff]": {
 			"$import": "../0x0086/templates/aeotec_template.json#button_version_1"
 		},
-		"53[0xffff0000]": {
+		"53[0xff00]": {
 			"$import": "../0x0086/templates/aeotec_template.json#button_battery_voltage_2"
 		},
-		"53[0xffff]": {
+		"53[0xff]": {
 			"$import": "../0x0086/templates/aeotec_template.json#button_version_2"
 		},
-		"54[0xffff0000]": {
+		"54[0xff00]": {
 			"$import": "../0x0086/templates/aeotec_template.json#button_battery_voltage_3"
 		},
-		"54[0xffff]": {
+		"54[0xff]": {
 			"$import": "../0x0086/templates/aeotec_template.json#button_version_3"
 		},
 		"96": {
