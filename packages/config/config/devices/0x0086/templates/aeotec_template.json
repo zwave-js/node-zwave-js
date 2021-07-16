@@ -2536,7 +2536,7 @@
 		]
 	},
 	"base_button_battery_voltage": {
-		"valueSize": 4,
+		"valueSize": 2,
 		"unit": "mV",
 		"minValue": 0,
 		"maxValue": 32767,
