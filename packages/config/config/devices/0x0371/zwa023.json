@@ -160,16 +160,20 @@
 			"$import": "../0x0086/templates/aeotec_template.json#current_threshold"
 		},
 		"23": {
-			"$import": "../0x0086/templates/aeotec_template.json#auto_report_interval_watt"
+			"$import": "../0x0086/templates/aeotec_template.json#auto_report_interval_watt",
+			"valueSize": 2
 		},
 		"24": {
-			"$import": "../0x0086/templates/aeotec_template.json#auto_report_interval_kwh"
+			"$import": "../0x0086/templates/aeotec_template.json#auto_report_interval_kwh",
+			"valueSize": 2
 		},
 		"25": {
-			"$import": "../0x0086/templates/aeotec_template.json#auto_report_interval_v"
+			"$import": "../0x0086/templates/aeotec_template.json#auto_report_interval_v",
+			"valueSize": 2
 		},
 		"26": {
-			"$import": "../0x0086/templates/aeotec_template.json#auto_report_interval_amp"
+			"$import": "../0x0086/templates/aeotec_template.json#auto_report_interval_amp",
+			"valueSize": 2
 		},
 		"30[0x01]": {
 			"$import": "../templates/master_template.json#base_enable_disable",
