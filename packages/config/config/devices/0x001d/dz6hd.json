@@ -78,6 +78,7 @@
 		"6": {
 			"label": "LED Dim Level Indicator Timeout",
 			"valueSize": 1,
+			"unit": "seconds",
 			"minValue": 0,
 			"maxValue": 255,
 			"defaultValue": 3,
