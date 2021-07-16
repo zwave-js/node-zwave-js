@@ -58,11 +58,11 @@
 			"$import": "../0x0086/templates/aeotec_template.json#association_group_2_basic_set_on"
 		},
 		"9": {
-			"$import": "../0x0086/templates/aeotec_template.json#association_group_2_basic_set_off"
+			"$import": "../0x0086/templates/aeotec_template.json#association_group_2_basic_set_off",
 			"defaultValue": 0
 		},
 		"10": {
-			"$import": "../0x0086/templates/aeotec_template.json#time_delay_on"
+			"$import": "../0x0086/templates/aeotec_template.json#time_delay_on",
 			"defaultValue": 0
 		},
 		"11": {
@@ -70,7 +70,7 @@
 			"defaultValue": 0
 		},
 		"12": {
-			"$import": "../0x0086/templates/aeotec_template.json#time_delay_tamper"
+			"$import": "../0x0086/templates/aeotec_template.json#time_delay_tamper",
 			"defaultValue": 0
 		},
 		"13": {
