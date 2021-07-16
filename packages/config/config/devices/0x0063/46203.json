@@ -33,8 +33,7 @@
 	},
 	"paramInformation": {
 		"3": {
-			"label": "LED Light",
-			"description": "LED status when device on or off.",
+			"label": "LED Indicator",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 3,
@@ -62,7 +61,6 @@
 		},
 		"4": {
 			"label": "Invert Switch",
-			"description": "Switch orientation.",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 1,
