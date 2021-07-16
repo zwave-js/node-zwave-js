@@ -35,7 +35,7 @@
 		]
 	},
 	"base_0-65535": {
-		"valueSize": 4,
+		"valueSize": 2,
 		"minValue": 0,
 		"maxValue": 65535,
 		"defaultValue": 0,
