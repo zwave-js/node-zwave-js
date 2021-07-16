@@ -75,7 +75,7 @@
 		},
 		"13": {
 			"$import": "../0x0086/templates/aeotec_template.json#report_on_tamper_cancel"
-		},
+		}
 	},
 	"metadata": {
 		"inclusion": "Tripple clicking the tamper button includes (adds) the device",
