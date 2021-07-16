@@ -34,7 +34,18 @@
 	},
 	"paramInformation": {
 		"3": {
-			"$import": "../0x0086/templates/aeotec_template.json#invert_state_report"
+			"$import": "../0x0086/templates/aeotec_template.json#invert_state_report",
+			"label": "State when magnet is close to sensor",
+			"options": [
+				{
+					"label": "Report closed when magnet is near",
+					"value": 0
+				},
+				{
+					"label": "Report opened when magnet is near",
+					"value": 1
+				}
+			]
 		},
 		"4[0x01]": {
 			"$import": "../0x0086/templates/aeotec_template.json#led_indicator_open"
@@ -43,7 +54,8 @@
 			"$import": "../0x0086/templates/aeotec_template.json#led_indicator_wake"
 		},
 		"4[0x04]": {
-			"$import": "../0x0086/templates/aeotec_template.json#led_indicator_tamper"
+			"$import": "../0x0086/templates/aeotec_template.json#led_indicator_tamper",
+			"defaultValue": 1
 		},
 		"5": {
 			"$import": "../0x0086/templates/aeotec_template.json#range_test_double_click"
