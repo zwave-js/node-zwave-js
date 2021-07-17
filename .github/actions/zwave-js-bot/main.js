@@ -1,5 +1,9 @@
 // @ts-check
 
+// Enable Yarn PnP
+// @ts-expect-error 🤷🏻‍♂️
+require("../../../.pnp.cjs").setup();
+
 const exec = require("@actions/exec");
 const github = require("@actions/github");
 const core = require("@actions/core");

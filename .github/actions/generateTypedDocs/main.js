@@ -1,3 +1,6 @@
+// Enable Yarn PnP
+require("../../../.pnp.cjs").setup();
+
 const exec = require("@actions/exec");
 const github = require("@actions/github");
 const core = require("@actions/core");

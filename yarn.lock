@@ -3962,6 +3962,7 @@ __metadata:
     "@typescript-eslint/parser": ^4.28.3
     "@zwave-js/config": 8.0.0-alpha.1
     "@zwave-js/core": 8.0.0-alpha.0
+    ansi-colors: ^4.1.1
     commitizen: ^4.2.4
     coveralls: ^3.1.1
     cz-conventional-changelog: ^3.3.0

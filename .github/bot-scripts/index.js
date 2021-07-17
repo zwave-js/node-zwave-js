@@ -1,3 +1,6 @@
+// Enable Yarn PnP
+require("../../.pnp.cjs").setup();
+
 module.exports = {
 	addCompatFlag: (...args) => require("./addCompatFlag")(...args),
 	addCompatFlagCreatePR: (...args) =>
