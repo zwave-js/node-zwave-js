@@ -2,7 +2,7 @@
 <!--
 	Add placeholder for next release with `wip` snippet
 -->
-## __WORK IN PROGRESS__
+## 7.12.1 (2021-07-17)
 ### Bugfixes
 * Fixed a bug where `healNode` on an non-existing node would block further heal attempts
 
