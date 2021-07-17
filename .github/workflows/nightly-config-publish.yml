@@ -19,9 +19,10 @@ jobs:
         fetch-depth: 0 # Fetch the history, or this action won't work
 
     - name: Use Node.js ${{ matrix.node-version }}
-      uses: actions/setup-node@v1
+      uses: actions/setup-node@v2
       with:
         node-version: ${{ matrix.node-version }}
+        cache: 'yarn'
 
     - name: Detect changes (git)
       run: |
@@ -55,15 +56,14 @@ jobs:
         # Install dependencies
         # ===============================
 
-        npm i -g yarn
-        yarn install --frozen-lockfile
+        yarn install --immutable
 
         # ===============================
         # Double-check changes with lerna
         # ===============================
 
         # Verify that only @zwave-js/config and zwave-js are changed
-        LERNA_CHANGED=$(npx lerna changed)
+        LERNA_CHANGED=$(yarn lerna changed)
         if [[ $(echo -e "@zwave-js/config\nzwave-js") != "$LERNA_CHANGED" ]]; then
           echo "❌ Lerna detected unexpected package changes, aborting..."
           echo "These packages are changed:"
@@ -76,7 +76,7 @@ jobs:
         # ===============================
 
         # Create a clean build
-        npx lerna run build
+        yarn lerna run build
 
         # Lint config files
         yarn run lint:config
@@ -92,7 +92,7 @@ jobs:
         # Figure out next version
         cat > ./script.js << 'EOF'
         const semver = require("semver");
-        let v = require("../config/package.json").version;
+        let v = require("@zwave-js/config/package.json").version;
         const now = new Date();
         const today = new Date(now.getTime() - now.getTimezoneOffset()*60000);
         const dateStr = today.toISOString().split("T")[0].replace(/-/g, "");
@@ -112,4 +112,4 @@ jobs:
         VERSION=$(node script.js)
         echo "Next version is $VERSION"
         npm version "$VERSION" --ignore-scripts --no-git-tag-version
-        npm publish
+        npm publish --tag nightly

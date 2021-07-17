@@ -300,7 +300,7 @@ export class AssociationCC extends CommandClass {
 		return (
 			this.getValueDB().getValue(
 				getMaxNodesValueId(this.endpointIndex, groupId),
-			) || 1
+			) ?? 0
 		);
 	}
 
@@ -387,56 +387,8 @@ export class AssociationCC extends CommandClass {
 		// Query each association group for its members
 		await this.refreshValues();
 
-		// TODO: Improve how the assignments are handled. For now only auto-assign associations on the root endpoint
-		if (this.endpointIndex === 0) {
-			// Assign the controller to all lifeline groups (Z-Wave+ and configured)
-			const lifelineGroups = getLifelineGroupIds(endpoint);
-			const ownNodeId = this.driver.controller.ownNodeId!;
-			const valueDB = this.getValueDB();
-
-			if (lifelineGroups.length) {
-				for (const group of lifelineGroups) {
-					// Check if we are already in the lifeline group
-					const lifelineValueId = getNodeIdsValueId(
-						this.endpointIndex,
-						group,
-					);
-					const lifelineNodeIds: number[] =
-						valueDB.getValue(lifelineValueId) ?? [];
-					if (!lifelineNodeIds.includes(ownNodeId)) {
-						this.driver.controllerLog.logNode(node.id, {
-							endpoint: this.endpointIndex,
-							message: `Controller missing from lifeline group #${group}, assigning ourselves...`,
-							direction: "outbound",
-						});
-						// Add a new destination
-						await api.addNodeIds(group, ownNodeId);
-						// and refresh it - don't trust that it worked
-						await api.getGroup(group);
-						// TODO: check if it worked
-					}
-				}
-
-				// Remember that we have a lifeline association
-				valueDB.setValue(
-					getHasLifelineValueId(this.endpointIndex),
-					true,
-				);
-			} else {
-				this.driver.controllerLog.logNode(node.id, {
-					endpoint: this.endpointIndex,
-					message:
-						"No information about Lifeline associations, cannot assign ourselves!",
-					direction: "outbound",
-					level: "warn",
-				});
-				// Remember that we have NO lifeline association
-				valueDB.setValue(
-					getHasLifelineValueId(this.endpointIndex),
-					false,
-				);
-			}
-		}
+		// And set up lifeline associations
+		await endpoint.configureLifelineAssociations();
 
 		// Remember that the interview is complete
 		this.interviewComplete = true;

@@ -22,6 +22,9 @@ It has four properties:
 -   `property` - The name (or a numeric identifier) of the property, for example `targetValue`
 -   `propertyKey` - _(optional)_ Allows sub-addressing properties that contain multiple values (like combined sensors).
 
+These can be considered to represent an hierarchical structure, like the following:
+![ValueID structure](../_images/value-id-structure.png)
+
 Since both `property` and `propertyKey` can be cryptic, value IDs are exposed to consuming applications in a "translated" form, which contains all properties from `ValueID` plus the following ones:
 
 <!-- #import TranslatedValueID from "zwave-js" -->

@@ -1,7 +1,40 @@
 # Changelog
 <!--
 	Add placeholder for next release with `wip` snippet
+  ## __WORK IN PROGRESS__
 -->
+## 8.0.0-alpha.3 (2021-07-14) · _There is no spoon_
+### Breaking changes · [Migration guide](https://zwave-js.github.io/node-zwave-js/#/getting-started/migrating-to-v8)
+* User codes are no longer queried during the interview in order to save battery
+* Restructured interview settings in `ZWaveOptions`
+* Reworked how endpoints and lifeline associations are handled
+* Removed `neighbors` property from `ZWaveNode` class and removed `InterviewStage.Neighbors`
+* Added missing `node` argument to nodes' `"statistics updated"` event
+* The minimum required Node.js version is now `v12.22.2`
+* The repository has been migrated from `yarn v1` to `yarn v3`. This changes a few things, mainly regarding installing dependencies and editor support and might require manual intervention after updating the repo.
+* Change secondary exports to `package.json` subpath exports
+* Both fields in `BatteryHealthReports` may be `undefined`
+
+<!-- ### Features
+
+### Bugfixes
+
+### Config file changes -->
+
+### Changes under the hood
+* Updated several dependencies
+
+## 7.12.1 (2021-07-17)
+### Bugfixes
+* Fixed a bug where `healNode` on an non-existing node would block further heal attempts
+
+### Config file changes
+* Add Z-connect garage door controller
+* Correct fingerprints for two Sunricher dimmers
+* Add metadata to Leviton devices and improve param definitions
+* Fix value size for Aeotec ZWA023 params 23 through 2
+* Correct Aeotec ZWA005 parameter numbers
+
 ## 7.12.0 (2021-07-14)
 ### Features
 * The volume (for the Sound Switch CC) can now be passed as a `setValue` option

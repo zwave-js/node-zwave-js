@@ -53,24 +53,12 @@ class TestNode extends ZWaveNode {
 	public async interviewCCs(): Promise<boolean> {
 		return super.interviewCCs();
 	}
-	// public async queryManufacturerSpecific(): Promise<void> {
-	// 	return super.queryManufacturerSpecific();
-	// }
-	// public async queryCCVersions(): Promise<void> {
-	// 	return super.queryCCVersions();
-	// }
 	// public async queryEndpoints(): Promise<void> {
 	// 	return super.queryEndpoints();
 	// }
 	// public async configureWakeup(): Promise<void> {
 	// 	return super.configureWakeup();
 	// }
-	// public async requestStaticValues(): Promise<void> {
-	// 	return super.requestStaticValues();
-	// }
-	public async queryNeighbors(): Promise<void> {
-		return super["queryNeighbors"]();
-	}
 	public get implementedCommandClasses(): Map<
 		CommandClasses,
 		CommandClassInfo
@@ -512,7 +500,6 @@ describe("lib/node/Node", () => {
 					queryProtocolInfo: InterviewStage.ProtocolInfo,
 					queryNodeInfo: InterviewStage.NodeInfo,
 					interviewCCs: InterviewStage.CommandClasses,
-					queryNeighbors: InterviewStage.Neighbors,
 				};
 				const returnValues: Partial<Record<keyof TestNode, any>> = {
 					ping: true,
@@ -522,7 +509,6 @@ describe("lib/node/Node", () => {
 					queryProtocolInfo: node["queryProtocolInfo"].bind(node),
 					queryNodeInfo: node["queryNodeInfo"].bind(node),
 					interviewCCs: node["interviewCCs"].bind(node),
-					queryNeighbors: node["queryNeighbors"].bind(node),
 				};
 				for (const method of Object.keys(
 					originalMethods,
@@ -979,7 +965,6 @@ describe("lib/node/Node", () => {
 			supportsBeaming: true,
 			protocolVersion: 3,
 			nodeType: "Controller",
-			neighbors: [2, 3, 4],
 			commandClasses: {
 				"0x25": {
 					name: "Binary Switch",
@@ -1098,11 +1083,11 @@ describe("lib/node/Node", () => {
 		it("deserialize() should also accept numbers for the interview stage", () => {
 			const input = {
 				...serializedTestNode,
-				interviewStage: InterviewStage.Neighbors,
+				interviewStage: InterviewStage.Complete,
 			};
 			const node = new ZWaveNode(1, fakeDriver);
 			node.deserialize(input);
-			expect(node.interviewStage).toBe(InterviewStage.Neighbors);
+			expect(node.interviewStage).toBe(InterviewStage.Complete);
 			node.destroy();
 		});
 
@@ -1520,7 +1505,7 @@ describe("lib/node/Node", () => {
 
 		beforeEach(() => fakeDriver.sendMessage.mockClear());
 
-		it("should map commands from the root endpoint to endpoint 1 if MultiChannelAssociationCC is V1/V2", async () => {
+		it("should map commands from the root endpoint to endpoint 1 if configured", async () => {
 			const node = makeNode([
 				[
 					CommandClasses["Multi Channel Association"],
@@ -1547,6 +1532,12 @@ describe("lib/node/Node", () => {
 			node.getEndpoint(1)?.addCC(CommandClasses["Binary Switch"], {
 				isSupported: true,
 			});
+
+			node["_deviceConfig"] = {
+				compat: {
+					mapRootReportsToEndpoint: 1,
+				},
+			} as any;
 
 			// Handle a command for the root endpoint
 			const command = new BinarySwitchCCReport(

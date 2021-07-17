@@ -1,6 +1,6 @@
 {
   "name": "@zwave-js/shared",
-  "version": "7.11.0",
+  "version": "8.0.0-alpha.3",
   "description": "zwave-js: shared utilities",
   "publishConfig": {
     "access": "public"
@@ -28,14 +28,23 @@
     "url": "https://github.com/sponsors/AlCalzone/"
   },
   "engines": {
-    "node": ">=10.0.0"
+    "node": ">=v12.22.2"
   },
   "dependencies": {
-    "alcalzone-shared": "^3.0.4"
+    "alcalzone-shared": "^4.0.0",
+    "fs-extra": "^10.0.0"
   },
   "scripts": {
     "build": "tsc -b tsconfig.build.json",
-    "clean": "yarn run build -- --clean",
-    "watch": "yarn run build -- --watch --pretty"
+    "clean": "yarn run build --clean",
+    "watch": "yarn run build --watch --pretty"
+  },
+  "devDependencies": {
+    "@types/fs-extra": "^9.0.12",
+    "@types/jest": "^26.0.24",
+    "@types/node": "^15.12.5",
+    "esbuild-register": "^2.6.0",
+    "jest-extended": "^0.11.5",
+    "typescript": "^4.3.5"
   }
 }
