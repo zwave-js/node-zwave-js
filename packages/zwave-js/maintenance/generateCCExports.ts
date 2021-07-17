@@ -139,9 +139,9 @@ export async function generateCCExports(): Promise<void> {
 `;
 
 	// Generate type and value exports for all found symbols
-	for (const [filename, fileExports] of [
-		...findExports().entries(),
-	].sort(([fileA], [fileB]) => compareStrings(fileA, fileB))) {
+	for (const [filename, fileExports] of [...findExports().entries()].sort(
+		([fileA], [fileB]) => compareStrings(fileA, fileB),
+	)) {
 		const relativePath = path
 			.relative(ccIndexFile, filename)
 			// normalize to slashes

@@ -32,7 +32,7 @@ export async function createAndStartDriver(
 
 	const driver = new Driver(PORT_ADDRESS, {
 		...options,
-		skipInterview: true,
+		interview: { skipInterview: true },
 	});
 	driver.on("error", () => {
 		/* swallow error events during testing */

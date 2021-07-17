@@ -9,7 +9,9 @@
 			"request": "launch",
 			"name": "Debug locally",
 			"port": 9229,
+			"runtimeExecutable": "yarn",
 			"runtimeArgs": [
+				"node",
 				"--async-stack-traces",
 				"--inspect-brk=9229",
 				"-r",
@@ -29,7 +31,9 @@
 			"request": "launch",
 			"name": "Generate typed docs",
 			"port": 9229,
+			"runtimeExecutable": "yarn",
 			"runtimeArgs": [
+				"node",
 				"--async-stack-traces",
 				"--inspect-brk=9229",
 				"-r",
@@ -45,7 +49,9 @@
 			"request": "launch",
 			"name": "Decode message",
 			"port": 9229,
+			"runtimeExecutable": "yarn",
 			"runtimeArgs": [
+				"node",
 				"--async-stack-traces",
 				"--inspect-brk=9229",
 				"${workspaceFolder}/test/debug.js"
@@ -58,9 +64,10 @@
 			"type": "node",
 			"name": "Process Staged ZWA Files",
 			"request": "launch",
-			"program": "${workspaceFolder}/packages/config/maintenance/importConfig.ts",
 			"cwd": "${workspaceFolder}",
+			"runtimeExecutable": "yarn",
 			"runtimeArgs": [
+				"node",
 				"--async-stack-traces",
 				"--inspect=9229",
 				"-r",

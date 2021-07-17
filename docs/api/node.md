@@ -850,7 +850,7 @@ interface ZWaveNotificationCallbackArgs_NotificationCC {
 This event is emitted regularly during and after communication with the node and gives some insight that would otherwise only be visible by looking at logs. The callback has the signature
 
 ```ts
-(statistics: NodeStatistics) => void
+(node: ZWaveNode, statistics: NodeStatistics) => void
 ```
 
 where the statistics have the following shape:

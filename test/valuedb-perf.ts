@@ -1,6 +1,6 @@
 import { JsonlDB } from "@alcalzone/jsonl-db";
-import { highResTimestamp } from "@zwave-js/core/src/util/date";
-import { indexDBsByNode, ValueDB } from "@zwave-js/core/src/values/ValueDB";
+import { highResTimestamp } from "../packages/core/src/util/date";
+import { indexDBsByNode, ValueDB } from "../packages/core/src/values/ValueDB";
 import * as fs from "fs-extra";
 
 const values: JsonlDB<any> = new JsonlDB("test.values.jsonl", {

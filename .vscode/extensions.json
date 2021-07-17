@@ -5,6 +5,7 @@
 		"Orta.vscode-jest",
 		"esbenp.prettier-vscode",
 		"EditorConfig.EditorConfig",
-		"eamodio.toggle-excluded-files"
+		"eamodio.toggle-excluded-files",
+		"arcanis.vscode-zipfs"
 	]
 }

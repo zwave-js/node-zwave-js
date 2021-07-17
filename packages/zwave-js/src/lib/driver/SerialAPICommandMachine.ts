@@ -1,7 +1,7 @@
 import {
 	assign,
+	createMachine,
 	Interpreter,
-	Machine,
 	MachineConfig,
 	MachineOptions,
 	StateMachine,
@@ -381,7 +381,7 @@ export function createSerialAPICommandMachine(
 	implementations: ServiceImplementations,
 	params: SerialAPICommandMachineParams,
 ): SerialAPICommandMachine {
-	return Machine(
+	return createMachine(
 		getSerialAPICommandMachineConfig(
 			message,
 			implementations,
