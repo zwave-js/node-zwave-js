@@ -308,7 +308,7 @@ interface ConditionalAssociationConfig {
 	readonly description?: string | undefined;
 	readonly maxNodes: number;
 	readonly isLifeline: boolean;
-	readonly multiChannel: boolean;
+	readonly multiChannel: boolean | "auto";
 }
 ```
 

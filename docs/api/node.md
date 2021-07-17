@@ -354,9 +354,6 @@ enum InterviewStage {
 	 */
 	OverwriteConfig,
 
-	/** The node has been queried for its current neighbor list */
-	Neighbors,
-
 	/** The interview process has finished */
 	Complete,
 }
