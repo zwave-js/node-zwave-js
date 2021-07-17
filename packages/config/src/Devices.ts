@@ -363,7 +363,7 @@ export class ConditionalDeviceConfig {
 		const relativePath = relativeTo
 			? path.relative(relativeTo, filename).replace(/\\/g, "/")
 			: filename;
-		const json = await readJsonWithTemplate(filename);
+		const json = await readJsonWithTemplate(filename, relativeTo);
 		return new ConditionalDeviceConfig(relativePath, json);
 	}
 

@@ -333,6 +333,40 @@ describe("readJsonWithTemplate", () => {
 		expect(content).toEqual(template);
 	});
 
+	it("should be able to resolve the root directory with ~/", async () => {
+		const test = {
+			$import: "~/template.json",
+		};
+		const template = {
+			template: true,
+		};
+		await mockFs({
+			"/foo/bar/test.json": JSON.stringify(test),
+			"/foo/template.json": JSON.stringify(template),
+		});
+		const content = await readJsonWithTemplate(
+			path.join(mockDir, "foo/bar/test.json"),
+			path.join(mockDir, "foo"),
+		);
+		expect(content).toEqual(template);
+	});
+
+	it("should throw when using a path that starts with ~/ when no root dir is configured", async () => {
+		const test = {
+			$import: "~/foo/template.json",
+		};
+		await mockFs({
+			"/foo/bar/test.json": JSON.stringify(test),
+		});
+		await assertZWaveError(
+			() => readJsonWithTemplate(path.join(mockDir, "foo/bar/test.json")),
+			{
+				messageMatches: "import specifier cannot start with ~/",
+				errorCode: ZWaveErrorCodes.Config_Invalid,
+			},
+		);
+	});
+
 	it("should be able to resolve in-file selectors", async () => {
 		const test = {
 			$import: "template.json#sub",
@@ -567,5 +601,27 @@ describe("readJsonWithTemplate", () => {
 			path.join(mockDir, "test.json"),
 		);
 		expect(content).toEqual(expected);
+	});
+
+	it("should throw when the referenced file is outside the rootDir", async () => {
+		const rootDir = "root/test";
+		const test = {
+			$import: "../outside.json",
+		};
+		await mockFs({
+			[`/${rootDir}/test.json`]: JSON.stringify(test),
+		});
+
+		await assertZWaveError(
+			() =>
+				readJsonWithTemplate(
+					path.join(mockDir, rootDir, "test.json"),
+					path.join(mockDir, rootDir),
+				),
+			{
+				messageMatches: "outside of root",
+				errorCode: ZWaveErrorCodes.Config_Invalid,
+			},
+		);
 	});
 });

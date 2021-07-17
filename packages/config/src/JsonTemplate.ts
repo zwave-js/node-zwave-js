@@ -6,12 +6,13 @@ import * as path from "path";
 
 const IMPORT_KEY = "$import";
 const importSpecifierRegex =
-	/^(?<filename>[\w\d\/\\\._-]+\.json)?(?:#(?<selector>[\w\d\/\._-]+(?:\[0x[0-9a-fA-F]+\])?))?$/i;
+	/^(?<filename>(?:~\/)?[\w\d\/\\\._-]+\.json)?(?:#(?<selector>[\w\d\/\._-]+(?:\[0x[0-9a-fA-F]+\])?))?$/i;
 type FileCache = Map<string, Record<string, unknown>>;
 
 /** Parses a JSON file with $import keys and replaces them with the selected objects */
 export async function readJsonWithTemplate(
 	filename: string,
+	rootDir?: string,
 ): Promise<Record<string, unknown>> {
 	if (!(await fs.pathExists(filename))) {
 		throw new ZWaveError(
@@ -19,7 +20,13 @@ export async function readJsonWithTemplate(
 			ZWaveErrorCodes.Config_NotFound,
 		);
 	}
-	return readJsonWithTemplateInternal(filename, undefined, [], new Map());
+	return readJsonWithTemplateInternal(
+		filename,
+		undefined,
+		[],
+		new Map(),
+		rootDir,
+	);
 }
 
 function assertImportSpecifier(
@@ -68,13 +75,41 @@ function select(
 	return ret;
 }
 
+function getImportStack(
+	visited: string[],
+	selector: string | undefined,
+): string {
+	const source = [...visited, selector ? `#${selector}` : undefined]
+		.reverse()
+		.filter((s) => !!s) as string[];
+	if (source.length > 0) {
+		return `\nImport stack: ${source.map((s) => `\n  in ${s}`).join("")}`;
+	}
+	return "";
+}
+
 async function readJsonWithTemplateInternal(
 	filename: string,
 	selector: string | undefined,
 	visited: string[],
 	fileCache: FileCache,
+	rootDir?: string,
 ): Promise<Record<string, unknown>> {
 	filename = path.normalize(filename);
+
+	// If we're limited by a root directory, make sure the file is inside that directory
+	if (rootDir) {
+		const relativeToRoot = path.relative(rootDir, filename);
+		if (relativeToRoot.startsWith("..")) {
+			throw new ZWaveError(
+				`Tried to import config file "${filename}" outside of root directory "${rootDir}"!${getImportStack(
+					visited,
+					selector,
+				)}`,
+				ZWaveErrorCodes.Config_Invalid,
+			);
+		}
+	}
 
 	const specifier = getImportSpecifier(filename, selector);
 	if (visited.includes(specifier)) {
@@ -95,16 +130,12 @@ async function readJsonWithTemplateInternal(
 			json = JSON5.parse(fileContent);
 			fileCache.set(filename, json);
 		} catch (e) {
-			let message = `Could not parse config file ${filename}: ${e.message}`;
-			const source = [...visited, selector ? `#${selector}` : undefined]
-				.reverse()
-				.filter((s) => !!s) as string[];
-			if (source.length > 0) {
-				message += `\nImport stack: ${source
-					.map((s) => `\n  in ${s}`)
-					.join("")}`;
-			}
-			throw new ZWaveError(message, ZWaveErrorCodes.Config_Invalid);
+			throw new ZWaveError(
+				`Could not parse config file ${filename}: ${
+					e.message
+				}${getImportStack(visited, selector)}`,
+				ZWaveErrorCodes.Config_Invalid,
+			);
 		}
 	}
 	// Resolve the JSON imports for (a subset) of the file and return the compound file
@@ -113,6 +144,7 @@ async function readJsonWithTemplateInternal(
 		filename,
 		[...visited, specifier],
 		fileCache,
+		rootDir,
 	);
 }
 
@@ -122,6 +154,7 @@ async function resolveJsonImports(
 	filename: string,
 	visited: string[],
 	fileCache: FileCache,
+	rootDir?: string,
 ): Promise<Record<string, unknown>> {
 	const ret: Record<string, unknown> = {};
 	// Loop through all properties and copy them to the resulting object
@@ -132,15 +165,41 @@ async function resolveJsonImports(
 			const { filename: importFilename, selector } =
 				importSpecifierRegex.exec(val)!.groups!;
 
+			// Resolve the correct import path
+			let newFilename: string;
+			if (importFilename) {
+				if (importFilename.startsWith("~/")) {
+					if (rootDir) {
+						newFilename = path.join(
+							rootDir,
+							importFilename.slice(2),
+						);
+					} else {
+						throw new ZWaveError(
+							`An $import specifier cannot start with ~/ when no root directory is defined!${getImportStack(
+								visited,
+								selector,
+							)}`,
+							ZWaveErrorCodes.Config_Invalid,
+						);
+					}
+				} else {
+					newFilename = path.join(
+						path.dirname(filename),
+						importFilename,
+					);
+				}
+			} else {
+				newFilename = filename;
+			}
+
 			// const importFilename = path.join(path.dirname(filename), val);
 			const imported = await readJsonWithTemplateInternal(
-				// If a filename is specified, resolve it - else use the current file
-				importFilename
-					? path.join(path.dirname(filename), importFilename)
-					: filename,
+				newFilename,
 				selector,
 				visited,
 				fileCache,
+				rootDir,
 			);
 			Object.assign(ret, imported);
 		} else if (isObject(val)) {
@@ -150,12 +209,19 @@ async function resolveJsonImports(
 				filename,
 				visited,
 				fileCache,
+				rootDir,
 			);
 		} else if (isArray(val)) {
 			// We're looking at an array, check if there are objects we need to recurse into
 			const tasks = val.map((v) =>
 				isObject(v)
-					? resolveJsonImports(v, filename, visited, fileCache)
+					? resolveJsonImports(
+							v,
+							filename,
+							visited,
+							fileCache,
+							rootDir,
+					  )
 					: v,
 			);
 			ret[prop] = await Promise.all(tasks);
