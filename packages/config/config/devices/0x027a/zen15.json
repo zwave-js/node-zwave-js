@@ -34,7 +34,7 @@
 			]
 		},
 		"21": {
-			"$import": "../templates/master_template.json#state_after_power_failure_prev_on_off"
+			"$import": "~/templates/master_template.json#state_after_power_failure_prev_on_off"
 		},
 		"24": {
 			"label": "On/Off Status Change Notifications",

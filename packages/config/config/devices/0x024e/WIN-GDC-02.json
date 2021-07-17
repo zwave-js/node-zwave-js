@@ -95,7 +95,7 @@
 			"description": "Relay 1 will be switched Off with predefined delay."
 		},
 		"7": {
-			"$import": "../templates/master_template.json#state_after_power_failure_prev_off",
+			"$import": "~/templates/master_template.json#state_after_power_failure_prev_off",
 			"label": "Relay 1 Restore After Power Loss",
 			"description": "Restore to the last known state for relay 1 after power was interrupted."
 		},
@@ -125,7 +125,7 @@
 			]
 		},
 		"9": {
-			"$import": "../templates/master_template.json#base_enable_disable",
+			"$import": "~/templates/master_template.json#base_enable_disable",
 			"label": "Hide Relay",
 			"description": "Hide relay 2 in controller interface"
 		},
@@ -149,17 +149,17 @@
 			"description": "Relay 2 will be switched Off with predefined delay."
 		},
 		"14": {
-			"$import": "../templates/master_template.json#state_after_power_failure_prev_off",
+			"$import": "~/templates/master_template.json#state_after_power_failure_prev_off",
 			"label": "Relay 2 Restore After Power Loss",
 			"description": "Restore to the last known state for relay 2 after power was interrupted."
 		},
 		"15": {
-			"$import": "../templates/master_template.json#base_enable_disable",
+			"$import": "~/templates/master_template.json#base_enable_disable",
 			"label": "Control Relay 1 & 2 together",
 			"description": "When enabled, Relay 2 will be switched On when Relay 1 is switched."
 		},
 		"16": {
-			"$import": "../templates/master_template.json#base_enable_disable",
+			"$import": "~/templates/master_template.json#base_enable_disable",
 			"label": "Control Relay 1 with S1"
 		},
 		"20": {
@@ -210,7 +210,7 @@
 			"description": "Values of sensor 3 options for processing. Devices included in association group 4 will be using this parameter for controlling sensor 3."
 		},
 		"35": {
-			"$import": "../templates/master_template.json#base_1-100_nounit",
+			"$import": "~/templates/master_template.json#base_1-100_nounit",
 			// I suspect the documentation is incorrect regarding this parameter
 			// as it doesn't make sense as documented. (same as 36).
 			// I think this is about sensor value change.
@@ -242,7 +242,7 @@
 			"description": "Values of sensor 4 options for processing. Devices included in association group 5 will be using this parameter for controlling sensor 4."
 		},
 		"40": {
-			"$import": "../templates/master_template.json#base_1-100_nounit",
+			"$import": "~/templates/master_template.json#base_1-100_nounit",
 			// I suspect the documentation is incorrect regarding this parameter
 			// as it doesn't make sense as documented. (same as 41).
 			// I think this is about sensor value change.
@@ -257,31 +257,31 @@
 			"defaultValue": 300
 		},
 		"50": {
-			"$import": "../templates/master_template.json#base_enable_disable",
+			"$import": "~/templates/master_template.json#base_enable_disable",
 			"label": "Require Secure Commands",
 			"description": "React only to secure commands when device is in secure mode.",
 			"defaultValue": 0
 		},
 		"51": {
-			"$import": "../templates/master_template.json#base_enable_disable",
+			"$import": "~/templates/master_template.json#base_enable_disable",
 			"label": "Secure Send Group 2",
 			"description": "Send secure command signals for association group 2.",
 			"defaultValue": 0
 		},
 		"52": {
-			"$import": "../templates/master_template.json#base_enable_disable",
+			"$import": "~/templates/master_template.json#base_enable_disable",
 			"label": "Secure Send Group 3",
 			"description": "Send secure command signals for association group 3.",
 			"defaultValue": 0
 		},
 		"53": {
-			"$import": "../templates/master_template.json#base_enable_disable",
+			"$import": "~/templates/master_template.json#base_enable_disable",
 			"label": "Secure Send Group 4",
 			"description": "Send secure command signals for association group 4.",
 			"defaultValue": 0
 		},
 		"54": {
-			"$import": "../templates/master_template.json#base_enable_disable",
+			"$import": "~/templates/master_template.json#base_enable_disable",
 			"label": "Secure Send Group 5",
 			"description": "Send secure command signals for association group 5.",
 			"defaultValue": 0

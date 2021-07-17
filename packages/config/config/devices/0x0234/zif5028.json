@@ -144,30 +144,30 @@
 			"label": "Input 6 - Function"
 		},
 		"14": {
-			"$import": "../templates/master_template.json#base_0-255_nounit",
+			"$import": "~/templates/master_template.json#base_0-255_nounit",
 			"label": "Input 6 - Timer",
 			"defaultValue": 0
 		},
 		"15": {
-			"$import": "../templates/master_template.json#base_0-255_nounit",
+			"$import": "~/templates/master_template.json#base_0-255_nounit",
 			"label": "Input Snubber-filter Time Constant.",
 			"unit": "10 ms",
 			"defaultValue": 5
 		},
 		"16": {
-			"$import": "../templates/master_template.json#base_0-255_nounit",
+			"$import": "~/templates/master_template.json#base_0-255_nounit",
 			"label": "Threshold Value For Activation Of Inputs.",
 			"unit": "10 ms",
 			"defaultValue": 200
 		},
 		"17": {
-			"$import": "../templates/master_template.json#base_0-255_nounit",
+			"$import": "~/templates/master_template.json#base_0-255_nounit",
 			"label": "Threshold For Input In Latched Mode.",
 			"unit": "10 ms",
 			"defaultValue": 50
 		},
 		"18": {
-			"$import": "../templates/master_template.json#base_enable_disable_inverted",
+			"$import": "~/templates/master_template.json#base_enable_disable_inverted",
 			"label": "Central Scene",
 			"defaultValue": 0
 		},

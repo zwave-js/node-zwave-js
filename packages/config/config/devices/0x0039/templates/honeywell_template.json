@@ -242,7 +242,7 @@
 	},
 	"outdoor_temperature_sensor": {
 		"label": "Outdoor Temperature Sensor",
-		"$import": "../../templates/master_template.json#base_enable_disable"
+		"$import": "~/templates/master_template.json#base_enable_disable"
 	},
 	"heating_equipment_type": {
 		"label": "Equipment Type",
@@ -367,7 +367,7 @@
 	},
 	"auto_changeover": {
 		"label": "Auto Changeover",
-		"$import": "../../templates/master_template.json#base_enable_disable"
+		"$import": "~/templates/master_template.json#base_enable_disable"
 	},
 	"auto_differential": {
 		"label": "Auto Differential",
@@ -379,11 +379,11 @@
 	},
 	"high_cool_stage_finish": {
 		"label": "High Cool Stage Finish",
-		"$import": "../../templates/master_template.json#base_enable_disable"
+		"$import": "~/templates/master_template.json#base_enable_disable"
 	},
 	"high_heat_stage_finish": {
 		"label": "High Heat Stage Finish",
-		"$import": "../../templates/master_template.json#base_enable_disable"
+		"$import": "~/templates/master_template.json#base_enable_disable"
 	},
 	"auxiliary_heat_droop": {
 		"label": "Auxiliary Heat Droop",
@@ -579,7 +579,7 @@
 	},
 	"adaptive_intelligent_recovery": {
 		"label": "Adaptive Intelligent Recovery",
-		"$import": "../../templates/master_template.json#base_enable_disable"
+		"$import": "~/templates/master_template.json#base_enable_disable"
 	},
 	"minimum_cool_temperature": {
 		"label": "Minimum Cool Temperature",
@@ -666,7 +666,7 @@
 	},
 	"daylight_saving": {
 		"label": "Daylight Saving",
-		"$import": "../../templates/master_template.json#base_enable_disable"
+		"$import": "~/templates/master_template.json#base_enable_disable"
 	},
 	"temperature_offset": {
 		"label": "Temperature Offset",

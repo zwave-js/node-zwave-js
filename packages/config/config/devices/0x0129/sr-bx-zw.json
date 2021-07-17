@@ -25,7 +25,7 @@
 			"unsigned": true
 		},
 		"2": {
-			"$import": "../templates/master_template.json#base_enable_disable",
+			"$import": "~/templates/master_template.json#base_enable_disable",
 			"label": "Alarm LED Flash"
 		},
 		"3": {
@@ -45,7 +45,7 @@
 			]
 		},
 		"4": {
-			"$import": "../templates/master_template.json#base_enable_disable",
+			"$import": "~/templates/master_template.json#base_enable_disable",
 			"label": "Tamper Alarm"
 		}
 	},

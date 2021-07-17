@@ -69,7 +69,7 @@
 			]
 		},
 		"30": {
-			"$import": "../templates/master_template.json#state_after_power_failure_prev_off"
+			"$import": "~/templates/master_template.json#state_after_power_failure_prev_off"
 		},
 		"48": {
 			"label": "Total Water Consumption",

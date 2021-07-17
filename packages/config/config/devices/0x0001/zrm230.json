@@ -41,10 +41,10 @@
 			"$import": "templates/act_template.json#suspend_group_4"
 		},
 		"3": {
-			"$import": "../templates/master_template.json#led_indicator_two_options_inverted"
+			"$import": "~/templates/master_template.json#led_indicator_two_options_inverted"
 		},
 		"4": {
-			"$import": "../templates/master_template.json#orientation"
+			"$import": "~/templates/master_template.json#orientation"
 		},
 		"14": {
 			"$import": "templates/act_template.json#enable_shade_group_2"
@@ -56,13 +56,13 @@
 			"$import": "templates/act_template.json#led_indicator"
 		},
 		"20": {
-			"$import": "../templates/master_template.json#base_1-255_nounit",
+			"$import": "~/templates/master_template.json#base_1-255_nounit",
 			"label": "Poll Group 2 Interval",
 			"unit": "minutes",
 			"defaultValue": 2
 		},
 		"22": {
-			"$import": "../templates/master_template.json#base_enable_disable",
+			"$import": "~/templates/master_template.json#base_enable_disable",
 			"label": "Poll Group 2",
 			"defaultValue": 1
 		}

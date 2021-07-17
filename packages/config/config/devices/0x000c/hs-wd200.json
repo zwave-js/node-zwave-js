@@ -16,10 +16,10 @@
 	},
 	"paramInformation": {
 		"3": {
-			"$import": "../templates/master_template.json#led_indicator_two_options"
+			"$import": "~/templates/master_template.json#led_indicator_two_options"
 		},
 		"4": {
-			"$import": "../templates/master_template.json#orientation"
+			"$import": "~/templates/master_template.json#orientation"
 		},
 		"11": {
 			"label": "Ramp Rate (Z-Wave)",
@@ -76,31 +76,31 @@
 			"$import": "templates/homeseer_template.json#blink_frequency"
 		},
 		"31[0x01]": {
-			"$import": "../templates/master_template.json#base_enable_disable",
+			"$import": "~/templates/master_template.json#base_enable_disable",
 			"label": "LED 1 Blink Status"
 		},
 		"31[0x02]": {
-			"$import": "../templates/master_template.json#base_enable_disable",
+			"$import": "~/templates/master_template.json#base_enable_disable",
 			"label": "LED 2 Blink Status"
 		},
 		"31[0x04]": {
-			"$import": "../templates/master_template.json#base_enable_disable",
+			"$import": "~/templates/master_template.json#base_enable_disable",
 			"label": "LED 3 Blink Status"
 		},
 		"31[0x08]": {
-			"$import": "../templates/master_template.json#base_enable_disable",
+			"$import": "~/templates/master_template.json#base_enable_disable",
 			"label": "LED 4 Blink Status"
 		},
 		"31[0x10]": {
-			"$import": "../templates/master_template.json#base_enable_disable",
+			"$import": "~/templates/master_template.json#base_enable_disable",
 			"label": "LED 5 Blink Status"
 		},
 		"31[0x20]": {
-			"$import": "../templates/master_template.json#base_enable_disable",
+			"$import": "~/templates/master_template.json#base_enable_disable",
 			"label": "LED 6 Blink Status"
 		},
 		"31[0x40]": {
-			"$import": "../templates/master_template.json#base_enable_disable",
+			"$import": "~/templates/master_template.json#base_enable_disable",
 			"label": "LED 7 Blink Status"
 		}
 	},

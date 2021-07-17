@@ -28,7 +28,7 @@
 	},
 	"paramInformation": {
 		"1": {
-			"$import": "../templates/master_template.json#state_after_power_failure_prev_on_off"
+			"$import": "~/templates/master_template.json#state_after_power_failure_prev_on_off"
 		},
 		"2": {
 			"label": "Power Wattage Report Value Threshold",

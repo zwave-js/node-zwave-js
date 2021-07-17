@@ -41,7 +41,7 @@
 			"$import": "templates/act_template.json#suspend_group_4"
 		},
 		"3": {
-			"$import": "../templates/master_template.json#led_indicator_two_options_inverted"
+			"$import": "~/templates/master_template.json#led_indicator_two_options_inverted"
 		}
 	}
 }

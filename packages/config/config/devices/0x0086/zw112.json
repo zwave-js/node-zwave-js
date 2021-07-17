@@ -63,7 +63,7 @@
 			"defaultValue": 20
 		},
 		"101": {
-			"$import": "../templates/master_template.json#base_enable_disable",
+			"$import": "~/templates/master_template.json#base_enable_disable",
 			"label": "Enable/Disable The Function of Parameter 111"
 		},
 		"111": {

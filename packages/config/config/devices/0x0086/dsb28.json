@@ -33,7 +33,7 @@
 	},
 	"paramInformation": {
 		"2": {
-			"$import": "../templates/master_template.json#base_0-1_nounit",
+			"$import": "~/templates/master_template.json#base_0-1_nounit",
 			"label": "Energy Detection Mode",
 			"options": [
 				{

@@ -49,55 +49,55 @@
 	},
 	"paramInformation": {
 		"1": {
-			"$import": "../0x0086/templates/aeotec_template.json#sensor_operation_mode"
+			"$import": "~/0x0086/templates/aeotec_template.json#sensor_operation_mode"
 		},
 		"2": {
-			"$import": "../0x0086/templates/aeotec_template.json#invert_state_report"
+			"$import": "~/0x0086/templates/aeotec_template.json#invert_state_report"
 		},
 		"3[0x02]": {
-			"$import": "../0x0086/templates/aeotec_template.json#led_indicator_open"
+			"$import": "~/0x0086/templates/aeotec_template.json#led_indicator_open"
 		},
 		"3[0x04]": {
-			"$import": "../0x0086/templates/aeotec_template.json#led_indicator_wake"
+			"$import": "~/0x0086/templates/aeotec_template.json#led_indicator_wake"
 		},
 		"3[0x10]": {
-			"$import": "../0x0086/templates/aeotec_template.json#led_indicator_tamper"
+			"$import": "~/0x0086/templates/aeotec_template.json#led_indicator_tamper"
 		},
 		"4": {
-			"$import": "../0x0086/templates/aeotec_template.json#range_test_double_click"
+			"$import": "~/0x0086/templates/aeotec_template.json#range_test_double_click"
 		},
 		"5": {
-			"$import": "../0x0086/templates/aeotec_template.json#association_group_2_trigger"
+			"$import": "~/0x0086/templates/aeotec_template.json#association_group_2_trigger"
 		},
 		"6": {
-			"$import": "../0x0086/templates/aeotec_template.json#association_group_2_command_type"
+			"$import": "~/0x0086/templates/aeotec_template.json#association_group_2_command_type"
 		},
 		"7": {
-			"$import": "../0x0086/templates/aeotec_template.json#association_group_2_basic_set_on"
+			"$import": "~/0x0086/templates/aeotec_template.json#association_group_2_basic_set_on"
 		},
 		"8": {
-			"$import": "../0x0086/templates/aeotec_template.json#association_group_2_basic_set_off"
+			"$import": "~/0x0086/templates/aeotec_template.json#association_group_2_basic_set_off"
 		},
 		"9": {
-			"$import": "../0x0086/templates/aeotec_template.json#time_delay_on"
+			"$import": "~/0x0086/templates/aeotec_template.json#time_delay_on"
 		},
 		"10": {
-			"$import": "../0x0086/templates/aeotec_template.json#time_delay_off"
+			"$import": "~/0x0086/templates/aeotec_template.json#time_delay_off"
 		},
 		"11": {
-			"$import": "../0x0086/templates/aeotec_template.json#time_delay_tamper"
+			"$import": "~/0x0086/templates/aeotec_template.json#time_delay_tamper"
 		},
 		"12": {
-			"$import": "../0x0086/templates/aeotec_template.json#report_on_tamper_cancel"
+			"$import": "~/0x0086/templates/aeotec_template.json#report_on_tamper_cancel"
 		},
 		"13": {
-			"$import": "../0x0086/templates/aeotec_template.json#central_scene_functionality"
+			"$import": "~/0x0086/templates/aeotec_template.json#central_scene_functionality"
 		},
 		"14": {
-			"$import": "../0x0086/templates/aeotec_template.json#tilt_sensor"
+			"$import": "~/0x0086/templates/aeotec_template.json#tilt_sensor"
 		},
 		"15": {
-			"$import": "../0x0086/templates/aeotec_template.json#tilt_sensor_sensitivity"
+			"$import": "~/0x0086/templates/aeotec_template.json#tilt_sensor_sensitivity"
 		}
 	},
 	"metadata": {

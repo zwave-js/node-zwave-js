@@ -72,7 +72,7 @@
 			"defaultValue": 0
 		},
 		"30": {
-			"$import": "../templates/master_template.json#state_after_power_failure_prev_off"
+			"$import": "~/templates/master_template.json#state_after_power_failure_prev_off"
 		},
 		"52": {
 			"label": "Auto or manual selection",

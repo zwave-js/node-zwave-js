@@ -57,16 +57,16 @@
 	},
 	"paramInformation": {
 		"2": {
-			"$import": "../templates/master_template.json#base_1-100_nounit",
+			"$import": "~/templates/master_template.json#base_1-100_nounit",
 			"label": "Set The Repetitions For Playing Doorbell Ringtone",
 			"defaultValue": 2
 		},
 		"5": {
-			"$import": "../templates/master_template.json#base_1-100_nounit",
+			"$import": "~/templates/master_template.json#base_1-100_nounit",
 			"label": "Default Doorbell Ringtone"
 		},
 		"6": {
-			"$import": "../templates/master_template.json#base_0-100_nounit",
+			"$import": "~/templates/master_template.json#base_0-100_nounit",
 			"label": "Play Ringtone",
 			"options": [
 				{
@@ -108,12 +108,12 @@
 			]
 		},
 		"8": {
-			"$import": "../templates/master_template.json#base_0-10_nounit",
+			"$import": "~/templates/master_template.json#base_0-10_nounit",
 			"label": "Volume",
 			"defaultValue": 10
 		},
 		"10": {
-			"$import": "../templates/master_template.json#base_0-1_nounit",
+			"$import": "~/templates/master_template.json#base_0-1_nounit",
 			"label": "Define The Function of Button- and Button+",
 			"options": [
 				{
@@ -127,7 +127,7 @@
 			]
 		},
 		"11": {
-			"$import": "../templates/master_template.json#base_0-1_nounit",
+			"$import": "~/templates/master_template.json#base_0-1_nounit",
 			"label": "Short/Long Press Function of Button- And Button+",
 			"options": [
 				{
@@ -141,7 +141,7 @@
 			]
 		},
 		"42": {
-			"$import": "../templates/master_template.json#base_0-255_nounit",
+			"$import": "~/templates/master_template.json#base_0-255_nounit",
 			"label": "Wireless Button Battery Status",
 			"description": "Set Normal Battery Level to reset low battery alarm",
 			"defaultValue": 0,

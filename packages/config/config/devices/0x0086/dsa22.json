@@ -37,19 +37,19 @@
 	},
 	"paramInformation": {
 		"241": {
-			"$import": "../templates/master_template.json#base_enable_disable",
+			"$import": "~/templates/master_template.json#base_enable_disable",
 			"label": "Button 1 (Upper Left) - Scene Mode"
 		},
 		"242": {
-			"$import": "../templates/master_template.json#base_enable_disable",
+			"$import": "~/templates/master_template.json#base_enable_disable",
 			"label": "Button 2 (Upper Right) - Scene Mode"
 		},
 		"243": {
-			"$import": "../templates/master_template.json#base_enable_disable",
+			"$import": "~/templates/master_template.json#base_enable_disable",
 			"label": "Button 3 (Lower Left) - Scene Mode"
 		},
 		"244": {
-			"$import": "../templates/master_template.json#base_enable_disable",
+			"$import": "~/templates/master_template.json#base_enable_disable",
 			"label": "Button 4 (Lower Right) - Scene Mode"
 		}
 	}

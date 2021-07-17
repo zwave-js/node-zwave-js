@@ -37,27 +37,27 @@
 	// Fantem is an OEM for Aeotec
 	"paramInformation": {
 		"1": {
-			"$import": "../0x0086/templates/aeotec_template.json#invert_state_report"
+			"$import": "~/0x0086/templates/aeotec_template.json#invert_state_report"
 		},
 		"39": {
-			"$import": "../0x0086/templates/aeotec_template.json#low_battery_threshold",
+			"$import": "~/0x0086/templates/aeotec_template.json#low_battery_threshold",
 			"defaultValue": 20
 		},
 		"101": {
-			"$import": "../templates/master_template.json#base_enable_disable",
+			"$import": "~/templates/master_template.json#base_enable_disable",
 			"label": "Enable/Disable The Function of Parameter 111"
 		},
 		"111": {
-			"$import": "../0x0086/templates/aeotec_template.json#low_battery_interval"
+			"$import": "~/0x0086/templates/aeotec_template.json#low_battery_interval"
 		},
 		"121": {
-			"$import": "../0x0086/templates/aeotec_template.json#binary_report_type"
+			"$import": "~/0x0086/templates/aeotec_template.json#binary_report_type"
 		},
 		"252": {
-			"$import": "../0x0086/templates/aeotec_template.json#lock_configuration"
+			"$import": "~/0x0086/templates/aeotec_template.json#lock_configuration"
 		},
 		"255": {
-			"$import": "../0x0086/templates/aeotec_template.json#factory_reset_exclude"
+			"$import": "~/0x0086/templates/aeotec_template.json#factory_reset_exclude"
 		}
 	},
 	"metadata": {

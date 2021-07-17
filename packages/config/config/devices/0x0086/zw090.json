@@ -32,15 +32,15 @@
 	},
 	"paramInformation": {
 		"81": {
-			"$import": "../templates/master_template.json#enable_led_indicator"
+			"$import": "~/templates/master_template.json#enable_led_indicator"
 		},
 		"220": {
-			"$import": "../templates/master_template.json#base_0-10_nounit",
+			"$import": "~/templates/master_template.json#base_0-10_nounit",
 			"label": "Rf Power Level",
 			"defaultValue": 10
 		},
 		"242": {
-			"$import": "../templates/master_template.json#base_enable_disable",
+			"$import": "~/templates/master_template.json#base_enable_disable",
 			"label": "Security Network"
 		},
 		"252": {

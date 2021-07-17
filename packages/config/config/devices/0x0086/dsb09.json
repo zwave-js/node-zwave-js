@@ -84,12 +84,12 @@
 			"valueSize": 4
 		},
 		"101[0x01]": {
-			"$import": "../templates/master_template.json#base_enable_disable",
+			"$import": "~/templates/master_template.json#base_enable_disable",
 			"label": "Automatic Report: Group 1 - Battery Report",
 			"valueSize": 4
 		},
 		"101[0x02]": {
-			"$import": "../templates/master_template.json#base_enable_disable",
+			"$import": "~/templates/master_template.json#base_enable_disable",
 			"label": "Automatic Report: Group 1 - MultiSensor Wattage (Whole HEM)",
 			"valueSize": 4
 		},
@@ -118,12 +118,12 @@
 			"$import": "templates/aeotec_template.json#auto_report_group1_kwh_clamp3"
 		},
 		"102[0x01]": {
-			"$import": "../templates/master_template.json#base_enable_disable",
+			"$import": "~/templates/master_template.json#base_enable_disable",
 			"label": "Automatic Report: Group 2 - Battery Report",
 			"valueSize": 4
 		},
 		"102[0x02]": {
-			"$import": "../templates/master_template.json#base_enable_disable",
+			"$import": "~/templates/master_template.json#base_enable_disable",
 			"label": "Automatic Report: Group 2 - MultiSensor Wattage (Whole HEM)",
 			"valueSize": 4
 		},
@@ -152,12 +152,12 @@
 			"$import": "templates/aeotec_template.json#auto_report_group2_kwh_clamp3"
 		},
 		"103[0x01]": {
-			"$import": "../templates/master_template.json#base_enable_disable",
+			"$import": "~/templates/master_template.json#base_enable_disable",
 			"label": "Automatic Report: Group 3 - Battery Report",
 			"valueSize": 4
 		},
 		"103[0x02]": {
-			"$import": "../templates/master_template.json#base_enable_disable",
+			"$import": "~/templates/master_template.json#base_enable_disable",
 			"label": "Automatic Report: Group 3 - MultiSensor Wattage (Whole HEM)",
 			"valueSize": 4
 		},

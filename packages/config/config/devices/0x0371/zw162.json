@@ -26,244 +26,244 @@
 	},
 	"paramInformation": {
 		"1[0xff000000]": {
-			"$import": "../0x0086/templates/aeotec_template.json#light_index_browse"
+			"$import": "~/0x0086/templates/aeotec_template.json#light_index_browse"
 		},
 		"1[0xff0000]": {
-			"$import": "../0x0086/templates/aeotec_template.json#tone_play_mode_browse"
+			"$import": "~/0x0086/templates/aeotec_template.json#tone_play_mode_browse"
 		},
 		"2[0xff000000]": {
-			"$import": "../0x0086/templates/aeotec_template.json#light_index_tamper"
+			"$import": "~/0x0086/templates/aeotec_template.json#light_index_tamper"
 		},
 		"2[0xff0000]": {
-			"$import": "../0x0086/templates/aeotec_template.json#tone_duration_tamper"
+			"$import": "~/0x0086/templates/aeotec_template.json#tone_duration_tamper"
 		},
 		"2[0xff00]": {
-			"$import": "../0x0086/templates/aeotec_template.json#tone_interval_tamper"
+			"$import": "~/0x0086/templates/aeotec_template.json#tone_interval_tamper"
 		},
 		"2[0xff]": {
-			"$import": "../0x0086/templates/aeotec_template.json#tone_play_count_tamper"
+			"$import": "~/0x0086/templates/aeotec_template.json#tone_play_count_tamper"
 		},
 		"3[0xff000000]": {
-			"$import": "../0x0086/templates/aeotec_template.json#light_index_doorbell_1"
+			"$import": "~/0x0086/templates/aeotec_template.json#light_index_doorbell_1"
 		},
 		"3[0xff0000]": {
-			"$import": "../0x0086/templates/aeotec_template.json#tone_duration_doorbell_1"
+			"$import": "~/0x0086/templates/aeotec_template.json#tone_duration_doorbell_1"
 		},
 		"3[0xff00]": {
-			"$import": "../0x0086/templates/aeotec_template.json#tone_interval_doorbell_1"
+			"$import": "~/0x0086/templates/aeotec_template.json#tone_interval_doorbell_1"
 		},
 		"3[0xff]": {
-			"$import": "../0x0086/templates/aeotec_template.json#tone_play_count_doorbell_1"
+			"$import": "~/0x0086/templates/aeotec_template.json#tone_play_count_doorbell_1"
 		},
 		"4[0xff000000]": {
-			"$import": "../0x0086/templates/aeotec_template.json#light_index_doorbell_2"
+			"$import": "~/0x0086/templates/aeotec_template.json#light_index_doorbell_2"
 		},
 		"4[0xff0000]": {
-			"$import": "../0x0086/templates/aeotec_template.json#tone_duration_doorbell_2"
+			"$import": "~/0x0086/templates/aeotec_template.json#tone_duration_doorbell_2"
 		},
 		"4[0xff00]": {
-			"$import": "../0x0086/templates/aeotec_template.json#tone_interval_doorbell_2"
+			"$import": "~/0x0086/templates/aeotec_template.json#tone_interval_doorbell_2"
 		},
 		"4[0xff]": {
-			"$import": "../0x0086/templates/aeotec_template.json#tone_play_count_doorbell_2"
+			"$import": "~/0x0086/templates/aeotec_template.json#tone_play_count_doorbell_2"
 		},
 		"5[0xff000000]": {
-			"$import": "../0x0086/templates/aeotec_template.json#light_index_doorbell_3"
+			"$import": "~/0x0086/templates/aeotec_template.json#light_index_doorbell_3"
 		},
 		"5[0xff0000]": {
-			"$import": "../0x0086/templates/aeotec_template.json#tone_duration_doorbell_3"
+			"$import": "~/0x0086/templates/aeotec_template.json#tone_duration_doorbell_3"
 		},
 		"5[0xff00]": {
-			"$import": "../0x0086/templates/aeotec_template.json#tone_interval_doorbell_3"
+			"$import": "~/0x0086/templates/aeotec_template.json#tone_interval_doorbell_3"
 		},
 		"5[0xff]": {
-			"$import": "../0x0086/templates/aeotec_template.json#tone_play_count_doorbell_3"
+			"$import": "~/0x0086/templates/aeotec_template.json#tone_play_count_doorbell_3"
 		},
 		"6[0xff000000]": {
-			"$import": "../0x0086/templates/aeotec_template.json#light_index_environment"
+			"$import": "~/0x0086/templates/aeotec_template.json#light_index_environment"
 		},
 		"6[0xff0000]": {
-			"$import": "../0x0086/templates/aeotec_template.json#tone_duration_environment"
+			"$import": "~/0x0086/templates/aeotec_template.json#tone_duration_environment"
 		},
 		"6[0xff00]": {
-			"$import": "../0x0086/templates/aeotec_template.json#tone_interval_environment"
+			"$import": "~/0x0086/templates/aeotec_template.json#tone_interval_environment"
 		},
 		"6[0xff]": {
-			"$import": "../0x0086/templates/aeotec_template.json#tone_play_count_environment"
+			"$import": "~/0x0086/templates/aeotec_template.json#tone_play_count_environment"
 		},
 		"7[0xff000000]": {
-			"$import": "../0x0086/templates/aeotec_template.json#light_index_security"
+			"$import": "~/0x0086/templates/aeotec_template.json#light_index_security"
 		},
 		"7[0xff0000]": {
-			"$import": "../0x0086/templates/aeotec_template.json#tone_duration_security"
+			"$import": "~/0x0086/templates/aeotec_template.json#tone_duration_security"
 		},
 		"7[0xff00]": {
-			"$import": "../0x0086/templates/aeotec_template.json#tone_interval_security"
+			"$import": "~/0x0086/templates/aeotec_template.json#tone_interval_security"
 		},
 		"7[0xff]": {
-			"$import": "../0x0086/templates/aeotec_template.json#tone_play_count_security"
+			"$import": "~/0x0086/templates/aeotec_template.json#tone_play_count_security"
 		},
 		"8[0xff000000]": {
-			"$import": "../0x0086/templates/aeotec_template.json#light_index_emergency"
+			"$import": "~/0x0086/templates/aeotec_template.json#light_index_emergency"
 		},
 		"8[0xff0000]": {
-			"$import": "../0x0086/templates/aeotec_template.json#tone_duration_emergency"
+			"$import": "~/0x0086/templates/aeotec_template.json#tone_duration_emergency"
 		},
 		"8[0xff00]": {
-			"$import": "../0x0086/templates/aeotec_template.json#tone_interval_emergency"
+			"$import": "~/0x0086/templates/aeotec_template.json#tone_interval_emergency"
 		},
 		"8[0xff]": {
-			"$import": "../0x0086/templates/aeotec_template.json#tone_play_count_emergency"
+			"$import": "~/0x0086/templates/aeotec_template.json#tone_play_count_emergency"
 		},
 		"16[0xff000000]": {
-			"$import": "../0x0086/templates/aeotec_template.json#dim_duration_on_1"
+			"$import": "~/0x0086/templates/aeotec_template.json#dim_duration_on_1"
 		},
 		"16[0xff0000]": {
-			"$import": "../0x0086/templates/aeotec_template.json#dim_duration_off_1"
+			"$import": "~/0x0086/templates/aeotec_template.json#dim_duration_off_1"
 		},
 		"16[0xff00]": {
-			"$import": "../0x0086/templates/aeotec_template.json#led_duration_on_1"
+			"$import": "~/0x0086/templates/aeotec_template.json#led_duration_on_1"
 		},
 		"16[0xff]": {
-			"$import": "../0x0086/templates/aeotec_template.json#led_duration_off_1"
+			"$import": "~/0x0086/templates/aeotec_template.json#led_duration_off_1"
 		},
 		"17[0xff000000]": {
-			"$import": "../0x0086/templates/aeotec_template.json#dim_duration_on_2"
+			"$import": "~/0x0086/templates/aeotec_template.json#dim_duration_on_2"
 		},
 		"17[0xff0000]": {
-			"$import": "../0x0086/templates/aeotec_template.json#dim_duration_off_2"
+			"$import": "~/0x0086/templates/aeotec_template.json#dim_duration_off_2"
 		},
 		"17[0xff00]": {
-			"$import": "../0x0086/templates/aeotec_template.json#led_duration_on_2"
+			"$import": "~/0x0086/templates/aeotec_template.json#led_duration_on_2"
 		},
 		"17[0xff]": {
-			"$import": "../0x0086/templates/aeotec_template.json#led_duration_off_2"
+			"$import": "~/0x0086/templates/aeotec_template.json#led_duration_off_2"
 		},
 		"18[0xff000000]": {
-			"$import": "../0x0086/templates/aeotec_template.json#dim_duration_on_3"
+			"$import": "~/0x0086/templates/aeotec_template.json#dim_duration_on_3"
 		},
 		"18[0xff0000]": {
-			"$import": "../0x0086/templates/aeotec_template.json#dim_duration_off_3"
+			"$import": "~/0x0086/templates/aeotec_template.json#dim_duration_off_3"
 		},
 		"18[0xff00]": {
-			"$import": "../0x0086/templates/aeotec_template.json#led_duration_on_3"
+			"$import": "~/0x0086/templates/aeotec_template.json#led_duration_on_3"
 		},
 		"18[0xff]": {
-			"$import": "../0x0086/templates/aeotec_template.json#led_duration_off_3"
+			"$import": "~/0x0086/templates/aeotec_template.json#led_duration_off_3"
 		},
 		"19[0xff000000]": {
-			"$import": "../0x0086/templates/aeotec_template.json#dim_duration_on_4"
+			"$import": "~/0x0086/templates/aeotec_template.json#dim_duration_on_4"
 		},
 		"19[0xff0000]": {
-			"$import": "../0x0086/templates/aeotec_template.json#dim_duration_off_4"
+			"$import": "~/0x0086/templates/aeotec_template.json#dim_duration_off_4"
 		},
 		"19[0xff00]": {
-			"$import": "../0x0086/templates/aeotec_template.json#led_duration_on_4"
+			"$import": "~/0x0086/templates/aeotec_template.json#led_duration_on_4"
 		},
 		"19[0xff]": {
-			"$import": "../0x0086/templates/aeotec_template.json#led_duration_off_4"
+			"$import": "~/0x0086/templates/aeotec_template.json#led_duration_off_4"
 		},
 		"20[0xff000000]": {
-			"$import": "../0x0086/templates/aeotec_template.json#dim_duration_on_5"
+			"$import": "~/0x0086/templates/aeotec_template.json#dim_duration_on_5"
 		},
 		"20[0xff0000]": {
-			"$import": "../0x0086/templates/aeotec_template.json#dim_duration_off_5"
+			"$import": "~/0x0086/templates/aeotec_template.json#dim_duration_off_5"
 		},
 		"20[0xff00]": {
-			"$import": "../0x0086/templates/aeotec_template.json#led_duration_on_5"
+			"$import": "~/0x0086/templates/aeotec_template.json#led_duration_on_5"
 		},
 		"20[0xff]": {
-			"$import": "../0x0086/templates/aeotec_template.json#led_duration_off_5"
+			"$import": "~/0x0086/templates/aeotec_template.json#led_duration_off_5"
 		},
 		"21[0xff000000]": {
-			"$import": "../0x0086/templates/aeotec_template.json#dim_duration_on_6"
+			"$import": "~/0x0086/templates/aeotec_template.json#dim_duration_on_6"
 		},
 		"21[0xff0000]": {
-			"$import": "../0x0086/templates/aeotec_template.json#dim_duration_off_6"
+			"$import": "~/0x0086/templates/aeotec_template.json#dim_duration_off_6"
 		},
 		"21[0xff00]": {
-			"$import": "../0x0086/templates/aeotec_template.json#led_duration_on_6"
+			"$import": "~/0x0086/templates/aeotec_template.json#led_duration_on_6"
 		},
 		"21[0xff]": {
-			"$import": "../0x0086/templates/aeotec_template.json#led_duration_off_6"
+			"$import": "~/0x0086/templates/aeotec_template.json#led_duration_off_6"
 		},
 		"22[0xff000000]": {
-			"$import": "../0x0086/templates/aeotec_template.json#dim_duration_on_7"
+			"$import": "~/0x0086/templates/aeotec_template.json#dim_duration_on_7"
 		},
 		"22[0xff0000]": {
-			"$import": "../0x0086/templates/aeotec_template.json#dim_duration_off_7"
+			"$import": "~/0x0086/templates/aeotec_template.json#dim_duration_off_7"
 		},
 		"22[0xff00]": {
-			"$import": "../0x0086/templates/aeotec_template.json#led_duration_on_7"
+			"$import": "~/0x0086/templates/aeotec_template.json#led_duration_on_7"
 		},
 		"22[0xff]": {
-			"$import": "../0x0086/templates/aeotec_template.json#led_duration_off_7"
+			"$import": "~/0x0086/templates/aeotec_template.json#led_duration_off_7"
 		},
 		"32": {
-			"$import": "../0x0086/templates/aeotec_template.json#basic_set_command_browse"
+			"$import": "~/0x0086/templates/aeotec_template.json#basic_set_command_browse"
 		},
 		"33": {
-			"$import": "../0x0086/templates/aeotec_template.json#basic_set_command_tamper"
+			"$import": "~/0x0086/templates/aeotec_template.json#basic_set_command_tamper"
 		},
 		"34": {
-			"$import": "../0x0086/templates/aeotec_template.json#basic_set_command_doorbell_1"
+			"$import": "~/0x0086/templates/aeotec_template.json#basic_set_command_doorbell_1"
 		},
 		"35": {
-			"$import": "../0x0086/templates/aeotec_template.json#basic_set_command_doorbell_2"
+			"$import": "~/0x0086/templates/aeotec_template.json#basic_set_command_doorbell_2"
 		},
 		"36": {
-			"$import": "../0x0086/templates/aeotec_template.json#basic_set_command_doorbell_3"
+			"$import": "~/0x0086/templates/aeotec_template.json#basic_set_command_doorbell_3"
 		},
 		"37": {
-			"$import": "../0x0086/templates/aeotec_template.json#basic_set_command_environment"
+			"$import": "~/0x0086/templates/aeotec_template.json#basic_set_command_environment"
 		},
 		"38": {
-			"$import": "../0x0086/templates/aeotec_template.json#basic_set_command_security"
+			"$import": "~/0x0086/templates/aeotec_template.json#basic_set_command_security"
 		},
 		"39": {
-			"$import": "../0x0086/templates/aeotec_template.json#basic_set_command_emergency"
+			"$import": "~/0x0086/templates/aeotec_template.json#basic_set_command_emergency"
 		},
 		"48": {
-			"$import": "../0x0086/templates/aeotec_template.json#button_unpair"
+			"$import": "~/0x0086/templates/aeotec_template.json#button_unpair"
 		},
 		"49": {
-			"$import": "../0x0086/templates/aeotec_template.json#button_pair"
+			"$import": "~/0x0086/templates/aeotec_template.json#button_pair"
 		},
 		"50": {
-			"$import": "../0x0086/templates/aeotec_template.json#button_pairing_status"
+			"$import": "~/0x0086/templates/aeotec_template.json#button_pairing_status"
 		},
 		"51[0x01]": {
-			"$import": "../0x0086/templates/aeotec_template.json#button_status_1"
+			"$import": "~/0x0086/templates/aeotec_template.json#button_status_1"
 		},
 		"51[0x02]": {
-			"$import": "../0x0086/templates/aeotec_template.json#button_status_2"
+			"$import": "~/0x0086/templates/aeotec_template.json#button_status_2"
 		},
 		"51[0x04]": {
-			"$import": "../0x0086/templates/aeotec_template.json#button_status_3"
+			"$import": "~/0x0086/templates/aeotec_template.json#button_status_3"
 		},
 		"52[0xffff0000]": {
-			"$import": "../0x0086/templates/aeotec_template.json#button_battery_voltage_1"
+			"$import": "~/0x0086/templates/aeotec_template.json#button_battery_voltage_1"
 		},
 		"52[0xffff]": {
-			"$import": "../0x0086/templates/aeotec_template.json#button_version_1"
+			"$import": "~/0x0086/templates/aeotec_template.json#button_version_1"
 		},
 		"53[0xffff0000]": {
-			"$import": "../0x0086/templates/aeotec_template.json#button_battery_voltage_2"
+			"$import": "~/0x0086/templates/aeotec_template.json#button_battery_voltage_2"
 		},
 		"53[0xffff]": {
-			"$import": "../0x0086/templates/aeotec_template.json#button_version_2"
+			"$import": "~/0x0086/templates/aeotec_template.json#button_version_2"
 		},
 		"54[0xffff0000]": {
-			"$import": "../0x0086/templates/aeotec_template.json#button_battery_voltage_3"
+			"$import": "~/0x0086/templates/aeotec_template.json#button_battery_voltage_3"
 		},
 		"54[0xffff]": {
-			"$import": "../0x0086/templates/aeotec_template.json#button_version_3"
+			"$import": "~/0x0086/templates/aeotec_template.json#button_version_3"
 		},
 		"96": {
-			"$import": "../0x0086/templates/aeotec_template.json#stop_action_button"
+			"$import": "~/0x0086/templates/aeotec_template.json#stop_action_button"
 		},
 		"255": {
-			"$import": "../0x0086/templates/aeotec_template.json#factory_reset_exclude"
+			"$import": "~/0x0086/templates/aeotec_template.json#factory_reset_exclude"
 		}
 	},
 	"metadata": {

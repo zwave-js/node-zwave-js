@@ -28,82 +28,82 @@
 			"defaultValue": 240
 		},
 		"2[0x01]": {
-			"$import": "../templates/master_template.json#base_enable_disable",
+			"$import": "~/templates/master_template.json#base_enable_disable",
 			"label": "Open Window Detector (Normal)",
 			"defaultValue": 1, // Enable
 			"valueSize": 4
 		},
 		"2[0x02]": {
-			"$import": "../templates/master_template.json#base_enable_disable",
+			"$import": "~/templates/master_template.json#base_enable_disable",
 			"label": "Open Window Detector (Rapid)",
 			"valueSize": 4
 		},
 		"2[0x04]": {
-			"$import": "../templates/master_template.json#base_enable_disable",
+			"$import": "~/templates/master_template.json#base_enable_disable",
 			"label": "Increase Receiver Sensitivity",
 			"description": "Increase receiver sensitivity, but shortens battery life",
 			"valueSize": 4
 		},
 		"2[0x08]": {
-			"$import": "../templates/master_template.json#base_enable_disable",
+			"$import": "~/templates/master_template.json#base_enable_disable",
 			"label": "Remote LED",
 			"description": "Enable LED indications when controlling remotely",
 			"valueSize": 4
 		},
 		"2[0x10]": {
-			"$import": "../templates/master_template.json#base_enable_disable",
+			"$import": "~/templates/master_template.json#base_enable_disable",
 			"label": "Protect Setting Full ON/OFF",
 			"description": "Protect from setting Full ON and Full OFF mode by turning the knob manually",
 			"valueSize": 4
 		},
 		"2[0x20]": {
 			"$if": "firmwareVersion >= 4.7",
-			"$import": "../templates/master_template.json#base_enable_disable",
+			"$import": "~/templates/master_template.json#base_enable_disable",
 			"label": "Vertical Mount",
 			"description": "Device mounted in vertical position",
 			"valueSize": 4
 		},
 		"2[0x40]": {
 			"$if": "firmwareVersion >= 4.7",
-			"$import": "../templates/master_template.json#base_enable_disable",
+			"$import": "~/templates/master_template.json#base_enable_disable",
 			"label": "Moderate Regulator Behaviour",
 			"description": "Set moderate regulator behaviour instead of rapid",
 			"valueSize": 4
 		},
 		"2[0x80]": {
 			"$if": "firmwareVersion >= 4.7",
-			"$import": "../templates/master_template.json#base_enable_disable",
+			"$import": "~/templates/master_template.json#base_enable_disable",
 			"label": "Inverted Knob Operation",
 			"valueSize": 4
 		},
 		"2[0x100]": {
 			"$if": "firmwareVersion >= 4.7",
-			"$import": "../templates/master_template.json#base_enable_disable",
+			"$import": "~/templates/master_template.json#base_enable_disable",
 			"label": "Heating Medium Demand Reports",
 			"valueSize": 4
 		},
 		"2[0x200]": {
 			"$if": "firmwareVersion >= 4.7",
-			"$import": "../templates/master_template.json#base_enable_disable",
+			"$import": "~/templates/master_template.json#base_enable_disable",
 			"label": "Detecting Heating System Failures",
 			"valueSize": 4
 		},
 		"3[0x01]": {
-			"$import": "../templates/master_template.json#base_true_false",
+			"$import": "~/templates/master_template.json#base_true_false",
 			"label": "Temperature Sensor",
 			"description": "Optional temperature sensor connected and operational",
 			"valueSize": 4,
 			"readOnly": true
 		},
 		"3[0x02]": {
-			"$import": "../templates/master_template.json#base_true_false",
+			"$import": "~/templates/master_template.json#base_true_false",
 			"label": "Open Window Detected",
 			"valueSize": 4,
 			"readOnly": true
 		},
 		"3[0x04]": {
 			"$if": "firmwareVersion >= 4.7",
-			"$import": "../templates/master_template.json#base_true_false",
+			"$import": "~/templates/master_template.json#base_true_false",
 			"label": "Provide Heat",
 			"description": "Provide heat in order to maintain set temperature",
 			"valueSize": 4,
@@ -111,7 +111,7 @@
 		},
 		"3[0x08]": {
 			"$if": "firmwareVersion >= 4.7",
-			"$import": "../templates/master_template.json#base_true_false",
+			"$import": "~/templates/master_template.json#base_true_false",
 			"label": "Malfunctioning Heating System",
 			"description": "Malfunctioning heating system - cannot reach set temperature",
 			"valueSize": 4,

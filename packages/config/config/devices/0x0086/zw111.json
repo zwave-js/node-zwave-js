@@ -64,7 +64,7 @@
 			"$import": "templates/aeotec_template.json#overheat_protection"
 		},
 		"20": {
-			"$import": "../templates/master_template.json#state_after_power_failure_prev_on_off"
+			"$import": "~/templates/master_template.json#state_after_power_failure_prev_on_off"
 		},
 		"80": {
 			"$import": "templates/aeotec_template.json#enable_notifications_0-4"
@@ -377,22 +377,22 @@
 		// End of WallSwipe Settings
 		"248[0x80]": {
 			"$if": "firmwareVersion >= 2.0",
-			"$import": "../templates/master_template.json#base_enable_disable",
+			"$import": "~/templates/master_template.json#base_enable_disable",
 			"label": "Advanced Parameter Settings"
 		},
 		"248[0x01]": {
 			"$if": "firmwareVersion >= 2.0",
-			"$import": "../templates/master_template.json#base_enable_disable",
+			"$import": "~/templates/master_template.json#base_enable_disable",
 			"label": "Advanced: Send NIFs"
 		},
 		"248[0x02]": {
 			"$if": "firmwareVersion >= 2.0",
-			"$import": "../templates/master_template.json#base_enable_disable",
+			"$import": "~/templates/master_template.json#base_enable_disable",
 			"label": "Advanced: RF Power Level Test Mode"
 		},
 		"248[0x04]": {
 			"$if": "firmwareVersion >= 2.0",
-			"$import": "../templates/master_template.json#base_enable_disable",
+			"$import": "~/templates/master_template.json#base_enable_disable",
 			"label": "Advanced: Factory Reset Function"
 		},
 		"252": {
