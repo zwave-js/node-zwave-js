@@ -2,6 +2,17 @@
 <!--
 	Add placeholder for next release with `wip` snippet
 -->
+## __WORK IN PROGRESS__
+### Bugfixes
+* Fixed a bug where `healNode` on an non-existing node would block further heal attempts
+
+### Config file changes
+* Add Z-connect garage door controller
+* Correct fingerprints for two Sunricher dimmers
+* Add metadata to Leviton devices and improve param definitions
+* Fix value size for Aeotec ZWA023 params 23 through 2
+* Correct Aeotec ZWA005 parameter numbers
+
 ## 7.12.0 (2021-07-14)
 ### Features
 * The volume (for the Sound Switch CC) can now be passed as a `setValue` option
