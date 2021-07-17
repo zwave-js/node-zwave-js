@@ -20,15 +20,15 @@
 			"isLifeline": true
 		},
 		"2": {
-			"label": "Group 2",
+			"label": "Control devices when a magnet trips",
 			"maxNodes": 5
 		},
 		"3": {
-			"label": "Group 3",
+			"label": "Sends our alarm message when magnet controlled",
 			"maxNodes": 5
 		},
 		"4": {
-			"label": "Group 4",
+			"label": "Sends alarm messages when tamper is tripped",
 			"maxNodes": 5
 		}
 	},
