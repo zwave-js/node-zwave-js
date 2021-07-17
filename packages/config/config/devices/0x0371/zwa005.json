@@ -167,10 +167,20 @@
 			"defaultValue": 0
 		},
 		"14": {
+			"$import": "../0x0086/templates/aeotec_template.json#base_color_options",
+			"label": "LED Color: Battery Report",
+			"defaultValue": 0
+		},
+		"15": {
+			"$import": "../0x0086/templates/aeotec_template.json#base_color_options",
+			"label": "LED Color: Wakeup Notification Report",
+			"defaultValue": 0
+		},
+		"20": {
 			"$import": "../0x0086/templates/aeotec_template.json#celsius_fahrenheit_0",
 			"valueSize": 1
 		},
-		"15": {
+		"21": {
 			"label": "Temperature Change Threshold",
 			"valueSize": 2,
 			"unit": "0.1 °(C/F)",
@@ -179,7 +189,7 @@
 			"defaultValue": 20,
 			"unsigned": true
 		},
-		"16": {
+		"22": {
 			"label": "Light Intensity Change Threshold",
 			"valueSize": 2,
 			"unit": "lux",
@@ -188,7 +198,7 @@
 			"defaultValue": 100,
 			"unsigned": true
 		},
-		"17": {
+		"23": {
 			"label": "Timed Temperature Report Interval",
 			"valueSize": 2,
 			"unit": "seconds",
@@ -197,10 +207,10 @@
 			"defaultValue": 3600,
 			"unsigned": true
 		},
-		"18": {
+		"24": {
 			"$import": "../0x0086/templates/aeotec_template.json#auto_report_interval_light"
 		},
-		"19": {
+		"30": {
 			"label": "Temperature Offset Value",
 			"valueSize": 2,
 			"unit": "0.1 °(C/F)",
@@ -208,7 +218,7 @@
 			"maxValue": 200,
 			"defaultValue": 0
 		},
-		"20": {
+		"31": {
 			"label": "Light Intensity Offset Value",
 			"valueSize": 2,
 			"unit": "lux",
@@ -216,7 +226,7 @@
 			"maxValue": 1000,
 			"defaultValue": 0
 		},
-		"21": {
+		"100": {
 			"label": "Light Sensor Calibrated Coefficient",
 			"valueSize": 2,
 			"minValue": 1,
