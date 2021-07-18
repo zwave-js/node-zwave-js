@@ -94,6 +94,23 @@ export enum FirmwareDownloadStatus {
 	OK = 0xff,
 }
 
+// @publicAPI
+export type FirmwareUpdateCapabilities =
+	| {
+			/** Indicates whether the node's firmware can be upgraded */
+			readonly firmwareUpgradable: false;
+	  }
+	| {
+			/** Indicates whether the node's firmware can be upgraded */
+			readonly firmwareUpgradable: true;
+			/** An array of firmware targets that can be upgraded */
+			readonly firmwareTargets: readonly number[];
+			/** Indicates whether the node continues to function normally during an upgrade */
+			readonly continuesToFunction: Maybe<boolean>;
+			/** Indicates whether the node supports delayed activation of the new firmware */
+			readonly supportsActivation: Maybe<boolean>;
+	  };
+
 function getSupportsActivationValueId(): ValueID {
 	return {
 		commandClass: CommandClasses["Firmware Update Meta Data"],

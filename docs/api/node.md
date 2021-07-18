@@ -182,13 +182,41 @@ Rediscovers all capabilities of a single CC on this node and all endpoints. Alth
 
 > [!NOTE] This method should only be used when necessary, for example when CC capabilities were not discovered correctly. It can be considered to be a more targeted version of `refreshInfo`.
 
+### `getFirmwareUpdateCapabilities`
+
+```ts
+getFirmwareUpdateCapabilities(): Promise<FirmwareUpdateCapabilities>
+```
+
+Retrieves the firmware update capabilities of a node to decide which options (e.g. firmware targets) to offer a user prior to the update.
+
+<!-- #import FirmwareUpdateCapabilities from "zwave-js" -->
+
+```ts
+type FirmwareUpdateCapabilities =
+	| {
+			/** Indicates whether the node's firmware can be upgraded */
+			readonly firmwareUpgradable: false;
+	  }
+	| {
+			/** Indicates whether the node's firmware can be upgraded */
+			readonly firmwareUpgradable: true;
+			/** An array of firmware targets that can be upgraded */
+			readonly firmwareTargets: readonly number[];
+			/** Indicates whether the node continues to function normally during an upgrade */
+			readonly continuesToFunction: Maybe<boolean>;
+			/** Indicates whether the node supports delayed activation of the new firmware */
+			readonly supportsActivation: Maybe<boolean>;
+	  };
+```
+
 ### `beginFirmwareUpdate`
 
 ```ts
 beginFirmwareUpdate(data: Buffer, target?: number): Promise<void>
 ```
 
-**WARNING: Use at your own risk! We don't take any responsibility if your devices don't work after an update.**
+> [!WARNING] Use at your own risk! We don't take any responsibility if your devices don't work after an update.
 
 Starts an OTA firmware update process for this node. This method takes two arguments:
 
