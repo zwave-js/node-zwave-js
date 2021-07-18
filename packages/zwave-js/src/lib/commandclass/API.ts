@@ -209,8 +209,8 @@ export class CCAPI {
 			throw new ZWaveError(
 				`${
 					hasNodeId
-						? "This virtual node"
-						: `Node #${this.endpoint.nodeId as number}`
+						? `Node #${this.endpoint.nodeId as number}`
+						: "This virtual node"
 				}${
 					this.endpoint.index > 0
 						? ` (Endpoint ${this.endpoint.index})`

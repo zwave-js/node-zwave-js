@@ -68,6 +68,30 @@ getCCVersion(cc: CommandClasses): number
 
 Retrieves the minimum version of the given CommandClass the underlying physical endpoints implement. If none of the endpoints support this CC, `0` is returned.
 
+### `invokeCCAPI`
+
+```ts
+invokeCCAPI(
+	cc: CommandClasses,
+	method: string, // any of the CC's methods
+	...args: unknown[], // that method's arguments
+): Promise<unknown> // that method's return type
+```
+
+Allows dynamically calling any CC API method on this virtual endpoint by CC ID and method name. When the CC and/or method name is known this uses a bunch of type magic to show you the the correct arguments depending on the CC and method name you entered.
+
+> [!NOTE] When dealing with statically known CCs, using the [`commandClasses` API](#commandClasses) is recommended instead.
+
+### `supportsCCAPI`
+
+```ts
+supportsCCAPI(cc: CommandClasses): boolean
+```
+
+Allows checking whether a CC API is supported before calling it with [`invokeCCAPI`](#invokeCCAPI)
+
+> [!WARNING] Get-type commands are not supported by virtual nodes/endpoints and will cause an error.
+
 ## VirtualEndpoint properties
 
 ### `nodeId`
