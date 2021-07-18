@@ -1,7 +1,12 @@
 import { CommandClasses, ZWaveError, ZWaveErrorCodes } from "@zwave-js/core";
 import { num2hex, staticExtends } from "@zwave-js/shared";
 import { distinct } from "alcalzone-shared/arrays";
-import { CCAPI, CCAPIs, PhysicalCCAPI } from "../commandclass/API";
+import {
+	APIMethodsOf,
+	CCAPI,
+	CCAPIs,
+	PhysicalCCAPI,
+} from "../commandclass/API";
 import { getAPI, MulticastDestination } from "../commandclass/CommandClass";
 import type { Driver } from "../driver/Driver";
 import type { Endpoint } from "./Endpoint";
@@ -193,6 +198,33 @@ export class VirtualEndpoint {
 	 */
 	public get commandClasses(): CCAPIs {
 		return this._commandClassAPIsProxy as unknown as CCAPIs;
+	}
+
+	/** Allows checking whether a CC API is supported before calling it with {@link VirtualEndpoint.invokeCCAPI} */
+	public supportsCCAPI(cc: CommandClasses): boolean {
+		return ((this.commandClasses as any)[cc] as CCAPI).isSupported();
+	}
+
+	/**
+	 * Allows dynamically calling any CC API method on this virtual endpoint by CC ID and method name.
+	 * Use {@link VirtualEndpoint.supportsCCAPI} to check support first.
+	 *
+	 * **Warning:** Get-type commands are not supported, even if auto-completion indicates that they are.
+	 */
+	public invokeCCAPI<
+		CC extends CommandClasses,
+		TMethod extends keyof TAPI,
+		TAPI extends Record<
+			string,
+			(...args: any[]) => any
+		> = CommandClasses extends CC ? any : APIMethodsOf<CC>,
+	>(
+		cc: CC,
+		method: TMethod,
+		...args: Parameters<TAPI[TMethod]>
+	): ReturnType<TAPI[TMethod]> {
+		const CCAPI = (this.commandClasses as any)[cc];
+		return CCAPI[method](...args);
 	}
 
 	/**
