@@ -38,7 +38,7 @@
 			"unit": "ms"
 		},
 		"7": {
-			"$import": "../templates/master_template.json#state_after_power_failure_prev_on_off",
+			"$import": "~/templates/master_template.json#state_after_power_failure_prev_on_off",
 			"options": [
 				{
 					"label": "Stop",
@@ -55,7 +55,7 @@
 			]
 		},
 		"8": {
-			"$import": "../templates/master_template.json#base_0-1_nounit",
+			"$import": "~/templates/master_template.json#base_0-1_nounit",
 			"label": "Count of External Buttons/Switches",
 			"options": [
 				{

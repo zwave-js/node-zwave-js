@@ -37,11 +37,11 @@
 	},
 	"paramInformation": {
 		"1": {
-			"$import": "../templates/master_template.json#base_enable_disable",
+			"$import": "~/templates/master_template.json#base_enable_disable",
 			"label": "Binary Sensor Report"
 		},
 		"2": {
-			"$import": "../0x0086/templates/aeotec_template.json#invert_state_report"
+			"$import": "~/0x0086/templates/aeotec_template.json#invert_state_report"
 		},
 		"3": {
 			"label": "Association Group 2: Basic Set Value",
@@ -137,11 +137,11 @@
 			]
 		},
 		"90": {
-			"$import": "../0x0086/templates/aeotec_template.json#low_battery_threshold",
+			"$import": "~/0x0086/templates/aeotec_template.json#low_battery_threshold",
 			"defaultValue": 30
 		},
 		"101": {
-			"$import": "../0x0086/templates/aeotec_template.json#auto_report_battery"
+			"$import": "~/0x0086/templates/aeotec_template.json#auto_report_battery"
 		}
 	},
 	"metadata": {

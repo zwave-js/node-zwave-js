@@ -20,10 +20,10 @@
 	},
 	"paramInformation": {
 		"4": {
-			"$import": "../templates/master_template.json#orientation"
+			"$import": "~/templates/master_template.json#orientation"
 		},
 		"7": {
-			"$import": "../templates/master_template.json#base_1-99_nounit",
+			"$import": "~/templates/master_template.json#base_1-99_nounit",
 			"label": "Remote Dimming Level Increment"
 		},
 		"8": {
@@ -31,7 +31,7 @@
 			"label": "Remote Dimming Step Duration"
 		},
 		"9": {
-			"$import": "../templates/master_template.json#base_1-99_nounit",
+			"$import": "~/templates/master_template.json#base_1-99_nounit",
 			"label": "Local Dimming Level Increment"
 		},
 		"10": {

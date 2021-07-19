@@ -43,10 +43,10 @@
 			"$import": "templates/act_template.json#suspend_group_4"
 		},
 		"3": {
-			"$import": "../templates/master_template.json#led_indicator_two_options_inverted"
+			"$import": "~/templates/master_template.json#led_indicator_two_options_inverted"
 		},
 		"4": {
-			"$import": "../templates/master_template.json#orientation"
+			"$import": "~/templates/master_template.json#orientation"
 		},
 		"5": {
 			"$import": "templates/act_template.json#ignore_start_level_receiving"
@@ -85,17 +85,17 @@
 			"$import": "templates/act_template.json#led_indicator"
 		},
 		"20": {
-			"$import": "../templates/master_template.json#base_1-255_nounit",
+			"$import": "~/templates/master_template.json#base_1-255_nounit",
 			"label": "Poll Group Interval",
 			"unit": "minutes",
 			"defaultValue": 2
 		},
 		"21": {
-			"$import": "../templates/master_template.json#base_enable_disable",
+			"$import": "~/templates/master_template.json#base_enable_disable",
 			"label": "Poll Group 1"
 		},
 		"22": {
-			"$import": "../templates/master_template.json#base_enable_disable",
+			"$import": "~/templates/master_template.json#base_enable_disable",
 			"label": "Poll Group 2",
 			"defaultValue": 1
 		}

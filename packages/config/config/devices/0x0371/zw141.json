@@ -16,7 +16,7 @@
 	},
 	"paramInformation": {
 		"20": {
-			"$import": "../templates/master_template.json#state_after_power_failure_prev_on_off",
+			"$import": "~/templates/master_template.json#state_after_power_failure_prev_on_off",
 			"options": [
 				{
 					"label": "Current position",
@@ -230,7 +230,7 @@
 			]
 		},
 		"80": {
-			"$import": "../0x0086/templates/aeotec_template.json#notification_report_type",
+			"$import": "~/0x0086/templates/aeotec_template.json#notification_report_type",
 			"label": "Command Report Type",
 			"options": [
 				{
@@ -365,7 +365,7 @@
 			]
 		},
 		"255": {
-			"$import": "../0x0086/templates/aeotec_template.json#factory_reset_exclude"
+			"$import": "~/0x0086/templates/aeotec_template.json#factory_reset_exclude"
 		}
 	},
 	"metadata": {

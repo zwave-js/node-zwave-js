@@ -31,22 +31,22 @@
 	},
 	"paramInformation": {
 		"32": {
-			"$import": "../0x0086/templates/aeotec_template.json#low_battery_threshold",
+			"$import": "~/0x0086/templates/aeotec_template.json#low_battery_threshold",
 			"label": "Level of Low Battery",
 			"defaultValue": 20
 		},
 		"41": {
-			"$import": "../templates/master_template.json#base_enable_disable",
+			"$import": "~/templates/master_template.json#base_enable_disable",
 			"label": "Central Scene Notifications",
 			"defaultValue": 1
 		},
 		"42": {
-			"$import": "../templates/master_template.json#base_0-255_nounit",
+			"$import": "~/templates/master_template.json#base_0-255_nounit",
 			"label": "Multilevel Command Duration",
 			"defaultValue": 255
 		},
 		"43": {
-			"$import": "../templates/master_template.json#base_enable_disable",
+			"$import": "~/templates/master_template.json#base_enable_disable",
 			"label": "Low Battery Buzzer"
 		}
 	},

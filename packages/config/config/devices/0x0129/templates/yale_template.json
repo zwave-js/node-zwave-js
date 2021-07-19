@@ -44,17 +44,17 @@
 		]
 	},
 	"auto_relock": {
-		"$import": "../../templates/master_template.json#base_enable_disable_255",
+		"$import": "~/templates/master_template.json#base_enable_disable_255",
 		"label": "Auto Relock"
 	},
 	"auto_relock_time_180": {
-		"$import": "../../templates/master_template.json#base_0-180_nounit",
+		"$import": "~/templates/master_template.json#base_0-180_nounit",
 		"label": "Auto Relock Time",
 		"unit": "seconds",
 		"defaultValue": 30
 	},
 	"auto_relock_time_127": {
-		"$import": "../../templates/master_template.json#base_0-127_nounit",
+		"$import": "~/templates/master_template.json#base_0-127_nounit",
 		"label": "Auto Relock Time",
 		"unit": "seconds",
 		"minValue": 10,
@@ -89,13 +89,13 @@
 		"unsigned": true
 	},
 	"wrong_code_lockout": {
-		"$import": "../../templates/master_template.json#base_0-180_nounit",
+		"$import": "~/templates/master_template.json#base_0-180_nounit",
 		"label": "Wrong Code Lockout Time",
 		"unit": "seconds",
 		"defaultValue": 60
 	},
 	"wrong_code_lockout_10_to_127": {
-		"$import": "../../templates/master_template.json#base_0-127_nounit",
+		"$import": "~/templates/master_template.json#base_0-127_nounit",
 		"label": "Wrong Code Lockout Time",
 		"unit": "seconds",
 		"minValue": 10,
@@ -194,15 +194,15 @@
 		]
 	},
 	"one_touch": {
-		"$import": "../../templates/master_template.json#base_enable_disable_255",
+		"$import": "~/templates/master_template.json#base_enable_disable_255",
 		"label": "One Touch Locking"
 	},
 	"privacy_button": {
-		"$import": "../../templates/master_template.json#base_enable_disable_255",
+		"$import": "~/templates/master_template.json#base_enable_disable_255",
 		"label": "Privacy Button"
 	},
 	"lock_status_led": {
-		"$import": "../../templates/master_template.json#base_enable_disable_255",
+		"$import": "~/templates/master_template.json#base_enable_disable_255",
 		"label": "Lock Status LED"
 	},
 	"reset_factory": {
@@ -225,23 +225,23 @@
 		]
 	},
 	"door_propped_timer": {
-		"$import": "../../templates/master_template.json#base_0-127_nounit",
+		"$import": "~/templates/master_template.json#base_0-127_nounit",
 		"label": "Door Propped Time Limit",
 		"unit": "10 seconds",
 		"minValue": 10,
 		"defaultValue": 0
 	},
 	"dps_alarm": {
-		"$import": "../../templates/master_template.json#base_enable_disable_255",
+		"$import": "~/templates/master_template.json#base_enable_disable_255",
 		"label": "Door Propped Alarm"
 	},
 	"enable_dps_alarm": {
-		"$import": "../../templates/master_template.json#base_enable_disable",
+		"$import": "~/templates/master_template.json#base_enable_disable",
 		"label": "Door Propped Alarm",
 		"defaultValue": 1
 	},
 	"deadbolt_installed_state": {
-		"$import": "../../templates/master_template.json#base_enable_disable_255",
+		"$import": "~/templates/master_template.json#base_enable_disable_255",
 		"label": "Deadbolt Status",
 		"options": [
 			{
@@ -255,26 +255,26 @@
 		]
 	},
 	"eco_mode": {
-		"$import": "../../templates/master_template.json#base_enable_disable_255",
+		"$import": "~/templates/master_template.json#base_enable_disable_255",
 		"label": "Eco Mode"
 	},
 	"privacy_mode": {
-		"$import": "../../templates/master_template.json#base_enable_disable_255",
+		"$import": "~/templates/master_template.json#base_enable_disable_255",
 		"label": "Privacy Mode With Deadbolt",
 		"description": "If enabled then extending the deadbolt will put the lock into privacy mode"
 	},
 	"enable_deadbolt_alarm": {
-		"$import": "../../templates/master_template.json#base_enable_disable",
+		"$import": "~/templates/master_template.json#base_enable_disable",
 		"label": "Deadbolt Alarm",
 		"defaultValue": 1
 	},
 	"enable_rotated_alarm": {
-		"$import": "../../templates/master_template.json#base_enable_disable",
+		"$import": "~/templates/master_template.json#base_enable_disable",
 		"label": "Rotated Alarm",
 		"defaultValue": 1
 	},
 	"enable_escape_mode": {
-		"$import": "../../templates/master_template.json#base_enable_disable_255",
+		"$import": "~/templates/master_template.json#base_enable_disable_255",
 		"label": "Escape Return Mode"
 	},
 	"manual_relock_time": {

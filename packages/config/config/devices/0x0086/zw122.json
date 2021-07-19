@@ -103,7 +103,7 @@
 			"defaultValue": 20
 		},
 		"48": {
-			"$import": "../templates/master_template.json#base_enable_disable",
+			"$import": "~/templates/master_template.json#base_enable_disable",
 			"label": "Send Sensor Reports"
 		},
 		"49[0xffff0000]": {
@@ -155,32 +155,32 @@
 			]
 		},
 		"86": {
-			"$import": "../templates/master_template.json#base_enable_disable",
+			"$import": "~/templates/master_template.json#base_enable_disable",
 			"label": "Buzzer",
 			"defaultValue": 1
 		},
 		"87[0x01]": {
-			"$import": "../templates/master_template.json#base_enable_disable",
+			"$import": "~/templates/master_template.json#base_enable_disable",
 			"label": "Buzzer: Water Leak",
 			"valueSize": 4
 		},
 		"87[0x02]": {
-			"$import": "../templates/master_template.json#base_enable_disable",
+			"$import": "~/templates/master_template.json#base_enable_disable",
 			"label": "Buzzer: Vibration",
 			"valueSize": 4
 		},
 		"87[0x04]": {
-			"$import": "../templates/master_template.json#base_enable_disable",
+			"$import": "~/templates/master_template.json#base_enable_disable",
 			"label": "Buzzer: Tilt Sensor",
 			"valueSize": 4
 		},
 		"87[0x10]": {
-			"$import": "../templates/master_template.json#base_enable_disable",
+			"$import": "~/templates/master_template.json#base_enable_disable",
 			"label": "Buzzer: Underheat",
 			"valueSize": 4
 		},
 		"87[0x20]": {
-			"$import": "../templates/master_template.json#base_enable_disable",
+			"$import": "~/templates/master_template.json#base_enable_disable",
 			"label": "Buzzer: Overheat",
 			"valueSize": 4
 		},
@@ -233,7 +233,7 @@
 			]
 		},
 		"94": {
-			"$import": "../templates/master_template.json#base_0-1_nounit",
+			"$import": "~/templates/master_template.json#base_0-1_nounit",
 			"label": "Battery Source to Report",
 			"options": [
 				{

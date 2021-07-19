@@ -70,7 +70,7 @@
 			"label": "Button 8 (Learn) Mode"
 		},
 		"250": {
-			"$import": "../templates/master_template.json#base_enable_disable",
+			"$import": "~/templates/master_template.json#base_enable_disable",
 			"label": "Scene Mode (Secondary Controller)"
 		}
 	},

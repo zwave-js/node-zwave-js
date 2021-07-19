@@ -122,7 +122,7 @@
 			"defaultValue": 30
 		},
 		"8": {
-			"$import": "../templates/master_template.json#state_after_power_failure_off_on_prev"
+			"$import": "~/templates/master_template.json#state_after_power_failure_off_on_prev"
 		},
 		"9": {
 			"label": "Ramp Rate Control",

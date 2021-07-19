@@ -19,7 +19,7 @@
 			"$import": "templates/honeywell_template.json#schedule_type"
 		},
 		"2": {
-			"$import": "../templates/master_template.json#temperature_scale"
+			"$import": "~/templates/master_template.json#temperature_scale"
 		},
 		"3": {
 			"$import": "templates/honeywell_template.json#outdoor_temperature_sensor"
@@ -133,7 +133,7 @@
 			"$import": "templates/honeywell_template.json#idle_brightness"
 		},
 		"40": {
-			"$import": "../templates/master_template.json#clock_format"
+			"$import": "~/templates/master_template.json#clock_format"
 		},
 		"41": {
 			"$import": "templates/honeywell_template.json#daylight_saving"

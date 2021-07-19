@@ -217,7 +217,7 @@
 			]
 		},
 		"16": {
-			"$import": "../templates/master_template.json#state_after_power_failure_off_prev"
+			"$import": "~/templates/master_template.json#state_after_power_failure_off_prev"
 		},
 		"17": {
 			"label": "3-way switch function",

@@ -16,10 +16,10 @@
 	},
 	"paramInformation": {
 		"3": {
-			"$import": "../templates/master_template.json#led_indicator_three_options"
+			"$import": "~/templates/master_template.json#led_indicator_three_options"
 		},
 		"4": {
-			"$import": "../templates/master_template.json#orientation"
+			"$import": "~/templates/master_template.json#orientation"
 		}
 	},
 	"metadata": {

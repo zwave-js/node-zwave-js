@@ -44,10 +44,10 @@
 			"$import": "templates/act_template.json#suspend_group_4"
 		},
 		"3": {
-			"$import": "../templates/master_template.json#led_indicator_two_options_inverted"
+			"$import": "~/templates/master_template.json#led_indicator_two_options_inverted"
 		},
 		"4": {
-			"$import": "../templates/master_template.json#orientation"
+			"$import": "~/templates/master_template.json#orientation"
 		},
 		"14": {
 			"$import": "templates/act_template.json#enable_shade_group_2"

@@ -26,10 +26,10 @@
 	},
 	"paramInformation": {
 		"1": {
-			"$import": "../templates/master_template.json#state_after_power_failure_prev_on_off_schedule"
+			"$import": "~/templates/master_template.json#state_after_power_failure_prev_on_off_schedule"
 		},
 		"2": {
-			"$import": "../templates/master_template.json#led_indicator_three_options",
+			"$import": "~/templates/master_template.json#led_indicator_three_options",
 			"options": [
 				{
 					"label": "Always off",
@@ -46,10 +46,10 @@
 			]
 		},
 		"3": {
-			"$import": "../0x0086/templates/aeotec_template.json#auto_off_timer"
+			"$import": "~/0x0086/templates/aeotec_template.json#auto_off_timer"
 		},
 		"4": {
-			"$import": "../0x0086/templates/aeotec_template.json#current_overload"
+			"$import": "~/0x0086/templates/aeotec_template.json#current_overload"
 		},
 		"5": {
 			"label": "Boost Time",
@@ -76,29 +76,29 @@
 			]
 		},
 		"20": {
-			"$import": "../0x0086/templates/aeotec_template.json#kwh_threshold"
+			"$import": "~/0x0086/templates/aeotec_template.json#kwh_threshold"
 		},
 		"21": {
-			"$import": "../0x0086/templates/aeotec_template.json#power_threshold",
+			"$import": "~/0x0086/templates/aeotec_template.json#power_threshold",
 			"maxValue": 2500,
 			"defaultValue": 100
 		},
 		"22": {
-			"$import": "../0x0086/templates/aeotec_template.json#current_threshold",
+			"$import": "~/0x0086/templates/aeotec_template.json#current_threshold",
 			"valueSize": 2,
 			"maxValue": 130
 		},
 		"23": {
-			"$import": "../0x0086/templates/aeotec_template.json#auto_report_interval_watt"
+			"$import": "~/0x0086/templates/aeotec_template.json#auto_report_interval_watt"
 		},
 		"24": {
-			"$import": "../0x0086/templates/aeotec_template.json#auto_report_interval_kwh"
+			"$import": "~/0x0086/templates/aeotec_template.json#auto_report_interval_kwh"
 		},
 		"25": {
-			"$import": "../0x0086/templates/aeotec_template.json#auto_report_interval_v"
+			"$import": "~/0x0086/templates/aeotec_template.json#auto_report_interval_v"
 		},
 		"26": {
-			"$import": "../0x0086/templates/aeotec_template.json#auto_report_interval_amp"
+			"$import": "~/0x0086/templates/aeotec_template.json#auto_report_interval_amp"
 		}
 	},
 	"metadata": {

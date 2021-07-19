@@ -206,7 +206,7 @@
 			]
 		},
 		"8": {
-			"$import": "../templates/master_template.json#state_after_power_failure_off_on_prev"
+			"$import": "~/templates/master_template.json#state_after_power_failure_off_on_prev"
 		},
 		"10": {
 			"label": "Enable/Disable Scene Control",

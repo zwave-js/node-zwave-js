@@ -19,6 +19,17 @@ where
 
 Both parts are optional, so you can import entire files and you can also build self-referencing templates if you leave out the filesystem path.
 
+Whenever possible, you should prefer using `~/` to navigate to the **config root directory** instead of using varying levels of `../`. This avoids broken references when files are moved around:
+
+```json
+{
+	// Prefer this:
+	"$import": "~/templates/master_template.json#selector",
+	// Over this:
+	"$import": "../../../templates/master_template.json#selector"
+}
+```
+
 Properties listed before the `$import` statement may get overwritten by the imports. Properties listed after it will overwrite the imported properties. You can use this to do device-specific additions without having to change the template as a whole.
 
 > [!ATTENTION]

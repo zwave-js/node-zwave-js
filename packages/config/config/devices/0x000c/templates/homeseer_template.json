@@ -78,31 +78,31 @@
 		]
 	},
 	"status_mode": {
-		"$import": "../../templates/master_template.json#base_enable_disable",
+		"$import": "~/templates/master_template.json#base_enable_disable",
 		"label": "Enable / Disable Custom LED Status Mode"
 	},
 	"enable_basic_set_command": {
-		"$import": "../../templates/master_template.json#base_enable_disable",
+		"$import": "~/templates/master_template.json#base_enable_disable",
 		"label": "Enable / Disable Basic Set Commands"
 	},
 	"enable_pir_triggers": {
-		"$import": "../../templates/master_template.json#base_enable_disable",
+		"$import": "~/templates/master_template.json#base_enable_disable",
 		"label": "Enable PIR/lux Floodlight Triggers"
 	},
 	"enable_pir_trigger_alerts": {
-		"$import": "../../templates/master_template.json#base_enable_disable",
+		"$import": "~/templates/master_template.json#base_enable_disable",
 		"label": "PIR Trigger Alerts"
 	},
 	"enable_notification_buzzer": {
-		"$import": "../../templates/master_template.json#base_enable_disable",
+		"$import": "~/templates/master_template.json#base_enable_disable",
 		"label": "Enable Notifcaton Buzzer"
 	},
 	"enable_shock_alarm": {
-		"$import": "../../templates/master_template.json#base_enable_disable",
+		"$import": "~/templates/master_template.json#base_enable_disable",
 		"label": "Enable / Disable Shock Alarm"
 	},
 	"dimming_step": {
-		"$import": "../../templates/master_template.json#dimming_timing",
+		"$import": "~/templates/master_template.json#dimming_timing",
 		"valueSize": 2
 	},
 	"basic_set_value": {
@@ -150,7 +150,7 @@
 		]
 	},
 	"blink_frequency": {
-		"$import": "../../templates/master_template.json#base_0-255_nounit",
+		"$import": "~/templates/master_template.json#base_0-255_nounit",
 		"label": "Blink Frequency",
 		"description": "Sets the blink frequency for LEDs; 0 for off",
 		"defaultValue": 0
@@ -229,7 +229,7 @@
 		]
 	},
 	"temp_reporting_interval": {
-		"$import": "../../templates/master_template.json#base_1-255_nounit",
+		"$import": "~/templates/master_template.json#base_1-255_nounit",
 		"label": "Temperature reportng interval when on line power",
 		"unit": "seconds",
 		"minValue": 30

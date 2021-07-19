@@ -1,28 +1,28 @@
 {
 	"enable_central_scene": {
-		"$import": "../../templates/master_template.json#base_enable_disable",
+		"$import": "~/templates/master_template.json#base_enable_disable",
 		"label": "Central Scene",
 		"defaultValue": 1
 	},
 	"multilevel_enable": {
-		"$import": "../../templates/master_template.json#base_enable_disable",
+		"$import": "~/templates/master_template.json#base_enable_disable",
 		"valueSize": 4,
 		"defaultValue": 1
 	},
 	"multilevel_upper_function": {
-		"$import": "../../templates/master_template.json#base_0-99_nounit",
+		"$import": "~/templates/master_template.json#base_0-99_nounit",
 		"label": "Upper Switch Value",
 		"valueSize": 4,
 		"defaultValue": 255
 	},
 	"multilevel_lower_function": {
-		"$import": "../../templates/master_template.json#base_0-99_nounit",
+		"$import": "~/templates/master_template.json#base_0-99_nounit",
 		"label": "Lower Switch Value",
 		"valueSize": 4,
 		"defaultValue": 0
 	},
 	"multilevel_duration_function": {
-		"$import": "../../templates/master_template.json#base_0-255_nounit",
+		"$import": "~/templates/master_template.json#base_0-255_nounit",
 		"label": "Duration",
 		"description": "Values 1-127 = seconds; 128-255 = minutes (minus 127)",
 		"valueSize": 4
@@ -94,7 +94,7 @@
 		]
 	},
 	"global_brightness": {
-		"$import": "../../templates/master_template.json#base_0-255_nounit",
+		"$import": "~/templates/master_template.json#base_0-255_nounit",
 		"label": "LED Indicator Brightness",
 		"valueSize": 4,
 		"defaultValue": 255
@@ -123,13 +123,13 @@
 		]
 	},
 	"dimming_duration": {
-		"$import": "../../templates/master_template.json#base_0-255_nounit",
+		"$import": "~/templates/master_template.json#base_0-255_nounit",
 		"label": "Duration of Dimming",
 		"unit": "seconds",
 		"defaultValue": 5
 	},
 	"duration_on_off": {
-		"$import": "../../templates/master_template.json#base_0-255_nounit",
+		"$import": "~/templates/master_template.json#base_0-255_nounit",
 		"label": "Duration of On/Off",
 		"defaultValue": 0
 	},
@@ -157,29 +157,29 @@
 		]
 	},
 	"dimmer_min": {
-		"$import": "../../templates/master_template.json#base_0-99_nounit",
+		"$import": "~/templates/master_template.json#base_0-99_nounit",
 		"label": "Dimmer: Minimum Level",
 		"defaultValue": 0
 	},
 	"dimmer_max": {
-		"$import": "../../templates/master_template.json#base_0-99_nounit",
+		"$import": "~/templates/master_template.json#base_0-99_nounit",
 		"label": "Dimmer: Maximum Level",
 		"defaultValue": 99
 	},
 	"dimmer_metering": {
-		"$import": "../../templates/master_template.json#base_0-255_nounit",
+		"$import": "~/templates/master_template.json#base_0-255_nounit",
 		"label": "Meter Report Time",
 		"defaultValue": 60
 	},
 	"led_indicator": {
-		"$import": "../../templates/master_template.json#base_0-255_nounit",
+		"$import": "~/templates/master_template.json#base_0-255_nounit",
 		"label": "Button LED Indicator",
 		"unsigned": true,
 		"valueSize": 4,
 		"defaultValue": 0
 	},
 	"button_led_indicator": {
-		"$import": "../../templates/master_template.json#base_0-255_nounit",
+		"$import": "~/templates/master_template.json#base_0-255_nounit",
 		"label": "Button LED Indicator",
 		"maxValue": 7,
 		"defaultValue": 7,
@@ -265,7 +265,7 @@
 		]
 	},
 	"input_funtion_relay": {
-		"$import": "../../templates/master_template.json#base_0-255_nounit",
+		"$import": "~/templates/master_template.json#base_0-255_nounit",
 		"label": "Input - Function",
 		"maxValue": 3,
 		"defaultValue": 3,
@@ -290,7 +290,7 @@
 		]
 	},
 	"output_function_relay": {
-		"$import": "../../templates/master_template.json#base_enable_disable",
+		"$import": "~/templates/master_template.json#base_enable_disable",
 		"label": "Output - Function",
 		"options": [
 			{
@@ -304,7 +304,7 @@
 		]
 	},
 	"status_led": {
-		"$import": "../../templates/master_template.json#led_indicator_four_options",
+		"$import": "~/templates/master_template.json#led_indicator_four_options",
 		"label": "Status of LED",
 		"defaultValue": 1,
 		"options": [
@@ -419,12 +419,12 @@
 		"unsigned": true
 	},
 	"led_brightness": {
-		"$import": "../../templates/master_template.json#base_0-99_nounit",
+		"$import": "~/templates/master_template.json#base_0-99_nounit",
 		"label": "Brightness of Status LED",
 		"defaultValue": 50
 	},
 	"input_calibration": {
-		"$import": "../../templates/master_template.json#base_0-99_nounit",
+		"$import": "~/templates/master_template.json#base_0-99_nounit",
 		"label": "Input: Calibration",
 		"unit": "0.1 °C",
 		"minValue": -40,
@@ -476,14 +476,14 @@
 		]
 	},
 	"button_debounce": {
-		"$import": "../../templates/master_template.json#base_1-255_nounit",
+		"$import": "~/templates/master_template.json#base_1-255_nounit",
 		"label": "Button Debounce Timer",
 		"unit": "10 ms",
 		"valueSize": 1,
 		"defaultValue": 5
 	},
 	"input_timer": {
-		"$import": "../../templates/master_template.json#base_0-255_nounit",
+		"$import": "~/templates/master_template.json#base_0-255_nounit",
 		"label": "Input: Timer",
 		"defaultValue": 0
 	},

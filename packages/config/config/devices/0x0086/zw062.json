@@ -37,7 +37,7 @@
 	},
 	"paramInformation": {
 		"32": {
-			"$import": "../templates/master_template.json#base_0-100_nounit",
+			"$import": "~/templates/master_template.json#base_0-100_nounit",
 			"label": "Default Startup Sound",
 			"options": [
 				{
@@ -47,7 +47,7 @@
 			]
 		},
 		"34": {
-			"$import": "../templates/master_template.json#base_0-1_nounit",
+			"$import": "~/templates/master_template.json#base_0-1_nounit",
 			"label": "Sensor Calibration",
 			"description": "To calibrate, close door fully. Initiate calibration. Open door fully, then close door fully.",
 			"options": [
@@ -62,25 +62,25 @@
 			]
 		},
 		"35": {
-			"$import": "../templates/master_template.json#base_0-255_nounit",
+			"$import": "~/templates/master_template.json#base_0-255_nounit",
 			"label": "Sensor Calibration Timeout",
 			"valueSize": 2,
 			"unit": "seconds",
 			"defaultValue": 60
 		},
 		"36": {
-			"$import": "../templates/master_template.json#base_0-100_nounit",
+			"$import": "~/templates/master_template.json#base_0-100_nounit",
 			"label": "Get Current Alarm Music Number",
 			"readOnly": true,
 			"allowManualEntry": false
 		},
 		"37[0xff]": {
-			"$import": "../templates/master_template.json#base_enable_disable",
+			"$import": "~/templates/master_template.json#base_enable_disable",
 			"label": "Opening Alarm",
 			"valueSize": 4
 		},
 		"37[0xff00]": {
-			"$import": "../templates/master_template.json#base_1-10_nounit",
+			"$import": "~/templates/master_template.json#base_1-10_nounit",
 			"label": "Opening Alarm: Volume",
 			"valueSize": 4,
 			"defaultValue": 8
@@ -93,19 +93,19 @@
 			"defaultValue": 1
 		},
 		"37[0xff000000]": {
-			"$import": "../templates/master_template.json#base_1-10_nounit",
+			"$import": "~/templates/master_template.json#base_1-10_nounit",
 			"label": "Opening Alarm: LED Blinking Frequency",
 			"valueSize": 4,
 			"defaultValue": 10
 		},
 		"38[0xff]": {
-			"$import": "../templates/master_template.json#base_enable_disable",
+			"$import": "~/templates/master_template.json#base_enable_disable",
 			"label": "Closing Alarm",
 			"valueSize": 4,
 			"defaultValue": 1
 		},
 		"38[0xff00]": {
-			"$import": "../templates/master_template.json#base_1-10_nounit",
+			"$import": "~/templates/master_template.json#base_1-10_nounit",
 			"label": "Closing Alarm: Volume",
 			"valueSize": 4,
 			"defaultValue": 8
@@ -118,18 +118,18 @@
 			"defaultValue": 2
 		},
 		"38[0xff000000]": {
-			"$import": "../templates/master_template.json#base_1-10_nounit",
+			"$import": "~/templates/master_template.json#base_1-10_nounit",
 			"label": "Closing Alarm: LED Blinking Frequency",
 			"valueSize": 4,
 			"defaultValue": 6
 		},
 		"39[0xff]": {
-			"$import": "../templates/master_template.json#base_enable_disable",
+			"$import": "~/templates/master_template.json#base_enable_disable",
 			"label": "Unknown State Alarm",
 			"valueSize": 4
 		},
 		"39[0xff00]": {
-			"$import": "../templates/master_template.json#base_1-10_nounit",
+			"$import": "~/templates/master_template.json#base_1-10_nounit",
 			"label": "Unknown State Alarm: Volume",
 			"valueSize": 4,
 			"defaultValue": 8
@@ -142,18 +142,18 @@
 			"defaultValue": 3
 		},
 		"39[0xff000000]": {
-			"$import": "../templates/master_template.json#base_1-10_nounit",
+			"$import": "~/templates/master_template.json#base_1-10_nounit",
 			"label": "Unknown State Alarm: LED Blinking Frequency",
 			"valueSize": 4,
 			"defaultValue": 4
 		},
 		"40[0xff]": {
-			"$import": "../templates/master_template.json#base_enable_disable",
+			"$import": "~/templates/master_template.json#base_enable_disable",
 			"label": "Closed Position Alarm",
 			"valueSize": 4
 		},
 		"40[0xff00]": {
-			"$import": "../templates/master_template.json#base_1-10_nounit",
+			"$import": "~/templates/master_template.json#base_1-10_nounit",
 			"label": "Closed Position Alarm: Volume",
 			"valueSize": 4,
 			"defaultValue": 8
@@ -166,7 +166,7 @@
 			"defaultValue": 3
 		},
 		"40[0xff000000]": {
-			"$import": "../templates/master_template.json#base_1-10_nounit",
+			"$import": "~/templates/master_template.json#base_1-10_nounit",
 			"label": "Closed Position Alarm: LED Blinking Frequency",
 			"valueSize": 4,
 			"defaultValue": 4
@@ -210,7 +210,7 @@
 			]
 		},
 		"43": {
-			"$import": "../templates/master_template.json#base_0-255_nounit",
+			"$import": "~/templates/master_template.json#base_0-255_nounit",
 			"label": "Demo Sound Selection",
 			"description": "Allowable range: 0-100",
 			"options": [
@@ -221,7 +221,7 @@
 			]
 		},
 		"44": {
-			"$import": "../templates/master_template.json#base_1-10_nounit",
+			"$import": "~/templates/master_template.json#base_1-10_nounit",
 			"label": "Test Volume Level"
 		},
 		"45": {
@@ -235,7 +235,7 @@
 			"readOnly": true
 		},
 		"47": {
-			"$import": "../templates/master_template.json#base_0-1_nounit",
+			"$import": "~/templates/master_template.json#base_0-1_nounit",
 			"label": "Short/Long Press Function of Button- And Button+",
 			"options": [
 				{

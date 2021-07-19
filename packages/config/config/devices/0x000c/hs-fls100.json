@@ -26,7 +26,7 @@
 			"label": "Luminance Report Interval"
 		},
 		"4": {
-			"$import": "../templates/master_template.json#base_enable_disable",
+			"$import": "~/templates/master_template.json#base_enable_disable",
 			"label": "Send Basic Report on Trigger"
 		}
 	},

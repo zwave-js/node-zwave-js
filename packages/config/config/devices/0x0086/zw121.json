@@ -31,7 +31,7 @@
 	},
 	"paramInformation": {
 		"20": {
-			"$import": "../templates/master_template.json#state_after_power_failure_prev_on_off"
+			"$import": "~/templates/master_template.json#state_after_power_failure_prev_on_off"
 		},
 		"32": {
 			"label": "Report Type",
@@ -53,26 +53,26 @@
 			]
 		},
 		"33[0xff]": {
-			"$import": "../templates/master_template.json#base_0-255_nounit",
+			"$import": "~/templates/master_template.json#base_0-255_nounit",
 			"label": "LED Strip Color: Blue",
 			"valueSize": 4
 		},
 		"33[0xff00]": {
-			"$import": "../templates/master_template.json#base_0-255_nounit",
+			"$import": "~/templates/master_template.json#base_0-255_nounit",
 			"label": "LED Strip Color: Green",
 			"valueSize": 4
 		},
 		"33[0xff0000]": {
-			"$import": "../templates/master_template.json#base_0-255_nounit",
+			"$import": "~/templates/master_template.json#base_0-255_nounit",
 			"label": "LED Strip Color: Red",
 			"valueSize": 4
 		},
 		"34": {
-			"$import": "../templates/master_template.json#base_enable_disable",
+			"$import": "~/templates/master_template.json#base_enable_disable",
 			"label": "Use Last Brightness on Color Switch Set CC"
 		},
 		"35": {
-			"$import": "../templates/master_template.json#base_0-1_nounit",
+			"$import": "~/templates/master_template.json#base_0-1_nounit",
 			"label": "Cold/Warm White Display Mode",
 			"defaultValue": 1,
 			"options": [
@@ -155,7 +155,7 @@
 			]
 		},
 		"37[0xff00]": {
-			"$import": "../templates/master_template.json#base_0-255_nounit",
+			"$import": "~/templates/master_template.json#base_0-255_nounit",
 			"label": "Cycle Count",
 			"description": "Allowable range: 1-254",
 			"valueSize": 4,
@@ -172,7 +172,7 @@
 			]
 		},
 		"37[0xff0000]": {
-			"$import": "../templates/master_template.json#base_1-255_nounit",
+			"$import": "~/templates/master_template.json#base_1-255_nounit",
 			"label": "Brightness",
 			"description": "Allowable range: 1-99",
 			"valueSize": 4,
@@ -246,20 +246,20 @@
 			]
 		},
 		"38[0xff]": {
-			"$import": "../templates/master_template.json#base_0-255_nounit",
+			"$import": "~/templates/master_template.json#base_0-255_nounit",
 			"label": "Pause Time of Off",
 			"description": "Active only in Fade Out/Fade In Transition Style",
 			"valueSize": 4,
 			"defaultValue": 0
 		},
 		"38[0xff00]": {
-			"$import": "../templates/master_template.json#base_0-255_nounit",
+			"$import": "~/templates/master_template.json#base_0-255_nounit",
 			"label": "Pause Time of On",
 			"valueSize": 4,
 			"defaultValue": 6
 		},
 		"38[0xff0000]": {
-			"$import": "../templates/master_template.json#base_0-255_nounit",
+			"$import": "~/templates/master_template.json#base_0-255_nounit",
 			"label": "Transition Speed (On to Off)",
 			"description": "Active only in Fade Out/Fade In Transition Style",
 			"valueSize": 4,
@@ -267,24 +267,24 @@
 			"defaultValue": 0
 		},
 		"38[0xff000000]": {
-			"$import": "../templates/master_template.json#base_0-255_nounit",
+			"$import": "~/templates/master_template.json#base_0-255_nounit",
 			"label": "Transition Speed (Off to On)",
 			"valueSize": 4,
 			"maxValue": 125,
 			"defaultValue": 24
 		},
 		"39[0xff00]": {
-			"$import": "../templates/master_template.json#base_0-255_nounit",
+			"$import": "~/templates/master_template.json#base_0-255_nounit",
 			"label": "Single Color/Fade Out: Blue Value",
 			"valueSize": 4
 		},
 		"39[0xff0000]": {
-			"$import": "../templates/master_template.json#base_0-255_nounit",
+			"$import": "~/templates/master_template.json#base_0-255_nounit",
 			"label": "Single Color/Fade Out: Green Value",
 			"valueSize": 4
 		},
 		"39[0xff000000]": {
-			"$import": "../templates/master_template.json#base_0-255_nounit",
+			"$import": "~/templates/master_template.json#base_0-255_nounit",
 			"label": "Single Color/Fade Out: Red Value",
 			"valueSize": 4
 		},

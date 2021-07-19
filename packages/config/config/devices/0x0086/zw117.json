@@ -43,7 +43,7 @@
 	},
 	"paramInformation": {
 		"82": {
-			"$import": "../templates/master_template.json#led_indicator_two_options",
+			"$import": "~/templates/master_template.json#led_indicator_two_options",
 			"options": [
 				{
 					"label": "On for 2 seconds",

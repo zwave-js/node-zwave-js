@@ -16,7 +16,7 @@
 	"supportsZWavePlus": true,
 	"paramInformation": {
 		"9": {
-			"$import": "../templates/master_template.json#state_after_power_failure_off_prev"
+			"$import": "~/templates/master_template.json#state_after_power_failure_off_prev"
 		},
 		"10": {
 			"label": "First channel operating mode",

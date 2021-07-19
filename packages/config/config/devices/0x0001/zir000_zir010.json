@@ -64,13 +64,13 @@
 			]
 		},
 		"18": {
-			"$import": "../templates/master_template.json#base_0-255_nounit",
+			"$import": "~/templates/master_template.json#base_0-255_nounit",
 			"label": "Delay After Trigger",
 			"description": "Defines the time after motion before the device sets off/idle",
 			"unit": "minutes"
 		},
 		"19": {
-			"$import": "../templates/master_template.json#base_enable_disable",
+			"$import": "~/templates/master_template.json#base_enable_disable",
 			"label": "Enable / Disable Sending Commands",
 			"description": "Allows temporarily disabling sending commands without removing direct associations"
 		},

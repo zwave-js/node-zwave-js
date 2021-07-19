@@ -52,7 +52,7 @@
 		},
 		"20": {
 			"$if": "firmwareVersion >= 4.0",
-			"$import": "../templates/master_template.json#state_after_power_failure_prev_on_off"
+			"$import": "~/templates/master_template.json#state_after_power_failure_prev_on_off"
 		},
 		"80": {
 			"$import": "templates/aeotec_template.json#enable_notifications"

@@ -66,7 +66,7 @@ export type ParamInfoMap = ReadonlyObjectKeyMap<
 	ParamInformation
 >;
 
-const embeddedDevicesDir = path.join(configDir, "devices");
+export const embeddedDevicesDir = path.join(configDir, "devices");
 const fulltextIndexPath = path.join(embeddedDevicesDir, "fulltext_index.json");
 
 function getDevicesPaths(configDir: string): {
@@ -363,7 +363,10 @@ export class ConditionalDeviceConfig {
 		const relativePath = relativeTo
 			? path.relative(relativeTo, filename).replace(/\\/g, "/")
 			: filename;
-		const json = await readJsonWithTemplate(filename);
+		const json = await readJsonWithTemplate(
+			filename,
+			relativeTo ?? embeddedDevicesDir,
+		);
 		return new ConditionalDeviceConfig(relativePath, json);
 	}
 

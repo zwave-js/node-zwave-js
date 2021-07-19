@@ -34,7 +34,7 @@
 			"$import": "templates/aeotec_template.json#enable_notifications"
 		},
 		"90": {
-			"$import": "../templates/master_template.json#base_enable_disable",
+			"$import": "~/templates/master_template.json#base_enable_disable",
 			"label": "Enable Parameters 91-92"
 		},
 		"91": {

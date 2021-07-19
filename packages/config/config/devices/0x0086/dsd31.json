@@ -46,7 +46,7 @@
 			]
 		},
 		"37[0xff]": {
-			"$import": "../templates/master_template.json#volume_three",
+			"$import": "~/templates/master_template.json#volume_three",
 			"valueSize": 2
 		},
 		"80": {

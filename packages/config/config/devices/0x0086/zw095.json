@@ -90,7 +90,7 @@
 			"defaultValue": 10
 		},
 		"13": {
-			"$import": "../templates/master_template.json#base_enable_disable",
+			"$import": "~/templates/master_template.json#base_enable_disable",
 			"label": "CRC-16 Encapsulation"
 		},
 		"101[0x01]": {

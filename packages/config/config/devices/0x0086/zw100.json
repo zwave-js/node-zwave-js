@@ -127,7 +127,7 @@
 			"defaultValue": 20
 		},
 		"42": {
-			"$import": "../templates/master_template.json#base_1-100_nounit",
+			"$import": "~/templates/master_template.json#base_1-100_nounit",
 			"label": "Humidity Change Threshold",
 			"unit": "%",
 			"defaultValue": 10
@@ -141,7 +141,7 @@
 			"defaultValue": 100
 		},
 		"44": {
-			"$import": "../templates/master_template.json#base_1-100_nounit",
+			"$import": "~/templates/master_template.json#base_1-100_nounit",
 			"label": "Battery Level Threshold",
 			"unit": "%",
 			"defaultValue": 10
@@ -241,13 +241,13 @@
 			"defaultValue": 0
 		},
 		"51": {
-			"$import": "../templates/master_template.json#base_0-100_nounit",
+			"$import": "~/templates/master_template.json#base_0-100_nounit",
 			"label": "Upper Humidity Limit",
 			"unit": "%",
 			"defaultValue": 60
 		},
 		"52": {
-			"$import": "../templates/master_template.json#base_0-100_nounit",
+			"$import": "~/templates/master_template.json#base_0-100_nounit",
 			"label": "Lower Humidity Limit",
 			"unit": "%",
 			"defaultValue": 50
@@ -302,48 +302,48 @@
 			"$import": "templates/aeotec_template.json#recover_limit_ultraviolet"
 		},
 		"61[0x01]": {
-			"$import": "../templates/master_template.json#base_true_false",
+			"$import": "~/templates/master_template.json#base_true_false",
 			"label": "Temperature: Below Lower Limit",
 			"readOnly": true
 		},
 		"61[0x10]": {
-			"$import": "../templates/master_template.json#base_true_false",
+			"$import": "~/templates/master_template.json#base_true_false",
 			"label": "Temperature: Above Lower Limit",
 			"readOnly": true
 		},
 		"61[0x02]": {
-			"$import": "../templates/master_template.json#base_true_false",
+			"$import": "~/templates/master_template.json#base_true_false",
 			"label": "Humidity: Below Lower Limit",
 			"readOnly": true
 		},
 		"61[0x20]": {
-			"$import": "../templates/master_template.json#base_true_false",
+			"$import": "~/templates/master_template.json#base_true_false",
 			"label": "Humidity: Above Lower Limit",
 			"readOnly": true
 		},
 		"61[0x04]": {
-			"$import": "../templates/master_template.json#base_true_false",
+			"$import": "~/templates/master_template.json#base_true_false",
 			"label": "Luminance: Below Lower Limit",
 			"readOnly": true
 		},
 		"61[0x40]": {
-			"$import": "../templates/master_template.json#base_true_false",
+			"$import": "~/templates/master_template.json#base_true_false",
 			"label": "Luminance: Above Lower Limit",
 			"readOnly": true
 		},
 		"61[0x08]": {
-			"$import": "../templates/master_template.json#base_true_false",
+			"$import": "~/templates/master_template.json#base_true_false",
 			"label": "Ultraviolet: Below Lower Limit",
 			"readOnly": true
 		},
 		"61[0x80]": {
-			"$import": "../templates/master_template.json#base_true_false",
+			"$import": "~/templates/master_template.json#base_true_false",
 			"label": "Ultraviolet: Above Lower Limit",
 			"readOnly": true
 		},
 		"81": {
 			"$if": "firmwareVersion >= 1.8",
-			"$import": "../templates/master_template.json#base_enable_disable",
+			"$import": "~/templates/master_template.json#base_enable_disable",
 			"label": "LED Blinking"
 		},
 		"101[0x01]": {

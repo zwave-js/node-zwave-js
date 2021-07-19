@@ -38,7 +38,7 @@
 			"$import": "templates/logic_group_template.json#dimmer_max"
 		},
 		"5": {
-			"$import": "../templates/master_template.json#base_0-255_nounit",
+			"$import": "~/templates/master_template.json#base_0-255_nounit",
 			"label": "Meter Report Time",
 			"description": "Values 1-127 = seconds; 128-255 = minutes (minus 127)",
 			"defaultValue": 60

@@ -95,7 +95,7 @@
 			"defaultValue": 5
 		},
 		"9": {
-			"$import": "../templates/master_template.json#state_after_power_failure_off_prev"
+			"$import": "~/templates/master_template.json#state_after_power_failure_off_prev"
 		},
 		"10": {
 			"label": "Timer Functionality (Auto - Off)",
@@ -286,86 +286,86 @@
 			]
 		},
 		"23": {
-			"$import": "../templates/master_template.json#base_enable_disable",
+			"$import": "~/templates/master_template.json#base_enable_disable",
 			"label": "Double Click Sets Brightness to 100%",
 			"defaultValue": 1
 		},
 		"24[0x01]": {
-			"$import": "../templates/master_template.json#base_enable_disable_inverted",
+			"$import": "~/templates/master_template.json#base_enable_disable_inverted",
 			"label": "Send Command Frames in 2nd and 3rd Association Groups when Switching ON (Single Click)",
 			"defaultValue": 0
 		},
 		"24[0x02]": {
-			"$import": "../templates/master_template.json#base_enable_disable_inverted",
+			"$import": "~/templates/master_template.json#base_enable_disable_inverted",
 			"label": "Send Command Frames in 2nd and 3rd Association Groups when Switching OFF (Single Click)",
 			"defaultValue": 0
 		},
 		"24[0x04]": {
-			"$import": "../templates/master_template.json#base_enable_disable_inverted",
+			"$import": "~/templates/master_template.json#base_enable_disable_inverted",
 			"label": "Send Command Frames in 2nd and 3rd Association Groups when Changing Dimming Level",
 			"defaultValue": 0
 		},
 		"24[0x08]": {
-			"$import": "../templates/master_template.json#base_enable_disable_inverted",
+			"$import": "~/templates/master_template.json#base_enable_disable_inverted",
 			"label": "Send Command Frames in 2nd and 3rd Association Groups on Double Click",
 			"defaultValue": 0
 		},
 		"24[0x10]": {
-			"$import": "../templates/master_template.json#base_enable_disable",
+			"$import": "~/templates/master_template.json#base_enable_disable",
 			"label": "Send Command Frames in 2nd and 3rd Association Groups with 0xFF Value on Double Click"
 		},
 		"25[0x01]": {
-			"$import": "../templates/master_template.json#base_enable_disable_inverted",
+			"$import": "~/templates/master_template.json#base_enable_disable_inverted",
 			"label": "Send Command Frames in 4th and 5th Association Groups when Switching ON (Single Click)",
 			"defaultValue": 0
 		},
 		"25[0x02]": {
-			"$import": "../templates/master_template.json#base_enable_disable_inverted",
+			"$import": "~/templates/master_template.json#base_enable_disable_inverted",
 			"label": "Send Command Frames in 4th and 5th Association Groups when Switching OFF (Single Click)",
 			"defaultValue": 0
 		},
 		"25[0x04]": {
-			"$import": "../templates/master_template.json#base_enable_disable_inverted",
+			"$import": "~/templates/master_template.json#base_enable_disable_inverted",
 			"label": "Send Command Frames in 4th and 5th Association Groups when Changing Dimming Level",
 			"defaultValue": 0
 		},
 		"25[0x08]": {
-			"$import": "../templates/master_template.json#base_enable_disable_inverted",
+			"$import": "~/templates/master_template.json#base_enable_disable_inverted",
 			"label": "Send Command Frames in 4th and 5th Association Groups on Double Click",
 			"defaultValue": 0
 		},
 		"25[0x10]": {
-			"$import": "../templates/master_template.json#base_enable_disable",
+			"$import": "~/templates/master_template.json#base_enable_disable",
 			"label": "Send Command Frames in 4th and 5th Association Groups with 0xFF Value on Double Click"
 		},
 		"26": {
-			"$import": "../templates/master_template.json#base_enable_disable",
+			"$import": "~/templates/master_template.json#base_enable_disable",
 			"label": "3-way Switch Function",
 			"description": "Key S2 also controls the dimmer"
 		},
 		"27[0x01]": {
-			"$import": "../templates/master_template.json#base_enable_disable",
+			"$import": "~/templates/master_template.json#base_enable_disable",
 			"label": "Send Secure Z-wave Commands to 2nd Association Group"
 		},
 		"27[0x02]": {
-			"$import": "../templates/master_template.json#base_enable_disable",
+			"$import": "~/templates/master_template.json#base_enable_disable",
 			"label": "Send Secure Z-wave Commands to 3rd Association Group"
 		},
 		"27[0x04]": {
-			"$import": "../templates/master_template.json#base_enable_disable",
+			"$import": "~/templates/master_template.json#base_enable_disable",
 			"label": "Send Secure Z-wave Commands to 4th Association Group"
 		},
 		"27[0x08]": {
-			"$import": "../templates/master_template.json#base_enable_disable",
+			"$import": "~/templates/master_template.json#base_enable_disable",
 			"label": "Send Secure Z-wave Commands to 5th Association Group"
 		},
 		"28": {
-			"$import": "../templates/master_template.json#base_enable_disable",
+			"$import": "~/templates/master_template.json#base_enable_disable",
 			"label": "Scene Activation Functionality",
 			"description": "See manual for SCENE ID specification details"
 		},
 		"29": {
-			"$import": "../templates/master_template.json#base_enable_disable",
+			"$import": "~/templates/master_template.json#base_enable_disable",
 			"label": "Swap Functionality of Key S1 and Key S2",
 			"description": "Causes S1 to operate as S2 and S2 to operate as S1"
 		},
@@ -815,7 +815,7 @@
 			]
 		},
 		"54": {
-			"$import": "../templates/master_template.json#base_enable_disable",
+			"$import": "~/templates/master_template.json#base_enable_disable",
 			"label": "Self-measurement",
 			"description": "Reports include power and energy used by device"
 		},

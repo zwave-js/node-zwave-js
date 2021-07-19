@@ -108,85 +108,85 @@
 			"label": "Timer For Input 4"
 		},
 		"11": {
-			"$import": "../templates/master_template.json#base_0-255_nounit",
+			"$import": "~/templates/master_template.json#base_0-255_nounit",
 			"label": "Input Snubber-filter Time Constant.",
 			"unit": "50 ms",
 			"defaultValue": 5
 		},
 		"12": {
-			"$import": "../templates/master_template.json#base_0-255_nounit",
+			"$import": "~/templates/master_template.json#base_0-255_nounit",
 			"label": "Threshold Value For Activation Of Inputs.",
 			"unit": "200 ms",
 			"defaultValue": 20
 		},
 		"13": {
-			"$import": "../templates/master_template.json#base_0-255_nounit",
+			"$import": "~/templates/master_template.json#base_0-255_nounit",
 			"label": "Threshold For Input In Latched Mode.",
 			"unit": "50 ms",
 			"defaultValue": 50
 		},
 		"14": {
-			"$import": "../templates/master_template.json#base_enable_disable_inverted",
+			"$import": "~/templates/master_template.json#base_enable_disable_inverted",
 			"label": "Central Scene",
 			"defaultValue": 0
 		},
 		"15[0x01]": {
-			"$import": "../templates/master_template.json#base_enable_disable",
+			"$import": "~/templates/master_template.json#base_enable_disable",
 			"label": "Association Group 2 Secure Message",
 			"valueSize": 2
 		},
 		"15[0x02]": {
-			"$import": "../templates/master_template.json#base_enable_disable",
+			"$import": "~/templates/master_template.json#base_enable_disable",
 			"label": "Association Group 3 Secure Message",
 			"valueSize": 2
 		},
 		"15[0x04]": {
-			"$import": "../templates/master_template.json#base_enable_disable",
+			"$import": "~/templates/master_template.json#base_enable_disable",
 			"label": "Association Group 4 Secure Message",
 			"valueSize": 2
 		},
 		"15[0x08]": {
-			"$import": "../templates/master_template.json#base_enable_disable",
+			"$import": "~/templates/master_template.json#base_enable_disable",
 			"label": "Association Group 5 Secure Message",
 			"valueSize": 2
 		},
 		"15[0x10]": {
-			"$import": "../templates/master_template.json#base_enable_disable",
+			"$import": "~/templates/master_template.json#base_enable_disable",
 			"label": "Association Group 6 Secure Message",
 			"valueSize": 2
 		},
 		"15[0x20]": {
-			"$import": "../templates/master_template.json#base_enable_disable",
+			"$import": "~/templates/master_template.json#base_enable_disable",
 			"label": "Association Group 7 Secure Message",
 			"valueSize": 2
 		},
 		"15[0x40]": {
-			"$import": "../templates/master_template.json#base_enable_disable",
+			"$import": "~/templates/master_template.json#base_enable_disable",
 			"label": "Association Group 8 Secure Message",
 			"valueSize": 2
 		},
 		"15[0x80]": {
-			"$import": "../templates/master_template.json#base_enable_disable",
+			"$import": "~/templates/master_template.json#base_enable_disable",
 			"label": "Association Group 9 Secure Message",
 			"valueSize": 2
 		},
 		"15[0x100]": {
-			"$import": "../templates/master_template.json#base_enable_disable",
+			"$import": "~/templates/master_template.json#base_enable_disable",
 			"label": "Association Group 10 Secure Message",
 			"valueSize": 2
 		},
 		"15[0x0200]": {
-			"$import": "../templates/master_template.json#base_enable_disable",
+			"$import": "~/templates/master_template.json#base_enable_disable",
 			"label": "Association Group 11 Secure Message",
 			"valueSize": 2
 		},
 		"15[0x0400]": {
-			"$import": "../templates/master_template.json#base_enable_disable",
+			"$import": "~/templates/master_template.json#base_enable_disable",
 			"label": "Association Group 12 Secure Message",
 			"valueSize": 2
 		},
 		"15[0x0800]": {
-			"$import": "../templates/master_template.json#base_enable_disable",
+			"$import": "~/templates/master_template.json#base_enable_disable",
 			"label": "Association Group 13 Secure Message",
 			"valueSize": 2
 		}

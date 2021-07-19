@@ -46,7 +46,7 @@
 	},
 	"paramInformation": {
 		"1": {
-			"$import": "../0x0086/templates/aeotec_template.json#motion_timeout",
+			"$import": "~/0x0086/templates/aeotec_template.json#motion_timeout",
 			"minValue": 0,
 			"maxValue": 32767,
 			"defaultValue": 30
@@ -76,7 +76,7 @@
 			]
 		},
 		"4": {
-			"$import": "../0x0086/templates/aeotec_template.json#enable_binary_report"
+			"$import": "~/0x0086/templates/aeotec_template.json#enable_binary_report"
 		},
 		"5": {
 			"label": "Send Basic Set to Associated Nodes",
@@ -149,35 +149,35 @@
 			"defaultValue": 239
 		},
 		"10": {
-			"$import": "../0x0086/templates/aeotec_template.json#enable_led_indicator"
+			"$import": "~/0x0086/templates/aeotec_template.json#enable_led_indicator"
 		},
 		"11": {
-			"$import": "../0x0086/templates/aeotec_template.json#base_color_options",
+			"$import": "~/0x0086/templates/aeotec_template.json#base_color_options",
 			"label": "LED Color: Motion Event Report",
 			"defaultValue": 2
 		},
 		"12": {
-			"$import": "../0x0086/templates/aeotec_template.json#base_color_options",
+			"$import": "~/0x0086/templates/aeotec_template.json#base_color_options",
 			"label": "LED Color: Temperature Sensor Report",
 			"defaultValue": 0
 		},
 		"13": {
-			"$import": "../0x0086/templates/aeotec_template.json#base_color_options",
+			"$import": "~/0x0086/templates/aeotec_template.json#base_color_options",
 			"label": "LED Color: Light Sensor Report",
 			"defaultValue": 0
 		},
 		"14": {
-			"$import": "../0x0086/templates/aeotec_template.json#base_color_options",
+			"$import": "~/0x0086/templates/aeotec_template.json#base_color_options",
 			"label": "LED Color: Battery Report",
 			"defaultValue": 0
 		},
 		"15": {
-			"$import": "../0x0086/templates/aeotec_template.json#base_color_options",
+			"$import": "~/0x0086/templates/aeotec_template.json#base_color_options",
 			"label": "LED Color: Wakeup Notification Report",
 			"defaultValue": 0
 		},
 		"20": {
-			"$import": "../0x0086/templates/aeotec_template.json#celsius_fahrenheit_0",
+			"$import": "~/0x0086/templates/aeotec_template.json#celsius_fahrenheit_0",
 			"valueSize": 1
 		},
 		"21": {
@@ -208,7 +208,7 @@
 			"unsigned": true
 		},
 		"24": {
-			"$import": "../0x0086/templates/aeotec_template.json#auto_report_interval_light"
+			"$import": "~/0x0086/templates/aeotec_template.json#auto_report_interval_light"
 		},
 		"30": {
 			"label": "Temperature Offset Value",

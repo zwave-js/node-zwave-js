@@ -238,7 +238,7 @@
 			]
 		},
 		"30": {
-			"$import": "../templates/master_template.json#state_after_power_failure_prev_off"
+			"$import": "~/templates/master_template.json#state_after_power_failure_prev_off"
 		},
 		"40": {
 			"label": "Power reporting in watts on power change",

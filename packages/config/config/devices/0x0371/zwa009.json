@@ -198,11 +198,11 @@
 			"defaultValue": 0
 		},
 		"64": {
-			"$import": "../0x0086/templates/aeotec_template.json#celsius_fahrenheit",
+			"$import": "~/0x0086/templates/aeotec_template.json#celsius_fahrenheit",
 			"valueSize": 1
 		},
 		"255": {
-			"$import": "../0x0086/templates/aeotec_template.json#factory_reset_complete"
+			"$import": "~/0x0086/templates/aeotec_template.json#factory_reset_complete"
 		}
 	}
 }

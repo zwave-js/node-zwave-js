@@ -37,17 +37,17 @@
 			"$import": "templates/aeotec_template.json#invert_basic_set"
 		},
 		"121[0x01]": {
-			"$import": "../templates/master_template.json#base_enable_disable",
+			"$import": "~/templates/master_template.json#base_enable_disable",
 			"label": "On Trigger: Send Battery Report",
 			"valueSize": 4
 		},
 		"121[0x10]": {
-			"$import": "../templates/master_template.json#base_enable_disable",
+			"$import": "~/templates/master_template.json#base_enable_disable",
 			"label": "On Trigger: Send Binary Sensor Report",
 			"valueSize": 4
 		},
 		"121[0x0100]": {
-			"$import": "../templates/master_template.json#base_enable_disable",
+			"$import": "~/templates/master_template.json#base_enable_disable",
 			"label": "On Trigger: Send Basic Report",
 			"valueSize": 4
 		},

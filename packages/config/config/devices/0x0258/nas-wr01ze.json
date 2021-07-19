@@ -20,7 +20,7 @@
 	"supportsZWavePlus": true,
 	"paramInformation": {
 		"1": {
-			"$import": "../templates/master_template.json#state_after_power_failure_off_prev"
+			"$import": "~/templates/master_template.json#state_after_power_failure_off_prev"
 		},
 		"2": {
 			"label": "Top button function",

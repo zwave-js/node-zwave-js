@@ -78,47 +78,47 @@
 	},
 	"paramInformation": {
 		"1[0x01]": {
-			"$import": "../templates/master_template.json#base_enable_disable",
+			"$import": "~/templates/master_template.json#base_enable_disable",
 			"label": "Button 1 Controls Relay 1"
 		},
 		"1[0x02]": {
-			"$import": "../templates/master_template.json#base_enable_disable",
+			"$import": "~/templates/master_template.json#base_enable_disable",
 			"label": "Button 2 Controls Relay 1"
 		},
 		"1[0x04]": {
-			"$import": "../templates/master_template.json#base_enable_disable",
+			"$import": "~/templates/master_template.json#base_enable_disable",
 			"label": "Button 3 Controls Relay 1"
 		},
 		"1[0x08]": {
-			"$import": "../templates/master_template.json#base_enable_disable",
+			"$import": "~/templates/master_template.json#base_enable_disable",
 			"label": "Button 4 Controls Relay 1"
 		},
 		"2[0x01]": {
-			"$import": "../templates/master_template.json#base_enable_disable",
+			"$import": "~/templates/master_template.json#base_enable_disable",
 			"label": "Button 1 Controls Relay 2"
 		},
 		"2[0x02]": {
-			"$import": "../templates/master_template.json#base_enable_disable",
+			"$import": "~/templates/master_template.json#base_enable_disable",
 			"label": "Button 2 Controls Relay 2"
 		},
 		"2[0x04]": {
-			"$import": "../templates/master_template.json#base_enable_disable",
+			"$import": "~/templates/master_template.json#base_enable_disable",
 			"label": "Button 3 Controls Relay 2"
 		},
 		"2[0x08]": {
-			"$import": "../templates/master_template.json#base_enable_disable",
+			"$import": "~/templates/master_template.json#base_enable_disable",
 			"label": "Button 4 Controls Relay 2"
 		},
 		"7": {
 			"$import": "templates/logic_group_template.json#enable_central_scene"
 		},
 		"8": {
-			"$import": "../templates/master_template.json#base_enable_disable",
+			"$import": "~/templates/master_template.json#base_enable_disable",
 			"label": "Double Press",
 			"defaultValue": 1
 		},
 		"10": {
-			"$import": "../templates/master_template.json#base_enable_disable",
+			"$import": "~/templates/master_template.json#base_enable_disable",
 			"label": "Enhanced LED Control"
 		},
 		"11": {
@@ -127,13 +127,13 @@
 			"defaultValue": 5
 		},
 		"12": {
-			"$import": "../templates/master_template.json#base_1-255_nounit",
+			"$import": "~/templates/master_template.json#base_1-255_nounit",
 			"label": "Button Press Threshold Time",
 			"unit": "10 ms",
 			"defaultValue": 20
 		},
 		"13": {
-			"$import": "../templates/master_template.json#base_1-255_nounit",
+			"$import": "~/templates/master_template.json#base_1-255_nounit",
 			"label": "Button Held Threshold Time",
 			"unit": "10 ms",
 			"defaultValue": 50
@@ -151,67 +151,67 @@
 			"label": "LED Indicator Brightness: Blue"
 		},
 		"15[0x01]": {
-			"$import": "../templates/master_template.json#base_enable_disable",
+			"$import": "~/templates/master_template.json#base_enable_disable",
 			"label": "Send Association Group 2 Messages Securely",
 			"valueSize": 2
 		},
 		"15[0x02]": {
-			"$import": "../templates/master_template.json#base_enable_disable",
+			"$import": "~/templates/master_template.json#base_enable_disable",
 			"label": "Send Association Group 3 Messages Securely",
 			"valueSize": 2
 		},
 		"15[0x04]": {
-			"$import": "../templates/master_template.json#base_enable_disable",
+			"$import": "~/templates/master_template.json#base_enable_disable",
 			"label": "Send Association Group 4 Messages Securely",
 			"valueSize": 2
 		},
 		"15[0x08]": {
-			"$import": "../templates/master_template.json#base_enable_disable",
+			"$import": "~/templates/master_template.json#base_enable_disable",
 			"label": "Send Association Group 5 Messages Securely",
 			"valueSize": 2
 		},
 		"15[0x10]": {
-			"$import": "../templates/master_template.json#base_enable_disable",
+			"$import": "~/templates/master_template.json#base_enable_disable",
 			"label": "Send Association Group 6 Messages Securely",
 			"valueSize": 2
 		},
 		"15[0x20]": {
-			"$import": "../templates/master_template.json#base_enable_disable",
+			"$import": "~/templates/master_template.json#base_enable_disable",
 			"label": "Send Association Group 7 Messages Securely",
 			"valueSize": 2
 		},
 		"15[0x40]": {
-			"$import": "../templates/master_template.json#base_enable_disable",
+			"$import": "~/templates/master_template.json#base_enable_disable",
 			"label": "Send Association Group 8 Messages Securely",
 			"valueSize": 2
 		},
 		"15[0x80]": {
-			"$import": "../templates/master_template.json#base_enable_disable",
+			"$import": "~/templates/master_template.json#base_enable_disable",
 			"label": "Send Association Group 9 Messages Securely",
 			"valueSize": 2
 		},
 		"15[0x100]": {
-			"$import": "../templates/master_template.json#base_enable_disable",
+			"$import": "~/templates/master_template.json#base_enable_disable",
 			"label": "Send Association Group 10 Messages Securely",
 			"valueSize": 2
 		},
 		"15[0x0200]": {
-			"$import": "../templates/master_template.json#base_enable_disable",
+			"$import": "~/templates/master_template.json#base_enable_disable",
 			"label": "Send Association Group 11 Messages Securely",
 			"valueSize": 2
 		},
 		"15[0x0400]": {
-			"$import": "../templates/master_template.json#base_enable_disable",
+			"$import": "~/templates/master_template.json#base_enable_disable",
 			"label": "Send Association Group 12 Messages Securely",
 			"valueSize": 2
 		},
 		"15[0x0800]": {
-			"$import": "../templates/master_template.json#base_enable_disable",
+			"$import": "~/templates/master_template.json#base_enable_disable",
 			"label": "Send Association Group 13 Messages Securely",
 			"valueSize": 2
 		},
 		"15[0x1000]": {
-			"$import": "../templates/master_template.json#base_enable_disable",
+			"$import": "~/templates/master_template.json#base_enable_disable",
 			"label": "Send Association Group 14 Messages Securely",
 			"valueSize": 2
 		},
@@ -220,7 +220,7 @@
 			"label": "Button 1 Functionality"
 		},
 		"17": {
-			"$import": "../templates/master_template.json#base_0-255_nounit",
+			"$import": "~/templates/master_template.json#base_0-255_nounit",
 			"label": "Button 1 - Timer",
 			"unit": "seconds",
 			"valueSize": 2,
@@ -265,7 +265,7 @@
 			"defaultValue": 127
 		},
 		"22[0xff]": {
-			"$import": "../templates/master_template.json#base_0-255_nounit",
+			"$import": "~/templates/master_template.json#base_0-255_nounit",
 			"label": "LED Time For Button 1 (On): Blinking",
 			"unit": "100 ms",
 			"valueSize": 4,
@@ -287,7 +287,7 @@
 			"defaultValue": 47
 		},
 		"23[0xff]": {
-			"$import": "../templates/master_template.json#base_0-255_nounit",
+			"$import": "~/templates/master_template.json#base_0-255_nounit",
 			"label": "LED Time For Button 1 (Off): Blinking",
 			"unit": "100 ms",
 			"valueSize": 4,
@@ -298,7 +298,7 @@
 			"label": "Button 2 Functionality"
 		},
 		"25": {
-			"$import": "../templates/master_template.json#base_0-255_nounit",
+			"$import": "~/templates/master_template.json#base_0-255_nounit",
 			"label": "Button 2 - Timer",
 			"unit": "seconds",
 			"valueSize": 2,
@@ -343,7 +343,7 @@
 			"defaultValue": 127
 		},
 		"30[0xff]": {
-			"$import": "../templates/master_template.json#base_0-255_nounit",
+			"$import": "~/templates/master_template.json#base_0-255_nounit",
 			"label": "LED Time For Button 2 (On): Blinking",
 			"unit": "100 ms",
 			"valueSize": 4,
@@ -365,7 +365,7 @@
 			"defaultValue": 47
 		},
 		"31[0xff]": {
-			"$import": "../templates/master_template.json#base_0-255_nounit",
+			"$import": "~/templates/master_template.json#base_0-255_nounit",
 			"label": "LED Time For Button 2 (Off) Blinking",
 			"unit": "100 ms",
 			"valueSize": 4,
@@ -376,7 +376,7 @@
 			"label": "Button 3 Functionality"
 		},
 		"33": {
-			"$import": "../templates/master_template.json#base_0-255_nounit",
+			"$import": "~/templates/master_template.json#base_0-255_nounit",
 			"label": "Button 3 - Timer",
 			"unit": "seconds",
 			"valueSize": 2,
@@ -421,7 +421,7 @@
 			"defaultValue": 127
 		},
 		"38[0xff]": {
-			"$import": "../templates/master_template.json#base_0-255_nounit",
+			"$import": "~/templates/master_template.json#base_0-255_nounit",
 			"label": "LED Time For Button 3 (On): Blinking",
 			"unit": "100 ms",
 			"valueSize": 4,
@@ -443,7 +443,7 @@
 			"defaultValue": 47
 		},
 		"39[0xff]": {
-			"$import": "../templates/master_template.json#base_0-255_nounit",
+			"$import": "~/templates/master_template.json#base_0-255_nounit",
 			"label": "LED Time For Button 3 (Off): Blinking",
 			"unit": "100 ms",
 			"valueSize": 4,
@@ -454,7 +454,7 @@
 			"label": "Button 4 Functionality"
 		},
 		"41": {
-			"$import": "../templates/master_template.json#base_0-255_nounit",
+			"$import": "~/templates/master_template.json#base_0-255_nounit",
 			"label": "Button 4 - Timer",
 			"unit": "seconds",
 			"valueSize": 2,
@@ -499,7 +499,7 @@
 			"defaultValue": 127
 		},
 		"46[0xff]": {
-			"$import": "../templates/master_template.json#base_0-255_nounit",
+			"$import": "~/templates/master_template.json#base_0-255_nounit",
 			"label": "LED Time For Button 4 (On): Blinking",
 			"unit": "100 ms",
 			"valueSize": 4
@@ -520,7 +520,7 @@
 			"defaultValue": 47
 		},
 		"47[0xff]": {
-			"$import": "../templates/master_template.json#base_0-255_nounit",
+			"$import": "~/templates/master_template.json#base_0-255_nounit",
 			"label": "LED Time For Button 4 (Off): Blinking",
 			"unit": "100 ms",
 			"valueSize": 4,

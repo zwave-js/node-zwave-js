@@ -16,10 +16,10 @@
 	},
 	"paramInformation": {
 		"3": {
-			"$import": "../templates/master_template.json#led_indicator_two_options"
+			"$import": "~/templates/master_template.json#led_indicator_two_options"
 		},
 		"4": {
-			"$import": "../templates/master_template.json#orientation"
+			"$import": "~/templates/master_template.json#orientation"
 		},
 		"5": {
 			"$import": "templates/homeseer_template.json#fan_type"
@@ -51,19 +51,19 @@
 			"$import": "templates/homeseer_template.json#blink_frequency"
 		},
 		"31[0x01]": {
-			"$import": "../templates/master_template.json#base_enable_disable",
+			"$import": "~/templates/master_template.json#base_enable_disable",
 			"label": "Enable / Disable Blinking - LED 1"
 		},
 		"31[0x02]": {
-			"$import": "../templates/master_template.json#base_enable_disable",
+			"$import": "~/templates/master_template.json#base_enable_disable",
 			"label": "Enable / Disable Blinking - LED 2"
 		},
 		"31[0x04]": {
-			"$import": "../templates/master_template.json#base_enable_disable",
+			"$import": "~/templates/master_template.json#base_enable_disable",
 			"label": "Enable / Disable Blinking - LED 3"
 		},
 		"31[0x08]": {
-			"$import": "../templates/master_template.json#base_enable_disable",
+			"$import": "~/templates/master_template.json#base_enable_disable",
 			"label": "Enable / Disable Blinking - LED 4"
 		}
 	},
