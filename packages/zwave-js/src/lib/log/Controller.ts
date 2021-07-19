@@ -22,7 +22,7 @@ const VALUE_LOGLEVEL = "debug";
 
 interface LogNodeOptions {
 	message: string;
-	level?: "verbose" | "warn" | "error";
+	level?: "debug" | "verbose" | "warn" | "error";
 	direction?: DataDirection;
 	endpoint?: number;
 }
@@ -65,7 +65,7 @@ export class ControllerLogger extends ZWaveLoggerBase {
 	public logNode(
 		nodeId: number,
 		message: string,
-		level?: "verbose" | "warn" | "error",
+		level?: "debug" | "verbose" | "warn" | "error",
 	): void;
 
 	/**
@@ -77,7 +77,7 @@ export class ControllerLogger extends ZWaveLoggerBase {
 	public logNode(
 		nodeId: number,
 		messageOrOptions: string | LogNodeOptions,
-		logLevel?: "verbose" | "warn" | "error",
+		logLevel?: "debug" | "verbose" | "warn" | "error",
 	): void {
 		if (typeof messageOrOptions === "string") {
 			return this.logNode(nodeId, {

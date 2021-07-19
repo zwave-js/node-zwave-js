@@ -439,6 +439,14 @@ export {
 	TimeParametersCCSet,
 } from "./TimeParametersCC";
 export {
+	TransportServiceCC,
+	TransportServiceCCFirstSegment,
+	TransportServiceCCSegmentComplete,
+	TransportServiceCCSegmentRequest,
+	TransportServiceCCSegmentWait,
+	TransportServiceCCSubsequentSegment,
+} from "./TransportServiceCC";
+export {
 	KeypadMode,
 	UserCodeCC,
 	UserCodeCCCapabilitiesGet,

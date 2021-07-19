@@ -1,10 +1,12 @@
 import {
 	CommandClasses,
 	CRC16_CCITT,
+	MessageOrCCLogEntry,
 	validatePayload,
 	ZWaveError,
 	ZWaveErrorCodes,
 } from "@zwave-js/core";
+import { buffer2hex } from "@zwave-js/shared";
 import type { Driver } from "../driver/Driver";
 import {
 	CCCommand,
@@ -16,6 +18,7 @@ import {
 	expectedCCResponse,
 	gotDeserializationOptions,
 	implementedVersion,
+	SinglecastCC,
 } from "./CommandClass";
 
 // All the supported commands
@@ -29,10 +32,22 @@ export enum TransportServiceCommand {
 
 const MAX_SEGMENT_SIZE = 39;
 
+// TODO: Figure out how we know if communicating with R2 or R3
+export const TransportServiceTimeouts = {
+	/** Waiting time before requesting a missing segment at data rate R2 */
+	requestMissingSegmentR2: 800,
+	/** Waiting time before requesting a missing segment at data rate R3 */
+	requestMissingSegmentR3: 400,
+};
+
 @commandClass(CommandClasses["Transport Service"])
 @implementedVersion(2)
-export class TransportServiceCC extends CommandClass {
+export class TransportServiceCC
+	extends CommandClass
+	implements SinglecastCC<TransportServiceCC>
+{
 	declare ccCommand: TransportServiceCommand;
+	declare nodeId: number;
 
 	// Override the default helper method
 	public static getCCCommand(data: Buffer): number | undefined {
@@ -70,6 +85,18 @@ interface TransportServiceCCFirstSegmentOptions extends CCCommandOptions {
 	sessionId: number;
 	headerExtension?: Buffer | undefined;
 	partialDatagram: Buffer;
+}
+
+export function isTransportServiceEncapsulation(
+	command: CommandClass,
+): command is
+	| TransportServiceCCFirstSegment
+	| TransportServiceCCSubsequentSegment {
+	return (
+		command.ccId === CommandClasses["Transport Service"] &&
+		(command.ccCommand === TransportServiceCommand.FirstSegment ||
+			command.ccCommand === TransportServiceCommand.SubsequentSegment)
+	);
 }
 
 @CCCommand(TransportServiceCommand.FirstSegment)
@@ -183,12 +210,25 @@ export class TransportServiceCCFirstSegment extends TransportServiceCC {
 			(this.headerExtension?.length ? 1 + this.headerExtension.length : 0)
 		);
 	}
+
+	public toLogEntry(): MessageOrCCLogEntry {
+		return {
+			...super.toLogEntry(),
+			message: {
+				"session ID": this.sessionId,
+				"datagram size": this.datagramSize,
+				"byte range": `0...${this.partialDatagram.length - 1}`,
+				payload: buffer2hex(this.partialDatagram),
+			},
+		};
+	}
 }
 
 interface TransportServiceCCSubsequentSegmentOptions
 	extends TransportServiceCCFirstSegmentOptions {
 	datagramOffset: number;
 }
+
 @CCCommand(TransportServiceCommand.SubsequentSegment)
 // @expectedCCResponse(TransportServiceCCReport)
 export class TransportServiceCCSubsequentSegment extends TransportServiceCC {
@@ -364,6 +404,20 @@ export class TransportServiceCCSubsequentSegment extends TransportServiceCC {
 			5 +
 			(this.headerExtension?.length ? 1 + this.headerExtension.length : 0)
 		);
+	}
+
+	public toLogEntry(): MessageOrCCLogEntry {
+		return {
+			...super.toLogEntry(),
+			message: {
+				"session ID": this.sessionId,
+				"datagram size": this.datagramSize,
+				"byte range": `${this.datagramOffset}...${
+					this.datagramOffset + this.partialDatagram.length - 1
+				}`,
+				payload: buffer2hex(this.partialDatagram),
+			},
+		};
 	}
 }
 
