@@ -75,6 +75,7 @@ import {
 } from "../commandclass/DoorLockCC";
 import { EntryControlCCNotification } from "../commandclass/EntryControlCC";
 import {
+	FirmwareUpdateCapabilities,
 	FirmwareUpdateMetaDataCC,
 	FirmwareUpdateMetaDataCCGet,
 	FirmwareUpdateMetaDataCCStatusReport,
@@ -2795,6 +2796,29 @@ protocol version:      ${this._protocolVersion}`;
 		  }
 		| undefined;
 
+	/** Retrieves the firmware update capabilities of a node to decide which options to offer a user prior to the update */
+	public async getFirmwareUpdateCapabilities(): Promise<FirmwareUpdateCapabilities> {
+		const api = this.commandClasses["Firmware Update Meta Data"];
+		const meta = await api.getMetaData();
+		if (!meta) {
+			throw new ZWaveError(
+				`Failed to request firmware update capabilities: The node did not respond in time!`,
+				ZWaveErrorCodes.Controller_NodeTimeout,
+			);
+		} else if (!meta.firmwareUpgradable) {
+			return {
+				firmwareUpgradable: false,
+			};
+		}
+
+		return {
+			firmwareUpgradable: true,
+			firmwareTargets: [0, ...meta.additionalFirmwareIDs],
+			continuesToFunction: meta.continuesToFunction,
+			supportsActivation: meta.supportsActivation,
+		};
+	}
+
 	/**
 	 * Starts an OTA firmware update process for this node.
 	 *
@@ -2831,26 +2855,23 @@ protocol version:      ${this._protocolVersion}`;
 		const meta = await api.getMetaData();
 		if (!meta) {
 			throw new ZWaveError(
-				`The node did not respond in time`,
+				`Failed to start the update: The node did not respond in time!`,
 				ZWaveErrorCodes.Controller_NodeTimeout,
 			);
 		}
 		if (target === 0 && !meta.firmwareUpgradable) {
 			throw new ZWaveError(
-				`The Z-Wave chip firmware is not upgradable`,
+				`Failed to start the update: The Z-Wave chip firmware is not upgradable!`,
 				ZWaveErrorCodes.FirmwareUpdateCC_NotUpgradable,
 			);
 		} else if (version < 3 && target !== 0) {
 			throw new ZWaveError(
-				`Upgrading different firmware targets requires version 3+`,
+				`Failed to start the update: The node does not support upgrading a different firmware target than 0!`,
 				ZWaveErrorCodes.FirmwareUpdateCC_TargetNotFound,
 			);
-		} else if (
-			target < 0 ||
-			(target > 0 && meta.additionalFirmwareIDs.length < target)
-		) {
+		} else if (!meta.additionalFirmwareIDs.includes(target)) {
 			throw new ZWaveError(
-				`Firmware target #${target} not found!`,
+				`Failed to start the update: Firmware target #${target} not found on this node!`,
 				ZWaveErrorCodes.FirmwareUpdateCC_TargetNotFound,
 			);
 		}

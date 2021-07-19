@@ -182,6 +182,7 @@ export {
 	FirmwareUpdateRequestStatus,
 	FirmwareUpdateStatus,
 } from "./FirmwareUpdateMetaDataCC";
+export type { FirmwareUpdateCapabilities } from "./FirmwareUpdateMetaDataCC";
 export { HailCC } from "./HailCC";
 export {
 	IndicatorCC,
