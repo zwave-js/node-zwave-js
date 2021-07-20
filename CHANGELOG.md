@@ -5,7 +5,7 @@
 	Add placeholder for next release with `wip` snippet
   ## __WORK IN PROGRESS__
 -->
-## __WORK IN PROGRESS__ · _„There are things out there that our little minds will never comprehend...”_
+## 8.0.1 (2021-07-20) · _„There are things out there that our little minds will never comprehend...”_
 > _...one of them being the Z-Wave specifications._  
 > &mdash; H. G. Tannhaus (from „Dark”, probably)
 
