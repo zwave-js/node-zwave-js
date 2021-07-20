@@ -5,7 +5,7 @@
 	Add placeholder for next release with `wip` snippet
   ## __WORK IN PROGRESS__
 -->
-## __WORK IN PROGRESS__
+## 8.0.2 (2021-07-20)
 ### Bugfixes
 * When creating the fallback endpoint association on the root endpoint, an existing node association is now removed first
 
