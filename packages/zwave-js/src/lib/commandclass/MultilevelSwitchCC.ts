@@ -14,6 +14,7 @@ import {
 import { getEnumMemberName, pick } from "@zwave-js/shared";
 import type { Driver } from "../driver/Driver";
 import { MessagePriority } from "../message/Constants";
+import { VirtualEndpoint } from "../node/VirtualEndpoint";
 import {
 	CCAPI,
 	PollValueImplementation,
@@ -206,30 +207,35 @@ export class MultilevelSwitchCCAPI extends CCAPI {
 			...options,
 		});
 
-		const superviseValueId = getSuperviseStartStopLevelChangeValueId();
-		const node = this.endpoint.getNodeUnsafe()!;
-		// Assume supervision is supported until we know it is not
-		let mayUseSupervision = node.getValue(superviseValueId) !== false;
+		let mayUseSupervision: boolean;
+		if (this.endpoint instanceof VirtualEndpoint) {
+			// We cannot use supervision when communicating with multiple nodes
+			mayUseSupervision = false;
+		} else {
+			// For singlecast, try to use supervision unless we know it is not supported
+			const superviseValueId = getSuperviseStartStopLevelChangeValueId();
+			const node = this.endpoint.getNodeUnsafe()!;
+			mayUseSupervision = node.getValue(superviseValueId) !== false;
 
-		if (mayUseSupervision) {
-			// Try to supervise the command execution
-			const supervisionResult =
-				await this.driver.trySendCommandSupervised(cc);
+			if (mayUseSupervision) {
+				// Try to supervise the command execution
+				const supervisionResult =
+					await this.driver.trySendCommandSupervised(cc);
 
-			if (supervisionResult?.status === SupervisionStatus.Fail) {
-				throw new ZWaveError(
-					"startLevelChange failed",
-					ZWaveErrorCodes.SupervisionCC_CommandFailed,
-				);
-			} else if (
-				supervisionResult?.status === SupervisionStatus.NoSupport
-			) {
-				// Remember that we shouldn't use supervision for that
-				node.valueDB.setValue(superviseValueId, false);
-				mayUseSupervision = false;
+				if (supervisionResult?.status === SupervisionStatus.Fail) {
+					throw new ZWaveError(
+						"startLevelChange failed",
+						ZWaveErrorCodes.SupervisionCC_CommandFailed,
+					);
+				} else if (
+					supervisionResult?.status === SupervisionStatus.NoSupport
+				) {
+					// Remember that we shouldn't use supervision for that
+					node.valueDB.setValue(superviseValueId, false);
+					mayUseSupervision = false;
+				}
 			}
 		}
-		// In order to support a fallback to no supervision, we must not use else-if here
 		if (!mayUseSupervision) {
 			await this.driver.sendCommand(cc);
 		}
@@ -246,30 +252,36 @@ export class MultilevelSwitchCCAPI extends CCAPI {
 			endpoint: this.endpoint.index,
 		});
 
-		const superviseValueId = getSuperviseStartStopLevelChangeValueId();
-		const node = this.endpoint.getNodeUnsafe()!;
-		// Assume supervision is supported until we know it is not
-		let mayUseSupervision = node.getValue(superviseValueId) !== false;
+		let mayUseSupervision: boolean;
+		if (this.endpoint instanceof VirtualEndpoint) {
+			// We cannot use supervision when communicating with multiple nodes
+			mayUseSupervision = false;
+		} else {
+			// For singlecast, try to use supervision unless we know it is not supported
+			const superviseValueId = getSuperviseStartStopLevelChangeValueId();
+			const node = this.endpoint.getNodeUnsafe()!;
+			mayUseSupervision = node.getValue(superviseValueId) !== false;
 
-		if (mayUseSupervision) {
-			// Try to supervise the command execution
-			const supervisionResult =
-				await this.driver.trySendCommandSupervised(cc);
+			if (mayUseSupervision) {
+				// Try to supervise the command execution
+				const supervisionResult =
+					await this.driver.trySendCommandSupervised(cc);
 
-			if (supervisionResult?.status === SupervisionStatus.Fail) {
-				throw new ZWaveError(
-					"stopLevelChange failed",
-					ZWaveErrorCodes.SupervisionCC_CommandFailed,
-				);
-			} else if (
-				supervisionResult?.status === SupervisionStatus.NoSupport
-			) {
-				// Remember that we shouldn't use supervision for that
-				node.valueDB.setValue(superviseValueId, false);
-				mayUseSupervision = false;
+				if (supervisionResult?.status === SupervisionStatus.Fail) {
+					throw new ZWaveError(
+						"stopLevelChange failed",
+						ZWaveErrorCodes.SupervisionCC_CommandFailed,
+					);
+				} else if (
+					supervisionResult?.status === SupervisionStatus.NoSupport
+				) {
+					// Remember that we shouldn't use supervision for that
+					node.valueDB.setValue(superviseValueId, false);
+					mayUseSupervision = false;
+				}
 			}
 		}
-		// In order to support a fallback to no supervision, we must not use else-if here
+
 		if (!mayUseSupervision) {
 			await this.driver.sendCommand(cc);
 		}
