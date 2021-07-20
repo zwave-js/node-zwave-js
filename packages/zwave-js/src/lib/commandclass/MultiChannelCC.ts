@@ -306,6 +306,7 @@ export class MultiChannelCC extends CommandClass {
 
 	public constructor(driver: Driver, options: CommandClassOptions) {
 		super(driver, options);
+		this.registerValue(getEndpointIndizesValueId().property, true);
 		this.registerValue(getEndpointCCsValueId(0).property, true);
 		this.registerValue(getEndpointDeviceClassValueId(0).property, true);
 	}
