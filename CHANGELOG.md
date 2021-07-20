@@ -5,7 +5,7 @@
 	Add placeholder for next release with `wip` snippet
   ## __WORK IN PROGRESS__
 -->
-## 8.0.0 (2021-07-20) · _„There are things out there that our little minds will never comprehend...”_
+## __WORK IN PROGRESS__ · _„There are things out there that our little minds will never comprehend...”_
 > _...one of them being the Z-Wave specifications._  
 > &mdash; H. G. Tannhaus (from „Dark”, probably)
 
@@ -58,6 +58,8 @@ As you may already know, if you're planning to market a product or software with
 * Improved error messages that explain why a firmware update failed
 * Multicast/Broadcast `setValue` now also accepts an options object
 * `start/stopLevelChange` now correctly works for multicast/broadcast
+* Added `typesVersions` to `zwave-js/package.json`, so TypeScript finds the subpath exports when used from consuming applications
+* The `endpointIndizes` value is now correctly marked as internal
 
 ### Config file changes
 * Add Heatit ZM Single Relay 16A
