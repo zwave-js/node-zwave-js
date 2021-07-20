@@ -25,6 +25,7 @@ import {
 	AssociationAddress,
 	EndpointAddress,
 	getEndpointsValueId,
+	getNodeIdsValueId,
 } from "../commandclass/MultiChannelAssociationCC";
 import {
 	getInstallerIconValueId,
@@ -751,6 +752,8 @@ export class Endpoint {
 			}
 
 			// Last attempt (actual Z-Wave+ Lifelines only): Try a multi channel association on the root
+			// Endpoint interview happen AFTER the root interview, so this enables us to overwrite what
+			// we previously configured on the root.
 			if (
 				!hasLifeline &&
 				!mustUseNodeAssociation &&
@@ -758,6 +761,10 @@ export class Endpoint {
 				node.supportsCC(CommandClasses["Z-Wave Plus Info"]) &&
 				this.index > 0
 			) {
+				const rootNodesValueId = getNodeIdsValueId(0, group);
+				const rootHasNodeAssociation = !!valueDB
+					.getValue<number[]>(rootNodesValueId)
+					?.some((a) => a === ownNodeId);
 				const rootEndpointsValueId = getEndpointsValueId(0, group);
 				const rootHasEndpointAssociation = !!valueDB
 					.getValue<EndpointAddress[]>(rootEndpointsValueId)
@@ -779,6 +786,13 @@ export class Endpoint {
 							message: `Assigning lifeline group #${group} with a multi channel association on the root device...`,
 							direction: "outbound",
 						});
+						// Clean up node associations because they might prevent us from adding the endpoint association
+						if (rootHasNodeAssociation) {
+							await rootMCAPI.removeDestinations({
+								groupId: group,
+								nodeIds: [ownNodeId],
+							});
+						}
 						await rootMCAPI.addDestinations({
 							groupId: group,
 							endpoints: [{ nodeId: ownNodeId, endpoint: 0 }],
