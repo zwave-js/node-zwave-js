@@ -5,7 +5,7 @@
 	Add placeholder for next release with `wip` snippet
   ## __WORK IN PROGRESS__
 -->
-## __WORK IN PROGRESS__
+## 8.0.3 (2021-07-20)
 ### Bugfixes
 * Corrected the interview order of non-application CCs vs. application CCs on the root endpoint
 
