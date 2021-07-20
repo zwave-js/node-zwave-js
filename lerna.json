@@ -1,15 +1,23 @@
 {
-	"packages": ["packages/*"],
+	"packages": [
+		"packages/*"
+	],
 	"useWorkspaces": true,
 	"npmClient": "yarn",
-	"version": "8.0.0-alpha.3",
+	"version": "8.0.0",
 	"command": {
 		"run": {
 			"stream": true
 		},
 		"version": {
-			"allowBranch": ["master", "release-*", "next"],
-			"ignoreChanges": ["*.md"],
+			"allowBranch": [
+				"master",
+				"release-*",
+				"next"
+			],
+			"ignoreChanges": [
+				"*.md"
+			],
 			"exact": true,
 			"amend": true,
 			"push": false

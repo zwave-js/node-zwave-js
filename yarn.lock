@@ -3804,7 +3804,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@zwave-js/config@8.0.0-alpha.3, @zwave-js/config@workspace:packages/config":
+"@zwave-js/config@8.0.0, @zwave-js/config@workspace:packages/config":
   version: 0.0.0-use.local
   resolution: "@zwave-js/config@workspace:packages/config"
   dependencies:
@@ -3817,9 +3817,9 @@ __metadata:
     "@types/semver": ^7.3.7
     "@types/xml2json": ^0.11.4
     "@types/yargs": ^16.0.4
-    "@zwave-js/core": 8.0.0-alpha.3
-    "@zwave-js/maintenance": 8.0.0-alpha.3
-    "@zwave-js/shared": 8.0.0-alpha.3
+    "@zwave-js/core": 8.0.0
+    "@zwave-js/maintenance": 8.0.0
+    "@zwave-js/shared": 8.0.0
     alcalzone-shared: ^4.0.0
     ansi-colors: ^4.1.1
     axios: ^0.21.1
@@ -3857,7 +3857,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@zwave-js/core@8.0.0-alpha.3, @zwave-js/core@workspace:packages/core":
+"@zwave-js/core@8.0.0, @zwave-js/core@workspace:packages/core":
   version: 0.0.0-use.local
   resolution: "@zwave-js/core@workspace:packages/core"
   dependencies:
@@ -3865,7 +3865,7 @@ __metadata:
     "@types/jest": ^26.0.24
     "@types/node": ^15.12.5
     "@types/triple-beam": ^1.3.2
-    "@zwave-js/shared": 8.0.0-alpha.3
+    "@zwave-js/shared": 8.0.0
     "@zwave-js/winston-daily-rotate-file": ^4.5.6-0
     alcalzone-shared: ^4.0.0
     ansi-colors: ^4.1.1
@@ -3909,7 +3909,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@zwave-js/maintenance@8.0.0-alpha.3, @zwave-js/maintenance@workspace:packages/maintenance":
+"@zwave-js/maintenance@8.0.0, @zwave-js/maintenance@workspace:packages/maintenance":
   version: 0.0.0-use.local
   resolution: "@zwave-js/maintenance@workspace:packages/maintenance"
   dependencies:
@@ -3919,8 +3919,8 @@ __metadata:
     "@types/node": ^15.12.5
     "@types/prettier": ^2
     "@types/yargs": ^16.0.4
-    "@zwave-js/core": 8.0.0-alpha.3
-    "@zwave-js/shared": 8.0.0-alpha.3
+    "@zwave-js/core": 8.0.0
+    "@zwave-js/shared": 8.0.0
     ansi-colors: ^4.1.1
     clipboardy: ^2.3.0
     esbuild-register: ^2.6.0
@@ -3984,7 +3984,7 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@zwave-js/serial@8.0.0-alpha.3, @zwave-js/serial@workspace:packages/serial":
+"@zwave-js/serial@8.0.0, @zwave-js/serial@workspace:packages/serial":
   version: 0.0.0-use.local
   resolution: "@zwave-js/serial@workspace:packages/serial"
   dependencies:
@@ -3993,9 +3993,9 @@ __metadata:
     "@types/jest": ^26.0.24
     "@types/node": ^15.12.5
     "@types/serialport": ^8.0.2
-    "@zwave-js/core": 8.0.0-alpha.3
-    "@zwave-js/shared": 8.0.0-alpha.3
-    "@zwave-js/testing": 8.0.0-alpha.3
+    "@zwave-js/core": 8.0.0
+    "@zwave-js/shared": 8.0.0
+    "@zwave-js/testing": 8.0.0
     alcalzone-shared: ^4.0.0
     ansi-colors: ^4.1.1
     esbuild-register: ^2.6.0
@@ -4020,7 +4020,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@zwave-js/shared@8.0.0-alpha.3, @zwave-js/shared@workspace:packages/shared":
+"@zwave-js/shared@8.0.0, @zwave-js/shared@workspace:packages/shared":
   version: 0.0.0-use.local
   resolution: "@zwave-js/shared@workspace:packages/shared"
   dependencies:
@@ -4045,14 +4045,14 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@zwave-js/testing@8.0.0-alpha.3, @zwave-js/testing@workspace:packages/testing":
+"@zwave-js/testing@8.0.0, @zwave-js/testing@workspace:packages/testing":
   version: 0.0.0-use.local
   resolution: "@zwave-js/testing@workspace:packages/testing"
   dependencies:
     "@types/jest": ^26.0.24
     "@types/node": ^15.12.5
     "@types/triple-beam": ^1.3.2
-    "@zwave-js/core": 8.0.0-alpha.3
+    "@zwave-js/core": 8.0.0
     ansi-colors: ^4.1.1
     esbuild-register: ^2.6.0
     jest-extended: ^0.11.5
@@ -13552,12 +13552,12 @@ typescript@^4.3.5:
     "@types/serialport": ^8.0.2
     "@types/source-map-support": ^0
     "@xstate/test": ^0.4.2
-    "@zwave-js/config": 8.0.0-alpha.3
-    "@zwave-js/core": 8.0.0-alpha.3
-    "@zwave-js/maintenance": 8.0.0-alpha.3
-    "@zwave-js/serial": 8.0.0-alpha.3
-    "@zwave-js/shared": 8.0.0-alpha.3
-    "@zwave-js/testing": 8.0.0-alpha.3
+    "@zwave-js/config": 8.0.0
+    "@zwave-js/core": 8.0.0
+    "@zwave-js/maintenance": 8.0.0
+    "@zwave-js/serial": 8.0.0
+    "@zwave-js/shared": 8.0.0
+    "@zwave-js/testing": 8.0.0
     alcalzone-shared: ^4.0.0
     ansi-colors: ^4.1.1
     axios: ^0.21.1
