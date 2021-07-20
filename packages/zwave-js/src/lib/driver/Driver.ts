@@ -74,6 +74,15 @@ import {
 	SupervisionStatus,
 } from "../commandclass/SupervisionCC";
 import {
+	isTransportServiceEncapsulation,
+	TransportServiceCCFirstSegment,
+	TransportServiceCCSegmentComplete,
+	TransportServiceCCSegmentRequest,
+	TransportServiceCCSegmentWait,
+	TransportServiceCCSubsequentSegment,
+	TransportServiceTimeouts,
+} from "../commandclass/TransportServiceCC";
+import {
 	getWakeUpIntervalValueId,
 	WakeUpCCNoMoreInformation,
 } from "../commandclass/WakeUpCC";
@@ -124,6 +133,10 @@ import {
 } from "./SendThreadMachine";
 import { throttlePresets } from "./ThrottlePresets";
 import { Transaction } from "./Transaction";
+import {
+	createTransportServiceRXMachine,
+	TransportServiceRXInterpreter,
+} from "./TransportServiceMachine";
 import {
 	checkForConfigUpdates,
 	installConfigUpdate,
@@ -310,8 +323,19 @@ export type SendSupervisedCommandOptions = SendCommandOptions &
 		  }
 	);
 
-// Strongly type the event emitter events
+interface TransportServiceSession {
+	fragmentSize: number;
+	interpreter: TransportServiceRXInterpreter;
+}
 
+interface Sessions {
+	/** A map of all current Transport Service sessions that may still receive updates */
+	transportService: Map<number, TransportServiceSession>;
+	/** A map of all current supervision sessions that may still receive updates */
+	supervision: Map<number, SupervisionUpdateHandler>;
+}
+
+// Strongly type the event emitter events
 export interface DriverEventCallbacks {
 	"driver ready": () => void;
 	"all nodes ready": () => void;
@@ -337,8 +361,17 @@ export class Driver extends TypedEventEmitter<DriverEventCallbacks> {
 	/** A map of awaited commands */
 	private awaitedCommands: AwaitedCommandEntry[] = [];
 
-	/** A map of all current supervision sessions that may still receive updates */
-	private supervisionSessions = new Map<number, SupervisionUpdateHandler>();
+	/** A map of Node ID -> ongoing sessions */
+	private nodeSessions = new Map<number, Sessions>();
+	private ensureNodeSessions(nodeId: number): Sessions {
+		if (!this.nodeSessions.has(nodeId)) {
+			this.nodeSessions.set(nodeId, {
+				transportService: new Map(),
+				supervision: new Map(),
+			});
+		}
+		return this.nodeSessions.get(nodeId)!;
+	}
 
 	public readonly cacheDir: string;
 
@@ -1561,6 +1594,7 @@ export class Driver extends TypedEventEmitter<DriverEventCallbacks> {
 
 		// If the message could be decoded, forward it to the send thread
 		if (msg) {
+			let wasMessageLogged = false;
 			if (isCommandClassContainer(msg)) {
 				// SecurityCCCommandEncapsulationNonceGet is two commands in one, but
 				// we're not set up to handle things like this. Reply to the nonce get
@@ -1572,12 +1606,36 @@ export class Driver extends TypedEventEmitter<DriverEventCallbacks> {
 					void msg.getNodeUnsafe()?.handleSecurityNonceGet();
 				}
 
+				// Transport Service commands must be handled before assembling partial CCs
+				if (isTransportServiceEncapsulation(msg.command)) {
+					// Log Transport Service commands before doing anything else
+					this.driverLog.logMessage(msg, {
+						secondaryTags: ["partial"],
+						direction: "inbound",
+					});
+					wasMessageLogged = true;
+
+					void this.handleTransportServiceCommand(msg.command).catch(
+						() => {
+							// Don't care about errors in incoming transport service commands
+						},
+					);
+				}
+
 				// Assemble partial CCs on the driver level. Only forward complete messages to the send thread machine
 				if (!this.assemblePartialCCs(msg)) return;
+				// Transport Service CC can be eliminated from the encapsulation stack, since it is always the outermost CC
+				if (isTransportServiceEncapsulation(msg.command)) {
+					msg.command = msg.command.encapsulated;
+					// Now we do want to log the command again, so we can see what was inside
+					wasMessageLogged = false;
+				}
 			}
 
 			try {
-				this.driverLog.logMessage(msg, { direction: "inbound" });
+				if (!wasMessageLogged) {
+					this.driverLog.logMessage(msg, { direction: "inbound" });
+				}
 
 				if (process.env.NODE_ENV !== "test") {
 					// Enrich error data in case something goes wrong
@@ -1751,43 +1809,68 @@ It is probably asleep, moving its messages to the wakeup queue.`,
 	}
 
 	private partialCCSessions = new Map<string, CommandClass[]>();
+	private getPartialCCSession(
+		command: CommandClass,
+		createIfMissing: false,
+	): { partialSessionKey: string; session?: CommandClass[] } | undefined;
+	private getPartialCCSession(
+		command: CommandClass,
+		createIfMissing: true,
+	): { partialSessionKey: string; session: CommandClass[] } | undefined;
+	private getPartialCCSession(
+		command: CommandClass,
+		createIfMissing: boolean,
+	): { partialSessionKey: string; session?: CommandClass[] } | undefined {
+		const sessionId = command.getPartialCCSessionId();
+
+		if (sessionId) {
+			// This CC belongs to a partial session
+			const partialSessionKey = JSON.stringify({
+				nodeId: command.nodeId,
+				ccId: command.ccId,
+				ccCommand: command.ccCommand!,
+				...sessionId,
+			});
+			if (
+				createIfMissing &&
+				!this.partialCCSessions.has(partialSessionKey)
+			) {
+				this.partialCCSessions.set(partialSessionKey, []);
+			}
+			return {
+				partialSessionKey,
+				session: this.partialCCSessions.get(partialSessionKey),
+			};
+		}
+	}
 	/**
 	 * Assembles partial CCs of in a message body. Returns `true` when the message is complete and can be handled further.
 	 * If the message expects another partial one, this returns `false`.
 	 */
 	private assemblePartialCCs(msg: Message & ICommandClassContainer): boolean {
 		let command: CommandClass | undefined = msg.command;
-		let sessionId: Record<string, any> | undefined;
 		// We search for the every CC that provides us with a session ID
 		// There might be newly-completed CCs that contain a partial CC,
 		// so investigate the entire CC encapsulation stack.
 		while (true) {
-			sessionId = command.getPartialCCSessionId();
-
-			if (sessionId) {
+			const { partialSessionKey, session } =
+				this.getPartialCCSession(command, true) ?? {};
+			if (session) {
 				// This CC belongs to a partial session
-				const partialSessionKey = JSON.stringify({
-					nodeId: msg.getNodeId()!,
-					ccId: msg.command.ccId,
-					ccCommand: msg.command.ccCommand!,
-					...sessionId,
-				});
-				if (!this.partialCCSessions.has(partialSessionKey)) {
-					this.partialCCSessions.set(partialSessionKey, []);
-				}
-				const session = this.partialCCSessions.get(partialSessionKey)!;
-				if (command.expectMoreMessages()) {
+				if (command.expectMoreMessages(session)) {
 					// this is not the final one, store it
 					session.push(command);
-					// and don't handle the command now
-					this.driverLog.logMessage(msg, {
-						secondaryTags: ["partial"],
-						direction: "inbound",
-					});
+					if (!isTransportServiceEncapsulation(msg.command)) {
+						// and don't handle the command now
+						this.driverLog.logMessage(msg, {
+							secondaryTags: ["partial"],
+							direction: "inbound",
+						});
+					}
 					return false;
 				} else {
 					// this is the final one, merge the previous responses
-					this.partialCCSessions.delete(partialSessionKey);
+					this.partialCCSessions.delete(partialSessionKey!);
 					try {
 						command.mergePartialCCs(session);
 					} catch (e: unknown) {
@@ -1835,6 +1918,119 @@ It is probably asleep, moving its messages to the wakeup queue.`,
 			}
 		}
 		return true;
+	}
+
+	/** Is called when a Transport Service command is received */
+	private async handleTransportServiceCommand(
+		command:
+			| TransportServiceCCFirstSegment
+			| TransportServiceCCSubsequentSegment,
+	): Promise<void> {
+		const nodeSessions = this.ensureNodeSessions(command.nodeId);
+		// If this command belongs to an existing session, just forward it to the state machine
+		const transportSession = nodeSessions.transportService.get(
+			command.sessionId,
+		);
+		if (command instanceof TransportServiceCCFirstSegment) {
+			// This is the first message in a sequence. Create or re-initialize the session
+			// We don't delete finished sessions when the last message is received in order to be able to
+			// handle when the SegmentComplete message gets lost. As soon as the node initializes a new session,
+			// we do know that the previous one is finished.
+			if (transportSession) {
+				transportSession.interpreter.stop();
+			}
+			nodeSessions.transportService.clear();
+
+			this.controllerLog.logNode(command.nodeId, {
+				message: `Beginning Transport Service RX session #${command.sessionId}...`,
+				level: "debug",
+				direction: "inbound",
+			});
+
+			const RXStateMachine = createTransportServiceRXMachine(
+				{
+					requestMissingSegment: async (index: number) => {
+						this.controllerLog.logNode(command.nodeId, {
+							message: `Transport Service RX session #${command.sessionId}: Segment ${index} missing - requesting it...`,
+							level: "debug",
+							direction: "outbound",
+						});
+						const cc = new TransportServiceCCSegmentRequest(this, {
+							nodeId: command.nodeId,
+							sessionId: command.sessionId,
+							datagramOffset:
+								index * transportSession!.fragmentSize,
+						});
+						await this.sendCommand(cc, {
+							maxSendAttempts: 1,
+							priority: MessagePriority.Handshake,
+						});
+					},
+					sendSegmentsComplete: async () => {
+						this.controllerLog.logNode(command.nodeId, {
+							message: `Transport Service RX session #${command.sessionId} complete`,
+							level: "debug",
+							direction: "outbound",
+						});
+						const cc = new TransportServiceCCSegmentComplete(this, {
+							nodeId: command.nodeId,
+							sessionId: command.sessionId,
+						});
+						await this.sendCommand(cc, {
+							maxSendAttempts: 1,
+							priority: MessagePriority.Handshake,
+						});
+					},
+				},
+				{
+					// TODO: Figure out how to know which timeout is the correct one. For now use the larger one
+					missingSegmentTimeout:
+						TransportServiceTimeouts.requestMissingSegmentR2,
+					numSegments: Math.ceil(
+						command.datagramSize / command.partialDatagram.length,
+					),
+				},
+			);
+
+			const interpreter = interpret(RXStateMachine).start();
+			nodeSessions.transportService.set(command.sessionId, {
+				fragmentSize: command.partialDatagram.length,
+				interpreter,
+			});
+
+			interpreter.onTransition((state) => {
+				if (state.changed && state.value === "failure") {
+					this.controllerLog.logNode(command.nodeId, {
+						message: `Transport Service RX session #${command.sessionId} failed`,
+						level: "error",
+						direction: "none",
+					});
+					// TODO: Update statistics
+					interpreter.stop();
+					nodeSessions.transportService.delete(command.sessionId);
+				}
+			});
+		} else {
+			// This is a subsequent message in a sequence. Just forward it to the state machine if there is one
+			if (transportSession) {
+				transportSession.interpreter.send({
+					type: "segment",
+					index: Math.floor(
+						command.datagramOffset / transportSession.fragmentSize,
+					),
+				});
+			} else {
+				// This belongs to a session we don't know... tell the sending node to try again
+				const cc = new TransportServiceCCSegmentWait(this, {
+					nodeId: command.nodeId,
+					pendingSegments: 0,
+				});
+				await this.sendCommand(cc, {
+					maxSendAttempts: 1,
+					priority: MessagePriority.Handshake,
+				});
+			}
+		}
 	}
 
 	/**
@@ -2011,6 +2207,7 @@ ${handlers.length} left`,
 			}
 
 			const node = this.controller.nodes.get(nodeId)!;
+			const nodeSessions = this.nodeSessions.get(nodeId);
 			// Check if we need to handle the command ourselves
 			if (
 				msg.command.ccId === CommandClasses["Device Reset Locally"] &&
@@ -2032,7 +2229,7 @@ ${handlers.length} left`,
 			} else if (
 				msg.command.ccId === CommandClasses.Supervision &&
 				msg.command instanceof SupervisionCCReport &&
-				this.supervisionSessions.has(msg.command.sessionId)
+				nodeSessions?.supervision.has(msg.command.sessionId)
 			) {
 				// Supervision commands are handled here
 				this.controllerLog.logNode(msg.command.nodeId, {
@@ -2041,13 +2238,13 @@ ${handlers.length} left`,
 				});
 
 				// Call the update handler
-				this.supervisionSessions.get(msg.command.sessionId)!(
+				nodeSessions.supervision.get(msg.command.sessionId)!(
 					msg.command.status,
 					msg.command.duration,
 				);
 				// If this was a final report, remove the handler
 				if (!msg.command.moreUpdatesFollow) {
-					this.supervisionSessions.delete(msg.command.sessionId);
+					nodeSessions.supervision.delete(msg.command.sessionId);
 				}
 			} else {
 				// check if someone is waiting for this command
@@ -2445,12 +2642,18 @@ ${handlers.length} left`,
 			requestStatusUpdates: false,
 		},
 	): Promise<SupervisionResult | undefined> {
+		const nodeId = command.nodeId;
+		if (typeof nodeId !== "number") {
+			throw new ZWaveError(
+				`Sending a supervised command is only supported with singlecast!`,
+				ZWaveErrorCodes.CC_NotSupported,
+			);
+		}
+
 		// Check if the target supports this command
 		if (!command.getNode()?.supportsCC(CommandClasses.Supervision)) {
 			throw new ZWaveError(
-				`Node ${
-					command.nodeId as number
-				} does not support the Supervision CC!`,
+				`Node ${nodeId} does not support the Supervision CC!`,
 				ZWaveErrorCodes.CC_NotSupported,
 			);
 		}
@@ -2470,7 +2673,7 @@ ${handlers.length} left`,
 
 		// If future updates are expected, listen for them
 		if (options.requestStatusUpdates && resp.moreUpdatesFollow) {
-			this.supervisionSessions.set(
+			this.ensureNodeSessions(nodeId).supervision.set(
 				(command as SupervisionCCGet).sessionId,
 				options.onUpdate,
 			);

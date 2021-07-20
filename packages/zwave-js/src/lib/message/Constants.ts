@@ -1,3 +1,5 @@
+// TODO: The "Handshake" priority should be called differently
+
 /** The priority of messages, sorted from high (0) to low (>0) */
 export enum MessagePriority {
 	// Handshake messages have the highest priority because they are part of other transactions
