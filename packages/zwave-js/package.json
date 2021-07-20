@@ -10,6 +10,16 @@
     "./*": "./build/*.js"
   },
   "types": "build/index.d.ts",
+  "typesVersions": {
+    "*": {
+      "build/index.d.ts": [
+        "build/index.d.ts"
+      ],
+      "*": [
+        "build/*"
+      ]
+    }
+  },
   "files": [
     "build/**/*.{js,d.ts,map}"
   ],
