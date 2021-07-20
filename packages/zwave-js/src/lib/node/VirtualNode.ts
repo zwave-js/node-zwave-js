@@ -4,7 +4,7 @@ import {
 	ZWaveError,
 	ZWaveErrorCodes,
 } from "@zwave-js/core";
-import type { CCAPI } from "../commandclass/API";
+import type { CCAPI, SetValueAPIOptions } from "../commandclass/API";
 import type { Driver } from "../driver/Driver";
 import type { ZWaveNode } from "./Node";
 import { VirtualEndpoint } from "./VirtualEndpoint";
@@ -32,7 +32,11 @@ export class VirtualNode extends VirtualEndpoint {
 	 * Updates a value for a given property of a given CommandClass.
 	 * This will communicate with the physical node(s) this virtual node represents!
 	 */
-	public async setValue(valueId: ValueID, value: unknown): Promise<boolean> {
+	public async setValue(
+		valueId: ValueID,
+		value: unknown,
+		options?: SetValueAPIOptions,
+	): Promise<boolean> {
 		// Try to retrieve the corresponding CC API
 		try {
 			// Access the CC API by name
@@ -50,6 +54,7 @@ export class VirtualNode extends VirtualEndpoint {
 					propertyKey: valueId.propertyKey,
 				},
 				value,
+				options,
 			);
 			if (api.isSetValueOptimistic(valueId)) {
 				// If the call did not throw, assume that the call was successful and remember the new value
