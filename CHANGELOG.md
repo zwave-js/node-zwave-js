@@ -5,6 +5,10 @@
 	Add placeholder for next release with `wip` snippet
   ## __WORK IN PROGRESS__
 -->
+## __WORK IN PROGRESS__
+### Bugfixes
+* Corrected the interview order of non-application CCs vs. application CCs on the root endpoint
+
 ## 8.0.2 (2021-07-20)
 ### Bugfixes
 * When creating the fallback endpoint association on the root endpoint, an existing node association is now removed first

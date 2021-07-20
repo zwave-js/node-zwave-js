@@ -1,7 +1,11 @@
 import {
+	applicationCCs,
 	assertZWaveError,
 	CommandClasses,
 	CommandClassInfo,
+	getCCName,
+	nonApplicationCCs,
+	topologicalSort,
 	ValueDB,
 	ValueID,
 	ValueMetadata,
@@ -12,6 +16,7 @@ import {
 	BinarySwitchCCReport,
 	BinarySwitchCommand,
 } from "../commandclass/BinarySwitchCC";
+import { getCCConstructor } from "../commandclass/CommandClass";
 import {
 	EntryControlCCNotification,
 	EntryControlCommand,
@@ -393,6 +398,75 @@ describe("lib/node/Node", () => {
 			beforeEach(() => fakeDriver.sendMessage.mockClear());
 
 			it.todo("test that the CC interview methods are called");
+
+			it.only("the CC interviews happen in the correct order", () => {
+				require("../commandclass/index");
+				expect(getCCConstructor(49)).not.toBeUndefined();
+
+				const node = new ZWaveNode(2, fakeDriver as any);
+				const CCs = [
+					CommandClasses["Z-Wave Plus Info"],
+					CommandClasses["Device Reset Locally"],
+					CommandClasses["Firmware Update Meta Data"],
+					CommandClasses["CRC-16 Encapsulation"],
+					CommandClasses["Multi Channel"],
+					CommandClasses["Multilevel Switch"],
+					CommandClasses.Configuration,
+					CommandClasses["Multilevel Sensor"],
+					CommandClasses.Meter,
+					CommandClasses.Protection,
+					CommandClasses.Association,
+					CommandClasses["Multi Channel Association"],
+					CommandClasses["Association Group Information"],
+					CommandClasses.Notification,
+					CommandClasses["Manufacturer Specific"],
+					CommandClasses.Version,
+				];
+				for (const cc of CCs) {
+					node.addCC(cc, { isSupported: true, version: 1 });
+				}
+
+				const rootInterviewGraphPart1 = node.buildCCInterviewGraph([
+					CommandClasses.Security,
+					CommandClasses["Security 2"],
+					CommandClasses["Manufacturer Specific"],
+					CommandClasses.Version,
+					...applicationCCs,
+				]);
+				const rootInterviewGraphPart2 = node.buildCCInterviewGraph([
+					...nonApplicationCCs,
+				]);
+
+				const rootInterviewOrderPart1 = topologicalSort(
+					rootInterviewGraphPart1,
+				);
+				const rootInterviewOrderPart2 = topologicalSort(
+					rootInterviewGraphPart2,
+				);
+
+				expect(
+					rootInterviewOrderPart1.map((cc) => getCCName(cc)),
+				).toEqual([
+					"Z-Wave Plus Info",
+					"Device Reset Locally",
+					"Firmware Update Meta Data",
+					"CRC-16 Encapsulation",
+					"Multi Channel",
+					"Association",
+					"Multi Channel Association",
+					"Association Group Information",
+				]);
+				expect(
+					rootInterviewOrderPart2.map((cc) => getCCName(cc)),
+				).toEqual([
+					"Multilevel Switch",
+					"Configuration",
+					"Multilevel Sensor",
+					"Meter",
+					"Protection",
+					"Notification",
+				]);
+			});
 
 			// it("should not send anything if the node is the controller", async () => {
 			// 	// Temporarily make this node the controller node

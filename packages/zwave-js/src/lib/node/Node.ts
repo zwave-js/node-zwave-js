@@ -17,6 +17,7 @@ import {
 	Maybe,
 	MetadataUpdatedArgs,
 	NodeUpdatePayload,
+	nonApplicationCCs,
 	normalizeValueID,
 	sensorCCs,
 	timespan,
@@ -43,7 +44,6 @@ import {
 	stringify,
 	TypedEventEmitter,
 } from "@zwave-js/shared";
-import type { Comparer, CompareResult } from "alcalzone-shared/comparable";
 import { padStart } from "alcalzone-shared/strings";
 import { isArray, isObject } from "alcalzone-shared/typeguards";
 import { randomBytes } from "crypto";
@@ -1597,27 +1597,33 @@ protocol version:      ${this._protocolVersion}`;
 			this.hideBasicCCInFavorOfActuatorCCs();
 		}
 
-		// We determine the correct interview order of the remaining CCs by topologically sorting a dependency graph
-		const rootInterviewGraph = this.buildCCInterviewGraph([
+		// We determine the correct interview order of the remaining CCs by topologically sorting two dependency graph
+		// In order to avoid emitting unnecessary value events for the root endpoint,
+		// we defer the application CC interview until after the other endpoints have been interviewed
+		const rootInterviewGraphBeforeEndpoints = this.buildCCInterviewGraph([
 			CommandClasses.Security,
 			CommandClasses["Security 2"],
 			CommandClasses["Manufacturer Specific"],
 			CommandClasses.Version,
+			...applicationCCs,
 		]);
-		let rootInterviewOrder: CommandClasses[];
+		let rootInterviewOrderBeforeEndpoints: CommandClasses[];
 
-		// In order to avoid emitting unnecessary value events for the root endpoint,
-		// we defer the application CC interview until after the other endpoints have been interviewed
-		const deferApplicationCCs: Comparer<CommandClasses> = (cc1, cc2) => {
-			const cc1IsApplicationCC = applicationCCs.includes(cc1);
-			const cc2IsApplicationCC = applicationCCs.includes(cc2);
-			return ((cc1IsApplicationCC ? 1 : 0) -
-				(cc2IsApplicationCC ? 1 : 0)) as CompareResult;
-		};
+		const rootInterviewGraphAfterEndpoints = this.buildCCInterviewGraph([
+			CommandClasses.Security,
+			CommandClasses["Security 2"],
+			CommandClasses["Manufacturer Specific"],
+			CommandClasses.Version,
+			...nonApplicationCCs,
+		]);
+		let rootInterviewOrderAfterEndpoints: CommandClasses[];
+
 		try {
-			rootInterviewOrder = topologicalSort(
-				rootInterviewGraph,
-				deferApplicationCCs,
+			rootInterviewOrderBeforeEndpoints = topologicalSort(
+				rootInterviewGraphBeforeEndpoints,
+			);
+			rootInterviewOrderAfterEndpoints = topologicalSort(
+				rootInterviewGraphAfterEndpoints,
 			);
 		} catch (e) {
 			// This interview cannot be done
@@ -1628,11 +1634,7 @@ protocol version:      ${this._protocolVersion}`;
 		}
 
 		// Now that we know the correct order, do the interview in sequence
-		let rootCCIndex = 0;
-		for (; rootCCIndex < rootInterviewOrder.length; rootCCIndex++) {
-			const cc = rootInterviewOrder[rootCCIndex];
-			// Once we reach the application CCs, pause the root endpoint interview
-			if (applicationCCs.includes(cc)) break;
+		for (const cc of rootInterviewOrderBeforeEndpoints) {
 			const action = await interviewEndpoint(this, cc);
 			if (action === "continue") continue;
 			else if (typeof action === "boolean") return action;
@@ -1697,8 +1699,7 @@ protocol version:      ${this._protocolVersion}`;
 		}
 
 		// Continue with the application CCs for the root endpoint
-		for (; rootCCIndex < rootInterviewOrder.length; rootCCIndex++) {
-			const cc = rootInterviewOrder[rootCCIndex];
+		for (const cc of rootInterviewOrderAfterEndpoints) {
 			const action = await interviewEndpoint(this, cc);
 			if (action === "continue") continue;
 			else if (typeof action === "boolean") return action;
