@@ -52,13 +52,17 @@ As you may already know, if you're planning to market a product or software with
 ### Features
 * Support `invokeCCAPI` and `supportsCCAPI` on virtual nodes/endpoints (multicast/broadcast)
 * Added node method `getFirmwareUpdateCapabilities` to check which features of the `Firmware Update CC` a node supports before attempting the update
+* Add support for receiving `Transport Service CC V2` encapsulated commands
 
 ### Bugfixes
 * Improved error messages that explain why a firmware update failed
+* Multicast/Broadcast `setValue` now also accepts an options object
+* `start/stopLevelChange` now correctly works for multicast/broadcast
 
 ### Config file changes
 * Add Heatit ZM Single Relay 16A
 * Add metadata to Evolve products
+* Add config file for Aeotec ZWA011
 
 ### Changes under the hood
 * Updated several dependencies
