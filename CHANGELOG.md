@@ -5,7 +5,7 @@
 	Add placeholder for next release with `wip` snippet
   ## __WORK IN PROGRESS__
 -->
-## __WORK IN PROGRESS__
+## 8.0.4 (2021-07-21)
 ### Bugfixes
 * Multicast/Broadcast `start/stopLevelChange` now also works correctly via the `setValue` API
 * Fixed validation logic for the firmware update target to accept target 0 again
