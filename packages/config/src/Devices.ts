@@ -42,6 +42,7 @@ export interface DeviceConfigIndexEntry {
 	productType: string;
 	productId: string;
 	firmwareVersion: FirmwareVersionRange;
+	rootDir?: string;
 	filename: string;
 }
 
@@ -53,6 +54,7 @@ export interface FulltextDeviceConfigIndexEntry {
 	productType: string;
 	productId: string;
 	firmwareVersion: FirmwareVersionRange;
+	rootDir?: string;
 	filename: string;
 }
 
@@ -116,8 +118,8 @@ async function generateIndex<T extends Record<string, unknown>>(
 	devicesDir: string,
 	extractIndexEntries: (config: DeviceConfig) => T[],
 	logger?: ConfigLogger,
-): Promise<(T & { filename: string })[]> {
-	const index: (T & { filename: string })[] = [];
+): Promise<(T & { filename: string; rootDir?: string })[]> {
+	const index: (T & { filename: string; rootDir?: string })[] = [];
 
 	const configFiles = await enumFilesRecursive(
 		devicesDir,
@@ -135,14 +137,22 @@ async function generateIndex<T extends Record<string, unknown>>(
 		// Try parsing the file
 		try {
 			const config = await DeviceConfig.from(file, {
-				relativeTo: devicesDir,
+				rootDir: devicesDir,
+				relative: true,
 			});
 			// Add the file to the index
 			index.push(
-				...extractIndexEntries(config).map((entry) => ({
-					...entry,
-					filename: relativePath,
-				})),
+				...extractIndexEntries(config).map((entry) => {
+					const ret: T & { filename: string; rootDir?: string } = {
+						...entry,
+						filename: relativePath,
+					};
+					// Only add the root dir to the index if necessary
+					if (devicesDir !== embeddedDevicesDir) {
+						ret.rootDir = devicesDir;
+					}
+					return ret;
+				}),
 			);
 		} catch (e: unknown) {
 			const message = `Error parsing config file ${relativePath}: ${
@@ -257,6 +267,7 @@ export async function generatePriorityDeviceIndex(
 					productType: formatId(dev.productType),
 					productId: formatId(dev.productId),
 					firmwareVersion: config.firmwareVersion,
+					rootDir: deviceConfigPriorityDir,
 				})),
 			logger,
 		)
@@ -318,6 +329,7 @@ export async function loadFulltextDeviceIndexInternal(
 				productType: formatId(dev.productType),
 				productId: formatId(dev.productId),
 				firmwareVersion: config.firmwareVersion,
+				rootDir: embeddedDevicesDir,
 			})),
 		logger,
 	);
@@ -355,18 +367,16 @@ export class ConditionalDeviceConfig {
 	public static async from(
 		filename: string,
 		options: {
-			relativeTo?: string;
-		} = {},
+			rootDir: string;
+			relative?: boolean;
+		},
 	): Promise<ConditionalDeviceConfig> {
-		const { relativeTo } = options;
+		const { relative, rootDir } = options;
 
-		const relativePath = relativeTo
-			? path.relative(relativeTo, filename).replace(/\\/g, "/")
+		const relativePath = relative
+			? path.relative(rootDir, filename).replace(/\\/g, "/")
 			: filename;
-		const json = await readJsonWithTemplate(
-			filename,
-			relativeTo ?? embeddedDevicesDir,
-		);
+		const json = await readJsonWithTemplate(filename, options.rootDir);
 		return new ConditionalDeviceConfig(relativePath, json);
 	}
 
@@ -685,9 +695,10 @@ export class DeviceConfig {
 	public static async from(
 		filename: string,
 		options: {
-			relativeTo?: string;
+			rootDir: string;
+			relative?: boolean;
 			deviceId?: DeviceID;
-		} = {},
+		},
 	): Promise<DeviceConfig> {
 		const ret = await ConditionalDeviceConfig.from(filename, options);
 		return ret.evaluate(options.deviceId);
