@@ -2860,21 +2860,26 @@ protocol version:      ${this._protocolVersion}`;
 				ZWaveErrorCodes.Controller_NodeTimeout,
 			);
 		}
-		if (target === 0 && !meta.firmwareUpgradable) {
-			throw new ZWaveError(
-				`Failed to start the update: The Z-Wave chip firmware is not upgradable!`,
-				ZWaveErrorCodes.FirmwareUpdateCC_NotUpgradable,
-			);
-		} else if (version < 3 && target !== 0) {
-			throw new ZWaveError(
-				`Failed to start the update: The node does not support upgrading a different firmware target than 0!`,
-				ZWaveErrorCodes.FirmwareUpdateCC_TargetNotFound,
-			);
-		} else if (!meta.additionalFirmwareIDs.includes(target)) {
-			throw new ZWaveError(
-				`Failed to start the update: Firmware target #${target} not found on this node!`,
-				ZWaveErrorCodes.FirmwareUpdateCC_TargetNotFound,
-			);
+
+		if (target === 0) {
+			if (!meta.firmwareUpgradable) {
+				throw new ZWaveError(
+					`Failed to start the update: The Z-Wave chip firmware is not upgradable!`,
+					ZWaveErrorCodes.FirmwareUpdateCC_NotUpgradable,
+				);
+			}
+		} else {
+			if (version < 3) {
+				throw new ZWaveError(
+					`Failed to start the update: The node does not support upgrading a different firmware target than 0!`,
+					ZWaveErrorCodes.FirmwareUpdateCC_TargetNotFound,
+				);
+			} else if (!meta.additionalFirmwareIDs.includes(target)) {
+				throw new ZWaveError(
+					`Failed to start the update: Firmware target #${target} not found on this node!`,
+					ZWaveErrorCodes.FirmwareUpdateCC_TargetNotFound,
+				);
+			}
 		}
 
 		// Determine the fragment size
