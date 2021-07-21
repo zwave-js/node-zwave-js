@@ -14,7 +14,7 @@ export type Constructor<T = {}> = new (...args: any[]) => T;
 export type TypedClassDecorator<TTarget extends Object> = <
 	// wotan-disable-next-line no-misused-generics
 	T extends TTarget,
-	TConstructor extends new (...args: any[]) => T
+	TConstructor extends new (...args: any[]) => T,
 >(
 	apiClass: TConstructor,
 ) => TConstructor | void;
@@ -34,4 +34,3 @@ export type OnlyMethods<T> = {
 };
 
 export type IsAny<T> = 0 extends 1 & T ? true : false;
-

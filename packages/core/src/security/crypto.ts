@@ -162,9 +162,10 @@ export function computePRK(
 const constantTE = Buffer.alloc(15, 0x88);
 
 /** Derives the temporary auth, encryption and nonce keys from the PRK */
-export function deriveTempKeys(
-	PRK: Buffer,
-): { tempKeyCCM: Buffer; tempPersonalizationString: Buffer } {
+export function deriveTempKeys(PRK: Buffer): {
+	tempKeyCCM: Buffer;
+	tempPersonalizationString: Buffer;
+} {
 	const T1 = computeCMAC(
 		Buffer.concat([constantTE, Buffer.from([0x01])]),
 		PRK,
@@ -186,9 +187,11 @@ export function deriveTempKeys(
 const constantNK = Buffer.alloc(15, 0x55);
 
 /** Derives the CCM, MPAN keys and the personalization string from the permanent network key (PNK) */
-export function deriveNetworkKeys(
-	PNK: Buffer,
-): { keyCCM: Buffer; keyMPAN: Buffer; personalizationString: Buffer } {
+export function deriveNetworkKeys(PNK: Buffer): {
+	keyCCM: Buffer;
+	keyMPAN: Buffer;
+	personalizationString: Buffer;
+} {
 	const T1 = computeCMAC(
 		Buffer.concat([constantNK, Buffer.from([0x01])]),
 		PNK,
@@ -238,4 +241,54 @@ export function deriveMEI(noncePRK: Buffer): Buffer {
 		noncePRK,
 	);
 	return Buffer.concat([T1, T2]);
+}
+
+export const SECURITY_S2_AUTH_TAG_LENGTH = 8;
+
+export function encryptAES128CCM(
+	key: Buffer,
+	iv: Buffer,
+	plaintext: Buffer,
+	additionalData: Buffer,
+	authTagLength: number,
+): { ciphertext: Buffer; authTag: Buffer } {
+	// prepare encryption
+	const algorithm = `aes-128-ccm`;
+	const cipher = crypto.createCipheriv(algorithm, key, iv, { authTagLength });
+	cipher.setAAD(additionalData, { plaintextLength: plaintext.length });
+
+	// do encryption
+	const ciphertext = cipher.update(plaintext);
+	cipher.final();
+	const authTag = cipher.getAuthTag();
+
+	return { ciphertext, authTag };
+}
+
+export function decryptAES128CCM(
+	key: Buffer,
+	iv: Buffer,
+	ciphertext: Buffer,
+	additionalData: Buffer,
+	authTag: Buffer,
+): { plaintext: Buffer; authOK: boolean } {
+	// prepare decryption
+	const algorithm = `aes-128-ccm`;
+	const decipher = crypto.createDecipheriv(algorithm, key, iv, {
+		authTagLength: authTag.length,
+	});
+	decipher.setAuthTag(authTag);
+	decipher.setAAD(additionalData, { plaintextLength: ciphertext.length });
+
+	// do decryption
+	const plaintext = decipher.update(ciphertext);
+	// verify decryption
+	let authOK = false;
+	try {
+		decipher.final();
+		authOK = true;
+	} catch (e) {
+		/* nothing to do */
+	}
+	return { plaintext, authOK };
 }

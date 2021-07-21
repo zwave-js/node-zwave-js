@@ -13,11 +13,10 @@ const METADATA_S2Extension = Symbol("S2Extension");
 
 type S2ExtensionMap = Map<S2ExtensionType, Constructable<Security2Extension>>;
 
-export type Constructable<
-	T extends Security2Extension
-> = typeof Security2Extension & {
-	new (options: Security2ExtensionOptions): T;
-};
+export type Constructable<T extends Security2Extension> =
+	typeof Security2Extension & {
+		new (options: Security2ExtensionOptions): T;
+	};
 
 /**
  * Looks up the S2 extension constructor for a given S2 extension type
@@ -47,7 +46,7 @@ export function extensionType(
 			new Map();
 		map.set(
 			type,
-			(extensionClass as unknown) as Constructable<Security2Extension>,
+			extensionClass as unknown as Constructable<Security2Extension>,
 		);
 		Reflect.defineMetadata(
 			METADATA_S2ExtensionMap,
@@ -140,6 +139,11 @@ export class Security2Extension {
 	/** Returns the number of bytes the first extension in the buffer occupies */
 	public static getExtensionLength(data: Buffer): number {
 		return data[0];
+	}
+
+	/** Returns the number of bytes the serialized extension will occupy */
+	public computeLength(): number {
+		return 2 + this.payload.length;
 	}
 
 	/**
