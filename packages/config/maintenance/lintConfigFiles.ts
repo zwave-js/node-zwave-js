@@ -177,12 +177,15 @@ async function lintDevices(): Promise<void> {
 	}
 
 	for (const file of uniqueFiles) {
-		const filePath = path.join(configDir, "devices", file);
+		const rootDir = path.join(configDir, "devices");
+		const filePath = path.join(rootDir, file);
 
 		// Try parsing the file
 		let conditionalConfig: ConditionalDeviceConfig;
 		try {
-			conditionalConfig = await ConditionalDeviceConfig.from(filePath);
+			conditionalConfig = await ConditionalDeviceConfig.from(filePath, {
+				rootDir,
+			});
 		} catch (e) {
 			addError(file, e.message);
 			continue;
@@ -945,7 +948,7 @@ The first occurence of this device is in file config/devices/${index[firstIndex]
 
 async function lintNamedScales(): Promise<void> {
 	await configManager.loadNamedScales();
-	const definitions = configManager["namedScales"];
+	const definitions = configManager.namedScales;
 
 	if (!definitions.has("temperature")) {
 		throw new Error(`Named scale "temperature" is missing!`);

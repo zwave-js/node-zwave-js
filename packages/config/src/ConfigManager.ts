@@ -21,6 +21,7 @@ import {
 	ConditionalDeviceConfig,
 	DeviceConfig,
 	DeviceConfigIndex,
+	embeddedDevicesDir,
 	FulltextDeviceConfigIndex,
 	generatePriorityDeviceIndex,
 	loadDeviceIndexInternal,
@@ -573,11 +574,14 @@ export class ConfigManager {
 			if (!(await pathExists(filePath))) return;
 
 			try {
-				return await ConditionalDeviceConfig.from(filePath);
+				return await ConditionalDeviceConfig.from(filePath, {
+					// When looking for device files, fall back to the embedded config dir
+					rootDir: indexEntry.rootDir ?? embeddedDevicesDir,
+				});
 			} catch (e) {
 				if (process.env.NODE_ENV !== "test") {
 					this.logger.print(
-						`Error loading device config ${filePath}`,
+						`Error loading device config ${filePath}: ${e}`,
 						"error",
 					);
 				}
