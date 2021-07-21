@@ -5,6 +5,12 @@
 	Add placeholder for next release with `wip` snippet
   ## __WORK IN PROGRESS__
 -->
+## __WORK IN PROGRESS__
+### Bugfixes
+* Multicast/Broadcast `start/stopLevelChange` now also works correctly via the `setValue` API
+* Fixed validation logic for the firmware update target to accept target 0 again
+* Fixed `$import` validation logic for device config files from the `deviceConfigPriorityDir`
+
 ## 8.0.3 (2021-07-20)
 ### Bugfixes
 * Corrected the interview order of non-application CCs vs. application CCs on the root endpoint
