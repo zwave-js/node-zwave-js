@@ -209,6 +209,7 @@ interface DeviceConfigIndexEntry {
 	productType: string;
 	productId: string;
 	firmwareVersion: FirmwareVersionRange;
+	rootDir?: string;
 	filename: string;
 }
 ```
@@ -242,6 +243,7 @@ interface FulltextDeviceConfigIndexEntry {
 	productType: string;
 	productId: string;
 	firmwareVersion: FirmwareVersionRange;
+	rootDir?: string;
 	filename: string;
 }
 ```
