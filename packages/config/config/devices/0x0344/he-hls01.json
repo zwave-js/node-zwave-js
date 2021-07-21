@@ -1,0 +1,455 @@
+{
+	"manufacturer": "HELTUN",
+	"manufacturerId": "0x0344",
+	"label": "HE-HLS01",
+	"description": "High Load Switch",
+	"devices": [
+		{
+			"productType": "0x0004",
+			"productId": "0x000a"
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"supportsZWavePlus": true,
+	"paramInformation": {
+		"1": {
+			"label": "Frequency Region",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 9,
+			"defaultValue": 0,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "EU (868.4 MHz, 869.85 MHz)",
+					"value": 0
+				},
+				{
+					"label": "US (908.4 MHz, 916.0 MHz)",
+					"value": 1
+				},
+				{
+					"label": "AU (919.8 MHz, 921.4 MHz)",
+					"value": 2
+				},
+				{
+					"label": "HO (919.8 MHz)",
+					"value": 3
+				},
+				{
+					"label": "In (865.2 MHz)",
+					"value": 4
+				},
+				{
+					"label": "IL (916.0 MHz)",
+					"value": 5
+				},
+				{
+					"label": "RU (869.0 MHz)",
+					"value": 6
+				},
+				{
+					"label": "Cn (868.4 MHz)",
+					"value": 7
+				},
+				{
+					"label": "JP (922.5 MHz, 923.9 MHz, 926.3 MHz)",
+					"value": 8
+				},
+				{
+					"label": "Or (920.9 MHz, 921.7 MHz, 923.1 MHz)",
+					"value": 9
+				}
+			]
+		},
+		"3": {
+			"label": "Hardware and Software Versions",
+			"valueSize": 4,
+			"minValue": 0,
+			"maxValue": 0,
+			"defaultValue": 0,
+			"readOnly": true,
+			"allowManualEntry": false
+		},
+		"4": {
+			"label": "Energy Consumption, kW",
+			"unit": "kW",
+			"valueSize": 4,
+			"minValue": 0,
+			"maxValue": 0,
+			"defaultValue": 0,
+			"readOnly": true,
+			"allowManualEntry": false
+		},
+		"7": {
+			"label": "Relay output mode",
+			"description": "NO or NC",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 0,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Normally Open",
+					"value": 0
+				},
+				{
+					"label": "Normally Closed",
+					"value": 1
+				}
+			]
+		},
+		"10": {
+			"label": "Floor Sensor Resistance",
+			"description": "External Floor NTC temperature sensor resistance",
+			"unit": "kΩ",
+			"valueSize": 1,
+			"minValue": 1,
+			"maxValue": 100,
+			"defaultValue": 10
+		},
+		"16": {
+			"label": "Temperature Scale Mode",
+			"description": "Sets temperature unit (Celsius/Fahrenheit)",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 0,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Celsius",
+					"value": 0
+				},
+				{
+					"label": "Fahrenheit",
+					"value": 1
+				}
+			]
+		},
+		"17": {
+			"label": "Temperature Sensor Calibration",
+			"valueSize": 1,
+			"minValue": -100,
+			"maxValue": 100,
+			"defaultValue": 0
+		},
+		"19": {
+			"label": "Time correction by controller",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 1,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Disabled",
+					"value": 0
+				},
+				{
+					"label": "Enabled",
+					"value": 1
+				}
+			]
+		},
+		"21": {
+			"label": "Week day",
+			"description": "Manually set week day",
+			"valueSize": 1,
+			"minValue": 1,
+			"maxValue": 7,
+			"defaultValue": 1,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Monday",
+					"value": 1
+				},
+				{
+					"label": "Tuesday",
+					"value": 2
+				},
+				{
+					"label": "Wednesday",
+					"value": 3
+				},
+				{
+					"label": "Thursday",
+					"value": 4
+				},
+				{
+					"label": "Friday",
+					"value": 5
+				},
+				{
+					"label": "Saturday",
+					"value": 6
+				},
+				{
+					"label": "Sunday",
+					"value": 7
+				}
+			]
+		},
+		"22": {
+			"label": "Time",
+			"description": "Time: Hour and Minutes",
+			"unit": "HHMM",
+			"valueSize": 2,
+			"minValue": 0,
+			"maxValue": 2359,
+			"defaultValue": 0
+		},
+		"23": {
+			"label": "Auto On/Off",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 0,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Disabled",
+					"value": 0
+				},
+				{
+					"label": "Enabled",
+					"value": 1
+				}
+			]
+		},
+		"24": {
+			"label": "Auto Off Timeout",
+			"unit": "minutes",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 120,
+			"defaultValue": 5
+		},
+		"25": {
+			"label": "Auto On Reconnect Timeout",
+			"unit": "minutes",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 120,
+			"defaultValue": 0
+		},
+		"26": {
+			"label": "High Load Timeout Protection: Power Threshold",
+			"unit": "Watts",
+			"valueSize": 2,
+			"minValue": 100,
+			"maxValue": 3500,
+			"defaultValue": 0
+		},
+		"27": {
+			"label": "High Load Timeout Protection: Time Threshold",
+			"unit": "Watts",
+			"valueSize": 2,
+			"minValue": 1,
+			"maxValue": 1440,
+			"defaultValue": 0
+		},
+		"41": {
+			"label": "External input: Hold Control Mode",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 3,
+			"defaultValue": 2,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Hold function is disabled",
+					"value": 0
+				},
+				{
+					"label": "Operate like click (parameter 51)",
+					"value": 1
+				},
+				{
+					"label": "Momentary switch",
+					"value": 2
+				},
+				{
+					"label": "Reversed momentary switch",
+					"value": 3
+				}
+			]
+		},
+		"51": {
+			"label": "External Input: Click Control Mode",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 5,
+			"defaultValue": 1,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Click function disabled",
+					"value": 0
+				},
+				{
+					"label": "Toggle switch",
+					"value": 1
+				},
+				{
+					"label": "Relay switches to ON state only",
+					"value": 2
+				},
+				{
+					"label": "Relay switches to OFF state only",
+					"value": 3
+				},
+				{
+					"label": "Timer On>Off mode",
+					"value": 4
+				},
+				{
+					"label": "Time Off>On mode",
+					"value": 5
+				}
+			]
+		},
+		"71": {
+			"label": "Relay Timer Mode Duration",
+			"unit": "seconds",
+			"valueSize": 3,
+			"minValue": 0,
+			"maxValue": 43200,
+			"defaultValue": 0
+		},
+		"141": {
+			"label": "Energy Consumption Meter Consecutive Report Interval",
+			"unit": "minutes",
+			"valueSize": 1,
+			"minValue": 1,
+			"maxValue": 120,
+			"defaultValue": 10
+		},
+		"142": {
+			"label": "Energy Consumption Report Threshold",
+			"description": "Consumption difference to send to controller, %",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 50,
+			"defaultValue": 25
+		},
+		"143": {
+			"label": "Temperature sensor consecutive report interval",
+			"unit": "minutes",
+			"valueSize": 1,
+			"minValue": 1,
+			"maxValue": 120,
+			"defaultValue": 10
+		},
+		"144": {
+			"label": "Temperature report threshold",
+			"description": "Temperature difference to send to controller, value X 10",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 100,
+			"defaultValue": 2
+		},
+		"151": {
+			"label": "Device Failure Notifications",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 1,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Disabled",
+					"value": 0
+				},
+				{
+					"label": "Enabled",
+					"value": 1
+				}
+			]
+		},
+		"152": {
+			"label": "Temperature Rise Notification",
+			"description": ": We recommend setting the value of this Parameter lower than value of Parameter 153 (Overheat Protection).",
+			"valueSize": 2,
+			"minValue": 1,
+			"maxValue": 120,
+			"defaultValue": 1
+		},
+		"153": {
+			"label": "Overheat Protection & Notification",
+			"valueSize": 2,
+			"minValue": 0,
+			"maxValue": 120,
+			"defaultValue": 0
+		},
+		"154": {
+			"label": "Over-Current Notification",
+			"description": "Even if you turn off the notification, the device will switch Off the load when the current reaches 16A.",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 1,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Disabled",
+					"value": 0
+				},
+				{
+					"label": "Enabled",
+					"value": 1
+				}
+			]
+		},
+		"155": {
+			"label": "Over-Load Protection & Notification",
+			"description": "The value of this parameter can be set from 100 to 4000 in watts. Use the value 0 if there is a need to disable this function.",
+			"unit": "Watts",
+			"valueSize": 2,
+			"minValue": 0,
+			"maxValue": 4000,
+			"defaultValue": 3500
+		},
+		"156": {
+			"label": "Over-Voltage Protection & Notification",
+			"description": "The value of this parameter can be set from 120 to 280 in watts. Use the value 0 if there is a need to disable this function.",
+			"unit": "Volts",
+			"valueSize": 2,
+			"minValue": 0,
+			"maxValue": 280,
+			"defaultValue": 240
+		},
+		"157": {
+			"label": "Voltage Drop Protection & Notification",
+			"description": "The value of this parameter can be set from 80 to 240 in watts. Use the value 0 if there is a need to disable this function.",
+			"unit": "Volts",
+			"valueSize": 2,
+			"minValue": 0,
+			"maxValue": 240,
+			"defaultValue": 200
+		},
+		"158": {
+			"label": "Sparks Protection & Notification",
+			"valueSize": 2,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 1,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Disabled",
+					"value": 0
+				},
+				{
+					"label": "Enabled",
+					"value": 1
+				}
+			]
+		}
+	}
+}

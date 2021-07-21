@@ -1,0 +1,875 @@
+{
+	"manufacturer": "HELTUN",
+	"manufacturerId": "0x0344",
+	"label": "HE-RS01",
+	"description": "Relay Switch Quinto",
+	"devices": [
+		{
+			"productType": "0x0004",
+			"productId": "0x0009"
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"supportsZWavePlus": true,
+	"paramInformation": {
+		"1": {
+			"label": "Frequency Region",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 9,
+			"defaultValue": 0,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "EU (868.4 MHz, 869.85 MHz)",
+					"value": 0
+				},
+				{
+					"label": "US (908.4 MHz, 916.0 MHz)",
+					"value": 1
+				},
+				{
+					"label": "AU (919.8 MHz, 921.4 MHz)",
+					"value": 2
+				},
+				{
+					"label": "HO (919.8 MHz)",
+					"value": 3
+				},
+				{
+					"label": "In (865.2 MHz)",
+					"value": 4
+				},
+				{
+					"label": "IL (916.0 MHz)",
+					"value": 5
+				},
+				{
+					"label": "RU (869.0 MHz)",
+					"value": 6
+				},
+				{
+					"label": "Cn (868.4 MHz)",
+					"value": 7
+				},
+				{
+					"label": "JP (922.5 MHz, 923.9 MHz, 926.3 MHz)",
+					"value": 8
+				},
+				{
+					"label": "Or (920.9 MHz, 921.7 MHz, 923.1 MHz)",
+					"value": 9
+				}
+			]
+		},
+		"3": {
+			"label": "Hardware and Software Versions",
+			"valueSize": 4,
+			"minValue": 0,
+			"maxValue": 0,
+			"defaultValue": 0,
+			"readOnly": true,
+			"allowManualEntry": false
+		},
+		"4": {
+			"label": "Energy Consumption, kW",
+			"unit": "kW",
+			"valueSize": 4,
+			"minValue": 0,
+			"maxValue": 0,
+			"defaultValue": 0,
+			"readOnly": true,
+			"allowManualEntry": false
+		},
+		"7": {
+			"label": "Relay 1 Outputs NO/NC Mode",
+			"description": "The output type can be NO – normal open (no contact/voltage to switch the load OFF) or NC - normal close (output is contacted / there is a voltage to switch the load OFF)",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 0,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "NO",
+					"value": 0
+				},
+				{
+					"label": "NC",
+					"value": 1
+				}
+			]
+		},
+		"8": {
+			"label": "Relay 2 Outputs NO/NC Mode",
+			"description": "The output type can be NO – normal open (no contact/voltage to switch the load OFF) or NC - normal close (output is contacted / there is a voltage to switch the load OFF)",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 0,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "NO",
+					"value": 0
+				},
+				{
+					"label": "NC",
+					"value": 1
+				}
+			]
+		},
+		"9": {
+			"label": "Relay 3 Outputs NO/NC Mode",
+			"description": "The output type can be NO – normal open (no contact/voltage to switch the load OFF) or NC - normal close (output is contacted / there is a voltage to switch the load OFF)",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 0,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "NO",
+					"value": 0
+				},
+				{
+					"label": "NC",
+					"value": 1
+				}
+			]
+		},
+		"10": {
+			"label": "Relay 4 Outputs NO/NC Mode",
+			"description": "The output type can be NO – normal open (no contact/voltage to switch the load OFF) or NC - normal close (output is contacted / there is a voltage to switch the load OFF)",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 0,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "NO",
+					"value": 0
+				},
+				{
+					"label": "NC",
+					"value": 1
+				}
+			]
+		},
+		"11": {
+			"label": "Relay 5 Outputs NO/NC Mode",
+			"description": "The output type can be NO – normal open (no contact/voltage to switch the load OFF) or NC - normal close (output is contacted / there is a voltage to switch the load OFF)",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 0,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "NO",
+					"value": 0
+				},
+				{
+					"label": "NC",
+					"value": 1
+				}
+			]
+		},
+		"12": {
+			"label": "Relay 1 Load Power in watt",
+			"description": "This parameter are used to specify the load power that are connected to the device output 1. The range from 0 to 1100 watt can be selected.",
+			"valueSize": 2,
+			"minValue": 0,
+			"maxValue": 1100,
+			"defaultValue": 0
+		},
+		"13": {
+			"label": "Relay 2 Load Power in watt",
+			"description": "This parameter are used to specify the load power that are connected to the device output 2. The range from 0 to 1100 watt can be selected.",
+			"valueSize": 2,
+			"minValue": 0,
+			"maxValue": 1100,
+			"defaultValue": 0
+		},
+		"14": {
+			"label": "Relay 3 Load Power in watt",
+			"description": "This parameter are used to specify the load power that are connected to the device output 3. The range from 0 to 1100 watt can be selected.",
+			"valueSize": 2,
+			"minValue": 0,
+			"maxValue": 1100,
+			"defaultValue": 0
+		},
+		"15": {
+			"label": "Relay 4 Load Power in watt",
+			"description": "This parameter are used to specify the load power that are connected to the device output 4. The range from 0 to 1100 watt can be selected.",
+			"valueSize": 2,
+			"minValue": 0,
+			"maxValue": 1100,
+			"defaultValue": 0
+		},
+		"16": {
+			"label": "Relay 5 Load Power in watt",
+			"description": "This parameter are used to specify the load power that are connected to the device output 5. The range from 0 to 1100 watt can be selected.",
+			"valueSize": 2,
+			"minValue": 0,
+			"maxValue": 1100,
+			"defaultValue": 0
+		},
+		"19": {
+			"label": "Time correction by controller",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 1,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Disabled",
+					"value": 0
+				},
+				{
+					"label": "Enabled",
+					"value": 1
+				}
+			]
+		},
+		"21": {
+			"label": "Week day",
+			"description": "Manually set week day",
+			"valueSize": 1,
+			"minValue": 1,
+			"maxValue": 7,
+			"defaultValue": 1,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Monday",
+					"value": 1
+				},
+				{
+					"label": "Tuesday",
+					"value": 2
+				},
+				{
+					"label": "Wednesday",
+					"value": 3
+				},
+				{
+					"label": "Thursday",
+					"value": 4
+				},
+				{
+					"label": "Friday",
+					"value": 5
+				},
+				{
+					"label": "Saturday",
+					"value": 6
+				},
+				{
+					"label": "Sunday",
+					"value": 7
+				}
+			]
+		},
+		"22": {
+			"label": "Time",
+			"description": "Time: Hour and Minutes",
+			"unit": "HHMM",
+			"valueSize": 2,
+			"minValue": 0,
+			"maxValue": 2359,
+			"defaultValue": 0
+		},
+		"41": {
+			"label": "Relay 1 External input S1: Hold Control Mode",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 3,
+			"defaultValue": 2,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Hold function is disabled",
+					"value": 0
+				},
+				{
+					"label": "Operate like click (parameter 51)",
+					"value": 1
+				},
+				{
+					"label": "Momentary switch",
+					"value": 2
+				},
+				{
+					"label": "Reversed momentary switch",
+					"value": 3
+				}
+			]
+		},
+		"42": {
+			"label": "Relay 2 External input S2: Hold Control Mode",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 3,
+			"defaultValue": 2,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Hold function is disabled",
+					"value": 0
+				},
+				{
+					"label": "Operate like click (parameter 51)",
+					"value": 1
+				},
+				{
+					"label": "Momentary switch",
+					"value": 2
+				},
+				{
+					"label": "Reversed momentary switch",
+					"value": 3
+				}
+			]
+		},
+		"43": {
+			"label": "Relay 3 External input S3: Hold Control Mode",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 3,
+			"defaultValue": 2,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Hold function is disabled",
+					"value": 0
+				},
+				{
+					"label": "Operate like click (parameter 51)",
+					"value": 1
+				},
+				{
+					"label": "Momentary switch",
+					"value": 2
+				},
+				{
+					"label": "Reversed momentary switch",
+					"value": 3
+				}
+			]
+		},
+		"44": {
+			"label": "Relay 4 External input S4: Hold Control Mode",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 3,
+			"defaultValue": 2,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Hold function is disabled",
+					"value": 0
+				},
+				{
+					"label": "Operate like click (parameter 51)",
+					"value": 1
+				},
+				{
+					"label": "Momentary switch",
+					"value": 2
+				},
+				{
+					"label": "Reversed momentary switch",
+					"value": 3
+				}
+			]
+		},
+		"45": {
+			"label": "Relay 5 External input S5: Hold Control Mode",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 3,
+			"defaultValue": 2,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Hold function is disabled",
+					"value": 0
+				},
+				{
+					"label": "Operate like click (parameter 51)",
+					"value": 1
+				},
+				{
+					"label": "Momentary switch",
+					"value": 2
+				},
+				{
+					"label": "Reversed momentary switch",
+					"value": 3
+				}
+			]
+		},
+		"51": {
+			"label": "Relay 1 External Input S1: Click Control Mode",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 5,
+			"defaultValue": 1,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Click function disabled",
+					"value": 0
+				},
+				{
+					"label": "Toggle switch",
+					"value": 1
+				},
+				{
+					"label": "Relay switches to ON state only",
+					"value": 2
+				},
+				{
+					"label": "Relay switches to OFF state only",
+					"value": 3
+				},
+				{
+					"label": "Timer On>Off mode",
+					"value": 4
+				},
+				{
+					"label": "Time Off>On mode",
+					"value": 5
+				}
+			]
+		},
+		"52": {
+			"label": "Relay 2 External Input S2: Click Control Mode",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 5,
+			"defaultValue": 1,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Click function disabled",
+					"value": 0
+				},
+				{
+					"label": "Toggle switch",
+					"value": 1
+				},
+				{
+					"label": "Relay switches to ON state only",
+					"value": 2
+				},
+				{
+					"label": "Relay switches to OFF state only",
+					"value": 3
+				},
+				{
+					"label": "Timer On>Off mode",
+					"value": 4
+				},
+				{
+					"label": "Time Off>On mode",
+					"value": 5
+				}
+			]
+		},
+		"53": {
+			"label": "Relay 3 External Input S3: Click Control Mode",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 5,
+			"defaultValue": 1,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Click function disabled",
+					"value": 0
+				},
+				{
+					"label": "Toggle switch",
+					"value": 1
+				},
+				{
+					"label": "Relay switches to ON state only",
+					"value": 2
+				},
+				{
+					"label": "Relay switches to OFF state only",
+					"value": 3
+				},
+				{
+					"label": "Timer On>Off mode",
+					"value": 4
+				},
+				{
+					"label": "Time Off>On mode",
+					"value": 5
+				}
+			]
+		},
+		"54": {
+			"label": "Relay 4 External Input S4: Click Control Mode",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 5,
+			"defaultValue": 1,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Click function disabled",
+					"value": 0
+				},
+				{
+					"label": "Toggle switch",
+					"value": 1
+				},
+				{
+					"label": "Relay switches to ON state only",
+					"value": 2
+				},
+				{
+					"label": "Relay switches to OFF state only",
+					"value": 3
+				},
+				{
+					"label": "Timer On>Off mode",
+					"value": 4
+				},
+				{
+					"label": "Time Off>On mode",
+					"value": 5
+				}
+			]
+		},
+		"55": {
+			"label": "Relay 5 External Input S5: Click Control Mode",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 5,
+			"defaultValue": 1,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Click function disabled",
+					"value": 0
+				},
+				{
+					"label": "Toggle switch",
+					"value": 1
+				},
+				{
+					"label": "Relay switches to ON state only",
+					"value": 2
+				},
+				{
+					"label": "Relay switches to OFF state only",
+					"value": 3
+				},
+				{
+					"label": "Timer On>Off mode",
+					"value": 4
+				},
+				{
+					"label": "Time Off>On mode",
+					"value": 5
+				}
+			]
+		},
+		"61": {
+			"label": "Relay 1 External Input Number for Relay Output Control",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 5,
+			"defaultValue": 1,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Controlled by gateway or associated device",
+					"value": 0
+				},
+				{
+					"label": "Controlled by external input S1",
+					"value": 1
+				},
+				{
+					"label": "Controlled by external input S2",
+					"value": 2
+				},
+				{
+					"label": "Controlled by external input S3",
+					"value": 3
+				},
+				{
+					"label": "Controlled by external input S4",
+					"value": 4
+				},
+				{
+					"label": "Controlled by external input S5",
+					"value": 5
+				}
+			]
+		},
+		"62": {
+			"label": "Relay 2 External Input Number for Relay Output Control",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 5,
+			"defaultValue": 2,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Controlled by gateway or associated device",
+					"value": 0
+				},
+				{
+					"label": "Controlled by external input S1",
+					"value": 1
+				},
+				{
+					"label": "Controlled by external input S2",
+					"value": 2
+				},
+				{
+					"label": "Controlled by external input S3",
+					"value": 3
+				},
+				{
+					"label": "Controlled by external input S4",
+					"value": 4
+				},
+				{
+					"label": "Controlled by external input S5",
+					"value": 5
+				}
+			]
+		},
+		"63": {
+			"label": "Relay 3 External Input Number for Relay Output Control",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 5,
+			"defaultValue": 3,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Controlled by gateway or associated device",
+					"value": 0
+				},
+				{
+					"label": "Controlled by external input S1",
+					"value": 1
+				},
+				{
+					"label": "Controlled by external input S2",
+					"value": 2
+				},
+				{
+					"label": "Controlled by external input S3",
+					"value": 3
+				},
+				{
+					"label": "Controlled by external input S4",
+					"value": 4
+				},
+				{
+					"label": "Controlled by external input S5",
+					"value": 5
+				}
+			]
+		},
+		"64": {
+			"label": "Relay 4 External Input Number for Relay Output Control",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 5,
+			"defaultValue": 4,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Controlled by gateway or associated device",
+					"value": 0
+				},
+				{
+					"label": "Controlled by external input S1",
+					"value": 1
+				},
+				{
+					"label": "Controlled by external input S2",
+					"value": 2
+				},
+				{
+					"label": "Controlled by external input S3",
+					"value": 3
+				},
+				{
+					"label": "Controlled by external input S4",
+					"value": 4
+				},
+				{
+					"label": "Controlled by external input S5",
+					"value": 5
+				}
+			]
+		},
+		"65": {
+			"label": "Relay 5 External Input Number for Relay Output Control",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 5,
+			"defaultValue": 5,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Controlled by gateway or associated device",
+					"value": 0
+				},
+				{
+					"label": "Controlled by external input S1",
+					"value": 1
+				},
+				{
+					"label": "Controlled by external input S2",
+					"value": 2
+				},
+				{
+					"label": "Controlled by external input S3",
+					"value": 3
+				},
+				{
+					"label": "Controlled by external input S4",
+					"value": 4
+				},
+				{
+					"label": "Controlled by external input S5",
+					"value": 5
+				}
+			]
+		},
+		"71": {
+			"label": "Relay 1 Timer Mode Duration",
+			"description": " Press the button on the switch connected to external input and the relay output goes to ON/OFF for the specified time then changes back to OFF/ON. This function can be used to open/close garage doors, blinds, curtains, etc. or to turn attached devices like door lock or security OFF for a short time. If the parameter value is set to ―0‖ it will operate as a short contact (about 0.5sec).",
+			"unit": "seconds",
+			"valueSize": 3,
+			"minValue": 0,
+			"maxValue": 43200,
+			"defaultValue": 0
+		},
+		"72": {
+			"label": "Relay 2 Timer Mode Duration",
+			"description": " Press the button on the switch connected to external input and the relay output goes to ON/OFF for the specified time then changes back to OFF/ON. This function can be used to open/close garage doors, blinds, curtains, etc. or to turn attached devices like door lock or security OFF for a short time. If the parameter value is set to ―0‖ it will operate as a short contact (about 0.5sec).",
+			"unit": "seconds",
+			"valueSize": 3,
+			"minValue": 0,
+			"maxValue": 43200,
+			"defaultValue": 0
+		},
+		"73": {
+			"label": "Relay 3 Timer Mode Duration",
+			"description": " Press the button on the switch connected to external input and the relay output goes to ON/OFF for the specified time then changes back to OFF/ON. This function can be used to open/close garage doors, blinds, curtains, etc. or to turn attached devices like door lock or security OFF for a short time. If the parameter value is set to ―0‖ it will operate as a short contact (about 0.5sec).",
+			"unit": "seconds",
+			"valueSize": 3,
+			"minValue": 0,
+			"maxValue": 43200,
+			"defaultValue": 0
+		},
+		"74": {
+			"label": "Relay 4 Timer Mode Duration",
+			"description": " Press the button on the switch connected to external input and the relay output goes to ON/OFF for the specified time then changes back to OFF/ON. This function can be used to open/close garage doors, blinds, curtains, etc. or to turn attached devices like door lock or security OFF for a short time. If the parameter value is set to ―0‖ it will operate as a short contact (about 0.5sec).",
+			"unit": "seconds",
+			"valueSize": 3,
+			"minValue": 0,
+			"maxValue": 43200,
+			"defaultValue": 0
+		},
+		"75": {
+			"label": "Relay 5 Timer Mode Duration",
+			"description": " Press the button on the switch connected to external input and the relay output goes to ON/OFF for the specified time then changes back to OFF/ON. This function can be used to open/close garage doors, blinds, curtains, etc. or to turn attached devices like door lock or security OFF for a short time. If the parameter value is set to ―0‖ it will operate as a short contact (about 0.5sec).",
+			"unit": "seconds",
+			"valueSize": 3,
+			"minValue": 0,
+			"maxValue": 43200,
+			"defaultValue": 0
+		},
+		"101": {
+			"label": "Relay Inverse Mode, Inching - Group 1",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 51,
+			"defaultValue": 0,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Function is disabled",
+					"value": 0
+				},
+				{
+					"label": "Relay 1 and Relay 2",
+					"value": 12
+				},
+				{
+					"label": "Relay 2 and Relay 3",
+					"value": 23
+				}
+			]
+		},
+		"102": {
+			"label": "Relay Inverse Mode, Inching - Group 2",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 51,
+			"defaultValue": 0,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Function is disabled",
+					"value": 0
+				},
+				{
+					"label": "Relay 3 and Relay 4",
+					"value": 34
+				},
+				{
+					"label": "Relay 4 and Relay 5",
+					"value": 45
+				}
+			]
+		},
+		"141": {
+			"label": "Energy Consumption Meter Consecutive Report Interval",
+			"unit": "minutes",
+			"valueSize": 1,
+			"minValue": 1,
+			"maxValue": 120,
+			"defaultValue": 10
+		},
+		"142": {
+			"label": "Control Energy Consumption Report ",
+			"description": "Consumption difference to send to controller, %",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 1,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Disabled",
+					"value": 0
+				},
+				{
+					"label": "Enabled",
+					"value": 1
+				}
+			]
+		}
+	}
+}
