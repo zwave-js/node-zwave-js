@@ -1,9 +1,12 @@
 import {
 	CommandClasses,
+	decryptAES128CCM,
 	encodeBitMask,
+	encryptAES128CCM,
 	parseBitMask,
 	parseCCList,
 	SecurityClasses,
+	SECURITY_S2_AUTH_TAG_LENGTH,
 	validatePayload,
 	ZWaveError,
 	ZWaveErrorCodes,
@@ -19,6 +22,8 @@ import {
 	gotDeserializationOptions,
 	implementedVersion,
 } from "./CommandClass";
+import { MGRPExtension, Security2Extension } from "./Security2/Extension";
+import { ECDHProfiles, KEXFailType, KEXSchemes } from "./Security2/shared";
 
 // All the supported commands
 export enum Security2Command {
@@ -36,26 +41,6 @@ export enum Security2Command {
 	TransferEnd = 0x0c,
 	CommandsSupportedGet = 0x0d,
 	CommandsSupportedReport = 0x0e,
-}
-
-export enum KEXSchemes {
-	KEXScheme1 = 1,
-}
-
-export enum ECDHProfiles {
-	Curve25519 = 0,
-}
-
-export enum KEXFailType {
-	NoKeyMatch = 0x01, // KEX_KEY
-	NoSupportedScheme = 0x02, // KEX_SCHEME
-	NoSupportedCurve = 0x03, // KEX_CURVES
-	Decrypt = 0x05,
-	BootstrappingCanceled = 0x06, // CANCEL
-	WrongSecurityLevel = 0x07, // AUTH
-	KeyNotGranted = 0x08, // GET
-	NoVerify = 0x09, // VERIFY
-	DifferentKey = 0x0a, // REPORT
 }
 
 function securityClassToBitMask(key: SecurityClasses): Buffer {
@@ -78,21 +63,260 @@ function bitMaskToSecurityClass(
 	return keys[0];
 }
 
+function getAuthenticationData(
+	sendingNodeId: number,
+	destination: number,
+	homeId: number,
+	commandLength: number,
+	unencryptedPayload: Buffer,
+): Buffer {
+	const ret = Buffer.allocUnsafe(8 + unencryptedPayload.length);
+	ret[0] = sendingNodeId;
+	ret[1] = destination;
+	ret.writeUInt32BE(homeId, 2);
+	ret.writeUInt16BE(commandLength, 6);
+	// This includes the sequence number and all unencrypted extensions
+	unencryptedPayload.copy(ret, 8, 0);
+	return ret;
+}
+
 @commandClass(CommandClasses["Security 2"])
 @implementedVersion(1)
 export class Security2CC extends CommandClass {
 	declare ccCommand: Security2Command;
 }
 
+interface Security2CCMessageEncapsulationOptions extends CCCommandOptions {
+	sequenceNumber: number;
+	extensions?: Security2Extension[];
+	encapsulated: CommandClass;
+}
+
+function getCCResponseForMessageEncapsulation(
+	sent: Security2CCMessageEncapsulation,
+) {
+	if (sent.encapsulated?.expectsCCResponse()) {
+		return Security2CCMessageEncapsulation;
+	}
+	// TODO: Do some extensions expect a response?
+}
+
+@CCCommand(Security2Command.MessageEncapsulation)
+@expectedCCResponse(
+	getCCResponseForMessageEncapsulation,
+	() => "checkEncapsulated",
+)
+export class Security2CCMessageEncapsulation extends Security2CC {
+	public constructor(
+		driver: Driver,
+		options:
+			| CommandClassDeserializationOptions
+			| Security2CCMessageEncapsulationOptions,
+	) {
+		super(driver, options);
+		if (gotDeserializationOptions(options)) {
+			validatePayload(this.payload.length >= 2);
+			this.sequenceNumber = this.payload[0];
+			const hasExtensions = !!(this.payload[1] & 0b1);
+			const hasEncryptedExtensions = !!(this.payload[1] & 0b10);
+
+			let offset = 2;
+			this.extensions = [];
+			const parseExtensions = (buffer: Buffer) => {
+				while (true) {
+					// we need to read at least the length byte
+					validatePayload(buffer.length >= offset + 1);
+					const extensionLength =
+						Security2Extension.getExtensionLength(
+							buffer.slice(offset),
+						);
+					// Parse the extension
+					const ext = Security2Extension.from(
+						buffer.slice(offset, offset + extensionLength),
+					);
+					this.extensions.push(ext);
+					offset += extensionLength;
+					// Check if that was the last extension
+					if (!ext.moreToFollow) break;
+				}
+			};
+			if (hasExtensions) parseExtensions(this.payload);
+
+			const unencryptedPayload = this.payload.slice(0, offset);
+			const ciphertext = this.payload.slice(
+				offset,
+				-SECURITY_S2_AUTH_TAG_LENGTH,
+			);
+			const authTag = this.payload.slice(-SECURITY_S2_AUTH_TAG_LENGTH);
+
+			const messageLength =
+				super.computeEncapsulationOverhead() + this.payload.length;
+			const authData = getAuthenticationData(
+				this.nodeId as number,
+				this.getDestinationIDRX(),
+				this.driver.controller.homeId!,
+				messageLength,
+				unencryptedPayload,
+			);
+
+			// TODO: get key and IV somewhere
+			const key = undefined as any as Buffer;
+			const iv = undefined as any as Buffer;
+			// Decrypt payload and verify integrity
+			const { plaintext, authOK } = decryptAES128CCM(
+				key,
+				iv,
+				ciphertext,
+				authData,
+				authTag,
+			);
+			validatePayload.withReason(
+				"Message authentication failed, won't accept security encapsulated command.",
+			)(authOK);
+
+			offset = 0;
+			if (hasEncryptedExtensions) parseExtensions(plaintext);
+
+			// Not every S2 message includes an encapsulated CC
+			const decryptedCCBytes = plaintext.slice(offset);
+			if (decryptedCCBytes.length > 0) {
+				// make sure this contains a complete CC command that's worth splitting
+				validatePayload(decryptedCCBytes.length >= 2);
+				// and deserialize the CC
+				this.encapsulated = CommandClass.from(this.driver, {
+					data: decryptedCCBytes,
+					fromEncapsulation: true,
+					encapCC: this,
+				});
+			}
+		} else {
+			this.encapsulated = options.encapsulated;
+			options.encapsulated.encapsulatingCC = this as any;
+
+			this.sequenceNumber = options.sequenceNumber;
+			this.extensions = options.extensions ?? [];
+			if (
+				typeof this.nodeId !== "number" &&
+				!this.extensions.some((e) => e instanceof MGRPExtension)
+			) {
+				throw new ZWaveError(
+					"Multicast Security S2 encapsulation requires the MGRP extension",
+					ZWaveErrorCodes.Security2CC_MissingExtension,
+				);
+			}
+		}
+	}
+
+	public sequenceNumber: number;
+	public encapsulated?: CommandClass;
+	public extensions: Security2Extension[];
+
+	private getDestinationIDTX(): number {
+		const mgrpExtension = this.extensions.find(
+			(e): e is MGRPExtension => e instanceof MGRPExtension,
+		);
+		if (mgrpExtension) return mgrpExtension.groupId;
+		else if (typeof this.nodeId === "number") return this.nodeId;
+
+		throw new ZWaveError(
+			"Multicast Security S2 encapsulation requires the MGRP extension",
+			ZWaveErrorCodes.Security2CC_MissingExtension,
+		);
+	}
+
+	private getDestinationIDRX(): number {
+		const mgrpExtension = this.extensions.find(
+			(e): e is MGRPExtension => e instanceof MGRPExtension,
+		);
+		if (mgrpExtension) return mgrpExtension.groupId;
+		return this.driver.controller.ownNodeId!;
+	}
+
+	public serialize(): Buffer {
+		const unencryptedExtensions = this.extensions.filter(
+			(e) => !e.isEncrypted(),
+		);
+		const encryptedExtensions = this.extensions.filter((e) =>
+			e.isEncrypted(),
+		);
+
+		const unencryptedPayload = Buffer.concat([
+			Buffer.from([
+				this.sequenceNumber,
+				(encryptedExtensions.length > 0 ? 0b10 : 0) |
+					(unencryptedExtensions.length > 0 ? 1 : 0),
+			]),
+			...unencryptedExtensions.map((e, index) =>
+				e.serialize(index < unencryptedExtensions.length - 1),
+			),
+		]);
+		const serializedCC = this.encapsulated?.serialize() ?? Buffer.from([]);
+		const plaintextPayload = Buffer.concat([
+			...encryptedExtensions.map((e, index) =>
+				e.serialize(index < encryptedExtensions.length - 1),
+			),
+			serializedCC,
+		]);
+
+		// Generate the authentication data for CCM encryption
+		const messageLength =
+			this.computeEncapsulationOverhead() + serializedCC.length;
+		const authData = getAuthenticationData(
+			this.driver.controller.ownNodeId!,
+			this.getDestinationIDTX(),
+			this.driver.controller.homeId!,
+			messageLength,
+			unencryptedPayload,
+		);
+		// TODO: get key and IV somewhere
+		const key = undefined as any as Buffer;
+		const iv = undefined as any as Buffer;
+		const { ciphertext: ciphertextPayload, authTag } = encryptAES128CCM(
+			key,
+			iv,
+			plaintextPayload,
+			authData,
+			SECURITY_S2_AUTH_TAG_LENGTH,
+		);
+
+		this.payload = Buffer.concat([
+			unencryptedPayload,
+			ciphertextPayload,
+			authTag,
+		]);
+		return super.serialize();
+	}
+
+	protected computeEncapsulationOverhead(): number {
+		// Security S2 adds:
+		// * 1 byte sequence number
+		// * 1 byte control
+		// * N bytes extensions
+		// * SECURITY_S2_AUTH_TAG_LENGTH bytes auth tag
+		const extensionBytes = this.extensions
+			.map((e) => e.computeLength())
+			.reduce((a, b) => a + b, 0);
+
+		return (
+			// eslint-disable-next-line @typescript-eslint/restrict-plus-operands
+			super.computeEncapsulationOverhead() +
+			2 +
+			SECURITY_S2_AUTH_TAG_LENGTH +
+			extensionBytes
+		);
+	}
+}
+
 type Security2CCNonceReportOptions = CCCommandOptions & {
 	sequenceNumber: number;
-	MOS: boolean;
 } & (
 		| {
+				MOS: boolean;
 				SOS: true;
 				receiverEI: Buffer;
 		  }
 		| {
+				MOS: true;
 				SOS: false;
 				receiverEI?: undefined;
 		  }
@@ -110,8 +334,10 @@ export class Security2CCNonceReport extends Security2CC {
 		if (gotDeserializationOptions(options)) {
 			validatePayload(this.payload.length >= 2);
 			this.sequenceNumber = this.payload[0];
+
 			this.MOS = !!(this.payload[1] & 0b10);
 			this.SOS = !!(this.payload[1] & 0b1);
+			validatePayload(this.MOS || this.SOS);
 
 			if (this.SOS) {
 				// If the SOS flag is set, the REI field MUST be included in the command
@@ -150,6 +376,9 @@ interface Security2CCNonceGetOptions extends CCCommandOptions {
 @CCCommand(Security2Command.NonceGet)
 @expectedCCResponse(Security2CCNonceReport)
 export class Security2CCNonceGet extends Security2CC {
+	// TODO: A node sending this command MUST accept a delay up to <Previous Round-trip-time to peer node> +
+	// 250 ms before receiving the Security 2 Nonce Report Command.
+
 	public constructor(
 		driver: Driver,
 		options:

@@ -122,6 +122,8 @@ export enum ZWaveErrorCodes {
 	SecurityCC_NoNonce = 1400,
 	/** Used to report that the inner state required for this action was not initialized */
 	Security2CC_NotInitialized,
+	/** Gets thrown when a Security S2 command is missing a required extension */
+	Security2CC_MissingExtension,
 
 	/** The firmware update process is already active */
 	FirmwareUpdateCC_Busy = 1500,
