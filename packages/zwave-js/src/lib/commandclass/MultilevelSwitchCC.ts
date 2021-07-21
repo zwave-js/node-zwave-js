@@ -415,11 +415,15 @@ export class MultilevelSwitchCCAPI extends CCAPI {
 				// Try to retrieve the current value to use as the start level,
 				// even if the target node is going to ignore it. There might
 				// be some bugged devices that ignore the ignore start level flag.
-				const startLevel = this.endpoint
-					.getNodeUnsafe()
-					?.getValue<number>(
-						getCurrentValueValueId(this.endpoint.index),
-					);
+				const startLevel =
+					// except for multicast, where we can't access the current value
+					this.endpoint instanceof VirtualEndpoint
+						? undefined
+						: this.endpoint
+								.getNodeUnsafe()
+								?.getValue<number>(
+									getCurrentValueValueId(this.endpoint.index),
+								);
 				// And perform the level change
 				const duration = Duration.from(options?.transitionDuration);
 				await this.startLevelChange({
