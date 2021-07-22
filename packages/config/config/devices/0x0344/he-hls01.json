@@ -406,7 +406,7 @@
 		},
 		"155": {
 			"label": "Over-Load Protection & Notification",
-			"description": "The value of this parameter can be set from 100 to 4000 in watts. Use the value 0 if there is a need to disable this function.",
+			"description": "Allowable Range 100-4000.",
 			"unit": "Watts",
 			"valueSize": 2,
 			"minValue": 0,
