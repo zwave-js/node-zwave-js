@@ -144,7 +144,7 @@
 			]
 		},
 		"12": {
-			"label": "Motion Event Report One Time Enable",
+			"label": "Prevent Motion Re-Trigger While On",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 1,
