@@ -122,6 +122,7 @@
 		},
 		"17": {
 			"label": "Temperature Sensor Calibration",
+			"unit": "0.1 °C",
 			"valueSize": 1,
 			"minValue": -100,
 			"maxValue": 100,
@@ -319,13 +320,14 @@
 		},
 		"142": {
 			"label": "Energy Consumption Report Threshold",
+			"unit": "W",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 50,
 			"defaultValue": 25
 		},
 		"143": {
-			"label": "Temperature sensor consecutive report interval",
+			"label": "Temperature Sensor Consecutive Report Interval",
 			"unit": "minutes",
 			"valueSize": 1,
 			"minValue": 1,
@@ -333,7 +335,8 @@
 			"defaultValue": 10
 		},
 		"144": {
-			"label": "Temperature report threshold",
+			"label": "Temperature Sensor Report Threshold",
+			"unit": "0.1 °C",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 100,
@@ -360,6 +363,7 @@
 		"152": {
 			"label": "Temperature Rise Notification",
 			"description": ": Value of this Parameter should be lower than value of Parameter 153 (Overheat Protection & Notification).",
+			"unit": "°C",
 			"valueSize": 2,
 			"minValue": 1,
 			"maxValue": 120,
@@ -367,6 +371,7 @@
 		},
 		"153": {
 			"label": "Overheat Protection & Notification",
+			"unit": "°C",
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 120,

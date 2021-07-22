@@ -447,6 +447,8 @@
 		},
 		"45": {
 			"label": "Monday Morning Temp",
+			"description": "Allowable range: 1 - 37, x10",
+			"unit": "0.1 °C",
 			"valueSize": 2,
 			"minValue": 10,
 			"maxValue": 370,
@@ -454,6 +456,8 @@
 		},
 		"46": {
 			"label": "Monday Day Temp",
+			"description": "Allowable range: 1 - 37, x10",
+			"unit": "0.1 °C",
 			"valueSize": 2,
 			"minValue": 10,
 			"maxValue": 370,
@@ -461,6 +465,8 @@
 		},
 		"47": {
 			"label": "Monday Evening Temp",
+			"description": "Allowable range: 1 - 37, x10",
+			"unit": "0.1 °C",
 			"valueSize": 2,
 			"minValue": 10,
 			"maxValue": 370,
@@ -468,6 +474,8 @@
 		},
 		"48": {
 			"label": "Monday Night Temp",
+			"description": "Allowable range: 1 - 37, x10",
+			"unit": "0.1 °C",
 			"valueSize": 2,
 			"minValue": 10,
 			"maxValue": 370,
@@ -475,6 +483,8 @@
 		},
 		"49": {
 			"label": "Tuesday Morning Temp",
+			"description": "Allowable range: 1 - 37, x10",
+			"unit": "0.1 °C",
 			"valueSize": 2,
 			"minValue": 10,
 			"maxValue": 370,
@@ -482,6 +492,8 @@
 		},
 		"50": {
 			"label": "Tuesday Day Temp",
+			"description": "Allowable range: 1 - 37, x10",
+			"unit": "0.1 °C",
 			"valueSize": 2,
 			"minValue": 10,
 			"maxValue": 370,
@@ -489,6 +501,8 @@
 		},
 		"51": {
 			"label": "Tuesday Evening Temp",
+			"description": "Allowable range: 1 - 37, x10",
+			"unit": "0.1 °C",
 			"valueSize": 2,
 			"minValue": 10,
 			"maxValue": 370,
@@ -496,6 +510,8 @@
 		},
 		"52": {
 			"label": "Tuesday Night Temp",
+			"description": "Allowable range: 1 - 37, x10",
+			"unit": "0.1 °C",
 			"valueSize": 2,
 			"minValue": 10,
 			"maxValue": 370,
@@ -503,6 +519,8 @@
 		},
 		"53": {
 			"label": "Wednesday Morning Temp",
+			"description": "Allowable range: 1 - 37, x10",
+			"unit": "0.1 °C",
 			"valueSize": 2,
 			"minValue": 10,
 			"maxValue": 370,
@@ -510,6 +528,8 @@
 		},
 		"54": {
 			"label": "Wednesday Day Temp",
+			"description": "Allowable range: 1 - 37, x10",
+			"unit": "0.1 °C",
 			"valueSize": 2,
 			"minValue": 10,
 			"maxValue": 370,
@@ -517,6 +537,8 @@
 		},
 		"55": {
 			"label": "Wednesday Evening Temp",
+			"description": "Allowable range: 1 - 37, x10",
+			"unit": "0.1 °C",
 			"valueSize": 2,
 			"minValue": 10,
 			"maxValue": 370,
@@ -524,6 +546,8 @@
 		},
 		"56": {
 			"label": "Wednesday Night Temp",
+			"description": "Allowable range: 1 - 37, x10",
+			"unit": "0.1 °C",
 			"valueSize": 2,
 			"minValue": 10,
 			"maxValue": 370,
@@ -531,6 +555,8 @@
 		},
 		"57": {
 			"label": "Thursday Morning Temp",
+			"description": "Allowable range: 1 - 37, x10",
+			"unit": "0.1 °C",
 			"valueSize": 2,
 			"minValue": 10,
 			"maxValue": 370,
@@ -538,6 +564,8 @@
 		},
 		"58": {
 			"label": "Thursday Day Temp",
+			"description": "Allowable range: 1 - 37, x10",
+			"unit": "0.1 °C",
 			"valueSize": 2,
 			"minValue": 10,
 			"maxValue": 370,
@@ -545,6 +573,8 @@
 		},
 		"59": {
 			"label": "Thursday Evening Temp",
+			"description": "Allowable range: 1 - 37, x10",
+			"unit": "0.1 °C",
 			"valueSize": 2,
 			"minValue": 10,
 			"maxValue": 370,
@@ -552,6 +582,8 @@
 		},
 		"60": {
 			"label": "Thursday Night Temp",
+			"description": "Allowable range: 1 - 37, x10",
+			"unit": "0.1 °C",
 			"valueSize": 2,
 			"minValue": 10,
 			"maxValue": 370,
@@ -559,6 +591,8 @@
 		},
 		"61": {
 			"label": "Friday Morning Temp",
+			"description": "Allowable range: 1 - 37, x10",
+			"unit": "0.1 °C",
 			"valueSize": 2,
 			"minValue": 10,
 			"maxValue": 370,
@@ -566,6 +600,8 @@
 		},
 		"62": {
 			"label": "Friday Day Temp",
+			"description": "Allowable range: 1 - 37, x10",
+			"unit": "0.1 °C",
 			"valueSize": 2,
 			"minValue": 10,
 			"maxValue": 370,
@@ -573,6 +609,8 @@
 		},
 		"63": {
 			"label": "Friday Evening Temp",
+			"description": "Allowable range: 1 - 37, x10",
+			"unit": "0.1 °C",
 			"valueSize": 2,
 			"minValue": 10,
 			"maxValue": 370,
@@ -580,6 +618,8 @@
 		},
 		"64": {
 			"label": "Friday Night Temp",
+			"description": "Allowable range: 1 - 37, x10",
+			"unit": "0.1 °C",
 			"valueSize": 2,
 			"minValue": 10,
 			"maxValue": 370,
@@ -587,6 +627,8 @@
 		},
 		"65": {
 			"label": "Saturday Morning Temp",
+			"description": "Allowable range: 1 - 37, x10",
+			"unit": "0.1 °C",
 			"valueSize": 2,
 			"minValue": 10,
 			"maxValue": 370,
@@ -594,6 +636,8 @@
 		},
 		"66": {
 			"label": "Saturday Day Temp",
+			"description": "Allowable range: 1 - 37, x10",
+			"unit": "0.1 °C",
 			"valueSize": 2,
 			"minValue": 10,
 			"maxValue": 370,
@@ -601,6 +645,8 @@
 		},
 		"67": {
 			"label": "Saturday Evening Temp",
+			"description": "Allowable range: 1 - 37, x10",
+			"unit": "0.1 °C",
 			"valueSize": 2,
 			"minValue": 10,
 			"maxValue": 370,
@@ -608,6 +654,8 @@
 		},
 		"68": {
 			"label": "Saturday Night Temp",
+			"description": "Allowable range: 1 - 37, x10",
+			"unit": "0.1 °C",
 			"valueSize": 2,
 			"minValue": 10,
 			"maxValue": 370,
@@ -615,6 +663,8 @@
 		},
 		"69": {
 			"label": "Sunday Morning Temp",
+			"description": "Allowable range: 1 - 37, x10",
+			"unit": "0.1 °C",
 			"valueSize": 2,
 			"minValue": 10,
 			"maxValue": 370,
@@ -622,6 +672,8 @@
 		},
 		"70": {
 			"label": "Sunday Day Temp",
+			"description": "Allowable range: 1 - 37, x10",
+			"unit": "0.1 °C",
 			"valueSize": 2,
 			"minValue": 10,
 			"maxValue": 370,
@@ -629,6 +681,8 @@
 		},
 		"71": {
 			"label": "Sunday Evening Temp",
+			"description": "Allowable range: 1 - 37, x10",
+			"unit": "0.1 °C",
 			"valueSize": 2,
 			"minValue": 10,
 			"maxValue": 370,
@@ -636,6 +690,8 @@
 		},
 		"72": {
 			"label": "Sunday Night Temp",
+			"description": "Allowable range: 1 - 37, x10",
+			"unit": "0.1 °C",
 			"valueSize": 2,
 			"minValue": 10,
 			"maxValue": 370,

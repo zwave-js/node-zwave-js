@@ -167,6 +167,7 @@
 		},
 		"12": {
 			"label": "Relay 1 Power Load",
+			"unit": "W",
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 1100,
@@ -174,6 +175,7 @@
 		},
 		"13": {
 			"label": "Relay 2 Power Load",
+			"unit": "W",
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 1100,
@@ -181,6 +183,7 @@
 		},
 		"14": {
 			"label": "Relay 3 Power Load",
+			"unit": "W",
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 1100,
@@ -188,6 +191,7 @@
 		},
 		"15": {
 			"label": "Relay 4 Power Load",
+			"unit": "W",
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 1100,
@@ -195,6 +199,7 @@
 		},
 		"16": {
 			"label": "Relay 5 Power Load",
+			"unit": "W",
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 1100,
