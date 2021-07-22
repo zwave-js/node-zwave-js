@@ -13,7 +13,6 @@
 		"min": "0.0",
 		"max": "255.255"
 	},
-	"supportsZWavePlus": true,
 	"paramInformation": {
 		"1": {
 			"label": "Frequency Region",
@@ -68,40 +67,31 @@
 		"3": {
 			"label": "Hardware and Software Versions",
 			"valueSize": 4,
-			"minValue": 0,
-			"maxValue": 0,
-			"defaultValue": 0,
-			"readOnly": true,
-			"allowManualEntry": false
+			"readOnly": true
 		},
 		"4": {
-			"label": "Energy Consumption, kW",
+			"label": "Energy Consumption",
 			"unit": "kW",
 			"valueSize": 4,
-			"minValue": 0,
-			"maxValue": 0,
-			"defaultValue": 0,
-			"readOnly": true,
-			"allowManualEntry": false
+			"readOnly": true
 		},
 		"5": {
-			"label": "Display brightness control",
+			"label": "Display Brightness Control",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 10,
 			"defaultValue": 0
 		},
 		"6": {
-			"label": "Touch buttons sensitivity",
-			"description": "Touch Button Sensitivity Threshold to be adjusted from level 1 (low sensitivity) to 10 (high sensitivity).",
+			"label": "Touch Buttons Sensitivity",
+			"description": "Allowable range: 1 (low sensitivity) to 10 (high sensitivity).",
 			"valueSize": 1,
 			"minValue": 1,
 			"maxValue": 10,
 			"defaultValue": 6
 		},
 		"7": {
-			"label": "Relay output",
-			"description": "Relay output NO or NC mode",
+			"label": "Relay Output Mode",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 1,
@@ -119,7 +109,7 @@
 			]
 		},
 		"8": {
-			"label": "External input mode",
+			"label": "External Input Mode",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 3,
@@ -179,7 +169,7 @@
 			]
 		},
 		"10": {
-			"label": "Floor sensor resistance",
+			"label": "Floor Sensor Resistance",
 			"unit": "kohm",
 			"valueSize": 1,
 			"minValue": 1,
@@ -187,7 +177,7 @@
 			"defaultValue": 10
 		},
 		"11": {
-			"label": "Source sensor",
+			"label": "Source Sensor",
 			"valueSize": 1,
 			"minValue": 1,
 			"maxValue": 7,
@@ -225,8 +215,8 @@
 			]
 		},
 		"12": {
-			"label": "Air temp min",
-			"description": "Air Temperature Minimum in degree, x10",
+			"label": "Air Temp Min",
+			"description": "Allowable range: 1 - 36, x10",
 			"unit": "0.1 °C",
 			"valueSize": 2,
 			"minValue": 10,
@@ -234,8 +224,8 @@
 			"defaultValue": 210
 		},
 		"13": {
-			"label": "Air temp max",
-			"description": "Air Temperature Maximum in degree, x10",
+			"label": "Air Temp Max",
+			"description": "Allowable range: 2 - 37, x10",
 			"unit": "0.1 °C",
 			"valueSize": 2,
 			"minValue": 20,
@@ -243,8 +233,8 @@
 			"defaultValue": 270
 		},
 		"14": {
-			"label": "Floor temp min",
-			"description": "Floor Temperature Minimum in degree, x10",
+			"label": "Floor Temp Min",
+			"description": "Allowable range: 1 - 36, x10",
 			"unit": "0.1 °C",
 			"valueSize": 2,
 			"minValue": 10,
@@ -252,8 +242,8 @@
 			"defaultValue": 180
 		},
 		"15": {
-			"label": "Floor temp max",
-			"description": "Floor Temperature Maximum in degree, x10",
+			"label": "Floor Temp Max",
+			"description": "Allowable range: 2 - 37, x10",
 			"unit": "0.1 °C",
 			"valueSize": 2,
 			"minValue": 20,
@@ -261,8 +251,8 @@
 			"defaultValue": 320
 		},
 		"16": {
-			"label": "Floor temp calibration",
-			"description": "Floor Temperature Calibration in degree x10",
+			"label": "Floor Temp Calibration",
+			"description": "Allowable range: -10 - 10, x10",
 			"unit": "0.1 °C",
 			"valueSize": 1,
 			"minValue": -100,
@@ -270,8 +260,8 @@
 			"defaultValue": 0
 		},
 		"17": {
-			"label": "Air temp calibration",
-			"description": "Air Temperature Calibration in degree x10",
+			"label": "Air Temp Calibration",
+			"description": "Allowable range: 10 - 10, x10",
 			"unit": "0.1 °C",
 			"valueSize": 1,
 			"minValue": -100,
@@ -279,8 +269,8 @@
 			"defaultValue": 0
 		},
 		"18": {
-			"label": "Temp hysteresis",
-			"description": "Temperature Hysteresis in degree, x10",
+			"label": "Temp Hysteresis",
+			"description": "Allowable range: 0.2 - 10, x10",
 			"unit": "0.1 °C",
 			"valueSize": 1,
 			"minValue": 2,
@@ -288,7 +278,7 @@
 			"defaultValue": 5
 		},
 		"19": {
-			"label": "Time correction by controller",
+			"label": "Time Correction by Controller",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 1,
@@ -306,7 +296,7 @@
 			]
 		},
 		"20": {
-			"label": "Time format",
+			"label": "Time Format",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 1,
@@ -324,8 +314,7 @@
 			]
 		},
 		"21": {
-			"label": "Week day",
-			"description": "Manually set week day",
+			"label": "Week Day Override",
 			"valueSize": 1,
 			"minValue": 1,
 			"maxValue": 7,
@@ -363,8 +352,7 @@
 			]
 		},
 		"22": {
-			"label": "Time",
-			"description": "Time: Hour and Minutes",
+			"label": "Time Override",
 			"unit": "HHMM",
 			"valueSize": 2,
 			"minValue": 0,
@@ -372,8 +360,7 @@
 			"defaultValue": 0
 		},
 		"23": {
-			"label": "Time reg on",
-			"description": "Time Regulation ON time, min",
+			"label": "Time Regulation Reg On Time",
 			"unit": "minutes",
 			"valueSize": 2,
 			"minValue": 10,
@@ -381,8 +368,7 @@
 			"defaultValue": 30
 		},
 		"24": {
-			"label": "Time reg off",
-			"description": "Time Regulation OFF time, min",
+			"label": "Time Regulation Reg Off Time",
 			"unit": "minutes",
 			"valueSize": 2,
 			"minValue": 10,
@@ -390,7 +376,7 @@
 			"defaultValue": 30
 		},
 		"25": {
-			"label": "Dry time",
+			"label": "Dry Time",
 			"unit": "minutes",
 			"valueSize": 1,
 			"minValue": 5,
@@ -428,7 +414,7 @@
 			]
 		},
 		"41": {
-			"label": "Morning start time",
+			"label": "Morning Start Time",
 			"unit": "HHMM",
 			"valueSize": 2,
 			"minValue": 0,
@@ -436,7 +422,7 @@
 			"defaultValue": 600
 		},
 		"42": {
-			"label": "Day start time",
+			"label": "Day Start Time",
 			"unit": "HHMM",
 			"valueSize": 2,
 			"minValue": 0,
@@ -444,7 +430,7 @@
 			"defaultValue": 900
 		},
 		"43": {
-			"label": "Evening start time",
+			"label": "Evening Start Time",
 			"unit": "HHMM",
 			"valueSize": 2,
 			"minValue": 0,
@@ -452,7 +438,7 @@
 			"defaultValue": 1800
 		},
 		"44": {
-			"label": "Night Start time",
+			"label": "Night Start Time",
 			"unit": "HHMM",
 			"valueSize": 2,
 			"minValue": 0,
@@ -460,196 +446,196 @@
 			"defaultValue": 2300
 		},
 		"45": {
-			"label": "Monday morning temp",
+			"label": "Monday Morning Temp",
 			"valueSize": 2,
 			"minValue": 10,
 			"maxValue": 370,
 			"defaultValue": 240
 		},
 		"46": {
-			"label": "Monday day temp",
+			"label": "Monday Day Temp",
 			"valueSize": 2,
 			"minValue": 10,
 			"maxValue": 370,
 			"defaultValue": 200
 		},
 		"47": {
-			"label": "Monday evening temp",
+			"label": "Monday Evening Temp",
 			"valueSize": 2,
 			"minValue": 10,
 			"maxValue": 370,
 			"defaultValue": 230
 		},
 		"48": {
-			"label": "Monday night temp",
+			"label": "Monday Night Temp",
 			"valueSize": 2,
 			"minValue": 10,
 			"maxValue": 370,
 			"defaultValue": 180
 		},
 		"49": {
-			"label": "Tuesday morning temp",
+			"label": "Tuesday Morning Temp",
 			"valueSize": 2,
 			"minValue": 10,
 			"maxValue": 370,
 			"defaultValue": 240
 		},
 		"50": {
-			"label": "Tuesday day temp",
+			"label": "Tuesday Day Temp",
 			"valueSize": 2,
 			"minValue": 10,
 			"maxValue": 370,
 			"defaultValue": 200
 		},
 		"51": {
-			"label": "Tuesday evening temp",
+			"label": "Tuesday Evening Temp",
 			"valueSize": 2,
 			"minValue": 10,
 			"maxValue": 370,
 			"defaultValue": 230
 		},
 		"52": {
-			"label": "Tuesday night temp",
+			"label": "Tuesday Night Temp",
 			"valueSize": 2,
 			"minValue": 10,
 			"maxValue": 370,
 			"defaultValue": 180
 		},
 		"53": {
-			"label": "Wednesday morning temp",
+			"label": "Wednesday Morning Temp",
 			"valueSize": 2,
 			"minValue": 10,
 			"maxValue": 370,
 			"defaultValue": 240
 		},
 		"54": {
-			"label": "Wednesday day temp",
+			"label": "Wednesday Day Temp",
 			"valueSize": 2,
 			"minValue": 10,
 			"maxValue": 370,
 			"defaultValue": 200
 		},
 		"55": {
-			"label": "Wednesday evening temp",
+			"label": "Wednesday Evening Temp",
 			"valueSize": 2,
 			"minValue": 10,
 			"maxValue": 370,
 			"defaultValue": 230
 		},
 		"56": {
-			"label": "Wednesday night temp",
+			"label": "Wednesday Night Temp",
 			"valueSize": 2,
 			"minValue": 10,
 			"maxValue": 370,
 			"defaultValue": 180
 		},
 		"57": {
-			"label": "Thursday morning temp",
+			"label": "Thursday Morning Temp",
 			"valueSize": 2,
 			"minValue": 10,
 			"maxValue": 370,
 			"defaultValue": 240
 		},
 		"58": {
-			"label": "Thursday day temp",
+			"label": "Thursday Day Temp",
 			"valueSize": 2,
 			"minValue": 10,
 			"maxValue": 370,
 			"defaultValue": 200
 		},
 		"59": {
-			"label": "Thursday evening temp",
+			"label": "Thursday Evening Temp",
 			"valueSize": 2,
 			"minValue": 10,
 			"maxValue": 370,
 			"defaultValue": 230
 		},
 		"60": {
-			"label": "Thursday night temp",
+			"label": "Thursday Night Temp",
 			"valueSize": 2,
 			"minValue": 10,
 			"maxValue": 370,
 			"defaultValue": 180
 		},
 		"61": {
-			"label": "Friday morning temp",
+			"label": "Friday Morning Temp",
 			"valueSize": 2,
 			"minValue": 10,
 			"maxValue": 370,
 			"defaultValue": 240
 		},
 		"62": {
-			"label": "Friday day temp",
+			"label": "Friday Day Temp",
 			"valueSize": 2,
 			"minValue": 10,
 			"maxValue": 370,
 			"defaultValue": 200
 		},
 		"63": {
-			"label": "Friday evening temp",
+			"label": "Friday Evening Temp",
 			"valueSize": 2,
 			"minValue": 10,
 			"maxValue": 370,
 			"defaultValue": 230
 		},
 		"64": {
-			"label": "Friday night temp",
+			"label": "Friday Night Temp",
 			"valueSize": 2,
 			"minValue": 10,
 			"maxValue": 370,
 			"defaultValue": 180
 		},
 		"65": {
-			"label": "Saturday morning temp",
+			"label": "Saturday Morning Temp",
 			"valueSize": 2,
 			"minValue": 10,
 			"maxValue": 370,
 			"defaultValue": 240
 		},
 		"66": {
-			"label": "Saturday day temp",
+			"label": "Saturday Day Temp",
 			"valueSize": 2,
 			"minValue": 10,
 			"maxValue": 370,
 			"defaultValue": 200
 		},
 		"67": {
-			"label": "Saturday evening temp",
+			"label": "Saturday Evening Temp",
 			"valueSize": 2,
 			"minValue": 10,
 			"maxValue": 370,
 			"defaultValue": 230
 		},
 		"68": {
-			"label": "Saturday night temp",
+			"label": "Saturday Night Temp",
 			"valueSize": 2,
 			"minValue": 10,
 			"maxValue": 370,
 			"defaultValue": 180
 		},
 		"69": {
-			"label": "Sunday morning temp",
+			"label": "Sunday Morning Temp",
 			"valueSize": 2,
 			"minValue": 10,
 			"maxValue": 370,
 			"defaultValue": 240
 		},
 		"70": {
-			"label": "Sunday day temp",
+			"label": "Sunday Day Temp",
 			"valueSize": 2,
 			"minValue": 10,
 			"maxValue": 370,
 			"defaultValue": 200
 		},
 		"71": {
-			"label": "Sunday evening temp",
+			"label": "Sunday Evening Temp",
 			"valueSize": 2,
 			"minValue": 10,
 			"maxValue": 370,
 			"defaultValue": 230
 		},
 		"72": {
-			"label": "Sunday night temp",
+			"label": "Sunday Night Temp",
 			"valueSize": 2,
 			"minValue": 10,
 			"maxValue": 370,
@@ -665,7 +651,6 @@
 		},
 		"142": {
 			"label": "Energy Consumption Report Threshold",
-			"description": "Consumption difference to send to controller, %",
 			"unit": "%",
 			"valueSize": 1,
 			"minValue": 0,
@@ -673,7 +658,7 @@
 			"defaultValue": 25
 		},
 		"143": {
-			"label": "Sensors consecutive reporting interval",
+			"label": "Sensors Consecutive Reporting Interval",
 			"unit": "minutes",
 			"valueSize": 1,
 			"minValue": 1,
@@ -682,7 +667,7 @@
 		},
 		"144": {
 			"label": "Air & Floor Temperature Sensors Report Threshold",
-			"description": "Temperature difference to send to controller, value X 10",
+			"description": "Allowable range: 0 - 10, x10",
 			"unit": "0.1 °C",
 			"valueSize": 1,
 			"minValue": 0,
@@ -691,7 +676,7 @@
 		},
 		"145": {
 			"label": "Humidity Sensor Report Threshold",
-			"description": "Humidity difference to send to controller, %",
+			"description": "Allowable range: 0 - 25",
 			"unit": "%",
 			"valueSize": 1,
 			"minValue": 0,
@@ -700,7 +685,7 @@
 		},
 		"146": {
 			"label": "Light Sensor Report Threshold",
-			"description": "Light sensor values difference to send to controller, %",
+			"description": "Allowable range: 0 - 99",
 			"unit": "%",
 			"valueSize": 1,
 			"minValue": 0,

@@ -13,7 +13,6 @@
 		"min": "0.0",
 		"max": "255.255"
 	},
-	"supportsZWavePlus": true,
 	"paramInformation": {
 		"1": {
 			"label": "Frequency Region",
@@ -68,25 +67,16 @@
 		"3": {
 			"label": "Hardware and Software Versions",
 			"valueSize": 4,
-			"minValue": 0,
-			"maxValue": 0,
-			"defaultValue": 0,
-			"readOnly": true,
-			"allowManualEntry": false
+			"readOnly": true
 		},
 		"4": {
-			"label": "Energy Consumption, kW",
+			"label": "Energy Consumption",
 			"unit": "kW",
 			"valueSize": 4,
-			"minValue": 0,
-			"maxValue": 0,
-			"defaultValue": 0,
-			"readOnly": true,
-			"allowManualEntry": false
+			"readOnly": true
 		},
 		"7": {
-			"label": "Relay 1 Outputs NO/NC Mode",
-			"description": "The output type can be NO – normal open (no contact/voltage to switch the load OFF) or NC - normal close (output is contacted / there is a voltage to switch the load OFF)",
+			"label": "Relay 1 Output Mode",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 1,
@@ -104,8 +94,7 @@
 			]
 		},
 		"8": {
-			"label": "Relay 2 Outputs NO/NC Mode",
-			"description": "The output type can be NO – normal open (no contact/voltage to switch the load OFF) or NC - normal close (output is contacted / there is a voltage to switch the load OFF)",
+			"label": "Relay 2 Output Mode",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 1,
@@ -123,8 +112,7 @@
 			]
 		},
 		"9": {
-			"label": "Relay 3 Outputs NO/NC Mode",
-			"description": "The output type can be NO – normal open (no contact/voltage to switch the load OFF) or NC - normal close (output is contacted / there is a voltage to switch the load OFF)",
+			"label": "Relay 3 Output Mode",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 1,
@@ -142,8 +130,7 @@
 			]
 		},
 		"10": {
-			"label": "Relay 4 Outputs NO/NC Mode",
-			"description": "The output type can be NO – normal open (no contact/voltage to switch the load OFF) or NC - normal close (output is contacted / there is a voltage to switch the load OFF)",
+			"label": "Relay 4 Output Mode",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 1,
@@ -161,8 +148,7 @@
 			]
 		},
 		"11": {
-			"label": "Relay 5 Outputs NO/NC Mode",
-			"description": "The output type can be NO – normal open (no contact/voltage to switch the load OFF) or NC - normal close (output is contacted / there is a voltage to switch the load OFF)",
+			"label": "Relay 5 Output Mode",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 1,
@@ -180,47 +166,42 @@
 			]
 		},
 		"12": {
-			"label": "Relay 1 Load Power in watt",
-			"description": "This parameter are used to specify the load power that are connected to the device output 1. The range from 0 to 1100 watt can be selected.",
+			"label": "Relay 1 Power Load",
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 1100,
 			"defaultValue": 0
 		},
 		"13": {
-			"label": "Relay 2 Load Power in watt",
-			"description": "This parameter are used to specify the load power that are connected to the device output 2. The range from 0 to 1100 watt can be selected.",
+			"label": "Relay 2 Power Load",
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 1100,
 			"defaultValue": 0
 		},
 		"14": {
-			"label": "Relay 3 Load Power in watt",
-			"description": "This parameter are used to specify the load power that are connected to the device output 3. The range from 0 to 1100 watt can be selected.",
+			"label": "Relay 3 Power Load",
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 1100,
 			"defaultValue": 0
 		},
 		"15": {
-			"label": "Relay 4 Load Power in watt",
-			"description": "This parameter are used to specify the load power that are connected to the device output 4. The range from 0 to 1100 watt can be selected.",
+			"label": "Relay 4 Power Load",
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 1100,
 			"defaultValue": 0
 		},
 		"16": {
-			"label": "Relay 5 Load Power in watt",
-			"description": "This parameter are used to specify the load power that are connected to the device output 5. The range from 0 to 1100 watt can be selected.",
+			"label": "Relay 5 Power Load",
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 1100,
 			"defaultValue": 0
 		},
 		"19": {
-			"label": "Time correction by controller",
+			"label": "Time Correction by Controller",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 1,
@@ -238,8 +219,7 @@
 			]
 		},
 		"21": {
-			"label": "Week day",
-			"description": "Manually set week day",
+			"label": "Week Day Override",
 			"valueSize": 1,
 			"minValue": 1,
 			"maxValue": 7,
@@ -277,8 +257,7 @@
 			]
 		},
 		"22": {
-			"label": "Time",
-			"description": "Time: Hour and Minutes",
+			"label": "Time Override",
 			"unit": "HHMM",
 			"valueSize": 2,
 			"minValue": 0,
@@ -757,7 +736,7 @@
 		},
 		"71": {
 			"label": "Relay 1 Timer Mode Duration",
-			"description": " Press the button on the switch connected to external input and the relay output goes to ON/OFF for the specified time then changes back to OFF/ON. This function can be used to open/close garage doors, blinds, curtains, etc. or to turn attached devices like door lock or security OFF for a short time. If the parameter value is set to ―0‖ it will operate as a short contact (about 0.5sec).",
+			"description": "This function can be used to open/close garage doors, blinds, curtains, etc. or to turn attached devices like door lock or security OFF for a short time. If the parameter value is set to ―0‖ it will operate as a short contact (about 0.5sec).",
 			"unit": "seconds",
 			"valueSize": 3,
 			"minValue": 0,
@@ -766,7 +745,7 @@
 		},
 		"72": {
 			"label": "Relay 2 Timer Mode Duration",
-			"description": " Press the button on the switch connected to external input and the relay output goes to ON/OFF for the specified time then changes back to OFF/ON. This function can be used to open/close garage doors, blinds, curtains, etc. or to turn attached devices like door lock or security OFF for a short time. If the parameter value is set to ―0‖ it will operate as a short contact (about 0.5sec).",
+			"description": "This function can be used to open/close garage doors, blinds, curtains, etc. or to turn attached devices like door lock or security OFF for a short time. If the parameter value is set to ―0‖ it will operate as a short contact (about 0.5sec).",
 			"unit": "seconds",
 			"valueSize": 3,
 			"minValue": 0,
@@ -775,7 +754,7 @@
 		},
 		"73": {
 			"label": "Relay 3 Timer Mode Duration",
-			"description": " Press the button on the switch connected to external input and the relay output goes to ON/OFF for the specified time then changes back to OFF/ON. This function can be used to open/close garage doors, blinds, curtains, etc. or to turn attached devices like door lock or security OFF for a short time. If the parameter value is set to ―0‖ it will operate as a short contact (about 0.5sec).",
+			"description": "This function can be used to open/close garage doors, blinds, curtains, etc. or to turn attached devices like door lock or security OFF for a short time. If the parameter value is set to ―0‖ it will operate as a short contact (about 0.5sec).",
 			"unit": "seconds",
 			"valueSize": 3,
 			"minValue": 0,
@@ -784,7 +763,7 @@
 		},
 		"74": {
 			"label": "Relay 4 Timer Mode Duration",
-			"description": " Press the button on the switch connected to external input and the relay output goes to ON/OFF for the specified time then changes back to OFF/ON. This function can be used to open/close garage doors, blinds, curtains, etc. or to turn attached devices like door lock or security OFF for a short time. If the parameter value is set to ―0‖ it will operate as a short contact (about 0.5sec).",
+			"description": "This function can be used to open/close garage doors, blinds, curtains, etc. or to turn attached devices like door lock or security OFF for a short time. If the parameter value is set to ―0‖ it will operate as a short contact (about 0.5sec).",
 			"unit": "seconds",
 			"valueSize": 3,
 			"minValue": 0,
@@ -793,7 +772,7 @@
 		},
 		"75": {
 			"label": "Relay 5 Timer Mode Duration",
-			"description": " Press the button on the switch connected to external input and the relay output goes to ON/OFF for the specified time then changes back to OFF/ON. This function can be used to open/close garage doors, blinds, curtains, etc. or to turn attached devices like door lock or security OFF for a short time. If the parameter value is set to ―0‖ it will operate as a short contact (about 0.5sec).",
+			"description": "This function can be used to open/close garage doors, blinds, curtains, etc. or to turn attached devices like door lock or security OFF for a short time. If the parameter value is set to ―0‖ it will operate as a short contact (about 0.5sec).",
 			"unit": "seconds",
 			"valueSize": 3,
 			"minValue": 0,
@@ -853,8 +832,7 @@
 			"defaultValue": 10
 		},
 		"142": {
-			"label": "Control Energy Consumption Report ",
-			"description": "Consumption difference to send to controller, %",
+			"label": "Control Energy Consumption Report",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 1,

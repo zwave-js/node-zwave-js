@@ -67,11 +67,7 @@
 		"3": {
 			"label": "Hardware and Software Versions",
 			"valueSize": 4,
-			"minValue": 0,
-			"maxValue": 0,
-			"defaultValue": 0,
-			"readOnly": true,
-			"allowManualEntry": false
+			"readOnly": true
 		},
 		"4": {
 			"label": "Energy Consumption",
@@ -106,8 +102,8 @@
 			"defaultValue": 10
 		},
 		"16": {
-			"label": "Temperature Scale Mode",
-			"description": "Sets temperature unit (Celsius/Fahrenheit)",
+			"label": "Temperature Scale",
+			"description": "Allowable range: 1 Celsius - 2 Fahrenheit",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 1,
@@ -132,7 +128,7 @@
 			"defaultValue": 0
 		},
 		"19": {
-			"label": "Time correction by controller",
+			"label": "Time Correction by Controller",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 1,
@@ -150,8 +146,7 @@
 			]
 		},
 		"21": {
-			"label": "Week day",
-			"description": "Manually set week day",
+			"label": "Week Day Override",
 			"valueSize": 1,
 			"minValue": 1,
 			"maxValue": 7,
@@ -189,8 +184,7 @@
 			]
 		},
 		"22": {
-			"label": "Time",
-			"description": "Time: Hour and Minutes",
+			"label": "Time Override",
 			"unit": "HHMM",
 			"valueSize": 2,
 			"minValue": 0,
@@ -233,7 +227,7 @@
 		},
 		"26": {
 			"label": "High Load Timeout Protection: Power Threshold",
-			"unit": "Watts",
+			"unit": "W",
 			"valueSize": 2,
 			"minValue": 100,
 			"maxValue": 3500,
@@ -241,14 +235,14 @@
 		},
 		"27": {
 			"label": "High Load Timeout Protection: Time Threshold",
-			"unit": "Watts",
+			"unit": "W",
 			"valueSize": 2,
 			"minValue": 1,
 			"maxValue": 1440,
 			"defaultValue": 0
 		},
 		"41": {
-			"label": "External input: Hold Control Mode",
+			"label": "External Input: Hold Control Mode",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 3,
@@ -325,7 +319,6 @@
 		},
 		"142": {
 			"label": "Energy Consumption Report Threshold",
-			"description": "Consumption difference to send to controller, %",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 50,
@@ -341,7 +334,6 @@
 		},
 		"144": {
 			"label": "Temperature report threshold",
-			"description": "Temperature difference to send to controller, value X 10",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 100,
@@ -367,7 +359,7 @@
 		},
 		"152": {
 			"label": "Temperature Rise Notification",
-			"description": ": We recommend setting the value of this Parameter lower than value of Parameter 153 (Overheat Protection).",
+			"description": ": Value of this Parameter should be lower than value of Parameter 153 (Overheat Protection & Notification).",
 			"valueSize": 2,
 			"minValue": 1,
 			"maxValue": 120,
@@ -382,7 +374,7 @@
 		},
 		"154": {
 			"label": "Over-Current Notification",
-			"description": "Even if you turn off the notification, the device will switch Off the load when the current reaches 16A.",
+			"description": "The device will switch Off the load when the current reaches 16A.",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 1,
@@ -401,7 +393,7 @@
 		},
 		"155": {
 			"label": "Over-Load Protection & Notification",
-			"description": "Allowable Range 100-4000.",
+			"description": "Allowable Range: 100-4000. 0 to disable function.",
 			"unit": "W",
 			"valueSize": 2,
 			"minValue": 0,
@@ -410,7 +402,7 @@
 		},
 		"156": {
 			"label": "Over-Voltage Protection & Notification",
-			"description": "The value of this parameter can be set from 120 to 280 in watts. Use the value 0 if there is a need to disable this function.",
+			"description": "Allowable Range: 120-280. 0 to disable function.",
 			"unit": "Volts",
 			"valueSize": 2,
 			"minValue": 0,
@@ -419,7 +411,7 @@
 		},
 		"157": {
 			"label": "Voltage Drop Protection & Notification",
-			"description": "The value of this parameter can be set from 80 to 240 in watts. Use the value 0 if there is a need to disable this function.",
+			"description": "Allowable Range: 80-240. 0 to disable function.",
 			"unit": "Volts",
 			"valueSize": 2,
 			"minValue": 0,
