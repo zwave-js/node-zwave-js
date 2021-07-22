@@ -6,168 +6,55 @@
 	"devices": [
 		{
 			"productType": "0x0003",
-			"productId": "0x608d"
+			"productId": "0x0083"
+		},
+		{
+			"productType": "0x0003",
+			"productId": "0x1083"
+		},
+		{
+			"productType": "0x0003",
+			"productId": "0x2083"
 		}
 	],
 	"firmwareVersion": {
 		"min": "0.0",
 		"max": "255.255"
 	},
+	"supportsZWavePlus": true,
 	"paramInformation": {
 		"1": {
-			"label": "PIR Sensitivity",
-			"description": "8 = highest; 255 = lowest",
-			"valueSize": 1,
-			"minValue": 8,
-			"maxValue": 255,
-			"defaultValue": 12,
-			"unsigned": true
+			"$import": "templates/shenzhen_neo_template.json#motion_sensitivity"
 		},
 		"2": {
-			"label": "On/Off Duration",
-			"description": "Determines how long the associated devices should stay on",
-			"unit": "seconds",
-			"valueSize": 2,
-			"minValue": 5,
-			"maxValue": 600,
-			"defaultValue": 30
+			"$import": "templates/shenzhen_neo_template.json#motion_on_off_duration"
 		},
 		"3": {
-			"label": "Basic Set Level",
-			"description": "Basic Set Command will be sent when motion is triggered",
-			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 255,
-			"defaultValue": 99,
-			"unsigned": true
+			"$import": "templates/shenzhen_neo_template.json#motion_basic_set_level"
 		},
 		"4": {
-			"label": "PIR Detector",
-			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 255,
-			"defaultValue": 255,
-			"unsigned": true,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "Disable",
-					"value": 0
-				},
-				{
-					"label": "Enable",
-					"value": 255
-				}
-			]
+			"$import": "templates/shenzhen_neo_template.json#motion_sensor"
 		},
 		"5": {
-			"label": "Light Sensor Brightness Threshold",
-			"description": "The light sensor is active when the brightness is above this level",
-			"unit": "lux",
-			"valueSize": 2,
-			"minValue": 0,
-			"maxValue": 1000,
-			"defaultValue": 100
+			"$import": "templates/shenzhen_neo_template.json#light_sensor_threshold"
 		},
 		"6": {
-			"label": "PIR Re-trigger Interval",
-			"description": "Must be less than the On/Off Duration",
-			"unit": "seconds",
-			"valueSize": 1,
-			"minValue": 1,
-			"maxValue": 8,
-			"defaultValue": 8
+			"$import": "templates/shenzhen_neo_template.json#motion_retrigger_interval"
 		},
 		"7": {
-			"label": "Light Sensor Polling Interval",
-			"description": "The Interval after which the Light Sensor Measure is polled.",
-			"unit": "seconds",
-			"valueSize": 2,
-			"minValue": 60,
-			"maxValue": 36000,
-			"defaultValue": 180,
-			"unsigned": true
+			"$import": "templates/shenzhen_neo_template.json#light_sensor_update_interval"
 		},
 		"8": {
-			"label": "Lux Level Function",
-			"description": "When enabled, send Basic Set if brighness falls below threshold.",
-			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 1,
-			"defaultValue": 0,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "Disable",
-					"value": 0
-				},
-				{
-					"label": "Enable",
-					"value": 1
-				}
-			]
+			"$import": "templates/shenzhen_neo_template.json#low_brightness_sensor"
 		},
 		"9": {
-			"label": "Lux Level Changed Report",
-			"description": "How much the Lux Level must change",
-			"unit": "lux",
-			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 255,
-			"defaultValue": 100,
-			"unsigned": true
+			"$import": "templates/shenzhen_neo_template.json#light_sensor_report_threshold"
 		},
 		"10": {
-			"label": "Temperature Differential Report Threshold",
-			"unit": "0.1 °C",
-			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 127,
-			"defaultValue": 5
-		},
-		"11": {
-			"label": "LED: Blink on Motion",
-			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 1,
-			"defaultValue": 1,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "Disable",
-					"value": 0
-				},
-				{
-					"label": "Enable",
-					"value": 1
-				}
-			]
-		},
-		"12": {
-			"label": "Prevent Motion Re-Trigger While On",
-			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 1,
-			"defaultValue": 1,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "Disable",
-					"value": 0
-				},
-				{
-					"label": "Enable",
-					"value": 1
-				}
-			]
+			"$import": "templates/shenzhen_neo_template.json#temperature_report_threshold"
 		},
 		"99": {
-			"label": "Ambient Light Intensity Calibration",
-			"valueSize": 2,
-			"minValue": 1,
-			"maxValue": 65535,
-			"defaultValue": 10,
-			"unsigned": true
+			"$import": "templates/shenzhen_neo_template.json#light_calibration"
 		}
 	}
 }

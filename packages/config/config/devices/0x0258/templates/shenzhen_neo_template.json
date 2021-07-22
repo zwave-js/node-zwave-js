@@ -1,0 +1,155 @@
+{
+	"motion_sensitivity": {
+		"label": "Motion Sensor: Sensitivity",
+		"description": "8 = highest; 255 = lowest",
+		"valueSize": 1,
+		"minValue": 8,
+		"maxValue": 255,
+		"defaultValue": 12,
+		"unsigned": true
+	},
+	"motion_on_off_duration": {
+		"label": "On/Off Duration",
+		"description": "Determines how long the associated devices should stay on",
+		"unit": "seconds",
+		"valueSize": 2,
+		"minValue": 5,
+		"maxValue": 600,
+		"defaultValue": 30
+	},
+	"motion_basic_set_level": {
+		"label": "Motion Sensor: Basic Set Level",
+		"description": "Basic Set Command will be sent when motion is triggered",
+		"valueSize": 1,
+		"minValue": 0,
+		"maxValue": 255,
+		"defaultValue": 255,
+		"unsigned": true
+	},
+	"motion_sensor": {
+		"label": "Motion Sensor",
+		"valueSize": 1,
+		"minValue": 0,
+		"maxValue": 255,
+		"defaultValue": 255,
+		"unsigned": true,
+		"allowManualEntry": false,
+		"options": [
+			{
+				"label": "Disable",
+				"value": 0
+			},
+			{
+				"label": "Enable",
+				"value": 255
+			}
+		]
+	},
+	"light_sensor_threshold": {
+		"label": "Light Sensor Brightness Threshold",
+		"description": "The light sensor is active when the brightness is above this level",
+		"unit": "lux",
+		"valueSize": 2,
+		"minValue": 0,
+		"maxValue": 1000,
+		"defaultValue": 100
+	},
+	"motion_retrigger_interval": {
+		"label": "Motion Sensor: Re-trigger Interval",
+		"description": "Must be less than the On/Off Duration",
+		"unit": "seconds",
+		"valueSize": 1,
+		"minValue": 1,
+		"maxValue": 8,
+		"defaultValue": 8
+	},
+	"light_sensor_update_interval": {
+		"label": "Light Sensor Update Interval",
+		"unit": "seconds",
+		"valueSize": 2,
+		"minValue": 60,
+		"maxValue": 36000,
+		"defaultValue": 180,
+		"unsigned": true
+	},
+	"low_brightness_sensor": {
+		"label": "Low Brightness Sensor",
+		"description": "When enabled, send Basic Set if brightness falls below threshold.",
+		"valueSize": 1,
+		"minValue": 0,
+		"maxValue": 1,
+		"defaultValue": 0,
+		"allowManualEntry": false,
+		"options": [
+			{
+				"label": "Disable",
+				"value": 0
+			},
+			{
+				"label": "Enable",
+				"value": 1
+			}
+		]
+	},
+	"light_sensor_report_threshold": {
+		"label": "Light Sensor Differential Report Threshold",
+		"unit": "lux",
+		"valueSize": 1,
+		"minValue": 0,
+		"maxValue": 255,
+		"defaultValue": 100,
+		"unsigned": true
+	},
+	"temperature_report_threshold": {
+		"label": "Temperature Differential Report Threshold",
+		"unit": "0.1 °C",
+		"valueSize": 1,
+		"minValue": 0,
+		"maxValue": 127,
+		"defaultValue": 5
+	},
+	"blink_on_motion": {
+		"label": "LED: Blink on Motion",
+		"valueSize": 1,
+		"minValue": 0,
+		"maxValue": 1,
+		"defaultValue": 1,
+		"allowManualEntry": false,
+		"options": [
+			{
+				"label": "Disable",
+				"value": 0
+			},
+			{
+				"label": "Enable",
+				"value": 1
+			}
+		]
+	},
+	"motion_prevent_retrigger": {
+		"label": "Motion Sensor: Prevent Re-Trigger While On",
+		"valueSize": 1,
+		"minValue": 0,
+		"maxValue": 1,
+		"defaultValue": 1,
+		"allowManualEntry": false,
+		"options": [
+			{
+				"label": "Disable",
+				"value": 0
+			},
+			{
+				"label": "Enable",
+				"value": 1
+			}
+		]
+	},
+	"light_calibration": {
+		"label": "Ambient Light Intensity Calibration",
+		"valueSize": 2,
+		"minValue": 1,
+		"maxValue": 65535,
+		"defaultValue": 1000,
+		"unsigned": true
+	}
+}
