@@ -67,12 +67,16 @@
 		"3": {
 			"label": "Hardware and Software Versions",
 			"valueSize": 4,
+			"minValue": 0,
+			"maxValue": 0,
 			"readOnly": true
 		},
 		"4": {
 			"label": "Energy Consumption",
 			"unit": "kW",
 			"valueSize": 4,
+			"minValue": 0,
+			"maxValue": 0,
 			"readOnly": true
 		},
 		"5": {
