@@ -7,6 +7,7 @@ import {
 	ConfigValueFormat,
 	encodeBitMask,
 	encodePartial,
+	getBitMaskWidth,
 	getIntegerLimits,
 	getMinIntegerSize,
 	isConsecutiveArray,
@@ -247,6 +248,20 @@ function bulkMergePartialParamValues(
 	return allParams as any;
 }
 
+/** Determines whether a partial parameter needs to be interpreted as signed */
+function isSignedPartial(
+	bitMask: number,
+	format: ConfigValueFormat | undefined,
+): boolean {
+	// Only treat partial params as signed if they span more than 1 bit.
+	// Otherwise we cannot model 0/1 properly.
+	return (
+		getBitMaskWidth(bitMask) > 1 &&
+		(format ?? ConfigValueFormat.SignedInteger) ===
+			ConfigValueFormat.SignedInteger
+	);
+}
+
 @API(CommandClasses.Configuration)
 export class ConfigurationCCAPI extends CCAPI {
 	public supportsCommand(cmd: ConfigurationCommand): Maybe<boolean> {
@@ -466,8 +481,7 @@ export class ConfigurationCCAPI extends CCAPI {
 			return parsePartial(
 				response.value as any,
 				valueBitMask,
-				(paramInfo.format ?? ConfigValueFormat.SignedInteger) ===
-					ConfigValueFormat.SignedInteger,
+				isSignedPartial(valueBitMask, paramInfo.format),
 			);
 		}
 		this.driver.controllerLog.logNode(this.endpoint.nodeId, {
@@ -559,8 +573,7 @@ export class ConfigurationCCAPI extends CCAPI {
 				value = parsePartial(
 					value,
 					o.bitMask,
-					(paramInfo.format ?? ConfigValueFormat.SignedInteger) ===
-						ConfigValueFormat.SignedInteger,
+					isSignedPartial(o.bitMask, paramInfo.format),
 				);
 			}
 			return { ...o, value };
@@ -1425,9 +1438,10 @@ export class ConfigurationCCReport extends ConfigurationCC {
 						parsePartial(
 							this._value as any,
 							param.propertyKey,
-							(param.metadata.format ??
-								ConfigValueFormat.SignedInteger) ===
-								ConfigValueFormat.SignedInteger,
+							isSignedPartial(
+								param.propertyKey,
+								param.metadata.format,
+							),
 						),
 					);
 				}
