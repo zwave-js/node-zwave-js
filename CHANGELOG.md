@@ -5,6 +5,10 @@
 	Add placeholder for next release with `wip` snippet
   ## __WORK IN PROGRESS__
 -->
+## __WORK IN PROGRESS__
+### Bugfixes
+* Fixed `$import` validation logic for device config files from the `ZWAVEJS_EXTERNAL_CONFIG` dir
+
 ## 8.0.4 (2021-07-21)
 ### Bugfixes
 * Multicast/Broadcast `start/stopLevelChange` now also works correctly via the `setValue` API
