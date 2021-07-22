@@ -75,7 +75,7 @@
 			"allowManualEntry": false
 		},
 		"4": {
-			"label": "Energy Consumption, kW",
+			"label": "Energy Consumption",
 			"unit": "kW",
 			"valueSize": 4,
 			"readOnly": true
