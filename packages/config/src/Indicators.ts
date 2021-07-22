@@ -28,7 +28,7 @@ export async function loadIndicatorsInternal(
 	properties: IndicatorPropertiesMap;
 }> {
 	const indicatorsConfigPath = path.join(
-		(externalConfig && externalConfigDir) || configDir,
+		(externalConfig && externalConfigDir()) || configDir,
 		"indicators.json",
 	);
 

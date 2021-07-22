@@ -19,7 +19,7 @@ export async function loadMetersInternal(
 	externalConfig?: boolean,
 ): Promise<MeterMap> {
 	const configPath = path.join(
-		(externalConfig && externalConfigDir) || configDir,
+		(externalConfig && externalConfigDir()) || configDir,
 		"meters.json",
 	);
 

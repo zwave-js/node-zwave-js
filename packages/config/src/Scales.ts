@@ -23,7 +23,7 @@ export async function loadNamedScalesInternal(
 	externalConfig?: boolean,
 ): Promise<NamedScalesGroupMap> {
 	const configPath = path.join(
-		(externalConfig && externalConfigDir) || configDir,
+		(externalConfig && externalConfigDir()) || configDir,
 		"scales.json",
 	);
 

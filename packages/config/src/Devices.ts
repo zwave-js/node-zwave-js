@@ -71,7 +71,7 @@ export type ParamInfoMap = ReadonlyObjectKeyMap<
 export const embeddedDevicesDir = path.join(configDir, "devices");
 const fulltextIndexPath = path.join(embeddedDevicesDir, "fulltext_index.json");
 
-function getDevicesPaths(configDir: string): {
+export function getDevicesPaths(configDir: string): {
 	devicesDir: string;
 	indexPath: string;
 } {
@@ -289,7 +289,7 @@ export async function loadDeviceIndexInternal(
 	externalConfig?: boolean,
 ): Promise<DeviceConfigIndex> {
 	const { devicesDir, indexPath } = getDevicesPaths(
-		(externalConfig && externalConfigDir) || configDir,
+		(externalConfig && externalConfigDir()) || configDir,
 	);
 
 	return loadDeviceIndexShared(
