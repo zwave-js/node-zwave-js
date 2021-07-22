@@ -103,8 +103,7 @@
 			]
 		},
 		"10": {
-			"label": "Floor Sensor Resistance",
-			"description": "External Floor NTC temperature sensor resistance",
+			"label": "Floor Temperature Sensor Resistance",
 			"unit": "kΩ",
 			"valueSize": 1,
 			"minValue": 1,
