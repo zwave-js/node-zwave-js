@@ -21,9 +21,9 @@ import {
 	ConditionalDeviceConfig,
 	DeviceConfig,
 	DeviceConfigIndex,
-	embeddedDevicesDir,
 	FulltextDeviceConfigIndex,
 	generatePriorityDeviceIndex,
+	getDevicesPaths,
 	loadDeviceIndexInternal,
 	loadFulltextDeviceIndexInternal,
 } from "./Devices";
@@ -138,7 +138,7 @@ export class ConfigManager {
 		if (syncResult.success) {
 			this.useExternalConfig = true;
 			this.logger.print(
-				`Using external configuration dir ${externalConfigDir}`,
+				`Using external configuration dir ${externalConfigDir()}`,
 			);
 			this._configVersion = syncResult.version;
 		} else {
@@ -568,15 +568,18 @@ export class ConfigManager {
 		);
 
 		if (indexEntry) {
+			const devicesDir = getDevicesPaths(
+				this.useExternalConfig ? externalConfigDir()! : configDir,
+			).devicesDir;
 			const filePath = path.isAbsolute(indexEntry.filename)
 				? indexEntry.filename
-				: path.join(configDir, "devices", indexEntry.filename);
+				: path.join(devicesDir, indexEntry.filename);
 			if (!(await pathExists(filePath))) return;
 
 			try {
 				return await ConditionalDeviceConfig.from(filePath, {
 					// When looking for device files, fall back to the embedded config dir
-					rootDir: indexEntry.rootDir ?? embeddedDevicesDir,
+					rootDir: indexEntry.rootDir ?? devicesDir,
 				});
 			} catch (e) {
 				if (process.env.NODE_ENV !== "test") {

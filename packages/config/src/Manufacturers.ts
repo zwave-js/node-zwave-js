@@ -19,7 +19,7 @@ export async function loadManufacturersInternal(
 	externalConfig?: boolean,
 ): Promise<ManufacturersMap> {
 	const configPath = path.join(
-		(externalConfig && externalConfigDir) || configDir,
+		(externalConfig && externalConfigDir()) || configDir,
 		"manufacturers.json",
 	);
 

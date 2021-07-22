@@ -29,7 +29,7 @@ export async function loadDeviceClassesInternal(
 	genericDeviceClasses: GenericDeviceClassMap;
 }> {
 	const configPath = path.join(
-		(externalConfig && externalConfigDir) || configDir,
+		(externalConfig && externalConfigDir()) || configDir,
 		"deviceClasses.json",
 	);
 

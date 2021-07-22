@@ -22,7 +22,7 @@ export async function loadSensorTypesInternal(
 	externalConfig?: boolean,
 ): Promise<SensorTypeMap> {
 	const configPath = path.join(
-		(externalConfig && externalConfigDir) || configDir,
+		(externalConfig && externalConfigDir()) || configDir,
 		"sensorTypes.json",
 	);
 

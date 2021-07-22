@@ -9,7 +9,9 @@ import type { ConfigLogger } from "./Logger";
 /** The absolute path of the embedded configuration directory */
 export const configDir = path.resolve(__dirname, "../config");
 /** The (optional) absolute path of an external configuration directory */
-export const externalConfigDir = process.env.ZWAVEJS_EXTERNAL_CONFIG;
+export function externalConfigDir(): string | undefined {
+	return process.env.ZWAVEJS_EXTERNAL_CONFIG;
+}
 
 export const hexKeyRegexNDigits = /^0x[a-f0-9]+$/;
 export const hexKeyRegex4Digits = /^0x[a-f0-9]{4}$/;
@@ -74,11 +76,12 @@ export type SyncExternalConfigDirResult =
 export async function syncExternalConfigDir(
 	logger: ConfigLogger,
 ): Promise<SyncExternalConfigDirResult> {
-	if (!externalConfigDir) return { success: false };
+	const extConfigDir = externalConfigDir();
+	if (!extConfigDir) return { success: false };
 
 	// Make sure the config dir exists
 	try {
-		await fs.ensureDir(externalConfigDir);
+		await fs.ensureDir(extConfigDir);
 	} catch {
 		logger.print(
 			`Synchronizing external config dir failed - directory could not be created`,
@@ -87,7 +90,7 @@ export async function syncExternalConfigDir(
 		return { success: false };
 	}
 
-	const externalVersionFilename = path.join(externalConfigDir, "version");
+	const externalVersionFilename = path.join(extConfigDir, "version");
 	const currentVersion = await getEmbeddedConfigVersion();
 	const supportedRange = `>=${currentVersion} <${semver.inc(
 		currentVersion,
@@ -122,11 +125,9 @@ export async function syncExternalConfigDir(
 
 	// Wipe and override the external dir
 	try {
-		logger.print(
-			`Synchronizing external config dir ${externalConfigDir}...`,
-		);
-		await fs.emptyDir(externalConfigDir);
-		await fs.copy(configDir, externalConfigDir, {
+		logger.print(`Synchronizing external config dir ${extConfigDir}...`);
+		await fs.emptyDir(extConfigDir);
+		await fs.copy(configDir, extConfigDir, {
 			filter: async (src: string) => {
 				if (!(await fs.stat(src)).isFile()) return true;
 				return src.endsWith(".json");
