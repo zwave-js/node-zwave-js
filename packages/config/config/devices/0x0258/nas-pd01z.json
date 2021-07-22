@@ -15,8 +15,8 @@
 	},
 	"paramInformation": {
 		"1": {
-			"label": "Sensitivity Level",
-			"description": "Defines the sensitivity of PIR sensor. 8 highest sensitivity and 255 lowest sensitivity.",
+			"label": "PIR Sensitivity",
+			"description": "8 = highest; 255 = lowest",
 			"valueSize": 1,
 			"minValue": 8,
 			"maxValue": 255,
