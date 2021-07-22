@@ -1,12 +1,24 @@
 {
 	"manufacturer": "Shenzhen Neo Electronics Co., Ltd.",
 	"manufacturerId": "0x0258",
-	"label": "Motion Sensor IN",
-	"description": "Motion Sensor IN",
+	"label": "NAS-PD03Z",
+	"description": "PIR Motion Sensor 3",
 	"devices": [
 		{
 			"productType": "0x0003",
-			"productId": "0x3083"
+			"productId": "0x108d"
+		},
+		{
+			"productType": "0x0003",
+			"productId": "0x208d"
+		},
+		{
+			"productType": "0x0200",
+			"productId": "0x1031"
+		},
+		{
+			"productType": "0x0003",
+			"productId": "0x608d"
 		}
 	],
 	"firmwareVersion": {
@@ -42,7 +54,13 @@
 			"$import": "templates/shenzhen_neo_template.json#light_sensor_report_threshold"
 		},
 		"10": {
+			"$import": "templates/shenzhen_neo_template.json#temperature_report_threshold"
+		},
+		"11": {
 			"$import": "templates/shenzhen_neo_template.json#blink_on_motion"
+		},
+		"12": {
+			"$import": "templates/shenzhen_neo_template.json#motion_prevent_retrigger"
 		},
 		"99": {
 			"$import": "templates/shenzhen_neo_template.json#light_calibration"
