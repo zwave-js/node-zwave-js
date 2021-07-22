@@ -407,7 +407,7 @@
 		"155": {
 			"label": "Over-Load Protection & Notification",
 			"description": "Allowable Range 100-4000.",
-			"unit": "Watts",
+			"unit": "W",
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 4000,
