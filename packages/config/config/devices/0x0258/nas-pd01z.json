@@ -21,7 +21,6 @@
 		"min": "0.0",
 		"max": "255.255"
 	},
-	"supportsZWavePlus": true,
 	"paramInformation": {
 		"1": {
 			"$import": "templates/shenzhen_neo_template.json#motion_sensitivity"
