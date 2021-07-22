@@ -5,6 +5,19 @@
 	Add placeholder for next release with `wip` snippet
   ## __WORK IN PROGRESS__
 -->
+## __WORK IN PROGRESS__
+### Bugfixes
+* The detection whether a config file is considered embedded or user-provided now takes `ZWAVEJS_EXTERNAL_CONFIG` into account.
+* Improved the error message when the cache directory cannot be written to
+
+### Config file changes
+* Add NAS-PD03Z Motion Sensor 3
+* Template other Shenzhen Neo motion sensors
+* Map root reports to endpoint 1 for CT101
+
+### Changes under the hood
+* Added regression tests for this oddysey of config loading fixes
+
 ## 8.0.5 (2021-07-22)
 ### Bugfixes
 * Fixed `$import` validation logic for device config files from the `ZWAVEJS_EXTERNAL_CONFIG` dir
