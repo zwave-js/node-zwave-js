@@ -78,11 +78,7 @@
 			"label": "Energy Consumption, kW",
 			"unit": "kW",
 			"valueSize": 4,
-			"minValue": 0,
-			"maxValue": 0,
-			"defaultValue": 0,
-			"readOnly": true,
-			"allowManualEntry": false
+			"readOnly": true
 		},
 		"7": {
 			"label": "Relay Output Mode",
