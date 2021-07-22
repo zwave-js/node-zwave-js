@@ -576,11 +576,21 @@ export class ConfigManager {
 				: path.join(devicesDir, indexEntry.filename);
 			if (!(await pathExists(filePath))) return;
 
+			// A config file is treated as am embedded one when it is located under the devices root dir
+			// or the external config dir
+			const isEmbedded = !path
+				.relative(devicesDir, filePath)
+				.startsWith("..");
+
 			try {
-				return await ConditionalDeviceConfig.from(filePath, {
-					// When looking for device files, fall back to the embedded config dir
-					rootDir: indexEntry.rootDir ?? devicesDir,
-				});
+				return await ConditionalDeviceConfig.from(
+					filePath,
+					isEmbedded,
+					{
+						// When looking for device files, fall back to the embedded config dir
+						rootDir: indexEntry.rootDir ?? devicesDir,
+					},
+				);
 			} catch (e) {
 				if (process.env.NODE_ENV !== "test") {
 					this.logger.print(

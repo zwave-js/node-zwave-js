@@ -116,6 +116,7 @@ async function hasChangedDeviceFiles(
  */
 async function generateIndex<T extends Record<string, unknown>>(
 	devicesDir: string,
+	isEmbedded: boolean,
 	extractIndexEntries: (config: DeviceConfig) => T[],
 	logger?: ConfigLogger,
 ): Promise<(T & { filename: string; rootDir?: string })[]> {
@@ -136,7 +137,7 @@ async function generateIndex<T extends Record<string, unknown>>(
 			.replace(/\\/g, "/");
 		// Try parsing the file
 		try {
-			const config = await DeviceConfig.from(file, {
+			const config = await DeviceConfig.from(file, isEmbedded, {
 				rootDir: devicesDir,
 				relative: true,
 			});
@@ -221,7 +222,12 @@ async function loadDeviceIndexShared<T extends Record<string, unknown>>(
 
 	if (needsUpdate) {
 		// Read all files from disk and generate an index
-		index = await generateIndex(devicesDir, extractIndexEntries, logger);
+		index = await generateIndex(
+			devicesDir,
+			true,
+			extractIndexEntries,
+			logger,
+		);
 		// Save the index to disk
 		try {
 			await writeFile(
@@ -257,6 +263,7 @@ export async function generatePriorityDeviceIndex(
 	return (
 		await generateIndex(
 			deviceConfigPriorityDir,
+			false,
 			(config) =>
 				config.devices.map((dev) => ({
 					manufacturerId: formatId(
@@ -366,6 +373,7 @@ function conditionApplies(condition: string, context: unknown): boolean {
 export class ConditionalDeviceConfig {
 	public static async from(
 		filename: string,
+		isEmbedded: boolean,
 		options: {
 			rootDir: string;
 			relative?: boolean;
@@ -377,11 +385,12 @@ export class ConditionalDeviceConfig {
 			? path.relative(rootDir, filename).replace(/\\/g, "/")
 			: filename;
 		const json = await readJsonWithTemplate(filename, options.rootDir);
-		return new ConditionalDeviceConfig(relativePath, json);
+		return new ConditionalDeviceConfig(relativePath, isEmbedded, json);
 	}
 
-	public constructor(filename: string, definition: any) {
+	public constructor(filename: string, isEmbedded: boolean, definition: any) {
 		this.filename = filename;
+		this.isEmbedded = isEmbedded;
 
 		if (!isHexKeyWith4Digits(definition.manufacturerId)) {
 			throwInvalidConfig(
@@ -637,6 +646,9 @@ metadata is not an object`,
 	/** Contains instructions and other metadata for the device */
 	public readonly metadata?: DeviceMetadata;
 
+	/** Whether this is an embedded configuration or not */
+	public readonly isEmbedded: boolean;
+
 	public evaluate(deviceId?: DeviceID): DeviceConfig {
 		let associations: Map<number, AssociationConfig> | undefined;
 		if (this.associations) {
@@ -675,6 +687,7 @@ metadata is not an object`,
 
 		return new DeviceConfig(
 			this.filename,
+			this.isEmbedded,
 			this.manufacturer,
 			this.manufacturerId,
 			this.label,
@@ -694,18 +707,26 @@ metadata is not an object`,
 export class DeviceConfig {
 	public static async from(
 		filename: string,
+		isEmbedded: boolean,
 		options: {
 			rootDir: string;
 			relative?: boolean;
 			deviceId?: DeviceID;
 		},
 	): Promise<DeviceConfig> {
-		const ret = await ConditionalDeviceConfig.from(filename, options);
+		const ret = await ConditionalDeviceConfig.from(
+			filename,
+			isEmbedded,
+			options,
+		);
 		return ret.evaluate(options.deviceId);
 	}
 
 	public constructor(
 		public readonly filename: string,
+		/** Whether this is an embedded configuration or not */
+		public readonly isEmbedded: boolean,
+
 		public readonly manufacturer: string,
 		public readonly manufacturerId: number,
 		public readonly label: string,
@@ -727,15 +748,7 @@ export class DeviceConfig {
 		public readonly compat?: CompatConfig,
 		/** Contains instructions and other metadata for the device */
 		public readonly metadata?: DeviceMetadata,
-	) {
-		// A config file is treated as am embedded one when it is located under the devices root dir
-		this.isEmbedded = !path
-			.relative(embeddedDevicesDir, this.filename)
-			.startsWith("..");
-	}
-
-	/** Whether this is an embedded configuration or not */
-	public readonly isEmbedded: boolean;
+	) {}
 
 	/** Returns the association config for a given endpoint */
 	public getAssociationConfigForEndpoint(
