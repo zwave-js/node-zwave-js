@@ -3,12 +3,10 @@
 	"manufacturerId": "0x0258",
 	"label": "NAS-PD01Z",
 	"description": "PIR Motion Sensor 3",
-	"devices": [
-		{
-			"productType": "0x0003",
-			"productId": "0x608d"
-		}
-	],
+	"devices": [{
+		"productType": "0x0003",
+		"productId": "0x608d"
+	}],
 	"firmwareVersion": {
 		"min": "0.0",
 		"max": "255.255"
@@ -16,7 +14,7 @@
 	"paramInformation": {
 		"1": {
 			"label": "Sensitivity Level",
-			"description": "Defines the sensitivity of PIR sensor.",
+			"description": "Defines the sensitivity of PIR sensor. 8 highest sensitivity and 255 lowest sensitivity.",
 			"valueSize": 1,
 			"minValue": 8,
 			"maxValue": 255,
@@ -49,16 +47,13 @@
 			"defaultValue": 255,
 			"unsigned": true,
 			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "Disable",
-					"value": 0
-				},
-				{
-					"label": "Enable",
-					"value": 255
-				}
-			]
+			"options": [{
+				"label": "Disable",
+				"value": 0
+			}, {
+				"label": "Enable",
+				"value": 255
+			}]
 		},
 		"5": {
 			"label": "Light Sensor Brightness Threshold",
@@ -96,16 +91,13 @@
 			"maxValue": 1,
 			"defaultValue": 0,
 			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "Disable",
-					"value": 0
-				},
-				{
-					"label": "Enable",
-					"value": 1
-				}
-			]
+			"options": [{
+				"label": "Disable",
+				"value": 0
+			}, {
+				"label": "Enable",
+				"value": 1
+			}]
 		},
 		"9": {
 			"label": "Lux Level Changed Report",
@@ -132,34 +124,28 @@
 			"maxValue": 1,
 			"defaultValue": 1,
 			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "Disable",
-					"value": 0
-				},
-				{
-					"label": "Enable",
-					"value": 1
-				}
-			]
+			"options": [{
+				"label": "Disable",
+				"value": 0
+			}, {
+				"label": "Enable",
+				"value": 1
+			}]
 		},
-    "12": {
+		"12": {
 			"label": "Motion Event Report One Time Enable",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 1,
 			"defaultValue": 1,
 			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "Disable",
-					"value": 0
-				},
-				{
-					"label": "Enable",
-					"value": 1
-				}
-			]
+			"options": [{
+				"label": "Disable",
+				"value": 0
+			}, {
+				"label": "Enable",
+				"value": 1
+			}]
 		},
 		"99": {
 			"label": "Ambient Light Intensity Calibration",
