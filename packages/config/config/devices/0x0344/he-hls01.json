@@ -85,8 +85,7 @@
 			"allowManualEntry": false
 		},
 		"7": {
-			"label": "Relay output mode",
-			"description": "NO or NC",
+			"label": "Relay Output Mode",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 1,
