@@ -183,9 +183,13 @@ async function lintDevices(): Promise<void> {
 		// Try parsing the file
 		let conditionalConfig: ConditionalDeviceConfig;
 		try {
-			conditionalConfig = await ConditionalDeviceConfig.from(filePath, {
-				rootDir,
-			});
+			conditionalConfig = await ConditionalDeviceConfig.from(
+				filePath,
+				true,
+				{
+					rootDir,
+				},
+			);
 		} catch (e) {
 			addError(file, e.message);
 			continue;

@@ -122,9 +122,9 @@ describe("ConfigManager", () => {
 			await cm.loadAll();
 
 			// Load the Aeotec ZW100 Multisensor 6 - we know that it uses multiple imports that could fail validation
-			expect(
-				await cm.lookupDevice(0x0086, 0x0002, 0x0064),
-			).not.toBeUndefined();
+			const device = await cm.lookupDevice(0x0086, 0x0002, 0x0064);
+			expect(device).not.toBeUndefined();
+			expect(device?.isEmbedded).toBeTrue();
 		});
 
 		it("from the ZWAVEJS_EXTERNAL_CONFIG", async () => {
@@ -140,9 +140,9 @@ describe("ConfigManager", () => {
 			expect(await fs.pathExists(configDir)).toBeTrue();
 
 			// Load the Aeotec ZW100 Multisensor 6 - we know that it uses multiple imports that could fail validation
-			expect(
-				await cm.lookupDevice(0x0086, 0x0002, 0x0064),
-			).not.toBeUndefined();
+			const device = await cm.lookupDevice(0x0086, 0x0002, 0x0064);
+			expect(device).not.toBeUndefined();
+			expect(device?.isEmbedded).toBeTrue(); // ZWAVEJS_EXTERNAL_CONFIG is still considered as an embedded config
 		});
 
 		async function testDeviceConfigPriorityDir(
@@ -216,6 +216,7 @@ describe("ConfigManager", () => {
 			expect(device?.paramInformation?.get({ parameter: 1 })?.label).toBe(
 				"Test",
 			);
+			expect(device?.isEmbedded).toBeFalse(); // deviceConfigPriorityDir is considered a user-provided config
 		}
 
 		it("from the deviceConfigPriorityDir (without ZWAVEJS_EXTERNAL_CONFIG)", () =>
