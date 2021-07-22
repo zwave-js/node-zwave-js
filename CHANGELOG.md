@@ -5,6 +5,17 @@
 	Add placeholder for next release with `wip` snippet
   ## __WORK IN PROGRESS__
 -->
+## __WORK IN PROGRESS__
+### Bugfixes
+* Fixed `$import` validation logic for device config files from the `ZWAVEJS_EXTERNAL_CONFIG` dir
+* Always treat 1-bit partial parameters as unsigned
+
+### Config file changes
+* Add fingerprint for Heatit Smoke battery
+
+### Changes under the hood
+* Fixed some bot scripts that broke when switching to `yarn`
+
 ## 8.0.4 (2021-07-21)
 ### Bugfixes
 * Multicast/Broadcast `start/stopLevelChange` now also works correctly via the `setValue` API
