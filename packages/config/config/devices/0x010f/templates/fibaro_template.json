@@ -1,0 +1,219 @@
+{
+	"send_secure_commands_group2": {
+		"$import": "~/templates/master_template.json#base_enable_disable",
+		"label": "Send Secure Z-wave Commands to 2nd Association Group",
+		"description": "Only active when the node is included securely"
+	},
+	"send_secure_commands_group3": {
+		"$import": "~/templates/master_template.json#base_enable_disable",
+		"label": "Send Secure Z-wave Commands to 3rd Association Group",
+		"description": "Only active when the node is included securely"
+	},
+	"send_secure_commands_group4": {
+		"$import": "~/templates/master_template.json#base_enable_disable",
+		"label": "Send Secure Z-wave Commands to 4tg Association Group",
+		"description": "Only active when the node is included securely"
+	},
+	"send_secure_commands_group5": {
+		"$import": "~/templates/master_template.json#base_enable_disable",
+		"label": "Send Secure Z-wave Commands to 5th Association Group",
+		"description": "Only active when the node is included securely"
+	},
+	"send_s1_associations_on": {
+		"$import": "~/templates/master_template.json#base_enable_disable_inverted",
+		"label": "Key S1 Associations: Send ON With Single Click",
+		"defaultValue": 0
+	},
+	"send_s1_associations_off": {
+		"$import": "~/templates/master_template.json#base_enable_disable_inverted",
+		"label": "Key S1 Associations: Send OFF With Single Click",
+		"defaultValue": 0
+	},
+	"send_s1_associations_hold_release": {
+		"$import": "~/templates/master_template.json#base_enable_disable_inverted",
+		"label": "Key S1 Associations: Send When Holding and Releasing",
+		"defaultValue": 0
+	},
+	"send_s1_associations_double_click": {
+		"$import": "~/templates/master_template.json#base_enable_disable_inverted",
+		"label": "Key S1 Associations: Send When Double Clicking",
+		"defaultValue": 0
+	},
+	"send_s2_associations_on": {
+		"$import": "~/templates/master_template.json#base_enable_disable_inverted",
+		"label": "Key S2 Associations: Send ON With Single Click",
+		"defaultValue": 0
+	},
+	"send_s2_associations_off": {
+		"$import": "~/templates/master_template.json#base_enable_disable_inverted",
+		"label": "Key S2 Associations: Send OFF With Single Click",
+		"defaultValue": 0
+	},
+	"send_s2_associations_hold_release": {
+		"$import": "~/templates/master_template.json#base_enable_disable_inverted",
+		"label": "Key S2 Associations: Send When Holding and Releasing",
+		"defaultValue": 0
+	},
+	"send_s2_associations_double_click": {
+		"$import": "~/templates/master_template.json#base_enable_disable_inverted",
+		"label": "Key S2 Associations: Send When Double Clicking",
+		"defaultValue": 0
+	},
+	"general_purpose_alarm_response": {
+		"label": "General Purpose Alarm Response",
+		"valueSize": 1,
+		"minValue": 0,
+		"maxValue": 3,
+		"defaultValue": 3,
+		"unsigned": true,
+		"allowManualEntry": false,
+		"options": [
+			{
+				"label": "Ignore",
+				"value": 0
+			},
+			{
+				"label": "Turn on load",
+				"value": 1
+			},
+			{
+				"label": "Turn off load",
+				"value": 2
+			},
+			{
+				"label": "Blink load",
+				"value": 3
+			}
+		]
+	},
+	"water_flood_alarm_response": {
+		"label": "Water Flood Alarm Response",
+		"valueSize": 1,
+		"minValue": 0,
+		"maxValue": 3,
+		"defaultValue": 2,
+		"unsigned": true,
+		"allowManualEntry": false,
+		"options": [
+			{
+				"label": "Ignore",
+				"value": 0
+			},
+			{
+				"label": "Turn on load",
+				"value": 1
+			},
+			{
+				"label": "Turn off load",
+				"value": 2
+			},
+			{
+				"label": "Blink load",
+				"value": 3
+			}
+		]
+	},
+	"smoke_alarm_response": {
+		"label": "Smoke, CO or CO2 Alarm Response",
+		"valueSize": 1,
+		"minValue": 0,
+		"maxValue": 3,
+		"defaultValue": 3,
+		"unsigned": true,
+		"allowManualEntry": false,
+		"options": [
+			{
+				"label": "Ignore",
+				"value": 0
+			},
+			{
+				"label": "Turn on load",
+				"value": 1
+			},
+			{
+				"label": "Turn off load",
+				"value": 2
+			},
+			{
+				"label": "Blink load",
+				"value": 3
+			}
+		]
+	},
+	"temperature_alarm_response": {
+		"label": "Temperature Alarm Response",
+		"valueSize": 1,
+		"minValue": 0,
+		"maxValue": 3,
+		"defaultValue": 1,
+		"unsigned": true,
+		"allowManualEntry": false,
+		"options": [
+			{
+				"label": "Ignore",
+				"value": 0
+			},
+			{
+				"label": "Turn on load",
+				"value": 1
+			},
+			{
+				"label": "Turn off load",
+				"value": 2
+			},
+			{
+				"label": "Blink load",
+				"value": 3
+			}
+		]
+	},
+	"alarm_state_time": {
+		"label": "Time of Alarm State",
+		"valueSize": 2,
+		"unit:": "seconds",
+		"minValue": 1,
+		"defaultValue": 600
+	},
+	"active_power_report_threshold": {
+		"label": "Active Power Report: Threshold",
+		"description": "Relative change since previous report sent",
+		"valueSize": 1,
+		"unit": "%",
+		"minValue": 0,
+		"maxValue": 100,
+		"options": [
+			{
+				"label": "Disable",
+				"value": 0
+			}
+		]
+	},
+	"energy_report_threshold": {
+		"label": "Energy Reports: Threshold",
+		"valueSize": 2,
+		"unit": "0.01 kWh",
+		"minValue": 0,
+		"options": [
+			{
+				"label": "Disable",
+				"value": 0
+			}
+		]
+	},
+	"reports_periodic": {
+		"valueSize": 2,
+		"unit": "seconds",
+		"minValue": 0,
+		"defaultValue": 3600,
+		"options": [
+			{
+				"label": "Disable",
+				"value": 0
+			}
+		]
+	},
+	"reports_include_self": {
+		"$import": "~/templates/master_template.json#base_enable_disable",
+		"label": "Include Consumption By Device Itself in Reports"
+	}
+}
