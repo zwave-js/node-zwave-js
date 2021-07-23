@@ -20,6 +20,14 @@ If you need to test changes from GitHub, e.g. a branch that fixes an issue you h
         ```bash
         yarn link /path/to/node-zwave-js --all
         ```
+        If you are getting an error like
+        ```txt
+        Usage Error: This plugin cannot access the package referenced via typanion which is neither a builtin, nor an exposed entry
+        ```
+        then you might need to upgrade your local version of `yarn`. Versions `3.0.0-rc.6` or higher are known to work.
+        ```bash
+        yarn set version 3.0.0-rc.6
+        ```
     1. If your repo is using `yarn v1`, add the following to your `package.json`, where `/path/to/zwave-js` needs to be the actual path of the `node-zwave-js` repo:
         ```json
         "resolutions": {

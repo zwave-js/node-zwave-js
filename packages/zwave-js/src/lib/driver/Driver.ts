@@ -688,6 +688,25 @@ export class Driver extends TypedEventEmitter<DriverEventCallbacks> {
 			// set unref, so stopping the process doesn't need to wait for the 1500ms
 			await wait(1500, true);
 
+			// Try to create the cache directory. This can fail, in which case we should expose a good error message
+			try {
+				await this.options.storage.driver.ensureDir(this.cacheDir);
+			} catch (e) {
+				let message: string;
+				if (/\.yarn[/\\]cache[/\\]zwave-js/i.test(e.stack)) {
+					message = `Failed to create the cache directory. When using Yarn PnP, you need to change the location with the "storage.cacheDir" driver option.`;
+				} else {
+					message = `Failed to create the cache directory. Please make sure that it is writable or change the location with the "storage.cacheDir" driver option.`;
+				}
+				this.driverLog.print(message, "error");
+				this.emit(
+					"error",
+					new ZWaveError(message, ZWaveErrorCodes.Driver_Failed),
+				);
+				void this.destroy();
+				return;
+			}
+
 			// Load the necessary configuration
 			this.driverLog.print("loading configuration...");
 			try {

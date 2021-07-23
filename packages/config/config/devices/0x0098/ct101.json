@@ -333,5 +333,9 @@
 				}
 			]
 		}
+	},
+	"compat": {
+		// The device has two endpoints. The temperature gets reported via the root, humidity is on endpoint 2.
+		"mapRootReportsToEndpoint": 1
 	}
 }

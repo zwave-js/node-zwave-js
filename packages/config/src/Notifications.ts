@@ -39,7 +39,7 @@ export async function loadNotificationsInternal(
 	externalConfig?: boolean,
 ): Promise<NotificationMap> {
 	const configPath = path.join(
-		(externalConfig && externalConfigDir) || configDir,
+		(externalConfig && externalConfigDir()) || configDir,
 		"notifications.json",
 	);
 
