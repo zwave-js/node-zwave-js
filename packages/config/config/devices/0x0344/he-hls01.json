@@ -107,7 +107,6 @@
 		},
 		"16": {
 			"label": "Temperature Scale",
-			"description": "Allowable range: 1 Celsius - 2 Fahrenheit",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 1,
@@ -141,11 +140,11 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "Disabled",
+					"label": "Disable",
 					"value": 0
 				},
 				{
-					"label": "Enabled",
+					"label": "Enable",
 					"value": 1
 				}
 			]
@@ -205,11 +204,11 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "Disabled",
+					"label": "Disable",
 					"value": 0
 				},
 				{
-					"label": "Enabled",
+					"label": "Enable",
 					"value": 1
 				}
 			]
@@ -224,6 +223,7 @@
 		},
 		"25": {
 			"label": "Auto On Reconnect Timeout",
+			"description": "When the load is reconnected the relay output will be switched On after the time defined in this parameter in minutes.",
 			"unit": "minutes",
 			"valueSize": 1,
 			"minValue": 0,
@@ -255,7 +255,7 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "Hold function is disabled",
+					"label": "Disable",
 					"value": 0
 				},
 				{
@@ -281,7 +281,7 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "Click function disabled",
+					"label": "Disabled",
 					"value": 0
 				},
 				{
@@ -315,7 +315,7 @@
 			"defaultValue": 0
 		},
 		"141": {
-			"label": "Energy Consumption Meter Consecutive Report Interval",
+			"label": "Energy Consumption Report Interval",
 			"unit": "minutes",
 			"valueSize": 1,
 			"minValue": 1,
@@ -339,7 +339,7 @@
 			"defaultValue": 10
 		},
 		"144": {
-			"label": "Temperature Sensor Report Threshold",
+			"label": "Temperature Report Threshold",
 			"unit": "0.1 °C",
 			"valueSize": 1,
 			"minValue": 0,
@@ -355,11 +355,11 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "Disabled",
+					"label": "Disable",
 					"value": 0
 				},
 				{
-					"label": "Enabled",
+					"label": "Enable",
 					"value": 1
 				}
 			]
@@ -391,18 +391,17 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "Disabled",
+					"label": "Disable",
 					"value": 0
 				},
 				{
-					"label": "Enabled",
+					"label": "Enable",
 					"value": 1
 				}
 			]
 		},
 		"155": {
 			"label": "Over-Load Protection & Notification",
-			"description": "Allowable Range: 100-4000. 0 to disable function.",
 			"unit": "W",
 			"valueSize": 2,
 			"minValue": 0,
@@ -411,7 +410,6 @@
 		},
 		"156": {
 			"label": "Over-Voltage Protection & Notification",
-			"description": "Allowable Range: 120-280. 0 to disable function.",
 			"unit": "Volts",
 			"valueSize": 2,
 			"minValue": 0,
@@ -420,7 +418,6 @@
 		},
 		"157": {
 			"label": "Voltage Drop Protection & Notification",
-			"description": "Allowable Range: 80-240. 0 to disable function.",
 			"unit": "Volts",
 			"valueSize": 2,
 			"minValue": 0,
@@ -436,11 +433,11 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "Disabled",
+					"label": "Disable",
 					"value": 0
 				},
 				{
-					"label": "Enabled",
+					"label": "Enable",
 					"value": 1
 				}
 			]

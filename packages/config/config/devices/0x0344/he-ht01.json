@@ -220,7 +220,6 @@
 		},
 		"12": {
 			"label": "Air Temp Min",
-			"description": "Allowable range: 1 - 36, x10",
 			"unit": "0.1 °C",
 			"valueSize": 2,
 			"minValue": 10,
@@ -229,7 +228,6 @@
 		},
 		"13": {
 			"label": "Air Temp Max",
-			"description": "Allowable range: 2 - 37, x10",
 			"unit": "0.1 °C",
 			"valueSize": 2,
 			"minValue": 20,
@@ -238,7 +236,6 @@
 		},
 		"14": {
 			"label": "Floor Temp Min",
-			"description": "Allowable range: 1 - 36, x10",
 			"unit": "0.1 °C",
 			"valueSize": 2,
 			"minValue": 10,
@@ -247,7 +244,6 @@
 		},
 		"15": {
 			"label": "Floor Temp Max",
-			"description": "Allowable range: 2 - 37, x10",
 			"unit": "0.1 °C",
 			"valueSize": 2,
 			"minValue": 20,
@@ -256,7 +252,6 @@
 		},
 		"16": {
 			"label": "Floor Temp Calibration",
-			"description": "Allowable range: -10 - 10, x10",
 			"unit": "0.1 °C",
 			"valueSize": 1,
 			"minValue": -100,
@@ -265,7 +260,6 @@
 		},
 		"17": {
 			"label": "Air Temp Calibration",
-			"description": "Allowable range: 10 - 10, x10",
 			"unit": "0.1 °C",
 			"valueSize": 1,
 			"minValue": -100,
@@ -274,7 +268,6 @@
 		},
 		"18": {
 			"label": "Temp Hysteresis",
-			"description": "Allowable range: 0.2 - 10, x10",
 			"unit": "0.1 °C",
 			"valueSize": 1,
 			"minValue": 2,
@@ -290,11 +283,11 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "Disabled",
+					"label": "Disable",
 					"value": 0
 				},
 				{
-					"label": "Enabled",
+					"label": "Enable",
 					"value": 1
 				}
 			]
@@ -451,7 +444,6 @@
 		},
 		"45": {
 			"label": "Monday Morning Temp",
-			"description": "Allowable range: 1 - 37, x10",
 			"unit": "0.1 °C",
 			"valueSize": 2,
 			"minValue": 10,
@@ -460,7 +452,6 @@
 		},
 		"46": {
 			"label": "Monday Day Temp",
-			"description": "Allowable range: 1 - 37, x10",
 			"unit": "0.1 °C",
 			"valueSize": 2,
 			"minValue": 10,
@@ -469,7 +460,6 @@
 		},
 		"47": {
 			"label": "Monday Evening Temp",
-			"description": "Allowable range: 1 - 37, x10",
 			"unit": "0.1 °C",
 			"valueSize": 2,
 			"minValue": 10,
@@ -478,7 +468,6 @@
 		},
 		"48": {
 			"label": "Monday Night Temp",
-			"description": "Allowable range: 1 - 37, x10",
 			"unit": "0.1 °C",
 			"valueSize": 2,
 			"minValue": 10,
@@ -487,7 +476,6 @@
 		},
 		"49": {
 			"label": "Tuesday Morning Temp",
-			"description": "Allowable range: 1 - 37, x10",
 			"unit": "0.1 °C",
 			"valueSize": 2,
 			"minValue": 10,
@@ -496,7 +484,6 @@
 		},
 		"50": {
 			"label": "Tuesday Day Temp",
-			"description": "Allowable range: 1 - 37, x10",
 			"unit": "0.1 °C",
 			"valueSize": 2,
 			"minValue": 10,
@@ -505,7 +492,6 @@
 		},
 		"51": {
 			"label": "Tuesday Evening Temp",
-			"description": "Allowable range: 1 - 37, x10",
 			"unit": "0.1 °C",
 			"valueSize": 2,
 			"minValue": 10,
@@ -514,7 +500,6 @@
 		},
 		"52": {
 			"label": "Tuesday Night Temp",
-			"description": "Allowable range: 1 - 37, x10",
 			"unit": "0.1 °C",
 			"valueSize": 2,
 			"minValue": 10,
@@ -523,7 +508,6 @@
 		},
 		"53": {
 			"label": "Wednesday Morning Temp",
-			"description": "Allowable range: 1 - 37, x10",
 			"unit": "0.1 °C",
 			"valueSize": 2,
 			"minValue": 10,
@@ -532,7 +516,6 @@
 		},
 		"54": {
 			"label": "Wednesday Day Temp",
-			"description": "Allowable range: 1 - 37, x10",
 			"unit": "0.1 °C",
 			"valueSize": 2,
 			"minValue": 10,
@@ -541,7 +524,6 @@
 		},
 		"55": {
 			"label": "Wednesday Evening Temp",
-			"description": "Allowable range: 1 - 37, x10",
 			"unit": "0.1 °C",
 			"valueSize": 2,
 			"minValue": 10,
@@ -550,7 +532,6 @@
 		},
 		"56": {
 			"label": "Wednesday Night Temp",
-			"description": "Allowable range: 1 - 37, x10",
 			"unit": "0.1 °C",
 			"valueSize": 2,
 			"minValue": 10,
@@ -559,7 +540,6 @@
 		},
 		"57": {
 			"label": "Thursday Morning Temp",
-			"description": "Allowable range: 1 - 37, x10",
 			"unit": "0.1 °C",
 			"valueSize": 2,
 			"minValue": 10,
@@ -568,7 +548,6 @@
 		},
 		"58": {
 			"label": "Thursday Day Temp",
-			"description": "Allowable range: 1 - 37, x10",
 			"unit": "0.1 °C",
 			"valueSize": 2,
 			"minValue": 10,
@@ -577,7 +556,6 @@
 		},
 		"59": {
 			"label": "Thursday Evening Temp",
-			"description": "Allowable range: 1 - 37, x10",
 			"unit": "0.1 °C",
 			"valueSize": 2,
 			"minValue": 10,
@@ -586,7 +564,6 @@
 		},
 		"60": {
 			"label": "Thursday Night Temp",
-			"description": "Allowable range: 1 - 37, x10",
 			"unit": "0.1 °C",
 			"valueSize": 2,
 			"minValue": 10,
@@ -595,7 +572,6 @@
 		},
 		"61": {
 			"label": "Friday Morning Temp",
-			"description": "Allowable range: 1 - 37, x10",
 			"unit": "0.1 °C",
 			"valueSize": 2,
 			"minValue": 10,
@@ -604,7 +580,6 @@
 		},
 		"62": {
 			"label": "Friday Day Temp",
-			"description": "Allowable range: 1 - 37, x10",
 			"unit": "0.1 °C",
 			"valueSize": 2,
 			"minValue": 10,
@@ -613,7 +588,6 @@
 		},
 		"63": {
 			"label": "Friday Evening Temp",
-			"description": "Allowable range: 1 - 37, x10",
 			"unit": "0.1 °C",
 			"valueSize": 2,
 			"minValue": 10,
@@ -622,7 +596,6 @@
 		},
 		"64": {
 			"label": "Friday Night Temp",
-			"description": "Allowable range: 1 - 37, x10",
 			"unit": "0.1 °C",
 			"valueSize": 2,
 			"minValue": 10,
@@ -631,7 +604,6 @@
 		},
 		"65": {
 			"label": "Saturday Morning Temp",
-			"description": "Allowable range: 1 - 37, x10",
 			"unit": "0.1 °C",
 			"valueSize": 2,
 			"minValue": 10,
@@ -640,7 +612,6 @@
 		},
 		"66": {
 			"label": "Saturday Day Temp",
-			"description": "Allowable range: 1 - 37, x10",
 			"unit": "0.1 °C",
 			"valueSize": 2,
 			"minValue": 10,
@@ -649,7 +620,6 @@
 		},
 		"67": {
 			"label": "Saturday Evening Temp",
-			"description": "Allowable range: 1 - 37, x10",
 			"unit": "0.1 °C",
 			"valueSize": 2,
 			"minValue": 10,
@@ -658,7 +628,6 @@
 		},
 		"68": {
 			"label": "Saturday Night Temp",
-			"description": "Allowable range: 1 - 37, x10",
 			"unit": "0.1 °C",
 			"valueSize": 2,
 			"minValue": 10,
@@ -667,7 +636,6 @@
 		},
 		"69": {
 			"label": "Sunday Morning Temp",
-			"description": "Allowable range: 1 - 37, x10",
 			"unit": "0.1 °C",
 			"valueSize": 2,
 			"minValue": 10,
@@ -676,7 +644,6 @@
 		},
 		"70": {
 			"label": "Sunday Day Temp",
-			"description": "Allowable range: 1 - 37, x10",
 			"unit": "0.1 °C",
 			"valueSize": 2,
 			"minValue": 10,
@@ -685,7 +652,6 @@
 		},
 		"71": {
 			"label": "Sunday Evening Temp",
-			"description": "Allowable range: 1 - 37, x10",
 			"unit": "0.1 °C",
 			"valueSize": 2,
 			"minValue": 10,
@@ -694,7 +660,6 @@
 		},
 		"72": {
 			"label": "Sunday Night Temp",
-			"description": "Allowable range: 1 - 37, x10",
 			"unit": "0.1 °C",
 			"valueSize": 2,
 			"minValue": 10,
@@ -702,7 +667,7 @@
 			"defaultValue": 180
 		},
 		"141": {
-			"label": "Energy Consumption Meter Consecutive Report Interval",
+			"label": "Energy Consumption Report Interval",
 			"unit": "minutes",
 			"valueSize": 1,
 			"minValue": 1,
@@ -727,7 +692,6 @@
 		},
 		"144": {
 			"label": "Air & Floor Temperature Sensors Report Threshold",
-			"description": "Allowable range: 0 - 10, x10",
 			"unit": "0.1 °C",
 			"valueSize": 1,
 			"minValue": 0,
@@ -736,7 +700,6 @@
 		},
 		"145": {
 			"label": "Humidity Sensor Report Threshold",
-			"description": "Allowable range: 0 - 25",
 			"unit": "%",
 			"valueSize": 1,
 			"minValue": 0,
@@ -745,7 +708,6 @@
 		},
 		"146": {
 			"label": "Light Sensor Report Threshold",
-			"description": "Allowable range: 0 - 99",
 			"unit": "%",
 			"valueSize": 1,
 			"minValue": 0,

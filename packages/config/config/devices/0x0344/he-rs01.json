@@ -169,46 +169,6 @@
 				}
 			]
 		},
-		"12": {
-			"label": "Relay 1 Power Load",
-			"unit": "W",
-			"valueSize": 2,
-			"minValue": 0,
-			"maxValue": 1100,
-			"defaultValue": 0
-		},
-		"13": {
-			"label": "Relay 2 Power Load",
-			"unit": "W",
-			"valueSize": 2,
-			"minValue": 0,
-			"maxValue": 1100,
-			"defaultValue": 0
-		},
-		"14": {
-			"label": "Relay 3 Power Load",
-			"unit": "W",
-			"valueSize": 2,
-			"minValue": 0,
-			"maxValue": 1100,
-			"defaultValue": 0
-		},
-		"15": {
-			"label": "Relay 4 Power Load",
-			"unit": "W",
-			"valueSize": 2,
-			"minValue": 0,
-			"maxValue": 1100,
-			"defaultValue": 0
-		},
-		"16": {
-			"label": "Relay 5 Power Load",
-			"unit": "W",
-			"valueSize": 2,
-			"minValue": 0,
-			"maxValue": 1100,
-			"defaultValue": 0
-		},
 		"19": {
 			"label": "Time Correction by Controller",
 			"valueSize": 1,
@@ -218,11 +178,11 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "Disabled",
+					"label": "Disable",
 					"value": 0
 				},
 				{
-					"label": "Enabled",
+					"label": "Enable",
 					"value": 1
 				}
 			]
@@ -282,7 +242,7 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "Hold function is disabled",
+					"label": "Disable",
 					"value": 0
 				},
 				{
@@ -308,7 +268,7 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "Hold function is disabled",
+					"label": "Disable",
 					"value": 0
 				},
 				{
@@ -334,7 +294,7 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "Hold function is disabled",
+					"label": "Disable",
 					"value": 0
 				},
 				{
@@ -360,7 +320,7 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "Hold function is disabled",
+					"label": "Disable",
 					"value": 0
 				},
 				{
@@ -386,7 +346,7 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "Hold function is disabled",
+					"label": "Disable",
 					"value": 0
 				},
 				{
@@ -412,7 +372,7 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "Click function disabled",
+					"label": "Disable",
 					"value": 0
 				},
 				{
@@ -446,7 +406,7 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "Click function disabled",
+					"label": "Disable",
 					"value": 0
 				},
 				{
@@ -480,7 +440,7 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "Click function disabled",
+					"label": "Disable",
 					"value": 0
 				},
 				{
@@ -514,7 +474,7 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "Click function disabled",
+					"label": "Disable",
 					"value": 0
 				},
 				{
@@ -548,7 +508,7 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "Click function disabled",
+					"label": "Disable",
 					"value": 0
 				},
 				{
@@ -745,59 +705,89 @@
 		},
 		"71": {
 			"label": "Relay 1 Timer Mode Duration",
-			"description": "This function can be used to open/close garage doors, blinds, curtains, etc. or to turn attached devices like door lock or security OFF for a short time. If the parameter value is set to ―0‖ it will operate as a short contact (about 0.5sec).",
+			"description": "Used to open/close garage doors, blinds, curtains, etc. or to turn attached devices like door lock or security OFF for a short time",
 			"unit": "seconds",
 			"valueSize": 3,
 			"minValue": 0,
 			"maxValue": 43200,
-			"defaultValue": 0
+			"defaultValue": 0,
+			"options": [
+				{
+					"label": "0.5 seconds",
+					"value": 0
+				}
+			]
 		},
 		"72": {
 			"label": "Relay 2 Timer Mode Duration",
-			"description": "This function can be used to open/close garage doors, blinds, curtains, etc. or to turn attached devices like door lock or security OFF for a short time. If the parameter value is set to ―0‖ it will operate as a short contact (about 0.5sec).",
+			"description": "Used to open/close garage doors, blinds, curtains, etc. or to turn attached devices like door lock or security OFF for a short time",
 			"unit": "seconds",
 			"valueSize": 3,
 			"minValue": 0,
 			"maxValue": 43200,
-			"defaultValue": 0
+			"defaultValue": 0,
+			"options": [
+				{
+					"label": "0.5 seconds",
+					"value": 0
+				}
+			]
 		},
 		"73": {
 			"label": "Relay 3 Timer Mode Duration",
-			"description": "This function can be used to open/close garage doors, blinds, curtains, etc. or to turn attached devices like door lock or security OFF for a short time. If the parameter value is set to ―0‖ it will operate as a short contact (about 0.5sec).",
+			"description": "Used to open/close garage doors, blinds, curtains, etc. or to turn attached devices like door lock or security OFF for a short time",
 			"unit": "seconds",
 			"valueSize": 3,
 			"minValue": 0,
 			"maxValue": 43200,
-			"defaultValue": 0
+			"defaultValue": 0,
+			"options": [
+				{
+					"label": "0.5 seconds",
+					"value": 0
+				}
+			]
 		},
 		"74": {
 			"label": "Relay 4 Timer Mode Duration",
-			"description": "This function can be used to open/close garage doors, blinds, curtains, etc. or to turn attached devices like door lock or security OFF for a short time. If the parameter value is set to ―0‖ it will operate as a short contact (about 0.5sec).",
+			"description": "Used to open/close garage doors, blinds, curtains, etc. or to turn attached devices like door lock or security OFF for a short time",
 			"unit": "seconds",
 			"valueSize": 3,
 			"minValue": 0,
 			"maxValue": 43200,
-			"defaultValue": 0
+			"defaultValue": 0,
+			"options": [
+				{
+					"label": "0.5 seconds",
+					"value": 0
+				}
+			]
 		},
 		"75": {
 			"label": "Relay 5 Timer Mode Duration",
-			"description": "This function can be used to open/close garage doors, blinds, curtains, etc. or to turn attached devices like door lock or security OFF for a short time. If the parameter value is set to ―0‖ it will operate as a short contact (about 0.5sec).",
+			"description": "Used to open/close garage doors, blinds, curtains, etc. or to turn attached devices like door lock or security OFF for a short time",
 			"unit": "seconds",
 			"valueSize": 3,
 			"minValue": 0,
 			"maxValue": 43200,
-			"defaultValue": 0
+			"defaultValue": 0,
+			"options": [
+				{
+					"label": "0.5 seconds",
+					"value": 0
+				}
+			]
 		},
 		"101": {
 			"label": "Relay Inverse Mode, Inching - Group 1",
 			"valueSize": 1,
 			"minValue": 0,
-			"maxValue": 51,
+			"maxValue": 23,
 			"defaultValue": 0,
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "Function is disabled",
+					"label": "Disable",
 					"value": 0
 				},
 				{
@@ -819,7 +809,7 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "Function is disabled",
+					"label": "Disable",
 					"value": 0
 				},
 				{
@@ -833,7 +823,7 @@
 			]
 		},
 		"141": {
-			"label": "Energy Consumption Meter Consecutive Report Interval",
+			"label": "Energy Consumption Report Interval",
 			"unit": "minutes",
 			"valueSize": 1,
 			"minValue": 1,
@@ -849,11 +839,11 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "Disabled",
+					"label": "Disable",
 					"value": 0
 				},
 				{
-					"label": "Enabled",
+					"label": "Enable",
 					"value": 1
 				}
 			]
