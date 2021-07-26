@@ -281,7 +281,7 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "Click function disabled",
+					"label": "Disable",
 					"value": 0
 				},
 				{
