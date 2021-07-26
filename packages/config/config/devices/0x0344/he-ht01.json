@@ -219,7 +219,7 @@
 			]
 		},
 		"12": {
-			"label": "Air Temp Min",
+			"label": "Air Temperature: Minimum",
 			"unit": "0.1 °C",
 			"valueSize": 2,
 			"minValue": 10,
