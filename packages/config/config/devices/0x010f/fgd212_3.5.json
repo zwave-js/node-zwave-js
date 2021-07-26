@@ -429,11 +429,11 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "Enable (dimming possible",
+					"label": "Dimming possible",
 					"value": 0
 				},
 				{
-					"label": "Disable (dimming not possible)",
+					"label": "Dimming not possible",
 					"value": 1
 				}
 			]
