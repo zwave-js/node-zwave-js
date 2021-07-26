@@ -401,7 +401,7 @@
 		},
 		"155": {
 			"label": "Over-Load Protection & Notification",
-			"description": "Allowable Range: 100-4000. 0 to disable function.",
+			"description": "Allowable Range: 100-4000",
 			"unit": "W",
 			"valueSize": 2,
 			"minValue": 0,
