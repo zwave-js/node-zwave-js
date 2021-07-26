@@ -1,5 +1,5 @@
 {
-	"default_metadata_for_fibaro": {
+	"default_metadata": {
 		"inclusion": "Turn the primary controller of Z-Wave network into inclusion mode, quickly press key S1 or B-button on product's housing three times",
 		"exclusion": "Turn the primary controller of Z-Wave network into exclusion mode, quickly press key S1 or B-button on product's housing three times",
 		"reset": "1. Power-cycle the device\n2. Press and hold the B-button to enter the menu\n3. Wait for the LED to turn yellow\n4. Quickly release and click B-button again\n5. Device will restart and LED will turn red"

@@ -705,7 +705,7 @@
 		}
 	},
 	"metadata": {
-		"$import": "templates/fibaro_template.json#default_metadata_for_fibaro",
+		"$import": "templates/fibaro_template.json#default_metadata",
 		"manual": "https://products.z-wavealliance.org/ProductManual/File?folder=&filename=MarketCertificationFiles/2836/FGD-212-EN-T-v1.3.pdf"
 	}
 }

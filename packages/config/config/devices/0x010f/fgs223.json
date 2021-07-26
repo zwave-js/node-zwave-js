@@ -433,7 +433,7 @@
 		}
 	},
 	"metadata": {
-		"$import": "templates/fibaro_template.json#default_metadata_for_fibaro",
+		"$import": "templates/fibaro_template.json#default_metadata",
 		"manual": "https://products.z-wavealliance.org/ProductManual/File?folder=&filename=MarketCertificationFiles/1742/FGS-2x3-EN-T-v1.0%2006.06.2016.pdf"
 	}
 }
