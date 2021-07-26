@@ -174,7 +174,7 @@
 		},
 		"10": {
 			"label": "Floor Sensor Resistance",
-			"unit": "kohm",
+			"unit": "kΩ",
 			"valueSize": 1,
 			"minValue": 1,
 			"maxValue": 100,
