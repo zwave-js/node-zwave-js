@@ -227,7 +227,7 @@
 			"defaultValue": 210
 		},
 		"13": {
-			"label": "Air Temp Max",
+			"label": "Air Temperature: Maximum",
 			"description": "Allowable range: 2 - 37, x10",
 			"unit": "0.1 °C",
 			"valueSize": 2,
