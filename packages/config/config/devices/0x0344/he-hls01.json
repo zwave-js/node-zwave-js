@@ -107,7 +107,6 @@
 		},
 		"16": {
 			"label": "Temperature Scale",
-			"description": "Allowable range: 1 Celsius - 2 Fahrenheit",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 1,
