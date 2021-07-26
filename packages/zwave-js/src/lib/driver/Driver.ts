@@ -2884,15 +2884,21 @@ ${handlers.length} left`,
 	 * to this method WILL save the network.
 	 */
 	private async saveNetworkToCacheInternal(): Promise<void> {
-		if (!this._controller || !this.controller.homeId) return;
+		// Avoid overwriting the cache with empty data if the controller wasn't interviewed yet
+		if (
+			!this._controller ||
+			this._controller.homeId == undefined ||
+			!this._controllerInterviewed
+		)
+			return;
 
 		await this.options.storage.driver.ensureDir(this.cacheDir);
 		const cacheFile = path.join(
 			this.cacheDir,
-			this.controller.homeId.toString(16) + ".json",
+			this._controller.homeId.toString(16) + ".json",
 		);
 
-		const serializedObj = this.controller.serialize();
+		const serializedObj = this._controller.serialize();
 		const jsonString = stringify(serializedObj);
 		await this.options.storage.driver.writeFile(
 			cacheFile,
@@ -2907,7 +2913,7 @@ ${handlers.length} left`,
 	 */
 	public async saveNetworkToCache(): Promise<void> {
 		// TODO: Detect if the network needs to be saved at all
-		if (!this._controller || !this.controller.homeId) return;
+		if (!this._controller || this._controller.homeId == undefined) return;
 		// Ensure this method isn't being executed too often
 		if (
 			this.isSavingToCache ||
