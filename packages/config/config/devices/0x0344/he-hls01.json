@@ -330,7 +330,7 @@
 			"defaultValue": 25
 		},
 		"143": {
-			"label": "Temperature Sensor Consecutive Report Interval",
+			"label": "Temperature Report Interval",
 			"unit": "minutes",
 			"valueSize": 1,
 			"minValue": 1,
