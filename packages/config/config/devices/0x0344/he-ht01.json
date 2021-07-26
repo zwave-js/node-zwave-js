@@ -358,6 +358,7 @@
 		},
 		"23": {
 			"label": "Time Regulation ON Time",
+			"description": "This Parameter defines floor HEATING time in minutes when Time Regulator is selected as the source sensor in Parameter 11.",
 			"unit": "minutes",
 			"valueSize": 2,
 			"minValue": 10,
@@ -366,6 +367,7 @@
 		},
 		"24": {
 			"label": "Time Regulation OFF Time",
+			"description": "This Parameter defines floor IDLE time in minutes when Time Regulator is selected as the source sensor in Parameter 11.",
 			"unit": "minutes",
 			"valueSize": 2,
 			"minValue": 10,
