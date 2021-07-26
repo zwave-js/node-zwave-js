@@ -367,8 +367,8 @@
 		},
 		"50": {
 			"$import": "templates/fibaro_template.json#active_power_report_threshold",
-			"defaultValue": 20,
-			"label": "First Channel - Active Power Report: Threshold"
+			"label": "First Channel - Active Power Report: Threshold",
+			"defaultValue": 20
 		},
 		"51": {
 			"label": "First Channel - Active Power Report: Minimum Time Between Reports",
