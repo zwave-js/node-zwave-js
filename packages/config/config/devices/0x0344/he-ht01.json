@@ -219,7 +219,7 @@
 			]
 		},
 		"12": {
-			"label": "Air Temperature: Minimum",
+			"label": "Air Temperatureerature: Minimum",
 			"unit": "0.1 °C",
 			"valueSize": 2,
 			"minValue": 10,
@@ -227,7 +227,7 @@
 			"defaultValue": 210
 		},
 		"13": {
-			"label": "Air Temperature: Maximum",
+			"label": "Air Temperatureerature: Maximum",
 			"unit": "0.1 °C",
 			"valueSize": 2,
 			"minValue": 20,
@@ -235,7 +235,7 @@
 			"defaultValue": 270
 		},
 		"14": {
-			"label": "Floor Temp Min",
+			"label": "Floor Temperature Min",
 			"unit": "0.1 °C",
 			"valueSize": 2,
 			"minValue": 10,
@@ -243,7 +243,7 @@
 			"defaultValue": 180
 		},
 		"15": {
-			"label": "Floor Temp Max",
+			"label": "Floor Temperature Max",
 			"unit": "0.1 °C",
 			"valueSize": 2,
 			"minValue": 20,
@@ -251,7 +251,7 @@
 			"defaultValue": 320
 		},
 		"16": {
-			"label": "Floor Temp Calibration",
+			"label": "Floor Temperature Calibration",
 			"unit": "0.1 °C",
 			"valueSize": 1,
 			"minValue": -100,
@@ -259,7 +259,7 @@
 			"defaultValue": 0
 		},
 		"17": {
-			"label": "Air Temp Calibration",
+			"label": "Air Temperature Calibration",
 			"unit": "0.1 °C",
 			"valueSize": 1,
 			"minValue": -100,
@@ -267,7 +267,7 @@
 			"defaultValue": 0
 		},
 		"18": {
-			"label": "Temp Hysteresis",
+			"label": "Temperature Hysteresis",
 			"unit": "0.1 °C",
 			"valueSize": 1,
 			"minValue": 2,
@@ -445,7 +445,7 @@
 			"defaultValue": 2300
 		},
 		"45": {
-			"label": "Monday Morning Temp",
+			"label": "Monday Morning Temperature",
 			"unit": "0.1 °C",
 			"valueSize": 2,
 			"minValue": 10,
@@ -453,7 +453,7 @@
 			"defaultValue": 240
 		},
 		"46": {
-			"label": "Monday Day Temp",
+			"label": "Monday Day Temperature",
 			"unit": "0.1 °C",
 			"valueSize": 2,
 			"minValue": 10,
@@ -461,7 +461,7 @@
 			"defaultValue": 200
 		},
 		"47": {
-			"label": "Monday Evening Temp",
+			"label": "Monday Evening Temperature",
 			"unit": "0.1 °C",
 			"valueSize": 2,
 			"minValue": 10,
@@ -469,7 +469,7 @@
 			"defaultValue": 230
 		},
 		"48": {
-			"label": "Monday Night Temp",
+			"label": "Monday Night Temperature",
 			"unit": "0.1 °C",
 			"valueSize": 2,
 			"minValue": 10,
@@ -477,7 +477,7 @@
 			"defaultValue": 180
 		},
 		"49": {
-			"label": "Tuesday Morning Temp",
+			"label": "Tuesday Morning Temperature",
 			"unit": "0.1 °C",
 			"valueSize": 2,
 			"minValue": 10,
@@ -485,7 +485,7 @@
 			"defaultValue": 240
 		},
 		"50": {
-			"label": "Tuesday Day Temp",
+			"label": "Tuesday Day Temperature",
 			"unit": "0.1 °C",
 			"valueSize": 2,
 			"minValue": 10,
@@ -493,7 +493,7 @@
 			"defaultValue": 200
 		},
 		"51": {
-			"label": "Tuesday Evening Temp",
+			"label": "Tuesday Evening Temperature",
 			"unit": "0.1 °C",
 			"valueSize": 2,
 			"minValue": 10,
@@ -501,7 +501,7 @@
 			"defaultValue": 230
 		},
 		"52": {
-			"label": "Tuesday Night Temp",
+			"label": "Tuesday Night Temperature",
 			"unit": "0.1 °C",
 			"valueSize": 2,
 			"minValue": 10,
@@ -509,7 +509,7 @@
 			"defaultValue": 180
 		},
 		"53": {
-			"label": "Wednesday Morning Temp",
+			"label": "Wednesday Morning Temperature",
 			"unit": "0.1 °C",
 			"valueSize": 2,
 			"minValue": 10,
@@ -517,7 +517,7 @@
 			"defaultValue": 240
 		},
 		"54": {
-			"label": "Wednesday Day Temp",
+			"label": "Wednesday Day Temperature",
 			"unit": "0.1 °C",
 			"valueSize": 2,
 			"minValue": 10,
@@ -525,7 +525,7 @@
 			"defaultValue": 200
 		},
 		"55": {
-			"label": "Wednesday Evening Temp",
+			"label": "Wednesday Evening Temperature",
 			"unit": "0.1 °C",
 			"valueSize": 2,
 			"minValue": 10,
@@ -533,7 +533,7 @@
 			"defaultValue": 230
 		},
 		"56": {
-			"label": "Wednesday Night Temp",
+			"label": "Wednesday Night Temperature",
 			"unit": "0.1 °C",
 			"valueSize": 2,
 			"minValue": 10,
@@ -541,7 +541,7 @@
 			"defaultValue": 180
 		},
 		"57": {
-			"label": "Thursday Morning Temp",
+			"label": "Thursday Morning Temperature",
 			"unit": "0.1 °C",
 			"valueSize": 2,
 			"minValue": 10,
@@ -549,7 +549,7 @@
 			"defaultValue": 240
 		},
 		"58": {
-			"label": "Thursday Day Temp",
+			"label": "Thursday Day Temperature",
 			"unit": "0.1 °C",
 			"valueSize": 2,
 			"minValue": 10,
@@ -557,7 +557,7 @@
 			"defaultValue": 200
 		},
 		"59": {
-			"label": "Thursday Evening Temp",
+			"label": "Thursday Evening Temperature",
 			"unit": "0.1 °C",
 			"valueSize": 2,
 			"minValue": 10,
@@ -565,7 +565,7 @@
 			"defaultValue": 230
 		},
 		"60": {
-			"label": "Thursday Night Temp",
+			"label": "Thursday Night Temperature",
 			"unit": "0.1 °C",
 			"valueSize": 2,
 			"minValue": 10,
@@ -573,7 +573,7 @@
 			"defaultValue": 180
 		},
 		"61": {
-			"label": "Friday Morning Temp",
+			"label": "Friday Morning Temperature",
 			"unit": "0.1 °C",
 			"valueSize": 2,
 			"minValue": 10,
@@ -581,7 +581,7 @@
 			"defaultValue": 240
 		},
 		"62": {
-			"label": "Friday Day Temp",
+			"label": "Friday Day Temperature",
 			"unit": "0.1 °C",
 			"valueSize": 2,
 			"minValue": 10,
@@ -589,7 +589,7 @@
 			"defaultValue": 200
 		},
 		"63": {
-			"label": "Friday Evening Temp",
+			"label": "Friday Evening Temperature",
 			"unit": "0.1 °C",
 			"valueSize": 2,
 			"minValue": 10,
@@ -597,7 +597,7 @@
 			"defaultValue": 230
 		},
 		"64": {
-			"label": "Friday Night Temp",
+			"label": "Friday Night Temperature",
 			"unit": "0.1 °C",
 			"valueSize": 2,
 			"minValue": 10,
@@ -605,7 +605,7 @@
 			"defaultValue": 180
 		},
 		"65": {
-			"label": "Saturday Morning Temp",
+			"label": "Saturday Morning Temperature",
 			"unit": "0.1 °C",
 			"valueSize": 2,
 			"minValue": 10,
@@ -613,7 +613,7 @@
 			"defaultValue": 240
 		},
 		"66": {
-			"label": "Saturday Day Temp",
+			"label": "Saturday Day Temperature",
 			"unit": "0.1 °C",
 			"valueSize": 2,
 			"minValue": 10,
@@ -621,7 +621,7 @@
 			"defaultValue": 200
 		},
 		"67": {
-			"label": "Saturday Evening Temp",
+			"label": "Saturday Evening Temperature",
 			"unit": "0.1 °C",
 			"valueSize": 2,
 			"minValue": 10,
@@ -629,7 +629,7 @@
 			"defaultValue": 230
 		},
 		"68": {
-			"label": "Saturday Night Temp",
+			"label": "Saturday Night Temperature",
 			"unit": "0.1 °C",
 			"valueSize": 2,
 			"minValue": 10,
@@ -637,7 +637,7 @@
 			"defaultValue": 180
 		},
 		"69": {
-			"label": "Sunday Morning Temp",
+			"label": "Sunday Morning Temperature",
 			"unit": "0.1 °C",
 			"valueSize": 2,
 			"minValue": 10,
@@ -645,7 +645,7 @@
 			"defaultValue": 240
 		},
 		"70": {
-			"label": "Sunday Day Temp",
+			"label": "Sunday Day Temperature",
 			"unit": "0.1 °C",
 			"valueSize": 2,
 			"minValue": 10,
@@ -653,7 +653,7 @@
 			"defaultValue": 200
 		},
 		"71": {
-			"label": "Sunday Evening Temp",
+			"label": "Sunday Evening Temperature",
 			"unit": "0.1 °C",
 			"valueSize": 2,
 			"minValue": 10,
@@ -661,7 +661,7 @@
 			"defaultValue": 230
 		},
 		"72": {
-			"label": "Sunday Night Temp",
+			"label": "Sunday Night Temperature",
 			"unit": "0.1 °C",
 			"valueSize": 2,
 			"minValue": 10,
@@ -693,7 +693,7 @@
 			"defaultValue": 10
 		},
 		"144": {
-			"label": "Air & Floor Temperature Sensors Report Threshold",
+			"label": "Air & Floor Temperatureerature Sensors Report Threshold",
 			"unit": "0.1 °C",
 			"valueSize": 1,
 			"minValue": 0,
