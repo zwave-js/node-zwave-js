@@ -6,22 +6,22 @@
 	},
 	"send_secure_commands_group2": {
 		"$import": "~/templates/master_template.json#base_enable_disable",
-		"label": "Send Secure Z-wave Commands to 2nd Association Group",
+		"label": "Send Secure Commands to 2nd Association Group",
 		"description": "Only active when the node is included securely"
 	},
 	"send_secure_commands_group3": {
 		"$import": "~/templates/master_template.json#base_enable_disable",
-		"label": "Send Secure Z-wave Commands to 3rd Association Group",
+		"label": "Send Secure Commands to 3rd Association Group",
 		"description": "Only active when the node is included securely"
 	},
 	"send_secure_commands_group4": {
 		"$import": "~/templates/master_template.json#base_enable_disable",
-		"label": "Send Secure Z-wave Commands to 4th Association Group",
+		"label": "Send Secure Commands to 4th Association Group",
 		"description": "Only active when the node is included securely"
 	},
 	"send_secure_commands_group5": {
 		"$import": "~/templates/master_template.json#base_enable_disable",
-		"label": "Send Secure Z-wave Commands to 5th Association Group",
+		"label": "Send Secure Commands to 5th Association Group",
 		"description": "Only active when the node is included securely"
 	},
 	"send_s1_associations_on": {
