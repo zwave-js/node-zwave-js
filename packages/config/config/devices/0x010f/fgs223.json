@@ -319,11 +319,11 @@
 		},
 		"35[0x04]": {
 			"$import": "templates/fibaro_template.json#send_s2_associations_hold_release",
-			"description": "Reuqires Key S2 to be configured as momentary"
+			"description": "Requires Key S2 to be configured as momentary"
 		},
 		"35[0x08]": {
 			"$import": "templates/fibaro_template.json#send_s2_associations_double_click",
-			"description": "Reuqires Key S2 to be configured as momentary or to change each time input changes"
+			"description": "Requires Key S2 to be configured as momentary or to change each time input changes"
 		},
 		"36": {
 			"label": "Key S2 Associations: Switch ON Value Sent",
