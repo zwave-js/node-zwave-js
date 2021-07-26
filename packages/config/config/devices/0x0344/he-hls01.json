@@ -254,7 +254,7 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "Hold function is disabled",
+					"label": "Disable",
 					"value": 0
 				},
 				{
