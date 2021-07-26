@@ -88,7 +88,7 @@
 		},
 		"6": {
 			"label": "Touch Buttons Sensitivity",
-			"description": "Allowable range: 1 (low sensitivity) to 10 (high sensitivity).",
+			"description": "1 = low sensitivity; 10 = high sensitivity",
 			"valueSize": 1,
 			"minValue": 1,
 			"maxValue": 10,
@@ -219,7 +219,7 @@
 			]
 		},
 		"12": {
-			"label": "Air Temp Min",
+			"label": "Air Temperature: Minimum",
 			"unit": "0.1 °C",
 			"valueSize": 2,
 			"minValue": 10,
@@ -227,7 +227,7 @@
 			"defaultValue": 210
 		},
 		"13": {
-			"label": "Air Temp Max",
+			"label": "Air Temperature: Maximum",
 			"unit": "0.1 °C",
 			"valueSize": 2,
 			"minValue": 20,
