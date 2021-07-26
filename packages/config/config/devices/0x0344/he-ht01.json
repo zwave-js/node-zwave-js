@@ -220,7 +220,6 @@
 		},
 		"12": {
 			"label": "Air Temp Min",
-			"description": "Allowable range: 1 - 36, x10",
 			"unit": "0.1 °C",
 			"valueSize": 2,
 			"minValue": 10,
