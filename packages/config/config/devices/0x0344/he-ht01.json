@@ -357,7 +357,7 @@
 			"defaultValue": 0
 		},
 		"23": {
-			"label": "Time Regulation Reg On Time",
+			"label": "Time Regulation ON Time",
 			"unit": "minutes",
 			"valueSize": 2,
 			"minValue": 10,
@@ -365,7 +365,7 @@
 			"defaultValue": 30
 		},
 		"24": {
-			"label": "Time Regulation Reg Off Time",
+			"label": "Time Regulation OFF Time",
 			"unit": "minutes",
 			"valueSize": 2,
 			"minValue": 10,
