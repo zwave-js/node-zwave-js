@@ -365,7 +365,7 @@
 		},
 		"152": {
 			"label": "Temperature Rise Notification",
-			"description": ": Value of this Parameter should be lower than value of Parameter 153 (Overheat Protection & Notification).",
+			"description": "The value should be lower than the value of parameter 153 (Overheat Protection & Notification).",
 			"unit": "°C",
 			"valueSize": 2,
 			"minValue": 1,
