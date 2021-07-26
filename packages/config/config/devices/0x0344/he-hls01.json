@@ -281,7 +281,7 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "Disabled",
+					"label": "Disable",
 					"value": 0
 				},
 				{
@@ -331,7 +331,7 @@
 			"defaultValue": 25
 		},
 		"143": {
-			"label": "Temperature Sensor Consecutive Report Interval",
+			"label": "Temperature Report Interval",
 			"unit": "minutes",
 			"valueSize": 1,
 			"minValue": 1,
@@ -366,7 +366,7 @@
 		},
 		"152": {
 			"label": "Temperature Rise Notification",
-			"description": ": Value of this Parameter should be lower than value of Parameter 153 (Overheat Protection & Notification).",
+			"description": "The value should be lower than the value of parameter 153 (Overheat Protection & Notification).",
 			"unit": "°C",
 			"valueSize": 2,
 			"minValue": 1,
