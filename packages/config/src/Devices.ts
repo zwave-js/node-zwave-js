@@ -568,9 +568,14 @@ found invalid param number "${paramNo}" in paramInformation`,
 							),
 						);
 				}
-			} else if (isObject(definition.paramInformation)) {
+			} else if (
+				(process.env.NODE_ENV !== "test" || !!process.env.CI) &&
+				isObject(definition.paramInformation)
+			) {
 				// Prior to v8.1.0, paramDefinition was an object
 				// We need to support parsing legacy files because users might have custom configs
+				// However, we don't allow this on CI or during tests/lint
+
 				for (const [key, paramDefinition] of entries(
 					definition.paramInformation,
 				)) {

@@ -992,6 +992,8 @@ async function lintSensorTypes(): Promise<void> {
 }
 
 export async function lintConfigFiles(): Promise<void> {
+	// Set NODE_ENV to test in order to trigger stricter checks
+	process.env.NODE_ENV = "test";
 	try {
 		await lintManufacturers();
 		await lintDevices();
