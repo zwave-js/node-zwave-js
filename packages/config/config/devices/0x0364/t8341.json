@@ -14,8 +14,9 @@
 		"min": "0.0",
 		"max": "255.255"
 	},
-	"paramInformation": {
-		"1": {
+	"paramInformation": [
+		{
+			"#": "1",
 			"label": "Basic Set Level",
 			"description": "",
 			"valueSize": 1,
@@ -24,7 +25,8 @@
 			"defaultValue": 99,
 			"unsigned": true
 		},
-		"3": {
+		{
+			"#": "3",
 			"label": "Sensitivity Level",
 			"description": "",
 			"valueSize": 1,
@@ -33,7 +35,8 @@
 			"defaultValue": 6,
 			"unsigned": true
 		},
-		"4": {
+		{
+			"#": "4",
 			"label": "Re-trigger Interval",
 			"description": "",
 			"valueSize": 2,
@@ -43,7 +46,8 @@
 			"defaultValue": 180,
 			"unsigned": true
 		},
-		"5": {
+		{
+			"#": "5",
 			"label": "Lux Level",
 			"description": "",
 			"valueSize": 1,
@@ -53,7 +57,8 @@
 			"defaultValue": 20,
 			"unsigned": true
 		},
-		"6": {
+		{
+			"#": "6",
 			"label": "On-off Duration",
 			"description": "",
 			"valueSize": 2,
@@ -63,7 +68,7 @@
 			"defaultValue": 15,
 			"unsigned": true
 		}
-	},
+	],
 	"metadata": {
 		"inclusion": "Auto inclusion\nThe motion sensor supports the auto inclusion feature where it will automatically enter Inclusion mode when first powered up.\nThis will also apply when powered up after a factory reset.\n1. Use a screwdriver to detach the rear cover.\n2. Put the AXIS M6505 camera (Z-Wave controller) into inclusion mode.\n3. Insert 1 CR123 3V batteries into the battery compartment with the correct polarity. The LED on the device should turn ON\n4. The inclusion process should be completed when the LED stops blinking\n5. Perform test before you refit the rear cover.\nManual inclusion\nYou can also choose to manually add the Z-Wave device to a control device. Please follow the steps described below.\nNote\nFor best results, exclude the device before starting the inclusion process. For more details see the installation guide\n1. Press the tamper switch 3 times within 1.5 seconds to put the unit into learning (inclusion/exclusion) mode.\n2. The inclusion process should be completed when the LED stops blinking\n3. Perform a test before you refit the cover",
 		"exclusion": "Manual exclusion\nNote\nFor more details see the installation guide\n1. Detach the battery cover.\n2. Press the tamper switch 3 times within 1.5 seconds to put the unit into learning (inclusion/exclusion) mode.\n3. The exclusion process should be completed when the LED stops blinking\n4. Refit the battery cover",

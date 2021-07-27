@@ -14,8 +14,9 @@
 		"max": "255.255"
 	},
 	"supportsZWavePlus": true,
-	"paramInformation": {
-		"7[0x08]": {
+	"paramInformation": [
+		{
+			"#": "7[0x08]",
 			"label": "Disable Sound",
 			"description": "Prevents audio from the siren - leaving only the strobe function.",
 			"valueSize": 1,
@@ -33,7 +34,8 @@
 				}
 			]
 		},
-		"7[0x10]": {
+		{
+			"#": "7[0x10]",
 			"label": "Notification Type",
 			"description": "Notification event type to use for trigger events",
 			"valueSize": 1,
@@ -51,7 +53,8 @@
 				}
 			]
 		},
-		"29": {
+		{
+			"#": "29",
 			"label": "Disable Alarm",
 			"description": "Disables the alarm function entierly, including any tamper detection.",
 			"valueSize": 1,
@@ -59,7 +62,8 @@
 			"maxValue": 1,
 			"defaultValue": 0
 		},
-		"31": {
+		{
+			"#": "31",
 			"label": "Alarm Duration",
 			"unit": "30 seconds",
 			"valueSize": 1,
@@ -73,5 +77,5 @@
 				}
 			]
 		}
-	}
+	]
 }

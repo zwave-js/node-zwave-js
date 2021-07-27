@@ -86,8 +86,9 @@
 			"maxNodes": 5
 		}
 	},
-	"paramInformation": {
-		"10": {
+	"paramInformation": [
+		{
+			"#": "10",
 			"label": "Key Pressed 1 time – command sent to 2nd association group",
 			"description": "This parameter defines commands sent to devices associated in 2nd association group after a single click.",
 			"valueSize": 1,
@@ -115,7 +116,8 @@
 				}
 			]
 		},
-		"11": {
+		{
+			"#": "11",
 			"label": "Key Pressed 1 time – value of SWITCH ON command sent to 2nd association group",
 			"description": "1-99 Set Level; 255 Last State",
 			"valueSize": 2,
@@ -134,7 +136,8 @@
 				}
 			]
 		},
-		"12": {
+		{
+			"#": "12",
 			"label": "Key Pressed 2 times – command sent to 2nd association group",
 			"description": "This parameter defines commands sent to devices associated in 2nd association group after a double click.",
 			"valueSize": 1,
@@ -162,7 +165,8 @@
 				}
 			]
 		},
-		"13": {
+		{
+			"#": "13",
 			"label": "Key Pressed 2 times – value of SWITCH ON command sent to 2nd association group",
 			"description": "1-99 Set Level; 255 Last State",
 			"valueSize": 2,
@@ -181,7 +185,8 @@
 				}
 			]
 		},
-		"14": {
+		{
+			"#": "14",
 			"label": "Key Pressed 3 times – command sent to 2nd association group",
 			"description": "This parameter defines commands sent to devices associated in 2nd association group after a triple click.",
 			"valueSize": 1,
@@ -209,7 +214,8 @@
 				}
 			]
 		},
-		"15": {
+		{
+			"#": "15",
 			"label": "Key Pressed 3 times – value of SWITCH ON command sent to 2nd association group",
 			"description": "1-99 Set Level; 255 Last State",
 			"valueSize": 2,
@@ -228,7 +234,8 @@
 				}
 			]
 		},
-		"20": {
+		{
+			"#": "20",
 			"label": "Key Pressed 1 time – command sent to 3rd association group",
 			"description": "This parameter defines commands sent to devices associated in 3rd association group after a single click.",
 			"valueSize": 1,
@@ -256,7 +263,8 @@
 				}
 			]
 		},
-		"21": {
+		{
+			"#": "21",
 			"label": "Key Pressed 1 time – value of SWITCH ON command sent to 3rd association group",
 			"description": "1-99 Set Level; 255 Last State",
 			"valueSize": 2,
@@ -275,7 +283,8 @@
 				}
 			]
 		},
-		"22": {
+		{
+			"#": "22",
 			"label": "Key Pressed 2 times – command sent to 3rd association group",
 			"description": "This parameter defines commands sent to devices associated in 3rd association group after a double click.",
 			"valueSize": 1,
@@ -303,7 +312,8 @@
 				}
 			]
 		},
-		"23": {
+		{
+			"#": "23",
 			"label": "Key Pressed 2 times – value of SWITCH ON command sent to 3rd association group",
 			"description": "1-99 Set Level; 255 Last State",
 			"valueSize": 2,
@@ -322,7 +332,8 @@
 				}
 			]
 		},
-		"24": {
+		{
+			"#": "24",
 			"label": "Key Pressed 3 times – command sent to 3rd association group",
 			"description": "This parameter defines commands sent to devices associated in 3rd association group after a triple click.",
 			"valueSize": 1,
@@ -350,7 +361,8 @@
 				}
 			]
 		},
-		"25": {
+		{
+			"#": "25",
 			"label": "Key Pressed 3 times – value of SWITCH ON command sent to 3rd association group",
 			"description": "1-99 Set Level; 255 Last State",
 			"valueSize": 2,
@@ -369,7 +381,8 @@
 				}
 			]
 		},
-		"29": {
+		{
+			"#": "29",
 			"label": "Key Held Down – command sent to 3rd association group",
 			"description": "This parameter defines commands sent to devices associated in 3rd association group after holding the button down.",
 			"valueSize": 1,
@@ -397,7 +410,8 @@
 				}
 			]
 		},
-		"1[0x01]": {
+		{
+			"#": "1[0x01]",
 			"label": "Scenes sent to the controller: Key Pressed 1 time",
 			"valueSize": 1,
 			"minValue": 0,
@@ -405,7 +419,8 @@
 			"defaultValue": 1,
 			"unsigned": true
 		},
-		"1[0x02]": {
+		{
+			"#": "1[0x02]",
 			"label": "Scenes sent to the controller: Key Pressed 2 times",
 			"valueSize": 1,
 			"minValue": 0,
@@ -413,7 +428,8 @@
 			"defaultValue": 1,
 			"unsigned": true
 		},
-		"1[0x04]": {
+		{
+			"#": "1[0x04]",
 			"label": "Scenes sent to the controller: Key Pressed 3 times",
 			"valueSize": 1,
 			"minValue": 0,
@@ -421,7 +437,8 @@
 			"defaultValue": 1,
 			"unsigned": true
 		},
-		"1[0x08]": {
+		{
+			"#": "1[0x08]",
 			"label": "Scenes sent to the controller: Key Pressed 4 times",
 			"valueSize": 1,
 			"minValue": 0,
@@ -429,7 +446,8 @@
 			"defaultValue": 1,
 			"unsigned": true
 		},
-		"1[0x10]": {
+		{
+			"#": "1[0x10]",
 			"label": "Scenes sent to the controller: Key Pressed 5 times",
 			"valueSize": 1,
 			"minValue": 0,
@@ -437,7 +455,8 @@
 			"defaultValue": 1,
 			"unsigned": true
 		},
-		"1[0x20]": {
+		{
+			"#": "1[0x20]",
 			"label": "Scenes sent to the controller: Key Held Down",
 			"valueSize": 1,
 			"minValue": 0,
@@ -445,7 +464,8 @@
 			"defaultValue": 1,
 			"unsigned": true
 		},
-		"1[0x40]": {
+		{
+			"#": "1[0x40]",
 			"label": "Scenes sent to the controller: Key Released",
 			"valueSize": 1,
 			"minValue": 0,
@@ -453,7 +473,8 @@
 			"defaultValue": 1,
 			"unsigned": true
 		},
-		"3[0x01]": {
+		{
+			"#": "3[0x01]",
 			"label": "Associations: Send secure commands to 2nd group",
 			"description": "This is only active when the node is included securely",
 			"valueSize": 1,
@@ -462,7 +483,8 @@
 			"defaultValue": 1,
 			"unsigned": true
 		},
-		"3[0x02]": {
+		{
+			"#": "3[0x02]",
 			"label": "Associations: Send secure commands to 3rd group",
 			"description": "This is only active when the node is included securely",
 			"valueSize": 1,
@@ -471,7 +493,8 @@
 			"defaultValue": 1,
 			"unsigned": true
 		},
-		"3[0x04]": {
+		{
+			"#": "3[0x04]",
 			"label": "Associations: Send secure commands to 4th group",
 			"description": "This is only active when the node is included securely",
 			"valueSize": 1,
@@ -480,7 +503,8 @@
 			"defaultValue": 1,
 			"unsigned": true
 		},
-		"30[0x01]": {
+		{
+			"#": "30[0x01]",
 			"label": "Send Alarm Frame to 4th Association Group: Key Pressed 1 time",
 			"valueSize": 1,
 			"minValue": 0,
@@ -488,7 +512,8 @@
 			"defaultValue": 1,
 			"unsigned": true
 		},
-		"30[0x02]": {
+		{
+			"#": "30[0x02]",
 			"label": "Send Alarm Frame to 4th Association Group: Key Pressed 2 times",
 			"valueSize": 1,
 			"minValue": 0,
@@ -496,7 +521,8 @@
 			"defaultValue": 1,
 			"unsigned": true
 		},
-		"30[0x04]": {
+		{
+			"#": "30[0x04]",
 			"label": "Send Alarm Frame to 4th Association Group: Key Pressed 3 times",
 			"valueSize": 1,
 			"minValue": 0,
@@ -504,7 +530,8 @@
 			"defaultValue": 1,
 			"unsigned": true
 		},
-		"30[0x08]": {
+		{
+			"#": "30[0x08]",
 			"label": "Send Alarm Frame to 4th Association Group: Key Pressed 4 times",
 			"valueSize": 1,
 			"minValue": 0,
@@ -512,7 +539,8 @@
 			"defaultValue": 1,
 			"unsigned": true
 		},
-		"30[0x10]": {
+		{
+			"#": "30[0x10]",
 			"label": "Send Alarm Frame to 4th Association Group: Key Pressed 5 times",
 			"valueSize": 1,
 			"minValue": 0,
@@ -520,7 +548,8 @@
 			"defaultValue": 1,
 			"unsigned": true
 		},
-		"30[0x20]": {
+		{
+			"#": "30[0x20]",
 			"label": "Send Alarm Frame to 4th Association Group: Key Held Down",
 			"valueSize": 1,
 			"minValue": 0,
@@ -528,7 +557,8 @@
 			"defaultValue": 1,
 			"unsigned": true
 		},
-		"30[0x40]": {
+		{
+			"#": "30[0x40]",
 			"label": "Send Alarm Frame to 4th Association Group: Key Released",
 			"valueSize": 1,
 			"minValue": 0,
@@ -536,7 +566,7 @@
 			"defaultValue": 1,
 			"unsigned": true
 		}
-	},
+	],
 	"metadata": {
 		"inclusion": "1) Place the Button within the direct range of your Z-Wave controller.\n2) Set the main controller in (security/non-security) add mode (see the controller’s manual).\n3) Click the Button at least six times.\n4) Wait for the adding process to end.\n5) Successful adding will be confirmed by the Z-Wave controller’s message.",
 		"exclusion": "1) Place the Button within the direct range of your Z-Wave controller.\n2) Set the main controller in remove mode (see the controller’s manual).\n3) Click the Button at least six times.\n4) Wait for the removing process to end.\n5) Successful removing will be confirmed by the Z-Wave controller’s message.",

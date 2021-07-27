@@ -14,8 +14,9 @@
 		"min": "0.0",
 		"max": "255.255"
 	},
-	"paramInformation": {
-		"3": {
+	"paramInformation": [
+		{
+			"#": "3",
 			"label": "Night Light",
 			"valueSize": 1,
 			"minValue": 0,
@@ -38,7 +39,8 @@
 				}
 			]
 		},
-		"4": {
+		{
+			"#": "4",
 			"label": "Invert Switch",
 			"valueSize": 1,
 			"minValue": 0,
@@ -57,5 +59,5 @@
 				}
 			]
 		}
-	}
+	]
 }

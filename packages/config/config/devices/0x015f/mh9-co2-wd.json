@@ -30,15 +30,16 @@
 			"isLifeline": true
 		}
 	},
-	"paramInformation": {
-		"1": {
+	"paramInformation": [
+		{
+			"#": "1",
 			"label": "CO2 Notification Threshold",
 			"valueSize": 2,
 			"minValue": 1,
 			"maxValue": 2000,
 			"defaultValue": 1000
 		}
-	},
+	],
 	"compat": {
 		"forceNotificationIdleReset": true
 	}

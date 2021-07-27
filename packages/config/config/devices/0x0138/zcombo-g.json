@@ -21,8 +21,9 @@
 			"isLifeline": true
 		}
 	},
-	"paramInformation": {
-		"1": {
+	"paramInformation": [
+		{
+			"#": "1",
 			"label": "SuperVision report timeout",
 			"description": "ZCOMBO will send the message over SuperVision Command Class and it will wait for the SuperVision report from the Controller for the SuperVision report timeout time.",
 			"unit": "seconds",
@@ -32,7 +33,8 @@
 			"defaultValue": 1500,
 			"unsigned": true
 		},
-		"2": {
+		{
+			"#": "2",
 			"label": "SuperVision retry count",
 			"description": "If the SuperVision report is not received within the SuperVision report timeout time, the ZCOMBO will retry sending the message again. Upon exceeding the max retry, the ZCOMBO device will send the next message available in the queue.",
 			"valueSize": 2,
@@ -41,7 +43,8 @@
 			"defaultValue": 1,
 			"unsigned": true
 		},
-		"3": {
+		{
+			"#": "3",
 			"label": "SuperVision wait time",
 			"description": "Before retrying the message, ZCOMBO will wait for the SuperVision wait time. Actual wait time is calculated using the formula: Wait Time = SuperVision wait time base-value + random-value + (attempt-count x 5 seconds). The random value will be between 100 and 1100 milliseconds.",
 			"unit": "s",
@@ -51,7 +54,7 @@
 			"defaultValue": 5,
 			"unsigned": true
 		}
-	},
+	],
 	"metadata": {
 		"inclusion": "ADD\n1. Slide battery door open.\n2. Insert batteries checking the correct orientation.\n3. Press and hold the test button. Keep it held down as you slide the battery drawer closed. You may then release the button.\nNOTE: Use only your finger or thumb on the test button. The use of any other instrument is strictly prohibited",
 		"exclusion": "REMOVE\n1. Slide battery door open.\n2. Remove and re-insert batteries checking the correct orientation.\n3. Press and hold the test button. Keep it held down as you slide the battery drawer closed. You may then release the button.\nNOTE: Use only your finger or thumb on the test button. The use of any other instrument is strictly prohibited",

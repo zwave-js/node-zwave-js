@@ -13,15 +13,17 @@
 		"min": "0.0",
 		"max": "255.255"
 	},
-	"paramInformation": {
-		"2": {
+	"paramInformation": [
+		{
+			"#": "2",
 			"label": "LED Indicator: Brightness",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 100,
 			"defaultValue": 100
 		},
-		"3": {
+		{
+			"#": "3",
 			"label": "LED Indicator: Mode",
 			"valueSize": 1,
 			"minValue": 0,
@@ -47,7 +49,8 @@
 				}
 			]
 		},
-		"11": {
+		{
+			"#": "11",
 			"label": "LED Indicator: Power Monitoring Display",
 			"valueSize": 1,
 			"minValue": 0,
@@ -65,7 +68,8 @@
 				}
 			]
 		},
-		"12": {
+		{
+			"#": "12",
 			"label": "LED Indicator: Power Monitoring Display Duration",
 			"description": "Sets the length of time for which the LED will reflect the current power usage",
 			"valueSize": 2,
@@ -80,7 +84,8 @@
 				}
 			]
 		},
-		"13": {
+		{
+			"#": "13",
 			"label": "Energy Usage Reporting Interval",
 			"valueSize": 2,
 			"unit": "minutes",
@@ -94,5 +99,5 @@
 				}
 			]
 		}
-	}
+	]
 }

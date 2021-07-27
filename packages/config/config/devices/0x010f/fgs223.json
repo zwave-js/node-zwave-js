@@ -57,11 +57,13 @@
 			"maxNodes": 5
 		}
 	},
-	"paramInformation": {
-		"9": {
+	"paramInformation": [
+		{
+			"#": "9",
 			"$import": "~/templates/master_template.json#state_after_power_failure_off_prev"
 		},
-		"10": {
+		{
+			"#": "10",
 			"label": "First channel - operating mode",
 			"description": "This parameter allows to choose operating for the 1st channel controlled by the S1 switch.",
 			"valueSize": 1,
@@ -97,7 +99,8 @@
 				}
 			]
 		},
-		"11": {
+		{
+			"#": "11",
 			"label": "First channel - reaction to switch for delay/auto ON/OFF modes",
 			"description": "This parameter determines how the device in timed mode reacts to pushing the switch connected to the S1 terminal.",
 			"valueSize": 1,
@@ -121,7 +124,8 @@
 				}
 			]
 		},
-		"12": {
+		{
+			"#": "12",
 			"label": "First channel - time parameter for delay/auto ON/OFF modes",
 			"description": "This parameter allows to set time parameter used in timed modes.",
 			"valueSize": 2,
@@ -131,7 +135,8 @@
 			"defaultValue": 50,
 			"unsigned": true
 		},
-		"13": {
+		{
+			"#": "13",
 			"label": "First channel - pulse time for flashing mode",
 			"description": "This parameter allows to set time of switching to opposite state in flashing mode.",
 			"valueSize": 2,
@@ -141,7 +146,8 @@
 			"defaultValue": 5,
 			"unsigned": true
 		},
-		"15": {
+		{
+			"#": "15",
 			"label": "Second channel - operating mode",
 			"description": "This parameter allows to choose operating for the 2nd channel controlled by the S2 switch.",
 			"valueSize": 1,
@@ -177,7 +183,8 @@
 				}
 			]
 		},
-		"16": {
+		{
+			"#": "16",
 			"label": "Second channel - reaction to switch for delay/auto ON/OFF modes",
 			"description": "This parameter determines how the device in timed mode reacts to pushing the switch connected to the S2 terminal.",
 			"valueSize": 1,
@@ -202,7 +209,8 @@
 				}
 			]
 		},
-		"17": {
+		{
+			"#": "17",
 			"label": "Second channel - time parameter for delay/auto ON/OFF modes",
 			"description": "This parameter allows to set time parameter used in timed modes.",
 			"valueSize": 2,
@@ -212,7 +220,8 @@
 			"defaultValue": 50,
 			"unsigned": true
 		},
-		"18": {
+		{
+			"#": "18",
 			"label": "Second channel - pulse time for flashing mode",
 			"description": "This parameter allows to set time of switching to opposite state in flashing mode.",
 			"valueSize": 2,
@@ -221,7 +230,8 @@
 			"defaultValue": 5,
 			"unsigned": true
 		},
-		"20": {
+		{
+			"#": "20",
 			"label": "Switch type",
 			"description": "Inputs type configuration",
 			"valueSize": 1,
@@ -245,7 +255,8 @@
 				}
 			]
 		},
-		"21": {
+		{
+			"#": "21",
 			"label": "Flashing mode report",
 			"description": "Enabled / Disabled reports on Flashing mode",
 			"valueSize": 1,
@@ -265,7 +276,8 @@
 				}
 			]
 		},
-		"27[0x01]": {
+		{
+			"#": "27[0x01]",
 			"label": "Associations: Send secure commands to 2nd group",
 			"description": "This is only active when the node is included securely",
 			"valueSize": 1,
@@ -274,7 +286,8 @@
 			"defaultValue": 1,
 			"unsigned": true
 		},
-		"27[0x02]": {
+		{
+			"#": "27[0x02]",
 			"label": "Associations: Send secure commands to 3rd group",
 			"description": "This is only active when the node is included securely",
 			"valueSize": 1,
@@ -283,7 +296,8 @@
 			"defaultValue": 1,
 			"unsigned": true
 		},
-		"27[0x04]": {
+		{
+			"#": "27[0x04]",
 			"label": "Associations: Send secure commands to 4th group",
 			"description": "This is only active when the node is included securely",
 			"valueSize": 1,
@@ -292,7 +306,8 @@
 			"defaultValue": 1,
 			"unsigned": true
 		},
-		"27[0x08]": {
+		{
+			"#": "27[0x08]",
 			"label": "Associations: Send secure commands to 5th group",
 			"description": "This is only active when the node is included securely",
 			"valueSize": 1,
@@ -301,7 +316,8 @@
 			"defaultValue": 1,
 			"unsigned": true
 		},
-		"28[0x01]": {
+		{
+			"#": "28[0x01]",
 			"label": "S1 switch - Send Scenes: Key pressed 1 time",
 			"valueSize": 1,
 			"minValue": 0,
@@ -309,7 +325,8 @@
 			"defaultValue": 0,
 			"unsigned": true
 		},
-		"28[0x02]": {
+		{
+			"#": "28[0x02]",
 			"label": "S1 switch - Send Scenes: Key pressed 2 times",
 			"valueSize": 1,
 			"minValue": 0,
@@ -317,7 +334,8 @@
 			"defaultValue": 0,
 			"unsigned": true
 		},
-		"28[0x04]": {
+		{
+			"#": "28[0x04]",
 			"label": "S1 switch - Send Scenes: Key pressed 3 times",
 			"valueSize": 1,
 			"minValue": 0,
@@ -325,7 +343,8 @@
 			"defaultValue": 0,
 			"unsigned": true
 		},
-		"28[0x08]": {
+		{
+			"#": "28[0x08]",
 			"label": "S1 switch - Send Scenes: Key held down and Key released",
 			"valueSize": 1,
 			"minValue": 0,
@@ -333,7 +352,8 @@
 			"defaultValue": 0,
 			"unsigned": true
 		},
-		"29[0x01]": {
+		{
+			"#": "29[0x01]",
 			"label": "S2 switch - Send Scenes: Key pressed 1 time",
 			"valueSize": 1,
 			"minValue": 0,
@@ -341,7 +361,8 @@
 			"defaultValue": 0,
 			"unsigned": true
 		},
-		"29[0x02]": {
+		{
+			"#": "29[0x02]",
 			"label": "S2 switch - Send Scenes: Key pressed 2 times",
 			"valueSize": 1,
 			"minValue": 0,
@@ -349,7 +370,8 @@
 			"defaultValue": 0,
 			"unsigned": true
 		},
-		"29[0x04]": {
+		{
+			"#": "29[0x04]",
 			"label": "S2 switch - Send Scenes: Key pressed 3 times",
 			"valueSize": 1,
 			"minValue": 0,
@@ -357,7 +379,8 @@
 			"defaultValue": 0,
 			"unsigned": true
 		},
-		"29[0x08]": {
+		{
+			"#": "29[0x08]",
 			"label": "S2 switch - Send Scenes: Key held down and Key released",
 			"valueSize": 1,
 			"minValue": 0,
@@ -365,7 +388,8 @@
 			"defaultValue": 0,
 			"unsigned": true
 		},
-		"30[0x01]": {
+		{
+			"#": "30[0x01]",
 			"label": "S1 switch associations - Ignore turning ON with 1 click",
 			"valueSize": 1,
 			"minValue": 0,
@@ -373,7 +397,8 @@
 			"defaultValue": 0,
 			"unsigned": true
 		},
-		"30[0x02]": {
+		{
+			"#": "30[0x02]",
 			"label": "S1 switch associations - Ignore turning OFF with 1 click",
 			"valueSize": 1,
 			"minValue": 0,
@@ -381,7 +406,8 @@
 			"defaultValue": 0,
 			"unsigned": true
 		},
-		"30[0x04]": {
+		{
+			"#": "30[0x04]",
 			"label": "S1 switch associations - Ignore holding and releasing",
 			"valueSize": 1,
 			"minValue": 0,
@@ -389,7 +415,8 @@
 			"defaultValue": 0,
 			"unsigned": true
 		},
-		"30[0x08]": {
+		{
+			"#": "30[0x08]",
 			"label": "S1 switch associations - Ignore double click",
 			"valueSize": 1,
 			"minValue": 0,
@@ -397,7 +424,8 @@
 			"defaultValue": 0,
 			"unsigned": true
 		},
-		"31": {
+		{
+			"#": "31",
 			"label": "S1 Switch ON value sent to 2nd and 3rd association groups",
 			"description": "This parameter determines value sent with Switch On command to devices associated in 2nd and 3rd association group.",
 			"valueSize": 2,
@@ -406,7 +434,8 @@
 			"defaultValue": 255,
 			"unsigned": true
 		},
-		"32": {
+		{
+			"#": "32",
 			"label": "S1 Switch OFF value sent to 2nd and 3rd association groups",
 			"description": "This parameter determines value sent with Switch Off command to devices associated in 2nd and 3rd association group.",
 			"valueSize": 2,
@@ -415,7 +444,8 @@
 			"defaultValue": 0,
 			"unsigned": true
 		},
-		"33": {
+		{
+			"#": "33",
 			"label": "S1 Switch Double Click value sent to 2nd and 3rd association groups",
 			"description": "This parameter determines value sent with Double Click command to devices associated in 2nd and 3rd association group.",
 			"valueSize": 2,
@@ -424,7 +454,8 @@
 			"defaultValue": 99,
 			"unsigned": true
 		},
-		"35[0x01]": {
+		{
+			"#": "35[0x01]",
 			"label": "S2 switch associations - Ignore turning ON with 1 click",
 			"valueSize": 1,
 			"minValue": 0,
@@ -432,7 +463,8 @@
 			"defaultValue": 0,
 			"unsigned": true
 		},
-		"35[0x02]": {
+		{
+			"#": "35[0x02]",
 			"label": "S2 switch associations - Ignore turning OFF with 1 click",
 			"valueSize": 1,
 			"minValue": 0,
@@ -440,7 +472,8 @@
 			"defaultValue": 0,
 			"unsigned": true
 		},
-		"35[0x04]": {
+		{
+			"#": "35[0x04]",
 			"label": "S2 switch associations - Ignore holding and releasing",
 			"valueSize": 1,
 			"minValue": 0,
@@ -448,7 +481,8 @@
 			"defaultValue": 0,
 			"unsigned": true
 		},
-		"35[0x08]": {
+		{
+			"#": "35[0x08]",
 			"label": "S2 switch associations - Ignore double click",
 			"valueSize": 1,
 			"minValue": 0,
@@ -456,7 +490,8 @@
 			"defaultValue": 0,
 			"unsigned": true
 		},
-		"36": {
+		{
+			"#": "36",
 			"label": "S2 Switch ON value sent to 4th and 5th association groups",
 			"description": "This parameter determines value sent with Switch On command to devices associated in 4th and 5th association group.",
 			"valueSize": 2,
@@ -465,7 +500,8 @@
 			"defaultValue": 255,
 			"unsigned": true
 		},
-		"37": {
+		{
+			"#": "37",
 			"label": "S2 Switch OFF value sent to 4th and 5th association groups",
 			"description": "This parameter determines value sent with Switch Off command to devices associated in 4th and 5th association group.",
 			"valueSize": 2,
@@ -474,7 +510,8 @@
 			"defaultValue": 0,
 			"unsigned": true
 		},
-		"38": {
+		{
+			"#": "38",
 			"label": "S2 Switch Double Click value sent to 4th and 5th association groups",
 			"description": "This parameter determines value sent with Double Click command to devices associated in 4th and 5th association group.",
 			"valueSize": 2,
@@ -483,7 +520,8 @@
 			"defaultValue": 99,
 			"unsigned": true
 		},
-		"40": {
+		{
+			"#": "40",
 			"label": "Reaction to General Alarm",
 			"description": "This parameter determines how the device will react to General Alarm frame.",
 			"valueSize": 1,
@@ -511,7 +549,8 @@
 				}
 			]
 		},
-		"41": {
+		{
+			"#": "41",
 			"label": "Reaction to Flood Alarm",
 			"description": "This parameter determines how the device will react to Flood Alarm frame.",
 			"valueSize": 1,
@@ -539,7 +578,8 @@
 				}
 			]
 		},
-		"42": {
+		{
+			"#": "42",
 			"label": "Reaction to CO/CO2/Smoke Alarm",
 			"description": "This parameter determines how the device will react to CO/CO2/Smoke Alarm frame.",
 			"valueSize": 1,
@@ -567,7 +607,8 @@
 				}
 			]
 		},
-		"43": {
+		{
+			"#": "43",
 			"label": "Reaction to Heat Alarm",
 			"description": "This parameter determines how the device will react to Heat alarm frame.",
 			"valueSize": 1,
@@ -595,7 +636,8 @@
 				}
 			]
 		},
-		"44": {
+		{
+			"#": "44",
 			"label": "Flashing alarm duration",
 			"description": "This parameter allows to set duration of flashing alarm mode.",
 			"valueSize": 2,
@@ -605,7 +647,8 @@
 			"defaultValue": 600,
 			"unsigned": true
 		},
-		"50": {
+		{
+			"#": "50",
 			"label": "First channel - power reports",
 			"description": "This parameter determines the minimum change in consumed power that will result in sending new power report to the main controller.",
 			"valueSize": 2,
@@ -615,7 +658,8 @@
 			"defaultValue": 20,
 			"unsigned": true
 		},
-		"51": {
+		{
+			"#": "51",
 			"label": "First channel - minimal time between power reports",
 			"description": "This parameter determines minimum time that has to elapse before sending new power report to the main controller.",
 			"valueSize": 2,
@@ -625,7 +669,8 @@
 			"defaultValue": 10,
 			"unsigned": true
 		},
-		"53": {
+		{
+			"#": "53",
 			"label": "First channel - energy reports",
 			"description": "This parameter determines the minimum change in consumed energy that will result in sending new energy report to the main controller.",
 			"valueSize": 2,
@@ -635,7 +680,8 @@
 			"defaultValue": 100,
 			"unsigned": true
 		},
-		"54": {
+		{
+			"#": "54",
 			"label": "Second Channel - power reports",
 			"description": "This parameter determines the minimum change in consumed power that will result in sending new power report to the main controller.",
 			"valueSize": 2,
@@ -645,7 +691,8 @@
 			"defaultValue": 20,
 			"unsigned": true
 		},
-		"55": {
+		{
+			"#": "55",
 			"label": "Second channel - minimal time between power reports",
 			"description": "This parameter determines minimum time that has to elapse before sending new power report to the main controller.",
 			"valueSize": 2,
@@ -655,7 +702,8 @@
 			"defaultValue": 10,
 			"unsigned": true
 		},
-		"57": {
+		{
+			"#": "57",
 			"label": "Second channel - energy reports",
 			"description": "This parameter determines the minimum change in consumed energy that will result in sending new energy report to the main controller.",
 			"valueSize": 2,
@@ -665,7 +713,8 @@
 			"defaultValue": 100,
 			"unsigned": true
 		},
-		"58": {
+		{
+			"#": "58",
 			"label": "Periodic power reports",
 			"description": "This parameter determines in what time interval the periodic power reports are sent to the main controller.",
 			"valueSize": 2,
@@ -675,7 +724,8 @@
 			"defaultValue": 3600,
 			"unsigned": true
 		},
-		"59": {
+		{
+			"#": "59",
 			"label": "Periodic energy reports",
 			"description": "This parameter determines in what time interval the periodic power reports are sent to the main controller.",
 			"valueSize": 2,
@@ -685,7 +735,8 @@
 			"defaultValue": 3600,
 			"unsigned": true
 		},
-		"60": {
+		{
+			"#": "60",
 			"label": "Measuring energy consumed by the device itself",
 			"description": "This parameter determines whether energy metering should include the amount of energy consumed by the device itself. Results are being added to energy reports for first endpoint.",
 			"valueSize": 1,
@@ -705,5 +756,5 @@
 				}
 			]
 		}
-	}
+	]
 }

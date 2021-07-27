@@ -29,8 +29,9 @@
 		"min": "3.5",
 		"max": "255.255"
 	},
-	"paramInformation": {
-		"1": {
+	"paramInformation": [
+		{
+			"#": "1",
 			"label": "Minimum Brightness Level",
 			"description": "For manual override, this is set during auto-calibration",
 			"valueSize": 1,
@@ -38,7 +39,8 @@
 			"maxValue": 98,
 			"defaultValue": 1
 		},
-		"2": {
+		{
+			"#": "2",
 			"label": "Maximum Brightness Level",
 			"description": "For manual override, this is set during auto-calibration",
 			"valueSize": 1,
@@ -46,7 +48,8 @@
 			"maxValue": 99,
 			"defaultValue": 99
 		},
-		"3": {
+		{
+			"#": "3",
 			"label": "Incandescence Level of Dimmable CFL*",
 			"description": "Relative to the range defined by minimum and maximum brightness level configuration",
 			"valueSize": 1,
@@ -54,7 +57,8 @@
 			"maxValue": 99,
 			"defaultValue": 1
 		},
-		"4": {
+		{
+			"#": "4",
 			"label": "Incandescence Time of Dimmable CFL*",
 			"valueSize": 2,
 			"unit": "100 ms",
@@ -62,7 +66,8 @@
 			"maxValue": 255,
 			"defaultValue": 0
 		},
-		"5": {
+		{
+			"#": "5",
 			"label": "Automatic Control: Dimming Step Size",
 			"description": "Relative to the range defined by minimum and maximum brightness level configuration",
 			"valueSize": 1,
@@ -70,7 +75,8 @@
 			"maxValue": 99,
 			"defaultValue": 1
 		},
-		"6": {
+		{
+			"#": "6",
 			"label": "Automatic Control: Dimming Step Timing",
 			"valueSize": 2,
 			"unit": "10 ms",
@@ -78,7 +84,8 @@
 			"maxValue": 255,
 			"defaultValue": 1
 		},
-		"7": {
+		{
+			"#": "7",
 			"label": "Manual Control: Dimming Step Size",
 			"description": "Relative to the range defined by minimum and maximum brightness level configuration",
 			"valueSize": 1,
@@ -86,7 +93,8 @@
 			"maxValue": 99,
 			"defaultValue": 1
 		},
-		"8": {
+		{
+			"#": "8",
 			"label": "Manual Control: Dimming Step Timing",
 			"valueSize": 2,
 			"unit": "100 ms",
@@ -94,10 +102,12 @@
 			"maxValue": 255,
 			"defaultValue": 5
 		},
-		"9": {
+		{
+			"#": "9",
 			"$import": "~/templates/master_template.json#state_after_power_failure_off_prev"
 		},
-		"10": {
+		{
+			"#": "10",
 			"label": "Timer Functionality (Auto - Off)",
 			"description": "Will automatically turn off after the specified time from switching on",
 			"valueSize": 2,
@@ -112,7 +122,8 @@
 				}
 			]
 		},
-		"11": {
+		{
+			"#": "11",
 			"label": "ALL ON/ALL OFF Function",
 			"valueSize": 2,
 			"minValue": 0,
@@ -139,7 +150,8 @@
 				}
 			]
 		},
-		"13": {
+		{
+			"#": "13",
 			"label": "Force Auto-Calibration",
 			"valueSize": 1,
 			"minValue": 0,
@@ -162,7 +174,8 @@
 				}
 			]
 		},
-		"14": {
+		{
+			"#": "14",
 			"label": "Auto-Calibration Status",
 			"valueSize": 1,
 			"minValue": 0,
@@ -181,7 +194,8 @@
 				}
 			]
 		},
-		"15": {
+		{
+			"#": "15",
 			"label": "Burnt Out Bulb Detection Power Variation",
 			"description": "Percentage value of standard power consumption as measured during calibration",
 			"valueSize": 1,
@@ -196,7 +210,8 @@
 				}
 			]
 		},
-		"16": {
+		{
+			"#": "16",
 			"label": "Burnt Out Bulb Detection Time Delay",
 			"valueSize": 2,
 			"unit": "seconds",
@@ -210,7 +225,8 @@
 				}
 			]
 		},
-		"19": {
+		{
+			"#": "19",
 			"label": "Forced Switch On Brightness",
 			"description": "Relative to the range defined by minimum and maximum brightness level configuration",
 			"valueSize": 1,
@@ -224,7 +240,8 @@
 				}
 			]
 		},
-		"20": {
+		{
+			"#": "20",
 			"label": "Input Button/Switch Configuration",
 			"valueSize": 1,
 			"minValue": 0,
@@ -247,7 +264,8 @@
 				}
 			]
 		},
-		"21": {
+		{
+			"#": "21",
 			"label": "Value Sent to Associated Devices on Single Click",
 			"valueSize": 1,
 			"minValue": 0,
@@ -266,7 +284,8 @@
 				}
 			]
 		},
-		"22": {
+		{
+			"#": "22",
 			"label": "Change Bi-Stable Input Switch Behavior",
 			"valueSize": 1,
 			"minValue": 0,
@@ -285,91 +304,110 @@
 				}
 			]
 		},
-		"23": {
+		{
+			"#": "23",
 			"$import": "~/templates/master_template.json#base_enable_disable",
 			"label": "Double Click Sets Brightness to 100%",
 			"defaultValue": 1
 		},
-		"24[0x01]": {
+		{
+			"#": "24[0x01]",
 			"$import": "~/templates/master_template.json#base_enable_disable_inverted",
 			"label": "Send Command Frames in 2nd and 3rd Association Groups when Switching ON (Single Click)",
 			"defaultValue": 0
 		},
-		"24[0x02]": {
+		{
+			"#": "24[0x02]",
 			"$import": "~/templates/master_template.json#base_enable_disable_inverted",
 			"label": "Send Command Frames in 2nd and 3rd Association Groups when Switching OFF (Single Click)",
 			"defaultValue": 0
 		},
-		"24[0x04]": {
+		{
+			"#": "24[0x04]",
 			"$import": "~/templates/master_template.json#base_enable_disable_inverted",
 			"label": "Send Command Frames in 2nd and 3rd Association Groups when Changing Dimming Level",
 			"defaultValue": 0
 		},
-		"24[0x08]": {
+		{
+			"#": "24[0x08]",
 			"$import": "~/templates/master_template.json#base_enable_disable_inverted",
 			"label": "Send Command Frames in 2nd and 3rd Association Groups on Double Click",
 			"defaultValue": 0
 		},
-		"24[0x10]": {
+		{
+			"#": "24[0x10]",
 			"$import": "~/templates/master_template.json#base_enable_disable",
 			"label": "Send Command Frames in 2nd and 3rd Association Groups with 0xFF Value on Double Click"
 		},
-		"25[0x01]": {
+		{
+			"#": "25[0x01]",
 			"$import": "~/templates/master_template.json#base_enable_disable_inverted",
 			"label": "Send Command Frames in 4th and 5th Association Groups when Switching ON (Single Click)",
 			"defaultValue": 0
 		},
-		"25[0x02]": {
+		{
+			"#": "25[0x02]",
 			"$import": "~/templates/master_template.json#base_enable_disable_inverted",
 			"label": "Send Command Frames in 4th and 5th Association Groups when Switching OFF (Single Click)",
 			"defaultValue": 0
 		},
-		"25[0x04]": {
+		{
+			"#": "25[0x04]",
 			"$import": "~/templates/master_template.json#base_enable_disable_inverted",
 			"label": "Send Command Frames in 4th and 5th Association Groups when Changing Dimming Level",
 			"defaultValue": 0
 		},
-		"25[0x08]": {
+		{
+			"#": "25[0x08]",
 			"$import": "~/templates/master_template.json#base_enable_disable_inverted",
 			"label": "Send Command Frames in 4th and 5th Association Groups on Double Click",
 			"defaultValue": 0
 		},
-		"25[0x10]": {
+		{
+			"#": "25[0x10]",
 			"$import": "~/templates/master_template.json#base_enable_disable",
 			"label": "Send Command Frames in 4th and 5th Association Groups with 0xFF Value on Double Click"
 		},
-		"26": {
+		{
+			"#": "26",
 			"$import": "~/templates/master_template.json#base_enable_disable",
 			"label": "3-way Switch Function",
 			"description": "Key S2 also controls the dimmer"
 		},
-		"27[0x01]": {
+		{
+			"#": "27[0x01]",
 			"$import": "~/templates/master_template.json#base_enable_disable",
 			"label": "Send Secure Z-wave Commands to 2nd Association Group"
 		},
-		"27[0x02]": {
+		{
+			"#": "27[0x02]",
 			"$import": "~/templates/master_template.json#base_enable_disable",
 			"label": "Send Secure Z-wave Commands to 3rd Association Group"
 		},
-		"27[0x04]": {
+		{
+			"#": "27[0x04]",
 			"$import": "~/templates/master_template.json#base_enable_disable",
 			"label": "Send Secure Z-wave Commands to 4th Association Group"
 		},
-		"27[0x08]": {
+		{
+			"#": "27[0x08]",
 			"$import": "~/templates/master_template.json#base_enable_disable",
 			"label": "Send Secure Z-wave Commands to 5th Association Group"
 		},
-		"28": {
+		{
+			"#": "28",
 			"$import": "~/templates/master_template.json#base_enable_disable",
 			"label": "Scene Activation Functionality",
 			"description": "See manual for SCENE ID specification details"
 		},
-		"29": {
+		{
+			"#": "29",
 			"$import": "~/templates/master_template.json#base_enable_disable",
 			"label": "Swap Functionality of Key S1 and Key S2",
 			"description": "Causes S1 to operate as S2 and S2 to operate as S1"
 		},
-		"30": {
+		{
+			"#": "30",
 			"label": "Dimmer Mode",
 			"valueSize": 1,
 			"minValue": 0,
@@ -392,7 +430,8 @@
 				}
 			]
 		},
-		"31": {
+		{
+			"#": "31",
 			"label": "Dimmer Mode Recognized During Auto-Calibration",
 			"valueSize": 1,
 			"minValue": 0,
@@ -411,7 +450,8 @@
 				}
 			]
 		},
-		"32": {
+		{
+			"#": "32",
 			"label": "On/Off Mode",
 			"description": "Mode for connecting non-dimmable light sources.",
 			"valueSize": 1,
@@ -435,7 +475,8 @@
 				}
 			]
 		},
-		"33": {
+		{
+			"#": "33",
 			"label": "Dimmability of the Load Recognized During Auto-Calibration",
 			"valueSize": 1,
 			"minValue": 0,
@@ -454,7 +495,8 @@
 				}
 			]
 		},
-		"34": {
+		{
+			"#": "34",
 			"label": "Soft-Start Functionality",
 			"description": "Time required to warm up the filament of halogen bulb.",
 			"valueSize": 1,
@@ -478,7 +520,8 @@
 				}
 			]
 		},
-		"35": {
+		{
+			"#": "35",
 			"label": "Perform Auto-Calibration",
 			"valueSize": 1,
 			"minValue": 0,
@@ -509,7 +552,8 @@
 				}
 			]
 		},
-		"37": {
+		{
+			"#": "37",
 			"label": "Behavior After Overcurrent or Surge",
 			"valueSize": 1,
 			"minValue": 0,
@@ -528,7 +572,8 @@
 				}
 			]
 		},
-		"38": {
+		{
+			"#": "38",
 			"label": "Brightness Level Correction for Flickering Loads",
 			"valueSize": 2,
 			"unit": "seconds",
@@ -546,7 +591,8 @@
 				}
 			]
 		},
-		"39": {
+		{
+			"#": "39",
 			"label": "Power Limit",
 			"description": "Defined value turns off load",
 			"valueSize": 2,
@@ -555,7 +601,8 @@
 			"maxValue": 350,
 			"defaultValue": 250
 		},
-		"40": {
+		{
+			"#": "40",
 			"label": "General Purpose Alarm Response",
 			"valueSize": 1,
 			"minValue": 0,
@@ -582,7 +629,8 @@
 				}
 			]
 		},
-		"41": {
+		{
+			"#": "41",
 			"label": "Water Flooding Alarm Response",
 			"valueSize": 1,
 			"minValue": 0,
@@ -609,7 +657,8 @@
 				}
 			]
 		},
-		"42": {
+		{
+			"#": "42",
 			"label": "Smoke, CO or CO2 Alarm Response",
 			"valueSize": 1,
 			"minValue": 0,
@@ -636,7 +685,8 @@
 				}
 			]
 		},
-		"43": {
+		{
+			"#": "43",
 			"label": "Temperature Alarm Response",
 			"valueSize": 1,
 			"minValue": 0,
@@ -663,7 +713,8 @@
 				}
 			]
 		},
-		"44": {
+		{
+			"#": "44",
 			"label": "Time of Alarm State",
 			"valueSize": 2,
 			"unit:": "seconds",
@@ -671,7 +722,8 @@
 			"maxValue": 32767,
 			"defaultValue": 600
 		},
-		"45": {
+		{
+			"#": "45",
 			"label": "Power Limit Alarm Report",
 			"description": "Load power consumption too high",
 			"valueSize": 1,
@@ -691,7 +743,8 @@
 				}
 			]
 		},
-		"46": {
+		{
+			"#": "46",
 			"label": "Load Error Alarm Report",
 			"description": "No load, load failure, burnt out bulb",
 			"valueSize": 1,
@@ -711,7 +764,8 @@
 				}
 			]
 		},
-		"47": {
+		{
+			"#": "47",
 			"label": "Overcurrent Alarm Report",
 			"description": "Short circuit, burnt out bulb causing overcurrent",
 			"valueSize": 1,
@@ -731,7 +785,8 @@
 				}
 			]
 		},
-		"48": {
+		{
+			"#": "48",
 			"label": "Surge Alarm Report",
 			"description": "Dimmer output overvoltage",
 			"valueSize": 1,
@@ -751,7 +806,8 @@
 				}
 			]
 		},
-		"49": {
+		{
+			"#": "49",
 			"label": "Overheat and Voltage Drop Alarm Report",
 			"description": "Critical temperature and low voltage",
 			"valueSize": 1,
@@ -771,7 +827,8 @@
 				}
 			]
 		},
-		"50": {
+		{
+			"#": "50",
 			"label": "Active Power Report: Threshold",
 			"description": "Relative change since previous report sent",
 			"valueSize": 1,
@@ -786,7 +843,8 @@
 				}
 			]
 		},
-		"52": {
+		{
+			"#": "52",
 			"label": "Periodic Active Power and Energy Reports",
 			"valueSize": 2,
 			"unit": "seconds",
@@ -800,7 +858,8 @@
 				}
 			]
 		},
-		"53": {
+		{
+			"#": "53",
 			"label": "Energy Report: Threshold",
 			"valueSize": 2,
 			"unit": "0.01 kWh",
@@ -814,12 +873,14 @@
 				}
 			]
 		},
-		"54": {
+		{
+			"#": "54",
 			"$import": "~/templates/master_template.json#base_enable_disable",
 			"label": "Self-measurement",
 			"description": "Reports include power and energy used by device"
 		},
-		"58": {
+		{
+			"#": "58",
 			"label": "Active Power Calculation Method",
 			"valueSize": 1,
 			"minValue": 0,
@@ -842,7 +903,8 @@
 				}
 			]
 		},
-		"59": {
+		{
+			"#": "59",
 			"label": "Approximated Power at the Maximum Brightness Level",
 			"valueSize": 2,
 			"unit": "W",
@@ -850,7 +912,7 @@
 			"maxValue": 500,
 			"defaultValue": 0
 		}
-	},
+	],
 	"metadata": {
 		"inclusion": "Turn the primary controller of Z-Wave network into inclusion mode, quickly press key S1 or B-button product's housing three times",
 		"exclusion": "Turn the primary controller of Z-Wave network into exclusion mode, quickly press key S1 or B-button product's housing three times",

@@ -24,8 +24,9 @@
 			"maxNodes": 5
 		}
 	},
-	"paramInformation": {
-		"1": {
+	"paramInformation": [
+		{
+			"#": "1",
 			"label": "Paddle Orientation",
 			"valueSize": 1,
 			"minValue": 0,
@@ -47,7 +48,8 @@
 				}
 			]
 		},
-		"2": {
+		{
+			"#": "2",
 			"label": "LED Indicator Control",
 			"valueSize": 1,
 			"minValue": 0,
@@ -73,7 +75,8 @@
 				}
 			]
 		},
-		"14": {
+		{
+			"#": "14",
 			"label": "LED Indicator Color",
 			"valueSize": 1,
 			"minValue": 0,
@@ -99,7 +102,8 @@
 				}
 			]
 		},
-		"15": {
+		{
+			"#": "15",
 			"label": "LED Indicator Brightness",
 			"valueSize": 1,
 			"minValue": 0,
@@ -121,7 +125,8 @@
 				}
 			]
 		},
-		"3": {
+		{
+			"#": "3",
 			"label": "Auto Turn-Off Timer",
 			"description": "Set the number of minutes to automatically turn off switch once it has been turned on (0 to disable).",
 			"valueSize": 4,
@@ -130,7 +135,8 @@
 			"defaultValue": 0,
 			"unit": "minutes"
 		},
-		"5": {
+		{
+			"#": "5",
 			"label": "Auto Turn-On Timer",
 			"description": "Set the number of minutes to automatically turn on switch once it has been turned off (0 to disable).",
 			"valueSize": 4,
@@ -139,7 +145,8 @@
 			"defaultValue": 0,
 			"unit": "minutes"
 		},
-		"7[0x01]": {
+		{
+			"#": "7[0x01]",
 			"label": "Control Group 2 With Physical Switch",
 			"valueSize": 1,
 			"minValue": 0,
@@ -157,7 +164,8 @@
 				}
 			]
 		},
-		"7[0x02]": {
+		{
+			"#": "7[0x02]",
 			"label": "Control Group 2 With Connected 3-Way Switch",
 			"valueSize": 1,
 			"minValue": 0,
@@ -175,7 +183,8 @@
 				}
 			]
 		},
-		"7[0x04]": {
+		{
+			"#": "7[0x04]",
 			"label": "Control Group 2 With Z-Wave Commands",
 			"valueSize": 1,
 			"minValue": 0,
@@ -193,7 +202,8 @@
 				}
 			]
 		},
-		"7[0x08]": {
+		{
+			"#": "7[0x08]",
 			"label": "Control Group 2 With On/Off Timers",
 			"valueSize": 1,
 			"minValue": 0,
@@ -211,10 +221,12 @@
 				}
 			]
 		},
-		"8": {
+		{
+			"#": "8",
 			"$import": "~/templates/master_template.json#state_after_power_failure_off_on_prev"
 		},
-		"10": {
+		{
+			"#": "10",
 			"label": "Scene Control",
 			"description": "Send scene commands to hub on physical paddle presses.",
 			"valueSize": 1,
@@ -233,7 +245,8 @@
 				}
 			]
 		},
-		"12": {
+		{
+			"#": "12",
 			"label": "Enable Local and Z-Wave Control",
 			"valueSize": 1,
 			"minValue": 0,
@@ -255,7 +268,8 @@
 				}
 			]
 		},
-		"13": {
+		{
+			"#": "13",
 			"label": "Reporting Behavior When Physical Control Is Disabled",
 			"description": "Enable or disable reporting on/off status and changing LED indicator state even if physical and Z-Wave control is disabled.",
 			"valueSize": 1,
@@ -274,7 +288,8 @@
 				}
 			]
 		},
-		"16": {
+		{
+			"#": "16",
 			"label": "Association Reports",
 			"description": "Report type for paddle control.",
 			"valueSize": 1,
@@ -293,5 +308,5 @@
 				}
 			]
 		}
-	}
+	]
 }

@@ -24,8 +24,9 @@
 			"isLifeline": true
 		}
 	},
-	"paramInformation": {
-		"1": {
+	"paramInformation": [
+		{
+			"#": "1",
 			"label": "Sensitivity",
 			"description": "Sensitivity sets the amount of motion required for EZMotion to detect motion.",
 			"valueSize": 1,
@@ -34,7 +35,8 @@
 			"defaultValue": 200,
 			"unsigned": true
 		},
-		"2": {
+		{
+			"#": "2",
 			"label": "On Time",
 			"description": "Sets the number of minutes the lights stay on when motion has not been detected.",
 			"valueSize": 1,
@@ -43,7 +45,8 @@
 			"defaultValue": 20,
 			"unsigned": true
 		},
-		"3": {
+		{
+			"#": "3",
 			"label": "LED On/Off",
 			"description": "LED ON/OFF turns the LED on or off.",
 			"valueSize": 1,
@@ -63,7 +66,8 @@
 				}
 			]
 		},
-		"4": {
+		{
+			"#": "4",
 			"label": "Light Threshold",
 			"description": "Light Threshold is the % of light above which the lights will not be turned on.",
 			"valueSize": 1,
@@ -72,7 +76,8 @@
 			"defaultValue": 100,
 			"unsigned": true
 		},
-		"5": {
+		{
+			"#": "5",
 			"label": "Stay Awake",
 			"description": "Setting Stay Awake value",
 			"valueSize": 1,
@@ -81,7 +86,8 @@
 			"defaultValue": 0,
 			"unsigned": true
 		},
-		"6": {
+		{
+			"#": "6",
 			"label": "On Value",
 			"description": "The value sent by the Z-Wave BASIC_SET command when motion is detected.",
 			"valueSize": 1,
@@ -90,5 +96,5 @@
 			"defaultValue": 255,
 			"unsigned": true
 		}
-	}
+	]
 }

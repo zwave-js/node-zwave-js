@@ -26,8 +26,9 @@
 			"maxNodes": 4
 		}
 	},
-	"paramInformation": {
-		"1": {
+	"paramInformation": [
+		{
+			"#": "1",
 			"label": "OnTime",
 			"unit": "Minutes",
 			"valueSize": 1,
@@ -35,7 +36,8 @@
 			"maxValue": 127,
 			"defaultValue": 10
 		},
-		"2": {
+		{
+			"#": "2",
 			"label": "OnLevel",
 			"unit": "Percent",
 			"valueSize": 1,
@@ -43,7 +45,8 @@
 			"maxValue": 99,
 			"defaultValue": -1
 		},
-		"3": {
+		{
+			"#": "3",
 			"label": "LiteMin",
 			"unit": "Minutes",
 			"valueSize": 1,
@@ -51,7 +54,8 @@
 			"maxValue": 127,
 			"defaultValue": 60
 		},
-		"4": {
+		{
+			"#": "4",
 			"label": "TempMin",
 			"description": "A Temperature report is sent to the controller every TempMin minutes.",
 			"unit": "Minutes",
@@ -60,12 +64,13 @@
 			"maxValue": 127,
 			"defaultValue": 60
 		},
-		"5": {
+		{
+			"#": "5",
 			"label": "TempAdj",
 			"valueSize": 1,
 			"minValue": -128,
 			"maxValue": 127,
 			"defaultValue": 0
 		}
-	}
+	]
 }

@@ -14,8 +14,9 @@
 		"min": "0.0",
 		"max": "255.255"
 	},
-	"paramInformation": {
-		"1": {
+	"paramInformation": [
+		{
+			"#": "1",
 			"label": "Basic Set Level",
 			"valueSize": 1,
 			"minValue": 0,
@@ -23,7 +24,8 @@
 			"defaultValue": 99,
 			"unsigned": true
 		},
-		"3": {
+		{
+			"#": "3",
 			"label": "Sensitivity Level",
 			"description": "1 = low sensitivity, 10 = high sensitivity",
 			"valueSize": 1,
@@ -32,7 +34,8 @@
 			"defaultValue": 6,
 			"unsigned": true
 		},
-		"4": {
+		{
+			"#": "4",
 			"label": "Re-trigger Interval",
 			"valueSize": 1,
 			"unit": "seconds",
@@ -41,7 +44,8 @@
 			"defaultValue": 180,
 			"unsigned": true
 		},
-		"5": {
+		{
+			"#": "5",
 			"label": "Lux Level",
 			"valueSize": 1,
 			"unit": "%",
@@ -50,7 +54,8 @@
 			"defaultValue": 20,
 			"unsigned": true
 		},
-		"6": {
+		{
+			"#": "6",
 			"label": "On - Off Duration",
 			"valueSize": 2,
 			"unit": "seconds",
@@ -59,7 +64,7 @@
 			"defaultValue": 15,
 			"unsigned": true
 		}
-	},
+	],
 	"metadata": {
 		"inclusion": "The sensor supports Auto Inclusion feature where it will automatically enter Inclusion mode when first\npowered up after a factory reset.\n1. Use a screwdriver to detach the rear cover.\n2. Put a Z-Wave Controller into inclusion mode.\n3. Insert 1 CR123 3V battery to the battery compartment with the correct polarity. The LED on the device should turn ON.\n4. The Inclusion process should be completed when the LED stops blinking.\n5. Do not refit the rear cover yet and proceed to the Testing section before mounting.\n\nNote: If Auto Inclusion fails, refer to the Troubleshooting section regarding Manual Inclusion.\n\n1. Put the Z-Wave Controller into Inclusion mode\n2. Press the tamper switch 3 times within 1.5\nseconds to put the unit into inclusion mode",
 		"exclusion": "1. Put the Z-Wave Controller into Exclusion mode\n2. Press the tamper switch 3 times within 1.5\nseconds to put the unit into exclusion mode",

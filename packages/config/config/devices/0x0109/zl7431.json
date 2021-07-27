@@ -25,8 +25,9 @@
 			"isLifeline": true
 		}
 	},
-	"paramInformation": {
-		"1": {
+	"paramInformation": [
+		{
+			"#": "1",
 			"label": "Indicator Light",
 			"valueSize": 1,
 			"minValue": 1,
@@ -45,5 +46,5 @@
 				}
 			]
 		}
-	}
+	]
 }

@@ -21,8 +21,9 @@
 			"isLifeline": true
 		}
 	},
-	"paramInformation": {
-		"1": {
+	"paramInformation": [
+		{
+			"#": "1",
 			"label": "Ignore Start Level (Transmitting)",
 			"description": "Dimmers controlled by this switch will start dimming from their current level.",
 			"valueSize": 1,
@@ -42,7 +43,8 @@
 				}
 			]
 		},
-		"3": {
+		{
+			"#": "3",
 			"label": "Night Light",
 			"description": "In night-light mode the LED on the switch will turn ON when the switch is turned OFF.",
 			"valueSize": 1,
@@ -62,7 +64,8 @@
 				}
 			]
 		},
-		"4": {
+		{
+			"#": "4",
 			"label": "Invert Switch",
 			"description": "Change the top of the switch to OFF and the bottom of the switch to ON.",
 			"valueSize": 1,
@@ -82,7 +85,8 @@
 				}
 			]
 		},
-		"5": {
+		{
+			"#": "5",
 			"label": "Ignore Start-Level (Receiving)",
 			"description": "The dimmer will start dimming from its current level.",
 			"valueSize": 1,
@@ -102,7 +106,8 @@
 				}
 			]
 		},
-		"19": {
+		{
+			"#": "19",
 			"label": "Transmission Indication",
 			"description": "Flicker LED while transmitting.",
 			"valueSize": 1,
@@ -126,7 +131,8 @@
 				}
 			]
 		},
-		"20": {
+		{
+			"#": "20",
 			"label": "Polling Interval",
 			"description": "How often, in minutes, to poll to keep synchronized with group.",
 			"valueSize": 1,
@@ -135,7 +141,8 @@
 			"defaultValue": 2,
 			"unsigned": true
 		},
-		"21": {
+		{
+			"#": "21",
 			"label": "Poll First Node",
 			"description": "Poll only the first node in Group 1.",
 			"valueSize": 1,
@@ -155,5 +162,5 @@
 				}
 			]
 		}
-	}
+	]
 }

@@ -14,8 +14,9 @@
 		"min": "0.0",
 		"max": "255.255"
 	},
-	"paramInformation": {
-		"1": {
+	"paramInformation": [
+		{
+			"#": "1",
 			"label": "Timer Setting",
 			"unit": "10 minutes",
 			"valueSize": 1,
@@ -24,7 +25,8 @@
 			"defaultValue": 1,
 			"unsigned": true
 		},
-		"2": {
+		{
+			"#": "2",
 			"label": "Remained Time",
 			"unit": "minutes",
 			"valueSize": 2,
@@ -33,7 +35,7 @@
 			"defaultValue": 0,
 			"unsigned": true
 		}
-	},
+	],
 	"metadata": {
 		"inclusion": "This must be done at GAS valve and when closed. Press Timer UP button for 5 seconds till hearing beep once",
 		"exclusion": "This must be done at GAS valve and when closed. Press Timer UP button for 5 seconds till hearing beep once",

@@ -21,11 +21,13 @@
 		"min": "0.0",
 		"max": "255.255"
 	},
-	"paramInformation": {
-		"1": {
+	"paramInformation": [
+		{
+			"#": "1",
 			"$import": "~/templates/master_template.json#state_after_power_failure_off_prev"
 		},
-		"2": {
+		{
+			"#": "2",
 			"label": "External Switch Type",
 			"valueSize": 1,
 			"minValue": 0,
@@ -47,7 +49,8 @@
 				}
 			]
 		},
-		"3": {
+		{
+			"#": "3",
 			"label": "Switch States",
 			"valueSize": 1,
 			"minValue": 0,
@@ -65,7 +68,8 @@
 				}
 			]
 		},
-		"4": {
+		{
+			"#": "4",
 			"label": "All On / All Off",
 			"valueSize": 1,
 			"minValue": 0,
@@ -92,21 +96,24 @@
 				}
 			]
 		},
-		"5": {
+		{
+			"#": "5",
 			"label": "Minimum Brightness",
 			"valueSize": 1,
 			"minValue": 1,
 			"maxValue": 98,
 			"defaultValue": 1
 		},
-		"6": {
+		{
+			"#": "6",
 			"label": "Maximum Brightness",
 			"valueSize": 1,
 			"minValue": 2,
 			"maxValue": 99,
 			"defaultValue": 99
 		},
-		"7": {
+		{
+			"#": "7",
 			"label": "Dimming Step Time (Manual)",
 			"valueSize": 2,
 			"unit": "10ms",
@@ -114,14 +121,16 @@
 			"maxValue": 255,
 			"defaultValue": 3
 		},
-		"8": {
+		{
+			"#": "8",
 			"label": "Dimming Step Size (Manual)",
 			"valueSize": 1,
 			"minValue": 1,
 			"maxValue": 99,
 			"defaultValue": 1
 		},
-		"9": {
+		{
+			"#": "9",
 			"label": "Dimming Step Time (Auto)",
 			"valueSize": 2,
 			"unit": "10ms",
@@ -129,28 +138,32 @@
 			"maxValue": 255,
 			"defaultValue": 3
 		},
-		"10": {
+		{
+			"#": "10",
 			"label": "Dimming Step Size (Auto)",
 			"valueSize": 1,
 			"minValue": 1,
 			"maxValue": 99,
 			"defaultValue": 1
 		},
-		"11": {
+		{
+			"#": "11",
 			"label": "Auto-Off Timer",
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 255,
 			"defaultValue": 0
 		},
-		"13": {
+		{
+			"#": "13",
 			"label": "One click of S1",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 99,
 			"defaultValue": 99
 		},
-		"14": {
+		{
+			"#": "14",
 			"label": "Double click of S1",
 			"valueSize": 1,
 			"minValue": 0,
@@ -168,7 +181,8 @@
 				}
 			]
 		},
-		"15": {
+		{
+			"#": "15",
 			"label": "Operation Report Switch1 to Association Groups 2 & 3",
 			"valueSize": 1,
 			"minValue": 0,
@@ -176,7 +190,8 @@
 			"defaultValue": 0,
 			"unsigned": true
 		},
-		"16": {
+		{
+			"#": "16",
 			"label": "Operation Report Switch1 to Association Group 2",
 			"valueSize": 1,
 			"minValue": 0,
@@ -194,7 +209,8 @@
 				}
 			]
 		},
-		"17": {
+		{
+			"#": "17",
 			"label": "Switch 2 Function",
 			"valueSize": 1,
 			"minValue": 0,
@@ -225,7 +241,8 @@
 				}
 			]
 		},
-		"18": {
+		{
+			"#": "18",
 			"label": "Association Group 4 Commands",
 			"valueSize": 1,
 			"minValue": 0,
@@ -252,7 +269,8 @@
 				}
 			]
 		},
-		"19": {
+		{
+			"#": "19",
 			"label": "Scene ID - One Click of S2 (Association Group 1)",
 			"valueSize": 1,
 			"minValue": 0,
@@ -260,7 +278,8 @@
 			"defaultValue": 0,
 			"unsigned": true
 		},
-		"20": {
+		{
+			"#": "20",
 			"label": "Scene ID - Double Click of S2 (Association Group 1)",
 			"valueSize": 1,
 			"minValue": 0,
@@ -268,7 +287,8 @@
 			"defaultValue": 0,
 			"unsigned": true
 		},
-		"21": {
+		{
+			"#": "21",
 			"label": "Scene ID - Hold of S2 (Association Group 1)",
 			"valueSize": 1,
 			"minValue": 0,
@@ -276,7 +296,8 @@
 			"defaultValue": 0,
 			"unsigned": true
 		},
-		"255": {
+		{
+			"#": "255",
 			"label": "Factory reset",
 			"valueSize": 1,
 			"minValue": 0,
@@ -296,5 +317,5 @@
 				}
 			]
 		}
-	}
+	]
 }

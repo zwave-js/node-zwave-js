@@ -14,8 +14,9 @@
 		"min": "0.0",
 		"max": "255.255"
 	},
-	"paramInformation": {
-		"3": {
+	"paramInformation": [
+		{
+			"#": "3",
 			"label": "Beeper",
 			"description": "Read and write 0: disable beeper -1: enable beeper",
 			"valueSize": 1,
@@ -34,7 +35,8 @@
 				}
 			]
 		},
-		"5": {
+		{
+			"#": "5",
 			"label": "Auto Lock",
 			"description": "Read-only 0: disable auto lock -1: enable auto lock",
 			"valueSize": 1,
@@ -53,7 +55,8 @@
 				}
 			]
 		},
-		"6": {
+		{
+			"#": "6",
 			"label": "User Slot Bit Field",
 			"description": "Each bit represent user slot",
 			"valueSize": 2,
@@ -62,7 +65,8 @@
 			"defaultValue": 3,
 			"unsigned": true
 		},
-		"18": {
+		{
+			"#": "18",
 			"label": "Get Bootloader Version",
 			"description": "Version of the bootloader",
 			"valueSize": 1,
@@ -71,7 +75,7 @@
 			"defaultValue": 1,
 			"unsigned": true
 		}
-	},
+	],
 	"metadata": {
 		"inclusion": "1. Place your Z-Wave Controller into the “Add” or Inclusion Mode (Refer the respective documentation for that specific home automation system or panel device for details). \n2. Slide the battery cover upward. \n3. Press the wireless button more than 3 seconds.\n4. Press “1” on the keypad.\n5. Press “6” on the keypad.\n6. Press User Code on the keypad.\n7. Press “#” on the keypad.\n8. If RF LED flickers, inclusion has completed successfully.\n9. If battery replace LED flickers(fail), try repeating steps 1-7",
 		"exclusion": "1. Place your Z-Wave Controller into the “Remove” or Exclusion Mode (Refer the respective documentation for that specific home automation system or panel device for details). \n2. Slide the battery cover upward. \n3. Press the wireless button more than 3 seconds.\n4. Press “2” on the keypad.\n5. Press “6” on the keypad.\n6. Press User Code on the keypad.\n7. Press “#” on the keypad.\n8. If RF LED flickers, exclusion has completed successfully.\n9. If battery replace LED flickers, try repeating steps 1-7.",

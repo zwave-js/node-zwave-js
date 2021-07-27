@@ -18,8 +18,9 @@
 		"min": "0.0",
 		"max": "255.255"
 	},
-	"paramInformation": {
-		"1": {
+	"paramInformation": [
+		{
+			"#": "1",
 			"label": "Heartbeat Interval",
 			"valueSize": 1,
 			"unit": "minutes",
@@ -28,7 +29,8 @@
 			"defaultValue": 70,
 			"unsigned": true
 		},
-		"2": {
+		{
+			"#": "2",
 			"label": "Message Retry Attempt Limit",
 			"valueSize": 1,
 			"minValue": 0,
@@ -36,7 +38,8 @@
 			"defaultValue": 1,
 			"unsigned": true
 		},
-		"3": {
+		{
+			"#": "3",
 			"label": "Delay Between Retry Attempts",
 			"valueSize": 1,
 			"unit": "seconds",
@@ -45,7 +48,8 @@
 			"defaultValue": 5,
 			"unsigned": true
 		},
-		"4": {
+		{
+			"#": "4",
 			"label": "Announcement Audio Volume",
 			"valueSize": 1,
 			"minValue": 0,
@@ -53,7 +57,8 @@
 			"defaultValue": 7,
 			"unsigned": true
 		},
-		"5": {
+		{
+			"#": "5",
 			"label": "Key Tone Volume",
 			"valueSize": 1,
 			"minValue": 0,
@@ -61,7 +66,8 @@
 			"defaultValue": 6,
 			"unsigned": true
 		},
-		"6": {
+		{
+			"#": "6",
 			"label": "Siren Volume",
 			"valueSize": 1,
 			"minValue": 0,
@@ -69,7 +75,8 @@
 			"defaultValue": 10,
 			"unsigned": true
 		},
-		"7": {
+		{
+			"#": "7",
 			"label": "Long Press Duration: Emergency Buttons",
 			"description": "Hold time required to capture a long press",
 			"valueSize": 1,
@@ -79,7 +86,8 @@
 			"defaultValue": 3,
 			"unsigned": true
 		},
-		"8": {
+		{
+			"#": "8",
 			"label": "Long Press Duration: Number Pad",
 			"description": "Hold time required to capture a long press",
 			"valueSize": 1,
@@ -89,7 +97,8 @@
 			"defaultValue": 3,
 			"unsigned": true
 		},
-		"9": {
+		{
+			"#": "9",
 			"label": "Timeout: Proximity Display",
 			"valueSize": 1,
 			"unit": "seconds",
@@ -98,7 +107,8 @@
 			"defaultValue": 5,
 			"unsigned": true
 		},
-		"10": {
+		{
+			"#": "10",
 			"label": "Timeout: Display on Button Press",
 			"valueSize": 1,
 			"unit": "seconds",
@@ -107,7 +117,8 @@
 			"defaultValue": 5,
 			"unsigned": true
 		},
-		"11": {
+		{
+			"#": "11",
 			"label": "Timeout: Display on Status Change",
 			"valueSize": 1,
 			"unit": "seconds",
@@ -116,7 +127,8 @@
 			"defaultValue": 5,
 			"unsigned": true
 		},
-		"12": {
+		{
+			"#": "12",
 			"label": "Brightness: Security Mode",
 			"valueSize": 1,
 			"unit": "%",
@@ -125,7 +137,8 @@
 			"defaultValue": 100,
 			"unsigned": true
 		},
-		"13": {
+		{
+			"#": "13",
 			"label": "Brightness: Key Backlight",
 			"valueSize": 1,
 			"unit": "%",
@@ -134,7 +147,8 @@
 			"defaultValue": 100,
 			"unsigned": true
 		},
-		"14": {
+		{
+			"#": "14",
 			"label": "Key Backlight Ambient Light Sensor Level",
 			"valueSize": 1,
 			"unit": "%",
@@ -143,7 +157,8 @@
 			"defaultValue": 20,
 			"unsigned": true
 		},
-		"15": {
+		{
+			"#": "15",
 			"label": "Proximity Detection",
 			"valueSize": 1,
 			"minValue": 0,
@@ -162,7 +177,8 @@
 				}
 			]
 		},
-		"16": {
+		{
+			"#": "16",
 			"label": "LED Ramp Time",
 			"valueSize": 1,
 			"unit": "seconds",
@@ -171,7 +187,8 @@
 			"defaultValue": 50,
 			"unsigned": true
 		},
-		"17": {
+		{
+			"#": "17",
 			"label": "Battery Low Threshold",
 			"valueSize": 1,
 			"unit": "%",
@@ -180,7 +197,8 @@
 			"defaultValue": 15,
 			"unsigned": true
 		},
-		"19": {
+		{
+			"#": "19",
 			"label": "Battery Warning Threshold",
 			"valueSize": 1,
 			"unit": "%",
@@ -189,7 +207,8 @@
 			"defaultValue": 5,
 			"unsigned": true
 		},
-		"18": {
+		{
+			"#": "18",
 			"label": "Keypad Language",
 			"valueSize": 1,
 			"minValue": 0,
@@ -211,7 +230,8 @@
 				}
 			]
 		},
-		"20": {
+		{
+			"#": "20",
 			"label": "System Security Mode Blink Duration",
 			"valueSize": 1,
 			"minValue": 1,
@@ -219,7 +239,8 @@
 			"defaultValue": 2,
 			"unsigned": true
 		},
-		"21": {
+		{
+			"#": "21",
 			"label": "Supervision Report Timeout",
 			"valueSize": 2,
 			"unit": "ms",
@@ -228,7 +249,8 @@
 			"defaultValue": 10000,
 			"unsigned": true
 		},
-		"22": {
+		{
+			"#": "22",
 			"label": "System Security Mode Display",
 			"description": "Allowable range: 1-600",
 			"valueSize": 2,
@@ -247,7 +269,8 @@
 				}
 			]
 		},
-		"23": {
+		{
+			"#": "23",
 			"label": "Languages Supported Report",
 			"description": "This parameter reports a bitmask of supported languages",
 			"valueSize": 4,
@@ -257,7 +280,8 @@
 			"unsigned": true,
 			"readOnly": true
 		},
-		"24": {
+		{
+			"#": "24",
 			"label": "Calibrate Speaker",
 			"valueSize": 1,
 			"minValue": 0,
@@ -276,7 +300,7 @@
 				}
 			]
 		}
-	},
+	],
 	"metadata": {
 		"inclusion": "After powering on the device, press and hold the #1 button for ~3 seconds. Release the button and the device will enter Classic inclusion mode which implements both classic inclusion with a Node Information Frame, and Network Wide Inclusion. During Classic Inclusion mode, the green Connection LED will blink three times followed by a brief pause, repeatedly. When Classic inclusion times-out, the device will blink alternating red and green a few times",
 		"exclusion": "Exclusion Instructions: \n1. Initiate remove “Ring Alarm Keypad” flow in the Ring Alarm mobile application – Select the settings icon from device details page and choose “Remove Device” to remove the device. This will place the controller into Remove or “Z-Wave Exclusion” mode. \n2. Locate the pinhole reset button on the back of the device. \n3. With the controller in Remove (Z-Wave Exclusion) mode, use a paper clip or similar object and tap the pinhole button. The device’s Connection LED turns on solid red to indicate the device was removed from the network.",

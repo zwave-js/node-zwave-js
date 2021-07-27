@@ -29,8 +29,9 @@
 			"maxNodes": 2
 		}
 	},
-	"paramInformation": {
-		"1": {
+	"paramInformation": [
+		{
+			"#": "1",
 			"label": "LED Indicator",
 			"valueSize": 1,
 			"minValue": 0,
@@ -52,7 +53,8 @@
 				}
 			]
 		},
-		"2": {
+		{
+			"#": "2",
 			"label": "Outlet 1 (Left) Auto Off Timer",
 			"valueSize": 4,
 			"unit": "minutes",
@@ -61,7 +63,8 @@
 			"defaultValue": 0,
 			"unsigned": true
 		},
-		"3": {
+		{
+			"#": "3",
 			"label": "Outlet 2 (Right) Auto Off Timer",
 			"valueSize": 4,
 			"unit": "minutes",
@@ -70,7 +73,8 @@
 			"defaultValue": 0,
 			"unsigned": true
 		},
-		"4": {
+		{
+			"#": "4",
 			"label": "Outlet 1 (Left) Auto On Timer",
 			"valueSize": 4,
 			"unit": "minutes",
@@ -79,7 +83,8 @@
 			"defaultValue": 0,
 			"unsigned": true
 		},
-		"5": {
+		{
+			"#": "5",
 			"label": "Outlet 2 (Right) Auto On Timer",
 			"valueSize": 4,
 			"unit": "minutes",
@@ -88,10 +93,11 @@
 			"defaultValue": 0,
 			"unsigned": true
 		},
-		"6": {
+		{
+			"#": "6",
 			"$import": "~/templates/master_template.json#state_after_power_failure_off_on_prev"
 		}
-	},
+	],
 	"metadata": {
 		"inclusion": "Refer to your primary controller instructions to process the inclusion / exclusion setup procedure.\nWhen prompted by your primary controller, click the PROG button three times in one second.",
 		"exclusion": "Refer to your primary controller instructions to process the inclusion / exclusion setup procedure.\nWhen prompted by your primary controller, click the PROG button three times in one second.",

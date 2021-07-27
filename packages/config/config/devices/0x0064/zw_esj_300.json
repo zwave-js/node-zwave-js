@@ -13,8 +13,9 @@
 		"min": "0.0",
 		"max": "255.255"
 	},
-	"paramInformation": {
-		"0": {
+	"paramInformation": [
+		{
+			"#": "0",
 			"label": "Running time",
 			"description": "Adjustment of the operating times of the sun blind control",
 			"valueSize": 1,
@@ -23,7 +24,8 @@
 			"defaultValue": 0,
 			"unsigned": true
 		},
-		"1": {
+		{
+			"#": "1",
 			"label": "Stop-functionality",
 			"valueSize": 1,
 			"minValue": 0,
@@ -41,5 +43,5 @@
 				}
 			]
 		}
-	}
+	]
 }

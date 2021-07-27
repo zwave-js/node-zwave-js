@@ -14,8 +14,9 @@
 		"min": "0.0",
 		"max": "255.255"
 	},
-	"paramInformation": {
-		"1": {
+	"paramInformation": [
+		{
+			"#": "1",
 			"label": "Protect Timeout",
 			"description": "",
 			"valueSize": 1,
@@ -25,7 +26,7 @@
 			"defaultValue": 30,
 			"unsigned": true
 		}
-	},
+	],
 	"metadata": {
 		"reset": "1) Press and hold both \"On\" and \"Off\" key together for 2 seconds until LED indicator light on, release all key;\n2) Press and hold both \"Stop\" and \"SOS\" key together for 10 seconds, during hold time LED will blink off 0.5 second interval 2 seconds. After hold 10 seconds LED indicator light off, then release all keys, factory default is retrieve, LED indicator will flashes three times after restore factory default success.\nPlease use this procedure only when the network primary controller is missing or otherwise inoperable",
 		"manual": "https://products.z-wavealliance.org/ProductManual/File?folder=&filename=MarketCertificationFiles/2496/Wireless_Keyfob_User_Manual_20171112.pdf"

@@ -14,8 +14,9 @@
 		"min": "0.0",
 		"max": "255.255"
 	},
-	"paramInformation": {
-		"1": {
+	"paramInformation": [
+		{
+			"#": "1",
 			"label": "Default Sound",
 			"description": "Different types of sounds",
 			"valueSize": 1,
@@ -24,7 +25,8 @@
 			"defaultValue": 5,
 			"unsigned": true
 		},
-		"2": {
+		{
+			"#": "2",
 			"label": "Heartbeat Notification Timing",
 			"description": "Seconds between automatic battery reports",
 			"valueSize": 4,
@@ -34,7 +36,8 @@
 			"defaultValue": 3600,
 			"unsigned": true
 		},
-		"3": {
+		{
+			"#": "3",
 			"label": "Supervision Encapsulation",
 			"description": "Encapsulate unsolicited notifications in supervision get requests.",
 			"valueSize": 1,
@@ -54,7 +57,8 @@
 				}
 			]
 		},
-		"4": {
+		{
+			"#": "4",
 			"label": "Sound Volume",
 			"description": "Sound volume as a percentage for non-emergency sounds",
 			"valueSize": 1,
@@ -64,7 +68,8 @@
 			"defaultValue": 50,
 			"unsigned": true
 		},
-		"5": {
+		{
+			"#": "5",
 			"label": "Sounds Available",
 			"description": "Number of sounds available to play",
 			"valueSize": 1,
@@ -74,7 +79,8 @@
 			"unsigned": true,
 			"readOnly": true
 		},
-		"6": {
+		{
+			"#": "6",
 			"label": "Emergency Sound Volume Adjustable",
 			"description": "Enable intrusion/smoke/co siren volume adjustable and mutable. 0 is disabled (default). 1 is enabled",
 			"valueSize": 1,
@@ -94,7 +100,7 @@
 				}
 			]
 		}
-	},
+	],
 	"metadata": {
 		"inclusion": "Adding to a Z-Wave Network (Classic Inclusion Method)\nMake sure the device has power. Press the Pair Button which is the smaller of the two buttons, and the device will enter classic inclusion mode which implements both classic inclusion with a Node Information Frame, and Network Wide Inclusion. During Classic Inclusion mode, the Green LED will blink two times every three seconds. When Classic inclusion times-out, the device will blink red and green",
 		"exclusion": "Removing a Sensor from a Z-Wave Network\nTo remove the device, place the controller into Remove or “Z-Wave Exclusion” mode. Press the smaller of the two buttons (Add/Test) following the same procedure to add for removal. Upon successful removal, the device’s red led will come on solid for 1 second. Note: Any Z-Wave Inclusion Controller can remove a Z-Wave device regardless of manufacturer or which network the device is currently added to.",

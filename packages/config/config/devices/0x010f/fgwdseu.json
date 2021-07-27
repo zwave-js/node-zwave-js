@@ -14,8 +14,9 @@
 		"max": "255.255"
 	},
 	"supportsZWavePlus": true,
-	"paramInformation": {
-		"1": {
+	"paramInformation": [
+		{
+			"#": "1",
 			"label": "Remember device state",
 			"valueSize": 1,
 			"minValue": 0,
@@ -33,28 +34,32 @@
 				}
 			]
 		},
-		"2": {
+		{
+			"#": "2",
 			"label": "First channel – overload safety switch",
 			"valueSize": 4,
 			"minValue": 0,
 			"maxValue": 45000,
 			"defaultValue": 0
 		},
-		"3": {
+		{
+			"#": "3",
 			"label": "Second channel – overload safety switch",
 			"valueSize": 4,
 			"minValue": 0,
 			"maxValue": 36200,
 			"defaultValue": 0
 		},
-		"10": {
+		{
+			"#": "10",
 			"label": "LED Frame - power limit",
 			"valueSize": 4,
 			"minValue": 500,
 			"maxValue": 30000,
 			"defaultValue": 30000
 		},
-		"11": {
+		{
+			"#": "11",
 			"label": "LED frame – colour when ON",
 			"valueSize": 1,
 			"minValue": 0,
@@ -104,7 +109,8 @@
 				}
 			]
 		},
-		"12": {
+		{
+			"#": "12",
 			"label": "LED frame – colour when OFF",
 			"valueSize": 1,
 			"minValue": 0,
@@ -146,21 +152,24 @@
 				}
 			]
 		},
-		"13": {
+		{
+			"#": "13",
 			"label": "LED frame – brightness",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 102,
 			"defaultValue": 100
 		},
-		"20": {
+		{
+			"#": "20",
 			"label": "Buttons operation",
 			"valueSize": 1,
 			"minValue": 1,
 			"maxValue": 4,
 			"defaultValue": 1
 		},
-		"24": {
+		{
+			"#": "24",
 			"label": "Buttons orientation",
 			"valueSize": 1,
 			"minValue": 0,
@@ -178,7 +187,8 @@
 				}
 			]
 		},
-		"25": {
+		{
+			"#": "25",
 			"label": "Outputs orientation",
 			"description": "Outputs orientation (Only in Double Switch Mode)",
 			"valueSize": 1,
@@ -197,49 +207,56 @@
 				}
 			]
 		},
-		"30": {
+		{
+			"#": "30",
 			"label": "Alarm configuration - 1st slot",
 			"valueSize": 4,
 			"minValue": 0,
 			"maxValue": 0,
 			"defaultValue": 0
 		},
-		"31": {
+		{
+			"#": "31",
 			"label": "Alarm configuration - 2nd slot",
 			"valueSize": 4,
 			"minValue": 0,
 			"maxValue": 0,
 			"defaultValue": 0
 		},
-		"32": {
+		{
+			"#": "32",
 			"label": "Alarm configuration - 3rd slot",
 			"valueSize": 4,
 			"minValue": 0,
 			"maxValue": 0,
 			"defaultValue": 0
 		},
-		"33": {
+		{
+			"#": "33",
 			"label": "Alarm configuration - 4th slot",
 			"valueSize": 4,
 			"minValue": 0,
 			"maxValue": 0,
 			"defaultValue": 0
 		},
-		"34": {
+		{
+			"#": "34",
 			"label": "Alarm configuration - 5th slot",
 			"valueSize": 4,
 			"minValue": 0,
 			"maxValue": 0,
 			"defaultValue": 0
 		},
-		"35": {
+		{
+			"#": "35",
 			"label": "Alarm configuration – duration",
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 32400,
 			"defaultValue": 600
 		},
-		"40": {
+		{
+			"#": "40",
 			"label": "First button – scenes sent",
 			"valueSize": 1,
 			"minValue": 0,
@@ -265,7 +282,8 @@
 				}
 			]
 		},
-		"41": {
+		{
+			"#": "41",
 			"label": "Second button – scenes sent",
 			"valueSize": 1,
 			"minValue": 0,
@@ -291,7 +309,8 @@
 				}
 			]
 		},
-		"60": {
+		{
+			"#": "60",
 			"label": "Power reports – include self-consumption",
 			"valueSize": 1,
 			"minValue": 0,
@@ -309,63 +328,72 @@
 				}
 			]
 		},
-		"61": {
+		{
+			"#": "61",
 			"label": "Power reports for first channel – on change",
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 500,
 			"defaultValue": 15
 		},
-		"62": {
+		{
+			"#": "62",
 			"label": "Power reports for first channel – periodic",
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 32400,
 			"defaultValue": 2600
 		},
-		"63": {
+		{
+			"#": "63",
 			"label": "Power reports for second channel – on change",
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 500,
 			"defaultValue": 15
 		},
-		"64": {
+		{
+			"#": "64",
 			"label": "Power reports for second channel – periodic",
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 32400,
 			"defaultValue": 3600
 		},
-		"65": {
+		{
+			"#": "65",
 			"label": "Energy reports for first channel – on change",
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 500,
 			"defaultValue": 10
 		},
-		"66": {
+		{
+			"#": "66",
 			"label": "Energy reports for first channel – periodic",
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 32400,
 			"defaultValue": 3600
 		},
-		"67": {
+		{
+			"#": "67",
 			"label": "Energy reports for second channel – on change",
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 500,
 			"defaultValue": 10
 		},
-		"68": {
+		{
+			"#": "68",
 			"label": "Energy reports for second channel – periodic",
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 32400,
 			"defaultValue": 3600
 		},
-		"150": {
+		{
+			"#": "150",
 			"label": "First channel – operating mode",
 			"valueSize": 1,
 			"minValue": 0,
@@ -387,7 +415,8 @@
 				}
 			]
 		},
-		"151": {
+		{
+			"#": "151",
 			"label": "Second channel – operating mode",
 			"valueSize": 1,
 			"minValue": 0,
@@ -409,7 +438,8 @@
 				}
 			]
 		},
-		"152": {
+		{
+			"#": "152",
 			"label": "1st ch - reaction to switch",
 			"description": "First channel - reaction to switch for delayed OFF / pulse modes",
 			"valueSize": 1,
@@ -432,7 +462,8 @@
 				}
 			]
 		},
-		"153": {
+		{
+			"#": "153",
 			"label": "2nd ch - reaction to switch",
 			"description": "Second channel - reaction to switch for delayed OFF / pulse modes",
 			"valueSize": 1,
@@ -455,21 +486,24 @@
 				}
 			]
 		},
-		"154": {
+		{
+			"#": "154",
 			"label": "First Channel - time parameter for delayed",
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 32000,
 			"defaultValue": 50
 		},
-		"155": {
+		{
+			"#": "155",
 			"label": "Second Channel - time parameter for delayed",
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 32000,
 			"defaultValue": 50
 		},
-		"156": {
+		{
+			"#": "156",
 			"label": "1st ch – ON value sent to 2nd/3rd",
 			"description": "First channel – Switch ON value sent to 2nd and 3rd association groups",
 			"valueSize": 2,
@@ -477,7 +511,8 @@
 			"maxValue": 255,
 			"defaultValue": 255
 		},
-		"157": {
+		{
+			"#": "157",
 			"label": "1st ch – OFF value sent to 2nd/3rd",
 			"description": "First channel – Switch OFF value sent to 2nd and 3rd association groups",
 			"valueSize": 2,
@@ -485,14 +520,16 @@
 			"maxValue": 255,
 			"defaultValue": 0
 		},
-		"158": {
+		{
+			"#": "158",
 			"label": "First Channel – Double Click value sent to 2nd/3rd",
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 255,
 			"defaultValue": 99
 		},
-		"159": {
+		{
+			"#": "159",
 			"label": "2nd ch – ON value sent to 4th/5th",
 			"description": "Second channel – Switch ON value sent to 4th and 5th association groups",
 			"valueSize": 2,
@@ -500,7 +537,8 @@
 			"maxValue": 255,
 			"defaultValue": 255
 		},
-		"160": {
+		{
+			"#": "160",
 			"label": "2nd ch – OFF value sent to 4th/5th",
 			"description": "Second channel – Switch OFF value sent to 4th and 5th association groups",
 			"valueSize": 2,
@@ -508,12 +546,13 @@
 			"maxValue": 255,
 			"defaultValue": 0
 		},
-		"161": {
+		{
+			"#": "161",
 			"label": "2nd ch – Double Click value sent to 4th/5th",
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 255,
 			"defaultValue": 99
 		}
-	}
+	]
 }

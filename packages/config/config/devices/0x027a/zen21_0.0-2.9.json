@@ -19,8 +19,9 @@
 		"max": "2.9"
 	},
 	"supportsZWavePlus": true,
-	"paramInformation": {
-		"1": {
+	"paramInformation": [
+		{
+			"#": "1",
 			"label": "Invert Switch",
 			"valueSize": 1,
 			"minValue": 0,
@@ -42,7 +43,8 @@
 				}
 			]
 		},
-		"2": {
+		{
+			"#": "2",
 			"label": "LED Indicator Control",
 			"valueSize": 1,
 			"minValue": 0,
@@ -60,7 +62,8 @@
 				}
 			]
 		},
-		"3": {
+		{
+			"#": "3",
 			"label": "Enable/Disable LED Indicator",
 			"valueSize": 1,
 			"minValue": 0,
@@ -78,7 +81,7 @@
 				}
 			]
 		}
-	},
+	],
 	"metadata": {
 		"inclusion": "1. Initiate inclusion (pairing) in the app (or web interface).\n2. Tap the upper paddle of the switch 3 times.\n3. The LED indicator will blink to signal communication and stay on/off when communication is concluded",
 		"exclusion": "1. Bring your Z-Wave gateway (hub) close to the switch if possible\n2. Put the Z-Wave hub into exclusion mode \n3. Tap the lower paddle on the switch 3 times quickly\n4. Your hub will confirm exclusion and the device will disappear from your controller's device list",
