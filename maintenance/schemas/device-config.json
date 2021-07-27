@@ -77,24 +77,11 @@
 		"endpoints": { "$ref": "#/definitions/endpoints" },
 		"associations": { "$ref": "#/definitions/associations" },
 		"paramInformation": {
-			"type": "object",
+			"type": "array",
 			"description": "Defines all the existing configuration parameters",
-			"properties": {
-				"$import": { "$ref": "#/definitions/import" }
-			},
-			"patternProperties": {
-				"^\\d+(\\[0x[0-9a-f]{1,8}\\])?$": {
-					"oneOf": [
-						{ "$ref": "#/definitions/param" },
-						{
-							"type": "array",
-							"items": { "$ref": "#/definitions/param" },
-							"minItems": 2
-						}
-					]
-				}
-			},
-			"additionalProperties": false
+			"items": { "$ref": "#/definitions/param" },
+			"minItems": 1,
+			"additionalItems": false
 		},
 		"proprietary": {
 			"type": "object",
@@ -344,7 +331,7 @@
 		"import": {
 			"type": "string",
 			"description": "Used to import another config file or parts thereof",
-			"pattern": "^((?<dir>((?:~/)?[\\w\\d_\\.-]+/)+)?(?<filename>[\\w\\d_-]+\\.json))?(?<selector>#([\\w\\d_-]+/)*[\\w\\d_-]+)?$"
+			"pattern": "^((?<dir>((?:~/)?[\\w\\d_\\.-]+/)+)?(?<filename>[\\w\\d_-]+\\.json))?(?<selector>#([\\w\\d\\[\\]_-]+/)*[\\w\\d\\[\\]_-]+)?$"
 		},
 		"condition": {
 			"type": "string",
@@ -461,6 +448,10 @@
 		"param": {
 			"type": "object",
 			"properties": {
+				"#": {
+					"type": "string",
+					"pattern": "^\\d+(\\[0x[0-9a-f]{1,8}\\])?$"
+				},
 				"$import": { "$ref": "#/definitions/import" },
 				"$if": { "$ref": "#/definitions/condition" },
 				"label": {
@@ -542,6 +533,7 @@
 					}
 				}
 			},
+			"additionalProperties": false,
 			"anyOf": [
 				{
 					"if": {
@@ -553,6 +545,7 @@
 					},
 					"then": {
 						"required": [
+							"#",
 							"label",
 							"valueSize",
 							"minValue",
@@ -561,6 +554,7 @@
 					},
 					"else": {
 						"required": [
+							"#",
 							"label",
 							"valueSize",
 							"minValue",
@@ -570,7 +564,7 @@
 					}
 				},
 				{
-					"required": ["$import"]
+					"required": ["#", "$import"]
 				}
 			]
 		}
