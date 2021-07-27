@@ -61,6 +61,9 @@ async function main(param) {
 		content = JSONC.stringify(json, undefined, "\t");
 		content = formatWithPrettier("file.json", content);
 		await fs.writeFile(filename, content, "utf8");
+
+		// Return the device label so it can be used in the PR title
+		return `${json.manufacturer} ${json.label}`;
 	}
 }
 module.exports = main;
