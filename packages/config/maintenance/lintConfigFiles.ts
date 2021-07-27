@@ -833,6 +833,30 @@ Did you mean to use ${opt.value >>> shiftAmount}?`,
 			}
 		}
 
+		// Ensure that for a given param, the one without a condition comes last
+		if (conditionalConfig.paramInformation) {
+			for (const [
+				key,
+				definitions,
+			] of conditionalConfig.paramInformation) {
+				if (
+					!definitions.every(
+						(d, index) =>
+							d.condition !== undefined ||
+							index === definitions.length - 1,
+					)
+				) {
+					addError(
+						file,
+						`${paramNoToString(
+							key.parameter,
+							key.valueBitMask,
+						)} is either invalid or duplicated: When there are multiple definitions, every definition except the last one MUST have an "$if" condition!`,
+					);
+				}
+			}
+		}
+
 		// Check only the conditional configs for single bit masks, because they might be added for
 		// separate variants
 		if (conditionalConfig.paramInformation) {
