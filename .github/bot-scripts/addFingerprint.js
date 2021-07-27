@@ -4,6 +4,7 @@
 require("../../.pnp.cjs").setup();
 
 const { ConfigManager } = require("@zwave-js/config");
+const { formatId } = require("@zwave-js/shared");
 const JSONC = require("comment-json");
 const fs = require("fs-extra");
 const prettier = require("prettier");
@@ -53,8 +54,8 @@ async function main(param) {
 
 		// Add the fingerprint
 		json.devices.push({
-			productType: newProductType,
-			productId: newProductId,
+			productType: formatId(newProductType),
+			productId: formatId(newProductId),
 		});
 
 		// And save it again

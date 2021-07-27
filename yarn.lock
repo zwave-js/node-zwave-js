@@ -3832,6 +3832,7 @@ __metadata:
     "@typescript-eslint/parser": ^4.28.3
     "@zwave-js/config": "workspace:*"
     "@zwave-js/core": "workspace:*"
+    "@zwave-js/shared": "workspace:*"
     ansi-colors: ^4.1.1
     comment-json: ^4.1.0
     commitizen: ^4.2.4
@@ -3877,7 +3878,7 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@zwave-js/shared@8.0.3, @zwave-js/shared@workspace:packages/shared":
+"@zwave-js/shared@8.0.3, @zwave-js/shared@workspace:*, @zwave-js/shared@workspace:packages/shared":
   version: 0.0.0-use.local
   resolution: "@zwave-js/shared@workspace:packages/shared"
   dependencies:
