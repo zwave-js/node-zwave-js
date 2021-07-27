@@ -398,6 +398,7 @@ jobs:
 
     # These steps only run if the check was successful
     - name: Use Node.js ${{ matrix.node-version }}
+      if: steps.check-permissions.outputs.result == 'true'
       uses: actions/setup-node@v2
       with:
         node-version: ${{ matrix.node-version }}
@@ -505,6 +506,7 @@ jobs:
 
     # These steps only run if the check was successful
     - name: Use Node.js ${{ matrix.node-version }}
+      if: steps.check-permissions.outputs.result == 'true'
       uses: actions/setup-node@v2
       with:
         node-version: ${{ matrix.node-version }}
@@ -592,5 +594,125 @@ jobs:
         script: |
           const bot = require(`${process.env.GITHUB_WORKSPACE}/.github/bot-scripts/index.js`);
           return bot.addCompatFlagCreatePR({github, context});
+
+
+  # #########################################################################
+  # Adds a fingerprint to an existing file when an authorized person posts
+  # @zwave-js-bot add fingerprint <newId> to <existingDeviceId>
+  add-fingerprint:
+    if: |
+      contains(github.event.issue.html_url, '/issues/') &&
+      contains(github.event.comment.body, '@zwave-js-bot add fingerprint') &&
+      (github.event.comment.user.login != 'zwave-js-bot' && github.event.comment.user.login != 'zwave-js-assistant[bot]')
+
+    runs-on: [ubuntu-latest]
+    strategy:
+      matrix:
+        node-version: [14.x] # This should be LTS
+
+    steps:
+    - name: Checkout master branch
+      uses: actions/checkout@v2
+ 
+    - name: Check user's permissions to do this
+      id: check-permissions
+      uses: actions/github-script@v4
+      with:
+        github-token: ${{secrets.BOT_TOKEN}}
+        result-encoding: string
+        script: |
+          const bot = require(`${process.env.GITHUB_WORKSPACE}/.github/bot-scripts/index.js`);
+          return bot.checkAuthorized({github, context});
+
+    # These steps only run if the check was successful
+    - name: Use Node.js ${{ matrix.node-version }}
+      if: steps.check-permissions.outputs.result == 'true'
+      uses: actions/setup-node@v2
+      with:
+        node-version: ${{ matrix.node-version }}
+        cache: 'yarn'
+
+    - name: Install dependencies
+      if: steps.check-permissions.outputs.result == 'true'
+      run: yarn install --immutable
+
+    - name: Compile TypeScript code
+      if: steps.check-permissions.outputs.result == 'true'
+      # We need this or the linter will complain about other stuff than the checks
+      run: yarn run build
+
+    - name: Parse command
+      if: steps.check-permissions.outputs.result == 'true'
+      id: parse-command
+      uses: actions/github-script@v4
+      with:
+        github-token: ${{secrets.BOT_TOKEN}}
+        script: |
+          const body = context.payload.comment.body;
+          const match = /add fingerprint (?<fingerprint>0x[0-9a-f]{4}:0x[0-9a-f]{4}) to (?<id>0x[0-9a-f]{4}:0x[0-9a-f]{4}:0x[0-9a-f]{4}(?::\d+\.\d+)?)/.exec(body);
+          if (!match) return {skip: true};
+          return {
+            fingerprint: match.groups.fingerprint,
+            id: match.groups.id
+          }
+
+    - name: Add fingerprint
+      if: |
+        steps.check-permissions.outputs.result == 'true' &&
+        !fromJSON(steps.parse-command.outputs.result).skip
+      uses: actions/github-script@v4
+      env:
+        fingerprint: ${{ fromJSON(steps.parse-command.outputs.result).fingerprint }}
+        id: ${{ fromJSON(steps.parse-command.outputs.result).id }}
+      with:
+        github-token: ${{secrets.BOT_TOKEN}}
+        script: |
+          const bot = require(`${process.env.GITHUB_WORKSPACE}/.github/bot-scripts/index.js`);
+          return bot.addFingerprint({github, context});
+
+    - name: Commit changes
+      if: |
+        steps.check-permissions.outputs.result == 'true' &&
+        !fromJSON(steps.parse-command.outputs.result).skip
+      id: commit-changes
+      env:
+        fingerprint: ${{ fromJSON(steps.parse-command.outputs.result).fingerprint }}
+        id: ${{ fromJSON(steps.parse-command.outputs.result).id }}
+      run: |
+        branchname="add-fingerprint-$(date +'%s')"
+        commitmessage="fix(config): add fingerprint `$fingerprint` to `$id`"
+
+        # Check if something changed
+        git config user.email "bot@zwave-js.io"
+        git config user.name "Z-Wave JS Bot"
+        git checkout -b "$branchname"
+        git add -A
+
+        if ! git diff --quiet HEAD -- packages/config/config/devices/ ; then
+          git commit -m "$commitmessage"
+          git push --set-upstream origin "$branchname"
+
+          echo "::set-output name=result::success"
+          echo "::set-output name=branchname::$branchname"
+          echo "::set-output name=commitmessage::$commitmessage"
+        else
+          echo "::set-output name=result::unchanged"
+          exit 0
+        fi
+
+    - name: Create PR
+      if: |
+        steps.check-permissions.outputs.result == 'true' &&
+        !fromJSON(steps.parse-command.outputs.result).skip
+      uses: actions/github-script@v4
+      env:
+        RESULT: ${{ steps.commit-changes.outputs.result }}
+        branchname: ${{ steps.commit-changes.outputs.branchname }}
+        commitmessage: ${{ steps.commit-changes.outputs.commitmessage }}
+      with:
+        github-token: ${{secrets.BOT_TOKEN}}
+        script: |
+          const bot = require(`${process.env.GITHUB_WORKSPACE}/.github/bot-scripts/index.js`);
+          return bot.addFingerprintCreatePR({github, context});
 
 
