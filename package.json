@@ -51,6 +51,7 @@
     "@zwave-js/config": "workspace:*",
     "@zwave-js/core": "workspace:*",
     "ansi-colors": "^4.1.1",
+    "comment-json": "^4.1.0",
     "commitizen": "^4.2.4",
     "coveralls": "^3.1.1",
     "cz-conventional-changelog": "^3.3.0",
