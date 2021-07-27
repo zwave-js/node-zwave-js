@@ -11,6 +11,10 @@
 		{
 			"productType": "0x0102",
 			"productId": "0x0009"
+		},
+		{
+			"productType": 514,
+			"productId": 9
 		}
 	],
 	"firmwareVersion": {
@@ -106,15 +110,6 @@
 				}
 			]
 		},
-		"10": {
-			"label": "High Temperature Basic Set Value",
-			"description": "Allowable Range: 0-99, 255.",
-			"unsigned": true,
-			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 255,
-			"defaultValue": 0
-		},
 		"6": {
 			"label": "Low Temperature Basic Set Threshhold",
 			"description": "Allowable Range: 200-1000.",
@@ -123,6 +118,36 @@
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 1000,
+			"defaultValue": 0,
+			"options": [
+				{
+					"label": "Disable",
+					"value": 0
+				}
+			]
+		},
+		"7": {
+			"label": "High Humidity Basic Set Threshhold",
+			"unit": "%",
+			"unsigned": true,
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 90,
+			"defaultValue": 0,
+			"options": [
+				{
+					"label": "Disable",
+					"value": 0
+				}
+			]
+		},
+		"8": {
+			"label": "Low Humidity Basic Set Threshhold",
+			"unit": "%",
+			"unsigned": true,
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 90,
 			"defaultValue": 0,
 			"options": [
 				{
@@ -140,44 +165,14 @@
 			"maxValue": 255,
 			"defaultValue": 255
 		},
-		"7": {
-			"label": "High Humidity Basic Set Threshhold",
-			"unit": "%",
-			"unsigned": true,
-			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 90,
-			"defaultValue": 0,
-			"options": [
-				{
-					"label": "Disable",
-					"value": 0
-				}
-			]
-		},
-		"12": {
-			"label": "High Humidity Trigger Basic Set Value",
+		"10": {
+			"label": "High Temperature Basic Set Value",
 			"description": "Allowable Range: 0-99, 255.",
 			"unsigned": true,
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 255,
 			"defaultValue": 0
-		},
-		"8": {
-			"label": "Low Humidity Basic Set Threshhold",
-			"unit": "%",
-			"unsigned": true,
-			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 90,
-			"defaultValue": 0,
-			"options": [
-				{
-					"label": "Disable",
-					"value": 0
-				}
-			]
 		},
 		"11": {
 			"label": "Low Humidity Trigger Basic Set Value",
@@ -187,6 +182,15 @@
 			"minValue": 0,
 			"maxValue": 255,
 			"defaultValue": 255
+		},
+		"12": {
+			"label": "High Humidity Trigger Basic Set Value",
+			"description": "Allowable Range: 0-99, 255.",
+			"unsigned": true,
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 0
 		},
 		"13": {
 			"label": "Humidity Offset for Mold Danger Notification",
