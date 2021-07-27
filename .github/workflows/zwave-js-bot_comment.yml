@@ -680,7 +680,7 @@ jobs:
         id: ${{ fromJSON(steps.parse-command.outputs.result).id }}
       run: |
         branchname="add-fingerprint-$(date +'%s')"
-        commitmessage="fix(config): add fingerprint `$fingerprint` to `$id`"
+        commitmessage="fix(config): add fingerprint \`$fingerprint\` to \`$id\`"
 
         # Check if something changed
         git config user.email "bot@zwave-js.io"
