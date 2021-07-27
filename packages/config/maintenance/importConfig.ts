@@ -401,34 +401,27 @@ function normalizeConfig(config: Record<string, any>): Record<string, any> {
 	});
 
 	// Standardize parameters
-	if (
-		config.paramInformation &&
-		Object.keys(config.paramInformation).length > 0
-	) {
+	if (config.paramInformation?.length) {
 		// Filter out duplicates between partial and non-partial params
-		const allowedKeys = Object.entries<Record<string, any>>(
-			config.paramInformation,
-		)
+		const allowedKeys = (config.paramInformation as any[])
 			.filter(
-				([key, param], _, arr) =>
+				(param, _, arr) =>
 					// Allow partial params
-					!/^\d+$/.test(key) ||
+					!/^\d+$/.test(param["#"]) ||
 					// and non-partial params...
 					// either with a condition
 					"$if" in param ||
 					// or without a corresponding partial param
-					!arr.some(([otherKey]) => otherKey.startsWith(`${key}[`)),
+					!arr.some((other) =>
+						other["#"].startsWith(`${param["#"]}[`),
+					),
 			)
 			.map(([key]) => key);
 
-		for (const [key, original] of Object.entries<any>(
-			config.paramInformation,
-		)) {
-			if (!allowedKeys.includes(key)) {
-				delete config.paramInformation[key];
-				continue;
-			}
-
+		config.paramInformation = config.paramInformation.filter((param: any) =>
+			allowedKeys.includes(param["#"]),
+		);
+		for (const original of config.paramInformation) {
 			original.unit = normalizeUnits(original.unit);
 
 			if (original.readOnly) {
@@ -566,7 +559,7 @@ async function parseOZWProduct(
 			max: existingDevice?.firmwareVersion.max ?? "255.255",
 		},
 		associations: existingDevice?.associations ?? {},
-		paramInformation: existingDevice?.paramInformation ?? {},
+		paramInformation: existingDevice?.paramInformation ?? [],
 		compat: existingDevice?.compat,
 	};
 
@@ -618,7 +611,10 @@ async function parseOZWProduct(
 				const label = ensureArray(bitSet.Label)[0] ?? "";
 				const desc = ensureArray(bitSet.Help)[0] ?? "";
 
-				const parsedParam = newConfig.paramInformation[id] ?? {};
+				const found = newConfig.paramInformation.find(
+					(p: any) => p["#"] === id.toString(),
+				);
+				const parsedParam = found ?? {};
 
 				parsedParam.label = `${paramLabel}${label}`;
 				parsedParam.description = desc;
@@ -631,10 +627,13 @@ async function parseOZWProduct(
 				parsedParam.writeOnly = undefined;
 				parsedParam.allowManualEntry = undefined;
 
-				newConfig.paramInformation[id] = parsedParam;
+				if (!found) newConfig.paramInformation.push(parsedParam);
 			}
 		} else {
-			const parsedParam = newConfig.paramInformation[param.index] ?? {};
+			const found = newConfig.paramInformation.find(
+				(p: any) => p["#"] === param.index.toString(),
+			);
+			const parsedParam = found ?? {};
 
 			// By default, update existing properties with new descriptions
 			// OZW's config fields could be empty strings, so we need to use || instead of ??
@@ -715,7 +714,7 @@ async function parseOZWProduct(
 				}
 			}
 
-			newConfig.paramInformation[param.index] = parsedParam;
+			if (!found) newConfig.paramInformation.push(parsedParam);
 		}
 	}
 
@@ -827,9 +826,8 @@ async function parseZWAFiles(): Promise<void> {
 	for (const file of jsonData) {
 		// Lookup the manufacturer
 		const manufacturerId = parseInt(file.ManufacturerId, 16);
-		const manufacturerName = configManager.lookupManufacturer(
-			manufacturerId,
-		);
+		const manufacturerName =
+			configManager.lookupManufacturer(manufacturerId);
 
 		// Add the manufacturer to our manufacturers.json if it is missing
 		if (Number.isNaN(manufacturerId)) {
@@ -1233,8 +1231,9 @@ async function parseZWAProduct(
 	const exclusion = product?.Texts?.find(
 		(document: any) => document.Type === 2,
 	)?.value;
-	const reset = product?.Texts?.find((document: any) => document.Type === 5)
-		?.value;
+	const reset = product?.Texts?.find(
+		(document: any) => document.Type === 5,
+	)?.value;
 	let manual = product?.Documents?.find(
 		(document: any) => document.Type === 1,
 	)?.value;
@@ -1256,7 +1255,7 @@ async function parseZWAProduct(
 			max: existingDevice?.firmwareVersion.max ?? "255.255",
 		},
 		associations: existingDevice?.associations ?? {},
-		paramInformation: existingDevice?.paramInformation ?? {},
+		paramInformation: existingDevice?.paramInformation ?? [],
 		compat: existingDevice?.compat,
 	};
 	if (inclusion || exclusion || reset || manual) {
@@ -1280,12 +1279,13 @@ async function parseZWAProduct(
 	const parameters = product.ConfigurationParameters;
 
 	for (const param of parameters) {
-		const parsedParam =
-			newConfig.paramInformation[param.ParameterNumber] ?? {};
+		const found = newConfig.paramInformation.find(
+			(p: any) => p["#"] === param.ParameterNumber.toString(),
+		);
 
-		if (parsedParam.$import) {
-			continue;
-		}
+		const parsedParam = found ?? {};
+
+		if (parsedParam.$import) continue;
 
 		// By default, update existing properties with new descriptions
 		parsedParam.label = param.Name || parsedParam.label;
@@ -1388,7 +1388,7 @@ async function parseZWAProduct(
 				}
 			}
 		}
-		newConfig.paramInformation[param.ParameterNumber] = parsedParam;
+		if (!found) newConfig.paramInformation.push(parsedParam);
 	}
 
 	/********************************
@@ -1829,7 +1829,7 @@ async function parseOHConfigFile(
 	}
 
 	if (json.parameters?.length) {
-		ret.paramInformation = {};
+		ret.paramInformation = [];
 		for (const param of json.parameters) {
 			let key: string = param.param_id.toString();
 			if (param.bitmask !== "0" && param.bitmask !== 0) {
@@ -1838,7 +1838,8 @@ async function parseOHConfigFile(
 			}
 			const sanitizedDescription = sanitizeText(param.description);
 			const sanitizedUnits = sanitizeText(param.units);
-			ret.paramInformation[key] = {
+			const paramInfo: Record<string, unknown> = {
+				"#": key,
 				label: sanitizeText(param.label),
 				...(sanitizedDescription
 					? { description: sanitizedDescription }
@@ -1853,13 +1854,12 @@ async function parseOHConfigFile(
 				allowManualEntry: param.limit_options === "1",
 			};
 			if (param.options?.length) {
-				ret.paramInformation[key].options = param.options.map(
-					(opt: any) => ({
-						label: sanitizeText(opt.label),
-						value: parseInt(opt.value, 10),
-					}),
-				);
+				paramInfo.options = param.options.map((opt: any) => ({
+					label: sanitizeText(opt.label),
+					value: parseInt(opt.value, 10),
+				}));
 			}
+			ret.paramInformation.push(paramInfo);
 		}
 	}
 	return ret;
