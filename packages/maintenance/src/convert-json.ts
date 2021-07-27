@@ -1,3 +1,5 @@
+// wotan-disable
+
 import { enumFilesRecursive } from "@zwave-js/shared";
 import fs from "fs-extra";
 import path from "path";
@@ -95,4 +97,6 @@ async function main() {
 	}
 }
 
-main();
+if (require.main === module) {
+	void main();
+}
