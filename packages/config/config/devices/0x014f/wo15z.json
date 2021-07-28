@@ -15,8 +15,7 @@
 	},
 	"paramInformation": {
 		"3": {
-			"label": "Status LED",
-			"description": "LED mode for attached load",
+			"label": "LED Indicator",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 1,
