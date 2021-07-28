@@ -19,8 +19,7 @@
 	},
 	"paramInformation": {
 		"3": {
-			"label": "Night Light",
-			"description": "By default, the LED will turn OFF when the load attached is turned ON.",
+			"label": "LED Indicator",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 4,
@@ -29,19 +28,19 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "OFF when load is on",
+					"label": "Off when load is on",
 					"value": 0
 				},
 				{
-					"label": "ON when load is on",
+					"label": "On when load is on",
 					"value": 1
 				},
 				{
-					"label": "LED Always ON",
+					"label": "LED Always on",
 					"value": 2
 				},
 				{
-					"label": "LED Always OFF",
+					"label": "LED Always off",
 					"value": 3
 				},
 				{
