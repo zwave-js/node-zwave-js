@@ -470,7 +470,7 @@ identical capabilities:      ${multiResponse.identicalCapabilities}`;
 				// copy the capabilities from the first endpoint
 				const devClass = this.getValueDB().getValue(
 					getEndpointDeviceClassValueId(allEndpoints[0]),
-				)!;
+				);
 				this.getValueDB().setValue(
 					getEndpointDeviceClassValueId(endpoint),
 					devClass,
