@@ -488,14 +488,15 @@ export class SecurityCCCommandEncapsulation extends SecurityCC {
 	) {
 		super(driver, options);
 
+		const verb = gotDeserializationOptions(options) ? "decoded" : "sent";
 		if (!(this.driver.controller.ownNodeId as unknown)) {
 			throw new ZWaveError(
-				`Secure commands can can only be sent when the controller's node id is known!`,
+				`Secure commands (S0) can only be ${verb} when the controller's node id is known!`,
 				ZWaveErrorCodes.Driver_NotReady,
 			);
 		} else if (!(this.driver.securityManager as unknown)) {
 			throw new ZWaveError(
-				`Secure commands can only be sent when the network key for the driver is set`,
+				`Secure commands (S0) can only be ${verb} when the network key for the driver is set`,
 				ZWaveErrorCodes.Driver_NoSecurity,
 			);
 		}

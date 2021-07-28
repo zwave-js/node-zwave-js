@@ -2068,17 +2068,12 @@ protocol version:      ${this._protocolVersion}`;
 		});
 
 		// Ensure that we're not flooding the queue with unnecessary NonceReports (GH#1059)
-		const { queue, currentTransaction } =
-			this.driver["sendThread"].state.context;
-		const isNonceReport = (t: Transaction | undefined) =>
-			!!t &&
+		const isNonceReport = (t: Transaction) =>
 			t.message.getNodeId() === this.nodeId &&
 			isCommandClassContainer(t.message) &&
 			t.message.command instanceof SecurityCCNonceReport;
-		if (
-			isNonceReport(currentTransaction) ||
-			queue.find((t) => isNonceReport(t))
-		) {
+
+		if (this.driver.hasPendingTransactions(isNonceReport)) {
 			this.driver.controllerLog.logNode(this.id, {
 				message:
 					"in the process of replying to a NonceGet, won't send another NonceReport",

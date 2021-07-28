@@ -1,9 +1,10 @@
 /** Management class and utils for Security S2 */
 
+import { getEnumMemberName } from "@zwave-js/shared";
 import * as crypto from "crypto";
 import { ZWaveError, ZWaveErrorCodes } from "../error/ZWaveError";
 import { increment } from "./bufferUtils";
-import { SecurityClasses } from "./constants";
+import { getHighestSecurityClass, SecurityClass } from "./constants";
 import {
 	computeNoncePRK,
 	deriveMEI,
@@ -19,6 +20,38 @@ interface NetworkKeys {
 	personalizationString: Buffer;
 }
 
+export enum SPANState {
+	/** No entry exists */
+	None = 0,
+	/* The other node's receiver's entropy input is known but, but we didn't send it our sender's EI yet */
+	RemoteEI,
+	/* We've sent the other node our receiver's entropy input, but we didn't receive its sender's EI yet */
+	LocalEI,
+	/* An SPAN with the other node has been established */
+	SPAN,
+}
+
+type SPANTableEntry = {
+	sequenceNumber: number;
+} & (
+	| {
+			// We know the other node's receiver's entropy input, but we didn't send it our sender's EI yet
+			type: SPANState.RemoteEI;
+			receiverEI: Buffer;
+	  }
+	| {
+			// We've sent the other node our receiver's entropy input, but we didn't receive its sender's EI yet
+			type: SPANState.LocalEI;
+			receiverEI: Buffer;
+	  }
+	| {
+			// We've established an SPAN with the other node
+			type: SPANState.SPAN;
+			securityClass: SecurityClass;
+			rng: CtrDRBG;
+	  }
+);
+
 export class SecurityManager2 {
 	public constructor() {
 		this.rng = new CtrDRBG(
@@ -32,25 +65,26 @@ export class SecurityManager2 {
 
 	/** PRNG used to initialize the others */
 	private rng: CtrDRBG;
-	/** A map of PRNGs for each node */
-	private nodeRNG = new Map<number, CtrDRBG>();
+
+	/** A map of SPAN states for each node */
+	private spanTable = new Map<number, SPANTableEntry>();
 	/** A map of MPAN states for each multicast group */
 	private mpanStates = new Map<number, Buffer>();
 	/** A map of permanent network keys per security class */
-	private networkKeys = new Map<SecurityClasses, NetworkKeys>();
-	/** Which node has been assigned which security class */
-	private nodeClasses = new Map<number, SecurityClasses>();
+	private networkKeys = new Map<SecurityClass, NetworkKeys>();
+	/** Which node has been assigned which security classes */
+	private nodeClasses = new Map<number, SecurityClass[]>();
 	/** Which multicast group has been assigned which security class */
-	private groupClasses = new Map<number, SecurityClasses>();
+	private groupClasses = new Map<number, SecurityClass>();
 
 	/** Sets the PNK for a given security class and derives the encryption keys from it */
-	public setKey(securityClass: SecurityClasses, key: Buffer): void {
+	public setKey(securityClass: SecurityClass, key: Buffer): void {
 		if (key.length !== 16) {
 			throw new ZWaveError(
 				`The network key must consist of 16 bytes!`,
 				ZWaveErrorCodes.Argument_Invalid,
 			);
-		} else if (!(securityClass in SecurityClasses)) {
+		} else if (!(securityClass in SecurityClass)) {
 			throw new ZWaveError(
 				`Invalid security class!`,
 				ZWaveErrorCodes.Argument_Invalid,
@@ -64,21 +98,88 @@ export class SecurityManager2 {
 
 	public assignSecurityClassSinglecast(
 		nodeId: number,
-		securityClass: SecurityClasses,
+		securityClasses: SecurityClass[],
 	): void {
-		this.nodeClasses.set(nodeId, securityClass);
+		this.nodeClasses.set(nodeId, securityClasses);
 	}
 
 	public assignSecurityClassMulticast(
 		group: number,
-		securityClass: SecurityClasses,
+		securityClass: SecurityClass,
 	): void {
 		this.groupClasses.set(group, securityClass);
 	}
 
-	/** Initializes the singlecast PAN generator for a given node */
+	public getHighestSecurityClassSinglecast(
+		nodeId: number,
+	): SecurityClass | undefined {
+		const securityClasses = this.nodeClasses.get(nodeId);
+		if (!securityClasses?.length) return undefined;
+		return getHighestSecurityClass(securityClasses);
+	}
+
+	public getKeys(options: {
+		nodeId: number;
+	}): NetworkKeys & { securityClass: SecurityClass } {
+		const securityClass = this.getHighestSecurityClassSinglecast(
+			options.nodeId,
+		);
+		if (!securityClass) {
+			throw new ZWaveError(
+				`Node ${options.nodeId} has not been assigned to a security class yet!`,
+				ZWaveErrorCodes.Security2CC_NotInitialized,
+			);
+		}
+
+		const keys = this.networkKeys.get(securityClass);
+		if (!keys) {
+			throw new ZWaveError(
+				`The network key for the security class ${getEnumMemberName(
+					SecurityClass,
+					securityClass,
+				)} has not been set up yet!`,
+				ZWaveErrorCodes.Security2CC_NotInitialized,
+			);
+		}
+		return {
+			securityClass,
+			...keys,
+		};
+	}
+
+	public getSPANState(
+		peerNodeID: number,
+	): SPANTableEntry | { type: SPANState.None } {
+		return this.spanTable.get(peerNodeID) ?? { type: SPANState.None };
+	}
+
+	/** Prepares the generation of a new SPAN by creating a random sequence number and (local) entropy input */
+	public generateNonce(receiver: number): {
+		sequenceNumber: number;
+		receiverEI: Buffer;
+	} {
+		const sequenceNumber = crypto.randomInt(256);
+		const receiverEI = this.rng.generate(16);
+		this.spanTable.set(receiver, {
+			sequenceNumber,
+			type: SPANState.LocalEI,
+			receiverEI,
+		});
+		return {
+			sequenceNumber,
+			receiverEI,
+		};
+	}
+
+	/** Invalidates the SPAN state for the given receiver */
+	public deleteNonce(receiver: number): void {
+		this.spanTable.delete(receiver);
+	}
+
+	/** Initializes the singlecast PAN generator for a given node based on the given entropy inputs */
 	public initializeSPAN(
 		receiver: number,
+		sequenceNumber: number,
 		senderEI: Buffer,
 		receiverEI: Buffer,
 	): void {
@@ -93,31 +194,58 @@ export class SecurityManager2 {
 				ZWaveErrorCodes.Security2CC_NotInitialized,
 			);
 		}
-		const keys = this.networkKeys.get(this.nodeClasses.get(receiver)!);
-		if (!keys) {
-			throw new ZWaveError(
-				`The network keys for the security class of node ${receiver} have not been set up yet!`,
-				ZWaveErrorCodes.Security2CC_NotInitialized,
-			);
-		}
+
+		const { securityClass, ...keys } = this.getKeys({ nodeId: receiver });
 
 		const noncePRK = computeNoncePRK(senderEI, receiverEI);
 		const MEI = deriveMEI(noncePRK);
 
-		this.nodeRNG.set(
-			receiver,
-			new CtrDRBG(128, false, MEI, undefined, keys.personalizationString),
+		this.spanTable.set(receiver, {
+			sequenceNumber,
+			securityClass,
+			type: SPANState.SPAN,
+			rng: new CtrDRBG(
+				128,
+				false,
+				MEI,
+				undefined,
+				keys.personalizationString,
+			),
+		});
+	}
+
+	/** Tests if the given combination of peer node ID and sequence number is a duplicate */
+	public isDuplicateSinglecast(
+		peerNodeId: number,
+		sequenceNumber: number,
+	): boolean {
+		return (
+			this.spanTable.get(peerNodeId)?.sequenceNumber === sequenceNumber
 		);
 	}
 
-	public nextNonce(receiver: number): Buffer {
-		if (!this.nodeRNG.has(receiver)) {
+	public updateSPAN(
+		peerNodeId: number,
+		entry: Partial<SPANTableEntry>,
+	): void {
+		if (!this.spanTable.has(peerNodeId)) {
 			throw new ZWaveError(
-				`The Singlecast PAN has not been initialized for Node ${receiver}`,
+				`The Singlecast PAN has not been initialized for Node ${peerNodeId}`,
 				ZWaveErrorCodes.Security2CC_NotInitialized,
 			);
 		}
-		const ret = this.nodeRNG.get(receiver)!.generate(16);
+		Object.assign(this.spanTable.get(peerNodeId), entry);
+	}
+
+	public nextNonce(peerNodeId: number): Buffer {
+		const spanState = this.spanTable.get(peerNodeId);
+		if (spanState?.type !== SPANState.SPAN) {
+			throw new ZWaveError(
+				`The Singlecast PAN has not been initialized for Node ${peerNodeId}`,
+				ZWaveErrorCodes.Security2CC_NotInitialized,
+			);
+		}
+		const ret = spanState.rng.generate(16);
 		return ret.slice(0, 13);
 	}
 

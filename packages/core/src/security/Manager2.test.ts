@@ -1,7 +1,7 @@
 import * as crypto from "crypto";
 import { ZWaveErrorCodes } from "../error/ZWaveError";
 import { assertZWaveError } from "../test/assertZWaveError";
-import { SecurityClasses } from "./constants";
+import { SecurityClass } from "./constants";
 import { SecurityManager2 } from "./Manager2";
 
 describe("lib/security/Manager2", () => {
@@ -19,32 +19,26 @@ describe("lib/security/Manager2", () => {
 		options: {
 			keys?: boolean;
 			nodeId?: number;
-			secClass?: SecurityClasses;
+			secClass?: SecurityClass;
 			multicastGroup?: number;
 		} = {},
 	): void {
 		if (options.keys !== false) {
-			man.setKey(SecurityClasses.S0_Legacy, crypto.randomBytes(16));
+			man.setKey(SecurityClass.S0_Legacy, crypto.randomBytes(16));
+			man.setKey(SecurityClass.S2_AccessControl, crypto.randomBytes(16));
+			man.setKey(SecurityClass.S2_Authenticated, crypto.randomBytes(16));
 			man.setKey(
-				SecurityClasses.S2_AccessControl,
-				crypto.randomBytes(16),
-			);
-			man.setKey(
-				SecurityClasses.S2_Authenticated,
-				crypto.randomBytes(16),
-			);
-			man.setKey(
-				SecurityClasses.S2_Unauthenticated,
+				SecurityClass.S2_Unauthenticated,
 				crypto.randomBytes(16),
 			);
 		}
 		if (options.nodeId) {
-			man.assignSecurityClassSinglecast(
-				options.nodeId,
-				options.secClass ?? SecurityClasses.S2_Authenticated,
-			);
+			man.assignSecurityClassSinglecast(options.nodeId, [
+				options.secClass ?? SecurityClass.S2_Authenticated,
+			]);
 			man.initializeSPAN(
 				options.nodeId,
+				0,
 				crypto.randomBytes(16),
 				crypto.randomBytes(16),
 			);
@@ -52,7 +46,7 @@ describe("lib/security/Manager2", () => {
 		if (options.multicastGroup) {
 			man.assignSecurityClassMulticast(
 				options.multicastGroup,
-				options.secClass ?? SecurityClasses.S2_Authenticated,
+				options.secClass ?? SecurityClass.S2_Authenticated,
 			);
 			man.initializeMPAN(options.multicastGroup);
 		}
@@ -90,7 +84,13 @@ describe("lib/security/Manager2", () => {
 		it("should throw if either entropy input does not have length 16", () => {
 			const man = new SecurityManager2();
 			assertZWaveError(
-				() => man.initializeSPAN(2, Buffer.alloc(15), Buffer.alloc(16)),
+				() =>
+					man.initializeSPAN(
+						2,
+						0,
+						Buffer.alloc(15),
+						Buffer.alloc(16),
+					),
 				{
 					errorCode: ZWaveErrorCodes.Argument_Invalid,
 					messageMatches: "16 bytes",
@@ -98,7 +98,8 @@ describe("lib/security/Manager2", () => {
 			);
 
 			assertZWaveError(
-				() => man.initializeSPAN(2, Buffer.alloc(16), Buffer.alloc(1)),
+				() =>
+					man.initializeSPAN(2, 0, Buffer.alloc(16), Buffer.alloc(1)),
 				{
 					errorCode: ZWaveErrorCodes.Argument_Invalid,
 					messageMatches: "16 bytes",
@@ -109,7 +110,13 @@ describe("lib/security/Manager2", () => {
 		it("should throw if the node has not been assigned to a security class", () => {
 			const man = new SecurityManager2();
 			assertZWaveError(
-				() => man.initializeSPAN(2, Buffer.alloc(16), Buffer.alloc(16)),
+				() =>
+					man.initializeSPAN(
+						2,
+						0,
+						Buffer.alloc(16),
+						Buffer.alloc(16),
+					),
 				{
 					errorCode: ZWaveErrorCodes.Security2CC_NotInitialized,
 					messageMatches: "security class",
@@ -119,12 +126,17 @@ describe("lib/security/Manager2", () => {
 
 		it("should throw if the keys for the node's security class have not been set up", () => {
 			const man = new SecurityManager2();
-			man.assignSecurityClassSinglecast(
-				2,
-				SecurityClasses.S2_Authenticated,
-			);
+			man.assignSecurityClassSinglecast(2, [
+				SecurityClass.S2_Authenticated,
+			]);
 			assertZWaveError(
-				() => man.initializeSPAN(2, Buffer.alloc(16), Buffer.alloc(16)),
+				() =>
+					man.initializeSPAN(
+						2,
+						0,
+						Buffer.alloc(16),
+						Buffer.alloc(16),
+					),
 				{
 					errorCode: ZWaveErrorCodes.Security2CC_NotInitialized,
 					messageMatches: "network key",
@@ -136,7 +148,7 @@ describe("lib/security/Manager2", () => {
 			const man = new SecurityManager2();
 			dummyInit(man, { nodeId: 2 });
 			expect(() =>
-				man.initializeSPAN(2, Buffer.alloc(16), Buffer.alloc(16)),
+				man.initializeSPAN(2, 0, Buffer.alloc(16), Buffer.alloc(16)),
 			).not.toThrow();
 		});
 	});
@@ -147,7 +159,7 @@ describe("lib/security/Manager2", () => {
 			assertZWaveError(
 				() =>
 					man.setKey(
-						SecurityClasses.S2_Authenticated,
+						SecurityClass.S2_Authenticated,
 						Buffer.alloc(15),
 					),
 				{
@@ -186,10 +198,7 @@ describe("lib/security/Manager2", () => {
 
 		it("should throw if the keys for the group's security class have not been set up", () => {
 			const man = new SecurityManager2();
-			man.assignSecurityClassMulticast(
-				1,
-				SecurityClasses.S2_Authenticated,
-			);
+			man.assignSecurityClassMulticast(1, SecurityClass.S2_Authenticated);
 			man.initializeMPAN(1);
 			assertZWaveError(() => man.nextMPAN(1), {
 				errorCode: ZWaveErrorCodes.Security2CC_NotInitialized,

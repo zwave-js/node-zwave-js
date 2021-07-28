@@ -383,7 +383,7 @@ export class Endpoint {
 				// typeof ccNameOrId === "string"
 				let ccId: CommandClasses | undefined;
 				// The command classes are exposed to library users by their name or the ID
-				if (/\d+/.test(ccNameOrId)) {
+				if (/^\d+$/.test(ccNameOrId)) {
 					// Since this is a property accessor, ccNameOrID is passed as a string,
 					// even when it was a number (CommandClasses)
 					ccId = +ccNameOrId;

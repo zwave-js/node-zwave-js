@@ -88,8 +88,21 @@ export interface ZWaveOptions {
 		throttle: "fast" | "normal" | "slow";
 	};
 
-	/** Specify the network key to use for encryption. This must be a Buffer of exactly 16 bytes. */
+	/**
+	 * @deprecated Use `securityKeys.S0_Legacy` instead
+	 * Specify the network key to use for encryption. This must be a Buffer of exactly 16 bytes.
+	 */
 	networkKey?: Buffer;
+
+	/**
+	 * Specify the security keys to use for encryption. Each one must be a Buffer of exactly 16 bytes.
+	 */
+	securityKeys?: {
+		S2_Unauthenticated?: Buffer;
+		S2_Authenticated?: Buffer;
+		S2_AccessControl?: Buffer;
+		S0_Legacy?: Buffer;
+	};
 
 	/**
 	 * Some Command Classes support reporting that a value is unknown.

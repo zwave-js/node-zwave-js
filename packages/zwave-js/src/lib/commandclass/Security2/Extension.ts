@@ -1,5 +1,5 @@
 import { validatePayload, ZWaveError, ZWaveErrorCodes } from "@zwave-js/core";
-import type { TypedClassDecorator } from "@zwave-js/shared";
+import { getEnumMemberName, TypedClassDecorator } from "@zwave-js/shared";
 
 enum S2ExtensionType {
 	SPAN = 0x01,
@@ -163,6 +163,16 @@ export class Security2Extension {
 		const ret = new Constructor({ data });
 		return ret;
 	}
+
+	public toLogEntry(): string {
+		let ret = `
+· type: ${getEnumMemberName(S2ExtensionType, this.type)}`;
+		if (this.payload.length > 0) {
+			ret += `
+  payload: 0x${this.payload.toString("hex")}`;
+		}
+		return ret;
+	}
 }
 
 interface SPANExtensionOptions {
@@ -197,6 +207,12 @@ export class SPANExtension extends Security2Extension {
 	public serialize(moreToFollow: boolean): Buffer {
 		this.payload = this.senderEI;
 		return super.serialize(moreToFollow);
+	}
+
+	public toLogEntry(): string {
+		let ret = super.toLogEntry().replace(/^  payload:.+$/m, "");
+		ret += `  sender EI: 0x${this.senderEI.toString("hex")}`;
+		return ret;
 	}
 }
 
@@ -244,6 +260,14 @@ export class MPANExtension extends Security2Extension {
 		]);
 		return super.serialize(moreToFollow);
 	}
+
+	public toLogEntry(): string {
+		let ret = super.toLogEntry().replace(/^  payload:.+$/m, "");
+		ret += `
+  group ID: ${this.groupId}
+  MPAN state: 0x${this.innerMPANState.toString("hex")}`;
+		return ret;
+	}
 }
 
 interface MGRPExtensionOptions {
@@ -272,6 +296,12 @@ export class MGRPExtension extends Security2Extension {
 	public serialize(moreToFollow: boolean): Buffer {
 		this.payload = Buffer.from([this.groupId]);
 		return super.serialize(moreToFollow);
+	}
+
+	public toLogEntry(): string {
+		let ret = super.toLogEntry().replace(/^  payload:.+$/m, "");
+		ret += `  group ID: ${this.groupId}`;
+		return ret;
 	}
 }
 
