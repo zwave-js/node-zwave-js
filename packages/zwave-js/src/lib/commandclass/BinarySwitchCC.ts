@@ -141,7 +141,6 @@ export class BinarySwitchCCAPI extends CCAPI {
 
 			// Verify the current value after a delay
 			// We query currentValue instead of targetValue to make sure that unsolicited updates cancel the scheduled poll
-
 			if (property === "targetValue") property = "currentValue";
 			this.schedulePoll({ property }, duration?.toMilliseconds() ?? 1000);
 		} else if (this.isMulticast()) {

@@ -165,11 +165,9 @@ export class DoorLockCCAPI extends PhysicalCCAPI {
 
 			// Fix insideHandlesCanOpenDoorConfiguration is not iterable
 			const allTrue: DoorHandleStatus = [true, true, true, true];
-
 			if (!config.insideHandlesCanOpenDoorConfiguration) {
 				config.insideHandlesCanOpenDoorConfiguration = allTrue;
 			}
-
 			if (!config.outsideHandlesCanOpenDoorConfiguration) {
 				config.outsideHandlesCanOpenDoorConfiguration = allTrue;
 			}

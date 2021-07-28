@@ -601,7 +601,6 @@ export class Driver extends TypedEventEmitter<DriverEventCallbacks> {
 	private _isOpen: boolean = false;
 
 	/** Start the driver */
-
 	public async start(): Promise<void> {
 		// avoid starting twice
 		if (this.wasDestroyed) {
@@ -2735,7 +2734,6 @@ ${handlers.length} left`,
 	 * @param timeout The number of milliseconds to wait. If the timeout elapses, the returned promise will be rejected
 	 * @param predicate A predicate function to test all incoming command classes
 	 */
-
 	public waitForCommand<T extends CommandClass>(
 		predicate: (cc: CommandClass) => boolean,
 		timeout: number,

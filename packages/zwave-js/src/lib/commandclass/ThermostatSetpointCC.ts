@@ -454,7 +454,6 @@ export class ThermostatSetpointCC extends CommandClass {
 
 			// If we made an assumption and did not switch to interpretation A,
 			// the device adheres to interpretation B
-
 			if (!interpretation && !interpretationChanged) {
 				// our assumption about interpretation B was correct
 				interpretation = "B";

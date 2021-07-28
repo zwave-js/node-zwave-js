@@ -637,7 +637,6 @@ export class ZWaveNode extends Endpoint {
 	 * Retrieves a stored value for a given value id.
 	 * This does not request an updated value from the node!
 	 */
-
 	public getValue<T = unknown>(valueId: ValueID): T | undefined {
 		return this._valueDB.getValue(valueId);
 	}
@@ -810,7 +809,6 @@ export class ZWaveNode extends Endpoint {
 	 * Requests a value for a given property of a given CommandClass by polling the node.
 	 * **Warning:** Some value IDs share a command, so make sure not to blindly call this for every property
 	 */
-
 	public pollValue<T extends unknown = unknown>(
 		valueId: ValueID,
 		sendCommandOptions: SendCommandOptions = {},

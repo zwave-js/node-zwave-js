@@ -1277,7 +1277,6 @@ function getCCCommand<T extends CommandClass>(cc: T): number | undefined {
 /**
  * Looks up the command class constructor for a given command class type and function type
  */
-
 function getCCCommandConstructor<TBase extends CommandClass>(
 	ccId: CommandClasses,
 	ccCommand: number,
