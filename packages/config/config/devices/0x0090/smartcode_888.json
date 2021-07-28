@@ -69,7 +69,10 @@
 				}
 			]
 		},
-		{ "#": "40", "$import": "templates/kwikset_template.json#reset" },
+		{
+			"#": "40",
+			"$import": "templates/kwikset_template.json#reset"
+		},
 		{
 			"#": "47",
 			"label": "Send Motor Load Alarms",

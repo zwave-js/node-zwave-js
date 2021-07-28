@@ -265,7 +265,10 @@
 			"#": "129",
 			"$import": "templates/aeotec_template.json#dimming_principle"
 		},
-		{ "#": "130", "$import": "templates/aeotec_template.json#load_type" },
+		{
+			"#": "130",
+			"$import": "templates/aeotec_template.json#load_type"
+		},
 		{
 			"#": "131",
 			"$import": "templates/aeotec_template.json#min_brightness"

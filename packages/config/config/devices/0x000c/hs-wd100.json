@@ -19,7 +19,10 @@
 		"max": "255.255"
 	},
 	"paramInformation": [
-		{ "#": "4", "$import": "~/templates/master_template.json#orientation" },
+		{
+			"#": "4",
+			"$import": "~/templates/master_template.json#orientation"
+		},
 		{
 			"#": "7",
 			"$import": "~/templates/master_template.json#base_1-99_nounit",

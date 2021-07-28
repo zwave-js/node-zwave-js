@@ -57,7 +57,10 @@
 			"label": "On Trigger: Send Basic Report",
 			"valueSize": 4
 		},
-		{ "#": "254", "$import": "templates/aeotec_template.json#device_tag" },
+		{
+			"#": "254",
+			"$import": "templates/aeotec_template.json#device_tag"
+		},
 		{
 			"#": "255",
 			"$import": "templates/aeotec_template.json#factory_reset"

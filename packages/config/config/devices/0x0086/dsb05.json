@@ -26,7 +26,10 @@
 			"#": "2",
 			"$import": "templates/aeotec_template.json#wake_up_10_minutes"
 		},
-		{ "#": "3", "$import": "templates/aeotec_template.json#trigger_off" },
+		{
+			"#": "3",
+			"$import": "templates/aeotec_template.json#trigger_off"
+		},
 		{
 			"#": "4",
 			"$import": "templates/aeotec_template.json#enable_motion_sensor"

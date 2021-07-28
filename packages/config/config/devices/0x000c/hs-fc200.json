@@ -19,8 +19,14 @@
 			"#": "3",
 			"$import": "~/templates/master_template.json#led_indicator_two_options"
 		},
-		{ "#": "4", "$import": "~/templates/master_template.json#orientation" },
-		{ "#": "5", "$import": "templates/homeseer_template.json#fan_type" },
+		{
+			"#": "4",
+			"$import": "~/templates/master_template.json#orientation"
+		},
+		{
+			"#": "5",
+			"$import": "templates/homeseer_template.json#fan_type"
+		},
 		{
 			"#": "13",
 			"$import": "templates/homeseer_template.json#status_mode"

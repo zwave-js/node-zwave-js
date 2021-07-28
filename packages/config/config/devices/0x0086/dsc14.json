@@ -81,7 +81,10 @@
 			"#": "120",
 			"$import": "templates/aeotec_template.json#external_switch_two"
 		},
-		{ "#": "254", "$import": "templates/aeotec_template.json#device_tag" },
+		{
+			"#": "254",
+			"$import": "templates/aeotec_template.json#device_tag"
+		},
 		{
 			"#": "255",
 			"$import": "templates/aeotec_template.json#factory_reset"
