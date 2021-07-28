@@ -430,7 +430,6 @@ export class ThermostatSetpointCC extends CommandClass {
 					logMessage = `received current value of setpoint ${setpointName}: ${
 						setpoint.value
 					} ${setpoint.scale.unit ?? ""}`;
-					// wotan-disable-next-line
 				} else if (!interpretation) {
 					// The setpoint type is not supported, switch to interpretation A
 					this.driver.controllerLog.logNode(node.id, {
@@ -455,7 +454,7 @@ export class ThermostatSetpointCC extends CommandClass {
 
 			// If we made an assumption and did not switch to interpretation A,
 			// the device adheres to interpretation B
-			// wotan-disable-next-line no-useless-predicate
+
 			if (!interpretation && !interpretationChanged) {
 				// our assumption about interpretation B was correct
 				interpretation = "B";

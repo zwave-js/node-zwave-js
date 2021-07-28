@@ -208,7 +208,6 @@ export class ZWaveLogContainer extends winston.Container {
 		if (
 			!this.fileTransport &&
 			!this.consoleTransport &&
-			// wotan-disable-next-line no-useless-predicate
 			(!this.logConfig.transports ||
 				this.logConfig.transports.length === 0)
 		) {

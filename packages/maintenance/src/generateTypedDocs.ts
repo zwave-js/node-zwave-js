@@ -2,9 +2,6 @@
  * This method returns the original source code for an interface or type so it can be put into documentation
  */
 
-// wotan-disable no-useless-assertion
-// until fimbullinter/wotan#719 is fixed
-
 import { CommandClasses, getCCName } from "@zwave-js/core";
 import { enumFilesRecursive, num2hex } from "@zwave-js/shared";
 import { red } from "ansi-colors";

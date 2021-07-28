@@ -766,7 +766,7 @@ export class ZWaveController extends TypedEventEmitter<ControllerEventCallbacks>
 	 */
 	public hardReset(): Promise<void> {
 		this.driver.controllerLog.print("performing hard reset...");
-		// wotan-disable-next-line async-function-assignability
+
 		return new Promise(async (resolve, reject) => {
 			// handle the incoming message
 			const handler: RequestHandler = (_msg) => {

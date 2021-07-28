@@ -271,7 +271,7 @@ export class ValueDB extends TypedEventEmitter<ValueDBEventCallbacks> {
 	/**
 	 * Retrieves a value for a given value id
 	 */
-	/* wotan-disable-next-line no-misused-generics */
+
 	public getValue<T = unknown>(valueId: ValueID): T | undefined {
 		const key = this.valueIdToDBKey(valueId);
 		return this._db.get(key) as T | undefined;

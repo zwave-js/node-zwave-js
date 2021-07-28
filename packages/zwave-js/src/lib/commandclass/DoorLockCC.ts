@@ -165,11 +165,11 @@ export class DoorLockCCAPI extends PhysicalCCAPI {
 
 			// Fix insideHandlesCanOpenDoorConfiguration is not iterable
 			const allTrue: DoorHandleStatus = [true, true, true, true];
-			// wotan-disable-next-line no-useless-predicate
+
 			if (!config.insideHandlesCanOpenDoorConfiguration) {
 				config.insideHandlesCanOpenDoorConfiguration = allTrue;
 			}
-			// wotan-disable-next-line no-useless-predicate
+
 			if (!config.outsideHandlesCanOpenDoorConfiguration) {
 				config.outsideHandlesCanOpenDoorConfiguration = allTrue;
 			}
