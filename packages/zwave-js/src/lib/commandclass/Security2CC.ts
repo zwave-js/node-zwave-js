@@ -470,7 +470,6 @@ export class Security2CCMessageEncapsulation extends Security2CC {
 			.reduce((a, b) => a + b, 0);
 
 		return (
-			// eslint-disable-next-line @typescript-eslint/restrict-plus-operands
 			super.computeEncapsulationOverhead() +
 			2 +
 			SECURITY_S2_AUTH_TAG_LENGTH +

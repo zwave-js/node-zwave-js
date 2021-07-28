@@ -1847,8 +1847,7 @@ export class Driver extends TypedEventEmitter<DriverEventCallbacks> {
 					direction: "outbound",
 				});
 				// Send the node our nonce
-				node.commandClasses["Security 2"].sendNonce().catch((e) => {
-					debugger;
+				node.commandClasses["Security 2"].sendNonce().catch(() => {
 					// Ignore errors
 				});
 			} else {
