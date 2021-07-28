@@ -1,96 +1,86 @@
 {
-  "typescript.tsdk": ".yarn/sdks/typescript/lib",
-  "typescript.enablePromptUseWorkspaceTsdk": true,
-  "jest.showCoverageOnLoad": false,
-  "jest.enableCodeLens": true,
-  "editor.formatOnSave": true,
-  "editor.defaultFormatter": "esbenp.prettier-vscode",
-  "eslint.validate": [
-    "javascript",
-    "javascriptreact",
-    "typescript",
-    "typescriptreact"
-  ],
-  "files.exclude": {
-    "node_modules/": true,
-    "coverage/": true,
-    ".*": false,
-    "**/node_modules/": true,
-    ".nyc_output": true,
-    "**/coverage/": true,
-    "**/*.map": true,
-    "**/zwave-js-*.tgz": true,
-    "cache": true,
-    "build": true,
-    "*.d.ts": true,
-    "*.map": true,
-    "**/build": true,
-    "**/*.tsbuildinfo": true,
-    "**/cache": true,
-    "packages/zwave-js/**/fingerprint.txt": true,
-    "node_modules/zwave-js/**/fingerprint.txt": true,
-    ".husky/_/**/*": true,
-    "packages/config/config/devices/index.json": true,
-    "packages/*/package-lock.json": true,
-    ".yarn/*": true,
-    ".yarn/patches": false,
-    ".yarn/releases": false,
-    ".yarn/plugins": false,
-    ".yarn/sdks": false,
-    ".yarn/versions": false,
-    "**/.pnp.*": true,
-    "**/*.test.js": true,
-    "packages/*/cache": true,
-    "**/.tmp": true,
-    "**/.tmpoh/": true,
-    "**/.tmpozw/": true,
-    "**/.tmpzwa/": true,
-    "**/.secrets": true,
-    "**/.test-payloads": true
-  },
-  "files.associations": {
-    "**/config/**/*.json": "jsonc"
-  },
-  "editor.rulers": [
-    72,
-    80,
-    120
-  ],
-  "files.participants.timeout": 10000,
-  "typescript.preferences.importModuleSpecifier": "project-relative",
-  "[jsonc]": {
-    "editor.defaultFormatter": "esbenp.prettier-vscode"
-  },
-  "standard.enable": false,
-  "json.schemas": [
-    {
-      "fileMatch": [
-        "/packages/config/config/devices/*/*.json"
-      ],
-      "url": "/maintenance/schemas/device-config.json"
-    },
-    {
-      "fileMatch": [
-        "/packages/config/config/deviceClasses.json"
-      ],
-      "url": "/maintenance/schemas/deviceClasses.json"
-    },
-    {
-      "fileMatch": [
-        "renovate.json"
-      ],
-      "url": "https://docs.renovatebot.com/renovate-schema.json"
-    }
-  ],
-  "debug.javascript.unmapMissingSources": true,
-  "jest.jestCommandLine": "yarn jest",
-  "search.exclude": {
-    "**/.yarn": true,
-    "**/.pnp.*": true
-  },
-  "eslint.nodePath": ".yarn/sdks",
-  "prettier.prettierPath": ".yarn/sdks/prettier/index.js",
-  "[typescript]": {
-    "editor.autoClosingBrackets": "languageDefined"
-  }
+	"typescript.tsdk": ".yarn/sdks/typescript/lib",
+	"typescript.enablePromptUseWorkspaceTsdk": true,
+	"jest.showCoverageOnLoad": false,
+	"jest.enableCodeLens": true,
+	"editor.formatOnSave": true,
+	"editor.defaultFormatter": "esbenp.prettier-vscode",
+	"eslint.validate": [
+		"javascript",
+		"javascriptreact",
+		"typescript",
+		"typescriptreact"
+	],
+	"files.exclude": {
+		"node_modules/": true,
+		"coverage/": true,
+		".*": false,
+		"**/node_modules/": true,
+		".nyc_output": true,
+		"**/coverage/": true,
+		"**/*.map": true,
+		"**/zwave-js-*.tgz": true,
+		"cache": true,
+		"build": true,
+		"*.d.ts": true,
+		"*.map": true,
+		"**/build": true,
+		"**/*.tsbuildinfo": true,
+		"**/cache": true,
+		"packages/zwave-js/**/fingerprint.txt": true,
+		"node_modules/zwave-js/**/fingerprint.txt": true,
+		".husky/_/**/*": true,
+		"packages/config/config/devices/index.json": true,
+		"packages/*/package-lock.json": true,
+		".yarn/*": true,
+		".yarn/patches": false,
+		".yarn/releases": false,
+		".yarn/plugins": false,
+		".yarn/sdks": false,
+		".yarn/versions": false,
+		"**/.pnp.*": true,
+		"**/*.test.js": true,
+		"packages/*/cache": true,
+		"**/.tmp": true,
+		"**/.tmpoh/": true,
+		"**/.tmpozw/": true,
+		"**/.tmpzwa/": true,
+		"**/.secrets": true,
+		"**/.test-payloads": true
+	},
+	"files.associations": {
+		"**/config/**/*.json": "jsonc"
+	},
+	"editor.rulers": [72, 80, 120],
+	"files.participants.timeout": 10000,
+	"typescript.preferences.importModuleSpecifier": "project-relative",
+	"[jsonc]": {
+		"editor.defaultFormatter": "esbenp.prettier-vscode"
+	},
+	"standard.enable": false,
+	"json.schemas": [
+		{
+			"fileMatch": ["/packages/config/config/devices/*/*.json"],
+			"url": "/maintenance/schemas/device-config.json"
+		},
+		{
+			"fileMatch": ["/packages/config/config/deviceClasses.json"],
+			"url": "/maintenance/schemas/deviceClasses.json"
+		},
+		{
+			"fileMatch": ["renovate.json"],
+			"url": "https://docs.renovatebot.com/renovate-schema.json"
+		}
+	],
+	"debug.javascript.unmapMissingSources": true,
+	"jest.jestCommandLine": "yarn jest",
+	"search.exclude": {
+		"**/.yarn": true,
+		"**/.pnp.*": true
+	},
+	"eslint.nodePath": ".yarn/sdks",
+	"prettier.prettierPath": ".yarn/sdks/prettier/index.js",
+	"[typescript]": {
+		"editor.autoClosingBrackets": "languageDefined"
+	}
 }
