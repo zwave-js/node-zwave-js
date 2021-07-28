@@ -108,7 +108,6 @@ export class BasicCCAPI extends CCAPI {
 
 			// and verify the current value after a delay. We query currentValue instead of targetValue to make sure
 			// that unsolicited updates cancel the scheduled poll
-			// wotan-disable-next-line no-useless-predicate
 			if (property === "targetValue") property = "currentValue";
 			this.schedulePoll({ property });
 		} else if (this.isMulticast()) {
@@ -137,7 +136,6 @@ export class BasicCCAPI extends CCAPI {
 				// However, when setting the value 255 (ON), we don't know the actual state
 
 				// We query currentValue instead of targetValue to make sure that unsolicited updates cancel the scheduled poll
-				// wotan-disable-next-line no-useless-predicate
 				if (property === "targetValue") property = "currentValue";
 				this.schedulePoll({ property });
 			}

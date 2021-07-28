@@ -1,5 +1,3 @@
-/* wotan-disable async-function-assignability */
-
 // To test with Sentry reporting:
 // import { Driver } from "../packages/zwave-js";
 

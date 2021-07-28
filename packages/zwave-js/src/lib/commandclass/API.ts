@@ -105,7 +105,6 @@ export class CCAPI {
 	 * Can be used on supported CC APIs to set a CC value by property name (and optionally the property key)
 	 */
 	public get setValue(): SetValueImplementation | undefined {
-		// wotan-disable-next-line no-restricted-property-access
 		return this[SET_VALUE];
 	}
 
@@ -120,7 +119,6 @@ export class CCAPI {
 	 * Can be used on supported CC APIs to poll a CC value by property name (and optionally the property key)
 	 */
 	public get pollValue(): PollValueImplementation | undefined {
-		// wotan-disable-next-line no-restricted-property-access
 		return this[POLL_VALUE]?.bind(this);
 	}
 

@@ -601,7 +601,6 @@ export class Driver extends TypedEventEmitter<DriverEventCallbacks> {
 	private _isOpen: boolean = false;
 
 	/** Start the driver */
-	// wotan-disable async-function-assignability
 	public async start(): Promise<void> {
 		// avoid starting twice
 		if (this.wasDestroyed) {
@@ -749,7 +748,6 @@ export class Driver extends TypedEventEmitter<DriverEventCallbacks> {
 
 		return spOpenPromise;
 	}
-	// wotan-enable async-function-assignability
 
 	private _controllerInterviewed: boolean = false;
 	private _nodesReady = new Set<number>();
@@ -1157,9 +1155,7 @@ export class Driver extends TypedEventEmitter<DriverEventCallbacks> {
 
 		if (
 			!isObject(appInfo) ||
-			// wotan-disable-next-line no-useless-predicate
 			typeof appInfo.applicationName !== "string" ||
-			// wotan-disable-next-line no-useless-predicate
 			typeof appInfo.applicationVersion !== "string"
 		) {
 			throw new ZWaveError(
@@ -2405,7 +2401,6 @@ ${handlers.length} left`,
 		}
 	}
 
-	// wotan-disable no-misused-generics
 	/**
 	 * Sends a message to the Z-Wave stick.
 	 * @param msg The message to send
@@ -2576,7 +2571,6 @@ ${handlers.length} left`,
 			throw e;
 		}
 	}
-	// wotan-enable no-misused-generics
 
 	/**
 	 * Sends a command to a Z-Wave node. If the node returns a command in response, that command will be the return value.
@@ -2584,7 +2578,6 @@ ${handlers.length} left`,
 	 * @param command The command to send. It will be encapsulated in a SendData[Multicast]Request.
 	 * @param options (optional) Options regarding the message transmission
 	 */
-	// wotan-disable-next-line no-misused-generics
 	public async sendCommand<TResponse extends CommandClass = CommandClass>(
 		command: CommandClass,
 		options: SendCommandOptions = {},
@@ -2741,7 +2734,6 @@ ${handlers.length} left`,
 	 * @param timeout The number of milliseconds to wait. If the timeout elapses, the returned promise will be rejected
 	 * @param predicate A predicate function to test all incoming command classes
 	 */
-	// wotan-disable-next-line no-misused-generics
 	public waitForCommand<T extends CommandClass>(
 		predicate: (cc: CommandClass) => boolean,
 		timeout: number,
@@ -3122,7 +3114,6 @@ ${handlers.length} left`,
 		// Now try to apply them to all known devices
 		if (this._controller) {
 			for (const node of this._controller.nodes.values()) {
-				// wotan-disable-next-line no-restricted-property-access
 				if (node.ready) await node["loadDeviceConfig"]();
 			}
 		}

@@ -42,7 +42,6 @@ export abstract class StatisticsHost<T> {
 			const value = s[property];
 			if (typeof value === "number") {
 				return {
-					// wotan-disable-next-line no-duplicate-spread-property
 					...s,
 					[property]: value + 1,
 				};

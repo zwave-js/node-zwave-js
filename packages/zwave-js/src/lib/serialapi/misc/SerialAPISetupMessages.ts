@@ -143,7 +143,6 @@ export class SerialAPISetupResponse extends Message {
 				break;
 		}
 
-		// wotan-disable-next-line no-useless-predicate
 		if (CommandConstructor && (new.target as any) !== CommandConstructor) {
 			return new CommandConstructor(driver, options);
 		}

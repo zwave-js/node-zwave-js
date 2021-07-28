@@ -15,8 +15,6 @@ import { blue, green } from "ansi-colors";
 import * as path from "path";
 import ts from "typescript";
 
-/* wotan-disable no-useless-predicate */
-
 // Configure which CCs are excluded from this check
 const whitelistedCCs: CommandClasses[] = [
 	// Configuration CC has a different way of storing its values
@@ -174,12 +172,12 @@ export function lintCCConstructors(): Promise<void> {
 				//    b1) there is a method definition for mergePartialCCs
 				//    b2) there is a @noCCValues comment
 
-				const hasCallToPersistValuesInConstructorBody = !!constructor.body.statements.find(
-					isCallToPersistValues,
-				);
-				const checkForDeserializationOptions = constructor.body.statements.find(
-					isCheckForDeserializationOptions,
-				);
+				const hasCallToPersistValuesInConstructorBody =
+					!!constructor.body.statements.find(isCallToPersistValues);
+				const checkForDeserializationOptions =
+					constructor.body.statements.find(
+						isCheckForDeserializationOptions,
+					);
 				const hasCallToPersistValuesInCheck =
 					checkForDeserializationOptions &&
 					!!checkForDeserializationOptions.thenStatement.statements.find(
