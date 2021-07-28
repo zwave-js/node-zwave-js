@@ -20,13 +20,11 @@
 		"**/coverage/": true,
 		"**/*.map": true,
 		"**/zwave-js-*.tgz": true,
-		"cache": true,
 		"build": true,
 		"*.d.ts": true,
 		"*.map": true,
 		"**/build": true,
 		"**/*.tsbuildinfo": true,
-		"**/cache": true,
 		"packages/zwave-js/**/fingerprint.txt": true,
 		"node_modules/zwave-js/**/fingerprint.txt": true,
 		".husky/_/**/*": true,
@@ -46,7 +44,8 @@
 		"**/.tmpozw/": true,
 		"**/.tmpzwa/": true,
 		"**/.secrets": true,
-		"**/.test-payloads": true
+		"**/.test-payloads": true,
+		"(!test)/cache": true
 	},
 	"files.associations": {
 		"**/config/**/*.json": "jsonc"
