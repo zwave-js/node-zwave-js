@@ -13,6 +13,7 @@
 * Removing associations from non-multichannel groups now works correctly
 * The endpoint device class is now stored correctly when all endpoints have identical capabilities
 * Fixed a crash that happened when trying to determine if all endpoints are the same device class and the device class hasn't been stored before
+* Added missing metadata definitions to `Version CC` fields
 
 ### Config file changes
 * Add NAS-PD03Z Motion Sensor 3
