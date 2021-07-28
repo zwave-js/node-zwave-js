@@ -9,14 +9,22 @@
 ### Bugfixes
 * The detection whether a config file is considered embedded or user-provided now takes `ZWAVEJS_EXTERNAL_CONFIG` into account.
 * Improved the error message when the cache directory cannot be written to
+* Avoid overwriting the `.json` cache file with empty data on shutdown
+* Removing associations from non-multichannel groups now works correctly
+* The endpoint device class is now stored correctly when all endpoints have identical capabilities
+* Fixed a crash that happened when trying to determine if all endpoints are the same device class and the device class hasn't been stored before
 
 ### Config file changes
 * Add NAS-PD03Z Motion Sensor 3
 * Template other Shenzhen Neo motion sensors
 * Map root reports to endpoint 1 for CT101
+* Add missing LED Light param to GE/Jasco 46202 and 14292
+* Add missing param and metadata for GE/Jasco 46203
+* Add fingerprint to Aeotec ZWA009
 
 ### Changes under the hood
 * Added regression tests for this oddysey of config loading fixes
+* Added a bot command to add new fingerprints to existing config files
 
 ## 8.0.5 (2021-07-22)
 ### Bugfixes
