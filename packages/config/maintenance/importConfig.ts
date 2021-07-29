@@ -1287,8 +1287,9 @@ async function parseZWAProduct(
 		if (parsedParam.$import) continue;
 
 		// Skip parameter if a bitmask has already been defined
+		const tPattern = new RegExp("/^" + param.ParameterNumber.toString() + "\[/")
 		if (newConfig.paramInformation.find(
-			(p: any) => p["#"].includes(param.ParameterNumber.toString()),
+			(p: any) => p["#"].match(tPattern),
 		)) {
 			continue;
 		}
