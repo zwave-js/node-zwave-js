@@ -31,9 +31,7 @@ export enum SPANState {
 	SPAN,
 }
 
-type SPANTableEntry = {
-	sequenceNumber: number;
-} & (
+type SPANTableEntry =
 	| {
 			// We know the other node's receiver's entropy input, but we didn't send it our sender's EI yet
 			type: SPANState.RemoteEI;
@@ -49,8 +47,7 @@ type SPANTableEntry = {
 			type: SPANState.SPAN;
 			securityClass: SecurityClass;
 			rng: CtrDRBG;
-	  }
-);
+	  };
 
 export class SecurityManager2 {
 	public constructor() {
@@ -68,6 +65,9 @@ export class SecurityManager2 {
 
 	/** A map of SPAN states for each node */
 	private spanTable = new Map<number, SPANTableEntry>();
+	/** A map of sequence numbers that were last used in communication with a node */
+	private ownSequenceNumbers = new Map<number, number>();
+	private peerSequenceNumbers = new Map<number, number>();
 	/** A map of MPAN states for each multicast group */
 	private mpanStates = new Map<number, Buffer>();
 	/** A map of permanent network keys per security class */
@@ -155,18 +155,18 @@ export class SecurityManager2 {
 
 	/** Prepares the generation of a new SPAN by creating a random sequence number and (local) entropy input */
 	public generateNonce(receiver: number): {
-		sequenceNumber: number;
+		ownSequenceNumber: number;
 		receiverEI: Buffer;
 	} {
-		const sequenceNumber = crypto.randomInt(256);
+		const ownSequenceNumber = crypto.randomInt(256);
 		const receiverEI = this.rng.generate(16);
+		this.ownSequenceNumbers.set(receiver, ownSequenceNumber);
 		this.spanTable.set(receiver, {
-			sequenceNumber,
 			type: SPANState.LocalEI,
 			receiverEI,
 		});
 		return {
-			sequenceNumber,
+			ownSequenceNumber,
 			receiverEI,
 		};
 	}
@@ -174,12 +174,13 @@ export class SecurityManager2 {
 	/** Invalidates the SPAN state for the given receiver */
 	public deleteNonce(receiver: number): void {
 		this.spanTable.delete(receiver);
+		this.peerSequenceNumbers.delete(receiver);
+		// Keep our own sequence number
 	}
 
 	/** Initializes the singlecast PAN generator for a given node based on the given entropy inputs */
 	public initializeSPAN(
 		receiver: number,
-		sequenceNumber: number,
 		senderEI: Buffer,
 		receiverEI: Buffer,
 	): void {
@@ -201,7 +202,6 @@ export class SecurityManager2 {
 		const MEI = deriveMEI(noncePRK);
 
 		this.spanTable.set(receiver, {
-			sequenceNumber,
 			securityClass,
 			type: SPANState.SPAN,
 			rng: new CtrDRBG(
@@ -219,22 +219,14 @@ export class SecurityManager2 {
 		peerNodeId: number,
 		sequenceNumber: number,
 	): boolean {
-		return (
-			this.spanTable.get(peerNodeId)?.sequenceNumber === sequenceNumber
-		);
+		return this.peerSequenceNumbers.get(peerNodeId) === sequenceNumber;
 	}
 
-	public updateSPAN(
+	public storeSequenceNumber(
 		peerNodeId: number,
-		entry: Partial<SPANTableEntry>,
+		sequenceNumber: number,
 	): void {
-		if (!this.spanTable.has(peerNodeId)) {
-			throw new ZWaveError(
-				`The Singlecast PAN has not been initialized for Node ${peerNodeId}`,
-				ZWaveErrorCodes.Security2CC_NotInitialized,
-			);
-		}
-		Object.assign(this.spanTable.get(peerNodeId), entry);
+		this.peerSequenceNumbers.set(peerNodeId, sequenceNumber);
 	}
 
 	public nextNonce(peerNodeId: number): Buffer {
@@ -247,6 +239,18 @@ export class SecurityManager2 {
 		}
 		const ret = spanState.rng.generate(16);
 		return ret.slice(0, 13);
+	}
+
+	/** Returns the next sequence number to use for outgoing messages to the given node */
+	public nextSequenceNumber(peerNodeId: number): number {
+		let seq = this.ownSequenceNumbers.get(peerNodeId);
+		if (seq == undefined) {
+			seq = crypto.randomInt(256);
+		} else {
+			seq = ++seq & 0xff;
+		}
+		this.ownSequenceNumbers.set(peerNodeId, seq);
+		return seq;
 	}
 
 	public initializeMPAN(group: number): void {

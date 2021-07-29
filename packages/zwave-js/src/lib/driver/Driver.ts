@@ -1640,13 +1640,14 @@ export class Driver extends TypedEventEmitter<DriverEventCallbacks> {
 					}
 				}
 			} catch (ee) {
-				if (
-					ee instanceof Error &&
-					/serial port is not open/.test(ee.message)
-				) {
-					this.emit("error", ee);
-					void this.destroy();
-					return;
+				if (ee instanceof Error) {
+					if (/serial port is not open/.test(ee.message)) {
+						this.emit("error", ee);
+						void this.destroy();
+						return;
+					}
+					// Print something, so we know what is wrong
+					this._driverLog.print(ee.stack ?? ee.message, "error");
 				}
 			}
 			// Don't keep handling the message
@@ -1842,7 +1843,7 @@ export class Driver extends TypedEventEmitter<DriverEventCallbacks> {
 
 			if (!this.hasPendingTransactions(isS2NonceReport)) {
 				this.controllerLog.logNode(nodeId, {
-					message: `Failed to decode S2-encapsulated command, because no SPAN is established. Requesting a nonce...`,
+					message: `No SPAN is established yet, cannot decode command. Requesting a nonce...`,
 					level: "verbose",
 					direction: "outbound",
 				});
@@ -1852,7 +1853,7 @@ export class Driver extends TypedEventEmitter<DriverEventCallbacks> {
 				});
 			} else {
 				this.controllerLog.logNode(nodeId, {
-					message: `Failed to decode S2-encapsulated command, because no SPAN is established. Currently in the process of doing that...`,
+					message: `No SPAN is established yet, cannot decode command.`,
 					level: "verbose",
 					direction: "none",
 				});

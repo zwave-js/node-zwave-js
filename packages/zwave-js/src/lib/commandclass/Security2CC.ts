@@ -29,6 +29,7 @@ import {
 	CommandClass,
 	commandClass,
 	CommandClassDeserializationOptions,
+	CommandClassOptions,
 	expectedCCResponse,
 	gotDeserializationOptions,
 	implementedVersion,
@@ -92,6 +93,37 @@ function getAuthenticationData(
 	return ret;
 }
 
+/** Validates that a sequence number is not a duplicate and updates the SPAN table if it is accepted */
+function validateSequenceNumber(this: Security2CC, sequenceNumber: number) {
+	const peerNodeID = this.nodeId as number;
+	validatePayload.withReason("Duplicate command")(
+		!this.driver.securityManager2!.isDuplicateSinglecast(
+			peerNodeID,
+			sequenceNumber,
+		),
+	);
+	// Not a duplicate, store it
+	this.driver.securityManager2!.storeSequenceNumber(
+		peerNodeID,
+		sequenceNumber,
+	);
+}
+
+function assertSecurity(this: Security2CC, options: CommandClassOptions): void {
+	const verb = gotDeserializationOptions(options) ? "decoded" : "sent";
+	if (!this.driver.controller.ownNodeId) {
+		throw new ZWaveError(
+			`Secure commands (S2) can only be ${verb} when the controller's node id is known!`,
+			ZWaveErrorCodes.Driver_NotReady,
+		);
+	} else if (!this.driver.securityManager2) {
+		throw new ZWaveError(
+			`Secure commands (S2) can only be ${verb} when the network keys for the driver are set!`,
+			ZWaveErrorCodes.Driver_NoSecurity,
+		);
+	}
+}
+
 @API(CommandClasses["Security 2"])
 export class Security2CCAPI extends CCAPI {
 	public supportsCommand(_cmd: Security2Command): Maybe<boolean> {
@@ -118,7 +150,7 @@ export class Security2CCAPI extends CCAPI {
 			);
 		}
 
-		const { receiverEI, sequenceNumber } =
+		const { receiverEI, ownSequenceNumber: sequenceNumber } =
 			this.driver.securityManager2.generateNonce(this.endpoint.nodeId);
 
 		const cc = new Security2CCNonceReport(this.driver, {
@@ -213,35 +245,21 @@ export class Security2CCMessageEncapsulation extends Security2CC {
 	) {
 		super(driver, options);
 
-		const verb = gotDeserializationOptions(options) ? "decoded" : "sent";
-		if (!(this.driver.controller.ownNodeId as unknown)) {
-			throw new ZWaveError(
-				`Secure commands (S2) can only be ${verb} when the controller's node id is known!`,
-				ZWaveErrorCodes.Driver_NotReady,
-			);
-		} else if (!this.driver.securityManager2) {
-			throw new ZWaveError(
-				`Secure commands (S2) can only be ${verb} when the network keys for the driver are set!`,
-				ZWaveErrorCodes.Driver_NoSecurity,
-			);
-		}
+		// Make sure that we can send/receive secure commands
+		assertSecurity.call(this, options);
 
 		if (gotDeserializationOptions(options)) {
 			validatePayload(this.payload.length >= 2);
 			// Check the sequence number to avoid duplicates
 			// TODO: distinguish between multicast and singlecast
 			this.sequenceNumber = this.payload[0];
-			const peerNodeID = this.nodeId as number;
-			validatePayload.withReason("Duplicate command")(
-				!this.driver.securityManager2.isDuplicateSinglecast(
-					peerNodeID,
-					this.sequenceNumber,
-				),
-			);
+			// Don't accept duplicate commands
+			validateSequenceNumber.call(this, this.sequenceNumber);
 
 			// Ensure the node has a security class
+			const peerNodeID = this.nodeId as number;
 			validatePayload.withReason("No security class granted")(
-				this.driver.securityManager2.getHighestSecurityClassSinglecast(
+				this.driver.securityManager2!.getHighestSecurityClassSinglecast(
 					peerNodeID,
 				) != undefined,
 			);
@@ -272,7 +290,7 @@ export class Security2CCMessageEncapsulation extends Security2CC {
 			if (hasExtensions) parseExtensions(this.payload);
 
 			const spanState =
-				this.driver.securityManager2.getSPANState(peerNodeID);
+				this.driver.securityManager2!.getSPANState(peerNodeID);
 			if (spanState.type !== SPANState.SPAN) {
 				// If no SPAN was established yet, we can't decode this further
 				// Figure out what to do
@@ -295,9 +313,8 @@ export class Security2CCMessageEncapsulation extends Security2CC {
 					const senderEI = this.getSenderEI();
 					if (!senderEI) return failNoSPAN();
 					const receiverEI = spanState.receiverEI;
-					this.driver.securityManager2.initializeSPAN(
+					this.driver.securityManager2!.initializeSPAN(
 						peerNodeID,
-						this.sequenceNumber,
 						senderEI,
 						receiverEI,
 					);
@@ -323,10 +340,10 @@ export class Security2CCMessageEncapsulation extends Security2CC {
 			);
 
 			// Decrypt payload and verify integrity
-			const { keyCCM: key } = this.driver.securityManager2.getKeys({
+			const { keyCCM: key } = this.driver.securityManager2!.getKeys({
 				nodeId: peerNodeID,
 			});
-			const iv = this.driver.securityManager2.nextNonce(peerNodeID);
+			const iv = this.driver.securityManager2!.nextNonce(peerNodeID);
 			const { plaintext, authOK } = decryptAES128CCM(
 				key,
 				iv,
@@ -517,9 +534,15 @@ export class Security2CCNonceReport extends Security2CC {
 			| (CCCommandOptions & Security2CCNonceReportOptions),
 	) {
 		super(driver, options);
+
+		// Make sure that we can send/receive secure commands
+		assertSecurity.call(this, options);
+
 		if (gotDeserializationOptions(options)) {
 			validatePayload(this.payload.length >= 2);
 			this.sequenceNumber = this.payload[0];
+			// Don't accept duplicate commands
+			validateSequenceNumber.call(this, this.sequenceNumber);
 
 			this.MOS = !!(this.payload[1] & 0b10);
 			this.SOS = !!(this.payload[1] & 0b1);
@@ -572,9 +595,15 @@ export class Security2CCNonceGet extends Security2CC {
 			| Security2CCNonceGetOptions,
 	) {
 		super(driver, options);
+
+		// Make sure that we can send/receive secure commands
+		assertSecurity.call(this, options);
+
 		if (gotDeserializationOptions(options)) {
 			validatePayload(this.payload.length >= 1);
 			this.sequenceNumber = this.payload[0];
+			// Don't accept duplicate commands
+			validateSequenceNumber.call(this, this.sequenceNumber);
 		} else {
 			this.sequenceNumber = options.sequenceNumber;
 		}
