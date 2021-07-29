@@ -80,7 +80,7 @@
 			"readOnly": true
 		},
 		"7": {
-			"label": "Relay 1 Output Mode",
+			"label": "Relay 1: Output Mode",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 1,
@@ -88,17 +88,17 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "NO",
+					"label": "Normally Open",
 					"value": 0
 				},
 				{
-					"label": "NC",
+					"label": "Normally Closed",
 					"value": 1
 				}
 			]
 		},
 		"8": {
-			"label": "Relay 2 Output Mode",
+			"label": "Relay 2: Output Mode",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 1,
@@ -106,17 +106,17 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "NO",
+					"label": "Normally Open",
 					"value": 0
 				},
 				{
-					"label": "NC",
+					"label": "Normally Closed",
 					"value": 1
 				}
 			]
 		},
 		"9": {
-			"label": "Relay 3 Output Mode",
+			"label": "Relay 3: Output Mode",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 1,
@@ -124,17 +124,17 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "NO",
+					"label": "Normally Open",
 					"value": 0
 				},
 				{
-					"label": "NC",
+					"label": "Normally Closed",
 					"value": 1
 				}
 			]
 		},
 		"10": {
-			"label": "Relay 4 Output Mode",
+			"label": "Relay 4: Output Mode",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 1,
@@ -142,17 +142,17 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "NO",
+					"label": "Normally Open",
 					"value": 0
 				},
 				{
-					"label": "NC",
+					"label": "Normally Closed",
 					"value": 1
 				}
 			]
 		},
 		"11": {
-			"label": "Relay 5 Output Mode",
+			"label": "Relay 5: Output Mode",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 1,
@@ -160,11 +160,11 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "NO",
+					"label": "Normally Open",
 					"value": 0
 				},
 				{
-					"label": "NC",
+					"label": "Normally Closed",
 					"value": 1
 				}
 			]
@@ -234,7 +234,7 @@
 			"defaultValue": 0
 		},
 		"41": {
-			"label": "Relay 1 External input S1: Hold Control Mode",
+			"label": "External Input S1: Hold Control Mode",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 3,
@@ -260,7 +260,7 @@
 			]
 		},
 		"42": {
-			"label": "Relay 2 External input S2: Hold Control Mode",
+			"label": "External Input S2: Hold Control Mode",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 3,
@@ -286,7 +286,7 @@
 			]
 		},
 		"43": {
-			"label": "Relay 3 External input S3: Hold Control Mode",
+			"label": "External Input S3: Hold Control Mode",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 3,
@@ -312,7 +312,7 @@
 			]
 		},
 		"44": {
-			"label": "Relay 4 External input S4: Hold Control Mode",
+			"label": "External Input S4: Hold Control Mode",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 3,
@@ -338,7 +338,7 @@
 			]
 		},
 		"45": {
-			"label": "Relay 5 External input S5: Hold Control Mode",
+			"label": "External Input S5: Hold Control Mode",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 3,
@@ -364,7 +364,7 @@
 			]
 		},
 		"51": {
-			"label": "Relay 1 External Input S1: Click Control Mode",
+			"label": "External Input S1: Click Control Mode",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 5,
@@ -380,25 +380,25 @@
 					"value": 1
 				},
 				{
-					"label": "Relay switches to ON state only",
+					"label": "Turn on",
 					"value": 2
 				},
 				{
-					"label": "Relay switches to OFF state only",
+					"label": "Turn off",
 					"value": 3
 				},
 				{
-					"label": "Timer On>Off mode",
+					"label": "Turn on, then off after timer",
 					"value": 4
 				},
 				{
-					"label": "Time Off>On mode",
+					"label": "Turn off, then on after timer",
 					"value": 5
 				}
 			]
 		},
 		"52": {
-			"label": "Relay 2 External Input S2: Click Control Mode",
+			"label": "External Input S2: Click Control Mode",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 5,
@@ -414,25 +414,25 @@
 					"value": 1
 				},
 				{
-					"label": "Relay switches to ON state only",
+					"label": "Turn on",
 					"value": 2
 				},
 				{
-					"label": "Relay switches to OFF state only",
+					"label": "Turn off",
 					"value": 3
 				},
 				{
-					"label": "Timer On>Off mode",
+					"label": "Turn on, then off after timer",
 					"value": 4
 				},
 				{
-					"label": "Time Off>On mode",
+					"label": "Turn off, then on after timer",
 					"value": 5
 				}
 			]
 		},
 		"53": {
-			"label": "Relay 3 External Input S3: Click Control Mode",
+			"label": "External Input S3: Click Control Mode",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 5,
@@ -448,25 +448,25 @@
 					"value": 1
 				},
 				{
-					"label": "Relay switches to ON state only",
+					"label": "Turn on",
 					"value": 2
 				},
 				{
-					"label": "Relay switches to OFF state only",
+					"label": "Turn off",
 					"value": 3
 				},
 				{
-					"label": "Timer On>Off mode",
+					"label": "Turn on, then off after timer",
 					"value": 4
 				},
 				{
-					"label": "Time Off>On mode",
+					"label": "Turn off, then on after timer",
 					"value": 5
 				}
 			]
 		},
 		"54": {
-			"label": "Relay 4 External Input S4: Click Control Mode",
+			"label": "External Input S4: Click Control Mode",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 5,
@@ -482,25 +482,25 @@
 					"value": 1
 				},
 				{
-					"label": "Relay switches to ON state only",
+					"label": "Turn on",
 					"value": 2
 				},
 				{
-					"label": "Relay switches to OFF state only",
+					"label": "Turn off",
 					"value": 3
 				},
 				{
-					"label": "Timer On>Off mode",
+					"label": "Turn on, then off after timer",
 					"value": 4
 				},
 				{
-					"label": "Time Off>On mode",
+					"label": "Turn off, then on after timer",
 					"value": 5
 				}
 			]
 		},
 		"55": {
-			"label": "Relay 5 External Input S5: Click Control Mode",
+			"label": "External Input S5: Click Control Mode",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 5,
@@ -516,25 +516,25 @@
 					"value": 1
 				},
 				{
-					"label": "Relay switches to ON state only",
+					"label": "Turn on",
 					"value": 2
 				},
 				{
-					"label": "Relay switches to OFF state only",
+					"label": "Turn off",
 					"value": 3
 				},
 				{
-					"label": "Timer On>Off mode",
+					"label": "Turn on, then off after timer",
 					"value": 4
 				},
 				{
-					"label": "Time Off>On mode",
+					"label": "Turn off, then on after timer",
 					"value": 5
 				}
 			]
 		},
 		"61": {
-			"label": "Relay 1 External Input Number for Relay Output Control",
+			"label": "Relay 1: External Source",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 5,
@@ -542,33 +542,33 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "Controlled by gateway or associated device",
+					"label": "Gateway or associated device",
 					"value": 0
 				},
 				{
-					"label": "Controlled by external input S1",
+					"label": "External input S1",
 					"value": 1
 				},
 				{
-					"label": "Controlled by external input S2",
+					"label": "External input S2",
 					"value": 2
 				},
 				{
-					"label": "Controlled by external input S3",
+					"label": "External input S3",
 					"value": 3
 				},
 				{
-					"label": "Controlled by external input S4",
+					"label": "External input S4",
 					"value": 4
 				},
 				{
-					"label": "Controlled by external input S5",
+					"label": "External input S5",
 					"value": 5
 				}
 			]
 		},
 		"62": {
-			"label": "Relay 2 External Input Number for Relay Output Control",
+			"label": "Relay 2: External Source",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 5,
@@ -576,33 +576,33 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "Controlled by gateway or associated device",
+					"label": "Gateway or associated device",
 					"value": 0
 				},
 				{
-					"label": "Controlled by external input S1",
+					"label": "External input S1",
 					"value": 1
 				},
 				{
-					"label": "Controlled by external input S2",
+					"label": "External input S2",
 					"value": 2
 				},
 				{
-					"label": "Controlled by external input S3",
+					"label": "External input S3",
 					"value": 3
 				},
 				{
-					"label": "Controlled by external input S4",
+					"label": "External input S4",
 					"value": 4
 				},
 				{
-					"label": "Controlled by external input S5",
+					"label": "External input S5",
 					"value": 5
 				}
 			]
 		},
 		"63": {
-			"label": "Relay 3 External Input Number for Relay Output Control",
+			"label": "Relay 3: External Source",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 5,
@@ -610,33 +610,33 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "Controlled by gateway or associated device",
+					"label": "Gateway or associated device",
 					"value": 0
 				},
 				{
-					"label": "Controlled by external input S1",
+					"label": "External input S1",
 					"value": 1
 				},
 				{
-					"label": "Controlled by external input S2",
+					"label": "External input S2",
 					"value": 2
 				},
 				{
-					"label": "Controlled by external input S3",
+					"label": "External input S3",
 					"value": 3
 				},
 				{
-					"label": "Controlled by external input S4",
+					"label": "External input S4",
 					"value": 4
 				},
 				{
-					"label": "Controlled by external input S5",
+					"label": "External input S5",
 					"value": 5
 				}
 			]
 		},
 		"64": {
-			"label": "Relay 4 External Input Number for Relay Output Control",
+			"label": "Relay 4: External Source",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 5,
@@ -644,33 +644,33 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "Controlled by gateway or associated device",
+					"label": "Gateway or associated device",
 					"value": 0
 				},
 				{
-					"label": "Controlled by external input S1",
+					"label": "External input S1",
 					"value": 1
 				},
 				{
-					"label": "Controlled by external input S2",
+					"label": "External input S2",
 					"value": 2
 				},
 				{
-					"label": "Controlled by external input S3",
+					"label": "External input S3",
 					"value": 3
 				},
 				{
-					"label": "Controlled by external input S4",
+					"label": "External input S4",
 					"value": 4
 				},
 				{
-					"label": "Controlled by external input S5",
+					"label": "External input S5",
 					"value": 5
 				}
 			]
 		},
 		"65": {
-			"label": "Relay 5 External Input Number for Relay Output Control",
+			"label": "Relay 5: External Source",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 5,
@@ -678,33 +678,33 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "Controlled by gateway or associated device",
+					"label": "Gateway or associated device",
 					"value": 0
 				},
 				{
-					"label": "Controlled by external input S1",
+					"label": "External input S1",
 					"value": 1
 				},
 				{
-					"label": "Controlled by external input S2",
+					"label": "External input S2",
 					"value": 2
 				},
 				{
-					"label": "Controlled by external input S3",
+					"label": "External input S3",
 					"value": 3
 				},
 				{
-					"label": "Controlled by external input S4",
+					"label": "External input S4",
 					"value": 4
 				},
 				{
-					"label": "Controlled by external input S5",
+					"label": "External input S5",
 					"value": 5
 				}
 			]
 		},
 		"71": {
-			"label": "Relay 1 Timer Mode Duration",
+			"label": "Relay 1: Timer Mode Duration",
 			"description": "Used to open/close garage doors, blinds, curtains, etc. or to turn attached devices like door lock or security OFF for a short time",
 			"unit": "seconds",
 			"valueSize": 3,
@@ -719,7 +719,7 @@
 			]
 		},
 		"72": {
-			"label": "Relay 2 Timer Mode Duration",
+			"label": "Relay 2: Timer Mode Duration",
 			"description": "Used to open/close garage doors, blinds, curtains, etc. or to turn attached devices like door lock or security OFF for a short time",
 			"unit": "seconds",
 			"valueSize": 3,
@@ -734,7 +734,7 @@
 			]
 		},
 		"73": {
-			"label": "Relay 3 Timer Mode Duration",
+			"label": "Relay 3: Timer Mode Duration",
 			"description": "Used to open/close garage doors, blinds, curtains, etc. or to turn attached devices like door lock or security OFF for a short time",
 			"unit": "seconds",
 			"valueSize": 3,
@@ -749,7 +749,7 @@
 			]
 		},
 		"74": {
-			"label": "Relay 4 Timer Mode Duration",
+			"label": "Relay 4: Timer Mode Duration",
 			"description": "Used to open/close garage doors, blinds, curtains, etc. or to turn attached devices like door lock or security OFF for a short time",
 			"unit": "seconds",
 			"valueSize": 3,
@@ -764,7 +764,7 @@
 			]
 		},
 		"75": {
-			"label": "Relay 5 Timer Mode Duration",
+			"label": "Relay 5: Timer Mode Duration",
 			"description": "Used to open/close garage doors, blinds, curtains, etc. or to turn attached devices like door lock or security OFF for a short time",
 			"unit": "seconds",
 			"valueSize": 3,
@@ -780,45 +780,30 @@
 		},
 		"101": {
 			"label": "Relay Inverse Mode, Inching - Group 1",
+			"description": "Combine the relay numbers to a two-digit number. Example: 24 = Relay 2 & 4",
 			"valueSize": 1,
 			"minValue": 0,
-			"maxValue": 23,
+			"maxValue": 54,
 			"defaultValue": 0,
-			"allowManualEntry": false,
 			"options": [
 				{
 					"label": "Disable",
 					"value": 0
-				},
-				{
-					"label": "Relay 1 and Relay 2",
-					"value": 12
-				},
-				{
-					"label": "Relay 2 and Relay 3",
-					"value": 23
 				}
 			]
 		},
 		"102": {
 			"label": "Relay Inverse Mode, Inching - Group 2",
+			"description": "Combine the relay numbers to a two-digit number. Example: 24 = Relay 2 & 4",
 			"valueSize": 1,
 			"minValue": 0,
-			"maxValue": 51,
+			"maxValue": 54,
 			"defaultValue": 0,
 			"allowManualEntry": false,
 			"options": [
 				{
 					"label": "Disable",
 					"value": 0
-				},
-				{
-					"label": "Relay 3 and Relay 4",
-					"value": 34
-				},
-				{
-					"label": "Relay 4 and Relay 5",
-					"value": 45
 				}
 			]
 		},
@@ -831,7 +816,7 @@
 			"defaultValue": 10
 		},
 		"142": {
-			"label": "Control Energy Consumption Report",
+			"label": "Energy Consumption Report",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 1,

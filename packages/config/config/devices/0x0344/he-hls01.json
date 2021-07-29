@@ -223,7 +223,7 @@
 		},
 		"25": {
 			"label": "Auto On Reconnect Timeout",
-			"description": "When the load is reconnected the relay output will be switched On after the time defined in this parameter in minutes.",
+			"description": "When the load is reconnected the relay output will be switched on after this time.",
 			"unit": "minutes",
 			"valueSize": 1,
 			"minValue": 0,
@@ -240,7 +240,7 @@
 		},
 		"27": {
 			"label": "High Load Timeout Protection: Time Threshold",
-			"unit": "W",
+			"unit": "minutes",
 			"valueSize": 2,
 			"minValue": 1,
 			"maxValue": 1440,
@@ -289,19 +289,19 @@
 					"value": 1
 				},
 				{
-					"label": "Relay switches to ON state only",
+					"label": "Turn on",
 					"value": 2
 				},
 				{
-					"label": "Relay switches to OFF state only",
+					"label": "Turn off",
 					"value": 3
 				},
 				{
-					"label": "Timer On>Off mode",
+					"label": "Turn on, then off after timer",
 					"value": 4
 				},
 				{
-					"label": "Time Off>On mode",
+					"label": "Turn off, then on after timer",
 					"value": 5
 				}
 			]

@@ -103,11 +103,11 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "NO",
+					"label": "Normally Open",
 					"value": 0
 				},
 				{
-					"label": "NC",
+					"label": "Normally Closed",
 					"value": 1
 				}
 			]
@@ -219,7 +219,7 @@
 			]
 		},
 		"12": {
-			"label": "Air Temperatureerature: Minimum",
+			"label": "Air Temperature: Minimum",
 			"unit": "0.1 °C",
 			"valueSize": 2,
 			"minValue": 10,
@@ -227,7 +227,7 @@
 			"defaultValue": 210
 		},
 		"13": {
-			"label": "Air Temperatureerature: Maximum",
+			"label": "Air Temperature: Maximum",
 			"unit": "0.1 °C",
 			"valueSize": 2,
 			"minValue": 20,
@@ -235,7 +235,7 @@
 			"defaultValue": 270
 		},
 		"14": {
-			"label": "Floor Temperature Min",
+			"label": "Floor Temperature: Minimum",
 			"unit": "0.1 °C",
 			"valueSize": 2,
 			"minValue": 10,
@@ -243,7 +243,7 @@
 			"defaultValue": 180
 		},
 		"15": {
-			"label": "Floor Temperature Max",
+			"label": "Floor Temperature: Maximum",
 			"unit": "0.1 °C",
 			"valueSize": 2,
 			"minValue": 20,
@@ -357,8 +357,8 @@
 			"defaultValue": 0
 		},
 		"23": {
-			"label": "Time Regulation ON Time",
-			"description": "This Parameter defines floor HEATING time in minutes when Time Regulator is selected as the source sensor in Parameter 11.",
+			"label": "Time Regulation On Time",
+			"description": "Floor HEATING time when time regulator is selected as the source sensor in Parameter 11.",
 			"unit": "minutes",
 			"valueSize": 2,
 			"minValue": 10,
@@ -366,8 +366,8 @@
 			"defaultValue": 30
 		},
 		"24": {
-			"label": "Time Regulation OFF Time",
-			"description": "This Parameter defines floor IDLE time in minutes when Time Regulator is selected as the source sensor in Parameter 11.",
+			"label": "Time Regulation Off Time",
+			"description": "Floor IDLE time when time regulator is selected as the source sensor in Parameter 11.",
 			"unit": "minutes",
 			"valueSize": 2,
 			"minValue": 10,
@@ -693,7 +693,7 @@
 			"defaultValue": 10
 		},
 		"144": {
-			"label": "Air & Floor Temperatureerature Sensors Report Threshold",
+			"label": "Air & Floor Temperature Sensors Report Threshold",
 			"unit": "0.1 °C",
 			"valueSize": 1,
 			"minValue": 0,
@@ -718,7 +718,7 @@
 		},
 		"171": {
 			"label": "Basic Set Action",
-			"description": "Mode to switch to on Basic",
+			"description": "Activate this mode when a Basic Set is received",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 6,
