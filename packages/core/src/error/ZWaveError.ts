@@ -120,6 +120,8 @@ export enum ZWaveErrorCodes {
 
 	/** Used to report that no nonce exists */
 	SecurityCC_NoNonce = 1400,
+	/** Used to report that no SPAN is established between the nodes yet. The context should be an object that contains the peer node ID */
+	Security2CC_NoSPAN,
 	/** Used to report that the inner state required for this action was not initialized */
 	Security2CC_NotInitialized,
 	/** Gets thrown when a Security S2 command is missing a required extension */

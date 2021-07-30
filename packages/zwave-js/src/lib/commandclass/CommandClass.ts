@@ -366,8 +366,14 @@ export class CommandClass {
 					ccName = `${getCCName(ccId)} CC`;
 				}
 				// Preserve why the command was invalid
-				let reason: string | undefined;
-				if (typeof e.context === "string") reason = e.context;
+				let reason: string | ZWaveErrorCodes | undefined;
+				if (
+					typeof e.context === "string" ||
+					(typeof e.context === "number" &&
+						ZWaveErrorCodes[e.context] != undefined)
+				) {
+					reason = e.context;
+				}
 
 				return new InvalidCC(driver, {
 					nodeId,
@@ -1007,13 +1013,15 @@ export class CommandClass {
 
 export interface InvalidCCCreationOptions extends CommandClassCreationOptions {
 	ccName: string;
-	reason?: string;
+	reason?: string | ZWaveErrorCodes;
 }
 
 export class InvalidCC extends CommandClass {
 	public constructor(driver: Driver, options: InvalidCCCreationOptions) {
 		super(driver, options);
 		this._ccName = options.ccName;
+		// Numeric reasons are used internally to communicate problems with a CC
+		// without ignoring them entirely
 		this.reason = options.reason;
 	}
 
@@ -1021,27 +1029,41 @@ export class InvalidCC extends CommandClass {
 	public get ccName(): string {
 		return this._ccName;
 	}
-	public readonly reason?: string;
+	public readonly reason?: string | ZWaveErrorCodes;
 
 	public toLogEntry(): MessageOrCCLogEntry {
 		return {
 			tags: [this.ccName, "INVALID"],
-			message: this.reason
-				? {
-						error: this.reason,
-				  }
-				: undefined,
+			message:
+				this.reason != undefined
+					? {
+							error:
+								typeof this.reason === "string"
+									? this.reason
+									: getEnumMemberName(
+											ZWaveErrorCodes,
+											this.reason,
+									  ),
+					  }
+					: undefined,
 		};
 	}
 }
 
 export function assertValidCCs(container: ICommandClassContainer): void {
 	if (container.command instanceof InvalidCC) {
-		throw new ZWaveError(
-			"The message payload is invalid!",
-			ZWaveErrorCodes.PacketFormat_InvalidPayload,
-			container.command.reason,
-		);
+		if (typeof container.command.reason === "number") {
+			throw new ZWaveError(
+				"The message payload failed validation!",
+				container.command.reason,
+			);
+		} else {
+			throw new ZWaveError(
+				"The message payload is invalid!",
+				ZWaveErrorCodes.PacketFormat_InvalidPayload,
+				container.command.reason,
+			);
+		}
 	} else if (isCommandClassContainer(container.command)) {
 		assertValidCCs(container.command);
 	}

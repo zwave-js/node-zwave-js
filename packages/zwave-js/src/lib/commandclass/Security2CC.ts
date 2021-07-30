@@ -3,26 +3,42 @@ import {
 	decryptAES128CCM,
 	encodeBitMask,
 	encryptAES128CCM,
+	isTransmissionError,
+	Maybe,
+	MessageOrCCLogEntry,
+	MessageRecord,
 	parseBitMask,
 	parseCCList,
-	SecurityClasses,
+	SecurityClass,
 	SECURITY_S2_AUTH_TAG_LENGTH,
+	SPANState,
 	validatePayload,
 	ZWaveError,
 	ZWaveErrorCodes,
 } from "@zwave-js/core";
+import { SendDataBridgeRequest } from "../controller/SendDataBridgeMessages";
+import { SendDataRequest } from "../controller/SendDataMessages";
+import { TransmitOptions } from "../controller/SendDataShared";
 import type { Driver } from "../driver/Driver";
+import { FunctionType, MessagePriority } from "../message/Constants";
+import { CCAPI } from "./API";
 import {
+	API,
 	CCCommand,
 	CCCommandOptions,
 	CommandClass,
 	commandClass,
 	CommandClassDeserializationOptions,
+	CommandClassOptions,
 	expectedCCResponse,
 	gotDeserializationOptions,
 	implementedVersion,
 } from "./CommandClass";
-import { MGRPExtension, Security2Extension } from "./Security2/Extension";
+import {
+	MGRPExtension,
+	Security2Extension,
+	SPANExtension,
+} from "./Security2/Extension";
 import { ECDHProfiles, KEXFailType, KEXSchemes } from "./Security2/shared";
 
 // All the supported commands
@@ -43,21 +59,18 @@ export enum Security2Command {
 	CommandsSupportedReport = 0x0e,
 }
 
-function securityClassToBitMask(key: SecurityClasses): Buffer {
+function securityClassToBitMask(key: SecurityClass): Buffer {
 	return encodeBitMask(
 		[key],
-		SecurityClasses.S0_Legacy,
-		SecurityClasses.S2_Unauthenticated,
+		SecurityClass.S0_Legacy,
+		SecurityClass.S2_Unauthenticated,
 	);
 }
 
-function bitMaskToSecurityClass(
-	buffer: Buffer,
-	offset: number,
-): SecurityClasses {
+function bitMaskToSecurityClass(buffer: Buffer, offset: number): SecurityClass {
 	const keys = parseBitMask(
 		buffer.slice(offset, offset + 1),
-		SecurityClasses.S2_Unauthenticated,
+		SecurityClass.S2_Unauthenticated,
 	);
 	validatePayload(keys.length === 1);
 	return keys[0];
@@ -80,14 +93,176 @@ function getAuthenticationData(
 	return ret;
 }
 
+/** Validates that a sequence number is not a duplicate and updates the SPAN table if it is accepted */
+function validateSequenceNumber(this: Security2CC, sequenceNumber: number) {
+	const peerNodeID = this.nodeId as number;
+	validatePayload.withReason("Duplicate command")(
+		!this.driver.securityManager2!.isDuplicateSinglecast(
+			peerNodeID,
+			sequenceNumber,
+		),
+	);
+	// Not a duplicate, store it
+	this.driver.securityManager2!.storeSequenceNumber(
+		peerNodeID,
+		sequenceNumber,
+	);
+}
+
+function assertSecurity(this: Security2CC, options: CommandClassOptions): void {
+	const verb = gotDeserializationOptions(options) ? "decoded" : "sent";
+	if (!this.driver.controller.ownNodeId) {
+		throw new ZWaveError(
+			`Secure commands (S2) can only be ${verb} when the controller's node id is known!`,
+			ZWaveErrorCodes.Driver_NotReady,
+		);
+	} else if (!this.driver.securityManager2) {
+		throw new ZWaveError(
+			`Secure commands (S2) can only be ${verb} when the network keys for the driver are set!`,
+			ZWaveErrorCodes.Driver_NoSecurity,
+		);
+	}
+}
+
+@API(CommandClasses["Security 2"])
+export class Security2CCAPI extends CCAPI {
+	public supportsCommand(_cmd: Security2Command): Maybe<boolean> {
+		// All commands are mandatory
+		return true;
+	}
+
+	/**
+	 * Sends a nonce to the node, either in response to a NonceGet request or a message that failed to decrypt. The message is sent without any retransmission etc.
+	 * The return value indicates whether a nonce was successfully sent
+	 */
+	public async sendNonce(): Promise<boolean> {
+		this.assertSupportsCommand(
+			Security2Command,
+			Security2Command.NonceReport,
+		);
+
+		this.assertPhysicalEndpoint(this.endpoint);
+
+		if (!this.driver.securityManager2) {
+			throw new ZWaveError(
+				`Nonces can only be sent if secure communication is set up!`,
+				ZWaveErrorCodes.Driver_NoSecurity,
+			);
+		}
+
+		const receiverEI = this.driver.securityManager2.generateNonce(
+			this.endpoint.nodeId,
+		);
+
+		const cc = new Security2CCNonceReport(this.driver, {
+			nodeId: this.endpoint.nodeId,
+			endpoint: this.endpoint.index,
+			SOS: true,
+			MOS: false,
+			receiverEI,
+		});
+
+		const SendDataConstructor = this.driver.controller.isFunctionSupported(
+			FunctionType.SendDataBridge,
+		)
+			? SendDataBridgeRequest
+			: SendDataRequest;
+		const msg = new SendDataConstructor(this.driver, {
+			command: cc,
+			// Seems we need these options or some nodes won't accept the nonce
+			transmitOptions: TransmitOptions.ACK | TransmitOptions.AutoRoute,
+			// Only try sending a nonce once
+			maxSendAttempts: 1,
+		});
+
+		try {
+			await this.driver.sendMessage(msg, {
+				...this.commandOptions,
+				// Nonce requests must be handled immediately
+				priority: MessagePriority.Handshake,
+				// We don't want failures causing us to treat the node as asleep or dead
+				changeNodeStatusOnMissingACK: false,
+			});
+		} catch (e) {
+			if (isTransmissionError(e)) {
+				// The nonce could not be sent, invalidate it
+				this.driver.securityManager2.deleteNonce(this.endpoint.nodeId);
+				return false;
+			} else {
+				// Pass other errors through
+				throw e;
+			}
+		}
+		return true;
+	}
+
+	/**
+	 * Requests a nonce from the target node
+	 */
+	public async requestNonce(): Promise<void> {
+		this.assertSupportsCommand(Security2Command, Security2Command.NonceGet);
+
+		this.assertPhysicalEndpoint(this.endpoint);
+
+		if (!this.driver.securityManager2) {
+			throw new ZWaveError(
+				`Nonces can only be sent if secure communication is set up!`,
+				ZWaveErrorCodes.Driver_NoSecurity,
+			);
+		}
+
+		const cc = new Security2CCNonceGet(this.driver, {
+			nodeId: this.endpoint.nodeId,
+			endpoint: this.endpoint.index,
+		});
+
+		await this.driver.sendCommand(cc, {
+			...this.commandOptions,
+			priority: MessagePriority.PreTransmitHandshake,
+			// Only try getting a nonce once
+			maxSendAttempts: 1,
+			// We don't want failures causing us to treat the node as asleep or dead
+			// The "real" transaction will do that for us
+			changeNodeStatusOnMissingACK: false,
+		});
+	}
+}
+
 @commandClass(CommandClasses["Security 2"])
 @implementedVersion(1)
 export class Security2CC extends CommandClass {
 	declare ccCommand: Security2Command;
+
+	/** Tests if a command should be sent secure and thus requires encapsulation */
+	public static requiresEncapsulation(cc: CommandClass): boolean {
+		// Everything that's not an S2 CC needs to be encapsulated if the CC is secure
+		if (!cc.secure) return true;
+		if (!(cc instanceof Security2CC)) return true;
+		// These S2 commands need additional encapsulation
+		switch (cc.ccCommand) {
+			case Security2Command.CommandsSupportedGet:
+			case Security2Command.CommandsSupportedReport:
+			case Security2Command.NetworkKeyGet:
+			case Security2Command.NetworkKeyReport:
+			case Security2Command.NetworkKeyVerify:
+				return true;
+		}
+		return false;
+	}
+
+	/** Encapsulates a command that should be sent encrypted */
+	public static encapsulate(
+		driver: Driver,
+		cc: CommandClass,
+	): Security2CCMessageEncapsulation {
+		return new Security2CCMessageEncapsulation(driver, {
+			nodeId: cc.nodeId,
+			encapsulated: cc,
+		});
+	}
 }
 
 interface Security2CCMessageEncapsulationOptions extends CCCommandOptions {
-	sequenceNumber: number;
 	extensions?: Security2Extension[];
 	encapsulated: CommandClass;
 }
@@ -114,9 +289,26 @@ export class Security2CCMessageEncapsulation extends Security2CC {
 			| Security2CCMessageEncapsulationOptions,
 	) {
 		super(driver, options);
+
+		// Make sure that we can send/receive secure commands
+		assertSecurity.call(this, options);
+
 		if (gotDeserializationOptions(options)) {
 			validatePayload(this.payload.length >= 2);
-			this.sequenceNumber = this.payload[0];
+			// Check the sequence number to avoid duplicates
+			// TODO: distinguish between multicast and singlecast
+			this._sequenceNumber = this.payload[0];
+			// Don't accept duplicate commands
+			validateSequenceNumber.call(this, this._sequenceNumber);
+
+			// Ensure the node has a security class
+			const peerNodeID = this.nodeId as number;
+			validatePayload.withReason("No security class granted")(
+				this.driver.securityManager2!.getHighestSecurityClassSinglecast(
+					peerNodeID,
+				) != undefined,
+			);
+
 			const hasExtensions = !!(this.payload[1] & 0b1);
 			const hasEncryptedExtensions = !!(this.payload[1] & 0b10);
 
@@ -142,6 +334,39 @@ export class Security2CCMessageEncapsulation extends Security2CC {
 			};
 			if (hasExtensions) parseExtensions(this.payload);
 
+			const spanState =
+				this.driver.securityManager2!.getSPANState(peerNodeID);
+			if (spanState.type !== SPANState.SPAN) {
+				// If no SPAN was established yet, we can't decode this further
+				// Figure out what to do
+
+				const failNoSPAN = () => {
+					return validatePayload.fail(
+						ZWaveErrorCodes.Security2CC_NoSPAN,
+					);
+				};
+
+				if (spanState.type === SPANState.None) {
+					return failNoSPAN();
+				} else if (spanState.type === SPANState.RemoteEI) {
+					// TODO: The specs are not clear how to handle this case
+					// For now, do the same as if we didn't have any EI
+					return failNoSPAN();
+				} else if (spanState.type === SPANState.LocalEI) {
+					// We've sent the other our receiver's EI and received its sender's EI,
+					// meaning we can now establish an SPAN
+					const senderEI = this.getSenderEI();
+					if (!senderEI) return failNoSPAN();
+					const receiverEI = spanState.receiverEI;
+					this.driver.securityManager2!.initializeSPAN(
+						peerNodeID,
+						senderEI,
+						receiverEI,
+					);
+				}
+			}
+
+			// Now we do have an SPAN
 			const unencryptedPayload = this.payload.slice(0, offset);
 			const ciphertext = this.payload.slice(
 				offset,
@@ -159,10 +384,11 @@ export class Security2CCMessageEncapsulation extends Security2CC {
 				unencryptedPayload,
 			);
 
-			// TODO: get key and IV somewhere
-			const key = undefined as any as Buffer;
-			const iv = undefined as any as Buffer;
 			// Decrypt payload and verify integrity
+			const { keyCCM: key } = this.driver.securityManager2!.getKeys({
+				nodeId: peerNodeID,
+			});
+			const iv = this.driver.securityManager2!.nextNonce(peerNodeID);
 			const { plaintext, authOK } = decryptAES128CCM(
 				key,
 				iv,
@@ -193,7 +419,6 @@ export class Security2CCMessageEncapsulation extends Security2CC {
 			this.encapsulated = options.encapsulated;
 			options.encapsulated.encapsulatingCC = this as any;
 
-			this.sequenceNumber = options.sequenceNumber;
 			this.extensions = options.extensions ?? [];
 			if (
 				typeof this.nodeId !== "number" &&
@@ -207,7 +432,23 @@ export class Security2CCMessageEncapsulation extends Security2CC {
 		}
 	}
 
-	public sequenceNumber: number;
+	private _sequenceNumber: number | undefined;
+	/**
+	 * Return the sequence number of this command.
+	 *
+	 * **WARNING:** If the sequence number hasn't been set before, this will create a new one.
+	 * When sending messages, this should only happen immediately before serializing.
+	 */
+	public get sequenceNumber(): number {
+		if (this._sequenceNumber == undefined) {
+			this._sequenceNumber =
+				this.driver.securityManager2!.nextSequenceNumber(
+					this.nodeId as number,
+				);
+		}
+		return this._sequenceNumber;
+	}
+
 	public encapsulated?: CommandClass;
 	public extensions: Security2Extension[];
 
@@ -232,7 +473,71 @@ export class Security2CCMessageEncapsulation extends Security2CC {
 		return this.driver.controller.ownNodeId!;
 	}
 
+	/** Returns the Sender's Entropy Input if this command contains an SPAN extension */
+	private getSenderEI(): Buffer | undefined {
+		const spanExtension = this.extensions.find(
+			(e): e is SPANExtension => e instanceof SPANExtension,
+		);
+		return spanExtension?.senderEI;
+	}
+
+	public requiresPreTransmitHandshake(): boolean {
+		// We need the receiver's EI to be able to send an encrypted command
+		const secMan = this.driver.securityManager2!;
+		const peerNodeId = this.nodeId as number;
+		const spanState = secMan.getSPANState(peerNodeId);
+		return (
+			spanState.type === SPANState.None ||
+			spanState.type === SPANState.LocalEI
+		);
+	}
+
+	public async preTransmitHandshake(): Promise<void> {
+		// Request a nonce
+		return this.getNode()!.commandClasses["Security 2"].requestNonce();
+		// Yeah, that's it :)
+	}
+
 	public serialize(): Buffer {
+		// TODO: Support Multicast
+		const peerNodeID = this.nodeId as number;
+
+		// Include Sender EI in the command if we only have the receiver's EI
+		const spanState =
+			this.driver.securityManager2!.getSPANState(peerNodeID);
+		if (
+			spanState.type === SPANState.None ||
+			spanState.type === SPANState.LocalEI
+		) {
+			// Can't do anything here if we don't have the receiver's EI
+			throw new ZWaveError(
+				`Security S2 CC requires the receiver's nonce to be sent!`,
+				ZWaveErrorCodes.Security2CC_NoSPAN,
+			);
+		} else if (spanState.type === SPANState.RemoteEI) {
+			// We have the receiver's EI, generate our input and send it over
+			// With both, we can create an SPAN
+			const senderEI =
+				this.driver.securityManager2!.generateNonce(undefined);
+			const receiverEI = spanState.receiverEI;
+			this.driver.securityManager2!.initializeSPAN(
+				peerNodeID,
+				senderEI,
+				receiverEI,
+			);
+
+			// Add or update the SPAN extension
+			let spanExtension = this.extensions.find(
+				(e): e is SPANExtension => e instanceof SPANExtension,
+			);
+			if (spanExtension) {
+				spanExtension.senderEI = senderEI;
+			} else {
+				spanExtension = new SPANExtension({ senderEI });
+				this.extensions.push(spanExtension);
+			}
+		}
+
 		const unencryptedExtensions = this.extensions.filter(
 			(e) => !e.isEncrypted(),
 		);
@@ -268,9 +573,11 @@ export class Security2CCMessageEncapsulation extends Security2CC {
 			messageLength,
 			unencryptedPayload,
 		);
-		// TODO: get key and IV somewhere
-		const key = undefined as any as Buffer;
-		const iv = undefined as any as Buffer;
+
+		const { keyCCM: key } = this.driver.securityManager2!.getKeys({
+			nodeId: peerNodeID,
+		});
+		const iv = this.driver.securityManager2!.nextNonce(peerNodeID);
 		const { ciphertext: ciphertextPayload, authTag } = encryptAES128CCM(
 			key,
 			iv,
@@ -298,29 +605,40 @@ export class Security2CCMessageEncapsulation extends Security2CC {
 			.reduce((a, b) => a + b, 0);
 
 		return (
-			// eslint-disable-next-line @typescript-eslint/restrict-plus-operands
 			super.computeEncapsulationOverhead() +
 			2 +
 			SECURITY_S2_AUTH_TAG_LENGTH +
 			extensionBytes
 		);
 	}
+
+	public toLogEntry(): MessageOrCCLogEntry {
+		const message: MessageRecord = {
+			sequenceNumber: this.sequenceNumber,
+		};
+		if (this.extensions.length > 0) {
+			message.extensions = this.extensions
+				.map((e) => e.toLogEntry())
+				.join("");
+		}
+		return {
+			...super.toLogEntry(),
+			message,
+		};
+	}
 }
 
-type Security2CCNonceReportOptions = CCCommandOptions & {
-	sequenceNumber: number;
-} & (
-		| {
-				MOS: boolean;
-				SOS: true;
-				receiverEI: Buffer;
-		  }
-		| {
-				MOS: true;
-				SOS: false;
-				receiverEI?: undefined;
-		  }
-	);
+export type Security2CCNonceReportOptions =
+	| {
+			MOS: boolean;
+			SOS: true;
+			receiverEI: Buffer;
+	  }
+	| {
+			MOS: true;
+			SOS: false;
+			receiverEI?: undefined;
+	  };
 
 @CCCommand(Security2Command.NonceReport)
 export class Security2CCNonceReport extends Security2CC {
@@ -328,12 +646,18 @@ export class Security2CCNonceReport extends Security2CC {
 		driver: Driver,
 		options:
 			| CommandClassDeserializationOptions
-			| Security2CCNonceReportOptions,
+			| (CCCommandOptions & Security2CCNonceReportOptions),
 	) {
 		super(driver, options);
+
+		// Make sure that we can send/receive secure commands
+		assertSecurity.call(this, options);
+
 		if (gotDeserializationOptions(options)) {
 			validatePayload(this.payload.length >= 2);
-			this.sequenceNumber = this.payload[0];
+			this._sequenceNumber = this.payload[0];
+			// Don't accept duplicate commands
+			validateSequenceNumber.call(this, this._sequenceNumber);
 
 			this.MOS = !!(this.payload[1] & 0b10);
 			this.SOS = !!(this.payload[1] & 0b1);
@@ -343,16 +667,38 @@ export class Security2CCNonceReport extends Security2CC {
 				// If the SOS flag is set, the REI field MUST be included in the command
 				validatePayload(this.payload.length >= 18);
 				this.receiverEI = this.payload.slice(2, 18);
+
+				// In that case we also need to store it, so the next sent command
+				// can use it for encryption
+				this.driver.securityManager2!.storeRemoteEI(
+					this.nodeId as number,
+					this.receiverEI,
+				);
 			}
 		} else {
-			this.sequenceNumber = options.sequenceNumber;
 			this.SOS = options.SOS;
 			this.MOS = options.MOS;
 			if (options.SOS) this.receiverEI = options.receiverEI;
 		}
 	}
 
-	public readonly sequenceNumber: number;
+	private _sequenceNumber: number | undefined;
+	/**
+	 * Return the sequence number of this command.
+	 *
+	 * **WARNING:** If the sequence number hasn't been set before, this will create a new one.
+	 * When sending messages, this should only happen immediately before serializing.
+	 */
+	public get sequenceNumber(): number {
+		if (this._sequenceNumber == undefined) {
+			this._sequenceNumber =
+				this.driver.securityManager2!.nextSequenceNumber(
+					this.nodeId as number,
+				);
+		}
+		return this._sequenceNumber;
+	}
+
 	public readonly SOS: boolean;
 	public readonly MOS: boolean;
 	public readonly receiverEI?: Buffer;
@@ -369,32 +715,44 @@ export class Security2CCNonceReport extends Security2CC {
 	}
 }
 
-interface Security2CCNonceGetOptions extends CCCommandOptions {
-	sequenceNumber: number;
-}
-
 @CCCommand(Security2Command.NonceGet)
 @expectedCCResponse(Security2CCNonceReport)
 export class Security2CCNonceGet extends Security2CC {
 	// TODO: A node sending this command MUST accept a delay up to <Previous Round-trip-time to peer node> +
 	// 250 ms before receiving the Security 2 Nonce Report Command.
 
-	public constructor(
-		driver: Driver,
-		options:
-			| CommandClassDeserializationOptions
-			| Security2CCNonceGetOptions,
-	) {
+	public constructor(driver: Driver, options: CCCommandOptions) {
 		super(driver, options);
+
+		// Make sure that we can send/receive secure commands
+		assertSecurity.call(this, options);
+
 		if (gotDeserializationOptions(options)) {
 			validatePayload(this.payload.length >= 1);
-			this.sequenceNumber = this.payload[0];
+			this._sequenceNumber = this.payload[0];
+			// Don't accept duplicate commands
+			validateSequenceNumber.call(this, this._sequenceNumber);
 		} else {
-			this.sequenceNumber = options.sequenceNumber;
+			// No options here
 		}
 	}
 
-	public sequenceNumber: number;
+	private _sequenceNumber: number | undefined;
+	/**
+	 * Return the sequence number of this command.
+	 *
+	 * **WARNING:** If the sequence number hasn't been set before, this will create a new one.
+	 * When sending messages, this should only happen immediately before serializing.
+	 */
+	public get sequenceNumber(): number {
+		if (this._sequenceNumber == undefined) {
+			this._sequenceNumber =
+				this.driver.securityManager2!.nextSequenceNumber(
+					this.nodeId as number,
+				);
+		}
+		return this._sequenceNumber;
+	}
 
 	public serialize(): Buffer {
 		this.payload = Buffer.from([this.sequenceNumber]);
@@ -419,7 +777,7 @@ export class Security2CCKEXReport extends Security2CC {
 		);
 		this.requestedKeys = parseBitMask(
 			this.payload.slice(3, 4),
-			SecurityClasses.S2_Unauthenticated,
+			SecurityClass.S2_Unauthenticated,
 		);
 	}
 
@@ -427,7 +785,7 @@ export class Security2CCKEXReport extends Security2CC {
 	public readonly echo: boolean;
 	public readonly supportedKEXSchemes: readonly KEXSchemes[];
 	public readonly supportedECDHProfiles: readonly ECDHProfiles[];
-	public readonly requestedKeys: readonly SecurityClasses[];
+	public readonly requestedKeys: readonly SecurityClass[];
 }
 
 @CCCommand(Security2Command.KEXGet)
@@ -439,7 +797,7 @@ interface Security2CCKEXSetOptions extends CCCommandOptions {
 	echo: boolean;
 	supportedKEXSchemes: KEXSchemes[];
 	supportedECDHProfiles: ECDHProfiles[];
-	requestedKeys: SecurityClasses[];
+	requestedKeys: SecurityClass[];
 }
 
 @CCCommand(Security2Command.KEXSet)
@@ -468,7 +826,7 @@ export class Security2CCKEXSet extends Security2CC {
 	public echo: boolean;
 	public selectedKEXSchemes: KEXSchemes[];
 	public selectedECDHProfiles: ECDHProfiles[];
-	public grantedKeys: SecurityClasses[];
+	public grantedKeys: SecurityClass[];
 
 	public serialize(): Buffer {
 		this.payload = Buffer.concat([
@@ -481,8 +839,8 @@ export class Security2CCKEXSet extends Security2CC {
 			),
 			encodeBitMask(
 				this.grantedKeys,
-				SecurityClasses.S0_Legacy,
-				SecurityClasses.S2_Unauthenticated,
+				SecurityClass.S0_Legacy,
+				SecurityClass.S2_Unauthenticated,
 			),
 		]);
 		return super.serialize();
@@ -553,7 +911,7 @@ export class Security2CCPublicKeyReport extends Security2CC {
 }
 
 interface Security2CCNetworkKeyReportOptions extends CCCommandOptions {
-	grantedKey: SecurityClasses;
+	grantedKey: SecurityClass;
 	networkKey: Buffer;
 }
 
@@ -578,7 +936,7 @@ export class Security2CCNetworkKeyReport extends Security2CC {
 		}
 	}
 
-	public grantedKey: SecurityClasses;
+	public grantedKey: SecurityClass;
 	public networkKey: Buffer;
 
 	public serialize(): Buffer {
@@ -591,7 +949,7 @@ export class Security2CCNetworkKeyReport extends Security2CC {
 }
 
 interface Security2CCNetworkKeyGetOptions extends CCCommandOptions {
-	requestedKey: SecurityClasses;
+	requestedKey: SecurityClass;
 }
 
 @CCCommand(Security2Command.NetworkKeyGet)
@@ -612,7 +970,7 @@ export class Security2CCNetworkKeyGet extends Security2CC {
 		}
 	}
 
-	public requestedKey: SecurityClasses;
+	public requestedKey: SecurityClass;
 
 	public serialize(): Buffer {
 		this.payload = securityClassToBitMask(this.requestedKey);

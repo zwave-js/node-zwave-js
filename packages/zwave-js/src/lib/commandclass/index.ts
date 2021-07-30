@@ -340,6 +340,23 @@ export {
 	SceneControllerConfigurationCCSet,
 } from "./SceneControllerConfigurationCC";
 export {
+	Security2CC,
+	Security2CCCommandsSupportedGet,
+	Security2CCCommandsSupportedReport,
+	Security2CCKEXFail,
+	Security2CCKEXGet,
+	Security2CCKEXReport,
+	Security2CCKEXSet,
+	Security2CCMessageEncapsulation,
+	Security2CCNetworkKeyGet,
+	Security2CCNetworkKeyReport,
+	Security2CCNetworkKeyVerify,
+	Security2CCNonceGet,
+	Security2CCNonceReport,
+	Security2CCPublicKeyReport,
+	Security2CCTransferEnd,
+} from "./Security2CC";
+export {
 	SecurityCC,
 	SecurityCCCommandEncapsulation,
 	SecurityCCCommandEncapsulationNonceGet,

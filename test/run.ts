@@ -2,6 +2,7 @@
 // import { Driver } from "../packages/zwave-js";
 
 // To test without Sentry reporting
+import { SecurityClass } from "@zwave-js/core";
 import path from "path";
 import "reflect-metadata";
 import { Driver } from "../packages/zwave-js/src/lib/driver/Driver";
@@ -11,16 +12,32 @@ process.on("unhandledRejection", (_r) => {
 });
 
 const driver = new Driver("COM5", {
-	// prettier-ignore
-	networkKey: Buffer.from([
-		1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16,
-	]),
+	securityKeys: {
+		S0_Legacy: Buffer.from("0102030405060708090a0b0c0d0e0f10", "hex"),
+		S2_Unauthenticated: Buffer.from(
+			"5F103E487B11BE72EE5ED3F6961B0B46",
+			"hex",
+		),
+		S2_Authenticated: Buffer.from(
+			"7666D813DEB4DD0FFDE089A38E883699",
+			"hex",
+		),
+		S2_AccessControl: Buffer.from(
+			"92901F4D820FF38A999A751914D1A2BA",
+			"hex",
+		),
+	},
 	storage: {
 		cacheDir: path.join(__dirname, "cache"),
 	},
 })
 	.on("error", console.error)
 	.once("driver ready", async () => {
+		// TODO: find a more elegant way to do this
+		driver.securityManager2?.assignSecurityClassSinglecast(31, [
+			SecurityClass.S2_Authenticated,
+			SecurityClass.S2_Unauthenticated,
+		]);
 		// driver.controller.on("statistics updated", (s) => {
 		// 	console.debug(s);
 		// });
