@@ -1294,6 +1294,7 @@ async function parseZWAProduct(
 		}
 
 		// By default, update existing properties with new descriptions
+		parsedParam["#"] = param.ParameterNumber.toString();
 		parsedParam.label = param.Name || parsedParam.label;
 		parsedParam.label = normalizeLabel(parsedParam.label);
 		parsedParam.description =
