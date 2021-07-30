@@ -113,9 +113,7 @@ export class SecurityManager2 {
 	public getHighestSecurityClassSinglecast(
 		nodeId: number,
 	): SecurityClass | undefined {
-		const securityClasses = this.nodeClasses.get(nodeId);
-		if (!securityClasses?.length) return undefined;
-		return getHighestSecurityClass(securityClasses);
+		return getHighestSecurityClass(this.nodeClasses.get(nodeId) ?? []);
 	}
 
 	public getKeys(options: {
@@ -153,22 +151,19 @@ export class SecurityManager2 {
 		return this.spanTable.get(peerNodeID) ?? { type: SPANState.None };
 	}
 
-	/** Prepares the generation of a new SPAN by creating a random sequence number and (local) entropy input */
-	public generateNonce(receiver: number): {
-		ownSequenceNumber: number;
-		receiverEI: Buffer;
-	} {
-		const ownSequenceNumber = crypto.randomInt(256);
+	/**
+	 * Prepares the generation of a new SPAN by creating a random sequence number and (local) entropy input
+	 * @param receiver The node this nonce is for. If none is given, the nonce is not stored.
+	 */
+	public generateNonce(receiver: number | undefined): Buffer {
 		const receiverEI = this.rng.generate(16);
-		this.ownSequenceNumbers.set(receiver, ownSequenceNumber);
-		this.spanTable.set(receiver, {
-			type: SPANState.LocalEI,
-			receiverEI,
-		});
-		return {
-			ownSequenceNumber,
-			receiverEI,
-		};
+		if (receiver != undefined) {
+			this.spanTable.set(receiver, {
+				type: SPANState.LocalEI,
+				receiverEI,
+			});
+		}
+		return receiverEI;
 	}
 
 	/** Invalidates the SPAN state for the given receiver */
@@ -227,6 +222,19 @@ export class SecurityManager2 {
 		sequenceNumber: number,
 	): void {
 		this.peerSequenceNumbers.set(peerNodeId, sequenceNumber);
+	}
+
+	public storeRemoteEI(peerNodeId: number, remoteEI: Buffer): void {
+		if (remoteEI.length !== 16) {
+			throw new ZWaveError(
+				`The entropy input must consist of 16 bytes`,
+				ZWaveErrorCodes.Argument_Invalid,
+			);
+		}
+		this.spanTable.set(peerNodeId, {
+			type: SPANState.RemoteEI,
+			receiverEI: remoteEI,
+		});
 	}
 
 	public nextNonce(peerNodeId: number): Buffer {

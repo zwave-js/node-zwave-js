@@ -1,5 +1,3 @@
-import { ZWaveError, ZWaveErrorCodes } from "../error/ZWaveError";
-
 export enum SecurityClass {
 	S2_Unauthenticated = 0,
 	S2_Authenticated = 1,
@@ -17,12 +15,8 @@ export const securityClassOrder = [
 
 export function getHighestSecurityClass(
 	securityClasses: SecurityClass[],
-): SecurityClass {
+): SecurityClass | undefined {
 	for (const cls of securityClassOrder) {
 		if (securityClasses.includes(cls)) return cls;
 	}
-	throw new ZWaveError(
-		"At least one valid SecurityClass must be given",
-		ZWaveErrorCodes.Argument_Invalid,
-	);
 }

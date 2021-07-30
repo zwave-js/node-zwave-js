@@ -47,7 +47,11 @@ import SerialPort from "serialport";
 import { URL } from "url";
 import * as util from "util";
 import { interpret } from "xstate";
-import { FirmwareUpdateStatus, Security2CCNonceReport } from "../commandclass";
+import {
+	FirmwareUpdateStatus,
+	Security2CC,
+	Security2CCNonceReport,
+} from "../commandclass";
 import {
 	assertValidCCs,
 	CommandClass,
@@ -2484,6 +2488,24 @@ ${handlers.length} left`,
 		}
 
 		// 5.
+
+		// When a node supports S2 and has a valid security class, the command
+		// must be S2-encapsulated
+		const node = msg.command.getNode();
+		if (node?.supportsCC(CommandClasses["Security 2"])) {
+			const securityClass =
+				this.securityManager2?.getHighestSecurityClassSinglecast(
+					node.id,
+				);
+			if (
+				securityClass != undefined &&
+				securityClass !== SecurityClass.S0_Legacy &&
+				Security2CC.requiresEncapsulation(msg.command)
+			) {
+				msg.command = Security2CC.encapsulate(this, msg.command);
+			}
+		}
+		// This check will return false for S2-encapsulated commands
 		if (SecurityCC.requiresEncapsulation(msg.command)) {
 			msg.command = SecurityCC.encapsulate(this, msg.command);
 		}

@@ -36,6 +36,7 @@ import {
 	gotDeserializationOptions,
 	implementedVersion,
 } from "./CommandClass";
+import { Security2CC } from "./Security2CC";
 
 // @noSetValueAPI This is an encapsulation CC
 
@@ -385,11 +386,12 @@ export class SecurityCC extends CommandClass {
 		this.interviewComplete = true;
 	}
 
-	/** Tests if a should be sent secure and thus requires encapsulation */
+	/** Tests if a command should be sent secure and thus requires encapsulation */
 	public static requiresEncapsulation(cc: CommandClass): boolean {
 		return (
 			cc.secure &&
 			// Already encapsulated (SecurityCCCommandEncapsulationNonceGet is a subclass)
+			!(cc instanceof Security2CC) &&
 			!(cc instanceof SecurityCCCommandEncapsulation) &&
 			// Cannot be sent encapsulated
 			!(cc instanceof SecurityCCNonceGet) &&
