@@ -160,6 +160,45 @@
 					"value": 1
 				}
 			]
+		},
+		"17": {
+			"$import": "~/0x0086/templates/aeotec_template.json#association_group_2_trigger",
+			"label": "Association Group 5: Trigger"
+		},
+		"18": {
+			"$import": "~/0x0086/templates/aeotec_template.json#association_group_2_command_type",
+			"label": "Association Group 5: Command Type"
+		},
+		"19": {
+			"$import": "~/0x0086/templates/aeotec_template.json#association_group_2_basic_set_on",
+			"label": "Association Group 5: Basic Set Value (On)"
+		},
+		"20": {
+			"$import": "~/0x0086/templates/aeotec_template.json#association_group_2_basic_set_off",
+			"label": "Association Group 5: Basic Set Value (Off)",
+			"defaultValue": 0
+		},
+		"21": {
+			"$import": "~/0x0086/templates/aeotec_template.json#tilt_sensor_sensitivity"
+		},
+		"22": {
+			"$import": "~/0x0086/templates/aeotec_template.json#enable_binary_report"
+		},
+		"23": {
+			"$import": "~/0x0086/templates/aeotec_template.json#low_battery_threshold",
+			"defaultValue": 20
+		},
+		"24": {
+			"$import": "~/templates/master_template.json#base_0-255_nounit",
+			"label": "Battery report interval",
+			"defaultValue": 24,
+			"unit": "hour",
+			"options": [
+				{
+					"label": "Disable",
+					"value": 0
+				}
+			]
 		}
 	},
 	"metadata": {
