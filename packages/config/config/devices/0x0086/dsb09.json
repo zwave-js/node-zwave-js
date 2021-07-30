@@ -208,5 +208,9 @@
 		"255": {
 			"$import": "templates/aeotec_template.json#factory_reset"
 		}
+	},
+	"compat": {
+		// This device reports compound values on the root endpoint
+		"preserveRootApplicationCCValueIDs": true
 	}
 }

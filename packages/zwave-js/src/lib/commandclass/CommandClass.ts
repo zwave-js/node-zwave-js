@@ -1080,7 +1080,6 @@ type APIConstructor = new (
 
 // eslint-disable-next-line @typescript-eslint/ban-types
 type TypedClassDecorator<TTarget extends Object> = <
-	// wotan-disable-next-line no-misused-generics
 	T extends TTarget,
 	TConstructor extends new (...args: any[]) => T,
 >(
@@ -1278,7 +1277,6 @@ function getCCCommand<T extends CommandClass>(cc: T): number | undefined {
 /**
  * Looks up the command class constructor for a given command class type and function type
  */
-// wotan-disable-next-line no-misused-generics
 function getCCCommandConstructor<TBase extends CommandClass>(
 	ccId: CommandClasses,
 	ccCommand: number,

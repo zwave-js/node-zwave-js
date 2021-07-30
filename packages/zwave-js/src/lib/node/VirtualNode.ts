@@ -147,7 +147,6 @@ export class VirtualNode extends VirtualEndpoint {
 
 	private get isMultiChannelInterviewComplete(): boolean {
 		for (const node of this.physicalNodes) {
-			// wotan-disable-next-line no-restricted-property-access
 			if (!node["isMultiChannelInterviewComplete"]) return false;
 		}
 		return true;

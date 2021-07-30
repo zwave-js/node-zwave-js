@@ -5,7 +5,6 @@ offerLintFix:
   # Define which linter outputs should be checked for auto-fixability
   linters:
     - eslint
-    - wotan
     - prettier
 
 # Check whether the resulting squash-commit will be semantic

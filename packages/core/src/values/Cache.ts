@@ -25,7 +25,6 @@ export function serializeCacheValue(value: unknown): SerializedValue {
 	if (value instanceof Map) {
 		// We mark maps with a special key, so they can be detected by the deserialization routine
 		return {
-			// wotan-disable-next-line no-duplicate-spread-property
 			...composeObject(
 				[...value.entries()].map(([k, v]) => [
 					k,

@@ -3,8 +3,6 @@ import * as semver from "semver";
 import { parse } from "./LogicParser";
 import { padVersion } from "./utils";
 
-// wotan-disable delete-only-optional-property
-
 function tryOr<T extends (...args: any[]) => any>(
 	operation: T,
 	onError: ReturnType<T>,

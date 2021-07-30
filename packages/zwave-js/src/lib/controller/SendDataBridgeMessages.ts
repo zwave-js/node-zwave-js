@@ -76,7 +76,6 @@ export class SendDataBridgeRequest<CCType extends CommandClass = CommandClass>
 			);
 		}
 
-		// wotan-disable-next-line no-useless-predicate
 		if (options.route && options.route.length !== 4) {
 			throw new ZWaveError(
 				`The route must consist of exactly 4 entries!`,

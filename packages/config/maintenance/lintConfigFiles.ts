@@ -17,9 +17,6 @@ import {
 import { parseLogic } from "../src/Logic";
 import { configDir, getDeviceEntryPredicate } from "../src/utils";
 
-/* wotan-disable no-useless-predicate */
-/* wotan-disable no-restricted-property-access */
-
 const configManager = new ConfigManager();
 
 async function lintNotifications(): Promise<void> {

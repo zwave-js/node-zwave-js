@@ -180,7 +180,6 @@ export class ManufacturerProprietaryCC extends CommandClass {
 	public manufacturerId!: number;
 
 	private assertManufacturerIdIsSet(): void {
-		// wotan-disable-next-line
 		if (this.manufacturerId == undefined) {
 			throw new ZWaveError(
 				`To use an instance of ManufacturerProprietaryCC, the manufacturer ID must be stored in the value DB`,

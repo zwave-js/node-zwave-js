@@ -766,7 +766,7 @@ export class ZWaveController extends TypedEventEmitter<ControllerEventCallbacks>
 	 */
 	public hardReset(): Promise<void> {
 		this.driver.controllerLog.print("performing hard reset...");
-		// wotan-disable-next-line async-function-assignability
+
 		return new Promise(async (resolve, reject) => {
 			// handle the incoming message
 			const handler: RequestHandler = (_msg) => {
@@ -2510,7 +2510,6 @@ ${associatedNodes.join(", ")}`,
 			endpoint.index > 0 ? `, endpoint ${endpoint.index}` : ""
 		}`;
 
-		let groupExistsAsMultiChannel = false;
 		// Split associations into conventional and endpoint associations
 		const nodeAssociations = distinct(
 			destinations
@@ -2523,23 +2522,79 @@ ${associatedNodes.join(", ")}`,
 
 		// Removing associations is not either/or - we could have a device with duplicated associations between
 		// Association CC and Multi Channel Association CC
+		// Figure out what we need to use to remove the associations
+
+		let groupExistsAsMultiChannel = false;
+		let groupExistsAsNodeAssociation = false;
+
+		let mcInstance: MultiChannelAssociationCC | undefined;
+		let assocInstance: AssociationCC | undefined;
+
+		// To remove a multi channel association, we need to make sure that the group exists
+		// and the node supports multi channel associations
 		if (endpoint.supportsCC(CommandClasses["Multi Channel Association"])) {
-			// Prefer multi channel associations
-			const cc =
+			mcInstance =
 				endpoint.createCCInstanceUnsafe<MultiChannelAssociationCC>(
 					CommandClasses["Multi Channel Association"],
 				)!;
-			if (group > cc.getGroupCountCached()) {
-				throw new ZWaveError(
-					`Group ${group} does not exist on node ${nodeAndEndpointString}`,
-					ZWaveErrorCodes.AssociationCC_InvalidGroup,
-				);
-			} else {
-				// Remember that the group exists as a multi channel group, otherwise the "normal" association code
-				// will throw if we try to remove the association from a non-existing "normal" group
+			if (group <= mcInstance.getGroupCountCached()) {
 				groupExistsAsMultiChannel = true;
 			}
+		} else if (endpointAssociations.length > 0) {
+			throw new ZWaveError(
+				`Node ${nodeAndEndpointString} does not support multi channel associations!`,
+				ZWaveErrorCodes.CC_NotSupported,
+			);
+		}
 
+		// To remove a normal association, we need to make sure that the group exists either as a normal association
+		// or as a multi channel association
+		if (endpoint.supportsCC(CommandClasses.Association)) {
+			assocInstance = endpoint.createCCInstanceUnsafe<AssociationCC>(
+				CommandClasses.Association,
+			)!;
+			if (group <= assocInstance.getGroupCountCached()) {
+				groupExistsAsNodeAssociation = true;
+			}
+		}
+
+		if (!mcInstance && !assocInstance) {
+			throw new ZWaveError(
+				`Node ${nodeAndEndpointString} does not support associations!`,
+				ZWaveErrorCodes.CC_NotSupported,
+			);
+		}
+
+		// Ensure the group exists and can be used
+		if (!groupExistsAsMultiChannel && !groupExistsAsNodeAssociation) {
+			throw new ZWaveError(
+				` Association group ${group} does not exist for node ${nodeAndEndpointString}`,
+				ZWaveErrorCodes.AssociationCC_InvalidGroup,
+			);
+		}
+		if (endpointAssociations.length > 0 && !groupExistsAsMultiChannel) {
+			throw new ZWaveError(
+				`Node ${nodeAndEndpointString}, association group ${group} does not support multi channel associations!`,
+				ZWaveErrorCodes.AssociationCC_InvalidGroup,
+			);
+		}
+
+		// Even if we only remove node associations, we use both CCs since it has been found that some
+		// devices do not correctly share the node list between the two commands
+		if (
+			assocInstance &&
+			nodeAssociations.length > 0 &&
+			groupExistsAsNodeAssociation
+		) {
+			await endpoint.commandClasses.Association.removeNodeIds({
+				groupId: group,
+				nodeIds: nodeAssociations,
+			});
+			// Refresh the association list
+			await endpoint.commandClasses.Association.getGroup(group);
+		}
+
+		if (mcInstance && groupExistsAsMultiChannel) {
 			await endpoint.commandClasses[
 				"Multi Channel Association"
 			].removeDestinations({
@@ -2550,38 +2605,6 @@ ${associatedNodes.join(", ")}`,
 			// Refresh the multi channel association list
 			await endpoint.commandClasses["Multi Channel Association"].getGroup(
 				group,
-			);
-		} else if (endpointAssociations.length > 0) {
-			throw new ZWaveError(
-				`Node ${nodeAndEndpointString} does not support multi channel associations!`,
-				ZWaveErrorCodes.CC_NotSupported,
-			);
-		}
-
-		if (endpoint.supportsCC(CommandClasses.Association)) {
-			// Use normal associations as a fallback
-			const cc = endpoint.createCCInstanceUnsafe<AssociationCC>(
-				CommandClasses.Association,
-			)!;
-			if (group > cc.getGroupCountCached()) {
-				// Don't throw if the group existed as multi channel - this branch is only a fallback
-				if (groupExistsAsMultiChannel) return;
-				throw new ZWaveError(
-					`Group ${group} does not exist on node ${nodeAndEndpointString}`,
-					ZWaveErrorCodes.AssociationCC_InvalidGroup,
-				);
-			}
-			// Remove the remaining node associations
-			await endpoint.commandClasses.Association.removeNodeIds({
-				groupId: group,
-				nodeIds: nodeAssociations,
-			});
-			// Refresh the association list
-			await endpoint.commandClasses.Association.getGroup(group);
-		} else if (nodeAssociations.length > 0) {
-			throw new ZWaveError(
-				`Node ${nodeAndEndpointString} does not support associations!`,
-				ZWaveErrorCodes.CC_NotSupported,
 			);
 		}
 	}

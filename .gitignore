@@ -20,6 +20,7 @@ coverage/
 zwave-js-*.tgz
 
 # ZWave cache
+*/cache
 packages/*/cache
 
 # Temporary (import) config files

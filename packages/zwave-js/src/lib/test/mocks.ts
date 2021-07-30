@@ -59,7 +59,6 @@ export function createEmptyMockDriver() {
 					endpointIndex: number = 0,
 				) => {
 					if (
-						// wotan-disable-next-line no-useless-predicate
 						ret.controller?.nodes instanceof Map &&
 						ret.controller.nodes.has(nodeId)
 					) {
