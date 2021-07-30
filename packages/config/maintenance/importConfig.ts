@@ -1279,12 +1279,11 @@ async function parseZWAProduct(
 	const parameters = product.ConfigurationParameters;
 
 	for (const param of parameters) {
-		const parsedParam = newConfig.paramInformation.find(
+		const found = newConfig.paramInformation.find(
 			(p: any) => p["#"] === param.ParameterNumber.toString(),
-		) ?? {};
+		);
 
-		// Skip processing if already importing a template
-		if (parsedParam.$import) continue;
+		const parsedParam = found ?? {};
 
 		// Skip parameter if a bitmask has already been defined
 		const tPattern = new RegExp("/^" + param.ParameterNumber.toString() + "\[/")
@@ -1294,7 +1293,6 @@ async function parseZWAProduct(
 			continue;
 		}
 
-		parsedParam["#"] = param.ParameterNumber.toString();
 		// By default, update existing properties with new descriptions
 		parsedParam.label = param.Name || parsedParam.label;
 		parsedParam.label = normalizeLabel(parsedParam.label);
@@ -1396,7 +1394,7 @@ async function parseZWAProduct(
 				}
 			}
 		}
-		newConfig.paramInformation.push(parsedParam);
+		if (!found) newConfig.paramInformation.push(parsedParam);
 	}
 
 	/********************************
