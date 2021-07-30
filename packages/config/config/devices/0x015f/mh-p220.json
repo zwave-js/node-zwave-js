@@ -10,6 +10,11 @@
 		},
 		{
 			"productType": "0x220a",
+			"productId": "0x5101",
+			"zwaveAllianceId": 3011
+		},
+		{
+			"productType": "0x220a",
 			"productId": "0x5102"
 		},
 		{
@@ -296,5 +301,11 @@
 				}
 			]
 		}
+	},
+	"metadata": {
+		"inclusion": "Add the device into Z-Wave network:\n1. Set controller into ADD mode. Follow the instructions provided by the controller/gateway manufacturer.\n2. Press the momentary button on the device 3 times, or the connected external button S1 3 times in quick succession. \nNote: If the ADD is successful, the INDICATION LED will blink 6 times. If not, INDICATION LED will be solid on or off depending on switch’s state.",
+		"exclusion": "Remove the device from Z-Wave network:\n1. Set controller into REMOVE mode. Follow the instructions provided by the controller/gateway manufacturer.\n2. Press the momentary button on the device 3 times, or the connected external button S1 3 times in quick succession. \nNote: If the REMOVE is successful, the INDICATION LED will blink 6 times. If not, INDICATION LED will be solid on or off depending on switch’s state.",
+		"reset": "Restoring Factory Settings:\nThe default configuration can be restored by:\n Sending commands through controller/gateway (the command classes which support this function is Configuration Command Class). The parameter are as follows:\n\nParameter Number 0xFF\nSize 1 BYTE\nDefault value N/A\nConfiguration value 0x55\nSet 0xFF as 0x55 will restore Factory Settings.\n\n Or press the inner button on the module 10 times in quick succession.Please use this procedure only when the network primary controller is missing or otherwise inoperable.",
+		"manual": "https://products.z-wavealliance.org/ProductManual/File?folder=&filename=MarketCertificationFiles/3011/MH-P220UserManual.pdf"
 	}
 }
