@@ -3401,10 +3401,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/pegjs@npm:^0.10.2":
-  version: 0.10.2
-  resolution: "@types/pegjs@npm:0.10.2"
-  checksum: fd3c71b0023d2096fccc6cf98d33d4545cb6170e0e7118fb1a8673be08add03a791daec2fa2fe9b2c6e12e5dd0343bc3e1e8651fba189d1a3ade24510c95002e
+"@types/pegjs@npm:^0.10.3":
+  version: 0.10.3
+  resolution: "@types/pegjs@npm:0.10.3"
+  checksum: b0301595d7d7da4de9f8edcc8a97ee55c959e74645dd49626bbaf344dd383e1491b43082d34c1f55048566fef21bf219a4b4743f770afbe80a390a3a33926b8a
   languageName: node
   linkType: hard
 
@@ -3649,7 +3649,7 @@ __metadata:
     "@types/js-levenshtein": ^1.1.0
     "@types/json-logic-js": ^1.2.1
     "@types/node": ^15.12.5
-    "@types/pegjs": ^0.10.2
+    "@types/pegjs": ^0.10.3
     "@types/semver": ^7.3.7
     "@types/xml2json": ^0.11.4
     "@types/yargs": ^16.0.4
