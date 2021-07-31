@@ -3842,7 +3842,7 @@ __metadata:
     piscina: ^3.1.0
     prettier: ^2.3.2
     reflect-metadata: ^0.1.13
-    ts-morph: ^11.0.0
+    ts-morph: ^11.0.3
     typescript: ^4.3.5
     yargs: ^16.2.0
   languageName: unknown
@@ -12418,13 +12418,13 @@ fsevents@^2.1.2:
   languageName: node
   linkType: hard
 
-"ts-morph@npm:^11.0.0":
-  version: 11.0.0
-  resolution: "ts-morph@npm:11.0.0"
+"ts-morph@npm:^11.0.3":
+  version: 11.0.3
+  resolution: "ts-morph@npm:11.0.3"
   dependencies:
-    "@ts-morph/common": ~0.10.0
+    "@ts-morph/common": ~0.10.1
     code-block-writer: ^10.1.1
-  checksum: 970322e031e0c4ec26d6e727934dd970528c6c7e9ab8b44df1855eb9ea9c2dfb44a90e09fcbd7da57eae479a4d530b360718a34efa7e2fa55128917825c6eee7
+  checksum: a59c17c317d8b26fd41d1933667e0deb058d04ad2c48b16afc261817f372d18c0fefe994788c243eeaa91bca782e4f1d6baaaf833c29cb7eaa55e616c9ae77cd
   languageName: node
   linkType: hard
 
