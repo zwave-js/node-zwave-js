@@ -57,22 +57,22 @@
 		"81": {
 			"$import": "templates/aeotec_template.json#led_indicator_three_options"
 		},
-		"83[0xff]": {
+		"83[0xff00]": {
 			"$import": "templates/aeotec_template.json#night_light_blue"
 		},
-		"83[0xff00]": {
+		"83[0xff0000]": {
 			"$import": "templates/aeotec_template.json#night_light_green"
 		},
-		"83[0xff0000]": {
+		"83[0xff000000]": {
 			"$import": "templates/aeotec_template.json#night_light_red"
 		},
-		"84[0xff]": {
+		"84[0xff00]": {
 			"$import": "templates/aeotec_template.json#night_light_green_brightness"
 		},
-		"84[0xff00]": {
+		"84[0xff0000]": {
 			"$import": "templates/aeotec_template.json#night_light_yellow_brightness"
 		},
-		"84[0xff0000]": {
+		"84[0xff000000]": {
 			"$import": "templates/aeotec_template.json#night_light_red_brightness"
 		},
 		"90": {
