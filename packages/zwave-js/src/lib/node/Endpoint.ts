@@ -529,8 +529,32 @@ export class Endpoint {
 
 			const mustUseNodeAssociation =
 				!supportsMultiChannel || assocConfig?.multiChannel === false;
-			const mustUseMultiChannelAssociation =
-				supportsMultiChannel && assocConfig?.multiChannel === true;
+			let mustUseMultiChannelAssociation = false;
+			if (supportsMultiChannel) {
+				if (assocConfig?.multiChannel === true) {
+					mustUseMultiChannelAssociation = true;
+				} else if (this.index === 0) {
+					// If the node has multiple endpoints but none of the extra ones support associations,
+					// the root endpoints needs a Multi Channel Association
+					const allEndpoints = node.getAllEndpoints();
+					if (
+						allEndpoints.length > 1 &&
+						allEndpoints
+							.filter((e) => e.index !== this.index)
+							.every(
+								(e) =>
+									!e.supportsCC(CommandClasses.Association) &&
+									!e.supportsCC(
+										CommandClasses[
+											"Multi Channel Association"
+										],
+									),
+							)
+					) {
+						mustUseMultiChannelAssociation = true;
+					}
+				}
+			}
 
 			// Figure out which associations exist and may need to be removed
 			const isAssignedAsNodeAssociation = (): boolean => {

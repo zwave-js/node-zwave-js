@@ -277,6 +277,8 @@ export class AssociationCC extends CommandClass {
 		return [
 			...super.determineRequiredCCInterviews(),
 			CommandClasses["Z-Wave Plus Info"],
+			// We need information about endpoints to correctly configure the lifeline associations
+			CommandClasses["Multi Channel"],
 		];
 	}
 
