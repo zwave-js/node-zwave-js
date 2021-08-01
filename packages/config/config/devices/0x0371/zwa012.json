@@ -69,19 +69,19 @@
 			"defaultValue": 0,
 			"options": [
 				{
-					"label": "Switch mode, OFF is CLOSED, ON is OPEN",
+					"label": "Switch mode",
 					"value": 0
 				},
 				{
-					"label": "Switch mode invert, ON is CLOSED, OFF is OPEN",
+					"label": "Switch mode inverted",
 					"value": 1
 				},
 				{
-					"label": "Momentary mode, toggle OPEN/CLOSE based on OFF to ON signal",
+					"label": "Momentary mode",
 					"value": 2
 				},
 				{
-					"label": "Momentary mode invert, toggle OPEN/CLOSE based on ON to OFF signal",
+					"label": "Momentary mode inverted",
 					"value": 3
 				}
 			]
@@ -91,11 +91,11 @@
 			"label": "State when magnet is close to sensor",
 			"options": [
 				{
-					"label": "Report closed when magnet is near",
+					"label": "Closed",
 					"value": 0
 				},
 				{
-					"label": "Report opened when magnet is near",
+					"label": "Opened",
 					"value": 1
 				}
 			]
@@ -149,14 +149,14 @@
 		},
 		"16": {
 			"$import": "~/0x0086/templates/aeotec_template.json#invert_state_report",
-			"label": "Tilt sensor polarity",
+			"label": "Tilt sensor polarity when sensor is vertical",
 			"options": [
 				{
-					"label": "OFF when sensor is vertical",
+					"label": "OFF",
 					"value": 0
 				},
 				{
-					"label": "ON when sensor is vertical",
+					"label": "ON",
 					"value": 1
 				}
 			]
