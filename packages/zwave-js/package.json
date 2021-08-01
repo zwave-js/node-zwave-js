@@ -73,7 +73,7 @@
     "serialport": "^9.2.0",
     "source-map-support": "^0.5.19",
     "winston": "^3.3.3",
-    "xstate": "^4.23.0"
+    "xstate": "^4.23.1"
   },
   "devDependencies": {
     "@types/fs-extra": "^9.0.12",
