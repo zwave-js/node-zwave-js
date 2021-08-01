@@ -3889,7 +3889,7 @@ __metadata:
     jest-extended: ^0.11.5
     lerna: ^4.0.0
     prettier: ^2.3.2
-    prettier-plugin-organize-imports: ^2.2.0
+    prettier-plugin-organize-imports: ^2.3.3
     reflect-metadata: ^0.1.13
     ts-node: ^10.1.0
     typescript: ^4.3.5
@@ -10660,13 +10660,13 @@ fsevents@^2.1.2:
   languageName: node
   linkType: hard
 
-"prettier-plugin-organize-imports@npm:^2.2.0":
-  version: 2.2.0
-  resolution: "prettier-plugin-organize-imports@npm:2.2.0"
+"prettier-plugin-organize-imports@npm:^2.3.3":
+  version: 2.3.3
+  resolution: "prettier-plugin-organize-imports@npm:2.3.3"
   peerDependencies:
     prettier: ">=2.0"
     typescript: ">=2.9"
-  checksum: 916801a4278627d32fb387edfeadad73b7245e511c983416e61bfd0c994b8e2bac427007bb623791a87f62a5f184e28a08568fa2cdb5910b4f9e3c9f62d5a5b0
+  checksum: 81a49744f3897e4724646b7dfdf3bd4f434f2ed2ddbe34c5b171179e255bda5fa23270f2d78fd1d52ede8fe084d3278c35fb8088a64d8818dd9e08e6ab6890b7
   languageName: node
   linkType: hard
 
