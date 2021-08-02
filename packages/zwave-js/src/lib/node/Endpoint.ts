@@ -756,52 +756,66 @@ export class Endpoint {
 			// we previously configured on the root.
 			if (
 				!hasLifeline &&
-				!mustUseNodeAssociation &&
 				group === 1 &&
 				node.supportsCC(CommandClasses["Z-Wave Plus Info"]) &&
 				this.index > 0
 			) {
-				const rootNodesValueId = getNodeIdsValueId(0, group);
-				const rootHasNodeAssociation = !!valueDB
-					.getValue<number[]>(rootNodesValueId)
-					?.some((a) => a === ownNodeId);
-				const rootEndpointsValueId = getEndpointsValueId(0, group);
-				const rootHasEndpointAssociation = !!valueDB
-					.getValue<EndpointAddress[]>(rootEndpointsValueId)
-					?.some((a) => a.nodeId === ownNodeId && a.endpoint === 0);
-				if (rootHasEndpointAssociation) {
-					// We already have the correct association
-					hasLifeline = true;
-					this.driver.controllerLog.logNode(node.id, {
-						endpoint: this.index,
-						message: `Lifeline group #${group} is assigned with a multi channel association on the root device`,
-						direction: "none",
-					});
-				} else {
-					const rootMCAPI =
-						node.commandClasses["Multi Channel Association"];
-					if (rootMCAPI.isSupported()) {
-						this.driver.controllerLog.logNode(node.id, {
-							endpoint: this.index,
-							message: `Assigning lifeline group #${group} with a multi channel association on the root device...`,
-							direction: "outbound",
-						});
-						// Clean up node associations because they might prevent us from adding the endpoint association
-						if (rootHasNodeAssociation) {
-							await rootMCAPI.removeDestinations({
-								groupId: group,
-								nodeIds: [ownNodeId],
-							});
-						}
-						await rootMCAPI.addDestinations({
-							groupId: group,
-							endpoints: [{ nodeId: ownNodeId, endpoint: 0 }],
-						});
-						// refresh the associations - don't trust that it worked
-						const groupReport = await rootMCAPI.getGroup(group);
-						hasLifeline = !!groupReport?.endpoints.some(
+				// But first check if the root may have a multi channel association
+				const rootAssocConfig =
+					node.deviceConfig?.getAssociationConfigForEndpoint(
+						0,
+						group,
+					);
+				const rootMustUseNodeAssociation =
+					!supportsMultiChannel ||
+					rootAssocConfig?.multiChannel === false;
+
+				if (!rootMustUseNodeAssociation) {
+					const rootNodesValueId = getNodeIdsValueId(0, group);
+					const rootHasNodeAssociation = !!valueDB
+						.getValue<number[]>(rootNodesValueId)
+						?.some((a) => a === ownNodeId);
+					const rootEndpointsValueId = getEndpointsValueId(0, group);
+					const rootHasEndpointAssociation = !!valueDB
+						.getValue<EndpointAddress[]>(rootEndpointsValueId)
+						?.some(
 							(a) => a.nodeId === ownNodeId && a.endpoint === 0,
 						);
+					if (rootHasEndpointAssociation) {
+						// We already have the correct association
+						hasLifeline = true;
+						this.driver.controllerLog.logNode(node.id, {
+							endpoint: this.index,
+							message: `Lifeline group #${group} is assigned with a multi channel association on the root device`,
+							direction: "none",
+						});
+					} else {
+						const rootMCAPI =
+							node.commandClasses["Multi Channel Association"];
+						if (rootMCAPI.isSupported()) {
+							this.driver.controllerLog.logNode(node.id, {
+								endpoint: this.index,
+								message: `Assigning lifeline group #${group} with a multi channel association on the root device...`,
+								direction: "outbound",
+							});
+							// Clean up node associations because they might prevent us from adding the endpoint association
+							if (rootHasNodeAssociation) {
+								await rootMCAPI.removeDestinations({
+									groupId: group,
+									nodeIds: [ownNodeId],
+								});
+							}
+							await rootMCAPI.addDestinations({
+								groupId: group,
+								endpoints: [{ nodeId: ownNodeId, endpoint: 0 }],
+							});
+							// refresh the associations - don't trust that it worked
+							const groupReport = await rootMCAPI.getGroup(group);
+							hasLifeline = !!groupReport?.endpoints.some(
+								(a) =>
+									a.nodeId === ownNodeId && a.endpoint === 0,
+							);
+						}
 					}
 				}
 			}
