@@ -5,7 +5,7 @@
 	Add placeholder for next release with `wip` snippet
   ## __WORK IN PROGRESS__
 -->
-## __WORK IN PROGRESS__
+## 8.0.7 (2021-08-02)
 ### Bugfixes
 Improved the heuristic for lifeline associations, which should resolve some reporting issues with devices:
 * If the root endpoint of a device is configured to use a node association, the fallback for the other endpoints no longer creates a multi channel association on the root endpoint

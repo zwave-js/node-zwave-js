@@ -3753,7 +3753,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@zwave-js/config@8.0.6, @zwave-js/config@workspace:*, @zwave-js/config@workspace:packages/config":
+"@zwave-js/config@8.0.7, @zwave-js/config@workspace:*, @zwave-js/config@workspace:packages/config":
   version: 0.0.0-use.local
   resolution: "@zwave-js/config@workspace:packages/config"
   dependencies:
@@ -3767,7 +3767,7 @@ __metadata:
     "@types/xml2json": ^0.11.4
     "@types/yargs": ^16.0.4
     "@zwave-js/core": 8.0.6
-    "@zwave-js/maintenance": 8.0.6
+    "@zwave-js/maintenance": 8.0.7
     "@zwave-js/shared": 8.0.3
     alcalzone-shared: ^4.0.0
     ansi-colors: ^4.1.1
@@ -3822,7 +3822,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@zwave-js/maintenance@8.0.6, @zwave-js/maintenance@workspace:packages/maintenance":
+"@zwave-js/maintenance@8.0.7, @zwave-js/maintenance@workspace:packages/maintenance":
   version: 0.0.0-use.local
   resolution: "@zwave-js/maintenance@workspace:packages/maintenance"
   dependencies:
@@ -3897,7 +3897,7 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@zwave-js/serial@8.0.6, @zwave-js/serial@workspace:packages/serial":
+"@zwave-js/serial@8.0.7, @zwave-js/serial@workspace:packages/serial":
   version: 0.0.0-use.local
   resolution: "@zwave-js/serial@workspace:packages/serial"
   dependencies:
@@ -13319,10 +13319,10 @@ typescript@^4.3.5:
     "@types/serialport": ^8.0.2
     "@types/source-map-support": ^0
     "@xstate/test": ^0.4.2
-    "@zwave-js/config": 8.0.6
+    "@zwave-js/config": 8.0.7
     "@zwave-js/core": 8.0.6
-    "@zwave-js/maintenance": 8.0.6
-    "@zwave-js/serial": 8.0.6
+    "@zwave-js/maintenance": 8.0.7
+    "@zwave-js/serial": 8.0.7
     "@zwave-js/shared": 8.0.3
     "@zwave-js/testing": 8.0.6
     alcalzone-shared: ^4.0.0
