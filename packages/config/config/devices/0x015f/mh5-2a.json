@@ -5,8 +5,8 @@
 	"description": "Fan Coil Thermostat",
 	"devices": [
 		{
-			"productType": "Need",
-			"productId": "Need"
+			"productType": "0xf501",
+			"productId": "0x7102",
 		}
 	],
 	"firmwareVersion": {
