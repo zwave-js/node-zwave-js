@@ -4,7 +4,6 @@ import { getEnumMemberName } from "@zwave-js/shared";
 import * as crypto from "crypto";
 import { ZWaveError, ZWaveErrorCodes } from "../error/ZWaveError";
 import { increment } from "./bufferUtils";
-import { getHighestSecurityClass, SecurityClass } from "./constants";
 import {
 	computeNoncePRK,
 	deriveMEI,
@@ -12,6 +11,11 @@ import {
 	encryptAES128ECB,
 } from "./crypto";
 import { CtrDRBG } from "./ctr_drbg";
+import {
+	getHighestSecurityClass,
+	SecurityClass,
+	SecurityClassOwner,
+} from "./SecurityClass";
 
 interface NetworkKeys {
 	pnk: Buffer;
@@ -72,8 +76,6 @@ export class SecurityManager2 {
 	private mpanStates = new Map<number, Buffer>();
 	/** A map of permanent network keys per security class */
 	private networkKeys = new Map<SecurityClass, NetworkKeys>();
-	/** Which node has been assigned which security classes */
-	private nodeClasses = new Map<number, SecurityClass[]>();
 	/** Which multicast group has been assigned which security class */
 	private groupClasses = new Map<number, SecurityClass>();
 
@@ -84,7 +86,10 @@ export class SecurityManager2 {
 				`The network key must consist of 16 bytes!`,
 				ZWaveErrorCodes.Argument_Invalid,
 			);
-		} else if (!(securityClass in SecurityClass)) {
+		} else if (
+			!(securityClass in SecurityClass) ||
+			securityClass === SecurityClass.None
+		) {
 			throw new ZWaveError(
 				`Invalid security class!`,
 				ZWaveErrorCodes.Argument_Invalid,
@@ -96,13 +101,6 @@ export class SecurityManager2 {
 		});
 	}
 
-	public assignSecurityClassSinglecast(
-		nodeId: number,
-		securityClasses: SecurityClass[],
-	): void {
-		this.nodeClasses.set(nodeId, securityClasses);
-	}
-
 	public assignSecurityClassMulticast(
 		group: number,
 		securityClass: SecurityClass,
@@ -111,21 +109,27 @@ export class SecurityManager2 {
 	}
 
 	public getHighestSecurityClassSinglecast(
-		nodeId: number,
+		owner: SecurityClassOwner,
 	): SecurityClass | undefined {
-		return getHighestSecurityClass(this.nodeClasses.get(nodeId) ?? []);
+		const securityClasses = [...owner.securityClasses]
+			.filter(([, hasClass]) => hasClass)
+			.map(([sec]) => sec);
+		return getHighestSecurityClass(securityClasses);
 	}
 
 	public getKeys(options: {
-		nodeId: number;
+		node: SecurityClassOwner;
 	}): NetworkKeys & { securityClass: SecurityClass } {
-		const securityClass = this.getHighestSecurityClassSinglecast(
-			options.nodeId,
-		);
-		if (!securityClass) {
+		const securityClass = options.node.getHighestSecurityClass();
+		if (securityClass == undefined) {
 			throw new ZWaveError(
-				`Node ${options.nodeId} has not been assigned to a security class yet!`,
+				`Node ${options.node.id} has not been assigned to a security class yet!`,
 				ZWaveErrorCodes.Security2CC_NotInitialized,
+			);
+		} else if (securityClass === SecurityClass.None) {
+			throw new ZWaveError(
+				`Node ${options.node.id} does not have any security class!`,
+				ZWaveErrorCodes.Security2CC_NotSecure,
 			);
 		}
 
@@ -175,7 +179,7 @@ export class SecurityManager2 {
 
 	/** Initializes the singlecast PAN generator for a given node based on the given entropy inputs */
 	public initializeSPAN(
-		receiver: number,
+		peer: SecurityClassOwner,
 		senderEI: Buffer,
 		receiverEI: Buffer,
 	): void {
@@ -184,19 +188,14 @@ export class SecurityManager2 {
 				`The entropy input must consist of 16 bytes`,
 				ZWaveErrorCodes.Argument_Invalid,
 			);
-		} else if (!this.nodeClasses.has(receiver)) {
-			throw new ZWaveError(
-				`Node ${receiver} has not been assigned to a security class yet!`,
-				ZWaveErrorCodes.Security2CC_NotInitialized,
-			);
 		}
 
-		const { securityClass, ...keys } = this.getKeys({ nodeId: receiver });
+		const { securityClass, ...keys } = this.getKeys({ node: peer });
 
 		const noncePRK = computeNoncePRK(senderEI, receiverEI);
 		const MEI = deriveMEI(noncePRK);
 
-		this.spanTable.set(receiver, {
+		this.spanTable.set(peer.id, {
 			securityClass,
 			type: SPANState.SPAN,
 			rng: new CtrDRBG(

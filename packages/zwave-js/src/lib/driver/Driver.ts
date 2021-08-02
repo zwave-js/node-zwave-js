@@ -2301,7 +2301,7 @@ ${handlers.length} left`,
 				(msg.command.ccId === CommandClasses.Security ||
 					msg.command.isEncapsulatedWith(CommandClasses.Security))
 			) {
-				node.isSecure = true;
+				node.securityClasses.set(SecurityClass.S0_Legacy, true);
 				// Force a new interview
 				void node.refreshInfo();
 			}
@@ -2493,10 +2493,7 @@ ${handlers.length} left`,
 		// must be S2-encapsulated
 		const node = msg.command.getNode();
 		if (node?.supportsCC(CommandClasses["Security 2"])) {
-			const securityClass =
-				this.securityManager2?.getHighestSecurityClassSinglecast(
-					node.id,
-				);
+			const securityClass = node.getHighestSecurityClass();
 			if (
 				securityClass != undefined &&
 				securityClass !== SecurityClass.S0_Legacy &&

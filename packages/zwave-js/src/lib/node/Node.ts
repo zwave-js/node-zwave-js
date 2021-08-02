@@ -12,6 +12,7 @@ import {
 	CommandClassInfo,
 	CRC16_CCITT,
 	getCCName,
+	getHighestSecurityClass,
 	isTransmissionError,
 	isZWaveError,
 	Maybe,
@@ -19,6 +20,9 @@ import {
 	NodeUpdatePayload,
 	nonApplicationCCs,
 	normalizeValueID,
+	SecurityClass,
+	securityClassOrder,
+	SecurityClassOwner,
 	sensorCCs,
 	timespan,
 	topologicalSort,
@@ -181,7 +185,7 @@ export interface ZWaveNode
  * of its root endpoint (index 0)
  */
 @Mixin([EventEmitter, NodeStatisticsHost])
-export class ZWaveNode extends Endpoint {
+export class ZWaveNode extends Endpoint implements SecurityClassOwner {
 	public constructor(
 		public readonly id: number,
 		driver: Driver,
@@ -490,12 +494,27 @@ export class ZWaveNode extends Endpoint {
 		}
 	}
 
-	private _isSecure: Maybe<boolean> | undefined;
-	public get isSecure(): Maybe<boolean> | undefined {
-		return this._isSecure;
+	public readonly securityClasses = new Map<SecurityClass, boolean>();
+
+	/** Whether the node was granted at least one security class */
+	public get isSecure(): Maybe<boolean> {
+		const securityClass = this.getHighestSecurityClass();
+		if (securityClass == undefined) return unknownBoolean;
+		if (securityClass === SecurityClass.None) return false;
+		return true;
 	}
-	public set isSecure(value: Maybe<boolean> | undefined) {
-		this._isSecure = value;
+
+	public hasSecurityClass(securityClass: SecurityClass): Maybe<boolean> {
+		return this.securityClasses.get(securityClass) ?? unknownBoolean;
+	}
+
+	/** Returns the highest security class this node was granted or `undefined` if that information isn't known yet */
+	public getHighestSecurityClass(): SecurityClass | undefined {
+		if (this.securityClasses.size === 0) return undefined;
+		const securityClasses = [...this.securityClasses]
+			.filter(([, hasClass]) => hasClass)
+			.map(([sec]) => sec);
+		return getHighestSecurityClass(securityClasses);
 	}
 
 	private _protocolVersion: ProtocolVersion | undefined;
@@ -1131,7 +1150,6 @@ export class ZWaveNode extends Endpoint {
 		this._isFrequentListening = undefined;
 		this._isRouting = undefined;
 		this._supportedDataRates = undefined;
-		this._isSecure = undefined;
 		this._protocolVersion = undefined;
 		this._nodeType = undefined;
 		this._supportsSecurity = undefined;
@@ -1293,7 +1311,6 @@ export class ZWaveNode extends Endpoint {
 		this._nodeType = resp.nodeType;
 		this._supportsSecurity = resp.supportsSecurity;
 		this._supportsBeaming = resp.supportsBeaming;
-		this._isSecure = unknownBoolean;
 
 		this.applyDeviceClass(resp.deviceClass);
 
@@ -1524,16 +1541,16 @@ protocol version:      ${this._protocolVersion}`;
 		// Always interview Security first because it changes the interview order
 		if (
 			this.supportsCC(CommandClasses.Security) &&
-			// At this point we're not sure if the node is included securely
-			this._isSecure !== false
+			// At this point we're not sure if the node is included with S0
+			this.hasSecurityClass(SecurityClass.S0_Legacy) !== false
 		) {
-			// Security is always supported *securely*
+			// Security S0 is always supported *securely*
 			this.addCC(CommandClasses.Security, { secure: true });
 
 			if (!this.driver.securityManager) {
 				if (!this._hasEmittedNoNetworkKeyError) {
 					// Cannot interview a secure device securely without a network key
-					const errorMessage = `supports Security, but no network key was configured. Continuing interview non-securely.`;
+					const errorMessage = `supports Security S0, but no network key was configured. Continuing interview non-securely.`;
 					this.driver.controllerLog.logNode(
 						this.nodeId,
 						errorMessage,
@@ -1557,10 +1574,10 @@ protocol version:      ${this._protocolVersion}`;
 			}
 		} else if (
 			!this.supportsCC(CommandClasses.Security) &&
-			this._isSecure === unknownBoolean
+			this.hasSecurityClass(SecurityClass.S0_Legacy) === unknownBoolean
 		) {
-			// Remember that this node is not secure
-			this._isSecure = false;
+			// Remember that this node hasn't been granted the S0 security class
+			this.securityClasses.set(SecurityClass.S0_Legacy, false);
 		}
 
 		// Manufacturer Specific and Version CC need to be handled before the other CCs because they are needed to
@@ -1650,8 +1667,8 @@ protocol version:      ${this._protocolVersion}`;
 			// Always interview Security first because it changes the interview order
 			if (
 				endpoint.supportsCC(CommandClasses.Security) &&
-				// The root endpoint has been interviewed, so we know it the device supports security
-				this._isSecure === true &&
+				// The root endpoint has been interviewed, so we know if the device supports security
+				this.hasSecurityClass(SecurityClass.S0_Legacy) === true &&
 				// Only interview SecurityCC if the network key was set
 				this.driver.securityManager
 			) {
@@ -3304,9 +3321,16 @@ protocol version:      ${this._protocolVersion}`;
 					: undefined,
 			supportsSecurity: this.supportsSecurity,
 			supportsBeaming: this.supportsBeaming,
-			isSecure: this.isSecure ?? unknownBoolean,
+			securityClasses: {} as JSONObject,
 			commandClasses: {} as JSONObject,
 		};
+		// Save security classes where they are known
+		for (const secClass of securityClassOrder) {
+			const hasClass = this.hasSecurityClass(secClass);
+			if (typeof hasClass === "boolean") {
+				ret.securityClasses[SecurityClass[secClass]] = hasClass;
+			}
+		}
 		// Sort the CCs by their key before writing to the object
 		const sortedCCs = [...this.implementedCommandClasses.keys()].sort(
 			(a, b) => Math.sign(a - b),
@@ -3387,9 +3411,21 @@ protocol version:      ${this._protocolVersion}`;
 			this._isFrequentListening = "1000ms";
 		}
 		tryParse("isRouting", "boolean");
-		// isSecure may be boolean or "unknown"
-		tryParse("isSecure", "string");
-		tryParse("isSecure", "boolean");
+		// Parse security classes
+		if (isObject(obj.securityClasses)) {
+			for (const [key, val] of Object.entries(obj.securityClasses)) {
+				if (
+					key in SecurityClass &&
+					typeof (SecurityClass as any)[key] === "number" &&
+					typeof val === "boolean"
+				) {
+					this.securityClasses.set((SecurityClass as any)[key], val);
+				}
+			}
+		} else if (typeof obj.isSecure === "boolean") {
+			// Fallback to "isSecure" for legacy cache files
+			this.securityClasses.set(SecurityClass.S0_Legacy, obj.isSecure);
+		}
 		tryParse("supportsSecurity", "boolean");
 		tryParse("supportsBeaming", "boolean");
 		tryParseLegacy(["supportsBeaming", "isBeaming"], ["string"]);

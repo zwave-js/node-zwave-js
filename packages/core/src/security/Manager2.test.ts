@@ -1,8 +1,8 @@
 import * as crypto from "crypto";
 import { ZWaveErrorCodes } from "../error/ZWaveError";
 import { assertZWaveError } from "../test/assertZWaveError";
-import { SecurityClass } from "./constants";
 import { SecurityManager2 } from "./Manager2";
+import { SecurityClass, SecurityClassOwner } from "./SecurityClass";
 
 describe("lib/security/Manager2", () => {
 	// beforeAll(() => {
@@ -14,6 +14,19 @@ describe("lib/security/Manager2", () => {
 	// 	jest.useRealTimers();
 	// });
 
+	function makeNode(
+		nodeId: number = 2,
+		secClass?: SecurityClass,
+	): SecurityClassOwner {
+		return {
+			getHighestSecurityClass: () => secClass,
+			id: nodeId,
+			hasSecurityClass: (s) => s === secClass,
+			securityClasses:
+				secClass != undefined ? new Map([[secClass, true]]) : new Map(),
+		};
+	}
+
 	function dummyInit(
 		man: SecurityManager2,
 		options: {
@@ -22,7 +35,7 @@ describe("lib/security/Manager2", () => {
 			secClass?: SecurityClass;
 			multicastGroup?: number;
 		} = {},
-	): void {
+	): SecurityClassOwner {
 		if (options.keys !== false) {
 			man.setKey(SecurityClass.S0_Legacy, crypto.randomBytes(16));
 			man.setKey(SecurityClass.S2_AccessControl, crypto.randomBytes(16));
@@ -32,12 +45,10 @@ describe("lib/security/Manager2", () => {
 				crypto.randomBytes(16),
 			);
 		}
+		const node = makeNode(options.nodeId, options.secClass);
 		if (options.nodeId) {
-			man.assignSecurityClassSinglecast(options.nodeId, [
-				options.secClass ?? SecurityClass.S2_Authenticated,
-			]);
 			man.initializeSPAN(
-				options.nodeId,
+				node,
 				crypto.randomBytes(16),
 				crypto.randomBytes(16),
 			);
@@ -49,6 +60,7 @@ describe("lib/security/Manager2", () => {
 			);
 			man.initializeMPAN(options.multicastGroup);
 		}
+		return node;
 	}
 
 	describe("nextNonce", () => {
@@ -62,7 +74,10 @@ describe("lib/security/Manager2", () => {
 
 		it("should generate a 13-byte nonce otherwise", () => {
 			const man = new SecurityManager2();
-			dummyInit(man, { nodeId: 2 });
+			dummyInit(man, {
+				nodeId: 2,
+				secClass: SecurityClass.S2_AccessControl,
+			});
 
 			const ret = man.nextNonce(2);
 			expect(Buffer.isBuffer(ret)).toBeTrue();
@@ -71,7 +86,10 @@ describe("lib/security/Manager2", () => {
 
 		it("two nonces should be different", () => {
 			const man = new SecurityManager2();
-			dummyInit(man, { nodeId: 2 });
+			dummyInit(man, {
+				nodeId: 2,
+				secClass: SecurityClass.S2_AccessControl,
+			});
 
 			const nonce1 = man.nextNonce(2);
 			const nonce2 = man.nextNonce(2);
@@ -82,8 +100,14 @@ describe("lib/security/Manager2", () => {
 	describe("initializeSPAN", () => {
 		it("should throw if either entropy input does not have length 16", () => {
 			const man = new SecurityManager2();
+			const node = makeNode(2);
 			assertZWaveError(
-				() => man.initializeSPAN(2, Buffer.alloc(15), Buffer.alloc(16)),
+				() =>
+					man.initializeSPAN(
+						node,
+						Buffer.alloc(15),
+						Buffer.alloc(16),
+					),
 				{
 					errorCode: ZWaveErrorCodes.Argument_Invalid,
 					messageMatches: "16 bytes",
@@ -91,7 +115,8 @@ describe("lib/security/Manager2", () => {
 			);
 
 			assertZWaveError(
-				() => man.initializeSPAN(2, Buffer.alloc(16), Buffer.alloc(1)),
+				() =>
+					man.initializeSPAN(node, Buffer.alloc(16), Buffer.alloc(1)),
 				{
 					errorCode: ZWaveErrorCodes.Argument_Invalid,
 					messageMatches: "16 bytes",
@@ -99,10 +124,16 @@ describe("lib/security/Manager2", () => {
 			);
 		});
 
-		it("should throw if the node has not been assigned to a security class", () => {
+		it("should throw if the node has not been assigned a security class", () => {
 			const man = new SecurityManager2();
+			const node = makeNode(2);
 			assertZWaveError(
-				() => man.initializeSPAN(2, Buffer.alloc(16), Buffer.alloc(16)),
+				() =>
+					man.initializeSPAN(
+						node,
+						Buffer.alloc(16),
+						Buffer.alloc(16),
+					),
 				{
 					errorCode: ZWaveErrorCodes.Security2CC_NotInitialized,
 					messageMatches: "security class",
@@ -112,11 +143,14 @@ describe("lib/security/Manager2", () => {
 
 		it("should throw if the keys for the node's security class have not been set up", () => {
 			const man = new SecurityManager2();
-			man.assignSecurityClassSinglecast(2, [
-				SecurityClass.S2_Authenticated,
-			]);
+			const node = makeNode(2, SecurityClass.S2_Authenticated);
 			assertZWaveError(
-				() => man.initializeSPAN(2, Buffer.alloc(16), Buffer.alloc(16)),
+				() =>
+					man.initializeSPAN(
+						node,
+						Buffer.alloc(16),
+						Buffer.alloc(16),
+					),
 				{
 					errorCode: ZWaveErrorCodes.Security2CC_NotInitialized,
 					messageMatches: "network key",
@@ -126,9 +160,12 @@ describe("lib/security/Manager2", () => {
 
 		it("should not throw otherwise", () => {
 			const man = new SecurityManager2();
-			dummyInit(man, { nodeId: 2 });
+			const node = dummyInit(man, {
+				nodeId: 2,
+				secClass: SecurityClass.S2_Authenticated,
+			});
 			expect(() =>
-				man.initializeSPAN(2, Buffer.alloc(16), Buffer.alloc(16)),
+				man.initializeSPAN(node, Buffer.alloc(16), Buffer.alloc(16)),
 			).not.toThrow();
 		});
 	});
