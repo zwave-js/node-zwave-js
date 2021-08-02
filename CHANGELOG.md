@@ -5,6 +5,17 @@
 	Add placeholder for next release with `wip` snippet
   ## __WORK IN PROGRESS__
 -->
+## __WORK IN PROGRESS__
+### Bugfixes
+Improved the heuristic for lifeline associations, which should resolve some reporting issues with devices:
+* If the root endpoint of a device is configured to use a node association, the fallback for the other endpoints no longer creates a multi channel association on the root endpoint
+* If the endpoints of a multi channel device don't support associations, the default lifeline on the root device will be configured as a multi channel association
+
+### Config file changes
+* Correct values sizes for zw096/zw099
+* Correct device file for Ecolink ISZW7
+* Preserve root endpoint values for Aeotec DSB09
+
 ## 8.0.6 (2021-07-28)
 ### Bugfixes
 * The detection whether a config file is considered embedded or user-provided now takes `ZWAVEJS_EXTERNAL_CONFIG` into account.
