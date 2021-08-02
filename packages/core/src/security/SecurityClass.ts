@@ -1,4 +1,7 @@
+import type { Maybe } from "../values/Primitive";
+
 export enum SecurityClass {
+	None = -1,
 	S2_Unauthenticated = 0,
 	S2_Authenticated = 1,
 	S2_AccessControl = 2,
@@ -13,10 +16,18 @@ export const securityClassOrder = [
 	SecurityClass.S0_Legacy,
 ] as const;
 
+export interface SecurityClassOwner {
+	readonly id: number;
+	readonly securityClasses: Map<SecurityClass, boolean>;
+	getHighestSecurityClass(): SecurityClass | undefined;
+	hasSecurityClass(securityClass: SecurityClass): Maybe<boolean>;
+}
+
 export function getHighestSecurityClass(
 	securityClasses: SecurityClass[],
-): SecurityClass | undefined {
+): SecurityClass {
 	for (const cls of securityClassOrder) {
 		if (securityClasses.includes(cls)) return cls;
 	}
+	return SecurityClass.None;
 }

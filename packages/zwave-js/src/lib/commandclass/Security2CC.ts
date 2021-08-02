@@ -10,12 +10,14 @@ import {
 	parseBitMask,
 	parseCCList,
 	SecurityClass,
+	SecurityManager2,
 	SECURITY_S2_AUTH_TAG_LENGTH,
 	SPANState,
 	validatePayload,
 	ZWaveError,
 	ZWaveErrorCodes,
 } from "@zwave-js/core";
+import type { ZWaveController } from "../controller/Controller";
 import { SendDataBridgeRequest } from "../controller/SendDataBridgeMessages";
 import { SendDataRequest } from "../controller/SendDataMessages";
 import { TransmitOptions } from "../controller/SendDataShared";
@@ -236,7 +238,7 @@ export class Security2CC extends CommandClass {
 	/** Tests if a command should be sent secure and thus requires encapsulation */
 	public static requiresEncapsulation(cc: CommandClass): boolean {
 		// Everything that's not an S2 CC needs to be encapsulated if the CC is secure
-		if (!cc.secure) return true;
+		if (!cc.secure) return false;
 		if (!(cc instanceof Security2CC)) return true;
 		// These S2 commands need additional encapsulation
 		switch (cc.ccCommand) {
@@ -273,7 +275,6 @@ function getCCResponseForMessageEncapsulation(
 	if (sent.encapsulated?.expectsCCResponse()) {
 		return Security2CCMessageEncapsulation;
 	}
-	// TODO: Do some extensions expect a response?
 }
 
 @CCCommand(Security2Command.MessageEncapsulation)
@@ -282,6 +283,15 @@ function getCCResponseForMessageEncapsulation(
 	() => "checkEncapsulated",
 )
 export class Security2CCMessageEncapsulation extends Security2CC {
+	// Define the securityManager and controller.ownNodeId as existing
+	// We check it in the constructor
+	declare driver: Driver & {
+		securityManager2: SecurityManager2;
+		controller: ZWaveController & {
+			ownNodeId: number;
+		};
+	};
+
 	public constructor(
 		driver: Driver,
 		options:
@@ -303,10 +313,11 @@ export class Security2CCMessageEncapsulation extends Security2CC {
 
 			// Ensure the node has a security class
 			const peerNodeID = this.nodeId as number;
+			const node = this.getNode()!;
+			const securityClass = node.getHighestSecurityClass();
 			validatePayload.withReason("No security class granted")(
-				this.driver.securityManager2!.getHighestSecurityClassSinglecast(
-					peerNodeID,
-				) != undefined,
+				securityClass != undefined &&
+					securityClass !== SecurityClass.None,
 			);
 
 			const hasExtensions = !!(this.payload[1] & 0b1);
@@ -335,7 +346,7 @@ export class Security2CCMessageEncapsulation extends Security2CC {
 			if (hasExtensions) parseExtensions(this.payload);
 
 			const spanState =
-				this.driver.securityManager2!.getSPANState(peerNodeID);
+				this.driver.securityManager2.getSPANState(peerNodeID);
 			if (spanState.type !== SPANState.SPAN) {
 				// If no SPAN was established yet, we can't decode this further
 				// Figure out what to do
@@ -358,8 +369,8 @@ export class Security2CCMessageEncapsulation extends Security2CC {
 					const senderEI = this.getSenderEI();
 					if (!senderEI) return failNoSPAN();
 					const receiverEI = spanState.receiverEI;
-					this.driver.securityManager2!.initializeSPAN(
-						peerNodeID,
+					this.driver.securityManager2.initializeSPAN(
+						node,
 						senderEI,
 						receiverEI,
 					);
@@ -385,10 +396,10 @@ export class Security2CCMessageEncapsulation extends Security2CC {
 			);
 
 			// Decrypt payload and verify integrity
-			const { keyCCM: key } = this.driver.securityManager2!.getKeys({
-				nodeId: peerNodeID,
+			const { keyCCM: key } = this.driver.securityManager2.getKeys({
+				node: node,
 			});
-			const iv = this.driver.securityManager2!.nextNonce(peerNodeID);
+			const iv = this.driver.securityManager2.nextNonce(peerNodeID);
 			const { plaintext, authOK } = decryptAES128CCM(
 				key,
 				iv,
@@ -442,7 +453,7 @@ export class Security2CCMessageEncapsulation extends Security2CC {
 	public get sequenceNumber(): number {
 		if (this._sequenceNumber == undefined) {
 			this._sequenceNumber =
-				this.driver.securityManager2!.nextSequenceNumber(
+				this.driver.securityManager2.nextSequenceNumber(
 					this.nodeId as number,
 				);
 		}
@@ -470,7 +481,7 @@ export class Security2CCMessageEncapsulation extends Security2CC {
 			(e): e is MGRPExtension => e instanceof MGRPExtension,
 		);
 		if (mgrpExtension) return mgrpExtension.groupId;
-		return this.driver.controller.ownNodeId!;
+		return this.driver.controller.ownNodeId;
 	}
 
 	/** Returns the Sender's Entropy Input if this command contains an SPAN extension */
@@ -483,7 +494,7 @@ export class Security2CCMessageEncapsulation extends Security2CC {
 
 	public requiresPreTransmitHandshake(): boolean {
 		// We need the receiver's EI to be able to send an encrypted command
-		const secMan = this.driver.securityManager2!;
+		const secMan = this.driver.securityManager2;
 		const peerNodeId = this.nodeId as number;
 		const spanState = secMan.getSPANState(peerNodeId);
 		return (
@@ -500,11 +511,10 @@ export class Security2CCMessageEncapsulation extends Security2CC {
 
 	public serialize(): Buffer {
 		// TODO: Support Multicast
-		const peerNodeID = this.nodeId as number;
+		const node = this.getNode()!;
 
 		// Include Sender EI in the command if we only have the receiver's EI
-		const spanState =
-			this.driver.securityManager2!.getSPANState(peerNodeID);
+		const spanState = this.driver.securityManager2.getSPANState(node.id);
 		if (
 			spanState.type === SPANState.None ||
 			spanState.type === SPANState.LocalEI
@@ -518,10 +528,10 @@ export class Security2CCMessageEncapsulation extends Security2CC {
 			// We have the receiver's EI, generate our input and send it over
 			// With both, we can create an SPAN
 			const senderEI =
-				this.driver.securityManager2!.generateNonce(undefined);
+				this.driver.securityManager2.generateNonce(undefined);
 			const receiverEI = spanState.receiverEI;
-			this.driver.securityManager2!.initializeSPAN(
-				peerNodeID,
+			this.driver.securityManager2.initializeSPAN(
+				node,
 				senderEI,
 				receiverEI,
 			);
@@ -567,17 +577,17 @@ export class Security2CCMessageEncapsulation extends Security2CC {
 		const messageLength =
 			this.computeEncapsulationOverhead() + serializedCC.length;
 		const authData = getAuthenticationData(
-			this.driver.controller.ownNodeId!,
+			this.driver.controller.ownNodeId,
 			this.getDestinationIDTX(),
 			this.driver.controller.homeId!,
 			messageLength,
 			unencryptedPayload,
 		);
 
-		const { keyCCM: key } = this.driver.securityManager2!.getKeys({
-			nodeId: peerNodeID,
+		const { keyCCM: key } = this.driver.securityManager2.getKeys({
+			node: node,
 		});
-		const iv = this.driver.securityManager2!.nextNonce(peerNodeID);
+		const iv = this.driver.securityManager2.nextNonce(node.id);
 		const { ciphertext: ciphertextPayload, authTag } = encryptAES128CCM(
 			key,
 			iv,
@@ -642,6 +652,15 @@ export type Security2CCNonceReportOptions =
 
 @CCCommand(Security2Command.NonceReport)
 export class Security2CCNonceReport extends Security2CC {
+	// Define the securityManager and controller.ownNodeId as existing
+	// We check it in the constructor
+	declare driver: Driver & {
+		securityManager2: SecurityManager2;
+		controller: ZWaveController & {
+			ownNodeId: number;
+		};
+	};
+
 	public constructor(
 		driver: Driver,
 		options:
@@ -670,7 +689,7 @@ export class Security2CCNonceReport extends Security2CC {
 
 				// In that case we also need to store it, so the next sent command
 				// can use it for encryption
-				this.driver.securityManager2!.storeRemoteEI(
+				this.driver.securityManager2.storeRemoteEI(
 					this.nodeId as number,
 					this.receiverEI,
 				);
@@ -692,7 +711,7 @@ export class Security2CCNonceReport extends Security2CC {
 	public get sequenceNumber(): number {
 		if (this._sequenceNumber == undefined) {
 			this._sequenceNumber =
-				this.driver.securityManager2!.nextSequenceNumber(
+				this.driver.securityManager2.nextSequenceNumber(
 					this.nodeId as number,
 				);
 		}
@@ -721,6 +740,15 @@ export class Security2CCNonceGet extends Security2CC {
 	// TODO: A node sending this command MUST accept a delay up to <Previous Round-trip-time to peer node> +
 	// 250 ms before receiving the Security 2 Nonce Report Command.
 
+	// Define the securityManager and controller.ownNodeId as existing
+	// We check it in the constructor
+	declare driver: Driver & {
+		securityManager2: SecurityManager2;
+		controller: ZWaveController & {
+			ownNodeId: number;
+		};
+	};
+
 	public constructor(driver: Driver, options: CCCommandOptions) {
 		super(driver, options);
 
@@ -747,7 +775,7 @@ export class Security2CCNonceGet extends Security2CC {
 	public get sequenceNumber(): number {
 		if (this._sequenceNumber == undefined) {
 			this._sequenceNumber =
-				this.driver.securityManager2!.nextSequenceNumber(
+				this.driver.securityManager2.nextSequenceNumber(
 					this.nodeId as number,
 				);
 		}

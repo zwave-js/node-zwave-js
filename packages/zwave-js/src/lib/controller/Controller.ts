@@ -6,6 +6,7 @@ import {
 	isTransmissionError,
 	isZWaveError,
 	NODE_ID_BROADCAST,
+	SecurityClass,
 	ValueDB,
 	ZWaveError,
 	ZWaveErrorCodes,
@@ -988,10 +989,10 @@ export class ZWaveController extends TypedEventEmitter<ControllerEventCallbacks>
 					await api.inheritSecurityScheme();
 				}
 
-				// Remember that the node is secure
-				node.isSecure = true;
+				// Remember that the node was granted the S0 security class
+				node.securityClasses.set(SecurityClass.S0_Legacy, true);
 			} catch (e: unknown) {
-				let errorMessage = `Security bootstrapping failed, the node is included insecurely`;
+				let errorMessage = `Security S0 bootstrapping failed, the node was not granted the S0 security class`;
 				if (!isZWaveError(e)) {
 					errorMessage += `: ${e as any}`;
 				} else if (
@@ -1009,13 +1010,13 @@ export class ZWaveController extends TypedEventEmitter<ControllerEventCallbacks>
 					errorMessage,
 					"warn",
 				);
-				// Remember that the node is non-secure
-				node.isSecure = false;
+				// Remember that the node was NOT granted the S0 security class
+				node.securityClasses.set(SecurityClass.S0_Legacy, false);
 				node.removeCC(CommandClasses.Security);
 			}
 		} else {
-			// Remember that the node is non-secure
-			node.isSecure = false;
+			// Remember that the node was NOT granted the S0 security class
+			node.securityClasses.set(SecurityClass.S0_Legacy, false);
 		}
 	}
 

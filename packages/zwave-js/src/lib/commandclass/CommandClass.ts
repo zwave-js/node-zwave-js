@@ -173,7 +173,7 @@ export class CommandClass {
 			this.secure =
 				node?.isSecure !== false &&
 				!!(endpoint ?? node)?.isCCSecure(this.ccId) &&
-				!!this.driver.securityManager;
+				!!(this.driver.securityManager || this.driver.securityManager2);
 		} else {
 			// For multicast and broadcast CCs, we just use the highest implemented version to serialize
 			// Older nodes will ignore the additional fields

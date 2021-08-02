@@ -11,6 +11,7 @@ import {
 	MessageOrCCLogEntry,
 	MessageRecord,
 	parseCCList,
+	SecurityClass,
 	SecurityManager,
 	validatePayload,
 	ZWaveError,
@@ -316,29 +317,29 @@ export class SecurityCC extends CommandClass {
 			priority: MessagePriority.NodeQuery,
 		});
 
-		// This only needs to be done once
 		this.driver.controllerLog.logNode(node.id, {
-			message: "querying securely supported commands...",
+			message: "Querying securely supported commands (S0)...",
 			direction: "outbound",
 		});
 
 		const resp = await api.getSupportedCommands();
 		if (!resp) {
-			if (node.isSecure === true) {
+			if (node.securityClasses.get(SecurityClass.S0_Legacy) === true) {
 				this.driver.controllerLog.logNode(node.id, {
 					endpoint: this.endpointIndex,
 					message:
-						"Querying securely supported commands timed out, skipping Security interview...",
+						"Querying securely supported commands (S0) timed out",
 					level: "warn",
 				});
 				// TODO: Abort interview?
 			} else {
-				// We didn't know if the node was secure, assume that it is not actually included securely
+				// We didn't know if the node was secure and it didn't respond,
+				// assume that it doesn't have the S0 security class
 				this.driver.controllerLog.logNode(
 					node.id,
-					`The node is not included securely. Continuing interview non-securely.`,
+					`The node was not granted the S0 security class. Continuing interview non-securely.`,
 				);
-				node.isSecure = false;
+				node.securityClasses.set(SecurityClass.S0_Legacy, false);
 			}
 			return;
 		}
@@ -374,11 +375,11 @@ export class SecurityCC extends CommandClass {
 		}
 
 		// We know for sure that the node is included securely
-		if (node.isSecure !== true) {
-			node.isSecure = true;
+		if (node.hasSecurityClass(SecurityClass.S0_Legacy) !== true) {
+			node.securityClasses.set(SecurityClass.S0_Legacy, true);
 			this.driver.controllerLog.logNode(
 				node.id,
-				`The node is included securely.`,
+				`The node was granted the S0 security class`,
 			);
 		}
 
