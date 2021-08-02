@@ -46,6 +46,7 @@
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 255,
+			"unit": "0.1 °F/C",
 			"defaultValue": 5,
 			"unsigned": true,
 			"options": [
