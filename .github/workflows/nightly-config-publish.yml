@@ -3,6 +3,7 @@ name: Publish nightly configuration updates
 on:
   schedule:
     - cron: 0 2 * * * # Every day at 02:00
+  workflow_dispatch: # Manually on demand
 
 jobs:
   publish-config:
