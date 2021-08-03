@@ -3,6 +3,7 @@ import {
 	decryptAES128CCM,
 	encodeBitMask,
 	encryptAES128CCM,
+	getCCName,
 	isTransmissionError,
 	Maybe,
 	MessageOrCCLogEntry,
@@ -13,10 +14,12 @@ import {
 	SecurityManager2,
 	SECURITY_S2_AUTH_TAG_LENGTH,
 	SPANState,
+	unknownBoolean,
 	validatePayload,
 	ZWaveError,
 	ZWaveErrorCodes,
 } from "@zwave-js/core";
+import { getEnumMemberName } from "@zwave-js/shared";
 import type { ZWaveController } from "../controller/Controller";
 import { SendDataBridgeRequest } from "../controller/SendDataBridgeMessages";
 import { SendDataRequest } from "../controller/SendDataMessages";
@@ -228,12 +231,138 @@ export class Security2CCAPI extends CCAPI {
 			changeNodeStatusOnMissingACK: false,
 		});
 	}
+
+	public async getSupportedCommands(): Promise<CommandClasses[] | undefined> {
+		this.assertSupportsCommand(
+			Security2Command,
+			Security2Command.CommandsSupportedGet,
+		);
+
+		const cc = new Security2CCCommandsSupportedGet(this.driver, {
+			nodeId: this.endpoint.nodeId,
+			endpoint: this.endpoint.index,
+		});
+		const response =
+			await this.driver.sendCommand<Security2CCCommandsSupportedReport>(
+				cc,
+				this.commandOptions,
+			);
+		return response?.supportedCCs;
+	}
 }
 
 @commandClass(CommandClasses["Security 2"])
 @implementedVersion(1)
 export class Security2CC extends CommandClass {
 	declare ccCommand: Security2Command;
+
+	public async interview(): Promise<void> {
+		const node = this.getNode()!;
+		const endpoint = this.getEndpoint()!;
+		const api = endpoint.commandClasses["Security 2"].withOptions({
+			priority: MessagePriority.NodeQuery,
+		});
+
+		// Only on the highest security class the reponse includes the supported commands
+		let hasReceivedSecureCommands = false;
+
+		for (const secClass of [
+			SecurityClass.S2_AccessControl,
+			SecurityClass.S2_Authenticated,
+			SecurityClass.S2_Unauthenticated,
+		] as const) {
+			// We might not know all assigned security classes yet, so we
+			// go down from the highest and try to request the supported commands.
+			// If the node does not respond, it wasn't assigned the security class.
+			// If it responds with a non-empty list, we know this is the highest class it supports.
+			// If the list is empty, the security class is still supported.
+
+			// If we already know the class is not supported, skip it
+			if (node.hasSecurityClass(secClass) === false) continue;
+
+			this.driver.controllerLog.logNode(node.id, {
+				message: `Querying securely supported commands (${getEnumMemberName(
+					SecurityClass,
+					secClass,
+				)})...`,
+				direction: "outbound",
+			});
+
+			let assignedTemporarily = false;
+			if (node.hasSecurityClass(secClass) === unknownBoolean) {
+				// We need to temporarily assign the security class to send the encrypted command
+				node.securityClasses.set(secClass, true);
+				// It will be removed afterwards if the request fails
+				assignedTemporarily = true;
+			}
+
+			let supportedCCs: CommandClasses[] | undefined;
+			// Query the supported commands but avoid remembering the wrong security class in case of a failure
+			try {
+				supportedCCs = await api.getSupportedCommands();
+			} catch (e) {
+				if (assignedTemporarily) {
+					node.securityClasses.delete(secClass);
+				}
+				throw e;
+			}
+
+			if (supportedCCs == undefined) {
+				// No supported commands found, mark the security class as not supported
+				node.securityClasses.set(secClass, false);
+
+				this.driver.controllerLog.logNode(node.id, {
+					message: `The node was NOT granted the security class ${getEnumMemberName(
+						SecurityClass,
+						secClass,
+					)}`,
+					direction: "inbound",
+				});
+				continue;
+			}
+
+			// Mark the security class as supported
+			node.securityClasses.set(secClass, true);
+
+			this.driver.controllerLog.logNode(node.id, {
+				message: `The node was granted the security class ${getEnumMemberName(
+					SecurityClass,
+					secClass,
+				)}`,
+				direction: "inbound",
+			});
+
+			if (!hasReceivedSecureCommands && supportedCCs.length > 0) {
+				hasReceivedSecureCommands = true;
+
+				const logLines: string[] = [
+					`received secure commands (${getEnumMemberName(
+						SecurityClass,
+						secClass,
+					)})`,
+					"supported CCs:",
+				];
+				for (const cc of supportedCCs) {
+					logLines.push(`· ${getCCName(cc)}`);
+				}
+				this.driver.controllerLog.logNode(node.id, {
+					message: logLines.join("\n"),
+					direction: "inbound",
+				});
+
+				// Remember which commands are supported securely
+				for (const cc of supportedCCs) {
+					endpoint.addCC(cc, {
+						isSupported: true,
+						secure: true,
+					});
+				}
+			}
+		}
+
+		// Remember that the interview is complete
+		this.interviewComplete = true;
+	}
 
 	/** Tests if a command should be sent secure and thus requires encapsulation */
 	public static requiresEncapsulation(cc: CommandClass): boolean {
@@ -397,7 +526,7 @@ export class Security2CCMessageEncapsulation extends Security2CC {
 
 			// Decrypt payload and verify integrity
 			const { keyCCM: key } = this.driver.securityManager2.getKeys({
-				node: node,
+				node,
 			});
 			const iv = this.driver.securityManager2.nextNonce(peerNodeID);
 			const { plaintext, authOK } = decryptAES128CCM(
@@ -585,7 +714,7 @@ export class Security2CCMessageEncapsulation extends Security2CC {
 		);
 
 		const { keyCCM: key } = this.driver.securityManager2.getKeys({
-			node: node,
+			node,
 		});
 		const iv = this.driver.securityManager2.nextNonce(node.id);
 		const { ciphertext: ciphertextPayload, authTag } = encryptAES128CCM(

@@ -2254,14 +2254,23 @@ ${handlers.length} left`,
 		// A controlling node MUST discard a received Report/Notification type command if it is
 		// not received using S0 encapsulation and the corresponding Command Class is supported securely only
 
-		if (cc.secure && cc.ccId !== CommandClasses.Security) {
+		if (
+			cc.secure &&
+			cc.ccId !== CommandClasses.Security &&
+			cc.ccId !== CommandClasses["Security 2"]
+		) {
 			const commandName = cc.constructor.name;
 			if (
 				commandName.endsWith("Report") ||
 				commandName.endsWith("Notification")
 			) {
-				// Check whether there was a S0 encapsulation
-				if (cc.isEncapsulatedWith(CommandClasses.Security)) return true;
+				// Check whether there was a security encapsulation
+				if (
+					cc.isEncapsulatedWith(CommandClasses.Security) ||
+					cc.isEncapsulatedWith(CommandClasses["Security 2"])
+				) {
+					return true;
+				}
 				// none found, don't accept the CC
 				this.controllerLog.logNode(
 					cc.nodeId as number,

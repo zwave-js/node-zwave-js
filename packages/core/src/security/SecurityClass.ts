@@ -8,6 +8,19 @@ export enum SecurityClass {
 	S0_Legacy = 7,
 }
 
+/** Tests if the given security class is S2 */
+export function securityClassIsS2(
+	secClass: SecurityClass,
+): secClass is
+	| SecurityClass.S2_Unauthenticated
+	| SecurityClass.S2_Authenticated
+	| SecurityClass.S2_AccessControl {
+	return (
+		secClass >= SecurityClass.S2_Unauthenticated &&
+		secClass <= SecurityClass.S2_AccessControl
+	);
+}
+
 /** An array of security classes, ordered from high (index 0) to low (index > 0) */
 export const securityClassOrder = [
 	SecurityClass.S2_AccessControl,

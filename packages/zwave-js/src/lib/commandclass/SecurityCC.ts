@@ -345,7 +345,7 @@ export class SecurityCC extends CommandClass {
 		}
 
 		const logLines: string[] = [
-			"received secure commands",
+			"received secure commands (S0)",
 			"supported CCs:",
 		];
 		for (const cc of resp.supportedCCs) {
