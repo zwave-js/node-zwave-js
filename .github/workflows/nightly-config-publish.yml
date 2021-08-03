@@ -110,7 +110,7 @@ jobs:
         console.log(v);
         EOF
 
-        VERSION=$(node script.js)
+        VERSION=$(yarn node script.js)
         echo "Next version is $VERSION"
         npm version "$VERSION" --ignore-scripts --no-git-tag-version
         npm publish --tag nightly
