@@ -75,7 +75,7 @@
     "zwave-js": "workspace:*"
   },
   "resolutions": {
-    "@ts-morph/common": "patch:@ts-morph/common@~0.10.0#.yarn/sdks/ts-morph/patch.diff"
+    "@ts-morph/common": "patch:@ts-morph/common@~0.10.1#.yarn/sdks/ts-morph/patch.diff"
   },
   "scripts": {
     "build": "lerna run build",
