@@ -5,6 +5,22 @@
 	Add placeholder for next release with `wip` snippet
   ## __WORK IN PROGRESS__
 -->
+## __WORK IN PROGRESS__
+### Bugfixes
+* The firmware target selection for targets other than 0 no longer incorrectly complains about an incorrect target
+
+### Config file changes
+* Add Silabs UZB3 500 series controller device
+* Correct parameter 81 for Aeotec ZW100
+* Add MCO Home MH5-2a and MH-S510, correct others
+* Updates to Fibaro FGS223 and FGD212
+* Add groups for Heatit Smoke Battery
+* Add support for HELTUN HE-HLS01, HE-HT01, HE-RS01
+* Update Fibaro FGT001 for v8 changes, preserve root and endpoint 2
+* Map root reports to endpoint 1 for Fibaro FGS211/221
+* Add option 11 to ZEN17 parameters 2 and 3
+* Update non-device configs (indicators, notifications, ...) to certification package 2020C
+
 ## 8.0.7 (2021-08-02)
 ### Bugfixes
 Improved the heuristic for lifeline associations, which should resolve some reporting issues with devices:
