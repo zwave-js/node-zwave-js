@@ -5,7 +5,7 @@
 	Add placeholder for next release with `wip` snippet
   ## __WORK IN PROGRESS__
 -->
-## __WORK IN PROGRESS__
+## 8.0.8 (2021-08-04)
 ### Bugfixes
 * The firmware target selection for targets other than 0 no longer incorrectly complains about an incorrect target
 
