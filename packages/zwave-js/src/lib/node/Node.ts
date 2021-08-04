@@ -12,7 +12,6 @@ import {
 	CommandClassInfo,
 	CRC16_CCITT,
 	getCCName,
-	getHighestSecurityClass,
 	isTransmissionError,
 	isZWaveError,
 	Maybe,
@@ -516,10 +515,15 @@ export class ZWaveNode extends Endpoint implements SecurityClassOwner {
 	/** Returns the highest security class this node was granted or `undefined` if that information isn't known yet */
 	public getHighestSecurityClass(): SecurityClass | undefined {
 		if (this.securityClasses.size === 0) return undefined;
-		const securityClasses = [...this.securityClasses]
-			.filter(([, hasClass]) => hasClass)
-			.map(([sec]) => sec);
-		return getHighestSecurityClass(securityClasses);
+		let missingSome = false;
+		for (const secClass of securityClassOrder) {
+			if (this.securityClasses.get(secClass) === true) return secClass;
+			if (!this.securityClasses.has(secClass)) {
+				missingSome = true;
+			}
+		}
+		// If we don't have the info for every security class, we don't know the highest one yet
+		return missingSome ? undefined : SecurityClass.None;
 	}
 
 	private _protocolVersion: ProtocolVersion | undefined;
@@ -2116,10 +2120,12 @@ protocol version:      ${this._protocolVersion}`;
 			return this.handleClockReport(command);
 		} else if (command instanceof SecurityCCNonceGet) {
 			return this.handleSecurityNonceGet();
-		} else if (command instanceof Security2CCNonceGet) {
-			return this.handleSecurity2NonceGet();
 		} else if (command instanceof SecurityCCNonceReport) {
 			return this.handleSecurityNonceReport(command);
+		} else if (command instanceof Security2CCNonceGet) {
+			return this.handleSecurity2NonceGet();
+		} else if (command instanceof Security2CCNonceReport) {
+			return this.handleSecurity2NonceReport(command);
 		} else if (command instanceof HailCC) {
 			return this.handleHail(command);
 		} else if (command instanceof FirmwareUpdateMetaDataCCGet) {
@@ -2276,6 +2282,23 @@ protocol version:      ${this._protocolVersion}`;
 				direction: "inbound",
 			});
 		}
+	}
+
+	/**
+	 * Is called when a nonce report is received that does not belong to any transaction.
+	 */
+	private handleSecurity2NonceReport(command: Security2CCNonceReport): void {
+		const secMan = this.driver.securityManager2;
+		if (!secMan) return;
+
+		if (command.SOS && command.receiverEI) {
+			// The node couldn't decrypt the last command we sent it. Invalidate
+			// the shared SPAN, since it did the same
+			secMan.storeRemoteEI(this.nodeId, command.receiverEI);
+		}
+
+		// Tell the driver to re-send the current message if necessary
+		this.driver.resendS2EncapsulatedCommand();
 	}
 
 	private busyPollingAfterHail: boolean = false;

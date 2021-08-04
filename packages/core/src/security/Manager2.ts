@@ -11,11 +11,7 @@ import {
 	encryptAES128ECB,
 } from "./crypto";
 import { CtrDRBG } from "./ctr_drbg";
-import {
-	getHighestSecurityClass,
-	SecurityClass,
-	SecurityClassOwner,
-} from "./SecurityClass";
+import { SecurityClass, SecurityClassOwner } from "./SecurityClass";
 
 interface NetworkKeys {
 	pnk: Buffer;
@@ -35,7 +31,7 @@ export enum SPANState {
 	SPAN,
 }
 
-type SPANTableEntry =
+export type SPANTableEntry =
 	| {
 			// We know the other node's receiver's entropy input, but we didn't send it our sender's EI yet
 			type: SPANState.RemoteEI;
@@ -108,29 +104,23 @@ export class SecurityManager2 {
 		this.groupClasses.set(group, securityClass);
 	}
 
-	public getHighestSecurityClassSinglecast(
-		owner: SecurityClassOwner,
-	): SecurityClass | undefined {
-		const securityClasses = [...owner.securityClasses]
-			.filter(([, hasClass]) => hasClass)
-			.map(([sec]) => sec);
-		return getHighestSecurityClass(securityClasses);
-	}
-
-	public getKeys(options: {
-		node: SecurityClassOwner;
-	}): NetworkKeys & { securityClass: SecurityClass } {
-		const securityClass = options.node.getHighestSecurityClass();
-		if (securityClass == undefined) {
-			throw new ZWaveError(
-				`Node ${options.node.id} has not been assigned to a security class yet!`,
-				ZWaveErrorCodes.Security2CC_NotInitialized,
-			);
-		} else if (securityClass === SecurityClass.None) {
-			throw new ZWaveError(
-				`Node ${options.node.id} does not have any security class!`,
-				ZWaveErrorCodes.Security2CC_NotSecure,
-			);
+	public getKeys(
+		options:
+			| { node: SecurityClassOwner }
+			| { securityClass: SecurityClass },
+	): NetworkKeys {
+		let securityClass: SecurityClass;
+		if ("securityClass" in options) {
+			securityClass = options.securityClass;
+		} else {
+			const spanState = this.getSPANState(options.node.id);
+			if (spanState.type !== SPANState.SPAN) {
+				throw new ZWaveError(
+					`Security class for node ${options.node.id} is not yet known!`,
+					ZWaveErrorCodes.Security2CC_NotInitialized,
+				);
+			}
+			securityClass = spanState.securityClass;
 		}
 
 		const keys = this.networkKeys.get(securityClass);
@@ -143,10 +133,7 @@ export class SecurityManager2 {
 				ZWaveErrorCodes.Security2CC_NotInitialized,
 			);
 		}
-		return {
-			securityClass,
-			...keys,
-		};
+		return { ...keys };
 	}
 
 	public getSPANState(
@@ -170,6 +157,20 @@ export class SecurityManager2 {
 		return receiverEI;
 	}
 
+	/**
+	 * Stores the given SPAN state in the table. This should NEVER be called by user code.
+	 */
+	public setSPANState(
+		peerNodeID: number,
+		state: SPANTableEntry | { type: SPANState.None },
+	): void {
+		if (state.type === SPANState.None) {
+			this.spanTable.delete(peerNodeID);
+		} else {
+			this.spanTable.set(peerNodeID, state);
+		}
+	}
+
 	/** Invalidates the SPAN state for the given receiver */
 	public deleteNonce(receiver: number): void {
 		this.spanTable.delete(receiver);
@@ -180,6 +181,7 @@ export class SecurityManager2 {
 	/** Initializes the singlecast PAN generator for a given node based on the given entropy inputs */
 	public initializeSPAN(
 		peer: SecurityClassOwner,
+		securityClass: SecurityClass,
 		senderEI: Buffer,
 		receiverEI: Buffer,
 	): void {
@@ -190,8 +192,7 @@ export class SecurityManager2 {
 			);
 		}
 
-		const { securityClass, ...keys } = this.getKeys({ node: peer });
-
+		const keys = this.getKeys({ securityClass });
 		const noncePRK = computeNoncePRK(senderEI, receiverEI);
 		const MEI = deriveMEI(noncePRK);
 

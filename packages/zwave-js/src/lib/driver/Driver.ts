@@ -50,6 +50,7 @@ import { interpret } from "xstate";
 import {
 	FirmwareUpdateStatus,
 	Security2CC,
+	Security2CCMessageEncapsulation,
 	Security2CCNonceReport,
 } from "../commandclass";
 import {
@@ -2998,6 +2999,49 @@ ${handlers.length} left`,
 	/** Re-sorts the send queue */
 	private sortSendQueue(): void {
 		this.sendThread.send("sortQueue");
+	}
+
+	/** Re-sends the current command if it is S2 encapsulated */
+	public resendS2EncapsulatedCommand(): void {
+		// If this is called, a receiving node couldn't decode the last message we sent it
+		const { currentTransaction } = this.sendThread.state.context;
+		if (
+			currentTransaction &&
+			isCommandClassContainer(currentTransaction.message) &&
+			currentTransaction.message.command instanceof
+				Security2CCMessageEncapsulation
+		) {
+			const cmd = currentTransaction.message.command;
+			if (cmd.wasRetriedAfterDecodeFailure) {
+				this._controllerLog.logNode(cmd.nodeId as number, {
+					message: `failed to decode the message after re-transmission with SPAN extension, dropping the message.`,
+					direction: "none",
+					level: "warn",
+				});
+				this.sendThread.send({
+					type: "reduce",
+					reducer: (_t, source) => {
+						if (source === "current") {
+							return {
+								type: "reject",
+								code: ZWaveErrorCodes.Security2CC_CannotDecode,
+								message:
+									"The node failed to decode the message.",
+							};
+						} else {
+							return { type: "keep" };
+						}
+					},
+				});
+			} else {
+				this._controllerLog.logNode(cmd.nodeId as number, {
+					message: `failed to decode the message, retrying with SPAN extension...`,
+					direction: "none",
+				});
+				cmd.prepareRetryAfterDecodeFailure();
+				this.sendThread.send("resend");
+			}
+		}
 	}
 
 	private lastSaveToCache: number = 0;

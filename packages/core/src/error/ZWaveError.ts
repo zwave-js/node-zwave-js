@@ -128,6 +128,8 @@ export enum ZWaveErrorCodes {
 	Security2CC_NotSecure,
 	/** Gets thrown when a Security S2 command is missing a required extension */
 	Security2CC_MissingExtension,
+	/** Gets thrown when a Security S2 encapsulated command cannot be decoded by the target node */
+	Security2CC_CannotDecode,
 
 	/** The firmware update process is already active */
 	FirmwareUpdateCC_Busy = 1500,
