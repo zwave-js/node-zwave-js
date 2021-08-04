@@ -846,5 +846,21 @@
 				"unit": "µg/m³"
 			}
 		}
+	},
+	"0x57": {
+		"label": "Person counter (entering)",
+		"scales": {
+			"0x00": {
+				"label": "Unitless"
+			}
+		}
+	},
+	"0x58": {
+		"label": "Person counter (exiting)",
+		"scales": {
+			"0x00": {
+				"label": "Unitless"
+			}
+		}
 	}
 }
