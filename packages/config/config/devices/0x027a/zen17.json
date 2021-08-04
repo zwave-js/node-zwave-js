@@ -363,94 +363,46 @@
 			"defaultValue": 0,
 			"unsigned": true
 		},
-		"10": [
-			{
-				"$if": "firmwareVersion >= 1.4",
-				"label": "Control Relay 1 with S1 Input",
-				"description": "If disabled and Parameter 2 is values 4-11, a Z-Wave report will be sent but R1 will not be triggered",
-				"valueSize": 1,
-				"minValue": 0,
-				"maxValue": 1,
-				"defaultValue": 1,
-				"unsigned": true,
-				"allowManualEntry": false,
-				"options": [
-					{
-						"label": "Disable",
-						"value": 0
-					},
-					{
-						"label": "Enable",
-						"value": 1
-					}
-				]
-			},
-			{
-				"$if": "firmwareVersion < 1.4",
-				"label": "Control Relay 1 with S1 Input",
-				"description": "If disabled and Parameter 2 is values 4-10, a Z-Wave report will be sent but R1 will not be triggered",
-				"valueSize": 1,
-				"minValue": 0,
-				"maxValue": 1,
-				"defaultValue": 1,
-				"unsigned": true,
-				"allowManualEntry": false,
-				"options": [
-					{
-						"label": "Disable",
-						"value": 0
-					},
-					{
-						"label": "Enable",
-						"value": 1
-					}
-				]
-			}
-		],
-		"11": [
-			{
-				"$if": "firmwareVersion >= 1.4",
-				"label": "Control Relay 2 with S2 Input",
-				"description": "If disabled and Parameter 3 is values 4-11, a Z-Wave report will be sent but R2 will not be triggered",
-				"valueSize": 1,
-				"minValue": 0,
-				"maxValue": 1,
-				"defaultValue": 1,
-				"unsigned": true,
-				"allowManualEntry": false,
-				"options": [
-					{
-						"label": "Disable",
-						"value": 0
-					},
-					{
-						"label": "Enable",
-						"value": 1
-					}
-				]
-			},
-			{
-				"$if": "firmwareVersion < 1.4",
-				"label": "Control Relay 2 with S2 Input",
-				"description": "If disabled and Parameter 3 is values 4-10, a Z-Wave report will be sent but R2 will not be triggered",
-				"valueSize": 1,
-				"minValue": 0,
-				"maxValue": 1,
-				"defaultValue": 1,
-				"unsigned": true,
-				"allowManualEntry": false,
-				"options": [
-					{
-						"label": "Disable",
-						"value": 0
-					},
-					{
-						"label": "Enable",
-						"value": 1
-					}
-				]
-			}
-		],
+		"10": {
+			"label": "Control Relay 1 with S1 Input",
+			"description": "If disabled and Parameter 2 is >= 4, a Z-Wave report will be sent but R1 will not be triggered",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 1,
+			"unsigned": true,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Disable",
+					"value": 0
+				},
+				{
+					"label": "Enable",
+					"value": 1
+				}
+			]
+		},
+		"11": {
+			"label": "Control Relay 2 with S2 Input",
+			"description": "If disabled and Parameter 3 is >= 4, a Z-Wave report will be sent but R2 will not be triggered",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 1,
+			"unsigned": true,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Disable",
+					"value": 0
+				},
+				{
+					"label": "Enable",
+					"value": 1
+				}
+			]
+		},
 		"15": {
 			"label": "Auto Turn-Off Timer Unit (Relay 1)",
 			"valueSize": 1,
