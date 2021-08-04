@@ -105,6 +105,8 @@ export type SendThreadEvent =
 	// and the current transaction and react accordingly. The reducer must not have
 	// side-effects because it may be executed multiple times for each transaction
 	| { type: "reduce"; reducer: TransactionReducer }
+	// Re-transmit the current transaction immediately
+	| { type: "resend" }
 	// These events are forwarded to the SerialAPICommand machine
 	| { type: "ACK" }
 	| { type: "CAN" }
@@ -995,6 +997,11 @@ export function createSendThreadMachine(
 								nodeUpdate: {
 									actions: resolveCurrentTransaction,
 									target: "done",
+								},
+								resend: {
+									// We were asked to resend the pending transaction immediately
+									// without increasing the retry counter
+									target: "execute",
 								},
 							},
 							after: {

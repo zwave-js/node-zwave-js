@@ -3,13 +3,17 @@ import {
 	decryptAES128CCM,
 	encodeBitMask,
 	encryptAES128CCM,
+	getCCName,
 	isTransmissionError,
+	isZWaveError,
 	Maybe,
 	MessageOrCCLogEntry,
 	MessageRecord,
 	parseBitMask,
 	parseCCList,
 	SecurityClass,
+	securityClassIsS2,
+	securityClassOrder,
 	SecurityManager2,
 	SECURITY_S2_AUTH_TAG_LENGTH,
 	SPANState,
@@ -17,6 +21,7 @@ import {
 	ZWaveError,
 	ZWaveErrorCodes,
 } from "@zwave-js/core";
+import { getEnumMemberName } from "@zwave-js/shared";
 import type { ZWaveController } from "../controller/Controller";
 import { SendDataBridgeRequest } from "../controller/SendDataBridgeMessages";
 import { SendDataRequest } from "../controller/SendDataMessages";
@@ -228,12 +233,147 @@ export class Security2CCAPI extends CCAPI {
 			changeNodeStatusOnMissingACK: false,
 		});
 	}
+
+	/**
+	 * Queries the securely supported commands for the current security class
+	 * @param securityClass Can be used to overwrite the security class to use. If this doesn't match the current one, new nonces will need to be exchanged.
+	 */
+	public async getSupportedCommands(
+		securityClass?:
+			| SecurityClass.S2_AccessControl
+			| SecurityClass.S2_Authenticated
+			| SecurityClass.S2_Unauthenticated,
+	): Promise<CommandClasses[] | undefined> {
+		this.assertSupportsCommand(
+			Security2Command,
+			Security2Command.CommandsSupportedGet,
+		);
+
+		let cc = new Security2CCCommandsSupportedGet(this.driver, {
+			nodeId: this.endpoint.nodeId,
+			endpoint: this.endpoint.index,
+		});
+		cc = Security2CC.encapsulate(this.driver, cc, securityClass);
+
+		const response =
+			await this.driver.sendCommand<Security2CCCommandsSupportedReport>(
+				cc,
+				this.commandOptions,
+			);
+		return response?.supportedCCs;
+	}
 }
 
 @commandClass(CommandClasses["Security 2"])
 @implementedVersion(1)
 export class Security2CC extends CommandClass {
 	declare ccCommand: Security2Command;
+
+	public async interview(): Promise<void> {
+		const node = this.getNode()!;
+		const endpoint = this.getEndpoint()!;
+		const api = endpoint.commandClasses["Security 2"].withOptions({
+			priority: MessagePriority.NodeQuery,
+		});
+
+		// Only on the highest security class the reponse includes the supported commands
+		let hasReceivedSecureCommands = false;
+
+		for (const secClass of [
+			SecurityClass.S2_Unauthenticated,
+			SecurityClass.S2_Authenticated,
+			SecurityClass.S2_AccessControl,
+		] as const) {
+			// We might not know all assigned security classes yet, so we work our way up from low to high and try to request the supported commands.
+			// This way, each command is encrypted with the security class we're currently testing.
+
+			// If the node does not respond, it wasn't assigned the security class.
+			// If it responds with a non-empty list, we know this is the highest class it supports.
+			// If the list is empty, the security class is still supported.
+
+			// If we already know the class is not supported, skip it
+			if (node.hasSecurityClass(secClass) === false) continue;
+
+			this.driver.controllerLog.logNode(node.id, {
+				message: `Querying securely supported commands (${getEnumMemberName(
+					SecurityClass,
+					secClass,
+				)})...`,
+				direction: "outbound",
+			});
+
+			// Query the supported commands but avoid remembering the wrong security class in case of a failure
+			let supportedCCs: CommandClasses[] | undefined;
+			try {
+				supportedCCs = await api.getSupportedCommands(secClass);
+			} catch (e) {
+				if (
+					isZWaveError(e) &&
+					e.code === ZWaveErrorCodes.Security2CC_CannotDecode
+				) {
+					// This has to be expected when we're using a non-granted security class
+					supportedCCs = undefined;
+				} else {
+					throw e;
+				}
+			}
+
+			if (supportedCCs == undefined) {
+				// No supported commands found, mark the security class as not granted
+				node.securityClasses.set(secClass, false);
+
+				this.driver.controllerLog.logNode(node.id, {
+					message: `The node was NOT granted the security class ${getEnumMemberName(
+						SecurityClass,
+						secClass,
+					)}`,
+					direction: "inbound",
+				});
+				continue;
+			}
+
+			// Mark the security class as granted
+			node.securityClasses.set(secClass, true);
+
+			this.driver.controllerLog.logNode(node.id, {
+				message: `The node was granted the security class ${getEnumMemberName(
+					SecurityClass,
+					secClass,
+				)}`,
+				direction: "inbound",
+			});
+
+			if (!hasReceivedSecureCommands && supportedCCs.length > 0) {
+				hasReceivedSecureCommands = true;
+
+				const logLines: string[] = [
+					`received secure commands (${getEnumMemberName(
+						SecurityClass,
+						secClass,
+					)})`,
+					"supported CCs:",
+				];
+				for (const cc of supportedCCs) {
+					logLines.push(`· ${getCCName(cc)}`);
+				}
+				this.driver.controllerLog.logNode(node.id, {
+					message: logLines.join("\n"),
+					direction: "inbound",
+				});
+
+				// Remember which commands are supported securely
+				for (const cc of supportedCCs) {
+					endpoint.addCC(cc, {
+						isSupported: true,
+						secure: true,
+					});
+				}
+			}
+		}
+
+		// Remember that the interview is complete
+		this.interviewComplete = true;
+	}
 
 	/** Tests if a command should be sent secure and thus requires encapsulation */
 	public static requiresEncapsulation(cc: CommandClass): boolean {
@@ -256,15 +396,19 @@ export class Security2CC extends CommandClass {
 	public static encapsulate(
 		driver: Driver,
 		cc: CommandClass,
+		securityClass?: SecurityClass,
 	): Security2CCMessageEncapsulation {
 		return new Security2CCMessageEncapsulation(driver, {
 			nodeId: cc.nodeId,
 			encapsulated: cc,
+			securityClass,
 		});
 	}
 }
 
 interface Security2CCMessageEncapsulationOptions extends CCCommandOptions {
+	/** Can be used to override the default security class for the command */
+	securityClass?: SecurityClass;
 	extensions?: Security2Extension[];
 	encapsulated: CommandClass;
 }
@@ -316,8 +460,7 @@ export class Security2CCMessageEncapsulation extends Security2CC {
 			const node = this.getNode()!;
 			const securityClass = node.getHighestSecurityClass();
 			validatePayload.withReason("No security class granted")(
-				securityClass != undefined &&
-					securityClass !== SecurityClass.None,
+				securityClass !== SecurityClass.None,
 			);
 
 			const hasExtensions = !!(this.payload[1] & 0b1);
@@ -345,39 +488,6 @@ export class Security2CCMessageEncapsulation extends Security2CC {
 			};
 			if (hasExtensions) parseExtensions(this.payload);
 
-			const spanState =
-				this.driver.securityManager2.getSPANState(peerNodeID);
-			if (spanState.type !== SPANState.SPAN) {
-				// If no SPAN was established yet, we can't decode this further
-				// Figure out what to do
-
-				const failNoSPAN = () => {
-					return validatePayload.fail(
-						ZWaveErrorCodes.Security2CC_NoSPAN,
-					);
-				};
-
-				if (spanState.type === SPANState.None) {
-					return failNoSPAN();
-				} else if (spanState.type === SPANState.RemoteEI) {
-					// TODO: The specs are not clear how to handle this case
-					// For now, do the same as if we didn't have any EI
-					return failNoSPAN();
-				} else if (spanState.type === SPANState.LocalEI) {
-					// We've sent the other our receiver's EI and received its sender's EI,
-					// meaning we can now establish an SPAN
-					const senderEI = this.getSenderEI();
-					if (!senderEI) return failNoSPAN();
-					const receiverEI = spanState.receiverEI;
-					this.driver.securityManager2.initializeSPAN(
-						node,
-						senderEI,
-						receiverEI,
-					);
-				}
-			}
-
-			// Now we do have an SPAN
 			const unencryptedPayload = this.payload.slice(0, offset);
 			const ciphertext = this.payload.slice(
 				offset,
@@ -396,20 +506,96 @@ export class Security2CCMessageEncapsulation extends Security2CC {
 			);
 
 			// Decrypt payload and verify integrity
-			const { keyCCM: key } = this.driver.securityManager2.getKeys({
-				node: node,
-			});
-			const iv = this.driver.securityManager2.nextNonce(peerNodeID);
-			const { plaintext, authOK } = decryptAES128CCM(
-				key,
-				iv,
-				ciphertext,
-				authData,
-				authTag,
-			);
+			const spanState =
+				this.driver.securityManager2.getSPANState(peerNodeID);
+			const failNoSPAN = () => {
+				return validatePayload.fail(ZWaveErrorCodes.Security2CC_NoSPAN);
+			};
+
+			// If we are not able to establish an SPAN yet, fail the decryption
+			if (spanState.type === SPANState.None) {
+				return failNoSPAN();
+			} else if (spanState.type === SPANState.RemoteEI) {
+				// TODO: The specs are not clear how to handle this case
+				// For now, do the same as if we didn't have any EI
+				return failNoSPAN();
+			}
+
+			const decrypt = (): { plaintext: Buffer; authOK: boolean } => {
+				const getNonceAndDecrypt = () => {
+					const iv = this.driver.securityManager2.nextNonce(node.id);
+					const { keyCCM: key } =
+						this.driver.securityManager2.getKeys({ node });
+					return decryptAES128CCM(
+						key,
+						iv,
+						ciphertext,
+						authData,
+						authTag,
+					);
+				};
+
+				if (spanState.type === SPANState.SPAN) {
+					// This can only happen if the security class is known
+					return getNonceAndDecrypt();
+				} else if (spanState.type === SPANState.LocalEI) {
+					// We've sent the other our receiver's EI and received its sender's EI,
+					// meaning we can now establish an SPAN
+					const senderEI = this.getSenderEI();
+					if (!senderEI) {
+						debugger;
+						return failNoSPAN();
+					}
+					const receiverEI = spanState.receiverEI;
+
+					// How we do this depends on whether we know the security class of the other node
+					if (securityClass != undefined) {
+						this.driver.securityManager2.initializeSPAN(
+							node,
+							securityClass,
+							senderEI,
+							receiverEI,
+						);
+
+						return getNonceAndDecrypt();
+					} else {
+						// Not knowing it can happen if we just took over an existing network
+						// Try multiple security classes
+						const possibleSecurityClasses = securityClassOrder
+							.filter((s) => securityClassIsS2(s))
+							.filter((s) => node.hasSecurityClass(s) !== false);
+						for (const secClass of possibleSecurityClasses) {
+							// Initialize an SPAN with that security class
+							this.driver.securityManager2.initializeSPAN(
+								node,
+								secClass,
+								senderEI,
+								receiverEI,
+							);
+							const ret = getNonceAndDecrypt();
+
+							// It worked, return the result and remember the security class
+							if (ret.authOK) {
+								node.securityClasses.set(secClass, true);
+								return ret;
+							}
+							// Reset the SPAN state and try with the next security class
+							this.driver.securityManager2.setSPANState(
+								node.id,
+								spanState,
+							);
+						}
+					}
+				}
+
+				// Nothing worked, fail the decryption
+				return { plaintext: Buffer.from([]), authOK: false };
+			};
+
+			const { plaintext, authOK } = decrypt();
 			validatePayload.withReason(
 				"Message authentication failed, won't accept security encapsulated command.",
-			)(authOK);
+			)(!!authOK && !!plaintext);
 
 			offset = 0;
 			if (hasEncryptedExtensions) parseExtensions(plaintext);
@@ -427,6 +613,7 @@ export class Security2CCMessageEncapsulation extends Security2CC {
 				});
 			}
 		} else {
+			this._securityClass = options.securityClass;
 			this.encapsulated = options.encapsulated;
 			options.encapsulated.encapsulatingCC = this as any;
 
@@ -442,6 +629,8 @@ export class Security2CCMessageEncapsulation extends Security2CC {
 			}
 		}
 	}
+
+	private _securityClass?: SecurityClass;
 
 	private _sequenceNumber: number | undefined;
 	/**
@@ -462,6 +651,23 @@ export class Security2CCMessageEncapsulation extends Security2CC {
 
 	public encapsulated?: CommandClass;
 	public extensions: Security2Extension[];
+
+	private _wasRetriedAfterDecodeFailure: boolean = false;
+	/** Indicates whether sending this command was retried after the target node failed to decode it  */
+	public get wasRetriedAfterDecodeFailure(): boolean {
+		return this._wasRetriedAfterDecodeFailure;
+	}
+
+	public prepareRetryAfterDecodeFailure(): void {
+		if (this._wasRetriedAfterDecodeFailure) {
+			throw new ZWaveError(
+				`S2 encapsulated messages may only be retried once after the target failed to decode them!`,
+				ZWaveErrorCodes.Controller_MessageDropped,
+			);
+		}
+		this._wasRetriedAfterDecodeFailure = true;
+		this._sequenceNumber = undefined;
+	}
 
 	private getDestinationIDTX(): number {
 		const mgrpExtension = this.extensions.find(
@@ -530,8 +736,18 @@ export class Security2CCMessageEncapsulation extends Security2CC {
 			const senderEI =
 				this.driver.securityManager2.generateNonce(undefined);
 			const receiverEI = spanState.receiverEI;
+			const securityClass =
+				this._securityClass ?? node.getHighestSecurityClass();
+
+			if (securityClass == undefined) {
+				throw new ZWaveError(
+					"No security class defined for this command!",
+					ZWaveErrorCodes.Security2CC_NoSPAN,
+				);
+			}
 			this.driver.securityManager2.initializeSPAN(
 				node,
+				securityClass,
 				senderEI,
 				receiverEI,
 			);
@@ -584,10 +800,14 @@ export class Security2CCMessageEncapsulation extends Security2CC {
 			unencryptedPayload,
 		);
 
-		const { keyCCM: key } = this.driver.securityManager2.getKeys({
-			node: node,
-		});
 		const iv = this.driver.securityManager2.nextNonce(node.id);
+		const { keyCCM: key } = this.driver.securityManager2.getKeys(
+			// Prefer the overridden security class if it was given
+			this._securityClass != undefined
+				? { securityClass: this._securityClass }
+				: { node },
+		);
+
 		const { ciphertext: ciphertextPayload, authTag } = encryptAES128CCM(
 			key,
 			iv,
