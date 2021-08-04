@@ -49,6 +49,7 @@ describe("lib/security/Manager2", () => {
 		if (options.nodeId) {
 			man.initializeSPAN(
 				node,
+				options.secClass ?? SecurityClass.S2_Authenticated,
 				crypto.randomBytes(16),
 				crypto.randomBytes(16),
 			);
@@ -105,6 +106,7 @@ describe("lib/security/Manager2", () => {
 				() =>
 					man.initializeSPAN(
 						node,
+						SecurityClass.S2_Authenticated,
 						Buffer.alloc(15),
 						Buffer.alloc(16),
 					),
@@ -116,7 +118,12 @@ describe("lib/security/Manager2", () => {
 
 			assertZWaveError(
 				() =>
-					man.initializeSPAN(node, Buffer.alloc(16), Buffer.alloc(1)),
+					man.initializeSPAN(
+						node,
+						SecurityClass.S2_Authenticated,
+						Buffer.alloc(16),
+						Buffer.alloc(1),
+					),
 				{
 					errorCode: ZWaveErrorCodes.Argument_Invalid,
 					messageMatches: "16 bytes",
@@ -131,6 +138,7 @@ describe("lib/security/Manager2", () => {
 				() =>
 					man.initializeSPAN(
 						node,
+						SecurityClass.S2_Authenticated,
 						Buffer.alloc(16),
 						Buffer.alloc(16),
 					),
@@ -148,6 +156,7 @@ describe("lib/security/Manager2", () => {
 				() =>
 					man.initializeSPAN(
 						node,
+						SecurityClass.S2_Authenticated,
 						Buffer.alloc(16),
 						Buffer.alloc(16),
 					),
@@ -165,7 +174,12 @@ describe("lib/security/Manager2", () => {
 				secClass: SecurityClass.S2_Authenticated,
 			});
 			expect(() =>
-				man.initializeSPAN(node, Buffer.alloc(16), Buffer.alloc(16)),
+				man.initializeSPAN(
+					node,
+					SecurityClass.S2_Authenticated,
+					Buffer.alloc(16),
+					Buffer.alloc(16),
+				),
 			).not.toThrow();
 		});
 	});
