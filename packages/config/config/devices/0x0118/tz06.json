@@ -152,5 +152,8 @@
 				}
 			]
 		}
+	},
+	"compat": {
+		"mapRootReportsToEndpoint": 1
 	}
 }
