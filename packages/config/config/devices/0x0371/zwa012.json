@@ -192,7 +192,7 @@
 			"$import": "~/templates/master_template.json#base_0-255_nounit",
 			"label": "Battery report interval",
 			"defaultValue": 24,
-			"unit": "hour",
+			"unit": "hours",
 			"options": [
 				{
 					"label": "Disable",
