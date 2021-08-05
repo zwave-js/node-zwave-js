@@ -148,7 +148,7 @@
 			"$import": "~/0x0086/templates/aeotec_template.json#tilt_sensor"
 		},
 		"16": {
-			"$import": "~/0x0086/templates/aeotec_template.json#invert_state_report",
+			"$import": "~/templates/master_template.json#base_0-1_nounit",
 			"label": "Tilt sensor polarity when sensor is vertical",
 			"options": [
 				{
