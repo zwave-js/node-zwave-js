@@ -63,8 +63,8 @@
 			"$import": "~/0x0086/templates/aeotec_template.json#sensor_operation_mode"
 		},
 		"2": {
-			"$import": "~/0x0086/templates/aeotec_template.json#external_switch_3way",
 			"label": "Dry Contact Operation Mode",
+			"minValue": 0,
 			"maxValue": 3,
 			"defaultValue": 0,
 			"options": [
