@@ -5,6 +5,33 @@
 	Add placeholder for next release with `wip` snippet
   ## __WORK IN PROGRESS__
 -->
+## 8.0.8 (2021-08-04)
+### Bugfixes
+* The firmware target selection for targets other than 0 no longer incorrectly complains about an incorrect target
+
+### Config file changes
+* Add Silabs UZB3 500 series controller device
+* Correct parameter 81 for Aeotec ZW100
+* Add MCO Home MH5-2a and MH-S510, correct others
+* Updates to Fibaro FGS223 and FGD212
+* Add groups for Heatit Smoke Battery
+* Add support for HELTUN HE-HLS01, HE-HT01, HE-RS01
+* Update Fibaro FGT001 for v8 changes, preserve root and endpoint 2
+* Map root reports to endpoint 1 for Fibaro FGS211/221
+* Add option 11 to ZEN17 parameters 2 and 3
+* Update non-device configs (indicators, notifications, ...) to certification package 2020C
+
+## 8.0.7 (2021-08-02)
+### Bugfixes
+Improved the heuristic for lifeline associations, which should resolve some reporting issues with devices:
+* If the root endpoint of a device is configured to use a node association, the fallback for the other endpoints no longer creates a multi channel association on the root endpoint
+* If the endpoints of a multi channel device don't support associations, the default lifeline on the root device will be configured as a multi channel association
+
+### Config file changes
+* Correct values sizes for zw096/zw099
+* Correct device file for Ecolink ISZW7
+* Preserve root endpoint values for Aeotec DSB09
+
 ## 8.0.6 (2021-07-28)
 ### Bugfixes
 * The detection whether a config file is considered embedded or user-provided now takes `ZWAVEJS_EXTERNAL_CONFIG` into account.

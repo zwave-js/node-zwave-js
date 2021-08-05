@@ -60,118 +60,246 @@
 				}
 			]
 		},
-		"2": {
-			"label": "Input Type for S1 Terminal",
-			"description": "Note: The device must be excluded (without resetting it) and re-included after changing to/from values 4-10",
-			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 10,
-			"defaultValue": 1,
-			"unsigned": true,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "Momentary switch",
-					"value": 0
-				},
-				{
-					"label": "Toggle switch (follow switch)",
-					"value": 1
-				},
-				{
-					"label": "Toggle switch (change on toggle)",
-					"value": 2
-				},
-				{
-					"label": "Garage door (momentary mode)",
-					"value": 3
-				},
-				{
-					"label": "Water sensor",
-					"value": 4
-				},
-				{
-					"label": "Heat alarm",
-					"value": 5
-				},
-				{
-					"label": "Motion alert",
-					"value": 6
-				},
-				{
-					"label": "Door sensor (open/close)",
-					"value": 7
-				},
-				{
-					"label": "CO alarm",
-					"value": 8
-				},
-				{
-					"label": "CO2 alarm",
-					"value": 9
-				},
-				{
-					"label": "On/off report (dry contact switch/sensor)",
-					"value": 10
-				}
-			]
-		},
-		"3": {
-			"label": "Input Type for S2 Terminal",
-			"description": "Note: The device must be excluded (without resetting it) and re-included after changing to/from values 4-10",
-			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 10,
-			"defaultValue": 1,
-			"unsigned": true,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "Momentary switch",
-					"value": 0
-				},
-				{
-					"label": "Toggle switch (follow switch)",
-					"value": 1
-				},
-				{
-					"label": "Toggle switch (change on toggle)",
-					"value": 2
-				},
-				{
-					"label": "Garage door (momentary mode)",
-					"value": 3
-				},
-				{
-					"label": "Water sensor",
-					"value": 4
-				},
-				{
-					"label": "Heat alarm",
-					"value": 5
-				},
-				{
-					"label": "Motion alert",
-					"value": 6
-				},
-				{
-					"label": "Door sensor (open/close)",
-					"value": 7
-				},
-				{
-					"label": "CO alarm",
-					"value": 8
-				},
-				{
-					"label": "CO2 alarm",
-					"value": 9
-				},
-				{
-					"label": "On/off report (dry contact switch/sensor)",
-					"value": 10
-				}
-			]
-		},
+		"2": [
+			{
+				"$if": "firmwareVersion >= 1.4",
+				"label": "Input Type for S1 Terminal",
+				"description": "Note: The device must be excluded (without resetting it) and re-included after changing to/from values 4-11",
+				"valueSize": 1,
+				"minValue": 0,
+				"maxValue": 11,
+				"defaultValue": 1,
+				"unsigned": true,
+				"allowManualEntry": false,
+				"options": [
+					{
+						"label": "Momentary switch",
+						"value": 0
+					},
+					{
+						"label": "Toggle switch (follow switch)",
+						"value": 1
+					},
+					{
+						"label": "Toggle switch (change on toggle)",
+						"value": 2
+					},
+					{
+						"label": "Garage door (momentary mode)",
+						"value": 3
+					},
+					{
+						"label": "Water sensor",
+						"value": 4
+					},
+					{
+						"label": "Heat alarm",
+						"value": 5
+					},
+					{
+						"label": "Motion alert",
+						"value": 6
+					},
+					{
+						"label": "Door sensor (open/close)",
+						"value": 7
+					},
+					{
+						"label": "CO alarm",
+						"value": 8
+					},
+					{
+						"label": "CO2 alarm",
+						"value": 9
+					},
+					{
+						"label": "On/off report (dry contact switch/sensor)",
+						"value": 10
+					},
+					{
+						"label": "Garage door mode (momentary mode) for relay and door sensor (open/close) for input",
+						"value": 11
+					}
+				]
+			},
+			{
+				"$if": "firmwareVersion < 1.4",
+				"label": "Input Type for S1 Terminal",
+				"description": "Note: The device must be excluded (without resetting it) and re-included after changing to/from values 4-10",
+				"valueSize": 1,
+				"minValue": 0,
+				"maxValue": 10,
+				"defaultValue": 1,
+				"unsigned": true,
+				"allowManualEntry": false,
+				"options": [
+					{
+						"label": "Momentary switch",
+						"value": 0
+					},
+					{
+						"label": "Toggle switch (follow switch)",
+						"value": 1
+					},
+					{
+						"label": "Toggle switch (change on toggle)",
+						"value": 2
+					},
+					{
+						"label": "Garage door (momentary mode)",
+						"value": 3
+					},
+					{
+						"label": "Water sensor",
+						"value": 4
+					},
+					{
+						"label": "Heat alarm",
+						"value": 5
+					},
+					{
+						"label": "Motion alert",
+						"value": 6
+					},
+					{
+						"label": "Door sensor (open/close)",
+						"value": 7
+					},
+					{
+						"label": "CO alarm",
+						"value": 8
+					},
+					{
+						"label": "CO2 alarm",
+						"value": 9
+					},
+					{
+						"label": "On/off report (dry contact switch/sensor)",
+						"value": 10
+					}
+				]
+			}
+		],
+		"3": [
+			{
+				"$if": "firmwareVersion >= 1.4",
+				"label": "Input Type for S2 Terminal",
+				"description": "Note: The device must be excluded (without resetting it) and re-included after changing to/from values 4-11",
+				"valueSize": 1,
+				"minValue": 0,
+				"maxValue": 11,
+				"defaultValue": 1,
+				"unsigned": true,
+				"allowManualEntry": false,
+				"options": [
+					{
+						"label": "Momentary switch",
+						"value": 0
+					},
+					{
+						"label": "Toggle switch (follow switch)",
+						"value": 1
+					},
+					{
+						"label": "Toggle switch (change on toggle)",
+						"value": 2
+					},
+					{
+						"label": "Garage door (momentary mode)",
+						"value": 3
+					},
+					{
+						"label": "Water sensor",
+						"value": 4
+					},
+					{
+						"label": "Heat alarm",
+						"value": 5
+					},
+					{
+						"label": "Motion alert",
+						"value": 6
+					},
+					{
+						"label": "Door sensor (open/close)",
+						"value": 7
+					},
+					{
+						"label": "CO alarm",
+						"value": 8
+					},
+					{
+						"label": "CO2 alarm",
+						"value": 9
+					},
+					{
+						"label": "On/off report (dry contact switch/sensor)",
+						"value": 10
+					},
+					{
+						"label": "Garage door mode (momentary mode) for relay and door sensor (open/close) for input",
+						"value": 11
+					}
+				]
+			},
+			{
+				"$if": "firmwareVersion < 1.4",
+				"label": "Input Type for S2 Terminal",
+				"description": "Note: The device must be excluded (without resetting it) and re-included after changing to/from values 4-10",
+				"valueSize": 1,
+				"minValue": 0,
+				"maxValue": 10,
+				"defaultValue": 1,
+				"unsigned": true,
+				"allowManualEntry": false,
+				"options": [
+					{
+						"label": "Momentary switch",
+						"value": 0
+					},
+					{
+						"label": "Toggle switch (follow switch)",
+						"value": 1
+					},
+					{
+						"label": "Toggle switch (change on toggle)",
+						"value": 2
+					},
+					{
+						"label": "Garage door (momentary mode)",
+						"value": 3
+					},
+					{
+						"label": "Water sensor",
+						"value": 4
+					},
+					{
+						"label": "Heat alarm",
+						"value": 5
+					},
+					{
+						"label": "Motion alert",
+						"value": 6
+					},
+					{
+						"label": "Door sensor (open/close)",
+						"value": 7
+					},
+					{
+						"label": "CO alarm",
+						"value": 8
+					},
+					{
+						"label": "CO2 alarm",
+						"value": 9
+					},
+					{
+						"label": "On/off report (dry contact switch/sensor)",
+						"value": 10
+					}
+				]
+			}
+		],
 		"5": {
 			"label": "LED Indicator",
 			"valueSize": 1,
@@ -237,7 +365,7 @@
 		},
 		"10": {
 			"label": "Control Relay 1 with S1 Input",
-			"description": "If disabled and Parameter 2 is values 4-10, a Z-Wave report will be sent but R1 will not be triggered",
+			"description": "If disabled and Parameter 2 is >= 4, a Z-Wave report will be sent but R1 will not be triggered",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 1,
@@ -257,7 +385,7 @@
 		},
 		"11": {
 			"label": "Control Relay 2 with S2 Input",
-			"description": "If disabled and Parameter 3 is values 4-10, a Z-Wave report will be sent but R2 will not be triggered",
+			"description": "If disabled and Parameter 3 is >= 4, a Z-Wave report will be sent but R2 will not be triggered",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 1,

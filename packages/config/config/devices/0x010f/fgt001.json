@@ -119,13 +119,6 @@
 		}
 	},
 	"compat": {
-		"commandClasses": {
-			"remove": {
-				// Root endpoint duplicates endpoint 1, causing duplicated Battery CC values
-				"0x80": {
-					"endpoints": [0]
-				}
-			}
-		}
+		"preserveEndpoints": [2]
 	}
 }

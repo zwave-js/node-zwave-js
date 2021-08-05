@@ -1688,39 +1688,39 @@
 	"night_light_blue": {
 		"$import": "~/templates/master_template.json#base_0-255_nounit",
 		"label": "Night Light: Blue Color",
-		"valueSize": 3,
+		"valueSize": 4,
 		"defaultValue": 221
 	},
 	"night_light_green": {
 		"$import": "~/templates/master_template.json#base_0-255_nounit",
 		"label": "Night Light: Green Color",
-		"valueSize": 3,
+		"valueSize": 4,
 		"defaultValue": 160
 	},
 	"night_light_red": {
 		"$import": "~/templates/master_template.json#base_0-255_nounit",
 		"label": "Night Light: Red Color",
-		"valueSize": 3,
+		"valueSize": 4,
 		"defaultValue": 221
 	},
 	"night_light_green_brightness": {
 		"$import": "~/templates/master_template.json#base_0-100_nounit",
 		"label": "Night Light: Green Brightness",
-		"valueSize": 3,
+		"valueSize": 4,
 		"unit": "%",
 		"defaultValue": 50
 	},
 	"night_light_yellow_brightness": {
 		"$import": "~/templates/master_template.json#base_0-100_nounit",
 		"label": "Night Light: Yellow Brightness",
-		"valueSize": 3,
+		"valueSize": 4,
 		"unit": "%",
 		"defaultValue": 50
 	},
 	"night_light_red_brightness": {
 		"$import": "~/templates/master_template.json#base_0-100_nounit",
 		"label": "Night Light: Red Brightness",
-		"valueSize": 3,
+		"valueSize": 4,
 		"unit": "%",
 		"defaultValue": 50
 	},
