@@ -426,6 +426,7 @@ interface BasicDeviceClass {
 interface GenericDeviceClass {
 	readonly key: number;
 	readonly label: string;
+	readonly requiresSecurity?: boolean | undefined;
 	readonly supportedCCs: readonly CommandClasses[];
 	readonly controlledCCs: readonly CommandClasses[];
 	readonly specific: ReadonlyMap<number, SpecificDeviceClass>;
@@ -439,6 +440,7 @@ interface SpecificDeviceClass {
 	readonly key: number;
 	readonly label: string;
 	readonly zwavePlusDeviceType?: string | undefined;
+	readonly requiresSecurity?: boolean | undefined;
 	readonly supportedCCs: readonly CommandClasses[];
 	readonly controlledCCs: readonly CommandClasses[];
 }
