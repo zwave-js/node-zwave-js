@@ -18,7 +18,8 @@ The options parameter is used to specify the inclusion strategy and provide call
     **This is the recommended** strategy and should be used unless there is a good reason not to.
 
 -   `InclusionStrategy.SmartStart`: Include using SmartStart (requires Security S2). Can't include devices that do not support SmartStart.  
-    **Should be preferred** over `Default` if supported, because it is easier for the user.
+    **Should be preferred** over `Default` if supported, because it is easier for the user.  
+    **WARNING:** This is not supported yet!
 
 -   `InclusionStrategy.Insecure`: Don't use encryption, even if supported.  
     **Not recommended**, because S2 should be used where possible.

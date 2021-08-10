@@ -884,6 +884,13 @@ export class ZWaveController extends TypedEventEmitter<ControllerEventCallbacks>
 			};
 		}
 
+		if (options.strategy === InclusionStrategy.SmartStart) {
+			throw new ZWaveError(
+				`SmartStart is not supported yet!`,
+				ZWaveErrorCodes.Driver_NotSupported,
+			);
+		}
+
 		this._inclusionActive = true;
 		this._inclusionOptions = options;
 
