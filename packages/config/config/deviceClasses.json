@@ -698,11 +698,13 @@
 				"0x03": {
 					"label": "Secure Keypad Door Lock",
 					"zwavePlusDeviceType": "Door Lock - Keypad",
+					"requiresSecurity": true,
 					"supportedCCs": ["Basic", "Door Lock", "User Code", "Manufacturer Specific", "Security", "Version"]
 				},
 				"0x05": {
 					"label": "Secure Door",
 					"zwavePlusDeviceType": "Motorized Barrier - GDO",
+					"requiresSecurity": true,
 					"supportedCCs": [
 						"Application Status",
 						"Association", // V2+
@@ -724,6 +726,7 @@
 				"0x06": {
 					"label": "Secure Gate",
 					"zwavePlusDeviceType": "Motorized Barrier - Gate",
+					"requiresSecurity": true,
 					"supportedCCs": [
 						"Application Status",
 						"Association", // V2+
@@ -745,6 +748,7 @@
 				"0x07": {
 					"label": "Secure Barrier Add-on",
 					"zwavePlusDeviceType": "Motorized Barrier - Add-on",
+					"requiresSecurity": true,
 					"supportedCCs": [
 						"Application Status",
 						"Association", // V2+
@@ -766,6 +770,7 @@
 				"0x08": {
 					"label": "Secure Barrier Open only",
 					"zwavePlusDeviceType": "Motorized Barrier - Open only",
+					"requiresSecurity": true,
 					"supportedCCs": [
 						"Application Status",
 						"Association", // V2+
@@ -787,6 +792,7 @@
 				"0x09": {
 					"label": "Secure Barrier Close only",
 					"zwavePlusDeviceType": "Motorized Barrier - Close only",
+					"requiresSecurity": true,
 					"supportedCCs": [
 						"Application Status",
 						"Association", // V2+
@@ -808,6 +814,7 @@
 				"0x0a": {
 					"label": "Lockbox",
 					"zwavePlusDeviceType": "Lockbox",
+					"requiresSecurity": true,
 					"supportedCCs": [
 						// MUST NOT support Basic
 						"Notification",
@@ -821,6 +828,7 @@
 				"0x0b": {
 					"label": "Secure Keypad",
 					"zwavePlusDeviceType": "Entry Control Keypad",
+					"requiresSecurity": true,
 					"supportedCCs": [
 						// "Device Reset Locally", (we can't know if the device can be reset)
 						"Entry Control",
