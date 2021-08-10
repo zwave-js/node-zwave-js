@@ -2505,8 +2505,9 @@ ${handlers.length} left`,
 		if (node?.supportsCC(CommandClasses["Security 2"])) {
 			const securityClass = node.getHighestSecurityClass();
 			if (
-				securityClass != undefined &&
-				securityClass !== SecurityClass.S0_Legacy &&
+				((securityClass != undefined &&
+					securityClass !== SecurityClass.S0_Legacy) ||
+					this.securityManager2?.tempKeys.has(node.id)) &&
 				Security2CC.requiresEncapsulation(msg.command)
 			) {
 				msg.command = Security2CC.encapsulate(this, msg.command);

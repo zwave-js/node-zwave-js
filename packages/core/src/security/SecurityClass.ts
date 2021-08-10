@@ -1,6 +1,7 @@
 import type { Maybe } from "../values/Primitive";
 
 export enum SecurityClass {
+	Temporary = -2,
 	None = -1,
 	S2_Unauthenticated = 0,
 	S2_Authenticated = 1,

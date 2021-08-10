@@ -21,7 +21,7 @@ import {
 	ZWaveError,
 	ZWaveErrorCodes,
 } from "@zwave-js/core";
-import { getEnumMemberName } from "@zwave-js/shared";
+import { getEnumMemberName, pick } from "@zwave-js/shared";
 import type { ZWaveController } from "../controller/Controller";
 import { SendDataBridgeRequest } from "../controller/SendDataBridgeMessages";
 import { SendDataRequest } from "../controller/SendDataMessages";
@@ -262,6 +262,122 @@ export class Security2CCAPI extends CCAPI {
 			);
 		return response?.supportedCCs;
 	}
+
+	// eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
+	public async getKeyExchangeParameters() {
+		this.assertSupportsCommand(Security2Command, Security2Command.KEXGet);
+
+		const cc = new Security2CCKEXGet(this.driver, {
+			nodeId: this.endpoint.nodeId,
+			endpoint: this.endpoint.index,
+		});
+		const response = await this.driver.sendCommand<Security2CCKEXReport>(
+			cc,
+			this.commandOptions,
+		);
+		if (response) {
+			return pick(response, [
+				"requestCSA",
+				"echo",
+				"supportedKEXSchemes",
+				"supportedECDHProfiles",
+				"requestedKeys",
+			]);
+		}
+	}
+
+	/** Grants the joining node the given keys */
+	public async grantKeys(
+		params: Omit<Security2CCKEXSetOptions, "echo">,
+	): Promise<void> {
+		this.assertSupportsCommand(Security2Command, Security2Command.KEXSet);
+
+		const cc = new Security2CCKEXSet(this.driver, {
+			nodeId: this.endpoint.nodeId,
+			endpoint: this.endpoint.index,
+			...params,
+			echo: false,
+		});
+		await this.driver.sendCommand(cc, this.commandOptions);
+	}
+
+	/** Confirms the keys that were granted to a node */
+	public async confirmGrantedKeys(
+		params: Omit<Security2CCKEXReportOptions, "echo">,
+	): Promise<void> {
+		this.assertSupportsCommand(
+			Security2Command,
+			Security2Command.KEXReport,
+		);
+
+		const cc = new Security2CCKEXReport(this.driver, {
+			nodeId: this.endpoint.nodeId,
+			endpoint: this.endpoint.index,
+			...params,
+			echo: true,
+		});
+		await this.driver.sendCommand(cc, this.commandOptions);
+	}
+
+	/** Notifies the other node that the ongoing key exchange was aborted */
+	public async abortKeyExchange(failType: KEXFailType): Promise<void> {
+		this.assertSupportsCommand(Security2Command, Security2Command.KEXFail);
+
+		const cc = new Security2CCKEXFail(this.driver, {
+			nodeId: this.endpoint.nodeId,
+			endpoint: this.endpoint.index,
+			failType,
+		});
+		await this.driver.sendCommand(cc, this.commandOptions);
+	}
+
+	public async sendPublicKey(publicKey: Buffer): Promise<void> {
+		this.assertSupportsCommand(
+			Security2Command,
+			Security2Command.PublicKeyReport,
+		);
+
+		const cc = new Security2CCPublicKeyReport(this.driver, {
+			nodeId: this.endpoint.nodeId,
+			endpoint: this.endpoint.index,
+			includingNode: true,
+			publicKey,
+		});
+		await this.driver.sendCommand(cc, this.commandOptions);
+	}
+
+	public async sendNetworkKey(
+		securityClass: SecurityClass,
+		networkKey: Buffer,
+	): Promise<void> {
+		this.assertSupportsCommand(
+			Security2Command,
+			Security2Command.NetworkKeyReport,
+		);
+
+		const cc = new Security2CCNetworkKeyReport(this.driver, {
+			nodeId: this.endpoint.nodeId,
+			endpoint: this.endpoint.index,
+			grantedKey: securityClass,
+			networkKey,
+		});
+		await this.driver.sendCommand(cc, this.commandOptions);
+	}
+
+	public async confirmKeyVerification(): Promise<void> {
+		this.assertSupportsCommand(
+			Security2Command,
+			Security2Command.TransferEnd,
+		);
+
+		const cc = new Security2CCTransferEnd(this.driver, {
+			nodeId: this.endpoint.nodeId,
+			endpoint: this.endpoint.index,
+			keyVerified: true,
+			keyRequestComplete: false,
+		});
+		await this.driver.sendCommand(cc, this.commandOptions);
+	}
 }
 
 @commandClass(CommandClasses["Security 2"])
@@ -387,7 +503,25 @@ export class Security2CC extends CommandClass {
 			case Security2Command.NetworkKeyGet:
 			case Security2Command.NetworkKeyReport:
 			case Security2Command.NetworkKeyVerify:
+			case Security2Command.TransferEnd:
 				return true;
+
+			case Security2Command.KEXSet:
+			case Security2Command.KEXReport:
+				// KEXSet/Report need to be encrypted for the confirmation only
+				return (cc as Security2CCKEXSet | Security2CCKEXReport).echo;
+
+			case Security2Command.KEXFail: {
+				switch ((cc as Security2CCKEXFail).failType) {
+					case KEXFailType.Decrypt:
+					case KEXFailType.WrongSecurityLevel:
+					case KEXFailType.KeyNotGranted:
+					case KEXFailType.NoVerify:
+						return true;
+					default:
+						return false;
+				}
+			}
 		}
 		return false;
 	}
@@ -521,18 +655,25 @@ export class Security2CCMessageEncapsulation extends Security2CC {
 				return failNoSPAN();
 			}
 
-			const decrypt = (): { plaintext: Buffer; authOK: boolean } => {
+			const decrypt = (): {
+				plaintext: Buffer;
+				authOK: boolean;
+				decryptionKey?: Buffer;
+			} => {
 				const getNonceAndDecrypt = () => {
 					const iv = this.driver.securityManager2.nextNonce(node.id);
 					const { keyCCM: key } =
-						this.driver.securityManager2.getKeys({ node });
-					return decryptAES128CCM(
-						key,
-						iv,
-						ciphertext,
-						authData,
-						authTag,
-					);
+						this.driver.securityManager2.getKeysForNode(node);
+					return {
+						decryptionKey: key,
+						...decryptAES128CCM(
+							key,
+							iv,
+							ciphertext,
+							authData,
+							authTag,
+						),
+					};
 				};
 
 				if (spanState.type === SPANState.SPAN) {
@@ -549,6 +690,24 @@ export class Security2CCMessageEncapsulation extends Security2CC {
 					const receiverEI = spanState.receiverEI;
 
 					// How we do this depends on whether we know the security class of the other node
+					if (this.driver.securityManager2.tempKeys.has(peerNodeID)) {
+						// We're currently bootstrapping the node, it might be using a temporary key
+						this.driver.securityManager2.initializeTempSPAN(
+							node,
+							senderEI,
+							receiverEI,
+						);
+						const ret = getNonceAndDecrypt();
+						// Decryption with the temporary key worked
+						if (ret.authOK) return ret;
+
+						// Reset the SPAN state and try with the recently granted security class
+						this.driver.securityManager2.setSPANState(
+							node.id,
+							spanState,
+						);
+					}
+
 					if (securityClass != undefined) {
 						this.driver.securityManager2.initializeSPAN(
 							node,
@@ -592,7 +751,7 @@ export class Security2CCMessageEncapsulation extends Security2CC {
 				return { plaintext: Buffer.from([]), authOK: false };
 			};
 
-			const { plaintext, authOK } = decrypt();
+			const { plaintext, authOK, decryptionKey } = decrypt();
 			validatePayload.withReason(
 				"Message authentication failed, won't accept security encapsulated command.",
 			)(!!authOK && !!plaintext);
@@ -612,6 +771,7 @@ export class Security2CCMessageEncapsulation extends Security2CC {
 					encapCC: this,
 				});
 			}
+			this.decryptionKey = decryptionKey;
 		} else {
 			this._securityClass = options.securityClass;
 			this.encapsulated = options.encapsulated;
@@ -631,6 +791,7 @@ export class Security2CCMessageEncapsulation extends Security2CC {
 	}
 
 	private _securityClass?: SecurityClass;
+	public readonly decryptionKey?: Buffer;
 
 	private _sequenceNumber: number | undefined;
 	/**
@@ -736,21 +897,32 @@ export class Security2CCMessageEncapsulation extends Security2CC {
 			const senderEI =
 				this.driver.securityManager2.generateNonce(undefined);
 			const receiverEI = spanState.receiverEI;
-			const securityClass =
-				this._securityClass ?? node.getHighestSecurityClass();
 
-			if (securityClass == undefined) {
-				throw new ZWaveError(
-					"No security class defined for this command!",
-					ZWaveErrorCodes.Security2CC_NoSPAN,
+			// While bootstrapping a node, the controller only sends commands encrypted
+			// with the temporary key
+			if (this.driver.securityManager2.tempKeys.has(node.id)) {
+				this.driver.securityManager2.initializeTempSPAN(
+					node,
+					senderEI,
+					receiverEI,
+				);
+			} else {
+				const securityClass =
+					this._securityClass ?? node.getHighestSecurityClass();
+
+				if (securityClass == undefined) {
+					throw new ZWaveError(
+						"No security class defined for this command!",
+						ZWaveErrorCodes.Security2CC_NoSPAN,
+					);
+				}
+				this.driver.securityManager2.initializeSPAN(
+					node,
+					securityClass,
+					senderEI,
+					receiverEI,
 				);
 			}
-			this.driver.securityManager2.initializeSPAN(
-				node,
-				securityClass,
-				senderEI,
-				receiverEI,
-			);
 
 			// Add or update the SPAN extension
 			let spanExtension = this.extensions.find(
@@ -801,12 +973,13 @@ export class Security2CCMessageEncapsulation extends Security2CC {
 		);
 
 		const iv = this.driver.securityManager2.nextNonce(node.id);
-		const { keyCCM: key } = this.driver.securityManager2.getKeys(
+		const { keyCCM: key } =
 			// Prefer the overridden security class if it was given
 			this._securityClass != undefined
-				? { securityClass: this._securityClass }
-				: { node },
-		);
+				? this.driver.securityManager2.getKeysForSecurityClass(
+						this._securityClass,
+				  )
+				: this.driver.securityManager2.getKeysForNode(node);
 
 		const { ciphertext: ciphertextPayload, authTag } = encryptAES128CCM(
 			key,
@@ -1008,39 +1181,7 @@ export class Security2CCNonceGet extends Security2CC {
 	}
 }
 
-@CCCommand(Security2Command.KEXReport)
-export class Security2CCKEXReport extends Security2CC {
-	public constructor(
-		driver: Driver,
-		options: CommandClassDeserializationOptions,
-	) {
-		super(driver, options);
-		validatePayload(this.payload.length >= 4);
-		this.requestCSA = !!(this.payload[0] & 0b10);
-		this.echo = !!(this.payload[0] & 0b1);
-		this.supportedKEXSchemes = parseBitMask(this.payload.slice(1, 2), 0);
-		this.supportedECDHProfiles = parseBitMask(
-			this.payload.slice(2, 3),
-			ECDHProfiles.Curve25519,
-		);
-		this.requestedKeys = parseBitMask(
-			this.payload.slice(3, 4),
-			SecurityClass.S2_Unauthenticated,
-		);
-	}
-
-	public readonly requestCSA: boolean;
-	public readonly echo: boolean;
-	public readonly supportedKEXSchemes: readonly KEXSchemes[];
-	public readonly supportedECDHProfiles: readonly ECDHProfiles[];
-	public readonly requestedKeys: readonly SecurityClass[];
-}
-
-@CCCommand(Security2Command.KEXGet)
-@expectedCCResponse(Security2CCKEXReport)
-export class Security2CCKEXGet extends Security2CC {}
-
-interface Security2CCKEXSetOptions extends CCCommandOptions {
+interface Security2CCKEXReportOptions {
 	requestCSA: boolean;
 	echo: boolean;
 	supportedKEXSchemes: KEXSchemes[];
@@ -1048,40 +1189,133 @@ interface Security2CCKEXSetOptions extends CCCommandOptions {
 	requestedKeys: SecurityClass[];
 }
 
-@CCCommand(Security2Command.KEXSet)
-export class Security2CCKEXSet extends Security2CC {
+@CCCommand(Security2Command.KEXReport)
+export class Security2CCKEXReport extends Security2CC {
 	public constructor(
 		driver: Driver,
-		options: CommandClassDeserializationOptions | Security2CCKEXSetOptions,
+		options:
+			| CommandClassDeserializationOptions
+			| (CCCommandOptions & Security2CCKEXReportOptions),
 	) {
 		super(driver, options);
 		if (gotDeserializationOptions(options)) {
-			// TODO: Deserialize payload
-			throw new ZWaveError(
-				`${this.constructor.name}: deserialization not implemented`,
-				ZWaveErrorCodes.Deserialization_NotImplemented,
+			validatePayload(this.payload.length >= 4);
+			this.requestCSA = !!(this.payload[0] & 0b10);
+			this.echo = !!(this.payload[0] & 0b1);
+			// The bit mask starts at 0, but bit 0 is not used
+			this.supportedKEXSchemes = parseBitMask(
+				this.payload.slice(1, 2),
+				0,
+			).filter((s) => s !== 0);
+			this.supportedECDHProfiles = parseBitMask(
+				this.payload.slice(2, 3),
+				ECDHProfiles.Curve25519,
+			);
+			this.requestedKeys = parseBitMask(
+				this.payload.slice(3, 4),
+				SecurityClass.S2_Unauthenticated,
 			);
 		} else {
 			this.requestCSA = options.requestCSA;
 			this.echo = options.echo;
-			this.selectedKEXSchemes = options.supportedKEXSchemes;
-			this.selectedECDHProfiles = options.supportedECDHProfiles;
-			this.grantedKeys = options.requestedKeys;
+			this.supportedKEXSchemes = options.supportedKEXSchemes;
+			this.supportedECDHProfiles = options.supportedECDHProfiles;
+			this.requestedKeys = options.requestedKeys;
 		}
 	}
 
-	public requestCSA: boolean;
-	public echo: boolean;
-	public selectedKEXSchemes: KEXSchemes[];
-	public selectedECDHProfiles: ECDHProfiles[];
-	public grantedKeys: SecurityClass[];
+	public readonly requestCSA: boolean;
+	public readonly echo: boolean;
+	public readonly supportedKEXSchemes: readonly KEXSchemes[];
+	public readonly supportedECDHProfiles: readonly ECDHProfiles[];
+	public readonly requestedKeys: readonly SecurityClass[];
 
 	public serialize(): Buffer {
 		this.payload = Buffer.concat([
 			Buffer.from([(this.requestCSA ? 0b10 : 0) + (this.echo ? 0b1 : 0)]),
-			encodeBitMask(this.selectedKEXSchemes, 8, KEXSchemes.KEXScheme1),
+			// The bit mask starts at 0, but bit 0 is not used
+			encodeBitMask(this.supportedKEXSchemes, 7, 0),
 			encodeBitMask(
-				this.selectedECDHProfiles,
+				this.supportedECDHProfiles,
+				7,
+				ECDHProfiles.Curve25519,
+			),
+			encodeBitMask(
+				this.requestedKeys,
+				SecurityClass.S0_Legacy,
+				SecurityClass.S2_Unauthenticated,
+			),
+		]);
+		return super.serialize();
+	}
+}
+
+@CCCommand(Security2Command.KEXGet)
+@expectedCCResponse(Security2CCKEXReport)
+export class Security2CCKEXGet extends Security2CC {}
+
+interface Security2CCKEXSetOptions {
+	permitCSA: boolean;
+	echo: boolean;
+	selectedKEXScheme: KEXSchemes;
+	selectedECDHProfile: ECDHProfiles;
+	grantedKeys: SecurityClass[];
+}
+
+@CCCommand(Security2Command.KEXSet)
+export class Security2CCKEXSet extends Security2CC {
+	public constructor(
+		driver: Driver,
+		options:
+			| CommandClassDeserializationOptions
+			| (CCCommandOptions & Security2CCKEXSetOptions),
+	) {
+		super(driver, options);
+		if (gotDeserializationOptions(options)) {
+			validatePayload(this.payload.length >= 4);
+			this.permitCSA = !!(this.payload[0] & 0b10);
+			this.echo = !!(this.payload[0] & 0b1);
+			// The bit mask starts at 0, but bit 0 is not used
+			const selectedKEXSchemes = parseBitMask(
+				this.payload.slice(1, 2),
+				0,
+			).filter((s) => s !== 0);
+			validatePayload(selectedKEXSchemes.length === 1);
+			this.selectedKEXScheme = selectedKEXSchemes[0];
+
+			const selectedECDHProfiles = parseBitMask(
+				this.payload.slice(2, 3),
+				ECDHProfiles.Curve25519,
+			);
+			validatePayload(selectedECDHProfiles.length === 1);
+			this.selectedECDHProfile = selectedECDHProfiles[0];
+
+			this.grantedKeys = parseBitMask(
+				this.payload.slice(3, 4),
+				SecurityClass.S2_Unauthenticated,
+			);
+		} else {
+			this.permitCSA = options.permitCSA;
+			this.echo = options.echo;
+			this.selectedKEXScheme = options.selectedKEXScheme;
+			this.selectedECDHProfile = options.selectedECDHProfile;
+			this.grantedKeys = options.grantedKeys;
+		}
+	}
+
+	public permitCSA: boolean;
+	public echo: boolean;
+	public selectedKEXScheme: KEXSchemes;
+	public selectedECDHProfile: ECDHProfiles;
+	public grantedKeys: SecurityClass[];
+
+	public serialize(): Buffer {
+		this.payload = Buffer.concat([
+			Buffer.from([(this.permitCSA ? 0b10 : 0) + (this.echo ? 0b1 : 0)]),
+			// The bit mask starts at 0, but bit 0 is not used
+			encodeBitMask([this.selectedKEXScheme], 7, 0),
+			encodeBitMask(
+				[this.selectedECDHProfile],
 				7,
 				ECDHProfiles.Curve25519,
 			),

@@ -4,6 +4,7 @@ export * from "./consts";
 export * from "./error/ZWaveError";
 export * from "./log/shared";
 export * from "./security/crypto";
+export * from "./security/DSK";
 export * from "./security/Manager";
 export * from "./security/Manager2";
 export * from "./security/SecurityClass";

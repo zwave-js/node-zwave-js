@@ -20,6 +20,11 @@ interface NetworkKeys {
 	personalizationString: Buffer;
 }
 
+interface TempNetworkKeys {
+	keyCCM: Buffer;
+	personalizationString: Buffer;
+}
+
 export enum SPANState {
 	/** No entry exists */
 	None = 0,
@@ -65,6 +70,8 @@ export class SecurityManager2 {
 
 	/** A map of SPAN states for each node */
 	private spanTable = new Map<number, SPANTableEntry>();
+	/** A map of temporary keys for each node that are used for the key exchange */
+	public readonly tempKeys = new Map<number, TempNetworkKeys>();
 	/** A map of sequence numbers that were last used in communication with a node */
 	private ownSequenceNumbers = new Map<number, number>();
 	private peerSequenceNumbers = new Map<number, number>();
@@ -84,7 +91,7 @@ export class SecurityManager2 {
 			);
 		} else if (
 			!(securityClass in SecurityClass) ||
-			securityClass === SecurityClass.None
+			securityClass <= SecurityClass.None
 		) {
 			throw new ZWaveError(
 				`Invalid security class!`,
@@ -104,25 +111,7 @@ export class SecurityManager2 {
 		this.groupClasses.set(group, securityClass);
 	}
 
-	public getKeys(
-		options:
-			| { node: SecurityClassOwner }
-			| { securityClass: SecurityClass },
-	): NetworkKeys {
-		let securityClass: SecurityClass;
-		if ("securityClass" in options) {
-			securityClass = options.securityClass;
-		} else {
-			const spanState = this.getSPANState(options.node.id);
-			if (spanState.type !== SPANState.SPAN) {
-				throw new ZWaveError(
-					`Security class for node ${options.node.id} is not yet known!`,
-					ZWaveErrorCodes.Security2CC_NotInitialized,
-				);
-			}
-			securityClass = spanState.securityClass;
-		}
-
+	public getKeysForSecurityClass(securityClass: SecurityClass): NetworkKeys {
 		const keys = this.networkKeys.get(securityClass);
 		if (!keys) {
 			throw new ZWaveError(
@@ -136,10 +125,46 @@ export class SecurityManager2 {
 		return { ...keys };
 	}
 
+	public getKeysForNode(
+		node: SecurityClassOwner,
+	): NetworkKeys | TempNetworkKeys {
+		const spanState = this.getSPANState(node.id);
+		// The keys we return must match the actual SPAN state (if we have one)
+		// Meaning if an SPAN for the temporary inclusion key is established,
+		// we need to return that temporary key
+		if (
+			spanState.type === SPANState.SPAN &&
+			spanState.securityClass === SecurityClass.Temporary
+		) {
+			if (this.tempKeys.has(node.id)) return this.tempKeys.get(node.id)!;
+			throw new ZWaveError(
+				`Temporary encryption key for node ${node.id} is not known!`,
+				ZWaveErrorCodes.Security2CC_NotInitialized,
+			);
+		} else if (spanState.type !== SPANState.SPAN) {
+			throw new ZWaveError(
+				`Security class for node ${node.id} is not yet known!`,
+				ZWaveErrorCodes.Security2CC_NotInitialized,
+			);
+		}
+		return this.getKeysForSecurityClass(spanState.securityClass);
+	}
+
 	public getSPANState(
 		peerNodeID: number,
 	): SPANTableEntry | { type: SPANState.None } {
 		return this.spanTable.get(peerNodeID) ?? { type: SPANState.None };
+	}
+
+	/** Tests whether the most recent secure command for a node has used the given security class */
+	public hasUsedSecurityClass(
+		peerNodeID: number,
+		securityClass: SecurityClass,
+	): boolean {
+		const spanState = this.spanTable.get(peerNodeID);
+		if (!spanState) return false;
+		if (spanState.type !== SPANState.SPAN) return false;
+		return spanState.securityClass === securityClass;
 	}
 
 	/**
@@ -192,12 +217,42 @@ export class SecurityManager2 {
 			);
 		}
 
-		const keys = this.getKeys({ securityClass });
+		const keys = this.getKeysForSecurityClass(securityClass);
 		const noncePRK = computeNoncePRK(senderEI, receiverEI);
 		const MEI = deriveMEI(noncePRK);
 
 		this.spanTable.set(peer.id, {
 			securityClass,
+			type: SPANState.SPAN,
+			rng: new CtrDRBG(
+				128,
+				false,
+				MEI,
+				undefined,
+				keys.personalizationString,
+			),
+		});
+	}
+
+	/** Initializes the singlecast PAN generator for a given node based on the given entropy inputs */
+	public initializeTempSPAN(
+		peer: SecurityClassOwner,
+		senderEI: Buffer,
+		receiverEI: Buffer,
+	): void {
+		if (senderEI.length !== 16 || receiverEI.length !== 16) {
+			throw new ZWaveError(
+				`The entropy input must consist of 16 bytes`,
+				ZWaveErrorCodes.Argument_Invalid,
+			);
+		}
+
+		const keys = this.tempKeys.get(peer.id)!;
+		const noncePRK = computeNoncePRK(senderEI, receiverEI);
+		const MEI = deriveMEI(noncePRK);
+
+		this.spanTable.set(peer.id, {
+			securityClass: SecurityClass.Temporary,
 			type: SPANState.SPAN,
 			rng: new CtrDRBG(
 				128,
