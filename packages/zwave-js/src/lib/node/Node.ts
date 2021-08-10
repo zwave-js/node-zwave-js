@@ -3052,7 +3052,7 @@ protocol version:      ${this._protocolVersion}`;
 					`Failed to start the update: The node does not support upgrading a different firmware target than 0!`,
 					ZWaveErrorCodes.FirmwareUpdateCC_TargetNotFound,
 				);
-			} else if (!meta.additionalFirmwareIDs.includes(target)) {
+			} else if (meta.additionalFirmwareIDs[target - 1] == undefined) {
 				throw new ZWaveError(
 					`Failed to start the update: Firmware target #${target} not found on this node!`,
 					ZWaveErrorCodes.FirmwareUpdateCC_TargetNotFound,

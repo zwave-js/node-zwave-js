@@ -1,0 +1,16 @@
+{
+	"manufacturer": "Silicon Labs",
+	"manufacturerId": "0x0000",
+	"label": "ACC-UZB3",
+	"description": "Z-Wave 500 Series Controller",
+	"devices": [
+		{
+			"productType": "0x0003",
+			"productId": "0x0008"
+		}
+	],
+	"firmwareVersion": {
+		"min": "6.0",
+		"max": "255.255"
+	}
+}

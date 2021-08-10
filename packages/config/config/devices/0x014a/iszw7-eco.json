@@ -17,26 +17,23 @@
 	"paramInformation": {
 		"1": {
 			"label": "Default Sound",
-			"description": "Different types of sounds",
 			"valueSize": 1,
 			"minValue": 1,
-			"maxValue": 5,
+			"maxValue": 100,
 			"defaultValue": 5,
 			"unsigned": true
 		},
 		"2": {
-			"label": "Heartbeat Notification Timing",
-			"description": "Seconds between automatic battery reports",
+			"label": "Battery Report Interval",
 			"valueSize": 4,
 			"unit": "seconds",
 			"minValue": 120,
-			"maxValue": 3600,
+			"maxValue": 86400,
 			"defaultValue": 3600,
 			"unsigned": true
 		},
 		"3": {
-			"label": "Supervision Encapsulation",
-			"description": "Encapsulate unsolicited notifications in supervision get requests.",
+			"label": "Supervision Encapsulation for Get Requests",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 1,
@@ -55,12 +52,11 @@
 			]
 		},
 		"4": {
-			"label": "Sound Volume",
-			"description": "Sound volume as a percentage for non-emergency sounds",
+			"label": "Volume",
 			"valueSize": 1,
 			"unit": "%",
 			"minValue": 0,
-			"maxValue": 255,
+			"maxValue": 100,
 			"defaultValue": 50,
 			"unsigned": true
 		},
@@ -69,14 +65,13 @@
 			"description": "Number of sounds available to play",
 			"valueSize": 1,
 			"minValue": 0,
-			"maxValue": 30,
+			"maxValue": 255,
 			"defaultValue": 30,
 			"unsigned": true,
 			"readOnly": true
 		},
 		"6": {
-			"label": "Emergency Sound Volume Adjustable",
-			"description": "Enable intrusion/smoke/co siren volume adjustable and mutable. 0 is disabled (default). 1 is enabled",
+			"label": "Allow Volume Adjustments for Intrusion/Smoke/CO Alarms",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 1,
@@ -85,11 +80,11 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "Disabled alarm type sounds volume adjustments",
+					"label": "Disable",
 					"value": 0
 				},
 				{
-					"label": "Enable alarm type sounds volume adjustments",
+					"label": "Enable",
 					"value": 1
 				}
 			]

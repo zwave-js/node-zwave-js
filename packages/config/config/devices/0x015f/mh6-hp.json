@@ -7,6 +7,11 @@
 		{
 			"productType": "0x0604",
 			"productId": "0x0101"
+		},
+		{
+			"productType": "0x0604",
+			"productId": "0x5101",
+			"zwaveAllianceId": 3042
 		}
 	],
 	"firmwareVersion": {
@@ -15,9 +20,15 @@
 	},
 	"associations": {
 		"1": {
-			"label": "Report",
+			"label": "Lifeline",
 			"maxNodes": 1,
 			"isLifeline": true
 		}
+	},
+	"metadata": {
+		"inclusion": "In normal display, press & hold ^ button to enter interface for adding Z-Wave network. Before device added into network, “- - -” will display on the screen. Then press ^ once, device will enter learning mode to get a node ID. If adding is successful, a Node ID will display on the screen in a few seconds.",
+		"exclusion": "In normal display, press & hold ^ button to enter interface for removing of Z-Wave network. A Node ID will display on the screen. Then press ^ button once, “- - -” will display on the screen to show removal was successful",
+		"reset": "1、Remove the device from Z-Wave network can restore factory setting.\n2、Configure the parameter 10 in secret menu can restore the factory setting also. Please use this procedure only when the network primary controller is missing or otherwise inoperable.",
+		"manual": "https://products.z-wavealliance.org/ProductManual/File?folder=&filename=MarketCertificationFiles/3042/MH6-HP%20User%20Manual.pdf"
 	}
 }
