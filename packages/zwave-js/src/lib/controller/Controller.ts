@@ -217,6 +217,12 @@ export type ReadonlyThrowingMap<K, V> = ReadonlyMap<K, V> & {
 	getOrThrow(key: K): V;
 };
 
+/** Additional information about the outcome of a node inclusion */
+export interface InclusionResult {
+	/** This flag warns that a node was included with a lower than intended security, meaning unencrypted when it should have been included with Security S0/S2 */
+	lowSecurity?: boolean;
+}
+
 export enum InclusionStrategy {
 	/**
 	 * Always uses Security S2 if supported, otherwise uses Security S0 for certain devices which don't work without encryption and uses no encryption otherwise.
@@ -276,14 +282,6 @@ export interface InclusionUserCallbacks {
 	grantSecurityClasses(
 		requested: InclusionGrant,
 	): Promise<InclusionGrant | false>;
-
-	// /**
-	//  * Instruct the application to display the received DSK for the user to verify if it matches the one belonging to the device.
-	//  * The returned promise MUST resolve to `true` when the user has confirmed the DSK and `false` if the user declined.
-	//  *
-	//  * @param dsk The full DSK in the form `aaaaa-bbbbb-ccccc-ddddd-eeeee-fffff-11111-22222`
-	//  */
-	// validateDSK(dsk: string): Promise<boolean>;
 
 	/**
 	 * Instruct the application to display the received DSK for the user to verify if it matches the one belonging to the device and
@@ -350,7 +348,7 @@ interface ControllerEventCallbacks
 	"exclusion started": () => void;
 	"inclusion stopped": () => void;
 	"exclusion stopped": () => void;
-	"node added": (node: ZWaveNode) => void;
+	"node added": (node: ZWaveNode, result: InclusionResult) => void;
 	"node removed": (node: ZWaveNode, replaced: boolean) => void;
 	"heal network progress": (
 		progress: ReadonlyMap<number, HealNodeStatus>,
@@ -1850,13 +1848,22 @@ export class ZWaveController extends TypedEventEmitter<ControllerEventCallbacks>
 
 					const opts = this._inclusionOptions;
 					// The default inclusion strategy is: Use S2 if possible, only use S0 if necessary, use no encryption otherwise
+					let lowSecurity = false;
 					if (
 						newNode.supportsCC(CommandClasses["Security 2"]) &&
 						(opts.strategy === InclusionStrategy.Default ||
 							opts.strategy === InclusionStrategy.Security_S2)
 					) {
 						await this.secureBootstrapS2(newNode);
-						// TODO: Warn if failed
+						const actualSecurityClass =
+							newNode.getHighestSecurityClass();
+						if (
+							actualSecurityClass == undefined ||
+							actualSecurityClass <
+								SecurityClass.S2_Unauthenticated
+						) {
+							lowSecurity = true;
+						}
 					} else if (
 						newNode.supportsCC(CommandClasses.Security) &&
 						(opts.strategy === InclusionStrategy.Security_S0 ||
@@ -1868,7 +1875,14 @@ export class ZWaveController extends TypedEventEmitter<ControllerEventCallbacks>
 									)?.requiresSecurity)))
 					) {
 						await this.secureBootstrapS0(newNode);
-						// TODO: Warn if failed
+						const actualSecurityClass =
+							newNode.getHighestSecurityClass();
+						if (
+							actualSecurityClass == undefined ||
+							actualSecurityClass < SecurityClass.S0_Legacy
+						) {
+							lowSecurity = true;
+						}
 					}
 					this._includeController = false;
 
@@ -1876,7 +1890,9 @@ export class ZWaveController extends TypedEventEmitter<ControllerEventCallbacks>
 					await this.bootstrapLifelineAndWakeup(newNode);
 
 					// We're done adding this node, notify listeners
-					this.emit("node added", newNode);
+					const result: InclusionResult = {};
+					if (lowSecurity) result.lowSecurity = true;
+					this.emit("node added", newNode, result);
 				}
 				break;
 			}
@@ -1978,25 +1994,43 @@ export class ZWaveController extends TypedEventEmitter<ControllerEventCallbacks>
 
 					// Try perform the security bootstrap process
 					const strategy = this._inclusionOptions.strategy;
+					let lowSecurity = false;
 					if (
 						newNode.supportsCC(CommandClasses["Security 2"]) &&
 						strategy === InclusionStrategy.Security_S2
 					) {
 						await this.secureBootstrapS2(newNode, true);
-						// TODO: Warn if failed
+						const actualSecurityClass =
+							newNode.getHighestSecurityClass();
+						if (
+							actualSecurityClass == undefined ||
+							actualSecurityClass <
+								SecurityClass.S2_Unauthenticated
+						) {
+							lowSecurity = true;
+						}
 					} else if (
 						newNode.supportsCC(CommandClasses.Security) &&
 						strategy === InclusionStrategy.Security_S0
 					) {
 						await this.secureBootstrapS0(newNode, true);
-						// TODO: Warn if failed
+						const actualSecurityClass =
+							newNode.getHighestSecurityClass();
+						if (
+							actualSecurityClass == undefined ||
+							actualSecurityClass < SecurityClass.S0_Legacy
+						) {
+							lowSecurity = true;
+						}
 					}
 
 					// Bootstrap the node's lifelines, so it knows where the controller is
 					await this.bootstrapLifelineAndWakeup(newNode);
 
 					// We're done adding this node, notify listeners. This also kicks off the node interview
-					this.emit("node added", newNode);
+					const result: InclusionResult = {};
+					if (lowSecurity) result.lowSecurity = true;
+					this.emit("node added", newNode, result);
 				}
 
 				// stop here, don't emit inclusion failed
