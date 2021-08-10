@@ -239,73 +239,149 @@
 			"maxValue": 32400,
 			"defaultValue": 600
 		},
-		"40": {
-			"label": "First button – scenes sent",
+		"40[0x01]": {
+			"label": "S1 scenes: Pressed 1 time",
+			"description": "Send a Central Scene notification when S1 is pressed 1 time",
 			"valueSize": 1,
 			"minValue": 0,
-			"maxValue": 8,
-			"defaultValue": 0,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "Key pressed 1 time",
-					"value": 1
-				},
-				{
-					"label": "Key pressed 2 times",
-					"value": 2
-				},
-				{
-					"label": "Key pressed 1 time and 2 times",
-					"value": 3
-				},
-				{
-					"label": "Key pressed 3 times",
-					"value": 4
-				},
-				{
-					"label": "Key pressed 1 time, 2 times and 3 times",
-					"value": 7
-				},
-				{
-					"label": "Key hold down and key released",
-					"value": 8
-				}
-			]
+			"maxValue": 1,
+			"defaultValue": 0
 		},
-		"41": {
-			"label": "Second button – scenes sent",
+		"40[0x02]": {
+			"label": "S1 scenes: Pressed 2 times",
+			"description": "Send a Central Scene notification when S1 is pressed 2 time",
 			"valueSize": 1,
 			"minValue": 0,
-			"maxValue": 8,
-			"defaultValue": 0,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "Key pressed 1 time",
-					"value": 1
-				},
-				{
-					"label": "Key pressed 2 times",
-					"value": 2
-				},
-				{
-					"label": "Key pressed 1 time and 2 times",
-					"value": 3
-				},
-				{
-					"label": "Key pressed 3 times",
-					"value": 4
-				},
-				{
-					"label": "Key pressed 1 time, 2 times and 3 times",
-					"value": 7
-				},
-				{
-					"label": "Key hold down and key released",
-					"value": 8
-				}
-			]
+			"maxValue": 1,
+			"defaultValue": 0
+		},
+		"40[0x03]": {
+			"label": "S1 scenes: Pressed 1 or 2 times",
+			"description": "Send a Central Scene notification when S1 is pressed 1 or 2 time",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 0
+		},
+		"40[0x04]": {
+			"label": "S1 scenes: Pressed 3 times",
+			"description": "Send a Central Scene notification when S1 is pressed 3 time",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 0
+		},
+		"40[0x06]": {
+			"label": "S1 scenes: Pressed 2 or 3 times",
+			"description": "Send a Central Scene notification when S1 is pressed 2 or 3 time",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 0
+		},
+		"40[0x07]": {
+			"label": "S1 scenes: Pressed 1, 2 or 3 times",
+			"description": "Send a Central Scene notification when S1 is pressed 1, 2 or 3 time",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 0
+		},
+		"40[0x08]": {
+			"label": "S1 scenes: Hold and Released",
+			"description": "Send a Central Scene notification when S1 is Hold and Released",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 0
+		},
+		"40[0x0e]": {
+			"label": "S1 scenes: Pressed 2 or 3 times, or Hold and Released",
+			"description": "Send a Central Scene notification when S1 is pressed 2 or 3 times, or Hold and Released",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 0
+		},
+		"40[0x0f]": {
+			"label": "S1 scenes: Pressed 1, 2 or 3 times, or Hold and Released",
+			"description": "Send a Central Scene notification when S1 is pressed 1, 2 or 3 times, or Hold and Released",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 0
+		},
+		"41[0x01]": {
+			"label": "S1 scenes: Pressed 1 time",
+			"description": "Send a Central Scene notification when S1 is pressed 1 time",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 0
+		},
+		"41[0x02]": {
+			"label": "S1 scenes: Pressed 2 times",
+			"description": "Send a Central Scene notification when S1 is pressed 2 time",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 0
+		},
+		"41[0x03]": {
+			"label": "S1 scenes: Pressed 1 or 2 times",
+			"description": "Send a Central Scene notification when S1 is pressed 1 or 2 time",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 0
+		},
+		"41[0x04]": {
+			"label": "S1 scenes: Pressed 3 times",
+			"description": "Send a Central Scene notification when S1 is pressed 3 time",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 0
+		},
+		"41[0x06]": {
+			"label": "S1 scenes: Pressed 2 or 3 times",
+			"description": "Send a Central Scene notification when S1 is pressed 2 or 3 time",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 0
+		},
+		"41[0x07]": {
+			"label": "S1 scenes: Pressed 1, 2 or 3 times",
+			"description": "Send a Central Scene notification when S1 is pressed 1, 2 or 3 time",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 0
+		},
+		"41[0x08]": {
+			"label": "S1 scenes: Hold and Released",
+			"description": "Send a Central Scene notification when S1 is Hold and Released",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 0
+		},
+		"41[0x0e]": {
+			"label": "S1 scenes: Pressed 2 or 3 times, or Hold and Released",
+			"description": "Send a Central Scene notification when S1 is pressed 2 or 3 times, or Hold and Released",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 0
+		},
+		"41[0x0f]": {
+			"label": "S1 scenes: Pressed 1, 2 or 3 times, or Hold and Released",
+			"description": "Send a Central Scene notification when S1 is pressed 1, 2 or 3 times, or Hold and Released",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 0
 		},
 		"60": {
 			"label": "Power reports – include self-consumption",
