@@ -5,6 +5,10 @@
 	Add placeholder for next release with `wip` snippet
   ## __WORK IN PROGRESS__
 -->
+## __WORK IN PROGRESS__ · _„Hell, it's about damn time”_
+### Features
+* Added support for **Security S2**
+
 ## 8.0.8 (2021-08-04)
 ### Bugfixes
 * The firmware target selection for targets other than 0 no longer incorrectly complains about an incorrect target
