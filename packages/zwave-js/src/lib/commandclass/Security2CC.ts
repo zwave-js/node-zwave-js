@@ -21,7 +21,7 @@ import {
 	ZWaveError,
 	ZWaveErrorCodes,
 } from "@zwave-js/core";
-import { getEnumMemberName, pick } from "@zwave-js/shared";
+import { buffer2hex, getEnumMemberName, pick } from "@zwave-js/shared";
 import type { ZWaveController } from "../controller/Controller";
 import { SendDataBridgeRequest } from "../controller/SendDataBridgeMessages";
 import { SendDataRequest } from "../controller/SendDataMessages";
@@ -1017,7 +1017,7 @@ export class Security2CCMessageEncapsulation extends Security2CC {
 
 	public toLogEntry(): MessageOrCCLogEntry {
 		const message: MessageRecord = {
-			sequenceNumber: this.sequenceNumber,
+			"sequence number": this.sequenceNumber,
 		};
 		if (this.extensions.length > 0) {
 			message.extensions = this.extensions
@@ -1125,6 +1125,21 @@ export class Security2CCNonceReport extends Security2CC {
 		}
 		return super.serialize();
 	}
+
+	public toLogEntry(): MessageOrCCLogEntry {
+		const message: MessageRecord = {
+			"sequence number": this.sequenceNumber,
+			SOS: this.SOS,
+			MOS: this.MOS,
+		};
+		if (this.receiverEI) {
+			message["receiver entropy"] = buffer2hex(this.receiverEI);
+		}
+		return {
+			...super.toLogEntry(),
+			message,
+		};
+	}
 }
 
 @CCCommand(Security2Command.NonceGet)
@@ -1178,6 +1193,13 @@ export class Security2CCNonceGet extends Security2CC {
 	public serialize(): Buffer {
 		this.payload = Buffer.from([this.sequenceNumber]);
 		return super.serialize();
+	}
+
+	public toLogEntry(): MessageOrCCLogEntry {
+		return {
+			...super.toLogEntry(),
+			message: { "sequence number": this.sequenceNumber },
+		};
 	}
 }
 
@@ -1247,6 +1269,25 @@ export class Security2CCKEXReport extends Security2CC {
 			),
 		]);
 		return super.serialize();
+	}
+
+	public toLogEntry(): MessageOrCCLogEntry {
+		return {
+			...super.toLogEntry(),
+			message: {
+				echo: this.echo,
+				"supported schemes": this.supportedKEXSchemes
+					.map((s) => `\n· ${getEnumMemberName(KEXSchemes, s)}`)
+					.join(""),
+				"supported ECDH profiles": this.supportedECDHProfiles
+					.map((s) => `\n· ${getEnumMemberName(ECDHProfiles, s)}`)
+					.join(""),
+				"CSA requested": this.requestCSA,
+				"requested security classes": this.requestedKeys
+					.map((s) => `\n· ${getEnumMemberName(SecurityClass, s)}`)
+					.join(""),
+			},
+		};
 	}
 }
 
@@ -1327,6 +1368,27 @@ export class Security2CCKEXSet extends Security2CC {
 		]);
 		return super.serialize();
 	}
+
+	public toLogEntry(): MessageOrCCLogEntry {
+		return {
+			...super.toLogEntry(),
+			message: {
+				echo: this.echo,
+				"selected scheme": getEnumMemberName(
+					KEXSchemes,
+					this.selectedKEXScheme,
+				),
+				"selected ECDH profile": getEnumMemberName(
+					ECDHProfiles,
+					this.selectedECDHProfile,
+				),
+				"CSA permitted": this.permitCSA,
+				"granted security classes": this.grantedKeys
+					.map((s) => `\n· ${getEnumMemberName(SecurityClass, s)}`)
+					.join(""),
+			},
+		};
+	}
 }
 
 interface Security2CCKEXFailOptions extends CCCommandOptions {
@@ -1353,6 +1415,13 @@ export class Security2CCKEXFail extends Security2CC {
 	public serialize(): Buffer {
 		this.payload = Buffer.from([this.failType]);
 		return super.serialize();
+	}
+
+	public toLogEntry(): MessageOrCCLogEntry {
+		return {
+			...super.toLogEntry(),
+			message: { reason: getEnumMemberName(KEXFailType, this.failType) },
+		};
 	}
 }
 
@@ -1389,6 +1458,16 @@ export class Security2CCPublicKeyReport extends Security2CC {
 			this.publicKey,
 		]);
 		return super.serialize();
+	}
+
+	public toLogEntry(): MessageOrCCLogEntry {
+		return {
+			...super.toLogEntry(),
+			message: {
+				"is including node": this.includingNode,
+				"public key": buffer2hex(this.publicKey),
+			},
+		};
 	}
 }
 
@@ -1428,6 +1507,19 @@ export class Security2CCNetworkKeyReport extends Security2CC {
 		]);
 		return super.serialize();
 	}
+
+	public toLogEntry(): MessageOrCCLogEntry {
+		return {
+			...super.toLogEntry(),
+			message: {
+				"security class": getEnumMemberName(
+					SecurityClass,
+					this.grantedKey,
+				),
+				"network key": buffer2hex(this.networkKey),
+			},
+		};
+	}
 }
 
 interface Security2CCNetworkKeyGetOptions extends CCCommandOptions {
@@ -1457,6 +1549,18 @@ export class Security2CCNetworkKeyGet extends Security2CC {
 	public serialize(): Buffer {
 		this.payload = securityClassToBitMask(this.requestedKey);
 		return super.serialize();
+	}
+
+	public toLogEntry(): MessageOrCCLogEntry {
+		return {
+			...super.toLogEntry(),
+			message: {
+				"security class": getEnumMemberName(
+					SecurityClass,
+					this.requestedKey,
+				),
+			},
+		};
 	}
 }
 
@@ -1496,6 +1600,16 @@ export class Security2CCTransferEnd extends Security2CC {
 		]);
 		return super.serialize();
 	}
+
+	public toLogEntry(): MessageOrCCLogEntry {
+		return {
+			...super.toLogEntry(),
+			message: {
+				"key verified": this.keyVerified,
+				"request complete": this.keyRequestComplete,
+			},
+		};
+	}
 }
 
 @CCCommand(Security2Command.CommandsSupportedReport)
@@ -1515,6 +1629,18 @@ export class Security2CCCommandsSupportedReport extends Security2CC {
 	}
 
 	public readonly supportedCCs: CommandClasses[];
+
+	public toLogEntry(): MessageOrCCLogEntry {
+		return {
+			...super.toLogEntry(),
+			message: {
+				supportedCCs: this.supportedCCs
+					.map((cc) => getCCName(cc))
+					.map((cc) => `\n· ${cc}`)
+					.join(""),
+			},
+		};
+	}
 }
 
 @CCCommand(Security2Command.CommandsSupportedGet)
