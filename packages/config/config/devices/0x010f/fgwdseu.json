@@ -256,8 +256,16 @@
 					"value": 2
 				},
 				{
+					"label": "Key pressed 1 time and 2 times",
+					"value": 3
+				},
+				{
 					"label": "Key pressed 3 times",
 					"value": 4
+				},
+				{
+					"label": "Key pressed 1 time, 2 times and 3 times",
+					"value": 7
 				},
 				{
 					"label": "Key hold down and key released",
@@ -282,8 +290,16 @@
 					"value": 2
 				},
 				{
+					"label": "Key pressed 1 time and 2 times",
+					"value": 3
+				},
+				{
 					"label": "Key pressed 3 times",
 					"value": 4
+				},
+				{
+					"label": "Key pressed 1 time, 2 times and 3 times",
+					"value": 7
 				},
 				{
 					"label": "Key hold down and key released",
