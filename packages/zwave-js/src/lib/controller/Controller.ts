@@ -302,7 +302,7 @@ export type InclusionOptions =
 			strategy: InclusionStrategy.Default;
 			userCallbacks: InclusionUserCallbacks;
 			/**
-			 * Force secure communication (S0) even when S2 is not supported and S0 is not necessary.
+			 * Force secure communication (S0) even when S2 is not supported and S0 is supported but not necessary.
 			 * This is not recommended due to the overhead caused by S0.
 			 */
 			forceSecurity?: boolean;
