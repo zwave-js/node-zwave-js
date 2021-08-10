@@ -17,3 +17,13 @@ export enum KEXFailType {
 	NoVerify = 0x09, // VERIFY
 	DifferentKey = 0x0a, // REPORT
 }
+
+export const inclusionTimeouts = Object.freeze({
+	TA1: 10000,
+	TA2: 10000,
+	TA3: 10000,
+	TA4: 10000,
+	TA5: 10000,
+	TAI1: 240000,
+	TAI2: 240000,
+} as const);

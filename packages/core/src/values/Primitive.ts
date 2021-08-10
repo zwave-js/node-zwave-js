@@ -199,7 +199,7 @@ export function parseBitMask(mask: Buffer, startValue: number = 1): number[] {
 
 /** Serializes a numeric array with a given maximum into a bit mask */
 export function encodeBitMask(
-	values: number[],
+	values: readonly number[],
 	maxValue: number,
 	startValue: number = 1,
 ): Buffer {

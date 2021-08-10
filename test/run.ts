@@ -2,7 +2,6 @@
 // import { Driver } from "../packages/zwave-js";
 
 // To test without Sentry reporting
-import { SecurityClass } from "@zwave-js/core";
 import path from "path";
 import "reflect-metadata";
 import { Driver } from "../packages/zwave-js/src/lib/driver/Driver";
@@ -33,11 +32,6 @@ const driver = new Driver("COM5", {
 })
 	.on("error", console.error)
 	.once("driver ready", async () => {
-		// TODO: find a more elegant way to do this
-		driver.securityManager2?.assignSecurityClassSinglecast(31, [
-			SecurityClass.S2_Authenticated,
-			SecurityClass.S2_Unauthenticated,
-		]);
 		// driver.controller.on("statistics updated", (s) => {
 		// 	console.debug(s);
 		// });
