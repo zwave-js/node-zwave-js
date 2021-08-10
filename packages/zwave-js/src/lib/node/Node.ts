@@ -498,6 +498,7 @@ export class ZWaveNode extends Endpoint implements SecurityClassOwner {
 		}
 	}
 
+	/** @internal */
 	public readonly securityClasses = new Map<SecurityClass, boolean>();
 
 	/** Whether the node was granted at least one security class */

@@ -7,15 +7,127 @@ The controller instance contains information about the controller and a list of 
 ### `beginInclusion`
 
 ```ts
-async beginInclusion(includeNonSecure?: boolean): Promise<boolean>
+async beginInclusion(options: InclusionOptions): Promise<boolean>
 ```
 
 Starts the inclusion process for a new node. The returned promise resolves to `true` if starting the inclusion was successful, `false` if it failed or if it was already active.
 
-By default, the node will be included securely (with encryption) if a network key is configured and the node supports encryption. You can force a non-secure inclusion by setting the optional parameter `includeNonSecure` to `true`.
+The options parameter is used to specify the inclusion strategy and provide callbacks to the application which are necessary to support inclusion with Security S2. The following inclusion strategies are defined:
+
+-   `InclusionStrategy.Default`: Prefer _Security S2_ if supported, use _Security S0_ if absolutely necessary (e.g. for legacy locks) or if opted in with the `forceSecurity` flag, don't use encryption otherwise.  
+    **This is the recommended** strategy and should be used unless there is a good reason not to.
+
+-   `InclusionStrategy.SmartStart`: Include using SmartStart (requires Security S2). Can't include devices that do not support SmartStart.  
+    **Should be preferred** over `Default` if supported, because it is easier for the user.
+
+-   `InclusionStrategy.Insecure`: Don't use encryption, even if supported.  
+    **Not recommended**, because S2 should be used where possible.
+
+-   `InclusionStrategy.Security_S0`: Use _Security S0_, even if a higher security mode is supported. Issues a warning if _Security S0_ is not supported or the secure bootstrapping fails.  
+    **Not recommended** because S0 should be used sparingly and S2 preferred whereever possible.
+
+-   `InclusionStrategy.Security_S2`: Use _Security S2_ and issue a warning if it is not supported or the secure bootstrapping fails.  
+    **Not recommended** because `Default` is more versatile and less complicated for the user.
 
 > [!NOTE]
 > For some devices, a special inclusion sequence needs to be performed in order to include it securely. Please refer to the device manual for further information.
+
+> [!NOTE] We've compiled some [guidelines](usage/s2-inclusion.md) how to tackle inclusion from the UI side, especially for Security S2.
+
+Depending on the chosen inclusion strategy, the options object requires additional properties:
+
+<!-- #import InclusionOptions from "zwave-js" -->
+
+```ts
+type InclusionOptions =
+	| {
+			strategy: InclusionStrategy.Default;
+			userCallbacks: InclusionUserCallbacks;
+			/**
+			 * Force secure communication (S0) even when S2 is not supported and S0 is supported but not necessary.
+			 * This is not recommended due to the overhead caused by S0.
+			 */
+			forceSecurity?: boolean;
+	  }
+	| {
+			strategy: InclusionStrategy.Security_S2;
+			userCallbacks: InclusionUserCallbacks;
+	  }
+	| {
+			strategy: InclusionStrategy.SmartStart;
+			provisioningList: unknown;
+	  }
+	| {
+			strategy:
+				| InclusionStrategy.Insecure
+				| InclusionStrategy.Security_S0;
+	  };
+```
+
+For inclusion with _Security S2_, this includes callbacks into the application which are defined as follows:
+
+<!-- #import InclusionUserCallbacks from "zwave-js" -->
+
+```ts
+interface InclusionUserCallbacks {
+	/**
+	 * Instruct the application to display the user which security classes the device has requested and whether client-side authentication (CSA) is desired.
+	 * The returned promise MUST resolve to the user selection - which of the requested security classes have been granted and whether CSA was allowed.
+	 * If the user did not accept the requested security classes, the promise MUST resolve to `true`.
+	 */
+	grantSecurityClasses(
+		requested: InclusionGrant,
+	): Promise<InclusionGrant | false>;
+
+	/**
+	 * Instruct the application to display the received DSK for the user to verify if it matches the one belonging to the device and
+	 * additionally enter the PIN that's found on the device.
+	 * The returned promise MUST resolve to the 5-digit PIN (as a string) when the user has confirmed the DSK and entered the PIN and `false` otherwise.
+	 *
+	 * @param dsk The partial DSK in the form `-bbbbb-ccccc-ddddd-eeeee-fffff-11111-22222`. The first 5 characters are left out because they are the unknown PIN.
+	 */
+	validateDSKAndEnterPIN(dsk: string): Promise<string | false>;
+
+	/** Called by the driver when the user validation has timed out and needs to be aborted */
+	abort(): void;
+}
+```
+
+This includes choosing the security classes to grant to the node and whether client side authentication should allowed.
+
+<!-- #import InclusionGrant from "zwave-js" -->
+
+```ts
+interface InclusionGrant {
+	/**
+	 * An array of security classes that are requested or to be granted.
+	 * The granted security classes MUST be a subset of the requested ones.
+	 */
+	securityClasses: SecurityClass[];
+	/** Whether client side authentication is requested or to be granted */
+	clientSideAuth: boolean;
+}
+```
+
+<!-- #import SecurityClass from "@zwave-js/core" -->
+
+```ts
+enum SecurityClass {
+	/**
+	 * Used internally during inclusion of a node. Don't use this!
+	 */
+	Temporary = -2,
+	/**
+	 * `None` is used to indicate that a node is included without security.
+	 * It is not meant as input to methods that accept a security class.
+	 */
+	None = -1,
+	S2_Unauthenticated = 0,
+	S2_Authenticated = 1,
+	S2_AccessControl = 2,
+	S0_Legacy = 7,
+}
+```
 
 ### `stopInclusion`
 
@@ -114,14 +226,31 @@ Removes a failed node from the controller's memory. If the process fails, this w
 ### `replaceFailedNode`
 
 ```ts
-replaceFailedNode(nodeId: number, includeNonSecure?: boolean): Promise<boolean>
+replaceFailedNode(nodeId: number, options: ReplaceNodeOptions): Promise<boolean>
 ```
 
 Removes a failed node from the controller's memory and starts an inclusion process to include a replacement node which will re-use the same node ID.
 
 This method returns `true` when the inclusion process is started, `false` if another inclusion or exclusion process is already running. If the process fails, this will throw an exception with the details why.
 
-By default, the node will be included securely (with encryption) if a network key is configured and the node supports encryption. You can force a non-secure inclusion by setting the optional parameter `includeNonSecure` to `true`.
+Like [`beginInclusion`](#beginInclusion), this method supports different inclusion strategies for the new node. However, the user or application must decide beforehand which security CC should be used to include the new node, since it is not possible to detect automatically. For that reason, only the inclusion strategies `Security_S2`, `Security_S0` and `Insecure` are supported:
+
+<!-- #import ReplaceNodeOptions from "zwave-js" without comments -->
+
+```ts
+type ReplaceNodeOptions =
+	// We don't know which security CCs a node supports when it is a replacement
+	// we we need the user to specify how the node should be included
+	| {
+			strategy: InclusionStrategy.Security_S2;
+			userCallbacks: InclusionUserCallbacks;
+	  }
+	| {
+			strategy:
+				| InclusionStrategy.Insecure
+				| InclusionStrategy.Security_S0;
+	  };
+```
 
 ### Managing associations
 
@@ -468,10 +597,21 @@ The process to include or exclude a node was stopped successfully. Note that the
 
 ### `"node added"`
 
-A node has successfully been added to the network. The added node is passed to the event handler as the only argument:
+A node has successfully been added to the network
 
 ```ts
-(node: ZWaveNode) => void
+(node: ZWaveNode, result: InclusionResult) => void
+```
+
+The second argument gives additional info about the inclusion result.
+
+<!-- #import InclusionResult from "zwave-js" -->
+
+```ts
+interface InclusionResult {
+	/** This flag warns that a node was included with a lower than intended security, meaning unencrypted when it should have been included with Security S0/S2 */
+	lowSecurity?: boolean;
+}
 ```
 
 ### `"node removed"`

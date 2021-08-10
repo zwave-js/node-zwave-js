@@ -1,7 +1,14 @@
 import type { Maybe } from "../values/Primitive";
 
 export enum SecurityClass {
+	/**
+	 * Used internally during inclusion of a node. Don't use this!
+	 */
 	Temporary = -2,
+	/**
+	 * `None` is used to indicate that a node is included without security.
+	 * It is not meant as input to methods that accept a security class.
+	 */
 	None = -1,
 	S2_Unauthenticated = 0,
 	S2_Authenticated = 1,
