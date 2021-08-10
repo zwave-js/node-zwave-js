@@ -32,6 +32,8 @@ The options parameter is used to specify the inclusion strategy and provide call
 > [!NOTE]
 > For some devices, a special inclusion sequence needs to be performed in order to include it securely. Please refer to the device manual for further information.
 
+> [!NOTE] We've compiled some [guidelines](usage/s2-inclusion.md) how to tackle inclusion from the UI side, especially for Security S2.
+
 Depending on the chosen inclusion strategy, the options object requires additional properties:
 
 <!-- #import InclusionOptions from "zwave-js" -->
