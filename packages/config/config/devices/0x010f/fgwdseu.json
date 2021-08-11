@@ -18,28 +18,45 @@
 			"$import": "~/templates/master_template.json#state_after_power_failure_off_prev"
 		},
 		"2": {
-			"label": "First channel – overload safety switch",
+			"label": "First Channel – Overload Safety Switch",
+			"description": "Allowable range: 10-45000 (single switch mode), 10-36200 (double switch mode)",
 			"valueSize": 4,
+			"unit": "0.1 W",
 			"minValue": 0,
 			"maxValue": 45000,
-			"defaultValue": 0
+			"defaultValue": 0,
+			"options": [
+				{
+					"label": "Disable",
+					"value": 0
+				}
+			]
 		},
 		"3": {
-			"label": "Second channel – overload safety switch",
+			"label": "Second Channel – Overload Safety Switch",
+			"description": "Allowable range: 10-36200 (double switch mode)",
 			"valueSize": 4,
+			"unit": "0.1 W",
 			"minValue": 0,
 			"maxValue": 36200,
-			"defaultValue": 0
+			"defaultValue": 0,
+			"options": [
+				{
+					"label": "Disable",
+					"value": 0
+				}
+			]
 		},
 		"10": {
-			"label": "LED Frame - power limit",
+			"label": "LED Frame - Power Limit",
+			"description": "If param 11 is 8 or 9, the LED frame will flash violet when exceeding this limit. Allowable range: 500-36800 (single switch mode), 500-30000 (double switch mode)",
 			"valueSize": 4,
 			"minValue": 500,
-			"maxValue": 30000,
-			"defaultValue": 30000
+			"maxValue": 36800,
+			"defaultValue": 36800
 		},
 		"11": {
-			"label": "LED frame – color when on",
+			"label": "LED Frame – Color When On",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 9,
@@ -89,7 +106,7 @@
 			]
 		},
 		"12": {
-			"label": "LED frame – color when OFF",
+			"label": "LED Frame – Color When Off",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 7,
@@ -131,18 +148,51 @@
 			]
 		},
 		"13": {
-			"label": "LED frame – brightness",
+			"label": "LED Frame – Brightness",
 			"valueSize": 1,
+			"unit": "%",
 			"minValue": 0,
 			"maxValue": 102,
-			"defaultValue": 100
+			"defaultValue": 100,
+			"options": [
+				{
+					"label": "Disable",
+					"value": 0
+				},
+				{
+					"label": "Proportional to power",
+					"value": 101
+				},
+				{
+					"label": "Inversely proportional to power",
+					"value": 102
+				}
+			]
 		},
 		"20": {
 			"label": "Buttons operation",
 			"valueSize": 1,
 			"minValue": 1,
 			"maxValue": 4,
-			"defaultValue": 1
+			"defaultValue": 1,
+			"options": [
+				{
+					"label": "S1 & S2 toggle the load/both channels",
+					"value": 1
+				},
+				{
+					"label": "S1 turns load/both channels on; S2 turns load/both channels off",
+					"value": 2
+				},
+				{
+					"label": "S1 toggles channel 1, S2 toggles channel 2 (double switch mode only)",
+					"value": 3
+				},
+				{
+					"label": "S1 single click turns channel 1 on, S1 double click turns channel 2 on, S2 single click turns both channels off (double switch mode only)",
+					"value": 4
+				}
+			]
 		},
 		"24": {
 			"label": "Buttons orientation",
@@ -153,18 +203,18 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "default",
+					"label": "Default",
 					"value": 0
 				},
 				{
-					"label": "reversed",
+					"label": "Reversed",
 					"value": 1
 				}
 			]
 		},
 		"25": {
-			"label": "Outputs orientation",
-			"description": "Outputs orientation (Only in Double Switch Mode)",
+			"label": "Outputs Orientation",
+			"description": "Only in double switch mode",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 1,
@@ -172,218 +222,225 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "default",
+					"label": "Default",
 					"value": 0
 				},
 				{
-					"label": "reversed",
+					"label": "Reversed",
 					"value": 1
 				}
 			]
 		},
-		"30": {
-			"label": "Alarm configuration - 1st slot",
-			"valueSize": 4,
-			"minValue": 0,
-			"maxValue": 0,
+		"30[0xff000000]": {
+			"$import": "templates/fibaro_template.json#alarm_configuration_notification_type",
+			"label": "Alarm Configuration - 1st Slot Notification Type",
 			"defaultValue": 0
 		},
-		"31": {
-			"label": "Alarm configuration - 2nd slot",
-			"valueSize": 4,
-			"minValue": 0,
-			"maxValue": 0,
+		"30[0xff0000]": {
+			"$import": "templates/fibaro_template.json#alarm_configuration_notification_event",
+			"label": "Alarm Configuration - 1st Slot Notification Event",
 			"defaultValue": 0
 		},
-		"32": {
-			"label": "Alarm configuration - 3rd slot",
-			"valueSize": 4,
-			"minValue": 0,
-			"maxValue": 0,
+		"30[0xff00]": {
+			"$import": "templates/fibaro_template.json#alarm_configuration_notification_event_parameter",
+			"label": "Alarm Configuration - 1st Slot Notification Event Parameter"
+		},
+		"30[0xf0]": {
+			"$import": "templates/fibaro_template.json#alarm_configuration_action",
+			"label": "Alarm Configuration - 1st Slot Action (Frame)",
+			"maxValue": 15,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "No Action",
+					"value": 0
+				},
+				{
+					"label": "Disable",
+					"value": 8
+				},
+				{
+					"label": "Blink red",
+					"value": 1
+				},
+				{
+					"label": "Blink green",
+					"value": 2
+				},
+				{
+					"label": "Blink blue",
+					"value": 4
+				},
+				{
+					"label": "Blink Red/White/Blue",
+					"value": 15
+				}
+			]
+		},
+		"30[0x0f]": {
+			"$import": "templates/fibaro_template.json#alarm_configuration_action",
+			"label": "Alarm Configuration - 1st Slot Action (LED)",
+			"maxValue": 3,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "No Action",
+					"value": 0
+				},
+				{
+					"label": "Turn on",
+					"value": 1
+				},
+				{
+					"label": "Turn off",
+					"value": 2
+				},
+				{
+					"label": "Turn on/off continuously",
+					"value": 3
+				}
+			]
+		},
+		"31[0xff000000]": {
+			"$import": "#paramInformation/30[0xff000000]",
+			"label": "Alarm Configuration - 2nd Slot Notification Type",
+			"defaultValue": 5
+		},
+		"31[0xff0000]": {
+			"$import": "#paramInformation/30[0xff0000]",
+			"label": "Alarm Configuration - 2nd Slot Notification Event",
+			"defaultValue": 255
+		},
+		"31[0xff00]": {
+			"$import": "#paramInformation/30[0xff00]",
+			"label": "Alarm Configuration - 2nd Slot Notification Event Parameter",
 			"defaultValue": 0
 		},
-		"33": {
-			"label": "Alarm configuration - 4th slot",
-			"valueSize": 4,
-			"minValue": 0,
-			"maxValue": 0,
+		"31[0xf0]": {
+			"$import": "#paramInformation/30[0xf0]",
+			"label": "Alarm Configuration - 2nd Slot Action (Frame)",
 			"defaultValue": 0
 		},
-		"34": {
-			"label": "Alarm configuration - 5th slot",
-			"valueSize": 4,
-			"minValue": 0,
-			"maxValue": 0,
+		"31[0x0f]": {
+			"$import": "#paramInformation/30[0x0f]",
+			"label": "Alarm Configuration - 2nd Slot Action (LED)",
+			"defaultValue": 0
+		},
+		"32[0xff000000]": {
+			"$import": "#paramInformation/30[0xff000000]",
+			"label": "Alarm Configuration - 3rd Slot Notification Type",
+			"defaultValue": 1
+		},
+		"32[0xff0000]": {
+			"$import": "#paramInformation/30[0xff0000]",
+			"label": "Alarm Configuration - 3rd Slot Notification Event",
+			"defaultValue": 255
+		},
+		"32[0xff00]": {
+			"$import": "#paramInformation/30[0xff00]",
+			"label": "Alarm Configuration - 3rd Slot Notification Event Parameter",
+			"defaultValue": 0
+		},
+		"32[0xf0]": {
+			"$import": "#paramInformation/30[0xf0]",
+			"label": "Alarm Configuration - 3rd Slot Action (Frame)",
+			"defaultValue": 0
+		},
+		"32[0x0f]": {
+			"$import": "#paramInformation/30[0x0f]",
+			"label": "Alarm Configuration - 3rd Slot Action (LED)",
+			"defaultValue": 0
+		},
+		"33[0xff000000]": {
+			"$import": "#paramInformation/30[0xff000000]",
+			"label": "Alarm Configuration - 4th Slot Notification Type",
+			"defaultValue": 2
+		},
+		"33[0xff0000]": {
+			"$import": "#paramInformation/30[0xff0000]",
+			"label": "Alarm Configuration - 4th Slot Notification Event",
+			"defaultValue": 255
+		},
+		"33[0xff00]": {
+			"$import": "#paramInformation/30[0xff00]",
+			"label": "Alarm Configuration - 4th Slot Notification Event Parameter",
+			"defaultValue": 0
+		},
+		"33[0xf0]": {
+			"$import": "#paramInformation/30[0xf0]",
+			"label": "Alarm Configuration - 4th Slot Action (Frame)",
+			"defaultValue": 0
+		},
+		"33[0x0f]": {
+			"$import": "#paramInformation/30[0x0f]",
+			"label": "Alarm Configuration - 4th Slot Action (LED)",
+			"defaultValue": 0
+		},
+		"34[0xff000000]": {
+			"$import": "#paramInformation/30[0xff000000]",
+			"label": "Alarm Configuration - 5th Slot Notification Type",
+			"defaultValue": 4
+		},
+		"34[0xff0000]": {
+			"$import": "#paramInformation/30[0xff0000]",
+			"label": "Alarm Configuration - 5th Slot Notification Event",
+			"defaultValue": 255
+		},
+		"34[0xff00]": {
+			"$import": "#paramInformation/30[0xff00]",
+			"label": "Alarm Configuration - 5th Slot Notification Event Parameter",
+			"defaultValue": 0
+		},
+		"34[0xf0]": {
+			"$import": "#paramInformation/30[0xf0]",
+			"label": "Alarm Configuration - 5th Slot Action (Frame)",
+			"defaultValue": 0
+		},
+		"34[0x0f]": {
+			"$import": "#paramInformation/30[0x0f]",
+			"label": "Alarm Configuration - 5th Slot Action (LED)",
 			"defaultValue": 0
 		},
 		"35": {
 			"label": "Alarm configuration – duration",
 			"valueSize": 2,
+			"unit": "s",
 			"minValue": 0,
 			"maxValue": 32400,
-			"defaultValue": 600
-		},
-		"40[0x01]": {
-			"label": "S1 scenes: Pressed 1 time",
-			"description": "Send a Central Scene notification when S1 is pressed 1 time",
-			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 1,
-			"defaultValue": 0
-		},
-		"40[0x02]": {
-			"label": "S1 scenes: Pressed 2 times",
-			"description": "Send a Central Scene notification when S1 is pressed 2 time",
-			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 1,
-			"defaultValue": 0
-		},
-		"40[0x03]": {
-			"label": "S1 scenes: Pressed 1 or 2 times",
-			"description": "Send a Central Scene notification when S1 is pressed 1 or 2 time",
-			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 1,
-			"defaultValue": 0
-		},
-		"40[0x04]": {
-			"label": "S1 scenes: Pressed 3 times",
-			"description": "Send a Central Scene notification when S1 is pressed 3 time",
-			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 1,
-			"defaultValue": 0
-		},
-		"40[0x06]": {
-			"label": "S1 scenes: Pressed 2 or 3 times",
-			"description": "Send a Central Scene notification when S1 is pressed 2 or 3 time",
-			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 1,
-			"defaultValue": 0
-		},
-		"40[0x07]": {
-			"label": "S1 scenes: Pressed 1, 2 or 3 times",
-			"description": "Send a Central Scene notification when S1 is pressed 1, 2 or 3 time",
-			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 1,
-			"defaultValue": 0
-		},
-		"40[0x08]": {
-			"label": "S1 scenes: Hold and Released",
-			"description": "Send a Central Scene notification when S1 is Hold and Released",
-			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 1,
-			"defaultValue": 0
-		},
-		"40[0x0e]": {
-			"label": "S1 scenes: Pressed 2 or 3 times, or Hold and Released",
-			"description": "Send a Central Scene notification when S1 is pressed 2 or 3 times, or Hold and Released",
-			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 1,
-			"defaultValue": 0
-		},
-		"40[0x0f]": {
-			"label": "S1 scenes: Pressed 1, 2 or 3 times, or Hold and Released",
-			"description": "Send a Central Scene notification when S1 is pressed 1, 2 or 3 times, or Hold and Released",
-			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 1,
-			"defaultValue": 0
-		},
-		"41[0x01]": {
-			"label": "S1 scenes: Pressed 1 time",
-			"description": "Send a Central Scene notification when S1 is pressed 1 time",
-			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 1,
-			"defaultValue": 0
-		},
-		"41[0x02]": {
-			"label": "S1 scenes: Pressed 2 times",
-			"description": "Send a Central Scene notification when S1 is pressed 2 time",
-			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 1,
-			"defaultValue": 0
-		},
-		"41[0x03]": {
-			"label": "S1 scenes: Pressed 1 or 2 times",
-			"description": "Send a Central Scene notification when S1 is pressed 1 or 2 time",
-			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 1,
-			"defaultValue": 0
-		},
-		"41[0x04]": {
-			"label": "S1 scenes: Pressed 3 times",
-			"description": "Send a Central Scene notification when S1 is pressed 3 time",
-			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 1,
-			"defaultValue": 0
-		},
-		"41[0x06]": {
-			"label": "S1 scenes: Pressed 2 or 3 times",
-			"description": "Send a Central Scene notification when S1 is pressed 2 or 3 time",
-			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 1,
-			"defaultValue": 0
-		},
-		"41[0x07]": {
-			"label": "S1 scenes: Pressed 1, 2 or 3 times",
-			"description": "Send a Central Scene notification when S1 is pressed 1, 2 or 3 time",
-			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 1,
-			"defaultValue": 0
-		},
-		"41[0x08]": {
-			"label": "S1 scenes: Hold and Released",
-			"description": "Send a Central Scene notification when S1 is Hold and Released",
-			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 1,
-			"defaultValue": 0
-		},
-		"41[0x0e]": {
-			"label": "S1 scenes: Pressed 2 or 3 times, or Hold and Released",
-			"description": "Send a Central Scene notification when S1 is pressed 2 or 3 times, or Hold and Released",
-			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 1,
-			"defaultValue": 0
-		},
-		"41[0x0f]": {
-			"label": "S1 scenes: Pressed 1, 2 or 3 times, or Hold and Released",
-			"description": "Send a Central Scene notification when S1 is pressed 1, 2 or 3 times, or Hold and Released",
-			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 1,
-			"defaultValue": 0
-		},
-		"60": {
-			"label": "Power reports – include self-consumption",
-			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 1,
-			"defaultValue": 0,
-			"allowManualEntry": false,
+			"defaultValue": 600,
 			"options": [
 				{
-					"label": "Self-consumption not included",
+					"label": "Infinite",
 					"value": 0
-				},
-				{
-					"label": "Self-consumption included",
-					"value": 1
 				}
 			]
+		},
+		"40[0x01]": {
+			"$import": "templates/fibaro_template.json#send_s1_central_scene_pressed_1x"
+		},
+		"40[0x02]": {
+			"$import": "templates/fibaro_template.json#send_s1_central_scene_pressed_2x"
+		},
+		"40[0x04]": {
+			"$import": "templates/fibaro_template.json#send_s1_central_scene_pressed_3x"
+		},
+		"40[0x08]": {
+			"$import": "templates/fibaro_template.json#send_s1_central_scene_hold_release"
+		},
+		"41[0x01]": {
+			"$import": "templates/fibaro_template.json#send_s2_central_scene_pressed_1x"
+		},
+		"41[0x02]": {
+			"$import": "templates/fibaro_template.json#send_s2_central_scene_pressed_2x"
+		},
+		"41[0x04]": {
+			"$import": "templates/fibaro_template.json#send_s2_central_scene_pressed_3x"
+		},
+		"41[0x08]": {
+			"$import": "templates/fibaro_template.json#send_s2_central_scene_hold_release"
+		},
+		"60": {
+			"$import": "templates/fibaro_template.json#reports_include_self"
 		},
 		"61": {
 			"label": "Power reports for first channel – on change",

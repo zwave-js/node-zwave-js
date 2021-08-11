@@ -344,7 +344,7 @@
 		"import": {
 			"type": "string",
 			"description": "Used to import another config file or parts thereof",
-			"pattern": "^((?<dir>((?:~/)?[\\w\\d_\\.-]+/)+)?(?<filename>[\\w\\d_-]+\\.json))?(?<selector>#([\\w\\d_-]+/)*[\\w\\d_-]+)?$"
+			"pattern": "^((?<dir>((?:~/)?[\\w\\d_\\.-]+/)+)?(?<filename>[\\w\\d_-]+\\.json))?(?<selector>#([\\w\\d_-]+/)*[\\w\\d\\[\\]_-]+)?$"
 		},
 		"condition": {
 			"type": "string",
