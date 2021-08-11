@@ -189,35 +189,40 @@
 			"unit": "W",
 			"valueSize": 2,
 			"minValue": 0,
-			"maxValue": 1100
+			"maxValue": 1100,
+			"defaultValue": 0
 		},
 		"13": {
 			"label": "Relay 2 Load Power",
 			"unit": "W",
 			"valueSize": 2,
 			"minValue": 0,
-			"maxValue": 1100
+			"maxValue": 1100,
+			"defaultValue": 0
 		},
 		"14": {
 			"label": "Relay 3 Load Power",
 			"unit": "W",
 			"valueSize": 2,
 			"minValue": 0,
-			"maxValue": 1100
+			"maxValue": 1100,
+			"defaultValue": 0
 		},
 		"15": {
 			"label": "Relay 4 Load Power",
 			"unit": "W",
 			"valueSize": 2,
 			"minValue": 0,
-			"maxValue": 1100
+			"maxValue": 1100,
+			"defaultValue": 0
 		},
 		"16": {
 			"label": "Relay 5 Load Power",
 			"unit": "W",
 			"valueSize": 2,
 			"minValue": 0,
-			"maxValue": 1100
+			"maxValue": 1100,
+			"defaultValue": 0
 		},
 		"17": {
 			"label": "Air Temperature Calibration",
@@ -480,6 +485,7 @@
 		"52": {
 			"label": "Button 2: Click Control Mode",
 			"valueSize": 1,
+			"minValue": 0,
 			"maxValue": 6,
 			"defaultValue": 1,
 			"allowManualEntry": false,
@@ -517,6 +523,7 @@
 		"53": {
 			"label": "Button 3: Click Control Mode",
 			"valueSize": 1,
+			"minValue": 0,
 			"maxValue": 6,
 			"defaultValue": 1,
 			"allowManualEntry": false,
@@ -554,6 +561,7 @@
 		"54": {
 			"label": "Button 4: Click Control Mode",
 			"valueSize": 1,
+			"minValue": 0,
 			"maxValue": 6,
 			"defaultValue": 1,
 			"allowManualEntry": false,
@@ -591,6 +599,7 @@
 		"55": {
 			"label": "Button 5: Click Control Mode",
 			"valueSize": 1,
+			"minValue": 0,
 			"maxValue": 6,
 			"defaultValue": 1,
 			"allowManualEntry": false,
