@@ -656,7 +656,7 @@
 			]
 		},
 		"50": {
-			"$import": "templates/fibaro_template.json#active_power_report_threshold",
+			"$import": "templates/fibaro_template.json#power_report_threshold_relative",
 			"defaultValue": 10
 		},
 		"52": {

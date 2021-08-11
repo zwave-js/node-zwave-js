@@ -51,6 +51,7 @@
 			"label": "LED Frame - Power Limit",
 			"description": "If param 11 is 8 or 9, the LED frame will flash violet when exceeding this limit. Allowable range: 500-36800 (single switch mode), 500-30000 (double switch mode)",
 			"valueSize": 4,
+			"unit": "0.1 W",
 			"minValue": 500,
 			"maxValue": 36800,
 			"defaultValue": 36800
@@ -404,7 +405,7 @@
 		"35": {
 			"label": "Alarm configuration – duration",
 			"valueSize": 2,
-			"unit": "s",
+			"unit": "seconds",
 			"minValue": 0,
 			"maxValue": 32400,
 			"defaultValue": 600,
@@ -443,60 +444,50 @@
 			"$import": "templates/fibaro_template.json#reports_include_self"
 		},
 		"61": {
-			"label": "Power reports for first channel – on change",
-			"valueSize": 2,
-			"minValue": 0,
-			"maxValue": 500,
+			"$import": "templates/fibaro_template.json#power_report_threshold_relative_0-500",
+			"label": "First Channel - Power Reports: Relative Change Threshold",
 			"defaultValue": 15
 		},
 		"62": {
-			"label": "Power reports for first channel – periodic",
-			"valueSize": 2,
-			"minValue": 0,
-			"maxValue": 32400,
-			"defaultValue": 2600
+			"$import": "templates/fibaro_template.json#reports_periodic",
+			"label": "First Channel - Periodic Power Reports",
+			"description": "Allowable Range: 30-32400",
+			"maxValue": 32400
 		},
 		"63": {
-			"label": "Power reports for second channel – on change",
-			"valueSize": 2,
-			"minValue": 0,
-			"maxValue": 500,
+			"$import": "templates/fibaro_template.json#power_report_threshold_relative_0-500",
+			"label": "Second Channel - Power Reports: Relative Change Threshold",
 			"defaultValue": 15
 		},
 		"64": {
-			"label": "Power reports for second channel – periodic",
-			"valueSize": 2,
-			"minValue": 0,
-			"maxValue": 32400,
-			"defaultValue": 3600
+			"$import": "templates/fibaro_template.json#reports_periodic",
+			"label": "Second Channel - Periodic Power Reports",
+			"description": "Allowable Range: 30-32400",
+			"maxValue": 32400
 		},
 		"65": {
-			"label": "Energy reports for first channel – on change",
-			"valueSize": 2,
-			"minValue": 0,
+			"$import": "templates/fibaro_template.json#energy_report_threshold",
+			"label": "First Channel - Energy Report Threshold",
 			"maxValue": 500,
 			"defaultValue": 10
 		},
 		"66": {
-			"label": "Energy reports for first channel – periodic",
-			"valueSize": 2,
-			"minValue": 0,
-			"maxValue": 32400,
-			"defaultValue": 3600
+			"$import": "templates/fibaro_template.json#reports_periodic",
+			"label": "First Channel - Periodic Energy Reports",
+			"description": "Allowable Range: 30-32400",
+			"maxValue": 32400
 		},
 		"67": {
-			"label": "Energy reports for second channel – on change",
-			"valueSize": 2,
-			"minValue": 0,
+			"$import": "templates/fibaro_template.json#energy_report_threshold",
+			"label": "Second Channel - Energy Report Threshold",
 			"maxValue": 500,
 			"defaultValue": 10
 		},
 		"68": {
-			"label": "Energy reports for second channel – periodic",
-			"valueSize": 2,
-			"minValue": 0,
-			"maxValue": 32400,
-			"defaultValue": 3600
+			"$import": "templates/fibaro_template.json#reports_periodic",
+			"label": "Second Channel - Periodic Energy Reports",
+			"description": "Allowable Range: 30-32400",
+			"maxValue": 32400
 		},
 		"150": {
 			"label": "First Channel – Operating Mode",

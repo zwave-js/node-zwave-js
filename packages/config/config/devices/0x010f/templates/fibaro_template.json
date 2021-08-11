@@ -219,9 +219,8 @@
 		"minValue": 1,
 		"defaultValue": 600
 	},
-	"active_power_report_threshold": {
-		"label": "Active Power Report: Threshold",
-		"description": "Relative change since previous report sent",
+	"power_report_threshold_relative": {
+		"label": "Power Reports: Relative Change Threshold",
 		"valueSize": 1,
 		"unit": "%",
 		"minValue": 0,
@@ -232,6 +231,11 @@
 				"value": 0
 			}
 		]
+	},
+	"power_report_threshold_relative_0-500": {
+		"$import": "#power_report_threshold_relative",
+		"valueSize": 2,
+		"maxValue": 500
 	},
 	"energy_report_threshold": {
 		"label": "Energy Reports: Threshold",
