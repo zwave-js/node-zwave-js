@@ -186,8 +186,6 @@
 				}
 			]
 		},
-
-
 		"24": {
 			"label": "Buttons orientation",
 			"valueSize": 1,
@@ -485,7 +483,6 @@
 			"maxValue": 32400,
 			"defaultValue": 3600
 		},
-
 		"154": {
 			"label": "First Channel - time parameter for delayed",
 			"valueSize": 2,
