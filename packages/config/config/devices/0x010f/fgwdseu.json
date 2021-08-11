@@ -1,8 +1,8 @@
 {
 	"manufacturer": "Fibargroup",
 	"manufacturerId": "0x010f",
-	"label": "FGWDSEU",
-	"description": "WALLI SWITCH FIBARO DOUBLE SWITCH",
+	"label": "FGWDSEU-221",
+	"description": "Walli Double Switch",
 	"devices": [
 		{
 			"productType": "0x1b01",
@@ -13,25 +13,9 @@
 		"min": "0.0",
 		"max": "255.255"
 	},
-	"supportsZWavePlus": true,
 	"paramInformation": {
 		"1": {
-			"label": "Remember device state",
-			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 1,
-			"defaultValue": 1,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "remains switched off after restoring power",
-					"value": 0
-				},
-				{
-					"label": "restores remembered state after restoring power",
-					"value": 1
-				}
-			]
+			"$import": "~/templates/master_template.json#state_after_power_failure_off_prev"
 		},
 		"2": {
 			"label": "First channel – overload safety switch",
@@ -55,7 +39,7 @@
 			"defaultValue": 30000
 		},
 		"11": {
-			"label": "LED frame – colour when ON",
+			"label": "LED frame – color when on",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 9,
@@ -95,17 +79,17 @@
 					"value": 7
 				},
 				{
-					"label": "smoothly dep. on measured power",
+					"label": "Smoothly depending on measured power",
 					"value": 8
 				},
 				{
-					"label": "in steps dep on measured power",
+					"label": "In steps depending on measured power",
 					"value": 9
 				}
 			]
 		},
 		"12": {
-			"label": "LED frame – colour when OFF",
+			"label": "LED frame – color when OFF",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 7,
