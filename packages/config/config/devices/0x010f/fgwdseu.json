@@ -170,7 +170,7 @@
 			]
 		},
 		"20": {
-			"label": "Buttons operation",
+			"label": "Switch Configuration",
 			"valueSize": 1,
 			"minValue": 1,
 			"maxValue": 4,
@@ -195,7 +195,7 @@
 			]
 		},
 		"24": {
-			"label": "Buttons orientation",
+			"label": "Switch Orientation",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 1,
@@ -499,7 +499,7 @@
 			"defaultValue": 3600
 		},
 		"150": {
-			"label": "First channel – operating mode",
+			"label": "First Channel – Operating Mode",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 2,
@@ -507,44 +507,25 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "standard operation",
+					"label": "Standard operation",
 					"value": 0
 				},
 				{
-					"label": "delayed OFF",
+					"label": "Turn off after delay",
 					"value": 1
 				},
 				{
-					"label": "single pulse",
+					"label": "Pulse - turn on, then turn off after delay",
 					"value": 2
 				}
 			]
 		},
 		"151": {
-			"label": "Second channel – operating mode",
-			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 2,
-			"defaultValue": 0,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "standard operation",
-					"value": 0
-				},
-				{
-					"label": "delayed OFF",
-					"value": 1
-				},
-				{
-					"label": "single pulse",
-					"value": 2
-				}
-			]
+			"$import": "#paramInformation/150",
+			"label": "Second Channel – Operating Mode"
 		},
 		"152": {
-			"label": "1st ch - reaction to switch",
-			"description": "First channel - reaction to switch for delayed OFF / pulse modes",
+			"label": "First Channel - Reaction to Switch for Timed Modes",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 2,
@@ -552,101 +533,93 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "cancel mode and set default state",
+					"label": "Cancel and set target state",
 					"value": 0
 				},
 				{
-					"label": "no reaction - mode runs until it ends",
+					"label": "Ignore - mode runs until it ends",
 					"value": 1
 				},
 				{
-					"label": "reset timer - start counting from the beginning",
+					"label": "Reset - start time from the beginning",
 					"value": 2
 				}
 			]
 		},
 		"153": {
-			"label": "2nd ch - reaction to switch",
-			"description": "Second channel - reaction to switch for delayed OFF / pulse modes",
-			"valueSize": 1,
+			"$import": "#paramInformation/152",
+			"label": "Second Channel - Reaction to Switch for Timed Modes"
+		},
+		"154": {
+			"label": "First Channel - Time Parameter for Timed Modes",
+			"valueSize": 2,
+			"unit": "seconds",
 			"minValue": 0,
-			"maxValue": 2,
-			"defaultValue": 0,
-			"allowManualEntry": false,
+			"maxValue": 32000,
+			"defaultValue": 50,
+			"unsigned": true,
 			"options": [
 				{
-					"label": "cancel mode and set default state",
+					"label": "0.1 seconds",
 					"value": 0
-				},
-				{
-					"label": "no reaction - mode runs until it ends",
-					"value": 1
-				},
-				{
-					"label": "reset timer - start counting from the beginning",
-					"value": 2
 				}
 			]
 		},
-		"154": {
-			"label": "First Channel - time parameter for delayed",
-			"valueSize": 2,
-			"minValue": 0,
-			"maxValue": 32000,
-			"defaultValue": 50
-		},
 		"155": {
-			"label": "Second Channel - time parameter for delayed",
+			"$import": "#paramInformation/154",
+			"label": "Second Channel - Time Parameter for Timed Modes",
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 32000,
 			"defaultValue": 50
 		},
 		"156": {
-			"label": "1st ch – ON value sent to 2nd/3rd",
-			"description": "First channel – Switch ON value sent to 2nd and 3rd association groups",
+			"label": "Key S1 Associations: Switch ON Value Sent",
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 255,
-			"defaultValue": 255
+			"defaultValue": 255,
+			"unsigned": true
 		},
 		"157": {
-			"label": "1st ch – OFF value sent to 2nd/3rd",
-			"description": "First channel – Switch OFF value sent to 2nd and 3rd association groups",
+			"label": "Key S1 Associations: Switch OFF Value Sent",
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 255,
-			"defaultValue": 0
+			"defaultValue": 0,
+			"unsigned": true
 		},
 		"158": {
-			"label": "First Channel – Double Click value sent to 2nd/3rd",
+			"label": "Key S1 Associations: Double Click Value Sent",
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 255,
-			"defaultValue": 99
+			"defaultValue": 99,
+			"unsigned": true
 		},
 		"159": {
-			"label": "2nd ch – ON value sent to 4th/5th",
-			"description": "Second channel – Switch ON value sent to 4th and 5th association groups",
+			"label": "Key S2 Associations: Switch ON Value Sent",
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 255,
-			"defaultValue": 255
+			"defaultValue": 255,
+			"unsigned": true
 		},
 		"160": {
-			"label": "2nd ch – OFF value sent to 4th/5th",
-			"description": "Second channel – Switch OFF value sent to 4th and 5th association groups",
+			"label": "Key S2 Associations: Switch OFF Value Sent",
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 255,
-			"defaultValue": 0
+			"defaultValue": 0,
+			"unsigned": true
 		},
 		"161": {
-			"label": "2nd ch – Double Click value sent to 4th/5th",
+			"label": "Key S2 Associations: Double Click Value Sent",
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 255,
-			"defaultValue": 99
+			"defaultValue": 99,
+			"unsigned": true
 		}
 	}
 }
