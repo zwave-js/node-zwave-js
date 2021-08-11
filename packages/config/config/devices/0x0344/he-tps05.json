@@ -1,7 +1,7 @@
 {
 	"manufacturer": "HELTUN",
 	"manufacturerId": "0x0344",
-	"label": "HE-RS01",
+	"label": "HE-TPS05",
 	"description": "Relay Switch Quinto",
 	"devices": [
 		{
