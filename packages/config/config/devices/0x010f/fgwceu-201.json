@@ -15,14 +15,29 @@
 	},
 	"paramInformation": {
 		"13": {
-			"label": "LED frame – brightness",
+			"label": "LED Frame – Brightness",
 			"valueSize": 1,
+			"unit": "%",
 			"minValue": 0,
 			"maxValue": 102,
-			"defaultValue": 100
+			"defaultValue": 100,
+			"options": [
+				{
+					"label": "Disable",
+					"value": 0
+				},
+				{
+					"label": "Proportional to power",
+					"value": 101
+				},
+				{
+					"label": "Inversely proportional to power",
+					"value": 102
+				}
+			]
 		},
 		"20": {
-			"label": "Buttons operation",
+			"label": "Switch Configuration",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 6,
@@ -59,7 +74,7 @@
 			]
 		},
 		"150": {
-			"label": "LED ring – first button color",
+			"label": "LED Frame – First Channel color",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 8,
@@ -105,53 +120,11 @@
 			]
 		},
 		"151": {
-			"label": "LED ring – second button color",
-			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 8,
-			"defaultValue": 0,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "LED disabled",
-					"value": 0
-				},
-				{
-					"label": "White",
-					"value": 1
-				},
-				{
-					"label": "Red",
-					"value": 2
-				},
-				{
-					"label": "Green",
-					"value": 3
-				},
-				{
-					"label": "Blue",
-					"value": 4
-				},
-				{
-					"label": "Yellow",
-					"value": 5
-				},
-				{
-					"label": "Cyan",
-					"value": 6
-				},
-				{
-					"label": "Magenta",
-					"value": 7
-				},
-				{
-					"label": "Blinking red-white-blue",
-					"value": 8
-				}
-			]
+			"$import": "#paramInformation/150",
+			"label": "LED Frame – Second Channel color"
 		},
 		"152": {
-			"label": "1st button - double click value",
+			"label": "First Channel - Double click value",
 			"description": "Defines value of Basic Set or Multilevel Set frame sent to associated devices",
 			"valueSize": 2,
 			"minValue": 0,
@@ -165,18 +138,8 @@
 			]
 		},
 		"153": {
-			"label": "2nd button - double click value",
-			"description": "Defines value of Basic Set or Multilevel Set frame sent to associated devices",
-			"valueSize": 2,
-			"minValue": 0,
-			"maxValue": 255,
-			"defaultValue": 99,
-			"options": [
-				{
-					"label": "Disabled",
-					"value": 255
-				}
-			]
+			"$import": "#paramInformation/152",
+			"label": "Second Chanel - Double click value"
 		}
 	}
 }
