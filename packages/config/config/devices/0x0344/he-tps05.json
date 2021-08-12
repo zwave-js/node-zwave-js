@@ -635,7 +635,7 @@
 			]
 		},
 		"61": {
-			"label": "Relay 1: Button number source",
+			"label": "Relay 1: Button Number Source",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 5,
@@ -651,25 +651,25 @@
 					"value": 1
 				},
 				{
-					"label": "Controlled by touch button N2 (Top Right)",
+					"label": "Touch button N2 (Top Right)",
 					"value": 2
 				},
 				{
-					"label": "Controlled by touch button N3 (Bottom Left)",
+					"label": "Touch button N3 (Bottom Left)",
 					"value": 3
 				},
 				{
-					"label": "Controlled by touch button N4 (Bottom Right)",
+					"label": "Touch button N4 (Bottom Right)",
 					"value": 4
 				},
 				{
-					"label": "Controlled by touch button N5 (Center)",
+					"label": "Touch button N5 (Center)",
 					"value": 5
 				}
 			]
 		},
 		"62": {
-			"label": "Relay 2: Button number source",
+			"label": "Relay 2: Button Number Source",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 5,
@@ -677,33 +677,33 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "Controlled by gateway or associated device",
+					"label": "Gateway or associated device",
 					"value": 0
 				},
 				{
-					"label": "Controlled by touch button N1 (Top Left)",
+					"label": "Touch button N1 (top left)",
 					"value": 1
 				},
 				{
-					"label": "Controlled by touch button N2 (Top Right)",
+					"label": "Touch button N2 (Top Right)",
 					"value": 2
 				},
 				{
-					"label": "Controlled by touch button N3 (Bottom Left)",
+					"label": "Touch button N3 (Bottom Left)",
 					"value": 3
 				},
 				{
-					"label": "Controlled by touch button N4 (Bottom Right)",
+					"label": "Touch button N4 (Bottom Right)",
 					"value": 4
 				},
 				{
-					"label": "Controlled by touch button N5 (Center)",
+					"label": "Touch button N5 (Center)",
 					"value": 5
 				}
 			]
 		},
 		"63": {
-			"label": "Relay 3: Button number source",
+			"label": "Relay 3: Button Number Source",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 5,
@@ -711,33 +711,33 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "Controlled by gateway or associated device",
+					"label": "Gateway or associated device",
 					"value": 0
 				},
 				{
-					"label": "Controlled by touch button N1 (Top Left)",
+					"label": "Touch button N1 (top left)",
 					"value": 1
 				},
 				{
-					"label": "Controlled by touch button N2 (Top Right)",
+					"label": "Touch button N2 (Top Right)",
 					"value": 2
 				},
 				{
-					"label": "Controlled by touch button N3 (Bottom Left)",
+					"label": "Touch button N3 (Bottom Left)",
 					"value": 3
 				},
 				{
-					"label": "Controlled by touch button N4 (Bottom Right)",
+					"label": "Touch button N4 (Bottom Right)",
 					"value": 4
 				},
 				{
-					"label": "Controlled by touch button N5 (Center)",
+					"label": "Touch button N5 (Center)",
 					"value": 5
 				}
 			]
 		},
 		"64": {
-			"label": "Relay 4: Button number source",
+			"label": "Relay 4: Button Number Source",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 5,
@@ -745,33 +745,33 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "Controlled by gateway or associated device",
+					"label": "Gateway or associated device",
 					"value": 0
 				},
 				{
-					"label": "Controlled by touch button N1 (Top Left)",
+					"label": "Touch button N1 (top left)",
 					"value": 1
 				},
 				{
-					"label": "Controlled by touch button N2 (Top Right)",
+					"label": "Touch button N2 (Top Right)",
 					"value": 2
 				},
 				{
-					"label": "Controlled by touch button N3 (Bottom Left)",
+					"label": "Touch button N3 (Bottom Left)",
 					"value": 3
 				},
 				{
-					"label": "Controlled by touch button N4 (Bottom Right)",
+					"label": "Touch button N4 (Bottom Right)",
 					"value": 4
 				},
 				{
-					"label": "Controlled by touch button N5 (Center)",
+					"label": "Touch button N5 (Center)",
 					"value": 5
 				}
 			]
 		},
 		"65": {
-			"label": "Relay 5: Button number source",
+			"label": "Relay 5: Button Number Source",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 5,
@@ -779,27 +779,27 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "Controlled by gateway or associated device",
+					"label": "Gateway or associated device",
 					"value": 0
 				},
 				{
-					"label": "Controlled by touch button N1 (Top Left)",
+					"label": "Touch button N1 (top left)",
 					"value": 1
 				},
 				{
-					"label": "Controlled by touch button N2 (Top Right)",
+					"label": "Touch button N2 (Top Right)",
 					"value": 2
 				},
 				{
-					"label": "Controlled by touch button N3 (Bottom Left)",
+					"label": "Touch button N3 (Bottom Left)",
 					"value": 3
 				},
 				{
-					"label": "Controlled by touch button N4 (Bottom Right)",
+					"label": "Touch button N4 (Bottom Right)",
 					"value": 4
 				},
 				{
-					"label": "Controlled by touch button N5 (Center)",
+					"label": "Touch button N5 (Center)",
 					"value": 5
 				}
 			]
