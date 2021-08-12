@@ -643,7 +643,7 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "Controlled by gateway or associated device",
+					"label": "Gateway or associated device",
 					"value": 0
 				},
 				{
