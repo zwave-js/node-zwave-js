@@ -2,7 +2,7 @@
 	"manufacturer": "Fibargroup",
 	"manufacturerId": "0x010f",
 	"label": "FGWCEU-201",
-	"description": "WALLI FIBARO CONTROLLER",
+	"description": "Walli Controller",
 	"devices": [
 		{
 			"productType": "0x2301",
