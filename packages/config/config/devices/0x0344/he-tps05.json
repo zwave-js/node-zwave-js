@@ -935,7 +935,7 @@
 			]
 		},
 		"143": {
-			"label": "Sensors Consecutive Reporting Interval",
+			"label": "All Sensors: Reporting Interval",
 			"unit": "minutes",
 			"valueSize": 1,
 			"minValue": 1,
