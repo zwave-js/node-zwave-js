@@ -1816,7 +1816,8 @@ export class Driver extends TypedEventEmitter<DriverEventCallbacks> {
 	): Promise<boolean> {
 		if (!isZWaveError(e)) return false;
 		if (
-			e.code === ZWaveErrorCodes.Security2CC_NoSPAN &&
+			(e.code === ZWaveErrorCodes.Security2CC_NoSPAN ||
+				e.code === ZWaveErrorCodes.Security2CC_CannotDecode) &&
 			isCommandClassContainer(msg)
 		) {
 			// Decoding the command failed because no SPAN has been established with the other node
@@ -1846,9 +1847,14 @@ export class Driver extends TypedEventEmitter<DriverEventCallbacks> {
 				isCommandClassContainer(t.message) &&
 				t.message.command instanceof Security2CCNonceReport;
 
+			const message: string =
+				e.code === ZWaveErrorCodes.Security2CC_CannotDecode
+					? "Message authentication failed"
+					: "No SPAN is established yet";
+
 			if (!this.hasPendingTransactions(isS2NonceReport)) {
 				this.controllerLog.logNode(nodeId, {
-					message: `No SPAN is established yet, cannot decode command. Requesting a nonce...`,
+					message: `${message}, cannot decode command. Requesting a nonce...`,
 					level: "verbose",
 					direction: "outbound",
 				});
@@ -1858,7 +1864,7 @@ export class Driver extends TypedEventEmitter<DriverEventCallbacks> {
 				});
 			} else {
 				this.controllerLog.logNode(nodeId, {
-					message: `No SPAN is established yet, cannot decode command.`,
+					message: `${message}, cannot decode command.`,
 					level: "verbose",
 					direction: "none",
 				});

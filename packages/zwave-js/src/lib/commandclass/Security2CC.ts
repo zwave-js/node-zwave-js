@@ -752,8 +752,10 @@ export class Security2CCMessageEncapsulation extends Security2CC {
 			};
 
 			const { plaintext, authOK, decryptionKey } = decrypt();
+			// If authentication fails, do so with an error code that instructs the
+			// driver to tell the node we have no nonce
 			validatePayload.withReason(
-				"Message authentication failed, won't accept security encapsulated command.",
+				ZWaveErrorCodes.Security2CC_CannotDecode,
 			)(!!authOK && !!plaintext);
 
 			offset = 0;

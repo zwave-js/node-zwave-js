@@ -1104,6 +1104,12 @@ export class ZWaveController extends TypedEventEmitter<ControllerEventCallbacks>
 			strategy: InclusionStrategy.Security_S2;
 		};
 
+		const deleteTempKey = () => {
+			// Whatever happens, no further communication needs the temporary key
+			this.driver.securityManager2?.deleteNonce(node.id);
+			this.driver.securityManager2?.tempKeys.delete(node.id);
+		};
+
 		try {
 			const api = node.commandClasses["Security 2"];
 			const abort = async (failType?: KEXFailType): Promise<void> => {
@@ -1116,6 +1122,7 @@ export class ZWaveController extends TypedEventEmitter<ControllerEventCallbacks>
 				}
 				// Un-grant S2 security classes we might have granted
 				unGrantSecurityClasses();
+				deleteTempKey();
 			};
 
 			const abortUser = () => {
@@ -1446,8 +1453,11 @@ export class ZWaveController extends TypedEventEmitter<ControllerEventCallbacks>
 			}
 
 			// Remember all security classes we have granted
-			for (const securityClass of grantedKeys) {
-				node.securityClasses.set(securityClass, true);
+			for (const securityClass of securityClassOrder) {
+				node.securityClasses.set(
+					securityClass,
+					grantedKeys.includes(securityClass),
+				);
 			}
 			this.driver.controllerLog.logNode(node.id, {
 				message: `Security S2 bootstrapping successful with these security classes:${[
@@ -1475,6 +1485,9 @@ export class ZWaveController extends TypedEventEmitter<ControllerEventCallbacks>
 			// Remember that the node was NOT granted any S2 security classes
 			unGrantSecurityClasses();
 			node.removeCC(CommandClasses["Security 2"]);
+		} finally {
+			// Whatever happens, no further communication needs the temporary key
+			deleteTempKey();
 		}
 	}
 
