@@ -7,11 +7,20 @@
 -->
 ## __WORK IN PROGRESS__ · _„Hell, it's about damn time”_
 ### Features
-* Added support for **Security S2**
+* Added support for **Security S2** inclusion and singlecast communication. See the [PR description](https://github.com/zwave-js/node-zwave-js/pull/1136) and documentation for details.
+
+### Bugfixes
+* The firmware target selection for targets other than 0 no longer incorrectly complains about an incorrect target
+
+### Config file changes
+* Add another product ID variant to Yale YRD210
+* Update and cleanup Fibaro Walli Double Switch
+* Preserve root endpoint values for TZ06
+* Allow manual entry for Zooz ZSE11 Param 12 
 
 ## 8.0.8 (2021-08-04)
 ### Bugfixes
-* The firmware target selection for targets other than 0 no longer incorrectly complains about an incorrect target
+* ~~The firmware target selection for targets other than 0 no longer incorrectly complains about an incorrect target~~
 
 ### Config file changes
 * Add Silabs UZB3 500 series controller device
