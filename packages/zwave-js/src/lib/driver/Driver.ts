@@ -8,7 +8,9 @@ import {
 	highResTimestamp,
 	isZWaveError,
 	LogConfig,
+	SecurityClass,
 	SecurityManager,
+	SecurityManager2,
 	serializeCacheValue,
 	timespan,
 	ValueMetadata,
@@ -45,7 +47,12 @@ import SerialPort from "serialport";
 import { URL } from "url";
 import * as util from "util";
 import { interpret } from "xstate";
-import { FirmwareUpdateStatus } from "../commandclass";
+import {
+	FirmwareUpdateStatus,
+	Security2CC,
+	Security2CCMessageEncapsulation,
+	Security2CCNonceReport,
+} from "../commandclass";
 import {
 	assertValidCCs,
 	CommandClass,
@@ -424,6 +431,12 @@ export class Driver extends TypedEventEmitter<DriverEventCallbacks> {
 	/** @internal */
 	public get securityManager(): SecurityManager | undefined {
 		return this._securityManager;
+	}
+
+	private _securityManager2: SecurityManager2 | undefined;
+	/** @internal */
+	public get securityManager2(): SecurityManager2 | undefined {
+		return this._securityManager2;
 	}
 
 	public constructor(
@@ -815,13 +828,33 @@ export class Driver extends TypedEventEmitter<DriverEventCallbacks> {
 			// Driver unit tests that don't need access to them
 		}
 
-		// We need to know the controller node id to set up the security manager
-		if (this.options.networkKey) {
+		// Set up the S0 security manager. We can only do that after the controller
+		// interview because we need to know the controller node id.
+		const S0Key =
+			this.options.securityKeys?.S0_Legacy ?? this.options.networkKey;
+		if (S0Key) {
 			this._securityManager = new SecurityManager({
-				networkKey: this.options.networkKey,
+				networkKey: S0Key,
 				ownNodeId: this._controller.ownNodeId!,
 				nonceTimeout: this.options.timeouts.nonce,
 			});
+		}
+
+		// The S2 security manager could be initialized earlier, but we do it here for consistency
+		if (this.options.securityKeys) {
+			this._securityManager2 = new SecurityManager2();
+			// Set up all keys
+			for (const secClass of [
+				"S2_Unauthenticated",
+				"S2_Authenticated",
+				"S2_AccessControl",
+				"S0_Legacy",
+			] as const) {
+				const key = this.options.securityKeys[secClass];
+				if (key) {
+					this._securityManager2.setKey(SecurityClass[secClass], key);
+				}
+			}
 		}
 
 		// in any case we need to emit the driver ready event here
@@ -1336,15 +1369,27 @@ export class Driver extends TypedEventEmitter<DriverEventCallbacks> {
 	/** Checks if there are any pending messages for the given node */
 	private hasPendingMessages(node: ZWaveNode): boolean {
 		// First check if there are messages in the queue
-		const { queue, currentTransaction } = this.sendThread.state.context;
 		if (
-			!!queue.find((t) => t.message.getNodeId() === node.id) ||
-			currentTransaction?.message.getNodeId() === node.id
+			this.hasPendingTransactions(
+				(t) => t.message.getNodeId() === node.id,
+			)
 		) {
 			return true;
 		}
+
 		// Then check if there are scheduled polls
 		return node.scheduledPolls.size > 0;
+	}
+
+	/** Checks if there are any pending transactions that match the given predicate */
+	public hasPendingTransactions(
+		predicate: (t: Transaction) => boolean,
+	): boolean {
+		const { queue, currentTransaction } = this.sendThread.state.context;
+		return (
+			(currentTransaction && predicate(currentTransaction)) ||
+			!!queue.find((t) => predicate(t))
+		);
 	}
 
 	/**
@@ -1584,23 +1629,30 @@ export class Driver extends TypedEventEmitter<DriverEventCallbacks> {
 			await this.writeHeader(MessageHeaders.ACK);
 		} catch (e) {
 			try {
-				const response = this.handleDecodeError(e, data, msg);
-				if (response) await this.writeHeader(response);
-				if (isCommandClassContainer(msg)) {
-					msg.getNodeUnsafe()?.incrementStatistics(
-						"commandsDroppedRX",
-					);
+				if (await this.handleSecurityS2DecodeError(e, msg)) {
+					// TODO
 				} else {
-					this._controller?.incrementStatistics("messagesDroppedRX");
+					const response = this.handleDecodeError(e, data, msg);
+					if (response) await this.writeHeader(response);
+					if (isCommandClassContainer(msg)) {
+						msg.getNodeUnsafe()?.incrementStatistics(
+							"commandsDroppedRX",
+						);
+					} else {
+						this._controller?.incrementStatistics(
+							"messagesDroppedRX",
+						);
+					}
 				}
-			} catch (e) {
-				if (
-					e instanceof Error &&
-					/serial port is not open/.test(e.message)
-				) {
-					this.emit("error", e);
-					void this.destroy();
-					return;
+			} catch (ee) {
+				if (ee instanceof Error) {
+					if (/serial port is not open/.test(ee.message)) {
+						this.emit("error", ee);
+						void this.destroy();
+						return;
+					}
+					// Print something, so we know what is wrong
+					this._driverLog.print(ee.stack ?? ee.message, "error");
 				}
 			}
 			// Don't keep handling the message
@@ -1739,7 +1791,7 @@ export class Driver extends TypedEventEmitter<DriverEventCallbacks> {
 
 				case ZWaveErrorCodes.Driver_NoSecurity:
 					this.driverLog.print(
-						`Dropping message because network key is not set or the driver is not yet ready to receive secure messages.`,
+						`Dropping message because network keys are not set or the driver is not yet ready to receive secure messages.`,
 						"warn",
 					);
 					return MessageHeaders.ACK;
@@ -1756,6 +1808,71 @@ export class Driver extends TypedEventEmitter<DriverEventCallbacks> {
 		}
 		// Pass all other errors through
 		throw e;
+	}
+
+	private async handleSecurityS2DecodeError(
+		e: Error,
+		msg: Message | undefined,
+	): Promise<boolean> {
+		if (!isZWaveError(e)) return false;
+		if (
+			(e.code === ZWaveErrorCodes.Security2CC_NoSPAN ||
+				e.code === ZWaveErrorCodes.Security2CC_CannotDecode) &&
+			isCommandClassContainer(msg)
+		) {
+			// Decoding the command failed because no SPAN has been established with the other node
+			const nodeId = msg.getNodeId()!;
+			// If the node isn't known, ignore this error
+			const node = this._controller?.nodes.get(nodeId);
+			if (!node) return false;
+
+			// Before we can send anything, ACK the command
+			await this.writeHeader(MessageHeaders.ACK);
+
+			this.driverLog.logMessage(msg, { direction: "inbound" });
+			node.incrementStatistics("commandsDroppedRX");
+
+			// We might receive this before the node has been interviewed. If that case, we need to mark Security S2 as
+			// supported or we won't ever be able to communicate with the node
+			if (node.interviewStage < InterviewStage.NodeInfo) {
+				node.addCC(CommandClasses["Security 2"], {
+					isSupported: true,
+					version: 1,
+				});
+			}
+
+			// Ensure that we're not flooding the queue with unnecessary NonceReports
+			const isS2NonceReport = (t: Transaction) =>
+				t.message.getNodeId() === nodeId &&
+				isCommandClassContainer(t.message) &&
+				t.message.command instanceof Security2CCNonceReport;
+
+			const message: string =
+				e.code === ZWaveErrorCodes.Security2CC_CannotDecode
+					? "Message authentication failed"
+					: "No SPAN is established yet";
+
+			if (!this.hasPendingTransactions(isS2NonceReport)) {
+				this.controllerLog.logNode(nodeId, {
+					message: `${message}, cannot decode command. Requesting a nonce...`,
+					level: "verbose",
+					direction: "outbound",
+				});
+				// Send the node our nonce
+				node.commandClasses["Security 2"].sendNonce().catch(() => {
+					// Ignore errors
+				});
+			} else {
+				this.controllerLog.logNode(nodeId, {
+					message: `${message}, cannot decode command.`,
+					level: "verbose",
+					direction: "none",
+				});
+			}
+
+			return true;
+		}
+		return false;
 	}
 
 	/** Checks if a transaction failed because a node didn't respond in time */
@@ -2144,14 +2261,23 @@ ${handlers.length} left`,
 		// A controlling node MUST discard a received Report/Notification type command if it is
 		// not received using S0 encapsulation and the corresponding Command Class is supported securely only
 
-		if (cc.secure && cc.ccId !== CommandClasses.Security) {
+		if (
+			cc.secure &&
+			cc.ccId !== CommandClasses.Security &&
+			cc.ccId !== CommandClasses["Security 2"]
+		) {
 			const commandName = cc.constructor.name;
 			if (
 				commandName.endsWith("Report") ||
 				commandName.endsWith("Notification")
 			) {
-				// Check whether there was a S0 encapsulation
-				if (cc.isEncapsulatedWith(CommandClasses.Security)) return true;
+				// Check whether there was a security encapsulation
+				if (
+					cc.isEncapsulatedWith(CommandClasses.Security) ||
+					cc.isEncapsulatedWith(CommandClasses["Security 2"])
+				) {
+					return true;
+				}
 				// none found, don't accept the CC
 				this.controllerLog.logNode(
 					cc.nodeId as number,
@@ -2191,7 +2317,7 @@ ${handlers.length} left`,
 				(msg.command.ccId === CommandClasses.Security ||
 					msg.command.isEncapsulatedWith(CommandClasses.Security))
 			) {
-				node.isSecure = true;
+				node.securityClasses.set(SecurityClass.S0_Legacy, true);
 				// Force a new interview
 				void node.refreshInfo();
 			}
@@ -2378,6 +2504,22 @@ ${handlers.length} left`,
 		}
 
 		// 5.
+
+		// When a node supports S2 and has a valid security class, the command
+		// must be S2-encapsulated
+		const node = msg.command.getNode();
+		if (node?.supportsCC(CommandClasses["Security 2"])) {
+			const securityClass = node.getHighestSecurityClass();
+			if (
+				((securityClass != undefined &&
+					securityClass !== SecurityClass.S0_Legacy) ||
+					this.securityManager2?.tempKeys.has(node.id)) &&
+				Security2CC.requiresEncapsulation(msg.command)
+			) {
+				msg.command = Security2CC.encapsulate(this, msg.command);
+			}
+		}
+		// This check will return false for S2-encapsulated commands
 		if (SecurityCC.requiresEncapsulation(msg.command)) {
 			msg.command = SecurityCC.encapsulate(this, msg.command);
 		}
@@ -2864,6 +3006,49 @@ ${handlers.length} left`,
 	/** Re-sorts the send queue */
 	private sortSendQueue(): void {
 		this.sendThread.send("sortQueue");
+	}
+
+	/** Re-sends the current command if it is S2 encapsulated */
+	public resendS2EncapsulatedCommand(): void {
+		// If this is called, a receiving node couldn't decode the last message we sent it
+		const { currentTransaction } = this.sendThread.state.context;
+		if (
+			currentTransaction &&
+			isCommandClassContainer(currentTransaction.message) &&
+			currentTransaction.message.command instanceof
+				Security2CCMessageEncapsulation
+		) {
+			const cmd = currentTransaction.message.command;
+			if (cmd.wasRetriedAfterDecodeFailure) {
+				this._controllerLog.logNode(cmd.nodeId as number, {
+					message: `failed to decode the message after re-transmission with SPAN extension, dropping the message.`,
+					direction: "none",
+					level: "warn",
+				});
+				this.sendThread.send({
+					type: "reduce",
+					reducer: (_t, source) => {
+						if (source === "current") {
+							return {
+								type: "reject",
+								code: ZWaveErrorCodes.Security2CC_CannotDecode,
+								message:
+									"The node failed to decode the message.",
+							};
+						} else {
+							return { type: "keep" };
+						}
+					},
+				});
+			} else {
+				this._controllerLog.logNode(cmd.nodeId as number, {
+					message: `failed to decode the message, retrying with SPAN extension...`,
+					direction: "none",
+				});
+				cmd.prepareRetryAfterDecodeFailure();
+				this.sendThread.send("resend");
+			}
+		}
 	}
 
 	private lastSaveToCache: number = 0;

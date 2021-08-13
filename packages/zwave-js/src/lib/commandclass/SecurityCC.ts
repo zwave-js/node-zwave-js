@@ -11,6 +11,7 @@ import {
 	MessageOrCCLogEntry,
 	MessageRecord,
 	parseCCList,
+	SecurityClass,
 	SecurityManager,
 	validatePayload,
 	ZWaveError,
@@ -36,6 +37,7 @@ import {
 	gotDeserializationOptions,
 	implementedVersion,
 } from "./CommandClass";
+import { Security2CC } from "./Security2CC";
 
 // @noSetValueAPI This is an encapsulation CC
 
@@ -315,35 +317,35 @@ export class SecurityCC extends CommandClass {
 			priority: MessagePriority.NodeQuery,
 		});
 
-		// This only needs to be done once
 		this.driver.controllerLog.logNode(node.id, {
-			message: "querying securely supported commands...",
+			message: "Querying securely supported commands (S0)...",
 			direction: "outbound",
 		});
 
 		const resp = await api.getSupportedCommands();
 		if (!resp) {
-			if (node.isSecure === true) {
+			if (node.securityClasses.get(SecurityClass.S0_Legacy) === true) {
 				this.driver.controllerLog.logNode(node.id, {
 					endpoint: this.endpointIndex,
 					message:
-						"Querying securely supported commands timed out, skipping Security interview...",
+						"Querying securely supported commands (S0) timed out",
 					level: "warn",
 				});
 				// TODO: Abort interview?
 			} else {
-				// We didn't know if the node was secure, assume that it is not actually included securely
+				// We didn't know if the node was secure and it didn't respond,
+				// assume that it doesn't have the S0 security class
 				this.driver.controllerLog.logNode(
 					node.id,
-					`The node is not included securely. Continuing interview non-securely.`,
+					`The node was not granted the S0 security class. Continuing interview non-securely.`,
 				);
-				node.isSecure = false;
+				node.securityClasses.set(SecurityClass.S0_Legacy, false);
 			}
 			return;
 		}
 
 		const logLines: string[] = [
-			"received secure commands",
+			"received secure commands (S0)",
 			"supported CCs:",
 		];
 		for (const cc of resp.supportedCCs) {
@@ -373,11 +375,11 @@ export class SecurityCC extends CommandClass {
 		}
 
 		// We know for sure that the node is included securely
-		if (node.isSecure !== true) {
-			node.isSecure = true;
+		if (node.hasSecurityClass(SecurityClass.S0_Legacy) !== true) {
+			node.securityClasses.set(SecurityClass.S0_Legacy, true);
 			this.driver.controllerLog.logNode(
 				node.id,
-				`The node is included securely.`,
+				`The node was granted the S0 security class`,
 			);
 		}
 
@@ -385,11 +387,12 @@ export class SecurityCC extends CommandClass {
 		this.interviewComplete = true;
 	}
 
-	/** Tests if a should be sent secure and thus requires encapsulation */
+	/** Tests if a command should be sent secure and thus requires encapsulation */
 	public static requiresEncapsulation(cc: CommandClass): boolean {
 		return (
 			cc.secure &&
 			// Already encapsulated (SecurityCCCommandEncapsulationNonceGet is a subclass)
+			!(cc instanceof Security2CC) &&
 			!(cc instanceof SecurityCCCommandEncapsulation) &&
 			// Cannot be sent encapsulated
 			!(cc instanceof SecurityCCNonceGet) &&
@@ -488,14 +491,15 @@ export class SecurityCCCommandEncapsulation extends SecurityCC {
 	) {
 		super(driver, options);
 
+		const verb = gotDeserializationOptions(options) ? "decoded" : "sent";
 		if (!(this.driver.controller.ownNodeId as unknown)) {
 			throw new ZWaveError(
-				`Secure commands can can only be sent when the controller's node id is known!`,
+				`Secure commands (S0) can only be ${verb} when the controller's node id is known!`,
 				ZWaveErrorCodes.Driver_NotReady,
 			);
 		} else if (!(this.driver.securityManager as unknown)) {
 			throw new ZWaveError(
-				`Secure commands can only be sent when the network key for the driver is set`,
+				`Secure commands (S0) can only be ${verb} when the network key for the driver is set`,
 				ZWaveErrorCodes.Driver_NoSecurity,
 			);
 		}

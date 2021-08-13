@@ -370,6 +370,8 @@ export type CCToName<CC extends CommandClasses> = [CC] extends [
 	? "Scene Actuator Configuration"
 	: [CC] extends [typeof CommandClasses["Scene Controller Configuration"]]
 	? "Scene Controller Configuration"
+	: [CC] extends [typeof CommandClasses["Security 2"]]
+	? "Security 2"
 	: [CC] extends [typeof CommandClasses["Security"]]
 	? "Security"
 	: [CC] extends [typeof CommandClasses["Sound Switch"]]
@@ -451,6 +453,7 @@ export interface CCAPIs {
 	"Scene Activation": import("./SceneActivationCC").SceneActivationCCAPI;
 	"Scene Actuator Configuration": import("./SceneActuatorConfigurationCC").SceneActuatorConfigurationCCAPI;
 	"Scene Controller Configuration": import("./SceneControllerConfigurationCC").SceneControllerConfigurationCCAPI;
+	"Security 2": import("./Security2CC").Security2CCAPI;
 	Security: import("./SecurityCC").SecurityCCAPI;
 	"Sound Switch": import("./SoundSwitchCC").SoundSwitchCCAPI;
 	Supervision: import("./SupervisionCC").SupervisionCCAPI;

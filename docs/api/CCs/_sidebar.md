@@ -53,6 +53,7 @@
         -   [Scene Activation CC](api/CCs/SceneActivation.md)
         -   [Scene Actuator Configuration CC](api/CCs/SceneActuatorConfiguration.md)
         -   [Scene Controller Configuration CC](api/CCs/SceneControllerConfiguration.md)
+        -   [Security 2 CC](api/CCs/Security2.md)
         -   [Security CC](api/CCs/Security.md)
         -   [Sound Switch CC](api/CCs/SoundSwitch.md)
         -   [Supervision CC](api/CCs/Supervision.md)
@@ -73,6 +74,7 @@
 
     -   [Send custom messages](usage/custom.md)
     -   [External config DB location](usage/external-config.md)
+    -   [UI guidelines for S2 inclusion](usage/s2-inclusion.md)
 
 -   Troubleshooting
 

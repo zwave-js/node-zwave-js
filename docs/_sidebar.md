@@ -23,6 +23,7 @@
 
     -   [Send custom messages](usage/custom.md)
     -   [External config DB location](usage/external-config.md)
+    -   [UI guidelines for S2 inclusion](usage/s2-inclusion.md)
 
 -   Troubleshooting
 

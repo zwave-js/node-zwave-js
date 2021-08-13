@@ -162,6 +162,22 @@ isAwake(): boolean
 
 Returns whether the node is currently assumed awake.
 
+### `hasSecurityClass`
+
+```ts
+hasSecurityClass(securityClass: SecurityClass): Maybe<boolean>
+```
+
+Returns whether the node was assigned the given security class - or `"unknown"` if that information isn't known yet.
+
+### `getHighestSecurityClass`
+
+```ts
+getHighestSecurityClass(): SecurityClass | undefined
+```
+
+Returns the highest security class this node was granted or `undefined` if that information isn't known yet. This can be used to distinguish whether a node is communicating with S2, S0 or insecure.
+
 ### `refreshInfo`
 
 ```ts
@@ -426,6 +442,7 @@ interface BasicDeviceClass {
 interface GenericDeviceClass {
 	readonly key: number;
 	readonly label: string;
+	readonly requiresSecurity?: boolean | undefined;
 	readonly supportedCCs: readonly CommandClasses[];
 	readonly controlledCCs: readonly CommandClasses[];
 	readonly specific: ReadonlyMap<number, SpecificDeviceClass>;
@@ -439,6 +456,7 @@ interface SpecificDeviceClass {
 	readonly key: number;
 	readonly label: string;
 	readonly zwavePlusDeviceType?: string | undefined;
+	readonly requiresSecurity?: boolean | undefined;
 	readonly supportedCCs: readonly CommandClasses[];
 	readonly controlledCCs: readonly CommandClasses[];
 }
@@ -561,10 +579,10 @@ Whether this node supports secure communication (S0 or S2).
 ### `isSecure`
 
 ```ts
-readonly isSecure: boolean | "unknown" | undefined;
+readonly isSecure: boolean | "unknown";
 ```
 
-Whether this node is communicating securely with the controller.
+Whether this node is communicating securely with the controller, meaning that it was granted at least one security class. More specific information can be retrieved with the [`hasSecurityClass`](#hasSecurityClass) or the [`getHighestSecurityClass`](#getHighestSecurityClass) methods.
 
 ### `supportsBeaming`
 

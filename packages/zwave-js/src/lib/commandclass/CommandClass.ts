@@ -24,6 +24,7 @@ import {
 	JSONObject,
 	num2hex,
 	staticExtends,
+	TypedClassDecorator,
 } from "@zwave-js/shared";
 import { isArray } from "alcalzone-shared/typeguards";
 import type { Driver } from "../driver/Driver";
@@ -172,7 +173,7 @@ export class CommandClass {
 			this.secure =
 				node?.isSecure !== false &&
 				!!(endpoint ?? node)?.isCCSecure(this.ccId) &&
-				!!this.driver.securityManager;
+				!!(this.driver.securityManager || this.driver.securityManager2);
 		} else {
 			// For multicast and broadcast CCs, we just use the highest implemented version to serialize
 			// Older nodes will ignore the additional fields
@@ -365,8 +366,14 @@ export class CommandClass {
 					ccName = `${getCCName(ccId)} CC`;
 				}
 				// Preserve why the command was invalid
-				let reason: string | undefined;
-				if (typeof e.context === "string") reason = e.context;
+				let reason: string | ZWaveErrorCodes | undefined;
+				if (
+					typeof e.context === "string" ||
+					(typeof e.context === "number" &&
+						ZWaveErrorCodes[e.context] != undefined)
+				) {
+					reason = e.context;
+				}
 
 				return new InvalidCC(driver, {
 					nodeId,
@@ -1006,13 +1013,15 @@ export class CommandClass {
 
 export interface InvalidCCCreationOptions extends CommandClassCreationOptions {
 	ccName: string;
-	reason?: string;
+	reason?: string | ZWaveErrorCodes;
 }
 
 export class InvalidCC extends CommandClass {
 	public constructor(driver: Driver, options: InvalidCCCreationOptions) {
 		super(driver, options);
 		this._ccName = options.ccName;
+		// Numeric reasons are used internally to communicate problems with a CC
+		// without ignoring them entirely
 		this.reason = options.reason;
 	}
 
@@ -1020,27 +1029,41 @@ export class InvalidCC extends CommandClass {
 	public get ccName(): string {
 		return this._ccName;
 	}
-	public readonly reason?: string;
+	public readonly reason?: string | ZWaveErrorCodes;
 
 	public toLogEntry(): MessageOrCCLogEntry {
 		return {
 			tags: [this.ccName, "INVALID"],
-			message: this.reason
-				? {
-						error: this.reason,
-				  }
-				: undefined,
+			message:
+				this.reason != undefined
+					? {
+							error:
+								typeof this.reason === "string"
+									? this.reason
+									: getEnumMemberName(
+											ZWaveErrorCodes,
+											this.reason,
+									  ),
+					  }
+					: undefined,
 		};
 	}
 }
 
 export function assertValidCCs(container: ICommandClassContainer): void {
 	if (container.command instanceof InvalidCC) {
-		throw new ZWaveError(
-			"The message payload is invalid!",
-			ZWaveErrorCodes.PacketFormat_InvalidPayload,
-			container.command.reason,
-		);
+		if (typeof container.command.reason === "number") {
+			throw new ZWaveError(
+				"The message payload failed validation!",
+				container.command.reason,
+			);
+		} else {
+			throw new ZWaveError(
+				"The message payload is invalid!",
+				ZWaveErrorCodes.PacketFormat_InvalidPayload,
+				container.command.reason,
+			);
+		}
 	} else if (isCommandClassContainer(container.command)) {
 		assertValidCCs(container.command);
 	}
@@ -1077,14 +1100,6 @@ type APIConstructor = new (
 	driver: Driver,
 	endpoint: Endpoint | VirtualEndpoint,
 ) => CCAPI;
-
-// eslint-disable-next-line @typescript-eslint/ban-types
-type TypedClassDecorator<TTarget extends Object> = <
-	T extends TTarget,
-	TConstructor extends new (...args: any[]) => T,
->(
-	apiClass: TConstructor,
-) => TConstructor | void;
 
 type CommandClassMap = Map<CommandClasses, Constructable<CommandClass>>;
 type CCCommandMap = Map<string, Constructable<CommandClass>>;
@@ -1125,11 +1140,11 @@ export function commandClass(
 	return (messageClass) => {
 		Reflect.defineMetadata(METADATA_commandClass, cc, messageClass);
 
-		// also store a map in the Message metadata for lookup.
+		// also store a map in the CommandClass metadata for lookup.
 		const map: CommandClassMap =
 			Reflect.getMetadata(METADATA_commandClassMap, CommandClass) ||
 			new Map();
-		map.set(cc, messageClass as any as Constructable<CommandClass>);
+		map.set(cc, messageClass as unknown as Constructable<CommandClass>);
 		Reflect.defineMetadata(METADATA_commandClassMap, map, CommandClass);
 	};
 }
@@ -1494,7 +1509,7 @@ export function API(cc: CommandClasses): TypedClassDecorator<CCAPI> {
 		// also store a map in the CCAPI metadata for lookup.
 		const map = (Reflect.getMetadata(METADATA_APIMap, CCAPI) ||
 			new Map()) as APIMap;
-		map.set(cc, apiClass as any as APIConstructor);
+		map.set(cc, apiClass as unknown as APIConstructor);
 		Reflect.defineMetadata(METADATA_APIMap, map, CCAPI);
 	};
 }

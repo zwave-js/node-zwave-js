@@ -45,6 +45,7 @@ The **Command Classes API** provides a high-to-mid level entrypoint which allows
 -   [Scene Activation CC](api/CCs/SceneActivation.md) · `0x2b`
 -   [Scene Actuator Configuration CC](api/CCs/SceneActuatorConfiguration.md) · `0x2c`
 -   [Scene Controller Configuration CC](api/CCs/SceneControllerConfiguration.md) · `0x2d`
+-   [Security 2 CC](api/CCs/Security2.md) · `0x9f`
 -   [Security CC](api/CCs/Security.md) · `0x98`
 -   [Sound Switch CC](api/CCs/SoundSwitch.md) · `0x79`
 -   [Supervision CC](api/CCs/Supervision.md) · `0x6c`
