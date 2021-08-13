@@ -1294,7 +1294,8 @@ export class ZWaveController extends TypedEventEmitter<ControllerEventCallbacks>
 
 			// Wait until the encrypted KEXSet from the node was received
 			// (if there is even time left)
-			const tai2RemainingMs = Date.now() - timerStartTAI2;
+			const tai2RemainingMs =
+				inclusionTimeouts.TAI2 - (Date.now() - timerStartTAI2);
 			if (tai2RemainingMs < 1) {
 				this.driver.controllerLog.logNode(node.id, {
 					message: `Security S2 bootstrapping failed: a secure inclusion timer has elapsed`,
