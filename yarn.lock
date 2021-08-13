@@ -3427,15 +3427,15 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@ts-morph/common@patch:@ts-morph/common@~0.10.1#.yarn/sdks/ts-morph/patch.diff::locator=%40zwave-js%2Frepo%40workspace%3A.":
+"@ts-morph/common@patch:@ts-morph/common@~0.10.1#.yarn-patches/ts-morph.diff::locator=%40zwave-js%2Frepo%40workspace%3A.":
   version: 0.10.1
-  resolution: "@ts-morph/common@patch:@ts-morph/common@npm%3A0.10.1#.yarn/sdks/ts-morph/patch.diff::version=0.10.1&hash=fbeda1&locator=%40zwave-js%2Frepo%40workspace%3A."
+  resolution: "@ts-morph/common@patch:@ts-morph/common@npm%3A0.10.1#.yarn-patches/ts-morph.diff::version=0.10.1&hash=962c38&locator=%40zwave-js%2Frepo%40workspace%3A."
   dependencies:
     fast-glob: ^3.2.5
     minimatch: ^3.0.4
     mkdirp: ^1.0.4
     path-browserify: ^1.0.1
-  checksum: 6866745c84c6c525ea9141d155383f72b0825be9990894a668ad93afc9804cd4bc938ee487728aadaad58b2f6a5d76ffd31cd2313fcf51ba8215e787f7640f52
+  checksum: f5c24b493b7965ad79d8a61bfbfbdc7230fe283ea95c28ba3fe921b6eb597aa9696c4d7d811bf6c0ab1d89d734f577cbc6d174f2f520e70c97bd27dbc567a3f6
   languageName: node
   linkType: hard
 
@@ -3923,7 +3923,7 @@ __metadata:
     pegjs: ^0.10.0
     semver: ^7.3.5
     ts-pegjs: ^0.3.1
-    typescript: 4.4.0-beta
+    typescript: 4.4.1-rc
     winston: ^3.3.3
     xml2json: ^0.12.0
     yargs: ^16.2.0
@@ -3948,7 +3948,7 @@ __metadata:
     logform: "*"
     nrf-intel-hex: ^1.3.0
     triple-beam: "*"
-    typescript: 4.4.0-beta
+    typescript: 4.4.1-rc
     winston: ^3.3.3
     winston-transport: "*"
   languageName: unknown
@@ -3984,7 +3984,7 @@ __metadata:
     prettier: ^2.3.2
     reflect-metadata: ^0.1.13
     ts-morph: ^11.0.3
-    typescript: 4.4.0-beta
+    typescript: 4.4.1-rc
     yargs: ^16.2.0
   languageName: unknown
   linkType: soft
@@ -4037,7 +4037,7 @@ __metadata:
     reflect-metadata: ^0.1.13
     semver: ^7.3.5
     ts-node: ^10.2.0
-    typescript: 4.4.0-beta
+    typescript: 4.4.1-rc
     zwave-js: "workspace:*"
   languageName: unknown
   linkType: soft
@@ -4059,7 +4059,7 @@ __metadata:
     esbuild-register: ^2.6.0
     jest-extended: ^0.11.5
     serialport: ^9.2.0
-    typescript: 4.4.0-beta
+    typescript: 4.4.1-rc
     winston: ^3.3.3
   languageName: unknown
   linkType: soft
@@ -4075,7 +4075,7 @@ __metadata:
     esbuild-register: ^2.6.0
     fs-extra: ^10.0.0
     jest-extended: ^0.11.5
-    typescript: 4.4.0-beta
+    typescript: 4.4.1-rc
   languageName: unknown
   linkType: soft
 
@@ -4091,7 +4091,7 @@ __metadata:
     esbuild-register: ^2.6.0
     jest-extended: ^0.11.5
     triple-beam: "*"
-    typescript: 4.4.0-beta
+    typescript: 4.4.1-rc
     winston-transport: "*"
   languageName: unknown
   linkType: soft
@@ -12806,23 +12806,23 @@ fsevents@^2.1.2:
   languageName: node
   linkType: hard
 
-typescript@4.4.0-beta:
-  version: 4.4.0-beta
-  resolution: "typescript@npm:4.4.0-beta"
+typescript@4.4.1-rc:
+  version: 4.4.1-rc
+  resolution: "typescript@npm:4.4.1-rc"
   bin:
     tsc: bin/tsc
     tsserver: bin/tsserver
-  checksum: aff0ab90b62eec675a40417e924870deafd32a02a8268318798656c5c44551ec1e4c83626a7145df3edbf3ec14dcd618c7c9737c72b60d6fc898da76b6217e43
+  checksum: 14a64cd01ccbd8d31cc4f22a756cd1ce54c8cba7e30a77e005ea623a187b7baa20b784acf60a3e71b5227961ff70bd275657f809703185a0c265220060bf3c53
   languageName: node
   linkType: hard
 
-"typescript@patch:typescript@4.4.0-beta#~builtin<compat/typescript>":
-  version: 4.4.0-beta
-  resolution: "typescript@patch:typescript@npm%3A4.4.0-beta#~builtin<compat/typescript>::version=4.4.0-beta&hash=d8b4e7"
+"typescript@patch:typescript@4.4.1-rc#~builtin<compat/typescript>":
+  version: 4.4.1-rc
+  resolution: "typescript@patch:typescript@npm%3A4.4.1-rc#~builtin<compat/typescript>::version=4.4.1-rc&hash=d8b4e7"
   bin:
     tsc: bin/tsc
     tsserver: bin/tsserver
-  checksum: 0ecaa2c90de4d30a99e0134c9b06c4ea4b1e114ad63421a0c245e8f9828dab785fe0ba19a9827925a422bbe6777551e2c7fa1648874346a777fa8689fb5a6a08
+  checksum: 204addf74c590b142703075b40ea650d2afe080b9a2f218a29c2b2ddd92cb143560b4d4905d082ff38bfc64c50f2cb9fc72a5415ba6a3aed97cd6fdc830e255a
   languageName: node
   linkType: hard
 
@@ -13538,7 +13538,7 @@ typescript@4.4.0-beta:
     semver: ^7.3.5
     serialport: ^9.2.0
     source-map-support: ^0.5.19
-    typescript: 4.4.0-beta
+    typescript: 4.4.1-rc
     winston: ^3.3.3
     xstate: ^4.23.1
   languageName: unknown
