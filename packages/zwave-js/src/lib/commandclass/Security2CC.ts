@@ -131,6 +131,8 @@ function assertSecurity(this: Security2CC, options: CommandClassOptions): void {
 	}
 }
 
+const DECRYPT_ATTEMPTS = 5;
+
 @API(CommandClasses["Security 2"])
 export class Security2CCAPI extends CCAPI {
 	public supportsCommand(_cmd: Security2Command): Maybe<boolean> {
@@ -683,10 +685,7 @@ export class Security2CCMessageEncapsulation extends Security2CC {
 					// We've sent the other our receiver's EI and received its sender's EI,
 					// meaning we can now establish an SPAN
 					const senderEI = this.getSenderEI();
-					if (!senderEI) {
-						debugger;
-						return failNoSPAN();
-					}
+					if (!senderEI) return failNoSPAN();
 					const receiverEI = spanState.receiverEI;
 
 					// How we do this depends on whether we know the security class of the other node
@@ -751,12 +750,24 @@ export class Security2CCMessageEncapsulation extends Security2CC {
 				return { plaintext: Buffer.from([]), authOK: false };
 			};
 
-			const { plaintext, authOK, decryptionKey } = decrypt();
+			let plaintext: Buffer | undefined;
+			let authOK = false;
+			let decryptionKey: Buffer | undefined;
+
+			// If the Receiver is unable to authenticate the singlecast message with the current SPAN,
+			// the Receiver SHOULD try decrypting the message with one or more of the following SPAN values,
+			// stopping when decryption is successful or the maximum number of iterations is reached.
+			for (let i = 0; i < DECRYPT_ATTEMPTS; i++) {
+				({ plaintext, authOK, decryptionKey } = decrypt());
+				if (!!authOK && !!plaintext) break;
+			}
 			// If authentication fails, do so with an error code that instructs the
 			// driver to tell the node we have no nonce
-			validatePayload.withReason(
-				ZWaveErrorCodes.Security2CC_CannotDecode,
-			)(!!authOK && !!plaintext);
+			if (!authOK || !plaintext) {
+				return validatePayload.fail(
+					ZWaveErrorCodes.Security2CC_CannotDecode,
+				);
+			}
 
 			offset = 0;
 			if (hasEncryptedExtensions) parseExtensions(plaintext);
