@@ -12,6 +12,7 @@ import {
 	isZWaveError,
 	NODE_ID_BROADCAST,
 	SecurityClass,
+	securityClassIsS2,
 	securityClassOrder,
 	ValueDB,
 	ZWaveError,
@@ -1493,6 +1494,20 @@ export class ZWaveController extends TypedEventEmitter<ControllerEventCallbacks>
 
 	/** Ensures that the node knows where to reach the controller */
 	private async bootstrapLifelineAndWakeup(node: ZWaveNode): Promise<void> {
+		// If the node was bootstrapped with S2, all these requests must happen securely
+		if (securityClassIsS2(node.getHighestSecurityClass())) {
+			for (const cc of [
+				CommandClasses["Wake Up"],
+				CommandClasses.Association,
+				CommandClasses["Multi Channel Association"],
+				CommandClasses.Version,
+			]) {
+				if (node.supportsCC(cc)) {
+					node.addCC(cc, { secure: true });
+				}
+			}
+		}
+
 		if (node.supportsCC(CommandClasses["Z-Wave Plus Info"])) {
 			// SDS11846: The Z-Wave+ lifeline must be assigned to a node as the very first thing
 			if (

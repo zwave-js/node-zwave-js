@@ -18,12 +18,13 @@ export enum SecurityClass {
 
 /** Tests if the given security class is S2 */
 export function securityClassIsS2(
-	secClass: SecurityClass,
+	secClass: SecurityClass | undefined,
 ): secClass is
 	| SecurityClass.S2_Unauthenticated
 	| SecurityClass.S2_Authenticated
 	| SecurityClass.S2_AccessControl {
 	return (
+		secClass != undefined &&
 		secClass >= SecurityClass.S2_Unauthenticated &&
 		secClass <= SecurityClass.S2_AccessControl
 	);
