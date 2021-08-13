@@ -7,3 +7,4 @@ export * from "./Meters";
 export * from "./Notifications";
 export * from "./Scales";
 export * from "./SensorTypes";
+export { externalConfigDir } from "./utils";
