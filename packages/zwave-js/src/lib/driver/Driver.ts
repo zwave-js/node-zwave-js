@@ -1,6 +1,6 @@
 import { JsonlDB, JsonlDBOptions } from "@alcalzone/jsonl-db";
 import * as Sentry from "@sentry/node";
-import { ConfigManager } from "@zwave-js/config";
+import { ConfigManager, externalConfigDir } from "@zwave-js/config";
 import {
 	CommandClasses,
 	deserializeCacheValue,
@@ -3280,9 +3280,19 @@ ${handlers.length} left`,
 			this.driverLog.print(
 				`Installing version ${newVersion} of configuration DB...`,
 			);
-			if (isDocker()) {
+			// We have 3 variants of this.
+			const extConfigDir = externalConfigDir();
+			if (this.configManager.useExternalConfig && extConfigDir) {
+				// 1. external config dir, leave node_modules alone
+				await installConfigUpdateInDocker(newVersion, {
+					cacheDir: this.options.storage.cacheDir,
+					configDir: extConfigDir,
+				});
+			} else if (isDocker()) {
+				// 2. Docker, but no external config dir, extract into node_modules
 				await installConfigUpdateInDocker(newVersion);
 			} else {
+				// 3. normal environment, use npm/yarn to install a new version of @zwave-js/config
 				await installConfigUpdate(newVersion);
 			}
 		} catch (e) {

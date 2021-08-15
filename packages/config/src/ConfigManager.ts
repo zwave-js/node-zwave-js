@@ -129,20 +129,23 @@ export class ConfigManager {
 	private fulltextIndex: FulltextDeviceConfigIndex | undefined;
 	private notifications: NotificationMap | undefined;
 
-	private useExternalConfig: boolean = false;
+	private _useExternalConfig: boolean = false;
+	public get useExternalConfig(): boolean {
+		return this._useExternalConfig;
+	}
 
 	public async loadAll(): Promise<void> {
 		// If the environment option for an external config dir is set
 		// try to sync it and then use it
 		const syncResult = await syncExternalConfigDir(this.logger);
 		if (syncResult.success) {
-			this.useExternalConfig = true;
+			this._useExternalConfig = true;
 			this.logger.print(
 				`Using external configuration dir ${externalConfigDir()}`,
 			);
 			this._configVersion = syncResult.version;
 		} else {
-			this.useExternalConfig = false;
+			this._useExternalConfig = false;
 			this._configVersion = await getEmbeddedConfigVersion();
 		}
 		this.logger.print(`version ${this._configVersion}`, "info");
@@ -160,7 +163,7 @@ export class ConfigManager {
 	public async loadManufacturers(): Promise<void> {
 		try {
 			this.manufacturers = await loadManufacturersInternal(
-				this.useExternalConfig,
+				this._useExternalConfig,
 			);
 		} catch (e: unknown) {
 			// If the config file is missing or invalid, don't try to find it again
@@ -226,7 +229,9 @@ export class ConfigManager {
 
 	public async loadIndicators(): Promise<void> {
 		try {
-			const config = await loadIndicatorsInternal(this.useExternalConfig);
+			const config = await loadIndicatorsInternal(
+				this._useExternalConfig,
+			);
 			this.indicators = config.indicators;
 			this.indicatorProperties = config.properties;
 		} catch (e: unknown) {
@@ -279,7 +284,7 @@ export class ConfigManager {
 	public async loadNamedScales(): Promise<void> {
 		try {
 			this._namedScales = await loadNamedScalesInternal(
-				this.useExternalConfig,
+				this._useExternalConfig,
 			);
 		} catch (e: unknown) {
 			// If the config file is missing or invalid, don't try to find it again
@@ -322,7 +327,7 @@ export class ConfigManager {
 		try {
 			this._sensorTypes = await loadSensorTypesInternal(
 				this,
-				this.useExternalConfig,
+				this._useExternalConfig,
 			);
 		} catch (e: unknown) {
 			// If the config file is missing or invalid, don't try to find it again
@@ -369,7 +374,7 @@ export class ConfigManager {
 
 	public async loadMeters(): Promise<void> {
 		try {
-			this.meters = await loadMetersInternal(this.useExternalConfig);
+			this.meters = await loadMetersInternal(this._useExternalConfig);
 		} catch (e: unknown) {
 			// If the config file is missing or invalid, don't try to find it again
 			if (isZWaveError(e) && e.code === ZWaveErrorCodes.Config_Invalid) {
@@ -415,7 +420,7 @@ export class ConfigManager {
 	public async loadDeviceClasses(): Promise<void> {
 		try {
 			const config = await loadDeviceClassesInternal(
-				this.useExternalConfig,
+				this._useExternalConfig,
 			);
 			this.basicDeviceClasses = config.basicDeviceClasses;
 			this.genericDeviceClasses = config.genericDeviceClasses;
@@ -485,7 +490,7 @@ export class ConfigManager {
 			// The index of config files included in this package
 			const embeddedIndex = await loadDeviceIndexInternal(
 				this.logger,
-				this.useExternalConfig,
+				this._useExternalConfig,
 			);
 			// A dynamic index of the user-defined priority device config files
 			const priorityIndex: DeviceConfigIndex = [];
@@ -569,7 +574,7 @@ export class ConfigManager {
 
 		if (indexEntry) {
 			const devicesDir = getDevicesPaths(
-				this.useExternalConfig ? externalConfigDir()! : configDir,
+				this._useExternalConfig ? externalConfigDir()! : configDir,
 			).devicesDir;
 			const filePath = path.isAbsolute(indexEntry.filename)
 				? indexEntry.filename
@@ -633,7 +638,7 @@ export class ConfigManager {
 	public async loadNotifications(): Promise<void> {
 		try {
 			this.notifications = await loadNotificationsInternal(
-				this.useExternalConfig,
+				this._useExternalConfig,
 			);
 		} catch (e: unknown) {
 			// If the config file is missing or invalid, don't try to find it again
