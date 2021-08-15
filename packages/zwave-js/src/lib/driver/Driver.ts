@@ -239,11 +239,36 @@ function checkOptions(options: ZWaveOptions): void {
 			ZWaveErrorCodes.Driver_InvalidOptions,
 		);
 	}
-	if (options.networkKey != undefined && options.networkKey.length !== 16) {
-		throw new ZWaveError(
-			`The network key must be a buffer with length 16!`,
-			ZWaveErrorCodes.Driver_InvalidOptions,
-		);
+	if (options.securityKeys != undefined) {
+		if (options.networkKey != undefined) {
+			throw new ZWaveError(
+				`The deprecated networkKey option may not be used together with the new securityKeys option!`,
+				ZWaveErrorCodes.Driver_InvalidOptions,
+			);
+		}
+		const keys = Object.entries(options.securityKeys);
+		for (let i = 0; i < keys.length; i++) {
+			const [secClass, key] = keys[i];
+			if (key.length !== 16) {
+				throw new ZWaveError(
+					`The security key for class ${secClass} must be a buffer with length 16!`,
+					ZWaveErrorCodes.Driver_InvalidOptions,
+				);
+			}
+			if (keys.findIndex(([, k]) => k.equals(key)) !== i) {
+				throw new ZWaveError(
+					`The security key for class ${secClass} was used multiple times!`,
+					ZWaveErrorCodes.Driver_InvalidOptions,
+				);
+			}
+		}
+	} else if (options.networkKey != undefined) {
+		if (options.networkKey.length !== 16) {
+			throw new ZWaveError(
+				`The network key must be a buffer with length 16!`,
+				ZWaveErrorCodes.Driver_InvalidOptions,
+			);
+		}
 	}
 	if (options.attempts.controller < 1 || options.attempts.controller > 3) {
 		throw new ZWaveError(
