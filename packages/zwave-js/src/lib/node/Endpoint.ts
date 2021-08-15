@@ -558,31 +558,56 @@ export class Endpoint {
 
 			// Figure out which associations exist and may need to be removed
 			const isAssignedAsNodeAssociation = (): boolean => {
-				return (
-					(groupSupportsMultiChannel &&
+				if (groupSupportsMultiChannel && mcInstance) {
+					if (
+						// Only consider a group if it doesn't share its associations with the root endpoint
+						mcInstance.getMaxNodesCached(group) > 0 &&
 						!!mcInstance
-							?.getAllDestinationsCached()
+							.getAllDestinationsCached()
 							.get(group)
 							?.some(
 								(addr) =>
 									addr.nodeId === ownNodeId &&
 									addr.endpoint == undefined,
-							)) ||
-					!!assocInstance
-						?.getAllDestinationsCached()
-						.get(group)
-						?.some((addr) => addr.nodeId === ownNodeId)
-				);
+							)
+					) {
+						return true;
+					}
+				}
+				if (assocInstance) {
+					if (
+						// Only consider a group if it doesn't share its associations with the root endpoint
+						assocInstance.getMaxNodesCached(group) > 0 &&
+						!!assocInstance
+							.getAllDestinationsCached()
+							.get(group)
+							?.some((addr) => addr.nodeId === ownNodeId)
+					) {
+						return true;
+					}
+				}
+
+				return false;
 			};
 
 			const isAssignedAsEndpointAssociation = (): boolean => {
-				return !!mcInstance
-					?.getAllDestinationsCached()
-					.get(group)
-					?.some(
-						(addr) =>
-							addr.nodeId === ownNodeId && addr.endpoint === 0,
-					);
+				if (mcInstance) {
+					if (
+						// Only consider a group if it doesn't share its associations with the root endpoint
+						mcInstance.getMaxNodesCached(group) > 0 &&
+						mcInstance
+							.getAllDestinationsCached()
+							.get(group)
+							?.some(
+								(addr) =>
+									addr.nodeId === ownNodeId &&
+									addr.endpoint === 0,
+							)
+					) {
+						return true;
+					}
+				}
+				return false;
 			};
 
 			// If the node was used with other controller softwares, there might be
