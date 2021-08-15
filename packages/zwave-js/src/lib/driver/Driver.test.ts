@@ -790,4 +790,37 @@ describe("lib/driver/Driver => ", () => {
 			expect(driver["hasPendingMessages"](node2)).toBeFalse();
 		});
 	});
+
+	describe("option validation", () => {
+		let driver: Driver;
+
+		afterEach(async () => {
+			if (driver) {
+				await driver.destroy();
+				driver.removeAllListeners();
+			}
+		});
+
+		it("duplicate security keys", () => {
+			assertZWaveError(
+				() => {
+					driver = new Driver("/dev/test", {
+						securityKeys: {
+							S0_Legacy: Buffer.from(
+								"0102030405060708090a0b0c0d0e0f10",
+								"hex",
+							),
+							S2_Unauthenticated: Buffer.from(
+								"0102030405060708090a0b0c0d0e0f10",
+								"hex",
+							),
+						},
+					});
+				},
+				{
+					errorCode: ZWaveErrorCodes.Driver_InvalidOptions,
+				},
+			);
+		});
+	});
 });
