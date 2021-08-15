@@ -7,7 +7,7 @@
 -->
 ## __WORK IN PROGRESS__ · _„Hell, it's about damn time”_
 ### Features
-* Added support for **Security S2** inclusion and singlecast communication. See the [PR description](https://github.com/zwave-js/node-zwave-js/pull/1136) and documentation for details.
+* Added support for **Security S2** inclusion and singlecast communication. See the [documentation](https://zwave-js.github.io/node-zwave-js/#/getting-started/security-s2) and [PR description](https://github.com/zwave-js/node-zwave-js/pull/1136) for details.
 
 ### Bugfixes
 * The firmware target selection for targets other than 0 no longer incorrectly complains about an incorrect target
