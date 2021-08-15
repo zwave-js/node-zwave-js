@@ -7,16 +7,23 @@
 -->
 ## __WORK IN PROGRESS__ · _„Hell, it's about damn time”_
 ### Features
-* Added support for **Security S2** inclusion and singlecast communication. See the [documentation](https://zwave-js.github.io/node-zwave-js/#/getting-started/security-s2) and [PR description](https://github.com/zwave-js/node-zwave-js/pull/1136) for details.
+Just one, but it's a big one: We added support for **Security S2** inclusion and singlecast communication 🎉.  
+As it looks like, **Z-Wave JS** is the first open source library to support **Security S2**.
+
+If you plan to add support in your application, see the [documentation](https://zwave-js.github.io/node-zwave-js/#/getting-started/security-s2) and [PR description](https://github.com/zwave-js/node-zwave-js/pull/1136) for details - this also requires UI changes.
 
 ### Bugfixes
 * The firmware target selection for targets other than 0 no longer incorrectly complains about an incorrect target
+* Avoid writing into `node_modules` when updating an external configuration directory
+* When an endpoint shares its lifeline with the root (i.e. has 0 max. associations), the root's associations are now ignored when determining how the endpoints's associations should be configured
 
 ### Config file changes
 * Add another product ID variant to Yale YRD210
 * Update and cleanup Fibaro Walli Double Switch
 * Preserve root endpoint values for TZ06
-* Allow manual entry for Zooz ZSE11 Param 12 
+* Allow manual entry for Zooz ZSE11 Param 12
+* Add missing fingerprint to MCOHome MH9-CO2-WD
+* Fix Heltun HE-RS01 parameters 41-45
 
 ## 8.0.8 (2021-08-04)
 ### Bugfixes
