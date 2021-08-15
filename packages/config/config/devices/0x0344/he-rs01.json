@@ -237,7 +237,7 @@
 			"label": "External Input S1: Hold Control Mode",
 			"valueSize": 1,
 			"minValue": 0,
-			"maxValue": 3,
+			"maxValue": 4,
 			"defaultValue": 2,
 			"allowManualEntry": false,
 			"options": [
@@ -254,8 +254,12 @@
 					"value": 2
 				},
 				{
-					"label": "Reversed momentary switch",
+					"label": "Reversed Momentary switch",
 					"value": 3
+				},
+				{
+					"label": "Toggle switch",
+					"value": 4
 				}
 			]
 		},
@@ -263,7 +267,7 @@
 			"label": "External Input S2: Hold Control Mode",
 			"valueSize": 1,
 			"minValue": 0,
-			"maxValue": 3,
+			"maxValue": 4,
 			"defaultValue": 2,
 			"allowManualEntry": false,
 			"options": [
@@ -280,8 +284,12 @@
 					"value": 2
 				},
 				{
-					"label": "Reversed momentary switch",
+					"label": "Reversed Momentary switch",
 					"value": 3
+				},
+				{
+					"label": "Toggle switch",
+					"value": 4
 				}
 			]
 		},
@@ -289,7 +297,7 @@
 			"label": "External Input S3: Hold Control Mode",
 			"valueSize": 1,
 			"minValue": 0,
-			"maxValue": 3,
+			"maxValue": 4,
 			"defaultValue": 2,
 			"allowManualEntry": false,
 			"options": [
@@ -306,8 +314,12 @@
 					"value": 2
 				},
 				{
-					"label": "Reversed momentary switch",
+					"label": "Reversed Momentary switch",
 					"value": 3
+				},
+				{
+					"label": "Toggle switch",
+					"value": 4
 				}
 			]
 		},
@@ -315,7 +327,7 @@
 			"label": "External Input S4: Hold Control Mode",
 			"valueSize": 1,
 			"minValue": 0,
-			"maxValue": 3,
+			"maxValue": 4,
 			"defaultValue": 2,
 			"allowManualEntry": false,
 			"options": [
@@ -332,8 +344,12 @@
 					"value": 2
 				},
 				{
-					"label": "Reversed momentary switch",
+					"label": "Reversed Momentary switch",
 					"value": 3
+				},
+				{
+					"label": "Toggle switch",
+					"value": 4
 				}
 			]
 		},
@@ -341,7 +357,7 @@
 			"label": "External Input S5: Hold Control Mode",
 			"valueSize": 1,
 			"minValue": 0,
-			"maxValue": 3,
+			"maxValue": 4,
 			"defaultValue": 2,
 			"allowManualEntry": false,
 			"options": [
@@ -358,8 +374,12 @@
 					"value": 2
 				},
 				{
-					"label": "Reversed momentary switch",
+					"label": "Reversed Momentary switch",
 					"value": 3
+				},
+				{
+					"label": "Toggle switch",
+					"value": 4
 				}
 			]
 		},
