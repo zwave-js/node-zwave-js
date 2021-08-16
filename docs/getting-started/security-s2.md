@@ -2,6 +2,10 @@
 
 Modern Z-Wave devices are required to support _Security S2_ and unlike _Security S0_, we recommend using it by default. However, supporting it requires some work in your application too, so we've compiled some guidelines here.
 
+The following figure gives you an overview of the inclusion process in Z-Wave. A common misconception is that an error causes the inclusion to be aborted. However, Z-Wave JS only learns about a node after it was already included. It will then exchange network keys if secure inclusion is desired and interview the node to determine its capabilities:
+
+![Inclusion in Z-Wave](../_images/inclusion-flowchart.png)
+
 ## Key management
 
 _Security S2_ supports multiple security classes, allowing different levels of trust and limiting access in case one of the keys ever gets compromised. In order to offer S2 in your application, you have to provide multiple network keys to the driver. Currently, these are:
