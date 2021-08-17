@@ -1,7 +1,7 @@
 {
 	"manufacturer": "HANK Electronics Ltd.",
 	"manufacturerId": "0x0208",
-	"label": "SCN04",
+	"label": "HKZW-SCN04",
 	"description": "Four-key Scene Controller",
 	"devices": [
 		{
@@ -20,7 +20,7 @@
 	"supportsZWavePlus": true,
 	"paramInformation": {
 		"254": {
-			"label": "Enable configuration",
+			"label": "Enable Configuration",
 			"description": "Lock/unlock all configuration parameters.",
 			"valueSize": 1,
 			"minValue": 0,
@@ -35,6 +35,25 @@
 				{
 					"label": "Lock",
 					"value": 1
+				}
+			]
+		},
+		"255": {
+			"label": "Reset/Remove",
+			"description": "Reset the sensor or remove from the Z-Wave network.",
+			"valueSize": 4,
+			"minValue": 0,
+			"maxValue": 2147483647,
+			"defaultValue": 1,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Reset the values of the configuration command to default setting.",
+					"value": 85
+				},
+				{
+					"label": "Reset to factory default settings and removed from the Z-Wave network.",
+					"value": 1431655765
 				}
 			]
 		}
