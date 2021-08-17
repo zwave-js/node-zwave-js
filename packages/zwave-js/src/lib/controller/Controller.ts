@@ -863,7 +863,7 @@ export class ZWaveController extends TypedEventEmitter<ControllerEventCallbacks>
 	 * @param includeNonSecure Whether the new node should be included non-securely, even if it supports Security S0. By default, S0 will be used.
 	 * @deprecated Use the overload with options instead
 	 */
-	public async beginInclusion(includeNonSecure: boolean): Promise<boolean>;
+	public async beginInclusion(includeNonSecure?: boolean): Promise<boolean>;
 
 	public async beginInclusion(
 		options?: InclusionOptions | boolean,
@@ -3326,7 +3326,7 @@ ${associatedNodes.join(", ")}`,
 	 */
 	public async replaceFailedNode(
 		nodeId: number,
-		includeNonSecure: boolean,
+		includeNonSecure?: boolean,
 	): Promise<boolean>;
 
 	public async replaceFailedNode(
