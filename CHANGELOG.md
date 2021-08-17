@@ -5,6 +5,11 @@
 	Add placeholder for next release with `wip` snippet
   ## __WORK IN PROGRESS__
 -->
+## __WORK IN PROGRESS__
+### Bugfixes
+* Added a missing `| undefined` to the deprecated `beginInclusion` signature
+* Fixed a check when replacing a node with another one that should use encryption
+
 ## 8.1.0 (2021-08-15) · _„Hell, it's about damn time”_
 ### Features
 Just one, but it's a big one: We added support for **Security S2** inclusion and singlecast communication 🎉.  
