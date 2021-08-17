@@ -150,7 +150,7 @@
 		},
 		"24": {
 			"label": "Blinking LED",
-			"description": "Enable/Disable blinking LED when alarm being triggerd",
+			"description": "Enable/Disable blinking LED when alarm being triggered",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 1,
