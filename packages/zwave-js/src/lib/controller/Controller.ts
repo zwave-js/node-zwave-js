@@ -1910,13 +1910,11 @@ export class ZWaveController extends TypedEventEmitter<ControllerEventCallbacks>
 						newNode.id,
 					);
 
-					// Try perform the security bootstrap process
+					// Try perform the security bootstrap process. When replacing a node, we don't know any supported CCs
+					// yet, so we need to trust the chosen inclusion strategy.
 					const strategy = this._inclusionOptions.strategy;
 					let lowSecurity = false;
-					if (
-						newNode.supportsCC(CommandClasses["Security 2"]) &&
-						strategy === InclusionStrategy.Security_S2
-					) {
+					if (strategy === InclusionStrategy.Security_S2) {
 						await this.secureBootstrapS2(newNode, true);
 						const actualSecurityClass =
 							newNode.getHighestSecurityClass();
@@ -1927,10 +1925,7 @@ export class ZWaveController extends TypedEventEmitter<ControllerEventCallbacks>
 						) {
 							lowSecurity = true;
 						}
-					} else if (
-						newNode.supportsCC(CommandClasses.Security) &&
-						strategy === InclusionStrategy.Security_S0
-					) {
+					} else if (strategy === InclusionStrategy.Security_S0) {
 						await this.secureBootstrapS0(newNode, true);
 						const actualSecurityClass =
 							newNode.getHighestSecurityClass();
