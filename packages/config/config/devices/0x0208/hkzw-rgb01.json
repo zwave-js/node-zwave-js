@@ -1,8 +1,8 @@
 {
 	"manufacturer": "HANK Electronics Ltd.",
 	"manufacturerId": "0x0208",
-	"label": "RGB bulb",
-	"description": "HKZW-RGB01-V1.0",
+	"label": "HKZW-RGB01",
+	"description": "RGB Bulb",
 	"devices": [
 		{
 			"productType": "0x0100",

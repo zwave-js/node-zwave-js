@@ -1,8 +1,8 @@
 {
 	"manufacturer": "HANK Electronics Ltd.",
 	"manufacturerId": "0x0208",
-	"label": "HKZW_FLD01",
-	"description": "Flood Sensor FLD01",
+	"label": "HKZW-FLD01",
+	"description": "Flood Sensor",
 	"devices": [
 		{
 			"productType": "0x0200",

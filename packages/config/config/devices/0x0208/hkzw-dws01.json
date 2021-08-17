@@ -1,7 +1,7 @@
 {
 	"manufacturer": "HANK Electronics Ltd.",
 	"manufacturerId": "0x0208",
-	"label": "DWS01",
+	"label": "HKZW-DWS01",
 	"description": "Door and Window Sensor",
 	"devices": [
 		{

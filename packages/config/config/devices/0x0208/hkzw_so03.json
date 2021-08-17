@@ -1,7 +1,7 @@
 {
 	"manufacturer": "HANK Electronics Ltd.",
 	"manufacturerId": "0x0208",
-	"label": "HKZW_SO03",
+	"label": "HKZW-SO03",
 	"description": "Smart Plug",
 	"devices": [
 		{

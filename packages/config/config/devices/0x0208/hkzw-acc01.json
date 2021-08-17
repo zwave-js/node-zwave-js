@@ -1,8 +1,8 @@
 {
 	"manufacturer": "HANK Electronics Ltd.",
 	"manufacturerId": "0x0208",
-	"label": "ACC01",
-	"description": "HKZW",
+	"label": "HKZW-ACC01",
+	"description": "IR Transceiver",
 	"devices": [
 		{
 			"productType": "0x0100",

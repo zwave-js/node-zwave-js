@@ -1,7 +1,7 @@
 {
 	"manufacturer": "HANK Electronics Ltd.",
 	"manufacturerId": "0x0208",
-	"label": "SCN01",
+	"label": "HKZW-SCN01",
 	"description": "One-key Scene Controller",
 	"devices": [
 		{
