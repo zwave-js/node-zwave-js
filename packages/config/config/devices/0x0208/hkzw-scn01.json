@@ -48,7 +48,7 @@
 			]
 		},
 		"255": {
-			"label": "Reset/remove",
+			"label": "Reset/Remove",
 			"description": "Reset the sensor or remove from the Z-Wave network",
 			"valueSize": 4,
 			"minValue": 0,
@@ -56,6 +56,10 @@
 			"defaultValue": 1,
 			"allowManualEntry": false,
 			"options": [
+				{
+					"label": "Idle",
+					"value": 1
+				},
 				{
 					"label": "Factory Reset without Remove",
 					"value": 85
