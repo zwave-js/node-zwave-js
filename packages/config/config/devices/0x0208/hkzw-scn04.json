@@ -52,11 +52,11 @@
 					"value": 1
 				},
 				{
-					"label": "Reset the values of the configuration command to default setting.",
+					"label": "Reset configuration",
 					"value": 85
 				},
 				{
-					"label": "Reset to factory default settings and removed from the Z-Wave network.",
+					"label": "Reset configuration and remove",
 					"value": 1431655765
 				}
 			]

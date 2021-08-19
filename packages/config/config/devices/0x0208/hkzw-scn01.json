@@ -61,11 +61,11 @@
 					"value": 1
 				},
 				{
-					"label": "Factory Reset without Remove",
+					"label": "Reset configuration",
 					"value": 85
 				},
 				{
-					"label": "Factory Reset & Remove",
+					"label": "Reset configuration and remove",
 					"value": 1431655765
 				}
 			]
