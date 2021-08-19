@@ -256,7 +256,7 @@
 				}
 			]
 		},
-		
+
 		"1[0x02]": {
 			"$import": "~/templates/master_template.json#base_enable_disable",
 			"label": "Double Click: Send Scene Events",
