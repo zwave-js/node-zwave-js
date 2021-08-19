@@ -73,7 +73,7 @@
 			"description": "Disables manual control from the device itself"
 		},
 		"27": {
-			"label": "Led Indicator",
+			"label": "LED Indicator",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 1,
