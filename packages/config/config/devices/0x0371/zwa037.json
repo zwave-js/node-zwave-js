@@ -1,0 +1,550 @@
+{
+	"manufacturer": "Aeotec Ltd.",
+	"manufacturerId": "0x0371",
+	"label": "ZWA037",
+	"description": "illumino Dimmer Switch",
+	"devices": [
+		{
+			"productType": "0x0103",
+			"productId": "0x0025",
+			"zwaveAllianceId": 4262
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"associations": {
+		"1": {
+			"label": "Lifeline",
+			"maxNodes": 5,
+			"isLifeline": true
+		},
+		"2": {
+			"label": "Top Button - Basic Set",
+			"maxNodes": 5
+		},
+		"3": {
+			"label": "Top Button - Multilevel Set",
+			"maxNodes": 5
+		},
+		"4": {
+			"label": "Buttom Button - Basic Set",
+			"maxNodes": 5
+		},
+		"5": {
+			"label": "Bottom Button - Multilevel Set",
+			"maxNodes": 5
+		},
+		"6": {
+			"label": "External Switch - Basic Set",
+			"maxNodes": 5
+		},
+		"7": {
+			"label": "External Switch - Multilevel Set",
+			"maxNodes": 5
+		},
+		"8": {
+			"label": "Top and Bottom Button - Basic Set",
+			"maxNodes": 5
+		},
+		"9": {
+			"label": "Top and Bottom Button - Multilevel Set",
+			"maxNodes": 5
+		}
+	},
+	"paramInformation": {
+		"20": {
+			"label": "Power Restore",
+			"description": "Status after power failure",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 2,
+			"defaultValue": 2,
+			"unsigned": true,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Return to off",
+					"value": 0
+				},
+				{
+					"label": "Return to on",
+					"value": 1
+				},
+				{
+					"label": "Return to last known state when repowered",
+					"value": 2
+				}
+			]
+		},
+		"40": {
+			"label": "Auto Turn Off Timer",
+			"description": "Timer that auto turn off once turned on",
+			"valueSize": 4,
+			"minValue": 0,
+			"maxValue": 65535,
+			"defaultValue": 0,
+			"unsigned": true,
+			"options": [
+				{
+					"label": "Disable",
+					"value": 0
+				}
+			]
+		},
+		"41": {
+			"label": "Auto Turn On Timer",
+			"description": "Timer that auto turn on once turned off",
+			"valueSize": 4,
+			"minValue": 0,
+			"maxValue": 65535,
+			"defaultValue": 0,
+			"unsigned": true,
+			"options": [
+				{
+					"label": "Disable",
+					"value": 0
+				}
+			]
+		},
+		"80": {
+			"label": "Instant Status Report",
+			"description": "The command for status report",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 2,
+			"defaultValue": 2,
+			"unsigned": true,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Nothing",
+					"value": 0
+				},
+				{
+					"label": "Basic report",
+					"value": 1
+				},
+				{
+					"label": "Binary switch report",
+					"value": 2
+				}
+			]
+		},
+		"82": {
+			"label": "Association Control Settings",
+			"description": "Setting command for association group",
+			"valueSize": 1,
+			"minValue": 1,
+			"maxValue": 2,
+			"defaultValue": 1,
+			"unsigned": true,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Basic Set",
+					"value": 1
+				},
+				{
+					"label": "Binary switch set",
+					"value": 2
+				}
+			]
+		},
+		"83": {
+			"label": "Led Indicator Settings",
+			"description": "Select the indicator function for output",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 2,
+			"defaultValue": 2,
+			"unsigned": true,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Disable",
+					"value": 0
+				},
+				{
+					"label": "Momentary blink",
+					"value": 1
+				},
+				{
+					"label": "Led follows status of output",
+					"value": 2
+				}
+			]
+		},
+		"84": {
+			"label": "Led Indicator Color For Output",
+			"description": "Select the indicator color for output",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 9,
+			"defaultValue": 9,
+			"unsigned": true,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Disable",
+					"value": 0
+				},
+				{
+					"label": "Red",
+					"value": 1
+				},
+				{
+					"label": "Blue",
+					"value": 2
+				},
+				{
+					"label": "Green",
+					"value": 3
+				},
+				{
+					"label": "Pink",
+					"value": 4
+				},
+				{
+					"label": "Cyan",
+					"value": 5
+				},
+				{
+					"label": "Puple",
+					"value": 6
+				},
+				{
+					"label": "Orange",
+					"value": 7
+				},
+				{
+					"label": "Yellow",
+					"value": 8
+				},
+				{
+					"label": "White",
+					"value": 9
+				}
+			]
+		},
+		"85": {
+			"label": "Led Indicator Color For Scene",
+			"description": "Select the indicator color for scene",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 9,
+			"defaultValue": 2,
+			"unsigned": true,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Disable",
+					"value": 0
+				},
+				{
+					"label": "Red",
+					"value": 1
+				},
+				{
+					"label": "Blue",
+					"value": 2
+				},
+				{
+					"label": "Green",
+					"value": 3
+				},
+				{
+					"label": "Pink",
+					"value": 4
+				},
+				{
+					"label": "Cyan",
+					"value": 5
+				},
+				{
+					"label": "Purple",
+					"value": 6
+				},
+				{
+					"label": "Orange",
+					"value": 7
+				},
+				{
+					"label": "Yellow",
+					"value": 8
+				},
+				{
+					"label": "White",
+					"value": 9
+				}
+			]
+		},
+		"86": {
+			"label": "Led Brightness",
+			"description": "Setting the brightness of indicator",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 100,
+			"defaultValue": 60,
+			"unsigned": true,
+			"options": [
+				{
+					"label": "Disable",
+					"value": 0
+				}
+			]
+		},
+		"110": {
+			"label": "Single Tap Behavior",
+			"description": "Select behavior when single tap",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 3,
+			"defaultValue": 0,
+			"unsigned": true,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Last brightness level",
+					"value": 0
+				},
+				{
+					"label": "Custom value from param 133",
+					"value": 1
+				},
+				{
+					"label": "Max brightness from param 132",
+					"value": 2
+				},
+				{
+					"label": "Full brightness at 100%",
+					"value": 3
+				}
+			]
+		},
+		"111": {
+			"label": "Double Tap Behavior",
+			"description": "Select behavior when double tap",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 3,
+			"defaultValue": 0,
+			"unsigned": true,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Full brightness at 99",
+					"value": 0
+				},
+				{
+					"label": "Custom value from param 133",
+					"value": 1
+				},
+				{
+					"label": "Max brightness from param 132",
+					"value": 2
+				},
+				{
+					"label": "Disable",
+					"value": 3
+				}
+			]
+		},
+		"119": {
+			"label": "External Switch Scene",
+			"description": "Enable or disable the scene function of external(3-way) switch",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 1,
+			"unsigned": true,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Disable",
+					"value": 0
+				},
+				{
+					"label": "Enable",
+					"value": 1
+				}
+			]
+		},
+		"120": {
+			"label": "External Switch Type",
+			"description": "Select the external(3- way) switch's type",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 3,
+			"defaultValue": 1,
+			"unsigned": true,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Toggle on or off only",
+					"value": 0
+				},
+				{
+					"label": "Toggle switch/1x to toggle /2x use param 132 or 133 /3x toggle dimmer loop ramp -> toggle once more to stop dim",
+					"value": 1
+				},
+				{
+					"label": "Momentary switch / 1x to toggle / 2x user param 132 or 133/ press and hold to dim up and down",
+					"value": 2
+				},
+				{
+					"label": "Momentary switch / 1x quick toggle / 2x user param 132 or 133 / press and hold to dim up and down (but after a double click to full brightness, then press and hold will always go down instead of increasing)",
+					"value": 3
+				}
+			]
+		},
+		"121": {
+			"label": "Output Control",
+			"description": "Enable or disable output",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 3,
+			"defaultValue": 3,
+			"unsigned": true,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Enable local control",
+					"value": 1
+				},
+				{
+					"label": "Enable central scene",
+					"value": 2
+				},
+				{
+					"label": "Enable local and central scene",
+					"value": 3
+				},
+				{
+					"label": "Disable",
+					"value": 0
+				}
+			]
+		},
+		"122": {
+			"label": "Button Function",
+			"description": "Select the paddle button functions",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 2,
+			"defaultValue": 0,
+			"unsigned": true,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Up/on, down/off",
+					"value": 0
+				},
+				{
+					"label": "Down/on, up/off",
+					"value": 1
+				},
+				{
+					"label": "Toggle (up or down are the same)",
+					"value": 2
+				}
+			]
+		},
+		"123": {
+			"label": "Report Behavior",
+			"description": "Select behavior for report and indicator when output is disable",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 0,
+			"unsigned": true,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Report on/off status and change LED indicator when parameter 121 is set to 0 or 2",
+					"value": 0
+				},
+				{
+					"label": "Don't report on/off status is pressed and parameter 121 is set to 0 or 2",
+					"value": 1
+				}
+			]
+		},
+		"125": {
+			"label": "Ramp Rate For Tap And Hub Control",
+			"description": "Setting ramp rate when tap to on off or controlled by hub",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 99,
+			"defaultValue": 2,
+			"unsigned": true,
+			"options": [
+				{
+					"label": "Instant",
+					"value": 0
+				}
+			]
+		},
+		"126": {
+			"label": "Ramp Rate For Press And Hold",
+			"description": "Ramp rate 1-99s",
+			"valueSize": 1,
+			"minValue": 1,
+			"maxValue": 99,
+			"defaultValue": 4,
+			"unsigned": true
+		},
+		"131": {
+			"label": "Minimum Most Dim Setting",
+			"description": "Setting the minimum value of dimmer",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 99,
+			"defaultValue": 0,
+			"unsigned": true,
+			"options": [
+				{
+					"label": "Disable",
+					"value": 0
+				}
+			]
+		},
+		"132": {
+			"label": "Maximum Most Dim Setting",
+			"description": "Setting the maximum value of dimmer",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 100,
+			"defaultValue": 100,
+			"unsigned": true,
+			"options": [
+				{
+					"label": "Disable",
+					"value": 0
+				}
+			]
+		},
+		"133": {
+			"label": "Custom Brightness",
+			"description": "Setting user custom brightness",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 99,
+			"defaultValue": 0,
+			"unsigned": true,
+			"options": [
+				{
+					"label": "Disable",
+					"value": 0
+				}
+			]
+		}
+	},
+	"metadata": {
+		"inclusion": "1. Turn the primary controller/ gateway into adding mode.\n2. 1x tap the Top/ Bottom button of Dimmer Switch",
+		"exclusion": "1. Turn the primary controller/ gateway into removing mode.\n2. 3x tap the Top/ Bottom button of Dimmer Switch",
+		"reset": "Press and hold the Top/ Bottom button for 20 seconds",
+		"manual": "https://products.z-wavealliance.org/ProductManual/File?folder=&filename=product_documents/4262/Aeotec%20Dimmer%20Switch%20Manual.pdf"
+	}
+}
