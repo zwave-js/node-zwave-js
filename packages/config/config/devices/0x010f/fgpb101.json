@@ -399,18 +399,15 @@
 			]
 		},
 		"3[0x01]": {
-			"$import": "~/templates/master_template.json#base_enable_disable",
-			"label": "Association Group 2: Send Secure Commands",
+			"$import": "templates/fibaro_template.json#send_secure_commands_group2",
 			"defaultValue": 1
 		},
 		"3[0x02]": {
-			"$import": "~/templates/master_template.json#base_enable_disable",
-			"label": "Association Group 3: Send Secure Commands",
+			"$import": "templates/fibaro_template.json#send_secure_commands_group3",
 			"defaultValue": 1
 		},
 		"3[0x04]": {
-			"$import": "~/templates/master_template.json#base_enable_disable",
-			"label": "Association Group 4: Send Secure Commands",
+			"$import": "templates/fibaro_template.json#send_secure_commands_group4",
 			"defaultValue": 1
 		},
 		"30[0x01]": {
