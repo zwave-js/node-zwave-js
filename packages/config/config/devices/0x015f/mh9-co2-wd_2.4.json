@@ -17,7 +17,6 @@
 	"paramInformation": {
 		"1": {
 			"label": "CO2 Notification Threshold",
-			"description": "CO2 Notification threshold 1 to 5000ppm",
 			"unit": "ppm",
 			"valueSize": 2,
 			"minValue": 1,
@@ -33,7 +32,7 @@
 			"maxValue": 255,
 			"options": [
 				{
-					"label: "Disable",
+					"label": "Disable",
 					"value": 0
 				}
 			]
@@ -41,18 +40,32 @@
 		},
 		"3": {
 			"label": "Temperature reporting threshold",
-			"description": "0 report disabled, 1~127: report when change >= n*0.5C, -1~-127: report when change >= (n+256)*0.5C, 1 by default, 1*0.5C=0.5C",
 			"valueSize": 1,
-			"minValue": -127,
-			"maxValue": 127,
+			"unit" = "0.5C"
+			"unsigned": true,
+			"minValue": 0,
+			"maxValue": 255,
+			"options": [
+				{
+					"label": "Disable",
+					"value": 0
+				}
+			]
 			"defaultValue": 1
 		},
 		"4": {
 			"label": "Humidity reporting threshold",
 			"description": "0 report disabled, base on 1% unit, 2 by default, 2*1%=2%",
 			"valueSize": 1,
+			"unit" = "1%"
 			"minValue": 0,
 			"maxValue": 100,
+			"options": [
+				{
+					"label": "Disable",
+					"value": 0
+				}
+			]
 			"defaultValue": 2
 		},
 		"255": {
