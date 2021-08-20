@@ -30,43 +30,43 @@
 			"unsigned": true,
 			"minValue": 0,
 			"maxValue": 255,
+			"defaultValue": 10,
 			"options": [
 				{
 					"label": "Disable",
 					"value": 0
 				}
 			]
-			"defaultValue": 10
 		},
 		"3": {
 			"label": "Temperature reporting threshold",
 			"valueSize": 1,
-			"unit" = "0.5C"
+			"unit" : "0.5C",
 			"unsigned": true,
 			"minValue": 0,
 			"maxValue": 255,
+			"defaultValue": 1,
 			"options": [
 				{
 					"label": "Disable",
 					"value": 0
 				}
 			]
-			"defaultValue": 1
 		},
 		"4": {
 			"label": "Humidity reporting threshold",
 			"description": "0 report disabled, base on 1% unit, 2 by default, 2*1%=2%",
 			"valueSize": 1,
-			"unit" = "1%"
+			"unit" : "1%",
 			"minValue": 0,
 			"maxValue": 100,
+			"defaultValue": 2,
 			"options": [
 				{
 					"label": "Disable",
 					"value": 0
 				}
 			]
-			"defaultValue": 2
 		},
 		"255": {
 			"label": "Factory setting",
