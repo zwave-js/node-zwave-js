@@ -55,7 +55,6 @@
 		},
 		"4": {
 			"label": "Humidity reporting threshold",
-			"description": "0 report disabled, base on 1% unit, 2 by default, 2*1%=2%",
 			"valueSize": 1,
 			"unit": "1%",
 			"minValue": 0,
@@ -70,7 +69,7 @@
 		},
 		"255": {
 			"label": "Factory setting",
-			"description": "Restore the factory setting - write only, set to 85 to reset",
+			"description": "Restore factory settings - write only, set to 85 to reset",
 			"valueSize": 1,
 			"minValue": 85,
 			"maxValue": 85,
