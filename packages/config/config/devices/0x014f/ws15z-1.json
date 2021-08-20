@@ -2,7 +2,7 @@
 	"manufacturer": "Nortek Security & Control LLC",
 	"manufacturerId": "0x014f",
 	"label": "WS15Z-1",
-	"description": "In-wall Switch ON/OFF",
+	"description": "In-wall Switch",
 	"devices": [
 		{
 			"productType": "0x5257",
@@ -36,22 +36,21 @@
 					"value": 1
 				},
 				{
-					"label": "LED Always on",
+					"label": "Always on",
 					"value": 2
 				},
 				{
-					"label": "LED Always off",
+					"label": "Always off",
 					"value": 3
 				},
 				{
-					"label": "LED Blinks during transmission",
+					"label": "Blink during transmission",
 					"value": 4
 				}
 			]
 		},
 		"4": {
 			"label": "Invert Switch",
-			"description": "To change the top of the switch to OFF and the bottom of the switch ON.",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 1,
@@ -60,11 +59,11 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "Top-ON, Bottom-OFF",
+					"label": "Normal Orientation",
 					"value": 0
 				},
 				{
-					"label": "Bottom-ON, Top-OFF",
+					"label": "Inverted Orientation",
 					"value": 1
 				}
 			]
