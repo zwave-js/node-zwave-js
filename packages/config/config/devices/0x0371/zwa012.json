@@ -154,11 +154,11 @@
 			"label": "Tilt sensor polarity when sensor is vertical",
 			"options": [
 				{
-					"label": "OFF",
+					"label": "Off",
 					"value": 0
 				},
 				{
-					"label": "ON",
+					"label": "On",
 					"value": 1
 				}
 			]
