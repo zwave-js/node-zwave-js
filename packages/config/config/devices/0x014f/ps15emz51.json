@@ -17,23 +17,10 @@
 		"2": {
 			"label": "LED Indicator: Brightness",
 			"valueSize": 1,
+			"unit": "%",
 			"minValue": 0,
 			"maxValue": 100,
-			"defaultValue": 100,
-			"options": [
-				{
-					"label": "LED OFF",
-					"value": 0
-				},
-				{
-					"label": "Very Dim",
-					"value": 1
-				},
-				{
-					"label": "Full Brightness",
-					"value": 100
-				}
-			]
+			"defaultValue": 100
 		},
 		"3": {
 			"label": "LED Indicator: Mode",
@@ -52,7 +39,7 @@
 					"value": 1
 				},
 				{
-					"label": "Always ON",
+					"label": "Always On",
 					"value": 2
 				},
 				{
