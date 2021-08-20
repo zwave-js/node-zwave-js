@@ -20,10 +20,9 @@
 			"isLifeline": true
 		}
 	},
-	"supportsZWavePlus": true,
 	"paramInformation": {
 		"1": {
-			"label": "Bulb brightness when turned on",
+			"label": "Initial Bulb Brightness",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 1,
