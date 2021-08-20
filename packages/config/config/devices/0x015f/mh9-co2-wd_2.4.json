@@ -26,10 +26,17 @@
 		},
 		"2": {
 			"label": "CO2 reporting threshold",
-			"description": "0 report disabled, 1~127: report when change >= n*5ppm, -1~-127: report when change >= (n+256)*5ppm, 10 by default, 10*5ppm=50ppm",
 			"valueSize": 1,
-			"minValue": -127,
-			"maxValue": 127,
+			"unit": "5ppm",
+			"unsigned": true,
+			"minValue": 0,
+			"maxValue": 255,
+			"options": [
+				{
+					"label: "Disable",
+					"value": 0
+				}
+			]
 			"defaultValue": 10
 		},
 		"3": {
