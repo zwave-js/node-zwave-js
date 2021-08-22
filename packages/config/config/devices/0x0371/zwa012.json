@@ -13,6 +13,22 @@
 			"productType": "0x0102",
 			"productId": "0x000c",
 			"zwaveAllianceId": 3950
+		},
+		{
+			"productType": "0x0202",
+			"productId": "0x000c"
+		},
+		{
+			"productType": "0x0002",
+			"productId": "0x002a"
+		},
+		{
+			"productType": "0x0102",
+			"productId": "0x002a"
+		},
+		{
+			"productType": "0x0202",
+			"productId": "0x002a"
 		}
 	],
 	"firmwareVersion": {
@@ -47,52 +63,144 @@
 			"$import": "~/0x0086/templates/aeotec_template.json#sensor_operation_mode"
 		},
 		"2": {
-			"$import": "~/0x0086/templates/aeotec_template.json#invert_state_report"
+			"label": "Dry Contact Operation Mode",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 3,
+			"defaultValue": 0,
+			"unsigned": true,
+			"options": [
+				{
+					"label": "Switch mode",
+					"value": 0
+				},
+				{
+					"label": "Switch mode inverted",
+					"value": 1
+				},
+				{
+					"label": "Momentary mode",
+					"value": 2
+				},
+				{
+					"label": "Momentary mode inverted",
+					"value": 3
+				}
+			]
 		},
-		"3[0x02]": {
+		"3": {
+			"$import": "~/templates/master_template.json#base_0-1_nounit",
+			"label": "State when magnet is close to sensor",
+			"options": [
+				{
+					"label": "Closed",
+					"value": 0
+				},
+				{
+					"label": "Opened",
+					"value": 1
+				}
+			]
+		},
+		"4[0x01]": {
 			"$import": "~/0x0086/templates/aeotec_template.json#led_indicator_open"
 		},
-		"3[0x04]": {
+		"4[0x02]": {
 			"$import": "~/0x0086/templates/aeotec_template.json#led_indicator_wake"
 		},
-		"3[0x10]": {
-			"$import": "~/0x0086/templates/aeotec_template.json#led_indicator_tamper"
-		},
-		"4": {
-			"$import": "~/0x0086/templates/aeotec_template.json#range_test_double_click"
+		"4[0x04]": {
+			"$import": "~/0x0086/templates/aeotec_template.json#led_indicator_tamper",
+			"defaultValue": 1
 		},
 		"5": {
-			"$import": "~/0x0086/templates/aeotec_template.json#association_group_2_trigger"
+			"$import": "~/0x0086/templates/aeotec_template.json#range_test_double_click"
 		},
 		"6": {
-			"$import": "~/0x0086/templates/aeotec_template.json#association_group_2_command_type"
+			"$import": "~/0x0086/templates/aeotec_template.json#association_group_2_trigger"
 		},
 		"7": {
-			"$import": "~/0x0086/templates/aeotec_template.json#association_group_2_basic_set_on"
+			"$import": "~/0x0086/templates/aeotec_template.json#association_group_2_command_type"
 		},
 		"8": {
-			"$import": "~/0x0086/templates/aeotec_template.json#association_group_2_basic_set_off"
+			"$import": "~/0x0086/templates/aeotec_template.json#association_group_2_basic_set_on"
 		},
 		"9": {
-			"$import": "~/0x0086/templates/aeotec_template.json#time_delay_on"
+			"$import": "~/0x0086/templates/aeotec_template.json#association_group_2_basic_set_off",
+			"defaultValue": 0
 		},
 		"10": {
-			"$import": "~/0x0086/templates/aeotec_template.json#time_delay_off"
+			"$import": "~/0x0086/templates/aeotec_template.json#time_delay_on",
+			"defaultValue": 0
 		},
 		"11": {
-			"$import": "~/0x0086/templates/aeotec_template.json#time_delay_tamper"
+			"$import": "~/0x0086/templates/aeotec_template.json#time_delay_off",
+			"defaultValue": 0
 		},
 		"12": {
-			"$import": "~/0x0086/templates/aeotec_template.json#report_on_tamper_cancel"
+			"$import": "~/0x0086/templates/aeotec_template.json#time_delay_tamper",
+			"defaultValue": 0
 		},
 		"13": {
-			"$import": "~/0x0086/templates/aeotec_template.json#central_scene_functionality"
+			"$import": "~/0x0086/templates/aeotec_template.json#report_on_tamper_cancel"
 		},
 		"14": {
-			"$import": "~/0x0086/templates/aeotec_template.json#tilt_sensor"
+			"$import": "~/0x0086/templates/aeotec_template.json#central_scene_functionality"
 		},
 		"15": {
+			"$import": "~/0x0086/templates/aeotec_template.json#tilt_sensor"
+		},
+		"16": {
+			"$import": "~/templates/master_template.json#base_0-1_nounit",
+			"label": "Tilt sensor polarity when sensor is vertical",
+			"options": [
+				{
+					"label": "Off",
+					"value": 0
+				},
+				{
+					"label": "On",
+					"value": 1
+				}
+			]
+		},
+		"17": {
+			"$import": "~/0x0086/templates/aeotec_template.json#association_group_2_trigger",
+			"label": "Association Group 5: Trigger"
+		},
+		"18": {
+			"$import": "~/0x0086/templates/aeotec_template.json#association_group_2_command_type",
+			"label": "Association Group 5: Command Type"
+		},
+		"19": {
+			"$import": "~/0x0086/templates/aeotec_template.json#association_group_2_basic_set_on",
+			"label": "Association Group 5: Basic Set Value (On)"
+		},
+		"20": {
+			"$import": "~/0x0086/templates/aeotec_template.json#association_group_2_basic_set_off",
+			"label": "Association Group 5: Basic Set Value (Off)",
+			"defaultValue": 0
+		},
+		"21": {
 			"$import": "~/0x0086/templates/aeotec_template.json#tilt_sensor_sensitivity"
+		},
+		"22": {
+			"$import": "~/0x0086/templates/aeotec_template.json#enable_binary_report"
+		},
+		"23": {
+			"$import": "~/0x0086/templates/aeotec_template.json#low_battery_threshold",
+			"defaultValue": 20
+		},
+		"24": {
+			"$import": "~/templates/master_template.json#base_0-255_nounit",
+			"label": "Battery report interval",
+			"defaultValue": 24,
+			"unit": "hours",
+			"options": [
+				{
+					"label": "Disable",
+					"value": 0
+				}
+			]
 		}
 	},
 	"metadata": {
