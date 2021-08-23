@@ -614,16 +614,12 @@ interface SensorType {
 }
 ```
 
-<!-- #import ScaleGroup from "@zwave-js/config" with comments -->
-
 ```ts
 type ScaleGroup = ReadonlyMap<number, Scale> & {
 	/** The name of the scale group if it is named */
 	readonly name?: string;
 };
 ```
-
-<!-- #import Scale from "@zwave-js/config" -->
 
 ```ts
 interface Scale {
