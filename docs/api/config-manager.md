@@ -568,7 +568,7 @@ A map of the defined named notification types.
 type NotificationMap = ReadonlyMap<number, Notification>;
 ```
 
-<!-- #import Notification from "@zwave-js/config" with comments -->
+<!-- #import Notification from "@zwave-js/config" -->
 
 ```ts
 interface Notification {
@@ -579,7 +579,7 @@ interface Notification {
 }
 ```
 
-<!-- #import NotificationEvent from "@zwave-js/config" with comments -->
+<!-- #import NotificationEvent from "@zwave-js/config" -->
 
 ```ts
 interface NotificationEvent {
@@ -614,7 +614,7 @@ interface SensorType {
 }
 ```
 
-<!-- #import ScaleGroup from "@zwave-js/config" -->
+<!-- #import ScaleGroup from "@zwave-js/config" with comments -->
 
 ```ts
 type ScaleGroup = ReadonlyMap<number, Scale> & {
