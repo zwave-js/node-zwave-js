@@ -376,6 +376,150 @@ Returns the defined label for a given notification type
 
 ## ConfigManager properties
 
+### `basicDeviceClasses`
+
+```ts
+readonly basicDeviceClasses: BasicDeviceClassMap;
+```
+
+A map of the defined named basic device classes.
+
+<!-- #import BasicDeviceClassMap from "@zwave-js/config" -->
+
+```ts
+type BasicDeviceClassMap = ReadonlyMap<number, string>;
+```
+
+### `genericDeviceClasses`
+
+```ts
+readonly genericDeviceClasses: GenericDeviceClassMap;
+```
+
+A map of the defined named generic device classes.
+
+<!-- #import GenericDeviceClassMap from "@zwave-js/config" -->
+
+```ts
+type GenericDeviceClassMap = ReadonlyMap<number, GenericDeviceClass>;
+```
+
+<!-- #import GenericDeviceClass from "@zwave-js/config" -->
+
+```ts
+interface GenericDeviceClass {
+	readonly key: number;
+	readonly label: string;
+	readonly zwavePlusDeviceType?: string;
+	readonly requiresSecurity?: boolean;
+	readonly supportedCCs: readonly CommandClasses[];
+	readonly controlledCCs: readonly CommandClasses[];
+	readonly specific: ReadonlyMap<number, SpecificDeviceClass>;
+}
+```
+
+<!-- #import SpecificDeviceClass from "@zwave-js/config" -->
+
+```ts
+interface SpecificDeviceClass {
+	readonly key: number;
+	readonly label: string;
+	readonly zwavePlusDeviceType?: string;
+	readonly requiresSecurity?: boolean;
+	readonly supportedCCs: readonly CommandClasses[];
+	readonly controlledCCs: readonly CommandClasses[];
+}
+```
+
+### `indicators`
+
+```ts
+readonly indicators: IndicatorMap;
+```
+
+A map of the defined named indicators.
+
+<!-- #import IndicatorMap from "@zwave-js/config" -->
+
+```ts
+type IndicatorMap = ReadonlyMap<number, string>;
+```
+
+### `indicatorProperties`
+
+```ts
+readonly indicatorProperties: IndicatorPropertiesMap;
+```
+
+A map (numeric indicator type -> indicator properties definition) of the defined named indicators and their properties.
+
+<!-- #import IndicatorPropertiesMap from "@zwave-js/config" -->
+
+```ts
+type IndicatorPropertiesMap = ReadonlyMap<number, IndicatorProperty>;
+```
+
+<!-- #import IndicatorProperty from "@zwave-js/config" -->
+
+```ts
+interface IndicatorProperty {
+	readonly id: number;
+	readonly label: string;
+	readonly description: string | undefined;
+	readonly min: number | undefined;
+	readonly max: number | undefined;
+	readonly readonly: boolean | undefined;
+	readonly type: ValueType | undefined;
+}
+```
+
+### `manufacturers`
+
+```ts
+readonly manufacturers: ManufacturersMap;
+```
+
+A map of known manufacturer IDs and the manufacturer's name.
+
+<!-- #import ManufacturersMap from "@zwave-js/config" -->
+
+```ts
+type ManufacturersMap = ManufacturersMap = Map<number, string>;
+```
+
+### `meters`
+
+```ts
+readonly meters: MeterMap;
+```
+
+A map (numeric meter type -> meter type definition) of the known meter types and their scales.
+
+<!-- #import MeterMap from "@zwave-js/config" -->
+
+```ts
+type MeterMap = ReadonlyMap<number, Meter>;
+```
+
+<!-- #import Meter from "@zwave-js/config" -->
+
+```ts
+interface Meter {
+	readonly id: number;
+	readonly name: string;
+	readonly scales: ReadonlyMap<number, MeterScale>;
+}
+```
+
+<!-- #import MeterScale from "@zwave-js/config" -->
+
+```ts
+interface MeterScale {
+	readonly key: number;
+	readonly label: string;
+}
+```
+
 ### `namedScales`
 
 ```ts
@@ -399,6 +543,53 @@ type ScaleGroup = ReadonlyMap<number, Scale> & {
 };
 ```
 
+<!-- #import Scale from "@zwave-js/config" -->
+
+```ts
+interface Scale {
+	readonly key: number;
+	readonly unit: string | undefined;
+	readonly label: string;
+	readonly description: string | undefined;
+}
+```
+
+### `notifications`
+
+```ts
+readonly notifications: NotificationMap;
+```
+
+A map of the defined named notification types.
+
+<!-- #import NotificationMap from "@zwave-js/config" -->
+
+```ts
+type NotificationMap = ReadonlyMap<number, Notification>;
+```
+
+<!-- #import Notification from "@zwave-js/config" with comments -->
+
+```ts
+interface Notification {
+	readonly id: number;
+	readonly name: string;
+	readonly variables: readonly NotificationVariable[];
+	readonly events: ReadonlyMap<number, NotificationEvent>;
+}
+```
+
+<!-- #import NotificationEvent from "@zwave-js/config" with comments -->
+
+```ts
+interface NotificationEvent {
+	readonly id: number;
+	readonly label: string;
+	readonly description?: string;
+	readonly parameter?: NotificationParameter;
+}
+```
+
 ### `sensorTypes`
 
 ```ts
@@ -420,5 +611,25 @@ interface SensorType {
 	readonly key: number;
 	readonly label: string;
 	readonly scales: ScaleGroup;
+}
+```
+
+<!-- #import ScaleGroup from "@zwave-js/config" -->
+
+```ts
+type ScaleGroup = ReadonlyMap<number, Scale> & {
+	/** The name of the scale group if it is named */
+	readonly name?: string;
+};
+```
+
+<!-- #import Scale from "@zwave-js/config" -->
+
+```ts
+interface Scale {
+	readonly key: number;
+	readonly unit: string | undefined;
+	readonly label: string;
+	readonly description: string | undefined;
 }
 ```
