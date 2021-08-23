@@ -9,5 +9,67 @@
 			"label": "Fahrenheit",
 			"unit": "°F"
 		}
+	},
+	"mass": {
+		"0x00": {
+			"label": "Kilogram",
+			"unit": "kg"
+		}
+	},
+	"acceleration": {
+		"0x00": {
+			"label": "Meter per square second",
+			"unit": "m/s2"
+		}
+	},
+	"percentage": {
+		"0x00": {
+			"label": "Percentage value",
+			"unit": "%"
+		}
+	},
+	"acidity": {
+		"0x00": {
+			"label": "Acidity",
+			"unit": "pH"
+		}
+	},
+	"direction": {
+		"0x00": {
+			"label": "Degrees",
+			"unit": "°",
+			"description": "0° = no motion detected, 90° = east, 180° = south, 270° = west, 360° = north"
+		}
+	},
+	"pressure": {
+		"0x00": {
+			"label": "Kilopascal",
+			"unit": "kPa"
+		},
+		"0x01": {
+			"label": "Pound per square inch",
+			"unit": "psi"
+		}
+	},
+	"air_pressure": {
+		"0x00": {
+			"label": "Kilopascal",
+			"unit": "kPa"
+		},
+		"0x01": {
+			"label": "Inches of Mercury",
+			"unit": "inHg"
+		}
+	},
+	"density": {
+		"0x00": {
+			"label": "Density",
+			"unit": "µg/m³"
+		}
+	},
+	"unitless": {
+		"0x00": {
+			"label": "Unitless"
+		}
 	}
 }
