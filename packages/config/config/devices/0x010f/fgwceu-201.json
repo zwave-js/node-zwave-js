@@ -15,7 +15,7 @@
 	},
 	"paramInformation": {
 		"13": {
-			"label": "LED Frame – Brightness",
+			"label": "LED Frame: Brightness",
 			"valueSize": 1,
 			"unit": "%",
 			"minValue": 0,
@@ -132,7 +132,7 @@
 			"defaultValue": 99,
 			"options": [
 				{
-					"label": "Disabled",
+					"label": "Disable",
 					"value": 255
 				}
 			]
