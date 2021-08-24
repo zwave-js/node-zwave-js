@@ -5,7 +5,7 @@
 	Add placeholder for next release with `wip` snippet
   ## __WORK IN PROGRESS__
 -->
-## __WORK IN PROGRESS__
+## 8.2.0 (2021-08-25)
 ### Features
 * Add new `ConfigManager` properties to expose the remaining config maps
 
