@@ -5,6 +5,26 @@
 	Add placeholder for next release with `wip` snippet
   ## __WORK IN PROGRESS__
 -->
+## __WORK IN PROGRESS__
+### Features
+* Add new `ConfigManager` properties to expose the remaining config maps
+
+### Bugfixes
+* Print less intimidating logs for missing S2 keys during decryption
+* Clarify error messages in the log when S0/S2 keys are missing
+* When converting pre-8.1 cache files, treat the nodes as not having any S2 security classes
+
+### Config file changes
+* Add fingerprint to Ring 1st Gen Range Extender config
+* Cleanup device file for Fibaro button
+* Add metadata to Nortek devices
+* Correct ZWA012 parameters indexing
+* Add association config for Vision ZM1701
+* Update Hank Electronics devices
+
+### Changes under the hood
+* Move more scale definitions into `scales.json`
+
 ## 8.1.1 (2021-08-17)
 ### Bugfixes
 * Added a missing `| undefined` to the deprecated `beginInclusion` signature
