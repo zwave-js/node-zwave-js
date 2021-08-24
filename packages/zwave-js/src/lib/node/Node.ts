@@ -1129,7 +1129,8 @@ export class ZWaveNode extends Endpoint implements SecurityClassOwner {
 		return this._interviewAttempts;
 	}
 
-	private _hasEmittedNoNetworkKeyError: boolean = false;
+	private _hasEmittedNoS2NetworkKeyError: boolean = false;
+	private _hasEmittedNoS0NetworkKeyError: boolean = false;
 
 	/** Utility function to check if this node is the controller */
 	public isControllerNode(): boolean {
@@ -1165,7 +1166,8 @@ export class ZWaveNode extends Endpoint implements SecurityClassOwner {
 		this._supportsSecurity = undefined;
 		this._supportsBeaming = undefined;
 		this._deviceConfig = undefined;
-		this._hasEmittedNoNetworkKeyError = false;
+		this._hasEmittedNoS0NetworkKeyError = false;
+		this._hasEmittedNoS2NetworkKeyError = false;
 		this._valueDB.clear({ noEvent: true });
 		this._endpointInstances.clear();
 		super.reset();
@@ -1564,9 +1566,9 @@ protocol version:      ${this._protocolVersion}`;
 				securityClassIsS2(securityClass)
 			) {
 				if (!this.driver.securityManager2) {
-					if (!this._hasEmittedNoNetworkKeyError) {
+					if (!this._hasEmittedNoS2NetworkKeyError) {
 						// Cannot interview a secure device securely without a network key
-						const errorMessage = `supports Security S2, but no network key was configured. Continuing interview non-securely.`;
+						const errorMessage = `supports Security S2, but no S2 network keys were configured. The interview might not include all functionality.`;
 						this.driver.controllerLog.logNode(
 							this.nodeId,
 							errorMessage,
@@ -1583,7 +1585,7 @@ protocol version:      ${this._protocolVersion}`;
 								ZWaveErrorCodes.Controller_NodeInsecureCommunication,
 							),
 						);
-						this._hasEmittedNoNetworkKeyError = true;
+						this._hasEmittedNoS2NetworkKeyError = true;
 					}
 				} else {
 					await interviewEndpoint(this, CommandClasses["Security 2"]);
@@ -1609,9 +1611,9 @@ protocol version:      ${this._protocolVersion}`;
 			// Query supported CCs unless we know for sure that the node wasn't assigned the S0 security class
 			if (this.hasSecurityClass(SecurityClass.S0_Legacy) !== false) {
 				if (!this.driver.securityManager) {
-					if (!this._hasEmittedNoNetworkKeyError) {
+					if (!this._hasEmittedNoS0NetworkKeyError) {
 						// Cannot interview a secure device securely without a network key
-						const errorMessage = `supports Security S0, but no network key was configured. Continuing interview non-securely.`;
+						const errorMessage = `supports Security S0, but the S0 network key was not configured. The interview might not include all functionality.`;
 						this.driver.controllerLog.logNode(
 							this.nodeId,
 							errorMessage,
@@ -1628,7 +1630,7 @@ protocol version:      ${this._protocolVersion}`;
 								ZWaveErrorCodes.Controller_NodeInsecureCommunication,
 							),
 						);
-						this._hasEmittedNoNetworkKeyError = true;
+						this._hasEmittedNoS0NetworkKeyError = true;
 					}
 				} else {
 					await interviewEndpoint(this, CommandClasses.Security);
