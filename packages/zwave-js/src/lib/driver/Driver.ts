@@ -1815,6 +1815,7 @@ export class Driver extends TypedEventEmitter<DriverEventCallbacks> {
 					return MessageHeaders.ACK;
 
 				case ZWaveErrorCodes.Driver_NoSecurity:
+				case ZWaveErrorCodes.Security2CC_NotInitialized:
 					this.driverLog.print(
 						`Dropping message because network keys are not set or the driver is not yet ready to receive secure messages.`,
 						"warn",
