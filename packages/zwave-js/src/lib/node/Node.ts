@@ -3591,8 +3591,12 @@ protocol version:      ${this._protocolVersion}`;
 				}
 			}
 		} else if (typeof obj.isSecure === "boolean") {
-			// Fallback to "isSecure" for legacy cache files
+			// Fallback to "isSecure" === S0 for legacy cache files
 			this.securityClasses.set(SecurityClass.S0_Legacy, obj.isSecure);
+
+			this.securityClasses.set(SecurityClass.S2_AccessControl, false);
+			this.securityClasses.set(SecurityClass.S2_Authenticated, false);
+			this.securityClasses.set(SecurityClass.S2_Unauthenticated, false);
 		}
 		tryParse("supportsSecurity", "boolean");
 		tryParse("supportsBeaming", "boolean");
