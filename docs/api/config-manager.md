@@ -410,8 +410,7 @@ type GenericDeviceClassMap = ReadonlyMap<number, GenericDeviceClass>;
 interface GenericDeviceClass {
 	readonly key: number;
 	readonly label: string;
-	readonly zwavePlusDeviceType?: string;
-	readonly requiresSecurity?: boolean;
+	readonly requiresSecurity?: boolean | undefined;
 	readonly supportedCCs: readonly CommandClasses[];
 	readonly controlledCCs: readonly CommandClasses[];
 	readonly specific: ReadonlyMap<number, SpecificDeviceClass>;
@@ -424,8 +423,8 @@ interface GenericDeviceClass {
 interface SpecificDeviceClass {
 	readonly key: number;
 	readonly label: string;
-	readonly zwavePlusDeviceType?: string;
-	readonly requiresSecurity?: boolean;
+	readonly zwavePlusDeviceType?: string | undefined;
+	readonly requiresSecurity?: boolean | undefined;
 	readonly supportedCCs: readonly CommandClasses[];
 	readonly controlledCCs: readonly CommandClasses[];
 }
@@ -484,7 +483,7 @@ A map of known manufacturer IDs and the manufacturer's name.
 <!-- #import ManufacturersMap from "@zwave-js/config" -->
 
 ```ts
-type ManufacturersMap = ManufacturersMap = Map<number, string>;
+type ManufacturersMap = Map<number, string>;
 ```
 
 ### `meters`
@@ -585,8 +584,8 @@ interface Notification {
 interface NotificationEvent {
 	readonly id: number;
 	readonly label: string;
-	readonly description?: string;
-	readonly parameter?: NotificationParameter;
+	readonly description?: string | undefined;
+	readonly parameter?: NotificationParameter | undefined;
 }
 ```
 
