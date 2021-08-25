@@ -5,6 +5,13 @@
 	Add placeholder for next release with `wip` snippet
   ## __WORK IN PROGRESS__
 -->
+## __WORK IN PROGRESS__
+### Bugfixes
+* Fixed an invalid definition in the sensor types configuration file
+
+### Config file changes
+* Add fingerprint for Fibaro FGFS
+
 ## 8.2.0 (2021-08-25)
 ### Features
 * Add new `ConfigManager` properties to expose the remaining config maps
