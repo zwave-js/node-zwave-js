@@ -451,7 +451,7 @@
 	},
 	"0x2a": {
 		"label": "Soil reactivity",
-		"scales": "SCALES:acidity"
+		"scales": "$SCALES:acidity"
 	},
 	"0x2b": {
 		"label": "Soil salinity",
@@ -617,7 +617,7 @@
 	},
 	"0x43": {
 		"label": "Water acidity",
-		"scales": "SCALES:acidity"
+		"scales": "$SCALES:acidity"
 	},
 	"0x44": {
 		"label": "Water Oxidation reduction potential",
