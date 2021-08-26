@@ -51,7 +51,7 @@
 			"defaultValue": 15
 		},
 		"6": {
-			"label": "MOSFET driving type",
+			"label": "MOSFET Driving Type",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 1,
