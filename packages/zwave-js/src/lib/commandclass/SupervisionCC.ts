@@ -7,9 +7,10 @@ import {
 	ZWaveError,
 	ZWaveErrorCodes,
 } from "@zwave-js/core";
-import { getEnumMemberName } from "@zwave-js/shared";
+import { getEnumMemberName, num2hex } from "@zwave-js/shared";
 import type { Driver } from "../driver/Driver";
 import { PhysicalCCAPI } from "./API";
+import { BatteryCCReport, BatteryCommand } from "./BatteryCC";
 import {
 	API,
 	CCCommand,
@@ -21,6 +22,11 @@ import {
 	gotDeserializationOptions,
 	implementedVersion,
 } from "./CommandClass";
+import {
+	EntryControlCCNotification,
+	EntryControlCommand,
+} from "./EntryControlCC";
+import { NotificationCCReport, NotificationCommand } from "./NotificationCC";
 
 // @noSetValueAPI - This CC has no values to set
 // @noInterview - This CC is only used for encapsulation
@@ -202,10 +208,93 @@ export class SupervisionCCGet extends SupervisionCC {
 		super(driver, options);
 		if (gotDeserializationOptions(options)) {
 			// TODO: Deserialize payload
-			throw new ZWaveError(
-				`${this.constructor.name}: deserialization not implemented`,
-				ZWaveErrorCodes.Deserialization_NotImplemented,
+			validatePayload(this.payload.length >= 3);
+			this.requestStatusUpdates = !!(this.payload[0] & 0b1_0_000000);
+			this.sessionId = this.payload[0] & 0b111111;
+
+			const cc = this.getEndpoint()?.createCCInstanceUnsafe(
+				this.payload[2],
 			);
+			if (cc) {
+				this.encapsulated = cc;
+			} else {
+				throw new ZWaveError(
+					`Unsupported CC ${num2hex(cc)}`,
+					ZWaveErrorCodes.CC_NotSupported,
+				);
+			}
+			const commandLength = this.payload[1];
+			let commandstr = "";
+			const payload = [];
+			for (let step = 2; step < commandLength + 2; step++) {
+				payload.push(this.payload[step]);
+				commandstr = `${commandstr}-${this.payload[step]}`;
+			}
+			const final_payload = Buffer.from(payload);
+			driver.controllerLog.logNode(
+				this.nodeId,
+				`Received SupervisionGet - requestStatusUpdates: '${this.requestStatusUpdates}', sessionId: '${this.sessionId}', commandLength: '${commandLength}', command: '${commandstr}'`,
+			);
+
+			const commandClass = this.payload[2];
+			const command = this.payload[3];
+
+			if (
+				commandClass == CommandClasses.Battery &&
+				command == BatteryCommand.Report
+			) {
+				driver.controllerLog.logNode(
+					this.nodeId,
+					`Recevied Battery Report`,
+				);
+				this.encapsulated = new BatteryCCReport(driver, {
+					fromEncapsulation: true,
+					data: this.payload,
+					encapCC: cc,
+				});
+			} else if (
+				commandClass == CommandClasses["Entry Control"] &&
+				command == EntryControlCommand.Notification
+			) {
+				driver.controllerLog.logNode(
+					this.nodeId,
+					`Recevied Entry Control Notification`,
+				);
+				this.encapsulated = new EntryControlCCNotification(driver, {
+					fromEncapsulation: true,
+					data: this.payload,
+					encapCC: this,
+				});
+			} else if (
+				commandClass == CommandClasses.Notification &&
+				command == NotificationCommand.Report
+			) {
+				driver.controllerLog.logNode(
+					this.nodeId,
+					`Recevied Notification Report - final payload: ${commandstr}`,
+				);
+				this.encapsulated = new NotificationCCReport(driver, {
+					fromEncapsulation: true,
+					data: final_payload,
+					encapCC: this,
+				});
+				const report = new SupervisionCCReport(driver, {
+					sessionId: this.sessionId,
+					moreUpdatesFollow: false,
+					nodeId: this.nodeId,
+					status: SupervisionStatus.Success,
+				});
+				void driver.sendSupervisedCommand(report);
+			} else {
+				throw new ZWaveError(
+					`${
+						this.constructor.name
+					}: deserialization not implemented for command '${num2hex(
+						command,
+					)}' in command class '${num2hex(commandClass)}'`,
+					ZWaveErrorCodes.Deserialization_NotImplemented,
+				);
+			}
 		} else {
 			this.sessionId = getNextSessionId();
 			this.requestStatusUpdates = options.requestStatusUpdates;
