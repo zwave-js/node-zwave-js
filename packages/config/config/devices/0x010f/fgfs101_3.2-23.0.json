@@ -115,7 +115,7 @@
 		"12": {
 			"label": "Temperature measurement hysteresis",
 			"description": "Minimum change in temperature value for report to be sent to controller",
-			"unit": "0.01 degrees C",
+			"unit": "0.01°C",
 			"valueSize": 2,
 			"minValue": 1,
 			"maxValue": 1000,
@@ -124,7 +124,7 @@
 		"50": {
 			"label": "Low temperature alarm threshold",
 			"description": "Temperature value below which visual indicator blinks",
-			"unit": "0.01 degrees C",
+			"unit": "0.01°C",
 			"valueSize": 2,
 			"minValue": -10000,
 			"maxValue": 10000,
@@ -173,7 +173,7 @@
 					"value": 1
 				},
 				{
-					"label": "Evert measurement (Power mode)",
+					"label": "Every measurement (Power mode)",
 					"value": 2
 				}
 			]
@@ -273,7 +273,7 @@
 					"value": 2
 				},
 				{
-					"label": "4th group \"Tamper” sent as secure",
+					"label": "4th group ”Tamper” sent as secure",
 					"value": 3
 				}
 			]
