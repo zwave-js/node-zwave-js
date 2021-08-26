@@ -106,7 +106,7 @@
 			]
 		},
 		"9": {
-			"label": "Set Startup Brightness",
+			"label": "Startup Brightness",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 99,
