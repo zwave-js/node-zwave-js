@@ -69,7 +69,7 @@
 			]
 		},
 		"7": {
-			"label": "Added / Removed From a Network Through External Switch",
+			"label": "Add / Remove From A Network Through External Switch",
 			"description": "When enabling this, triple press the external switch within 1.5 seconds to be added to or removed from a network",
 			"valueSize": 1,
 			"minValue": 0,
