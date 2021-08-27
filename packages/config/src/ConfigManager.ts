@@ -4,7 +4,7 @@ import {
 	ZWaveErrorCodes,
 	ZWaveLogContainer,
 } from "@zwave-js/core";
-import { num2hex } from "@zwave-js/shared";
+import { getErrorMessage, num2hex } from "@zwave-js/shared";
 import { pathExists } from "fs-extra";
 import path from "path";
 import {
@@ -667,7 +667,10 @@ export class ConfigManager {
 			} catch (e) {
 				if (process.env.NODE_ENV !== "test") {
 					this.logger.print(
-						`Error loading device config ${filePath}: ${e}`,
+						`Error loading device config ${filePath}: ${getErrorMessage(
+							e,
+							true,
+						)}`,
 						"error",
 					);
 				}
