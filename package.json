@@ -111,7 +111,8 @@
     "docs:generate": "yarn ts packages/maintenance/src/generateTypedDocs.ts",
     "test:perf": "yarn ts test/valuedb-perf.ts",
     "test:firmware": "yarn ts test/firmware-extraction.ts",
-    "ts": "node -r esbuild-register"
+    "ts": "node -r esbuild-register",
+    "update-sdk": "yarn dlx @yarnpkg/sdks vscode"
   },
   "readme": "README.md",
   "config": {
