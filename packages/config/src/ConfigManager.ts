@@ -233,7 +233,7 @@ export class ConfigManager {
 			this._manufacturers = await loadManufacturersInternal(
 				this._useExternalConfig,
 			);
-		} catch (e: unknown) {
+		} catch (e) {
 			// If the config file is missing or invalid, don't try to find it again
 			if (isZWaveError(e) && e.code === ZWaveErrorCodes.Config_Invalid) {
 				if (process.env.NODE_ENV !== "test") {
@@ -302,7 +302,7 @@ export class ConfigManager {
 			);
 			this._indicators = config.indicators;
 			this._indicatorProperties = config.properties;
-		} catch (e: unknown) {
+		} catch (e) {
 			// If the config file is missing or invalid, don't try to find it again
 			if (isZWaveError(e) && e.code === ZWaveErrorCodes.Config_Invalid) {
 				if (process.env.NODE_ENV !== "test") {
@@ -354,7 +354,7 @@ export class ConfigManager {
 			this._namedScales = await loadNamedScalesInternal(
 				this._useExternalConfig,
 			);
-		} catch (e: unknown) {
+		} catch (e) {
 			// If the config file is missing or invalid, don't try to find it again
 			if (isZWaveError(e) && e.code === ZWaveErrorCodes.Config_Invalid) {
 				if (process.env.NODE_ENV !== "test") {
@@ -397,7 +397,7 @@ export class ConfigManager {
 				this,
 				this._useExternalConfig,
 			);
-		} catch (e: unknown) {
+		} catch (e) {
 			// If the config file is missing or invalid, don't try to find it again
 			if (isZWaveError(e) && e.code === ZWaveErrorCodes.Config_Invalid) {
 				if (process.env.NODE_ENV !== "test") {
@@ -443,7 +443,7 @@ export class ConfigManager {
 	public async loadMeters(): Promise<void> {
 		try {
 			this._meters = await loadMetersInternal(this._useExternalConfig);
-		} catch (e: unknown) {
+		} catch (e) {
 			// If the config file is missing or invalid, don't try to find it again
 			if (isZWaveError(e) && e.code === ZWaveErrorCodes.Config_Invalid) {
 				if (process.env.NODE_ENV !== "test") {
@@ -492,7 +492,7 @@ export class ConfigManager {
 			);
 			this._basicDeviceClasses = config.basicDeviceClasses;
 			this._genericDeviceClasses = config.genericDeviceClasses;
-		} catch (e: unknown) {
+		} catch (e) {
 			// If the config file is missing or invalid, don't try to find it again
 			if (isZWaveError(e) && e.code === ZWaveErrorCodes.Config_Invalid) {
 				if (process.env.NODE_ENV !== "test") {
@@ -579,7 +579,7 @@ export class ConfigManager {
 			}
 			// Put the priority index in front, so the files get resolved first
 			this.index = [...priorityIndex, ...embeddedIndex];
-		} catch (e: unknown) {
+		} catch (e) {
 			// If the index file is missing or invalid, don't try to find it again
 			if (
 				(!isZWaveError(e) && e instanceof Error) ||
@@ -708,7 +708,7 @@ export class ConfigManager {
 			this._notifications = await loadNotificationsInternal(
 				this._useExternalConfig,
 			);
-		} catch (e: unknown) {
+		} catch (e) {
 			// If the config file is missing or invalid, don't try to find it again
 			if (isZWaveError(e) && e.code === ZWaveErrorCodes.Config_Invalid) {
 				if (process.env.NODE_ENV !== "test") {

@@ -58,7 +58,7 @@ export async function loadSensorTypesInternal(
 			);
 		}
 		return sensorTypes;
-	} catch (e: unknown) {
+	} catch (e) {
 		if (isZWaveError(e)) {
 			throw e;
 		} else {

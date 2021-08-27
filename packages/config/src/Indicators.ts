@@ -83,7 +83,7 @@ export async function loadIndicatorsInternal(
 		}
 
 		return { indicators, properties };
-	} catch (e: unknown) {
+	} catch (e) {
 		if (isZWaveError(e)) {
 			throw e;
 		} else {
