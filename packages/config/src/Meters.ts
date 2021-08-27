@@ -49,7 +49,7 @@ export async function loadMetersInternal(
 			meters.set(idNum, new Meter(idNum, meterDefinition as JSONObject));
 		}
 		return meters;
-	} catch (e: unknown) {
+	} catch (e) {
 		if (isZWaveError(e)) {
 			throw e;
 		} else {

@@ -26,6 +26,7 @@ import {
 } from "@zwave-js/serial";
 import {
 	DeepPartial,
+	getErrorMessage,
 	isDocker,
 	mergeDeep,
 	num2hex,
@@ -708,7 +709,9 @@ export class Driver extends TypedEventEmitter<DriverEventCallbacks> {
 			try {
 				await this.serial!.open();
 			} catch (e) {
-				const message = `Failed to open the serial port: ${e.message}`;
+				const message = `Failed to open the serial port: ${getErrorMessage(
+					e,
+				)}`;
 				this.driverLog.print(message, "error");
 
 				spOpenPromise.reject(
@@ -730,7 +733,11 @@ export class Driver extends TypedEventEmitter<DriverEventCallbacks> {
 				await this.options.storage.driver.ensureDir(this.cacheDir);
 			} catch (e) {
 				let message: string;
-				if (/\.yarn[/\\]cache[/\\]zwave-js/i.test(e.stack)) {
+				if (
+					/\.yarn[/\\]cache[/\\]zwave-js/i.test(
+						getErrorMessage(e, true),
+					)
+				) {
 					message = `Failed to create the cache directory. When using Yarn PnP, you need to change the location with the "storage.cacheDir" driver option.`;
 				} else {
 					message = `Failed to create the cache directory. Please make sure that it is writable or change the location with the "storage.cacheDir" driver option.`;
@@ -749,7 +756,9 @@ export class Driver extends TypedEventEmitter<DriverEventCallbacks> {
 			try {
 				await this.configManager.loadAll();
 			} catch (e) {
-				const message = `Failed to load the configuration: ${e.message}`;
+				const message = `Failed to load the configuration: ${getErrorMessage(
+					e,
+				)}`;
 				this.driverLog.print(message, "error");
 				this.emit(
 					"error",
@@ -762,7 +771,7 @@ export class Driver extends TypedEventEmitter<DriverEventCallbacks> {
 			this.driverLog.print("beginning interview...");
 			try {
 				await this.initializeControllerAndNodes();
-			} catch (e: unknown) {
+			} catch (e) {
 				let message: string;
 				if (
 					isZWaveError(e) &&
@@ -770,9 +779,9 @@ export class Driver extends TypedEventEmitter<DriverEventCallbacks> {
 				) {
 					message = `Failed to initialize the driver, no response from the controller. Are you sure this is a Z-Wave controller?`;
 				} else {
-					message = `Failed to initialize the driver: ${
-						e instanceof Error ? e.message : String(e)
-					}`;
+					message = `Failed to initialize the driver: ${getErrorMessage(
+						e,
+					)}`;
 				}
 				this.driverLog.print(message, "error");
 				this.emit(
@@ -1037,7 +1046,7 @@ export class Driver extends TypedEventEmitter<DriverEventCallbacks> {
 				// eslint-disable-next-line @typescript-eslint/no-empty-function
 				void reportMissingDeviceConfig(node as any).catch(() => {});
 			}
-		} catch (e: unknown) {
+		} catch (e) {
 			if (isZWaveError(e)) {
 				if (
 					e.code === ZWaveErrorCodes.Driver_NotReady ||
@@ -1565,7 +1574,7 @@ export class Driver extends TypedEventEmitter<DriverEventCallbacks> {
 			await this.saveNetworkToCacheInternal();
 		} catch (e) {
 			this.driverLog.print(
-				`Saving the network to cache failed: ${e.message}`,
+				`Saving the network to cache failed: ${getErrorMessage(e)}`,
 				"error",
 			);
 		}
@@ -1576,7 +1585,7 @@ export class Driver extends TypedEventEmitter<DriverEventCallbacks> {
 			await this._metadataDB?.close();
 		} catch (e) {
 			this.driverLog.print(
-				`Closing the value DBs failed: ${e.message}`,
+				`Closing the value DBs failed: ${getErrorMessage(e)}`,
 				"error",
 			);
 		}
@@ -1652,7 +1661,7 @@ export class Driver extends TypedEventEmitter<DriverEventCallbacks> {
 			}
 			// all good, send ACK
 			await this.writeHeader(MessageHeaders.ACK);
-		} catch (e) {
+		} catch (e: any) {
 			try {
 				if (await this.handleSecurityS2DecodeError(e, msg)) {
 					// TODO
@@ -1747,7 +1756,9 @@ export class Driver extends TypedEventEmitter<DriverEventCallbacks> {
 				}
 			} catch (e) {
 				// We shouldn't throw just because logging a message fails
-				this.driverLog.print(`Logging a message failed: ${e.message}`);
+				this.driverLog.print(
+					`Logging a message failed: ${getErrorMessage(e)}`,
+				);
 			}
 			this.sendThread.send({ type: "message", message: msg });
 		}
@@ -1798,7 +1809,9 @@ export class Driver extends TypedEventEmitter<DriverEventCallbacks> {
 						} catch (e) {
 							// We shouldn't throw just because logging a message fails
 							this.driverLog.print(
-								`Logging a message failed: ${e.message}`,
+								`Logging a message failed: ${getErrorMessage(
+									e,
+								)}`,
 							);
 						}
 					} else {
@@ -2031,7 +2044,7 @@ It is probably asleep, moving its messages to the wakeup queue.`,
 					this.partialCCSessions.delete(partialSessionKey!);
 					try {
 						command.mergePartialCCs(session);
-					} catch (e: unknown) {
+					} catch (e) {
 						if (isZWaveError(e)) {
 							switch (e.code) {
 								case ZWaveErrorCodes.Deserialization_NotImplemented:
@@ -2389,7 +2402,9 @@ ${handlers.length} left`,
 					await this.controller.removeFailedNode(msg.command.nodeId);
 				} catch (e) {
 					this.controllerLog.logNode(msg.command.nodeId, {
-						message: `removing the node failed: ${e}`,
+						message: `removing the node failed: ${getErrorMessage(
+							e,
+						)}`,
 						level: "error",
 					});
 				}
@@ -2791,7 +2806,7 @@ ${handlers.length} left`,
 				this.unwrapCommands(resp);
 				return resp.command as TResponse;
 			}
-		} catch (e: unknown) {
+		} catch (e) {
 			// A timeout always has to be expected. In this case return nothing.
 			if (
 				isZWaveError(e) &&
@@ -3166,7 +3181,10 @@ ${handlers.length} left`,
 				`Restoring the network from cache was successful!`,
 			);
 		} catch (e) {
-			const message = `Restoring the network from cache failed: ${e.stack}`;
+			const message = `Restoring the network from cache failed: ${getErrorMessage(
+				e,
+				true,
+			)}`;
 			this.emit(
 				"error",
 				new ZWaveError(message, ZWaveErrorCodes.Driver_InvalidCache),
@@ -3286,7 +3304,7 @@ ${handlers.length} left`,
 			}
 			return ret;
 		} catch (e) {
-			this.driverLog.print(e.message, "error");
+			this.driverLog.print(getErrorMessage(e), "error");
 		}
 	}
 
@@ -3322,7 +3340,7 @@ ${handlers.length} left`,
 				await installConfigUpdate(newVersion);
 			}
 		} catch (e) {
-			this.driverLog.print(e.message, "error");
+			this.driverLog.print(getErrorMessage(e), "error");
 			return false;
 		}
 		this.driverLog.print(

@@ -21,6 +21,7 @@ import {
 import {
 	flatMap,
 	getEnumMemberName,
+	getErrorMessage,
 	JSONObject,
 	Mixin,
 	num2hex,
@@ -613,7 +614,7 @@ export class ZWaveController extends TypedEventEmitter<ControllerEventCallbacks>
 				);
 			} catch (e) {
 				this.driver.controllerLog.print(
-					`Error while promoting to SUC/SIS: ${e.message}`,
+					`Error while promoting to SUC/SIS: ${getErrorMessage(e)}`,
 					"error",
 				);
 			}
@@ -824,7 +825,7 @@ export class ZWaveController extends TypedEventEmitter<ControllerEventCallbacks>
 			} catch (e) {
 				// in any case unregister the handler
 				this.driver.controllerLog.print(
-					`  hard reset failed: ${e.message}`,
+					`  hard reset failed: ${getErrorMessage(e)}`,
 					"error",
 				);
 				this.driver.unregisterRequestHandler(
@@ -1055,7 +1056,7 @@ export class ZWaveController extends TypedEventEmitter<ControllerEventCallbacks>
 
 			// Remember that the node was granted the S0 security class
 			node.securityClasses.set(SecurityClass.S0_Legacy, true);
-		} catch (e: unknown) {
+		} catch (e) {
 			let errorMessage = `Security S0 bootstrapping failed, the node was not granted the S0 security class`;
 			if (!isZWaveError(e)) {
 				errorMessage += `: ${e as any}`;
@@ -1470,7 +1471,7 @@ export class ZWaveController extends TypedEventEmitter<ControllerEventCallbacks>
 			});
 
 			// success 🎉
-		} catch (e: unknown) {
+		} catch (e) {
 			let errorMessage = `Security S2 bootstrapping failed, the node was not granted any S2 security class`;
 			if (!isZWaveError(e)) {
 				errorMessage += `: ${e as any}`;
@@ -1537,7 +1538,7 @@ export class ZWaveController extends TypedEventEmitter<ControllerEventCallbacks>
 
 					// After setting the association, make sure the node knows how to reach us
 					await this.assignReturnRoute(node.id, ownNodeId);
-				} catch (e: unknown) {
+				} catch (e) {
 					if (isTransmissionError(e) || isRecoverableZWaveError(e)) {
 						this.driver.controllerLog.logNode(node.id, {
 							message: `Failed to configure Z-Wave+ Lifeline association: ${e.message}`,
@@ -1578,7 +1579,7 @@ export class ZWaveController extends TypedEventEmitter<ControllerEventCallbacks>
 					)!;
 					await instance.interview();
 				}
-			} catch (e: unknown) {
+			} catch (e) {
 				if (isTransmissionError(e) || isRecoverableZWaveError(e)) {
 					this.driver.controllerLog.logNode(node.id, {
 						message: `Cannot configure wakeup destination: ${e.message}`,
@@ -2307,7 +2308,7 @@ export class ZWaveController extends TypedEventEmitter<ControllerEventCallbacks>
 			} catch (e) {
 				this.driver.controllerLog.logNode(
 					nodeId,
-					`refreshing neighbor list failed: ${e.message}`,
+					`refreshing neighbor list failed: ${getErrorMessage(e)}`,
 					"warn",
 				);
 			}
@@ -2343,7 +2344,7 @@ export class ZWaveController extends TypedEventEmitter<ControllerEventCallbacks>
 			} catch (e) {
 				this.driver.controllerLog.logNode(
 					nodeId,
-					`deleting return routes failed: ${e.message}`,
+					`deleting return routes failed: ${getErrorMessage(e)}`,
 					"warn",
 				);
 			}
@@ -2402,7 +2403,7 @@ ${associatedNodes.join(", ")}`,
 				} catch (e) {
 					this.driver.controllerLog.logNode(
 						nodeId,
-						`assigning return route failed: ${e.message}`,
+						`assigning return route failed: ${getErrorMessage(e)}`,
 						"warn",
 					);
 				}
@@ -2463,7 +2464,7 @@ ${associatedNodes.join(", ")}`,
 		} catch (e) {
 			this.driver.controllerLog.logNode(
 				nodeId,
-				`Assigning SUC return route failed: ${e.message}`,
+				`Assigning SUC return route failed: ${getErrorMessage(e)}`,
 				"error",
 			);
 			return false;
@@ -2489,7 +2490,7 @@ ${associatedNodes.join(", ")}`,
 		} catch (e) {
 			this.driver.controllerLog.logNode(
 				nodeId,
-				`Deleting SUC return route failed: ${e.message}`,
+				`Deleting SUC return route failed: ${getErrorMessage(e)}`,
 				"error",
 			);
 			return false;
@@ -2519,7 +2520,7 @@ ${associatedNodes.join(", ")}`,
 		} catch (e) {
 			this.driver.controllerLog.logNode(
 				nodeId,
-				`Assigning return route failed: ${e.message}`,
+				`Assigning return route failed: ${getErrorMessage(e)}`,
 				"error",
 			);
 			return false;
@@ -2545,7 +2546,7 @@ ${associatedNodes.join(", ")}`,
 		} catch (e) {
 			this.driver.controllerLog.logNode(
 				nodeId,
-				`Deleting return routes failed: ${e.message}`,
+				`Deleting return routes failed: ${getErrorMessage(e)}`,
 				"error",
 			);
 			return false;
@@ -3568,7 +3569,7 @@ ${associatedNodes.join(", ")}`,
 		} catch (e) {
 			this.driver.controllerLog.logNode(
 				nodeId,
-				`requesting the node neighbors failed: ${e.message}`,
+				`requesting the node neighbors failed: ${getErrorMessage(e)}`,
 				"error",
 			);
 			throw e;
@@ -3630,7 +3631,9 @@ ${associatedNodes.join(", ")}`,
 			return ret.isOK();
 		} catch (e) {
 			this.driver.controllerLog.print(
-				`Error turning RF ${enabled ? "on" : "off"}: ${e.message}`,
+				`Error turning RF ${enabled ? "on" : "off"}: ${getErrorMessage(
+					e,
+				)}`,
 				"error",
 			);
 			return false;

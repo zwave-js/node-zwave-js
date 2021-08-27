@@ -58,7 +58,7 @@ export async function loadManufacturersInternal(
 		}
 
 		return manufacturers;
-	} catch (e: unknown) {
+	} catch (e) {
 		if (isZWaveError(e)) {
 			throw e;
 		} else {

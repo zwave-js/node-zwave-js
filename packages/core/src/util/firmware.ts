@@ -1,3 +1,4 @@
+import { getErrorMessage } from "@zwave-js/shared";
 import * as crypto from "crypto";
 // @ts-expect-error There are no type definitions for nrf-intel-hex
 import MemoryMap from "nrf-intel-hex";
@@ -210,7 +211,7 @@ function extractFirmwareHEX(dataHEX: Buffer | string): Firmware {
 		}
 		return { data };
 	} catch (e) {
-		if (/Malformed/.test(e.message)) {
+		if (/Malformed/.test(getErrorMessage(e))) {
 			throw new ZWaveError(
 				"Could not parse HEX firmware file!",
 				ZWaveErrorCodes.Argument_Invalid,

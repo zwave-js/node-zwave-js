@@ -71,11 +71,11 @@
     "reflect-metadata": "^0.1.13",
     "semver": "^7.3.5",
     "ts-node": "^10.2.0",
-    "typescript": "^4.3.5",
+    "typescript": "4.4.2",
     "zwave-js": "workspace:*"
   },
   "resolutions": {
-    "@ts-morph/common": "patch:@ts-morph/common@~0.10.0#.yarn/sdks/ts-morph/patch.diff"
+    "@ts-morph/common": "patch:@ts-morph/common@~0.11.0#.yarn-patches/ts-morph.diff"
   },
   "scripts": {
     "build": "lerna run build",
@@ -111,7 +111,8 @@
     "docs:generate": "yarn ts packages/maintenance/src/generateTypedDocs.ts",
     "test:perf": "yarn ts test/valuedb-perf.ts",
     "test:firmware": "yarn ts test/firmware-extraction.ts",
-    "ts": "node -r esbuild-register"
+    "ts": "node -r esbuild-register",
+    "update-sdk": "yarn dlx @yarnpkg/sdks vscode"
   },
   "readme": "README.md",
   "config": {

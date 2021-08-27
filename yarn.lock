@@ -3427,27 +3427,27 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@ts-morph/common@patch:@ts-morph/common@~0.10.0#.yarn/sdks/ts-morph/patch.diff::locator=%40zwave-js%2Frepo%40workspace%3A.":
-  version: 0.10.1
-  resolution: "@ts-morph/common@patch:@ts-morph/common@npm%3A0.10.1#.yarn/sdks/ts-morph/patch.diff::version=0.10.1&hash=107b7d&locator=%40zwave-js%2Frepo%40workspace%3A."
+"@ts-morph/common@patch:@ts-morph/common@~0.11.0#.yarn-patches/ts-morph.diff::locator=%40zwave-js%2Frepo%40workspace%3A.":
+  version: 0.11.0
+  resolution: "@ts-morph/common@patch:@ts-morph/common@npm%3A0.11.0#.yarn-patches/ts-morph.diff::version=0.11.0&hash=905f0f&locator=%40zwave-js%2Frepo%40workspace%3A."
   dependencies:
-    fast-glob: ^3.2.5
+    fast-glob: ^3.2.7
     minimatch: ^3.0.4
     mkdirp: ^1.0.4
     path-browserify: ^1.0.1
-  checksum: 50730ef1d8b6a2f4c64386d6d10a8905552372b1bcbb3f41fe5c996ee971386d0901c43c2b944ea00e922f0f99922b821bf503e573b5ffef440ad9ce970471af
+  checksum: d71930081571f922e76f77b38fc790a679bf33f62964767ba3cd1b1c2749dbdca1badfbc160a838a75370f55b6145e0b79efba2a1b4994766295ce4719f664d9
   languageName: node
   linkType: hard
 
-"@ts-morph/common@~0.10.0":
-  version: 0.10.1
-  resolution: "@ts-morph/common@npm:0.10.1"
+"@ts-morph/common@~0.11.0":
+  version: 0.11.0
+  resolution: "@ts-morph/common@npm:0.11.0"
   dependencies:
-    fast-glob: ^3.2.5
+    fast-glob: ^3.2.7
     minimatch: ^3.0.4
     mkdirp: ^1.0.4
     path-browserify: ^1.0.1
-  checksum: 24c8185a2c165d18d683dd822ee2e2070f325e328f87281ff3bc53e555aabf331bb5498ff89e3d1364e462f2b4be237442c38e2920d1ecb7438f4e2f30804e63
+  checksum: beaa444c6a30cb3d886644464590bf39e84c3d5bec21cb0ff909643f590f2166ac81c81466b506a6015dd5f573dd91611e3b724f91b5ec2e08a20a92feaf2680
   languageName: node
   linkType: hard
 
@@ -3923,7 +3923,7 @@ __metadata:
     pegjs: ^0.10.0
     semver: ^7.3.5
     ts-pegjs: ^0.3.1
-    typescript: ^4.3.5
+    typescript: 4.4.2
     winston: ^3.3.3
     xml2json: ^0.12.0
     yargs: ^16.2.0
@@ -3948,7 +3948,7 @@ __metadata:
     logform: "*"
     nrf-intel-hex: ^1.3.0
     triple-beam: "*"
-    typescript: ^4.3.5
+    typescript: 4.4.2
     winston: ^3.3.3
     winston-transport: "*"
   languageName: unknown
@@ -3983,8 +3983,8 @@ __metadata:
     piscina: ^3.1.0
     prettier: ^2.3.2
     reflect-metadata: ^0.1.13
-    ts-morph: ^11.0.3
-    typescript: ^4.3.5
+    ts-morph: ^12.0.0
+    typescript: 4.4.2
     yargs: ^16.2.0
   languageName: unknown
   linkType: soft
@@ -4037,7 +4037,7 @@ __metadata:
     reflect-metadata: ^0.1.13
     semver: ^7.3.5
     ts-node: ^10.2.0
-    typescript: ^4.3.5
+    typescript: 4.4.2
     zwave-js: "workspace:*"
   languageName: unknown
   linkType: soft
@@ -4059,7 +4059,7 @@ __metadata:
     esbuild-register: ^2.6.0
     jest-extended: ^0.11.5
     serialport: ^9.2.0
-    typescript: ^4.3.5
+    typescript: 4.4.2
     winston: ^3.3.3
   languageName: unknown
   linkType: soft
@@ -4075,7 +4075,7 @@ __metadata:
     esbuild-register: ^2.6.0
     fs-extra: ^10.0.0
     jest-extended: ^0.11.5
-    typescript: ^4.3.5
+    typescript: 4.4.2
   languageName: unknown
   linkType: soft
 
@@ -4091,7 +4091,7 @@ __metadata:
     esbuild-register: ^2.6.0
     jest-extended: ^0.11.5
     triple-beam: "*"
-    typescript: ^4.3.5
+    typescript: 4.4.2
     winston-transport: "*"
   languageName: unknown
   linkType: soft
@@ -6619,7 +6619,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"fast-glob@npm:^3.1.1, fast-glob@npm:^3.2.5":
+"fast-glob@npm:^3.1.1":
   version: 3.2.6
   resolution: "fast-glob@npm:3.2.6"
   dependencies:
@@ -6629,6 +6629,19 @@ __metadata:
     merge2: ^1.3.0
     micromatch: ^4.0.4
   checksum: 5cd4fb7b3d8c176cf11bca068f88a45b4e231c6f508e43cc9ad69c5551558420ee90df1a1b6c5a9e047b4ee8fa5f5ac7f7aaf27b7a54d8597971d4705e4390a2
+  languageName: node
+  linkType: hard
+
+"fast-glob@npm:^3.2.7":
+  version: 3.2.7
+  resolution: "fast-glob@npm:3.2.7"
+  dependencies:
+    "@nodelib/fs.stat": ^2.0.2
+    "@nodelib/fs.walk": ^1.2.3
+    glob-parent: ^5.1.2
+    merge2: ^1.3.0
+    micromatch: ^4.0.4
+  checksum: 2f4708ff112d2b451888129fdd9a0938db88b105b0ddfd043c064e3c4d3e20eed8d7c7615f7565fee660db34ddcf08a2db1bf0ab3c00b87608e4719694642d78
   languageName: node
   linkType: hard
 
@@ -6954,10 +6967,10 @@ fsevents@^2.1.2:
 
 "fsevents@patch:fsevents@^2.1.2#~builtin<compat/fsevents>":
   version: 2.3.2
-  resolution: "fsevents@patch:fsevents@npm%3A2.3.2#~builtin<compat/fsevents>::version=2.3.2&hash=1cc4b2"
+  resolution: "fsevents@patch:fsevents@npm%3A2.3.2#~builtin<compat/fsevents>::version=2.3.2&hash=18f3a7"
   dependencies:
     node-gyp: latest
-  checksum: 78db9daf1f6526a49cefee3917cc988f62dc7f25b5dd80ad6de4ffc4af7f0cab7491ac737626ff53e482a111bc53aac9e411fe3602458eca36f6a003ecf69c16
+  checksum: edbd0fd80be379c14409605f77e52fdc78a119e17f875e8b90a220c3e5b29e54a1477c21d91fd30b957ea4866406dc3ff87b61432d2840ff8866b309e5866140
   languageName: node
   linkType: hard
 
@@ -11459,11 +11472,11 @@ fsevents@^2.1.2:
 
 "resolve@patch:resolve@^1.10.0#~builtin<compat/resolve>, resolve@patch:resolve@^1.14.2#~builtin<compat/resolve>, resolve@patch:resolve@^1.18.1#~builtin<compat/resolve>, resolve@patch:resolve@^1.20.0#~builtin<compat/resolve>":
   version: 1.20.0
-  resolution: "resolve@patch:resolve@npm%3A1.20.0#~builtin<compat/resolve>::version=1.20.0&hash=00b1ff"
+  resolution: "resolve@patch:resolve@npm%3A1.20.0#~builtin<compat/resolve>::version=1.20.0&hash=d4691f"
   dependencies:
     is-core-module: ^2.2.0
     path-parse: ^1.0.6
-  checksum: bed00be983cd20a8af0e7840664f655c4b269786dbd9595c5f156cd9d8a0050e65cdbbbdafc30ee9b6245b230c78a2c8ab6447a52545b582f476c29adb188cc5
+  checksum: 028141533a81a4515c8ac07e38a0ccde5e2722a0fa6bb83ac53ec463a764f1b7c021dcb98fc9a511a4f6e403f354d034bf250fcf9b7b8399bceb2a889ddf78ff
   languageName: node
   linkType: hard
 
@@ -12616,13 +12629,13 @@ fsevents@^2.1.2:
   languageName: node
   linkType: hard
 
-"ts-morph@npm:^11.0.3":
-  version: 11.0.3
-  resolution: "ts-morph@npm:11.0.3"
+"ts-morph@npm:^12.0.0":
+  version: 12.0.0
+  resolution: "ts-morph@npm:12.0.0"
   dependencies:
-    "@ts-morph/common": ~0.10.1
+    "@ts-morph/common": ~0.11.0
     code-block-writer: ^10.1.1
-  checksum: a59c17c317d8b26fd41d1933667e0deb058d04ad2c48b16afc261817f372d18c0fefe994788c243eeaa91bca782e4f1d6baaaf833c29cb7eaa55e616c9ae77cd
+  checksum: c033708c76448625380daa3b8c2eeea1306300fa4367804029635f0d911a3723e4315a6e0824e6dfb256df0b99aac0ea0478cb3f14ed6fae2339d43ec882a427
   languageName: node
   linkType: hard
 
@@ -12806,23 +12819,23 @@ fsevents@^2.1.2:
   languageName: node
   linkType: hard
 
-typescript@^4.3.5:
-  version: 4.3.5
-  resolution: "typescript@npm:4.3.5"
+typescript@4.4.2:
+  version: 4.4.2
+  resolution: "typescript@npm:4.4.2"
   bin:
     tsc: bin/tsc
     tsserver: bin/tsserver
-  checksum: bab033b5e2b0790dd35b77fd005df976ef80b8d84fd2c6e63cc31808151875beae9216e5a315fe7068e8499905c3c354248fe83272cdfc13b7705635f0c66c97
+  checksum: 194e08e9d1971d667d6fd1a0554616b7022312a2319d70e81a64e502a265992061ee7817ed9a69b52bbabe7a9b85e7938cb8c11c433e40a516b277f8c4dacd51
   languageName: node
   linkType: hard
 
-"typescript@patch:typescript@^4.3.5#~builtin<compat/typescript>":
-  version: 4.3.5
-  resolution: "typescript@patch:typescript@npm%3A4.3.5#~builtin<compat/typescript>::version=4.3.5&hash=d8b4e7"
+"typescript@patch:typescript@4.4.2#~builtin<compat/typescript>":
+  version: 4.4.2
+  resolution: "typescript@patch:typescript@npm%3A4.4.2#~builtin<compat/typescript>::version=4.4.2&hash=ddd1e8"
   bin:
     tsc: bin/tsc
     tsserver: bin/tsserver
-  checksum: bc2c4fdf0f1557fdafe4ef74848c72ebd9c8c60829568248f869121aea2bb20e16649a252431d0acb185ec118143be22bed73d08f64379557810d82756afedde
+  checksum: 1f30617046271a94d6821fe9da9c4705111e0a2f5479269c82f65aa76b2421ff90def8838dd35b1aa464d015248b06c89ff867bd282f4822b5ee18b7f92f95ee
   languageName: node
   linkType: hard
 
@@ -13538,7 +13551,7 @@ typescript@^4.3.5:
     semver: ^7.3.5
     serialport: ^9.2.0
     source-map-support: ^0.5.19
-    typescript: ^4.3.5
+    typescript: 4.4.2
     winston: ^3.3.3
     xstate: ^4.23.1
   languageName: unknown

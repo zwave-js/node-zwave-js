@@ -346,7 +346,7 @@ export class CommandClass {
 		try {
 			const ret = new Constructor(driver, options);
 			return ret;
-		} catch (e: unknown) {
+		} catch (e) {
 			// Indicate invalid payloads with a special CC type
 			if (
 				isZWaveError(e) &&
@@ -507,7 +507,7 @@ export class CommandClass {
 	public getNodeUnsafe(): ZWaveNode | undefined {
 		try {
 			return this.getNode();
-		} catch (e: unknown) {
+		} catch (e) {
 			// This was expected
 			if (isZWaveError(e) && e.code === ZWaveErrorCodes.Driver_NotReady) {
 				return undefined;

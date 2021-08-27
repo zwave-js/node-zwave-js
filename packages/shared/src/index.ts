@@ -1,4 +1,5 @@
 export * from "./docker";
+export * from "./errors";
 export * from "./EventEmitter";
 export * from "./fs";
 export * from "./inheritance";
