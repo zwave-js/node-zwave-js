@@ -2,7 +2,7 @@
 	"manufacturer": "Zipato",
 	"manufacturerId": "0x0131",
 	"label": "PH-PSE02",
-	"description": "Multisound indoor siren",
+	"description": "Multisound Indoor Siren",
 	"devices": [
 		{
 			"productType": "0x0004",
@@ -13,7 +13,6 @@
 		"min": "0.0",
 		"max": "255.255"
 	},
-	"supportsZWavePlus": true,
 	"paramInformation": {
 		"7[0x08]": {
 			"$import": "~/0x0175/ph-pse02.json#paramInformation/7[0x08]"
