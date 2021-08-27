@@ -27,6 +27,7 @@ export class ConfigLogger extends ZWaveLoggerBase {
 			level: actualLevel,
 			message,
 			direction: getDirectionPrefix("none"),
+			context: { source: "config" },
 		});
 	}
 }

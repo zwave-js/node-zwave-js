@@ -24,6 +24,7 @@ import { NodeStatus } from "../node/Types";
 export const DRIVER_LABEL = "DRIVER";
 const DRIVER_LOGLEVEL = "verbose";
 const SENDQUEUE_LOGLEVEL = "debug";
+const CONTEXT = { source: "driver" };
 
 export class DriverLogger extends ZWaveLoggerBase {
 	constructor(loggers: ZWaveLogContainer) {
@@ -53,6 +54,7 @@ export class DriverLogger extends ZWaveLoggerBase {
 			level: actualLevel,
 			message,
 			direction: getDirectionPrefix("none"),
+			context: CONTEXT,
 		});
 	}
 
@@ -173,6 +175,7 @@ export class DriverLogger extends ZWaveLoggerBase {
 				// Since we are programming a controller, responses are always inbound
 				// (not to confuse with the message type, which may be Request or Response)
 				direction: getDirectionPrefix(direction),
+				context: { ...CONTEXT, direction },
 			});
 		} catch (e) {
 			// When logging fails, send the message to Sentry
@@ -219,6 +222,7 @@ export class DriverLogger extends ZWaveLoggerBase {
 				queue.length === 1 ? "" : "s"
 			})`,
 			direction: getDirectionPrefix("none"),
+			context: CONTEXT,
 		});
 	}
 }

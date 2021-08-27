@@ -56,7 +56,13 @@ export interface ZWaveLogInfo extends Omit<TransformableInfo, "message"> {
 	timestamp?: string;
 	label?: string;
 	message: string | string[];
+	context: LogContext;
 }
+
+export type LogContext = { source: string } & Record<
+	string,
+	string | number | boolean | undefined | null
+>;
 
 export type MessageRecord = Record<
 	string,

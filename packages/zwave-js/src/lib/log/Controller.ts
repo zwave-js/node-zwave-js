@@ -3,6 +3,7 @@ import {
 	DataDirection,
 	getDirectionPrefix,
 	getNodeTag,
+	LogContext,
 	tagify,
 	ValueAddedArgs,
 	ValueID,
@@ -26,6 +27,8 @@ interface LogNodeOptions {
 	direction?: DataDirection;
 	endpoint?: number;
 }
+
+type ControllerLogContext = LogContext & { source: "controller" };
 
 export type LogValueArgs<T> = T & { nodeId: number; internal?: boolean };
 
@@ -54,6 +57,7 @@ export class ControllerLogger extends ZWaveLoggerBase {
 			level: actualLevel,
 			message,
 			direction: getDirectionPrefix("none"),
+			context: { source: "controller" },
 		});
 	}
 
@@ -91,6 +95,13 @@ export class ControllerLogger extends ZWaveLoggerBase {
 		if (!this.container.isLoglevelVisible(actualLevel)) return;
 		if (!this.container.shouldLogNode(nodeId)) return;
 
+		const context: ControllerLogContext = {
+			nodeId,
+			source: "controller",
+		};
+		if (endpoint) context.endpoint = endpoint;
+		if (direction) context.direction = direction;
+
 		this.logger.log({
 			level: actualLevel,
 			primaryTags: tagify([getNodeTag(nodeId)]),
@@ -99,6 +110,7 @@ export class ControllerLogger extends ZWaveLoggerBase {
 				? tagify([`Endpoint ${endpoint}`])
 				: undefined,
 			direction: getDirectionPrefix(direction || "none"),
+			context,
 		});
 	}
 
@@ -129,7 +141,14 @@ export class ControllerLogger extends ZWaveLoggerBase {
 	): void {
 		if (!this.isValueLogVisible()) return;
 		if (!this.container.shouldLogNode(args.nodeId)) return;
-
+		const context: ControllerLogContext = {
+			nodeId: args.nodeId,
+			change,
+			commandClass: args.commandClass,
+			internal: args.internal,
+			property: args.property,
+			source: "controller",
+		};
 		const primaryTags: string[] = [
 			getNodeTag(args.nodeId),
 			this.valueEventPrefixes[change],
@@ -137,6 +156,7 @@ export class ControllerLogger extends ZWaveLoggerBase {
 		];
 		const secondaryTags: string[] = [];
 		if (args.endpoint != undefined) {
+			context.endpoint = args.endpoint;
 			secondaryTags.push(`Endpoint ${args.endpoint}`);
 		}
 		if (args.internal === true) {
@@ -144,6 +164,7 @@ export class ControllerLogger extends ZWaveLoggerBase {
 		}
 		let message = args.property.toString();
 		if (args.propertyKey != undefined) {
+			context.propertyKey = args.propertyKey;
 			message += `[${args.propertyKey}]`;
 		}
 		switch (change) {
@@ -176,6 +197,7 @@ export class ControllerLogger extends ZWaveLoggerBase {
 			secondaryTags: tagify(secondaryTags),
 			message,
 			direction: getDirectionPrefix("none"),
+			context,
 		});
 	}
 
@@ -183,13 +205,20 @@ export class ControllerLogger extends ZWaveLoggerBase {
 	public metadataUpdated(args: LogValueArgs<ValueID>): void {
 		if (!this.isValueLogVisible()) return;
 		if (!this.container.shouldLogNode(args.nodeId)) return;
-
+		const context: ControllerLogContext = {
+			nodeId: args.nodeId,
+			commandClass: args.commandClass,
+			internal: args.internal,
+			property: args.property,
+			source: "controller",
+		};
 		const primaryTags: string[] = [
 			getNodeTag(args.nodeId),
 			CommandClasses[args.commandClass],
 		];
 		const secondaryTags: string[] = [];
 		if (args.endpoint != undefined) {
+			context.endpoint = args.endpoint;
 			secondaryTags.push(`Endpoint ${args.endpoint}`);
 		}
 		if (args.internal === true) {
@@ -197,6 +226,7 @@ export class ControllerLogger extends ZWaveLoggerBase {
 		}
 		let message = args.property.toString();
 		if (args.propertyKey != undefined) {
+			context.propertyKey = args.propertyKey;
 			message += `[${args.propertyKey}]`;
 		}
 		message += ": metadata updated";
@@ -206,6 +236,7 @@ export class ControllerLogger extends ZWaveLoggerBase {
 			secondaryTags: tagify(secondaryTags),
 			message,
 			direction: getDirectionPrefix("none"),
+			context,
 		});
 	}
 
@@ -224,6 +255,7 @@ export class ControllerLogger extends ZWaveLoggerBase {
 							InterviewStage[node.interviewStage]
 					  }`,
 			direction: getDirectionPrefix("none"),
+			context: { nodeId: node.id, source: "controller" },
 		});
 	}
 
@@ -240,6 +272,7 @@ export class ControllerLogger extends ZWaveLoggerBase {
 			primaryTags: tagify([getNodeTag(node.id)]),
 			message,
 			direction: getDirectionPrefix("none"),
+			context: { nodeId: node.id, source: "controller" },
 		});
 	}
 }
