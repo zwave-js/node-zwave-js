@@ -101,6 +101,7 @@
 		"152": {
 			"label": "Power Report Percentage Threshold",
 			"valueSize": 2,
+			"unit": "%",
 			"minValue": 0,
 			"maxValue": 255,
 			"defaultValue": 10,
