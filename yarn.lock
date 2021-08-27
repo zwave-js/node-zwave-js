@@ -3427,27 +3427,27 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@ts-morph/common@patch:@ts-morph/common@~0.10.1#.yarn-patches/ts-morph.diff::locator=%40zwave-js%2Frepo%40workspace%3A.":
-  version: 0.10.1
-  resolution: "@ts-morph/common@patch:@ts-morph/common@npm%3A0.10.1#.yarn-patches/ts-morph.diff::version=0.10.1&hash=962c38&locator=%40zwave-js%2Frepo%40workspace%3A."
+"@ts-morph/common@patch:@ts-morph/common@~0.11.0#.yarn-patches/ts-morph.diff::locator=%40zwave-js%2Frepo%40workspace%3A.":
+  version: 0.11.0
+  resolution: "@ts-morph/common@patch:@ts-morph/common@npm%3A0.11.0#.yarn-patches/ts-morph.diff::version=0.11.0&hash=3f6370&locator=%40zwave-js%2Frepo%40workspace%3A."
   dependencies:
-    fast-glob: ^3.2.5
+    fast-glob: ^3.2.7
     minimatch: ^3.0.4
     mkdirp: ^1.0.4
     path-browserify: ^1.0.1
-  checksum: f5c24b493b7965ad79d8a61bfbfbdc7230fe283ea95c28ba3fe921b6eb597aa9696c4d7d811bf6c0ab1d89d734f577cbc6d174f2f520e70c97bd27dbc567a3f6
+  checksum: 1a418e3764b026c4f29d9ab06085ef8dfe5c65b62fe6ccf03cc3552b0770f722799fff487355c1188b72196adda621964a917550bb58c79232177e132b2c5297
   languageName: node
   linkType: hard
 
-"@ts-morph/common@~0.10.1":
-  version: 0.10.1
-  resolution: "@ts-morph/common@npm:0.10.1"
+"@ts-morph/common@~0.11.0":
+  version: 0.11.0
+  resolution: "@ts-morph/common@npm:0.11.0"
   dependencies:
-    fast-glob: ^3.2.5
+    fast-glob: ^3.2.7
     minimatch: ^3.0.4
     mkdirp: ^1.0.4
     path-browserify: ^1.0.1
-  checksum: 24c8185a2c165d18d683dd822ee2e2070f325e328f87281ff3bc53e555aabf331bb5498ff89e3d1364e462f2b4be237442c38e2920d1ecb7438f4e2f30804e63
+  checksum: beaa444c6a30cb3d886644464590bf39e84c3d5bec21cb0ff909643f590f2166ac81c81466b506a6015dd5f573dd91611e3b724f91b5ec2e08a20a92feaf2680
   languageName: node
   linkType: hard
 
@@ -3923,7 +3923,7 @@ __metadata:
     pegjs: ^0.10.0
     semver: ^7.3.5
     ts-pegjs: ^0.3.1
-    typescript: 4.4.1-rc
+    typescript: 4.4.2
     winston: ^3.3.3
     xml2json: ^0.12.0
     yargs: ^16.2.0
@@ -3948,7 +3948,7 @@ __metadata:
     logform: "*"
     nrf-intel-hex: ^1.3.0
     triple-beam: "*"
-    typescript: 4.4.1-rc
+    typescript: 4.4.2
     winston: ^3.3.3
     winston-transport: "*"
   languageName: unknown
@@ -3983,8 +3983,8 @@ __metadata:
     piscina: ^3.1.0
     prettier: ^2.3.2
     reflect-metadata: ^0.1.13
-    ts-morph: ^11.0.3
-    typescript: 4.4.1-rc
+    ts-morph: ^12.0.0
+    typescript: 4.4.2
     yargs: ^16.2.0
   languageName: unknown
   linkType: soft
@@ -4037,7 +4037,7 @@ __metadata:
     reflect-metadata: ^0.1.13
     semver: ^7.3.5
     ts-node: ^10.2.0
-    typescript: 4.4.1-rc
+    typescript: 4.4.2
     zwave-js: "workspace:*"
   languageName: unknown
   linkType: soft
@@ -4059,7 +4059,7 @@ __metadata:
     esbuild-register: ^2.6.0
     jest-extended: ^0.11.5
     serialport: ^9.2.0
-    typescript: 4.4.1-rc
+    typescript: 4.4.2
     winston: ^3.3.3
   languageName: unknown
   linkType: soft
@@ -4075,7 +4075,7 @@ __metadata:
     esbuild-register: ^2.6.0
     fs-extra: ^10.0.0
     jest-extended: ^0.11.5
-    typescript: 4.4.1-rc
+    typescript: 4.4.2
   languageName: unknown
   linkType: soft
 
@@ -4091,7 +4091,7 @@ __metadata:
     esbuild-register: ^2.6.0
     jest-extended: ^0.11.5
     triple-beam: "*"
-    typescript: 4.4.1-rc
+    typescript: 4.4.2
     winston-transport: "*"
   languageName: unknown
   linkType: soft
@@ -6619,7 +6619,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"fast-glob@npm:^3.1.1, fast-glob@npm:^3.2.5":
+"fast-glob@npm:^3.1.1":
   version: 3.2.6
   resolution: "fast-glob@npm:3.2.6"
   dependencies:
@@ -6629,6 +6629,19 @@ __metadata:
     merge2: ^1.3.0
     micromatch: ^4.0.4
   checksum: 5cd4fb7b3d8c176cf11bca068f88a45b4e231c6f508e43cc9ad69c5551558420ee90df1a1b6c5a9e047b4ee8fa5f5ac7f7aaf27b7a54d8597971d4705e4390a2
+  languageName: node
+  linkType: hard
+
+"fast-glob@npm:^3.2.7":
+  version: 3.2.7
+  resolution: "fast-glob@npm:3.2.7"
+  dependencies:
+    "@nodelib/fs.stat": ^2.0.2
+    "@nodelib/fs.walk": ^1.2.3
+    glob-parent: ^5.1.2
+    merge2: ^1.3.0
+    micromatch: ^4.0.4
+  checksum: 2f4708ff112d2b451888129fdd9a0938db88b105b0ddfd043c064e3c4d3e20eed8d7c7615f7565fee660db34ddcf08a2db1bf0ab3c00b87608e4719694642d78
   languageName: node
   linkType: hard
 
@@ -12616,13 +12629,13 @@ fsevents@^2.1.2:
   languageName: node
   linkType: hard
 
-"ts-morph@npm:^11.0.3":
-  version: 11.0.3
-  resolution: "ts-morph@npm:11.0.3"
+"ts-morph@npm:^12.0.0":
+  version: 12.0.0
+  resolution: "ts-morph@npm:12.0.0"
   dependencies:
-    "@ts-morph/common": ~0.10.1
+    "@ts-morph/common": ~0.11.0
     code-block-writer: ^10.1.1
-  checksum: a59c17c317d8b26fd41d1933667e0deb058d04ad2c48b16afc261817f372d18c0fefe994788c243eeaa91bca782e4f1d6baaaf833c29cb7eaa55e616c9ae77cd
+  checksum: c033708c76448625380daa3b8c2eeea1306300fa4367804029635f0d911a3723e4315a6e0824e6dfb256df0b99aac0ea0478cb3f14ed6fae2339d43ec882a427
   languageName: node
   linkType: hard
 
@@ -12806,23 +12819,23 @@ fsevents@^2.1.2:
   languageName: node
   linkType: hard
 
-typescript@4.4.1-rc:
-  version: 4.4.1-rc
-  resolution: "typescript@npm:4.4.1-rc"
+typescript@4.4.2:
+  version: 4.4.2
+  resolution: "typescript@npm:4.4.2"
   bin:
     tsc: bin/tsc
     tsserver: bin/tsserver
-  checksum: 14a64cd01ccbd8d31cc4f22a756cd1ce54c8cba7e30a77e005ea623a187b7baa20b784acf60a3e71b5227961ff70bd275657f809703185a0c265220060bf3c53
+  checksum: 194e08e9d1971d667d6fd1a0554616b7022312a2319d70e81a64e502a265992061ee7817ed9a69b52bbabe7a9b85e7938cb8c11c433e40a516b277f8c4dacd51
   languageName: node
   linkType: hard
 
-"typescript@patch:typescript@4.4.1-rc#~builtin<compat/typescript>":
-  version: 4.4.1-rc
-  resolution: "typescript@patch:typescript@npm%3A4.4.1-rc#~builtin<compat/typescript>::version=4.4.1-rc&hash=d8b4e7"
+"typescript@patch:typescript@4.4.2#~builtin<compat/typescript>":
+  version: 4.4.2
+  resolution: "typescript@patch:typescript@npm%3A4.4.2#~builtin<compat/typescript>::version=4.4.2&hash=d8b4e7"
   bin:
     tsc: bin/tsc
     tsserver: bin/tsserver
-  checksum: 204addf74c590b142703075b40ea650d2afe080b9a2f218a29c2b2ddd92cb143560b4d4905d082ff38bfc64c50f2cb9fc72a5415ba6a3aed97cd6fdc830e255a
+  checksum: 11d6ab6e868117908c388401e2ac06d503c5c8709115ab80ee69a1a6352c1f98471d1e595636bfe6a2d6b20b03a44df6bb2d3d198cea97c0c328968cd18d2b70
   languageName: node
   linkType: hard
 
@@ -13538,7 +13551,7 @@ typescript@4.4.1-rc:
     semver: ^7.3.5
     serialport: ^9.2.0
     source-map-support: ^0.5.19
-    typescript: 4.4.1-rc
+    typescript: 4.4.2
     winston: ^3.3.3
     xstate: ^4.23.1
   languageName: unknown
