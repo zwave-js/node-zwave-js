@@ -2412,6 +2412,29 @@ ${handlers.length} left`,
 				if (!msg.command.moreUpdatesFollow) {
 					nodeSessions.supervision.delete(msg.command.sessionId);
 				}
+			} else if (
+				msg.command.encapsulatingCC instanceof SupervisionCCGet
+			) {
+				// check if someone is waiting for this command
+				for (const entry of this.awaitedCommands) {
+					if (entry.predicate(msg.command)) {
+						// resolve the promise - this will remove the entry from the list
+						entry.promise.resolve(msg.command);
+						return;
+					}
+				}
+
+				await node.handleCommand(msg.command);
+
+				const report = new SupervisionCCReport(this, {
+					sessionId: msg.command.encapsulatingCC.sessionId,
+					moreUpdatesFollow: false,
+					nodeId: msg.command.encapsulatingCC.nodeId,
+					status: SupervisionStatus.Success,
+					duration: new Duration(0, "seconds"),
+				});
+
+				await this.sendCommand(report);
 			} else {
 				// check if someone is waiting for this command
 				for (const entry of this.awaitedCommands) {
