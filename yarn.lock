@@ -5,10 +5,10 @@ __metadata:
   version: 4
   cacheKey: 8
 
-"@actions/core@npm:^1.4.0":
-  version: 1.4.0
-  resolution: "@actions/core@npm:1.4.0"
-  checksum: bdad9fedeb184b59bb0d3b81ea8e486367b2cda4185e037cc9068204ed2aece79cc0889cdc96eb9752507dbd702bbf49c2ec1ffded4c26e9c1c6825fe124dfc6
+"@actions/core@npm:^1.5.0":
+  version: 1.5.0
+  resolution: "@actions/core@npm:1.5.0"
+  checksum: ef1ef51c4bafd467d2f06a859f4271beae64ee98dbf9bd4e594da0ed3f205dae1a8202c0dfa350bf0a111698470086d6e58cabc68d05a5d661f142237d4729a2
   languageName: node
   linkType: hard
 
@@ -3993,7 +3993,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@zwave-js/repo@workspace:."
   dependencies:
-    "@actions/core": ^1.4.0
+    "@actions/core": ^1.5.0
     "@actions/exec": ^1.1.0
     "@actions/github": ^5.0.0
     "@alcalzone/jsonl-db": ^1.3.0
