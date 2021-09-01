@@ -787,6 +787,7 @@ export class Driver extends TypedEventEmitter<DriverEventCallbacks> {
 				} else {
 					message = `Failed to initialize the driver: ${getErrorMessage(
 						e,
+						true,
 					)}`;
 				}
 				this.driverLog.print(message, "error");

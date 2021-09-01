@@ -36,6 +36,9 @@ export async function createAndStartDriver(
 	driver.on("error", () => {
 		/* swallow error events during testing */
 	});
+	// We don't need to test the soft reset logic in CI
+	// Return a promise that never resolves, so we don't accidentally stumble into interview code
+	driver.softReset = () => new Promise(() => {});
 	await driver.start();
 	const portInstance = MockSerialPort.getInstance(PORT_ADDRESS)!;
 
