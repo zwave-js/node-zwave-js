@@ -693,6 +693,11 @@ export class Driver extends TypedEventEmitter<DriverEventCallbacks> {
 		this.serial
 			.on("data", this.serialport_onData.bind(this))
 			.on("error", (err) => {
+				if (this.isSoftResetting && !this.serial?.isOpen) {
+					// A disconnection while soft resetting is to be expected
+					return;
+				}
+
 				this.driverLog.print(
 					`Serial port errored: ${err.message}`,
 					"error",
@@ -712,20 +717,7 @@ export class Driver extends TypedEventEmitter<DriverEventCallbacks> {
 
 		// asynchronously open the serial port
 		setImmediate(async () => {
-			try {
-				await this.serial!.open();
-			} catch (e) {
-				const message = `Failed to open the serial port: ${getErrorMessage(
-					e,
-				)}`;
-				this.driverLog.print(message, "error");
-
-				spOpenPromise.reject(
-					new ZWaveError(message, ZWaveErrorCodes.Driver_Failed),
-				);
-				void this.destroy();
-				return;
-			}
+			if (!(await this.tryOpenSerialport(spOpenPromise))) return;
 			this.driverLog.print("serial port opened");
 			this._isOpen = true;
 			spOpenPromise.resolve();
@@ -807,10 +799,39 @@ export class Driver extends TypedEventEmitter<DriverEventCallbacks> {
 	private _nodesReady = new Set<number>();
 	private _nodesReadyEventEmitted: boolean = false;
 
+	private async tryOpenSerialport(
+		openPromise?: DeferredPromise<void>,
+	): Promise<boolean> {
+		try {
+			await this.serial!.open();
+			return true;
+		} catch (e) {
+			const message = `Failed to open the serial port: ${getErrorMessage(
+				e,
+			)}`;
+			this.driverLog.print(message, "error");
+
+			const error = new ZWaveError(
+				message,
+				ZWaveErrorCodes.Driver_Failed,
+			);
+			if (this._isOpen || !openPromise) {
+				this.serialport_onError(error);
+			} else {
+				openPromise?.reject(error);
+			}
+
+			void this.destroy();
+		}
+		return false;
+	}
+
 	/** Indicates whether all nodes are ready, i.e. the "all nodes ready" event has been emitted */
 	public get allNodesReady(): boolean {
 		return this._nodesReadyEventEmitted;
 	}
+
+	private isSoftResetting: boolean = false;
 
 	/**
 	 * Instruct the controller to soft-reset.
@@ -820,6 +841,7 @@ export class Driver extends TypedEventEmitter<DriverEventCallbacks> {
 		this.controllerLog.print("performing soft reset...");
 
 		try {
+			this.isSoftResetting = true;
 			await this.sendMessage(new SoftResetRequest(this), {
 				supportCheck: false,
 				pauseSendThread: true,
@@ -832,12 +854,20 @@ export class Driver extends TypedEventEmitter<DriverEventCallbacks> {
 				`  soft reset failed: ${getErrorMessage(e)}`,
 				"error",
 			);
-		} finally {
-			// Wait 1.5 seconds after reset to ensure that the module is ready for communication again
-			await wait(1500, true);
-			// And resume sending
-			this.unpauseSendThread();
 		}
+
+		// Wait 1.5 seconds after reset to ensure that the module is ready for communication again
+		await wait(1500);
+
+		this.isSoftResetting = false;
+
+		// If the controller disconnected the serial port during the soft reset, we need to re-open it
+		if (!this.serial!.isOpen) {
+			await this.tryOpenSerialport();
+		}
+
+		// And resume sending
+		this.unpauseSendThread();
 	}
 
 	/**
