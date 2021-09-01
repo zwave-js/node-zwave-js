@@ -98,6 +98,18 @@ Since it might be necessary to control a node **before** its supported CC versio
 -   **throws (!)** if the requested CC is not implemented in this library
 -   returns the version the node claims to support otherwise
 
+### `softReset`
+
+```ts
+async softReset(): Promise<void>
+```
+
+Instruct the controller to soft-reset (restart). The returned Promise will resolve after the controller has restarted and can be used again.
+
+> [!WARNING] USB modules will reconnect, meaning that they might get a new address. Make sure to configure your device address in a way that prevents it from changing, e.g. by using `/dev/serial/by-id/...` on Linux.
+
+> [!NOTE] This method is known to cause problems in Docker containers where a reconnection of the serial device will prevent it from being connected again. There are ways around this, but they require host configuration or changes to how the container is started. Therefore this method won't do anything inside Docker unless the `ZWAVEJS_ENABLE_SOFT_RESET` environment variable is set.
+
 ### `hardReset`
 
 ```ts

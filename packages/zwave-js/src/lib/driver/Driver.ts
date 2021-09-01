@@ -831,54 +831,6 @@ export class Driver extends TypedEventEmitter<DriverEventCallbacks> {
 		return this._nodesReadyEventEmitted;
 	}
 
-	private isSoftResetting: boolean = false;
-	private hasLoggedSoftResetWarning: boolean = false;
-
-	/**
-	 * Instruct the controller to soft-reset.
-	 * Warning: USB modules will reconnect, meaning that they might get a new address.
-	 */
-	public async softReset(): Promise<void> {
-		if (!isDocker() || !!process.env.ZWAVEJS_ENABLE_SOFT_RESET) {
-			this.controllerLog.print("performing soft reset...");
-
-			try {
-				this.isSoftResetting = true;
-				await this.sendMessage(new SoftResetRequest(this), {
-					supportCheck: false,
-					pauseSendThread: true,
-				});
-
-				// TODO: This will cause the controller to issue a FUNC_ID_SERIAL_API_STARTED command
-				// We should react to that instead of waiting a fixed 1.5 seconds
-			} catch (e) {
-				this.controllerLog.print(
-					`  soft reset failed: ${getErrorMessage(e)}`,
-					"error",
-				);
-			}
-
-			// Wait 1.5 seconds after reset to ensure that the module is ready for communication again
-			await wait(1500);
-
-			this.isSoftResetting = false;
-
-			// If the controller disconnected the serial port during the soft reset, we need to re-open it
-			if (!this.serial!.isOpen) {
-				await this.tryOpenSerialport();
-			}
-
-			// And resume sending
-			this.unpauseSendThread();
-		} else if (!this.hasLoggedSoftResetWarning) {
-			this.hasLoggedSoftResetWarning = true;
-			this.controllerLog.print(
-				"Soft reset of the controller from within Docker requires configuration of the container and/or host and the ZWAVEJS_ENABLE_SOFT_RESET environment variable must be set.",
-				"warn",
-			);
-		}
-	}
-
 	/**
 	 * Initializes the variables for controller and nodes,
 	 * adds event handlers and starts the interview process.
@@ -1560,6 +1512,54 @@ export class Driver extends TypedEventEmitter<DriverEventCallbacks> {
 			throw new ZWaveError(
 				"Cannot retrieve the version of a CC that is not implemented",
 				ZWaveErrorCodes.CC_NotSupported,
+			);
+		}
+	}
+
+	private isSoftResetting: boolean = false;
+	private hasLoggedSoftResetWarning: boolean = false;
+
+	/**
+	 * Instruct the controller to soft-reset.
+	 * Warning: USB modules will reconnect, meaning that they might get a new address.
+	 */
+	public async softReset(): Promise<void> {
+		if (!isDocker() || !!process.env.ZWAVEJS_ENABLE_SOFT_RESET) {
+			this.controllerLog.print("performing soft reset...");
+
+			try {
+				this.isSoftResetting = true;
+				await this.sendMessage(new SoftResetRequest(this), {
+					supportCheck: false,
+					pauseSendThread: true,
+				});
+
+				// TODO: This will cause the controller to issue a FUNC_ID_SERIAL_API_STARTED command
+				// We should react to that instead of waiting a fixed 1.5 seconds
+			} catch (e) {
+				this.controllerLog.print(
+					`  soft reset failed: ${getErrorMessage(e)}`,
+					"error",
+				);
+			}
+
+			// Wait 1.5 seconds after reset to ensure that the module is ready for communication again
+			await wait(1500);
+
+			this.isSoftResetting = false;
+
+			// If the controller disconnected the serial port during the soft reset, we need to re-open it
+			if (!this.serial!.isOpen) {
+				await this.tryOpenSerialport();
+			}
+
+			// And resume sending
+			this.unpauseSendThread();
+		} else if (!this.hasLoggedSoftResetWarning) {
+			this.hasLoggedSoftResetWarning = true;
+			this.controllerLog.print(
+				"Soft reset of the controller from within Docker requires configuration of the container and/or host and the ZWAVEJS_ENABLE_SOFT_RESET environment variable must be set.",
+				"warn",
 			);
 		}
 	}
