@@ -163,6 +163,24 @@ export class SupervisionCCReport extends SupervisionCC {
 	public readonly status: SupervisionStatus;
 	public readonly duration: Duration | undefined;
 
+	public serialize(): Buffer {
+		this.payload = Buffer.concat([
+			Buffer.from([
+				(this.moreUpdatesFollow ? 0b10_000000 : 0) |
+					(this.sessionId & 0b111111),
+				this.status,
+			]),
+		]);
+
+		if (this.duration) {
+			this.payload = Buffer.concat([
+				this.payload,
+				Buffer.from([this.duration.serializeReport()]),
+			]);
+		}
+		return super.serialize();
+	}
+
 	public toLogEntry(): MessageOrCCLogEntry {
 		const message: MessageRecord = {
 			"session id": this.sessionId,
@@ -210,16 +228,8 @@ export class SupervisionCCGet extends SupervisionCC {
 				encapCC: this,
 			});
 
-			const commandLength = this.payload[1];
-			let commandstr = "";
-			for (let step = 2; step < commandLength + 2; step++) {
-				commandstr = `${commandstr}-${this.payload[step]}`;
-			}
-
-			driver.controllerLog.logNode(
-				this.nodeId,
-				`Received SupervisionGet - requestStatusUpdates: '${this.requestStatusUpdates}', sessionId: '${this.sessionId}', commandLength: '${commandLength}', command: '${commandstr}'`,
-			);
+			// If this command requires security, so does the encapsulated one
+			this.encapsulated.secure = this.secure;
 		} else {
 			this.sessionId = getNextSessionId();
 			this.requestStatusUpdates = options.requestStatusUpdates;
