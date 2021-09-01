@@ -2415,10 +2415,6 @@ ${handlers.length} left`,
 			} else if (
 				msg.command.encapsulatingCC instanceof SupervisionCCGet
 			) {
-				this.controllerLog.logNode(
-					msg.command.nodeId,
-					`handling supervisionccget encapsulated command`,
-				);
 				// check if someone is waiting for this command
 				for (const entry of this.awaitedCommands) {
 					if (entry.predicate(msg.command)) {
@@ -2430,11 +2426,6 @@ ${handlers.length} left`,
 
 				await node.handleCommand(msg.command);
 
-				this.controllerLog.logNode(
-					msg.command.nodeId,
-					`prepping supervisionccreport`,
-				);
-
 				const report = new SupervisionCCReport(this, {
 					sessionId: msg.command.encapsulatingCC.sessionId,
 					moreUpdatesFollow: false,
@@ -2444,19 +2435,11 @@ ${handlers.length} left`,
 				});
 
 				// The report should be sent back with security if the received command was secure
-				report.secure = true;
+				report.secure = msg.command.secure;
 
-				this.controllerLog.logNode(
-					msg.command.nodeId,
-					`sending supervisionccreport`,
-				);
-
-				await this.sendCommand(report);
-
-				this.controllerLog.logNode(
-					msg.command.nodeId,
-					`supervisionccreport sent`,
-				);
+				await this.sendCommand(report, {
+					priority: MessagePriority.Handshake,
+				});
 			} else {
 				// check if someone is waiting for this command
 				for (const entry of this.awaitedCommands) {
