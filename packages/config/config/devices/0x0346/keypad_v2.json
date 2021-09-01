@@ -278,6 +278,8 @@
 		}
 	},
 	"compat": {
+		// The device doesn't respect some spec requirements, 
+		// for example that ASCII-encoded codes must be padded to 16 bytes
 		"disableStrictEntryControlDataValidation": true
 	},
 	"metadata": {
