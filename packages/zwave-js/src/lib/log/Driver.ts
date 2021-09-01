@@ -54,7 +54,7 @@ export class DriverLogger extends ZWaveLoggerBase {
 			level: actualLevel,
 			message,
 			direction: getDirectionPrefix("none"),
-			context: CONTEXT,
+			context: { ...CONTEXT },
 		});
 	}
 
