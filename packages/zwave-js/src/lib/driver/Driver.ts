@@ -116,6 +116,7 @@ import {
 	isSendDataSinglecast,
 	SendDataMessage,
 } from "../controller/SendDataShared";
+import { SoftResetRequest } from "../controller/SoftResetRequest";
 import { ControllerLogger } from "../log/Controller";
 import { DriverLogger } from "../log/Driver";
 import {
@@ -333,6 +334,11 @@ export interface SendMessageOptions {
 	 * @internal
 	 */
 	tag?: any;
+	/**
+	 * Whether the send thread MUST be paused after this message was handled
+	 * @internal
+	 */
+	pauseSendThread?: boolean;
 }
 
 export interface SendCommandOptions extends SendMessageOptions {
@@ -724,9 +730,9 @@ export class Driver extends TypedEventEmitter<DriverEventCallbacks> {
 			this._isOpen = true;
 			spOpenPromise.resolve();
 
+			// Perform initialization sequence
 			await this.writeHeader(MessageHeaders.NAK);
-			// set unref, so stopping the process doesn't need to wait for the 1500ms
-			await wait(1500, true);
+			await this.softReset();
 
 			// Try to create the cache directory. This can fail, in which case we should expose a good error message
 			try {
@@ -803,6 +809,34 @@ export class Driver extends TypedEventEmitter<DriverEventCallbacks> {
 	/** Indicates whether all nodes are ready, i.e. the "all nodes ready" event has been emitted */
 	public get allNodesReady(): boolean {
 		return this._nodesReadyEventEmitted;
+	}
+
+	/**
+	 * Instruct the controller to soft-reset.
+	 * Warning: USB modules will reconnect, meaning that they might get a new address.
+	 */
+	public async softReset(): Promise<void> {
+		this.controllerLog.print("performing soft reset...");
+
+		try {
+			await this.sendMessage(new SoftResetRequest(this), {
+				supportCheck: false,
+				pauseSendThread: true,
+			});
+
+			// TODO: This will cause the controller to issue a FUNC_ID_SERIAL_API_STARTED command
+			// We should react to that instead of waiting a fixed 1.5 seconds
+		} catch (e) {
+			this.controllerLog.print(
+				`  soft reset failed: ${getErrorMessage(e)}`,
+				"error",
+			);
+		} finally {
+			// Wait 1.5 seconds after reset to ensure that the module is ready for communication again
+			await wait(1500, true);
+			// And resume sending
+			this.unpauseSendThread();
+		}
 	}
 
 	/**
@@ -2678,6 +2712,9 @@ ${handlers.length} left`,
 			transaction.changeNodeStatusOnTimeout =
 				options.changeNodeStatusOnMissingACK;
 		}
+		if (options.pauseSendThread === true) {
+			transaction.pauseSendThread = true;
+		}
 		transaction.tag = options.tag;
 
 		// start sending now (maybe)
@@ -3042,6 +3079,22 @@ ${handlers.length} left`,
 			errorMsg,
 			errorCode,
 		);
+	}
+
+	/**
+	 * @internal
+	 * Pauses the send thread, avoiding commands to be sent to the controller
+	 */
+	public pauseSendThread(): void {
+		this.sendThread.send({ type: "pause" });
+	}
+
+	/**
+	 * @internal
+	 * Unpauses the send thread, allowing commands to be sent to the controller again
+	 */
+	public unpauseSendThread(): void {
+		this.sendThread.send({ type: "unpause" });
 	}
 
 	/** Re-sorts the send queue */

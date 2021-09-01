@@ -792,6 +792,16 @@ export class ZWaveController extends TypedEventEmitter<ControllerEventCallbacks>
 	}
 
 	/**
+	 * Instruct the controller to soft-reset.
+	 * Warning: USB modules will reconnect, meaning that they might get a new address.
+	 */
+	public softReset(): Promise<void> {
+		// For consistency, this should be a controller method, but the driver needs access before
+		// the controller is initialized
+		return this.driver.softReset();
+	}
+
+	/**
 	 * Performs a hard reset on the controller. This wipes out all configuration!
 	 * Warning: The driver needs to re-interview the controller, so don't call this directly
 	 * @internal
