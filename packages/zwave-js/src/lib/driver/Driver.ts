@@ -57,6 +57,7 @@ import {
 	assertValidCCs,
 	CommandClass,
 	getImplementedVersion,
+	InvalidCC,
 } from "../commandclass/CommandClass";
 import { DeviceResetLocallyCCNotification } from "../commandclass/DeviceResetLocallyCC";
 import {
@@ -2422,6 +2423,25 @@ ${handlers.length} left`,
 						entry.promise.resolve(msg.command);
 						return;
 					}
+				}
+
+				if (msg.command instanceof InvalidCC) {
+					const report = new SupervisionCCReport(this, {
+						sessionId: msg.command.encapsulatingCC.sessionId,
+						moreUpdatesFollow: false,
+						nodeId: msg.command.encapsulatingCC.nodeId,
+						status: SupervisionStatus.Fail,
+						duration: new Duration(0, "seconds"),
+					});
+
+					// The report should be sent back with security if the received command was secure
+					report.secure = msg.command.secure;
+
+					await this.sendCommand(report, {
+						priority: MessagePriority.Handshake,
+					});
+
+					return;
 				}
 
 				await node.handleCommand(msg.command);

@@ -375,12 +375,18 @@ export class CommandClass {
 					reason = e.context;
 				}
 
-				return new InvalidCC(driver, {
+				const invalidcc = new InvalidCC(driver, {
 					nodeId,
 					ccId,
 					ccName,
 					reason,
 				});
+
+				if (options.fromEncapsulation) {
+					invalidcc.encapsulatingCC = options.encapCC as any;
+				}
+
+				return invalidcc;
 			}
 			throw e;
 		}
