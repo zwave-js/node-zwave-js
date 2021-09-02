@@ -5,7 +5,7 @@
 	Add placeholder for next release with `wip` snippet
   ## __WORK IN PROGRESS__
 -->
-## __WORK IN PROGRESS__
+## 8.2.2 (2021-09-02)
 ### Bugfixes
 * Handle missing S2 keys more gracefully
 
