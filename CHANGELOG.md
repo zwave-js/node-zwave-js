@@ -5,6 +5,21 @@
 	Add placeholder for next release with `wip` snippet
   ## __WORK IN PROGRESS__
 -->
+## __WORK IN PROGRESS__
+### Bugfixes
+* Handle missing S2 keys more gracefully
+
+### Config file changes
+* Disable strict entry control validation for Ring Keypad v2
+* Add HeatIt Z Push Button 2
+* Add support for Zipato PH-PSE02
+* Add new Zooz devices ZSE41/ZSE42; fix ZEN15 parameter 30
+* Clean up config file for FGFS-101
+* Add support for Namron Dimmer 400W
+
+### Changes under the hood
+* Upgrade to TypeScript 4.4
+
 ## 8.2.1 (2021-08-25)
 ### Bugfixes
 * Fixed an invalid definition in the sensor types configuration file
