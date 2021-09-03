@@ -1,13 +1,12 @@
 {
-	"manufacturer": "Custos",
+	"manufacturer": "Zooz",
 	"manufacturerId": "0x0270",
-	"label": "BVS-ZWU",
-	"description": "Water Ball Valve Servo",
+	"label": "ZAC36",
+	"description": "Titan Water Valve Actuator",
 	"devices": [
 		{
 			"productType": "0x0101",
-			"productId": "0x000a",
-			"zwaveAllianceId": [3885, 3916]
+			"productId": "0x0036"
 		}
 	],
 	"firmwareVersion": {
