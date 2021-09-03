@@ -1,0 +1,337 @@
+{
+	"manufacturer": "Ubitech",
+	"manufacturerId": "0x0270",
+	"label": "BVS-ZWU",
+	"description": "Custos Ball Valve Servo",
+	"devices": [
+		{
+			"productType": "0x0101",
+			"productId": "0x000a",
+			"zwaveAllianceId": 3885
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"associations": {
+		"1": {
+			"label": "Lifeline",
+			"maxNodes": 5,
+			"isLifeline": true
+		},
+		"2": {
+			"label": "Water Valve",
+			"maxNodes": 5
+		},
+		"3": {
+			"label": "Leak Sensor",
+			"maxNodes": 5
+		},
+		"4": {
+			"label": "Overheat Alarm",
+			"maxNodes": 5
+		},
+		"5": {
+			"label": "Freeze Alarm",
+			"maxNodes": 5
+		}
+	},
+	"paramInformation": {
+		"17": {
+			"label": "Inverse Water Valve Report",
+			"description": "Inverses switch binary report when water valve = 0x00 “valve doesn’t let the water run through in notification and real physical status.”",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 1,
+			"unsigned": true,
+			"options": [
+				{
+					"label": "Disable: 0x00 = does not let water run through, 0xff = let water run through. based on configuration cc setting 0x12 & 0x13",
+					"value": 0
+				}
+			]
+		},
+		"18": {
+			"label": "Association Group 2 Set Value",
+			"description": "Configure association group 2 Basic Set value when binary switch report = 0xff *(related to configuration setting 0x11)",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 2,
+			"defaultValue": 1,
+			"unsigned": true,
+			"options": [
+				{
+					"label": "Disable Basic Set (send nothing)",
+					"value": 0
+				}
+			]
+		},
+		"19": {
+			"label": "Association Group 2 Set Value",
+			"description": "Configure association group 2 Basic Set value when binary switch report = 0x00 *(related to configuration setting 0x11)",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 2,
+			"defaultValue": 2,
+			"unsigned": true,
+			"options": [
+				{
+					"label": "Disable Basic Set (send nothing)",
+					"value": 0
+				}
+			]
+		},
+		"33": {
+			"label": "Temperature Report Unit",
+			"description": "Configure temperature unit report. the default unit is depended on regional frequency setting. (by default, us=°f and eu=°c)",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 2,
+			"defaultValue": 2,
+			"unsigned": true,
+			"options": [
+				{
+					"label": "Disable auto temperature report",
+					"value": 0
+				}
+			]
+		},
+		"34": {
+			"label": "Temperature Threshold Change",
+			"description": "Configure temperature threshold changed and send auto report",
+			"valueSize": 2,
+			"minValue": 0,
+			"maxValue": 511,
+			"defaultValue": 260,
+			"unsigned": true
+		},
+		"35": {
+			"label": "Temperature Report Offset",
+			"description": "Configure temperature offset degree; higher byte 0x = positive degree and 1x= negative degree",
+			"valueSize": 2,
+			"minValue": 0,
+			"maxValue": 4607,
+			"defaultValue": 256,
+			"unsigned": true
+		},
+		"36": {
+			"label": "Overheat Trigger Value",
+			"description": "Configure overheat report trigger value. “higher byte 0x00 represents celsius °c unit, 0x01 represents fahrenheit °f unit",
+			"valueSize": 2,
+			"unit": "°C",
+			"minValue": 0,
+			"maxValue": 511,
+			"defaultValue": 360,
+			"unsigned": true
+		},
+		"37": {
+			"label": "Overheat Recover Value",
+			"description": "Configure overheat recover report value",
+			"valueSize": 2,
+			"minValue": 0,
+			"maxValue": 511,
+			"defaultValue": 342,
+			"unsigned": true
+		},
+		"38": {
+			"label": "Association Group 4 Overheat Trigger",
+			"description": "Configure overheat trigger value in association group 4",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 2,
+			"defaultValue": 0,
+			"unsigned": true,
+			"options": [
+				{
+					"label": "Disable Basic Set (send nothing)",
+					"value": 0
+				}
+			]
+		},
+		"39": {
+			"label": "Association Group 4 Overheat Cancel",
+			"description": "Configure overheat cancellation set value",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 2,
+			"defaultValue": 0,
+			"unsigned": true,
+			"options": [
+				{
+					"label": "Disable Basic Set (send nothing)",
+					"value": 0
+				}
+			]
+		},
+		"40": {
+			"label": "Freeze Trigger Value",
+			"description": "Configure freeze trigger report value",
+			"valueSize": 2,
+			"minValue": 0,
+			"maxValue": 511,
+			"defaultValue": 288,
+			"unsigned": true
+		},
+		"41": {
+			"label": "Freeze Recover Value",
+			"description": "Configure freeze recover report value",
+			"valueSize": 2,
+			"minValue": 0,
+			"maxValue": 511,
+			"defaultValue": 292,
+			"unsigned": true
+		},
+		"42": {
+			"label": "Freeze Detection Valve Control",
+			"description": "Enable / disable valve control during freeze when water leak is detected “detected by built-in temperature sensor.  refer to configuration cc parameter 0x28 (41) & 0x29 (42)",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 1,
+			"unsigned": true,
+			"options": [
+				{
+					"label": "Ignore / allowed to control water valve during freeze detection",
+					"value": 0
+				}
+			]
+		},
+		"43": {
+			"label": "Association Group 5 Freeze Trigger",
+			"description": "Configure association group 5 freeze detection trigger Basic Set value",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 2,
+			"defaultValue": 0,
+			"unsigned": true,
+			"options": [
+				{
+					"label": "Disable Basic Set (send nothing)",
+					"value": 0
+				}
+			]
+		},
+		"44": {
+			"label": "Association Group 5 Freeze Cancel",
+			"description": "Configure association group 5 freeze detection cancellation Basic Set value",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 2,
+			"defaultValue": 0,
+			"unsigned": true,
+			"options": [
+				{
+					"label": "Disable Basic Set (send nothing)",
+					"value": 0
+				}
+			]
+		},
+		"49": {
+			"label": "Association Group 3 Water Leak Trigger",
+			"description": "Configure association group 3 water leak trigger Basic Set value",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 2,
+			"defaultValue": 1,
+			"unsigned": true,
+			"options": [
+				{
+					"label": "Disable Basic Set (send nothing)",
+					"value": 0
+				}
+			]
+		},
+		"50": {
+			"label": "Association Group 3 Water Leak Cancel",
+			"description": "Configure association group water leak cancellation Basic Set value",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 2,
+			"defaultValue": 0,
+			"unsigned": true,
+			"options": [
+				{
+					"label": "Disable Basic Set (send nothing)",
+					"value": 0
+				}
+			]
+		},
+		"51": {
+			"label": "Water Leak Detection Valve Control",
+			"description": "Disable / enable valve control when water leak detected",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 1,
+			"unsigned": true,
+			"options": [
+				{
+					"label": "Disable to control water valve when water leak is detected",
+					"value": 0
+				}
+			]
+		},
+		"65": {
+			"label": "Buzzer",
+			"description": "Enable / disable built-in buzzer sound",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 1,
+			"unsigned": true,
+			"options": [
+				{
+					"label": "Disable buzzer",
+					"value": 0
+				}
+			]
+		},
+		"66": {
+			"label": "Led Brightness Level",
+			"description": "Set brightness level from 0% ~ 99%",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 99,
+			"defaultValue": 80,
+			"unsigned": true
+		},
+		"67": {
+			"label": "Touch Keylock Protection",
+			"description": "Disable / enable touch keylock protection",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 0,
+			"unsigned": true,
+			"options": [
+				{
+					"label": "Disable keylock protection",
+					"value": 0
+				}
+			]
+		},
+		"81": {
+			"label": "Notification Report",
+			"description": "Configure notification report in association group 1 lifeline “set bit to 0 = disable, set bit to 1 = enable” default value 0x0d (13) only available values as below xxxx xxx0 = disable to report valve open / close status xxxx xxx1 = enable to report valve open / close status (default) xxxx xx0x = disable overheat detection (default) xxxx xx1x = enable overheat detection  xxxx x0xx = disable freeze (underheat) detection xxxx x1xx = enable freeze (underheat) detection (default) xxxx 0xxx = disable water leak detection xxxx 1xxx = enable water leak detection (default)",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 15,
+			"defaultValue": 13,
+			"unsigned": true,
+			"options": [
+				{
+					"label": "Water valve open/close report - 0=disable / *1=enable",
+					"value": 0
+				}
+			]
+		}
+	},
+	"metadata": {
+		"inclusion": "Classic Inclusion:\nSet your Z-Wave Gateway into Inclusion mode / Add device.\ni. Start: Short press Touch Sense Button 3 times.\nii. Processing: Yellow LED and short beep sound keeping continue. For security inclusion support, you may need to entering first 5 digit\nthat show on QR Code label, please refer to the instructions of central controller.\niii. Success: Green LED on 1 second with 2 short beep sounds.\niv. The LED indication changes to Green LED slow blinking from Yellow LED blinking.",
+		"exclusion": "Remove Custos BVS from Z-Wave Network:\nSet your Z-Wave Gateway into Exclusion mode / Remove device.\ni. Start: Short press Touch Sense Button 3 times.\nii. Processing: Yellow LED and short beep sound keeping continue.\niii. Success: Green LED on 1 second with 2 short beep sounds.\niv. The LED indication Changes to Yellow LED blinking",
+		"reset": "Factory Default Reset:\nTo remove Custos BVS without involve gateway in Exclusion / Remove device operation and BVS will reset all setting to Factory Default\nSetting.\ni. Start: Long hold Touch Sense Button for 10 seconds then short click 5 times.\nii. Processing: Yellow LED ON 1 second then wait 2-5 seconds.\niii. Success: Green LED on 2 second with long beep sounds for 2 seconds.\n*Factory Default Reset will:\na. Remote the BVS from Z-Wave Network;\nb. Delete the association setting;\nc. Restore the configuration settings to the default",
+		"manual": "https://products.z-wavealliance.org/ProductManual/File?folder=&filename=product_documents/3885/BVS_ZWU_v1.0.9.pdf"
+	}
+}
