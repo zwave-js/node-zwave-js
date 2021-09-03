@@ -2416,22 +2416,12 @@ ${handlers.length} left`,
 			} else if (
 				msg.command.encapsulatingCC instanceof SupervisionCCGet
 			) {
-				// check if someone is waiting for this command
-				for (const entry of this.awaitedCommands) {
-					if (entry.predicate(msg.command)) {
-						// resolve the promise - this will remove the entry from the list
-						entry.promise.resolve(msg.command);
-						return;
-					}
-				}
-
 				if (msg.command instanceof InvalidCC) {
 					const report = new SupervisionCCReport(this, {
 						sessionId: msg.command.encapsulatingCC.sessionId,
 						moreUpdatesFollow: false,
 						nodeId: msg.command.encapsulatingCC.nodeId,
-						status: SupervisionStatus.Fail,
-						duration: new Duration(0, "seconds"),
+						status: SupervisionStatus.NoSupport,
 					});
 
 					// The report should be sent back with security if the received command was secure
@@ -2451,7 +2441,6 @@ ${handlers.length} left`,
 					moreUpdatesFollow: false,
 					nodeId: msg.command.encapsulatingCC.nodeId,
 					status: SupervisionStatus.Success,
-					duration: new Duration(0, "seconds"),
 				});
 
 				// The report should be sent back with security if the received command was secure
