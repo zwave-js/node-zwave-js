@@ -74,7 +74,7 @@
 			]
 		},
 		"150": {
-			"label": "LED Frame – First Channel Color",
+			"label": "LED Frame: First Channel Color",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 8,
@@ -82,7 +82,7 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "LED disabled",
+					"label": "Disable",
 					"value": 0
 				},
 				{
@@ -114,17 +114,17 @@
 					"value": 7
 				},
 				{
-					"label": "Blinking red-white-blue",
+					"label": "Blinking red, white, blue",
 					"value": 8
 				}
 			]
 		},
 		"151": {
 			"$import": "#paramInformation/150",
-			"label": "LED Frame – Second Channel Color"
+			"label": "LED Frame: Second Channel Color"
 		},
 		"152": {
-			"label": "First Channel - Double Click Value",
+			"label": "First Channel: Double Click Value",
 			"description": "Defines value of Basic Set or Multilevel Set frame sent to associated devices",
 			"valueSize": 2,
 			"minValue": 0,
@@ -139,7 +139,7 @@
 		},
 		"153": {
 			"$import": "#paramInformation/152",
-			"label": "Second Chanel - Double Click Value"
+			"label": "Second Chanel: Double Click Value"
 		}
 	}
 }
