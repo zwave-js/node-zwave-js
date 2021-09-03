@@ -476,8 +476,41 @@
 				}
 			]
 		},
+		"61": {
+			"label": "Auto Test Mode",
+			"description": "Causes the valve to periodically make a 1/8 turn to ensure it is operational",
+			"valueSize": 1,
+			"minValue": 1,
+			"maxValue": 3,
+			"defaultValue": 3,
+			"unsigned": true,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Enable when included/excluded",
+					"value": 3
+				},
+				{
+					"label": "Enable when included",
+					"value": 2
+				},
+				{
+					"label": "Enable when excluded",
+					"value": 1
+				}
+			]
+		},
+		"62": {
+			"label": "Auto Test Mode: Frequency",
+			"valueSize": 1,
+			"unit": "days",
+			"minValue": 1,
+			"maxValue": 30,
+			"defaultValue": 14,
+			"unsigned": true
+		},
 		"65": {
-			"label": "Buzzer",
+			"label": "Sound Alarms and Notifications",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 1,
