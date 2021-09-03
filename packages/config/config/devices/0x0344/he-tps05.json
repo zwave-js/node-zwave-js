@@ -87,7 +87,7 @@
 			"defaultValue": 0
 		},
 		"6": {
-			"label": "Touch Buttons Sensitivity",
+			"label": "Touch Button Sensitivity",
 			"description": "1 = low sensitivity; 10 = high sensitivity",
 			"valueSize": 1,
 			"minValue": 1,
@@ -185,7 +185,7 @@
 			]
 		},
 		"12": {
-			"label": "Relay 1 Load Power",
+			"label": "Relay 1: Load Power",
 			"unit": "W",
 			"valueSize": 2,
 			"minValue": 0,
@@ -193,7 +193,7 @@
 			"defaultValue": 0
 		},
 		"13": {
-			"label": "Relay 2 Load Power",
+			"label": "Relay 2: Load Power",
 			"unit": "W",
 			"valueSize": 2,
 			"minValue": 0,
@@ -201,7 +201,7 @@
 			"defaultValue": 0
 		},
 		"14": {
-			"label": "Relay 3 Load Power",
+			"label": "Relay 3: Load Power",
 			"unit": "W",
 			"valueSize": 2,
 			"minValue": 0,
@@ -209,7 +209,7 @@
 			"defaultValue": 0
 		},
 		"15": {
-			"label": "Relay 4 Load Power",
+			"label": "Relay 4: Load Power",
 			"unit": "W",
 			"valueSize": 2,
 			"minValue": 0,
@@ -217,7 +217,7 @@
 			"defaultValue": 0
 		},
 		"16": {
-			"label": "Relay 5 Load Power",
+			"label": "Relay 5: Load Power",
 			"unit": "W",
 			"valueSize": 2,
 			"minValue": 0,
@@ -251,7 +251,7 @@
 			]
 		},
 		"21": {
-			"label": "Week Day Override",
+			"label": "Weekday Override",
 			"valueSize": 1,
 			"minValue": 1,
 			"maxValue": 7,
@@ -297,7 +297,7 @@
 			"defaultValue": 0
 		},
 		"30": {
-			"label": "Buttons Backlight Color",
+			"label": "Buttons: Backlight Color",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 1,
@@ -457,11 +457,11 @@
 					"value": 0
 				},
 				{
-					"label": "Relay inverts state according to the relay state",
+					"label": "Invert state according to the relay state",
 					"value": 1
 				},
 				{
-					"label": "Relay inverts state according to the button backlight state",
+					"label": "Invert state according to the button backlight state",
 					"value": 2
 				},
 				{
@@ -495,11 +495,11 @@
 					"value": 0
 				},
 				{
-					"label": "Relay inverts state according to the relay state",
+					"label": "Invert state according to the relay state",
 					"value": 1
 				},
 				{
-					"label": "Relay inverts state according to the button backlight state",
+					"label": "Invert state according to the button backlight state",
 					"value": 2
 				},
 				{
@@ -533,11 +533,11 @@
 					"value": 0
 				},
 				{
-					"label": "Relay inverts state according to the relay state",
+					"label": "Invert state according to the relay state",
 					"value": 1
 				},
 				{
-					"label": "Relay inverts state according to the button backlight state",
+					"label": "Invert state according to the button backlight state",
 					"value": 2
 				},
 				{
@@ -571,11 +571,11 @@
 					"value": 0
 				},
 				{
-					"label": "Relay inverts state according to the relay state",
+					"label": "Invert state according to the relay state",
 					"value": 1
 				},
 				{
-					"label": "Relay inverts state according to the button backlight state",
+					"label": "Invert state according to the button backlight state",
 					"value": 2
 				},
 				{
@@ -609,11 +609,11 @@
 					"value": 0
 				},
 				{
-					"label": "Relay inverts state according to the relay state",
+					"label": "Invert state according to the relay state",
 					"value": 1
 				},
 				{
-					"label": "Relay inverts state according to the button backlight state",
+					"label": "Invert state according to the button backlight state",
 					"value": 2
 				},
 				{
@@ -647,23 +647,23 @@
 					"value": 0
 				},
 				{
-					"label": "Touch button N1 (top left)",
+					"label": "Top left button",
 					"value": 1
 				},
 				{
-					"label": "Touch button N2 (Top Right)",
+					"label": "Top right button",
 					"value": 2
 				},
 				{
-					"label": "Touch button N3 (Bottom Left)",
+					"label": "Bottom left button",
 					"value": 3
 				},
 				{
-					"label": "Touch button N4 (Bottom Right)",
+					"label": "Bottom right button",
 					"value": 4
 				},
 				{
-					"label": "Touch button N5 (Center)",
+					"label": "Center button",
 					"value": 5
 				}
 			]
@@ -681,23 +681,23 @@
 					"value": 0
 				},
 				{
-					"label": "Touch button N1 (top left)",
+					"label": "Top left button",
 					"value": 1
 				},
 				{
-					"label": "Touch button N2 (Top Right)",
+					"label": "Top right button",
 					"value": 2
 				},
 				{
-					"label": "Touch button N3 (Bottom Left)",
+					"label": "Bottom left button",
 					"value": 3
 				},
 				{
-					"label": "Touch button N4 (Bottom Right)",
+					"label": "Bottom right button",
 					"value": 4
 				},
 				{
-					"label": "Touch button N5 (Center)",
+					"label": "Center button",
 					"value": 5
 				}
 			]
@@ -715,23 +715,23 @@
 					"value": 0
 				},
 				{
-					"label": "Touch button N1 (top left)",
+					"label": "Top left button",
 					"value": 1
 				},
 				{
-					"label": "Touch button N2 (Top Right)",
+					"label": "Top right button",
 					"value": 2
 				},
 				{
-					"label": "Touch button N3 (Bottom Left)",
+					"label": "Bottom left button",
 					"value": 3
 				},
 				{
-					"label": "Touch button N4 (Bottom Right)",
+					"label": "Bottom right button",
 					"value": 4
 				},
 				{
-					"label": "Touch button N5 (Center)",
+					"label": "Center button",
 					"value": 5
 				}
 			]
@@ -749,23 +749,23 @@
 					"value": 0
 				},
 				{
-					"label": "Touch button N1 (top left)",
+					"label": "Top left button",
 					"value": 1
 				},
 				{
-					"label": "Touch button N2 (Top Right)",
+					"label": "Top right button",
 					"value": 2
 				},
 				{
-					"label": "Touch button N3 (Bottom Left)",
+					"label": "Bottom left button",
 					"value": 3
 				},
 				{
-					"label": "Touch button N4 (Bottom Right)",
+					"label": "Bottom right button",
 					"value": 4
 				},
 				{
-					"label": "Touch button N5 (Center)",
+					"label": "Center button",
 					"value": 5
 				}
 			]
@@ -783,23 +783,23 @@
 					"value": 0
 				},
 				{
-					"label": "Touch button N1 (top left)",
+					"label": "Top left button",
 					"value": 1
 				},
 				{
-					"label": "Touch button N2 (Top Right)",
+					"label": "Top right button",
 					"value": 2
 				},
 				{
-					"label": "Touch button N3 (Bottom Left)",
+					"label": "Bottom left button",
 					"value": 3
 				},
 				{
-					"label": "Touch button N4 (Bottom Right)",
+					"label": "Bottom right button",
 					"value": 4
 				},
 				{
-					"label": "Touch button N5 (Center)",
+					"label": "Center button",
 					"value": 5
 				}
 			]
@@ -880,7 +880,7 @@
 			]
 		},
 		"101": {
-			"label": "Relay Inverse Mode, Inching - Group 1",
+			"label": "Relay Inverse Mode, Inching: Group 1",
 			"description": "Combine the relay numbers to a two-digit number. Example: 24 = Relay 2 & 4",
 			"valueSize": 1,
 			"minValue": 0,
@@ -894,7 +894,7 @@
 			]
 		},
 		"102": {
-			"label": "Relay Inverse Mode, Inching - Group 2",
+			"label": "Relay Inverse Mode, Inching: Group 2",
 			"description": "Combine the relay numbers to a two-digit number. Example: 24 = Relay 2 & 4",
 			"valueSize": 1,
 			"minValue": 0,
