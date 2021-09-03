@@ -128,7 +128,6 @@ type SupervisionCCReportOptions = CCCommandOptions & {
 					| SupervisionStatus.NoSupport
 					| SupervisionStatus.Fail
 					| SupervisionStatus.Success;
-				duration: Duration;
 		  }
 	);
 
@@ -154,7 +153,11 @@ export class SupervisionCCReport extends SupervisionCC {
 			this.moreUpdatesFollow = options.moreUpdatesFollow;
 			this.sessionId = options.sessionId;
 			this.status = options.status;
-			this.duration = options.duration;
+			if (options.status === SupervisionStatus.Working) {
+				this.duration = options.duration;
+			} else {
+				this.duration = new Duration(0, "seconds");
+			}
 		}
 	}
 
