@@ -230,9 +230,6 @@ export class SupervisionCCGet extends SupervisionCC {
 				fromEncapsulation: true,
 				encapCC: this,
 			});
-
-			// If this command requires security, so does the encapsulated one
-			this.encapsulated.secure = this.secure;
 		} else {
 			this.sessionId = getNextSessionId();
 			this.requestStatusUpdates = options.requestStatusUpdates;
