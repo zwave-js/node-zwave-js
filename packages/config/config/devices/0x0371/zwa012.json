@@ -182,7 +182,7 @@
 		},
 		"21": {
 			"$import": "~/0x0086/templates/aeotec_template.json#tilt_sensor_sensitivity"
-		},.
+		},
 		"255": {
 			"$import": "~/0x0086/templates/aeotec_template.json#factory_reset_exclude"
 		}
