@@ -2413,14 +2413,12 @@ ${handlers.length} left`,
 				if (!msg.command.moreUpdatesFollow) {
 					nodeSessions.supervision.delete(msg.command.sessionId);
 				}
-			} else if (
-				msg.command.encapsulatingCC instanceof SupervisionCCGet
-			) {
+			} else if (msg.supervisionEncapsulation) {
 				if (msg.command instanceof InvalidCC) {
 					const report = new SupervisionCCReport(this, {
-						sessionId: msg.command.encapsulatingCC.sessionId,
+						sessionId: msg.supervisionEncapsulation.sessionId,
 						moreUpdatesFollow: false,
-						nodeId: msg.command.encapsulatingCC.nodeId,
+						nodeId: msg.supervisionEncapsulation.nodeId,
 						status: SupervisionStatus.NoSupport,
 					});
 
@@ -2437,9 +2435,9 @@ ${handlers.length} left`,
 				await node.handleCommand(msg.command);
 
 				const report = new SupervisionCCReport(this, {
-					sessionId: msg.command.encapsulatingCC.sessionId,
+					sessionId: msg.supervisionEncapsulation.sessionId,
 					moreUpdatesFollow: false,
-					nodeId: msg.command.encapsulatingCC.nodeId,
+					nodeId: msg.supervisionEncapsulation.nodeId,
 					status: SupervisionStatus.Success,
 				});
 
@@ -2601,6 +2599,12 @@ ${handlers.length} left`,
 				);
 				return;
 			}
+
+			if (unwrapped instanceof SupervisionCCGet) {
+				msg.supervisionEncapsulation = unwrapped;
+			}
+
+			msg.encapsulatingCC.push(msg.command);
 			msg.command = unwrapped;
 		}
 	}
