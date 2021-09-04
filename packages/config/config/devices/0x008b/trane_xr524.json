@@ -23,11 +23,11 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "Gas/Electric",
+					"label": "HeatPump",
 					"value": 0
 				},
 				{
-					"label": "HeatPump",
+					"label": "AC",
 					"value": 1
 				}
 			]
@@ -164,7 +164,7 @@
 			"label": "Cooling Delta Stage 1 ON",
 			"valueSize": 1,
 			"minValue": 1,
-			"maxValue": 8,
+			"maxValue": 18,
 			"defaultValue": 1
 		},
 		"19": {
