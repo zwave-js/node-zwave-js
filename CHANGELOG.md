@@ -5,7 +5,7 @@
 	Add placeholder for next release with `wip` snippet
   ## __WORK IN PROGRESS__
 -->
-## __WORK IN PROGRESS__
+## 8.2.3 (2021-09-06)
 ### Bugfixes
 * Interpret wait time after firmware update as seconds, not milliseconds
 * Fall back to interpreting OTA/OTZ firmware files as binary, if they aren't in Intel HEX format
