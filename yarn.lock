@@ -3490,9 +3490,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@serialport/bindings@npm:^9.2.0":
-  version: 9.2.0
-  resolution: "@serialport/bindings@npm:9.2.0"
+"@serialport/bindings@npm:9.2.1":
+  version: 9.2.1
+  resolution: "@serialport/bindings@npm:9.2.1"
   dependencies:
     "@serialport/binding-abstract": ^9.0.7
     "@serialport/parser-readline": ^9.0.7
@@ -3501,7 +3501,7 @@ __metadata:
     nan: ^2.14.2
     node-gyp: latest
     prebuild-install: ^6.0.1
-  checksum: b53682d841f964e190aeae391dfde268769754f37edfcd7a817d17ab2f24f7546f619a7ef7f202784f8791fb22538bf6a659a044c77c51e9e5376509484d560a
+  checksum: 7cf8ce60c5931caff1ff07a62706de0292499a888f8cdd3b385fed914d239f17a7dccb7f84747a0149e55731a02a5a4032398d7212ce7c2152ab6c4a77e0cc75
   languageName: node
   linkType: hard
 
@@ -4221,7 +4221,7 @@ __metadata:
     ansi-colors: ^4.1.1
     esbuild-register: ^2.6.0
     jest-extended: ^0.11.5
-    serialport: ^9.2.0
+    serialport: ^9.2.1
     typescript: 4.4.2
     winston: ^3.3.3
   languageName: unknown
@@ -11853,12 +11853,12 @@ fsevents@^2.1.2:
   languageName: node
   linkType: hard
 
-"serialport@npm:^9.2.0":
-  version: 9.2.0
-  resolution: "serialport@npm:9.2.0"
+"serialport@npm:^9.2.1":
+  version: 9.2.1
+  resolution: "serialport@npm:9.2.1"
   dependencies:
     "@serialport/binding-mock": 9.0.7
-    "@serialport/bindings": ^9.2.0
+    "@serialport/bindings": 9.2.1
     "@serialport/parser-byte-length": 9.0.7
     "@serialport/parser-cctalk": 9.0.7
     "@serialport/parser-delimiter": 9.0.7
@@ -11868,7 +11868,7 @@ fsevents@^2.1.2:
     "@serialport/parser-regex": 9.0.7
     "@serialport/stream": 9.0.7
     debug: ^4.3.1
-  checksum: 98433e1e911f96c65fcf8a75c24e213f0feb1907cff866db60338cb612bc7371d0be74646bf4dbb5f7aa3047a826a04d4f83de4eda4c9a09a1cb59b8ac09ab4e
+  checksum: 9a814e908389d1dc39bfa7f4257c9a6d3b9ab3b6891b72afb82b313d5beb8f6868b5e2a33ff4a0d41f04d9ab74a96b87fcc5a22b943720691625d989c7151514
   languageName: node
   linkType: hard
 
@@ -13731,7 +13731,7 @@ typescript@4.4.2:
     proper-lockfile: ^4.1.2
     reflect-metadata: ^0.1.13
     semver: ^7.3.5
-    serialport: ^9.2.0
+    serialport: ^9.2.1
     source-map-support: ^0.5.19
     typescript: 4.4.2
     winston: ^3.3.3
