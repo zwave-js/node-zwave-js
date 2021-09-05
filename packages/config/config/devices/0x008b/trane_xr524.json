@@ -121,71 +121,71 @@
 		"12": {
 			"label": "Heating Delta Stage 1 ON",
 			"valueSize": 1,
-			"minValue": 1,
-			"maxValue": 8,
+			"minValue": -128,
+			"maxValue": 127,
 			"defaultValue": 1
 		},
 		"13": {
 			"label": "Heating Delta Stage 1 OFF",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 8,
+			"minValue": -128,
+			"maxValue": 127,
 			"defaultValue": 0
 		},
 		"14": {
 			"label": "Heating Delta Stage 2 ON",
 			"valueSize": 1,
-			"minValue": 1,
-			"maxValue": 8,
+			"minValue": -128,
+			"maxValue": 127,
 			"defaultValue": 2
 		},
 		"15": {
 			"label": "Heating Delta Stage 2 OFF",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 8,
+			"minValue": -128,
+			"maxValue": 127,
 			"defaultValue": 0
 		},
 		"16": {
 			"label": "Heating Delta Stage 3 ON",
 			"valueSize": 1,
-			"minValue": 1,
-			"maxValue": 8,
+			"minValue": -128,
+			"maxValue": 127,
 			"defaultValue": 3
 		},
 		"17": {
 			"label": "Heating Delta Stage 3 OFF",
 			"valueSize": 1,
 			"minValue": 0,
-			"maxValue": 8,
+			"maxValue": 255,
 			"defaultValue": 0
 		},
 		"18": {
 			"label": "Cooling Delta Stage 1 ON",
 			"valueSize": 1,
-			"minValue": 1,
-			"maxValue": 18,
+			"minValue": 0,
+			"maxValue": 255,
 			"defaultValue": 1
 		},
 		"19": {
 			"label": "Cooling Delta Stage 1 OFF",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 8,
+			"minValue": -128,
+			"maxValue": 127,
 			"defaultValue": 0
 		},
 		"20": {
 			"label": "Cooling Delta Stage 2 ON",
 			"valueSize": 1,
-			"minValue": 1,
-			"maxValue": 8,
+			"minValue": -128,
+			"maxValue": 127,
 			"defaultValue": 2
 		},
 		"21": {
 			"label": "Cooling Delta Stage 2 OFF",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 8,
+			"minValue": -128,
+			"maxValue": 127,
 			"defaultValue": 0
 		},
 		"24": {
@@ -329,190 +329,215 @@
 			"label": "Schedule Sun-1",
 			"valueSize": 4,
 			"minValue": 0,
-			"maxValue": 0,
-			"defaultValue": 0
+			"maxValue": 4294967295,
+			"defaultValue": 0,
+			"unsigned": true
 		},
 		"229": {
 			"label": "Schedule Sun-2",
 			"valueSize": 4,
 			"minValue": 0,
-			"maxValue": 0,
-			"defaultValue": 0
+			"maxValue": 4294967295,
+			"defaultValue": 0,
+			"unsigned": true
 		},
 		"230": {
 			"label": "Schedule Sun-3",
 			"valueSize": 4,
 			"minValue": 0,
-			"maxValue": 0,
-			"defaultValue": 0
+			"maxValue": 4294967295,
+			"defaultValue": 0,
+			"unsigned": true
 		},
 		"231": {
 			"label": "Schedule Sun-4",
 			"valueSize": 4,
 			"minValue": 0,
 			"maxValue": 0,
-			"defaultValue": 0
+			"defaultValue": 0,
+			"unsigned": true
 		},
 		"232": {
 			"label": "Schedule Mon-1",
 			"valueSize": 4,
 			"minValue": 0,
-			"maxValue": 0,
+			"maxValue": 4294967295,
 			"defaultValue": 0
 		},
 		"233": {
 			"label": "Schedule Mon-2",
 			"valueSize": 4,
 			"minValue": 0,
-			"maxValue": 0,
-			"defaultValue": 0
+			"maxValue": 4294967295,
+			"defaultValue": 0,
+			"unsigned": true
 		},
 		"234": {
 			"label": "Schedule Mon-3",
 			"valueSize": 4,
 			"minValue": 0,
-			"maxValue": 0,
+			"maxValue": 4294967295,
 			"defaultValue": 0
 		},
 		"235": {
 			"label": "Schedule Mon-4",
 			"valueSize": 4,
 			"minValue": 0,
-			"maxValue": 0,
-			"defaultValue": 0
+			"maxValue": 4294967295,
+			"defaultValue": 0,
+			"unsigned": true
 		},
 		"236": {
 			"label": "Schedule Tue-1",
 			"valueSize": 4,
 			"minValue": 0,
-			"maxValue": 0,
-			"defaultValue": 0
+			"maxValue": 4294967295,
+			"defaultValue": 0,
+			"unsigned": true
 		},
 		"237": {
 			"label": "Schedule Tue-2",
 			"valueSize": 4,
 			"minValue": 0,
-			"maxValue": 0,
-			"defaultValue": 0
+			"maxValue": 4294967295,
+			"defaultValue": 0,
+			"unsigned": true
 		},
 		"238": {
 			"label": "Schedule Tue-3",
 			"valueSize": 4,
 			"minValue": 0,
-			"maxValue": 0,
-			"defaultValue": 0
+			"maxValue": 4294967295,
+			"defaultValue": 0,
+			"unsigned": true
 		},
 		"239": {
 			"label": "Schedule Tue-4",
 			"valueSize": 4,
 			"minValue": 0,
-			"maxValue": 0,
-			"defaultValue": 0
+			"maxValue": 4294967295,
+			"defaultValue": 0,
+			"unsigned": true
 		},
 		"240": {
 			"label": "Schedule Wed-1",
 			"valueSize": 4,
 			"minValue": 0,
-			"maxValue": 0,
-			"defaultValue": 0
+			"maxValue": 4294967295,
+			"defaultValue": 0,
+			"unsigned": true
 		},
 		"241": {
 			"label": "Schedule Wed-2",
 			"valueSize": 4,
 			"minValue": 0,
-			"maxValue": 0,
-			"defaultValue": 0
+			"maxValue": 4294967295,
+			"defaultValue": 0,
+			"unsigned": true
 		},
 		"242": {
 			"label": "Schedule Wed-3",
 			"valueSize": 4,
 			"minValue": 0,
-			"maxValue": 0,
-			"defaultValue": 0
+			"maxValue": 4294967295,
+			"defaultValue": 0,
+			"unsigned": true
 		},
 		"243": {
 			"label": "Schedule Wed-4",
 			"valueSize": 4,
 			"minValue": 0,
-			"maxValue": 0,
-			"defaultValue": 0
+			"maxValue": 4294967295,
+			"defaultValue": 0,
+			"unsigned": true
 		},
 		"244": {
 			"label": "Schedule Thu-1",
 			"valueSize": 4,
 			"minValue": 0,
-			"maxValue": 0,
-			"defaultValue": 0
+			"maxValue": 4294967295,
+			"defaultValue": 0,
+			"unsigned": true
 		},
 		"246": {
 			"label": "Schedule Thu-3",
 			"valueSize": 4,
 			"minValue": 0,
-			"maxValue": 0,
-			"defaultValue": 0
+			"maxValue": 4294967295,
+			"defaultValue": 0,
+			"unsigned": true
 		},
 		"247": {
 			"label": "Schedule Thu-4",
 			"valueSize": 4,
 			"minValue": 0,
-			"maxValue": 0,
-			"defaultValue": 0
+			"maxValue": 4294967295,
+			"defaultValue": 0,
+			"unsigned": true
 		},
 		"248": {
 			"label": "Schedule Fri-1",
 			"valueSize": 4,
 			"minValue": 0,
-			"maxValue": 0,
-			"defaultValue": 0
+			"maxValue": 4294967295,
+			"defaultValue": 0,
+			"unsigned": true
 		},
 		"249": {
 			"label": "Schedule Fri-2",
 			"valueSize": 4,
 			"minValue": 0,
-			"maxValue": 0,
-			"defaultValue": 0
+			"maxValue": 4294967295,
+			"defaultValue": 0,
+			"unsigned": true
 		},
 		"250": {
 			"label": "Schedule Fri-3",
 			"valueSize": 4,
 			"minValue": 0,
-			"maxValue": 0,
-			"defaultValue": 0
+			"maxValue": 4294967295,
+			"defaultValue": 0,
+			"unsigned": true
 		},
 		"251": {
 			"label": "Schedule Fri-4",
 			"valueSize": 4,
 			"minValue": 0,
-			"maxValue": 0,
-			"defaultValue": 0
+			"maxValue": 4294967295,
+			"defaultValue": 0,
+			"unsigned": true
 		},
 		"252": {
 			"label": "Schedule Sat-1",
 			"valueSize": 4,
 			"minValue": 0,
-			"maxValue": 0,
-			"defaultValue": 0
+			"maxValue": 4294967295,
+			"defaultValue": 0,
+			"unsigned": true
 		},
 		"253": {
 			"label": "Schedule Sat-2",
 			"valueSize": 4,
 			"minValue": 0,
-			"maxValue": 0,
-			"defaultValue": 0
+			"maxValue": 4294967295,
+			"defaultValue": 0,
+			"unsigned": true
 		},
 		"254": {
 			"label": "Schedule Sat-3",
 			"valueSize": 4,
 			"minValue": 0,
-			"maxValue": 0,
-			"defaultValue": 0
+			"maxValue": 4294967295,
+			"defaultValue": 0,
+			"unsigned": true
 		},
 		"255": {
 			"label": "Schedule Sat-4",
 			"valueSize": 4,
 			"minValue": 0,
-			"maxValue": 0,
-			"defaultValue": 0
+			"maxValue": 4294967295,
+			"defaultValue": 0,
+			"unsigned": true
 		}
 	}
 }
