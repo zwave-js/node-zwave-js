@@ -156,15 +156,15 @@
 		"17": {
 			"label": "Heating Delta Stage 3 OFF",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 255,
+			"minValue": -128,
+			"maxValue": 127,
 			"defaultValue": 0
 		},
 		"18": {
 			"label": "Cooling Delta Stage 1 ON",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 255,
+			"minValue": -128,
+			"maxValue": 127,
 			"defaultValue": 1
 		},
 		"19": {
@@ -362,7 +362,8 @@
 			"valueSize": 4,
 			"minValue": 0,
 			"maxValue": 4294967295,
-			"defaultValue": 0
+			"defaultValue": 0,
+			"unsigned": true
 		},
 		"233": {
 			"label": "Schedule Mon-2",
@@ -377,7 +378,8 @@
 			"valueSize": 4,
 			"minValue": 0,
 			"maxValue": 4294967295,
-			"defaultValue": 0
+			"defaultValue": 0,
+			"unsigned": true
 		},
 		"235": {
 			"label": "Schedule Mon-4",
