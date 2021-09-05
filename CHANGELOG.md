@@ -5,6 +5,26 @@
 	Add placeholder for next release with `wip` snippet
   ## __WORK IN PROGRESS__
 -->
+## __WORK IN PROGRESS__
+### Bugfixes
+* Interpret wait time after firmware update as seconds, not milliseconds
+* Fall back to interpreting OTA/OTZ firmware files as binary, if they aren't in Intel HEX format
+* Guard against invalid inclusion strategies, log which one was chosen
+
+### Config file changes
+* Add fingerprint `0x0005:0x0112` to "Fakro AMZ Solar"
+* Add config for Minoston MP21ZD
+* Add metadata + units to Namron Z-Wave Dimmer2 400W
+* Add metadata to Namron Z-Wave Dimmer 400W
+* Correct Aeotec ZWA011 and ZWA012 parameters
+* Add Zooz ZAC36 water valve
+* Add support for HE-TPS05
+* Add support for FGWCEU-201
+
+### Changes under the hood
+* Documentation: Mention that an option for **S0 only** inclusion must exist
+* Updated some dependencies
+
 ## 8.2.2 (2021-09-02)
 ### Bugfixes
 * Handle missing S2 keys more gracefully
