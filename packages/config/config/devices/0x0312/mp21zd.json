@@ -124,7 +124,6 @@
 		"11": {
 			"label": "Minimum Brightness",
 			"valueSize": 1,
-			"unit": "%",
 			"minValue": 0,
 			"maxValue": 99,
 			"defaultValue": 0,
@@ -159,7 +158,7 @@
 			"unsigned": true
 		},
 		"14": {
-			"label": "Temperature Delta Threshold For Report",
+			"label": "Temperature Report Change Threshold",
 			"valueSize": 1,
 			"unit": "°C",
 			"minValue": 1,
