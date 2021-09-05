@@ -1015,6 +1015,23 @@ export class CommandClass {
 		}
 		return false;
 	}
+
+	/** Returns the requested CC object that encapsulates this CC */
+	public getEncapsulatingCC(
+		ccId: CommandClasses,
+		ccCommand?: number,
+	): CommandClass | undefined {
+		let cc: CommandClass = this;
+		while (cc.encapsulatingCC) {
+			cc = cc.encapsulatingCC;
+			if (
+				cc.ccId === ccId &&
+				(ccCommand === undefined || cc.ccCommand === ccCommand)
+			) {
+				return cc;
+			}
+		}
+	}
 }
 
 export interface InvalidCCCreationOptions extends CommandClassCreationOptions {

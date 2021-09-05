@@ -1,7 +1,6 @@
 /// <reference types="reflect-metadata" />
 
 import {
-	CommandClasses,
 	getNodeTag,
 	MessageOrCCLogEntry,
 	ZWaveError,
@@ -11,7 +10,6 @@ import { MessageHeaders } from "@zwave-js/serial";
 import type { JSONObject } from "@zwave-js/shared";
 import { num2hex, staticExtends } from "@zwave-js/shared";
 import { entries } from "alcalzone-shared/objects";
-import type { CommandClass, SupervisionCCGet } from "../commandclass";
 import { isCommandClassContainer } from "../commandclass/ICommandClassContainer";
 import type { Driver } from "../driver/Driver";
 import { isNodeQuery } from "../node/INodeQuery";
@@ -132,9 +130,6 @@ export class Message {
 		}
 	}
 
-	public encapsulatingCC: Array<CommandClass> = [];
-	public supervisionEncapsulation?: SupervisionCCGet;
-
 	public type: MessageType;
 	public functionType: FunctionType;
 	public expectedResponse:
@@ -148,23 +143,6 @@ export class Message {
 		| ResponsePredicate
 		| undefined;
 	public payload: Buffer; // TODO: Length limit 255
-
-	/** Checks whether this CC is encapsulated with one that has the given CC id and (optionally) CC Command */
-	public isEncapsulatedWith(
-		ccId: CommandClasses,
-		ccCommand?: number,
-	): boolean {
-		this.encapsulatingCC.forEach((cc) => {
-			if (
-				cc.ccId === ccId &&
-				(ccCommand === undefined || cc.ccCommand === ccCommand)
-			) {
-				return true;
-			}
-		});
-
-		return false;
-	}
 
 	private _callbackId: number | undefined;
 	/**

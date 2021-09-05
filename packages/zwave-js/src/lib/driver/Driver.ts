@@ -78,6 +78,7 @@ import {
 	SupervisionCC,
 	SupervisionCCGet,
 	SupervisionCCReport,
+	SupervisionCommand,
 	SupervisionResult,
 	SupervisionStatus,
 } from "../commandclass/SupervisionCC";
@@ -2413,15 +2414,25 @@ ${handlers.length} left`,
 				if (!msg.command.moreUpdatesFollow) {
 					nodeSessions.supervision.delete(msg.command.sessionId);
 				}
-			} else if (msg.supervisionEncapsulation) {
+			} else if (
+				msg.command.isEncapsulatedWith(
+					CommandClasses.Supervision,
+					SupervisionCommand.Get,
+				)
+			) {
+				const supervisionEncapsulation = msg.command.getEncapsulatingCC(
+					CommandClasses.Supervision,
+					SupervisionCommand.Get,
+				) as SupervisionCCGet;
+
 				if (
 					msg.command instanceof InvalidCC &&
-					!msg.supervisionEncapsulation.isMulticast() // A receiving node MUST NOT return a response if this command is received via multicast addressing
+					!supervisionEncapsulation.isMulticast() // A receiving node MUST NOT return a response if this command is received via multicast addressing
 				) {
 					const report = new SupervisionCCReport(this, {
-						sessionId: msg.supervisionEncapsulation.sessionId,
+						sessionId: supervisionEncapsulation.sessionId,
 						moreUpdatesFollow: false,
-						nodeId: msg.supervisionEncapsulation.nodeId,
+						nodeId: supervisionEncapsulation.nodeId,
 						status: SupervisionStatus.NoSupport,
 					});
 
@@ -2438,11 +2449,11 @@ ${handlers.length} left`,
 				await node.handleCommand(msg.command);
 
 				// A receiving node MUST NOT return a response if this command is received via multicast addressing.
-				if (!msg.supervisionEncapsulation.isMulticast()) {
+				if (!supervisionEncapsulation.isMulticast()) {
 					const report = new SupervisionCCReport(this, {
-						sessionId: msg.supervisionEncapsulation.sessionId,
+						sessionId: supervisionEncapsulation.sessionId,
 						moreUpdatesFollow: false,
-						nodeId: msg.supervisionEncapsulation.nodeId,
+						nodeId: supervisionEncapsulation.nodeId,
 						status: SupervisionStatus.Success,
 					});
 
@@ -2605,12 +2616,6 @@ ${handlers.length} left`,
 				);
 				return;
 			}
-
-			if (unwrapped instanceof SupervisionCCGet) {
-				msg.supervisionEncapsulation = unwrapped;
-			}
-
-			msg.encapsulatingCC.push(msg.command);
 			msg.command = unwrapped;
 		}
 	}
