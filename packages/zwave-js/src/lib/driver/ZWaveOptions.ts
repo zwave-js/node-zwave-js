@@ -33,6 +33,12 @@ export interface ZWaveOptions {
 	};
 
 	attempts: {
+		/**
+		 * @internal
+		 * How often to attempt opening the serial port
+		 */
+		openSerialPort: number;
+
 		/** How often the driver should try communication with the controller before giving up */
 		controller: number; // [1...3], default: 3
 

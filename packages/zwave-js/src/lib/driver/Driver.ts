@@ -180,6 +180,7 @@ const defaultOptions: ZWaveOptions = {
 		refreshValue: 5000, // Default should handle most slow devices until we have a better solution
 	},
 	attempts: {
+		openSerialPort: 10,
 		controller: 3,
 		sendData: 3,
 		retryAfterTransmitReport: false,
@@ -803,14 +804,20 @@ export class Driver extends TypedEventEmitter<DriverEventCallbacks> {
 	): Promise<boolean> {
 		let lastError: unknown;
 		// After a reset, the serial port may need a few seconds until we can open it - try a few times
-		for (let attempt = 1; attempt < 10; attempt++) {
+		for (
+			let attempt = 1;
+			attempt <= this.options.attempts.openSerialPort;
+			attempt++
+		) {
 			try {
 				await this.serial!.open();
 				return true;
 			} catch (e) {
 				lastError = e;
 			}
-			await wait(1000);
+			if (attempt < this.options.attempts.openSerialPort) {
+				await wait(1000);
+			}
 		}
 
 		const message = `Failed to open the serial port: ${getErrorMessage(
