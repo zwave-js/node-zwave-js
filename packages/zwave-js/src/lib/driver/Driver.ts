@@ -696,17 +696,16 @@ export class Driver extends TypedEventEmitter<DriverEventCallbacks> {
 				if (this.isSoftResetting && !this.serial?.isOpen) {
 					// A disconnection while soft resetting is to be expected
 					return;
+				} else if (!this._isOpen) {
+					// tryOpenSerialport takes care of error handling
+					return;
 				}
 
 				this.driverLog.print(
 					`Serial port errored: ${err.message}`,
 					"error",
 				);
-				if (this._isOpen) {
-					this.serialport_onError(err);
-				} else {
-					spOpenPromise.reject(err);
-				}
+				this.serialport_onError(err);
 				void this.destroy();
 			});
 		// If the port is already open, close it first
@@ -802,27 +801,31 @@ export class Driver extends TypedEventEmitter<DriverEventCallbacks> {
 	private async tryOpenSerialport(
 		openPromise?: DeferredPromise<void>,
 	): Promise<boolean> {
-		try {
-			await this.serial!.open();
-			return true;
-		} catch (e) {
-			const message = `Failed to open the serial port: ${getErrorMessage(
-				e,
-			)}`;
-			this.driverLog.print(message, "error");
-
-			const error = new ZWaveError(
-				message,
-				ZWaveErrorCodes.Driver_Failed,
-			);
-			if (this._isOpen || !openPromise) {
-				this.serialport_onError(error);
-			} else {
-				openPromise?.reject(error);
+		let lastError: unknown;
+		// After a reset, the serial port may need a few seconds until we can open it - try a few times
+		for (let attempt = 1; attempt < 10; attempt++) {
+			try {
+				await this.serial!.open();
+				return true;
+			} catch (e) {
+				lastError = e;
 			}
-
-			void this.destroy();
+			await wait(1000);
 		}
+
+		const message = `Failed to open the serial port: ${getErrorMessage(
+			lastError,
+		)}`;
+		this.driverLog.print(message, "error");
+
+		const error = new ZWaveError(message, ZWaveErrorCodes.Driver_Failed);
+		if (this._isOpen || !openPromise) {
+			this.serialport_onError(error);
+		} else {
+			openPromise?.reject(error);
+		}
+
+		void this.destroy();
 		return false;
 	}
 
@@ -1546,12 +1549,12 @@ export class Driver extends TypedEventEmitter<DriverEventCallbacks> {
 			// Wait 1.5 seconds after reset to ensure that the module is ready for communication again
 			await wait(1500);
 
-			this.isSoftResetting = false;
-
 			// If the controller disconnected the serial port during the soft reset, we need to re-open it
 			if (!this.serial!.isOpen) {
 				await this.tryOpenSerialport();
 			}
+
+			this.isSoftResetting = false;
 
 			// And resume sending
 			this.unpauseSendThread();
