@@ -1411,10 +1411,10 @@ export class Driver extends TypedEventEmitter<DriverEventCallbacks> {
 		if (status < FirmwareUpdateStatus.OK_WaitingForActivation) return;
 
 		// Wait at least 5 seconds
-		if (!waitTime) waitTime = 5000;
+		if (!waitTime) waitTime = 5;
 		this.controllerLog.logNode(
 			node.id,
-			`Firmware updated, scheduling interview in ${waitTime} ms...`,
+			`Firmware updated, scheduling interview in ${waitTime} seconds...`,
 		);
 		// We reuse the retryNodeInterviewTimeouts here because they serve a similar purpose
 		this.retryNodeInterviewTimeouts.set(
@@ -1422,7 +1422,7 @@ export class Driver extends TypedEventEmitter<DriverEventCallbacks> {
 			setTimeout(() => {
 				this.retryNodeInterviewTimeouts.delete(node.id);
 				void node.refreshInfo();
-			}, waitTime).unref(),
+			}, waitTime * 1000).unref(),
 		);
 	}
 
