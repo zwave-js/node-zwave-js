@@ -71,7 +71,7 @@ export class VirtualNode extends VirtualEndpoint {
 			}
 
 			return true;
-		} catch (e: unknown) {
+		} catch (e) {
 			// Define which errors during setValue are expected and won't crash
 			// the driver:
 			if (isZWaveError(e)) {

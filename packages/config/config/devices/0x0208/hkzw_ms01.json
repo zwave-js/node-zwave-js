@@ -1,7 +1,7 @@
 {
 	"manufacturer": "HANK Electronics Ltd.",
 	"manufacturerId": "0x0208",
-	"label": "HKZW_MS01",
+	"label": "HKZW-MS01",
 	"description": "Multisensor",
 	"devices": [
 		{

@@ -1630,7 +1630,7 @@ export class ConfigurationCCSet extends ConfigurationCC {
 				);
 			} catch (e) {
 				tryCatchOutOfBoundsError(
-					e,
+					e as Error,
 					this.value,
 					this.parameter,
 					valueSize,
@@ -1791,7 +1791,7 @@ export class ConfigurationCCBulkSet extends ConfigurationCC {
 					);
 				} catch (e) {
 					tryCatchOutOfBoundsError(
-						e,
+						e as Error,
 						value,
 						param,
 						valueSize,

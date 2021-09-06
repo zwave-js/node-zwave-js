@@ -5,6 +5,68 @@
 	Add placeholder for next release with `wip` snippet
   ## __WORK IN PROGRESS__
 -->
+## 8.2.3 (2021-09-06)
+### Bugfixes
+* Interpret wait time after firmware update as seconds, not milliseconds
+* Fall back to interpreting OTA/OTZ firmware files as binary, if they aren't in Intel HEX format
+* Guard against invalid inclusion strategies, log which one was chosen
+
+### Config file changes
+* Add fingerprint `0x0005:0x0112` to "Fakro AMZ Solar"
+* Add config for Minoston MP21ZD
+* Add metadata + units to Namron Z-Wave Dimmer2 400W
+* Add metadata to Namron Z-Wave Dimmer 400W
+* Correct Aeotec ZWA011 and ZWA012 parameters
+* Add Zooz ZAC36 water valve
+* Add support for HE-TPS05
+* Add support for FGWCEU-201
+
+### Changes under the hood
+* Documentation: Mention that an option for **S0 only** inclusion must exist
+* Updated some dependencies
+
+## 8.2.2 (2021-09-02)
+### Bugfixes
+* Handle missing S2 keys more gracefully
+
+### Config file changes
+* Disable strict entry control validation for Ring Keypad v2
+* Add HeatIt Z Push Button 2
+* Add support for Zipato PH-PSE02
+* Add new Zooz devices ZSE41/ZSE42; fix ZEN15 parameter 30
+* Clean up config file for FGFS-101
+* Add support for Namron Dimmer 400W
+
+### Changes under the hood
+* Upgrade to TypeScript 4.4
+
+## 8.2.1 (2021-08-25)
+### Bugfixes
+* Fixed an invalid definition in the sensor types configuration file
+
+### Config file changes
+* Add fingerprint for Fibaro FGFS
+
+## 8.2.0 (2021-08-25)
+### Features
+* Add new `ConfigManager` properties to expose the remaining config maps
+
+### Bugfixes
+* Print less intimidating logs for missing S2 keys during decryption
+* Clarify error messages in the log when S0/S2 keys are missing
+* When converting pre-8.1 cache files, treat the nodes as not having any S2 security classes
+
+### Config file changes
+* Add fingerprint to Ring 1st Gen Range Extender config
+* Cleanup device file for Fibaro button
+* Add metadata to Nortek devices
+* Correct ZWA012 parameters indexing
+* Add association config for Vision ZM1701
+* Update Hank Electronics devices
+
+### Changes under the hood
+* Move more scale definitions into `scales.json`
+
 ## 8.1.1 (2021-08-17)
 ### Bugfixes
 * Added a missing `| undefined` to the deprecated `beginInclusion` signature

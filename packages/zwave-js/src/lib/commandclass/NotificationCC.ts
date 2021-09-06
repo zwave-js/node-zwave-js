@@ -1074,7 +1074,7 @@ export class NotificationCCReport extends NotificationCC {
 						json = pick(json, ["payload"]);
 					}
 					this.eventParameters = json;
-				} catch (e: unknown) {
+				} catch (e) {
 					if (
 						isZWaveError(e) &&
 						e.code ===

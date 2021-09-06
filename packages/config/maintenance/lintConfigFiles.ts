@@ -1,6 +1,6 @@
 import { getIntegerLimits, getMinimumShiftForBitMask } from "@zwave-js/core";
 import { reportProblem } from "@zwave-js/maintenance";
-import { formatId, num2hex } from "@zwave-js/shared";
+import { formatId, getErrorMessage, num2hex } from "@zwave-js/shared";
 import { distinct } from "alcalzone-shared/arrays";
 import { wait } from "alcalzone-shared/async";
 import { isObject } from "alcalzone-shared/typeguards";
@@ -31,7 +31,7 @@ async function lintManufacturers(): Promise<void> {
 
 async function lintIndicators(): Promise<void> {
 	await configManager.loadIndicators();
-	const properties = configManager["indicatorProperties"]!;
+	const properties = configManager.indicatorProperties;
 
 	if (!(properties.get(1)?.label === "Multilevel")) {
 		throw new Error(
@@ -188,7 +188,7 @@ async function lintDevices(): Promise<void> {
 				},
 			);
 		} catch (e) {
-			addError(file, e.message);
+			addError(file, getErrorMessage(e));
 			continue;
 		}
 
@@ -227,7 +227,7 @@ async function lintDevices(): Promise<void> {
 			try {
 				config = conditionalConfig.evaluate(variant);
 			} catch (e) {
-				addError(file, e.message, variant);
+				addError(file, getErrorMessage(e), variant);
 				continue;
 			}
 
@@ -977,7 +977,7 @@ export async function lintConfigFiles(): Promise<void> {
 		console.log(green("The config files are valid!"));
 		console.log();
 		console.log(" ");
-	} catch (e) {
+	} catch (e: any) {
 		if (typeof e.stack === "string") {
 			const lines = (e.stack as string).split("\n");
 			if (lines[0].trim().toLowerCase() === "error:") {

@@ -155,7 +155,7 @@ async function generateIndex<T extends Record<string, unknown>>(
 					return ret;
 				}),
 			);
-		} catch (e: unknown) {
+		} catch (e) {
 			const message = `Error parsing config file ${relativePath}: ${
 				(e as Error).message
 			}`;
@@ -238,7 +238,7 @@ ${stringify(index, "\t")}
 				"utf8",
 			);
 			logger?.print("Device index regenerated", "verbose");
-		} catch (e: unknown) {
+		} catch (e) {
 			logger?.print(
 				`Writing the device index to disk failed: ${
 					(e as Error).message

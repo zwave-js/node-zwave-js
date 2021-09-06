@@ -72,7 +72,7 @@ export async function loadNamedScalesInternal(
 			namedScales.set(name, named);
 		}
 		return namedScales;
-	} catch (e: unknown) {
+	} catch (e) {
 		if (isZWaveError(e)) {
 			throw e;
 		} else {

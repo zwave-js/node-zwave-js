@@ -412,6 +412,20 @@ export class Security2CC extends CommandClass {
 			// If we already know the class is not supported, skip it
 			if (node.hasSecurityClass(secClass) === false) continue;
 
+			// If no key is configured for this security class, skip it
+			if (
+				!this.driver.securityManager2?.hasKeysForSecurityClass(secClass)
+			) {
+				this.driver.controllerLog.logNode(node.id, {
+					message: `Cannot query securely supported commands (${getEnumMemberName(
+						SecurityClass,
+						secClass,
+					)}) - network key is not configured...`,
+					level: "warn",
+				});
+				continue;
+			}
+
 			this.driver.controllerLog.logNode(node.id, {
 				message: `Querying securely supported commands (${getEnumMemberName(
 					SecurityClass,
