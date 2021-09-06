@@ -277,6 +277,11 @@
 			]
 		}
 	},
+	"compat": {
+		// The device doesn't respect some spec requirements,
+		// for example that ASCII-encoded codes must be padded to 16 bytes
+		"disableStrictEntryControlDataValidation": true
+	},
 	"metadata": {
 		"inclusion": "After powering on the device, press and hold the #1 button for ~3 seconds. Release the button and the device will enter Classic inclusion mode which implements both classic inclusion with a Node Information Frame, and Network Wide Inclusion. During Classic Inclusion mode, the green Connection LED will blink three times followed by a brief pause, repeatedly. When Classic inclusion times-out, the device will blink alternating red and green a few times",
 		"exclusion": "Exclusion Instructions: \n1. Initiate remove “Ring Alarm Keypad” flow in the Ring Alarm mobile application – Select the settings icon from device details page and choose “Remove Device” to remove the device. This will place the controller into Remove or “Z-Wave Exclusion” mode. \n2. Locate the pinhole reset button on the back of the device. \n3. With the controller in Remove (Z-Wave Exclusion) mode, use a paper clip or similar object and tap the pinhole button. The device’s Connection LED turns on solid red to indicate the device was removed from the network.",

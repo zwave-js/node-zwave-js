@@ -86,6 +86,24 @@ export function extractFirmware(
 			return extractFirmwareAeotec(rawData);
 		case "otz":
 		case "ota":
+			// Per convention, otz and ota files SHOULD be in Intel HEX format,
+			// but some manufacturers use them for binary data. So we attempt parsing
+			// them as HEX and fall back to returning the binary contents.
+			if (rawData.every((b) => b <= 127)) {
+				try {
+					return extractFirmwareHEX(rawData);
+				} catch (e) {
+					if (
+						e instanceof ZWaveError &&
+						e.code === ZWaveErrorCodes.Argument_Invalid
+					) {
+						// Fall back to binary data
+					} else {
+						throw e;
+					}
+				}
+			}
+			return extractFirmwareRAW(rawData);
 		case "hex":
 			return extractFirmwareHEX(rawData);
 		case "hec":
@@ -93,11 +111,15 @@ export function extractFirmware(
 		case "gecko":
 			// There is no description for the file contents, so we
 			// have to assume this is for firmware target 0
-			return { data: rawData };
+			return extractFirmwareRAW(rawData);
 		case "bin":
 			// There is no description for the file contents, so the user has to make sure to select the correct target
-			return { data: rawData };
+			return extractFirmwareRAW(rawData);
 	}
+}
+
+function extractFirmwareRAW(data: Buffer): Firmware {
+	return { data };
 }
 
 function extractFirmwareAeotec(data: Buffer): Firmware {

@@ -9,6 +9,7 @@ import {
 	isZWaveError,
 	LogConfig,
 	SecurityClass,
+	securityClassIsS2,
 	SecurityManager,
 	SecurityManager2,
 	serializeCacheValue,
@@ -903,15 +904,35 @@ export class Driver extends TypedEventEmitter<DriverEventCallbacks> {
 		const S0Key =
 			this.options.securityKeys?.S0_Legacy ?? this.options.networkKey;
 		if (S0Key) {
+			this.driverLog.print(
+				"Network key for S0 configured, enabling S0 security manager...",
+			);
 			this._securityManager = new SecurityManager({
 				networkKey: S0Key,
 				ownNodeId: this._controller.ownNodeId!,
 				nonceTimeout: this.options.timeouts.nonce,
 			});
+		} else {
+			this.driverLog.print(
+				"No network key for S0 configured, communication with secure (S0) devices won't work!",
+				"warn",
+			);
 		}
 
 		// The S2 security manager could be initialized earlier, but we do it here for consistency
-		if (this.options.securityKeys) {
+		if (
+			this.options.securityKeys &&
+			// Only set it up if we have security keys for at least one S2 security class
+			Object.keys(this.options.securityKeys).some(
+				(key) =>
+					key.startsWith("S2_") &&
+					key in SecurityClass &&
+					securityClassIsS2((SecurityClass as any)[key]),
+			)
+		) {
+			this.driverLog.print(
+				"At least one network key for S2 configured, enabling S2 security manager...",
+			);
 			this._securityManager2 = new SecurityManager2();
 			// Set up all keys
 			for (const secClass of [
@@ -925,6 +946,11 @@ export class Driver extends TypedEventEmitter<DriverEventCallbacks> {
 					this._securityManager2.setKey(SecurityClass[secClass], key);
 				}
 			}
+		} else {
+			this.driverLog.print(
+				"No network key for S2 configured, communication with secure (S2) devices won't work!",
+				"warn",
+			);
 		}
 
 		// in any case we need to emit the driver ready event here
@@ -1421,10 +1447,10 @@ export class Driver extends TypedEventEmitter<DriverEventCallbacks> {
 		if (status < FirmwareUpdateStatus.OK_WaitingForActivation) return;
 
 		// Wait at least 5 seconds
-		if (!waitTime) waitTime = 5000;
+		if (!waitTime) waitTime = 5;
 		this.controllerLog.logNode(
 			node.id,
-			`Firmware updated, scheduling interview in ${waitTime} ms...`,
+			`Firmware updated, scheduling interview in ${waitTime} seconds...`,
 		);
 		// We reuse the retryNodeInterviewTimeouts here because they serve a similar purpose
 		this.retryNodeInterviewTimeouts.set(
@@ -1432,7 +1458,7 @@ export class Driver extends TypedEventEmitter<DriverEventCallbacks> {
 			setTimeout(() => {
 				this.retryNodeInterviewTimeouts.delete(node.id);
 				void node.refreshInfo();
-			}, waitTime).unref(),
+			}, waitTime * 1000).unref(),
 		);
 	}
 

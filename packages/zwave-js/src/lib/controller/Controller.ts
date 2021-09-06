@@ -886,6 +886,14 @@ export class ZWaveController extends TypedEventEmitter<ControllerEventCallbacks>
 			};
 		}
 
+		// Protect against invalid inclusion options
+		if (!(options.strategy in InclusionStrategy)) {
+			throw new ZWaveError(
+				`Invalid inclusion strategy: ${options.strategy}`,
+				ZWaveErrorCodes.Argument_Invalid,
+			);
+		}
+
 		if (options.strategy === InclusionStrategy.SmartStart) {
 			throw new ZWaveError(
 				`SmartStart is not supported yet!`,
@@ -896,7 +904,12 @@ export class ZWaveController extends TypedEventEmitter<ControllerEventCallbacks>
 		this._inclusionActive = true;
 		this._inclusionOptions = options;
 
-		this.driver.controllerLog.print(`starting inclusion process...`);
+		this.driver.controllerLog.print(
+			`Starting inclusion process with strategy ${getEnumMemberName(
+				InclusionStrategy,
+				options.strategy,
+			)}...`,
+		);
 
 		// create the promise we're going to return
 		this._beginInclusionPromise = createDeferredPromise();

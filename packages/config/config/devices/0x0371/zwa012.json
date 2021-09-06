@@ -183,24 +183,8 @@
 		"21": {
 			"$import": "~/0x0086/templates/aeotec_template.json#tilt_sensor_sensitivity"
 		},
-		"22": {
-			"$import": "~/0x0086/templates/aeotec_template.json#enable_binary_report"
-		},
-		"23": {
-			"$import": "~/0x0086/templates/aeotec_template.json#low_battery_threshold",
-			"defaultValue": 20
-		},
-		"24": {
-			"$import": "~/templates/master_template.json#base_0-255_nounit",
-			"label": "Battery report interval",
-			"defaultValue": 24,
-			"unit": "hours",
-			"options": [
-				{
-					"label": "Disable",
-					"value": 0
-				}
-			]
+		"255": {
+			"$import": "~/0x0086/templates/aeotec_template.json#factory_reset_exclude"
 		}
 	},
 	"metadata": {
