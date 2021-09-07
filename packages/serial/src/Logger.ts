@@ -2,6 +2,7 @@ import * as Sentry from "@sentry/node";
 import {
 	DataDirection,
 	getDirectionPrefix,
+	LogContext,
 	ZWaveLogContainer,
 	ZWaveLoggerBase,
 } from "@zwave-js/core";
@@ -10,6 +11,13 @@ import { MessageHeaders } from "./MessageHeaders";
 
 export const SERIAL_LABEL = "SERIAL";
 const SERIAL_LOGLEVEL = "debug";
+
+export type SerialLogContext = LogContext & {
+	source: "serial";
+	type: "serial";
+	direction: DataDirection;
+	header?: string;
+};
 
 export class SerialLogger extends ZWaveLoggerBase {
 	constructor(loggers: ZWaveLogContainer) {
@@ -61,7 +69,7 @@ export class SerialLogger extends ZWaveLoggerBase {
 				header: getEnumMemberName(MessageHeaders, header),
 				direction,
 				source: "serial",
-			},
+			} as SerialLogContext,
 		});
 	}
 
@@ -80,7 +88,8 @@ export class SerialLogger extends ZWaveLoggerBase {
 				context: {
 					direction,
 					source: "serial",
-				},
+					type: "serial",
+				} as SerialLogContext,
 			});
 		}
 		if (process.env.NODE_ENV !== "test") {
@@ -120,7 +129,11 @@ export class SerialLogger extends ZWaveLoggerBase {
 				level: SERIAL_LOGLEVEL,
 				message,
 				direction: getDirectionPrefix("none"),
-				context: { source: "serial" },
+				context: {
+					source: "serial",
+					type: "serial",
+					direction: "none",
+				} as SerialLogContext,
 			});
 		}
 	}

@@ -61,7 +61,7 @@ export interface ZWaveLogInfo extends Omit<TransformableInfo, "message"> {
 }
 
 export interface LogContext {
-	source: "controller" | "config" | "driver";
+	source: "controller" | "config" | "driver" | "serial";
 	type: string;
 }
 
