@@ -375,7 +375,7 @@ export class CommandClass {
 					reason = e.context;
 				}
 
-				const invalidcc = new InvalidCC(driver, {
+				const ret = new InvalidCC(driver, {
 					nodeId,
 					ccId,
 					ccName,
@@ -383,10 +383,10 @@ export class CommandClass {
 				});
 
 				if (options.fromEncapsulation) {
-					invalidcc.encapsulatingCC = options.encapCC as any;
+					ret.encapsulatingCC = options.encapCC as any;
 				}
 
-				return invalidcc;
+				return ret;
 			}
 			throw e;
 		}
@@ -1016,7 +1016,7 @@ export class CommandClass {
 		return false;
 	}
 
-	/** Returns the requested CC object that encapsulates this CC */
+	/** Traverses the encapsulation stack of this CC and returns the one that has the given CC id and (optionally) CC Command if that exists. */
 	public getEncapsulatingCC(
 		ccId: CommandClasses,
 		ccCommand?: number,
