@@ -1,6 +1,6 @@
 {
-	"manufacturer": "Nortek Security & Control LLC",
-	"manufacturerId": "0x014f",
+	"manufacturer": "Enerwave / Wenzhou MTLC Electric Appliances Co., Ltd.",
+	"manufacturerId": "0x011a",
 	"label": "ZWN-BPC",
 	"description": "PIR Sensor",
 	"devices": [
