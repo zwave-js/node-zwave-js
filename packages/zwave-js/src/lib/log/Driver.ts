@@ -2,6 +2,7 @@ import * as Sentry from "@sentry/node";
 import {
 	DataDirection,
 	getDirectionPrefix,
+	LogContext,
 	messageRecordToLines,
 	tagify,
 	ZWaveLogContainer,
@@ -24,7 +25,12 @@ import { NodeStatus } from "../node/Types";
 export const DRIVER_LABEL = "DRIVER";
 const DRIVER_LOGLEVEL = "verbose";
 const SENDQUEUE_LOGLEVEL = "debug";
-const CONTEXT = { source: "driver" };
+
+export type DriverLogContext = LogContext & {
+	type: "driver";
+	direction?: DataDirection;
+};
+const CONTEXT: DriverLogContext = { source: "driver", type: "driver" };
 
 export class DriverLogger extends ZWaveLoggerBase {
 	constructor(loggers: ZWaveLogContainer) {
@@ -50,11 +56,12 @@ export class DriverLogger extends ZWaveLoggerBase {
 		const actualLevel = level || DRIVER_LOGLEVEL;
 		if (!this.container.isLoglevelVisible(actualLevel)) return;
 
+		const context: DriverLogContext = { ...CONTEXT, direction: "none" };
 		this.logger.log({
 			level: actualLevel,
 			message,
 			direction: getDirectionPrefix("none"),
-			context: { ...CONTEXT },
+			context,
 		});
 	}
 
@@ -165,6 +172,7 @@ export class DriverLogger extends ZWaveLoggerBase {
 				}
 			}
 
+			const context: DriverLogContext = { ...CONTEXT, direction };
 			this.logger.log({
 				level: DRIVER_LOGLEVEL,
 				secondaryTags:
@@ -175,7 +183,7 @@ export class DriverLogger extends ZWaveLoggerBase {
 				// Since we are programming a controller, responses are always inbound
 				// (not to confuse with the message type, which may be Request or Response)
 				direction: getDirectionPrefix(direction),
-				context: { ...CONTEXT, direction },
+				context,
 			});
 		} catch (e) {
 			// When logging fails, send the message to Sentry
@@ -215,6 +223,7 @@ export class DriverLogger extends ZWaveLoggerBase {
 		} else {
 			message += " (empty)";
 		}
+		const context: DriverLogContext = { ...CONTEXT, direction: "none" };
 		this.logger.log({
 			level: SENDQUEUE_LOGLEVEL,
 			message,
@@ -222,7 +231,7 @@ export class DriverLogger extends ZWaveLoggerBase {
 				queue.length === 1 ? "" : "s"
 			})`,
 			direction: getDirectionPrefix("none"),
-			context: CONTEXT,
+			context,
 		});
 	}
 }

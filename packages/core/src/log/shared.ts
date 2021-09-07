@@ -7,6 +7,7 @@ import { configs, MESSAGE } from "triple-beam";
 import winston, { Logger } from "winston";
 import type Transport from "winston-transport";
 import type { ConsoleTransportInstance } from "winston/lib/winston/transports";
+import type { ValueID } from "../values/ValueDB";
 import { colorizer } from "./Colorizer";
 
 const { combine, timestamp, label } = winston.format;
@@ -59,10 +60,14 @@ export interface ZWaveLogInfo extends Omit<TransformableInfo, "message"> {
 	context: LogContext;
 }
 
-export type LogContext = { source: string } & Record<
-	string,
-	string | number | boolean | undefined | null
->;
+export interface LogContext {
+	source: "controller" | "config" | "driver";
+	type: string;
+}
+
+export type NodeLogContext = LogContext & { nodeId: number; type: "node" };
+export type ValueLogContext = LogContext &
+	ValueID & { nodeId: number; type: "value" };
 
 export type MessageRecord = Record<
 	string,
