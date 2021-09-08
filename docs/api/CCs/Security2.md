@@ -25,7 +25,7 @@ Requests a nonce from the target node.
 
 ```ts
 async getSupportedCommands(
-	securityClass?:
+	securityClass:
 		| SecurityClass.S2_AccessControl
 		| SecurityClass.S2_Authenticated
 		| SecurityClass.S2_Unauthenticated,
