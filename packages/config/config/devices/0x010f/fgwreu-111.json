@@ -16,19 +16,52 @@
 	"supportsZWavePlus": true,
 	"paramInformation": {
 		"11": {
-			"label": "LED frame colour when moving",
+			"label": "LED frame – colour when moving",
 			"description": "This parameter defines the LED colour when the motor is running.",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 7,
-			"defaultValue": 1
+			"defaultValue": 1,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "LED diabled",
+					"value": 0
+				},
+				{
+					"label": "White",
+					"value": 1
+				},
+				{
+					"label": "Red",
+					"value": 2
+				},
+				{
+					"label": "Green",
+					"value": 3
+				},
+				{
+					"label": "Blue",
+					"value": 4
+				},
+				{
+					"label": "Yellow",
+					"value": 5
+				},
+				{
+					"label": "Cyan",
+					"value": 6
+				},
+				{
+					"label": "Magenta",
+					"value": 7
+				}
+			]
 		},
 		"12": {
+			"$import": "#paramInformation/11",
 			"label": "LED frame – colour when not moving",
 			"description": "This parameter defines the LED colour when the device motor is not running.",
-			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 7,
 			"defaultValue": 0
 		},
 		"13": {
@@ -37,7 +70,8 @@
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 100,
-			"defaultValue": 100
+			"defaultValue": 100,
+			"unit": "%"
 		},
 		"24": {
 			"label": "Buttons orientation",
@@ -45,7 +79,18 @@
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 1,
-			"defaultValue": 0
+			"defaultValue": 0,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "1st button UP, 2nd button DOWN",
+					"value": 0
+				},
+				{
+					"label": "1st button DOWN, 2nd button UP (reversed)",
+					"value": 1
+				}
+			]
 		},
 		"25": {
 			"label": "Outputs orientation",
@@ -53,73 +98,99 @@
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 1,
-			"defaultValue": 0
+			"defaultValue": 0,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Q1 – UP, Q2 – DOWN",
+					"value": 0
+				},
+				{
+					"label": "Q1 – DOWN, Q2 – UP (reversed)",
+					"value": 1
+				}
+			]
 		},
 		"30": {
 			"label": "Alarm configuration - 1st slot",
 			"description": "Which alarm frames and how the device should react",
 			"valueSize": 4,
 			"minValue": 0,
-			"maxValue": 255,
+			"maxValue": 4,
 			"defaultValue": 0
 		},
 		"31": {
 			"label": "Alarm configuration - 2nd slot",
 			"description": "which alarm frames and how the device should react",
 			"valueSize": 4,
-			"minValue": 0,
-			"maxValue": 255,
+			"minValue": 1,
+			"maxValue": 4,
 			"defaultValue": 0
 		},
 		"32": {
 			"label": "Alarm configuration - 3rd slot",
 			"description": "which alarm frames and how the device should react",
 			"valueSize": 4,
-			"minValue": 0,
-			"maxValue": 255,
-			"defaultValue": 0,
-			"readOnly": true
+			"minValue": 1,
+			"maxValue": 4,
+			"defaultValue": 0
 		},
 		"33": {
 			"label": "Alarm configuration - 4th slot",
 			"description": "which alarm frames and how the device should react",
 			"valueSize": 4,
-			"minValue": 0,
-			"maxValue": 255,
+			"minValue": 1,
+			"maxValue": 4,
 			"defaultValue": 0
 		},
 		"34": {
 			"label": "Alarm configuration - 5th slot",
 			"description": "which alarm frames and how the device should react",
 			"valueSize": 4,
-			"minValue": 0,
-			"maxValue": 255,
+			"minValue": 1,
+			"maxValue": 4,
 			"defaultValue": 0
 		},
 		"35": {
 			"label": "Alarm configuration – duration",
 			"description": "duration of alarm sequence",
-			"unit": "Seconds",
+			"unit": "s",
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 32400,
 			"defaultValue": 600
 		},
-		"40": {
-			"label": "First button – scenes sent",
-			"description": "which actions result in sending scene IDs",
-			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 15,
-			"defaultValue": 0
+		"40[0x01]": {
+			"$import": "../templates/master_template.json#base_enable_disable",
+			"label": "First button: send scenes when pressed 1 time"
 		},
-		"41": {
-			"label": "Second button – scenes sent",
-			"description": "which actions result in sending scene IDs",
-			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 15,
-			"defaultValue": 0
+		"40[0x02]": {
+			"$import": "../templates/master_template.json#base_enable_disable",
+			"label": "First button: send scenes when pressed 2 times"
+		},
+		"40[0x04]": {
+			"$import": "../templates/master_template.json#base_enable_disable",
+			"label": "First button: send scenes when pressed 3 times"
+		},
+		"40[0x08]": {
+			"$import": "../templates/master_template.json#base_enable_disable",
+			"label": "First button: send scenes when held down and released"
+		},
+		"41[0x01]": {
+			"$import": "../templates/master_template.json#base_enable_disable",
+			"label": "Second button: send scenes when pressed 1 time"
+		},
+		"41[0x02]": {
+			"$import": "../templates/master_template.json#base_enable_disable",
+			"label": "Second button: send scenes when pressed 2 times"
+		},
+		"41[0x04]": {
+			"$import": "../templates/master_template.json#base_enable_disable",
+			"label": "Second button: send scenes when pressed 3 times"
+		},
+		"41[0x08]": {
+			"$import": "../templates/master_template.json#base_enable_disable",
+			"label": "Second button: send scenes when held down and released"
 		},
 		"60": {
 			"label": "Power reports – include self-consumption",
@@ -127,12 +198,23 @@
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 1,
-			"defaultValue": 0
+			"defaultValue": 0,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Self-consumption not included",
+					"value": 0
+				},
+				{
+					"label": "Self-consumption included",
+					"value": 1
+				}
+			]
 		},
 		"61": {
 			"label": "Power reports – on change",
 			"description": "minimal change in measured power to report",
-			"unit": "Percent",
+			"unit": "%",
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 500,
@@ -140,8 +222,8 @@
 		},
 		"62": {
 			"label": "Power reports – periodic",
-			"description": "reporting interval for measured power",
-			"unit": "Seconds",
+			"description": "This reporting interval for measured power",
+			"unit": "s",
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 32400,
@@ -150,6 +232,7 @@
 		"65": {
 			"label": "Energy reports – on change",
 			"description": "minimal change in measured energy to report",
+			"unit": "0.01kWh",
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 500,
@@ -158,6 +241,7 @@
 		"66": {
 			"label": "Energy reports – periodic",
 			"description": "This reporting interval for measured energy",
+			"unit": "s",
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 32400,
@@ -165,11 +249,25 @@
 		},
 		"150": {
 			"label": "Force calibration",
-			"description": "Set 2 to force device into calibration mode",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 2,
-			"defaultValue": 0
+			"defaultValue": 0,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "device is not calibrated",
+					"value": 0
+				},
+				{
+					"label": "device is calibrated",
+					"value": 1
+				},
+				{
+					"label": "force device calibration",
+					"value": 2
+				}
+			]
 		},
 		"151": {
 			"label": "Operating mode",
@@ -177,10 +275,30 @@
 			"valueSize": 1,
 			"minValue": 1,
 			"maxValue": 6,
-			"defaultValue": 1
+			"defaultValue": 1,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "roller blind (with positioning)",
+					"value": 1
+				},
+				{
+					"label": "Venetian blind (with positioning)",
+					"value": 2
+				},
+				{
+					"label": "roller blind with built-in driver",
+					"value": 5
+				},
+				{
+					"label": "roller blind with built-in driver (impulse)",
+					"value": 6
+				}
+			]
 		},
 		"152": {
 			"label": "Venetian blind – time of full turn of the slats",
+			"unit": "ms",
 			"valueSize": 4,
 			"minValue": 0,
 			"maxValue": 65535,
@@ -192,11 +310,27 @@
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 2,
-			"defaultValue": 1
+			"defaultValue": 1,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "slats return to previously set position only in case of the main controller operation",
+					"value": 0
+				},
+				{
+					"label": "slats return to previously set position in case of the main controller operation, momentary switch operation, or when the limit switch is reached",
+					"value": 1
+				},
+				{
+					"label": "slats return to previously set position in case of the main controller operation, momentary switch operation, when the limit switch is reached or after receiving the Switch Multilevel Stop control frame",
+					"value": 2
+				}
+			]
 		},
 		"154": {
 			"label": "Delay motor stop after reaching end switch",
 			"description": "time after which the motor will be stopped after contacts closed",
+			"unit": "0.1s",
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 255,
@@ -205,6 +339,7 @@
 		"155": {
 			"label": "Motor operation detection",
 			"description": "Power threshold interpreted as reaching a limit switch.",
+			"unit": "W",
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 255,
@@ -213,6 +348,7 @@
 		"156": {
 			"label": "Time of up movement",
 			"description": "time needed for roller blinds to reach the top",
+			"unit": "ms",
 			"valueSize": 4,
 			"minValue": 1,
 			"maxValue": 65535,
@@ -221,6 +357,7 @@
 		"157": {
 			"label": "Time of down movement",
 			"description": "time needed for roller blinds to reach the bottom",
+			"unit": "ms",
 			"valueSize": 4,
 			"minValue": 1,
 			"maxValue": 65535,
