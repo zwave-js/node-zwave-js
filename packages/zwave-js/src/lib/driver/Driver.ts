@@ -339,6 +339,8 @@ export interface SendMessageOptions {
 export interface SendCommandOptions extends SendMessageOptions {
 	/** How many times the driver should try to send the message. Defaults to the configured Driver option */
 	maxSendAttempts?: number;
+	/** Whether the driver should automatically handle the encapsulation. Default: true */
+	autoEncapsulate?: boolean;
 }
 
 export type SupervisionUpdateHandler = (
@@ -2822,7 +2824,7 @@ ${handlers.length} left`,
 		}
 
 		// Automatically encapsulate commands before sending
-		this.encapsulateCommands(msg);
+		if (options.autoEncapsulate !== false) this.encapsulateCommands(msg);
 
 		try {
 			const resp = await this.sendMessage(msg, options);
