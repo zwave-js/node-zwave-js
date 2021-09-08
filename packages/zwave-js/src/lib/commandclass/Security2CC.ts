@@ -11,6 +11,7 @@ import {
 	MessageRecord,
 	parseBitMask,
 	parseCCList,
+	S2SecurityClass,
 	SecurityClass,
 	securityClassIsS2,
 	securityClassOrder,
@@ -41,6 +42,7 @@ import {
 	gotDeserializationOptions,
 	implementedVersion,
 } from "./CommandClass";
+import { MultiChannelCC } from "./MultiChannelCC";
 import {
 	MGRPExtension,
 	Security2Extension,
@@ -241,7 +243,7 @@ export class Security2CCAPI extends CCAPI {
 	 * @param securityClass Can be used to overwrite the security class to use. If this doesn't match the current one, new nonces will need to be exchanged.
 	 */
 	public async getSupportedCommands(
-		securityClass?:
+		securityClass:
 			| SecurityClass.S2_AccessControl
 			| SecurityClass.S2_Authenticated
 			| SecurityClass.S2_Unauthenticated,
@@ -251,16 +253,28 @@ export class Security2CCAPI extends CCAPI {
 			Security2Command.CommandsSupportedGet,
 		);
 
-		let cc = new Security2CCCommandsSupportedGet(this.driver, {
-			nodeId: this.endpoint.nodeId,
-			endpoint: this.endpoint.index,
-		});
+		let cc: CommandClass = new Security2CCCommandsSupportedGet(
+			this.driver,
+			{
+				nodeId: this.endpoint.nodeId,
+				endpoint: this.endpoint.index,
+			},
+		);
+		// Security2CCCommandsSupportedGet is special because we cannot reply on the driver to do the automatic
+		// encapsulation because it would use a different security class. Therefore the entire possible stack
+		// of encapsulation needs to be done here
+		if (MultiChannelCC.requiresEncapsulation(cc)) {
+			cc = MultiChannelCC.encapsulate(this.driver, cc);
+		}
 		cc = Security2CC.encapsulate(this.driver, cc, securityClass);
 
 		const response =
 			await this.driver.sendCommand<Security2CCCommandsSupportedReport>(
 				cc,
-				this.commandOptions,
+				{
+					...this.commandOptions,
+					autoEncapsulate: false,
+				},
 			);
 		return response?.supportedCCs;
 	}
@@ -397,11 +411,27 @@ export class Security2CC extends CommandClass {
 		// Only on the highest security class the reponse includes the supported commands
 		let hasReceivedSecureCommands = false;
 
-		for (const secClass of [
-			SecurityClass.S2_Unauthenticated,
-			SecurityClass.S2_Authenticated,
-			SecurityClass.S2_AccessControl,
-		] as const) {
+		let possibleSecurityClasses: S2SecurityClass[];
+		if (endpoint.index === 0) {
+			possibleSecurityClasses = [
+				SecurityClass.S2_Unauthenticated,
+				SecurityClass.S2_Authenticated,
+				SecurityClass.S2_AccessControl,
+			];
+		} else {
+			const secClass = node.getHighestSecurityClass();
+			if (!securityClassIsS2(secClass)) {
+				this.driver.controllerLog.logNode(node.id, {
+					endpoint: endpoint.index,
+					message: `Cannot query securely supported commands for endpoint because the node's security class isn't known...`,
+					level: "error",
+				});
+				return;
+			}
+			possibleSecurityClasses = [secClass];
+		}
+
+		for (const secClass of possibleSecurityClasses) {
 			// We might not know all assigned security classes yet, so we work our way up from low to high and try to request the supported commands.
 			// This way, each command is encrypted with the security class we're currently testing.
 
@@ -417,6 +447,7 @@ export class Security2CC extends CommandClass {
 				!this.driver.securityManager2?.hasKeysForSecurityClass(secClass)
 			) {
 				this.driver.controllerLog.logNode(node.id, {
+					endpoint: endpoint.index,
 					message: `Cannot query securely supported commands (${getEnumMemberName(
 						SecurityClass,
 						secClass,
@@ -427,6 +458,7 @@ export class Security2CC extends CommandClass {
 			}
 
 			this.driver.controllerLog.logNode(node.id, {
+				endpoint: endpoint.index,
 				message: `Querying securely supported commands (${getEnumMemberName(
 					SecurityClass,
 					secClass,
@@ -451,29 +483,33 @@ export class Security2CC extends CommandClass {
 			}
 
 			if (supportedCCs == undefined) {
-				// No supported commands found, mark the security class as not granted
-				node.securityClasses.set(secClass, false);
+				if (endpoint.index === 0) {
+					// No supported commands found, mark the security class as not granted
+					node.securityClasses.set(secClass, false);
+
+					this.driver.controllerLog.logNode(node.id, {
+						message: `The node was NOT granted the security class ${getEnumMemberName(
+							SecurityClass,
+							secClass,
+						)}`,
+						direction: "inbound",
+					});
+				}
+				continue;
+			}
+
+			if (endpoint.index === 0) {
+				// Mark the security class as granted
+				node.securityClasses.set(secClass, true);
 
 				this.driver.controllerLog.logNode(node.id, {
-					message: `The node was NOT granted the security class ${getEnumMemberName(
+					message: `The node was granted the security class ${getEnumMemberName(
 						SecurityClass,
 						secClass,
 					)}`,
 					direction: "inbound",
 				});
-				continue;
 			}
-
-			// Mark the security class as granted
-			node.securityClasses.set(secClass, true);
-
-			this.driver.controllerLog.logNode(node.id, {
-				message: `The node was granted the security class ${getEnumMemberName(
-					SecurityClass,
-					secClass,
-				)}`,
-				direction: "inbound",
-			});
 
 			if (!hasReceivedSecureCommands && supportedCCs.length > 0) {
 				hasReceivedSecureCommands = true;
@@ -489,6 +525,7 @@ export class Security2CC extends CommandClass {
 					logLines.push(`· ${getCCName(cc)}`);
 				}
 				this.driver.controllerLog.logNode(node.id, {
+					endpoint: endpoint.index,
 					message: logLines.join("\n"),
 					direction: "inbound",
 				});
