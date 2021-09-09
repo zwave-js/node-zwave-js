@@ -148,9 +148,27 @@ export class SceneControllerConfigurationCCAPI extends CCAPI {
 					) ?? new Duration(0, "seconds");
 				await this.set(propertyKey, value, dimmingDuration);
 			}
+		} else if (property === "dimmingDuration") {
+			if (typeof value !== "number") {
+				throwWrongValueType(
+					this.ccId,
+					property,
+					"duration",
+					typeof value,
+				);
+			}
+
+			const dimmingDuration = Duration.parseSet(value);
+
+			const node = this.endpoint.getNodeUnsafe()!;
+			// If SceneId missing, we need to set a default to 0,
+			// which disables the scene configuration for the association group
+			const sceneId =
+				node.getValue<number>(
+					getSceneIdValueID(this.endpoint.index, propertyKey),
+				) ?? 0;
+			await this.set(propertyKey, sceneId, dimmingDuration);
 		} else {
-			// setting dimmingDuration value alone not supported,
-			// because I'm not sure how to handle a Duration value
 			throwUnsupportedProperty(this.ccId, property);
 		}
 	};
@@ -190,7 +208,7 @@ export class SceneControllerConfigurationCCAPI extends CCAPI {
 	public async set(
 		groupId: number,
 		sceneId: number,
-		dimmingDuration: Duration,
+		dimmingDuration?: Duration,
 	): Promise<void> {
 		this.assertSupportsCommand(
 			SceneControllerConfigurationCommand,
@@ -364,7 +382,7 @@ dimming duration: ${group.dimmingDuration.toString()}`;
 interface SceneControllerConfigurationCCSetOptions extends CCCommandOptions {
 	groupId: number;
 	sceneId: number;
-	dimmingDuration: Duration;
+	dimmingDuration?: Duration;
 }
 
 @CCCommand(SceneControllerConfigurationCommand.Set)
@@ -386,7 +404,9 @@ export class SceneControllerConfigurationCCSet extends SceneControllerConfigurat
 			const groupCount = this.getGroupCountCached();
 			this.groupId = options.groupId;
 			this.sceneId = options.sceneId;
-			this.dimmingDuration = options.dimmingDuration;
+			// if dimmingDuration was missing, default to 0 seconds
+			this.dimmingDuration =
+				options.dimmingDuration ?? new Duration(0, "seconds");
 
 			// The client SHOULD NOT specify group 1 (the life-line group).
 			// We don't block it here, because the specs don't forbid it,

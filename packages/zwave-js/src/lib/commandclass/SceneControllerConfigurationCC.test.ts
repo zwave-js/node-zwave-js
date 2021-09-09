@@ -88,6 +88,24 @@ describe("lib/commandclass/SceneControllerConfigurationCC => ", () => {
 		expect(cc.serialize()).toEqual(expected);
 	});
 
+	it("the Set command should serialize correctly with undefined duration", () => {
+		const cc = new SceneControllerConfigurationCCSet(fakeDriver, {
+			nodeId: 2,
+			groupId: 3,
+			sceneId: 240,
+			dimmingDuration: undefined,
+		});
+		const expected = buildCCBuffer(
+			Buffer.from([
+				SceneControllerConfigurationCommand.Set, // CC Command
+				3, // groupId
+				240, // sceneId
+				0x00, // dimming duration
+			]),
+		);
+		expect(cc.serialize()).toEqual(expected);
+	});
+
 	it("the Set command should throw if GroupId > groupCount", () => {
 		expect(
 			() =>
