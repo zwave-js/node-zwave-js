@@ -100,7 +100,7 @@ describe("lib/commandclass/SceneControllerConfigurationCC => ", () => {
 				SceneControllerConfigurationCommand.Set, // CC Command
 				3, // groupId
 				240, // sceneId
-				0x00, // dimming duration
+				0xff, // dimming duration
 			]),
 		);
 		expect(cc.serialize()).toEqual(expected);

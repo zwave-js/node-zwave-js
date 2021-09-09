@@ -149,7 +149,7 @@ export class SceneControllerConfigurationCCAPI extends CCAPI {
 				await this.set(propertyKey, value, dimmingDuration);
 			}
 		} else if (property === "dimmingDuration") {
-			if (typeof value !== "number") {
+			if (typeof value !== "string" && !Duration.isDuration(value)) {
 				throwWrongValueType(
 					this.ccId,
 					property,
@@ -158,15 +158,38 @@ export class SceneControllerConfigurationCCAPI extends CCAPI {
 				);
 			}
 
-			const dimmingDuration = Duration.parseSet(value);
+			const dimmingDuration = Duration.from(value);
+			if (dimmingDuration == undefined) {
+				throw new ZWaveError(
+					`${CommandClasses["Scene Controller Configuration"]}: "${property}" could not be set. Value is not a valid duration.`,
+					ZWaveErrorCodes.Argument_Invalid,
+				);
+			}
 
 			const node = this.endpoint.getNodeUnsafe()!;
-			// If SceneId missing, we need to set a default to 0,
-			// which disables the scene configuration for the association group
-			const sceneId =
-				node.getValue<number>(
-					getSceneIdValueID(this.endpoint.index, propertyKey),
-				) ?? 0;
+			const sceneId = node.getValue<number>(
+				getSceneIdValueID(this.endpoint.index, propertyKey),
+			);
+			if (sceneId == undefined || sceneId === 0) {
+				// Can't actually send dimmingDuration without valid sceneId
+				// So we save it in the valueDB without sending it to the node
+				const dimmingDurationValueId = getDimmingDurationValueID(
+					this.endpoint.index,
+					propertyKey,
+				);
+				const valueDB = node.valueDB;
+
+				if (!valueDB.hasMetadata(dimmingDurationValueId)) {
+					valueDB.setMetadata(dimmingDurationValueId, {
+						...ValueMetadata.Duration,
+						label: `Dimming duration (${propertyKey})`,
+					});
+				}
+
+				valueDB.setValue(dimmingDurationValueId, dimmingDuration);
+				return;
+			}
+
 			await this.set(propertyKey, sceneId, dimmingDuration);
 		} else {
 			throwUnsupportedProperty(this.ccId, property);
@@ -404,9 +427,9 @@ export class SceneControllerConfigurationCCSet extends SceneControllerConfigurat
 			const groupCount = this.getGroupCountCached();
 			this.groupId = options.groupId;
 			this.sceneId = options.sceneId;
-			// if dimmingDuration was missing, default to 0 seconds
+			// if dimmingDuration was missing, default to 0xff
 			this.dimmingDuration =
-				options.dimmingDuration ?? new Duration(0, "seconds");
+				options.dimmingDuration ?? new Duration(0, "default");
 
 			// The client SHOULD NOT specify group 1 (the life-line group).
 			// We don't block it here, because the specs don't forbid it,
