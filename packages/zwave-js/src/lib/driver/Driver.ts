@@ -2482,6 +2482,17 @@ ${handlers.length} left`,
 				);
 				const secure = msg.command.secure;
 
+				if (
+					supervisionSessionId !== undefined &&
+					!node.supportsCC(CommandClasses.Supervision)
+				) {
+					// When a node sends us a command that's supervision encapsulated, it must support Supervision CC
+					node.addCC(CommandClasses.Supervision, {
+						isSupported: true,
+						version: 1,
+					});
+				}
+
 				// check if someone is waiting for this command
 				for (const entry of this.awaitedCommands) {
 					if (entry.predicate(msg.command)) {
