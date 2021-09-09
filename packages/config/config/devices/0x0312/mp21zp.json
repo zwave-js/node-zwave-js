@@ -27,7 +27,7 @@
 			"unsigned": true,
 			"options": [
 				{
-					"label": "Disabled",
+					"label": "Disable",
 					"value": 0
 				}
 			]
@@ -42,7 +42,7 @@
 			"unsigned": true,
 			"options": [
 				{
-					"label": "Disabled",
+					"label": "Disable",
 					"value": 0
 				}
 			]
