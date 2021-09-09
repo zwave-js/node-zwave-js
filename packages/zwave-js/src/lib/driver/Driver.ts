@@ -2456,67 +2456,125 @@ ${handlers.length} left`,
 				if (!msg.command.moreUpdatesFollow) {
 					nodeSessions.supervision.delete(msg.command.sessionId);
 				}
-			} else if (
-				msg.command.isEncapsulatedWith(
-					CommandClasses.Supervision,
-					SupervisionCommand.Get,
-				)
-			) {
-				const supervisionEncapsulation = msg.command.getEncapsulatingCC(
-					CommandClasses.Supervision,
-					SupervisionCommand.Get,
-				) as SupervisionCCGet;
-
-				if (
-					msg.command instanceof InvalidCC &&
-					!supervisionEncapsulation.isMulticast() // A receiving node MUST NOT return a response if this command is received via multicast addressing
-				) {
-					const report = new SupervisionCCReport(this, {
-						sessionId: supervisionEncapsulation.sessionId,
-						moreUpdatesFollow: false,
-						nodeId: supervisionEncapsulation.nodeId,
-						status: SupervisionStatus.NoSupport,
-					});
-
-					// The report should be sent back with security if the received command was secure
-					report.secure = msg.command.secure;
-
-					await this.sendCommand(report, {
-						priority: MessagePriority.Handshake,
-					});
-
-					return;
-				}
-
-				await node.handleCommand(msg.command);
-
-				// A receiving node MUST NOT return a response if this command is received via multicast addressing.
-				if (!supervisionEncapsulation.isMulticast()) {
-					const report = new SupervisionCCReport(this, {
-						sessionId: supervisionEncapsulation.sessionId,
-						moreUpdatesFollow: false,
-						nodeId: supervisionEncapsulation.nodeId,
-						status: SupervisionStatus.Success,
-					});
-
-					// The report should be sent back with security if the received command was secure
-					report.secure = msg.command.secure;
-
-					await this.sendCommand(report, {
-						priority: MessagePriority.Handshake,
-					});
-				}
 			} else {
 				// check if someone is waiting for this command
 				for (const entry of this.awaitedCommands) {
 					if (entry.predicate(msg.command)) {
 						// resolve the promise - this will remove the entry from the list
 						entry.promise.resolve(msg.command);
+
+						// send back a Supervision Report if the command was received via Supervision Get
+						if (
+							msg.command.isEncapsulatedWith(
+								CommandClasses.Supervision,
+								SupervisionCommand.Get,
+							)
+						) {
+							const supervisionEncapsulation =
+								msg.command.getEncapsulatingCC(
+									CommandClasses.Supervision,
+									SupervisionCommand.Get,
+								) as SupervisionCCGet;
+
+							// A receiving node MUST NOT return a response if this command is received via multicast addressing
+							if (!supervisionEncapsulation.isMulticast()) {
+								const report = new SupervisionCCReport(this, {
+									sessionId:
+										supervisionEncapsulation.sessionId,
+									moreUpdatesFollow: false,
+									nodeId: supervisionEncapsulation.nodeId,
+									status: SupervisionStatus.Success,
+								});
+
+								// The report should be sent back with security if the received command was secure
+								report.secure = msg.command.secure;
+
+								await this.sendCommand(report, {
+									priority: MessagePriority.Handshake,
+								});
+							}
+						}
 						return;
 					}
 				}
-				// noone is waiting, dispatch the command to the node itself
-				await node.handleCommand(msg.command);
+
+				if (
+					msg.command.isEncapsulatedWith(
+						CommandClasses.Supervision,
+						SupervisionCommand.Get,
+					)
+				) {
+					const supervisionEncapsulation =
+						msg.command.getEncapsulatingCC(
+							CommandClasses.Supervision,
+							SupervisionCommand.Get,
+						) as SupervisionCCGet;
+
+					if (
+						msg.command instanceof InvalidCC &&
+						!supervisionEncapsulation.isMulticast() // A receiving node MUST NOT return a response if this command is received via multicast addressing
+					) {
+						const report = new SupervisionCCReport(this, {
+							sessionId: supervisionEncapsulation.sessionId,
+							moreUpdatesFollow: false,
+							nodeId: supervisionEncapsulation.nodeId,
+							status: SupervisionStatus.NoSupport,
+						});
+
+						// The report should be sent back with security if the received command was secure
+						report.secure = msg.command.secure;
+
+						await this.sendCommand(report, {
+							priority: MessagePriority.Handshake,
+						});
+
+						return;
+					}
+
+					try {
+						// noone is waiting, dispatch the command to the node itself
+						await node.handleCommand(msg.command);
+
+						// A receiving node MUST NOT return a response if this command is received via multicast addressing
+						if (!supervisionEncapsulation.isMulticast()) {
+							const report = new SupervisionCCReport(this, {
+								sessionId: supervisionEncapsulation.sessionId,
+								moreUpdatesFollow: false,
+								nodeId: supervisionEncapsulation.nodeId,
+								status: SupervisionStatus.Success,
+							});
+
+							// The report should be sent back with security if the received command was secure
+							report.secure = msg.command.secure;
+
+							await this.sendCommand(report, {
+								priority: MessagePriority.Handshake,
+							});
+						}
+					} catch (error) {
+						// A receiving node MUST NOT return a response if this command is received via multicast addressing
+						if (!supervisionEncapsulation.isMulticast()) {
+							const report = new SupervisionCCReport(this, {
+								sessionId: supervisionEncapsulation.sessionId,
+								moreUpdatesFollow: false,
+								nodeId: supervisionEncapsulation.nodeId,
+								status: SupervisionStatus.Fail,
+							});
+
+							// The report should be sent back with security if the received command was secure
+							report.secure = msg.command.secure;
+
+							await this.sendCommand(report, {
+								priority: MessagePriority.Handshake,
+							});
+						}
+
+						throw error;
+					}
+				} else {
+					// noone is waiting, dispatch the command to the node itself
+					await node.handleCommand(msg.command);
+				}
 			}
 
 			return;
