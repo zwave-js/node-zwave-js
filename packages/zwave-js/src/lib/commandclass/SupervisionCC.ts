@@ -1,14 +1,19 @@
-import type { Maybe, MessageRecord } from "@zwave-js/core";
 import {
 	CommandClasses,
 	Duration,
+	isTransmissionError,
+	Maybe,
 	MessageOrCCLogEntry,
+	MessageRecord,
 	validatePayload,
 	ZWaveError,
 	ZWaveErrorCodes,
 } from "@zwave-js/core";
 import { getEnumMemberName } from "@zwave-js/shared";
+import { SendDataBridgeRequest } from "../controller/SendDataBridgeMessages";
+import { SendDataRequest } from "../controller/SendDataMessages";
 import type { Driver } from "../driver/Driver";
+import { FunctionType, MessagePriority } from "../message/Constants";
 import { PhysicalCCAPI } from "./API";
 import {
 	API,
@@ -59,6 +64,7 @@ export class SupervisionCCAPI extends PhysicalCCAPI {
 	public supportsCommand(cmd: SupervisionCommand): Maybe<boolean> {
 		switch (cmd) {
 			case SupervisionCommand.Get:
+			case SupervisionCommand.Report:
 				return true; // This is mandatory
 		}
 		return super.supportsCommand(cmd);
@@ -77,6 +83,49 @@ export class SupervisionCCAPI extends PhysicalCCAPI {
 			encapsulated,
 		});
 		await this.driver.sendCommand(cc, this.commandOptions);
+	}
+
+	public async sendReport(
+		options: SupervisionCCReportOptions & { secure?: boolean },
+	): Promise<void> {
+		const { secure = false, ...cmdOptions } = options;
+		const cc = new SupervisionCCReport(this.driver, {
+			nodeId: this.endpoint.nodeId,
+			...cmdOptions,
+		});
+
+		// The report should be sent back with security if the received command was secure
+		cc.secure = secure;
+
+		const SendDataConstructor = this.driver.controller.isFunctionSupported(
+			FunctionType.SendDataBridge,
+		)
+			? SendDataBridgeRequest
+			: SendDataRequest;
+
+		const msg = new SendDataConstructor(this.driver, {
+			command: cc,
+			// Only try sending a nonce once
+			maxSendAttempts: 1,
+		});
+
+		try {
+			await this.driver.sendMessage(msg, {
+				...this.commandOptions,
+				// Supervision Reports must be sent immediately
+				priority: MessagePriority.Handshake,
+				// We don't want failures causing us to treat the node as asleep or dead
+				changeNodeStatusOnMissingACK: false,
+			});
+		} catch (e) {
+			if (isTransmissionError(e)) {
+				// Swallow errors related to transmission failures
+				return;
+			} else {
+				// Pass other errors through
+				throw e;
+			}
+		}
 	}
 }
 
@@ -113,23 +162,44 @@ export class SupervisionCC extends CommandClass {
 			requestStatusUpdates,
 		});
 	}
+
+	/**
+	 * Given a CC instance, this returns the Supervision session ID which is used for this command.
+	 * Returns `undefined` when there is no session ID or the command was sent as multicast.
+	 */
+	public static getSessionId(command: CommandClass): number | undefined {
+		if (
+			command.isEncapsulatedWith(
+				CommandClasses.Supervision,
+				SupervisionCommand.Get,
+			)
+		) {
+			const supervisionEncapsulation = command.getEncapsulatingCC(
+				CommandClasses.Supervision,
+				SupervisionCommand.Get,
+			) as SupervisionCCGet;
+			if (!supervisionEncapsulation.isMulticast()) {
+				return supervisionEncapsulation.sessionId;
+			}
+		}
+	}
 }
 
-type SupervisionCCReportOptions = CCCommandOptions & {
+export type SupervisionCCReportOptions = {
 	moreUpdatesFollow: boolean;
 	sessionId: number;
 } & (
-		| {
-				status: SupervisionStatus.Working;
-				duration: Duration;
-		  }
-		| {
-				status:
-					| SupervisionStatus.NoSupport
-					| SupervisionStatus.Fail
-					| SupervisionStatus.Success;
-		  }
-	);
+	| {
+			status: SupervisionStatus.Working;
+			duration: Duration;
+	  }
+	| {
+			status:
+				| SupervisionStatus.NoSupport
+				| SupervisionStatus.Fail
+				| SupervisionStatus.Success;
+	  }
+);
 
 @CCCommand(SupervisionCommand.Report)
 export class SupervisionCCReport extends SupervisionCC {
@@ -139,7 +209,7 @@ export class SupervisionCCReport extends SupervisionCC {
 		driver: Driver,
 		options:
 			| CommandClassDeserializationOptions
-			| SupervisionCCReportOptions,
+			| (CCCommandOptions & SupervisionCCReportOptions),
 	) {
 		super(driver, options);
 
@@ -155,6 +225,8 @@ export class SupervisionCCReport extends SupervisionCC {
 			this.status = options.status;
 			if (options.status === SupervisionStatus.Working) {
 				this.duration = options.duration;
+			} else {
+				this.duration = new Duration(0, "seconds");
 			}
 		}
 	}
@@ -163,6 +235,24 @@ export class SupervisionCCReport extends SupervisionCC {
 	public readonly sessionId: number;
 	public readonly status: SupervisionStatus;
 	public readonly duration: Duration | undefined;
+
+	public serialize(): Buffer {
+		this.payload = Buffer.concat([
+			Buffer.from([
+				(this.moreUpdatesFollow ? 0b10_000000 : 0) |
+					(this.sessionId & 0b111111),
+				this.status,
+			]),
+		]);
+
+		if (this.duration) {
+			this.payload = Buffer.concat([
+				this.payload,
+				Buffer.from([this.duration.serializeReport()]),
+			]);
+		}
+		return super.serialize();
+	}
 
 	public toLogEntry(): MessageOrCCLogEntry {
 		const message: MessageRecord = {
@@ -201,11 +291,15 @@ export class SupervisionCCGet extends SupervisionCC {
 	) {
 		super(driver, options);
 		if (gotDeserializationOptions(options)) {
-			// TODO: Deserialize payload
-			throw new ZWaveError(
-				`${this.constructor.name}: deserialization not implemented`,
-				ZWaveErrorCodes.Deserialization_NotImplemented,
-			);
+			validatePayload(this.payload.length >= 3);
+			this.requestStatusUpdates = !!(this.payload[0] & 0b1_0_000000);
+			this.sessionId = this.payload[0] & 0b111111;
+
+			this.encapsulated = CommandClass.from(this.driver, {
+				data: this.payload.slice(2),
+				fromEncapsulation: true,
+				encapCC: this,
+			});
 		} else {
 			this.sessionId = getNextSessionId();
 			this.requestStatusUpdates = options.requestStatusUpdates;
