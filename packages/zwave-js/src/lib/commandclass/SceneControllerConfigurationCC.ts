@@ -178,14 +178,6 @@ export class SceneControllerConfigurationCCAPI extends CCAPI {
 					propertyKey,
 				);
 				const valueDB = node.valueDB;
-
-				if (!valueDB.hasMetadata(dimmingDurationValueId)) {
-					valueDB.setMetadata(dimmingDurationValueId, {
-						...ValueMetadata.Duration,
-						label: `Dimming duration (${propertyKey})`,
-					});
-				}
-
 				valueDB.setValue(dimmingDurationValueId, dimmingDuration);
 				return;
 			}
