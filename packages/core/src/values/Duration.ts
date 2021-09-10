@@ -95,26 +95,6 @@ export class Duration {
 		}
 	}
 
-	/**
-	 * Guards that an arbitrary object is a valid Duration
-	 */
-	public static isDuration(input: any): input is Duration {
-		if (typeof input.value !== "number" || typeof input.unit !== "string") {
-			return false;
-		}
-		switch (input.unit) {
-			case "minutes":
-				return input.value >= 1 && input.value <= 127;
-			case "seconds":
-				return input.value <= 127;
-			case "unknown":
-			case "default":
-				return input.value === 0;
-			default:
-				return false;
-		}
-	}
-
 	/** Serializes a duration for a Set command */
 	public serializeSet(): number {
 		if (this.unit === "default") return 0xff;

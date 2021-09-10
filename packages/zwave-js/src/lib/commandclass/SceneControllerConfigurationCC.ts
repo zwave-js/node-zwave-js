@@ -1,6 +1,7 @@
 import {
 	CommandClasses,
 	Duration,
+	getCCName,
 	Maybe,
 	MessageOrCCLogEntry,
 	validatePayload,
@@ -149,7 +150,7 @@ export class SceneControllerConfigurationCCAPI extends CCAPI {
 				await this.set(propertyKey, value, dimmingDuration);
 			}
 		} else if (property === "dimmingDuration") {
-			if (typeof value !== "string" && !Duration.isDuration(value)) {
+			if (typeof value !== "string" && !(value instanceof Duration)) {
 				throwWrongValueType(
 					this.ccId,
 					property,
@@ -161,7 +162,11 @@ export class SceneControllerConfigurationCCAPI extends CCAPI {
 			const dimmingDuration = Duration.from(value);
 			if (dimmingDuration == undefined) {
 				throw new ZWaveError(
-					`${CommandClasses["Scene Controller Configuration"]}: "${property}" could not be set. Value is not a valid duration.`,
+					`${getCCName(
+						this.ccId,
+					)}: "${property}" could not be set. ${JSON.stringify(
+						value,
+					)} is not a valid duration.`,
 					ZWaveErrorCodes.Argument_Invalid,
 				);
 			}
@@ -419,7 +424,7 @@ export class SceneControllerConfigurationCCSet extends SceneControllerConfigurat
 			const groupCount = this.getGroupCountCached();
 			this.groupId = options.groupId;
 			this.sceneId = options.sceneId;
-			// if dimmingDuration was missing, default to 0xff
+			// if dimmingDuration was missing, use default duration.
 			this.dimmingDuration =
 				options.dimmingDuration ?? new Duration(0, "default");
 
