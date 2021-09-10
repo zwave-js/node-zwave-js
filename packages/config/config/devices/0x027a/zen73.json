@@ -191,7 +191,7 @@
 			]
 		},
 		"17": {
-		    "$if": "firmwareVersion >= 10.0",
+			"$if": "firmwareVersion >= 10.0",
 			"label": "Disable Programming from Toggle",
 			"valueSize": 1,
 			"minValue": 0,
@@ -202,12 +202,12 @@
 			"options": [
 				{
 					"label": "Toggle Programming Function Enabled",
-          	"description": "Switch will behave according to manual toggle programming",
+					"description": "Switch will behave according to manual toggle programming",
 					"value": 0
 				},
 				{
 					"label": "Toggle Programming Function Disabled",
-          	"description": "Switch will not perform the following manual toggle press functions: 1) exclusion, inclusion, 2) change LED indicator mode. Switch will still perform functions 1) on/off, 2) factory reset, 3) range test tool and central scene triggers (if central scene enabled)",
+					"description": "Switch will not perform the following manual toggle press functions: 1) exclusion, inclusion, 2) change LED indicator mode. Switch will still perform functions 1) on/off, 2) factory reset, 3) range test tool and central scene triggers (if central scene enabled)",
 					"value": 1
 				}
 			]
