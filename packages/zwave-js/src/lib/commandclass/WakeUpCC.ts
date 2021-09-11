@@ -134,6 +134,7 @@ export class WakeUpCCAPI extends CCAPI {
 				"minWakeUpInterval",
 				"maxWakeUpInterval",
 				"wakeUpIntervalSteps",
+				"wakeUpOnDemandSupported",
 			]);
 		}
 	}
@@ -174,7 +175,7 @@ export class WakeUpCCAPI extends CCAPI {
 }
 
 @commandClass(CommandClasses["Wake Up"])
-@implementedVersion(2)
+@implementedVersion(3)
 export class WakeUpCC extends CommandClass {
 	declare ccCommand: WakeUpCommand;
 
@@ -223,7 +224,7 @@ export class WakeUpCC extends CommandClass {
 				`skipping wakeup configuration for frequent listening device`,
 			);
 		} else {
-			// Retrieve the allowed wake up intervals if possible
+			// Retrieve the allowed wake up intervals and wake on demand support if possible
 			if (this.version >= 2) {
 				this.driver.controllerLog.logNode(node.id, {
 					endpoint: this.endpointIndex,
@@ -237,7 +238,8 @@ export class WakeUpCC extends CommandClass {
 default wakeup interval: ${wakeupCaps.defaultWakeUpInterval} seconds
 minimum wakeup interval: ${wakeupCaps.minWakeUpInterval} seconds
 maximum wakeup interval: ${wakeupCaps.maxWakeUpInterval} seconds
-wakeup interval steps:   ${wakeupCaps.wakeUpIntervalSteps} seconds`;
+wakeup interval steps:   ${wakeupCaps.wakeUpIntervalSteps} seconds
+wake up on demand supported: ${wakeupCaps.wakeUpOnDemandSupported}`;
 					this.driver.controllerLog.logNode(node.id, {
 						endpoint: this.endpointIndex,
 						message: logMessage,
@@ -418,6 +420,13 @@ export class WakeUpCCIntervalCapabilitiesReport extends WakeUpCC {
 		this._defaultWakeUpInterval = this.payload.readUIntBE(6, 3);
 		this._wakeUpIntervalSteps = this.payload.readUIntBE(9, 3);
 
+		// Get 'Wake Up on Demand Support' if node supports V3 and sends 13th byte
+		if (this.version >= 3 && this.payload.length >= 13) {
+			this._wakeUpOnDemandSupported = !!(this.payload[12] & 0b1);
+		} else {
+			this._wakeUpOnDemandSupported = false;
+		}
+
 		// Store the received information as metadata for the wake up interval
 		this.getValueDB().setMetadata(
 			{
@@ -455,6 +464,16 @@ export class WakeUpCCIntervalCapabilitiesReport extends WakeUpCC {
 		return this._wakeUpIntervalSteps;
 	}
 
+	private _wakeUpOnDemandSupported: boolean;
+	@ccValue({ minVersion: 3 })
+	@ccValueMetadata({
+		...ValueMetadata.ReadOnlyBoolean,
+		label: "Wake Up On Demand supported",
+	})
+	public get wakeUpOnDemandSupported(): boolean {
+		return this._wakeUpOnDemandSupported;
+	}
+
 	public toLogEntry(): MessageOrCCLogEntry {
 		return {
 			...super.toLogEntry(),
@@ -463,6 +482,7 @@ export class WakeUpCCIntervalCapabilitiesReport extends WakeUpCC {
 				"minimum interval": `${this._minWakeUpInterval} seconds`,
 				"maximum interval": `${this._maxWakeUpInterval} seconds`,
 				"interval steps": `${this._wakeUpIntervalSteps} seconds`,
+				"wake up on demand supported": `${this._wakeUpOnDemandSupported}`,
 			},
 		};
 	}

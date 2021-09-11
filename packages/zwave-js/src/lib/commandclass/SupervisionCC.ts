@@ -130,7 +130,7 @@ export class SupervisionCCAPI extends PhysicalCCAPI {
 }
 
 @commandClass(CommandClasses.Supervision)
-@implementedVersion(1)
+@implementedVersion(2)
 export class SupervisionCC extends CommandClass {
 	declare ccCommand: SupervisionCommand;
 	// Force singlecast for the supervision CC
@@ -187,6 +187,7 @@ export class SupervisionCC extends CommandClass {
 
 export type SupervisionCCReportOptions = {
 	moreUpdatesFollow: boolean;
+	requestWakeUp?: boolean;
 	sessionId: number;
 } & (
 	| {
@@ -216,11 +217,14 @@ export class SupervisionCCReport extends SupervisionCC {
 		if (gotDeserializationOptions(options)) {
 			validatePayload(this.payload.length >= 3);
 			this.moreUpdatesFollow = !!(this.payload[0] & 0b1_0_000000);
+			// Ignore requestWakeUp bit when receiving Report
+			this.requestWakeUp = false;
 			this.sessionId = this.payload[0] & 0b111111;
 			this.status = this.payload[1];
 			this.duration = Duration.parseReport(this.payload[2]);
 		} else {
 			this.moreUpdatesFollow = options.moreUpdatesFollow;
+			this.requestWakeUp = options.requestWakeUp ?? false;
 			this.sessionId = options.sessionId;
 			this.status = options.status;
 			if (options.status === SupervisionStatus.Working) {
@@ -232,6 +236,7 @@ export class SupervisionCCReport extends SupervisionCC {
 	}
 
 	public readonly moreUpdatesFollow: boolean;
+	public readonly requestWakeUp: boolean;
 	public readonly sessionId: number;
 	public readonly status: SupervisionStatus;
 	public readonly duration: Duration | undefined;
@@ -239,7 +244,8 @@ export class SupervisionCCReport extends SupervisionCC {
 	public serialize(): Buffer {
 		this.payload = Buffer.concat([
 			Buffer.from([
-				(this.moreUpdatesFollow ? 0b10_000000 : 0) |
+				(this.moreUpdatesFollow ? 0b1_0_000000 : 0) |
+					(this.requestWakeUp ? 0b0_1_000000 : 0) |
 					(this.sessionId & 0b111111),
 				this.status,
 			]),
