@@ -16,8 +16,7 @@
 	"supportsZWavePlus": true,
 	"paramInformation": {
 		"11": {
-			"label": "LED frame – colour when moving",
-			"description": "This parameter defines the LED colour when the motor is running.",
+			"label": "LED Indicator: Color When Moving",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 7,
@@ -25,7 +24,7 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "LED diabled",
+					"label": "Diable",
 					"value": 0
 				},
 				{
@@ -60,13 +59,11 @@
 		},
 		"12": {
 			"$import": "#paramInformation/11",
-			"label": "LED frame – colour when not moving",
-			"description": "This parameter defines the LED colour when the device motor is not running.",
+			"label": "LED Indicator: Standby Color",
 			"defaultValue": 0
 		},
 		"13": {
-			"label": "LED frame – brightness",
-			"description": "This parameter allows to adjust the LED frame brightness.",
+			"label": "LED Indicator: Brightness",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 100,
@@ -74,8 +71,7 @@
 			"unit": "%"
 		},
 		"24": {
-			"label": "Buttons orientation",
-			"description": "This parameter allows reversing the operation of the buttons.",
+			"label": "Invert Orientation",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 1,
@@ -83,18 +79,17 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "1st button UP, 2nd button DOWN",
+					"label": "Normal Orientation",
 					"value": 0
 				},
 				{
-					"label": "1st button DOWN, 2nd button UP (reversed)",
+					"label": "Inverted Orientation",
 					"value": 1
 				}
 			]
 		},
 		"25": {
-			"label": "Outputs orientation",
-			"description": "reversing the operation of Q1 and Q2",
+			"label": "Output Orientation",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 1,
@@ -102,17 +97,17 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "Q1 – UP, Q2 – DOWN",
+					"label": "Q1 up, Q2 down",
 					"value": 0
 				},
 				{
-					"label": "Q1 – DOWN, Q2 – UP (reversed)",
+					"label": "Q1 down, Q2 up",
 					"value": 1
 				}
 			]
 		},
 		"30": {
-			"label": "Alarm configuration - 1st slot",
+			"label": "Alarm Configuration: 1st Slot",
 			"description": "Which alarm frames and how the device should react",
 			"valueSize": 4,
 			"minValue": 0,
