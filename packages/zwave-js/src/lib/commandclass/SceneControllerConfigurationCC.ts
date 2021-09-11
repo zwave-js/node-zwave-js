@@ -84,6 +84,7 @@ function persistSceneConfig(
 		valueDB.setMetadata(sceneIdValueId, {
 			...ValueMetadata.UInt8,
 			label: `Associated Scene ID (${groupId})`,
+			valueChangeOptions: ["transitionDuration"],
 		});
 	}
 	if (!valueDB.hasMetadata(dimmingDurationValueId)) {
@@ -116,6 +117,7 @@ export class SceneControllerConfigurationCCAPI extends CCAPI {
 	protected [SET_VALUE]: SetValueImplementation = async (
 		{ property, propertyKey },
 		value,
+		options,
 	): Promise<void> => {
 		if (propertyKey == undefined) {
 			throwMissingPropertyKey(this.ccId, property);
@@ -138,14 +140,21 @@ export class SceneControllerConfigurationCCAPI extends CCAPI {
 			} else {
 				// We need to set the dimming duration along with the scene ID
 				const node = this.endpoint.getNodeUnsafe()!;
-				// If duration is missing, we set a default of instant
-				const dimmingDuration =
-					node.getValue<Duration>(
-						getDimmingDurationValueID(
-							this.endpoint.index,
-							propertyKey,
-						),
-					) ?? new Duration(0, "seconds");
+				// If duration option isn't provided and duration is missing,
+				// we set a default of instant
+				let dimmingDuration: Duration | undefined;
+				if (options) {
+					dimmingDuration = Duration.from(options.transitionDuration);
+				}
+				if (!dimmingDuration) {
+					dimmingDuration =
+						node.getValue<Duration>(
+							getDimmingDurationValueID(
+								this.endpoint.index,
+								propertyKey,
+							),
+						) ?? new Duration(0, "seconds");
+				}
 				await this.set(propertyKey, value, dimmingDuration);
 			}
 		} else {

@@ -82,6 +82,7 @@ function persistSceneActuatorConfig(
 		valueDB.setMetadata(levelValueId, {
 			...ValueMetadata.UInt8,
 			label: `Level (${sceneId})`,
+			valueChangeOptions: ["transitionDuration"],
 		});
 	}
 	if (!valueDB.hasMetadata(dimmingDurationValueId)) {
@@ -114,6 +115,7 @@ export class SceneActuatorConfigurationCCAPI extends CCAPI {
 	protected [SET_VALUE]: SetValueImplementation = async (
 		{ property, propertyKey },
 		value,
+		options,
 	): Promise<void> => {
 		if (propertyKey == undefined) {
 			throwMissingPropertyKey(this.ccId, property);
@@ -130,13 +132,23 @@ export class SceneActuatorConfigurationCCAPI extends CCAPI {
 				);
 			}
 
-			// We need to set the dimming duration along with the level.
-			// If no duration is set, we default to 0 seconds
 			const node = this.endpoint.getNodeUnsafe()!;
-			const dimmingDuration =
-				node.getValue<Duration>(
-					getDimmingDurationValueID(this.endpoint.index, propertyKey),
-				) ?? new Duration(0, "seconds");
+			// We need to set the dimming duration along with the level.
+			// If duration option isn't provided and no duration is set,
+			// we default to 0 seconds
+			let dimmingDuration: Duration | undefined;
+			if (options) {
+				dimmingDuration = Duration.from(options.transitionDuration);
+			}
+			if (!dimmingDuration) {
+				dimmingDuration =
+					node.getValue<Duration>(
+						getDimmingDurationValueID(
+							this.endpoint.index,
+							propertyKey,
+						),
+					) ?? new Duration(0, "seconds");
+			}
 			await this.set(propertyKey, dimmingDuration, value);
 		} else {
 			// setting dimmingDuration value alone not supported
