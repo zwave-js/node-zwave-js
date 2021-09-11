@@ -108,8 +108,7 @@
 			"$import": "~/templates/master_template.json#state_after_power_failure_off_on_prev"
 		},
 		"9": {
-			"label": "Ramp Rate Control",
-			"description": "Adjust the physical ramp rate for your dimmer (fade-in / fade-out effect for on / off operation).",
+			"label": "Dim Rate Speed",
 			"unit": "seconds",
 			"valueSize": 1,
 			"minValue": 0,
