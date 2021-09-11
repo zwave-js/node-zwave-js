@@ -1,6 +1,7 @@
 import {
 	CommandClasses,
 	Duration,
+	getCCName,
 	Maybe,
 	MessageOrCCLogEntry,
 	validatePayload,
@@ -84,6 +85,7 @@ function persistSceneConfig(
 		valueDB.setMetadata(sceneIdValueId, {
 			...ValueMetadata.UInt8,
 			label: `Associated Scene ID (${groupId})`,
+			valueChangeOptions: ["transitionDuration"],
 		});
 	}
 	if (!valueDB.hasMetadata(dimmingDurationValueId)) {
@@ -116,6 +118,7 @@ export class SceneControllerConfigurationCCAPI extends CCAPI {
 	protected [SET_VALUE]: SetValueImplementation = async (
 		{ property, propertyKey },
 		value,
+		options,
 	): Promise<void> => {
 		if (propertyKey == undefined) {
 			throwMissingPropertyKey(this.ccId, property);
@@ -137,20 +140,63 @@ export class SceneControllerConfigurationCCAPI extends CCAPI {
 				await this.disable(propertyKey);
 			} else {
 				// We need to set the dimming duration along with the scene ID
-				const node = this.endpoint.getNodeUnsafe()!;
-				// If duration is missing, we set a default of instant
+				// Dimming duration is chosen with the following precedence:
+				// 1. options.transitionDuration
+				// 2. current stored value
+				// 3. default value
 				const dimmingDuration =
-					node.getValue<Duration>(
-						getDimmingDurationValueID(
-							this.endpoint.index,
-							propertyKey,
-						),
-					) ?? new Duration(0, "seconds");
+					Duration.from(options?.transitionDuration) ??
+					this.endpoint
+						.getNodeUnsafe()!
+						.getValue<Duration>(
+							getDimmingDurationValueID(
+								this.endpoint.index,
+								propertyKey,
+							),
+						) ??
+					new Duration(0, "default");
 				await this.set(propertyKey, value, dimmingDuration);
 			}
+		} else if (property === "dimmingDuration") {
+			if (typeof value !== "string" && !(value instanceof Duration)) {
+				throwWrongValueType(
+					this.ccId,
+					property,
+					"duration",
+					typeof value,
+				);
+			}
+
+			const dimmingDuration = Duration.from(value);
+			if (dimmingDuration == undefined) {
+				throw new ZWaveError(
+					`${getCCName(
+						this.ccId,
+					)}: "${property}" could not be set. ${JSON.stringify(
+						value,
+					)} is not a valid duration.`,
+					ZWaveErrorCodes.Argument_Invalid,
+				);
+			}
+
+			const node = this.endpoint.getNodeUnsafe()!;
+			const sceneId = node.getValue<number>(
+				getSceneIdValueID(this.endpoint.index, propertyKey),
+			);
+			if (sceneId == undefined || sceneId === 0) {
+				// Can't actually send dimmingDuration without valid sceneId
+				// So we save it in the valueDB without sending it to the node
+				const dimmingDurationValueId = getDimmingDurationValueID(
+					this.endpoint.index,
+					propertyKey,
+				);
+				const valueDB = node.valueDB;
+				valueDB.setValue(dimmingDurationValueId, dimmingDuration);
+				return;
+			}
+
+			await this.set(propertyKey, sceneId, dimmingDuration);
 		} else {
-			// setting dimmingDuration value alone not supported,
-			// because I'm not sure how to handle a Duration value
 			throwUnsupportedProperty(this.ccId, property);
 		}
 	};
@@ -190,7 +236,7 @@ export class SceneControllerConfigurationCCAPI extends CCAPI {
 	public async set(
 		groupId: number,
 		sceneId: number,
-		dimmingDuration: Duration,
+		dimmingDuration?: Duration,
 	): Promise<void> {
 		this.assertSupportsCommand(
 			SceneControllerConfigurationCommand,
@@ -364,7 +410,7 @@ dimming duration: ${group.dimmingDuration.toString()}`;
 interface SceneControllerConfigurationCCSetOptions extends CCCommandOptions {
 	groupId: number;
 	sceneId: number;
-	dimmingDuration: Duration;
+	dimmingDuration?: Duration;
 }
 
 @CCCommand(SceneControllerConfigurationCommand.Set)
@@ -386,7 +432,9 @@ export class SceneControllerConfigurationCCSet extends SceneControllerConfigurat
 			const groupCount = this.getGroupCountCached();
 			this.groupId = options.groupId;
 			this.sceneId = options.sceneId;
-			this.dimmingDuration = options.dimmingDuration;
+			// if dimmingDuration was missing, use default duration.
+			this.dimmingDuration =
+				options.dimmingDuration ?? new Duration(0, "default");
 
 			// The client SHOULD NOT specify group 1 (the life-line group).
 			// We don't block it here, because the specs don't forbid it,
