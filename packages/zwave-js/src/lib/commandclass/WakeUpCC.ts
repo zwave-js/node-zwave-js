@@ -302,7 +302,7 @@ controller node: ${wakeupResp.controllerNodeId}`;
 		if (!hadCriticalTimeout) this.interviewComplete = true;
 	}
 
-	public static supportsWakeOnDemand(node?: ZWaveNode): boolean {
+	public static supportsWakeUpOnDemand(node?: ZWaveNode): boolean {
 		return node?.getValue(getWakeUpOnDemandSupportedValueId()) ?? false;
 	}
 }
