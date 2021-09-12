@@ -41,6 +41,13 @@ export function getWakeUpIntervalValueId(): ValueID {
 	};
 }
 
+export function getWakeUpOnDemandSupportedValueId(): ValueID {
+	return {
+		commandClass: CommandClasses["Wake Up"],
+		property: "wakeUpOnDemandSupported",
+	};
+}
+
 export enum WakeUpCommand {
 	IntervalSet = 0x04,
 	IntervalGet = 0x05,
@@ -294,6 +301,10 @@ controller node: ${wakeupResp.controllerNodeId}`;
 		// Remember that the interview is complete
 		if (!hadCriticalTimeout) this.interviewComplete = true;
 	}
+
+	public static supportsWakeOnDemand(node?: ZWaveNode): boolean {
+		return node?.getValue(getWakeUpOnDemandSupportedValueId()) ?? false;
+	}
 }
 
 interface WakeUpCCIntervalSetOptions extends CCCommandOptions {
@@ -442,6 +453,9 @@ export class WakeUpCCIntervalCapabilitiesReport extends WakeUpCC {
 				default: this._defaultWakeUpInterval,
 			},
 		);
+
+		// Store wakeUpOnDemandSupported in valueDB
+		this.persistValues();
 	}
 
 	private _minWakeUpInterval: number;
