@@ -5,7 +5,7 @@
 	Add placeholder for next release with `wip` snippet
   ## __WORK IN PROGRESS__
 -->
-## __WORK IN PROGRESS__
+## 8.3.0 (2021-09-12)
 Shoutout to @Ikcelaks and @IvanBrazza, who've contributed the main features in this release!
 
 ### Features
