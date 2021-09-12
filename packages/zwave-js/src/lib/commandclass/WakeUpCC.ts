@@ -301,10 +301,6 @@ controller node: ${wakeupResp.controllerNodeId}`;
 		// Remember that the interview is complete
 		if (!hadCriticalTimeout) this.interviewComplete = true;
 	}
-
-	public static supportsWakeUpOnDemand(node?: ZWaveNode): boolean {
-		return node?.getValue(getWakeUpOnDemandSupportedValueId()) ?? false;
-	}
 }
 
 interface WakeUpCCIntervalSetOptions extends CCCommandOptions {

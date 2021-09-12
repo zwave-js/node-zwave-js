@@ -122,6 +122,7 @@ import {
 import { getFirmwareVersionsValueId } from "../commandclass/VersionCC";
 import {
 	getWakeUpIntervalValueId,
+	getWakeUpOnDemandSupportedValueId,
 	WakeUpCCWakeUpNotification,
 } from "../commandclass/WakeUpCC";
 import {
@@ -582,6 +583,21 @@ export class ZWaveNode extends Endpoint implements SecurityClassOwner {
 
 	public get zwavePlusRoleType(): ZWavePlusRoleType | undefined {
 		return this.getValue(getRoleTypeValueId());
+	}
+
+	public get supportsWakeUpOnDemand(): boolean | undefined {
+		return this.getValue(getWakeUpOnDemandSupportedValueId());
+	}
+
+	public get shouldRequestWakeUpOnDemand(): boolean {
+		return (
+			!!this.supportsWakeUpOnDemand &&
+			this.driver.hasPendingTransactions(
+				(t) =>
+					t.message.getNodeId() === this.id &&
+					t.tag === "requestWakeUpOnDemand",
+			)
+		);
 	}
 
 	/**

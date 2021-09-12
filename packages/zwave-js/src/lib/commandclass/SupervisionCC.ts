@@ -187,7 +187,7 @@ export class SupervisionCC extends CommandClass {
 
 export type SupervisionCCReportOptions = {
 	moreUpdatesFollow: boolean;
-	requestWakeUp?: boolean;
+	requestWakeUpOnDemand?: boolean;
 	sessionId: number;
 } & (
 	| {
@@ -224,7 +224,7 @@ export class SupervisionCCReport extends SupervisionCC {
 			this.duration = Duration.parseReport(this.payload[2]);
 		} else {
 			this.moreUpdatesFollow = options.moreUpdatesFollow;
-			this.requestWakeUp = options.requestWakeUp ?? false;
+			this.requestWakeUp = options.requestWakeUpOnDemand ?? false;
 			this.sessionId = options.sessionId;
 			this.status = options.status;
 			if (options.status === SupervisionStatus.Working) {
