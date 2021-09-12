@@ -591,6 +591,7 @@ export class ZWaveNode extends Endpoint implements SecurityClassOwner {
 
 	public get shouldRequestWakeUpOnDemand(): boolean {
 		return (
+			this.status === NodeStatus.Asleep &&
 			!!this.supportsWakeUpOnDemand &&
 			this.driver.hasPendingTransactions(
 				(t) =>
