@@ -5,6 +5,30 @@
 	Add placeholder for next release with `wip` snippet
   ## __WORK IN PROGRESS__
 -->
+## __WORK IN PROGRESS__
+Shoutout to @Ikcelaks and @IvanBrazza, who've contributed the main features in this release!
+
+### Features
+* Support reacting to SupervisionCC::Get
+* Add setting `dimmingDuration` for `Scene Actuator Configuration CC` with `setValue` API
+* Add setting `dimmingDuration` for `Scene Controller Configuration CC` with `setValue` API
+
+### Bugfixes
+* Correctly determine the capabilities of endpoints during Security S2 interview
+
+### Config file changes
+* Enable basic set mapping for ZWN-BPC variants
+* Force Multilevel Switch CC to be supported in MCOHome MH-C221
+* Add product ID for EU version of Ring Contact Sensor v2
+* Remove Z-Wave Plus CC from GE 14318
+* Add product id 0x0103 to Aeotec ZW141
+* Add Minoston mp21zp config file
+* Add fingerprint to Logic Group ZSO7300
+* Reduce parameter 9's minValue to 0 for Zooz ZEN24 4.0
+
+### Changes under the hood
+* Node.js 16.9.0 causes crashes in testing, so we cannot verify that Z-Wave JS works correctly with it. Until that bug is fixed, we've removed Node.js 16.9.0 from the range of supported versions.
+
 ## 8.2.3 (2021-09-06)
 ### Bugfixes
 * Interpret wait time after firmware update as seconds, not milliseconds
