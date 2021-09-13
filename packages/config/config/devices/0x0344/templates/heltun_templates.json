@@ -57,6 +57,38 @@
 			}
 		]
 	},
+	"relay_button_number_source": {
+		"valueSize": 1,
+		"minValue": 0,
+		"maxValue": 5,
+		"allowManualEntry": false,
+		"options": [
+			{
+				"label": "Gateway or associated device",
+				"value": 0
+			},
+			{
+				"label": "Top left button",
+				"value": 1
+			},
+			{
+				"label": "Top right button",
+				"value": 2
+			},
+			{
+				"label": "Bottom left button",
+				"value": 3
+			},
+			{
+				"label": "Bottom right button",
+				"value": 4
+			},
+			{
+				"label": "Center button",
+				"value": 5
+			}
+		]
+	},
 	"relay_external_source": {
 		"valueSize": 1,
 		"minValue": 0,
