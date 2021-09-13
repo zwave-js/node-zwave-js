@@ -49,46 +49,6 @@
 			"$import": "templates/heltun_template.json#relay_output_mode",
 			"label": "Relay 5: Output Mode"
 		},
-		"12": {
-			"label": "Relay 1: Load Power",
-			"unit": "W",
-			"valueSize": 2,
-			"minValue": 0,
-			"maxValue": 1100,
-			"defaultValue": 0
-		},
-		"13": {
-			"label": "Relay 2: Load Power",
-			"unit": "W",
-			"valueSize": 2,
-			"minValue": 0,
-			"maxValue": 1100,
-			"defaultValue": 0
-		},
-		"14": {
-			"label": "Relay 3: Load Power",
-			"unit": "W",
-			"valueSize": 2,
-			"minValue": 0,
-			"maxValue": 1100,
-			"defaultValue": 0
-		},
-		"15": {
-			"label": "Relay 4: Load Power",
-			"unit": "W",
-			"valueSize": 2,
-			"minValue": 0,
-			"maxValue": 1100,
-			"defaultValue": 0
-		},
-		"16": {
-			"label": "Relay 5: Load Power",
-			"unit": "W",
-			"valueSize": 2,
-			"minValue": 0,
-			"maxValue": 1100,
-			"defaultValue": 0
-		},
 		"17": {
 			"label": "Air Temperature Calibration",
 			"unit": "0.1 °C",
