@@ -5,6 +5,14 @@
 	Add placeholder for next release with `wip` snippet
   ## __WORK IN PROGRESS__
 -->
+## __WORK IN PROGRESS__
+### Config file changes
+* Add fingerprint `0xaa00:0xaa02` to `NIE Technology Co., Ltd. ZW31`
+* Preserve root endpoint values for Everspring ST814
+
+### Changes under the hood
+* Add Node.js 16.9.1+ to the range of supported versions.
+
 ## 8.3.0 (2021-09-12)
 Shoutout to @Ikcelaks and @IvanBrazza, who've contributed the main features in this release!
 
