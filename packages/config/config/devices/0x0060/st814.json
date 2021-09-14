@@ -140,7 +140,9 @@
 		}
 	},
 	"compat": {
-		// The device sends reports for endpoint 1 un-encapsulated
-		"mapRootReportsToEndpoint": 1
+		// The device shouldn't have any endpoints
+		"preserveRootApplicationCCValueIDs": true
+		// TODO: Remove endpoints when compat flag is implemented
+		// https://github.com/zwave-js/node-zwave-js/issues/3335
 	}
 }
