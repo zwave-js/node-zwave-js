@@ -14,6 +14,28 @@
 		"max": "255.255"
 	},
 	"paramInformation": {
+		"1": {
+			"label": "Frequency Region",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 0,
+			"readOnly": true
+		},
+		"3": {
+			"label": "Hardware and Software Versions",
+			"valueSize": 4,
+			"minValue": 0,
+			"maxValue": 0,
+			"readOnly": true
+		},
+		"4": {
+			"label": "Energy Consumption",
+			"unit": "kW",
+			"valueSize": 4,
+			"minValue": 0,
+			"maxValue": 0,
+			"readOnly": true
+		},
 		"5": {
 			"label": "Display Brightness Control",
 			"valueSize": 1,
