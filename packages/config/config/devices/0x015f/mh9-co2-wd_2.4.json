@@ -1,0 +1,79 @@
+{
+	"manufacturer": "McoHome Technology Co., Ltd.",
+	"manufacturerId": "0x015f",
+	"label": "MH9-CO2-WD",
+	"description": "CO2 Air Quality Monitor",
+	"devices": [
+		{
+			"productType": "0x0902",
+			"productId": "0x5102"
+		}
+	],
+	"firmwareVersion": {
+		"min": "2.4",
+		"max": "255.255"
+	},
+	"supportsZWavePlus": true,
+	"paramInformation": {
+		"1": {
+			"label": "CO2 Notification Threshold",
+			"unit": "ppm",
+			"valueSize": 2,
+			"minValue": 1,
+			"maxValue": 5000,
+			"defaultValue": 1000
+		},
+		"2": {
+			"label": "CO2 reporting threshold",
+			"valueSize": 1,
+			"unit": "5ppm",
+			"unsigned": true,
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 10,
+			"options": [
+				{
+					"label": "Disable",
+					"value": 0
+				}
+			]
+		},
+		"3": {
+			"label": "Temperature reporting threshold",
+			"valueSize": 1,
+			"unit": "0.5C",
+			"unsigned": true,
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 1,
+			"options": [
+				{
+					"label": "Disable",
+					"value": 0
+				}
+			]
+		},
+		"4": {
+			"label": "Humidity reporting threshold",
+			"valueSize": 1,
+			"unit": "1%",
+			"minValue": 0,
+			"maxValue": 100,
+			"defaultValue": 2,
+			"options": [
+				{
+					"label": "Disable",
+					"value": 0
+				}
+			]
+		},
+		"255": {
+			"label": "Factory setting",
+			"description": "Restore factory settings - write only, set to 85 to reset",
+			"valueSize": 1,
+			"minValue": 85,
+			"maxValue": 85,
+			"defaultValue": 0
+		}
+	}
+}
