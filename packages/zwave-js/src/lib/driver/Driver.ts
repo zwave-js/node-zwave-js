@@ -1765,9 +1765,13 @@ export class Driver extends TypedEventEmitter<DriverEventCallbacks> {
 			// Then ensure there are no errors
 			if (isCommandClassContainer(msg)) {
 				assertValidCCs(msg);
-				msg.getNodeUnsafe()?.incrementStatistics("commandsRX");
-			} else {
-				this._controller?.incrementStatistics("messagesRX");
+			}
+			if (!!this._controller) {
+				if (isCommandClassContainer(msg)) {
+					msg.getNodeUnsafe()?.incrementStatistics("commandsRX");
+				} else {
+					this._controller.incrementStatistics("messagesRX");
+				}
 			}
 			// all good, send ACK
 			await this.writeHeader(MessageHeaders.ACK);
@@ -1778,14 +1782,16 @@ export class Driver extends TypedEventEmitter<DriverEventCallbacks> {
 				} else {
 					const response = this.handleDecodeError(e, data, msg);
 					if (response) await this.writeHeader(response);
-					if (isCommandClassContainer(msg)) {
-						msg.getNodeUnsafe()?.incrementStatistics(
-							"commandsDroppedRX",
-						);
-					} else {
-						this._controller?.incrementStatistics(
-							"messagesDroppedRX",
-						);
+					if (!!this._controller) {
+						if (isCommandClassContainer(msg)) {
+							msg.getNodeUnsafe()?.incrementStatistics(
+								"commandsDroppedRX",
+							);
+						} else {
+							this._controller.incrementStatistics(
+								"messagesDroppedRX",
+							);
+						}
 					}
 				}
 			} catch (ee) {
