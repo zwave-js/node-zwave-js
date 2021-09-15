@@ -80,7 +80,7 @@
 			"readOnly": true
 		},
 		"5": {
-			"label": "Display Brightness Control",
+			"label": "Backlight Brightness Control",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 10,
