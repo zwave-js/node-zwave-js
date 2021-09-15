@@ -130,6 +130,7 @@
 		"12": {
 			"label": "Basic Set Level",
 			"description": "This parameter is configured the value that BASIC_SET for nodes that associated in Group 2.",
+			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 100,
 			"defaultValue": 100,
