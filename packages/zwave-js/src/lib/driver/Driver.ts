@@ -59,6 +59,7 @@ import {
 	assertValidCCs,
 	CommandClass,
 	getImplementedVersion,
+	InvalidCC,
 } from "../commandclass/CommandClass";
 import { DeviceResetLocallyCCNotification } from "../commandclass/DeviceResetLocallyCC";
 import {
@@ -346,6 +347,8 @@ export interface SendMessageOptions {
 export interface SendCommandOptions extends SendMessageOptions {
 	/** How many times the driver should try to send the message. Defaults to the configured Driver option */
 	maxSendAttempts?: number;
+	/** Whether the driver should automatically handle the encapsulation. Default: true */
+	autoEncapsulate?: boolean;
 }
 
 export type SupervisionUpdateHandler = (
@@ -1787,6 +1790,25 @@ export class Driver extends TypedEventEmitter<DriverEventCallbacks> {
 							msg.getNodeUnsafe()?.incrementStatistics(
 								"commandsDroppedRX",
 							);
+
+							// Figure out if the command was received with supervision encapsulation
+							const supervisionSessionId =
+								SupervisionCC.getSessionId(msg.command);
+							if (
+								supervisionSessionId !== undefined &&
+								msg.command instanceof InvalidCC
+							) {
+								// If it was, we need to notify the sender that we couldn't decode the command
+								await msg
+									.getNodeUnsafe()
+									?.commandClasses.Supervision.sendReport({
+										sessionId: supervisionSessionId,
+										moreUpdatesFollow: false,
+										status: SupervisionStatus.NoSupport,
+										secure: msg.command.secure,
+									});
+								return;
+							}
 						} else {
 							this._controller.incrementStatistics(
 								"messagesDroppedRX",
@@ -2545,16 +2567,68 @@ ${handlers.length} left`,
 					nodeSessions.supervision.delete(msg.command.sessionId);
 				}
 			} else {
+				// Figure out if the command was received with supervision encapsulation
+				const supervisionSessionId = SupervisionCC.getSessionId(
+					msg.command,
+				);
+				const secure = msg.command.secure;
+
+				if (
+					supervisionSessionId !== undefined &&
+					!node.supportsCC(CommandClasses.Supervision)
+				) {
+					// When a node sends us a command that's supervision encapsulated, it must support Supervision CC
+					node.addCC(CommandClasses.Supervision, {
+						isSupported: true,
+						version: 1,
+					});
+				}
+
 				// check if someone is waiting for this command
 				for (const entry of this.awaitedCommands) {
 					if (entry.predicate(msg.command)) {
 						// resolve the promise - this will remove the entry from the list
 						entry.promise.resolve(msg.command);
+
+						// send back a Supervision Report if the command was received via Supervision Get
+						if (supervisionSessionId !== undefined) {
+							await node.commandClasses.Supervision.sendReport({
+								sessionId: supervisionSessionId,
+								moreUpdatesFollow: false,
+								status: SupervisionStatus.Success,
+								secure,
+							});
+						}
 						return;
 					}
 				}
-				// noone is waiting, dispatch the command to the node itself
-				await node.handleCommand(msg.command);
+
+				// No one is waiting, dispatch the command to the node itself
+				if (supervisionSessionId !== undefined) {
+					// Wrap the handleCommand in try-catch so we can notify the node that we weren't able to handle the command
+					try {
+						await node.handleCommand(msg.command);
+
+						await node.commandClasses.Supervision.sendReport({
+							sessionId: supervisionSessionId,
+							moreUpdatesFollow: false,
+							status: SupervisionStatus.Success,
+							secure,
+						});
+					} catch (e) {
+						await node.commandClasses.Supervision.sendReport({
+							sessionId: supervisionSessionId,
+							moreUpdatesFollow: false,
+							status: SupervisionStatus.Fail,
+							secure,
+						});
+
+						// In any case we don't want to swallow the error
+						throw e;
+					}
+				} else {
+					await node.handleCommand(msg.command);
+				}
 			}
 
 			return;
@@ -2915,7 +2989,7 @@ ${handlers.length} left`,
 		}
 
 		// Automatically encapsulate commands before sending
-		this.encapsulateCommands(msg);
+		if (options.autoEncapsulate !== false) this.encapsulateCommands(msg);
 
 		try {
 			const resp = await this.sendMessage(msg, options);

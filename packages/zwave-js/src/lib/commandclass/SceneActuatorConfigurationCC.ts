@@ -1,6 +1,7 @@
 import {
 	CommandClasses,
 	Duration,
+	getCCName,
 	Maybe,
 	MessageOrCCLogEntry,
 	validatePayload,
@@ -82,6 +83,7 @@ function persistSceneActuatorConfig(
 		valueDB.setMetadata(levelValueId, {
 			...ValueMetadata.UInt8,
 			label: `Level (${sceneId})`,
+			valueChangeOptions: ["transitionDuration"],
 		});
 	}
 	if (!valueDB.hasMetadata(dimmingDurationValueId)) {
@@ -114,6 +116,7 @@ export class SceneActuatorConfigurationCCAPI extends CCAPI {
 	protected [SET_VALUE]: SetValueImplementation = async (
 		{ property, propertyKey },
 		value,
+		options,
 	): Promise<void> => {
 		if (propertyKey == undefined) {
 			throwMissingPropertyKey(this.ccId, property);
@@ -131,15 +134,54 @@ export class SceneActuatorConfigurationCCAPI extends CCAPI {
 			}
 
 			// We need to set the dimming duration along with the level.
-			// If no duration is set, we default to 0 seconds
-			const node = this.endpoint.getNodeUnsafe()!;
+			// Dimming duration is chosen with the following precedence:
+			// 1. options.transitionDuration
+			// 2. current stored value
+			// 3. default to instant
 			const dimmingDuration =
-				node.getValue<Duration>(
-					getDimmingDurationValueID(this.endpoint.index, propertyKey),
-				) ?? new Duration(0, "seconds");
+				Duration.from(options?.transitionDuration) ??
+				this.endpoint
+					.getNodeUnsafe()!
+					.getValue<Duration>(
+						getDimmingDurationValueID(
+							this.endpoint.index,
+							propertyKey,
+						),
+					) ??
+				new Duration(0, "seconds");
 			await this.set(propertyKey, dimmingDuration, value);
+		} else if (property === "dimmingDuration") {
+			if (typeof value !== "string" && !(value instanceof Duration)) {
+				throwWrongValueType(
+					this.ccId,
+					property,
+					"duration",
+					typeof value,
+				);
+			}
+
+			const dimmingDuration = Duration.from(value);
+			if (dimmingDuration == undefined) {
+				throw new ZWaveError(
+					`${getCCName(
+						this.ccId,
+					)}: "${property}" could not be set. ${JSON.stringify(
+						value,
+					)} is not a valid duration.`,
+					ZWaveErrorCodes.Argument_Invalid,
+				);
+			}
+
+			// Must set the level along with the dimmingDuration,
+			// Use saved value, if it's defined. Otherwise the default
+			// will be used.
+			const node = this.endpoint.getNodeUnsafe()!;
+			const level = node.getValue<number>(
+				getLevelValueID(this.endpoint.index, propertyKey),
+			);
+
+			await this.set(propertyKey, dimmingDuration, level);
 		} else {
-			// setting dimmingDuration value alone not supported
 			throwUnsupportedProperty(this.ccId, property);
 		}
 	};

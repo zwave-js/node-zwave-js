@@ -16,13 +16,15 @@ export enum SecurityClass {
 	S0_Legacy = 7,
 }
 
+export type S2SecurityClass =
+	| SecurityClass.S2_Unauthenticated
+	| SecurityClass.S2_Authenticated
+	| SecurityClass.S2_AccessControl;
+
 /** Tests if the given security class is S2 */
 export function securityClassIsS2(
 	secClass: SecurityClass | undefined,
-): secClass is
-	| SecurityClass.S2_Unauthenticated
-	| SecurityClass.S2_Authenticated
-	| SecurityClass.S2_AccessControl {
+): secClass is S2SecurityClass {
 	return (
 		secClass != undefined &&
 		secClass >= SecurityClass.S2_Unauthenticated &&

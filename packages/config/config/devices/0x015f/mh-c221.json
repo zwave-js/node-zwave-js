@@ -36,5 +36,16 @@
 			"defaultValue": 720,
 			"unsigned": true
 		}
+	},
+	"compat": {
+		"commandClasses": {
+			"add": {
+				"0x26": {
+					// This is a roller shutter, but it responds to the CC version request with 0
+					"isSupported": true,
+					"version": 1
+				}
+			}
+		}
 	}
 }
