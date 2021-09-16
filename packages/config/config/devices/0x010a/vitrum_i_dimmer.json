@@ -1,20 +1,26 @@
 {
-	"manufacturer": "VDA",
+	"manufacturer": "Vitrum",
 	"manufacturerId": "0x010a",
-	"label": "Vitrum I Dimmer",
-	"description": "Vitrum I Dimmer Wireless",
+	"label": "01E010010 / 01B010010",
+	"description": "I Dimmer Wireless",
 	"devices": [
 		{
+			// EU
 			"productType": "0x1100",
 			"productId": "0x4900",
 			"zwaveAllianceId": 121
 		},
 		{
+			// BS
 			"productType": "0x2100",
 			"productId": "0x8900",
 			"zwaveAllianceId": 95
 		}
 	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
 	"associations": {
 		"1": {
 			"label": "Button 1",
@@ -26,9 +32,5 @@
 		"exclusion": "1. The device can be excluded from a network only if previously included. Check that by pressing a button on the front panel: the LED button should not blink with red colour brielfy.\n2. Set the controller into “Exclusion Mode”. Refer to the controller documentation to set the controller into Exclusion mode.\n 3. Press and hold the top left most button for at least 8 seconds.\n 4. LED will flash red three times and sound a tone to confirm successful exclusion.",
 		"reset": "WARNING: Please use this procedure only when the Z-Wave Primary Controller is missing or otherwise inoperable.\nTo reset the unit to Factory Settings:\n1. Remove the unit from the wall mounting box.\n2. Press and hold the hidden Factory Reset button for at least 3 seconds.\n3. LED will flash red three times and sound a tone to confirm successful factory reset.",
 		"manual": "https://z-wave.ru/podderzhka/skachat/category/83-thinksimple.html?download=231:vitrum-dimmer-wireless"
-	},
-	"firmwareVersion": {
-		"min": "0.0",
-		"max": "255.255"
 	}
 }

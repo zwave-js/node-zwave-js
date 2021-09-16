@@ -1,10 +1,11 @@
 {
-	"manufacturer": "VDA",
+	"manufacturer": "Vitrum",
 	"manufacturerId": "0x010a",
 	"label": "01E06S263",
-	"description": "Vitrum VI EU on-off 6 triac 868.4MHz",
+	"description": "VI On-Off 6 Triac",
 	"devices": [
 		{
+			// EU
 			"productType": "0x8161",
 			"productId": "0x2062",
 			"zwaveAllianceId": [3271, 3899, 3918]
@@ -17,7 +18,7 @@
 	"paramInformation": {
 		"7": {
 			"label": "Button N.1 Off Status Led",
-			"description": "Led is off: 0: LED is off; 1: red; 2: green; 3: blue; 4: yellow; 5: magenta; 6: cyan; 7; white",
+			"description": "0: LED is off; 1: red; 2: green; 3: blue; 4: yellow; 5: magenta; 6: cyan; 7; white",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 7,
