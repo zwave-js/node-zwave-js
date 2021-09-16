@@ -18,7 +18,7 @@
 			"label": "Frequency Region",
 			"valueSize": 1,
 			"minValue": 0,
-			"maxValue": 0,
+			"maxValue": 9,
 			"readOnly": true,
 			"options": [
 				{
