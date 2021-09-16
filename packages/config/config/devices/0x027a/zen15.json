@@ -59,6 +59,38 @@
 				}
 			]
 		},
+		"33": {
+			"$if": "firmwareVersion >= 2.4",
+			"label": "Auto-On Timer",
+			"valueSize": 1,
+			"unit": "minutes",
+			"minValue": 0,
+			"maxValue": 99,
+			"defaultValue": 0,
+			"unsigned": true,
+			"options": [
+				{
+					"label": "Disable",
+					"value": 0
+				}
+			]
+		},
+		"34": {
+			"$if": "firmwareVersion >= 2.4",
+			"label": "Auto-Off Timer",
+			"valueSize": 1,
+			"unit": "minutes",
+			"minValue": 0,
+			"maxValue": 99,
+			"defaultValue": 0,
+			"unsigned": true,
+			"options": [
+				{
+					"label": "Disable",
+					"value": 0
+				}
+			]
+		},
 		"30": {
 			"$if": "firmwareVersion >= 1.3",
 			"$import": "~/templates/master_template.json#base_enable_disable",
