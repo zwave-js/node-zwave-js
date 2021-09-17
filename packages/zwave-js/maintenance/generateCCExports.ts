@@ -164,12 +164,13 @@ export async function generateCCExports(): Promise<void> {
 		}
 	}
 
-	// And write the file
-	await fs.writeFile(
-		ccIndexFile,
-		formatWithPrettier(ccIndexFile, fileContent),
-		"utf8",
-	);
+	// And write the file if it changed
+	const originalFileContent = await fs.readFile(ccIndexFile, "utf8");
+	fileContent = formatWithPrettier(ccIndexFile, fileContent);
+	if (fileContent !== originalFileContent) {
+		console.log("CC index file changed");
+		await fs.writeFile(ccIndexFile, fileContent, "utf8");
+	}
 }
 
 if (require.main === module) void generateCCExports();

@@ -78,10 +78,11 @@
     "@ts-morph/common": "patch:@ts-morph/common@~0.11.0#.yarn-patches/ts-morph.diff"
   },
   "scripts": {
-    "build": "lerna run build",
+    "prebuild": "yarn workspace zwave-js run b prebuild",
+    "build": "tsc -b packages/!(zwave-js)/tsconfig.build.json && yarn prebuild && tsc -b packages/zwave-js/tsconfig.build.json",
+    "watch": "yarn run build --watch",
     "deprecated": "node -p '\\\"\\\\n \\\\n \\\\033[31;1;4mThe \\\\\"build:full\\\\\" script has been deprecated. Use \\\\\"build\\\\\" instead!\\\\033[0m\\\\n \\\\n\\\"'",
     "build:full": "yarn run deprecated && yarn run build",
-    "watch": "lerna run watch --parallel",
     "test:reset": "jest --clear-cache",
     "test:ts": "jest",
     "test:ci": "yarn run test:ts --runInBand",
