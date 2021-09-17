@@ -1718,8 +1718,6 @@ export class Driver extends TypedEventEmitter<DriverEventCallbacks> {
 								sessionId: supervisionSessionId,
 								moreUpdatesFollow: false,
 								status: SupervisionStatus.NoSupport,
-								requestWakeUpOnDemand:
-									node.shouldRequestWakeUpOnDemand,
 								secure: msg.command.secure,
 							});
 							return;
@@ -2510,8 +2508,6 @@ ${handlers.length} left`,
 								sessionId: supervisionSessionId,
 								moreUpdatesFollow: false,
 								status: SupervisionStatus.Success,
-								requestWakeUpOnDemand:
-									node.shouldRequestWakeUpOnDemand,
 								secure,
 							});
 						}
@@ -2529,8 +2525,6 @@ ${handlers.length} left`,
 							sessionId: supervisionSessionId,
 							moreUpdatesFollow: false,
 							status: SupervisionStatus.Success,
-							requestWakeUpOnDemand:
-								node.shouldRequestWakeUpOnDemand,
 							secure,
 						});
 					} catch (e) {
@@ -2538,8 +2532,6 @@ ${handlers.length} left`,
 							sessionId: supervisionSessionId,
 							moreUpdatesFollow: false,
 							status: SupervisionStatus.Fail,
-							requestWakeUpOnDemand:
-								node.shouldRequestWakeUpOnDemand,
 							secure,
 						});
 

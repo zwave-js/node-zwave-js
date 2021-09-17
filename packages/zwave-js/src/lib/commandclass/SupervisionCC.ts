@@ -88,10 +88,17 @@ export class SupervisionCCAPI extends PhysicalCCAPI {
 	public async sendReport(
 		options: SupervisionCCReportOptions & { secure?: boolean },
 	): Promise<void> {
+		// Ask the node if it needs Wake Up On Demand,
+		// unless it's overriden in `options`
+		const requestWakeUpOnDemand =
+			options.requestWakeUpOnDemand ??
+			this.endpoint.getNodeUnsafe()?.shouldRequestWakeUpOnDemand;
+
 		const { secure = false, ...cmdOptions } = options;
 		const cc = new SupervisionCCReport(this.driver, {
 			nodeId: this.endpoint.nodeId,
 			...cmdOptions,
+			requestWakeUpOnDemand,
 		});
 
 		// The report should be sent back with security if the received command was secure
@@ -217,14 +224,13 @@ export class SupervisionCCReport extends SupervisionCC {
 		if (gotDeserializationOptions(options)) {
 			validatePayload(this.payload.length >= 3);
 			this.moreUpdatesFollow = !!(this.payload[0] & 0b1_0_000000);
-			// Ignore requestWakeUpOnDemand bit when receiving Report
-			this.requestWakeUpOnDemand = false;
+			this.requestWakeUpOnDemand = !!(this.payload[0] & 0b0_1_000000);
 			this.sessionId = this.payload[0] & 0b111111;
 			this.status = this.payload[1];
 			this.duration = Duration.parseReport(this.payload[2]);
 		} else {
 			this.moreUpdatesFollow = options.moreUpdatesFollow;
-			this.requestWakeUpOnDemand = options.requestWakeUpOnDemand ?? false;
+			this.requestWakeUpOnDemand = !!options.requestWakeUpOnDemand;
 			this.sessionId = options.sessionId;
 			this.status = options.status;
 			if (options.status === SupervisionStatus.Working) {

@@ -246,7 +246,7 @@ default wakeup interval: ${wakeupCaps.defaultWakeUpInterval} seconds
 minimum wakeup interval: ${wakeupCaps.minWakeUpInterval} seconds
 maximum wakeup interval: ${wakeupCaps.maxWakeUpInterval} seconds
 wakeup interval steps:   ${wakeupCaps.wakeUpIntervalSteps} seconds
-wake up on demand supported: ${wakeupCaps.wakeUpOnDemandSupported}`;
+wakeup on demand supported: ${wakeupCaps.wakeUpOnDemandSupported}`;
 					this.driver.controllerLog.logNode(node.id, {
 						endpoint: this.endpointIndex,
 						message: logMessage,
