@@ -49,9 +49,9 @@
 		}
 	},
 	"metadata": {
-		"inclusion": "Add for inclusion: \na) Set the Z-Wave network main controller into adding mode.\nb) Power cycle once for the led bulb(OFF->ON).The led bulb will flash once when it has been include into the network.",
-		"exclusion": "Remove for exclusion：\na) Set the Z-Wave network main controller into removing mode.\nb) Power cycle once for the led bulb(OFF->ON).Then the led bulb will flash once then dim to 5%,when it has been excluded outside the network.",
-		"reset": "Reset the device :\nLed bulb re-power 6 times (between 0.5-2 seconds each time); If the 6th power on, the led bulb flashes twice (first time: red to green to blue gradient transition, second time: 2700K), which means that the resetting is successful.\nNOTE:\nUsing this action in case of the primary controller is missing or inoperable.",
+		"inclusion": "a) Set the Z-Wave network main controller into adding mode.\nb) Power cycle once for the led bulb(OFF->ON).The led bulb will flash once when it has been include into the network.",
+		"exclusion": "a) Set the Z-Wave network main controller into removing mode.\nb) Power cycle once for the led bulb(OFF->ON).Then the led bulb will flash once then dim to 5%,when it has been excluded outside the network.",
+		"reset": "Led bulb re-power 6 times (between 0.5-2 seconds each time); If the 6th power on, the led bulb flashes twice (first time: red to green to blue gradient transition, second time: 2700K), which means that the resetting is successful.\nNOTE:\nUsing this action in case of the primary controller is missing or inoperable.",
 		"manual": "https://products.z-wavealliance.org/ProductManual/File?folder=&filename=MarketCertificationFiles/2889/Z-Wave%20RGBW%20Bulb%20User%20Guide-Aibase%200524.pdf"
 	}
 }
