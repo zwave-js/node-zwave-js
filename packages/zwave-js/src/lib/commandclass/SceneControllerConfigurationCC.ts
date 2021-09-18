@@ -381,13 +381,9 @@ export class SceneControllerConfigurationCC extends CommandClass {
 			return;
 		}
 
-		// Always query scene configuration for each association group
+		// Create metadata for each scene, but don't query their actual configuration
+		// since some devices only support setting scenes
 		for (let groupId = 1; groupId <= groupCount; groupId++) {
-			this.driver.controllerLog.logNode(node.id, {
-				endpoint: this.endpointIndex,
-				message: `setting metadata for scene configuration for association group #${groupId}...`,
-				direction: "outbound",
-			});
 			setSceneConfigurationMetadata.call(this, groupId);
 		}
 

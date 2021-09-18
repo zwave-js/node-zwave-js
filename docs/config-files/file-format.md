@@ -355,7 +355,7 @@ Version 8 of the `Notification CC` added the requirement that devices must issue
 
 ### `forceSceneControllerGroupCount`
 
-The specifications mandate that each `Scene Controller Configuration CC` Group ID corresponds to that actual `Association CC` group. Some devices ignore this rule, and the count of `Scene Controller Configuration CC` groups cannot be known from the count of `Association CC` groups. `forceSceneControllerGroupCount` directly specifies the number of `Scene Controller Configuration CC` groups to support.
+The specifications mandate that each `Scene Controller Configuration CC` Group ID corresponds to exactly one association group. Some devices ignore this rule, and as a result not all scenes can be configured. Using the `forceSceneControllerGroupCount` flag, the actual number of scenes of these devices can be configured.
 
 ### `manualValueRefreshDelayMs`
 
