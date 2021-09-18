@@ -1,5 +1,5 @@
 {
-	"manufacturer": "Ameta International Co. Ltd.",
+	"manufacturer": "AiBase Smart Technology",
 	"manufacturerId": "0x0384",
 	"label": "HA-ZW-5SF",
 	"description": "Water Leak Sensor",
@@ -21,23 +21,22 @@
 			"isLifeline": true
 		},
 		"2": {
-			"label": "Group 2",
+			"label": "Water - Basic Set",
 			"maxNodes": 5
 		}
 	},
 	"paramInformation": {
 		"10": {
-			"label": "Level of Low Battery",
-			"description": "When the battery level is less than this value, device will send low battery report to the gateway",
+			"label": "Low Battery Report Threshold",
 			"valueSize": 1,
+			"unit": "%",
 			"minValue": 0,
-			"maxValue": 10,
+			"maxValue": 50,
 			"defaultValue": 10,
 			"unsigned": true
 		},
 		"11": {
 			"label": "Beeping Rate",
-			"description": "Beeping rate when the water probe is triggered",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 3,
@@ -46,26 +45,25 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "Buzzer keep on 1s, off 1s",
+					"label": "On 1s, off 1s",
 					"value": 0
 				},
 				{
-					"label": "Buzzer keep on 0.5s, off 0.5s",
+					"label": "On 0.5s, off 0.5s",
 					"value": 1
 				},
 				{
-					"label": "Buzzer keep on beeping always",
+					"label": "Continual beeping",
 					"value": 2
 				},
 				{
-					"label": "Buzzer keep silence",
+					"label": "Disable",
 					"value": 3
 				}
 			]
 		},
 		"254": {
-			"label": "Lock/Unlock All Configuration Parameters",
-			"description": "Lock/unlock all configuration parameters",
+			"label": "Lock Configuration Parameters",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 1,
@@ -74,11 +72,11 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "Unlock",
+					"label": "Disable",
 					"value": 0
 				},
 				{
-					"label": "Lock",
+					"label": "Enable",
 					"value": 1
 				}
 			]
