@@ -35,21 +35,21 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "Outlet on / LED on",
+					"label": "On when load is on",
 					"value": 0
 				},
 				{
-					"label": "Outlet on / LED off",
+					"label": "On when load is off",
 					"value": 1
 				},
 				{
-					"label": "LED disabled",
+					"label": "Disable",
 					"value": 2
 				}
 			]
 		},
 		"2": {
-			"label": "Outlet 1 (Right) Auto Off Timer",
+			"label": "Outlet 1 (Right): Auto Off Timer",
 			"valueSize": 4,
 			"unit": "minutes",
 			"minValue": 0,
@@ -58,7 +58,7 @@
 			"unsigned": true
 		},
 		"3": {
-			"label": "Outlet 1 (Right) Auto On Timer",
+			"label": "Outlet 1 (Right): Auto On Timer",
 			"valueSize": 4,
 			"unit": "minutes",
 			"minValue": 0,
