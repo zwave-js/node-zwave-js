@@ -245,9 +245,9 @@
 		"76": {
 			"label": "Run/Hold Schedule",
 			"valueSize": 1,
-			"minValue": 10,
-			"maxValue": 120,
-			"defaultValue": 10,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 1,
 			"allowManualEntry": false,
 			"options": [
 				{
