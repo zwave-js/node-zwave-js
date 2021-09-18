@@ -5,7 +5,6 @@
 	"description": "I On-Off Wireless",
 	"devices": [
 		{
-			// EU
 			"productType": "0x1200",
 			"productId": "0x5100",
 			"zwaveAllianceId": 8

@@ -5,7 +5,6 @@
 	"description": "III Dimmer Wireless",
 	"devices": [
 		{
-			// EU
 			"productType": "0x1100",
 			"productId": "0x4b00"
 		}

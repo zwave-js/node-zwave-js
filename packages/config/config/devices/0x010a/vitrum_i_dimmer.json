@@ -5,13 +5,11 @@
 	"description": "I Dimmer Wireless",
 	"devices": [
 		{
-			// EU
 			"productType": "0x1100",
 			"productId": "0x4900",
 			"zwaveAllianceId": 121
 		},
 		{
-			// BS
 			"productType": "0x2100",
 			"productId": "0x8900",
 			"zwaveAllianceId": 95

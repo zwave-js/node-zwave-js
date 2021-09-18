@@ -5,7 +5,6 @@
 	"description": "I Satellite Wireless",
 	"devices": [
 		{
-			// BS
 			"productType": "0x2400",
 			"productId": "0xa100"
 		}

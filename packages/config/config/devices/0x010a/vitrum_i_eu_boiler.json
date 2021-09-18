@@ -5,7 +5,6 @@
 	"description": "touch timer switch Dual Relay",
 	"devices": [
 		{
-			// EU
 			"productType": "0x7032",
 			"productId": "0x0f33"
 		}

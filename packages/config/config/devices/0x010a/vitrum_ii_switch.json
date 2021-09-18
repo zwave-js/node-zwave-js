@@ -5,13 +5,11 @@
 	"description": "II On-Off Wireless",
 	"devices": [
 		{
-			// EU
 			"productType": "0x1200",
 			"productId": "0x5200",
 			"zwaveAllianceId": 87
 		},
 		{
-			// BS
 			"productType": "0x2200",
 			"productId": "0x9200"
 		}

@@ -5,7 +5,6 @@
 	"description": "II Rolldown Shutters and Curtains",
 	"devices": [
 		{
-			// EU
 			"productType": "0x1300",
 			"productId": "0x5a00",
 			"zwaveAllianceId": 7

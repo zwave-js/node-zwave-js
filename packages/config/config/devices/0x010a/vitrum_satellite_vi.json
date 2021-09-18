@@ -5,7 +5,6 @@
 	"description": "VI Satellite Wireless",
 	"devices": [
 		{
-			// EU
 			"productType": "0x1400",
 			"productId": "0x6600"
 		}
