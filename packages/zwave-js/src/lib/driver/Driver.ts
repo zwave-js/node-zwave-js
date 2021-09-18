@@ -2764,9 +2764,6 @@ ${handlers.length} left`,
 				// Remember that this transaction was part of an interview
 				options.tag = "interview";
 			}
-			if (options.requestWakeUpOnDemand) {
-				options.tag = "requestWakeUpOnDemand";
-			}
 			options.priority = MessagePriority.WakeUp;
 		}
 
@@ -2783,6 +2780,7 @@ ${handlers.length} left`,
 			transaction.changeNodeStatusOnTimeout =
 				options.changeNodeStatusOnMissingACK;
 		}
+		transaction.requestWakeUpOnDemand = !!options.requestWakeUpOnDemand;
 		transaction.tag = options.tag;
 
 		// start sending now (maybe)
