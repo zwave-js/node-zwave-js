@@ -35,7 +35,6 @@
 			"minValue": -2013265920,
 			"maxValue": 0,
 			"defaultValue": 0,
-			"unsigned": true,
 			"allowManualEntry": false,
 			"options": [
 				{
