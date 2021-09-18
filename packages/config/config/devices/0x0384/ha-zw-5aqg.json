@@ -1,5 +1,5 @@
 {
-	"manufacturer": "Ameta International Co. Ltd.",
+	"manufacturer": "AiBase Smart Technology",
 	"manufacturerId": "0x0384",
 	"label": "HA-ZW-5AQG",
 	"description": "A19 LED BULB RGBW",
@@ -16,24 +16,21 @@
 	},
 	"associations": {
 		"1": {
-			"label": "Group 1",
+			"label": "Lifeline",
 			"maxNodes": 1,
 			"isLifeline": true
 		}
 	},
 	"paramInformation": {
 		"1": {
-			"label": "It is Used to Get The Internal Temperture of The Bulb",
-			"description": "It is used to get the internal temperture of the bulb",
+			"label": "Internal Temperature",
 			"valueSize": 1,
 			"minValue": -128,
 			"maxValue": 127,
-			"defaultValue": 0,
-			"unsigned": true
+			"readOnly": true
 		},
 		"255": {
-			"label": "Resetting",
-			"description": "This parameter is used to reset to factory configuration and remove the node from the Z-Wave network, or to reset configuration parameter to their default value",
+			"label": "Factory Reset Device",
 			"valueSize": 4,
 			"minValue": -2013265920,
 			"maxValue": 0,
@@ -42,11 +39,11 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "Reset to factory configuration and removed the node from the Z-Wave network",
+					"label": "Reset and remove from Z-Wave network",
 					"value": -2004318072
 				},
 				{
-					"label": "Reset configuration parameter to default value",
+					"label": "Reset configuration parameters to default values",
 					"value": -2013265920
 				}
 			]
