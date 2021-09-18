@@ -2,7 +2,7 @@
 	"manufacturer": "Shenzhen Neo Electronics Co., Ltd.",
 	"manufacturerId": "0x0258",
 	"label": "NAS-PD07Z",
-	"description": "PIR Motion Sensor 5in1",
+	"description": "5 in 1 PIR Motion Sensor",
 	"devices": [
 		{
 			"productType": "0x0010",
@@ -18,7 +18,7 @@
 			"$import": "templates/shenzhen_neo_template.json#blink_on_motion"
 		},
 		"2": {
-			"label": "Motion Enable",
+			"label": "Motion Detection",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 1,
@@ -38,26 +38,8 @@
 		"3": {
 			"$import": "templates/shenzhen_neo_template.json#motion_prevent_retrigger"
 		},
-		"4": {
-			"label": "Luminance Associated Enable",
-			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 1,
-			"defaultValue": 0,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "Disable",
-					"value": 0
-				},
-				{
-					"label": "Enable",
-					"value": 1
-				}
-			]
-		},
 		"5": {
-			"label": "Binary Sensor Report Enable",
+			"label": "Binary Sensor Report",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 1,
@@ -75,66 +57,43 @@
 			]
 		},
 		"6": {
-			"label": "Motion Sensor: Sensitivity",
-			"description": "0 = highest; 15 = lowest",
+			"label": "Motion Sensor Sensitivity",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 15,
 			"defaultValue": 2,
 			"unsigned": true
 		},
-		"7": {
-			"label": "Temperature Offset Value",
-			"description": "The current measuring temperature value can be add and minus a value by this setting",
-			"unit": "0.1 °C",
-			"valueSize": 1,
-			"minValue": -120,
-			"maxValue": 120,
-			"defaultValue": 0,
-			"unsigned": false
-		},
-		"8": {
-			"label": "Humidity Offset Value",
-			"description": "The current measuring humidity value can be add and minus a value by this setting",
-			"unit": "0.1 %",
-			"valueSize": 1,
-			"minValue": -120,
-			"maxValue": 120,
-			"defaultValue": 0,
-			"unsigned": false
-		},
 		"9": {
-			"label": "Temperature Differential Report Threshold",
-			"unit": "0.1 °C",
+			"label": "Temperature Change Report Threshold",
 			"valueSize": 1,
+			"unit": "0.1 °C/F",
 			"minValue": 0,
 			"maxValue": 100,
 			"defaultValue": 10
 		},
 		"10": {
-			"label": "Humidity Differential Report Threshold",
-			"unit": "0.1 %",
+			"label": "Humidity Change Report Threshold",
 			"valueSize": 1,
+			"unit": "0.1 %",
 			"minValue": 0,
 			"maxValue": 100,
 			"defaultValue": 20
 		},
 		"11": {
-			"label": "Luminance Differential Report Threshold",
-			"unit": "lux",
+			"label": "Luminance Change Report Threshold",
 			"valueSize": 1,
+			"unit": "lux",
 			"minValue": 0,
 			"maxValue": 120,
 			"defaultValue": 50
 		},
 		"12": {
-			"label": "Basic Set Level",
-			"description": "This parameter is configured the value that BASIC_SET for nodes that associated in Group 2.",
+			"label": "Association Group 2: Basic Set Level",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 100,
 			"defaultValue": 100,
-			"allowManualEntry": false,
 			"options": [
 				{
 					"label": "Disable",
@@ -151,25 +110,41 @@
 		},
 		"14": {
 			"label": "Basic Set Off Delay Time",
-			"description": "Time delay for device sending BASIC_SET = 0x00 to nodes that associated in Group 2 when device detects a motion event. [0] – Not Send BASIC_SET = 0x00 Command. [1 ... 30000] – Time delay count",
-			"unit": "seconds",
 			"valueSize": 2,
+			"unit": "seconds",
 			"minValue": 0,
 			"maxValue": 30000,
 			"defaultValue": 30
 		},
 		"15": {
 			"label": "Motion Clear Time",
-			"description": "Time to clear motion event after a motion event detected. Time to motion clear, the device will send a clear event report to controller",
-			"unit": "seconds",
 			"valueSize": 2,
+			"unit": "seconds",
 			"minValue": 1,
 			"maxValue": 30000,
 			"defaultValue": 30
 		},
+		"4": {
+			"label": "Require Luminance Change for Basic Sets on Motion",
+			"description": "If enabled, a Basic Set will be set if the ambient light is below the level defined in Parameter 16",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 0,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Disable",
+					"value": 0
+				},
+				{
+					"label": "Enable",
+					"value": 1
+				}
+			]
+		},
 		"16": {
-			"label": "Luminance Threshold for Associated",
-			"description": "When Ambient light intensity is less than this setting, device will consider the current environment is insufficient light. If 'Configuration No. 3' is set '1' and a motion event is detected, the device will send a BASIC_SET to the nodes which associated in Group 2",
+			"label": "Luminance Threshold for Basic Sets",
 			"unit": "lux",
 			"valueSize": 2,
 			"minValue": 0,
@@ -177,17 +152,34 @@
 			"defaultValue": 50
 		},
 		"17": {
-			"label": "Sensor Measuring Interval",
-			"description": "Time interval for light sensor, temperature and humidity sensor measuring. This value is larger, the battery life is longer. And the sensors values changed are not obvious. 0 – All sensors are disabled",
+			"label": "Sensor Report Interval",
 			"unit": "seconds",
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 30000,
 			"defaultValue": 180
 		},
+		"7": {
+			"label": "Temperature Offset Value",
+			"valueSize": 1,
+			"unit": "0.1 °C/F",
+			"minValue": -120,
+			"maxValue": 120,
+			"defaultValue": 0,
+			"unsigned": false
+		},
+		"8": {
+			"label": "Humidity Offset Value",
+			"valueSize": 1,
+			"unit": "0.1 %",
+			"minValue": -120,
+			"maxValue": 120,
+			"defaultValue": 0,
+			"unsigned": false
+		},
 		"99": {
-			"label": "Light Intensity Offset Calibration",
-			"description": "This parameter defines the calibrated scale for ambient light intensity. Because the method and position that the sensor mounted and the cover of sensor will bring measurement error, user can get more real light intensity by this parameter setting.",
+			"label": "Light Intensity Offset Value",
+			"description": "See manual for details",
 			"valueSize": 2,
 			"minValue": 1,
 			"maxValue": 32767,
