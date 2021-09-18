@@ -42,109 +42,109 @@
 	},
 	"button_1_off_color": {
 		"$import": "#led_color_options",
-        "label": "Button 1 Off",
+		"label": "Button 1 Off",
 		"description": "LED color of the button when the output is in the Off state",
 		"defaultValue": 3
 	},
 	"button_1_on_color": {
 		"$import": "#led_color_options",
-        "label": "Button 1 On",
+		"label": "Button 1 On",
 		"description": "LED color of the button when the output is in the On state",
 		"defaultValue": 4
 	},
 	"button_1_eco_color": {
 		"$import": "#led_color_options",
-        "label": "Button 1 Eco",
+		"label": "Button 1 Eco",
 		"description": "LED color of the button when the output is in the Eco state",
 		"defaultValue": 2
 	},
 	"button_2_off_color": {
 		"$import": "#led_color_options",
-        "label": "Button 2 Off",
+		"label": "Button 2 Off",
 		"description": "LED color of the button when the output is in the Off state",
 		"defaultValue": 3
 	},
 	"button_2_on_color": {
 		"$import": "#led_color_options",
-        "label": "Button 2 On",
+		"label": "Button 2 On",
 		"description": "LED color of the button when the output is in the On state",
 		"defaultValue": 4
 	},
 	"button_2_eco_color": {
 		"$import": "#led_color_options",
-        "label": "Button 2 Eco",
+		"label": "Button 2 Eco",
 		"description": "LED color of the button when the output is in the Eco state",
 		"defaultValue": 2
 	},
 	"button_3_off_color": {
 		"$import": "#led_color_options",
-        "label": "Button 3 Off",
+		"label": "Button 3 Off",
 		"description": "LED color of the button when the output is in the Off state",
 		"defaultValue": 3
 	},
 	"button_3_on_color": {
 		"$import": "#led_color_options",
-        "label": "Button 3 On",
+		"label": "Button 3 On",
 		"description": "LED color of the button when the output is in the On state",
 		"defaultValue": 4
 	},
 	"button_3_eco_color": {
 		"$import": "#led_color_options",
-        "label": "Button 3 Eco",
+		"label": "Button 3 Eco",
 		"description": "LED color of the button when the output is in the Eco state",
 		"defaultValue": 2
 	},
 	"button_4_off_color": {
 		"$import": "#led_color_options",
-        "label": "Button 4 Off",
+		"label": "Button 4 Off",
 		"description": "LED color of the button when the output is in the Off state",
 		"defaultValue": 3
 	},
 	"button_4_on_color": {
 		"$import": "#led_color_options",
-        "label": "Button 4 On",
+		"label": "Button 4 On",
 		"description": "LED color of the button when the output is in the On state",
 		"defaultValue": 4
 	},
 	"button_4_eco_color": {
 		"$import": "#led_color_options",
-        "label": "Button 4 Eco",
+		"label": "Button 4 Eco",
 		"description": "LED color of the button when the output is in the Eco state",
 		"defaultValue": 2
 	},
 	"button_5_off_color": {
 		"$import": "#led_color_options",
-        "label": "Button 5 Off",
+		"label": "Button 5 Off",
 		"description": "LED color of the button when the output is in the Off state",
 		"defaultValue": 3
 	},
 	"button_5_on_color": {
 		"$import": "#led_color_options",
-        "label": "Button 5 On",
+		"label": "Button 5 On",
 		"description": "LED color of the button when the output is in the On state",
 		"defaultValue": 4
 	},
 	"button_5_eco_color": {
 		"$import": "#led_color_options",
-        "label": "Button 5 Eco",
+		"label": "Button 5 Eco",
 		"description": "LED color of the button when the output is in the Eco state",
 		"defaultValue": 2
 	},
 	"button_6_off_color": {
 		"$import": "#led_color_options",
-        "label": "Button 6 Off",
+		"label": "Button 6 Off",
 		"description": "LED color of the button when the output is in the Off state",
 		"defaultValue": 3
 	},
 	"button_6_on_color": {
 		"$import": "#led_color_options",
-        "label": "Button 6 On",
+		"label": "Button 6 On",
 		"description": "LED color of the button when the output is in the On state",
 		"defaultValue": 4
 	},
 	"button_6_eco_color": {
 		"$import": "#led_color_options",
-        "label": "Button 6 Eco",
+		"label": "Button 6 Eco",
 		"description": "LED color of the button when the output is in the Eco state",
 		"defaultValue": 2
 	},
