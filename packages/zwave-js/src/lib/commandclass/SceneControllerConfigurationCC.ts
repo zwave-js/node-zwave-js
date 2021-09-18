@@ -68,18 +68,16 @@ export function getDimmingDurationValueID(
 	};
 }
 
-function persistSceneConfig(
+function setSceneConfigurationMetadata(
 	this: SceneControllerConfigurationCC,
 	groupId: number,
-	sceneId: number,
-	dimmingDuration: Duration,
 ) {
+	const valueDB = this.getValueDB();
 	const sceneIdValueId = getSceneIdValueID(this.endpointIndex, groupId);
 	const dimmingDurationValueId = getDimmingDurationValueID(
 		this.endpointIndex,
 		groupId,
 	);
-	const valueDB = this.getValueDB();
 
 	if (!valueDB.hasMetadata(sceneIdValueId)) {
 		valueDB.setMetadata(sceneIdValueId, {
@@ -93,6 +91,27 @@ function persistSceneConfig(
 			...ValueMetadata.Duration,
 			label: `Dimming duration (${groupId})`,
 		});
+	}
+}
+
+function persistSceneConfig(
+	this: SceneControllerConfigurationCC,
+	groupId: number,
+	sceneId: number,
+	dimmingDuration: Duration,
+) {
+	const sceneIdValueId = getSceneIdValueID(this.endpointIndex, groupId);
+	const dimmingDurationValueId = getDimmingDurationValueID(
+		this.endpointIndex,
+		groupId,
+	);
+	const valueDB = this.getValueDB();
+
+	if (
+		!valueDB.hasMetadata(sceneIdValueId) ||
+		!valueDB.hasMetadata(dimmingDurationValueId)
+	) {
+		setSceneConfigurationMetadata.call(this, groupId);
 	}
 
 	valueDB.setValue(sceneIdValueId, sceneId);
@@ -340,14 +359,9 @@ export class SceneControllerConfigurationCC extends CommandClass {
 		];
 	}
 
+	// eslint-disable-next-line @typescript-eslint/require-await
 	public async interview(complete: boolean = true): Promise<void> {
 		const node = this.getNode()!;
-		const endpoint = this.getEndpoint()!;
-		const api = endpoint.commandClasses[
-			"Scene Controller Configuration"
-		].withOptions({
-			priority: MessagePriority.NodeQuery,
-		});
 
 		this.driver.controllerLog.logNode(node.id, {
 			message: `${this.constructor.name}: doing a ${
@@ -371,12 +385,40 @@ export class SceneControllerConfigurationCC extends CommandClass {
 		for (let groupId = 1; groupId <= groupCount; groupId++) {
 			this.driver.controllerLog.logNode(node.id, {
 				endpoint: this.endpointIndex,
-				message: `querying scene configuration for association group #${groupId}...`,
+				message: `setting metadata for scene configuration for association group #${groupId}...`,
+				direction: "outbound",
+			});
+			setSceneConfigurationMetadata.call(this, groupId);
+		}
+
+		// Remember that the interview is complete
+		this.interviewComplete = true;
+	}
+
+	public async refreshValues(): Promise<void> {
+		const node = this.getNode()!;
+		const endpoint = this.getEndpoint()!;
+		const api = endpoint.commandClasses[
+			"Scene Controller Configuration"
+		].withOptions({
+			priority: MessagePriority.NodeQuery,
+		});
+
+		const groupCount = this.getGroupCountCached();
+
+		this.driver.controllerLog.logNode(node.id, {
+			message: "querying all scene controller configurations...",
+			direction: "outbound",
+		});
+		for (let groupId = 1; groupId <= groupCount; groupId++) {
+			this.driver.controllerLog.logNode(node.id, {
+				endpoint: this.endpointIndex,
+				message: `querying scene configuration for group #${groupId}...`,
 				direction: "outbound",
 			});
 			const group = await api.get(groupId);
 			if (group != undefined) {
-				const logMessage = `received scene configuration for association group #${groupId}:
+				const logMessage = `received scene configuration for group #${groupId}:
 scene ID:         ${group.sceneId}
 dimming duration: ${group.dimmingDuration.toString()}`;
 				this.driver.controllerLog.logNode(node.id, {
@@ -386,9 +428,6 @@ dimming duration: ${group.dimmingDuration.toString()}`;
 				});
 			}
 		}
-
-		// Remember that the interview is complete
-		this.interviewComplete = true;
 	}
 
 	/**
@@ -398,11 +437,14 @@ dimming duration: ${group.dimmingDuration.toString()}`;
 	 */
 	protected getGroupCountCached(): number {
 		return (
+			this.getNodeUnsafe()?.deviceConfig?.compat
+				?.forceSceneControllerGroupCount ??
 			this.getEndpoint()
 				?.createCCInstanceUnsafe<AssociationCC>(
 					CommandClasses.Association,
 				)
-				?.getGroupCountCached() ?? 0
+				?.getGroupCountCached() ??
+			0
 		);
 	}
 }

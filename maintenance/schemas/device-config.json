@@ -227,6 +227,11 @@
 				"forceNotificationIdleReset": {
 					"const": true
 				},
+				"forceSceneControllerGroupCount": {
+					"type": "number",
+					"minimum": 0,
+					"maximum": 255
+				},
 				"manualValueRefreshDelayMs": {
 					"type": "number",
 					"minimum": 0
