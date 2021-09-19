@@ -12,6 +12,7 @@ import {
 } from "@zwave-js/core";
 import { pick } from "@zwave-js/shared";
 import type { Driver } from "../driver/Driver";
+import { MessagePriority } from "../message/Constants";
 import {
 	CCAPI,
 	PollValueImplementation,
@@ -66,11 +67,9 @@ export function getDimmingDurationValueID(
 	};
 }
 
-function persistSceneActuatorConfig(
+function setSceneActuatorConfigMetaData(
 	this: SceneActuatorConfigurationCC,
 	sceneId: number,
-	level: number,
-	dimmingDuration: Duration,
 ) {
 	const levelValueId = getLevelValueID(this.endpointIndex, sceneId);
 	const dimmingDurationValueId = getDimmingDurationValueID(
@@ -91,6 +90,27 @@ function persistSceneActuatorConfig(
 			...ValueMetadata.Duration,
 			label: `Dimming duration (${sceneId})`,
 		});
+	}
+}
+
+function persistSceneActuatorConfig(
+	this: SceneActuatorConfigurationCC,
+	sceneId: number,
+	level: number,
+	dimmingDuration: Duration,
+): boolean {
+	const levelValueId = getLevelValueID(this.endpointIndex, sceneId);
+	const dimmingDurationValueId = getDimmingDurationValueID(
+		this.endpointIndex,
+		sceneId,
+	);
+	const valueDB = this.getValueDB();
+
+	if (
+		!valueDB.hasMetadata(levelValueId) ||
+		!valueDB.hasMetadata(dimmingDurationValueId)
+	) {
+		setSceneActuatorConfigMetaData.call(this, sceneId);
 	}
 
 	valueDB.setValue(levelValueId, level);
@@ -137,7 +157,7 @@ export class SceneActuatorConfigurationCCAPI extends CCAPI {
 			// Dimming duration is chosen with the following precedence:
 			// 1. options.transitionDuration
 			// 2. current stored value
-			// 3. default to instant
+			// 3. default
 			const dimmingDuration =
 				Duration.from(options?.transitionDuration) ??
 				this.endpoint
@@ -147,8 +167,7 @@ export class SceneActuatorConfigurationCCAPI extends CCAPI {
 							this.endpoint.index,
 							propertyKey,
 						),
-					) ??
-				new Duration(0, "seconds");
+					);
 			await this.set(propertyKey, dimmingDuration, value);
 		} else if (property === "dimmingDuration") {
 			if (typeof value !== "string" && !(value instanceof Duration)) {
@@ -211,7 +230,7 @@ export class SceneActuatorConfigurationCCAPI extends CCAPI {
 
 	public async set(
 		sceneId: number,
-		dimmingDuration: Duration,
+		dimmingDuration?: Duration,
 		level?: number,
 	): Promise<void> {
 		this.assertSupportsCommand(
@@ -219,11 +238,13 @@ export class SceneActuatorConfigurationCCAPI extends CCAPI {
 			SceneActuatorConfigurationCommand.Set,
 		);
 
+		// `dimmingDuration defaults to 0 seconds to simplify the call
+		// for actuators that don't support `dimmingDuration`
 		const cc = new SceneActuatorConfigurationCCSet(this.driver, {
 			nodeId: this.endpoint.nodeId,
 			endpoint: this.endpoint.index,
 			sceneId,
-			dimmingDuration,
+			dimmingDuration: dimmingDuration ?? new Duration(0, "seconds"),
 			level,
 		});
 
@@ -293,12 +314,43 @@ export class SceneActuatorConfigurationCCAPI extends CCAPI {
 	}
 }
 
-// @noInterview - We don't want to query 255 scenes
-
 @commandClass(CommandClasses["Scene Actuator Configuration"])
 @implementedVersion(1)
 export class SceneActuatorConfigurationCC extends CommandClass {
 	declare ccCommand: SceneActuatorConfigurationCommand;
+
+	// eslint-disable-next-line @typescript-eslint/require-await
+	public async interview(): Promise<void> {
+		const node = this.getNode()!;
+
+		this.driver.controllerLog.logNode(node.id, {
+			message: `${this.constructor.name}: setting metadata`,
+			direction: "none",
+		});
+
+		for (let sceneId = 1; sceneId <= 255; sceneId++) {
+			setSceneActuatorConfigMetaData.call(this, sceneId);
+		}
+
+		this.interviewComplete = true;
+	}
+
+	public async refreshValues(): Promise<void> {
+		const node = this.getNode()!;
+		const endpoint = this.getEndpoint()!;
+		const api = endpoint.commandClasses[
+			"Scene Actuator Configuration"
+		].withOptions({
+			priority: MessagePriority.NodeQuery,
+		});
+		this.driver.controllerLog.logNode(node.id, {
+			message: "querying all scene actuator configs...",
+			direction: "outbound",
+		});
+		for (let sceneId = 1; sceneId <= 255; sceneId++) {
+			await api.get(sceneId);
+		}
+	}
 }
 
 interface SceneActuatorConfigurationCCSetOptions extends CCCommandOptions {
