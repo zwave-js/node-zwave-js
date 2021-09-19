@@ -48,7 +48,7 @@
 					"value": 3
 				},
 				{
-					"label": "Blinks during rf transmissions",
+					"label": "Blink during RF transmissions",
 					"value": 4
 				}
 			]
@@ -60,15 +60,12 @@
 			"minValue": 0,
 			"maxValue": 255,
 			"defaultValue": 6,
+			"unit": "minutes",
 			"unsigned": true,
 			"options": [
 				{
-					"label": "disable",
+					"label": "Disable",
 					"value": 0
-				},
-				{
-					"label": "minutes",
-					"value": 1.255
 				}
 			]
 		}
