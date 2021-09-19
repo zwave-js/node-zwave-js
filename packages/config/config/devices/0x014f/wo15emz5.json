@@ -69,8 +69,10 @@
 				}
 				{
 					"label": "Number of minutes between reports.",
-					"value": 1-255
-					"default": 6
+					"valueSize": 1,
+					"minValue": 1,
+					"maxValue": 255,
+					"defaultValue": 6
 				}
 			]
 		}
