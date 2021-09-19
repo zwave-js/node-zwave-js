@@ -41,11 +41,11 @@
 					"value": 1
 				},
 				{
-					"label": "LED is always on",
+					"label": "LED always on",
 					"value": 2
 				},
 				{
-					"label": "LED is always off",
+					"label": "LED always off",
 					"value": 3
 				},
 				{
