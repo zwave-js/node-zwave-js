@@ -54,8 +54,7 @@
 			]
 		},
 		"13": {
-			"label": "Energy Monitoring",
-			"description": "Automatic Reporting Interval",
+			"label": "Automatic Reporting Interval",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 255,
