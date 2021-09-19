@@ -23,8 +23,8 @@
 	},
 	"paramInformation": {
 		"3": {
-			"label": "Night Light",
-			"description": "Configure night light function",
+			"label": "LED Indicator",
+			"description": "Configure LED Indicator",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 4,
@@ -33,23 +33,23 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "Led off when the load is on, and on when the load is off",
+					"label": "On when load is on",
 					"value": 0
 				},
 				{
-					"label": "Led on when the load is on, and off when the load is off",
+					"label": "Off when load is on",
 					"value": 1
 				},
 				{
-					"label": "Led is always on",
+					"label": "LED is always on",
 					"value": 2
 				},
 				{
-					"label": "Led is always off",
+					"label": "LED is always off",
 					"value": 3
 				},
 				{
-					"label": "Led blinks during rf transmissions from or to the device",
+					"label": "LED blinks during rf transmissions",
 					"value": 4
 				}
 			]
