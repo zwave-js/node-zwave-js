@@ -353,6 +353,10 @@ The specifications mandate strict rules for the data and sequence numbers in `En
 
 Version 8 of the `Notification CC` added the requirement that devices must issue an idle notification after a notification variable is no longer active. Several legacy devices and some misbehaving V8 devices do not return their variables to idle automatically. By setting `forceNotificationIdleReset` to `true`, `zwave-js` auto-idles supporting notification variables after 5 minutes.
 
+### `forceSceneControllerGroupCount`
+
+The specifications mandate that each `Scene Controller Configuration CC` Group ID corresponds to exactly one association group. Some devices ignore this rule, and as a result not all scenes can be configured. Using the `forceSceneControllerGroupCount` flag, the actual number of scenes of these devices can be configured.
+
 ### `manualValueRefreshDelayMs`
 
 Some legacy devices emit an NIF when a local event occurs (e.g. a button press) to signal that the controller should request a status update. However, some of these devices require a delay before they are ready to respond to this request. `manualValueRefreshDelayMs` specifies that delay, expressed in milliseconds. If unset, there will be no delay.
