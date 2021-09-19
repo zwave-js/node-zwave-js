@@ -148,7 +148,7 @@ function getValueLabel(
 	suffix?: string,
 ): string {
 	let ret = getMeterTypeName(configManager, meterType);
-	if (rateType !== RateType.Unspecified) {
+	if (rateType !== RateType.Unspecified && rateType !== RateType.Consumed) {
 		ret += ` ${getEnumMemberName(RateType, rateType)}`;
 	}
 	ret += ` [${scale.label}]`;
