@@ -67,6 +67,11 @@
 					"label": "Automatic reporting off",
 					"value": 0
 				}
+				{
+					"label": "Number of minutes between reports.",
+					"value": 1-255
+					"default": 6
+				}
 			]
 		}
 	},
