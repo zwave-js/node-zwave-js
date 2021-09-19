@@ -56,7 +56,7 @@
 		},
 		"13": {
 			"label": "Energy Monitoring",
-			"description": "Configure energy monitoring reporting duration",
+			"description": "Automatic Reporting Interval",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 255,
@@ -64,15 +64,12 @@
 			"unsigned": true,
 			"options": [
 				{
-					"label": "Automatic reporting off",
+					"label": "disable",
 					"value": 0
 				}
 				{
-					"label": "Number of minutes between reports.",
-					"valueSize": 1,
-					"minValue": 1,
-					"maxValue": 255,
-					"defaultValue": 6
+					"label": "minutes",
+					"value": 1.255
 				}
 			]
 		}
