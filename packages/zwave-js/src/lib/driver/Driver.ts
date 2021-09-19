@@ -335,6 +335,8 @@ export interface SendMessageOptions {
 	 * @internal
 	 */
 	tag?: any;
+	/** If a Wake Up On Demand should be requested for the target node. */
+	requestWakeUpOnDemand?: boolean;
 }
 
 export interface SendCommandOptions extends SendMessageOptions {
@@ -1711,14 +1713,13 @@ export class Driver extends TypedEventEmitter<DriverEventCallbacks> {
 							msg.command instanceof InvalidCC
 						) {
 							// If it was, we need to notify the sender that we couldn't decode the command
-							await msg
-								.getNodeUnsafe()
-								?.commandClasses.Supervision.sendReport({
-									sessionId: supervisionSessionId,
-									moreUpdatesFollow: false,
-									status: SupervisionStatus.NoSupport,
-									secure: msg.command.secure,
-								});
+							const node = msg.getNodeUnsafe();
+							await node?.commandClasses.Supervision.sendReport({
+								sessionId: supervisionSessionId,
+								moreUpdatesFollow: false,
+								status: SupervisionStatus.NoSupport,
+								secure: msg.command.secure,
+							});
 							return;
 						}
 					} else {
@@ -2779,6 +2780,7 @@ ${handlers.length} left`,
 			transaction.changeNodeStatusOnTimeout =
 				options.changeNodeStatusOnMissingACK;
 		}
+		transaction.requestWakeUpOnDemand = !!options.requestWakeUpOnDemand;
 		transaction.tag = options.tag;
 
 		// start sending now (maybe)
