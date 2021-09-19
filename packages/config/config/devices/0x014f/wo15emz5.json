@@ -2,7 +2,7 @@
 	"manufacturer": "Nortek Security & Control LLC",
 	"manufacturerId": "0x014f",
 	"label": "WO15EMZ5",
-	"description": "-1",
+	"description": "In-Wall Single Outlet",
 	"devices": [
 		{
 			"productType": "0x574f",
@@ -24,7 +24,6 @@
 	"paramInformation": {
 		"3": {
 			"label": "LED Indicator",
-			"description": "Configure LED Indicator",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 4,
@@ -41,15 +40,15 @@
 					"value": 1
 				},
 				{
-					"label": "LED always on",
+					"label": "Always on",
 					"value": 2
 				},
 				{
-					"label": "LED always off",
+					"label": "Always off",
 					"value": 3
 				},
 				{
-					"label": "LED blinks during rf transmissions",
+					"label": "Blinks during rf transmissions",
 					"value": 4
 				}
 			]
