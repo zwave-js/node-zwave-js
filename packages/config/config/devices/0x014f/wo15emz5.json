@@ -33,11 +33,11 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "On when load is on",
+					"label": "Off when load is on",
 					"value": 0
 				},
 				{
-					"label": "Off when load is on",
+					"label": "On when load is on",
 					"value": 1
 				},
 				{
