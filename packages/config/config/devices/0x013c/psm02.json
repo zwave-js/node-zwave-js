@@ -61,6 +61,108 @@
 			"maxValue": 127,
 			"defaultValue": 4
 		},
+		"7[0x02]": {
+			"label": "Send motion OFF report. ",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 0,
+			"options": [
+				{
+					"label": "Disable",
+					"value": 0
+				},
+				{
+					"label": "Enable",
+					"value": 1
+				}
+			]
+		},
+		"7[0x04]": {
+			"label": "PIR super sensitivity mode",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 1,
+			"options": [
+				{
+					"label": "Disable",
+					"value": 0
+				},
+				{
+					"label": "Enable",
+					"value": 1
+				}
+			]
+		},
+		"7[0x08]": {
+			"label": "Send Basic CC Off After Door Close",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 0,
+			"options": [
+				{
+					"label": "Disable",
+					"value": 1
+				},
+				{
+					"label": "Enable",
+					"value": 0
+				}
+			]
+		},
+		"7[0x10]": {
+			"label": "Notification Type",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 0,
+			"options": [
+				{
+					"label": "Notification Report",
+					"value": 0
+				},
+				{
+					"label": "Binary Sensor Report",
+					"value": 1
+				}
+			]
+		},
+		"7[0x20]": {
+			"label": "Multi Command Encapsulated Auto Reports",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 0,
+			"options": [
+				{
+					"label": "Disable",
+					"value": 1
+				},
+				{
+					"label": "Enable",
+					"value": 0
+				}
+			]
+		},
+		"7[0x40]": {
+			"label": "Report Battery State When Triggered",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 1,
+			"options": [
+				{
+					"label": "Disable",
+					"value": 1
+				},
+				{
+					"label": "Enable",
+					"value": 0
+				}
+			]
+		},
 		"8": {
 			"label": "PIR Re-Detect Interval Time",
 			"valueSize": 1,
