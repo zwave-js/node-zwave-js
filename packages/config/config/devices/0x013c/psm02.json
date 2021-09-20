@@ -269,7 +269,7 @@
 			]
 		},
 		"7[0x04]": {
-			"label": "PIR super sensitivity mode",
+			"label": "PIR Super Sensitivity Mode",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 1,
