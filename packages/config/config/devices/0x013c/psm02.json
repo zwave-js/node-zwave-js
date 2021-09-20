@@ -14,6 +14,7 @@
 		"min": "0.0",
 		"max": "255.255"
 	},
+	"supportsZWavePlus": false,
 	"associations": {
 		"1": {
 			"label": "Reports",
