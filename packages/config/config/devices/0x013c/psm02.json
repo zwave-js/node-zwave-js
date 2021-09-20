@@ -17,7 +17,7 @@
 	"associations": {
 		"1": {
 			"label": "Reports",
-			"maxNodes": 7
+			"maxNodes": 7,
 			"isLifeline": true
 		},
 		"2": {
