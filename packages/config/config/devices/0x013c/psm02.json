@@ -55,12 +55,107 @@
 			"maxValue": 127,
 			"defaultValue": 0
 		},
-		"6": {
-			"label": "Multi-Sensor Function Switch",
+		"6[0x01]": {
+			"label": "Magnetic Integrate Illumination",
 			"valueSize": 1,
 			"minValue": 0,
-			"maxValue": 127,
-			"defaultValue": 4
+			"maxValue": 1,
+			"defaultValue": 0,
+			"options": [
+				{
+					"label": "Disable",
+					"value": 1
+				},
+				{
+					"label": "Enable",
+					"value": 0
+				}
+			]
+		},
+		"6[0x02]": {
+			"label": "PIR Integrate Illumination",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 0,
+			"options": [
+				{
+					"label": "Disable",
+					"value": 1
+				},
+				{
+					"label": "Enable",
+					"value": 0
+				}
+			]
+		},
+		"6[0x04]": {
+			"label": "Magnetic Integrate PIR",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 1,
+			"options": [
+				{
+					"label": "Disable",
+					"value": 1
+				},
+				{
+					"label": "Enable",
+					"value": 0
+				}
+			]
+		},
+		"6[0x08]": {
+			"label": "Device and Light Location",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 0,
+			"options": [
+				{
+					"label": "Same Room",
+					"value": 0
+				},
+				{
+					"label": "Different Room",
+					"value": 1
+				}
+			]
+		},
+		"6[0x10]": {
+			"label": "5 Second Delay Light Off",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 1,
+			"options": [
+				{
+					"label": "Disable",
+					"value": 1
+				},
+				{
+					"label": "Enable",
+					"value": 0
+				}
+			]
+		},
+		"6[0x20]": {
+			"label": "Auto Turn Off Light",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 1,
+			"options": [
+				{
+					"label": "Disable",
+					"value": 1
+				},
+				{
+					"label": "Enable",
+					"value": 0
+				}
+			]
 		},
 		"7[0x02]": {
 			"label": "Send motion OFF report. ",
