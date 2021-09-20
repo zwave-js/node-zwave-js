@@ -48,12 +48,107 @@
 			"maxValue": 100,
 			"defaultValue": 100
 		},
-		"5": {
-			"label": "Operation Mode",
+		"5[0x01]": {
+			"label": "Security Mode",
 			"valueSize": 1,
 			"minValue": 0,
-			"maxValue": 127,
-			"defaultValue": 0
+			"maxValue": 1,
+			"defaultValue": 0,
+			"options": [
+				{
+					"label": "Disable",
+					"value": 0
+				},
+				{
+					"label": "Enable",
+					"value": 1
+				}
+			]
+		},
+		"5[0x02]": {
+			"label": "Test Mode",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 0,
+			"options": [
+				{
+					"label": "Disable",
+					"value": 0
+				},
+				{
+					"label": "Enable",
+					"value": 1
+				}
+			]
+		},
+		"5[0x04]": {
+			"label": "Door Window Function",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 0,
+			"options": [
+				{
+					"label": "Disable",
+					"value": 1
+				},
+				{
+					"label": "Enable",
+					"value": 0
+				}
+			]
+		},
+		"5[0x08]": {
+			"label": "Temperature Scale",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 0,
+			"options": [
+				{
+					"label": "Fahrenheit",
+					"value": 0
+				},
+				{
+					"label": "Celsius",
+					"value": 1
+				}
+			]
+		},
+		"5[0x10]": {
+			"label": "Illumination Report on Trigger",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 1,
+			"options": [
+				{
+					"label": "Disable",
+					"value": 1
+				},
+				{
+					"label": "Enable",
+					"value": 0
+				}
+			]
+		},
+		"5[0x20]": {
+			"label": "Temperature Report on Trigger",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 1,
+			"options": [
+				{
+					"label": "Disable",
+					"value": 1
+				},
+				{
+					"label": "Enable",
+					"value": 0
+				}
+			]
 		},
 		"6[0x01]": {
 			"label": "Magnetic Integrate Illumination",
