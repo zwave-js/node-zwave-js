@@ -252,7 +252,7 @@
 			]
 		},
 		"7[0x02]": {
-			"label": "Send motion OFF report. ",
+			"label": "Send Motion Off Report",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 1,
