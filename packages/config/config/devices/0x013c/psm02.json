@@ -18,6 +18,7 @@
 		"1": {
 			"label": "Reports",
 			"maxNodes": 7
+			"isLifeline": true
 		},
 		"2": {
 			"label": "Light Control",
