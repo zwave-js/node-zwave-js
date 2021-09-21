@@ -42,15 +42,25 @@
 			"valueSize": 1,
 			"minValue": 1,
 			"maxValue": 3,
-			"defaultValue": 2
+			"defaultValue": 2,
+			"options": [
+				{ "value": 1, "label": "Low" },
+				{ "value": 2, "label": "Middle" },
+				{ "value": 3, "label": "High" }
+			]
 		},
 		"2": {
 			"label": "Alarm music duration time",
 			"valueSize": 1,
 			"minValue": 0,
-			"maxValue": 255,
+			"maxValue": 3,
 			"defaultValue": 2,
-			"unsigned": true
+			"options": [
+				{ "value": 0, "label": "Off" },
+				{ "value": 1, "label": "30 seconds" },
+				{ "value": 2, "label": "1 minute" },
+				{ "value": 3, "label": "5 minutes" }
+			]
 		},
 		"3": {
 			"label": "Door bell music duration time",
@@ -58,14 +68,23 @@
 			"minValue": 0,
 			"maxValue": 255,
 			"defaultValue": 1,
-			"unsigned": true
+			"unsigned": true,
+			"options": [
+				{ "value": 0,   "label": "Off" },
+				{ "value": 255, "label": "Always" }
+			]
 		},
 		"4": {
 			"label": "Door bell music volume",
 			"valueSize": 1,
 			"minValue": 1,
 			"maxValue": 3,
-			"defaultValue": 2
+			"defaultValue": 2,
+			"options": [
+				{ "value": 1, "label": "Low" },
+				{ "value": 2, "label": "Middle" },
+				{ "value": 3, "label": "High" }
+			]
 		},
 		"5": {
 			"label": "Alarm music index",
@@ -86,7 +105,33 @@
 			"valueSize": 1,
 			"minValue": 1,
 			"maxValue": 2,
-			"defaultValue": 1
+			"defaultValue": 1,
+			"options": [
+				{ "value": 1, "label": "Alarm music" },
+				{ "value": 2, "label": "Door bell music" }
+			]
+		},
+		"8": {
+			"label": "Alarm LED enable",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 1,
+			"options": [
+				{ "value": 0, "label": "Disable" },
+				{ "value": 1, "label": "Enable" }
+			]
+		},
+		"9": {
+			"label": "Door bell LED enable",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 0,
+			"options": [
+				{ "value": 0, "label": "Disable" },
+				{ "value": 1, "label": "Enable" }
+			]
 		}
 	}
 }
