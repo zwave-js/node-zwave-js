@@ -27,10 +27,12 @@
 	"paramInformation": {
 		"2": {
 			"label": "Basic Set Level",
+			"description": "Allowable range: 0-99, 255",
 			"valueSize": 1,
-			"minValue": -1,
-			"maxValue": 100,
-			"defaultValue": -1
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 255,
+			"unsigned": true
 		},
 		"3": {
 			"label": "PIR Sensitivity",
