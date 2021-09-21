@@ -251,11 +251,11 @@
 		},
 		"154": {
 			"label": "First channel – time parameter for delayed/auto OFF and flashing modes",
-			"description": "This parameter allows to set time parameter used in timed modes. (deciseconds)",
+			"description": "This parameter allows to set time parameter used in timed modes.",
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 32000,
-			"unit": "ds",
+			"unit": "0.1 s",
 			"defaultValue": 5,
 			"unsigned": true
 		},
