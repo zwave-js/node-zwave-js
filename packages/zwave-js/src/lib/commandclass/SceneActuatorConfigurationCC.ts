@@ -12,7 +12,6 @@ import {
 } from "@zwave-js/core";
 import { pick } from "@zwave-js/shared";
 import type { Driver } from "../driver/Driver";
-import { MessagePriority } from "../message/Constants";
 import {
 	CCAPI,
 	PollValueImplementation,
@@ -238,8 +237,9 @@ export class SceneActuatorConfigurationCCAPI extends CCAPI {
 			SceneActuatorConfigurationCommand.Set,
 		);
 
-		// `dimmingDuration defaults to 0 seconds to simplify the call
-		// for actuators that don't support `dimmingDuration`
+		// Undefined `dimmingDuration` defaults to 0 seconds to simplify the call
+		// for actuators that don't support non-instant `dimmingDuration`
+		// Undefined `level` uses the actuator's current value (override = 0).
 		const cc = new SceneActuatorConfigurationCCSet(this.driver, {
 			nodeId: this.endpoint.nodeId,
 			endpoint: this.endpoint.index,
@@ -335,22 +335,25 @@ export class SceneActuatorConfigurationCC extends CommandClass {
 		this.interviewComplete = true;
 	}
 
-	public async refreshValues(): Promise<void> {
-		const node = this.getNode()!;
-		const endpoint = this.getEndpoint()!;
-		const api = endpoint.commandClasses[
-			"Scene Actuator Configuration"
-		].withOptions({
-			priority: MessagePriority.NodeQuery,
-		});
-		this.driver.controllerLog.logNode(node.id, {
-			message: "querying all scene actuator configs...",
-			direction: "outbound",
-		});
-		for (let sceneId = 1; sceneId <= 255; sceneId++) {
-			await api.get(sceneId);
-		}
-	}
+	// `refreshValues()` would create 255 `Get` commands to be issued to the node
+	// Therefore, I think we should not implement it. Here is how it would be implemented
+	//
+	// public async refreshValues(): Promise<void> {
+	// 	const node = this.getNode()!;
+	// 	const endpoint = this.getEndpoint()!;
+	// 	const api = endpoint.commandClasses[
+	// 		"Scene Actuator Configuration"
+	// 	].withOptions({
+	// 		priority: MessagePriority.NodeQuery,
+	// 	});
+	// 	this.driver.controllerLog.logNode(node.id, {
+	// 		message: "querying all scene actuator configs...",
+	// 		direction: "outbound",
+	// 	});
+	// 	for (let sceneId = 1; sceneId <= 255; sceneId++) {
+	// 		await api.get(sceneId);
+	// 	}
+	// }
 }
 
 interface SceneActuatorConfigurationCCSetOptions extends CCCommandOptions {
