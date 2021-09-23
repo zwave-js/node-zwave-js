@@ -105,16 +105,16 @@
 				}
 			]
 		},
-		"6[0x02]": {
+		"6": {
 			"label": "PIR Integrate Illumination",
 			"valueSize": 1,
 			"minValue": 0,
-			"maxValue": 1,
+			"maxValue": 2,
 			"defaultValue": 0,
 			"options": [
 				{
 					"label": "Disable",
-					"value": 1
+					"value": 2
 				},
 				{
 					"label": "Enable",
