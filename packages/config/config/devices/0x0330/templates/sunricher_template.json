@@ -1,18 +1,18 @@
 {
 	"scene_command_type": {
 		"label": "Scene Command Type",
-		"description": "Set to choose between CENTRAL_SCENE or SCENE_ACTIVATION command types",
 		"valueSize": 1,
 		"minValue": 0,
 		"maxValue": 1,
 		"defaultValue": 0,
+		"allowManualEntry": false,
 		"options": [
 			{
-				"label": "CENTRAL_SCENE",
+				"label": "Central Scene",
 				"value": 0
 			},
 			{
-				"label": "SCENE_ACTIVATION",
+				"label": "Scene Activation",
 				"value": 1
 			}
 		]
