@@ -2080,9 +2080,9 @@ It is probably asleep, moving its messages to the wakeup queue.`,
 				// This CC belongs to a partial session
 				if (command.expectMoreMessages(session)) {
 					// this is not the final one, store it
-					session.push(command);
+					// and don't handle the command now
+					command.addToPartialCCSession(session);
 					if (!isTransportServiceEncapsulation(msg.command)) {
-						// and don't handle the command now
 						this.driverLog.logMessage(msg, {
 							secondaryTags: ["partial"],
 							direction: "inbound",

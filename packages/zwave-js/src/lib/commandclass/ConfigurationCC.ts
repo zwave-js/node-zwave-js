@@ -2018,6 +2018,17 @@ export class ConfigurationCCNameReport extends ConfigurationCC {
 		return this._reportsToFollow > 0;
 	}
 
+	public addToPartialCCSession(
+		session: ConfigurationCCNameReport[],
+	): boolean {
+		if (session.some((cc) => cc.reportsToFollow === this.reportsToFollow)) {
+			// This is a duplicate partial CC. Discard it.
+			return false;
+		}
+		session.push(this);
+		return true;
+	}
+
 	public mergePartialCCs(partials: ConfigurationCCNameReport[]): void {
 		// Concat the name
 		this._name = [...partials, this]
@@ -2115,6 +2126,17 @@ export class ConfigurationCCInfoReport extends ConfigurationCC {
 
 	public expectMoreMessages(): boolean {
 		return this._reportsToFollow > 0;
+	}
+
+	public addToPartialCCSession(
+		session: ConfigurationCCInfoReport[],
+	): boolean {
+		if (session.some((cc) => cc.reportsToFollow === this.reportsToFollow)) {
+			// This is a duplicate partial CC. Discard it.
+			return false;
+		}
+		session.push(this);
+		return true;
 	}
 
 	public mergePartialCCs(partials: ConfigurationCCInfoReport[]): void {
