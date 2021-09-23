@@ -81,5 +81,9 @@
 			"defaultValue": 50,
 			"unsigned": true
 		}
+	},
+	"compat": {
+		// Basic CC is required to react to Scene Off commands
+		"disableBasicMapping": true
 	}
 }
