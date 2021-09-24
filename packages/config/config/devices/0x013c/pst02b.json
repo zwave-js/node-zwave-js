@@ -43,6 +43,7 @@
 			"minValue": 0,
 			"maxValue": 1,
 			"defaultValue": 0,
+			"allowManualEntry": false,
 			"options": [
 				{
 					"label": "Disable",
@@ -60,6 +61,7 @@
 			"minValue": 0,
 			"maxValue": 1,
 			"defaultValue": 0,
+			"allowManualEntry": false,
 			"options": [
 				{
 					"label": "Fahrenheit",
@@ -77,6 +79,7 @@
 			"minValue": 0,
 			"maxValue": 1,
 			"defaultValue": 0,
+			"allowManualEntry": false,
 			"options": [
 				{
 					"label": "Disable",
@@ -94,6 +97,7 @@
 			"minValue": 0,
 			"maxValue": 1,
 			"defaultValue": 0,
+			"allowManualEntry": false,
 			"options": [
 				{
 					"label": "Disable",
@@ -111,6 +115,7 @@
 			"minValue": 0,
 			"maxValue": 2,
 			"defaultValue": 0,
+			"allowManualEntry": false,
 			"options": [
 				{
 					"label": "Disable",
@@ -128,6 +133,7 @@
 			"minValue": 0,
 			"maxValue": 1,
 			"defaultValue": 0,
+			"allowManualEntry": false,
 			"options": [
 				{
 					"label": "Disable",
@@ -145,6 +151,7 @@
 			"minValue": 0,
 			"maxValue": 1,
 			"defaultValue": 1,
+			"allowManualEntry": false,
 			"options": [
 				{
 					"label": "Disable",
@@ -162,6 +169,7 @@
 			"minValue": 0,
 			"maxValue": 1,
 			"defaultValue": 0,
+			"allowManualEntry": false,
 			"options": [
 				{
 					"label": "Notification Report",
@@ -179,6 +187,7 @@
 			"minValue": 0,
 			"maxValue": 1,
 			"defaultValue": 0,
+			"allowManualEntry": false,
 			"options": [
 				{
 					"label": "Disable",
@@ -196,6 +205,7 @@
 			"minValue": 0,
 			"maxValue": 1,
 			"defaultValue": 1,
+			"allowManualEntry": false,
 			"options": [
 				{
 					"label": "Disable",
