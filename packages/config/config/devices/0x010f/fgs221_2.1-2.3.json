@@ -213,11 +213,11 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "Momentary switch",
+					"label": "Mono-stable input (button)",
 					"value": 0
 				},
 				{
-					"label": "Toggle switch",
+					"label": "Bi-stable input (switch)",
 					"value": 1
 				}
 			]
