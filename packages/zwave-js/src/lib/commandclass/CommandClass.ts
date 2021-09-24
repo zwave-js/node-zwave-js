@@ -859,7 +859,7 @@ export class CommandClass {
 	/**
 	 * Attempt to add this CC to the partial CC session
 	 * @param session The previously received set of messages received in this partial CC session
-	 * @returns `true` if Partial CC is successfully added to the session
+	 * @returns `true` if session is valid for this CC, false if it needs to be reset
 	 */
 	public addToPartialCCSession(session: CommandClass[]): boolean {
 		// Default to the old behavior of pushing the CC onto the session without any sanity checks

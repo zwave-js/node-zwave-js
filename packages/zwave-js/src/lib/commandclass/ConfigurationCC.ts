@@ -2021,12 +2021,22 @@ export class ConfigurationCCNameReport extends ConfigurationCC {
 	public addToPartialCCSession(
 		session: ConfigurationCCNameReport[],
 	): boolean {
-		if (session.some((cc) => cc.reportsToFollow === this.reportsToFollow)) {
-			// This is a duplicate partial CC. Discard it.
-			return false;
+		if (
+			session.length === 0 ||
+			this.reportsToFollow ===
+				session[session.length - 1].reportsToFollow - 1
+		) {
+			session.push(this);
+			return true;
 		}
-		session.push(this);
-		return true;
+		if (
+			this.reportsToFollow === session[session.length - 1].reportsToFollow
+		) {
+			// Assume this report is a duplicate. Keep the session and discard this cc.
+			return true;
+		}
+		// This cc doesn't fit into the session. A new session must be created.
+		return false;
 	}
 
 	public mergePartialCCs(partials: ConfigurationCCNameReport[]): void {
@@ -2131,12 +2141,22 @@ export class ConfigurationCCInfoReport extends ConfigurationCC {
 	public addToPartialCCSession(
 		session: ConfigurationCCInfoReport[],
 	): boolean {
-		if (session.some((cc) => cc.reportsToFollow === this.reportsToFollow)) {
-			// This is a duplicate partial CC. Discard it.
-			return false;
+		if (
+			session.length === 0 ||
+			this.reportsToFollow ===
+				session[session.length - 1].reportsToFollow - 1
+		) {
+			session.push(this);
+			return true;
 		}
-		session.push(this);
-		return true;
+		if (
+			this.reportsToFollow === session[session.length - 1].reportsToFollow
+		) {
+			// Assume this report is a duplicate. Keep the session and discard this cc.
+			return true;
+		}
+		// This cc doesn't fit into the session. A new session must be created.
+		return false;
 	}
 
 	public mergePartialCCs(partials: ConfigurationCCInfoReport[]): void {

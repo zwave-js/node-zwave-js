@@ -2,6 +2,7 @@ import { CommandClasses } from "@zwave-js/core";
 import type { Driver } from "../driver/Driver";
 import { ZWaveNode } from "../node/Node";
 import { createEmptyMockDriver } from "../test/mocks";
+import type { CommandClass } from "./CommandClass";
 import {
 	ConfigurationCC,
 	ConfigurationCCGet,
@@ -20,18 +21,31 @@ function buildCCBuffer(payload: Buffer): Buffer {
 	]);
 }
 
-function buildNameReportCCBuffer(
+function buildNameReportCC(
+	fakeDriver: Driver,
+	nodeId: number,
 	parameter: number,
 	reportsToFollow: number,
 	name: string,
-): Buffer {
+): ConfigurationCCNameReport {
 	const headerSize = 4;
 	const header = Buffer.alloc(headerSize);
 	header[0] = ConfigurationCommand.NameReport;
 	header.writeUInt16BE(parameter, 1);
 	header[3] = reportsToFollow;
 	const payload = Buffer.concat([header, Buffer.from(name)]);
-	return buildCCBuffer(payload);
+	return new ConfigurationCCNameReport(fakeDriver, {
+		nodeId,
+		data: buildCCBuffer(payload),
+	});
+}
+
+function buildReportCCSession<CC extends CommandClass>(partialCCs: CC[]): CC[] {
+	const session: CC[] = [];
+	partialCCs.forEach((partialCC) => {
+		partialCC.addToPartialCCSession(session);
+	});
+	return session;
 }
 
 describe("lib/commandclass/ConfigurationCC => ", () => {
@@ -138,45 +152,44 @@ describe("lib/commandclass/ConfigurationCC => ", () => {
 
 	it("the NameReport should properly concatenate partial reports when unique and ordered", () => {
 		const partialCCs = [
-			{ reportsRemaining: 3, name: "abc" },
-			{ reportsRemaining: 2, name: "def" },
-			{ reportsRemaining: 1, name: "ghi" },
-		].map(({ reportsRemaining, name }) => {
-			return new ConfigurationCCNameReport(fakeDriver, {
-				nodeId: 30,
-				data: buildNameReportCCBuffer(1, reportsRemaining, name),
-			});
-		});
-		const finalCC = new ConfigurationCCNameReport(fakeDriver, {
-			nodeId: 30,
-			data: buildNameReportCCBuffer(1, 0, "jkl"),
-		});
-		finalCC.mergePartialCCs(partialCCs);
+			{ reportsToFollow: 3, name: "abc" },
+			{ reportsToFollow: 2, name: "def" },
+			{ reportsToFollow: 1, name: "ghi" },
+		].map((data) =>
+			buildNameReportCC(
+				fakeDriver,
+				30,
+				1,
+				data.reportsToFollow,
+				data.name,
+			),
+		);
+		const session = buildReportCCSession(partialCCs);
+		const finalCC = buildNameReportCC(fakeDriver, 30, 1, 0, "jkl");
+		finalCC.mergePartialCCs(session);
 
 		expect(finalCC.parameter).toBe(1);
 		expect(finalCC.name).toBe("abcdefghijkl");
 	});
 
 	it("the NameReport should properly concatenate partial reports when repeated", () => {
-		const session = [
-			{ reportsRemaining: 3, name: "abc" },
-			{ reportsRemaining: 2, name: "def" },
-			{ reportsRemaining: 3, name: "abc" },
-			{ reportsRemaining: 2, name: "def" },
-			{ reportsRemaining: 1, name: "ghi" },
-			{ reportsRemaining: 1, name: "ghi" },
-		].reduce((sess, { reportsRemaining, name }) => {
-			const partialCC = new ConfigurationCCNameReport(fakeDriver, {
-				nodeId: 30,
-				data: buildNameReportCCBuffer(1, reportsRemaining, name),
-			});
-			partialCC.addToPartialCCSession(sess);
-			return sess;
-		}, []);
-		const finalCC = new ConfigurationCCNameReport(fakeDriver, {
-			nodeId: 30,
-			data: buildNameReportCCBuffer(1, 0, "jkl"),
-		});
+		const partialCCs = [
+			{ reportsToFollow: 3, name: "abc" },
+			{ reportsToFollow: 2, name: "def" },
+			{ reportsToFollow: 2, name: "def" },
+			{ reportsToFollow: 1, name: "ghi" },
+			{ reportsToFollow: 1, name: "ghi" },
+		].map((data) =>
+			buildNameReportCC(
+				fakeDriver,
+				30,
+				1,
+				data.reportsToFollow,
+				data.name,
+			),
+		);
+		const session = buildReportCCSession(partialCCs);
+		const finalCC = buildNameReportCC(fakeDriver, 30, 1, 0, "jkl");
 		finalCC.mergePartialCCs(session);
 
 		expect(finalCC.parameter).toBe(1);

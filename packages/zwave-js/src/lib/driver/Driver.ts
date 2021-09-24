@@ -2081,7 +2081,14 @@ It is probably asleep, moving its messages to the wakeup queue.`,
 				if (command.expectMoreMessages(session)) {
 					// this is not the final one, store it
 					// and don't handle the command now
-					command.addToPartialCCSession(session);
+					const sessionValid = command.addToPartialCCSession(session);
+					if (!sessionValid) {
+						// This command is not part of the existing session,
+						// Start a new session with this command
+						this.partialCCSessions.set(partialSessionKey!, [
+							command,
+						]);
+					}
 					if (!isTransportServiceEncapsulation(msg.command)) {
 						this.driverLog.logMessage(msg, {
 							secondaryTags: ["partial"],
