@@ -147,11 +147,11 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "Off",
+					"label": "Disable",
 					"value": 0
 				},
 				{
-					"label": "Alarm Report (*)",
+					"label": "Alarm Report",
 					"value": 1
 				},
 				{
