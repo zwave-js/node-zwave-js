@@ -71,86 +71,88 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@alcalzone/release-script-core@npm:3.0.0":
-  version: 3.0.0
-  resolution: "@alcalzone/release-script-core@npm:3.0.0"
+"@alcalzone/release-script-core@npm:3.3.0":
+  version: 3.3.0
+  resolution: "@alcalzone/release-script-core@npm:3.3.0"
   dependencies:
     execa: ^5.1.1
-  checksum: 14d04956d3b1345ba6936685dd2e9a9b4a4dcc870723a510c2b0abb0abb8951f08283a7e5efff0d073c9ae4b6abd39e8c1ff2ea9bb2f6b6c30afde240b6c8dea
+  checksum: e0dcfa606c1a20197a9193942dff64c00cb45a3936c9dead6861d803290ac4b0035b91b313037e45742c67e8b5a7bf6cbcaf9e1c5de1790f50ba59ca247795c6
   languageName: node
   linkType: hard
 
-"@alcalzone/release-script-plugin-changelog@npm:3.0.0":
-  version: 3.0.0
-  resolution: "@alcalzone/release-script-plugin-changelog@npm:3.0.0"
+"@alcalzone/release-script-plugin-changelog@npm:3.3.2":
+  version: 3.3.2
+  resolution: "@alcalzone/release-script-plugin-changelog@npm:3.3.2"
   dependencies:
-    "@alcalzone/release-script-core": 3.0.0
+    "@alcalzone/release-script-core": 3.3.0
     alcalzone-shared: ^4.0.0
-  checksum: 86f81c6088990ee0462e891f7a13923e4a8cca39ae41e280524db2188137a1ab5a623654005ee93bb7f6ef4650ff6edffc51fd8095f278cc47a3fbe21ce8871d
+  checksum: e90bb3a0e516e0d56f1b99cb4f931d7dba43903f323047b9b98fd9daa0664a0531666f7f68760e1a5e0e141eb0d14e9a642d9c695da683cced9b7d1a4645b607
   languageName: node
   linkType: hard
 
-"@alcalzone/release-script-plugin-exec@npm:3.0.0":
-  version: 3.0.0
-  resolution: "@alcalzone/release-script-plugin-exec@npm:3.0.0"
+"@alcalzone/release-script-plugin-exec@npm:3.3.0":
+  version: 3.3.0
+  resolution: "@alcalzone/release-script-plugin-exec@npm:3.3.0"
   dependencies:
-    "@alcalzone/release-script-core": 3.0.0
+    "@alcalzone/release-script-core": 3.3.0
     alcalzone-shared: ^4.0.0
-  checksum: 4ab2ce0fc41497b164bf4e5e90474210fcba51dccd6f0e6b7bc00973a2773fee139808c57e09c70f01641ed809efb4f30bf56d92ea4956e8d71f8ba4fd2e37fb
+  checksum: 336ae53cbc1fbcef74fa0a16b2d3c72a3ec68e487ee4329ab8607fcb5146ca29a6c3d346a72ad0f6245870a7767837d4565e0155563ea87eefeac36d47d350b6
   languageName: node
   linkType: hard
 
-"@alcalzone/release-script-plugin-git@npm:3.0.0":
-  version: 3.0.0
-  resolution: "@alcalzone/release-script-plugin-git@npm:3.0.0"
+"@alcalzone/release-script-plugin-git@npm:3.3.0":
+  version: 3.3.0
+  resolution: "@alcalzone/release-script-plugin-git@npm:3.3.0"
   dependencies:
-    "@alcalzone/release-script-core": 3.0.0
+    "@alcalzone/release-script-core": 3.3.0
     fs-extra: ^10.0.0
-  checksum: dd1f454369f9269dbe3a1c84fd44c412cee0a1deb228e2edbe861d6b2e75266661048601ca311f1e0465e204bfd1e5742eeefedb3936df0b4acf853c32603e8b
+  checksum: e96a5d5972e21c0ace23fc7a48b96a226b49ef234f5a430337a82cabf3abe9f4082f85db390d802c76d7414c53380ad2d8ce912560f0fde1d8cfdaf5ec8e8d71
   languageName: node
   linkType: hard
 
-"@alcalzone/release-script-plugin-lerna@npm:^3.0.0":
-  version: 3.0.0
-  resolution: "@alcalzone/release-script-plugin-lerna@npm:3.0.0"
+"@alcalzone/release-script-plugin-lerna@npm:~3.3.0":
+  version: 3.3.0
+  resolution: "@alcalzone/release-script-plugin-lerna@npm:3.3.0"
   dependencies:
-    "@alcalzone/release-script-core": 3.0.0
-  checksum: 8de1588b606d24a1fb6eeb02813d0a0b3f70460f33c5ce707b40e2d0c7794e504d3b52c3501d4ca3bfa43f74acf2224d95d0c9aa81991daa5a2ed0857fa078d0
+    "@alcalzone/release-script-core": 3.3.0
+  checksum: d9b1bb9cba4f3ff4234302148575158baa61b8663a492a837fd6e83d01a031de449b3838cc09f27a7249a57682cbe359abcc8ce22d2cc0b31a254d3439caf5cc
   languageName: node
   linkType: hard
 
-"@alcalzone/release-script-plugin-package@npm:3.0.0":
-  version: 3.0.0
-  resolution: "@alcalzone/release-script-plugin-package@npm:3.0.0"
+"@alcalzone/release-script-plugin-package@npm:3.3.0":
+  version: 3.3.0
+  resolution: "@alcalzone/release-script-plugin-package@npm:3.3.0"
   dependencies:
     "@alcalzone/pak": ^0.7.0
-    "@alcalzone/release-script-core": 3.0.0
+    "@alcalzone/release-script-core": 3.3.0
     alcalzone-shared: ^4.0.0
     semver: ^7.3.5
-  checksum: 0ef07d49614d466d9bcd7d4ad17a79ec013d8badcfc22f231cf6336ae30b208a48145b80a82adac8679bd65be8920e1cddf10fc3d5bec054e9786d2c97b7eb9a
+  checksum: f22e6ab6d058f314f9fe7b8c0bf7191e4c3191c06caff941f4d5ce60f8e5382a67169481b96590cd0f29363bd84cc9b2689a3a4bc6017d7217752d2d8560a15f
   languageName: node
   linkType: hard
 
-"@alcalzone/release-script-plugin-version@npm:3.0.0":
-  version: 3.0.0
-  resolution: "@alcalzone/release-script-plugin-version@npm:3.0.0"
+"@alcalzone/release-script-plugin-version@npm:3.3.0":
+  version: 3.3.0
+  resolution: "@alcalzone/release-script-plugin-version@npm:3.3.0"
   dependencies:
-    "@alcalzone/release-script-core": 3.0.0
+    "@alcalzone/release-script-core": 3.3.0
+    alcalzone-shared: ^4.0.0
     semver: ^7.3.5
-  checksum: af0198400e5a5dcfc659698c9f70ced2f61d5b07d2963b63ca519fb215b6ebf333cd43cbfcc93dd9e9255a4fe6ad58edab9af2abdc4a3f79b3a36cd67b32f46a
+    tiny-glob: ^0.2.9
+  checksum: bab59105fc3e3a3ca38f78879d0db78058c1b014ce96d6d953f722832b38f78c7ef87ea8443c3ccfafc594b8ebeaf3ba3e56c494d1f53a606697484e50b015a7
   languageName: node
   linkType: hard
 
-"@alcalzone/release-script@npm:^3.0.0":
-  version: 3.0.0
-  resolution: "@alcalzone/release-script@npm:3.0.0"
+"@alcalzone/release-script@npm:~3.3.2":
+  version: 3.3.2
+  resolution: "@alcalzone/release-script@npm:3.3.2"
   dependencies:
-    "@alcalzone/release-script-core": 3.0.0
-    "@alcalzone/release-script-plugin-changelog": 3.0.0
-    "@alcalzone/release-script-plugin-exec": 3.0.0
-    "@alcalzone/release-script-plugin-git": 3.0.0
-    "@alcalzone/release-script-plugin-package": 3.0.0
-    "@alcalzone/release-script-plugin-version": 3.0.0
+    "@alcalzone/release-script-core": 3.3.0
+    "@alcalzone/release-script-plugin-changelog": 3.3.2
+    "@alcalzone/release-script-plugin-exec": 3.3.0
+    "@alcalzone/release-script-plugin-git": 3.3.0
+    "@alcalzone/release-script-plugin-package": 3.3.0
+    "@alcalzone/release-script-plugin-version": 3.3.0
     alcalzone-shared: ^4.0.0
     axios: ^0.21.4
     colors: ^1.4.0
@@ -161,7 +163,7 @@ __metadata:
     yargs: ^17.1.1
   bin:
     release-script: bin/release.js
-  checksum: 356ee5304cb9d9e59a381cb377569b71412adb92d7c1bf686881d7a6db990b20056fa0273202e5f9b7d5c7b4e6bab0f7e7c238af45cd1b5815e43198b4460406
+  checksum: 0158fd4de2c73770a8d3afef5a6235f51de33e97920ebf02355b93aea03bef4cf798b04e40d4c46da818c2b7f6157f663a2d41b18a4af2a752905b307dfdc359
   languageName: node
   linkType: hard
 
@@ -4237,8 +4239,8 @@ __metadata:
     "@actions/exec": ^1.1.0
     "@actions/github": ^5.0.0
     "@alcalzone/jsonl-db": ^1.3.0
-    "@alcalzone/release-script": ^3.0.0
-    "@alcalzone/release-script-plugin-lerna": ^3.0.0
+    "@alcalzone/release-script": ~3.3.2
+    "@alcalzone/release-script-plugin-lerna": ~3.3.0
     "@babel/core": ^7.15.5
     "@babel/plugin-proposal-class-properties": "*"
     "@babel/plugin-proposal-decorators": ^7.15.4
@@ -7525,6 +7527,13 @@ fsevents@^2.1.2:
   languageName: node
   linkType: hard
 
+"globalyzer@npm:0.1.0":
+  version: 0.1.0
+  resolution: "globalyzer@npm:0.1.0"
+  checksum: 419a0f95ba542534fac0842964d31b3dc2936a479b2b1a8a62bad7e8b61054faa9b0a06ad9f2e12593396b9b2621cac93358d9b3071d33723fb1778608d358a1
+  languageName: node
+  linkType: hard
+
 "globby@npm:^11.0.2, globby@npm:^11.0.3":
   version: 11.0.4
   resolution: "globby@npm:11.0.4"
@@ -7536,6 +7545,13 @@ fsevents@^2.1.2:
     merge2: ^1.3.0
     slash: ^3.0.0
   checksum: d3e02d5e459e02ffa578b45f040381c33e3c0538ed99b958f0809230c423337999867d7b0dbf752ce93c46157d3bbf154d3fff988a93ccaeb627df8e1841775b
+  languageName: node
+  linkType: hard
+
+"globrex@npm:^0.1.2":
+  version: 0.1.2
+  resolution: "globrex@npm:0.1.2"
+  checksum: adca162494a176ce9ecf4dd232f7b802956bb1966b37f60c15e49d2e7d961b66c60826366dc2649093cad5a0d69970cfa8875bd1695b5a1a2f33dcd2aa88da3c
   languageName: node
   linkType: hard
 
@@ -12782,6 +12798,16 @@ fsevents@^2.1.2:
   version: 2.3.8
   resolution: "through@npm:2.3.8"
   checksum: a38c3e059853c494af95d50c072b83f8b676a9ba2818dcc5b108ef252230735c54e0185437618596c790bbba8fcdaef5b290405981ffa09dce67b1f1bf190cbd
+  languageName: node
+  linkType: hard
+
+"tiny-glob@npm:^0.2.9":
+  version: 0.2.9
+  resolution: "tiny-glob@npm:0.2.9"
+  dependencies:
+    globalyzer: 0.1.0
+    globrex: ^0.1.2
+  checksum: aea5801eb6663ddf77ebb74900b8f8bd9dfcfc9b6a1cc8018cb7421590c00bf446109ff45e4b64a98e6c95ddb1255a337a5d488fb6311930e2a95334151ec9c6
   languageName: node
   linkType: hard
 
