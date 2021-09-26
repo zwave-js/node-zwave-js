@@ -5,7 +5,7 @@
 	Add placeholder for next release with `wip` snippet
   ## __WORK IN PROGRESS__
 -->
-## __WORK IN PROGRESS__
+## 8.4.0 (2021-09-26)
 ### Features
 * Added a compat flag to override the number of scenes accessible to `Scene Controller Configuration CC`
 * Experimental support for Wake Up on demand
