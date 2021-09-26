@@ -1,7 +1,7 @@
 {
 	"manufacturer": "Sensative AB",
 	"manufacturerId": "0x019a",
-	"label": "11-01-021",
+	"label": "11-01-022",
 	"description": "Strips Drip 700",
 	"devices": [
 		{
@@ -157,24 +157,6 @@
 				{
 					"label": "All Reports",
 					"value": 2
-				}
-			]
-		},
-		"20": {
-			"label": "Wake-Up Moisture Pooling Workaround for Fibaro Gateway Users",
-			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 1,
-			"defaultValue": 0,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "LED Off",
-					"value": 0
-				},
-				{
-					"label": "LED On",
-					"value": 1
 				}
 			]
 		},
