@@ -138,7 +138,7 @@
 		},
 		"15": {
 			"label": "Activate Supervision",
-			"description": "Activate Supervision command for only important alarm events or all events. *Supervised commands require a confirmation from the gateway when a notification is received.",
+			"description": "Request confirmation from the gateway that a command was received.",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 2,
@@ -147,11 +147,11 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "Off",
+					"label": "Disable",
 					"value": 0
 				},
 				{
-					"label": "Alarm Report (*)",
+					"label": "Alarm Report",
 					"value": 1
 				},
 				{
