@@ -4136,7 +4136,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@zwave-js/config@8.4.0, @zwave-js/config@workspace:*, @zwave-js/config@workspace:packages/config":
+"@zwave-js/config@8.4.1, @zwave-js/config@workspace:*, @zwave-js/config@workspace:packages/config":
   version: 0.0.0-use.local
   resolution: "@zwave-js/config@workspace:packages/config"
   dependencies:
@@ -13837,7 +13837,7 @@ typescript@4.4.2:
     "@types/serialport": ^8.0.2
     "@types/source-map-support": ^0
     "@xstate/test": ^0.4.2
-    "@zwave-js/config": 8.4.0
+    "@zwave-js/config": 8.4.1
     "@zwave-js/core": 8.3.1
     "@zwave-js/maintenance": 8.3.1
     "@zwave-js/serial": 8.3.1

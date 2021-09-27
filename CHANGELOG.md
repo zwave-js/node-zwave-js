@@ -5,7 +5,7 @@
 	Add placeholder for next release with `wip` snippet
   ## __WORK IN PROGRESS__
 -->
-## __WORK IN PROGRESS__
+## 8.4.1 (2021-09-27)
 ### Bugfixes
 * Responses to secure `Supervision CC::Get` commands are now correctly sent with security encapsulation if required
 * Errors in application-provided callbacks for Security S2 bootstrapping are now caught
