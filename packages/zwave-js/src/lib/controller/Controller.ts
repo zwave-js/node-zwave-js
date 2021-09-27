@@ -1197,11 +1197,14 @@ export class ZWaveController extends TypedEventEmitter<ControllerEventCallbacks>
 
 			// TODO: Validate client-side auth if requested
 			const grantResult = await Promise.race([
-				wait(inclusionTimeouts.TAI1).then(() => false as const),
-				userCallbacks.grantSecurityClasses({
-					securityClasses: supportedKeys,
-					clientSideAuth: false,
-				}),
+				wait(inclusionTimeouts.TAI1, true).then(() => false as const),
+				userCallbacks
+					.grantSecurityClasses({
+						securityClasses: supportedKeys,
+						clientSideAuth: false,
+					})
+					// ignore errors in application callbacks
+					.catch(() => false as const),
 			]);
 			if (grantResult === false) {
 				// There was a timeout or the user did not confirm the request, abort
@@ -1265,8 +1268,13 @@ export class ZWaveController extends TypedEventEmitter<ControllerEventCallbacks>
 				const dsk = dskToString(nodePublicKey.slice(0, 16)).slice(5);
 
 				const pinResult = await Promise.race([
-					wait(inclusionTimeouts.TAI2).then(() => false as const),
-					userCallbacks.validateDSKAndEnterPIN(dsk),
+					wait(inclusionTimeouts.TAI2, true).then(
+						() => false as const,
+					),
+					userCallbacks
+						.validateDSKAndEnterPIN(dsk)
+						// ignore errors in application callbacks
+						.catch(() => false as const),
 				]);
 				if (
 					typeof pinResult !== "string" ||
