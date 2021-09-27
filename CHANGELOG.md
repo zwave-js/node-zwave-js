@@ -5,6 +5,17 @@
 	Add placeholder for next release with `wip` snippet
   ## __WORK IN PROGRESS__
 -->
+## __WORK IN PROGRESS__
+### Bugfixes
+* Responses to secure `Supervision CC::Get` commands are now correctly sent with security encapsulation if required
+* Errors in application-provided callbacks for Security S2 bootstrapping are now caught
+
+### Config file changes
+* Auto-idle notifications for Ecolink DWZWAVE25
+
+### Changes under the hood
+* Fixed the workflow for creating test releases from PRs
+
 ## 8.4.0 (2021-09-26)
 ### Features
 * Added a compat flag to override the number of scenes accessible to `Scene Controller Configuration CC`
