@@ -1,6 +1,9 @@
 # Commands to start on workspace startup
 tasks:
-  - init: yarn install && yarn build # Install dependencies
+  - init: |
+      yarn config set enableGlobalCache=false
+      yarn install
+      yarn build
     command: yarn watch # Start TypeScript compiler in watch mode
 
 # Auto-install VSCode extensions
