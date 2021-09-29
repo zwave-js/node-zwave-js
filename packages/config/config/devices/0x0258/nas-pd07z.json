@@ -39,24 +39,6 @@
 			"$import": "templates/shenzhen_neo_template.json#motion_prevent_retrigger"
 		},
 		"5": {
-			"label": "Binary Sensor Report",
-			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 1,
-			"defaultValue": 0,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "Disable",
-					"value": 0
-				},
-				{
-					"label": "Enable",
-					"value": 1
-				}
-			]
-		},
-		"6": {
 			"label": "Motion Sensor Sensitivity",
 			"valueSize": 1,
 			"minValue": 0,
@@ -64,7 +46,7 @@
 			"defaultValue": 2,
 			"unsigned": true
 		},
-		"9": {
+		"8": {
 			"label": "Temperature Change Report Threshold",
 			"valueSize": 1,
 			"unit": "0.1 °C/F",
@@ -72,7 +54,7 @@
 			"maxValue": 100,
 			"defaultValue": 10
 		},
-		"10": {
+		"9": {
 			"label": "Humidity Change Report Threshold",
 			"valueSize": 1,
 			"unit": "0.1 %",
@@ -80,7 +62,7 @@
 			"maxValue": 100,
 			"defaultValue": 20
 		},
-		"11": {
+		"10": {
 			"label": "Luminance Change Report Threshold",
 			"valueSize": 1,
 			"unit": "lux",
@@ -88,7 +70,7 @@
 			"maxValue": 120,
 			"defaultValue": 50
 		},
-		"12": {
+		"11": {
 			"label": "Association Group 2: Basic Set Level",
 			"valueSize": 1,
 			"minValue": 0,
@@ -105,10 +87,7 @@
 				}
 			]
 		},
-		"13": {
-			"$import": "templates/shenzhen_neo_template.json#motion_retrigger_interval"
-		},
-		"14": {
+		"12": {
 			"label": "Basic Set Off Delay Time",
 			"valueSize": 2,
 			"unit": "seconds",
@@ -116,7 +95,7 @@
 			"maxValue": 30000,
 			"defaultValue": 30
 		},
-		"15": {
+		"13": {
 			"label": "Motion Clear Time",
 			"valueSize": 2,
 			"unit": "seconds",
@@ -143,7 +122,7 @@
 				}
 			]
 		},
-		"16": {
+		"14": {
 			"label": "Luminance Threshold for Basic Sets",
 			"unit": "lux",
 			"valueSize": 2,
@@ -151,7 +130,7 @@
 			"maxValue": 1000,
 			"defaultValue": 50
 		},
-		"17": {
+		"15": {
 			"label": "Sensor Report Interval",
 			"unit": "seconds",
 			"valueSize": 2,
@@ -159,7 +138,7 @@
 			"maxValue": 30000,
 			"defaultValue": 180
 		},
-		"7": {
+		"6": {
 			"label": "Temperature Offset Value",
 			"valueSize": 1,
 			"unit": "0.1 °C/F",
@@ -168,7 +147,7 @@
 			"defaultValue": 0,
 			"unsigned": false
 		},
-		"8": {
+		"7": {
 			"label": "Humidity Offset Value",
 			"valueSize": 1,
 			"unit": "0.1 %",
