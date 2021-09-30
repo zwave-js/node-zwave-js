@@ -39,7 +39,7 @@
     "@babel/plugin-proposal-private-methods": "*",
     "@babel/plugin-proposal-private-property-in-object": "*",
     "@babel/plugin-transform-typescript": "*",
-    "@babel/preset-env": "^7.15.4",
+    "@babel/preset-env": "^7.15.6",
     "@babel/preset-typescript": "^7.15.0",
     "@commitlint/cli": "^12.1.4",
     "@commitlint/config-conventional": "^12.1.4",
