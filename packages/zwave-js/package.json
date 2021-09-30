@@ -75,7 +75,7 @@
     "xstate": "^4.23.4"
   },
   "devDependencies": {
-    "@types/fs-extra": "^9.0.12",
+    "@types/fs-extra": "^9.0.13",
     "@types/jest": "^26.0.24",
     "@types/node": "^15.12.5",
     "@types/proper-lockfile": "^4",
