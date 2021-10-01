@@ -31,7 +31,7 @@
     "@actions/exec": "^1.1.0",
     "@actions/github": "^5.0.0",
     "@alcalzone/jsonl-db": "^1.3.0",
-    "@alcalzone/release-script": "~3.3.2",
+    "@alcalzone/release-script": "~3.4.0",
     "@alcalzone/release-script-plugin-lerna": "~3.3.0",
     "@babel/core": "^7.15.5",
     "@babel/plugin-proposal-class-properties": "*",
