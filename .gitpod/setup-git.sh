@@ -4,6 +4,14 @@ GRAY='\033[1;30m'
 BLUE='\033[1;34m'
 NC='\033[0m'
 
+echo ""
+echo -e "${GREEN}==================================================${NC}"
+echo -e "${GREEN}         Welcome to the Z-Wave JS GitPod!         ${NC}"
+echo -e "${GREEN}==================================================${NC}"
+echo ""
+echo "Just a few more questions to help you get started..."
+echo ""
+
 while true; do
     read -p "Have you already forked the repo? (y/n) " yn
     case $yn in
@@ -29,6 +37,7 @@ echo -e "${BLUE}Setting up git remotes for you...${NC}"
 username=zwave-js-bot
 git remote set-url origin "https://github.com/$username/node-zwave-js"
 git fetch origin
+echo ""
 echo -e "Your fork is now configured as ${BLUE}origin${NC}, the original repo as ${BLUE}upstream${NC}"
 echo ""
 

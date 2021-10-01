@@ -4,9 +4,9 @@ RED='\033[1;31m'
 GREEN='\033[0;32m'
 BLUE='\033[1;34m'
 NC='\033[0m'
-echo -e "${GREEN}================================================================================${NC}"
-echo -e "${GREEN}                        Welcome to the Z-Wave JS GitPod!                        ${NC}"
-echo -e "${GREEN}================================================================================${NC}"
+echo -e "${GREEN}==================================================${NC}"
+echo -e "${GREEN}         Welcome to the Z-Wave JS GitPod!         ${NC}"
+echo -e "${GREEN}==================================================${NC}"
 echo -e ""
 echo -e "This environment is set up to make contributing easy for you."
 echo -e ""
