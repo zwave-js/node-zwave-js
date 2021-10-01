@@ -27,7 +27,7 @@
     "packages/*"
   ],
   "devDependencies": {
-    "@actions/core": "^1.5.0",
+    "@actions/core": "^1.6.0",
     "@actions/exec": "^1.1.0",
     "@actions/github": "^5.0.0",
     "@alcalzone/jsonl-db": "^1.3.0",
