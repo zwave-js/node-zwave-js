@@ -1,10 +1,10 @@
 # Commands to start on workspace startup
 tasks:
   - init: |
-      yarn config set enableGlobalCache=false
+      sed -i 's/enableGlobalCache: true/cacheFolder: ".yarn/cache"/' .yarnrc.yml
       yarn install
       yarn build
-    command: yarn watch # Start TypeScript compiler in watch mode
+    # command: yarn watch # Start TypeScript compiler in watch mode
 
 # Auto-install VSCode extensions
 vscode:
