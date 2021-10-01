@@ -35,7 +35,6 @@ while true; do
 done
 
 echo -e "${BLUE}Setting up git remotes for you...${NC}"
-username=zwave-js-bot
 git remote set-url origin "https://github.com/$username/node-zwave-js"
 git fetch origin
 echo ""
