@@ -2,6 +2,9 @@
 tasks:
   - init: |
       sed -i 's/enableGlobalCache: true/cacheFolder: ".yarn/cache"/' .yarnrc.yml
+      cat .yarnrc.yml
+      yarn config get cacheFolder
+      sleep 15
       yarn install
       yarn build
     # command: yarn watch # Start TypeScript compiler in watch mode
