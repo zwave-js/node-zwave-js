@@ -3,11 +3,17 @@ tasks:
   - init: |
       yarn install
       yarn build
-    command: bash .gitpod/setup-git.sh
+    command: |
+      bash .gitpod/setup-git.sh
+      gp sync-done prepare
 
   - name: Print help
     openMode: split-right
-    command: bash .gitpod/help.sh
+    init: |
+      echo "Please wait... setting up workspace"
+      gp sync-await prepare
+    command: |
+      bash .gitpod/help.sh
 
 # Auto-install VSCode extensions
 vscode:
