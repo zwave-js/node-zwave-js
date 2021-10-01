@@ -4,6 +4,7 @@ tasks:
       yarn install
       yarn build
     command: |
+      RED='\033[1;31m'
       GREEN='\033[0;32m'
       BLUE='\033[1;34m'
       NC='\033[0m'
@@ -36,6 +37,9 @@ tasks:
       echo -e ""
       echo -e "   * Correcting something in a config file"
       echo -e "     ${BLUE}fix(config): change param 2 min value to -10 for MyManufacturer ABC-123Z${NC}"
+      echo -e ""
+      echo -e "${RED}♥${NC} Happy coding!"
+      echo -e ""
 
 # Auto-install VSCode extensions
 vscode:
