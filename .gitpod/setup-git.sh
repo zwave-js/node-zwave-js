@@ -14,19 +14,19 @@ echo "Just a few more questions to help you get started..."
 echo ""
 
 while true; do
-    read -p "Have you already forked the repo? (y/n) " yn
-    case $yn in
-        [Yy]* ) break;;
-        [Nn]* )
-            echo -e "${BLUE}Ok, VSCode will guide you through it when you create a PR...${NC}"
-            echo ""
-            exit;;
-        * ) echo -e "${RED}Please answer yes (y) or no (n)!${NC}";;
-    esac
+	read -p "Have you already forked the repo? (y/n) " fork
+	case $fork in
+		[Yy]* ) break;;
+		[Nn]* )
+			echo -e "${BLUE}Please open https://github.com/zwave-js/node-zwave-js/fork in another browser window and select your account as the destination.${NC}"
+			read -p "Press ENTER when the fork was created... "
+			break;;
+		* ) echo -e "${RED}Please answer yes (y) or no (n)!${NC}";;
+	esac
 done
 
 while true; do
-    read -p "What is your GitHub username? " username
+	read -p "What is your GitHub username? " username
 	if [[ -z "$username" ]]; then
 		echo -e "${RED}Please enter a username!${NC}"
 	else
