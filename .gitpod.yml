@@ -9,11 +9,7 @@ tasks:
 
   - name: Print help
     openMode: split-right
-    init: |
-      echo "Please wait... setting up workspace"
-      gp sync-await prepare
-    command: |
-      bash .gitpod/help.sh
+    command: bash .gitpod/help.sh
 
 # Auto-install VSCode extensions
 vscode:
