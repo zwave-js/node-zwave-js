@@ -82,13 +82,13 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@alcalzone/release-script-plugin-changelog@npm:3.3.2":
-  version: 3.3.2
-  resolution: "@alcalzone/release-script-plugin-changelog@npm:3.3.2"
+"@alcalzone/release-script-plugin-changelog@npm:3.4.0":
+  version: 3.4.0
+  resolution: "@alcalzone/release-script-plugin-changelog@npm:3.4.0"
   dependencies:
     "@alcalzone/release-script-core": 3.3.0
     alcalzone-shared: ^4.0.0
-  checksum: e90bb3a0e516e0d56f1b99cb4f931d7dba43903f323047b9b98fd9daa0664a0531666f7f68760e1a5e0e141eb0d14e9a642d9c695da683cced9b7d1a4645b607
+  checksum: ac22c3edf922f3ba8f678e471ffc9e8fd856336a3825f708c334ed364e470928edb0387e9c7da539d597b84f90dc49635fa3048a79ca109b2ad05e6dda6cdd3c
   languageName: node
   linkType: hard
 
@@ -145,12 +145,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@alcalzone/release-script@npm:~3.3.2":
-  version: 3.3.2
-  resolution: "@alcalzone/release-script@npm:3.3.2"
+"@alcalzone/release-script@npm:~3.4.0":
+  version: 3.4.0
+  resolution: "@alcalzone/release-script@npm:3.4.0"
   dependencies:
     "@alcalzone/release-script-core": 3.3.0
-    "@alcalzone/release-script-plugin-changelog": 3.3.2
+    "@alcalzone/release-script-plugin-changelog": 3.4.0
     "@alcalzone/release-script-plugin-exec": 3.3.0
     "@alcalzone/release-script-plugin-git": 3.3.0
     "@alcalzone/release-script-plugin-package": 3.3.0
@@ -165,7 +165,7 @@ __metadata:
     yargs: ^17.1.1
   bin:
     release-script: bin/release.js
-  checksum: 0158fd4de2c73770a8d3afef5a6235f51de33e97920ebf02355b93aea03bef4cf798b04e40d4c46da818c2b7f6157f663a2d41b18a4af2a752905b307dfdc359
+  checksum: 71fe9c5bb71cbe62a6a03de17661b934221fba70754b90349a048893fe8843f06f35cacc2422d62e34b5b3a65849614ba88bd57005013b19d9a1b377e1f67a06
   languageName: node
   linkType: hard
 
@@ -4259,7 +4259,7 @@ __metadata:
     "@actions/exec": ^1.1.0
     "@actions/github": ^5.0.0
     "@alcalzone/jsonl-db": ^1.3.0
-    "@alcalzone/release-script": ~3.3.2
+    "@alcalzone/release-script": ~3.4.0
     "@alcalzone/release-script-plugin-lerna": ~3.3.0
     "@babel/core": ^7.15.5
     "@babel/plugin-proposal-class-properties": "*"
