@@ -617,7 +617,7 @@ interface InclusionResult {
 
 ### `"node removed"`
 
-A node has successfully been replaced or removed from the network. The `replace` parameter indicates whether the node was replaced with another node.
+A node has successfully been replaced or removed from the network. The `replaced` parameter indicates whether the node was replaced with another node.
 
 ```ts
 (node: ZWaveNode, replaced: boolean) => void

@@ -19,8 +19,7 @@
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 9,
-			"defaultValue": 0,
-			"allowManualEntry": false,
+			"readOnly": true,
 			"options": [
 				{
 					"label": "EU (868.4 MHz, 869.85 MHz)",

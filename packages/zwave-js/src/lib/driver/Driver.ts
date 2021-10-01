@@ -342,6 +342,8 @@ export interface SendMessageOptions {
 	 * @internal
 	 */
 	pauseSendThread?: boolean;
+	/** If a Wake Up On Demand should be requested for the target node. */
+	requestWakeUpOnDemand?: boolean;
 }
 
 export interface SendCommandOptions extends SendMessageOptions {
@@ -2871,6 +2873,7 @@ ${handlers.length} left`,
 		if (options.pauseSendThread === true) {
 			transaction.pauseSendThread = true;
 		}
+		transaction.requestWakeUpOnDemand = !!options.requestWakeUpOnDemand;
 		transaction.tag = options.tag;
 
 		// start sending now (maybe)

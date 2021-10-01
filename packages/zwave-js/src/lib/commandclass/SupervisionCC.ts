@@ -10,10 +10,8 @@ import {
 	ZWaveErrorCodes,
 } from "@zwave-js/core";
 import { getEnumMemberName } from "@zwave-js/shared";
-import { SendDataBridgeRequest } from "../controller/SendDataBridgeMessages";
-import { SendDataRequest } from "../controller/SendDataMessages";
 import type { Driver } from "../driver/Driver";
-import { FunctionType, MessagePriority } from "../message/Constants";
+import { MessagePriority } from "../message/Constants";
 import { PhysicalCCAPI } from "./API";
 import {
 	API,
@@ -88,34 +86,31 @@ export class SupervisionCCAPI extends PhysicalCCAPI {
 	public async sendReport(
 		options: SupervisionCCReportOptions & { secure?: boolean },
 	): Promise<void> {
+		// Ask the node if it needs Wake Up On Demand,
+		// unless it's overriden in `options`
+		const requestWakeUpOnDemand =
+			options.requestWakeUpOnDemand ??
+			this.endpoint.getNodeUnsafe()?.shouldRequestWakeUpOnDemand;
+
 		const { secure = false, ...cmdOptions } = options;
 		const cc = new SupervisionCCReport(this.driver, {
 			nodeId: this.endpoint.nodeId,
 			...cmdOptions,
+			requestWakeUpOnDemand,
 		});
 
 		// The report should be sent back with security if the received command was secure
 		cc.secure = secure;
 
-		const SendDataConstructor = this.driver.controller.isFunctionSupported(
-			FunctionType.SendDataBridge,
-		)
-			? SendDataBridgeRequest
-			: SendDataRequest;
-
-		const msg = new SendDataConstructor(this.driver, {
-			command: cc,
-			// Only try sending a nonce once
-			maxSendAttempts: 1,
-		});
-
 		try {
-			await this.driver.sendMessage(msg, {
+			await this.driver.sendCommand(cc, {
 				...this.commandOptions,
 				// Supervision Reports must be sent immediately
 				priority: MessagePriority.Handshake,
 				// We don't want failures causing us to treat the node as asleep or dead
 				changeNodeStatusOnMissingACK: false,
+				// Only try sending the report once. If it fails, the node will ask again
+				maxSendAttempts: 1,
 			});
 		} catch (e) {
 			if (isTransmissionError(e)) {
@@ -130,7 +125,7 @@ export class SupervisionCCAPI extends PhysicalCCAPI {
 }
 
 @commandClass(CommandClasses.Supervision)
-@implementedVersion(1)
+@implementedVersion(2)
 export class SupervisionCC extends CommandClass {
 	declare ccCommand: SupervisionCommand;
 	// Force singlecast for the supervision CC
@@ -187,6 +182,7 @@ export class SupervisionCC extends CommandClass {
 
 export type SupervisionCCReportOptions = {
 	moreUpdatesFollow: boolean;
+	requestWakeUpOnDemand?: boolean;
 	sessionId: number;
 } & (
 	| {
@@ -216,11 +212,13 @@ export class SupervisionCCReport extends SupervisionCC {
 		if (gotDeserializationOptions(options)) {
 			validatePayload(this.payload.length >= 3);
 			this.moreUpdatesFollow = !!(this.payload[0] & 0b1_0_000000);
+			this.requestWakeUpOnDemand = !!(this.payload[0] & 0b0_1_000000);
 			this.sessionId = this.payload[0] & 0b111111;
 			this.status = this.payload[1];
 			this.duration = Duration.parseReport(this.payload[2]);
 		} else {
 			this.moreUpdatesFollow = options.moreUpdatesFollow;
+			this.requestWakeUpOnDemand = !!options.requestWakeUpOnDemand;
 			this.sessionId = options.sessionId;
 			this.status = options.status;
 			if (options.status === SupervisionStatus.Working) {
@@ -232,6 +230,7 @@ export class SupervisionCCReport extends SupervisionCC {
 	}
 
 	public readonly moreUpdatesFollow: boolean;
+	public readonly requestWakeUpOnDemand: boolean;
 	public readonly sessionId: number;
 	public readonly status: SupervisionStatus;
 	public readonly duration: Duration | undefined;
@@ -239,7 +238,8 @@ export class SupervisionCCReport extends SupervisionCC {
 	public serialize(): Buffer {
 		this.payload = Buffer.concat([
 			Buffer.from([
-				(this.moreUpdatesFollow ? 0b10_000000 : 0) |
+				(this.moreUpdatesFollow ? 0b1_0_000000 : 0) |
+					(this.requestWakeUpOnDemand ? 0b0_1_000000 : 0) |
 					(this.sessionId & 0b111111),
 				this.status,
 			]),

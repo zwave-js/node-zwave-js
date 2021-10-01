@@ -122,6 +122,7 @@ import {
 import { getFirmwareVersionsValueId } from "../commandclass/VersionCC";
 import {
 	getWakeUpIntervalValueId,
+	getWakeUpOnDemandSupportedValueId,
 	WakeUpCCWakeUpNotification,
 } from "../commandclass/WakeUpCC";
 import {
@@ -582,6 +583,22 @@ export class ZWaveNode extends Endpoint implements SecurityClassOwner {
 
 	public get zwavePlusRoleType(): ZWavePlusRoleType | undefined {
 		return this.getValue(getRoleTypeValueId());
+	}
+
+	public get supportsWakeUpOnDemand(): boolean | undefined {
+		return this.getValue(getWakeUpOnDemandSupportedValueId());
+	}
+
+	public get shouldRequestWakeUpOnDemand(): boolean {
+		return (
+			!!this.supportsWakeUpOnDemand &&
+			this.status === NodeStatus.Asleep &&
+			this.driver.hasPendingTransactions(
+				(t) =>
+					t.requestWakeUpOnDemand &&
+					t.message.getNodeId() === this.id,
+			)
+		);
 	}
 
 	/**
@@ -1783,6 +1800,10 @@ protocol version:      ${this._protocolVersion}`;
 				endpoint.addCC(CommandClasses.Security, { secure: true });
 			}
 
+			// The Security S0/S2 CC adds new CCs to the endpoint, so we need to once more remove those
+			// that aren't actually properly supported by the device.
+			this.applyCommandClassesCompatFlag(endpoint.index);
+
 			// Don't offer or interview the Basic CC if any actuator CC is supported - except if the config files forbid us
 			// to map the Basic CC to other CCs or expose Basic Set as an event
 			if (!compat?.disableBasicMapping && !compat?.treatBasicSetAsEvent) {
@@ -2013,15 +2034,23 @@ protocol version:      ${this._protocolVersion}`;
 	/**
 	 * Uses the `commandClasses` compat flag defined in the node's config file to
 	 * override the reported command classes.
+	 * @param endpointIndex If given, limits the application of the compat flag to the given endpoint.
 	 */
-	private applyCommandClassesCompatFlag(): void {
+	private applyCommandClassesCompatFlag(endpointIndex?: number): void {
 		if (this.deviceConfig) {
 			// Add CCs the device config file tells us to
 			const addCCs = this.deviceConfig.compat?.addCCs;
 			if (addCCs) {
 				for (const [cc, { endpoints }] of addCCs) {
-					for (const [ep, info] of endpoints) {
-						this.getEndpoint(ep)?.addCC(cc, info);
+					if (endpointIndex === undefined) {
+						for (const [ep, info] of endpoints) {
+							this.getEndpoint(ep)?.addCC(cc, info);
+						}
+					} else if (endpoints.has(endpointIndex)) {
+						this.getEndpoint(endpointIndex)?.addCC(
+							cc,
+							endpoints.get(endpointIndex)!,
+						);
 					}
 				}
 			}
@@ -2030,12 +2059,20 @@ protocol version:      ${this._protocolVersion}`;
 			if (removeCCs) {
 				for (const [cc, endpoints] of removeCCs) {
 					if (endpoints === "*") {
-						for (const ep of this.getAllEndpoints()) {
-							ep.removeCC(cc);
+						if (endpointIndex === undefined) {
+							for (const ep of this.getAllEndpoints()) {
+								ep.removeCC(cc);
+							}
+						} else {
+							this.getEndpoint(endpointIndex)?.removeCC(cc);
 						}
 					} else {
-						for (const ep of endpoints) {
-							this.getEndpoint(ep)?.removeCC(cc);
+						if (endpointIndex === undefined) {
+							for (const ep of endpoints) {
+								this.getEndpoint(ep)?.removeCC(cc);
+							}
+						} else if (endpoints.includes(endpointIndex)) {
+							this.getEndpoint(endpointIndex)?.removeCC(cc);
 						}
 					}
 				}

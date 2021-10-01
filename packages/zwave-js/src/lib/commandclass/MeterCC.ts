@@ -148,10 +148,16 @@ function getValueLabel(
 	suffix?: string,
 ): string {
 	let ret = getMeterTypeName(configManager, meterType);
-	if (rateType !== RateType.Unspecified) {
-		ret += ` ${getEnumMemberName(RateType, rateType)}`;
+	switch (rateType) {
+		case RateType.Consumed:
+			ret += ` Consumption [${scale.label}]`;
+			break;
+		case RateType.Produced:
+			ret += ` Production [${scale.label}]`;
+			break;
+		default:
+			ret += ` [${scale.label}]`;
 	}
-	ret += ` [${scale.label}]`;
 	if (suffix) {
 		ret += ` (${suffix})`;
 	}
