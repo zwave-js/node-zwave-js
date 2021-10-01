@@ -3560,32 +3560,13 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@serialport/binding-abstract@npm:^9.0.7":
-  version: 9.0.7
-  resolution: "@serialport/binding-abstract@npm:9.0.7"
-  dependencies:
-    debug: ^4.3.1
-  checksum: 2987cd9a315bfcf6c8179037b3290362d6ff5c43fb356eecca34b0f050abd6d0ad78cefb91982d8ff0e7043159d941c05e979c641b87454585c453ffccc00c87
-  languageName: node
-  linkType: hard
-
-"@serialport/binding-mock@npm:9.2.4":
+"@serialport/binding-mock@npm:9.2.4, @serialport/binding-mock@npm:^9.2.4":
   version: 9.2.4
   resolution: "@serialport/binding-mock@npm:9.2.4"
   dependencies:
     "@serialport/binding-abstract": 9.2.3
     debug: ^4.3.2
   checksum: c67de00e61de5d7745ff8ac1c7c77c5edebc77c187c76844aa651f4823aa6f070861ceeeb650c21e65eba696f984013a77ee43ca173792281d087cb8a0f9f7fe
-  languageName: node
-  linkType: hard
-
-"@serialport/binding-mock@npm:^9.0.7":
-  version: 9.0.7
-  resolution: "@serialport/binding-mock@npm:9.0.7"
-  dependencies:
-    "@serialport/binding-abstract": ^9.0.7
-    debug: ^4.3.1
-  checksum: ad348b7cdd30872b3e6f858fc6f8db4e1d8fa62bb9439b159e5cd4de3579b2a8bcdffe05da9adc197a23f7ac8a9bc4057453f87c69e60331413bf073f9b8f5af
   languageName: node
   linkType: hard
 
@@ -4310,7 +4291,7 @@ __metadata:
   resolution: "@zwave-js/serial@workspace:packages/serial"
   dependencies:
     "@sentry/node": ^6.12.0
-    "@serialport/binding-mock": ^9.0.7
+    "@serialport/binding-mock": ^9.2.4
     "@types/jest": ^26.0.24
     "@types/node": ^15.12.5
     "@types/serialport": ^8.0.2
