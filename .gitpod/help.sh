@@ -38,7 +38,7 @@ echo -e "     ${BLUE}fix(config): change param 2 min value to -10 for MyManufact
 
 echo ""
 echo ""
-echo "${BLUE}Please wait... setting up workspace${NC}"
+echo -e "${BLUE}Please wait... setting up workspace${NC}"
 echo ""
 echo ""
 gp sync-await prepare
