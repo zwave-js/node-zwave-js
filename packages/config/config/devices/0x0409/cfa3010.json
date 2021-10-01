@@ -2,7 +2,7 @@
 	"manufacturer": "ABUS",
 	"manufacturerId": "0x0409",
 	"label": "CFA3010",
-	"description": "Z-Wave Door Lock",
+	"description": "Z-Wave Door Lock - Make changes",
 	"devices": [
 		{
 			"productType": "0x0005",
