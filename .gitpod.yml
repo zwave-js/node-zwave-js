@@ -1,7 +1,8 @@
 # Commands to start on workspace startup
 tasks:
   - init: |
-      sed -i 's/enableGlobalCache: true/cacheFolder: ".yarn/cache"/' .yarnrc.yml
+      yarn config set enableGlobalCache false
+      yarn config set cacheFolder .yarn/cache
       cat .yarnrc.yml
       yarn config get cacheFolder
       sleep 15
