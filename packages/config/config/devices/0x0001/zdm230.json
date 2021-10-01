@@ -2,7 +2,7 @@
 	"manufacturer": "HomePro",
 	"manufacturerId": "0x0001",
 	"label": "ZDM230",
-	"description": "Wall Dimmer",
+	"description": "Wall Dimmer - Another change",
 	"devices": [
 		{
 			"productType": "0x444d",
