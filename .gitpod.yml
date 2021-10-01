@@ -1,11 +1,8 @@
 # Commands to start on workspace startup
 tasks:
   - init: |
-      yarn config set enableGlobalCache false
-      yarn config set cacheFolder .yarn/cache
-      cat .yarnrc.yml
+      yarn config get enableGlobalCache
       yarn config get cacheFolder
-      sleep 15
       yarn install
       yarn build
     # command: yarn watch # Start TypeScript compiler in watch mode
