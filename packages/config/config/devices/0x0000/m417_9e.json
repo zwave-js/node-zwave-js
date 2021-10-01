@@ -1,6 +1,6 @@
 {
 	"manufacturer": "Sigma Designs (Former Zensys)",
-	"manufacturerId": "0x0000",
+	"manufacturerId": "0x0000 - Test 2",
 	"label": "M417_9E",
 	"description": "Smart Temperature & Humidity Sensor",
 	"devices": [
