@@ -3770,12 +3770,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/fs-extra@npm:^9.0.12":
-  version: 9.0.12
-  resolution: "@types/fs-extra@npm:9.0.12"
+"@types/fs-extra@npm:^9.0.13":
+  version: 9.0.13
+  resolution: "@types/fs-extra@npm:9.0.13"
   dependencies:
     "@types/node": "*"
-  checksum: c63834f0be8d0993c55abcc0b2c90f3c095cf3aa9e827973472167bd93687df9da546bd5e0823ddc9e83e1651c9cfb09bbac99fa57a15ab28fd21280426e472c
+  checksum: add79e212acd5ac76b97b9045834e03a7996aef60a814185e0459088fd290519a3c1620865d588fa36c4498bf614210d2a703af5cf80aa1dbc125db78f6edac3
   languageName: node
   linkType: hard
 
@@ -4139,7 +4139,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@zwave-js/config@workspace:packages/config"
   dependencies:
-    "@types/fs-extra": ^9.0.12
+    "@types/fs-extra": ^9.0.13
     "@types/jest": ^26.0.24
     "@types/js-levenshtein": ^1.1.0
     "@types/json-logic-js": ^1.2.1
@@ -4209,7 +4209,7 @@ __metadata:
   resolution: "@zwave-js/maintenance@workspace:packages/maintenance"
   dependencies:
     "@types/clipboardy": ^2
-    "@types/fs-extra": ^9.0.12
+    "@types/fs-extra": ^9.0.13
     "@types/jest": ^26.0.24
     "@types/node": ^15.12.5
     "@types/prettier": ^2
@@ -4310,7 +4310,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@zwave-js/shared@workspace:packages/shared"
   dependencies:
-    "@types/fs-extra": ^9.0.12
+    "@types/fs-extra": ^9.0.13
     "@types/jest": ^26.0.24
     "@types/node": ^15.12.5
     alcalzone-shared: ^4.0.0
@@ -13828,7 +13828,7 @@ typescript@4.4.2:
     "@alcalzone/pak": ^0.7.0
     "@sentry/integrations": ^6.12.0
     "@sentry/node": ^6.12.0
-    "@types/fs-extra": ^9.0.12
+    "@types/fs-extra": ^9.0.13
     "@types/jest": ^26.0.24
     "@types/node": ^15.12.5
     "@types/proper-lockfile": ^4
