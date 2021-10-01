@@ -5,7 +5,7 @@
 	"description": "Smart Temperature & Humidity Sensor",
 	"devices": [
 		{
-			"productType": "0x0003",
+			"productType": "0x0003 - errewr",
 			"productId": "0x0008"
 		}
 	],
