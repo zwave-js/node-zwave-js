@@ -1713,36 +1713,10 @@
 				"value": 1
 			}
 		]
-	},	"smart_switch_mode": {
-		"label": "Smart Switch Mode",
-		"valueSize": 1,
-		"minValue": 0,
-		"maxValue": 3,
-		"defaultValue": 3,
-		"unsigned": true,
-		"allowManualEntry": false,
-		"options": [
-			{
-				"label": "Disable",
-				"value": 0
-			},
-			{
-				"label": "Local control only",
-				"value": 1
-			},
-			{
-				"label": "Central scene only",
-				"value": 2
-			},
-			{
-				"label": "Local and central scene",
-				"value": 3
-			}
-		]
 	},
 	"smart_switch_mode_reporting": {
 		"$import": "~/templates/master_template.json#base_enable_disable",
-		"label": "Smart Switch Mode: Report State in Scene Mode"
+		"label": "Smart Switch Mode: Reporting"
 	},
 	"led_function": {
 		"label": "LED Indicator Function",
