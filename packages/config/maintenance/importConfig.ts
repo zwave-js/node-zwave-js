@@ -12,6 +12,7 @@ import { CommandClasses, getIntegerLimits } from "@zwave-js/core";
 import {
 	enumFilesRecursive,
 	formatId,
+	getErrorMessage,
 	num2hex,
 	stringify,
 } from "@zwave-js/shared";
@@ -827,9 +828,8 @@ async function parseZWAFiles(): Promise<void> {
 	for (const file of jsonData) {
 		// Lookup the manufacturer
 		const manufacturerId = parseInt(file.ManufacturerId, 16);
-		const manufacturerName = configManager.lookupManufacturer(
-			manufacturerId,
-		);
+		const manufacturerName =
+			configManager.lookupManufacturer(manufacturerId);
 
 		// Add the manufacturer to our manufacturers.json if it is missing
 		if (Number.isNaN(manufacturerId)) {
@@ -1188,7 +1188,12 @@ async function parseZWAProduct(
 			);
 		}
 	} catch (e) {
-		console.log(`Error processing: ${fileNameAbsolute} - ${e}`);
+		console.log(
+			`Error processing: ${fileNameAbsolute} - ${getErrorMessage(
+				e,
+				true,
+			)}`,
+		);
 	}
 
 	/********************************
@@ -1233,8 +1238,9 @@ async function parseZWAProduct(
 	const exclusion = product?.Texts?.find(
 		(document: any) => document.Type === 2,
 	)?.value;
-	const reset = product?.Texts?.find((document: any) => document.Type === 5)
-		?.value;
+	const reset = product?.Texts?.find(
+		(document: any) => document.Type === 5,
+	)?.value;
 	let manual = product?.Documents?.find(
 		(document: any) => document.Type === 1,
 	)?.value;
@@ -1513,7 +1519,9 @@ async function maintenanceParse(): Promise<void> {
 		try {
 			jsonData = JSONC.parse(j);
 		} catch (e) {
-			console.log(`Error processing: ${file} - ${e}`);
+			console.log(
+				`Error processing: ${file} - ${getErrorMessage(e, true)}`,
+			);
 		}
 
 		const includedZwaFiles: number[] = [];
@@ -1527,7 +1535,9 @@ async function maintenanceParse(): Promise<void> {
 				}
 			}
 		} catch (e) {
-			console.log(`Error iterating: ${file} - ${e}`);
+			console.log(
+				`Error iterating: ${file} - ${getErrorMessage(e, true)}`,
+			);
 		}
 
 		includedZwaFiles.sort(function (a, b) {
@@ -1886,7 +1896,7 @@ async function importConfigFilesOH(): Promise<void> {
 				console.error(`${file} has no label, ignoring it!`);
 				continue;
 			}
-		} catch (e: unknown) {
+		} catch (e) {
 			if (e instanceof AssertionError) {
 				console.error(`${file} is not valid, ignoring!`);
 				continue;

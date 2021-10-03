@@ -1,0 +1,16 @@
+{
+	"manufacturer": "Heatit",
+	"manufacturerId": "0x019b",
+	"label": "Z Push Button 2",
+	"description": "Wall Mounted Switch",
+	"devices": [
+		{
+			"productType": "0x0300",
+			"productId": "0xa307"
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	}
+}

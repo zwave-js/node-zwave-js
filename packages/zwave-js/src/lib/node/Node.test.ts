@@ -1100,8 +1100,11 @@ describe("lib/node/Node", () => {
 				...serializedTestNode,
 				isFrequentListening: "1000ms",
 				securityClasses: {
-					// S2 classes are not known when deserializing legacy caches
 					S0_Legacy: true,
+					// S2 classes are not granted when deserializing legacy caches
+					S2_AccessControl: false,
+					S2_Authenticated: false,
+					S2_Unauthenticated: false,
 				},
 			};
 			expect(node.serialize()).toEqual(expected);

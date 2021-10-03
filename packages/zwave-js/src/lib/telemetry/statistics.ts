@@ -63,7 +63,7 @@ export async function sendStatistics(
 			return data.success;
 		}
 		return false;
-	} catch (e) {
+	} catch (e: any) {
 		if (isObject(e.response) && e.response.status === 429) {
 			// We've hit the rate limiter. Figure out when we may try again.
 			if (

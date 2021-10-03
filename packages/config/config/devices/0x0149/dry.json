@@ -42,27 +42,30 @@
 		},
 		"4": {
 			"label": "Value used for devices belonging to Group 2",
-			"description": "Value sent when the external switch receives 1 Click",
+			"description": "Value sent when the external switch receives 1 click. Allowable range: 0-99, 255",
 			"valueSize": 1,
-			"minValue": -1,
-			"maxValue": 100,
-			"defaultValue": 100
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 255,
+			"unsigned": true
 		},
 		"5": {
 			"label": "Value used for devices belonging to Group 3",
-			"description": "Value sent wen the external switch receives 2 Clicks",
+			"description": "Value sent when the external switch receives 2 clicks. Allowable range: 0-99, 255",
 			"valueSize": 1,
-			"minValue": -1,
-			"maxValue": 100,
-			"defaultValue": 100
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 255,
+			"unsigned": true
 		},
 		"6": {
 			"label": "Value used for devices belonging to Group 4",
-			"description": "Value sent when external switch receives 3 Clicks",
+			"description": "Value sent when external switch receives 3 clicks. Allowable range: 0-99, 255",
 			"valueSize": 1,
-			"minValue": -1,
-			"maxValue": 100,
-			"defaultValue": 100
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 255,
+			"unsigned": true
 		},
 		"10": {
 			"label": "Timer to switch OFF the Relay",

@@ -6,6 +6,13 @@ Don't take this the wrong way, but we have standards. We are unwilling to merge 
 
 While our standards are more exacting that other Z-Wave driver projects, we're here to help. To that end, we provide the following resources to help you:
 
+## Editor setup
+
+While it is possible to edit config files directly on GitHub, we recommend using a proper IDE to edit the files. For the best possible experience, we recommend using VS Code. The repository comes with settings like auto-formatting, code completion and recommended extensions to make your life easier and help you solve common issues. You can either:
+
+-   Open VSCode in a fully [preconfigured environment in your browser](https://gitpod.io/#/https://github.com/zwave-js/node-zwave-js)
+-   Or use VSCode offline, see [prerequisites](development/intro.md#prerequisites)
+
 ## Importing Device Files from Other Projects
 
 We provide scripts to allow you to import a pre-existing device file from the OpenZWave or OpenHAB projects. Please note that such files are only a starting point. Files for those projects frequently contain errors that must be corrected. Additionally, as explained in our [Style Guide](config-files/style-guide.md), our standards for labels and descriptions are much more exacting. Other things like templating, partial parameters, and conditional parameters work differently and will need to be corrected.

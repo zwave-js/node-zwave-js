@@ -11,10 +11,10 @@ const sourceDir = path.join(__dirname, "../src");
 const grammarFilename = path.join(sourceDir, "logic.pegjs");
 
 const grammar = fs.readFileSync(grammarFilename, "utf8");
-const parserCode = (pegjs.generate(grammar, {
+const parserCode = pegjs.generate(grammar, {
 	output: "source",
 	plugins: [pegts],
-}) as any) as string;
+}) as any as string;
 
 let code = `// THIS FILE WAS AUTO GENERATED
 /* eslint-disable */

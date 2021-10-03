@@ -111,6 +111,10 @@ export class SecurityManager2 {
 		this.groupClasses.set(group, securityClass);
 	}
 
+	public hasKeysForSecurityClass(securityClass: SecurityClass): boolean {
+		return this.networkKeys.has(securityClass);
+	}
+
 	public getKeysForSecurityClass(securityClass: SecurityClass): NetworkKeys {
 		const keys = this.networkKeys.get(securityClass);
 		if (!keys) {
