@@ -94,6 +94,56 @@
 			}
 		]
 	},
+	"base_color_options_9": {
+		"valueSize": 1,
+		"minValue": 0,
+		"maxValue": 9,
+		"defaultValue": 9,
+		"unsigned": true,
+		"allowManualEntry": false,
+		"options": [
+			{
+				"label": "Disable",
+				"value": 0
+			},
+			{
+				"label": "Red",
+				"value": 1
+			},
+			{
+				"label": "Blue",
+				"value": 2
+			},
+			{
+				"label": "Green",
+				"value": 3
+			},
+			{
+				"label": "Pink",
+				"value": 4
+			},
+			{
+				"label": "Cyan",
+				"value": 5
+			},
+			{
+				"label": "Puple",
+				"value": 6
+			},
+			{
+				"label": "Orange",
+				"value": 7
+			},
+			{
+				"label": "Yellow",
+				"value": 8
+			},
+			{
+				"label": "White",
+				"value": 9
+			}
+		]
+	},
 	"notification_type": {
 		"label": "Notification Type",
 		"valueSize": 1,
@@ -698,6 +748,17 @@
 			}
 		]
 	},
+	"auto_off_timer_65535": {
+		"$import": "#base_0-65535",
+		"label": "Auto Off Timer",
+		"unit": "seconds",
+		"options": [
+			{
+				"label": "Disable",
+				"value": 0
+			}
+		]
+	},
 	"auto_on_timer": {
 		"label": "Auto On Timer",
 		"description": "Allowable range: 1-86400",
@@ -707,6 +768,17 @@
 		"maxValue": 86400,
 		"defaultValue": 0,
 		"unsigned": true,
+		"options": [
+			{
+				"label": "Disable",
+				"value": 0
+			}
+		]
+	},
+	"auto_on_timer_65535": {
+		"$import": "#base_0-65535",
+		"label": "Auto On Timer",
+		"unit": "seconds",
 		"options": [
 			{
 				"label": "Disable",
@@ -1472,6 +1544,11 @@
 		"unit": "%",
 		"defaultValue": 10
 	},
+	"external_switch_scene_function": {
+		"$import": "~/templates/master_template.json#base_enable_disable",
+		"label": "External Switch: Scene Functionality",
+		"defaultValue": 1
+	},
 	"external_switch_two": {
 		"$import": "~/templates/master_template.json#base_0-1_nounit",
 		"label": "External Switch Type",
@@ -1557,6 +1634,56 @@
 			}
 		]
 	},
+	"external_switch_toggle_no_nc": {
+		"label": "External Switch Type",
+		"valueSize": 1,
+		"minValue": 0,
+		"maxValue": 2,
+		"defaultValue": 0,
+		"unsigned": true,
+		"allowManualEntry": false,
+		"options": [
+			{
+				"label": "Switch",
+				"value": 0
+			},
+			{
+				"label": "Momentary - NO",
+				"value": 1
+			},
+			{
+				"label": "Momentary - NC",
+				"value": 2
+			}
+		]
+	},
+	"external_switch_dimmers": {
+		"label": "External Switch Type",
+		"valueSize": 1,
+		"minValue": 0,
+		"maxValue": 3,
+		"defaultValue": 1,
+		"unsigned": true,
+		"allowManualEntry": false,
+		"options": [
+			{
+				"label": "Switch only",
+				"value": 0
+			},
+			{
+				"label": "Switch; 2x switch and dim to param 132/133; 3x switch and begin dimmer ramp",
+				"value": 1
+			},
+			{
+				"label": "Momentary; 2x momentary and dim to param 132/133 (hold to dim up/down)",
+				"value": 2
+			},
+			{
+				"label": "Momentary; 2x momentary and dim to param 132/133 (decreasing dim on hold)",
+				"value": 3
+			}
+		]
+	},
 	"switch_mode_state_s1": {
 		"$import": "~/templates/master_template.json#base_0-1_nounit",
 		"label": "Switch Mode (S1): State Sync",
@@ -1584,6 +1711,60 @@
 			{
 				"label": "On/Off Switch",
 				"value": 1
+			}
+		]
+	},
+	"smart_switch_mode": {
+		"label": "Smart Switch Mode",
+		"valueSize": 1,
+		"minValue": 0,
+		"maxValue": 3,
+		"defaultValue": 3,
+		"unsigned": true,
+		"allowManualEntry": false,
+		"options": [
+			{
+				"label": "Local control only",
+				"value": 1
+			},
+			{
+				"label": "Central scene only",
+				"value": 2
+			},
+			{
+				"label": "Local and central scene",
+				"value": 3
+			},
+			{
+				"label": "Disable",
+				"value": 0
+			}
+		]
+	},
+	"smart_switch_mode_reporting": {
+		"$import": "~/templates/master_template.json#base_enable_disable",
+		"label": "Smart Switch Mode: Report State in Scene Mode"
+	},
+	"led_function": {
+		"label": "LED Indicator Function",
+		"valueSize": 1,
+		"minValue": 0,
+		"maxValue": 2,
+		"defaultValue": 2,
+		"unsigned": true,
+		"allowManualEntry": false,
+		"options": [
+			{
+				"label": "Disable",
+				"value": 0
+			},
+			{
+				"label": "Momentary blink",
+				"value": 1
+			},
+			{
+				"label": "LED follows switch state",
+				"value": 2
 			}
 		]
 	},
@@ -1668,6 +1849,25 @@
 			{
 				"label": "On/off mode",
 				"value": 2
+			}
+		]
+	},
+	"led_indicator_color_output": {
+		"$import": "#base_color_options_9",
+		"label": "Led Indicator Color: Output"
+	},
+	"led_indicator_color_scene": {
+		"$import": "#base_color_options_9",
+		"label": "Led Indicator Color: Scene"
+	},
+	"led_indicator_brightness": {
+		"$import": "~/templates/master_template.json#base_0-100_nounit",
+		"label": "LED Indicator: Brightness",
+		"defaultValue": 60,
+		"options": [
+			{
+				"label": "Disable",
+				"value": 0
 			}
 		]
 	},
@@ -1824,6 +2024,18 @@
 		"unit": "seconds",
 		"defaultValue": 3
 	},
+	"dimming_rate_99": {
+		"$import": "~/templates/master_template.json#base_0-99_nounit",
+		"label": "Dimming Rate",
+		"unit": "seconds",
+		"defaultValue": 2,
+		"options": [
+			{
+				"label": "Instant",
+				"value": 0
+			}
+		]
+	},
 	"current_working_mode": {
 		"label": "Current Working Mode",
 		"valueSize": 1,
@@ -1900,6 +2112,47 @@
 		"$import": "~/templates/master_template.json#base_0-99_nounit",
 		"label": "Maximum Brightness Level",
 		"defaultValue": 99
+	},
+	"max_brightness_100": {
+		"$import": "~/templates/master_template.json#base_0-100_nounit",
+		"label": "Maximum Brightness Level",
+		"defaultValue": 100,
+		"unit": "%"
+	},
+	"custom_brightness_99": {
+		"$import": "~/templates/master_template.json#base_0-99_nounit",
+		"label": "Custom Default Brightness"
+	},
+	"brightness_single_tap": {
+		"label": "Brightness on Single Tap",
+		"valueSize": 1,
+		"minValue": 0,
+		"maxValue": 3,
+		"defaultValue": 0,
+		"unsigned": true,
+		"allowManualEntry": false,
+		"options": [
+			{
+				"label": "Last brightness level",
+				"value": 0
+			},
+			{
+				"label": "Custom value from param 133",
+				"value": 1
+			},
+			{
+				"label": "Max brightness from param 132",
+				"value": 2
+			},
+			{
+				"label": "Full brightness",
+				"value": 3
+			}
+		]
+	},
+	"brightness_double_tap": {
+		"$import": "#brightness_single_tap",
+		"label": "Brightness on Double Tap"
 	},
 	"load_recognition_method": {
 		"label": "Load Recognition Method",

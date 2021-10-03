@@ -165,6 +165,29 @@
 		"$import": "#base_enable_disable",
 		"label": "Inverted Orientation"
 	},
+	"orientation_momentary": {
+		"label": "Inverted Orientation",
+		"valueSize": 1,
+		"minValue": 0,
+		"maxValue": 2,
+		"defaultValue": 0,
+		"unsigned": true,
+		"allowManualEntry": false,
+		"options": [
+			{
+				"label": "Disable",
+				"value": 0
+			},
+			{
+				"label": "Enable",
+				"value": 1
+			},
+			{
+				"label": "Both buttons momentary",
+				"value": 2
+			}
+		]
+	},
 	"enable_led_indicator": {
 		"$import": "#base_enable_disable",
 		"label": "LED Indicator"
