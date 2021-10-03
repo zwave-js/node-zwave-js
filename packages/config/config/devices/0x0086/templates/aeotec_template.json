@@ -3067,8 +3067,9 @@
 		"valueSize": 4
 	},
 	"button_color_brightness": {
-		"$import": "~/templates/master_template.json#base_0-100_nounit",
+		"$import": "~/templates/master_template.json#base_0-255_nounit",
 		"label": "WallSwipe Button Brightness",
+		"description": "Allowable range: 0-99",
 		"valueSize": 4,
 		"defaultValue": 87
 	},
@@ -3091,8 +3092,9 @@
 		"defaultValue": 255
 	},
 	"button_color_up_brightness": {
-		"$import": "~/templates/master_template.json#base_0-100_nounit",
+		"$import": "~/templates/master_template.json#base_0-255_nounit",
 		"label": "LED Indicator on Up Gesture: Brightness",
+		"description": "Allowable range: 1-99",
 		"valueSize": 4,
 		"defaultValue": 23
 	},
@@ -3115,8 +3117,9 @@
 		"defaultValue": 255
 	},
 	"button_color_down_brightness": {
-		"$import": "~/templates/master_template.json#base_0-100_nounit",
+		"$import": "~/templates/master_template.json#base_0-255_nounit",
 		"label": "LED Indicator on Down Gesture: Brightness",
+		"description": "Allowable range: 0-99",
 		"valueSize": 4,
 		"defaultValue": 23
 	},
@@ -3139,8 +3142,9 @@
 		"defaultValue": 255
 	},
 	"button_color_left_brightness": {
-		"$import": "~/templates/master_template.json#base_0-100_nounit",
+		"$import": "~/templates/master_template.json#base_0-255_nounit",
 		"label": "LED Indicator on Left Gesture: Brightness",
+		"description": "Allowable range: 0-99",
 		"valueSize": 4,
 		"defaultValue": 23
 	},
@@ -3163,8 +3167,9 @@
 		"defaultValue": 255
 	},
 	"button_color_right_brightness": {
-		"$import": "~/templates/master_template.json#base_0-100_nounit",
+		"$import": "~/templates/master_template.json#base_0-255_nounit",
 		"label": "LED Indicator on Right Gesture: Brightness",
+		"description": "Allowable range: 0-99",
 		"valueSize": 4,
 		"defaultValue": 23
 	},
@@ -3187,8 +3192,9 @@
 		"defaultValue": 255
 	},
 	"button_color_night_brightness": {
-		"$import": "~/templates/master_template.json#base_0-100_nounit",
+		"$import": "~/templates/master_template.json#base_0-255_nounit",
 		"label": "LED Indicator (Night): Brightness",
+		"description": "Allowable range: 0-99",
 		"valueSize": 4,
 		"defaultValue": 23
 	},
