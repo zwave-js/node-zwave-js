@@ -30,7 +30,7 @@
 	},
 	"paramInformation": {
 		"1": {
-			"$import": "templates/zooz_template.json#switch_orientation"
+			"$import": "~/templates/master_template.json#orientation_momentary"
 		},
 		"2": {
 			"$import": "~/templates/master_template.json#led_indicator_four_options"
@@ -69,7 +69,7 @@
 			"$import": "templates/zooz_template.json#enable_scene_control"
 		},
 		"15": {
-			"$import": "templates/zooz_template.json#smart_bulb_mode_control"
+			"$import": "~/templates/master_template.json#smart_switch_mode_0-2"
 		},
 		"19": {
 			"label": "3-Way Switch Type",
@@ -80,25 +80,25 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "Mechanical (off/on only)",
+					"label": "Toggle switch",
 					"value": 0
 				},
 				{
-					"label": "Mechanical (with dimming control)",
+					"label": "Toggle switch (with dimming control)",
 					"value": 1
 				},
 				{
-					"label": "Momentary (with dimming control)",
+					"label": "Momentary switch (with dimming control)",
 					"value": 2
 				},
 				{
-					"label": "Momentary (with dimming control, but reduce after double click)",
+					"label": "Momentary switch (with dimming control, but reduce after double click)",
 					"value": 3
 				}
 			]
 		},
 		"20": {
-			"label": "Smart Bulb Mode: Dimming Reporting Behavior",
+			"label": "Smart Switch Mode: Dim Reporting Behavior",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 1,
@@ -116,7 +116,7 @@
 			]
 		},
 		"21": {
-			"$import": "templates/zooz_template.json#smart_bulb_mode_reporting"
+			"$import": "templates/zooz_template.json#smart_switch_mode_reporting"
 		},
 		"16": {
 			"$import": "templates/zooz_template.json#local_dimming_speed"

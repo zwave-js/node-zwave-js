@@ -26,7 +26,7 @@
 	},
 	"paramInformation": {
 		"1": {
-			"$import": "templates/zooz_template.json#switch_orientation"
+			"$import": "~/templates/master_template.json#orientation_momentary"
 		},
 		"2": {
 			"$import": "~/templates/master_template.json#led_indicator_four_options"
@@ -70,10 +70,10 @@
 			"$import": "templates/zooz_template.json#enable_scene_control"
 		},
 		"12": {
-			"$import": "templates/zooz_template.json#smart_bulb_mode_control"
+			"$import": "~/templates/master_template.json#smart_switch_mode_0-2"
 		},
 		"13": {
-			"$import": "templates/zooz_template.json#smart_bulb_mode_reporting"
+			"$import": "templates/zooz_template.json#smart_switch_mode_reporting"
 		},
 		"16": {
 			"$import": "templates/zooz_template.json#association_reports"

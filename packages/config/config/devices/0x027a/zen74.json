@@ -31,7 +31,7 @@
 	},
 	"paramInformation": {
 		"1": {
-			"$import": "templates/zooz_template.json#switch_orientation"
+			"$import": "~/templates/master_template.json#orientation_momentary"
 		},
 		"3": {
 			"$import": "templates/zooz_template.json#auto_off_timer"
@@ -64,16 +64,16 @@
 			"$import": "templates/zooz_template.json#enable_scene_control"
 		},
 		"15": {
-			"$import": "templates/zooz_template.json#smart_bulb_mode_control"
+			"$import": "~/templates/master_template.json#smart_switch_mode_0-2"
 		},
 		"16": {
 			"$import": "templates/zooz_template.json#local_dimming_speed"
 		},
 		"20": {
-			"$import": "templates/zooz_template.json#smart_bulb_mode_dimming_reporting"
+			"$import": "templates/zooz_template.json#smart_switch_mode_dimming_reporting"
 		},
 		"21": {
-			"$import": "templates/zooz_template.json#smart_bulb_mode_reporting"
+			"$import": "templates/zooz_template.json#smart_switch_mode_reporting"
 		},
 		"22": {
 			"$import": "templates/zooz_template.json#night_light_mode"

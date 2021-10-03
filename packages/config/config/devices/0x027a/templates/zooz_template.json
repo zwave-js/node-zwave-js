@@ -99,7 +99,7 @@
 			}
 		]
 	},
-	"smart_bulb_mode_control": {
+	"smart_switch_mode_control": {
 		"label": "Smart Bulb Mode: Control",
 		"valueSize": 1,
 		"minValue": 0,
@@ -122,7 +122,7 @@
 			}
 		]
 	},
-	"smart_bulb_mode_reporting": {
+	"smart_switch_mode_reporting": {
 		"label": "Smart Bulb Mode: Reporting Behavior",
 		"valueSize": 1,
 		"minValue": 0,
@@ -141,7 +141,7 @@
 			}
 		]
 	},
-	"smart_bulb_mode_dimming_reporting": {
+	"smart_switch_mode_dimming_reporting": {
 		"label": "Smart Bulb Mode: Dimming Reporting Behavior",
 		"valueSize": 1,
 		"minValue": 0,
