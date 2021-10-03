@@ -70,7 +70,7 @@
 			"defaultValue": 1,
 			"unsigned": true,
 			"options": [
-				{ "value": 0,   "label": "Off" },
+				{ "value": 0, "label": "Off" },
 				{ "value": 255, "label": "Always" }
 			]
 		},
