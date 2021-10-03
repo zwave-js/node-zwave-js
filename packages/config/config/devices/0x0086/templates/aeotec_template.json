@@ -1713,8 +1713,7 @@
 				"value": 1
 			}
 		]
-	},
-	"smart_switch_mode": {
+	},	"smart_switch_mode": {
 		"label": "Smart Switch Mode",
 		"valueSize": 1,
 		"minValue": 0,
@@ -1723,6 +1722,10 @@
 		"unsigned": true,
 		"allowManualEntry": false,
 		"options": [
+			{
+				"label": "Disable",
+				"value": 0
+			},
 			{
 				"label": "Local control only",
 				"value": 1
@@ -1734,10 +1737,6 @@
 			{
 				"label": "Local and central scene",
 				"value": 3
-			},
-			{
-				"label": "Disable",
-				"value": 0
 			}
 		]
 	},

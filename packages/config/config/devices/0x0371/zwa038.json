@@ -72,7 +72,7 @@
 			"$import": "~/0x0086/templates/aeotec_template.json#external_switch_toggle_no_nc"
 		},
 		"121": {
-			"$import": "~/0x0086/templates/aeotec_template.json#smart_switch_mode"
+			"$import": "~/templates/master_template.json#smart_switch_mode_0-3"
 		},
 		"123": {
 			"$import": "~/0x0086/templates/aeotec_template.json#smart_switch_mode_reporting"

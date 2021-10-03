@@ -426,6 +426,33 @@
 			}
 		]
 	},
+	"smart_switch_mode_0-3": {
+		"label": "Smart Switch Mode",
+		"valueSize": 1,
+		"minValue": 0,
+		"maxValue": 3,
+		"defaultValue": 3,
+		"unsigned": true,
+		"allowManualEntry": false,
+		"options": [
+			{
+				"label": "Disable",
+				"value": 0
+			},
+			{
+				"label": "Local control only",
+				"value": 1
+			},
+			{
+				"label": "Central scene only",
+				"value": 2
+			},
+			{
+				"label": "Local and central scene",
+				"value": 3
+			}
+		]
+	},
 	"volume_three": {
 		"label": "Volume",
 		"valueSize": 1,
