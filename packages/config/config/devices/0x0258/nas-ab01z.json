@@ -47,15 +47,14 @@
 				{
 					"label": "Low",
 					"value": 1
- 				},
+				},
 				{
-					"label": "Middle", 
+					"label": "Middle",
 					"value": 2
 				},
 				{
 					"label": "High",
-					"value": 3 
-
+					"value": 3
 				}
 			]
 		},
@@ -67,20 +66,20 @@
 			"defaultValue": 2,
 			"options": [
 				{
-					"label": "Off", 
-					"value": 0 
+					"label": "Off",
+					"value": 0
 				},
 				{
-					"label": "30 seconds", 
-					"value": 1 
+					"label": "30 seconds",
+					"value": 1
 				},
 				{
-					"label": "1 minute", 
-					"value": 2 
+					"label": "1 minute",
+					"value": 2
 				},
 				{
-					"label": "5 minutes", 
-					"value": 3 
+					"label": "5 minutes",
+					"value": 3
 				}
 			]
 		},
@@ -94,10 +93,10 @@
 			"options": [
 				{
 					"label": "Off",
-					"value": 0 
+					"value": 0
 				},
 				{
-					"label": "Always", 
+					"label": "Always",
 					"value": 255
 				}
 			]
@@ -110,16 +109,16 @@
 			"defaultValue": 2,
 			"options": [
 				{
-					"label": "Low", 
-					"value": 1 
+					"label": "Low",
+					"value": 1
 				},
 				{
-					"label": "Middle", 
-					"value": 2 
+					"label": "Middle",
+					"value": 2
 				},
 				{
-					"label": "High", 
-					"value": 3 
+					"label": "High",
+					"value": 3
 				}
 			]
 		},
@@ -145,12 +144,12 @@
 			"defaultValue": 1,
 			"options": [
 				{
-					"label": "Alarm music", 
-					"value": 1 
+					"label": "Alarm music",
+					"value": 1
 				},
 				{
-					"label": "Door bell music", 
-					"value": 2 
+					"label": "Door bell music",
+					"value": 2
 				}
 			]
 		},
@@ -162,12 +161,12 @@
 			"defaultValue": 1,
 			"options": [
 				{
-					"label": "Disable", 
-					"value": 0 
+					"label": "Disable",
+					"value": 0
 				},
 				{
-					"label": "Enable", 
-					"value": 1 
+					"label": "Enable",
+					"value": 1
 				}
 			]
 		},
@@ -179,12 +178,12 @@
 			"defaultValue": 0,
 			"options": [
 				{
-					"label": "Disable", 
-					"value": 0 
+					"label": "Disable",
+					"value": 0
 				},
 				{
-					"label": "Enable", 
-					"value": 1 
+					"label": "Enable",
+					"value": 1
 				}
 			]
 		}
