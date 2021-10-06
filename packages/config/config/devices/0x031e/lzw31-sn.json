@@ -16,7 +16,7 @@
 	"supportsZWavePlus": true,
 	"paramInformation": {
 		"1": {
-			"label": "Dimming Speed (Z-Wave)",
+			"label": "Dimming Speed (Manual)",
 			"unit": "seconds",
 			"valueSize": 1,
 			"minValue": 0,
@@ -30,7 +30,7 @@
 			]
 		},
 		"2": {
-			"label": "Dimming Speed (Manual)",
+			"label": "Dimming Speed (Z-wave)",
 			"unit": "seconds",
 			"valueSize": 1,
 			"minValue": 0,
@@ -48,7 +48,7 @@
 			]
 		},
 		"3": {
-			"label": "Ramp Rate (Z-Wave)",
+			"label": "Ramp Rate (Manual)",
 			"unit": "seconds",
 			"valueSize": 1,
 			"minValue": 0,
@@ -66,7 +66,7 @@
 			]
 		},
 		"4": {
-			"label": "Ramp Rate (Manual)",
+			"label": "Ramp Rate (Z-wave)",
 			"unit": "seconds",
 			"valueSize": 1,
 			"minValue": 0,
