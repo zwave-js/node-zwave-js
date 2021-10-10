@@ -25,7 +25,7 @@
 			"maxNodes": 5
 		},
 		"3": {
-			"label": "Top Button - MultiLevel Set",
+			"label": "Top Button - Multilevel Set",
 			"maxNodes": 5
 		},
 		"4": {
@@ -33,7 +33,7 @@
 			"maxNodes": 5
 		},
 		"5": {
-			"label": "Bottom Button - MultiLevel Set",
+			"label": "Bottom Button - Multilevel Set",
 			"maxNodes": 5
 		},
 		"6": {
@@ -41,7 +41,7 @@
 			"maxNodes": 5
 		},
 		"7": {
-			"label": "External Switch - MultiLevel Set",
+			"label": "External Switch - Multilevel Set",
 			"maxNodes": 5
 		},
 		"8": {
@@ -49,7 +49,7 @@
 			"maxNodes": 5
 		},
 		"9": {
-			"label": "Top and Bottom Button - MultiLevel Set",
+			"label": "Top and Bottom Button - Multilevel Set",
 			"maxNodes": 5
 		}
 	},

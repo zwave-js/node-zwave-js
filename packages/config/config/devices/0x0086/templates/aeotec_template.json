@@ -1671,15 +1671,15 @@
 				"value": 0
 			},
 			{
-				"label": "Switch; 2x switch and dim to param 132/133; 3x switch and begin dimmer ramp",
+				"label": "Switch - Double click to dim to param 132/133; Triple click to begin dim ramp up",
 				"value": 1
 			},
 			{
-				"label": "Momentary; 2x momentary and dim to param 132/133 (hold to dim up/down)",
+				"label": "Momentary - Double click to dim to param 132/133 (then hold to dim up/down)",
 				"value": 2
 			},
 			{
-				"label": "Momentary; 2x momentary and dim to param 132/133 (decreasing dim on hold)",
+				"label": "Momentary - Double click to dim to param 132/133 (then hold to dim down)",
 				"value": 3
 			}
 		]
