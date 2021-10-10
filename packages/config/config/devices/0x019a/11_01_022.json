@@ -1,7 +1,7 @@
 {
 	"manufacturer": "Sensative AB",
 	"manufacturerId": "0x019a",
-	"label": "11-01-021",
+	"label": "11-01-022",
 	"description": "Strips Guard 700",
 	"devices": [
 		{
@@ -16,7 +16,6 @@
 	"associations": {
 		"1": {
 			"label": "Lifeline",
-			"description": "Strips supports association group 1 (lifeline), max 1 node, normally used to send Strips’notification to the Z-Wave controller.",
 			"maxNodes": 1,
 			"isLifeline": true
 		}
