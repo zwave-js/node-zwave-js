@@ -5,6 +5,33 @@
 	Add placeholder for next release with `wip` snippet
   ## __WORK IN PROGRESS__
 -->
+## __WORK IN PROGRESS__
+### Features
+* Export `getAPI` through `zwave-js/CommandClass`
+
+### Bugfixes
+* Avoid including `undefined` properties in configuration metadata
+* Add debug logging to `configureLifelineAssociations`, always query normal association groups
+* Remove Security S0/S2 from mandatory CCs in Device Classes configuration
+* Refresh associations after removing invalid destinations
+* Don't wait for node ACK after `Security 2 CC::TransferEnd`
+* Increase tolerance for wakeup interval to 5 minutes without auto-refreshing the interval
+
+### Config file changes
+* Change NAS-PD07Z parameters to match actual device configuration
+* Delete duplicate config file for Fakro ZWS230
+* Update ZCOMBO-G units/metadata
+* Add fingerprint to BeNext Energy switch
+* Add support for Sensative AB Strips Drip 700
+* Spelling mistake in manufacturer name
+* Add Sunricher RGBW and CCT wall controllers
+* Add firmware version 1.6 to Zooz ZEN22
+* Force scene count of VRCS4 and VRCZ4 to 8
+
+### Changes under the hood
+* Add support for prebuilt Gitpod instances to simplify contributing without installing VSCode locally
+* Dependency updates
+
 ## 8.4.1 (2021-09-27)
 ### Bugfixes
 * Responses to secure `Supervision CC::Get` commands are now correctly sent with security encapsulation if required
