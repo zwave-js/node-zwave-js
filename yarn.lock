@@ -4060,12 +4060,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/yargs@npm:^16.0.4":
-  version: 16.0.4
-  resolution: "@types/yargs@npm:16.0.4"
+"@types/yargs@npm:^17.0.3":
+  version: 17.0.3
+  resolution: "@types/yargs@npm:17.0.3"
   dependencies:
     "@types/yargs-parser": "*"
-  checksum: caa21d2c957592fe2184a8368c8cbe5a82a6c2e2f2893722e489f842dc5963293d2f3120bc06fe3933d60a3a0d1e2eb269649fd6b1947fe1820f8841ba611dd9
+  checksum: 8c4e01f893f0b372a37efb2da2191b63793a25126e0b468c7eb8886176fec2a10f063d9718fa75f1fa00e82fbed4a614bb06661d968e4233be8a00468b94ac60
   languageName: node
   linkType: hard
 
@@ -4202,7 +4202,7 @@ __metadata:
     "@types/pegjs": ^0.10.3
     "@types/semver": ^7.3.8
     "@types/xml2json": ^0.11.4
-    "@types/yargs": ^16.0.4
+    "@types/yargs": ^17.0.3
     "@zwave-js/core": 8.3.1
     "@zwave-js/maintenance": 8.3.1
     "@zwave-js/shared": 8.2.2
@@ -4222,7 +4222,7 @@ __metadata:
     typescript: 4.4.3
     winston: ^3.3.3
     xml2json: ^0.12.0
-    yargs: ^16.2.0
+    yargs: ^17.2.1
   languageName: unknown
   linkType: soft
 
@@ -4268,7 +4268,7 @@ __metadata:
     "@types/jest": ^26.0.24
     "@types/node": ^15.12.5
     "@types/prettier": ^2
-    "@types/yargs": ^16.0.4
+    "@types/yargs": ^17.0.3
     "@zwave-js/core": 8.3.1
     "@zwave-js/shared": 8.2.2
     ansi-colors: ^4.1.1
@@ -4281,7 +4281,7 @@ __metadata:
     reflect-metadata: ^0.1.13
     ts-morph: ^12.0.0
     typescript: 4.4.3
-    yargs: ^16.2.0
+    yargs: ^17.2.1
   languageName: unknown
   linkType: soft
 
@@ -13901,6 +13901,21 @@ typescript@4.4.3:
     y18n: ^5.0.5
     yargs-parser: ^20.2.2
   checksum: b05a9467937172e01a4af7a7ad4361a22ee510cd12d1d5a3ad3b4c2e57eb8c35ca94ee22e4bdfbb40fe693fbf8000771e41824f77f6b224f1496c57f20f192b6
+  languageName: node
+  linkType: hard
+
+"yargs@npm:^17.2.1":
+  version: 17.2.1
+  resolution: "yargs@npm:17.2.1"
+  dependencies:
+    cliui: ^7.0.2
+    escalade: ^3.1.1
+    get-caller-file: ^2.0.5
+    require-directory: ^2.1.1
+    string-width: ^4.2.0
+    y18n: ^5.0.5
+    yargs-parser: ^20.2.2
+  checksum: 451aac46f82da776f436018feed0244bc0e7b4355f7e397bcb53d34c691b177c0d71db3dda9653760e1bc240254d8b763a252ff918ef9e235a8d202e2909c4eb
   languageName: node
   linkType: hard
 
