@@ -1,27 +1,4 @@
 {
-	"switch_orientation": {
-		"label": "Switch orientation",
-		"valueSize": 1,
-		"minValue": 0,
-		"maxValue": 2,
-		"defaultValue": 0,
-		"unsigned": true,
-		"allowManualEntry": false,
-		"options": [
-			{
-				"label": "Normal orientation",
-				"value": 0
-			},
-			{
-				"label": "Inverted orientation",
-				"value": 1
-			},
-			{
-				"label": "Toggle mode",
-				"value": 2
-			}
-		]
-	},
 	"auto_timer_base": {
 		"unit": "minutes",
 		"valueSize": 4,
@@ -95,29 +72,6 @@
 			},
 			{
 				"label": "Low (30%)",
-				"value": 2
-			}
-		]
-	},
-	"smart_switch_mode_control": {
-		"label": "Smart Bulb Mode: Control",
-		"valueSize": 1,
-		"minValue": 0,
-		"maxValue": 2,
-		"defaultValue": 1,
-		"unsigned": true,
-		"allowManualEntry": false,
-		"options": [
-			{
-				"label": "Physical control disabled",
-				"value": 0
-			},
-			{
-				"label": "Physical control enabled",
-				"value": 1
-			},
-			{
-				"label": "Physical and Z-Wave control disabled",
 				"value": 2
 			}
 		]
