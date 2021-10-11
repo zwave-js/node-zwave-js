@@ -5,7 +5,7 @@
 	Add placeholder for next release with `wip` snippet
   ## __WORK IN PROGRESS__
 -->
-## __WORK IN PROGRESS__
+## 8.5.0 (2021-10-11)
 ### Features
 * Export `getAPI` through `zwave-js/CommandClass`
 * Add `getDefinedValueIDs` for virtual nodes
