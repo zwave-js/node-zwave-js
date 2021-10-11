@@ -3752,7 +3752,7 @@ ${associatedNodes.join(", ")}`,
 
 		const ret = Buffer.allocUnsafe(size);
 		let offset = 0;
-		// Try reading the maximum size at first, the Serial API will return chunks in a size it supports
+		// Try reading the maximum size at first, the Serial API should return chunks in a size it supports
 		// For some reason, there is no documentation and no official command for this
 		let chunkSize: number = Math.min(0xffff, ret.length);
 		while (offset < ret.length) {
@@ -3760,6 +3760,12 @@ ${associatedNodes.join(", ")}`,
 				offset,
 				Math.min(chunkSize, ret.length - offset),
 			);
+			if (chunk.length === 0) {
+				// Some SDK versions return an empty buffer when trying to read a buffer that is too long
+				// Fallback to a sane (but maybe slow) size
+				chunkSize = 48;
+				continue;
+			}
 			chunk.copy(ret, offset);
 			offset += chunk.length;
 			if (chunkSize > chunk.length) chunkSize = chunk.length;
