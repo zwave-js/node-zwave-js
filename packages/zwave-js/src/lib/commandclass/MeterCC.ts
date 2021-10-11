@@ -559,6 +559,41 @@ export class MeterCCReport extends MeterCC {
 			scale,
 		);
 
+		if (this.version >= 2) {
+			// If possible, filter out corrupted reports that don't match the supported
+			const valueDB = this.getValueDB();
+			// We know the supported meter type, scales and rate types. Drop the report if it doesn't match
+			const expectedType = valueDB.getValue<number>(
+				getTypeValueId(this.endpointIndex),
+			);
+			if (expectedType != undefined) {
+				validatePayload.withReason(
+					"Unexpected meter type or corrupted data",
+				)(this._type === expectedType);
+			}
+
+			const supportedScales = valueDB.getValue<number[]>(
+				getSupportedScalesValueId(this.endpointIndex),
+			);
+			if (supportedScales?.length) {
+				validatePayload.withReason(
+					`Unsupported meter scale ${this._scale.label} or corrupted data`,
+				)(supportedScales.includes(this._scale.key));
+			}
+
+			const supportedRateTypes = valueDB.getValue<RateType[]>(
+				getSupportedRateTypesValueId(this.endpointIndex),
+			);
+			if (supportedRateTypes?.length) {
+				validatePayload.withReason(
+					`Unsupported rate type ${getEnumMemberName(
+						RateType,
+						this._rateType,
+					)} or corrupted data`,
+				)(supportedRateTypes.includes(this._rateType));
+			}
+		}
+
 		this.persistValues();
 	}
 
