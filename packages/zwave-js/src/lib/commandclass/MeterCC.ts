@@ -1,4 +1,8 @@
-import type { ConfigManager, MeterScale } from "@zwave-js/config";
+import {
+	ConfigManager,
+	getDefaultMeterScale,
+	MeterScale,
+} from "@zwave-js/config";
 import type {
 	MessageOrCCLogEntry,
 	MessageRecord,
@@ -506,6 +510,8 @@ export class MeterCCReport extends MeterCC {
 
 		validatePayload(this.payload.length >= 2);
 		this._type = this.payload[0] & 0b0_00_11111;
+		const meterType = this.driver.configManager.lookupMeter(this._type);
+
 		this._rateType = (this.payload[0] & 0b0_11_00000) >>> 5;
 		const scale1Bit2 = (this.payload[0] & 0b1_00_00000) >>> 7;
 
@@ -558,6 +564,49 @@ export class MeterCCReport extends MeterCC {
 			this._type,
 			scale,
 		);
+
+		// Filter out unknown meter types and scales
+		validatePayload.withReason(
+			`Unknown meter type ${num2hex(this.type)} or corrupted data`,
+		)(!!meterType);
+		validatePayload.withReason(
+			`Unknown meter scale ${num2hex(scale)} or corrupted data`,
+		)(this.scale.label !== getDefaultMeterScale(scale).label);
+
+		// Filter out unsupported meter types, scales and rate types if possible
+		if (this.version >= 2) {
+			const valueDB = this.getValueDB();
+
+			const expectedType = valueDB.getValue<number>(
+				getTypeValueId(this.endpointIndex),
+			);
+			if (expectedType != undefined) {
+				validatePayload.withReason(
+					"Unexpected meter type or corrupted data",
+				)(this._type === expectedType);
+			}
+
+			const supportedScales = valueDB.getValue<number[]>(
+				getSupportedScalesValueId(this.endpointIndex),
+			);
+			if (supportedScales?.length) {
+				validatePayload.withReason(
+					`Unsupported meter scale ${this._scale.label} or corrupted data`,
+				)(supportedScales.includes(this._scale.key));
+			}
+
+			const supportedRateTypes = valueDB.getValue<RateType[]>(
+				getSupportedRateTypesValueId(this.endpointIndex),
+			);
+			if (supportedRateTypes?.length) {
+				validatePayload.withReason(
+					`Unsupported rate type ${getEnumMemberName(
+						RateType,
+						this._rateType,
+					)} or corrupted data`,
+				)(supportedRateTypes.includes(this._rateType));
+			}
+		}
 
 		this.persistValues();
 	}
