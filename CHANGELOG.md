@@ -5,6 +5,86 @@
 	Add placeholder for next release with `wip` snippet
   ## __WORK IN PROGRESS__
 -->
+## __WORK IN PROGRESS__
+### Features
+* Export `getAPI` through `zwave-js/CommandClass`
+
+### Bugfixes
+* Avoid including `undefined` properties in configuration metadata
+* Add debug logging to `configureLifelineAssociations`, always query normal association groups
+* Remove Security S0/S2 from mandatory CCs in Device Classes configuration
+* Refresh associations after removing invalid destinations
+* Don't wait for node ACK after `Security 2 CC::TransferEnd`
+* Increase tolerance for wakeup interval to 5 minutes without auto-refreshing the interval
+
+### Config file changes
+* Change NAS-PD07Z parameters to match actual device configuration
+* Delete duplicate config file for Fakro ZWS230
+* Update ZCOMBO-G units/metadata
+* Add fingerprint to BeNext Energy switch
+* Add support for Sensative AB Strips Drip 700
+* Spelling mistake in manufacturer name
+* Add Sunricher RGBW and CCT wall controllers
+* Add firmware version 1.6 to Zooz ZEN22
+* Force scene count of VRCS4 and VRCZ4 to 8
+
+### Changes under the hood
+* Add support for prebuilt Gitpod instances to simplify contributing without installing VSCode locally
+* Dependency updates
+
+## 8.4.1 (2021-09-27)
+### Bugfixes
+* Responses to secure `Supervision CC::Get` commands are now correctly sent with security encapsulation if required
+* Errors in application-provided callbacks for Security S2 bootstrapping are now caught
+
+### Config file changes
+* Auto-idle notifications for Ecolink DWZWAVE25
+
+### Changes under the hood
+* Fixed the workflow for creating test releases from PRs
+
+## 8.4.0 (2021-09-26)
+### Features
+* Added a compat flag to override the number of scenes accessible to `Scene Controller Configuration CC`
+* Experimental support for Wake Up on demand
+* The values of `Scene Actuator Configuration CC` are now pre-created during the node interview
+
+### Bugfixes
+* CCs that are removed via a configuration files now stay removed after the `Security S0/S2` interview
+* Implemented a workaround for the incorrect `Serial API Setup Sub Command` bitmask encoding in 700 series sticks with a firmware of 7.15 or higher
+* Rename consumed/produced in meter labels to consumption/production
+
+### Config file changes
+* Add fingerprint `0xa803:0x1352` to McoHome A8-9
+* Add Neo Coolcam NAS-PD07Z Motion Sensor 5in1
+* Add NIE Tech / Eva Logik ZW96
+* Add Aibase A19 LED Bulb
+* Add Aibase Water Leak Sensor
+* Add templating and remove unnecessary parameters
+* Add device identifier for MCOHome MH10-PM2.5
+* Add missing parameters to Zooz ZEN15
+* Add fingerprint `0x1301:0x4001` to "Fibargroup FGT001"
+* Add Nortek WO15EMZ5
+* Correct units for Fibaro FGS-224 and FGS-214 params 154 and 155
+* Update Philio PSM02 Configuration
+* Use unsigned for config parameters setting Basic Set levels
+* Add fingerprint to Fakro ZWS230
+* Add fingerprint to OOMI Color Strip
+* Disable Basic CC mapping for Eaton/Aspire RFWC5
+* Add fingerprint to Popp & Co POPE700342
+* Update Philio PST02A and PST02B to use partial config parameters (5, 6, 7)
+
+### Changes under the hood
+* Fixed a bug in ConfigManager tests that led to a folder with name `undefined` being created
+
+## 8.3.1 (2021-09-14)
+### Config file changes
+* Add fingerprint `0xaa00:0xaa02` to `NIE Technology Co., Ltd. ZW31`
+* Preserve root endpoint values for Everspring ST814
+
+### Changes under the hood
+* Add Node.js 16.9.1+ to the range of supported versions.
+
 ## 8.3.0 (2021-09-12)
 Shoutout to @Ikcelaks and @IvanBrazza, who've contributed the main features in this release!
 
