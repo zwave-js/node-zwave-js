@@ -14,8 +14,9 @@
 		"max": "255.255"
 	},
 	"supportsZWavePlus": true,
-	"paramInformation": {
-		"1": {
+	"paramInformation": [
+		{
+			"#": "1",
 			"label": "Diode control",
 			"valueSize": 1,
 			"minValue": 0,
@@ -41,7 +42,8 @@
 				}
 			]
 		},
-		"2": {
+		{
+			"#": "2",
 			"label": "Turn on/off voltage on input terminal 1",
 			"valueSize": 1,
 			"minValue": 0,
@@ -59,7 +61,8 @@
 				}
 			]
 		},
-		"3": {
+		{
+			"#": "3",
 			"label": "Turn on/off voltage on input terminal 2",
 			"valueSize": 1,
 			"minValue": 0,
@@ -77,7 +80,8 @@
 				}
 			]
 		},
-		"4": {
+		{
+			"#": "4",
 			"label": "Turn on/off voltage on input terminal 3",
 			"valueSize": 1,
 			"minValue": 0,
@@ -95,7 +99,8 @@
 				}
 			]
 		},
-		"5": {
+		{
+			"#": "5",
 			"label": "Turn on/off voltage on input terminal 4",
 			"valueSize": 1,
 			"minValue": 0,
@@ -113,7 +118,8 @@
 				}
 			]
 		},
-		"6": {
+		{
+			"#": "6",
 			"label": "Prel. filter time on input terminals",
 			"valueSize": 1,
 			"minValue": 0,
@@ -121,7 +127,8 @@
 			"defaultValue": 5,
 			"unsigned": true
 		},
-		"7": {
+		{
+			"#": "7",
 			"label": "Threshold for triggering input",
 			"valueSize": 1,
 			"minValue": 0,
@@ -129,7 +136,8 @@
 			"defaultValue": 20,
 			"unsigned": true
 		},
-		"8": {
+		{
+			"#": "8",
 			"label": "Threshold time for triggering input",
 			"valueSize": 1,
 			"minValue": 0,
@@ -137,40 +145,45 @@
 			"defaultValue": 50,
 			"unsigned": true
 		},
-		"9": {
+		{
+			"#": "9",
 			"label": "Function for input terminal 1",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 3,
 			"defaultValue": 1
 		},
-		"10": {
+		{
+			"#": "10",
 			"label": "Function for input terminal 2",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 3,
 			"defaultValue": 1
 		},
-		"11": {
+		{
+			"#": "11",
 			"label": "Function for input terminal 3",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 3,
 			"defaultValue": 1
 		},
-		"12": {
+		{
+			"#": "12",
 			"label": "Function for input terminal 4",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 3,
 			"defaultValue": 1
 		},
-		"13": {
+		{
+			"#": "13",
 			"label": "Central Scene notification",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 1,
 			"defaultValue": 0
 		}
-	}
+	]
 }

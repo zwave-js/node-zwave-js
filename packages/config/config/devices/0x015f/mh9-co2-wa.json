@@ -13,8 +13,9 @@
 		"min": "0.0",
 		"max": "255.255"
 	},
-	"paramInformation": {
-		"1": {
+	"paramInformation": [
+		{
+			"#": "1",
 			"label": "CO2 Notification Threshold",
 			"valueSize": 2,
 			"minValue": 1,
@@ -22,7 +23,8 @@
 			"defaultValue": 1000,
 			"unit": "ppm"
 		},
-		"2": {
+		{
+			"#": "2",
 			"label": "CO2 Reporting Threshold",
 			"valueSize": 1,
 			"minValue": 0,
@@ -37,7 +39,8 @@
 				}
 			]
 		},
-		"3": {
+		{
+			"#": "3",
 			"label": "Temperature Reporting Threshold",
 			"valueSize": 1,
 			"minValue": 0,
@@ -52,7 +55,8 @@
 				}
 			]
 		},
-		"4": {
+		{
+			"#": "4",
 			"label": "Humidity Reporting Threshold",
 			"valueSize": 1,
 			"minValue": 0,
@@ -67,7 +71,8 @@
 				}
 			]
 		},
-		"255": {
+		{
+			"#": "255",
 			"label": "Factory Setting",
 			"description": "Restore the factory setting",
 			"valueSize": 1,
@@ -84,7 +89,7 @@
 				}
 			]
 		}
-	},
+	],
 	"compat": {
 		"forceNotificationIdleReset": true
 	}

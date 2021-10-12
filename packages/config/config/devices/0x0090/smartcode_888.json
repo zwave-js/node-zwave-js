@@ -21,14 +21,17 @@
 			"isLifeline": true
 		}
 	},
-	"paramInformation": {
-		"33": {
+	"paramInformation": [
+		{
+			"#": "33",
 			"$import": "templates/kwikset_template.json#dipswitch_sku_firstfour"
 		},
-		"34": {
+		{
+			"#": "34",
 			"$import": "templates/kwikset_template.json#dipswitch_sku_lastfour"
 		},
-		"35": {
+		{
+			"#": "35",
 			"label": "Interior Status LED",
 			"valueSize": 1,
 			"minValue": 0,
@@ -46,7 +49,8 @@
 				}
 			]
 		},
-		"37": {
+		{
+			"#": "37",
 			"label": "Audio Feedback",
 			"description": "Allows the user to get/set the audio feed back command",
 			"valueSize": 1,
@@ -65,10 +69,12 @@
 				}
 			]
 		},
-		"40": {
+		{
+			"#": "40",
 			"$import": "templates/kwikset_template.json#reset"
 		},
-		"47": {
+		{
+			"#": "47",
 			"label": "Send Motor Load Alarms",
 			"valueSize": 1,
 			"minValue": 0,
@@ -86,7 +92,8 @@
 				}
 			]
 		},
-		"36[0x01]": {
+		{
+			"#": "36[0x01]",
 			"label": "Auto Relock Door",
 			"valueSize": 2,
 			"minValue": 0,
@@ -104,7 +111,8 @@
 				}
 			]
 		},
-		"36[0xff00]": {
+		{
+			"#": "36[0xff00]",
 			"label": "Auto Relock Timing",
 			"valueSize": 2,
 			"minValue": 30,
@@ -134,7 +142,7 @@
 				}
 			]
 		}
-	},
+	],
 	"compat": {
 		"alarmMapping": [
 			{

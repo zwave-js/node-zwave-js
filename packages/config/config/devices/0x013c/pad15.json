@@ -14,8 +14,9 @@
 		"min": "0.0",
 		"max": "255.255"
 	},
-	"paramInformation": {
-		"1": {
+	"paramInformation": [
+		{
+			"#": "1",
 			"label": "Switch Set",
 			"description": "To select connected switch function.  setting value: 0: only s1 is effective 1: both s1 and s2 are effective. 2: s1 dimmer up  s2 dimmer down",
 			"valueSize": 1,
@@ -39,7 +40,8 @@
 				}
 			]
 		},
-		"2": {
+		{
+			"#": "2",
 			"label": "Power-on Recovery Status Set",
 			"description": "To set dimmer level when ac power on.  setting value: 0: off-0% 1: on-last level 2: on-100%",
 			"valueSize": 1,
@@ -63,7 +65,8 @@
 				}
 			]
 		},
-		"3": {
+		{
+			"#": "3",
 			"label": "Rf Report Set",
 			"description": "To set if device send multilevel switch report to gateway when dimming finished.  setting value: 1: report on 0: report off",
 			"valueSize": 1,
@@ -83,7 +86,8 @@
 				}
 			]
 		},
-		"4": {
+		{
+			"#": "4",
 			"label": "Maximum Level",
 			"description": "1~99 : 1% ~ 99%",
 			"valueSize": 1,
@@ -92,7 +96,8 @@
 			"defaultValue": 99,
 			"unsigned": true
 		},
-		"5": {
+		{
+			"#": "5",
 			"label": "Minimum Level",
 			"description": "0~98 : 0% ~ 98%",
 			"valueSize": 1,
@@ -101,7 +106,8 @@
 			"defaultValue": 0,
 			"unsigned": true
 		},
-		"6": {
+		{
+			"#": "6",
 			"label": "Basic Duration Set",
 			"description": "Unit: second ,0 ~127second",
 			"valueSize": 1,
@@ -111,7 +117,7 @@
 			"defaultValue": 2,
 			"unsigned": true
 		}
-	},
+	],
 	"metadata": {
 		"inclusion": "Add(Classic Inclusion) : \n1. Put your Z-Wave™ controller into inclusion mode by following the instructions provided by the controller\nmanufacturer.\n2. Press the include button three times within 3 seconds to enter inclusion mode",
 		"exclusion": "Remove (Exclusion)\n1. Put your Z-Wave™ controller into exclusion mode by following the instructions provided by the controller\nmanufacturer.\n2. Press the include button three times within 3 seconds to enter\nexclusion mode.\n3. Node ID will be excluded",

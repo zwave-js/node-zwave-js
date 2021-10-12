@@ -14,20 +14,22 @@
 		"max": "255.255"
 	},
 	"supportsZWavePlus": true,
-	"paramInformation": {
-		"1": {
+	"paramInformation": [
+		{
+			"#": "1",
 			"label": "Value of ON-Command",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 99,
 			"defaultValue": 99
 		},
-		"2": {
+		{
+			"#": "2",
 			"label": "Value of OFF-Command",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 99,
 			"defaultValue": 0
 		}
-	}
+	]
 }

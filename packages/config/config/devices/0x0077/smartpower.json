@@ -24,8 +24,9 @@
 			"isLifeline": true
 		}
 	},
-	"paramInformation": {
-		"1": {
+	"paramInformation": [
+		{
+			"#": "1",
 			"label": "Report node",
 			"description": "Report changes in level to this node id",
 			"valueSize": 1,
@@ -34,7 +35,8 @@
 			"defaultValue": 0,
 			"unsigned": true
 		},
-		"2": {
+		{
+			"#": "2",
 			"label": "BO IR support",
 			"description": "Enable/Disable BO IR Support",
 			"valueSize": 1,
@@ -54,5 +56,5 @@
 				}
 			]
 		}
-	}
+	]
 }

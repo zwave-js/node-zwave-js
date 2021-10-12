@@ -26,8 +26,9 @@
 			"maxNodes": 4
 		}
 	},
-	"paramInformation": {
-		"1": {
+	"paramInformation": [
+		{
+			"#": "1",
 			"label": "Off Delay After Motion",
 			"unit": "minutes",
 			"valueSize": 1,
@@ -35,16 +36,18 @@
 			"maxValue": 127,
 			"defaultValue": 10
 		},
-		"2": {
+		{
+			"#": "2",
 			"label": "Dim Level",
-			"description": "Sets the dim level; -1 for full on",
-			"unit": "%",
+			"description": "Allowable range: 0-99, 255",
 			"valueSize": 1,
-			"minValue": -1,
-			"maxValue": 99,
-			"defaultValue": -1
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 255,
+			"unsigned": true
 		},
-		"3": {
+		{
+			"#": "3",
 			"label": "Light Level Report Interval",
 			"description": "Sets the interval for light level reports; 0 to disable",
 			"unit": "minutes",
@@ -53,7 +56,8 @@
 			"maxValue": 127,
 			"defaultValue": 60
 		},
-		"4": {
+		{
+			"#": "4",
 			"label": "Temperature Report Interval",
 			"description": "Sets the interval for temp level reports; 0 to disable",
 			"unit": "minutes",
@@ -62,7 +66,8 @@
 			"maxValue": 127,
 			"defaultValue": 60
 		},
-		"5": {
+		{
+			"#": "5",
 			"label": "Temperature Calibration",
 			"valueSize": 1,
 			"unit": "0.1°F",
@@ -70,5 +75,5 @@
 			"maxValue": 127,
 			"defaultValue": 0
 		}
-	}
+	]
 }

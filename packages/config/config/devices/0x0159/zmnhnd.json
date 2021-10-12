@@ -14,8 +14,9 @@
 		"max": "255.255"
 	},
 	"supportsZWavePlus": true,
-	"paramInformation": {
-		"1": {
+	"paramInformation": [
+		{
+			"#": "1",
 			"label": "Input 1 switch type",
 			"valueSize": 1,
 			"minValue": 0,
@@ -34,7 +35,8 @@
 				}
 			]
 		},
-		"2": {
+		{
+			"#": "2",
 			"label": "Input 2 contact type",
 			"valueSize": 1,
 			"minValue": 0,
@@ -53,7 +55,8 @@
 				}
 			]
 		},
-		"10": {
+		{
+			"#": "10",
 			"label": "Activate / deactivate functions ALL ON/ALL OFF",
 			"valueSize": 1,
 			"minValue": 0,
@@ -80,7 +83,8 @@
 				}
 			]
 		},
-		"11": {
+		{
+			"#": "11",
 			"label": "Automatic turning off relay after set time",
 			"valueSize": 2,
 			"minValue": 0,
@@ -94,7 +98,8 @@
 				}
 			]
 		},
-		"12": {
+		{
+			"#": "12",
 			"label": "Automatic turning on relay after set time",
 			"valueSize": 2,
 			"minValue": 0,
@@ -108,7 +113,8 @@
 				}
 			]
 		},
-		"15": {
+		{
+			"#": "15",
 			"label": "Auto turn off / on seconds or milliseconds",
 			"valueSize": 1,
 			"minValue": 0,
@@ -127,10 +133,12 @@
 				}
 			]
 		},
-		"30": {
+		{
+			"#": "30",
 			"$import": "~/templates/master_template.json#state_after_power_failure_prev_off"
 		},
-		"63": {
+		{
+			"#": "63",
 			"label": "Output Switch selection",
 			"valueSize": 1,
 			"minValue": 0,
@@ -149,7 +157,8 @@
 				}
 			]
 		},
-		"100": {
+		{
+			"#": "100",
 			"label": "Endpoint I2 Notification and Event",
 			"valueSize": 1,
 			"minValue": 0,
@@ -192,7 +201,8 @@
 				}
 			]
 		},
-		"110": {
+		{
+			"#": "110",
 			"label": "Temperature sensor offset settings",
 			"valueSize": 2,
 			"minValue": 0,
@@ -200,7 +210,8 @@
 			"defaultValue": 32536,
 			"unsigned": true
 		},
-		"120": {
+		{
+			"#": "120",
 			"label": "Digital temperature sensor reporting",
 			"valueSize": 1,
 			"minValue": 0,
@@ -208,5 +219,5 @@
 			"defaultValue": 5,
 			"unsigned": true
 		}
-	}
+	]
 }

@@ -14,8 +14,9 @@
 		"max": "255.255"
 	},
 	"supportsZWavePlus": true,
-	"paramInformation": {
-		"4": {
+	"paramInformation": [
+		{
+			"#": "4",
 			"label": "Orientation",
 			"description": "Controls the on/off orientation of the rocker switch",
 			"valueSize": 1,
@@ -35,7 +36,8 @@
 				}
 			]
 		},
-		"7": {
+		{
+			"#": "7",
 			"label": "Remote Dim Level Increment",
 			"description": "Number of dim levels to change for each dim step when remotely commanded",
 			"valueSize": 1,
@@ -43,7 +45,8 @@
 			"maxValue": 99,
 			"defaultValue": 1
 		},
-		"8": {
+		{
+			"#": "8",
 			"label": "Remote Dim Step Duration",
 			"description": "Interval between dimming steps when remotely commanded",
 			"unit": "10 ms",
@@ -52,7 +55,8 @@
 			"maxValue": 255,
 			"defaultValue": 3
 		},
-		"9": {
+		{
+			"#": "9",
 			"label": "Dim Level Increment",
 			"description": "Indicates the number of levels to change dimming each step",
 			"valueSize": 1,
@@ -61,7 +65,8 @@
 			"defaultValue": 1,
 			"unsigned": true
 		},
-		"10": {
+		{
+			"#": "10",
 			"label": "Step Duration",
 			"description": "Interval between dimming steps",
 			"valueSize": 2,
@@ -70,7 +75,7 @@
 			"defaultValue": 3,
 			"unit": "10 ms"
 		}
-	},
+	],
 	"compat": {
 		"commandClasses": {
 			"remove": {

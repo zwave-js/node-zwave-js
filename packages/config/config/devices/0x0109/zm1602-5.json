@@ -26,8 +26,9 @@
 			"isLifeline": true
 		}
 	},
-	"paramInformation": {
-		"1": {
+	"paramInformation": [
+		{
+			"#": "1",
 			"label": "Siren/Strobe Mode",
 			"description": "User can change value from 0 to 2 to turn either siren sound, strobe light, or both when triggered",
 			"valueSize": 1,
@@ -51,7 +52,8 @@
 				}
 			]
 		},
-		"2": {
+		{
+			"#": "2",
 			"label": "Alarm Auto Stop Time",
 			"description": "User can change the duration of siren time when triggered",
 			"valueSize": 1,
@@ -79,7 +81,7 @@
 				}
 			]
 		}
-	},
+	],
 	"metadata": {
 		"inclusion": "Put the Z-Wave™ Interface Controller into “inclusion” mode, and following its instruction to add the ZM 1602 to your controller. To get in the “inclusion” mode, the distance between siren and controller is suggested to be in one meter. Open the bracket and press the program switch of ZM 1602 for 1 second at least & release to be included. After setting, the LED Setting Lighting should go off",
 		"exclusion": "Set up the Z-Wave™ Interface Controller into “exclusion” mode, and following its instruction to delete the ZM 1602 from your controller. Press the Tamper Switch of ZM 1602 for 1 second at least & release to be excluded",

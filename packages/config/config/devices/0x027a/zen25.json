@@ -14,8 +14,9 @@
 		"max": "255.255"
 	},
 	"supportsZWavePlus": true,
-	"paramInformation": {
-		"1": {
+	"paramInformation": [
+		{
+			"#": "1",
 			"label": "On/Off After Power",
 			"valueSize": 1,
 			"minValue": 0,
@@ -37,7 +38,8 @@
 				}
 			]
 		},
-		"2": {
+		{
+			"#": "2",
 			"label": "Wattage Threshold",
 			"description": "Power Wattage Report Value Threshold",
 			"unit": "Watta",
@@ -52,7 +54,8 @@
 				}
 			]
 		},
-		"3": {
+		{
+			"#": "3",
 			"label": "Wattage Frequency",
 			"unit": "Seconds",
 			"valueSize": 4,
@@ -60,7 +63,8 @@
 			"maxValue": 2678400,
 			"defaultValue": 30
 		},
-		"4": {
+		{
+			"#": "4",
 			"label": "Energy Frequency",
 			"unit": "Seconds",
 			"valueSize": 4,
@@ -68,7 +72,8 @@
 			"maxValue": 2678400,
 			"defaultValue": 300
 		},
-		"5": {
+		{
+			"#": "5",
 			"label": "Voltage Frequency",
 			"unit": "Seconds",
 			"valueSize": 4,
@@ -76,7 +81,8 @@
 			"maxValue": 2678400,
 			"defaultValue": 300
 		},
-		"6": {
+		{
+			"#": "6",
 			"label": "Current Frequency",
 			"description": "Electrical Current (A) Report Frequency",
 			"unit": "Seconds",
@@ -85,7 +91,8 @@
 			"maxValue": 2678400,
 			"defaultValue": 300
 		},
-		"7": {
+		{
+			"#": "7",
 			"label": "Overload Protection",
 			"unit": "Amps",
 			"valueSize": 1,
@@ -93,7 +100,8 @@
 			"maxValue": 10,
 			"defaultValue": 10
 		},
-		"8": {
+		{
+			"#": "8",
 			"label": "Enable Auto-Off (Left)",
 			"description": "Enable Auto Turn-Off Timer for Left Outlet",
 			"valueSize": 1,
@@ -112,7 +120,8 @@
 				}
 			]
 		},
-		"9": {
+		{
+			"#": "9",
 			"label": "Turn-Off Time (Left)",
 			"unit": "Minutes",
 			"valueSize": 4,
@@ -120,7 +129,8 @@
 			"maxValue": 65535,
 			"defaultValue": 60
 		},
-		"10": {
+		{
+			"#": "10",
 			"label": "Enable Auto-On (Left)",
 			"description": "Enable Auto Turn-On Timer for Left Outlet",
 			"valueSize": 1,
@@ -139,7 +149,8 @@
 				}
 			]
 		},
-		"11": {
+		{
+			"#": "11",
 			"label": "Turn-On Time (Left)",
 			"unit": "Minutes",
 			"valueSize": 4,
@@ -147,7 +158,8 @@
 			"maxValue": 65535,
 			"defaultValue": 60
 		},
-		"12": {
+		{
+			"#": "12",
 			"label": "Enable Auto-Off (Right)",
 			"description": "Enable Auto Turn-Off Timer for Right Outlet",
 			"valueSize": 1,
@@ -166,14 +178,16 @@
 				}
 			]
 		},
-		"13": {
+		{
+			"#": "13",
 			"label": "Turn-Off Time (Right)",
 			"valueSize": 4,
 			"minValue": 1,
 			"maxValue": 65535,
 			"defaultValue": 60
 		},
-		"14": {
+		{
+			"#": "14",
 			"label": "Enable Auto-On (Right)",
 			"description": "Enable Auto Turn-On Timer for Right Outlet",
 			"valueSize": 1,
@@ -192,14 +206,16 @@
 				}
 			]
 		},
-		"15": {
+		{
+			"#": "15",
 			"label": "Turn-On Time (Right)",
 			"valueSize": 4,
 			"minValue": 1,
 			"maxValue": 65535,
 			"defaultValue": 60
 		},
-		"16": {
+		{
+			"#": "16",
 			"label": "Manual Control",
 			"description": "Enable/Disable Manual Control",
 			"valueSize": 1,
@@ -218,7 +234,8 @@
 				}
 			]
 		},
-		"17": {
+		{
+			"#": "17",
 			"label": "LED Mode",
 			"description": "LED Indicator Mode",
 			"valueSize": 1,
@@ -245,7 +262,8 @@
 				}
 			]
 		},
-		"18": {
+		{
+			"#": "18",
 			"$if": "firmwareVersion >= 2.0",
 			"label": "Enable/Disable Power Reports",
 			"valueSize": 1,
@@ -276,7 +294,7 @@
 				}
 			]
 		}
-	},
+	],
 	"compat": {
 		"preserveRootApplicationCCValueIDs": true
 	}

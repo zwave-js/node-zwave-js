@@ -14,8 +14,9 @@
 		"max": "2.255"
 	},
 	"supportsZWavePlus": true,
-	"paramInformation": {
-		"1": {
+	"paramInformation": [
+		{
+			"#": "1",
 			"label": "Operation Mode",
 			"valueSize": 1,
 			"minValue": 0,
@@ -41,7 +42,8 @@
 				}
 			]
 		},
-		"2": {
+		{
+			"#": "2",
 			"label": "Sensor Mode",
 			"valueSize": 1,
 			"minValue": 0,
@@ -75,7 +77,8 @@
 				}
 			]
 		},
-		"3": {
+		{
+			"#": "3",
 			"label": "Floor sensor type",
 			"valueSize": 1,
 			"minValue": 0,
@@ -109,14 +112,16 @@
 				}
 			]
 		},
-		"4": {
+		{
+			"#": "4",
 			"label": "Temperature control hysteresis (DIFF I)",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 30,
 			"defaultValue": 5
 		},
-		"5": {
+		{
+			"#": "5",
 			"label": "Floor minimum temperature limit (FLo)",
 			"unit": "oC",
 			"valueSize": 2,
@@ -124,7 +129,8 @@
 			"maxValue": 400,
 			"defaultValue": 50
 		},
-		"6": {
+		{
+			"#": "6",
 			"label": "Floor maximum temperature (FHi)",
 			"unit": "oC",
 			"valueSize": 2,
@@ -132,7 +138,8 @@
 			"maxValue": 400,
 			"defaultValue": 400
 		},
-		"7": {
+		{
+			"#": "7",
 			"label": "Air minimum temperature limit (ALo)",
 			"unit": "oC",
 			"valueSize": 2,
@@ -140,7 +147,8 @@
 			"maxValue": 400,
 			"defaultValue": 50
 		},
-		"8": {
+		{
+			"#": "8",
 			"label": "Air maximum temperature limit (AHi)",
 			"unit": "oC",
 			"valueSize": 2,
@@ -148,14 +156,16 @@
 			"maxValue": 400,
 			"defaultValue": 400
 		},
-		"9": {
+		{
+			"#": "9",
 			"label": "FP mode P setting (PLo)",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 9,
 			"defaultValue": 0
 		},
-		"10": {
+		{
+			"#": "10",
 			"label": "Heating mode setpoint (CO)",
 			"unit": "oC",
 			"valueSize": 2,
@@ -163,7 +173,8 @@
 			"maxValue": 400,
 			"defaultValue": 210
 		},
-		"11": {
+		{
+			"#": "11",
 			"label": "Energy saving mode setpoint (ECO)",
 			"unit": "oC",
 			"valueSize": 2,
@@ -171,7 +182,8 @@
 			"maxValue": 400,
 			"defaultValue": 180
 		},
-		"12": {
+		{
+			"#": "12",
 			"label": "P setting",
 			"unit": "oC",
 			"valueSize": 1,
@@ -179,7 +191,8 @@
 			"maxValue": 10,
 			"defaultValue": 2
 		},
-		"13": {
+		{
+			"#": "13",
 			"label": "Cooling setpoint (COOL)",
 			"unit": "oC",
 			"valueSize": 2,
@@ -187,7 +200,8 @@
 			"maxValue": 400,
 			"defaultValue": 210
 		},
-		"14": {
+		{
+			"#": "14",
 			"label": "Room sensor calibration",
 			"unit": "oC",
 			"valueSize": 1,
@@ -195,7 +209,8 @@
 			"maxValue": 40,
 			"defaultValue": 0
 		},
-		"15": {
+		{
+			"#": "15",
 			"label": "Floor sensor calibration",
 			"unit": "oC",
 			"valueSize": 1,
@@ -203,7 +218,8 @@
 			"maxValue": 40,
 			"defaultValue": 0
 		},
-		"16": {
+		{
+			"#": "16",
 			"label": "External sensor calibration",
 			"unit": "oC",
 			"valueSize": 1,
@@ -211,7 +227,8 @@
 			"maxValue": 40,
 			"defaultValue": 0
 		},
-		"17": {
+		{
+			"#": "17",
 			"label": "Temperature display",
 			"valueSize": 1,
 			"minValue": 0,
@@ -229,7 +246,8 @@
 				}
 			]
 		},
-		"18": {
+		{
+			"#": "18",
 			"label": "Button brightness - dimmed state",
 			"unit": "%",
 			"valueSize": 1,
@@ -237,7 +255,8 @@
 			"maxValue": 100,
 			"defaultValue": 50
 		},
-		"19": {
+		{
+			"#": "19",
 			"label": "Button brightness - active state",
 			"unit": "%",
 			"valueSize": 1,
@@ -245,7 +264,8 @@
 			"maxValue": 100,
 			"defaultValue": 100
 		},
-		"20": {
+		{
+			"#": "20",
 			"label": "Display brightness - dimmed state",
 			"unit": "%",
 			"valueSize": 1,
@@ -253,7 +273,8 @@
 			"maxValue": 100,
 			"defaultValue": 50
 		},
-		"21": {
+		{
+			"#": "21",
 			"label": "Display brightness - active state",
 			"unit": "%",
 			"valueSize": 1,
@@ -261,7 +282,8 @@
 			"maxValue": 100,
 			"defaultValue": 100
 		},
-		"22": {
+		{
+			"#": "22",
 			"label": "Temperature report interval",
 			"unit": "seconds",
 			"valueSize": 2,
@@ -269,7 +291,8 @@
 			"maxValue": 32767,
 			"defaultValue": 60
 		},
-		"23": {
+		{
+			"#": "23",
 			"label": "Temperature report hysteresis",
 			"unit": "oC",
 			"valueSize": 1,
@@ -277,7 +300,8 @@
 			"maxValue": 100,
 			"defaultValue": 10
 		},
-		"24": {
+		{
+			"#": "24",
 			"label": "Meter report interval",
 			"unit": "seconds",
 			"valueSize": 2,
@@ -285,7 +309,8 @@
 			"maxValue": 32767,
 			"defaultValue": 60
 		},
-		"25": {
+		{
+			"#": "25",
 			"label": "Meter report delta value",
 			"unit": "kWh/10",
 			"valueSize": 1,
@@ -294,5 +319,5 @@
 			"defaultValue": 10,
 			"unsigned": true
 		}
-	}
+	]
 }

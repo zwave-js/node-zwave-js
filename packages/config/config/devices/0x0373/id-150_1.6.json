@@ -14,8 +14,9 @@
 		"max": "255.255"
 	},
 	"supportsZWavePlus": true,
-	"paramInformation": {
-		"1": {
+	"paramInformation": [
+		{
+			"#": "1",
 			"label": "Door lock mode",
 			"description": "Set if the lock is in away mode and if automatic locking should be enabled",
 			"valueSize": 1,
@@ -42,7 +43,8 @@
 				}
 			]
 		},
-		"2": {
+		{
+			"#": "2",
 			"label": "RFID Mode",
 			"valueSize": 1,
 			"minValue": 5,
@@ -60,7 +62,8 @@
 				}
 			]
 		},
-		"3": {
+		{
+			"#": "3",
 			"label": "Door Hinge Position Mode",
 			"description": "Tell the lock which side your hinges are on seen from the outside",
 			"valueSize": 1,
@@ -79,7 +82,8 @@
 				}
 			]
 		},
-		"4": {
+		{
+			"#": "4",
 			"label": "Door Audio Volume Level",
 			"description": "Set the Audio Volume Level of the Lock",
 			"valueSize": 1,
@@ -118,7 +122,8 @@
 				}
 			]
 		},
-		"5": {
+		{
+			"#": "5",
 			"label": "Door ReLock Mode",
 			"description": "Sets if the door should relock or not",
 			"valueSize": 1,
@@ -137,7 +142,8 @@
 				}
 			]
 		},
-		"6": {
+		{
+			"#": "6",
 			"label": "Service PIN Mode",
 			"description": "Sets the validity of the service PIN",
 			"valueSize": 1,
@@ -193,7 +199,8 @@
 				}
 			]
 		},
-		"7": {
+		{
+			"#": "7",
 			"label": "Door Lock Model Type",
 			"description": "Sends information if the model of the lock is 101 or 150",
 			"valueSize": 1,
@@ -202,7 +209,8 @@
 			"defaultValue": 0,
 			"readOnly": true
 		},
-		"8": {
+		{
+			"#": "8",
 			"label": "Updater Mode",
 			"description": "Enables use of the Updater app",
 			"valueSize": 1,
@@ -229,7 +237,8 @@
 				}
 			]
 		},
-		"9": {
+		{
+			"#": "9",
 			"label": "Master PIN Unlock Mode",
 			"description": "Configures if the Master PIN can unlock",
 			"valueSize": 1,
@@ -248,5 +257,5 @@
 				}
 			]
 		}
-	}
+	]
 }

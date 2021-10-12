@@ -13,8 +13,9 @@
 		"min": "0.0",
 		"max": "255.255"
 	},
-	"paramInformation": {
-		"2": {
+	"paramInformation": [
+		{
+			"#": "2",
 			"label": "Status LED Configuration",
 			"valueSize": 1,
 			"minValue": 0,
@@ -41,7 +42,8 @@
 				}
 			]
 		},
-		"4": {
+		{
+			"#": "4",
 			"label": "Auto-Off Timer",
 			"valueSize": 4,
 			"unit": "minutes",
@@ -56,7 +58,8 @@
 				}
 			]
 		},
-		"6": {
+		{
+			"#": "6",
 			"label": "Auto-On Timer",
 			"valueSize": 4,
 			"unit": "minutes",
@@ -71,7 +74,8 @@
 				}
 			]
 		},
-		"7": {
+		{
+			"#": "7",
 			"label": "Night Light Brightness",
 			"valueSize": 1,
 			"unit": "10%",
@@ -80,10 +84,12 @@
 			"defaultValue": 2,
 			"unsigned": true
 		},
-		"8": {
+		{
+			"#": "8",
 			"$import": "~/templates/master_template.json#state_after_power_failure_off_on_prev"
 		},
-		"9": {
+		{
+			"#": "9",
 			"label": "Dimmer Ramp Rate (On/Off)",
 			"valueSize": 1,
 			"unit": "seconds",
@@ -92,7 +98,8 @@
 			"defaultValue": 1,
 			"unsigned": true
 		},
-		"10": {
+		{
+			"#": "10",
 			"label": "Dimmer Ramp Rate (Change Brightness)",
 			"valueSize": 1,
 			"unit": "seconds",
@@ -101,7 +108,8 @@
 			"defaultValue": 4,
 			"unsigned": true
 		},
-		"11": {
+		{
+			"#": "11",
 			"label": "Minimum Brightness",
 			"valueSize": 1,
 			"minValue": 0,
@@ -115,7 +123,8 @@
 				}
 			]
 		},
-		"12": {
+		{
+			"#": "12",
 			"label": "Maximum Brightness",
 			"valueSize": 1,
 			"minValue": 0,
@@ -129,7 +138,8 @@
 				}
 			]
 		},
-		"13": {
+		{
+			"#": "13",
 			"label": "Temperature Report Interval",
 			"valueSize": 1,
 			"minValue": 1,
@@ -137,7 +147,8 @@
 			"defaultValue": 1,
 			"unsigned": true
 		},
-		"14": {
+		{
+			"#": "14",
 			"label": "Temperature Report Change Threshold",
 			"valueSize": 1,
 			"unit": "°C",
@@ -146,7 +157,7 @@
 			"defaultValue": 5,
 			"unsigned": true
 		}
-	},
+	],
 	"metadata": {
 		"inclusion": "Follow the instructions for your Z-Wave certified controller to add a device to the Z-Wave network.\n Once the controller is ready to add your device, press the Manual/Program button on the smart plug 3 times quickly. The blue LED will blink quickly.",
 		"exclusion": "Follow the instructions for your Z-Wave certified controller to remove a device from the Z-Wave network.\n Once the controller is ready to remove your device, press the manual/program button on the smart plug 3 times quickly.",

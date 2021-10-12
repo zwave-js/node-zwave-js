@@ -21,34 +21,38 @@
 			"isLifeline": true
 		}
 	},
-	"paramInformation": {
-		"1": {
+	"paramInformation": [
+		{
+			"#": "1",
 			"label": "Watt meter report period",
 			"valueSize": 2,
 			"minValue": 1,
 			"maxValue": 32767,
 			"defaultValue": 720
 		},
-		"2": {
+		{
+			"#": "2",
 			"label": "KWh meter report period",
 			"valueSize": 2,
 			"minValue": 1,
 			"maxValue": 32767,
 			"defaultValue": 6
 		},
-		"3": {
+		{
+			"#": "3",
 			"label": "Watt load caution threshold",
 			"valueSize": 2,
 			"minValue": 10,
 			"maxValue": 1100,
 			"defaultValue": 1100
 		},
-		"4": {
+		{
+			"#": "4",
 			"label": "KWh load caution threshold",
 			"valueSize": 2,
 			"minValue": 1,
 			"maxValue": 10000,
 			"defaultValue": 10000
 		}
-	}
+	]
 }

@@ -28,8 +28,9 @@
 			"maxNodes": 10
 		}
 	},
-	"paramInformation": {
-		"10": {
+	"paramInformation": [
+		{
+			"#": "10",
 			"label": "Typical click timeout",
 			"description": "Typical time used to differentiate click",
 			"valueSize": 1,
@@ -37,7 +38,8 @@
 			"maxValue": 100,
 			"defaultValue": 50
 		},
-		"11": {
+		{
+			"#": "11",
 			"label": "Invert buttons",
 			"valueSize": 1,
 			"minValue": 0,
@@ -56,7 +58,8 @@
 				}
 			]
 		},
-		"13": {
+		{
+			"#": "13",
 			"label": "Action on button single press or hold",
 			"description": "Defines which command should be sent on button single press or hold.",
 			"valueSize": 1,
@@ -83,7 +86,8 @@
 				}
 			]
 		},
-		"14": {
+		{
+			"#": "14",
 			"label": "Action on button double press or hold",
 			"description": "Defines which command should be sent on button double press or press-hold.",
 			"valueSize": 1,
@@ -111,7 +115,8 @@
 				}
 			]
 		},
-		"15": {
+		{
+			"#": "15",
 			"label": "Send the following Switch All commands",
 			"valueSize": 1,
 			"minValue": 0,
@@ -134,7 +139,8 @@
 				}
 			]
 		},
-		"20": {
+		{
+			"#": "20",
 			"label": "Send unsolicited Battery Report on Wake Up",
 			"valueSize": 1,
 			"minValue": 0,
@@ -157,5 +163,5 @@
 				}
 			]
 		}
-	}
+	]
 }

@@ -64,8 +64,9 @@
 			"maxNodes": 5
 		}
 	},
-	"paramInformation": {
-		"10": {
+	"paramInformation": [
+		{
+			"#": "10",
 			"label": "Command to Control Group No1 (Assoc. Group 2)",
 			"description": "Defines the command sent to group 1 when the button is pressed (Assoc. Group 2)",
 			"valueSize": 1,
@@ -101,7 +102,8 @@
 				}
 			]
 		},
-		"11": {
+		{
+			"#": "11",
 			"label": "Command to Control Group No2 (association group 3)",
 			"valueSize": 1,
 			"minValue": 0,
@@ -136,7 +138,8 @@
 				}
 			]
 		},
-		"12": {
+		{
+			"#": "12",
 			"label": "Command to Control Group No3 (association group 4)",
 			"valueSize": 1,
 			"minValue": 0,
@@ -171,7 +174,8 @@
 				}
 			]
 		},
-		"13": {
+		{
+			"#": "13",
 			"label": "Command to Control Group No4 (association group 5)",
 			"valueSize": 1,
 			"minValue": 0,
@@ -206,7 +210,8 @@
 				}
 			]
 		},
-		"14": {
+		{
+			"#": "14",
 			"label": "Command to Control Group No5 (association group 6)",
 			"valueSize": 1,
 			"minValue": 0,
@@ -241,7 +246,8 @@
 				}
 			]
 		},
-		"15": {
+		{
+			"#": "15",
 			"label": "Command to Control Group No6 (association group 7)",
 			"valueSize": 1,
 			"minValue": 0,
@@ -276,7 +282,8 @@
 				}
 			]
 		},
-		"16": {
+		{
+			"#": "16",
 			"label": "Command to Control Group No7 (association group 8)",
 			"valueSize": 1,
 			"minValue": 0,
@@ -311,7 +318,8 @@
 				}
 			]
 		},
-		"17": {
+		{
+			"#": "17",
 			"label": "Command to Control Scene No1 (association group 9)",
 			"valueSize": 1,
 			"minValue": 0,
@@ -346,7 +354,8 @@
 				}
 			]
 		},
-		"18": {
+		{
+			"#": "18",
 			"label": "Command to Control Scene No2",
 			"valueSize": 1,
 			"minValue": 0,
@@ -381,7 +390,8 @@
 				}
 			]
 		},
-		"19": {
+		{
+			"#": "19",
 			"label": "Command to Control Scene No3",
 			"valueSize": 1,
 			"minValue": 0,
@@ -416,7 +426,8 @@
 				}
 			]
 		},
-		"20": {
+		{
+			"#": "20",
 			"label": "Command to Control group All On/Off",
 			"valueSize": 1,
 			"minValue": 0,
@@ -451,7 +462,8 @@
 				}
 			]
 		},
-		"21": {
+		{
+			"#": "21",
 			"label": "Send the following Switch All commands",
 			"valueSize": 1,
 			"minValue": 0,
@@ -474,5 +486,5 @@
 				}
 			]
 		}
-	}
+	]
 }

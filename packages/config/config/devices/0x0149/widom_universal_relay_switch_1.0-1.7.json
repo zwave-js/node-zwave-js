@@ -37,8 +37,9 @@
 			"maxNodes": 16
 		}
 	},
-	"paramInformation": {
-		"1": {
+	"paramInformation": [
+		{
+			"#": "1",
 			"label": "Device status 1 click",
 			"description": "Device status when the external switch receives 1 click",
 			"valueSize": 1,
@@ -65,7 +66,8 @@
 				}
 			]
 		},
-		"2": {
+		{
+			"#": "2",
 			"label": "Device status 2 click",
 			"description": "Device status when the external switch receives 2 clicks",
 			"valueSize": 1,
@@ -92,5 +94,5 @@
 				}
 			]
 		}
-	}
+	]
 }

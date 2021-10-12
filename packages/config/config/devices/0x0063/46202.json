@@ -30,8 +30,9 @@
 			"isLifeline": true
 		}
 	},
-	"paramInformation": {
-		"3": {
+	"paramInformation": [
+		{
+			"#": "3",
 			"label": "LED Light",
 			"valueSize": 1,
 			"minValue": 0,
@@ -58,7 +59,8 @@
 				}
 			]
 		},
-		"4": {
+		{
+			"#": "4",
 			"label": "Invert Switch",
 			"valueSize": 1,
 			"minValue": 0,
@@ -76,7 +78,7 @@
 				}
 			]
 		}
-	},
+	],
 	"compat": {
 		"treatBasicSetAsEvent": true
 	}

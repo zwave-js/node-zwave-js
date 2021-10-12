@@ -25,8 +25,9 @@
 			"maxNodes": 4
 		}
 	},
-	"paramInformation": {
-		"1": {
+	"paramInformation": [
+		{
+			"#": "1",
 			"label": "All On/All Off",
 			"valueSize": 1,
 			"minValue": 0,
@@ -53,10 +54,12 @@
 				}
 			]
 		},
-		"5": {
+		{
+			"#": "5",
 			"$import": "~/templates/master_template.json#state_after_power_failure_off_prev"
 		},
-		"13": {
+		{
+			"#": "13",
 			"label": "Double click option",
 			"valueSize": 1,
 			"minValue": 0,
@@ -74,7 +77,8 @@
 				}
 			]
 		},
-		"17": {
+		{
+			"#": "17",
 			"label": "Dimming time frame",
 			"valueSize": 1,
 			"unit": "seconds",
@@ -82,19 +86,21 @@
 			"maxValue": 5,
 			"defaultValue": 3
 		},
-		"18": {
+		{
+			"#": "18",
 			"label": "Maximum Dimmer level control",
 			"valueSize": 1,
 			"minValue": 2,
 			"maxValue": 99,
 			"defaultValue": 99
 		},
-		"19": {
+		{
+			"#": "19",
 			"label": "Minimum Dimmer level control",
 			"valueSize": 1,
 			"minValue": 1,
 			"maxValue": 98,
 			"defaultValue": 13
 		}
-	}
+	]
 }

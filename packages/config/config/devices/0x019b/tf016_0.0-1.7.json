@@ -18,8 +18,9 @@
 		"max": "1.7"
 	},
 	"supportsZWavePlus": true,
-	"paramInformation": {
-		"1": {
+	"paramInformation": [
+		{
+			"#": "1",
 			"label": "Operation mode",
 			"description": "Defines Operation Mode of thermostat",
 			"valueSize": 2,
@@ -46,5 +47,5 @@
 				}
 			]
 		}
-	}
+	]
 }

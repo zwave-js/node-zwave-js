@@ -24,8 +24,9 @@
 			"maxNodes": 5
 		}
 	},
-	"paramInformation": {
-		"1": {
+	"paramInformation": [
+		{
+			"#": "1",
 			"label": "Paddle Orientation",
 			"valueSize": 1,
 			"minValue": 0,
@@ -43,7 +44,8 @@
 				}
 			]
 		},
-		"2": {
+		{
+			"#": "2",
 			"label": "LED Indicator Control",
 			"valueSize": 1,
 			"minValue": 0,
@@ -69,7 +71,8 @@
 				}
 			]
 		},
-		"3": {
+		{
+			"#": "3",
 			"label": "Auto Turn-Off Timer",
 			"valueSize": 1,
 			"minValue": 0,
@@ -87,7 +90,8 @@
 				}
 			]
 		},
-		"4": {
+		{
+			"#": "4",
 			"label": "Auto Turn-Off Timer Duration",
 			"unit": "minutes",
 			"valueSize": 4,
@@ -95,7 +99,8 @@
 			"maxValue": 65535,
 			"defaultValue": 60
 		},
-		"5": {
+		{
+			"#": "5",
 			"label": "Auto Turn-On Timer",
 			"valueSize": 1,
 			"minValue": 0,
@@ -113,7 +118,8 @@
 				}
 			]
 		},
-		"6": {
+		{
+			"#": "6",
 			"label": "Auto Turn-On Timer Duration",
 			"unit": "minutes",
 			"valueSize": 4,
@@ -121,7 +127,8 @@
 			"maxValue": 65535,
 			"defaultValue": 30
 		},
-		"7[0x01]": {
+		{
+			"#": "7[0x01]",
 			"label": "Control Group 2 With Physical Switch",
 			"valueSize": 1,
 			"minValue": 0,
@@ -139,7 +146,8 @@
 				}
 			]
 		},
-		"7[0x02]": {
+		{
+			"#": "7[0x02]",
 			"label": "Control Group 2 With Connected 3-Way Switch",
 			"valueSize": 1,
 			"minValue": 0,
@@ -157,7 +165,8 @@
 				}
 			]
 		},
-		"7[0x04]": {
+		{
+			"#": "7[0x04]",
 			"label": "Control Group 2 With Z-Wave Commands",
 			"valueSize": 1,
 			"minValue": 0,
@@ -175,7 +184,8 @@
 				}
 			]
 		},
-		"7[0x08]": {
+		{
+			"#": "7[0x08]",
 			"label": "Control Group 2 With On/Off Timers",
 			"valueSize": 1,
 			"minValue": 0,
@@ -193,10 +203,12 @@
 				}
 			]
 		},
-		"8": {
+		{
+			"#": "8",
 			"$import": "~/templates/master_template.json#state_after_power_failure_off_on_prev"
 		},
-		"9": {
+		{
+			"#": "9",
 			"label": "Ramp Rate Control",
 			"description": "Set the number of seconds for dimmer to reach full brightness or turn off when operated manually.",
 			"valueSize": 1,
@@ -205,7 +217,8 @@
 			"defaultValue": 1,
 			"unit": "seconds"
 		},
-		"17": {
+		{
+			"#": "17",
 			"label": "Z-Wave Ramp Rate Control",
 			"valueSize": 1,
 			"minValue": 0,
@@ -223,7 +236,8 @@
 				}
 			]
 		},
-		"10": {
+		{
+			"#": "10",
 			"label": "Minimum Brightness",
 			"description": "Set the minimum brightness level.",
 			"valueSize": 1,
@@ -232,7 +246,8 @@
 			"defaultValue": 1,
 			"units": "%"
 		},
-		"11": {
+		{
+			"#": "11",
 			"label": "Maximum Brightness",
 			"valueSize": 1,
 			"minValue": 1,
@@ -240,7 +255,8 @@
 			"defaultValue": 99,
 			"units": "%"
 		},
-		"12": {
+		{
+			"#": "12",
 			"label": "Double-Tap Upper Paddle Behavior",
 			"description": "Set the brightness level after double-tapping the upper paddle.",
 			"valueSize": 1,
@@ -259,7 +275,8 @@
 				}
 			]
 		},
-		"14": {
+		{
+			"#": "14",
 			"label": "Enable Double Tap Function",
 			"description": "Enable or disable the double tap function and assign brightness level to single tap.",
 			"valueSize": 1,
@@ -282,7 +299,8 @@
 				}
 			]
 		},
-		"13": {
+		{
+			"#": "13",
 			"label": "Scene Control",
 			"description": "Send scene commands to hub on physical paddle presses.",
 			"valueSize": 1,
@@ -301,7 +319,8 @@
 				}
 			]
 		},
-		"15": {
+		{
+			"#": "15",
 			"label": "Enable Local and Z-Wave Control",
 			"valueSize": 1,
 			"minValue": 0,
@@ -323,7 +342,8 @@
 				}
 			]
 		},
-		"20": {
+		{
+			"#": "20",
 			"label": "Dimming Reporting",
 			"description": "Set how the dimmer to reports when paddles are tapped and held.",
 			"valueSize": 1,
@@ -342,7 +362,8 @@
 				}
 			]
 		},
-		"16": {
+		{
+			"#": "16",
 			"label": "Local Dimming Speed",
 			"description": "Set the time it takes to get from 0% to 100% brightness when pressing and holding the paddle.",
 			"valueSize": 1,
@@ -351,7 +372,8 @@
 			"defaultValue": 4,
 			"units": "seconds"
 		},
-		"18": {
+		{
+			"#": "18",
 			"label": "Custom Brightness Level",
 			"description": "Set the custom brightness level when single tapping the upper paddle (0 for last brightness level).",
 			"valueSize": 1,
@@ -360,5 +382,5 @@
 			"defaultValue": 0,
 			"units": "%"
 		}
-	}
+	]
 }

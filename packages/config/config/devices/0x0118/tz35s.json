@@ -22,8 +22,9 @@
 			"isLifeline": true
 		}
 	},
-	"paramInformation": {
-		"1": {
+	"paramInformation": [
+		{
+			"#": "1",
 			"label": "Ignore start level bit",
 			"valueSize": 1,
 			"minValue": 0,
@@ -41,7 +42,8 @@
 				}
 			]
 		},
-		"3": {
+		{
+			"#": "3",
 			"label": "Night light",
 			"description": "Indicates if LED is on when load is ON",
 			"valueSize": 1,
@@ -60,7 +62,8 @@
 				}
 			]
 		},
-		"4": {
+		{
+			"#": "4",
 			"label": "Invert switch",
 			"valueSize": 1,
 			"minValue": 0,
@@ -78,7 +81,8 @@
 				}
 			]
 		},
-		"19": {
+		{
+			"#": "19",
 			"label": "LED transmission indicator",
 			"description": "LED flickering during transmission",
 			"valueSize": 1,
@@ -101,5 +105,5 @@
 				}
 			]
 		}
-	}
+	]
 }
