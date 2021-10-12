@@ -32,15 +32,17 @@
 			"isLifeline": true
 		}
 	},
-	"paramInformation": {
-		"1": {
+	"paramInformation": [
+		{
+			"#": "1",
 			"label": "Alarm Cancellation Delay",
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 3600,
 			"defaultValue": 0
 		},
-		"2": {
+		{
+			"#": "2",
 			"label": "Alarm acoustic and visual signals",
 			"valueSize": 1,
 			"minValue": 0,
@@ -67,7 +69,8 @@
 				}
 			]
 		},
-		"5": {
+		{
+			"#": "5",
 			"label": "Type of alarm to 1st association group (SMOKE)",
 			"valueSize": 1,
 			"minValue": 0,
@@ -86,7 +89,8 @@
 				}
 			]
 		},
-		"7": {
+		{
+			"#": "7",
 			"label": "Forced Level of Dimming group 1",
 			"valueSize": 1,
 			"minValue": 1,
@@ -94,21 +98,24 @@
 			"defaultValue": 255,
 			"unsigned": true
 		},
-		"10": {
+		{
+			"#": "10",
 			"label": "Interval between temperature readings",
 			"valueSize": 2,
 			"minValue": 1,
 			"maxValue": 32767,
 			"defaultValue": 300
 		},
-		"12": {
+		{
+			"#": "12",
 			"label": "Insensitiveness to temperature changes.",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 100,
 			"defaultValue": 20
 		},
-		"13": {
+		{
+			"#": "13",
 			"label": "Frame broadcast mode",
 			"valueSize": 1,
 			"minValue": 0,
@@ -135,14 +142,16 @@
 				}
 			]
 		},
-		"73": {
+		{
+			"#": "73",
 			"label": "Temperature measurement compensation",
 			"valueSize": 2,
 			"minValue": -1000,
 			"maxValue": 1000,
 			"defaultValue": 0
 		},
-		"80": {
+		{
+			"#": "80",
 			"label": "Z-Wave range test interval",
 			"valueSize": 1,
 			"minValue": 0,
@@ -150,14 +159,16 @@
 			"defaultValue": 1,
 			"unsigned": true
 		},
-		"81": {
+		{
+			"#": "81",
 			"label": "Temperature alarm threshold",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 100,
 			"defaultValue": 54
 		},
-		"82": {
+		{
+			"#": "82",
 			"label": "Smoke Sensor sensitivity",
 			"valueSize": 1,
 			"minValue": 0,
@@ -179,7 +190,8 @@
 				}
 			]
 		},
-		"83": {
+		{
+			"#": "83",
 			"label": "Black Box sensitivity level",
 			"valueSize": 1,
 			"minValue": 0,
@@ -202,35 +214,40 @@
 				}
 			]
 		},
-		"84": {
+		{
+			"#": "84",
 			"label": "Malfunction alarm",
 			"valueSize": 1,
 			"minValue": -126,
 			"maxValue": 127,
 			"defaultValue": 10
 		},
-		"85": {
+		{
+			"#": "85",
 			"label": "Temperature alarm",
 			"valueSize": 1,
 			"minValue": -126,
 			"maxValue": 127,
 			"defaultValue": 5
 		},
-		"86": {
+		{
+			"#": "86",
 			"label": "Lack of the Z-Wave range alarm",
 			"valueSize": 2,
 			"minValue": 1,
 			"maxValue": 17280,
 			"defaultValue": 360
 		},
-		"87": {
+		{
+			"#": "87",
 			"label": "Low battery alarm",
 			"valueSize": 2,
 			"minValue": 1,
 			"maxValue": 17280,
 			"defaultValue": 360
 		},
-		"88": {
+		{
+			"#": "88",
 			"label": "Temperature measurement compensation for report",
 			"valueSize": 1,
 			"minValue": 0,
@@ -249,7 +266,8 @@
 				}
 			]
 		},
-		"89": {
+		{
+			"#": "89",
 			"label": "Tamper alarm",
 			"description": "Activates/inactivates temper switch alarm",
 			"valueSize": 1,
@@ -273,5 +291,5 @@
 				}
 			]
 		}
-	}
+	]
 }

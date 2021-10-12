@@ -656,6 +656,8 @@ must use endpoint association: ${mustUseMultiChannelAssociation}`,
 					groupId: group,
 					endpoints: invalidEndpointAssociations,
 				});
+				// refresh the associations - don't trust that it worked
+				await mcAPI.getGroup(group);
 			}
 
 			// Assigning the correct lifelines depends on the association kind, source endpoint and the desired strategy:

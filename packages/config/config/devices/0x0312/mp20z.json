@@ -14,8 +14,9 @@
 		"min": "0.0",
 		"max": "255.255"
 	},
-	"paramInformation": {
-		"1": {
+	"paramInformation": [
+		{
+			"#": "1",
 			"label": "Status LED Configuration",
 			"valueSize": 1,
 			"minValue": 0,
@@ -38,7 +39,8 @@
 				}
 			]
 		},
-		"2": {
+		{
+			"#": "2",
 			"label": "Left Outlet Auto-Off Timer",
 			"valueSize": 4,
 			"unit": "minutes",
@@ -53,7 +55,8 @@
 				}
 			]
 		},
-		"3": {
+		{
+			"#": "3",
 			"label": "Right Outlet Auto-Off Timer",
 			"valueSize": 4,
 			"unit": "minutes",
@@ -68,7 +71,8 @@
 				}
 			]
 		},
-		"4": {
+		{
+			"#": "4",
 			"label": "Left Outlet Auto-On Timer",
 			"valueSize": 4,
 			"unit": "minutes",
@@ -83,7 +87,8 @@
 				}
 			]
 		},
-		"5": {
+		{
+			"#": "5",
 			"label": "Right Outlet Auto-on Timer",
 			"valueSize": 4,
 			"unit": "minutes",
@@ -98,10 +103,11 @@
 				}
 			]
 		},
-		"6": {
+		{
+			"#": "6",
 			"$import": "~/templates/master_template.json#state_after_power_failure_off_on_prev"
 		}
-	},
+	],
 	"metadata": {
 		"inclusion": "1. Follow the instructions for your Z-Wave certified controller to include\n a device to the Z-Wave network.\n2. Once the controller is ready to include your device, press up and \n release the toggle to include it in the network.\n3. Once your controller has confirmed that the device has been included, refresh the \n Z-Wave network to optimize performance.\n4. The device is associated in the same group when it included in setting process. \n Now you can control your Z-Wave device according to groups, scenes, schedules \n and automation programmed.",
 		"exclusion": "1. Follow the instructions for your Z-Wave certified controller to exclude \n a device from the Z-Wave network.\n2. Once the controller is ready to Exclude your device, press up and \n release the front button to exclude it from the network.",

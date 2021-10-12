@@ -25,8 +25,9 @@
 			"maxNodes": 5
 		}
 	},
-	"paramInformation": {
-		"1": {
+	"paramInformation": [
+		{
+			"#": "1",
 			"label": "Group 2 BASIC SET",
 			"valueSize": 1,
 			"minValue": 0,
@@ -45,7 +46,8 @@
 				}
 			]
 		},
-		"2": {
+		{
+			"#": "2",
 			"label": "Sensor Binary Reports",
 			"valueSize": 1,
 			"minValue": 0,
@@ -64,5 +66,5 @@
 				}
 			]
 		}
-	}
+	]
 }

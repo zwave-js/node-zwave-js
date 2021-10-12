@@ -14,8 +14,9 @@
 		"max": "0.2"
 	},
 	"supportsZWavePlus": true,
-	"paramInformation": {
-		"3": {
+	"paramInformation": [
+		{
+			"#": "3",
 			"label": "Temperature reporting mode",
 			"description": "0:Off 1:Normal 2:High Accuracy",
 			"valueSize": 1,
@@ -38,7 +39,8 @@
 				}
 			]
 		},
-		"4": {
+		{
+			"#": "4",
 			"label": "Temperature reporting unit",
 			"description": "0:Celcius 1:Fahrenheit",
 			"valueSize": 1,
@@ -57,7 +59,8 @@
 				}
 			]
 		},
-		"5": {
+		{
+			"#": "5",
 			"label": "High Temperature alarm",
 			"description": "0:Off 1:On",
 			"valueSize": 1,
@@ -76,7 +79,8 @@
 				}
 			]
 		},
-		"6": {
+		{
+			"#": "6",
 			"label": "High Temperature alarm level",
 			"description": "-20 to + 60 degree C",
 			"valueSize": 1,
@@ -90,7 +94,8 @@
 				}
 			]
 		},
-		"7": {
+		{
+			"#": "7",
 			"label": "Low Temperature alarm",
 			"description": "0:Off 1:On",
 			"valueSize": 1,
@@ -109,7 +114,8 @@
 				}
 			]
 		},
-		"8": {
+		{
+			"#": "8",
 			"label": "Low Temperature alarm level",
 			"description": "-20 to + 60 degree C",
 			"valueSize": 1,
@@ -123,7 +129,8 @@
 				}
 			]
 		},
-		"9": {
+		{
+			"#": "9",
 			"label": "Ambient light reporting",
 			"description": "0:Off 1:On",
 			"valueSize": 1,
@@ -142,7 +149,8 @@
 				}
 			]
 		},
-		"10": {
+		{
+			"#": "10",
 			"label": "Leakage alarm",
 			"description": "0:Off 1:On",
 			"valueSize": 1,
@@ -161,7 +169,8 @@
 				}
 			]
 		},
-		"11": {
+		{
+			"#": "11",
 			"label": "Leakage alarm level",
 			"description": "1 to 100 (1= almost dry, 100 = soaking wet)",
 			"valueSize": 1,
@@ -175,7 +184,8 @@
 				}
 			]
 		},
-		"12": {
+		{
+			"#": "12",
 			"label": "Moisture reporting period",
 			"description": "0-120: Number of hours between moisture reports",
 			"valueSize": 1,
@@ -189,5 +199,5 @@
 				}
 			]
 		}
-	}
+	]
 }

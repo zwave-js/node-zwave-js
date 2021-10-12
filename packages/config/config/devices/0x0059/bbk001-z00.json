@@ -19,8 +19,9 @@
 		"min": "0.0",
 		"max": "255.255"
 	},
-	"paramInformation": {
-		"1": {
+	"paramInformation": [
+		{
+			"#": "1",
 			"label": "Delta Temperature For Association Group 2",
 			"valueSize": 1,
 			"unit": "0.1 °C",
@@ -29,7 +30,8 @@
 			"defaultValue": 10,
 			"unsigned": true
 		},
-		"2": {
+		{
+			"#": "2",
 			"label": "Temperature Report Interval For Association Group 2",
 			"description": "In minutes, controllers may only allow configuring signed values. in order to set values in the range 128…255, the value sent in the application shall be equal to desired value minus 256. for example, to set delta temperature to 130, it may be needed to set a value 130−256=−126",
 			"valueSize": 1,
@@ -39,7 +41,8 @@
 			"defaultValue": 30,
 			"unsigned": true
 		},
-		"3": {
+		{
+			"#": "3",
 			"label": "Minimum Set Point Temperature",
 			"description": "In degree centigrade",
 			"valueSize": 1,
@@ -49,7 +52,8 @@
 			"defaultValue": 5,
 			"unsigned": true
 		},
-		"4": {
+		{
+			"#": "4",
 			"label": "Maximum Set Point Temperature",
 			"description": "In degree centigrade",
 			"valueSize": 1,
@@ -59,7 +63,8 @@
 			"defaultValue": 35,
 			"unsigned": true
 		},
-		"5": {
+		{
+			"#": "5",
 			"label": "Delta Temperature For Lifeline Group",
 			"description": "In 0.1 degree centigrade",
 			"valueSize": 1,
@@ -69,7 +74,8 @@
 			"defaultValue": 0,
 			"unsigned": true
 		},
-		"6": {
+		{
+			"#": "6",
 			"label": "Temperature Report Interval For Lifeline Group",
 			"description": "In degree centigrade. controllers may only allow configuring signed values. in order to set values in the range 128…255, the value sent in the application shall be equal to desired value minus 256. for example, to set delta temperature to 130, it may be needed to set a value 130−256=−126",
 			"valueSize": 1,
@@ -78,7 +84,7 @@
 			"maxValue": 127,
 			"defaultValue": 0
 		}
-	},
+	],
 	"metadata": {
 		"inclusion": "On thermostat in advance mode scroll to option “Add device”, then click OK button. On other Z-Wave device start learn process, thermostat will display outcome on completion of the process.",
 		"exclusion": "On thermostat in advance mode scroll to option “Remove device”, then click OK button. On other Z-Wave device start learn process, thermostat will display outcome on completion of the process.",

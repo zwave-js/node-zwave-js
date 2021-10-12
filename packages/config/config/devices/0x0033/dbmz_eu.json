@@ -14,8 +14,9 @@
 		"min": "0.0",
 		"max": "255.255"
 	},
-	"paramInformation": {
-		"1": {
+	"paramInformation": [
+		{
+			"#": "1",
 			"label": "Calibration",
 			"description": "Unit calibration state",
 			"valueSize": 1,
@@ -39,7 +40,8 @@
 				}
 			]
 		},
-		"2": {
+		{
+			"#": "2",
 			"label": "Motor direction",
 			"valueSize": 1,
 			"minValue": 0,
@@ -56,12 +58,13 @@
 				}
 			]
 		},
-		"3": {
+		{
+			"#": "3",
 			"label": "Enable tilt feature",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 1,
 			"defaultValue": 1
 		}
-	}
+	]
 }

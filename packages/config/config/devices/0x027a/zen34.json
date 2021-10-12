@@ -32,8 +32,9 @@
 			"maxNodes": 5
 		}
 	},
-	"paramInformation": {
-		"1": {
+	"paramInformation": [
+		{
+			"#": "1",
 			"label": "LED Indicator Mode",
 			"valueSize": 1,
 			"minValue": 0,
@@ -59,7 +60,8 @@
 				}
 			]
 		},
-		"2": {
+		{
+			"#": "2",
 			"label": "LED Color for Upper Paddle",
 			"valueSize": 1,
 			"minValue": 0,
@@ -97,7 +99,8 @@
 				}
 			]
 		},
-		"3": {
+		{
+			"#": "3",
 			"label": "LED Color for Lower Paddle",
 			"valueSize": 1,
 			"minValue": 0,
@@ -135,5 +138,5 @@
 				}
 			]
 		}
-	}
+	]
 }

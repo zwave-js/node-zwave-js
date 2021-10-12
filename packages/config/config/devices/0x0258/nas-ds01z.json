@@ -33,8 +33,9 @@
 		"min": "0.0",
 		"max": "255.255"
 	},
-	"paramInformation": {
-		"1": {
+	"paramInformation": [
+		{
+			"#": "1",
 			"label": "ON/OFF Delay",
 			"description": "Delay before the OFF command is transmitted",
 			"unit": "Seconds",
@@ -44,7 +45,8 @@
 			"defaultValue": 0,
 			"unsigned": true
 		},
-		"2": {
+		{
+			"#": "2",
 			"label": "Basic Set Level",
 			"description": "Basic Set Command sent when door/window is opened or closed",
 			"valueSize": 1,
@@ -53,5 +55,5 @@
 			"defaultValue": 255,
 			"unsigned": true
 		}
-	}
+	]
 }

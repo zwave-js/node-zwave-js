@@ -14,8 +14,9 @@
 		"min": "0.0",
 		"max": "255.255"
 	},
-	"paramInformation": {
-		"12": {
+	"paramInformation": [
+		{
+			"#": "12",
 			"label": "Calibrate",
 			"description": "Value 1 – calibrated, value 2 – discalibrated – to enter the calibration mode must first time discalibrate and then calibrate",
 			"valueSize": 1,
@@ -24,7 +25,8 @@
 			"defaultValue": 1,
 			"unsigned": true
 		},
-		"13": {
+		{
+			"#": "13",
 			"label": "End Position",
 			"description": "1 – ff go to max, 2 – ff go to previous position",
 			"valueSize": 1,
@@ -33,7 +35,7 @@
 			"defaultValue": 1,
 			"unsigned": true
 		}
-	},
+	],
 	"metadata": {
 		"inclusion": "Autoinclusion - This feature allow you to add hard to reach devices to Z-Wave network. 3-times ON and OFF the power roller shutter (OFF-ON-OFF-ON-OFF-ON) causes the introduction of roller shutter to Autoinclusion mode. Please note that the procedure has been started the time between on and off can not exceed 20s. Autoinclusion mode is activated for a maximum of 10 minutes. During this time, we can add an awning to any Z-Wave controller running in the Include procedure.\n\nInclude - This function allow you to add roller shutter to the network Z-Wave. Follow the procedur adding device to the network Z-Wave according to user manual supplied with the product. Then, press the programming button P on the roller shutter for 1 second",
 		"exclusion": "Exclude - This function allow you to remove roller shutter from the network Z-Wave. Follow the procedur removing device from the network Z-Wave according to user manual supplied with the product. Then, press the programming button P on the roller shutter for 1 second. Function removes information only about newtork Z-Wave",

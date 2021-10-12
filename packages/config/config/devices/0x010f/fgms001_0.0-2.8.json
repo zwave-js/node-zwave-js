@@ -57,8 +57,9 @@
 			"isLifeline": true
 		}
 	},
-	"paramInformation": {
-		"1": {
+	"paramInformation": [
+		{
+			"#": "1",
 			"label": "Motion Sensor's Sensitivity",
 			"description": "The lower the value, the more sensitive the PIR sensor.",
 			"valueSize": 1,
@@ -67,7 +68,8 @@
 			"defaultValue": 10,
 			"unsigned": true
 		},
-		"2": {
+		{
+			"#": "2",
 			"label": "Motion Sensor's Blind Time (Insensitive)",
 			"description": "Period of time through which the PIR sensor is “blind”.",
 			"valueSize": 1,
@@ -75,7 +77,8 @@
 			"maxValue": 15,
 			"defaultValue": 15
 		},
-		"3": {
+		{
+			"#": "3",
 			"label": "PIR Sensor’s “PULSE COUNTER”",
 			"description": "Sets the number of moves required for the PIR sensor to report motion.",
 			"valueSize": 1,
@@ -83,7 +86,8 @@
 			"maxValue": 3,
 			"defaultValue": 1
 		},
-		"4": {
+		{
+			"#": "4",
 			"label": "PIR Sensor’s “WINDOW TIME”",
 			"description": "The higher the value, the more sensitive the PIR sensor.",
 			"valueSize": 1,
@@ -91,7 +95,8 @@
 			"maxValue": 3,
 			"defaultValue": 2
 		},
-		"6": {
+		{
+			"#": "6",
 			"label": "Motion Alarm Cancellation Delay",
 			"description": "Period of time after wich Motion alarm will be cancelled.",
 			"unit": "seconds",
@@ -101,7 +106,8 @@
 			"defaultValue": 30,
 			"unsigned": true
 		},
-		"8": {
+		{
+			"#": "8",
 			"label": "PIR Sensor Operating Mode",
 			"description": "The parameter determines the part of day in which the PIR sensor will be active.",
 			"valueSize": 1,
@@ -125,7 +131,8 @@
 				}
 			]
 		},
-		"9": {
+		{
+			"#": "9",
 			"label": "Night / Day",
 			"description": "The parameter defines the difference between night and day.",
 			"unit": "lux",
@@ -135,7 +142,8 @@
 			"defaultValue": 200,
 			"unsigned": true
 		},
-		"12": {
+		{
+			"#": "12",
 			"label": "BASIC command class configuration",
 			"description": "Determines the command frames sent in 1st association group.",
 			"valueSize": 1,
@@ -158,7 +166,8 @@
 				}
 			]
 		},
-		"14": {
+		{
+			"#": "14",
 			"label": "BASIC ON command frame value",
 			"description": "The value of 255 allows to turn ON a device.",
 			"valueSize": 1,
@@ -167,7 +176,8 @@
 			"defaultValue": 255,
 			"unsigned": true
 		},
-		"16": {
+		{
+			"#": "16",
 			"label": "BASIC OFF command frame value",
 			"description": "The value of 0 allows to turn OFF a device.",
 			"valueSize": 1,
@@ -176,7 +186,8 @@
 			"defaultValue": 0,
 			"unsigned": true
 		},
-		"20": {
+		{
+			"#": "20",
 			"label": "Tamper Sensitivity",
 			"description": "The parameter determines the changes in forces.",
 			"valueSize": 1,
@@ -184,7 +195,8 @@
 			"maxValue": 122,
 			"defaultValue": 15
 		},
-		"22": {
+		{
+			"#": "22",
 			"label": "Tamper - alarm cancellation delay",
 			"description": "Time period after which a tamper alarm will be cancelled.",
 			"valueSize": 2,
@@ -193,7 +205,8 @@
 			"defaultValue": 30,
 			"unsigned": true
 		},
-		"24": {
+		{
+			"#": "24",
 			"label": "Tamper Operating Modes",
 			"description": "The parameter determines the behaviour of tamper and how it reports.",
 			"valueSize": 1,
@@ -225,7 +238,8 @@
 				}
 			]
 		},
-		"26": {
+		{
+			"#": "26",
 			"label": "Tamper Alarm Broadcast Mode",
 			"description": "Alarm frame will or will not be sent in broadcast mode.",
 			"valueSize": 1,
@@ -245,7 +259,8 @@
 				}
 			]
 		},
-		"40": {
+		{
+			"#": "40",
 			"label": "Illumination Report Threshold",
 			"description": "Change in level of light intensity resulting in illumination report.",
 			"unit": "lux",
@@ -255,7 +270,8 @@
 			"defaultValue": 200,
 			"unsigned": true
 		},
-		"42": {
+		{
+			"#": "42",
 			"label": "Illumination Reports Interval",
 			"description": "Time interval between consecutive illumination reports.",
 			"valueSize": 2,
@@ -264,7 +280,8 @@
 			"defaultValue": 0,
 			"unsigned": true
 		},
-		"60": {
+		{
+			"#": "60",
 			"label": "Temperature Report Threshold",
 			"description": "Change in level of temperature resulting in temperature report.",
 			"valueSize": 1,
@@ -273,7 +290,8 @@
 			"defaultValue": 10,
 			"unsigned": true
 		},
-		"62": {
+		{
+			"#": "62",
 			"label": "Interval of Temperature Measuring",
 			"description": "The parameter determines how often the temperature will be measured.",
 			"unit": "seconds",
@@ -283,7 +301,8 @@
 			"defaultValue": 900,
 			"unsigned": true
 		},
-		"64": {
+		{
+			"#": "64",
 			"label": "Temperature Reports Interval",
 			"description": "How often temperature reports will be sent to the main controller.",
 			"valueSize": 2,
@@ -292,7 +311,8 @@
 			"defaultValue": 0,
 			"unsigned": true
 		},
-		"66": {
+		{
+			"#": "66",
 			"label": "Temperature Offset",
 			"description": "The value to be added to the actual measured temperature.",
 			"valueSize": 2,
@@ -301,7 +321,8 @@
 			"defaultValue": 0,
 			"unsigned": true
 		},
-		"80": {
+		{
+			"#": "80",
 			"label": "LED Signalling Mode",
 			"description": "Way in which LED diode behaves after motion has been detected.",
 			"valueSize": 1,
@@ -421,7 +442,8 @@
 				}
 			]
 		},
-		"81": {
+		{
+			"#": "81",
 			"label": "LED Brightness",
 			"description": "The parameter determines the brightness of LED when indicating motion.",
 			"valueSize": 1,
@@ -429,7 +451,8 @@
 			"maxValue": 100,
 			"defaultValue": 50
 		},
-		"82": {
+		{
+			"#": "82",
 			"label": "Lower Ambient Illumination Level",
 			"description": "Below which LED brightness is set to 1%",
 			"unit": "lux",
@@ -439,7 +462,8 @@
 			"defaultValue": 100,
 			"unsigned": true
 		},
-		"83": {
+		{
+			"#": "83",
 			"label": "Upper Ambient Illumination Level",
 			"description": "Above which LED brightness is set to 100%",
 			"unit": "lux",
@@ -449,7 +473,8 @@
 			"defaultValue": 1000,
 			"unsigned": true
 		},
-		"86": {
+		{
+			"#": "86",
 			"label": "Min Temperature Resulting in Blue LED Illumination",
 			"description": "This parameter is relevant only when parameter 80 has been properly configured.",
 			"valueSize": 1,
@@ -457,7 +482,8 @@
 			"maxValue": 100,
 			"defaultValue": 18
 		},
-		"87": {
+		{
+			"#": "87",
 			"label": "Max Temperature Resulting in Red LED Illumination",
 			"description": "This parameter is relevant only when parameter 80 has been properly configured.",
 			"valueSize": 1,
@@ -465,7 +491,8 @@
 			"maxValue": 100,
 			"defaultValue": 28
 		},
-		"89": {
+		{
+			"#": "89",
 			"label": "LED indicating Tamper Alarm",
 			"description": "Indicating mode resembles a police car (white, red and blue).",
 			"valueSize": 1,
@@ -485,5 +512,5 @@
 				}
 			]
 		}
-	}
+	]
 }

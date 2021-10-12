@@ -14,8 +14,9 @@
 		"min": "0.0",
 		"max": "255.255"
 	},
-	"paramInformation": {
-		"1": {
+	"paramInformation": [
+		{
+			"#": "1",
 			"label": "Button Mode Switching",
 			"description": "This parameter sets the mode for the wall switch inputs",
 			"valueSize": 1,
@@ -35,7 +36,7 @@
 				}
 			]
 		}
-	},
+	],
 	"metadata": {
 		"inclusion": "For “Inclusion” in (adding to) a network: Put the Z-Wave™ Interface Controller into “inclusion” mode, and following its instruction to add the ZL 7435EU-5 to your controller. To get in the “inclusion” mode, the distance between module and controller is suggested to be in one meter. \nPress 3 times within 2 seconds or turn on the wall switch 3 times within 2 seconds (or press toggle switch 3 times) to be included.",
 		"exclusion": "For “Exclusion” from (removing from) a network: Put the Z-Wave™ Interface Controller into “exclusion” mode, and following its instruction to delete the ZL 7435EU-5 from your controller. Press 3 times within 2 seconds or turn on the wall switch 3 times within 2 seconds (or press toggle switch 3 times) to be excluded.",

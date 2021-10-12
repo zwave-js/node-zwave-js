@@ -17,11 +17,13 @@
 		"min": "0.0",
 		"max": "255.255"
 	},
-	"paramInformation": {
-		"2": {
+	"paramInformation": [
+		{
+			"#": "2",
 			"$import": "~/templates/master_template.json#state_after_power_failure_off_prev"
 		},
-		"3": {
+		{
+			"#": "3",
 			"label": "Overload",
 			"description": "Overload safety switch",
 			"valueSize": 2,
@@ -35,7 +37,8 @@
 				}
 			]
 		},
-		"11": {
+		{
+			"#": "11",
 			"label": "Power Reporting",
 			"valueSize": 1,
 			"minValue": 0,
@@ -48,7 +51,8 @@
 				}
 			]
 		},
-		"12": {
+		{
+			"#": "12",
 			"label": "Energy Reporting Threshold",
 			"valueSize": 2,
 			"minValue": 0,
@@ -61,7 +65,8 @@
 				}
 			]
 		},
-		"13": {
+		{
+			"#": "13",
 			"label": "Power Reporting Interval",
 			"valueSize": 2,
 			"minValue": 0,
@@ -74,7 +79,8 @@
 				}
 			]
 		},
-		"14": {
+		{
+			"#": "14",
 			"label": "Energy Reporting Interval",
 			"valueSize": 2,
 			"minValue": 0,
@@ -87,7 +93,8 @@
 				}
 			]
 		},
-		"15": {
+		{
+			"#": "15",
 			"label": "Consumption",
 			"description": "Measure energy consumed by the Wall Plug itself",
 			"valueSize": 1,
@@ -106,7 +113,8 @@
 				}
 			]
 		},
-		"21": {
+		{
+			"#": "21",
 			"label": "Up Value",
 			"description": "Upper power threshold",
 			"valueSize": 2,
@@ -114,7 +122,8 @@
 			"maxValue": 18000,
 			"defaultValue": 500
 		},
-		"22": {
+		{
+			"#": "22",
 			"label": "Down value",
 			"description": "Lower power threshold",
 			"valueSize": 2,
@@ -122,7 +131,8 @@
 			"maxValue": 17900,
 			"defaultValue": 300
 		},
-		"23": {
+		{
+			"#": "23",
 			"label": "Controlling",
 			"description": "Controlling 3rd association group devices",
 			"valueSize": 1,
@@ -145,7 +155,8 @@
 				}
 			]
 		},
-		"24": {
+		{
+			"#": "24",
 			"label": "Switch On",
 			"description": "Command frame sent to devices in 2nd group",
 			"valueSize": 2,
@@ -163,7 +174,8 @@
 				}
 			]
 		},
-		"25": {
+		{
+			"#": "25",
 			"label": "Switch Off",
 			"description": "Command frame sent to devices in 2nd group",
 			"valueSize": 2,
@@ -181,7 +193,8 @@
 				}
 			]
 		},
-		"26": {
+		{
+			"#": "26",
 			"label": "Threshold Up",
 			"description": "Command frame sent to the devices in 3rd group",
 			"valueSize": 2,
@@ -199,7 +212,8 @@
 				}
 			]
 		},
-		"27": {
+		{
+			"#": "27",
 			"label": "Threshold Down",
 			"description": "Command frame sent to the devices in 3rd group",
 			"valueSize": 2,
@@ -217,7 +231,8 @@
 				}
 			]
 		},
-		"30": {
+		{
+			"#": "30",
 			"label": "Active Alarms",
 			"description": "Network alarms to which the Wall Plug will respond",
 			"valueSize": 1,
@@ -256,7 +271,8 @@
 				}
 			]
 		},
-		"31": {
+		{
+			"#": "31",
 			"label": "Response to alarm frames",
 			"description": "Wall plug response to alarms",
 			"valueSize": 1,
@@ -278,7 +294,8 @@
 				}
 			]
 		},
-		"32": {
+		{
+			"#": "32",
 			"label": "Alarm state duration",
 			"description": "Specifies the duration of the alarm state",
 			"valueSize": 2,
@@ -286,7 +303,8 @@
 			"maxValue": 32400,
 			"defaultValue": 600
 		},
-		"40": {
+		{
+			"#": "40",
 			"label": "Power load for violet color",
 			"description": "Maximum active power to flash the LED frame Violet",
 			"valueSize": 2,
@@ -294,7 +312,8 @@
 			"maxValue": 18000,
 			"defaultValue": 18000
 		},
-		"41": {
+		{
+			"#": "41",
 			"label": "LED frame color On",
 			"description": "LED frame color when controlled device is on",
 			"valueSize": 1,
@@ -345,7 +364,8 @@
 				}
 			]
 		},
-		"42": {
+		{
+			"#": "42",
 			"label": "LED frame color Off",
 			"description": "LED frame color when controlled device is off",
 			"valueSize": 1,
@@ -392,7 +412,8 @@
 				}
 			]
 		},
-		"43": {
+		{
+			"#": "43",
 			"label": "LED frame color Z-Wave",
 			"description": "Z-Wave alarm illumination",
 			"valueSize": 1,
@@ -443,5 +464,5 @@
 				}
 			]
 		}
-	}
+	]
 }

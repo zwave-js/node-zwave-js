@@ -17,8 +17,9 @@
 		"min": "0.0",
 		"max": "255.255"
 	},
-	"paramInformation": {
-		"3": {
+	"paramInformation": [
+		{
+			"#": "3",
 			"label": "Scene Type",
 			"valueSize": 1,
 			"minValue": 0,
@@ -36,7 +37,8 @@
 				}
 			]
 		},
-		"4": {
+		{
+			"#": "4",
 			"label": "Scene Command Targer",
 			"valueSize": 1,
 			"minValue": 0,
@@ -54,5 +56,5 @@
 				}
 			]
 		}
-	}
+	]
 }

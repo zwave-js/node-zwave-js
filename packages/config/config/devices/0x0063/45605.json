@@ -13,8 +13,9 @@
 		"min": "0.0",
 		"max": "255.255"
 	},
-	"paramInformation": {
-		"3": {
+	"paramInformation": [
+		{
+			"#": "3",
 			"label": "Night Light",
 			"description": "Defines the behavior of the blue LED.",
 			"valueSize": 1,
@@ -38,7 +39,8 @@
 				}
 			]
 		},
-		"4": {
+		{
+			"#": "4",
 			"label": "Invert Switch",
 			"description": "Change the top of the switch to OFF",
 			"valueSize": 1,
@@ -58,5 +60,5 @@
 				}
 			]
 		}
-	}
+	]
 }

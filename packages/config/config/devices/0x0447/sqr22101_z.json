@@ -14,8 +14,9 @@
 		"min": "0.0",
 		"max": "255.255"
 	},
-	"paramInformation": {
-		"1": {
+	"paramInformation": [
+		{
+			"#": "1",
 			"label": "LED Indicator",
 			"valueSize": 1,
 			"minValue": 0,
@@ -34,7 +35,7 @@
 				}
 			]
 		}
-	},
+	],
 	"metadata": {
 		"inclusion": "Quick click x3, within 1.5s/ interval <0.5s",
 		"exclusion": "Quick click x3, within 1.5s/ interval <0.5s",

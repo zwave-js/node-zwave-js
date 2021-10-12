@@ -21,12 +21,14 @@
 			"isLifeline": true
 		}
 	},
-	"paramInformation": {
-		"80": {
+	"paramInformation": [
+		{
+			"#": "80",
 			"$import": "templates/aeotec_template.json#enable_notifications"
 		},
-		"120": {
+		{
+			"#": "120",
 			"$import": "templates/aeotec_template.json#external_switch_3way"
 		}
-	}
+	]
 }

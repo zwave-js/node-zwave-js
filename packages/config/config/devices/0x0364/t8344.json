@@ -14,8 +14,9 @@
 		"min": "0.0",
 		"max": "255.255"
 	},
-	"paramInformation": {
-		"3": {
+	"paramInformation": [
+		{
+			"#": "3",
 			"label": "Remember The Last Status",
 			"description": "",
 			"valueSize": 1,
@@ -35,7 +36,7 @@
 				}
 			]
 		}
-	},
+	],
 	"metadata": {
 		"inclusion": "1. Put the Z-Wave Controller into Inclusion mode.\n2. Press the On/Off knob 3 times within 1.5 seconds to put the unit into Inclusion mode.",
 		"exclusion": "1. Put the Z-Wave Controller into Exclusion mode.\n2. Press the On/Off knob 3 times within 1.5 seconds to put the unit into Exclusion mode.",

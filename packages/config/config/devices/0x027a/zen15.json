@@ -14,8 +14,9 @@
 		"min": "0.0",
 		"max": "255.255"
 	},
-	"paramInformation": {
-		"20": {
+	"paramInformation": [
+		{
+			"#": "20",
 			"label": "Overload Protection",
 			"valueSize": 1,
 			"minValue": 0,
@@ -33,10 +34,12 @@
 				}
 			]
 		},
-		"21": {
+		{
+			"#": "21",
 			"$import": "~/templates/master_template.json#state_after_power_failure_prev_on_off"
 		},
-		"24": {
+		{
+			"#": "24",
 			"label": "On/Off Status Change Notifications",
 			"valueSize": 1,
 			"minValue": 0,
@@ -59,7 +62,8 @@
 				}
 			]
 		},
-		"33": {
+		{
+			"#": "33",
 			"$if": "firmwareVersion >= 2.4",
 			"label": "Auto-On Timer",
 			"valueSize": 1,
@@ -75,7 +79,8 @@
 				}
 			]
 		},
-		"34": {
+		{
+			"#": "34",
 			"$if": "firmwareVersion >= 2.4",
 			"label": "Auto-Off Timer",
 			"valueSize": 1,
@@ -91,13 +96,15 @@
 				}
 			]
 		},
-		"30": {
+		{
+			"#": "30",
 			"$if": "firmwareVersion >= 1.3",
 			"$import": "~/templates/master_template.json#base_enable_disable",
 			"label": "Manual Control",
 			"description": "Disables manual control from the device itself"
 		},
-		"27": {
+		{
+			"#": "27",
 			"label": "LED Indicator",
 			"valueSize": 1,
 			"minValue": 0,
@@ -116,7 +123,8 @@
 				}
 			]
 		},
-		"151": {
+		{
+			"#": "151",
 			"label": "Power Report Value Threshold",
 			"valueSize": 2,
 			"minValue": 0,
@@ -130,7 +138,8 @@
 				}
 			]
 		},
-		"152": {
+		{
+			"#": "152",
 			"label": "Power Report Percentage Threshold",
 			"valueSize": 2,
 			"unit": "%",
@@ -145,7 +154,8 @@
 				}
 			]
 		},
-		"171": {
+		{
+			"#": "171",
 			"label": "Power Report Frequency",
 			"valueSize": 4,
 			"unit": "seconds",
@@ -160,7 +170,8 @@
 				}
 			]
 		},
-		"172": {
+		{
+			"#": "172",
 			"label": "Energy Report Frequency",
 			"valueSize": 4,
 			"unit": "seconds",
@@ -175,7 +186,8 @@
 				}
 			]
 		},
-		"173": {
+		{
+			"#": "173",
 			"label": "Voltage Report Frequency",
 			"valueSize": 4,
 			"unit": "seconds",
@@ -190,7 +202,8 @@
 				}
 			]
 		},
-		"174": {
+		{
+			"#": "174",
 			"label": "Electricity Report Frequency",
 			"valueSize": 4,
 			"unit": "seconds",
@@ -205,7 +218,7 @@
 				}
 			]
 		}
-	},
+	],
 	"metadata": {
 		"inclusion": "Please include the Power Switch to your network BEFORE connecting it to the appliance you wish to control.\n\nAuto Z-Wave Inclusion:\n1. Put your Z-Wave controller into inclusion mode\n2. Plug the Power Switch into a grounded receptacle located within direct range from your Z-Wave gateway controller\n3. The LED indicator will start flashing blue, then turn blue (on) or pink (off) once included\n4. A new on / off device will be recognized by your Z-Wave controller\n\nManual Z-Wave Inclusion:\n1. Plug the Power Switch into a grounded receptacle located within direct range from your Z-Wave gateway controller\n2. Put your Z-Wave controller into inclusion mode\n3. Press and release the Z-Wave button 3 TIMES QUICKLY\n4. The LED indicator will start flashing blue, then turn blue (on) or pink (off) once included\n5. A new on / off device will be recognized by your Z-Wave controller\n\nSecure Z-Wave Inclusion:\n1. Plug the Power Switch into a grounded receptacle located within direct range from your Z-Wave gateway controller\n2. Put your Z-Wave controller in secure inclusion mode\nPress and HOLD the Z-Wave button for at least 3 seconds\n3. The LED indicator will start flashing green, then turn blue (on) or pink (off) once included\n4. A new secure on / off device will be recognized by your Z-Wave controller",
 		"exclusion": "1. Plug the Power Switch into a grounded receptacle located within direct range of your Z-Wave gateway controller\n2. Put your Z-Wave controller into exclusion mode\n3. Press and release the Z-Wave button 3 TIMES QUICKLY\n4. The LED indicator will start flashing orange, then turn blue (on) or pink (off) once excluded\n5. The Power Switch will disappear from your controller's device list. The LED indicator will remain solid orange for a few seconds to indicate exclusion\n\nIf the first attempt is unsuccessful, please repeat the process following all steps carefully",

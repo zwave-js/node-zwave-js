@@ -20,8 +20,9 @@
 			"isLifeline": true
 		}
 	},
-	"paramInformation": {
-		"3": {
+	"paramInformation": [
+		{
+			"#": "3",
 			"label": "Beeper",
 			"description": "Audio feedback when keypad pressed during normal operation",
 			"valueSize": 1,
@@ -41,7 +42,8 @@
 				}
 			]
 		},
-		"4": {
+		{
+			"#": "4",
 			"label": "Vacation Mode",
 			"description": "Prevents all user codes from unlocking the deadbolt",
 			"valueSize": 1,
@@ -61,7 +63,8 @@
 				}
 			]
 		},
-		"5": {
+		{
+			"#": "5",
 			"label": "Lock & Leave",
 			"description": "Press the Schlage button to lock the deadbolt",
 			"valueSize": 1,
@@ -81,7 +84,8 @@
 				}
 			]
 		},
-		"15": {
+		{
+			"#": "15",
 			"label": "Auto Lock",
 			"description": "Automatically locks 30 seconds after unlocking",
 			"valueSize": 1,
@@ -101,7 +105,8 @@
 				}
 			]
 		},
-		"16": {
+		{
+			"#": "16",
 			"label": "User Code PIN Length",
 			"description": "User codes can be 4-8 digits. Changing length will delete all existing codes.",
 			"valueSize": 1,
@@ -109,5 +114,5 @@
 			"maxValue": 8,
 			"defaultValue": 4
 		}
-	}
+	]
 }

@@ -14,8 +14,9 @@
 		"min": "0.0",
 		"max": "255.255"
 	},
-	"paramInformation": {
-		"1": {
+	"paramInformation": [
+		{
+			"#": "1",
 			"label": "LED Indicator",
 			"valueSize": 1,
 			"minValue": 0,
@@ -34,7 +35,7 @@
 				}
 			]
 		}
-	},
+	],
 	"metadata": {
 		"inclusion": "*Smart Start Inclusion\nThe feature assumes the gateway has implemented Smart Start. Users could use the APP of the gateway or the gateway camera to scan the QR code on device or on device package even before powering on the device, when the device is powered on, it shall be automatically added to the gateway. \n*Manual Inclusion\nWhen the gateway is in adding mode (please refer to the instruction of the Z-Wave gateway for the operations on gateway itself):\nquick click x3, (within 1.5s/ interval<0.5s), on either top or bottom paddle",
 		"exclusion": "When the gateway is in removing mode (please refer to the instruction of the Z-Wave gateway for the operations on gateway itself):\nquick click x3, (within 1.5s/ interval<0.5s), on either top or bottom paddle",

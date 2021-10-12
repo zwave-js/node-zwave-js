@@ -13,8 +13,9 @@
 		"min": "0.0",
 		"max": "255.255"
 	},
-	"paramInformation": {
-		"2": {
+	"paramInformation": [
+		{
+			"#": "2",
 			"label": "Basic Set Level",
 			"description": "BASIC command value sent when turning on lights. Allowable range: 0-99, 255",
 			"valueSize": 1,
@@ -23,14 +24,16 @@
 			"defaultValue": 255,
 			"unsigned": true
 		},
-		"3": {
+		{
+			"#": "3",
 			"label": "PIR Sensitivity",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 99,
 			"defaultValue": 70
 		},
-		"4": {
+		{
+			"#": "4",
 			"label": "Light Threshold",
 			"description": "Illumination threshold for turning on associated lights.",
 			"valueSize": 1,
@@ -38,7 +41,8 @@
 			"maxValue": 100,
 			"defaultValue": 100
 		},
-		"5[0x02]": {
+		{
+			"#": "5[0x02]",
 			"label": "Test Mode",
 			"valueSize": 1,
 			"minValue": 0,
@@ -56,7 +60,8 @@
 				}
 			]
 		},
-		"5[0x08]": {
+		{
+			"#": "5[0x08]",
 			"label": "Temperature Scale",
 			"valueSize": 1,
 			"minValue": 0,
@@ -74,7 +79,8 @@
 				}
 			]
 		},
-		"5[0x10]": {
+		{
+			"#": "5[0x10]",
 			"label": "Illumination Report on Trigger",
 			"valueSize": 1,
 			"minValue": 0,
@@ -92,7 +98,8 @@
 				}
 			]
 		},
-		"5[0x20]": {
+		{
+			"#": "5[0x20]",
 			"label": "Temperature Report on Trigger",
 			"valueSize": 1,
 			"minValue": 0,
@@ -110,7 +117,8 @@
 				}
 			]
 		},
-		"6": {
+		{
+			"#": "6",
 			"label": "PIR Integrate Illumination",
 			"valueSize": 1,
 			"minValue": 0,
@@ -128,7 +136,8 @@
 				}
 			]
 		},
-		"7[0x02]": {
+		{
+			"#": "7[0x02]",
 			"label": "Send Motion Off Report",
 			"valueSize": 1,
 			"minValue": 0,
@@ -146,7 +155,8 @@
 				}
 			]
 		},
-		"7[0x04]": {
+		{
+			"#": "7[0x04]",
 			"label": "PIR Super Sensitivity Mode",
 			"valueSize": 1,
 			"minValue": 0,
@@ -164,7 +174,8 @@
 				}
 			]
 		},
-		"7[0x10]": {
+		{
+			"#": "7[0x10]",
 			"label": "Notification Type",
 			"valueSize": 1,
 			"minValue": 0,
@@ -182,7 +193,8 @@
 				}
 			]
 		},
-		"7[0x20]": {
+		{
+			"#": "7[0x20]",
 			"label": "Multi Command Encapsulated Auto Reports",
 			"valueSize": 1,
 			"minValue": 0,
@@ -200,7 +212,8 @@
 				}
 			]
 		},
-		"7[0x40]": {
+		{
+			"#": "7[0x40]",
 			"label": "Report Battery State When Triggered",
 			"valueSize": 1,
 			"minValue": 0,
@@ -218,7 +231,8 @@
 				}
 			]
 		},
-		"8": {
+		{
+			"#": "8",
 			"label": "PIR Re-Detect Interval Time",
 			"description": "Time period to wait until reporting motion detected again.",
 			"valueSize": 1,
@@ -226,7 +240,8 @@
 			"maxValue": 127,
 			"defaultValue": 3
 		},
-		"9": {
+		{
+			"#": "9",
 			"label": "Turn Off Light Time",
 			"description": "Time to wait before sending command to turn off lights",
 			"valueSize": 1,
@@ -234,7 +249,8 @@
 			"maxValue": 127,
 			"defaultValue": 4
 		},
-		"10": {
+		{
+			"#": "10",
 			"label": "Auto Report Battery Time",
 			"description": "The interval time for auto reporting the battery level.",
 			"valueSize": 1,
@@ -242,7 +258,8 @@
 			"maxValue": 127,
 			"defaultValue": 12
 		},
-		"12": {
+		{
+			"#": "12",
 			"label": "Auto Report Illumination Time",
 			"description": "The interval time for auto reporting the illumination state",
 			"valueSize": 1,
@@ -250,7 +267,8 @@
 			"maxValue": 127,
 			"defaultValue": 12
 		},
-		"13": {
+		{
+			"#": "13",
 			"label": "Auto Report Temperature Time",
 			"description": "The interval time for auto reporting the temperature.",
 			"valueSize": 1,
@@ -258,7 +276,8 @@
 			"maxValue": 127,
 			"defaultValue": 12
 		},
-		"20": {
+		{
+			"#": "20",
 			"label": "Auto Report Tick interval",
 			"description": "The interval time for auto report each tick.",
 			"unit": "minutes",
@@ -268,7 +287,8 @@
 			"defaultValue": 30,
 			"unsigned": true
 		},
-		"21": {
+		{
+			"#": "21",
 			"label": "Temperature differential report.",
 			"description": "The temperature differential to report. Not applicable to TSP01.",
 			"unit": "Fahrenheit",
@@ -277,7 +297,8 @@
 			"maxValue": 127,
 			"defaultValue": 1
 		},
-		"22": {
+		{
+			"#": "22",
 			"label": "Illumination differential report.",
 			"description": "The illumination differential to report. Not applicable to TSP01.",
 			"unit": "percentage",
@@ -286,7 +307,7 @@
 			"maxValue": 127,
 			"defaultValue": 1
 		}
-	},
+	],
 	"metadata": {
 		"inclusion": "Turn the primary controller of Z-Wave network into inclusion mode, triple click tamper switch within 1.5 seconds",
 		"exclusion": "Turn the primary controller of Z-Wave network into exclusion mode, triple click tamper switch within 1.5 seconds",

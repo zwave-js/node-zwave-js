@@ -14,8 +14,9 @@
 		"max": "255.255"
 	},
 	"supportsZWavePlus": true,
-	"paramInformation": {
-		"1": {
+	"paramInformation": [
+		{
+			"#": "1",
 			"label": "Basic Sets for Association Group 2",
 			"description": "Send or not send Basic Set commands",
 			"valueSize": 1,
@@ -35,7 +36,8 @@
 				}
 			]
 		},
-		"2": {
+		{
+			"#": "2",
 			"label": "Send Reports",
 			"valueSize": 1,
 			"minValue": 0,
@@ -54,5 +56,5 @@
 				}
 			]
 		}
-	}
+	]
 }

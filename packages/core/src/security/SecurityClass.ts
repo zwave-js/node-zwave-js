@@ -42,7 +42,6 @@ export const securityClassOrder = [
 
 export interface SecurityClassOwner {
 	readonly id: number;
-	readonly securityClasses: Map<SecurityClass, boolean>;
 	getHighestSecurityClass(): SecurityClass | undefined;
 	hasSecurityClass(securityClass: SecurityClass): Maybe<boolean>;
 }

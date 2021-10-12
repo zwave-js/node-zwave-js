@@ -36,8 +36,9 @@
 			"isLifeline": true
 		}
 	},
-	"paramInformation": {
-		"1": {
+	"paramInformation": [
+		{
+			"#": "1",
 			"label": "Alarm Cancellation Delay",
 			"description": "Additional delay after an alarm has ceased",
 			"valueSize": 2,
@@ -45,7 +46,8 @@
 			"maxValue": 3600,
 			"defaultValue": 0
 		},
-		"2": {
+		{
+			"#": "2",
 			"label": "Flooding Signals",
 			"description": "LED indicator and acoustic alarm deactivation",
 			"valueSize": 1,
@@ -73,7 +75,8 @@
 				}
 			]
 		},
-		"5": {
+		{
+			"#": "5",
 			"label": "Type of alarm frame for 1st group (FLOOD)",
 			"description": "Command frame sent by the Sensor in case flooding",
 			"valueSize": 1,
@@ -93,7 +96,8 @@
 				}
 			]
 		},
-		"7": {
+		{
+			"#": "7",
 			"label": "Forced Level of Dimming group 1",
 			"description": "Value of the parameter specifying linking to association group no. 1",
 			"valueSize": 1,
@@ -102,7 +106,8 @@
 			"defaultValue": 255,
 			"unsigned": true
 		},
-		"9": {
+		{
+			"#": "9",
 			"label": "Alarm cancelling or turning a device off",
 			"description": "Allows for deactivating device turn off and alarm cancellation functions",
 			"valueSize": 1,
@@ -122,7 +127,8 @@
 				}
 			]
 		},
-		"10": {
+		{
+			"#": "10",
 			"label": "Temperature reading Interval",
 			"description": "Interval between successive readings of temperature in seconds.",
 			"valueSize": 2,
@@ -130,7 +136,8 @@
 			"maxValue": 32767,
 			"defaultValue": 300
 		},
-		"12": {
+		{
+			"#": "12",
 			"label": "Insensitiveness to temperature changes.",
 			"description": "Determines a minimum temperature change value (insensitivity level; def: 0,5C)",
 			"valueSize": 2,
@@ -138,7 +145,8 @@
 			"maxValue": 1000,
 			"defaultValue": 50
 		},
-		"13": {
+		{
+			"#": "13",
 			"label": "Alarm BROADCAST",
 			"description": "Transmitting the alarm or control frame in 'broadcast' mode",
 			"valueSize": 1,
@@ -166,7 +174,8 @@
 				}
 			]
 		},
-		"50": {
+		{
+			"#": "50",
 			"label": "Low temperature alarm threshold",
 			"description": "The parameter stores a temperature value, below which LED indicator blinks.",
 			"valueSize": 2,
@@ -174,7 +183,8 @@
 			"maxValue": 10000,
 			"defaultValue": 1500
 		},
-		"51": {
+		{
+			"#": "51",
 			"label": "High temperature alarm threshold",
 			"description": "The parameter stores a temperature value, above which LED indicator blinks.",
 			"valueSize": 2,
@@ -182,7 +192,8 @@
 			"maxValue": 10000,
 			"defaultValue": 3500
 		},
-		"61": {
+		{
+			"#": "61",
 			"label": "Low temperature alarm indicator colour",
 			"description": "Default is blue (0x000000FF).",
 			"valueSize": 4,
@@ -190,7 +201,8 @@
 			"maxValue": 16777215,
 			"defaultValue": 255
 		},
-		"62": {
+		{
+			"#": "62",
 			"label": "High temperature alarm indicator colour",
 			"description": "Default is red (0x00FF0000).",
 			"valueSize": 4,
@@ -198,7 +210,8 @@
 			"maxValue": 16777215,
 			"defaultValue": 16711680
 		},
-		"63": {
+		{
+			"#": "63",
 			"label": "Managing a LED indicator under standard operation",
 			"description": "Parameter determines LED indicator’s operation",
 			"valueSize": 1,
@@ -222,7 +235,8 @@
 				}
 			]
 		},
-		"73": {
+		{
+			"#": "73",
 			"label": "Temperature measurement compensation",
 			"description": "Parameter stores a offset value from the current temperature",
 			"valueSize": 2,
@@ -230,7 +244,8 @@
 			"maxValue": 10000,
 			"defaultValue": 0
 		},
-		"74": {
+		{
+			"#": "74",
 			"label": "Alarm frame sent to 2nd Group activation",
 			"description": "sensor’s vibrations alarm",
 			"valueSize": 1,
@@ -258,7 +273,8 @@
 				}
 			]
 		},
-		"75": {
+		{
+			"#": "75",
 			"label": "Visual and audible alarms duration",
 			"description": "Silence the Flood Sensor.",
 			"valueSize": 2,
@@ -267,7 +283,8 @@
 			"defaultValue": 0,
 			"unsigned": true
 		},
-		"76": {
+		{
+			"#": "76",
 			"label": "Visual and audible alarms retransmit",
 			"description": "Period after which an alarm frame will be retransmitted",
 			"valueSize": 2,
@@ -276,7 +293,8 @@
 			"defaultValue": 0,
 			"unsigned": true
 		},
-		"77": {
+		{
+			"#": "77",
 			"label": "Flood sensor functionality turned off",
 			"description": "Turning of the internal flood sensor.",
 			"valueSize": 1,
@@ -296,5 +314,5 @@
 				}
 			]
 		}
-	}
+	]
 }

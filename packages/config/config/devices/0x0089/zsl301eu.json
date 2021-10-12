@@ -13,8 +13,9 @@
 		"min": "0.0",
 		"max": "255.255"
 	},
-	"paramInformation": {
-		"0": {
+	"paramInformation": [
+		{
+			"#": "0",
 			"label": "Last Status",
 			"valueSize": 1,
 			"minValue": 0,
@@ -36,7 +37,8 @@
 				}
 			]
 		},
-		"1": {
+		{
+			"#": "1",
 			"label": "Night Light",
 			"valueSize": 1,
 			"minValue": 0,
@@ -54,7 +56,8 @@
 				}
 			]
 		},
-		"2": {
+		{
+			"#": "2",
 			"label": "Enable LED",
 			"valueSize": 1,
 			"minValue": 0,
@@ -72,7 +75,8 @@
 				}
 			]
 		},
-		"3": {
+		{
+			"#": "3",
 			"label": "Enable All ON/All OFF",
 			"valueSize": 1,
 			"minValue": 0,
@@ -99,7 +103,8 @@
 				}
 			]
 		},
-		"4": {
+		{
+			"#": "4",
 			"label": "Button Protection",
 			"valueSize": 1,
 			"minValue": 0,
@@ -121,7 +126,8 @@
 				}
 			]
 		},
-		"5": {
+		{
+			"#": "5",
 			"label": "Delay In Time",
 			"unit": "seconds",
 			"valueSize": 1,
@@ -129,7 +135,8 @@
 			"maxValue": 5,
 			"defaultValue": 0
 		},
-		"6": {
+		{
+			"#": "6",
 			"label": "Delay Out Time",
 			"unit": "seconds",
 			"valueSize": 1,
@@ -137,5 +144,5 @@
 			"maxValue": 5,
 			"defaultValue": 0
 		}
-	}
+	]
 }

@@ -14,8 +14,9 @@
 		"min": "0.0",
 		"max": "255.255"
 	},
-	"paramInformation": {
-		"1": {
+	"paramInformation": [
+		{
+			"#": "1",
 			"label": "Synchronization Cool And Heat Temperature Set-point",
 			"description": "Synchronization cool and heat temperature set-point while one of it has been change by master controller",
 			"valueSize": 1,
@@ -34,7 +35,8 @@
 				}
 			]
 		},
-		"2": {
+		{
+			"#": "2",
 			"label": "Inner Master Mcu Communication Address",
 			"description": "Should same as inner master mcu configuration",
 			"valueSize": 1,
@@ -43,7 +45,7 @@
 			"defaultValue": 1,
 			"unsigned": true
 		}
-	},
+	],
 	"metadata": {
 		"inclusion": "Start master controller add device mode as instruction, press 3 time of PB button located on the back side of thermostat panel in 1.5 second,\nLED flash indicator inclusion processing until included or 60 second timeout no detect any master controller",
 		"exclusion": "Start master controller remove device mode as instruction, press 3 time of PB button located on the back side of thermostat panel in 1.5 second, LED flash indicator exclusion processing until excluded or 5 second timeout no detect any master controller",
