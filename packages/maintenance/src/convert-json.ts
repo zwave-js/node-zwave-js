@@ -1,4 +1,7 @@
-// wotan-disable
+/*
+ * Script to convert JSON config files from the old format to the new one.
+ * Execute with `yarn ts packages/maintenance/src/convert-json.ts`
+ */
 
 import { enumFilesRecursive } from "@zwave-js/shared";
 import fs from "fs-extra";

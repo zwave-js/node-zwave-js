@@ -99,7 +99,8 @@ const program = yargs
 	)
 	.help()
 	.version(false)
-	.alias("h", "help").argv;
+	.alias("h", "help")
+	.parseSync();
 
 // Where the files are located
 const processedDir = path.join(
@@ -1292,13 +1293,16 @@ async function parseZWAProduct(
 		const parsedParam = found ?? {};
 
 		// Skip parameter if already a template import
-		if (parsedParam.$import) { continue };
+		if (parsedParam.$import) {
+			continue;
+		}
 
 		// Skip parameter if a bitmask has already been defined
-		const tPattern = new RegExp("/^" + param.ParameterNumber.toString() + "\[/")
-		if (newConfig.paramInformation.find(
-			(p: any) => p["#"].match(tPattern),
-		)) {
+		if (
+			newConfig.paramInformation.some((p: any) =>
+				p["#"]?.startsWith(`${param.ParameterNumber}[`),
+			)
+		) {
 			continue;
 		}
 

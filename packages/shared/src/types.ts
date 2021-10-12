@@ -12,7 +12,6 @@ export type Constructor<T = {}> = new (...args: any[]) => T;
 
 // eslint-disable-next-line @typescript-eslint/ban-types
 export type TypedClassDecorator<TTarget extends Object> = <
-	// wotan-disable-next-line no-misused-generics
 	T extends TTarget,
 	TConstructor extends new (...args: any[]) => T,
 >(
