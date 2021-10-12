@@ -14,8 +14,9 @@
 		"max": "255.255"
 	},
 	"supportsZWavePlus": true,
-	"paramInformation": {
-		"11": {
+	"paramInformation": [
+		{
+			"#": "11",
 			"label": "LED Indicator: Color When Moving",
 			"valueSize": 1,
 			"minValue": 0,
@@ -57,12 +58,14 @@
 				}
 			]
 		},
-		"12": {
+		{
+			"#": "12",
 			"$import": "#paramInformation/11",
 			"label": "LED Indicator: Standby Color",
 			"defaultValue": 0
 		},
-		"13": {
+		{
+			"#": "13",
 			"label": "LED Indicator: Brightness",
 			"valueSize": 1,
 			"minValue": 0,
@@ -70,7 +73,8 @@
 			"defaultValue": 100,
 			"unit": "%"
 		},
-		"24": {
+		{
+			"#": "24",
 			"label": "Invert Orientation",
 			"valueSize": 1,
 			"minValue": 0,
@@ -88,7 +92,8 @@
 				}
 			]
 		},
-		"25": {
+		{
+			"#": "25",
 			"label": "Output Orientation",
 			"valueSize": 1,
 			"minValue": 0,
@@ -106,7 +111,8 @@
 				}
 			]
 		},
-		"30": {
+		{
+			"#": "30",
 			"label": "Alarm Configuration: 1st Slot",
 			"description": "Which alarm frames and how the device should react",
 			"valueSize": 4,
@@ -114,7 +120,8 @@
 			"maxValue": 4,
 			"defaultValue": 0
 		},
-		"31": {
+		{
+			"#": "31",
 			"label": "Alarm configuration - 2nd slot",
 			"description": "which alarm frames and how the device should react",
 			"valueSize": 4,
@@ -122,7 +129,8 @@
 			"maxValue": 4,
 			"defaultValue": 0
 		},
-		"32": {
+		{
+			"#": "32",
 			"label": "Alarm configuration - 3rd slot",
 			"description": "which alarm frames and how the device should react",
 			"valueSize": 4,
@@ -130,7 +138,8 @@
 			"maxValue": 4,
 			"defaultValue": 0
 		},
-		"33": {
+		{
+			"#": "33",
 			"label": "Alarm configuration - 4th slot",
 			"description": "which alarm frames and how the device should react",
 			"valueSize": 4,
@@ -138,7 +147,8 @@
 			"maxValue": 4,
 			"defaultValue": 0
 		},
-		"34": {
+		{
+			"#": "34",
 			"label": "Alarm configuration - 5th slot",
 			"description": "which alarm frames and how the device should react",
 			"valueSize": 4,
@@ -146,7 +156,8 @@
 			"maxValue": 4,
 			"defaultValue": 0
 		},
-		"35": {
+		{
+			"#": "35",
 			"label": "Alarm configuration – duration",
 			"description": "duration of alarm sequence",
 			"unit": "s",
@@ -155,39 +166,48 @@
 			"maxValue": 32400,
 			"defaultValue": 600
 		},
-		"40[0x01]": {
+		{
+			"#": "40[0x01]",
 			"$import": "../templates/master_template.json#base_enable_disable",
 			"label": "First button: send scenes when pressed 1 time"
 		},
-		"40[0x02]": {
+		{
+			"#": "40[0x02]",
 			"$import": "../templates/master_template.json#base_enable_disable",
 			"label": "First button: send scenes when pressed 2 times"
 		},
-		"40[0x04]": {
+		{
+			"#": "40[0x04]",
 			"$import": "../templates/master_template.json#base_enable_disable",
 			"label": "First button: send scenes when pressed 3 times"
 		},
-		"40[0x08]": {
+		{
+			"#": "40[0x08]",
 			"$import": "../templates/master_template.json#base_enable_disable",
 			"label": "First button: send scenes when held down and released"
 		},
-		"41[0x01]": {
+		{
+			"#": "41[0x01]",
 			"$import": "../templates/master_template.json#base_enable_disable",
 			"label": "Second button: send scenes when pressed 1 time"
 		},
-		"41[0x02]": {
+		{
+			"#": "41[0x02]",
 			"$import": "../templates/master_template.json#base_enable_disable",
 			"label": "Second button: send scenes when pressed 2 times"
 		},
-		"41[0x04]": {
+		{
+			"#": "41[0x04]",
 			"$import": "../templates/master_template.json#base_enable_disable",
 			"label": "Second button: send scenes when pressed 3 times"
 		},
-		"41[0x08]": {
+		{
+			"#": "41[0x08]",
 			"$import": "../templates/master_template.json#base_enable_disable",
 			"label": "Second button: send scenes when held down and released"
 		},
-		"60": {
+		{
+			"#": "60",
 			"label": "Power reports – include self-consumption",
 			"description": "power measurements include device itself",
 			"valueSize": 1,
@@ -206,7 +226,8 @@
 				}
 			]
 		},
-		"61": {
+		{
+			"#": "61",
 			"label": "Power reports – on change",
 			"description": "minimal change in measured power to report",
 			"unit": "%",
@@ -215,7 +236,8 @@
 			"maxValue": 500,
 			"defaultValue": 15
 		},
-		"62": {
+		{
+			"#": "62",
 			"label": "Power reports – periodic",
 			"description": "This reporting interval for measured power",
 			"unit": "s",
@@ -224,7 +246,8 @@
 			"maxValue": 32400,
 			"defaultValue": 3600
 		},
-		"65": {
+		{
+			"#": "65",
 			"label": "Energy reports – on change",
 			"description": "minimal change in measured energy to report",
 			"unit": "0.01kWh",
@@ -233,7 +256,8 @@
 			"maxValue": 500,
 			"defaultValue": 10
 		},
-		"66": {
+		{
+			"#": "66",
 			"label": "Energy reports – periodic",
 			"description": "This reporting interval for measured energy",
 			"unit": "s",
@@ -242,7 +266,8 @@
 			"maxValue": 32400,
 			"defaultValue": 3600
 		},
-		"150": {
+		{
+			"#": "150",
 			"label": "Force calibration",
 			"valueSize": 1,
 			"minValue": 0,
@@ -264,7 +289,8 @@
 				}
 			]
 		},
-		"151": {
+		{
+			"#": "151",
 			"label": "Operating mode",
 			"description": "This parameter allows adjusting operation ac-cording to the connected device.",
 			"valueSize": 1,
@@ -291,7 +317,8 @@
 				}
 			]
 		},
-		"152": {
+		{
+			"#": "152",
 			"label": "Venetian blind – time of full turn of the slats",
 			"unit": "ms",
 			"valueSize": 4,
@@ -299,7 +326,8 @@
 			"maxValue": 65535,
 			"defaultValue": 150
 		},
-		"153": {
+		{
+			"#": "153",
 			"label": "Set slats back to previous position",
 			"description": "slats positioning in various situations",
 			"valueSize": 1,
@@ -322,7 +350,8 @@
 				}
 			]
 		},
-		"154": {
+		{
+			"#": "154",
 			"label": "Delay motor stop after reaching end switch",
 			"description": "time after which the motor will be stopped after contacts closed",
 			"unit": "0.1s",
@@ -331,7 +360,8 @@
 			"maxValue": 255,
 			"defaultValue": 10
 		},
-		"155": {
+		{
+			"#": "155",
 			"label": "Motor operation detection",
 			"description": "Power threshold interpreted as reaching a limit switch.",
 			"unit": "W",
@@ -340,7 +370,8 @@
 			"maxValue": 255,
 			"defaultValue": 10
 		},
-		"156": {
+		{
+			"#": "156",
 			"label": "Time of up movement",
 			"description": "time needed for roller blinds to reach the top",
 			"unit": "ms",
@@ -349,7 +380,8 @@
 			"maxValue": 65535,
 			"defaultValue": 6000
 		},
-		"157": {
+		{
+			"#": "157",
 			"label": "Time of down movement",
 			"description": "time needed for roller blinds to reach the bottom",
 			"unit": "ms",
@@ -358,5 +390,5 @@
 			"maxValue": 65535,
 			"defaultValue": 6000
 		}
-	}
+	]
 }
