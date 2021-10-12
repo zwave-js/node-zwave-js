@@ -4208,7 +4208,7 @@ __metadata:
     "@zwave-js/shared": 8.5.0
     alcalzone-shared: ^4.0.0
     ansi-colors: ^4.1.1
-    axios: ^0.21.4
+    axios: ^0.23.0
     comment-json: ^4.1.1
     esbuild: "*"
     esbuild-register: ^3.0.0
@@ -4872,6 +4872,15 @@ __metadata:
   dependencies:
     follow-redirects: ^1.14.0
   checksum: 44245f24ac971e7458f3120c92f9d66d1fc695e8b97019139de5b0cc65d9b8104647db01e5f46917728edfc0cfd88eb30fc4c55e6053eef4ace76768ce95ff3c
+  languageName: node
+  linkType: hard
+
+"axios@npm:^0.23.0":
+  version: 0.23.0
+  resolution: "axios@npm:0.23.0"
+  dependencies:
+    follow-redirects: ^1.14.4
+  checksum: 879f61022bd825da2a7ebb72410bc528683ba54c140436baa0b924b7cab02ec0919fe64a04a546f482a75f5fd570b77884f9826764a95f2fd88265e61dcb70db
   languageName: node
   linkType: hard
 
@@ -7357,6 +7366,16 @@ __metadata:
     debug:
       optional: true
   checksum: b4d89339afd119b5e6fd92f0e81ae7d3621a5421af7d4a7d94539765c1d5546cf61d2f3219d40596e53c7c253307fbaf5dc772254aa9170fdfe1f9d7731732a9
+  languageName: node
+  linkType: hard
+
+"follow-redirects@npm:^1.14.4":
+  version: 1.14.4
+  resolution: "follow-redirects@npm:1.14.4"
+  peerDependenciesMeta:
+    debug:
+      optional: true
+  checksum: d4ce74cf5c6f363168b97e706b914eb9ffb6bf4d4c6d8f8330b93088d9b90e566611ddbcf0e42c8ed5fd17598dfeda1d19230d3e9d6d6c6b4d1c10ec3a0b99be
   languageName: node
   linkType: hard
 
@@ -14127,7 +14146,7 @@ typescript@4.4.3:
     "@zwave-js/testing": 8.5.0
     alcalzone-shared: ^4.0.0
     ansi-colors: ^4.1.1
-    axios: ^0.21.4
+    axios: ^0.23.0
     esbuild: "*"
     esbuild-register: ^3.0.0
     execa: ^5.1.1
