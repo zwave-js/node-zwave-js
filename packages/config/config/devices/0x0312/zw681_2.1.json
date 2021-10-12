@@ -12,6 +12,5 @@
 	"firmwareVersion": {
 		"min": "2.1",
 		"max": "255.255"
-	},
-	"supportsZWavePlus": true
+	}
 }
