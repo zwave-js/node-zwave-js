@@ -48,8 +48,9 @@
 			"maxNodes": 10
 		}
 	},
-	"paramInformation": {
-		"1": {
+	"paramInformation": [
+		{
+			"#": "1",
 			"label": "Minimum brightness level",
 			"description": "Set automatically during the calibration process",
 			"valueSize": 1,
@@ -57,7 +58,8 @@
 			"maxValue": 98,
 			"defaultValue": 1
 		},
-		"2": {
+		{
+			"#": "2",
 			"label": "Maximum brightness level",
 			"description": "Set automatically during the calibration process.",
 			"valueSize": 1,
@@ -65,7 +67,8 @@
 			"maxValue": 99,
 			"defaultValue": 99
 		},
-		"3": {
+		{
+			"#": "3",
 			"label": "Incandescence level of dimmable fluorescent lamps",
 			"description": "Dimmer will set to this value after first switch on.",
 			"valueSize": 1,
@@ -73,7 +76,8 @@
 			"maxValue": 99,
 			"defaultValue": 1
 		},
-		"4": {
+		{
+			"#": "4",
 			"label": "Incandescence time of dimmable fluorescent lamps",
 			"description": "Time for switching fluorescent lamps and certain light sources.",
 			"valueSize": 2,
@@ -81,7 +85,8 @@
 			"maxValue": 255,
 			"defaultValue": 0
 		},
-		"5": {
+		{
+			"#": "5",
 			"label": "Dimming Step at Automatic Control",
 			"valueSize": 1,
 			"unit": "%",
@@ -89,31 +94,36 @@
 			"maxValue": 99,
 			"defaultValue": 1
 		},
-		"6": {
+		{
+			"#": "6",
 			"label": "Dimming Step Timing at Automatic Control",
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 255,
 			"defaultValue": 1
 		},
-		"7": {
+		{
+			"#": "7",
 			"label": "Dimming Step at Manual Control",
 			"valueSize": 1,
 			"minValue": 1,
 			"maxValue": 99,
 			"defaultValue": 1
 		},
-		"8": {
+		{
+			"#": "8",
 			"label": "Dimming Step Timing at Manual Control",
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 255,
 			"defaultValue": 5
 		},
-		"9": {
+		{
+			"#": "9",
 			"$import": "~/templates/master_template.json#state_after_power_failure_off_prev"
 		},
-		"10": {
+		{
+			"#": "10",
 			"label": "Timer functionality (auto - off).",
 			"description": "Setting of the timer.",
 			"valueSize": 2,
@@ -121,7 +131,8 @@
 			"maxValue": 32767,
 			"defaultValue": 0
 		},
-		"11": {
+		{
+			"#": "11",
 			"label": "ALL ON/ALL OFF function",
 			"description": "The parameter specifies the available functions.",
 			"valueSize": 2,
@@ -149,7 +160,8 @@
 				}
 			]
 		},
-		"13": {
+		{
+			"#": "13",
 			"label": "Force auto-calibration",
 			"valueSize": 1,
 			"minValue": 0,
@@ -172,7 +184,8 @@
 				}
 			]
 		},
-		"14": {
+		{
+			"#": "14",
 			"label": "Auto-calibration status (read-only parameter)",
 			"description": "Mode of the Dimmer (auto/man settings).",
 			"valueSize": 1,
@@ -192,7 +205,8 @@
 				}
 			]
 		},
-		"15": {
+		{
+			"#": "15",
 			"label": "Burnt out bulb detection",
 			"description": "Percentage value of power variation",
 			"valueSize": 1,
@@ -200,7 +214,8 @@
 			"maxValue": 99,
 			"defaultValue": 30
 		},
-		"16": {
+		{
+			"#": "16",
 			"label": "Time delay of burnt out bulb/overload detection",
 			"description": "Delay for power variation detection",
 			"valueSize": 2,
@@ -208,7 +223,8 @@
 			"maxValue": 255,
 			"defaultValue": 5
 		},
-		"19": {
+		{
+			"#": "19",
 			"label": "Forced switch on brightness level",
 			"description": "Switching on the Dimmer will always set this brightness level.",
 			"valueSize": 1,
@@ -216,7 +232,8 @@
 			"maxValue": 99,
 			"defaultValue": 0
 		},
-		"20": {
+		{
+			"#": "20",
 			"label": "Inputs Button/Switch configuration",
 			"description": "Binary inputs type configuration",
 			"valueSize": 1,
@@ -240,7 +257,8 @@
 				}
 			]
 		},
-		"21": {
+		{
+			"#": "21",
 			"label": "Value sent to associated devices on single click",
 			"valueSize": 1,
 			"minValue": 0,
@@ -259,7 +277,8 @@
 				}
 			]
 		},
-		"22": {
+		{
+			"#": "22",
 			"label": "Change [On-Off] bi-stable keys",
 			"valueSize": 1,
 			"minValue": 0,
@@ -278,7 +297,8 @@
 				}
 			]
 		},
-		"23": {
+		{
+			"#": "23",
 			"label": "Double click option",
 			"description": "Double-click set lighting at 100%",
 			"valueSize": 1,
@@ -298,7 +318,8 @@
 				}
 			]
 		},
-		"24": {
+		{
+			"#": "24",
 			"label": "Command frames sent in 2nd and 3rd assoc groups",
 			"description": "Actions not resulting in sending frames to association groups",
 			"valueSize": 1,
@@ -334,7 +355,8 @@
 				}
 			]
 		},
-		"25": {
+		{
+			"#": "25",
 			"label": "Command frames sent in 4th and 5th assoc groups",
 			"description": "Actions not resulting in sending frames to association groups",
 			"valueSize": 1,
@@ -370,7 +392,8 @@
 				}
 			]
 		},
-		"26": {
+		{
+			"#": "26",
 			"label": "The function of 3-way switch",
 			"description": "Key no. 2 controls the Dimmer additionally",
 			"valueSize": 1,
@@ -390,7 +413,8 @@
 				}
 			]
 		},
-		"27": {
+		{
+			"#": "27",
 			"label": "Associations in Z-Wave network security mode",
 			"description": "Param. sent in specified assoc. groups: secure or non-secure",
 			"valueSize": 1,
@@ -426,7 +450,8 @@
 				}
 			]
 		},
-		"28": {
+		{
+			"#": "28",
 			"label": "Scene activation functionality",
 			"description": "SCENE ID depends on the switch type configuration",
 			"valueSize": 1,
@@ -446,7 +471,8 @@
 				}
 			]
 		},
-		"29": {
+		{
+			"#": "29",
 			"label": "Switch functionality of S1 and S2",
 			"description": "Switch S1 and S2 buttons",
 			"valueSize": 1,
@@ -466,7 +492,8 @@
 				}
 			]
 		},
-		"30": {
+		{
+			"#": "30",
 			"label": "Load control mode",
 			"description": "The parameter defines the used control mode.",
 			"valueSize": 1,
@@ -490,7 +517,8 @@
 				}
 			]
 		},
-		"31": {
+		{
+			"#": "31",
 			"label": "Load control mode recognized during auto-calibration",
 			"valueSize": 1,
 			"minValue": 0,
@@ -509,7 +537,8 @@
 				}
 			]
 		},
-		"32": {
+		{
+			"#": "32",
 			"label": "On/Off mode",
 			"description": "Ignore brightening/- dimming time settings.",
 			"valueSize": 1,
@@ -533,7 +562,8 @@
 				}
 			]
 		},
-		"33": {
+		{
+			"#": "33",
 			"label": "Dimmability of the load (read only)",
 			"valueSize": 1,
 			"minValue": 0,
@@ -552,7 +582,8 @@
 				}
 			]
 		},
-		"34": {
+		{
+			"#": "34",
 			"label": "Soft-Start functionality",
 			"description": "Time required to warm up the filament of halogen bulb.",
 			"valueSize": 1,
@@ -576,7 +607,8 @@
 				}
 			]
 		},
-		"35": {
+		{
+			"#": "35",
 			"label": "Auto-calibration after power on",
 			"description": "Determine the trigger of auto-calibration procedure",
 			"valueSize": 1,
@@ -608,7 +640,8 @@
 				}
 			]
 		},
-		"37": {
+		{
+			"#": "37",
 			"label": "Behaviour of the Dimmer after overload or surge",
 			"valueSize": 1,
 			"minValue": 0,
@@ -627,7 +660,8 @@
 				}
 			]
 		},
-		"39": {
+		{
+			"#": "39",
 			"label": "Power limit - OVERLOAD",
 			"description": "Reaching the defined value will result in turning off the load",
 			"valueSize": 2,
@@ -635,7 +669,8 @@
 			"maxValue": 250,
 			"defaultValue": 250
 		},
-		"40": {
+		{
+			"#": "40",
 			"label": "General Purpose Alarm",
 			"description": "The parameter specifies the response to an alarm.",
 			"valueSize": 1,
@@ -663,7 +698,8 @@
 				}
 			]
 		},
-		"41": {
+		{
+			"#": "41",
 			"label": "Water Flooding Alarm",
 			"description": "The parameter specifies the response to an alarm.",
 			"valueSize": 1,
@@ -691,7 +727,8 @@
 				}
 			]
 		},
-		"42": {
+		{
+			"#": "42",
 			"label": "Smoke, CO or CO2 Alarm",
 			"description": "The parameter specifies the response to an alarm.",
 			"valueSize": 1,
@@ -719,7 +756,8 @@
 				}
 			]
 		},
-		"43": {
+		{
+			"#": "43",
 			"label": "Temperature Alarm",
 			"description": "The parameter specifies the response to an alarm.",
 			"valueSize": 1,
@@ -747,7 +785,8 @@
 				}
 			]
 		},
-		"44": {
+		{
+			"#": "44",
 			"label": "Time of alarm state",
 			"description": "Alarm state may be cancelled earlier",
 			"valueSize": 2,
@@ -755,7 +794,8 @@
 			"maxValue": 32767,
 			"defaultValue": 600
 		},
-		"45": {
+		{
+			"#": "45",
 			"label": "OVERLOAD alarm report",
 			"description": "(load power consumption too high)",
 			"valueSize": 1,
@@ -775,7 +815,8 @@
 				}
 			]
 		},
-		"46": {
+		{
+			"#": "46",
 			"label": "LOAD ERROR alarm report",
 			"description": "(no load, load failure, burnt out bulb)",
 			"valueSize": 1,
@@ -795,7 +836,8 @@
 				}
 			]
 		},
-		"47": {
+		{
+			"#": "47",
 			"label": "OVERCURRENT alarm report",
 			"description": "(short circuit, burnt out bulb causing overcurrent)",
 			"valueSize": 1,
@@ -815,7 +857,8 @@
 				}
 			]
 		},
-		"48": {
+		{
+			"#": "48",
 			"label": "SURGE alarm report",
 			"description": "(Dimmer output overvoltage)",
 			"valueSize": 1,
@@ -835,7 +878,8 @@
 				}
 			]
 		},
-		"49": {
+		{
+			"#": "49",
 			"label": "OVERHEAT and VOLTAGE DROP alarm report",
 			"valueSize": 1,
 			"minValue": 0,
@@ -854,7 +898,8 @@
 				}
 			]
 		},
-		"50": {
+		{
+			"#": "50",
 			"label": "Active power reports",
 			"description": "Power level change resulting in new power report being sent.",
 			"valueSize": 1,
@@ -862,7 +907,8 @@
 			"maxValue": 100,
 			"defaultValue": 10
 		},
-		"52": {
+		{
+			"#": "52",
 			"label": "Periodic active power and energy reports",
 			"description": "Time period between consecutive reports.",
 			"valueSize": 2,
@@ -870,7 +916,8 @@
 			"maxValue": 32767,
 			"defaultValue": 3600
 		},
-		"53": {
+		{
+			"#": "53",
 			"label": "Energy reports",
 			"description": "Energy level change resulting in sending a new energy report.",
 			"valueSize": 2,
@@ -878,7 +925,8 @@
 			"maxValue": 255,
 			"defaultValue": 10
 		},
-		"54": {
+		{
+			"#": "54",
 			"label": "Self-measurement",
 			"description": "Active power and energy used by itself",
 			"valueSize": 1,
@@ -898,7 +946,8 @@
 				}
 			]
 		},
-		"58": {
+		{
+			"#": "58",
 			"label": "Method of calculating the active power",
 			"valueSize": 1,
 			"minValue": 0,
@@ -921,12 +970,13 @@
 				}
 			]
 		},
-		"59": {
+		{
+			"#": "59",
 			"label": "Approximated power at the maximum brightness level",
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 500,
 			"defaultValue": 0
 		}
-	}
+	]
 }

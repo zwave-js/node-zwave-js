@@ -14,8 +14,9 @@
 		"max": "255.255"
 	},
 	"supportsZWavePlus": true,
-	"paramInformation": {
-		"1": {
+	"paramInformation": [
+		{
+			"#": "1",
 			"label": "Twin Assist",
 			"description": "Helps you to lock and unlock your door lock.",
 			"valueSize": 1,
@@ -34,7 +35,8 @@
 				}
 			]
 		},
-		"2": {
+		{
+			"#": "2",
 			"label": "Hold and Release",
 			"description": "After a unlock operation the lock holds the lock, so the door can be opened",
 			"valueSize": 4,
@@ -48,7 +50,8 @@
 				}
 			]
 		},
-		"3": {
+		{
+			"#": "3",
 			"label": "Block to block",
 			"description": "The lock will run the motor until it hits resistance.",
 			"valueSize": 1,
@@ -67,7 +70,8 @@
 				}
 			]
 		},
-		"4": {
+		{
+			"#": "4",
 			"label": "BLE Temporary Allowed",
 			"description": "The BLE is enabled for a number of seconds.",
 			"valueSize": 4,
@@ -75,7 +79,8 @@
 			"maxValue": 2147483647,
 			"defaultValue": 0
 		},
-		"5": {
+		{
+			"#": "5",
 			"label": "BLE Always Allowed",
 			"valueSize": 1,
 			"minValue": 0,
@@ -93,7 +98,8 @@
 				}
 			]
 		},
-		"6": {
+		{
+			"#": "6",
 			"label": "Autolock",
 			"description": "Lock after an unlock.Value is delay in sec before lock is locked again.",
 			"valueSize": 4,
@@ -101,5 +107,5 @@
 			"maxValue": 2147483647,
 			"defaultValue": 0
 		}
-	}
+	]
 }

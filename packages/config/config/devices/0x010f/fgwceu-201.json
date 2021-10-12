@@ -13,8 +13,9 @@
 		"min": "0.0",
 		"max": "255.255"
 	},
-	"paramInformation": {
-		"13": {
+	"paramInformation": [
+		{
+			"#": "13",
 			"label": "LED Frame: Brightness",
 			"valueSize": 1,
 			"unit": "%",
@@ -36,7 +37,8 @@
 				}
 			]
 		},
-		"20": {
+		{
+			"#": "20",
 			"label": "Switch Configuration",
 			"valueSize": 1,
 			"minValue": 0,
@@ -73,7 +75,8 @@
 				}
 			]
 		},
-		"150": {
+		{
+			"#": "150",
 			"label": "LED Frame: First Channel Color",
 			"valueSize": 1,
 			"minValue": 0,
@@ -119,11 +122,13 @@
 				}
 			]
 		},
-		"151": {
+		{
+			"#": "151",
 			"$import": "#paramInformation/150",
 			"label": "LED Frame: Second Channel Color"
 		},
-		"152": {
+		{
+			"#": "152",
 			"label": "First Channel: Double Click Value",
 			"description": "Defines value of Basic Set or Multilevel Set frame sent to associated devices",
 			"valueSize": 2,
@@ -137,9 +142,10 @@
 				}
 			]
 		},
-		"153": {
+		{
+			"#": "153",
 			"$import": "#paramInformation/152",
 			"label": "Second Chanel: Double Click Value"
 		}
-	}
+	]
 }

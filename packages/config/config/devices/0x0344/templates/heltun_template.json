@@ -1,0 +1,169 @@
+{
+	"external_input_click_control_mode": {
+		"valueSize": 1,
+		"minValue": 0,
+		"maxValue": 5,
+		"defaultValue": 1,
+		"allowManualEntry": false,
+		"options": [
+			{
+				"label": "Disable",
+				"value": 0
+			},
+			{
+				"label": "Toggle switch",
+				"value": 1
+			},
+			{
+				"label": "Turn on",
+				"value": 2
+			},
+			{
+				"label": "Turn off",
+				"value": 3
+			},
+			{
+				"label": "Turn on, then off after timer",
+				"value": 4
+			},
+			{
+				"label": "Turn off, then on after timer",
+				"value": 5
+			}
+		]
+	},
+	"external_input_hold_control_mode": {
+		"valueSize": 1,
+		"minValue": 0,
+		"maxValue": 3,
+		"defaultValue": 2,
+		"allowManualEntry": false,
+		"options": [
+			{
+				"label": "Disable",
+				"value": 0
+			},
+			{
+				"label": "Operate like click (parameter 51)",
+				"value": 1
+			},
+			{
+				"label": "Momentary switch",
+				"value": 2
+			},
+			{
+				"label": "Reversed momentary switch",
+				"value": 3
+			}
+		]
+	},
+	"relay_button_number_source": {
+		"valueSize": 1,
+		"minValue": 0,
+		"maxValue": 5,
+		"allowManualEntry": false,
+		"options": [
+			{
+				"label": "Gateway or associated device",
+				"value": 0
+			},
+			{
+				"label": "Top left button",
+				"value": 1
+			},
+			{
+				"label": "Top right button",
+				"value": 2
+			},
+			{
+				"label": "Bottom left button",
+				"value": 3
+			},
+			{
+				"label": "Bottom right button",
+				"value": 4
+			},
+			{
+				"label": "Center button",
+				"value": 5
+			}
+		]
+	},
+	"relay_external_source": {
+		"valueSize": 1,
+		"minValue": 0,
+		"maxValue": 5,
+		"allowManualEntry": false,
+		"options": [
+			{
+				"label": "Gateway or associated device",
+				"value": 0
+			},
+			{
+				"label": "External input S1",
+				"value": 1
+			},
+			{
+				"label": "External input S2",
+				"value": 2
+			},
+			{
+				"label": "External input S3",
+				"value": 3
+			},
+			{
+				"label": "External input S4",
+				"value": 4
+			},
+			{
+				"label": "External input S5",
+				"value": 5
+			}
+		]
+	},
+	"relay_inverse_mode_inching": {
+		"description": "Combine the relay numbers to a two-digit number. Example: 24 = Relay 2 & 4",
+		"valueSize": 1,
+		"minValue": 0,
+		"maxValue": 54,
+		"defaultValue": 0,
+		"allowManualEntry": false,
+		"options": [
+			{
+				"label": "Disable",
+				"value": 0
+			}
+		]
+	},
+	"relay_output_mode": {
+		"valueSize": 1,
+		"minValue": 0,
+		"maxValue": 1,
+		"defaultValue": 0,
+		"allowManualEntry": false,
+		"options": [
+			{
+				"label": "Normally Open",
+				"value": 0
+			},
+			{
+				"label": "Normally Closed",
+				"value": 1
+			}
+		]
+	},
+	"relay_timer_mode_duration": {
+		"description": "Used to open/close garage doors, blinds, curtains, etc. or to turn attached devices like door lock or security OFF for a short time",
+		"unit": "seconds",
+		"valueSize": 3,
+		"minValue": 0,
+		"maxValue": 43200,
+		"defaultValue": 0,
+		"options": [
+			{
+				"label": "0.5 seconds",
+				"value": 0
+			}
+		]
+	}
+}

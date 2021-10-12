@@ -13,8 +13,9 @@
 		"min": "0.0",
 		"max": "255.255"
 	},
-	"paramInformation": {
-		"1": {
+	"paramInformation": [
+		{
+			"#": "1",
 			"label": "Toggle LED mode",
 			"description": "Set to 1 for LED to be in sync with switch.",
 			"valueSize": 1,
@@ -33,5 +34,5 @@
 				}
 			]
 		}
-	}
+	]
 }

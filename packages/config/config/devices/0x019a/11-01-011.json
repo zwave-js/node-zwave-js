@@ -20,8 +20,9 @@
 			"isLifeline": true
 		}
 	},
-	"paramInformation": {
-		"1": {
+	"paramInformation": [
+		{
+			"#": "1",
 			"label": "Notification type",
 			"valueSize": 1,
 			"minValue": 0,
@@ -44,7 +45,8 @@
 				}
 			]
 		},
-		"2": {
+		{
+			"#": "2",
 			"label": "LED indication",
 			"description": "Specify if LED should indicate special event.",
 			"valueSize": 1,
@@ -64,5 +66,5 @@
 				}
 			]
 		}
-	}
+	]
 }

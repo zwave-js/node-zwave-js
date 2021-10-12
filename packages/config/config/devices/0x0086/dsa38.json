@@ -21,8 +21,9 @@
 			"isLifeline": true
 		}
 	},
-	"paramInformation": {
-		"250": {
+	"paramInformation": [
+		{
+			"#": "250",
 			"label": "Button 1 Mode",
 			"valueSize": 1,
 			"minValue": 0,
@@ -41,5 +42,5 @@
 				}
 			]
 		}
-	}
+	]
 }

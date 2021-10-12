@@ -25,15 +25,17 @@
 			"maxNodes": 3
 		}
 	},
-	"paramInformation": {
-		"1": {
+	"paramInformation": [
+		{
+			"#": "1",
 			"label": "Basic Set Level",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 99,
 			"defaultValue": 99
 		},
-		"2": {
+		{
+			"#": "2",
 			"label": "Enable/Disable Detecting",
 			"description": "The Detecting function can be Disabled or Enabled.",
 			"valueSize": 1,
@@ -53,7 +55,8 @@
 				}
 			]
 		},
-		"3": {
+		{
+			"#": "3",
 			"label": "Sensitivity Level",
 			"description": "1 Means lowest sensitivity and 10 means highest.",
 			"valueSize": 1,
@@ -61,7 +64,8 @@
 			"maxValue": 10,
 			"defaultValue": 6
 		},
-		"4": {
+		{
+			"#": "4",
 			"label": "Re-trigger Interval",
 			"description": "Adjust the interval of being re-triggered after a trigger",
 			"valueSize": 2,
@@ -69,7 +73,8 @@
 			"maxValue": 3600,
 			"defaultValue": 5
 		},
-		"5": {
+		{
+			"#": "5",
 			"label": "Lux Level",
 			"description": "Minimum Lux Level to provoke trigger",
 			"valueSize": 1,
@@ -77,7 +82,8 @@
 			"maxValue": 100,
 			"defaultValue": 10
 		},
-		"6": {
+		{
+			"#": "6",
 			"label": "On-Off Duration",
 			"valueSize": 1,
 			"minValue": 5,
@@ -85,5 +91,5 @@
 			"defaultValue": 5,
 			"unsigned": true
 		}
-	}
+	]
 }

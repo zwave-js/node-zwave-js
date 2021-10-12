@@ -9,7 +9,7 @@
 ```ts
 async set(
 	sceneId: number,
-	dimmingDuration: Duration,
+	dimmingDuration?: Duration,
 	level?: number,
 ): Promise<void>;
 ```

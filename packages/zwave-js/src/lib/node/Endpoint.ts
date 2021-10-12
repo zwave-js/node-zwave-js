@@ -511,13 +511,21 @@ export class Endpoint {
 				endpoint: this.index,
 				message:
 					"No information about Lifeline associations, cannot assign ourselves!",
-				direction: "outbound",
 				level: "warn",
 			});
 			// Remember that we have NO lifeline association
 			valueDB.setValue(getHasLifelineValueId(this.index), false);
 			return;
 		}
+
+		this.driver.controllerLog.logNode(node.id, {
+			endpoint: this.index,
+			message: `Checking/assigning lifeline groups: ${lifelineGroups.join(
+				", ",
+			)}
+supports classic associations:       ${!!assocInstance}
+supports multi channel associations: ${!!mcInstance}`,
+		});
 
 		for (const group of lifelineGroups) {
 			const groupSupportsMultiChannel = group <= mcGroupCount;
@@ -530,6 +538,7 @@ export class Endpoint {
 			const mustUseNodeAssociation =
 				!supportsMultiChannel || assocConfig?.multiChannel === false;
 			let mustUseMultiChannelAssociation = false;
+
 			if (supportsMultiChannel) {
 				if (assocConfig?.multiChannel === true) {
 					mustUseMultiChannelAssociation = true;
@@ -555,6 +564,15 @@ export class Endpoint {
 					}
 				}
 			}
+
+			this.driver.controllerLog.logNode(node.id, {
+				endpoint: this.index,
+				message: `Configuring lifeline group #${group}:
+group supports multi channel:  ${groupSupportsMultiChannel}
+configured strategy:           ${assocConfig?.multiChannel ?? "auto"}
+must use node association:     ${mustUseNodeAssociation}
+must use endpoint association: ${mustUseMultiChannelAssociation}`,
+			});
 
 			// Figure out which associations exist and may need to be removed
 			const isAssignedAsNodeAssociation = (): boolean => {
@@ -638,6 +656,8 @@ export class Endpoint {
 					groupId: group,
 					endpoints: invalidEndpointAssociations,
 				});
+				// refresh the associations - don't trust that it worked
+				await mcAPI.getGroup(group);
 			}
 
 			// Assigning the correct lifelines depends on the association kind, source endpoint and the desired strategy:
@@ -658,6 +678,11 @@ export class Endpoint {
 				if (isAssignedAsNodeAssociation()) {
 					// We already have the correct association
 					hasLifeline = true;
+					this.driver.controllerLog.logNode(node.id, {
+						endpoint: this.index,
+						message: `Lifeline group #${group} is already assigned with a node association`,
+						direction: "none",
+					});
 				} else if (
 					assocAPI.isSupported() &&
 					// Some endpoint groups don't support having any destinations because they are shared with the root
@@ -748,6 +773,11 @@ export class Endpoint {
 				if (isAssignedAsEndpointAssociation()) {
 					// We already have the correct association
 					hasLifeline = true;
+					this.driver.controllerLog.logNode(node.id, {
+						endpoint: this.index,
+						message: `Lifeline group #${group} is already assigned with an endpoint association`,
+						direction: "none",
+					});
 				} else if (
 					mcAPI.isSupported() &&
 					mcAPI.version >= 3 &&
@@ -819,6 +849,14 @@ export class Endpoint {
 					!supportsMultiChannel ||
 					rootAssocConfig?.multiChannel === false;
 
+				this.driver.controllerLog.logNode(node.id, {
+					endpoint: this.index,
+					message: `Checking root device for fallback assignment of lifeline group #${group}:
+root supports multi channel:  ${supportsMultiChannel}
+configured strategy:           ${rootAssocConfig?.multiChannel ?? "auto"}
+must use node association:     ${rootMustUseNodeAssociation}`,
+				});
+
 				if (!rootMustUseNodeAssociation) {
 					const rootNodesValueId = getNodeIdsValueId(0, group);
 					const rootHasNodeAssociation = !!valueDB
@@ -835,7 +873,7 @@ export class Endpoint {
 						hasLifeline = true;
 						this.driver.controllerLog.logNode(node.id, {
 							endpoint: this.index,
-							message: `Lifeline group #${group} is assigned with a multi channel association on the root device`,
+							message: `Lifeline group #${group} is already assigned with a multi channel association on the root device`,
 							direction: "none",
 						});
 					} else {

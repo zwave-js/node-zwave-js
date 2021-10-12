@@ -14,8 +14,9 @@
 		"max": "255.255"
 	},
 	"supportsZWavePlus": true,
-	"paramInformation": {
-		"3": {
+	"paramInformation": [
+		{
+			"#": "3",
 			"label": "LED Indicator",
 			"description": "Controls LED behavior when switch state is on/off",
 			"valueSize": 1,
@@ -39,7 +40,8 @@
 				}
 			]
 		},
-		"4": {
+		{
+			"#": "4",
 			"label": "Orientation",
 			"description": "Controls the on/off orientation of the rocker switch",
 			"valueSize": 1,
@@ -59,5 +61,5 @@
 				}
 			]
 		}
-	}
+	]
 }

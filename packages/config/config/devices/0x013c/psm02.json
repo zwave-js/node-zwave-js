@@ -2,7 +2,7 @@
 	"manufacturer": "Philio Technology Corp",
 	"manufacturerId": "0x013c",
 	"label": "PSM02",
-	"description": "Slim Multi-Sensor",
+	"description": "Slim Multi-Sensor (Door/Motion/Temperature/Illumination)",
 	"devices": [
 		{
 			"productType": "0x0002",
@@ -17,90 +17,416 @@
 	"associations": {
 		"1": {
 			"label": "Reports",
-			"maxNodes": 7
+			"maxNodes": 7,
+			"isLifeline": true
 		},
 		"2": {
 			"label": "Light Control",
 			"maxNodes": 7
 		}
 	},
-	"paramInformation": {
-		"2": {
+	"paramInformation": [
+		{
+			"#": "2",
 			"label": "Basic Set Level",
 			"valueSize": 1,
-			"minValue": -1,
-			"maxValue": 100,
-			"defaultValue": -1
+			"unsigned": true,
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 255
 		},
-		"3": {
+		{
+			"#": "3",
 			"label": "PIR Sensitivity",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 99,
 			"defaultValue": 70
 		},
-		"4": {
+		{
+			"#": "4",
 			"label": "Light Threshold",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 100,
 			"defaultValue": 100
 		},
-		"5": {
-			"label": "Operation Mode",
+		{
+			"#": "5[0x01]",
+			"label": "Security Mode",
 			"valueSize": 1,
 			"minValue": 0,
-			"maxValue": 127,
-			"defaultValue": 0
+			"maxValue": 1,
+			"defaultValue": 0,
+			"options": [
+				{
+					"label": "Disable",
+					"value": 0
+				},
+				{
+					"label": "Enable",
+					"value": 1
+				}
+			]
 		},
-		"6": {
-			"label": "Multi-Sensor Function Switch",
+		{
+			"#": "5[0x02]",
+			"label": "Test Mode",
 			"valueSize": 1,
 			"minValue": 0,
-			"maxValue": 127,
-			"defaultValue": 4
+			"maxValue": 1,
+			"defaultValue": 0,
+			"options": [
+				{
+					"label": "Disable",
+					"value": 0
+				},
+				{
+					"label": "Enable",
+					"value": 1
+				}
+			]
 		},
-		"8": {
+		{
+			"#": "5[0x04]",
+			"label": "Door Window Function",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 0,
+			"options": [
+				{
+					"label": "Disable",
+					"value": 1
+				},
+				{
+					"label": "Enable",
+					"value": 0
+				}
+			]
+		},
+		{
+			"#": "5[0x08]",
+			"label": "Temperature Scale",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 0,
+			"options": [
+				{
+					"label": "Fahrenheit",
+					"value": 0
+				},
+				{
+					"label": "Celsius",
+					"value": 1
+				}
+			]
+		},
+		{
+			"#": "5[0x10]",
+			"label": "Illumination Report on Trigger",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 1,
+			"options": [
+				{
+					"label": "Disable",
+					"value": 1
+				},
+				{
+					"label": "Enable",
+					"value": 0
+				}
+			]
+		},
+		{
+			"#": "5[0x20]",
+			"label": "Temperature Report on Trigger",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 1,
+			"options": [
+				{
+					"label": "Disable",
+					"value": 1
+				},
+				{
+					"label": "Enable",
+					"value": 0
+				}
+			]
+		},
+		{
+			"#": "6[0x01]",
+			"label": "Magnetic Integrate Illumination",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 0,
+			"options": [
+				{
+					"label": "Disable",
+					"value": 1
+				},
+				{
+					"label": "Enable",
+					"value": 0
+				}
+			]
+		},
+		{
+			"#": "6[0x02]",
+			"label": "PIR Integrate Illumination",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 0,
+			"options": [
+				{
+					"label": "Disable",
+					"value": 1
+				},
+				{
+					"label": "Enable",
+					"value": 0
+				}
+			]
+		},
+		{
+			"#": "6[0x04]",
+			"label": "Magnetic Integrate PIR",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 1,
+			"options": [
+				{
+					"label": "Disable",
+					"value": 1
+				},
+				{
+					"label": "Enable",
+					"value": 0
+				}
+			]
+		},
+		{
+			"#": "6[0x08]",
+			"label": "Device and Light Location",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 0,
+			"options": [
+				{
+					"label": "Same Room",
+					"value": 0
+				},
+				{
+					"label": "Different Room",
+					"value": 1
+				}
+			]
+		},
+		{
+			"#": "6[0x10]",
+			"label": "5 Second Delay Light Off",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 1,
+			"options": [
+				{
+					"label": "Disable",
+					"value": 1
+				},
+				{
+					"label": "Enable",
+					"value": 0
+				}
+			]
+		},
+		{
+			"#": "6[0x20]",
+			"label": "Auto Turn Off Light",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 1,
+			"options": [
+				{
+					"label": "Disable",
+					"value": 1
+				},
+				{
+					"label": "Enable",
+					"value": 0
+				}
+			]
+		},
+		{
+			"#": "7[0x02]",
+			"label": "Send Motion Off Report",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 0,
+			"options": [
+				{
+					"label": "Disable",
+					"value": 0
+				},
+				{
+					"label": "Enable",
+					"value": 1
+				}
+			]
+		},
+		{
+			"#": "7[0x04]",
+			"label": "PIR Super Sensitivity Mode",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 1,
+			"options": [
+				{
+					"label": "Disable",
+					"value": 0
+				},
+				{
+					"label": "Enable",
+					"value": 1
+				}
+			]
+		},
+		{
+			"#": "7[0x08]",
+			"label": "Send Basic CC Off After Door Close",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 0,
+			"options": [
+				{
+					"label": "Disable",
+					"value": 1
+				},
+				{
+					"label": "Enable",
+					"value": 0
+				}
+			]
+		},
+		{
+			"#": "7[0x10]",
+			"label": "Notification Type",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 0,
+			"options": [
+				{
+					"label": "Notification Report",
+					"value": 0
+				},
+				{
+					"label": "Binary Sensor Report",
+					"value": 1
+				}
+			]
+		},
+		{
+			"#": "7[0x20]",
+			"label": "Multi Command Encapsulated Auto Reports",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 0,
+			"options": [
+				{
+					"label": "Disable",
+					"value": 1
+				},
+				{
+					"label": "Enable",
+					"value": 0
+				}
+			]
+		},
+		{
+			"#": "7[0x40]",
+			"label": "Report Battery State When Triggered",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 1,
+			"options": [
+				{
+					"label": "Disable",
+					"value": 1
+				},
+				{
+					"label": "Enable",
+					"value": 0
+				}
+			]
+		},
+		{
+			"#": "8",
 			"label": "PIR Re-Detect Interval Time",
 			"valueSize": 1,
 			"minValue": 3,
 			"maxValue": 127,
 			"defaultValue": 3
 		},
-		"9": {
+		{
+			"#": "9",
 			"label": "Turn Off Light Time",
 			"valueSize": 1,
 			"minValue": 4,
 			"maxValue": 127,
 			"defaultValue": 4
 		},
-		"10": {
+		{
+			"#": "10",
 			"label": "Auto Report Battery Time",
 			"valueSize": 1,
 			"minValue": 1,
 			"maxValue": 127,
 			"defaultValue": 12
 		},
-		"11": {
+		{
+			"#": "11",
 			"label": "Auto Report Door/Window State Time",
 			"valueSize": 1,
 			"minValue": 1,
 			"maxValue": 127,
 			"defaultValue": 12
 		},
-		"12": {
+		{
+			"#": "12",
 			"label": "Auto Report Illumination Time",
 			"valueSize": 1,
 			"minValue": 1,
 			"maxValue": 127,
 			"defaultValue": 12
 		},
-		"13": {
+		{
+			"#": "13",
 			"label": "Auto Report Temperature Time",
 			"valueSize": 1,
 			"minValue": 1,
 			"maxValue": 127,
 			"defaultValue": 12
 		}
+	],
+	"metadata": {
+		"inclusion": "Turn the primary controller of Z-Wave network into inclusion mode, triple click tamper switch within 1.5 seconds",
+		"exclusion": "Turn the primary controller of Z-Wave network into exclusion mode, triple click tamper switch within 1.5 seconds",
+		"reset": "Pressing tamper key four times within 1.5 seconds and do not release the tamper key in the 4th  pressed, and the LED will light on. After 3 seconds the LED will turn off, after that within 2 seconds, release the tamper key. If successful, the LED will light on one second. Otherwise, the LED will flash once. IDs are excluded and all settings will reset to factory default."
 	}
 }

@@ -14,8 +14,9 @@
 		"min": "0.0",
 		"max": "255.255"
 	},
-	"paramInformation": {
-		"1": {
+	"paramInformation": [
+		{
+			"#": "1",
 			"label": "Silent Mode On/Off",
 			"valueSize": 1,
 			"minValue": 1,
@@ -38,7 +39,8 @@
 				}
 			]
 		},
-		"2": {
+		{
+			"#": "2",
 			"label": "Auto Relock On/Off",
 			"valueSize": 1,
 			"minValue": 0,
@@ -57,7 +59,8 @@
 				}
 			]
 		},
-		"3": {
+		{
+			"#": "3",
 			"label": "Relock Time",
 			"description": "Time lock stays unlocked before automatically re-locking",
 			"valueSize": 1,
@@ -67,7 +70,7 @@
 			"defaultValue": 30,
 			"unsigned": true
 		}
-	},
+	],
 	"metadata": {
 		"inclusion": "1. Touch Keypad with palm.\n2. Enter User Code (Normal Mode only. Enter Master Code if operating Master Mode).\n3. Press 'I' button [Registration] from the inside of battery cover. \n4. Press 9, #, 1, # by sequence on the keypad (to Add).\n5. Wait until \"Ding dong dang\" melody play, then press 'I' button [Registration] from the inside of battery cover",
 		"exclusion": "1. Touch Keypad with palm.\n2. Enter User Code (Normal Mode only. Enter Master Code if operating Master Mode).\n3. Press 'I' button [Registration] from the inside of battery cover. \n4. Press 9, #, 3, # on the keypad by sequence (to Delete).\n5. Enter User Code (Normal Mode only. Enter Master Code if operating Master Mode), then press #.\n6. Wait until \"Ding dong dang\" melody play, then press 'I' button [Registration] from the inside of battery cover",

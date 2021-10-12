@@ -1538,7 +1538,8 @@ export function API(cc: CommandClasses): TypedClassDecorator<CCAPI> {
 }
 
 /**
- * Retrieves the implemented version defined for a Z-Wave command class
+ * @publicAPI
+ * Retrieves the CC API constructor that is defined for a Z-Wave command class
  */
 export function getAPI(cc: CommandClasses): APIConstructor | undefined {
 	// Retrieve the constructor map from the CCAPI class

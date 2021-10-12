@@ -11,14 +11,19 @@
 		{
 			"productType": "0x1301",
 			"productId": "0x1001"
+		},
+		{
+			"productType": "0x1301",
+			"productId": "0x4001"
 		}
 	],
 	"firmwareVersion": {
 		"min": "0.0",
 		"max": "255.255"
 	},
-	"paramInformation": {
-		"1": {
+	"paramInformation": [
+		{
+			"#": "1",
 			"label": "Override Schedule Duration",
 			"description": "Duration of Override Schedule after turning knob",
 			"unit": "minutes",
@@ -27,81 +32,94 @@
 			"maxValue": 10000,
 			"defaultValue": 240
 		},
-		"2[0x01]": {
+		{
+			"#": "2[0x01]",
 			"$import": "~/templates/master_template.json#base_enable_disable",
 			"label": "Open Window Detector (Normal)",
-			"defaultValue": 1, // Enable
+			"defaultValue": 1,
 			"valueSize": 4
 		},
-		"2[0x02]": {
+		{
+			"#": "2[0x02]",
 			"$import": "~/templates/master_template.json#base_enable_disable",
 			"label": "Open Window Detector (Rapid)",
 			"valueSize": 4
 		},
-		"2[0x04]": {
+		{
+			"#": "2[0x04]",
 			"$import": "~/templates/master_template.json#base_enable_disable",
 			"label": "Increase Receiver Sensitivity",
 			"description": "Increase receiver sensitivity, but shortens battery life",
 			"valueSize": 4
 		},
-		"2[0x08]": {
+		{
+			"#": "2[0x08]",
 			"$import": "~/templates/master_template.json#base_enable_disable",
 			"label": "Remote LED",
 			"description": "Enable LED indications when controlling remotely",
 			"valueSize": 4
 		},
-		"2[0x10]": {
+		{
+			"#": "2[0x10]",
 			"$import": "~/templates/master_template.json#base_enable_disable",
 			"label": "Protect Setting Full ON/OFF",
 			"description": "Protect from setting Full ON and Full OFF mode by turning the knob manually",
 			"valueSize": 4
 		},
-		"2[0x20]": {
+		{
+			"#": "2[0x20]",
 			"$if": "firmwareVersion >= 4.7",
 			"$import": "~/templates/master_template.json#base_enable_disable",
 			"label": "Vertical Mount",
 			"description": "Device mounted in vertical position",
 			"valueSize": 4
 		},
-		"2[0x40]": {
+		{
+			"#": "2[0x40]",
 			"$if": "firmwareVersion >= 4.7",
 			"$import": "~/templates/master_template.json#base_enable_disable",
 			"label": "Moderate Regulator Behaviour",
 			"description": "Set moderate regulator behaviour instead of rapid",
 			"valueSize": 4
 		},
-		"2[0x80]": {
+		{
+			"#": "2[0x80]",
 			"$if": "firmwareVersion >= 4.7",
 			"$import": "~/templates/master_template.json#base_enable_disable",
 			"label": "Inverted Knob Operation",
 			"valueSize": 4
 		},
-		"2[0x100]": {
+		{
+			"#": "2[0x100]",
 			"$if": "firmwareVersion >= 4.7",
 			"$import": "~/templates/master_template.json#base_enable_disable",
 			"label": "Heating Medium Demand Reports",
 			"valueSize": 4
 		},
-		"2[0x200]": {
+		{
+			"#": "2[0x200]",
 			"$if": "firmwareVersion >= 4.7",
 			"$import": "~/templates/master_template.json#base_enable_disable",
 			"label": "Detecting Heating System Failures",
 			"valueSize": 4
 		},
-		"3[0x01]": {
+		{
+			"#": "3[0x01]",
 			"$import": "~/templates/master_template.json#base_true_false",
 			"label": "Temperature Sensor",
 			"description": "Optional temperature sensor connected and operational",
 			"valueSize": 4,
 			"readOnly": true
 		},
-		"3[0x02]": {
+		{
+			"#": "3[0x02]",
 			"$import": "~/templates/master_template.json#base_true_false",
 			"label": "Open Window Detected",
 			"valueSize": 4,
 			"readOnly": true
 		},
-		"3[0x04]": {
+		{
+			"#": "3[0x04]",
 			"$if": "firmwareVersion >= 4.7",
 			"$import": "~/templates/master_template.json#base_true_false",
 			"label": "Provide Heat",
@@ -109,7 +127,8 @@
 			"valueSize": 4,
 			"readOnly": true
 		},
-		"3[0x08]": {
+		{
+			"#": "3[0x08]",
 			"$if": "firmwareVersion >= 4.7",
 			"$import": "~/templates/master_template.json#base_true_false",
 			"label": "Malfunctioning Heating System",
@@ -117,7 +136,7 @@
 			"valueSize": 4,
 			"readOnly": true
 		}
-	},
+	],
 	"compat": {
 		"preserveEndpoints": [2]
 	}

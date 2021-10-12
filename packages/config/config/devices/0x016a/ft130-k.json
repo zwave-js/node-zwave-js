@@ -14,8 +14,9 @@
 		"min": "0.0",
 		"max": "255.255"
 	},
-	"paramInformation": {
-		"1": {
+	"paramInformation": [
+		{
+			"#": "1",
 			"label": "Enable/Disable Touch Sound",
 			"valueSize": 1,
 			"minValue": 0,
@@ -34,7 +35,8 @@
 				}
 			]
 		},
-		"2": {
+		{
+			"#": "2",
 			"label": "Enable/Disable Touch Vibration",
 			"valueSize": 1,
 			"minValue": 0,
@@ -53,7 +55,8 @@
 				}
 			]
 		},
-		"3": {
+		{
+			"#": "3",
 			"label": "Enable/Disable Button Slide",
 			"valueSize": 1,
 			"minValue": 0,
@@ -72,7 +75,8 @@
 				}
 			]
 		},
-		"4": {
+		{
+			"#": "4",
 			"label": "Type of Report When Button Pressed",
 			"valueSize": 1,
 			"minValue": 1,
@@ -91,7 +95,8 @@
 				}
 			]
 		},
-		"11": {
+		{
+			"#": "11",
 			"label": "Type of Command to Send to Association Groups 2, 4, 6, 8",
 			"valueSize": 1,
 			"minValue": 0,
@@ -110,7 +115,8 @@
 				}
 			]
 		},
-		"39": {
+		{
+			"#": "39",
 			"label": "Low Battery Threshold",
 			"valueSize": 1,
 			"unit": "%",
@@ -119,7 +125,8 @@
 			"defaultValue": 20,
 			"unsigned": true
 		},
-		"81": {
+		{
+			"#": "81",
 			"label": "Enable/Disable LED on Wake Up",
 			"valueSize": 1,
 			"minValue": 0,
@@ -138,7 +145,8 @@
 				}
 			]
 		},
-		"82": {
+		{
+			"#": "82",
 			"label": "Enable/Disable Blinking LED on Command Failure",
 			"valueSize": 1,
 			"minValue": 0,
@@ -157,7 +165,8 @@
 				}
 			]
 		},
-		"83": {
+		{
+			"#": "83",
 			"label": "Enable/Disable LED When Charging",
 			"valueSize": 1,
 			"minValue": 0,
@@ -176,7 +185,8 @@
 				}
 			]
 		},
-		"84": {
+		{
+			"#": "84",
 			"label": "Enable/Disable LED on Button Press",
 			"valueSize": 1,
 			"minValue": 0,
@@ -195,7 +205,8 @@
 				}
 			]
 		},
-		"252": {
+		{
+			"#": "252",
 			"label": "Lock Configuration Parameters",
 			"valueSize": 1,
 			"minValue": 0,
@@ -214,7 +225,8 @@
 				}
 			]
 		},
-		"255": {
+		{
+			"#": "255",
 			"label": "Reset Device",
 			"valueSize": 4,
 			"minValue": 0,
@@ -233,7 +245,7 @@
 				}
 			]
 		}
-	},
+	],
 	"metadata": {
 		"inclusion": "Turn the primary controller of Z-Wave network into inclusion mode, short press the product’s Action button that you can find on the product's housing",
 		"exclusion": "Turn the primary controller of Z-Wave network into exclusion mode, short press the product’s Action button that you can find on the product's housing",

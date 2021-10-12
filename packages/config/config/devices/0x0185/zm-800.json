@@ -14,8 +14,9 @@
 		"min": "0.0",
 		"max": "255.255"
 	},
-	"paramInformation": {
-		"1": {
+	"paramInformation": [
+		{
+			"#": "1",
 			"label": "LED Light",
 			"valueSize": 1,
 			"minValue": 0,
@@ -34,7 +35,7 @@
 				}
 			]
 		}
-	},
+	],
 	"metadata": {
 		"inclusion": "1. Make sure ZM-800 is in the range of the Z-Wave controller. \n2. Set the Z-Wave controller to the inclusion mode. \n3. Quickly pressing TP-Switch2 button 3 times on the ZM-800.\n4. The ZM-800 is added to the network",
 		"exclusion": "1. Make sure ZM-800 is in the range of the Z-Wave controller. \n2. Set the Z-Wave controller to the exclusion mode. \n3. Quickly pressing TP-Switch2 button 3 times on the ZM-800.\n4. The ZM-800 is deleted from the network",
