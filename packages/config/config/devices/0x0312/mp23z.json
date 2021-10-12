@@ -14,8 +14,9 @@
 		"min": "0.0",
 		"max": "255.255"
 	},
-	"paramInformation": {
-		"1": {
+	"paramInformation": [
+		{
+			"#": "1",
 			"label": "Status LED Configuration",
 			"valueSize": 1,
 			"minValue": 0,
@@ -38,7 +39,8 @@
 				}
 			]
 		},
-		"2": {
+		{
+			"#": "2",
 			"label": "Auto-Off Timer",
 			"valueSize": 2,
 			"unit": "seconds",
@@ -53,7 +55,7 @@
 				}
 			]
 		}
-	},
+	],
 	"metadata": {
 		"inclusion": "ADD the MP23Z from the existing Z-Wave home control network with your primary controller.\n ---Refer to your primary controller instructions to process the inclusion / exclusion setup procedure.\n ---When prompted by your primary controller, click the Up or Down button three times in one second.\nInclude MP23Z to/from a Z-Wave Gateway with supporting Security.The MP23Z can support the Primary Controller that implemented the security S2",
 		"exclusion": "Remove the MP23Z from the existing Z-Wave home control network with your primary controller.\n ---Refer to your primary controller instructions to process the inclusion / exclusion setup procedure.\n ---When prompted by your primary controller, click the Up or Down button three times in one second.\nInclude MP23Z to/from a Z-Wave Gateway with supporting Security.The MP23Z can support the Primary Controller that implemented the security S2",

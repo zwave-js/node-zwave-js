@@ -14,8 +14,9 @@
 		"max": "255.255"
 	},
 	"supportsZWavePlus": true,
-	"paramInformation": {
-		"1": {
+	"paramInformation": [
+		{
+			"#": "1",
 			"label": "Dimmer Step Configuration",
 			"description": "Dimmer speed setting (On/Off)",
 			"valueSize": 1,
@@ -23,7 +24,8 @@
 			"maxValue": 99,
 			"defaultValue": 1
 		},
-		"2": {
+		{
+			"#": "2",
 			"label": "Dimmer Minimum Configuration",
 			"description": "Lowest dim setting before turning off",
 			"valueSize": 1,
@@ -31,7 +33,8 @@
 			"maxValue": 99,
 			"defaultValue": 1
 		},
-		"4": {
+		{
+			"#": "4",
 			"label": "Switch Orientation",
 			"description": "Invert on & off on the physical switch",
 			"valueSize": 1,
@@ -50,7 +53,8 @@
 				}
 			]
 		},
-		"5": {
+		{
+			"#": "5",
 			"label": "Shutoff Timer",
 			"valueSize": 2,
 			"unit": "seconds",
@@ -58,5 +62,5 @@
 			"maxValue": 32767,
 			"defaultValue": 0
 		}
-	}
+	]
 }

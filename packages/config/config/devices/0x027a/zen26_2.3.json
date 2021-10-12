@@ -24,8 +24,9 @@
 			"maxNodes": 5
 		}
 	},
-	"paramInformation": {
-		"1": {
+	"paramInformation": [
+		{
+			"#": "1",
 			"label": "Invert Switch",
 			"valueSize": 1,
 			"minValue": 0,
@@ -47,7 +48,8 @@
 				}
 			]
 		},
-		"2": {
+		{
+			"#": "2",
 			"label": "LED Indicator Control",
 			"valueSize": 1,
 			"minValue": 0,
@@ -73,7 +75,8 @@
 				}
 			]
 		},
-		"3": {
+		{
+			"#": "3",
 			"label": "Auto Turn-Off Timer",
 			"valueSize": 1,
 			"minValue": 0,
@@ -91,7 +94,8 @@
 				}
 			]
 		},
-		"4": {
+		{
+			"#": "4",
 			"label": "Auto Turn-Off Timer Duration",
 			"unit": "minutes",
 			"valueSize": 4,
@@ -99,7 +103,8 @@
 			"maxValue": 65535,
 			"defaultValue": 60
 		},
-		"5": {
+		{
+			"#": "5",
 			"label": "Auto Turn-On Timer",
 			"valueSize": 1,
 			"minValue": 0,
@@ -117,7 +122,8 @@
 				}
 			]
 		},
-		"6": {
+		{
+			"#": "6",
 			"label": "Auto Turn-On Timer Duration",
 			"unit": "minutes",
 			"valueSize": 4,
@@ -125,7 +131,8 @@
 			"maxValue": 65535,
 			"defaultValue": 30
 		},
-		"7[0x01]": {
+		{
+			"#": "7[0x01]",
 			"label": "Send Status Change Report: Local Control",
 			"description": "Determine whether a trigger of this type should prompt a status change report to associated devices.",
 			"valueSize": 1,
@@ -145,7 +152,8 @@
 				}
 			]
 		},
-		"7[0x02]": {
+		{
+			"#": "7[0x02]",
 			"label": "Send Status Change Report: 3-Way",
 			"description": "Determine whether a trigger of this type should prompt a status change report to associated devices.",
 			"valueSize": 1,
@@ -165,7 +173,8 @@
 				}
 			]
 		},
-		"7[0x04]": {
+		{
+			"#": "7[0x04]",
 			"label": "Send Status Change Report: Z-Wave",
 			"description": "Determine whether a trigger of this type should prompt a status change report to associated devices.",
 			"valueSize": 1,
@@ -185,7 +194,8 @@
 				}
 			]
 		},
-		"7[0x08]": {
+		{
+			"#": "7[0x08]",
 			"label": "Send Status Change Report: Timer",
 			"description": "Determine whether a trigger of this type should prompt a status change report to associated devices.",
 			"valueSize": 1,
@@ -205,10 +215,12 @@
 				}
 			]
 		},
-		"8": {
+		{
+			"#": "8",
 			"$import": "~/templates/master_template.json#state_after_power_failure_off_on_prev"
 		},
-		"10": {
+		{
+			"#": "10",
 			"label": "Enable/Disable Scene Control",
 			"description": "Send scene commands to hub on physical paddle presses.",
 			"valueSize": 1,
@@ -227,7 +239,8 @@
 				}
 			]
 		},
-		"11": {
+		{
+			"#": "11",
 			"label": "Enable Local and Z-Wave Control",
 			"description": "Enable or disable local control at the switch and Z-Wave control.",
 			"valueSize": 1,
@@ -250,7 +263,8 @@
 				}
 			]
 		},
-		"13": {
+		{
+			"#": "13",
 			"label": "Reporting Behavior When Physical Control Is Disabled",
 			"description": "Enable or disable reporting on/off status and changing LED indicator state even if physical and Z-Wave control is disabled.",
 			"valueSize": 1,
@@ -269,5 +283,5 @@
 				}
 			]
 		}
-	}
+	]
 }

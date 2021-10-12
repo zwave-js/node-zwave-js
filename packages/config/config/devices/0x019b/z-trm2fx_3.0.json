@@ -14,8 +14,9 @@
 		"max": "255.255"
 	},
 	"supportsZWavePlus": true,
-	"paramInformation": {
-		"1": {
+	"paramInformation": [
+		{
+			"#": "1",
 			"label": "Operation mode",
 			"valueSize": 1,
 			"minValue": 0,
@@ -41,7 +42,8 @@
 				}
 			]
 		},
-		"2": {
+		{
+			"#": "2",
 			"label": "Sensor mode",
 			"valueSize": 1,
 			"minValue": 0,
@@ -63,7 +65,8 @@
 				}
 			]
 		},
-		"3": {
+		{
+			"#": "3",
 			"label": "Floor sensor type",
 			"valueSize": 1,
 			"minValue": 0,
@@ -97,14 +100,16 @@
 				}
 			]
 		},
-		"4": {
+		{
+			"#": "4",
 			"label": "Temperature control hysteresis (DIFF I)",
 			"valueSize": 1,
 			"minValue": 3,
 			"maxValue": 30,
 			"defaultValue": 5
 		},
-		"5": {
+		{
+			"#": "5",
 			"label": "Floor minimum temperature limit (FLo)",
 			"unit": "oC",
 			"valueSize": 2,
@@ -112,7 +117,8 @@
 			"maxValue": 400,
 			"defaultValue": 50
 		},
-		"6": {
+		{
+			"#": "6",
 			"label": "Floor maximum temperature (FHi)",
 			"unit": "oC",
 			"valueSize": 2,
@@ -120,7 +126,8 @@
 			"maxValue": 400,
 			"defaultValue": 400
 		},
-		"7": {
+		{
+			"#": "7",
 			"label": "Air (A2) minimum temperature limit (ALo)",
 			"unit": "oC",
 			"valueSize": 2,
@@ -128,7 +135,8 @@
 			"maxValue": 400,
 			"defaultValue": 50
 		},
-		"8": {
+		{
+			"#": "8",
 			"label": "Air (A2) maximum temperature limit (AHi)",
 			"unit": "oC",
 			"valueSize": 2,
@@ -136,7 +144,8 @@
 			"maxValue": 400,
 			"defaultValue": 400
 		},
-		"9": {
+		{
+			"#": "9",
 			"label": "Heating mode setpoint (CO)",
 			"unit": "oC",
 			"valueSize": 2,
@@ -144,7 +153,8 @@
 			"maxValue": 400,
 			"defaultValue": 210
 		},
-		"10": {
+		{
+			"#": "10",
 			"label": "Energy saving mode setpoint (ECO)",
 			"unit": "oC",
 			"valueSize": 2,
@@ -152,7 +162,8 @@
 			"maxValue": 400,
 			"defaultValue": 180
 		},
-		"11": {
+		{
+			"#": "11",
 			"label": "Cooling setpoint (COOL)",
 			"unit": "oC",
 			"valueSize": 2,
@@ -160,7 +171,8 @@
 			"maxValue": 400,
 			"defaultValue": 210
 		},
-		"12": {
+		{
+			"#": "12",
 			"label": "Floor sensor calibration",
 			"unit": "oC",
 			"valueSize": 1,
@@ -168,7 +180,8 @@
 			"maxValue": 40,
 			"defaultValue": 0
 		},
-		"13": {
+		{
+			"#": "13",
 			"label": "External sensor calibration",
 			"unit": "oC",
 			"valueSize": 1,
@@ -176,7 +189,8 @@
 			"maxValue": 40,
 			"defaultValue": 0
 		},
-		"14": {
+		{
+			"#": "14",
 			"label": "Temperature display",
 			"valueSize": 1,
 			"minValue": 0,
@@ -194,7 +208,8 @@
 				}
 			]
 		},
-		"15": {
+		{
+			"#": "15",
 			"label": "Button brightness - dimmed state",
 			"unit": "%",
 			"valueSize": 1,
@@ -202,7 +217,8 @@
 			"maxValue": 100,
 			"defaultValue": 50
 		},
-		"16": {
+		{
+			"#": "16",
 			"label": "Button brightness - active state",
 			"unit": "%",
 			"valueSize": 1,
@@ -210,7 +226,8 @@
 			"maxValue": 100,
 			"defaultValue": 100
 		},
-		"17": {
+		{
+			"#": "17",
 			"label": "Display brightness - dimmed state",
 			"unit": "%",
 			"valueSize": 1,
@@ -218,7 +235,8 @@
 			"maxValue": 100,
 			"defaultValue": 50
 		},
-		"18": {
+		{
+			"#": "18",
 			"label": "Display brightness - active state",
 			"unit": "%",
 			"valueSize": 1,
@@ -226,7 +244,8 @@
 			"maxValue": 100,
 			"defaultValue": 100
 		},
-		"19": {
+		{
+			"#": "19",
 			"label": "Temperature report interval",
 			"unit": "seconds",
 			"valueSize": 2,
@@ -234,7 +253,8 @@
 			"maxValue": 32767,
 			"defaultValue": 60
 		},
-		"20": {
+		{
+			"#": "20",
 			"label": "Temperature report hysteresis",
 			"unit": "oC",
 			"valueSize": 1,
@@ -242,7 +262,8 @@
 			"maxValue": 100,
 			"defaultValue": 10
 		},
-		"21": {
+		{
+			"#": "21",
 			"label": "Meter report interval",
 			"unit": "seconds",
 			"valueSize": 2,
@@ -250,7 +271,8 @@
 			"maxValue": 32767,
 			"defaultValue": 60
 		},
-		"22": {
+		{
+			"#": "22",
 			"label": "Meter report delta value",
 			"unit": "kWh/10",
 			"valueSize": 1,
@@ -258,7 +280,7 @@
 			"maxValue": 127,
 			"defaultValue": 10
 		}
-	},
+	],
 	"compat": {
 		// Stop this device from flooding the network with hundreds of invalid reports
 		"skipConfigurationInfoQuery": true

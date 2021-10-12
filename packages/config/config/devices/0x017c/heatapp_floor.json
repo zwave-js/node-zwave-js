@@ -13,8 +13,9 @@
 		"min": "0.0",
 		"max": "255.255"
 	},
-	"paramInformation": {
-		"1": {
+	"paramInformation": [
+		{
+			"#": "1",
 			"label": "Missing Radio Link time",
 			"unit": "minutes",
 			"valueSize": 1,
@@ -23,7 +24,8 @@
 			"defaultValue": 30,
 			"unsigned": true
 		},
-		"2": {
+		{
+			"#": "2",
 			"label": "Relay type",
 			"description": "0 normal open, 1 normal close, 2 switching",
 			"valueSize": 1,
@@ -46,5 +48,5 @@
 				}
 			]
 		}
-	}
+	]
 }

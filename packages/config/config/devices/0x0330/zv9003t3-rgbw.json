@@ -14,8 +14,9 @@
 		"max": "255.255"
 	},
 	"supportsZWavePlus": true,
-	"paramInformation": {
-		"3": {
+	"paramInformation": [
+		{
+			"#": "3",
 			"label": "Scene Command Type",
 			"description": "Set to choose between CENTRAL_SCENE or SCENE_ACTIVATION command types",
 			"valueSize": 1,
@@ -33,7 +34,8 @@
 				}
 			]
 		},
-		"4": {
+		{
+			"#": "4",
 			"label": "Scene Command Target Role",
 			"description": "Send Scene Commands to Gateway or Controller Devices",
 			"valueSize": 1,
@@ -51,5 +53,5 @@
 				}
 			]
 		}
-	}
+	]
 }

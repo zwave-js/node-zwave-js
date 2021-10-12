@@ -86,8 +86,9 @@ Labels should be clear and concise. They should clearly explain what the paramet
 ?> Labels should be **Title Case**.
 
 ```diff
-"paramInformation": {
-	"4": {
+"paramInformation": [
+	{
+		"#": "4",
 -		"label": "Switch multilevel set single-activation values for pushbutton 1, Byte 1",
 +		"label": "Value Sent on Pushbutton 1",
 		"valueSize": 1,
@@ -96,7 +97,7 @@ Labels should be clear and concise. They should clearly explain what the paramet
 		"defaultValue": 0,
 		"unsigned": true
 	}
-}
+]
 ```
 
 ### Parameter Descriptions
@@ -110,8 +111,9 @@ As a rule of thumb: Only include a description if it is necessary, helpful, and 
 **Exception 1:** Sometimes a parameter provides for a range of 0-99, or 255 for the last value (or similar). This could be confusing to users because 100-254 are not valid values. In such circumstances the allowable range _should_ be explained, in conjunction with a predefined option as a hint (described below).
 
 ```json
-"paramInformation": {
-	"4": {
+"paramInformation": [
+	{
+		"#": "4",
 		"label": "Duration Sent on Pushbutton 1",
 		"description": "Allowable range: 0-99",
 		"valueSize": 1,
@@ -126,14 +128,15 @@ As a rule of thumb: Only include a description if it is necessary, helpful, and 
 			}
 		]
 	}
-}
+]
 ```
 
 **Exception 2:** Some manufacturers use parameters for which the unit changes depending on the value. In such circumstances there is no other option but to describe the unit in the description.
 
 ```json
-"paramInformation": {
-	"4": {
+"paramInformation": [
+	{
+		"#": "4",
 		"label": "Duration Sent on Pushbutton 1",
 		"description": "Values 1-127 = seconds; 128-255 = minutes (minus 127)",
 		"valueSize": 1,
@@ -143,7 +146,7 @@ As a rule of thumb: Only include a description if it is necessary, helpful, and 
 		"unsigned": true,
 		"allowManualEntry": false
 	}
-}
+]
 ```
 
 ### Options
@@ -155,8 +158,9 @@ Whenever possible we aim to provide a list of pre-defined options to be displaye
 > [!NOTE] If the predefined options are the **only** possible values, manual entry should be disabled. To do that, set `allowManualEntry` to `false`.
 
 ```json
-"paramInformation": {
-	"4": {
+"paramInformation": [
+	{
+		"#": "4",
 		"label": "Invert Switch",
 		"valueSize": 1,
 		"minValue": 0,
@@ -175,7 +179,7 @@ Whenever possible we aim to provide a list of pre-defined options to be displaye
 			}
 		]
 	}
-}
+]
 ```
 
 #### Options as Hints
@@ -185,8 +189,9 @@ Sometimes a parameter provides for a range of 0-99, or 255 for the last value (o
 For example:
 
 ```json
-"paramInformation": {
-	"4": {
+"paramInformation": [
+	{
+		"#": "4",
 		"label": "Dimmer Delay",
 		"description": "Allowable range: 0-99",
 		"valueSize": 1,
@@ -201,14 +206,15 @@ For example:
 			}
 		]
 	}
-}
+]
 ```
 
 or
 
 ```json
-"paramInformation": {
-	"4": {
+"paramInformation": [
+	{
+		"#": "4",
 		"label": "Dimmer Transition",
 		"valueSize": 1,
 		"minValue": 0,
@@ -222,7 +228,7 @@ or
 			}
 		]
 	}
-}
+]
 ```
 
 ### Special Note: Enable/Disable

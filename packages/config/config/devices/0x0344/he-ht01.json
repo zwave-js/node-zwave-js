@@ -13,14 +13,14 @@
 		"min": "0.0",
 		"max": "255.255"
 	},
-	"paramInformation": {
-		"1": {
+	"paramInformation": [
+		{
+			"#": "1",
 			"label": "Frequency Region",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 9,
-			"defaultValue": 0,
-			"allowManualEntry": false,
+			"readOnly": true,
 			"options": [
 				{
 					"label": "EU (868.4 MHz, 869.85 MHz)",
@@ -64,14 +64,16 @@
 				}
 			]
 		},
-		"3": {
+		{
+			"#": "3",
 			"label": "Hardware and Software Versions",
 			"valueSize": 4,
 			"minValue": 0,
 			"maxValue": 0,
 			"readOnly": true
 		},
-		"4": {
+		{
+			"#": "4",
 			"label": "Energy Consumption",
 			"unit": "kW",
 			"valueSize": 4,
@@ -79,14 +81,16 @@
 			"maxValue": 0,
 			"readOnly": true
 		},
-		"5": {
-			"label": "Display Brightness Control",
+		{
+			"#": "5",
+			"label": "Backlight Brightness Control",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 10,
 			"defaultValue": 0
 		},
-		"6": {
+		{
+			"#": "6",
 			"label": "Touch Buttons Sensitivity",
 			"description": "1 = low sensitivity; 10 = high sensitivity",
 			"valueSize": 1,
@@ -94,7 +98,8 @@
 			"maxValue": 10,
 			"defaultValue": 6
 		},
-		"7": {
+		{
+			"#": "7",
 			"label": "Relay Output Mode",
 			"valueSize": 1,
 			"minValue": 0,
@@ -112,7 +117,8 @@
 				}
 			]
 		},
-		"8": {
+		{
+			"#": "8",
 			"label": "External Input Mode",
 			"valueSize": 1,
 			"minValue": 0,
@@ -138,7 +144,8 @@
 				}
 			]
 		},
-		"9": {
+		{
+			"#": "9",
 			"label": "Operating Mode for External Input Action",
 			"valueSize": 1,
 			"minValue": 1,
@@ -172,7 +179,8 @@
 				}
 			]
 		},
-		"10": {
+		{
+			"#": "10",
 			"label": "Floor Sensor Resistance",
 			"unit": "kΩ",
 			"valueSize": 1,
@@ -180,7 +188,8 @@
 			"maxValue": 100,
 			"defaultValue": 10
 		},
-		"11": {
+		{
+			"#": "11",
 			"label": "Source Sensor",
 			"valueSize": 1,
 			"minValue": 1,
@@ -218,7 +227,8 @@
 				}
 			]
 		},
-		"12": {
+		{
+			"#": "12",
 			"label": "Air Temperature: Minimum",
 			"unit": "0.1 °C",
 			"valueSize": 2,
@@ -226,7 +236,8 @@
 			"maxValue": 360,
 			"defaultValue": 210
 		},
-		"13": {
+		{
+			"#": "13",
 			"label": "Air Temperature: Maximum",
 			"unit": "0.1 °C",
 			"valueSize": 2,
@@ -234,7 +245,8 @@
 			"maxValue": 370,
 			"defaultValue": 270
 		},
-		"14": {
+		{
+			"#": "14",
 			"label": "Floor Temperature: Minimum",
 			"unit": "0.1 °C",
 			"valueSize": 2,
@@ -242,7 +254,8 @@
 			"maxValue": 360,
 			"defaultValue": 180
 		},
-		"15": {
+		{
+			"#": "15",
 			"label": "Floor Temperature: Maximum",
 			"unit": "0.1 °C",
 			"valueSize": 2,
@@ -250,7 +263,8 @@
 			"maxValue": 370,
 			"defaultValue": 320
 		},
-		"16": {
+		{
+			"#": "16",
 			"label": "Floor Temperature Calibration",
 			"unit": "0.1 °C",
 			"valueSize": 1,
@@ -258,7 +272,8 @@
 			"maxValue": 100,
 			"defaultValue": 0
 		},
-		"17": {
+		{
+			"#": "17",
 			"label": "Air Temperature Calibration",
 			"unit": "0.1 °C",
 			"valueSize": 1,
@@ -266,7 +281,8 @@
 			"maxValue": 100,
 			"defaultValue": 0
 		},
-		"18": {
+		{
+			"#": "18",
 			"label": "Temperature Hysteresis",
 			"unit": "0.1 °C",
 			"valueSize": 1,
@@ -274,7 +290,8 @@
 			"maxValue": 100,
 			"defaultValue": 5
 		},
-		"19": {
+		{
+			"#": "19",
 			"label": "Time Correction by Controller",
 			"valueSize": 1,
 			"minValue": 0,
@@ -292,7 +309,8 @@
 				}
 			]
 		},
-		"20": {
+		{
+			"#": "20",
 			"label": "Time Format",
 			"valueSize": 1,
 			"minValue": 0,
@@ -310,7 +328,8 @@
 				}
 			]
 		},
-		"21": {
+		{
+			"#": "21",
 			"label": "Week Day Override",
 			"valueSize": 1,
 			"minValue": 1,
@@ -348,7 +367,8 @@
 				}
 			]
 		},
-		"22": {
+		{
+			"#": "22",
 			"label": "Time Override",
 			"unit": "HHMM",
 			"valueSize": 2,
@@ -356,7 +376,8 @@
 			"maxValue": 2359,
 			"defaultValue": 0
 		},
-		"23": {
+		{
+			"#": "23",
 			"label": "Time Regulation On Time",
 			"description": "Floor HEATING time when time regulator is selected as the source sensor in Parameter 11.",
 			"unit": "minutes",
@@ -365,7 +386,8 @@
 			"maxValue": 240,
 			"defaultValue": 30
 		},
-		"24": {
+		{
+			"#": "24",
 			"label": "Time Regulation Off Time",
 			"description": "Floor IDLE time when time regulator is selected as the source sensor in Parameter 11.",
 			"unit": "minutes",
@@ -374,7 +396,8 @@
 			"maxValue": 240,
 			"defaultValue": 30
 		},
-		"25": {
+		{
+			"#": "25",
 			"label": "Dry Time",
 			"unit": "minutes",
 			"valueSize": 1,
@@ -382,7 +405,8 @@
 			"maxValue": 90,
 			"defaultValue": 30
 		},
-		"26": {
+		{
+			"#": "26",
 			"label": "Mode To Switch After Dry Mode Operation Completion",
 			"valueSize": 1,
 			"minValue": 1,
@@ -412,7 +436,8 @@
 				}
 			]
 		},
-		"41": {
+		{
+			"#": "41",
 			"label": "Morning Start Time",
 			"unit": "HHMM",
 			"valueSize": 2,
@@ -420,7 +445,8 @@
 			"maxValue": 2359,
 			"defaultValue": 600
 		},
-		"42": {
+		{
+			"#": "42",
 			"label": "Day Start Time",
 			"unit": "HHMM",
 			"valueSize": 2,
@@ -428,7 +454,8 @@
 			"maxValue": 2359,
 			"defaultValue": 900
 		},
-		"43": {
+		{
+			"#": "43",
 			"label": "Evening Start Time",
 			"unit": "HHMM",
 			"valueSize": 2,
@@ -436,7 +463,8 @@
 			"maxValue": 2359,
 			"defaultValue": 1800
 		},
-		"44": {
+		{
+			"#": "44",
 			"label": "Night Start Time",
 			"unit": "HHMM",
 			"valueSize": 2,
@@ -444,7 +472,8 @@
 			"maxValue": 2359,
 			"defaultValue": 2300
 		},
-		"45": {
+		{
+			"#": "45",
 			"label": "Monday Morning Temperature",
 			"unit": "0.1 °C",
 			"valueSize": 2,
@@ -452,7 +481,8 @@
 			"maxValue": 370,
 			"defaultValue": 240
 		},
-		"46": {
+		{
+			"#": "46",
 			"label": "Monday Day Temperature",
 			"unit": "0.1 °C",
 			"valueSize": 2,
@@ -460,7 +490,8 @@
 			"maxValue": 370,
 			"defaultValue": 200
 		},
-		"47": {
+		{
+			"#": "47",
 			"label": "Monday Evening Temperature",
 			"unit": "0.1 °C",
 			"valueSize": 2,
@@ -468,7 +499,8 @@
 			"maxValue": 370,
 			"defaultValue": 230
 		},
-		"48": {
+		{
+			"#": "48",
 			"label": "Monday Night Temperature",
 			"unit": "0.1 °C",
 			"valueSize": 2,
@@ -476,7 +508,8 @@
 			"maxValue": 370,
 			"defaultValue": 180
 		},
-		"49": {
+		{
+			"#": "49",
 			"label": "Tuesday Morning Temperature",
 			"unit": "0.1 °C",
 			"valueSize": 2,
@@ -484,7 +517,8 @@
 			"maxValue": 370,
 			"defaultValue": 240
 		},
-		"50": {
+		{
+			"#": "50",
 			"label": "Tuesday Day Temperature",
 			"unit": "0.1 °C",
 			"valueSize": 2,
@@ -492,7 +526,8 @@
 			"maxValue": 370,
 			"defaultValue": 200
 		},
-		"51": {
+		{
+			"#": "51",
 			"label": "Tuesday Evening Temperature",
 			"unit": "0.1 °C",
 			"valueSize": 2,
@@ -500,7 +535,8 @@
 			"maxValue": 370,
 			"defaultValue": 230
 		},
-		"52": {
+		{
+			"#": "52",
 			"label": "Tuesday Night Temperature",
 			"unit": "0.1 °C",
 			"valueSize": 2,
@@ -508,7 +544,8 @@
 			"maxValue": 370,
 			"defaultValue": 180
 		},
-		"53": {
+		{
+			"#": "53",
 			"label": "Wednesday Morning Temperature",
 			"unit": "0.1 °C",
 			"valueSize": 2,
@@ -516,7 +553,8 @@
 			"maxValue": 370,
 			"defaultValue": 240
 		},
-		"54": {
+		{
+			"#": "54",
 			"label": "Wednesday Day Temperature",
 			"unit": "0.1 °C",
 			"valueSize": 2,
@@ -524,7 +562,8 @@
 			"maxValue": 370,
 			"defaultValue": 200
 		},
-		"55": {
+		{
+			"#": "55",
 			"label": "Wednesday Evening Temperature",
 			"unit": "0.1 °C",
 			"valueSize": 2,
@@ -532,7 +571,8 @@
 			"maxValue": 370,
 			"defaultValue": 230
 		},
-		"56": {
+		{
+			"#": "56",
 			"label": "Wednesday Night Temperature",
 			"unit": "0.1 °C",
 			"valueSize": 2,
@@ -540,7 +580,8 @@
 			"maxValue": 370,
 			"defaultValue": 180
 		},
-		"57": {
+		{
+			"#": "57",
 			"label": "Thursday Morning Temperature",
 			"unit": "0.1 °C",
 			"valueSize": 2,
@@ -548,7 +589,8 @@
 			"maxValue": 370,
 			"defaultValue": 240
 		},
-		"58": {
+		{
+			"#": "58",
 			"label": "Thursday Day Temperature",
 			"unit": "0.1 °C",
 			"valueSize": 2,
@@ -556,7 +598,8 @@
 			"maxValue": 370,
 			"defaultValue": 200
 		},
-		"59": {
+		{
+			"#": "59",
 			"label": "Thursday Evening Temperature",
 			"unit": "0.1 °C",
 			"valueSize": 2,
@@ -564,7 +607,8 @@
 			"maxValue": 370,
 			"defaultValue": 230
 		},
-		"60": {
+		{
+			"#": "60",
 			"label": "Thursday Night Temperature",
 			"unit": "0.1 °C",
 			"valueSize": 2,
@@ -572,7 +616,8 @@
 			"maxValue": 370,
 			"defaultValue": 180
 		},
-		"61": {
+		{
+			"#": "61",
 			"label": "Friday Morning Temperature",
 			"unit": "0.1 °C",
 			"valueSize": 2,
@@ -580,7 +625,8 @@
 			"maxValue": 370,
 			"defaultValue": 240
 		},
-		"62": {
+		{
+			"#": "62",
 			"label": "Friday Day Temperature",
 			"unit": "0.1 °C",
 			"valueSize": 2,
@@ -588,7 +634,8 @@
 			"maxValue": 370,
 			"defaultValue": 200
 		},
-		"63": {
+		{
+			"#": "63",
 			"label": "Friday Evening Temperature",
 			"unit": "0.1 °C",
 			"valueSize": 2,
@@ -596,7 +643,8 @@
 			"maxValue": 370,
 			"defaultValue": 230
 		},
-		"64": {
+		{
+			"#": "64",
 			"label": "Friday Night Temperature",
 			"unit": "0.1 °C",
 			"valueSize": 2,
@@ -604,7 +652,8 @@
 			"maxValue": 370,
 			"defaultValue": 180
 		},
-		"65": {
+		{
+			"#": "65",
 			"label": "Saturday Morning Temperature",
 			"unit": "0.1 °C",
 			"valueSize": 2,
@@ -612,7 +661,8 @@
 			"maxValue": 370,
 			"defaultValue": 240
 		},
-		"66": {
+		{
+			"#": "66",
 			"label": "Saturday Day Temperature",
 			"unit": "0.1 °C",
 			"valueSize": 2,
@@ -620,7 +670,8 @@
 			"maxValue": 370,
 			"defaultValue": 200
 		},
-		"67": {
+		{
+			"#": "67",
 			"label": "Saturday Evening Temperature",
 			"unit": "0.1 °C",
 			"valueSize": 2,
@@ -628,7 +679,8 @@
 			"maxValue": 370,
 			"defaultValue": 230
 		},
-		"68": {
+		{
+			"#": "68",
 			"label": "Saturday Night Temperature",
 			"unit": "0.1 °C",
 			"valueSize": 2,
@@ -636,7 +688,8 @@
 			"maxValue": 370,
 			"defaultValue": 180
 		},
-		"69": {
+		{
+			"#": "69",
 			"label": "Sunday Morning Temperature",
 			"unit": "0.1 °C",
 			"valueSize": 2,
@@ -644,7 +697,8 @@
 			"maxValue": 370,
 			"defaultValue": 240
 		},
-		"70": {
+		{
+			"#": "70",
 			"label": "Sunday Day Temperature",
 			"unit": "0.1 °C",
 			"valueSize": 2,
@@ -652,7 +706,8 @@
 			"maxValue": 370,
 			"defaultValue": 200
 		},
-		"71": {
+		{
+			"#": "71",
 			"label": "Sunday Evening Temperature",
 			"unit": "0.1 °C",
 			"valueSize": 2,
@@ -660,7 +715,8 @@
 			"maxValue": 370,
 			"defaultValue": 230
 		},
-		"72": {
+		{
+			"#": "72",
 			"label": "Sunday Night Temperature",
 			"unit": "0.1 °C",
 			"valueSize": 2,
@@ -668,7 +724,8 @@
 			"maxValue": 370,
 			"defaultValue": 180
 		},
-		"141": {
+		{
+			"#": "141",
 			"label": "Energy Consumption Report Interval",
 			"unit": "minutes",
 			"valueSize": 1,
@@ -676,7 +733,8 @@
 			"maxValue": 120,
 			"defaultValue": 10
 		},
-		"142": {
+		{
+			"#": "142",
 			"label": "Energy Consumption Report Threshold",
 			"unit": "%",
 			"valueSize": 1,
@@ -684,7 +742,8 @@
 			"maxValue": 50,
 			"defaultValue": 25
 		},
-		"143": {
+		{
+			"#": "143",
 			"label": "Sensors Consecutive Reporting Interval",
 			"unit": "minutes",
 			"valueSize": 1,
@@ -692,7 +751,8 @@
 			"maxValue": 120,
 			"defaultValue": 10
 		},
-		"144": {
+		{
+			"#": "144",
 			"label": "Air & Floor Temperature Sensors Report Threshold",
 			"unit": "0.1 °C",
 			"valueSize": 1,
@@ -700,7 +760,8 @@
 			"maxValue": 100,
 			"defaultValue": 2
 		},
-		"145": {
+		{
+			"#": "145",
 			"label": "Humidity Sensor Report Threshold",
 			"unit": "%",
 			"valueSize": 1,
@@ -708,7 +769,8 @@
 			"maxValue": 25,
 			"defaultValue": 2
 		},
-		"146": {
+		{
+			"#": "146",
 			"label": "Light Sensor Report Threshold",
 			"unit": "%",
 			"valueSize": 1,
@@ -716,7 +778,8 @@
 			"maxValue": 99,
 			"defaultValue": 50
 		},
-		"171": {
+		{
+			"#": "171",
 			"label": "Basic Set Action",
 			"description": "Activate this mode when a Basic Set is received",
 			"valueSize": 1,
@@ -755,5 +818,5 @@
 				}
 			]
 		}
-	}
+	]
 }

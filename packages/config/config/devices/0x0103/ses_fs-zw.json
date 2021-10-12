@@ -21,8 +21,9 @@
 			"isLifeline": true
 		}
 	},
-	"paramInformation": {
-		"1": {
+	"paramInformation": [
+		{
+			"#": "1",
 			"label": "Default switch state",
 			"description": "Behaviour after mains failure",
 			"valueSize": 1,
@@ -45,7 +46,8 @@
 				}
 			]
 		},
-		"2": {
+		{
+			"#": "2",
 			"label": "Energy minimum report time",
 			"description": "Minimum time between two (non-requested) energy values",
 			"unit": "1s",
@@ -54,7 +56,8 @@
 			"maxValue": 32767,
 			"defaultValue": 10
 		},
-		"3": {
+		{
+			"#": "3",
 			"label": "Energy maximum report time",
 			"description": "Maximum time between two energy values, independently of changes in the value",
 			"unit": "1s",
@@ -63,7 +66,8 @@
 			"maxValue": 32767,
 			"defaultValue": 120
 		},
-		"4": {
+		{
+			"#": "4",
 			"label": "Power minimum report time",
 			"description": "Minimum time between two (non-requested) power values",
 			"unit": "1s",
@@ -72,7 +76,8 @@
 			"maxValue": 32767,
 			"defaultValue": 10
 		},
-		"5": {
+		{
+			"#": "5",
 			"label": "Power maximum report time",
 			"description": "Maximum time between two power values, independently of changes in the value",
 			"unit": "1s",
@@ -81,7 +86,8 @@
 			"maxValue": 32767,
 			"defaultValue": 120
 		},
-		"6": {
+		{
+			"#": "6",
 			"label": "Energy delta value",
 			"description": "Minimum change required for a new energy value to be transmitted.",
 			"unit": "0.1 Wh",
@@ -90,7 +96,8 @@
 			"maxValue": 32767,
 			"defaultValue": 10
 		},
-		"7": {
+		{
+			"#": "7",
 			"label": "Power delta value",
 			"description": "Minimum change required for a new power value to be transmitted.",
 			"unit": "0.1 Wh",
@@ -99,7 +106,8 @@
 			"maxValue": 32767,
 			"defaultValue": 150
 		},
-		"8": {
+		{
+			"#": "8",
 			"label": "Safety shutdown configuration",
 			"description": "Behaviour in the event of a safety shutdown",
 			"valueSize": 1,
@@ -118,7 +126,8 @@
 				}
 			]
 		},
-		"9": {
+		{
+			"#": "9",
 			"label": "Reset of overcurrent shutdown",
 			"description": "Activation despite 3x safety shutdown",
 			"valueSize": 1,
@@ -138,7 +147,8 @@
 				}
 			]
 		},
-		"10": {
+		{
+			"#": "10",
 			"label": "Night mode",
 			"description": "Set Night mode of the Status LED",
 			"valueSize": 1,
@@ -157,7 +167,8 @@
 				}
 			]
 		},
-		"11": {
+		{
+			"#": "11",
 			"label": "Info LED colour",
 			"description": "Set color of the Info LED",
 			"valueSize": 2,
@@ -184,5 +195,5 @@
 				}
 			]
 		}
-	}
+	]
 }

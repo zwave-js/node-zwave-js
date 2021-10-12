@@ -24,8 +24,9 @@
 		"min": "0.0",
 		"max": "255.255"
 	},
-	"paramInformation": {
-		"1": {
+	"paramInformation": [
+		{
+			"#": "1",
 			"label": "Button Orientation",
 			"valueSize": 1,
 			"minValue": 0,
@@ -48,7 +49,8 @@
 				}
 			]
 		},
-		"2": {
+		{
+			"#": "2",
 			"label": "Status LED Configuration",
 			"valueSize": 1,
 			"minValue": 0,
@@ -75,7 +77,8 @@
 				}
 			]
 		},
-		"3": {
+		{
+			"#": "3",
 			"label": "Enable/Disable Auto-Off Timer",
 			"valueSize": 1,
 			"minValue": 0,
@@ -94,7 +97,8 @@
 				}
 			]
 		},
-		"4": {
+		{
+			"#": "4",
 			"label": "Auto-Off Timer",
 			"valueSize": 4,
 			"unit": "minutes",
@@ -103,7 +107,8 @@
 			"defaultValue": 60,
 			"unsigned": true
 		},
-		"5": {
+		{
+			"#": "5",
 			"label": "Enable/Disable Auto-On Timer",
 			"valueSize": 1,
 			"minValue": 0,
@@ -122,7 +127,8 @@
 				}
 			]
 		},
-		"6": {
+		{
+			"#": "6",
 			"label": "Auto-On Timer",
 			"valueSize": 4,
 			"unit": "minutes",
@@ -131,7 +137,8 @@
 			"defaultValue": 60,
 			"unsigned": true
 		},
-		"7[0x01]": {
+		{
+			"#": "7[0x01]",
 			"label": "Send Status Change Report: Local Control",
 			"description": "Determine whether a trigger of this type should prompt a status change report to associated devices.",
 			"valueSize": 1,
@@ -151,7 +158,8 @@
 				}
 			]
 		},
-		"7[0x02]": {
+		{
+			"#": "7[0x02]",
 			"label": "Send Status Change Report: 3-Way",
 			"description": "Determine whether a trigger of this type should prompt a status change report to associated devices.",
 			"valueSize": 1,
@@ -171,7 +179,8 @@
 				}
 			]
 		},
-		"7[0x04]": {
+		{
+			"#": "7[0x04]",
 			"label": "Send Status Change Report: Z-Wave",
 			"description": "Determine whether a trigger of this type should prompt a status change report to associated devices.",
 			"valueSize": 1,
@@ -191,7 +200,8 @@
 				}
 			]
 		},
-		"7[0x08]": {
+		{
+			"#": "7[0x08]",
 			"label": "Send Status Change Report: Timer",
 			"description": "Determine whether a trigger of this type should prompt a status change report to associated devices.",
 			"valueSize": 1,
@@ -211,10 +221,12 @@
 				}
 			]
 		},
-		"8": {
+		{
+			"#": "8",
 			"$import": "~/templates/master_template.json#state_after_power_failure_off_on_prev"
 		},
-		"9": {
+		{
+			"#": "9",
 			"label": "Enable/Disable Local Control",
 			"valueSize": 1,
 			"minValue": 0,
@@ -233,7 +245,7 @@
 				}
 			]
 		}
-	},
+	],
 	"metadata": {
 		"inclusion": "ADD or Remove the MS12Z from the existing Z-Wave home control network with your primary controller.\n ---Refer to your primary controller instructions to process the inclusion / exclusion setup procedure.\n ---When prompted by your primary controller, click the Up or Down button three times in one second. \nInclude MS12Z to/from a Z-Wave Gateway with supporting Security.The MS12Z can support the Primary Controller that implemented the security S2.",
 		"exclusion": "ADD or Remove the MS12Z from the existing Z-Wave home control network with your primary controller.\n ---Refer to your primary controller instructions to process the inclusion / exclusion setup procedure.\n ---When prompted by your primary controller, click the Up or Down button three times in one second. \nInclude MS12Z to/from a Z-Wave Gateway with supporting Security.The MS12Z can support the Primary Controller that implemented the security S2.",

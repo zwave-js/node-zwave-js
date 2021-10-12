@@ -20,8 +20,9 @@
 			"isLifeline": true
 		}
 	},
-	"paramInformation": {
-		"1": {
+	"paramInformation": [
+		{
+			"#": "1",
 			"label": "Set to default",
 			"description": "Set all config values to default values (factory settings).",
 			"valueSize": 1,
@@ -29,7 +30,8 @@
 			"maxValue": 0,
 			"defaultValue": 0
 		},
-		"2": {
+		{
+			"#": "2",
 			"label": "Mode Timeout",
 			"description": "The time used in mode 2 to turn the sensor off .",
 			"unit": "seconds",
@@ -38,7 +40,8 @@
 			"maxValue": 3600,
 			"defaultValue": 900
 		},
-		"3": {
+		{
+			"#": "3",
 			"label": "Switch off time",
 			"description": "Switch off time starts after timeout.",
 			"unit": "seconds",
@@ -47,7 +50,8 @@
 			"maxValue": 7200,
 			"defaultValue": 2700
 		},
-		"4": {
+		{
+			"#": "4",
 			"label": "Sensitivity",
 			"description": "The sensitivity of the motion circuit",
 			"valueSize": 1,
@@ -55,7 +59,8 @@
 			"maxValue": 127,
 			"defaultValue": 80
 		},
-		"5": {
+		{
+			"#": "5",
 			"label": "Mode",
 			"description": "The mode that is entered after detection",
 			"valueSize": 1,
@@ -63,7 +68,8 @@
 			"maxValue": 3,
 			"defaultValue": 2
 		},
-		"6": {
+		{
+			"#": "6",
 			"label": "The temperature offset",
 			"description": "An offset for the temperature.",
 			"valueSize": 2,
@@ -71,5 +77,5 @@
 			"maxValue": 10,
 			"defaultValue": 0
 		}
-	}
+	]
 }

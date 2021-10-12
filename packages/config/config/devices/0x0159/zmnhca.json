@@ -40,8 +40,9 @@
 			"isLifeline": true
 		}
 	},
-	"paramInformation": {
-		"10": {
+	"paramInformation": [
+		{
+			"#": "10",
 			"label": "ALL ON / ALL OFF",
 			"description": "Responds to commands ALL ON / ALL OFF from Main Controller",
 			"valueSize": 2,
@@ -68,7 +69,8 @@
 				}
 			]
 		},
-		"40": {
+		{
+			"#": "40",
 			"label": "Reporting in Watts on power change for Q1 or Q2",
 			"description": "Power consumption change threshold for sending updates",
 			"valueSize": 1,
@@ -76,7 +78,8 @@
 			"maxValue": 100,
 			"defaultValue": 1
 		},
-		"42": {
+		{
+			"#": "42",
 			"label": "Reporting in Watts by time interval for Q1 or Q2",
 			"valueSize": 2,
 			"unit": "W",
@@ -84,7 +87,8 @@
 			"maxValue": 32767,
 			"defaultValue": 300
 		},
-		"71": {
+		{
+			"#": "71",
 			"label": "Operating modes",
 			"description": "Operation Mode (Shutter or Venetian)",
 			"valueSize": 1,
@@ -103,7 +107,8 @@
 				}
 			]
 		},
-		"72": {
+		{
+			"#": "72",
 			"label": "Slats tilting full turn time",
 			"description": "Slat full turn time in tenths of a second.",
 			"valueSize": 2,
@@ -111,7 +116,8 @@
 			"maxValue": 32767,
 			"defaultValue": 150
 		},
-		"73": {
+		{
+			"#": "73",
 			"label": "Slats position",
 			"valueSize": 1,
 			"minValue": 0,
@@ -133,7 +139,8 @@
 				}
 			]
 		},
-		"74": {
+		{
+			"#": "74",
 			"label": "Motor moving up/down time",
 			"description": "Shutter motor moving time of complete opening or complete closing",
 			"valueSize": 2,
@@ -141,7 +148,8 @@
 			"maxValue": 32767,
 			"defaultValue": 0
 		},
-		"76": {
+		{
+			"#": "76",
 			"label": "Motor operation detection",
 			"description": "Power threshold",
 			"valueSize": 1,
@@ -149,7 +157,8 @@
 			"maxValue": 127,
 			"defaultValue": 10
 		},
-		"78": {
+		{
+			"#": "78",
 			"label": "Forced Shutter calibration",
 			"description": "0 to 1 a Shutter enters the calibration mode",
 			"valueSize": 1,
@@ -157,7 +166,8 @@
 			"maxValue": 1,
 			"defaultValue": 0
 		},
-		"80": {
+		{
+			"#": "80",
 			"label": "Reporting to controller",
 			"valueSize": 1,
 			"minValue": 0,
@@ -175,7 +185,8 @@
 				}
 			]
 		},
-		"85": {
+		{
+			"#": "85",
 			"label": "Power consumption max delay time",
 			"description": "max time before motor power consumption is read",
 			"valueSize": 1,
@@ -183,7 +194,8 @@
 			"maxValue": 50,
 			"defaultValue": 0
 		},
-		"90": {
+		{
+			"#": "90",
 			"label": "Relay delay time",
 			"description": "This parameter defines the time delay between output relay switching",
 			"valueSize": 1,
@@ -191,5 +203,5 @@
 			"maxValue": 30,
 			"defaultValue": 5
 		}
-	}
+	]
 }

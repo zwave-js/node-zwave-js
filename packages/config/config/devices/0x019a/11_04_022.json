@@ -1,0 +1,230 @@
+{
+	"manufacturer": "Sensative AB",
+	"manufacturerId": "0x019a",
+	"label": "11-04-022",
+	"description": "Strips Drip 700",
+	"devices": [
+		{
+			"productType": "0x0004",
+			"productId": "0x000b"
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"paramInformation": [
+		{
+			"#": "2",
+			"label": "LED Alarm Event Reporting",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 1,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "LED Off",
+					"value": 0
+				},
+				{
+					"label": "LED On",
+					"value": 1
+				}
+			]
+		},
+		{
+			"#": "4",
+			"label": "Temperature Reporting",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 1,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Disable",
+					"value": 0
+				},
+				{
+					"label": "Enable",
+					"value": 1
+				}
+			]
+		},
+		{
+			"#": "5",
+			"label": "Temperature Reporting Unit",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 0,
+			"readOnly": true,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Celsius",
+					"value": 0
+				},
+				{
+					"label": "Fahrenheit",
+					"value": 1
+				}
+			]
+		},
+		{
+			"#": "6",
+			"label": "Temperature Alarms",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 0,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Disable",
+					"value": 0
+				},
+				{
+					"label": "Enable",
+					"value": 1
+				}
+			]
+		},
+		{
+			"#": "7",
+			"label": "High Temperature Alarm Level",
+			"valueSize": 1,
+			"unit": "°C",
+			"minValue": -20,
+			"maxValue": 80,
+			"defaultValue": 40
+		},
+		{
+			"#": "8",
+			"label": "Low Temperature Alarm Level",
+			"valueSize": 1,
+			"unit": "°C",
+			"minValue": -20,
+			"maxValue": 80,
+			"defaultValue": 5
+		},
+		{
+			"#": "12",
+			"label": "Leakage/Moisture Alarm",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 1,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Disable",
+					"value": 0
+				},
+				{
+					"label": "Enable",
+					"value": 1
+				}
+			]
+		},
+		{
+			"#": "13",
+			"label": "Leakage/Moisture Alarm Level",
+			"valueSize": 1,
+			"minValue": 1,
+			"maxValue": 100,
+			"defaultValue": 10
+		},
+		{
+			"#": "14",
+			"label": "Leakage/Moisture Reporting Period",
+			"valueSize": 1,
+			"unit": "hours",
+			"minValue": 0,
+			"maxValue": 120,
+			"defaultValue": 0
+		},
+		{
+			"#": "15",
+			"label": "Activate Supervision",
+			"description": "Request confirmation from the gateway that a command was received.",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 2,
+			"defaultValue": 1,
+			"unsigned": true,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Disable",
+					"value": 0
+				},
+				{
+					"label": "Alarm Report",
+					"value": 1
+				},
+				{
+					"label": "All Reports",
+					"value": 2
+				}
+			]
+		},
+		{
+			"#": "23",
+			"label": "Perform Leakage/Moisture Sensor Calibration",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 0,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Idle",
+					"value": 0
+				},
+				{
+					"label": "Perform Calibration",
+					"value": 1
+				}
+			]
+		},
+		{
+			"#": "24",
+			"label": "Temperature Offset",
+			"valueSize": 1,
+			"unit": "°C",
+			"minValue": -100,
+			"maxValue": 100,
+			"defaultValue": 0
+		},
+		{
+			"#": "25",
+			"label": "Temperature Reporting Period",
+			"valueSize": 2,
+			"unit": "minutes",
+			"minValue": 15,
+			"maxValue": 1440,
+			"defaultValue": 1440
+		},
+		{
+			"#": "26",
+			"label": "Temperature Reporting Threshold",
+			"valueSize": 1,
+			"unit": "0.1°C",
+			"minValue": 5,
+			"maxValue": 100,
+			"defaultValue": 20
+		},
+		{
+			"#": "27",
+			"label": "Temperature Hysteresis for Temperature Alarms",
+			"description": "Triggers alarm clear reports. (See parameters 7&8)",
+			"valueSize": 1,
+			"unit": "0.1°C",
+			"minValue": 5,
+			"maxValue": 100,
+			"defaultValue": 20
+		}
+	]
+}

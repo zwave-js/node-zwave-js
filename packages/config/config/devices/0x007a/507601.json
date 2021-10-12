@@ -21,22 +21,25 @@
 			"isLifeline": true
 		}
 	},
-	"paramInformation": {
-		"176": {
+	"paramInformation": [
+		{
+			"#": "176",
 			"label": "Staircase timer byte 1",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 127,
 			"defaultValue": 0
 		},
-		"177": {
+		{
+			"#": "177",
 			"label": "Staircase timer byte 2",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 127,
 			"defaultValue": 0
 		},
-		"183": {
+		{
+			"#": "183",
 			"label": "Additional limit duration",
 			"description": "(after brief interruption) Unsure what this does",
 			"valueSize": 1,
@@ -44,5 +47,5 @@
 			"maxValue": 127,
 			"defaultValue": 30
 		}
-	}
+	]
 }

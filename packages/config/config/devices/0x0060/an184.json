@@ -14,8 +14,9 @@
 		"min": "0.0",
 		"max": "255.255"
 	},
-	"paramInformation": {
-		"1": {
+	"paramInformation": [
+		{
+			"#": "1",
 			"label": "Basic Set Command Value",
 			"description": "Allowable Range: 0-99",
 			"valueSize": 2,
@@ -30,7 +31,8 @@
 				}
 			]
 		},
-		"2": {
+		{
+			"#": "2",
 			"label": "Group 1: Report Delay",
 			"description": "Delaying time to report to group 1",
 			"valueSize": 1,
@@ -40,7 +42,8 @@
 			"unit": "seconds",
 			"unsigned": true
 		},
-		"3": {
+		{
+			"#": "3",
 			"label": "Restore State After Power Loss",
 			"valueSize": 1,
 			"minValue": 0,
@@ -58,7 +61,8 @@
 				}
 			]
 		},
-		"4": {
+		{
+			"#": "4",
 			"label": "Wattage Report Interval",
 			"valueSize": 2,
 			"minValue": 0,
@@ -67,7 +71,8 @@
 			"unit": "minutes",
 			"unsigned": true
 		},
-		"5": {
+		{
+			"#": "5",
 			"label": "kWh Report Interval",
 			"valueSize": 2,
 			"minValue": 0,
@@ -76,7 +81,8 @@
 			"unit": "minutes",
 			"unsigned": true
 		},
-		"6": {
+		{
+			"#": "6",
 			"label": "Wattage Report Threshold",
 			"valueSize": 2,
 			"minValue": 0,
@@ -91,7 +97,8 @@
 				}
 			]
 		},
-		"7": {
+		{
+			"#": "7",
 			"label": "Wattage Report Relative Change Threshold",
 			"valueSize": 1,
 			"minValue": 0,
@@ -105,7 +112,7 @@
 				}
 			]
 		}
-	},
+	],
 	"metadata": {
 		"inclusion": "1. Put the Z-Wave Controller into inclusion mode.\n2. Press the link key three times within 1.5 seconds to put the unit into inclusion mode.",
 		"exclusion": "1. Put the Z-Wave Controller into exclusion mode.\n2. Press the link key three times within 1.5 seconds to put the unit into exclusion mode.",
