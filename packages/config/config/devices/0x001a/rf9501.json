@@ -21,8 +21,9 @@
 			"isLifeline": true
 		}
 	},
-	"paramInformation": {
-		"1": {
+	"paramInformation": [
+		{
+			"#": "1",
 			"label": "Delayed OFF time",
 			"description": "The time in seconds the switch will delay when trigger the delayed off feature",
 			"valueSize": 1,
@@ -31,7 +32,8 @@
 			"defaultValue": 0,
 			"unsigned": true
 		},
-		"2": {
+		{
+			"#": "2",
 			"label": "Panic ON time",
 			"description": "The time in seconds the switch will turn on for when panic mode is triggered",
 			"valueSize": 1,
@@ -40,7 +42,8 @@
 			"defaultValue": 0,
 			"unsigned": true
 		},
-		"3": {
+		{
+			"#": "3",
 			"label": "Panic OFF time",
 			"description": "The time in seconds the switch will turn off for when panic mode is triggered",
 			"valueSize": 1,
@@ -49,7 +52,8 @@
 			"defaultValue": 0,
 			"unsigned": true
 		},
-		"4": {
+		{
+			"#": "4",
 			"label": "Basic Set Value",
 			"description": "Value to be transmitted to devices in association group",
 			"valueSize": 1,
@@ -58,7 +62,8 @@
 			"defaultValue": 0,
 			"unsigned": true
 		},
-		"5": {
+		{
+			"#": "5",
 			"label": "Power Up State",
 			"description": "Power Up State of the switch",
 			"valueSize": 1,
@@ -82,7 +87,8 @@
 				}
 			]
 		},
-		"6": {
+		{
+			"#": "6",
 			"label": "Panic mode enable",
 			"description": "Enables this switch to participate in panic mode",
 			"valueSize": 1,
@@ -102,5 +108,5 @@
 				}
 			]
 		}
-	}
+	]
 }

@@ -20,8 +20,9 @@
 			"isLifeline": true
 		}
 	},
-	"paramInformation": {
-		"1": {
+	"paramInformation": [
+		{
+			"#": "1",
 			"label": "Relay mode",
 			"valueSize": 1,
 			"minValue": 0,
@@ -39,7 +40,8 @@
 				}
 			]
 		},
-		"2": {
+		{
+			"#": "2",
 			"label": "Temperature threshold",
 			"unit": "Δ°С",
 			"valueSize": 1,
@@ -47,7 +49,8 @@
 			"maxValue": 7,
 			"defaultValue": 1
 		},
-		"3": {
+		{
+			"#": "3",
 			"label": "Point mode",
 			"valueSize": 1,
 			"minValue": 0,
@@ -69,7 +72,8 @@
 				}
 			]
 		},
-		"4": {
+		{
+			"#": "4",
 			"label": "Thermostat status at failure",
 			"description": "Operating mode in case a thermostat doesn't receive data from a temp sensor",
 			"valueSize": 1,
@@ -88,7 +92,8 @@
 				}
 			]
 		},
-		"5": {
+		{
+			"#": "5",
 			"label": "Max waiting time from temp sensor",
 			"description": "Max time of data expectation from room temperature sensor",
 			"unit": "sec",
@@ -97,7 +102,8 @@
 			"maxValue": 30000,
 			"defaultValue": 30000
 		},
-		"6": {
+		{
+			"#": "6",
 			"label": "Minimum allowable temperature",
 			"unit": "°С",
 			"valueSize": 2,
@@ -105,7 +111,8 @@
 			"maxValue": 127,
 			"defaultValue": 4
 		},
-		"7": {
+		{
+			"#": "7",
 			"label": "Maximum alowable temperature",
 			"unit": "°С",
 			"valueSize": 2,
@@ -113,7 +120,8 @@
 			"maxValue": 127,
 			"defaultValue": 30
 		},
-		"8": {
+		{
+			"#": "8",
 			"label": "Time turbo mode",
 			"unit": "sec",
 			"valueSize": 2,
@@ -121,7 +129,8 @@
 			"maxValue": 1200,
 			"defaultValue": 120
 		},
-		"9": {
+		{
+			"#": "9",
 			"label": "Power on turbo mode",
 			"unit": "sec",
 			"valueSize": 1,
@@ -129,7 +138,8 @@
 			"maxValue": 1,
 			"defaultValue": 0
 		},
-		"10": {
+		{
+			"#": "10",
 			"label": "Temperature sensor mode",
 			"valueSize": 1,
 			"minValue": 0,
@@ -151,7 +161,8 @@
 				}
 			]
 		},
-		"11": {
+		{
+			"#": "11",
 			"label": "Polling period of the room sensor",
 			"unit": "sec",
 			"valueSize": 2,
@@ -159,7 +170,8 @@
 			"maxValue": 600,
 			"defaultValue": 300
 		},
-		"12": {
+		{
+			"#": "12",
 			"label": "Temprature threshold to send data",
 			"description": "The value that temprature should be changed to send data",
 			"unit": "Δ°С",
@@ -168,14 +180,16 @@
 			"maxValue": 16,
 			"defaultValue": 1
 		},
-		"13": {
+		{
+			"#": "13",
 			"label": "Interval for forced sending data",
 			"valueSize": 2,
 			"minValue": 100,
 			"maxValue": 600,
 			"defaultValue": 300
 		},
-		"15": {
+		{
+			"#": "15",
 			"label": "Type of switch 1",
 			"description": "Set Type of switch 1 (thermostat operating mode)",
 			"valueSize": 1,
@@ -202,7 +216,8 @@
 				}
 			]
 		},
-		"16": {
+		{
+			"#": "16",
 			"label": "Type of switch 2",
 			"description": "Set type of switch 2 (turbo mode)",
 			"valueSize": 1,
@@ -229,7 +244,8 @@
 				}
 			]
 		},
-		"40": {
+		{
+			"#": "40",
 			"label": "Adjusment of a temperature sensor",
 			"description": "Adjust temperature sensor if required.",
 			"valueSize": 1,
@@ -284,5 +300,5 @@
 				}
 			]
 		}
-	}
+	]
 }

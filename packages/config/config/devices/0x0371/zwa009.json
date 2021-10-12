@@ -48,8 +48,9 @@
 			"maxNodes": 5
 		}
 	},
-	"paramInformation": {
-		"1": {
+	"paramInformation": [
+		{
+			"#": "1",
 			"label": "Temperature Change Report Threshold",
 			"unit": "0.1 °(C/F)",
 			"unsigned": true,
@@ -64,7 +65,8 @@
 				}
 			]
 		},
-		"2": {
+		{
+			"#": "2",
 			"label": "Humidity Change Report Threshhold",
 			"unit": "%",
 			"unsigned": true,
@@ -79,7 +81,8 @@
 				}
 			]
 		},
-		"4": {
+		{
+			"#": "4",
 			"label": "Automatic Reporting Interval",
 			"description": "Allowable Range: 900-65535",
 			"unit": "seconds",
@@ -95,7 +98,8 @@
 				}
 			]
 		},
-		"5": {
+		{
+			"#": "5",
 			"label": "High Temperature Basic Set Threshhold",
 			"unit": "0.1 °(C/F)",
 			"unsigned": true,
@@ -110,7 +114,8 @@
 				}
 			]
 		},
-		"10": {
+		{
+			"#": "10",
 			"label": "High Temperature Basic Set Value",
 			"description": "Allowable Range: 0-99, 255.",
 			"unsigned": true,
@@ -119,7 +124,8 @@
 			"maxValue": 255,
 			"defaultValue": 0
 		},
-		"6": {
+		{
+			"#": "6",
 			"label": "Low Temperature Basic Set Threshhold",
 			"description": "Allowable Range: 200-1000.",
 			"unit": "0.1 °(C/F)",
@@ -135,7 +141,8 @@
 				}
 			]
 		},
-		"9": {
+		{
+			"#": "9",
 			"label": "Low Temperature Basic Set Value",
 			"description": "Allowable Range: 0-99, 255.",
 			"unsigned": true,
@@ -144,7 +151,8 @@
 			"maxValue": 255,
 			"defaultValue": 255
 		},
-		"7": {
+		{
+			"#": "7",
 			"label": "High Humidity Basic Set Threshhold",
 			"unit": "%",
 			"unsigned": true,
@@ -159,7 +167,8 @@
 				}
 			]
 		},
-		"12": {
+		{
+			"#": "12",
 			"label": "High Humidity Trigger Basic Set Value",
 			"description": "Allowable Range: 0-99, 255.",
 			"unsigned": true,
@@ -168,7 +177,8 @@
 			"maxValue": 255,
 			"defaultValue": 0
 		},
-		"8": {
+		{
+			"#": "8",
 			"label": "Low Humidity Basic Set Threshhold",
 			"unit": "%",
 			"unsigned": true,
@@ -183,7 +193,8 @@
 				}
 			]
 		},
-		"11": {
+		{
+			"#": "11",
 			"label": "Low Humidity Trigger Basic Set Value",
 			"description": "Allowable Range: 0-99, 255.",
 			"unsigned": true,
@@ -192,7 +203,8 @@
 			"maxValue": 255,
 			"defaultValue": 255
 		},
-		"13": {
+		{
+			"#": "13",
 			"label": "Humidity Offset for Mold Danger Notification",
 			"unit": "%",
 			"unsigned": true,
@@ -201,12 +213,14 @@
 			"maxValue": 10,
 			"defaultValue": 0
 		},
-		"64": {
+		{
+			"#": "64",
 			"$import": "~/0x0086/templates/aeotec_template.json#celsius_fahrenheit",
 			"valueSize": 1
 		},
-		"255": {
+		{
+			"#": "255",
 			"$import": "~/0x0086/templates/aeotec_template.json#factory_reset_complete"
 		}
-	}
+	]
 }

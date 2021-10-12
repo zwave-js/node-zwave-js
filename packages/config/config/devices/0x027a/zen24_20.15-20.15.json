@@ -14,8 +14,9 @@
 		"max": "20.15"
 	},
 	"supportsZWavePlus": true,
-	"paramInformation": {
-		"1": {
+	"paramInformation": [
+		{
+			"#": "1",
 			"label": "Toggle Control",
 			"description": "Controls behavior of the toggle switch",
 			"valueSize": 1,
@@ -23,5 +24,5 @@
 			"maxValue": 1,
 			"defaultValue": 0
 		}
-	}
+	]
 }

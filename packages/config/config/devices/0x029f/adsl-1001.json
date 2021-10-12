@@ -14,8 +14,9 @@
 		"min": "0.0",
 		"max": "255.255"
 	},
-	"paramInformation": {
-		"1": {
+	"paramInformation": [
+		{
+			"#": "1",
 			"label": "Set Door Open Notification On Or Off",
 			"valueSize": 1,
 			"minValue": 1,
@@ -34,7 +35,7 @@
 				}
 			]
 		}
-	},
+	],
 	"metadata": {
 		"inclusion": "- Z-Wave inclusion:\n\ni. Press “Z-Wave Settings” button in the inner side for 3 seconds. (toggle status) \n\nii. Then “Blue LED” will turn on.\n\niii. When the inclusion is complete, the led is turned off and the beep sounds. Please wait.\n\n* Beep : Success (Beep), Fail (Beep~)\n* The inclusion results can be found in the controller or in your app",
 		"exclusion": "- Z-Wave exclusion \n\ni. Press “Z-Wave Settings” button in the inner side for 3 seconds. (toggle status)\n\nii. Then “Blue LED” will turn on.\n\niii. When the exclusion is completed, the led is turned off and the beep sounds. Please wait.\n\n* Beep : Success (Beep Beep), Fail (Beep~)\n* The exclusion results can be found in the controller or in your app",

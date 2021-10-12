@@ -24,8 +24,9 @@
 		"min": "0.0",
 		"max": "255.255"
 	},
-	"paramInformation": {
-		"1": {
+	"paramInformation": [
+		{
+			"#": "1",
 			"label": "Basic Set Command Value",
 			"description": "Allowable Range: 0-99",
 			"valueSize": 2,
@@ -40,7 +41,8 @@
 				}
 			]
 		},
-		"2": {
+		{
+			"#": "2",
 			"label": "Group 1: Report Delay",
 			"description": "Delaying time to report to group 1",
 			"valueSize": 1,
@@ -50,7 +52,8 @@
 			"unit": "seconds",
 			"unsigned": true
 		},
-		"3": {
+		{
+			"#": "3",
 			"label": "Restore State After Power Loss",
 			"valueSize": 1,
 			"minValue": 0,
@@ -68,7 +71,8 @@
 				}
 			]
 		},
-		"4": {
+		{
+			"#": "4",
 			"label": "Switching type",
 			"description": "Edge or toogle switch mode.",
 			"valueSize": 1,
@@ -88,5 +92,5 @@
 				}
 			]
 		}
-	}
+	]
 }

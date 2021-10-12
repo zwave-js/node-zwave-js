@@ -29,8 +29,9 @@
 			"maxNodes": 5
 		}
 	},
-	"paramInformation": {
-		"1": {
+	"paramInformation": [
+		{
+			"#": "1",
 			"label": "Orientation",
 			"valueSize": 1,
 			"minValue": 0,
@@ -53,7 +54,8 @@
 				}
 			]
 		},
-		"3": {
+		{
+			"#": "3",
 			"label": "Auto Off Timer",
 			"valueSize": 4,
 			"unit": "minutes",
@@ -68,7 +70,8 @@
 				}
 			]
 		},
-		"5": {
+		{
+			"#": "5",
 			"label": "Auto On Timer",
 			"valueSize": 4,
 			"unit": "minutes",
@@ -83,10 +86,12 @@
 				}
 			]
 		},
-		"8": {
+		{
+			"#": "8",
 			"$import": "~/templates/master_template.json#state_after_power_failure_off_on_prev"
 		},
-		"9": {
+		{
+			"#": "9",
 			"label": "Ramp Rate Control (Manual)",
 			"valueSize": 1,
 			"unit": "seconds",
@@ -101,7 +106,8 @@
 				}
 			]
 		},
-		"10": {
+		{
+			"#": "10",
 			"label": "Minimum Brightness",
 			"valueSize": 1,
 			"minValue": 1,
@@ -109,7 +115,8 @@
 			"defaultValue": 1,
 			"unsigned": true
 		},
-		"11": {
+		{
+			"#": "11",
 			"label": "Maximum Brightness",
 			"valueSize": 1,
 			"minValue": 1,
@@ -117,7 +124,8 @@
 			"defaultValue": 99,
 			"unsigned": true
 		},
-		"25": {
+		{
+			"#": "25",
 			"label": "Single Tap Behavior (Up)",
 			"valueSize": 1,
 			"minValue": 0,
@@ -144,7 +152,8 @@
 				}
 			]
 		},
-		"12": {
+		{
+			"#": "12",
 			"label": "Double Tap Behavior (Up)",
 			"valueSize": 1,
 			"minValue": 0,
@@ -171,7 +180,8 @@
 				}
 			]
 		},
-		"18": {
+		{
+			"#": "18",
 			"label": "Custom Brightness Level",
 			"description": "Allowable range: 1-99",
 			"valueSize": 1,
@@ -186,7 +196,8 @@
 				}
 			]
 		},
-		"13": {
+		{
+			"#": "13",
 			"label": "Scene Control",
 			"description": "Activated with quick double tap triggers",
 			"valueSize": 1,
@@ -206,7 +217,8 @@
 				}
 			]
 		},
-		"15": {
+		{
+			"#": "15",
 			"label": "Smart Bulb Mode: Control",
 			"valueSize": 1,
 			"minValue": 0,
@@ -229,7 +241,8 @@
 				}
 			]
 		},
-		"16": {
+		{
+			"#": "16",
 			"label": "Physical Dimming Speed",
 			"valueSize": 1,
 			"unit": "seconds",
@@ -238,7 +251,8 @@
 			"defaultValue": 5,
 			"unsigned": true
 		},
-		"20": {
+		{
+			"#": "20",
 			"label": "Smart Bulb Mode: Reporting",
 			"description": "See manual for options",
 			"valueSize": 1,
@@ -247,7 +261,8 @@
 			"defaultValue": 2,
 			"unsigned": true
 		},
-		"21": {
+		{
+			"#": "21",
 			"label": "Smart Bulb Mode: Report Status if Physical Control Disabled",
 			"valueSize": 1,
 			"minValue": 0,
@@ -266,7 +281,8 @@
 				}
 			]
 		},
-		"22": {
+		{
+			"#": "22",
 			"label": "Night Light Mode",
 			"description": "Allowable range: 1-99 - Set the brightness level the dimmer will turn on to when off and when toggle is held down for a second",
 			"valueSize": 1,
@@ -281,7 +297,7 @@
 				}
 			]
 		}
-	},
+	],
 	"metadata": {
 		"inclusion": "1. Initiate inclusion (pairing) in the app (or web interface).\n2. TAP UP 3 TIMES QUICKLY if using traditional Z-Wave inclusion.\n3. The LED indicator will blink blue to signal communication and turn green for 3 seconds if inclusion is successful or turn red for 3 seconds if the pairing attempt fails.",
 		"exclusion": "1. Bring your Z-Wave gateway (hub) close to the switch if possible\n2. Put the Z-Wave hub into exclusion mode (not sure how to do that? ask@getzooz.com) \n3. Toggle the switch down 3 times quickly (the LED indicator will start blinking blue)\n4. Your hub will confirm exclusion, the LED indicator on the switch will turn green for 3 seconds, and the device will disappear from your controller's device list",

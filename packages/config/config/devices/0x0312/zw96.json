@@ -1,0 +1,83 @@
+{
+	"manufacturer": "NIE Technology Co., Ltd.",
+	"manufacturerId": "0x0312",
+	"label": "ZW96",
+	"description": "Outdoor Z-Wave Plug-In Module (1-Channel)",
+	"devices": [
+		{
+			"productType": "0xc000",
+			"productId": "0xc003",
+			"zwaveAllianceId": 3377
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"associations": {
+		"1": {
+			"label": "Lifeline",
+			"maxNodes": 5,
+			"isLifeline": true
+		},
+		"2": {
+			"label": "Outlet 1 (Right)",
+			"maxNodes": 5
+		}
+	},
+	"paramInformation": [
+		{
+			"#": "1",
+			"label": "LED Indicator",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 2,
+			"defaultValue": 0,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "On when load is on",
+					"value": 0
+				},
+				{
+					"label": "On when load is off",
+					"value": 1
+				},
+				{
+					"label": "Disable",
+					"value": 2
+				}
+			]
+		},
+		{
+			"#": "2",
+			"label": "Outlet 1 (Right): Auto Off Timer",
+			"valueSize": 4,
+			"unit": "minutes",
+			"minValue": 0,
+			"maxValue": 65535,
+			"defaultValue": 0,
+			"unsigned": true
+		},
+		{
+			"#": "3",
+			"label": "Outlet 1 (Right): Auto On Timer",
+			"valueSize": 4,
+			"unit": "minutes",
+			"minValue": 0,
+			"maxValue": 65535,
+			"defaultValue": 0,
+			"unsigned": true
+		},
+		{
+			"#": "4",
+			"$import": "~/templates/master_template.json#state_after_power_failure_off_on_prev"
+		}
+	],
+	"metadata": {
+		"inclusion": "Refer to your primary controller instructions to process the inclusion / exclusion setup procedure.\nWhen prompted by your primary controller, press the button 3 times.",
+		"exclusion": "Refer to your primary controller instructions to process the inclusion / exclusion setup procedure.\nWhen prompted by your primary controller, press the button 3 times.",
+		"reset": "Power off device, press and hold the button, then power on the device, after 5 seconds the device will reset.\nThis should only be used in the event your network’s primary controller is missing or otherwise inoperable.",
+		"manual": "https://www.evalogik.com/uploads/202024315/ZW96-Manual.pdf?rnd=213"
+	}
+}

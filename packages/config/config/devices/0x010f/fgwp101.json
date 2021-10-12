@@ -33,8 +33,9 @@
 			"isLifeline": true
 		}
 	},
-	"paramInformation": {
-		"1": {
+	"paramInformation": [
+		{
+			"#": "1",
 			"label": "Always on function",
 			"description": "Once activated, Wall Plug will keep a connected device ...",
 			"valueSize": 1,
@@ -54,10 +55,12 @@
 				}
 			]
 		},
-		"16": {
+		{
+			"#": "16",
 			"$import": "~/templates/master_template.json#state_after_power_failure_off_prev"
 		},
-		"34": {
+		{
+			"#": "34",
 			"label": "Reaction to alarms",
 			"description": "Define Z-Wave network alarms to which the Wall Plug will respond.",
 			"valueSize": 1,
@@ -65,7 +68,8 @@
 			"maxValue": 63,
 			"defaultValue": 63
 		},
-		"35": {
+		{
+			"#": "35",
 			"label": "Response to alarms",
 			"description": "Parameter defines how the Wall Plug will respond to alarms ...",
 			"valueSize": 1,
@@ -93,7 +97,8 @@
 				}
 			]
 		},
-		"39": {
+		{
+			"#": "39",
 			"label": "Alarm duration",
 			"description": "Wall Plug's alarm mode duration. If a device sending an ...",
 			"valueSize": 2,
@@ -102,7 +107,8 @@
 			"defaultValue": 600,
 			"unsigned": true
 		},
-		"40": {
+		{
+			"#": "40",
 			"label": "Immediate power report",
 			"description": "Parameter defines by how much power load must change ...",
 			"valueSize": 1,
@@ -110,7 +116,8 @@
 			"maxValue": 100,
 			"defaultValue": 80
 		},
-		"42": {
+		{
+			"#": "42",
 			"label": "Standard power load report",
 			"description": "Parameter defines by how much power load must change ..",
 			"valueSize": 1,
@@ -118,7 +125,8 @@
 			"maxValue": 100,
 			"defaultValue": 15
 		},
-		"43": {
+		{
+			"#": "43",
 			"label": "Power reporting frequency",
 			"description": "This parameter defines how frequently standard power ...",
 			"valueSize": 1,
@@ -127,7 +135,8 @@
 			"defaultValue": 30,
 			"unsigned": true
 		},
-		"45": {
+		{
+			"#": "45",
 			"label": "Changes in energy consumed by controlled devices",
 			"valueSize": 1,
 			"minValue": 1,
@@ -135,7 +144,8 @@
 			"defaultValue": 1,
 			"unsigned": true
 		},
-		"47": {
+		{
+			"#": "47",
 			"label": "Time between reports on power/energy consumption",
 			"valueSize": 2,
 			"minValue": 1,
@@ -143,7 +153,8 @@
 			"defaultValue": 3600,
 			"unsigned": true
 		},
-		"49": {
+		{
+			"#": "49",
 			"label": "Metering energy consumed by the Wall Plug itself.",
 			"description": "This parameter determines whether energy metering ...",
 			"valueSize": 1,
@@ -163,7 +174,8 @@
 				}
 			]
 		},
-		"50": {
+		{
+			"#": "50",
 			"label": "DOWN value",
 			"description": "Lower power threshold, used in parameter 52.",
 			"valueSize": 2,
@@ -172,7 +184,8 @@
 			"defaultValue": 300,
 			"unsigned": true
 		},
-		"51": {
+		{
+			"#": "51",
 			"label": "UP value",
 			"description": "Upper power threshold, used in parameter 52.",
 			"valueSize": 2,
@@ -181,7 +194,8 @@
 			"defaultValue": 500,
 			"unsigned": true
 		},
-		"52": {
+		{
+			"#": "52",
 			"label": "Action in case defined power values exceeded",
 			"description": "Parameter defines the way 2nd association group devices ...",
 			"valueSize": 1,
@@ -221,7 +235,8 @@
 				}
 			]
 		},
-		"60": {
+		{
+			"#": "60",
 			"label": "Power load to make red ring flash violet",
 			"description": "Function is active only when parameter 61 is set to 0 or 1.",
 			"valueSize": 2,
@@ -230,7 +245,8 @@
 			"defaultValue": 25000,
 			"unsigned": true
 		},
-		"61": {
+		{
+			"#": "61",
 			"label": "LED color when device is on",
 			"valueSize": 1,
 			"minValue": 0,
@@ -281,7 +297,8 @@
 				}
 			]
 		},
-		"62": {
+		{
+			"#": "62",
 			"label": "LED color when device is off",
 			"valueSize": 1,
 			"minValue": 0,
@@ -328,7 +345,8 @@
 				}
 			]
 		},
-		"63": {
+		{
+			"#": "63",
 			"label": "LED color when Z Wave alarm",
 			"valueSize": 1,
 			"minValue": 0,
@@ -379,7 +397,8 @@
 				}
 			]
 		},
-		"70": {
+		{
+			"#": "70",
 			"label": "Overload safety switch",
 			"description": "This function allows for turning off the controlled device...",
 			"valueSize": 2,
@@ -388,5 +407,5 @@
 			"defaultValue": 65535,
 			"unsigned": true
 		}
-	}
+	]
 }

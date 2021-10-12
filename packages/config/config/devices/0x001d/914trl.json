@@ -20,8 +20,9 @@
 			"isLifeline": true
 		}
 	},
-	"paramInformation": {
-		"40": {
+	"paramInformation": [
+		{
+			"#": "40",
 			"label": "Factory Default",
 			"description": "Reset to factory default settings.",
 			"valueSize": 1,
@@ -36,7 +37,8 @@
 				}
 			]
 		},
-		"31[0x100000]": {
+		{
+			"#": "31[0x100000]",
 			"label": "Auto Buzzer",
 			"description": "Beeping sound enabled.",
 			"valueSize": 4,
@@ -56,7 +58,8 @@
 				}
 			]
 		},
-		"31[0x01000000]": {
+		{
+			"#": "31[0x01000000]",
 			"label": "Auto Lock",
 			"description": "Automatically re-locks door 30 seconds after unlocking.",
 			"valueSize": 4,
@@ -76,7 +79,8 @@
 				}
 			]
 		},
-		"31[0x10000000]": {
+		{
+			"#": "31[0x10000000]",
 			"label": "Lock LED Status",
 			"description": "Door lock status LED blinks every 6 seconds.",
 			"valueSize": 4,
@@ -96,5 +100,5 @@
 				}
 			]
 		}
-	}
+	]
 }

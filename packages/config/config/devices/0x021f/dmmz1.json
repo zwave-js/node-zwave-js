@@ -32,8 +32,9 @@
 			"maxNodes": 5
 		}
 	},
-	"paramInformation": {
-		"1": {
+	"paramInformation": [
+		{
+			"#": "1",
 			"label": "BASIC_SET Level",
 			"description": "Sets the value sent by the BASIC_SET command to Association Group 2",
 			"valueSize": 1,
@@ -42,7 +43,8 @@
 			"defaultValue": 255,
 			"unsigned": true
 		},
-		"2": {
+		{
+			"#": "2",
 			"label": "Set Firing Mode",
 			"description": "This parameter sets the “firing mode” of the Mouser.",
 			"valueSize": 1,
@@ -61,7 +63,8 @@
 				}
 			]
 		},
-		"3": {
+		{
+			"#": "3",
 			"label": "High Voltage Duration Time",
 			"description": "How long the Mouser will fire continuously before it starts to burst-fire",
 			"valueSize": 2,
@@ -69,7 +72,8 @@
 			"maxValue": 168,
 			"defaultValue": 64
 		},
-		"4": {
+		{
+			"#": "4",
 			"label": "Enable/Disable LED Alarm",
 			"description": "Enables or disables the indicator LED alarm when the trap is tripped",
 			"valueSize": 1,
@@ -88,7 +92,8 @@
 				}
 			]
 		},
-		"5": {
+		{
+			"#": "5",
 			"label": "LED Alarm Duration",
 			"description": "Sets the amount of time the LED Indicator blinks after the trap is tripped",
 			"valueSize": 1,
@@ -97,5 +102,5 @@
 			"defaultValue": 0,
 			"unsigned": true
 		}
-	}
+	]
 }

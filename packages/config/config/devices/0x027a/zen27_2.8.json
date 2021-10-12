@@ -28,8 +28,9 @@
 			"maxNodes": 5
 		}
 	},
-	"paramInformation": {
-		"1": {
+	"paramInformation": [
+		{
+			"#": "1",
 			"label": "Invert Switch",
 			"valueSize": 1,
 			"minValue": 0,
@@ -51,7 +52,8 @@
 				}
 			]
 		},
-		"2": {
+		{
+			"#": "2",
 			"label": "LED Indicator Control",
 			"valueSize": 1,
 			"minValue": 0,
@@ -77,7 +79,8 @@
 				}
 			]
 		},
-		"3": {
+		{
+			"#": "3",
 			"label": "Auto Turn-Off Timer",
 			"valueSize": 1,
 			"minValue": 0,
@@ -95,7 +98,8 @@
 				}
 			]
 		},
-		"4": {
+		{
+			"#": "4",
 			"label": "Auto Turn-Off Timer Duration",
 			"unit": "minutes",
 			"valueSize": 4,
@@ -103,7 +107,8 @@
 			"maxValue": 65535,
 			"defaultValue": 60
 		},
-		"5": {
+		{
+			"#": "5",
 			"label": "Auto Turn-On Timer",
 			"valueSize": 1,
 			"minValue": 0,
@@ -121,7 +126,8 @@
 				}
 			]
 		},
-		"6": {
+		{
+			"#": "6",
 			"label": "Auto Turn-On Timer Duration",
 			"unit": "minutes",
 			"valueSize": 4,
@@ -129,7 +135,8 @@
 			"maxValue": 65535,
 			"defaultValue": 30
 		},
-		"7[0x01]": {
+		{
+			"#": "7[0x01]",
 			"label": "Send Status Change Report: Local Control",
 			"description": "Determine whether a trigger of this type should prompt a status change report to associated devices.",
 			"valueSize": 1,
@@ -149,7 +156,8 @@
 				}
 			]
 		},
-		"7[0x02]": {
+		{
+			"#": "7[0x02]",
 			"label": "Send Status Change Report: 3-Way",
 			"description": "Determine whether a trigger of this type should prompt a status change report to associated devices.",
 			"valueSize": 1,
@@ -169,7 +177,8 @@
 				}
 			]
 		},
-		"7[0x04]": {
+		{
+			"#": "7[0x04]",
 			"label": "Send Status Change Report: Z-Wave",
 			"description": "Determine whether a trigger of this type should prompt a status change report to associated devices.",
 			"valueSize": 1,
@@ -189,7 +198,8 @@
 				}
 			]
 		},
-		"7[0x08]": {
+		{
+			"#": "7[0x08]",
 			"label": "Send Status Change Report: Timer",
 			"description": "Determine whether a trigger of this type should prompt a status change report to associated devices.",
 			"valueSize": 1,
@@ -209,10 +219,12 @@
 				}
 			]
 		},
-		"8": {
+		{
+			"#": "8",
 			"$import": "~/templates/master_template.json#state_after_power_failure_off_on_prev"
 		},
-		"9": {
+		{
+			"#": "9",
 			"label": "Ramp Rate Control",
 			"description": "Set the number of seconds for dimmer to reach full brightness or turn off when operated manually.",
 			"valueSize": 1,
@@ -221,7 +233,8 @@
 			"defaultValue": 1,
 			"unit": "seconds"
 		},
-		"10": {
+		{
+			"#": "10",
 			"label": "Minimum Brightness",
 			"valueSize": 1,
 			"minValue": 1,
@@ -229,7 +242,8 @@
 			"defaultValue": 1,
 			"units": "%"
 		},
-		"11": {
+		{
+			"#": "11",
 			"label": "Maximum Brightness",
 			"valueSize": 1,
 			"minValue": 1,
@@ -237,7 +251,8 @@
 			"defaultValue": 99,
 			"units": "%"
 		},
-		"12": {
+		{
+			"#": "12",
 			"label": "Double-Tap Upper Paddle Behavior",
 			"description": "Set the brightness level after double-tapping the upper paddle.",
 			"valueSize": 1,
@@ -256,7 +271,8 @@
 				}
 			]
 		},
-		"13": {
+		{
+			"#": "13",
 			"label": "Enable/Disable Scene Control",
 			"description": "Send scene commands to hub on physical paddle presses.",
 			"valueSize": 1,
@@ -275,7 +291,8 @@
 				}
 			]
 		},
-		"14": {
+		{
+			"#": "14",
 			"label": "Enable Double Tap Function",
 			"description": "Enable or disable the double tap function and assign brightness level to single tap.",
 			"valueSize": 1,
@@ -298,7 +315,8 @@
 				}
 			]
 		},
-		"15": {
+		{
+			"#": "15",
 			"label": "Enable Local and Z-Wave Control",
 			"description": "Enable or disable local control at the switch and Z-Wave control.",
 			"valueSize": 1,
@@ -321,7 +339,8 @@
 				}
 			]
 		},
-		"16": {
+		{
+			"#": "16",
 			"label": "Local Dimming Speed",
 			"description": "Set the time it takes to get from 0% to 100% brightness when pressing and holding the paddle.",
 			"valueSize": 1,
@@ -330,7 +349,8 @@
 			"defaultValue": 4,
 			"units": "seconds"
 		},
-		"17": {
+		{
+			"#": "17",
 			"label": "Z-Wave Ramp Rate",
 			"valueSize": 1,
 			"minValue": 0,
@@ -348,7 +368,8 @@
 				}
 			]
 		},
-		"18": {
+		{
+			"#": "18",
 			"label": "Custom Brightness Level",
 			"description": "Set the custom brightness level when single tapping the upper paddle (0 for last brightness level).",
 			"valueSize": 1,
@@ -357,7 +378,8 @@
 			"defaultValue": 0,
 			"units": "%"
 		},
-		"20": {
+		{
+			"#": "20",
 			"label": "Dimming Reporting",
 			"description": "Set how the dimmer reports when paddles are tapped and held.",
 			"valueSize": 1,
@@ -376,7 +398,8 @@
 				}
 			]
 		},
-		"21": {
+		{
+			"#": "21",
 			"label": "Reporting Behavior When Physical Control Is Disabled",
 			"description": "Enable or disable reporting on/off status and changing LED indicator state even if physical and Z-Wave control is disabled.",
 			"valueSize": 1,
@@ -395,7 +418,8 @@
 				}
 			]
 		},
-		"22": {
+		{
+			"#": "22",
 			"label": "Night Light Mode",
 			"description": "Set the brightness level the dimmer will turn on to when off and when lower paddle is held down for one second (0 to disable).",
 			"valueSize": 1,
@@ -404,5 +428,5 @@
 			"defaultValue": 0,
 			"units": "%"
 		}
-	}
+	]
 }

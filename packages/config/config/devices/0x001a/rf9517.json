@@ -25,8 +25,9 @@
 			"maxNodes": 1
 		}
 	},
-	"paramInformation": {
-		"1": {
+	"paramInformation": [
+		{
+			"#": "1",
 			"label": "Delayed OFF time",
 			"description": "The time in seconds the switch will delay when trigger the delayed off feature",
 			"valueSize": 1,
@@ -35,5 +36,5 @@
 			"defaultValue": 0,
 			"unsigned": true
 		}
-	}
+	]
 }

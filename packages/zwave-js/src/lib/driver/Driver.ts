@@ -59,6 +59,7 @@ import {
 	assertValidCCs,
 	CommandClass,
 	getImplementedVersion,
+	InvalidCC,
 } from "../commandclass/CommandClass";
 import { DeviceResetLocallyCCNotification } from "../commandclass/DeviceResetLocallyCC";
 import {
@@ -116,6 +117,7 @@ import {
 	isSendData,
 	isSendDataSinglecast,
 	SendDataMessage,
+	TransmitOptions,
 } from "../controller/SendDataShared";
 import { ControllerLogger } from "../log/Controller";
 import { DriverLogger } from "../log/Driver";
@@ -334,11 +336,17 @@ export interface SendMessageOptions {
 	 * @internal
 	 */
 	tag?: any;
+	/** If a Wake Up On Demand should be requested for the target node. */
+	requestWakeUpOnDemand?: boolean;
 }
 
 export interface SendCommandOptions extends SendMessageOptions {
 	/** How many times the driver should try to send the message. Defaults to the configured Driver option */
 	maxSendAttempts?: number;
+	/** Whether the driver should automatically handle the encapsulation. Default: true */
+	autoEncapsulate?: boolean;
+	/** Overwrite the default transmit options */
+	transmitOptions?: TransmitOptions;
 }
 
 export type SupervisionUpdateHandler = (
@@ -1411,10 +1419,10 @@ export class Driver extends TypedEventEmitter<DriverEventCallbacks> {
 		if (status < FirmwareUpdateStatus.OK_WaitingForActivation) return;
 
 		// Wait at least 5 seconds
-		if (!waitTime) waitTime = 5000;
+		if (!waitTime) waitTime = 5;
 		this.controllerLog.logNode(
 			node.id,
-			`Firmware updated, scheduling interview in ${waitTime} ms...`,
+			`Firmware updated, scheduling interview in ${waitTime} seconds...`,
 		);
 		// We reuse the retryNodeInterviewTimeouts here because they serve a similar purpose
 		this.retryNodeInterviewTimeouts.set(
@@ -1422,7 +1430,7 @@ export class Driver extends TypedEventEmitter<DriverEventCallbacks> {
 			setTimeout(() => {
 				this.retryNodeInterviewTimeouts.delete(node.id);
 				void node.refreshInfo();
-			}, waitTime).unref(),
+			}, waitTime * 1000).unref(),
 		);
 	}
 
@@ -1698,6 +1706,25 @@ export class Driver extends TypedEventEmitter<DriverEventCallbacks> {
 						msg.getNodeUnsafe()?.incrementStatistics(
 							"commandsDroppedRX",
 						);
+
+						// Figure out if the command was received with supervision encapsulation
+						const supervisionSessionId = SupervisionCC.getSessionId(
+							msg.command,
+						);
+						if (
+							supervisionSessionId !== undefined &&
+							msg.command instanceof InvalidCC
+						) {
+							// If it was, we need to notify the sender that we couldn't decode the command
+							const node = msg.getNodeUnsafe();
+							await node?.commandClasses.Supervision.sendReport({
+								sessionId: supervisionSessionId,
+								moreUpdatesFollow: false,
+								status: SupervisionStatus.NoSupport,
+								secure: msg.command.secure,
+							});
+							return;
+						}
 					} else {
 						this._controller?.incrementStatistics(
 							"messagesDroppedRX",
@@ -2455,16 +2482,68 @@ ${handlers.length} left`,
 					nodeSessions.supervision.delete(msg.command.sessionId);
 				}
 			} else {
+				// Figure out if the command was received with supervision encapsulation
+				const supervisionSessionId = SupervisionCC.getSessionId(
+					msg.command,
+				);
+				const secure = msg.command.secure;
+
+				if (
+					supervisionSessionId !== undefined &&
+					!node.supportsCC(CommandClasses.Supervision)
+				) {
+					// When a node sends us a command that's supervision encapsulated, it must support Supervision CC
+					node.addCC(CommandClasses.Supervision, {
+						isSupported: true,
+						version: 1,
+					});
+				}
+
 				// check if someone is waiting for this command
 				for (const entry of this.awaitedCommands) {
 					if (entry.predicate(msg.command)) {
 						// resolve the promise - this will remove the entry from the list
 						entry.promise.resolve(msg.command);
+
+						// send back a Supervision Report if the command was received via Supervision Get
+						if (supervisionSessionId !== undefined) {
+							await node.commandClasses.Supervision.sendReport({
+								sessionId: supervisionSessionId,
+								moreUpdatesFollow: false,
+								status: SupervisionStatus.Success,
+								secure,
+							});
+						}
 						return;
 					}
 				}
-				// noone is waiting, dispatch the command to the node itself
-				await node.handleCommand(msg.command);
+
+				// No one is waiting, dispatch the command to the node itself
+				if (supervisionSessionId !== undefined) {
+					// Wrap the handleCommand in try-catch so we can notify the node that we weren't able to handle the command
+					try {
+						await node.handleCommand(msg.command);
+
+						await node.commandClasses.Supervision.sendReport({
+							sessionId: supervisionSessionId,
+							moreUpdatesFollow: false,
+							status: SupervisionStatus.Success,
+							secure,
+						});
+					} catch (e) {
+						await node.commandClasses.Supervision.sendReport({
+							sessionId: supervisionSessionId,
+							moreUpdatesFollow: false,
+							status: SupervisionStatus.Fail,
+							secure,
+						});
+
+						// In any case we don't want to swallow the error
+						throw e;
+					}
+				} else {
+					await node.handleCommand(msg.command);
+				}
 			}
 
 			return;
@@ -2704,6 +2783,7 @@ ${handlers.length} left`,
 			transaction.changeNodeStatusOnTimeout =
 				options.changeNodeStatusOnMissingACK;
 		}
+		transaction.requestWakeUpOnDemand = !!options.requestWakeUpOnDemand;
 		transaction.tag = options.tag;
 
 		// start sending now (maybe)
@@ -2821,8 +2901,17 @@ ${handlers.length} left`,
 			msg.maxSendAttempts = options.maxSendAttempts;
 		}
 
+		// Specify transmit options for the request
+		if (options.transmitOptions != undefined) {
+			msg.transmitOptions = options.transmitOptions;
+			if (!(options.transmitOptions & TransmitOptions.ACK)) {
+				// If no ACK is requested, set the callback ID to zero, because we won't get a controller callback
+				msg.callbackId = 0;
+			}
+		}
+
 		// Automatically encapsulate commands before sending
-		this.encapsulateCommands(msg);
+		if (options.autoEncapsulate !== false) this.encapsulateCommands(msg);
 
 		try {
 			const resp = await this.sendMessage(msg, options);

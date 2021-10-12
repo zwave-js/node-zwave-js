@@ -32,8 +32,9 @@
 			"maxNodes": 1
 		}
 	},
-	"paramInformation": {
-		"1": {
+	"paramInformation": [
+		{
+			"#": "1",
 			"label": "Selected endpoint",
 			"description": "Send Basic Command Class",
 			"valueSize": 1,
@@ -57,7 +58,8 @@
 				}
 			]
 		},
-		"2": {
+		{
+			"#": "2",
 			"label": "Switch mode",
 			"description": "Change the external switch mode",
 			"valueSize": 1,
@@ -81,7 +83,7 @@
 				}
 			]
 		}
-	},
+	],
 	"compat": {
 		"preserveRootApplicationCCValueIDs": true
 	}

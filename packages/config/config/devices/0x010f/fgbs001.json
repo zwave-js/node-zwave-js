@@ -49,8 +49,9 @@
 			"isLifeline": true
 		}
 	},
-	"paramInformation": {
-		"1": {
+	"paramInformation": [
+		{
+			"#": "1",
 			"label": "Input I alarm cancellation delay",
 			"valueSize": 2,
 			"minValue": 0,
@@ -58,7 +59,8 @@
 			"defaultValue": 0,
 			"unsigned": true
 		},
-		"2": {
+		{
+			"#": "2",
 			"label": "Input 2 alarm cancellation delay",
 			"valueSize": 2,
 			"minValue": 0,
@@ -66,7 +68,8 @@
 			"defaultValue": 0,
 			"unsigned": true
 		},
-		"3": {
+		{
+			"#": "3",
 			"label": "Type of input no. 1",
 			"description": "Type of input no. 1, what the input 1 will report if no contact is made",
 			"valueSize": 1,
@@ -94,7 +97,8 @@
 				}
 			]
 		},
-		"4": {
+		{
+			"#": "4",
 			"label": "Type of input no. 2",
 			"description": "Type of input no. 2, what the input 2 will report if no contact is made",
 			"valueSize": 1,
@@ -122,7 +126,8 @@
 				}
 			]
 		},
-		"5": {
+		{
+			"#": "5",
 			"label": "Type of control frame for association group 1",
 			"valueSize": 1,
 			"minValue": 0,
@@ -161,7 +166,8 @@
 				}
 			]
 		},
-		"6": {
+		{
+			"#": "6",
 			"label": "Type of control frame for association group 2",
 			"valueSize": 1,
 			"minValue": 0,
@@ -200,7 +206,8 @@
 				}
 			]
 		},
-		"7": {
+		{
+			"#": "7",
 			"label": "Forced Level of Dimming group 1",
 			"description": "Value of the parameter specifying the forced levels.",
 			"valueSize": 1,
@@ -209,7 +216,8 @@
 			"defaultValue": 255,
 			"unsigned": true
 		},
-		"8": {
+		{
+			"#": "8",
 			"label": "Forced Level of Dimming group 2",
 			"description": "Value of the parameter specifying forced levels.",
 			"valueSize": 1,
@@ -218,7 +226,8 @@
 			"defaultValue": 255,
 			"unsigned": true
 		},
-		"9": {
+		{
+			"#": "9",
 			"label": "Deactivate transmission of frame canceling alarm",
 			"valueSize": 1,
 			"minValue": 0,
@@ -241,7 +250,8 @@
 				}
 			]
 		},
-		"10": {
+		{
+			"#": "10",
 			"label": "Interval between readings of temperature sensors",
 			"valueSize": 1,
 			"minValue": 1,
@@ -249,7 +259,8 @@
 			"defaultValue": 20,
 			"unsigned": true
 		},
-		"11": {
+		{
+			"#": "11",
 			"label": "Interval betw. forcing to send report for temp.",
 			"description": "The forced report is sent immediately after ...",
 			"valueSize": 1,
@@ -258,7 +269,8 @@
 			"defaultValue": 200,
 			"unsigned": true
 		},
-		"12": {
+		{
+			"#": "12",
 			"label": "Insensitiveness to temperature changes.",
 			"description": "This is the maximum acceptable difference between",
 			"valueSize": 1,
@@ -267,7 +279,8 @@
 			"defaultValue": 8,
 			"unsigned": true
 		},
-		"13": {
+		{
+			"#": "13",
 			"label": "Transmitting alarm/control frame broadcast mode",
 			"valueSize": 1,
 			"minValue": 0,
@@ -294,7 +307,8 @@
 				}
 			]
 		},
-		"14": {
+		{
+			"#": "14",
 			"label": "Scene activation",
 			"description": "Enable/Disable scene functionality.",
 			"valueSize": 1,
@@ -314,7 +328,7 @@
 				}
 			]
 		}
-	},
+	],
 	"compat": {
 		"enableBasicSetMapping": true,
 		"commandClasses": {

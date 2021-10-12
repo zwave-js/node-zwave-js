@@ -14,8 +14,9 @@
 		"min": "0.0",
 		"max": "255.255"
 	},
-	"paramInformation": {
-		"1": {
+	"paramInformation": [
+		{
+			"#": "1",
 			"label": "Set Buzzer",
 			"description": "00 - turn off buzzer / 01 - turn on buzzer",
 			"valueSize": 1,
@@ -24,7 +25,8 @@
 			"defaultValue": 1,
 			"unsigned": true
 		},
-		"2": {
+		{
+			"#": "2",
 			"label": "Set Clock",
 			"description": "Configure panel hour and minute",
 			"valueSize": 2,
@@ -45,7 +47,8 @@
 				}
 			]
 		},
-		"3": {
+		{
+			"#": "3",
 			"label": "Eco Mode Channel 01",
 			"description": "30 - minimum limit / 100 - maximum limit",
 			"valueSize": 1,
@@ -54,7 +57,8 @@
 			"defaultValue": 100,
 			"unsigned": true
 		},
-		"4": {
+		{
+			"#": "4",
 			"label": "Eco Mode Channel 02",
 			"description": "30 - minimum limit / 100 - maximum limit",
 			"valueSize": 1,
@@ -63,7 +67,8 @@
 			"defaultValue": 100,
 			"unsigned": true
 		},
-		"5": {
+		{
+			"#": "5",
 			"label": "Eco Mode Channel 03",
 			"description": "30 - minimum limit / 100 - maximum limit",
 			"valueSize": 1,
@@ -72,7 +77,8 @@
 			"defaultValue": 100,
 			"unsigned": true
 		},
-		"6": {
+		{
+			"#": "6",
 			"label": "Eco Mode Channel 04",
 			"description": "30 - minimum limit / 100 - maximum limit",
 			"valueSize": 1,
@@ -81,7 +87,8 @@
 			"defaultValue": 100,
 			"unsigned": true
 		},
-		"7": {
+		{
+			"#": "7",
 			"label": "Eco Mode Channel 05",
 			"description": "30 - minimum limit / 100 - maximum limit",
 			"valueSize": 1,
@@ -90,7 +97,8 @@
 			"defaultValue": 100,
 			"unsigned": true
 		},
-		"8": {
+		{
+			"#": "8",
 			"label": "Eco Mode Channel 06",
 			"description": "30 - minimum limit / 100 - maximum limit",
 			"valueSize": 1,
@@ -99,7 +107,8 @@
 			"defaultValue": 100,
 			"unsigned": true
 		},
-		"9": {
+		{
+			"#": "9",
 			"label": "Dimmer Minimum Level Channel 01",
 			"description": "29 - minimum limit / 99 - maximum limit",
 			"valueSize": 1,
@@ -108,7 +117,8 @@
 			"defaultValue": 29,
 			"unsigned": true
 		},
-		"10": {
+		{
+			"#": "10",
 			"label": "Dimmer Minimum Level Channel 02",
 			"description": "29 - minimum limit / 99 - maximum limit",
 			"valueSize": 1,
@@ -117,7 +127,8 @@
 			"defaultValue": 29,
 			"unsigned": true
 		},
-		"11": {
+		{
+			"#": "11",
 			"label": "Dimmer Minimum Level Channel 03",
 			"description": "29 - minimum limit / 99 - maximum limit",
 			"valueSize": 1,
@@ -126,7 +137,8 @@
 			"defaultValue": 29,
 			"unsigned": true
 		},
-		"12": {
+		{
+			"#": "12",
 			"label": "Dimmer Minimum Level Channel 04",
 			"description": "29 - minimum limit / 99 - maximum limit",
 			"valueSize": 1,
@@ -135,7 +147,8 @@
 			"defaultValue": 29,
 			"unsigned": true
 		},
-		"13": {
+		{
+			"#": "13",
 			"label": "Dimmer Minimum Level Channel 05",
 			"description": "29 - minimum limit / 99 - maximum limit",
 			"valueSize": 1,
@@ -144,7 +157,8 @@
 			"defaultValue": 29,
 			"unsigned": true
 		},
-		"14": {
+		{
+			"#": "14",
 			"label": "Dimmer Minimum Level Channel 06",
 			"description": "29 - minimum limit / 99 - maximum limit",
 			"valueSize": 1,
@@ -153,15 +167,21 @@
 			"defaultValue": 29,
 			"unsigned": true
 		},
-		"15": {
+		{
+			"#": "15",
 			"label": "Reset to Factory Default",
-			"description": "-1 (0xff) - reset the device",
 			"valueSize": 1,
-			"minValue": -1,
-			"maxValue": 0,
-			"defaultValue": 0
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 0,
+			"unsigned": true,
+			"allowManualEntry": false,
+			"options": [
+				{ "label": "idle", "value": 0 },
+				{ "label": "Factory reset", "value": 255 }
+			]
 		}
-	},
+	],
 	"metadata": {
 		"inclusion": "1. Enter your Z-Wave Controller into Inclusion/Add Mode.\n2. Press the Lighting Panel \"Scene1\" button more than 3 times within 1 second.\nOR, to use NWI:\n1. Enter your Z-Wave Controller into Inclusion/Add Mode.\n2. Power on the FlexNET Dongle. It will be active during 4 seconds",
 		"exclusion": "1. Enter your Z-Wave Controller into Exclusion/Remove Mode.\n2. Press the Lighting Panel \"Scene1\" button more than 3 times within 1 second",

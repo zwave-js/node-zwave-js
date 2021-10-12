@@ -15,7 +15,7 @@ import { pathExists, readFile, writeFile } from "fs-extra";
 import JSON5 from "json5";
 import path from "path";
 import { CompatConfig } from "./CompatConfig";
-import { readJsonWithTemplate } from "./JsonTemplate";
+import { clearTemplateCache, readJsonWithTemplate } from "./JsonTemplate";
 import type { ConfigLogger } from "./Logger";
 import { evaluate } from "./Logic";
 import {
@@ -122,6 +122,7 @@ async function generateIndex<T extends Record<string, unknown>>(
 ): Promise<(T & { filename: string; rootDir?: string })[]> {
 	const index: (T & { filename: string; rootDir?: string })[] = [];
 
+	clearTemplateCache();
 	const configFiles = await enumFilesRecursive(
 		devicesDir,
 		(file) =>
@@ -517,71 +518,121 @@ found non-numeric group id "${key}" in associations`,
 				{ parameter: number; valueBitMask?: number },
 				ConditionalParamInformation[]
 			>();
-			if (!isObject(definition.paramInformation)) {
-				throwInvalidConfig(
-					`device`,
-					`packages/config/config/devices/${filename}:
-paramInformation is not an object`,
-				);
-			}
-			for (const [key, paramDefinition] of entries(
-				definition.paramInformation,
-			)) {
-				const match = /^(\d+)(?:\[0x([0-9a-fA-F]+)\])?$/.exec(key);
-				if (!match) {
-					throwInvalidConfig(
-						`device`,
-						`packages/config/config/devices/${filename}: 
-found invalid param number "${key}" in paramInformation`,
-					);
-				}
 
+			if (isArray(definition.paramInformation)) {
+				// Defining paramInformation as an array is the preferred variant now.
+
+				// Check that every param has a param number
 				if (
-					!isObject(paramDefinition) &&
-					!(
-						isArray(paramDefinition) &&
-						(paramDefinition as any[]).every((p) => isObject(p))
+					!definition.paramInformation.every(
+						(entry: any) => "#" in entry,
 					)
 				) {
 					throwInvalidConfig(
 						`device`,
 						`packages/config/config/devices/${filename}: 
-paramInformation "${key}" is invalid: Every entry must either be an object or an array of objects!`,
+required property "#" missing in at least one entry of paramInformation`,
 					);
 				}
 
-				// Normalize to an array
-				const defns: any[] = isArray(paramDefinition)
-					? paramDefinition
-					: [paramDefinition];
-				if (
-					!defns.every(
-						(d, index) => index === defns.length - 1 || "$if" in d,
-					)
-				) {
-					throwInvalidConfig(
-						`device`,
-						`packages/config/config/devices/${filename}: 
-paramInformation "${key}" is invalid: When there are multiple definitions, every definition except the last one MUST have an "$if" condition!`,
+				for (const paramDefinition of definition.paramInformation) {
+					const { ["#"]: paramNo, ...defn } = paramDefinition;
+					const match = /^(\d+)(?:\[0x([0-9a-fA-F]+)\])?$/.exec(
+						paramNo,
 					);
-				}
+					if (!match) {
+						throwInvalidConfig(
+							`device`,
+							`packages/config/config/devices/${filename}: 
+found invalid param number "${paramNo}" in paramInformation`,
+						);
+					}
 
-				const keyNum = parseInt(match[1], 10);
-				const bitMask =
-					match[2] != undefined ? parseInt(match[2], 16) : undefined;
-				paramInformation.set(
-					{ parameter: keyNum, valueBitMask: bitMask },
-					defns.map(
-						(def) =>
+					const keyNum = parseInt(match[1], 10);
+					const bitMask =
+						match[2] != undefined
+							? parseInt(match[2], 16)
+							: undefined;
+					const key = { parameter: keyNum, valueBitMask: bitMask };
+
+					if (!paramInformation.has(key))
+						paramInformation.set(key, []);
+					paramInformation
+						.get(key)!
+						.push(
 							new ConditionalParamInformation(
 								this,
 								keyNum,
 								bitMask,
-								def,
+								defn,
 							),
-					),
+						);
+				}
+			} else if (
+				(process.env.NODE_ENV !== "test" || !!process.env.CI) &&
+				isObject(definition.paramInformation)
+			) {
+				// Prior to v8.1.0, paramDefinition was an object
+				// We need to support parsing legacy files because users might have custom configs
+				// However, we don't allow this on CI or during tests/lint
+
+				for (const [key, paramDefinition] of entries(
+					definition.paramInformation,
+				)) {
+					const match = /^(\d+)(?:\[0x([0-9a-fA-F]+)\])?$/.exec(key);
+					if (!match) {
+						throwInvalidConfig(
+							`device`,
+							`packages/config/config/devices/${filename}:
+found invalid param number "${key}" in paramInformation`,
+						);
+					}
+
+					if (
+						!isObject(paramDefinition) &&
+						!(
+							isArray(paramDefinition) &&
+							(paramDefinition as any[]).every((p) => isObject(p))
+						)
+					) {
+						throwInvalidConfig(
+							`device`,
+							`packages/config/config/devices/${filename}:
+paramInformation "${key}" is invalid: Every entry must either be an object or an array of objects!`,
+						);
+					}
+
+					// Normalize to an array
+					const defns: any[] = isArray(paramDefinition)
+						? paramDefinition
+						: [paramDefinition];
+
+					const keyNum = parseInt(match[1], 10);
+					const bitMask =
+						match[2] != undefined
+							? parseInt(match[2], 16)
+							: undefined;
+					paramInformation.set(
+						{ parameter: keyNum, valueBitMask: bitMask },
+						defns.map(
+							(def) =>
+								new ConditionalParamInformation(
+									this,
+									keyNum,
+									bitMask,
+									def,
+								),
+						),
+					);
+				}
+			} else {
+				throwInvalidConfig(
+					`device`,
+					`packages/config/config/devices/${filename}:
+paramInformation must be an array!`,
 				);
 			}
+
 			this.paramInformation = paramInformation;
 		}
 

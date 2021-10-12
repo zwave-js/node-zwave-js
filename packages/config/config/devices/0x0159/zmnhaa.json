@@ -35,8 +35,9 @@
 			"isLifeline": true
 		}
 	},
-	"paramInformation": {
-		"1": {
+	"paramInformation": [
+		{
+			"#": "1",
 			"label": "Input 1 switch type",
 			"valueSize": 1,
 			"minValue": 0,
@@ -55,7 +56,8 @@
 				}
 			]
 		},
-		"2": {
+		{
+			"#": "2",
 			"label": "Input 2 contact type",
 			"valueSize": 1,
 			"minValue": 0,
@@ -74,7 +76,8 @@
 				}
 			]
 		},
-		"3": {
+		{
+			"#": "3",
 			"label": "Input 3 contact type",
 			"valueSize": 1,
 			"minValue": 0,
@@ -93,7 +96,8 @@
 				}
 			]
 		},
-		"10": {
+		{
+			"#": "10",
 			"label": "Activate / deactivate functions ALL ON/ALL OFF",
 			"valueSize": 1,
 			"minValue": 0,
@@ -120,7 +124,8 @@
 				}
 			]
 		},
-		"11": {
+		{
+			"#": "11",
 			"label": "Automatic turning off relay after set time",
 			"valueSize": 2,
 			"minValue": 0,
@@ -128,10 +133,12 @@
 			"defaultValue": 0,
 			"unsigned": true
 		},
-		"30": {
+		{
+			"#": "30",
 			"$import": "~/templates/master_template.json#state_after_power_failure_prev_off"
 		},
-		"40": {
+		{
+			"#": "40",
 			"label": "Power reporting in Watts on percentage change",
 			"valueSize": 1,
 			"minValue": 0,
@@ -139,7 +146,8 @@
 			"defaultValue": 3,
 			"unsigned": true
 		},
-		"42": {
+		{
+			"#": "42",
 			"label": "Power reporting in Watts on power change",
 			"valueSize": 2,
 			"minValue": 0,
@@ -147,5 +155,5 @@
 			"defaultValue": 300,
 			"unsigned": true
 		}
-	}
+	]
 }

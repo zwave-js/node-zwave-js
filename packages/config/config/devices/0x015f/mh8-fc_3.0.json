@@ -37,8 +37,9 @@
 			"isLifeline": true
 		}
 	},
-	"paramInformation": {
-		"1": {
+	"paramInformation": [
+		{
+			"#": "1",
 			"label": "Temperature Unit Setting",
 			"valueSize": 1,
 			"minValue": 0,
@@ -56,7 +57,8 @@
 				}
 			]
 		},
-		"2": {
+		{
+			"#": "2",
 			"label": "Upload Temperature Automatically",
 			"valueSize": 1,
 			"minValue": 0,
@@ -82,14 +84,16 @@
 				}
 			]
 		},
-		"3": {
+		{
+			"#": "3",
 			"label": "Upload temperature difference",
 			"valueSize": 2,
 			"minValue": 3,
 			"maxValue": 1000,
 			"defaultValue": 5
 		},
-		"4": {
+		{
+			"#": "4",
 			"label": "Upload time interval",
 			"valueSize": 2,
 			"unit": "seconds",
@@ -98,7 +102,8 @@
 			"defaultValue": 30,
 			"unsigned": true
 		},
-		"255": {
+		{
+			"#": "255",
 			"label": "Factory Setting",
 			"valueSize": 1,
 			"minValue": 85,
@@ -106,5 +111,5 @@
 			"defaultValue": 85,
 			"writeOnly": true
 		}
-	}
+	]
 }
