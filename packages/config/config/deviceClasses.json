@@ -85,8 +85,8 @@
 						"Inclusion Controller",
 						"Powerlevel",
 						"Manufacturer Specific",
-						"Security",
-						"Security 2",
+						// "Security", (some devices only support S2)
+						// "Security 2", (older devices don't always support S2)
 						"Supervision",
 						"Simple AV Control",
 						"Transport Service", // V2+
@@ -100,8 +100,8 @@
 						"CRC-16 Encapsulation",
 						"Multi Channel", // V4+
 						"Multi Channel Association", // V3+
-						"Security",
-						"Security 2",
+						// "Security", (some devices only support S2)
+						// "Security 2", (older devices don't always support S2)
 						"Wake Up" // V2+
 					]
 				},
@@ -116,7 +116,7 @@
 						"Inclusion Controller",
 						"Manufacturer Specific",
 						"Powerlevel",
-						"Security 2",
+						// "Security 2", (older devices don't always support S2)
 						"Supervision",
 						"Transport Service", // V2+
 						"Version", // V2+
@@ -140,8 +140,8 @@
 						"Inclusion Controller",
 						"Manufacturer Specific",
 						"Powerlevel",
-						"Security",
-						"Security 2",
+						// "Security", (some devices only support S2)
+						// "Security 2", (older devices don't always support S2)
 						"Supervision",
 						"Simple AV Control",
 						"Transport Service", // V2+
@@ -156,16 +156,23 @@
 						"CRC-16 Encapsulation",
 						"Multi Channel", // V4+
 						"Multi Channel Association", // V3+
-						"Security",
-						"Security 2",
+						// "Security", (some devices only support S2)
+						// "Security 2", (older devices don't always support S2)
 						"Wake Up" // V2+
 					]
 				},
 				"0x07": {
 					"label": "Gateway",
 					"zwavePlusDeviceType": "Gateway",
-					"supportedCCs": ["Manufacturer Specific", "Security", "Version"],
-					"controlledCCs": ["Security", "Multi Channel"]
+					"supportedCCs": [
+						"Manufacturer Specific",
+						// "Security", (some devices only support S2)
+						"Version"
+					],
+					"controlledCCs": [
+						// "Security", (some devices only support S2)
+						"Multi Channel"
+					]
 				}
 			}
 		},
@@ -186,7 +193,7 @@
 						// "Device Reset Locally", (we can't know if the device can be reset)
 						"Manufacturer Specific",
 						"Powerlevel",
-						"Security 2",
+						// "Security 2", (older devices don't always support S2)
 						"Supervision",
 						"Transport Service", // V2+
 						"Version", // V2+
@@ -332,7 +339,7 @@
 						"IR Repeater",
 						"Manufacturer Specific",
 						"Powerlevel",
-						"Security 2",
+						// "Security 2", (older devices don't always support S2)
 						"Supervision",
 						"Transport Service", // V2+
 						"Version", // V2+
@@ -362,7 +369,7 @@
 						// "Device Reset Locally", (we can't know if the device can be reset)
 						"Manufacturer Specific",
 						"Powerlevel",
-						"Security 2",
+						// "Security 2", (older devices don't always support S2)
 						"Supervision",
 						"Transport Service", // V2+
 						"Version", // V2+
@@ -391,7 +398,7 @@
 						"Multi Channel", // V4+
 						"Multi Channel Association", // V3+
 						"Powerlevel",
-						"Security 2",
+						// "Security 2", (older devices don't always support S2)
 						"Supervision",
 						"Transport Service", // V2+
 						"Version", // V2+
@@ -410,7 +417,7 @@
 						// "Device Reset Locally", (we can't know if the device can be reset)
 						"Manufacturer Specific",
 						"Powerlevel",
-						"Security 2",
+						// "Security 2", (older devices don't always support S2)
 						"Supervision",
 						"Transport Service", // V2+
 						"Version", // V2+
@@ -429,7 +436,7 @@
 						// "Device Reset Locally", (we can't know if the device can be reset)
 						"Manufacturer Specific",
 						"Powerlevel",
-						"Security 2",
+						// "Security 2", (older devices don't always support S2)
 						"Supervision",
 						"Transport Service", // V2+
 						"Version", // V2+
@@ -447,7 +454,7 @@
 						// "Device Reset Locally", (we can't know if the device can be reset)
 						"Manufacturer Specific",
 						"Powerlevel",
-						"Security 2",
+						// "Security 2", (older devices don't always support S2)
 						"Supervision",
 						"Transport Service", // V2+
 						"Version", // V2+
@@ -477,7 +484,7 @@
 						"Manufacturer Specific",
 						"Multilevel Switch",
 						"Powerlevel",
-						"Security 2",
+						// "Security 2", (older devices don't always support S2)
 						"Supervision",
 						"Transport Service", // V2+
 						"Version", // V2+
@@ -538,7 +545,7 @@
 						"Manufacturer Specific",
 						"Multilevel Switch",
 						"Powerlevel",
-						"Security 2",
+						// "Security 2", (older devices don't always support S2)
 						"Supervision",
 						"Transport Service", // V2+
 						"Version", // V2+
@@ -674,7 +681,7 @@
 						"Manufacturer Specific",
 						"Meter", // V2+
 						"Powerlevel",
-						"Security 2",
+						// "Security 2", (older devices don't always support S2)
 						"Supervision",
 						"Transport Service", // V2+
 						"Version", // V2+
@@ -698,11 +705,20 @@
 				"0x03": {
 					"label": "Secure Keypad Door Lock",
 					"zwavePlusDeviceType": "Door Lock - Keypad",
-					"supportedCCs": ["Basic", "Door Lock", "User Code", "Manufacturer Specific", "Security", "Version"]
+					"requiresSecurity": true,
+					"supportedCCs": [
+						"Basic",
+						"Door Lock",
+						"User Code",
+						"Manufacturer Specific",
+						// "Security", (some devices only support S2)
+						"Version"
+					]
 				},
 				"0x05": {
 					"label": "Secure Door",
 					"zwavePlusDeviceType": "Motorized Barrier - GDO",
+					"requiresSecurity": true,
 					"supportedCCs": [
 						"Application Status",
 						"Association", // V2+
@@ -713,8 +729,8 @@
 						"Manufacturer Specific",
 						"Notification", // V4+
 						"Powerlevel",
-						"Security",
-						"Security 2",
+						// "Security", (some devices only support S2)
+						// "Security 2", (older devices don't always support S2)
 						"Supervision",
 						"Transport Service", // V2+
 						"Version", // V2+
@@ -724,6 +740,7 @@
 				"0x06": {
 					"label": "Secure Gate",
 					"zwavePlusDeviceType": "Motorized Barrier - Gate",
+					"requiresSecurity": true,
 					"supportedCCs": [
 						"Application Status",
 						"Association", // V2+
@@ -734,8 +751,8 @@
 						"Manufacturer Specific",
 						"Notification", // V4+
 						"Powerlevel",
-						"Security",
-						"Security 2",
+						// "Security", (some devices only support S2)
+						// "Security 2", (older devices don't always support S2)
 						"Supervision",
 						"Transport Service", // V2+
 						"Version", // V2+
@@ -745,6 +762,7 @@
 				"0x07": {
 					"label": "Secure Barrier Add-on",
 					"zwavePlusDeviceType": "Motorized Barrier - Add-on",
+					"requiresSecurity": true,
 					"supportedCCs": [
 						"Application Status",
 						"Association", // V2+
@@ -755,8 +773,8 @@
 						"Manufacturer Specific",
 						"Notification", // V4+
 						"Powerlevel",
-						"Security",
-						"Security 2",
+						// "Security", (some devices only support S2)
+						// "Security 2", (older devices don't always support S2)
 						"Supervision",
 						"Transport Service", // V2+
 						"Version", // V2+
@@ -766,6 +784,7 @@
 				"0x08": {
 					"label": "Secure Barrier Open only",
 					"zwavePlusDeviceType": "Motorized Barrier - Open only",
+					"requiresSecurity": true,
 					"supportedCCs": [
 						"Application Status",
 						"Association", // V2+
@@ -776,8 +795,8 @@
 						"Manufacturer Specific",
 						"Notification", // V4+
 						"Powerlevel",
-						"Security",
-						"Security 2",
+						// "Security", (some devices only support S2)
+						// "Security 2", (older devices don't always support S2)
 						"Supervision",
 						"Transport Service", // V2+
 						"Version", // V2+
@@ -787,6 +806,7 @@
 				"0x09": {
 					"label": "Secure Barrier Close only",
 					"zwavePlusDeviceType": "Motorized Barrier - Close only",
+					"requiresSecurity": true,
 					"supportedCCs": [
 						"Application Status",
 						"Association", // V2+
@@ -797,8 +817,8 @@
 						"Manufacturer Specific",
 						"Notification", // V4+
 						"Powerlevel",
-						"Security",
-						"Security 2",
+						// "Security", (some devices only support S2)
+						// "Security 2", (older devices don't always support S2)
 						"Supervision",
 						"Transport Service", // V2+
 						"Version", // V2+
@@ -808,24 +828,26 @@
 				"0x0a": {
 					"label": "Lockbox",
 					"zwavePlusDeviceType": "Lockbox",
+					"requiresSecurity": true,
 					"supportedCCs": [
 						// MUST NOT support Basic
 						"Notification",
 						"Association",
 						"Door Lock",
 						"Manufacturer Specific",
-						"Security",
+						// "Security", (some devices only support S2)
 						"Version"
 					]
 				},
 				"0x0b": {
 					"label": "Secure Keypad",
 					"zwavePlusDeviceType": "Entry Control Keypad",
+					"requiresSecurity": true,
 					"supportedCCs": [
 						// "Device Reset Locally", (we can't know if the device can be reset)
 						"Entry Control",
 						"Manufacturer Specific",
-						"Security",
+						// "Security", (some devices only support S2)
 						"Version"
 					]
 				}

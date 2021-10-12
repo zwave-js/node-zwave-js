@@ -75,7 +75,7 @@ export async function loadNotificationsInternal(
 			);
 		}
 		return notifications;
-	} catch (e: unknown) {
+	} catch (e) {
 		if (isZWaveError(e)) {
 			throw e;
 		} else {

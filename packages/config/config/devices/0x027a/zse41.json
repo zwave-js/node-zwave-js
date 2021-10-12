@@ -1,0 +1,117 @@
+{
+	"manufacturer": "Zooz",
+	"manufacturerId": "0x027a",
+	"label": "ZSE41",
+	"description": "Open/Close XS Sensor",
+	"devices": [
+		{
+			"productType": "0x7000",
+			"productId": "0xe001",
+			"zwaveAllianceId": 4276
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"associations": {
+		"1": {
+			"label": "Lifeline",
+			"maxNodes": 3,
+			"isLifeline": true
+		},
+		"2": {
+			"label": "On/Off",
+			"maxNodes": 5
+		}
+	},
+	"paramInformation": [
+		{
+			"#": "1",
+			"label": "LED Indicator",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 1,
+			"unsigned": true,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Disable",
+					"value": 0
+				},
+				{
+					"label": "Enable",
+					"value": 1
+				}
+			]
+		},
+		{
+			"#": "3",
+			"label": "Battery Report Threshold",
+			"valueSize": 1,
+			"unit": "%",
+			"minValue": 1,
+			"maxValue": 50,
+			"defaultValue": 10,
+			"unsigned": true
+		},
+		{
+			"#": "4",
+			"label": "Low Battery Alarm Threshold",
+			"valueSize": 1,
+			"unit": "%",
+			"minValue": 10,
+			"maxValue": 50,
+			"defaultValue": 20,
+			"unsigned": true
+		},
+		{
+			"#": "5",
+			"label": "Invert Sensor State",
+			"description": "When enabled, the device will report open when the magnet is near",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 0,
+			"unsigned": true,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Disable",
+					"value": 0
+				},
+				{
+					"label": "Enable",
+					"value": 1
+				}
+			]
+		},
+		{
+			"#": "6",
+			"label": "Group 2: On Delay",
+			"valueSize": 4,
+			"unit": "seconds",
+			"minValue": 0,
+			"maxValue": 3600,
+			"defaultValue": 0,
+			"unsigned": true
+		},
+		{
+			"#": "7",
+			"label": "Group 2: Off Delay",
+			"valueSize": 4,
+			"unit": "seconds",
+			"minValue": 0,
+			"maxValue": 3600,
+			"defaultValue": 0,
+			"unsigned": true
+		}
+	],
+	"metadata": {
+		"inclusion": "Initiate inclusion (pairing) in the app (or web interface). Not sure how? ask@getzooz.com\n\nWhile the hub is looking for new devices, click the Z-Wave button 3 times as quickly as possible. The LED indicator will start flashing to confirm inclusion mode and turn off once inclusion is completed.",
+		"exclusion": "1. Bring the sensor within direct range of your Z-Wave hub.\n2. Put the Z-Wave hub into exclusion mode (not sure how to do that? ask@getzooz.com).\n3. Click the Z-Wave button 3 times as quickly as possible.\n4. Your hub will confirm exclusion and the sensor will disappear from your controller's device list",
+		"reset": "When your network’s primary controller is missing or otherwise inoperable, you may need to reset the device to factory settings manually. In order to complete the process, make sure the sensor is powered, then click the Z-Wave button twice and hold it the third time for 10 seconds. The LED indicator will blink continuously. Immediately after, click the Z-Wave button twice more to finalize the reset. The LED indicator will flash 3 times to confirm a successful reset",
+		"manual": "https://products.z-wavealliance.org/ProductManual/File?folder=&filename=product_documents/4276/zooz-zse41-manual-online.pdf"
+	}
+}

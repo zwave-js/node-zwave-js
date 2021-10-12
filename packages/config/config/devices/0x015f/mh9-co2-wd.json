@@ -9,6 +9,10 @@
 			"productId": "0x3102"
 		},
 		{
+			"productType": "0x0902",
+			"productId": "0x5102"
+		},
+		{
 			"productType": "0x0905",
 			"productId": "0x0201"
 		}

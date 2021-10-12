@@ -105,7 +105,6 @@ export class CCAPI {
 	 * Can be used on supported CC APIs to set a CC value by property name (and optionally the property key)
 	 */
 	public get setValue(): SetValueImplementation | undefined {
-		// wotan-disable-next-line no-restricted-property-access
 		return this[SET_VALUE];
 	}
 
@@ -120,7 +119,6 @@ export class CCAPI {
 	 * Can be used on supported CC APIs to poll a CC value by property name (and optionally the property key)
 	 */
 	public get pollValue(): PollValueImplementation | undefined {
-		// wotan-disable-next-line no-restricted-property-access
 		return this[POLL_VALUE]?.bind(this);
 	}
 
@@ -372,6 +370,8 @@ export type CCToName<CC extends CommandClasses> = [CC] extends [
 	? "Scene Actuator Configuration"
 	: [CC] extends [typeof CommandClasses["Scene Controller Configuration"]]
 	? "Scene Controller Configuration"
+	: [CC] extends [typeof CommandClasses["Security 2"]]
+	? "Security 2"
 	: [CC] extends [typeof CommandClasses["Security"]]
 	? "Security"
 	: [CC] extends [typeof CommandClasses["Sound Switch"]]
@@ -453,6 +453,7 @@ export interface CCAPIs {
 	"Scene Activation": import("./SceneActivationCC").SceneActivationCCAPI;
 	"Scene Actuator Configuration": import("./SceneActuatorConfigurationCC").SceneActuatorConfigurationCCAPI;
 	"Scene Controller Configuration": import("./SceneControllerConfigurationCC").SceneControllerConfigurationCCAPI;
+	"Security 2": import("./Security2CC").Security2CCAPI;
 	Security: import("./SecurityCC").SecurityCCAPI;
 	"Sound Switch": import("./SoundSwitchCC").SoundSwitchCCAPI;
 	Supervision: import("./SupervisionCC").SupervisionCCAPI;

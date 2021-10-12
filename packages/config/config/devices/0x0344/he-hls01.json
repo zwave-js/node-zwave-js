@@ -1,0 +1,475 @@
+{
+	"manufacturer": "HELTUN",
+	"manufacturerId": "0x0344",
+	"label": "HE-HLS01",
+	"description": "High Load Switch",
+	"devices": [
+		{
+			"productType": "0x0004",
+			"productId": "0x000a"
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"paramInformation": [
+		{
+			"#": "1",
+			"label": "Frequency Region",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 9,
+			"readOnly": true,
+			"options": [
+				{
+					"label": "EU (868.4 MHz, 869.85 MHz)",
+					"value": 0
+				},
+				{
+					"label": "US (908.4 MHz, 916.0 MHz)",
+					"value": 1
+				},
+				{
+					"label": "AU (919.8 MHz, 921.4 MHz)",
+					"value": 2
+				},
+				{
+					"label": "HO (919.8 MHz)",
+					"value": 3
+				},
+				{
+					"label": "In (865.2 MHz)",
+					"value": 4
+				},
+				{
+					"label": "IL (916.0 MHz)",
+					"value": 5
+				},
+				{
+					"label": "RU (869.0 MHz)",
+					"value": 6
+				},
+				{
+					"label": "Cn (868.4 MHz)",
+					"value": 7
+				},
+				{
+					"label": "JP (922.5 MHz, 923.9 MHz, 926.3 MHz)",
+					"value": 8
+				},
+				{
+					"label": "Or (920.9 MHz, 921.7 MHz, 923.1 MHz)",
+					"value": 9
+				}
+			]
+		},
+		{
+			"#": "3",
+			"label": "Hardware and Software Versions",
+			"valueSize": 4,
+			"minValue": 0,
+			"maxValue": 0,
+			"readOnly": true
+		},
+		{
+			"#": "4",
+			"label": "Energy Consumption",
+			"unit": "kW",
+			"valueSize": 4,
+			"minValue": 0,
+			"maxValue": 0,
+			"readOnly": true
+		},
+		{
+			"#": "7",
+			"label": "Relay Output Mode",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 0,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Normally Open",
+					"value": 0
+				},
+				{
+					"label": "Normally Closed",
+					"value": 1
+				}
+			]
+		},
+		{
+			"#": "10",
+			"label": "Floor Temperature Sensor Resistance",
+			"unit": "kΩ",
+			"valueSize": 1,
+			"minValue": 1,
+			"maxValue": 100,
+			"defaultValue": 10
+		},
+		{
+			"#": "16",
+			"label": "Temperature Scale",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 0,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Celsius",
+					"value": 0
+				},
+				{
+					"label": "Fahrenheit",
+					"value": 1
+				}
+			]
+		},
+		{
+			"#": "17",
+			"label": "Temperature Sensor Calibration",
+			"unit": "0.1 °C",
+			"valueSize": 1,
+			"minValue": -100,
+			"maxValue": 100,
+			"defaultValue": 0
+		},
+		{
+			"#": "19",
+			"label": "Time Correction by Controller",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 1,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Disable",
+					"value": 0
+				},
+				{
+					"label": "Enable",
+					"value": 1
+				}
+			]
+		},
+		{
+			"#": "21",
+			"label": "Week Day Override",
+			"valueSize": 1,
+			"minValue": 1,
+			"maxValue": 7,
+			"defaultValue": 1,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Monday",
+					"value": 1
+				},
+				{
+					"label": "Tuesday",
+					"value": 2
+				},
+				{
+					"label": "Wednesday",
+					"value": 3
+				},
+				{
+					"label": "Thursday",
+					"value": 4
+				},
+				{
+					"label": "Friday",
+					"value": 5
+				},
+				{
+					"label": "Saturday",
+					"value": 6
+				},
+				{
+					"label": "Sunday",
+					"value": 7
+				}
+			]
+		},
+		{
+			"#": "22",
+			"label": "Time Override",
+			"unit": "HHMM",
+			"valueSize": 2,
+			"minValue": 0,
+			"maxValue": 2359,
+			"defaultValue": 0
+		},
+		{
+			"#": "23",
+			"label": "Auto On/Off",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 0,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Disable",
+					"value": 0
+				},
+				{
+					"label": "Enable",
+					"value": 1
+				}
+			]
+		},
+		{
+			"#": "24",
+			"label": "Auto Off Timeout",
+			"unit": "minutes",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 120,
+			"defaultValue": 5
+		},
+		{
+			"#": "25",
+			"label": "Auto On Reconnect Timeout",
+			"description": "When the load is reconnected the relay output will be switched on after this time.",
+			"unit": "minutes",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 120,
+			"defaultValue": 0
+		},
+		{
+			"#": "26",
+			"label": "High Load Timeout Protection: Power Threshold",
+			"unit": "W",
+			"valueSize": 2,
+			"minValue": 100,
+			"maxValue": 3500,
+			"defaultValue": 0
+		},
+		{
+			"#": "27",
+			"label": "High Load Timeout Protection: Time Threshold",
+			"unit": "minutes",
+			"valueSize": 2,
+			"minValue": 1,
+			"maxValue": 1440,
+			"defaultValue": 0
+		},
+		{
+			"#": "41",
+			"label": "External Input: Hold Control Mode",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 3,
+			"defaultValue": 2,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Disable",
+					"value": 0
+				},
+				{
+					"label": "Operate like click (parameter 51)",
+					"value": 1
+				},
+				{
+					"label": "Momentary switch",
+					"value": 2
+				},
+				{
+					"label": "Reversed momentary switch",
+					"value": 3
+				}
+			]
+		},
+		{
+			"#": "51",
+			"label": "External Input: Click Control Mode",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 5,
+			"defaultValue": 1,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Disable",
+					"value": 0
+				},
+				{
+					"label": "Toggle switch",
+					"value": 1
+				},
+				{
+					"label": "Turn on",
+					"value": 2
+				},
+				{
+					"label": "Turn off",
+					"value": 3
+				},
+				{
+					"label": "Turn on, then off after timer",
+					"value": 4
+				},
+				{
+					"label": "Turn off, then on after timer",
+					"value": 5
+				}
+			]
+		},
+		{
+			"#": "71",
+			"label": "Relay Timer Mode Duration",
+			"unit": "seconds",
+			"valueSize": 3,
+			"minValue": 0,
+			"maxValue": 43200,
+			"defaultValue": 0
+		},
+		{
+			"#": "141",
+			"label": "Energy Consumption Report Interval",
+			"unit": "minutes",
+			"valueSize": 1,
+			"minValue": 1,
+			"maxValue": 120,
+			"defaultValue": 10
+		},
+		{
+			"#": "142",
+			"label": "Energy Consumption Report Threshold",
+			"unit": "W",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 50,
+			"defaultValue": 25
+		},
+		{
+			"#": "143",
+			"label": "Temperature Report Interval",
+			"unit": "minutes",
+			"valueSize": 1,
+			"minValue": 1,
+			"maxValue": 120,
+			"defaultValue": 10
+		},
+		{
+			"#": "144",
+			"label": "Temperature Report Threshold",
+			"unit": "0.1 °C",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 100,
+			"defaultValue": 2
+		},
+		{
+			"#": "151",
+			"label": "Device Failure Notifications",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 1,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Disable",
+					"value": 0
+				},
+				{
+					"label": "Enable",
+					"value": 1
+				}
+			]
+		},
+		{
+			"#": "152",
+			"label": "Temperature Rise Notification",
+			"description": "The value should be lower than the value of parameter 153 (Overheat Protection & Notification).",
+			"unit": "°C",
+			"valueSize": 2,
+			"minValue": 1,
+			"maxValue": 120,
+			"defaultValue": 1
+		},
+		{
+			"#": "153",
+			"label": "Overheat Protection & Notification",
+			"unit": "°C",
+			"valueSize": 2,
+			"minValue": 0,
+			"maxValue": 120,
+			"defaultValue": 0
+		},
+		{
+			"#": "154",
+			"label": "Over-Current Notification",
+			"description": "The device will switch Off the load when the current reaches 16A.",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 1,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Disable",
+					"value": 0
+				},
+				{
+					"label": "Enable",
+					"value": 1
+				}
+			]
+		},
+		{
+			"#": "155",
+			"label": "Over-Load Protection & Notification",
+			"unit": "W",
+			"valueSize": 2,
+			"minValue": 0,
+			"maxValue": 4000,
+			"defaultValue": 3500
+		},
+		{
+			"#": "156",
+			"label": "Over-Voltage Protection & Notification",
+			"unit": "Volts",
+			"valueSize": 2,
+			"minValue": 0,
+			"maxValue": 280,
+			"defaultValue": 240
+		},
+		{
+			"#": "157",
+			"label": "Voltage Drop Protection & Notification",
+			"unit": "Volts",
+			"valueSize": 2,
+			"minValue": 0,
+			"maxValue": 240,
+			"defaultValue": 200
+		},
+		{
+			"#": "158",
+			"label": "Sparks Protection & Notification",
+			"valueSize": 2,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 1,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Disable",
+					"value": 0
+				},
+				{
+					"label": "Enable",
+					"value": 1
+				}
+			]
+		}
+	]
+}

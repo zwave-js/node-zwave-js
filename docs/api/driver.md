@@ -392,6 +392,8 @@ interface SendMessageOptions {
 	changeNodeStatusOnMissingACK?: boolean;
 	/** Sets the number of milliseconds after which a message expires. When the expiration timer elapses, the promise is rejected with the error code `Controller_MessageExpired`. */
 	expire?: number;
+	/** If a Wake Up On Demand should be requested for the target node. */
+	requestWakeUpOnDemand?: boolean;
 }
 ```
 
@@ -554,9 +556,15 @@ interface ZWaveOptions {
 		 */
 		throttle: "fast" | "normal" | "slow";
 	};
-
-	/** Specify the network key to use for encryption. This must be a Buffer of exactly 16 bytes. */
-	networkKey?: Buffer;
+	/**
+	 * Specify the security keys to use for encryption. Each one must be a Buffer of exactly 16 bytes.
+	 */
+	securityKeys?: {
+		S2_Unauthenticated?: Buffer;
+		S2_Authenticated?: Buffer;
+		S2_AccessControl?: Buffer;
+		S0_Legacy?: Buffer;
+	};
 
 	/**
 	 * Some Command Classes support reporting that a value is unknown.

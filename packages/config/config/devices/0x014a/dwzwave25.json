@@ -56,5 +56,8 @@
 				}
 			]
 		}
-	]
+	],
+	"compat": {
+		"forceNotificationIdleReset": true
+	}
 }

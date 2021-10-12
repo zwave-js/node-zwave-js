@@ -115,13 +115,18 @@
 		},
 		{
 			"#": "9",
-			"label": "Ramp Rate Control",
-			"description": "Adjust the physical ramp rate for your dimmer (fade-in / fade-out effect for on / off operation).",
+			"label": "Dim Rate Speed",
 			"unit": "seconds",
 			"valueSize": 1,
-			"minValue": 1,
+			"minValue": 0,
 			"maxValue": 99,
-			"defaultValue": 1
+			"defaultValue": 1,
+			"options": [
+				{
+					"label": "Instant on/off",
+					"value": 0
+				}
+			]
 		},
 		{
 			"#": "10",

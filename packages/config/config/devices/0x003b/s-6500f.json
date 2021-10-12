@@ -18,40 +18,40 @@
 		{
 			"#": "3",
 			"label": "Beeper",
-			"description": "Read and write 0: disable beeper -1: enable beeper",
 			"valueSize": 1,
-			"minValue": -1,
-			"maxValue": 0,
-			"defaultValue": -1,
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 255,
+			"unsigned": true,
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "Enable beeper",
-					"value": -1
+					"label": "Disable",
+					"value": 0
 				},
 				{
-					"label": "Disable beeper",
-					"value": 0
+					"label": "Enable",
+					"value": 255
 				}
 			]
 		},
 		{
 			"#": "5",
 			"label": "Auto Lock",
-			"description": "Read-only 0: disable auto lock -1: enable auto lock",
 			"valueSize": 1,
-			"minValue": -1,
-			"maxValue": 0,
+			"minValue": 0,
+			"maxValue": 255,
 			"defaultValue": 0,
+			"unsigned": true,
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "Enable auto lock",
-					"value": -1
+					"label": "Disable ",
+					"value": 0
 				},
 				{
-					"label": "Disable auto lock",
-					"value": 0
+					"label": "Enable",
+					"value": 255
 				}
 			]
 		},

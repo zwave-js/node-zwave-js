@@ -399,7 +399,7 @@ describe("lib/node/Node", () => {
 
 			it.todo("test that the CC interview methods are called");
 
-			it.only("the CC interviews happen in the correct order", () => {
+			it("the CC interviews happen in the correct order", () => {
 				require("../commandclass/index");
 				expect(getCCConstructor(49)).not.toBeUndefined();
 
@@ -1035,10 +1035,15 @@ describe("lib/node/Node", () => {
 			isRouting: false,
 			supportedDataRates: [40000],
 			supportsSecurity: false,
-			isSecure: "unknown",
 			supportsBeaming: true,
 			protocolVersion: 3,
 			nodeType: "Controller",
+			securityClasses: {
+				S2_AccessControl: false,
+				S2_Authenticated: true,
+				S2_Unauthenticated: true,
+				S0_Legacy: false,
+			},
 			commandClasses: {
 				"0x25": {
 					name: "Binary Switch",
@@ -1084,13 +1089,23 @@ describe("lib/node/Node", () => {
 				isFrequentListening: true, // --> 1000ms
 				isBeaming: true,
 				maxBaudRate: 40000,
+				isSecure: true, // --> securityClasses.S0_Legacy: true
 			};
 			// @ts-expect-error We want to test this!
 			delete legacy.protocolVersion;
+			// @ts-expect-error We want to test this!
+			delete legacy.securityClasses;
 			node.deserialize(legacy);
 			const expected = {
 				...serializedTestNode,
 				isFrequentListening: "1000ms",
+				securityClasses: {
+					S0_Legacy: true,
+					// S2 classes are not granted when deserializing legacy caches
+					S2_AccessControl: false,
+					S2_Authenticated: false,
+					S2_Unauthenticated: false,
+				},
 			};
 			expect(node.serialize()).toEqual(expected);
 			node.destroy();

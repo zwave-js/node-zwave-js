@@ -1,11 +1,19 @@
 import {
 	actuatorCCs,
 	CommandClasses,
+	computePRK,
+	decodeX25519KeyDER,
+	deriveTempKeys,
+	dskToString,
+	encodeX25519KeyDERSPKI,
 	indexDBsByNode,
 	isRecoverableZWaveError,
 	isTransmissionError,
 	isZWaveError,
 	NODE_ID_BROADCAST,
+	SecurityClass,
+	securityClassIsS2,
+	securityClassOrder,
 	ValueDB,
 	ZWaveError,
 	ZWaveErrorCodes,
@@ -13,6 +21,7 @@ import {
 import {
 	flatMap,
 	getEnumMemberName,
+	getErrorMessage,
 	JSONObject,
 	Mixin,
 	num2hex,
@@ -22,12 +31,23 @@ import {
 	TypedEventEmitter,
 } from "@zwave-js/shared";
 import { distinct } from "alcalzone-shared/arrays";
+import { wait } from "alcalzone-shared/async";
 import {
 	createDeferredPromise,
 	DeferredPromise,
 } from "alcalzone-shared/deferred-promise";
 import { composeObject } from "alcalzone-shared/objects";
 import { isObject } from "alcalzone-shared/typeguards";
+import crypto from "crypto";
+import util from "util";
+import {
+	Security2CCKEXFail,
+	Security2CCKEXSet,
+	Security2CCNetworkKeyGet,
+	Security2CCNetworkKeyVerify,
+	Security2CCPublicKeyReport,
+	Security2CCTransferEnd,
+} from "../commandclass";
 import type { AssociationCC } from "../commandclass/AssociationCC";
 import type {
 	AssociationGroup,
@@ -46,6 +66,12 @@ import type {
 	EndpointAddress,
 	MultiChannelAssociationCC,
 } from "../commandclass/MultiChannelAssociationCC";
+import {
+	ECDHProfiles,
+	inclusionTimeouts,
+	KEXFailType,
+	KEXSchemes,
+} from "../commandclass/Security2/shared";
 import {
 	getFirmwareVersionsMetadata,
 	getFirmwareVersionsValueId,
@@ -152,6 +178,12 @@ import {
 } from "./GetSUCNodeIdMessages";
 import { HardResetRequest } from "./HardResetRequest";
 import {
+	InclusionOptions,
+	InclusionResult,
+	InclusionStrategy,
+	ReplaceNodeOptions,
+} from "./Inclusion";
+import {
 	IsFailedNodeRequest,
 	IsFailedNodeResponse,
 } from "./IsFailedNodeMessages";
@@ -198,11 +230,11 @@ interface ControllerEventCallbacks
 	extends StatisticsEventCallbacks<ControllerStatistics> {
 	"inclusion failed": () => void;
 	"exclusion failed": () => void;
-	"inclusion started": (secure: boolean) => void;
+	"inclusion started": (secure: boolean, strategy: InclusionStrategy) => void;
 	"exclusion started": () => void;
 	"inclusion stopped": () => void;
 	"exclusion stopped": () => void;
-	"node added": (node: ZWaveNode) => void;
+	"node added": (node: ZWaveNode, result: InclusionResult) => void;
 	"node removed": (node: ZWaveNode, replaced: boolean) => void;
 	"heal network progress": (
 		progress: ReadonlyMap<number, HealNodeStatus>,
@@ -582,7 +614,7 @@ export class ZWaveController extends TypedEventEmitter<ControllerEventCallbacks>
 				);
 			} catch (e) {
 				this.driver.controllerLog.print(
-					`Error while promoting to SUC/SIS: ${e.message}`,
+					`Error while promoting to SUC/SIS: ${getErrorMessage(e)}`,
 					"error",
 				);
 			}
@@ -766,7 +798,7 @@ export class ZWaveController extends TypedEventEmitter<ControllerEventCallbacks>
 	 */
 	public hardReset(): Promise<void> {
 		this.driver.controllerLog.print("performing hard reset...");
-		// wotan-disable-next-line async-function-assignability
+
 		return new Promise(async (resolve, reject) => {
 			// handle the incoming message
 			const handler: RequestHandler = (_msg) => {
@@ -793,7 +825,7 @@ export class ZWaveController extends TypedEventEmitter<ControllerEventCallbacks>
 			} catch (e) {
 				// in any case unregister the handler
 				this.driver.controllerLog.print(
-					`  hard reset failed: ${e.message}`,
+					`  hard reset failed: ${getErrorMessage(e)}`,
 					"error",
 				);
 				this.driver.unregisterRequestHandler(
@@ -807,8 +839,8 @@ export class ZWaveController extends TypedEventEmitter<ControllerEventCallbacks>
 
 	private _exclusionActive: boolean = false;
 	private _inclusionActive: boolean = false;
-	private _includeNonSecure: boolean = false;
 	private _includeController: boolean = false;
+	private _inclusionOptions: InclusionOptions | undefined;
 	private _nodePendingInclusion: ZWaveNode | undefined;
 	private _nodePendingExclusion: ZWaveNode | undefined;
 	private _nodePendingReplace: ZWaveNode | undefined;
@@ -821,17 +853,63 @@ export class ZWaveController extends TypedEventEmitter<ControllerEventCallbacks>
 	 * Starts the inclusion process of new nodes.
 	 * Resolves to true when the process was started, and false if the inclusion was already active.
 	 *
-	 * @param includeNonSecure Whether the node should be included non-securely, even if it supports Security. By default, all nodes will be included securely if possible
+	 * @param options Defines the inclusion strategy to use.
 	 */
+	public async beginInclusion(options: InclusionOptions): Promise<boolean>;
+
+	/**
+	 * Starts the inclusion process of new nodes.
+	 * Resolves to true when the process was started, and false if the inclusion was already active.
+	 *
+	 * @param includeNonSecure Whether the new node should be included non-securely, even if it supports Security S0. By default, S0 will be used.
+	 * @deprecated Use the overload with options instead
+	 */
+	public async beginInclusion(includeNonSecure?: boolean): Promise<boolean>;
+
 	public async beginInclusion(
-		includeNonSecure: boolean = false,
+		options?: InclusionOptions | boolean,
 	): Promise<boolean> {
 		// don't start it twice
-		if (this._inclusionActive || this._exclusionActive) return false;
-		this._inclusionActive = true;
-		this._includeNonSecure = includeNonSecure;
+		if (this._inclusionActive || this._exclusionActive) {
+			return false;
+		}
 
-		this.driver.controllerLog.print(`starting inclusion process...`);
+		if (options == undefined) {
+			options = {
+				strategy: InclusionStrategy.Security_S0,
+			};
+		} else if (typeof options === "boolean") {
+			options = {
+				strategy: options
+					? InclusionStrategy.Insecure
+					: InclusionStrategy.Security_S0,
+			};
+		}
+
+		// Protect against invalid inclusion options
+		if (!(options.strategy in InclusionStrategy)) {
+			throw new ZWaveError(
+				`Invalid inclusion strategy: ${options.strategy}`,
+				ZWaveErrorCodes.Argument_Invalid,
+			);
+		}
+
+		if (options.strategy === InclusionStrategy.SmartStart) {
+			throw new ZWaveError(
+				`SmartStart is not supported yet!`,
+				ZWaveErrorCodes.Driver_NotSupported,
+			);
+		}
+
+		this._inclusionActive = true;
+		this._inclusionOptions = options;
+
+		this.driver.controllerLog.print(
+			`Starting inclusion process with strategy ${getEnumMemberName(
+				InclusionStrategy,
+				options.strategy,
+			)}...`,
+		);
 
 		// create the promise we're going to return
 		this._beginInclusionPromise = createDeferredPromise();
@@ -947,80 +1025,511 @@ export class ZWaveController extends TypedEventEmitter<ControllerEventCallbacks>
 
 	private async secureBootstrapS0(
 		node: ZWaveNode,
-		assumeSecure: boolean = false,
+		assumeSupported: boolean = false,
 	): Promise<void> {
+		if (!this.driver.securityManager) {
+			// Remember that the node was NOT granted the S0 security class
+			node.securityClasses.set(SecurityClass.S0_Legacy, false);
+			return;
+		}
+
 		// If security has been set up and we are allowed to include the node securely, try to do it
-		if (
-			this.driver.securityManager &&
-			(assumeSecure || node.supportsCC(CommandClasses.Security))
-		) {
-			// Only try once, otherwise the node stays unsecure
-			try {
-				// When replacing a node, we receive no NIF, so we cannot know that the Security CC is supported.
-				// Querying the node info however kicks some devices out of secure inclusion mode.
-				// Therefore we must assume that the node supports Security in order to support replacing a node securely
-				if (assumeSecure && !node.supportsCC(CommandClasses.Security)) {
-					node.addCC(CommandClasses.Security, {
-						secure: true,
-						isSupported: true,
-						version: 1,
-					});
-				}
-
-				// SDS13783 - impose a 10s timeout on each message
-				const api = node.commandClasses.Security.withOptions({
-					expire: 10000,
+		try {
+			// When replacing a node, we receive no NIF, so we cannot know that the Security CC is supported.
+			// Querying the node info however kicks some devices out of secure inclusion mode.
+			// Therefore we must assume that the node supports Security in order to support replacing a node securely
+			if (assumeSupported && !node.supportsCC(CommandClasses.Security)) {
+				node.addCC(CommandClasses.Security, {
+					secure: true,
+					isSupported: true,
+					version: 1,
 				});
-				// Request security scheme, because it is required by the specs
-				await api.getSecurityScheme(); // ignore the result
-
-				// Request nonce separately, so we can impose a timeout
-				await api.getNonce({
-					standalone: true,
-					storeAsFreeNonce: true,
-				});
-
-				// send the network key
-				await api.setNetworkKey(this.driver.securityManager.networkKey);
-
-				if (this._includeController) {
-					// Tell the controller which security scheme to use
-					await api.inheritSecurityScheme();
-				}
-
-				// Remember that the node is secure
-				node.isSecure = true;
-			} catch (e: unknown) {
-				let errorMessage = `Security bootstrapping failed, the node is included insecurely`;
-				if (!isZWaveError(e)) {
-					errorMessage += `: ${e as any}`;
-				} else if (
-					e.code === ZWaveErrorCodes.Controller_MessageExpired
-				) {
-					errorMessage += ": a secure inclusion timer has elapsed.";
-				} else if (
-					e.code !== ZWaveErrorCodes.Controller_MessageDropped &&
-					e.code !== ZWaveErrorCodes.Controller_NodeTimeout
-				) {
-					errorMessage += `: ${e.message}`;
-				}
-				this.driver.controllerLog.logNode(
-					node.id,
-					errorMessage,
-					"warn",
-				);
-				// Remember that the node is non-secure
-				node.isSecure = false;
-				node.removeCC(CommandClasses.Security);
 			}
-		} else {
-			// Remember that the node is non-secure
-			node.isSecure = false;
+
+			// SDS13783 - impose a 10s timeout on each message
+			const api = node.commandClasses.Security.withOptions({
+				expire: 10000,
+			});
+			// Request security scheme, because it is required by the specs
+			await api.getSecurityScheme(); // ignore the result
+
+			// Request nonce separately, so we can impose a timeout
+			await api.getNonce({
+				standalone: true,
+				storeAsFreeNonce: true,
+			});
+
+			// send the network key
+			await api.setNetworkKey(this.driver.securityManager.networkKey);
+
+			if (this._includeController) {
+				// Tell the controller which security scheme to use
+				await api.inheritSecurityScheme();
+			}
+
+			// Remember that the node was granted the S0 security class
+			node.securityClasses.set(SecurityClass.S0_Legacy, true);
+		} catch (e) {
+			let errorMessage = `Security S0 bootstrapping failed, the node was not granted the S0 security class`;
+			if (!isZWaveError(e)) {
+				errorMessage += `: ${e as any}`;
+			} else if (e.code === ZWaveErrorCodes.Controller_MessageExpired) {
+				errorMessage += ": a secure inclusion timer has elapsed.";
+			} else if (
+				e.code !== ZWaveErrorCodes.Controller_MessageDropped &&
+				e.code !== ZWaveErrorCodes.Controller_NodeTimeout
+			) {
+				errorMessage += `: ${e.message}`;
+			}
+			this.driver.controllerLog.logNode(node.id, errorMessage, "warn");
+			// Remember that the node was NOT granted the S0 security class
+			node.securityClasses.set(SecurityClass.S0_Legacy, false);
+			node.removeCC(CommandClasses.Security);
+		}
+	}
+
+	private async secureBootstrapS2(
+		node: ZWaveNode,
+		assumeSupported: boolean = false,
+	): Promise<void> {
+		const unGrantSecurityClasses = () => {
+			for (const secClass of securityClassOrder) {
+				node.securityClasses.set(secClass, false);
+			}
+		};
+
+		if (!this.driver.securityManager2) {
+			// Remember that the node was NOT granted any S2 security classes
+			unGrantSecurityClasses();
+			return;
+		}
+
+		// When replacing a node, we receive no NIF, so we cannot know that the Security CC is supported.
+		// Querying the node info however kicks some devices out of secure inclusion mode.
+		// Therefore we must assume that the node supports Security in order to support replacing a node securely
+		if (assumeSupported && !node.supportsCC(CommandClasses["Security 2"])) {
+			node.addCC(CommandClasses["Security 2"], {
+				secure: true,
+				isSupported: true,
+				version: 1,
+			});
+		}
+
+		const { userCallbacks } = this._inclusionOptions as InclusionOptions & {
+			strategy: InclusionStrategy.Security_S2;
+		};
+
+		const deleteTempKey = () => {
+			// Whatever happens, no further communication needs the temporary key
+			this.driver.securityManager2?.deleteNonce(node.id);
+			this.driver.securityManager2?.tempKeys.delete(node.id);
+		};
+
+		try {
+			const api = node.commandClasses["Security 2"];
+			const abort = async (failType?: KEXFailType): Promise<void> => {
+				if (failType != undefined) {
+					try {
+						await api.abortKeyExchange(failType);
+					} catch {
+						// ignore
+					}
+				}
+				// Un-grant S2 security classes we might have granted
+				unGrantSecurityClasses();
+				deleteTempKey();
+			};
+
+			const abortUser = () => {
+				setImmediate(() => {
+					try {
+						userCallbacks.abort();
+					} catch {
+						// ignore errors in application callbacks
+					}
+				});
+				return abort(KEXFailType.BootstrappingCanceled);
+			};
+
+			// Ask the node for its desired security classes and key exchange params
+			const kexParams = await api
+				.withOptions({ expire: inclusionTimeouts.TA1 })
+				.getKeyExchangeParameters();
+			if (!kexParams) {
+				this.driver.controllerLog.logNode(node.id, {
+					message: `Security S2 bootstrapping failed: did not receive the node's desired security classes.`,
+					level: "warn",
+				});
+				return abort();
+			}
+
+			// Validate the response
+			// At the time of implementation, only these are defined
+			if (
+				!kexParams.supportedKEXSchemes.includes(KEXSchemes.KEXScheme1)
+			) {
+				this.driver.controllerLog.logNode(node.id, {
+					message: `Security S2 bootstrapping failed: No supported key exchange scheme.`,
+					level: "warn",
+				});
+				return abort(KEXFailType.NoSupportedScheme);
+			} else if (
+				!kexParams.supportedECDHProfiles.includes(
+					ECDHProfiles.Curve25519,
+				)
+			) {
+				this.driver.controllerLog.logNode(node.id, {
+					message: `Security S2 bootstrapping failed: No supported ECDH profile.`,
+					level: "warn",
+				});
+				return abort(KEXFailType.NoSupportedCurve);
+			}
+			const supportedKeys = kexParams.requestedKeys.filter((k) =>
+				securityClassOrder.includes(k as any),
+			);
+			if (!supportedKeys.length) {
+				this.driver.controllerLog.logNode(node.id, {
+					message: `Security S2 bootstrapping failed: None of the requested security classes are supported.`,
+					level: "warn",
+				});
+				return abort(KEXFailType.NoKeyMatch);
+			}
+
+			// TODO: Validate client-side auth if requested
+			const grantResult = await Promise.race([
+				wait(inclusionTimeouts.TAI1, true).then(() => false as const),
+				userCallbacks
+					.grantSecurityClasses({
+						securityClasses: supportedKeys,
+						clientSideAuth: false,
+					})
+					// ignore errors in application callbacks
+					.catch(() => false as const),
+			]);
+			if (grantResult === false) {
+				// There was a timeout or the user did not confirm the request, abort
+				this.driver.controllerLog.logNode(node.id, {
+					message: `Security S2 bootstrapping failed: User rejected the requested security classes or interaction timed out.`,
+					level: "warn",
+				});
+				return abortUser();
+			}
+			const grantedKeys = supportedKeys.filter((k) =>
+				grantResult.securityClasses.includes(k),
+			);
+			if (!grantedKeys.length) {
+				// The user did not grant any of the requested keys
+				this.driver.controllerLog.logNode(node.id, {
+					message: `Security S2 bootstrapping failed: None of the requested keys were granted by the user.`,
+					level: "warn",
+				});
+				return abortUser();
+			}
+
+			// Tell the node how we want the inclusion to go and grant it the keys
+			// It will send its public key in response
+			await api.grantKeys({
+				grantedKeys,
+				permitCSA: false,
+				selectedECDHProfile: ECDHProfiles.Curve25519,
+				selectedKEXScheme: KEXSchemes.KEXScheme1,
+			});
+
+			const pubKeyResponse = await this.driver.waitForCommand<
+				Security2CCPublicKeyReport | Security2CCKEXFail
+			>(
+				(cc) =>
+					cc instanceof Security2CCPublicKeyReport ||
+					cc instanceof Security2CCKEXFail,
+				inclusionTimeouts.TA2,
+			);
+			if (
+				pubKeyResponse instanceof Security2CCKEXFail ||
+				pubKeyResponse.includingNode
+			) {
+				this.driver.controllerLog.logNode(node.id, {
+					message: `The joining node canceled the Security S2 bootstrapping.`,
+					direction: "inbound",
+					level: "warn",
+				});
+				return abort();
+			}
+
+			const nodePublicKey = pubKeyResponse.publicKey;
+			// This is the starting point of the timer TAI2. Depending on how long the user takes to confirm,
+			// the node has less time to send its KEXSet
+			const timerStartTAI2 = Date.now();
+			if (
+				grantedKeys.includes(SecurityClass.S2_AccessControl) ||
+				grantedKeys.includes(SecurityClass.S2_Authenticated)
+			) {
+				// For authenticated encryption, the DSK (first 16 bytes of the public key) is obfuscated (missing the first 2 bytes)
+				// Request the user to enter the missing part as a 5-digit PIN
+				const dsk = dskToString(nodePublicKey.slice(0, 16)).slice(5);
+
+				const pinResult = await Promise.race([
+					wait(inclusionTimeouts.TAI2, true).then(
+						() => false as const,
+					),
+					userCallbacks
+						.validateDSKAndEnterPIN(dsk)
+						// ignore errors in application callbacks
+						.catch(() => false as const),
+				]);
+				if (
+					typeof pinResult !== "string" ||
+					!/^\d{5}$/.test(pinResult)
+				) {
+					// There was a timeout, the user did not confirm the DSK or entered an invalid PIN
+					this.driver.controllerLog.logNode(node.id, {
+						message: `Security S2 bootstrapping failed: User rejected the DSK, entered an invalid PIN or the interaction timed out.`,
+						level: "warn",
+					});
+					return abortUser();
+				}
+
+				// Fill in the missing two bytes of the public key
+				nodePublicKey.writeUInt16BE(parseInt(pinResult, 10), 0);
+			}
+
+			// Generate ECDH key pair. Z-Wave works with the "raw" keys, so this is a tad complicated
+			const keyPair = await util.promisify(crypto.generateKeyPair)(
+				"x25519",
+			);
+			const publicKey = decodeX25519KeyDER(
+				keyPair.publicKey.export({
+					type: "spki",
+					format: "der",
+				}),
+			);
+			const sharedSecret = crypto.diffieHellman({
+				publicKey: crypto.createPublicKey({
+					key: encodeX25519KeyDERSPKI(nodePublicKey),
+					format: "der",
+					type: "spki",
+				}),
+				privateKey: keyPair.privateKey,
+			});
+
+			// Derive temporary key from ECDH key pair
+			const tempKeys = deriveTempKeys(
+				computePRK(sharedSecret, publicKey, nodePublicKey),
+			);
+			this.driver.securityManager2.tempKeys.set(node.id, {
+				keyCCM: tempKeys.tempKeyCCM,
+				personalizationString: tempKeys.tempPersonalizationString,
+			});
+
+			await api.sendPublicKey(publicKey);
+
+			// Wait until the encrypted KEXSet from the node was received
+			// (if there is even time left)
+			const tai2RemainingMs =
+				inclusionTimeouts.TAI2 - (Date.now() - timerStartTAI2);
+			if (tai2RemainingMs < 1) {
+				this.driver.controllerLog.logNode(node.id, {
+					message: `Security S2 bootstrapping failed: a secure inclusion timer has elapsed`,
+					level: "warn",
+				});
+				return abortUser();
+			}
+
+			const keySetEcho = await this.driver.waitForCommand<
+				Security2CCKEXSet | Security2CCKEXFail
+			>(
+				(cc) =>
+					cc instanceof Security2CCKEXSet ||
+					cc instanceof Security2CCKEXFail,
+				tai2RemainingMs,
+			);
+			// Validate that the received command contains the correct list of keys
+			if (keySetEcho instanceof Security2CCKEXFail || !keySetEcho.echo) {
+				this.driver.controllerLog.logNode(node.id, {
+					message: `The joining node canceled the Security S2 bootstrapping.`,
+					direction: "inbound",
+					level: "warn",
+				});
+				return abort();
+			} else if (
+				keySetEcho.grantedKeys.length !== grantedKeys.length ||
+				!keySetEcho.grantedKeys.every((k) => grantedKeys.includes(k))
+			) {
+				this.driver.controllerLog.logNode(node.id, {
+					message: `Security S2 bootstrapping failed: Granted key mismatch.`,
+					level: "warn",
+				});
+				return abort(KEXFailType.WrongSecurityLevel);
+			}
+			// Confirm the keys - the node will start requesting the granted keys in response
+			await api.confirmGrantedKeys({
+				requestCSA: kexParams.requestCSA,
+				requestedKeys: [...kexParams.requestedKeys],
+				supportedECDHProfiles: [...kexParams.supportedECDHProfiles],
+				supportedKEXSchemes: [...kexParams.supportedKEXSchemes],
+			});
+
+			for (let i = 0; i < grantedKeys.length; i++) {
+				// Wait for the key request
+				const keyRequest = await this.driver.waitForCommand<
+					Security2CCNetworkKeyGet | Security2CCKEXFail
+				>(
+					(cc) =>
+						cc instanceof Security2CCNetworkKeyGet ||
+						cc instanceof Security2CCKEXFail,
+					inclusionTimeouts.TA3,
+				);
+				if (keyRequest instanceof Security2CCKEXFail) {
+					this.driver.controllerLog.logNode(node.id, {
+						message: `The joining node canceled the Security S2 bootstrapping.`,
+						direction: "inbound",
+						level: "warn",
+					});
+					return abort();
+				}
+
+				const securityClass = keyRequest.requestedKey;
+				// Ensure it was received encrypted with the temporary key
+				if (
+					!this.driver.securityManager2.hasUsedSecurityClass(
+						node.id,
+						SecurityClass.Temporary,
+					)
+				) {
+					this.driver.controllerLog.logNode(node.id, {
+						message: `Security S2 bootstrapping failed: Node used wrong key to communicate.`,
+						level: "warn",
+					});
+					return abort(KEXFailType.WrongSecurityLevel);
+				} else if (!grantedKeys.includes(securityClass)) {
+					// and that the requested key is one of the granted keys
+					this.driver.controllerLog.logNode(node.id, {
+						message: `Security S2 bootstrapping failed: Node used key it was not granted.`,
+						level: "warn",
+					});
+					return abort(KEXFailType.KeyNotGranted);
+				}
+
+				// Send the node the requested key
+				await api.sendNetworkKey(
+					securityClass,
+					this.driver.securityManager2.getKeysForSecurityClass(
+						securityClass,
+					).pnk,
+				);
+				// We need to temporarily mark this security class as granted, so the following exchange will use this
+				// key for decryption
+				node.securityClasses.set(securityClass, true);
+
+				// And wait for verification
+				const verify = await this.driver.waitForCommand<
+					Security2CCNetworkKeyVerify | Security2CCKEXFail
+				>(
+					(cc) =>
+						cc instanceof Security2CCNetworkKeyVerify ||
+						cc instanceof Security2CCKEXFail,
+					inclusionTimeouts.TA4,
+				);
+				if (verify instanceof Security2CCKEXFail) {
+					this.driver.controllerLog.logNode(node.id, {
+						message: `The joining node canceled the Security S2 bootstrapping.`,
+						direction: "inbound",
+						level: "warn",
+					});
+					return abort();
+				}
+
+				if (
+					!this.driver.securityManager2.hasUsedSecurityClass(
+						node.id,
+						securityClass,
+					)
+				) {
+					this.driver.controllerLog.logNode(node.id, {
+						message: `Security S2 bootstrapping failed: Node used wrong key to communicate.`,
+						level: "warn",
+					});
+					return abort(KEXFailType.NoVerify);
+				}
+
+				// Tell the node that verification was successful. We need to reset the SPAN state
+				// so the temporary key will be used again. Also we don't know in which order the node requests the keys
+				// so our logic to use the highest security class for decryption might be problematic. Therefore delete the
+				// security class for now.
+				node.securityClasses.delete(securityClass);
+				this.driver.securityManager2.deleteNonce(node.id);
+				await api.confirmKeyVerification();
+			}
+
+			// After all keys were sent and verified, we need to wait for the node to confirm that it is done
+			const transferEnd =
+				await this.driver.waitForCommand<Security2CCTransferEnd>(
+					(cc) => cc instanceof Security2CCTransferEnd,
+					inclusionTimeouts.TA5,
+				);
+			if (!transferEnd.keyRequestComplete) {
+				// S2 bootstrapping failed
+				this.driver.controllerLog.logNode(node.id, {
+					message: `Security S2 bootstrapping failed: Node did not confirm completion of the key exchange`,
+					level: "warn",
+				});
+				return abort();
+			}
+
+			// Remember all security classes we have granted
+			for (const securityClass of securityClassOrder) {
+				node.securityClasses.set(
+					securityClass,
+					grantedKeys.includes(securityClass),
+				);
+			}
+			this.driver.controllerLog.logNode(node.id, {
+				message: `Security S2 bootstrapping successful with these security classes:${[
+					...node.securityClasses.entries(),
+				]
+					.filter(([, v]) => v)
+					.map(([k]) => `\n· ${getEnumMemberName(SecurityClass, k)}`)
+					.join("")}`,
+			});
+
+			// success 🎉
+		} catch (e) {
+			let errorMessage = `Security S2 bootstrapping failed, the node was not granted any S2 security class`;
+			if (!isZWaveError(e)) {
+				errorMessage += `: ${e as any}`;
+			} else if (e.code === ZWaveErrorCodes.Controller_MessageExpired) {
+				errorMessage += ": a secure inclusion timer has elapsed.";
+			} else if (
+				e.code !== ZWaveErrorCodes.Controller_MessageDropped &&
+				e.code !== ZWaveErrorCodes.Controller_NodeTimeout
+			) {
+				errorMessage += `: ${e.message}`;
+			}
+			this.driver.controllerLog.logNode(node.id, errorMessage, "warn");
+			// Remember that the node was NOT granted any S2 security classes
+			unGrantSecurityClasses();
+			node.removeCC(CommandClasses["Security 2"]);
+		} finally {
+			// Whatever happens, no further communication needs the temporary key
+			deleteTempKey();
 		}
 	}
 
 	/** Ensures that the node knows where to reach the controller */
 	private async bootstrapLifelineAndWakeup(node: ZWaveNode): Promise<void> {
+		// If the node was bootstrapped with S2, all these requests must happen securely
+		if (securityClassIsS2(node.getHighestSecurityClass())) {
+			for (const cc of [
+				CommandClasses["Wake Up"],
+				CommandClasses.Association,
+				CommandClasses["Multi Channel Association"],
+				CommandClasses.Version,
+			]) {
+				if (node.supportsCC(cc)) {
+					node.addCC(cc, { secure: true });
+				}
+			}
+		}
+
 		if (node.supportsCC(CommandClasses["Z-Wave Plus Info"])) {
 			// SDS11846: The Z-Wave+ lifeline must be assigned to a node as the very first thing
 			if (
@@ -1050,7 +1559,7 @@ export class ZWaveController extends TypedEventEmitter<ControllerEventCallbacks>
 
 					// After setting the association, make sure the node knows how to reach us
 					await this.assignReturnRoute(node.id, ownNodeId);
-				} catch (e: unknown) {
+				} catch (e) {
 					if (isTransmissionError(e) || isRecoverableZWaveError(e)) {
 						this.driver.controllerLog.logNode(node.id, {
 							message: `Failed to configure Z-Wave+ Lifeline association: ${e.message}`,
@@ -1091,7 +1600,7 @@ export class ZWaveController extends TypedEventEmitter<ControllerEventCallbacks>
 					)!;
 					await instance.interview();
 				}
-			} catch (e: unknown) {
+			} catch (e) {
 				if (isTransmissionError(e) || isRecoverableZWaveError(e)) {
 					this.driver.controllerLog.logNode(node.id, {
 						message: `Cannot configure wakeup destination: ${e.message}`,
@@ -1131,7 +1640,11 @@ export class ZWaveController extends TypedEventEmitter<ControllerEventCallbacks>
 				AddNodeStatus[msg.status!]
 			})`,
 		);
-		if (!this._inclusionActive && msg.status !== AddNodeStatus.Done) {
+
+		if (
+			(!this._inclusionActive && msg.status !== AddNodeStatus.Done) ||
+			this._inclusionOptions == undefined
+		) {
 			this.driver.controllerLog.print(
 				`  inclusion is NOT active, ignoring it...`,
 			);
@@ -1146,7 +1659,13 @@ export class ZWaveController extends TypedEventEmitter<ControllerEventCallbacks>
 				);
 				if (this._beginInclusionPromise != null) {
 					this._beginInclusionPromise.resolve(true);
-					this.emit("inclusion started", !this._includeNonSecure);
+					this.emit(
+						"inclusion started",
+						// TODO: Remove first parameter in next major version
+						this._inclusionOptions.strategy !==
+							InclusionStrategy.Insecure,
+						this._inclusionOptions.strategy,
+					);
 				}
 				break;
 			case AddNodeStatus.Failed:
@@ -1267,8 +1786,43 @@ export class ZWaveController extends TypedEventEmitter<ControllerEventCallbacks>
 						newNode.id,
 					);
 
-					if (!this._includeNonSecure) {
+					const opts = this._inclusionOptions;
+					// The default inclusion strategy is: Use S2 if possible, only use S0 if necessary, use no encryption otherwise
+					let lowSecurity = false;
+					if (
+						newNode.supportsCC(CommandClasses["Security 2"]) &&
+						(opts.strategy === InclusionStrategy.Default ||
+							opts.strategy === InclusionStrategy.Security_S2)
+					) {
+						await this.secureBootstrapS2(newNode);
+						const actualSecurityClass =
+							newNode.getHighestSecurityClass();
+						if (
+							actualSecurityClass == undefined ||
+							actualSecurityClass <
+								SecurityClass.S2_Unauthenticated
+						) {
+							lowSecurity = true;
+						}
+					} else if (
+						newNode.supportsCC(CommandClasses.Security) &&
+						(opts.strategy === InclusionStrategy.Security_S0 ||
+							(opts.strategy === InclusionStrategy.Default &&
+								(opts.forceSecurity ||
+									(
+										newNode.deviceClass?.specific ??
+										newNode.deviceClass?.generic
+									)?.requiresSecurity)))
+					) {
 						await this.secureBootstrapS0(newNode);
+						const actualSecurityClass =
+							newNode.getHighestSecurityClass();
+						if (
+							actualSecurityClass == undefined ||
+							actualSecurityClass < SecurityClass.S0_Legacy
+						) {
+							lowSecurity = true;
+						}
 					}
 					this._includeController = false;
 
@@ -1276,7 +1830,9 @@ export class ZWaveController extends TypedEventEmitter<ControllerEventCallbacks>
 					await this.bootstrapLifelineAndWakeup(newNode);
 
 					// We're done adding this node, notify listeners
-					this.emit("node added", newNode);
+					const result: InclusionResult = {};
+					if (lowSecurity) result.lowSecurity = true;
+					this.emit("node added", newNode, result);
 				}
 				break;
 			}
@@ -1299,6 +1855,13 @@ export class ZWaveController extends TypedEventEmitter<ControllerEventCallbacks>
 				ReplaceFailedNodeStatus[msg.replaceStatus]
 			})`,
 		);
+
+		if (this._inclusionOptions == undefined) {
+			this.driver.controllerLog.print(
+				`  currently NOT replacing a node, ignoring it...`,
+			);
+			return true; // Don't invoke any more handlers
+		}
 
 		switch (msg.replaceStatus) {
 			case ReplaceFailedNodeStatus.NodeOK:
@@ -1323,7 +1886,13 @@ export class ZWaveController extends TypedEventEmitter<ControllerEventCallbacks>
 				this.driver.controllerLog.print(
 					`The failed node is ready to be replaced, inclusion started...`,
 				);
-				this.emit("inclusion started", !this._includeNonSecure);
+				this.emit(
+					"inclusion started",
+					// TODO: Remove first parameter in next major version
+					this._inclusionOptions.strategy !==
+						InclusionStrategy.Insecure,
+					this._inclusionOptions.strategy,
+				);
 				this._inclusionActive = true;
 				this._replaceFailedPromise?.resolve(true);
 
@@ -1363,16 +1932,40 @@ export class ZWaveController extends TypedEventEmitter<ControllerEventCallbacks>
 						newNode.id,
 					);
 
-					// Try perform the security bootstrap process
-					if (!this._includeNonSecure) {
+					// Try perform the security bootstrap process. When replacing a node, we don't know any supported CCs
+					// yet, so we need to trust the chosen inclusion strategy.
+					const strategy = this._inclusionOptions.strategy;
+					let lowSecurity = false;
+					if (strategy === InclusionStrategy.Security_S2) {
+						await this.secureBootstrapS2(newNode, true);
+						const actualSecurityClass =
+							newNode.getHighestSecurityClass();
+						if (
+							actualSecurityClass == undefined ||
+							actualSecurityClass <
+								SecurityClass.S2_Unauthenticated
+						) {
+							lowSecurity = true;
+						}
+					} else if (strategy === InclusionStrategy.Security_S0) {
 						await this.secureBootstrapS0(newNode, true);
+						const actualSecurityClass =
+							newNode.getHighestSecurityClass();
+						if (
+							actualSecurityClass == undefined ||
+							actualSecurityClass < SecurityClass.S0_Legacy
+						) {
+							lowSecurity = true;
+						}
 					}
 
 					// Bootstrap the node's lifelines, so it knows where the controller is
 					await this.bootstrapLifelineAndWakeup(newNode);
 
 					// We're done adding this node, notify listeners. This also kicks off the node interview
-					this.emit("node added", newNode);
+					const result: InclusionResult = {};
+					if (lowSecurity) result.lowSecurity = true;
+					this.emit("node added", newNode, result);
 				}
 
 				// stop here, don't emit inclusion failed
@@ -1736,7 +2329,7 @@ export class ZWaveController extends TypedEventEmitter<ControllerEventCallbacks>
 			} catch (e) {
 				this.driver.controllerLog.logNode(
 					nodeId,
-					`refreshing neighbor list failed: ${e.message}`,
+					`refreshing neighbor list failed: ${getErrorMessage(e)}`,
 					"warn",
 				);
 			}
@@ -1772,7 +2365,7 @@ export class ZWaveController extends TypedEventEmitter<ControllerEventCallbacks>
 			} catch (e) {
 				this.driver.controllerLog.logNode(
 					nodeId,
-					`deleting return routes failed: ${e.message}`,
+					`deleting return routes failed: ${getErrorMessage(e)}`,
 					"warn",
 				);
 			}
@@ -1831,7 +2424,7 @@ ${associatedNodes.join(", ")}`,
 				} catch (e) {
 					this.driver.controllerLog.logNode(
 						nodeId,
-						`assigning return route failed: ${e.message}`,
+						`assigning return route failed: ${getErrorMessage(e)}`,
 						"warn",
 					);
 				}
@@ -1892,7 +2485,7 @@ ${associatedNodes.join(", ")}`,
 		} catch (e) {
 			this.driver.controllerLog.logNode(
 				nodeId,
-				`Assigning SUC return route failed: ${e.message}`,
+				`Assigning SUC return route failed: ${getErrorMessage(e)}`,
 				"error",
 			);
 			return false;
@@ -1918,7 +2511,7 @@ ${associatedNodes.join(", ")}`,
 		} catch (e) {
 			this.driver.controllerLog.logNode(
 				nodeId,
-				`Deleting SUC return route failed: ${e.message}`,
+				`Deleting SUC return route failed: ${getErrorMessage(e)}`,
 				"error",
 			);
 			return false;
@@ -1948,7 +2541,7 @@ ${associatedNodes.join(", ")}`,
 		} catch (e) {
 			this.driver.controllerLog.logNode(
 				nodeId,
-				`Assigning return route failed: ${e.message}`,
+				`Assigning return route failed: ${getErrorMessage(e)}`,
 				"error",
 			);
 			return false;
@@ -1974,7 +2567,7 @@ ${associatedNodes.join(", ")}`,
 		} catch (e) {
 			this.driver.controllerLog.logNode(
 				nodeId,
-				`Deleting return routes failed: ${e.message}`,
+				`Deleting return routes failed: ${getErrorMessage(e)}`,
 				"error",
 			);
 			return false;
@@ -2510,7 +3103,6 @@ ${associatedNodes.join(", ")}`,
 			endpoint.index > 0 ? `, endpoint ${endpoint.index}` : ""
 		}`;
 
-		let groupExistsAsMultiChannel = false;
 		// Split associations into conventional and endpoint associations
 		const nodeAssociations = distinct(
 			destinations
@@ -2523,23 +3115,79 @@ ${associatedNodes.join(", ")}`,
 
 		// Removing associations is not either/or - we could have a device with duplicated associations between
 		// Association CC and Multi Channel Association CC
+		// Figure out what we need to use to remove the associations
+
+		let groupExistsAsMultiChannel = false;
+		let groupExistsAsNodeAssociation = false;
+
+		let mcInstance: MultiChannelAssociationCC | undefined;
+		let assocInstance: AssociationCC | undefined;
+
+		// To remove a multi channel association, we need to make sure that the group exists
+		// and the node supports multi channel associations
 		if (endpoint.supportsCC(CommandClasses["Multi Channel Association"])) {
-			// Prefer multi channel associations
-			const cc =
+			mcInstance =
 				endpoint.createCCInstanceUnsafe<MultiChannelAssociationCC>(
 					CommandClasses["Multi Channel Association"],
 				)!;
-			if (group > cc.getGroupCountCached()) {
-				throw new ZWaveError(
-					`Group ${group} does not exist on node ${nodeAndEndpointString}`,
-					ZWaveErrorCodes.AssociationCC_InvalidGroup,
-				);
-			} else {
-				// Remember that the group exists as a multi channel group, otherwise the "normal" association code
-				// will throw if we try to remove the association from a non-existing "normal" group
+			if (group <= mcInstance.getGroupCountCached()) {
 				groupExistsAsMultiChannel = true;
 			}
+		} else if (endpointAssociations.length > 0) {
+			throw new ZWaveError(
+				`Node ${nodeAndEndpointString} does not support multi channel associations!`,
+				ZWaveErrorCodes.CC_NotSupported,
+			);
+		}
 
+		// To remove a normal association, we need to make sure that the group exists either as a normal association
+		// or as a multi channel association
+		if (endpoint.supportsCC(CommandClasses.Association)) {
+			assocInstance = endpoint.createCCInstanceUnsafe<AssociationCC>(
+				CommandClasses.Association,
+			)!;
+			if (group <= assocInstance.getGroupCountCached()) {
+				groupExistsAsNodeAssociation = true;
+			}
+		}
+
+		if (!mcInstance && !assocInstance) {
+			throw new ZWaveError(
+				`Node ${nodeAndEndpointString} does not support associations!`,
+				ZWaveErrorCodes.CC_NotSupported,
+			);
+		}
+
+		// Ensure the group exists and can be used
+		if (!groupExistsAsMultiChannel && !groupExistsAsNodeAssociation) {
+			throw new ZWaveError(
+				` Association group ${group} does not exist for node ${nodeAndEndpointString}`,
+				ZWaveErrorCodes.AssociationCC_InvalidGroup,
+			);
+		}
+		if (endpointAssociations.length > 0 && !groupExistsAsMultiChannel) {
+			throw new ZWaveError(
+				`Node ${nodeAndEndpointString}, association group ${group} does not support multi channel associations!`,
+				ZWaveErrorCodes.AssociationCC_InvalidGroup,
+			);
+		}
+
+		// Even if we only remove node associations, we use both CCs since it has been found that some
+		// devices do not correctly share the node list between the two commands
+		if (
+			assocInstance &&
+			nodeAssociations.length > 0 &&
+			groupExistsAsNodeAssociation
+		) {
+			await endpoint.commandClasses.Association.removeNodeIds({
+				groupId: group,
+				nodeIds: nodeAssociations,
+			});
+			// Refresh the association list
+			await endpoint.commandClasses.Association.getGroup(group);
+		}
+
+		if (mcInstance && groupExistsAsMultiChannel) {
 			await endpoint.commandClasses[
 				"Multi Channel Association"
 			].removeDestinations({
@@ -2550,38 +3198,6 @@ ${associatedNodes.join(", ")}`,
 			// Refresh the multi channel association list
 			await endpoint.commandClasses["Multi Channel Association"].getGroup(
 				group,
-			);
-		} else if (endpointAssociations.length > 0) {
-			throw new ZWaveError(
-				`Node ${nodeAndEndpointString} does not support multi channel associations!`,
-				ZWaveErrorCodes.CC_NotSupported,
-			);
-		}
-
-		if (endpoint.supportsCC(CommandClasses.Association)) {
-			// Use normal associations as a fallback
-			const cc = endpoint.createCCInstanceUnsafe<AssociationCC>(
-				CommandClasses.Association,
-			)!;
-			if (group > cc.getGroupCountCached()) {
-				// Don't throw if the group existed as multi channel - this branch is only a fallback
-				if (groupExistsAsMultiChannel) return;
-				throw new ZWaveError(
-					`Group ${group} does not exist on node ${nodeAndEndpointString}`,
-					ZWaveErrorCodes.AssociationCC_InvalidGroup,
-				);
-			}
-			// Remove the remaining node associations
-			await endpoint.commandClasses.Association.removeNodeIds({
-				groupId: group,
-				nodeIds: nodeAssociations,
-			});
-			// Refresh the association list
-			await endpoint.commandClasses.Association.getGroup(group);
-		} else if (nodeAssociations.length > 0) {
-			throw new ZWaveError(
-				`Node ${nodeAndEndpointString} does not support associations!`,
-				ZWaveErrorCodes.CC_NotSupported,
 			);
 		}
 	}
@@ -2712,15 +3328,42 @@ ${associatedNodes.join(", ")}`,
 	/**
 	 * Replace a failed node from the controller's memory. If the process fails, this will throw an exception with the details why.
 	 * @param nodeId The id of the node to replace
-	 * @param includeNonSecure Whether the new node should be included non-securely, even if it supports Security. By default, all nodes will be included securely if possible
-	 *
+	 * @param options Defines the inclusion strategy to use for the replacement node
 	 */
 	public async replaceFailedNode(
 		nodeId: number,
-		includeNonSecure: boolean = false,
+		options: ReplaceNodeOptions,
+	): Promise<boolean>;
+
+	/**
+	 * Replace a failed node from the controller's memory. If the process fails, this will throw an exception with the details why.
+	 * @param nodeId The id of the node to replace
+	 * @param includeNonSecure Whether the new node should be included non-securely, even if it supports Security S0. By default, S0 will be used.
+	 * @deprecated Use the overload with options instead
+	 */
+	public async replaceFailedNode(
+		nodeId: number,
+		includeNonSecure?: boolean,
+	): Promise<boolean>;
+
+	public async replaceFailedNode(
+		nodeId: number,
+		options?: ReplaceNodeOptions | boolean,
 	): Promise<boolean> {
 		// don't start it twice
 		if (this._inclusionActive || this._exclusionActive) return false;
+
+		if (options == undefined) {
+			options = {
+				strategy: InclusionStrategy.Security_S0,
+			};
+		} else if (typeof options === "boolean") {
+			options = {
+				strategy: options
+					? InclusionStrategy.Insecure
+					: InclusionStrategy.Security_S0,
+			};
+		}
 
 		this.driver.controllerLog.print(
 			`starting replace failed node process...`,
@@ -2734,7 +3377,7 @@ ${associatedNodes.join(", ")}`,
 			);
 		}
 
-		this._includeNonSecure = includeNonSecure;
+		this._inclusionOptions = options;
 
 		const result = await this.driver.sendMessage<ReplaceFailedNodeResponse>(
 			new ReplaceFailedNodeRequest(this.driver, {
@@ -2947,7 +3590,7 @@ ${associatedNodes.join(", ")}`,
 		} catch (e) {
 			this.driver.controllerLog.logNode(
 				nodeId,
-				`requesting the node neighbors failed: ${e.message}`,
+				`requesting the node neighbors failed: ${getErrorMessage(e)}`,
 				"error",
 			);
 			throw e;
@@ -3009,7 +3652,9 @@ ${associatedNodes.join(", ")}`,
 			return ret.isOK();
 		} catch (e) {
 			this.driver.controllerLog.print(
-				`Error turning RF ${enabled ? "on" : "off"}: ${e.message}`,
+				`Error turning RF ${enabled ? "on" : "off"}: ${getErrorMessage(
+					e,
+				)}`,
 				"error",
 			);
 			return false;
@@ -3107,7 +3752,7 @@ ${associatedNodes.join(", ")}`,
 
 		const ret = Buffer.allocUnsafe(size);
 		let offset = 0;
-		// Try reading the maximum size at first, the Serial API will return chunks in a size it supports
+		// Try reading the maximum size at first, the Serial API should return chunks in a size it supports
 		// For some reason, there is no documentation and no official command for this
 		let chunkSize: number = Math.min(0xffff, ret.length);
 		while (offset < ret.length) {
@@ -3115,6 +3760,12 @@ ${associatedNodes.join(", ")}`,
 				offset,
 				Math.min(chunkSize, ret.length - offset),
 			);
+			if (chunk.length === 0) {
+				// Some SDK versions return an empty buffer when trying to read a buffer that is too long
+				// Fallback to a sane (but maybe slow) size
+				chunkSize = 48;
+				continue;
+			}
 			chunk.copy(ret, offset);
 			offset += chunk.length;
 			if (chunkSize > chunk.length) chunkSize = chunk.length;

@@ -1,6 +1,6 @@
 import { JsonlDB, JsonlDBOptions } from "@alcalzone/jsonl-db";
 import * as Sentry from "@sentry/node";
-import { ConfigManager } from "@zwave-js/config";
+import { ConfigManager, externalConfigDir } from "@zwave-js/config";
 import {
 	CommandClasses,
 	deserializeCacheValue,
@@ -8,7 +8,10 @@ import {
 	highResTimestamp,
 	isZWaveError,
 	LogConfig,
+	SecurityClass,
+	securityClassIsS2,
 	SecurityManager,
+	SecurityManager2,
 	serializeCacheValue,
 	timespan,
 	ValueMetadata,
@@ -24,6 +27,7 @@ import {
 } from "@zwave-js/serial";
 import {
 	DeepPartial,
+	getErrorMessage,
 	isDocker,
 	mergeDeep,
 	num2hex,
@@ -45,11 +49,17 @@ import SerialPort from "serialport";
 import { URL } from "url";
 import * as util from "util";
 import { interpret } from "xstate";
-import { FirmwareUpdateStatus } from "../commandclass";
+import {
+	FirmwareUpdateStatus,
+	Security2CC,
+	Security2CCMessageEncapsulation,
+	Security2CCNonceReport,
+} from "../commandclass";
 import {
 	assertValidCCs,
 	CommandClass,
 	getImplementedVersion,
+	InvalidCC,
 } from "../commandclass/CommandClass";
 import { DeviceResetLocallyCCNotification } from "../commandclass/DeviceResetLocallyCC";
 import {
@@ -107,6 +117,7 @@ import {
 	isSendData,
 	isSendDataSinglecast,
 	SendDataMessage,
+	TransmitOptions,
 } from "../controller/SendDataShared";
 import { ControllerLogger } from "../log/Controller";
 import { DriverLogger } from "../log/Driver";
@@ -232,11 +243,36 @@ function checkOptions(options: ZWaveOptions): void {
 			ZWaveErrorCodes.Driver_InvalidOptions,
 		);
 	}
-	if (options.networkKey != undefined && options.networkKey.length !== 16) {
-		throw new ZWaveError(
-			`The network key must be a buffer with length 16!`,
-			ZWaveErrorCodes.Driver_InvalidOptions,
-		);
+	if (options.securityKeys != undefined) {
+		if (options.networkKey != undefined) {
+			throw new ZWaveError(
+				`The deprecated networkKey option may not be used together with the new securityKeys option!`,
+				ZWaveErrorCodes.Driver_InvalidOptions,
+			);
+		}
+		const keys = Object.entries(options.securityKeys);
+		for (let i = 0; i < keys.length; i++) {
+			const [secClass, key] = keys[i];
+			if (key.length !== 16) {
+				throw new ZWaveError(
+					`The security key for class ${secClass} must be a buffer with length 16!`,
+					ZWaveErrorCodes.Driver_InvalidOptions,
+				);
+			}
+			if (keys.findIndex(([, k]) => k.equals(key)) !== i) {
+				throw new ZWaveError(
+					`The security key for class ${secClass} was used multiple times!`,
+					ZWaveErrorCodes.Driver_InvalidOptions,
+				);
+			}
+		}
+	} else if (options.networkKey != undefined) {
+		if (options.networkKey.length !== 16) {
+			throw new ZWaveError(
+				`The network key must be a buffer with length 16!`,
+				ZWaveErrorCodes.Driver_InvalidOptions,
+			);
+		}
 	}
 	if (options.attempts.controller < 1 || options.attempts.controller > 3) {
 		throw new ZWaveError(
@@ -300,11 +336,17 @@ export interface SendMessageOptions {
 	 * @internal
 	 */
 	tag?: any;
+	/** If a Wake Up On Demand should be requested for the target node. */
+	requestWakeUpOnDemand?: boolean;
 }
 
 export interface SendCommandOptions extends SendMessageOptions {
 	/** How many times the driver should try to send the message. Defaults to the configured Driver option */
 	maxSendAttempts?: number;
+	/** Whether the driver should automatically handle the encapsulation. Default: true */
+	autoEncapsulate?: boolean;
+	/** Overwrite the default transmit options */
+	transmitOptions?: TransmitOptions;
 }
 
 export type SupervisionUpdateHandler = (
@@ -424,6 +466,12 @@ export class Driver extends TypedEventEmitter<DriverEventCallbacks> {
 	/** @internal */
 	public get securityManager(): SecurityManager | undefined {
 		return this._securityManager;
+	}
+
+	private _securityManager2: SecurityManager2 | undefined;
+	/** @internal */
+	public get securityManager2(): SecurityManager2 | undefined {
+		return this._securityManager2;
 	}
 
 	public constructor(
@@ -601,7 +649,6 @@ export class Driver extends TypedEventEmitter<DriverEventCallbacks> {
 	private _isOpen: boolean = false;
 
 	/** Start the driver */
-	// wotan-disable async-function-assignability
 	public async start(): Promise<void> {
 		// avoid starting twice
 		if (this.wasDestroyed) {
@@ -671,7 +718,9 @@ export class Driver extends TypedEventEmitter<DriverEventCallbacks> {
 			try {
 				await this.serial!.open();
 			} catch (e) {
-				const message = `Failed to open the serial port: ${e.message}`;
+				const message = `Failed to open the serial port: ${getErrorMessage(
+					e,
+				)}`;
 				this.driverLog.print(message, "error");
 
 				spOpenPromise.reject(
@@ -693,7 +742,11 @@ export class Driver extends TypedEventEmitter<DriverEventCallbacks> {
 				await this.options.storage.driver.ensureDir(this.cacheDir);
 			} catch (e) {
 				let message: string;
-				if (/\.yarn[/\\]cache[/\\]zwave-js/i.test(e.stack)) {
+				if (
+					/\.yarn[/\\]cache[/\\]zwave-js/i.test(
+						getErrorMessage(e, true),
+					)
+				) {
 					message = `Failed to create the cache directory. When using Yarn PnP, you need to change the location with the "storage.cacheDir" driver option.`;
 				} else {
 					message = `Failed to create the cache directory. Please make sure that it is writable or change the location with the "storage.cacheDir" driver option.`;
@@ -712,7 +765,9 @@ export class Driver extends TypedEventEmitter<DriverEventCallbacks> {
 			try {
 				await this.configManager.loadAll();
 			} catch (e) {
-				const message = `Failed to load the configuration: ${e.message}`;
+				const message = `Failed to load the configuration: ${getErrorMessage(
+					e,
+				)}`;
 				this.driverLog.print(message, "error");
 				this.emit(
 					"error",
@@ -725,7 +780,7 @@ export class Driver extends TypedEventEmitter<DriverEventCallbacks> {
 			this.driverLog.print("beginning interview...");
 			try {
 				await this.initializeControllerAndNodes();
-			} catch (e: unknown) {
+			} catch (e) {
 				let message: string;
 				if (
 					isZWaveError(e) &&
@@ -733,9 +788,9 @@ export class Driver extends TypedEventEmitter<DriverEventCallbacks> {
 				) {
 					message = `Failed to initialize the driver, no response from the controller. Are you sure this is a Z-Wave controller?`;
 				} else {
-					message = `Failed to initialize the driver: ${
-						e instanceof Error ? e.message : String(e)
-					}`;
+					message = `Failed to initialize the driver: ${getErrorMessage(
+						e,
+					)}`;
 				}
 				this.driverLog.print(message, "error");
 				this.emit(
@@ -749,7 +804,6 @@ export class Driver extends TypedEventEmitter<DriverEventCallbacks> {
 
 		return spOpenPromise;
 	}
-	// wotan-enable async-function-assignability
 
 	private _controllerInterviewed: boolean = false;
 	private _nodesReady = new Set<number>();
@@ -817,13 +871,58 @@ export class Driver extends TypedEventEmitter<DriverEventCallbacks> {
 			// Driver unit tests that don't need access to them
 		}
 
-		// We need to know the controller node id to set up the security manager
-		if (this.options.networkKey) {
+		// Set up the S0 security manager. We can only do that after the controller
+		// interview because we need to know the controller node id.
+		const S0Key =
+			this.options.securityKeys?.S0_Legacy ?? this.options.networkKey;
+		if (S0Key) {
+			this.driverLog.print(
+				"Network key for S0 configured, enabling S0 security manager...",
+			);
 			this._securityManager = new SecurityManager({
-				networkKey: this.options.networkKey,
+				networkKey: S0Key,
 				ownNodeId: this._controller.ownNodeId!,
 				nonceTimeout: this.options.timeouts.nonce,
 			});
+		} else {
+			this.driverLog.print(
+				"No network key for S0 configured, communication with secure (S0) devices won't work!",
+				"warn",
+			);
+		}
+
+		// The S2 security manager could be initialized earlier, but we do it here for consistency
+		if (
+			this.options.securityKeys &&
+			// Only set it up if we have security keys for at least one S2 security class
+			Object.keys(this.options.securityKeys).some(
+				(key) =>
+					key.startsWith("S2_") &&
+					key in SecurityClass &&
+					securityClassIsS2((SecurityClass as any)[key]),
+			)
+		) {
+			this.driverLog.print(
+				"At least one network key for S2 configured, enabling S2 security manager...",
+			);
+			this._securityManager2 = new SecurityManager2();
+			// Set up all keys
+			for (const secClass of [
+				"S2_Unauthenticated",
+				"S2_Authenticated",
+				"S2_AccessControl",
+				"S0_Legacy",
+			] as const) {
+				const key = this.options.securityKeys[secClass];
+				if (key) {
+					this._securityManager2.setKey(SecurityClass[secClass], key);
+				}
+			}
+		} else {
+			this.driverLog.print(
+				"No network key for S2 configured, communication with secure (S2) devices won't work!",
+				"warn",
+			);
 		}
 
 		// in any case we need to emit the driver ready event here
@@ -981,7 +1080,7 @@ export class Driver extends TypedEventEmitter<DriverEventCallbacks> {
 				// eslint-disable-next-line @typescript-eslint/no-empty-function
 				void reportMissingDeviceConfig(node as any).catch(() => {});
 			}
-		} catch (e: unknown) {
+		} catch (e) {
 			if (isZWaveError(e)) {
 				if (
 					e.code === ZWaveErrorCodes.Driver_NotReady ||
@@ -1157,9 +1256,7 @@ export class Driver extends TypedEventEmitter<DriverEventCallbacks> {
 
 		if (
 			!isObject(appInfo) ||
-			// wotan-disable-next-line no-useless-predicate
 			typeof appInfo.applicationName !== "string" ||
-			// wotan-disable-next-line no-useless-predicate
 			typeof appInfo.applicationVersion !== "string"
 		) {
 			throw new ZWaveError(
@@ -1322,10 +1419,10 @@ export class Driver extends TypedEventEmitter<DriverEventCallbacks> {
 		if (status < FirmwareUpdateStatus.OK_WaitingForActivation) return;
 
 		// Wait at least 5 seconds
-		if (!waitTime) waitTime = 5000;
+		if (!waitTime) waitTime = 5;
 		this.controllerLog.logNode(
 			node.id,
-			`Firmware updated, scheduling interview in ${waitTime} ms...`,
+			`Firmware updated, scheduling interview in ${waitTime} seconds...`,
 		);
 		// We reuse the retryNodeInterviewTimeouts here because they serve a similar purpose
 		this.retryNodeInterviewTimeouts.set(
@@ -1333,22 +1430,34 @@ export class Driver extends TypedEventEmitter<DriverEventCallbacks> {
 			setTimeout(() => {
 				this.retryNodeInterviewTimeouts.delete(node.id);
 				void node.refreshInfo();
-			}, waitTime).unref(),
+			}, waitTime * 1000).unref(),
 		);
 	}
 
 	/** Checks if there are any pending messages for the given node */
 	private hasPendingMessages(node: ZWaveNode): boolean {
 		// First check if there are messages in the queue
-		const { queue, currentTransaction } = this.sendThread.state.context;
 		if (
-			!!queue.find((t) => t.message.getNodeId() === node.id) ||
-			currentTransaction?.message.getNodeId() === node.id
+			this.hasPendingTransactions(
+				(t) => t.message.getNodeId() === node.id,
+			)
 		) {
 			return true;
 		}
+
 		// Then check if there are scheduled polls
 		return node.scheduledPolls.size > 0;
+	}
+
+	/** Checks if there are any pending transactions that match the given predicate */
+	public hasPendingTransactions(
+		predicate: (t: Transaction) => boolean,
+	): boolean {
+		const { queue, currentTransaction } = this.sendThread.state.context;
+		return (
+			(currentTransaction && predicate(currentTransaction)) ||
+			!!queue.find((t) => predicate(t))
+		);
 	}
 
 	/**
@@ -1499,7 +1608,7 @@ export class Driver extends TypedEventEmitter<DriverEventCallbacks> {
 			await this.saveNetworkToCacheInternal();
 		} catch (e) {
 			this.driverLog.print(
-				`Saving the network to cache failed: ${e.message}`,
+				`Saving the network to cache failed: ${getErrorMessage(e)}`,
 				"error",
 			);
 		}
@@ -1510,7 +1619,7 @@ export class Driver extends TypedEventEmitter<DriverEventCallbacks> {
 			await this._metadataDB?.close();
 		} catch (e) {
 			this.driverLog.print(
-				`Closing the value DBs failed: ${e.message}`,
+				`Closing the value DBs failed: ${getErrorMessage(e)}`,
 				"error",
 			);
 		}
@@ -1586,25 +1695,51 @@ export class Driver extends TypedEventEmitter<DriverEventCallbacks> {
 			}
 			// all good, send ACK
 			await this.writeHeader(MessageHeaders.ACK);
-		} catch (e) {
+		} catch (e: any) {
 			try {
-				const response = this.handleDecodeError(e, data, msg);
-				if (response) await this.writeHeader(response);
-				if (isCommandClassContainer(msg)) {
-					msg.getNodeUnsafe()?.incrementStatistics(
-						"commandsDroppedRX",
-					);
+				if (await this.handleSecurityS2DecodeError(e, msg)) {
+					// TODO
 				} else {
-					this._controller?.incrementStatistics("messagesDroppedRX");
+					const response = this.handleDecodeError(e, data, msg);
+					if (response) await this.writeHeader(response);
+					if (isCommandClassContainer(msg)) {
+						msg.getNodeUnsafe()?.incrementStatistics(
+							"commandsDroppedRX",
+						);
+
+						// Figure out if the command was received with supervision encapsulation
+						const supervisionSessionId = SupervisionCC.getSessionId(
+							msg.command,
+						);
+						if (
+							supervisionSessionId !== undefined &&
+							msg.command instanceof InvalidCC
+						) {
+							// If it was, we need to notify the sender that we couldn't decode the command
+							const node = msg.getNodeUnsafe();
+							await node?.commandClasses.Supervision.sendReport({
+								sessionId: supervisionSessionId,
+								moreUpdatesFollow: false,
+								status: SupervisionStatus.NoSupport,
+								secure: msg.command.secure,
+							});
+							return;
+						}
+					} else {
+						this._controller?.incrementStatistics(
+							"messagesDroppedRX",
+						);
+					}
 				}
-			} catch (e) {
-				if (
-					e instanceof Error &&
-					/serial port is not open/.test(e.message)
-				) {
-					this.emit("error", e);
-					void this.destroy();
-					return;
+			} catch (ee) {
+				if (ee instanceof Error) {
+					if (/serial port is not open/.test(ee.message)) {
+						this.emit("error", ee);
+						void this.destroy();
+						return;
+					}
+					// Print something, so we know what is wrong
+					this._driverLog.print(ee.stack ?? ee.message, "error");
 				}
 			}
 			// Don't keep handling the message
@@ -1674,7 +1809,9 @@ export class Driver extends TypedEventEmitter<DriverEventCallbacks> {
 				}
 			} catch (e) {
 				// We shouldn't throw just because logging a message fails
-				this.driverLog.print(`Logging a message failed: ${e.message}`);
+				this.driverLog.print(
+					`Logging a message failed: ${getErrorMessage(e)}`,
+				);
 			}
 			this.sendThread.send({ type: "message", message: msg });
 		}
@@ -1725,7 +1862,9 @@ export class Driver extends TypedEventEmitter<DriverEventCallbacks> {
 						} catch (e) {
 							// We shouldn't throw just because logging a message fails
 							this.driverLog.print(
-								`Logging a message failed: ${e.message}`,
+								`Logging a message failed: ${getErrorMessage(
+									e,
+								)}`,
 							);
 						}
 					} else {
@@ -1742,8 +1881,9 @@ export class Driver extends TypedEventEmitter<DriverEventCallbacks> {
 					return MessageHeaders.ACK;
 
 				case ZWaveErrorCodes.Driver_NoSecurity:
+				case ZWaveErrorCodes.Security2CC_NotInitialized:
 					this.driverLog.print(
-						`Dropping message because network key is not set or the driver is not yet ready to receive secure messages.`,
+						`Dropping message because network keys are not set or the driver is not yet ready to receive secure messages.`,
 						"warn",
 					);
 					return MessageHeaders.ACK;
@@ -1760,6 +1900,71 @@ export class Driver extends TypedEventEmitter<DriverEventCallbacks> {
 		}
 		// Pass all other errors through
 		throw e;
+	}
+
+	private async handleSecurityS2DecodeError(
+		e: Error,
+		msg: Message | undefined,
+	): Promise<boolean> {
+		if (!isZWaveError(e)) return false;
+		if (
+			(e.code === ZWaveErrorCodes.Security2CC_NoSPAN ||
+				e.code === ZWaveErrorCodes.Security2CC_CannotDecode) &&
+			isCommandClassContainer(msg)
+		) {
+			// Decoding the command failed because no SPAN has been established with the other node
+			const nodeId = msg.getNodeId()!;
+			// If the node isn't known, ignore this error
+			const node = this._controller?.nodes.get(nodeId);
+			if (!node) return false;
+
+			// Before we can send anything, ACK the command
+			await this.writeHeader(MessageHeaders.ACK);
+
+			this.driverLog.logMessage(msg, { direction: "inbound" });
+			node.incrementStatistics("commandsDroppedRX");
+
+			// We might receive this before the node has been interviewed. If that case, we need to mark Security S2 as
+			// supported or we won't ever be able to communicate with the node
+			if (node.interviewStage < InterviewStage.NodeInfo) {
+				node.addCC(CommandClasses["Security 2"], {
+					isSupported: true,
+					version: 1,
+				});
+			}
+
+			// Ensure that we're not flooding the queue with unnecessary NonceReports
+			const isS2NonceReport = (t: Transaction) =>
+				t.message.getNodeId() === nodeId &&
+				isCommandClassContainer(t.message) &&
+				t.message.command instanceof Security2CCNonceReport;
+
+			const message: string =
+				e.code === ZWaveErrorCodes.Security2CC_CannotDecode
+					? "Message authentication failed"
+					: "No SPAN is established yet";
+
+			if (!this.hasPendingTransactions(isS2NonceReport)) {
+				this.controllerLog.logNode(nodeId, {
+					message: `${message}, cannot decode command. Requesting a nonce...`,
+					level: "verbose",
+					direction: "outbound",
+				});
+				// Send the node our nonce
+				node.commandClasses["Security 2"].sendNonce().catch(() => {
+					// Ignore errors
+				});
+			} else {
+				this.controllerLog.logNode(nodeId, {
+					message: `${message}, cannot decode command.`,
+					level: "verbose",
+					direction: "none",
+				});
+			}
+
+			return true;
+		}
+		return false;
 	}
 
 	/** Checks if a transaction failed because a node didn't respond in time */
@@ -1892,7 +2097,7 @@ It is probably asleep, moving its messages to the wakeup queue.`,
 					this.partialCCSessions.delete(partialSessionKey!);
 					try {
 						command.mergePartialCCs(session);
-					} catch (e: unknown) {
+					} catch (e) {
 						if (isZWaveError(e)) {
 							switch (e.code) {
 								case ZWaveErrorCodes.Deserialization_NotImplemented:
@@ -2148,14 +2353,23 @@ ${handlers.length} left`,
 		// A controlling node MUST discard a received Report/Notification type command if it is
 		// not received using S0 encapsulation and the corresponding Command Class is supported securely only
 
-		if (cc.secure && cc.ccId !== CommandClasses.Security) {
+		if (
+			cc.secure &&
+			cc.ccId !== CommandClasses.Security &&
+			cc.ccId !== CommandClasses["Security 2"]
+		) {
 			const commandName = cc.constructor.name;
 			if (
 				commandName.endsWith("Report") ||
 				commandName.endsWith("Notification")
 			) {
-				// Check whether there was a S0 encapsulation
-				if (cc.isEncapsulatedWith(CommandClasses.Security)) return true;
+				// Check whether there was a security encapsulation
+				if (
+					cc.isEncapsulatedWith(CommandClasses.Security) ||
+					cc.isEncapsulatedWith(CommandClasses["Security 2"])
+				) {
+					return true;
+				}
 				// none found, don't accept the CC
 				this.controllerLog.logNode(
 					cc.nodeId as number,
@@ -2195,7 +2409,7 @@ ${handlers.length} left`,
 				(msg.command.ccId === CommandClasses.Security ||
 					msg.command.isEncapsulatedWith(CommandClasses.Security))
 			) {
-				node.isSecure = true;
+				node.securityClasses.set(SecurityClass.S0_Legacy, true);
 				// Force a new interview
 				void node.refreshInfo();
 			}
@@ -2241,7 +2455,9 @@ ${handlers.length} left`,
 					await this.controller.removeFailedNode(msg.command.nodeId);
 				} catch (e) {
 					this.controllerLog.logNode(msg.command.nodeId, {
-						message: `removing the node failed: ${e}`,
+						message: `removing the node failed: ${getErrorMessage(
+							e,
+						)}`,
 						level: "error",
 					});
 				}
@@ -2266,16 +2482,68 @@ ${handlers.length} left`,
 					nodeSessions.supervision.delete(msg.command.sessionId);
 				}
 			} else {
+				// Figure out if the command was received with supervision encapsulation
+				const supervisionSessionId = SupervisionCC.getSessionId(
+					msg.command,
+				);
+				const secure = msg.command.secure;
+
+				if (
+					supervisionSessionId !== undefined &&
+					!node.supportsCC(CommandClasses.Supervision)
+				) {
+					// When a node sends us a command that's supervision encapsulated, it must support Supervision CC
+					node.addCC(CommandClasses.Supervision, {
+						isSupported: true,
+						version: 1,
+					});
+				}
+
 				// check if someone is waiting for this command
 				for (const entry of this.awaitedCommands) {
 					if (entry.predicate(msg.command)) {
 						// resolve the promise - this will remove the entry from the list
 						entry.promise.resolve(msg.command);
+
+						// send back a Supervision Report if the command was received via Supervision Get
+						if (supervisionSessionId !== undefined) {
+							await node.commandClasses.Supervision.sendReport({
+								sessionId: supervisionSessionId,
+								moreUpdatesFollow: false,
+								status: SupervisionStatus.Success,
+								secure,
+							});
+						}
 						return;
 					}
 				}
-				// noone is waiting, dispatch the command to the node itself
-				await node.handleCommand(msg.command);
+
+				// No one is waiting, dispatch the command to the node itself
+				if (supervisionSessionId !== undefined) {
+					// Wrap the handleCommand in try-catch so we can notify the node that we weren't able to handle the command
+					try {
+						await node.handleCommand(msg.command);
+
+						await node.commandClasses.Supervision.sendReport({
+							sessionId: supervisionSessionId,
+							moreUpdatesFollow: false,
+							status: SupervisionStatus.Success,
+							secure,
+						});
+					} catch (e) {
+						await node.commandClasses.Supervision.sendReport({
+							sessionId: supervisionSessionId,
+							moreUpdatesFollow: false,
+							status: SupervisionStatus.Fail,
+							secure,
+						});
+
+						// In any case we don't want to swallow the error
+						throw e;
+					}
+				} else {
+					await node.handleCommand(msg.command);
+				}
 			}
 
 			return;
@@ -2382,6 +2650,22 @@ ${handlers.length} left`,
 		}
 
 		// 5.
+
+		// When a node supports S2 and has a valid security class, the command
+		// must be S2-encapsulated
+		const node = msg.command.getNode();
+		if (node?.supportsCC(CommandClasses["Security 2"])) {
+			const securityClass = node.getHighestSecurityClass();
+			if (
+				((securityClass != undefined &&
+					securityClass !== SecurityClass.S0_Legacy) ||
+					this.securityManager2?.tempKeys.has(node.id)) &&
+				Security2CC.requiresEncapsulation(msg.command)
+			) {
+				msg.command = Security2CC.encapsulate(this, msg.command);
+			}
+		}
+		// This check will return false for S2-encapsulated commands
 		if (SecurityCC.requiresEncapsulation(msg.command)) {
 			msg.command = SecurityCC.encapsulate(this, msg.command);
 		}
@@ -2405,7 +2689,6 @@ ${handlers.length} left`,
 		}
 	}
 
-	// wotan-disable no-misused-generics
 	/**
 	 * Sends a message to the Z-Wave stick.
 	 * @param msg The message to send
@@ -2500,6 +2783,7 @@ ${handlers.length} left`,
 			transaction.changeNodeStatusOnTimeout =
 				options.changeNodeStatusOnMissingACK;
 		}
+		transaction.requestWakeUpOnDemand = !!options.requestWakeUpOnDemand;
 		transaction.tag = options.tag;
 
 		// start sending now (maybe)
@@ -2576,7 +2860,6 @@ ${handlers.length} left`,
 			throw e;
 		}
 	}
-	// wotan-enable no-misused-generics
 
 	/**
 	 * Sends a command to a Z-Wave node. If the node returns a command in response, that command will be the return value.
@@ -2584,7 +2867,6 @@ ${handlers.length} left`,
 	 * @param command The command to send. It will be encapsulated in a SendData[Multicast]Request.
 	 * @param options (optional) Options regarding the message transmission
 	 */
-	// wotan-disable-next-line no-misused-generics
 	public async sendCommand<TResponse extends CommandClass = CommandClass>(
 		command: CommandClass,
 		options: SendCommandOptions = {},
@@ -2619,8 +2901,17 @@ ${handlers.length} left`,
 			msg.maxSendAttempts = options.maxSendAttempts;
 		}
 
+		// Specify transmit options for the request
+		if (options.transmitOptions != undefined) {
+			msg.transmitOptions = options.transmitOptions;
+			if (!(options.transmitOptions & TransmitOptions.ACK)) {
+				// If no ACK is requested, set the callback ID to zero, because we won't get a controller callback
+				msg.callbackId = 0;
+			}
+		}
+
 		// Automatically encapsulate commands before sending
-		this.encapsulateCommands(msg);
+		if (options.autoEncapsulate !== false) this.encapsulateCommands(msg);
 
 		try {
 			const resp = await this.sendMessage(msg, options);
@@ -2630,7 +2921,7 @@ ${handlers.length} left`,
 				this.unwrapCommands(resp);
 				return resp.command as TResponse;
 			}
-		} catch (e: unknown) {
+		} catch (e) {
 			// A timeout always has to be expected. In this case return nothing.
 			if (
 				isZWaveError(e) &&
@@ -2741,7 +3032,6 @@ ${handlers.length} left`,
 	 * @param timeout The number of milliseconds to wait. If the timeout elapses, the returned promise will be rejected
 	 * @param predicate A predicate function to test all incoming command classes
 	 */
-	// wotan-disable-next-line no-misused-generics
 	public waitForCommand<T extends CommandClass>(
 		predicate: (cc: CommandClass) => boolean,
 		timeout: number,
@@ -2874,6 +3164,49 @@ ${handlers.length} left`,
 		this.sendThread.send("sortQueue");
 	}
 
+	/** Re-sends the current command if it is S2 encapsulated */
+	public resendS2EncapsulatedCommand(): void {
+		// If this is called, a receiving node couldn't decode the last message we sent it
+		const { currentTransaction } = this.sendThread.state.context;
+		if (
+			currentTransaction &&
+			isCommandClassContainer(currentTransaction.message) &&
+			currentTransaction.message.command instanceof
+				Security2CCMessageEncapsulation
+		) {
+			const cmd = currentTransaction.message.command;
+			if (cmd.wasRetriedAfterDecodeFailure) {
+				this._controllerLog.logNode(cmd.nodeId as number, {
+					message: `failed to decode the message after re-transmission with SPAN extension, dropping the message.`,
+					direction: "none",
+					level: "warn",
+				});
+				this.sendThread.send({
+					type: "reduce",
+					reducer: (_t, source) => {
+						if (source === "current") {
+							return {
+								type: "reject",
+								code: ZWaveErrorCodes.Security2CC_CannotDecode,
+								message:
+									"The node failed to decode the message.",
+							};
+						} else {
+							return { type: "keep" };
+						}
+					},
+				});
+			} else {
+				this._controllerLog.logNode(cmd.nodeId as number, {
+					message: `failed to decode the message, retrying with SPAN extension...`,
+					direction: "none",
+				});
+				cmd.prepareRetryAfterDecodeFailure();
+				this.sendThread.send("resend");
+			}
+		}
+	}
+
 	private lastSaveToCache: number = 0;
 	private readonly saveToCacheInterval: number = 150;
 	private saveToCacheTimer: NodeJS.Timer | undefined;
@@ -2963,7 +3296,10 @@ ${handlers.length} left`,
 				`Restoring the network from cache was successful!`,
 			);
 		} catch (e) {
-			const message = `Restoring the network from cache failed: ${e.stack}`;
+			const message = `Restoring the network from cache failed: ${getErrorMessage(
+				e,
+				true,
+			)}`;
 			this.emit(
 				"error",
 				new ZWaveError(message, ZWaveErrorCodes.Driver_InvalidCache),
@@ -3083,7 +3419,7 @@ ${handlers.length} left`,
 			}
 			return ret;
 		} catch (e) {
-			this.driverLog.print(e.message, "error");
+			this.driverLog.print(getErrorMessage(e), "error");
 		}
 	}
 
@@ -3103,13 +3439,23 @@ ${handlers.length} left`,
 			this.driverLog.print(
 				`Installing version ${newVersion} of configuration DB...`,
 			);
-			if (isDocker()) {
+			// We have 3 variants of this.
+			const extConfigDir = externalConfigDir();
+			if (this.configManager.useExternalConfig && extConfigDir) {
+				// 1. external config dir, leave node_modules alone
+				await installConfigUpdateInDocker(newVersion, {
+					cacheDir: this.options.storage.cacheDir,
+					configDir: extConfigDir,
+				});
+			} else if (isDocker()) {
+				// 2. Docker, but no external config dir, extract into node_modules
 				await installConfigUpdateInDocker(newVersion);
 			} else {
+				// 3. normal environment, use npm/yarn to install a new version of @zwave-js/config
 				await installConfigUpdate(newVersion);
 			}
 		} catch (e) {
-			this.driverLog.print(e.message, "error");
+			this.driverLog.print(getErrorMessage(e), "error");
 			return false;
 		}
 		this.driverLog.print(
@@ -3122,7 +3468,6 @@ ${handlers.length} left`,
 		// Now try to apply them to all known devices
 		if (this._controller) {
 			for (const node of this._controller.nodes.values()) {
-				// wotan-disable-next-line no-restricted-property-access
 				if (node.ready) await node["loadDeviceConfig"]();
 			}
 		}

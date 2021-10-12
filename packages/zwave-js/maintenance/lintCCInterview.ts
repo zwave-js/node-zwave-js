@@ -15,8 +15,6 @@ import {
 import * as path from "path";
 import ts from "typescript";
 
-/* wotan-disable no-useless-predicate */
-
 function getRequiredInterviewCCsFromMethod(
 	sourceFile: ts.SourceFile,
 	method: ts.MethodDeclaration,
@@ -122,19 +120,21 @@ export function lintCCInterview(): Promise<void> {
 							member.getStart(sourceFile, false),
 						);
 						try {
-							const requiredCCs = getRequiredInterviewCCsFromMethod(
-								sourceFile,
-								member,
-							);
+							const requiredCCs =
+								getRequiredInterviewCCsFromMethod(
+									sourceFile,
+									member,
+								);
 							if (!requiredCCs) {
 								throw new Error(
 									`Could not determine required CC interviews for ${node.name.text}!`,
 								);
 							} else if (!applicationCCs.includes(ccId)) {
 								// This is a non-application CC
-								const requiredApplicationCCs = requiredCCs.filter(
-									(cc) => applicationCCs.includes(cc),
-								);
+								const requiredApplicationCCs =
+									requiredCCs.filter((cc) =>
+										applicationCCs.includes(cc),
+									);
 								if (requiredApplicationCCs.length > 0) {
 									// that depends on an application CC
 									throw new Error(

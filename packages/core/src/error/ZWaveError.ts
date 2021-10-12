@@ -120,6 +120,16 @@ export enum ZWaveErrorCodes {
 
 	/** Used to report that no nonce exists */
 	SecurityCC_NoNonce = 1400,
+	/** Used to report that no SPAN is established between the nodes yet. The context should be an object that contains the peer node ID */
+	Security2CC_NoSPAN,
+	/** Used to report that the inner state required for this action was not initialized */
+	Security2CC_NotInitialized,
+	/** Used to report that secure communication with a node is not possible because the node is not secure */
+	Security2CC_NotSecure,
+	/** Gets thrown when a Security S2 command is missing a required extension */
+	Security2CC_MissingExtension,
+	/** Gets thrown when a Security S2 encapsulated command cannot be decoded by the target node */
+	Security2CC_CannotDecode,
 
 	/** The firmware update process is already active */
 	FirmwareUpdateCC_Busy = 1500,
@@ -175,7 +185,8 @@ export function isTransmissionError(e: unknown): e is ZWaveError & {
 		| ZWaveErrorCodes.Controller_MessageDropped
 		| ZWaveErrorCodes.Controller_CallbackNOK
 		| ZWaveErrorCodes.Controller_ResponseNOK
-		| ZWaveErrorCodes.Controller_NodeTimeout;
+		| ZWaveErrorCodes.Controller_NodeTimeout
+		| ZWaveErrorCodes.Security2CC_CannotDecode;
 } {
 	return (
 		isZWaveError(e) &&
@@ -183,7 +194,8 @@ export function isTransmissionError(e: unknown): e is ZWaveError & {
 			e.code === ZWaveErrorCodes.Controller_MessageDropped ||
 			e.code === ZWaveErrorCodes.Controller_CallbackNOK ||
 			e.code === ZWaveErrorCodes.Controller_ResponseNOK ||
-			e.code === ZWaveErrorCodes.Controller_NodeTimeout)
+			e.code === ZWaveErrorCodes.Controller_NodeTimeout ||
+			e.code === ZWaveErrorCodes.Security2CC_CannotDecode)
 	);
 }
 

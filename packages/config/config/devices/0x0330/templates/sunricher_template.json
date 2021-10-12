@@ -1,0 +1,20 @@
+{
+	"scene_command_type": {
+		"label": "Scene Command Type",
+		"valueSize": 1,
+		"minValue": 0,
+		"maxValue": 1,
+		"defaultValue": 0,
+		"allowManualEntry": false,
+		"options": [
+			{
+				"label": "Central Scene",
+				"value": 0
+			},
+			{
+				"label": "Scene Activation",
+				"value": 1
+			}
+		]
+	}
+}

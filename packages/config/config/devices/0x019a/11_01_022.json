@@ -1,0 +1,160 @@
+{
+	"manufacturer": "Sensative AB",
+	"manufacturerId": "0x019a",
+	"label": "11-01-022",
+	"description": "Strips Guard 700",
+	"devices": [
+		{
+			"productType": "0x0004",
+			"productId": "0x0004"
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"associations": {
+		"1": {
+			"label": "Lifeline",
+			"maxNodes": 1,
+			"isLifeline": true
+		}
+	},
+	"paramInformation": [
+		{
+			"#": "1",
+			"label": "Notification type",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 2,
+			"defaultValue": 1,
+			"unsigned": true,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Binary sensor report + Notification report (Access Control)",
+					"value": 0
+				},
+				{
+					"label": "Notification report (Access Control)",
+					"value": 1
+				},
+				{
+					"label": "Notification report (Home Security)",
+					"value": 2
+				}
+			]
+		},
+		{
+			"#": "2",
+			"label": "LED indication",
+			"description": "Turn On or Off LED for specific event indications (ex. alarms).",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 1,
+			"unsigned": true,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Turns off LED for door open events",
+					"value": 0
+				},
+				{
+					"label": "On",
+					"value": 1
+				}
+			]
+		},
+		{
+			"#": "15",
+			"label": "Activate supervision",
+			"description": "Activate Supervision command for only important alarm events or all events. Supervised commands require a confirmation from the gateway when a notification is received.",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 2,
+			"defaultValue": 1,
+			"unsigned": true,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Events sent with S2 Encapsulation only",
+					"value": 0
+				},
+				{
+					"label": "Only Door Open Alarm Report (Events sent with S2 and supervision encapsulation)",
+					"value": 1
+				},
+				{
+					"label": "Unsolicited reports (Door Open/Close, Tamper clear, Wake-up notification and Battery Report events sent with S2 and supervision encapsulation)",
+					"value": 2
+				}
+			]
+		},
+		{
+			"#": "16",
+			"label": "Supervision report wait time",
+			"description": "Only used if parameter 22 is set to 1 (High security). The number of milliseconds to wait for a Supervision response when a Supervised message is sent.",
+			"unit": "ms",
+			"valueSize": 2,
+			"minValue": 500,
+			"maxValue": 30000,
+			"defaultValue": 10000,
+			"unsigned": true
+		},
+		{
+			"#": "17",
+			"label": "Number of failed event retries",
+			"description": "Only used if parameter 22 is set to 1 (High security). Number of retries when a confirmation is not received. 0 = No retry, 1 - 5 = Number of retries when a confirmation is not received.",
+			"unit": "retries",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 5,
+			"defaultValue": 1,
+			"unsigned": true
+		},
+		{
+			"#": "18",
+			"label": "Failed Event Retry Interval",
+			"description": "Only used if parameter 22 is set to 1 (High security). The minimum number of seconds between retries. Min = 1 second, Max = 60 seconds",
+			"unit": "seconds",
+			"valueSize": 1,
+			"minValue": 1,
+			"maxValue": 60,
+			"defaultValue": 6,
+			"unsigned": true
+		},
+		{
+			"#": "19",
+			"label": "Heartbeat interval",
+			"description": "Only used if parameter 22 is set to 1 (High security). Number of minutes between periodic battery reports (Heartbeats). Accepts multiples of 5 mins. Any arbitary value between 5 and 70 will be rounded up to a multiple of 5.",
+			"unit": "minutes",
+			"valueSize": 1,
+			"minValue": 5,
+			"maxValue": 70,
+			"defaultValue": 70,
+			"unsigned": true
+		},
+		{
+			"#": "22",
+			"label": "Security Level",
+			"description": "Select the level of security. High Security (Enables parameters 16-19, 21). Standard (Forces parameter behaviour as follows: #16=1000, #17=Sensative standard**, #18=0, #19=Off, #21=Off ** Retries with an incrementally longer period until reconnected.",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 0,
+			"unsigned": true,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Standard Security",
+					"value": 0
+				},
+				{
+					"label": "High Security",
+					"value": 1
+				}
+			]
+		}
+	]
+}

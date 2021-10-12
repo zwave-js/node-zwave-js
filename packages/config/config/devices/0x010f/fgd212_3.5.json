@@ -185,11 +185,11 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "No calibration or manual settings",
+					"label": "No calibration or manual override",
 					"value": 0
 				},
 				{
-					"label": "Dimmer operates on auto-calibration",
+					"label": "Using auto-calibration",
 					"value": 1
 				}
 			]
@@ -251,7 +251,7 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "Mono-stable input (button)",
+					"label": "Mono-stable input (momentary button)",
 					"value": 0
 				},
 				{
@@ -259,7 +259,7 @@
 					"value": 1
 				},
 				{
-					"label": "Roller blind switch (UP / DOWN)",
+					"label": "Roller blind switch (up / down)",
 					"value": 2
 				}
 			]
@@ -299,7 +299,7 @@
 					"value": 0
 				},
 				{
-					"label": "Output synced with input switch position",
+					"label": "Output syncs with input switch position",
 					"value": 1
 				}
 			]
@@ -312,27 +312,19 @@
 		},
 		{
 			"#": "24[0x01]",
-			"$import": "~/templates/master_template.json#base_enable_disable_inverted",
-			"label": "Send Command Frames in 2nd and 3rd Association Groups when Switching ON (Single Click)",
-			"defaultValue": 0
+			"$import": "templates/fibaro_template.json#send_s1_associations_on"
 		},
 		{
 			"#": "24[0x02]",
-			"$import": "~/templates/master_template.json#base_enable_disable_inverted",
-			"label": "Send Command Frames in 2nd and 3rd Association Groups when Switching OFF (Single Click)",
-			"defaultValue": 0
+			"$import": "templates/fibaro_template.json#send_s1_associations_off"
 		},
 		{
 			"#": "24[0x04]",
-			"$import": "~/templates/master_template.json#base_enable_disable_inverted",
-			"label": "Send Command Frames in 2nd and 3rd Association Groups when Changing Dimming Level",
-			"defaultValue": 0
+			"$import": "templates/fibaro_template.json#send_s1_associations_hold_release"
 		},
 		{
 			"#": "24[0x08]",
-			"$import": "~/templates/master_template.json#base_enable_disable_inverted",
-			"label": "Send Command Frames in 2nd and 3rd Association Groups on Double Click",
-			"defaultValue": 0
+			"$import": "templates/fibaro_template.json#send_s1_associations_double_click"
 		},
 		{
 			"#": "24[0x10]",
@@ -341,27 +333,19 @@
 		},
 		{
 			"#": "25[0x01]",
-			"$import": "~/templates/master_template.json#base_enable_disable_inverted",
-			"label": "Send Command Frames in 4th and 5th Association Groups when Switching ON (Single Click)",
-			"defaultValue": 0
+			"$import": "templates/fibaro_template.json#send_s2_associations_on"
 		},
 		{
 			"#": "25[0x02]",
-			"$import": "~/templates/master_template.json#base_enable_disable_inverted",
-			"label": "Send Command Frames in 4th and 5th Association Groups when Switching OFF (Single Click)",
-			"defaultValue": 0
+			"$import": "templates/fibaro_template.json#send_s2_associations_off"
 		},
 		{
 			"#": "25[0x04]",
-			"$import": "~/templates/master_template.json#base_enable_disable_inverted",
-			"label": "Send Command Frames in 4th and 5th Association Groups when Changing Dimming Level",
-			"defaultValue": 0
+			"$import": "templates/fibaro_template.json#send_s2_associations_hold_release"
 		},
 		{
 			"#": "25[0x08]",
-			"$import": "~/templates/master_template.json#base_enable_disable_inverted",
-			"label": "Send Command Frames in 4th and 5th Association Groups on Double Click",
-			"defaultValue": 0
+			"$import": "templates/fibaro_template.json#send_s2_associations_double_click"
 		},
 		{
 			"#": "25[0x10]",
@@ -376,23 +360,23 @@
 		},
 		{
 			"#": "27[0x01]",
-			"$import": "~/templates/master_template.json#base_enable_disable",
-			"label": "Send Secure Z-wave Commands to 2nd Association Group"
+			"$import": "templates/fibaro_template.json#send_secure_commands_group2",
+			"defaultValue": 1
 		},
 		{
 			"#": "27[0x02]",
-			"$import": "~/templates/master_template.json#base_enable_disable",
-			"label": "Send Secure Z-wave Commands to 3rd Association Group"
+			"$import": "templates/fibaro_template.json#send_secure_commands_group3",
+			"defaultValue": 1
 		},
 		{
 			"#": "27[0x04]",
-			"$import": "~/templates/master_template.json#base_enable_disable",
-			"label": "Send Secure Z-wave Commands to 4th Association Group"
+			"$import": "templates/fibaro_template.json#send_secure_commands_group4",
+			"defaultValue": 1
 		},
 		{
 			"#": "27[0x08]",
-			"$import": "~/templates/master_template.json#base_enable_disable",
-			"label": "Send Secure Z-wave Commands to 5th Association Group"
+			"$import": "templates/fibaro_template.json#send_secure_commands_group5",
+			"defaultValue": 1
 		},
 		{
 			"#": "28",
@@ -425,7 +409,7 @@
 					"value": 1
 				},
 				{
-					"label": "Select from auto-calibration",
+					"label": "As recognized during auto-calibration",
 					"value": 2
 				}
 			]
@@ -453,7 +437,7 @@
 		{
 			"#": "32",
 			"label": "On/Off Mode",
-			"description": "Mode for connecting non-dimmable light sources.",
+			"description": "Useful when connecting non-dimmable loads.",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 2,
@@ -462,22 +446,22 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "Disable (dimming is possible)",
+					"label": "Disable (dimming possible)",
 					"value": 0
 				},
 				{
-					"label": "Enable (dimming is not possible)",
+					"label": "Enable (dimming not possible)",
 					"value": 1
 				},
 				{
-					"label": "Select from auto-calibration",
+					"label": "As recognized during auto-calibration",
 					"value": 2
 				}
 			]
 		},
 		{
 			"#": "33",
-			"label": "Dimmability of the Load Recognized During Auto-Calibration",
+			"label": "Dimmability Recognized During Auto-Calibration",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 1,
@@ -603,124 +587,24 @@
 		},
 		{
 			"#": "40",
-			"label": "General Purpose Alarm Response",
-			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 3,
-			"defaultValue": 3,
-			"unsigned": true,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "No reaction",
-					"value": 0
-				},
-				{
-					"label": "Turn on the load",
-					"value": 1
-				},
-				{
-					"label": "Turn off the load",
-					"value": 2
-				},
-				{
-					"label": "Load blinking",
-					"value": 3
-				}
-			]
+			"$import": "templates/fibaro_template.json#general_purpose_alarm_response"
 		},
 		{
 			"#": "41",
-			"label": "Water Flooding Alarm Response",
-			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 3,
-			"defaultValue": 2,
-			"unsigned": true,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "No reaction",
-					"value": 0
-				},
-				{
-					"label": "Turn on the load",
-					"value": 1
-				},
-				{
-					"label": "Turn off the load",
-					"value": 2
-				},
-				{
-					"label": "Load blinking",
-					"value": 3
-				}
-			]
+			"$import": "templates/fibaro_template.json#water_flood_alarm_response"
 		},
 		{
 			"#": "42",
-			"label": "Smoke, CO or CO2 Alarm Response",
-			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 3,
-			"defaultValue": 3,
-			"unsigned": true,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "No reaction",
-					"value": 0
-				},
-				{
-					"label": "Turn on the load",
-					"value": 1
-				},
-				{
-					"label": "Turn off the load",
-					"value": 2
-				},
-				{
-					"label": "Load blinking",
-					"value": 3
-				}
-			]
+			"$import": "templates/fibaro_template.json#smoke_alarm_response"
 		},
 		{
 			"#": "43",
-			"label": "Temperature Alarm Response",
-			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 255,
-			"defaultValue": 1,
-			"unsigned": true,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "No reaction",
-					"value": 0
-				},
-				{
-					"label": "Turn on the load",
-					"value": 1
-				},
-				{
-					"label": "Turn off the load",
-					"value": 2
-				},
-				{
-					"label": "Load blinking",
-					"value": 3
-				}
-			]
+			"$import": "templates/fibaro_template.json#temperature_alarm_response"
 		},
 		{
 			"#": "44",
-			"label": "Time of Alarm State",
-			"valueSize": 2,
-			"unit:": "seconds",
-			"minValue": 1,
-			"maxValue": 32767,
-			"defaultValue": 600
+			"$import": "templates/fibaro_template.json#alarm_state_time",
+			"maxValue": 32767
 		},
 		{
 			"#": "45",
@@ -829,55 +713,24 @@
 		},
 		{
 			"#": "50",
-			"label": "Active Power Report: Threshold",
-			"description": "Relative change since previous report sent",
-			"valueSize": 1,
-			"unit": "%",
-			"minValue": 0,
-			"maxValue": 100,
-			"defaultValue": 10,
-			"options": [
-				{
-					"label": "Disable",
-					"value": 0
-				}
-			]
+			"$import": "templates/fibaro_template.json#power_report_threshold_relative",
+			"defaultValue": 10
 		},
 		{
 			"#": "52",
+			"$import": "templates/fibaro_template.json#reports_periodic",
 			"label": "Periodic Active Power and Energy Reports",
-			"valueSize": 2,
-			"unit": "seconds",
-			"minValue": 0,
-			"maxValue": 32767,
-			"defaultValue": 3600,
-			"options": [
-				{
-					"label": "Disable",
-					"value": 0
-				}
-			]
+			"maxValue": 32767
 		},
 		{
 			"#": "53",
-			"label": "Energy Report: Threshold",
-			"valueSize": 2,
-			"unit": "0.01 kWh",
-			"minValue": 0,
+			"$import": "templates/fibaro_template.json#energy_report_threshold",
 			"maxValue": 255,
-			"defaultValue": 10,
-			"options": [
-				{
-					"label": "Disable",
-					"value": 0
-				}
-			]
+			"defaultValue": 10
 		},
 		{
 			"#": "54",
-			"$import": "~/templates/master_template.json#base_enable_disable",
-			"label": "Self-measurement",
-			"description": "Reports include power and energy used by device"
+			"$import": "templates/fibaro_template.json#reports_include_self"
 		},
 		{
 			"#": "58",
@@ -914,9 +767,7 @@
 		}
 	],
 	"metadata": {
-		"inclusion": "Turn the primary controller of Z-Wave network into inclusion mode, quickly press key S1 or B-button product's housing three times",
-		"exclusion": "Turn the primary controller of Z-Wave network into exclusion mode, quickly press key S1 or B-button product's housing three times",
-		"reset": "1. Power-cycle the device\n2. Press and hold the B-button to enter the menu\n3. Wait for the LED to turn yellow\n4. Quickly release and click B-button again\n5. Device will restart and LED will turn red",
+		"$import": "templates/fibaro_template.json#default_metadata",
 		"manual": "https://products.z-wavealliance.org/ProductManual/File?folder=&filename=MarketCertificationFiles/2836/FGD-212-EN-T-v1.3.pdf"
 	}
 }

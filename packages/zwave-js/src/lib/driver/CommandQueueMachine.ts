@@ -1,3 +1,4 @@
+import { getErrorMessage } from "@zwave-js/shared";
 import { SortedList } from "alcalzone-shared/sorted-list";
 import {
 	assign,
@@ -230,7 +231,10 @@ export function createCommandQueueMachine(
 						);
 					} catch (e) {
 						implementations.log(
-							`Unexpected error during SerialAPI command: ${e.stack}`,
+							`Unexpected error during SerialAPI command: ${getErrorMessage(
+								e,
+								true,
+							)}`,
 							"error",
 						);
 						return Promise.reject(e);

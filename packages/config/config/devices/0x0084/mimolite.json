@@ -51,7 +51,8 @@
 		},
 		"4": {
 			"label": "Binary Sensor report",
-			"maxNodes": 2
+			"maxNodes": 2,
+			"isLifeline": true
 		},
 		"5": {
 			"label": "Pulse Meter Sensor report",

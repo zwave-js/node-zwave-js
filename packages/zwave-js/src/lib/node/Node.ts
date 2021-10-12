@@ -19,6 +19,10 @@ import {
 	NodeUpdatePayload,
 	nonApplicationCCs,
 	normalizeValueID,
+	SecurityClass,
+	securityClassIsS2,
+	securityClassOrder,
+	SecurityClassOwner,
 	sensorCCs,
 	timespan,
 	topologicalSort,
@@ -36,6 +40,7 @@ import {
 import {
 	formatId,
 	getEnumMemberName,
+	getErrorMessage,
 	JSONObject,
 	Mixin,
 	num2hex,
@@ -107,12 +112,17 @@ import {
 } from "../commandclass/NotificationCC";
 import { SceneActivationCCSet } from "../commandclass/SceneActivationCC";
 import {
+	Security2CCNonceGet,
+	Security2CCNonceReport,
+} from "../commandclass/Security2CC";
+import {
 	SecurityCCNonceGet,
 	SecurityCCNonceReport,
 } from "../commandclass/SecurityCC";
 import { getFirmwareVersionsValueId } from "../commandclass/VersionCC";
 import {
 	getWakeUpIntervalValueId,
+	getWakeUpOnDemandSupportedValueId,
 	WakeUpCCWakeUpNotification,
 } from "../commandclass/WakeUpCC";
 import {
@@ -181,7 +191,7 @@ export interface ZWaveNode
  * of its root endpoint (index 0)
  */
 @Mixin([EventEmitter, NodeStatisticsHost])
-export class ZWaveNode extends Endpoint {
+export class ZWaveNode extends Endpoint implements SecurityClassOwner {
 	public constructor(
 		public readonly id: number,
 		driver: Driver,
@@ -490,12 +500,33 @@ export class ZWaveNode extends Endpoint {
 		}
 	}
 
-	private _isSecure: Maybe<boolean> | undefined;
-	public get isSecure(): Maybe<boolean> | undefined {
-		return this._isSecure;
+	/** @internal */
+	public readonly securityClasses = new Map<SecurityClass, boolean>();
+
+	/** Whether the node was granted at least one security class */
+	public get isSecure(): Maybe<boolean> {
+		const securityClass = this.getHighestSecurityClass();
+		if (securityClass == undefined) return unknownBoolean;
+		if (securityClass === SecurityClass.None) return false;
+		return true;
 	}
-	public set isSecure(value: Maybe<boolean> | undefined) {
-		this._isSecure = value;
+
+	public hasSecurityClass(securityClass: SecurityClass): Maybe<boolean> {
+		return this.securityClasses.get(securityClass) ?? unknownBoolean;
+	}
+
+	/** Returns the highest security class this node was granted or `undefined` if that information isn't known yet */
+	public getHighestSecurityClass(): SecurityClass | undefined {
+		if (this.securityClasses.size === 0) return undefined;
+		let missingSome = false;
+		for (const secClass of securityClassOrder) {
+			if (this.securityClasses.get(secClass) === true) return secClass;
+			if (!this.securityClasses.has(secClass)) {
+				missingSome = true;
+			}
+		}
+		// If we don't have the info for every security class, we don't know the highest one yet
+		return missingSome ? undefined : SecurityClass.None;
 	}
 
 	private _protocolVersion: ProtocolVersion | undefined;
@@ -552,6 +583,22 @@ export class ZWaveNode extends Endpoint {
 
 	public get zwavePlusRoleType(): ZWavePlusRoleType | undefined {
 		return this.getValue(getRoleTypeValueId());
+	}
+
+	public get supportsWakeUpOnDemand(): boolean | undefined {
+		return this.getValue(getWakeUpOnDemandSupportedValueId());
+	}
+
+	public get shouldRequestWakeUpOnDemand(): boolean {
+		return (
+			!!this.supportsWakeUpOnDemand &&
+			this.status === NodeStatus.Asleep &&
+			this.driver.hasPendingTransactions(
+				(t) =>
+					t.requestWakeUpOnDemand &&
+					t.message.getNodeId() === this.id,
+			)
+		);
 	}
 
 	/**
@@ -637,7 +684,6 @@ export class ZWaveNode extends Endpoint {
 	 * Retrieves a stored value for a given value id.
 	 * This does not request an updated value from the node!
 	 */
-	/* wotan-disable-next-line no-misused-generics */
 	public getValue<T = unknown>(valueId: ValueID): T | undefined {
 		return this._valueDB.getValue(valueId);
 	}
@@ -781,7 +827,7 @@ export class ZWaveNode extends Endpoint {
 			}
 
 			return true;
-		} catch (e: unknown) {
+		} catch (e) {
 			// Define which errors during setValue are expected and won't crash
 			// the driver:
 			if (isZWaveError(e)) {
@@ -810,7 +856,6 @@ export class ZWaveNode extends Endpoint {
 	 * Requests a value for a given property of a given CommandClass by polling the node.
 	 * **Warning:** Some value IDs share a command, so make sure not to blindly call this for every property
 	 */
-	// wotan-disable-next-line no-misused-generics
 	public pollValue<T extends unknown = unknown>(
 		valueId: ValueID,
 		sendCommandOptions: SendCommandOptions = {},
@@ -1102,7 +1147,8 @@ export class ZWaveNode extends Endpoint {
 		return this._interviewAttempts;
 	}
 
-	private _hasEmittedNoNetworkKeyError: boolean = false;
+	private _hasEmittedNoS2NetworkKeyError: boolean = false;
+	private _hasEmittedNoS0NetworkKeyError: boolean = false;
 
 	/** Utility function to check if this node is the controller */
 	public isControllerNode(): boolean {
@@ -1133,13 +1179,13 @@ export class ZWaveNode extends Endpoint {
 		this._isFrequentListening = undefined;
 		this._isRouting = undefined;
 		this._supportedDataRates = undefined;
-		this._isSecure = undefined;
 		this._protocolVersion = undefined;
 		this._nodeType = undefined;
 		this._supportsSecurity = undefined;
 		this._supportsBeaming = undefined;
 		this._deviceConfig = undefined;
-		this._hasEmittedNoNetworkKeyError = false;
+		this._hasEmittedNoS0NetworkKeyError = false;
+		this._hasEmittedNoS2NetworkKeyError = false;
 		this._valueDB.clear({ noEvent: true });
 		this._endpointInstances.clear();
 		super.reset();
@@ -1194,7 +1240,7 @@ export class ZWaveNode extends Endpoint {
 			try {
 				await method();
 				return true;
-			} catch (e: unknown) {
+			} catch (e) {
 				if (isTransmissionError(e)) {
 					return false;
 				}
@@ -1295,7 +1341,6 @@ export class ZWaveNode extends Endpoint {
 		this._nodeType = resp.nodeType;
 		this._supportsSecurity = resp.supportsSecurity;
 		this._supportsBeaming = resp.supportsBeaming;
-		this._isSecure = unknownBoolean;
 
 		this.applyDeviceClass(resp.deviceClass);
 
@@ -1352,7 +1397,7 @@ protocol version:      ${this._protocolVersion}`;
 			} catch (e) {
 				this.driver.controllerLog.logNode(
 					this.id,
-					`ping failed: ${e.message}`,
+					`ping failed: ${getErrorMessage(e)}`,
 				);
 				return false;
 			}
@@ -1473,7 +1518,7 @@ protocol version:      ${this._protocolVersion}`;
 			let instance: CommandClass;
 			try {
 				instance = endpoint.createCCInstance(cc)!;
-			} catch (e: unknown) {
+			} catch (e) {
 				if (
 					isZWaveError(e) &&
 					e.code === ZWaveErrorCodes.CC_NotSupported
@@ -1485,7 +1530,11 @@ protocol version:      ${this._protocolVersion}`;
 				// we want to pass all other errors through
 				throw e;
 			}
-			if (endpoint.isCCSecure(cc) && !this.driver.securityManager) {
+			if (
+				endpoint.isCCSecure(cc) &&
+				!this.driver.securityManager &&
+				!this.driver.securityManager2
+			) {
 				// The CC is only supported securely, but the network key is not set up
 				// Skip the CC
 				this.driver.controllerLog.logNode(
@@ -1503,7 +1552,7 @@ protocol version:      ${this._protocolVersion}`;
 
 			try {
 				await instance.interview();
-			} catch (e: unknown) {
+			} catch (e) {
 				if (isTransmissionError(e)) {
 					// We had a CAN or timeout during the interview
 					// or the node is presumed dead. Abort the process
@@ -1517,52 +1566,104 @@ protocol version:      ${this._protocolVersion}`;
 				await this.driver.saveNetworkToCache();
 			} catch (e) {
 				this.driver.controllerLog.print(
-					`${getCCName(cc)}: Error after interview:\n${e.message}`,
+					`${getCCName(
+						cc,
+					)}: Error after interview:\n${getErrorMessage(e)}`,
 					"error",
 				);
 			}
 		};
 
 		// Always interview Security first because it changes the interview order
-		if (
-			this.supportsCC(CommandClasses.Security) &&
-			// At this point we're not sure if the node is included securely
-			this._isSecure !== false
-		) {
-			// Security is always supported *securely*
+		if (this.supportsCC(CommandClasses["Security 2"])) {
+			// Security S2 is always supported *securely*
+			this.addCC(CommandClasses["Security 2"], { secure: true });
+
+			// Query supported CCs unless we know for sure that the node wasn't assigned a S2 security class
+			const securityClass = this.getHighestSecurityClass();
+			if (
+				securityClass == undefined ||
+				securityClassIsS2(securityClass)
+			) {
+				if (!this.driver.securityManager2) {
+					if (!this._hasEmittedNoS2NetworkKeyError) {
+						// Cannot interview a secure device securely without a network key
+						const errorMessage = `supports Security S2, but no S2 network keys were configured. The interview might not include all functionality.`;
+						this.driver.controllerLog.logNode(
+							this.nodeId,
+							errorMessage,
+							"error",
+						);
+						this.driver.emit(
+							"error",
+							new ZWaveError(
+								`Node ${padStart(
+									this.id.toString(),
+									3,
+									"0",
+								)} ${errorMessage}`,
+								ZWaveErrorCodes.Controller_NodeInsecureCommunication,
+							),
+						);
+						this._hasEmittedNoS2NetworkKeyError = true;
+					}
+				} else {
+					await interviewEndpoint(this, CommandClasses["Security 2"]);
+				}
+			}
+		} else {
+			// If there is any doubt about granted S2 security classes, we now know they are not granted
+			for (const secClass of [
+				SecurityClass.S2_AccessControl,
+				SecurityClass.S2_Authenticated,
+				SecurityClass.S2_Unauthenticated,
+			] as const) {
+				if (this.hasSecurityClass(secClass) === unknownBoolean) {
+					this.securityClasses.set(secClass, false);
+				}
+			}
+		}
+
+		if (this.supportsCC(CommandClasses.Security)) {
+			// Security S0 is always supported *securely*
 			this.addCC(CommandClasses.Security, { secure: true });
 
-			if (!this.driver.securityManager) {
-				if (!this._hasEmittedNoNetworkKeyError) {
-					// Cannot interview a secure device securely without a network key
-					const errorMessage = `supports Security, but no network key was configured. Continuing interview non-securely.`;
-					this.driver.controllerLog.logNode(
-						this.nodeId,
-						errorMessage,
-						"error",
-					);
-					this.driver.emit(
-						"error",
-						new ZWaveError(
-							`Node ${padStart(
-								this.id.toString(),
-								3,
-								"0",
-							)} ${errorMessage}`,
-							ZWaveErrorCodes.Controller_NodeInsecureCommunication,
-						),
-					);
-					this._hasEmittedNoNetworkKeyError = true;
+			// Query supported CCs unless we know for sure that the node wasn't assigned the S0 security class
+			if (this.hasSecurityClass(SecurityClass.S0_Legacy) !== false) {
+				if (!this.driver.securityManager) {
+					if (!this._hasEmittedNoS0NetworkKeyError) {
+						// Cannot interview a secure device securely without a network key
+						const errorMessage = `supports Security S0, but the S0 network key was not configured. The interview might not include all functionality.`;
+						this.driver.controllerLog.logNode(
+							this.nodeId,
+							errorMessage,
+							"error",
+						);
+						this.driver.emit(
+							"error",
+							new ZWaveError(
+								`Node ${padStart(
+									this.id.toString(),
+									3,
+									"0",
+								)} ${errorMessage}`,
+								ZWaveErrorCodes.Controller_NodeInsecureCommunication,
+							),
+						);
+						this._hasEmittedNoS0NetworkKeyError = true;
+					}
+				} else {
+					await interviewEndpoint(this, CommandClasses.Security);
 				}
-			} else {
-				await interviewEndpoint(this, CommandClasses.Security);
 			}
-		} else if (
-			!this.supportsCC(CommandClasses.Security) &&
-			this._isSecure === unknownBoolean
-		) {
-			// Remember that this node is not secure
-			this._isSecure = false;
+		} else {
+			if (
+				this.hasSecurityClass(SecurityClass.S0_Legacy) ===
+				unknownBoolean
+			) {
+				// Remember that this node hasn't been granted the S0 security class
+				this.securityClasses.set(SecurityClass.S0_Legacy, false);
+			}
 		}
 
 		// Manufacturer Specific and Version CC need to be handled before the other CCs because they are needed to
@@ -1650,22 +1751,58 @@ protocol version:      ${this._protocolVersion}`;
 			if (!endpoint) continue;
 
 			// Always interview Security first because it changes the interview order
+			// The root endpoint has been interviewed, so we know if the device supports security and which security classes it has
+			const securityClass = this.getHighestSecurityClass();
+
+			if (endpoint.supportsCC(CommandClasses["Security 2"])) {
+				// Security S2 is always supported *securely*
+				endpoint.addCC(CommandClasses["Security 2"], { secure: true });
+
+				// If S2 is the highest security class, interview it for the endpoint
+				if (
+					securityClass != undefined &&
+					securityClassIsS2(securityClass) &&
+					!!this.driver.securityManager2
+				) {
+					const action = await interviewEndpoint(
+						endpoint,
+						CommandClasses["Security 2"],
+					);
+					if (typeof action === "boolean") return action;
+				}
+			}
+
+			if (endpoint.supportsCC(CommandClasses.Security)) {
+				// Security S0 is always supported *securely*
+				endpoint.addCC(CommandClasses.Security, { secure: true });
+
+				// If S0 is the highest security class, interview it for the endpoint
+				if (
+					securityClass === SecurityClass.S0_Legacy &&
+					!!this.driver.securityManager
+				) {
+					const action = await interviewEndpoint(
+						endpoint,
+						CommandClasses.Security,
+					);
+					if (typeof action === "boolean") return action;
+				}
+			}
+
 			if (
 				endpoint.supportsCC(CommandClasses.Security) &&
-				// The root endpoint has been interviewed, so we know it the device supports security
-				this._isSecure === true &&
+				// The root endpoint has been interviewed, so we know if the device supports security
+				this.hasSecurityClass(SecurityClass.S0_Legacy) === true &&
 				// Only interview SecurityCC if the network key was set
 				this.driver.securityManager
 			) {
 				// Security is always supported *securely*
 				endpoint.addCC(CommandClasses.Security, { secure: true });
-
-				const action = await interviewEndpoint(
-					endpoint,
-					CommandClasses.Security,
-				);
-				if (typeof action === "boolean") return action;
 			}
+
+			// The Security S0/S2 CC adds new CCs to the endpoint, so we need to once more remove those
+			// that aren't actually properly supported by the device.
+			this.applyCommandClassesCompatFlag(endpoint.index);
 
 			// Don't offer or interview the Basic CC if any actuator CC is supported - except if the config files forbid us
 			// to map the Basic CC to other CCs or expose Basic Set as an event
@@ -1834,7 +1971,7 @@ protocol version:      ${this._protocolVersion}`;
 						this.id,
 						`failed to interview CC ${getCCName(cc)}, endpoint ${
 							endpoint.index
-						}: ${e.message}`,
+						}: ${getErrorMessage(e)}`,
 						"error",
 					);
 				}
@@ -1857,7 +1994,7 @@ protocol version:      ${this._protocolVersion}`;
 						this.id,
 						`failed to refresh values for ${getCCName(
 							cc,
-						)}, endpoint ${endpoint.index}: ${e.message}`,
+						)}, endpoint ${endpoint.index}: ${getErrorMessage(e)}`,
 						"error",
 					);
 				}
@@ -1886,7 +2023,7 @@ protocol version:      ${this._protocolVersion}`;
 						this.id,
 						`failed to refresh values for ${getCCName(
 							cc.ccId,
-						)}, endpoint ${endpoint.index}: ${e.message}`,
+						)}, endpoint ${endpoint.index}: ${getErrorMessage(e)}`,
 						"error",
 					);
 				}
@@ -1897,15 +2034,23 @@ protocol version:      ${this._protocolVersion}`;
 	/**
 	 * Uses the `commandClasses` compat flag defined in the node's config file to
 	 * override the reported command classes.
+	 * @param endpointIndex If given, limits the application of the compat flag to the given endpoint.
 	 */
-	private applyCommandClassesCompatFlag(): void {
+	private applyCommandClassesCompatFlag(endpointIndex?: number): void {
 		if (this.deviceConfig) {
 			// Add CCs the device config file tells us to
 			const addCCs = this.deviceConfig.compat?.addCCs;
 			if (addCCs) {
 				for (const [cc, { endpoints }] of addCCs) {
-					for (const [ep, info] of endpoints) {
-						this.getEndpoint(ep)?.addCC(cc, info);
+					if (endpointIndex === undefined) {
+						for (const [ep, info] of endpoints) {
+							this.getEndpoint(ep)?.addCC(cc, info);
+						}
+					} else if (endpoints.has(endpointIndex)) {
+						this.getEndpoint(endpointIndex)?.addCC(
+							cc,
+							endpoints.get(endpointIndex)!,
+						);
 					}
 				}
 			}
@@ -1914,12 +2059,20 @@ protocol version:      ${this._protocolVersion}`;
 			if (removeCCs) {
 				for (const [cc, endpoints] of removeCCs) {
 					if (endpoints === "*") {
-						for (const ep of this.getAllEndpoints()) {
-							ep.removeCC(cc);
+						if (endpointIndex === undefined) {
+							for (const ep of this.getAllEndpoints()) {
+								ep.removeCC(cc);
+							}
+						} else {
+							this.getEndpoint(endpointIndex)?.removeCC(cc);
 						}
 					} else {
-						for (const ep of endpoints) {
-							this.getEndpoint(ep)?.removeCC(cc);
+						if (endpointIndex === undefined) {
+							for (const ep of endpoints) {
+								this.getEndpoint(ep)?.removeCC(cc);
+							}
+						} else if (endpoints.includes(endpointIndex)) {
+							this.getEndpoint(endpointIndex)?.removeCC(cc);
 						}
 					}
 				}
@@ -2012,6 +2165,10 @@ protocol version:      ${this._protocolVersion}`;
 			return this.handleSecurityNonceGet();
 		} else if (command instanceof SecurityCCNonceReport) {
 			return this.handleSecurityNonceReport(command);
+		} else if (command instanceof Security2CCNonceGet) {
+			return this.handleSecurity2NonceGet();
+		} else if (command instanceof Security2CCNonceReport) {
+			return this.handleSecurity2NonceReport(command);
 		} else if (command instanceof HailCC) {
 			return this.handleHail(command);
 		} else if (command instanceof FirmwareUpdateMetaDataCCGet) {
@@ -2070,17 +2227,12 @@ protocol version:      ${this._protocolVersion}`;
 		});
 
 		// Ensure that we're not flooding the queue with unnecessary NonceReports (GH#1059)
-		const { queue, currentTransaction } =
-			this.driver["sendThread"].state.context;
-		const isNonceReport = (t: Transaction | undefined) =>
-			!!t &&
+		const isNonceReport = (t: Transaction) =>
 			t.message.getNodeId() === this.nodeId &&
 			isCommandClassContainer(t.message) &&
 			t.message.command instanceof SecurityCCNonceReport;
-		if (
-			isNonceReport(currentTransaction) ||
-			queue.find((t) => isNonceReport(t))
-		) {
+
+		if (this.driver.hasPendingTransactions(isNonceReport)) {
 			this.driver.controllerLog.logNode(this.id, {
 				message:
 					"in the process of replying to a NonceGet, won't send another NonceReport",
@@ -2097,7 +2249,7 @@ protocol version:      ${this._protocolVersion}`;
 			await this.commandClasses.Security.sendNonce();
 		} catch (e) {
 			this.driver.controllerLog.logNode(this.id, {
-				message: `failed to send nonce: ${e}`,
+				message: `failed to send nonce: ${getErrorMessage(e)}`,
 				direction: "inbound",
 			});
 		}
@@ -2122,6 +2274,74 @@ protocol version:      ${this._protocolVersion}`;
 			},
 			{ free: true },
 		);
+	}
+
+	/**
+	 * @internal
+	 * Handles a nonce request for S2
+	 */
+	public async handleSecurity2NonceGet(): Promise<void> {
+		// Only reply if secure communication is set up
+		if (!this.driver.securityManager2) {
+			if (!this.hasLoggedNoNetworkKey) {
+				this.hasLoggedNoNetworkKey = true;
+				this.driver.controllerLog.logNode(this.id, {
+					message: `cannot reply to NonceGet (S2) because no network key was configured!`,
+					direction: "inbound",
+					level: "warn",
+				});
+			}
+			return;
+		}
+
+		// When a node asks us for a nonce, it must support Security 2 CC
+		this.addCC(CommandClasses["Security 2"], {
+			isSupported: true,
+			version: 1,
+			// Security 2 CC is always secure
+			secure: true,
+		});
+
+		// Ensure that we're not flooding the queue with unnecessary NonceReports (GH#1059)
+		const isNonceReport = (t: Transaction) =>
+			t.message.getNodeId() === this.nodeId &&
+			isCommandClassContainer(t.message) &&
+			t.message.command instanceof Security2CCNonceReport;
+
+		if (this.driver.hasPendingTransactions(isNonceReport)) {
+			this.driver.controllerLog.logNode(this.id, {
+				message:
+					"in the process of replying to a NonceGet, won't send another NonceReport",
+				level: "warn",
+			});
+			return;
+		}
+
+		try {
+			await this.commandClasses["Security 2"].sendNonce();
+		} catch (e) {
+			this.driver.controllerLog.logNode(this.id, {
+				message: `failed to send nonce: ${getErrorMessage(e)}`,
+				direction: "inbound",
+			});
+		}
+	}
+
+	/**
+	 * Is called when a nonce report is received that does not belong to any transaction.
+	 */
+	private handleSecurity2NonceReport(command: Security2CCNonceReport): void {
+		const secMan = this.driver.securityManager2;
+		if (!secMan) return;
+
+		if (command.SOS && command.receiverEI) {
+			// The node couldn't decrypt the last command we sent it. Invalidate
+			// the shared SPAN, since it did the same
+			secMan.storeRemoteEI(this.nodeId, command.receiverEI);
+		}
+
+		// Tell the driver to re-send the current message if necessary
+		this.driver.resendS2EncapsulatedCommand();
 	}
 
 	private busyPollingAfterHail: boolean = false;
@@ -2288,12 +2508,12 @@ protocol version:      ${this._protocolVersion}`;
 			// we've already measured the wake up interval, so we can check whether a refresh is necessary
 			const wakeUpInterval =
 				this.getValue<number>(getWakeUpIntervalValueId()) ?? 1;
-			// The wakeup interval is specified in seconds. Also add 5 seconds tolerance to avoid
+			// The wakeup interval is specified in seconds. Also add 5 minutes tolerance to avoid
 			// unnecessary queries since there might be some delay. A wakeup interval of 0 means manual wakeup,
 			// so the interval shouldn't be verified
 			if (
 				wakeUpInterval > 0 &&
-				(now - this.lastWakeUp) / 1000 > wakeUpInterval + 5
+				(now - this.lastWakeUp) / 1000 > wakeUpInterval + 5 * 60
 			) {
 				this.commandClasses["Wake Up"].getInterval().catch(() => {
 					// Don't throw if there's an error
@@ -2389,7 +2609,7 @@ protocol version:      ${this._protocolVersion}`;
 				});
 			} catch (e) {
 				this.driver.controllerLog.logNode(this.id, {
-					message: `error during API call: ${e}`,
+					message: `error during API call: ${getErrorMessage(e)}`,
 					direction: "none",
 					level: "warn",
 				});
@@ -2874,7 +3094,7 @@ protocol version:      ${this._protocolVersion}`;
 					`Failed to start the update: The node does not support upgrading a different firmware target than 0!`,
 					ZWaveErrorCodes.FirmwareUpdateCC_TargetNotFound,
 				);
-			} else if (!meta.additionalFirmwareIDs.includes(target)) {
+			} else if (meta.additionalFirmwareIDs[target - 1] == undefined) {
 				throw new ZWaveError(
 					`Failed to start the update: Firmware target #${target} not found on this node!`,
 					ZWaveErrorCodes.FirmwareUpdateCC_TargetNotFound,
@@ -3006,7 +3226,7 @@ protocol version:      ${this._protocolVersion}`;
 			// Clean up
 			this._firmwareUpdateStatus = undefined;
 			this.keepAwake = false;
-		} catch (e: unknown) {
+		} catch (e) {
 			if (
 				isZWaveError(e) &&
 				e.code === ZWaveErrorCodes.Controller_NodeTimeout
@@ -3224,7 +3444,7 @@ protocol version:      ${this._protocolVersion}`;
 				);
 
 			this.handleFirmwareUpdateStatusReport(report);
-		} catch (e: unknown) {
+		} catch (e) {
 			if (
 				isZWaveError(e) &&
 				e.code === ZWaveErrorCodes.Controller_NodeTimeout
@@ -3311,9 +3531,16 @@ protocol version:      ${this._protocolVersion}`;
 					: undefined,
 			supportsSecurity: this.supportsSecurity,
 			supportsBeaming: this.supportsBeaming,
-			isSecure: this.isSecure ?? unknownBoolean,
+			securityClasses: {} as JSONObject,
 			commandClasses: {} as JSONObject,
 		};
+		// Save security classes where they are known
+		for (const secClass of securityClassOrder) {
+			const hasClass = this.hasSecurityClass(secClass);
+			if (typeof hasClass === "boolean") {
+				ret.securityClasses[SecurityClass[secClass]] = hasClass;
+			}
+		}
 		// Sort the CCs by their key before writing to the object
 		const sortedCCs = [...this.implementedCommandClasses.keys()].sort(
 			(a, b) => Math.sign(a - b),
@@ -3394,9 +3621,25 @@ protocol version:      ${this._protocolVersion}`;
 			this._isFrequentListening = "1000ms";
 		}
 		tryParse("isRouting", "boolean");
-		// isSecure may be boolean or "unknown"
-		tryParse("isSecure", "string");
-		tryParse("isSecure", "boolean");
+		// Parse security classes
+		if (isObject(obj.securityClasses)) {
+			for (const [key, val] of Object.entries(obj.securityClasses)) {
+				if (
+					key in SecurityClass &&
+					typeof (SecurityClass as any)[key] === "number" &&
+					typeof val === "boolean"
+				) {
+					this.securityClasses.set((SecurityClass as any)[key], val);
+				}
+			}
+		} else if (typeof obj.isSecure === "boolean") {
+			// Fallback to "isSecure" === S0 for legacy cache files
+			this.securityClasses.set(SecurityClass.S0_Legacy, obj.isSecure);
+
+			this.securityClasses.set(SecurityClass.S2_AccessControl, false);
+			this.securityClasses.set(SecurityClass.S2_Authenticated, false);
+			this.securityClasses.set(SecurityClass.S2_Unauthenticated, false);
+		}
 		tryParse("supportsSecurity", "boolean");
 		tryParse("supportsBeaming", "boolean");
 		tryParseLegacy(["supportsBeaming", "isBeaming"], ["string"]);
@@ -3517,7 +3760,10 @@ protocol version:      ${this._protocolVersion}`;
 							);
 						} catch (e) {
 							this.driver.controllerLog.logNode(this.id, {
-								message: `Error during deserialization of CC value metadata from cache:\n${e}`,
+								message: `Error during deserialization of CC value metadata from cache:\n${getErrorMessage(
+									e,
+									true,
+								)}`,
 								level: "error",
 							});
 						}
@@ -3540,7 +3786,10 @@ protocol version:      ${this._protocolVersion}`;
 							);
 						} catch (e) {
 							this.driver.controllerLog.logNode(this.id, {
-								message: `Error during deserialization of CC values from cache:\n${e}`,
+								message: `Error during deserialization of CC values from cache:\n${getErrorMessage(
+									e,
+									true,
+								)}`,
 								level: "error",
 							});
 						}

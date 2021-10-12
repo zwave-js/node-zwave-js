@@ -204,11 +204,12 @@
 		{
 			"#": "38",
 			"label": "UP Power Associated",
-			"description": "Defines the status of Group 2 devices",
+			"description": "Defines the status of Group 2 devices. Allowable range: 0-99, 255",
 			"valueSize": 1,
-			"minValue": -1,
-			"maxValue": 99,
-			"defaultValue": 0
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 0,
+			"unsigned": true
 		},
 		{
 			"#": "39",
@@ -259,11 +260,12 @@
 		{
 			"#": "42",
 			"label": "DOWN Power Associated",
-			"description": "Defines the status of Group 3 devices",
+			"description": "Defines the status of Group 3 devices. Allowable range: 0-99, 255",
 			"valueSize": 1,
-			"minValue": -1,
-			"maxValue": 99,
-			"defaultValue": 0
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 0,
+			"unsigned": true
 		},
 		{
 			"#": "43",

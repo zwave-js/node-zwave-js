@@ -69,7 +69,6 @@ export async function reportMissingDeviceConfig(
 				AssociationGroupInfoCC,
 			)!;
 			const associationGroupCount =
-				// wotan-disable-next-line no-restricted-property-access
 				instance["getAssociationGroupCountCached"]();
 			const names: string[] = [];
 			for (let group = 1; group <= associationGroupCount; group++) {

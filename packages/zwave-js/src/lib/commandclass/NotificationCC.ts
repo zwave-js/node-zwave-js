@@ -853,7 +853,6 @@ export class NotificationCCReport extends NotificationCC {
 							)) {
 								if (typeof val === "number") {
 									this.eventParameters[key] = val;
-									// wotan-disable-next-line no-useless-predicate
 								} else if (val === "alarmLevel") {
 									this.eventParameters[key] = this.alarmLevel;
 								}
@@ -1075,7 +1074,7 @@ export class NotificationCCReport extends NotificationCC {
 						json = pick(json, ["payload"]);
 					}
 					this.eventParameters = json;
-				} catch (e: unknown) {
+				} catch (e) {
 					if (
 						isZWaveError(e) &&
 						e.code ===

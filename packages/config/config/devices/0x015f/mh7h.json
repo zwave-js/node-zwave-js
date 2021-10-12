@@ -10,7 +10,8 @@
 		},
 		{
 			"productType": "0x0702",
-			"productId": "0x5102"
+			"productId": "0x5102",
+			"zwaveAllianceId": [2900, 3846, 3847]
 		},
 		{
 			"productType": "0x0712",
@@ -25,7 +26,13 @@
 		"min": "0.0",
 		"max": "255.255"
 	},
-	"supportsZWavePlus": true,
+	"associations": {
+		"1": {
+			"label": "Lifeline",
+			"maxNodes": 5,
+			"isLifeline": true
+		}
+	},
 	"paramInformation": [
 		{
 			"#": "1",
@@ -117,5 +124,11 @@
 			"unsigned": true,
 			"writeOnly": true
 		}
-	]
+	],
+	"metadata": {
+		"inclusion": "In normal working interface, press & hold S4 to enter interface for adding or removing of Z-Wave network. Before device added into network, “- - -” will display on the screen. Then press S4 once, device will enter learning mode to get a node ID. If adding is succeed, a node ID will display on the screen in a few seconds. \n\nA node ID can always inform us whether the device is in the network or not.\n\nAfter adding, turn off the device and then turn it on. Now the device is ready to be operated by controller/ gateway in Z-Wave network.",
+		"exclusion": "In normal working interface, press & hold S4 to enter interface for adding or removing of Z-Wave network. Before device removed from network, a Node ID will display on the screen. Then press S4 once. If removing is succeed, “- - -”will display on the screen in a few seconds. \n\nA node ID can always inform us whether the device is in the network or not.When removed, the device will restore its factory setting.",
+		"reset": "A parameter P18 in the secret menu can be used to restore factory setting locally. Please use this procedure only when the network primary controller is missing or otherwise inoperable. ; And a parameter FF can be used to restore the factory setting via Z-Wave",
+		"manual": "https://products.z-wavealliance.org/ProductManual/File?folder=&filename=MarketCertificationFiles/2900/MH7H%20User%20Manual.pdf"
+	}
 }

@@ -603,6 +603,22 @@
 					"name": "user ID"
 				}
 			},
+			"0x21": {
+				"label": "Lock operation with User Code",
+				// Param contains UserCodeCC User Identifier (2 bytes)
+				"params": {
+					"type": "value",
+					"name": "user ID"
+				}
+			},
+			"0x22": {
+				"label": "Unlock operation with User Code",
+				// Param contains UserCodeCC User Identifier (2 bytes)
+				"params": {
+					"type": "value",
+					"name": "user ID"
+				}
+			},
 			"0x41": {
 				"label": "Barrier operation (open/close) force has been exceeded"
 			},

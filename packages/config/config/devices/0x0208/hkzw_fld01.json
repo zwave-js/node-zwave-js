@@ -1,8 +1,8 @@
 {
 	"manufacturer": "HANK Electronics Ltd.",
 	"manufacturerId": "0x0208",
-	"label": "HKZW_FLD01",
-	"description": "Flood Sensor FLD01",
+	"label": "HKZW-FLD01",
+	"description": "Flood Sensor",
 	"devices": [
 		{
 			"productType": "0x0200",
@@ -159,7 +159,7 @@
 		{
 			"#": "24",
 			"label": "Blinking LED",
-			"description": "Enable/Disable blinking LED when alarm being triggerd",
+			"description": "Enable/Disable blinking LED when alarm being triggered",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 1,

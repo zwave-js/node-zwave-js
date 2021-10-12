@@ -158,5 +158,11 @@
 				}
 			]
 		}
-	]
+	],
+	"compat": {
+		// The device has multiple endpoints, but doesn't seem to use multi channel encapsulation
+		// for unsolicited reports. By preserving the root endpoint values, users can use polling
+		// to update the endpoint values.
+		"preserveRootApplicationCCValueIDs": true
+	}
 }

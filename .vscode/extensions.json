@@ -2,7 +2,6 @@
 	"recommendations": [
 		"rebornix.project-snippets",
 		"dbaeumer.vscode-eslint",
-		"Orta.vscode-jest",
 		"esbenp.prettier-vscode",
 		"EditorConfig.EditorConfig",
 		"eamodio.toggle-excluded-files",

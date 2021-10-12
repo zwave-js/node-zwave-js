@@ -1,13 +1,27 @@
 import {
+	actuatorCCs,
+	CommandClasses,
 	isZWaveError,
+	TranslatedValueID,
 	ValueID,
+	valueIdToString,
+	ValueMetadata,
+	ValueMetadataNumeric,
 	ZWaveError,
 	ZWaveErrorCodes,
 } from "@zwave-js/core";
+import { distinct } from "alcalzone-shared/arrays";
 import type { CCAPI, SetValueAPIOptions } from "../commandclass/API";
 import type { Driver } from "../driver/Driver";
 import type { ZWaveNode } from "./Node";
 import { VirtualEndpoint } from "./VirtualEndpoint";
+
+export interface VirtualValueID extends TranslatedValueID {
+	/** The metadata that belongs to this virtual value ID */
+	metadata: ValueMetadata;
+	/** The maximum supported CC version among all nodes targeted by this virtual value ID */
+	ccVersion: number;
+}
 
 export class VirtualNode extends VirtualEndpoint {
 	public constructor(
@@ -71,7 +85,7 @@ export class VirtualNode extends VirtualEndpoint {
 			}
 
 			return true;
-		} catch (e: unknown) {
+		} catch (e) {
 			// Define which errors during setValue are expected and won't crash
 			// the driver:
 			if (isZWaveError(e)) {
@@ -94,6 +108,80 @@ export class VirtualNode extends VirtualEndpoint {
 			}
 			throw e;
 		}
+	}
+
+	/**
+	 * Returns a list of all value IDs and their metadata that can be used to
+	 * control the physical node(s) this virtual node represents.
+	 */
+	public getDefinedValueIDs(): VirtualValueID[] {
+		// If all nodes are secure, we can't use broadcast/multicast commands
+		if (this.physicalNodes.every((n) => n.isSecure === true)) return [];
+
+		// In order to compare value ids, we need them to be strings
+		const ret = new Map<string, VirtualValueID>();
+
+		for (const pNode of this.physicalNodes) {
+			// Secure nodes cannot be used for broadcast
+			if (pNode.isSecure === true) continue;
+
+			// Take only the actuator values
+			const valueIDs: TranslatedValueID[] = pNode
+				.getDefinedValueIDs()
+				.filter((v) => actuatorCCs.includes(v.commandClass));
+			// And add them to the returned array if they aren't included yet or if the version is higher
+
+			for (const valueId of valueIDs) {
+				const mapKey = valueIdToString(valueId);
+				const ccVersion = pNode.getCCVersion(valueId.commandClass);
+				const metadata = pNode.getValueMetadata(valueId);
+				// Don't expose read-only values for virtual nodes, they won't ever have any value
+				if (!metadata.writeable) continue;
+
+				const needsUpdate =
+					!ret.has(mapKey) || ret.get(mapKey)!.ccVersion < ccVersion;
+				if (needsUpdate) {
+					ret.set(mapKey, {
+						...valueId,
+						ccVersion,
+						metadata: {
+							...metadata,
+							// Metadata of virtual nodes is only writable
+							readable: false,
+						},
+					});
+				}
+			}
+		}
+
+		// Basic CC is not exposed, but virtual nodes need it to control multiple different devices together
+		const exposedEndpoints = distinct(
+			[...ret.values()]
+				.map((v) => v.endpoint)
+				.filter((e): e is number => e !== undefined),
+		);
+		for (const endpoint of exposedEndpoints) {
+			// TODO: This should be defined in the Basic CC file
+			const valueId: TranslatedValueID = {
+				commandClass: CommandClasses.Basic,
+				commandClassName: "Basic",
+				endpoint,
+				property: "targetValue",
+				propertyName: "Target value",
+			};
+			const ccVersion = 1;
+			const metadata: ValueMetadataNumeric = {
+				...ValueMetadata.WriteOnlyUInt8,
+				label: "Target value",
+			};
+			ret.set(valueIdToString(valueId), {
+				...valueId,
+				ccVersion,
+				metadata,
+			});
+		}
+
+		return [...ret.values()];
 	}
 
 	/** Cache for this node's endpoint instances */
@@ -147,7 +235,6 @@ export class VirtualNode extends VirtualEndpoint {
 
 	private get isMultiChannelInterviewComplete(): boolean {
 		for (const node of this.physicalNodes) {
-			// wotan-disable-next-line no-restricted-property-access
 			if (!node["isMultiChannelInterviewComplete"]) return false;
 		}
 		return true;

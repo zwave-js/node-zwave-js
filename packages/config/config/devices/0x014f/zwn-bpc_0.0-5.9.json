@@ -31,5 +31,9 @@
 			"defaultValue": 1,
 			"unsigned": true
 		}
-	]
+	],
+	"compat": {
+		// This device uses Basic Set to report the motion sensor status
+		"enableBasicSetMapping": true
+	}
 }

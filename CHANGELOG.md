@@ -5,18 +5,250 @@
 	Add placeholder for next release with `wip` snippet
   ## __WORK IN PROGRESS__
 -->
-## __WORK IN PROGRESS__
+## 8.5.0 (2021-10-11)
+### Features
+* Export `getAPI` through `zwave-js/CommandClass`
+* Add `getDefinedValueIDs` for virtual nodes
+
+### Bugfixes
+* Avoid including `undefined` properties in configuration metadata
+* Add debug logging to `configureLifelineAssociations`, always query normal association groups
+* Remove Security S0/S2 from mandatory CCs in Device Classes configuration
+* Refresh associations after removing invalid destinations
+* Don't wait for node ACK after `Security 2 CC::TransferEnd`
+* Increase tolerance for wakeup interval to 5 minutes without auto-refreshing the interval
+* Remove `securityClasses` property from `SecurityClassOwner` interface to fix TypeScript error
+* Filter out corrupted `Meter CC Reports` and `Multilevel Sensor CC Reports`
+* Added a fallback for NVM backup when the initial response contains an empty buffer
+
+### Config file changes
+* Change NAS-PD07Z parameters to match actual device configuration
+* Delete duplicate config file for Fakro ZWS230
+* Update ZCOMBO-G units/metadata
+* Add fingerprint to BeNext Energy switch
+* Add support for Sensative AB Strips Drip 700
+* Spelling mistake in manufacturer name
+* Add Sunricher RGBW and CCT wall controllers
+* Add firmware version 1.6 to Zooz ZEN22
+* Force scene count of VRCS4 and VRCZ4 to 8
+* Add Aeotec illumino switches
+
+### Changes under the hood
+* Add support for prebuilt Gitpod instances to simplify contributing without installing VSCode locally
+* Dependency updates
+
+## 8.4.1 (2021-09-27)
+### Bugfixes
+* Responses to secure `Supervision CC::Get` commands are now correctly sent with security encapsulation if required
+* Errors in application-provided callbacks for Security S2 bootstrapping are now caught
+
+### Config file changes
+* Auto-idle notifications for Ecolink DWZWAVE25
+
+### Changes under the hood
+* Fixed the workflow for creating test releases from PRs
+
+## 8.4.0 (2021-09-26)
+### Features
+* Added a compat flag to override the number of scenes accessible to `Scene Controller Configuration CC`
+* Experimental support for Wake Up on demand
+* The values of `Scene Actuator Configuration CC` are now pre-created during the node interview
+
+### Bugfixes
+* CCs that are removed via a configuration files now stay removed after the `Security S0/S2` interview
+* Implemented a workaround for the incorrect `Serial API Setup Sub Command` bitmask encoding in 700 series sticks with a firmware of 7.15 or higher
+* Rename consumed/produced in meter labels to consumption/production
+
+### Config file changes
+* Add fingerprint `0xa803:0x1352` to McoHome A8-9
+* Add Neo Coolcam NAS-PD07Z Motion Sensor 5in1
+* Add NIE Tech / Eva Logik ZW96
+* Add Aibase A19 LED Bulb
+* Add Aibase Water Leak Sensor
+* Add templating and remove unnecessary parameters
+* Add device identifier for MCOHome MH10-PM2.5
+* Add missing parameters to Zooz ZEN15
+* Add fingerprint `0x1301:0x4001` to "Fibargroup FGT001"
+* Add Nortek WO15EMZ5
+* Correct units for Fibaro FGS-224 and FGS-214 params 154 and 155
+* Update Philio PSM02 Configuration
+* Use unsigned for config parameters setting Basic Set levels
+* Add fingerprint to Fakro ZWS230
+* Add fingerprint to OOMI Color Strip
+* Disable Basic CC mapping for Eaton/Aspire RFWC5
+* Add fingerprint to Popp & Co POPE700342
+* Update Philio PST02A and PST02B to use partial config parameters (5, 6, 7)
+
+### Changes under the hood
+* Fixed a bug in ConfigManager tests that led to a folder with name `undefined` being created
+
+## 8.3.1 (2021-09-14)
+### Config file changes
+* Add fingerprint `0xaa00:0xaa02` to `NIE Technology Co., Ltd. ZW31`
+* Preserve root endpoint values for Everspring ST814
+
+### Changes under the hood
+* Add Node.js 16.9.1+ to the range of supported versions.
+
+## 8.3.0 (2021-09-12)
+Shoutout to @Ikcelaks and @IvanBrazza, who've contributed the main features in this release!
+
+### Features
+* Support reacting to SupervisionCC::Get
+* Add setting `dimmingDuration` for `Scene Actuator Configuration CC` with `setValue` API
+* Add setting `dimmingDuration` for `Scene Controller Configuration CC` with `setValue` API
+
+### Bugfixes
+* Correctly determine the capabilities of endpoints during Security S2 interview
+
+### Config file changes
+* Enable basic set mapping for ZWN-BPC variants
+* Force Multilevel Switch CC to be supported in MCOHome MH-C221
+* Add product ID for EU version of Ring Contact Sensor v2
+* Remove Z-Wave Plus CC from GE 14318
+* Add product id 0x0103 to Aeotec ZW141
+* Add Minoston mp21zp config file
+* Add fingerprint to Logic Group ZSO7300
+* Reduce parameter 9's minValue to 0 for Zooz ZEN24 4.0
+
+### Changes under the hood
+* Node.js 16.9.0 causes crashes in testing, so we cannot verify that Z-Wave JS works correctly with it. Until that bug is fixed, we've removed Node.js 16.9.0 from the range of supported versions.
+
+## 8.2.3 (2021-09-06)
+### Bugfixes
+* Interpret wait time after firmware update as seconds, not milliseconds
+* Fall back to interpreting OTA/OTZ firmware files as binary, if they aren't in Intel HEX format
+* Guard against invalid inclusion strategies, log which one was chosen
+
+### Config file changes
+* Add fingerprint `0x0005:0x0112` to "Fakro AMZ Solar"
+* Add config for Minoston MP21ZD
+* Add metadata + units to Namron Z-Wave Dimmer2 400W
+* Add metadata to Namron Z-Wave Dimmer 400W
+* Correct Aeotec ZWA011 and ZWA012 parameters
+* Add Zooz ZAC36 water valve
+* Add support for HE-TPS05
+* Add support for FGWCEU-201
+
+### Changes under the hood
+* Documentation: Mention that an option for **S0 only** inclusion must exist
+* Updated some dependencies
+
+## 8.2.2 (2021-09-02)
+### Bugfixes
+* Handle missing S2 keys more gracefully
+
+### Config file changes
+* Disable strict entry control validation for Ring Keypad v2
+* Add HeatIt Z Push Button 2
+* Add support for Zipato PH-PSE02
+* Add new Zooz devices ZSE41/ZSE42; fix ZEN15 parameter 30
+* Clean up config file for FGFS-101
+* Add support for Namron Dimmer 400W
+
+### Changes under the hood
+* Upgrade to TypeScript 4.4
+
+## 8.2.1 (2021-08-25)
+### Bugfixes
+* Fixed an invalid definition in the sensor types configuration file
+
+### Config file changes
+* Add fingerprint for Fibaro FGFS
+
+## 8.2.0 (2021-08-25)
+### Features
+* Add new `ConfigManager` properties to expose the remaining config maps
+
+### Bugfixes
+* Print less intimidating logs for missing S2 keys during decryption
+* Clarify error messages in the log when S0/S2 keys are missing
+* When converting pre-8.1 cache files, treat the nodes as not having any S2 security classes
+
+### Config file changes
+* Add fingerprint to Ring 1st Gen Range Extender config
+* Cleanup device file for Fibaro button
+* Add metadata to Nortek devices
+* Correct ZWA012 parameters indexing
+* Add association config for Vision ZM1701
+* Update Hank Electronics devices
+
+### Changes under the hood
+* Move more scale definitions into `scales.json`
+
+## 8.1.1 (2021-08-17)
+### Bugfixes
+* Added a missing `| undefined` to the deprecated `beginInclusion` signature
+* Fixed a check when replacing a node with another one that should use encryption
+
+## 8.1.0 (2021-08-15) · _„Hell, it's about damn time”_
+### Features
+Just one, but it's a big one: We added support for **Security S2** inclusion and singlecast communication 🎉.  
+As it looks like, **Z-Wave JS** is the first open source library to support **Security S2**.
+
+If you plan to add support in your application, see the [documentation](https://zwave-js.github.io/node-zwave-js/#/getting-started/security-s2) and [PR description](https://github.com/zwave-js/node-zwave-js/pull/1136) for details - this also requires UI changes.
+
+### Bugfixes
+* The firmware target selection for targets other than 0 no longer incorrectly complains about an incorrect target
+* Avoid writing into `node_modules` when updating an external configuration directory
+* When an endpoint shares its lifeline with the root (i.e. has 0 max. associations), the root's associations are now ignored when determining how the endpoints's associations should be configured
+
+### Config file changes
+* Add another product ID variant to Yale YRD210
+* Update and cleanup Fibaro Walli Double Switch
+* Preserve root endpoint values for TZ06
+* Allow manual entry for Zooz ZSE11 Param 12
+* Add missing fingerprint to MCOHome MH9-CO2-WD
+* Fix Heltun HE-RS01 parameters 41-45
+
+## 8.0.8 (2021-08-04)
+### Bugfixes
+* ~~The firmware target selection for targets other than 0 no longer incorrectly complains about an incorrect target~~
+
+### Config file changes
+* Add Silabs UZB3 500 series controller device
+* Correct parameter 81 for Aeotec ZW100
+* Add MCO Home MH5-2a and MH-S510, correct others
+* Updates to Fibaro FGS223 and FGD212
+* Add groups for Heatit Smoke Battery
+* Add support for HELTUN HE-HLS01, HE-HT01, HE-RS01
+* Update Fibaro FGT001 for v8 changes, preserve root and endpoint 2
+* Map root reports to endpoint 1 for Fibaro FGS211/221
+* Add option 11 to ZEN17 parameters 2 and 3
+* Update non-device configs (indicators, notifications, ...) to certification package 2020C
+
+## 8.0.7 (2021-08-02)
+### Bugfixes
+Improved the heuristic for lifeline associations, which should resolve some reporting issues with devices:
+* If the root endpoint of a device is configured to use a node association, the fallback for the other endpoints no longer creates a multi channel association on the root endpoint
+* If the endpoints of a multi channel device don't support associations, the default lifeline on the root device will be configured as a multi channel association
+
+### Config file changes
+* Correct values sizes for zw096/zw099
+* Correct device file for Ecolink ISZW7
+* Preserve root endpoint values for Aeotec DSB09
+
+## 8.0.6 (2021-07-28)
 ### Bugfixes
 * The detection whether a config file is considered embedded or user-provided now takes `ZWAVEJS_EXTERNAL_CONFIG` into account.
 * Improved the error message when the cache directory cannot be written to
+* Avoid overwriting the `.json` cache file with empty data on shutdown
+* Removing associations from non-multichannel groups now works correctly
+* The endpoint device class is now stored correctly when all endpoints have identical capabilities
+* Fixed a crash that happened when trying to determine if all endpoints are the same device class and the device class hasn't been stored before
+* Added missing metadata definitions to `Version CC` fields
 
 ### Config file changes
 * Add NAS-PD03Z Motion Sensor 3
 * Template other Shenzhen Neo motion sensors
 * Map root reports to endpoint 1 for CT101
+* Add missing LED Light param to GE/Jasco 46202 and 14292
+* Add missing param and metadata for GE/Jasco 46203
+* Add fingerprint to Aeotec ZWA009
 
 ### Changes under the hood
 * Added regression tests for this oddysey of config loading fixes
+* Added a bot command to add new fingerprints to existing config files
 
 ## 8.0.5 (2021-07-22)
 ### Bugfixes

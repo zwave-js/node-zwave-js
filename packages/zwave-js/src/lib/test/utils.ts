@@ -1,5 +1,4 @@
 /* eslint-disable @typescript-eslint/no-empty-function */
-/* wotan-disable no-restricted-property-access */
 
 import { MockSerialPort } from "@zwave-js/serial";
 import type { DeepPartial } from "@zwave-js/shared";

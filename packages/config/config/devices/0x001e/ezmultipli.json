@@ -39,11 +39,12 @@
 		{
 			"#": "2",
 			"label": "OnLevel",
-			"unit": "Percent",
+			"description": "Allowable range: 0-99, 255",
 			"valueSize": 1,
-			"minValue": -1,
-			"maxValue": 99,
-			"defaultValue": -1
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 255,
+			"unsigned": true
 		},
 		{
 			"#": "3",

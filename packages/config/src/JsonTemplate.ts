@@ -1,4 +1,5 @@
 import { ZWaveError, ZWaveErrorCodes } from "@zwave-js/core";
+import { getErrorMessage } from "@zwave-js/shared";
 import { isArray, isObject } from "alcalzone-shared/typeguards";
 import * as fs from "fs-extra";
 import JSON5 from "json5";
@@ -165,9 +166,9 @@ async function readJsonWithTemplateInternal(
 			fileCache.set(filename, json);
 		} catch (e) {
 			throw new ZWaveError(
-				`Could not parse config file ${filename}: ${
-					e.message
-				}${getImportStack(visited, selector)}`,
+				`Could not parse config file ${filename}: ${getErrorMessage(
+					e,
+				)}${getImportStack(visited, selector)}`,
 				ZWaveErrorCodes.Config_Invalid,
 			);
 		}

@@ -2,6 +2,7 @@
 
     -   [Introduction](README.md)
     -   [Quick Start](getting-started/quickstart.md)
+    -   [Security S2](getting-started/security-s2.md)
     -   [Migrating to v6](getting-started/migrating-to-v6.md)
     -   [Migrating to v7](getting-started/migrating-to-v7.md)
     -   [Migrating to v8](getting-started/migrating-to-v8.md)
@@ -14,6 +15,7 @@
     -   [Controller](api/controller.md)
     -   [ZWaveNode](api/node.md)
     -   [Endpoint](api/endpoint.md)
+    -   [Virtual nodes and endpoints](api/virtual-node-endpoint.md)
     -   [Values and Metadata](api/valueid.md)
     -   [ConfigManager](api/config-manager.md)
     -   [Command Classes](api/CCs/index.md)

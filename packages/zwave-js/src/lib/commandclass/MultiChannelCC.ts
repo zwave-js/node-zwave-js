@@ -115,11 +115,13 @@ function areAllEndpointsDifferent(
 	const deviceClasses = new Set<number>();
 	for (const endpoint of endpointIndizes) {
 		const devClassValueId = getEndpointDeviceClassValueId(endpoint);
-		const { generic, specific } =
+		const deviceClass =
 			node.getValue<{ generic: number; specific: number }>(
 				devClassValueId,
-			)!;
-		deviceClasses.add(generic * 256 + specific);
+			);
+		if (deviceClass) {
+			deviceClasses.add(deviceClass.generic * 256 + deviceClass.specific);
+		}
 	}
 	return deviceClasses.size === endpointIndizes.length;
 }
@@ -466,6 +468,13 @@ identical capabilities:      ${multiResponse.identicalCapabilities}`;
 				});
 
 				// copy the capabilities from the first endpoint
+				const devClass = this.getValueDB().getValue(
+					getEndpointDeviceClassValueId(allEndpoints[0]),
+				);
+				this.getValueDB().setValue(
+					getEndpointDeviceClassValueId(endpoint),
+					devClass,
+				);
 				const ep1Caps = this.getValueDB().getValue<CommandClasses[]>(
 					getEndpointCCsValueId(allEndpoints[0]),
 				)!;

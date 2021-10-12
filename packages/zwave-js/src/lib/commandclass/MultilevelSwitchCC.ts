@@ -347,7 +347,6 @@ export class MultilevelSwitchCCAPI extends CCAPI {
 							?.supportsCC(CommandClasses.Supervision)
 					) {
 						// We query currentValue instead of targetValue to make sure that unsolicited updates cancel the scheduled poll
-						// wotan-disable-next-line no-useless-predicate
 						if (property === "targetValue")
 							property = "currentValue";
 						this.schedulePoll(
@@ -381,7 +380,6 @@ export class MultilevelSwitchCCAPI extends CCAPI {
 						// However, when setting the value 255 (ON), we don't know the actual state
 
 						// We query currentValue instead of targetValue to make sure that unsolicited updates cancel the scheduled poll
-						// wotan-disable-next-line no-useless-predicate
 						if (property === "targetValue")
 							property = "currentValue";
 						// TODO: #1321

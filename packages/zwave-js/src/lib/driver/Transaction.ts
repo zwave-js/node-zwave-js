@@ -34,6 +34,9 @@ export class Transaction implements Comparable<Transaction> {
 	/** Whether the node status should be updated when this transaction times out */
 	public changeNodeStatusOnTimeout: boolean = true;
 
+	/** If a Wake Up On Demand should be requested for the target node. */
+	public requestWakeUpOnDemand: boolean = false;
+
 	/** Internal information used to identify or mark this transaction */
 	public tag?: any;
 

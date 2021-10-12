@@ -39,12 +39,12 @@
 		{
 			"#": "2",
 			"label": "Dim Level",
-			"description": "Sets the dim level; -1 for full on",
-			"unit": "%",
+			"description": "Allowable range: 0-99, 255",
 			"valueSize": 1,
-			"minValue": -1,
-			"maxValue": 99,
-			"defaultValue": -1
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 255,
+			"unsigned": true
 		},
 		{
 			"#": "3",

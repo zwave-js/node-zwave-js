@@ -1,0 +1,105 @@
+{
+	"manufacturer": "McoHome Technology Co., Ltd.",
+	"manufacturerId": "0x015f",
+	"label": "MH-S510",
+	"description": "Touch Panel Switch",
+	"devices": [
+		{
+			"productType": "0x5131",
+			"productId": "0x5101",
+			"zwaveAllianceId": 3674
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"associations": {
+		"1": {
+			"label": "Lifeline",
+			"maxNodes": 1,
+			"isLifeline": true
+		}
+	},
+	"paramInformation": [
+		{
+			"#": "2",
+			"$import": "~/templates/master_template.json#state_after_power_failure_off_prev"
+		},
+		{
+			"#": "4",
+			"label": "LED Indicator: Brightness",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 10,
+			"defaultValue": 10,
+			"unsigned": true
+		},
+		{
+			"#": "5",
+			"label": "Key Mode",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 2,
+			"defaultValue": 0,
+			"unsigned": true,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Switch on/off",
+					"value": 0
+				},
+				{
+					"label": "Turn on for key duration",
+					"value": 1
+				},
+				{
+					"label": "Turn off for key duration",
+					"value": 2
+				}
+			]
+		},
+		{
+			"#": "6",
+			"label": "Key Duration",
+			"valueSize": 2,
+			"unit": "seconds",
+			"minValue": 0,
+			"maxValue": 32767,
+			"defaultValue": 0,
+			"unsigned": true,
+			"options": [
+				{
+					"label": "Infinite",
+					"value": 0
+				}
+			]
+		},
+		{
+			"#": "7",
+			"label": "External Aux Switch Type",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 0,
+			"unsigned": true,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Momentary",
+					"value": 0
+				},
+				{
+					"label": "Toggle",
+					"value": 1
+				}
+			]
+		}
+	],
+	"metadata": {
+		"inclusion": "1. Set controller into ADD mode. Follow instructions provided by controller manufacturer.\n2. Press and hold any key on the panel for 8 seconds or 3 clicks in quick succession. \nNote: If the ADD is successful, all INDICATION LEDs on the panel will flash 4 times.",
+		"exclusion": "1. Set controller into REMOVE mode. Follow instructions provided by controller manufacturer.\n2. Press and hold any key on the panel for 8 seconds or 3 clicks in quick succession.\nNote: If the REMOVE is successful, all INDICATION LEDs on the panel will flash 4 times. The REMOVE will delete all association data.",
+		"reset": "Press 20 times of any button (the interval time of touching is less than 500 milliseconds and the relay will keep same state after continually touching more than five times) or exclude the device from Z-Wave network, the factory setting will be restored.\nPlease use this procedure only when the network primary controller is missing or otherwise inoperable",
+		"manual": "https://products.z-wavealliance.org/ProductManual/File?folder=&filename=product_documents/3674/MH%20S510%20user%20manual.pdf"
+	}
+}

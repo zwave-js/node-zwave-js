@@ -170,11 +170,16 @@
 		{
 			"#": "15",
 			"label": "Reset to Factory Default",
-			"description": "-1 (0xff) - reset the device",
 			"valueSize": 1,
-			"minValue": -1,
-			"maxValue": 0,
-			"defaultValue": 0
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 0,
+			"unsigned": true,
+			"allowManualEntry": false,
+			"options": [
+				{ "label": "idle", "value": 0 },
+				{ "label": "Factory reset", "value": 255 }
+			]
 		}
 	],
 	"metadata": {
