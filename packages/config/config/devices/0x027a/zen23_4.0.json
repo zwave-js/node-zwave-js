@@ -13,7 +13,6 @@
 		"min": "4.0",
 		"max": "255.255"
 	},
-	"supportsZWavePlus": true,
 	"associations": {
 		"1": {
 			"label": "Lifeline",
