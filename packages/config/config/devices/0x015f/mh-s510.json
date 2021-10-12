@@ -21,11 +21,13 @@
 			"isLifeline": true
 		}
 	},
-	"paramInformation": {
-		"2": {
+	"paramInformation": [
+		{
+			"#": "2",
 			"$import": "~/templates/master_template.json#state_after_power_failure_off_prev"
 		},
-		"4": {
+		{
+			"#": "4",
 			"label": "LED Indicator: Brightness",
 			"valueSize": 1,
 			"minValue": 0,
@@ -33,7 +35,8 @@
 			"defaultValue": 10,
 			"unsigned": true
 		},
-		"5": {
+		{
+			"#": "5",
 			"label": "Key Mode",
 			"valueSize": 1,
 			"minValue": 0,
@@ -56,7 +59,8 @@
 				}
 			]
 		},
-		"6": {
+		{
+			"#": "6",
 			"label": "Key Duration",
 			"valueSize": 2,
 			"unit": "seconds",
@@ -71,7 +75,8 @@
 				}
 			]
 		},
-		"7": {
+		{
+			"#": "7",
 			"label": "External Aux Switch Type",
 			"valueSize": 1,
 			"minValue": 0,
@@ -90,7 +95,7 @@
 				}
 			]
 		}
-	},
+	],
 	"metadata": {
 		"inclusion": "1. Set controller into ADD mode. Follow instructions provided by controller manufacturer.\n2. Press and hold any key on the panel for 8 seconds or 3 clicks in quick succession. \nNote: If the ADD is successful, all INDICATION LEDs on the panel will flash 4 times.",
 		"exclusion": "1. Set controller into REMOVE mode. Follow instructions provided by controller manufacturer.\n2. Press and hold any key on the panel for 8 seconds or 3 clicks in quick succession.\nNote: If the REMOVE is successful, all INDICATION LEDs on the panel will flash 4 times. The REMOVE will delete all association data.",

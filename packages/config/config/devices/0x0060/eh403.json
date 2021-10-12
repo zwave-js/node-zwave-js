@@ -14,8 +14,9 @@
 		"min": "0.0",
 		"max": "255.255"
 	},
-	"paramInformation": {
-		"1": {
+	"paramInformation": [
+		{
+			"#": "1",
 			"label": "Pir Trigger Off Period",
 			"description": "Pir trigger off period can be set 8~720 secs",
 			"valueSize": 2,
@@ -24,7 +25,8 @@
 			"defaultValue": 15,
 			"unsigned": true
 		},
-		"2": {
+		{
+			"#": "2",
 			"label": "Lux Sensor Threshold",
 			"description": "Lux sensor threshold can be set 30~200",
 			"valueSize": 2,
@@ -34,7 +36,8 @@
 			"unsigned": true,
 			"writeOnly": true
 		},
-		"3": {
+		{
+			"#": "3",
 			"label": "Lux Auto Report",
 			"description": "Lux auto report can be set 0~1440 minutes",
 			"valueSize": 2,
@@ -44,7 +47,7 @@
 			"defaultValue": 0,
 			"unsigned": true
 		}
-	},
+	],
 	"metadata": {
 		"inclusion": "Auto Inclusion\nThe unit supports Auto Inclusion feature where it will automatically enter Inclusion mode when first powered up after a factory reset.\n\n1. Prepare the Z-Wave controller.\n2. Plug the cable plug to the wall socket to power up the unit.\n3. The Link LED will start to blink slowly with 2-second on, 2-second off (for 2 minutes) which shows the unit does not be paired.\n4. Within 30 seconds, put the Z-Wave Controller into inclusion mode.\n5. The Inclusion process should be completed when the Link LED stops blinking.\n\nNote: If you are connecting this unit to a Z-Wave Controller that utilizes the S2 security protocol, you may be asked by your controller to enter a 5-digit Device Specific Key (DSK) that is unique to each unit. This can be found in one of two places:\n- on the QR code label on the back of the unit\n- on the insert card inside the packaging.\n\n6. Turn on the floodlight using the controller to check if the auto inclusion is working properly.\n\nManual Inclusion\n1. Prepare the Z-Wave controller.\n2. Press the tamper switch 3 times within 1.5 seconds to put the unit into inclusion mode",
 		"exclusion": "1. Put the Z-Wave Controller into exclusion mode.\n2. Press the tamper switch 3 times within 1.5 seconds to put the unit into exclusion mode",

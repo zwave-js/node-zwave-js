@@ -46,7 +46,8 @@ export async function generateCCAPIInterface(): Promise<void> {
 
 	console.log(`Found ${CCsWithAPI.length} API classes...`);
 
-	let apiFileContent = await fs.readFile(apiFile, "utf8");
+	const originalApiFileContent = await fs.readFile(apiFile, "utf8");
+	let apiFileContent = originalApiFileContent;
 
 	// Generate interface
 	let startTokenEnd =
@@ -81,7 +82,11 @@ export async function generateCCAPIInterface(): Promise<void> {
 		apiFileContent.substr(endTokenStart);
 
 	apiFileContent = formatWithPrettier(apiFile, apiFileContent);
-	await fs.writeFile(apiFile, apiFileContent, "utf8");
+	// Only update file if necessary - this reduces build time
+	if (apiFileContent !== originalApiFileContent) {
+		console.log("API interface changed");
+		await fs.writeFile(apiFile, apiFileContent, "utf8");
+	}
 }
 
 if (require.main === module) void generateCCAPIInterface();

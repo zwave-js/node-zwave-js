@@ -14,8 +14,9 @@
 		"min": "0.0",
 		"max": "255.255"
 	},
-	"paramInformation": {
-		"2": {
+	"paramInformation": [
+		{
+			"#": "2",
 			"label": "Enable Switch",
 			"description": "Enable switch of \"alarm notification\" report",
 			"valueSize": 1,
@@ -35,7 +36,7 @@
 				}
 			]
 		}
-	},
+	],
 	"metadata": {
 		"inclusion": "-Add (Inclusion)\nInsert a CR123A, and LED blinks. \nSet the controller to the status for “Add”. \nPress the button over 3 seconds and release.\nAbout “Add” is completed, LED turns off.\n(If security include, LED turns off will soon after “Preparing inclusion” process.)\nNote) After inclusion completed, this sensor keep waking about 40 seconds, for interview process.\n During this time, button operation is disabled.",
 		"exclusion": "-Remove (exclusion)\nSet the controller to the status for “Remove”.\nPress the button over 3 seconds and release.\nLED blinks when “Remove” is completed.",

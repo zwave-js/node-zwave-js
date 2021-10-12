@@ -29,8 +29,9 @@
 			"isLifeline": true
 		}
 	},
-	"paramInformation": {
-		"3": {
+	"paramInformation": [
+		{
+			"#": "3",
 			"label": "LED Light",
 			"description": "Sets when the LED on the switch is lit.",
 			"valueSize": 1,
@@ -49,7 +50,8 @@
 				}
 			]
 		},
-		"4": {
+		{
+			"#": "4",
 			"label": "Invert Switch",
 			"valueSize": 1,
 			"minValue": 0,
@@ -67,7 +69,7 @@
 				}
 			]
 		}
-	},
+	],
 	"compat": {
 		"treatBasicSetAsEvent": true,
 		"commandClasses": {

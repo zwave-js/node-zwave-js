@@ -14,4 +14,4 @@ export {
 	ZWaveNodeEvents,
 } from "./lib/node/Types";
 export { VirtualEndpoint } from "./lib/node/VirtualEndpoint";
-export { VirtualNode } from "./lib/node/VirtualNode";
+export { VirtualNode, VirtualValueID } from "./lib/node/VirtualNode";

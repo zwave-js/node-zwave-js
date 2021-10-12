@@ -14,8 +14,9 @@
 		"min": "0.0",
 		"max": "255.255"
 	},
-	"paramInformation": {
-		"1": {
+	"paramInformation": [
+		{
+			"#": "1",
 			"label": "Battery Report Delay Time",
 			"description": "Minute",
 			"valueSize": 1,
@@ -25,7 +26,8 @@
 			"defaultValue": 3,
 			"unsigned": true
 		},
-		"2": {
+		{
+			"#": "2",
 			"label": "External Sensor Define",
 			"valueSize": 1,
 			"minValue": 0,
@@ -33,7 +35,7 @@
 			"defaultValue": 0,
 			"unsigned": true
 		}
-	},
+	],
 	"metadata": {
 		"inclusion": "To manually include the device, press Tamper three times repeatedly to perform the actions.\nLED Status:Blue LED solid light",
 		"exclusion": "To manually exclude the device, press Tamper three times repeatedly to perform the actions.\nLED Status:Blue LED 1 sec. flashes 3 times",

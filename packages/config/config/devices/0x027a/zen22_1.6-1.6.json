@@ -1,0 +1,84 @@
+{
+	"manufacturer": "Zooz",
+	"manufacturerId": "0x027a",
+	"label": "ZEN22",
+	"description": "Dimmer Paddle Switch",
+	"devices": [
+		{
+			"productType": "0xb112",
+			"productId": "0x1f1c"
+		}
+	],
+	"firmwareVersion": {
+		"min": "1.6",
+		"max": "1.6"
+	},
+	"paramInformation": [
+		{
+			"#": "1",
+			"label": "Orientation",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 0,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Normal orientation",
+					"value": 0
+				},
+				{
+					"label": "Reverse top/bottom",
+					"value": 1
+				}
+			]
+		},
+		{
+			"#": "2",
+			"label": "LED Indicator Control",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 3,
+			"defaultValue": 0,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "LED on when switch off, LED off when switch on",
+					"value": 0
+				},
+				{
+					"label": "LED on when switch on, LED off when switch off",
+					"value": 1
+				},
+				{
+					"label": "LED always off",
+					"value": 2
+				},
+				{
+					"label": "LED always on",
+					"value": 3
+				}
+			]
+		},
+		{
+			"#": "4",
+			"label": "Ramp Rate Control",
+			"description": "Choose from 2 ramp rate options (fade-in / fade-out effect)",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 0,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Slow Ramp Rate",
+					"value": 0
+				},
+				{
+					"label": "Fast Ramp Rate",
+					"value": 1
+				}
+			]
+		}
+	]
+}

@@ -21,69 +21,89 @@
 			"isLifeline": true
 		}
 	},
-	"paramInformation": {
-		"2": {
+	"paramInformation": [
+		{
+			"#": "2",
 			"$import": "templates/aeotec_template.json#wake_up_10_minutes"
 		},
-		"3": {
+		{
+			"#": "3",
 			"$import": "templates/aeotec_template.json#trigger_off"
 		},
-		"4": {
+		{
+			"#": "4",
 			"$import": "templates/aeotec_template.json#enable_motion_sensor"
 		},
-		"5": {
+		{
+			"#": "5",
 			"$import": "templates/aeotec_template.json#motion_report_type"
 		},
-		"101[0x01]": {
+		{
+			"#": "101[0x01]",
 			"$import": "templates/aeotec_template.json#auto_report_group1_battery"
 		},
-		"101[0x20]": {
+		{
+			"#": "101[0x20]",
 			"$import": "templates/aeotec_template.json#auto_report_group1_temp"
 		},
-		"101[0x40]": {
+		{
+			"#": "101[0x40]",
 			"$import": "templates/aeotec_template.json#auto_report_group1_humidity"
 		},
-		"101[0x80]": {
+		{
+			"#": "101[0x80]",
 			"$import": "templates/aeotec_template.json#auto_report_group1_luminance"
 		},
-		"102[0x01]": {
+		{
+			"#": "102[0x01]",
 			"$import": "templates/aeotec_template.json#auto_report_group2_battery"
 		},
-		"102[0x20]": {
+		{
+			"#": "102[0x20]",
 			"$import": "templates/aeotec_template.json#auto_report_group2_temp"
 		},
-		"102[0x40]": {
+		{
+			"#": "102[0x40]",
 			"$import": "templates/aeotec_template.json#auto_report_group2_humidity"
 		},
-		"102[0x80]": {
+		{
+			"#": "102[0x80]",
 			"$import": "templates/aeotec_template.json#auto_report_group2_luminance"
 		},
-		"103[0x01]": {
+		{
+			"#": "103[0x01]",
 			"$import": "templates/aeotec_template.json#auto_report_group3_battery"
 		},
-		"103[0x20]": {
+		{
+			"#": "103[0x20]",
 			"$import": "templates/aeotec_template.json#auto_report_group3_temp"
 		},
-		"103[0x40]": {
+		{
+			"#": "103[0x40]",
 			"$import": "templates/aeotec_template.json#auto_report_group3_humidity"
 		},
-		"103[0x80]": {
+		{
+			"#": "103[0x80]",
 			"$import": "templates/aeotec_template.json#auto_report_group3_luminance"
 		},
-		"111": {
+		{
+			"#": "111",
 			"$import": "templates/aeotec_template.json#auto_report_interval_group1",
 			"maxValue": 167400
 		},
-		"112": {
+		{
+			"#": "112",
 			"$import": "templates/aeotec_template.json#auto_report_interval_group2",
 			"maxValue": 167400
 		},
-		"113": {
+		{
+			"#": "113",
 			"$import": "templates/aeotec_template.json#auto_report_interval_group3",
 			"maxValue": 167400
 		},
-		"255": {
+		{
+			"#": "255",
 			"$import": "templates/aeotec_template.json#factory_reset"
 		}
-	}
+	]
 }

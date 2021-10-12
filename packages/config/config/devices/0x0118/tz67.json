@@ -26,8 +26,9 @@
 			"isLifeline": true
 		}
 	},
-	"paramInformation": {
-		"1": {
+	"paramInformation": [
+		{
+			"#": "1",
 			"label": "LED Behavior",
 			"description": "Defines the behavior of the blue LED",
 			"valueSize": 1,
@@ -46,7 +47,7 @@
 				}
 			]
 		}
-	},
+	],
 	"metadata": {
 		"manual": "https://products.z-wavealliance.org/ProductManual/File?folder=&filename=MarketCertificationFiles/1951/TZ67%20User%20Manual.pdf"
 	}

@@ -20,8 +20,9 @@
 			"isLifeline": true
 		}
 	},
-	"paramInformation": {
-		"1": {
+	"paramInformation": [
+		{
+			"#": "1",
 			"label": "Set LED indication mode",
 			"valueSize": 1,
 			"minValue": 0,
@@ -48,7 +49,8 @@
 				}
 			]
 		},
-		"2": {
+		{
+			"#": "2",
 			"label": "Automatic switch off time",
 			"description": "If not zero, automatically switch off after a user defined time (in seconds)",
 			"valueSize": 2,
@@ -57,7 +59,8 @@
 			"defaultValue": 0,
 			"unsigned": true
 		},
-		"3": {
+		{
+			"#": "3",
 			"label": "RF Off command",
 			"valueSize": 1,
 			"minValue": 0,
@@ -84,7 +87,8 @@
 				}
 			]
 		},
-		"5": {
+		{
+			"#": "5",
 			"label": "Restore switch state after power cycle",
 			"valueSize": 1,
 			"minValue": 0,
@@ -103,5 +107,5 @@
 				}
 			]
 		}
-	}
+	]
 }

@@ -32,8 +32,9 @@
 			"maxNodes": 5
 		}
 	},
-	"paramInformation": {
-		"1": {
+	"paramInformation": [
+		{
+			"#": "1",
 			"label": "State After Power Restore",
 			"valueSize": 1,
 			"minValue": 0,
@@ -55,7 +56,8 @@
 				}
 			]
 		},
-		"2": {
+		{
+			"#": "2",
 			"label": "Send Notification on Status Change.",
 			"valueSize": 1,
 			"minValue": 0,
@@ -73,7 +75,8 @@
 				}
 			]
 		},
-		"3": {
+		{
+			"#": "3",
 			"label": "Default Dimming Speed",
 			"valueSize": 1,
 			"unit": "seconds",
@@ -81,7 +84,8 @@
 			"maxValue": 100,
 			"defaultValue": 5
 		},
-		"5": {
+		{
+			"#": "5",
 			"label": "External Switch Can Pair Network",
 			"valueSize": 1,
 			"minValue": 0,
@@ -99,7 +103,8 @@
 				}
 			]
 		},
-		"6": {
+		{
+			"#": "6",
 			"label": "Dimming Mode",
 			"valueSize": 1,
 			"minValue": 0,
@@ -117,7 +122,8 @@
 				}
 			]
 		},
-		"7": {
+		{
+			"#": "7",
 			"label": "Default Brightness",
 			"valueSize": 1,
 			"minValue": 0,
@@ -130,7 +136,8 @@
 				}
 			]
 		},
-		"8": {
+		{
+			"#": "8",
 			"label": "Off Delay Time ",
 			"valueSize": 1,
 			"unit": "seconds",
@@ -144,7 +151,7 @@
 				}
 			]
 		}
-	},
+	],
 	"metadata": {
 		"inclusion": "1. Set primary controller/gateway into inclusion mode (Please refer top your primary controllers manual on how to set your controller into inclusion). 2. Power on the in-wall dimmer. 3.Tripple Press the reset button on the dimmer, it will set the dimmer into inclusion mode. The purple indicator light will stay solid on for 10 seconds to indicate successful incusion.",
 		"exclusion": "1. Set the primary controller/gateway int exclusion mode (Please refer top your primary controllers manual on how to set your controller into exclusion). 2.Triple press the reset button, the dimmer will be set to exclusion mode, and wait to be excluded, then the dimmer will be excluded form the network.",

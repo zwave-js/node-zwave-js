@@ -21,8 +21,9 @@
 			"isLifeline": true
 		}
 	},
-	"paramInformation": {
-		"1": {
+	"paramInformation": [
+		{
+			"#": "1",
 			"label": "Audio Volume",
 			"description": "Sets the volume level of the beeps and voice prompts",
 			"valueSize": 1,
@@ -45,7 +46,8 @@
 				}
 			]
 		},
-		"2": {
+		{
+			"#": "2",
 			"label": "Auto Re-lock",
 			"description": "When enabled, the unit will automatically re-lock",
 			"valueSize": 1,
@@ -65,7 +67,8 @@
 				}
 			]
 		},
-		"3": {
+		{
+			"#": "3",
 			"label": "Re-lock Time",
 			"description": "Time after unlocking that the device will lock",
 			"unit": "Seconds",
@@ -75,7 +78,8 @@
 			"defaultValue": 30,
 			"unsigned": true
 		},
-		"4": {
+		{
+			"#": "4",
 			"label": "Wrong Code Entry Limit",
 			"description": "The number of invalid tries before the lock shutdowns and sends an alarm",
 			"valueSize": 1,
@@ -83,7 +87,8 @@
 			"maxValue": 7,
 			"defaultValue": 5
 		},
-		"5": {
+		{
+			"#": "5",
 			"label": "Language",
 			"description": "Language used by the voice prompts",
 			"valueSize": 1,
@@ -106,7 +111,8 @@
 				}
 			]
 		},
-		"7": {
+		{
+			"#": "7",
 			"label": "Shutdown Time",
 			"description": "Number of times the device is locked out after the invalid retries are exceeded",
 			"unit": "Seconds",
@@ -116,7 +122,8 @@
 			"defaultValue": 30,
 			"unsigned": true
 		},
-		"8": {
+		{
+			"#": "8",
 			"label": "Operating Mode",
 			"description": "Sets if the unit operates normal, or disables keypad and Z-Wave lock/unlock",
 			"valueSize": 1,
@@ -139,5 +146,5 @@
 				}
 			]
 		}
-	}
+	]
 }

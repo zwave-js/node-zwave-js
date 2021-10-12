@@ -13,11 +13,13 @@
 		"min": "0.0",
 		"max": "255.255"
 	},
-	"paramInformation": {
-		"2": {
+	"paramInformation": [
+		{
+			"#": "2",
 			"$import": "~/templates/master_template.json#state_after_power_failure_off_prev"
 		},
-		"3": {
+		{
+			"#": "3",
 			"label": "All On / All Off",
 			"valueSize": 1,
 			"minValue": 0,
@@ -44,14 +46,16 @@
 				}
 			]
 		},
-		"4": {
+		{
+			"#": "4",
 			"label": "LED Backlight Brightness Level",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 10,
 			"defaultValue": 10
 		},
-		"5": {
+		{
+			"#": "5",
 			"label": "Key Mode",
 			"valueSize": 1,
 			"minValue": 0,
@@ -89,7 +93,8 @@
 				}
 			]
 		},
-		"6": {
+		{
+			"#": "6",
 			"label": "Key On Duration",
 			"valueSize": 2,
 			"unit": "seconds",
@@ -98,7 +103,8 @@
 			"defaultValue": 0,
 			"unsigned": true
 		},
-		"8": {
+		{
+			"#": "8",
 			"label": "Basic CC Integration Setting",
 			"valueSize": 1,
 			"minValue": 0,
@@ -125,7 +131,8 @@
 				}
 			]
 		},
-		"10": {
+		{
+			"#": "10",
 			"label": "Key 1 Mode",
 			"valueSize": 1,
 			"minValue": 0,
@@ -164,7 +171,8 @@
 				}
 			]
 		},
-		"11": {
+		{
+			"#": "11",
 			"label": "Key 2 Mode",
 			"valueSize": 1,
 			"minValue": 0,
@@ -203,7 +211,8 @@
 				}
 			]
 		},
-		"12": {
+		{
+			"#": "12",
 			"label": "Key 3 Mode",
 			"valueSize": 1,
 			"minValue": 0,
@@ -242,7 +251,8 @@
 				}
 			]
 		},
-		"14": {
+		{
+			"#": "14",
 			"label": "Local Control",
 			"valueSize": 1,
 			"minValue": 0,
@@ -260,7 +270,8 @@
 				}
 			]
 		},
-		"15": {
+		{
+			"#": "15",
 			"label": "Remote Control",
 			"valueSize": 1,
 			"minValue": 0,
@@ -278,7 +289,8 @@
 				}
 			]
 		},
-		"16": {
+		{
+			"#": "16",
 			"label": "Scene Respond",
 			"valueSize": 1,
 			"minValue": 0,
@@ -320,7 +332,8 @@
 				}
 			]
 		},
-		"17": {
+		{
+			"#": "17",
 			"label": "Key 1 Scene Settings",
 			"valueSize": 1,
 			"minValue": 0,
@@ -346,7 +359,8 @@
 				}
 			]
 		},
-		"18": {
+		{
+			"#": "18",
 			"label": "Key 1 Activate Scene ID",
 			"valueSize": 1,
 			"minValue": 0,
@@ -360,7 +374,8 @@
 				}
 			]
 		},
-		"19": {
+		{
+			"#": "19",
 			"label": "Key 1 Activate Scene Duration",
 			"unit": "seconds",
 			"valueSize": 1,
@@ -375,7 +390,8 @@
 				}
 			]
 		},
-		"20": {
+		{
+			"#": "20",
 			"label": "Key 2 Scene Settings",
 			"valueSize": 1,
 			"minValue": 0,
@@ -401,7 +417,8 @@
 				}
 			]
 		},
-		"21": {
+		{
+			"#": "21",
 			"label": "Key 2 Activate Scene ID",
 			"valueSize": 1,
 			"minValue": 0,
@@ -415,7 +432,8 @@
 				}
 			]
 		},
-		"22": {
+		{
+			"#": "22",
 			"label": "Key 2 Activate Scene Duration",
 			"unit": "seconds",
 			"valueSize": 1,
@@ -430,7 +448,8 @@
 				}
 			]
 		},
-		"23": {
+		{
+			"#": "23",
 			"label": "Key 3 Scene Settings",
 			"valueSize": 1,
 			"minValue": 0,
@@ -456,7 +475,8 @@
 				}
 			]
 		},
-		"24": {
+		{
+			"#": "24",
 			"label": "Key 3 Activate Scene ID",
 			"valueSize": 1,
 			"minValue": 0,
@@ -470,7 +490,8 @@
 				}
 			]
 		},
-		"25": {
+		{
+			"#": "25",
 			"label": "Key 3 Activate Scene Duration (0=Instantly)",
 			"valueSize": 1,
 			"unit": "seconds",
@@ -485,7 +506,8 @@
 				}
 			]
 		},
-		"255": {
+		{
+			"#": "255",
 			"label": "Factory reset",
 			"valueSize": 1,
 			"minValue": 0,
@@ -505,5 +527,5 @@
 				}
 			]
 		}
-	}
+	]
 }

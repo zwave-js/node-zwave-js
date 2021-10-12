@@ -104,6 +104,30 @@ error in compat option forceNotificationIdleReset`,
 				definition.forceNotificationIdleReset;
 		}
 
+		if (definition.forceSceneControllerGroupCount != undefined) {
+			if (typeof definition.forceSceneControllerGroupCount !== "number") {
+				throwInvalidConfig(
+					"devices",
+					`config/devices/${filename}:
+compat option forceSceneControllerGroupCount must be a number!`,
+				);
+			}
+
+			if (
+				definition.forceSceneControllerGroupCount < 0 ||
+				definition.forceSceneControllerGroupCount > 255
+			) {
+				throwInvalidConfig(
+					"devices",
+					`config/devices/${filename}:
+compat option forceSceneControllerGroupCount must be between 0 and 255!`,
+				);
+			}
+
+			this.forceSceneControllerGroupCount =
+				definition.forceSceneControllerGroupCount;
+		}
+
 		if (definition.preserveRootApplicationCCValueIDs != undefined) {
 			if (definition.preserveRootApplicationCCValueIDs !== true) {
 				throwInvalidConfig(
@@ -424,6 +448,7 @@ compat option alarmMapping must be an array where all items are objects!`,
 	public readonly disableStrictEntryControlDataValidation?: boolean;
 	public readonly enableBasicSetMapping?: boolean;
 	public readonly forceNotificationIdleReset?: boolean;
+	public readonly forceSceneControllerGroupCount?: number;
 	public readonly manualValueRefreshDelayMs?: number;
 	public readonly mapRootReportsToEndpoint?: number;
 	public readonly overrideFloatEncoding?: {

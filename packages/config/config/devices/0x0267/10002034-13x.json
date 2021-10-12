@@ -26,8 +26,9 @@
 		"max": "255.255"
 	},
 	"supportsZWavePlus": true,
-	"paramInformation": {
-		"1": {
+	"paramInformation": [
+		{
+			"#": "1",
 			"label": "Association LED",
 			"valueSize": 1,
 			"minValue": 0,
@@ -47,7 +48,8 @@
 				}
 			]
 		},
-		"10": {
+		{
+			"#": "10",
 			"label": "Delay ON",
 			"description": "Delay from activation request until load activation",
 			"valueSize": 1,
@@ -56,7 +58,8 @@
 			"defaultValue": 0,
 			"unsigned": true
 		},
-		"11": {
+		{
+			"#": "11",
 			"label": "Activation Time",
 			"description": "Time that load performs activated after complete an activation process.",
 			"valueSize": 1,
@@ -65,7 +68,8 @@
 			"defaultValue": 0,
 			"unsigned": true
 		},
-		"12": {
+		{
+			"#": "12",
 			"label": "Behavior of LED in Reponse",
 			"description": "Configuration of Main LED as identification at 20%.",
 			"valueSize": 1,
@@ -85,7 +89,8 @@
 				}
 			]
 		},
-		"13": {
+		{
+			"#": "13",
 			"label": "Lock Input",
 			"description": "Locks the pushbutton and wired input actions.",
 			"valueSize": 1,
@@ -105,7 +110,8 @@
 				}
 			]
 		},
-		"15": {
+		{
+			"#": "15",
 			"label": "Reset Default",
 			"description": "Parameters, Groups, and Z-Wave status are restored to default.",
 			"valueSize": 2,
@@ -126,7 +132,8 @@
 				}
 			]
 		},
-		"16": {
+		{
+			"#": "16",
 			"label": "Delay OFF",
 			"description": "Delay from deactivation request until load deactivation.",
 			"valueSize": 1,
@@ -135,5 +142,5 @@
 			"defaultValue": 0,
 			"unsigned": true
 		}
-	}
+	]
 }
