@@ -28,50 +28,65 @@
 			"maxNodes": 5
 		}
 	},
-	"paramInformation": {
-		"1": {
+	"paramInformation": [
+		{
+			"#": "1",
 			"$import": "~/templates/master_template.json#orientation_momentary"
 		},
-		"2": {
+		{
+			"#": "2",
 			"$import": "~/templates/master_template.json#led_indicator_four_options"
 		},
-		"23": {
+		{
+			"#": "23",
 			"$import": "templates/zooz_template.json#led_indicator_color"
 		},
-		"24": {
+		{
+			"#": "24",
 			"$import": "templates/zooz_template.json#led_indicator_brightness"
 		},
-		"3": {
+		{
+			"#": "3",
 			"$import": "templates/zooz_template.json#auto_off_timer"
 		},
-		"5": {
+		{
+			"#": "5",
 			"$import": "templates/zooz_template.json#auto_on_timer"
 		},
-		"8": {
+		{
+			"#": "8",
 			"$import": "~/templates/master_template.json#state_after_power_failure_off_on_prev"
 		},
-		"9": {
+		{
+			"#": "9",
 			"$import": "templates/zooz_template.json#dimmer_ramp_rate"
 		},
-		"10": {
+		{
+			"#": "10",
 			"$import": "templates/zooz_template.json#min_brightness"
 		},
-		"11": {
+		{
+			"#": "11",
 			"$import": "templates/zooz_template.json#max_brightness"
 		},
-		"12": {
+		{
+			"#": "12",
 			"$import": "templates/zooz_template.json#double_tap_up_behavior"
 		},
-		"25": {
+		{
+			"#": "25",
 			"$import": "templates/zooz_template.json#single_tap_up_behavior"
 		},
-		"13": {
+		{
+			"#": "13",
 			"$import": "templates/zooz_template.json#enable_scene_control"
 		},
-		"15": {
+		{
+			"#": "15",
 			"$import": "~/templates/master_template.json#smart_switch_mode_0-2"
 		},
-		"19": {
+		{
+			"#": "19",
 			"label": "3-Way Switch Type",
 			"valueSize": 1,
 			"minValue": 0,
@@ -97,7 +112,8 @@
 				}
 			]
 		},
-		"20": {
+		{
+			"#": "20",
 			"label": "Smart Switch Mode: Dim Reporting Behavior",
 			"valueSize": 1,
 			"minValue": 0,
@@ -115,17 +131,21 @@
 				}
 			]
 		},
-		"21": {
+		{
+			"#": "21",
 			"$import": "templates/zooz_template.json#smart_switch_mode_reporting"
 		},
-		"16": {
+		{
+			"#": "16",
 			"$import": "templates/zooz_template.json#local_dimming_speed"
 		},
-		"18": {
+		{
+			"#": "18",
 			"$import": "templates/zooz_template.json#custom_brightness"
 		},
-		"22": {
+		{
+			"#": "22",
 			"$import": "templates/zooz_template.json#night_light_mode"
 		}
-	}
+	]
 }

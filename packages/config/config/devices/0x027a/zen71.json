@@ -24,29 +24,37 @@
 			"maxNodes": 5
 		}
 	},
-	"paramInformation": {
-		"1": {
+	"paramInformation": [
+		{
+			"#": "1",
 			"$import": "~/templates/master_template.json#orientation_momentary"
 		},
-		"2": {
+		{
+			"#": "2",
 			"$import": "~/templates/master_template.json#led_indicator_four_options"
 		},
-		"3": {
+		{
+			"#": "3",
 			"$import": "templates/zooz_template.json#auto_off_timer"
 		},
-		"5": {
+		{
+			"#": "5",
 			"$import": "templates/zooz_template.json#auto_on_timer"
 		},
-		"8": {
+		{
+			"#": "8",
 			"$import": "~/templates/master_template.json#state_after_power_failure_off_on_prev"
 		},
-		"9": {
+		{
+			"#": "9",
 			"$import": "templates/zooz_template.json#enable_scene_control"
 		},
-		"11": {
+		{
+			"#": "11",
 			"$import": "~/templates/master_template.json#smart_switch_mode_0-2"
 		},
-		"12": {
+		{
+			"#": "12",
 			"label": "3-Way Switch Type",
 			"valueSize": 1,
 			"minValue": 0,
@@ -64,17 +72,21 @@
 				}
 			]
 		},
-		"13": {
+		{
+			"#": "13",
 			"$import": "templates/zooz_template.json#smart_switch_mode_reporting"
 		},
-		"14": {
+		{
+			"#": "14",
 			"$import": "templates/zooz_template.json#led_indicator_color"
 		},
-		"15": {
+		{
+			"#": "15",
 			"$import": "templates/zooz_template.json#led_indicator_brightness"
 		},
-		"16": {
+		{
+			"#": "16",
 			"$import": "templates/zooz_template.json#association_reports"
 		}
-	}
+	]
 }

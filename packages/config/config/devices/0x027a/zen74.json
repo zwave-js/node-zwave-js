@@ -29,56 +29,72 @@
 			"maxNodes": 5
 		}
 	},
-	"paramInformation": {
-		"1": {
+	"paramInformation": [
+		{
+			"#": "1",
 			"$import": "~/templates/master_template.json#orientation_momentary"
 		},
-		"3": {
+		{
+			"#": "3",
 			"$import": "templates/zooz_template.json#auto_off_timer"
 		},
-		"5": {
+		{
+			"#": "5",
 			"$import": "templates/zooz_template.json#auto_on_timer"
 		},
-		"8": {
+		{
+			"#": "8",
 			"$import": "~/templates/master_template.json#state_after_power_failure_off_on_prev"
 		},
-		"9": {
+		{
+			"#": "9",
 			"$import": "templates/zooz_template.json#dimmer_ramp_rate"
 		},
-		"10": {
+		{
+			"#": "10",
 			"$import": "templates/zooz_template.json#min_brightness"
 		},
-		"11": {
+		{
+			"#": "11",
 			"$import": "templates/zooz_template.json#max_brightness"
 		},
-		"25": {
+		{
+			"#": "25",
 			"$import": "templates/zooz_template.json#single_tap_up_behavior"
 		},
-		"12": {
+		{
+			"#": "12",
 			"$import": "templates/zooz_template.json#double_tap_up_behavior"
 		},
-		"18": {
+		{
+			"#": "18",
 			"$import": "templates/zooz_template.json#custom_brightness"
 		},
-		"13": {
+		{
+			"#": "13",
 			"$import": "templates/zooz_template.json#enable_scene_control"
 		},
-		"15": {
+		{
+			"#": "15",
 			"$import": "~/templates/master_template.json#smart_switch_mode_0-2"
 		},
-		"16": {
+		{
+			"#": "16",
 			"$import": "templates/zooz_template.json#local_dimming_speed"
 		},
-		"20": {
+		{
+			"#": "20",
 			"$import": "templates/zooz_template.json#smart_switch_mode_dimming_reporting"
 		},
-		"21": {
+		{
+			"#": "21",
 			"$import": "templates/zooz_template.json#smart_switch_mode_reporting"
 		},
-		"22": {
+		{
+			"#": "22",
 			"$import": "templates/zooz_template.json#night_light_mode"
 		}
-	},
+	],
 	"metadata": {
 		"inclusion": "1. Initiate inclusion (pairing) in the app (or web interface).\n2. TAP UP 3 TIMES QUICKLY if using traditional Z-Wave inclusion.\n3. The LED indicator will blink blue to signal communication and turn green for 3 seconds if inclusion is successful or turn red for 3 seconds if the pairing attempt fails.",
 		"exclusion": "1. Bring your Z-Wave gateway (hub) close to the switch if possible\n2. Put the Z-Wave hub into exclusion mode (not sure how to do that? ask@getzooz.com) \n3. Toggle the switch down 3 times quickly (the LED indicator will start blinking blue)\n4. Your hub will confirm exclusion, the LED indicator on the switch will turn green for 3 seconds, and the device will disappear from your controller's device list",
