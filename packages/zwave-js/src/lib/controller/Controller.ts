@@ -429,11 +429,8 @@ export class ZWaveController extends TypedEventEmitter<ControllerEventCallbacks>
 
 	/** Creates a virtual node that can be used to send multicast commands to several nodes */
 	public getMulticastGroup(nodeIDs: number[]): VirtualNode {
-		return new VirtualNode(
-			undefined,
-			this.driver,
-			nodeIDs.map((id) => this._nodes.get(id)!),
-		);
+		const nodes = nodeIDs.map((id) => this._nodes.getOrThrow(id));
+		return new VirtualNode(undefined, this.driver, nodes);
 	}
 
 	/**
