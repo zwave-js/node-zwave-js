@@ -64,8 +64,9 @@
 			"isLifeline": true
 		}
 	},
-	"paramInformation": {
-		"1": {
+	"paramInformation": [
+		{
+			"#": "1",
 			"label": "Enable/Disable ALL ON/OFF",
 			"valueSize": 1,
 			"minValue": 0,
@@ -92,7 +93,8 @@
 				}
 			]
 		},
-		"3": {
+		{
+			"#": "3",
 			"label": "Enable/Disable Manual Override",
 			"valueSize": 1,
 			"minValue": 0,
@@ -111,7 +113,8 @@
 				}
 			]
 		},
-		"4": {
+		{
+			"#": "4",
 			"label": "Relay 1: OFF-delay time",
 			"description": "Automatic turning off relay 1 after set time in milliseconds, 0 to disable",
 			"valueSize": 2,
@@ -120,7 +123,8 @@
 			"defaultValue": 0,
 			"unsigned": true
 		},
-		"5": {
+		{
+			"#": "5",
 			"label": "Relay 2: OFF-delay time",
 			"description": "Automatic turning off relay 2 after set time in milliseconds, 0 to disable",
 			"valueSize": 2,
@@ -129,7 +133,8 @@
 			"defaultValue": 0,
 			"unsigned": true
 		},
-		"6": {
+		{
+			"#": "6",
 			"label": "Separation of association sending (key 1)",
 			"description": "Activate/Deactivate association sending for group 1 - Also see param #16",
 			"valueSize": 1,
@@ -153,7 +158,8 @@
 				}
 			]
 		},
-		"7": {
+		{
+			"#": "7",
 			"label": "Control key #2 behaviour",
 			"description": "Map status to devices in group 2.",
 			"valueSize": 1,
@@ -173,7 +179,8 @@
 				}
 			]
 		},
-		"13": {
+		{
+			"#": "13",
 			"label": "Inputs behaviour",
 			"description": "In case of bi-stable switches, define their behaviour (toggle or follow)",
 			"valueSize": 1,
@@ -193,7 +200,8 @@
 				}
 			]
 		},
-		"14": {
+		{
+			"#": "14",
 			"label": "Inputs Button/Switch configuration",
 			"description": "Binary inputs type configuration",
 			"valueSize": 1,
@@ -213,7 +221,8 @@
 				}
 			]
 		},
-		"15": {
+		{
+			"#": "15",
 			"label": "Dimmer/Roller shutter control",
 			"description": "Enable/Disable operation of dimmer associated to group 1.",
 			"valueSize": 1,
@@ -233,10 +242,12 @@
 				}
 			]
 		},
-		"16": {
+		{
+			"#": "16",
 			"$import": "~/templates/master_template.json#state_after_power_failure_off_prev"
 		},
-		"30": {
+		{
+			"#": "30",
 			"label": "Relay 1: Response to General Alarm",
 			"valueSize": 1,
 			"minValue": 0,
@@ -263,7 +274,8 @@
 				}
 			]
 		},
-		"31": {
+		{
+			"#": "31",
 			"label": "Relay 1: Response to Water Flood Alarm",
 			"valueSize": 1,
 			"minValue": 0,
@@ -290,7 +302,8 @@
 				}
 			]
 		},
-		"32": {
+		{
+			"#": "32",
 			"label": "Relay 1: Response to Smoke, CO, CO2 Alarm",
 			"valueSize": 1,
 			"minValue": 0,
@@ -317,7 +330,8 @@
 				}
 			]
 		},
-		"33": {
+		{
+			"#": "33",
 			"label": "Relay 1: Response to Temperature Alarm",
 			"valueSize": 1,
 			"minValue": 0,
@@ -344,7 +358,8 @@
 				}
 			]
 		},
-		"39": {
+		{
+			"#": "39",
 			"label": "ALARM FLASHING alarm time",
 			"description": "Amount of time (ms) the device keeps on flashing after receipt of Alarm Frame",
 			"valueSize": 2,
@@ -353,7 +368,8 @@
 			"defaultValue": 600,
 			"unsigned": true
 		},
-		"40": {
+		{
+			"#": "40",
 			"label": "Relay 2: Response to General Alarm",
 			"valueSize": 1,
 			"minValue": 0,
@@ -380,7 +396,8 @@
 				}
 			]
 		},
-		"41": {
+		{
+			"#": "41",
 			"label": "Relay 2: Response to Water Flood Alarm",
 			"valueSize": 1,
 			"minValue": 0,
@@ -407,7 +424,8 @@
 				}
 			]
 		},
-		"42": {
+		{
+			"#": "42",
 			"label": "Relay 2: Response to Smoke, CO, CO2 Alarm",
 			"valueSize": 1,
 			"minValue": 0,
@@ -434,7 +452,8 @@
 				}
 			]
 		},
-		"43": {
+		{
+			"#": "43",
 			"label": "Relay 2: Response to Temperature Alarm",
 			"valueSize": 1,
 			"minValue": 0,
@@ -461,7 +480,7 @@
 				}
 			]
 		}
-	},
+	],
 	"compat": {
 		// The device sends reports for endpoint 1 un-encapsulated
 		"mapRootReportsToEndpoint": 1

@@ -10,10 +10,8 @@ import {
 	ZWaveErrorCodes,
 } from "@zwave-js/core";
 import { getEnumMemberName } from "@zwave-js/shared";
-import { SendDataBridgeRequest } from "../controller/SendDataBridgeMessages";
-import { SendDataRequest } from "../controller/SendDataMessages";
 import type { Driver } from "../driver/Driver";
-import { FunctionType, MessagePriority } from "../message/Constants";
+import { MessagePriority } from "../message/Constants";
 import { PhysicalCCAPI } from "./API";
 import {
 	API,
@@ -104,25 +102,15 @@ export class SupervisionCCAPI extends PhysicalCCAPI {
 		// The report should be sent back with security if the received command was secure
 		cc.secure = secure;
 
-		const SendDataConstructor = this.driver.controller.isFunctionSupported(
-			FunctionType.SendDataBridge,
-		)
-			? SendDataBridgeRequest
-			: SendDataRequest;
-
-		const msg = new SendDataConstructor(this.driver, {
-			command: cc,
-			// Only try sending a nonce once
-			maxSendAttempts: 1,
-		});
-
 		try {
-			await this.driver.sendMessage(msg, {
+			await this.driver.sendCommand(cc, {
 				...this.commandOptions,
 				// Supervision Reports must be sent immediately
 				priority: MessagePriority.Handshake,
 				// We don't want failures causing us to treat the node as asleep or dead
 				changeNodeStatusOnMissingACK: false,
+				// Only try sending the report once. If it fails, the node will ask again
+				maxSendAttempts: 1,
 			});
 		} catch (e) {
 			if (isTransmissionError(e)) {

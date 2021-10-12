@@ -25,8 +25,9 @@
 			"maxNodes": 3
 		}
 	},
-	"paramInformation": {
-		"1": {
+	"paramInformation": [
+		{
+			"#": "1",
 			"label": "Basic Level Set",
 			"description": "The value sent with Basic commands in case of detected flood",
 			"valueSize": 1,
@@ -40,5 +41,5 @@
 				}
 			]
 		}
-	}
+	]
 }

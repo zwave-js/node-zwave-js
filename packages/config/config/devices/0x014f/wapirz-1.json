@@ -20,8 +20,9 @@
 			"isLifeline": true
 		}
 	},
-	"paramInformation": {
-		"1": {
+	"paramInformation": [
+		{
+			"#": "1",
 			"label": "Re-trigger Wait Time",
 			"unit": "minutes",
 			"valueSize": 1,
@@ -30,7 +31,7 @@
 			"defaultValue": 3,
 			"unsigned": true
 		}
-	},
+	],
 	"compat": {
 		"enableBasicSetMapping": true
 	}

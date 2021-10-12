@@ -28,8 +28,9 @@
 			"maxNodes": 5
 		}
 	},
-	"paramInformation": {
-		"1": {
+	"paramInformation": [
+		{
+			"#": "1",
 			"label": "Rain Counter",
 			"description": "total count of rain",
 			"unit": "mm",
@@ -38,7 +39,8 @@
 			"maxValue": 32000,
 			"defaultValue": 0
 		},
-		"2": {
+		{
+			"#": "2",
 			"label": "Rain Start Command",
 			"description": "Send rain start command to group 2",
 			"valueSize": 1,
@@ -46,7 +48,8 @@
 			"maxValue": 99,
 			"defaultValue": 99
 		},
-		"3": {
+		{
+			"#": "3",
 			"label": "Rain Stop Command",
 			"description": "Send rain stop to group 2",
 			"valueSize": 1,
@@ -54,7 +57,8 @@
 			"maxValue": 99,
 			"defaultValue": 0
 		},
-		"4": {
+		{
+			"#": "4",
 			"label": "Meter Multiplier",
 			"description": "Adapt the display",
 			"valueSize": 2,
@@ -62,7 +66,8 @@
 			"maxValue": 1000,
 			"defaultValue": 1
 		},
-		"5": {
+		{
+			"#": "5",
 			"label": "Heavy Rain",
 			"description": "Threshold defines heavy rain condition",
 			"unit": "mm per hour",
@@ -72,7 +77,8 @@
 			"defaultValue": 255,
 			"unsigned": true
 		},
-		"6": {
+		{
+			"#": "6",
 			"label": "Heavy Rain Start Command",
 			"description": "Send heavy rain start to group 3",
 			"valueSize": 1,
@@ -80,7 +86,8 @@
 			"maxValue": 99,
 			"defaultValue": 99
 		},
-		"7": {
+		{
+			"#": "7",
 			"label": "Heavy Rain Stop Command",
 			"description": "Send heavy rain stop to group 3",
 			"valueSize": 1,
@@ -88,7 +95,7 @@
 			"maxValue": 99,
 			"defaultValue": 0
 		}
-	},
+	],
 	"compat": {
 		"commandClasses": {
 			"add": {

@@ -24,8 +24,9 @@
 			"maxNodes": 5
 		}
 	},
-	"paramInformation": {
-		"1": {
+	"paramInformation": [
+		{
+			"#": "1",
 			"label": "LED indication mode",
 			"valueSize": 1,
 			"minValue": 0,
@@ -48,7 +49,8 @@
 				}
 			]
 		},
-		"2": {
+		{
+			"#": "2",
 			"label": "Automatically switch off after x seconds.",
 			"description": "If not zero, automatically switch device off after a user defined time",
 			"valueSize": 1,
@@ -57,7 +59,8 @@
 			"defaultValue": 0,
 			"unsigned": true
 		},
-		"3": {
+		{
+			"#": "3",
 			"label": "What to do on RF off command.",
 			"description": "Defines how to interpret RF Off-Command.",
 			"valueSize": 1,
@@ -85,7 +88,8 @@
 				}
 			]
 		},
-		"5": {
+		{
+			"#": "5",
 			"label": "Restore switch state after power cycle.",
 			"description": "Defines if the switch should restore switch state.",
 			"valueSize": 1,
@@ -105,7 +109,8 @@
 				}
 			]
 		},
-		"20": {
+		{
+			"#": "20",
 			"label": "Specify the consumption of the load in watts",
 			"description": "Maximum load 3500 Watts",
 			"valueSize": 2,
@@ -113,7 +118,8 @@
 			"maxValue": 3500,
 			"defaultValue": 0
 		},
-		"21": {
+		{
+			"#": "21",
 			"label": "LED Off color",
 			"description": "Color for Off state.",
 			"valueSize": 1,
@@ -145,7 +151,8 @@
 				}
 			]
 		},
-		"22": {
+		{
+			"#": "22",
 			"label": "LED On color.",
 			"description": "Color for On state.",
 			"valueSize": 1,
@@ -177,5 +184,5 @@
 				}
 			]
 		}
-	}
+	]
 }

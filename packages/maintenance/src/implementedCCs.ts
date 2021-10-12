@@ -19,7 +19,8 @@ const noInterviewRegex = /^\/\/ @noInterview/m; // This comment marks a CC that 
 const pollValueApiRegex = /^\tprotected \[POLL_VALUE\]/m;
 const noPollValueApiRegex = /^\/\/ @noPollValueAPI/m; // This comment marks a CC that needs no pollValue API
 
-const onlyIncomplete = !!yargs.argv.onlyIncomplete;
+const argv = yargs.parseSync();
+const onlyIncomplete = !!argv.onlyIncomplete;
 
 function getSafeLength(str: string): number {
 	return c.stripColor(str).length;
@@ -163,7 +164,7 @@ interface CCInfo {
 	}
 	writeTable(
 		[headers, ...rows],
-		yargs.argv.flavor === "github" ? "github" : "console",
+		argv.flavor === "github" ? "github" : "console",
 	);
 })();
 

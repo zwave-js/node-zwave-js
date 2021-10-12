@@ -13,8 +13,9 @@
 		"min": "0.0",
 		"max": "255.255"
 	},
-	"paramInformation": {
-		"1": {
+	"paramInformation": [
+		{
+			"#": "1",
 			"label": "Up output time",
 			"unit": "seconds",
 			"valueSize": 1,
@@ -23,7 +24,8 @@
 			"defaultValue": 1,
 			"unsigned": true
 		},
-		"2": {
+		{
+			"#": "2",
 			"label": "Stop output time",
 			"unit": "seconds",
 			"valueSize": 1,
@@ -32,7 +34,8 @@
 			"defaultValue": 1,
 			"unsigned": true
 		},
-		"3": {
+		{
+			"#": "3",
 			"label": "Down output time",
 			"unit": "seconds",
 			"valueSize": 1,
@@ -41,5 +44,5 @@
 			"defaultValue": 1,
 			"unsigned": true
 		}
-	}
+	]
 }

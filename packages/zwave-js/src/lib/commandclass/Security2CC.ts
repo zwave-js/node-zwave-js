@@ -392,7 +392,11 @@ export class Security2CCAPI extends CCAPI {
 			keyVerified: true,
 			keyRequestComplete: false,
 		});
-		await this.driver.sendCommand(cc, this.commandOptions);
+		await this.driver.sendCommand(cc, {
+			...this.commandOptions,
+			// Don't wait for an ACK from the node
+			transmitOptions: TransmitOptions.DEFAULT & ~TransmitOptions.ACK,
+		});
 	}
 }
 

@@ -40,8 +40,9 @@
 			"isLifeline": true
 		}
 	},
-	"paramInformation": {
-		"1": {
+	"paramInformation": [
+		{
+			"#": "1",
 			"label": "Group 1 Level",
 			"valueSize": 1,
 			"minValue": 1,
@@ -49,7 +50,8 @@
 			"defaultValue": 10,
 			"unsigned": true
 		},
-		"2": {
+		{
+			"#": "2",
 			"label": "Group 2 Level",
 			"valueSize": 1,
 			"minValue": 1,
@@ -57,7 +59,8 @@
 			"defaultValue": 20,
 			"unsigned": true
 		},
-		"3": {
+		{
+			"#": "3",
 			"label": "Group 3 Level",
 			"valueSize": 1,
 			"minValue": 1,
@@ -65,7 +68,8 @@
 			"defaultValue": 30,
 			"unsigned": true
 		},
-		"4": {
+		{
+			"#": "4",
 			"label": "Group 4 Level",
 			"valueSize": 1,
 			"minValue": 1,
@@ -73,7 +77,8 @@
 			"defaultValue": 40,
 			"unsigned": true
 		},
-		"5": {
+		{
+			"#": "5",
 			"label": "Group 5 Level",
 			"valueSize": 1,
 			"minValue": 1,
@@ -81,5 +86,9 @@
 			"defaultValue": 50,
 			"unsigned": true
 		}
+	],
+	"compat": {
+		// Basic CC is required to react to Scene Off commands
+		"disableBasicMapping": true
 	}
 }

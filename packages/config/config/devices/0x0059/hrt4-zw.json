@@ -41,8 +41,9 @@
 			"isLifeline": true
 		}
 	},
-	"paramInformation": {
-		"1": {
+	"paramInformation": [
+		{
+			"#": "1",
 			"label": "Enable Temperature Sensor",
 			"description": "Controls the use of the temperature sensor on the device",
 			"valueSize": 1,
@@ -62,7 +63,8 @@
 				}
 			]
 		},
-		"2": {
+		{
+			"#": "2",
 			"label": "Temperature Scale",
 			"description": "Controls the temperature sensor scale",
 			"valueSize": 1,
@@ -82,7 +84,8 @@
 				}
 			]
 		},
-		"3": {
+		{
+			"#": "3",
 			"label": "Delta T",
 			"description": "Defines the temperature steps of the heating control. Steps are 0.1 K",
 			"valueSize": 1,
@@ -91,5 +94,5 @@
 			"defaultValue": 10,
 			"unsigned": true
 		}
-	}
+	]
 }

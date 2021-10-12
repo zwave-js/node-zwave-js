@@ -14,8 +14,9 @@
 		"max": "255.255"
 	},
 	"supportsZWavePlus": true,
-	"paramInformation": {
-		"7": {
+	"paramInformation": [
+		{
+			"#": "7",
 			"label": "Customer Function",
 			"valueSize": 1,
 			"minValue": 0,
@@ -33,12 +34,13 @@
 				}
 			]
 		},
-		"10": {
+		{
+			"#": "10",
 			"label": "Auto Report Battery Time",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 127,
 			"defaultValue": 127
 		}
-	}
+	]
 }

@@ -14,8 +14,9 @@
 		"max": "255.255"
 	},
 	"supportsZWavePlus": true,
-	"paramInformation": {
-		"1": {
+	"paramInformation": [
+		{
+			"#": "1",
 			"label": "Siren alarm sequence interval",
 			"valueSize": 1,
 			"minValue": 3,
@@ -23,33 +24,37 @@
 			"defaultValue": 10,
 			"unsigned": true
 		},
-		"2": {
+		{
+			"#": "2",
 			"label": "Siren alarm tone length",
 			"valueSize": 1,
 			"minValue": 1,
 			"maxValue": 99,
 			"defaultValue": 8
 		},
-		"3": {
+		{
+			"#": "3",
 			"label": "Value of On-Command",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 99,
 			"defaultValue": 99
 		},
-		"4": {
+		{
+			"#": "4",
 			"label": "Value of Off-Command",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 99,
 			"defaultValue": 99
 		},
-		"10": {
+		{
+			"#": "10",
 			"label": "Auto Report Battery Time",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 127,
 			"defaultValue": 127
 		}
-	}
+	]
 }

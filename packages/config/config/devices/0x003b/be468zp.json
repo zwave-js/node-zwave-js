@@ -14,8 +14,9 @@
 		"min": "0.0",
 		"max": "255.255"
 	},
-	"paramInformation": {
-		"3": {
+	"paramInformation": [
+		{
+			"#": "3",
 			"label": "Beeper",
 			"valueSize": 1,
 			"minValue": 0,
@@ -34,7 +35,8 @@
 				}
 			]
 		},
-		"4": {
+		{
+			"#": "4",
 			"label": "Vacation Mode",
 			"description": "Enabling this disables all user codes on the keypad.",
 			"valueSize": 1,
@@ -54,7 +56,8 @@
 				}
 			]
 		},
-		"5": {
+		{
+			"#": "5",
 			"label": "Lock And Leave Mode",
 			"description": "Controls the use of the \"Schlage\" button on the keypad for single button push for throwing the deadbolt",
 			"valueSize": 1,
@@ -74,7 +77,8 @@
 				}
 			]
 		},
-		"6": {
+		{
+			"#": "6",
 			"label": "User Slot Bit Field",
 			"valueSize": 4,
 			"minValue": 0,
@@ -82,7 +86,8 @@
 			"readOnly": true,
 			"unsigned": true
 		},
-		"12": {
+		{
+			"#": "12",
 			"label": "Get Electronic Transition Count",
 			"valueSize": 4,
 			"minValue": 0,
@@ -90,7 +95,8 @@
 			"readOnly": true,
 			"unsigned": true
 		},
-		"13": {
+		{
+			"#": "13",
 			"label": "Get Mechanical Transition Count",
 			"valueSize": 4,
 			"minValue": 0,
@@ -98,7 +104,8 @@
 			"readOnly": true,
 			"unsigned": true
 		},
-		"14": {
+		{
+			"#": "14",
 			"label": "Get Electronic Failed Count",
 			"valueSize": 4,
 			"minValue": 0,
@@ -106,7 +113,8 @@
 			"readOnly": true,
 			"unsigned": true
 		},
-		"15": {
+		{
+			"#": "15",
 			"label": "Auto Lock",
 			"description": "Automatically throws the deadbolt 30 seconds after a valid user code has been entered at the keypad",
 			"valueSize": 1,
@@ -127,7 +135,8 @@
 				}
 			]
 		},
-		"16": {
+		{
+			"#": "16",
 			"label": "User Code PIN Length",
 			"valueSize": 1,
 			"minValue": 4,
@@ -135,7 +144,8 @@
 			"defaultValue": 4,
 			"unsigned": true
 		},
-		"17": {
+		{
+			"#": "17",
 			"label": "Get Electrical High Preload Transition Count",
 			"valueSize": 4,
 			"minValue": 0,
@@ -143,7 +153,8 @@
 			"readOnly": true,
 			"unsigned": true
 		},
-		"18": {
+		{
+			"#": "18",
 			"label": "Get Bootloader Version",
 			"valueSize": 1,
 			"minValue": 0,
@@ -151,7 +162,7 @@
 			"readOnly": true,
 			"unsigned": true
 		}
-	},
+	],
 	"metadata": {
 		"inclusion": "One-button Add lock to Z-Wave Network (Inclusion) \n\n1. Place your home automation system or panel into the “Add” or Inclusion Mode (Refer to the respective documentation for that specific home automation system or panel device for details). \n2. Remove the battery cover of the deadbolt. \n3. Press then release the button on the PCB.\n4. An LED will flash amber indicating the “Add” or Inclusion process is in progress. \n• If the Security Scheme is Security 2 (S2), verify the DSK of the lock at the Z-Wave Controller. The PIN Code portion of the Z-Wave DSK will be needed.\n5. When a green LED turns ON, the “Add” or Inclusion has completed successfully. \n6. If a red LED turns ON, try repeating steps 1-3 \n \nInteractive Instruction for Add \nhttps://instructions.allegion.com/instr/86/2543",
 		"exclusion": "One-button Remove lock from Z-Wave Network (Exclusion) \n\n1. Place your home automation system or panel into the “Remove” or Exclusion Mode (Refer to the respective documentation for that specific home automation system or panel device for details). \n2. Remove the battery cover of the deadbolt. \n3. Press then release the button on the PCB. \n4. An LED will flash amber indicating the “Remove” or Exclusion process is in progress. \n5. When a green LED flashes 3 times, the “Remove” or Exclusion process is completed successfully. \n6. If a red LED turns ON, try repeating steps 1-3 \n\nInteractive Instruction for Remove https://instructions.allegion.com/instr/86/2581",

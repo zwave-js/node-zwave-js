@@ -21,8 +21,9 @@
 			"isLifeline": true
 		}
 	},
-	"paramInformation": {
-		"3": {
+	"paramInformation": [
+		{
+			"#": "3",
 			"label": "LED Indicator",
 			"valueSize": 1,
 			"minValue": 0,
@@ -53,7 +54,8 @@
 				}
 			]
 		},
-		"13": {
+		{
+			"#": "13",
 			"label": "Automatic Reporting Interval",
 			"valueSize": 1,
 			"minValue": 0,
@@ -68,7 +70,7 @@
 				}
 			]
 		}
-	},
+	],
 	"metadata": {
 		"inclusion": "Put the controller in to INCLUDE mode. Press the button on the unit once.",
 		"exclusion": "Put the controller in to EXCLUDE mode. Press the button on the unit twice.",

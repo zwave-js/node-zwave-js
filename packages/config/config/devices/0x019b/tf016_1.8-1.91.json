@@ -28,8 +28,9 @@
 			"maxNodes": 8
 		}
 	},
-	"paramInformation": {
-		"1": {
+	"paramInformation": [
+		{
+			"#": "1",
 			"label": "Operation mode",
 			"valueSize": 2,
 			"minValue": 0,
@@ -55,7 +56,8 @@
 				}
 			]
 		},
-		"2": {
+		{
+			"#": "2",
 			"label": "Sensor mode",
 			"valueSize": 2,
 			"minValue": 0,
@@ -89,7 +91,8 @@
 				}
 			]
 		},
-		"3": {
+		{
+			"#": "3",
 			"label": "Floor sensor type",
 			"valueSize": 2,
 			"minValue": 0,
@@ -123,7 +126,8 @@
 				}
 			]
 		},
-		"4": {
+		{
+			"#": "4",
 			"label": "DIFF l. Temperature control Hysteresis",
 			"description": "Range 3-30 (0.3°C 3.0°C)",
 			"valueSize": 2,
@@ -131,7 +135,8 @@
 			"maxValue": 30,
 			"defaultValue": 5
 		},
-		"5": {
+		{
+			"#": "5",
 			"label": "FLo, Floor min limit",
 			"description": "Range 50-400 (5.0°C 40.0°C)",
 			"valueSize": 2,
@@ -139,7 +144,8 @@
 			"maxValue": 400,
 			"defaultValue": 50
 		},
-		"6": {
+		{
+			"#": "6",
 			"label": "FHi, Floor max limit",
 			"description": "Range 50-400 (5.0°C 40.0°C)",
 			"valueSize": 2,
@@ -147,7 +153,8 @@
 			"maxValue": 400,
 			"defaultValue": 400
 		},
-		"7": {
+		{
+			"#": "7",
 			"label": "ALo, Air min limit",
 			"description": "Range 50-400 (5.0°C 40.0°C)",
 			"valueSize": 2,
@@ -155,7 +162,8 @@
 			"maxValue": 400,
 			"defaultValue": 50
 		},
-		"8": {
+		{
+			"#": "8",
 			"label": "AHi, Air max limit",
 			"description": "Range 50-400 (5.0°C 40.0°C)",
 			"valueSize": 2,
@@ -163,14 +171,16 @@
 			"maxValue": 400,
 			"defaultValue": 400
 		},
-		"9": {
+		{
+			"#": "9",
 			"label": "PLo, FP-mode P setting",
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 9,
 			"defaultValue": 0
 		},
-		"10": {
+		{
+			"#": "10",
 			"label": "CO mode setpoint",
 			"description": "Range 50-400 (5.0°C 40.0°C)",
 			"valueSize": 2,
@@ -178,7 +188,8 @@
 			"maxValue": 400,
 			"defaultValue": 210
 		},
-		"11": {
+		{
+			"#": "11",
 			"label": "ECO mode setpoint",
 			"description": "Range 50-400 (5.0°C 40.0°C)",
 			"valueSize": 2,
@@ -186,14 +197,16 @@
 			"maxValue": 400,
 			"defaultValue": 180
 		},
-		"12": {
+		{
+			"#": "12",
 			"label": "P setting",
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 10,
 			"defaultValue": 2
 		},
-		"13": {
+		{
+			"#": "13",
 			"label": "COOL setpoint",
 			"description": "Only if cooling enabled. Range 50-400 (5.0°C 40.0°C)",
 			"valueSize": 2,
@@ -201,5 +214,5 @@
 			"maxValue": 400,
 			"defaultValue": 210
 		}
-	}
+	]
 }

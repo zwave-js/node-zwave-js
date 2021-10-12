@@ -24,15 +24,17 @@
 			"isLifeline": true
 		}
 	},
-	"paramInformation": {
-		"0": {
+	"paramInformation": [
+		{
+			"#": "0",
 			"label": "Maximum dim level",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 99,
 			"defaultValue": 99
 		},
-		"1": {
+		{
+			"#": "1",
 			"label": "Report node",
 			"description": "Report Node, reports changes in level to this node id. Disabled if 0.",
 			"valueSize": 1,
@@ -41,7 +43,8 @@
 			"defaultValue": 0,
 			"unsigned": true
 		},
-		"2": {
+		{
+			"#": "2",
 			"label": "B&O IR support",
 			"description": "B&O IR support is disabled if 0 otherwise enabled.",
 			"valueSize": 1,
@@ -61,7 +64,8 @@
 				}
 			]
 		},
-		"3": {
+		{
+			"#": "3",
 			"label": "Dimming type",
 			"description": "Dimming Type, trailing edge enabled if 0 otherwise leading edge enabled.",
 			"valueSize": 1,
@@ -81,7 +85,8 @@
 				}
 			]
 		},
-		"4": {
+		{
+			"#": "4",
 			"label": "Dimming level duration",
 			"valueSize": 1,
 			"minValue": 1,
@@ -89,7 +94,8 @@
 			"defaultValue": 8,
 			"unsigned": true
 		},
-		"5": {
+		{
+			"#": "5",
 			"label": "Set level duration",
 			"description": "Default Set Level Duration, how long time it takes to set one level in 0.01s.",
 			"valueSize": 1,
@@ -98,7 +104,8 @@
 			"defaultValue": 1,
 			"unsigned": true
 		},
-		"6": {
+		{
+			"#": "6",
 			"label": "Long dim duration",
 			"valueSize": 1,
 			"minValue": 0,
@@ -106,7 +113,8 @@
 			"defaultValue": 158,
 			"unsigned": true
 		},
-		"7": {
+		{
+			"#": "7",
 			"label": "Touch press time",
 			"valueSize": 1,
 			"minValue": 1,
@@ -114,7 +122,8 @@
 			"defaultValue": 50,
 			"unsigned": true
 		},
-		"8": {
+		{
+			"#": "8",
 			"label": "Touch Multiple Press Time",
 			"description": "No specific usage in this product",
 			"valueSize": 1,
@@ -123,7 +132,8 @@
 			"defaultValue": 100,
 			"unsigned": true
 		},
-		"9": {
+		{
+			"#": "9",
 			"label": "Touch Hold Time",
 			"valueSize": 1,
 			"minValue": 0,
@@ -131,7 +141,8 @@
 			"defaultValue": 40,
 			"unsigned": true
 		},
-		"10": {
+		{
+			"#": "10",
 			"label": "Network Update Interval",
 			"valueSize": 2,
 			"minValue": 0,
@@ -139,7 +150,8 @@
 			"defaultValue": 168,
 			"unsigned": true
 		},
-		"11": {
+		{
+			"#": "11",
 			"label": "Rediscover Interval",
 			"description": "Rediscover Interval, time between rediscoveries in 256 seconds. Disabled if 0.",
 			"valueSize": 2,
@@ -148,5 +160,5 @@
 			"defaultValue": 2362,
 			"unsigned": true
 		}
-	}
+	]
 }

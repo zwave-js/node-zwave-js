@@ -1,7 +1,7 @@
 {
 	"manufacturer": "Sensative AB",
 	"manufacturerId": "0x019a",
-	"label": "11-01-021",
+	"label": "11-01-022",
 	"description": "Strips Guard 700",
 	"devices": [
 		{
@@ -16,13 +16,13 @@
 	"associations": {
 		"1": {
 			"label": "Lifeline",
-			"description": "Strips supports association group 1 (lifeline), max 1 node, normally used to send Strips’notification to the Z-Wave controller.",
 			"maxNodes": 1,
 			"isLifeline": true
 		}
 	},
-	"paramInformation": {
-		"1": {
+	"paramInformation": [
+		{
+			"#": "1",
 			"label": "Notification type",
 			"valueSize": 1,
 			"minValue": 0,
@@ -45,7 +45,8 @@
 				}
 			]
 		},
-		"2": {
+		{
+			"#": "2",
 			"label": "LED indication",
 			"description": "Turn On or Off LED for specific event indications (ex. alarms).",
 			"valueSize": 1,
@@ -65,7 +66,8 @@
 				}
 			]
 		},
-		"15": {
+		{
+			"#": "15",
 			"label": "Activate supervision",
 			"description": "Activate Supervision command for only important alarm events or all events. Supervised commands require a confirmation from the gateway when a notification is received.",
 			"valueSize": 1,
@@ -89,7 +91,8 @@
 				}
 			]
 		},
-		"16": {
+		{
+			"#": "16",
 			"label": "Supervision report wait time",
 			"description": "Only used if parameter 22 is set to 1 (High security). The number of milliseconds to wait for a Supervision response when a Supervised message is sent.",
 			"unit": "ms",
@@ -99,7 +102,8 @@
 			"defaultValue": 10000,
 			"unsigned": true
 		},
-		"17": {
+		{
+			"#": "17",
 			"label": "Number of failed event retries",
 			"description": "Only used if parameter 22 is set to 1 (High security). Number of retries when a confirmation is not received. 0 = No retry, 1 - 5 = Number of retries when a confirmation is not received.",
 			"unit": "retries",
@@ -109,7 +113,8 @@
 			"defaultValue": 1,
 			"unsigned": true
 		},
-		"18": {
+		{
+			"#": "18",
 			"label": "Failed Event Retry Interval",
 			"description": "Only used if parameter 22 is set to 1 (High security). The minimum number of seconds between retries. Min = 1 second, Max = 60 seconds",
 			"unit": "seconds",
@@ -119,7 +124,8 @@
 			"defaultValue": 6,
 			"unsigned": true
 		},
-		"19": {
+		{
+			"#": "19",
 			"label": "Heartbeat interval",
 			"description": "Only used if parameter 22 is set to 1 (High security). Number of minutes between periodic battery reports (Heartbeats). Accepts multiples of 5 mins. Any arbitary value between 5 and 70 will be rounded up to a multiple of 5.",
 			"unit": "minutes",
@@ -129,7 +135,8 @@
 			"defaultValue": 70,
 			"unsigned": true
 		},
-		"22": {
+		{
+			"#": "22",
 			"label": "Security Level",
 			"description": "Select the level of security. High Security (Enables parameters 16-19, 21). Standard (Forces parameter behaviour as follows: #16=1000, #17=Sensative standard**, #18=0, #19=Off, #21=Off ** Retries with an incrementally longer period until reconnected.",
 			"valueSize": 1,
@@ -149,5 +156,5 @@
 				}
 			]
 		}
-	}
+	]
 }

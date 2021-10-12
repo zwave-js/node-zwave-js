@@ -14,8 +14,9 @@
 		"min": "0.0",
 		"max": "255.255"
 	},
-	"paramInformation": {
-		"2": {
+	"paramInformation": [
+		{
+			"#": "2",
 			"label": "Reporting Trigger Threshold Of Shutter Position Change",
 			"description": "Range 1-10%, 0 to disable reporting",
 			"valueSize": 1,
@@ -25,7 +26,8 @@
 			"defaultValue": 1,
 			"unsigned": true
 		},
-		"3": {
+		{
+			"#": "3",
 			"label": "Stop By Block Function",
 			"description": "",
 			"valueSize": 1,
@@ -45,7 +47,8 @@
 				}
 			]
 		},
-		"4": {
+		{
+			"#": "4",
 			"label": "Learn mode",
 			"description": "",
 			"valueSize": 1,
@@ -73,7 +76,8 @@
 				}
 			]
 		},
-		"5": {
+		{
+			"#": "5",
 			"label": "Ventilation Function",
 			"description": "",
 			"valueSize": 1,
@@ -93,7 +97,7 @@
 				}
 			]
 		}
-	},
+	],
 	"metadata": {
 		"inclusion": "Make sure connecting module to power supply and module has not joined Z-Wave network (if module joined any other Z-Wave network, please refer to the clauses “Exclude device from a Z-Wave network”). \nFirst, set primary controller/gateway into inclusion mode. And press 'Button L' 3 times, LED starts to flash slowly for 10 seconds, during the flash, don’t press 'Button L' 3 times again, because it will cancel your last operation. Until LED is on for 3 seconds, means success. If module does not find a Z-Wave network within 10 seconds after join network function trigger, please try again. After joined Z-Wave network, please wait for a while until the app showing device is included. Then you can start enjoying with our module",
 		"exclusion": "Method 1: Factory Reset.\nMethod 2: First, set primary controller/gateway into exclusion mode. And press 'Button L' 3 times, LED started to flash slowly for 10 seconds, during the flash, don’t press 'Button L' 3 times again, because it will cancel your last operation. Until LED is on for 3 seconds, means success",

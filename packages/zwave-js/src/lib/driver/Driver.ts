@@ -117,6 +117,7 @@ import {
 	isSendData,
 	isSendDataSinglecast,
 	SendDataMessage,
+	TransmitOptions,
 } from "../controller/SendDataShared";
 import { ControllerLogger } from "../log/Controller";
 import { DriverLogger } from "../log/Driver";
@@ -344,6 +345,8 @@ export interface SendCommandOptions extends SendMessageOptions {
 	maxSendAttempts?: number;
 	/** Whether the driver should automatically handle the encapsulation. Default: true */
 	autoEncapsulate?: boolean;
+	/** Overwrite the default transmit options */
+	transmitOptions?: TransmitOptions;
 }
 
 export type SupervisionUpdateHandler = (
@@ -2896,6 +2899,15 @@ ${handlers.length} left`,
 		// Specify the number of send attempts for the request
 		if (options.maxSendAttempts != undefined) {
 			msg.maxSendAttempts = options.maxSendAttempts;
+		}
+
+		// Specify transmit options for the request
+		if (options.transmitOptions != undefined) {
+			msg.transmitOptions = options.transmitOptions;
+			if (!(options.transmitOptions & TransmitOptions.ACK)) {
+				// If no ACK is requested, set the callback ID to zero, because we won't get a controller callback
+				msg.callbackId = 0;
+			}
 		}
 
 		// Automatically encapsulate commands before sending
