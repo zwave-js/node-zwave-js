@@ -37,50 +37,64 @@
 			"maxNodes": 5
 		}
 	},
-	"paramInformation": {
-		"20": {
+	"paramInformation": [
+		{
+			"#": "20",
 			"$import": "~/templates/master_template.json#state_after_power_failure_off_on_prev"
 		},
-		"40": {
+		{
+			"#": "40",
 			"$import": "~/0x0086/templates/aeotec_template.json#auto_off_timer_65535"
 		},
-		"41": {
+		{
+			"#": "41",
 			"$import": "~/0x0086/templates/aeotec_template.json#auto_on_timer_65535"
 		},
-		"80": {
+		{
+			"#": "80",
 			"$import": "~/0x0086/templates/aeotec_template.json#binary_report_type"
 		},
-		"82": {
+		{
+			"#": "82",
 			"$import": "~/0x0086/templates/aeotec_template.json#wallmote_command_type"
 		},
-		"83": {
+		{
+			"#": "83",
 			"$import": "~/0x0086/templates/aeotec_template.json#led_function"
 		},
-		"84": {
+		{
+			"#": "84",
 			"$import": "~/0x0086/templates/aeotec_template.json#led_indicator_color_output"
 		},
-		"85": {
+		{
+			"#": "85",
 			"$import": "~/0x0086/templates/aeotec_template.json#led_indicator_color_scene"
 		},
-		"86": {
+		{
+			"#": "86",
 			"$import": "~/0x0086/templates/aeotec_template.json#led_indicator_brightness"
 		},
-		"119": {
+		{
+			"#": "119",
 			"$import": "~/0x0086/templates/aeotec_template.json#external_switch_scene_function"
 		},
-		"120": {
+		{
+			"#": "120",
 			"$import": "~/0x0086/templates/aeotec_template.json#external_switch_toggle_no_nc"
 		},
-		"121": {
+		{
+			"#": "121",
 			"$import": "~/templates/master_template.json#smart_switch_mode_0-3"
 		},
-		"123": {
+		{
+			"#": "123",
 			"$import": "~/0x0086/templates/aeotec_template.json#smart_switch_mode_reporting"
 		},
-		"122": {
+		{
+			"#": "122",
 			"$import": "~/templates/master_template.json#orientation_momentary"
 		}
-	},
+	],
 	"metadata": {
 		"inclusion": "1. Turn your primary controller into inclusion mode.\n2. Press the Top/Buttom button once on product",
 		"exclusion": "1. Turn your primary controller into exclusion mode.\n2. 3*tap the Top/Buttom button on product",

@@ -14,8 +14,9 @@
 		"max": "255.255"
 	},
 	"supportsZWavePlus": true,
-	"paramInformation": {
-		"1": {
+	"paramInformation": [
+		{
+			"#": "1",
 			"label": "Local load control",
 			"description": "Defines which sequences of click control the local load.",
 			"valueSize": 1,
@@ -38,7 +39,8 @@
 				}
 			]
 		},
-		"2": {
+		{
+			"#": "2",
 			"label": "Level used to control group 4",
 			"description": "Allowable range: 0-99, 255",
 			"valueSize": 1,
@@ -47,7 +49,8 @@
 			"defaultValue": 255,
 			"unsigned": true
 		},
-		"3": {
+		{
+			"#": "3",
 			"label": "Level used to control group 5",
 			"description": "Allowable range: 0-99, 255",
 			"valueSize": 1,
@@ -56,21 +59,24 @@
 			"defaultValue": 255,
 			"unsigned": true
 		},
-		"4": {
+		{
+			"#": "4",
 			"label": "Overvoltage level",
 			"valueSize": 2,
 			"minValue": 110,
 			"maxValue": 260,
 			"defaultValue": 253
 		},
-		"5": {
+		{
+			"#": "5",
 			"label": "Overvoltage Timer",
 			"valueSize": 2,
 			"minValue": 1,
 			"maxValue": 3600,
 			"defaultValue": 5
 		},
-		"6": {
+		{
+			"#": "6",
 			"label": "Overvoltage Alarm Reset",
 			"valueSize": 1,
 			"minValue": 0,
@@ -88,7 +94,8 @@
 				}
 			]
 		},
-		"7": {
+		{
+			"#": "7",
 			"label": "Level used to control group 3",
 			"description": "Allowable range: 0-99, 255",
 			"valueSize": 1,
@@ -97,21 +104,24 @@
 			"defaultValue": 0,
 			"unsigned": true
 		},
-		"8": {
+		{
+			"#": "8",
 			"label": "Overcurrent level",
 			"valueSize": 1,
 			"minValue": 1,
 			"maxValue": 12,
 			"defaultValue": 12
 		},
-		"9": {
+		{
+			"#": "9",
 			"label": "Overcurrent Timer",
 			"valueSize": 2,
 			"minValue": 1,
 			"maxValue": 3600,
 			"defaultValue": 10
 		},
-		"10": {
+		{
+			"#": "10",
 			"label": "Overcurrent Alarm Reset",
 			"valueSize": 1,
 			"minValue": 0,
@@ -129,7 +139,8 @@
 				}
 			]
 		},
-		"11": {
+		{
+			"#": "11",
 			"label": "Level used to control group 2",
 			"description": "Allowable range: 0-99, 255",
 			"valueSize": 1,
@@ -138,5 +149,5 @@
 			"defaultValue": 0,
 			"unsigned": true
 		}
-	}
+	]
 }

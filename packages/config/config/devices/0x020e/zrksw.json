@@ -14,8 +14,9 @@
 		"min": "0.0",
 		"max": "255.255"
 	},
-	"paramInformation": {
-		"1": {
+	"paramInformation": [
+		{
+			"#": "1",
 			"label": "Dim Level When Powered On",
 			"valueSize": 1,
 			"minValue": 0,
@@ -34,7 +35,8 @@
 				}
 			]
 		},
-		"9": {
+		{
+			"#": "9",
 			"label": "Dim Step Level",
 			"description": "Defines the number of steps necessary to reach full brightness.",
 			"valueSize": 1,
@@ -43,7 +45,8 @@
 			"defaultValue": 1,
 			"unsigned": true
 		},
-		"10": {
+		{
+			"#": "10",
 			"label": "Dim Step Timing",
 			"description": "Timing of steps",
 			"valueSize": 1,
@@ -52,7 +55,7 @@
 			"defaultValue": 3,
 			"unsigned": true
 		}
-	},
+	],
 	"metadata": {
 		"inclusion": "1. Turn Off power to the light bulb socket\n2. Screw in the light bulb\n3. Place your network controller into inclusion mode by following the controller manufacturer's instructions\n4. Turn On power to the light bulb. If successful, the LED light bulb will flash twice to indicate successful inclusion.\n5. If the controller/gateway shows it was a fail, repeat the procedure.\n\nNote: If Inclusion still fails after the 2nd attempt, you need to first RESET the dt Smart Bulb before repeating the above steps.",
 		"exclusion": "1. Turn off power to the light bulb socket\n2. Follow the network controller instruction to place your network controller into exclusion mode to remove the dt light bulb from the network.\n3. After being prompted by the network controller, turn On power to the light bulb. If successful, the LED light bulb will flash twice to indicate successful inclusion.",

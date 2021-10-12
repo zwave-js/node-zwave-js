@@ -38,41 +38,53 @@
 			"maxNodes": 5
 		}
 	},
-	"paramInformation": {
-		"3[0x04]": {
+	"paramInformation": [
+		{
+			"#": "3[0x04]",
 			"$import": "~/0x0086/templates/aeotec_template.json#led_indicator_wake"
 		},
-		"3[0x10]": {
+		{
+			"#": "3[0x10]",
 			"$import": "~/0x0086/templates/aeotec_template.json#led_indicator_tamper"
 		},
-		"4": {
+		{
+			"#": "4",
 			"$import": "~/0x0086/templates/aeotec_template.json#range_test_double_click"
 		},
-		"5": {
+		{
+			"#": "5",
 			"$import": "~/0x0086/templates/aeotec_template.json#association_group_2_trigger"
 		},
-		"6": {
+		{
+			"#": "6",
 			"$import": "~/0x0086/templates/aeotec_template.json#association_group_2_command_type"
 		},
-		"7": {
+		{
+			"#": "7",
 			"$import": "~/0x0086/templates/aeotec_template.json#association_group_2_basic_set_on"
 		},
-		"8": {
+		{
+			"#": "8",
 			"$import": "~/0x0086/templates/aeotec_template.json#association_group_2_basic_set_off"
 		},
-		"9": {
+		{
+			"#": "9",
 			"$import": "~/0x0086/templates/aeotec_template.json#time_delay_on"
 		},
-		"10": {
+		{
+			"#": "10",
 			"$import": "~/0x0086/templates/aeotec_template.json#time_delay_off"
 		},
-		"11": {
+		{
+			"#": "11",
 			"$import": "~/0x0086/templates/aeotec_template.json#time_delay_tamper"
 		},
-		"12": {
+		{
+			"#": "12",
 			"$import": "~/0x0086/templates/aeotec_template.json#report_on_tamper_cancel"
 		},
-		"16": {
+		{
+			"#": "16",
 			"label": "Temperature Change Report Trigger",
 			"valueSize": 1,
 			"unit": "0.1 °(C/F)",
@@ -87,7 +99,8 @@
 				}
 			]
 		},
-		"17": {
+		{
+			"#": "17",
 			"label": "Humidity Change Report Trigger",
 			"valueSize": 1,
 			"unit": "%",
@@ -102,7 +115,8 @@
 				}
 			]
 		},
-		"18": {
+		{
+			"#": "18",
 			"label": "Automatic Reporting Interval",
 			"valueSize": 2,
 			"unit": "seconds",
@@ -117,14 +131,16 @@
 				}
 			]
 		},
-		"64": {
+		{
+			"#": "64",
 			"$import": "~/0x0086/templates/aeotec_template.json#celsius_fahrenheit",
 			"valueSize": 1
 		},
-		"255": {
+		{
+			"#": "255",
 			"$import": "~/0x0086/templates/aeotec_template.json#factory_reset_exclude"
 		}
-	},
+	],
 	"metadata": {
 		"inclusion": "1. Open the housing.\n2. Remove the battery protection.\n3. Press the tamper on the side of the appliance three times quickly",
 		"exclusion": "1. Open the housing.\n2. Press the tamper on the side of the appliance three times quickly",

@@ -28,8 +28,9 @@
 			"isLifeline": true
 		}
 	},
-	"paramInformation": {
-		"1": {
+	"paramInformation": [
+		{
+			"#": "1",
 			"label": "LED mode",
 			"description": "Set LED indication mode",
 			"valueSize": 1,
@@ -61,7 +62,8 @@
 				}
 			]
 		},
-		"2": {
+		{
+			"#": "2",
 			"label": "Automatically open or close after time",
 			"unit": "seconds",
 			"valueSize": 2,
@@ -76,7 +78,8 @@
 				}
 			]
 		},
-		"3": {
+		{
+			"#": "3",
 			"label": "RF Close Command Interpretation",
 			"valueSize": 1,
 			"minValue": 0,
@@ -103,7 +106,8 @@
 				}
 			]
 		},
-		"4": {
+		{
+			"#": "4",
 			"label": "Full close time",
 			"description": "Time in seconds to go from opened to closed state.",
 			"valueSize": 1,
@@ -118,7 +122,8 @@
 				}
 			]
 		},
-		"5": {
+		{
+			"#": "5",
 			"label": "Full open time",
 			"description": "Time in seconds to go from closed to open state.",
 			"valueSize": 1,
@@ -133,7 +138,8 @@
 				}
 			]
 		},
-		"6": {
+		{
+			"#": "6",
 			"label": "Node ID of the blocking device",
 			"description": "Id of the device which can block the blinds",
 			"valueSize": 1,
@@ -148,7 +154,8 @@
 				}
 			]
 		},
-		"7": {
+		{
+			"#": "7",
 			"label": "Protected command",
 			"valueSize": 1,
 			"minValue": 0,
@@ -167,7 +174,8 @@
 				}
 			]
 		},
-		"8": {
+		{
+			"#": "8",
 			"label": "Stop or Revert if opposite button is pressed",
 			"description": "Defines behaviour on open press while closing and vice versa.",
 			"valueSize": 1,
@@ -191,7 +199,8 @@
 				}
 			]
 		},
-		"9": {
+		{
+			"#": "9",
 			"label": "Invert open and close relays",
 			"valueSize": 1,
 			"minValue": 0,
@@ -210,14 +219,16 @@
 				}
 			]
 		},
-		"10": {
+		{
+			"#": "10",
 			"label": "Typical click timeout",
 			"valueSize": 1,
 			"minValue": 1,
 			"maxValue": 100,
 			"defaultValue": 50
 		},
-		"11": {
+		{
+			"#": "11",
 			"label": "Invert buttons",
 			"description": "Allows exchanging the functionality of the buttons",
 			"valueSize": 1,
@@ -237,7 +248,8 @@
 				}
 			]
 		},
-		"12": {
+		{
+			"#": "12",
 			"label": "Switch by buttons",
 			"description": "Local operations by buttons will/will not/ switch the load",
 			"valueSize": 1,
@@ -261,7 +273,8 @@
 				}
 			]
 		},
-		"13": {
+		{
+			"#": "13",
 			"label": "Action on button single press or hold",
 			"description": "Defines which command should be sent on button single press or hold.",
 			"valueSize": 1,
@@ -297,7 +310,8 @@
 				}
 			]
 		},
-		"14": {
+		{
+			"#": "14",
 			"label": "Action on button double press or hold",
 			"description": "Defines which command should be sent on button double press or press-hold.",
 			"valueSize": 1,
@@ -333,7 +347,8 @@
 				}
 			]
 		},
-		"15": {
+		{
+			"#": "15",
 			"label": "Action on Switch All command",
 			"valueSize": 1,
 			"minValue": 0,
@@ -356,7 +371,8 @@
 				}
 			]
 		},
-		"16": {
+		{
+			"#": "16",
 			"label": "What to do on button Down press",
 			"valueSize": 1,
 			"minValue": 0,
@@ -379,7 +395,8 @@
 				}
 			]
 		},
-		"17": {
+		{
+			"#": "17",
 			"label": "Action on Auto open or close function",
 			"description": "Defines the action to perform upon auto open or auto close.",
 			"valueSize": 1,
@@ -399,5 +416,5 @@
 				}
 			]
 		}
-	}
+	]
 }

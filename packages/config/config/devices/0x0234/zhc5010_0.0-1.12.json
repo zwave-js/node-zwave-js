@@ -18,8 +18,9 @@
 		"max": "1.12"
 	},
 	"supportsZWavePlus": true,
-	"paramInformation": {
-		"1": {
+	"paramInformation": [
+		{
+			"#": "1",
 			"label": "Upper paddle buttons mode",
 			"description": "Configuration of Pair Mode for the upper two buttons (button #1 and #2)",
 			"valueSize": 1,
@@ -38,7 +39,8 @@
 				}
 			]
 		},
-		"2": {
+		{
+			"#": "2",
 			"label": "Lower paddle buttons mode",
 			"description": "Pair Mode, upper two buttons",
 			"valueSize": 1,
@@ -57,7 +59,8 @@
 				}
 			]
 		},
-		"3": {
+		{
+			"#": "3",
 			"label": "LED indication #1",
 			"valueSize": 1,
 			"minValue": 0,
@@ -99,7 +102,8 @@
 				}
 			]
 		},
-		"4": {
+		{
+			"#": "4",
 			"label": "LED indication #2",
 			"valueSize": 1,
 			"minValue": 0,
@@ -141,7 +145,8 @@
 				}
 			]
 		},
-		"5": {
+		{
+			"#": "5",
 			"label": "LED indication #3",
 			"valueSize": 1,
 			"minValue": 0,
@@ -183,7 +188,8 @@
 				}
 			]
 		},
-		"6": {
+		{
+			"#": "6",
 			"label": "LED indication #4",
 			"valueSize": 1,
 			"minValue": 0,
@@ -225,7 +231,8 @@
 				}
 			]
 		},
-		"7": {
+		{
+			"#": "7",
 			"label": "Percentage of light in the LED #1 when On",
 			"description": "Configure the percentage of light in LED # 1, when the LED is turned on.",
 			"valueSize": 1,
@@ -233,7 +240,8 @@
 			"maxValue": 100,
 			"defaultValue": 50
 		},
-		"8": {
+		{
+			"#": "8",
 			"label": "Percentage of light in the LED #2 when On",
 			"description": "Configure the percentage of light in LED # 2, when the LED is turned on.",
 			"valueSize": 1,
@@ -242,7 +250,8 @@
 			"defaultValue": 50,
 			"readOnly": true
 		},
-		"9": {
+		{
+			"#": "9",
 			"label": "Percentage of light in the LED #3 when On",
 			"description": "Configure the percentage of light in LED # 3, when the LED is turned on.",
 			"valueSize": 1,
@@ -250,7 +259,8 @@
 			"maxValue": 100,
 			"defaultValue": 50
 		},
-		"10": {
+		{
+			"#": "10",
 			"label": "Percentage of light in the LED #4 when On",
 			"description": "Configure the percentage of light in LED #4, when the LED is turned on.",
 			"valueSize": 1,
@@ -258,7 +268,8 @@
 			"maxValue": 100,
 			"defaultValue": 50
 		},
-		"11": {
+		{
+			"#": "11",
 			"label": "Percentage of light in the LED #1 when Off",
 			"description": "Configure the percentage of light in LED # 1, when the LED is turned off.",
 			"valueSize": 1,
@@ -266,7 +277,8 @@
 			"maxValue": 100,
 			"defaultValue": 0
 		},
-		"12": {
+		{
+			"#": "12",
 			"label": "Percentage of light in the LED #2 when Off",
 			"description": "Configure the percentage of light in LED # 2, when the LED is turned off.",
 			"valueSize": 1,
@@ -274,7 +286,8 @@
 			"maxValue": 100,
 			"defaultValue": 0
 		},
-		"13": {
+		{
+			"#": "13",
 			"label": "Percentage of light in the LED #3 when Off",
 			"description": "Configure the percentage of light in LED #3, when the LED is turned off.",
 			"valueSize": 1,
@@ -282,7 +295,8 @@
 			"maxValue": 100,
 			"defaultValue": 0
 		},
-		"14": {
+		{
+			"#": "14",
 			"label": "Percentage of light in the LED #4 when Off",
 			"description": "Configure the percentage of light in LED #4, when the LED is turned off.",
 			"valueSize": 1,
@@ -290,7 +304,8 @@
 			"maxValue": 100,
 			"defaultValue": 0
 		},
-		"15": {
+		{
+			"#": "15",
 			"label": "Relay mode",
 			"description": "How built-in relay is controlled",
 			"valueSize": 1,
@@ -357,7 +372,8 @@
 				}
 			]
 		},
-		"16": {
+		{
+			"#": "16",
 			"label": "Indicator mode.",
 			"description": "set the current light level for the actual LED or the level value can be stored",
 			"valueSize": 1,
@@ -376,7 +392,8 @@
 				}
 			]
 		},
-		"17": {
+		{
+			"#": "17",
 			"label": "Scene notification offset.",
 			"description": "Scene sequence numbers transmitted by Central Scene notifications.",
 			"valueSize": 1,
@@ -396,7 +413,8 @@
 				}
 			]
 		},
-		"18": {
+		{
+			"#": "18",
 			"label": "Disable House Cleaning.",
 			"valueSize": 1,
 			"minValue": 0,
@@ -414,7 +432,8 @@
 				}
 			]
 		},
-		"23": {
+		{
+			"#": "23",
 			"label": "Control of association groups (button #1).",
 			"valueSize": 1,
 			"minValue": 0,
@@ -432,7 +451,8 @@
 				}
 			]
 		},
-		"24": {
+		{
+			"#": "24",
 			"label": "Control of association groups (button #2).",
 			"valueSize": 1,
 			"minValue": 0,
@@ -450,7 +470,8 @@
 				}
 			]
 		},
-		"25": {
+		{
+			"#": "25",
 			"label": "Control of association groups (button #3).",
 			"valueSize": 1,
 			"minValue": 0,
@@ -468,7 +489,8 @@
 				}
 			]
 		},
-		"26": {
+		{
+			"#": "26",
 			"label": "Control of association groups (button #4).",
 			"valueSize": 1,
 			"minValue": 0,
@@ -486,7 +508,8 @@
 				}
 			]
 		},
-		"19[0x01]": {
+		{
+			"#": "19[0x01]",
 			"label": "Multilevel Switch (button #1) Disabled/Enabled",
 			"description": "Multilevel Switch on single press for device 1 (button #1)",
 			"valueSize": 4,
@@ -505,21 +528,24 @@
 				}
 			]
 		},
-		"19[0xff00]": {
+		{
+			"#": "19[0xff00]",
 			"label": "Upper switch value - (button #1)",
 			"valueSize": 4,
 			"minValue": 0,
 			"maxValue": 255,
 			"defaultValue": 255
 		},
-		"19[0xff0000]": {
+		{
+			"#": "19[0xff0000]",
 			"label": "Lower switch value - (button #1)",
 			"valueSize": 4,
 			"minValue": 0,
 			"maxValue": 99,
 			"defaultValue": 0
 		},
-		"20[0x01]": {
+		{
+			"#": "20[0x01]",
 			"label": "Multilevel Switch (button #2) Disabled/Enabled",
 			"description": "Multilevel Switch on single press for device 2 (button #2)",
 			"valueSize": 4,
@@ -538,21 +564,24 @@
 				}
 			]
 		},
-		"20[0xff00]": {
+		{
+			"#": "20[0xff00]",
 			"label": "Upper switch value - (button #2)",
 			"valueSize": 4,
 			"minValue": 0,
 			"maxValue": 255,
 			"defaultValue": 255
 		},
-		"20[0xff0000]": {
+		{
+			"#": "20[0xff0000]",
 			"label": "Lower switch value - (button #2)",
 			"valueSize": 4,
 			"minValue": 0,
 			"maxValue": 99,
 			"defaultValue": 0
 		},
-		"21[0x01]": {
+		{
+			"#": "21[0x01]",
 			"label": "Multilevel Switch (button #3) Disabled/Enabled",
 			"description": "Multilevel Switch on single press for device 3 (button #3)",
 			"valueSize": 4,
@@ -571,21 +600,24 @@
 				}
 			]
 		},
-		"21[0xff00]": {
+		{
+			"#": "21[0xff00]",
 			"label": "Upper switch value - (button #3)",
 			"valueSize": 4,
 			"minValue": 0,
 			"maxValue": 255,
 			"defaultValue": 255
 		},
-		"21[0xff0000]": {
+		{
+			"#": "21[0xff0000]",
 			"label": "Lower switch value - (button #3)",
 			"valueSize": 4,
 			"minValue": 0,
 			"maxValue": 99,
 			"defaultValue": 0
 		},
-		"22[0x01]": {
+		{
+			"#": "22[0x01]",
 			"label": "Multilevel Switch (button #4) Disabled/Enabled",
 			"description": "Multilevel Switch on single press for device 4 (button #4)",
 			"valueSize": 4,
@@ -604,21 +636,23 @@
 				}
 			]
 		},
-		"22[0xff00]": {
+		{
+			"#": "22[0xff00]",
 			"label": "Upper switch value - (button #4)",
 			"valueSize": 4,
 			"minValue": 0,
 			"maxValue": 255,
 			"defaultValue": 255
 		},
-		"22[0xff0000]": {
+		{
+			"#": "22[0xff0000]",
 			"label": "Lower switch value - (button #4)",
 			"valueSize": 4,
 			"minValue": 0,
 			"maxValue": 99,
 			"defaultValue": 0
 		}
-	},
+	],
 	"compat": {
 		"preserveRootApplicationCCValueIDs": true
 	}

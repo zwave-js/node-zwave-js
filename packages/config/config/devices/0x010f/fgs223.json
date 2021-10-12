@@ -29,11 +29,13 @@
 		"min": "0.0",
 		"max": "255.255"
 	},
-	"paramInformation": {
-		"9": {
+	"paramInformation": [
+		{
+			"#": "9",
 			"$import": "~/templates/master_template.json#state_after_power_failure_off_prev"
 		},
-		"10": {
+		{
+			"#": "10",
 			"label": "First Channel - Operating Mode",
 			"valueSize": 1,
 			"minValue": 0,
@@ -68,7 +70,8 @@
 				}
 			]
 		},
-		"11": {
+		{
+			"#": "11",
 			"label": "First Channel - Reaction to Key S1 for Delay/Auto ON/OFF Modes",
 			"valueSize": 1,
 			"minValue": 0,
@@ -91,7 +94,8 @@
 				}
 			]
 		},
-		"12": {
+		{
+			"#": "12",
 			"label": "First Channel - Time Parameter for Delay/Auto ON/OFF Modes",
 			"valueSize": 2,
 			"unit": "seconds",
@@ -106,7 +110,8 @@
 				}
 			]
 		},
-		"13": {
+		{
+			"#": "13",
 			"label": "First Channel - Pulse Time for Blink Mode",
 			"valueSize": 2,
 			"unit": "0.1 seconds",
@@ -115,7 +120,8 @@
 			"defaultValue": 5,
 			"unsigned": true
 		},
-		"15": {
+		{
+			"#": "15",
 			"label": "Second Channel - Operating Mode",
 			"valueSize": 1,
 			"minValue": 0,
@@ -150,7 +156,8 @@
 				}
 			]
 		},
-		"16": {
+		{
+			"#": "16",
 			"label": "Second Channel - Reaction to Key S2 for Delay/Auto ON/OFF Modes",
 			"valueSize": 1,
 			"unit": "seconds",
@@ -174,7 +181,8 @@
 				}
 			]
 		},
-		"17": {
+		{
+			"#": "17",
 			"label": "Second Channel - Time Parameter for Delay/Auto ON/OFF Modes",
 			"valueSize": 2,
 			"unit": "seconds",
@@ -189,7 +197,8 @@
 				}
 			]
 		},
-		"18": {
+		{
+			"#": "18",
 			"label": "Second Channel - Pulse Time for Blink Mode",
 			"valueSize": 2,
 			"unit": "0.1 seconds",
@@ -198,7 +207,8 @@
 			"defaultValue": 5,
 			"unsigned": true
 		},
-		"20": {
+		{
+			"#": "20",
 			"label": "Input Button/Switch Configuration",
 			"valueSize": 1,
 			"minValue": 0,
@@ -221,73 +231,91 @@
 				}
 			]
 		},
-		"21": {
+		{
+			"#": "21",
 			"$import": "~/templates/master_template.json#base_enable_disable",
 			"label": "Report During Blink Mode"
 		},
-		"27[0x01]": {
+		{
+			"#": "27[0x01]",
 			"$import": "templates/fibaro_template.json#send_secure_commands_group2",
 			"defaultValue": 1
 		},
-		"27[0x02]": {
+		{
+			"#": "27[0x02]",
 			"$import": "templates/fibaro_template.json#send_secure_commands_group3",
 			"defaultValue": 1
 		},
-		"27[0x04]": {
+		{
+			"#": "27[0x04]",
 			"$import": "templates/fibaro_template.json#send_secure_commands_group4",
 			"defaultValue": 1
 		},
-		"27[0x08]": {
+		{
+			"#": "27[0x08]",
 			"$import": "templates/fibaro_template.json#send_secure_commands_group5",
 			"defaultValue": 1
 		},
-		"28[0x01]": {
+		{
+			"#": "28[0x01]",
 			"$import": "~/templates/master_template.json#base_enable_disable",
 			"label": "Key S1: Send Scenes When Pressed 1 Time"
 		},
-		"28[0x02]": {
+		{
+			"#": "28[0x02]",
 			"$import": "~/templates/master_template.json#base_enable_disable",
 			"label": "Key S1: Send Scenes When Pressed 2 Times"
 		},
-		"28[0x04]": {
+		{
+			"#": "28[0x04]",
 			"$import": "~/templates/master_template.json#base_enable_disable",
 			"label": "Key S1: Send Scenes When Pressed 3 Times"
 		},
-		"28[0x08]": {
+		{
+			"#": "28[0x08]",
 			"$import": "~/templates/master_template.json#base_enable_disable",
 			"label": "Key S1: Send Scenes When Held Down and Released"
 		},
-		"29[0x01]": {
+		{
+			"#": "29[0x01]",
 			"$import": "~/templates/master_template.json#base_enable_disable",
 			"label": "Key S2: Send Scenes When Pressed 1 Time"
 		},
-		"29[0x02]": {
+		{
+			"#": "29[0x02]",
 			"$import": "~/templates/master_template.json#base_enable_disable",
 			"label": "Key S2: Send Scenes When Pressed 2 Times"
 		},
-		"29[0x04]": {
+		{
+			"#": "29[0x04]",
 			"$import": "~/templates/master_template.json#base_enable_disable",
 			"label": "Key S2: Send Scenes When Pressed 3 Times"
 		},
-		"29[0x08]": {
+		{
+			"#": "29[0x08]",
 			"$import": "~/templates/master_template.json#base_enable_disable",
 			"label": "Key S2: Send Scenes When Held Down and Released"
 		},
-		"30[0x01]": {
+		{
+			"#": "30[0x01]",
 			"$import": "templates/fibaro_template.json#send_s1_associations_on"
 		},
-		"30[0x02]": {
+		{
+			"#": "30[0x02]",
 			"$import": "templates/fibaro_template.json#send_s1_associations_off"
 		},
-		"30[0x04]": {
+		{
+			"#": "30[0x04]",
 			"$import": "templates/fibaro_template.json#send_s1_associations_hold_release",
 			"description": "Reuqires Key S1 to be configured as momentary"
 		},
-		"30[0x08]": {
+		{
+			"#": "30[0x08]",
 			"$import": "templates/fibaro_template.json#send_s1_associations_double_click",
 			"description": "Reuqires Key S1 to be configured as momentary or to change each time input changes"
 		},
-		"31": {
+		{
+			"#": "31",
 			"label": "Key S1 Associations: Switch ON Value Sent",
 			"valueSize": 2,
 			"minValue": 0,
@@ -295,7 +323,8 @@
 			"defaultValue": 255,
 			"unsigned": true
 		},
-		"32": {
+		{
+			"#": "32",
 			"label": "Key S1 Associations: Switch OFF Value Sent",
 			"valueSize": 2,
 			"minValue": 0,
@@ -303,7 +332,8 @@
 			"defaultValue": 0,
 			"unsigned": true
 		},
-		"33": {
+		{
+			"#": "33",
 			"label": "Key S1 Associations: Double Click Value Sent",
 			"valueSize": 2,
 			"minValue": 0,
@@ -311,21 +341,26 @@
 			"defaultValue": 99,
 			"unsigned": true
 		},
-		"35[0x01]": {
+		{
+			"#": "35[0x01]",
 			"$import": "templates/fibaro_template.json#send_s2_associations_on"
 		},
-		"35[0x02]": {
+		{
+			"#": "35[0x02]",
 			"$import": "templates/fibaro_template.json#send_s2_associations_off"
 		},
-		"35[0x04]": {
+		{
+			"#": "35[0x04]",
 			"$import": "templates/fibaro_template.json#send_s2_associations_hold_release",
 			"description": "Requires Key S2 to be configured as momentary"
 		},
-		"35[0x08]": {
+		{
+			"#": "35[0x08]",
 			"$import": "templates/fibaro_template.json#send_s2_associations_double_click",
 			"description": "Requires Key S2 to be configured as momentary or to change each time input changes"
 		},
-		"36": {
+		{
+			"#": "36",
 			"label": "Key S2 Associations: Switch ON Value Sent",
 			"valueSize": 2,
 			"minValue": 0,
@@ -333,7 +368,8 @@
 			"defaultValue": 255,
 			"unsigned": true
 		},
-		"37": {
+		{
+			"#": "37",
 			"label": "Key S2 Associations: Switch OFF Value Sent",
 			"valueSize": 2,
 			"minValue": 0,
@@ -341,7 +377,8 @@
 			"defaultValue": 0,
 			"unsigned": true
 		},
-		"38": {
+		{
+			"#": "38",
 			"label": "Key S2 Associations: Double Click Value Sent",
 			"valueSize": 2,
 			"minValue": 0,
@@ -349,28 +386,35 @@
 			"defaultValue": 99,
 			"unsigned": true
 		},
-		"40": {
+		{
+			"#": "40",
 			"$import": "templates/fibaro_template.json#general_purpose_alarm_response"
 		},
-		"41": {
+		{
+			"#": "41",
 			"$import": "templates/fibaro_template.json#water_flood_alarm_response"
 		},
-		"42": {
+		{
+			"#": "42",
 			"$import": "templates/fibaro_template.json#smoke_alarm_response"
 		},
-		"43": {
+		{
+			"#": "43",
 			"$import": "templates/fibaro_template.json#temperature_alarm_response"
 		},
-		"44": {
+		{
+			"#": "44",
 			"$import": "templates/fibaro_template.json#alarm_state_time",
 			"maxValue": 32000
 		},
-		"50": {
+		{
+			"#": "50",
 			"$import": "templates/fibaro_template.json#power_report_threshold_relative",
 			"label": "First Channel - Power Reports: Threshold",
 			"defaultValue": 20
 		},
-		"51": {
+		{
+			"#": "51",
 			"label": "First Channel - Power Reports: Minimum Time Between Reports",
 			"valueSize": 1,
 			"unit": "seconds",
@@ -385,18 +429,21 @@
 				}
 			]
 		},
-		"53": {
+		{
+			"#": "53",
 			"$import": "templates/fibaro_template.json#energy_report_threshold",
 			"maxValue": 32000,
 			"defaultValue": 100,
 			"label": "First Channel - Energy Reports: Threshold"
 		},
-		"54": {
+		{
+			"#": "54",
 			"$import": "templates/fibaro_template.json#power_report_threshold_relative",
 			"defaultValue": 20,
 			"label": "Second Channel - Power Reports: Threshold"
 		},
-		"55": {
+		{
+			"#": "55",
 			"label": "Second Channel - Power Reports: Minimum Time Between Reports",
 			"valueSize": 1,
 			"unit": "seconds",
@@ -411,27 +458,31 @@
 				}
 			]
 		},
-		"57": {
+		{
+			"#": "57",
 			"$import": "templates/fibaro_template.json#energy_report_threshold",
 			"maxValue": 32000,
 			"defaultValue": 100,
 			"label": "Second Channel - Energy Reports: Threshold"
 		},
-		"58": {
+		{
+			"#": "58",
 			"$import": "templates/fibaro_template.json#reports_periodic",
 			"label": "Periodic Active Power Reports",
 			"maxValue": 32000
 		},
-		"59": {
+		{
+			"#": "59",
 			"$import": "templates/fibaro_template.json#reports_periodic",
 			"label": "Periodic Energy Reports",
 			"maxValue": 32000
 		},
-		"60": {
+		{
+			"#": "60",
 			"$import": "templates/fibaro_template.json#reports_include_self",
 			"description": "If enabled, it will be included in the reports for the first channel"
 		}
-	},
+	],
 	"metadata": {
 		"$import": "templates/fibaro_template.json#default_metadata",
 		"manual": "https://products.z-wavealliance.org/ProductManual/File?folder=&filename=MarketCertificationFiles/1742/FGS-2x3-EN-T-v1.0%2006.06.2016.pdf"

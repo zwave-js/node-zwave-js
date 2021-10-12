@@ -27,8 +27,9 @@
 			"maxNodes": 5
 		}
 	},
-	"paramInformation": {
-		"1": {
+	"paramInformation": [
+		{
+			"#": "1",
 			"label": "Sending Basic Sets to Association group 2",
 			"valueSize": 1,
 			"minValue": 0,
@@ -47,7 +48,8 @@
 				}
 			]
 		},
-		"2": {
+		{
+			"#": "2",
 			"label": "Sending sensor binary report",
 			"valueSize": 1,
 			"minValue": 0,
@@ -66,7 +68,7 @@
 				}
 			]
 		}
-	},
+	],
 	"metadata": {
 		"inclusion": "Once the controller is in inclusion mode, either remove the battery isolation tab, OR insert the battery to power up the sensor",
 		"exclusion": "Once the controller is in exclusion mode, either remove the battery isolation tab, OR insert the battery to power up the sensor",

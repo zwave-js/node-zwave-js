@@ -51,8 +51,9 @@
 			"maxNodes": 5
 		}
 	},
-	"paramInformation": {
-		"1": {
+	"paramInformation": [
+		{
+			"#": "1",
 			"label": "Low Temperature Trigger Point",
 			"valueSize": 1,
 			"minValue": 0,
@@ -60,7 +61,8 @@
 			"defaultValue": 4,
 			"unsigned": true
 		},
-		"2": {
+		{
+			"#": "2",
 			"label": "High Temperature Trigger Point",
 			"valueSize": 1,
 			"minValue": 0,
@@ -68,5 +70,5 @@
 			"defaultValue": 70,
 			"unsigned": true
 		}
-	}
+	]
 }

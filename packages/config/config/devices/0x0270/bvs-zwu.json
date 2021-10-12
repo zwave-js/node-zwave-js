@@ -37,8 +37,9 @@
 			"maxNodes": 5
 		}
 	},
-	"paramInformation": {
-		"17": {
+	"paramInformation": [
+		{
+			"#": "17",
 			"label": "Invert Water Valve Report",
 			"description": "When enabled, the device will report off (0x00) when the valve is open, and on (0xff) when the valve is closed; ",
 			"valueSize": 1,
@@ -58,7 +59,8 @@
 				}
 			]
 		},
-		"18": {
+		{
+			"#": "18",
 			"label": "Association Group 2: Basic Set Value (On)",
 			"description": "Note: If parameter 17 is enabled, this level will be set when the valve is off",
 			"valueSize": 1,
@@ -82,7 +84,8 @@
 				}
 			]
 		},
-		"19": {
+		{
+			"#": "19",
 			"label": "Association Group 2: Basic Set Value (Off)",
 			"description": "Note: If parameter 17 is enabled, this level will be set when the valve is on",
 			"valueSize": 1,
@@ -106,7 +109,8 @@
 				}
 			]
 		},
-		"49": {
+		{
+			"#": "49",
 			"label": "Association Group 3: Water Leak Basic Set Value (Trigger)",
 			"valueSize": 1,
 			"minValue": 0,
@@ -129,7 +133,8 @@
 				}
 			]
 		},
-		"50": {
+		{
+			"#": "50",
 			"label": "Association Group 3: Water Leak Basic Set Value (Cancel)",
 			"valueSize": 1,
 			"minValue": 0,
@@ -152,7 +157,8 @@
 				}
 			]
 		},
-		"33": {
+		{
+			"#": "33",
 			"label": "Temperature Report Unit",
 			"valueSize": 1,
 			"minValue": 0,
@@ -175,7 +181,8 @@
 				}
 			]
 		},
-		"35[0xff]": {
+		{
+			"#": "35[0xff]",
 			"label": "Temperature Report Offset",
 			"valueSize": 2,
 			"minValue": 0,
@@ -183,7 +190,8 @@
 			"defaultValue": 0,
 			"unsigned": true
 		},
-		"35[0xff00]": {
+		{
+			"#": "35[0xff00]",
 			"label": "Temperature Report Offset: Unit",
 			"valueSize": 2,
 			"minValue": 0,
@@ -210,7 +218,8 @@
 				}
 			]
 		},
-		"34[0xff]": {
+		{
+			"#": "34[0xff]",
 			"label": "Temperature Change Reporting: Threshold",
 			"valueSize": 2,
 			"unit": "°F/C",
@@ -219,7 +228,8 @@
 			"defaultValue": 0,
 			"unsigned": true
 		},
-		"34[0xff00]": {
+		{
+			"#": "34[0xff00]",
 			"label": "Temperature Change Reporting: Unit",
 			"valueSize": 2,
 			"minValue": 0,
@@ -238,7 +248,8 @@
 				}
 			]
 		},
-		"36[0xff]": {
+		{
+			"#": "36[0xff]",
 			"label": "Overheat Trigger: Temperature",
 			"valueSize": 2,
 			"unit": "°F/C",
@@ -247,7 +258,8 @@
 			"defaultValue": 104,
 			"unsigned": true
 		},
-		"36[0xff00]": {
+		{
+			"#": "36[0xff00]",
 			"label": "Overheat Trigger: Unit",
 			"valueSize": 2,
 			"minValue": 0,
@@ -266,7 +278,8 @@
 				}
 			]
 		},
-		"37[0xff]": {
+		{
+			"#": "37[0xff]",
 			"label": "Overheat Recover: Temperature",
 			"valueSize": 2,
 			"minValue": 0,
@@ -274,7 +287,8 @@
 			"defaultValue": 86,
 			"unsigned": true
 		},
-		"37[0xff00]": {
+		{
+			"#": "37[0xff00]",
 			"label": "Overheat Recover: Unit",
 			"valueSize": 2,
 			"minValue": 0,
@@ -293,7 +307,8 @@
 				}
 			]
 		},
-		"38": {
+		{
+			"#": "38",
 			"label": "Association Group 4: Overheat Basic Set Value (Trigger)",
 			"valueSize": 1,
 			"minValue": 0,
@@ -316,7 +331,8 @@
 				}
 			]
 		},
-		"39": {
+		{
+			"#": "39",
 			"label": "Association Group 4: Overheat Basic Set Value (Cancel)",
 			"valueSize": 1,
 			"minValue": 0,
@@ -339,7 +355,8 @@
 				}
 			]
 		},
-		"40[0xff]": {
+		{
+			"#": "40[0xff]",
 			"label": "Freeze Threshold: Temperature",
 			"valueSize": 2,
 			"minValue": 0,
@@ -347,7 +364,8 @@
 			"defaultValue": 32,
 			"unsigned": true
 		},
-		"40[0xff00]": {
+		{
+			"#": "40[0xff00]",
 			"label": "Freeze Threshold: Unit",
 			"valueSize": 2,
 			"minValue": 0,
@@ -366,7 +384,8 @@
 				}
 			]
 		},
-		"41[0xff]": {
+		{
+			"#": "41[0xff]",
 			"label": "Freeze Recover: Temperature",
 			"valueSize": 2,
 			"minValue": 0,
@@ -374,7 +393,8 @@
 			"defaultValue": 36,
 			"unsigned": true
 		},
-		"41[0xff00]": {
+		{
+			"#": "41[0xff00]",
 			"label": "Freeze Recover: Unit",
 			"valueSize": 2,
 			"minValue": 0,
@@ -393,7 +413,8 @@
 				}
 			]
 		},
-		"43": {
+		{
+			"#": "43",
 			"label": "Association Group 5: Freeze Basic Set Value (Trigger)",
 			"valueSize": 1,
 			"minValue": 0,
@@ -416,7 +437,8 @@
 				}
 			]
 		},
-		"44": {
+		{
+			"#": "44",
 			"label": "Association Group 5: Freeze Basic Set Value (Cancel)",
 			"valueSize": 1,
 			"minValue": 0,
@@ -439,7 +461,8 @@
 				}
 			]
 		},
-		"51": {
+		{
+			"#": "51",
 			"label": "Allow Valve Control - Water Leak Detected",
 			"valueSize": 1,
 			"minValue": 0,
@@ -458,7 +481,8 @@
 				}
 			]
 		},
-		"42": {
+		{
+			"#": "42",
 			"label": "Allow Valve Control - Water Leak Detected During Freeze Mode",
 			"valueSize": 1,
 			"minValue": 0,
@@ -477,7 +501,8 @@
 				}
 			]
 		},
-		"65": {
+		{
+			"#": "65",
 			"label": "Buzzer",
 			"valueSize": 1,
 			"minValue": 0,
@@ -496,7 +521,8 @@
 				}
 			]
 		},
-		"66": {
+		{
+			"#": "66",
 			"label": "LED Brightness Level",
 			"valueSize": 1,
 			"minValue": 0,
@@ -504,7 +530,8 @@
 			"defaultValue": 80,
 			"unsigned": true
 		},
-		"67": {
+		{
+			"#": "67",
 			"label": "Touch Keylock Protection",
 			"valueSize": 1,
 			"minValue": 0,
@@ -523,7 +550,8 @@
 				}
 			]
 		},
-		"81[0x01]": {
+		{
+			"#": "81[0x01]",
 			"label": "Notification Report: Water Valve Open",
 			"valueSize": 1,
 			"minValue": 0,
@@ -542,7 +570,8 @@
 				}
 			]
 		},
-		"81[0x02]": {
+		{
+			"#": "81[0x02]",
 			"label": "Notification Report: Overheat Detection",
 			"valueSize": 1,
 			"minValue": 0,
@@ -561,7 +590,8 @@
 				}
 			]
 		},
-		"81[0x04]": {
+		{
+			"#": "81[0x04]",
 			"label": "Notification Report: Freeze Detection",
 			"valueSize": 1,
 			"minValue": 0,
@@ -580,7 +610,8 @@
 				}
 			]
 		},
-		"81[0x08]": {
+		{
+			"#": "81[0x08]",
 			"label": "Notification Report: Local Water Leak Sensor Probe Detection",
 			"valueSize": 1,
 			"minValue": 0,
@@ -599,7 +630,7 @@
 				}
 			]
 		}
-	},
+	],
 	"metadata": {
 		"inclusion": "Set your Z-Wave Gateway into Inclusion mode / Add device.\ni. Start: Short press Touch Sense Button 3 times.\nii. Processing: Yellow LED and short beep sound keeping continue. For security inclusion support, you may need to entering first 5 digit\nthat show on QR Code label, please refer to the instructions of central controller.\niii. Success: Green LED on 1 second with 2 short beep sounds.\niv. The LED indication changes to Green LED slow blinking from Yellow LED blinking.",
 		"exclusion": "Set your Z-Wave Gateway into Exclusion mode / Remove device.\ni. Start: Short press Touch Sense Button 3 times.\nii. Processing: Yellow LED and short beep sound keeping continue.\niii. Success: Green LED on 1 second with 2 short beep sounds.\niv. The LED indication Changes to Yellow LED blinking",

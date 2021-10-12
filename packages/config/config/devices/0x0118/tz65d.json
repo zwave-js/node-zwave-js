@@ -32,8 +32,9 @@
 			"isLifeline": true
 		}
 	},
-	"paramInformation": {
-		"1": {
+	"paramInformation": [
+		{
+			"#": "1",
 			"label": "Ignore start level",
 			"description": "Ignore start level when transmitting a dim command to the dimmer",
 			"valueSize": 1,
@@ -52,7 +53,8 @@
 				}
 			]
 		},
-		"2": {
+		{
+			"#": "2",
 			"label": "Suspend Group 4",
 			"valueSize": 1,
 			"minValue": 0,
@@ -70,7 +72,8 @@
 				}
 			]
 		},
-		"3": {
+		{
+			"#": "3",
 			"label": "Blue LED light Behavior",
 			"description": "Defines the behavior of the blue LED.",
 			"valueSize": 1,
@@ -89,7 +92,8 @@
 				}
 			]
 		},
-		"4": {
+		{
+			"#": "4",
 			"label": "Invert Switch",
 			"description": "To change the top of the switch to off and the botton to on",
 			"valueSize": 1,
@@ -108,7 +112,8 @@
 				}
 			]
 		},
-		"14": {
+		{
+			"#": "14",
 			"label": "Enable Shade Control Group 2",
 			"valueSize": 1,
 			"minValue": 0,
@@ -126,7 +131,8 @@
 				}
 			]
 		},
-		"15": {
+		{
+			"#": "15",
 			"label": "Enable Shade Control Group 3",
 			"valueSize": 1,
 			"minValue": 0,
@@ -144,7 +150,8 @@
 				}
 			]
 		},
-		"19": {
+		{
+			"#": "19",
 			"label": "Blue LED light behavior on transmission",
 			"description": "Defines the behavior of the blue LED when transmission of data",
 			"valueSize": 1,
@@ -167,7 +174,8 @@
 				}
 			]
 		},
-		"20": {
+		{
+			"#": "20",
 			"label": "Poll Group 2 Interval ",
 			"valueSize": 1,
 			"minValue": 1,
@@ -176,7 +184,8 @@
 			"unsigned": true,
 			"unit": "minutes"
 		},
-		"22": {
+		{
+			"#": "22",
 			"label": "Poll Group 2",
 			"description": "Should Group 2 be pulled?",
 			"valueSize": 1,
@@ -195,5 +204,5 @@
 				}
 			]
 		}
-	}
+	]
 }

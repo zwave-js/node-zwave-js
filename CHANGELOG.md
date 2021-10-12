@@ -5,9 +5,10 @@
 	Add placeholder for next release with `wip` snippet
   ## __WORK IN PROGRESS__
 -->
-## __WORK IN PROGRESS__
+## 8.5.0 (2021-10-11)
 ### Features
 * Export `getAPI` through `zwave-js/CommandClass`
+* Add `getDefinedValueIDs` for virtual nodes
 
 ### Bugfixes
 * Avoid including `undefined` properties in configuration metadata
@@ -16,6 +17,9 @@
 * Refresh associations after removing invalid destinations
 * Don't wait for node ACK after `Security 2 CC::TransferEnd`
 * Increase tolerance for wakeup interval to 5 minutes without auto-refreshing the interval
+* Remove `securityClasses` property from `SecurityClassOwner` interface to fix TypeScript error
+* Filter out corrupted `Meter CC Reports` and `Multilevel Sensor CC Reports`
+* Added a fallback for NVM backup when the initial response contains an empty buffer
 
 ### Config file changes
 * Change NAS-PD07Z parameters to match actual device configuration
@@ -27,6 +31,7 @@
 * Add Sunricher RGBW and CCT wall controllers
 * Add firmware version 1.6 to Zooz ZEN22
 * Force scene count of VRCS4 and VRCZ4 to 8
+* Add Aeotec illumino switches
 
 ### Changes under the hood
 * Add support for prebuilt Gitpod instances to simplify contributing without installing VSCode locally

@@ -14,8 +14,9 @@
 		"min": "0.0",
 		"max": "255.255"
 	},
-	"paramInformation": {
-		"2": {
+	"paramInformation": [
+		{
+			"#": "2",
 			"label": "State After Power Outage",
 			"valueSize": 1,
 			"minValue": 0,
@@ -38,7 +39,8 @@
 				}
 			]
 		},
-		"51": {
+		{
+			"#": "51",
 			"label": "Color Temperature (Warm White)",
 			"valueSize": 2,
 			"minValue": 2700,
@@ -46,7 +48,8 @@
 			"defaultValue": 2700,
 			"unsigned": true
 		},
-		"52": {
+		{
+			"#": "52",
 			"label": "Color Temperature (Cool White)",
 			"valueSize": 2,
 			"minValue": 5000,
@@ -54,7 +57,7 @@
 			"defaultValue": 5000,
 			"unsigned": true
 		}
-	},
+	],
 	"metadata": {
 		"inclusion": "Start the inclusion process on your HUB/Gateway.\nOnce the inclusion process has started, turn on and off power to the bulb 3x (ie: Turn On, Turn Off, Turn On, Turn Off, Turn On) and the bulb should flash 3x indicating it’s in inclusion mode. \nIf the bulb was included successfully, it will blink one more time. If it was not included successfully, you may have to run an exclusion as mentioned above. If there’s still issues, please ensure your bulb is within range",
 		"exclusion": "IMPORTANT: If you are having issues pairing/including your device, please ensure your bulb is within range of your HUB (pages 2-3). If you believe you’re within range and it’s still not working, then you may have to run an Exclusion. Put your HUB in Exclusion mode and turn the power on/off/on/off/on/off/on (3x on and 2x off) until your bulb blinks three (3x) and then blinks 1x to confirm. Your HUB should say that the device is excluded. You may then add (include) the bulb per the instructions below",

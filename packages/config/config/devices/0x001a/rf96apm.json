@@ -14,8 +14,9 @@
 		"min": "0.0",
 		"max": "255.255"
 	},
-	"paramInformation": {
-		"13": {
+	"paramInformation": [
+		{
+			"#": "13",
 			"label": "Remember The Last Status",
 			"description": "1: remember (0: do not remember)",
 			"valueSize": 1,
@@ -35,7 +36,7 @@
 				}
 			]
 		}
-	},
+	],
 	"metadata": {
 		"inclusion": "This ON/OFF plug supports Auto Inclusion feature where it will automatically enter Inclusion mode when first powered up after a factory reset.\n1. There is an ON/OFF button on the front of the device which is used to carry out inclusion, exclusion or association.\n2. Put your Z-Wave Controller into inclusion/exclusion mode.\n3. Plug this ON/OFF Plug-in module into a wall outlet near the load to be controlled.\n4. The Inclusion process should be completed when the LED stops blinking.\nNote: If Auto Inclusion fails, refer to the Troubleshooting section regarding Manual Inclusion\n\nIf auto inclusion fails:\n1. Put the Z-Wave Controller into Inclusion mode\n2. Press the ON/OFF button 3 times within\n1.5 seconds to put the unit into Inclusion mode",
 		"exclusion": "1. Put the Z-Wave Controller into Exclusion mode\n2. Press the ON/OFF button 3 times within\n1.5 seconds to put the unit into Exclusion mode",
