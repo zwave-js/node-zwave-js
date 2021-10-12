@@ -19,8 +19,9 @@
 		"min": "0.0",
 		"max": "255.255"
 	},
-	"paramInformation": {
-		"1": {
+	"paramInformation": [
+		{
+			"#": "1",
 			"label": "Off Delay",
 			"valueSize": 2,
 			"unit": "seconds",
@@ -35,7 +36,8 @@
 				}
 			]
 		},
-		"2": {
+		{
+			"#": "2",
 			"label": "Basic Set Level",
 			"valueSize": 1,
 			"minValue": 0,
@@ -53,7 +55,7 @@
 				}
 			]
 		}
-	},
+	],
 	"metadata": {
 		"inclusion": "Add the Sensor (Door/Window detector) to Z-Wave Network\n\n1.Remove the sensor cover. \n\n2.Make sure the sensor is powered. \n\n3.Set Z-Wave controller or Z-Wave gateway into inclusion mode (Refer to the controller or gateway operating manual) \n4.Press the button three times within 1.5 second, the device will enter inclusion mode. And the LED will flash on and off alternately five times.",
 		"exclusion": "Delete the Sensor (Door/Window detector) from Z-Wave Network\n\n1.Remove the device cover. \n\n2.Make sure the sensor is powered. \n\n3.Set Z-Wave controller or Z-Wave gateway into exclusion mode (Refer to the controller or gateway operating manual) \n4.Press the button three times within 1.5 second, the device will enter exclusion mode.",

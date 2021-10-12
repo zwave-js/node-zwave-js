@@ -14,8 +14,9 @@
 		"max": "255.255"
 	},
 	"supportsZWavePlus": true,
-	"paramInformation": {
-		"20": {
+	"paramInformation": [
+		{
+			"#": "20",
 			"label": "Overload Protection",
 			"description": "If current exceeds 16.5A over 5 seconds, relay will turn off.",
 			"valueSize": 1,
@@ -23,10 +24,12 @@
 			"maxValue": 1,
 			"defaultValue": 1
 		},
-		"21": {
+		{
+			"#": "21",
 			"$import": "~/templates/master_template.json#state_after_power_failure_prev_on_off"
 		},
-		"24": {
+		{
+			"#": "24",
 			"label": "Notification on Load Change",
 			"description": "Smart Plug can send notifications to association device load state changes.",
 			"valueSize": 1,
@@ -34,7 +37,8 @@
 			"maxValue": 2,
 			"defaultValue": 1
 		},
-		"27": {
+		{
+			"#": "27",
 			"label": "Indicator Modes",
 			"description": "LED in the device will indicate the state of load",
 			"valueSize": 1,
@@ -42,7 +46,8 @@
 			"maxValue": 1,
 			"defaultValue": 0
 		},
-		"151": {
+		{
+			"#": "151",
 			"label": "Threshold of power report",
 			"description": "Power Threshold at which to send meter report",
 			"unit": "W",
@@ -52,7 +57,8 @@
 			"defaultValue": 50,
 			"unsigned": true
 		},
-		"152": {
+		{
+			"#": "152",
 			"label": "Percentage Threshold of to Trigger Power Report",
 			"unit": "%",
 			"valueSize": 1,
@@ -61,7 +67,8 @@
 			"defaultValue": 10,
 			"unsigned": true
 		},
-		"171": {
+		{
+			"#": "171",
 			"label": "Power Report Frequency",
 			"description": "The interval of sending power report to association device (Group Lifeline).",
 			"unit": "Seconds",
@@ -70,7 +77,8 @@
 			"maxValue": 2678400,
 			"defaultValue": 30
 		},
-		"172": {
+		{
+			"#": "172",
 			"label": "Energy Report Frequency",
 			"description": "The interval of sending energy report to association device (Group Lifeline).",
 			"unit": "Seconds",
@@ -79,7 +87,8 @@
 			"maxValue": 2678400,
 			"defaultValue": 300
 		},
-		"173": {
+		{
+			"#": "173",
 			"label": "Voltage Report Frequency",
 			"description": "The interval of sending voltage report to association device (Group Lifeline)",
 			"unit": "Seconds",
@@ -88,7 +97,8 @@
 			"maxValue": 2678400,
 			"defaultValue": 0
 		},
-		"174": {
+		{
+			"#": "174",
 			"label": "Electricity Report Frequency",
 			"description": "Interval for sending electricity report.",
 			"unit": "Seconds",
@@ -97,5 +107,5 @@
 			"maxValue": 2678400,
 			"defaultValue": 0
 		}
-	}
+	]
 }

@@ -14,8 +14,9 @@
 		"max": "255.255"
 	},
 	"supportsZWavePlus": true,
-	"paramInformation": {
-		"1": {
+	"paramInformation": [
+		{
+			"#": "1",
 			"label": "Delayed OFF time",
 			"description": "Time in seconds to delay OFF",
 			"unit": "secs",
@@ -25,7 +26,8 @@
 			"defaultValue": 0,
 			"unsigned": true
 		},
-		"2": {
+		{
+			"#": "2",
 			"label": "Panic ON time",
 			"description": "Time in seconds for panic mode ON",
 			"unit": "secs",
@@ -35,7 +37,8 @@
 			"defaultValue": 0,
 			"unsigned": true
 		},
-		"3": {
+		{
+			"#": "3",
 			"label": "Panic OFF time",
 			"description": "time in seconds for OFF in panic mode",
 			"unit": "secs",
@@ -45,7 +48,8 @@
 			"defaultValue": 0,
 			"unsigned": true
 		},
-		"5": {
+		{
+			"#": "5",
 			"label": "Power Up State",
 			"description": "Power Up State of the switch",
 			"unit": "bool",
@@ -69,7 +73,8 @@
 				}
 			]
 		},
-		"6": {
+		{
+			"#": "6",
 			"label": "Panic mode enable",
 			"description": "Enables this switch to participate in panic mode",
 			"valueSize": 1,
@@ -88,7 +93,8 @@
 				}
 			]
 		},
-		"7": {
+		{
+			"#": "7",
 			"label": "Dimmer Ramp Time",
 			"description": "Time in seconds to reach desired level",
 			"unit": "secs",
@@ -98,7 +104,8 @@
 			"defaultValue": 1,
 			"unsigned": true
 		},
-		"8": {
+		{
+			"#": "8",
 			"label": "Kickstart / Rapid Start",
 			"description": "Ensures that LED / CFL bulbs turn on when the preset dim level is low",
 			"valueSize": 1,
@@ -117,54 +124,61 @@
 				}
 			]
 		},
-		"9": {
+		{
+			"#": "9",
 			"label": "Reset max/min levels to factory default",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 0,
 			"defaultValue": 0
 		},
-		"11": {
+		{
+			"#": "11",
 			"label": "Minimum Dimming Level",
 			"valueSize": 1,
 			"minValue": 1,
 			"maxValue": 99,
 			"defaultValue": 1
 		},
-		"12": {
+		{
+			"#": "12",
 			"label": "Maximum Dimming Level",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 99,
 			"defaultValue": 99
 		},
-		"13": {
+		{
+			"#": "13",
 			"label": "Blue LED brightness level while dimmer is ON",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 4,
 			"defaultValue": 4
 		},
-		"14": {
+		{
+			"#": "14",
 			"label": "Blue LED brightness level while dimmer is OFF",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 4,
 			"defaultValue": 1
 		},
-		"15": {
+		{
+			"#": "15",
 			"label": "Amber LED brightness level while the dimmer is ON",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 4,
 			"defaultValue": 0
 		},
-		"16": {
+		{
+			"#": "16",
 			"label": "Amber LED brightness level while the dimmer is OFF",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 4,
 			"defaultValue": 2
 		}
-	}
+	]
 }

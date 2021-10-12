@@ -13,11 +13,13 @@
 		"min": "0.0",
 		"max": "255.255"
 	},
-	"paramInformation": {
-		"2": {
+	"paramInformation": [
+		{
+			"#": "2",
 			"$import": "~/templates/master_template.json#state_after_power_failure_off_on_prev"
 		},
-		"3": {
+		{
+			"#": "3",
 			"label": "Send Basic Report",
 			"valueSize": 1,
 			"minValue": 0,
@@ -35,7 +37,8 @@
 				}
 			]
 		},
-		"4": {
+		{
+			"#": "4",
 			"label": "Default Fade Time",
 			"valueSize": 1,
 			"unit": "seconds",
@@ -44,21 +47,24 @@
 			"defaultValue": 1,
 			"unsigned": true
 		},
-		"5": {
+		{
+			"#": "5",
 			"label": "Minimum Brightness Value",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 50,
 			"defaultValue": 15
 		},
-		"6": {
+		{
+			"#": "6",
 			"label": "Maximum Brightness Value",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 100,
 			"defaultValue": 100
 		},
-		"7": {
+		{
+			"#": "7",
 			"label": "MOSFET Driving Type",
 			"valueSize": 1,
 			"minValue": 0,
@@ -76,7 +82,8 @@
 				}
 			]
 		},
-		"8": {
+		{
+			"#": "8",
 			"label": "External Switch Type",
 			"valueSize": 1,
 			"minValue": 0,
@@ -98,7 +105,8 @@
 				}
 			]
 		},
-		"9": {
+		{
+			"#": "9",
 			"label": "Add / Remove From A Network Through External Switch",
 			"description": "When enabling this, triple press the external switch within 1.5 seconds to be added to or removed from a network",
 			"valueSize": 1,
@@ -117,7 +125,8 @@
 				}
 			]
 		},
-		"11": {
+		{
+			"#": "11",
 			"label": "Wiring Type",
 			"valueSize": 1,
 			"minValue": 0,
@@ -139,7 +148,8 @@
 				}
 			]
 		},
-		"12": {
+		{
+			"#": "12",
 			"label": "Load type",
 			"valueSize": 1,
 			"minValue": 0,
@@ -165,7 +175,8 @@
 				}
 			]
 		},
-		"13": {
+		{
+			"#": "13",
 			"label": "Over Current Protection",
 			"description": "Must be over 2.1A for 20 seconds continously",
 			"valueSize": 1,
@@ -184,7 +195,8 @@
 				}
 			]
 		},
-		"14": {
+		{
+			"#": "14",
 			"label": "Power Automatic Report Absolute Threshold",
 			"description": "When power changes above the absolute threshold, immediately report current power value",
 			"valueSize": 2,
@@ -193,7 +205,8 @@
 			"maxValue": 1,
 			"defaultValue": 10
 		},
-		"15": {
+		{
+			"#": "15",
 			"label": "Power Automatic Report Percentage Threshold",
 			"description": "When power changes above the percentage threshold, immediately report current power value",
 			"valueSize": 1,
@@ -202,7 +215,8 @@
 			"maxValue": 1,
 			"defaultValue": 20
 		},
-		"21": {
+		{
+			"#": "21",
 			"label": "Power Metering Automatic Report Time Cycle",
 			"valueSize": 4,
 			"unit": "seconds",
@@ -216,7 +230,8 @@
 				}
 			]
 		},
-		"22": {
+		{
+			"#": "22",
 			"label": "Energy Metering Automatic Report Time Cycle",
 			"valueSize": 4,
 			"unit": "seconds",
@@ -230,7 +245,8 @@
 				}
 			]
 		},
-		"23": {
+		{
+			"#": "23",
 			"label": "Voltage Metering Automatic Report Time Cycle",
 			"valueSize": 4,
 			"unit": "seconds",
@@ -244,7 +260,8 @@
 				}
 			]
 		},
-		"24": {
+		{
+			"#": "24",
 			"label": "Current Metering Automatic Report Time Cycle",
 			"valueSize": 4,
 			"unit": "seconds",
@@ -258,7 +275,8 @@
 				}
 			]
 		},
-		"31": {
+		{
+			"#": "31",
 			"label": "Dimming Curve",
 			"valueSize": 1,
 			"minValue": 0,
@@ -276,14 +294,15 @@
 				}
 			]
 		},
-		"32": {
+		{
+			"#": "32",
 			"label": "Startup Brightness",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 99,
 			"defaultValue": 0
 		}
-	},
+	],
 	"metadata": {
 		"inclusion": "1. Set primary controller/gateway into inclusion mode (Please refer top your primary controllers manual on how to set your controller into inclusion). 2. Power on the in-wall dimmer. 3.Tripple Press the reset button on the dimmer, it will set the dimmer into inclusion mode. The connected light will stay solid on for 3 seconds to indicate successful incusion.",
 		"exclusion": "1. Set the primary controller/gateway int exclusion mode (Please refer top your primary controllers manual on how to set your controller into exclusion). 2.Triple press the reset button, the dimmer will be set to exclusion mode, and wait to be excluded, then the dimmer will be excluded form the network.",

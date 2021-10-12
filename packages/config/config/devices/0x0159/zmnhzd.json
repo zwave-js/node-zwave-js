@@ -31,8 +31,9 @@
 			"maxNodes": 16
 		}
 	},
-	"paramInformation": {
-		"1": {
+	"paramInformation": [
+		{
+			"#": "1",
 			"label": "Wind Gauge - Gust Top Value",
 			"unit": "m/s",
 			"valueSize": 2,
@@ -40,28 +41,32 @@
 			"maxValue": 8800,
 			"defaultValue": 1000
 		},
-		"2": {
+		{
+			"#": "2",
 			"label": "Rain Gauge - Rate top value",
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 30000,
 			"defaultValue": 200
 		},
-		"3": {
+		{
+			"#": "3",
 			"label": "Wind Gauge",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 1,
 			"defaultValue": 1
 		},
-		"4": {
+		{
+			"#": "4",
 			"label": "Rain Gauge",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 1,
 			"defaultValue": 1
 		},
-		"5": {
+		{
+			"#": "5",
 			"label": "End Point 1",
 			"description": "Unsolicited report",
 			"valueSize": 1,
@@ -69,7 +74,8 @@
 			"maxValue": 1,
 			"defaultValue": 1
 		},
-		"6": {
+		{
+			"#": "6",
 			"label": "End Point 2",
 			"description": "Unsolicited report",
 			"valueSize": 1,
@@ -77,7 +83,8 @@
 			"maxValue": 1,
 			"defaultValue": 1
 		},
-		"7": {
+		{
+			"#": "7",
 			"label": "End Point 3",
 			"description": "Unsolicited report",
 			"valueSize": 1,
@@ -85,7 +92,8 @@
 			"maxValue": 1,
 			"defaultValue": 1
 		},
-		"8": {
+		{
+			"#": "8",
 			"label": "End Point 4",
 			"description": "Unsolicited report",
 			"valueSize": 1,
@@ -93,7 +101,8 @@
 			"maxValue": 1,
 			"defaultValue": 1
 		},
-		"9": {
+		{
+			"#": "9",
 			"label": "End Point 5",
 			"description": "Unsolicited report",
 			"valueSize": 1,
@@ -101,7 +110,8 @@
 			"maxValue": 1,
 			"defaultValue": 1
 		},
-		"10": {
+		{
+			"#": "10",
 			"label": "End Point 6",
 			"description": "Unsolicited report",
 			"valueSize": 1,
@@ -109,7 +119,8 @@
 			"maxValue": 1,
 			"defaultValue": 1
 		},
-		"11": {
+		{
+			"#": "11",
 			"label": "End Point 7",
 			"description": "Unsolicited report",
 			"valueSize": 1,
@@ -117,7 +128,8 @@
 			"maxValue": 1,
 			"defaultValue": 1
 		},
-		"12": {
+		{
+			"#": "12",
 			"label": "End Point 8",
 			"description": "Unsolicited report",
 			"valueSize": 1,
@@ -125,7 +137,8 @@
 			"maxValue": 1,
 			"defaultValue": 1
 		},
-		"13": {
+		{
+			"#": "13",
 			"label": "End Point 9",
 			"description": "Unsolicited report",
 			"valueSize": 1,
@@ -133,7 +146,8 @@
 			"maxValue": 1,
 			"defaultValue": 1
 		},
-		"14": {
+		{
+			"#": "14",
 			"label": "End Point 10",
 			"description": "Unsolicited report",
 			"valueSize": 1,
@@ -141,7 +155,8 @@
 			"maxValue": 1,
 			"defaultValue": 1
 		},
-		"15": {
+		{
+			"#": "15",
 			"label": "Random ID enable",
 			"description": "enables/disables random ID",
 			"valueSize": 1,
@@ -149,12 +164,13 @@
 			"maxValue": 1,
 			"defaultValue": 0
 		},
-		"250": {
+		{
+			"#": "250",
 			"label": "Unsecure / Secure Inclusion",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 1,
 			"defaultValue": 0
 		}
-	}
+	]
 }

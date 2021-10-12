@@ -14,8 +14,9 @@
 		"min": "0.0",
 		"max": "255.255"
 	},
-	"paramInformation": {
-		"1": {
+	"paramInformation": [
+		{
+			"#": "1",
 			"label": "Delayed Off Time",
 			"valueSize": 1,
 			"minValue": 0,
@@ -23,7 +24,8 @@
 			"defaultValue": 10,
 			"unsigned": true
 		},
-		"2": {
+		{
+			"#": "2",
 			"label": "Panic On Time",
 			"description": "Interval after which device will turn on during panic mode",
 			"valueSize": 1,
@@ -32,7 +34,8 @@
 			"defaultValue": 1,
 			"unsigned": true
 		},
-		"3": {
+		{
+			"#": "3",
 			"label": "Panic Off Time",
 			"description": "Interval after which device will turn off during panic mode",
 			"valueSize": 1,
@@ -41,7 +44,8 @@
 			"defaultValue": 1,
 			"unsigned": true
 		},
-		"5": {
+		{
+			"#": "5",
 			"label": "State After Power Restored",
 			"description": "1 = off 2 = on 3 = last state",
 			"valueSize": 1,
@@ -65,7 +69,8 @@
 				}
 			]
 		},
-		"6": {
+		{
+			"#": "6",
 			"label": "Panic Mode",
 			"valueSize": 1,
 			"minValue": 0,
@@ -84,7 +89,8 @@
 				}
 			]
 		},
-		"13": {
+		{
+			"#": "13",
 			"label": "Blue LED Brightness Level While The Receptacle is On",
 			"description": "Light intensity of indicator led",
 			"valueSize": 1,
@@ -104,7 +110,8 @@
 				}
 			]
 		},
-		"14": {
+		{
+			"#": "14",
 			"label": "Blue LED Brightness Level While The Receptacle is Off",
 			"description": "Light intensity of indicator led",
 			"valueSize": 1,
@@ -124,7 +131,7 @@
 				}
 			]
 		}
-	},
+	],
 	"metadata": {
 		"inclusion": "1. To include this device in a Z-Wave network, select the command on your Z Wave controller for inclusion (Install, Add Device,\nAdd Node, Include Device, etc.). Then press the device ON/OFF button one time to include it in the network.\n2. Based on the controller, the controller may ask you to scan the QR code or manually enter 5 digit code under the QR code\nto install the device as a secured device. You may find this QR code on the device or included in device packaging.\n3. After the Device is added to the network, the blue indicator LED will stop blinking. This indicates the device is installed in the Z-Wave\nnetwork",
 		"exclusion": "1. To exclude this device from a Z-Wave network, select the setting on your Z-Wave controller for exclusion\n(Uninstall, Remove Device, Remove Node, Exclude Device, etc.).\n2. Once your controller is in exclusion mode, press the device ON/OFF button one time to exclude it from the network. The LED will start blinking.",

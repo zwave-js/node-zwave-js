@@ -13,7 +13,7 @@ The following properties are defined and should always be present in the same or
 | `supportsZWavePlus` | (deprecated)                                                                                                                                                                                               |
 | `endpoints`         | Endpoint-specific configuration, [see below](#endpoints) for details. If this is present, `associations` must be specified on endpoint `"0"` instead of on the root level.                                 |
 | `associations`      | The association groups the device supports, [see below](#associations) for details. Only needs to be present if the device does not support Z-Wave+ or requires changes to the default association config. |
-| `paramInformation`  | A dictionary of the configuration parameters the device supports. [See below](#paramInformation) for details.                                                                                              |
+| `paramInformation`  | An array of the configuration parameters the device supports. [See below](#paramInformation) for details.                                                                                                  |
 | `proprietary`       | A dictionary of settings for the proprietary CC. The settings depend on each proprietary CC implementation.                                                                                                |
 | `compat`            | Compatibility flags used to influence the communication with non-complient devices. [See below](#compat) for details.                                                                                      |
 | `metadata`          | Metadata that is intended to help the user, like inclusion instructions etc. [See below](#metadata) for details.                                                                                           |
@@ -185,11 +185,17 @@ Example:
 This property defines all the existing configuration parameters. It looks like this
 
 ```json
-"paramInformation": {
-	"1": { /* parameter #1 definition */},
-	"2": { /* parameter #2 definition */},
+"paramInformation": [
+	{
+		"#": "1",
+		// parameter #1 definition
+	},
+	{
+		"#": "2",
+		// parameter #2 definition
+	}
 	// ... more parameters ...
-}
+]
 ```
 
 where each parameter definition has the following properties:
@@ -216,19 +222,23 @@ Some devices use a single parameter number to configure several, sometimes unrel
 For example,
 
 ```json
-"40[0x01]": {
+{
+	"#": "40[0x01]",
 	"label": "Button 1: behavior",
 	/* parameter definition */
 },
-"40[0x02]": {
+{
+	"#": "40[0x02]",
 	"label": "Button 1: notifications",
 	/* parameter definition */
 },
-"40[0x04]": {
+{
+	"#": "40[0x04]",
 	"label": "Button 2: behavior",
 	/* parameter definition */
 },
-"40[0x08]": {
+{
+	"#": "40[0x08]",
 	"label": "Button 2: notifications",
 	/* parameter definition */
 },

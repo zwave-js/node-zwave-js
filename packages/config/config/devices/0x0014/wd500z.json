@@ -29,8 +29,9 @@
 			"maxNodes": 5
 		}
 	},
-	"paramInformation": {
-		"1": {
+	"paramInformation": [
+		{
+			"#": "1",
 			"label": "Ignore Start Level",
 			"valueSize": 1,
 			"minValue": 0,
@@ -49,7 +50,8 @@
 				}
 			]
 		},
-		"3": {
+		{
+			"#": "3",
 			"label": "Night Light",
 			"description": "When enabled, the LED indicator will turn on when the light is turned off",
 			"valueSize": 1,
@@ -69,7 +71,8 @@
 				}
 			]
 		},
-		"4": {
+		{
+			"#": "4",
 			"label": "Invert Switch",
 			"valueSize": 1,
 			"minValue": 0,
@@ -88,7 +91,8 @@
 				}
 			]
 		},
-		"14": {
+		{
+			"#": "14",
 			"label": "Shade Control Group 2",
 			"valueSize": 1,
 			"minValue": 0,
@@ -107,7 +111,8 @@
 				}
 			]
 		},
-		"15": {
+		{
+			"#": "15",
 			"label": "Shade Control Group 3",
 			"valueSize": 1,
 			"minValue": 0,
@@ -126,7 +131,8 @@
 				}
 			]
 		},
-		"19": {
+		{
+			"#": "19",
 			"label": "LED Indicator",
 			"valueSize": 1,
 			"minValue": 0,
@@ -149,7 +155,8 @@
 				}
 			]
 		},
-		"29": {
+		{
+			"#": "29",
 			"label": "Load Sense",
 			"valueSize": 1,
 			"minValue": 0,
@@ -168,5 +175,5 @@
 				}
 			]
 		}
-	}
+	]
 }

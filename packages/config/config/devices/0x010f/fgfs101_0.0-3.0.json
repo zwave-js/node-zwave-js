@@ -36,8 +36,9 @@
 			"isLifeline": true
 		}
 	},
-	"paramInformation": {
-		"1": {
+	"paramInformation": [
+		{
+			"#": "1",
 			"label": "Alarm Cancellation Delay",
 			"description": "Time alarm still indicated after alarm condition has ceased",
 			"valueSize": 2,
@@ -45,7 +46,8 @@
 			"maxValue": 3600,
 			"defaultValue": 0
 		},
-		"2": {
+		{
+			"#": "2",
 			"label": "Acoustic/visual signals On/Off in case of flooding",
 			"description": "LED indicator/acoustic alarm deactivation",
 			"valueSize": 1,
@@ -73,7 +75,8 @@
 				}
 			]
 		},
-		"5": {
+		{
+			"#": "5",
 			"label": "Type alarm frame sent to 1st assoc group",
 			"description": "Type of cmd frame sent in case of flooding",
 			"valueSize": 1,
@@ -93,7 +96,8 @@
 				}
 			]
 		},
-		"7": {
+		{
+			"#": "7",
 			"label": "Forced Level of Dimming group 1",
 			"description": "Parameter specifying forced level of dimming f. asoc grp 1",
 			"valueSize": 1,
@@ -102,7 +106,8 @@
 			"defaultValue": 255,
 			"unsigned": true
 		},
-		"9": {
+		{
+			"#": "9",
 			"label": "Alarm cancelling or turning a device off",
 			"description": "Disable all-clear basic set & alarm frame generation",
 			"valueSize": 1,
@@ -122,14 +127,16 @@
 				}
 			]
 		},
-		"10": {
+		{
+			"#": "10",
 			"label": "Interval betw. successive readings of temp sensors",
 			"valueSize": 2,
 			"minValue": 1,
 			"maxValue": 32767,
 			"defaultValue": 300
 		},
-		"12": {
+		{
+			"#": "12",
 			"label": "Insensitiveness to temperature changes.",
 			"description": "Minimum temperature change value",
 			"valueSize": 2,
@@ -137,7 +144,8 @@
 			"maxValue": 1000,
 			"defaultValue": 50
 		},
-		"13": {
+		{
+			"#": "13",
 			"label": "Alarm BROADCAST",
 			"description": "Transmit the alarm or control frame in 'broadcast' mode",
 			"valueSize": 1,
@@ -165,7 +173,8 @@
 				}
 			]
 		},
-		"50": {
+		{
+			"#": "50",
 			"label": "Low temperature alarm threshold",
 			"description": "Temperature value below which LED indicator blinks",
 			"valueSize": 2,
@@ -173,7 +182,8 @@
 			"maxValue": 10000,
 			"defaultValue": 1500
 		},
-		"51": {
+		{
+			"#": "51",
 			"label": "High temperature alarm threshold",
 			"description": "Temperature value above which LED indicator blinks",
 			"valueSize": 2,
@@ -181,7 +191,8 @@
 			"maxValue": 10000,
 			"defaultValue": 3500
 		},
-		"61": {
+		{
+			"#": "61",
 			"label": "Low temperature alarm indicator colour",
 			"description": "Default is blue (0x000000FF).",
 			"valueSize": 4,
@@ -189,7 +200,8 @@
 			"maxValue": 16777215,
 			"defaultValue": 255
 		},
-		"62": {
+		{
+			"#": "62",
 			"label": "High temperature alarm indicator colour",
 			"description": "Default is red (0x00FF0000). 65535 * Red + 256 * Green + Blue",
 			"valueSize": 4,
@@ -197,7 +209,8 @@
 			"maxValue": 16777215,
 			"defaultValue": 16711680
 		},
-		"63": {
+		{
+			"#": "63",
 			"label": "Managing a LED indicator under standard operation",
 			"description": "Parameter determines LED indicator’s operation",
 			"valueSize": 1,
@@ -221,7 +234,8 @@
 				}
 			]
 		},
-		"73": {
+		{
+			"#": "73",
 			"label": "Temperature measurement compensation",
 			"description": "Temperature value to compensate between air temp",
 			"valueSize": 2,
@@ -229,7 +243,8 @@
 			"maxValue": 10000,
 			"defaultValue": 0
 		},
-		"74": {
+		{
+			"#": "74",
 			"label": "Alarm frame sent to 2nd Assoc Grp",
 			"description": "Aalarms resulting from sensor’s vibrations",
 			"valueSize": 1,
@@ -257,7 +272,8 @@
 				}
 			]
 		},
-		"75": {
+		{
+			"#": "75",
 			"label": "Visual and audible alarms duration",
 			"valueSize": 2,
 			"minValue": 0,
@@ -265,7 +281,8 @@
 			"defaultValue": 0,
 			"unsigned": true
 		},
-		"76": {
+		{
+			"#": "76",
 			"label": "Alarm/basic retransmission time when flooding",
 			"description": "Time period after which alarm frames will be retransmitted",
 			"unit": "seconds",
@@ -275,7 +292,8 @@
 			"defaultValue": 0,
 			"unsigned": true
 		},
-		"77": {
+		{
+			"#": "77",
 			"label": "Flood sensor functionality turned off",
 			"description": "Allows for turning of the internal flood sensor",
 			"valueSize": 1,
@@ -295,5 +313,5 @@
 				}
 			]
 		}
-	}
+	]
 }

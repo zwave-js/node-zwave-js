@@ -18,8 +18,9 @@
 		"max": "255.255"
 	},
 	"supportsZWavePlus": true,
-	"paramInformation": {
-		"3": {
+	"paramInformation": [
+		{
+			"#": "3",
 			"label": "LED Light",
 			"description": "Set the state of the LED Light",
 			"valueSize": 1,
@@ -41,5 +42,5 @@
 				}
 			]
 		}
-	}
+	]
 }

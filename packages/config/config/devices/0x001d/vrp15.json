@@ -25,8 +25,9 @@
 			"isLifeline": true
 		}
 	},
-	"paramInformation": {
-		"7": {
+	"paramInformation": [
+		{
+			"#": "7",
 			"label": "Locator LED Status",
 			"description": "Controls state of on-device LED",
 			"valueSize": 1,
@@ -50,5 +51,5 @@
 				}
 			]
 		}
-	}
+	]
 }

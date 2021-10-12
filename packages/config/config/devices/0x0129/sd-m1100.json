@@ -13,18 +13,22 @@
 		"min": "0.0",
 		"max": "255.255"
 	},
-	"paramInformation": {
-		"1": {
+	"paramInformation": [
+		{
+			"#": "1",
 			"$import": "templates/yale_template.json#volume_inverted"
 		},
-		"2": {
+		{
+			"#": "2",
 			"$import": "templates/yale_template.json#auto_relock"
 		},
-		"3": {
+		{
+			"#": "3",
 			"$import": "templates/yale_template.json#manual_relock_time"
 		},
-		"6": {
+		{
+			"#": "6",
 			"$import": "templates/yale_template.json#remote_relock_time"
 		}
-	}
+	]
 }

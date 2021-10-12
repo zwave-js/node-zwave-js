@@ -29,8 +29,9 @@
 			"maxNodes": 5
 		}
 	},
-	"paramInformation": {
-		"200": {
+	"paramInformation": [
+		{
+			"#": "200",
 			"label": "Partner ID",
 			"valueSize": 1,
 			"minValue": 0,
@@ -60,11 +61,13 @@
 				}
 			]
 		},
-		"254": {
+		{
+			"#": "254",
 			"$import": "templates/aeotec_template.json#device_tag"
 		},
-		"255": {
+		{
+			"#": "255",
 			"$import": "templates/aeotec_template.json#factory_reset"
 		}
-	}
+	]
 }

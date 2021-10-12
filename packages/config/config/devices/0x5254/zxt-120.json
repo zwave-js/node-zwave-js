@@ -21,15 +21,17 @@
 		"min": "0.0",
 		"max": "255.255"
 	},
-	"paramInformation": {
-		"25": {
+	"paramInformation": [
+		{
+			"#": "25",
 			"label": "Location",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 22,
 			"defaultValue": 1
 		},
-		"26": {
+		{
+			"#": "26",
 			"label": "Learning status register (Read Only)",
 			"valueSize": 1,
 			"minValue": 0,
@@ -37,7 +39,8 @@
 			"defaultValue": 0,
 			"readOnly": true
 		},
-		"27": {
+		{
+			"#": "27",
 			"label": "IR code number for built-in code library",
 			"valueSize": 2,
 			"minValue": 0,
@@ -45,7 +48,8 @@
 			"defaultValue": 0,
 			"unsigned": true
 		},
-		"28": {
+		{
+			"#": "28",
 			"label": "External IR Emitter power level",
 			"valueSize": 1,
 			"minValue": 0,
@@ -64,7 +68,8 @@
 				}
 			]
 		},
-		"32": {
+		{
+			"#": "32",
 			"label": "Surround IR control",
 			"valueSize": 1,
 			"minValue": 0,
@@ -83,7 +88,8 @@
 				}
 			]
 		},
-		"33": {
+		{
+			"#": "33",
 			"label": "AC function Swing control",
 			"valueSize": 1,
 			"minValue": 0,
@@ -102,7 +108,8 @@
 				}
 			]
 		},
-		"35": {
+		{
+			"#": "35",
 			"label": "Learn location status. Bitmask. (Read Only)",
 			"valueSize": 4,
 			"minValue": 0,
@@ -110,12 +117,13 @@
 			"defaultValue": 0,
 			"readOnly": true
 		},
-		"37": {
+		{
+			"#": "37",
 			"label": "Sensor temperature compensation",
 			"valueSize": 1,
 			"minValue": -5,
 			"maxValue": 5,
 			"defaultValue": 0
 		}
-	}
+	]
 }

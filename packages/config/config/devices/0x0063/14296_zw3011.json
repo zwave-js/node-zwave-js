@@ -29,8 +29,9 @@
 			"isLifeline": true
 		}
 	},
-	"paramInformation": {
-		"3": {
+	"paramInformation": [
+		{
+			"#": "3",
 			"label": "LED Light",
 			"valueSize": 1,
 			"minValue": 0,
@@ -57,7 +58,8 @@
 				}
 			]
 		},
-		"6": {
+		{
+			"#": "6",
 			"label": "Dim Speed",
 			"valueSize": 1,
 			"minValue": 0,
@@ -76,7 +78,8 @@
 				}
 			]
 		},
-		"16": {
+		{
+			"#": "16",
 			"label": "Switch Mode",
 			"valueSize": 1,
 			"minValue": 0,
@@ -95,7 +98,8 @@
 				}
 			]
 		},
-		"19": {
+		{
+			"#": "19",
 			"label": "Alternate Exclusion",
 			"valueSize": 1,
 			"minValue": 0,
@@ -114,7 +118,8 @@
 				}
 			]
 		},
-		"30": {
+		{
+			"#": "30",
 			"label": "Minimum Dim Threshold",
 			"valueSize": 1,
 			"minValue": 1,
@@ -122,7 +127,8 @@
 			"defaultValue": 1,
 			"unsigned": true
 		},
-		"31": {
+		{
+			"#": "31",
 			"label": "Maximum Brightness Threshold",
 			"valueSize": 1,
 			"minValue": 0,
@@ -130,7 +136,8 @@
 			"defaultValue": 99,
 			"unsigned": true
 		},
-		"32": {
+		{
+			"#": "32",
 			"label": "Default Brightness Level",
 			"valueSize": 1,
 			"minValue": 0,
@@ -138,7 +145,7 @@
 			"defaultValue": 0,
 			"unsigned": true
 		}
-	},
+	],
 	"compat": {
 		"treatBasicSetAsEvent": true
 	}

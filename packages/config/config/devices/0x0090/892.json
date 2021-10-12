@@ -14,8 +14,9 @@
 		"min": "0.0",
 		"max": "255.255"
 	},
-	"paramInformation": {
-		"1": {
+	"paramInformation": [
+		{
+			"#": "1",
 			"label": "Status LED Control",
 			"description": "The configuration parameter 1 is a read/write parameter with a one-byte field, used to control the status led. if set to on, the status LED will show the status of the latch every 6 seconds. if set to off, the status LED will not be shown",
 			"valueSize": 1,
@@ -36,7 +37,8 @@
 				}
 			]
 		},
-		"2": {
+		{
+			"#": "2",
 			"label": "Sound Control",
 			"description": "The configuration parameter 2 is a read/write parameter with a one-byte field, used to control the lock’s buzzer. if set to on, the buzzer is enabled and will sound during normal events. if set to off, the buzzer is disabled, and the buzzer sound will not occur",
 			"valueSize": 1,
@@ -57,7 +59,8 @@
 				}
 			]
 		},
-		"3": {
+		{
+			"#": "3",
 			"label": "User Program Button Control",
 			"description": "The configuration parameter 3 is a read/write parameter with a one-byte field, used to control the user program button. if set to on, the program button is available for user code maintenance. if set to off, the program button is not available for user code maintenance",
 			"valueSize": 1,
@@ -78,7 +81,8 @@
 				}
 			]
 		},
-		"4": {
+		{
+			"#": "4",
 			"label": "Secure Screen Control",
 			"description": "The configuration parameter 4 is a read/write parameter with a one-byte field, used to control the secure screen functionality on touch locks only. this parameter is not used on non-touch locks and will be ignored. if set to enabled, the touch screen will display the secure screen functionality when woken. if set to disabled, the touch screen will not display the secure screen functionality when woken",
 			"valueSize": 1,
@@ -99,7 +103,8 @@
 				}
 			]
 		},
-		"10": {
+		{
+			"#": "10",
 			"label": "Handing Control",
 			"description": "The configuration parameter 10 is a read/write parameter with a one-byte field. when this parameter is read, it will return the handing of the lock. when this parameter is written, it will run a handing operation. when written with a value of 0x01, it will cause the lock to cycle through locking and unlocking until it determines the correct handing. it is suggested that this operation occur while the door is opened so that no obstructions will be in the way for the operation. after the completion of the handing process, a configuration report message will be sent back to the requestor. it will contain a non-zero value for success or a zero value for failure",
 			"valueSize": 1,
@@ -123,7 +128,8 @@
 				}
 			]
 		},
-		"40": {
+		{
+			"#": "40",
 			"label": "Factory Default Control",
 			"description": "The configuration parameter 40 is a write only parameter with a one-byte field, used to request the lock to perform a factory reset back to its default state. this control will cause the lock to be removed from the network, placing the lock back to its default state. when a read is issued for this parameter, a 0 will be returned",
 			"valueSize": 1,
@@ -148,7 +154,8 @@
 				}
 			]
 		},
-		"46": {
+		{
+			"#": "46",
 			"label": "Motor Load Value",
 			"description": "Provides an insight into the amount of resistance encountered by motor",
 			"valueSize": 4,
@@ -158,7 +165,7 @@
 			"unsigned": true,
 			"readOnly": true
 		}
-	},
+	],
 	"metadata": {
 		"inclusion": "For classic inclusion, initiate the process to add the lock to your system at your smart home controller. When prompted by your smart home system to add the lock, press button 'A' on the lock interior one time. The red LED will illuminate when the lock enters inclusion mode. If successful, re-name the lock in your system. If unsuccessful, follow your system's instruction to remove the lock from the network, press button 'A' one time to remove, and then repeat the process",
 		"exclusion": "Follow your smart home system's instructions to remove the lock from the network. When prompted by the system, press button 'A' on the lock interior once",

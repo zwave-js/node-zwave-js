@@ -14,8 +14,9 @@
 		"min": "0.0",
 		"max": "255.255"
 	},
-	"paramInformation": {
-		"1": {
+	"paramInformation": [
+		{
+			"#": "1",
 			"label": "Enable Switch of Multilevel Sensor Report",
 			"description": "Configure arbitrarily to send which sensor values. the sensor values can be selected from humidity, luminance, and temperature",
 			"valueSize": 1,
@@ -59,7 +60,8 @@
 				}
 			]
 		},
-		"2": {
+		{
+			"#": "2",
 			"label": "Enable Switch of Alarm Notification Report",
 			"description": "Configure to send which the sensor values arbitralily. the sensor values can be selected from human detect and open/close",
 			"valueSize": 1,
@@ -87,7 +89,8 @@
 				}
 			]
 		},
-		"3": {
+		{
+			"#": "3",
 			"label": "Select Switch of Luminance Sensor Scale",
 			"description": "Configure the luminance sensor scale to either percentage value or lux",
 			"valueSize": 1,
@@ -108,7 +111,8 @@
 				}
 			]
 		},
-		"4": {
+		{
+			"#": "4",
 			"label": "Set Interval For Multilevel Sensor",
 			"description": "Configure the sending interval time of the sensor value which is selected by configuration parameter number 1. \"0\" means especially synchronizing with wake up interval",
 			"valueSize": 2,
@@ -123,7 +127,7 @@
 				}
 			]
 		}
-	},
+	],
 	"metadata": {
 		"inclusion": "Insert a CR123A, and LED blinks. \nSet the controller to the status for “Add”.\nPress the button over 3 seconds and release.\nAbout 30 second later, LED turns off when “Add” is completed.",
 		"exclusion": "Set the controller to the status for “Remove”.\nPress the button over 3 seconds and release.\nLED blinks when “Remove” is completed.",

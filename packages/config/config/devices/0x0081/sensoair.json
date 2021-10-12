@@ -21,8 +21,9 @@
 			"isLifeline": true
 		}
 	},
-	"paramInformation": {
-		"1": {
+	"paramInformation": [
+		{
+			"#": "1",
 			"label": "Device Configuration Value 1",
 			"description": "Configuration of the device operating mode",
 			"valueSize": 1,
@@ -31,7 +32,8 @@
 			"defaultValue": 141,
 			"unsigned": true
 		},
-		"2": {
+		{
+			"#": "2",
 			"label": "Interval for unsolicited Sensor Report Mode B",
 			"description": "defines how often a Sensor report is sent",
 			"valueSize": 2,
@@ -40,5 +42,5 @@
 			"defaultValue": 30,
 			"unsigned": true
 		}
-	}
+	]
 }
