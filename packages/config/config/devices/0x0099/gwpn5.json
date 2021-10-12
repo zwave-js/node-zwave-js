@@ -35,8 +35,9 @@
 			"isLifeline": true
 		}
 	},
-	"paramInformation": {
-		"0": {
+	"paramInformation": [
+		{
+			"#": "0",
 			"label": "Min. variation of load current",
 			"description": "Minimum variation in load current before a message is sent.",
 			"valueSize": 1,
@@ -44,7 +45,8 @@
 			"maxValue": 100,
 			"defaultValue": 10
 		},
-		"1": {
+		{
+			"#": "1",
 			"label": "No communication light",
 			"description": "Minutes after which the device will flash if controller communicate is lost",
 			"valueSize": 1,
@@ -53,7 +55,8 @@
 			"defaultValue": 2,
 			"unsigned": true
 		},
-		"2": {
+		{
+			"#": "2",
 			"label": "Wheel position",
 			"description": "Wheel position on the GreenWave device (read-only)",
 			"valueSize": 1,
@@ -105,7 +108,8 @@
 				}
 			]
 		},
-		"3": {
+		{
+			"#": "3",
 			"label": "Power-on state",
 			"description": "Default state after power loss",
 			"valueSize": 1,
@@ -128,7 +132,8 @@
 				}
 			]
 		},
-		"4": {
+		{
+			"#": "4",
 			"label": "LED for network error",
 			"description": "If the LED should indicate a network error by flashing or not",
 			"valueSize": 1,
@@ -147,5 +152,5 @@
 				}
 			]
 		}
-	}
+	]
 }

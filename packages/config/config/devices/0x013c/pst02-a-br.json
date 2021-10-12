@@ -14,8 +14,9 @@
 		"min": "0.0",
 		"max": "255.255"
 	},
-	"paramInformation": {
-		"2": {
+	"paramInformation": [
+		{
+			"#": "2",
 			"label": "Basic Set Level",
 			"description": "Setting the basic command value to turn on the light. the 0xff(-1) means turn on the light. for dimmer equipment 1 to 100 means the light strength.0 means turn off the light.caution: the value is unsigned byte, the range is from 0x00 ~ 0xff",
 			"valueSize": 1,
@@ -34,7 +35,8 @@
 				}
 			]
 		},
-		"3": {
+		{
+			"#": "3",
 			"label": "Pir Sensitivity",
 			"description": "Pir sensitivity settings.0 means disable the PIR motion.1 means the lowest sensitivity,99 means the highest sensitivity.high sensitivity means can detected long distance, but if there is more noise signal in the environment, it will re-trigger too frequency",
 			"valueSize": 1,
@@ -57,7 +59,8 @@
 				}
 			]
 		},
-		"4": {
+		{
+			"#": "4",
 			"label": "Light Threshold",
 			"description": "The light will only turn on when the environment illumination is below this setting. 1: darkest; 99: brightest",
 			"valueSize": 1,
@@ -72,7 +75,8 @@
 				}
 			]
 		},
-		"5": {
+		{
+			"#": "5",
 			"label": "Operation Mode",
 			"description": "Operation mode. using bit to control.caution: the value is unsigned byte, the range is from 0x00 ~ 0xff. bit0: reserve. bit1: 1 means test mode,   0 means normal mode. bit2: disable the door/window  function. (1:disable, 0:enable) bit3: setting the temperature scale.  0: fahrenheit, 1:celsius bit4: disable the illumination report  after event triggered. (1:disable, 0:enable) bit5: disable the temperature report  after event triggered. (1:disable, 0:enable) bit6: reserve. bit7: disable the back key release into test mode.  (1:disable, 0:enable)",
 			"valueSize": 1,
@@ -120,7 +124,8 @@
 				}
 			]
 		},
-		"6": {
+		{
+			"#": "6",
 			"label": "Mult- Sensor Function Switch",
 			"description": "Multisensor function switch. using bit to control.caution: the value is unsigned byte, the range is from 0x00 ~ 0xff.  bit0: disable magnetic integrate  illumination to turn on the lighting  nodes in the association group 2.  (1:disable, 0:enable) bit1: disable PIR integrate  illumination to turn on the lighting  nodes in the association group 2.  (1:disable, 0:enable) bit2: disable magnetic integrate PIR  to turn on the lighting nodes in the  association group 2. (1:disable,  0:enable) (default is disable) bit3: when bit2 is 0 (enable), are the  device and the lighting in the same  room? 0: in the same room(default),1: in the different room. bit4: disable delay 5 seconds to turn off the light, when door/window closed. (1:disable, 0:enable) bit5: disable auto turn off the light, after door/window opened to turn on the light. (1:disable, 0:enable) bit6: reserve. bit7: reserve",
 			"valueSize": 1,
@@ -168,7 +173,8 @@
 				}
 			]
 		},
-		"7": {
+		{
+			"#": "7",
 			"label": "Customer Function",
 			"description": "Customer function switch, using bit control.caution: the value is unsigned byte, the range is from 0x00 ~ 0xff.  bit0: reserve. bit1: enable sending motion off report. (0:disable, 1:enable) bit2: enable PIR super sensitivity mode. (0:disable, 1:enable) bit3: disable send out basic off after door closed. (1:disable, 0:enable) bit4: notification type,  0: using notification report.  1: using sensor binary report. bit5: disable multi cc in auto report. (1:disable, 0:enable) bit6: disable to report battery state when the device triggered.(1:disable, 0:enable) bit7: reserve",
 			"valueSize": 1,
@@ -216,7 +222,8 @@
 				}
 			]
 		},
-		"8": {
+		{
+			"#": "8",
 			"label": "Pir Re- Detect Interval Time",
 			"description": "Default tick is 3 (24 seconds)",
 			"valueSize": 1,
@@ -226,7 +233,8 @@
 			"defaultValue": 3,
 			"unsigned": true
 		},
-		"9": {
+		{
+			"#": "9",
 			"label": "Turn Off Light Time",
 			"description": "Default tick is 4 (32seconds)",
 			"valueSize": 1,
@@ -236,7 +244,8 @@
 			"defaultValue": 4,
 			"unsigned": true
 		},
-		"10": {
+		{
+			"#": "10",
 			"label": "Auto Report Battery Time",
 			"description": "The default value is 12. the tick time can setting by the configuration no.20",
 			"valueSize": 1,
@@ -245,7 +254,8 @@
 			"defaultValue": 12,
 			"unsigned": true
 		},
-		"11": {
+		{
+			"#": "11",
 			"label": "Auto Report Door/Windo W State",
 			"description": "The default value is 12. the tick time can setting by the configuration no.20",
 			"valueSize": 1,
@@ -254,7 +264,8 @@
 			"defaultValue": 12,
 			"unsigned": true
 		},
-		"12": {
+		{
+			"#": "12",
 			"label": "Auto Report Illumination Time",
 			"description": "The default value is 12. the tick time can setting by the configuration no.20",
 			"valueSize": 1,
@@ -263,7 +274,8 @@
 			"defaultValue": 12,
 			"unsigned": true
 		},
-		"13": {
+		{
+			"#": "13",
 			"label": "Auto Report Temperature Time",
 			"description": "The default value is 12. the tick time can setting by the configuration no.20",
 			"valueSize": 1,
@@ -272,7 +284,8 @@
 			"defaultValue": 12,
 			"unsigned": true
 		},
-		"20": {
+		{
+			"#": "20",
 			"label": "Auto Report Tick Interval",
 			"description": "The unit is 1 minute,setting this configuration will effect configuration no.10, no.11, no.12 and no.13",
 			"valueSize": 1,
@@ -282,7 +295,8 @@
 			"defaultValue": 30,
 			"unsigned": true
 		},
-		"21": {
+		{
+			"#": "21",
 			"label": "Temperature Differential Report",
 			"description": "Enable this function the device will detect every minutes. and when the temperature is over 140 degree fahrenheit, it will continue report",
 			"valueSize": 1,
@@ -291,7 +305,8 @@
 			"defaultValue": 1,
 			"unsigned": true
 		},
-		"22": {
+		{
+			"#": "22",
 			"label": "Illumination Differential Report",
 			"description": "Enable this function the device will detect every minutes",
 			"valueSize": 1,
@@ -300,7 +315,7 @@
 			"defaultValue": 0,
 			"unsigned": true
 		}
-	},
+	],
 	"metadata": {
 		"inclusion": "There are two tamper keys in the device, one is in the back side, another is in the front side. Both of them can add, remove, reset or association from Z-Wave network.\nTo add into a Z-Wave network: \n1. Have Z-Wave Controller entered inclusion mode.\n2. Pressing tamper key three times within 1.5 seconds to enter the inclusion mode.\n3. After add successful, the device will wake to receive the setting command from Z-Wave Controller about 20 seconds",
 		"exclusion": "There are two tamper keys in the device, one is in the back side, another is in the front side. Both of them can add, remove, reset or association from Z-Wave network.\nTo remove the device from a Z-Wave network: \n1. Have Z-Wave Controller entered exclusion mode.\n2. Pressing tamper key three times within 1.5 seconds to enter the exclusion mode.\nNode ID has been excluded",

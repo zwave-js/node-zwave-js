@@ -14,8 +14,9 @@
 		"min": "0.0",
 		"max": "255.255"
 	},
-	"paramInformation": {
-		"1": {
+	"paramInformation": [
+		{
+			"#": "1",
 			"label": "Hardware Combination Identifier",
 			"valueSize": 1,
 			"minValue": 16,
@@ -43,7 +44,8 @@
 				}
 			]
 		},
-		"4": {
+		{
+			"#": "4",
 			"label": "Safety Activate Delay",
 			"valueSize": 2,
 			"minValue": 0,
@@ -52,7 +54,8 @@
 			"defaultValue": 0,
 			"unsigned": true
 		},
-		"5": {
+		{
+			"#": "5",
 			"label": "Safety Off Period",
 			"valueSize": 2,
 			"minValue": 0,
@@ -61,7 +64,8 @@
 			"defaultValue": 600,
 			"unsigned": true
 		},
-		"6": {
+		{
+			"#": "6",
 			"label": "Safety On Period",
 			"valueSize": 2,
 			"minValue": 0,
@@ -70,7 +74,8 @@
 			"defaultValue": 300,
 			"unsigned": true
 		},
-		"16": {
+		{
+			"#": "16",
 			"label": "Back Unit Type",
 			"valueSize": 1,
 			"minValue": 0,
@@ -98,7 +103,7 @@
 				}
 			]
 		}
-	},
+	],
 	"metadata": {
 		"inclusion": "To add the device to a Z-Wave network, the Z-Wave Controller must first be set into Add (Learn) mode. Then use a paperclip or a small pointy tool to push and hold the button in the button hole for approximately a second. The device LED will blink twice to indicate that it sends information to the Controller",
 		"exclusion": "To remove the device from a Z-Wave network, the Z-Wave Controller must first be set into Remove (Learn) mode. Then use a paperclip or a small pointy tool to push and hold the button in the button hole for approximately a second. The device LED will blink twice to indicate that it sends information to the Controller",

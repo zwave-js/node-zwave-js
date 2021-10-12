@@ -19,8 +19,9 @@
 		"min": "0.0",
 		"max": "255.255"
 	},
-	"paramInformation": {
-		"1": {
+	"paramInformation": [
+		{
+			"#": "1",
 			"label": "Invert LCD orientation",
 			"valueSize": 1,
 			"minValue": 0,
@@ -39,7 +40,8 @@
 				}
 			]
 		},
-		"2": {
+		{
+			"#": "2",
 			"label": "LCD Timeout",
 			"valueSize": 1,
 			"unit": "seconds",
@@ -54,7 +56,8 @@
 				}
 			]
 		},
-		"3": {
+		{
+			"#": "3",
 			"label": "Backlight",
 			"valueSize": 1,
 			"minValue": 0,
@@ -73,7 +76,8 @@
 				}
 			]
 		},
-		"4": {
+		{
+			"#": "4",
 			"label": "Battery Report",
 			"valueSize": 1,
 			"minValue": 0,
@@ -92,7 +96,8 @@
 				}
 			]
 		},
-		"5": {
+		{
+			"#": "5",
 			"label": "Measured Temperature Report",
 			"valueSize": 1,
 			"unit": "0.1 °C",
@@ -107,7 +112,8 @@
 				}
 			]
 		},
-		"6": {
+		{
+			"#": "6",
 			"label": "Valve Position Report",
 			"valueSize": 1,
 			"unit": "%",
@@ -122,7 +128,8 @@
 				}
 			]
 		},
-		"7": {
+		{
+			"#": "7",
 			"label": "Open Window Detection Sensitivity",
 			"valueSize": 1,
 			"minValue": 0,
@@ -148,7 +155,8 @@
 				}
 			]
 		},
-		"8": {
+		{
+			"#": "8",
 			"label": "Temperature Offset",
 			"description": "Allowable range: -50 to 50 (-5 °C to +5 °C)",
 			"valueSize": 1,
@@ -163,7 +171,7 @@
 				}
 			]
 		}
-	},
+	],
 	"metadata": {
 		"inclusion": "Start the Inclusion mode of your primary Z-Wave Controller. Press the Boost-Button of the Thermoast. The Radiator thermostat will show the assigned NodeID",
 		"exclusion": "Set your Z-Wave primary Controller into exclusion mode. Press and hold the Boost button for 5 seconds. The LCD screen of the sensor will show \"LEA\". Leave the Radiator thermostat as it is until the multicolor LED will light up green and the LCD screen will show \"0\". If the exclusion failed, the screen will show the failed code \"18\"",

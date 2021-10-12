@@ -33,8 +33,9 @@
 			"isLifeline": true
 		}
 	},
-	"paramInformation": {
-		"1": {
+	"paramInformation": [
+		{
+			"#": "1",
 			"label": "Swing",
 			"description": "Set Swing value from 1F/.5C to 4F/2.0C Available settings: 1 - 4",
 			"valueSize": 1,
@@ -42,7 +43,8 @@
 			"maxValue": 4,
 			"defaultValue": 2
 		},
-		"2": {
+		{
+			"#": "2",
 			"label": "Differntial",
 			"description": "Set Differential value from 1F/.5C to 4F/2.0C Available settings: 1 - 4",
 			"valueSize": 1,
@@ -50,7 +52,8 @@
 			"maxValue": 4,
 			"defaultValue": 2
 		},
-		"3": {
+		{
+			"#": "3",
 			"label": "Set Filter Counter",
 			"valueSize": 2,
 			"minValue": 500,
@@ -58,7 +61,8 @@
 			"defaultValue": 500,
 			"unit": "hours"
 		},
-		"4": {
+		{
+			"#": "4",
 			"label": "Report Filter Counter",
 			"valueSize": 2,
 			"minValue": 0,
@@ -67,7 +71,8 @@
 			"unit": "hours",
 			"readOnly": true
 		},
-		"5": {
+		{
+			"#": "5",
 			"label": "Temperature Scale",
 			"valueSize": 1,
 			"minValue": 0,
@@ -86,21 +91,24 @@
 				}
 			]
 		},
-		"6": {
+		{
+			"#": "6",
 			"label": "Upper Limit of Setpoint A",
 			"valueSize": 2,
 			"minValue": 37,
 			"maxValue": 99,
 			"defaultValue": 99
 		},
-		"7": {
+		{
+			"#": "7",
 			"label": "Lower Limit of Setpoint B",
 			"valueSize": 2,
 			"minValue": 5,
 			"maxValue": 95,
 			"defaultValue": 41
 		},
-		"8": {
+		{
+			"#": "8",
 			"label": "Easy Mode",
 			"description": "Set Easy Mode 0:DISABLE 1:ENABLED DEFAULT:ENABLED",
 			"valueSize": 1,
@@ -120,7 +128,8 @@
 				}
 			]
 		},
-		"9": {
+		{
+			"#": "9",
 			"label": "Time Format",
 			"valueSize": 1,
 			"minValue": 0,
@@ -139,7 +148,8 @@
 				}
 			]
 		},
-		"10": {
+		{
+			"#": "10",
 			"label": "Repeat Basic Set Counter",
 			"valueSize": 1,
 			"minValue": 0,
@@ -147,26 +157,29 @@
 			"defaultValue": 0,
 			"unsigned": true
 		},
-		"11": {
+		{
+			"#": "11",
 			"label": "AUTO report by room temperature",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 8,
 			"defaultValue": 4
 		},
-		"12": {
+		{
+			"#": "12",
 			"label": "Sensor temperature calibration.",
 			"valueSize": 1,
 			"minValue": -10,
 			"maxValue": 10,
 			"defaultValue": 0
 		},
-		"13": {
+		{
+			"#": "13",
 			"label": "AUTO report by time interval.",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 16,
 			"defaultValue": 0
 		}
-	}
+	]
 }

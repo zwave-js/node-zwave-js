@@ -28,22 +28,25 @@
 			"maxNodes": 1
 		}
 	},
-	"paramInformation": {
-		"1": {
+	"paramInformation": [
+		{
+			"#": "1",
 			"label": "Watt Meter Report Period",
 			"valueSize": 2,
 			"minValue": 1,
 			"maxValue": 32767,
 			"defaultValue": 720
 		},
-		"2": {
+		{
+			"#": "2",
 			"label": "KWH Meter Report",
 			"valueSize": 2,
 			"minValue": 1,
 			"maxValue": 32767,
 			"defaultValue": 6
 		},
-		"3": {
+		{
+			"#": "3",
 			"label": "Selected Relay",
 			"valueSize": 1,
 			"minValue": 1,
@@ -65,7 +68,8 @@
 				}
 			]
 		},
-		"4": {
+		{
+			"#": "4",
 			"label": "Mode",
 			"valueSize": 1,
 			"minValue": 1,
@@ -87,14 +91,16 @@
 				}
 			]
 		},
-		"5": {
+		{
+			"#": "5",
 			"label": "Threshold of current for Load Caution",
 			"valueSize": 2,
 			"minValue": 10,
 			"maxValue": 600,
 			"defaultValue": 600
 		},
-		"6": {
+		{
+			"#": "6",
 			"label": "Threshold of KWH for Load Caution",
 			"unit": "KWh",
 			"valueSize": 2,
@@ -102,7 +108,8 @@
 			"maxValue": 10000,
 			"defaultValue": 10000
 		},
-		"7": {
+		{
+			"#": "7",
 			"label": "Relay control mode",
 			"valueSize": 1,
 			"minValue": 1,
@@ -120,7 +127,8 @@
 				}
 			]
 		},
-		"8": {
+		{
+			"#": "8",
 			"label": "Restore Relay state mode",
 			"valueSize": 1,
 			"minValue": 0,
@@ -142,7 +150,8 @@
 				}
 			]
 		},
-		"9": {
+		{
+			"#": "9",
 			"label": "Existence of Endpoint3",
 			"valueSize": 1,
 			"minValue": 1,
@@ -160,5 +169,5 @@
 				}
 			]
 		}
-	}
+	]
 }

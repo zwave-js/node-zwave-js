@@ -13,8 +13,9 @@
 		"min": "5.0",
 		"max": "8.0"
 	},
-	"paramInformation": {
-		"1": {
+	"paramInformation": [
+		{
+			"#": "1",
 			"label": "Set Buzzer",
 			"description": "Turn On or Off the Flex Panel Buzzer",
 			"valueSize": 1,
@@ -22,5 +23,5 @@
 			"maxValue": 1,
 			"defaultValue": 1
 		}
-	}
+	]
 }

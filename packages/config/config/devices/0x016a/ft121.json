@@ -17,8 +17,9 @@
 		"min": "0.0",
 		"max": "255.255"
 	},
-	"paramInformation": {
-		"20": {
+	"paramInformation": [
+		{
+			"#": "20",
 			"label": "LED Strip state at Power ON",
 			"valueSize": 1,
 			"minValue": 0,
@@ -40,7 +41,8 @@
 				}
 			]
 		},
-		"32": {
+		{
+			"#": "32",
 			"label": "Enable/Disable Report on color change.",
 			"valueSize": 1,
 			"minValue": 0,
@@ -58,7 +60,8 @@
 				}
 			]
 		},
-		"34": {
+		{
+			"#": "34",
 			"label": "Brightness Level Control",
 			"valueSize": 1,
 			"minValue": 0,
@@ -76,7 +79,8 @@
 				}
 			]
 		},
-		"35": {
+		{
+			"#": "35",
 			"label": "Display mode of Cold/warm white",
 			"valueSize": 1,
 			"minValue": 0,
@@ -94,7 +98,8 @@
 				}
 			]
 		},
-		"40": {
+		{
+			"#": "40",
 			"label": "Colorful mode configuration",
 			"valueSize": 1,
 			"minValue": 0,
@@ -129,7 +134,8 @@
 				}
 			]
 		},
-		"80": {
+		{
+			"#": "80",
 			"label": "Notification (Group 1) when state changes",
 			"valueSize": 1,
 			"minValue": 0,
@@ -151,7 +157,8 @@
 				}
 			]
 		},
-		"112": {
+		{
+			"#": "112",
 			"label": "Dimmer mode",
 			"valueSize": 1,
 			"minValue": 0,
@@ -177,7 +184,8 @@
 				}
 			]
 		},
-		"252": {
+		{
+			"#": "252",
 			"label": "Configuration lock",
 			"valueSize": 1,
 			"minValue": 0,
@@ -195,7 +203,8 @@
 				}
 			]
 		},
-		"255": {
+		{
+			"#": "255",
 			"label": "Reset to defaults",
 			"valueSize": 1,
 			"minValue": 0,
@@ -203,7 +212,8 @@
 			"defaultValue": 0,
 			"unsigned": true
 		},
-		"37[0x1f]": {
+		{
+			"#": "37[0x1f]",
 			"label": "Color Change Speed Level",
 			"description": "Applies only when the Color Transition Style is set to Fade Out/In",
 			"valueSize": 4,
@@ -217,7 +227,8 @@
 				}
 			]
 		},
-		"37[0xe0]": {
+		{
+			"#": "37[0xe0]",
 			"label": "Time Base of Color Change Speed",
 			"description": "Applies only when the Color Transition Style is set to Fade Out/In",
 			"valueSize": 4,
@@ -240,7 +251,8 @@
 				}
 			]
 		},
-		"37[0xff00]": {
+		{
+			"#": "37[0xff00]",
 			"label": "Cycle Count",
 			"description": "Defines the number of repetitions of the color transition cycle",
 			"valueSize": 4,
@@ -248,7 +260,8 @@
 			"maxValue": 254,
 			"defaultValue": 0
 		},
-		"37[0xff0000]": {
+		{
+			"#": "37[0xff0000]",
 			"label": "Brightness",
 			"description": "Brightness when in color transition mode",
 			"valueSize": 4,
@@ -256,7 +269,8 @@
 			"maxValue": 99,
 			"defaultValue": 99
 		},
-		"37[0x07000000]": {
+		{
+			"#": "37[0x07000000]",
 			"label": "Color Display Cycle",
 			"description": "Defines the mode for determining colors used in color transitions",
 			"valueSize": 4,
@@ -287,7 +301,8 @@
 				}
 			]
 		},
-		"37[0x38000000]": {
+		{
+			"#": "37[0x38000000]",
 			"label": "Color Change Speed Option",
 			"description": "Applies only when the Color Transition Style is set to Fade Out/In",
 			"valueSize": 4,
@@ -310,7 +325,8 @@
 				}
 			]
 		},
-		"37[0x40000000]": {
+		{
+			"#": "37[0x40000000]",
 			"label": "Color Transition Style",
 			"description": "Defines how the strip transitions between colors",
 			"valueSize": 4,
@@ -329,5 +345,5 @@
 				}
 			]
 		}
-	}
+	]
 }

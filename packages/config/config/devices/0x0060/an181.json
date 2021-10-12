@@ -14,8 +14,9 @@
 		"max": "255.255"
 	},
 	"supportsZWavePlus": true,
-	"paramInformation": {
-		"1": {
+	"paramInformation": [
+		{
+			"#": "1",
 			"label": "Command value",
 			"description": "Set Basic Set Command value to be sent to group 2 when switch is turned on",
 			"valueSize": 2,
@@ -33,7 +34,8 @@
 				}
 			]
 		},
-		"2": {
+		{
+			"#": "2",
 			"label": "Delaying time",
 			"description": "Set the delaying time to report to Group 1 in seconds",
 			"unit": "Seconds",
@@ -42,7 +44,8 @@
 			"maxValue": 25,
 			"defaultValue": 3
 		},
-		"3": {
+		{
+			"#": "3",
 			"label": "Remember status",
 			"description": "Set whether to remember the last status",
 			"valueSize": 1,
@@ -61,7 +64,8 @@
 				}
 			]
 		},
-		"4": {
+		{
+			"#": "4",
 			"label": "Interval for wattage auto report",
 			"unit": "minutes",
 			"valueSize": 2,
@@ -75,7 +79,8 @@
 				}
 			]
 		},
-		"5": {
+		{
+			"#": "5",
 			"label": "Interval for kW*h auto report",
 			"unit": "minutes",
 			"valueSize": 2,
@@ -89,7 +94,8 @@
 				}
 			]
 		},
-		"6": {
+		{
+			"#": "6",
 			"label": "Auto report load surpasses value",
 			"unit": "W",
 			"valueSize": 2,
@@ -103,7 +109,8 @@
 				}
 			]
 		},
-		"7": {
+		{
+			"#": "7",
 			"label": "Auto report change percentage",
 			"description": "Auto report when the change of wattage surpasses the set percentage",
 			"unit": "Percent",
@@ -118,5 +125,5 @@
 				}
 			]
 		}
-	}
+	]
 }

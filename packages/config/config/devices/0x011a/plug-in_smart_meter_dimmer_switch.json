@@ -31,8 +31,9 @@
 			"maxNodes": 5
 		}
 	},
-	"paramInformation": {
-		"1": {
+	"paramInformation": [
+		{
+			"#": "1",
 			"label": "Synchronization of load power and LED indicator",
 			"valueSize": 1,
 			"minValue": 0,
@@ -50,7 +51,8 @@
 				}
 			]
 		},
-		"8": {
+		{
+			"#": "8",
 			"label": "Autosend Interval (METER_REPORT)",
 			"valueSize": 1,
 			"minValue": 0,
@@ -58,7 +60,8 @@
 			"defaultValue": 0,
 			"unsigned": true
 		},
-		"9": {
+		{
+			"#": "9",
 			"label": "Autosend interval (SENSOR_MULTILEVEL_REPORT)",
 			"valueSize": 1,
 			"minValue": 0,
@@ -66,7 +69,8 @@
 			"defaultValue": 0,
 			"unsigned": true
 		},
-		"10": {
+		{
+			"#": "10",
 			"label": "Accumulated Autosend Interval ( METER_REPORT)",
 			"valueSize": 1,
 			"minValue": 0,
@@ -74,7 +78,8 @@
 			"defaultValue": 0,
 			"unsigned": true
 		},
-		"11": {
+		{
+			"#": "11",
 			"label": "Enable automatic notifications",
 			"valueSize": 1,
 			"minValue": 0,
@@ -100,7 +105,8 @@
 				}
 			]
 		},
-		"12": {
+		{
+			"#": "12",
 			"label": "Minimum change in wattage report",
 			"valueSize": 1,
 			"minValue": 0,
@@ -108,5 +114,5 @@
 			"defaultValue": 10,
 			"unsigned": true
 		}
-	}
+	]
 }

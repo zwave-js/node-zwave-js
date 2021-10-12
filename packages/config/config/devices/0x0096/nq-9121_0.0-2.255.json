@@ -13,8 +13,9 @@
 		"min": "0.0",
 		"max": "2.255"
 	},
-	"paramInformation": {
-		"1": {
+	"paramInformation": [
+		{
+			"#": "1",
 			"label": "Pulse factor",
 			"description": "How many pulses * 10 per kWh",
 			"valueSize": 4,
@@ -22,7 +23,8 @@
 			"maxValue": 65535,
 			"defaultValue": 10000
 		},
-		"2": {
+		{
+			"#": "2",
 			"label": "Sensor type",
 			"valueSize": 1,
 			"minValue": 0,
@@ -41,7 +43,8 @@
 				}
 			]
 		},
-		"3": {
+		{
+			"#": "3",
 			"label": "IR Listen period",
 			"description": "Additional time for feedback measurement. Should always be 0.",
 			"valueSize": 1,
@@ -49,7 +52,8 @@
 			"maxValue": 127,
 			"defaultValue": 0
 		},
-		"4": {
+		{
+			"#": "4",
 			"label": "IR Pulse Width",
 			"description": "Adjusts transmit signal so received signal will in average be equal to this values.",
 			"valueSize": 1,
@@ -57,7 +61,8 @@
 			"maxValue": 127,
 			"defaultValue": 50
 		},
-		"5": {
+		{
+			"#": "5",
 			"label": "Poll / Wake up frequency",
 			"description": "Wake device up this many times per second. This value also controls number of measurements per second on mechanical meters",
 			"valueSize": 1,
@@ -65,7 +70,8 @@
 			"maxValue": 50,
 			"defaultValue": 20
 		},
-		"6": {
+		{
+			"#": "6",
 			"label": "Pulse Threshold Low",
 			"description": "Low detection threshold for wheel meters",
 			"valueSize": 1,
@@ -73,7 +79,8 @@
 			"maxValue": 127,
 			"defaultValue": 0
 		},
-		"7": {
+		{
+			"#": "7",
 			"label": "Pulse Threshold High",
 			"description": "High detection threshold for wheel meters",
 			"valueSize": 1,
@@ -81,7 +88,8 @@
 			"maxValue": 127,
 			"defaultValue": 5
 		},
-		"8": {
+		{
+			"#": "8",
 			"label": "Wakeup Interval",
 			"description": "like WAKEUP command class",
 			"valueSize": 1,
@@ -90,7 +98,8 @@
 			"defaultValue": 0,
 			"unsigned": true
 		},
-		"9": {
+		{
+			"#": "9",
 			"label": "Pulse count",
 			"description": "Current pulse count in device (pulse count / pulse factor = kWh)",
 			"valueSize": 4,
@@ -98,7 +107,8 @@
 			"maxValue": 50,
 			"defaultValue": 20
 		},
-		"10": {
+		{
+			"#": "10",
 			"label": "Keep alive period",
 			"description": "How many ticks before going back to sleep in normal wakeup mode.",
 			"valueSize": 2,
@@ -106,7 +116,8 @@
 			"maxValue": 32767,
 			"defaultValue": 60
 		},
-		"11": {
+		{
+			"#": "11",
 			"label": "Real-time mode",
 			"description": "Set this to enter real-time mode from remote. Contains seconds * poll frequency before going back to sleep. If you press the button once this value will be set.",
 			"valueSize": 2,
@@ -114,7 +125,8 @@
 			"maxValue": 32767,
 			"defaultValue": 0
 		},
-		"13": {
+		{
+			"#": "13",
 			"label": "Off",
 			"description": "LED blinks at pulse counting",
 			"valueSize": 1,
@@ -122,5 +134,5 @@
 			"maxValue": 1,
 			"defaultValue": 0
 		}
-	}
+	]
 }

@@ -14,8 +14,9 @@
 		"min": "0.0",
 		"max": "255.255"
 	},
-	"paramInformation": {
-		"1": {
+	"paramInformation": [
+		{
+			"#": "1",
 			"label": "Set The Motor Rotation Direction",
 			"description": "",
 			"valueSize": 1,
@@ -35,7 +36,8 @@
 				}
 			]
 		},
-		"2": {
+		{
+			"#": "2",
 			"label": "Set To Start Holding Hands",
 			"description": "",
 			"valueSize": 1,
@@ -55,7 +57,8 @@
 				}
 			]
 		},
-		"3": {
+		{
+			"#": "3",
 			"label": "Weak Electric Switch Mode",
 			"description": "",
 			"valueSize": 1,
@@ -83,7 +86,8 @@
 				}
 			]
 		},
-		"4": {
+		{
+			"#": "4",
 			"label": "Strong Electric Switch Mode",
 			"description": "",
 			"valueSize": 1,
@@ -107,7 +111,8 @@
 				}
 			]
 		},
-		"5": {
+		{
+			"#": "5",
 			"label": "Limit Position Status",
 			"description": "",
 			"valueSize": 1,
@@ -128,7 +133,8 @@
 				}
 			]
 		},
-		"6": {
+		{
+			"#": "6",
 			"label": "Device Type",
 			"description": "",
 			"valueSize": 1,
@@ -153,7 +159,8 @@
 				}
 			]
 		},
-		"7": {
+		{
+			"#": "7",
 			"label": "Power Supply Type",
 			"description": "",
 			"valueSize": 1,
@@ -174,7 +181,8 @@
 				}
 			]
 		},
-		"8": {
+		{
+			"#": "8",
 			"label": "Manually Set / Cancel Open Borders",
 			"description": "",
 			"valueSize": 1,
@@ -194,7 +202,8 @@
 				}
 			]
 		},
-		"9": {
+		{
+			"#": "9",
 			"label": "Manually Set / Cancel Close Borders",
 			"description": "",
 			"valueSize": 1,
@@ -214,7 +223,8 @@
 				}
 			]
 		},
-		"10": {
+		{
+			"#": "10",
 			"label": "Delete The Limit Position",
 			"description": "",
 			"valueSize": 1,
@@ -231,7 +241,7 @@
 				}
 			]
 		}
-	},
+	],
 	"metadata": {
 		"inclusion": "Press the motor setting button three times within 1.5 seconds. (Press P1 (1 beep), Press P1 (1 beep), Press P1( 1 beep and 1 jog))",
 		"exclusion": "Press the motor setting button three times within 1.5 seconds. (Press P1 (1 beep), Press P1 (1 beep), Press P1 (1 beep and 1 jog))",

@@ -17,8 +17,9 @@
 		"min": "0.0",
 		"max": "255.255"
 	},
-	"paramInformation": {
-		"0": {
+	"paramInformation": [
+		{
+			"#": "0",
 			"label": "Siren Strobe Mode",
 			"description": "Defines the reaction of the siren",
 			"valueSize": 1,
@@ -41,7 +42,8 @@
 				}
 			]
 		},
-		"1": {
+		{
+			"#": "1",
 			"label": "Alarm auto stop",
 			"description": "Defines the auto time out of the alarm indication",
 			"valueSize": 1,
@@ -68,5 +70,5 @@
 				}
 			]
 		}
-	}
+	]
 }

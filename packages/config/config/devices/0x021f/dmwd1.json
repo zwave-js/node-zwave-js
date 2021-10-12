@@ -32,8 +32,9 @@
 			"maxNodes": 5
 		}
 	},
-	"paramInformation": {
-		"1": {
+	"paramInformation": [
+		{
+			"#": "1",
 			"label": "BASIC_SET Off Delay",
 			"description": "The delay time from when the Door/Window Sensor sends the BASIC_SET command.",
 			"valueSize": 2,
@@ -42,7 +43,8 @@
 			"defaultValue": 30,
 			"unsigned": true
 		},
-		"2": {
+		{
+			"#": "2",
 			"label": "BASIC_SET Level",
 			"description": "Sets the value sent by the BASIC_SET command to Association Group 2",
 			"valueSize": 1,
@@ -62,5 +64,5 @@
 				}
 			]
 		}
-	}
+	]
 }

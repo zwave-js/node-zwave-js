@@ -355,8 +355,9 @@
 			"maxNodes": 30
 		}
 	},
-	"paramInformation": {
-		"0": {
+	"paramInformation": [
+		{
+			"#": "0",
 			"label": "Button Press Time",
 			"valueSize": 1,
 			"minValue": 0,
@@ -364,7 +365,8 @@
 			"defaultValue": 50,
 			"unsigned": true
 		},
-		"1": {
+		{
+			"#": "1",
 			"label": "Button Multiple Press Time",
 			"valueSize": 1,
 			"minValue": 0,
@@ -372,7 +374,8 @@
 			"defaultValue": 100,
 			"unsigned": true
 		},
-		"2": {
+		{
+			"#": "2",
 			"label": "Button Hold Time",
 			"valueSize": 1,
 			"minValue": 0,
@@ -380,7 +383,8 @@
 			"defaultValue": 40,
 			"unsigned": true
 		},
-		"3": {
+		{
+			"#": "3",
 			"label": "Network Update Interval",
 			"valueSize": 2,
 			"minValue": 0,
@@ -388,5 +392,5 @@
 			"defaultValue": 168,
 			"unsigned": true
 		}
-	}
+	]
 }

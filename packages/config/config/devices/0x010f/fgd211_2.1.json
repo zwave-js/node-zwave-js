@@ -52,8 +52,9 @@
 			"isLifeline": true
 		}
 	},
-	"paramInformation": {
-		"1": {
+	"paramInformation": [
+		{
+			"#": "1",
 			"label": "Enable/Disable ALL ON/OFF",
 			"valueSize": 1,
 			"minValue": 0,
@@ -80,7 +81,8 @@
 				}
 			]
 		},
-		"6": {
+		{
+			"#": "6",
 			"label": "Separation of association sending (key 1)",
 			"description": "Activate/Deactivate association sending for group 1 - Also see param #16",
 			"valueSize": 1,
@@ -104,7 +106,8 @@
 				}
 			]
 		},
-		"7": {
+		{
+			"#": "7",
 			"label": "Control key #2 behaviour",
 			"description": "Checking the device status before sending a control frame from the key no. 2.",
 			"valueSize": 1,
@@ -124,14 +127,16 @@
 				}
 			]
 		},
-		"8": {
+		{
+			"#": "8",
 			"label": "Dimming step at automatic control",
 			"valueSize": 1,
 			"minValue": 1,
 			"maxValue": 99,
 			"defaultValue": 1
 		},
-		"9": {
+		{
+			"#": "9",
 			"label": "Time of MANUALLY moving between dimming values",
 			"description": "Options for changing parameter 1-255 (10ms - 2,5s)",
 			"valueSize": 1,
@@ -140,7 +145,8 @@
 			"defaultValue": 5,
 			"unsigned": true
 		},
-		"10": {
+		{
+			"#": "10",
 			"label": "Time of AUTOMATIC moving between dimming values",
 			"valueSize": 1,
 			"minValue": 0,
@@ -148,7 +154,8 @@
 			"defaultValue": 1,
 			"unsigned": true
 		},
-		"11": {
+		{
+			"#": "11",
 			"label": "Dimming step at manual control",
 			"description": "Options for changing parameter 1-99",
 			"valueSize": 1,
@@ -156,7 +163,8 @@
 			"maxValue": 99,
 			"defaultValue": 1
 		},
-		"12": {
+		{
+			"#": "12",
 			"label": "Maximum dimmer level control",
 			"description": "Options for changing parameter 2-99",
 			"valueSize": 1,
@@ -164,7 +172,8 @@
 			"maxValue": 99,
 			"defaultValue": 99
 		},
-		"13": {
+		{
+			"#": "13",
 			"label": "Minimum dimmer level control",
 			"description": "Options for changing parameter 1-98",
 			"valueSize": 1,
@@ -172,7 +181,8 @@
 			"maxValue": 98,
 			"defaultValue": 2
 		},
-		"14": {
+		{
+			"#": "14",
 			"label": "Inputs Button/Switch configuration",
 			"description": "Binary inputs type configuration",
 			"valueSize": 1,
@@ -196,7 +206,8 @@
 				}
 			]
 		},
-		"15": {
+		{
+			"#": "15",
 			"label": "Parm 15",
 			"description": "Double-click set lighting at 100%",
 			"valueSize": 1,
@@ -216,10 +227,12 @@
 				}
 			]
 		},
-		"16": {
+		{
+			"#": "16",
 			"$import": "~/templates/master_template.json#state_after_power_failure_off_prev"
 		},
-		"17": {
+		{
+			"#": "17",
 			"label": "3-way switch function",
 			"valueSize": 1,
 			"minValue": 0,
@@ -238,7 +251,8 @@
 				}
 			]
 		},
-		"18": {
+		{
+			"#": "18",
 			"label": "Synchronizing light level for associated devices",
 			"description": "The dimmer communicate the level to the associated devices. (default value 0)",
 			"valueSize": 1,
@@ -258,7 +272,8 @@
 				}
 			]
 		},
-		"19": {
+		{
+			"#": "19",
 			"label": "Change [On-Off] bi-stable keys",
 			"description": "Assigns bistable key status to the device status.",
 			"valueSize": 1,
@@ -278,7 +293,8 @@
 				}
 			]
 		},
-		"20": {
+		{
+			"#": "20",
 			"label": "Minimum level of the Dimmer",
 			"valueSize": 1,
 			"minValue": 100,
@@ -286,7 +302,8 @@
 			"defaultValue": 110,
 			"unsigned": true
 		},
-		"30": {
+		{
+			"#": "30",
 			"label": "Relay 1: Response to General Alarm",
 			"description": "Resonse to alarm of any type",
 			"valueSize": 1,
@@ -314,7 +331,8 @@
 				}
 			]
 		},
-		"39": {
+		{
+			"#": "39",
 			"label": "ALARM FLASHING alarm time",
 			"description": "Amount of time (ms) the device keeps on flashing after receipt of Alarm Frame",
 			"valueSize": 2,
@@ -323,7 +341,8 @@
 			"defaultValue": 600,
 			"unsigned": true
 		},
-		"40": {
+		{
+			"#": "40",
 			"label": "Updating the dimming level without switch.",
 			"description": "Available settings: from 1 to 99.",
 			"valueSize": 1,
@@ -331,7 +350,8 @@
 			"maxValue": 99,
 			"defaultValue": 99
 		},
-		"41": {
+		{
+			"#": "41",
 			"label": "Scene activation functionality",
 			"description": "Sending commands with command class scene activation",
 			"valueSize": 1,
@@ -351,5 +371,5 @@
 				}
 			]
 		}
-	}
+	]
 }

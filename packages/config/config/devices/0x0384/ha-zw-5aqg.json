@@ -21,15 +21,17 @@
 			"isLifeline": true
 		}
 	},
-	"paramInformation": {
-		"1": {
+	"paramInformation": [
+		{
+			"#": "1",
 			"label": "Internal Temperature",
 			"valueSize": 1,
 			"minValue": -128,
 			"maxValue": 127,
 			"readOnly": true
 		},
-		"255": {
+		{
+			"#": "255",
 			"label": "Factory Reset Device",
 			"valueSize": 4,
 			"minValue": -2013265920,
@@ -47,7 +49,7 @@
 				}
 			]
 		}
-	},
+	],
 	"metadata": {
 		"inclusion": "a) Set the Z-Wave network main controller into adding mode.\nb) Power cycle once for the led bulb(OFF->ON).The led bulb will flash once when it has been include into the network.",
 		"exclusion": "a) Set the Z-Wave network main controller into removing mode.\nb) Power cycle once for the led bulb(OFF->ON).Then the led bulb will flash once then dim to 5%,when it has been excluded outside the network.",

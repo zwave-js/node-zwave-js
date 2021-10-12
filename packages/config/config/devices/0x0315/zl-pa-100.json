@@ -14,8 +14,9 @@
 		"max": "255.255"
 	},
 	"supportsZWavePlus": true,
-	"paramInformation": {
-		"3": {
+	"paramInformation": [
+		{
+			"#": "3",
 			"label": "Nightlight",
 			"description": "Nightlight Operation",
 			"valueSize": 1,
@@ -38,5 +39,5 @@
 				}
 			]
 		}
-	}
+	]
 }

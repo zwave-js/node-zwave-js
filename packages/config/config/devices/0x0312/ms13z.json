@@ -1,5 +1,5 @@
 {
-	"manufacturer": "Ministon",
+	"manufacturer": "Minoston",
 	"manufacturerId": "0x0312",
 	"label": "MS13Z",
 	"description": "Smart Dimmer Toggle Switch",
@@ -24,8 +24,9 @@
 		"min": "0.0",
 		"max": "255.255"
 	},
-	"paramInformation": {
-		"1": {
+	"paramInformation": [
+		{
+			"#": "1",
 			"label": "Button Orientation",
 			"valueSize": 1,
 			"minValue": 0,
@@ -48,7 +49,8 @@
 				}
 			]
 		},
-		"2": {
+		{
+			"#": "2",
 			"label": "Status LED Configuration",
 			"valueSize": 1,
 			"minValue": 0,
@@ -75,7 +77,8 @@
 				}
 			]
 		},
-		"3": {
+		{
+			"#": "3",
 			"label": "Enable/Disable Auto Turn-off Timer",
 			"valueSize": 1,
 			"minValue": 0,
@@ -94,7 +97,8 @@
 				}
 			]
 		},
-		"4": {
+		{
+			"#": "4",
 			"label": "Auto Turn-off Time",
 			"valueSize": 4,
 			"unit": "minutes",
@@ -103,7 +107,8 @@
 			"defaultValue": 60,
 			"unsigned": true
 		},
-		"5": {
+		{
+			"#": "5",
 			"label": "Enable/Disable Auto Turn-on Timer",
 			"valueSize": 1,
 			"minValue": 0,
@@ -122,7 +127,8 @@
 				}
 			]
 		},
-		"6": {
+		{
+			"#": "6",
 			"label": "Auto Turn-on Timer",
 			"valueSize": 4,
 			"unit": "minutes",
@@ -131,7 +137,8 @@
 			"defaultValue": 60,
 			"unsigned": true
 		},
-		"7[0x01]": {
+		{
+			"#": "7[0x01]",
 			"label": "Send Status Change Report: Local Control",
 			"description": "Determine whether a trigger of this type should prompt a status change report to associated devices.",
 			"valueSize": 1,
@@ -151,7 +158,8 @@
 				}
 			]
 		},
-		"7[0x02]": {
+		{
+			"#": "7[0x02]",
 			"label": "Send Status Change Report: 3-Way",
 			"description": "Determine whether a trigger of this type should prompt a status change report to associated devices.",
 			"valueSize": 1,
@@ -171,7 +179,8 @@
 				}
 			]
 		},
-		"7[0x04]": {
+		{
+			"#": "7[0x04]",
 			"label": "Send Status Change Report: Z-Wave",
 			"description": "Determine whether a trigger of this type should prompt a status change report to associated devices.",
 			"valueSize": 1,
@@ -191,7 +200,8 @@
 				}
 			]
 		},
-		"7[0x08]": {
+		{
+			"#": "7[0x08]",
 			"label": "Send Status Change Report: Timer",
 			"description": "Determine whether a trigger of this type should prompt a status change report to associated devices.",
 			"valueSize": 1,
@@ -211,10 +221,12 @@
 				}
 			]
 		},
-		"8": {
+		{
+			"#": "8",
 			"$import": "~/templates/master_template.json#state_after_power_failure_off_on_prev"
 		},
-		"9": {
+		{
+			"#": "9",
 			"label": "Dimmer Speed (Manual)",
 			"valueSize": 1,
 			"minValue": 0,
@@ -222,7 +234,8 @@
 			"defaultValue": 1,
 			"unsigned": true
 		},
-		"10": {
+		{
+			"#": "10",
 			"label": "Minimum Dim Level",
 			"valueSize": 1,
 			"unit": "%",
@@ -231,7 +244,8 @@
 			"defaultValue": 1,
 			"unsigned": true
 		},
-		"11": {
+		{
+			"#": "11",
 			"label": "Maximum Dim Level",
 			"valueSize": 1,
 			"unit": "%",
@@ -240,7 +254,8 @@
 			"defaultValue": 99,
 			"unsigned": true
 		},
-		"12": {
+		{
+			"#": "12",
 			"label": "Dim Level on Double Tap",
 			"valueSize": 1,
 			"minValue": 0,
@@ -259,7 +274,8 @@
 				}
 			]
 		},
-		"14": {
+		{
+			"#": "14",
 			"label": "Double Tap Behavior",
 			"valueSize": 1,
 			"minValue": 0,
@@ -282,7 +298,8 @@
 				}
 			]
 		},
-		"15": {
+		{
+			"#": "15",
 			"label": "Enable/Disable Local Control",
 			"valueSize": 1,
 			"minValue": 0,
@@ -301,7 +318,7 @@
 				}
 			]
 		}
-	},
+	],
 	"metadata": {
 		"inclusion": "ADD the MS13Z from the existing Z-Wave home control network with your primary controller.\n ---Refer to your primary controller instructions to process the inclusion / exclusion setup procedure.\n ---When prompted by your primary controller, click the Up or Down button three times in one second. \nInclude MS13Z to/from a Z-Wave Gateway with supporting Security.The MS13Z can support the Primary Controller that implemented the security S2.",
 		"exclusion": "Remove the MS13Z from the existing Z-Wave home control network with your primary controller.\n ---Refer to your primary controller instructions to process the inclusion / exclusion setup procedure.\n ---When prompted by your primary controller, click the Up or Down button three times in one second. \nInclude MS13Z to/from a Z-Wave Gateway with supporting Security.The MS13Z can support the Primary Controller that implemented the security S2.",

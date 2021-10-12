@@ -13,8 +13,9 @@
 		"min": "3.4",
 		"max": "3.4"
 	},
-	"paramInformation": {
-		"2": {
+	"paramInformation": [
+		{
+			"#": "2",
 			"label": "Fireman Timeout",
 			"description": "Minutes that pump will continue to run after heater shutoff",
 			"unit": "Minutes",
@@ -24,7 +25,8 @@
 			"defaultValue": 0,
 			"unsigned": true
 		},
-		"22": {
+		{
+			"#": "22",
 			"label": "Pool - Spa Mode",
 			"description": "Controller Mode",
 			"unit": "Decimal",
@@ -33,7 +35,8 @@
 			"maxValue": 2,
 			"defaultValue": 0
 		},
-		"1[0xff]": {
+		{
+			"#": "1[0xff]",
 			"label": "Booster/Cleaner Pump Operation Mode",
 			"description": "Which circuit the booster/cleaner pump resides on",
 			"unit": "Decimal",
@@ -42,7 +45,8 @@
 			"maxValue": 6,
 			"defaultValue": 1
 		},
-		"1[0xff00]": {
+		{
+			"#": "1[0xff00]",
 			"label": "Pump Type Operation Mode",
 			"description": "Which type of pump is being used",
 			"unit": "Decimal",
@@ -51,5 +55,5 @@
 			"maxValue": 7,
 			"defaultValue": 0
 		}
-	}
+	]
 }

@@ -13,8 +13,9 @@
 		"min": "0.0",
 		"max": "255.255"
 	},
-	"paramInformation": {
-		"2": {
+	"paramInformation": [
+		{
+			"#": "2",
 			"label": "LED Indicator: Brightness",
 			"valueSize": 1,
 			"unit": "%",
@@ -22,7 +23,8 @@
 			"maxValue": 100,
 			"defaultValue": 100
 		},
-		"3": {
+		{
+			"#": "3",
 			"label": "LED Indicator: Mode",
 			"valueSize": 1,
 			"minValue": 0,
@@ -48,7 +50,8 @@
 				}
 			]
 		},
-		"11": {
+		{
+			"#": "11",
 			"label": "LED Indicator: Power Monitoring Display",
 			"valueSize": 1,
 			"minValue": 0,
@@ -66,7 +69,8 @@
 				}
 			]
 		},
-		"12": {
+		{
+			"#": "12",
 			"label": "LED Indicator: Power Monitoring Display Duration",
 			"description": "Sets the length of time for which the LED will reflect the current power usage",
 			"valueSize": 2,
@@ -81,7 +85,8 @@
 				}
 			]
 		},
-		"13": {
+		{
+			"#": "13",
 			"label": "Energy Usage Reporting Interval",
 			"valueSize": 2,
 			"unit": "minutes",
@@ -95,7 +100,7 @@
 				}
 			]
 		}
-	},
+	],
 	"metadata": {
 		"inclusion": "With the controller in inclusion mode, tap the button on the face of the outlet. The LED will blink slowly when adding.",
 		"exclusion": "Remove the switch by tapping the button on the face of the outlet 2 times. The LED will begin blinking slowly for 10 seconds indicating that it has been removed.",

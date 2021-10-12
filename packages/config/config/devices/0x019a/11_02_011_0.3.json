@@ -14,8 +14,9 @@
 		"max": "255.255"
 	},
 	"supportsZWavePlus": true,
-	"paramInformation": {
-		"2": {
+	"paramInformation": [
+		{
+			"#": "2",
 			"label": "LED alarm event reporting",
 			"valueSize": 1,
 			"minValue": 0,
@@ -33,7 +34,8 @@
 				}
 			]
 		},
-		"3": {
+		{
+			"#": "3",
 			"label": "Temperature & Light reporting frequency",
 			"valueSize": 1,
 			"minValue": 0,
@@ -51,7 +53,8 @@
 				}
 			]
 		},
-		"4": {
+		{
+			"#": "4",
 			"label": "Temperature reporting",
 			"valueSize": 1,
 			"minValue": 0,
@@ -69,7 +72,8 @@
 				}
 			]
 		},
-		"5": {
+		{
+			"#": "5",
 			"label": "Temperature reporting unit",
 			"valueSize": 1,
 			"minValue": 0,
@@ -88,7 +92,8 @@
 				}
 			]
 		},
-		"6": {
+		{
+			"#": "6",
 			"label": "Temperature alarms",
 			"valueSize": 1,
 			"minValue": 0,
@@ -106,21 +111,24 @@
 				}
 			]
 		},
-		"7": {
+		{
+			"#": "7",
 			"label": "High temperature alarm level",
 			"valueSize": 1,
 			"minValue": -20,
 			"maxValue": 60,
 			"defaultValue": 60
 		},
-		"8": {
+		{
+			"#": "8",
 			"label": "Low temperature alarm level",
 			"valueSize": 1,
 			"minValue": -20,
 			"maxValue": 60,
 			"defaultValue": -20
 		},
-		"9": {
+		{
+			"#": "9",
 			"label": "Ambient light reporting",
 			"valueSize": 1,
 			"minValue": 0,
@@ -142,21 +150,24 @@
 				}
 			]
 		},
-		"10": {
+		{
+			"#": "10",
 			"label": "High ambient light report level",
 			"valueSize": 4,
 			"minValue": 3,
 			"maxValue": 64000,
 			"defaultValue": 40000
 		},
-		"11": {
+		{
+			"#": "11",
 			"label": "Low ambient light report level",
 			"valueSize": 4,
 			"minValue": 1,
 			"maxValue": 42000,
 			"defaultValue": 5000
 		},
-		"12": {
+		{
+			"#": "12",
 			"label": "Leakage alarm",
 			"valueSize": 1,
 			"minValue": 0,
@@ -174,19 +185,21 @@
 				}
 			]
 		},
-		"13": {
+		{
+			"#": "13",
 			"label": "Leakage alarm level",
 			"valueSize": 1,
 			"minValue": 1,
 			"maxValue": 100,
 			"defaultValue": 10
 		},
-		"14": {
+		{
+			"#": "14",
 			"label": "Moisture reporting period",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 120,
 			"defaultValue": 0
 		}
-	}
+	]
 }
