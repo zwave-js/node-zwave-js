@@ -10,6 +10,8 @@ import * as path from "path";
 const pathWhitelists = ["node_modules/iobroker.zwave2"];
 // except if they are included in this array
 const pathBlacklists = ["node_modules/@serialport"];
+// like pathBlacklists but for exact matches
+const pathBlacklistsExact = ["repl.js"];
 
 function isZWaveError(
 	err: Error | string | null | undefined,
@@ -73,6 +75,17 @@ export function createSentryContext(libraryRootDir: string): SentryContext {
 		);
 	}
 
+	/** Returns whether any line in the given stacktrace is blacklisted */
+	function anyBlacklistedExact(filenames: string[]): boolean {
+		const normalizedFilenames = filenames.map((f) => path.normalize(f));
+		const normalizedBlacklistsExact = pathBlacklistsExact.map((b) =>
+			path.normalize(b),
+		);
+		return normalizedFilenames.some((f) =>
+			normalizedBlacklistsExact.some((b) => f === b),
+		);
+	}
+
 	/** Returns whether the given Sentry event should be ignored */
 	function shouldIgnore(
 		event: Sentry.Event,
@@ -90,6 +103,11 @@ export function createSentryContext(libraryRootDir: string): SentryContext {
 		// Definitely ignore errors which have nothing to do with this library, unless whitelisted
 		if (!filenames.some((f) => isPartOfThisLib(f))) {
 			return !anyWhitelisted(filenames);
+		}
+
+		// Definitely ignore errors where a part of the stack trace is blacklisted
+		if (anyBlacklistedExact(filenames)) {
+			return true;
 		}
 
 		let ignore = false;

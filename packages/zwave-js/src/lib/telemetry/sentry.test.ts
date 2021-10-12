@@ -1,14 +1,12 @@
 import { ZWaveError, ZWaveErrorCodes } from "@zwave-js/core";
 import path from "path";
-import { createSentryContext, SentryContext } from "./sentry";
+import { createSentryContext } from "./sentry";
 
 describe("The Sentry telemetry", () => {
-	let context: SentryContext;
-	beforeAll(() => {
-		context = createSentryContext(path.join(__dirname, "../../.."));
-	});
+	const defaultRootDir = path.join(__dirname, "../../..");
 
 	it("should ignore errors that are caused outside zwave-js", () => {
+		const context = createSentryContext(defaultRootDir);
 		const event = {
 			exception: {
 				values: [
@@ -49,6 +47,9 @@ describe("The Sentry telemetry", () => {
 	});
 
 	it("should NOT ignore errors that are explicitly whitelisted", () => {
+		const context = createSentryContext(
+			"/opt/iobroker/node_modules/zwave-js",
+		);
 		const event = {
 			exception: {
 				values: [
@@ -105,6 +106,9 @@ describe("The Sentry telemetry", () => {
 	});
 
 	it("should ignore errors that must be handled by the developer", () => {
+		const context = createSentryContext(
+			"/home/michel/dashboard/servers/zwave/node_modules/zwave-js",
+		);
 		const event = {
 			exception: {
 				values: [
@@ -205,6 +209,9 @@ describe("The Sentry telemetry", () => {
 	});
 
 	it("should ignore errors that must be handled by the developer, unless whitelisted", () => {
+		const context = createSentryContext(
+			"/opt/iobroker/node_modules/zwave-js",
+		);
 		const event = {
 			exception: {
 				values: [
@@ -298,5 +305,109 @@ describe("The Sentry telemetry", () => {
 			),
 		} as any;
 		expect(context.shouldIgnore(event, hint)).toBeFalse();
+	});
+
+	describe("regression tests for ignored errors", () => {
+		it("test 1: testing in the REPL", () => {
+			const context = createSentryContext(
+				"/Users/ross/code/temp/zwave/node_modules/zwave-js",
+			);
+			const event = {
+				culprit:
+					"Map.<anonymous>(zwave-js.src.lib.controller:Controller.ts)",
+				exception: {
+					values: [
+						{
+							type: "ZWaveError",
+							value: "Node 255 was not found!",
+							stacktrace: {
+								frames: [
+									{
+										function:
+											"REPLServer.runBound [as eval]",
+										module: "domain",
+										filename: "domain.js",
+										abs_path: "domain.js",
+										in_app: false,
+									},
+									{
+										function: "bound",
+										module: "domain",
+										filename: "domain.js",
+										abs_path: "domain.js",
+										in_app: false,
+									},
+									{
+										function: "REPLServer.defaultEval",
+										module: "repl",
+										filename: "repl.js",
+										abs_path: "repl.js",
+										in_app: false,
+									},
+									{
+										function: "Script.runInContext",
+										module: "vm",
+										filename: "vm.js",
+										abs_path: "vm.js",
+										in_app: false,
+									},
+									{
+										function: "null.<anonymous>",
+										module: "REPL1",
+										filename: "REPL1",
+										abs_path: "REPL1",
+										in_app: false,
+									},
+									{
+										function:
+											"ZWaveController.addAssociations",
+										module: "zwave-js.src.lib.controller:Controller.ts",
+										filename:
+											"/Users/ross/code/temp/zwave/node_modules/zwave-js/src/lib/controller/Controller.ts",
+										abs_path:
+											"/Users/ross/code/temp/zwave/node_modules/zwave-js/src/lib/controller/Controller.ts",
+										in_app: false,
+									},
+									{ function: "Array.filter", in_app: true },
+									{
+										function: "null.<anonymous>",
+										module: "zwave-js.src.lib.controller:Controller.ts",
+										filename:
+											"/Users/ross/code/temp/zwave/node_modules/zwave-js/src/lib/controller/Controller.ts",
+										abs_path:
+											"/Users/ross/code/temp/zwave/node_modules/zwave-js/src/lib/controller/Controller.ts",
+										in_app: false,
+									},
+									{
+										function:
+											"ZWaveController.isAssociationAllowed",
+										module: "zwave-js.src.lib.controller:Controller.ts",
+										filename:
+											"/Users/ross/code/temp/zwave/node_modules/zwave-js/src/lib/controller/Controller.ts",
+										abs_path:
+											"/Users/ross/code/temp/zwave/node_modules/zwave-js/src/lib/controller/Controller.ts",
+										in_app: false,
+									},
+									{
+										function: "Map.<anonymous>",
+										module: "zwave-js.src.lib.controller:Controller.ts",
+										filename:
+											"/Users/ross/code/temp/zwave/node_modules/zwave-js/src/lib/controller/Controller.ts",
+										abs_path:
+											"/Users/ross/code/temp/zwave/node_modules/zwave-js/src/lib/controller/Controller.ts",
+										in_app: false,
+									},
+								],
+							},
+							mechanism: {
+								type: "onunhandledrejection",
+								handled: false,
+							},
+						},
+					],
+				},
+			} as any;
+			expect(context.shouldIgnore(event)).toBeTrue();
+		});
 	});
 });
