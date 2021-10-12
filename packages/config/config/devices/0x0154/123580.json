@@ -20,8 +20,9 @@
 			"isLifeline": true
 		}
 	},
-	"paramInformation": {
-		"1": {
+	"paramInformation": [
+		{
+			"#": "1",
 			"label": "Set LED indication mode",
 			"valueSize": 1,
 			"minValue": 0,
@@ -47,7 +48,8 @@
 				}
 			]
 		},
-		"2": {
+		{
+			"#": "2",
 			"label": "Automatic switch off time",
 			"description": "If not zero, automatically switch off after a user defined time (in seconds)",
 			"valueSize": 2,
@@ -56,7 +58,8 @@
 			"defaultValue": 0,
 			"unsigned": true
 		},
-		"3": {
+		{
+			"#": "3",
 			"label": "RF Off command",
 			"valueSize": 1,
 			"minValue": 0,
@@ -82,7 +85,8 @@
 				}
 			]
 		},
-		"4": {
+		{
+			"#": "4",
 			"label": "Ignore start level",
 			"valueSize": 1,
 			"minValue": 0,
@@ -100,7 +104,8 @@
 				}
 			]
 		},
-		"5": {
+		{
+			"#": "5",
 			"label": "Speed for fast dimming",
 			"valueSize": 1,
 			"minValue": 0,
@@ -108,7 +113,8 @@
 			"defaultValue": 30,
 			"unsigned": true
 		},
-		"6": {
+		{
+			"#": "6",
 			"label": "Speed for slow dimming",
 			"valueSize": 1,
 			"minValue": 0,
@@ -116,7 +122,8 @@
 			"defaultValue": 3,
 			"unsigned": true
 		},
-		"7": {
+		{
+			"#": "7",
 			"label": "Behavior when ON received",
 			"valueSize": 1,
 			"minValue": 0,
@@ -138,28 +145,32 @@
 				}
 			]
 		},
-		"8": {
+		{
+			"#": "8",
 			"label": "Baby dimming time",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 99,
 			"defaultValue": 0
 		},
-		"9": {
+		{
+			"#": "9",
 			"label": "Baby target light level",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 100,
 			"defaultValue": 0
 		},
-		"10": {
+		{
+			"#": "10",
 			"label": "Baby target time level",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 100,
 			"defaultValue": 50
 		},
-		"17": {
+		{
+			"#": "17",
 			"label": "Limit minimum light level",
 			"description": "Minimum level should be greater than maximum.",
 			"valueSize": 1,
@@ -167,7 +178,8 @@
 			"maxValue": 95,
 			"defaultValue": 1
 		},
-		"18": {
+		{
+			"#": "18",
 			"label": "Limit maximum light level",
 			"description": "Maximum level should be greater than minimum. Set to 0 to act as a switch.",
 			"valueSize": 1,
@@ -175,35 +187,40 @@
 			"maxValue": 99,
 			"defaultValue": 1
 		},
-		"19": {
+		{
+			"#": "19",
 			"label": "Dim Level on 'Switch On'",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 99,
 			"defaultValue": 1
 		},
-		"51": {
+		{
+			"#": "51",
 			"label": "Pause before pulse",
 			"valueSize": 1,
 			"minValue": 5,
 			"maxValue": 60,
 			"defaultValue": 28
 		},
-		"52": {
+		{
+			"#": "52",
 			"label": "Pause after pulse",
 			"valueSize": 1,
 			"minValue": 5,
 			"maxValue": 60,
 			"defaultValue": 28
 		},
-		"53": {
+		{
+			"#": "53",
 			"label": "Pulse width",
 			"valueSize": 1,
 			"minValue": 3,
 			"maxValue": 20,
 			"defaultValue": 10
 		},
-		"54": {
+		{
+			"#": "54",
 			"label": "Pulse type",
 			"description": "NB: Do not touch these settings if you are not sure what they mean!",
 			"valueSize": 1,
@@ -222,5 +239,5 @@
 				}
 			]
 		}
-	}
+	]
 }

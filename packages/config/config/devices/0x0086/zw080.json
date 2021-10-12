@@ -26,8 +26,9 @@
 			"isLifeline": true
 		}
 	},
-	"paramInformation": {
-		"37[0xff00]": {
+	"paramInformation": [
+		{
+			"#": "37[0xff00]",
 			"label": "Siren Sound",
 			"valueSize": 2,
 			"minValue": 1,
@@ -56,23 +57,28 @@
 				}
 			]
 		},
-		"37[0xff]": {
+		{
+			"#": "37[0xff]",
 			"$import": "templates/aeotec_template.json#wattage_percent_trigger",
 			"valueSize": 2
 		},
-		"80": {
+		{
+			"#": "80",
 			"$import": "templates/aeotec_template.json#enable_notifications"
 		},
-		"200": {
+		{
+			"#": "200",
 			"$import": "templates/aeotec_template.json#partner_id_aeotec"
 		},
-		"252": {
+		{
+			"#": "252",
 			"$import": "templates/aeotec_template.json#lock_configuration"
 		},
-		"255": {
+		{
+			"#": "255",
 			"$import": "templates/aeotec_template.json#factory_reset_exclude"
 		}
-	},
+	],
 	"metadata": {
 		"inclusion": "Turn the primary controller of Z-Wave network into inclusion mode, short press the product’s Action button that you can find on the product's housing",
 		"exclusion": "Turn the primary controller of Z-Wave network into exclusion mode, short press the product’s Action button that you can find on the product's housing",

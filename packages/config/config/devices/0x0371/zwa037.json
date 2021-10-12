@@ -53,73 +53,94 @@
 			"maxNodes": 5
 		}
 	},
-	"paramInformation": {
-		"20": {
+	"paramInformation": [
+		{
+			"#": "20",
 			"$import": "~/templates/master_template.json#state_after_power_failure_off_on_prev"
 		},
-		"40": {
+		{
+			"#": "40",
 			"$import": "~/0x0086/templates/aeotec_template.json#auto_off_timer_65535"
 		},
-		"41": {
+		{
+			"#": "41",
 			"$import": "~/0x0086/templates/aeotec_template.json#auto_on_timer_65535"
 		},
-		"80": {
+		{
+			"#": "80",
 			"$import": "~/0x0086/templates/aeotec_template.json#binary_report_type"
 		},
-		"82": {
+		{
+			"#": "82",
 			"$import": "~/0x0086/templates/aeotec_template.json#wallmote_command_type"
 		},
-		"83": {
+		{
+			"#": "83",
 			"$import": "~/0x0086/templates/aeotec_template.json#led_function"
 		},
-		"84": {
+		{
+			"#": "84",
 			"$import": "~/0x0086/templates/aeotec_template.json#led_indicator_color_output"
 		},
-		"85": {
+		{
+			"#": "85",
 			"$import": "~/0x0086/templates/aeotec_template.json#led_indicator_color_scene"
 		},
-		"86": {
+		{
+			"#": "86",
 			"$import": "~/0x0086/templates/aeotec_template.json#led_indicator_brightness"
 		},
-		"110": {
+		{
+			"#": "110",
 			"$import": "~/0x0086/templates/aeotec_template.json#brightness_single_tap"
 		},
-		"111": {
+		{
+			"#": "111",
 			"$import": "~/0x0086/templates/aeotec_template.json#brightness_double_tap"
 		},
-		"119": {
+		{
+			"#": "119",
 			"$import": "~/0x0086/templates/aeotec_template.json#external_switch_scene_function"
 		},
-		"120": {
+		{
+			"#": "120",
 			"$import": "~/0x0086/templates/aeotec_template.json#external_switch_dimmers"
 		},
-		"121": {
+		{
+			"#": "121",
 			"$import": "~/templates/master_template.json#smart_switch_mode_0-3"
 		},
-		"123": {
+		{
+			"#": "123",
 			"$import": "~/0x0086/templates/aeotec_template.json#smart_switch_mode_reporting"
 		},
-		"122": {
+		{
+			"#": "122",
 			"$import": "~/templates/master_template.json#orientation_momentary"
 		},
-		"125": {
+		{
+			"#": "125",
 			"$import": "~/0x0086/templates/aeotec_template.json#dimming_rate_99",
 			"label": "Dimming Rate (Z-Wave & Tap)"
 		},
-		"126": {
+		{
+			"#": "126",
 			"$import": "~/0x0086/templates/aeotec_template.json#dimming_rate_99",
 			"label": "Dimming Rate (Hold)"
 		},
-		"131": {
+		{
+			"#": "131",
 			"$import": "~/0x0086/templates/aeotec_template.json#min_brightness"
 		},
-		"132": {
+		{
+			"#": "132",
 			"$import": "~/0x0086/templates/aeotec_template.json#max_brightness_100"
 		},
-		"133": {
+		{
+			"#": "133",
 			"$import": "~/0x0086/templates/aeotec_template.json#custom_brightness_99"
 		}
-	},
+	],
 	"metadata": {
 		"inclusion": "1. Turn the primary controller/ gateway into adding mode.\n2. 1x tap the Top/ Bottom button of Dimmer Switch",
 		"exclusion": "1. Turn the primary controller/ gateway into removing mode.\n2. 3x tap the Top/ Bottom button of Dimmer Switch",

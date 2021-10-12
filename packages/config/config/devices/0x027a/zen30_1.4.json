@@ -29,8 +29,9 @@
 			"maxNodes": 5
 		}
 	},
-	"paramInformation": {
-		"1": {
+	"paramInformation": [
+		{
+			"#": "1",
 			"label": "LED Indicator Mode for Dimmer",
 			"valueSize": 1,
 			"minValue": 0,
@@ -57,7 +58,8 @@
 				}
 			]
 		},
-		"2": {
+		{
+			"#": "2",
 			"label": "LED Indicator Mode for Relay",
 			"valueSize": 1,
 			"minValue": 0,
@@ -84,7 +86,8 @@
 				}
 			]
 		},
-		"3": {
+		{
+			"#": "3",
 			"label": "LED Indicator Color for Dimmer",
 			"valueSize": 1,
 			"minValue": 0,
@@ -111,7 +114,8 @@
 				}
 			]
 		},
-		"4": {
+		{
+			"#": "4",
 			"label": "LED Indicator Color for Relay",
 			"valueSize": 1,
 			"minValue": 0,
@@ -138,7 +142,8 @@
 				}
 			]
 		},
-		"5": {
+		{
+			"#": "5",
 			"label": "LED Indicator Brightness for Dimmer",
 			"valueSize": 1,
 			"minValue": 0,
@@ -161,7 +166,8 @@
 				}
 			]
 		},
-		"6": {
+		{
+			"#": "6",
 			"label": "LED Indicator Brightness for Relay",
 			"valueSize": 1,
 			"minValue": 0,
@@ -184,7 +190,8 @@
 				}
 			]
 		},
-		"7": {
+		{
+			"#": "7",
 			"label": "LED Indicator Mode for Scene Control",
 			"valueSize": 1,
 			"minValue": 0,
@@ -203,7 +210,8 @@
 				}
 			]
 		},
-		"8": {
+		{
+			"#": "8",
 			"label": "Auto Turn-Off Timer for Dimmer",
 			"valueSize": 4,
 			"unit": "minutes",
@@ -211,7 +219,8 @@
 			"maxValue": 65535,
 			"defaultValue": 0
 		},
-		"9": {
+		{
+			"#": "9",
 			"label": "Auto Turn-On Timer for Dimmer",
 			"valueSize": 4,
 			"unit": "minutes",
@@ -219,7 +228,8 @@
 			"maxValue": 65535,
 			"defaultValue": 0
 		},
-		"10": {
+		{
+			"#": "10",
 			"label": "Auto Turn-Off Timer for Relay",
 			"valueSize": 4,
 			"unit": "minutes",
@@ -227,7 +237,8 @@
 			"maxValue": 65535,
 			"defaultValue": 0
 		},
-		"11": {
+		{
+			"#": "11",
 			"label": "Auto Turn-On Timer for Relay",
 			"valueSize": 4,
 			"unit": "minutes",
@@ -235,7 +246,8 @@
 			"maxValue": 65535,
 			"defaultValue": 0
 		},
-		"12": {
+		{
+			"#": "12",
 			"label": "On Off Status After Power Failure",
 			"valueSize": 1,
 			"minValue": 0,
@@ -281,7 +293,8 @@
 				}
 			]
 		},
-		"13": {
+		{
+			"#": "13",
 			"label": "Ramp Rate Control for Dimmer",
 			"description": "Number of seconds it takes for the dimmer to reach full brightness or turn off when operated manually. 0 is instant.",
 			"valueSize": 1,
@@ -290,7 +303,8 @@
 			"maxValue": 99,
 			"defaultValue": 1
 		},
-		"14": {
+		{
+			"#": "14",
 			"label": "Minimum Brightness",
 			"valueSize": 1,
 			"unit": "%",
@@ -298,7 +312,8 @@
 			"maxValue": 99,
 			"defaultValue": 1
 		},
-		"15": {
+		{
+			"#": "15",
 			"label": "Maximum Brightness",
 			"valueSize": 1,
 			"unit": "%",
@@ -306,7 +321,8 @@
 			"maxValue": 99,
 			"defaultValue": 99
 		},
-		"17": {
+		{
+			"#": "17",
 			"label": "Double Tap Function for Dimmer",
 			"description": "Brightness level after double-tapping the upper paddle.",
 			"valueSize": 1,
@@ -325,7 +341,8 @@
 				}
 			]
 		},
-		"18": {
+		{
+			"#": "18",
 			"label": "Enable/Disable Double-tap for Dimmer",
 			"valueSize": 1,
 			"minValue": 0,
@@ -347,7 +364,8 @@
 				}
 			]
 		},
-		"19": {
+		{
+			"#": "19",
 			"label": "Enable/Disable Load Control for Dimmer",
 			"valueSize": 1,
 			"minValue": 0,
@@ -369,7 +387,8 @@
 				}
 			]
 		},
-		"20": {
+		{
+			"#": "20",
 			"label": "Enable/Disable Load Control for Relay",
 			"valueSize": 1,
 			"minValue": 0,
@@ -391,7 +410,8 @@
 				}
 			]
 		},
-		"21": {
+		{
+			"#": "21",
 			"label": "Manual Dimming Speed",
 			"description": "How many seconds it takes for the dimmer to go from 0% to 100% brightness when pressing and holding the paddle.",
 			"valueSize": 1,
@@ -400,7 +420,8 @@
 			"defaultValue": 4,
 			"units": "seconds"
 		},
-		"23": {
+		{
+			"#": "23",
 			"label": "Default Brightness Level On for Dimmer",
 			"description": "Brightness level for the dimmer to come on to at single tap. Set 0 for last brightness level.",
 			"valueSize": 1,
@@ -409,7 +430,8 @@
 			"defaultValue": 0,
 			"units": "%"
 		},
-		"24": {
+		{
+			"#": "24",
 			"label": "Dimmer Reporting Behavior When Physical Control Is Disabled",
 			"description": "Enable or disable dimmer reporting on/off status and changing LED indicator state even if physical and Z-Wave control is disabled.",
 			"valueSize": 1,
@@ -428,7 +450,8 @@
 				}
 			]
 		},
-		"25": {
+		{
+			"#": "25",
 			"label": "Relay Reporting Behavior When Physical Control Is Disabled",
 			"description": "Enable or disable relay reporting on/off status and changing LED indicator state even if physical and Z-Wave control is disabled.",
 			"valueSize": 1,
@@ -447,7 +470,8 @@
 				}
 			]
 		},
-		"26": {
+		{
+			"#": "26",
 			"label": "Night Light Mode",
 			"description": "Set the brightness level the dimmer will turn on to when off and when lower paddle is held down for one second (0 to disable).",
 			"valueSize": 1,
@@ -456,7 +480,8 @@
 			"defaultValue": 0,
 			"units": "%"
 		},
-		"27": {
+		{
+			"#": "27",
 			"label": "Paddle Control",
 			"valueSize": 1,
 			"minValue": 0,
@@ -478,7 +503,7 @@
 				}
 			]
 		}
-	},
+	],
 	"metadata": {
 		"inclusion": "1. Initiate inclusion (pairing) in the app (or web interface).\n2. Finalize inclusion at the switch. Tap the upper paddle of the dimmer 3 times quickly. The LED indicators will blink to signal communication and remain on for 2 seconds to confirm inclusion",
 		"exclusion": "Bring your Z-Wave gateway (hub) close to the switch if possible\n2. Put the Z-Wave hub into exclusion mode \n3. Tap the lower paddle on the dimmer 3 times quickly\n4. Your hub will confirm exclusion and the device will disappear from your\ncontroller's device list",

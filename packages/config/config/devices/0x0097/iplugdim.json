@@ -13,8 +13,9 @@
 		"min": "0.0",
 		"max": "255.255"
 	},
-	"paramInformation": {
-		"1": {
+	"paramInformation": [
+		{
+			"#": "1",
 			"label": "Set to Default",
 			"valueSize": 1,
 			"minValue": 0,
@@ -28,5 +29,5 @@
 				}
 			]
 		}
-	}
+	]
 }

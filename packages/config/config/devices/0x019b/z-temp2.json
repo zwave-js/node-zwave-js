@@ -13,8 +13,9 @@
 		"min": "0.0",
 		"max": "255.255"
 	},
-	"paramInformation": {
-		"1": {
+	"paramInformation": [
+		{
+			"#": "1",
 			"label": "Temperature / Humidity Report Interval",
 			"valueSize": 2,
 			"minValue": 30,
@@ -23,7 +24,8 @@
 			"unit": "seconds",
 			"unsigned": true
 		},
-		"2": {
+		{
+			"#": "2",
 			"label": "Temperature Change Report Threshold",
 			"description": "Allowable range: 5-50",
 			"unit": "1/10 °C",
@@ -39,7 +41,8 @@
 				}
 			]
 		},
-		"3": {
+		{
+			"#": "3",
 			"label": "Humidity Change Report Threshold",
 			"description": "Allowable range: 5-50",
 			"unit": "%",
@@ -55,7 +58,8 @@
 				}
 			]
 		},
-		"4": {
+		{
+			"#": "4",
 			"label": "Temperature sensor offset settings",
 			"description": "Calibrate the internal temperature sensor.",
 			"unit": "°C",
@@ -65,7 +69,8 @@
 			"defaultValue": 0,
 			"unsigned": false
 		},
-		"5": {
+		{
+			"#": "5",
 			"label": "Humidity sensor offset settings",
 			"description": "Calibrate the internal humidity sensor. 1 = 1/10%",
 			"unit": "1/10 %",
@@ -75,7 +80,8 @@
 			"defaultValue": 0,
 			"unsigned": false
 		},
-		"6": {
+		{
+			"#": "6",
 			"label": "Proximity sensor re-trigger interval",
 			"unit": "seconds",
 			"valueSize": 2,
@@ -84,7 +90,8 @@
 			"defaultValue": 10,
 			"unsigned": true
 		},
-		"7": {
+		{
+			"#": "7",
 			"label": "Proximity Sensor",
 			"valueSize": 2,
 			"minValue": 0,
@@ -102,7 +109,8 @@
 				}
 			]
 		},
-		"8": {
+		{
+			"#": "8",
 			"label": "LED Maximum Brightness",
 			"description": "Adjust the backlight of LCD display.",
 			"valueSize": 2,
@@ -111,7 +119,8 @@
 			"defaultValue": 50,
 			"unsigned": true
 		},
-		"9": {
+		{
+			"#": "9",
 			"label": "LED Display Timeout",
 			"description": "How long the LED display will be active after after being activated",
 			"unit": "seconds",
@@ -121,7 +130,8 @@
 			"defaultValue": 3,
 			"unsigned": true
 		},
-		"10": {
+		{
+			"#": "10",
 			"label": "Temperature Control Hysteresis",
 			"valueSize": 2,
 			"minValue": 3,
@@ -130,7 +140,8 @@
 			"unsigned": true,
 			"unit": "0.1 °C"
 		},
-		"11": {
+		{
+			"#": "11",
 			"label": "Minimum Temperature Limit",
 			"valueSize": 2,
 			"minValue": 50,
@@ -139,7 +150,8 @@
 			"unsigned": true,
 			"unit": "0.1 °C"
 		},
-		"12": {
+		{
+			"#": "12",
 			"label": "Maximum Temperature Limit",
 			"valueSize": 2,
 			"minValue": 50,
@@ -148,7 +160,8 @@
 			"unsigned": true,
 			"unit": "0.1 °C"
 		},
-		"13": {
+		{
+			"#": "13",
 			"label": "External Relay and Operating State Update Interval",
 			"description": "How often the devices sends Binary Switch State and Thermostat Mode in addition to change reports",
 			"valueSize": 2,
@@ -163,7 +176,8 @@
 				}
 			]
 		},
-		"14": {
+		{
+			"#": "14",
 			"label": "Send Report When Presence is Detected",
 			"valueSize": 2,
 			"minValue": 0,
@@ -181,5 +195,5 @@
 				}
 			]
 		}
-	}
+	]
 }

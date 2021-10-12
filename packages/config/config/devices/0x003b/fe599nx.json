@@ -27,8 +27,9 @@
 			"isLifeline": true
 		}
 	},
-	"paramInformation": {
-		"3": {
+	"paramInformation": [
+		{
+			"#": "3",
 			"label": "Beeper",
 			"description": "Enable/Disable keypad beep",
 			"valueSize": 1,
@@ -47,7 +48,8 @@
 				}
 			]
 		},
-		"4": {
+		{
+			"#": "4",
 			"label": "Vacation Mode",
 			"description": "Enable/Disable Vacation Mode",
 			"valueSize": 1,
@@ -66,7 +68,8 @@
 				}
 			]
 		},
-		"5": {
+		{
+			"#": "5",
 			"label": "Lock & Leave",
 			"description": "Enable/Disable Lock & Leave",
 			"valueSize": 1,
@@ -85,7 +88,8 @@
 				}
 			]
 		},
-		"7": {
+		{
+			"#": "7",
 			"label": "Lock Basic Set Value",
 			"description": "Byte to send with set command to devices in association group 1",
 			"valueSize": 1,
@@ -94,5 +98,5 @@
 			"defaultValue": 255,
 			"unsigned": true
 		}
-	}
+	]
 }

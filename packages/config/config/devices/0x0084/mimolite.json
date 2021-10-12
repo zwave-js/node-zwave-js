@@ -59,8 +59,9 @@
 			"maxNodes": 2
 		}
 	},
-	"paramInformation": {
-		"2": {
+	"paramInformation": [
+		{
+			"#": "2",
 			"label": "Clear_Pulse_Meter_Counts",
 			"valueSize": 1,
 			"minValue": 0,
@@ -75,7 +76,8 @@
 				}
 			]
 		},
-		"3": {
+		{
+			"#": "3",
 			"label": "Trigger_Mapping",
 			"description": "Input-to-relay Mapping",
 			"valueSize": 1,
@@ -95,7 +97,8 @@
 				}
 			]
 		},
-		"4": {
+		{
+			"#": "4",
 			"label": "Lower_Threshold_High",
 			"valueSize": 1,
 			"minValue": 0,
@@ -109,7 +112,8 @@
 				}
 			]
 		},
-		"5": {
+		{
+			"#": "5",
 			"label": "Lower_Threshold_Low",
 			"valueSize": 1,
 			"minValue": 0,
@@ -123,7 +127,8 @@
 				}
 			]
 		},
-		"6": {
+		{
+			"#": "6",
 			"label": "Upper_Threshold_High",
 			"valueSize": 1,
 			"minValue": 0,
@@ -137,7 +142,8 @@
 				}
 			]
 		},
-		"7": {
+		{
+			"#": "7",
 			"label": "Upper_Threshold_Low",
 			"valueSize": 1,
 			"minValue": 0,
@@ -151,7 +157,8 @@
 				}
 			]
 		},
-		"8": {
+		{
+			"#": "8",
 			"label": "Trigger_Level_And_Input_Threshold",
 			"valueSize": 1,
 			"minValue": 0,
@@ -178,7 +185,8 @@
 				}
 			]
 		},
-		"9": {
+		{
+			"#": "9",
 			"label": "Multilevel_AutoReport_Interval",
 			"valueSize": 1,
 			"minValue": 0,
@@ -197,7 +205,8 @@
 				}
 			]
 		},
-		"11": {
+		{
+			"#": "11",
 			"label": "Momentary_Relay1_Duration",
 			"description": "Momentary Relay1 output enable/disable (100msec).",
 			"valueSize": 1,
@@ -216,5 +225,5 @@
 				}
 			]
 		}
-	}
+	]
 }

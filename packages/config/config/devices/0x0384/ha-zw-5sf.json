@@ -25,8 +25,9 @@
 			"maxNodes": 5
 		}
 	},
-	"paramInformation": {
-		"10": {
+	"paramInformation": [
+		{
+			"#": "10",
 			"label": "Low Battery Report Threshold",
 			"valueSize": 1,
 			"unit": "%",
@@ -35,7 +36,8 @@
 			"defaultValue": 10,
 			"unsigned": true
 		},
-		"11": {
+		{
+			"#": "11",
 			"label": "Beeping Rate",
 			"valueSize": 1,
 			"minValue": 0,
@@ -62,7 +64,8 @@
 				}
 			]
 		},
-		"254": {
+		{
+			"#": "254",
 			"label": "Lock Configuration Parameters",
 			"valueSize": 1,
 			"minValue": 0,
@@ -81,7 +84,7 @@
 				}
 			]
 		}
-	},
+	],
 	"metadata": {
 		"inclusion": "1. Insert the battery.\n2. Set the Z-Wave network main controller into Inclusion mode.\n3. Triggering this button action.\n4. If the add for inclusion is successful, the LED will blink fast and then keep on 3 seconds. Otherwise, the LED will blink 25 seconds and then turn off, in which case you need to repeat the process from step 2.",
 		"exclusion": "1. Insert the battery.\n2. Set the Z-Wave network main controller into exclusion mode.\n3. Triggering this button action.\nIf the remove for exclusion is successful, the LED will blink fast and turn off. Otherwise, the LED will keep solid for 25 seconds and then turn off, in which case you need to repeat the process from step 2.",

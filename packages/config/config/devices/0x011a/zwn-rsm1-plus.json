@@ -31,13 +31,14 @@
 			"maxNodes": 3
 		}
 	},
-	"paramInformation": {
-		"3": {
+	"paramInformation": [
+		{
+			"#": "3",
 			"label": "Unsolicited Report Configuration",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 1,
 			"defaultValue": 0
 		}
-	}
+	]
 }

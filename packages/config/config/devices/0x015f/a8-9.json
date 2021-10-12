@@ -25,8 +25,9 @@
 			"isLifeline": true
 		}
 	},
-	"paramInformation": {
-		"1": {
+	"paramInformation": [
+		{
+			"#": "1",
 			"label": "PM2.5 Sensor: Change Report Threshold",
 			"unit": "µg/m³",
 			"valueSize": 1,
@@ -41,7 +42,8 @@
 				}
 			]
 		},
-		"2": {
+		{
+			"#": "2",
 			"label": "CO2 Sensor: Change Report Threshold",
 			"unit": "5 ppm",
 			"valueSize": 1,
@@ -56,7 +58,8 @@
 				}
 			]
 		},
-		"3": {
+		{
+			"#": "3",
 			"label": "Temperature Sensor: Change Report Threshold",
 			"unit": "0.5 °C",
 			"valueSize": 1,
@@ -71,7 +74,8 @@
 				}
 			]
 		},
-		"4": {
+		{
+			"#": "4",
 			"label": "Humidity Sensor: Change Report Threshold",
 			"unit": "%rF",
 			"valueSize": 1,
@@ -86,7 +90,8 @@
 				}
 			]
 		},
-		"5": {
+		{
+			"#": "5",
 			"label": "VOC Sensor: Change Report Threshold",
 			"unit": "5 ppb",
 			"valueSize": 1,
@@ -101,7 +106,8 @@
 				}
 			]
 		},
-		"6": {
+		{
+			"#": "6",
 			"label": "Brightness Sensor: Change Report Threshold",
 			"unit": "lux",
 			"valueSize": 2,
@@ -116,7 +122,8 @@
 				}
 			]
 		},
-		"7": {
+		{
+			"#": "7",
 			"label": "dB Sensor: Change Report Threshold",
 			"unit": "dB",
 			"valueSize": 1,
@@ -131,7 +138,8 @@
 				}
 			]
 		},
-		"8": {
+		{
+			"#": "8",
 			"label": "PIR Sensor: Report Changes",
 			"valueSize": 1,
 			"minValue": 0,
@@ -150,7 +158,8 @@
 				}
 			]
 		},
-		"9": {
+		{
+			"#": "9",
 			"label": "Smoke Sensor: Report Changes",
 			"valueSize": 1,
 			"minValue": 0,
@@ -168,7 +177,8 @@
 				}
 			]
 		},
-		"10": {
+		{
+			"#": "10",
 			"label": "Smoke Sensor: Auto-Report Timer",
 			"description": "Allowable Range: 35-32767 s",
 			"unit": "seconds",
@@ -184,7 +194,8 @@
 				}
 			]
 		},
-		"11": {
+		{
+			"#": "11",
 			"label": "PIR Sensor: Auto-Report Timer",
 			"description": "Allowable Range: 35-32767 s",
 			"unit": "seconds",
@@ -200,7 +211,8 @@
 				}
 			]
 		},
-		"12": {
+		{
+			"#": "12",
 			"label": "PM2.5 Sensor: Auto-Report Timer",
 			"description": "Allowable Range: 35-32767 s",
 			"unit": "seconds",
@@ -216,7 +228,8 @@
 				}
 			]
 		},
-		"13": {
+		{
+			"#": "13",
 			"label": "CO2 Sensor: Auto-Report Timer",
 			"description": "Allowable Range: 35-32767 s",
 			"unit": "seconds",
@@ -232,7 +245,8 @@
 				}
 			]
 		},
-		"14": {
+		{
+			"#": "14",
 			"label": "Temperature Sensor: Auto-Report Timer",
 			"description": "Allowable Range: 35-32767 s",
 			"unit": "seconds",
@@ -248,7 +262,8 @@
 				}
 			]
 		},
-		"15": {
+		{
+			"#": "15",
 			"label": "Humidity Sensor: Auto-Report Timer",
 			"description": "Allowable Range: 35-32767 s",
 			"unit": "seconds",
@@ -264,7 +279,8 @@
 				}
 			]
 		},
-		"16": {
+		{
+			"#": "16",
 			"label": "VOC Sensor: Auto-Report Timer",
 			"description": "Allowable Range: 35-32767 s",
 			"unit": "seconds",
@@ -280,7 +296,8 @@
 				}
 			]
 		},
-		"17": {
+		{
+			"#": "17",
 			"label": "Brightness Sensor: Auto-Report Timer",
 			"description": "Allowable Range: 35-32767 s",
 			"unit": "seconds",
@@ -296,7 +313,8 @@
 				}
 			]
 		},
-		"18": {
+		{
+			"#": "18",
 			"label": "dB Sensor: Auto-Report Timer",
 			"description": "Allowable Range: 35-32767 s",
 			"unit": "seconds",
@@ -312,7 +330,8 @@
 				}
 			]
 		},
-		"47": {
+		{
+			"#": "47",
 			"label": "Temperature Unit",
 			"valueSize": 1,
 			"minValue": 0,
@@ -331,17 +350,19 @@
 				}
 			]
 		},
-		"50": {
+		{
+			"#": "50",
 			"label": "Temperature Offset",
 			"description": "Offset = value minus 100. Example: 91 => -0.9 °",
-			"unit": "0.1 °C", // The manual says so, not sure if this is true for Fahrenheit aswell
+			"unit": "0.1 °C",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 255,
 			"defaultValue": 100,
 			"unsigned": true
 		},
-		"51": {
+		{
+			"#": "51",
 			"label": "Humidity Offset",
 			"description": "Offset = value minus 20. Example: 33 => +13 %",
 			"unit": "%",
@@ -351,7 +372,8 @@
 			"defaultValue": 20,
 			"unsigned": true
 		},
-		"52": {
+		{
+			"#": "52",
 			"label": "CO2 Offset",
 			"description": "Offset = value minus 500. Example: 999 => +499 ppm",
 			"unit": "ppm",
@@ -361,7 +383,8 @@
 			"defaultValue": 500,
 			"unsigned": true
 		},
-		"53": {
+		{
+			"#": "53",
 			"label": "PM2.5 Offset",
 			"description": "Offset = value minus 100. Example: 101 => +1 µg/m³",
 			"unit": "µg/m³",
@@ -371,7 +394,8 @@
 			"defaultValue": 100,
 			"unsigned": true
 		},
-		"54": {
+		{
+			"#": "54",
 			"label": "Brightness Offset",
 			"description": "Offset = value minus 5000. Example: 49 => -4951 lux",
 			"unit": "lux",
@@ -381,7 +405,8 @@
 			"defaultValue": 5000,
 			"unsigned": true
 		},
-		"55": {
+		{
+			"#": "55",
 			"label": "VOC Offset",
 			"description": "Offset = value minus 100. Example: 101 => +1 ppb",
 			"unit": "ppb",
@@ -391,7 +416,8 @@
 			"defaultValue": 100,
 			"unsigned": true
 		},
-		"56": {
+		{
+			"#": "56",
 			"label": "dB Offset",
 			"description": "Offset = value minus 50. Example: 98 => +48 dB",
 			"unit": "dB",
@@ -401,7 +427,8 @@
 			"defaultValue": 50,
 			"unsigned": true
 		},
-		"255": {
+		{
+			"#": "255",
 			"label": "Reset to Factory Default Setting",
 			"valueSize": 1,
 			"minValue": 0,
@@ -425,7 +452,7 @@
 				}
 			]
 		}
-	},
+	],
 	"metadata": {
 		"inclusion": "Activate Add mode in the gateway. When device is powered on, hold F1 to choose interface for Add into Z-Wave network. Click F2 five times until \"cycle icon\" turns blue. Hold F2 and the device enters into learning mode, then \"wifi icon\" turns blue and the device is added into Z-Wave network",
 		"exclusion": "Activate Remove mode in the gateway. When device is powered on, hold F1 to choose interface for Remove into Z-Wave network. Click F2 five times until \"cycle icon\" turns blue. Hold F2 and the device enters into learning mode, then \"wifi icon\" turns blue and the device is added into Z-Wave network",

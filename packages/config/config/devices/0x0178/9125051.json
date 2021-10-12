@@ -14,8 +14,9 @@
 		"min": "0.0",
 		"max": "255.255"
 	},
-	"paramInformation": {
-		"1": {
+	"paramInformation": [
+		{
+			"#": "1",
 			"label": "Buzzer Volume",
 			"valueSize": 1,
 			"minValue": 0,
@@ -23,7 +24,8 @@
 			"defaultValue": 100,
 			"unsigned": true
 		},
-		"2": {
+		{
+			"#": "2",
 			"label": "Discovery Mode",
 			"description": "Start, stop, or get the results of discovery mode. Retrieve the configuration parameter to obtain the results.",
 			"valueSize": 1,
@@ -51,7 +53,8 @@
 				}
 			]
 		},
-		"3": {
+		{
+			"#": "3",
 			"label": "Sleep Mode",
 			"valueSize": 1,
 			"minValue": 0,
@@ -70,7 +73,7 @@
 				}
 			]
 		}
-	},
+	],
 	"metadata": {
 		"inclusion": "If not included to a Z-Wave network, the device will attempt to be added to the network at power-up following an LED start-up sequence. The controller must be put into include mode before plugging in the device.\n\nDuring normal operation, after putting the controller into include mode, a single press of the round Z-Wave button will add the device to the Z-Wave network.",
 		"exclusion": "After putting the controller in exclude mode, a single press of the round Z-Wave button will remove the device from the Z-Wave network",

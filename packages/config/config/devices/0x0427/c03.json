@@ -14,8 +14,9 @@
 		"min": "0.0",
 		"max": "255.255"
 	},
-	"paramInformation": {
-		"1": {
+	"paramInformation": [
+		{
+			"#": "1",
 			"label": "LED Light During Sending",
 			"description": "",
 			"valueSize": 1,
@@ -35,7 +36,8 @@
 				}
 			]
 		},
-		"2": {
+		{
+			"#": "2",
 			"label": "Temperature Report Threshold",
 			"description": "",
 			"valueSize": 1,
@@ -83,7 +85,7 @@
 				}
 			]
 		}
-	},
+	],
 	"metadata": {
 		"inclusion": "Press the operating switch once and release it within about 2 seconds, then registration operation is started and the LED lights for about 30 seconds",
 		"exclusion": "Press the operating switch once. The LED comes on and then goes out",

@@ -25,8 +25,9 @@
 			"isLifeline": true
 		}
 	},
-	"paramInformation": {
-		"1": {
+	"paramInformation": [
+		{
+			"#": "1",
 			"label": "Reset to factory settings",
 			"description": "Set all configuration values to default values (factory settings).",
 			"valueSize": 1,
@@ -35,21 +36,24 @@
 			"defaultValue": 0,
 			"unsigned": true
 		},
-		"2": {
+		{
+			"#": "2",
 			"label": "Mode timeout",
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 900,
 			"defaultValue": 900
 		},
-		"3": {
+		{
+			"#": "3",
 			"label": "Switch off time",
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 2700,
 			"defaultValue": 2700
 		},
-		"4": {
+		{
+			"#": "4",
 			"label": "sensitivity",
 			"description": "the sensitivity of the motion circuit",
 			"valueSize": 1,
@@ -57,7 +61,8 @@
 			"maxValue": 127,
 			"defaultValue": 80
 		},
-		"5": {
+		{
+			"#": "5",
 			"label": "The mode",
 			"description": "The mode that is entered after detection",
 			"valueSize": 1,
@@ -80,7 +85,8 @@
 				}
 			]
 		},
-		"6": {
+		{
+			"#": "6",
 			"label": "The temperature offset",
 			"description": "An offset for the temperature.",
 			"valueSize": 2,
@@ -88,75 +94,85 @@
 			"maxValue": 0,
 			"defaultValue": 0
 		},
-		"7": {
+		{
+			"#": "7",
 			"label": "Light table 100 %",
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 17,
 			"defaultValue": 17
 		},
-		"8": {
+		{
+			"#": "8",
 			"label": "Light table 90 %",
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 38,
 			"defaultValue": 38
 		},
-		"9": {
+		{
+			"#": "9",
 			"label": "Light table 80 %",
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 85,
 			"defaultValue": 85
 		},
-		"10": {
+		{
+			"#": "10",
 			"label": "Light table 70 %",
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 186,
 			"defaultValue": 186
 		},
-		"11": {
+		{
+			"#": "11",
 			"label": "Light table 60 %",
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 407,
 			"defaultValue": 407
 		},
-		"12": {
+		{
+			"#": "12",
 			"label": "Light table 50 %",
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 891,
 			"defaultValue": 891
 		},
-		"13": {
+		{
+			"#": "13",
 			"label": "Light table 40 %",
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 1949,
 			"defaultValue": 1949
 		},
-		"14": {
+		{
+			"#": "14",
 			"label": "Light table 30 %",
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 4265,
 			"defaultValue": 4265
 		},
-		"15": {
+		{
+			"#": "15",
 			"label": "Light table 20 %",
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 9332,
 			"defaultValue": 9332
 		},
-		"16": {
+		{
+			"#": "16",
 			"label": "Light table 10 %",
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 20417,
 			"defaultValue": 20417
 		}
-	}
+	]
 }

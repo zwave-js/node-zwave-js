@@ -20,8 +20,9 @@
 			"isLifeline": true
 		}
 	},
-	"paramInformation": {
-		"0": {
+	"paramInformation": [
+		{
+			"#": "0",
 			"label": "Motion timeout",
 			"unit": "minutes",
 			"valueSize": 1,
@@ -30,7 +31,7 @@
 			"defaultValue": 1,
 			"unsigned": true
 		}
-	},
+	],
 	"compat": {
 		// This device uses Basic Set to report the motion sensor status
 		"enableBasicSetMapping": true

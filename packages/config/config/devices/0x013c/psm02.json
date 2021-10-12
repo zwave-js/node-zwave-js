@@ -25,8 +25,9 @@
 			"maxNodes": 7
 		}
 	},
-	"paramInformation": {
-		"2": {
+	"paramInformation": [
+		{
+			"#": "2",
 			"label": "Basic Set Level",
 			"valueSize": 1,
 			"unsigned": true,
@@ -34,21 +35,24 @@
 			"maxValue": 255,
 			"defaultValue": 255
 		},
-		"3": {
+		{
+			"#": "3",
 			"label": "PIR Sensitivity",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 99,
 			"defaultValue": 70
 		},
-		"4": {
+		{
+			"#": "4",
 			"label": "Light Threshold",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 100,
 			"defaultValue": 100
 		},
-		"5[0x01]": {
+		{
+			"#": "5[0x01]",
 			"label": "Security Mode",
 			"valueSize": 1,
 			"minValue": 0,
@@ -65,7 +69,8 @@
 				}
 			]
 		},
-		"5[0x02]": {
+		{
+			"#": "5[0x02]",
 			"label": "Test Mode",
 			"valueSize": 1,
 			"minValue": 0,
@@ -82,7 +87,8 @@
 				}
 			]
 		},
-		"5[0x04]": {
+		{
+			"#": "5[0x04]",
 			"label": "Door Window Function",
 			"valueSize": 1,
 			"minValue": 0,
@@ -99,7 +105,8 @@
 				}
 			]
 		},
-		"5[0x08]": {
+		{
+			"#": "5[0x08]",
 			"label": "Temperature Scale",
 			"valueSize": 1,
 			"minValue": 0,
@@ -116,7 +123,8 @@
 				}
 			]
 		},
-		"5[0x10]": {
+		{
+			"#": "5[0x10]",
 			"label": "Illumination Report on Trigger",
 			"valueSize": 1,
 			"minValue": 0,
@@ -133,7 +141,8 @@
 				}
 			]
 		},
-		"5[0x20]": {
+		{
+			"#": "5[0x20]",
 			"label": "Temperature Report on Trigger",
 			"valueSize": 1,
 			"minValue": 0,
@@ -150,7 +159,8 @@
 				}
 			]
 		},
-		"6[0x01]": {
+		{
+			"#": "6[0x01]",
 			"label": "Magnetic Integrate Illumination",
 			"valueSize": 1,
 			"minValue": 0,
@@ -167,7 +177,8 @@
 				}
 			]
 		},
-		"6[0x02]": {
+		{
+			"#": "6[0x02]",
 			"label": "PIR Integrate Illumination",
 			"valueSize": 1,
 			"minValue": 0,
@@ -184,7 +195,8 @@
 				}
 			]
 		},
-		"6[0x04]": {
+		{
+			"#": "6[0x04]",
 			"label": "Magnetic Integrate PIR",
 			"valueSize": 1,
 			"minValue": 0,
@@ -201,7 +213,8 @@
 				}
 			]
 		},
-		"6[0x08]": {
+		{
+			"#": "6[0x08]",
 			"label": "Device and Light Location",
 			"valueSize": 1,
 			"minValue": 0,
@@ -218,7 +231,8 @@
 				}
 			]
 		},
-		"6[0x10]": {
+		{
+			"#": "6[0x10]",
 			"label": "5 Second Delay Light Off",
 			"valueSize": 1,
 			"minValue": 0,
@@ -235,7 +249,8 @@
 				}
 			]
 		},
-		"6[0x20]": {
+		{
+			"#": "6[0x20]",
 			"label": "Auto Turn Off Light",
 			"valueSize": 1,
 			"minValue": 0,
@@ -252,7 +267,8 @@
 				}
 			]
 		},
-		"7[0x02]": {
+		{
+			"#": "7[0x02]",
 			"label": "Send Motion Off Report",
 			"valueSize": 1,
 			"minValue": 0,
@@ -269,7 +285,8 @@
 				}
 			]
 		},
-		"7[0x04]": {
+		{
+			"#": "7[0x04]",
 			"label": "PIR Super Sensitivity Mode",
 			"valueSize": 1,
 			"minValue": 0,
@@ -286,7 +303,8 @@
 				}
 			]
 		},
-		"7[0x08]": {
+		{
+			"#": "7[0x08]",
 			"label": "Send Basic CC Off After Door Close",
 			"valueSize": 1,
 			"minValue": 0,
@@ -303,7 +321,8 @@
 				}
 			]
 		},
-		"7[0x10]": {
+		{
+			"#": "7[0x10]",
 			"label": "Notification Type",
 			"valueSize": 1,
 			"minValue": 0,
@@ -320,7 +339,8 @@
 				}
 			]
 		},
-		"7[0x20]": {
+		{
+			"#": "7[0x20]",
 			"label": "Multi Command Encapsulated Auto Reports",
 			"valueSize": 1,
 			"minValue": 0,
@@ -337,7 +357,8 @@
 				}
 			]
 		},
-		"7[0x40]": {
+		{
+			"#": "7[0x40]",
 			"label": "Report Battery State When Triggered",
 			"valueSize": 1,
 			"minValue": 0,
@@ -354,49 +375,55 @@
 				}
 			]
 		},
-		"8": {
+		{
+			"#": "8",
 			"label": "PIR Re-Detect Interval Time",
 			"valueSize": 1,
 			"minValue": 3,
 			"maxValue": 127,
 			"defaultValue": 3
 		},
-		"9": {
+		{
+			"#": "9",
 			"label": "Turn Off Light Time",
 			"valueSize": 1,
 			"minValue": 4,
 			"maxValue": 127,
 			"defaultValue": 4
 		},
-		"10": {
+		{
+			"#": "10",
 			"label": "Auto Report Battery Time",
 			"valueSize": 1,
 			"minValue": 1,
 			"maxValue": 127,
 			"defaultValue": 12
 		},
-		"11": {
+		{
+			"#": "11",
 			"label": "Auto Report Door/Window State Time",
 			"valueSize": 1,
 			"minValue": 1,
 			"maxValue": 127,
 			"defaultValue": 12
 		},
-		"12": {
+		{
+			"#": "12",
 			"label": "Auto Report Illumination Time",
 			"valueSize": 1,
 			"minValue": 1,
 			"maxValue": 127,
 			"defaultValue": 12
 		},
-		"13": {
+		{
+			"#": "13",
 			"label": "Auto Report Temperature Time",
 			"valueSize": 1,
 			"minValue": 1,
 			"maxValue": 127,
 			"defaultValue": 12
 		}
-	},
+	],
 	"metadata": {
 		"inclusion": "Turn the primary controller of Z-Wave network into inclusion mode, triple click tamper switch within 1.5 seconds",
 		"exclusion": "Turn the primary controller of Z-Wave network into exclusion mode, triple click tamper switch within 1.5 seconds",

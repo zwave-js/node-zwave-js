@@ -26,8 +26,9 @@
 			"isLifeline": true
 		}
 	},
-	"paramInformation": {
-		"1": {
+	"paramInformation": [
+		{
+			"#": "1",
 			"label": "Siren/Strobe Mode",
 			"description": "0(all enable),1(siren only),2(storbe only)",
 			"valueSize": 1,
@@ -36,7 +37,8 @@
 			"defaultValue": 0,
 			"unsigned": true
 		},
-		"2": {
+		{
+			"#": "2",
 			"label": "Alarm Auto Stop Time",
 			"description": "0(30s),1(60s),2(120s),3(unlimited)",
 			"valueSize": 1,
@@ -45,7 +47,7 @@
 			"defaultValue": 0,
 			"unsigned": true
 		}
-	},
+	],
 	"metadata": {
 		"inclusion": "For “Inclusion” (adding to) a network, put the Z-Wave™ network controller into “inclusion” mode, and following its instruction to add the ZM 1601 to your controller. To get the ZM 1601 in the “inclusion” mode, open the bracket and press the program switch of ZM 1601 for 1 second at least & release to be included. After waiting a few seconds the LED Setting Lighting should go off, if not, please try again. (After sending the Z-Wave NIF one time if the ZM1601 is not included it will send 4 times Network Wide Inclusion request every 4 ~ 6 seconds for auto inclusion. The orange LED will flash again if the siren has not been included or the orange LED will go off after inclusion.)",
 		"exclusion": "For “Exclusion” from (removing from) a network: Set up the Z-Wave™ network controller into “exclusion” mode, and following its instruction to delete the ZM 1601 from your controller. Press the program switch of ZM 1601 for 1 second at least & release to be excluded. Note: a. LED setting light will flash (orange color) continuously in Exclusion condition for 25 seconds. b. All user and network settings will be cleared and the device reset to factory defaults when the device is excluded",
