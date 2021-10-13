@@ -1845,7 +1845,8 @@ async function parseOHConfigFile(
 				}
 			}
 		} else {
-			ret.supportsZWavePlus = true;
+			// The supportsZwavePlus key is obsolete
+			// ret.supportsZWavePlus = true;
 		}
 	} catch (e) {
 		console.error(filename);
