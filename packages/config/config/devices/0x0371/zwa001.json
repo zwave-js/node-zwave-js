@@ -17,9 +17,9 @@
 		"min": "0.0",
 		"max": "255.255"
 	},
-	"supportsZWavePlus": true,
-	"paramInformation": {
-		"80": {
+	"paramInformation": [
+		{
+			"#": "80",
 			"label": "Send notifications to associated devices",
 			"description": "To send notifications to (Group 1) when state change.0 = Nothing.1= Basic CC.",
 			"valueSize": 1,
@@ -39,7 +39,8 @@
 				}
 			]
 		},
-		"81": {
+		{
+			"#": "81",
 			"label": "Adjust color temperature in warm white color comp",
 			"description": "available value: 0x0A8C-1387Warm White(0x0A8C(2700k) ~ 0x1387 (4999k))",
 			"valueSize": 2,
@@ -54,7 +55,8 @@
 				}
 			]
 		},
-		"82": {
+		{
+			"#": "82",
 			"label": "Color temperature in cold white color comp",
 			"description": "Available value:0x1388-0x1964Cold White (0x1388 (5000k) ~ 0x1964 (6500k))",
 			"valueSize": 2,
@@ -69,5 +71,5 @@
 				}
 			]
 		}
-	}
+	]
 }

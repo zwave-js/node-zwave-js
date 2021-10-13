@@ -13,9 +13,9 @@
 		"min": "0.0",
 		"max": "255.255"
 	},
-	"supportsZWavePlus": true,
-	"paramInformation": {
-		"20": {
+	"paramInformation": [
+		{
+			"#": "20",
 			"label": "Overload Protection",
 			"unit": "decimal",
 			"valueSize": 1,
@@ -34,10 +34,12 @@
 				}
 			]
 		},
-		"21": {
+		{
+			"#": "21",
 			"$import": "~/templates/master_template.json#state_after_power_failure_prev_on_off"
 		},
-		"24": {
+		{
+			"#": "24",
 			"label": "On/Off Status Change Notifications",
 			"unit": "decimal",
 			"valueSize": 1,
@@ -60,7 +62,8 @@
 				}
 			]
 		},
-		"27": {
+		{
+			"#": "27",
 			"label": "Led Indicator Control",
 			"unit": "decimal",
 			"valueSize": 1,
@@ -79,5 +82,5 @@
 				}
 			]
 		}
-	}
+	]
 }

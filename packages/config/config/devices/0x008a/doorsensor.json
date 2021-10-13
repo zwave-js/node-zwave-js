@@ -29,8 +29,9 @@
 			"maxNodes": 5
 		}
 	},
-	"paramInformation": {
-		"1": {
+	"paramInformation": [
+		{
+			"#": "1",
 			"label": "Reset to factory settings",
 			"description": "Set all configuration values to default values (factory settings).",
 			"valueSize": 1,
@@ -39,7 +40,8 @@
 			"defaultValue": 0,
 			"unsigned": true
 		},
-		"2": {
+		{
+			"#": "2",
 			"label": "External contact behavior",
 			"description": "Configure what the external contact sends when triggered.",
 			"valueSize": 1,
@@ -59,7 +61,8 @@
 				}
 			]
 		},
-		"5": {
+		{
+			"#": "5",
 			"label": "Operating mode.",
 			"description": "The main operating mode for the device.",
 			"valueSize": 1,
@@ -83,7 +86,8 @@
 				}
 			]
 		},
-		"6": {
+		{
+			"#": "6",
 			"label": "Temperature offset",
 			"description": "An offset for the temperature.",
 			"valueSize": 2,
@@ -91,5 +95,5 @@
 			"maxValue": 32767,
 			"defaultValue": 0
 		}
-	}
+	]
 }

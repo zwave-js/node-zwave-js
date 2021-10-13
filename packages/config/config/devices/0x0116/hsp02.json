@@ -26,8 +26,9 @@
 			"isLifeline": true
 		}
 	},
-	"paramInformation": {
-		"1": {
+	"paramInformation": [
+		{
+			"#": "1",
 			"label": "Basic Set Level",
 			"description": "Value to be sent with a BASIC SET command",
 			"valueSize": 1,
@@ -35,7 +36,8 @@
 			"maxValue": 99,
 			"defaultValue": 99
 		},
-		"2": {
+		{
+			"#": "2",
 			"label": "Sensor Detecting Function",
 			"valueSize": 1,
 			"minValue": 1,
@@ -58,14 +60,16 @@
 				}
 			]
 		},
-		"3": {
+		{
+			"#": "3",
 			"label": "Sensitivity Level",
 			"valueSize": 1,
 			"minValue": 1,
 			"maxValue": 10,
 			"defaultValue": 6
 		},
-		"4": {
+		{
+			"#": "4",
 			"label": "Re-trigger Interval Setting",
 			"valueSize": 1,
 			"minValue": 5,
@@ -74,7 +78,8 @@
 			"unsigned": true,
 			"unit": "seconds"
 		},
-		"5": {
+		{
+			"#": "5",
 			"label": "Brightness Threshold",
 			"description": "Motion sensing is active while the brightness is below this value.",
 			"valueSize": 1,
@@ -83,7 +88,8 @@
 			"defaultValue": 10,
 			"unit": "lux"
 		},
-		"6": {
+		{
+			"#": "6",
 			"label": "On time",
 			"description": "The amount of time the module/lighting should stay ON for.",
 			"valueSize": 1,
@@ -93,5 +99,5 @@
 			"unsigned": true,
 			"unit": "seconds"
 		}
-	}
+	]
 }

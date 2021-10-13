@@ -24,11 +24,16 @@ Built on Node.js and compatible with all known 500 and 700 series Z-Wave control
 
 ## Quick Links
 
-<p>
+<p align="center">
   <a href="LICENSE">License</a> &middot;
   <a href="CHANGELOG.md">Changelog</a> &middot;
   <a href="https://zwave-js.github.io/node-zwave-js/">Documentation</a> &middot;
   <a href="https://devices.zwave-js.io">Device configuration DB</a>
+</p>
+<p align="center">
+  <a href="https://gitpod.io/#/https://github.com/zwave-js/node-zwave-js">
+    <img src="https://gitpod.io/button/open-in-gitpod.svg" alt="Open in Gitpod" />
+  </a>
 </p>
 
 ## Supporting Z-Wave JS

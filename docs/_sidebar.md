@@ -15,6 +15,7 @@
     -   [Controller](api/controller.md)
     -   [ZWaveNode](api/node.md)
     -   [Endpoint](api/endpoint.md)
+    -   [Virtual nodes and endpoints](api/virtual-node-endpoint.md)
     -   [Values and Metadata](api/valueid.md)
     -   [ConfigManager](api/config-manager.md)
     -   [Command Classes](api/CCs/index.md)

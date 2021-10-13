@@ -24,8 +24,9 @@
 			"maxNodes": 5
 		}
 	},
-	"paramInformation": {
-		"1": {
+	"paramInformation": [
+		{
+			"#": "1",
 			"label": "Paddle Orientation",
 			"valueSize": 1,
 			"minValue": 0,
@@ -43,7 +44,8 @@
 				}
 			]
 		},
-		"2": {
+		{
+			"#": "2",
 			"label": "LED Indicator Control",
 			"valueSize": 1,
 			"minValue": 0,
@@ -69,7 +71,8 @@
 				}
 			]
 		},
-		"3": {
+		{
+			"#": "3",
 			"label": "Auto Turn-Off Timer Duration",
 			"description": "Set the number of seconds to automatically turn off switch once it has been turned on (0 to disable).",
 			"unit": "seconds",
@@ -78,8 +81,9 @@
 			"maxValue": 32767,
 			"defaultValue": 60
 		},
-		"8": {
+		{
+			"#": "8",
 			"$import": "~/templates/master_template.json#state_after_power_failure_off_on_prev"
 		}
-	}
+	]
 }

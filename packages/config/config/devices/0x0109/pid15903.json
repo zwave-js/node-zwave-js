@@ -13,9 +13,9 @@
 		"min": "0.0",
 		"max": "255.255"
 	},
-	"supportsZWavePlus": true,
-	"paramInformation": {
-		"1": {
+	"paramInformation": [
+		{
+			"#": "1",
 			"label": "Auto Report Timing",
 			"description": "Reports kWh/kVAh",
 			"unit": "seconds",
@@ -25,7 +25,8 @@
 			"defaultValue": 60,
 			"unsigned": true
 		},
-		"2": {
+		{
+			"#": "2",
 			"label": "Report When Wattage Changes",
 			"description": "Reports V/A/W",
 			"unit": "W",
@@ -34,5 +35,5 @@
 			"maxValue": 3600,
 			"defaultValue": 50
 		}
-	}
+	]
 }

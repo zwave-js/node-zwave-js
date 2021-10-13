@@ -17,9 +17,9 @@
 		"min": "0.0",
 		"max": "3.1"
 	},
-	"supportsZWavePlus": true,
-	"paramInformation": {
-		"1": {
+	"paramInformation": [
+		{
+			"#": "1",
 			"label": "Smoke Sensor sensitivity",
 			"description": "There are 3 levels of sensitivity to smoke presence.",
 			"valueSize": 1,
@@ -43,7 +43,8 @@
 				}
 			]
 		},
-		"2": {
+		{
+			"#": "2",
 			"label": "Z-Wave notifications status",
 			"description": "This parameter allows to activate excess temperature ...",
 			"valueSize": 1,
@@ -52,7 +53,8 @@
 			"defaultValue": 255,
 			"unsigned": true
 		},
-		"3": {
+		{
+			"#": "3",
 			"label": "Visual indicator notifications status",
 			"description": "This parameter allows to activate visual indications",
 			"valueSize": 1,
@@ -96,7 +98,8 @@
 				}
 			]
 		},
-		"4": {
+		{
+			"#": "4",
 			"label": "Sound notifications status",
 			"description": "This parameter allows to activate sound signals...",
 			"valueSize": 1,
@@ -140,7 +143,8 @@
 				}
 			]
 		},
-		"10": {
+		{
+			"#": "10",
 			"label": "Config of control frames in BASIC command class",
 			"description": "This parameter defines which frames will be sent ...",
 			"valueSize": 1,
@@ -164,7 +168,8 @@
 				}
 			]
 		},
-		"11": {
+		{
+			"#": "11",
 			"label": "BASIC ON frame value",
 			"description": "BASIC ON frame is sent in case of smoke presence detection ...",
 			"valueSize": 2,
@@ -172,7 +177,8 @@
 			"maxValue": 255,
 			"defaultValue": 255
 		},
-		"12": {
+		{
+			"#": "12",
 			"label": "BASIC OFF frame value",
 			"description": "BASIC OFF frame is sent in case of FIRE ALARM cancellation.",
 			"valueSize": 2,
@@ -180,7 +186,8 @@
 			"maxValue": 255,
 			"defaultValue": 255
 		},
-		"13": {
+		{
+			"#": "13",
 			"label": "Alarm broadcast",
 			"description": "A value other than 0 means that alarms are being ...",
 			"valueSize": 1,
@@ -208,7 +215,8 @@
 				}
 			]
 		},
-		"20": {
+		{
+			"#": "20",
 			"label": "Temperature report interval",
 			"description": "Time interval between consecutive temperature reports.",
 			"valueSize": 2,
@@ -216,7 +224,8 @@
 			"maxValue": 8640,
 			"defaultValue": 1
 		},
-		"21": {
+		{
+			"#": "21",
 			"label": "Temperature report hysteresis",
 			"description": "The temperature report will only be sent if there is a difference ...",
 			"valueSize": 1,
@@ -224,7 +233,8 @@
 			"maxValue": 100,
 			"defaultValue": 10
 		},
-		"30": {
+		{
+			"#": "30",
 			"label": "Temperature threshold",
 			"description": "Temperature threshold for activating alarms",
 			"valueSize": 1,
@@ -232,7 +242,8 @@
 			"maxValue": 100,
 			"defaultValue": 55
 		},
-		"31": {
+		{
+			"#": "31",
 			"label": "Excess temperature signaling interval",
 			"description": "Time interval of signaling (visual indication/sound) excess ...",
 			"valueSize": 2,
@@ -240,7 +251,8 @@
 			"maxValue": 8640,
 			"defaultValue": 1
 		},
-		"32": {
+		{
+			"#": "32",
 			"label": "Lack of Z-Wave range indication interval",
 			"description": "Time interval of signaling (visual indication/sound) lack of ...",
 			"valueSize": 2,
@@ -248,5 +260,5 @@
 			"maxValue": 8640,
 			"defaultValue": 180
 		}
-	}
+	]
 }

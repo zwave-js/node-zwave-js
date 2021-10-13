@@ -13,9 +13,9 @@
 		"min": "0.0",
 		"max": "255.255"
 	},
-	"supportsZWavePlus": true,
-	"paramInformation": {
-		"1": {
+	"paramInformation": [
+		{
+			"#": "1",
 			"label": "Sensor Operation Mode",
 			"description": "Iinternal magnet sensor or the external terminal",
 			"valueSize": 1,
@@ -34,7 +34,8 @@
 				}
 			]
 		},
-		"2": {
+		{
+			"#": "2",
 			"label": "Sensor State Polarity",
 			"description": "This parameter deﬁnes the polarity of the magnet sensor",
 			"valueSize": 1,
@@ -53,7 +54,8 @@
 				}
 			]
 		},
-		"3": {
+		{
+			"#": "3",
 			"label": "Visual LED Indications",
 			"description": "This parameter deﬁnes when the red LED will indicate events",
 			"valueSize": 1,
@@ -79,7 +81,8 @@
 				}
 			]
 		},
-		"4": {
+		{
+			"#": "4",
 			"label": "Range Test after double click",
 			"description": "Allows to enable the activation of a Z-Wave range test",
 			"valueSize": 1,
@@ -98,7 +101,8 @@
 				}
 			]
 		},
-		"5": {
+		{
+			"#": "5",
 			"label": "2nd Association Group Trigger",
 			"description": "Status of the magnet switch that causes sending command",
 			"valueSize": 1,
@@ -121,7 +125,8 @@
 				}
 			]
 		},
-		"6": {
+		{
+			"#": "6",
 			"label": "Command Sent to Devices of Association Group 2",
 			"description": "which commands is sent to 2nd Association Group",
 			"valueSize": 1,
@@ -144,7 +149,8 @@
 				}
 			]
 		},
-		"7": {
+		{
+			"#": "7",
 			"label": "Value sent to 2nd Association Group on On event",
 			"valueSize": 1,
 			"minValue": 0,
@@ -153,7 +159,8 @@
 			"unsigned": true,
 			"writeOnly": true
 		},
-		"8": {
+		{
+			"#": "8",
 			"label": "value sent to 2nd Association Group on Off event",
 			"valueSize": 1,
 			"minValue": 0,
@@ -161,7 +168,8 @@
 			"defaultValue": 0,
 			"unsigned": true
 		},
-		"9": {
+		{
+			"#": "9",
 			"label": "Time Delay of On command frame",
 			"description": "sent after a delay",
 			"valueSize": 2,
@@ -169,7 +177,8 @@
 			"maxValue": 32400,
 			"defaultValue": 0
 		},
-		"10": {
+		{
+			"#": "10",
 			"label": "Time Delay of Off command frame",
 			"description": "sent after a delay",
 			"valueSize": 2,
@@ -177,7 +186,8 @@
 			"maxValue": 32400,
 			"defaultValue": 0
 		},
-		"11": {
+		{
+			"#": "11",
 			"label": "Delay of Tamper Alarm Cancellation",
 			"description": "Time a tamper alarm is delayed in seconds",
 			"valueSize": 2,
@@ -185,7 +195,8 @@
 			"maxValue": 32400,
 			"defaultValue": 0
 		},
-		"12": {
+		{
+			"#": "12",
 			"label": "Reporting Tamper Alarm Cancellation",
 			"description": "This parameter deﬁnes if the alarm cancellation event is reported",
 			"valueSize": 1,
@@ -204,7 +215,8 @@
 				}
 			]
 		},
-		"13": {
+		{
+			"#": "13",
 			"label": "Central Scene Event Functionality",
 			"description": "enables/disables the central scene function",
 			"valueSize": 1,
@@ -223,7 +235,8 @@
 				}
 			]
 		},
-		"14": {
+		{
+			"#": "14",
 			"label": "Tilt Sensor Functionality",
 			"description": "enables/disables the tilt function",
 			"valueSize": 1,
@@ -242,5 +255,5 @@
 				}
 			]
 		}
-	}
+	]
 }

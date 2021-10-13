@@ -17,9 +17,9 @@
 		"min": "0.0",
 		"max": "255.255"
 	},
-	"supportsZWavePlus": true,
-	"paramInformation": {
-		"21": {
+	"paramInformation": [
+		{
+			"#": "21",
 			"label": "Status after power failure",
 			"description": "Define how the RGB BULB will react after the power supply is back on.",
 			"valueSize": 1,
@@ -42,7 +42,8 @@
 				}
 			]
 		},
-		"24": {
+		{
+			"#": "24",
 			"label": "Notification when Load status change",
 			"description": "RGB BULB can send notifications to associated device",
 			"valueSize": 1,
@@ -65,7 +66,8 @@
 				}
 			]
 		},
-		"51": {
+		{
+			"#": "51",
 			"label": "Enable/disable the function of using wall switch to turn on/off RGB BULB",
 			"valueSize": 1,
 			"minValue": 0,
@@ -83,7 +85,8 @@
 				}
 			]
 		},
-		"61": {
+		{
+			"#": "61",
 			"label": "Advance mode",
 			"description": "RGB BULB can blink or cyclic/random change color automatically at set intervals.",
 			"valueSize": 4,
@@ -126,7 +129,8 @@
 				}
 			]
 		},
-		"255": {
+		{
+			"#": "255",
 			"label": "Resetting to factory default",
 			"description": "RGB BULB will exclude from the Z-Wave network with this particular command",
 			"valueSize": 4,
@@ -140,5 +144,5 @@
 				}
 			]
 		}
-	}
+	]
 }

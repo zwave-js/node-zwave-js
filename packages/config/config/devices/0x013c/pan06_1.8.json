@@ -17,9 +17,9 @@
 		"min": "1.8",
 		"max": "255.255"
 	},
-	"supportsZWavePlus": true,
-	"paramInformation": {
-		"1": {
+	"paramInformation": [
+		{
+			"#": "1",
 			"label": "Selected endpoint",
 			"description": "Send Basic Command Class",
 			"valueSize": 1,
@@ -42,7 +42,8 @@
 				}
 			]
 		},
-		"2": {
+		{
+			"#": "2",
 			"label": "Switch mode",
 			"description": "Change the external switch mode",
 			"valueSize": 1,
@@ -65,7 +66,8 @@
 				}
 			]
 		},
-		"3": {
+		{
+			"#": "3",
 			"label": "Restore Switch State Mode",
 			"description": "Switch state after repowering",
 			"valueSize": 1,
@@ -88,14 +90,16 @@
 				}
 			]
 		},
-		"4": {
+		{
+			"#": "4",
 			"label": "Auto OFF Timer",
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 32767,
 			"defaultValue": 0
 		},
-		"5": {
+		{
+			"#": "5",
 			"label": "RF OFF command",
 			"valueSize": 1,
 			"minValue": 0,
@@ -121,7 +125,8 @@
 				}
 			]
 		},
-		"6": {
+		{
+			"#": "6",
 			"label": "Existence of endpoint 3",
 			"valueSize": 1,
 			"minValue": 1,
@@ -139,5 +144,5 @@
 				}
 			]
 		}
-	}
+	]
 }

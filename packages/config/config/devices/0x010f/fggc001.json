@@ -21,9 +21,9 @@
 		"min": "0.0",
 		"max": "255.255"
 	},
-	"supportsZWavePlus": true,
-	"paramInformation": {
-		"1": {
+	"paramInformation": [
+		{
+			"#": "1",
 			"label": "Device Orientation",
 			"description": "Orientation in relation to default position.",
 			"valueSize": 1,
@@ -50,7 +50,8 @@
 				}
 			]
 		},
-		"2": {
+		{
+			"#": "2",
 			"label": "Buzzer - acoustic signal settings",
 			"description": "Acoustic signalling of gestures detection.",
 			"valueSize": 1,
@@ -69,7 +70,8 @@
 				}
 			]
 		},
-		"3": {
+		{
+			"#": "3",
 			"label": "LED diode - visual indicator settings",
 			"description": "Visual indication of gestures detection",
 			"valueSize": 1,
@@ -88,7 +90,8 @@
 				}
 			]
 		},
-		"4": {
+		{
+			"#": "4",
 			"label": "Buzzer - signalling result of gesture recognition",
 			"description": "Acoustic signalling of gesture recognition result (using the built-in buzzer).",
 			"valueSize": 1,
@@ -111,7 +114,8 @@
 				}
 			]
 		},
-		"5": {
+		{
+			"#": "5",
 			"label": "Powering mode update interval",
 			"description": "Check if the USB pwr supply is connected, update pwr mode",
 			"valueSize": 2,
@@ -129,7 +133,8 @@
 				}
 			]
 		},
-		"6": {
+		{
+			"#": "6",
 			"label": "Power saving mode (battery mode)",
 			"description": "This parameter determines operation of gesture detection when battery powered.",
 			"valueSize": 1,
@@ -152,7 +157,8 @@
 				}
 			]
 		},
-		"7": {
+		{
+			"#": "7",
 			"label": "Hold gesture to enter the menu",
 			"description": "Choose if the menu can be entered using the Hold gesture.",
 			"valueSize": 1,
@@ -171,7 +177,8 @@
 				}
 			]
 		},
-		"10": {
+		{
+			"#": "10",
 			"label": "Scenes sent to the controller",
 			"description": "Defines which actions result in sending scenes to 1st “Lifeline” group.",
 			"valueSize": 1,
@@ -210,7 +217,8 @@
 				}
 			]
 		},
-		"11": {
+		{
+			"#": "11",
 			"label": "Associations in Z-Wave network security mode",
 			"description": "Define sent command for specified association groups.",
 			"valueSize": 1,
@@ -240,7 +248,8 @@
 				}
 			]
 		},
-		"12": {
+		{
+			"#": "12",
 			"label": "Mode of 2nd-5th \"Flick UP/DOWN/LEFT/RIGHT”",
 			"description": "Choose control mode for 2nd-5th groups and scenes.",
 			"valueSize": 1,
@@ -266,7 +275,8 @@
 				}
 			]
 		},
-		"13": {
+		{
+			"#": "13",
 			"label": "Rate of smooth level control",
 			"description": "Choose gesture time for \"AirWheel\" to reach max/min level.",
 			"valueSize": 2,
@@ -274,7 +284,8 @@
 			"maxValue": 255,
 			"defaultValue": 255
 		},
-		"20": {
+		{
+			"#": "20",
 			"label": "SWITCH ON control frame value for FLICK UP gesture",
 			"description": "Value sent in SWITCH ON command",
 			"valueSize": 2,
@@ -282,7 +293,8 @@
 			"maxValue": 255,
 			"defaultValue": 255
 		},
-		"21": {
+		{
+			"#": "21",
 			"label": "SWITCH OFF frame value for FLICK UP",
 			"description": "Value sent in SWITCH OFF command frame.",
 			"valueSize": 2,
@@ -290,7 +302,8 @@
 			"maxValue": 255,
 			"defaultValue": 255
 		},
-		"22": {
+		{
+			"#": "22",
 			"label": "SWITCH ON frame value for FLICK DOWN",
 			"description": "Value sent in SWITCH ON command frame.",
 			"valueSize": 2,
@@ -298,7 +311,8 @@
 			"maxValue": 255,
 			"defaultValue": 255
 		},
-		"23": {
+		{
+			"#": "23",
 			"label": "SWITCH OFF frame value for FLICK DOWN",
 			"description": "Value sent in SWITCH OFF command frame.",
 			"valueSize": 2,
@@ -306,7 +320,8 @@
 			"maxValue": 255,
 			"defaultValue": 255
 		},
-		"24": {
+		{
+			"#": "24",
 			"label": "SWITCH ON frame value for FLICK LEFT",
 			"description": "Value sent in SWITCH ON command frame.",
 			"valueSize": 2,
@@ -314,7 +329,8 @@
 			"maxValue": 255,
 			"defaultValue": 255
 		},
-		"25": {
+		{
+			"#": "25",
 			"label": "SWITCH OFF frame value for FLICK LEFT",
 			"description": "Value sent in SWITCH OFF command frame.",
 			"valueSize": 2,
@@ -322,7 +338,8 @@
 			"maxValue": 255,
 			"defaultValue": 255
 		},
-		"26": {
+		{
+			"#": "26",
 			"label": "SWITCH ON frame value for FLICK RIGHT",
 			"description": "Value sent in SWITCH ON command frame.",
 			"valueSize": 2,
@@ -330,7 +347,8 @@
 			"maxValue": 255,
 			"defaultValue": 255
 		},
-		"27": {
+		{
+			"#": "27",
 			"label": "SWITCH OFF frame value for FLICK RIGHT",
 			"description": "Value sent in SWITCH OFF command frame.",
 			"valueSize": 2,
@@ -338,14 +356,16 @@
 			"maxValue": 255,
 			"defaultValue": 255
 		},
-		"30": {
+		{
+			"#": "30",
 			"label": "Launch Sequence learning mode",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 6,
 			"defaultValue": 0
 		},
-		"31": {
+		{
+			"#": "31",
 			"label": "1st gestures sequence (SLOT 1)",
 			"description": "Value containing sequence of gestures.",
 			"valueSize": 2,
@@ -353,7 +373,8 @@
 			"maxValue": 1076,
 			"defaultValue": 0
 		},
-		"32": {
+		{
+			"#": "32",
 			"label": "2nd gestures sequence (SLOT 2)",
 			"description": "Value containing sequence of gestures.",
 			"valueSize": 2,
@@ -361,7 +382,8 @@
 			"maxValue": 1076,
 			"defaultValue": 0
 		},
-		"33": {
+		{
+			"#": "33",
 			"label": "3rd gestures sequence (SLOT 3)",
 			"description": "Value containing sequence of gestures.",
 			"valueSize": 2,
@@ -369,7 +391,8 @@
 			"maxValue": 1076,
 			"defaultValue": 0
 		},
-		"34": {
+		{
+			"#": "34",
 			"label": "4th gestures sequence (SLOT 4)",
 			"description": "Value containing sequence of gestures.",
 			"valueSize": 2,
@@ -377,7 +400,8 @@
 			"maxValue": 1076,
 			"defaultValue": 0
 		},
-		"35": {
+		{
+			"#": "35",
 			"label": "5th gestures sequence (SLOT 5)",
 			"description": "Value containing sequence of gestures.",
 			"valueSize": 2,
@@ -385,7 +409,8 @@
 			"maxValue": 1076,
 			"defaultValue": 0
 		},
-		"36": {
+		{
+			"#": "36",
 			"label": "6th gestures sequence (SLOT 6)",
 			"description": "Value containing sequence of gestures.",
 			"valueSize": 2,
@@ -393,5 +418,5 @@
 			"maxValue": 1076,
 			"defaultValue": 0
 		}
-	}
+	]
 }

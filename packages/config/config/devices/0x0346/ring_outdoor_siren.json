@@ -17,8 +17,9 @@
 		"min": "0.0",
 		"max": "255.255"
 	},
-	"paramInformation": {
-		"1": {
+	"paramInformation": [
+		{
+			"#": "1",
 			"label": "Heartbeat Interval",
 			"valueSize": 1,
 			"unit": "minutes",
@@ -26,14 +27,16 @@
 			"maxValue": 70,
 			"defaultValue": 70
 		},
-		"2": {
+		{
+			"#": "2",
 			"label": "Application Retries",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 5,
 			"defaultValue": 1
 		},
-		"3": {
+		{
+			"#": "3",
 			"label": "Application Level Retry Base Wait Time Period",
 			"valueSize": 1,
 			"unit": "seconds",
@@ -41,7 +44,8 @@
 			"maxValue": 60,
 			"defaultValue": 5
 		},
-		"4": {
+		{
+			"#": "4",
 			"label": "Low Battery Threshold",
 			"valueSize": 1,
 			"unit": "%",
@@ -49,7 +53,8 @@
 			"maxValue": 100,
 			"defaultValue": 25
 		},
-		"5": {
+		{
+			"#": "5",
 			"label": "Critical Battery Threshold",
 			"valueSize": 1,
 			"unit": "%",
@@ -57,7 +62,8 @@
 			"maxValue": 100,
 			"defaultValue": 25
 		},
-		"6": {
+		{
+			"#": "6",
 			"label": "Supervision Report Timeout",
 			"valueSize": 2,
 			"unit": "milliseconds",
@@ -65,7 +71,8 @@
 			"maxValue": 5000,
 			"defaultValue": 1500
 		},
-		"7": {
+		{
+			"#": "7",
 			"label": "ZWave Sleep Timeout",
 			"valueSize": 1,
 			"unit": "seconds",
@@ -73,7 +80,8 @@
 			"maxValue": 15,
 			"defaultValue": 10
 		},
-		"8": {
+		{
+			"#": "8",
 			"label": "Siren Duration",
 			"valueSize": 1,
 			"unit": "minutes",
@@ -81,7 +89,8 @@
 			"maxValue": 10,
 			"defaultValue": 3
 		},
-		"9": {
+		{
+			"#": "9",
 			"label": "QRBP Switch Threshold",
 			"description": "Once the rechargeable battery has charged to this threshold, device can switch to it if running on D-cells",
 			"valueSize": 1,
@@ -90,7 +99,8 @@
 			"maxValue": 100,
 			"defaultValue": 10
 		},
-		"10": {
+		{
+			"#": "10",
 			"label": "LED Ramp Time",
 			"valueSize": 1,
 			"unit": "10 ms",
@@ -99,7 +109,7 @@
 			"defaultValue": 50,
 			"unsigned": true
 		}
-	},
+	],
 	"metadata": {
 		"manual": "https://products.z-wavealliance.org/ProductManual/File?folder=&filename=product_documents/4118/Z-Wave%20User%20Manual_Outdoor_Siren.pdf"
 	}

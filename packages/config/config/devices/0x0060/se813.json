@@ -14,8 +14,9 @@
 		"min": "0.0",
 		"max": "255.255"
 	},
-	"paramInformation": {
-		"1": {
+	"paramInformation": [
+		{
+			"#": "1",
 			"label": "Siren Alarm Period",
 			"valueSize": 2,
 			"unit": "seconds",
@@ -24,7 +25,8 @@
 			"defaultValue": 180,
 			"unsigned": true
 		},
-		"2": {
+		{
+			"#": "2",
 			"label": "Temperature/Humidity Auto Report Period",
 			"valueSize": 2,
 			"unit": "minutes",
@@ -33,7 +35,8 @@
 			"defaultValue": 30,
 			"unsigned": true
 		},
-		"3": {
+		{
+			"#": "3",
 			"label": "Sound Playback",
 			"valueSize": 1,
 			"minValue": 0,
@@ -47,7 +50,7 @@
 				}
 			]
 		}
-	},
+	],
 	"metadata": {
 		"inclusion": "1. Put the Z-Wave Controller into inclusion mode.\n2. Press the Link button 3 times within 1.5 seconds to put the unit into inclusion mode.",
 		"exclusion": "1. Put the Z-Wave Controller into exclusion mode.\n2. Press the Link button 3 times within 1.5 seconds to put the unit into exclusion mode.",

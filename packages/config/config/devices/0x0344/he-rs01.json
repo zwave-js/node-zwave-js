@@ -13,8 +13,9 @@
 		"min": "0.0",
 		"max": "255.255"
 	},
-	"paramInformation": {
-		"1": {
+	"paramInformation": [
+		{
+			"#": "1",
 			"label": "Frequency Region",
 			"valueSize": 1,
 			"minValue": 0,
@@ -63,14 +64,16 @@
 				}
 			]
 		},
-		"3": {
+		{
+			"#": "3",
 			"label": "Hardware and Software Versions",
 			"valueSize": 4,
 			"minValue": 0,
 			"maxValue": 0,
 			"readOnly": true
 		},
-		"4": {
+		{
+			"#": "4",
 			"label": "Energy Consumption",
 			"unit": "kW",
 			"valueSize": 4,
@@ -78,27 +81,33 @@
 			"maxValue": 0,
 			"readOnly": true
 		},
-		"7": {
+		{
+			"#": "7",
 			"$import": "templates/heltun_template.json#relay_output_mode",
 			"label": "Relay 1: Output Mode"
 		},
-		"8": {
+		{
+			"#": "8",
 			"$import": "templates/heltun_template.json#relay_output_mode",
 			"label": "Relay 2: Output Mode"
 		},
-		"9": {
+		{
+			"#": "9",
 			"$import": "templates/heltun_template.json#relay_output_mode",
 			"label": "Relay 3: Output Mode"
 		},
-		"10": {
+		{
+			"#": "10",
 			"$import": "templates/heltun_template.json#relay_output_mode",
 			"label": "Relay 4: Output Mode"
 		},
-		"11": {
+		{
+			"#": "11",
 			"$import": "templates/heltun_template.json#relay_output_mode",
 			"label": "Relay 5: Output Mode"
 		},
-		"19": {
+		{
+			"#": "19",
 			"label": "Time Correction by Controller",
 			"valueSize": 1,
 			"minValue": 0,
@@ -116,7 +125,8 @@
 				}
 			]
 		},
-		"21": {
+		{
+			"#": "21",
 			"label": "Week Day Override",
 			"valueSize": 1,
 			"minValue": 1,
@@ -154,7 +164,8 @@
 				}
 			]
 		},
-		"22": {
+		{
+			"#": "22",
 			"label": "Time Override",
 			"unit": "HHMM",
 			"valueSize": 2,
@@ -162,100 +173,123 @@
 			"maxValue": 2359,
 			"defaultValue": 0
 		},
-		"41": {
+		{
+			"#": "41",
 			"$import": "templates/heltun_template.json#external_input_hold_control_mode",
 			"label": "External Input S1: Hold Control Mode"
 		},
-		"42": {
+		{
+			"#": "42",
 			"$import": "templates/heltun_template.json#external_input_hold_control_mode",
 			"label": "External Input S2: Hold Control Mode"
 		},
-		"43": {
+		{
+			"#": "43",
 			"$import": "templates/heltun_template.json#external_input_hold_control_mode",
 			"label": "External Input S3: Hold Control Mode"
 		},
-		"44": {
+		{
+			"#": "44",
 			"$import": "templates/heltun_template.json#external_input_hold_control_mode",
 			"label": "External Input S4: Hold Control Mode"
 		},
-		"45": {
+		{
+			"#": "45",
 			"$import": "templates/heltun_template.json#external_input_hold_control_mode",
 			"label": "External Input S5: Hold Control Mode"
 		},
-		"51": {
+		{
+			"#": "51",
 			"$import": "templates/heltun_template.json#external_input_click_control_mode",
 			"label": "External Input S1: Click Control Mode"
 		},
-		"52": {
+		{
+			"#": "52",
 			"$import": "templates/heltun_template.json#external_input_click_control_mode",
 			"label": "External Input S2: Click Control Mode"
 		},
-		"53": {
+		{
+			"#": "53",
 			"$import": "templates/heltun_template.json#external_input_click_control_mode",
 			"label": "External Input S3: Click Control Mode"
 		},
-		"54": {
+		{
+			"#": "54",
 			"$import": "templates/heltun_template.json#external_input_click_control_mode",
 			"label": "External Input S4: Click Control Mode"
 		},
-		"55": {
+		{
+			"#": "55",
 			"$import": "templates/heltun_template.json#external_input_click_control_mode",
 			"label": "External Input S5: Click Control Mode"
 		},
-		"61": {
+		{
+			"#": "61",
 			"$import": "templates/heltun_template.json#relay_external_source",
 			"label": "Relay 1: External Source",
 			"defaultValue": 1
 		},
-		"62": {
+		{
+			"#": "62",
 			"$import": "templates/heltun_template.json#relay_external_source",
 			"label": "Relay 2: External Source",
 			"defaultValue": 2
 		},
-		"63": {
+		{
+			"#": "63",
 			"$import": "templates/heltun_template.json#relay_external_source",
 			"label": "Relay 3: External Source",
 			"defaultValue": 3
 		},
-		"64": {
+		{
+			"#": "64",
 			"$import": "templates/heltun_template.json#relay_external_source",
 			"label": "Relay 4: External Source",
 			"defaultValue": 4
 		},
-		"65": {
+		{
+			"#": "65",
 			"$import": "templates/heltun_template.json#relay_external_source",
 			"label": "Relay 5: External Source",
 			"defaultValue": 5
 		},
-		"71": {
+		{
+			"#": "71",
 			"$import": "templates/heltun_template.json#relay_timer_mode_duration",
 			"label": "Relay 1: Timer Mode Duration"
 		},
-		"72": {
+		{
+			"#": "72",
 			"$import": "templates/heltun_template.json#relay_timer_mode_duration",
 			"label": "Relay 2: Timer Mode Duration"
 		},
-		"73": {
+		{
+			"#": "73",
 			"$import": "templates/heltun_template.json#relay_timer_mode_duration",
 			"label": "Relay 3: Timer Mode Duration"
 		},
-		"74": {
+		{
+			"#": "74",
 			"$import": "templates/heltun_template.json#relay_timer_mode_duration",
 			"label": "Relay 4: Timer Mode Duration"
 		},
-		"75": {
+		{
+			"#": "75",
 			"$import": "templates/heltun_template.json#relay_timer_mode_duration",
 			"label": "Relay 5: Timer Mode Duration"
 		},
-		"101": {
+		{
+			"#": "101",
 			"$import": "templates/heltun_template.json#relay_inverse_mode_inching",
 			"label": "Relay Inverse Mode, Inching - Group 1"
 		},
-		"102": {
+		{
+			"#": "102",
 			"$import": "templates/heltun_template.json#relay_inverse_mode_inching",
 			"label": "Relay Inverse Mode, Inching - Group 2"
 		},
-		"141": {
+		{
+			"#": "141",
 			"label": "Energy Consumption Report Interval",
 			"unit": "minutes",
 			"valueSize": 1,
@@ -263,7 +297,8 @@
 			"maxValue": 120,
 			"defaultValue": 10
 		},
-		"142": {
+		{
+			"#": "142",
 			"label": "Energy Consumption Report",
 			"valueSize": 1,
 			"minValue": 0,
@@ -281,5 +316,5 @@
 				}
 			]
 		}
-	}
+	]
 }

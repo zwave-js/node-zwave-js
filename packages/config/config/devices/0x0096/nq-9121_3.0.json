@@ -13,8 +13,9 @@
 		"min": "3.0",
 		"max": "255.255"
 	},
-	"paramInformation": {
-		"1": {
+	"paramInformation": [
+		{
+			"#": "1",
 			"label": "Pulse factor",
 			"description": "Impulse or Rotation factor (see NorthQ docs for Gas meters)",
 			"valueSize": 4,
@@ -22,7 +23,8 @@
 			"maxValue": 1000000,
 			"defaultValue": 1000
 		},
-		"2": {
+		{
+			"#": "2",
 			"label": "Sensor type",
 			"description": "Defines the type of sensor",
 			"valueSize": 1,
@@ -41,7 +43,8 @@
 				}
 			]
 		},
-		"9": {
+		{
+			"#": "9",
 			"label": "Pulse count",
 			"description": "This register holds the total number of pulses.",
 			"valueSize": 4,
@@ -49,7 +52,8 @@
 			"maxValue": 2147483647,
 			"defaultValue": 0
 		},
-		"10": {
+		{
+			"#": "10",
 			"label": "Keep alive period",
 			"description": "How many ticks before going back to sleep in normal wakeup mode.",
 			"valueSize": 2,
@@ -57,7 +61,8 @@
 			"maxValue": 32767,
 			"defaultValue": 5
 		},
-		"11": {
+		{
+			"#": "11",
 			"label": "Real-time mode",
 			"description": "Set this to enter real-time mode from remote.",
 			"valueSize": 2,
@@ -66,7 +71,8 @@
 			"defaultValue": 0,
 			"readOnly": true
 		},
-		"12": {
+		{
+			"#": "12",
 			"label": "Serial number",
 			"description": "Read-only serial number in decimal",
 			"valueSize": 4,
@@ -75,7 +81,8 @@
 			"defaultValue": 0,
 			"readOnly": true
 		},
-		"15": {
+		{
+			"#": "15",
 			"label": "Calibration status",
 			"description": "Aplies to devices with firmware version 3.30 or higher",
 			"valueSize": 4,
@@ -83,5 +90,5 @@
 			"maxValue": 65535,
 			"defaultValue": 0
 		}
-	}
+	]
 }

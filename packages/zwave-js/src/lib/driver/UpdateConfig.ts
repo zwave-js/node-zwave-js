@@ -23,7 +23,7 @@ export async function checkForConfigUpdates(
 
 	try {
 		registry = (
-			await axios.get("https://registry.npmjs.org/@zwave-js/config")
+			await axios.get<any>("https://registry.npmjs.org/@zwave-js/config")
 		).data;
 	} catch (e) {
 		throw new ZWaveError(

@@ -21,8 +21,9 @@
 			"isLifeline": true
 		}
 	},
-	"paramInformation": {
-		"1": {
+	"paramInformation": [
+		{
+			"#": "1",
 			"label": "Set to default",
 			"description": "Set all configuration values to default values (factory settings)",
 			"valueSize": 1,
@@ -37,7 +38,8 @@
 				}
 			]
 		},
-		"2": {
+		{
+			"#": "2",
 			"label": "Data request interval",
 			"description": "Interval of updating data from thermostat and boiler",
 			"unit": "Seconds",
@@ -47,7 +49,8 @@
 			"defaultValue": 14,
 			"unsigned": true
 		},
-		"3": {
+		{
+			"#": "3",
 			"label": "T room update difference",
 			"description": "Difference of temperature before new update",
 			"unit": "*0,1 degrees Celcius",
@@ -57,7 +60,8 @@
 			"defaultValue": 1,
 			"unsigned": true
 		},
-		"4": {
+		{
+			"#": "4",
 			"label": "T setpoint update difference",
 			"description": "Difference in setpoint before new update",
 			"unit": "*0,1 degrees Celcius",
@@ -67,7 +71,8 @@
 			"defaultValue": 5,
 			"unsigned": true
 		},
-		"5": {
+		{
+			"#": "5",
 			"label": "Unsolicited CRC",
 			"description": "CRC-16 encapulation",
 			"valueSize": 1,
@@ -87,7 +92,8 @@
 				}
 			]
 		},
-		"6": {
+		{
+			"#": "6",
 			"label": "Type of 'special' thermostat",
 			"valueSize": 1,
 			"minValue": 0,
@@ -109,7 +115,8 @@
 				}
 			]
 		},
-		"7": {
+		{
+			"#": "7",
 			"label": "Status auto report",
 			"description": "Status auto report boiler/thermostat report.",
 			"valueSize": 1,
@@ -129,7 +136,8 @@
 				}
 			]
 		},
-		"9": {
+		{
+			"#": "9",
 			"label": "Enable/Disable thermostat schedule",
 			"valueSize": 1,
 			"minValue": 0,
@@ -148,7 +156,8 @@
 				}
 			]
 		},
-		"11": {
+		{
+			"#": "11",
 			"label": "Readout manual setpoint thermostat",
 			"valueSize": 1,
 			"minValue": 0,
@@ -167,5 +176,5 @@
 				}
 			]
 		}
-	}
+	]
 }

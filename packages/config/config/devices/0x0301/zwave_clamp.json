@@ -13,9 +13,9 @@
 		"min": "0.0",
 		"max": "255.255"
 	},
-	"supportsZWavePlus": true,
-	"paramInformation": {
-		"2": {
+	"paramInformation": [
+		{
+			"#": "2",
 			"label": "MEAS_PERIOD",
 			"unit": "s",
 			"valueSize": 1,
@@ -23,14 +23,16 @@
 			"maxValue": 120,
 			"defaultValue": 30
 		},
-		"3": {
+		{
+			"#": "3",
 			"label": "MAX_REP_INTERVAL",
 			"valueSize": 1,
 			"minValue": 3,
 			"maxValue": 60,
 			"defaultValue": 6
 		},
-		"4": {
+		{
+			"#": "4",
 			"label": "RES_ACTIVE_POWER",
 			"unit": "W",
 			"valueSize": 1,
@@ -38,21 +40,24 @@
 			"maxValue": 100,
 			"defaultValue": 4
 		},
-		"5": {
+		{
+			"#": "5",
 			"label": "RES_RMS_VOLTAGE",
 			"valueSize": 2,
 			"minValue": 1,
 			"maxValue": 1000,
 			"defaultValue": 10
 		},
-		"6": {
+		{
+			"#": "6",
 			"label": "RES_RMS_CURRENT",
 			"valueSize": 2,
 			"minValue": 1,
 			"maxValue": 1000,
 			"defaultValue": 10
 		},
-		"8": {
+		{
+			"#": "8",
 			"label": "CLAMP_REVERSED",
 			"valueSize": 1,
 			"minValue": 0,
@@ -76,7 +81,8 @@
 				}
 			]
 		},
-		"9": {
+		{
+			"#": "9",
 			"label": "ENABLE_CRC16",
 			"valueSize": 1,
 			"minValue": 0,
@@ -94,12 +100,13 @@
 				}
 			]
 		},
-		"10": {
+		{
+			"#": "10",
 			"label": "AVG_PERIOD",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 6,
 			"defaultValue": 1
 		}
-	}
+	]
 }

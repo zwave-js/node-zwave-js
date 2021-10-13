@@ -44,14 +44,16 @@
 			"maxNodes": 5
 		}
 	},
-	"paramInformation": {
-		"1": {
+	"paramInformation": [
+		{
+			"#": "1",
 			"$import": "~/0x0086/templates/aeotec_template.json#motion_timeout",
 			"minValue": 0,
 			"maxValue": 32767,
 			"defaultValue": 30
 		},
-		"2": {
+		{
+			"#": "2",
 			"label": "Motion Clear Time",
 			"valueSize": 2,
 			"unit": "seconds",
@@ -60,7 +62,8 @@
 			"defaultValue": 240,
 			"unsigned": true
 		},
-		"3": {
+		{
+			"#": "3",
 			"label": "Motion Sensitivity",
 			"description": "Allowable range: 1-11",
 			"valueSize": 1,
@@ -75,10 +78,12 @@
 				}
 			]
 		},
-		"4": {
+		{
+			"#": "4",
 			"$import": "~/0x0086/templates/aeotec_template.json#enable_binary_report"
 		},
-		"5": {
+		{
+			"#": "5",
 			"label": "Send Basic Set to Associated Nodes",
 			"valueSize": 1,
 			"minValue": 0,
@@ -105,7 +110,8 @@
 				}
 			]
 		},
-		"6": {
+		{
+			"#": "6",
 			"label": "Basic Set Value For Group 2",
 			"valueSize": 1,
 			"minValue": 0,
@@ -140,7 +146,8 @@
 				}
 			]
 		},
-		"7": {
+		{
+			"#": "7",
 			"label": "Temperature Alarm Threshold (High)",
 			"valueSize": 2,
 			"unit": "0.1 °(C/F)",
@@ -148,39 +155,47 @@
 			"maxValue": 1185,
 			"defaultValue": 239
 		},
-		"10": {
+		{
+			"#": "10",
 			"$import": "~/0x0086/templates/aeotec_template.json#enable_led_indicator"
 		},
-		"11": {
+		{
+			"#": "11",
 			"$import": "~/0x0086/templates/aeotec_template.json#base_color_options",
 			"label": "LED Color: Motion Event Report",
 			"defaultValue": 2
 		},
-		"12": {
+		{
+			"#": "12",
 			"$import": "~/0x0086/templates/aeotec_template.json#base_color_options",
 			"label": "LED Color: Temperature Sensor Report",
 			"defaultValue": 0
 		},
-		"13": {
+		{
+			"#": "13",
 			"$import": "~/0x0086/templates/aeotec_template.json#base_color_options",
 			"label": "LED Color: Light Sensor Report",
 			"defaultValue": 0
 		},
-		"14": {
+		{
+			"#": "14",
 			"$import": "~/0x0086/templates/aeotec_template.json#base_color_options",
 			"label": "LED Color: Battery Report",
 			"defaultValue": 0
 		},
-		"15": {
+		{
+			"#": "15",
 			"$import": "~/0x0086/templates/aeotec_template.json#base_color_options",
 			"label": "LED Color: Wakeup Notification Report",
 			"defaultValue": 0
 		},
-		"20": {
+		{
+			"#": "20",
 			"$import": "~/0x0086/templates/aeotec_template.json#celsius_fahrenheit_0",
 			"valueSize": 1
 		},
-		"21": {
+		{
+			"#": "21",
 			"label": "Temperature Change Threshold",
 			"valueSize": 2,
 			"unit": "0.1 °(C/F)",
@@ -189,7 +204,8 @@
 			"defaultValue": 20,
 			"unsigned": true
 		},
-		"22": {
+		{
+			"#": "22",
 			"label": "Light Intensity Change Threshold",
 			"valueSize": 2,
 			"unit": "lux",
@@ -198,7 +214,8 @@
 			"defaultValue": 100,
 			"unsigned": true
 		},
-		"23": {
+		{
+			"#": "23",
 			"label": "Timed Temperature Report Interval",
 			"valueSize": 2,
 			"unit": "seconds",
@@ -207,10 +224,12 @@
 			"defaultValue": 3600,
 			"unsigned": true
 		},
-		"24": {
+		{
+			"#": "24",
 			"$import": "~/0x0086/templates/aeotec_template.json#auto_report_interval_light"
 		},
-		"30": {
+		{
+			"#": "30",
 			"label": "Temperature Offset Value",
 			"valueSize": 2,
 			"unit": "0.1 °(C/F)",
@@ -218,7 +237,8 @@
 			"maxValue": 200,
 			"defaultValue": 0
 		},
-		"31": {
+		{
+			"#": "31",
 			"label": "Light Intensity Offset Value",
 			"valueSize": 2,
 			"unit": "lux",
@@ -226,7 +246,8 @@
 			"maxValue": 1000,
 			"defaultValue": 0
 		},
-		"100": {
+		{
+			"#": "100",
 			"label": "Light Sensor Calibrated Coefficient",
 			"valueSize": 2,
 			"minValue": 1,
@@ -234,7 +255,7 @@
 			"defaultValue": 1024,
 			"unsigned": true
 		}
-	},
+	],
 	"metadata": {
 		"inclusion": "Press once TriSensor’s Action Button. If it is the first installation, the yellow LED will keep solid until whole network processing is complete. If successful, the LED will flash white -> green -> white -> green, after 2 seconds finished. If failed, the yellow LED lasts for 30 seconds, then the green LED flashes once.\nIf it is the S2 encryption network, please enter the first 5 digits of DSK.",
 		"exclusion": "Press once TriSensor’s Action Button, the Purple LED will keep solid until whole network processing is complete. If the exclusion is successful, the LED will flash white -> green ->white -> green and then LED will pulse a blue. If failed, the yellow LED lasts for 30 seconds, then the green LED flashes once",

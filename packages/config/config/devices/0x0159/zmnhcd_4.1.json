@@ -13,9 +13,9 @@
 		"min": "4.1",
 		"max": "255.255"
 	},
-	"supportsZWavePlus": true,
-	"paramInformation": {
-		"10": {
+	"paramInformation": [
+		{
+			"#": "10",
 			"label": "ALL ON/ALL OFF",
 			"description": "Responds to commands ALL ON / ALL OFF from Main Controller",
 			"valueSize": 2,
@@ -42,7 +42,8 @@
 				}
 			]
 		},
-		"40": {
+		{
+			"#": "40",
 			"label": "Power reporting in watts on power change",
 			"description": "Power consumption change threshold for sending updates",
 			"valueSize": 1,
@@ -50,7 +51,8 @@
 			"maxValue": 100,
 			"defaultValue": 1
 		},
-		"42": {
+		{
+			"#": "42",
 			"label": "Power reporting in Watts by time interval",
 			"unit": "seconds",
 			"valueSize": 2,
@@ -58,7 +60,8 @@
 			"maxValue": 32767,
 			"defaultValue": 300
 		},
-		"71": {
+		{
+			"#": "71",
 			"label": "Operating modes",
 			"description": "Operation Mode (Shutter or Venetian)",
 			"valueSize": 1,
@@ -78,7 +81,8 @@
 				}
 			]
 		},
-		"72": {
+		{
+			"#": "72",
 			"label": "Slats tilting full turn time",
 			"description": "Slat full turn time in tenths of a second.",
 			"unit": "tenths of a second",
@@ -87,7 +91,8 @@
 			"maxValue": 32767,
 			"defaultValue": 150
 		},
-		"73": {
+		{
+			"#": "73",
 			"label": "Slats position",
 			"description": "Slats position after up/down movement.",
 			"valueSize": 1,
@@ -106,7 +111,8 @@
 				}
 			]
 		},
-		"74": {
+		{
+			"#": "74",
 			"label": "Motor moving up/down time",
 			"description": "Shutter motor moving time of complete opening or complete closing",
 			"valueSize": 2,
@@ -114,7 +120,8 @@
 			"maxValue": 32767,
 			"defaultValue": 0
 		},
-		"76": {
+		{
+			"#": "76",
 			"label": "Motor operation detection",
 			"description": "Power threshold to be interpreted when motor reach the limit switch",
 			"valueSize": 1,
@@ -122,7 +129,8 @@
 			"maxValue": 127,
 			"defaultValue": 10
 		},
-		"78": {
+		{
+			"#": "78",
 			"label": "Forced Shutter calibration",
 			"description": "Enters calibration mode if set to 1",
 			"valueSize": 1,
@@ -141,7 +149,8 @@
 				}
 			]
 		},
-		"80": {
+		{
+			"#": "80",
 			"label": "Reporting to Controller",
 			"description": "Defines if reporting regarding power level, etc is reported to controller.",
 			"valueSize": 1,
@@ -161,7 +170,8 @@
 				}
 			]
 		},
-		"85": {
+		{
+			"#": "85",
 			"label": "Power consumption max delay time",
 			"description": "Time delay for detecting motor errors",
 			"valueSize": 1,
@@ -169,7 +179,8 @@
 			"maxValue": 50,
 			"defaultValue": 8
 		},
-		"86": {
+		{
+			"#": "86",
 			"label": "Power consumption at limit switch delay time",
 			"description": "Sets the time delay for detecting limit switches",
 			"valueSize": 1,
@@ -177,7 +188,8 @@
 			"maxValue": 50,
 			"defaultValue": 8
 		},
-		"90": {
+		{
+			"#": "90",
 			"label": "Relay delay time",
 			"description": "Defines the minimum time delay between next motor movement",
 			"unit": "milliseconds",
@@ -186,7 +198,8 @@
 			"maxValue": 30,
 			"defaultValue": 5
 		},
-		"110": {
+		{
+			"#": "110",
 			"label": "Temperature sensor offset settings",
 			"description": "Adds or removes an offset from the measured temperature.",
 			"valueSize": 2,
@@ -194,7 +207,8 @@
 			"maxValue": 32536,
 			"defaultValue": 32536
 		},
-		"120": {
+		{
+			"#": "120",
 			"label": "Digital temperature sensor reporting",
 			"description": "Threshold for sending temperature change reports",
 			"valueSize": 1,
@@ -202,5 +216,5 @@
 			"maxValue": 127,
 			"defaultValue": 5
 		}
-	}
+	]
 }

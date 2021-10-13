@@ -13,9 +13,9 @@
 		"min": "0.0",
 		"max": "255.255"
 	},
-	"supportsZWavePlus": true,
-	"paramInformation": {
-		"1": {
+	"paramInformation": [
+		{
+			"#": "1",
 			"label": "Set LED indication mode",
 			"valueSize": 1,
 			"minValue": 0,
@@ -37,7 +37,8 @@
 				}
 			]
 		},
-		"2": {
+		{
+			"#": "2",
 			"label": "Automatic switch off",
 			"description": "If not zero, automatically switch off after a user defined time",
 			"valueSize": 2,
@@ -46,7 +47,8 @@
 			"defaultValue": 0,
 			"unsigned": true
 		},
-		"3": {
+		{
+			"#": "3",
 			"label": "Function of RF off command",
 			"valueSize": 1,
 			"minValue": 0,
@@ -73,7 +75,8 @@
 				}
 			]
 		},
-		"5": {
+		{
+			"#": "5",
 			"label": "Restore switch state after power cycle",
 			"valueSize": 1,
 			"minValue": 0,
@@ -92,14 +95,16 @@
 				}
 			]
 		},
-		"20": {
+		{
+			"#": "20",
 			"label": "Energy consumption",
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 1800,
 			"defaultValue": 0
 		},
-		"21": {
+		{
+			"#": "21",
 			"label": "Off Color",
 			"valueSize": 1,
 			"minValue": 0,
@@ -130,7 +135,8 @@
 				}
 			]
 		},
-		"22": {
+		{
+			"#": "22",
 			"label": "On Color",
 			"valueSize": 1,
 			"minValue": 0,
@@ -161,5 +167,5 @@
 				}
 			]
 		}
-	}
+	]
 }

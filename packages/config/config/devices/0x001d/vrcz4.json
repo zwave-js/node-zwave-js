@@ -46,5 +46,9 @@
 			"maxNodes": 32,
 			"isLifeline": true
 		}
+	},
+	"compat": {
+		// This device has 4 association groups, but 8 scenes
+		"forceSceneControllerGroupCount": 8
 	}
 }

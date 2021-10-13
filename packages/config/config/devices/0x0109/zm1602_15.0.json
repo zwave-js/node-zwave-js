@@ -17,9 +17,9 @@
 		"min": "15.0",
 		"max": "255.255"
 	},
-	"supportsZWavePlus": true,
-	"paramInformation": {
-		"1": {
+	"paramInformation": [
+		{
+			"#": "1",
 			"label": "Siren Strobe Mode",
 			"description": "Defines the reaction of the siren",
 			"valueSize": 1,
@@ -43,7 +43,8 @@
 				}
 			]
 		},
-		"2": {
+		{
+			"#": "2",
 			"label": "Alarm auto stop",
 			"description": "Defines the auto time out of the alarm indication",
 			"valueSize": 1,
@@ -71,5 +72,5 @@
 				}
 			]
 		}
-	}
+	]
 }

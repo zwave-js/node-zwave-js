@@ -13,9 +13,9 @@
 		"min": "0.0",
 		"max": "255.255"
 	},
-	"supportsZWavePlus": true,
-	"paramInformation": {
-		"1": {
+	"paramInformation": [
+		{
+			"#": "1",
 			"label": "Watt meter report interval (5s)",
 			"description": "Interval (x5 seconds) to send out watt meter report",
 			"valueSize": 2,
@@ -23,7 +23,8 @@
 			"maxValue": 32767,
 			"defaultValue": 720
 		},
-		"2": {
+		{
+			"#": "2",
 			"label": "KWH Meter Report Interval (10min)",
 			"description": "Interval (x10 minutes) to send out KWH Meter Report",
 			"valueSize": 2,
@@ -31,7 +32,8 @@
 			"maxValue": 32767,
 			"defaultValue": 6
 		},
-		"3": {
+		{
+			"#": "3",
 			"label": "Threshold for Load Caution (10mA)",
 			"description": "Threshold (x0.01A) of current for Load Caution",
 			"valueSize": 2,
@@ -39,7 +41,8 @@
 			"maxValue": 1100,
 			"defaultValue": 500
 		},
-		"4": {
+		{
+			"#": "4",
 			"label": "Threshold of KWh for Load Caution",
 			"unit": "kWh",
 			"valueSize": 2,
@@ -47,7 +50,8 @@
 			"maxValue": 10000,
 			"defaultValue": 10000
 		},
-		"5": {
+		{
+			"#": "5",
 			"label": "External SwitchType",
 			"description": "Sets the type of an external switch",
 			"valueSize": 1,
@@ -55,7 +59,8 @@
 			"maxValue": 2,
 			"defaultValue": 2
 		},
-		"6": {
+		{
+			"#": "6",
 			"label": "Level report mode",
 			"description": "Sets the way the controller reports the shutter level",
 			"valueSize": 1,
@@ -63,5 +68,5 @@
 			"maxValue": 2,
 			"defaultValue": 2
 		}
-	}
+	]
 }

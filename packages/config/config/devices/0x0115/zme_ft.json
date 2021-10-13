@@ -20,8 +20,9 @@
 			"maxNodes": 10
 		}
 	},
-	"paramInformation": {
-		"1": {
+	"paramInformation": [
+		{
+			"#": "1",
 			"label": "Boost Dry mode duration",
 			"unit": "sec",
 			"valueSize": 2,
@@ -29,7 +30,8 @@
 			"maxValue": 1800,
 			"defaultValue": 1800
 		},
-		"2": {
+		{
+			"#": "2",
 			"label": "Button mode",
 			"valueSize": 1,
 			"minValue": 0,
@@ -51,7 +53,8 @@
 				}
 			]
 		},
-		"3": {
+		{
+			"#": "3",
 			"label": "Basic mode",
 			"valueSize": 1,
 			"minValue": 0,
@@ -81,7 +84,8 @@
 				}
 			]
 		},
-		"4": {
+		{
+			"#": "4",
 			"label": "Temperature control interval",
 			"unit": "sec",
 			"valueSize": 1,
@@ -89,7 +93,8 @@
 			"maxValue": 60,
 			"defaultValue": 18
 		},
-		"5": {
+		{
+			"#": "5",
 			"label": "Maximum allowed temperature deviation",
 			"unit": "in 0.1 C",
 			"valueSize": 1,
@@ -97,7 +102,8 @@
 			"maxValue": 60,
 			"defaultValue": 30
 		},
-		"6": {
+		{
+			"#": "6",
 			"label": "Maximal allowed temperature",
 			"unit": "degree Celsus",
 			"valueSize": 1,
@@ -105,7 +111,8 @@
 			"maxValue": 55,
 			"defaultValue": 27
 		},
-		"10": {
+		{
+			"#": "10",
 			"label": "Typical click timeout",
 			"description": "Typical time used to differenciate click from hold",
 			"unit": "in 10ms",
@@ -114,5 +121,5 @@
 			"maxValue": 100,
 			"defaultValue": 50
 		}
-	}
+	]
 }

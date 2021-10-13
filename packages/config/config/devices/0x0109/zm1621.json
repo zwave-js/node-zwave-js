@@ -14,9 +14,9 @@
 		"min": "0.0",
 		"max": "255.255"
 	},
-	"supportsZWavePlus": true,
-	"paramInformation": {
-		"1": {
+	"paramInformation": [
+		{
+			"#": "1",
 			"label": "Siren Strobe Mode",
 			"description": "Defines the reaction of the siren",
 			"valueSize": 1,
@@ -39,7 +39,8 @@
 				}
 			]
 		},
-		"2": {
+		{
+			"#": "2",
 			"label": "Alarm Auto Stop Time",
 			"description": "Defines the auto time out of the alarm indication",
 			"valueSize": 1,
@@ -66,7 +67,7 @@
 				}
 			]
 		}
-	},
+	],
 	"metadata": {
 		"inclusion": "For “Inclusion” in (adding to) a network: Put the Z-Wave™ Interface Controller into “inclusion” mode, and following its instruction to add the ZM 1621 to your controller. To get in the “inclusion” mode, get magnet of the bracket to touch the reed switch on the ZM1621 and separate at once to be included. After setting, the LED Light should go off, if not, please try again. (After sending one time’s Z-Wave NIF and not be included then it will send NWI for auto inclusion. The LED light will flash again if the siren has not been included or the LED light will go off after inclusion.)",
 		"exclusion": "For “Exclusion” in (removing from) a network: Put the Z-Wave™ Interface Controller into “exclusion” mode, and following its instruction to remove the ZM 1621 from your controller. ZM1621-5 will send NWE if the exclusion could not be done successfully. \nNote:\na. LED light will flash continuously in Exclusion condition.\nb. All user and network settings will be cleared and the device reset to factory defaults when the device is excluded.",

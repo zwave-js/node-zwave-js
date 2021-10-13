@@ -14,11 +14,12 @@
 		"min": "0.0",
 		"max": "255.255"
 	},
-	"paramInformation": {
-		"5": {
+	"paramInformation": [
+		{
+			"#": "5",
 			"$import": "templates/yale_template.json#language_asia"
 		}
-	},
+	],
 	"metadata": {
 		"inclusion": "To include:\n1. Touch keypad with palm\n2. Enter User code(Normal Mode only. Enter Master code if operating Master Mode.)\n3. Press 'I' button [Registration] from the inside of battery cover.\n4. Press 9,#,1,# on the keypad (by sequence)\n5. Wait until 'Ding dong dang' melody play then press 'I' button",
 		"exclusion": "To exclude:\n1. Touch keypad with palm\n2. Enter User code(Normal Mode only. Enter Master code if operating Master Mode.)\n3. Press 'I' button [Registration] from the inside of battery cover.\n4. Press 9,#,3,# on the keypad (by sequence)\n5. Wait until 'Ding dong dang' melody play then press 'I' button",

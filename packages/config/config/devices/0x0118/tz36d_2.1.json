@@ -17,9 +17,9 @@
 		"min": "2.1",
 		"max": "255.255"
 	},
-	"supportsZWavePlus": true,
-	"paramInformation": {
-		"1": {
+	"paramInformation": [
+		{
+			"#": "1",
 			"label": "Night light",
 			"description": "LED behaviour control.",
 			"valueSize": 1,
@@ -38,7 +38,8 @@
 				}
 			]
 		},
-		"2": {
+		{
+			"#": "2",
 			"label": "Memory function",
 			"description": "Memory function behaviour control.",
 			"valueSize": 1,
@@ -57,7 +58,8 @@
 				}
 			]
 		},
-		"3": {
+		{
+			"#": "3",
 			"label": "Invert switch",
 			"description": "Swap top and bottom switch/button.",
 			"valueSize": 1,
@@ -76,7 +78,8 @@
 				}
 			]
 		},
-		"4": {
+		{
+			"#": "4",
 			"label": "LED transmission indication",
 			"valueSize": 1,
 			"minValue": 0,
@@ -98,7 +101,8 @@
 				}
 			]
 		},
-		"5": {
+		{
+			"#": "5",
 			"label": "Suspend group 4",
 			"description": "Group 4 command sending behaviour control.",
 			"valueSize": 1,
@@ -117,5 +121,5 @@
 				}
 			]
 		}
-	}
+	]
 }

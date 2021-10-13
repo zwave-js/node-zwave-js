@@ -13,9 +13,9 @@
 		"min": "0.0",
 		"max": "255.255"
 	},
-	"supportsZWavePlus": true,
-	"paramInformation": {
-		"1": {
+	"paramInformation": [
+		{
+			"#": "1",
 			"label": "Wind Speed Action Threshold",
 			"description": "Available Parameters: 0 - Off 1 - 30 in milliseconds Default = 6 m/s",
 			"valueSize": 1,
@@ -23,7 +23,8 @@
 			"maxValue": 30,
 			"defaultValue": 6
 		},
-		"2": {
+		{
+			"#": "2",
 			"label": "Twilight Action Threshold",
 			"description": "Set from 0 - 100 % Default = 37% (street lighting)",
 			"valueSize": 1,
@@ -31,5 +32,5 @@
 			"maxValue": 100,
 			"defaultValue": 37
 		}
-	}
+	]
 }

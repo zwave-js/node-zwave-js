@@ -14,8 +14,9 @@
 		"min": "0.0",
 		"max": "255.255"
 	},
-	"paramInformation": {
-		"1": {
+	"paramInformation": [
+		{
+			"#": "1",
 			"label": "State With Manual Switch or Power Failure",
 			"valueSize": 1,
 			"minValue": 0,
@@ -38,7 +39,8 @@
 				}
 			]
 		},
-		"9": {
+		{
+			"#": "9",
 			"label": "Dim Rate Steps",
 			"valueSize": 1,
 			"minValue": 1,
@@ -46,7 +48,8 @@
 			"defaultValue": 99,
 			"unsigned": true
 		},
-		"10": {
+		{
+			"#": "10",
 			"label": "Dim Rate Timing",
 			"valueSize": 1,
 			"unit": "10ms",
@@ -55,7 +58,7 @@
 			"defaultValue": 10,
 			"unsigned": true
 		}
-	},
+	],
 	"metadata": {
 		"inclusion": "1. When initially powered, the bulb is in SmartStart inclusion mode. If your hub supports SmartStart, scan the QR code.\n2. To change to classic inclusion mode, turn bulb OFF, then ON three times. The bulb rapidly flashes four times to indicate classic mode.\n3. To change back to SmartStart inclusion mode, turn the bulb OFF, then ON three times. The bulb rapidly flashes six times to indicate SmartStart mode.",
 		"exclusion": "1. Follow the instructions for your Z-Wave certified controller to remove a device from the Z-Wave network.\n2. Once the controller is ready to remove your device, turn ON the light switch. The smart bulb flashes twice when\nremoved from the network",

@@ -21,29 +21,33 @@
 			"isLifeline": true
 		}
 	},
-	"paramInformation": {
-		"1": {
+	"paramInformation": [
+		{
+			"#": "1",
 			"label": "Delayed Off",
 			"valueSize": 1,
 			"minValue": -128,
 			"maxValue": 127,
 			"defaultValue": 0
 		},
-		"2": {
+		{
+			"#": "2",
 			"label": "Panic On Time",
 			"valueSize": 1,
 			"minValue": -128,
 			"maxValue": 127,
 			"defaultValue": 0
 		},
-		"3": {
+		{
+			"#": "3",
 			"label": "Panic Off Time",
 			"valueSize": 1,
 			"minValue": -128,
 			"maxValue": 127,
 			"defaultValue": 0
 		},
-		"5": {
+		{
+			"#": "5",
 			"label": "Power Up State",
 			"valueSize": 1,
 			"minValue": 1,
@@ -65,7 +69,8 @@
 				}
 			]
 		},
-		"6": {
+		{
+			"#": "6",
 			"label": "Panic Mode Enable",
 			"valueSize": 1,
 			"minValue": 0,
@@ -83,5 +88,5 @@
 				}
 			]
 		}
-	}
+	]
 }

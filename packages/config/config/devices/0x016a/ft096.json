@@ -21,9 +21,9 @@
 		"min": "0.0",
 		"max": "255.255"
 	},
-	"supportsZWavePlus": true,
-	"paramInformation": {
-		"3": {
+	"paramInformation": [
+		{
+			"#": "3",
 			"label": "Current overload protection enable",
 			"valueSize": 1,
 			"minValue": 0,
@@ -41,7 +41,8 @@
 				}
 			]
 		},
-		"20": {
+		{
+			"#": "20",
 			"label": "Output load after re-power",
 			"valueSize": 1,
 			"minValue": 0,
@@ -63,7 +64,8 @@
 				}
 			]
 		},
-		"33": {
+		{
+			"#": "33",
 			"label": "RGB LED color testing",
 			"valueSize": 4,
 			"minValue": 0,
@@ -71,7 +73,8 @@
 			"defaultValue": 0,
 			"writeOnly": true
 		},
-		"80": {
+		{
+			"#": "80",
 			"label": "Enable send to associated devices",
 			"description": "Enable to send notifications to Group 1",
 			"valueSize": 1,
@@ -94,7 +97,8 @@
 				}
 			]
 		},
-		"81": {
+		{
+			"#": "81",
 			"label": "Configure LED state",
 			"valueSize": 1,
 			"minValue": 0,
@@ -116,7 +120,8 @@
 				}
 			]
 		},
-		"90": {
+		{
+			"#": "90",
 			"label": "Enable Parameters 91 and 92",
 			"valueSize": 1,
 			"minValue": 0,
@@ -134,7 +139,8 @@
 				}
 			]
 		},
-		"91": {
+		{
+			"#": "91",
 			"label": "Wattage Threshold",
 			"description": "minimum change in wattage to trigger",
 			"unit": "W",
@@ -144,7 +150,8 @@
 			"defaultValue": 25,
 			"unsigned": true
 		},
-		"92": {
+		{
+			"#": "92",
 			"label": "Wattage Percent Change",
 			"description": "minimum change in wattage percent",
 			"unit": "%",
@@ -153,7 +160,8 @@
 			"maxValue": 100,
 			"defaultValue": 5
 		},
-		"100": {
+		{
+			"#": "100",
 			"label": "Set 101‐103 to default.",
 			"valueSize": 1,
 			"minValue": 0,
@@ -172,7 +180,8 @@
 				}
 			]
 		},
-		"101": {
+		{
+			"#": "101",
 			"label": "Values to send to group 1",
 			"description": "Which reports need to send in Report group 1",
 			"valueSize": 4,
@@ -207,7 +216,8 @@
 				}
 			]
 		},
-		"102": {
+		{
+			"#": "102",
 			"label": "Values to send to group 2",
 			"description": "Which reports need to send in Report group 2",
 			"valueSize": 4,
@@ -242,7 +252,8 @@
 				}
 			]
 		},
-		"103": {
+		{
+			"#": "103",
 			"label": "Values to send to group 3",
 			"description": "Which reports need to send in Report group 3",
 			"valueSize": 4,
@@ -277,7 +288,8 @@
 				}
 			]
 		},
-		"110": {
+		{
+			"#": "110",
 			"label": "Set 111‐113 to default.",
 			"valueSize": 1,
 			"minValue": 0,
@@ -296,7 +308,8 @@
 				}
 			]
 		},
-		"111": {
+		{
+			"#": "111",
 			"label": "Time interval for sending to group 1",
 			"description": "Group 1 automatic update interval",
 			"unit": "seconds",
@@ -305,7 +318,8 @@
 			"maxValue": 2147483647,
 			"defaultValue": 3
 		},
-		"112": {
+		{
+			"#": "112",
 			"label": "Time interval for sending to group 2",
 			"description": "Group 2 automatic update interval",
 			"unit": "seconds",
@@ -314,7 +328,8 @@
 			"maxValue": 2147483647,
 			"defaultValue": 600
 		},
-		"113": {
+		{
+			"#": "113",
 			"label": "Time interval for sending to group 3",
 			"description": "Group 3 automatic update interval",
 			"valueSize": 4,
@@ -322,7 +337,8 @@
 			"maxValue": 2147483647,
 			"defaultValue": 600
 		},
-		"252": {
+		{
+			"#": "252",
 			"label": "Configuration Locked",
 			"description": "Enable/disable Configuration Locked (0 =disable, 1 = enable).",
 			"valueSize": 1,
@@ -341,7 +357,8 @@
 				}
 			]
 		},
-		"255": {
+		{
+			"#": "255",
 			"label": "RESET",
 			"description": "Reset the device to defaults",
 			"valueSize": 1,
@@ -350,21 +367,24 @@
 			"defaultValue": 0,
 			"writeOnly": true
 		},
-		"83[0xff]": {
+		{
+			"#": "83[0xff]",
 			"label": "Blue night light color value",
 			"valueSize": 3,
 			"minValue": 0,
 			"maxValue": 255,
 			"defaultValue": 221
 		},
-		"83[0xff00]": {
+		{
+			"#": "83[0xff00]",
 			"label": "Green night light color value",
 			"valueSize": 3,
 			"minValue": 0,
 			"maxValue": 255,
 			"defaultValue": 160
 		},
-		"83[0xff0000]": {
+		{
+			"#": "83[0xff0000]",
 			"label": "Red night light color value",
 			"description": "Configure the RGB value when it is in Night light mode",
 			"valueSize": 3,
@@ -372,7 +392,8 @@
 			"maxValue": 255,
 			"defaultValue": 221
 		},
-		"84[0xff]": {
+		{
+			"#": "84[0xff]",
 			"label": "Green brightness in energy mode (%)",
 			"unit": "percent",
 			"valueSize": 3,
@@ -380,7 +401,8 @@
 			"maxValue": 100,
 			"defaultValue": 50
 		},
-		"84[0xff00]": {
+		{
+			"#": "84[0xff00]",
 			"label": "Yellow brightness in energy mode (%)",
 			"unit": "percent",
 			"valueSize": 3,
@@ -388,7 +410,8 @@
 			"maxValue": 100,
 			"defaultValue": 50
 		},
-		"84[0xff0000]": {
+		{
+			"#": "84[0xff0000]",
 			"label": "Red brightness in energy mode (%)",
 			"unit": "percent",
 			"valueSize": 3,
@@ -396,5 +419,5 @@
 			"maxValue": 100,
 			"defaultValue": 50
 		}
-	}
+	]
 }

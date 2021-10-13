@@ -31,8 +31,9 @@
 			"isLifeline": true
 		}
 	},
-	"paramInformation": {
-		"4": {
+	"paramInformation": [
+		{
+			"#": "4",
 			"label": "Invert Switch",
 			"valueSize": 1,
 			"minValue": 0,
@@ -50,7 +51,7 @@
 				}
 			]
 		}
-	},
+	],
 	"metadata": {
 		"inclusion": "1. Follow the instructions for your Z-Wave certified controller to include a device to the Z-Wave network.\n2. Once the controller is ready to include your device, press up and release the Toggle Switch to add it in the network.\n3. Once your controller has confirmed that the device has been included",
 		"exclusion": "1. Follow the instructions for your Z-Wave certified controller to exclude a device from the Z-Wave network.\n2. Once the controller is ready to Exclude your device, press and release the top or bottom of the wireless smart dimmer (rocker) to exclude it from the network",

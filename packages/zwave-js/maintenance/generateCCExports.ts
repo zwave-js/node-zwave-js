@@ -76,7 +76,9 @@ function findExports() {
 				ts.isEnumDeclaration(node) ||
 				ts.isTypeAliasDeclaration(node) ||
 				ts.isInterfaceDeclaration(node) ||
-				ts.isClassDeclaration(node)
+				ts.isClassDeclaration(node) ||
+				ts.isFunctionDeclaration(node) ||
+				ts.isArrowFunction(node)
 			) {
 				if (!node.name) return;
 

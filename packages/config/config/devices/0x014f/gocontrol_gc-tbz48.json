@@ -21,9 +21,9 @@
 		"min": "0.0",
 		"max": "255.255"
 	},
-	"supportsZWavePlus": true,
-	"paramInformation": {
-		"1": {
+	"paramInformation": [
+		{
+			"#": "1",
 			"label": "System Type",
 			"valueSize": 1,
 			"minValue": 0,
@@ -41,7 +41,8 @@
 				}
 			]
 		},
-		"2": {
+		{
+			"#": "2",
 			"label": "Fan Type",
 			"valueSize": 1,
 			"minValue": 0,
@@ -59,7 +60,8 @@
 				}
 			]
 		},
-		"3": {
+		{
+			"#": "3",
 			"label": "Change Over Type",
 			"valueSize": 1,
 			"minValue": 0,
@@ -77,7 +79,8 @@
 				}
 			]
 		},
-		"4": {
+		{
+			"#": "4",
 			"label": "2nd Stage Heat Enable",
 			"valueSize": 1,
 			"minValue": 0,
@@ -95,7 +98,8 @@
 				}
 			]
 		},
-		"5": {
+		{
+			"#": "5",
 			"label": "Aux Heat Enable",
 			"valueSize": 1,
 			"minValue": 0,
@@ -113,7 +117,8 @@
 				}
 			]
 		},
-		"6": {
+		{
+			"#": "6",
 			"label": "2nd Stage Cool Enable",
 			"valueSize": 1,
 			"minValue": 0,
@@ -131,7 +136,8 @@
 				}
 			]
 		},
-		"7": {
+		{
+			"#": "7",
 			"label": "Temperature Unit",
 			"valueSize": 1,
 			"minValue": 0,
@@ -149,7 +155,8 @@
 				}
 			]
 		},
-		"8": {
+		{
+			"#": "8",
 			"label": "Minimum Off Time",
 			"unit": "minutes",
 			"valueSize": 1,
@@ -157,7 +164,8 @@
 			"maxValue": 9,
 			"defaultValue": 5
 		},
-		"9": {
+		{
+			"#": "9",
 			"label": "Minimum Run Time",
 			"unit": "minutes",
 			"valueSize": 1,
@@ -165,7 +173,8 @@
 			"maxValue": 9,
 			"defaultValue": 3
 		},
-		"10": {
+		{
+			"#": "10",
 			"label": "Setpoint H/C Delta",
 			"unit": "fahrenheit",
 			"valueSize": 1,
@@ -173,7 +182,8 @@
 			"maxValue": 15,
 			"defaultValue": 3
 		},
-		"11": {
+		{
+			"#": "11",
 			"label": "H Delta Stage 1 ON",
 			"unit": "fahrenheit",
 			"valueSize": 1,
@@ -181,7 +191,8 @@
 			"maxValue": 6,
 			"defaultValue": 1
 		},
-		"12": {
+		{
+			"#": "12",
 			"label": "H Delta Stage 1 OFF",
 			"unit": "fahrenheit",
 			"valueSize": 1,
@@ -189,7 +200,8 @@
 			"maxValue": 5,
 			"defaultValue": 0
 		},
-		"13": {
+		{
+			"#": "13",
 			"label": "H Delta Stage 2 ON",
 			"unit": "fahrenheit",
 			"valueSize": 1,
@@ -197,7 +209,8 @@
 			"maxValue": 7,
 			"defaultValue": 2
 		},
-		"14": {
+		{
+			"#": "14",
 			"label": "H Delta Stage 2 OFF",
 			"unit": "fahrenheit",
 			"valueSize": 1,
@@ -205,7 +218,8 @@
 			"maxValue": 6,
 			"defaultValue": 0
 		},
-		"15": {
+		{
+			"#": "15",
 			"label": "H Delta Aux ON",
 			"unit": "fahrenheit",
 			"valueSize": 1,
@@ -213,7 +227,8 @@
 			"maxValue": 8,
 			"defaultValue": 3
 		},
-		"16": {
+		{
+			"#": "16",
 			"label": "H Delta Stage 3 OFF",
 			"unit": "fahrenheit",
 			"valueSize": 1,
@@ -221,7 +236,8 @@
 			"maxValue": 7,
 			"defaultValue": 0
 		},
-		"17": {
+		{
+			"#": "17",
 			"label": "C Delta Stage 1 ON",
 			"unit": "fahrenheit",
 			"valueSize": 1,
@@ -229,7 +245,8 @@
 			"maxValue": 6,
 			"defaultValue": 1
 		},
-		"18": {
+		{
+			"#": "18",
 			"label": "C Delta Stage 1 OFF",
 			"unit": "fahrenheit",
 			"valueSize": 1,
@@ -237,7 +254,8 @@
 			"maxValue": 5,
 			"defaultValue": 0
 		},
-		"19": {
+		{
+			"#": "19",
 			"label": "C Delta Stage 2 ON",
 			"unit": "fahrenheit",
 			"valueSize": 1,
@@ -245,7 +263,8 @@
 			"maxValue": 7,
 			"defaultValue": 2
 		},
-		"20": {
+		{
+			"#": "20",
 			"label": "C Delta Stage 2 OFF",
 			"unit": "fahrenheit",
 			"valueSize": 1,
@@ -253,14 +272,16 @@
 			"maxValue": 6,
 			"defaultValue": 0
 		},
-		"23": {
+		{
+			"#": "23",
 			"label": "Lifeline Association Group Report To Send",
 			"valueSize": 4,
 			"minValue": 0,
 			"maxValue": 65535,
 			"defaultValue": 8319
 		},
-		"24": {
+		{
+			"#": "24",
 			"label": "Display Lock",
 			"valueSize": 1,
 			"minValue": 0,
@@ -278,7 +299,8 @@
 				}
 			]
 		},
-		"26": {
+		{
+			"#": "26",
 			"label": "Backlight Timer",
 			"unit": "seconds",
 			"valueSize": 1,
@@ -286,21 +308,24 @@
 			"maxValue": 30,
 			"defaultValue": 20
 		},
-		"33": {
+		{
+			"#": "33",
 			"label": "Max Heat Setpoint",
 			"valueSize": 1,
 			"minValue": 30,
 			"maxValue": 109,
 			"defaultValue": 90
 		},
-		"34": {
+		{
+			"#": "34",
 			"label": "Min Cool Setpoint",
 			"valueSize": 1,
 			"minValue": 33,
 			"maxValue": 112,
 			"defaultValue": 61
 		},
-		"38": {
+		{
+			"#": "38",
 			"label": "Schedule Enable",
 			"valueSize": 1,
 			"minValue": 0,
@@ -318,7 +343,8 @@
 				}
 			]
 		},
-		"39": {
+		{
+			"#": "39",
 			"label": "Run/Hold Mode",
 			"valueSize": 1,
 			"minValue": 0,
@@ -336,7 +362,8 @@
 				}
 			]
 		},
-		"40": {
+		{
+			"#": "40",
 			"label": "Setback Mode",
 			"valueSize": 1,
 			"minValue": 0,
@@ -354,21 +381,24 @@
 				}
 			]
 		},
-		"41": {
+		{
+			"#": "41",
 			"label": "Un-Occupied HSP",
 			"valueSize": 1,
 			"minValue": 30,
 			"maxValue": 109,
 			"defaultValue": 62
 		},
-		"42": {
+		{
+			"#": "42",
 			"label": "Un-Occupied CSP",
 			"valueSize": 1,
 			"minValue": 33,
 			"maxValue": 112,
 			"defaultValue": 80
 		},
-		"43": {
+		{
+			"#": "43",
 			"label": "Remote Sensor 1 Node Number",
 			"valueSize": 1,
 			"minValue": 0,
@@ -376,28 +406,32 @@
 			"defaultValue": 0,
 			"unsigned": true
 		},
-		"46": {
+		{
+			"#": "46",
 			"label": "Remote Sensor 1 Temperature",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 112,
 			"defaultValue": 0
 		},
-		"48": {
+		{
+			"#": "48",
 			"label": "Internal Sensor Temp Offset",
 			"valueSize": 1,
 			"minValue": -7,
 			"maxValue": 7,
 			"defaultValue": 0
 		},
-		"49": {
+		{
+			"#": "49",
 			"label": "R1 Sensor Temp Offset",
 			"valueSize": 1,
 			"minValue": -7,
 			"maxValue": 7,
 			"defaultValue": 0
 		},
-		"52": {
+		{
+			"#": "52",
 			"label": "Filter Timer",
 			"unit": "hours",
 			"valueSize": 2,
@@ -405,7 +439,8 @@
 			"maxValue": 4000,
 			"defaultValue": 0
 		},
-		"54": {
+		{
+			"#": "54",
 			"label": "Heat Timer",
 			"unit": "hours",
 			"valueSize": 2,
@@ -413,7 +448,8 @@
 			"maxValue": 4000,
 			"defaultValue": 0
 		},
-		"55": {
+		{
+			"#": "55",
 			"label": "Cool Timer",
 			"unit": "hours",
 			"valueSize": 2,
@@ -421,7 +457,8 @@
 			"maxValue": 4000,
 			"defaultValue": 0
 		},
-		"61": {
+		{
+			"#": "61",
 			"label": "Fan Purge Heat",
 			"unit": "seconds",
 			"valueSize": 1,
@@ -429,7 +466,8 @@
 			"maxValue": 90,
 			"defaultValue": 0
 		},
-		"62": {
+		{
+			"#": "62",
 			"label": "Fan Purge Cool",
 			"unit": "seconds",
 			"valueSize": 1,
@@ -437,5 +475,5 @@
 			"maxValue": 90,
 			"defaultValue": 0
 		}
-	}
+	]
 }
