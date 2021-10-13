@@ -96,6 +96,8 @@ export enum FunctionType {
 	ExtNVMReadLongByte = 0x2c, // Reads a byte from the external NVM
 	ExtExtWriteLongByte = 0x2d, // Writes a byte to the external NVM
 
+	NVMOperations = 0x2e, // 700-series command to read and write from/to the external NVM
+
 	UNKNOWN_FUNC_CLOCK_SET = 0x30, // ??
 	UNKNOWN_FUNC_CLOCK_GET = 0x31, // ??
 	UNKNOWN_FUNC_CLOCK_COMPARE = 0x32, // ??
