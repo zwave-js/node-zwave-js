@@ -191,6 +191,8 @@ const defaultOptions: ZWaveOptions = {
 	},
 	preserveUnknownValues: false,
 	disableOptimisticValueUpdate: false,
+	// By default enable soft reset outside Docker or if the env variable is set
+	enableSoftReset: !isDocker() || !!process.env.ZWAVEJS_ENABLE_SOFT_RESET,
 	interview: {
 		skipInterview: false,
 		queryAllUserCodes: false,
@@ -1572,7 +1574,7 @@ export class Driver extends TypedEventEmitter<DriverEventCallbacks> {
 	 * Warning: USB modules will reconnect, meaning that they might get a new address.
 	 */
 	public async softReset(): Promise<void> {
-		if (!isDocker() || !!process.env.ZWAVEJS_ENABLE_SOFT_RESET) {
+		if (this.options.enableSoftReset) {
 			this.controllerLog.print("performing soft reset...");
 
 			try {
@@ -1586,7 +1588,7 @@ export class Driver extends TypedEventEmitter<DriverEventCallbacks> {
 				// We should react to that instead of waiting a fixed 1.5 seconds
 			} catch (e) {
 				this.controllerLog.print(
-					`  soft reset failed: ${getErrorMessage(e)}`,
+					`Soft reset failed: ${getErrorMessage(e)}`,
 					"error",
 				);
 			}
@@ -1605,9 +1607,12 @@ export class Driver extends TypedEventEmitter<DriverEventCallbacks> {
 			this.unpauseSendThread();
 		} else if (!this.hasLoggedSoftResetWarning) {
 			this.hasLoggedSoftResetWarning = true;
-			this.controllerLog.print(
-				"Soft reset of the controller from within Docker requires configuration of the container and/or host and the ZWAVEJS_ENABLE_SOFT_RESET environment variable must be set.",
-				"warn",
+			const message =
+				"Soft reset of the controller from within Docker requires configuration of the container and/or host. To enable it, set the corresponding driver option or the ZWAVEJS_ENABLE_SOFT_RESET environment variable.";
+			this.controllerLog.print(message, "warn");
+			this.emit(
+				"error",
+				new ZWaveError(message, ZWaveErrorCodes.Driver_NotSupported),
 			);
 		}
 	}

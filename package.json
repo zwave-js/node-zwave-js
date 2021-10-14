@@ -44,6 +44,7 @@
     "@commitlint/cli": "^12.1.4",
     "@commitlint/config-conventional": "^12.1.4",
     "@tsconfig/node12": "^1.0.9",
+    "@types/fs-extra": "^9.0.13",
     "@types/jest": "^26.0.24",
     "@types/node": "^15.12.5",
     "@types/semver": "^7.3.8",
