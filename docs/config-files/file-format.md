@@ -2,21 +2,20 @@
 
 The following properties are defined and should always be present in the same order for consistency among the config files:
 
-| Property            | Description                                                                                                                                                                                                |
-| ------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `manufacturer`      | The name of the manufacturer (or brand under which the device is sold)                                                                                                                                     |
-| `manufacturerId`    | The ID of the manufacturer (as defined in the Z-Wave specs) as a 4-digit hexadecimal string.                                                                                                               |
-| `label`             | A short label for the device                                                                                                                                                                               |
-| `description`       | A longer description of the device, usually the full name                                                                                                                                                  |
-| `devices`           | An array of product type and product ID combinations, [see below](#devices) for details.                                                                                                                   |
-| `firmwareVersion`   | The firmware version range this config file is valid for, [see below](#firmwareVersion) for details.                                                                                                       |
-| `supportsZWavePlus` | (deprecated)                                                                                                                                                                                               |
-| `endpoints`         | Endpoint-specific configuration, [see below](#endpoints) for details. If this is present, `associations` must be specified on endpoint `"0"` instead of on the root level.                                 |
-| `associations`      | The association groups the device supports, [see below](#associations) for details. Only needs to be present if the device does not support Z-Wave+ or requires changes to the default association config. |
-| `paramInformation`  | A dictionary of the configuration parameters the device supports. [See below](#paramInformation) for details.                                                                                              |
-| `proprietary`       | A dictionary of settings for the proprietary CC. The settings depend on each proprietary CC implementation.                                                                                                |
-| `compat`            | Compatibility flags used to influence the communication with non-complient devices. [See below](#compat) for details.                                                                                      |
-| `metadata`          | Metadata that is intended to help the user, like inclusion instructions etc. [See below](#metadata) for details.                                                                                           |
+| Property           | Description                                                                                                                                                                                                |
+| ------------------ | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `manufacturer`     | The name of the manufacturer (or brand under which the device is sold)                                                                                                                                     |
+| `manufacturerId`   | The ID of the manufacturer (as defined in the Z-Wave specs) as a 4-digit hexadecimal string.                                                                                                               |
+| `label`            | A short label for the device                                                                                                                                                                               |
+| `description`      | A longer description of the device, usually the full name                                                                                                                                                  |
+| `devices`          | An array of product type and product ID combinations, [see below](#devices) for details.                                                                                                                   |
+| `firmwareVersion`  | The firmware version range this config file is valid for, [see below](#firmwareVersion) for details.                                                                                                       |
+| `endpoints`        | Endpoint-specific configuration, [see below](#endpoints) for details. If this is present, `associations` must be specified on endpoint `"0"` instead of on the root level.                                 |
+| `associations`     | The association groups the device supports, [see below](#associations) for details. Only needs to be present if the device does not support Z-Wave+ or requires changes to the default association config. |
+| `paramInformation` | An array of the configuration parameters the device supports. [See below](#paramInformation) for details.                                                                                                  |
+| `proprietary`      | A dictionary of settings for the proprietary CC. The settings depend on each proprietary CC implementation.                                                                                                |
+| `compat`           | Compatibility flags used to influence the communication with non-complient devices. [See below](#compat) for details.                                                                                      |
+| `metadata`         | Metadata that is intended to help the user, like inclusion instructions etc. [See below](#metadata) for details.                                                                                           |
 
 ## `devices`
 
@@ -185,17 +184,24 @@ Example:
 This property defines all the existing configuration parameters. It looks like this
 
 ```json
-"paramInformation": {
-	"1": { /* parameter #1 definition */},
-	"2": { /* parameter #2 definition */},
+"paramInformation": [
+	{
+		"#": "1",
+		// parameter #1 definition
+	},
+	{
+		"#": "2",
+		// parameter #2 definition
+	}
 	// ... more parameters ...
-}
+]
 ```
 
 where each parameter definition has the following properties:
 
 | Parameter property | Type    | Required? | Description                                                                                                                                                                                                                                                                                  |
 | ------------------ | ------- | :-------: | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `#`                | string  |    yes    | The parameter number (e.g. `"1"`, `"2"`, ...). <br />For partial parameters, this includes the bitmask (e.g. `"5[0xff00]"`)                                                                                                                                                                  |
 | `label`            | string  |    yes    | A short name for the parameter. <br />This **must not** include unnecessary white-space, such as newlines or tabs.                                                                                                                                                                           |
 | `description`      | string  |    no     | An **optional** longer description of what the parameter does.<br />If a description does not add **significant** value (for example if it just repeats the allowed values), it should be removed instead.<br />This **must not** include unnecessary white-space, such as newlines or tabs. |
 | `valueSize`        | number  |    yes    | How many bytes the device uses for this value                                                                                                                                                                                                                                                |
@@ -216,19 +222,23 @@ Some devices use a single parameter number to configure several, sometimes unrel
 For example,
 
 ```json
-"40[0x01]": {
+{
+	"#": "40[0x01]",
 	"label": "Button 1: behavior",
 	/* parameter definition */
 },
-"40[0x02]": {
+{
+	"#": "40[0x02]",
 	"label": "Button 1: notifications",
 	/* parameter definition */
 },
-"40[0x04]": {
+{
+	"#": "40[0x04]",
 	"label": "Button 2: behavior",
 	/* parameter definition */
 },
-"40[0x08]": {
+{
+	"#": "40[0x08]",
 	"label": "Button 2: notifications",
 	/* parameter definition */
 },

@@ -13,9 +13,9 @@
 		"min": "0.0",
 		"max": "255.255"
 	},
-	"supportsZWavePlus": true,
-	"paramInformation": {
-		"1": {
+	"paramInformation": [
+		{
+			"#": "1",
 			"label": "Analog gas/heat port mode",
 			"valueSize": 1,
 			"minValue": 0,
@@ -37,14 +37,16 @@
 				}
 			]
 		},
-		"2": {
+		{
+			"#": "2",
 			"label": "Analog gas/heat port resolution",
 			"valueSize": 4,
 			"minValue": 120,
 			"maxValue": 40000,
 			"defaultValue": 400
 		},
-		"3": {
+		{
+			"#": "3",
 			"label": "Analog electricity port mode",
 			"valueSize": 1,
 			"minValue": 0,
@@ -66,21 +68,24 @@
 				}
 			]
 		},
-		"4": {
+		{
+			"#": "4",
 			"label": "Analog electricity port resolution",
 			"valueSize": 4,
 			"minValue": 120,
 			"maxValue": 40000,
 			"defaultValue": 400
 		},
-		"5": {
+		{
+			"#": "5",
 			"label": "Digital port mode",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 2,
 			"defaultValue": 2
 		},
-		"255": {
+		{
+			"#": "255",
 			"label": "Restart device",
 			"valueSize": 1,
 			"minValue": 0,
@@ -98,5 +103,5 @@
 				}
 			]
 		}
-	}
+	]
 }

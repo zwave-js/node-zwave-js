@@ -13,9 +13,9 @@
 		"min": "0.0",
 		"max": "255.255"
 	},
-	"supportsZWavePlus": true,
-	"paramInformation": {
-		"1": {
+	"paramInformation": [
+		{
+			"#": "1",
 			"label": "Association LED",
 			"description": "Turns ON/OFF the Association LED",
 			"unit": "HEXADECIMAL",
@@ -37,7 +37,8 @@
 				}
 			]
 		},
-		"2": {
+		{
+			"#": "2",
 			"label": "Custom consumption limit",
 			"unit": "HEXADECIMAL",
 			"valueSize": 2,
@@ -56,7 +57,8 @@
 				}
 			]
 		},
-		"3": {
+		{
+			"#": "3",
 			"label": "Beacon LEDs",
 			"valueSize": 1,
 			"minValue": 0,
@@ -69,7 +71,8 @@
 				}
 			]
 		},
-		"10": {
+		{
+			"#": "10",
 			"label": "Delay ON",
 			"valueSize": 1,
 			"minValue": 0,
@@ -77,7 +80,8 @@
 			"defaultValue": 0,
 			"unsigned": true
 		},
-		"11": {
+		{
+			"#": "11",
 			"label": "Activation TIME",
 			"valueSize": 1,
 			"minValue": 0,
@@ -85,7 +89,8 @@
 			"defaultValue": 0,
 			"unsigned": true
 		},
-		"13": {
+		{
+			"#": "13",
 			"label": "Lock Input",
 			"valueSize": 1,
 			"minValue": 0,
@@ -104,7 +109,8 @@
 				}
 			]
 		},
-		"15": {
+		{
+			"#": "15",
 			"label": "Reset",
 			"description": "Reset default",
 			"valueSize": 2,
@@ -125,7 +131,8 @@
 				}
 			]
 		},
-		"16": {
+		{
+			"#": "16",
 			"label": "Delay OFF",
 			"valueSize": 1,
 			"minValue": 0,
@@ -133,7 +140,8 @@
 			"defaultValue": 0,
 			"unsigned": true
 		},
-		"17": {
+		{
+			"#": "17",
 			"label": "Post Reset State",
 			"description": "Load state after reset",
 			"valueSize": 1,
@@ -153,7 +161,8 @@
 				}
 			]
 		},
-		"19": {
+		{
+			"#": "19",
 			"label": "Action When Pressing",
 			"valueSize": 1,
 			"minValue": 0,
@@ -175,7 +184,8 @@
 				}
 			]
 		},
-		"20": {
+		{
+			"#": "20",
 			"label": "Identify",
 			"description": "The center LED flashes",
 			"valueSize": 1,
@@ -185,7 +195,8 @@
 			"unsigned": true,
 			"writeOnly": true
 		},
-		"21": {
+		{
+			"#": "21",
 			"label": "Charge Status",
 			"description": "Charge status (read-only)",
 			"valueSize": 2,
@@ -194,7 +205,8 @@
 			"defaultValue": 0,
 			"readOnly": true
 		},
-		"27": {
+		{
+			"#": "27",
 			"label": "Long Press Key",
 			"description": "Determines function of long press",
 			"valueSize": 1,
@@ -214,5 +226,5 @@
 				}
 			]
 		}
-	}
+	]
 }

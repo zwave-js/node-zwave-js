@@ -17,9 +17,9 @@
 		"min": "0.0",
 		"max": "255.255"
 	},
-	"supportsZWavePlus": true,
-	"paramInformation": {
-		"1": {
+	"paramInformation": [
+		{
+			"#": "1",
 			"label": "Total Alarm Duration",
 			"description": "Total duration of audio and visual alarm when water is detected.",
 			"unit": "Minutes",
@@ -29,7 +29,8 @@
 			"defaultValue": 120,
 			"unsigned": true
 		},
-		"2": {
+		{
+			"#": "2",
 			"label": "Audio Alarm: Beep Interval",
 			"description": "Interval length between beeps",
 			"unit": "Minutes",
@@ -39,7 +40,8 @@
 			"defaultValue": 1,
 			"unsigned": true
 		},
-		"3": {
+		{
+			"#": "3",
 			"label": "Audio Alarm: First Beep Duration",
 			"description": "Duration of First Beep",
 			"unit": "Seconds",
@@ -49,7 +51,8 @@
 			"defaultValue": 60,
 			"unsigned": true
 		},
-		"4": {
+		{
+			"#": "4",
 			"label": "Audio Alarm: Beep Duration",
 			"description": "Beep Duration after first Beep",
 			"unit": "seconds",
@@ -59,7 +62,8 @@
 			"defaultValue": 5,
 			"unsigned": true
 		},
-		"5": {
+		{
+			"#": "5",
 			"label": "Enable/Disable Audio Alarm",
 			"description": "Visual alarm will NOT be disabled",
 			"valueSize": 1,
@@ -67,14 +71,16 @@
 			"maxValue": 1,
 			"defaultValue": 1
 		},
-		"6": {
+		{
+			"#": "6",
 			"label": "Enable/Disable Water Detection",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 1,
 			"defaultValue": 1
 		},
-		"7": {
+		{
+			"#": "7",
 			"label": "Trigger Action",
 			"description": "Send command to associated device.",
 			"valueSize": 1,
@@ -83,5 +89,5 @@
 			"defaultValue": 255,
 			"unsigned": true
 		}
-	}
+	]
 }

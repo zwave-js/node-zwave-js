@@ -13,9 +13,9 @@
 		"min": "0.0",
 		"max": "255.255"
 	},
-	"supportsZWavePlus": true,
-	"paramInformation": {
-		"4": {
+	"paramInformation": [
+		{
+			"#": "4",
 			"label": "Safety Activate Delay",
 			"unit": "seconds",
 			"valueSize": 2,
@@ -23,7 +23,8 @@
 			"maxValue": 32767,
 			"defaultValue": 0
 		},
-		"5": {
+		{
+			"#": "5",
 			"label": "Safety OFF Period",
 			"unit": "seconds",
 			"valueSize": 2,
@@ -31,7 +32,8 @@
 			"maxValue": 32767,
 			"defaultValue": 600
 		},
-		"6": {
+		{
+			"#": "6",
 			"label": "Safety ON Period",
 			"unit": "seconds",
 			"valueSize": 2,
@@ -39,7 +41,8 @@
 			"maxValue": 32767,
 			"defaultValue": 300
 		},
-		"10": {
+		{
+			"#": "10",
 			"label": "Dimming speed",
 			"description": "Dimmer Speed in 1/100th of a Second",
 			"unit": "/100s",
@@ -48,7 +51,8 @@
 			"maxValue": 32767,
 			"defaultValue": 300
 		},
-		"11": {
+		{
+			"#": "11",
 			"label": "Dimmer mode",
 			"description": "Dimmer Operation Mode",
 			"valueSize": 1,
@@ -56,21 +60,24 @@
 			"maxValue": 1,
 			"defaultValue": 1
 		},
-		"12": {
+		{
+			"#": "12",
 			"label": "Maximum Level",
 			"valueSize": 1,
 			"minValue": 1,
 			"maxValue": 99,
 			"defaultValue": 90
 		},
-		"13": {
+		{
+			"#": "13",
 			"label": "Minimum Level",
 			"valueSize": 1,
 			"minValue": 1,
 			"maxValue": 99,
 			"defaultValue": 15
 		},
-		"14": {
+		{
+			"#": "14",
 			"label": "Button mode",
 			"description": "Operating mode for switch",
 			"valueSize": 1,
@@ -78,28 +85,32 @@
 			"maxValue": 4,
 			"defaultValue": 0
 		},
-		"15": {
+		{
+			"#": "15",
 			"label": "Light Zone Control Mode",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 30,
 			"defaultValue": 0
 		},
-		"17": {
+		{
+			"#": "17",
 			"label": "Back Unit Role",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 2,
 			"defaultValue": 1
 		},
-		"18": {
+		{
+			"#": "18",
 			"label": "Back Unit Light Zone",
 			"valueSize": 1,
 			"minValue": 1,
 			"maxValue": 4,
 			"defaultValue": 1
 		},
-		"32": {
+		{
+			"#": "32",
 			"label": "Thermostat Set Point Max",
 			"description": "Set Point Max in 1/10th of a degree Celcius",
 			"unit": "1/10 degrees",
@@ -108,7 +119,8 @@
 			"maxValue": 500,
 			"defaultValue": 270
 		},
-		"34": {
+		{
+			"#": "34",
 			"label": "Thermostat Set Point Min",
 			"description": "Set Point Min in 1/10th of a degree Celcius",
 			"valueSize": 2,
@@ -116,7 +128,8 @@
 			"maxValue": 500,
 			"defaultValue": 50
 		},
-		"36": {
+		{
+			"#": "36",
 			"label": "Thermostat Control Resend Interval",
 			"description": "Resend Interval in seconds",
 			"unit": "seconds",
@@ -125,7 +138,8 @@
 			"maxValue": 32767,
 			"defaultValue": 3600
 		},
-		"37": {
+		{
+			"#": "37",
 			"label": "Thermostat Minimum On/Off Interval",
 			"description": "Minimum On/Off interval in seconds",
 			"unit": "seconds",
@@ -134,7 +148,8 @@
 			"maxValue": 32767,
 			"defaultValue": 300
 		},
-		"38": {
+		{
+			"#": "38",
 			"label": "Thermostat Floor Temp Max",
 			"description": "Floor Temp Max in 1/10th of a degree Celcius",
 			"unit": "1/10 degrees",
@@ -143,21 +158,24 @@
 			"maxValue": 500,
 			"defaultValue": 270
 		},
-		"40": {
+		{
+			"#": "40",
 			"label": "Temperature Sensor Select",
 			"valueSize": 1,
 			"minValue": 1,
 			"maxValue": 3,
 			"defaultValue": 3
 		},
-		"44": {
+		{
+			"#": "44",
 			"label": "Cold Start Minimum Level",
 			"valueSize": 1,
 			"minValue": 1,
 			"maxValue": 99,
 			"defaultValue": 20
 		},
-		"64": {
+		{
+			"#": "64",
 			"label": "Temperature Report Inteval",
 			"description": "Report Interval in seconds",
 			"unit": "seconds",
@@ -166,7 +184,8 @@
 			"maxValue": 32767,
 			"defaultValue": 600
 		},
-		"66": {
+		{
+			"#": "66",
 			"label": "Temperature Report Threshold",
 			"description": "Report Threshold in 1/10th of a degree Celcius",
 			"unit": "1/10 degrees",
@@ -175,7 +194,8 @@
 			"maxValue": 127,
 			"defaultValue": 10
 		},
-		"67": {
+		{
+			"#": "67",
 			"label": "Thermostat On∕Off Interval Override Threshold",
 			"description": "Temperature Threshold in 1/10th of a degree Celcius",
 			"valueSize": 1,
@@ -183,14 +203,16 @@
 			"maxValue": 127,
 			"defaultValue": 0
 		},
-		"80": {
+		{
+			"#": "80",
 			"label": "Button LED Mode",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 2,
 			"defaultValue": 0
 		},
-		"240": {
+		{
+			"#": "240",
 			"label": "Floor Sensor Temperature Offset",
 			"description": "Temperature Offset in 1/10th of a degree Celcius",
 			"unit": "1/10 degrees",
@@ -199,7 +221,8 @@
 			"maxValue": 127,
 			"defaultValue": 0
 		},
-		"241": {
+		{
+			"#": "241",
 			"label": "Room Sensor Temperature Offset",
 			"description": "Temperature Offset in 1/10th of a degree Celcius",
 			"unit": "1/10 degrees",
@@ -208,5 +231,5 @@
 			"maxValue": 127,
 			"defaultValue": 0
 		}
-	}
+	]
 }

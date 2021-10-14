@@ -17,9 +17,9 @@
 		"min": "0.0",
 		"max": "255.255"
 	},
-	"supportsZWavePlus": true,
-	"paramInformation": {
-		"2": {
+	"paramInformation": [
+		{
+			"#": "2",
 			"label": "Z-Wave notifications",
 			"description": "Set the actions sent to controller",
 			"valueSize": 1,
@@ -46,7 +46,8 @@
 				}
 			]
 		},
-		"3": {
+		{
+			"#": "3",
 			"label": "LED diode indications",
 			"description": "Set the actions which result in LED diode indications",
 			"valueSize": 1,
@@ -89,7 +90,8 @@
 				}
 			]
 		},
-		"4": {
+		{
+			"#": "4",
 			"label": "Acoustic signals",
 			"description": "Set the actions which result in acoustic signals",
 			"valueSize": 1,
@@ -132,7 +134,8 @@
 				}
 			]
 		},
-		"7": {
+		{
+			"#": "7",
 			"label": "Associations in Z-Wave network security mode",
 			"description": "Secure or non-secure commands to assoc groups",
 			"valueSize": 1,
@@ -140,7 +143,8 @@
 			"maxValue": 63,
 			"defaultValue": 63
 		},
-		"10": {
+		{
+			"#": "10",
 			"label": "Commands sent to 2nd association group (CO Alarm)",
 			"valueSize": 1,
 			"minValue": 1,
@@ -162,7 +166,8 @@
 				}
 			]
 		},
-		"11": {
+		{
+			"#": "11",
 			"label": "Value of BASIC ON command sent to 2nd assoc group",
 			"valueSize": 2,
 			"minValue": 0,
@@ -184,14 +189,16 @@
 				}
 			]
 		},
-		"12": {
+		{
+			"#": "12",
 			"label": "Value of BASIC OFF cmd sent to 2nd assoc group",
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 255,
 			"defaultValue": 0
 		},
-		"13": {
+		{
+			"#": "13",
 			"label": "Commands sent to 4th association group (CO Level)",
 			"description": "Defines cmd sent to devices in 4th association group",
 			"valueSize": 1,
@@ -200,7 +207,8 @@
 			"defaultValue": 3,
 			"readOnly": true
 		},
-		"14": {
+		{
+			"#": "14",
 			"label": "CO level for sending BASIC ON to 4th assoc group",
 			"description": "Defines min level of CO concentration starting timer",
 			"valueSize": 2,
@@ -208,7 +216,8 @@
 			"maxValue": 400,
 			"defaultValue": 40
 		},
-		"15": {
+		{
+			"#": "15",
 			"label": "Time required for BASIC ON cmd to 4th assoc group",
 			"description": "Defines time of CO concentration should remain above param values",
 			"valueSize": 2,
@@ -216,21 +225,24 @@
 			"maxValue": 2880,
 			"defaultValue": 0
 		},
-		"16": {
+		{
+			"#": "16",
 			"label": "Value of BASIC ON cmd sent to 4th assoc group",
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 255,
 			"defaultValue": 255
 		},
-		"17": {
+		{
+			"#": "17",
 			"label": "CO Level for sending BASIC OFF to 4th assoc group",
 			"valueSize": 2,
 			"minValue": 10,
 			"maxValue": 400,
 			"defaultValue": 25
 		},
-		"19": {
+		{
+			"#": "19",
 			"label": "Value of BASIC OFF cmd sent to 4th assoc group",
 			"valueSize": 2,
 			"minValue": 0,
@@ -238,7 +250,8 @@
 			"defaultValue": 0,
 			"readOnly": true
 		},
-		"20": {
+		{
+			"#": "20",
 			"label": "Temperature reporting time interval",
 			"description": "Time interval between consecutive reports of temperature",
 			"valueSize": 2,
@@ -246,7 +259,8 @@
 			"maxValue": 1440,
 			"defaultValue": 0
 		},
-		"21": {
+		{
+			"#": "21",
 			"label": "Temperature reporting hysteresis",
 			"description": "Min change in temperature resulting in a report being sent",
 			"valueSize": 1,
@@ -254,7 +268,8 @@
 			"maxValue": 20,
 			"defaultValue": 2
 		},
-		"22": {
+		{
+			"#": "22",
 			"label": "Threshold of exceeding the temperature",
 			"description": "Temp level resulting in sending actions (parameters 2, 3 and 4)",
 			"valueSize": 1,
@@ -262,7 +277,8 @@
 			"maxValue": 85,
 			"defaultValue": 55
 		},
-		"23": {
+		{
+			"#": "23",
 			"label": "CO meter activation",
 			"description": "Activates reporting of CO concentration to controller.",
 			"valueSize": 1,
@@ -270,7 +286,8 @@
 			"maxValue": 1,
 			"defaultValue": 1
 		},
-		"25": {
+		{
+			"#": "25",
 			"label": "CO level reporting hysteresis",
 			"description": "Minchange in CO concentration resulting in sending new value to controller",
 			"valueSize": 1,
@@ -278,7 +295,8 @@
 			"maxValue": 6,
 			"defaultValue": 2
 		},
-		"26": {
+		{
+			"#": "26",
 			"label": "Threshold of CO meter activation",
 			"description": "Defines CO concentration level sending a new value to controller",
 			"valueSize": 2,
@@ -286,5 +304,5 @@
 			"maxValue": 255,
 			"defaultValue": 30
 		}
-	}
+	]
 }

@@ -14,17 +14,20 @@
 		"min": "0.0",
 		"max": "255.255"
 	},
-	"paramInformation": {
-		"14": {
+	"paramInformation": [
+		{
+			"#": "14",
 			"$import": "templates/homeseer_template.json#enable_basic_set_command"
 		},
-		"15": {
+		{
+			"#": "15",
 			"$import": "templates/homeseer_template.json#basic_set_value"
 		},
-		"32": {
+		{
+			"#": "32",
 			"$import": "templates/homeseer_template.json#low_battery_level"
 		}
-	},
+	],
 	"metadata": {
 		"inclusion": "1. Insert the AAA battery.\n2. Set the Z-Wave network main controller into learning mode.\n3. Triple or single short press the Z-button.\n4. If the add for inclusion is successful, the LED will blink less than 5 seconds and then keep on 3 seconds. Otherwise, the LED will blink 5 seconds and then turn off, in which case you need to repeat the process from step 2.",
 		"exclusion": "1. Insert the AAA battery.\n2. Set the Z-Wave network main controller into learning mode.\n3. Triple clicking the Z-button.\n4. If the remove for exclusion, the LED will turn off within 1 second. Otherwise, the LED will blink 5 seconds and then turn off, in which case you need to repeat the process from step 2.",

@@ -30,8 +30,9 @@
 			"isLifeline": true
 		}
 	},
-	"paramInformation": {
-		"3": {
+	"paramInformation": [
+		{
+			"#": "3",
 			"label": "LED Light",
 			"description": "LED status when device on or off.",
 			"valueSize": 1,
@@ -59,7 +60,8 @@
 				}
 			]
 		},
-		"6": {
+		{
+			"#": "6",
 			"label": "Dim up/down rate",
 			"description": "Adjust the speed at which the ramps to a specific value",
 			"valueSize": 1,
@@ -79,7 +81,8 @@
 				}
 			]
 		},
-		"16": {
+		{
+			"#": "16",
 			"label": "Switch Mode",
 			"valueSize": 1,
 			"minValue": 0,
@@ -98,7 +101,8 @@
 				}
 			]
 		},
-		"19": {
+		{
+			"#": "19",
 			"label": "Alternate Exclusion",
 			"valueSize": 1,
 			"minValue": 0,
@@ -117,7 +121,8 @@
 				}
 			]
 		},
-		"30": {
+		{
+			"#": "30",
 			"label": "Minimum Dim Threshold",
 			"valueSize": 1,
 			"unit": "%",
@@ -126,7 +131,8 @@
 			"defaultValue": 1,
 			"unsigned": true
 		},
-		"31": {
+		{
+			"#": "31",
 			"label": "Maximum Brightness Threshold",
 			"valueSize": 1,
 			"unit": "%",
@@ -135,7 +141,8 @@
 			"defaultValue": 99,
 			"unsigned": true
 		},
-		"32": {
+		{
+			"#": "32",
 			"label": "Default Brightness Level",
 			"description": "Set the default brightness level that the dimmer will turn on when being turned on manually",
 			"valueSize": 1,
@@ -145,7 +152,7 @@
 			"defaultValue": 0,
 			"unsigned": true
 		}
-	},
+	],
 	"compat": {
 		"treatBasicSetAsEvent": true
 	},

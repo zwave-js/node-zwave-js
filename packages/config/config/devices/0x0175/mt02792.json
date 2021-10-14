@@ -13,9 +13,9 @@
 		"min": "0.0",
 		"max": "255.255"
 	},
-	"supportsZWavePlus": true,
-	"paramInformation": {
-		"1": {
+	"paramInformation": [
+		{
+			"#": "1",
 			"label": "Watt counter reporting period",
 			"description": "multiples of 5s",
 			"unit": "seconds",
@@ -30,7 +30,8 @@
 				}
 			]
 		},
-		"2": {
+		{
+			"#": "2",
 			"label": "KWh counter reporting period",
 			"description": "number of 10 minute intervals",
 			"unit": "10m",
@@ -45,7 +46,8 @@
 				}
 			]
 		},
-		"3": {
+		{
+			"#": "3",
 			"label": "Definition of warning of current load (A)",
 			"description": "1300*0.01A = 13A",
 			"unit": "0.01A",
@@ -54,14 +56,16 @@
 			"maxValue": 1300,
 			"defaultValue": 1300
 		},
-		"4": {
+		{
+			"#": "4",
 			"label": "load caution threshold",
 			"valueSize": 2,
 			"minValue": 1,
 			"maxValue": 10000,
 			"defaultValue": 10000
 		},
-		"5": {
+		{
+			"#": "5",
 			"label": "Mode for restoring status",
 			"description": "Restore switch state mode.",
 			"valueSize": 1,
@@ -84,7 +88,8 @@
 				}
 			]
 		},
-		"6": {
+		{
+			"#": "6",
 			"label": "Switch OFF mode",
 			"description": "Mode of switch off function.",
 			"valueSize": 1,
@@ -103,7 +108,8 @@
 				}
 			]
 		},
-		"7": {
+		{
+			"#": "7",
 			"label": "LED display mode",
 			"description": "Display device status",
 			"valueSize": 1,
@@ -126,7 +132,8 @@
 				}
 			]
 		},
-		"8": {
+		{
+			"#": "8",
 			"label": "Auto off timer",
 			"description": "Auto off timer. 0 will disable the auto off function.",
 			"unit": "1s",
@@ -141,7 +148,8 @@
 				}
 			]
 		},
-		"9": {
+		{
+			"#": "9",
 			"label": "Device from command status",
 			"description": "RF off command mode",
 			"valueSize": 1,
@@ -168,5 +176,5 @@
 				}
 			]
 		}
-	}
+	]
 }

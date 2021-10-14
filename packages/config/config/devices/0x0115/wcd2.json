@@ -31,8 +31,9 @@
 			"maxNodes": 8
 		}
 	},
-	"paramInformation": {
-		"1": {
+	"paramInformation": [
+		{
+			"#": "1",
 			"label": "Button 1 and 3 pair mode",
 			"valueSize": 1,
 			"minValue": 0,
@@ -55,7 +56,8 @@
 				}
 			]
 		},
-		"2": {
+		{
+			"#": "2",
 			"label": "Button 2 and 4 pair mode",
 			"valueSize": 1,
 			"minValue": 0,
@@ -78,7 +80,8 @@
 				}
 			]
 		},
-		"11": {
+		{
+			"#": "11",
 			"label": "Action on group 1",
 			"valueSize": 1,
 			"minValue": 0,
@@ -113,7 +116,8 @@
 				}
 			]
 		},
-		"12": {
+		{
+			"#": "12",
 			"label": "Action on group 2",
 			"valueSize": 1,
 			"minValue": 0,
@@ -148,7 +152,8 @@
 				}
 			]
 		},
-		"13": {
+		{
+			"#": "13",
 			"label": "Action on group 3",
 			"valueSize": 1,
 			"minValue": 0,
@@ -183,7 +188,8 @@
 				}
 			]
 		},
-		"14": {
+		{
+			"#": "14",
 			"label": "Action on group 4",
 			"valueSize": 1,
 			"minValue": 0,
@@ -218,7 +224,8 @@
 				}
 			]
 		},
-		"20": {
+		{
+			"#": "20",
 			"label": "Typical click timeout",
 			"description": "Typical time used to differentiate click, hold and double clicks in 10ms units",
 			"valueSize": 1,
@@ -227,7 +234,8 @@
 			"defaultValue": 50,
 			"unsigned": true
 		},
-		"21": {
+		{
+			"#": "21",
 			"label": "Send the following Switch All commands",
 			"valueSize": 1,
 			"minValue": 0,
@@ -250,7 +258,8 @@
 				}
 			]
 		},
-		"22": {
+		{
+			"#": "22",
 			"label": "Invert buttons",
 			"valueSize": 1,
 			"minValue": 0,
@@ -269,7 +278,8 @@
 				}
 			]
 		},
-		"24": {
+		{
+			"#": "24",
 			"label": "Led Confirmation Mode",
 			"description": "This allows to save battery",
 			"valueSize": 1,
@@ -293,7 +303,8 @@
 				}
 			]
 		},
-		"30": {
+		{
+			"#": "30",
 			"label": "Send unsolicited Battery Report on Wake Up",
 			"valueSize": 1,
 			"minValue": 0,
@@ -316,5 +327,5 @@
 				}
 			]
 		}
-	}
+	]
 }

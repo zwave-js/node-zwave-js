@@ -13,9 +13,9 @@
 		"min": "0.0",
 		"max": "255.255"
 	},
-	"supportsZWavePlus": true,
-	"paramInformation": {
-		"1": {
+	"paramInformation": [
+		{
+			"#": "1",
 			"label": "Group 2 Command Type",
 			"description": "Select what type of command to be sent to nodes in association group 2",
 			"valueSize": 1,
@@ -42,7 +42,8 @@
 				}
 			]
 		},
-		"2": {
+		{
+			"#": "2",
 			"label": "Group 2 Value",
 			"description": "Select what value that should be sent to association group 2",
 			"valueSize": 1,
@@ -57,7 +58,8 @@
 				}
 			]
 		},
-		"3": {
+		{
+			"#": "3",
 			"label": "Group 2 Signal Type",
 			"description": "Type of commands to association group 2",
 			"valueSize": 1,
@@ -76,7 +78,8 @@
 				}
 			]
 		},
-		"4": {
+		{
+			"#": "4",
 			"label": "Group 3 Command Type",
 			"description": "Select what type of command to be sent to nodes in association group 3",
 			"valueSize": 1,
@@ -103,7 +106,8 @@
 				}
 			]
 		},
-		"5": {
+		{
+			"#": "5",
 			"label": "Group 3 Value",
 			"description": "Select what value that should be sent to association group 3",
 			"valueSize": 1,
@@ -118,7 +122,8 @@
 				}
 			]
 		},
-		"6": {
+		{
+			"#": "6",
 			"label": "Group 3 Signal Type",
 			"description": "Type of commands to association group 3",
 			"valueSize": 1,
@@ -137,7 +142,8 @@
 				}
 			]
 		},
-		"7": {
+		{
+			"#": "7",
 			"label": "LED-Indicator",
 			"valueSize": 1,
 			"minValue": 0,
@@ -155,7 +161,8 @@
 				}
 			]
 		},
-		"8": {
+		{
+			"#": "8",
 			"label": "Lifeline command Type",
 			"description": "Select the type of command to be sent in the Lifeline",
 			"valueSize": 1,
@@ -174,5 +181,5 @@
 				}
 			]
 		}
-	}
+	]
 }

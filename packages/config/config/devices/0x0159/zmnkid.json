@@ -13,9 +13,9 @@
 		"min": "0.0",
 		"max": "255.255"
 	},
-	"supportsZWavePlus": true,
-	"paramInformation": {
-		"1": {
+	"paramInformation": [
+		{
+			"#": "1",
 			"label": "Input I1 switch type",
 			"valueSize": 1,
 			"minValue": 0,
@@ -33,7 +33,8 @@
 				}
 			]
 		},
-		"4": {
+		{
+			"#": "4",
 			"label": "Input 1 contact type",
 			"valueSize": 1,
 			"minValue": 0,
@@ -51,42 +52,48 @@
 				}
 			]
 		},
-		"40": {
+		{
+			"#": "40",
 			"label": "Power Consumption Reporting Threshold",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 100,
 			"defaultValue": 10
 		},
-		"42": {
+		{
+			"#": "42",
 			"label": "Power Consumption Reporting(Time)",
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 32767,
 			"defaultValue": 600
 		},
-		"43": {
+		{
+			"#": "43",
 			"label": "Hysteresis Upper temperature offset",
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 450,
 			"defaultValue": 5
 		},
-		"44": {
+		{
+			"#": "44",
 			"label": "Hysteresis Lower temperature offset",
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 450,
 			"defaultValue": 5
 		},
-		"45": {
+		{
+			"#": "45",
 			"label": "Antifreeze",
 			"valueSize": 2,
 			"minValue": -125,
 			"maxValue": 1000,
 			"defaultValue": 50
 		},
-		"59": {
+		{
+			"#": "59",
 			"label": "Thermostat mode",
 			"valueSize": 1,
 			"minValue": 0,
@@ -104,21 +111,24 @@
 				}
 			]
 		},
-		"60": {
+		{
+			"#": "60",
 			"label": "Too low temperature limit",
 			"valueSize": 2,
 			"minValue": -150,
 			"maxValue": 2120,
 			"defaultValue": 50
 		},
-		"61": {
+		{
+			"#": "61",
 			"label": "Too high temperature limit",
 			"valueSize": 2,
 			"minValue": 1,
 			"maxValue": 2120,
 			"defaultValue": 700
 		},
-		"63": {
+		{
+			"#": "63",
 			"label": "Output switch selection",
 			"valueSize": 1,
 			"minValue": 0,
@@ -136,7 +146,8 @@
 				}
 			]
 		},
-		"78": {
+		{
+			"#": "78",
 			"label": "Scale Selection",
 			"valueSize": 1,
 			"minValue": 0,
@@ -154,19 +165,21 @@
 				}
 			]
 		},
-		"110": {
+		{
+			"#": "110",
 			"label": "Temperature Sensor Offset Settings",
 			"valueSize": 2,
 			"minValue": -270,
 			"maxValue": 270,
 			"defaultValue": 0
 		},
-		"120": {
+		{
+			"#": "120",
 			"label": "Temperature Sensor Reporting Threshold",
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 270,
 			"defaultValue": 5
 		}
-	}
+	]
 }

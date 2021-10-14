@@ -13,9 +13,9 @@
 		"min": "0.0",
 		"max": "255.255"
 	},
-	"supportsZWavePlus": true,
-	"paramInformation": {
-		"1": {
+	"paramInformation": [
+		{
+			"#": "1",
 			"label": "Power On State",
 			"valueSize": 1,
 			"minValue": 0,
@@ -37,7 +37,8 @@
 				}
 			]
 		},
-		"2": {
+		{
+			"#": "2",
 			"label": "Invert Switch",
 			"valueSize": 1,
 			"minValue": 0,
@@ -55,7 +56,8 @@
 				}
 			]
 		},
-		"3": {
+		{
+			"#": "3",
 			"label": "Auto Off Timer",
 			"unit": "seconds",
 			"valueSize": 2,
@@ -63,14 +65,16 @@
 			"maxValue": 32767,
 			"defaultValue": 0
 		},
-		"4": {
+		{
+			"#": "4",
 			"label": "Association Behavior",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 15,
 			"defaultValue": 15
 		},
-		"5": {
+		{
+			"#": "5",
 			"label": "LED Indicator Color",
 			"description": "Uses a scaled hue value (realHue / 360 * 255).",
 			"valueSize": 2,
@@ -117,7 +121,8 @@
 				}
 			]
 		},
-		"6": {
+		{
+			"#": "6",
 			"label": "LED Indicator Brightness",
 			"valueSize": 1,
 			"minValue": 0,
@@ -171,7 +176,8 @@
 				}
 			]
 		},
-		"7": {
+		{
+			"#": "7",
 			"label": "LED Indicator Brightness When Off",
 			"valueSize": 1,
 			"minValue": 0,
@@ -225,7 +231,8 @@
 				}
 			]
 		},
-		"9": {
+		{
+			"#": "9",
 			"label": "LED Strip Timeout",
 			"unit": "seconds",
 			"valueSize": 1,
@@ -280,7 +287,8 @@
 				}
 			]
 		},
-		"10": {
+		{
+			"#": "10",
 			"label": "Active Power Reports",
 			"unit": "%",
 			"valueSize": 1,
@@ -288,7 +296,8 @@
 			"maxValue": 100,
 			"defaultValue": 10
 		},
-		"11": {
+		{
+			"#": "11",
 			"label": "Periodic Power & Energy Reports",
 			"unit": "seconds",
 			"valueSize": 2,
@@ -296,7 +305,8 @@
 			"maxValue": 32767,
 			"defaultValue": 3600
 		},
-		"12": {
+		{
+			"#": "12",
 			"label": "Energy Reports",
 			"unit": "%",
 			"valueSize": 1,
@@ -304,7 +314,8 @@
 			"maxValue": 100,
 			"defaultValue": 10
 		},
-		"13": {
+		{
+			"#": "13",
 			"$if": "firmwareVersion >= 1.17",
 			"label": "Load Type",
 			"valueSize": 1,
@@ -323,7 +334,8 @@
 				}
 			]
 		},
-		"51": {
+		{
+			"#": "51",
 			"$if": "firmwareVersion >= 1.19",
 			"label": "Instant On",
 			"description": "Enabling this disables the 700ms button delay and multi-tap scenes.",
@@ -343,7 +355,8 @@
 				}
 			]
 		},
-		"8[0xff]": {
+		{
+			"#": "8[0xff]",
 			"label": "LED Effect Color",
 			"description": "Uses a scaled hue value (realHue / 360 * 255).",
 			"valueSize": 4,
@@ -385,7 +398,8 @@
 				}
 			]
 		},
-		"8[0xff00]": {
+		{
+			"#": "8[0xff00]",
 			"label": "LED Effect Brightness",
 			"valueSize": 4,
 			"minValue": 0,
@@ -439,7 +453,8 @@
 				}
 			]
 		},
-		"8[0xff0000]": {
+		{
+			"#": "8[0xff0000]",
 			"label": "LED Effect Duration",
 			"description": "0 = disabled, 1 to 60 = seconds, 61 to 120 = minutes (minus 60), 121 - 254 = hours (minus 120), 255 = indefinitely",
 			"valueSize": 4,
@@ -447,7 +462,8 @@
 			"maxValue": 255,
 			"defaultValue": 255
 		},
-		"8[0x7f000000]": {
+		{
+			"#": "8[0x7f000000]",
 			"label": "LED Effect Type",
 			"valueSize": 4,
 			"minValue": 0,
@@ -477,5 +493,5 @@
 				}
 			]
 		}
-	}
+	]
 }

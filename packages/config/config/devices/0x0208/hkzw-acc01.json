@@ -13,9 +13,9 @@
 		"min": "0.0",
 		"max": "255.255"
 	},
-	"supportsZWavePlus": true,
-	"paramInformation": {
-		"93": {
+	"paramInformation": [
+		{
+			"#": "93",
 			"label": "Clear IR information",
 			"valueSize": 4,
 			"minValue": 1,
@@ -28,7 +28,8 @@
 				}
 			]
 		},
-		"254": {
+		{
+			"#": "254",
 			"label": "Enable/Disable configuration",
 			"valueSize": 1,
 			"minValue": 0,
@@ -46,7 +47,8 @@
 				}
 			]
 		},
-		"255": {
+		{
+			"#": "255",
 			"label": "Reset & remove from Z-Wave network",
 			"valueSize": 4,
 			"minValue": 1,
@@ -59,5 +61,5 @@
 				}
 			]
 		}
-	}
+	]
 }

@@ -14,8 +14,9 @@
 		"min": "0.0",
 		"max": "255.255"
 	},
-	"paramInformation": {
-		"1": {
+	"paramInformation": [
+		{
+			"#": "1",
 			"label": "Heartbeat Notification Rate",
 			"valueSize": 2,
 			"unit": "minutes",
@@ -24,7 +25,7 @@
 			"defaultValue": 60,
 			"unsigned": true
 		}
-	},
+	],
 	"metadata": {
 		"inclusion": "Inclusion (Add)\nTo include (Add) the device to a Z-Wave network, press the button four times in quick succession. When the device is in Add mode, the LED flashes green. When finished, the new status is:\nAdd: The LED lights up briefly in green\nRemove: The LED lights up briefly in red",
 		"exclusion": "Exclusion (Remove)\nTo exclude (Remove) the device from a Z-Wave network, press the button four times in quick succession. When the device is in Add mode, the LED flashes green. When finished, the new status is:\nAdd: The LED lights up briefly in green\nRemove: The LED lights up briefly in red",

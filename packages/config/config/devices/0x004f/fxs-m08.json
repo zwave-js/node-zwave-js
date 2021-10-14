@@ -14,8 +14,9 @@
 		"min": "0.0",
 		"max": "255.255"
 	},
-	"paramInformation": {
-		"1": {
+	"paramInformation": [
+		{
+			"#": "1",
 			"label": "Watt Meter Report Period",
 			"description": "5*720s=3600s=1 hour",
 			"valueSize": 2,
@@ -25,7 +26,8 @@
 			"defaultValue": 720,
 			"unsigned": true
 		},
-		"2": {
+		{
+			"#": "2",
 			"label": "Kwh Meter Report Period",
 			"description": "6*10min= 1 hour",
 			"valueSize": 2,
@@ -35,7 +37,8 @@
 			"defaultValue": 6,
 			"unsigned": true
 		},
-		"3": {
+		{
+			"#": "3",
 			"label": "Threshold of Current For Load Caution",
 			"description": "500*0.01a=5a",
 			"valueSize": 2,
@@ -44,7 +47,8 @@
 			"defaultValue": 500,
 			"unsigned": true
 		},
-		"4": {
+		{
+			"#": "4",
 			"label": "Threshold of Kwh For Load Caution",
 			"description": "10000 * 1kwh = 10000 kwh",
 			"valueSize": 2,
@@ -53,7 +57,8 @@
 			"defaultValue": 10000,
 			"unsigned": true
 		},
-		"5": {
+		{
+			"#": "5",
 			"label": "External Switch Type",
 			"description": "1. one push button：  when the configuration setting is one push button, only s1 input will be valid. the control moving commands can be accepted in this switch type while the shutter is moving. in this switch type, the inclusion/exclusion/reset/association function can also be fulfilled by pressing s1 just like the operation of include button. when s1 is short pressed, the shutter will move up toward top(0x63). while in this moving s1 is short pressed again, the shutter will stop moving. a third short pressing of s1 will move the shutter down toward bottom(0x00). while in this moving s1 is short pressed again, the shutter will stop moving. and so on… inverting direction and stopping.   2. two push button： (the default setting is two push button (2))  if this setting is configured as two push button, s1 and s2 input will be valid, but will not accept pressing s1and s2 at the same time. in this switch type, the inclusion/exclusion/reset/association function can also be fulfilled by pressing s1 or s2 just like the operation of include button.  when s1 is pressed and hold more than 1.5 seconds, the shutter will move up toward top(0x63), and the shutter will stop moving when s1 is released. when s2 is pressed and hold more than 1.5 seconds, the shutter will move down toward bottom(0x00), and the shutter will stop moving when s2 is released.   when s1 is short pressed, the shutter will move up toward top(0x63). while in this moving short pressed s1 again, the shutter just keep moving up toward top(0x63). the easy way to stop this moving is short pressing s2. when s2 is short pressed, the shutter will move down toward botton(0x00). while in this moving short pressed s2 again, the shutter just keep moving down toward botton(0x00). the easy way to stop this moving is short pressing s1.    when in two push button switch type, s1 or s2 are pressed and not released, and fxs-m08 receive any control moving command from Z-Wave rf (ex. basic_set、binary_switch_set、multilevel_switch_set、multilevel_switch_start_level_change or multilevel_switch_stop_level_change or scene_activation_set), fxs-m08 won’t do any change in position but report alarm to group1 (alarm_type=1, alarm_level =0xff), this indicate that the s1 or s2 not been release.  att. : for avoid misunderstanding that rf command dose not work, it is recommended to check the status of s1 and s2",
 			"valueSize": 1,
@@ -74,7 +79,8 @@
 				}
 			]
 		},
-		"6": {
+		{
+			"#": "6",
 			"label": "Level Report Mode",
 			"description": "Mode 1 : in 5 seconds period after controlled by a moving command, it will report the destination level when received request command. out of the 5 seconds period, it will report the actual level of the shutter when received request command.  mode 2 : whenever the shutter move pass a 10 percent level, it will auto report the level to group 1 node",
 			"valueSize": 1,
@@ -95,7 +101,7 @@
 				}
 			]
 		}
-	},
+	],
 	"metadata": {
 		"inclusion": "1. Put your Z-Wave controller into inclusion mode by following the instructions provided by the controller manufacturer. \n2. Pressing Include button three times within 2 seconds will enter inclusion mode",
 		"exclusion": "1. Put your Z-Wave controller into exclusion mode by following the instructions provided by the controller manufacturer. \n2. Pressing Include button three times within 2 seconds will enter exclusion mode",

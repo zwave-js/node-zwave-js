@@ -14,8 +14,9 @@
 		"min": "0.0",
 		"max": "255.255"
 	},
-	"paramInformation": {
-		"2": {
+	"paramInformation": [
+		{
+			"#": "2",
 			"label": "State After Power Outage",
 			"valueSize": 1,
 			"minValue": 0,
@@ -34,7 +35,7 @@
 				}
 			]
 		}
-	},
+	],
 	"metadata": {
 		"inclusion": "With the power to the smart bulb turned off, start the inclusion process on your HUB/Gateway.\nOnce the inclusion process has started, turn on power to the bulb and it will blink twice (2x) indicating it’s in inclusion mode. If the bulb was included successfully, it will blink one more (1x) time. If it was not included successfully, you may have to run an exclusion as mentioned above. If there’s still issues, please ensure your bulb is within range",
 		"exclusion": "If you are having issues pairing/including your device, please ensure your bulb is within range of your HUB (pages 2-3). If you believe you’re within range and it’s still not working, then you may have to run an Exclusion. Put your HUB in Exclusion mode and turn the power on. Your bulb will blink twice (2x), indicating it’s in exclusion mode. When exclusion is successful, it will blink one more time (1x) to confirm. Your HUB should say that the device is excluded",

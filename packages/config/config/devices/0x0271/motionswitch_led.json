@@ -13,9 +13,9 @@
 		"min": "0.0",
 		"max": "255.255"
 	},
-	"supportsZWavePlus": true,
-	"paramInformation": {
-		"1": {
+	"paramInformation": [
+		{
+			"#": "1",
 			"label": "TIME",
 			"description": "Duration of light after motion detection [s]",
 			"unit": "s",
@@ -30,7 +30,8 @@
 				}
 			]
 		},
-		"2": {
+		{
+			"#": "2",
 			"label": "LIGHT",
 			"description": "Light threshold [lx]",
 			"unit": "lx",
@@ -45,7 +46,8 @@
 				}
 			]
 		},
-		"5": {
+		{
+			"#": "5",
 			"label": "SENSITIVITY",
 			"description": "Motion Radar Sensitivity [%]",
 			"unit": "%",
@@ -54,7 +56,8 @@
 			"maxValue": 100,
 			"defaultValue": 100
 		},
-		"6": {
+		{
+			"#": "6",
 			"label": "Brightness measuring interval",
 			"unit": "minutes",
 			"valueSize": 1,
@@ -62,7 +65,8 @@
 			"maxValue": 120,
 			"defaultValue": 0
 		},
-		"8": {
+		{
+			"#": "8",
 			"label": "GLOBAL_LIGHT",
 			"description": "Use external Ambient Light Value",
 			"valueSize": 1,
@@ -70,7 +74,8 @@
 			"maxValue": 1,
 			"defaultValue": 1
 		},
-		"9": {
+		{
+			"#": "9",
 			"label": "SLAVE_MODE",
 			"description": "Disable local control",
 			"valueSize": 1,
@@ -78,7 +83,8 @@
 			"maxValue": 4,
 			"defaultValue": 2
 		},
-		"10": {
+		{
+			"#": "10",
 			"label": "OFF_BEHAVIOUR",
 			"description": "Off behaviour ( timeout )",
 			"valueSize": 2,
@@ -86,7 +92,8 @@
 			"maxValue": 209,
 			"defaultValue": 10
 		},
-		"11": {
+		{
+			"#": "11",
 			"label": "ON_BEHAVIOUR",
 			"description": "On behaviour ( timeout )",
 			"valueSize": 2,
@@ -94,7 +101,8 @@
 			"maxValue": 255,
 			"defaultValue": 255
 		},
-		"12": {
+		{
+			"#": "12",
 			"label": "ON_TIME_OVER",
 			"description": "On behaviour time over ( timeout )",
 			"valueSize": 2,
@@ -102,7 +110,8 @@
 			"maxValue": 209,
 			"defaultValue": 204
 		},
-		"13": {
+		{
+			"#": "13",
 			"label": "ON_OFF_BEHAVIOUR",
 			"description": "Sequence On-Off behaviour ( timeout )",
 			"valueSize": 2,
@@ -110,7 +119,8 @@
 			"maxValue": 209,
 			"defaultValue": 204
 		},
-		"14": {
+		{
+			"#": "14",
 			"label": "OFF_ON_BEHAVIOUR",
 			"description": "Sequence Off-On behaviour ( timeout )",
 			"valueSize": 2,
@@ -118,7 +128,8 @@
 			"maxValue": 209,
 			"defaultValue": 204
 		},
-		"15": {
+		{
+			"#": "15",
 			"label": "SEQUENCE_TIME",
 			"description": "Sequence Off-On behaviour ( timeout )",
 			"unit": "100 ms",
@@ -127,7 +138,8 @@
 			"maxValue": 50,
 			"defaultValue": 10
 		},
-		"16": {
+		{
+			"#": "16",
 			"label": "MOTION_DISABLE",
 			"description": "Motion Off behaviour ( timeout )",
 			"valueSize": 2,
@@ -135,7 +147,8 @@
 			"maxValue": 209,
 			"defaultValue": 0
 		},
-		"17": {
+		{
+			"#": "17",
 			"label": "BUTTON_BEHAVIOUR",
 			"description": "Toggle button behaviour",
 			"valueSize": 1,
@@ -143,7 +156,8 @@
 			"maxValue": 31,
 			"defaultValue": 8
 		},
-		"18": {
+		{
+			"#": "18",
 			"label": "BUTTON_SCENES",
 			"description": "Toggle button Scene 1-4",
 			"valueSize": 1,
@@ -151,7 +165,8 @@
 			"maxValue": 127,
 			"defaultValue": 1
 		},
-		"19": {
+		{
+			"#": "19",
 			"label": "LEGACY_INACTIVITY_TIME )",
 			"description": "Toggle button inactivity time in \"legacy\" mode ( timeout )",
 			"valueSize": 2,
@@ -159,5 +174,5 @@
 			"maxValue": 209,
 			"defaultValue": 103
 		}
-	}
+	]
 }

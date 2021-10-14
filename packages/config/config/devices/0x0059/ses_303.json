@@ -13,9 +13,9 @@
 		"min": "0.0",
 		"max": "255.255"
 	},
-	"supportsZWavePlus": true,
-	"paramInformation": {
-		"1": {
+	"paramInformation": [
+		{
+			"#": "1",
 			"label": "Delta Temp",
 			"description": "Precision of measured temperature (delta)",
 			"unit": "Celcius degrees",
@@ -25,7 +25,8 @@
 			"defaultValue": 0,
 			"unsigned": true
 		},
-		"2": {
+		{
+			"#": "2",
 			"label": "Temp Reporting Interval",
 			"description": "Reporting interval in minutes",
 			"unit": "Mins",
@@ -35,7 +36,8 @@
 			"defaultValue": 5,
 			"unsigned": true
 		},
-		"3": {
+		{
+			"#": "3",
 			"label": "Delta Humidity",
 			"description": "Precision of measured humidity (delta)",
 			"unit": "RH %",
@@ -45,7 +47,8 @@
 			"defaultValue": 5,
 			"unsigned": true
 		},
-		"4": {
+		{
+			"#": "4",
 			"label": "Humidity Reporting Interval",
 			"description": "Reporting interval in minutes",
 			"unit": "Mins",
@@ -55,5 +58,5 @@
 			"defaultValue": 5,
 			"unsigned": true
 		}
-	}
+	]
 }

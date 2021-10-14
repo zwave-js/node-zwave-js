@@ -21,9 +21,9 @@
 		"min": "0.0",
 		"max": "255.255"
 	},
-	"supportsZWavePlus": true,
-	"paramInformation": {
-		"20": {
+	"paramInformation": [
+		{
+			"#": "20",
 			"label": "Input 1 - operating mode",
 			"description": "mode of 1st input",
 			"valueSize": 1,
@@ -58,7 +58,8 @@
 				}
 			]
 		},
-		"21": {
+		{
+			"#": "21",
 			"label": "Input 2 - operating mode",
 			"description": "mode of 2nd input",
 			"valueSize": 1,
@@ -93,7 +94,8 @@
 				}
 			]
 		},
-		"24": {
+		{
+			"#": "24",
 			"label": "Inputs orientation",
 			"description": "reversing operation of IN1 and IN2 inputs",
 			"valueSize": 1,
@@ -112,7 +114,8 @@
 				}
 			]
 		},
-		"25": {
+		{
+			"#": "25",
 			"label": "Outputs orientation",
 			"description": "reversing operation of OUT1 and OUT2 outputs",
 			"valueSize": 1,
@@ -131,7 +134,8 @@
 				}
 			]
 		},
-		"47": {
+		{
+			"#": "47",
 			"label": "Input 1 - 2nd group, activated",
 			"description": "value sent to 2nd association group when activated",
 			"valueSize": 2,
@@ -139,7 +143,8 @@
 			"maxValue": 255,
 			"defaultValue": 255
 		},
-		"49": {
+		{
+			"#": "49",
 			"label": "Input 1 - 2nd group, deactivated",
 			"description": "value sent to 2nd association group when deactivated",
 			"valueSize": 2,
@@ -147,7 +152,8 @@
 			"maxValue": 255,
 			"defaultValue": 0
 		},
-		"52": {
+		{
+			"#": "52",
 			"label": "Input 2 - 3rd group, activated",
 			"description": "value sent to 3rd association group when activated",
 			"valueSize": 2,
@@ -155,7 +161,8 @@
 			"maxValue": 255,
 			"defaultValue": 255
 		},
-		"54": {
+		{
+			"#": "54",
 			"label": "Input 2 - 3rd group, deactivated",
 			"description": "value sent to 3rd association group when deactivated",
 			"valueSize": 2,
@@ -163,7 +170,8 @@
 			"maxValue": 255,
 			"defaultValue": 0
 		},
-		"63": {
+		{
+			"#": "63",
 			"label": "Analog inputs - minimal change to report",
 			"description": "minimal change",
 			"unit": "deciVolts",
@@ -172,7 +180,8 @@
 			"maxValue": 100,
 			"defaultValue": 5
 		},
-		"64": {
+		{
+			"#": "64",
 			"label": "Analog inputs - periodical reports",
 			"unit": "seconds",
 			"valueSize": 2,
@@ -180,7 +189,8 @@
 			"maxValue": 32400,
 			"defaultValue": 0
 		},
-		"65": {
+		{
+			"#": "65",
 			"label": "Temperature sensor threshold",
 			"description": "Internal temperature sensor - minimal change to report",
 			"unit": "deciGrades",
@@ -189,7 +199,8 @@
 			"maxValue": 255,
 			"defaultValue": 5
 		},
-		"66": {
+		{
+			"#": "66",
 			"label": "Temperatur sensor period",
 			"description": "Internal temperature sensor - periodical reports",
 			"unit": "seconds",
@@ -198,14 +209,16 @@
 			"maxValue": 32400,
 			"defaultValue": 0
 		},
-		"67": {
+		{
+			"#": "67",
 			"label": "External sensors threshold",
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 255,
 			"defaultValue": 5
 		},
-		"68": {
+		{
+			"#": "68",
 			"label": "External sensors - periodical reports",
 			"description": "reporting period of analog inputs value",
 			"unit": "seconds",
@@ -214,7 +227,8 @@
 			"maxValue": 32400,
 			"defaultValue": 0
 		},
-		"150": {
+		{
+			"#": "150",
 			"label": "Input 1 - sensitivity",
 			"description": "inertia time of IN1 input in alarm modes",
 			"valueSize": 1,
@@ -222,7 +236,8 @@
 			"maxValue": 100,
 			"defaultValue": 10
 		},
-		"151": {
+		{
+			"#": "151",
 			"label": "Input 2 - sensitivity",
 			"description": "inertia time of IN2 input in alarm modes",
 			"valueSize": 1,
@@ -230,7 +245,8 @@
 			"maxValue": 100,
 			"defaultValue": 10
 		},
-		"152": {
+		{
+			"#": "152",
 			"label": "Input 1 - delay of alarm cancellation",
 			"description": "additional delay of cancelling the alarm on IN1 input",
 			"valueSize": 2,
@@ -238,7 +254,8 @@
 			"maxValue": 3600,
 			"defaultValue": 0
 		},
-		"153": {
+		{
+			"#": "153",
 			"label": "Input 2 - delay of alarm cancellation",
 			"description": "additional delay of cancelling the alarm on IN2 input",
 			"valueSize": 2,
@@ -246,7 +263,8 @@
 			"maxValue": 3600,
 			"defaultValue": 0
 		},
-		"154": {
+		{
+			"#": "154",
 			"label": "Output 1 - logic of operation",
 			"description": "logic of OUT1 output operation",
 			"valueSize": 1,
@@ -265,7 +283,8 @@
 				}
 			]
 		},
-		"155": {
+		{
+			"#": "155",
 			"label": "Output 2 - logic of operation",
 			"description": "OUT2 output operation",
 			"valueSize": 1,
@@ -284,7 +303,8 @@
 				}
 			]
 		},
-		"156": {
+		{
+			"#": "156",
 			"label": "Output 1 - auto off",
 			"description": "OUT1 automatically deactivated",
 			"valueSize": 2,
@@ -292,7 +312,8 @@
 			"maxValue": 27000,
 			"defaultValue": 0
 		},
-		"157": {
+		{
+			"#": "157",
 			"label": "Output 2 - auto off",
 			"description": "OUT2 automatically deactivated",
 			"unit": "deciseconds",
@@ -301,7 +322,8 @@
 			"maxValue": 27000,
 			"defaultValue": 0
 		},
-		"40": {
+		{
+			"#": "40",
 			"label": "Input 1 - sent scenes",
 			"description": "sending scene ID",
 			"valueSize": 1,
@@ -327,7 +349,8 @@
 				}
 			]
 		},
-		"41": {
+		{
+			"#": "41",
 			"label": "Input 2 - sent scenes",
 			"description": "sending scene ID",
 			"valueSize": 1,
@@ -353,5 +376,5 @@
 				}
 			]
 		}
-	}
+	]
 }

@@ -13,9 +13,9 @@
 		"min": "0.0",
 		"max": "255.255"
 	},
-	"supportsZWavePlus": true,
-	"paramInformation": {
-		"1": {
+	"paramInformation": [
+		{
+			"#": "1",
 			"label": "In-wall Switch Type for Load to control I1",
 			"unit": "/",
 			"valueSize": 1,
@@ -34,7 +34,8 @@
 				}
 			]
 		},
-		"5": {
+		{
+			"#": "5",
 			"label": "Working mode",
 			"valueSize": 1,
 			"minValue": 0,
@@ -52,21 +53,24 @@
 				}
 			]
 		},
-		"11": {
+		{
+			"#": "11",
 			"label": "Turn Load 1 Off Automatically with Timer",
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 32536,
 			"defaultValue": 0
 		},
-		"12": {
+		{
+			"#": "12",
 			"label": "Turn Load 1 On Automatically with Timer",
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 32536,
 			"defaultValue": 0
 		},
-		"21": {
+		{
+			"#": "21",
 			"label": "Enable/Disable the Double click function",
 			"valueSize": 1,
 			"minValue": 0,
@@ -84,52 +88,60 @@
 				}
 			]
 		},
-		"30": {
+		{
+			"#": "30",
 			"$import": "~/templates/master_template.json#state_after_power_failure_prev_off"
 		},
-		"40": {
+		{
+			"#": "40",
 			"label": "Power Consumption Threshold",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 100,
 			"defaultValue": 10
 		},
-		"42": {
+		{
+			"#": "42",
 			"label": "Power Consumption Threshold (time)",
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 32767,
 			"defaultValue": 0
 		},
-		"60": {
+		{
+			"#": "60",
 			"label": "Minimum dimming value",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 98,
 			"defaultValue": 0
 		},
-		"61": {
+		{
+			"#": "61",
 			"label": "Maximum dimming value",
 			"valueSize": 1,
 			"minValue": 1,
 			"maxValue": 99,
 			"defaultValue": 1
 		},
-		"65": {
+		{
+			"#": "65",
 			"label": "Dimming time when key pressed",
 			"valueSize": 1,
 			"minValue": 1,
 			"maxValue": 127,
 			"defaultValue": 1
 		},
-		"66": {
+		{
+			"#": "66",
 			"label": "Dimming time when key hold",
 			"valueSize": 2,
 			"minValue": 1,
 			"maxValue": 127,
 			"defaultValue": 3
 		},
-		"67": {
+		{
+			"#": "67",
 			"label": "Ignore start level",
 			"valueSize": 1,
 			"minValue": 0,
@@ -147,21 +159,24 @@
 				}
 			]
 		},
-		"68": {
+		{
+			"#": "68",
 			"label": "Dimming duration",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 127,
 			"defaultValue": 0
 		},
-		"70": {
+		{
+			"#": "70",
 			"label": "Overload safety switch",
 			"valueSize": 2,
 			"minValue": 1,
 			"maxValue": 200,
 			"defaultValue": 200
 		},
-		"71": {
+		{
+			"#": "71",
 			"label": "Calibration trigger",
 			"valueSize": 1,
 			"minValue": 0,
@@ -183,7 +198,8 @@
 				}
 			]
 		},
-		"72": {
+		{
+			"#": "72",
 			"label": "Calibration status (read only)",
 			"valueSize": 1,
 			"minValue": 1,
@@ -202,19 +218,21 @@
 				}
 			]
 		},
-		"73": {
+		{
+			"#": "73",
 			"label": "Alarm/Notification events",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 3,
 			"defaultValue": 0
 		},
-		"74": {
+		{
+			"#": "74",
 			"label": "Alarm/Notification time interval",
 			"valueSize": 1,
 			"minValue": 1,
 			"maxValue": 125,
 			"defaultValue": 10
 		}
-	}
+	]
 }

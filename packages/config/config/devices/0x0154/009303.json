@@ -13,9 +13,9 @@
 		"min": "0.0",
 		"max": "255.255"
 	},
-	"supportsZWavePlus": true,
-	"paramInformation": {
-		"1": {
+	"paramInformation": [
+		{
+			"#": "1",
 			"label": "Button 1 and 3 pair mode",
 			"valueSize": 1,
 			"minValue": 0,
@@ -38,7 +38,8 @@
 				}
 			]
 		},
-		"2": {
+		{
+			"#": "2",
 			"label": "Button 2 and 4 pair mode",
 			"valueSize": 1,
 			"minValue": 0,
@@ -61,7 +62,8 @@
 				}
 			]
 		},
-		"11": {
+		{
+			"#": "11",
 			"label": "Command to control Group A",
 			"valueSize": 1,
 			"minValue": 0,
@@ -108,7 +110,8 @@
 				}
 			]
 		},
-		"12": {
+		{
+			"#": "12",
 			"label": "Command to control Group B",
 			"valueSize": 1,
 			"minValue": 0,
@@ -155,7 +158,8 @@
 				}
 			]
 		},
-		"13": {
+		{
+			"#": "13",
 			"label": "Command to control Group C",
 			"valueSize": 1,
 			"minValue": 0,
@@ -202,7 +206,8 @@
 				}
 			]
 		},
-		"14": {
+		{
+			"#": "14",
 			"label": "Command to control Group D",
 			"valueSize": 1,
 			"minValue": 0,
@@ -249,7 +254,8 @@
 				}
 			]
 		},
-		"21": {
+		{
+			"#": "21",
 			"label": "Send the following switch all commands",
 			"valueSize": 1,
 			"minValue": 0,
@@ -272,7 +278,8 @@
 				}
 			]
 		},
-		"22": {
+		{
+			"#": "22",
 			"label": "Invert buttons",
 			"valueSize": 1,
 			"minValue": 0,
@@ -291,7 +298,8 @@
 				}
 			]
 		},
-		"25": {
+		{
+			"#": "25",
 			"label": "Block wake up even when Wake Up Interval is set",
 			"valueSize": 1,
 			"minValue": 0,
@@ -310,7 +318,8 @@
 				}
 			]
 		},
-		"30": {
+		{
+			"#": "30",
 			"label": "End unsolicited battery report on Wake Up.",
 			"valueSize": 1,
 			"minValue": 0,
@@ -333,5 +342,5 @@
 				}
 			]
 		}
-	}
+	]
 }

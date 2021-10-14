@@ -13,44 +13,49 @@
 		"min": "0.0",
 		"max": "255.255"
 	},
-	"supportsZWavePlus": true,
-	"paramInformation": {
-		"1": {
+	"paramInformation": [
+		{
+			"#": "1",
 			"label": "Remember device state",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 1,
 			"defaultValue": 1
 		},
-		"2": {
+		{
+			"#": "2",
 			"label": "Overload safety switch",
 			"valueSize": 4,
 			"minValue": 0,
 			"maxValue": 36800,
 			"defaultValue": 0
 		},
-		"10": {
+		{
+			"#": "10",
 			"label": "LED frame - power limit",
 			"valueSize": 4,
 			"minValue": 500,
 			"maxValue": 36800,
 			"defaultValue": 36800
 		},
-		"11": {
+		{
+			"#": "11",
 			"label": "LED frame - colour when ON",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 9,
 			"defaultValue": 8
 		},
-		"12": {
+		{
+			"#": "12",
 			"label": "LED frame - colour when OFF",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 7,
 			"defaultValue": 0
 		},
-		"13": {
+		{
+			"#": "13",
 			"label": "LED frame – brightness",
 			"unit": "%",
 			"valueSize": 1,
@@ -58,42 +63,48 @@
 			"maxValue": 102,
 			"defaultValue": 100
 		},
-		"30": {
+		{
+			"#": "30",
 			"label": "Alarm configuration - 1st slot",
 			"valueSize": 4,
 			"minValue": 0,
 			"maxValue": 0,
 			"defaultValue": 0
 		},
-		"31": {
+		{
+			"#": "31",
 			"label": "Alarm configuration - 2nd slot",
 			"valueSize": 4,
 			"minValue": 0,
 			"maxValue": 0,
 			"defaultValue": 0
 		},
-		"32": {
+		{
+			"#": "32",
 			"label": "Alarm configuration - 3rd slot",
 			"valueSize": 4,
 			"minValue": 0,
 			"maxValue": 0,
 			"defaultValue": 0
 		},
-		"33": {
+		{
+			"#": "33",
 			"label": "Alarm configuration - 4th slot",
 			"valueSize": 4,
 			"minValue": 0,
 			"maxValue": 0,
 			"defaultValue": 0
 		},
-		"34": {
+		{
+			"#": "34",
 			"label": "Alarm configuration - 5th slot",
 			"valueSize": 4,
 			"minValue": 0,
 			"maxValue": 0,
 			"defaultValue": 0
 		},
-		"35": {
+		{
+			"#": "35",
 			"label": "Alarm configuration – duration",
 			"unit": "s",
 			"valueSize": 2,
@@ -101,42 +112,48 @@
 			"maxValue": 32400,
 			"defaultValue": 600
 		},
-		"45": {
+		{
+			"#": "45",
 			"label": "Associations – 2nd group",
 			"valueSize": 1,
 			"minValue": 1,
 			"maxValue": 3,
 			"defaultValue": 3
 		},
-		"46": {
+		{
+			"#": "46",
 			"label": "Associations – UP threshold",
 			"valueSize": 4,
 			"minValue": 100,
 			"maxValue": 36800,
 			"defaultValue": 500
 		},
-		"47": {
+		{
+			"#": "47",
 			"label": "Associations – UP threshold frame value",
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 255,
 			"defaultValue": 255
 		},
-		"48": {
+		{
+			"#": "48",
 			"label": "Associations – DOWN threshold",
 			"valueSize": 4,
 			"minValue": 0,
 			"maxValue": 36700,
 			"defaultValue": 300
 		},
-		"60": {
+		{
+			"#": "60",
 			"label": "Power reports – include self-consumption",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 1,
 			"defaultValue": 0
 		},
-		"61": {
+		{
+			"#": "61",
 			"label": "Power reports – on change",
 			"unit": "%",
 			"valueSize": 2,
@@ -144,26 +161,29 @@
 			"maxValue": 500,
 			"defaultValue": 0
 		},
-		"62": {
+		{
+			"#": "62",
 			"label": "Power reports – periodic",
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 32400,
 			"defaultValue": 3600
 		},
-		"65": {
+		{
+			"#": "65",
 			"label": "Energy reports – on change",
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 500,
 			"defaultValue": 10
 		},
-		"66": {
+		{
+			"#": "66",
 			"label": "Energy reports – periodic",
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 32400,
 			"defaultValue": 3600
 		}
-	}
+	]
 }

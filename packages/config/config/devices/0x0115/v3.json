@@ -14,8 +14,9 @@
 		"min": "0.0",
 		"max": "255.255"
 	},
-	"paramInformation": {
-		"2": {
+	"paramInformation": [
+		{
+			"#": "2",
 			"label": "Blink With Service LED During Operation",
 			"valueSize": 1,
 			"minValue": 0,
@@ -34,7 +35,7 @@
 				}
 			]
 		}
-	},
+	],
 	"metadata": {
 		"inclusion": "Press Service button three times",
 		"exclusion": "Press Service button three times",

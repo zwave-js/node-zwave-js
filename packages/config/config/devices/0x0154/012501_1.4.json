@@ -13,9 +13,9 @@
 		"min": "1.4",
 		"max": "255.255"
 	},
-	"supportsZWavePlus": true,
-	"paramInformation": {
-		"0": {
+	"paramInformation": [
+		{
+			"#": "0",
 			"label": "Auto-Close",
 			"description": "Automated Close after Opening",
 			"unit": "seconds",
@@ -24,19 +24,21 @@
 			"maxValue": 127,
 			"defaultValue": 3
 		},
-		"1": {
+		{
+			"#": "1",
 			"label": "Value of Off-Command",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 99,
 			"defaultValue": 0
 		},
-		"2": {
+		{
+			"#": "2",
 			"label": "Value of On-Command",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 99,
 			"defaultValue": 99
 		}
-	}
+	]
 }

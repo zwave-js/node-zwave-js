@@ -13,9 +13,9 @@
 		"min": "0.0",
 		"max": "255.255"
 	},
-	"supportsZWavePlus": true,
-	"paramInformation": {
-		"1": {
+	"paramInformation": [
+		{
+			"#": "1",
 			"label": "Fade On Time",
 			"valueSize": 1,
 			"minValue": 0,
@@ -23,7 +23,8 @@
 			"defaultValue": 2,
 			"unsigned": true
 		},
-		"2": {
+		{
+			"#": "2",
 			"label": "Fade Off Time",
 			"valueSize": 1,
 			"minValue": 0,
@@ -31,28 +32,32 @@
 			"defaultValue": 2,
 			"unsigned": true
 		},
-		"3": {
+		{
+			"#": "3",
 			"label": "Minimum Light Level",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 100,
 			"defaultValue": 10
 		},
-		"4": {
+		{
+			"#": "4",
 			"label": "Maximum Light Level",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 100,
 			"defaultValue": 100
 		},
-		"5": {
+		{
+			"#": "5",
 			"label": "Preset Light Level",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 100,
 			"defaultValue": 0
 		},
-		"6": {
+		{
+			"#": "6",
 			"label": "LED Dim Level Indicator Timeout",
 			"valueSize": 1,
 			"minValue": 0,
@@ -60,7 +65,8 @@
 			"defaultValue": 3,
 			"unsigned": true
 		},
-		"7": {
+		{
+			"#": "7",
 			"label": "Locator LED Status",
 			"valueSize": 1,
 			"minValue": 0,
@@ -68,12 +74,13 @@
 			"defaultValue": 255,
 			"unsigned": true
 		},
-		"8": {
+		{
+			"#": "8",
 			"label": "Load Type",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 2,
 			"defaultValue": 0
 		}
-	}
+	]
 }

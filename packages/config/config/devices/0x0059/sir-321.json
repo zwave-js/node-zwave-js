@@ -30,8 +30,9 @@
 			"isLifeline": true
 		}
 	},
-	"paramInformation": {
-		"1": {
+	"paramInformation": [
+		{
+			"#": "1",
 			"label": "Fail Save timer",
 			"description": "Enable/Disable the Fail save timer",
 			"valueSize": 1,
@@ -40,7 +41,8 @@
 			"defaultValue": 0,
 			"unsigned": true
 		},
-		"2": {
+		{
+			"#": "2",
 			"label": "Temperature Scale",
 			"description": "Set the Temperatur scale to Celsius",
 			"valueSize": 2,
@@ -49,7 +51,8 @@
 			"maxValue": 127,
 			"defaultValue": 0
 		},
-		"3": {
+		{
+			"#": "3",
 			"label": "Temperature reporting intervals",
 			"description": "Define the time interval for the temperature report that is sent.",
 			"valueSize": 2,
@@ -58,7 +61,8 @@
 			"maxValue": 32767,
 			"defaultValue": 0
 		},
-		"4": {
+		{
+			"#": "4",
 			"label": "Delta configuration temperature reporting",
 			"description": "Set the delta-configuration of the temperature report in Celsius or Fahrenheit",
 			"valueSize": 2,
@@ -67,7 +71,8 @@
 			"maxValue": 100,
 			"defaultValue": 0
 		},
-		"5": {
+		{
+			"#": "5",
 			"label": "Temperature Cutoff",
 			"description": "Set the Cutoff in Celsius",
 			"valueSize": 2,
@@ -76,5 +81,5 @@
 			"maxValue": 1000,
 			"defaultValue": 0
 		}
-	}
+	]
 }

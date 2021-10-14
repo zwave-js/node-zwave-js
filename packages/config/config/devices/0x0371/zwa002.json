@@ -17,9 +17,9 @@
 		"min": "0.0",
 		"max": "255.255"
 	},
-	"supportsZWavePlus": true,
-	"paramInformation": {
-		"1": {
+	"paramInformation": [
+		{
+			"#": "1",
 			"label": "Use custom mode for LED animations",
 			"valueSize": 1,
 			"minValue": 0,
@@ -41,7 +41,8 @@
 				}
 			]
 		},
-		"2": {
+		{
+			"#": "2",
 			"label": "Enable/Disable Strobe over Custom Color",
 			"valueSize": 1,
 			"minValue": 0,
@@ -59,7 +60,8 @@
 				}
 			]
 		},
-		"3": {
+		{
+			"#": "3",
 			"label": "Rate of change to next color in Custom Mode",
 			"unit": "MS",
 			"valueSize": 4,
@@ -67,7 +69,8 @@
 			"maxValue": 8640000,
 			"defaultValue": 50
 		},
-		"4": {
+		{
+			"#": "4",
 			"label": "Set color that LED Bulb blinks in (Blink Mode)",
 			"valueSize": 1,
 			"minValue": 1,
@@ -76,7 +79,8 @@
 			"unsigned": true,
 			"writeOnly": true
 		},
-		"16": {
+		{
+			"#": "16",
 			"label": "Ramp rate when dimming using Multilevel Switch",
 			"unit": "100ms",
 			"valueSize": 1,
@@ -84,7 +88,8 @@
 			"maxValue": 100,
 			"defaultValue": 20
 		},
-		"80": {
+		{
+			"#": "80",
 			"label": "Enable notifications",
 			"description": "Enable notifications to associated devices (Group 1) when the state is changed",
 			"valueSize": 1,
@@ -103,7 +108,8 @@
 				}
 			]
 		},
-		"81": {
+		{
+			"#": "81",
 			"label": "Adjust color component of Warm White",
 			"unit": "k",
 			"valueSize": 2,
@@ -111,7 +117,8 @@
 			"maxValue": 4999,
 			"defaultValue": 2700
 		},
-		"82": {
+		{
+			"#": "82",
 			"label": "Adjust color component of Cold White",
 			"unit": "k",
 			"valueSize": 2,
@@ -119,5 +126,5 @@
 			"maxValue": 6500,
 			"defaultValue": 6500
 		}
-	}
+	]
 }

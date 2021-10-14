@@ -18,9 +18,9 @@
 		"min": "3.4",
 		"max": "255.255"
 	},
-	"supportsZWavePlus": true,
-	"paramInformation": {
-		"1": {
+	"paramInformation": [
+		{
+			"#": "1",
 			"label": "Invert Switch",
 			"valueSize": 1,
 			"minValue": 0,
@@ -42,7 +42,8 @@
 				}
 			]
 		},
-		"2": {
+		{
+			"#": "2",
 			"label": "LED Indicator Control",
 			"valueSize": 1,
 			"minValue": 0,
@@ -68,7 +69,8 @@
 				}
 			]
 		},
-		"3": {
+		{
+			"#": "3",
 			"label": "Enable/Disable Auto Off",
 			"valueSize": 1,
 			"minValue": 0,
@@ -86,7 +88,8 @@
 				}
 			]
 		},
-		"4": {
+		{
+			"#": "4",
 			"label": "Auto-Off Timer",
 			"unit": "minutes",
 			"valueSize": 4,
@@ -94,7 +97,8 @@
 			"maxValue": 65535,
 			"defaultValue": 60
 		},
-		"5": {
+		{
+			"#": "5",
 			"label": "Enable/Disable Auto On",
 			"valueSize": 1,
 			"minValue": 0,
@@ -112,7 +116,8 @@
 				}
 			]
 		},
-		"6": {
+		{
+			"#": "6",
 			"label": "Auto On Timer",
 			"unit": "minutes",
 			"valueSize": 4,
@@ -120,7 +125,8 @@
 			"maxValue": 65535,
 			"defaultValue": 60
 		},
-		"7[0x01]": {
+		{
+			"#": "7[0x01]",
 			"label": "Send Status Change Report: Local Control",
 			"description": "Determine whether a trigger of this type should prompt a status change report to associated devices.",
 			"valueSize": 1,
@@ -140,7 +146,8 @@
 				}
 			]
 		},
-		"7[0x02]": {
+		{
+			"#": "7[0x02]",
 			"label": "Send Status Change Report: 3-Way",
 			"description": "Determine whether a trigger of this type should prompt a status change report to associated devices.",
 			"valueSize": 1,
@@ -160,7 +167,8 @@
 				}
 			]
 		},
-		"7[0x04]": {
+		{
+			"#": "7[0x04]",
 			"label": "Send Status Change Report: Z-Wave",
 			"description": "Determine whether a trigger of this type should prompt a status change report to associated devices.",
 			"valueSize": 1,
@@ -180,7 +188,8 @@
 				}
 			]
 		},
-		"7[0x08]": {
+		{
+			"#": "7[0x08]",
 			"label": "Send Status Change Report: Timer",
 			"description": "Determine whether a trigger of this type should prompt a status change report to associated devices.",
 			"valueSize": 1,
@@ -200,10 +209,12 @@
 				}
 			]
 		},
-		"8": {
+		{
+			"#": "8",
 			"$import": "~/templates/master_template.json#state_after_power_failure_off_on_prev"
 		},
-		"9": {
+		{
+			"#": "9",
 			"label": "Enable/Disable Scene Control",
 			"description": "Send scene commands to hub on physical paddle presses.",
 			"valueSize": 1,
@@ -222,7 +233,8 @@
 				}
 			]
 		},
-		"11": {
+		{
+			"#": "11",
 			"label": "Enable Local and Z-Wave Control",
 			"description": "Enable or disable local control at the switch and Z-Wave control.",
 			"valueSize": 1,
@@ -245,7 +257,8 @@
 				}
 			]
 		},
-		"12": {
+		{
+			"#": "12",
 			"label": "3-Way Switch Type",
 			"valueSize": 1,
 			"minValue": 0,
@@ -263,7 +276,8 @@
 				}
 			]
 		},
-		"13": {
+		{
+			"#": "13",
 			"label": "Reporting Behavior When Physical Control Is Disabled",
 			"description": "Enable or disable reporting on/off status and changing LED indicator state even if physical and Z-Wave control is disabled.",
 			"valueSize": 1,
@@ -282,7 +296,7 @@
 				}
 			]
 		}
-	},
+	],
 	"metadata": {
 		"inclusion": "1. Initiate inclusion (pairing) in the app (or web interface).\n2. Tap the upper paddle of the switch 3 times.\n3. The LED indicator will blink to signal communication and stay on/off when communication is concluded",
 		"exclusion": "1. Bring your Z-Wave gateway (hub) close to the switch if possible\n2. Put the Z-Wave hub into exclusion mode \n3. Tap the lower paddle on the switch 3 times quickly\n4. Your hub will confirm exclusion and the device will disappear from your controller's device list",

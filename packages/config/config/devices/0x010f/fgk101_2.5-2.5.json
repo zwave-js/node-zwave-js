@@ -37,8 +37,9 @@
 			"isLifeline": true
 		}
 	},
-	"paramInformation": {
-		"1": {
+	"paramInformation": [
+		{
+			"#": "1",
 			"label": "Input IN alarm cancellation delay",
 			"description": "Additional delay after an alarm from input IN1 has ceased.",
 			"valueSize": 2,
@@ -48,7 +49,8 @@
 			"defaultValue": 0,
 			"unsigned": true
 		},
-		"2": {
+		{
+			"#": "2",
 			"label": "Status change signalled by LED",
 			"valueSize": 1,
 			"minValue": 0,
@@ -71,7 +73,8 @@
 				}
 			]
 		},
-		"3": {
+		{
+			"#": "3",
 			"label": "Type of IN input",
 			"valueSize": 1,
 			"minValue": 0,
@@ -97,7 +100,8 @@
 				}
 			]
 		},
-		"5": {
+		{
+			"#": "5",
 			"label": "Type of control frame transmitted for group 1",
 			"valueSize": 1,
 			"minValue": 1,
@@ -132,7 +136,8 @@
 				}
 			]
 		},
-		"7": {
+		{
+			"#": "7",
 			"label": "Forced Level of Dimming group 1",
 			"description": "Parameter for dimming/opening blinds",
 			"valueSize": 1,
@@ -141,7 +146,8 @@
 			"defaultValue": 255,
 			"unsigned": true
 		},
-		"9": {
+		{
+			"#": "9",
 			"label": "Enable/Disable cancelling alarm",
 			"valueSize": 1,
 			"minValue": 0,
@@ -159,7 +165,8 @@
 				}
 			]
 		},
-		"10": {
+		{
+			"#": "10",
 			"label": "Tamper alarm",
 			"description": "Enable/disable tamper alarm",
 			"valueSize": 1,
@@ -178,7 +185,8 @@
 				}
 			]
 		},
-		"12": {
+		{
+			"#": "12",
 			"label": "Sensitivity to temperature changes",
 			"valueSize": 1,
 			"minValue": 0,
@@ -186,7 +194,8 @@
 			"defaultValue": 8,
 			"unsigned": true
 		},
-		"13": {
+		{
+			"#": "13",
 			"label": "Transmitting the alarm or control frame broadcast",
 			"description": "Enabling/Disabling broadcast alarm for IN and TMP",
 			"valueSize": 1,
@@ -213,7 +222,8 @@
 				}
 			]
 		},
-		"14": {
+		{
+			"#": "14",
 			"label": "Scene activation",
 			"description": "Enable/Disable scene functionality",
 			"valueSize": 1,
@@ -233,7 +243,8 @@
 				}
 			]
 		},
-		"15": {
+		{
+			"#": "15",
 			"label": "DS18B20",
 			"description": "Status of DS18B20 sensor",
 			"valueSize": 1,
@@ -258,5 +269,5 @@
 				}
 			]
 		}
-	}
+	]
 }

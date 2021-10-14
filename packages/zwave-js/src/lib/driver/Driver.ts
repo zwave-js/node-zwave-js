@@ -117,6 +117,7 @@ import {
 	isSendData,
 	isSendDataSinglecast,
 	SendDataMessage,
+	TransmitOptions,
 } from "../controller/SendDataShared";
 import { SoftResetRequest } from "../controller/SoftResetRequest";
 import { ControllerLogger } from "../log/Controller";
@@ -351,6 +352,8 @@ export interface SendCommandOptions extends SendMessageOptions {
 	maxSendAttempts?: number;
 	/** Whether the driver should automatically handle the encapsulation. Default: true */
 	autoEncapsulate?: boolean;
+	/** Overwrite the default transmit options */
+	transmitOptions?: TransmitOptions;
 }
 
 export type SupervisionUpdateHandler = (
@@ -708,11 +711,15 @@ export class Driver extends TypedEventEmitter<DriverEventCallbacks> {
 					return;
 				}
 
-				this.driverLog.print(
-					`Serial port errored: ${err.message}`,
-					"error",
+				const message = `Serial port errored: ${err.message}`;
+				this.driverLog.print(message, "error");
+
+				const error = new ZWaveError(
+					message,
+					ZWaveErrorCodes.Driver_Failed,
 				);
-				this.serialport_onError(err);
+				this.emit("error", error);
+
 				void this.destroy();
 			});
 		// If the port is already open, close it first
@@ -833,7 +840,7 @@ export class Driver extends TypedEventEmitter<DriverEventCallbacks> {
 
 		const error = new ZWaveError(message, ZWaveErrorCodes.Driver_Failed);
 		if (this._isOpen || !openPromise) {
-			this.serialport_onError(error);
+			this.emit("error", error);
 		} else {
 			openPromise?.reject(error);
 		}
@@ -1726,10 +1733,6 @@ export class Driver extends TypedEventEmitter<DriverEventCallbacks> {
 		this._logContainer.destroy();
 
 		this._destroyPromise.resolve();
-	}
-
-	private serialport_onError(err: Error): void {
-		this.emit("error", err);
 	}
 
 	/**
@@ -2989,6 +2992,15 @@ ${handlers.length} left`,
 		// Specify the number of send attempts for the request
 		if (options.maxSendAttempts != undefined) {
 			msg.maxSendAttempts = options.maxSendAttempts;
+		}
+
+		// Specify transmit options for the request
+		if (options.transmitOptions != undefined) {
+			msg.transmitOptions = options.transmitOptions;
+			if (!(options.transmitOptions & TransmitOptions.ACK)) {
+				// If no ACK is requested, set the callback ID to zero, because we won't get a controller callback
+				msg.callbackId = 0;
+			}
 		}
 
 		// Automatically encapsulate commands before sending

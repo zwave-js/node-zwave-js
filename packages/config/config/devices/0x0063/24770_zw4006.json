@@ -14,8 +14,9 @@
 		"min": "0.0",
 		"max": "255.255"
 	},
-	"paramInformation": {
-		"1": {
+	"paramInformation": [
+		{
+			"#": "1",
 			"label": "Timeout Duration",
 			"description": "Amount of time the light stays on after motion stops",
 			"valueSize": 1,
@@ -51,7 +52,8 @@
 				}
 			]
 		},
-		"2": {
+		{
+			"#": "2",
 			"label": "Change Brightness of Associated Light Bulb(s)",
 			"description": "255 = last dimming level",
 			"valueSize": 1,
@@ -60,7 +62,8 @@
 			"defaultValue": 255,
 			"unsigned": true
 		},
-		"3": {
+		{
+			"#": "3",
 			"label": "Operation Mode",
 			"valueSize": 1,
 			"minValue": 1,
@@ -83,7 +86,8 @@
 				}
 			]
 		},
-		"4": {
+		{
+			"#": "4",
 			"label": "Enable/Disable Association Mode",
 			"valueSize": 1,
 			"minValue": 0,
@@ -102,7 +106,8 @@
 				}
 			]
 		},
-		"5": {
+		{
+			"#": "5",
 			"label": "Invert Switch",
 			"valueSize": 1,
 			"minValue": 0,
@@ -120,7 +125,8 @@
 				}
 			]
 		},
-		"6": {
+		{
+			"#": "6",
 			"label": "Enable/Disable Motion Sensor",
 			"valueSize": 1,
 			"minValue": 0,
@@ -139,7 +145,8 @@
 				}
 			]
 		},
-		"13": {
+		{
+			"#": "13",
 			"label": "Motion Sensor Sensitivity",
 			"valueSize": 1,
 			"minValue": 1,
@@ -162,7 +169,8 @@
 				}
 			]
 		},
-		"14": {
+		{
+			"#": "14",
 			"label": "Enable/Disable Light Sensing",
 			"valueSize": 1,
 			"minValue": 0,
@@ -181,7 +189,8 @@
 				}
 			]
 		},
-		"15": {
+		{
+			"#": "15",
 			"label": "Reset Cycle",
 			"valueSize": 1,
 			"unit": "15 seconds",
@@ -190,7 +199,8 @@
 			"defaultValue": 2,
 			"unsigned": true
 		},
-		"19": {
+		{
+			"#": "19",
 			"label": "Exclusion Mode",
 			"valueSize": 1,
 			"minValue": 0,
@@ -209,7 +219,7 @@
 				}
 			]
 		}
-	},
+	],
 	"metadata": {
 		"inclusion": "1. Follow the instructions for your Z-Wave certified\ncontroller to include the smart switch to the\nZ-Wave network.\n2. Once the controller is ready to include your smart\nswitch, press and release the top or bottom button\non the smart switch to include it in the network",
 		"exclusion": "1. Follow the instructions for your Z-Wave certified\ncontroller to exclude a device from the Z-Wave\nnetwork.\n2. Once the controller is ready to exclude your device,\npress and release the top or bottom button on the\nsmart switch to exclude it from the network",

@@ -13,9 +13,9 @@
 		"min": "0.0",
 		"max": "255.255"
 	},
-	"supportsZWavePlus": true,
-	"paramInformation": {
-		"1": {
+	"paramInformation": [
+		{
+			"#": "1",
 			"label": "Watt Meter Report Period",
 			"unit": "5 seconds",
 			"valueSize": 2,
@@ -24,7 +24,8 @@
 			"defaultValue": 720,
 			"unsigned": true
 		},
-		"2": {
+		{
+			"#": "2",
 			"label": "kWh Meter Report Period",
 			"unit": "10 minutes",
 			"valueSize": 2,
@@ -33,7 +34,8 @@
 			"defaultValue": 6,
 			"unsigned": true
 		},
-		"5": {
+		{
+			"#": "5",
 			"label": "Level Report Trigger",
 			"valueSize": 1,
 			"minValue": 1,
@@ -52,7 +54,8 @@
 				}
 			]
 		},
-		"7": {
+		{
+			"#": "7",
 			"label": "Read motor data on first use",
 			"description": "Run the motor for 3 seconds to read motor data",
 			"valueSize": 1,
@@ -72,7 +75,8 @@
 				}
 			]
 		},
-		"8": {
+		{
+			"#": "8",
 			"label": "LED Backlight Brightness",
 			"valueSize": 1,
 			"minValue": 0,
@@ -80,7 +84,8 @@
 			"defaultValue": 10,
 			"unsigned": true
 		},
-		"9": {
+		{
+			"#": "9",
 			"label": "Read Motor Data and Auto Calibrate",
 			"valueSize": 1,
 			"minValue": 0,
@@ -99,7 +104,8 @@
 				}
 			]
 		},
-		"10": {
+		{
+			"#": "10",
 			"label": "Auto Calibrate",
 			"valueSize": 1,
 			"minValue": 0,
@@ -118,7 +124,8 @@
 				}
 			]
 		},
-		"11": {
+		{
+			"#": "11",
 			"label": "Min Level Shutter Close",
 			"valueSize": 1,
 			"minValue": 0,
@@ -126,7 +133,8 @@
 			"defaultValue": 0,
 			"unsigned": true
 		},
-		"12": {
+		{
+			"#": "12",
 			"label": "Max Level Shutter Open",
 			"valueSize": 1,
 			"minValue": 1,
@@ -134,7 +142,8 @@
 			"defaultValue": 99,
 			"unsigned": true
 		},
-		"13": {
+		{
+			"#": "13",
 			"label": "External Switch Type",
 			"valueSize": 1,
 			"minValue": 0,
@@ -153,7 +162,8 @@
 				}
 			]
 		},
-		"14": {
+		{
+			"#": "14",
 			"label": "External Switch Input",
 			"valueSize": 1,
 			"minValue": 0,
@@ -184,7 +194,8 @@
 				}
 			]
 		},
-		"255": {
+		{
+			"#": "255",
 			"label": "Factory Reset",
 			"valueSize": 1,
 			"minValue": 0,
@@ -203,7 +214,7 @@
 				}
 			]
 		}
-	},
+	],
 	"compat": {
 		"commandClasses": {
 			"add": {

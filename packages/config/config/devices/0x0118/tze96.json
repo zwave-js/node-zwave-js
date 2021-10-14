@@ -13,10 +13,10 @@
 		"min": "0.0",
 		"max": "255.255"
 	},
-	"supportsZWavePlus": true,
-	"paramInformation": {
-		"4": {
+	"paramInformation": [
+		{
+			"#": "4",
 			"$import": "~/templates/master_template.json#state_after_power_failure_off_prev"
 		}
-	}
+	]
 }

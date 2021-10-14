@@ -1,6 +1,6 @@
 {
   "name": "@zwave-js/config",
-  "version": "8.4.1",
+  "version": "8.5.0",
   "description": "zwave-js: configuration files",
   "publishConfig": {
     "access": "public"
@@ -40,8 +40,8 @@
     "ts": "node -r esbuild-register"
   },
   "dependencies": {
-    "@zwave-js/core": "8.3.1",
-    "@zwave-js/shared": "8.2.2",
+    "@zwave-js/core": "8.5.0",
+    "@zwave-js/shared": "8.5.0",
     "alcalzone-shared": "^4.0.0",
     "ansi-colors": "^4.1.1",
     "fs-extra": "^10.0.0",
@@ -59,17 +59,18 @@
     "@types/pegjs": "^0.10.3",
     "@types/semver": "^7.3.8",
     "@types/xml2json": "^0.11.4",
-    "@types/yargs": "^16.0.4",
-    "@zwave-js/maintenance": "8.3.1",
-    "axios": "^0.21.4",
+    "@types/yargs": "^17.0.3",
+    "@zwave-js/maintenance": "8.5.0",
+    "axios": "^0.23.0",
     "comment-json": "^4.1.1",
-    "esbuild-register": "^2.6.0",
+    "esbuild": "*",
+    "esbuild-register": "^3.0.0",
     "jest-extended": "^0.11.5",
     "js-levenshtein": "^1.1.6",
     "pegjs": "^0.10.0",
     "ts-pegjs": "^0.3.1",
     "typescript": "4.4.3",
     "xml2json": "^0.12.0",
-    "yargs": "^16.2.0"
+    "yargs": "^17.2.1"
   }
 }

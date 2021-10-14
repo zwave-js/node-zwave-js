@@ -13,9 +13,9 @@
 		"min": "0.0",
 		"max": "255.255"
 	},
-	"supportsZWavePlus": true,
-	"paramInformation": {
-		"1": {
+	"paramInformation": [
+		{
+			"#": "1",
 			"label": "Mode",
 			"valueSize": 1,
 			"minValue": 1,
@@ -37,7 +37,8 @@
 				}
 			]
 		},
-		"2": {
+		{
+			"#": "2",
 			"label": "Restore switch state mode",
 			"valueSize": 1,
 			"minValue": 0,
@@ -59,7 +60,8 @@
 				}
 			]
 		},
-		"3": {
+		{
+			"#": "3",
 			"label": "Manual On/Off mode",
 			"valueSize": 1,
 			"minValue": 0,
@@ -77,7 +79,8 @@
 				}
 			]
 		},
-		"4": {
+		{
+			"#": "4",
 			"label": "LED indication mode",
 			"valueSize": 1,
 			"minValue": 1,
@@ -99,7 +102,8 @@
 				}
 			]
 		},
-		"5": {
+		{
+			"#": "5",
 			"label": "Auto off timer",
 			"unit": "second",
 			"valueSize": 2,
@@ -107,7 +111,8 @@
 			"maxValue": 32767,
 			"defaultValue": 0
 		},
-		"6": {
+		{
+			"#": "6",
 			"label": "RF Off command mode",
 			"valueSize": 1,
 			"minValue": 0,
@@ -133,5 +138,5 @@
 				}
 			]
 		}
-	}
+	]
 }

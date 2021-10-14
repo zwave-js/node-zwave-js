@@ -48,8 +48,9 @@
 	"proprietary": {
 		"fibaroCCs": [38 /* 0x26 (Venetian Blinds) */]
 	},
-	"paramInformation": {
-		"3": {
+	"paramInformation": [
+		{
+			"#": "3",
 			"label": "Reports type",
 			"description": "value should be set to 1 if the module operates in Venetian Blind mode.",
 			"valueSize": 1,
@@ -68,7 +69,8 @@
 				}
 			]
 		},
-		"10": {
+		{
+			"#": "10",
 			"label": "Roller Shutter operating modes",
 			"valueSize": 1,
 			"minValue": 0,
@@ -98,7 +100,8 @@
 				}
 			]
 		},
-		"12": {
+		{
+			"#": "12",
 			"label": "Turning time/ delay time",
 			"description": "depending on mode, turning time or delay time",
 			"valueSize": 2,
@@ -107,7 +110,8 @@
 			"defaultValue": 150,
 			"unsigned": true
 		},
-		"13": {
+		{
+			"#": "13",
 			"label": "Lamellas positioning mode",
 			"description": "Parameter influences the lamellas positioning in venetian blind mode",
 			"valueSize": 1,
@@ -130,7 +134,8 @@
 				}
 			]
 		},
-		"14": {
+		{
+			"#": "14",
 			"label": "Switch type",
 			"description": "either Toggle switches or a single, momentary switch.",
 			"valueSize": 1,
@@ -153,7 +158,8 @@
 				}
 			]
 		},
-		"17": {
+		{
+			"#": "17",
 			"label": "Delay time after S2",
 			"description": "delay till auto turned off or auto gate close",
 			"valueSize": 1,
@@ -162,7 +168,8 @@
 			"defaultValue": 10,
 			"unsigned": true
 		},
-		"18": {
+		{
+			"#": "18",
 			"label": "Motor operation detection",
 			"description": "Power threshold to be interpreted as reaching a limit switch.",
 			"valueSize": 1,
@@ -171,7 +178,8 @@
 			"defaultValue": 10,
 			"unsigned": true
 		},
-		"22": {
+		{
+			"#": "22",
 			"label": "Motor operation time",
 			"description": "Time period for the motor to continue operation.",
 			"valueSize": 2,
@@ -180,7 +188,8 @@
 			"defaultValue": 10,
 			"unsigned": true
 		},
-		"29": {
+		{
+			"#": "29",
 			"label": "Forced Roller Shutter calibration",
 			"description": "set to 1 will enter calibration mode",
 			"valueSize": 1,
@@ -199,7 +208,8 @@
 				}
 			]
 		},
-		"30": {
+		{
+			"#": "30",
 			"label": "Response to General Alarm",
 			"valueSize": 1,
 			"minValue": 0,
@@ -221,7 +231,8 @@
 				}
 			]
 		},
-		"31": {
+		{
+			"#": "31",
 			"label": "Response to Water Flood Alarm",
 			"valueSize": 1,
 			"minValue": 0,
@@ -243,7 +254,8 @@
 				}
 			]
 		},
-		"32": {
+		{
+			"#": "32",
 			"label": "Response to Smoke, CO, CO2 Alarm",
 			"valueSize": 1,
 			"minValue": 0,
@@ -265,7 +277,8 @@
 				}
 			]
 		},
-		"33": {
+		{
+			"#": "33",
 			"label": "Response to Temperature Alarm",
 			"valueSize": 1,
 			"minValue": 0,
@@ -287,7 +300,8 @@
 				}
 			]
 		},
-		"35": {
+		{
+			"#": "35",
 			"label": "Managing lamellas in response to alarm",
 			"description": "0 no change, 1 extreme position",
 			"valueSize": 1,
@@ -307,7 +321,8 @@
 				}
 			]
 		},
-		"40": {
+		{
+			"#": "40",
 			"label": "Power reports",
 			"description": "change that needs to occur to trigger the power report",
 			"valueSize": 1,
@@ -315,7 +330,8 @@
 			"maxValue": 100,
 			"defaultValue": 10
 		},
-		"42": {
+		{
+			"#": "42",
 			"label": "Periodic power or energy reports",
 			"description": "Time to the next report. Value of 0 means the reports are turned off.",
 			"valueSize": 2,
@@ -324,7 +340,8 @@
 			"defaultValue": 3600,
 			"unsigned": true
 		},
-		"43": {
+		{
+			"#": "43",
 			"label": "Energy reports",
 			"description": "Energy threshold to trigger report",
 			"valueSize": 1,
@@ -333,7 +350,8 @@
 			"defaultValue": 10,
 			"unsigned": true
 		},
-		"44": {
+		{
+			"#": "44",
 			"label": "Self-measurement",
 			"description": "if power and energy reports are to sent to the main controller",
 			"valueSize": 1,
@@ -352,7 +370,8 @@
 				}
 			]
 		},
-		"50": {
+		{
+			"#": "50",
 			"label": "Scenes/ Associations activation",
 			"description": "whether scenes or associations are activated by the switch keys",
 			"valueSize": 1,
@@ -371,5 +390,5 @@
 				}
 			]
 		}
-	}
+	]
 }

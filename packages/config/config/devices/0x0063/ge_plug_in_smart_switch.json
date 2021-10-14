@@ -13,9 +13,9 @@
 		"min": "0.0",
 		"max": "255.255"
 	},
-	"supportsZWavePlus": true,
-	"paramInformation": {
-		"3": {
+	"paramInformation": [
+		{
+			"#": "3",
 			"label": "LED light",
 			"description": "control LED light behavior. Default is on when connected device is off",
 			"valueSize": 1,
@@ -38,5 +38,5 @@
 				}
 			]
 		}
-	}
+	]
 }

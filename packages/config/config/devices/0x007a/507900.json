@@ -21,8 +21,9 @@
 			"isLifeline": true
 		}
 	},
-	"paramInformation": {
-		"196": {
+	"paramInformation": [
+		{
+			"#": "196",
 			"label": "Dimmer speed",
 			"description": "Set dimming speed. fast=0 ... 240=slow.",
 			"valueSize": 1,
@@ -31,5 +32,5 @@
 			"defaultValue": 0,
 			"unsigned": true
 		}
-	}
+	]
 }

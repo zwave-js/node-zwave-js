@@ -13,11 +13,13 @@
 		"min": "0.0",
 		"max": "255.255"
 	},
-	"paramInformation": {
-		"1": {
+	"paramInformation": [
+		{
+			"#": "1",
 			"$import": "~/templates/master_template.json#led_indicator_four_options"
 		},
-		"2": {
+		{
+			"#": "2",
 			"label": "Auto-Off Timer",
 			"valueSize": 4,
 			"unit": "minutes",
@@ -32,7 +34,8 @@
 				}
 			]
 		},
-		"3": {
+		{
+			"#": "3",
 			"label": "Auto-On Timer",
 			"valueSize": 4,
 			"unit": "minutes",
@@ -47,10 +50,12 @@
 				}
 			]
 		},
-		"4": {
+		{
+			"#": "4",
 			"$import": "~/templates/master_template.json#state_after_power_failure_prev_off_on"
 		},
-		"5": {
+		{
+			"#": "5",
 			"label": "Power delta value",
 			"description": "Minimum change required for a new power value to be transmitted.",
 			"unit": "W",
@@ -59,7 +64,8 @@
 			"maxValue": 5,
 			"defaultValue": 1
 		},
-		"6": {
+		{
+			"#": "6",
 			"label": "Power maximum report time",
 			"description": "Maximum time between two power values, independently of changes in the value",
 			"unit": "minutes",
@@ -69,7 +75,8 @@
 			"defaultValue": 1,
 			"unsigned": true
 		},
-		"7": {
+		{
+			"#": "7",
 			"label": "Current delta value",
 			"description": "Minimum change required for a new power value to be transmitted.",
 			"unit": "0.1 A",
@@ -78,7 +85,8 @@
 			"maxValue": 10,
 			"defaultValue": 1
 		},
-		"8": {
+		{
+			"#": "8",
 			"label": "Current delta value",
 			"description": "Minimum change required for a new power value to be transmitted.",
 			"unit": "0.01 kWh",
@@ -87,7 +95,7 @@
 			"maxValue": 100,
 			"defaultValue": 1
 		}
-	},
+	],
 	"metadata": {
 		"inclusion": "Follow the instructions for your Z-Wave certified controller to add a device to the Z-Wave network.\n Once the controller is ready to add your device, press the Manual/Program button on the smart plug 3 times quickly. The blue LED will blink quickly.",
 		"exclusion": "Follow the instructions for your Z-Wave certified controller to remove a device from the Z-Wave network.\n Once the controller is ready to remove your device, press the manual/program button on the smart plug 3 times quickly.",

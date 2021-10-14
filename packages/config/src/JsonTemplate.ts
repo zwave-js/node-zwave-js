@@ -8,7 +8,16 @@ import * as path from "path";
 const IMPORT_KEY = "$import";
 const importSpecifierRegex =
 	/^(?<filename>(?:~\/)?[\w\d\/\\\._-]+\.json)?(?:#(?<selector>[\w\d\/\._-]+(?:\[0x[0-9a-fA-F]+\])?))?$/i;
+
 type FileCache = Map<string, Record<string, unknown>>;
+
+// The template cache is used to speed up cases where the same files get parsed multiple times,
+// e.g. during config file linting. It should be cleared whenever the files need to be loaded fresh
+// from disk, like when creating an index
+const templateCache: FileCache = new Map();
+export function clearTemplateCache(): void {
+	templateCache.clear();
+}
 
 /** Parses a JSON file with $import keys and replaces them with the selected objects */
 export async function readJsonWithTemplate(
@@ -21,13 +30,25 @@ export async function readJsonWithTemplate(
 			ZWaveErrorCodes.Config_NotFound,
 		);
 	}
-	return readJsonWithTemplateInternal(
+
+	// Try to use the cached versions of the template files to speed up the loading
+	const fileCache = new Map(templateCache);
+	const ret = await readJsonWithTemplateInternal(
 		filename,
 		undefined,
 		[],
-		new Map(),
+		fileCache,
 		rootDir,
 	);
+
+	// Only remember the cached templates, not the individual files to save RAM
+	for (const [filename, cached] of fileCache) {
+		if (/[\\/]templates[\\/]/.test(filename)) {
+			templateCache.set(filename, cached);
+		}
+	}
+
+	return ret;
 }
 
 function assertImportSpecifier(
@@ -65,6 +86,19 @@ function select(
 	let ret: Record<string, unknown> = obj;
 	const selectorParts = selector.split("/").filter((s): s is string => !!s);
 	for (const part of selectorParts) {
+		// Special case for paramInformation selectors to select params by #
+		if (isArray(ret)) {
+			const item = ret.find(
+				(r) => isObject(r) && "#" in r && r["#"] === part,
+			);
+			if (item != undefined) {
+				// Don't copy the param number
+				const { ["#"]: _, ...rest } = item as any;
+				ret = rest;
+				continue;
+			}
+		}
+		// By default select the object property
 		ret = (ret as any)[part];
 	}
 	if (!isObject(ret)) {
@@ -214,18 +248,23 @@ async function resolveJsonImports(
 			);
 		} else if (isArray(val)) {
 			// We're looking at an array, check if there are objects we need to recurse into
-			const tasks = val.map((v) =>
-				isObject(v)
-					? resolveJsonImports(
+			const vals: unknown[] = [];
+			for (const v of val) {
+				if (isObject(v)) {
+					vals.push(
+						await resolveJsonImports(
 							v,
 							filename,
 							visited,
 							fileCache,
 							rootDir,
-					  )
-					: v,
-			);
-			ret[prop] = await Promise.all(tasks);
+						),
+					);
+				} else {
+					vals.push(v);
+				}
+			}
+			ret[prop] = vals;
 		} else {
 			ret[prop] = val;
 		}

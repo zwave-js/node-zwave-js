@@ -30,8 +30,9 @@
 			"isLifeline": true
 		}
 	},
-	"paramInformation": {
-		"3": {
+	"paramInformation": [
+		{
+			"#": "3",
 			"label": "LED Light",
 			"description": "LED status when device on or off.",
 			"valueSize": 1,
@@ -59,7 +60,8 @@
 				}
 			]
 		},
-		"4": {
+		{
+			"#": "4",
 			"label": "Invert Switch",
 			"description": "Reverse the default On/Off rocker setting",
 			"valueSize": 1,
@@ -79,7 +81,8 @@
 				}
 			]
 		},
-		"6": {
+		{
+			"#": "6",
 			"label": "Dim up/down rate",
 			"description": "Enable/Disable slow dim rate",
 			"valueSize": 1,
@@ -99,7 +102,8 @@
 				}
 			]
 		},
-		"16": {
+		{
+			"#": "16",
 			"label": "Switch Mode",
 			"description": "Turn your dimmer into an On/Off switch with switch mode",
 			"valueSize": 1,
@@ -119,7 +123,8 @@
 				}
 			]
 		},
-		"19": {
+		{
+			"#": "19",
 			"label": "Alternate Exclusion",
 			"description": "Enables alternate method for excluding the device to prevent accidental removal",
 			"valueSize": 1,
@@ -139,7 +144,8 @@
 				}
 			]
 		},
-		"30": {
+		{
+			"#": "30",
 			"label": "Minimum Dim Threshold",
 			"description": "Set the minimum dimmer threshold when manually or remotely controlled",
 			"valueSize": 1,
@@ -148,7 +154,8 @@
 			"defaultValue": 1,
 			"unsigned": true
 		},
-		"31": {
+		{
+			"#": "31",
 			"label": "Maximum Dim Threshold",
 			"description": "Set the maximum dim threshold when manually or remotely controlled",
 			"valueSize": 1,
@@ -157,7 +164,8 @@
 			"defaultValue": 99,
 			"unsigned": true
 		},
-		"32": {
+		{
+			"#": "32",
 			"label": "Brightness Level",
 			"description": "Dimmer will turn ON to this level",
 			"valueSize": 1,
@@ -166,7 +174,8 @@
 			"defaultValue": 0,
 			"unsigned": true
 		},
-		"84": {
+		{
+			"#": "84",
 			"label": "Reset factory default",
 			"valueSize": 1,
 			"minValue": 0,
@@ -185,7 +194,7 @@
 				}
 			]
 		}
-	},
+	],
 	"compat": {
 		"treatBasicSetAsEvent": true
 	},

@@ -13,9 +13,9 @@
 		"min": "0.0",
 		"max": "255.255"
 	},
-	"supportsZWavePlus": true,
-	"paramInformation": {
-		"3": {
+	"paramInformation": [
+		{
+			"#": "3",
 			"label": "Nightlight",
 			"description": "Controls LED operation",
 			"valueSize": 1,
@@ -23,7 +23,8 @@
 			"maxValue": 2,
 			"defaultValue": 0
 		},
-		"9": {
+		{
+			"#": "9",
 			"label": "Dimming Resolution Level",
 			"description": "Steps to change dimmer level per tick",
 			"valueSize": 1,
@@ -31,7 +32,8 @@
 			"maxValue": 99,
 			"defaultValue": 1
 		},
-		"10": {
+		{
+			"#": "10",
 			"label": "Dimming Resolution Speed",
 			"description": "Tick length in 10ms units",
 			"valueSize": 1,
@@ -40,7 +42,7 @@
 			"defaultValue": 3,
 			"unsigned": true
 		}
-	},
+	],
 	"compat": {
 		"commandClasses": {
 			"remove": {

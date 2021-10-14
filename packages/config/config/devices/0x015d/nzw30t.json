@@ -21,9 +21,9 @@
 		"min": "0.0",
 		"max": "255.255"
 	},
-	"supportsZWavePlus": true,
-	"paramInformation": {
-		"4": {
+	"paramInformation": [
+		{
+			"#": "4",
 			"label": "Invert",
 			"description": "Change the top of the switch to OFF and the bottom of the switch to ON.",
 			"valueSize": 1,
@@ -42,7 +42,8 @@
 				}
 			]
 		},
-		"5": {
+		{
+			"#": "5",
 			"label": "Countdown",
 			"description": "Countdown to shutoff",
 			"unit": "seconds",
@@ -51,5 +52,5 @@
 			"maxValue": 32767,
 			"defaultValue": 0
 		}
-	}
+	]
 }

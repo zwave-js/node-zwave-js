@@ -14,8 +14,9 @@
 		"min": "0.0",
 		"max": "255.255"
 	},
-	"paramInformation": {
-		"1": {
+	"paramInformation": [
+		{
+			"#": "1",
 			"label": "Parameter 1",
 			"description": "Switch 1 type",
 			"valueSize": 1,
@@ -35,7 +36,8 @@
 				}
 			]
 		},
-		"2": {
+		{
+			"#": "2",
 			"label": "Parameter 2",
 			"description": "Switch 2 type",
 			"valueSize": 1,
@@ -55,7 +57,8 @@
 				}
 			]
 		},
-		"3": {
+		{
+			"#": "3",
 			"label": "Parameter 3",
 			"description": "Max 12hrs",
 			"valueSize": 4,
@@ -64,7 +67,8 @@
 			"defaultValue": 0,
 			"unsigned": true
 		},
-		"4": {
+		{
+			"#": "4",
 			"label": "Parameter 4",
 			"description": "Max 12hrs",
 			"valueSize": 4,
@@ -73,7 +77,8 @@
 			"defaultValue": 43200,
 			"unsigned": true
 		},
-		"5": {
+		{
+			"#": "5",
 			"label": "Parameter 5",
 			"description": "Set whether to remember the last status of relay 1",
 			"valueSize": 1,
@@ -93,7 +98,8 @@
 				}
 			]
 		},
-		"6": {
+		{
+			"#": "6",
 			"label": "Parameter 6",
 			"description": "Set whether to remember the last status of relay 2",
 			"valueSize": 1,
@@ -113,7 +119,7 @@
 				}
 			]
 		}
-	},
+	],
 	"metadata": {
 		"inclusion": "1. Put the Z-Wave Controller into inclusion mode.\n2. Press the link key three times within 1.5 seconds to put the unit into inclusion mode.",
 		"exclusion": "1. Put the Z-Wave Controller into exclusion mode.\n2. Press the link key three times within 1.5 seconds to put the unit into exclusion mode.",

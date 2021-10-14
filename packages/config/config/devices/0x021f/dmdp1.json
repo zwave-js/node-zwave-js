@@ -32,8 +32,9 @@
 			"maxNodes": 5
 		}
 	},
-	"paramInformation": {
-		"1": {
+	"paramInformation": [
+		{
+			"#": "1",
 			"label": "Enable/Disable LED Indicator",
 			"valueSize": 1,
 			"minValue": 0,
@@ -51,7 +52,8 @@
 				}
 			]
 		},
-		"2": {
+		{
+			"#": "2",
 			"label": "Configure Open/Close Reports Sent",
 			"valueSize": 1,
 			"minValue": 0,
@@ -69,7 +71,8 @@
 				}
 			]
 		},
-		"3": {
+		{
+			"#": "3",
 			"label": "Switch Between Notification and Binary Sensor",
 			"valueSize": 1,
 			"minValue": 0,
@@ -87,7 +90,8 @@
 				}
 			]
 		},
-		"4": {
+		{
+			"#": "4",
 			"label": "Enable/Disable Temperature Sensor",
 			"valueSize": 1,
 			"minValue": 0,
@@ -105,14 +109,16 @@
 				}
 			]
 		},
-		"5": {
+		{
+			"#": "5",
 			"label": "Temperature offset",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 0,
 			"defaultValue": 0
 		},
-		"6": {
+		{
+			"#": "6",
 			"label": "Temperature Units",
 			"valueSize": 1,
 			"minValue": 0,
@@ -130,26 +136,29 @@
 				}
 			]
 		},
-		"7": {
+		{
+			"#": "7",
 			"label": "Basic Set Value (Group 2)",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 0,
 			"defaultValue": 0
 		},
-		"8": {
+		{
+			"#": "8",
 			"label": "Basic Set Value (Group 3)",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 0,
 			"defaultValue": 0
 		},
-		"9": {
+		{
+			"#": "9",
 			"label": "Basic Set Value (Group 4)",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 0,
 			"defaultValue": 0
 		}
-	}
+	]
 }
