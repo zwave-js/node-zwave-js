@@ -54,6 +54,16 @@ export class NVMOperationsRequest extends Message {
 
 		return super.serialize();
 	}
+
+	public toLogEntry(): MessageOrCCLogEntry {
+		const message: MessageRecord = {
+			command: getEnumMemberName(NVMOperationsCommand, this.command),
+		};
+		return {
+			...super.toLogEntry(),
+			message,
+		};
+	}
 }
 
 // =============================================================================
@@ -127,9 +137,11 @@ export class NVMOperationsReadRequest extends NVMOperationsRequest {
 	}
 
 	public toLogEntry(): MessageOrCCLogEntry {
+		const ret = super.toLogEntry();
 		return {
-			...super.toLogEntry(),
+			...ret,
 			message: {
+				...ret.message,
 				"data length": this.length,
 				"address offset": num2hex(this.offset),
 			},
@@ -190,9 +202,11 @@ export class NVMOperationsWriteRequest extends NVMOperationsRequest {
 	}
 
 	public toLogEntry(): MessageOrCCLogEntry {
+		const ret = super.toLogEntry();
 		return {
-			...super.toLogEntry(),
+			...ret,
 			message: {
+				...ret.message,
 				offset: num2hex(this.offset),
 				buffer: `(${this.buffer.length} byte${
 					this.buffer.length === 1 ? "" : "s"
@@ -219,8 +233,8 @@ export class NVMOperationsResponse extends Message implements SuccessIndicator {
 		}
 
 		const dataLength = this.payload[1];
-		if (dataLength > 0) {
-			validatePayload(this.payload.length >= 4 + dataLength);
+		// The response to the write command contains the offset and written data length, but no data
+		if (dataLength > 0 && this.payload.length >= 4 + dataLength) {
 			this.buffer = this.payload.slice(4, 4 + dataLength);
 		} else {
 			this.buffer = Buffer.from([]);

@@ -1,5 +1,5 @@
 import { ZWaveError, ZWaveErrorCodes } from "@zwave-js/core";
-import { formatId } from "@zwave-js/shared";
+import { formatId, padVersion } from "@zwave-js/shared";
 import * as fs from "fs-extra";
 import path from "path";
 import * as semver from "semver";
@@ -50,11 +50,6 @@ export function getDeviceEntryPredicate(
 		}
 		return true;
 	};
-}
-
-/** Pads a firmware version string, so it can be compared with semver */
-export function padVersion(version: string): string {
-	return version + ".0";
 }
 
 export async function getEmbeddedConfigVersion(): Promise<string> {
