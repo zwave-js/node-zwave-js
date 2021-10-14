@@ -696,14 +696,17 @@ export class Driver extends TypedEventEmitter<DriverEventCallbacks> {
 		this.serial
 			.on("data", this.serialport_onData.bind(this))
 			.on("error", (err) => {
-				this.driverLog.print(
-					`Serial port errored: ${err.message}`,
-					"error",
+				const message = `Serial port errored: ${err.message}`;
+				this.driverLog.print(message, "error");
+
+				const error = new ZWaveError(
+					message,
+					ZWaveErrorCodes.Driver_Failed,
 				);
 				if (this._isOpen) {
-					this.serialport_onError(err);
+					this.emit("error", error);
 				} else {
-					spOpenPromise.reject(err);
+					spOpenPromise.reject(error);
 				}
 				void this.destroy();
 			});
@@ -1645,10 +1648,6 @@ export class Driver extends TypedEventEmitter<DriverEventCallbacks> {
 		this._logContainer.destroy();
 
 		this._destroyPromise.resolve();
-	}
-
-	private serialport_onError(err: Error): void {
-		this.emit("error", err);
 	}
 
 	/**
