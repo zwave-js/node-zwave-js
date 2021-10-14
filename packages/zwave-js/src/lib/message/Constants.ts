@@ -57,7 +57,7 @@ export enum FunctionType {
 	SetSerialApiTimeouts = 0x06,
 	GetSerialApiCapabilities = 0x07,
 
-	FUNC_ID_SERIAL_API_SOFT_RESET = 0x08,
+	SoftReset = 0x08,
 
 	UNKNOWN_FUNC_UNKNOWN_0x09 = 0x09, // ??
 	UNKNOWN_FUNC_UNKNOWN_0x0a = 0x0a, // ??

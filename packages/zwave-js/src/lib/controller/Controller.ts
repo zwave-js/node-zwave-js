@@ -3496,7 +3496,8 @@ ${associatedNodes.join(", ")}`,
 				ZWaveErrorCodes.Driver_NotSupported,
 			);
 		}
-		// TODO: Issue soft reset
+
+		if (result.success) await this.driver.softReset();
 		return result.success;
 	}
 
@@ -4049,7 +4050,7 @@ ${associatedNodes.join(", ")}`,
 			} else {
 				await this.restoreNVMRaw500(nvmData, onProgress);
 			}
-			this.driver.controllerLog.print("NVM backup completed");
+			this.driver.controllerLog.print("NVM backup restored");
 		} finally {
 			// Whatever happens, turn Z-Wave radio back on
 			await this.toggleRF(true);
@@ -4059,7 +4060,17 @@ ${associatedNodes.join(", ")}`,
 		// so you can figure out which pages you don't have to save or restore. If you do this, you need to make sure to issue a
 		// "factory reset" before restoring the NVM - that'll blank out the NVM to 0xffs before initializing it.
 
-		// TODO: Soft Reset
+		if (this.driver.options.enableSoftReset) {
+			this.driver.controllerLog.print(
+				"Activating restored NVM backup...",
+			);
+			await this.driver.softReset();
+		} else {
+			this.driver.controllerLog.print(
+				"Soft reset not enabled, cannot automatically activate restored NVM backup!",
+				"warn",
+			);
+		}
 	}
 
 	private async restoreNVMRaw500(
