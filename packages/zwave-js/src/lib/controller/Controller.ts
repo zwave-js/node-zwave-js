@@ -3843,15 +3843,30 @@ ${associatedNodes.join(", ")}`,
 	public async externalNVMWriteBuffer700(
 		offset: number,
 		buffer: Buffer,
-	): Promise<{ success: boolean; endOfFile: boolean }> {
+	): Promise<{ endOfFile: boolean }> {
 		const ret = await this.driver.sendMessage<NVMOperationsResponse>(
 			new NVMOperationsWriteRequest(this.driver, {
 				offset,
 				buffer,
 			}),
 		);
+
+		if (!ret.isOK()) {
+			let message = "Could not write to the external NVM";
+			if (ret.status === NVMOperationStatus.Error_OperationInterference) {
+				message += ": interference between read and write operation.";
+			} else if (
+				ret.status === NVMOperationStatus.Error_OperationMismatch
+			) {
+				message += ": wrong operation requested.";
+			}
+			throw new ZWaveError(
+				message,
+				ZWaveErrorCodes.Controller_CommandError,
+			);
+		}
+
 		return {
-			success: ret.isOK(),
 			endOfFile: ret.status === NVMOperationStatus.EndOfFile,
 		};
 	}
@@ -3977,29 +3992,32 @@ ${associatedNodes.join(", ")}`,
 		// Try reading the maximum size at first, the Serial API should return chunks in a size it supports
 		// For some reason, there is no documentation and no official command for this
 		let chunkSize: number = Math.min(0xff, ret.length);
-		while (offset < ret.length) {
-			const { buffer: chunk, endOfFile } =
-				await this.externalNVMReadBuffer700(
-					offset,
-					Math.min(chunkSize, ret.length - offset),
-				);
-			if (chunkSize === 0xff && chunk.length === 0) {
-				// Some SDK versions return an empty buffer when trying to read a buffer that is too long
-				// Fallback to a sane (but maybe slow) size
-				chunkSize = 48;
-				continue;
+		try {
+			while (offset < ret.length) {
+				const { buffer: chunk, endOfFile } =
+					await this.externalNVMReadBuffer700(
+						offset,
+						Math.min(chunkSize, ret.length - offset),
+					);
+				if (chunkSize === 0xff && chunk.length === 0) {
+					// Some SDK versions return an empty buffer when trying to read a buffer that is too long
+					// Fallback to a sane (but maybe slow) size
+					chunkSize = 48;
+					continue;
+				}
+				chunk.copy(ret, offset);
+				offset += chunk.length;
+				if (chunkSize > chunk.length) chunkSize = chunk.length;
+
+				// Report progress for listeners
+				if (onProgress) setImmediate(() => onProgress(offset, size));
+
+				if (endOfFile) break;
 			}
-			chunk.copy(ret, offset);
-			offset += chunk.length;
-			if (chunkSize > chunk.length) chunkSize = chunk.length;
-
-			// Report progress for listeners
-			if (onProgress) setImmediate(() => onProgress(offset, size));
-
-			if (endOfFile) break;
+		} finally {
+			// Whatever happens, close the NVM
+			await this.externalNVMClose();
 		}
-		// Close NVM
-		await this.externalNVMClose();
 
 		return ret;
 	}
@@ -4098,21 +4116,16 @@ ${associatedNodes.join(", ")}`,
 		const chunkSize =
 			(await this.externalNVMReadBuffer700(0, 0xff)).buffer.length || 48;
 
-		// Close NVM and re-open again but for writing
+		// Close NVM and re-open again for writing
 		await this.externalNVMClose();
 		await this.externalNVMOpen();
 
 		for (let offset = 0; offset < nvmData.length; offset += chunkSize) {
-			const { success, endOfFile } = await this.externalNVMWriteBuffer700(
+			const { endOfFile } = await this.externalNVMWriteBuffer700(
 				offset,
 				nvmData.slice(offset, offset + chunkSize),
 			);
-			if (!success) {
-				throw new ZWaveError(
-					"Failed to restore, could not write NVM data!",
-					ZWaveErrorCodes.Controller_CommandError,
-				);
-			}
+
 			// Report progress for listeners
 			if (onProgress) setImmediate(() => onProgress(offset, size));
 
