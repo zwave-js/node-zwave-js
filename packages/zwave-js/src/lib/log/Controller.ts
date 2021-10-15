@@ -30,12 +30,12 @@ interface LogNodeOptions {
 	endpoint?: number;
 }
 
-type ControllerLogContext = LogContext & { source: "controller" };
+export type ControllerLogContext = LogContext<"controller">;
 
-type ControllerNodeLogContext = ControllerLogContext &
+export type ControllerNodeLogContext = ControllerLogContext &
 	NodeLogContext & { endpoint?: number; direction: string };
 
-type ControllerValueLogContext = ControllerLogContext &
+export type ControllerValueLogContext = ControllerLogContext &
 	ValueLogContext & {
 		direction?: string;
 		change?: "added" | "updated" | "removed" | "notification";
@@ -44,7 +44,7 @@ type ControllerValueLogContext = ControllerLogContext &
 
 export type LogValueArgs<T> = T & { nodeId: number; internal?: boolean };
 
-export class ControllerLogger extends ZWaveLoggerBase {
+export class ControllerLogger extends ZWaveLoggerBase<ControllerLogContext> {
 	constructor(loggers: ZWaveLogContainer) {
 		super(loggers, CONTROLLER_LABEL);
 	}
@@ -260,7 +260,7 @@ export class ControllerLogger extends ZWaveLoggerBase {
 		if (!this.isControllerLogVisible()) return;
 		if (!this.container.shouldLogNode(node.id)) return;
 
-		this.logger.log({
+		this.logger.log<ControllerNodeLogContext>({
 			level: CONTROLLER_LOGLEVEL,
 			primaryTags: tagify([getNodeTag(node.id)]),
 			message:
@@ -275,7 +275,7 @@ export class ControllerLogger extends ZWaveLoggerBase {
 				source: "controller",
 				type: "node",
 				direction: "none",
-			} as ControllerNodeLogContext,
+			},
 		});
 	}
 
@@ -287,7 +287,7 @@ export class ControllerLogger extends ZWaveLoggerBase {
 		const message = `Beginning interview - last completed stage: ${
 			InterviewStage[node.interviewStage]
 		}`;
-		this.logger.log({
+		this.logger.log<ControllerNodeLogContext>({
 			level: CONTROLLER_LOGLEVEL,
 			primaryTags: tagify([getNodeTag(node.id)]),
 			message,
@@ -297,7 +297,7 @@ export class ControllerLogger extends ZWaveLoggerBase {
 				source: "controller",
 				type: "node",
 				direction: "none",
-			} as ControllerNodeLogContext,
+			},
 		});
 	}
 }

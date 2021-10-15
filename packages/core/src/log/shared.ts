@@ -45,7 +45,8 @@ export const LOG_WIDTH = 80;
 /** The width of the columns containing the timestamp and channel */
 export const LOG_PREFIX_WIDTH = 20;
 
-export interface ZWaveLogInfo extends Omit<TransformableInfo, "message"> {
+export interface ZWaveLogInfo<TContext extends LogContext = LogContext>
+	extends Omit<TransformableInfo, "message"> {
 	direction: string;
 	/** Primary tags are printed before the message and must fit into the first line.
 	 * They don't have to be enclosed in square brackets */
@@ -57,12 +58,14 @@ export interface ZWaveLogInfo extends Omit<TransformableInfo, "message"> {
 	timestamp?: string;
 	label?: string;
 	message: string | string[];
-	context: LogContext;
+	context: TContext;
 }
 
-export interface LogContext {
-	source: "controller" | "config" | "driver" | "serial";
-	type: string;
+export interface LogContext<T extends string = string> {
+	/** Which logger this log came from */
+	source: T;
+	/** An optional identifier to distinguish different log types from the same logger */
+	type?: string;
 }
 
 export type NodeLogContext = LogContext & { nodeId: number; type: "node" };
@@ -84,17 +87,20 @@ export function getNodeTag(nodeId: number): string {
 	return "Node " + padStart(nodeId.toString(), 3, "0");
 }
 
-export type ZWaveLogger = Omit<Logger, "log"> & {
-	log: (info: ZWaveLogInfo) => void;
+export type ZWaveLogger<TContext extends LogContext = LogContext> = Omit<
+	Logger,
+	"log"
+> & {
+	log: <T extends TContext>(info: ZWaveLogInfo<T>) => void;
 };
 
-export class ZWaveLoggerBase {
+export class ZWaveLoggerBase<TContext extends LogContext = LogContext> {
 	constructor(loggers: ZWaveLogContainer, logLabel: string) {
 		this.container = loggers;
 		this.logger = this.container.getLogger(logLabel);
 	}
 
-	public logger: ZWaveLogger;
+	public logger: ZWaveLogger<TContext>;
 	public container: ZWaveLogContainer;
 }
 

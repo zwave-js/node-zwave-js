@@ -8,9 +8,9 @@ import {
 export const CONFIG_LABEL = "CONFIG";
 const CONFIG_LOGLEVEL = "debug";
 
-export type ConfigLogContext = LogContext & { type: "config" };
+export type ConfigLogContext = LogContext<"config">;
 
-export class ConfigLogger extends ZWaveLoggerBase {
+export class ConfigLogger extends ZWaveLoggerBase<ConfigLogContext> {
 	constructor(loggers: ZWaveLogContainer) {
 		super(loggers, CONFIG_LABEL);
 	}
@@ -30,7 +30,7 @@ export class ConfigLogger extends ZWaveLoggerBase {
 			level: actualLevel,
 			message,
 			direction: getDirectionPrefix("none"),
-			context: { source: "config", type: "config" } as ConfigLogContext,
+			context: { source: "config" },
 		});
 	}
 }

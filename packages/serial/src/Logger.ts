@@ -12,14 +12,12 @@ import { MessageHeaders } from "./MessageHeaders";
 export const SERIAL_LABEL = "SERIAL";
 const SERIAL_LOGLEVEL = "debug";
 
-export type SerialLogContext = LogContext & {
-	source: "serial";
-	type: "serial";
+export interface SerialLogContext extends LogContext<"serial"> {
 	direction: DataDirection;
 	header?: string;
-};
+}
 
-export class SerialLogger extends ZWaveLoggerBase {
+export class SerialLogger extends ZWaveLoggerBase<SerialLogContext> {
 	constructor(loggers: ZWaveLogContainer) {
 		super(loggers, SERIAL_LABEL);
 	}
@@ -66,10 +64,10 @@ export class SerialLogger extends ZWaveLoggerBase {
 			secondaryTags: `(${num2hex(header)})`,
 			direction: getDirectionPrefix(direction),
 			context: {
+				source: "serial",
 				header: getEnumMemberName(MessageHeaders, header),
 				direction,
-				source: "serial",
-			} as SerialLogContext,
+			},
 		});
 	}
 
@@ -86,10 +84,9 @@ export class SerialLogger extends ZWaveLoggerBase {
 				secondaryTags: `(${data.length} bytes)`,
 				direction: getDirectionPrefix(direction),
 				context: {
-					direction,
 					source: "serial",
-					type: "serial",
-				} as SerialLogContext,
+					direction,
+				},
 			});
 		}
 		if (process.env.NODE_ENV !== "test") {
@@ -131,9 +128,8 @@ export class SerialLogger extends ZWaveLoggerBase {
 				direction: getDirectionPrefix("none"),
 				context: {
 					source: "serial",
-					type: "serial",
 					direction: "none",
-				} as SerialLogContext,
+				},
 			});
 		}
 	}
