@@ -739,7 +739,7 @@ export class Driver extends TypedEventEmitter<DriverEventCallbacks> {
 
 			// Perform initialization sequence
 			await this.writeHeader(MessageHeaders.NAK);
-			await this.softReset();
+			await this.maybeSoftReset();
 
 			// Try to create the cache directory. This can fail, in which case we should expose a good error message
 			try {
@@ -1567,54 +1567,67 @@ export class Driver extends TypedEventEmitter<DriverEventCallbacks> {
 	}
 
 	private isSoftResetting: boolean = false;
-	private hasLoggedSoftResetWarning: boolean = false;
+
+	/**
+	 * Soft-resets the controller if the feature is enabled
+	 */
+	public async maybeSoftReset(): Promise<void> {
+		if (this.options.enableSoftReset) {
+			await this.softReset();
+		} else {
+			const message = `The soft reset feature is not enabled, skipping API call.`;
+			this.controllerLog.print(message, "warn");
+		}
+	}
 
 	/**
 	 * Instruct the controller to soft-reset.
-	 * Warning: USB modules will reconnect, meaning that they might get a new address.
+	 *
+	 * **Warning:** USB modules will reconnect, meaning that they might get a new address.
+	 *
+	 * **Warning:** This call will throw if soft-reset is not enabled.
 	 */
 	public async softReset(): Promise<void> {
-		if (this.options.enableSoftReset) {
-			this.controllerLog.print("performing soft reset...");
-
-			try {
-				this.isSoftResetting = true;
-				await this.sendMessage(new SoftResetRequest(this), {
-					supportCheck: false,
-					pauseSendThread: true,
-				});
-
-				// TODO: This will cause the controller to issue a FUNC_ID_SERIAL_API_STARTED command
-				// We should react to that instead of waiting a fixed 1.5 seconds
-			} catch (e) {
-				this.controllerLog.print(
-					`Soft reset failed: ${getErrorMessage(e)}`,
-					"error",
-				);
-			}
-
-			// Wait 1.5 seconds after reset to ensure that the module is ready for communication again
-			await wait(1500);
-
-			// If the controller disconnected the serial port during the soft reset, we need to re-open it
-			if (!this.serial!.isOpen) {
-				await this.tryOpenSerialport();
-			}
-
-			this.isSoftResetting = false;
-
-			// And resume sending
-			this.unpauseSendThread();
-		} else if (!this.hasLoggedSoftResetWarning) {
-			this.hasLoggedSoftResetWarning = true;
-			const message =
-				"Soft reset of the controller from within Docker requires configuration of the container and/or host. To enable it, set the corresponding driver option or the ZWAVEJS_ENABLE_SOFT_RESET environment variable.";
-			this.controllerLog.print(message, "warn");
-			this.emit(
-				"error",
-				new ZWaveError(message, ZWaveErrorCodes.Driver_NotSupported),
+		if (!this.options.enableSoftReset) {
+			const message = `The soft reset feature is not enabled. To enable it, set the corresponding driver option or the ZWAVEJS_ENABLE_SOFT_RESET environment variable.
+Note that soft reset from within Docker requires special configuration of the container and/or host system.`;
+			this.controllerLog.print(message, "error");
+			throw new ZWaveError(
+				message,
+				ZWaveErrorCodes.Driver_FeatureDisabled,
 			);
 		}
+
+		this.controllerLog.print("performing soft reset...");
+
+		try {
+			this.isSoftResetting = true;
+			await this.sendMessage(new SoftResetRequest(this), {
+				supportCheck: false,
+				pauseSendThread: true,
+			});
+
+			// TODO: This will cause the controller to issue a FUNC_ID_SERIAL_API_STARTED command
+			// We should react to that instead of waiting a fixed 1.5 seconds
+		} catch (e) {
+			this.controllerLog.print(
+				`Soft reset failed: ${getErrorMessage(e)}`,
+				"error",
+			);
+		}
+
+		// Wait 1.5 seconds after reset to ensure that the module is ready for communication again
+		await wait(1500);
+
+		// If the controller disconnected the serial port during the soft reset, we need to re-open it
+		if (!this.serial!.isOpen) {
+			await this.tryOpenSerialport();
+		}
+
+		this.isSoftResetting = false;
+
+		// And resume sending
+		this.unpauseSendThread();
 	}
 
 	/**

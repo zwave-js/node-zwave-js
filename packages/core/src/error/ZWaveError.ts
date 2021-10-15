@@ -1,5 +1,5 @@
 /**
- * Used to identify errors from this library without relying on the error message
+ * Used to identify errors from this library without relying on the specific wording of the error message
  */
 export enum ZWaveErrorCodes {
 	PacketFormat_Truncated,
@@ -11,7 +11,7 @@ export enum ZWaveErrorCodes {
 	PacketFormat_DecryptionFailed,
 
 	/** The driver failed to start */
-	Driver_Failed,
+	Driver_Failed = 100,
 	Driver_Reset,
 	Driver_Destroyed,
 	Driver_NotReady,
@@ -23,9 +23,10 @@ export enum ZWaveErrorCodes {
 	/** The driver tried to do something that requires security */
 	Driver_NoSecurity,
 	Driver_NoErrorHandler,
+	Driver_FeatureDisabled,
 
 	/** The controller has timed out while waiting for a report from the node */
-	Controller_Timeout,
+	Controller_Timeout = 200,
 	Controller_NodeTimeout,
 	Controller_MessageDropped,
 	Controller_ResponseNOK,
@@ -54,17 +55,17 @@ export enum ZWaveErrorCodes {
 	/** A Serial API command resulted in an error response */
 	Controller_CommandError,
 
-	CC_Invalid,
+	CC_Invalid = 300,
 	CC_NoNodeID,
 	CC_NotSupported,
 	CC_NotImplemented,
 	CC_NoAPI,
 
-	Deserialization_NotImplemented,
+	Deserialization_NotImplemented = 320,
 	Arithmetic,
 	Argument_Invalid,
 
-	Config_Invalid,
+	Config_Invalid = 340,
 	Config_NotFound,
 	/** A compound config file has circular imports */
 	Config_CircularImport,
@@ -79,7 +80,7 @@ export enum ZWaveErrorCodes {
 	// Here follow message specific errors
 
 	/** The removal process could not be started or completed due to one or several reasons */
-	RemoveFailedNode_Failed,
+	RemoveFailedNode_Failed = 360,
 	/** The removal process was aborted because the node has responded */
 	RemoveFailedNode_NodeOK,
 	/** The replace process could not be started or completed due to one or several reasons */
