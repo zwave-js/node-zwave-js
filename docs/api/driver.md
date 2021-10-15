@@ -558,6 +558,11 @@ interface ZWaveOptions {
 		/** Allows you to specify a different cache directory */
 		cacheDir: string;
 		/**
+		 * Allows you to specify a different directory for the lockfiles than cacheDir.
+		 * Can also be set with the ZWAVEJS_LOCK_DIRECTORY env variable.
+		 */
+		lockDir?: string;
+		/**
 		 * Allows you to specify a directory where device configuration files can be loaded from with higher priority than the included ones.
 		 * This directory does not get indexed and should be used sparingly, e.g. for testing.
 		 */
@@ -647,7 +652,8 @@ The `report` timeout is used by this library to determine how long to wait for a
 If your network has connectivity issues, you can increase the number of interview attempts the driver makes before giving up. The default is `5`.
 
 For more control over writing the cache files, you can use the `storage` options. By default, the cache is located inside `node_modules/zwave-js/cache` and written using Node.js built-in `fs` methods (promisified using `fs-extra`). The replacement file system must adhere to the [`FileSystem`](#FileSystem) interface.
-The `throttle` option allows you to fine-tune the filesystem. The default value `"normal"`
+The `throttle` option allows you to fine-tune the filesystem. The default value is `"normal"`.
+Note that the lockfiles to avoid concurrent cache accesses are updated every couple of seconds. If you have concerns regarding SD card wear, you can change the `lockDir` option to point a directory that resides in a RAM filesystem.
 
 For custom logging options you can use `logConfig`, check [`LogConfig`](#LogConfig) interface for more informations.
 The logging options can be changed on the fly using the [`updateLogConfig`](#updateLogConfig) method.
