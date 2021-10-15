@@ -99,6 +99,7 @@ describe("lib/driver/Driver => ", () => {
 
 		it("the start promise should be rejected if the port opening fails", async () => {
 			const driver = new Driver(PORT_ADDRESS, {
+				attempts: { openSerialPort: 1 },
 				interview: { skipInterview: true },
 				logConfig: { enabled: false },
 			});
@@ -110,7 +111,9 @@ describe("lib/driver/Driver => ", () => {
 
 			// fail opening of the serialport
 			const portInstance = MockSerialPort.getInstance(PORT_ADDRESS)!;
-			portInstance.openStub.mockRejectedValue(new Error("NOPE"));
+			portInstance.openStub.mockImplementation(() =>
+				Promise.reject(new Error("NOPE")),
+			);
 
 			await expect(startPromise).rejects.toThrow("NOPE");
 			await driver.destroy();
@@ -118,6 +121,7 @@ describe("lib/driver/Driver => ", () => {
 
 		it("after a failed start, starting again should not be possible", async () => {
 			const driver = new Driver(PORT_ADDRESS, {
+				attempts: { openSerialPort: 1 },
 				interview: { skipInterview: true },
 				logConfig: { enabled: false },
 			});

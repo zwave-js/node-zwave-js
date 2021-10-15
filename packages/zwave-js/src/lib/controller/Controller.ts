@@ -26,6 +26,7 @@ import {
 	Mixin,
 	num2hex,
 	ObjectKeyMap,
+	padVersion,
 	pick,
 	ReadonlyObjectKeyMap,
 	TypedEventEmitter,
@@ -39,6 +40,7 @@ import {
 import { composeObject } from "alcalzone-shared/objects";
 import { isObject } from "alcalzone-shared/typeguards";
 import crypto from "crypto";
+import semver from "semver";
 import util from "util";
 import {
 	Security2CCKEXFail,
@@ -136,6 +138,14 @@ import {
 	nvmSizeToBufferSize,
 } from "../serialapi/nvm/GetNVMIdMessages";
 import {
+	NVMOperationsCloseRequest,
+	NVMOperationsOpenRequest,
+	NVMOperationsReadRequest,
+	NVMOperationsResponse,
+	NVMOperationStatus,
+	NVMOperationsWriteRequest,
+} from "../serialapi/nvm/NVMOperationsMessages";
+import {
 	AddNodeStatus,
 	AddNodeToNetworkRequest,
 	AddNodeType,
@@ -219,6 +229,7 @@ import { SetSUCNodeIdRequest } from "./SetSUCNodeIDMessages";
 import { ZWaveLibraryTypes } from "./ZWaveLibraryTypes";
 
 export type HealNodeStatus = "pending" | "done" | "failed" | "skipped";
+type SerialAPIVersion = `${number}.${number}`;
 
 export type ThrowingMap<K, V> = Map<K, V> & { getOrThrow(key: K): V };
 export type ReadonlyThrowingMap<K, V> = ReadonlyMap<K, V> & {
@@ -341,6 +352,50 @@ export class ZWaveController extends TypedEventEmitter<ControllerEventCallbacks>
 	private _serialApiVersion: string | undefined;
 	public get serialApiVersion(): string | undefined {
 		return this._serialApiVersion;
+	}
+
+	/** Checks if the Serial API version is greater than the given one */
+	public serialApiGt(version: SerialAPIVersion): boolean | undefined {
+		if (this._serialApiVersion === undefined) {
+			return undefined;
+		}
+		return semver.gt(
+			padVersion(this._serialApiVersion),
+			padVersion(version),
+		);
+	}
+
+	/** Checks if the Serial API version is greater than or equal to the given one */
+	public serialApiGte(version: SerialAPIVersion): boolean | undefined {
+		if (this._serialApiVersion === undefined) {
+			return undefined;
+		}
+		return semver.gte(
+			padVersion(this._serialApiVersion),
+			padVersion(version),
+		);
+	}
+
+	/** Checks if the Serial API version is lower than the given one */
+	public serialApiLt(version: SerialAPIVersion): boolean | undefined {
+		if (this._serialApiVersion === undefined) {
+			return undefined;
+		}
+		return semver.lt(
+			padVersion(this._serialApiVersion),
+			padVersion(version),
+		);
+	}
+
+	/** Checks if the Serial API version is lower than or equal to the given one */
+	public serialApiLte(version: SerialAPIVersion): boolean | undefined {
+		if (this._serialApiVersion === undefined) {
+			return undefined;
+		}
+		return semver.lte(
+			padVersion(this._serialApiVersion),
+			padVersion(version),
+		);
 	}
 
 	private _manufacturerId: number | undefined;
@@ -3441,7 +3496,8 @@ ${associatedNodes.join(", ")}`,
 				ZWaveErrorCodes.Driver_NotSupported,
 			);
 		}
-		// TODO: Issue soft reset
+
+		if (result.success) await this.driver.softReset();
 		return result.success;
 	}
 
@@ -3658,7 +3714,11 @@ ${associatedNodes.join(", ")}`,
 		}
 	}
 
-	/** Returns information of the controller's external NVM */
+	/**
+	 * **Z-Wave 500 series only**
+	 *
+	 * Returns information of the controller's external NVM
+	 */
 	public async getNVMId(): Promise<NVMId> {
 		const ret = await this.driver.sendMessage<GetNVMIdResponse>(
 			new GetNVMIdRequest(this.driver),
@@ -3666,7 +3726,11 @@ ${associatedNodes.join(", ")}`,
 		return pick(ret, ["nvmManufacturerId", "memoryType", "memorySize"]);
 	}
 
-	/** Reads a byte from the external NVM at the given offset */
+	/**
+	 * **Z-Wave 500 series only**
+	 *
+	 * Reads a byte from the external NVM at the given offset
+	 */
 	public async externalNVMReadByte(offset: number): Promise<number> {
 		const ret = await this.driver.sendMessage<ExtNVMReadLongByteResponse>(
 			new ExtNVMReadLongByteRequest(this.driver, { offset }),
@@ -3675,6 +3739,8 @@ ${associatedNodes.join(", ")}`,
 	}
 
 	/**
+	 * **Z-Wave 500 series only**
+	 *
 	 * Writes a byte to the external NVM at the given offset
 	 * **WARNING:** This function can write in the full NVM address space and is not offset to start at the application area.
 	 * Take care not to accidentally overwrite the protocol NVM area!
@@ -3691,18 +3757,63 @@ ${associatedNodes.join(", ")}`,
 		return ret.success;
 	}
 
-	/** Reads a buffer from the external NVM at the given offset */
+	/**
+	 * **Z-Wave 500 series only**
+	 *
+	 * Reads a buffer from the external NVM at the given offset
+	 */
 	public async externalNVMReadBuffer(
 		offset: number,
 		length: number,
 	): Promise<Buffer> {
 		const ret = await this.driver.sendMessage<ExtNVMReadLongBufferResponse>(
-			new ExtNVMReadLongBufferRequest(this.driver, { offset, length }),
+			new ExtNVMReadLongBufferRequest(this.driver, {
+				offset,
+				length,
+			}),
 		);
 		return ret.buffer;
 	}
 
 	/**
+	 * **Z-Wave 700 series only**
+	 *
+	 * Reads a buffer from the external NVM at the given offset
+	 */
+	public async externalNVMReadBuffer700(
+		offset: number,
+		length: number,
+	): Promise<{ buffer: Buffer; endOfFile: boolean }> {
+		const ret = await this.driver.sendMessage<NVMOperationsResponse>(
+			new NVMOperationsReadRequest(this.driver, {
+				offset,
+				length,
+			}),
+		);
+		if (!ret.isOK()) {
+			let message = "Could not read from the external NVM";
+			if (ret.status === NVMOperationStatus.Error_OperationInterference) {
+				message += ": interference between read and write operation.";
+			} else if (
+				ret.status === NVMOperationStatus.Error_OperationMismatch
+			) {
+				message += ": wrong operation requested.";
+			}
+			throw new ZWaveError(
+				message,
+				ZWaveErrorCodes.Controller_CommandError,
+			);
+		}
+
+		return {
+			buffer: ret.buffer,
+			endOfFile: ret.status === NVMOperationStatus.EndOfFile,
+		};
+	}
+
+	/**
+	 * **Z-Wave 500 series only**
+	 *
 	 * Writes a buffer to the external NVM at the given offset
 	 * **WARNING:** This function can write in the full NVM address space and is not offset to start at the application area.
 	 * Take care not to accidentally overwrite the protocol NVM area!
@@ -3724,6 +3835,79 @@ ${associatedNodes.join(", ")}`,
 	}
 
 	/**
+	 * **Z-Wave 700 series only**
+	 *
+	 * Writes a buffer to the external NVM at the given offset
+	 * **WARNING:** This function can write in the full NVM address space and is not offset to start at the application area.
+	 * Take care not to accidentally overwrite the protocol NVM area!
+	 */
+	public async externalNVMWriteBuffer700(
+		offset: number,
+		buffer: Buffer,
+	): Promise<{ endOfFile: boolean }> {
+		const ret = await this.driver.sendMessage<NVMOperationsResponse>(
+			new NVMOperationsWriteRequest(this.driver, {
+				offset,
+				buffer,
+			}),
+		);
+
+		if (!ret.isOK()) {
+			let message = "Could not write to the external NVM";
+			if (ret.status === NVMOperationStatus.Error_OperationInterference) {
+				message += ": interference between read and write operation.";
+			} else if (
+				ret.status === NVMOperationStatus.Error_OperationMismatch
+			) {
+				message += ": wrong operation requested.";
+			}
+			throw new ZWaveError(
+				message,
+				ZWaveErrorCodes.Controller_CommandError,
+			);
+		}
+
+		return {
+			endOfFile: ret.status === NVMOperationStatus.EndOfFile,
+		};
+	}
+
+	/**
+	 * **Z-Wave 700 series only**
+	 *
+	 * Opens the controller's external NVM for reading/writing and returns the NVM size
+	 */
+	public async externalNVMOpen(): Promise<number> {
+		const ret = await this.driver.sendMessage<NVMOperationsResponse>(
+			new NVMOperationsOpenRequest(this.driver),
+		);
+		if (!ret.isOK()) {
+			throw new ZWaveError(
+				"Failed to open the external NVM",
+				ZWaveErrorCodes.Controller_CommandError,
+			);
+		}
+		return ret.offsetOrSize;
+	}
+
+	/**
+	 * **Z-Wave 700 series only**
+	 *
+	 * Closes the controller's external NVM
+	 */
+	public async externalNVMClose(): Promise<void> {
+		const ret = await this.driver.sendMessage<NVMOperationsResponse>(
+			new NVMOperationsCloseRequest(this.driver),
+		);
+		if (!ret.isOK()) {
+			throw new ZWaveError(
+				"Failed to close the external NVM",
+				ZWaveErrorCodes.Controller_CommandError,
+			);
+		}
+	}
+
+	/**
 	 * Creates a backup of the NVM and returns the raw data as a Buffer. The Z-Wave radio is turned off/on automatically.
 	 * @param onProgress Can be used to monitor the progress of the operation, which may take several seconds up to a few minutes depending on the NVM size
 	 * @returns The raw NVM buffer
@@ -3731,6 +3915,8 @@ ${associatedNodes.join(", ")}`,
 	public async backupNVMRaw(
 		onProgress?: (bytesRead: number, total: number) => void,
 	): Promise<Buffer> {
+		this.driver.controllerLog.print("Backing up NVM...");
+
 		// Turn Z-Wave radio off to avoid having the protocol write to the NVM while dumping it
 		if (!(await this.toggleRF(false))) {
 			throw new ZWaveError(
@@ -3739,6 +3925,29 @@ ${associatedNodes.join(", ")}`,
 			);
 		}
 
+		let ret: Buffer;
+		try {
+			if (this.serialApiGte("7.0")) {
+				ret = await this.backupNVMRaw700(onProgress);
+			} else {
+				ret = await this.backupNVMRaw500(onProgress);
+			}
+			this.driver.controllerLog.print("NVM backup completed");
+		} finally {
+			// Whatever happens, turn Z-Wave radio back on
+			await this.toggleRF(true);
+		}
+
+		// TODO: You can also get away with eliding all the 0xff pages. The NVR also holds the page size of the NVM (NVMP),
+		// so you can figure out which pages you don't have to save or restore. If you do this, you need to make sure to issue a
+		// "factory reset" before restoring the NVM - that'll blank out the NVM to 0xffs before initializing it.
+
+		return ret;
+	}
+
+	private async backupNVMRaw500(
+		onProgress?: (bytesRead: number, total: number) => void,
+	): Promise<Buffer> {
 		const size = nvmSizeToBufferSize((await this.getNVMId()).memorySize);
 		if (!size) {
 			throw new ZWaveError(
@@ -3770,13 +3979,46 @@ ${associatedNodes.join(", ")}`,
 			// Report progress for listeners
 			if (onProgress) setImmediate(() => onProgress(offset, size));
 		}
+		return ret;
+	}
 
-		// TODO: You can also get away with eliding all the 0xff pages. The NVR also holds the page size of the NVM (NVMP),
-		// so you can figure out which pages you don't have to save or restore. If you do this, you need to make sure to issue a
-		// "factory reset" before restoring the NVM - that'll blank out the NVM to 0xffs before initializing it.
+	private async backupNVMRaw700(
+		onProgress?: (bytesRead: number, total: number) => void,
+	): Promise<Buffer> {
+		// Open NVM for reading
+		const size = await this.externalNVMOpen();
 
-		// Turn Z-Wave radio back on
-		await this.toggleRF(true);
+		const ret = Buffer.allocUnsafe(size);
+		let offset = 0;
+		// Try reading the maximum size at first, the Serial API should return chunks in a size it supports
+		// For some reason, there is no documentation and no official command for this
+		let chunkSize: number = Math.min(0xff, ret.length);
+		try {
+			while (offset < ret.length) {
+				const { buffer: chunk, endOfFile } =
+					await this.externalNVMReadBuffer700(
+						offset,
+						Math.min(chunkSize, ret.length - offset),
+					);
+				if (chunkSize === 0xff && chunk.length === 0) {
+					// Some SDK versions return an empty buffer when trying to read a buffer that is too long
+					// Fallback to a sane (but maybe slow) size
+					chunkSize = 48;
+					continue;
+				}
+				chunk.copy(ret, offset);
+				offset += chunk.length;
+				if (chunkSize > chunk.length) chunkSize = chunk.length;
+
+				// Report progress for listeners
+				if (onProgress) setImmediate(() => onProgress(offset, size));
+
+				if (endOfFile) break;
+			}
+		} finally {
+			// Whatever happens, close the NVM
+			await this.externalNVMClose();
+		}
 
 		return ret;
 	}
@@ -3792,6 +4034,8 @@ ${associatedNodes.join(", ")}`,
 		nvmData: Buffer,
 		onProgress?: (bytesWritten: number, total: number) => void,
 	): Promise<void> {
+		this.driver.controllerLog.print("Restoring NVM...");
+
 		// Turn Z-Wave radio off to avoid having the protocol write to the NVM while dumping it
 		if (!(await this.toggleRF(false))) {
 			throw new ZWaveError(
@@ -3800,6 +4044,39 @@ ${associatedNodes.join(", ")}`,
 			);
 		}
 
+		try {
+			if (this.serialApiGte("7.0")) {
+				await this.restoreNVMRaw700(nvmData, onProgress);
+			} else {
+				await this.restoreNVMRaw500(nvmData, onProgress);
+			}
+			this.driver.controllerLog.print("NVM backup restored");
+		} finally {
+			// Whatever happens, turn Z-Wave radio back on
+			await this.toggleRF(true);
+		}
+
+		// TODO: You can also get away with eliding all the 0xff pages. The NVR also holds the page size of the NVM (NVMP),
+		// so you can figure out which pages you don't have to save or restore. If you do this, you need to make sure to issue a
+		// "factory reset" before restoring the NVM - that'll blank out the NVM to 0xffs before initializing it.
+
+		if (this.driver.options.enableSoftReset) {
+			this.driver.controllerLog.print(
+				"Activating restored NVM backup...",
+			);
+			await this.driver.softReset();
+		} else {
+			this.driver.controllerLog.print(
+				"Soft reset not enabled, cannot automatically activate restored NVM backup!",
+				"warn",
+			);
+		}
+	}
+
+	private async restoreNVMRaw500(
+		nvmData: Buffer,
+		onProgress?: (bytesWritten: number, total: number) => void,
+	): Promise<void> {
 		const size = nvmSizeToBufferSize((await this.getNVMId()).memorySize);
 		if (!size) {
 			throw new ZWaveError(
@@ -3812,10 +4089,6 @@ ${associatedNodes.join(", ")}`,
 				ZWaveErrorCodes.Argument_Invalid,
 			);
 		}
-
-		// TODO: You can also get away with eliding all the 0xff pages. The NVR also holds the page size of the NVM (NVMP),
-		// so you can figure out which pages you don't have to save or restore. If you do this, you need to make sure to issue a
-		// "factory reset" before restoring the NVM - that'll blank out the NVM to 0xffs before initializing it.
 
 		// Figure out the maximum chunk size the Serial API supports
 		// For some reason, there is no documentation and no official command for this
@@ -3831,10 +4104,45 @@ ${associatedNodes.join(", ")}`,
 			// Report progress for listeners
 			if (onProgress) setImmediate(() => onProgress(offset, size));
 		}
+	}
 
-		// Turn Z-Wave radio back on
-		await this.toggleRF(true);
+	private async restoreNVMRaw700(
+		nvmData: Buffer,
+		onProgress?: (bytesWritten: number, total: number) => void,
+	): Promise<void> {
+		// Open NVM for reading
+		const size = await this.externalNVMOpen();
 
-		// TODO: Soft Reset
+		if (size !== nvmData.length) {
+			throw new ZWaveError(
+				"The given data does not match the NVM size - cannot restore!",
+				ZWaveErrorCodes.Argument_Invalid,
+			);
+		}
+
+		// Figure out the maximum chunk size the Serial API supports
+		// For some reason, there is no documentation and no official command for this
+		// The write requests have the same size as the read response - if this yields no
+		// data, default to a sane (but maybe slow) size
+		const chunkSize =
+			(await this.externalNVMReadBuffer700(0, 0xff)).buffer.length || 48;
+
+		// Close NVM and re-open again for writing
+		await this.externalNVMClose();
+		await this.externalNVMOpen();
+
+		for (let offset = 0; offset < nvmData.length; offset += chunkSize) {
+			const { endOfFile } = await this.externalNVMWriteBuffer700(
+				offset,
+				nvmData.slice(offset, offset + chunkSize),
+			);
+
+			// Report progress for listeners
+			if (onProgress) setImmediate(() => onProgress(offset, size));
+
+			if (endOfFile) break;
+		}
+		// Close NVM
+		await this.externalNVMClose();
 	}
 }

@@ -51,6 +51,9 @@ export enum ZWaveErrorCodes {
 	/** The message has expired (the given timeout has elapsed) */
 	Controller_MessageExpired,
 
+	/** A Serial API command resulted in an error response */
+	Controller_CommandError,
+
 	CC_Invalid,
 	CC_NoNodeID,
 	CC_NotSupported,
