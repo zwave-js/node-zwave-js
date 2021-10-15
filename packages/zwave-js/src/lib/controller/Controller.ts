@@ -3497,7 +3497,7 @@ ${associatedNodes.join(", ")}`,
 			);
 		}
 
-		if (result.success) await this.driver.softReset();
+		if (result.success) await this.driver.trySoftReset();
 		return result.success;
 	}
 
