@@ -1140,6 +1140,23 @@ export class ZWaveController extends TypedEventEmitter<ControllerEventCallbacks>
 		}
 	}
 
+	private _bootstrappingS2NodeId: number | undefined;
+	/**
+	 * @internal
+	 * Returns which node is currently being bootstrapped with S2
+	 */
+	public get bootstrappingS2NodeId(): number | undefined {
+		return this._bootstrappingS2NodeId;
+	}
+
+	private cancelBootstrapS2Promise: DeferredPromise<KEXFailType> | undefined;
+	public cancelSecureBootstrapS2(reason: KEXFailType): void {
+		if (this.cancelBootstrapS2Promise) {
+			this.cancelBootstrapS2Promise.resolve(reason);
+			this.cancelBootstrapS2Promise = undefined;
+		}
+	}
+
 	private async secureBootstrapS2(
 		node: ZWaveNode,
 		assumeSupported: boolean = false,
@@ -1177,6 +1194,10 @@ export class ZWaveController extends TypedEventEmitter<ControllerEventCallbacks>
 			this.driver.securityManager2?.tempKeys.delete(node.id);
 		};
 
+		// Allow canceling the bootstrapping process
+		this._bootstrappingS2NodeId = node.id;
+		this.cancelBootstrapS2Promise = createDeferredPromise();
+
 		try {
 			const api = node.commandClasses["Security 2"];
 			const abort = async (failType?: KEXFailType): Promise<void> => {
@@ -1190,6 +1211,9 @@ export class ZWaveController extends TypedEventEmitter<ControllerEventCallbacks>
 				// Un-grant S2 security classes we might have granted
 				unGrantSecurityClasses();
 				deleteTempKey();
+				// We're no longer bootstrapping
+				this._bootstrappingS2NodeId = undefined;
+				this.cancelBootstrapS2Promise = undefined;
 			};
 
 			const abortUser = () => {
@@ -1386,14 +1410,22 @@ export class ZWaveController extends TypedEventEmitter<ControllerEventCallbacks>
 				return abortUser();
 			}
 
-			const keySetEcho = await this.driver.waitForCommand<
-				Security2CCKEXSet | Security2CCKEXFail
-			>(
-				(cc) =>
-					cc instanceof Security2CCKEXSet ||
-					cc instanceof Security2CCKEXFail,
-				tai2RemainingMs,
-			);
+			const keySetEcho = await Promise.race([
+				this.driver.waitForCommand<
+					Security2CCKEXSet | Security2CCKEXFail
+				>(
+					(cc) =>
+						cc instanceof Security2CCKEXSet ||
+						cc instanceof Security2CCKEXFail,
+					tai2RemainingMs,
+				),
+				this.cancelBootstrapS2Promise,
+			]);
+			if (typeof keySetEcho === "number") {
+				// The bootstrapping process was canceled - this is most likely because the PIN was incorrect
+				// and the node's commands cannot be decoded
+				return abort(keySetEcho);
+			}
 			// Validate that the received command contains the correct list of keys
 			if (keySetEcho instanceof Security2CCKEXFail || !keySetEcho.echo) {
 				this.driver.controllerLog.logNode(node.id, {
@@ -1563,6 +1595,9 @@ export class ZWaveController extends TypedEventEmitter<ControllerEventCallbacks>
 		} finally {
 			// Whatever happens, no further communication needs the temporary key
 			deleteTempKey();
+			// And we're no longer bootstrapping
+			this._bootstrappingS2NodeId = undefined;
+			this.cancelBootstrapS2Promise = undefined;
 		}
 	}
 

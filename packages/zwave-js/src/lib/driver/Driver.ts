@@ -72,6 +72,7 @@ import {
 } from "../commandclass/ICommandClassContainer";
 import { MultiChannelCC } from "../commandclass/MultiChannelCC";
 import { messageIsPing } from "../commandclass/NoOperationCC";
+import { KEXFailType } from "../commandclass/Security2/shared";
 import {
 	SecurityCC,
 	SecurityCCCommandEncapsulationNonceGet,
@@ -2052,7 +2053,17 @@ Note that soft reset from within Docker requires special configuration of the co
 					? "Message authentication failed"
 					: "No SPAN is established yet";
 
-			if (!this.hasPendingTransactions(isS2NonceReport)) {
+			if (this.controller.bootstrappingS2NodeId === nodeId) {
+				// The node is currently being bootstrapped. Us not being able to decode the command means we need to abort the bootstrapping process
+				this.controllerLog.logNode(nodeId, {
+					message: `${message}, cannot decode command. Aborting the S2 bootstrapping process...`,
+					level: "error",
+					direction: "inbound",
+				});
+				this.controller.cancelSecureBootstrapS2(
+					KEXFailType.BootstrappingCanceled,
+				);
+			} else if (!this.hasPendingTransactions(isS2NonceReport)) {
 				this.controllerLog.logNode(nodeId, {
 					message: `${message}, cannot decode command. Requesting a nonce...`,
 					level: "verbose",
