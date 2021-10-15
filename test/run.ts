@@ -28,6 +28,7 @@ const driver = new Driver("COM5", {
 	},
 	storage: {
 		cacheDir: path.join(__dirname, "cache"),
+		lockDir: path.join(__dirname, "cache/locks"),
 	},
 })
 	.on("error", console.error)

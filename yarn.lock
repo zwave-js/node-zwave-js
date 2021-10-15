@@ -51,14 +51,14 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@alcalzone/jsonl-db@npm:^1.3.0":
-  version: 1.3.0
-  resolution: "@alcalzone/jsonl-db@npm:1.3.0"
+"@alcalzone/jsonl-db@npm:^2.2.0":
+  version: 2.2.0
+  resolution: "@alcalzone/jsonl-db@npm:2.2.0"
   dependencies:
-    alcalzone-shared: ^3.0.4
-    fs-extra: ^9.1.0
+    alcalzone-shared: ^4.0.0
+    fs-extra: ^10.0.0
     proper-lockfile: ^4.1.2
-  checksum: 49324f985227e97da0f277d761cf05565ae9b567e05a5eabb49ce8eb2a22e6535eab5c979f8d88dd1ad2ed6ad261bd83df3f738fa3dc206402ac5cd1a0ab076e
+  checksum: 8e1fb815675d7df5fa60704ce2654309351ead03318dd0d36d999f3798fe689cf2799636bbc72c5ccca11c997643b332bac9f6caea766de8500c64f22d2265fb
   languageName: node
   linkType: hard
 
@@ -4231,7 +4231,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@zwave-js/core@workspace:packages/core"
   dependencies:
-    "@alcalzone/jsonl-db": ^1.3.0
+    "@alcalzone/jsonl-db": ^2.2.0
     "@types/jest": ^26.0.24
     "@types/node": ^15.12.5
     "@types/triple-beam": ^1.3.2
@@ -4295,7 +4295,7 @@ __metadata:
     "@actions/core": ^1.6.0
     "@actions/exec": ^1.1.0
     "@actions/github": ^5.0.0
-    "@alcalzone/jsonl-db": ^1.3.0
+    "@alcalzone/jsonl-db": ^2.2.0
     "@alcalzone/release-script": ~3.4.0
     "@alcalzone/release-script-plugin-lerna": ~3.3.0
     "@babel/core": ^7.15.8
@@ -4550,15 +4550,6 @@ __metadata:
     require-from-string: ^2.0.2
     uri-js: ^4.2.2
   checksum: e091264ff6c8134d9072e804f6f1d56e8dacc143537852d9afb456f0bb6c4eff98307e152da2faf7afef2ebf665278316aa5cf30f7d81ccecc9654c11629e2a6
-  languageName: node
-  linkType: hard
-
-"alcalzone-shared@npm:^3.0.4":
-  version: 3.0.4
-  resolution: "alcalzone-shared@npm:3.0.4"
-  dependencies:
-    debug: ^4.3.1
-  checksum: b952fcbb75c8703bc6efb8193aec5ff4479cb73adc8b133479fa176e1ab815edae1991643a70abcd180d2a86d0484e182d8d051cf05b23901ce874ac2273a152
   languageName: node
   linkType: hard
 
@@ -14127,7 +14118,7 @@ typescript@4.4.3:
   version: 0.0.0-use.local
   resolution: "zwave-js@workspace:packages/zwave-js"
   dependencies:
-    "@alcalzone/jsonl-db": ^1.3.0
+    "@alcalzone/jsonl-db": ^2.2.0
     "@alcalzone/pak": ^0.7.0
     "@sentry/integrations": ^6.13.3
     "@sentry/node": ^6.13.3

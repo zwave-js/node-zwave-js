@@ -79,6 +79,11 @@ export interface ZWaveOptions {
 		/** Allows you to specify a different cache directory */
 		cacheDir: string;
 		/**
+		 * Allows you to specify a different directory for the lockfiles than cacheDir.
+		 * Can also be set with the ZWAVEJS_LOCK_DIRECTORY env variable.
+		 */
+		lockDir?: string;
+		/**
 		 * Allows you to specify a directory where device configuration files can be loaded from with higher priority than the included ones.
 		 * This directory does not get indexed and should be used sparingly, e.g. for testing.
 		 */

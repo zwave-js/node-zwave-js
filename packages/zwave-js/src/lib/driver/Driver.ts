@@ -200,6 +200,7 @@ const defaultOptions: ZWaveOptions = {
 	storage: {
 		driver: fsExtra,
 		cacheDir: path.resolve(libraryRootDir, "cache"),
+		lockDir: process.env.ZWAVEJS_LOCK_DIRECTORY,
 		throttle: "normal",
 	},
 	preferences: {
@@ -874,6 +875,9 @@ export class Driver extends TypedEventEmitter<DriverEventCallbacks> {
 				ignoreReadErrors: true,
 				...throttlePresets[this.options.storage.throttle],
 			};
+			if (this.options.storage.lockDir) {
+				options.lockfileDirectory = this.options.storage.lockDir;
+			}
 
 			const valueDBFile = path.join(
 				this.cacheDir,
