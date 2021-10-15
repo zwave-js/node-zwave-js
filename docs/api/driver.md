@@ -102,7 +102,7 @@ Since it might be necessary to control a node **before** its supported CC versio
 
 ```ts
 async softReset(): Promise<void>
-async maybeSoftReset(): Promise<void>
+async trySoftReset(): Promise<void>
 ```
 
 Instruct the controller to soft-reset (restart). The returned Promise will resolve after the controller has restarted and can be used again.
@@ -110,7 +110,7 @@ Instruct the controller to soft-reset (restart). The returned Promise will resol
 > [!NOTE] Soft-reset is known to cause problems in Docker containers where a reconnection of the serial device will prevent it from being connected again. There are ways around this, but they require host configuration or changes to how the container is started.  
 > Therefore soft-reset is disabled in Docker unless the `ZWAVEJS_ENABLE_SOFT_RESET` environment variable or the `enableSoftReset` driver option is set.
 
-`softReset` will throw when called while soft-reset is not enabled. Consider using `maybeSoftReset` instead, which only performs a soft-reset when enabled.
+`softReset` will throw when called while soft-reset is not enabled. Consider using `trySoftReset` instead, which only performs a soft-reset when enabled.
 
 > [!WARNING] USB modules will reconnect, meaning that they might get a new address. Make sure to configure your device address in a way that prevents it from changing, e.g. by using `/dev/serial/by-id/...` on Linux.
 

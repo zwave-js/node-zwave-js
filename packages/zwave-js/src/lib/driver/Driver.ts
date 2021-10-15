@@ -739,7 +739,7 @@ export class Driver extends TypedEventEmitter<DriverEventCallbacks> {
 
 			// Perform initialization sequence
 			await this.writeHeader(MessageHeaders.NAK);
-			await this.maybeSoftReset();
+			await this.trySoftReset();
 
 			// Try to create the cache directory. This can fail, in which case we should expose a good error message
 			try {
@@ -1571,7 +1571,7 @@ export class Driver extends TypedEventEmitter<DriverEventCallbacks> {
 	/**
 	 * Soft-resets the controller if the feature is enabled
 	 */
-	public async maybeSoftReset(): Promise<void> {
+	public async trySoftReset(): Promise<void> {
 		if (this.options.enableSoftReset) {
 			await this.softReset();
 		} else {
