@@ -30,10 +30,13 @@ export class ZWaveSerialPort extends ZWaveSerialPortBase {
 						parity: "none",
 					}),
 				open: (serial: SerialPort) =>
-					new Promise((resolve) => {
-						// detect serial disconnection errors
-						serial.on("close", (err?: DisconnectError) => {
+					new Promise((resolve, reject) => {
+						// eslint-disable-next-line prefer-const
+						let removeListeners: () => void;
+						const onClose = (err?: DisconnectError) => {
+							// detect serial disconnection errors
 							if (err?.disconnected === true) {
+								removeListeners();
 								this.emit(
 									"error",
 									new ZWaveError(
@@ -42,8 +45,28 @@ export class ZWaveSerialPort extends ZWaveSerialPortBase {
 									),
 								);
 							}
-						});
-						serial.once("open", resolve).open();
+						};
+						const onError = (err: Error) => {
+							removeListeners();
+							reject(err);
+						};
+						const onOpen = () => {
+							removeListeners();
+							resolve();
+						};
+
+						// We need to remove the listeners again no matter which of the handlers is called
+						// Otherwise this would cause an EventEmitter leak.
+						// Hence this somewhat ugly construct
+						removeListeners = () => {
+							serial.removeListener("close", onClose);
+							serial.removeListener("error", onError);
+							serial.removeListener("open", onOpen);
+						};
+
+						serial.once("close", onClose);
+						serial.once("error", onError);
+						serial.once("open", onOpen).open();
 					}),
 				close: (serial: SerialPort) =>
 					new Promise((resolve) => {
