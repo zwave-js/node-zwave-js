@@ -17,9 +17,9 @@
 		"min": "0.0",
 		"max": "255.255"
 	},
-	"supportsZWavePlus": true,
-	"paramInformation": {
-		"42": {
+	"paramInformation": [
+		{
+			"#": "42",
 			"label": "Duration",
 			"description": "Set the duration value of the sent commands",
 			"valueSize": 1,
@@ -28,7 +28,8 @@
 			"defaultValue": 255,
 			"unsigned": true
 		},
-		"254": {
+		{
+			"#": "254",
 			"label": "Configuration Lock",
 			"description": "Lock/unlock all configuration parameters.",
 			"valueSize": 1,
@@ -47,7 +48,8 @@
 				}
 			]
 		},
-		"255": {
+		{
+			"#": "255",
 			"label": "Reset/Remove",
 			"description": "Reset the sensor or remove from the Z-Wave network",
 			"valueSize": 4,
@@ -70,5 +72,5 @@
 				}
 			]
 		}
-	}
+	]
 }

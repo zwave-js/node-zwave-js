@@ -18,9 +18,9 @@
 		"min": "0.0",
 		"max": "255.255"
 	},
-	"supportsZWavePlus": true,
-	"paramInformation": {
-		"1": {
+	"paramInformation": [
+		{
+			"#": "1",
 			"label": "Direction",
 			"valueSize": 1,
 			"minValue": 0,
@@ -38,7 +38,8 @@
 				}
 			]
 		},
-		"2": {
+		{
+			"#": "2",
 			"label": "Speed (Torque)",
 			"valueSize": 1,
 			"minValue": 1,
@@ -68,7 +69,8 @@
 				}
 			]
 		},
-		"3": {
+		{
+			"#": "3",
 			"label": "Mode",
 			"valueSize": 1,
 			"minValue": 0,
@@ -90,21 +92,24 @@
 				}
 			]
 		},
-		"4": {
+		{
+			"#": "4",
 			"label": "Turn degrees",
 			"valueSize": 1,
 			"minValue": 1,
 			"maxValue": 100,
 			"defaultValue": 1
 		},
-		"5": {
+		{
+			"#": "5",
 			"label": "Auto Latch time",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 60,
 			"defaultValue": 0
 		},
-		"6": {
+		{
+			"#": "6",
 			"label": "Sound",
 			"valueSize": 1,
 			"minValue": 0,
@@ -122,7 +127,8 @@
 				}
 			]
 		},
-		"7": {
+		{
+			"#": "7",
 			"label": "Battery Type",
 			"valueSize": 1,
 			"minValue": 0,
@@ -144,14 +150,16 @@
 				}
 			]
 		},
-		"8": {
+		{
+			"#": "8",
 			"label": "Battery alarm value",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 100,
 			"defaultValue": 0
 		},
-		"9": {
+		{
+			"#": "9",
 			"label": "TurnAndGo",
 			"valueSize": 1,
 			"minValue": 0,
@@ -169,7 +177,8 @@
 				}
 			]
 		},
-		"10": {
+		{
+			"#": "10",
 			"label": "BrakeAndGoBack",
 			"description": "Turn 75 degrees back after x seconds",
 			"valueSize": 1,
@@ -244,7 +253,8 @@
 				}
 			]
 		},
-		"11": {
+		{
+			"#": "11",
 			"label": "Async",
 			"description": "Used if the lock is using an optional rotation sensor",
 			"valueSize": 1,
@@ -263,7 +273,8 @@
 				}
 			]
 		},
-		"12": {
+		{
+			"#": "12",
 			"label": "ReportType",
 			"description": "Door lock operation report type",
 			"valueSize": 1,
@@ -286,7 +297,7 @@
 				}
 			]
 		}
-	},
+	],
 	"metadata": {
 		"inclusion": "To add or include the danalock into a Z-Wave network\nSet the controller in inclusion mode\nTouch the User Button until you hear two beeps.",
 		"exclusion": "To remove or exclude the danalock into a Z-Wave network\nSet the controller in exclusion mode\nTouch the User Button until you hear two beeps",

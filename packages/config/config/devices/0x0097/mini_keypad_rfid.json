@@ -29,8 +29,9 @@
 			"isLifeline": true
 		}
 	},
-	"paramInformation": {
-		"1": {
+	"paramInformation": [
+		{
+			"#": "1",
 			"label": "Set to default",
 			"description": "Set all configuration to factory settings",
 			"valueSize": 1,
@@ -45,7 +46,8 @@
 				}
 			]
 		},
-		"2": {
+		{
+			"#": "2",
 			"label": "Feedback time",
 			"description": "To configure the time the beep is automatically turned off in seconds.",
 			"valueSize": 1,
@@ -65,7 +67,8 @@
 				}
 			]
 		},
-		"3": {
+		{
+			"#": "3",
 			"label": "Feedback timeout",
 			"description": "Timeout beep",
 			"valueSize": 1,
@@ -73,7 +76,8 @@
 			"maxValue": 127,
 			"defaultValue": 0
 		},
-		"4": {
+		{
+			"#": "4",
 			"label": "Feedback beeps per second",
 			"description": "To configure the number of beeps per second. Every beep is fixed about 10ms.",
 			"unit": "ms",
@@ -82,7 +86,8 @@
 			"maxValue": 127,
 			"defaultValue": 2
 		},
-		"5": {
+		{
+			"#": "5",
 			"label": "The mode",
 			"description": "Operating mode",
 			"valueSize": 1,
@@ -105,5 +110,5 @@
 				}
 			]
 		}
-	}
+	]
 }

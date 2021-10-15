@@ -13,9 +13,9 @@
 		"min": "0.0",
 		"max": "255.255"
 	},
-	"supportsZWavePlus": true,
-	"paramInformation": {
-		"1": {
+	"paramInformation": [
+		{
+			"#": "1",
 			"label": "Watt Meter Report Period",
 			"unit": "5",
 			"valueSize": 2,
@@ -23,7 +23,8 @@
 			"maxValue": 32767,
 			"defaultValue": 720
 		},
-		"2": {
+		{
+			"#": "2",
 			"label": "kWh Meter Report Period",
 			"unit": "10 minutes",
 			"valueSize": 2,
@@ -31,7 +32,8 @@
 			"maxValue": 32767,
 			"defaultValue": 6
 		},
-		"3": {
+		{
+			"#": "3",
 			"label": "Threshold of current for Load caution",
 			"unit": "0.01 A",
 			"valueSize": 2,
@@ -39,14 +41,16 @@
 			"maxValue": 1100,
 			"defaultValue": 1100
 		},
-		"4": {
+		{
+			"#": "4",
 			"label": "Threshold of KWh for Load caution",
 			"valueSize": 2,
 			"minValue": 10,
 			"maxValue": 10000,
 			"defaultValue": 10000
 		},
-		"5": {
+		{
+			"#": "5",
 			"label": "Restore switch state mode",
 			"valueSize": 1,
 			"minValue": 0,
@@ -68,7 +72,8 @@
 				}
 			]
 		},
-		"6": {
+		{
+			"#": "6",
 			"label": "Manual On/Off mode",
 			"valueSize": 1,
 			"minValue": 0,
@@ -86,7 +91,8 @@
 				}
 			]
 		},
-		"7": {
+		{
+			"#": "7",
 			"label": "LED indication mode",
 			"valueSize": 1,
 			"minValue": 1,
@@ -108,14 +114,16 @@
 				}
 			]
 		},
-		"8": {
+		{
+			"#": "8",
 			"label": "Auto off timer",
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 32767,
 			"defaultValue": 0
 		},
-		"9": {
+		{
+			"#": "9",
 			"label": "RF off command mode",
 			"valueSize": 1,
 			"minValue": 0,
@@ -141,7 +149,8 @@
 				}
 			]
 		},
-		"10": {
+		{
+			"#": "10",
 			"label": "Switch mode",
 			"description": "Edge or Pulse mode or Edge-Toggle mode",
 			"valueSize": 1,
@@ -164,7 +173,8 @@
 				}
 			]
 		},
-		"11": {
+		{
+			"#": "11",
 			"label": "Manual Switch Report mode",
 			"valueSize": 1,
 			"minValue": 0,
@@ -182,5 +192,5 @@
 				}
 			]
 		}
-	}
+	]
 }

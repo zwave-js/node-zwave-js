@@ -13,9 +13,9 @@
 		"min": "0.0",
 		"max": "255.255"
 	},
-	"supportsZWavePlus": true,
-	"paramInformation": {
-		"2": {
+	"paramInformation": [
+		{
+			"#": "2",
 			"label": "Basic Set Level",
 			"description": "Basic command to turn on the light",
 			"valueSize": 1,
@@ -34,7 +34,8 @@
 				}
 			]
 		},
-		"3": {
+		{
+			"#": "3",
 			"label": "PIR Sensitivity",
 			"description": "setting",
 			"valueSize": 1,
@@ -42,7 +43,8 @@
 			"maxValue": 99,
 			"defaultValue": 80
 		},
-		"4": {
+		{
+			"#": "4",
 			"label": "Light Threshold",
 			"description": "setting",
 			"valueSize": 1,
@@ -50,7 +52,8 @@
 			"maxValue": 100,
 			"defaultValue": 99
 		},
-		"8": {
+		{
+			"#": "8",
 			"label": "PIR motion re-trigger min interval",
 			"unit": "8s ticks",
 			"valueSize": 1,
@@ -58,7 +61,8 @@
 			"maxValue": 127,
 			"defaultValue": 3
 		},
-		"9": {
+		{
+			"#": "9",
 			"label": "Light on time hysteresis",
 			"description": "time to keep the light on without motion",
 			"unit": "8s ticks",
@@ -67,7 +71,8 @@
 			"maxValue": 127,
 			"defaultValue": 4
 		},
-		"10": {
+		{
+			"#": "10",
 			"label": "Battery level auto-report interval",
 			"unit": "ticks",
 			"valueSize": 1,
@@ -75,7 +80,8 @@
 			"maxValue": 127,
 			"defaultValue": 12
 		},
-		"11": {
+		{
+			"#": "11",
 			"label": "Door state report interval",
 			"unit": "ticks",
 			"valueSize": 1,
@@ -83,7 +89,8 @@
 			"maxValue": 127,
 			"defaultValue": 12
 		},
-		"12": {
+		{
+			"#": "12",
 			"label": "Illumination auto report interval",
 			"unit": "ticks",
 			"valueSize": 1,
@@ -91,7 +98,8 @@
 			"maxValue": 127,
 			"defaultValue": 12
 		},
-		"13": {
+		{
+			"#": "13",
 			"label": "Temperature report interval",
 			"unit": "ticks",
 			"valueSize": 1,
@@ -99,7 +107,8 @@
 			"maxValue": 127,
 			"defaultValue": 12
 		},
-		"20": {
+		{
+			"#": "20",
 			"label": "Tick duration",
 			"description": "auto-reports tick duration",
 			"unit": "s",
@@ -109,7 +118,8 @@
 			"defaultValue": 30,
 			"unsigned": true
 		},
-		"21": {
+		{
+			"#": "21",
 			"label": "Temperature differential to report",
 			"unit": "Fahrenheit",
 			"valueSize": 1,
@@ -117,7 +127,8 @@
 			"maxValue": 127,
 			"defaultValue": 1
 		},
-		"22": {
+		{
+			"#": "22",
 			"label": "Min illumination differential",
 			"unit": "percent",
 			"valueSize": 1,
@@ -125,7 +136,8 @@
 			"maxValue": 63,
 			"defaultValue": 0
 		},
-		"5[0x02]": {
+		{
+			"#": "5[0x02]",
 			"label": "Operation mode",
 			"description": "set test mode if DIP switch in customer mode",
 			"valueSize": 1,
@@ -144,7 +156,8 @@
 				}
 			]
 		},
-		"5[0x04]": {
+		{
+			"#": "5[0x04]",
 			"label": "Disable the door/window function",
 			"description": "Disable/Enable the function",
 			"valueSize": 1,
@@ -163,7 +176,8 @@
 				}
 			]
 		},
-		"5[0x08]": {
+		{
+			"#": "5[0x08]",
 			"label": "Temperature Unit",
 			"valueSize": 1,
 			"minValue": 0,
@@ -181,7 +195,8 @@
 				}
 			]
 		},
-		"5[0x10]": {
+		{
+			"#": "5[0x10]",
 			"label": "Disable illumination reports",
 			"valueSize": 1,
 			"minValue": 0,
@@ -199,7 +214,8 @@
 				}
 			]
 		},
-		"5[0x20]": {
+		{
+			"#": "5[0x20]",
 			"label": "Disable temperature reports",
 			"valueSize": 1,
 			"minValue": 0,
@@ -217,7 +233,8 @@
 				}
 			]
 		},
-		"5[0x80]": {
+		{
+			"#": "5[0x80]",
 			"label": "Back key release action",
 			"description": "Disable/enable the back key release into test mode",
 			"valueSize": 1,
@@ -236,7 +253,8 @@
 				}
 			]
 		},
-		"6[0x01]": {
+		{
+			"#": "6[0x01]",
 			"label": "Magnetic integration for lighting control",
 			"description": "Switch control",
 			"valueSize": 1,
@@ -255,7 +273,8 @@
 				}
 			]
 		},
-		"6[0x02]": {
+		{
+			"#": "6[0x02]",
 			"label": "PIR integration to control lighting",
 			"description": "PIR integration",
 			"valueSize": 1,
@@ -274,7 +293,8 @@
 				}
 			]
 		},
-		"6[0x04]": {
+		{
+			"#": "6[0x04]",
 			"label": "Magetic/pir integration",
 			"description": "control lighting in association group 2",
 			"valueSize": 1,
@@ -293,7 +313,8 @@
 				}
 			]
 		},
-		"6[0x08]": {
+		{
+			"#": "6[0x08]",
 			"label": "Device and lighting in same room",
 			"valueSize": 1,
 			"minValue": 0,
@@ -311,7 +332,8 @@
 				}
 			]
 		},
-		"6[0x10]": {
+		{
+			"#": "6[0x10]",
 			"label": "Disable delay to turn off the light",
 			"description": "disable/enable delay",
 			"valueSize": 1,
@@ -330,7 +352,8 @@
 				}
 			]
 		},
-		"6[0x20]": {
+		{
+			"#": "6[0x20]",
 			"label": "Light off control",
 			"description": "disable/enable auto turn off the light",
 			"valueSize": 1,
@@ -349,7 +372,8 @@
 				}
 			]
 		},
-		"7[0x02]": {
+		{
+			"#": "7[0x02]",
 			"label": "Motion Off Report",
 			"valueSize": 1,
 			"minValue": 0,
@@ -367,7 +391,8 @@
 				}
 			]
 		},
-		"7[0x04]": {
+		{
+			"#": "7[0x04]",
 			"label": "PIR Super-Sensitivity",
 			"valueSize": 1,
 			"minValue": 0,
@@ -385,7 +410,8 @@
 				}
 			]
 		},
-		"7[0x08]": {
+		{
+			"#": "7[0x08]",
 			"label": "BASIC OFF report",
 			"description": "Disable/enable report after door closed",
 			"valueSize": 1,
@@ -404,7 +430,8 @@
 				}
 			]
 		},
-		"7[0x10]": {
+		{
+			"#": "7[0x10]",
 			"label": "Door closed report type",
 			"description": "notification or sensor binary report",
 			"valueSize": 1,
@@ -423,7 +450,8 @@
 				}
 			]
 		},
-		"7[0x20]": {
+		{
+			"#": "7[0x20]",
 			"label": "Multi CC in auto report",
 			"description": "disable/enable multi CC in report",
 			"valueSize": 1,
@@ -442,7 +470,8 @@
 				}
 			]
 		},
-		"7[0x40]": {
+		{
+			"#": "7[0x40]",
 			"label": "Battery state reports",
 			"valueSize": 1,
 			"minValue": 0,
@@ -460,5 +489,5 @@
 				}
 			]
 		}
-	}
+	]
 }

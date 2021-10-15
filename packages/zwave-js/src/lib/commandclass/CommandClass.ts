@@ -346,7 +346,7 @@ export class CommandClass {
 		try {
 			const ret = new Constructor(driver, options);
 			return ret;
-		} catch (e: unknown) {
+		} catch (e) {
 			// Indicate invalid payloads with a special CC type
 			if (
 				isZWaveError(e) &&
@@ -375,12 +375,18 @@ export class CommandClass {
 					reason = e.context;
 				}
 
-				return new InvalidCC(driver, {
+				const ret = new InvalidCC(driver, {
 					nodeId,
 					ccId,
 					ccName,
 					reason,
 				});
+
+				if (options.fromEncapsulation) {
+					ret.encapsulatingCC = options.encapCC as any;
+				}
+
+				return ret;
 			}
 			throw e;
 		}
@@ -507,7 +513,7 @@ export class CommandClass {
 	public getNodeUnsafe(): ZWaveNode | undefined {
 		try {
 			return this.getNode();
-		} catch (e: unknown) {
+		} catch (e) {
 			// This was expected
 			if (isZWaveError(e) && e.code === ZWaveErrorCodes.Driver_NotReady) {
 				return undefined;
@@ -1008,6 +1014,23 @@ export class CommandClass {
 			}
 		}
 		return false;
+	}
+
+	/** Traverses the encapsulation stack of this CC and returns the one that has the given CC id and (optionally) CC Command if that exists. */
+	public getEncapsulatingCC(
+		ccId: CommandClasses,
+		ccCommand?: number,
+	): CommandClass | undefined {
+		let cc: CommandClass = this;
+		while (cc.encapsulatingCC) {
+			cc = cc.encapsulatingCC;
+			if (
+				cc.ccId === ccId &&
+				(ccCommand === undefined || cc.ccCommand === ccCommand)
+			) {
+				return cc;
+			}
+		}
 	}
 }
 
@@ -1515,7 +1538,8 @@ export function API(cc: CommandClasses): TypedClassDecorator<CCAPI> {
 }
 
 /**
- * Retrieves the implemented version defined for a Z-Wave command class
+ * @publicAPI
+ * Retrieves the CC API constructor that is defined for a Z-Wave command class
  */
 export function getAPI(cc: CommandClasses): APIConstructor | undefined {
 	// Retrieve the constructor map from the CCAPI class

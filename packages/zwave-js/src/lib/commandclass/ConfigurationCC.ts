@@ -1298,7 +1298,7 @@ alters capabilities: ${!!properties.altersCapabilities}`;
 		for (const [param, info] of config.entries()) {
 			// We need to make the config information compatible with the
 			// format that ConfigurationCC reports
-			const paramInfo: Partial<ConfigurationMetadata> = {
+			const paramInfo: Partial<ConfigurationMetadata> = stripUndefined({
 				// TODO: Make this smarter! (0...1 ==> boolean)
 				type: "number",
 				valueSize: info.valueSize,
@@ -1324,7 +1324,7 @@ alters capabilities: ${!!properties.altersCapabilities}`;
 				label: info.label,
 				description: info.description,
 				isFromConfig: true,
-			};
+			});
 			this.extendParamInformation(
 				param.parameter,
 				param.valueBitMask,
@@ -1630,7 +1630,7 @@ export class ConfigurationCCSet extends ConfigurationCC {
 				);
 			} catch (e) {
 				tryCatchOutOfBoundsError(
-					e,
+					e as Error,
 					this.value,
 					this.parameter,
 					valueSize,
@@ -1791,7 +1791,7 @@ export class ConfigurationCCBulkSet extends ConfigurationCC {
 					);
 				} catch (e) {
 					tryCatchOutOfBoundsError(
-						e,
+						e as Error,
 						value,
 						param,
 						valueSize,

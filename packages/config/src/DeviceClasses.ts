@@ -91,7 +91,7 @@ export async function loadDeviceClassesInternal(
 		}
 
 		return { basicDeviceClasses, genericDeviceClasses };
-	} catch (e: unknown) {
+	} catch (e) {
 		if (isZWaveError(e)) {
 			throw e;
 		} else {

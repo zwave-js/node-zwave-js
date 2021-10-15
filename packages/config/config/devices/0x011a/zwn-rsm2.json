@@ -33,8 +33,9 @@
 			"maxNodes": 3
 		}
 	},
-	"paramInformation": {
-		"3": {
+	"paramInformation": [
+		{
+			"#": "3",
 			"label": "Unsolicited Report Configuration",
 			"description": "Send unsolicited status report to primary controller",
 			"valueSize": 1,
@@ -43,7 +44,7 @@
 			"defaultValue": 0,
 			"unsigned": true
 		}
-	},
+	],
 	"metadata": {
 		"inclusion": "When the controller is in add mode, press and release the program button of ZWN-RSM2 module,or Flick 3 times of the connected switch with Aux1 line(or Aux 2 line) in 1.5 second. Then the controller will add the module into current Z-Wave network",
 		"exclusion": "When the controller is in remove mode, press and release the program button of ZWN-RSM2 module, or Flick 3 times of the connected switch with Aux1 line (or Aux2 line) in 1.5 second. Then the controller will remove the module from current Z-Wave network",

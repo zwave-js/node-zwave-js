@@ -98,6 +98,18 @@ Since it might be necessary to control a node **before** its supported CC versio
 -   **throws (!)** if the requested CC is not implemented in this library
 -   returns the version the node claims to support otherwise
 
+### `softReset`
+
+```ts
+async softReset(): Promise<void>
+```
+
+Instruct the controller to soft-reset (restart). The returned Promise will resolve after the controller has restarted and can be used again.
+
+> [!WARNING] USB modules will reconnect, meaning that they might get a new address. Make sure to configure your device address in a way that prevents it from changing, e.g. by using `/dev/serial/by-id/...` on Linux.
+
+> [!NOTE] This method is known to cause problems in Docker containers where a reconnection of the serial device will prevent it from being connected again. There are ways around this, but they require host configuration or changes to how the container is started. Therefore this method won't do anything inside Docker unless the `ZWAVEJS_ENABLE_SOFT_RESET` environment variable or the `enableSoftReset` driver option is set.
+
 ### `hardReset`
 
 ```ts
@@ -392,6 +404,8 @@ interface SendMessageOptions {
 	changeNodeStatusOnMissingACK?: boolean;
 	/** Sets the number of milliseconds after which a message expires. When the expiration timer elapses, the promise is rejected with the error code `Controller_MessageExpired`. */
 	expire?: number;
+	/** If a Wake Up On Demand should be requested for the target node. */
+	requestWakeUpOnDemand?: boolean;
 }
 ```
 
@@ -533,6 +547,7 @@ interface ZWaveOptions {
 		 */
 		queryAllUserCodes?: boolean;
 	};
+
 	storage: {
 		/** Allows you to replace the default file system driver used to store and read the cache */
 		driver: FileSystem;
@@ -568,7 +583,8 @@ interface ZWaveOptions {
 	 * Some Command Classes support reporting that a value is unknown.
 	 * When this flag is `false`, unknown values are exposed as `undefined`.
 	 * When it is `true`, unknown values are exposed as the literal string "unknown" (even if the value is normally numeric).
-	 * Default: `false` */
+	 * Default: `false`
+	 */
 	preserveUnknownValues?: boolean;
 
 	/**
@@ -582,6 +598,13 @@ interface ZWaveOptions {
 	 * Default: `false`
 	 */
 	disableOptimisticValueUpdate?: boolean;
+
+	/**
+	 * Soft Reset is required after some commands like changing the RF region or restoring an NVM backup.
+	 * Because it may be problematic in certain environments like Docker, the functionality must be opted into.
+	 * Default: `false` in Docker, `true` when ZWAVEJS_ENABLE_SOFT_RESET env variable is set or outside Docker.
+	 */
+	enableSoftReset?: boolean;
 
 	preferences: {
 		/**

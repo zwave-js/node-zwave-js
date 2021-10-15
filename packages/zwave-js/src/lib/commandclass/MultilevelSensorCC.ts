@@ -1,4 +1,4 @@
-import { Scale } from "@zwave-js/config";
+import { getDefaultScale, Scale } from "@zwave-js/config";
 import type {
 	MessageOrCCLogEntry,
 	MessageRecord,
@@ -15,7 +15,7 @@ import {
 	ZWaveError,
 	ZWaveErrorCodes,
 } from "@zwave-js/core";
-import { pick } from "@zwave-js/shared";
+import { num2hex, pick } from "@zwave-js/shared";
 import type { Driver } from "../driver/Driver";
 import { MessagePriority } from "../message/Constants";
 import {
@@ -140,6 +140,25 @@ function getPreferredSensorScale(
 	} else {
 		return preferred;
 	}
+}
+
+export function getSupportedSensorTypesValueId(endpoint: number): ValueID {
+	return {
+		commandClass: CommandClasses["Multilevel Sensor"],
+		endpoint: endpoint,
+		property: "supportedSensorTypes",
+	};
+}
+export function getSupportedScalesValueId(
+	endpoint: number,
+	sensorType: number,
+): ValueID {
+	return {
+		commandClass: CommandClasses["Multilevel Sensor"],
+		endpoint: endpoint,
+		property: "supportedScales",
+		propertyKey: sensorType,
+	};
 }
 
 // @noSetValueAPI This CC is read-only
@@ -504,6 +523,9 @@ export class MultilevelSensorCCReport extends MultilevelSensorCC {
 		if (gotDeserializationOptions(options)) {
 			validatePayload(this.payload.length >= 1);
 			this.type = this.payload[0];
+			const sensorType = this.driver.configManager.lookupSensorType(
+				this.type,
+			);
 			// parseFloatWithScale does its own validation
 			const { value, scale } = parseFloatWithScale(this.payload.slice(1));
 			this.value = value;
@@ -511,6 +533,39 @@ export class MultilevelSensorCCReport extends MultilevelSensorCC {
 				this.type,
 				scale,
 			);
+
+			// Filter out unknown sensor types and scales
+			validatePayload.withReason(
+				`Unknown sensor type ${num2hex(this.type)} or corrupted data`,
+			)(!!sensorType);
+			validatePayload.withReason(
+				`Unknown scale ${num2hex(scale)} or corrupted data`,
+			)(this.scale.label !== getDefaultScale(scale).label);
+
+			// Filter out unsupported sensor types and scales if possible
+			if (this.version >= 5) {
+				const valueDB = this.getValueDB();
+
+				const supportedSensorTypes = valueDB.getValue<number[]>(
+					getSupportedSensorTypesValueId(this.endpointIndex),
+				);
+				if (supportedSensorTypes?.length) {
+					validatePayload.withReason(
+						`Unsupported sensor type ${
+							sensorType!.label
+						} or corrupted data`,
+					)(supportedSensorTypes.includes(this.type));
+				}
+
+				const supportedScales = valueDB.getValue<number[]>(
+					getSupportedScalesValueId(this.endpointIndex, this.type),
+				);
+				if (supportedScales?.length) {
+					validatePayload.withReason(
+						`Unsupported sensor type ${this.scale.label} or corrupted data`,
+					)(supportedScales.includes(this.scale.key));
+				}
+			}
 
 			this.persistValues();
 		} else {

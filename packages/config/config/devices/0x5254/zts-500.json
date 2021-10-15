@@ -17,9 +17,9 @@
 		"min": "0.0",
 		"max": "255.255"
 	},
-	"supportsZWavePlus": true,
-	"paramInformation": {
-		"1": {
+	"paramInformation": [
+		{
+			"#": "1",
 			"label": "Temp. Scale",
 			"description": "0=C, 1=F",
 			"valueSize": 1,
@@ -38,7 +38,8 @@
 				}
 			]
 		},
-		"2": {
+		{
+			"#": "2",
 			"label": "Swing",
 			"description": "1=1F/0.5C - 4=4F/2C",
 			"unit": "1F / 0.5C",
@@ -66,7 +67,8 @@
 				}
 			]
 		},
-		"3": {
+		{
+			"#": "3",
 			"label": "Differential",
 			"description": "1=1F/0.5C - 4=4F/2C",
 			"unit": "1F/0.5C",
@@ -94,7 +96,8 @@
 				}
 			]
 		},
-		"4": {
+		{
+			"#": "4",
 			"label": "Dead Band",
 			"description": "3=3F/1.5C - 6=6F/3C",
 			"unit": "1F/0.5C",
@@ -103,7 +106,8 @@
 			"maxValue": 6,
 			"defaultValue": 4
 		},
-		"10": {
+		{
+			"#": "10",
 			"label": "Temp. Sensor Calibration",
 			"description": "Changes Temp. Display (-10=-10F/-5C - 10=+10F/5C)",
 			"unit": "1F/0.5C",
@@ -112,5 +116,5 @@
 			"maxValue": 10,
 			"defaultValue": 0
 		}
-	}
+	]
 }

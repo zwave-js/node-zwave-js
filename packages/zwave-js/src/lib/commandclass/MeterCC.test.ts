@@ -1,4 +1,8 @@
-import { CommandClasses } from "@zwave-js/core";
+import {
+	assertZWaveError,
+	CommandClasses,
+	ZWaveErrorCodes,
+} from "@zwave-js/core";
 import type { Driver } from "../driver/Driver";
 import { ZWaveNode } from "../node/Node";
 import { createEmptyMockDriver } from "../test/mocks";
@@ -126,14 +130,14 @@ describe("lib/commandclass/MeterCC => ", () => {
 		const ccData = buildCCBuffer(
 			Buffer.from([
 				MeterCommand.Report, // CC Command
-				0x05, // Meter type
+				0x03, // Meter type
 				0b001_10_001, // precision, scale, size
 				55, // value
 			]),
 		);
 		const cc = new MeterCCReport(fakeDriver, { nodeId: 1, data: ccData });
 
-		expect(cc.type).toBe(5);
+		expect(cc.type).toBe(3);
 		expect(cc.scale.key).toBe(2);
 		expect(cc.value).toBe(5.5);
 		expect(cc.rateType).toBe(RateType.Unspecified);
@@ -145,7 +149,7 @@ describe("lib/commandclass/MeterCC => ", () => {
 		const ccData = buildCCBuffer(
 			Buffer.from([
 				MeterCommand.Report, // CC Command
-				0b0_10_00101, // Rate type, Meter type
+				0b0_10_00011, // Rate type, Meter type
 				0b001_10_001, // precision, scale, size
 				55, // value
 				0, // delta time
@@ -154,7 +158,7 @@ describe("lib/commandclass/MeterCC => ", () => {
 		);
 		const cc = new MeterCCReport(fakeDriver, { nodeId: 1, data: ccData });
 
-		expect(cc.type).toBe(5);
+		expect(cc.type).toBe(3);
 		expect(cc.scale.key).toBe(2);
 		expect(cc.value).toBe(5.5);
 		expect(cc.rateType).toBe(RateType.Produced);
@@ -166,7 +170,7 @@ describe("lib/commandclass/MeterCC => ", () => {
 		const ccData = buildCCBuffer(
 			Buffer.from([
 				MeterCommand.Report, // CC Command
-				0b0_10_00101, // Rate type, Meter type
+				0b0_10_00011, // Rate type, Meter type
 				0b001_10_001, // precision, scale, size
 				55, // value
 				0, // delta time
@@ -176,7 +180,7 @@ describe("lib/commandclass/MeterCC => ", () => {
 		);
 		const cc = new MeterCCReport(fakeDriver, { nodeId: 1, data: ccData });
 
-		expect(cc.type).toBe(5);
+		expect(cc.type).toBe(3);
 		expect(cc.scale.key).toBe(2);
 		expect(cc.value).toBe(5.5);
 		expect(cc.rateType).toBe(RateType.Produced);
@@ -188,7 +192,7 @@ describe("lib/commandclass/MeterCC => ", () => {
 		const ccData = buildCCBuffer(
 			Buffer.from([
 				MeterCommand.Report, // CC Command
-				0b1_10_00101, // Scale(2), Rate type, Meter type
+				0b1_10_00001, // Scale(2), Rate type, Meter type
 				0b001_10_001, // precision, Scale (1:0), size
 				55, // value
 				0, // delta time
@@ -205,18 +209,64 @@ describe("lib/commandclass/MeterCC => ", () => {
 		const ccData = buildCCBuffer(
 			Buffer.from([
 				MeterCommand.Report, // CC Command
-				0b1_10_00101, // Scale(2), Rate type, Meter type
+				0b1_10_00001, // Scale(2), Rate type, Meter type
 				0b001_11_001, // precision, Scale (1:0), size
 				55, // value
 				0, // delta time
 				5,
 				54, // previous value
-				0b10, // Scale2
+				0b01, // Scale2
 			]),
 		);
 		const cc = new MeterCCReport(fakeDriver, { nodeId: 1, data: ccData });
 
-		expect(cc.scale.key).toBe(9);
+		expect(cc.scale.key).toBe(8);
+	});
+
+	it("the Report command should validate that a known meter type is given", () => {
+		const ccData = buildCCBuffer(
+			Buffer.from([
+				MeterCommand.Report, // CC Command
+				0b1_10_11111, // Scale(2), Rate type, Meter type
+				0b001_11_001, // precision, Scale (1:0), size
+				55, // value
+				0, // delta time
+				5,
+				54, // previous value
+				0b01, // Scale2
+			]),
+		);
+
+		// Meter type 31 (does not exist)
+		assertZWaveError(
+			() => new MeterCCReport(fakeDriver, { nodeId: 1, data: ccData }),
+			{
+				errorCode: ZWaveErrorCodes.PacketFormat_InvalidPayload,
+			},
+		);
+	});
+
+	it("the Report command should validate that a known meter scale is given", () => {
+		const ccData = buildCCBuffer(
+			Buffer.from([
+				MeterCommand.Report, // CC Command
+				0b1_10_00100, // Scale(2), Rate type, Meter type
+				0b001_11_001, // precision, Scale (1:0), size
+				55, // value
+				0, // delta time
+				5,
+				54, // previous value
+				0b01, // Scale2
+			]),
+		);
+
+		// Meter type 4, Scale 8 (does not exist)
+		assertZWaveError(
+			() => new MeterCCReport(fakeDriver, { nodeId: 1, data: ccData }),
+			{
+				errorCode: ZWaveErrorCodes.PacketFormat_InvalidPayload,
+			},
+		);
 	});
 
 	it("the value IDs should be translated correctly", () => {

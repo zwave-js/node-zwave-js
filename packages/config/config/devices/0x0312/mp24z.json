@@ -1,5 +1,5 @@
 {
-	"manufacturer": "Ministon",
+	"manufacturer": "Minoston",
 	"manufacturerId": "0x0312",
 	"label": "MP24Z",
 	"description": "Outdoor Smart Plug - 2 channel",
@@ -14,8 +14,9 @@
 		"min": "0.0",
 		"max": "255.255"
 	},
-	"paramInformation": {
-		"1": {
+	"paramInformation": [
+		{
+			"#": "1",
 			"label": "Status LED Configuration",
 			"valueSize": 1,
 			"minValue": 0,
@@ -38,7 +39,8 @@
 				}
 			]
 		},
-		"2": {
+		{
+			"#": "2",
 			"label": "Auto-Off Timer",
 			"valueSize": 2,
 			"unit": "minutes",
@@ -53,7 +55,8 @@
 				}
 			]
 		},
-		"3": {
+		{
+			"#": "3",
 			"label": "Auto-On Timer",
 			"valueSize": 2,
 			"unit": "minutes",
@@ -68,7 +71,7 @@
 				}
 			]
 		}
-	},
+	],
 	"metadata": {
 		"inclusion": "ADD or Remove the MP24Z from the existing Z-Wave home control network with your primary controller.\n---Refer to your primary controller instructions to process the inclusion / exclusion setup procedure.\n---When prompted by your primary controller, click the PROG button five times in one second",
 		"exclusion": "ADD or Remove the MP24Z from the existing Z-Wave home control network with your primary controller.\n---Refer to your primary controller instructions to process the inclusion / exclusion setup procedure.\n---When prompted by your primary controller, click the PROG button five times in one second",

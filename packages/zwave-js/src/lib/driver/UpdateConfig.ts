@@ -1,5 +1,6 @@
 import { detectPackageManager, PackageManager } from "@alcalzone/pak";
 import { ZWaveError, ZWaveErrorCodes } from "@zwave-js/core";
+import { getErrorMessage } from "@zwave-js/shared";
 import { isObject } from "alcalzone-shared/typeguards";
 import axios from "axios";
 import execa from "execa";
@@ -22,7 +23,7 @@ export async function checkForConfigUpdates(
 
 	try {
 		registry = (
-			await axios.get("https://registry.npmjs.org/@zwave-js/config")
+			await axios.get<any>("https://registry.npmjs.org/@zwave-js/config")
 		).data;
 	} catch (e) {
 		throw new ZWaveError(
@@ -217,7 +218,9 @@ export async function installConfigUpdateInDocker(
 	} catch (e) {
 		await freeLock();
 		throw new ZWaveError(
-			`Config update failed: Could not download tarball. Reason: ${e.message}`,
+			`Config update failed: Could not download tarball. Reason: ${getErrorMessage(
+				e,
+			)}`,
 			ZWaveErrorCodes.Config_Update_InstallFailed,
 		);
 	}

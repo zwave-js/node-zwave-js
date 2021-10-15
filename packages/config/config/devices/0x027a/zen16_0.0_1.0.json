@@ -32,8 +32,9 @@
 			"maxNodes": 5
 		}
 	},
-	"paramInformation": {
-		"1": {
+	"paramInformation": [
+		{
+			"#": "1",
 			"label": "Status After Power Failure",
 			"valueSize": 1,
 			"minValue": 0,
@@ -64,7 +65,8 @@
 				}
 			]
 		},
-		"2": {
+		{
+			"#": "2",
 			"label": "Switch Type for Relay 1 (Sw1)",
 			"description": "Choose the wall switch type you want to connect to the Sw1 terminal.",
 			"valueSize": 1,
@@ -88,7 +90,8 @@
 				}
 			]
 		},
-		"3": {
+		{
+			"#": "3",
 			"label": "Switch Type for Relay 2 (Sw2)",
 			"description": "Choose the wall switch type you want to connect to the Sw2 terminal.",
 			"valueSize": 1,
@@ -112,7 +115,8 @@
 				}
 			]
 		},
-		"4": {
+		{
+			"#": "4",
 			"label": "Switch Type for Relay 3 (Sw3)",
 			"description": "Choose the wall switch type you want to connect to the Sw3 terminal.",
 			"valueSize": 1,
@@ -136,7 +140,8 @@
 				}
 			]
 		},
-		"5": {
+		{
+			"#": "5",
 			"label": "LED Indicator Control",
 			"description": "Choose the LED indicator behavior",
 			"valueSize": 1,
@@ -164,7 +169,8 @@
 				}
 			]
 		},
-		"6": {
+		{
+			"#": "6",
 			"label": "Auto Turn-Off Timer for Relay 1",
 			"description": "Sets the time after which you want relay 1 to automatically turn off once it has been turned on.",
 			"unit": "minutes",
@@ -174,7 +180,8 @@
 			"defaultValue": 0,
 			"unsigned": true
 		},
-		"7": {
+		{
+			"#": "7",
 			"label": "Auto Turn-On Timer for Relay 1",
 			"description": "Sets the time after which you want relay 1 to automatically turn off once it has been turned on, using the unit defined in parameter 16.",
 			"valueSize": 4,
@@ -184,7 +191,8 @@
 			"defaultValue": 0,
 			"unsigned": true
 		},
-		"8": {
+		{
+			"#": "8",
 			"label": "Auto Turn-Off Timer for Relay 2",
 			"description": "Sets the time after which you want relay 1 to automatically turn off once it has been turned on.",
 			"valueSize": 4,
@@ -194,7 +202,8 @@
 			"defaultValue": 0,
 			"unsigned": true
 		},
-		"9": {
+		{
+			"#": "9",
 			"label": "Auto Turn-On Timer for Relay 2",
 			"description": "Sets the time after which you want relay 1 to automatically turn off once it has been turned on.",
 			"valueSize": 4,
@@ -204,7 +213,8 @@
 			"defaultValue": 0,
 			"unsigned": true
 		},
-		"10": {
+		{
+			"#": "10",
 			"label": "Auto Turn-Off Timer for Relay 3",
 			"description": "Sets the time after which you want relay 1 to automatically turn off once it has been turned on.",
 			"valueSize": 4,
@@ -214,7 +224,8 @@
 			"defaultValue": 0,
 			"unsigned": true
 		},
-		"11": {
+		{
+			"#": "11",
 			"label": "Auto Turn-On Timer for Relay 3",
 			"description": "Sets the time after which you want relay 1 to automatically turn off once it has been turned on.",
 			"valueSize": 4,
@@ -224,7 +235,8 @@
 			"defaultValue": 0,
 			"unsigned": true
 		},
-		"12": {
+		{
+			"#": "12",
 			"label": "Enable/Disable Manual Control for SW1",
 			"description": "Determine whether you can control the indicated switch manually.",
 			"valueSize": 1,
@@ -244,7 +256,8 @@
 				}
 			]
 		},
-		"13": {
+		{
+			"#": "13",
 			"label": "Enable/Disable Manual Control for SW2",
 			"description": "Determine whether you can control the indicated switch manually.",
 			"valueSize": 1,
@@ -264,7 +277,8 @@
 				}
 			]
 		},
-		"14": {
+		{
+			"#": "14",
 			"label": "Enable/Disable Manual Control for SW3",
 			"description": "Determine whether you can control the indicated switch manually.",
 			"valueSize": 1,
@@ -284,7 +298,7 @@
 				}
 			]
 		}
-	},
+	],
 	"compat": {
 		// This device improperly reports the state of R2 (endpoint 2) through the root endpoint in a way that also changes the state of R1 (endpoint 1)
 		"preserveRootApplicationCCValueIDs": true

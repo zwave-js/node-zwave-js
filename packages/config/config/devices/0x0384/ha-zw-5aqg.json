@@ -1,0 +1,59 @@
+{
+	"manufacturer": "AiBase Smart Technology",
+	"manufacturerId": "0x0384",
+	"label": "HA-ZW-5AQG",
+	"description": "A19 LED BULB RGBW",
+	"devices": [
+		{
+			"productType": "0x0003",
+			"productId": "0x0003",
+			"zwaveAllianceId": 2889
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"associations": {
+		"1": {
+			"label": "Lifeline",
+			"maxNodes": 1,
+			"isLifeline": true
+		}
+	},
+	"paramInformation": [
+		{
+			"#": "1",
+			"label": "Internal Temperature",
+			"valueSize": 1,
+			"minValue": -128,
+			"maxValue": 127,
+			"readOnly": true
+		},
+		{
+			"#": "255",
+			"label": "Factory Reset Device",
+			"valueSize": 4,
+			"minValue": -2013265920,
+			"maxValue": 0,
+			"defaultValue": 0,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Reset and remove from Z-Wave network",
+					"value": -2004318072
+				},
+				{
+					"label": "Reset configuration parameters to default values",
+					"value": -2013265920
+				}
+			]
+		}
+	],
+	"metadata": {
+		"inclusion": "a) Set the Z-Wave network main controller into adding mode.\nb) Power cycle once for the led bulb(OFF->ON).The led bulb will flash once when it has been include into the network.",
+		"exclusion": "a) Set the Z-Wave network main controller into removing mode.\nb) Power cycle once for the led bulb(OFF->ON).Then the led bulb will flash once then dim to 5%,when it has been excluded outside the network.",
+		"reset": "Led bulb re-power 6 times (between 0.5-2 seconds each time); If the 6th power on, the led bulb flashes twice (first time: red to green to blue gradient transition, second time: 2700K), which means that the resetting is successful.\nNOTE:\nUsing this action in case of the primary controller is missing or inoperable.",
+		"manual": "https://products.z-wavealliance.org/ProductManual/File?folder=&filename=MarketCertificationFiles/2889/Z-Wave%20RGBW%20Bulb%20User%20Guide-Aibase%200524.pdf"
+	}
+}

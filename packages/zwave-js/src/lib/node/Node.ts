@@ -40,6 +40,7 @@ import {
 import {
 	formatId,
 	getEnumMemberName,
+	getErrorMessage,
 	JSONObject,
 	Mixin,
 	num2hex,
@@ -121,6 +122,7 @@ import {
 import { getFirmwareVersionsValueId } from "../commandclass/VersionCC";
 import {
 	getWakeUpIntervalValueId,
+	getWakeUpOnDemandSupportedValueId,
 	WakeUpCCWakeUpNotification,
 } from "../commandclass/WakeUpCC";
 import {
@@ -583,6 +585,22 @@ export class ZWaveNode extends Endpoint implements SecurityClassOwner {
 		return this.getValue(getRoleTypeValueId());
 	}
 
+	public get supportsWakeUpOnDemand(): boolean | undefined {
+		return this.getValue(getWakeUpOnDemandSupportedValueId());
+	}
+
+	public get shouldRequestWakeUpOnDemand(): boolean {
+		return (
+			!!this.supportsWakeUpOnDemand &&
+			this.status === NodeStatus.Asleep &&
+			this.driver.hasPendingTransactions(
+				(t) =>
+					t.requestWakeUpOnDemand &&
+					t.message.getNodeId() === this.id,
+			)
+		);
+	}
+
 	/**
 	 * The user-defined name of this node. Uses the value reported by `Node Naming and Location CC` if it exists.
 	 *
@@ -809,7 +827,7 @@ export class ZWaveNode extends Endpoint implements SecurityClassOwner {
 			}
 
 			return true;
-		} catch (e: unknown) {
+		} catch (e) {
 			// Define which errors during setValue are expected and won't crash
 			// the driver:
 			if (isZWaveError(e)) {
@@ -1222,7 +1240,7 @@ export class ZWaveNode extends Endpoint implements SecurityClassOwner {
 			try {
 				await method();
 				return true;
-			} catch (e: unknown) {
+			} catch (e) {
 				if (isTransmissionError(e)) {
 					return false;
 				}
@@ -1379,7 +1397,7 @@ protocol version:      ${this._protocolVersion}`;
 			} catch (e) {
 				this.driver.controllerLog.logNode(
 					this.id,
-					`ping failed: ${e.message}`,
+					`ping failed: ${getErrorMessage(e)}`,
 				);
 				return false;
 			}
@@ -1500,7 +1518,7 @@ protocol version:      ${this._protocolVersion}`;
 			let instance: CommandClass;
 			try {
 				instance = endpoint.createCCInstance(cc)!;
-			} catch (e: unknown) {
+			} catch (e) {
 				if (
 					isZWaveError(e) &&
 					e.code === ZWaveErrorCodes.CC_NotSupported
@@ -1534,7 +1552,7 @@ protocol version:      ${this._protocolVersion}`;
 
 			try {
 				await instance.interview();
-			} catch (e: unknown) {
+			} catch (e) {
 				if (isTransmissionError(e)) {
 					// We had a CAN or timeout during the interview
 					// or the node is presumed dead. Abort the process
@@ -1548,7 +1566,9 @@ protocol version:      ${this._protocolVersion}`;
 				await this.driver.saveNetworkToCache();
 			} catch (e) {
 				this.driver.controllerLog.print(
-					`${getCCName(cc)}: Error after interview:\n${e.message}`,
+					`${getCCName(
+						cc,
+					)}: Error after interview:\n${getErrorMessage(e)}`,
 					"error",
 				);
 			}
@@ -1780,6 +1800,10 @@ protocol version:      ${this._protocolVersion}`;
 				endpoint.addCC(CommandClasses.Security, { secure: true });
 			}
 
+			// The Security S0/S2 CC adds new CCs to the endpoint, so we need to once more remove those
+			// that aren't actually properly supported by the device.
+			this.applyCommandClassesCompatFlag(endpoint.index);
+
 			// Don't offer or interview the Basic CC if any actuator CC is supported - except if the config files forbid us
 			// to map the Basic CC to other CCs or expose Basic Set as an event
 			if (!compat?.disableBasicMapping && !compat?.treatBasicSetAsEvent) {
@@ -1947,7 +1971,7 @@ protocol version:      ${this._protocolVersion}`;
 						this.id,
 						`failed to interview CC ${getCCName(cc)}, endpoint ${
 							endpoint.index
-						}: ${e.message}`,
+						}: ${getErrorMessage(e)}`,
 						"error",
 					);
 				}
@@ -1970,7 +1994,7 @@ protocol version:      ${this._protocolVersion}`;
 						this.id,
 						`failed to refresh values for ${getCCName(
 							cc,
-						)}, endpoint ${endpoint.index}: ${e.message}`,
+						)}, endpoint ${endpoint.index}: ${getErrorMessage(e)}`,
 						"error",
 					);
 				}
@@ -1999,7 +2023,7 @@ protocol version:      ${this._protocolVersion}`;
 						this.id,
 						`failed to refresh values for ${getCCName(
 							cc.ccId,
-						)}, endpoint ${endpoint.index}: ${e.message}`,
+						)}, endpoint ${endpoint.index}: ${getErrorMessage(e)}`,
 						"error",
 					);
 				}
@@ -2010,15 +2034,23 @@ protocol version:      ${this._protocolVersion}`;
 	/**
 	 * Uses the `commandClasses` compat flag defined in the node's config file to
 	 * override the reported command classes.
+	 * @param endpointIndex If given, limits the application of the compat flag to the given endpoint.
 	 */
-	private applyCommandClassesCompatFlag(): void {
+	private applyCommandClassesCompatFlag(endpointIndex?: number): void {
 		if (this.deviceConfig) {
 			// Add CCs the device config file tells us to
 			const addCCs = this.deviceConfig.compat?.addCCs;
 			if (addCCs) {
 				for (const [cc, { endpoints }] of addCCs) {
-					for (const [ep, info] of endpoints) {
-						this.getEndpoint(ep)?.addCC(cc, info);
+					if (endpointIndex === undefined) {
+						for (const [ep, info] of endpoints) {
+							this.getEndpoint(ep)?.addCC(cc, info);
+						}
+					} else if (endpoints.has(endpointIndex)) {
+						this.getEndpoint(endpointIndex)?.addCC(
+							cc,
+							endpoints.get(endpointIndex)!,
+						);
 					}
 				}
 			}
@@ -2027,12 +2059,20 @@ protocol version:      ${this._protocolVersion}`;
 			if (removeCCs) {
 				for (const [cc, endpoints] of removeCCs) {
 					if (endpoints === "*") {
-						for (const ep of this.getAllEndpoints()) {
-							ep.removeCC(cc);
+						if (endpointIndex === undefined) {
+							for (const ep of this.getAllEndpoints()) {
+								ep.removeCC(cc);
+							}
+						} else {
+							this.getEndpoint(endpointIndex)?.removeCC(cc);
 						}
 					} else {
-						for (const ep of endpoints) {
-							this.getEndpoint(ep)?.removeCC(cc);
+						if (endpointIndex === undefined) {
+							for (const ep of endpoints) {
+								this.getEndpoint(ep)?.removeCC(cc);
+							}
+						} else if (endpoints.includes(endpointIndex)) {
+							this.getEndpoint(endpointIndex)?.removeCC(cc);
 						}
 					}
 				}
@@ -2209,7 +2249,7 @@ protocol version:      ${this._protocolVersion}`;
 			await this.commandClasses.Security.sendNonce();
 		} catch (e) {
 			this.driver.controllerLog.logNode(this.id, {
-				message: `failed to send nonce: ${e}`,
+				message: `failed to send nonce: ${getErrorMessage(e)}`,
 				direction: "inbound",
 			});
 		}
@@ -2281,7 +2321,7 @@ protocol version:      ${this._protocolVersion}`;
 			await this.commandClasses["Security 2"].sendNonce();
 		} catch (e) {
 			this.driver.controllerLog.logNode(this.id, {
-				message: `failed to send nonce: ${e}`,
+				message: `failed to send nonce: ${getErrorMessage(e)}`,
 				direction: "inbound",
 			});
 		}
@@ -2468,12 +2508,12 @@ protocol version:      ${this._protocolVersion}`;
 			// we've already measured the wake up interval, so we can check whether a refresh is necessary
 			const wakeUpInterval =
 				this.getValue<number>(getWakeUpIntervalValueId()) ?? 1;
-			// The wakeup interval is specified in seconds. Also add 5 seconds tolerance to avoid
+			// The wakeup interval is specified in seconds. Also add 5 minutes tolerance to avoid
 			// unnecessary queries since there might be some delay. A wakeup interval of 0 means manual wakeup,
 			// so the interval shouldn't be verified
 			if (
 				wakeUpInterval > 0 &&
-				(now - this.lastWakeUp) / 1000 > wakeUpInterval + 5
+				(now - this.lastWakeUp) / 1000 > wakeUpInterval + 5 * 60
 			) {
 				this.commandClasses["Wake Up"].getInterval().catch(() => {
 					// Don't throw if there's an error
@@ -2569,7 +2609,7 @@ protocol version:      ${this._protocolVersion}`;
 				});
 			} catch (e) {
 				this.driver.controllerLog.logNode(this.id, {
-					message: `error during API call: ${e}`,
+					message: `error during API call: ${getErrorMessage(e)}`,
 					direction: "none",
 					level: "warn",
 				});
@@ -3186,7 +3226,7 @@ protocol version:      ${this._protocolVersion}`;
 			// Clean up
 			this._firmwareUpdateStatus = undefined;
 			this.keepAwake = false;
-		} catch (e: unknown) {
+		} catch (e) {
 			if (
 				isZWaveError(e) &&
 				e.code === ZWaveErrorCodes.Controller_NodeTimeout
@@ -3404,7 +3444,7 @@ protocol version:      ${this._protocolVersion}`;
 				);
 
 			this.handleFirmwareUpdateStatusReport(report);
-		} catch (e: unknown) {
+		} catch (e) {
 			if (
 				isZWaveError(e) &&
 				e.code === ZWaveErrorCodes.Controller_NodeTimeout
@@ -3720,7 +3760,10 @@ protocol version:      ${this._protocolVersion}`;
 							);
 						} catch (e) {
 							this.driver.controllerLog.logNode(this.id, {
-								message: `Error during deserialization of CC value metadata from cache:\n${e}`,
+								message: `Error during deserialization of CC value metadata from cache:\n${getErrorMessage(
+									e,
+									true,
+								)}`,
 								level: "error",
 							});
 						}
@@ -3743,7 +3786,10 @@ protocol version:      ${this._protocolVersion}`;
 							);
 						} catch (e) {
 							this.driver.controllerLog.logNode(this.id, {
-								message: `Error during deserialization of CC values from cache:\n${e}`,
+								message: `Error during deserialization of CC values from cache:\n${getErrorMessage(
+									e,
+									true,
+								)}`,
 								level: "error",
 							});
 						}

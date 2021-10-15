@@ -57,7 +57,7 @@ export enum FunctionType {
 	SetSerialApiTimeouts = 0x06,
 	GetSerialApiCapabilities = 0x07,
 
-	FUNC_ID_SERIAL_API_SOFT_RESET = 0x08,
+	SoftReset = 0x08,
 
 	UNKNOWN_FUNC_UNKNOWN_0x09 = 0x09, // ??
 	UNKNOWN_FUNC_UNKNOWN_0x0a = 0x0a, // ??
@@ -95,6 +95,8 @@ export enum FunctionType {
 	ExtNVMWriteLongBuffer = 0x2b, // Writes a buffer to the external NVM
 	ExtNVMReadLongByte = 0x2c, // Reads a byte from the external NVM
 	ExtExtWriteLongByte = 0x2d, // Writes a byte to the external NVM
+
+	NVMOperations = 0x2e, // 700-series command to read and write from/to the external NVM
 
 	UNKNOWN_FUNC_CLOCK_SET = 0x30, // ??
 	UNKNOWN_FUNC_CLOCK_GET = 0x31, // ??

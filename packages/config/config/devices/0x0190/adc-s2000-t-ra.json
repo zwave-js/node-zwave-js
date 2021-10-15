@@ -13,9 +13,9 @@
 		"min": "0.0",
 		"max": "255.255"
 	},
-	"supportsZWavePlus": true,
-	"paramInformation": {
-		"1": {
+	"paramInformation": [
+		{
+			"#": "1",
 			"label": "Wake Up Period",
 			"description": "Seconds to stay awake following button press",
 			"unit": "Seconds",
@@ -24,14 +24,16 @@
 			"maxValue": 32767,
 			"defaultValue": 32768
 		},
-		"2": {
+		{
+			"#": "2",
 			"label": "Low Battery Level",
 			"valueSize": 2,
 			"minValue": 1000,
 			"maxValue": 2500,
 			"defaultValue": 2500
 		},
-		"3": {
+		{
+			"#": "3",
 			"label": "Temperature Reporting Threshold",
 			"description": "Tenths of a degree Fahrenheit. A value of 10 would be 1.0F.",
 			"valueSize": 2,
@@ -39,7 +41,8 @@
 			"maxValue": 100,
 			"defaultValue": 100
 		},
-		"4": {
+		{
+			"#": "4",
 			"label": "Configuration Bitmask",
 			"valueSize": 2,
 			"minValue": 0,
@@ -57,28 +60,32 @@
 				}
 			]
 		},
-		"5": {
+		{
+			"#": "5",
 			"label": "Battery Reporting Interval",
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 255,
 			"defaultValue": 255
 		},
-		"7": {
+		{
+			"#": "7",
 			"label": "Temperature Reporting Interval",
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 255,
 			"defaultValue": 0
 		},
-		"8": {
+		{
+			"#": "8",
 			"label": "Temperature Calibration Offset",
 			"valueSize": 2,
 			"minValue": -100,
 			"maxValue": 100,
 			"defaultValue": 0
 		},
-		"9": {
+		{
+			"#": "9",
 			"label": "Mandatory Temperature Reporting Interval",
 			"unit": "seconds",
 			"valueSize": 2,
@@ -87,5 +94,5 @@
 			"defaultValue": 64800,
 			"unsigned": true
 		}
-	}
+	]
 }

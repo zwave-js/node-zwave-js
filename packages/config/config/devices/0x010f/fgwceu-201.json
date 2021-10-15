@@ -1,0 +1,151 @@
+{
+	"manufacturer": "Fibargroup",
+	"manufacturerId": "0x010f",
+	"label": "FGWCEU-201",
+	"description": "Walli Controller",
+	"devices": [
+		{
+			"productType": "0x2301",
+			"productId": "0x1000"
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"paramInformation": [
+		{
+			"#": "13",
+			"label": "LED Frame: Brightness",
+			"valueSize": 1,
+			"unit": "%",
+			"minValue": 0,
+			"maxValue": 102,
+			"defaultValue": 100,
+			"options": [
+				{
+					"label": "Disable",
+					"value": 0
+				},
+				{
+					"label": "Proportional to power",
+					"value": 101
+				},
+				{
+					"label": "Inversely proportional to power",
+					"value": 102
+				}
+			]
+		},
+		{
+			"#": "20",
+			"label": "Switch Configuration",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 6,
+			"defaultValue": 1,
+			"options": [
+				{
+					"label": "Scene controller mode",
+					"value": 0
+				},
+				{
+					"label": "Double button mode",
+					"value": 1
+				},
+				{
+					"label": "Single button mode",
+					"value": 2
+				},
+				{
+					"label": "Switch controller mode",
+					"value": 3
+				},
+				{
+					"label": "Dimmer / Roller shutter controller mode",
+					"value": 4
+				},
+				{
+					"label": "Roller Shutter controller mode",
+					"value": 5
+				},
+				{
+					"label": "Venetian blinds controller mode",
+					"value": 6
+				}
+			]
+		},
+		{
+			"#": "150",
+			"label": "LED Frame: First Channel Color",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 8,
+			"defaultValue": 0,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Disable",
+					"value": 0
+				},
+				{
+					"label": "White",
+					"value": 1
+				},
+				{
+					"label": "Red",
+					"value": 2
+				},
+				{
+					"label": "Green",
+					"value": 3
+				},
+				{
+					"label": "Blue",
+					"value": 4
+				},
+				{
+					"label": "Yellow",
+					"value": 5
+				},
+				{
+					"label": "Cyan",
+					"value": 6
+				},
+				{
+					"label": "Magenta",
+					"value": 7
+				},
+				{
+					"label": "Blinking red, white, blue",
+					"value": 8
+				}
+			]
+		},
+		{
+			"#": "151",
+			"$import": "#paramInformation/150",
+			"label": "LED Frame: Second Channel Color"
+		},
+		{
+			"#": "152",
+			"label": "First Channel: Double Click Value",
+			"description": "Defines value of Basic Set or Multilevel Set frame sent to associated devices",
+			"valueSize": 2,
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 99,
+			"options": [
+				{
+					"label": "Disable",
+					"value": 255
+				}
+			]
+		},
+		{
+			"#": "153",
+			"$import": "#paramInformation/152",
+			"label": "Second Chanel: Double Click Value"
+		}
+	]
+}

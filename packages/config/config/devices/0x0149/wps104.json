@@ -13,9 +13,9 @@
 		"min": "0.0",
 		"max": "255.255"
 	},
-	"supportsZWavePlus": true,
-	"paramInformation": {
-		"1": {
+	"paramInformation": [
+		{
+			"#": "1",
 			"label": "Device Status",
 			"description": "How to control the relay",
 			"valueSize": 1,
@@ -42,7 +42,8 @@
 				}
 			]
 		},
-		"20": {
+		{
+			"#": "20",
 			"label": "Device status upon receipt of a Basic Set command",
 			"valueSize": 1,
 			"minValue": 0,
@@ -68,14 +69,16 @@
 				}
 			]
 		},
-		"30": {
+		{
+			"#": "30",
 			"label": "Overcurrent Level",
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 4500,
 			"defaultValue": 4500
 		},
-		"31": {
+		{
+			"#": "31",
 			"label": "Overcurrent Time",
 			"description": "Sets the time to recognize an overcurrent event.",
 			"valueSize": 2,
@@ -83,7 +86,8 @@
 			"maxValue": 10800,
 			"defaultValue": 10
 		},
-		"32": {
+		{
+			"#": "32",
 			"label": "Next State",
 			"description": "Defines the next state if an overcurrent event occurr",
 			"valueSize": 1,
@@ -110,7 +114,8 @@
 				}
 			]
 		},
-		"33": {
+		{
+			"#": "33",
 			"label": "Meter Reset",
 			"description": "Provides total operating time from last meter reset",
 			"valueSize": 4,
@@ -129,7 +134,8 @@
 				}
 			]
 		},
-		"34": {
+		{
+			"#": "34",
 			"label": "Energy flow",
 			"description": "Determines whether if energy consumed or energy produced.",
 			"valueSize": 1,
@@ -148,7 +154,8 @@
 				}
 			]
 		},
-		"35": {
+		{
+			"#": "35",
 			"label": "UP Power Level",
 			"description": "Sets the level of instantaneous power in Watts",
 			"valueSize": 2,
@@ -156,7 +163,8 @@
 			"maxValue": 11250,
 			"defaultValue": 11250
 		},
-		"36": {
+		{
+			"#": "36",
 			"label": "UP Power Time",
 			"description": "Sets the time in seconds",
 			"valueSize": 2,
@@ -164,7 +172,8 @@
 			"maxValue": 10800,
 			"defaultValue": 10
 		},
-		"37": {
+		{
+			"#": "37",
 			"label": "UP Power State",
 			"description": "Defines the next status case of a UP Power event",
 			"valueSize": 1,
@@ -191,15 +200,18 @@
 				}
 			]
 		},
-		"38": {
+		{
+			"#": "38",
 			"label": "UP Power Associated",
-			"description": "Defines the status of Group 2 devices",
+			"description": "Defines the status of Group 2 devices. Allowable range: 0-99, 255",
 			"valueSize": 1,
-			"minValue": -1,
-			"maxValue": 99,
-			"defaultValue": 0
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 0,
+			"unsigned": true
 		},
-		"39": {
+		{
+			"#": "39",
 			"label": "DOWN Power Level",
 			"description": "Sets the level of instantaneous power in Watts",
 			"valueSize": 2,
@@ -207,7 +219,8 @@
 			"maxValue": 11250,
 			"defaultValue": 0
 		},
-		"40": {
+		{
+			"#": "40",
 			"label": "DOWN Power Time",
 			"description": "Sets the time in seconds",
 			"valueSize": 2,
@@ -215,7 +228,8 @@
 			"maxValue": 10800,
 			"defaultValue": 10
 		},
-		"41": {
+		{
+			"#": "41",
 			"label": "DOWN Power State",
 			"description": "Defines the next state case of a DOWN Power event",
 			"valueSize": 1,
@@ -242,15 +256,18 @@
 				}
 			]
 		},
-		"42": {
+		{
+			"#": "42",
 			"label": "DOWN Power Associated",
-			"description": "Defines the status of Group 3 devices",
+			"description": "Defines the status of Group 3 devices. Allowable range: 0-99, 255",
 			"valueSize": 1,
-			"minValue": -1,
-			"maxValue": 99,
-			"defaultValue": 0
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 0,
+			"unsigned": true
 		},
-		"43": {
+		{
+			"#": "43",
 			"label": "Energy Level",
 			"description": "Sets the energy level in KWh",
 			"valueSize": 4,
@@ -258,7 +275,8 @@
 			"maxValue": 2000000,
 			"defaultValue": 2000000
 		},
-		"44": {
+		{
+			"#": "44",
 			"label": "Energy Limit State",
 			"description": "Defines the next state in case of Energy Limit event",
 			"valueSize": 1,
@@ -285,7 +303,8 @@
 				}
 			]
 		},
-		"45": {
+		{
+			"#": "45",
 			"label": "Variation Instantaneous Power",
 			"description": "Defines the percentage variation of instantaneous power",
 			"valueSize": 1,
@@ -293,7 +312,8 @@
 			"maxValue": 100,
 			"defaultValue": 10
 		},
-		"46": {
+		{
+			"#": "46",
 			"label": "Report Time Frequency",
 			"description": "Defines the time in minutes",
 			"valueSize": 1,
@@ -301,7 +321,8 @@
 			"maxValue": 100,
 			"defaultValue": 10
 		},
-		"47": {
+		{
+			"#": "47",
 			"label": "Variation Total Energy",
 			"description": "Defines the increase energy to generate a report",
 			"valueSize": 1,
@@ -332,7 +353,8 @@
 				}
 			]
 		},
-		"48": {
+		{
+			"#": "48",
 			"label": "Nominal Voltage",
 			"description": "Defines the nominal voltage value in tenths of volts",
 			"valueSize": 2,
@@ -340,7 +362,8 @@
 			"maxValue": 2500,
 			"defaultValue": 2300
 		},
-		"49": {
+		{
+			"#": "49",
 			"label": "Fall In Maximum Voltage",
 			"description": "Defines, the nominal value for max voltage fall permitted",
 			"valueSize": 1,
@@ -348,7 +371,8 @@
 			"maxValue": 100,
 			"defaultValue": 10
 		},
-		"50": {
+		{
+			"#": "50",
 			"label": "Electric parameters",
 			"description": "Defines which parameters will be subjected to notification",
 			"valueSize": 2,
@@ -356,7 +380,8 @@
 			"maxValue": 62,
 			"defaultValue": 30
 		},
-		"51": {
+		{
+			"#": "51",
 			"label": "Voltage RMS value",
 			"description": "Reading of this parameter returns the value of voltage RMS",
 			"valueSize": 2,
@@ -366,7 +391,8 @@
 			"unsigned": true,
 			"readOnly": true
 		},
-		"52": {
+		{
+			"#": "52",
 			"label": "Current RMS value",
 			"description": "Returns the value of current RMS expressed in hundredths of Amperes.",
 			"valueSize": 2,
@@ -376,7 +402,8 @@
 			"unsigned": true,
 			"readOnly": true
 		},
-		"53": {
+		{
+			"#": "53",
 			"label": "Power Factor",
 			"description": "Returns the value of power factor as a percentage",
 			"valueSize": 1,
@@ -386,7 +413,8 @@
 			"unsigned": true,
 			"readOnly": true
 		},
-		"54": {
+		{
+			"#": "54",
 			"label": "Total energy consumed",
 			"description": "Returns the value of total energy consumed expressed in Wh (thousandths of KWh).",
 			"valueSize": 4,
@@ -396,7 +424,8 @@
 			"unsigned": true,
 			"readOnly": true
 		},
-		"55": {
+		{
+			"#": "55",
 			"label": "Total energy produced",
 			"description": "Returns the value of total energy consumed expressed in Wh (thousandths of KWh).",
 			"valueSize": 4,
@@ -406,7 +435,8 @@
 			"unsigned": true,
 			"readOnly": true
 		},
-		"60": {
+		{
+			"#": "60",
 			"label": "Start-up status",
 			"description": "Defines the status of the device following a restart.",
 			"valueSize": 1,
@@ -429,7 +459,8 @@
 				}
 			]
 		},
-		"61": {
+		{
+			"#": "61",
 			"label": "Configuration reset",
 			"description": "Defines which parameters should be reset to default values.",
 			"valueSize": 1,
@@ -456,7 +487,8 @@
 				}
 			]
 		},
-		"62": {
+		{
+			"#": "62",
 			"label": "Type of external switch",
 			"description": "Defines the type of external switch connected to the device.",
 			"valueSize": 1,
@@ -483,7 +515,8 @@
 				}
 			]
 		},
-		"63": {
+		{
+			"#": "63",
 			"label": "Load Control",
 			"description": "Defines the load control mode",
 			"valueSize": 1,
@@ -510,5 +543,5 @@
 				}
 			]
 		}
-	}
+	]
 }

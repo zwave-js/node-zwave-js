@@ -112,7 +112,7 @@ export {
 	ColorSwitchCCSupportedReport,
 } from "./ColorSwitchCC";
 export type { ColorTable } from "./ColorSwitchCC";
-export { CommandClass, InvalidCC } from "./CommandClass";
+export { CommandClass, getAPI, InvalidCC } from "./CommandClass";
 export {
 	ConfigurationCC,
 	ConfigurationCCBulkGet,

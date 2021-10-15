@@ -14,8 +14,9 @@
 		"min": "0.0",
 		"max": "255.255"
 	},
-	"paramInformation": {
-		"1": {
+	"paramInformation": [
+		{
+			"#": "1",
 			"label": "Change The State of Indicator Light",
 			"description": "1 means night light mode,0 means turn off the night light mode",
 			"valueSize": 1,
@@ -24,7 +25,8 @@
 			"defaultValue": 1,
 			"unsigned": true
 		},
-		"2": {
+		{
+			"#": "2",
 			"label": "Memory Function",
 			"description": "0 means no memory function,1 means memory function",
 			"valueSize": 1,
@@ -33,7 +35,8 @@
 			"defaultValue": 1,
 			"unsigned": true
 		},
-		"3": {
+		{
+			"#": "3",
 			"label": "Watt Meter Report Period",
 			"valueSize": 2,
 			"minValue": 0,
@@ -41,7 +44,8 @@
 			"defaultValue": 720,
 			"unsigned": true
 		},
-		"4": {
+		{
+			"#": "4",
 			"label": "kWh Meter Report Period",
 			"valueSize": 2,
 			"minValue": 0,
@@ -49,7 +53,8 @@
 			"defaultValue": 6,
 			"unsigned": true
 		},
-		"5": {
+		{
+			"#": "5",
 			"label": "Threshold of Watt For Load Caution",
 			"valueSize": 2,
 			"minValue": 0,
@@ -57,7 +62,8 @@
 			"defaultValue": 3000,
 			"unsigned": true
 		},
-		"6": {
+		{
+			"#": "6",
 			"label": "Threshold of kWh For Load Caution",
 			"valueSize": 2,
 			"minValue": 0,
@@ -65,7 +71,7 @@
 			"defaultValue": 10000,
 			"unsigned": true
 		}
-	},
+	],
 	"metadata": {
 		"inclusion": "1. Enter your Z-Wave controller into inclusion mode\n2. Press the socket on/off button three times within 1.5 seconds to be included",
 		"exclusion": "1. Enter your Z-Wave controller into exclusion mode\n2. Press the socket on/off button three times within 1.5 seconds to be excluded",

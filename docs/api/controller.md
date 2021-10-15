@@ -406,7 +406,7 @@ This method returns `true` when turning the radio on or off succeeded, `false` o
 
 > [!WARNING] The Z-Wave radio **must** be turned off when accessing the NVM.
 
-#### Retrieving information about the NVM
+#### Retrieving information about the NVM (500 series only)
 
 ```ts
 getNVMId(): Promise<NVMId>
@@ -422,7 +422,23 @@ interface NVMId {
 }
 ```
 
-#### Reading from the NVM
+#### Opening the NVM and retrieving the size (700 series only)
+
+```ts
+externalNVMOpen(): Promise<number>
+```
+
+Before reading or writing to a 700 series NVM, it must be opened using this method, which also returns the accessible NVM size in bytes.
+
+> [!NOTE] The first access determines whether the NVM can be written to or read from. To change the access method, close and re-open the NVM.
+
+#### Closing the NVM (700 series only)
+
+```ts
+externalNVMClose(): Promise<void>
+```
+
+#### Reading from the NVM (500 series only)
 
 ```ts
 externalNVMReadByte(offset: number): Promise<number>
@@ -436,7 +452,16 @@ externalNVMReadBuffer(offset: number, length: number): Promise<Buffer>
 
 Reads a buffer from the external NVM at the given offset. The returned buffer length is limited by the Serial API capabilities and not guaranteed to equal `length`.
 
-#### Writing to the NVM
+#### Reading from the NVM (700 series only)
+
+```ts
+externalNVMReadBuffer700(offset: number, length: number): Promise<{ buffer: Buffer; endOfFile: boolean }>
+```
+
+Reads a buffer from the external NVM at the given offset. The returned `buffer` length is limited by the Serial API capabilities and not guaranteed to equal `length`.
+If `endOfFile` is `true`, the end of the NVM has been reached and the NVM should be closed with a call to [`externalNVMClose`](#externalNVMClose).
+
+#### Writing to the NVM (500 series only)
 
 ```ts
 externalNVMWriteByte(offset: number, data: number): Promise<boolean>
@@ -451,6 +476,16 @@ externalNVMWriteBuffer(offset: number, buffer: Buffer): Promise<boolean>
 Writes a buffer to the external NVM at the given offset.
 
 > [!WARNING] These methods can write in the full NVM address space and are not offset to start at the application area. Take care not to accidentally overwrite the protocol NVM area!
+
+#### Writing to the NVM (700 series only)
+
+```ts
+externalNVMWriteBuffer700(offset: number, buffer: Buffer): Promise<boolean>
+```
+
+Writes a buffer to the external NVM at the given offset. If `endOfFile` is `true`, the end of the NVM has been reached and the NVM should be closed with a call to [`externalNVMClose`](#externalNVMClose).
+
+> [!WARNING] This method can write in the full NVM address space and are not offset to start at the application area. Take care not to accidentally overwrite the protocol NVM area!
 
 #### NVM backup and restore
 
@@ -617,7 +652,7 @@ interface InclusionResult {
 
 ### `"node removed"`
 
-A node has successfully been replaced or removed from the network. The `replace` parameter indicates whether the node was replaced with another node.
+A node has successfully been replaced or removed from the network. The `replaced` parameter indicates whether the node was replaced with another node.
 
 ```ts
 (node: ZWaveNode, replaced: boolean) => void

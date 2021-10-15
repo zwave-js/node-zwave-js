@@ -13,9 +13,9 @@
 		"min": "0.0",
 		"max": "255.255"
 	},
-	"supportsZWavePlus": true,
-	"paramInformation": {
-		"1": {
+	"paramInformation": [
+		{
+			"#": "1",
 			"label": "LED mode",
 			"description": "Set LED indication mode",
 			"valueSize": 1,
@@ -47,7 +47,8 @@
 				}
 			]
 		},
-		"2": {
+		{
+			"#": "2",
 			"label": "Automatically open or close after",
 			"unit": "Seconds",
 			"valueSize": 2,
@@ -62,7 +63,8 @@
 				}
 			]
 		},
-		"3": {
+		{
+			"#": "3",
 			"label": "What to do on RF close command",
 			"description": "Defines how to interpret RF Off command.",
 			"valueSize": 1,
@@ -90,7 +92,8 @@
 				}
 			]
 		},
-		"4": {
+		{
+			"#": "4",
 			"label": "Full close time",
 			"description": "Time in seconds to go from opened to closed state.",
 			"unit": "Seconds",
@@ -106,7 +109,8 @@
 				}
 			]
 		},
-		"5": {
+		{
+			"#": "5",
 			"label": "Full open time",
 			"description": "Time in seconds to go from closed to open state.",
 			"unit": "Seconds",
@@ -122,7 +126,8 @@
 				}
 			]
 		},
-		"6": {
+		{
+			"#": "6",
 			"label": "Node ID of the blocking device",
 			"description": "Commands from this device will be interpreted as block/unblock instead of open/close",
 			"valueSize": 1,
@@ -137,7 +142,8 @@
 				}
 			]
 		},
-		"7": {
+		{
+			"#": "7",
 			"label": "Unprotected command",
 			"description": "Which command from the blocking Node should be interpreted as 'unprotected'",
 			"valueSize": 1,
@@ -157,7 +163,8 @@
 				}
 			]
 		},
-		"8": {
+		{
+			"#": "8",
 			"label": "Opposite button reaction",
 			"valueSize": 1,
 			"minValue": 0,
@@ -176,7 +183,8 @@
 				}
 			]
 		},
-		"9": {
+		{
+			"#": "9",
 			"label": "Invert open and close relays",
 			"valueSize": 1,
 			"minValue": 0,
@@ -195,7 +203,8 @@
 				}
 			]
 		},
-		"10": {
+		{
+			"#": "10",
 			"label": "Typical click timeout",
 			"valueSize": 1,
 			"minValue": 0,
@@ -203,7 +212,8 @@
 			"unit": "10 ms",
 			"defaultValue": 50
 		},
-		"11": {
+		{
+			"#": "11",
 			"label": "Invert buttons",
 			"description": "Allows exchanging the functionality of the buttons",
 			"valueSize": 1,
@@ -223,7 +233,8 @@
 				}
 			]
 		},
-		"12": {
+		{
+			"#": "12",
 			"label": "Switch by buttons",
 			"valueSize": 1,
 			"minValue": 0,
@@ -246,7 +257,8 @@
 				}
 			]
 		},
-		"13": {
+		{
+			"#": "13",
 			"label": "Action on button single press or hold",
 			"description": "Defines which command should be sent on button single press or hold.",
 			"valueSize": 1,
@@ -270,7 +282,8 @@
 				}
 			]
 		},
-		"14": {
+		{
+			"#": "14",
 			"label": "Action on button double press or hold",
 			"description": "Defines which command should be sent on button double press or press-hold.",
 			"valueSize": 1,
@@ -294,7 +307,8 @@
 				}
 			]
 		},
-		"15": {
+		{
+			"#": "15",
 			"label": "Action to take on Switch All commands",
 			"valueSize": 1,
 			"minValue": 0,
@@ -317,5 +331,5 @@
 				}
 			]
 		}
-	}
+	]
 }

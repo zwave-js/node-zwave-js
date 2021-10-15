@@ -13,9 +13,9 @@
 		"min": "0.0",
 		"max": "255.255"
 	},
-	"supportsZWavePlus": true,
-	"paramInformation": {
-		"3": {
+	"paramInformation": [
+		{
+			"#": "3",
 			"label": "Beeper",
 			"description": "Keypad beeper to be turned ON or OFF",
 			"valueSize": 1,
@@ -35,7 +35,8 @@
 				}
 			]
 		},
-		"4": {
+		{
+			"#": "4",
 			"label": "Vacation Mode",
 			"valueSize": 1,
 			"minValue": 0,
@@ -54,7 +55,8 @@
 				}
 			]
 		},
-		"5": {
+		{
+			"#": "5",
 			"label": "Lock and Leave Mode",
 			"description": "Controls button push for throwing the deadbolt.",
 			"valueSize": 1,
@@ -74,7 +76,8 @@
 				}
 			]
 		},
-		"6": {
+		{
+			"#": "6",
 			"label": "User Slot Bit Field",
 			"description": "Occupied slots for User Codes",
 			"valueSize": 4,
@@ -82,7 +85,8 @@
 			"maxValue": 255,
 			"defaultValue": 0
 		},
-		"7": {
+		{
+			"#": "7",
 			"label": "Alarm Mode",
 			"description": "Lock Specific Alarm Mode",
 			"valueSize": 1,
@@ -109,7 +113,8 @@
 				}
 			]
 		},
-		"8": {
+		{
+			"#": "8",
 			"label": "Alarm Alert Sensitivity",
 			"valueSize": 1,
 			"minValue": 1,
@@ -139,7 +144,8 @@
 				}
 			]
 		},
-		"9": {
+		{
+			"#": "9",
 			"label": "Alarm Tamper Sensitivity",
 			"valueSize": 1,
 			"minValue": 1,
@@ -169,7 +175,8 @@
 				}
 			]
 		},
-		"10": {
+		{
+			"#": "10",
 			"label": "Alarm Kick Sensitivity",
 			"valueSize": 1,
 			"minValue": 1,
@@ -199,7 +206,8 @@
 				}
 			]
 		},
-		"11": {
+		{
+			"#": "11",
 			"label": "Alarm Disable Local Controls",
 			"valueSize": 1,
 			"minValue": 0,
@@ -218,7 +226,8 @@
 				}
 			]
 		},
-		"12": {
+		{
+			"#": "12",
 			"label": "Electronic Transition Count",
 			"valueSize": 4,
 			"minValue": 0,
@@ -226,7 +235,8 @@
 			"defaultValue": 0,
 			"readOnly": true
 		},
-		"13": {
+		{
+			"#": "13",
 			"label": "Mechanical Transition Count",
 			"valueSize": 4,
 			"minValue": 0,
@@ -234,7 +244,8 @@
 			"defaultValue": 0,
 			"readOnly": true
 		},
-		"14": {
+		{
+			"#": "14",
 			"label": "Electronic Failed Count",
 			"valueSize": 4,
 			"minValue": 0,
@@ -242,7 +253,8 @@
 			"defaultValue": 0,
 			"readOnly": true
 		},
-		"15": {
+		{
+			"#": "15",
 			"label": "Auto Lock",
 			"description": "Automatically throws the deadbolt 30 after seconds",
 			"valueSize": 1,
@@ -262,7 +274,8 @@
 				}
 			]
 		},
-		"16": {
+		{
+			"#": "16",
 			"label": "User Code PIN Length",
 			"description": "Required length of all User Codes",
 			"valueSize": 1,
@@ -270,7 +283,8 @@
 			"maxValue": 8,
 			"defaultValue": 4
 		},
-		"17": {
+		{
+			"#": "17",
 			"label": "Get Electrical High Preload Transition Count",
 			"description": "Count of high preload on the deadbolt",
 			"valueSize": 4,
@@ -279,7 +293,8 @@
 			"defaultValue": 0,
 			"readOnly": true
 		},
-		"18": {
+		{
+			"#": "18",
 			"label": "Get Bootloader Version",
 			"valueSize": 1,
 			"minValue": 0,
@@ -287,5 +302,5 @@
 			"defaultValue": 0,
 			"readOnly": true
 		}
-	}
+	]
 }

@@ -14,9 +14,9 @@
 		"min": "0.0",
 		"max": "255.255"
 	},
-	"supportsZWavePlus": true,
-	"paramInformation": {
-		"5": {
+	"paramInformation": [
+		{
+			"#": "5",
 			"label": "Operation Mode",
 			"description": "Setting the temperature scale",
 			"valueSize": 1,
@@ -35,7 +35,8 @@
 				}
 			]
 		},
-		"6": {
+		{
+			"#": "6",
 			"label": "Multi Sensor Function Switch",
 			"description": "Disable the humidity report after event triggered",
 			"valueSize": 1,
@@ -54,7 +55,8 @@
 				}
 			]
 		},
-		"10": {
+		{
+			"#": "10",
 			"label": "Auto Report Battery Time",
 			"description": "The interval time for auto report the battery level.",
 			"unit": "Ticks",
@@ -63,7 +65,8 @@
 			"maxValue": 127,
 			"defaultValue": 12
 		},
-		"13": {
+		{
+			"#": "13",
 			"label": "Auto Report Temperature Time",
 			"description": "The interval time for auto report the temperature.",
 			"unit": "Ticks",
@@ -72,7 +75,8 @@
 			"maxValue": 127,
 			"defaultValue": 12
 		},
-		"14": {
+		{
+			"#": "14",
 			"label": "Auto Report Humidity Time",
 			"description": "The interval time for auto report the humidity",
 			"unit": "Ticks",
@@ -81,7 +85,8 @@
 			"maxValue": 127,
 			"defaultValue": 12
 		},
-		"20": {
+		{
+			"#": "20",
 			"label": "Auto Report Tick Interval",
 			"description": "The interval time for auto report each tick",
 			"unit": "Minutes",
@@ -91,7 +96,8 @@
 			"defaultValue": 30,
 			"unsigned": true
 		},
-		"21": {
+		{
+			"#": "21",
 			"label": "Temperature Differential Report",
 			"unit": "Fahrenheit",
 			"valueSize": 1,
@@ -99,7 +105,8 @@
 			"maxValue": 127,
 			"defaultValue": 1
 		},
-		"23": {
+		{
+			"#": "23",
 			"label": "Humidity Differential Report",
 			"unit": "Percent",
 			"valueSize": 1,
@@ -107,7 +114,8 @@
 			"maxValue": 60,
 			"defaultValue": 0
 		},
-		"7[0x10]": {
+		{
+			"#": "7[0x10]",
 			"label": "Customer Function: Notification Type",
 			"valueSize": 1,
 			"minValue": 0,
@@ -125,7 +133,8 @@
 				}
 			]
 		},
-		"7[0x20]": {
+		{
+			"#": "7[0x20]",
 			"label": "Customer Function: Disable Multi CC",
 			"valueSize": 1,
 			"minValue": 0,
@@ -143,7 +152,7 @@
 				}
 			]
 		}
-	},
+	],
 	"metadata": {
 		"inclusion": "1. Have Z-Wave™ Controller entered inclusion mode.\n2. Pressing the tamper key three times within 1.5 \nseconds to enter the inclusion mode.\n3. After add successful, the device will wake to \nreceive the setting command from Z-Wave™ \nController about 20 seconds.",
 		"exclusion": "1. Have Z-Wave™ Controller entered exclusion mode.\n2. Pressing tamper key three times within 1.5 seconds\nto enter the exclusion mode.\nNode ID has been excluded.",

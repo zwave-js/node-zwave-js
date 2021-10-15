@@ -19,9 +19,9 @@
 		"min": "0.0",
 		"max": "255.255"
 	},
-	"supportsZWavePlus": true,
-	"paramInformation": {
-		"1": {
+	"paramInformation": [
+		{
+			"#": "1",
 			"label": "External switch",
 			"description": "Determines if the external switch can be used.",
 			"valueSize": 1,
@@ -41,7 +41,7 @@
 				}
 			]
 		}
-	},
+	],
 	"compat": {
 		"commandClasses": {
 			"add": {

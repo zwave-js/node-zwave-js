@@ -14,9 +14,9 @@
 		"min": "0.0",
 		"max": "255.255"
 	},
-	"supportsZWavePlus": true,
-	"paramInformation": {
-		"7": {
+	"paramInformation": [
+		{
+			"#": "7",
 			"label": "Customer Function",
 			"description": "Customer function switch, using bit control",
 			"valueSize": 1,
@@ -35,7 +35,8 @@
 				}
 			]
 		},
-		"10": {
+		{
+			"#": "10",
 			"label": "Auto Report Battery Time",
 			"description": "The interval time for auto report the battery level",
 			"unit": "30 minutes",
@@ -44,7 +45,7 @@
 			"maxValue": 127,
 			"defaultValue": 12
 		}
-	},
+	],
 	"metadata": {
 		"inclusion": "1. Have Z-Wave™ Controller entered inclusion mode.\n2. Pressing button three times within 1.5 seconds to enter the inclusion mode.\n3. After add successful, the device will wake to receive the setting command from Z-Wave™ Controller about 20 seconds",
 		"exclusion": "1. Have Z-Wave™ Controller entered exclusion mode.\n2. Pressing button three times within 1.5 seconds to enter the exclusion mode. Node ID has been removed",

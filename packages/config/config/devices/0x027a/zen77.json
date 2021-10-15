@@ -28,8 +28,9 @@
 			"maxNodes": 5
 		}
 	},
-	"paramInformation": {
-		"1": {
+	"paramInformation": [
+		{
+			"#": "1",
 			"label": "Paddle Orientation",
 			"valueSize": 1,
 			"minValue": 0,
@@ -51,7 +52,8 @@
 				}
 			]
 		},
-		"2": {
+		{
+			"#": "2",
 			"label": "LED Indicator Control",
 			"valueSize": 1,
 			"minValue": 0,
@@ -77,7 +79,8 @@
 				}
 			]
 		},
-		"23": {
+		{
+			"#": "23",
 			"label": "LED Indicator Color",
 			"valueSize": 1,
 			"minValue": 0,
@@ -103,7 +106,8 @@
 				}
 			]
 		},
-		"24": {
+		{
+			"#": "24",
 			"label": "LED Indicator Brightness",
 			"valueSize": 1,
 			"minValue": 0,
@@ -125,7 +129,8 @@
 				}
 			]
 		},
-		"3": {
+		{
+			"#": "3",
 			"label": "Auto Turn-Off Timer",
 			"description": "Set the number of minutes to automatically turn off switch once it has been turned on (0 to disable).",
 			"valueSize": 4,
@@ -134,7 +139,8 @@
 			"defaultValue": 0,
 			"unit": "minutes"
 		},
-		"5": {
+		{
+			"#": "5",
 			"label": "Auto Turn-On Timer",
 			"description": "Set the number of minutes to automatically turn on switch once it has been turned off (0 to disable).",
 			"valueSize": 4,
@@ -143,7 +149,8 @@
 			"defaultValue": 0,
 			"unit": "minutes"
 		},
-		"7[0x01]": {
+		{
+			"#": "7[0x01]",
 			"label": "Control Groups 2 and 3 With Physical Switch",
 			"valueSize": 1,
 			"minValue": 0,
@@ -161,7 +168,8 @@
 				}
 			]
 		},
-		"7[0x02]": {
+		{
+			"#": "7[0x02]",
 			"label": "Control Groups 2 and 3 With Connected 3-Way Switch",
 			"valueSize": 1,
 			"minValue": 0,
@@ -179,7 +187,8 @@
 				}
 			]
 		},
-		"7[0x04]": {
+		{
+			"#": "7[0x04]",
 			"label": "Control Groups 2 and 3 With Z-Wave Commands",
 			"valueSize": 1,
 			"minValue": 0,
@@ -197,7 +206,8 @@
 				}
 			]
 		},
-		"7[0x08]": {
+		{
+			"#": "7[0x08]",
 			"label": "Control Groups 2 and 3 With On/Off Timers",
 			"valueSize": 1,
 			"minValue": 0,
@@ -215,10 +225,12 @@
 				}
 			]
 		},
-		"8": {
+		{
+			"#": "8",
 			"$import": "~/templates/master_template.json#state_after_power_failure_off_on_prev"
 		},
-		"9": {
+		{
+			"#": "9",
 			"label": "Ramp Rate Control",
 			"description": "Set the number of seconds for dimmer to reach full brightness or turn off when operated manually.",
 			"valueSize": 1,
@@ -227,7 +239,8 @@
 			"defaultValue": 1,
 			"unit": "seconds"
 		},
-		"10": {
+		{
+			"#": "10",
 			"label": "Minimum Brightness",
 			"valueSize": 1,
 			"minValue": 1,
@@ -235,7 +248,8 @@
 			"defaultValue": 1,
 			"unit": "%"
 		},
-		"11": {
+		{
+			"#": "11",
 			"label": "Maximum Brightness",
 			"valueSize": 1,
 			"minValue": 1,
@@ -243,7 +257,8 @@
 			"defaultValue": 99,
 			"unit": "%"
 		},
-		"12": {
+		{
+			"#": "12",
 			"label": "Double-Tap Upper Paddle Behavior",
 			"description": "Set the brightness level after double-tapping the upper paddle.",
 			"valueSize": 1,
@@ -270,7 +285,8 @@
 				}
 			]
 		},
-		"25": {
+		{
+			"#": "25",
 			"label": "Single-Tap Upper Paddle Behavior",
 			"valueSize": 1,
 			"minValue": 0,
@@ -296,7 +312,8 @@
 				}
 			]
 		},
-		"13": {
+		{
+			"#": "13",
 			"label": "Scene Control",
 			"description": "Send scene commands to hub on physical paddle presses.",
 			"valueSize": 1,
@@ -315,7 +332,8 @@
 				}
 			]
 		},
-		"15": {
+		{
+			"#": "15",
 			"label": "Enable Local and Z-Wave Control",
 			"valueSize": 1,
 			"minValue": 0,
@@ -337,7 +355,8 @@
 				}
 			]
 		},
-		"20": {
+		{
+			"#": "20",
 			"label": "Dimmer Reporting",
 			"description": "Set how the dimmer to reports when paddles are tapped and held.",
 			"valueSize": 1,
@@ -360,7 +379,8 @@
 				}
 			]
 		},
-		"21": {
+		{
+			"#": "21",
 			"label": "Reporting Behavior When Physical Control Is Disabled",
 			"description": "Enable or disable reporting on/off status and changing LED indicator state even if physical and Z-Wave control is disabled.",
 			"valueSize": 1,
@@ -379,7 +399,8 @@
 				}
 			]
 		},
-		"16": {
+		{
+			"#": "16",
 			"label": "Local Dimming Speed",
 			"description": "Set the time it takes to get from 0% to 100% brightness when pressing and holding the paddle.",
 			"valueSize": 1,
@@ -388,7 +409,8 @@
 			"defaultValue": 5,
 			"unit": "seconds"
 		},
-		"18": {
+		{
+			"#": "18",
 			"label": "Custom Brightness Level",
 			"description": "Set the custom brightness level when single tapping the upper paddle (0 for last brightness level).",
 			"valueSize": 1,
@@ -397,7 +419,8 @@
 			"defaultValue": 0,
 			"units": "%"
 		},
-		"22": {
+		{
+			"#": "22",
 			"label": "Night Light Mode",
 			"description": "Set the brightness level the dimmer will turn on to when off and when lower paddle is held down for one second (0 to disable).",
 			"valueSize": 1,
@@ -406,5 +429,5 @@
 			"defaultValue": 20,
 			"units": "%"
 		}
-	}
+	]
 }

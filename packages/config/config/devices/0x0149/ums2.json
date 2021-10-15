@@ -13,9 +13,9 @@
 		"min": "0.0",
 		"max": "255.255"
 	},
-	"supportsZWavePlus": true,
-	"paramInformation": {
-		"1": {
+	"paramInformation": [
+		{
+			"#": "1",
 			"label": "Numbers of clicks to control the local load",
 			"valueSize": 1,
 			"minValue": 0,
@@ -41,63 +41,84 @@
 				}
 			]
 		},
-		"2": {
+		{
+			"#": "2",
 			"label": "Favorite level for ON position",
 			"valueSize": 1,
 			"minValue": 50,
 			"maxValue": 100,
 			"defaultValue": 100
 		},
-		"3": {
+		{
+			"#": "3",
 			"label": "Favorite level for OFF position",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 49,
 			"defaultValue": 0
 		},
-		"4": {
+		{
+			"#": "4",
 			"label": "Value for Group 2 with 1 click on UP button",
+			"description": "Allowable range: 0-99, 255",
 			"valueSize": 1,
-			"minValue": -1,
-			"maxValue": 99,
-			"defaultValue": -1
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 255,
+			"unsigned": true
 		},
-		"5": {
+		{
+			"#": "5",
 			"label": "Value for Group 2 with 1 click on DOWN button",
+			"description": "Allowable range: 0-99, 255",
 			"valueSize": 1,
-			"minValue": -1,
-			"maxValue": 99,
-			"defaultValue": 0
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 0,
+			"unsigned": true
 		},
-		"6": {
+		{
+			"#": "6",
 			"label": "Value for Group 3 with 2 clicks on UP button",
+			"description": "Allowable range: 0-99, 255",
 			"valueSize": 1,
-			"minValue": -1,
-			"maxValue": 99,
-			"defaultValue": -1
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 255,
+			"unsigned": true
 		},
-		"7": {
+		{
+			"#": "7",
 			"label": "Value for Group 3 with 2 clicks on DOWN button",
+			"description": "Allowable range: 0-99, 255",
 			"valueSize": 1,
-			"minValue": -1,
-			"maxValue": 99,
-			"defaultValue": 0
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 0,
+			"unsigned": true
 		},
-		"8": {
+		{
+			"#": "8",
 			"label": "Value for Group 4 with 3 clicks on UP button",
+			"description": "Allowable range: 0-99, 255",
 			"valueSize": 1,
-			"minValue": -1,
-			"maxValue": 99,
-			"defaultValue": -1
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 255,
+			"unsigned": true
 		},
-		"9": {
+		{
+			"#": "9",
 			"label": "Value for Group 4 with 3 clicks on DOWN button",
+			"description": "Allowable range: 0-99, 255",
 			"valueSize": 1,
-			"minValue": -1,
-			"maxValue": 99,
-			"defaultValue": 0
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 0,
+			"unsigned": true
 		},
-		"20": {
+		{
+			"#": "20",
 			"label": "Calibration",
 			"description": "Defines the status of the calibration procedure",
 			"valueSize": 1,
@@ -105,19 +126,21 @@
 			"maxValue": 2,
 			"defaultValue": 0
 		},
-		"21": {
+		{
+			"#": "21",
 			"label": "Motor idle state definition",
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 3000,
 			"defaultValue": 1000
 		},
-		"22": {
+		{
+			"#": "22",
 			"label": "Limit switch recognition",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 127,
 			"defaultValue": 30
 		}
-	}
+	]
 }

@@ -36,3 +36,6 @@ packages/*/cache
 
 .secrets
 .test-payloads
+
+test/.*-audit.json
+test/zwavejs_*.log

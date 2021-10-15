@@ -28,8 +28,9 @@
 			"maxNodes": 4
 		}
 	},
-	"paramInformation": {
-		"1": {
+	"paramInformation": [
+		{
+			"#": "1",
 			"label": "Siren alarm sequence interval in seconds",
 			"description": "This parameter defines the total length of the interval in seconds.",
 			"unit": "Seconds",
@@ -39,7 +40,8 @@
 			"defaultValue": 10,
 			"unsigned": true
 		},
-		"2": {
+		{
+			"#": "2",
 			"label": "Siren alarm tone length",
 			"description": "Total length of the sound versus silence within this interval.",
 			"unit": "Seconds",
@@ -49,21 +51,24 @@
 			"defaultValue": 10,
 			"unsigned": true
 		},
-		"3": {
+		{
+			"#": "3",
 			"label": "Value of On-Command",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 99,
 			"defaultValue": 99
 		},
-		"4": {
+		{
+			"#": "4",
 			"label": "Value of Off-Command",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 99,
 			"defaultValue": 0
 		},
-		"5": {
+		{
+			"#": "5",
 			"label": "Status of automated meshing of smoke alarms",
 			"description": "Inform other smoke detectors of same type about smoke alarms",
 			"valueSize": 1,
@@ -83,7 +88,8 @@
 				}
 			]
 		},
-		"6": {
+		{
+			"#": "6",
 			"label": "Status of automated meshing of battery alarms",
 			"description": "Inform other smoke detectors of same type about battery alarms",
 			"valueSize": 1,
@@ -103,5 +109,5 @@
 				}
 			]
 		}
-	}
+	]
 }

@@ -13,9 +13,9 @@
 		"min": "0.0",
 		"max": "255.255"
 	},
-	"supportsZWavePlus": true,
-	"paramInformation": {
-		"1": {
+	"paramInformation": [
+		{
+			"#": "1",
 			"label": "Central Scene notifications",
 			"description": "Enable/disable central scene notifications for 2x-5x button presses.",
 			"valueSize": 1,
@@ -34,7 +34,8 @@
 				}
 			]
 		},
-		"2": {
+		{
+			"#": "2",
 			"label": "Report interval",
 			"description": "Allowable range: 3-8640 (30 seconds to 1 day)",
 			"valueSize": 2,
@@ -49,7 +50,8 @@
 				}
 			]
 		},
-		"3": {
+		{
+			"#": "3",
 			"label": "Energy meter report interval",
 			"description": "Allowable range: 10-30240 (10 minutes to 3 weeks)",
 			"valueSize": 2,
@@ -64,7 +66,8 @@
 				}
 			]
 		},
-		"4": {
+		{
+			"#": "4",
 			"label": "Button operation mode",
 			"description": "Operations mode for push buttons controlling the output. - Normal Switch: In this mode the top button will turn the output on, while the bottom button will turn the output off. - Toogle Switch: In this mode any button press will toggle the output - when on it will be turned off, when off it will be turned on.",
 			"valueSize": 1,
@@ -83,7 +86,8 @@
 				}
 			]
 		},
-		"5": {
+		{
+			"#": "5",
 			"label": "External switch type",
 			"description": "Configuration of switch type connected to extension input S. - External Normal Switch: Use this value if a toggle switch is connected to extension input S. - External Push Button: Use this value if a push button switch is connected to extension input S.",
 			"valueSize": 1,
@@ -102,7 +106,8 @@
 				}
 			]
 		},
-		"6": {
+		{
+			"#": "6",
 			"label": "External switch mapping",
 			"description": "Central Scene mapping of extension input S.",
 			"valueSize": 1,
@@ -125,5 +130,5 @@
 				}
 			]
 		}
-	}
+	]
 }

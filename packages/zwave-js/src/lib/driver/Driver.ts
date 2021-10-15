@@ -9,6 +9,7 @@ import {
 	isZWaveError,
 	LogConfig,
 	SecurityClass,
+	securityClassIsS2,
 	SecurityManager,
 	SecurityManager2,
 	serializeCacheValue,
@@ -26,6 +27,7 @@ import {
 } from "@zwave-js/serial";
 import {
 	DeepPartial,
+	getErrorMessage,
 	isDocker,
 	mergeDeep,
 	num2hex,
@@ -57,6 +59,7 @@ import {
 	assertValidCCs,
 	CommandClass,
 	getImplementedVersion,
+	InvalidCC,
 } from "../commandclass/CommandClass";
 import { DeviceResetLocallyCCNotification } from "../commandclass/DeviceResetLocallyCC";
 import {
@@ -114,7 +117,9 @@ import {
 	isSendData,
 	isSendDataSinglecast,
 	SendDataMessage,
+	TransmitOptions,
 } from "../controller/SendDataShared";
+import { SoftResetRequest } from "../controller/SoftResetRequest";
 import { ControllerLogger } from "../log/Controller";
 import { DriverLogger } from "../log/Driver";
 import {
@@ -178,6 +183,7 @@ const defaultOptions: ZWaveOptions = {
 		refreshValue: 5000, // Default should handle most slow devices until we have a better solution
 	},
 	attempts: {
+		openSerialPort: 10,
 		controller: 3,
 		sendData: 3,
 		retryAfterTransmitReport: false,
@@ -185,6 +191,8 @@ const defaultOptions: ZWaveOptions = {
 	},
 	preserveUnknownValues: false,
 	disableOptimisticValueUpdate: false,
+	// By default enable soft reset outside Docker or if the env variable is set
+	enableSoftReset: !isDocker() || !!process.env.ZWAVEJS_ENABLE_SOFT_RESET,
 	interview: {
 		skipInterview: false,
 		queryAllUserCodes: false,
@@ -332,11 +340,22 @@ export interface SendMessageOptions {
 	 * @internal
 	 */
 	tag?: any;
+	/**
+	 * Whether the send thread MUST be paused after this message was handled
+	 * @internal
+	 */
+	pauseSendThread?: boolean;
+	/** If a Wake Up On Demand should be requested for the target node. */
+	requestWakeUpOnDemand?: boolean;
 }
 
 export interface SendCommandOptions extends SendMessageOptions {
 	/** How many times the driver should try to send the message. Defaults to the configured Driver option */
 	maxSendAttempts?: number;
+	/** Whether the driver should automatically handle the encapsulation. Default: true */
+	autoEncapsulate?: boolean;
+	/** Overwrite the default transmit options */
+	transmitOptions?: TransmitOptions;
 }
 
 export type SupervisionUpdateHandler = (
@@ -686,15 +705,23 @@ export class Driver extends TypedEventEmitter<DriverEventCallbacks> {
 		this.serial
 			.on("data", this.serialport_onData.bind(this))
 			.on("error", (err) => {
-				this.driverLog.print(
-					`Serial port errored: ${err.message}`,
-					"error",
-				);
-				if (this._isOpen) {
-					this.serialport_onError(err);
-				} else {
-					spOpenPromise.reject(err);
+				if (this.isSoftResetting && !this.serial?.isOpen) {
+					// A disconnection while soft resetting is to be expected
+					return;
+				} else if (!this._isOpen) {
+					// tryOpenSerialport takes care of error handling
+					return;
 				}
+
+				const message = `Serial port errored: ${err.message}`;
+				this.driverLog.print(message, "error");
+
+				const error = new ZWaveError(
+					message,
+					ZWaveErrorCodes.Driver_Failed,
+				);
+				this.emit("error", error);
+
 				void this.destroy();
 			});
 		// If the port is already open, close it first
@@ -705,32 +732,25 @@ export class Driver extends TypedEventEmitter<DriverEventCallbacks> {
 
 		// asynchronously open the serial port
 		setImmediate(async () => {
-			try {
-				await this.serial!.open();
-			} catch (e) {
-				const message = `Failed to open the serial port: ${e.message}`;
-				this.driverLog.print(message, "error");
-
-				spOpenPromise.reject(
-					new ZWaveError(message, ZWaveErrorCodes.Driver_Failed),
-				);
-				void this.destroy();
-				return;
-			}
+			if (!(await this.tryOpenSerialport(spOpenPromise))) return;
 			this.driverLog.print("serial port opened");
 			this._isOpen = true;
 			spOpenPromise.resolve();
 
+			// Perform initialization sequence
 			await this.writeHeader(MessageHeaders.NAK);
-			// set unref, so stopping the process doesn't need to wait for the 1500ms
-			await wait(1500, true);
+			await this.softReset();
 
 			// Try to create the cache directory. This can fail, in which case we should expose a good error message
 			try {
 				await this.options.storage.driver.ensureDir(this.cacheDir);
 			} catch (e) {
 				let message: string;
-				if (/\.yarn[/\\]cache[/\\]zwave-js/i.test(e.stack)) {
+				if (
+					/\.yarn[/\\]cache[/\\]zwave-js/i.test(
+						getErrorMessage(e, true),
+					)
+				) {
 					message = `Failed to create the cache directory. When using Yarn PnP, you need to change the location with the "storage.cacheDir" driver option.`;
 				} else {
 					message = `Failed to create the cache directory. Please make sure that it is writable or change the location with the "storage.cacheDir" driver option.`;
@@ -749,7 +769,9 @@ export class Driver extends TypedEventEmitter<DriverEventCallbacks> {
 			try {
 				await this.configManager.loadAll();
 			} catch (e) {
-				const message = `Failed to load the configuration: ${e.message}`;
+				const message = `Failed to load the configuration: ${getErrorMessage(
+					e,
+				)}`;
 				this.driverLog.print(message, "error");
 				this.emit(
 					"error",
@@ -762,7 +784,7 @@ export class Driver extends TypedEventEmitter<DriverEventCallbacks> {
 			this.driverLog.print("beginning interview...");
 			try {
 				await this.initializeControllerAndNodes();
-			} catch (e: unknown) {
+			} catch (e) {
 				let message: string;
 				if (
 					isZWaveError(e) &&
@@ -770,9 +792,10 @@ export class Driver extends TypedEventEmitter<DriverEventCallbacks> {
 				) {
 					message = `Failed to initialize the driver, no response from the controller. Are you sure this is a Z-Wave controller?`;
 				} else {
-					message = `Failed to initialize the driver: ${
-						e instanceof Error ? e.message : String(e)
-					}`;
+					message = `Failed to initialize the driver: ${getErrorMessage(
+						e,
+						true,
+					)}`;
 				}
 				this.driverLog.print(message, "error");
 				this.emit(
@@ -790,6 +813,43 @@ export class Driver extends TypedEventEmitter<DriverEventCallbacks> {
 	private _controllerInterviewed: boolean = false;
 	private _nodesReady = new Set<number>();
 	private _nodesReadyEventEmitted: boolean = false;
+
+	private async tryOpenSerialport(
+		openPromise?: DeferredPromise<void>,
+	): Promise<boolean> {
+		let lastError: unknown;
+		// After a reset, the serial port may need a few seconds until we can open it - try a few times
+		for (
+			let attempt = 1;
+			attempt <= this.options.attempts.openSerialPort;
+			attempt++
+		) {
+			try {
+				await this.serial!.open();
+				return true;
+			} catch (e) {
+				lastError = e;
+			}
+			if (attempt < this.options.attempts.openSerialPort) {
+				await wait(1000);
+			}
+		}
+
+		const message = `Failed to open the serial port: ${getErrorMessage(
+			lastError,
+		)}`;
+		this.driverLog.print(message, "error");
+
+		const error = new ZWaveError(message, ZWaveErrorCodes.Driver_Failed);
+		if (this._isOpen || !openPromise) {
+			this.emit("error", error);
+		} else {
+			openPromise?.reject(error);
+		}
+
+		void this.destroy();
+		return false;
+	}
 
 	/** Indicates whether all nodes are ready, i.e. the "all nodes ready" event has been emitted */
 	public get allNodesReady(): boolean {
@@ -858,15 +918,35 @@ export class Driver extends TypedEventEmitter<DriverEventCallbacks> {
 		const S0Key =
 			this.options.securityKeys?.S0_Legacy ?? this.options.networkKey;
 		if (S0Key) {
+			this.driverLog.print(
+				"Network key for S0 configured, enabling S0 security manager...",
+			);
 			this._securityManager = new SecurityManager({
 				networkKey: S0Key,
 				ownNodeId: this._controller.ownNodeId!,
 				nonceTimeout: this.options.timeouts.nonce,
 			});
+		} else {
+			this.driverLog.print(
+				"No network key for S0 configured, communication with secure (S0) devices won't work!",
+				"warn",
+			);
 		}
 
 		// The S2 security manager could be initialized earlier, but we do it here for consistency
-		if (this.options.securityKeys) {
+		if (
+			this.options.securityKeys &&
+			// Only set it up if we have security keys for at least one S2 security class
+			Object.keys(this.options.securityKeys).some(
+				(key) =>
+					key.startsWith("S2_") &&
+					key in SecurityClass &&
+					securityClassIsS2((SecurityClass as any)[key]),
+			)
+		) {
+			this.driverLog.print(
+				"At least one network key for S2 configured, enabling S2 security manager...",
+			);
 			this._securityManager2 = new SecurityManager2();
 			// Set up all keys
 			for (const secClass of [
@@ -880,6 +960,11 @@ export class Driver extends TypedEventEmitter<DriverEventCallbacks> {
 					this._securityManager2.setKey(SecurityClass[secClass], key);
 				}
 			}
+		} else {
+			this.driverLog.print(
+				"No network key for S2 configured, communication with secure (S2) devices won't work!",
+				"warn",
+			);
 		}
 
 		// in any case we need to emit the driver ready event here
@@ -1037,7 +1122,7 @@ export class Driver extends TypedEventEmitter<DriverEventCallbacks> {
 				// eslint-disable-next-line @typescript-eslint/no-empty-function
 				void reportMissingDeviceConfig(node as any).catch(() => {});
 			}
-		} catch (e: unknown) {
+		} catch (e) {
 			if (isZWaveError(e)) {
 				if (
 					e.code === ZWaveErrorCodes.Driver_NotReady ||
@@ -1376,10 +1461,10 @@ export class Driver extends TypedEventEmitter<DriverEventCallbacks> {
 		if (status < FirmwareUpdateStatus.OK_WaitingForActivation) return;
 
 		// Wait at least 5 seconds
-		if (!waitTime) waitTime = 5000;
+		if (!waitTime) waitTime = 5;
 		this.controllerLog.logNode(
 			node.id,
-			`Firmware updated, scheduling interview in ${waitTime} ms...`,
+			`Firmware updated, scheduling interview in ${waitTime} seconds...`,
 		);
 		// We reuse the retryNodeInterviewTimeouts here because they serve a similar purpose
 		this.retryNodeInterviewTimeouts.set(
@@ -1387,7 +1472,7 @@ export class Driver extends TypedEventEmitter<DriverEventCallbacks> {
 			setTimeout(() => {
 				this.retryNodeInterviewTimeouts.delete(node.id);
 				void node.refreshInfo();
-			}, waitTime).unref(),
+			}, waitTime * 1000).unref(),
 		);
 	}
 
@@ -1481,6 +1566,57 @@ export class Driver extends TypedEventEmitter<DriverEventCallbacks> {
 		}
 	}
 
+	private isSoftResetting: boolean = false;
+	private hasLoggedSoftResetWarning: boolean = false;
+
+	/**
+	 * Instruct the controller to soft-reset.
+	 * Warning: USB modules will reconnect, meaning that they might get a new address.
+	 */
+	public async softReset(): Promise<void> {
+		if (this.options.enableSoftReset) {
+			this.controllerLog.print("performing soft reset...");
+
+			try {
+				this.isSoftResetting = true;
+				await this.sendMessage(new SoftResetRequest(this), {
+					supportCheck: false,
+					pauseSendThread: true,
+				});
+
+				// TODO: This will cause the controller to issue a FUNC_ID_SERIAL_API_STARTED command
+				// We should react to that instead of waiting a fixed 1.5 seconds
+			} catch (e) {
+				this.controllerLog.print(
+					`Soft reset failed: ${getErrorMessage(e)}`,
+					"error",
+				);
+			}
+
+			// Wait 1.5 seconds after reset to ensure that the module is ready for communication again
+			await wait(1500);
+
+			// If the controller disconnected the serial port during the soft reset, we need to re-open it
+			if (!this.serial!.isOpen) {
+				await this.tryOpenSerialport();
+			}
+
+			this.isSoftResetting = false;
+
+			// And resume sending
+			this.unpauseSendThread();
+		} else if (!this.hasLoggedSoftResetWarning) {
+			this.hasLoggedSoftResetWarning = true;
+			const message =
+				"Soft reset of the controller from within Docker requires configuration of the container and/or host. To enable it, set the corresponding driver option or the ZWAVEJS_ENABLE_SOFT_RESET environment variable.";
+			this.controllerLog.print(message, "warn");
+			this.emit(
+				"error",
+				new ZWaveError(message, ZWaveErrorCodes.Driver_NotSupported),
+			);
+		}
+	}
+
 	/**
 	 * Performs a hard reset on the controller. This wipes out all configuration!
 	 *
@@ -1565,7 +1701,7 @@ export class Driver extends TypedEventEmitter<DriverEventCallbacks> {
 			await this.saveNetworkToCacheInternal();
 		} catch (e) {
 			this.driverLog.print(
-				`Saving the network to cache failed: ${e.message}`,
+				`Saving the network to cache failed: ${getErrorMessage(e)}`,
 				"error",
 			);
 		}
@@ -1576,7 +1712,7 @@ export class Driver extends TypedEventEmitter<DriverEventCallbacks> {
 			await this._metadataDB?.close();
 		} catch (e) {
 			this.driverLog.print(
-				`Closing the value DBs failed: ${e.message}`,
+				`Closing the value DBs failed: ${getErrorMessage(e)}`,
 				"error",
 			);
 		}
@@ -1602,10 +1738,6 @@ export class Driver extends TypedEventEmitter<DriverEventCallbacks> {
 		this._logContainer.destroy();
 
 		this._destroyPromise.resolve();
-	}
-
-	private serialport_onError(err: Error): void {
-		this.emit("error", err);
 	}
 
 	/**
@@ -1646,27 +1778,52 @@ export class Driver extends TypedEventEmitter<DriverEventCallbacks> {
 			// Then ensure there are no errors
 			if (isCommandClassContainer(msg)) {
 				assertValidCCs(msg);
-				msg.getNodeUnsafe()?.incrementStatistics("commandsRX");
-			} else {
-				this._controller?.incrementStatistics("messagesRX");
+			}
+			if (!!this._controller) {
+				if (isCommandClassContainer(msg)) {
+					msg.getNodeUnsafe()?.incrementStatistics("commandsRX");
+				} else {
+					this._controller.incrementStatistics("messagesRX");
+				}
 			}
 			// all good, send ACK
 			await this.writeHeader(MessageHeaders.ACK);
-		} catch (e) {
+		} catch (e: any) {
 			try {
 				if (await this.handleSecurityS2DecodeError(e, msg)) {
 					// TODO
 				} else {
 					const response = this.handleDecodeError(e, data, msg);
 					if (response) await this.writeHeader(response);
-					if (isCommandClassContainer(msg)) {
-						msg.getNodeUnsafe()?.incrementStatistics(
-							"commandsDroppedRX",
-						);
-					} else {
-						this._controller?.incrementStatistics(
-							"messagesDroppedRX",
-						);
+					if (!!this._controller) {
+						if (isCommandClassContainer(msg)) {
+							msg.getNodeUnsafe()?.incrementStatistics(
+								"commandsDroppedRX",
+							);
+
+							// Figure out if the command was received with supervision encapsulation
+							const supervisionSessionId =
+								SupervisionCC.getSessionId(msg.command);
+							if (
+								supervisionSessionId !== undefined &&
+								msg.command instanceof InvalidCC
+							) {
+								// If it was, we need to notify the sender that we couldn't decode the command
+								await msg
+									.getNodeUnsafe()
+									?.commandClasses.Supervision.sendReport({
+										sessionId: supervisionSessionId,
+										moreUpdatesFollow: false,
+										status: SupervisionStatus.NoSupport,
+										secure: msg.command.secure,
+									});
+								return;
+							}
+						} else {
+							this._controller.incrementStatistics(
+								"messagesDroppedRX",
+							);
+						}
 					}
 				}
 			} catch (ee) {
@@ -1747,7 +1904,9 @@ export class Driver extends TypedEventEmitter<DriverEventCallbacks> {
 				}
 			} catch (e) {
 				// We shouldn't throw just because logging a message fails
-				this.driverLog.print(`Logging a message failed: ${e.message}`);
+				this.driverLog.print(
+					`Logging a message failed: ${getErrorMessage(e)}`,
+				);
 			}
 			this.sendThread.send({ type: "message", message: msg });
 		}
@@ -1798,7 +1957,9 @@ export class Driver extends TypedEventEmitter<DriverEventCallbacks> {
 						} catch (e) {
 							// We shouldn't throw just because logging a message fails
 							this.driverLog.print(
-								`Logging a message failed: ${e.message}`,
+								`Logging a message failed: ${getErrorMessage(
+									e,
+								)}`,
 							);
 						}
 					} else {
@@ -2031,7 +2192,7 @@ It is probably asleep, moving its messages to the wakeup queue.`,
 					this.partialCCSessions.delete(partialSessionKey!);
 					try {
 						command.mergePartialCCs(session);
-					} catch (e: unknown) {
+					} catch (e) {
 						if (isZWaveError(e)) {
 							switch (e.code) {
 								case ZWaveErrorCodes.Deserialization_NotImplemented:
@@ -2389,7 +2550,9 @@ ${handlers.length} left`,
 					await this.controller.removeFailedNode(msg.command.nodeId);
 				} catch (e) {
 					this.controllerLog.logNode(msg.command.nodeId, {
-						message: `removing the node failed: ${e}`,
+						message: `removing the node failed: ${getErrorMessage(
+							e,
+						)}`,
 						level: "error",
 					});
 				}
@@ -2414,16 +2577,68 @@ ${handlers.length} left`,
 					nodeSessions.supervision.delete(msg.command.sessionId);
 				}
 			} else {
+				// Figure out if the command was received with supervision encapsulation
+				const supervisionSessionId = SupervisionCC.getSessionId(
+					msg.command,
+				);
+				const secure = msg.command.secure;
+
+				if (
+					supervisionSessionId !== undefined &&
+					!node.supportsCC(CommandClasses.Supervision)
+				) {
+					// When a node sends us a command that's supervision encapsulated, it must support Supervision CC
+					node.addCC(CommandClasses.Supervision, {
+						isSupported: true,
+						version: 1,
+					});
+				}
+
 				// check if someone is waiting for this command
 				for (const entry of this.awaitedCommands) {
 					if (entry.predicate(msg.command)) {
 						// resolve the promise - this will remove the entry from the list
 						entry.promise.resolve(msg.command);
+
+						// send back a Supervision Report if the command was received via Supervision Get
+						if (supervisionSessionId !== undefined) {
+							await node.commandClasses.Supervision.sendReport({
+								sessionId: supervisionSessionId,
+								moreUpdatesFollow: false,
+								status: SupervisionStatus.Success,
+								secure,
+							});
+						}
 						return;
 					}
 				}
-				// noone is waiting, dispatch the command to the node itself
-				await node.handleCommand(msg.command);
+
+				// No one is waiting, dispatch the command to the node itself
+				if (supervisionSessionId !== undefined) {
+					// Wrap the handleCommand in try-catch so we can notify the node that we weren't able to handle the command
+					try {
+						await node.handleCommand(msg.command);
+
+						await node.commandClasses.Supervision.sendReport({
+							sessionId: supervisionSessionId,
+							moreUpdatesFollow: false,
+							status: SupervisionStatus.Success,
+							secure,
+						});
+					} catch (e) {
+						await node.commandClasses.Supervision.sendReport({
+							sessionId: supervisionSessionId,
+							moreUpdatesFollow: false,
+							status: SupervisionStatus.Fail,
+							secure,
+						});
+
+						// In any case we don't want to swallow the error
+						throw e;
+					}
+				} else {
+					await node.handleCommand(msg.command);
+				}
 			}
 
 			return;
@@ -2663,6 +2878,10 @@ ${handlers.length} left`,
 			transaction.changeNodeStatusOnTimeout =
 				options.changeNodeStatusOnMissingACK;
 		}
+		if (options.pauseSendThread === true) {
+			transaction.pauseSendThread = true;
+		}
+		transaction.requestWakeUpOnDemand = !!options.requestWakeUpOnDemand;
 		transaction.tag = options.tag;
 
 		// start sending now (maybe)
@@ -2780,8 +2999,17 @@ ${handlers.length} left`,
 			msg.maxSendAttempts = options.maxSendAttempts;
 		}
 
+		// Specify transmit options for the request
+		if (options.transmitOptions != undefined) {
+			msg.transmitOptions = options.transmitOptions;
+			if (!(options.transmitOptions & TransmitOptions.ACK)) {
+				// If no ACK is requested, set the callback ID to zero, because we won't get a controller callback
+				msg.callbackId = 0;
+			}
+		}
+
 		// Automatically encapsulate commands before sending
-		this.encapsulateCommands(msg);
+		if (options.autoEncapsulate !== false) this.encapsulateCommands(msg);
 
 		try {
 			const resp = await this.sendMessage(msg, options);
@@ -2791,7 +3019,7 @@ ${handlers.length} left`,
 				this.unwrapCommands(resp);
 				return resp.command as TResponse;
 			}
-		} catch (e: unknown) {
+		} catch (e) {
 			// A timeout always has to be expected. In this case return nothing.
 			if (
 				isZWaveError(e) &&
@@ -3029,6 +3257,22 @@ ${handlers.length} left`,
 		);
 	}
 
+	/**
+	 * @internal
+	 * Pauses the send thread, avoiding commands to be sent to the controller
+	 */
+	public pauseSendThread(): void {
+		this.sendThread.send({ type: "pause" });
+	}
+
+	/**
+	 * @internal
+	 * Unpauses the send thread, allowing commands to be sent to the controller again
+	 */
+	public unpauseSendThread(): void {
+		this.sendThread.send({ type: "unpause" });
+	}
+
 	/** Re-sorts the send queue */
 	private sortSendQueue(): void {
 		this.sendThread.send("sortQueue");
@@ -3166,7 +3410,10 @@ ${handlers.length} left`,
 				`Restoring the network from cache was successful!`,
 			);
 		} catch (e) {
-			const message = `Restoring the network from cache failed: ${e.stack}`;
+			const message = `Restoring the network from cache failed: ${getErrorMessage(
+				e,
+				true,
+			)}`;
 			this.emit(
 				"error",
 				new ZWaveError(message, ZWaveErrorCodes.Driver_InvalidCache),
@@ -3286,7 +3533,7 @@ ${handlers.length} left`,
 			}
 			return ret;
 		} catch (e) {
-			this.driverLog.print(e.message, "error");
+			this.driverLog.print(getErrorMessage(e), "error");
 		}
 	}
 
@@ -3322,7 +3569,7 @@ ${handlers.length} left`,
 				await installConfigUpdate(newVersion);
 			}
 		} catch (e) {
-			this.driverLog.print(e.message, "error");
+			this.driverLog.print(getErrorMessage(e), "error");
 			return false;
 		}
 		this.driverLog.print(

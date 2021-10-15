@@ -30,9 +30,9 @@ export class ZWaveSerialPort extends ZWaveSerialPortBase {
 						parity: "none",
 					}),
 				open: (serial: SerialPort) =>
-					new Promise((resolve) => {
+					new Promise((resolve, reject) => {
 						// detect serial disconnection errors
-						serial.on("close", (err?: DisconnectError) => {
+						serial.once("close", (err?: DisconnectError) => {
 							if (err?.disconnected === true) {
 								this.emit(
 									"error",
@@ -43,6 +43,7 @@ export class ZWaveSerialPort extends ZWaveSerialPortBase {
 								);
 							}
 						});
+						serial.once("error", reject);
 						serial.once("open", resolve).open();
 					}),
 				close: (serial: SerialPort) =>

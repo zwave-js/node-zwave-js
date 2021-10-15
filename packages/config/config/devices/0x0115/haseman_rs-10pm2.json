@@ -13,8 +13,9 @@
 		"min": "0.0",
 		"max": "255.255"
 	},
-	"paramInformation": {
-		"11": {
+	"paramInformation": [
+		{
+			"#": "11",
 			"label": "Reporting Time",
 			"valueSize": 1,
 			"minValue": 1,
@@ -23,7 +24,8 @@
 			"unit": "seconds",
 			"unsigned": true
 		},
-		"64": {
+		{
+			"#": "64",
 			"label": "Power Up Memory",
 			"valueSize": 2,
 			"minValue": 0,
@@ -41,7 +43,8 @@
 				}
 			]
 		},
-		"65": {
+		{
+			"#": "65",
 			"label": "Button Type - Channel 1",
 			"valueSize": 2,
 			"minValue": 0,
@@ -67,7 +70,8 @@
 				}
 			]
 		},
-		"66": {
+		{
+			"#": "66",
 			"label": "Button Type - Channel 2",
 			"valueSize": 2,
 			"minValue": 0,
@@ -93,7 +97,8 @@
 				}
 			]
 		},
-		"67": {
+		{
+			"#": "67",
 			"label": "Button Type - Channel 3",
 			"valueSize": 2,
 			"minValue": 0,
@@ -119,7 +124,8 @@
 				}
 			]
 		},
-		"68": {
+		{
+			"#": "68",
 			"label": "Button Type - Channel 4",
 			"valueSize": 2,
 			"minValue": 0,
@@ -145,7 +151,8 @@
 				}
 			]
 		},
-		"69": {
+		{
+			"#": "69",
 			"label": "Button Type - Channel 5",
 			"valueSize": 2,
 			"minValue": 0,
@@ -171,7 +178,8 @@
 				}
 			]
 		},
-		"70": {
+		{
+			"#": "70",
 			"label": "Button Type - Channel 6",
 			"valueSize": 2,
 			"minValue": 0,
@@ -197,7 +205,8 @@
 				}
 			]
 		},
-		"71": {
+		{
+			"#": "71",
 			"label": "Button Type - Channel 7",
 			"valueSize": 2,
 			"minValue": 0,
@@ -223,7 +232,8 @@
 				}
 			]
 		},
-		"72": {
+		{
+			"#": "72",
 			"label": "Button Type - Channel 8",
 			"valueSize": 2,
 			"minValue": 0,
@@ -249,7 +259,8 @@
 				}
 			]
 		},
-		"73": {
+		{
+			"#": "73",
 			"label": "Button Type - Channel 9",
 			"valueSize": 2,
 			"minValue": 0,
@@ -275,7 +286,8 @@
 				}
 			]
 		},
-		"74": {
+		{
+			"#": "74",
 			"label": "Button Type - Channel 10",
 			"valueSize": 2,
 			"minValue": 0,
@@ -301,5 +313,5 @@
 				}
 			]
 		}
-	}
+	]
 }

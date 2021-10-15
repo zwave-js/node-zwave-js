@@ -13,9 +13,9 @@
 		"min": "0.0",
 		"max": "255.255"
 	},
-	"supportsZWavePlus": true,
-	"paramInformation": {
-		"4": {
+	"paramInformation": [
+		{
+			"#": "4",
 			"label": "Memory function",
 			"description": "Recover after a power failure",
 			"valueSize": 1,
@@ -34,5 +34,5 @@
 				}
 			]
 		}
-	}
+	]
 }

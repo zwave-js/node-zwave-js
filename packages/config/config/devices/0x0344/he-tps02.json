@@ -1,0 +1,344 @@
+{
+	"manufacturer": "HELTUN",
+	"manufacturerId": "0x0344",
+	"label": "HE-TPS02",
+	"description": "Touch Panel Switch Duo",
+	"devices": [
+		{
+			"productType": "0x0004",
+			"productId": "0x0006"
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"paramInformation": [
+		{
+			"#": "1",
+			"label": "Frequency Region",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 9,
+			"readOnly": true,
+			"options": [
+				{
+					"label": "EU (868.4 MHz, 869.85 MHz)",
+					"value": 0
+				},
+				{
+					"label": "US (908.4 MHz, 916.0 MHz)",
+					"value": 1
+				},
+				{
+					"label": "AU (919.8 MHz, 921.4 MHz)",
+					"value": 2
+				},
+				{
+					"label": "HO (919.8 MHz)",
+					"value": 3
+				},
+				{
+					"label": "In (865.2 MHz)",
+					"value": 4
+				},
+				{
+					"label": "IL (916.0 MHz)",
+					"value": 5
+				},
+				{
+					"label": "RU (869.0 MHz)",
+					"value": 6
+				},
+				{
+					"label": "Cn (868.4 MHz)",
+					"value": 7
+				},
+				{
+					"label": "JP (922.5 MHz, 923.9 MHz, 926.3 MHz)",
+					"value": 8
+				},
+				{
+					"label": "Or (920.9 MHz, 921.7 MHz, 923.1 MHz)",
+					"value": 9
+				}
+			]
+		},
+		{
+			"#": "3",
+			"label": "Hardware and Software Versions",
+			"valueSize": 4,
+			"minValue": 0,
+			"maxValue": 0,
+			"readOnly": true
+		},
+		{
+			"#": "4",
+			"label": "Energy Consumption",
+			"unit": "kW",
+			"valueSize": 4,
+			"minValue": 0,
+			"maxValue": 0,
+			"readOnly": true
+		},
+		{
+			"#": "5",
+			"label": "Backlight Brightness Control",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 10,
+			"defaultValue": 0
+		},
+		{
+			"#": "6",
+			"label": "Touch Button Sensitivity",
+			"description": "1 = low sensitivity; 10 = high sensitivity",
+			"valueSize": 1,
+			"minValue": 1,
+			"maxValue": 10,
+			"defaultValue": 6
+		},
+		{
+			"#": "7",
+			"$import": "templates/heltun_template.json#relay_output_mode",
+			"label": "Relay 1: Output Mode"
+		},
+		{
+			"#": "8",
+			"$import": "templates/heltun_template.json#relay_output_mode",
+			"label": "Relay 2: Output Mode"
+		},
+		{
+			"#": "17",
+			"label": "Air Temperature Calibration",
+			"unit": "0.1 °C",
+			"valueSize": 1,
+			"minValue": -100,
+			"maxValue": 100,
+			"defaultValue": 0
+		},
+		{
+			"#": "19",
+			"label": "Time Correction by Controller",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 1,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Disable",
+					"value": 0
+				},
+				{
+					"label": "Enable",
+					"value": 1
+				}
+			]
+		},
+		{
+			"#": "21",
+			"label": "Weekday Override",
+			"valueSize": 1,
+			"minValue": 1,
+			"maxValue": 7,
+			"defaultValue": 1,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Monday",
+					"value": 1
+				},
+				{
+					"label": "Tuesday",
+					"value": 2
+				},
+				{
+					"label": "Wednesday",
+					"value": 3
+				},
+				{
+					"label": "Thursday",
+					"value": 4
+				},
+				{
+					"label": "Friday",
+					"value": 5
+				},
+				{
+					"label": "Saturday",
+					"value": 6
+				},
+				{
+					"label": "Sunday",
+					"value": 7
+				}
+			]
+		},
+		{
+			"#": "22",
+			"label": "Time Override",
+			"unit": "HHMM",
+			"valueSize": 2,
+			"minValue": 0,
+			"maxValue": 2359,
+			"defaultValue": 0
+		},
+		{
+			"#": "30",
+			"label": "Buttons: Backlight Color",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 1,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Active state blue / Inactive state red",
+					"value": 0
+				},
+				{
+					"label": "Active state red / Inactive state blue",
+					"value": 1
+				}
+			]
+		},
+		{
+			"#": "41",
+			"$import": "templates/heltun_template.json#external_input_hold_control_mode",
+			"label": "Button 1: Hold Control Mode"
+		},
+		{
+			"#": "42",
+			"$import": "templates/heltun_template.json#external_input_hold_control_mode",
+			"label": "Button 2: Hold Control Mode"
+		},
+		{
+			"#": "51",
+			"$import": "templates/heltun_template.json#external_input_click_control_mode",
+			"label": "Button 1: Click Control Mode"
+		},
+		{
+			"#": "52",
+			"$import": "templates/heltun_template.json#external_input_click_control_mode",
+			"label": "Button 2: Click Control Mode"
+		},
+		{
+			"#": "61",
+			"$import": "templates/heltun_template.json#relay_button_number_source",
+			"label": "Relay 1: Button Number Source",
+			"defaultValue": 1
+		},
+		{
+			"#": "62",
+			"$import": "templates/heltun_template.json#relay_button_number_source",
+			"label": "Relay 2: Button Number Source",
+			"defaultValue": 2
+		},
+		{
+			"#": "71",
+			"$import": "templates/heltun_template.json#relay_timer_mode_duration",
+			"label": "Relay 1: Timer Mode Duration"
+		},
+		{
+			"#": "72",
+			"$import": "templates/heltun_template.json#relay_timer_mode_duration",
+			"label": "Relay 2: Timer Mode Duration"
+		},
+		{
+			"#": "101",
+			"label": "Relay Inverse Mode, Inching: Group 1",
+			"description": "Combine the relay numbers to a two-digit number. Example: 24 = Relay 2 & 4",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 54,
+			"defaultValue": 0,
+			"options": [
+				{
+					"label": "Disable",
+					"value": 0
+				}
+			]
+		},
+		{
+			"#": "102",
+			"label": "Relay Inverse Mode, Inching: Group 2",
+			"description": "Combine the relay numbers to a two-digit number. Example: 24 = Relay 2 & 4",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 54,
+			"defaultValue": 0,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Disable",
+					"value": 0
+				}
+			]
+		},
+		{
+			"#": "141",
+			"label": "Energy Consumption Report Interval",
+			"unit": "minutes",
+			"valueSize": 1,
+			"minValue": 1,
+			"maxValue": 120,
+			"defaultValue": 10
+		},
+		{
+			"#": "142",
+			"label": "Energy Consumption Report",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 1,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Disable",
+					"value": 0
+				},
+				{
+					"label": "Enable",
+					"value": 1
+				}
+			]
+		},
+		{
+			"#": "143",
+			"label": "All Sensors: Reporting Interval",
+			"unit": "minutes",
+			"valueSize": 1,
+			"minValue": 1,
+			"maxValue": 120,
+			"defaultValue": 10
+		},
+		{
+			"#": "144",
+			"label": "Air Temperature Sensor Report Threshold",
+			"unit": "0.1 °C",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 100,
+			"defaultValue": 2
+		},
+		{
+			"#": "145",
+			"label": "Humidity Sensor Report Threshold",
+			"unit": "%",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 25,
+			"defaultValue": 2
+		},
+		{
+			"#": "146",
+			"label": "Light Sensor Report Threshold",
+			"unit": "%",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 99,
+			"defaultValue": 50
+		}
+	]
+}

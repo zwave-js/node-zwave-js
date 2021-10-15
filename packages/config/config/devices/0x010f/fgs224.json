@@ -32,8 +32,9 @@
 			"maxNodes": 5
 		}
 	},
-	"paramInformation": {
-		"1": {
+	"paramInformation": [
+		{
+			"#": "1",
 			"label": "Remember relays state",
 			"description": "This parameter determines the state of relays power supply failure (e.g. power outage). auto OFF and flashing modes the parameter not relevant and the relay will always remain off.",
 			"valueSize": 1,
@@ -57,7 +58,8 @@
 				}
 			]
 		},
-		"20": {
+		{
+			"#": "20",
 			"label": "S1 input – switch type",
 			"description": "S1 - Inputs type configuration",
 			"valueSize": 1,
@@ -81,7 +83,8 @@
 				}
 			]
 		},
-		"21": {
+		{
+			"#": "21",
 			"label": "S2 input – switch type",
 			"description": "S2 - Inputs type configuration",
 			"valueSize": 1,
@@ -105,7 +108,8 @@
 				}
 			]
 		},
-		"25": {
+		{
+			"#": "25",
 			"label": "Inputs orientation",
 			"description": "This parameter allows reversing operation of S1 and S2 inputs changing the wiring. Use in case of incorrect wiring.",
 			"valueSize": 1,
@@ -125,7 +129,8 @@
 				}
 			]
 		},
-		"26": {
+		{
+			"#": "26",
 			"label": "Outputs orientation",
 			"description": "This parameter allows reversing operation of Q1 and Q2 outputs changing the wiring. Use in case of incorrect wiring.",
 			"valueSize": 1,
@@ -145,7 +150,8 @@
 				}
 			]
 		},
-		"150": {
+		{
+			"#": "150",
 			"label": "First channel - operating mode",
 			"description": "This parameter allows to choose operating for channel controlled with Q/Q1 output. timed modes (value 1, 2 or 3), time is set parameter 154 and reaction to input is set with parameter 152.",
 			"valueSize": 1,
@@ -173,7 +179,8 @@
 				}
 			]
 		},
-		"151": {
+		{
+			"#": "151",
 			"label": "Second channel - operating mode",
 			"description": "This parameter allows to choose operating for channel controlled with Q/Q2 output. timed modes (value 1, 2 or 3), time is set parameter 155 and reaction to input is set with parameter 153.",
 			"valueSize": 1,
@@ -201,7 +208,8 @@
 				}
 			]
 		},
-		"152": {
+		{
+			"#": "152",
 			"label": "First channel - reaction to input change in delayed/auto OFF modes",
 			"description": "This parameter determines how the device when changing state of S1 input in timed for first channel.",
 			"valueSize": 1,
@@ -225,7 +233,8 @@
 				}
 			]
 		},
-		"153": {
+		{
+			"#": "153",
 			"label": "Second channel - reaction to input change in delayed/auto OFF modes",
 			"description": "This parameter determines how the device when changing state of S2 input in timed for second channel.",
 			"valueSize": 1,
@@ -249,27 +258,30 @@
 				}
 			]
 		},
-		"154": {
+		{
+			"#": "154",
 			"label": "First channel – time parameter for delayed/auto OFF and flashing modes",
-			"description": "This parameter allows to set time parameter used in timed modes. (s)",
+			"description": "This parameter allows to set time parameter used in timed modes.",
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 32000,
-			"unit": "s",
+			"unit": "0.1 s",
 			"defaultValue": 5,
 			"unsigned": true
 		},
-		"155": {
+		{
+			"#": "155",
 			"label": "Second channel – time parameter for delayed/auto OFF and flashing modes",
-			"description": "This parameter allows to set time parameter used in timed modes. (s)",
+			"description": "This parameter allows to set time parameter used in timed modes.",
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 32000,
-			"unit": "s",
+			"unit": "0.1 s",
 			"defaultValue": 5,
 			"unsigned": true
 		},
-		"156": {
+		{
+			"#": "156",
 			"label": "S1 Switch ON value sent to 2nd association group",
 			"description": "This parameter determines value sent with Switch On command to devices associated in 2nd association group.",
 			"valueSize": 2,
@@ -278,7 +290,8 @@
 			"defaultValue": 255,
 			"unsigned": true
 		},
-		"157": {
+		{
+			"#": "157",
 			"label": "S1 Switch OFF value sent to 2nd association group",
 			"description": "This parameter determines value sent with Switch Off command to devices associated in 2nd association group.",
 			"valueSize": 2,
@@ -287,7 +300,8 @@
 			"defaultValue": 0,
 			"unsigned": true
 		},
-		"158": {
+		{
+			"#": "158",
 			"label": "S1 Switch Double Click value sent to 2nd association groups",
 			"description": "This parameter determines value sent with Double Click command to devices associated in 2nd association group.",
 			"valueSize": 2,
@@ -296,7 +310,8 @@
 			"defaultValue": 99,
 			"unsigned": true
 		},
-		"159": {
+		{
+			"#": "159",
 			"label": "S2 Switch ON value sent to 3rd association group",
 			"description": "This parameter determines value sent with Switch On command to devices associated in 3rd association group.",
 			"valueSize": 2,
@@ -305,7 +320,8 @@
 			"defaultValue": 255,
 			"unsigned": true
 		},
-		"160": {
+		{
+			"#": "160",
 			"label": "S2 Switch OFF value sent to 3rd association group",
 			"description": "This parameter determines value sent with Switch Off command to devices associated in 3rd association group.",
 			"valueSize": 2,
@@ -314,7 +330,8 @@
 			"defaultValue": 0,
 			"unsigned": true
 		},
-		"161": {
+		{
+			"#": "161",
 			"label": "S2 Switch Double Click value sent to 3rd association groups",
 			"description": "This parameter determines value sent with Double Click command to devices associated in 3rd association group.",
 			"valueSize": 2,
@@ -323,7 +340,8 @@
 			"defaultValue": 99,
 			"unsigned": true
 		},
-		"162": {
+		{
+			"#": "162",
 			"label": "Q/Q1 output type",
 			"description": "This parameter determines type of Q/Q1 output.",
 			"valueSize": 1,
@@ -343,7 +361,8 @@
 				}
 			]
 		},
-		"163": {
+		{
+			"#": "163",
 			"label": "Q2 output type",
 			"description": "This parameter determines type of Q2 output.",
 			"valueSize": 1,
@@ -363,7 +382,8 @@
 				}
 			]
 		},
-		"164": {
+		{
+			"#": "164",
 			"label": "Lock simultaneous switching of Q1 and Q2 outputs",
 			"description": "When the lock is enabled, both outputs cannot turned on at the same time.",
 			"valueSize": 1,
@@ -383,5 +403,5 @@
 				}
 			]
 		}
-	}
+	]
 }

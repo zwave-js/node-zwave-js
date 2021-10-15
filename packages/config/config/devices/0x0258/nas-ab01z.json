@@ -36,15 +36,17 @@
 			"isLifeline": true
 		}
 	},
-	"paramInformation": {
-		"1": {
+	"paramInformation": [
+		{
+			"#": "1",
 			"label": "Configure Alarm music volume",
 			"valueSize": 1,
 			"minValue": 1,
 			"maxValue": 3,
 			"defaultValue": 2
 		},
-		"2": {
+		{
+			"#": "2",
 			"label": "Alarm music duration time",
 			"valueSize": 1,
 			"minValue": 0,
@@ -52,7 +54,8 @@
 			"defaultValue": 2,
 			"unsigned": true
 		},
-		"3": {
+		{
+			"#": "3",
 			"label": "Door bell music duration time",
 			"valueSize": 1,
 			"minValue": 0,
@@ -60,33 +63,37 @@
 			"defaultValue": 1,
 			"unsigned": true
 		},
-		"4": {
+		{
+			"#": "4",
 			"label": "Door bell music volume",
 			"valueSize": 1,
 			"minValue": 1,
 			"maxValue": 3,
 			"defaultValue": 2
 		},
-		"5": {
+		{
+			"#": "5",
 			"label": "Alarm music index",
 			"valueSize": 1,
 			"minValue": 1,
 			"maxValue": 10,
 			"defaultValue": 9
 		},
-		"6": {
+		{
+			"#": "6",
 			"label": "Door bell music index",
 			"valueSize": 1,
 			"minValue": 1,
 			"maxValue": 10,
 			"defaultValue": 10
 		},
-		"7": {
+		{
+			"#": "7",
 			"label": "Default Siren on mode",
 			"valueSize": 1,
 			"minValue": 1,
 			"maxValue": 2,
 			"defaultValue": 1
 		}
-	}
+	]
 }

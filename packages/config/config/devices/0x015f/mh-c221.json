@@ -25,9 +25,9 @@
 		"min": "0.0",
 		"max": "255.255"
 	},
-	"supportsZWavePlus": true,
-	"paramInformation": {
-		"1": {
+	"paramInformation": [
+		{
+			"#": "1",
 			"label": "Watt Meter Report Period",
 			"unit": "5 seconds",
 			"valueSize": 2,
@@ -35,6 +35,17 @@
 			"maxValue": 32767,
 			"defaultValue": 720,
 			"unsigned": true
+		}
+	],
+	"compat": {
+		"commandClasses": {
+			"add": {
+				"0x26": {
+					// This is a roller shutter, but it responds to the CC version request with 0
+					"isSupported": true,
+					"version": 1
+				}
+			}
 		}
 	}
 }

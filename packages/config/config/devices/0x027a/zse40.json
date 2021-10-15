@@ -13,9 +13,9 @@
 		"min": "0.0",
 		"max": "255.255"
 	},
-	"supportsZWavePlus": true,
-	"paramInformation": {
-		"1": {
+	"paramInformation": [
+		{
+			"#": "1",
 			"label": "Temperature Scale",
 			"valueSize": 1,
 			"minValue": 0,
@@ -33,7 +33,8 @@
 				}
 			]
 		},
-		"2": {
+		{
+			"#": "2",
 			"label": "Temperature Reporting Threshold",
 			"unit": "0.1 °",
 			"valueSize": 1,
@@ -41,7 +42,8 @@
 			"maxValue": 50,
 			"defaultValue": 10
 		},
-		"3": {
+		{
+			"#": "3",
 			"label": "Humidity Reporting Threshold",
 			"unit": "%",
 			"valueSize": 1,
@@ -49,7 +51,8 @@
 			"maxValue": 50,
 			"defaultValue": 10
 		},
-		"4": {
+		{
+			"#": "4",
 			"label": "Brightness Reporting Threshold",
 			"unit": "%",
 			"valueSize": 1,
@@ -57,42 +60,44 @@
 			"maxValue": 50,
 			"defaultValue": 10
 		},
-		"5": [
-			{
-				"$if": "firmwareVersion < 17.9",
-				"label": "Trigger Interval",
-				"description": "Set the trigger interval for motion sensor re-activation.",
-				"unit": "minutes",
-				"valueSize": 1,
-				"minValue": 1,
-				"maxValue": 255,
-				"defaultValue": 3,
-				"unsigned": true
-			},
-			{
-				"$if": "firmwareVersion >= 17.9 && firmwareVersion < 24.2",
-				"label": "Trigger Interval",
-				"description": "Set the trigger interval for motion sensor re-activation.",
-				"unit": "seconds",
-				"valueSize": 1,
-				"minValue": 15,
-				"maxValue": 60,
-				"defaultValue": 15,
-				"unsigned": true
-			},
-			{
-				"$if": "firmwareVersion >= 24.2",
-				"label": "Trigger Interval",
-				"description": "Set the trigger interval for motion sensor re-activation.",
-				"unit": "seconds",
-				"valueSize": 1,
-				"minValue": 15,
-				"maxValue": 255,
-				"defaultValue": 15,
-				"unsigned": true
-			}
-		],
-		"6": {
+		{
+			"#": "5",
+			"$if": "firmwareVersion < 17.9",
+			"label": "Trigger Interval",
+			"description": "Set the trigger interval for motion sensor re-activation.",
+			"unit": "minutes",
+			"valueSize": 1,
+			"minValue": 1,
+			"maxValue": 255,
+			"defaultValue": 3,
+			"unsigned": true
+		},
+		{
+			"#": "5",
+			"$if": "firmwareVersion >= 17.9 && firmwareVersion < 24.2",
+			"label": "Trigger Interval",
+			"description": "Set the trigger interval for motion sensor re-activation.",
+			"unit": "seconds",
+			"valueSize": 1,
+			"minValue": 15,
+			"maxValue": 60,
+			"defaultValue": 15,
+			"unsigned": true
+		},
+		{
+			"#": "5",
+			"$if": "firmwareVersion >= 24.2",
+			"label": "Trigger Interval",
+			"description": "Set the trigger interval for motion sensor re-activation.",
+			"unit": "seconds",
+			"valueSize": 1,
+			"minValue": 15,
+			"maxValue": 255,
+			"defaultValue": 15,
+			"unsigned": true
+		},
+		{
+			"#": "6",
 			"label": "Motion Sensor Sensitivity",
 			"description": "Adjust sensitivity of the motion sensor.",
 			"valueSize": 1,
@@ -131,7 +136,8 @@
 				}
 			]
 		},
-		"7": {
+		{
+			"#": "7",
 			"label": "LED indicator mode",
 			"valueSize": 1,
 			"minValue": 1,
@@ -157,5 +163,5 @@
 				}
 			]
 		}
-	}
+	]
 }

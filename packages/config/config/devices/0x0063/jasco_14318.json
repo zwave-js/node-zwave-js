@@ -13,9 +13,9 @@
 		"min": "0.0",
 		"max": "255.255"
 	},
-	"supportsZWavePlus": true,
-	"paramInformation": {
-		"3": {
+	"paramInformation": [
+		{
+			"#": "3",
 			"label": "LED Light",
 			"valueSize": 1,
 			"minValue": 1,
@@ -33,7 +33,8 @@
 				}
 			]
 		},
-		"4": {
+		{
+			"#": "4",
 			"label": "Invert Switch",
 			"valueSize": 1,
 			"minValue": 0,
@@ -45,6 +46,16 @@
 					"value": 1
 				}
 			]
+		}
+	],
+	"compat": {
+		"commandClasses": {
+			"remove": {
+				// Removes the Z-Wave Plus CC as this device fails to send state updates. It sends NIFs, which are only refreshed for non-plus devices
+				"0x5e": {
+					"endpoints": "*"
+				}
+			}
 		}
 	}
 }

@@ -13,9 +13,9 @@
 		"min": "0.0",
 		"max": "255.255"
 	},
-	"supportsZWavePlus": true,
-	"paramInformation": {
-		"1": {
+	"paramInformation": [
+		{
+			"#": "1",
 			"label": "Sensitivity level",
 			"description": "8 = Highest sensitivity, 255 = lowest sesitivity",
 			"valueSize": 1,
@@ -24,7 +24,8 @@
 			"defaultValue": 12,
 			"unsigned": true
 		},
-		"2": {
+		{
+			"#": "2",
 			"label": "ON / OFF Duration",
 			"description": "How long should the associated devices have ON status.",
 			"valueSize": 2,
@@ -32,14 +33,16 @@
 			"maxValue": 600,
 			"defaultValue": 30
 		},
-		"3": {
+		{
+			"#": "3",
 			"label": "BASIC SET Level",
 			"valueSize": 2,
 			"minValue": 1,
 			"maxValue": 255,
 			"defaultValue": 255
 		},
-		"4": {
+		{
+			"#": "4",
 			"label": "PIR detection ENABLED / DISABLED",
 			"description": "Enable og disable the PIR sensor",
 			"valueSize": 1,
@@ -48,7 +51,8 @@
 			"defaultValue": 255,
 			"unsigned": true
 		},
-		"5": {
+		{
+			"#": "5",
 			"label": "Ambent illumination LUX level",
 			"description": "Lux value which determines when the light sensor is activated",
 			"valueSize": 2,
@@ -56,7 +60,8 @@
 			"maxValue": 1000,
 			"defaultValue": 100
 		},
-		"6": {
+		{
+			"#": "6",
 			"label": "Re-Trigger Interval",
 			"description": "Adjust the interval of being re-triggered",
 			"valueSize": 1,
@@ -64,7 +69,8 @@
 			"maxValue": 8,
 			"defaultValue": 8
 		},
-		"7": {
+		{
+			"#": "7",
 			"label": "Light sensor polling interval",
 			"description": "How often should ambient illumination be evaluated",
 			"valueSize": 2,
@@ -72,7 +78,8 @@
 			"maxValue": 3600,
 			"defaultValue": 180
 		},
-		"8": {
+		{
+			"#": "8",
 			"label": "LUX level function enable",
 			"description": "See overview",
 			"valueSize": 1,
@@ -80,7 +87,8 @@
 			"maxValue": 1,
 			"defaultValue": 0
 		},
-		"9": {
+		{
+			"#": "9",
 			"label": "Ambient illumination report",
 			"description": "when lux changes by the number in this setting it is reported",
 			"valueSize": 2,
@@ -88,5 +96,5 @@
 			"maxValue": 1000,
 			"defaultValue": 1
 		}
-	}
+	]
 }

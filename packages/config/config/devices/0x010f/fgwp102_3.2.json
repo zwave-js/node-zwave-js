@@ -21,9 +21,9 @@
 		"min": "3.2",
 		"max": "255.255"
 	},
-	"supportsZWavePlus": true,
-	"paramInformation": {
-		"1": {
+	"paramInformation": [
+		{
+			"#": "1",
 			"label": "“Always On” mode",
 			"description": "Will turn on connected device permanently",
 			"valueSize": 1,
@@ -42,10 +42,12 @@
 				}
 			]
 		},
-		"2": {
+		{
+			"#": "2",
 			"$import": "~/templates/master_template.json#state_after_power_failure_off_prev"
 		},
-		"3": {
+		{
+			"#": "3",
 			"label": "Overload safety switch",
 			"description": "allows to turn off the controlled device in case of exceeding the defined power.",
 			"valueSize": 2,
@@ -59,7 +61,8 @@
 				}
 			]
 		},
-		"10": {
+		{
+			"#": "10",
 			"label": "High priority power report",
 			"description": "minimum percentage change in active power",
 			"valueSize": 1,
@@ -67,7 +70,8 @@
 			"maxValue": 100,
 			"defaultValue": 80
 		},
-		"11": {
+		{
+			"#": "11",
 			"label": "Standard power report",
 			"description": "minimum percentage change in active power",
 			"valueSize": 1,
@@ -75,7 +79,8 @@
 			"maxValue": 100,
 			"defaultValue": 15
 		},
-		"12": {
+		{
+			"#": "12",
 			"label": "Power reporting interval",
 			"description": "defines the time interval of sending at most 5 standard power reports",
 			"valueSize": 2,
@@ -83,7 +88,8 @@
 			"maxValue": 600,
 			"defaultValue": 30
 		},
-		"13": {
+		{
+			"#": "13",
 			"label": "Energy reporting threshold",
 			"description": "specifies the minimum change in energy consumption",
 			"valueSize": 2,
@@ -97,7 +103,8 @@
 				}
 			]
 		},
-		"14": {
+		{
+			"#": "14",
 			"label": "Power and energy periodic reports",
 			"description": "defines time period between independent reports sent",
 			"valueSize": 2,
@@ -111,7 +118,8 @@
 				}
 			]
 		},
-		"15": {
+		{
+			"#": "15",
 			"label": "Measuring energy consumed by the Wall Plug itself",
 			"description": "determines whether power metering should include the amount of power",
 			"valueSize": 1,
@@ -130,7 +138,8 @@
 				}
 			]
 		},
-		"20": {
+		{
+			"#": "20",
 			"label": "On/Off (Button)” association group (2)",
 			"valueSize": 1,
 			"minValue": 0,
@@ -148,21 +157,24 @@
 				}
 			]
 		},
-		"21": {
+		{
+			"#": "21",
 			"label": "DOWN value - association group (3)",
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 24900,
 			"defaultValue": 300
 		},
-		"22": {
+		{
+			"#": "22",
 			"label": "UP value - association group (3)",
 			"valueSize": 2,
 			"minValue": 100,
 			"maxValue": 25000,
 			"defaultValue": 500
 		},
-		"23": {
+		{
+			"#": "23",
 			"label": "The response after exceeding defined power values",
 			"description": "defines the way that 3rd association group devices are controlled.",
 			"valueSize": 1,
@@ -197,7 +209,8 @@
 				}
 			]
 		},
-		"24": {
+		{
+			"#": "24",
 			"label": "SWITCH ON value - „On/Off” association groups",
 			"valueSize": 2,
 			"minValue": 0,
@@ -210,7 +223,8 @@
 				}
 			]
 		},
-		"30": {
+		{
+			"#": "30",
 			"label": "Active alarms",
 			"description": "Define Z-Wave network alarms to which the Wall Plug will respond",
 			"valueSize": 1,
@@ -249,7 +263,8 @@
 				}
 			]
 		},
-		"31": {
+		{
+			"#": "31",
 			"label": "Response to alarm frames",
 			"description": "defines how the Wall Plug will respond to alarms",
 			"valueSize": 1,
@@ -257,7 +272,8 @@
 			"maxValue": 50,
 			"defaultValue": 0
 		},
-		"32": {
+		{
+			"#": "32",
 			"label": "Alarm state duration",
 			"description": "specifies the duration of alarm state",
 			"valueSize": 2,
@@ -265,7 +281,8 @@
 			"maxValue": 32400,
 			"defaultValue": 600
 		},
-		"40": {
+		{
+			"#": "40",
 			"label": "Power load for violet colour",
 			"description": "determines maximum active power value",
 			"valueSize": 2,
@@ -273,7 +290,8 @@
 			"maxValue": 30000,
 			"defaultValue": 25000
 		},
-		"41": {
+		{
+			"#": "41",
 			"label": "LED ring colour (device is ON)",
 			"valueSize": 1,
 			"minValue": 0,
@@ -323,7 +341,8 @@
 				}
 			]
 		},
-		"42": {
+		{
+			"#": "42",
 			"label": "LED ring colour (device is OFF)",
 			"valueSize": 1,
 			"minValue": 0,
@@ -369,7 +388,8 @@
 				}
 			]
 		},
-		"43": {
+		{
+			"#": "43",
 			"label": "LED ring colour (alarm detection)",
 			"valueSize": 1,
 			"minValue": 0,
@@ -419,7 +439,8 @@
 				}
 			]
 		},
-		"50": {
+		{
+			"#": "50",
 			"label": "Associations in Z-Wave network security mode",
 			"description": "defines how commands are sent in specified association groups",
 			"valueSize": 1,
@@ -446,5 +467,5 @@
 				}
 			]
 		}
-	}
+	]
 }

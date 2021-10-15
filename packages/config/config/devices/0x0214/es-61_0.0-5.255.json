@@ -17,9 +17,9 @@
 		"min": "0.0",
 		"max": "5.255"
 	},
-	"supportsZWavePlus": true,
-	"paramInformation": {
-		"1": {
+	"paramInformation": [
+		{
+			"#": "1",
 			"label": "Basic Set",
 			"description": "send BASIC Set = Value command",
 			"valueSize": 1,
@@ -27,7 +27,8 @@
 			"maxValue": 100,
 			"defaultValue": 255
 		},
-		"2": {
+		{
+			"#": "2",
 			"label": "Turn Off Light Time Configuration",
 			"description": "send BASIC Set = Value command & send Basic Set = 0x00 to turn of light",
 			"valueSize": 1,
@@ -35,7 +36,8 @@
 			"maxValue": 120,
 			"defaultValue": 20
 		},
-		"3": {
+		{
+			"#": "3",
 			"label": "PIR Sensor Alarm Elemination Time Configuration",
 			"description": "Value * 5s",
 			"valueSize": 1,
@@ -43,5 +45,5 @@
 			"maxValue": 120,
 			"defaultValue": 20
 		}
-	}
+	]
 }

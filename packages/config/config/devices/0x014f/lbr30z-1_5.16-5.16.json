@@ -13,9 +13,9 @@
 		"min": "5.16",
 		"max": "5.16"
 	},
-	"supportsZWavePlus": true,
-	"paramInformation": {
-		"1": {
+	"paramInformation": [
+		{
+			"#": "1",
 			"label": "Dim Level Memory",
 			"valueSize": 1,
 			"minValue": 0,
@@ -33,7 +33,8 @@
 				}
 			]
 		},
-		"9": {
+		{
+			"#": "9",
 			"label": "Dim / Bright Step Level",
 			"description": "How much the brightness will change with each dimming step",
 			"valueSize": 1,
@@ -41,7 +42,8 @@
 			"maxValue": 99,
 			"defaultValue": 1
 		},
-		"10": {
+		{
+			"#": "10",
 			"label": "Dim / Bright Speed",
 			"description": "How fast the brightness will change with each dimming step",
 			"valueSize": 1,
@@ -49,5 +51,5 @@
 			"maxValue": 10,
 			"defaultValue": 3
 		}
-	}
+	]
 }

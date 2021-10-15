@@ -13,7 +13,6 @@
 		"min": "0.0",
 		"max": "255.255"
 	},
-	"supportsZWavePlus": true,
 	"associations": {
 		// One entry for each association group
 		"1": {
@@ -31,8 +30,9 @@
 			"isLifeline": true
 		}
 	},
-	"paramInformation": {
-		"3": {
+	"paramInformation": [
+		{
+			"#": "3",
 			"label": "Blue LED Night Light",
 			"valueSize": 1,
 			"minValue": 0,
@@ -59,7 +59,8 @@
 				}
 			]
 		},
-		"19": {
+		{
+			"#": "19",
 			"label": "Alternate Exclusion",
 			"description": "Enables alternate method for excluding the device to prevent accidental removal",
 			"valueSize": 1,
@@ -79,7 +80,7 @@
 				}
 			]
 		}
-	},
+	],
 	"compat": {
 		"treatBasicSetAsEvent": true
 	},

@@ -35,8 +35,9 @@
 			"isLifeline": true
 		}
 	},
-	"paramInformation": {
-		"3": {
+	"paramInformation": [
+		{
+			"#": "3",
 			"label": "LED Light",
 			"description": "LED status when device on or off.",
 			"valueSize": 1,
@@ -64,7 +65,8 @@
 				}
 			]
 		},
-		"4": {
+		{
+			"#": "4",
 			"label": "Invert Switch",
 			"description": "On/Off rocker settings can be reversed",
 			"valueSize": 1,
@@ -72,7 +74,8 @@
 			"maxValue": 1,
 			"defaultValue": 0
 		},
-		"19": {
+		{
+			"#": "19",
 			"label": "Alternate Exclusion",
 			"description": "Change the default exclusion behavior",
 			"valueSize": 1,
@@ -92,7 +95,7 @@
 				}
 			]
 		}
-	},
+	],
 	"compat": {
 		"treatBasicSetAsEvent": true
 	},

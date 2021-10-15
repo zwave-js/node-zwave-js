@@ -17,7 +17,6 @@
 		"min": "0.0",
 		"max": "255.255"
 	},
-	"supportsZWavePlus": true,
 	"associations": {
 		// One entry for each association group
 		"1": {
@@ -35,8 +34,9 @@
 			"isLifeline": true
 		}
 	},
-	"paramInformation": {
-		"3": {
+	"paramInformation": [
+		{
+			"#": "3",
 			"label": "Night Light",
 			"description": "Defines the behavior of the blue LED. Default is on when switch is off.",
 			"valueSize": 1,
@@ -60,7 +60,8 @@
 				}
 			]
 		},
-		"4": {
+		{
+			"#": "4",
 			"label": "Invert Switch",
 			"description": "Invert the ON/OFF Switch State.",
 			"valueSize": 1,
@@ -80,7 +81,7 @@
 				}
 			]
 		}
-	},
+	],
 	"compat": {
 		"treatBasicSetAsEvent": true
 	}

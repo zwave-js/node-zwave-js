@@ -13,9 +13,9 @@
 		"min": "0.0",
 		"max": "255.255"
 	},
-	"supportsZWavePlus": true,
-	"paramInformation": {
-		"1": {
+	"paramInformation": [
+		{
+			"#": "1",
 			"label": "Mode of Switch Off function",
 			"description": "Switch button mode (enabled/disabled).",
 			"valueSize": 1,
@@ -34,7 +34,8 @@
 				}
 			]
 		},
-		"2": {
+		{
+			"#": "2",
 			"label": "LED indication mode",
 			"description": "LED mode: 1 is show switch state. 2 is night mode (opposite).",
 			"valueSize": 1,
@@ -53,7 +54,8 @@
 				}
 			]
 		},
-		"3": {
+		{
+			"#": "3",
 			"label": "Auto off timer",
 			"description": "Automatic OFF after given time.",
 			"unit": "1s",
@@ -62,7 +64,8 @@
 			"maxValue": 32767,
 			"defaultValue": 0
 		},
-		"4": {
+		{
+			"#": "4",
 			"label": "RF off command mode",
 			"description": "How to interpret OFF command.",
 			"valueSize": 1,
@@ -89,5 +92,5 @@
 				}
 			]
 		}
-	}
+	]
 }

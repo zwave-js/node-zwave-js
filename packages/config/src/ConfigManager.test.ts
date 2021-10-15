@@ -105,7 +105,7 @@ describe("ConfigManager", () => {
 
 		beforeEach(async () => {
 			await fs.emptyDir(tempDir);
-			process.env.ZWAVEJS_EXTERNAL_CONFIG = undefined;
+			delete process.env.ZWAVEJS_EXTERNAL_CONFIG;
 			jest.resetModules();
 		});
 
