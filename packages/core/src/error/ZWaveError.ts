@@ -1,3 +1,5 @@
+import { padStart } from "alcalzone-shared/strings";
+
 /**
  * Used to identify errors from this library without relying on the error message
  */
@@ -150,6 +152,16 @@ export enum ZWaveErrorCodes {
 	Unsupported_Firmware_Format,
 }
 
+export function getErrorSuffix(code: ZWaveErrorCodes): string {
+	return `ZW${padStart(code.toString(), 4, "0")}`;
+}
+
+function appendErrorSuffix(message: string, code: ZWaveErrorCodes): string {
+	const suffix = ` (${getErrorSuffix(code)})`;
+	if (!message.endsWith(suffix)) message += suffix;
+	return message;
+}
+
 /**
  * Errors thrown in this library are of this type. The `code` property identifies what went wrong.
  */
@@ -162,7 +174,10 @@ export class ZWaveError extends Error {
 		/** If this error corresponds to a failed transaction, this contains the stack where it was created */
 		public readonly transactionSource?: string,
 	) {
-		super(message);
+		super();
+
+		// Add the error code to the message to be able to identify it even when the stack trace is garbled somehow
+		this.message = appendErrorSuffix(message, code);
 
 		// We need to set the prototype explicitly
 		Object.setPrototypeOf(this, ZWaveError.prototype);
