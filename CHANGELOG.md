@@ -4,7 +4,7 @@
 <!--
 	Add placeholder for next release with `wip` snippet
 -->
-## __WORK IN PROGRESS__
+## 8.5.1-beta.0 (2021-10-15)
 ### Features
 * Implemented soft reset command. This needs to be opted in inside Docker
 * Implemented 700-series variant of NVM backup/restore
