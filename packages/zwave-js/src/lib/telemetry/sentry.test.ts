@@ -1,4 +1,4 @@
-import { ZWaveError, ZWaveErrorCodes } from "@zwave-js/core";
+import { getErrorSuffix, ZWaveError, ZWaveErrorCodes } from "@zwave-js/core";
 import path from "path";
 import { createSentryContext } from "./sentry";
 
@@ -150,8 +150,6 @@ describe("The Sentry telemetry", () => {
 										"/home/michel/dashboard/servers/zwave/devices/powerswitch.js",
 									abs_path:
 										"/home/michel/dashboard/servers/zwave/devices/powerswitch.js",
-									lineno: 134,
-									colno: 24,
 								},
 								{
 									function: "new Promise",
@@ -408,6 +406,113 @@ describe("The Sentry telemetry", () => {
 				},
 			} as any;
 			expect(context.shouldIgnore(event)).toBeTrue();
+		});
+
+		it("test 2: clearly a connection issue", () => {
+			const context = createSentryContext(
+				"/home/pi/zwave/node_modules/zwave-js",
+			);
+			const event = {
+				culprit:
+					"Map.<anonymous>(zwave-js.src.lib.controller:Controller.ts)",
+				exception: {
+					values: [
+						{
+							type: "ZWaveError",
+							value: "Failed to send the message after 3 attempts",
+							stacktrace: {
+								frames: [
+									{
+										function: "__awaiter",
+										module: "fn",
+										filename: "/home/pi/zwave/build/fn.js",
+										abs_path: "/home/pi/zwave/build/fn.js",
+										in_app: true,
+									},
+									{
+										function: "new Promise",
+										in_app: true,
+									},
+									{
+										function: "null.<anonymous>",
+										module: "fn",
+										filename: "/home/pi/zwave/build/fn.js",
+										abs_path: "/home/pi/zwave/build/fn.js",
+										in_app: true,
+									},
+									{
+										function: "Generator.next",
+										in_app: true,
+									},
+									{
+										function: "null.<anonymous>",
+										module: "fn.ts",
+										filename: "/home/pi/zwave/fn.ts",
+										abs_path: "/home/pi/zwave/fn.ts",
+										in_app: true,
+									},
+									{
+										function: "ZWaveNode.setValue",
+										module: "zwave-js.src.lib.node:Node.ts",
+										filename:
+											"/home/pi/zwave/node_modules/zwave-js/src/lib/node/Node.ts",
+										abs_path:
+											"/home/pi/zwave/node_modules/zwave-js/src/lib/node/Node.ts",
+										in_app: false,
+									},
+									{
+										function:
+											"Proxy.ConfigurationCCAPI.<computed>",
+										module: "zwave-js.src.lib.commandclass:ConfigurationCC.ts",
+										filename:
+											"/home/pi/zwave/node_modules/zwave-js/src/lib/commandclass/ConfigurationCC.ts",
+										abs_path:
+											"/home/pi/zwave/node_modules/zwave-js/src/lib/commandclass/ConfigurationCC.ts",
+										in_app: false,
+									},
+									{
+										function: "ConfigurationCCAPI.set",
+										module: "zwave-js.src.lib.commandclass:ConfigurationCC.ts",
+										filename:
+											"/home/pi/zwave/node_modules/zwave-js/src/lib/commandclass/ConfigurationCC.ts",
+										abs_path:
+											"/home/pi/zwave/node_modules/zwave-js/src/lib/commandclass/ConfigurationCC.ts",
+										in_app: false,
+									},
+									{
+										function: "Driver.sendCommand",
+										module: "zwave-js.src.lib.driver:Driver.ts",
+										filename:
+											"/home/pi/zwave/node_modules/zwave-js/src/lib/driver/Driver.ts",
+										abs_path:
+											"/home/pi/zwave/node_modules/zwave-js/src/lib/driver/Driver.ts",
+										in_app: false,
+									},
+									{
+										function: "Driver.sendMessage",
+										module: "zwave-js.src.lib.driver:Driver.ts",
+										filename:
+											"/home/pi/zwave/node_modules/zwave-js/src/lib/driver/Driver.ts",
+										abs_path:
+											"/home/pi/zwave/node_modules/zwave-js/src/lib/driver/Driver.ts",
+										in_app: false,
+									},
+								],
+							},
+							mechanism: {
+								type: "onunhandledrejection",
+								handled: false,
+							},
+						},
+					],
+				},
+			} as any;
+			const hint = {
+				originalException: `Failed to send the message after 3 attempts (${getErrorSuffix(
+					ZWaveErrorCodes.Controller_MessageDropped,
+				)})`,
+			} as any;
+			expect(context.shouldIgnore(event, hint)).toBeTrue();
 		});
 	});
 });

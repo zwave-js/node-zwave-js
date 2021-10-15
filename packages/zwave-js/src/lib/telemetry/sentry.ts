@@ -1,7 +1,7 @@
 // Load sentry.io so we get information about errors
 import * as Integrations from "@sentry/integrations";
 import * as Sentry from "@sentry/node";
-import { ZWaveError, ZWaveErrorCodes } from "@zwave-js/core";
+import { getErrorSuffix, ZWaveError, ZWaveErrorCodes } from "@zwave-js/core";
 import { randomBytes } from "crypto";
 import * as fs from "fs-extra";
 import * as path from "path";
@@ -26,6 +26,71 @@ export interface SentryContext {
 	shouldIgnore(event: Sentry.Event, hint?: Sentry.EventHint): boolean;
 	getFingerprint(): Promise<string>;
 }
+
+const errorMessageTests = (() => {
+	const tests: ((msg: string) => boolean | undefined)[] = [];
+
+	// For some reason, working with ZWaveError instances directly doesn't work always.
+	// Therefore check for the error codes' string representations.
+	tests.push((msg) => {
+		for (const code of [
+			// we don't care about timeouts
+			ZWaveErrorCodes.Controller_MessageDropped,
+			// We don't care about failed node removal
+			ZWaveErrorCodes.RemoveFailedNode_Failed,
+			ZWaveErrorCodes.RemoveFailedNode_NodeOK,
+			// Or failed inclusion processes:
+			ZWaveErrorCodes.Controller_InclusionFailed,
+			ZWaveErrorCodes.Controller_ExclusionFailed,
+			// Or users that don't read the changelog:
+			ZWaveErrorCodes.Driver_NoErrorHandler,
+			// Or incorrect driver options:
+			ZWaveErrorCodes.Driver_InvalidOptions,
+		] as const) {
+			if (msg.includes(getErrorSuffix(code))) {
+				return true;
+			}
+		}
+	});
+
+	// Don't care about users that try to manage associations on nodes that don't support it
+	tests.push(
+		(msg) =>
+			msg.includes(getErrorSuffix(ZWaveErrorCodes.CC_NotSupported)) &&
+			/does not support.+associations/.test(msg),
+	);
+
+	// No such file or directory, cannot open /dev/ttyACM0
+	// no such file or directory, rename '/usr/src/app/store/mqtt/incoming~'
+	// Opening COM18: File not found
+	// No such file or directory, cannot open Select Port
+	tests.push(
+		(msg) =>
+			/(no such file|permission denied|cannot open|file not found)/i.test(
+				msg,
+			) && /(\/dev\/|\/mqtt\/|COM\d+|Select Port)/i.test(msg),
+	);
+
+	// EROFS: read-only file system, write
+	// ENODEV: no such device, write
+	// ENOSPC: no space left on device, write
+	tests.push(
+		(msg) =>
+			/(EROFS|ENODEV|ENOSPC)/i.test(msg) &&
+			/(read-only file system|no such device|no space left)/i.test(msg),
+	);
+
+	// Unknown system error -116: Unknown system error -116, write
+	tests.push((msg) => /unknown system error/i.test(msg));
+
+	// Input/output error setting custom baud rate of 115200
+	tests.push((msg) => /custom baud rate/i.test(msg));
+
+	// Could not locate the bindings file
+	tests.push((msg) => /bindings\.node/i.test(msg));
+
+	return tests;
+})();
 
 export function createSentryContext(libraryRootDir: string): SentryContext {
 	/** Checks if a filename is part of this library. Paths outside will be excluded from Sentry error reporting */
@@ -121,77 +186,28 @@ export function createSentryContext(libraryRootDir: string): SentryContext {
 		// Filter out specific errors that are raised by zwave-js,
 		// but shouldn't create a report on Sentry because they should be
 		// handled by the library user
-		if (culpritIsPartOfThisLib && hint) {
-			if (isZWaveError(hint.originalException)) {
-				switch (hint.originalException.code) {
-					// we don't care about timeouts
-					case ZWaveErrorCodes.Controller_MessageDropped:
-					// We don't care about failed node removal
-					case ZWaveErrorCodes.RemoveFailedNode_Failed:
-					case ZWaveErrorCodes.RemoveFailedNode_NodeOK:
-					// Or failed inclusion processes:
-					case ZWaveErrorCodes.Controller_InclusionFailed:
-					case ZWaveErrorCodes.Controller_ExclusionFailed:
-					// Or users that don't read the changelog:
-					case ZWaveErrorCodes.Driver_NoErrorHandler:
+		if (!ignore && culpritIsPartOfThisLib && hint) {
+			if (hint.originalException) {
+				try {
+					const msg = hint.originalException.toString();
+					if (errorMessageTests.some((test) => test(msg))) {
 						ignore = true;
-						break;
-					// Or users that try to manage associations on nodes that don't support it
-					case ZWaveErrorCodes.CC_NotSupported:
-						if (
-							/does not support.+associations/.test(
-								hint.originalException.message,
-							)
-						) {
-							ignore = true;
-						}
-						break;
+					}
+				} catch {
+					// This doesn't seem to be representable as a string
 				}
 
-				// Try to attach transaction context this way
-				if (!ignore && hint.originalException.transactionSource) {
+				// Try to attach transaction context if this is an actual ZWaveError instance
+				if (
+					!ignore &&
+					isZWaveError(hint.originalException) &&
+					hint.originalException.transactionSource
+				) {
 					event.contexts = {
 						transaction: {
 							stack: hint.originalException.transactionSource,
 						},
 					};
-				}
-			} else if (hint.originalException) {
-				try {
-					const msg = hint.originalException.toString();
-					if (
-						/(no such file|permission denied|cannot open|file not found)/i.test(
-							msg,
-						) &&
-						/(\/dev\/|\/mqtt\/|COM\d+|Select Port)/i.test(msg)
-					) {
-						// No such file or directory, cannot open /dev/ttyACM0
-						// no such file or directory, rename '/usr/src/app/store/mqtt/incoming~'
-						// Opening COM18: File not found
-						// No such file or directory, cannot open Select Port
-						ignore = true;
-					} else if (
-						/(EROFS|ENODEV|ENOSPC)/i.test(msg) &&
-						/(read-only file system|no such device|no space left)/i.test(
-							msg,
-						)
-					) {
-						// EROFS: read-only file system, write
-						// ENODEV: no such device, write
-						// ENOSPC: no space left on device, write
-						ignore = true;
-					} else if (/unknown system error/i.test(msg)) {
-						// Unknown system error -116: Unknown system error -116, write
-						ignore = true;
-					} else if (/custom baud rate/i.test(msg)) {
-						// Input/output error setting custom baud rate of 115200
-						ignore = true;
-					} else if (/bindings\.node/i.test(msg)) {
-						// Could not locate the bindings file
-						ignore = true;
-					}
-				} catch {
-					// This doesn't seem to be representable as a string
 				}
 			}
 		}
