@@ -1,22 +1,96 @@
 # Troubleshooting
 
-Z-Wave is a complex protocol and many things can go wrong in the communication. While there may be a problem with `zwave-js`, many issues are due to misbehaving or misconfigured devices and/or network connectivity problems. Please follow this guide before opening issues.
+Z-Wave is a complex protocol and many things can go wrong in the communication. While there may be a problem with `zwave-js`, many issues are due to misbehaving or misconfigured devices and/or network connectivity problems. Please follow this guide **before** opening issues.
 
-## Some values are missing
+## Rule #1: Use the driver log, Luke!
 
-It is very likely that the interview is not yet completed. Check if the `ready` event has been emitted for the node in question. If not, have patience - the first interview of battery-powered nodes may take several hours. If the interview never gets completed, please consider opening an issue.
+Many, many, many issues can **only** be sorted out by looking at driver logs. Try to familiarize yourself with them - it will help.  
+Unless you are inquiring about a missing device configuration, you **should** have a driver log at hand. Also, make sure you have the correct log!
 
-## The configuration is missing
+<details>
+<summary>Click here for examples how the log looks like</summary>
 
-Although the specification added the ability to discover the configuration, most devices out there don't use this yet. For those devices, configuration files are required which define the available parameters. To add support for a device, please do one of the following:
+Here's an example how this **DOES** look like (correct log, correct loglevel):
 
--   Open a Pull Request and provide such a configuration file. The [documentation](config-files/overview.md) describes how this is done.
--   Or open an issue detailing which device you want added and provide a link to the device manual that includes a description of all parameters.
+```
+2021-10-15T16:16:56.984Z DRIVER   starting driver...
+2021-10-15T16:16:56.997Z DRIVER   opening serial port COM5
+2021-10-15T16:16:57.128Z DRIVER   serial port opened
+2021-10-15T16:16:57.129Z SERIAL » [NAK]                                                                   (0x15)
+[...]
+2021-10-15T16:16:59.887Z DRIVER » [Node 012] [REQ] [SendDataBridge]
+                                  │ source node id:   1
+                                  │ transmit options: 0x25
+                                  │ route:            0, 0, 0, 0
+                                  │ callback id:      1
+                                  └─[NoOperationCC]
+2021-10-15T16:16:59.888Z CNTRLR   [Node 029] The node is asleep.
+```
 
-## A device does not respond
+Here's how it **DOES NOT** look like. This is an **application log** from `zwavejs2mqtt`:
 
-Check the detailed section [here](troubleshooting/no-device-response.md)
+```
+2021-08-04 15:56:59.250 INFO MQTT: MQTT is disabled
+2021-08-04 15:56:59.503 INFO ZWAVE: Connecting to /dev/ttyACM0
+2021-08-04 15:57:09.381 INFO ZWAVE: Zwave driver is ready
+2021-08-04 15:57:09.387 INFO ZWAVE: Controller status: Driver ready
+```
 
-## Missing updates from a device
+</details>
 
-Check the detailed section [here](troubleshooting/no-updates.md)
+## Rule #2: Thou shalt only use the "debug" level
+
+There are multiple log levels, but **only** the "debug" level contains enough info for troubleshooting.
+
+<details>
+<summary>Click here another counter example</summary>
+
+This is a driver log, but on the wrong loglevel (`info`):
+
+```
+2021-10-15T17:25:06.701Z CNTRLR   [Node 001] The node is alive.
+2021-10-15T17:25:06.701Z CNTRLR   [Node 001] The node is ready to be used
+2021-10-15T17:25:06.702Z CNTRLR » [Node 012] pinging the node...
+2021-10-15T17:25:06.727Z CNTRLR   [Node 029] The node is asleep.
+2021-10-15T17:25:06.729Z CNTRLR   [Node 029] The node is ready to be used
+2021-10-15T17:25:06.730Z CNTRLR   [Node 030] The node is asleep.
+2021-10-15T17:25:06.731Z CNTRLR   [Node 030] Beginning interview - last completed stage: ProtocolInfo
+2021-10-15T17:25:06.732Z CNTRLR » [Node 030] querying node info...
+2021-10-15T17:25:06.757Z CNTRLR   [Node 012] The node is alive.
+2021-10-15T17:25:06.758Z CNTRLR   [Node 012] The node is ready to be used
+2021-10-15T17:25:06.758Z CNTRLR « [Node 012] ping successful
+2021-10-15T17:25:12.800Z CNTRLR « [Node 029] received wakeup notification
+2021-10-15T17:25:12.804Z CNTRLR   [Node 029] The node is now awake.
+2021-10-15T17:25:13.807Z CNTRLR » [Node 029] Sending node back to sleep...
+2021-10-15T17:25:13.833Z CNTRLR   [Node 029] The node is now asleep.
+```
+
+</details>
+
+## Rule #3: When in doubt, re-interview
+
+The **interview** is the process of the driver figuring out the capabilities of a device. It is possible that something went wrong the first time and the driver operates on incorrect information. To make the driver forget what it knows about a device and start over, you can re-interview it (`refreshInfo`).
+
+Sometimes this is also necessary to pick up changed device config files or repair incorrect associations.
+
+---
+
+## Common issues
+
+Now that we got this out of the way, here's a collection of **common** issues and how to solve them.
+
+🐛 [Configuration parameters are missing or wrong](troubleshooting/missing-config-params.md)
+
+🐛 [A device is not identified (unknown product)](troubleshooting/unidentified-device.md)
+
+🐛 [Connectivity issues](troubleshooting/connectivity-issues.md) (unreliable communication, slow network, etc.)
+
+🐛 [Healing the network fails on Z-Wave 700 stick](troubleshooting/healing-fails.md)
+
+🐛 [A lock (or any secure device) cannot be controlled](troubleshooting/lock-uncontrollable.md)
+
+🐛 [Some values are missing](troubleshooting/missing-values.md)
+
+🐛 [A device does not respond](troubleshooting/no-device-response.md)
+
+🐛 [Missing updates from a device](troubleshooting/no-updates.md)

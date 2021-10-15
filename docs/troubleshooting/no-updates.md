@@ -7,16 +7,18 @@ This section is meant to help you figure out why and reduce debugging time for u
 1. Check whether the device supports `Association CC`, `Multi Channel Association CC` and/or `Multi Channel CC` and note the CC versions.  
    _You should find this info in the cache file `<homeid>.json` or in node dumps from the applications._
 
-1. Check whether the Lifeline association is set up correctly. For `Z-Wave Plus` devices, this is association group 1. For legacy devices, check the manual.  
-   _The following will assume that the controller is node 1._
+1. Check whether **any** Lifeline association is set up. For `Z-Wave Plus` devices, this is association group 1. For legacy devices, check the manual.  
+   If not, try re-interviewing the device. `zwave-js` will try to configure the correct associations automatically. If that fails, go to the next step.
 
-    a.) The device supports `Multi Channel CC` and `Multi Channel Association CC` version 3 or higher: **Node `1`, endpoint `0`**
+1. Check whether the Lifeline association is set up correctly. _The following will assume that the controller is node 1._
 
-    b.) The device supports `Multi Channel CC` and `Multi Channel Association CC` version 1 or 2: **Node `1`, no endpoint**
+    a.) The device supports `Multi Channel CC`, the endpoints support `Association CC`: One association per endpoint, **target node `1`, no target endpoint**
 
-    c.) The device supports `Multi Channel CC` and `Association CC`: **Node `1`, no endpoint**
+    b.) The device supports `Multi Channel CC`, the endpoints support `Multi Channel Association CC` version 3 or higher: One association per endpoint, **target node `1`, target endpoint `0`**
 
-    d.) The device **does not** support `Multi Channel CC`: **Node `1`, no endpoint**
+    c.) The device supports `Multi Channel CC` and `Multi Channel Association CC` version 3 or higher: One association on the root device (endpoint 0), **target node `1`, target endpoint `0`**
+
+    d.) The device **does not** `Multi Channel CC` **or** it supports `Multi Channel Association CC` version 1 or 2 **or** it supports `Association CC` only: One association on the root device (endpoint 0), **target node `1`, no target endpoint**
 
 1. Check the logfile which reports the device sends. This depends on how the association is set up.
 
@@ -74,7 +76,7 @@ This section is meant to help you figure out why and reduce debugging time for u
     }
     ```
 
-    a) It is supported on **exactly 1** endpoint (excluding `0`): The compat flag `mapRootReportsToEndpoints` should help.  
+    a) It is supported on **exactly 1** endpoint (excluding `0`): The compat flag `mapRootReportsToEndpoint` should help.  
      Please open an issue (with the information you've gathered so far), so we can decide what to do.
 
     b) It is supported on **more than 1** endpoint (excluding `0`): Now it gets complicated.  
