@@ -193,7 +193,7 @@ const defaultOptions: ZWaveOptions = {
 	preserveUnknownValues: false,
 	disableOptimisticValueUpdate: false,
 	// By default enable soft reset unless the env variable is set
-	enableSoftReset: !!process.env.ZWAVEJS_DISABLE_SOFT_RESET,
+	enableSoftReset: !process.env.ZWAVEJS_DISABLE_SOFT_RESET,
 	interview: {
 		skipInterview: false,
 		queryAllUserCodes: false,
