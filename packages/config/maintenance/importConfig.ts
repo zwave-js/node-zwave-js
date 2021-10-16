@@ -30,7 +30,6 @@ import { promisify } from "util";
 import xml2json from "xml2json";
 import yargs from "yargs";
 import { ConfigManager, DeviceConfigIndexEntry } from "../src";
-import { padVersion } from "../src/utils";
 
 const execPromise = promisify(child.exec);
 
@@ -1845,7 +1844,8 @@ async function parseOHConfigFile(
 				}
 			}
 		} else {
-			ret.supportsZWavePlus = true;
+			// The supportsZwavePlus key is obsolete
+			// ret.supportsZWavePlus = true;
 		}
 	} catch (e) {
 		console.error(filename);

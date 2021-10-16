@@ -86,3 +86,8 @@ export function mergeDeep(
 	}
 	return target;
 }
+
+/** Pads a firmware version string, so it can be compared with semver */
+export function padVersion(version: string): string {
+	return version + ".0";
+}
