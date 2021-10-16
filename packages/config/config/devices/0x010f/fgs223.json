@@ -483,6 +483,10 @@
 			"description": "If enabled, it will be included in the reports for the first channel"
 		}
 	],
+	"compat": {
+		// The device sends reports for endpoint 1 un-encapsulated
+		"mapRootReportsToEndpoint": 1
+	},
 	"metadata": {
 		"$import": "templates/fibaro_template.json#default_metadata",
 		"manual": "https://products.z-wavealliance.org/ProductManual/File?folder=&filename=MarketCertificationFiles/1742/FGS-2x3-EN-T-v1.0%2006.06.2016.pdf"
