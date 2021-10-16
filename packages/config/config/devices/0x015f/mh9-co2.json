@@ -1,0 +1,146 @@
+{
+	"manufacturer": "McoHome Technology Co., Ltd.",
+	"manufacturerId": "0x015f",
+	"label": "MH9-CO2-WA",
+	"description": "CO2 Monitor Air quality detector",
+	"devices": [
+		{
+			"productType": "0x0901",
+			"productId": "0x5102"
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"paramInformation": [
+		{
+			"#": "1",
+			"label": "CO2 Notification Threshold",
+			"valueSize": 2,
+			"minValue": 1,
+			"maxValue": 5000,
+			"defaultValue": 1000,
+			"unit": "ppm"
+		},
+		{
+			"#": "2",
+			"label": "CO2 Reporting Threshold",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 10,
+			"unsigned": true,
+			"unit": "5 ppm",
+			"options": [
+				{
+					"label": "Disable",
+					"value": 0
+				}
+			]
+		},
+		{
+			"#": "3",
+			"label": "Temperature Reporting Threshold",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 1,
+			"unsigned": true,
+			"unit": "0.5 °C",
+			"options": [
+				{
+					"label": "Disable",
+					"value": 0
+				}
+			]
+		},
+		{
+			"#": "4",
+			"label": "Humidity Reporting Threshold",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 100,
+			"defaultValue": 2,
+			"unsigned": true,
+			"unit": "%",
+			"options": [
+				{
+					"label": "Disable",
+					"value": 0
+				}
+			]
+		},
+		{
+			"#": "255",
+			"label": "Factory Setting",
+			"description": "Restore the factory setting",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 0,
+			"unsigned": true,
+			"writeOnly": true,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Reset",
+					"value": 85
+				}
+			]
+		}
+	],
+	"compat": {
+		"forceNotificationIdleReset": true
+	}
+}
+{
+	"manufacturer": "McoHome Technology Co., Ltd.",
+	"manufacturerId": "0x015f",
+	"label": "MH9-CO2-WD",
+	"description": "CO2 Monitor Air quality detector",
+	"devices": [
+		{
+			"productType": "0x0901",
+			"productId": "0x3102"
+		},
+		{
+			"productType": "0x0902",
+			"productId": "0x5102"
+		},
+		{
+			"productType": "0x0905",
+			"productId": "0x0201"
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"associations": {
+		"1": {
+			"label": "Notification",
+			"description": "sends report ever 30s when CO2 value above threshold",
+			"maxNodes": 5
+		},
+		"2": {
+			"label": "Gateway report",
+			"description": "CO2, Temperature and Humidity is reported when changed",
+			"maxNodes": 1,
+			"isLifeline": true
+		}
+	},
+	"paramInformation": [
+		{
+			"#": "1",
+			"label": "CO2 Notification Threshold",
+			"valueSize": 2,
+			"minValue": 1,
+			"maxValue": 2000,
+			"defaultValue": 1000
+		}
+	],
+	"compat": {
+		"forceNotificationIdleReset": true
+	}
+}
