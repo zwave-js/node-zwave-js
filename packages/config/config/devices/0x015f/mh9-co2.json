@@ -2,7 +2,7 @@
 	"manufacturer": "McoHome Technology Co., Ltd.",
 	"manufacturerId": "0x015f",
 	"label": "MH9-CO2",
-	"description": "CO2 Monitor Air quality detector",
+	"description": "CO2 Monitor Air Quality Detector",
 	"devices": [
 		{
 			"productType": "0x0901",
@@ -46,6 +46,7 @@
 			"$if": "firmwareVersion < 2.4",
 			"label": "CO2 Notification Threshold",
 			"valueSize": 2,
+			"unit": "ppm",
 			"minValue": 1,
 			"maxValue": 2000,
 			"defaultValue": 1000,
@@ -56,6 +57,7 @@
 			"$if": "firmwareVersion >= 2.4",
 			"label": "CO2 Notification Threshold",
 			"valueSize": 2,
+			"unit": "ppm",
 			"minValue": 1,
 			"maxValue": 5000,
 			"defaultValue": 1000,
@@ -66,11 +68,11 @@
 			"$if": "firmwareVersion >= 2.4",
 			"label": "CO2 Reporting Threshold",
 			"valueSize": 1,
+			"unit": "5 ppm",
 			"minValue": 0,
 			"maxValue": 255,
 			"defaultValue": 10,
 			"unsigned": true,
-			"unit": "5 ppm",
 			"options": [
 				{
 					"label": "Disable",
@@ -83,11 +85,11 @@
 			"$if": "firmwareVersion >= 2.4",
 			"label": "Temperature Reporting Threshold",
 			"valueSize": 1,
+			"unit": "0.5 °C",
 			"minValue": 0,
 			"maxValue": 255,
 			"defaultValue": 1,
 			"unsigned": true,
-			"unit": "0.5 °C",
 			"options": [
 				{
 					"label": "Disable",
@@ -100,11 +102,11 @@
 			"$if": "firmwareVersion >= 2.4",
 			"label": "Humidity Reporting Threshold",
 			"valueSize": 1,
+			"unit": "%",
 			"minValue": 0,
 			"maxValue": 100,
 			"defaultValue": 2,
 			"unsigned": true,
-			"unit": "%",
 			"options": [
 				{
 					"label": "Disable",
@@ -115,18 +117,21 @@
 		{
 			"#": "255",
 			"$if": "firmwareVersion >= 2.4",
-			"label": "Factory Setting",
-			"description": "Restore the factory setting",
+			"label": "Reset to Factory Settings",
 			"valueSize": 1,
 			"minValue": 0,
-			"maxValue": 255,
+			"maxValue": 85,
 			"defaultValue": 0,
 			"unsigned": true,
 			"writeOnly": true,
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "Reset",
+					"label": "Normal operation",
+					"value": 0
+				},
+				{
+					"label": "Reset to Factory Settings",
 					"value": 85
 				}
 			]
