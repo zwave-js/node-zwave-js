@@ -9,7 +9,7 @@ import { install as installSourceMapSupport } from "source-map-support";
 installSourceMapSupport();
 
 import * as path from "path";
-import { initSentry } from "./lib/telemetry/sentry.js";
+import { initSentry } from "./lib/telemetry/sentry";
 
 /** The version of zwave-js, exported for your convenience */
 const packageJsonPath = require.resolve("zwave-js/package.json");

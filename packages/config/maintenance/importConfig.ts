@@ -30,7 +30,6 @@ import { promisify } from "util";
 import xml2json from "xml2json";
 import yargs from "yargs";
 import { ConfigManager, DeviceConfigIndexEntry } from "../src";
-import { padVersion } from "../src/utils";
 
 const execPromise = promisify(child.exec);
 

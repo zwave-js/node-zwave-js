@@ -85,6 +85,7 @@ export interface SendThreadContext {
 	currentTransaction?: Transaction;
 	handshakeTransaction?: Transaction;
 	sendDataAttempts: number;
+	paused: boolean;
 }
 
 export type SendThreadEvent =
@@ -129,7 +130,8 @@ export type SendThreadEvent =
 	| ({ type: "active_command_error" } & Omit<
 			CommandQueueEvent & { type: "command_error" },
 			"type"
-	  >);
+	  >)
+	| { type: "pause" | "unpause" };
 
 export type SendThreadMachine = StateMachine<
 	SendThreadContext,
@@ -183,7 +185,6 @@ export type SendThreadMachineParams = {
 };
 
 // These actions must be assign actions or they will be executed out of order
-
 const setCurrentTransaction: AssignAction<SendThreadContext, any> = assign(
 	(ctx) => {
 		const queue = ctx.queue;
@@ -276,8 +277,11 @@ const every = (...guards: string[]) => ({
 	type: "every",
 	guards,
 });
+
 const guards: MachineOptions<SendThreadContext, SendThreadEvent>["guards"] = {
 	maySendFirstMessage: (ctx) => {
+		// We may not send anything if the send thread is paused
+		if (ctx.paused) return false;
 		const nextTransaction = ctx.queue.peekStart();
 		// We can't send anything if the queue is empty
 		if (!nextTransaction) return false;
@@ -456,6 +460,9 @@ export function createSendThreadMachine(
 ): SendThreadMachine {
 	const resolveCurrentTransaction: AssignAction<SendThreadContext, any> =
 		assign((ctx, evt) => {
+			if (ctx.currentTransaction!.pauseSendThread) {
+				ctx.paused = true;
+			}
 			implementations.resolveTransaction(
 				ctx.currentTransaction!,
 				evt.result,
@@ -466,6 +473,9 @@ export function createSendThreadMachine(
 		SendThreadContext,
 		any
 	> = assign((ctx) => {
+		if (ctx.currentTransaction!.pauseSendThread) {
+			ctx.paused = true;
+		}
 		implementations.resolveTransaction(ctx.currentTransaction!, undefined);
 		return ctx;
 	});
@@ -562,6 +572,9 @@ export function createSendThreadMachine(
 
 	const resolveEventTransaction: AssignAction<SendThreadContext, any> =
 		assign((ctx, evt) => {
+			if (ctx.currentTransaction!.pauseSendThread) {
+				ctx.paused = true;
+			}
 			implementations.resolveTransaction(evt.transaction, evt.result);
 			return ctx;
 		});
@@ -675,6 +688,7 @@ export function createSendThreadMachine(
 				commandQueue: undefined as any,
 				queue: new SortedList(),
 				sendDataAttempts: 0,
+				paused: false,
 			},
 			on: {
 				// Forward low-level events and unidentified messages to the command queue
@@ -765,6 +779,16 @@ export function createSendThreadMachine(
 				// Accept external commands to sort the queue
 				sortQueue: {
 					actions: [sortQueue, raise("trigger") as any],
+				},
+				// Accept external commands to pause/unpause the send queue
+				pause: {
+					actions: [assign({ paused: () => true }) as any],
+				},
+				unpause: {
+					actions: [
+						assign({ paused: () => false }) as any,
+						raise("trigger") as any,
+					],
 				},
 			},
 			states: {

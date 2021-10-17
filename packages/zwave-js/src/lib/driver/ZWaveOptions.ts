@@ -33,6 +33,12 @@ export interface ZWaveOptions {
 	};
 
 	attempts: {
+		/**
+		 * @internal
+		 * How often to attempt opening the serial port
+		 */
+		openSerialPort: number;
+
 		/** How often the driver should try communication with the controller before giving up */
 		controller: number; // [1...3], default: 3
 
@@ -66,11 +72,17 @@ export interface ZWaveOptions {
 		 */
 		queryAllUserCodes?: boolean;
 	};
+
 	storage: {
 		/** Allows you to replace the default file system driver used to store and read the cache */
 		driver: FileSystem;
 		/** Allows you to specify a different cache directory */
 		cacheDir: string;
+		/**
+		 * Allows you to specify a different directory for the lockfiles than cacheDir.
+		 * Can also be set with the ZWAVEJS_LOCK_DIRECTORY env variable.
+		 */
+		lockDir?: string;
 		/**
 		 * Allows you to specify a directory where device configuration files can be loaded from with higher priority than the included ones.
 		 * This directory does not get indexed and should be used sparingly, e.g. for testing.
@@ -108,7 +120,8 @@ export interface ZWaveOptions {
 	 * Some Command Classes support reporting that a value is unknown.
 	 * When this flag is `false`, unknown values are exposed as `undefined`.
 	 * When it is `true`, unknown values are exposed as the literal string "unknown" (even if the value is normally numeric).
-	 * Default: `false` */
+	 * Default: `false`
+	 */
 	preserveUnknownValues?: boolean;
 
 	/**
@@ -122,6 +135,13 @@ export interface ZWaveOptions {
 	 * Default: `false`
 	 */
 	disableOptimisticValueUpdate?: boolean;
+
+	/**
+	 * Soft Reset is required after some commands like changing the RF region or restoring an NVM backup.
+	 * Because it may be problematic in certain environments like Docker, the functionality must be opted into.
+	 * Default: `false` in Docker, `true` when ZWAVEJS_ENABLE_SOFT_RESET env variable is set or outside Docker.
+	 */
+	enableSoftReset?: boolean;
 
 	preferences: {
 		/**
