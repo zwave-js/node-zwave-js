@@ -2,7 +2,7 @@
 	"manufacturer": "Vitrum",
 	"manufacturerId": "0x010a",
 	"label": "Boiler",
-	"description": "touch timer switch Dual Relay",
+	"description": "Touch Timer Switch Dual Relay",
 	"devices": [
 		{
 			"productType": "0x7032",

@@ -2,7 +2,7 @@
 	"manufacturer": "Vitrum",
 	"manufacturerId": "0x010a",
 	"label": "Scenario",
-	"description": "Scenario controller",
+	"description": "Scenario Controller",
 	"devices": [
 		{
 			"productType": "0x1500",

@@ -7,7 +7,7 @@
 		"allowManualEntry": false,
 		"options": [
 			{
-				"label": "Off",
+				"label": "Disable",
 				"value": 0
 			},
 			{
@@ -42,110 +42,92 @@
 	},
 	"button_1_off_color": {
 		"$import": "#led_color_options",
-		"label": "Button 1 Off",
-		"description": "LED color of the button when the output is in the Off state",
+		"label": "Button 1: LED Color When Off",
 		"defaultValue": 3
 	},
 	"button_1_on_color": {
 		"$import": "#led_color_options",
-		"label": "Button 1 On",
-		"description": "LED color of the button when the output is in the On state",
+		"label": "Button 1: LED Color When On",
 		"defaultValue": 4
 	},
 	"button_1_eco_color": {
 		"$import": "#led_color_options",
-		"label": "Button 1 Eco",
-		"description": "LED color of the button when the output is in the Eco state",
+		"label": "Button 1: LED Color When Eco",
 		"defaultValue": 2
 	},
 	"button_2_off_color": {
 		"$import": "#led_color_options",
-		"label": "Button 2 Off",
-		"description": "LED color of the button when the output is in the Off state",
+		"label": "Button 2: LED Color When Off",
 		"defaultValue": 3
 	},
 	"button_2_on_color": {
 		"$import": "#led_color_options",
-		"label": "Button 2 On",
-		"description": "LED color of the button when the output is in the On state",
+		"label": "Button 2: LED Color When On",
 		"defaultValue": 4
 	},
 	"button_2_eco_color": {
 		"$import": "#led_color_options",
-		"label": "Button 2 Eco",
-		"description": "LED color of the button when the output is in the Eco state",
+		"label": "Button 2: LED Color When Eco",
 		"defaultValue": 2
 	},
 	"button_3_off_color": {
 		"$import": "#led_color_options",
-		"label": "Button 3 Off",
-		"description": "LED color of the button when the output is in the Off state",
+		"label": "Button 3: LED Color When Off",
 		"defaultValue": 3
 	},
 	"button_3_on_color": {
 		"$import": "#led_color_options",
-		"label": "Button 3 On",
-		"description": "LED color of the button when the output is in the On state",
+		"label": "Button 3: LED Color When On",
 		"defaultValue": 4
 	},
 	"button_3_eco_color": {
 		"$import": "#led_color_options",
-		"label": "Button 3 Eco",
-		"description": "LED color of the button when the output is in the Eco state",
+		"label": "Button 3: LED Color When Eco",
 		"defaultValue": 2
 	},
 	"button_4_off_color": {
 		"$import": "#led_color_options",
-		"label": "Button 4 Off",
-		"description": "LED color of the button when the output is in the Off state",
+		"label": "Button 4: LED Color When Off",
 		"defaultValue": 3
 	},
 	"button_4_on_color": {
 		"$import": "#led_color_options",
-		"label": "Button 4 On",
-		"description": "LED color of the button when the output is in the On state",
+		"label": "Button 4: LED Color When On",
 		"defaultValue": 4
 	},
 	"button_4_eco_color": {
 		"$import": "#led_color_options",
-		"label": "Button 4 Eco",
-		"description": "LED color of the button when the output is in the Eco state",
+		"label": "Button 4: LED Color When Eco",
 		"defaultValue": 2
 	},
 	"button_5_off_color": {
 		"$import": "#led_color_options",
-		"label": "Button 5 Off",
-		"description": "LED color of the button when the output is in the Off state",
+		"label": "Button 5: LED Color When Off",
 		"defaultValue": 3
 	},
 	"button_5_on_color": {
 		"$import": "#led_color_options",
-		"label": "Button 5 On",
-		"description": "LED color of the button when the output is in the On state",
+		"label": "Button 5: LED Color When On",
 		"defaultValue": 4
 	},
 	"button_5_eco_color": {
 		"$import": "#led_color_options",
-		"label": "Button 5 Eco",
-		"description": "LED color of the button when the output is in the Eco state",
+		"label": "Button 5: LED Color When Eco",
 		"defaultValue": 2
 	},
 	"button_6_off_color": {
 		"$import": "#led_color_options",
-		"label": "Button 6 Off",
-		"description": "LED color of the button when the output is in the Off state",
+		"label": "Button 6: LED Color When Off",
 		"defaultValue": 3
 	},
 	"button_6_on_color": {
 		"$import": "#led_color_options",
-		"label": "Button 6 On",
-		"description": "LED color of the button when the output is in the On state",
+		"label": "Button 6: LED Color When On",
 		"defaultValue": 4
 	},
 	"button_6_eco_color": {
 		"$import": "#led_color_options",
-		"label": "Button 6 Eco",
-		"description": "LED color of the button when the output is in the Eco state",
+		"label": "Button 6: LED Color When Eco",
 		"defaultValue": 2
 	},
 	"output_port_options_6ch": {
@@ -156,7 +138,7 @@
 		"allowManualEntry": false,
 		"options": [
 			{
-				"label": "Disconnected",
+				"label": "Disable",
 				"value": 0
 			},
 			{
@@ -187,32 +169,32 @@
 	},
 	"button_1_output_6ch": {
 		"$import": "#output_port_options_6ch",
-		"label": "Button 1 connected to",
+		"label": "Button 1 Connected to",
 		"defaultValue": 1
 	},
 	"button_2_output_6ch": {
 		"$import": "#output_port_options_6ch",
-		"label": "Button 2 connected to",
+		"label": "Button 2 Connected to",
 		"defaultValue": 2
 	},
 	"button_3_output_6ch": {
 		"$import": "#output_port_options_6ch",
-		"label": "Button 3 connected to",
+		"label": "Button 3 Connected to",
 		"defaultValue": 3
 	},
 	"button_4_output_6ch": {
 		"$import": "#output_port_options_6ch",
-		"label": "Button 4 connected to",
+		"label": "Button 4 Connected to",
 		"defaultValue": 4
 	},
 	"button_5_output_6ch": {
 		"$import": "#output_port_options_6ch",
-		"label": "Button 5 connected to",
+		"label": "Button 5 Connected to",
 		"defaultValue": 5
 	},
 	"button_6_output_6ch": {
 		"$import": "#output_port_options_6ch",
-		"label": "Button 6 connected to",
+		"label": "Button 6 Connected to",
 		"defaultValue": 6
 	},
 	"basic_set_type": {
@@ -228,7 +210,7 @@
 				"value": 0
 			},
 			{
-				"label": "Last Level (0xFF)",
+				"label": "Last level (0xFF)",
 				"value": 1
 			}
 		]
