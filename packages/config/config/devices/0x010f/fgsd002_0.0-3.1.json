@@ -17,7 +17,6 @@
 		"min": "0.0",
 		"max": "3.1"
 	},
-	"supportsZWavePlus": true,
 	"paramInformation": [
 		{
 			"#": "1",

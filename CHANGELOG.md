@@ -3,8 +3,24 @@
 
 <!--
 	Add placeholder for next release with `wip` snippet
-  ## __WORK IN PROGRESS__
 -->
+## 8.5.1-beta.0 (2021-10-15)
+### Features
+* Implemented soft reset command. This needs to be opted in inside Docker
+* Implemented 700-series variant of NVM backup/restore
+
+### Bugfixes
+* Emit `Driver_Failed` error when serial port errors
+* Better error when creating a multicast group with missing nodes
+
+### Config file changes
+* Add support for Heltun panels
+* Auto-assign `Binary Sensor Report` association group for FortrezZ MIMOLite
+
+### Changes under the hood
+* `supportsZWavePlus` property was removed from config files and documentation
+* The `paramInformation` property in config files was converted to an array in order to preserve ordered parameters
+
 ## 8.5.0 (2021-10-11)
 ### Features
 * Export `getAPI` through `zwave-js/CommandClass`

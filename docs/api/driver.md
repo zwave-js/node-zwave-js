@@ -98,6 +98,22 @@ Since it might be necessary to control a node **before** its supported CC versio
 -   **throws (!)** if the requested CC is not implemented in this library
 -   returns the version the node claims to support otherwise
 
+### `softReset`
+
+```ts
+async softReset(): Promise<void>
+async trySoftReset(): Promise<void>
+```
+
+Instruct the controller to soft-reset (restart). The returned Promise will resolve after the controller has restarted and can be used again.
+
+> [!NOTE] Soft-reset is known to cause problems in Docker containers where a reconnection of the serial device will prevent it from being connected again. There are ways around this, but they require host configuration or changes to how the container is started.  
+> Therefore soft-reset is disabled in Docker unless the `ZWAVEJS_ENABLE_SOFT_RESET` environment variable or the `enableSoftReset` driver option is set.
+
+`softReset` will throw when called while soft-reset is not enabled. Consider using `trySoftReset` instead, which only performs a soft-reset when enabled.
+
+> [!WARNING] USB modules will reconnect, meaning that they might get a new address. Make sure to configure your device address in a way that prevents it from changing, e.g. by using `/dev/serial/by-id/...` on Linux.
+
 ### `hardReset`
 
 ```ts
@@ -535,11 +551,17 @@ interface ZWaveOptions {
 		 */
 		queryAllUserCodes?: boolean;
 	};
+
 	storage: {
 		/** Allows you to replace the default file system driver used to store and read the cache */
 		driver: FileSystem;
 		/** Allows you to specify a different cache directory */
 		cacheDir: string;
+		/**
+		 * Allows you to specify a different directory for the lockfiles than cacheDir.
+		 * Can also be set with the ZWAVEJS_LOCK_DIRECTORY env variable.
+		 */
+		lockDir?: string;
 		/**
 		 * Allows you to specify a directory where device configuration files can be loaded from with higher priority than the included ones.
 		 * This directory does not get indexed and should be used sparingly, e.g. for testing.
@@ -570,7 +592,8 @@ interface ZWaveOptions {
 	 * Some Command Classes support reporting that a value is unknown.
 	 * When this flag is `false`, unknown values are exposed as `undefined`.
 	 * When it is `true`, unknown values are exposed as the literal string "unknown" (even if the value is normally numeric).
-	 * Default: `false` */
+	 * Default: `false`
+	 */
 	preserveUnknownValues?: boolean;
 
 	/**
@@ -584,6 +607,13 @@ interface ZWaveOptions {
 	 * Default: `false`
 	 */
 	disableOptimisticValueUpdate?: boolean;
+
+	/**
+	 * Soft Reset is required after some commands like changing the RF region or restoring an NVM backup.
+	 * Because it may be problematic in certain environments like Docker, the functionality must be opted into.
+	 * Default: `false` in Docker, `true` when ZWAVEJS_ENABLE_SOFT_RESET env variable is set or outside Docker.
+	 */
+	enableSoftReset?: boolean;
 
 	preferences: {
 		/**
@@ -622,7 +652,8 @@ The `report` timeout is used by this library to determine how long to wait for a
 If your network has connectivity issues, you can increase the number of interview attempts the driver makes before giving up. The default is `5`.
 
 For more control over writing the cache files, you can use the `storage` options. By default, the cache is located inside `node_modules/zwave-js/cache` and written using Node.js built-in `fs` methods (promisified using `fs-extra`). The replacement file system must adhere to the [`FileSystem`](#FileSystem) interface.
-The `throttle` option allows you to fine-tune the filesystem. The default value `"normal"`
+The `throttle` option allows you to fine-tune the filesystem. The default value is `"normal"`.
+Note that the lockfiles to avoid concurrent cache accesses are updated every couple of seconds. If you have concerns regarding SD card wear, you can change the `lockDir` option to point a directory that resides in a RAM filesystem.
 
 For custom logging options you can use `logConfig`, check [`LogConfig`](#LogConfig) interface for more informations.
 The logging options can be changed on the fly using the [`updateLogConfig`](#updateLogConfig) method.
