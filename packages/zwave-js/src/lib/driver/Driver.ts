@@ -1594,7 +1594,7 @@ export class Driver extends TypedEventEmitter<DriverEventCallbacks> {
 	 */
 	public async softReset(): Promise<void> {
 		if (!this.options.enableSoftReset) {
-			const message = `The soft reset feature has been disabled with the ZWAVEJS_DISABLE_SOFT_RESET environment variable`;
+			const message = `The soft reset feature has been disabled with a config option or the ZWAVEJS_DISABLE_SOFT_RESET environment variable.`;
 			this.controllerLog.print(message, "error");
 			throw new ZWaveError(
 				message,
