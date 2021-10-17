@@ -1,6 +1,9 @@
 # Commands to start on workspace startup
 tasks:
-  - init: |
+  - before: |
+      gp env YARN_ENABLE_GLOBAL_CACHE=false
+      gp env YARN_CACHE_FOLDER=.yarn/cache
+    init: |
       yarn install
       yarn build
     command: |
