@@ -31,123 +31,27 @@
 	"paramInformation": [
 		{
 			"#": "1",
-			"label": "Invert Orientation",
-			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 2,
-			"defaultValue": 0,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "Normal orientation",
-					"value": 0
-				},
-				{
-					"label": "Inverted orientation",
-					"value": 1
-				},
-				{
-					"label": "Toggle",
-					"value": 2
-				}
-			]
+			"$import": "~/templates/master_template.json#orientation_momentary"
 		},
 		{
 			"#": "2",
-			"label": "LED Indicator Control",
-			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 3,
-			"defaultValue": 0,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "LED is on when switch is off",
-					"value": 0
-				},
-				{
-					"label": "LED is on when switch is on",
-					"value": 1
-				},
-				{
-					"label": "LED is always off",
-					"value": 2
-				},
-				{
-					"label": "LED is always on",
-					"value": 3
-				}
-			]
+			"$import": "~/templates/master_template.json#led_indicator_four_options"
 		},
 		{
 			"#": "23",
-			"label": "LED Indicator Color",
-			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 3,
-			"defaultValue": 1,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "White",
-					"value": 0
-				},
-				{
-					"label": "Blue",
-					"value": 1
-				},
-				{
-					"label": "Green",
-					"value": 2
-				},
-				{
-					"label": "Red",
-					"value": 3
-				}
-			]
+			"$import": "templates/zooz_template.json#led_indicator_color"
 		},
 		{
 			"#": "24",
-			"label": "LED Indicator Brightness",
-			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 2,
-			"defaultValue": 1,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "100%",
-					"value": 0
-				},
-				{
-					"label": "60%",
-					"value": 1
-				},
-				{
-					"label": "30%",
-					"value": 2
-				}
-			]
+			"$import": "templates/zooz_template.json#led_indicator_brightness"
 		},
 		{
 			"#": "3",
-			"label": "Auto Turn-Off Timer",
-			"description": "Set the number of minutes to automatically turn off switch once it has been turned on (0 to disable).",
-			"valueSize": 4,
-			"unit": "minutes",
-			"minValue": 0,
-			"maxValue": 65535,
-			"defaultValue": 0
+			"$import": "templates/zooz_template.json#auto_off_timer"
 		},
 		{
 			"#": "5",
-			"label": "Auto Turn-On Timer",
-			"description": "Set the number of minutes to automatically turn on switch once it has been turned off (0 to disable).",
-			"valueSize": 4,
-			"unit": "minutes",
-			"minValue": 0,
-			"maxValue": 65535,
-			"defaultValue": 0
+			"$import": "templates/zooz_template.json#auto_on_timer"
 		},
 		{
 			"#": "8",
@@ -155,129 +59,31 @@
 		},
 		{
 			"#": "9",
-			"label": "Ramp Rate Control",
-			"description": "Set the number of seconds for dimmer to reach full brightness or turn off when operated manually.",
-			"valueSize": 1,
-			"unit": "seconds",
-			"minValue": 0,
-			"maxValue": 99,
-			"defaultValue": 1
+			"$import": "templates/zooz_template.json#dimmer_ramp_rate"
 		},
 		{
 			"#": "10",
-			"label": "Minimum Brightness",
-			"valueSize": 1,
-			"unit": "%",
-			"minValue": 1,
-			"maxValue": 99,
-			"defaultValue": 1
+			"$import": "templates/zooz_template.json#min_brightness"
 		},
 		{
 			"#": "11",
-			"label": "Maximum Brightness",
-			"valueSize": 1,
-			"unit": "%",
-			"minValue": 1,
-			"maxValue": 99,
-			"defaultValue": 99
+			"$import": "templates/zooz_template.json#max_brightness"
 		},
 		{
 			"#": "12",
-			"label": "Double-Tap Upper Paddle Behavior",
-			"description": "Set the brightness level after double-tapping the upper paddle.",
-			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 3,
-			"defaultValue": 0,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "Full brightness",
-					"value": 0
-				},
-				{
-					"label": "Configured custom brightness (parameter 18)",
-					"value": 1
-				},
-				{
-					"label": "Configured maximum brightness (parameter 11)",
-					"value": 2
-				},
-				{
-					"label": "Double tap disabled",
-					"value": 3
-				}
-			]
+			"$import": "templates/zooz_template.json#double_tap_up_behavior"
 		},
 		{
 			"#": "25",
-			"label": "Single-Tap Upper Paddle Behavior",
-			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 3,
-			"defaultValue": 0,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "Previous brightness",
-					"value": 0
-				},
-				{
-					"label": "Configured custom brightness (parameter 18)",
-					"value": 1
-				},
-				{
-					"label": "Configured maximum brightness (parameter 11)",
-					"value": 2
-				},
-				{
-					"label": "Full brightness",
-					"value": 3
-				}
-			]
+			"$import": "templates/zooz_template.json#single_tap_up_behavior"
 		},
 		{
 			"#": "13",
-			"label": "Scene Control",
-			"description": "Send scene commands to hub on physical paddle presses.",
-			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 1,
-			"defaultValue": 0,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "Disabled",
-					"value": 0
-				},
-				{
-					"label": "Enabled",
-					"value": 1
-				}
-			]
+			"$import": "templates/zooz_template.json#enable_scene_control"
 		},
 		{
 			"#": "15",
-			"label": "Local and Z-Wave Control",
-			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 2,
-			"defaultValue": 0,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "Local control disabled, Z-Wave control enabled",
-					"value": 0
-				},
-				{
-					"label": "Both enabled",
-					"value": 1
-				},
-				{
-					"label": "Both disabled",
-					"value": 2
-				}
-			]
+			"$import": "~/templates/master_template.json#smart_switch_mode_0-2"
 		},
 		{
 			"#": "19",
@@ -289,27 +95,26 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "Mechanical (off/on only)",
+					"label": "Toggle switch",
 					"value": 0
 				},
 				{
-					"label": "Mechanical (with dimming control)",
+					"label": "Toggle switch (with dimming control)",
 					"value": 1
 				},
 				{
-					"label": "Momentary (with dimming control)",
+					"label": "Momentary switch (with dimming control)",
 					"value": 2
 				},
 				{
-					"label": "Momentary (with dimming control, but reduce after double click)",
+					"label": "Momentary switch (with dimming control, but reduce after double click)",
 					"value": 3
 				}
 			]
 		},
 		{
 			"#": "20",
-			"label": "Dimming Reporting",
-			"description": "Set how the dimmer reports when paddles are tapped and held.",
+			"label": "Smart Switch Mode: Dim Reporting Behavior",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 1,
@@ -317,64 +122,30 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "Physical disabled: Every brightness level; Physical enabled: Final level only",
+					"label": "Physical disabled: Report every brightness level; Physical enabled: Report final brightness level only",
 					"value": 0
 				},
 				{
-					"label": "Send final brightness level only",
+					"label": "Report final brightness level only",
 					"value": 1
 				}
 			]
 		},
 		{
 			"#": "21",
-			"label": "Reporting Behavior When Physical Control Is Disabled",
-			"description": "Enable or disable reporting on/off status and changing LED indicator state even if physical and Z-Wave control is disabled.",
-			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 1,
-			"defaultValue": 0,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "Enabled",
-					"value": 0
-				},
-				{
-					"label": "Disabled",
-					"value": 1
-				}
-			]
+			"$import": "templates/zooz_template.json#smart_switch_mode_reporting"
 		},
 		{
 			"#": "16",
-			"label": "Local Dimming Speed",
-			"description": "Set the time it takes to get from 0% to 100% brightness when pressing and holding the paddle.",
-			"valueSize": 1,
-			"unit": "seconds",
-			"minValue": 1,
-			"maxValue": 99,
-			"defaultValue": 5
+			"$import": "templates/zooz_template.json#local_dimming_speed"
 		},
 		{
 			"#": "18",
-			"label": "Custom Brightness Level",
-			"description": "Set the custom brightness level when single tapping the upper paddle (0 for last brightness level).",
-			"valueSize": 1,
-			"units": "%",
-			"minValue": 0,
-			"maxValue": 99,
-			"defaultValue": 0
+			"$import": "templates/zooz_template.json#custom_brightness"
 		},
 		{
 			"#": "22",
-			"label": "Night Light Mode",
-			"description": "Set the brightness level the dimmer will turn on to when off and when lower paddle is held down for one second (0 to disable).",
-			"valueSize": 1,
-			"units": "%",
-			"minValue": 0,
-			"maxValue": 99,
-			"defaultValue": 20
+			"$import": "templates/zooz_template.json#night_light_mode"
 		}
 	]
 }
