@@ -27,13 +27,13 @@
 	},
 	"associations": {
 		"1": {
-			"$if": "firmwareVersion >= 2.4",
+			"$if": "firmwareVersion < 2.4",
 			"label": "Notification",
 			"description": "sends report ever 30s when CO2 value above threshold",
 			"maxNodes": 5
 		},
 		"2": {
-			"$if": "firmwareVersion >= 2.4",
+			"$if": "firmwareVersion < 2.4",
 			"label": "Gateway report",
 			"description": "CO2, Temperature and Humidity is reported when changed",
 			"maxNodes": 1,
@@ -43,20 +43,21 @@
 	"paramInformation": [
 		{
 			"#": "1",
-			"$if": "firmwareVersion >= 2.4",
+			"$if": "firmwareVersion < 2.4",
 			"label": "CO2 Notification Threshold",
 			"valueSize": 2,
 			"minValue": 1,
-			"maxValue": 5000,
+			"maxValue": 2000,
 			"defaultValue": 1000,
 			"unit": "ppm"
 		},
 		{
 			"#": "1",
+			"$if": "firmwareVersion >= 2.4",
 			"label": "CO2 Notification Threshold",
 			"valueSize": 2,
 			"minValue": 1,
-			"maxValue": 2000,
+			"maxValue": 5000,
 			"defaultValue": 1000,
 			"unit": "ppm"
 		},
