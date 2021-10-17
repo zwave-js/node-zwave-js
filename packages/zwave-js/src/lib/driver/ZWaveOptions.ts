@@ -138,8 +138,8 @@ export interface ZWaveOptions {
 
 	/**
 	 * Soft Reset is required after some commands like changing the RF region or restoring an NVM backup.
-	 * Because it may be problematic in certain environments like Docker, the functionality must be opted into.
-	 * Default: `false` in Docker, `true` when ZWAVEJS_ENABLE_SOFT_RESET env variable is set or outside Docker.
+	 * Because it may be problematic in certain environments, we provide the user with an option to opt out.
+	 * Default: `true,` except when ZWAVEJS_DISABLE_SOFT_RESET env variable is set.
 	 */
 	enableSoftReset?: boolean;
 

@@ -192,8 +192,8 @@ const defaultOptions: ZWaveOptions = {
 	},
 	preserveUnknownValues: false,
 	disableOptimisticValueUpdate: false,
-	// By default enable soft reset outside Docker or if the env variable is set
-	enableSoftReset: !isDocker() || !!process.env.ZWAVEJS_ENABLE_SOFT_RESET,
+	// By default enable soft reset unless the env variable is set
+	enableSoftReset: !process.env.ZWAVEJS_DISABLE_SOFT_RESET,
 	interview: {
 		skipInterview: false,
 		queryAllUserCodes: false,
@@ -1594,8 +1594,7 @@ export class Driver extends TypedEventEmitter<DriverEventCallbacks> {
 	 */
 	public async softReset(): Promise<void> {
 		if (!this.options.enableSoftReset) {
-			const message = `The soft reset feature is not enabled. To enable it, set the corresponding driver option or the ZWAVEJS_ENABLE_SOFT_RESET environment variable.
-Note that soft reset from within Docker requires special configuration of the container and/or host system.`;
+			const message = `The soft reset feature has been disabled with a config option or the ZWAVEJS_DISABLE_SOFT_RESET environment variable.`;
 			this.controllerLog.print(message, "error");
 			throw new ZWaveError(
 				message,
