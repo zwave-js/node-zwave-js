@@ -43,16 +43,47 @@
 			"valueSize": 1,
 			"minValue": 1,
 			"maxValue": 3,
-			"defaultValue": 2
+			"defaultValue": 2,
+			"options": [
+				{
+					"label": "Low",
+					"value": 1
+				},
+				{
+					"label": "Middle",
+					"value": 2
+				},
+				{
+					"label": "High",
+					"value": 3
+				}
+			]
 		},
 		{
 			"#": "2",
 			"label": "Alarm music duration time",
 			"valueSize": 1,
 			"minValue": 0,
-			"maxValue": 255,
+			"maxValue": 3,
 			"defaultValue": 2,
-			"unsigned": true
+			"options": [
+				{
+					"label": "Off",
+					"value": 0
+				},
+				{
+					"label": "30 seconds",
+					"value": 1
+				},
+				{
+					"label": "1 minute",
+					"value": 2
+				},
+				{
+					"label": "5 minutes",
+					"value": 3
+				}
+			]
 		},
 		{
 			"#": "3",
@@ -61,7 +92,17 @@
 			"minValue": 0,
 			"maxValue": 255,
 			"defaultValue": 1,
-			"unsigned": true
+			"unsigned": true,
+			"options": [
+				{
+					"label": "Off",
+					"value": 0
+				},
+				{
+					"label": "Always",
+					"value": 255
+				}
+			]
 		},
 		{
 			"#": "4",
@@ -69,7 +110,21 @@
 			"valueSize": 1,
 			"minValue": 1,
 			"maxValue": 3,
-			"defaultValue": 2
+			"defaultValue": 2,
+			"options": [
+				{
+					"label": "Low",
+					"value": 1
+				},
+				{
+					"label": "Middle",
+					"value": 2
+				},
+				{
+					"label": "High",
+					"value": 3
+				}
+			]
 		},
 		{
 			"#": "5",
@@ -93,7 +148,53 @@
 			"valueSize": 1,
 			"minValue": 1,
 			"maxValue": 2,
-			"defaultValue": 1
+			"defaultValue": 1,
+			"options": [
+				{
+					"label": "Alarm music",
+					"value": 1
+				},
+				{
+					"label": "Door bell music",
+					"value": 2
+				}
+			]
+		},
+		{
+			"#": "8",
+			"label": "Alarm LED enable",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 1,
+			"options": [
+				{
+					"label": "Disable",
+					"value": 0
+				},
+				{
+					"label": "Enable",
+					"value": 1
+				}
+			]
+		},
+		{
+			"#": "9",
+			"label": "Door bell LED enable",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 0,
+			"options": [
+				{
+					"label": "Disable",
+					"value": 0
+				},
+				{
+					"label": "Enable",
+					"value": 1
+				}
+			]
 		}
 	]
 }
