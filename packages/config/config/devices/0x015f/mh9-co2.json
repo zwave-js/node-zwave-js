@@ -33,7 +33,7 @@
 		},
 		"2": {
 			"$if": "firmwareVersion < 2.4",
-			"label": "CO2, Temperature, and Humidity",
+			"label": "CO2, Temperature and Humidity",
 			"maxNodes": 1,
 			"isLifeline": true
 		}
