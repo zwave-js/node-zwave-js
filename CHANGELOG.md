@@ -4,22 +4,31 @@
 <!--
 	Add placeholder for next release with `wip` snippet
 -->
-## 8.5.1-beta.0 (2021-10-15)
+## __WORK IN PROGRESS__
 ### Features
-* Implemented soft reset command. This needs to be opted in inside Docker
+* Implemented and use soft reset command. If this causes problems, you can opt-out.
 * Implemented 700-series variant of NVM backup/restore
+* Add driver option to change where lockfiles are created
 
 ### Bugfixes
 * Emit `Driver_Failed` error when serial port errors
 * Better error when creating a multicast group with missing nodes
+* Security S2 bootstrapping is now aborted when an incorrect PIN is entered
 
 ### Config file changes
 * Add support for Heltun panels
 * Auto-assign `Binary Sensor Report` association group for FortrezZ MIMOLite
+* Add LRM-1000 Wall Mounted Dimmer
+* Merge MH9-CO2 variants, add Z-Wave+ variant with firmware 2.4
+* Add fingerprint `0x0331:0x010b` to "FortrezZ LLC SSA3"
+* Add Heatit Z-Push Button 4
+* Update NAS-AB01Z to match manual
+* Clean up Zooz Zen 7x configs
 
 ### Changes under the hood
 * `supportsZWavePlus` property was removed from config files and documentation
 * The `paramInformation` property in config files was converted to an array in order to preserve ordered parameters
+* Environment variables on Gitpod should now be set correctly
 
 ## 8.5.0 (2021-10-11)
 ### Features
