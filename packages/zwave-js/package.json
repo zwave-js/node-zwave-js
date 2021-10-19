@@ -79,7 +79,7 @@
     "@types/jest": "^26.0.24",
     "@types/node": "^15.12.5",
     "@types/proper-lockfile": "^4",
-    "@types/semver": "^7.3.8",
+    "@types/semver": "^7.3.9",
     "@types/serialport": "^8.0.2",
     "@types/source-map-support": "^0",
     "@xstate/test": "^0.4.2",
