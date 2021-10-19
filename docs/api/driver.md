@@ -186,6 +186,19 @@ trySendCommandSupervised(command: CommandClass, options?: SendSupervisedCommandO
 
 If `Supervision CC` is not supported, the returned promise resolves to `undefined`.
 
+### `waitForMessage`
+
+```ts
+waitForMessage<T extends Message>(predicate: (msg: Message) => boolean, timeout: number): Promise<T>
+```
+
+Waits until an unsolicited serial message is received which matches the given predicate or a timeout has elapsed. Resolves the received message. This method takes two arguments:
+
+-   `predicate` - A predicate function that will be called for every received unsolicited message. If the function returns `true`, the returned promise will be resolved with the message.
+-   `timeout` - The timeout in milliseconds after which the returned promise will be rejected if no matching message has been received.
+
+> [!NOTE] This does not trigger for (Bridge)ApplicationCommandRequests, which are handled differently. To wait for a certain CommandClass, use [`waitForCommand`](#waitForCommand).
+
 ### `waitForCommand`
 
 ```ts
@@ -194,7 +207,7 @@ waitForCommand<T extends CommandClass>(predicate: (cc: CommandClass) => boolean,
 
 Waits until an unsolicited command is received which matches the given predicate or a timeout has elapsed. Resolves the received command. This method takes two arguments:
 
--   `predicate` - A predicate function that will be called for every received command. If the function returns true, the returned promise will be resolved with the command.
+-   `predicate` - A predicate function that will be called for every received command. If the function returns `true`, the returned promise will be resolved with the command.
 -   `timeout` - The timeout in milliseconds after which the returned promise will be rejected if no matching command has been received.
 
 ### `saveNetworkToCache`
