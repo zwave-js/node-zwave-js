@@ -138,7 +138,7 @@
 		},
 		{
 			"#": "100",
-			"label": "Enable / Disable endpoints relays",
+			"label": "Configure External Relay Endpoints",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 3,
@@ -146,19 +146,19 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "EP IR external relay and External relay disabled",
+					"label": "IR (BICOM) and TRIAC (IKA) disabled",
 					"value": 0
 				},
 				{
-					"label": "EP IR external relay dsbld, External relay enbld",
+					"label": "IR (BICOM) enabled, TRIAC (IKA) disabled",
 					"value": 1
 				},
 				{
-					"label": "EP IR external relay enbld, External relay dsbld",
+					"label": "IR (BICOM) disabled, TRIAC (IKA) enabled",
 					"value": 2
 				},
 				{
-					"label": "EP IR external relay and External relay enabled",
+					"label": "IR (BICOM) and TRIAC (IKA) enabled",
 					"value": 3
 				}
 			]
@@ -217,5 +217,9 @@
 				}
 			]
 		}
-	]
+	],
+	"compat": {
+		// This device has additional external relays, which the driver thinks are unnecessary
+		"preserveEndpoints": "*"
+	}
 }

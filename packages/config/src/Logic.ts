@@ -1,7 +1,7 @@
+import { padVersion } from "@zwave-js/shared";
 import { add_operation, apply, RulesLogic } from "json-logic-js";
 import * as semver from "semver";
 import { parse } from "./LogicParser";
-import { padVersion } from "./utils";
 
 function tryOr<T extends (...args: any[]) => any>(
 	operation: T,

@@ -51,14 +51,14 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@alcalzone/jsonl-db@npm:^1.3.0":
-  version: 1.3.0
-  resolution: "@alcalzone/jsonl-db@npm:1.3.0"
+"@alcalzone/jsonl-db@npm:^2.2.0":
+  version: 2.2.0
+  resolution: "@alcalzone/jsonl-db@npm:2.2.0"
   dependencies:
-    alcalzone-shared: ^3.0.4
-    fs-extra: ^9.1.0
+    alcalzone-shared: ^4.0.0
+    fs-extra: ^10.0.0
     proper-lockfile: ^4.1.2
-  checksum: 49324f985227e97da0f277d761cf05565ae9b567e05a5eabb49ce8eb2a22e6535eab5c979f8d88dd1ad2ed6ad261bd83df3f738fa3dc206402ac5cd1a0ab076e
+  checksum: 8e1fb815675d7df5fa60704ce2654309351ead03318dd0d36d999f3798fe689cf2799636bbc72c5ccca11c997643b332bac9f6caea766de8500c64f22d2265fb
   languageName: node
   linkType: hard
 
@@ -2160,12 +2160,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@cspotcode/source-map-support@npm:0.6.1":
-  version: 0.6.1
-  resolution: "@cspotcode/source-map-support@npm:0.6.1"
+"@cspotcode/source-map-support@npm:0.7.0":
+  version: 0.7.0
+  resolution: "@cspotcode/source-map-support@npm:0.7.0"
   dependencies:
     "@cspotcode/source-map-consumer": 0.8.0
-  checksum: da9fb4f6404ebd210537bfa8b2821a747407bf422d2d3d46f29bf85c7c3a68a126de1a9ec41398d57ca116c3bef56d58c2fb4def0800630b1ec82533ad2447c2
+  checksum: 9faddda7757cd778b5fd6812137b2cc265810043680d6399acc20441668fafcdc874053be9dccd0d9110087287bfad27eb3bf342f72bceca9aa9059f5d0c4be8
   languageName: node
   linkType: hard
 
@@ -3980,10 +3980,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/semver@npm:^7.3.8":
-  version: 7.3.8
-  resolution: "@types/semver@npm:7.3.8"
-  checksum: bc90f5a9d5430e36f766c08c898e3c28af88830ebc7736baef8ffc74783bad2efb32f29c40d450e85fc341847ee74e2dd97b76cfc7da407e4232ba9ecae4ff9c
+"@types/semver@npm:^7.3.9":
+  version: 7.3.9
+  resolution: "@types/semver@npm:7.3.9"
+  checksum: 60bfcfdfa7f937be2c6f4b37ddb6714fb0f27b05fe4cbdfdd596a97d35ed95d13ee410efdd88e72a66449d0384220bf20055ab7d6b5df10de4990fbd20e5cbe0
   languageName: node
   linkType: hard
 
@@ -4060,12 +4060,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/yargs@npm:^17.0.3":
-  version: 17.0.3
-  resolution: "@types/yargs@npm:17.0.3"
+"@types/yargs@npm:^17.0.4":
+  version: 17.0.4
+  resolution: "@types/yargs@npm:17.0.4"
   dependencies:
     "@types/yargs-parser": "*"
-  checksum: 8c4e01f893f0b372a37efb2da2191b63793a25126e0b468c7eb8886176fec2a10f063d9718fa75f1fa00e82fbed4a614bb06661d968e4233be8a00468b94ac60
+  checksum: 570f5227bf7ae0ba7c5e64f825fb6168bf5fa2b9cba0cabf88c7f2094717287f6d95919ea8756596cc8c4bb3151313976163f911ca21f9cf6435b4e3cab1cb7e
   languageName: node
   linkType: hard
 
@@ -4190,7 +4190,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@zwave-js/config@8.5.0, @zwave-js/config@workspace:*, @zwave-js/config@workspace:packages/config":
+"@zwave-js/config@8.5.1-beta.1, @zwave-js/config@workspace:*, @zwave-js/config@workspace:packages/config":
   version: 0.0.0-use.local
   resolution: "@zwave-js/config@workspace:packages/config"
   dependencies:
@@ -4200,12 +4200,12 @@ __metadata:
     "@types/json-logic-js": ^1.2.1
     "@types/node": ^15.12.5
     "@types/pegjs": ^0.10.3
-    "@types/semver": ^7.3.8
+    "@types/semver": ^7.3.9
     "@types/xml2json": ^0.11.4
-    "@types/yargs": ^17.0.3
-    "@zwave-js/core": 8.5.0
-    "@zwave-js/maintenance": 8.5.0
-    "@zwave-js/shared": 8.5.0
+    "@types/yargs": ^17.0.4
+    "@zwave-js/core": 8.5.1-beta.1
+    "@zwave-js/maintenance": 8.5.1-beta.1
+    "@zwave-js/shared": 8.5.1-beta.1
     alcalzone-shared: ^4.0.0
     ansi-colors: ^4.1.1
     axios: ^0.23.0
@@ -4220,22 +4220,22 @@ __metadata:
     pegjs: ^0.10.0
     semver: ^7.3.5
     ts-pegjs: ^0.3.1
-    typescript: 4.4.3
+    typescript: 4.4.4
     winston: ^3.3.3
     xml2json: ^0.12.0
     yargs: ^17.2.1
   languageName: unknown
   linkType: soft
 
-"@zwave-js/core@8.5.0, @zwave-js/core@workspace:*, @zwave-js/core@workspace:packages/core":
+"@zwave-js/core@8.5.1-beta.1, @zwave-js/core@workspace:*, @zwave-js/core@workspace:packages/core":
   version: 0.0.0-use.local
   resolution: "@zwave-js/core@workspace:packages/core"
   dependencies:
-    "@alcalzone/jsonl-db": ^1.3.0
+    "@alcalzone/jsonl-db": ^2.2.0
     "@types/jest": ^26.0.24
     "@types/node": ^15.12.5
     "@types/triple-beam": ^1.3.2
-    "@zwave-js/shared": 8.5.0
+    "@zwave-js/shared": 8.5.1-beta.1
     "@zwave-js/winston-daily-rotate-file": ^4.5.6-0
     alcalzone-shared: ^4.0.0
     ansi-colors: ^4.1.1
@@ -4246,7 +4246,7 @@ __metadata:
     logform: "*"
     nrf-intel-hex: ^1.3.0
     triple-beam: "*"
-    typescript: 4.4.3
+    typescript: 4.4.4
     winston: ^3.3.3
     winston-transport: "*"
   languageName: unknown
@@ -4261,7 +4261,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@zwave-js/maintenance@8.5.0, @zwave-js/maintenance@workspace:packages/maintenance":
+"@zwave-js/maintenance@8.5.1-beta.1, @zwave-js/maintenance@workspace:packages/maintenance":
   version: 0.0.0-use.local
   resolution: "@zwave-js/maintenance@workspace:packages/maintenance"
   dependencies:
@@ -4270,9 +4270,9 @@ __metadata:
     "@types/jest": ^26.0.24
     "@types/node": ^15.12.5
     "@types/prettier": ^2
-    "@types/yargs": ^17.0.3
-    "@zwave-js/core": 8.5.0
-    "@zwave-js/shared": 8.5.0
+    "@types/yargs": ^17.0.4
+    "@zwave-js/core": 8.5.1-beta.1
+    "@zwave-js/shared": 8.5.1-beta.1
     ansi-colors: ^4.1.1
     clipboardy: ^2.3.0
     esbuild: "*"
@@ -4283,7 +4283,7 @@ __metadata:
     prettier: ^2.4.1
     reflect-metadata: ^0.1.13
     ts-morph: ^12.0.0
-    typescript: 4.4.3
+    typescript: 4.4.4
     yargs: ^17.2.1
   languageName: unknown
   linkType: soft
@@ -4295,7 +4295,7 @@ __metadata:
     "@actions/core": ^1.6.0
     "@actions/exec": ^1.1.0
     "@actions/github": ^5.0.0
-    "@alcalzone/jsonl-db": ^1.3.0
+    "@alcalzone/jsonl-db": ^2.2.0
     "@alcalzone/release-script": ~3.4.0
     "@alcalzone/release-script-plugin-lerna": ~3.3.0
     "@babel/core": ^7.15.8
@@ -4309,9 +4309,10 @@ __metadata:
     "@commitlint/cli": ^12.1.4
     "@commitlint/config-conventional": ^12.1.4
     "@tsconfig/node12": ^1.0.9
+    "@types/fs-extra": ^9.0.13
     "@types/jest": ^26.0.24
     "@types/node": ^15.12.5
-    "@types/semver": ^7.3.8
+    "@types/semver": ^7.3.9
     "@typescript-eslint/eslint-plugin": ^4.33.0
     "@typescript-eslint/parser": ^4.33.0
     "@zwave-js/config": "workspace:*"
@@ -4323,7 +4324,7 @@ __metadata:
     commitizen: ^4.2.4
     coveralls: ^3.1.1
     cz-conventional-changelog: ^3.3.0
-    esbuild: ^0.13.4
+    esbuild: ^0.13.8
     esbuild-register: ^3.0.0
     eslint: ^7.32.0
     eslint-config-prettier: ^8.3.0
@@ -4337,13 +4338,13 @@ __metadata:
     prettier-plugin-organize-imports: ^2.3.4
     reflect-metadata: ^0.1.13
     semver: ^7.3.5
-    ts-node: ^10.2.1
-    typescript: 4.4.3
+    ts-node: ^10.3.0
+    typescript: 4.4.4
     zwave-js: "workspace:*"
   languageName: unknown
   linkType: soft
 
-"@zwave-js/serial@8.5.0, @zwave-js/serial@workspace:packages/serial":
+"@zwave-js/serial@8.5.1-beta.1, @zwave-js/serial@workspace:packages/serial":
   version: 0.0.0-use.local
   resolution: "@zwave-js/serial@workspace:packages/serial"
   dependencies:
@@ -4352,21 +4353,21 @@ __metadata:
     "@types/jest": ^26.0.24
     "@types/node": ^15.12.5
     "@types/serialport": ^8.0.2
-    "@zwave-js/core": 8.5.0
-    "@zwave-js/shared": 8.5.0
-    "@zwave-js/testing": 8.5.0
+    "@zwave-js/core": 8.5.1-beta.1
+    "@zwave-js/shared": 8.5.1-beta.1
+    "@zwave-js/testing": 8.5.1-beta.1
     alcalzone-shared: ^4.0.0
     ansi-colors: ^4.1.1
     esbuild: "*"
     esbuild-register: ^3.0.0
     jest-extended: ^0.11.5
     serialport: ^9.2.4
-    typescript: 4.4.3
+    typescript: 4.4.4
     winston: ^3.3.3
   languageName: unknown
   linkType: soft
 
-"@zwave-js/shared@8.5.0, @zwave-js/shared@workspace:*, @zwave-js/shared@workspace:packages/shared":
+"@zwave-js/shared@8.5.1-beta.1, @zwave-js/shared@workspace:*, @zwave-js/shared@workspace:packages/shared":
   version: 0.0.0-use.local
   resolution: "@zwave-js/shared@workspace:packages/shared"
   dependencies:
@@ -4378,24 +4379,24 @@ __metadata:
     esbuild-register: ^3.0.0
     fs-extra: ^10.0.0
     jest-extended: ^0.11.5
-    typescript: 4.4.3
+    typescript: 4.4.4
   languageName: unknown
   linkType: soft
 
-"@zwave-js/testing@8.5.0, @zwave-js/testing@workspace:packages/testing":
+"@zwave-js/testing@8.5.1-beta.1, @zwave-js/testing@workspace:packages/testing":
   version: 0.0.0-use.local
   resolution: "@zwave-js/testing@workspace:packages/testing"
   dependencies:
     "@types/jest": ^26.0.24
     "@types/node": ^15.12.5
     "@types/triple-beam": ^1.3.2
-    "@zwave-js/core": 8.5.0
+    "@zwave-js/core": 8.5.1-beta.1
     ansi-colors: ^4.1.1
     esbuild: "*"
     esbuild-register: ^3.0.0
     jest-extended: ^0.11.5
     triple-beam: "*"
-    typescript: 4.4.3
+    typescript: 4.4.4
     winston-transport: "*"
   languageName: unknown
   linkType: soft
@@ -4549,15 +4550,6 @@ __metadata:
     require-from-string: ^2.0.2
     uri-js: ^4.2.2
   checksum: e091264ff6c8134d9072e804f6f1d56e8dacc143537852d9afb456f0bb6c4eff98307e152da2faf7afef2ebf665278316aa5cf30f7d81ccecc9654c11629e2a6
-  languageName: node
-  linkType: hard
-
-"alcalzone-shared@npm:^3.0.4":
-  version: 3.0.4
-  resolution: "alcalzone-shared@npm:3.0.4"
-  dependencies:
-    debug: ^4.3.1
-  checksum: b952fcbb75c8703bc6efb8193aec5ff4479cb73adc8b133479fa176e1ab815edae1991643a70abcd180d2a86d0484e182d8d051cf05b23901ce874ac2273a152
   languageName: node
   linkType: hard
 
@@ -6514,10 +6506,24 @@ __metadata:
   languageName: node
   linkType: hard
 
+"esbuild-android-arm64@npm:0.13.8":
+  version: 0.13.8
+  resolution: "esbuild-android-arm64@npm:0.13.8"
+  checksum: b8a0b50211cb7943132643bf9b718a36efa0bb664cde0d628f5513e96bf339d217a517793876a43399b8a814003d861c19c1f681c50070de1366397a0b061750
+  languageName: node
+  linkType: hard
+
 "esbuild-darwin-64@npm:0.13.4":
   version: 0.13.4
   resolution: "esbuild-darwin-64@npm:0.13.4"
   checksum: 0af8951ea816d48cdadb44ae25ca45cc411948e666850c20c7e1c429b10388c2eeff233ed32a09cc45b3ab19ec39dc359653f387e5756c62fc7a528efbed45aa
+  languageName: node
+  linkType: hard
+
+"esbuild-darwin-64@npm:0.13.8":
+  version: 0.13.8
+  resolution: "esbuild-darwin-64@npm:0.13.8"
+  checksum: fb630872d7fe8ff5b704126f54f99413016e46a55f365ad24e4df6f070d28a3dc67f935cfda20cbdb39635eb31c9c6f645352374265b24a96584e2e39d90064f
   languageName: node
   linkType: hard
 
@@ -6528,10 +6534,24 @@ __metadata:
   languageName: node
   linkType: hard
 
+"esbuild-darwin-arm64@npm:0.13.8":
+  version: 0.13.8
+  resolution: "esbuild-darwin-arm64@npm:0.13.8"
+  checksum: b7f8fe7a0c5d40f1cad5e8c9026a30975335f757b9260e6dd250cb1f4c8ef90db100a4758dc4831115cd852257a47cd4d0a3a4633cf11ecac71e57846b4a7f9c
+  languageName: node
+  linkType: hard
+
 "esbuild-freebsd-64@npm:0.13.4":
   version: 0.13.4
   resolution: "esbuild-freebsd-64@npm:0.13.4"
   checksum: 1af815b638a101ad2c1919fda480e58be16071010d0f897f650263deb690027371aa434790e986e3a2a4586dba61aa03652a36f36d61d4526ca5f149222059e5
+  languageName: node
+  linkType: hard
+
+"esbuild-freebsd-64@npm:0.13.8":
+  version: 0.13.8
+  resolution: "esbuild-freebsd-64@npm:0.13.8"
+  checksum: bdac72a9aef00594457710fcff0072a4481a9a7c83228c5602c58360f9d866f32d0ca2b42a961a2d61e4e9bce1375cd939faf29b2f4fd30d3a37b05269fc5251
   languageName: node
   linkType: hard
 
@@ -6542,10 +6562,24 @@ __metadata:
   languageName: node
   linkType: hard
 
+"esbuild-freebsd-arm64@npm:0.13.8":
+  version: 0.13.8
+  resolution: "esbuild-freebsd-arm64@npm:0.13.8"
+  checksum: ad6d729e780cf662aa5401ab00a28cbc8244d23ebce5eeaa0fcdffe44337431c1fcaf6cd36c97d2aaaf36a696cee01275fe93b593780fcf991d0692be32048b5
+  languageName: node
+  linkType: hard
+
 "esbuild-linux-32@npm:0.13.4":
   version: 0.13.4
   resolution: "esbuild-linux-32@npm:0.13.4"
   checksum: b2259163fbe9fd8fff297b6b48558f56edd5cc42f0b441bb998b421aac229511d4580a739bf1426dace322b08649da3b3bbc15743b0da094f7e3618aa9d872e0
+  languageName: node
+  linkType: hard
+
+"esbuild-linux-32@npm:0.13.8":
+  version: 0.13.8
+  resolution: "esbuild-linux-32@npm:0.13.8"
+  checksum: dfb87e3d6b1b688a2b9717f7c98946ac69c80b6de45761177139c04d8310b110ea1d5910b822dd8828622bdc846f2aba743f255218dff44c2d72c2175493c07e
   languageName: node
   linkType: hard
 
@@ -6556,10 +6590,24 @@ __metadata:
   languageName: node
   linkType: hard
 
+"esbuild-linux-64@npm:0.13.8":
+  version: 0.13.8
+  resolution: "esbuild-linux-64@npm:0.13.8"
+  checksum: 008e028475e087aceb900b4f6bec25cd4202017249322f30a8767826628c400c59543b19a567f39ec2348467d9a7995491e2e5c788add7691a850b2995e4a37e
+  languageName: node
+  linkType: hard
+
 "esbuild-linux-arm64@npm:0.13.4":
   version: 0.13.4
   resolution: "esbuild-linux-arm64@npm:0.13.4"
   checksum: 7ee5f90cfd0db68752266c9b77ff5306e394247120dd45feaa67d772deea2659ef8c7844a6b8d0d682b19e69b69434a0f6df6624405b7e84787141c398154854
+  languageName: node
+  linkType: hard
+
+"esbuild-linux-arm64@npm:0.13.8":
+  version: 0.13.8
+  resolution: "esbuild-linux-arm64@npm:0.13.8"
+  checksum: bd8cc7b2bd74b7d7372f33c46cf98e90b75264e323fcbf1a4c5d75bfca226148691e4ef17b543beaa6b533ea8b87447305af60f10470ab44b5dc3037d79dd2ec
   languageName: node
   linkType: hard
 
@@ -6570,10 +6618,24 @@ __metadata:
   languageName: node
   linkType: hard
 
+"esbuild-linux-arm@npm:0.13.8":
+  version: 0.13.8
+  resolution: "esbuild-linux-arm@npm:0.13.8"
+  checksum: c10db7b1577df9d1efedd8f7adf57df39f0eca9b4036bf21a6051010670779d2dc07cfcc072c55dca4716802796aeab973f5c50bfed6ff7b29b33978c5b36ec4
+  languageName: node
+  linkType: hard
+
 "esbuild-linux-mips64le@npm:0.13.4":
   version: 0.13.4
   resolution: "esbuild-linux-mips64le@npm:0.13.4"
   checksum: d7e750313414abb77470180b246c2236171ba405c6093ef33fbba5019df6ae3f7b6cbd465e8af89ea9b2f56588057ce32a2a77d597cbf90ee80041599d65cb15
+  languageName: node
+  linkType: hard
+
+"esbuild-linux-mips64le@npm:0.13.8":
+  version: 0.13.8
+  resolution: "esbuild-linux-mips64le@npm:0.13.8"
+  checksum: cefa7c059cadb78af0bfb2171012e94e3b219ba1a386b69e9a5a30d8cf7d5f16559e8eba41da93d1e9db7d0ff64c7e5a98c48ef445b1496ea0921fc1b4dd7a2e
   languageName: node
   linkType: hard
 
@@ -6584,10 +6646,31 @@ __metadata:
   languageName: node
   linkType: hard
 
+"esbuild-linux-ppc64le@npm:0.13.8":
+  version: 0.13.8
+  resolution: "esbuild-linux-ppc64le@npm:0.13.8"
+  checksum: 2afb8b26a2eb200a8d2a9594ea2bdbb21b1810ed399ff6cfe358fffbb3d9b2ad997f4bbae8d474694476a7ceb31f0fc04e391a7a78b8235ccd4f29fcc120c2de
+  languageName: node
+  linkType: hard
+
+"esbuild-netbsd-64@npm:0.13.8":
+  version: 0.13.8
+  resolution: "esbuild-netbsd-64@npm:0.13.8"
+  checksum: 0f73634a3e82896bc8f8d677b37494a6578606780de10b47d929b22f81a2afc63a5dd0a3c6a309f999565c828e6556074d78b9357b9a892462b23ddac7424620
+  languageName: node
+  linkType: hard
+
 "esbuild-openbsd-64@npm:0.13.4":
   version: 0.13.4
   resolution: "esbuild-openbsd-64@npm:0.13.4"
   checksum: 76e3378f7f523a85f86d8df4363b6409ebeb57b3bd60f337eb7662428f937f4a214ebe87e2b2f8e44ba34328cff2b460218778175a2ac06ca5eada204c132a64
+  languageName: node
+  linkType: hard
+
+"esbuild-openbsd-64@npm:0.13.8":
+  version: 0.13.8
+  resolution: "esbuild-openbsd-64@npm:0.13.8"
+  checksum: 969edda8773e18377bd3df919c67e3524d6ab7a1b310bed2174fe4c3f7547676ae83197df07aba5e562eec27c3ddf44a7850fae917755a5cdf6d163a0396d7be
   languageName: node
   linkType: hard
 
@@ -6609,10 +6692,24 @@ __metadata:
   languageName: node
   linkType: hard
 
+"esbuild-sunos-64@npm:0.13.8":
+  version: 0.13.8
+  resolution: "esbuild-sunos-64@npm:0.13.8"
+  checksum: 3f9bdae8f5a23765529fad75c4bb74922bf689767bb4a27bce379133cf02c02ea9976db33cb664dd6bbbdeba6c3a94b74c50f8e7542fe724690c5f2dbe1210cf
+  languageName: node
+  linkType: hard
+
 "esbuild-windows-32@npm:0.13.4":
   version: 0.13.4
   resolution: "esbuild-windows-32@npm:0.13.4"
   checksum: 7b23a8c4341ddc0217bf83d53935c114645a86459a7c1545919dfc6a4e34627803a9791c03e61cc6b756c3827b844a877793a8e65186d7603b591ee75b6c40c1
+  languageName: node
+  linkType: hard
+
+"esbuild-windows-32@npm:0.13.8":
+  version: 0.13.8
+  resolution: "esbuild-windows-32@npm:0.13.8"
+  checksum: ca259559f8bdf31d396e1661612d745611274a2baf2d85570507ebe3adb1e1a1dbfac640859f8358a4b4dcf4dcbd65b3e01373d76a205b1838d4bd237bd566f3
   languageName: node
   linkType: hard
 
@@ -6623,6 +6720,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"esbuild-windows-64@npm:0.13.8":
+  version: 0.13.8
+  resolution: "esbuild-windows-64@npm:0.13.8"
+  checksum: a4ab47051682682b887ee2020d8b089734f4344b8af845d116cde63302eb49ea2c93f3bcc129d16c1a27444bb68be48cc940ff055bbe337c03e7e296b90bfb7f
+  languageName: node
+  linkType: hard
+
 "esbuild-windows-arm64@npm:0.13.4":
   version: 0.13.4
   resolution: "esbuild-windows-arm64@npm:0.13.4"
@@ -6630,7 +6734,14 @@ __metadata:
   languageName: node
   linkType: hard
 
-"esbuild@npm:*, esbuild@npm:^0.13.4":
+"esbuild-windows-arm64@npm:0.13.8":
+  version: 0.13.8
+  resolution: "esbuild-windows-arm64@npm:0.13.8"
+  checksum: f7183974a273a561b04bbfb5f8a7dd4e44fc9115003ddc364d75de38910a0a5f7eaf39935073b2108d2db0844b07429c627a4b7759bb01e7050b5a8336f5a393
+  languageName: node
+  linkType: hard
+
+"esbuild@npm:*":
   version: 0.13.4
   resolution: "esbuild@npm:0.13.4"
   dependencies:
@@ -6686,6 +6797,68 @@ __metadata:
   bin:
     esbuild: bin/esbuild
   checksum: 0bde4a312a0a2f2da83254f2bb4c716bd75c18eb7351733c0b3039f54a90e28e1777d89dc0abeccb1f102a31e3bfd35751458bed669d5cb8439cf2d8d514de7f
+  languageName: node
+  linkType: hard
+
+"esbuild@npm:^0.13.8":
+  version: 0.13.8
+  resolution: "esbuild@npm:0.13.8"
+  dependencies:
+    esbuild-android-arm64: 0.13.8
+    esbuild-darwin-64: 0.13.8
+    esbuild-darwin-arm64: 0.13.8
+    esbuild-freebsd-64: 0.13.8
+    esbuild-freebsd-arm64: 0.13.8
+    esbuild-linux-32: 0.13.8
+    esbuild-linux-64: 0.13.8
+    esbuild-linux-arm: 0.13.8
+    esbuild-linux-arm64: 0.13.8
+    esbuild-linux-mips64le: 0.13.8
+    esbuild-linux-ppc64le: 0.13.8
+    esbuild-netbsd-64: 0.13.8
+    esbuild-openbsd-64: 0.13.8
+    esbuild-sunos-64: 0.13.8
+    esbuild-windows-32: 0.13.8
+    esbuild-windows-64: 0.13.8
+    esbuild-windows-arm64: 0.13.8
+  dependenciesMeta:
+    esbuild-android-arm64:
+      optional: true
+    esbuild-darwin-64:
+      optional: true
+    esbuild-darwin-arm64:
+      optional: true
+    esbuild-freebsd-64:
+      optional: true
+    esbuild-freebsd-arm64:
+      optional: true
+    esbuild-linux-32:
+      optional: true
+    esbuild-linux-64:
+      optional: true
+    esbuild-linux-arm:
+      optional: true
+    esbuild-linux-arm64:
+      optional: true
+    esbuild-linux-mips64le:
+      optional: true
+    esbuild-linux-ppc64le:
+      optional: true
+    esbuild-netbsd-64:
+      optional: true
+    esbuild-openbsd-64:
+      optional: true
+    esbuild-sunos-64:
+      optional: true
+    esbuild-windows-32:
+      optional: true
+    esbuild-windows-64:
+      optional: true
+    esbuild-windows-arm64:
+      optional: true
+  bin:
+    esbuild: bin/esbuild
+  checksum: 239b48f26af525236d96385a0854eb86886581d503eee81c18d189cc8d099ff182fc0de9b14c4328fd146ca3ec506efa5d011c95c6af2dd7011cb0b225dfd140
   languageName: node
   linkType: hard
 
@@ -13230,11 +13403,11 @@ fsevents@^2.1.2:
   languageName: node
   linkType: hard
 
-"ts-node@npm:^10.2.1":
-  version: 10.2.1
-  resolution: "ts-node@npm:10.2.1"
+"ts-node@npm:^10.3.0":
+  version: 10.3.0
+  resolution: "ts-node@npm:10.3.0"
   dependencies:
-    "@cspotcode/source-map-support": 0.6.1
+    "@cspotcode/source-map-support": 0.7.0
     "@tsconfig/node10": ^1.0.7
     "@tsconfig/node12": ^1.0.7
     "@tsconfig/node14": ^1.0.0
@@ -13262,7 +13435,7 @@ fsevents@^2.1.2:
     ts-node-script: dist/bin-script.js
     ts-node-transpile-only: dist/bin-transpile.js
     ts-script: dist/bin-script-deprecated.js
-  checksum: f37d2827a583c51d012cdd3d9b96629fba7a5b5dfad2c26ca48c7c89f904118924689ca56f4b9b2136217194870a76f26aae06e3490ee613b0e960f02dc96bbe
+  checksum: aea1b9eac4d4c735c453a0e7efef6fd76c7b59db3be158eabe21abad9d35209d243b210a9a5ef39742ffbda542250c2e771fa387e3b4829e8cb699e82f3820c4
   languageName: node
   linkType: hard
 
@@ -13410,23 +13583,23 @@ fsevents@^2.1.2:
   languageName: node
   linkType: hard
 
-typescript@4.4.3:
-  version: 4.4.3
-  resolution: "typescript@npm:4.4.3"
+typescript@4.4.4:
+  version: 4.4.4
+  resolution: "typescript@npm:4.4.4"
   bin:
     tsc: bin/tsc
     tsserver: bin/tsserver
-  checksum: 05823f21796d450531a7e4ab299715d38fd9ded0e4ce7400876053f4b5166ca3dde7a68cecfe72d9086039f03c0b6edba36516fb10ed83c5837d9600532ea4c2
+  checksum: 89ecb8436bb48ef5594d49289f5f89103071716b6e4844278f4fb3362856e31203e187a9c76d205c3f0b674d221a058fd28310dbcbcf5d95e9a57229bb5203f1
   languageName: node
   linkType: hard
 
-"typescript@patch:typescript@4.4.3#~builtin<compat/typescript>":
-  version: 4.4.3
-  resolution: "typescript@patch:typescript@npm%3A4.4.3#~builtin<compat/typescript>::version=4.4.3&hash=ddd1e8"
+"typescript@patch:typescript@4.4.4#~builtin<compat/typescript>":
+  version: 4.4.4
+  resolution: "typescript@patch:typescript@npm%3A4.4.4#~builtin<compat/typescript>::version=4.4.4&hash=ddd1e8"
   bin:
     tsc: bin/tsc
     tsserver: bin/tsserver
-  checksum: 79f5c13d21c9dea3eb44d2b7002ff25a0569fefc432e083d65a360e3aca990aca25fc733e14aa6883b5e9a68e3e2f0330a34123e048806f91d701732ece00e6f
+  checksum: bd629ad0da4a15d79aaad56baf3ee7d96f6a181760d430ae77f8c5325df7bffd9edee57544a3970e3651e8b796fe03a5838a7eb39c6d46cc3866c0b23d36a0dd
   languageName: node
   linkType: hard
 
@@ -14126,7 +14299,7 @@ typescript@4.4.3:
   version: 0.0.0-use.local
   resolution: "zwave-js@workspace:packages/zwave-js"
   dependencies:
-    "@alcalzone/jsonl-db": ^1.3.0
+    "@alcalzone/jsonl-db": ^2.2.0
     "@alcalzone/pak": ^0.7.0
     "@sentry/integrations": ^6.13.3
     "@sentry/node": ^6.13.3
@@ -14134,16 +14307,16 @@ typescript@4.4.3:
     "@types/jest": ^26.0.24
     "@types/node": ^15.12.5
     "@types/proper-lockfile": ^4
-    "@types/semver": ^7.3.8
+    "@types/semver": ^7.3.9
     "@types/serialport": ^8.0.2
     "@types/source-map-support": ^0
     "@xstate/test": ^0.4.2
-    "@zwave-js/config": 8.5.0
-    "@zwave-js/core": 8.5.0
-    "@zwave-js/maintenance": 8.5.0
-    "@zwave-js/serial": 8.5.0
-    "@zwave-js/shared": 8.5.0
-    "@zwave-js/testing": 8.5.0
+    "@zwave-js/config": 8.5.1-beta.1
+    "@zwave-js/core": 8.5.1-beta.1
+    "@zwave-js/maintenance": 8.5.1-beta.1
+    "@zwave-js/serial": 8.5.1-beta.1
+    "@zwave-js/shared": 8.5.1-beta.1
+    "@zwave-js/testing": 8.5.1-beta.1
     alcalzone-shared: ^4.0.0
     ansi-colors: ^4.1.1
     axios: ^0.23.0
@@ -14158,7 +14331,7 @@ typescript@4.4.3:
     semver: ^7.3.5
     serialport: ^9.2.4
     source-map-support: ^0.5.20
-    typescript: 4.4.3
+    typescript: 4.4.4
     winston: ^3.3.3
     xstate: ^4.25.0
   languageName: unknown

@@ -426,6 +426,29 @@
 			}
 		]
 	},
+	"smart_switch_mode_0-2": {
+		"label": "Smart Switch Mode",
+		"valueSize": 1,
+		"minValue": 0,
+		"maxValue": 3,
+		"defaultValue": 3,
+		"unsigned": true,
+		"allowManualEntry": false,
+		"options": [
+			{
+				"label": "Local control disabled",
+				"value": 0
+			},
+			{
+				"label": "Local and Z-Wave control enabled",
+				"value": 1
+			},
+			{
+				"label": "Local and Z-Wave control disabled",
+				"value": 2
+			}
+		]
+	},
 	"smart_switch_mode_0-3": {
 		"label": "Smart Switch Mode",
 		"valueSize": 1,

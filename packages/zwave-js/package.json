@@ -1,6 +1,6 @@
 {
   "name": "zwave-js",
-  "version": "8.5.0",
+  "version": "8.5.1-beta.1",
   "description": "Z-Wave driver written entirely in JavaScript/TypeScript",
   "keywords": [],
   "main": "build/index.js",
@@ -53,14 +53,14 @@
     "ts": "node -r esbuild-register"
   },
   "dependencies": {
-    "@alcalzone/jsonl-db": "^1.3.0",
+    "@alcalzone/jsonl-db": "^2.2.0",
     "@alcalzone/pak": "^0.7.0",
     "@sentry/integrations": "^6.13.3",
     "@sentry/node": "^6.13.3",
-    "@zwave-js/config": "8.5.0",
-    "@zwave-js/core": "8.5.0",
-    "@zwave-js/serial": "8.5.0",
-    "@zwave-js/shared": "8.5.0",
+    "@zwave-js/config": "8.5.1-beta.1",
+    "@zwave-js/core": "8.5.1-beta.1",
+    "@zwave-js/serial": "8.5.1-beta.1",
+    "@zwave-js/shared": "8.5.1-beta.1",
     "alcalzone-shared": "^4.0.0",
     "ansi-colors": "^4.1.1",
     "axios": "^0.23.0",
@@ -79,16 +79,16 @@
     "@types/jest": "^26.0.24",
     "@types/node": "^15.12.5",
     "@types/proper-lockfile": "^4",
-    "@types/semver": "^7.3.8",
+    "@types/semver": "^7.3.9",
     "@types/serialport": "^8.0.2",
     "@types/source-map-support": "^0",
     "@xstate/test": "^0.4.2",
-    "@zwave-js/maintenance": "8.5.0",
-    "@zwave-js/testing": "8.5.0",
+    "@zwave-js/maintenance": "8.5.1-beta.1",
+    "@zwave-js/testing": "8.5.1-beta.1",
     "esbuild": "*",
     "esbuild-register": "^3.0.0",
     "jest-extended": "^0.11.5",
     "mockdate": "^3.0.5",
-    "typescript": "4.4.3"
+    "typescript": "4.4.4"
   }
 }
