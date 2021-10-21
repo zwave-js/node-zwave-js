@@ -5,6 +5,27 @@
 	Add placeholder for next release with `wip` snippet
   ## __WORK IN PROGRESS__
 -->
+## __WORK IN PROGRESS__
+### Bugfixes
+* Avoid force-adding Supervision support, remove encapsulation CCs from list of mandatory CCs
+* Remove listeners before closing serial port
+* Emit `Driver_Failed` error when serial port errors
+* Better error when creating a multicast group with missing nodes
+* Security S2 bootstrapping is now aborted when an incorrect PIN is entered
+
+### Config file changes
+* Add support for Heltun panels
+* Auto-assign `Binary Sensor Report` association group for FortrezZ MIMOLite
+* Add LRM-1000 Wall Mounted Dimmer
+* Merge MH9-CO2 variants, add Z-Wave+ variant with firmware 2.4
+* Add fingerprint `0x0331:0x010b` to "FortrezZ LLC SSA3"
+* Add Heatit Z-Push Button 4
+* Update NAS-AB01Z to match manual
+* Clean up Zooz Zen 7x configs
+* Correct manufactuerID for Zooz ZAC36
+* Correct param 100 and preserve endpoints for ZMNHTD
+* Force notification idle reset for Vision Security ZP3103
+
 ## 8.5.0 (2021-10-11)
 ### Features
 * Export `getAPI` through `zwave-js/CommandClass`
