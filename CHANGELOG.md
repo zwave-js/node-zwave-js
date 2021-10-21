@@ -4,13 +4,18 @@
 <!--
 	Add placeholder for next release with `wip` snippet
 -->
-## 8.5.1-beta.1 (2021-10-18)
+## __WORK IN PROGRESS__
 ### Features
 * Implemented and use soft reset command. If this causes problems, you can opt-out.
 * Implemented 700-series variant of NVM backup/restore
 * Add driver option to change where lockfiles are created
+* Implement waitForMessage to await unsolicited Serial API messages
+* Add context object to log messages
 
 ### Bugfixes
+* Avoid force-adding Supervision support, remove encapsulation CCs from list of mandatory CCs
+* Check correct transaction for `pauseSendThread` flag
+* Remove listeners before closing serial port
 * Emit `Driver_Failed` error when serial port errors
 * Better error when creating a multicast group with missing nodes
 * Security S2 bootstrapping is now aborted when an incorrect PIN is entered
@@ -24,6 +29,9 @@
 * Add Heatit Z-Push Button 4
 * Update NAS-AB01Z to match manual
 * Clean up Zooz Zen 7x configs
+* Correct manufactuerID for Zooz ZAC36
+* Correct param 100 and preserve endpoints for ZMNHTD
+* Force notification idle reset for Vision Security ZP3103
 
 ### Changes under the hood
 * `supportsZWavePlus` property was removed from config files and documentation
