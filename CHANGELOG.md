@@ -5,7 +5,7 @@
 	Add placeholder for next release with `wip` snippet
   ## __WORK IN PROGRESS__
 -->
-## __WORK IN PROGRESS__
+## 8.5.1 (2021-10-21)
 ### Bugfixes
 * Avoid force-adding Supervision support, remove encapsulation CCs from list of mandatory CCs
 * Remove listeners before closing serial port
