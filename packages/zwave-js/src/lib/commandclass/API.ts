@@ -33,7 +33,7 @@ export type SetValueAPIOptions = Partial<ValueChangeOptions>;
 
 /** Used to identify the method on the CC API class that handles polling values from nodes */
 export const POLL_VALUE: unique symbol = Symbol.for("CCAPI_POLL_VALUE");
-export type PollValueImplementation<T extends unknown = unknown> = (
+export type PollValueImplementation<T = unknown> = (
 	property: ValueIDProperties,
 ) => Promise<T | undefined>;
 
