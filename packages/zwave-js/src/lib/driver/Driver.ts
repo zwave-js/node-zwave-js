@@ -1716,13 +1716,15 @@ export class Driver extends TypedEventEmitter<DriverEventCallbacks> {
 							msg.command instanceof InvalidCC
 						) {
 							// If it was, we need to notify the sender that we couldn't decode the command
-							const node = msg.getNodeUnsafe();
-							await node?.commandClasses.Supervision.sendReport({
-								sessionId: supervisionSessionId,
-								moreUpdatesFollow: false,
-								status: SupervisionStatus.NoSupport,
-								secure: msg.command.secure,
-							});
+							await msg
+								.getNodeUnsafe()
+								?.createAPI(CommandClasses.Supervision, false)
+								.sendReport({
+									sessionId: supervisionSessionId,
+									moreUpdatesFollow: false,
+									status: SupervisionStatus.NoSupport,
+									secure: msg.command.secure,
+								});
 							return;
 						}
 					} else {
@@ -2498,16 +2500,8 @@ ${handlers.length} left`,
 				);
 				const secure = msg.command.secure;
 
-				if (
-					supervisionSessionId !== undefined &&
-					!node.supportsCC(CommandClasses.Supervision)
-				) {
-					// When a node sends us a command that's supervision encapsulated, it must support Supervision CC
-					node.addCC(CommandClasses.Supervision, {
-						isSupported: true,
-						version: 1,
-					});
-				}
+				// DO NOT force-add support for the Supervision CC here. Some devices only support Supervision when sending,
+				// so we need to trust the information we already have.
 
 				// check if someone is waiting for this command
 				for (const entry of this.awaitedCommands) {
@@ -2517,12 +2511,14 @@ ${handlers.length} left`,
 
 						// send back a Supervision Report if the command was received via Supervision Get
 						if (supervisionSessionId !== undefined) {
-							await node.commandClasses.Supervision.sendReport({
-								sessionId: supervisionSessionId,
-								moreUpdatesFollow: false,
-								status: SupervisionStatus.Success,
-								secure,
-							});
+							await node
+								.createAPI(CommandClasses.Supervision, false)
+								.sendReport({
+									sessionId: supervisionSessionId,
+									moreUpdatesFollow: false,
+									status: SupervisionStatus.Success,
+									secure,
+								});
 						}
 						return;
 					}
@@ -2534,19 +2530,23 @@ ${handlers.length} left`,
 					try {
 						await node.handleCommand(msg.command);
 
-						await node.commandClasses.Supervision.sendReport({
-							sessionId: supervisionSessionId,
-							moreUpdatesFollow: false,
-							status: SupervisionStatus.Success,
-							secure,
-						});
+						await node
+							.createAPI(CommandClasses.Supervision, false)
+							.sendReport({
+								sessionId: supervisionSessionId,
+								moreUpdatesFollow: false,
+								status: SupervisionStatus.Success,
+								secure,
+							});
 					} catch (e) {
-						await node.commandClasses.Supervision.sendReport({
-							sessionId: supervisionSessionId,
-							moreUpdatesFollow: false,
-							status: SupervisionStatus.Fail,
-							secure,
-						});
+						await node
+							.createAPI(CommandClasses.Supervision, false)
+							.sendReport({
+								sessionId: supervisionSessionId,
+								moreUpdatesFollow: false,
+								status: SupervisionStatus.Fail,
+								secure,
+							});
 
 						// In any case we don't want to swallow the error
 						throw e;

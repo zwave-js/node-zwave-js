@@ -80,16 +80,16 @@
 					"supportedCCs": [
 						"Association", // V2+
 						"Association Group Information",
-						"CRC-16 Encapsulation",
+						// "CRC-16 Encapsulation", (trust the NIF! Assuming support would break communication)
 						// "Device Reset Locally", (we can't know if the device can be reset)
 						"Inclusion Controller",
 						"Powerlevel",
 						"Manufacturer Specific",
 						// "Security", (some devices only support S2)
 						// "Security 2", (older devices don't always support S2)
-						"Supervision",
+						// "Supervision", (trust the NIF! Assuming support would break communication)
 						"Simple AV Control",
-						"Transport Service", // V2+
+						// "Transport Service", // V2+ (trust the NIF! Assuming support would break communication)
 						"Version", // V2+
 						"Z-Wave Plus Info" // V2+
 					],
@@ -97,7 +97,7 @@
 						"Anti-Theft Unlock", // V1
 						"Association", // V2+
 						"Basic",
-						"CRC-16 Encapsulation",
+						// "CRC-16 Encapsulation", (trust the NIF! Assuming support would break communication)
 						"Multi Channel", // V4+
 						"Multi Channel Association", // V3+
 						// "Security", (some devices only support S2)
@@ -111,20 +111,20 @@
 					"supportedCCs": [
 						"Association", // V2+
 						"Association Group Information",
-						"CRC-16 Encapsulation",
+						// "CRC-16 Encapsulation", (trust the NIF! Assuming support would break communication)
 						// "Device Reset Locally", (we can't know if the device can be reset)
 						"Inclusion Controller",
 						"Manufacturer Specific",
 						"Powerlevel",
 						// "Security 2", (older devices don't always support S2)
-						"Supervision",
-						"Transport Service", // V2+
+						// "Supervision", (trust the NIF! Assuming support would break communication)
+						// "Transport Service", // V2+ (trust the NIF! Assuming support would break communication)
 						"Version", // V2+
 						"Z-Wave Plus Info" // V2+
 					],
 					"controlledCCs": [
 						"Basic",
-						"CRC-16 Encapsulation",
+						// "CRC-16 Encapsulation", (trust the NIF! Assuming support would break communication)
 						"Multi Channel", // V4+
 						"Wake Up" // V2+
 					]
@@ -135,16 +135,16 @@
 					"supportedCCs": [
 						"Association", // V2+
 						"Association Group Information",
-						"CRC-16 Encapsulation",
+						// "CRC-16 Encapsulation", (trust the NIF! Assuming support would break communication)
 						// "Device Reset Locally", (we can't know if the device can be reset)
 						"Inclusion Controller",
 						"Manufacturer Specific",
 						"Powerlevel",
 						// "Security", (some devices only support S2)
 						// "Security 2", (older devices don't always support S2)
-						"Supervision",
+						// "Supervision", (trust the NIF! Assuming support would break communication)
 						"Simple AV Control",
-						"Transport Service", // V2+
+						// "Transport Service", // V2+ (trust the NIF! Assuming support would break communication)
 						"Version", // V2+
 						"Z-Wave Plus Info" // V2+
 					],
@@ -153,7 +153,7 @@
 						"Association", // V2+
 						"Association Group Information",
 						"Basic",
-						"CRC-16 Encapsulation",
+						// "CRC-16 Encapsulation", (trust the NIF! Assuming support would break communication)
 						"Multi Channel", // V4+
 						"Multi Channel Association", // V3+
 						// "Security", (some devices only support S2)
@@ -194,8 +194,8 @@
 						"Manufacturer Specific",
 						"Powerlevel",
 						// "Security 2", (older devices don't always support S2)
-						"Supervision",
-						"Transport Service", // V2+
+						// "Supervision", (trust the NIF! Assuming support would break communication)
+						// "Transport Service", // V2+ (trust the NIF! Assuming support would break communication)
 						"Version", // V2+
 						"Z-Wave Plus Info" // V2+
 					]
@@ -340,8 +340,8 @@
 						"Manufacturer Specific",
 						"Powerlevel",
 						// "Security 2", (older devices don't always support S2)
-						"Supervision",
-						"Transport Service", // V2+
+						// "Supervision", (trust the NIF! Assuming support would break communication)
+						// "Transport Service", // V2+ (trust the NIF! Assuming support would break communication)
 						"Version", // V2+
 						"Z-Wave Plus Info" // V2+
 					]
@@ -370,8 +370,8 @@
 						"Manufacturer Specific",
 						"Powerlevel",
 						// "Security 2", (older devices don't always support S2)
-						"Supervision",
-						"Transport Service", // V2+
+						// "Supervision", (trust the NIF! Assuming support would break communication)
+						// "Transport Service", // V2+ (trust the NIF! Assuming support would break communication)
 						"Version", // V2+
 						"Z-Wave Plus Info" // V2+
 					]
@@ -399,8 +399,8 @@
 						"Multi Channel Association", // V3+
 						"Powerlevel",
 						// "Security 2", (older devices don't always support S2)
-						"Supervision",
-						"Transport Service", // V2+
+						// "Supervision", (trust the NIF! Assuming support would break communication)
+						// "Transport Service", // V2+ (trust the NIF! Assuming support would break communication)
 						"Version", // V2+
 						"Z-Wave Plus Info" // V2+
 					]
@@ -418,8 +418,8 @@
 						"Manufacturer Specific",
 						"Powerlevel",
 						// "Security 2", (older devices don't always support S2)
-						"Supervision",
-						"Transport Service", // V2+
+						// "Supervision", (trust the NIF! Assuming support would break communication)
+						// "Transport Service", // V2+ (trust the NIF! Assuming support would break communication)
 						"Version", // V2+
 						"Z-Wave Plus Info" // V2+
 					]
@@ -437,8 +437,8 @@
 						"Manufacturer Specific",
 						"Powerlevel",
 						// "Security 2", (older devices don't always support S2)
-						"Supervision",
-						"Transport Service", // V2+
+						// "Supervision", (trust the NIF! Assuming support would break communication)
+						// "Transport Service", // V2+ (trust the NIF! Assuming support would break communication)
 						"Version", // V2+
 						"Z-Wave Plus Info" // V2+
 					]
@@ -455,8 +455,8 @@
 						"Manufacturer Specific",
 						"Powerlevel",
 						// "Security 2", (older devices don't always support S2)
-						"Supervision",
-						"Transport Service", // V2+
+						// "Supervision", (trust the NIF! Assuming support would break communication)
+						// "Transport Service", // V2+ (trust the NIF! Assuming support would break communication)
 						"Version", // V2+
 						"Z-Wave Plus Info" // V2+
 					]
@@ -485,8 +485,8 @@
 						"Multilevel Switch",
 						"Powerlevel",
 						// "Security 2", (older devices don't always support S2)
-						"Supervision",
-						"Transport Service", // V2+
+						// "Supervision", (trust the NIF! Assuming support would break communication)
+						// "Transport Service", // V2+ (trust the NIF! Assuming support would break communication)
 						"Version", // V2+
 						"Z-Wave Plus Info" // V2+
 					]
@@ -546,8 +546,8 @@
 						"Multilevel Switch",
 						"Powerlevel",
 						// "Security 2", (older devices don't always support S2)
-						"Supervision",
-						"Transport Service", // V2+
+						// "Supervision", (trust the NIF! Assuming support would break communication)
+						// "Transport Service", // V2+ (trust the NIF! Assuming support would break communication)
 						"Version", // V2+
 						"Z-Wave Plus Info" // V2+
 					]
@@ -676,14 +676,14 @@
 						"Association", // V2+
 						"Association Group Information",
 						"Battery",
-						"CRC-16 Encapsulation",
+						// "CRC-16 Encapsulation", (trust the NIF! Assuming support would break communication)
 						// "Device Reset Locally", (we can't know if the device can be reset)
 						"Manufacturer Specific",
 						"Meter", // V2+
 						"Powerlevel",
 						// "Security 2", (older devices don't always support S2)
-						"Supervision",
-						"Transport Service", // V2+
+						// "Supervision", (trust the NIF! Assuming support would break communication)
+						// "Transport Service", // V2+ (trust the NIF! Assuming support would break communication)
 						"Version", // V2+
 						"Wake Up", // V2+
 						"Z-Wave Plus Info" // V2+
@@ -731,8 +731,8 @@
 						"Powerlevel",
 						// "Security", (some devices only support S2)
 						// "Security 2", (older devices don't always support S2)
-						"Supervision",
-						"Transport Service", // V2+
+						// "Supervision", (trust the NIF! Assuming support would break communication)
+						// "Transport Service", // V2+ (trust the NIF! Assuming support would break communication)
 						"Version", // V2+
 						"Z-Wave Plus Info" // V2+
 					]
@@ -753,8 +753,8 @@
 						"Powerlevel",
 						// "Security", (some devices only support S2)
 						// "Security 2", (older devices don't always support S2)
-						"Supervision",
-						"Transport Service", // V2+
+						// "Supervision", (trust the NIF! Assuming support would break communication)
+						// "Transport Service", // V2+ (trust the NIF! Assuming support would break communication)
 						"Version", // V2+
 						"Z-Wave Plus Info" // V2+
 					]
@@ -775,8 +775,8 @@
 						"Powerlevel",
 						// "Security", (some devices only support S2)
 						// "Security 2", (older devices don't always support S2)
-						"Supervision",
-						"Transport Service", // V2+
+						// "Supervision", (trust the NIF! Assuming support would break communication)
+						// "Transport Service", // V2+ (trust the NIF! Assuming support would break communication)
 						"Version", // V2+
 						"Z-Wave Plus Info" // V2+
 					]
@@ -797,8 +797,8 @@
 						"Powerlevel",
 						// "Security", (some devices only support S2)
 						// "Security 2", (older devices don't always support S2)
-						"Supervision",
-						"Transport Service", // V2+
+						// "Supervision", (trust the NIF! Assuming support would break communication)
+						// "Transport Service", // V2+ (trust the NIF! Assuming support would break communication)
 						"Version", // V2+
 						"Z-Wave Plus Info" // V2+
 					]
@@ -819,8 +819,8 @@
 						"Powerlevel",
 						// "Security", (some devices only support S2)
 						// "Security 2", (older devices don't always support S2)
-						"Supervision",
-						"Transport Service", // V2+
+						// "Supervision", (trust the NIF! Assuming support would break communication)
+						// "Transport Service", // V2+ (trust the NIF! Assuming support would break communication)
 						"Version", // V2+
 						"Z-Wave Plus Info" // V2+
 					]
