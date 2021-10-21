@@ -856,7 +856,7 @@ export class ZWaveNode extends Endpoint implements SecurityClassOwner {
 	 * Requests a value for a given property of a given CommandClass by polling the node.
 	 * **Warning:** Some value IDs share a command, so make sure not to blindly call this for every property
 	 */
-	public pollValue<T extends unknown = unknown>(
+	public pollValue<T = unknown>(
 		valueId: ValueID,
 		sendCommandOptions: SendCommandOptions = {},
 	): Promise<T | undefined> {
