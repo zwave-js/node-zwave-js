@@ -572,7 +572,7 @@ export function createSendThreadMachine(
 
 	const resolveEventTransaction: AssignAction<SendThreadContext, any> =
 		assign((ctx, evt) => {
-			if (ctx.currentTransaction!.pauseSendThread) {
+			if (evt.transaction.pauseSendThread) {
 				ctx.paused = true;
 			}
 			implementations.resolveTransaction(evt.transaction, evt.result);
