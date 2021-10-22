@@ -114,7 +114,7 @@
 		},
 		{
 			"#": "7",
-			"$if": "firmwareVersion >= 3.6",
+			"$if": "firmwareVersion >= 3.06",
 			"label": "Remote Calibration",
 			"valueSize": 1,
 			"minValue": 0,
