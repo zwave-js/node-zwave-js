@@ -30,6 +30,12 @@ export interface ZWaveOptions {
 		 * How long to wait for a poll after setting a value
 		 */
 		refreshValue: number;
+
+		/**
+		 * How long to wait for the Serial API Started command after a soft-reset before resorting
+		 * to polling the API for the responsiveness check.
+		 */
+		serialAPIStarted: number; // [1000...30000], default: 5000 ms
 	};
 
 	attempts: {
