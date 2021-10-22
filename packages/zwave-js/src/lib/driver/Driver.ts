@@ -1689,9 +1689,12 @@ export class Driver extends TypedEventEmitter<DriverEventCallbacks> {
 		// anyways, so we might aswell use it here too
 		const pollController = async () => {
 			try {
+				// And resume sending - this requires us to unpause the send thread
+				this.unpauseSendThread();
 				await this.sendMessage(new GetControllerVersionRequest(this), {
 					supportCheck: false,
 				});
+				this.pauseSendThread();
 				this.controllerLog.print("Serial API responded");
 				return true;
 			} catch {
