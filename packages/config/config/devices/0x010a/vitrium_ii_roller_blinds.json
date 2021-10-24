@@ -1,8 +1,8 @@
 {
-	"manufacturer": "VDA",
+	"manufacturer": "Vitrum",
 	"manufacturerId": "0x010a",
-	"label": "VITRIUM II Roller Blinds",
-	"description": "VITRUM II Control of Roller Blinds - EU BOX",
+	"label": "02E020011 / 02B020011",
+	"description": "II Rolldown Shutters and Curtains",
 	"devices": [
 		{
 			"productType": "0x1300",
