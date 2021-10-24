@@ -1,13 +1,13 @@
 {
 	"manufacturer": "Vision Security",
 	"manufacturerId": "0x0109",
-	"label": "ZSE40",
-	"description": "Zooz 4-in-one motion/temperature/humidity/luminance sensor",
+	"label": "ZP3111-5",
+	"description": "4-in-1 Sensor",
 	"devices": [
 		{
 			"productType": "0x2021",
 			"productId": "0x2101",
-			"zwaveAllianceId": [1572, 2479]
+			"zwaveAllianceId": [1572, 1744, 2479]
 		}
 	],
 	"firmwareVersion": {
