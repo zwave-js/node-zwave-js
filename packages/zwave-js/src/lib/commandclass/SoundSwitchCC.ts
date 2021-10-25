@@ -273,8 +273,8 @@ export class SoundSwitchCCAPI extends CCAPI {
 				await this.stopPlaying();
 			}
 			if (this.isSinglecast()) {
-				// Verify the current value after a delay
-				this.schedulePoll({ property });
+				// Verify the current value after a (short) delay
+				this.schedulePoll({ property }, { transition: "fast" });
 			}
 		} else {
 			throwUnsupportedProperty(this.ccId, property);

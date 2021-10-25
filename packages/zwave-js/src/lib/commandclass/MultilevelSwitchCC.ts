@@ -349,10 +349,8 @@ export class MultilevelSwitchCCAPI extends CCAPI {
 						// We query currentValue instead of targetValue to make sure that unsolicited updates cancel the scheduled poll
 						if (property === "targetValue")
 							property = "currentValue";
-						this.schedulePoll(
-							{ property },
-							duration?.toMilliseconds(),
-						);
+
+						this.schedulePoll({ property }, { duration });
 					}
 				} else if (this.isMulticast()) {
 					// Only update currentValue for valid target values
@@ -382,12 +380,7 @@ export class MultilevelSwitchCCAPI extends CCAPI {
 						// We query currentValue instead of targetValue to make sure that unsolicited updates cancel the scheduled poll
 						if (property === "targetValue")
 							property = "currentValue";
-						// TODO: #1321
-						const duration = undefined as Duration | undefined;
-						this.schedulePoll(
-							{ property },
-							duration?.toMilliseconds(),
-						);
+						this.schedulePoll({ property }, { duration });
 					}
 				}
 			}

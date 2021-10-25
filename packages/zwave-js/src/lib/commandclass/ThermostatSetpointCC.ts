@@ -180,8 +180,11 @@ export class ThermostatSetpointCCAPI extends CCAPI {
 		await this.set(propertyKey, value, preferredScale ?? 0);
 
 		if (this.isSinglecast()) {
-			// Verify the current value after a delay
-			this.schedulePoll({ property, propertyKey });
+			// Verify the current value after a (short) delay
+			this.schedulePoll(
+				{ property, propertyKey },
+				{ transition: "fast" },
+			);
 		}
 	};
 
