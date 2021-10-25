@@ -4,7 +4,7 @@
 <!--
 	Add placeholder for next release with `wip` snippet
 -->
-## __WORK IN PROGRESS__
+## 8.6.0 (2021-10-25)
 ### Features
 * Implemented and use soft reset command. If this causes problems, you can opt-out.
 * Implemented 700-series variant of NVM backup/restore
