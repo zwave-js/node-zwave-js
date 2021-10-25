@@ -83,6 +83,7 @@ import {
 	FirmwareUpdateCapabilities,
 	FirmwareUpdateMetaDataCC,
 	FirmwareUpdateMetaDataCCGet,
+	FirmwareUpdateMetaDataCCReport,
 	FirmwareUpdateMetaDataCCStatusReport,
 	FirmwareUpdateRequestStatus,
 	FirmwareUpdateStatus,
@@ -3333,6 +3334,25 @@ protocol version:      ${this._protocolVersion}`;
 					await this.sendCorruptedFirmwareUpdateReport(num, fragment);
 					return;
 				} else {
+					// Avoid queuing duplicate fragments
+					const isCurrentFirmwareFragment = (t: Transaction) =>
+						t.message.getNodeId() === this.nodeId &&
+						isCommandClassContainer(t.message) &&
+						t.message.command instanceof
+							FirmwareUpdateMetaDataCCReport &&
+						t.message.command.reportNumber === num;
+					if (
+						this.driver.hasPendingTransactions(
+							isCurrentFirmwareFragment,
+						)
+					) {
+						this.driver.controllerLog.logNode(this.id, {
+							message: `Firmware fragment ${num} already queued`,
+							level: "warn",
+						});
+						continue;
+					}
+
 					this.driver.controllerLog.logNode(this.id, {
 						message: `Sending firmware fragment ${num} / ${numFragments}`,
 						direction: "outbound",
