@@ -60,7 +60,7 @@ export enum FunctionType {
 	SoftReset = 0x08,
 
 	UNKNOWN_FUNC_UNKNOWN_0x09 = 0x09, // ??
-	UNKNOWN_FUNC_UNKNOWN_0x0a = 0x0a, // ??
+	SerialAPIStarted = 0x0a, // Sent by the controller after the serial API has been started (again)
 
 	SerialAPISetup = 0x0b, // Configure the Serial API
 

@@ -104,6 +104,7 @@ import {
 } from "../controller/ApplicationUpdateRequest";
 import { BridgeApplicationCommandRequest } from "../controller/BridgeApplicationCommandRequest";
 import { ZWaveController } from "../controller/Controller";
+import { GetControllerVersionRequest } from "../controller/GetControllerVersionMessages";
 import {
 	SendDataBridgeRequest,
 	SendDataMulticastBridgeRequest,
@@ -132,6 +133,7 @@ import { getDefaultPriority, Message } from "../message/Message";
 import { isNodeQuery } from "../node/INodeQuery";
 import type { ZWaveNode } from "../node/Node";
 import { InterviewStage, NodeStatus } from "../node/Types";
+import type { SerialAPIStartedRequest } from "../serialapi/misc/SerialAPIStartedRequest";
 import { reportMissingDeviceConfig } from "../telemetry/deviceConfig";
 import {
 	AppInfo,
@@ -182,6 +184,7 @@ const defaultOptions: ZWaveOptions = {
 		nonce: 5000,
 		sendDataCallback: 65000, // as defined in INS13954
 		refreshValue: 5000, // Default should handle most slow devices until we have a better solution
+		serialAPIStarted: 5000,
 	},
 	attempts: {
 		openSerialPort: 10,
@@ -246,6 +249,15 @@ function checkOptions(options: ZWaveOptions): void {
 	if (options.timeouts.sendDataCallback < 10000) {
 		throw new ZWaveError(
 			`The Send Data Callback timeout must be at least 10000 milliseconds!`,
+			ZWaveErrorCodes.Driver_InvalidOptions,
+		);
+	}
+	if (
+		options.timeouts.serialAPIStarted < 1000 ||
+		options.timeouts.serialAPIStarted > 30000
+	) {
+		throw new ZWaveError(
+			`The Serial API started timeout must be between 1000 and 30000 milliseconds!`,
 			ZWaveErrorCodes.Driver_InvalidOptions,
 		);
 	}
@@ -1610,7 +1622,7 @@ export class Driver extends TypedEventEmitter<DriverEventCallbacks> {
 			);
 		}
 
-		this.controllerLog.print("performing soft reset...");
+		this.controllerLog.print("Performing soft reset...");
 
 		try {
 			this.isSoftResetting = true;
@@ -1618,9 +1630,6 @@ export class Driver extends TypedEventEmitter<DriverEventCallbacks> {
 				supportCheck: false,
 				pauseSendThread: true,
 			});
-
-			// TODO: This will cause the controller to issue a FUNC_ID_SERIAL_API_STARTED command
-			// We should react to that instead of waiting a fixed 1.5 seconds
 		} catch (e) {
 			this.controllerLog.print(
 				`Soft reset failed: ${getErrorMessage(e)}`,
@@ -1628,18 +1637,93 @@ export class Driver extends TypedEventEmitter<DriverEventCallbacks> {
 			);
 		}
 
-		// Wait 1.5 seconds after reset to ensure that the module is ready for communication again
-		await wait(1500);
-
-		// If the controller disconnected the serial port during the soft reset, we need to re-open it
-		if (!this.serial!.isOpen) {
-			await this.tryOpenSerialport();
-		}
+		// Make sure we're able to communicate with the controller again
+		await this.ensureSerialAPI();
 
 		this.isSoftResetting = false;
 
 		// And resume sending
 		this.unpauseSendThread();
+	}
+
+	private async ensureSerialAPI(): Promise<void> {
+		// Wait 1.5 seconds after reset to ensure that the module is ready for communication again
+		// Z-Wave 700 sticks are relatively fast, so we also wait for the Serial API started command
+		// to bail early
+		this.controllerLog.print("Waiting for the controller to reconnect...");
+		let waitResult = await this.waitForMessage<SerialAPIStartedRequest>(
+			(msg) => msg.functionType === FunctionType.SerialAPIStarted,
+			1500,
+		).catch(() => false as const);
+
+		if (waitResult) {
+			// Serial API did start, maybe do something with the information?
+			this.controllerLog.print("reconnected and restarted");
+			return;
+		}
+
+		// If the controller disconnected the serial port during the soft reset, we need to re-open it
+		if (!this.serial!.isOpen) {
+			this.controllerLog.print("Re-opening serial port...");
+			await this.tryOpenSerialport();
+		}
+
+		// Wait the configured amount of time for the Serial API started command to be received
+		this.controllerLog.print("Waiting for the Serial API to start...");
+		waitResult = await this.waitForMessage<SerialAPIStartedRequest>(
+			(msg) => msg.functionType === FunctionType.SerialAPIStarted,
+			this.options.timeouts.serialAPIStarted,
+		).catch(() => false as const);
+
+		if (waitResult) {
+			// Serial API did start, maybe do something with the information?
+			this.controllerLog.print("Serial API started");
+			return;
+		}
+
+		this.controllerLog.print(
+			"Did not receive notification that Serial API has started, checking if it responds...",
+		);
+
+		// We don't need to use any specific command here. However we're going to use this one in the interview
+		// anyways, so we might aswell use it here too
+		const pollController = async () => {
+			try {
+				// And resume sending - this requires us to unpause the send thread
+				this.unpauseSendThread();
+				await this.sendMessage(new GetControllerVersionRequest(this), {
+					supportCheck: false,
+				});
+				this.pauseSendThread();
+				this.controllerLog.print("Serial API responded");
+				return true;
+			} catch {
+				return false;
+			}
+		};
+		// Poll the controller with increasing backoff delay
+		if (await pollController()) return;
+		this.controllerLog.print(
+			"Serial API did not respond, trying again in 2 seconds...",
+		);
+		await wait(2000, true);
+		if (await pollController()) return;
+		this.controllerLog.print(
+			"Serial API did not respond, trying again in 5 seconds...",
+		);
+		await wait(5000, true);
+		if (await pollController()) return;
+		this.controllerLog.print(
+			"Serial API did not respond, trying again in 10 seconds...",
+		);
+		await wait(10000, true);
+		if (await pollController()) return;
+
+		this.controllerLog.print(
+			"Serial API did not respond, giving up",
+			"error",
+		);
+		await this.destroy();
 	}
 
 	/**
