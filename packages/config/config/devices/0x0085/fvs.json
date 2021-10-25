@@ -33,18 +33,17 @@
 			"#": "75",
 			"label": "Chain Outreach Length",
 			"valueSize": 1,
-			"unit": "cm",
 			"minValue": 1,
 			"maxValue": 2,
 			"defaultValue": 1,
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "17",
+					"label": "17 cm",
 					"value": 1
 				},
 				{
-					"label": "27",
+					"label": "27 cm",
 					"value": 2
 				}
 			]
