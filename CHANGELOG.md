@@ -19,6 +19,8 @@
 * Emit `Driver_Failed` error when serial port errors
 * Better error when creating a multicast group with missing nodes
 * Security S2 bootstrapping is now aborted when an incorrect PIN is entered
+* Avoid queuing duplicate firmware fragments
+* Add additional 1s delay before verifying a value that has been set through the `setValue` API with a transition duration
 
 ### Config file changes
 * Add support for Heltun panels
@@ -32,6 +34,12 @@
 * Correct manufactuerID for Zooz ZAC36
 * Correct param 100 and preserve endpoints for ZMNHTD
 * Force notification idle reset for Vision Security ZP3103
+* Update lifeline config and parameters for Philio PAN06 v1
+* Add fingerprint `0x0200:0x1022` to Shenzhen Neo NAS-DS01Z
+* Add Fakro FVS Solar Powered Skylight
+* Tidy up Vitrum devices
+* Correct identification of Vision ZP3111-5
+* Remove endpoints from FGS-212
 
 ### Changes under the hood
 * `supportsZWavePlus` property was removed from config files and documentation
