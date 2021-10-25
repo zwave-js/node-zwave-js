@@ -86,8 +86,8 @@ export class WakeUpCCAPI extends CCAPI {
 		await this.setInterval(value, this.driver.controller.ownNodeId ?? 1);
 
 		if (this.isSinglecast()) {
-			// Verify the current value after a delay
-			this.schedulePoll({ property });
+			// Verify the current value after a (short) delay
+			this.schedulePoll({ property }, { transition: "fast" });
 		}
 	};
 

@@ -138,8 +138,8 @@ export class ThermostatFanModeCCAPI extends CCAPI {
 		}
 
 		if (this.isSinglecast()) {
-			// Verify the current value after a delay
-			this.schedulePoll({ property });
+			// Verify the current value after a (short) delay
+			this.schedulePoll({ property }, { transition: "fast" });
 		}
 	};
 

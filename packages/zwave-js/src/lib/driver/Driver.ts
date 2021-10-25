@@ -184,6 +184,7 @@ const defaultOptions: ZWaveOptions = {
 		nonce: 5000,
 		sendDataCallback: 65000, // as defined in INS13954
 		refreshValue: 5000, // Default should handle most slow devices until we have a better solution
+		refreshValueAfterTransition: 1000, // To account for delays in the device
 		serialAPIStarted: 5000,
 	},
 	attempts: {
