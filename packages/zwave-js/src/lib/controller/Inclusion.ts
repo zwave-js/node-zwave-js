@@ -15,11 +15,11 @@ export enum InclusionStrategy {
 	 * **This is the recommended** strategy and should be used unless there is a good reason not to.
 	 */
 	Default = 0,
+
 	/**
 	 * Include using SmartStart (requires Security S2).
-	 * Issues a warning if Security S2 is not supported, or the secure bootstrapping fails.
 	 *
-	 * **Should be preferred** over **Default** if supported.
+	 * **Note:** This will be used internally and cannot be used by applications
 	 */
 	SmartStart,
 
@@ -95,13 +95,20 @@ export type InclusionOptions =
 			userCallbacks: InclusionUserCallbacks;
 	  }
 	| {
-			strategy: InclusionStrategy.SmartStart;
-			provisioningList: unknown;
-	  }
-	| {
 			strategy:
 				| InclusionStrategy.Insecure
 				| InclusionStrategy.Security_S0;
+	  };
+
+/**
+ * Options for inclusion of a new node, including SmartStart
+ * @internal
+ */
+export type InclusionOptionsInternal =
+	| InclusionOptions
+	| {
+			strategy: InclusionStrategy.SmartStart;
+			provisioning: NodeProvisioningEntry;
 	  };
 
 /** Options for replacing a node */
@@ -117,3 +124,8 @@ export type ReplaceNodeOptions =
 				| InclusionStrategy.Insecure
 				| InclusionStrategy.Security_S0;
 	  };
+
+export interface NodeProvisioningEntry {
+	dsk: Buffer;
+	securityClasses: SecurityClass[];
+}

@@ -1,5 +1,6 @@
 import {
 	actuatorCCs,
+	authHomeIdFromDSK,
 	CommandClasses,
 	computePRK,
 	decodeX25519KeyDER,
@@ -11,6 +12,7 @@ import {
 	isTransmissionError,
 	isZWaveError,
 	NODE_ID_BROADCAST,
+	nwiHomeIdFromDSK,
 	SecurityClass,
 	securityClassIsS2,
 	securityClassOrder,
@@ -146,9 +148,12 @@ import {
 	NVMOperationsWriteRequest,
 } from "../serialapi/nvm/NVMOperationsMessages";
 import {
+	AddNodeDSKToNetworkRequest,
 	AddNodeStatus,
 	AddNodeToNetworkRequest,
+	AddNodeToNetworkRequestStatusReport,
 	AddNodeType,
+	EnableSmartStartListenRequest,
 } from "./AddNodeToNetworkRequest";
 import { AssignReturnRouteRequest } from "./AssignReturnRouteMessages";
 import { AssignSUCReturnRouteRequest } from "./AssignSUCReturnRouteMessages";
@@ -189,8 +194,11 @@ import {
 import { HardResetRequest } from "./HardResetRequest";
 import {
 	InclusionOptions,
+	InclusionOptionsInternal,
 	InclusionResult,
 	InclusionStrategy,
+	InclusionUserCallbacks,
+	NodeProvisioningEntry,
 	ReplaceNodeOptions,
 } from "./Inclusion";
 import {
@@ -206,6 +214,7 @@ import {
 } from "./RemoveFailedNodeMessages";
 import {
 	RemoveNodeFromNetworkRequest,
+	RemoveNodeFromNetworkRequestStatusReport,
 	RemoveNodeStatus,
 	RemoveNodeType,
 } from "./RemoveNodeFromNetworkRequest";
@@ -285,15 +294,15 @@ export class ZWaveController extends TypedEventEmitter<ControllerEventCallbacks>
 		// register message handlers
 		driver.registerRequestHandler(
 			FunctionType.AddNodeToNetwork,
-			this.handleAddNodeRequest.bind(this),
+			this.handleAddNodeStatusReport.bind(this),
 		);
 		driver.registerRequestHandler(
 			FunctionType.RemoveNodeFromNetwork,
-			this.handleRemoveNodeRequest.bind(this),
+			this.handleRemoveNodeStatusReport.bind(this),
 		);
 		driver.registerRequestHandler(
 			FunctionType.ReplaceFailedNode,
-			this.handleReplaceNodeRequest.bind(this),
+			this.handleReplaceNodeStatusReport.bind(this),
 		);
 	}
 
@@ -911,14 +920,12 @@ export class ZWaveController extends TypedEventEmitter<ControllerEventCallbacks>
 
 	private _exclusionActive: boolean = false;
 	private _inclusionActive: boolean = false;
+	private _smartStartActive: boolean = false;
 	private _includeController: boolean = false;
-	private _inclusionOptions: InclusionOptions | undefined;
+	private _inclusionOptions: InclusionOptionsInternal | undefined;
 	private _nodePendingInclusion: ZWaveNode | undefined;
 	private _nodePendingExclusion: ZWaveNode | undefined;
 	private _nodePendingReplace: ZWaveNode | undefined;
-	// The following variables are to be used for inclusion AND exclusion
-	private _beginInclusionPromise: DeferredPromise<boolean> | undefined;
-	private _stopInclusionPromise: DeferredPromise<boolean> | undefined;
 	private _replaceFailedPromise: DeferredPromise<boolean> | undefined;
 
 	/**
@@ -959,16 +966,20 @@ export class ZWaveController extends TypedEventEmitter<ControllerEventCallbacks>
 		}
 
 		// Protect against invalid inclusion options
-		if (!(options.strategy in InclusionStrategy)) {
+		if (
+			!(options.strategy in InclusionStrategy) ||
+			// @ts-expect-error We're checking for user errors
+			options.strategy === InclusionStrategy.SmartStart
+		) {
 			throw new ZWaveError(
 				`Invalid inclusion strategy: ${options.strategy}`,
 				ZWaveErrorCodes.Argument_Invalid,
 			);
 		}
 
-		if (options.strategy === InclusionStrategy.SmartStart) {
+		if (this._smartStartActive) {
 			throw new ZWaveError(
-				`SmartStart is not supported yet!`,
+				`Cannot perform a normal inclusion while SmartStart is active`,
 				ZWaveErrorCodes.Driver_NotSupported,
 			);
 		}
@@ -976,55 +987,134 @@ export class ZWaveController extends TypedEventEmitter<ControllerEventCallbacks>
 		this._inclusionActive = true;
 		this._inclusionOptions = options;
 
-		this.driver.controllerLog.print(
-			`Starting inclusion process with strategy ${getEnumMemberName(
-				InclusionStrategy,
-				options.strategy,
-			)}...`,
-		);
+		try {
+			this.driver.controllerLog.print(
+				`Starting inclusion process with strategy ${getEnumMemberName(
+					InclusionStrategy,
+					options.strategy,
+				)}...`,
+			);
 
-		// create the promise we're going to return
-		this._beginInclusionPromise = createDeferredPromise();
+			// kick off the inclusion process
+			await this.driver.sendMessage(
+				new AddNodeToNetworkRequest(this.driver, {
+					addNodeType: AddNodeType.Any,
+					highPower: true,
+					networkWide: true,
+				}),
+			);
+
+			this.driver.controllerLog.print(
+				`The controller is now ready to add nodes`,
+			);
+
+			this.emit(
+				"inclusion started",
+				// TODO: Remove first parameter in next major version
+				options.strategy !== InclusionStrategy.Insecure,
+				options.strategy,
+			);
+		} catch (e) {
+			if (
+				isZWaveError(e) &&
+				e.code === ZWaveErrorCodes.Controller_CallbackNOK
+			) {
+				this.driver.controllerLog.print(
+					`Starting the inclusion failed`,
+					"error",
+				);
+				throw new ZWaveError(
+					"The inclusion could not be started.",
+					ZWaveErrorCodes.Controller_InclusionFailed,
+				);
+			}
+		}
+
+		return true;
+	}
+
+	/** @internal */
+	public async beginInclusionSmartStart(
+		provisioningEntry: NodeProvisioningEntry,
+	): Promise<boolean> {
+		// don't start it twice
+		if (this._inclusionActive || this._exclusionActive) {
+			return false;
+		}
+
+		this._inclusionActive = true;
+		this._inclusionOptions = {
+			strategy: InclusionStrategy.SmartStart,
+			provisioning: provisioningEntry,
+		};
+
+		this.driver.controllerLog.print(
+			`Including SmartStart node with DSK ${dskToString(
+				provisioningEntry.dsk,
+			)}`,
+		);
 
 		// kick off the inclusion process
 		await this.driver.sendMessage(
-			new AddNodeToNetworkRequest(this.driver, {
-				addNodeType: AddNodeType.Any,
+			new AddNodeDSKToNetworkRequest(this.driver, {
+				nwiHomeId: nwiHomeIdFromDSK(provisioningEntry.dsk),
+				authHomeId: authHomeIdFromDSK(provisioningEntry.dsk),
 				highPower: true,
 				networkWide: true,
 			}),
 		);
 
-		return this._beginInclusionPromise;
+		this.emit(
+			"inclusion started",
+			// TODO: Remove first parameter in next major version
+			true,
+			InclusionStrategy.SmartStart,
+		);
+
+		return true;
 	}
 
-	/** Is used internally to stop an active inclusion process without creating deadlocks */
-	private async stopInclusionInternal(): Promise<void> {
-		// don't stop it twice
-		if (!this._inclusionActive) return;
-		this._inclusionActive = false;
-
-		this.driver.controllerLog.print(`stopping inclusion process...`);
-
-		// create the promise we're going to return
-		this._stopInclusionPromise = createDeferredPromise();
-
-		// kick off the inclusion process
+	/** Is used internally to stop an active inclusion process without waiting for a confirmation */
+	private async stopInclusionNoCallback(): Promise<void> {
 		await this.driver.sendMessage(
 			new AddNodeToNetworkRequest(this.driver, {
+				callbackId: 0, // disable callbacks
 				addNodeType: AddNodeType.Stop,
 				highPower: true,
 				networkWide: true,
 			}),
 		);
+		this.driver.controllerLog.print(`The inclusion process was stopped`);
+		this.emit("inclusion stopped");
+	}
 
-		// Don't await the promise or we create a deadlock
-		void this._stopInclusionPromise.then(() => {
-			this.driver.controllerLog.print(
-				`the inclusion process was stopped`,
+	/**
+	 * Finishes an inclusion process. This must only be called after the ProtocolDone status is received.
+	 * Returns the ID of the newly added node.
+	 */
+	private async finishInclusion(): Promise<number> {
+		this.driver.controllerLog.print(`finishing inclusion process...`);
+
+		const response =
+			await this.driver.sendMessage<AddNodeToNetworkRequestStatusReport>(
+				new AddNodeToNetworkRequest(this.driver, {
+					addNodeType: AddNodeType.Stop,
+					highPower: true,
+					networkWide: true,
+				}),
 			);
-			this.emit("inclusion stopped");
-		});
+		if (response.status === AddNodeStatus.Done) {
+			return response.statusContext!.nodeId;
+		}
+
+		this.driver.controllerLog.print(
+			`Finishing the inclusion failed`,
+			"error",
+		);
+		throw new ZWaveError(
+			"Finishing the inclusion failed",
+			ZWaveErrorCodes.Controller_InclusionFailed,
+		);
 	}
 
 	/**
@@ -1034,10 +1124,91 @@ export class ZWaveController extends TypedEventEmitter<ControllerEventCallbacks>
 	public async stopInclusion(): Promise<boolean> {
 		// don't stop it twice
 		if (!this._inclusionActive) return false;
+		this._inclusionActive = false;
 
-		await this.stopInclusionInternal();
+		this.driver.controllerLog.print(`stopping inclusion process...`);
 
-		return this._stopInclusionPromise!;
+		try {
+			// stop the inclusion process
+			await this.driver.sendMessage(
+				new AddNodeToNetworkRequest(this.driver, {
+					addNodeType: AddNodeType.Stop,
+					highPower: true,
+					networkWide: true,
+				}),
+			);
+			this.driver.controllerLog.print(
+				`The inclusion process was stopped`,
+			);
+			this.emit("inclusion stopped");
+			return true;
+		} catch (e) {
+			if (
+				isZWaveError(e) &&
+				e.code === ZWaveErrorCodes.Controller_CallbackNOK
+			) {
+				this.driver.controllerLog.print(
+					`Stopping the inclusion failed`,
+					"error",
+				);
+				throw new ZWaveError(
+					"The inclusion could not be stopped.",
+					ZWaveErrorCodes.Controller_InclusionFailed,
+				);
+			}
+			throw e;
+		}
+	}
+
+	/**
+	 * Puts the controller into listening mode for Smart Start inclusion. Whenever a node on the provisioning list announces itself,
+	 * it will automatically be added.
+	 *
+	 * Resolves to `true` when the listening mode is started, and `false` if inclusion, exclusion or the listening mode is already active.
+	 */
+	public async enableSmartStart(): Promise<boolean> {
+		if (
+			this._inclusionActive ||
+			this._exclusionActive ||
+			this._smartStartActive
+		) {
+			return false;
+		}
+		this._smartStartActive = true;
+
+		this.driver.controllerLog.print(
+			`enabling Smart Start listening mode...`,
+		);
+		await this.driver.sendMessage(
+			new EnableSmartStartListenRequest(this.driver, {}),
+		);
+		this.driver.controllerLog.print(`Smart Start listening mode enabled`);
+
+		return true;
+	}
+
+	/**
+	 * Disables the listening mode for Smart Start inclusion.
+	 *
+	 * Resolves to `true` when the listening mode is stopped, and `false` if was not active.
+	 */
+	public async disableSmartStart(): Promise<boolean> {
+		if (!this._smartStartActive) {
+			return false;
+		}
+		this._smartStartActive = false;
+
+		this.driver.controllerLog.print(
+			`disabling Smart Start listening mode...`,
+		);
+		await this.driver.sendMessage(
+			new AddNodeToNetworkRequest(this.driver, {
+				addNodeType: AddNodeType.Stop,
+				networkWide: true,
+			}),
+		);
+
+		return true;
 	}
 
 	/**
@@ -1047,52 +1218,102 @@ export class ZWaveController extends TypedEventEmitter<ControllerEventCallbacks>
 	 */
 	public async beginExclusion(): Promise<boolean> {
 		// don't start it twice
-		if (this._inclusionActive || this._exclusionActive) return false;
+		if (
+			this._inclusionActive ||
+			this._exclusionActive ||
+			this._smartStartActive === true
+		)
+			return false;
 		this._exclusionActive = true;
 
 		this.driver.controllerLog.print(`starting exclusion process...`);
 
-		// create the promise we're going to return
-		this._beginInclusionPromise = createDeferredPromise();
-
-		// kick off the inclusion process
-		await this.driver.sendMessage(
-			new RemoveNodeFromNetworkRequest(this.driver, {
-				removeNodeType: RemoveNodeType.Any,
-				highPower: true,
-				networkWide: true,
-			}),
-		);
-
-		return this._beginInclusionPromise;
+		try {
+			// kick off the inclusion process
+			await this.driver.sendMessage(
+				new RemoveNodeFromNetworkRequest(this.driver, {
+					removeNodeType: RemoveNodeType.Any,
+					highPower: true,
+					networkWide: true,
+				}),
+			);
+			this.driver.controllerLog.print(
+				`The controller is now ready to remove nodes`,
+			);
+			this.emit("exclusion started");
+		} catch (e) {
+			if (
+				isZWaveError(e) &&
+				e.code === ZWaveErrorCodes.Controller_CallbackNOK
+			) {
+				this.driver.controllerLog.print(
+					`Starting the exclusion failed`,
+					"error",
+				);
+				throw new ZWaveError(
+					"The exclusion could not be started.",
+					ZWaveErrorCodes.Controller_ExclusionFailed,
+				);
+			}
+		}
+		return true;
 	}
 
-	/** Is used internally to stop an active inclusion process without creating deadlocks */
-	private async stopExclusionInternal(): Promise<void> {
-		// don't stop it twice
-		if (!this._exclusionActive) return;
-		this._exclusionActive = false;
-
-		this.driver.controllerLog.print(`stopping exclusion process...`);
-
-		// create the promise we're going to return
-		this._stopInclusionPromise = createDeferredPromise();
-
-		// kick off the inclusion process
+	/** Is used internally to stop an active exclusion process without waiting for confirmation */
+	private async stopExclusionNoCallback(): Promise<void> {
 		await this.driver.sendMessage(
 			new RemoveNodeFromNetworkRequest(this.driver, {
+				callbackId: 0, // disable callbacks
 				removeNodeType: RemoveNodeType.Stop,
 				highPower: true,
 				networkWide: true,
 			}),
 		);
+		this.driver.controllerLog.print(`the exclusion process was stopped`);
+		this.emit("exclusion stopped");
+	}
 
-		void this._stopInclusionPromise.then(() => {
+	/**
+	 * Stops an active exclusion process. Resolves to true when the controller leaves exclusion mode,
+	 * and false if the inclusion was not active.
+	 */
+	public async stopExclusion(): Promise<boolean> {
+		// don't stop it twice
+		if (!this._exclusionActive) return false;
+		this._exclusionActive = false;
+
+		this.driver.controllerLog.print(`stopping exclusion process...`);
+
+		try {
+			// kick off the inclusion process
+			await this.driver.sendMessage(
+				new RemoveNodeFromNetworkRequest(this.driver, {
+					removeNodeType: RemoveNodeType.Stop,
+					highPower: true,
+					networkWide: true,
+				}),
+			);
 			this.driver.controllerLog.print(
 				`the exclusion process was stopped`,
 			);
 			this.emit("exclusion stopped");
-		});
+			return true;
+		} catch (e) {
+			if (
+				isZWaveError(e) &&
+				e.code === ZWaveErrorCodes.Controller_CallbackNOK
+			) {
+				this.driver.controllerLog.print(
+					`Stopping the exclusion failed`,
+					"error",
+				);
+				throw new ZWaveError(
+					"The exclusion could not be stopped.",
+					ZWaveErrorCodes.Controller_ExclusionFailed,
+				);
+			}
+			throw e;
+		}
 	}
 
 	private async secureBootstrapS0(
@@ -1204,9 +1425,41 @@ export class ZWaveController extends TypedEventEmitter<ControllerEventCallbacks>
 			});
 		}
 
-		const { userCallbacks } = this._inclusionOptions as InclusionOptions & {
-			strategy: InclusionStrategy.Security_S2;
+		let userCallbacks: InclusionUserCallbacks;
+		const inclusionOptions = this
+			._inclusionOptions as InclusionOptionsInternal & {
+			strategy:
+				| InclusionStrategy.Security_S2
+				| InclusionStrategy.SmartStart;
 		};
+		if (inclusionOptions?.strategy === InclusionStrategy.SmartStart) {
+			// SmartStart is pre-provisioned, so we don't need to ask the user for anything
+			userCallbacks = {
+				// eslint-disable-next-line @typescript-eslint/no-empty-function
+				abort() {},
+				grantSecurityClasses: (requested) => {
+					return Promise.resolve({
+						clientSideAuth: false,
+						securityClasses: requested.securityClasses.filter((r) =>
+							inclusionOptions.provisioning.securityClasses.includes(
+								r,
+							),
+						),
+					});
+				},
+				validateDSKAndEnterPIN: () => {
+					return Promise.resolve(
+						dskToString(inclusionOptions.provisioning.dsk).slice(
+							0,
+							5,
+						),
+					);
+				},
+			};
+		} else {
+			// Use the provided callbacks
+			userCallbacks = inclusionOptions.userCallbacks;
+		}
 
 		const deleteTempKey = () => {
 			// Whatever happens, no further communication needs the temporary key
@@ -1723,29 +1976,14 @@ export class ZWaveController extends TypedEventEmitter<ControllerEventCallbacks>
 	}
 
 	/**
-	 * Stops an active exclusion process. Resolves to true when the controller leaves exclusion mode,
-	 * and false if the inclusion was not active.
-	 */
-	public async stopExclusion(): Promise<boolean> {
-		// don't stop it twice
-		if (!this._exclusionActive) return false;
-
-		await this.stopExclusionInternal();
-
-		return this._stopInclusionPromise!;
-	}
-
-	/**
 	 * Is called when an AddNode request is received from the controller.
 	 * Handles and controls the inclusion process.
 	 */
-	private async handleAddNodeRequest(
-		msg: AddNodeToNetworkRequest,
+	private async handleAddNodeStatusReport(
+		msg: AddNodeToNetworkRequestStatusReport,
 	): Promise<boolean> {
 		this.driver.controllerLog.print(
-			`handling add node request (status = ${
-				AddNodeStatus[msg.status!]
-			})`,
+			`handling add node request (status = ${AddNodeStatus[msg.status]})`,
 		);
 
 		if (
@@ -1759,50 +1997,22 @@ export class ZWaveController extends TypedEventEmitter<ControllerEventCallbacks>
 		}
 
 		switch (msg.status) {
-			case AddNodeStatus.Ready:
-				// this is called when inclusion was started successfully
-				this.driver.controllerLog.print(
-					`  the controller is now ready to add nodes`,
-				);
-				if (this._beginInclusionPromise != null) {
-					this._beginInclusionPromise.resolve(true);
-					this.emit(
-						"inclusion started",
-						// TODO: Remove first parameter in next major version
-						this._inclusionOptions.strategy !==
-							InclusionStrategy.Insecure,
-						this._inclusionOptions.strategy,
-					);
-				}
-				break;
 			case AddNodeStatus.Failed:
-				// this is called when inclusion could not be started...
-				if (this._beginInclusionPromise != null) {
-					this.driver.controllerLog.print(
-						`  starting the inclusion failed`,
-						"error",
-					);
-					this._beginInclusionPromise.reject(
-						new ZWaveError(
-							"The inclusion could not be started.",
-							ZWaveErrorCodes.Controller_InclusionFailed,
-						),
-					);
-				} else {
-					// ...or adding a node failed
-					this.driver.controllerLog.print(
-						`  adding the node failed`,
-						"error",
-					);
-					this.emit("inclusion failed");
-				}
+				// This code is handled elsewhere for starting the inclusion, so this means
+				// that adding a node failed
+				this.driver.controllerLog.print(
+					`Adding the node failed`,
+					"error",
+				);
+				this.emit("inclusion failed");
+
 				// in any case, stop the inclusion process so we don't accidentally add another node
 				try {
-					await this.stopInclusionInternal();
+					await this.stopInclusion();
 				} catch {
 					/* ok */
 				}
-				break;
+				return true; // Don't invoke any more handlers
 			case AddNodeStatus.AddingController:
 				this._includeController = true;
 			// fall through!
@@ -1833,23 +2043,28 @@ export class ZWaveController extends TypedEventEmitter<ControllerEventCallbacks>
 			case AddNodeStatus.ProtocolDone: {
 				// this is called after a new node is added
 				// stop the inclusion process so we don't accidentally add another node
+				let nodeId: number | undefined;
 				try {
-					await this.stopInclusionInternal();
+					nodeId = await this.finishInclusion();
 				} catch {
-					/* ok */
+					// ignore the error
 				}
-				break;
-			}
-			case AddNodeStatus.Done: {
-				// this is called when the inclusion was completed
-				this.driver.controllerLog.print(
-					`done called for ${msg.statusContext!.nodeId}`,
-				);
-				// stopping the inclusion was acknowledged by the controller
-				if (this._stopInclusionPromise != null)
-					this._stopInclusionPromise.resolve(true);
 
-				if (msg.statusContext!.nodeId === NODE_ID_BROADCAST) {
+				// It is recommended to send another STOP command to the controller
+				try {
+					await this.stopInclusionNoCallback();
+				} catch {
+					// ignore the error
+				}
+
+				if (!nodeId) {
+					// The inclusion did not succeed
+					this._inclusionActive = false;
+					this._nodePendingInclusion = undefined;
+					return true;
+				}
+
+				if (nodeId === NODE_ID_BROADCAST) {
 					// No idea how this can happen but it dit at least once
 					this.driver.controllerLog.print(
 						`Cannot add a node with the Node ID ${NODE_ID_BROADCAST}, aborting...`,
@@ -1857,6 +2072,7 @@ export class ZWaveController extends TypedEventEmitter<ControllerEventCallbacks>
 					);
 					this._nodePendingInclusion = undefined;
 				} else if (this._nodePendingInclusion != null) {
+					// Inclusion is now completed, bootstrap the node
 					const newNode = this._nodePendingInclusion;
 					const supportedCommandClasses = [
 						...newNode.implementedCommandClasses.entries(),
@@ -1899,7 +2115,8 @@ export class ZWaveController extends TypedEventEmitter<ControllerEventCallbacks>
 					if (
 						newNode.supportsCC(CommandClasses["Security 2"]) &&
 						(opts.strategy === InclusionStrategy.Default ||
-							opts.strategy === InclusionStrategy.Security_S2)
+							opts.strategy === InclusionStrategy.Security_S2 ||
+							opts.strategy === InclusionStrategy.SmartStart)
 					) {
 						await this.secureBootstrapS2(newNode);
 						const actualSecurityClass =
@@ -1941,20 +2158,26 @@ export class ZWaveController extends TypedEventEmitter<ControllerEventCallbacks>
 					if (lowSecurity) result.lowSecurity = true;
 					this.emit("node added", newNode, result);
 				}
-				break;
+
+				// If we included this node via Smart Start, start listening again
+				if (
+					this._inclusionOptions.strategy ===
+					InclusionStrategy.SmartStart
+				) {
+					await this.enableSmartStart();
+				}
+				return true; // Don't invoke any more handlers
 			}
-			default:
-				// not sure what to do with this message
-				return false;
 		}
-		return true; // Don't invoke any more handlers
+		// not sure what to do with this message
+		return false;
 	}
 
 	/**
 	 * Is called when an ReplaceFailed request is received from the controller.
 	 * Handles and controls the replace process.
 	 */
-	private async handleReplaceNodeRequest(
+	private async handleReplaceNodeStatusReport(
 		msg: ReplaceFailedNodeRequestStatusReport,
 	): Promise<boolean> {
 		this.driver.controllerLog.print(
@@ -2088,12 +2311,12 @@ export class ZWaveController extends TypedEventEmitter<ControllerEventCallbacks>
 	 * Is called when a RemoveNode request is received from the controller.
 	 * Handles and controls the exclusion process.
 	 */
-	private async handleRemoveNodeRequest(
-		msg: RemoveNodeFromNetworkRequest,
+	private async handleRemoveNodeStatusReport(
+		msg: RemoveNodeFromNetworkRequestStatusReport,
 	): Promise<boolean> {
 		this.driver.controllerLog.print(
 			`handling remove node request (status = ${
-				RemoveNodeStatus[msg.status!]
+				RemoveNodeStatus[msg.status]
 			})`,
 		);
 		if (!this._exclusionActive && msg.status !== RemoveNodeStatus.Done) {
@@ -2104,45 +2327,22 @@ export class ZWaveController extends TypedEventEmitter<ControllerEventCallbacks>
 		}
 
 		switch (msg.status) {
-			case RemoveNodeStatus.Ready:
-				// this is called when inclusion was started successfully
-				this.driver.controllerLog.print(
-					`  the controller is now ready to remove nodes`,
-				);
-				if (this._beginInclusionPromise != null) {
-					this._beginInclusionPromise.resolve(true);
-					this.emit("exclusion started");
-				}
-				break;
-
 			case RemoveNodeStatus.Failed:
-				// this is called when inclusion could not be started...
-				if (this._beginInclusionPromise != null) {
-					this.driver.controllerLog.print(
-						`  starting the exclusion failed`,
-						"error",
-					);
-					this._beginInclusionPromise.reject(
-						new ZWaveError(
-							"The exclusion could not be started.",
-							ZWaveErrorCodes.Controller_ExclusionFailed,
-						),
-					);
-				} else {
-					// ...or removing a node failed
-					this.driver.controllerLog.print(
-						`  removing the node failed`,
-						"error",
-					);
-					this.emit("exclusion failed");
-				}
+				// This code is handled elsewhere for starting the exclusion, so this means
+				// that removing a node failed
+				this.driver.controllerLog.print(
+					`Removing the node failed`,
+					"error",
+				);
+				this.emit("exclusion failed");
+
 				// in any case, stop the exclusion process so we don't accidentally remove another node
 				try {
-					await this.stopExclusionInternal();
+					await this.stopExclusion();
 				} catch {
 					/* ok */
 				}
-				break;
+				return true; // Don't invoke any more handlers
 
 			case RemoveNodeStatus.RemovingSlave:
 			case RemoveNodeStatus.RemovingController: {
@@ -2157,14 +2357,10 @@ export class ZWaveController extends TypedEventEmitter<ControllerEventCallbacks>
 				// this is called when the exclusion was completed
 				// stop the exclusion process so we don't accidentally remove another node
 				try {
-					await this.stopExclusionInternal();
+					await this.stopExclusionNoCallback();
 				} catch {
 					/* ok */
 				}
-
-				// stopping the inclusion was acknowledged by the controller
-				if (this._stopInclusionPromise != null)
-					this._stopInclusionPromise.resolve(true);
 
 				if (this._nodePendingExclusion != null) {
 					this.driver.controllerLog.print(
@@ -2181,13 +2377,11 @@ export class ZWaveController extends TypedEventEmitter<ControllerEventCallbacks>
 					this._nodes.delete(this._nodePendingExclusion.id);
 					this._nodePendingExclusion = undefined;
 				}
-				break;
+				return true; // Don't invoke any more handlers
 			}
-			default:
-				// not sure what to do with this message
-				return false;
 		}
-		return true; // Don't invoke any more handlers
+		// not sure what to do with this message
+		return false;
 	}
 
 	private _healNetworkProgress = new Map<number, HealNodeStatus>();

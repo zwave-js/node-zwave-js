@@ -9,6 +9,7 @@ import {
 	highResTimestamp,
 	isZWaveError,
 	LogConfig,
+	nwiHomeIdFromDSK,
 	SecurityClass,
 	securityClassIsS2,
 	SecurityManager,
@@ -107,10 +108,12 @@ import { ApplicationCommandRequest } from "../controller/ApplicationCommandReque
 import {
 	ApplicationUpdateRequest,
 	ApplicationUpdateRequestNodeInfoReceived,
+	ApplicationUpdateRequestSmartStartHomeIDReceived,
 } from "../controller/ApplicationUpdateRequest";
 import { BridgeApplicationCommandRequest } from "../controller/BridgeApplicationCommandRequest";
 import { ZWaveController } from "../controller/Controller";
 import { GetControllerVersionRequest } from "../controller/GetControllerVersionMessages";
+import type { NodeProvisioningEntry } from "../controller/Inclusion";
 import {
 	SendDataBridgeRequest,
 	SendDataMulticastBridgeRequest,
@@ -512,6 +515,11 @@ export class Driver extends TypedEventEmitter<DriverEventCallbacks> {
 		return this._securityManager2;
 	}
 
+	private _provisioningList: NodeProvisioningEntry[] = [];
+	public get provisioningList(): readonly NodeProvisioningEntry[] {
+		return this._provisioningList;
+	}
+
 	public constructor(
 		private port: string,
 		options?: DeepPartial<ZWaveOptions>,
@@ -536,6 +544,8 @@ export class Driver extends TypedEventEmitter<DriverEventCallbacks> {
 
 		// Initialize the cache
 		this.cacheDir = this.options.storage.cacheDir;
+
+		// TODO: Load provisioning list
 
 		// Initialize config manager
 		this.configManager = new ConfigManager({
@@ -2890,6 +2900,54 @@ ${handlers.length} left`,
 					}
 
 					return;
+				}
+			} else if (
+				msg instanceof ApplicationUpdateRequestSmartStartHomeIDReceived
+			) {
+				// the controller is in Smart Start learn mode and a node requests inclusion via Smart Start
+				this.controllerLog.print(
+					"Received Smart Start inclusion request",
+				);
+
+				if (this.controller["_inclusionActive"]) {
+					this.controllerLog.print(
+						"Controller is busy with another inclusion request, ignoring it...",
+					);
+					return;
+				}
+
+				// Check if the node is on the provisioning list
+				const provisioningEntry = this._provisioningList.find((entry) =>
+					nwiHomeIdFromDSK(entry.dsk).equals(msg.nwiHomeId),
+				);
+				if (!provisioningEntry) {
+					this.controllerLog.print(
+						"NWI Home ID not found in provisioning list, ignoring request...",
+					);
+					return;
+				}
+
+				this.controllerLog.print(
+					"NWI Home ID found in provisioning list, including node...",
+				);
+				try {
+					const result =
+						await this.controller.beginInclusionSmartStart(
+							provisioningEntry,
+						);
+					if (!result) {
+						this.controllerLog.print(
+							"Smart Start inclusion could not be started",
+							"error",
+						);
+					}
+				} catch (e) {
+					this.controllerLog.print(
+						`Smart Start inclusion could not be started: ${getErrorMessage(
+							e,
+						)}`,
+						"error",
+					);
 				}
 			}
 		} else {
