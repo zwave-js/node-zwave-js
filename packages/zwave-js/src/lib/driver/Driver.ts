@@ -1666,6 +1666,15 @@ export class Driver extends TypedEventEmitter<DriverEventCallbacks> {
 			return false;
 		}
 
+		// Z-Wave.me UZB
+		if (
+			manufacturerId === 0x0115 &&
+			productType === 0x0400 &&
+			productId === 0x0001
+		) {
+			return false;
+		}
+
 		return true;
 	}
 
