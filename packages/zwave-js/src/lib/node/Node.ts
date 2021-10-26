@@ -12,6 +12,7 @@ import {
 	CommandClassInfo,
 	CRC16_CCITT,
 	getCCName,
+	getNodeMetaValueID,
 	isTransmissionError,
 	isZWaveError,
 	Maybe,
@@ -171,14 +172,6 @@ import type {
 	ZWaveNodeValueEventCallbacks,
 } from "./Types";
 import { InterviewStage, NodeStatus, NodeType, ProtocolVersion } from "./Types";
-
-/** Returns a Value ID that can be used to store node specific data without relating it to a CC */
-function getNodeMetaValueID(property: string): ValueID {
-	return {
-		commandClass: CommandClasses._NONE,
-		property,
-	};
-}
 
 export interface ZWaveNode
 	extends TypedEventEmitter<

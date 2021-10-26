@@ -5,6 +5,7 @@ import {
 	CommandClasses,
 	deserializeCacheValue,
 	Duration,
+	getNodeMetaValueID,
 	highResTimestamp,
 	isZWaveError,
 	LogConfig,
@@ -70,6 +71,11 @@ import {
 	ICommandClassContainer,
 	isCommandClassContainer,
 } from "../commandclass/ICommandClassContainer";
+import {
+	getManufacturerIdValueId,
+	getProductIdValueId,
+	getProductTypeValueId,
+} from "../commandclass/ManufacturerSpecificCC";
 import { MultiChannelCC } from "../commandclass/MultiChannelCC";
 import { messageIsPing } from "../commandclass/NoOperationCC";
 import { KEXFailType } from "../commandclass/Security2/shared";
@@ -762,7 +768,9 @@ export class Driver extends TypedEventEmitter<DriverEventCallbacks> {
 
 			// Perform initialization sequence
 			await this.writeHeader(MessageHeaders.NAK);
-			await this.trySoftReset();
+			// Per the specs, this should be followed by a soft-reset but we need to be able
+			// to handle sticks that don't support the soft reset command. Therefore we do it
+			// after opening the value DBs
 
 			// Try to create the cache directory. This can fail, in which case we should expose a good error message
 			try {
@@ -879,6 +887,42 @@ export class Driver extends TypedEventEmitter<DriverEventCallbacks> {
 		return this._nodesReadyEventEmitted;
 	}
 
+	private async initValueDBs(homeId: number): Promise<void> {
+		// Always start the value and metadata databases
+		const options: JsonlDBOptions<any> = {
+			ignoreReadErrors: true,
+			...throttlePresets[this.options.storage.throttle],
+		};
+		if (this.options.storage.lockDir) {
+			options.lockfileDirectory = this.options.storage.lockDir;
+		}
+
+		const valueDBFile = path.join(
+			this.cacheDir,
+			`${homeId.toString(16)}.values.jsonl`,
+		);
+		this._valueDB = new JsonlDB(valueDBFile, {
+			...options,
+			reviver: (key, value) => deserializeCacheValue(value),
+			serializer: (key, value) => serializeCacheValue(value),
+		});
+		await this._valueDB.open();
+
+		const metadataDBFile = path.join(
+			this.cacheDir,
+			`${homeId.toString(16)}.metadata.jsonl`,
+		);
+		this._metadataDB = new JsonlDB(metadataDBFile, options);
+		await this._metadataDB.open();
+
+		if (process.env.NO_CACHE === "true") {
+			// Since value/metadata DBs are append-only, we need to clear them
+			// if the cache should be ignored
+			this._valueDB.clear();
+			this._metadataDB.clear();
+		}
+	}
+
 	/**
 	 * Initializes the variables for controller and nodes,
 	 * adds event handlers and starts the interview process.
@@ -891,52 +935,53 @@ export class Driver extends TypedEventEmitter<DriverEventCallbacks> {
 				.on("node removed", this.onNodeRemoved.bind(this));
 		}
 
-		const initValueDBs = async (): Promise<void> => {
-			// Always start the value and metadata databases
-			const options: JsonlDBOptions<any> = {
-				ignoreReadErrors: true,
-				...throttlePresets[this.options.storage.throttle],
-			};
-			if (this.options.storage.lockDir) {
-				options.lockfileDirectory = this.options.storage.lockDir;
-			}
-
-			const valueDBFile = path.join(
-				this.cacheDir,
-				`${this._controller!.homeId!.toString(16)}.values.jsonl`,
-			);
-			this._valueDB = new JsonlDB(valueDBFile, {
-				...options,
-				reviver: (key, value) => deserializeCacheValue(value),
-				serializer: (key, value) => serializeCacheValue(value),
-			});
-			await this._valueDB.open();
-
-			const metadataDBFile = path.join(
-				this.cacheDir,
-				`${this._controller!.homeId!.toString(16)}.metadata.jsonl`,
-			);
-			this._metadataDB = new JsonlDB(metadataDBFile, options);
-			await this._metadataDB.open();
-
-			if (process.env.NO_CACHE === "true") {
-				// Since value/metadata DBs are append-only, we need to clear them
-				// if the cache should be ignored
-				this._valueDB.clear();
-				this._metadataDB.clear();
-			}
-		};
-
 		if (!this.options.interview.skipInterview) {
+			// Determine controller IDs to open the Value DBs
+			// We need to do this first because some older controllers, especially the UZB1 and
+			// some 500-series sticks in virtualized environments don't respond after a soft reset
+
+			// No need to initialize databases if skipInterview is true, because it is only used in some
+			// Driver unit tests that don't need access to them
+			await this.controller.identify();
+
+			// now that we know the home ID, we can open the databases
+			await this.initValueDBs(this.controller.homeId!);
+
+			// Create the controller node so we can use its value DB
+			this.controller.initializeControllerNode();
+
+			// and check if we may do a soft reset
+			if (this.options.enableSoftReset && !this.maySoftReset()) {
+				this.driverLog.print(
+					`Soft reset is enabled through config, but this stick does not support it.`,
+					"warn",
+				);
+				this.options.enableSoftReset = false;
+			}
+
+			if (this.options.enableSoftReset) {
+				try {
+					await this.softResetInternal(false);
+				} catch (e) {
+					if (
+						isZWaveError(e) &&
+						e.code === ZWaveErrorCodes.Driver_Failed
+					) {
+						// Remember that soft reset is not supported by this stick
+						this.rememberNoSoftReset();
+						// Then fail the driver
+						await this.destroy();
+					}
+				}
+			}
+
 			// Interview the controller.
-			await this._controller.interview(initValueDBs, async () => {
+			await this._controller.interview(async () => {
 				// Try to restore the network information from the cache
 				if (process.env.NO_CACHE !== "true") {
 					await this.restoreNetworkStructureFromCache();
 				}
 			});
-			// No need to initialize databases if skipInterview is true, because it is only used in some
-			// Driver unit tests that don't need access to them
 		}
 
 		// Set up the S0 security manager. We can only do that after the controller
@@ -1594,6 +1639,49 @@ export class Driver extends TypedEventEmitter<DriverEventCallbacks> {
 
 	private isSoftResetting: boolean = false;
 
+	private maySoftReset(): boolean {
+		const controllerNode = this.controller.nodes.getOrThrow(
+			this.controller.ownNodeId!,
+		);
+		const valueDB = controllerNode.valueDB;
+		// If we've previously determined a stick not to support soft reset, don't bother trying again
+		const disableSoftReset = !!valueDB.getValue(
+			getNodeMetaValueID("disableSoftReset"),
+		);
+		if (disableSoftReset) return false;
+
+		// Blacklist some sticks that are known to not support soft reset
+		const manufacturerId = valueDB.getValue<number>(
+			getManufacturerIdValueId(),
+		);
+		const productType = valueDB.getValue<number>(getProductTypeValueId());
+		const productId = valueDB.getValue<number>(getProductIdValueId());
+
+		// Z-Wave.me UZB1
+		if (
+			manufacturerId === 0x0115 &&
+			productType === 0x0000 &&
+			productId === 0x0000
+		) {
+			return false;
+		}
+
+		return true;
+	}
+
+	private rememberNoSoftReset(): void {
+		this.driverLog.print(
+			"Soft reset seems not to be supported by this stick, disabling it.",
+			"warn",
+		);
+		const controllerNode = this.controller.nodes.getOrThrow(
+			this.controller.ownNodeId!,
+		);
+		const valueDB = controllerNode.valueDB;
+		// If we've previously determined a stick not to support soft reset, don't bother trying again
+		valueDB.setValue(getNodeMetaValueID("disableSoftReset"), true);
+	}
+
 	/**
 	 * Soft-resets the controller if the feature is enabled
 	 */
@@ -1623,6 +1711,10 @@ export class Driver extends TypedEventEmitter<DriverEventCallbacks> {
 			);
 		}
 
+		return this.softResetInternal(true);
+	}
+
+	private async softResetInternal(destroyOnError: boolean): Promise<void> {
 		this.controllerLog.print("Performing soft reset...");
 
 		try {
@@ -1639,7 +1731,16 @@ export class Driver extends TypedEventEmitter<DriverEventCallbacks> {
 		}
 
 		// Make sure we're able to communicate with the controller again
-		await this.ensureSerialAPI();
+		if (!(await this.ensureSerialAPI())) {
+			if (destroyOnError) {
+				await this.destroy();
+			} else {
+				throw new ZWaveError(
+					"The Serial API did not respond after soft-reset",
+					ZWaveErrorCodes.Driver_Failed,
+				);
+			}
+		}
 
 		this.isSoftResetting = false;
 
@@ -1647,7 +1748,7 @@ export class Driver extends TypedEventEmitter<DriverEventCallbacks> {
 		this.unpauseSendThread();
 	}
 
-	private async ensureSerialAPI(): Promise<void> {
+	private async ensureSerialAPI(): Promise<boolean> {
 		// Wait 1.5 seconds after reset to ensure that the module is ready for communication again
 		// Z-Wave 700 sticks are relatively fast, so we also wait for the Serial API started command
 		// to bail early
@@ -1660,7 +1761,7 @@ export class Driver extends TypedEventEmitter<DriverEventCallbacks> {
 		if (waitResult) {
 			// Serial API did start, maybe do something with the information?
 			this.controllerLog.print("reconnected and restarted");
-			return;
+			return true;
 		}
 
 		// If the controller disconnected the serial port during the soft reset, we need to re-open it
@@ -1679,7 +1780,7 @@ export class Driver extends TypedEventEmitter<DriverEventCallbacks> {
 		if (waitResult) {
 			// Serial API did start, maybe do something with the information?
 			this.controllerLog.print("Serial API started");
-			return;
+			return true;
 		}
 
 		this.controllerLog.print(
@@ -1703,28 +1804,20 @@ export class Driver extends TypedEventEmitter<DriverEventCallbacks> {
 			}
 		};
 		// Poll the controller with increasing backoff delay
-		if (await pollController()) return;
-		this.controllerLog.print(
-			"Serial API did not respond, trying again in 2 seconds...",
-		);
-		await wait(2000, true);
-		if (await pollController()) return;
-		this.controllerLog.print(
-			"Serial API did not respond, trying again in 5 seconds...",
-		);
-		await wait(5000, true);
-		if (await pollController()) return;
-		this.controllerLog.print(
-			"Serial API did not respond, trying again in 10 seconds...",
-		);
-		await wait(10000, true);
-		if (await pollController()) return;
+		if (await pollController()) return true;
+		for (const backoff of [2, 5, 10, 15]) {
+			this.controllerLog.print(
+				`Serial API did not respond, trying again in ${backoff} seconds...`,
+			);
+			await wait(backoff * 1000, true);
+			if (await pollController()) return true;
+		}
 
 		this.controllerLog.print(
 			"Serial API did not respond, giving up",
 			"error",
 		);
-		await this.destroy();
+		return false;
 	}
 
 	/**
