@@ -1839,6 +1839,9 @@ export class ZWaveController extends TypedEventEmitter<ControllerEventCallbacks>
 					grantedKeys.includes(securityClass),
 				);
 			}
+			// Remember the DSK (first 16 bytes of the public key)
+			node.dsk = nodePublicKey.slice(0, 16);
+
 			this.driver.controllerLog.logNode(node.id, {
 				message: `Security S2 bootstrapping successful with these security classes:${[
 					...node.securityClasses.entries(),
