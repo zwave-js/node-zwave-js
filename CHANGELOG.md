@@ -4,6 +4,10 @@
 <!--
 	Add placeholder for next release with `wip` snippet
 -->
+## __WORK IN PROGRESS__
+### Bugfixes
+* Try to detect if a Z-Wave stick is incompatible with soft-reset and automatically disable the functionality
+
 ## 8.6.0 (2021-10-25)
 ### Features
 * Implemented and use soft reset command. If this causes problems, you can opt-out.
