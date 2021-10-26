@@ -177,11 +177,12 @@ describe("ConfigManager", () => {
 						min: "0.0",
 						max: "255.255",
 					},
-					paramInformation: {
-						1: {
+					paramInformation: [
+						{
+							"#": "1",
 							$import: "templates/template.json#test",
 						},
-					},
+					],
 				},
 				{ encoding: "utf8", spaces: 4 },
 			);
