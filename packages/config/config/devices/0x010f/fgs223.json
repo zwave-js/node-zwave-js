@@ -29,6 +29,16 @@
 		"min": "0.0",
 		"max": "255.255"
 	},
+	"associations": {
+		"1": {
+			"label": "Lifeline",
+			"maxNodes": 1,
+			// This device requires a multi channel association on the root
+			// to be able to report from the correct endpoints
+			"multiChannel": true,
+			"isLifeline": true
+		}
+	},
 	"paramInformation": [
 		{
 			"#": "9",
