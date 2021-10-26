@@ -114,6 +114,14 @@ export function valueIdToString(valueID: ValueID): string {
 	return JSON.stringify(normalizeValueID(valueID));
 }
 
+/** Returns a Value ID that can be used to store node specific data without relating it to a CC */
+export function getNodeMetaValueID(property: string): ValueID {
+	return {
+		commandClass: CommandClasses._NONE,
+		property,
+	};
+}
+
 export interface SetValueOptions {
 	/** When this is true, no event will be emitted for the value change */
 	noEvent?: boolean;

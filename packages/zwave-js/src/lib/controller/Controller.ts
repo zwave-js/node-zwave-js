@@ -467,6 +467,11 @@ export class ZWaveController extends TypedEventEmitter<ControllerEventCallbacks>
 		return this._nodes;
 	}
 
+	/** Returns the controller node's value DB */
+	public get valueDB(): ValueDB {
+		return this._nodes.get(this._ownNodeId!)!.valueDB;
+	}
+
 	private _healNetworkActive: boolean = false;
 	/** Returns whether the network or a node is currently being healed. */
 	public get isHealNetworkActive(): boolean {
@@ -490,12 +495,42 @@ export class ZWaveController extends TypedEventEmitter<ControllerEventCallbacks>
 
 	/**
 	 * @internal
+	 * Queries the controller IDs which are necessary for the value DBs to be opened
+	 */
+	public async identify(): Promise<void> {
+		// get the home and node id of the controller
+		this.driver.controllerLog.print(`querying controller IDs...`);
+		const ids = await this.driver.sendMessage<GetControllerIdResponse>(
+			new GetControllerIdRequest(this.driver),
+			{ supportCheck: false },
+		);
+		this._homeId = ids.homeId;
+		this._ownNodeId = ids.ownNodeId;
+		this.driver.controllerLog.print(
+			`received controller IDs:
+  home ID:     ${num2hex(this._homeId)}
+  own node ID: ${this._ownNodeId}`,
+		);
+	}
+
+	/**
+	 * @internal
+	 * Queries the controller IDs which are necessary for the value DBs to be opened
+	 */
+	public initializeControllerNode(): void {
+		const nodeId = this._ownNodeId!;
+		this._nodes.set(
+			nodeId,
+			new ZWaveNode(nodeId, this.driver, undefined, undefined, undefined),
+		);
+	}
+
+	/**
+	 * @internal
 	 * Interviews the controller for the necessary information.
-	 * @param initValueDBs Asynchronous callback for the driver to initialize the Value DBs before nodes are created
 	 * @param restoreFromCache Asynchronous callback for the driver to restore the network from cache after nodes are created
 	 */
 	public async interview(
-		initValueDBs: () => Promise<void>,
 		restoreFromCache: () => Promise<void>,
 	): Promise<void> {
 		this.driver.controllerLog.print("beginning interview...");
@@ -515,20 +550,6 @@ export class ZWaveController extends TypedEventEmitter<ControllerEventCallbacks>
 			`received version info:
   controller type: ${ZWaveLibraryTypes[this._type]}
   library version: ${this._libraryVersion}`,
-		);
-
-		// get the home and node id of the controller
-		this.driver.controllerLog.print(`querying controller IDs...`);
-		const ids = await this.driver.sendMessage<GetControllerIdResponse>(
-			new GetControllerIdRequest(this.driver),
-			{ supportCheck: false },
-		);
-		this._homeId = ids.homeId;
-		this._ownNodeId = ids.ownNodeId;
-		this.driver.controllerLog.print(
-			`received controller IDs:
-  home ID:     ${num2hex(this._homeId)}
-  own node ID: ${this._ownNodeId}`,
 		);
 
 		// find out what the controller can do
@@ -656,7 +677,7 @@ export class ZWaveController extends TypedEventEmitter<ControllerEventCallbacks>
 			);
 			try {
 				const result = await this.configureSUC(
-					this._ownNodeId,
+					this._ownNodeId!,
 					true,
 					true,
 				);
@@ -679,9 +700,6 @@ export class ZWaveController extends TypedEventEmitter<ControllerEventCallbacks>
 		) {
 			// TODO: send FUNC_ID_ZW_GET_VIRTUAL_NODES message
 		}
-
-		// Give the Driver time to set up the value DBs
-		await initValueDBs();
 
 		// Request information about all nodes with the GetInitData message
 		this.driver.controllerLog.print(`querying node information...`);
@@ -712,6 +730,8 @@ export class ZWaveController extends TypedEventEmitter<ControllerEventCallbacks>
 		]);
 		// create an empty entry in the nodes map so we can initialize them afterwards
 		for (const nodeId of initData.nodeIds) {
+			// The controller node is created separately
+			if (nodeId === this._ownNodeId) continue;
 			this._nodes.set(
 				nodeId,
 				new ZWaveNode(
@@ -733,7 +753,7 @@ export class ZWaveController extends TypedEventEmitter<ControllerEventCallbacks>
 		await restoreFromCache();
 
 		// Set manufacturer information for the controller node
-		const controllerValueDB = this._nodes.get(this._ownNodeId)!.valueDB;
+		const controllerValueDB = this.valueDB;
 		controllerValueDB.setMetadata(
 			getManufacturerIdValueId(),
 			getManufacturerIdValueMetadata(),
