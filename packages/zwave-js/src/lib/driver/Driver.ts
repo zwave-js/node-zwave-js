@@ -113,7 +113,7 @@ import {
 import { BridgeApplicationCommandRequest } from "../controller/BridgeApplicationCommandRequest";
 import { ZWaveController } from "../controller/Controller";
 import { GetControllerVersionRequest } from "../controller/GetControllerVersionMessages";
-import type { NodeProvisioningEntry } from "../controller/Inclusion";
+import { InclusionState } from "../controller/Inclusion";
 import {
 	SendDataBridgeRequest,
 	SendDataMulticastBridgeRequest,
@@ -432,94 +432,6 @@ export type DriverEvents = Extract<keyof DriverEventCallbacks, string>;
  * instance or its associated nodes.
  */
 export class Driver extends TypedEventEmitter<DriverEventCallbacks> {
-	/** The serial port instance */
-	private serial: ZWaveSerialPortBase | undefined;
-	/** An instance of the Send Thread state machine */
-	private sendThread: SendThreadInterpreter;
-
-	/** A map of handlers for all sorts of requests */
-	private requestHandlers = new Map<FunctionType, RequestHandlerEntry[]>();
-	/** A map of awaited messages */
-	private awaitedMessages: AwaitedMessageEntry[] = [];
-	/** A map of awaited commands */
-	private awaitedCommands: AwaitedCommandEntry[] = [];
-
-	/** A map of Node ID -> ongoing sessions */
-	private nodeSessions = new Map<number, Sessions>();
-	private ensureNodeSessions(nodeId: number): Sessions {
-		if (!this.nodeSessions.has(nodeId)) {
-			this.nodeSessions.set(nodeId, {
-				transportService: new Map(),
-				supervision: new Map(),
-			});
-		}
-		return this.nodeSessions.get(nodeId)!;
-	}
-
-	public readonly cacheDir: string;
-
-	private _valueDB: JsonlDB | undefined;
-	/** @internal */
-	public get valueDB(): JsonlDB | undefined {
-		return this._valueDB;
-	}
-	private _metadataDB: JsonlDB<ValueMetadata> | undefined;
-	/** @internal */
-	public get metadataDB(): JsonlDB<ValueMetadata> | undefined {
-		return this._metadataDB;
-	}
-
-	public readonly configManager: ConfigManager;
-	public get configVersion(): string {
-		return (
-			this.configManager?.configVersion ??
-			packageJson?.dependencies?.["@zwave-js/config"] ??
-			libVersion
-		);
-	}
-
-	private _logContainer: ZWaveLogContainer;
-	private _driverLog: DriverLogger;
-	/** @internal */
-	public get driverLog(): DriverLogger {
-		return this._driverLog;
-	}
-
-	private _controllerLog: ControllerLogger;
-	/** @internal */
-	public get controllerLog(): ControllerLogger {
-		return this._controllerLog;
-	}
-
-	private _controller: ZWaveController | undefined;
-	/** Encapsulates information about the Z-Wave controller and provides access to its nodes */
-	public get controller(): ZWaveController {
-		if (this._controller == undefined) {
-			throw new ZWaveError(
-				"The controller is not yet ready!",
-				ZWaveErrorCodes.Driver_NotReady,
-			);
-		}
-		return this._controller;
-	}
-
-	private _securityManager: SecurityManager | undefined;
-	/** @internal */
-	public get securityManager(): SecurityManager | undefined {
-		return this._securityManager;
-	}
-
-	private _securityManager2: SecurityManager2 | undefined;
-	/** @internal */
-	public get securityManager2(): SecurityManager2 | undefined {
-		return this._securityManager2;
-	}
-
-	private _provisioningList: NodeProvisioningEntry[] = [];
-	public get provisioningList(): readonly NodeProvisioningEntry[] {
-		return this._provisioningList;
-	}
-
 	public constructor(
 		private port: string,
 		options?: DeepPartial<ZWaveOptions>,
@@ -662,6 +574,88 @@ export class Driver extends TypedEventEmitter<DriverEventCallbacks> {
 		// 			"verbose",
 		// 		);
 		// });
+	}
+	/** The serial port instance */
+	private serial: ZWaveSerialPortBase | undefined;
+	/** An instance of the Send Thread state machine */
+	private sendThread: SendThreadInterpreter;
+
+	/** A map of handlers for all sorts of requests */
+	private requestHandlers = new Map<FunctionType, RequestHandlerEntry[]>();
+	/** A map of awaited messages */
+	private awaitedMessages: AwaitedMessageEntry[] = [];
+	/** A map of awaited commands */
+	private awaitedCommands: AwaitedCommandEntry[] = [];
+
+	/** A map of Node ID -> ongoing sessions */
+	private nodeSessions = new Map<number, Sessions>();
+	private ensureNodeSessions(nodeId: number): Sessions {
+		if (!this.nodeSessions.has(nodeId)) {
+			this.nodeSessions.set(nodeId, {
+				transportService: new Map(),
+				supervision: new Map(),
+			});
+		}
+		return this.nodeSessions.get(nodeId)!;
+	}
+
+	public readonly cacheDir: string;
+
+	private _valueDB: JsonlDB | undefined;
+	/** @internal */
+	public get valueDB(): JsonlDB | undefined {
+		return this._valueDB;
+	}
+	private _metadataDB: JsonlDB<ValueMetadata> | undefined;
+	/** @internal */
+	public get metadataDB(): JsonlDB<ValueMetadata> | undefined {
+		return this._metadataDB;
+	}
+
+	public readonly configManager: ConfigManager;
+	public get configVersion(): string {
+		return (
+			this.configManager?.configVersion ??
+			packageJson?.dependencies?.["@zwave-js/config"] ??
+			libVersion
+		);
+	}
+
+	private _logContainer: ZWaveLogContainer;
+	private _driverLog: DriverLogger;
+	/** @internal */
+	public get driverLog(): DriverLogger {
+		return this._driverLog;
+	}
+
+	private _controllerLog: ControllerLogger;
+	/** @internal */
+	public get controllerLog(): ControllerLogger {
+		return this._controllerLog;
+	}
+
+	private _controller: ZWaveController | undefined;
+	/** Encapsulates information about the Z-Wave controller and provides access to its nodes */
+	public get controller(): ZWaveController {
+		if (this._controller == undefined) {
+			throw new ZWaveError(
+				"The controller is not yet ready!",
+				ZWaveErrorCodes.Driver_NotReady,
+			);
+		}
+		return this._controller;
+	}
+
+	private _securityManager: SecurityManager | undefined;
+	/** @internal */
+	public get securityManager(): SecurityManager | undefined {
+		return this._securityManager;
+	}
+
+	private _securityManager2: SecurityManager2 | undefined;
+	/** @internal */
+	public get securityManager2(): SecurityManager2 | undefined {
+		return this._securityManager2;
 	}
 
 	/** Updates the logging configuration without having to restart the driver. */
@@ -992,6 +986,9 @@ export class Driver extends TypedEventEmitter<DriverEventCallbacks> {
 					await this.restoreNetworkStructureFromCache();
 				}
 			});
+
+			// Auto-enable smart start inclusion
+			this._controller.autoProvisionSmartStart();
 		}
 
 		// Set up the S0 security manager. We can only do that after the controller
@@ -1910,6 +1907,21 @@ export class Driver extends TypedEventEmitter<DriverEventCallbacks> {
 		this._destroyPromise = createDeferredPromise();
 
 		this.driverLog.print("destroying driver instance...");
+
+		// Disable inclusion before shutting down
+		try {
+			switch (this._controller?.inclusionState) {
+				case InclusionState.SmartStart:
+				case InclusionState.Including:
+					await this._controller.stopInclusionNoCallback();
+					break;
+				case InclusionState.Excluding:
+					await this._controller.stopExclusionNoCallback();
+					break;
+			}
+		} catch {
+			// ignore
+		}
 
 		// First stop the send thread machine and close the serial port, so nothing happens anymore
 		if (this.sendThread.initialized) this.sendThread.stop();
@@ -2909,16 +2921,20 @@ ${handlers.length} left`,
 					"Received Smart Start inclusion request",
 				);
 
-				if (this.controller["_inclusionActive"]) {
+				if (
+					this.controller.inclusionState !== InclusionState.Idle &&
+					this.controller.inclusionState !== InclusionState.SmartStart
+				) {
 					this.controllerLog.print(
-						"Controller is busy with another inclusion request, ignoring it...",
+						"Controller is busy and cannot handle this inclusion request right now...",
 					);
 					return;
 				}
 
 				// Check if the node is on the provisioning list
-				const provisioningEntry = this._provisioningList.find((entry) =>
-					nwiHomeIdFromDSK(entry.dsk).equals(msg.nwiHomeId),
+				const provisioningEntry = this.controller.provisioningList.find(
+					(entry) =>
+						nwiHomeIdFromDSK(entry.dsk).equals(msg.nwiHomeId),
 				);
 				if (!provisioningEntry) {
 					this.controllerLog.print(

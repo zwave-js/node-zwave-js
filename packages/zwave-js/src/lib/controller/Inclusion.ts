@@ -108,7 +108,7 @@ export type InclusionOptionsInternal =
 	| InclusionOptions
 	| {
 			strategy: InclusionStrategy.SmartStart;
-			provisioning: NodeProvisioningEntry;
+			provisioning: PlannedSmartStartProvisioningEntry;
 	  };
 
 /** Options for replacing a node */
@@ -125,7 +125,24 @@ export type ReplaceNodeOptions =
 				| InclusionStrategy.Security_S0;
 	  };
 
-export interface NodeProvisioningEntry {
+export interface PlannedSmartStartProvisioningEntry {
 	dsk: Buffer;
 	securityClasses: SecurityClass[];
+}
+
+export interface IncludedSmartStartProvisioningEntry
+	extends PlannedSmartStartProvisioningEntry {
+	nodeId: number;
+}
+
+export type SmartStartProvisioningEntry =
+	| PlannedSmartStartProvisioningEntry
+	| IncludedSmartStartProvisioningEntry;
+
+export enum InclusionState {
+	Idle,
+	Including,
+	Excluding,
+	Busy,
+	SmartStart,
 }
