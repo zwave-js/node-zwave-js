@@ -12,5 +12,9 @@
 	"firmwareVersion": {
 		"min": "0.0",
 		"max": "255.255"
+	},
+	"compat": {
+		// The device needs a bit of delay until it is ready to answer GET requests after sending a NIF
+		"manualValueRefreshDelayMs": 1000
 	}
 }
