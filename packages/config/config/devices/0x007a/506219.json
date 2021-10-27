@@ -93,5 +93,9 @@
 			"maxValue": 127,
 			"defaultValue": 0
 		}
-	]
+	],
+	"compat": {
+		// The device uses Basic Set to control other devices
+		"treatBasicSetAsEvent": true
+	}
 }
