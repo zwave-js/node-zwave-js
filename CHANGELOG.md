@@ -4,16 +4,27 @@
 <!--
 	Add placeholder for next release with `wip` snippet
 -->
-## 8.5.1-beta.1 (2021-10-18)
+## 8.6.1 (2021-10-26)
+### Bugfixes
+* Try to detect if a Z-Wave stick is incompatible with soft-reset and automatically disable the functionality
+
+## 8.6.0 (2021-10-25)
 ### Features
 * Implemented and use soft reset command. If this causes problems, you can opt-out.
 * Implemented 700-series variant of NVM backup/restore
 * Add driver option to change where lockfiles are created
+* Implement waitForMessage to await unsolicited Serial API messages
+* Add context object to log messages
 
 ### Bugfixes
+* Avoid force-adding Supervision support, remove encapsulation CCs from list of mandatory CCs
+* Check correct transaction for `pauseSendThread` flag
+* Remove listeners before closing serial port
 * Emit `Driver_Failed` error when serial port errors
 * Better error when creating a multicast group with missing nodes
 * Security S2 bootstrapping is now aborted when an incorrect PIN is entered
+* Avoid queuing duplicate firmware fragments
+* Add additional 1s delay before verifying a value that has been set through the `setValue` API with a transition duration
 
 ### Config file changes
 * Add support for Heltun panels
@@ -24,6 +35,15 @@
 * Add Heatit Z-Push Button 4
 * Update NAS-AB01Z to match manual
 * Clean up Zooz Zen 7x configs
+* Correct manufactuerID for Zooz ZAC36
+* Correct param 100 and preserve endpoints for ZMNHTD
+* Force notification idle reset for Vision Security ZP3103
+* Update lifeline config and parameters for Philio PAN06 v1
+* Add fingerprint `0x0200:0x1022` to Shenzhen Neo NAS-DS01Z
+* Add Fakro FVS Solar Powered Skylight
+* Tidy up Vitrum devices
+* Correct identification of Vision ZP3111-5
+* Remove endpoints from FGS-212
 
 ### Changes under the hood
 * `supportsZWavePlus` property was removed from config files and documentation

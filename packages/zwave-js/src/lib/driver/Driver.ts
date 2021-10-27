@@ -5,6 +5,7 @@ import {
 	CommandClasses,
 	deserializeCacheValue,
 	Duration,
+	getNodeMetaValueID,
 	highResTimestamp,
 	isZWaveError,
 	LogConfig,
@@ -70,6 +71,11 @@ import {
 	ICommandClassContainer,
 	isCommandClassContainer,
 } from "../commandclass/ICommandClassContainer";
+import {
+	getManufacturerIdValueId,
+	getProductIdValueId,
+	getProductTypeValueId,
+} from "../commandclass/ManufacturerSpecificCC";
 import { MultiChannelCC } from "../commandclass/MultiChannelCC";
 import { messageIsPing } from "../commandclass/NoOperationCC";
 import { KEXFailType } from "../commandclass/Security2/shared";
@@ -104,6 +110,7 @@ import {
 } from "../controller/ApplicationUpdateRequest";
 import { BridgeApplicationCommandRequest } from "../controller/BridgeApplicationCommandRequest";
 import { ZWaveController } from "../controller/Controller";
+import { GetControllerVersionRequest } from "../controller/GetControllerVersionMessages";
 import {
 	SendDataBridgeRequest,
 	SendDataMulticastBridgeRequest,
@@ -132,6 +139,7 @@ import { getDefaultPriority, Message } from "../message/Message";
 import { isNodeQuery } from "../node/INodeQuery";
 import type { ZWaveNode } from "../node/Node";
 import { InterviewStage, NodeStatus } from "../node/Types";
+import type { SerialAPIStartedRequest } from "../serialapi/misc/SerialAPIStartedRequest";
 import { reportMissingDeviceConfig } from "../telemetry/deviceConfig";
 import {
 	AppInfo,
@@ -182,6 +190,8 @@ const defaultOptions: ZWaveOptions = {
 		nonce: 5000,
 		sendDataCallback: 65000, // as defined in INS13954
 		refreshValue: 5000, // Default should handle most slow devices until we have a better solution
+		refreshValueAfterTransition: 1000, // To account for delays in the device
+		serialAPIStarted: 5000,
 	},
 	attempts: {
 		openSerialPort: 10,
@@ -246,6 +256,15 @@ function checkOptions(options: ZWaveOptions): void {
 	if (options.timeouts.sendDataCallback < 10000) {
 		throw new ZWaveError(
 			`The Send Data Callback timeout must be at least 10000 milliseconds!`,
+			ZWaveErrorCodes.Driver_InvalidOptions,
+		);
+	}
+	if (
+		options.timeouts.serialAPIStarted < 1000 ||
+		options.timeouts.serialAPIStarted > 30000
+	) {
+		throw new ZWaveError(
+			`The Serial API started timeout must be between 1000 and 30000 milliseconds!`,
 			ZWaveErrorCodes.Driver_InvalidOptions,
 		);
 	}
@@ -316,6 +335,12 @@ export type RequestHandler<T extends Message = Message> = (
 interface RequestHandlerEntry<T extends Message = Message> {
 	invoke: RequestHandler<T>;
 	oneTime: boolean;
+}
+
+interface AwaitedMessageEntry {
+	promise: DeferredPromise<Message>;
+	timeout?: NodeJS.Timeout;
+	predicate: (msg: Message) => boolean;
 }
 
 interface AwaitedCommandEntry {
@@ -411,6 +436,8 @@ export class Driver extends TypedEventEmitter<DriverEventCallbacks> {
 
 	/** A map of handlers for all sorts of requests */
 	private requestHandlers = new Map<FunctionType, RequestHandlerEntry[]>();
+	/** A map of awaited messages */
+	private awaitedMessages: AwaitedMessageEntry[] = [];
 	/** A map of awaited commands */
 	private awaitedCommands: AwaitedCommandEntry[] = [];
 
@@ -741,7 +768,9 @@ export class Driver extends TypedEventEmitter<DriverEventCallbacks> {
 
 			// Perform initialization sequence
 			await this.writeHeader(MessageHeaders.NAK);
-			await this.trySoftReset();
+			// Per the specs, this should be followed by a soft-reset but we need to be able
+			// to handle sticks that don't support the soft reset command. Therefore we do it
+			// after opening the value DBs
 
 			// Try to create the cache directory. This can fail, in which case we should expose a good error message
 			try {
@@ -858,6 +887,42 @@ export class Driver extends TypedEventEmitter<DriverEventCallbacks> {
 		return this._nodesReadyEventEmitted;
 	}
 
+	private async initValueDBs(homeId: number): Promise<void> {
+		// Always start the value and metadata databases
+		const options: JsonlDBOptions<any> = {
+			ignoreReadErrors: true,
+			...throttlePresets[this.options.storage.throttle],
+		};
+		if (this.options.storage.lockDir) {
+			options.lockfileDirectory = this.options.storage.lockDir;
+		}
+
+		const valueDBFile = path.join(
+			this.cacheDir,
+			`${homeId.toString(16)}.values.jsonl`,
+		);
+		this._valueDB = new JsonlDB(valueDBFile, {
+			...options,
+			reviver: (key, value) => deserializeCacheValue(value),
+			serializer: (key, value) => serializeCacheValue(value),
+		});
+		await this._valueDB.open();
+
+		const metadataDBFile = path.join(
+			this.cacheDir,
+			`${homeId.toString(16)}.metadata.jsonl`,
+		);
+		this._metadataDB = new JsonlDB(metadataDBFile, options);
+		await this._metadataDB.open();
+
+		if (process.env.NO_CACHE === "true") {
+			// Since value/metadata DBs are append-only, we need to clear them
+			// if the cache should be ignored
+			this._valueDB.clear();
+			this._metadataDB.clear();
+		}
+	}
+
 	/**
 	 * Initializes the variables for controller and nodes,
 	 * adds event handlers and starts the interview process.
@@ -870,52 +935,53 @@ export class Driver extends TypedEventEmitter<DriverEventCallbacks> {
 				.on("node removed", this.onNodeRemoved.bind(this));
 		}
 
-		const initValueDBs = async (): Promise<void> => {
-			// Always start the value and metadata databases
-			const options: JsonlDBOptions<any> = {
-				ignoreReadErrors: true,
-				...throttlePresets[this.options.storage.throttle],
-			};
-			if (this.options.storage.lockDir) {
-				options.lockfileDirectory = this.options.storage.lockDir;
-			}
-
-			const valueDBFile = path.join(
-				this.cacheDir,
-				`${this._controller!.homeId!.toString(16)}.values.jsonl`,
-			);
-			this._valueDB = new JsonlDB(valueDBFile, {
-				...options,
-				reviver: (key, value) => deserializeCacheValue(value),
-				serializer: (key, value) => serializeCacheValue(value),
-			});
-			await this._valueDB.open();
-
-			const metadataDBFile = path.join(
-				this.cacheDir,
-				`${this._controller!.homeId!.toString(16)}.metadata.jsonl`,
-			);
-			this._metadataDB = new JsonlDB(metadataDBFile, options);
-			await this._metadataDB.open();
-
-			if (process.env.NO_CACHE === "true") {
-				// Since value/metadata DBs are append-only, we need to clear them
-				// if the cache should be ignored
-				this._valueDB.clear();
-				this._metadataDB.clear();
-			}
-		};
-
 		if (!this.options.interview.skipInterview) {
+			// Determine controller IDs to open the Value DBs
+			// We need to do this first because some older controllers, especially the UZB1 and
+			// some 500-series sticks in virtualized environments don't respond after a soft reset
+
+			// No need to initialize databases if skipInterview is true, because it is only used in some
+			// Driver unit tests that don't need access to them
+			await this.controller.identify();
+
+			// now that we know the home ID, we can open the databases
+			await this.initValueDBs(this.controller.homeId!);
+
+			// Create the controller node so we can use its value DB
+			this.controller.initializeControllerNode();
+
+			// and check if we may do a soft reset
+			if (this.options.enableSoftReset && !this.maySoftReset()) {
+				this.driverLog.print(
+					`Soft reset is enabled through config, but this stick does not support it.`,
+					"warn",
+				);
+				this.options.enableSoftReset = false;
+			}
+
+			if (this.options.enableSoftReset) {
+				try {
+					await this.softResetInternal(false);
+				} catch (e) {
+					if (
+						isZWaveError(e) &&
+						e.code === ZWaveErrorCodes.Driver_Failed
+					) {
+						// Remember that soft reset is not supported by this stick
+						this.rememberNoSoftReset();
+						// Then fail the driver
+						await this.destroy();
+					}
+				}
+			}
+
 			// Interview the controller.
-			await this._controller.interview(initValueDBs, async () => {
+			await this._controller.interview(async () => {
 				// Try to restore the network information from the cache
 				if (process.env.NO_CACHE !== "true") {
 					await this.restoreNetworkStructureFromCache();
 				}
 			});
-			// No need to initialize databases if skipInterview is true, because it is only used in some
-			// Driver unit tests that don't need access to them
 		}
 
 		// Set up the S0 security manager. We can only do that after the controller
@@ -1573,6 +1639,58 @@ export class Driver extends TypedEventEmitter<DriverEventCallbacks> {
 
 	private isSoftResetting: boolean = false;
 
+	private maySoftReset(): boolean {
+		const controllerNode = this.controller.nodes.getOrThrow(
+			this.controller.ownNodeId!,
+		);
+		const valueDB = controllerNode.valueDB;
+		// If we've previously determined a stick not to support soft reset, don't bother trying again
+		const disableSoftReset = !!valueDB.getValue(
+			getNodeMetaValueID("disableSoftReset"),
+		);
+		if (disableSoftReset) return false;
+
+		// Blacklist some sticks that are known to not support soft reset
+		const manufacturerId = valueDB.getValue<number>(
+			getManufacturerIdValueId(),
+		);
+		const productType = valueDB.getValue<number>(getProductTypeValueId());
+		const productId = valueDB.getValue<number>(getProductIdValueId());
+
+		// Z-Wave.me UZB1
+		if (
+			manufacturerId === 0x0115 &&
+			productType === 0x0000 &&
+			productId === 0x0000
+		) {
+			return false;
+		}
+
+		// Z-Wave.me UZB
+		if (
+			manufacturerId === 0x0115 &&
+			productType === 0x0400 &&
+			productId === 0x0001
+		) {
+			return false;
+		}
+
+		return true;
+	}
+
+	private rememberNoSoftReset(): void {
+		this.driverLog.print(
+			"Soft reset seems not to be supported by this stick, disabling it.",
+			"warn",
+		);
+		const controllerNode = this.controller.nodes.getOrThrow(
+			this.controller.ownNodeId!,
+		);
+		const valueDB = controllerNode.valueDB;
+		// If we've previously determined a stick not to support soft reset, don't bother trying again
+		valueDB.setValue(getNodeMetaValueID("disableSoftReset"), true);
+	}
+
 	/**
 	 * Soft-resets the controller if the feature is enabled
 	 */
@@ -1602,7 +1720,11 @@ export class Driver extends TypedEventEmitter<DriverEventCallbacks> {
 			);
 		}
 
-		this.controllerLog.print("performing soft reset...");
+		return this.softResetInternal(true);
+	}
+
+	private async softResetInternal(destroyOnError: boolean): Promise<void> {
+		this.controllerLog.print("Performing soft reset...");
 
 		try {
 			this.isSoftResetting = true;
@@ -1610,9 +1732,6 @@ export class Driver extends TypedEventEmitter<DriverEventCallbacks> {
 				supportCheck: false,
 				pauseSendThread: true,
 			});
-
-			// TODO: This will cause the controller to issue a FUNC_ID_SERIAL_API_STARTED command
-			// We should react to that instead of waiting a fixed 1.5 seconds
 		} catch (e) {
 			this.controllerLog.print(
 				`Soft reset failed: ${getErrorMessage(e)}`,
@@ -1620,18 +1739,94 @@ export class Driver extends TypedEventEmitter<DriverEventCallbacks> {
 			);
 		}
 
-		// Wait 1.5 seconds after reset to ensure that the module is ready for communication again
-		await wait(1500);
-
-		// If the controller disconnected the serial port during the soft reset, we need to re-open it
-		if (!this.serial!.isOpen) {
-			await this.tryOpenSerialport();
+		// Make sure we're able to communicate with the controller again
+		if (!(await this.ensureSerialAPI())) {
+			if (destroyOnError) {
+				await this.destroy();
+			} else {
+				throw new ZWaveError(
+					"The Serial API did not respond after soft-reset",
+					ZWaveErrorCodes.Driver_Failed,
+				);
+			}
 		}
 
 		this.isSoftResetting = false;
 
 		// And resume sending
 		this.unpauseSendThread();
+	}
+
+	private async ensureSerialAPI(): Promise<boolean> {
+		// Wait 1.5 seconds after reset to ensure that the module is ready for communication again
+		// Z-Wave 700 sticks are relatively fast, so we also wait for the Serial API started command
+		// to bail early
+		this.controllerLog.print("Waiting for the controller to reconnect...");
+		let waitResult = await this.waitForMessage<SerialAPIStartedRequest>(
+			(msg) => msg.functionType === FunctionType.SerialAPIStarted,
+			1500,
+		).catch(() => false as const);
+
+		if (waitResult) {
+			// Serial API did start, maybe do something with the information?
+			this.controllerLog.print("reconnected and restarted");
+			return true;
+		}
+
+		// If the controller disconnected the serial port during the soft reset, we need to re-open it
+		if (!this.serial!.isOpen) {
+			this.controllerLog.print("Re-opening serial port...");
+			await this.tryOpenSerialport();
+		}
+
+		// Wait the configured amount of time for the Serial API started command to be received
+		this.controllerLog.print("Waiting for the Serial API to start...");
+		waitResult = await this.waitForMessage<SerialAPIStartedRequest>(
+			(msg) => msg.functionType === FunctionType.SerialAPIStarted,
+			this.options.timeouts.serialAPIStarted,
+		).catch(() => false as const);
+
+		if (waitResult) {
+			// Serial API did start, maybe do something with the information?
+			this.controllerLog.print("Serial API started");
+			return true;
+		}
+
+		this.controllerLog.print(
+			"Did not receive notification that Serial API has started, checking if it responds...",
+		);
+
+		// We don't need to use any specific command here. However we're going to use this one in the interview
+		// anyways, so we might aswell use it here too
+		const pollController = async () => {
+			try {
+				// And resume sending - this requires us to unpause the send thread
+				this.unpauseSendThread();
+				await this.sendMessage(new GetControllerVersionRequest(this), {
+					supportCheck: false,
+				});
+				this.pauseSendThread();
+				this.controllerLog.print("Serial API responded");
+				return true;
+			} catch {
+				return false;
+			}
+		};
+		// Poll the controller with increasing backoff delay
+		if (await pollController()) return true;
+		for (const backoff of [2, 5, 10, 15]) {
+			this.controllerLog.print(
+				`Serial API did not respond, trying again in ${backoff} seconds...`,
+			);
+			await wait(backoff * 1000, true);
+			if (await pollController()) return true;
+		}
+
+		this.controllerLog.print(
+			"Serial API did not respond, giving up",
+			"error",
+		);
+		return false;
 	}
 
 	/**
@@ -1709,6 +1904,8 @@ export class Driver extends TypedEventEmitter<DriverEventCallbacks> {
 		// First stop the send thread machine and close the serial port, so nothing happens anymore
 		if (this.sendThread.initialized) this.sendThread.stop();
 		if (this.serial != undefined) {
+			// Avoid spewing errors if the port was in the middle of receiving something
+			this.serial.removeAllListeners();
 			if (this.serial.isOpen) await this.serial.close();
 			this.serial = undefined;
 		}
@@ -1828,7 +2025,11 @@ export class Driver extends TypedEventEmitter<DriverEventCallbacks> {
 								// If it was, we need to notify the sender that we couldn't decode the command
 								await msg
 									.getNodeUnsafe()
-									?.commandClasses.Supervision.sendReport({
+									?.createAPI(
+										CommandClasses.Supervision,
+										false,
+									)
+									.sendReport({
 										sessionId: supervisionSessionId,
 										moreUpdatesFollow: false,
 										status: SupervisionStatus.NoSupport,
@@ -2610,16 +2811,8 @@ ${handlers.length} left`,
 				);
 				const secure = msg.command.secure;
 
-				if (
-					supervisionSessionId !== undefined &&
-					!node.supportsCC(CommandClasses.Supervision)
-				) {
-					// When a node sends us a command that's supervision encapsulated, it must support Supervision CC
-					node.addCC(CommandClasses.Supervision, {
-						isSupported: true,
-						version: 1,
-					});
-				}
+				// DO NOT force-add support for the Supervision CC here. Some devices only support Supervision when sending,
+				// so we need to trust the information we already have.
 
 				// check if someone is waiting for this command
 				for (const entry of this.awaitedCommands) {
@@ -2629,12 +2822,14 @@ ${handlers.length} left`,
 
 						// send back a Supervision Report if the command was received via Supervision Get
 						if (supervisionSessionId !== undefined) {
-							await node.commandClasses.Supervision.sendReport({
-								sessionId: supervisionSessionId,
-								moreUpdatesFollow: false,
-								status: SupervisionStatus.Success,
-								secure,
-							});
+							await node
+								.createAPI(CommandClasses.Supervision, false)
+								.sendReport({
+									sessionId: supervisionSessionId,
+									moreUpdatesFollow: false,
+									status: SupervisionStatus.Success,
+									secure,
+								});
 						}
 						return;
 					}
@@ -2646,19 +2841,23 @@ ${handlers.length} left`,
 					try {
 						await node.handleCommand(msg.command);
 
-						await node.commandClasses.Supervision.sendReport({
-							sessionId: supervisionSessionId,
-							moreUpdatesFollow: false,
-							status: SupervisionStatus.Success,
-							secure,
-						});
+						await node
+							.createAPI(CommandClasses.Supervision, false)
+							.sendReport({
+								sessionId: supervisionSessionId,
+								moreUpdatesFollow: false,
+								status: SupervisionStatus.Success,
+								secure,
+							});
 					} catch (e) {
-						await node.commandClasses.Supervision.sendReport({
-							sessionId: supervisionSessionId,
-							moreUpdatesFollow: false,
-							status: SupervisionStatus.Fail,
-							secure,
-						});
+						await node
+							.createAPI(CommandClasses.Supervision, false)
+							.sendReport({
+								sessionId: supervisionSessionId,
+								moreUpdatesFollow: false,
+								status: SupervisionStatus.Fail,
+								secure,
+							});
 
 						// In any case we don't want to swallow the error
 						throw e;
@@ -2694,6 +2893,17 @@ ${handlers.length} left`,
 				}
 			}
 		} else {
+			// Check if we have a dynamic handler waiting for this message
+			for (const entry of this.awaitedMessages) {
+				if (entry.predicate(msg)) {
+					// resolve the promise - this will remove the entry from the list
+					entry.promise.resolve(msg);
+					return;
+				}
+			}
+
+			// Otherwise loop through the static handlers
+
 			// TODO: This deserves a nicer formatting
 			this.driverLog.print(
 				`handling request ${FunctionType[msg.functionType]} (${
@@ -3153,7 +3363,48 @@ ${handlers.length} left`,
 	}
 
 	/**
-	 * Waits until a command is received or a timeout has elapsed. Returns the received command.
+	 * Waits until an unsolicited serial message is received or a timeout has elapsed. Returns the received message.
+	 *
+	 * **Note:** This does not trigger for [Bridge]ApplicationUpdateRequests, which are handled differently. To wait for a certain CommandClass, use {@link waitForCommand}.
+	 * @param timeout The number of milliseconds to wait. If the timeout elapses, the returned promise will be rejected
+	 * @param predicate A predicate function to test all incoming messages
+	 */
+	public waitForMessage<T extends Message>(
+		predicate: (msg: Message) => boolean,
+		timeout: number,
+	): Promise<T> {
+		return new Promise<T>((resolve, reject) => {
+			const entry: AwaitedMessageEntry = {
+				predicate,
+				promise: createDeferredPromise<Message>(),
+				timeout: undefined,
+			};
+			this.awaitedMessages.push(entry);
+			const removeEntry = () => {
+				if (entry.timeout) clearTimeout(entry.timeout);
+				const index = this.awaitedMessages.indexOf(entry);
+				if (index !== -1) this.awaitedMessages.splice(index, 1);
+			};
+			// When the timeout elapses, remove the wait entry and reject the returned Promise
+			entry.timeout = setTimeout(() => {
+				removeEntry();
+				reject(
+					new ZWaveError(
+						`Received no matching message within the provided timeout!`,
+						ZWaveErrorCodes.Controller_Timeout,
+					),
+				);
+			}, timeout).unref();
+			// When the promise is resolved, remove the wait entry and resolve the returned Promise
+			void entry.promise.then((cc) => {
+				removeEntry();
+				resolve(cc as T);
+			});
+		});
+	}
+
+	/**
+	 * Waits until a CommandClass is received or a timeout has elapsed. Returns the received command.
 	 * @param timeout The number of milliseconds to wait. If the timeout elapses, the returned promise will be rejected
 	 * @param predicate A predicate function to test all incoming command classes
 	 */

@@ -27,9 +27,21 @@ export interface ZWaveOptions {
 
 		/**
 		 * @internal
-		 * How long to wait for a poll after setting a value
+		 * How long to wait for a poll after setting a value without transition duration
 		 */
 		refreshValue: number;
+
+		/**
+		 * @internal
+		 * How long to wait for a poll after setting a value with transition duration. This doubles as the "fast" delay.
+		 */
+		refreshValueAfterTransition: number;
+
+		/**
+		 * How long to wait for the Serial API Started command after a soft-reset before resorting
+		 * to polling the API for the responsiveness check.
+		 */
+		serialAPIStarted: number; // [1000...30000], default: 5000 ms
 	};
 
 	attempts: {

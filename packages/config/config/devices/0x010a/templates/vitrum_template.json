@@ -1,0 +1,218 @@
+{
+	"led_color_options": {
+		"valueSize": 1,
+		"minValue": 0,
+		"maxValue": 7,
+		"unsigned": true,
+		"allowManualEntry": false,
+		"options": [
+			{
+				"label": "Disable",
+				"value": 0
+			},
+			{
+				"label": "Red",
+				"value": 1
+			},
+			{
+				"label": "Green",
+				"value": 2
+			},
+			{
+				"label": "Blue",
+				"value": 3
+			},
+			{
+				"label": "Yellow",
+				"value": 4
+			},
+			{
+				"label": "Magenta",
+				"value": 5
+			},
+			{
+				"label": "Cyan",
+				"value": 6
+			},
+			{
+				"label": "White",
+				"value": 7
+			}
+		]
+	},
+	"button_1_off_color": {
+		"$import": "#led_color_options",
+		"label": "Button 1: LED Color When Off",
+		"defaultValue": 3
+	},
+	"button_1_on_color": {
+		"$import": "#led_color_options",
+		"label": "Button 1: LED Color When On",
+		"defaultValue": 4
+	},
+	"button_1_eco_color": {
+		"$import": "#led_color_options",
+		"label": "Button 1: LED Color When Eco",
+		"defaultValue": 2
+	},
+	"button_2_off_color": {
+		"$import": "#led_color_options",
+		"label": "Button 2: LED Color When Off",
+		"defaultValue": 3
+	},
+	"button_2_on_color": {
+		"$import": "#led_color_options",
+		"label": "Button 2: LED Color When On",
+		"defaultValue": 4
+	},
+	"button_2_eco_color": {
+		"$import": "#led_color_options",
+		"label": "Button 2: LED Color When Eco",
+		"defaultValue": 2
+	},
+	"button_3_off_color": {
+		"$import": "#led_color_options",
+		"label": "Button 3: LED Color When Off",
+		"defaultValue": 3
+	},
+	"button_3_on_color": {
+		"$import": "#led_color_options",
+		"label": "Button 3: LED Color When On",
+		"defaultValue": 4
+	},
+	"button_3_eco_color": {
+		"$import": "#led_color_options",
+		"label": "Button 3: LED Color When Eco",
+		"defaultValue": 2
+	},
+	"button_4_off_color": {
+		"$import": "#led_color_options",
+		"label": "Button 4: LED Color When Off",
+		"defaultValue": 3
+	},
+	"button_4_on_color": {
+		"$import": "#led_color_options",
+		"label": "Button 4: LED Color When On",
+		"defaultValue": 4
+	},
+	"button_4_eco_color": {
+		"$import": "#led_color_options",
+		"label": "Button 4: LED Color When Eco",
+		"defaultValue": 2
+	},
+	"button_5_off_color": {
+		"$import": "#led_color_options",
+		"label": "Button 5: LED Color When Off",
+		"defaultValue": 3
+	},
+	"button_5_on_color": {
+		"$import": "#led_color_options",
+		"label": "Button 5: LED Color When On",
+		"defaultValue": 4
+	},
+	"button_5_eco_color": {
+		"$import": "#led_color_options",
+		"label": "Button 5: LED Color When Eco",
+		"defaultValue": 2
+	},
+	"button_6_off_color": {
+		"$import": "#led_color_options",
+		"label": "Button 6: LED Color When Off",
+		"defaultValue": 3
+	},
+	"button_6_on_color": {
+		"$import": "#led_color_options",
+		"label": "Button 6: LED Color When On",
+		"defaultValue": 4
+	},
+	"button_6_eco_color": {
+		"$import": "#led_color_options",
+		"label": "Button 6: LED Color When Eco",
+		"defaultValue": 2
+	},
+	"output_port_options_6ch": {
+		"valueSize": 1,
+		"minValue": 0,
+		"maxValue": 6,
+		"unsigned": true,
+		"allowManualEntry": false,
+		"options": [
+			{
+				"label": "Disable",
+				"value": 0
+			},
+			{
+				"label": "Output Port 1",
+				"value": 1
+			},
+			{
+				"label": "Output Port 2",
+				"value": 2
+			},
+			{
+				"label": "Output Port 3",
+				"value": 3
+			},
+			{
+				"label": "Output Port 4",
+				"value": 4
+			},
+			{
+				"label": "Output Port 5",
+				"value": 5
+			},
+			{
+				"label": "Output Port 6",
+				"value": 6
+			}
+		]
+	},
+	"button_1_output_6ch": {
+		"$import": "#output_port_options_6ch",
+		"label": "Button 1 Connected to",
+		"defaultValue": 1
+	},
+	"button_2_output_6ch": {
+		"$import": "#output_port_options_6ch",
+		"label": "Button 2 Connected to",
+		"defaultValue": 2
+	},
+	"button_3_output_6ch": {
+		"$import": "#output_port_options_6ch",
+		"label": "Button 3 Connected to",
+		"defaultValue": 3
+	},
+	"button_4_output_6ch": {
+		"$import": "#output_port_options_6ch",
+		"label": "Button 4 Connected to",
+		"defaultValue": 4
+	},
+	"button_5_output_6ch": {
+		"$import": "#output_port_options_6ch",
+		"label": "Button 5 Connected to",
+		"defaultValue": 5
+	},
+	"button_6_output_6ch": {
+		"$import": "#output_port_options_6ch",
+		"label": "Button 6 Connected to",
+		"defaultValue": 6
+	},
+	"basic_set_type": {
+		"valueSize": 1,
+		"minValue": 0,
+		"maxValue": 1,
+		"defaultValue": 1,
+		"unsigned": true,
+		"allowManualEntry": false,
+		"options": [
+			{
+				"label": "100% (0x63)",
+				"value": 0
+			},
+			{
+				"label": "Last level (0xFF)",
+				"value": 1
+			}
+		]
+	}
+}

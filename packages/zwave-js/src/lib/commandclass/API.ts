@@ -1,4 +1,4 @@
-import type { ValueChangeOptions, ValueID } from "@zwave-js/core";
+import type { Duration, ValueChangeOptions, ValueID } from "@zwave-js/core";
 import {
 	CommandClasses,
 	Maybe,
@@ -33,7 +33,7 @@ export type SetValueAPIOptions = Partial<ValueChangeOptions>;
 
 /** Used to identify the method on the CC API class that handles polling values from nodes */
 export const POLL_VALUE: unique symbol = Symbol.for("CCAPI_POLL_VALUE");
-export type PollValueImplementation<T extends unknown = unknown> = (
+export type PollValueImplementation<T = unknown> = (
 	property: ValueIDProperties,
 ) => Promise<T | undefined>;
 
@@ -82,6 +82,11 @@ export function throwWrongValueType(
 	);
 }
 
+export interface SchedulePollOptions {
+	duration?: Duration;
+	transition?: "fast" | "slow";
+}
+
 /**
  * The base class for all CC APIs exposed via `Node.commandClasses.<CCName>`
  * @publicAPI
@@ -128,8 +133,17 @@ export class CCAPI {
 	 */
 	protected schedulePoll(
 		property: ValueIDProperties,
-		timeoutMs: number = this.driver.options.timeouts.refreshValue,
+		{ duration, transition = "slow" }: SchedulePollOptions = {},
 	): boolean {
+		// Figure out the delay. If a non-zero duration was given or this is a "fast" transition,
+		// use/add the short delay. Otherwise, default to the long delay.
+		const durationMs = duration?.toMilliseconds() ?? 0;
+		const additionalDelay =
+			!!durationMs || transition === "fast"
+				? this.driver.options.timeouts.refreshValueAfterTransition
+				: this.driver.options.timeouts.refreshValue;
+		const timeoutMs = durationMs + additionalDelay;
+
 		if (this.isSinglecast()) {
 			const node = this.endpoint.getNodeUnsafe();
 			if (!node) return false;

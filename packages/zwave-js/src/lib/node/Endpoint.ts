@@ -8,7 +8,7 @@ import {
 } from "@zwave-js/core";
 import { num2hex } from "@zwave-js/shared";
 import type { MultiChannelAssociationCC } from "../commandclass";
-import type { APIMethodsOf, CCAPI, CCAPIs } from "../commandclass/API";
+import type { APIMethodsOf, CCAPI, CCAPIs, CCToAPI } from "../commandclass/API";
 import {
 	AssociationCC,
 	getHasLifelineValueId,
@@ -320,8 +320,12 @@ export class Endpoint {
 	 * @internal
 	 * Creates an API instance for a given command class. Throws if no API is defined.
 	 * @param ccId The command class to create an API instance for
+	 * @param requireSupport Whether accessing the API should throw if it is not supported by the node.
 	 */
-	public createAPI(ccId: CommandClasses): CCAPI {
+	public createAPI<T extends CommandClasses>(
+		ccId: T,
+		requireSupport: boolean = true,
+	): CommandClasses extends T ? CCAPI : CCToAPI<T> {
 		const APIConstructor = getAPI(ccId);
 		const ccName = CommandClasses[ccId];
 		if (APIConstructor == undefined) {
@@ -333,27 +337,35 @@ export class Endpoint {
 			);
 		}
 		const apiInstance = new APIConstructor(this.driver, this);
-		return new Proxy(apiInstance, {
-			get: (target, property) => {
-				// Forbid access to the API if it is not supported by the node
-				if (
-					property !== "ccId" &&
-					property !== "endpoint" &&
-					property !== "isSupported" &&
-					property !== "withOptions" &&
-					property !== "commandOptions" &&
-					!target.isSupported()
-				) {
-					throw new ZWaveError(
-						`Node ${this.nodeId}${
-							this.index === 0 ? "" : ` (endpoint ${this.index})`
-						} does not support the Command Class ${ccName}!`,
-						ZWaveErrorCodes.CC_NotSupported,
-					);
-				}
-				return target[property as keyof CCAPI];
-			},
-		});
+		if (requireSupport) {
+			// @ts-expect-error TS doesn't like assigning to conditional types
+			return new Proxy(apiInstance, {
+				get: (target, property) => {
+					// Forbid access to the API if it is not supported by the node
+					if (
+						property !== "ccId" &&
+						property !== "endpoint" &&
+						property !== "isSupported" &&
+						property !== "withOptions" &&
+						property !== "commandOptions" &&
+						!target.isSupported()
+					) {
+						throw new ZWaveError(
+							`Node ${this.nodeId}${
+								this.index === 0
+									? ""
+									: ` (endpoint ${this.index})`
+							} does not support the Command Class ${ccName}!`,
+							ZWaveErrorCodes.CC_NotSupported,
+						);
+					}
+					return target[property as keyof CCAPI];
+				},
+			});
+		} else {
+			// @ts-expect-error TS doesn't like assigning to conditional types
+			return apiInstance;
+		}
 	}
 
 	private _commandClassAPIs = new Map<CommandClasses, CCAPI>();

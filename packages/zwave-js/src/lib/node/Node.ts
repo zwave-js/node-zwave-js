@@ -12,6 +12,7 @@ import {
 	CommandClassInfo,
 	CRC16_CCITT,
 	getCCName,
+	getNodeMetaValueID,
 	isTransmissionError,
 	isZWaveError,
 	Maybe,
@@ -83,6 +84,7 @@ import {
 	FirmwareUpdateCapabilities,
 	FirmwareUpdateMetaDataCC,
 	FirmwareUpdateMetaDataCCGet,
+	FirmwareUpdateMetaDataCCReport,
 	FirmwareUpdateMetaDataCCStatusReport,
 	FirmwareUpdateRequestStatus,
 	FirmwareUpdateStatus,
@@ -170,14 +172,6 @@ import type {
 	ZWaveNodeValueEventCallbacks,
 } from "./Types";
 import { InterviewStage, NodeStatus, NodeType, ProtocolVersion } from "./Types";
-
-/** Returns a Value ID that can be used to store node specific data without relating it to a CC */
-function getNodeMetaValueID(property: string): ValueID {
-	return {
-		commandClass: CommandClasses._NONE,
-		property,
-	};
-}
 
 export interface ZWaveNode
 	extends TypedEventEmitter<
@@ -856,7 +850,7 @@ export class ZWaveNode extends Endpoint implements SecurityClassOwner {
 	 * Requests a value for a given property of a given CommandClass by polling the node.
 	 * **Warning:** Some value IDs share a command, so make sure not to blindly call this for every property
 	 */
-	public pollValue<T extends unknown = unknown>(
+	public pollValue<T = unknown>(
 		valueId: ValueID,
 		sendCommandOptions: SendCommandOptions = {},
 	): Promise<T | undefined> {
@@ -3333,6 +3327,25 @@ protocol version:      ${this._protocolVersion}`;
 					await this.sendCorruptedFirmwareUpdateReport(num, fragment);
 					return;
 				} else {
+					// Avoid queuing duplicate fragments
+					const isCurrentFirmwareFragment = (t: Transaction) =>
+						t.message.getNodeId() === this.nodeId &&
+						isCommandClassContainer(t.message) &&
+						t.message.command instanceof
+							FirmwareUpdateMetaDataCCReport &&
+						t.message.command.reportNumber === num;
+					if (
+						this.driver.hasPendingTransactions(
+							isCurrentFirmwareFragment,
+						)
+					) {
+						this.driver.controllerLog.logNode(this.id, {
+							message: `Firmware fragment ${num} already queued`,
+							level: "warn",
+						});
+						continue;
+					}
+
 					this.driver.controllerLog.logNode(this.id, {
 						message: `Sending firmware fragment ${num} / ${numFragments}`,
 						direction: "outbound",

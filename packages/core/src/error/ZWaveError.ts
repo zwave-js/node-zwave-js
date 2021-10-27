@@ -27,8 +27,9 @@ export enum ZWaveErrorCodes {
 	Driver_NoErrorHandler,
 	Driver_FeatureDisabled,
 
-	/** The controller has timed out while waiting for a report from the node */
+	/** There was a timeout while waiting for a message from the controller */
 	Controller_Timeout = 200,
+	/** There was a timeout while waiting for a response from a node */
 	Controller_NodeTimeout,
 	Controller_MessageDropped,
 	Controller_ResponseNOK,

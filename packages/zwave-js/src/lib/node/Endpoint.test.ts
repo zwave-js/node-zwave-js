@@ -5,7 +5,6 @@ import {
 	ZWaveErrorCodes,
 } from "@zwave-js/core";
 import { BatteryCCAPI } from "../commandclass/BatteryCC";
-import type { BinarySensorCCAPI } from "../commandclass/BinarySensorCC";
 import "../commandclass/index";
 import { VersionCCAPI } from "../commandclass/VersionCC";
 import type { Driver } from "../driver/Driver";
@@ -29,9 +28,7 @@ describe("lib/node/Endpoint", () => {
 		it("the returned API throws when trying to access a non-supported CC", async () => {
 			const endpoint = new Endpoint(1, fakeDriver, 1);
 			// We must not use Basic CC here, because that is assumed to be always supported
-			const api = endpoint.createAPI(
-				CommandClasses["Binary Sensor"],
-			) as BinarySensorCCAPI;
+			const api = endpoint.createAPI(CommandClasses["Binary Sensor"]);
 
 			// this does not throw
 			api.isSupported();

@@ -22,14 +22,19 @@
 			"label": "Relay 1 + 2",
 			"maxNodes": 1,
 			"isLifeline": true
+			// Corresponds to endpoint 1 (both relays)
 		},
 		"2": {
 			"label": "Relay 1",
-			"maxNodes": 1
+			"maxNodes": 1,
+			"isLifeline": true
+			// Corresponds to endpoint 2
 		},
 		"3": {
 			"label": "Relay 2",
-			"maxNodes": 1
+			"maxNodes": 1,
+			"isLifeline": true
+			// Corresponds to endpoint 3
 		}
 	},
 	"paramInformation": [
@@ -80,6 +85,28 @@
 				{
 					"label": "Edge-Toggle mode",
 					"value": 3
+				}
+			]
+		},
+		{
+			// This parameter is undocumented, but necessary for endpoint reporting
+			"#": "11",
+			"label": "Send Reports From Endpoints",
+			"description": "Enable this to distinguish between the relays.",
+			"valueSize": 1,
+			"minValue": 1,
+			"maxValue": 2,
+			"defaultValue": 1,
+			"unsigned": true,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Disable",
+					"value": 1
+				},
+				{
+					"label": "Enable",
+					"value": 2
 				}
 			]
 		}
