@@ -532,7 +532,7 @@ export class ZWaveController extends TypedEventEmitter<ControllerEventCallbacks>
 	}
 
 	/**
-	 * Adds the given DSK or node ID from the controller's SmartStart provisioning list.
+	 * Removes the given DSK or node ID from the controller's SmartStart provisioning list.
 	 *
 	 * **Note:** If this entry corresponds to an included node, it will **NOT** be excluded
 	 */

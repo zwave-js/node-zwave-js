@@ -140,9 +140,14 @@ export type SmartStartProvisioningEntry =
 	| IncludedSmartStartProvisioningEntry;
 
 export enum InclusionState {
+	/** The controller isn't doing anything regarding inclusion. */
 	Idle,
+	/** The controller is waiting for a node to be included. */
 	Including,
+	/** The controller is waiting for a node to be excluded. */
 	Excluding,
+	/** The controller is busy including or excluding a node. */
 	Busy,
+	/** The controller listening for SmartStart nodes to announce themselves. */
 	SmartStart,
 }
