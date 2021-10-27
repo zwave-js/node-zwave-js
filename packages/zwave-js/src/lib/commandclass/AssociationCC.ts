@@ -525,12 +525,8 @@ export class AssociationCCRemove extends AssociationCC {
 				);
 			}
 
-			if (options.nodeIds?.some((n) => n < 1 || n > MAX_NODES)) {
-				throw new ZWaveError(
-					`All node IDs must be between 1 and ${MAX_NODES}!`,
-					ZWaveErrorCodes.Argument_Invalid,
-				);
-			}
+			// When removing associations, we allow invalid node IDs.
+			// See GH#3606 - it is possible that those exist.
 			this.groupId = options.groupId;
 			this.nodeIds = options.nodeIds;
 		}
