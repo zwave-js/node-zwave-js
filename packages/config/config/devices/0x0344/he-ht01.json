@@ -349,7 +349,7 @@
 			"unit": "minutes",
 			"valueSize": 1,
 			"minValue": 1,
-			"maxValue": 2,
+			"maxValue": 3,
 			"defaultValue": 1,
 			"allowManualEntry": false,
 			"options": [
@@ -725,7 +725,7 @@
 			"description": "Activate this mode when a Basic Set is received",
 			"valueSize": 1,
 			"minValue": 0,
-			"maxValue": 6,
+			"maxValue": 9,
 			"defaultValue": 1,
 			"allowManualEntry": false,
 			"options": [
