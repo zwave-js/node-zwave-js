@@ -47,8 +47,8 @@ export function nwiHomeIdFromDSK(dsk: Buffer): Buffer {
 
 export function authHomeIdFromDSK(dsk: Buffer): Buffer {
 	// Auth HomeID 1..4 shall match byte 13..16 of the S2 DSK.
-	// • Bits 7 and 6 of the Auth HomeID 1 shall be set to 1.
-	// • Bit 0 of the Auth HomeID 4 byte shall be set to 0.
+	// • Bits 7 and 6 of the Auth HomeID 1 shall be set to 0. (Error in the specs, they say it should be 1)
+	// • Bit 0 of the Auth HomeID 4 byte shall be set to 1. (Error in the specs, they say it should be 0)
 	const ret = Buffer.allocUnsafe(4);
 	dsk.copy(ret, 0, 12, 16);
 	ret[0] &= 0b00111111;
