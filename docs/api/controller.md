@@ -158,7 +158,7 @@ Stops the exclusion process to remove a node from the network. The returned prom
 provisionSmartStartNode(entry: PlannedSmartStartProvisioningEntry): void
 ```
 
-Adds the given entry (DSK and security classes) to the controller's SmartStart provisioning list. The node will be included out of band when it powers up.
+Adds the given entry (DSK and security classes) to the controller's SmartStart provisioning list or replaces an existing entry. The node will be included out of band when it powers up.
 
 The parameter has the following shape:
 

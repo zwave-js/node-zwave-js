@@ -520,15 +520,20 @@ export class ZWaveController extends TypedEventEmitter<ControllerEventCallbacks>
 		return this._provisioningList;
 	}
 
-	/** Adds the given entry (DSK and security classes) to the controller's SmartStart provisioning list */
+	/** Adds the given entry (DSK and security classes) to the controller's SmartStart provisioning list or replaces an existing entry */
 	public provisionSmartStartNode(
 		entry: PlannedSmartStartProvisioningEntry,
 	): void {
-		if (!this._provisioningList.find((e) => e.dsk.equals(entry.dsk))) {
+		const index = this._provisioningList.findIndex((e) =>
+			e.dsk.equals(entry.dsk),
+		);
+		if (index === -1) {
 			this._provisioningList.push(entry);
-			this.autoProvisionSmartStart();
-			void this.driver.saveNetworkToCache();
+		} else {
+			this._provisioningList[index] = entry;
 		}
+		this.autoProvisionSmartStart();
+		void this.driver.saveNetworkToCache();
 	}
 
 	/**
