@@ -532,13 +532,17 @@ export class ZWaveController extends TypedEventEmitter<ControllerEventCallbacks>
 	}
 
 	/**
-	 * Adds the given DSK from the controller's SmartStart provisioning list.
+	 * Adds the given DSK or node ID from the controller's SmartStart provisioning list.
 	 *
 	 * **Note:** If this entry corresponds to an included node, it will **NOT** be excluded
 	 */
-	public unprovisionSmartStartNode(dsk: Buffer): void {
-		const index = this._provisioningList.findIndex((e) =>
-			e.dsk.equals(dsk),
+	public unprovisionSmartStartNode(dskOrNodeId: Buffer | number): void {
+		const index = this._provisioningList.findIndex(
+			(e) =>
+				(Buffer.isBuffer(dskOrNodeId) && e.dsk.equals(dskOrNodeId)) ||
+				(typeof dskOrNodeId === "number" &&
+					"nodeId" in e &&
+					e.nodeId === dskOrNodeId),
 		);
 		if (index >= 0) {
 			this._provisioningList.splice(index, 1);
@@ -1048,6 +1052,7 @@ export class ZWaveController extends TypedEventEmitter<ControllerEventCallbacks>
 	private _smartStartEnabled: boolean = false;
 
 	private _includeController: boolean = false;
+	private _unprovisionRemovedNode: boolean = false;
 
 	private _inclusionOptions: InclusionOptionsInternal | undefined;
 	private _nodePendingInclusion: ZWaveNode | undefined;
@@ -1390,10 +1395,13 @@ export class ZWaveController extends TypedEventEmitter<ControllerEventCallbacks>
 
 	/**
 	 * Starts the exclusion process of new nodes.
-	 * Resolves to true when the process was started,
-	 * and false if an inclusion or exclusion process was already active
+	 * Resolves to true when the process was started, and false if an inclusion or exclusion process was already active.
+	 *
+	 * @param unprovision Whether the removed node should also be removed from the Smart Start provisioning list.
 	 */
-	public async beginExclusion(): Promise<boolean> {
+	public async beginExclusion(
+		unprovision: boolean = false,
+	): Promise<boolean> {
 		if (
 			this._inclusionState === InclusionState.Including ||
 			this._inclusionState === InclusionState.Excluding ||
@@ -1422,6 +1430,7 @@ export class ZWaveController extends TypedEventEmitter<ControllerEventCallbacks>
 			this.driver.controllerLog.print(
 				`The controller is now ready to remove nodes`,
 			);
+			this._unprovisionRemovedNode = unprovision;
 			this.emit("exclusion started");
 			return true;
 		} catch (e) {
@@ -2569,17 +2578,18 @@ export class ZWaveController extends TypedEventEmitter<ControllerEventCallbacks>
 					return true;
 				}
 
-				this.driver.controllerLog.print(
-					`Node ${this._nodePendingExclusion.id} was removed`,
-				);
+				const nodeId = this._nodePendingExclusion.id;
+				this.driver.controllerLog.print(`Node ${nodeId} was removed`);
+
+				// Avoid automatic re-inclusion using SmartStart if desired
+				if (this._unprovisionRemovedNode)
+					this.unprovisionSmartStartNode(nodeId);
 
 				// notify listeners
 				this.emit("node removed", this._nodePendingExclusion, false);
 				// and forget the node
-				this.unmarkNodeOnProvisioningList(
-					this._nodePendingExclusion.id,
-				);
-				this._nodes.delete(this._nodePendingExclusion.id);
+				this.unmarkNodeOnProvisioningList(nodeId);
+				this._nodes.delete(nodeId);
 				this._nodePendingExclusion = undefined;
 
 				this.setInclusionState(InclusionState.Idle);
