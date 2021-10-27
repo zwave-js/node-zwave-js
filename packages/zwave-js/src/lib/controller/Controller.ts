@@ -1317,7 +1317,7 @@ export class ZWaveController extends TypedEventEmitter<ControllerEventCallbacks>
 	 *
 	 * Resolves to `true` when the listening mode is started or was active, and `false` if it is scheduled for later activation.
 	 */
-	public async enableSmartStart(): Promise<boolean> {
+	private async enableSmartStart(): Promise<boolean> {
 		if (this._smartStartEnabled) return true;
 		this._smartStartEnabled = true;
 
@@ -1360,7 +1360,7 @@ export class ZWaveController extends TypedEventEmitter<ControllerEventCallbacks>
 	 *
 	 * Resolves to `true` when the listening mode is stopped, and `false` if was not active.
 	 */
-	public async disableSmartStart(): Promise<boolean> {
+	private async disableSmartStart(): Promise<boolean> {
 		if (!this._smartStartEnabled) return false;
 		this._smartStartEnabled = false;
 
