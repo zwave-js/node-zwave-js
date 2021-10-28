@@ -11,6 +11,7 @@ import {
 	indexDBsByNode,
 	isRecoverableZWaveError,
 	isTransmissionError,
+	isValidDSK,
 	isZWaveError,
 	NODE_ID_BROADCAST,
 	nwiHomeIdFromDSK,
@@ -194,14 +195,14 @@ import {
 } from "./GetSUCNodeIdMessages";
 import { HardResetRequest } from "./HardResetRequest";
 import {
-	IncludedSmartStartProvisioningEntry,
+	IncludedProvisioningEntry,
 	InclusionOptions,
 	InclusionOptionsInternal,
 	InclusionResult,
 	InclusionState,
 	InclusionStrategy,
 	InclusionUserCallbacks,
-	PlannedSmartStartProvisioningEntry,
+	PlannedProvisioningEntry,
 	ReplaceNodeOptions,
 	SmartStartProvisioningEntry,
 } from "./Inclusion";
@@ -521,11 +522,9 @@ export class ZWaveController extends TypedEventEmitter<ControllerEventCallbacks>
 	}
 
 	/** Adds the given entry (DSK and security classes) to the controller's SmartStart provisioning list or replaces an existing entry */
-	public provisionSmartStartNode(
-		entry: PlannedSmartStartProvisioningEntry,
-	): void {
-		const index = this._provisioningList.findIndex((e) =>
-			e.dsk.equals(entry.dsk),
+	public provisionSmartStartNode(entry: PlannedProvisioningEntry): void {
+		const index = this._provisioningList.findIndex(
+			(e) => e.dsk === entry.dsk,
 		);
 		if (index === -1) {
 			this._provisioningList.push(entry);
@@ -541,10 +540,10 @@ export class ZWaveController extends TypedEventEmitter<ControllerEventCallbacks>
 	 *
 	 * **Note:** If this entry corresponds to an included node, it will **NOT** be excluded
 	 */
-	public unprovisionSmartStartNode(dskOrNodeId: Buffer | number): void {
+	public unprovisionSmartStartNode(dskOrNodeId: string | number): void {
 		const index = this._provisioningList.findIndex(
 			(e) =>
-				(Buffer.isBuffer(dskOrNodeId) && e.dsk.equals(dskOrNodeId)) ||
+				e.dsk === dskOrNodeId ||
 				(typeof dskOrNodeId === "number" &&
 					"nodeId" in e &&
 					e.nodeId === dskOrNodeId),
@@ -560,9 +559,9 @@ export class ZWaveController extends TypedEventEmitter<ControllerEventCallbacks>
 	 * Returns the entry for the given DSK from the controller's SmartStart provisioning list.
 	 */
 	public getProvisioningEntry(
-		dsk: Buffer,
+		dsk: string,
 	): SmartStartProvisioningEntry | undefined {
-		return this._provisioningList.find((e) => e.dsk.equals(dsk));
+		return this._provisioningList.find((e) => e.dsk === dsk);
 	}
 
 	/**
@@ -571,10 +570,8 @@ export class ZWaveController extends TypedEventEmitter<ControllerEventCallbacks>
 	public getProvisioningEntries(): SmartStartProvisioningEntry[] {
 		// Make copies so no one can modify the internal list
 		return this._provisioningList.map((e) => {
-			const dsk = Buffer.allocUnsafe(e.dsk.length);
-			e.dsk.copy(dsk);
 			return {
-				dsk,
+				dsk: e.dsk,
 				securityClasses: [...e.securityClasses],
 				...("nodeId" in e ? { nodeId: e.nodeId } : {}),
 			};
@@ -605,11 +602,10 @@ export class ZWaveController extends TypedEventEmitter<ControllerEventCallbacks>
 	private markNodeOnProvisioningList(node: ZWaveNode): void {
 		// If this node's DSK is on the provisioning list, remember the node ID
 		if (node.dsk) {
-			const entry = this._provisioningList.find((e) =>
-				e.dsk.equals(node.dsk!),
+			const entry = this._provisioningList.find(
+				(e) => e.dsk === dskToString(node.dsk!),
 			);
-			if (entry)
-				(entry as IncludedSmartStartProvisioningEntry).nodeId = node.id;
+			if (entry) (entry as IncludedProvisioningEntry).nodeId = node.id;
 		}
 	}
 
@@ -1175,7 +1171,7 @@ export class ZWaveController extends TypedEventEmitter<ControllerEventCallbacks>
 
 	/** @internal */
 	public async beginInclusionSmartStart(
-		provisioningEntry: PlannedSmartStartProvisioningEntry,
+		provisioningEntry: PlannedProvisioningEntry,
 	): Promise<boolean> {
 		if (
 			this._inclusionState === InclusionState.Including ||
@@ -1196,16 +1192,15 @@ export class ZWaveController extends TypedEventEmitter<ControllerEventCallbacks>
 
 		try {
 			this.driver.controllerLog.print(
-				`Including SmartStart node with DSK ${dskToString(
-					provisioningEntry.dsk,
-				)}`,
+				`Including SmartStart node with DSK ${provisioningEntry.dsk}`,
 			);
 
 			// kick off the inclusion process
+			const dskBuffer = dskFromString(provisioningEntry.dsk);
 			await this.driver.sendMessage(
 				new AddNodeDSKToNetworkRequest(this.driver, {
-					nwiHomeId: nwiHomeIdFromDSK(provisioningEntry.dsk),
-					authHomeId: authHomeIdFromDSK(provisioningEntry.dsk),
+					nwiHomeId: nwiHomeIdFromDSK(dskBuffer),
+					authHomeId: authHomeIdFromDSK(dskBuffer),
 					highPower: true,
 					networkWide: true,
 				}),
@@ -1634,8 +1629,8 @@ export class ZWaveController extends TypedEventEmitter<ControllerEventCallbacks>
 				| InclusionStrategy.Security_S2
 				| InclusionStrategy.SmartStart;
 		};
-		if (inclusionOptions?.strategy === InclusionStrategy.SmartStart) {
-			// SmartStart is pre-provisioned, so we don't need to ask the user for anything
+		if ("provisioning" in inclusionOptions) {
+			// SmartStart and S2 with QR code are pre-provisioned, so we don't need to ask the user for anything
 			userCallbacks = {
 				// eslint-disable-next-line @typescript-eslint/no-empty-function
 				abort() {},
@@ -1649,13 +1644,12 @@ export class ZWaveController extends TypedEventEmitter<ControllerEventCallbacks>
 						),
 					});
 				},
-				validateDSKAndEnterPIN: () => {
-					return Promise.resolve(
-						dskToString(inclusionOptions.provisioning.dsk).slice(
-							0,
-							5,
-						),
-					);
+				validateDSKAndEnterPIN: (dsk) => {
+					const fullDSK = inclusionOptions.provisioning.dsk;
+					const pin = fullDSK.slice(0, 5);
+					// Make sure the DSK matches
+					if (pin + dsk !== fullDSK) return Promise.resolve(false);
+					return Promise.resolve(pin);
 				},
 			};
 		} else {
@@ -4143,7 +4137,7 @@ ${associatedNodes.join(", ")}`,
 		return {
 			controller: {
 				provisioningList: this.provisioningList.map((e) => ({
-					dsk: dskToString(e.dsk),
+					dsk: e.dsk,
 					securityClasses: e.securityClasses.map(
 						(s) => SecurityClass[s],
 					),
@@ -4171,14 +4165,8 @@ ${associatedNodes.join(", ")}`,
 					if (!isObject(entry)) continue;
 					if (typeof entry.dsk !== "string") continue;
 					if (!isArray(entry.securityClasses)) continue;
+					if (!isValidDSK(entry.dsk)) continue;
 
-					let dsk: Buffer;
-					try {
-						dsk = dskFromString(entry.dsk);
-					} catch {
-						// Not a valid DSK
-						continue;
-					}
 					const securityClasses: SecurityClass[] = [];
 					for (const s of entry.securityClasses) {
 						if (typeof s !== "string") continue entries;
@@ -4188,7 +4176,7 @@ ${associatedNodes.join(", ")}`,
 					}
 
 					this._provisioningList.push({
-						dsk,
+						dsk: entry.dsk,
 						securityClasses,
 					});
 				}

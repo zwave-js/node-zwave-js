@@ -4,6 +4,7 @@ import { ConfigManager, externalConfigDir } from "@zwave-js/config";
 import {
 	CommandClasses,
 	deserializeCacheValue,
+	dskFromString,
 	Duration,
 	getNodeMetaValueID,
 	highResTimestamp,
@@ -2934,7 +2935,9 @@ ${handlers.length} left`,
 				// Check if the node is on the provisioning list
 				const provisioningEntry = this.controller.provisioningList.find(
 					(entry) =>
-						nwiHomeIdFromDSK(entry.dsk).equals(msg.nwiHomeId),
+						nwiHomeIdFromDSK(dskFromString(entry.dsk)).equals(
+							msg.nwiHomeId,
+						),
 				);
 				if (!provisioningEntry) {
 					this.controllerLog.print(

@@ -55,6 +55,10 @@ type InclusionOptions =
 			userCallbacks: InclusionUserCallbacks;
 	  }
 	| {
+			strategy: InclusionStrategy.Security_S2;
+			provisioning: PlannedProvisioningEntry;
+	  }
+	| {
 			strategy:
 				| InclusionStrategy.Insecure
 				| InclusionStrategy.Security_S0;
@@ -126,6 +130,18 @@ enum SecurityClass {
 }
 ```
 
+Alternatively, the node can be pre-provisioned by providing the full DSK and the granted security classes instead of the user callbacks:
+
+```ts
+interface PlannedProvisioningEntry {
+	/** The device specific key (DSK) in the form aaaaa-bbbbb-ccccc-ddddd-eeeee-fffff-11111-22222 */
+	dsk: string;
+	securityClasses: SecurityClass[];
+}
+```
+
+> [!NOTE] The intended use case for this is inclusion after scanning a S2 QR code. Otherwise, care must be taken to give correct information. If the included node has a different DSK than the provided one, the secure inclusion will fail. Furthermore, the node will be granted only those security classes that are requested and the provided list. If there is no overlap, the secure inclusion will fail.
+
 ### `stopInclusion`
 
 ```ts
@@ -155,21 +171,22 @@ Stops the exclusion process to remove a node from the network. The returned prom
 ### `provisionSmartStartNode`
 
 ```ts
-provisionSmartStartNode(entry: PlannedSmartStartProvisioningEntry): void
+provisionSmartStartNode(entry: PlannedProvisioningEntry): void
 ```
 
 Adds the given entry (DSK and security classes) to the controller's SmartStart provisioning list or replaces an existing entry. The node will be included out of band when it powers up.
 
 The parameter has the following shape:
 
+<!-- #import PlannedProvisioningEntry from "zwave-js" -->
+
 ```ts
-interface PlannedSmartStartProvisioningEntry {
-	dsk: Buffer;
+interface PlannedProvisioningEntry {
+	/** The device specific key (DSK) in the form aaaaa-bbbbb-ccccc-ddddd-eeeee-fffff-11111-22222 */
+	dsk: string;
 	securityClasses: SecurityClass[];
 }
 ```
-
-> [!NOTE] The DSK must be given as a buffer. Converting between the standard string form and buffers can be done with the `dskFromString` and `dskToString` methods which can be imported from `@zwave-js/core`.
 
 ### `unprovisionSmartStartNode`
 
