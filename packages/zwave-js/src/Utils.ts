@@ -1,2 +1,12 @@
-export { extractFirmware, guessFirmwareFileFormat } from "@zwave-js/core";
-export type { Firmware, FirmwareFileFormat } from "@zwave-js/core";
+export {
+	extractFirmware,
+	guessFirmwareFileFormat,
+	parseQRCodeString,
+	QRCodeVersion,
+} from "@zwave-js/core";
+export type {
+	Firmware,
+	FirmwareFileFormat,
+	Protocols,
+	QRProvisioningInformation,
+} from "@zwave-js/core";

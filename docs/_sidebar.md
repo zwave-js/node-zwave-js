@@ -18,6 +18,7 @@
     -   [Virtual nodes and endpoints](api/virtual-node-endpoint.md)
     -   [Values and Metadata](api/valueid.md)
     -   [ConfigManager](api/config-manager.md)
+    -   [Utilities](api/utils.md)
     -   [Command Classes](api/CCs/index.md)
         <!-- AUTO-GENERATE: CC Links -->
 
