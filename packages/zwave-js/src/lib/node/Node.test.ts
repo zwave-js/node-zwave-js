@@ -1044,6 +1044,7 @@ describe("lib/node/Node", () => {
 				S2_Unauthenticated: true,
 				S0_Legacy: false,
 			},
+			dsk: "00000-00001-00002-00003-00004-00005-00006-00007",
 			commandClasses: {
 				"0x25": {
 					name: "Binary Switch",
@@ -1212,7 +1213,7 @@ describe("lib/node/Node", () => {
 			node.destroy();
 		});
 
-		it("deserialize() should skip any primitive properties that have the wrong type", () => {
+		it("deserialize() should skip any primitive properties that have the wrong type or format", () => {
 			const node = new ZWaveNode(1, fakeDriver);
 			const wrongInputs: [string, any][] = [
 				["isListening", 1],
@@ -1222,6 +1223,7 @@ describe("lib/node/Node", () => {
 				["supportsSecurity", 3],
 				["supportsSecurity", "3"],
 				["protocolVersion", false],
+				["dsk", "foo"],
 			];
 			for (const [prop, val] of wrongInputs) {
 				const input = {

@@ -77,7 +77,7 @@ await driver.controller.beginInclusion({
 
 ### Inclusion strategy
 
-Z-Wave JS offers multiple ways to include a device, but we only recommend a few of them. For most use cases, the **default** inclusion strategy should be enough. For modern devices, **SmartStart** makes the inclusion even easier for the user due to not requiring interaction during the inclusion process. If you absolutely must, you can force **unencrypted communication**.
+Z-Wave JS offers multiple ways to include a device, but we only recommend a few of them. For most use cases, the **default** inclusion strategy should be enough. If you absolutely must, you can force **unencrypted communication**.
 
 Furthermore it has been found that some locks claim to support S2, but don't respond to the key exchange commands. Because it is not possible to try with S0 after S2 has been attempted, an option to **use only S0** must exist.
 
@@ -121,3 +121,13 @@ driver.controller.on("node added", (node, result) => {
 
 Therefore, the inclusion result should be displayed and a user MUST be warned about a problem during the inclusion, e.g. by displaying one of these dialogs:
 ![inclusion result](../_images/s2-inclusion-result.png)
+
+## SmartStart
+
+For modern devices, **SmartStart** makes the inclusion even easier for the user due to not requiring interaction during the inclusion process. SmartStart capable nodes are pre-provisioned through entering their DSK and granting security classes outside of the inclusion process. When a node on the provisioning list announces itself, it will automatically be included in the network within a couple of minutes. A UI to manage the provisioning list could look like this:
+
+![Smart Start provisioning list](../_images/smart-start.png)
+
+Scanning a QR code can further simplify this process, but decoding the QR codes isn't implemented yet.
+
+> [!NOTE] Confirming the inclusion process like with normal S2 inclusion is recommended, so users can react to a failed bootstrapping attempt.

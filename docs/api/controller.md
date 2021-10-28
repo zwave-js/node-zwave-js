@@ -55,10 +55,6 @@ type InclusionOptions =
 			userCallbacks: InclusionUserCallbacks;
 	  }
 	| {
-			strategy: InclusionStrategy.SmartStart;
-			provisioningList: unknown;
-	  }
-	| {
 			strategy:
 				| InclusionStrategy.Insecure
 				| InclusionStrategy.Security_S0;
@@ -141,10 +137,12 @@ Stops the inclusion process for a new node. The returned promise resolves to `tr
 ### `beginExclusion`
 
 ```ts
-async beginExclusion(): Promise<boolean>
+async beginExclusion(unprovision?: boolean): Promise<boolean>
 ```
 
 Starts the exclusion process to remove a node from the network. The returned promise resolves to `true` if starting the exclusion was successful, `false` if it failed or if it was already active.
+
+The optional parameter `unprovision` specifies whether the removed node should be removed from the Smart Start provisioning list as well.
 
 ### `stopExclusion`
 
@@ -152,7 +150,62 @@ Starts the exclusion process to remove a node from the network. The returned pro
 async stopExclusion(): Promise<boolean>
 ```
 
-Stops the exclusion process to remove a node from the network.The returned promise resolves to `true` if stopping the exclusion was successful, `false` if it failed or if it was not active.
+Stops the exclusion process to remove a node from the network. The returned promise resolves to `true` if stopping the exclusion was successful, `false` if it failed or if it was not active.
+
+### `provisionSmartStartNode`
+
+```ts
+provisionSmartStartNode(entry: PlannedSmartStartProvisioningEntry): void
+```
+
+Adds the given entry (DSK and security classes) to the controller's SmartStart provisioning list or replaces an existing entry. The node will be included out of band when it powers up.
+
+The parameter has the following shape:
+
+```ts
+interface PlannedSmartStartProvisioningEntry {
+	dsk: Buffer;
+	securityClasses: SecurityClass[];
+}
+```
+
+> [!NOTE] The DSK must be given as a buffer. Converting between the standard string form and buffers can be done with the `dskFromString` and `dskToString` methods which can be imported from `@zwave-js/core`.
+
+### `unprovisionSmartStartNode`
+
+```ts
+unprovisionSmartStartNode(dskOrNodeId: Buffer | number): void
+```
+
+Removes the given DSK or node ID from the controller's SmartStart provisioning list. The DSK must be given as a buffer.
+
+> [!NOTE] If this entry corresponds to an already-included node, it will **NOT** be excluded.
+
+### `getProvisioningEntry`
+
+```ts
+getProvisioningEntry(dsk: Buffer): SmartStartProvisioningEntry | undefined
+```
+
+Returns the entry for the given DSK from the controller's SmartStart provisioning list. The returned entry (if found) has the following shape:
+
+```ts
+interface SmartStartProvisioningEntry {
+	dsk: Buffer;
+	securityClasses: SecurityClass[];
+	nodeId?: number;
+}
+```
+
+The `nodeId` will be set when the entry corresponds to an included node.
+
+### `getProvisioningEntries`
+
+```ts
+getProvisioningEntries(): SmartStartProvisioningEntry[]
+```
+
+Returns all entries from the controller's SmartStart provisioning list.
 
 ### `getNodeNeighbors`
 
@@ -599,10 +652,35 @@ Returns the ID of the controller in the current network.
 ### `isHealNetworkActive`
 
 ```ts
-isHealNetworkActive: boolean;
+readonly isHealNetworkActive: boolean;
 ```
 
 Returns whether the network or a node is currently being healed.
+
+### `inclusionState`
+
+```ts
+readonly inclusionState: InclusionState
+```
+
+Returns the controller state regarding inclusion/exclusion.
+
+<!-- #import InclusionState from "zwave-js" -->
+
+```ts
+enum InclusionState {
+	/** The controller isn't doing anything regarding inclusion. */
+	Idle,
+	/** The controller is waiting for a node to be included. */
+	Including,
+	/** The controller is waiting for a node to be excluded. */
+	Excluding,
+	/** The controller is busy including or excluding a node. */
+	Busy,
+	/** The controller listening for SmartStart nodes to announce themselves. */
+	SmartStart,
+}
+```
 
 ## Controller events
 

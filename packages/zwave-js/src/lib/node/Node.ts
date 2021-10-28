@@ -11,6 +11,8 @@ import {
 	CommandClasses,
 	CommandClassInfo,
 	CRC16_CCITT,
+	dskFromString,
+	dskToString,
 	getCCName,
 	getNodeMetaValueID,
 	isTransmissionError,
@@ -496,6 +498,19 @@ export class ZWaveNode extends Endpoint implements SecurityClassOwner {
 
 	/** @internal */
 	public readonly securityClasses = new Map<SecurityClass, boolean>();
+
+	private _dsk: Buffer | undefined;
+	/**
+	 * The device specific key (DSK) of this node in binary format.
+	 * This is only set if included with Security S2.
+	 */
+	public get dsk(): Buffer | undefined {
+		return this._dsk;
+	}
+	/** @internal */
+	public set dsk(value: Buffer | undefined) {
+		this._dsk = value;
+	}
 
 	/** Whether the node was granted at least one security class */
 	public get isSecure(): Maybe<boolean> {
@@ -3545,6 +3560,7 @@ protocol version:      ${this._protocolVersion}`;
 			supportsSecurity: this.supportsSecurity,
 			supportsBeaming: this.supportsBeaming,
 			securityClasses: {} as JSONObject,
+			dsk: this.dsk ? dskToString(this.dsk) : undefined,
 			commandClasses: {} as JSONObject,
 		};
 		// Save security classes where they are known
@@ -3652,6 +3668,13 @@ protocol version:      ${this._protocolVersion}`;
 			this.securityClasses.set(SecurityClass.S2_AccessControl, false);
 			this.securityClasses.set(SecurityClass.S2_Authenticated, false);
 			this.securityClasses.set(SecurityClass.S2_Unauthenticated, false);
+		}
+		if (typeof obj.dsk === "string") {
+			try {
+				this._dsk = dskFromString(obj.dsk);
+			} catch {
+				// ignore
+			}
 		}
 		tryParse("supportsSecurity", "boolean");
 		tryParse("supportsBeaming", "boolean");
