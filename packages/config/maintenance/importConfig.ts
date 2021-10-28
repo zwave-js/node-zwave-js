@@ -417,7 +417,7 @@ function normalizeConfig(config: Record<string, any>): Record<string, any> {
 						other["#"].startsWith(`${param["#"]}[`),
 					),
 			)
-			.map(([key]) => key);
+			.map((e) => e["#"]);
 
 		config.paramInformation = config.paramInformation.filter((param: any) =>
 			allowedKeys.includes(param["#"]),
