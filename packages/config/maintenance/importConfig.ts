@@ -775,10 +775,8 @@ async function parseOZWProduct(
 	await fs.ensureDir(manufacturerDir);
 
 	// write the updated configuration file
-	await fs.writeFile(
-		fileNameAbsolute,
-		stringify(normalizeConfig(newConfig), "\t"),
-	);
+	const output = stringify(normalizeConfig(newConfig), "\t") + "\n";
+	await fs.writeFile(fileNameAbsolute, output, "utf8");
 }
 
 /*********************************************************
@@ -1498,7 +1496,8 @@ async function parseZWAProduct(
 	await fs.ensureDir(manufacturerDir);
 
 	// Write the file
-	const output = JSONC.stringify(normalizeConfig(newConfig), null, "\t");
+	const output =
+		JSONC.stringify(normalizeConfig(newConfig), null, "\t") + "\n";
 	await fs.writeFile(fileNameAbsolute, output, "utf8");
 }
 
@@ -1588,11 +1587,8 @@ async function maintenanceParse(): Promise<void> {
 			/*************************************
 			 *   Write the configuration file    *
 			 *************************************/
-			const output = JSONC.stringify(
-				normalizeConfig(jsonData),
-				null,
-				"\t",
-			);
+			const output =
+				JSONC.stringify(normalizeConfig(jsonData), null, "\t") + "\n";
 			await fs.writeFile(file, output, "utf8");
 		}
 	}
@@ -1936,7 +1932,7 @@ async function importConfigFilesOH(): Promise<void> {
 		outFilename += ".json";
 		await fs.ensureDir(path.dirname(outFilename));
 
-		const output = stringify(parsed, "\t");
+		const output = stringify(parsed, "\t") + "\n";
 		await fs.writeFile(outFilename, output, "utf8");
 	}
 }
