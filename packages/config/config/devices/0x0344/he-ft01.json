@@ -196,7 +196,7 @@
 		{
 			"#": "12",
 			"label": "Fan Low Speed Relay: Load Power",
-			"description": "The load of the connected device, which is used to determine energy consumption.",
+			"description": "The power of the connected device, which is used to determine energy consumption.",
 			"unit": "W",
 			"valueSize": 2,
 			"minValue": 0,
@@ -206,7 +206,7 @@
 		{
 			"#": "13",
 			"label": "Fan Medium Speed Relay: Load Power",
-			"description": "The load of the connected device, which is used to determine energy consumption.",
+			"description": "The power of the connected device, which is used to determine energy consumption.",
 			"unit": "W",
 			"valueSize": 2,
 			"minValue": 0,
@@ -216,7 +216,7 @@
 		{
 			"#": "14",
 			"label": "Fan High Speed Relay: Load Power",
-			"description": "The load of the connected device, which is used to determine energy consumption.",
+			"description": "The power of the connected device, which is used to determine energy consumption.",
 			"unit": "W",
 			"valueSize": 2,
 			"minValue": 0,
@@ -226,7 +226,7 @@
 		{
 			"#": "15",
 			"label": "Heating Valve Relay: Load Power",
-			"description": "The load of the connected device, which is used to determine energy consumption.",
+			"description": "The power of the connected device, which is used to determine energy consumption.",
 			"unit": "W",
 			"valueSize": 2,
 			"minValue": 0,
@@ -236,7 +236,7 @@
 		{
 			"#": "16",
 			"label": "Cooling Valve Relay: Load Power",
-			"description": "The load of the connected device, which is used to determine energy consumption.",
+			"description": "The power of the connected device, which is used to determine energy consumption.",
 			"unit": "W",
 			"valueSize": 2,
 			"minValue": 0,
