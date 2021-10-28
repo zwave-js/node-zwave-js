@@ -95,6 +95,10 @@ export type InclusionOptions =
 			userCallbacks: InclusionUserCallbacks;
 	  }
 	| {
+			strategy: InclusionStrategy.Security_S2;
+			provisioning: PlannedProvisioningEntry;
+	  }
+	| {
 			strategy:
 				| InclusionStrategy.Insecure
 				| InclusionStrategy.Security_S0;
@@ -108,7 +112,7 @@ export type InclusionOptionsInternal =
 	| InclusionOptions
 	| {
 			strategy: InclusionStrategy.SmartStart;
-			provisioning: PlannedSmartStartProvisioningEntry;
+			provisioning: PlannedProvisioningEntry;
 	  };
 
 /** Options for replacing a node */
@@ -120,24 +124,28 @@ export type ReplaceNodeOptions =
 			userCallbacks: InclusionUserCallbacks;
 	  }
 	| {
+			strategy: InclusionStrategy.Security_S2;
+			provisioning: PlannedProvisioningEntry;
+	  }
+	| {
 			strategy:
 				| InclusionStrategy.Insecure
 				| InclusionStrategy.Security_S0;
 	  };
 
-export interface PlannedSmartStartProvisioningEntry {
-	dsk: Buffer;
+export interface PlannedProvisioningEntry {
+	/** The device specific key (DSK) in the form aaaaa-bbbbb-ccccc-ddddd-eeeee-fffff-11111-22222 */
+	dsk: string;
 	securityClasses: SecurityClass[];
 }
 
-export interface IncludedSmartStartProvisioningEntry
-	extends PlannedSmartStartProvisioningEntry {
+export interface IncludedProvisioningEntry extends PlannedProvisioningEntry {
 	nodeId: number;
 }
 
 export type SmartStartProvisioningEntry =
-	| PlannedSmartStartProvisioningEntry
-	| IncludedSmartStartProvisioningEntry;
+	| PlannedProvisioningEntry
+	| IncludedProvisioningEntry;
 
 export enum InclusionState {
 	/** The controller isn't doing anything regarding inclusion. */

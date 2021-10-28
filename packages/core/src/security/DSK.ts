@@ -1,6 +1,10 @@
 import { padStart } from "alcalzone-shared/strings";
 import { ZWaveError, ZWaveErrorCodes } from "../error/ZWaveError";
 
+export function isValidDSK(dsk: string): boolean {
+	return /^(\d{5}-){7}\d{5}$/.test(dsk);
+}
+
 export function dskToString(dsk: Buffer): string {
 	if (dsk.length !== 16) {
 		throw new ZWaveError(
@@ -17,7 +21,7 @@ export function dskToString(dsk: Buffer): string {
 }
 
 export function dskFromString(dsk: string): Buffer {
-	if (!/^(\d{5}-){7}\d{5}$/.test(dsk)) {
+	if (!isValidDSK(dsk)) {
 		throw new ZWaveError(
 			`The DSK must be in the form "aaaaa-bbbbb-ccccc-ddddd-eeeee-fffff-11111-22222"`,
 			ZWaveErrorCodes.Argument_Invalid,
