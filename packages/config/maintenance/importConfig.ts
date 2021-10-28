@@ -361,8 +361,13 @@ function normalizeConfig(config: Record<string, any>): Record<string, any> {
 		"options",
 	];
 
-	// Potentially empty arrays to remove
-	const arraysToClean = ["associations", "compat", "metadata"];
+	// Potentially empty arrays and objects to remove
+	const disallowEmpty = [
+		"associations",
+		"paramInformation",
+		"compat",
+		"metadata",
+	];
 
 	/*******************
 	 * Standardize things
@@ -381,10 +386,20 @@ function normalizeConfig(config: Record<string, any>): Record<string, any> {
 		config[l] = temp;
 	}
 
-	// Remove empty arrays
-	for (const array of Object.keys(arraysToClean)) {
-		if (!config[array] || config[array].length === 0) {
-			delete config[array];
+	// Remove empty arrays and objects
+	for (const prop of Object.keys(disallowEmpty)) {
+		if (prop in config) {
+			// Key exists
+			if (
+				isObject(config[prop]) &&
+				Object.keys(config[prop]).length === 0
+			) {
+				delete config[prop];
+			} else if (isArray(config[prop]) && config[prop].length === 0) {
+				delete config[prop];
+			} else if (!config[prop]) {
+				delete config[prop];
+			}
 		}
 	}
 
