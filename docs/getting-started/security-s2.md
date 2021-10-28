@@ -128,6 +128,12 @@ For modern devices, **SmartStart** makes the inclusion even easier for the user 
 
 ![Smart Start provisioning list](../_images/smart-start.png)
 
-Scanning a QR code can further simplify this process, see [Parse S2 or SmartStart QR code strings](api/utils.md#parse-s2-or-smartstart-qr-code-strings).
-
 > [!NOTE] Confirming the inclusion process like with normal S2 inclusion is recommended, so users can react to a failed bootstrapping attempt.
+
+## Using QR codes to include devices
+
+Scanning a QR code can further simplify the inclusion process, because it limits the user interaction to scanning the code (and pushing a button for conventional inclusion):
+
+![Inclusion with QR code](../_images/qr-code-inclusion.png)
+
+For more details see [Parse S2 or SmartStart QR code strings](api/utils.md#parse-s2-or-smartstart-qr-code-strings).
