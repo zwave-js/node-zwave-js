@@ -475,6 +475,16 @@ export class ZWaveController extends TypedEventEmitter<ControllerEventCallbacks>
 		return this._supportsTimers;
 	}
 
+	private _supportsSoftReset: boolean | undefined;
+	/** Whether the controller is known to support soft reset */
+	public get supportsSoftReset(): boolean | undefined {
+		return this._supportsSoftReset;
+	}
+	/** @internal */
+	public set supportsSoftReset(value: boolean | undefined) {
+		this._supportsSoftReset = value;
+	}
+
 	private _nodes: ThrowingMap<number, ZWaveNode>;
 	/** A dictionary of the nodes connected to this controller */
 	public get nodes(): ReadonlyThrowingMap<number, ZWaveNode> {
@@ -619,7 +629,7 @@ export class ZWaveController extends TypedEventEmitter<ControllerEventCallbacks>
 
 	/**
 	 * @internal
-	 * Queries the controller IDs which are necessary for the value DBs to be opened
+	 * Queries the controller IDs and its Serial API capabilities
 	 */
 	public async identify(): Promise<void> {
 		// get the home and node id of the controller
@@ -635,17 +645,30 @@ export class ZWaveController extends TypedEventEmitter<ControllerEventCallbacks>
   home ID:     ${num2hex(this._homeId)}
   own node ID: ${this._ownNodeId}`,
 		);
-	}
 
-	/**
-	 * @internal
-	 * Queries the controller IDs which are necessary for the value DBs to be opened
-	 */
-	public initializeControllerNode(): void {
-		const nodeId = this._ownNodeId!;
-		this._nodes.set(
-			nodeId,
-			new ZWaveNode(nodeId, this.driver, undefined, undefined, undefined),
+		// Figure out what the serial API can do
+		this.driver.controllerLog.print(`querying API capabilities...`);
+		const apiCaps =
+			await this.driver.sendMessage<GetSerialApiCapabilitiesResponse>(
+				new GetSerialApiCapabilitiesRequest(this.driver),
+				{
+					supportCheck: false,
+				},
+			);
+		this._serialApiVersion = apiCaps.serialApiVersion;
+		this._manufacturerId = apiCaps.manufacturerId;
+		this._productType = apiCaps.productType;
+		this._productId = apiCaps.productId;
+		this._supportedFunctionTypes = apiCaps.supportedFunctionTypes;
+		this.driver.controllerLog.print(
+			`received API capabilities:
+  serial API version:  ${this._serialApiVersion}
+  manufacturer ID:     ${num2hex(this._manufacturerId)}
+  product type:        ${num2hex(this._productType)}
+  product ID:          ${num2hex(this._productId)}
+  supported functions: ${this._supportedFunctionTypes
+		.map((fn) => `\n  · ${FunctionType[fn]} (${num2hex(fn)})`)
+		.join("")}`,
 		);
 	}
 
@@ -657,8 +680,6 @@ export class ZWaveController extends TypedEventEmitter<ControllerEventCallbacks>
 	public async interview(
 		restoreFromCache: () => Promise<void>,
 	): Promise<void> {
-		this.driver.controllerLog.print("beginning interview...");
-
 		// get basic controller version info
 		this.driver.controllerLog.print(`querying version info...`);
 		const version =
@@ -699,32 +720,6 @@ export class ZWaveController extends TypedEventEmitter<ControllerEventCallbacks>
   was real primary:    ${this._wasRealPrimary}
   is a SUC:            ${this._isStaticUpdateController}`,
 		);
-
-		// find out which part of the API is supported
-		this.driver.controllerLog.print(`querying API capabilities...`);
-		const apiCaps =
-			await this.driver.sendMessage<GetSerialApiCapabilitiesResponse>(
-				new GetSerialApiCapabilitiesRequest(this.driver),
-				{
-					supportCheck: false,
-				},
-			);
-		this._serialApiVersion = apiCaps.serialApiVersion;
-		this._manufacturerId = apiCaps.manufacturerId;
-		this._productType = apiCaps.productType;
-		this._productId = apiCaps.productId;
-		this._supportedFunctionTypes = apiCaps.supportedFunctionTypes;
-		this.driver.controllerLog.print(
-			`received API capabilities:
-  serial API version:  ${this._serialApiVersion}
-  manufacturer ID:     ${num2hex(this._manufacturerId)}
-  product type:        ${num2hex(this._productType)}
-  product ID:          ${num2hex(this._productId)}
-  supported functions: ${this._supportedFunctionTypes
-		.map((fn) => `\n  · ${FunctionType[fn]} (${num2hex(fn)})`)
-		.join("")}`,
-		);
-		// now we can check if a function is supported
 
 		// Figure out which sub commands of SerialAPISetup are supported
 		if (this.isFunctionSupported(FunctionType.SerialAPISetup)) {
@@ -854,8 +849,6 @@ export class ZWaveController extends TypedEventEmitter<ControllerEventCallbacks>
 		]);
 		// create an empty entry in the nodes map so we can initialize them afterwards
 		for (const nodeId of initData.nodeIds) {
-			// The controller node is created separately
-			if (nodeId === this._ownNodeId) continue;
 			this._nodes.set(
 				nodeId,
 				new ZWaveNode(
@@ -4136,6 +4129,7 @@ ${associatedNodes.join(", ")}`,
 	public serialize(): JSONObject {
 		return {
 			controller: {
+				supportsSoftReset: this.supportsSoftReset,
 				provisioningList: this.provisioningList.map((e) => ({
 					dsk: e.dsk,
 					securityClasses: e.securityClasses.map(
@@ -4158,6 +4152,11 @@ ${associatedNodes.join(", ")}`,
 	 */
 	public async deserialize(serialized: any): Promise<void> {
 		if (isObject(serialized.controller)) {
+			// Parse whether the controller supports soft reset
+			if (typeof serialized.controller.supportsSoftReset === "boolean") {
+				this.supportsSoftReset =
+					serialized.controller.supportsSoftReset;
+			}
 			// Parse the controller's Smart Start provisioning list
 			if (isArray(serialized.controller.provisioningList)) {
 				entries: for (const entry of serialized.controller
