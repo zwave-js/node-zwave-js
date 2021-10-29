@@ -2,7 +2,7 @@
 	"manufacturer": "Aeotec Ltd.",
 	"manufacturerId": "0x0371",
 	"label": "ZWA009",
-	"description": "aërQ Temperature and Humidity Sensor",
+	"description": "aërQ Temperature and Humidity Sensor v1.0",
 	"devices": [
 		{
 			"productType": "0x0002",
@@ -18,8 +18,8 @@
 		}
 	],
 	"firmwareVersion": {
-		"min": "0.0",
-		"max": "255.255"
+		"min": "11.1",
+		"max": "11.1"
 	},
 	"associations": {
 		"1": {
@@ -84,7 +84,7 @@
 		{
 			"#": "4",
 			"label": "Automatic Reporting Interval",
-			"description": "Allowable Range: 900-65535",
+			"description": "Allowable Range: 30-65535",
 			"unit": "seconds",
 			"unsigned": true,
 			"valueSize": 2,

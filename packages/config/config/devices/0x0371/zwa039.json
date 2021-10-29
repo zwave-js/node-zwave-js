@@ -1,0 +1,282 @@
+{
+	"manufacturer": "Aeotec Ltd.",
+	"manufacturerId": "0x0371",
+	"label": "ZWA039",
+	"description": "aërQ Temperature and Humidity Sensor v2.0",
+	"devices": [
+		{
+			"productType": "0x0002",
+			"productId": "0x0009"
+		},
+		{
+			"productType": "0x0102",
+			"productId": "0x0009"
+		},
+		{
+			"productType": "0x0202",
+			"productId": "0x0009"
+		}
+	],
+	"firmwareVersion": {
+		"min": "2.0",
+		"max": "10.255"
+	},
+	"associations": {
+		"1": {
+			"label": "Lifeline",
+			"maxNodes": 5,
+			"isLifeline": true
+		},
+		"2": {
+			"label": "High Temperature",
+			"maxNodes": 5
+		},
+		"3": {
+			"label": "Low Temperature",
+			"maxNodes": 5
+		},
+		"4": {
+			"label": "High Humidity",
+			"maxNodes": 5
+		},
+		"5": {
+			"label": "Low Humidity",
+			"maxNodes": 5
+		},
+		"6": {
+			"label": "Air Temperature (Multilevel)",
+			"maxNodes": 5
+		}
+	},
+	"paramInformation": [
+		{
+			"#": "1",
+			"label": "Temperature Change Report Threshold",
+			"unit": "0.1 °(C/F)",
+			"unsigned": true,
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 100,
+			"defaultValue": 20,
+			"options": [
+				{
+					"label": "Disable",
+					"value": 0
+				}
+			]
+		},
+		{
+			"#": "2",
+			"label": "Humidity Change Report Threshhold",
+			"unit": "%",
+			"unsigned": true,
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 20,
+			"defaultValue": 5,
+			"options": [
+				{
+					"label": "Disable",
+					"value": 0
+				}
+			]
+		},
+		{
+			"#": "3",
+			"label": "Threshold Check Interval",
+			"unit": "minutes",
+			"unsigned": true,
+			"valueSize": 2,
+			"minValue": 1,
+			"maxValue": 255,
+			"defaultValue": 15
+		},
+		{
+			"#": "4",
+			"label": "Automatic Reporting Interval",
+			"description": "Allowable Range: 30-65535",
+			"unit": "seconds",
+			"unsigned": true,
+			"valueSize": 2,
+			"minValue": 0,
+			"maxValue": 65535,
+			"defaultValue": 43200,
+			"options": [
+				{
+					"label": "Disable",
+					"value": 0
+				}
+			]
+		},
+		{
+			"#": "5",
+			"label": "High Temperature Basic Set Threshhold",
+			"unit": "0.1 °(C/F)",
+			"unsigned": true,
+			"valueSize": 2,
+			"minValue": 0,
+			"maxValue": 1000,
+			"defaultValue": 0,
+			"options": [
+				{
+					"label": "Disable",
+					"value": 0
+				}
+			]
+		},
+		{
+			"#": "10",
+			"label": "High Temperature Basic Set Value",
+			"description": "Allowable Range: 0-99, 255.",
+			"unsigned": true,
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 0
+		},
+		{
+			"#": "6",
+			"label": "Low Temperature Basic Set Threshhold",
+			"description": "Allowable Range: 200-1000.",
+			"unit": "0.1 °(C/F)",
+			"unsigned": true,
+			"valueSize": 2,
+			"minValue": 0,
+			"maxValue": 1000,
+			"defaultValue": 0,
+			"options": [
+				{
+					"label": "Disable",
+					"value": 0
+				}
+			]
+		},
+		{
+			"#": "9",
+			"label": "Low Temperature Basic Set Value",
+			"description": "Allowable Range: 0-99, 255.",
+			"unsigned": true,
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 255
+		},
+		{
+			"#": "7",
+			"label": "High Humidity Basic Set Threshhold",
+			"unit": "%",
+			"unsigned": true,
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 90,
+			"defaultValue": 0,
+			"options": [
+				{
+					"label": "Disable",
+					"value": 0
+				}
+			]
+		},
+		{
+			"#": "16",
+			"label": "Check Interval for Parameter 5, 6, 7, 8",
+			"unit": "minutes",
+			"unsigned": true,
+			"valueSize": 1,
+			"minValue": 1,
+			"maxValue": 255,
+			"defaultValue": 15
+		},
+		{
+			"#": "12",
+			"label": "High Humidity Trigger Basic Set Value",
+			"description": "Allowable Range: 0-99, 255.",
+			"unsigned": true,
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 0
+		},
+		{
+			"#": "8",
+			"label": "Low Humidity Basic Set Threshhold",
+			"unit": "%",
+			"unsigned": true,
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 90,
+			"defaultValue": 0,
+			"options": [
+				{
+					"label": "Disable",
+					"value": 0
+				}
+			]
+		},
+		{
+			"#": "11",
+			"label": "Low Humidity Trigger Basic Set Value",
+			"description": "Allowable Range: 0-99, 255.",
+			"unsigned": true,
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 255
+		},
+		{
+			"#": "13",
+			"label": "Humidity Offset for Mold Danger Notification",
+			"unit": "%",
+			"unsigned": true,
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 10,
+			"defaultValue": 0
+		},
+		{
+			"#": "65[0x01]",
+			"label": "Sensor Report after Inclusion: Battery",
+			"unsigned": true,
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 1
+		},
+		{
+			"#": "65[0x02]",
+			"label": "Sensor Report after Inclusion: Temperature",
+			"unsigned": true,
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 1
+		},
+		{
+			"#": "65[0x04]",
+			"label": "Sensor Report after Inclusion: Humidity",
+			"unsigned": true,
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 1
+		},
+		{
+			"#": "65[0x08]",
+			"label": "Sensor Report after Inclusion: Dew Point",
+			"unsigned": true,
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 1
+		},
+		{
+			"#": "64",
+			"$import": "~/0x0086/templates/aeotec_template.json#celsius_fahrenheit",
+			"valueSize": 1
+		},
+		{
+			"#": "255",
+			"$import": "~/0x0086/templates/aeotec_template.json#factory_reset_complete"
+		}
+	]
+}
