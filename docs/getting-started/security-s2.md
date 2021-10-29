@@ -46,9 +46,11 @@ const driver = new Driver("COM5", {
 
 ## Inclusion
 
-Including devices with _Security S2_ has some very specific requirements, which also includes the UI. We've compiled a few guidelines here. We recommend staying close to the shown examples when designing your own UI. A high level overview over the available inclusion flows can be seen in the following figure:
+A high level overview over the available inclusion flows can be seen in the following figure:
 
 ![Inclusion flows](../_images/s2-inclusion-flows.png)
+
+Including devices with _Security S2_ has some very specific requirements, which also includes the UI. We've compiled a few guidelines here. We recommend staying close to the shown examples when designing your own UI.
 
 ### Conventional inclusion process
 
