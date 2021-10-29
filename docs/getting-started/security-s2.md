@@ -2,7 +2,7 @@
 
 Modern Z-Wave devices are required to support _Security S2_ and unlike _Security S0_, we recommend using it by default. However, supporting it requires some work in your application too, so we've compiled some guidelines here.
 
-The following figure gives you an overview of the inclusion process in Z-Wave. A common misconception is that an error causes the inclusion to be aborted. However, Z-Wave JS only learns about a node after it was already included. It will then exchange network keys if secure inclusion is desired and interview the node to determine its capabilities:
+The following figure gives you an overview of the (conventional) inclusion process in Z-Wave. A common misconception is that an error causes the inclusion to be aborted. However, Z-Wave JS only learns about a node after it was already included. It will then exchange network keys if secure inclusion is desired and interview the node to determine its capabilities:
 
 ![Inclusion in Z-Wave](../_images/inclusion-flowchart.png)
 
@@ -46,7 +46,11 @@ const driver = new Driver("COM5", {
 
 ## Inclusion
 
-Including devices with _Security S2_ has some very specific requirements, which also includes the UI. We've compiled a few guidelines here. We recommend staying close to the shown examples when designing your own UI.
+Including devices with _Security S2_ has some very specific requirements, which also includes the UI. We've compiled a few guidelines here. We recommend staying close to the shown examples when designing your own UI. A high level overview over the available inclusion flows can be seen in the following figure:
+
+![Inclusion flows](../_images/s2-inclusion-flows.png)
+
+### Conventional inclusion process
 
 The normal inclusion process requires user interaction for choosing keys and verification of the included devices. For this reason, the inclusion process may require you to provide callbacks that `zwave-js` will call to instruct your application to show the inclusion dialogs:
 
