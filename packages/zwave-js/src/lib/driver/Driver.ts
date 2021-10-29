@@ -6,7 +6,6 @@ import {
 	deserializeCacheValue,
 	dskFromString,
 	Duration,
-	getNodeMetaValueID,
 	highResTimestamp,
 	isZWaveError,
 	LogConfig,
@@ -73,11 +72,6 @@ import {
 	ICommandClassContainer,
 	isCommandClassContainer,
 } from "../commandclass/ICommandClassContainer";
-import {
-	getManufacturerIdValueId,
-	getProductIdValueId,
-	getProductTypeValueId,
-} from "../commandclass/ManufacturerSpecificCC";
 import { MultiChannelCC } from "../commandclass/MultiChannelCC";
 import { messageIsPing } from "../commandclass/NoOperationCC";
 import { KEXFailType } from "../commandclass/Security2/shared";
@@ -947,16 +941,11 @@ export class Driver extends TypedEventEmitter<DriverEventCallbacks> {
 
 			// No need to initialize databases if skipInterview is true, because it is only used in some
 			// Driver unit tests that don't need access to them
+
+			// Identify the controller and determine if it supports soft reset
 			await this.controller.identify();
 
-			// now that we know the home ID, we can open the databases
-			await this.initValueDBs(this.controller.homeId!);
-
-			// Create the controller node so we can use its value DB
-			this.controller.initializeControllerNode();
-
-			// and check if we may do a soft reset
-			if (this.options.enableSoftReset && !this.maySoftReset()) {
+			if (this.options.enableSoftReset && !(await this.maySoftReset())) {
 				this.driverLog.print(
 					`Soft reset is enabled through config, but this stick does not support it.`,
 					"warn",
@@ -973,12 +962,38 @@ export class Driver extends TypedEventEmitter<DriverEventCallbacks> {
 						e.code === ZWaveErrorCodes.Driver_Failed
 					) {
 						// Remember that soft reset is not supported by this stick
-						this.rememberNoSoftReset();
+						await this.rememberNoSoftReset();
 						// Then fail the driver
 						await this.destroy();
+						return;
 					}
 				}
 			}
+
+			// There are situations where a controller claims it has the ID 0,
+			// which isn't valid. In this case try again after having soft-reset the stick
+			if (
+				this.controller.ownNodeId === 0 &&
+				this.options.enableSoftReset
+			) {
+				this.driverLog.print(
+					`Controller identification returned invalid node ID 0 - trying again...`,
+					"warn",
+				);
+				await this.controller.identify();
+			}
+
+			if (this.controller.ownNodeId === 0) {
+				this.driverLog.print(
+					`Controller identification returned invalid node ID 0`,
+					"error",
+				);
+				await this.destroy();
+				return;
+			}
+
+			// now that we know the home ID, we can open the databases
+			await this.initValueDBs(this.controller.homeId!);
 
 			// Interview the controller.
 			await this._controller.interview(async () => {
@@ -1647,23 +1662,33 @@ export class Driver extends TypedEventEmitter<DriverEventCallbacks> {
 
 	private isSoftResetting: boolean = false;
 
-	private maySoftReset(): boolean {
-		const controllerNode = this.controller.nodes.getOrThrow(
-			this.controller.ownNodeId!,
-		);
-		const valueDB = controllerNode.valueDB;
+	private async maySoftReset(): Promise<boolean> {
 		// If we've previously determined a stick not to support soft reset, don't bother trying again
-		const disableSoftReset = !!valueDB.getValue(
-			getNodeMetaValueID("disableSoftReset"),
-		);
-		if (disableSoftReset) return false;
+		let supportsSoftReset: boolean | undefined;
+		if (this._controllerInterviewed) {
+			supportsSoftReset = this.controller.supportsSoftReset;
+		} else {
+			// The controller wasn't interviewed yet, read the json file manually
+			const fs = this.options.storage.driver;
+
+			const cacheFile = path.join(
+				this.cacheDir,
+				this.controller.homeId!.toString(16) + ".json",
+			);
+
+			// Read it if it exists
+			let json;
+			if (await fs.pathExists(cacheFile)) {
+				try {
+					json = JSON.parse(await fs.readFile(cacheFile, "utf8"));
+				} catch {}
+			}
+			supportsSoftReset = json?.controller?.supportsSoftReset;
+		}
+		if (supportsSoftReset === false) return false;
 
 		// Blacklist some sticks that are known to not support soft reset
-		const manufacturerId = valueDB.getValue<number>(
-			getManufacturerIdValueId(),
-		);
-		const productType = valueDB.getValue<number>(getProductTypeValueId());
-		const productId = valueDB.getValue<number>(getProductIdValueId());
+		const { manufacturerId, productType, productId } = this.controller;
 
 		// Z-Wave.me UZB1
 		if (
@@ -1686,17 +1711,50 @@ export class Driver extends TypedEventEmitter<DriverEventCallbacks> {
 		return true;
 	}
 
-	private rememberNoSoftReset(): void {
+	private async rememberNoSoftReset(): Promise<void> {
 		this.driverLog.print(
 			"Soft reset seems not to be supported by this stick, disabling it.",
 			"warn",
 		);
-		const controllerNode = this.controller.nodes.getOrThrow(
-			this.controller.ownNodeId!,
-		);
-		const valueDB = controllerNode.valueDB;
-		// If we've previously determined a stick not to support soft reset, don't bother trying again
-		valueDB.setValue(getNodeMetaValueID("disableSoftReset"), true);
+		this.controller.supportsSoftReset = false;
+
+		if (this._controllerInterviewed) {
+			// We can use the normal method for this
+			await this.saveNetworkToCacheInternal();
+		} else {
+			// saveNetworkToCache won't write anything, just edit the file "manually"
+
+			// TODO: This is ugly, rework this when changing how the network data is saved
+
+			const fs = this.options.storage.driver;
+
+			await fs.ensureDir(this.cacheDir);
+			const cacheFile = path.join(
+				this.cacheDir,
+				this.controller.homeId!.toString(16) + ".json",
+			);
+
+			// Read it if it exists
+			let json;
+			if (await fs.pathExists(cacheFile)) {
+				try {
+					json = JSON.parse(await fs.readFile(cacheFile, "utf8"));
+				} catch {}
+			}
+
+			// Change the supportsSoftReset flag
+			json ??= {};
+			json.controller ??= {};
+			json.controller.supportsSoftReset = false;
+
+			// And save it again
+			const jsonString = stringify(json);
+			await this.options.storage.driver.writeFile(
+				cacheFile,
+				jsonString,
+				"utf8",
+			);
+		}
 	}
 
 	/**
