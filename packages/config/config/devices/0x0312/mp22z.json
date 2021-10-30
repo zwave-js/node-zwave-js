@@ -1,5 +1,5 @@
 {
-	"manufacturer": "Minoston",
+	"manufacturer": "NIE Technology Co., Ltd.",
 	"manufacturerId": "0x0312",
 	"label": "MP22Z",
 	"description": "Z-Wave Outdoor Smart Plug",
@@ -8,17 +8,64 @@
 			"productType": "0xff00",
 			"productId": "0xff07",
 			"zwaveAllianceId": 3711
+		},
+		{
+			"productType": "0xff07",
+			"productId": "0xff03",
+			"zwaveAllianceId": 4254
 		}
 	],
 	"firmwareVersion": {
 		"min": "0.0",
 		"max": "255.255"
 	},
+	"associations": {
+		"1": {
+			"label": "Lifeline",
+			"maxNodes": 3,
+			"isLifeline": true
+		},
+		"2": {
+			"label": "BASIC SET",
+			"maxNodes": 5
+		},
+		"3": {
+			"label": "BASIC SET",
+			"maxNodes": 5
+		}
+	},
 	"paramInformation": [
 		{
 			"#": "1",
-			"label": "Status LED Configuration",
+			"label": "Locally Button Function",
+			"description": "Parameter=1，size=1，value=0 up button: on   down button: off value=1 up button: off   down button: on  value=2 up button: on/off down button: on/off default = 0",
 			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 2,
+			"defaultValue": 0,
+			"unsigned": true,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Up button on,down button off",
+					"value": 0
+				},
+				{
+					"label": "Up button off,down button on",
+					"value": 1
+				},
+				{
+					"label": "Up button on/off,down button on/off",
+					"value": 2
+				}
+			]
+		},
+		{
+			"#": "2",
+			"label": "Led Indicator",
+			"description": "Parameter=2，size=1，value=0 on when off and off when on  value=1 on when on and off when off  value=2 always off  value=3 always on default =0",
+			"valueSize": 1,
+			"unit": "minutes",
 			"minValue": 0,
 			"maxValue": 3,
 			"defaultValue": 0,
@@ -26,32 +73,20 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "LED on when load off, LED off when load on",
+					"label": "On when off and off when on",
 					"value": 0
 				},
 				{
-					"label": "LED on when load on, LED off when load off",
+					"label": "On when on and off when off",
 					"value": 1
 				},
 				{
-					"label": "LED always off",
+					"label": "Always off",
 					"value": 2
-				}
-			]
-		},
-		{
-			"#": "2",
-			"label": "Auto-Off Timer",
-			"valueSize": 2,
-			"unit": "minutes",
-			"minValue": 0,
-			"maxValue": 65535,
-			"defaultValue": 0,
-			"unsigned": true,
-			"options": [
+				},
 				{
-					"label": "Disabled",
-					"value": 0
+					"label": "Always on",
+					"value": 3
 				}
 			]
 		},
@@ -75,12 +110,329 @@
 			"#": "6",
 			"$import": "~/templates/master_template.json#state_after_power_failure_off_on_prev",
 			"defaultValue": 0
+		},
+		{
+			"#": "10",
+			"label": "Multilevel Minimum Value Can Be Set",
+			"description": "Multilevel minimum value",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 99,
+			"defaultValue": 1,
+			"unsigned": true
+		},
+		{
+			"#": "11",
+			"label": "Multilevel Maximum Value Can Be Set",
+			"description": "Multilevel maximum value can be set",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 100,
+			"defaultValue": 99,
+			"unsigned": true
+		},
+		{
+			"#": "12",
+			"label": "Double Tap Behavior",
+			"description": "Double tap behavior: when switch is off and quickly press upper paddle 2 times, switch turns on to x brightness （local button）  parameter=12，size=1，  value = 0 enable double tap to full brightness (99) value = 1 custom value set in parameter 18   value = 2 enable double tap to maximum brightness (turn on to the value relate with parameter 11)   value = 3 disable double tap to full brightness  default = 0",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 3,
+			"defaultValue": 0,
+			"unsigned": true,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Enable double tap to full brightness (99)",
+					"value": 0
+				},
+				{
+					"label": "Custom value set in parameter 18",
+					"value": 1
+				},
+				{
+					"label": "Enable double tap to maximum brightness (turn on to the value relate with parameter 11)",
+					"value": 2
+				},
+				{
+					"label": "Disable double tap to full brightness",
+					"value": 3
+				}
+			]
+		},
+		{
+			"#": "15",
+			"label": "Enable Or Disable Local / Z-Wave Control",
+			"description": "Enable or disable local / Z-Wave control  parameter=15，size=1，value=0 disable (when paddle pressed switch will not turn light on or off but it will still control the light via Z-Wave and it will change LED indicator status and on/off/multilevel status when paddle is pressed) value=1 enable (normal operation like now) value = 2 disable local and Z-Wave control (led and on/off status will still change if paddle pressed) >> make sure that status is still reported and LED indicator changes when Z-Wave control is disabled  default = 1",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 2,
+			"defaultValue": 1,
+			"unsigned": true,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Disable",
+					"value": 0
+				},
+				{
+					"label": "Enable (normal operation like now)",
+					"value": 1
+				},
+				{
+					"label": "Disable local and Z-Wave control (led and on/off status will still change if paddle pressed) >> make sure that status is still reported and LED indicator changes when Z-Wave control is disabled",
+					"value": 2
+				}
+			]
+		},
+		{
+			"#": "16",
+			"label": "Dimmer Speed",
+			"description": "From 0x63 to 0x00 or from 0x00 to 0x63 need this value",
+			"valueSize": 1,
+			"minValue": 1,
+			"maxValue": 99,
+			"defaultValue": 5,
+			"unsigned": true
+		},
+		{
+			"#": "18",
+			"label": "Custom Brightness Level",
+			"description": "Custom brightness level",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 99,
+			"defaultValue": 0,
+			"unsigned": true
+		},
+		{
+			"#": "19",
+			"label": "3-way Switch Type",
+			"description": "3-way switch type parameter=19,size=1,value=0 toggle switch(device changes status when switch changes  status,it can only turn on or turn off lamp,it can’t dimmer)(default); value = 1 toggle switch(press 1x change device status;quickly press 2x the result depend on par11/par12; quickly press 3x it trigger dimmer in loop(dimmer up/dimmer down ) value=2 momentary switch (press 1x change device status;quickly press 2x the result depend on par11/par12;hold trigger dimmer in loop(dimmer up/dimmer down ) value=3 momentary switch (press 1x change device status;quickly press 2x the result depend on par11/par12;hold trigger dimmer in loop(dimmer up/dimmer down – but after double click to full brightness, hold will dim down always instead of trying to increase brightness) >> this value is missing, please add to setting  notice: when the value=1,or value=2,the switch can’t respond immediately,because it need to recognize multiple press",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 3,
+			"defaultValue": 0,
+			"unsigned": true,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Toggle switch (device changes status when switch changes status)",
+					"value": 0
+				},
+				{
+					"label": "Toggle switch(press 1x change device status;quickly press 2x the result depend on par11/par12; quickly press 3x it trigger dimmer in loop(dimmer up/dimmer down )",
+					"value": 1
+				},
+				{
+					"label": "Momentary switch (press 1x change device status;quickly press 2x the result depend on par11/par12;hold trigger dimmer in loop(dimmer up/dimmer down )",
+					"value": 2
+				},
+				{
+					"label": "Momentary switch (press 1x change device status;quickly press 2x the result depend on par11/par12;hold trigger dimmer in loop(dimmer up/dimmer down – but after double click to full brightness, hold will dim down always instead of trying to increase brightness) >> this value is missing, please add to setting",
+					"value": 3
+				}
+			]
+		},
+		{
+			"#": "20",
+			"label": "Association Reports",
+			"description": "Association reports parameter=20,size=1 values: 0 –  Z-Wave control：multilevel report (without each level,just final level) manual control (short press): basic report(without each level,just final level) manual control(long press & relay enable): basic report(without each level,just final level) manual control(long press & relay disable): multilevel report (each level will be reported)   1 –  Z-Wave control：multilevel report (without each level,just final level) manual control (short press): basic report (without each level,just final level) manual control(long press & relay enable or disable): basic report (without each level,just final level)  2 –  Z-Wave control：multilevel report (without each level, just final level) manual control (short press): multilevel report (without each level, just final level) manual control (long press & relay enable): multilevel report (without each level, just final level) manual control (long press & relay disable): multilevel report (each level will be reported)   default = 2",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 2,
+			"defaultValue": 2,
+			"unsigned": true,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Z-Wave control：multilevel report (without each level, just final level) manual control (short press): multilevel report (without each level, just final level) manual control (long press & relay enable): multilevel report (without each level, just final level) manual control (long press & relay disable): multilevel report (each level will be reported)",
+					"value": 0
+				},
+				{
+					"label": "Z-Wave control：multilevel report (without each level,just final level) manual control (short press): basic report (without each level,just final level) manual control(long press & relay enable or disable): basic report (without each level,just final level)",
+					"value": 1
+				},
+				{
+					"label": "Z-Wave control：multilevel report (without each level,just final level) manual control (short press): basic report (without each level,just final level) manual control(long press & relay enable or disable): basic report (without each level,just final level)",
+					"value": 2
+				}
+			]
+		},
+		{
+			"#": "21",
+			"label": "Disabled Relay Behavior",
+			"description": "Disabled relay behavior parameter=21,size=1 value=0 report on/off and multilevel status when paddle is pressed and change LED indicator status and parameter 15 is set to value 0 or 2 (output control disabled) according to setting in parameter 20. value=1 don’t report on/off or multilevel status or and change LED indicator status when paddle is pressed and parameter 15 is set to value 0 or 2 (output control disabled).   default = 0",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 0,
+			"unsigned": true,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Report on/off and multilevel status when paddle is pressed and change LED indicator status and parameter 15 is set to value 0 or 2 (output control disabled) according to setting in parameter 20",
+					"value": 0
+				},
+				{
+					"label": "Report on/off status and change LED indicator when upper or lower paddle is pressed and parameter 11 is set to value 0 or 2 (output control disabled)",
+					"value": 1
+				}
+			]
+		},
+		{
+			"#": "22",
+			"label": "Night Mode Brightness Level",
+			"description": "Night mode brightness level",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 99,
+			"defaultValue": 20,
+			"unsigned": true
+		},
+		{
+			"#": "23",
+			"label": "Led Indicator Color",
+			"description": "Led indicator color parameter=23，size=1，value=0 white value=1 blue  value=2 green  value=3 red default = 1",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 3,
+			"defaultValue": 1,
+			"unsigned": true,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "White",
+					"value": 0
+				},
+				{
+					"label": "Blue",
+					"value": 1
+				},
+				{
+					"label": "Green",
+					"value": 2
+				},
+				{
+					"label": "Red",
+					"value": 3
+				}
+			]
+		},
+		{
+			"#": "24",
+			"label": "Led Indicator Brightness",
+			"description": "Led indicator brightness parameter=24，size=1，value=0 bright (100%) value=1 medium (60%)  value=2 low (30%)  default =1",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 2,
+			"defaultValue": 1,
+			"unsigned": true,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Bright (100%)",
+					"value": 0
+				},
+				{
+					"label": "Medium (60%)",
+					"value": 1
+				},
+				{
+					"label": "Low (30%)",
+					"value": 2
+				}
+			]
+		},
+		{
+			"#": "25",
+			"label": "Single Tap Behavior",
+			"description": "Single tap behavior: when switch is off and press upper paddle 1 time, switch turns on to x brightness （local button）  parameter=25，size=1，  value = 0 last brightness level   value = 1 custom value set in parameter 18   value = 2 maximum brightness set in parameter 11  value = 3 full 100% brightness  default = 0",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 3,
+			"defaultValue": 0,
+			"unsigned": true,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Last brightness level",
+					"value": 0
+				},
+				{
+					"label": "Custom value set in parameter 18",
+					"value": 1
+				},
+				{
+					"label": "Maximum brightness set in parameter 11",
+					"value": 2
+				},
+				{
+					"label": "Full 100% brightness",
+					"value": 3
+				}
+			]
+		},
+		{
+			"#": "3",
+			"label": "Auto Turn-off Timer",
+			"description": "Auto turn-off timer",
+			"valueSize": 4,
+			"minValue": 0,
+			"maxValue": 65535,
+			"defaultValue": 0,
+			"unsigned": true
+		},
+		{
+			"#": "5",
+			"label": "Auto Turn-on Timer",
+			"description": "Auto turn-on this timer",
+			"valueSize": 4,
+			"minValue": 0,
+			"maxValue": 65535,
+			"defaultValue": 0,
+			"unsigned": true
+		},
+		{
+			"#": "8",
+			"label": "Restores State After Power Failure",
+			"description": "Restores state after power failure parameter=8，size=1，value=0 output off  value=1 output on  value=2 out put the state after power default =2",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 2,
+			"defaultValue": 2,
+			"unsigned": true,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Output off",
+					"value": 0
+				},
+				{
+					"label": "Output on",
+					"value": 1
+				},
+				{
+					"label": "Out put the state after power",
+					"value": 2
+				}
+			]
+		},
+		{
+			"#": "9",
+			"label": "Ramp Rate",
+			"description": "From 0x63 to 0x00 or from 0x00 to 0x63 need this value",
+			"valueSize": 1,
+			"minValue": 1,
+			"maxValue": 99,
+			"defaultValue": 1,
+			"unsigned": true
 		}
 	],
 	"metadata": {
-		"inclusion": "ADD the MP22Z from the existing Z-Wave home control network with your primary controller.\n ---Refer to your primary controller instructions to process the inclusion / exclusion setup procedure.\n ---When prompted by your primary controller, click the Up or Down button three times in one second.\nInclude MP22Zto/from a Z-Wave Gateway with supporting Security.The MP22Zcan support the Primary Controller that implemented the security S2",
-		"exclusion": "Remove the MP22Zfrom the existing Z-Wave home control network with your primary controller.\n ---Refer to your primary controller instructions to process the inclusion / exclusion setup procedure.\n ---When prompted by your primary controller, click the Up or Down button three times in one second.\nInclude MP22Zto/from a Z-Wave Gateway with supporting Security.The MP22Z can support the Primary Controller that implemented the security S2",
-		"reset": "Press click Z-Wave button 3 times quickly, and hold for at least 10 seconds at the third time to restore the device to the factory\nNode:Please use this procedure only when the network primary controller is missing or otherwise inoperable",
-		"manual": "https://products.z-wavealliance.org/ProductManual/File?folder=&filename=product_documents/3711/MP22Z-Manual191111.pdf"
+		"inclusion": "Adding Your Device To A Hub\nThe device support two methods of inclusion,When using a Z-Wave Plus™ certified controller choose Network Wide Inclusion or SmartStart,\nNetwork Wide Inclusion To A Z-Wave™ Network\n1,Refer to your primary controller instructions to process the inclusion / exclusion setup procedure.\n2,When prompted by your primary controller, click the button three times in one second",
+		"exclusion": "Adding Your Device To A Hub\nThe device support two methods of inclusion,When using a Z-Wave Plus™ certified controller choose Network Wide Inclusion or SmartStart,\nNetwork Wide Inclusion To A Z-Wave™ Network\n1,Refer to your primary controller instructions to process the inclusion / exclusion setup procedure.\n2,When prompted by your primary controller, click the button three times in one second",
+		"reset": "Press click Z-Wave button 3 times quickly, and hold for at least 10 seconds at the third time to restore the device to the factory\n(Node:Please use this procedure only when the network primary controller is missing or otherwise inoperable.)",
+		"manual": "https://products.z-wavealliance.org/ProductManual/File?folder=&filename=product_documents/4254/MP22ZD-manual-20210728.pdf"
 	}
 }
