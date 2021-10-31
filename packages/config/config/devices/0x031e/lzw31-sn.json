@@ -451,7 +451,7 @@
 		{
 			"#": "16[0xff]",
 			"label": "LED Bar Effect Color",
-			"description": "This will allow you to add some sweet effects to your LED bar (e.g., pulse, chase, solid, etc.). This is Byte 1 (of 4): Choose color using the scaled hue color circle (realHue / 360 * 255)."
+			"description": "This will allow you to add some sweet effects to your LED bar (e.g., pulse, chase, solid, etc.). This is Byte 1 (of 4): Choose color using the scaled hue color circle (realHue / 360 * 255).",
 			"valueSize": 4,
 			"minValue": 0,
 			"maxValue": 255,
@@ -499,7 +499,7 @@
 		{
 			"#": "16[0xff00]",
 			"label": "LED Bar Effect Brightness",
-			"description": "This will allow you to add some sweet effects to your LED bar (e.g., pulse, chase, solid, etc.). This is Byte 2 (of 4): LED Bar Brightness Level."
+			"description": "This will allow you to add some sweet effects to your LED bar (e.g., pulse, chase, solid, etc.). This is Byte 2 (of 4): LED Bar Brightness Level.",
 			"valueSize": 4,
 			"minValue": 0,
 			"maxValue": 10,
@@ -555,7 +555,7 @@
 		{
 			"#": "16[0xff0000]",
 			"label": "LED Bar Effect Duration",
-			"description": "This will allow you to add some sweet effects to your LED bar (e.g., pulse, chase, solid, etc.). This is Byte 3 (of 4): Bar Duration. 0 = disabled, 1 to 60 = seconds, 61 to 120 = minutes (minus 60), 121 - 254 = hours (minus 120), 255 = indefinitely."
+			"description": "This will allow you to add some sweet effects to your LED bar (e.g., pulse, chase, solid, etc.). This is Byte 3 (of 4): Bar Duration. 0 = disabled, 1 to 60 = seconds, 61 to 120 = minutes (minus 60), 121 - 254 = hours (minus 120), 255 = indefinitely.",
 			"valueSize": 4,
 			"minValue": 0,
 			"maxValue": 255,
@@ -564,7 +564,7 @@
 		{
 			"#": "16[0x7f000000]",
 			"label": "LED Bar Effect Type",
-			"description": "This will allow you to add some sweet effects to your LED bar (e.g., pulse, chase, solid, etc.). This is Byte 4 (of 4): Bar Effect Type."
+			"description": "This will allow you to add some sweet effects to your LED bar (e.g., pulse, chase, solid, etc.). This is Byte 4 (of 4): Bar Effect Type.",
 			"valueSize": 4,
 			"minValue": 0,
 			"maxValue": 5,
