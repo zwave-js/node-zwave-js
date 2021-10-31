@@ -17,6 +17,7 @@
 		{
 			"#": "1",
 			"label": "Dimming Speed (Z-Wave)",
+			"description": "How fast or slow the light turns on when you hold the switch (e.g., dimming from 10-20%, 80-60%, etc.). 0 = Instant On, 1 = 1 second, 100 = 100 seconds. NOTE IF USING A DUMB SWITCH: This parameter will not work when pressing the dumb switch manually.",
 			"unit": "seconds",
 			"valueSize": 1,
 			"minValue": 0,
@@ -24,7 +25,7 @@
 			"defaultValue": 3,
 			"options": [
 				{
-					"label": "Immediate",
+					"label": "Instant On",
 					"value": 0
 				}
 			]
@@ -32,6 +33,7 @@
 		{
 			"#": "2",
 			"label": "Dimming Speed (Manual)",
+			"description": "How fast or slow the light turns dim when you adjust the switch remotely (e.g., dimming from 10-20%, 80-60%, etc.). 0 =  Instant On, 1 = 1 second, 100 = 100 seconds, 101 = Keep in sync with Parameter 1.",
 			"unit": "seconds",
 			"valueSize": 1,
 			"minValue": 0,
@@ -39,11 +41,11 @@
 			"defaultValue": 101,
 			"options": [
 				{
-					"label": "Immediate",
+					"label": "Instant On",
 					"value": 0
 				},
 				{
-					"label": "Synced with Parameter 1",
+					"label": "Keep in sync with Parameter 1",
 					"value": 101
 				}
 			]
@@ -51,6 +53,7 @@
 		{
 			"#": "3",
 			"label": "Ramp Rate (Z-Wave)",
+			"description": "How fast or slow the light turns on when you press the switch 1x to bring from On to Off or Off to On. 0 = Instant On, 1 = 1 second, 100 = 100 seconds, 101 = Keep in sync with Parameter 1.",
 			"unit": "seconds",
 			"valueSize": 1,
 			"minValue": 0,
@@ -58,11 +61,11 @@
 			"defaultValue": 101,
 			"options": [
 				{
-					"label": "Immediate",
+					"label": "Instant On",
 					"value": 0
 				},
 				{
-					"label": "Synced with Parameter 1",
+					"label": "Keep in sync with Parameter 1",
 					"value": 101
 				}
 			]
@@ -70,6 +73,7 @@
 		{
 			"#": "4",
 			"label": "Ramp Rate (Manual)",
+			"description": "How fast or slow the light turns on when you bring your switch from On to Off or Off to On remotely. 0 = Instant On, 1 = 1 second, 100 = 100 seconds, 101 = Keep in sync with Parameter 1.",
 			"unit": "seconds",
 			"valueSize": 1,
 			"minValue": 0,
@@ -77,11 +81,11 @@
 			"defaultValue": 101,
 			"options": [
 				{
-					"label": "Immediate",
+					"label": "Instant On",
 					"value": 0
 				},
 				{
-					"label": "Synced with Parameter 1",
+					"label": "Keep in sync with Parameter 1",
 					"value": 101
 				}
 			]
@@ -89,6 +93,7 @@
 		{
 			"#": "5",
 			"label": "Minimum Dim Level",
+			"description": "Minimum level the light switch will dim to (great for fixing flickering bulbs). 1 = 1%, 2 = 2%, 45 = 45%.",
 			"unit": "%",
 			"valueSize": 1,
 			"minValue": 1,
@@ -98,6 +103,7 @@
 		{
 			"#": "6",
 			"label": "Maximum Dim Level",
+			"description": "Maximum level the light switch will dim to. 55 = 55%, 56 = 56%, 99 = 99% (NOTE: Z-Wave only goes up to 99%, not 100%).",
 			"unit": "%",
 			"valueSize": 1,
 			"minValue": 55,
@@ -107,6 +113,7 @@
 		{
 			"#": "7",
 			"label": "Invert Switch",
+			"description": "Inverts the switch (Tap Down = On, Tap Up = Off).",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 1,
@@ -126,6 +133,7 @@
 		{
 			"#": "8",
 			"label": "Auto Off Timer",
+			"description": "Automatically turns the switch off after x amount of seconds. 0 = Disabled, 1 = 1 second, 32767 = 32767 seconds.",
 			"unit": "seconds",
 			"valueSize": 2,
 			"minValue": 0,
@@ -135,6 +143,7 @@
 		{
 			"#": "9",
 			"label": "Default Level",
+			"description": "Default dim level for the switch when pressed locally (at the switch) 0 = Switch will return to level it was prior to being off, 1 = 1%, 99 = 99% (NOTE: Z-Wave only goes up to 99%, not 100%).",
 			"unit": "%",
 			"valueSize": 1,
 			"minValue": 0,
@@ -142,7 +151,7 @@
 			"defaultValue": 0,
 			"options": [
 				{
-					"label": "Last State",
+					"label": "Previous State",
 					"value": 0
 				}
 			]
@@ -150,6 +159,7 @@
 		{
 			"#": "10",
 			"label": "Default Level (Z-Wave)",
+			"description": "Default dim level for the switch when powered on via a Z-Wave command. 0 = Switch will return to level it was prior to being off, 1 = 1%, 99 = 99% (NOTE: Z-Wave only goes up to 99%, not 100%) .",
 			"unit": "%",
 			"valueSize": 1,
 			"minValue": 0,
@@ -157,14 +167,35 @@
 			"defaultValue": 0,
 			"options": [
 				{
-					"label": "Last State",
+					"label": "Previous State",
 					"value": 0
 				}
 			]
 		},
 		{
 			"#": "11",
+			"$if": "firmwareVersion >= 1.43",
 			"label": "Power On State",
+			"description": "When power is restored, the switch reverts to either On, Off, or Last Level. 0 = Off, 1-99 = Specific % On, 101 = Returns to Level before Power Outage.",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 101,
+			"defaultValue": 100,
+			"options": [
+				{
+					"label": "Off",
+					"value": 0
+				},
+				{
+					"label": "Previous State",
+					"value": 101
+				}
+			]
+		},
+		{
+			"#": "11",
+			"label": "Power On State",
+			"description": "When power is restored, the switch reverts to either On, Off, or Last Level. 0 = Off, 1-99 = Specific % On, 101 = Returns to Level before Power Outage.",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 101,
@@ -175,7 +206,7 @@
 					"value": 0
 				},
 				{
-					"label": "Last State",
+					"label": "Previous State",
 					"value": 101
 				}
 			]
@@ -258,8 +289,8 @@
 		},
 		{
 			"#": "13",
-			"label": "LED Indicator Color",
-			"description": "Uses a scaled hue value (realHue / 360 * 255).",
+			"label": "LED Bar Color",
+			"description": "This will set the default color of the LED Bar. Calculated by using a scaled hue color circle (realHue / 360 * 255).",
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 255,
@@ -299,7 +330,7 @@
 					"value": 234
 				},
 				{
-					"$if": "firmwareVersion >= 1.47",
+					"$if": "firmwareVersion >= 1.45",
 					"label": "White",
 					"value": 255
 				}
@@ -307,7 +338,8 @@
 		},
 		{
 			"#": "14",
-			"label": "LED Indicator Brightness",
+			"label": "LED Bar Brightness",
+			"description": "This will set the intensity of the LED bar (i.e., how bright it is). 0 = Off, 1 = Low, 5 = Medium, 10 = High.",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 10,
@@ -362,7 +394,8 @@
 		},
 		{
 			"#": "15",
-			"label": "LED Indicator Brightness When Off",
+			"label": "LED Bar Brightness When Off",
+			"description": "This is the intensity of the LED bar when the switch is off. 0 = Off, 1 = Low, 5 = Medium, 10 = High.",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 10,
@@ -417,8 +450,8 @@
 		},
 		{
 			"#": "16[0xff]",
-			"label": "LED Effect Color",
-			"description": "Uses a scaled hue value (realHue / 360 * 255).",
+			"label": "LED Bar Effect Color",
+			"description": "This will allow you to add some sweet effects to your LED bar (e.g., pulse, chase, solid, etc.). This is Byte 1 (of 4): Choose color using the scaled hue color circle (realHue / 360 * 255)."
 			"valueSize": 4,
 			"minValue": 0,
 			"maxValue": 255,
@@ -465,7 +498,8 @@
 		},
 		{
 			"#": "16[0xff00]",
-			"label": "LED Effect Brightness",
+			"label": "LED Bar Effect Brightness",
+			"description": "This will allow you to add some sweet effects to your LED bar (e.g., pulse, chase, solid, etc.). This is Byte 2 (of 4): LED Bar Brightness Level."
 			"valueSize": 4,
 			"minValue": 0,
 			"maxValue": 10,
@@ -520,8 +554,8 @@
 		},
 		{
 			"#": "16[0xff0000]",
-			"label": "LED Effect Duration",
-			"description": "0 = disabled, 1 to 60 = seconds, 61 to 120 = minutes (minus 60), 121 - 254 = hours (minus 120), 255 = indefinitely",
+			"label": "LED Bar Effect Duration",
+			"description": "This will allow you to add some sweet effects to your LED bar (e.g., pulse, chase, solid, etc.). This is Byte 3 (of 4): Bar Duration. 0 = disabled, 1 to 60 = seconds, 61 to 120 = minutes (minus 60), 121 - 254 = hours (minus 120), 255 = indefinitely."
 			"valueSize": 4,
 			"minValue": 0,
 			"maxValue": 255,
@@ -529,7 +563,8 @@
 		},
 		{
 			"#": "16[0x7f000000]",
-			"label": "LED Effect Type",
+			"label": "LED Bar Effect Type",
+			"description": "This will allow you to add some sweet effects to your LED bar (e.g., pulse, chase, solid, etc.). This is Byte 4 (of 4): Bar Effect Type."
 			"valueSize": 4,
 			"minValue": 0,
 			"maxValue": 5,
@@ -564,7 +599,8 @@
 		},
 		{
 			"#": "17",
-			"label": "LED Indicator Timeout",
+			"label": "LED Bar Indicator Timeout",
+			"description": "Changes the amount of time the RGB Bar shows the Dim level if the LED Bar has been disabled. 0 = Always off, 1 = 1 second after level is adjusted, 10 = 10 seconds after level is adjusted.",
 			"unit": "seconds",
 			"valueSize": 1,
 			"minValue": 0,
@@ -574,6 +610,7 @@
 		{
 			"#": "18",
 			"label": "Active Power Reports",
+			"description": "The power level change that will result in a new power report being sent (% of previous report). 0 = Disabled, 10 = 10% of previous report, 100 = 100% of previous report.",
 			"unit": "%",
 			"valueSize": 1,
 			"minValue": 0,
@@ -583,6 +620,7 @@
 		{
 			"#": "19",
 			"label": "Periodic Power & Energy Reports",
+			"description": "Time period between consecutive power and energy reports being sent (in seconds). 0 = 0 seconds, 1 = 1 second, 32767 = 32767 seconds. Timer resets after every report is sent.",
 			"unit": "seconds",
 			"valueSize": 2,
 			"minValue": 0,
@@ -591,7 +629,19 @@
 		},
 		{
 			"#": "20",
+			"$if": "firmwareVersion >= 1.43",
 			"label": "Energy Reports",
+			"description": "The energy level change that will result in a new energy report being sent (kWh difference from previous report). 0 = 0.01 kWh, 10 = 0.1 kWh, 100 = 1 kWh difference from previous report.",
+			"unit": "kWh",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 127,
+			"defaultValue": 10
+		},
+		{
+			"#": "20",
+			"label": "Energy Reports",
+			"description": "The energy level change that will result in a new energy report being sent (% of previous report). 0 = Disabled, 10 = 10% Of previous report, 100 = 100% Of previous report.",
 			"unit": "%",
 			"valueSize": 1,
 			"minValue": 0,
@@ -601,6 +651,7 @@
 		{
 			"#": "21",
 			"label": "AC Power Type",
+			"description": "Sets whether the switch is wired with or without a neutral wire.",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 1,
@@ -620,6 +671,7 @@
 		{
 			"#": "22",
 			"label": "Switch Type",
+			"description": "Sets installation type.",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 2,
@@ -644,6 +696,7 @@
 			"#": "50",
 			"$if": "firmwareVersion >= 1.49",
 			"label": "Physical Button Delay Period",
+			"description": "Adjust the delay when parameter 51 is enabled. 1=100ms, 2=200ms, 3=300ms, etc.",
 			"unit": "100ms",
 			"valueSize": 1,
 			"minValue": 1,
@@ -654,7 +707,7 @@
 			"#": "51",
 			"$if": "firmwareVersion >= 1.47",
 			"label": "Button Delay and Scene Control",
-			"description": "Disabling this allows the switch to respond instantly to physical actions",
+			"description": "Disabling this allows the switch to respond instantly to physical actions. Note: Disabling the delay also disables scene control except for Button 1 (i.e., tap up 1x or tap down 1x) and button 7 (config button). All other buttons (2-6) will be disabled.",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 1,
@@ -662,11 +715,11 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "Disable",
+					"label": "Disable (No Delay)",
 					"value": 0
 				},
 				{
-					"label": "Enable",
+					"label": "Enable (700ms Delay)",
 					"value": 1
 				}
 			]
@@ -675,7 +728,7 @@
 			"#": "52",
 			"$if": "firmwareVersion >= 1.54",
 			"label": "Smart Bulb Mode",
-			"description": "Change the working mode of the dimmer. Choose either on / off only which makes the device work like an on / off switch. Or choose smart bulb mode which optimized the device for interaction with smart bulbs. (firmware 1.54+)",
+			"description": "Change the working mode of the dimmer. Choose either On/Off-Only mode which makes the device work like an on/off switch, or choose Smart Bulb mode which optimizes the device for interaction with smart bulbs.",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 2,
@@ -683,16 +736,37 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "Disabled",
+					"label": "Normal",
 					"value": 0
 				},
 				{
-					"label": "On / Off Only",
+					"label": "On/Off Only",
 					"value": 1
 				},
 				{
 					"label": "Smart Bulb",
 					"value": 2
+				}
+			]
+		},
+		{
+			"#": "52",
+			"$if": "firmwareVersion >= 1.47",
+			"label": "Smart Bulb Mode",
+			"description": "Put the switch into 'Smart Bulb' mode. If it set to 1, the power will output maximum % when the dimmer is on. 0 = Normal Operation, 1 = Smart Bulb.",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 0,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Normal Operation",
+					"value": 0
+				},
+				{
+					"label": "Smart Bulb",
+					"value": 1
 				}
 			]
 		},
