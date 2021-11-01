@@ -15,6 +15,7 @@ import {
 	SecurityManager,
 	SecurityManager2,
 	serializeCacheValue,
+	SPANState,
 	timespan,
 	ValueMetadata,
 	ZWaveError,
@@ -2339,15 +2340,44 @@ export class Driver extends TypedEventEmitter<DriverEventCallbacks> {
 					: "No SPAN is established yet";
 
 			if (this.controller.bootstrappingS2NodeId === nodeId) {
-				// The node is currently being bootstrapped. Us not being able to decode the command means we need to abort the bootstrapping process
-				this.controllerLog.logNode(nodeId, {
-					message: `${message}, cannot decode command. Aborting the S2 bootstrapping process...`,
-					level: "error",
-					direction: "inbound",
-				});
-				this.controller.cancelSecureBootstrapS2(
-					KEXFailType.BootstrappingCanceled,
-				);
+				// The node is currently being bootstrapped.
+				if (this.securityManager2?.tempKeys.has(nodeId)) {
+					// The DSK has been verified, so we should be able to decode this command.
+					// If this is the first attempt, we need to request a nonce first
+					if (
+						this.securityManager2.getSPANState(nodeId).type ===
+						SPANState.None
+					) {
+						this.controllerLog.logNode(nodeId, {
+							message: `${message}, cannot decode command. Requesting a nonce...`,
+							level: "verbose",
+							direction: "outbound",
+						});
+						// Send the node our nonce
+						node.commandClasses["Security 2"]
+							.sendNonce()
+							.catch(() => {
+								// Ignore errors
+							});
+					} else {
+						// Us not being able to repeatedly decode the command means we need to abort the bootstrapping process
+						// because the PIN is wrong
+						this.controllerLog.logNode(nodeId, {
+							message: `${message}, cannot decode command. Aborting the S2 bootstrapping process...`,
+							level: "error",
+							direction: "inbound",
+						});
+						this.controller.cancelSecureBootstrapS2(
+							KEXFailType.BootstrappingCanceled,
+						);
+					}
+				} else {
+					this.controllerLog.logNode(nodeId, {
+						message: `Ignoring KEXSet because the DSK has not been verified yet`,
+						level: "verbose",
+						direction: "inbound",
+					});
+				}
 			} else if (!this.hasPendingTransactions(isS2NonceReport)) {
 				this.controllerLog.logNode(nodeId, {
 					message: `${message}, cannot decode command. Requesting a nonce...`,

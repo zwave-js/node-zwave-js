@@ -1792,11 +1792,26 @@ export class ZWaveController extends TypedEventEmitter<ControllerEventCallbacks>
 				});
 				return abort();
 			}
-
 			const nodePublicKey = pubKeyResponse.publicKey;
-			// This is the starting point of the timer TAI2. Depending on how long the user takes to confirm,
-			// the node has less time to send its KEXSet
+
+			// This is the starting point of the timer TAI2.
 			const timerStartTAI2 = Date.now();
+
+			// Generate ECDH key pair. We need to immediately send the other node our public key,
+			// so it won't abort bootstrapping
+			const keyPair = await util.promisify(crypto.generateKeyPair)(
+				"x25519",
+			);
+			const publicKey = decodeX25519KeyDER(
+				keyPair.publicKey.export({
+					type: "spki",
+					format: "der",
+				}),
+			);
+			await api.sendPublicKey(publicKey);
+			// After this, the node will start sending us a KEX SET every 10 seconds.
+			// We won't be able to decode it until the DSK was verified
+
 			if (
 				grantedKeys.includes(SecurityClass.S2_AccessControl) ||
 				grantedKeys.includes(SecurityClass.S2_Authenticated)
@@ -1805,10 +1820,12 @@ export class ZWaveController extends TypedEventEmitter<ControllerEventCallbacks>
 				// Request the user to enter the missing part as a 5-digit PIN
 				const dsk = dskToString(nodePublicKey.slice(0, 16)).slice(5);
 
+				// The time the user has to enter the PIN is limited by the timeout TAI2
+				const tai2RemainingMs =
+					inclusionTimeouts.TAI2 - (Date.now() - timerStartTAI2);
+
 				const pinResult = await Promise.race([
-					wait(inclusionTimeouts.TAI2, true).then(
-						() => false as const,
-					),
+					wait(tai2RemainingMs, true).then(() => false as const),
 					userCallbacks
 						.validateDSKAndEnterPIN(dsk)
 						// ignore errors in application callbacks
@@ -1830,16 +1847,8 @@ export class ZWaveController extends TypedEventEmitter<ControllerEventCallbacks>
 				nodePublicKey.writeUInt16BE(parseInt(pinResult, 10), 0);
 			}
 
-			// Generate ECDH key pair. Z-Wave works with the "raw" keys, so this is a tad complicated
-			const keyPair = await util.promisify(crypto.generateKeyPair)(
-				"x25519",
-			);
-			const publicKey = decodeX25519KeyDER(
-				keyPair.publicKey.export({
-					type: "spki",
-					format: "der",
-				}),
-			);
+			// After the user has verified the DSK, we can derive the shared secret
+			// Z-Wave works with the "raw" keys, so this is a tad complicated
 			const sharedSecret = crypto.diffieHellman({
 				publicKey: crypto.createPublicKey({
 					key: encodeX25519KeyDERSPKI(nodePublicKey),
@@ -1849,19 +1858,17 @@ export class ZWaveController extends TypedEventEmitter<ControllerEventCallbacks>
 				privateKey: keyPair.privateKey,
 			});
 
-			// Derive temporary key from ECDH key pair
+			// Derive temporary key from ECDH key pair - this will allow us to receive the node's KEX SET commands
 			const tempKeys = deriveTempKeys(
 				computePRK(sharedSecret, publicKey, nodePublicKey),
 			);
+			this.driver.securityManager2.deleteNonce(node.id);
 			this.driver.securityManager2.tempKeys.set(node.id, {
 				keyCCM: tempKeys.tempKeyCCM,
 				personalizationString: tempKeys.tempPersonalizationString,
 			});
 
-			await api.sendPublicKey(publicKey);
-
-			// Wait until the encrypted KEXSet from the node was received
-			// (if there is even time left)
+			// Now wait for the next KEXSet from the node (if there is even time left)
 			const tai2RemainingMs =
 				inclusionTimeouts.TAI2 - (Date.now() - timerStartTAI2);
 			if (tai2RemainingMs < 1) {
