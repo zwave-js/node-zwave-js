@@ -140,7 +140,9 @@ interface PlannedProvisioningEntry {
 }
 ```
 
-> [!NOTE] The intended use case for this is inclusion after scanning a S2 QR code. Otherwise, care must be taken to give correct information. If the included node has a different DSK than the provided one, the secure inclusion will fail. Furthermore, the node will be granted only those security classes that are requested and the provided list. If there is no overlap, the secure inclusion will fail.
+> [!NOTE] The `provisioning` property accepts `QRProvisioningInformation` which is returned by [`parseQRCodeString`](api/utils.md#parse-s2-or-smartstart-qr-code-strings). You just need to make sure that the QR code is an `S2` QR code by checking the `version` field.
+
+> [!ATTENTION] The intended use case for this is inclusion after scanning a S2 QR code. Otherwise, care must be taken to give correct information. If the included node has a different DSK than the provided one, the secure inclusion will fail. Furthermore, the node will be granted only those security classes that are requested and the provided list. If there is no overlap, the secure inclusion will fail.
 
 ### `stopInclusion`
 
@@ -191,6 +193,8 @@ interface PlannedProvisioningEntry {
 	[prop: string]: any;
 }
 ```
+
+> [!NOTE] This method accepts a `QRProvisioningInformation` which is returned by [`parseQRCodeString`](api/utils.md#parse-s2-or-smartstart-qr-code-strings). You just need to make sure that the QR code is a `SmartStart` QR code by checking the `version` field.
 
 ### `unprovisionSmartStartNode`
 
@@ -324,6 +328,10 @@ type ReplaceNodeOptions =
 	| {
 			strategy: InclusionStrategy.Security_S2;
 			userCallbacks: InclusionUserCallbacks;
+	  }
+	| {
+			strategy: InclusionStrategy.Security_S2;
+			provisioning: PlannedProvisioningEntry;
 	  }
 	| {
 			strategy:
