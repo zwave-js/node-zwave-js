@@ -185,32 +185,41 @@ interface PlannedProvisioningEntry {
 	/** The device specific key (DSK) in the form aaaaa-bbbbb-ccccc-ddddd-eeeee-fffff-11111-22222 */
 	dsk: string;
 	securityClasses: SecurityClass[];
+	/**
+	 * Additional properties to be stored in this provisioning entry, e.g. the device ID from a scanned QR code
+	 */
+	[prop: string]: any;
 }
 ```
 
 ### `unprovisionSmartStartNode`
 
 ```ts
-unprovisionSmartStartNode(dskOrNodeId: Buffer | number): void
+unprovisionSmartStartNode(dskOrNodeId: string | number): void
 ```
 
-Removes the given DSK or node ID from the controller's SmartStart provisioning list. The DSK must be given as a buffer.
+Removes the given DSK or node ID from the controller's SmartStart provisioning list.
 
 > [!NOTE] If this entry corresponds to an already-included node, it will **NOT** be excluded.
 
 ### `getProvisioningEntry`
 
 ```ts
-getProvisioningEntry(dsk: Buffer): SmartStartProvisioningEntry | undefined
+getProvisioningEntry(dsk: string): SmartStartProvisioningEntry | undefined
 ```
 
 Returns the entry for the given DSK from the controller's SmartStart provisioning list. The returned entry (if found) has the following shape:
 
 ```ts
 interface SmartStartProvisioningEntry {
-	dsk: Buffer;
+	/** The device specific key (DSK) in the form aaaaa-bbbbb-ccccc-ddddd-eeeee-fffff-11111-22222 */
+	dsk: string;
 	securityClasses: SecurityClass[];
 	nodeId?: number;
+	/**
+	 * Additional properties to be stored in this provisioning entry, e.g. the device ID from a scanned QR code
+	 */
+	[prop: string]: any;
 }
 ```
 

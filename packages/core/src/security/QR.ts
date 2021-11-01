@@ -87,7 +87,8 @@ export interface ProvisioningInformation_SupportedProtocols {
 
 export type QRProvisioningInformation = {
 	version: QRCodeVersion;
-	requestedKeys: SecurityClass[];
+	/** The security classes that are requested by this device */
+	securityClasses: SecurityClass[];
 	dsk: string;
 } & ProvisioningInformation_ProductType &
 	ProvisioningInformation_ProductId &
@@ -226,11 +227,11 @@ export function parseQRCodeString(qr: string): QRProvisioningInformation {
 	if (checksum !== expectedChecksum) fail("invalid checksum");
 
 	const requestedKeysBitmask = readUInt8(qr, 9);
-	const requestedKeys = parseBitMask(
+	const securityClasses = parseBitMask(
 		Buffer.from([requestedKeysBitmask]),
 		SecurityClass.S2_Unauthenticated,
 	);
-	if (!requestedKeys.every((k) => k in SecurityClass)) {
+	if (!securityClasses.every((k) => k in SecurityClass)) {
 		fail("invalid security class requested");
 	}
 
@@ -244,7 +245,7 @@ export function parseQRCodeString(qr: string): QRProvisioningInformation {
 
 	const ret = {
 		version,
-		requestedKeys,
+		securityClasses,
 		dsk: dskToString(dsk),
 	} as QRProvisioningInformation;
 
