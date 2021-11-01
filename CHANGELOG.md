@@ -4,6 +4,25 @@
 <!--
 	Add placeholder for next release with `wip` snippet
 -->
+## __WORK IN PROGRESS__
+### Features
+* Add support for SmartStart and S2-only inclusion through pre-provisioned security information
+* Expose a helper function to parse QR code strings into provisioning information
+
+### Bugfixes
+* During S2 bootstrapping, send the controller's public key immediately to keep the included node from timing out
+* Allow removing associations with invalid node IDs
+* When the controller reports its own ID as 0 on startup, repeat the controller identification after soft-reset or restart
+* Fix polling of `Fibaro CC`
+
+### Config file changes
+* Add Aeotec aërQ Humidity Sensor v2
+* Add support for Heltun HE-FT01, small fixes for HE-HT01
+* Delay manual refresh for Leviton DZS15
+* Treat Basic Set as event for Merten FunkTaster CONNECT
+* Fix reporting for Fibaro FGT001
+* Fix reporting for Fibaro FGS-223
+
 ## 8.6.1 (2021-10-26)
 ### Bugfixes
 * Try to detect if a Z-Wave stick is incompatible with soft-reset and automatically disable the functionality
