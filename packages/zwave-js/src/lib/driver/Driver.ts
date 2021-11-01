@@ -2360,7 +2360,7 @@ export class Driver extends TypedEventEmitter<DriverEventCallbacks> {
 								// Ignore errors
 							});
 					} else {
-						// Us not being able to repeatedly decode the command means we need to abort the bootstrapping process
+						// Us repeatedly not being able to decode the command means we need to abort the bootstrapping process
 						// because the PIN is wrong
 						this.controllerLog.logNode(nodeId, {
 							message: `${message}, cannot decode command. Aborting the S2 bootstrapping process...`,
