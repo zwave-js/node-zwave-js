@@ -140,7 +140,9 @@ interface PlannedProvisioningEntry {
 }
 ```
 
-> [!NOTE] The intended use case for this is inclusion after scanning a S2 QR code. Otherwise, care must be taken to give correct information. If the included node has a different DSK than the provided one, the secure inclusion will fail. Furthermore, the node will be granted only those security classes that are requested and the provided list. If there is no overlap, the secure inclusion will fail.
+> [!NOTE] The `provisioning` property accepts `QRProvisioningInformation` which is returned by [`parseQRCodeString`](api/utils.md#parse-s2-or-smartstart-qr-code-strings). You just need to make sure that the QR code is an `S2` QR code by checking the `version` field.
+
+> [!ATTENTION] The intended use case for this is inclusion after scanning a S2 QR code. Otherwise, care must be taken to give correct information. If the included node has a different DSK than the provided one, the secure inclusion will fail. Furthermore, the node will be granted only those security classes that are requested and the provided list. If there is no overlap, the secure inclusion will fail.
 
 ### `stopInclusion`
 
@@ -185,32 +187,43 @@ interface PlannedProvisioningEntry {
 	/** The device specific key (DSK) in the form aaaaa-bbbbb-ccccc-ddddd-eeeee-fffff-11111-22222 */
 	dsk: string;
 	securityClasses: SecurityClass[];
+	/**
+	 * Additional properties to be stored in this provisioning entry, e.g. the device ID from a scanned QR code
+	 */
+	[prop: string]: any;
 }
 ```
+
+> [!NOTE] This method accepts a `QRProvisioningInformation` which is returned by [`parseQRCodeString`](api/utils.md#parse-s2-or-smartstart-qr-code-strings). You just need to make sure that the QR code is a `SmartStart` QR code by checking the `version` field.
 
 ### `unprovisionSmartStartNode`
 
 ```ts
-unprovisionSmartStartNode(dskOrNodeId: Buffer | number): void
+unprovisionSmartStartNode(dskOrNodeId: string | number): void
 ```
 
-Removes the given DSK or node ID from the controller's SmartStart provisioning list. The DSK must be given as a buffer.
+Removes the given DSK or node ID from the controller's SmartStart provisioning list.
 
 > [!NOTE] If this entry corresponds to an already-included node, it will **NOT** be excluded.
 
 ### `getProvisioningEntry`
 
 ```ts
-getProvisioningEntry(dsk: Buffer): SmartStartProvisioningEntry | undefined
+getProvisioningEntry(dsk: string): SmartStartProvisioningEntry | undefined
 ```
 
 Returns the entry for the given DSK from the controller's SmartStart provisioning list. The returned entry (if found) has the following shape:
 
 ```ts
 interface SmartStartProvisioningEntry {
-	dsk: Buffer;
+	/** The device specific key (DSK) in the form aaaaa-bbbbb-ccccc-ddddd-eeeee-fffff-11111-22222 */
+	dsk: string;
 	securityClasses: SecurityClass[];
 	nodeId?: number;
+	/**
+	 * Additional properties to be stored in this provisioning entry, e.g. the device ID from a scanned QR code
+	 */
+	[prop: string]: any;
 }
 ```
 
@@ -315,6 +328,10 @@ type ReplaceNodeOptions =
 	| {
 			strategy: InclusionStrategy.Security_S2;
 			userCallbacks: InclusionUserCallbacks;
+	  }
+	| {
+			strategy: InclusionStrategy.Security_S2;
+			provisioning: PlannedProvisioningEntry;
 	  }
 	| {
 			strategy:

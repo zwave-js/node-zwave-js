@@ -137,6 +137,10 @@ export interface PlannedProvisioningEntry {
 	/** The device specific key (DSK) in the form aaaaa-bbbbb-ccccc-ddddd-eeeee-fffff-11111-22222 */
 	dsk: string;
 	securityClasses: SecurityClass[];
+	/**
+	 * Additional properties to be stored in this provisioning entry, e.g. the device ID from a scanned QR code
+	 */
+	[prop: string]: any;
 }
 
 export interface IncludedProvisioningEntry extends PlannedProvisioningEntry {

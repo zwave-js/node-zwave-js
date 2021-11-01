@@ -578,12 +578,14 @@ export class ZWaveController extends TypedEventEmitter<ControllerEventCallbacks>
 	 * Returns all entries from the controller's SmartStart provisioning list.
 	 */
 	public getProvisioningEntries(): SmartStartProvisioningEntry[] {
-		// Make copies so no one can modify the internal list
+		// Make copies so no one can modify the internal list (except for user info)
 		return this._provisioningList.map((e) => {
+			const { dsk, securityClasses, nodeId, ...rest } = e;
 			return {
-				dsk: e.dsk,
-				securityClasses: [...e.securityClasses],
-				...("nodeId" in e ? { nodeId: e.nodeId } : {}),
+				dsk,
+				securityClasses: [...securityClasses],
+				...(nodeId != undefined ? { nodeId } : {}),
+				...rest,
 			};
 		});
 	}
@@ -623,7 +625,6 @@ export class ZWaveController extends TypedEventEmitter<ControllerEventCallbacks>
 		const entry = this._provisioningList.find(
 			(e) => "nodeId" in e && e.nodeId === nodeId,
 		);
-		// @ts-expect-error The nodeId only exists on one of the union types
 		if (entry) delete entry.nodeId;
 	}
 
@@ -4137,12 +4138,17 @@ ${associatedNodes.join(", ")}`,
 		return {
 			controller: {
 				supportsSoftReset: this.supportsSoftReset,
-				provisioningList: this.provisioningList.map((e) => ({
-					dsk: e.dsk,
-					securityClasses: e.securityClasses.map(
-						(s) => SecurityClass[s],
-					),
-				})),
+				provisioningList: this.provisioningList.map((e) => {
+					const { dsk, securityClasses, ...rest } = e;
+					return {
+						dsk,
+						securityClasses: securityClasses.map(
+							(s) => SecurityClass[s],
+						),
+						// The user-defined properties are saved as-is
+						...rest,
+					};
+				}),
 			},
 			nodes: composeObject(
 				[...this.nodes.entries()].map(
@@ -4169,12 +4175,13 @@ ${associatedNodes.join(", ")}`,
 				entries: for (const entry of serialized.controller
 					.provisioningList) {
 					if (!isObject(entry)) continue;
+					const { dsk, securityClasses: secClasses, ...rest } = entry;
 					if (typeof entry.dsk !== "string") continue;
 					if (!isArray(entry.securityClasses)) continue;
 					if (!isValidDSK(entry.dsk)) continue;
 
 					const securityClasses: SecurityClass[] = [];
-					for (const s of entry.securityClasses) {
+					for (const s of secClasses) {
 						if (typeof s !== "string") continue entries;
 						const secClass = (SecurityClass as any)[s];
 						if (typeof secClass !== "number") continue entries;
@@ -4184,6 +4191,8 @@ ${associatedNodes.join(", ")}`,
 					this._provisioningList.push({
 						dsk: entry.dsk,
 						securityClasses,
+						// The user-defined properties are not validated further
+						...rest,
 					});
 				}
 			}
