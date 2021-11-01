@@ -39,7 +39,7 @@ describe("QR code parsing", () => {
 		);
 		expect(result).toEqual({
 			version: QRCodeVersion.SmartStart,
-			requestedKeys: [
+			securityClasses: [
 				SecurityClass.S2_Unauthenticated,
 				SecurityClass.S2_Authenticated,
 			],
@@ -60,7 +60,7 @@ describe("QR code parsing", () => {
 		);
 		expect(result).toEqual({
 			version: QRCodeVersion.SmartStart,
-			requestedKeys: [
+			securityClasses: [
 				SecurityClass.S2_Unauthenticated,
 				SecurityClass.S2_Authenticated,
 				SecurityClass.S2_AccessControl,
@@ -83,7 +83,7 @@ describe("QR code parsing", () => {
 		);
 		expect(result).toEqual({
 			version: QRCodeVersion.S2,
-			requestedKeys: [
+			securityClasses: [
 				SecurityClass.S2_Unauthenticated,
 				SecurityClass.S2_Authenticated,
 			],
