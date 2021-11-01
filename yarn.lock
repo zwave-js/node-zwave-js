@@ -73,15 +73,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@alcalzone/release-script-core@npm:3.3.0":
-  version: 3.3.0
-  resolution: "@alcalzone/release-script-core@npm:3.3.0"
-  dependencies:
-    execa: ^5.1.1
-  checksum: e0dcfa606c1a20197a9193942dff64c00cb45a3936c9dead6861d803290ac4b0035b91b313037e45742c67e8b5a7bf6cbcaf9e1c5de1790f50ba59ca247795c6
-  languageName: node
-  linkType: hard
-
 "@alcalzone/release-script-core@npm:3.4.1":
   version: 3.4.1
   resolution: "@alcalzone/release-script-core@npm:3.4.1"
@@ -121,12 +112,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@alcalzone/release-script-plugin-lerna@npm:~3.3.0":
-  version: 3.3.0
-  resolution: "@alcalzone/release-script-plugin-lerna@npm:3.3.0"
+"@alcalzone/release-script-plugin-lerna@npm:~3.4.1":
+  version: 3.4.1
+  resolution: "@alcalzone/release-script-plugin-lerna@npm:3.4.1"
   dependencies:
-    "@alcalzone/release-script-core": 3.3.0
-  checksum: d9b1bb9cba4f3ff4234302148575158baa61b8663a492a837fd6e83d01a031de449b3838cc09f27a7249a57682cbe359abcc8ce22d2cc0b31a254d3439caf5cc
+    "@alcalzone/release-script-core": 3.4.1
+  checksum: 2f0d47c06db2ff3b48b81a6b7880cf7f7fc72390bcb9ed7c92d9c9247619aed9152735bdfb1627a749107f3931ebbacc199646f6b4a51a229015d387206f2c20
   languageName: node
   linkType: hard
 
@@ -4222,7 +4213,7 @@ __metadata:
     "@actions/github": ^5.0.0
     "@alcalzone/jsonl-db": ^2.2.0
     "@alcalzone/release-script": ~3.4.1
-    "@alcalzone/release-script-plugin-lerna": ~3.3.0
+    "@alcalzone/release-script-plugin-lerna": ~3.4.1
     "@babel/core": ^7.16.0
     "@babel/plugin-proposal-class-properties": "*"
     "@babel/plugin-proposal-decorators": ^7.16.0
