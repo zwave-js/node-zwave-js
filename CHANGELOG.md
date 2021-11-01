@@ -4,7 +4,7 @@
 <!--
 	Add placeholder for next release with `wip` snippet
 -->
-## __WORK IN PROGRESS__
+## 8.7.0 (2021-11-01)
 ### Features
 * Add support for SmartStart and S2-only inclusion through pre-provisioned security information
 * Expose a helper function to parse QR code strings into provisioning information
