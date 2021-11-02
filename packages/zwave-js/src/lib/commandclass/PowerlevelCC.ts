@@ -9,6 +9,7 @@ import {
 } from "@zwave-js/core";
 import { getEnumMemberName, pick } from "@zwave-js/shared";
 import type { Driver } from "../driver/Driver";
+import type { ZWaveNode } from "../node/Node";
 import { NodeStatus } from "../node/Types";
 import { CCAPI } from "./API";
 import {
@@ -33,6 +34,7 @@ export enum PowerlevelCommand {
 	TestNodeReport = 0x06,
 }
 
+/** @publicAPI */
 export enum Powerlevel {
 	"Normal Power" = 0x00,
 	"-1 dBm" = 0x01,
@@ -46,11 +48,32 @@ export enum Powerlevel {
 	"-9 dBm" = 0x09,
 }
 
+/** @publicAPI */
 export enum PowerlevelTestStatus {
-	TestFailed = 0x00,
-	TestSuccess = 0x01,
-	TestInProgress = 0x02,
+	Failed = 0x00,
+	Success = 0x01,
+	"In Progress" = 0x02,
 }
+
+/**
+ * @publicAPI
+ * This is emitted when an unsolicited powerlevel test report is received
+ */
+export interface ZWaveNotificationCallbackArgs_PowerlevelCC {
+	testNodeId: number;
+	status: PowerlevelTestStatus;
+	acknowledgedFrames: number;
+}
+
+/**
+ * @publicAPI
+ * Parameter types for the Powerlevel CC specific version of ZWaveNotificationCallback
+ */
+export type ZWaveNotificationCallbackParams_PowerlevelCC = [
+	node: ZWaveNode,
+	ccId: CommandClasses.Powerlevel,
+	args: ZWaveNotificationCallbackArgs_PowerlevelCC,
+];
 
 @API(CommandClasses.Powerlevel)
 export class PowerlevelCCAPI extends CCAPI {
@@ -219,7 +242,7 @@ export class PowerlevelCCSet extends PowerlevelCC {
 			"power level": getEnumMemberName(Powerlevel, this.powerlevel),
 		};
 		if (this.timeout != undefined) {
-			message.timeout = this.timeout;
+			message.timeout = `${this.timeout} s`;
 		}
 		return {
 			...super.toLogEntry(),
@@ -323,7 +346,7 @@ export class PowerlevelCCTestNodeSet extends PowerlevelCC {
 		return {
 			...super.toLogEntry(),
 			message: {
-				"test node ID": this.testNodeId,
+				"test node id": this.testNodeId,
 				"power level": getEnumMemberName(Powerlevel, this.powerlevel),
 				"test frame count": this.testFrameCount,
 			},
@@ -353,8 +376,8 @@ export class PowerlevelCCTestNodeReport extends PowerlevelCC {
 		return {
 			...super.toLogEntry(),
 			message: {
-				"node ID": this.testNodeId,
-				status: this.status,
+				"test node id": this.testNodeId,
+				status: getEnumMemberName(PowerlevelTestStatus, this.status),
 				"acknowledged frames": this.acknowledgedFrames,
 			},
 		};

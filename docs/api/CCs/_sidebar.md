@@ -52,6 +52,7 @@
         -   [Node Naming and Location CC](api/CCs/NodeNamingAndLocation.md)
         -   [No Operation CC](api/CCs/NoOperation.md)
         -   [Notification CC](api/CCs/Notification.md)
+        -   [Powerlevel CC](api/CCs/Powerlevel.md)
         -   [Protection CC](api/CCs/Protection.md)
         -   [Scene Activation CC](api/CCs/SceneActivation.md)
         -   [Scene Actuator Configuration CC](api/CCs/SceneActuatorConfiguration.md)

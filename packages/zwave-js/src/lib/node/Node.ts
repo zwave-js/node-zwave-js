@@ -56,6 +56,7 @@ import { padStart } from "alcalzone-shared/strings";
 import { isArray, isObject } from "alcalzone-shared/typeguards";
 import { randomBytes } from "crypto";
 import { EventEmitter } from "events";
+import { PowerlevelCCTestNodeReport } from "../commandclass";
 import type {
 	CCAPI,
 	PollValueImplementation,
@@ -2186,6 +2187,8 @@ protocol version:      ${this._protocolVersion}`;
 			return this.handleFirmwareUpdateStatusReport(command);
 		} else if (command instanceof EntryControlCCNotification) {
 			return this.handleEntryControlNotification(command);
+		} else if (command instanceof PowerlevelCCTestNodeReport) {
+			return this.handlePowerlevelTestNodeReport(command);
 		}
 
 		// Ignore all commands that don't need to be handled
@@ -3532,6 +3535,18 @@ protocol version:      ${this._protocolVersion}`;
 			this,
 			CommandClasses["Entry Control"],
 			pick(command, ["eventType", "dataType", "eventData"]),
+		);
+	}
+
+	private handlePowerlevelTestNodeReport(
+		command: PowerlevelCCTestNodeReport,
+	): void {
+		// Notify listeners
+		this.emit(
+			"notification",
+			this,
+			CommandClasses.Powerlevel,
+			pick(command, ["testNodeId", "status", "acknowledgedFrames"]),
 		);
 	}
 

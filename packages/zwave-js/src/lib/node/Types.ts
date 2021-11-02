@@ -9,6 +9,7 @@ import type {
 import type { FirmwareUpdateStatus } from "../commandclass";
 import type { ZWaveNotificationCallbackParams_EntryControlCC } from "../commandclass/EntryControlCC";
 import type { ZWaveNotificationCallbackParams_NotificationCC } from "../commandclass/NotificationCC";
+import type { ZWaveNotificationCallbackParams_PowerlevelCC } from "../commandclass/PowerlevelCC";
 import type { ZWaveNode } from "./Node";
 
 export interface TranslatedValueID extends ValueID {
@@ -81,6 +82,7 @@ export type ZWaveNotificationCallback = (
 	...args:
 		| ZWaveNotificationCallbackParams_NotificationCC
 		| ZWaveNotificationCallbackParams_EntryControlCC
+		| ZWaveNotificationCallbackParams_PowerlevelCC
 ) => void;
 
 export interface ZWaveNodeValueEventCallbacks {

@@ -888,6 +888,45 @@ interface ZWaveNotificationCallbackArgs_NotificationCC {
 }
 ```
 
+#### `Powerlevel CC`
+
+The event is emitted when a node finishes its powerlevel test of another node and sends the test result.
+It uses the following signature
+
+<!-- #import ZWaveNotificationCallbackParams_PowerlevelCC from "zwave-js" -->
+
+```ts
+type ZWaveNotificationCallbackParams_PowerlevelCC = [
+	node: ZWaveNode,
+	ccId: CommandClasses.Powerlevel,
+	args: ZWaveNotificationCallbackArgs_PowerlevelCC,
+];
+```
+
+where the argument object has the type
+
+<!-- #import ZWaveNotificationCallbackArgs_PowerlevelCC from "zwave-js" -->
+
+```ts
+interface ZWaveNotificationCallbackArgs_PowerlevelCC {
+	testNodeId: number;
+	status: PowerlevelTestStatus;
+	acknowledgedFrames: number;
+}
+```
+
+with
+
+<!-- #import PowerlevelTestStatus from "zwave-js" -->
+
+```ts
+enum PowerlevelTestStatus {
+	Failed = 0x00,
+	Success = 0x01,
+	"In Progress" = 0x02,
+}
+```
+
 ### `"statistics updated"`
 
 This event is emitted regularly during and after communication with the node and gives some insight that would otherwise only be visible by looking at logs. The callback has the signature
