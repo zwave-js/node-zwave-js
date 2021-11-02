@@ -538,6 +538,9 @@ export class ZWaveController extends TypedEventEmitter<ControllerEventCallbacks>
 		);
 		if (index === -1) {
 			this._provisioningList.push(entry);
+			// If this is an entry for an existing node, mark it as included
+			const node = this.getNodeByDSK(entry.dsk);
+			if (node) this.markNodeOnProvisioningList(node);
 		} else {
 			this._provisioningList[index] = entry;
 		}
