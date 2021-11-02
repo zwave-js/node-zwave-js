@@ -4,7 +4,7 @@
 <!--
 	Add placeholder for next release with `wip` snippet
 -->
-## __WORK IN PROGRESS__
+## 8.7.1 (2021-11-02)
 ### Bugfixes
 * Fix auto-enabling SmartStart listening mode after an inclusion or exclusion
 
