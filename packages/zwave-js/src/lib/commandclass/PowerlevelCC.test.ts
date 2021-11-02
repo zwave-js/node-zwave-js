@@ -1,7 +1,6 @@
-import { CommandClasses, enumValuesToMetadataStates } from "@zwave-js/core";
+import { CommandClasses } from "@zwave-js/core";
 import type { Driver } from "../driver/Driver";
 import { createEmptyMockDriver } from "../test/mocks";
-import { getCCValueMetadata } from "./CommandClass";
 import {
 	Powerlevel,
 	PowerlevelCC,
@@ -11,7 +10,7 @@ import {
 	PowerlevelCommand,
 } from "./PowerlevelCC";
 
-const fakeDriver = (createEmptyMockDriver() as unknown) as Driver;
+const fakeDriver = createEmptyMockDriver() as unknown as Driver;
 
 function buildCCBuffer(payload: Buffer): Buffer {
 	return Buffer.concat([
@@ -36,12 +35,12 @@ describe("lib/commandclass/PowerlevelCC => ", () => {
 	it("the Set NormalPower command should serialize correctly", () => {
 		const cc = new PowerlevelCCSet(fakeDriver, {
 			nodeId: 2,
-			powerlevel: Powerlevel.NormalPower,
+			powerlevel: Powerlevel["Normal Power"],
 		});
 		const expected = buildCCBuffer(
 			Buffer.from([
 				PowerlevelCommand.Set, // CC Command
-				Powerlevel.NormalPower, // powerlevel
+				Powerlevel["Normal Power"], // powerlevel
 				0, // timeout (ignored)
 			]),
 		);
@@ -51,13 +50,13 @@ describe("lib/commandclass/PowerlevelCC => ", () => {
 	it("the Set NormalPower command with timeout should serialize correctly", () => {
 		const cc = new PowerlevelCCSet(fakeDriver, {
 			nodeId: 2,
-			powerlevel: Powerlevel.NormalPower,
+			powerlevel: Powerlevel["Normal Power"],
 			timeout: 50,
 		});
 		const expected = buildCCBuffer(
 			Buffer.from([
 				PowerlevelCommand.Set, // CC Command
-				Powerlevel.NormalPower, // powerlevel
+				Powerlevel["Normal Power"], // powerlevel
 				50, // timeout (ignored)
 			]),
 		);
@@ -67,13 +66,13 @@ describe("lib/commandclass/PowerlevelCC => ", () => {
 	it("the Set Custom power command should serialize correctly", () => {
 		const cc = new PowerlevelCCSet(fakeDriver, {
 			nodeId: 2,
-			powerlevel: Powerlevel.Minus1dBm,
+			powerlevel: Powerlevel["-1 dBm"],
 			timeout: 50,
 		});
 		const expected = buildCCBuffer(
 			Buffer.from([
 				PowerlevelCommand.Set, // CC Command
-				Powerlevel.Minus1dBm, // powerlevel
+				Powerlevel["-1 dBm"], // powerlevel
 				50, // timeout
 			]),
 		);
@@ -84,7 +83,7 @@ describe("lib/commandclass/PowerlevelCC => ", () => {
 		const ccData = buildCCBuffer(
 			Buffer.from([
 				PowerlevelCommand.Report, // CC Command
-				Powerlevel.NormalPower, // powerlevel
+				Powerlevel["Normal Power"], // powerlevel
 				50, // timeout (ignored because NormalPower)
 			]),
 		);
@@ -93,7 +92,7 @@ describe("lib/commandclass/PowerlevelCC => ", () => {
 			data: ccData,
 		});
 
-		expect(cc.powerlevel).toBe(Powerlevel.NormalPower);
+		expect(cc.powerlevel).toBe(Powerlevel["Normal Power"]);
 		expect(cc.timeout).toBeUndefined(); // timeout does not apply to NormalPower
 	});
 
@@ -101,7 +100,7 @@ describe("lib/commandclass/PowerlevelCC => ", () => {
 		const ccData = buildCCBuffer(
 			Buffer.from([
 				PowerlevelCommand.Report, // CC Command
-				Powerlevel.Minus3dBm, // powerlevel
+				Powerlevel["-3 dBm"], // powerlevel
 				50, // timeout (ignored because NormalPower)
 			]),
 		);
@@ -110,7 +109,7 @@ describe("lib/commandclass/PowerlevelCC => ", () => {
 			data: ccData,
 		});
 
-		expect(cc.powerlevel).toBe(Powerlevel.Minus3dBm);
+		expect(cc.powerlevel).toBe(Powerlevel["-3 dBm"]);
 		expect(cc.timeout).toBe(50); // timeout does not apply to NormalPower
 	});
 
@@ -123,32 +122,5 @@ describe("lib/commandclass/PowerlevelCC => ", () => {
 			data: serializedCC,
 		});
 		expect(cc.constructor).toBe(PowerlevelCC);
-	});
-
-	it("the CC values should have the correct metadata", () => {
-		// Powerlevel
-		const powerlevelValueMeta = getCCValueMetadata(
-			CommandClasses.Powerlevel,
-			"powerlevel",
-		);
-		expect(powerlevelValueMeta).toMatchObject({
-			readable: true,
-			writeable: true,
-			states: enumValuesToMetadataStates(Powerlevel),
-			label: "Power level",
-		});
-
-		// timeout [1, 255]
-		const targetValueMeta = getCCValueMetadata(
-			CommandClasses.Powerlevel,
-			"timeout",
-		);
-		expect(targetValueMeta).toMatchObject({
-			readable: true,
-			writeable: true,
-			min: 1,
-			max: 255,
-			label: "Timeout",
-		});
 	});
 });

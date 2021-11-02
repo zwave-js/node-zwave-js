@@ -1,11 +1,9 @@
 import {
 	CommandClasses,
-	enumValuesToMetadataStates,
 	Maybe,
 	MessageOrCCLogEntry,
 	MessageRecord,
 	validatePayload,
-	ValueMetadata,
 	ZWaveError,
 	ZWaveErrorCodes,
 } from "@zwave-js/core";
@@ -17,8 +15,6 @@ import {
 	API,
 	CCCommand,
 	CCCommandOptions,
-	ccValue,
-	ccValueMetadata,
 	CommandClass,
 	commandClass,
 	CommandClassDeserializationOptions,
@@ -38,16 +34,16 @@ export enum PowerlevelCommand {
 }
 
 export enum Powerlevel {
-	NormalPower = 0x00,
-	Minus1dBm = 0x01,
-	Minus2dBm = 0x02,
-	Minus3dBm = 0x03,
-	Minus4dBm = 0x04,
-	Minus5dBm = 0x05,
-	Minus6dBm = 0x06,
-	Minus7dBm = 0x07,
-	Minus8dBm = 0x08,
-	Minus9dBm = 0x09,
+	"Normal Power" = 0x00,
+	"-1 dBm" = 0x01,
+	"-2 dBm" = 0x02,
+	"-3 dBm" = 0x03,
+	"-4 dBm" = 0x04,
+	"-5 dBm" = 0x05,
+	"-6 dBm" = 0x06,
+	"-7 dBm" = 0x07,
+	"-8 dBm" = 0x08,
+	"-9 dBm" = 0x09,
 }
 
 export enum PowerlevelTestStatus {
@@ -76,7 +72,7 @@ export class PowerlevelCCAPI extends CCAPI {
 		const cc = new PowerlevelCCSet(this.driver, {
 			nodeId: this.endpoint.nodeId,
 			endpoint: this.endpoint.index,
-			powerlevel: Powerlevel.NormalPower,
+			powerlevel: Powerlevel["Normal Power"],
 		});
 		await this.driver.sendCommand(cc, this.commandOptions);
 	}
@@ -114,7 +110,7 @@ export class PowerlevelCCAPI extends CCAPI {
 		}
 	}
 
-	public async startTestNode(
+	public async startNodeTest(
 		testNodeId: number,
 		powerlevel: Powerlevel,
 		testFrameCount: number,
@@ -134,10 +130,10 @@ export class PowerlevelCCAPI extends CCAPI {
 		await this.driver.sendCommand(cc, this.commandOptions);
 	}
 
-	public async getTestNodeResult(): Promise<
+	public async getNodeTestStatus(): Promise<
 		| Pick<
 				PowerlevelCCTestNodeReport,
-				"testNodeId" | "testStatus" | "testFrameAcknowlegedCount"
+				"testNodeId" | "status" | "acknowledgedFrames"
 		  >
 		| undefined
 	> {
@@ -150,15 +146,16 @@ export class PowerlevelCCAPI extends CCAPI {
 			nodeId: this.endpoint.nodeId,
 			endpoint: this.endpoint.index,
 		});
-		const response = await this.driver.sendCommand<PowerlevelCCTestNodeReport>(
-			cc,
-			this.commandOptions,
-		);
+		const response =
+			await this.driver.sendCommand<PowerlevelCCTestNodeReport>(
+				cc,
+				this.commandOptions,
+			);
 		if (response) {
 			return pick(response, [
 				"testNodeId",
-				"testStatus",
-				"testFrameAcknowlegedCount",
+				"status",
+				"acknowledgedFrames",
 			]);
 		}
 	}
@@ -177,7 +174,8 @@ type PowerlevelCCSetOptions = CCCommandOptions &
 				timeout: number;
 		  }
 		| {
-				powerlevel: typeof Powerlevel.NormalPower;
+				powerlevel: typeof Powerlevel["Normal Power"];
+				timeout?: undefined;
 		  }
 	);
 
@@ -195,16 +193,16 @@ export class PowerlevelCCSet extends PowerlevelCC {
 				ZWaveErrorCodes.Deserialization_NotImplemented,
 			);
 		} else {
-			if ("timeout" in options) {
+			this.powerlevel = options.powerlevel;
+			if (options.powerlevel !== Powerlevel["Normal Power"]) {
 				if (options.timeout < 1 || options.timeout > 255) {
 					throw new ZWaveError(
-						`${this.constructor.name}: The timeout parameter must be between 1 and 255.`,
+						`The timeout parameter must be between 1 and 255.`,
 						ZWaveErrorCodes.Argument_Invalid,
 					);
 				}
 				this.timeout = options.timeout;
 			}
-			this.powerlevel = options.powerlevel;
 		}
 	}
 
@@ -218,7 +216,7 @@ export class PowerlevelCCSet extends PowerlevelCC {
 
 	public toLogEntry(): MessageOrCCLogEntry {
 		const message: MessageRecord = {
-			powerlevel: getEnumMemberName(Powerlevel, this.powerlevel),
+			"power level": getEnumMemberName(Powerlevel, this.powerlevel),
 		};
 		if (this.timeout != undefined) {
 			message.timeout = this.timeout;
@@ -239,36 +237,26 @@ export class PowerlevelCCReport extends PowerlevelCC {
 		super(driver, options);
 
 		this.powerlevel = this.payload[0];
-		if (this.powerlevel !== Powerlevel.NormalPower) {
+		if (this.powerlevel !== Powerlevel["Normal Power"]) {
 			this.timeout = this.payload[1];
 		}
 
 		this.persistValues();
 	}
 
-	@ccValue({ stateful: false })
-	@ccValueMetadata({
-		...ValueMetadata.UInt8,
-		states: enumValuesToMetadataStates(Powerlevel),
-		label: "Power level",
-		description: "The current power level  in effect on the node.",
-	})
 	public readonly powerlevel: Powerlevel;
-
-	@ccValue({ stateful: false })
-	@ccValueMetadata({
-		...ValueMetadata.UInt8,
-		min: 1,
-		max: 255,
-		label: "Timeout",
-		description: "Time in seconds before node returns to Normal power.",
-	})
 	public readonly timeout?: number;
 
 	public toLogEntry(): MessageOrCCLogEntry {
+		const message: MessageRecord = {
+			"power level": getEnumMemberName(Powerlevel, this.powerlevel),
+		};
+		if (this.timeout != undefined) {
+			message.timeout = `${this.timeout} s`;
+		}
 		return {
 			...super.toLogEntry(),
-			message: { "Power level": this.powerlevel, Timeout: this.timeout },
+			message,
 		};
 	}
 }
@@ -299,23 +287,19 @@ export class PowerlevelCCTestNodeSet extends PowerlevelCC {
 				ZWaveErrorCodes.Deserialization_NotImplemented,
 			);
 		} else {
-			const testNode = driver.controller.nodes.get(options.testNodeId);
-			if (!testNode) {
-				throw new ZWaveError(
-					`${this.constructor.name}: Node Id ${options.testNodeId} doesn't exist.`,
-					ZWaveErrorCodes.Argument_Invalid,
-				);
-			}
+			const testNode = driver.controller.nodes.getOrThrow(
+				options.testNodeId,
+			);
 			if (testNode.isFrequentListening) {
 				throw new ZWaveError(
-					`${this.constructor.name}: Node Id ${options.testNodeId} is FLiRS, which is not allowed for the Test Node.`,
-					ZWaveErrorCodes.Argument_Invalid,
+					`Node ${options.testNodeId} is FLiRS and therefore cannot be used for a powerlevel test.`,
+					ZWaveErrorCodes.PowerlevelCC_UnsupportedTestNode,
 				);
 			}
-			if (testNode.status !== NodeStatus.Awake) {
+			if (testNode.canSleep && testNode.status !== NodeStatus.Awake) {
 				throw new ZWaveError(
-					`${this.constructor.name}: Node Id ${options.testNodeId} status is ${testNode.status}, but the Test Node must be Awake.`,
-					ZWaveErrorCodes.Argument_Invalid,
+					`Node ${options.testNodeId} is not awake and therefore cannot be used for a powerlevel test.`,
+					ZWaveErrorCodes.PowerlevelCC_UnsupportedTestNode,
 				);
 			}
 
@@ -330,12 +314,8 @@ export class PowerlevelCCTestNodeSet extends PowerlevelCC {
 	public testFrameCount: number;
 
 	public serialize(): Buffer {
-		this.payload = Buffer.from([
-			this.testNodeId,
-			this.powerlevel,
-			(this.testFrameCount >> 8) & 0xff,
-			this.testFrameCount & 0xff,
-		]);
+		this.payload = Buffer.from([this.testNodeId, this.powerlevel, 0, 0]);
+		this.payload.writeUInt16BE(this.testFrameCount, 2);
 		return super.serialize();
 	}
 
@@ -343,9 +323,9 @@ export class PowerlevelCCTestNodeSet extends PowerlevelCC {
 		return {
 			...super.toLogEntry(),
 			message: {
-				testNodeId: this.testNodeId,
-				powerlevel: this.powerlevel,
-				testFrameCount: this.testFrameCount,
+				"test node ID": this.testNodeId,
+				"power level": getEnumMemberName(Powerlevel, this.powerlevel),
+				"test frame count": this.testFrameCount,
 			},
 		};
 	}
@@ -361,44 +341,21 @@ export class PowerlevelCCTestNodeReport extends PowerlevelCC {
 
 		validatePayload(this.payload.length >= 4);
 		this.testNodeId = this.payload[0];
-		this.testStatus = this.payload[1];
-		this.testFrameAcknowlegedCount =
-			(this.payload[2] << 8) | this.payload[3];
-
-		this.persistValues();
+		this.status = this.payload[1];
+		this.acknowledgedFrames = this.payload.readUInt16BE(2);
 	}
 
-	@ccValue({ stateful: false })
-	@ccValueMetadata({
-		...ValueMetadata.ReadOnlyUInt8,
-		label: "Test Node Id",
-	})
 	public readonly testNodeId: number;
-
-	@ccValue({ stateful: false })
-	@ccValueMetadata({
-		...ValueMetadata.ReadOnlyUInt8,
-		states: enumValuesToMetadataStates(PowerlevelTestStatus),
-		label: "Test Status",
-	})
-	public readonly testStatus: PowerlevelTestStatus;
-
-	@ccValue({ stateful: false })
-	@ccValueMetadata({
-		...ValueMetadata.ReadOnlyUInt16,
-		min: 1,
-		max: 65535,
-		label: "Test frame acknowledged count",
-	})
-	public readonly testFrameAcknowlegedCount;
+	public readonly status: PowerlevelTestStatus;
+	public readonly acknowledgedFrames: number;
 
 	public toLogEntry(): MessageOrCCLogEntry {
 		return {
 			...super.toLogEntry(),
 			message: {
-				"Test Node Id": this.testNodeId,
-				"Test status": this.testStatus,
-				"Test frame acknowledged count": this.testFrameAcknowlegedCount,
+				"node ID": this.testNodeId,
+				status: this.status,
+				"acknowledged frames": this.acknowledgedFrames,
 			},
 		};
 	}
