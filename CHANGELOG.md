@@ -4,7 +4,7 @@
 <!--
 	Add placeholder for next release with `wip` snippet
 -->
-## __WORK IN PROGRESS__
+## 8.7.2 (2021-11-02)
 ### Bugfixes
 * When provisioning an already-included node, the provisioning entry now gets assigned the node ID immediately
 
