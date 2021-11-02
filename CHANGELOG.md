@@ -4,6 +4,10 @@
 <!--
 	Add placeholder for next release with `wip` snippet
 -->
+## __WORK IN PROGRESS__
+### Bugfixes
+* Fix auto-enabling SmartStart listening mode after an inclusion or exclusion
+
 ## 8.7.0 (2021-11-01)
 ### Features
 * Add support for SmartStart and S2-only inclusion through pre-provisioned security information
