@@ -4,6 +4,10 @@
 <!--
 	Add placeholder for next release with `wip` snippet
 -->
+## __WORK IN PROGRESS__
+### Bugfixes
+* When provisioning an already-included node, the provisioning entry now gets assigned the node ID immediately
+
 ## 8.7.1 (2021-11-02)
 ### Bugfixes
 * Fix auto-enabling SmartStart listening mode after an inclusion or exclusion
