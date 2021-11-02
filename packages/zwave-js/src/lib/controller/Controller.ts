@@ -1312,7 +1312,6 @@ export class ZWaveController extends TypedEventEmitter<ControllerEventCallbacks>
 	 * Resolves to `true` when the listening mode is started or was active, and `false` if it is scheduled for later activation.
 	 */
 	private async enableSmartStart(): Promise<boolean> {
-		if (this._smartStartEnabled) return true;
 		this._smartStartEnabled = true;
 
 		if (this._inclusionState === InclusionState.Idle) {
@@ -1355,7 +1354,6 @@ export class ZWaveController extends TypedEventEmitter<ControllerEventCallbacks>
 	 * Resolves to `true` when the listening mode is stopped, and `false` if was not active.
 	 */
 	private async disableSmartStart(): Promise<boolean> {
-		if (!this._smartStartEnabled) return false;
 		this._smartStartEnabled = false;
 
 		if (this._inclusionState === InclusionState.SmartStart) {
@@ -1379,6 +1377,8 @@ export class ZWaveController extends TypedEventEmitter<ControllerEventCallbacks>
 				);
 				throw e;
 			}
+		} else if (this._inclusionState === InclusionState.Idle) {
+			return true;
 		} else {
 			this.driver.controllerLog.print(
 				`Smart Start listening mode disabled`,
