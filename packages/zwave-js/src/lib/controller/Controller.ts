@@ -728,6 +728,15 @@ export class ZWaveController extends TypedEventEmitter<ControllerEventCallbacks>
   library version: ${this._libraryVersion}`,
 		);
 
+		this.driver.controllerLog.print(
+			`supported Z-Wave features: ${Object.keys(ZWaveFeature)
+				.filter((k) => /^\d+$/.test(k))
+				.map((k) => parseInt(k) as ZWaveFeature)
+				.filter((feat) => this.supportsFeature(feat))
+				.map((feat) => `\n  · ${getEnumMemberName(ZWaveFeature, feat)}`)
+				.join("")}`,
+		);
+
 		// find out what the controller can do
 		this.driver.controllerLog.print(`querying controller capabilities...`);
 		const ctrlCaps =
@@ -750,14 +759,6 @@ export class ZWaveController extends TypedEventEmitter<ControllerEventCallbacks>
   is SIS present:      ${this._isSISPresent}
   was real primary:    ${this._wasRealPrimary}
   is a SUC:            ${this._isStaticUpdateController}`,
-		);
-		this.driver.controllerLog.print(
-			`supported Z-Wave features: ${Object.keys(ZWaveFeature)
-				.filter((k) => /^\d+$/.test(k))
-				.map((k) => parseInt(k) as ZWaveFeature)
-				.filter((feat) => this.supportsFeature(feat))
-				.map((feat) => `\n  · ${getEnumMemberName(ZWaveFeature, feat)}`)
-				.join("")}`,
 		);
 
 		// Figure out which sub commands of SerialAPISetup are supported
