@@ -82,7 +82,7 @@
 		},
 		{
 			"#": "16",
-			"label": "Report on change of power consumption",
+			"label": "Power Consumption Reports: Change Threshold",
 			"valueSize": 2,
 			"unit": "W",
 			"minValue": 0,
@@ -97,7 +97,7 @@
 		},
 		{
 			"#": "17",
-			"label": "Report on change of power consumption (%)",
+			"label": "Power Consumption Reports: Relative Change Threshold",
 			"valueSize": 1,
 			"unit": "%",
 			"minValue": 0,
