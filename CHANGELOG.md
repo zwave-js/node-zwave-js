@@ -4,6 +4,17 @@
 <!--
 	Add placeholder for next release with `wip` snippet
 -->
+## __WORK IN PROGRESS__
+### Bugfixes
+* The node ID of an existing node is no longer unnecessarily stored when serializing the provisioning list
+* Fixed assignment of lifeline associations that only support node associations, even though multi channel associations are supported by the node
+* The SmartStart feature is now limited to Z-Wave SDK 6.81+. Support needs to be tested before using the feature.
+
+### Config file changes
+* Add HomeSeer HS-WX300 Switch
+* Add missing parameters for Telldus TZWP-102
+* Add fingerprint to NAS-WR01ZE
+
 ## 8.7.2 (2021-11-02)
 ### Bugfixes
 * When provisioning an already-included node, the provisioning entry now gets assigned the node ID immediately
