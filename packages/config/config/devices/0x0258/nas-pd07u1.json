@@ -81,7 +81,7 @@
 				}
 			]
 		},
-        {
+		{
 			"#": "6",
 			"label": "Motion Sensor Sensitivity",
 			"valueSize": 1,
@@ -160,7 +160,7 @@
 			"maxValue": 8,
 			"defaultValue": 8
 		},
-        {
+		{
 			"#": "14",
 			"label": "Basic Set Off Delay Time",
 			"valueSize": 2,
