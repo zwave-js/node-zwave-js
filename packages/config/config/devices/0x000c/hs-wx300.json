@@ -45,7 +45,7 @@
 		},
 		{
 			"#": "6",
-			"label": "Central Scene Control and Multi-Tap",
+			"label": "Central Scene, Multi-Tap, Press and Hold",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 1,
@@ -53,11 +53,11 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "Central Scene Enabled, controls load with delay. Enables Multi-tap and press and hold",
+					"label": "Enable (control load with delay)",
 					"value": 0
 				},
 				{
-					"label": "Central Scene Disabled, controls load instantly. Disables multi-tap, central scene, and press and hold",
+					"label": "Disable (control load instantly)",
 					"value": 1
 				}
 			]
@@ -168,8 +168,7 @@
 		},
 		{
 			"#": "32",
-			"label": "Wire mode",
-			"description": "Sets the Wire mode / no neutral mod of the switch",
+			"label": "Wire Mode",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 1,
@@ -177,7 +176,7 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "3 wire mode (Neutral, Line, & Load)",
+					"label": "3 wire mode (Neutral, Line & Load)",
 					"value": 0
 				},
 				{
