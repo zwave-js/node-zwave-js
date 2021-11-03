@@ -4190,7 +4190,13 @@ ${associatedNodes.join(", ")}`,
 			controller: {
 				supportsSoftReset: this.supportsSoftReset,
 				provisioningList: this.provisioningList.map((e) => {
-					const { dsk, securityClasses, ...rest } = e;
+					const {
+						dsk,
+						securityClasses,
+						// Node ID is not saved - we update it when deserializing nodes
+						nodeId,
+						...rest
+					} = e;
 					return {
 						dsk,
 						securityClasses: securityClasses.map(
@@ -4226,7 +4232,13 @@ ${associatedNodes.join(", ")}`,
 				entries: for (const entry of serialized.controller
 					.provisioningList) {
 					if (!isObject(entry)) continue;
-					const { dsk, securityClasses: secClasses, ...rest } = entry;
+					const {
+						dsk,
+						securityClasses: secClasses,
+						// Node ID is ignored - we update it when deserializing nodes
+						nodeId,
+						...rest
+					} = entry;
 					if (typeof entry.dsk !== "string") continue;
 					if (!isArray(entry.securityClasses)) continue;
 					if (!isValidDSK(entry.dsk)) continue;
