@@ -132,28 +132,8 @@
 			"$import": "templates/homeseer_template.json#blink_frequency"
 		},
 		{
-			"#": "31[0x40]",
-			"label": "LED 7 Blink Status",
-			"$import": "templates/homeseer_template.json#led_blink_status"
-		},
-		{
-			"#": "31[0x20]",
-			"label": "LED 6 Blink Status",
-			"$import": "templates/homeseer_template.json#led_blink_status"
-		},
-		{
-			"#": "31[0x10]",
-			"label": "LED 5 Blink Status",
-			"$import": "templates/homeseer_template.json#led_blink_status"
-		},
-		{
-			"#": "31[0x08]",
-			"label": "LED 4 Blink Status",
-			"$import": "templates/homeseer_template.json#led_blink_status"
-		},
-		{
-			"#": "31[0x04]",
-			"label": "LED 3 Blink Status",
+			"#": "31[0x01]",
+			"label": "LED 1 Blink Status",
 			"$import": "templates/homeseer_template.json#led_blink_status"
 		},
 		{
@@ -162,8 +142,28 @@
 			"$import": "templates/homeseer_template.json#led_blink_status"
 		},
 		{
-			"#": "31[0x01]",
-			"label": "LED 1 Blink Status",
+			"#": "31[0x04]",
+			"label": "LED 3 Blink Status",
+			"$import": "templates/homeseer_template.json#led_blink_status"
+		},
+		{
+			"#": "31[0x08]",
+			"label": "LED 4 Blink Status",
+			"$import": "templates/homeseer_template.json#led_blink_status"
+		},
+		{
+			"#": "31[0x10]",
+			"label": "LED 5 Blink Status",
+			"$import": "templates/homeseer_template.json#led_blink_status"
+		},
+		{
+			"#": "31[0x20]",
+			"label": "LED 6 Blink Status",
+			"$import": "templates/homeseer_template.json#led_blink_status"
+		},
+		{
+			"#": "31[0x40]",
+			"label": "LED 7 Blink Status",
 			"$import": "templates/homeseer_template.json#led_blink_status"
 		},
 		{
