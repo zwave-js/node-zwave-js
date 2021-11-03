@@ -1,0 +1,68 @@
+{
+	"manufacturer": "Ring",
+	"manufacturerId": "0x0346",
+	"label": "4AR1SZ-0EN0",
+	"description": "Range Extender (2nd generation)",
+	"devices": [
+		{
+			"productType": "0x0401",
+			"productId": "0x0301"
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"paramInformation": [
+		{
+			"#": "1",
+			"label": "Battery Report Interval",
+			"valueSize": 2,
+			"unit": "minutes",
+			"minValue": 4,
+			"maxValue": 70,
+			"defaultValue": 70
+		},
+		{
+			"#": "2",
+			"label": "Application Retries",
+			"description": "Number of application level retries attempted for messages either not ACKed or messages encapsulated via supervision get that did not receive a report.",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 5,
+			"defaultValue": 1
+		},
+		{
+			"#": "3",
+			"label": "Application Retry Wait Time",
+			"description": "The number base seconds used in the calculation for sleeping between retry messages.",
+			"unit": "seconds",
+			"valueSize": 1,
+			"minValue": 1,
+			"maxValue": 60,
+			"defaultValue": 5
+		},
+		{
+			"#": "4",
+			"label": "LED Indicator Behavior",
+			"description": "Allows LED indications on the device to be turned on or off.",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 2,
+			"defaultValue": 1
+		},
+		{
+			"#": "5",
+			"label": "Supervisory Report Timeout",
+			"description": "The number of milliseconds waiting for a Supervisory Report response to a Supervisory Get encapsulated command from the sensor before attempting a retry.",
+			"unit": "milliseconds",
+			"valueSize": 2,
+			"minValue": 500,
+			"maxValue": 5000,
+			"defaultValue": 1500
+		}
+	],
+	"metadata": {
+		"manual": "https://support.ring.com/hc/en-us/article_attachments/360055786012/Ring_Alarm_Range_Extender_Zwave.pdf"
+	}
+}
