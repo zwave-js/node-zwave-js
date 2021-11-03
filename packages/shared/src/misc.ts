@@ -89,5 +89,6 @@ export function mergeDeep(
 
 /** Pads a firmware version string, so it can be compared with semver */
 export function padVersion(version: string): string {
+	if (version.split(".").length === 3) return version;
 	return version + ".0";
 }
