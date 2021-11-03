@@ -157,6 +157,9 @@ export enum ZWaveErrorCodes {
 	Invalid_Firmware_File,
 	/** An firmware file with an unsupported format was provided */
 	Unsupported_Firmware_Format,
+
+	/** Unsupported target node for a powerlevel test */
+	PowerlevelCC_UnsupportedTestNode = 1600,
 }
 
 export function getErrorSuffix(code: ZWaveErrorCodes): string {

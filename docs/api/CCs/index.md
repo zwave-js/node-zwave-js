@@ -41,6 +41,7 @@ The **Command Classes API** provides a high-to-mid level entrypoint which allows
 -   [Node Naming and Location CC](api/CCs/NodeNamingAndLocation.md) · `0x77`
 -   [No Operation CC](api/CCs/NoOperation.md) · `0x00`
 -   [Notification CC](api/CCs/Notification.md) · `0x71`
+-   [Powerlevel CC](api/CCs/Powerlevel.md) · `0x73`
 -   [Protection CC](api/CCs/Protection.md) · `0x75`
 -   [Scene Activation CC](api/CCs/SceneActivation.md) · `0x2b`
 -   [Scene Actuator Configuration CC](api/CCs/SceneActuatorConfiguration.md) · `0x2c`

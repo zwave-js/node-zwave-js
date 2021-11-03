@@ -311,6 +311,21 @@ export type {
 	ZWaveNotificationCallbackParams_NotificationCC,
 } from "./NotificationCC";
 export {
+	Powerlevel,
+	PowerlevelCC,
+	PowerlevelCCGet,
+	PowerlevelCCReport,
+	PowerlevelCCSet,
+	PowerlevelCCTestNodeGet,
+	PowerlevelCCTestNodeReport,
+	PowerlevelCCTestNodeSet,
+	PowerlevelTestStatus,
+} from "./PowerlevelCC";
+export type {
+	ZWaveNotificationCallbackArgs_PowerlevelCC,
+	ZWaveNotificationCallbackParams_PowerlevelCC,
+} from "./PowerlevelCC";
+export {
 	LocalProtectionState,
 	ProtectionCC,
 	ProtectionCCExclusiveControlGet,
