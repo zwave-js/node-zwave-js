@@ -4,7 +4,7 @@
 <!--
 	Add placeholder for next release with `wip` snippet
 -->
-## __WORK IN PROGRESS__
+## 8.7.3 (2021-11-03)
 ### Bugfixes
 * The node ID of an existing node is no longer unnecessarily stored when serializing the provisioning list
 * Fixed assignment of lifeline associations that only support node associations, even though multi channel associations are supported by the node
