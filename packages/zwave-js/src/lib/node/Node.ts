@@ -115,6 +115,7 @@ import {
 	NotificationCC,
 	NotificationCCReport,
 } from "../commandclass/NotificationCC";
+import { Powerlevel, PowerlevelTestStatus } from "../commandclass/PowerlevelCC";
 import { SceneActivationCCSet } from "../commandclass/SceneActivationCC";
 import {
 	Security2CCNonceGet,
@@ -3913,5 +3914,80 @@ protocol version:      ${this._protocolVersion}`;
 
 		this.isSendingNoMoreInformation = false;
 		return msgSent;
+	}
+
+	/**
+	 * Instructs the node to send powerlevel test frames to the other node using the given powerlevel. Returns how many frames were acknowledged during the test.
+	 *
+	 * **Note:** Depending on the number of test frames, this may take a while
+	 */
+	public async testPowerlevel(
+		testNodeId: number,
+		powerlevel: Powerlevel,
+		testFrameCount: number,
+		onProgress?: (acknowledged: number, total: number) => void,
+	): Promise<number> {
+		const api = this.commandClasses.Powerlevel;
+
+		// Keep sleeping nodes awake
+		const wasKeptAwake = this.keepAwake;
+		if (this.canSleep) this.keepAwake = true;
+		const result = <T>(value: T) => {
+			// And undo the change when we're done
+			this.keepAwake = wasKeptAwake;
+			return value;
+		};
+
+		// Start the process
+		await api.startNodeTest(testNodeId, powerlevel, testFrameCount);
+
+		// Each frame will take a few ms to be sent, let's assume 5 per second
+		// to estimate how long the test will take
+		const expectedDurationMs = Math.round((testFrameCount / 5) * 1000);
+
+		// Poll the status of the test regularly
+		const pollFrequencyMs =
+			expectedDurationMs >= 60000
+				? 10000
+				: expectedDurationMs >= 10000
+				? 5000
+				: 1000;
+
+		let continuousErrors = 0;
+		while (true) {
+			// The node might send an unsolicited update when it finishes the test
+			const report = await this.driver
+				.waitForCommand<PowerlevelCCTestNodeReport>(
+					(cc) =>
+						cc.nodeId === this.id &&
+						cc instanceof PowerlevelCCTestNodeReport,
+					pollFrequencyMs,
+				)
+				.catch(() => undefined);
+
+			const status = report
+				? pick(report, ["status", "acknowledgedFrames"])
+				: // If it didn't come in the wait time, poll for an update
+				  await api.getNodeTestStatus().catch(() => undefined);
+
+			// If we didn't get a result, try again next iteration
+			if (!status) {
+				// Safeguard against infinite loop
+				if (continuousErrors > 5) return result(0);
+				continuousErrors++;
+				continue;
+			} else {
+				continuousErrors = 0;
+			}
+
+			if (status.status === PowerlevelTestStatus.Failed) {
+				return result(0);
+			} else if (status.status === PowerlevelTestStatus.Success) {
+				return result(status.acknowledgedFrames);
+			} else if (onProgress) {
+				// Notify the caller of the test progress
+				onProgress(status.acknowledgedFrames, testFrameCount);
+			}
+		}
 	}
 }

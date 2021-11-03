@@ -310,6 +310,12 @@ export class PowerlevelCCTestNodeSet extends PowerlevelCC {
 				ZWaveErrorCodes.Deserialization_NotImplemented,
 			);
 		} else {
+			if (options.testNodeId === this.nodeId) {
+				throw new ZWaveError(
+					`For a powerlevel test, the test node ID must different from the source node ID.`,
+					ZWaveErrorCodes.Argument_Invalid,
+				);
+			}
 			const testNode = driver.controller.nodes.getOrThrow(
 				options.testNodeId,
 			);

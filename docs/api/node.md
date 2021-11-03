@@ -317,6 +317,23 @@ ping(): Promise<boolean>
 
 Pings the node and returns whether it responded or not.
 
+### `testPowerlevel`
+
+```ts
+testPowerlevel(
+	testNodeId: number,
+	powerlevel: Powerlevel,
+	testFrameCount: number,
+	onProgress?: (acknowledged: number, total: number) => void,
+): Promise<number>;
+```
+
+Instructs the node to send powerlevel test frames to the other node with ID `testNodeId` using the given powerlevel. Returns how many frames were acknowledged during the test.
+
+Depending on the number of test frames and involved hops, this may take a while. You can use the optional `onProgress` callback to get regular updates on the test progress.
+
+> [!ATTENTION] This will throw when the target node is a FLiRS node or a sleeping node that is not awake.
+
 ## ZWaveNode properties
 
 ### `id`
