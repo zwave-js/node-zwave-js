@@ -57,7 +57,7 @@ describe("lib/commandclass/PowerlevelCC => ", () => {
 			Buffer.from([
 				PowerlevelCommand.Set, // CC Command
 				Powerlevel["Normal Power"], // powerlevel
-				50, // timeout (ignored)
+				0x00, // timeout ignored
 			]),
 		);
 		expect(cc.serialize()).toEqual(expected);
