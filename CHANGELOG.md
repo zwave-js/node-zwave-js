@@ -4,6 +4,10 @@
 <!--
 	Add placeholder for next release with `wip` snippet
 -->
+## __WORK IN PROGRESS__
+### Bugfixes
+* Fixed a crash that happened when determining the SDK version for certain protocol versions
+
 ## 8.7.3 (2021-11-03)
 ### Bugfixes
 * The node ID of an existing node is no longer unnecessarily stored when serializing the provisioning list
