@@ -165,6 +165,7 @@ import {
 } from "./ControllerStatistics";
 import { DeleteReturnRouteRequest } from "./DeleteReturnRouteMessages";
 import { DeleteSUCReturnRouteRequest } from "./DeleteSUCReturnRouteMessages";
+import { minFeatureVersions, ZWaveFeature } from "./Features";
 import {
 	GetControllerCapabilitiesRequest,
 	GetControllerCapabilitiesResponse,
@@ -241,9 +242,12 @@ import {
 } from "./SetSerialApiTimeoutsMessages";
 import { SetSUCNodeIdRequest } from "./SetSUCNodeIDMessages";
 import { ZWaveLibraryTypes } from "./ZWaveLibraryTypes";
+import { protocolVersionToSDKVersion } from "./ZWaveSDKVersions";
 
 export type HealNodeStatus = "pending" | "done" | "failed" | "skipped";
-type SerialAPIVersion = `${number}.${number}`;
+export type SerialAPIVersion =
+	| `${number}.${number}`
+	| `${number}.${number}.${number}`;
 
 export type ThrowingMap<K, V> = Map<K, V> & { getOrThrow(key: K): V };
 export type ReadonlyThrowingMap<K, V> = ReadonlyMap<K, V> & {
@@ -370,46 +374,42 @@ export class ZWaveController extends TypedEventEmitter<ControllerEventCallbacks>
 
 	/** Checks if the Serial API version is greater than the given one */
 	public serialApiGt(version: SerialAPIVersion): boolean | undefined {
-		if (this._serialApiVersion === undefined) {
+		// TODO: Rename these to sdkVersionGt(e) etc...
+		if (this._libraryVersion === undefined) {
 			return undefined;
 		}
-		return semver.gt(
-			padVersion(this._serialApiVersion),
-			padVersion(version),
-		);
+		const sdkVersion = protocolVersionToSDKVersion(this._libraryVersion);
+		return semver.gt(padVersion(sdkVersion), padVersion(version));
 	}
 
 	/** Checks if the Serial API version is greater than or equal to the given one */
 	public serialApiGte(version: SerialAPIVersion): boolean | undefined {
-		if (this._serialApiVersion === undefined) {
+		// TODO: Rename these to sdkVersionGt(e) etc...
+		if (this._libraryVersion === undefined) {
 			return undefined;
 		}
-		return semver.gte(
-			padVersion(this._serialApiVersion),
-			padVersion(version),
-		);
+		const sdkVersion = protocolVersionToSDKVersion(this._libraryVersion);
+		return semver.gte(padVersion(sdkVersion), padVersion(version));
 	}
 
 	/** Checks if the Serial API version is lower than the given one */
 	public serialApiLt(version: SerialAPIVersion): boolean | undefined {
-		if (this._serialApiVersion === undefined) {
+		// TODO: Rename these to sdkVersionGt(e) etc...
+		if (this._libraryVersion === undefined) {
 			return undefined;
 		}
-		return semver.lt(
-			padVersion(this._serialApiVersion),
-			padVersion(version),
-		);
+		const sdkVersion = protocolVersionToSDKVersion(this._libraryVersion);
+		return semver.lt(padVersion(sdkVersion), padVersion(version));
 	}
 
 	/** Checks if the Serial API version is lower than or equal to the given one */
 	public serialApiLte(version: SerialAPIVersion): boolean | undefined {
-		if (this._serialApiVersion === undefined) {
+		// TODO: Rename these to sdkVersionGt(e) etc...
+		if (this._libraryVersion === undefined) {
 			return undefined;
 		}
-		return semver.lte(
-			padVersion(this._serialApiVersion),
-			padVersion(version),
-		);
+		const sdkVersion = protocolVersionToSDKVersion(this._libraryVersion);
+		return semver.lte(padVersion(sdkVersion), padVersion(version));
 	}
 
 	private _manufacturerId: number | undefined;
@@ -463,6 +463,27 @@ export class ZWaveController extends TypedEventEmitter<ControllerEventCallbacks>
 			);
 		}
 		return this._supportedSerialAPISetupCommands.indexOf(command) > -1;
+	}
+
+	/**
+	 * Tests if the controller supports a certain feature.
+	 * Returns `undefined` if this information isn't known yet.
+	 */
+	public supportsFeature(feature: ZWaveFeature): boolean | undefined {
+		switch (feature) {
+			case ZWaveFeature.SmartStart:
+				return this.serialApiGte(minFeatureVersions[feature]);
+		}
+	}
+
+	/** Throws if the controller does not support a certain feature */
+	private assertFeature(feature: ZWaveFeature): void {
+		if (!this.supportsFeature(feature)) {
+			throw new ZWaveError(
+				`The controller does not support the ${feature} feature`,
+				ZWaveErrorCodes.Controller_NotSupported,
+			);
+		}
 	}
 
 	private _sucNodeId: number | undefined;
@@ -533,6 +554,9 @@ export class ZWaveController extends TypedEventEmitter<ControllerEventCallbacks>
 
 	/** Adds the given entry (DSK and security classes) to the controller's SmartStart provisioning list or replaces an existing entry */
 	public provisionSmartStartNode(entry: PlannedProvisioningEntry): void {
+		// Make sure the controller supports SmartStart
+		this.assertFeature(ZWaveFeature.SmartStart);
+
 		const index = this._provisioningList.findIndex(
 			(e) => e.dsk === entry.dsk,
 		);
@@ -603,6 +627,9 @@ export class ZWaveController extends TypedEventEmitter<ControllerEventCallbacks>
 	 * Automatically starts smart start inclusion if there are nodes pending inclusion.
 	 */
 	public autoProvisionSmartStart(): void {
+		// Make sure the controller supports SmartStart
+		if (!this.supportsFeature(ZWaveFeature.SmartStart)) return;
+
 		if (this.hasPlannedProvisioningEntries()) {
 			// SmartStart should be enabled
 			// eslint-disable-next-line @typescript-eslint/no-empty-function
@@ -699,6 +726,15 @@ export class ZWaveController extends TypedEventEmitter<ControllerEventCallbacks>
 			`received version info:
   controller type: ${ZWaveLibraryTypes[this._type]}
   library version: ${this._libraryVersion}`,
+		);
+
+		this.driver.controllerLog.print(
+			`supported Z-Wave features: ${Object.keys(ZWaveFeature)
+				.filter((k) => /^\d+$/.test(k))
+				.map((k) => parseInt(k) as ZWaveFeature)
+				.filter((feat) => this.supportsFeature(feat))
+				.map((feat) => `\n  · ${getEnumMemberName(ZWaveFeature, feat)}`)
+				.join("")}`,
 		);
 
 		// find out what the controller can do
@@ -1038,7 +1074,11 @@ export class ZWaveController extends TypedEventEmitter<ControllerEventCallbacks>
 	private setInclusionState(state: InclusionState): void {
 		if (this._inclusionState === state) return;
 		this._inclusionState = state;
-		if (state === InclusionState.Idle && this._smartStartEnabled) {
+		if (
+			state === InclusionState.Idle &&
+			this._smartStartEnabled &&
+			this.supportsFeature(ZWaveFeature.SmartStart)
+		) {
 			// If Smart Start was enabled before the inclusion/exclusion,
 			// enable it again and ignore errors
 
@@ -1315,6 +1355,13 @@ export class ZWaveController extends TypedEventEmitter<ControllerEventCallbacks>
 	 * Resolves to `true` when the listening mode is started or was active, and `false` if it is scheduled for later activation.
 	 */
 	private async enableSmartStart(): Promise<boolean> {
+		if (!this.supportsFeature(ZWaveFeature.SmartStart)) {
+			this.driver.controllerLog.print(
+				`Smart Start is not supported by this controller, NOT enabling listening mode...`,
+				"warn",
+			);
+		}
+
 		this._smartStartEnabled = true;
 
 		if (this._inclusionState === InclusionState.Idle) {
@@ -1357,6 +1404,7 @@ export class ZWaveController extends TypedEventEmitter<ControllerEventCallbacks>
 	 * Resolves to `true` when the listening mode is stopped, and `false` if was not active.
 	 */
 	private async disableSmartStart(): Promise<boolean> {
+		if (!this.supportsFeature(ZWaveFeature.SmartStart)) return true;
 		this._smartStartEnabled = false;
 
 		if (this._inclusionState === InclusionState.SmartStart) {

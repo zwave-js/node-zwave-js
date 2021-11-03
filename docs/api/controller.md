@@ -4,6 +4,24 @@ The controller instance contains information about the controller and a list of 
 
 ## Controller methods
 
+### `supportsFeature`
+
+```ts
+supportsFeature(feature: ZWaveFeature): boolean | undefined
+```
+
+Some Z-Wave features are not available on all controllers and can potentially create unwanted situations. The `supportsFeature` method must be used to check for support before using certain features. It returns a boolean indicating whether the feature is supported or `undefined` if this information isn't known yet.
+
+The available features to test for are:
+
+<!-- #import ZWaveFeature from "zwave-js" -->
+
+```ts
+enum ZWaveFeature {
+	SmartStart,
+}
+```
+
 ### `beginInclusion`
 
 ```ts
@@ -16,10 +34,6 @@ The options parameter is used to specify the inclusion strategy and provide call
 
 -   `InclusionStrategy.Default`: Prefer _Security S2_ if supported, use _Security S0_ if absolutely necessary (e.g. for legacy locks) or if opted in with the `forceSecurity` flag, don't use encryption otherwise.  
     **This is the recommended** strategy and should be used unless there is a good reason not to.
-
--   `InclusionStrategy.SmartStart`: Include using SmartStart (requires Security S2). Can't include devices that do not support SmartStart.  
-    **Should be preferred** over `Default` if supported, because it is easier for the user.  
-    **WARNING:** This is not supported yet!
 
 -   `InclusionStrategy.Insecure`: Don't use encryption, even if supported.  
     **Not recommended**, because S2 should be used where possible.
@@ -177,6 +191,8 @@ provisionSmartStartNode(entry: PlannedProvisioningEntry): void
 ```
 
 Adds the given entry (DSK and security classes) to the controller's SmartStart provisioning list or replaces an existing entry. The node will be included out of band when it powers up.
+
+> [!ATTENTION] This method will throw when SmartStart is not supported by the controller!
 
 The parameter has the following shape:
 
