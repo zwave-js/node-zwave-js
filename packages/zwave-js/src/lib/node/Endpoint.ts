@@ -495,7 +495,7 @@ export class Endpoint {
 		const node = this.getNodeUnsafe()!;
 		const valueDB = node.valueDB;
 		// We check if a node supports Multi Channel CC before creating Multi Channel Lifeline Associations (#1109)
-		const supportsMultiChannel = node.supportsCC(
+		const nodeSupportsMultiChannel = node.supportsCC(
 			CommandClasses["Multi Channel"],
 		);
 
@@ -540,7 +540,7 @@ supports multi channel associations: ${!!mcInstance}`,
 		});
 
 		for (const group of lifelineGroups) {
-			const groupSupportsMultiChannel = group <= mcGroupCount;
+			const groupSupportsMultiChannelAssociation = group <= mcGroupCount;
 			const assocConfig =
 				node.deviceConfig?.getAssociationConfigForEndpoint(
 					this.index,
@@ -548,10 +548,15 @@ supports multi channel associations: ${!!mcInstance}`,
 				);
 
 			const mustUseNodeAssociation =
-				!supportsMultiChannel || assocConfig?.multiChannel === false;
+				!groupSupportsMultiChannelAssociation ||
+				!nodeSupportsMultiChannel ||
+				assocConfig?.multiChannel === false;
 			let mustUseMultiChannelAssociation = false;
 
-			if (supportsMultiChannel) {
+			if (
+				groupSupportsMultiChannelAssociation &&
+				nodeSupportsMultiChannel
+			) {
 				if (assocConfig?.multiChannel === true) {
 					mustUseMultiChannelAssociation = true;
 				} else if (this.index === 0) {
@@ -580,7 +585,7 @@ supports multi channel associations: ${!!mcInstance}`,
 			this.driver.controllerLog.logNode(node.id, {
 				endpoint: this.index,
 				message: `Configuring lifeline group #${group}:
-group supports multi channel:  ${groupSupportsMultiChannel}
+group supports multi channel:  ${groupSupportsMultiChannelAssociation}
 configured strategy:           ${assocConfig?.multiChannel ?? "auto"}
 must use node association:     ${mustUseNodeAssociation}
 must use endpoint association: ${mustUseMultiChannelAssociation}`,
@@ -588,7 +593,7 @@ must use endpoint association: ${mustUseMultiChannelAssociation}`,
 
 			// Figure out which associations exist and may need to be removed
 			const isAssignedAsNodeAssociation = (): boolean => {
-				if (groupSupportsMultiChannel && mcInstance) {
+				if (groupSupportsMultiChannelAssociation && mcInstance) {
 					if (
 						// Only consider a group if it doesn't share its associations with the root endpoint
 						mcInstance.getMaxNodesCached(group) > 0 &&
@@ -657,7 +662,7 @@ must use endpoint association: ${mustUseMultiChannelAssociation}`,
 			if (
 				invalidEndpointAssociations.length > 0 &&
 				mcAPI.isSupported() &&
-				groupSupportsMultiChannel
+				groupSupportsMultiChannelAssociation
 			) {
 				this.driver.controllerLog.logNode(node.id, {
 					endpoint: this.index,
@@ -842,8 +847,8 @@ must use endpoint association: ${mustUseMultiChannelAssociation}`,
 				}
 			}
 
-			// Last attempt (actual Z-Wave+ Lifelines only): Try a multi channel association on the root
-			// Endpoint interview happen AFTER the root interview, so this enables us to overwrite what
+			// Last attempt (actual Z-Wave+ Lifelines only): Try a multi channel association on the root.
+			// Endpoint interviews happen AFTER the root interview, so this enables us to overwrite what
 			// we previously configured on the root.
 			if (
 				!hasLifeline &&
@@ -858,13 +863,13 @@ must use endpoint association: ${mustUseMultiChannelAssociation}`,
 						group,
 					);
 				const rootMustUseNodeAssociation =
-					!supportsMultiChannel ||
+					!nodeSupportsMultiChannel ||
 					rootAssocConfig?.multiChannel === false;
 
 				this.driver.controllerLog.logNode(node.id, {
 					endpoint: this.index,
 					message: `Checking root device for fallback assignment of lifeline group #${group}:
-root supports multi channel:  ${supportsMultiChannel}
+root supports multi channel:  ${nodeSupportsMultiChannel}
 configured strategy:           ${rootAssocConfig?.multiChannel ?? "auto"}
 must use node association:     ${rootMustUseNodeAssociation}`,
 				});
