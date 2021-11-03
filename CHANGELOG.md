@@ -4,7 +4,7 @@
 <!--
 	Add placeholder for next release with `wip` snippet
 -->
-## __WORK IN PROGRESS__
+## 8.7.4 (2021-11-03)
 ### Bugfixes
 * Fixed a crash that happened when determining the SDK version for certain protocol versions
 
