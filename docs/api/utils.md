@@ -17,7 +17,7 @@ which returns the following data structure:
 ```ts
 interface QRProvisioningInformation {
 	version: QRCodeVersion;
-	requestedKeys: SecurityClass[];
+	securityClasses: SecurityClass[];
 	dsk: string;
 	genericDeviceClass: number;
 	specificDeviceClass: number;
