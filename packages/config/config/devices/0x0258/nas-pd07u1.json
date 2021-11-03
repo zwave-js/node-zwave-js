@@ -146,11 +146,7 @@
 			"defaultValue": 100,
 			"options": [
 				{
-					"label": "Disable",
-					"value": 0
-				},
-				{
-					"label": "Enable",
+					"label": "On (255)",
 					"value": 100
 				}
 			]
