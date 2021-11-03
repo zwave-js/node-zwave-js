@@ -8,67 +8,67 @@ const versions = Object.freeze([
 
 	{
 		sdkVersion: "6.84.0",
-		protocolVersion: "6.10.00",
+		protocolVersion: "6.10",
 		serialAPIVersion: "8",
 	},
 	{
 		sdkVersion: "6.82.1",
-		protocolVersion: "6.09.00",
+		protocolVersion: "6.09",
 		serialAPIVersion: "8",
 	},
 	{
 		sdkVersion: "6.82.0",
-		protocolVersion: "6.08.00",
+		protocolVersion: "6.08",
 		serialAPIVersion: "8",
 	},
 	{
 		sdkVersion: "6.81.6",
-		protocolVersion: "6.07.00",
+		protocolVersion: "6.07",
 		serialAPIVersion: "8",
 	},
 	{
 		sdkVersion: "6.81.5",
-		protocolVersion: "6.06.00",
+		protocolVersion: "6.06",
 		serialAPIVersion: "8",
 	},
 	{
 		sdkVersion: "6.81.4",
-		protocolVersion: "6.05.00",
+		protocolVersion: "6.05",
 		serialAPIVersion: "8",
 	},
 	{
 		sdkVersion: "6.81.3",
-		protocolVersion: "6.04.00",
+		protocolVersion: "6.04",
 		serialAPIVersion: "8",
 	},
 	{
 		sdkVersion: "6.81.2",
-		protocolVersion: "6.03.00",
+		protocolVersion: "6.03",
 		serialAPIVersion: "8",
 	},
 	{
 		sdkVersion: "6.81.1",
-		protocolVersion: "6.02.00",
+		protocolVersion: "6.02",
 		serialAPIVersion: "8",
 	},
 	{
 		sdkVersion: "6.81.0",
-		protocolVersion: "6.01.00",
+		protocolVersion: "6.01",
 		serialAPIVersion: "8",
 	},
 	{
 		sdkVersion: "6.80.0-beta",
-		protocolVersion: "6.01.00",
+		protocolVersion: "6.01",
 		serialAPIVersion: "8",
 	},
 	{
 		sdkVersion: "6.71.3",
-		protocolVersion: "5.03.00",
+		protocolVersion: "5.03",
 		serialAPIVersion: "7",
 	},
 	{
 		sdkVersion: "6.71.2",
-		protocolVersion: "5.02.00",
+		protocolVersion: "5.02",
 		serialAPIVersion: "7",
 	},
 	{
@@ -337,8 +337,16 @@ export function protocolVersionToSDKVersion(protocolVersion: string): string {
 	if (protocolVersion.startsWith("Z-Wave ")) {
 		protocolVersion = protocolVersion.substr(7);
 	}
-	return (
-		versions.find((v) => v.protocolVersion === protocolVersion)
-			?.sdkVersion ?? protocolVersion
-	);
+
+	let ret = versions.find(
+		(v) => v.protocolVersion === protocolVersion,
+	)?.sdkVersion;
+	if (!ret) {
+		// Remove leading zeroes and stuff
+		ret = protocolVersion
+			.split(".")
+			.map((part) => parseInt(part))
+			.join(".");
+	}
+	return ret;
 }
