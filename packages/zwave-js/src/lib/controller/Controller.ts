@@ -165,7 +165,7 @@ import {
 } from "./ControllerStatistics";
 import { DeleteReturnRouteRequest } from "./DeleteReturnRouteMessages";
 import { DeleteSUCReturnRouteRequest } from "./DeleteSUCReturnRouteMessages";
-import { ZWaveFeature } from "./Features";
+import { minFeatureVersions, ZWaveFeature } from "./Features";
 import {
 	GetControllerCapabilitiesRequest,
 	GetControllerCapabilitiesResponse,
@@ -245,7 +245,9 @@ import { ZWaveLibraryTypes } from "./ZWaveLibraryTypes";
 import { protocolVersionToSDKVersion } from "./ZWaveSDKVersions";
 
 export type HealNodeStatus = "pending" | "done" | "failed" | "skipped";
-type SerialAPIVersion = `${number}.${number}` | `${number}.${number}.${number}`;
+export type SerialAPIVersion =
+	| `${number}.${number}`
+	| `${number}.${number}.${number}`;
 
 export type ThrowingMap<K, V> = Map<K, V> & { getOrThrow(key: K): V };
 export type ReadonlyThrowingMap<K, V> = ReadonlyMap<K, V> & {
@@ -470,7 +472,7 @@ export class ZWaveController extends TypedEventEmitter<ControllerEventCallbacks>
 	public supportsFeature(feature: ZWaveFeature): boolean | undefined {
 		switch (feature) {
 			case ZWaveFeature.SmartStart:
-				return this.serialApiGte("6.81");
+				return this.serialApiGte(minFeatureVersions[feature]);
 		}
 	}
 
@@ -748,6 +750,14 @@ export class ZWaveController extends TypedEventEmitter<ControllerEventCallbacks>
   is SIS present:      ${this._isSISPresent}
   was real primary:    ${this._wasRealPrimary}
   is a SUC:            ${this._isStaticUpdateController}`,
+		);
+		this.driver.controllerLog.print(
+			`supported Z-Wave features: ${Object.keys(ZWaveFeature)
+				.filter((k) => /^\d+$/.test(k))
+				.map((k) => parseInt(k) as ZWaveFeature)
+				.filter((feat) => this.supportsFeature(feat))
+				.map((feat) => `\n  · ${getEnumMemberName(ZWaveFeature, feat)}`)
+				.join("")}`,
 		);
 
 		// Figure out which sub commands of SerialAPISetup are supported

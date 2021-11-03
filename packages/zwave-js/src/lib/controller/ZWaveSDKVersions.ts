@@ -334,6 +334,9 @@ const versions = Object.freeze([
  * Defaults to the protocol version itself, which is the case for v7+
  */
 export function protocolVersionToSDKVersion(protocolVersion: string): string {
+	if (protocolVersion.startsWith("Z-Wave ")) {
+		protocolVersion = protocolVersion.substr(7);
+	}
 	return (
 		versions.find((v) => v.protocolVersion === protocolVersion)
 			?.sdkVersion ?? protocolVersion
