@@ -233,5 +233,23 @@
 		"label": "Temperature reportng interval when on line power",
 		"unit": "seconds",
 		"minValue": 30
+	},
+	"led_blink_status": {
+		"label": "LED Blink Status",
+		"valueSize": 1,
+		"minValue": 0,
+		"maxValue": 1,
+		"defaultValue": 0,
+		"allowManualEntry": false,
+		"options": [
+			{
+				"label": "Solid",
+				"value": 0
+			},
+			{
+				"label": "Blink",
+				"value": 1
+			}
+		]
 	}
 }

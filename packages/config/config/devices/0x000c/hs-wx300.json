@@ -1,0 +1,189 @@
+{
+	"manufacturer": "HomeSeer Technologies",
+	"manufacturerId": "0x000c",
+	"label": "HS-WX300",
+	"description": "Wall Dimmer & Switch",
+	"devices": [
+		{
+			"productType": "0x4447",
+			"productId": "0x4037"
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"associations": {
+		"1": {
+			"label": "Lifeline",
+			"maxNodes": 5,
+			"isLifeline": true
+		},
+		"2": {
+			"label": "Companion Sync",
+			"maxNodes": 5
+		}
+	},
+	"paramInformation": [
+		{
+			"#": "3",
+			"label": "Bottom LED Operation",
+			"$import": "~/templates/master_template.json#led_indicator_two_options"
+		},
+		{
+			"#": "4",
+			"$import": "~/templates/master_template.json#orientation"
+		},
+		{
+			"#": "5",
+			"label": "Dimming Threshold",
+			"description": "Sets the lowest dimming threshold",
+			"valueSize": 1,
+			"minValue": 1,
+			"maxValue": 14,
+			"defaultValue": 1
+		},
+		{
+			"#": "6",
+			"label": "Central Scene, Multi-Tap, Press and Hold",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 0,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Enable (control load with delay)",
+					"value": 0
+				},
+				{
+					"label": "Disable (control load instantly)",
+					"value": 1
+				}
+			]
+		},
+		{
+			"#": "11",
+			"label": "Ramp Rate (Z-Wave)",
+			"valueSize": 1,
+			"unit": "seconds",
+			"minValue": 0,
+			"maxValue": 90,
+			"defaultValue": 3
+		},
+		{
+			"#": "12",
+			"label": "Ramp Rate (Manual)",
+			"valueSize": 1,
+			"unit": "seconds",
+			"minValue": 0,
+			"maxValue": 90,
+			"defaultValue": 3
+		},
+		{
+			"#": "13",
+			"label": "Status Mode",
+			"$import": "templates/homeseer_template.json#status_mode"
+		},
+		{
+			"#": "14",
+			"label": "Load Status LED Color",
+			"description": "Set the LED color when displaying load status",
+			"$import": "templates/homeseer_template.json#led_colors"
+		},
+		{
+			"#": "21",
+			"label": "Status LED 1 Color",
+			"$import": "templates/homeseer_template.json#status_mode_choices"
+		},
+		{
+			"#": "22",
+			"label": "Status LED 2 Color",
+			"$import": "templates/homeseer_template.json#status_mode_choices"
+		},
+		{
+			"#": "23",
+			"label": "Status LED 3 Color",
+			"$import": "templates/homeseer_template.json#status_mode_choices"
+		},
+		{
+			"#": "24",
+			"label": "Status LED 4 Color",
+			"$import": "templates/homeseer_template.json#status_mode_choices"
+		},
+		{
+			"#": "25",
+			"label": "Status LED 5 Color",
+			"$import": "templates/homeseer_template.json#status_mode_choices"
+		},
+		{
+			"#": "26",
+			"label": "Status LED 6 Color",
+			"$import": "templates/homeseer_template.json#status_mode_choices"
+		},
+		{
+			"#": "27",
+			"label": "Status LED 7 Color",
+			"$import": "templates/homeseer_template.json#status_mode_choices"
+		},
+		{
+			"#": "30",
+			"label": "Custom Status Blink Frequency",
+			"$import": "templates/homeseer_template.json#blink_frequency"
+		},
+		{
+			"#": "31[0x01]",
+			"label": "LED 1 Blink Status",
+			"$import": "templates/homeseer_template.json#led_blink_status"
+		},
+		{
+			"#": "31[0x02]",
+			"label": "LED 2 Blink Status",
+			"$import": "templates/homeseer_template.json#led_blink_status"
+		},
+		{
+			"#": "31[0x04]",
+			"label": "LED 3 Blink Status",
+			"$import": "templates/homeseer_template.json#led_blink_status"
+		},
+		{
+			"#": "31[0x08]",
+			"label": "LED 4 Blink Status",
+			"$import": "templates/homeseer_template.json#led_blink_status"
+		},
+		{
+			"#": "31[0x10]",
+			"label": "LED 5 Blink Status",
+			"$import": "templates/homeseer_template.json#led_blink_status"
+		},
+		{
+			"#": "31[0x20]",
+			"label": "LED 6 Blink Status",
+			"$import": "templates/homeseer_template.json#led_blink_status"
+		},
+		{
+			"#": "31[0x40]",
+			"label": "LED 7 Blink Status",
+			"$import": "templates/homeseer_template.json#led_blink_status"
+		},
+		{
+			"#": "32",
+			"label": "Wire Mode",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 0,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "3 wire mode (Neutral, Line & Load)",
+					"value": 0
+				},
+				{
+					"label": "2 wire mode (Line & Load)",
+					"value": 1
+				}
+			]
+		}
+	]
+}
