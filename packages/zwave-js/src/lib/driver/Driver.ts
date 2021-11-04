@@ -2854,6 +2854,17 @@ ${handlers.length} left`,
 			if (!this.mayHandleUnsolicitedCommand(msg.command)) return;
 		}
 
+		// Check if we have a dynamic handler waiting for this message
+		for (const entry of this.awaitedMessages) {
+			if (entry.predicate(msg)) {
+				// resolve the promise - this will remove the entry from the list
+				entry.promise.resolve(msg);
+				return;
+			}
+		}
+
+		// Otherwise go through the static handlers
+
 		if (
 			msg instanceof ApplicationCommandRequest ||
 			msg instanceof BridgeApplicationCommandRequest
@@ -3060,17 +3071,6 @@ ${handlers.length} left`,
 				}
 			}
 		} else {
-			// Check if we have a dynamic handler waiting for this message
-			for (const entry of this.awaitedMessages) {
-				if (entry.predicate(msg)) {
-					// resolve the promise - this will remove the entry from the list
-					entry.promise.resolve(msg);
-					return;
-				}
-			}
-
-			// Otherwise loop through the static handlers
-
 			// TODO: This deserves a nicer formatting
 			this.driverLog.print(
 				`handling request ${FunctionType[msg.functionType]} (${
@@ -3270,7 +3270,7 @@ ${handlers.length} left`,
 		}
 
 		// create the transaction and enqueue it
-		const promise = createDeferredPromise<TResponse>();
+		const promise = createDeferredPromise<Message>();
 		const transaction = new Transaction(
 			this,
 			msg,
@@ -3320,6 +3320,8 @@ ${handlers.length} left`,
 			} else {
 				this._controller?.incrementStatistics("messagesTX");
 			}
+
+			// TODO: Should this happen before or after waiting for the node update?
 			// Track and potentially update the status of the node when communication succeeds
 			if (node) {
 				if (node.canSleep) {
@@ -3337,7 +3339,30 @@ ${handlers.length} left`,
 					node.markAsAlive();
 				}
 			}
-			return ret;
+
+			// If this message expects an update from the node, wait for it
+			if (ret.expectsNodeUpdate()) {
+				try {
+					return await this.waitForMessage(
+						(msg) => ret.isExpectedNodeUpdate(msg),
+						this.options.timeouts.report,
+					);
+				} catch (e) {
+					throw new ZWaveError(
+						`Timed out while waiting for a response from the node`,
+						ZWaveErrorCodes.Controller_NodeTimeout,
+						undefined,
+						transaction.stack,
+					);
+				} finally {
+					// Tell the send thread to continue
+					this.sendThread.send({ type: "finalize" });
+				}
+			} else {
+				// Nothing to wait for, tell the send thread to continue
+				this.sendThread.send({ type: "finalize" });
+				return ret as TResponse;
+			}
 		} catch (e) {
 			if (isZWaveError(e)) {
 				if (

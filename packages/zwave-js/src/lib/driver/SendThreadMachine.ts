@@ -60,7 +60,7 @@ export interface SendThreadStateSchema {
 					};
 				};
 				execute: {};
-				waitForUpdate: {};
+				finalize: {};
 				retryWait: {};
 				done: {};
 			};
@@ -92,10 +92,6 @@ export type SendThreadEvent =
 	| { type: "add"; transaction: Transaction }
 	| { type: "trigger" }
 	| {
-			type: "nodeUpdate";
-			result: ApplicationCommandRequest | BridgeApplicationCommandRequest;
-	  }
-	| {
 			type: "handshakeResponse";
 			result: ApplicationCommandRequest | BridgeApplicationCommandRequest;
 	  }
@@ -108,6 +104,8 @@ export type SendThreadEvent =
 	| { type: "reduce"; reducer: TransactionReducer }
 	// Re-transmit the current transaction immediately
 	| { type: "resend" }
+	// Finalize the current transaction
+	| { type: "finalize" }
 	// These events are forwarded to the SerialAPICommand machine
 	| { type: "ACK" }
 	| { type: "CAN" }
@@ -224,13 +222,6 @@ const forwardToCommandQueue = forwardTo<any, any>((ctx) => ctx.commandQueue);
 const currentTransactionIsSendData = (ctx: SendThreadContext) =>
 	isSendData(ctx.currentTransaction?.message);
 
-const forwardNodeUpdate = pure<SendThreadContext, any>((ctx, evt) => {
-	return raise({
-		type: "nodeUpdate",
-		result: evt.message,
-	});
-});
-
 const forwardHandshakeResponse = pure<SendThreadContext, any>((ctx, evt) => {
 	return raise({
 		type: "handshakeResponse",
@@ -324,31 +315,8 @@ const guards: MachineOptions<SendThreadContext, SendThreadEvent>["guards"] = {
 				!!ctx.handshakeTransaction) &&
 				evt.transaction === ctx.handshakeTransaction) ||
 			((meta.state.matches("sending.execute") ||
-				meta.state.matches("sending.waitForUpdate") ||
 				!!ctx.currentTransaction) &&
 				evt.transaction === ctx.currentTransaction)
-		);
-	},
-	expectsNodeUpdate: (ctx) => {
-		const msg = ctx.currentTransaction?.message;
-		if (
-			msg instanceof SendDataRequest ||
-			msg instanceof SendDataBridgeRequest
-		) {
-			return (msg.command as CommandClass).expectsCCResponse();
-		}
-		return false;
-	},
-	isExpectedUpdate: (ctx, evt, meta) => {
-		if (!meta.state.matches("sending.waitForUpdate")) return false;
-		const sentMsg = ctx.currentTransaction!.message as
-			| SendDataRequest
-			| SendDataBridgeRequest;
-		const receivedMsg = (evt as any).message;
-		return (
-			(receivedMsg instanceof ApplicationCommandRequest ||
-				receivedMsg instanceof BridgeApplicationCommandRequest) &&
-			sentMsg.command.isExpectedCCResponse(receivedMsg.command)
 		);
 	},
 	currentTransactionIsSendData,
@@ -769,10 +737,6 @@ export function createSendThreadMachine(
 						cond: "isExpectedHandshakeResponse",
 						actions: forwardHandshakeResponse,
 					},
-					{
-						cond: "isExpectedUpdate",
-						actions: forwardNodeUpdate,
-					},
 					// Return unsolicited messages to the driver
 					{ actions: notifyUnsolicited },
 				],
@@ -972,15 +936,10 @@ export function createSendThreadMachine(
 							],
 							on: {
 								active_command_success: [
-									// On success, start waiting for an update
-									{
-										cond: "expectsNodeUpdate",
-										target: "waitForUpdate",
-									},
-									// or resolve the current transaction if none is required
+									// On success, resolve the transaction and wait for the driver's GO for the next one
 									{
 										actions: resolveCurrentTransaction,
-										target: "done",
+										target: "finalize",
 									},
 								],
 								active_command_failure: [
@@ -1016,10 +975,9 @@ export function createSendThreadMachine(
 								],
 							},
 						},
-						waitForUpdate: {
+						finalize: {
 							on: {
-								nodeUpdate: {
-									actions: resolveCurrentTransaction,
+								finalize: {
 									target: "done",
 								},
 								resend: {
@@ -1027,25 +985,6 @@ export function createSendThreadMachine(
 									// without increasing the retry counter
 									target: "execute",
 								},
-							},
-							after: {
-								// If an update times out, retry if possible - otherwise reject the transaction
-								REPORT_TIMEOUT: [
-									// only retry on timeout when configured
-									...(params.attempts.retryAfterTransmitReport
-										? [
-												{
-													cond: "mayRetry",
-													target: "retryWait",
-												},
-										  ]
-										: []),
-									{
-										actions:
-											rejectCurrentTransactionWithNodeTimeout,
-										target: "done",
-									},
-								],
 							},
 						},
 						retryWait: {

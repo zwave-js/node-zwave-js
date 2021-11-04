@@ -30,6 +30,8 @@ import {
 	priority,
 } from "../message/Message";
 import type { SuccessIndicator } from "../message/SuccessIndicator";
+import { ApplicationCommandRequest } from "./ApplicationCommandRequest";
+import { BridgeApplicationCommandRequest } from "./BridgeApplicationCommandRequest";
 import { MAX_SEND_ATTEMPTS } from "./SendDataMessages";
 import { TransmitOptions, TransmitStatus } from "./SendDataShared";
 
@@ -162,6 +164,18 @@ export class SendDataBridgeRequest<CCType extends CommandClass = CommandClass>
 		if (this.transmitOptions & TransmitOptions.Explore) return 46;
 		if (this.transmitOptions & TransmitOptions.AutoRoute) return 48;
 		return 54;
+	}
+
+	public expectsNodeUpdate(): boolean {
+		return this.command.expectsCCResponse();
+	}
+
+	public isExpectedNodeUpdate(msg: Message): boolean {
+		return (
+			(msg instanceof ApplicationCommandRequest ||
+				msg instanceof BridgeApplicationCommandRequest) &&
+			this.command.isExpectedCCResponse(msg.command)
+		);
 	}
 }
 
