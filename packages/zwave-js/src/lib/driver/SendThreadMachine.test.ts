@@ -43,11 +43,12 @@ interface TestMachineStateSchema {
 		// The "simple" path tests a controller message
 		// (no retrying on the message level, no handshakes)
 		execute_simple: {};
+		finalize_simple: {};
 		done_simple: {};
 		// The "SendData" path tests a SendData transaction
-		// (including retrying, no handshakes, with and without update)
+		// (including retrying, no handshakes)
 		execute_senddata: {};
-		wait_senddata: {};
+		finalize_senddata: {};
 		retry_senddata: {};
 		done_senddata: {};
 		unsolicited_senddata: {};
@@ -57,6 +58,7 @@ interface TestMachineStateSchema {
 		handshake_execute_secure: {};
 		handshake_wait_secure: {};
 		execute_secure: {};
+		finalize_secure: {};
 		retry_secure: {};
 		done_secure: {};
 	};
@@ -64,7 +66,6 @@ interface TestMachineStateSchema {
 /* eslint-enable @typescript-eslint/ban-types */
 
 interface TestMachineContext {
-	expectsUpdate?: boolean;
 	sendDataAttempts: number;
 	retryCount: number;
 }
@@ -73,14 +74,13 @@ type TestMachineEvents =
 	| { type: "ADD_SIMPLE" }
 	| { type: "FAILURE_SIMPLE" }
 	| { type: "SUCCESS_SIMPLE" }
+	| { type: "FINALIZE" }
 	| { type: "ADD_SENDDATA" }
 	| { type: "FAILURE_SENDDATA" }
 	| { type: "SUCCESS_SENDDATA" }
 	| { type: "UNSOLICITED_SENDDATA" }
-	| { type: "UPDATE_SENDDATA" }
 	//
 	| { type: "RETRY_TIMEOUT" }
-	| { type: "WAIT_TIMEOUT" }
 	//
 	| { type: "ADD_SECURE" }
 	| { type: "HANDSHAKE_ADD_SECURE" }
@@ -159,13 +159,7 @@ describe("lib/driver/SendThreadMachine", () => {
 					idle: {
 						on: {
 							ADD_SIMPLE: "execute_simple",
-							ADD_SENDDATA: {
-								target: "execute_senddata",
-								actions: assign({
-									expectsUpdate: (_, evt: any) =>
-										evt.command === "BasicGet",
-								}),
-							},
+							ADD_SENDDATA: "execute_senddata",
 							ADD_SECURE: "handshake_secure",
 						},
 						meta: {
@@ -179,7 +173,7 @@ describe("lib/driver/SendThreadMachine", () => {
 					},
 					execute_simple: {
 						on: {
-							SUCCESS_SIMPLE: "done_simple",
+							SUCCESS_SIMPLE: "finalize_simple",
 							FAILURE_SIMPLE: "done_simple",
 						},
 						meta: {
@@ -198,6 +192,18 @@ describe("lib/driver/SendThreadMachine", () => {
 									interpreter.state.context
 										.currentTransaction,
 								).toBe(sentTransaction);
+							},
+						},
+					},
+					finalize_simple: {
+						on: {
+							FINALIZE: "done_simple",
+						},
+						meta: {
+							test: ({ interpreter }: TestContext) => {
+								expect(interpreter.state.value).toEqual({
+									sending: "finalize",
+								});
 							},
 						},
 					},
@@ -242,39 +248,22 @@ describe("lib/driver/SendThreadMachine", () => {
 							sendDataAttempts: (ctx) => ctx.sendDataAttempts + 1,
 						}),
 						on: {
-							SUCCESS_SENDDATA: [
-								{
-									cond: "expectsUpdate",
-									target: "wait_senddata",
-								},
-								{ target: "done_senddata" },
-							],
+							SUCCESS_SENDDATA: [{ target: "finalize_senddata" }],
 							FAILURE_SENDDATA: [
 								{ cond: "mayRetry", target: "retry_senddata" },
 								{ target: "done_senddata" },
 							],
 						},
 					},
-					wait_senddata: {
+					finalize_senddata: {
 						on: {
-							UPDATE_SENDDATA: "done_senddata",
-							WAIT_TIMEOUT: [
-								...(retryAfterTransmitReport
-									? [
-											{
-												cond: "mayRetry",
-												target: "retry_senddata",
-											},
-									  ]
-									: []),
-								{ target: "done_senddata" },
-							],
+							FINALIZE: "done_senddata",
 							UNSOLICITED_SENDDATA: "unsolicited_senddata",
 						},
 						meta: {
 							test: ({ interpreter }: TestContext) => {
 								expect(interpreter.state.value).toEqual({
-									sending: "waitForUpdate",
+									sending: "finalize",
 								});
 							},
 						},
@@ -418,7 +407,7 @@ describe("lib/driver/SendThreadMachine", () => {
 					},
 					execute_secure: {
 						on: {
-							SUCCESS_SECURE: "done_secure",
+							SUCCESS_SECURE: "finalize_secure",
 							FAILURE_SECURE: [
 								{ cond: "mayRetry", target: "retry_secure" },
 								{ target: "done_secure" },
@@ -433,6 +422,19 @@ describe("lib/driver/SendThreadMachine", () => {
 							},
 						},
 					},
+					finalize_secure: {
+						on: {
+							FINALIZE: "done_secure",
+						},
+						meta: {
+							test: ({ interpreter }: TestContext) => {
+								expect(interpreter.state.value).toEqual({
+									sending: "finalize",
+								});
+							},
+						},
+					},
+
 					retry_secure: {
 						entry: assign({
 							retryCount: (ctx) => ctx.retryCount + 1,
@@ -459,7 +461,6 @@ describe("lib/driver/SendThreadMachine", () => {
 			},
 			{
 				guards: {
-					expectsUpdate: (ctx) => !!ctx.expectsUpdate,
 					mayRetry: (ctx) =>
 						ctx.sendDataAttempts <
 						(machineParams.attempts as any).sendData,
@@ -540,20 +541,6 @@ describe("lib/driver/SendThreadMachine", () => {
 						type: "command_failure",
 						transaction: sentTransaction,
 						reason: "response NOK",
-					} as any);
-				},
-			},
-			UPDATE_SENDDATA: {
-				// Send the expected update
-				exec: (context) => {
-					const { interpreter, testTransactions } = context;
-					const message = testTransactions.BasicReport.message;
-					context.expectedResult = message;
-					interpreter.send({
-						// updates are returned by the serial API command machine as "unsolicited"
-						type: "unsolicited",
-						// type: "message",
-						message,
 					} as any);
 				},
 			},
@@ -675,11 +662,12 @@ describe("lib/driver/SendThreadMachine", () => {
 					jest.advanceTimersByTime(500);
 				},
 			},
-			WAIT_TIMEOUT: {
-				exec: (context) => {
-					// After a timeout, we no longer expect a response
-					context.expectedResult = undefined;
-					jest.advanceTimersByTime(machineParams.timeouts.report);
+
+			FINALIZE: {
+				exec: ({ interpreter, testTransactions }) => {
+					interpreter.send({
+						type: "finalize",
+					});
 				},
 			},
 		});
