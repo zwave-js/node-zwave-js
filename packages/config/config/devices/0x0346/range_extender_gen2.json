@@ -1,0 +1,85 @@
+{
+	"manufacturer": "Ring",
+	"manufacturerId": "0x0346",
+	"label": "4AR1SZ-0EN0",
+	"description": "Range Extender (2nd generation)",
+	"devices": [
+		{
+			"productType": "0x0401",
+			"productId": "0x0301"
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"paramInformation": [
+		{
+			"#": "1",
+			"label": "Heartbeat Interval",
+			"valueSize": 1,
+			"unit": "minutes",
+			"minValue": 1,
+			"maxValue": 70,
+			"defaultValue": 70,
+			"unsigned": true
+		},
+		{
+			"#": "2",
+			"label": "Message Retry Attempt Limit",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 5,
+			"defaultValue": 1,
+			"unsigned": true
+		},
+		{
+			"#": "3",
+			"label": "Delay Between Retry Attempts",
+			"valueSize": 1,
+			"unit": "seconds",
+			"minValue": 1,
+			"maxValue": 60,
+			"defaultValue": 5,
+			"unsigned": true
+		},
+		{
+			"#": "4",
+			"label": "LED Indicator",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 2,
+			"defaultValue": 1,
+			"unsigned": true,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Always off",
+					"value": 0
+				},
+				{
+					"label": "On when activated",
+					"value": 1
+				},
+				{
+					"label": "On when activated or cleared",
+					"value": 2
+				}
+			]
+		},
+		{
+			"#": "5",
+			"label": "Supervision Report Timeout",
+			"description": "How long to wait for a Supervision Report response to a Supervision Get",
+			"valueSize": 2,
+			"unit": "ms",
+			"minValue": 500,
+			"maxValue": 5000,
+			"defaultValue": 1500,
+			"unsigned": true
+		}
+	],
+	"metadata": {
+		"manual": "https://support.ring.com/hc/en-us/article_attachments/360055786012/Ring_Alarm_Range_Extender_Zwave.pdf"
+	}
+}
