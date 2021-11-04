@@ -32,7 +32,13 @@ import {
 import type { SuccessIndicator } from "../message/SuccessIndicator";
 import { ApplicationCommandRequest } from "./ApplicationCommandRequest";
 import { BridgeApplicationCommandRequest } from "./BridgeApplicationCommandRequest";
-import { TransmitOptions, TransmitStatus } from "./SendDataShared";
+import {
+	parseTransmitStatusReport,
+	TransmitOptions,
+	TransmitStatus,
+	TransmitStatusReport,
+	transmitStatusReportToMessageRecord,
+} from "./SendDataShared";
 
 export const MAX_SEND_ATTEMPTS = 5;
 
@@ -166,22 +172,22 @@ export class SendDataRequestTransmitReport
 
 		if (gotDeserializationOptions(options)) {
 			this.callbackId = this.payload[0];
-			this._transmitStatus = this.payload[1];
-			// not sure what bytes 2 and 3 mean
-			// the CC seems not to be included in this, but rather come in an application command later
+			this.transmitStatus = this.payload[1];
+			this.transmitStatusReport = parseTransmitStatusReport(
+				this.transmitStatus !== TransmitStatus.NoAck,
+				this.payload.slice(2),
+			);
 		} else {
 			this.callbackId = options.callbackId;
-			this._transmitStatus = options.transmitStatus;
+			this.transmitStatus = options.transmitStatus;
 		}
 	}
 
-	private _transmitStatus: TransmitStatus;
-	public get transmitStatus(): TransmitStatus {
-		return this._transmitStatus;
-	}
+	public readonly transmitStatus: TransmitStatus;
+	public readonly transmitStatusReport: TransmitStatusReport | undefined;
 
 	public isOK(): boolean {
-		return this._transmitStatus === TransmitStatus.OK;
+		return this.transmitStatus === TransmitStatus.OK;
 	}
 
 	public toJSON(): JSONObject {
@@ -196,10 +202,16 @@ export class SendDataRequestTransmitReport
 			...super.toLogEntry(),
 			message: {
 				"callback id": this.callbackId,
-				"transmit status": getEnumMemberName(
-					TransmitStatus,
-					this.transmitStatus,
-				),
+				"transmit status":
+					getEnumMemberName(TransmitStatus, this.transmitStatus) +
+					(this.transmitStatusReport
+						? `, took ${this.transmitStatusReport.txTicks * 10} ms`
+						: ""),
+				...(this.transmitStatusReport
+					? transmitStatusReportToMessageRecord(
+							this.transmitStatusReport,
+					  )
+					: {}),
 			},
 		};
 	}

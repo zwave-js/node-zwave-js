@@ -33,7 +33,13 @@ import type { SuccessIndicator } from "../message/SuccessIndicator";
 import { ApplicationCommandRequest } from "./ApplicationCommandRequest";
 import { BridgeApplicationCommandRequest } from "./BridgeApplicationCommandRequest";
 import { MAX_SEND_ATTEMPTS } from "./SendDataMessages";
-import { TransmitOptions, TransmitStatus } from "./SendDataShared";
+import {
+	parseTransmitStatusReport,
+	TransmitOptions,
+	TransmitStatus,
+	TransmitStatusReport,
+	transmitStatusReportToMessageRecord,
+} from "./SendDataShared";
 
 @messageTypes(MessageType.Request, FunctionType.SendDataBridge)
 @priority(MessagePriority.Normal)
@@ -199,21 +205,22 @@ export class SendDataBridgeRequestTransmitReport
 
 		if (gotDeserializationOptions(options)) {
 			this.callbackId = this.payload[0];
-			this._transmitStatus = this.payload[1];
-			// TODO: Parse transmit report
+			this.transmitStatus = this.payload[1];
+			this.transmitStatusReport = parseTransmitStatusReport(
+				this.transmitStatus !== TransmitStatus.NoAck,
+				this.payload.slice(2),
+			);
 		} else {
 			this.callbackId = options.callbackId;
-			this._transmitStatus = options.transmitStatus;
+			this.transmitStatus = options.transmitStatus;
 		}
 	}
 
-	private _transmitStatus: TransmitStatus;
-	public get transmitStatus(): TransmitStatus {
-		return this._transmitStatus;
-	}
+	public readonly transmitStatus: TransmitStatus;
+	public readonly transmitStatusReport: TransmitStatusReport | undefined;
 
 	public isOK(): boolean {
-		return this._transmitStatus === TransmitStatus.OK;
+		return this.transmitStatus === TransmitStatus.OK;
 	}
 
 	public toJSON(): JSONObject {
@@ -228,10 +235,16 @@ export class SendDataBridgeRequestTransmitReport
 			...super.toLogEntry(),
 			message: {
 				"callback id": this.callbackId,
-				"transmit status": getEnumMemberName(
-					TransmitStatus,
-					this.transmitStatus,
-				),
+				"transmit status":
+					getEnumMemberName(TransmitStatus, this.transmitStatus) +
+					(this.transmitStatusReport
+						? `, took ${this.transmitStatusReport.txTicks * 10} ms`
+						: ""),
+				...(this.transmitStatusReport
+					? transmitStatusReportToMessageRecord(
+							this.transmitStatusReport,
+					  )
+					: {}),
 			},
 		};
 	}
