@@ -4,6 +4,14 @@
 <!--
 	Add placeholder for next release with `wip` snippet
 -->
+## __WORK IN PROGRESS__
+### Bugfixes
+* When a 500-series USB stick reconnects during startup, the process doesn't exit anymore if the event loop is otherwise empty
+* Increase delay before verifying thermostat values after set
+
+### Config file changes
+* Add Ring 4AR1SZ-0EN0 Alarm Extender Gen2
+
 ## 8.7.4 (2021-11-03)
 ### Bugfixes
 * Fixed a crash that happened when determining the SDK version for certain protocol versions
