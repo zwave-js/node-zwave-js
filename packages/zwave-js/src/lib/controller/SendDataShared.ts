@@ -78,6 +78,11 @@ export function parseRSSI(payload: Buffer, offset: number = 0): RSSI {
 	return ret;
 }
 
+function tryParseRSSI(payload: Buffer, offset: number = 0): RSSI | undefined {
+	if (payload.length <= offset) return;
+	return parseRSSI(payload, offset);
+}
+
 export function rssiToString(rssi: RSSI): string {
 	switch (rssi) {
 		case RssiError.NotAvailable:
@@ -171,15 +176,15 @@ export function parseTransmitStatusReport(
 		failedRouteLastFunctionalNodeId: payload[17],
 		failedRouteFirstNonFunctionalNodeId: payload[18],
 		txPower: parseTXPower(payload, 19),
-		measuredNoiseFloor: parseRSSI(payload, 20),
+		measuredNoiseFloor: tryParseRSSI(payload, 20),
 		destinationAckTxPower: includeACK
 			? parseTXPower(payload, 21)
 			: undefined,
 		destinationAckMeasuredRSSI: includeACK
-			? parseRSSI(payload, 22)
+			? tryParseRSSI(payload, 22)
 			: undefined,
 		destinationAckMeasuredNoiseFloor: includeACK
-			? parseRSSI(payload, 23)
+			? tryParseRSSI(payload, 23)
 			: undefined,
 	};
 	// Remove unused repeaters from arrays
