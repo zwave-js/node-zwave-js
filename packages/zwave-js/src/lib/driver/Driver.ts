@@ -30,6 +30,7 @@ import {
 } from "@zwave-js/serial";
 import {
 	DeepPartial,
+	getEnumMemberName,
 	getErrorMessage,
 	isDocker,
 	mergeDeep,
@@ -563,13 +564,13 @@ export class Driver extends TypedEventEmitter<DriverEventCallbacks> {
 			pick(this.options, ["timeouts", "attempts"]),
 		);
 		this.sendThread = interpret(sendThreadMachine);
-		// this.sendThread.onTransition((state) => {
-		// 	if (state.changed)
-		// 		this.driverLog.print(
-		// 			`send thread state: ${state.toStrings().slice(-1)[0]}`,
-		// 			"verbose",
-		// 		);
-		// });
+		this.sendThread.onTransition((state) => {
+			if (state.changed)
+				this.driverLog.print(
+					`send thread state: ${state.toStrings().slice(-1)[0]}`,
+					"verbose",
+				);
+		});
 	}
 	/** The serial port instance */
 	private serial: ZWaveSerialPortBase | undefined;
@@ -3310,8 +3311,16 @@ ${handlers.length} left`,
 			}, options.expire).unref();
 		}
 
+		const prefix = `[${
+			isCommandClassContainer(msg)
+				? msg.command.constructor.name
+				: getEnumMemberName(FunctionType, msg.functionType)
+		}] `;
+
 		try {
+			this.driverLog.print(`${prefix}sendMessage before await promise`);
 			const ret = await promise;
+			this.driverLog.print(`${prefix}sendMessage after await promise`);
 			// The message was transmitted, so it can no longer expire
 			if (expirationTimeout) clearTimeout(expirationTimeout);
 			// Update statistics
@@ -3340,14 +3349,25 @@ ${handlers.length} left`,
 				}
 			}
 
-			// If this message expects an update from the node, wait for it
-			if (ret.expectsNodeUpdate()) {
+			// If the sent message expects an update from the node, wait for it
+			if (msg.expectsNodeUpdate()) {
+				this.driverLog.print(
+					`${prefix}sendMessage before wait for update`,
+				);
 				try {
-					return await this.waitForMessage(
-						(msg) => ret.isExpectedNodeUpdate(msg),
+					const ret = await this.waitForMessage(
+						(received) => msg.isExpectedNodeUpdate(received),
 						this.options.timeouts.report,
 					);
+					this.driverLog.print(
+						`${prefix}sendMessage after wait for update`,
+					);
+					return ret as TResponse;
 				} catch (e) {
+					this.driverLog.print(
+						`${prefix}sendMessage wait for update error`,
+					);
+
 					throw new ZWaveError(
 						`Timed out while waiting for a response from the node`,
 						ZWaveErrorCodes.Controller_NodeTimeout,
@@ -3557,7 +3577,7 @@ ${handlers.length} left`,
 	/**
 	 * Waits until an unsolicited serial message is received or a timeout has elapsed. Returns the received message.
 	 *
-	 * **Note:** This does not trigger for [Bridge]ApplicationUpdateRequests, which are handled differently. To wait for a certain CommandClass, use {@link waitForCommand}.
+	 * **Note:** To wait for a certain CommandClass, better use {@link waitForCommand}.
 	 * @param timeout The number of milliseconds to wait. If the timeout elapses, the returned promise will be rejected
 	 * @param predicate A predicate function to test all incoming messages
 	 */
