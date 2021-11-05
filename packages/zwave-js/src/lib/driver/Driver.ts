@@ -2019,6 +2019,8 @@ export class Driver extends TypedEventEmitter<DriverEventCallbacks> {
 			...this.sendNodeToSleepTimers.values(),
 			...this.retryNodeInterviewTimeouts.values(),
 			this.statisticsTimeout,
+			...this.awaitedCommands.map((c) => c.timeout),
+			...this.awaitedMessages.map((m) => m.timeout),
 		]) {
 			if (timeout) clearTimeout(timeout);
 		}
@@ -3559,7 +3561,7 @@ ${handlers.length} left`,
 						ZWaveErrorCodes.Controller_Timeout,
 					),
 				);
-			}, timeout).unref();
+			}, timeout);
 			// When the promise is resolved, remove the wait entry and resolve the returned Promise
 			void entry.promise.then((cc) => {
 				removeEntry();
@@ -3598,7 +3600,7 @@ ${handlers.length} left`,
 						ZWaveErrorCodes.Controller_NodeTimeout,
 					),
 				);
-			}, timeout).unref();
+			}, timeout);
 			// When the promise is resolved, remove the wait entry and resolve the returned Promise
 			void entry.promise.then((cc) => {
 				removeEntry();
