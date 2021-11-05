@@ -138,8 +138,10 @@ export class ThermostatFanModeCCAPI extends CCAPI {
 		}
 
 		if (this.isSinglecast()) {
-			// Verify the current value after a (short) delay
-			this.schedulePoll({ property }, { transition: "fast" });
+			// Verify the current value after a delay
+			// TODO: Ideally this would be a short delay, but some thermostats like Remotec ZXT-600
+			// aren't able to handle the GET this quickly.
+			this.schedulePoll({ property });
 		}
 	};
 
