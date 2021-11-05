@@ -4,7 +4,7 @@
 <!--
 	Add placeholder for next release with `wip` snippet
 -->
-## __WORK IN PROGRESS__
+## 8.7.5 (2021-11-05)
 ### Bugfixes
 * When a 500-series USB stick reconnects during startup, the process doesn't exit anymore if the event loop is otherwise empty
 * Increase delay before verifying thermostat values after set
