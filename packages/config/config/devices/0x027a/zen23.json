@@ -32,7 +32,7 @@
 	"paramInformation": [
 		{
 			"#": "1",
-			"$if": "firmwareVersion >= 1.5 && firmwareVersion < 3.0 && firmwareVersion === 20.15",
+			"$if": "firmwareVersion >= 1.5 && firmwareVersion < 3.0 || firmwareVersion === 20.15",
 			"label": "Switch behavior",
 			"description": "Determines whether up is on and down is off; or up is off, down is on",
 			"valueSize": 1,
@@ -53,7 +53,7 @@
 		},		
 		{
 			"#": "1",
-			"$if": "firmwareVersion >= 3.0 && firmwareVersion <= 20.14 && firmwareVersion >= 20.17",
+			"$if": "firmwareVersion >= 3.0 && firmwareVersion <= 20.14 || firmwareVersion >= 20.17",
 			"label": "Switch behavior",
 			"description": "Determines whether up is on and down is off; or up is off, down is on",
 			"valueSize": 1,
@@ -78,7 +78,7 @@
 		},
 		{
 			"#": "3",
-			"$if": "firmwareVersion >= 3.0 && firmwareVersion <=20.14 && firmwareVersion >=20.17",
+			"$if": "firmwareVersion >= 3.0 && firmwareVersion <=20.14 || firmwareVersion >=20.17",
 			"label": "Auto Turn-Off Timer",
 			"valueSize": 1,
 			"minValue": 0,
@@ -98,7 +98,7 @@
 		},
 		{
 			"#": "4",
-			"$if": "firmwareVersion >= 3.0 && firmwareVersion <=20.14 && firmwareVersion >=20.17",
+			"$if": "firmwareVersion >= 3.0 && firmwareVersion <=20.14 || firmwareVersion >=20.17",
 			"label": "Auto Turn-Off Timer Time",
 			"description": "Time after which the switch automatically turns off",
 			"unit": "minutes",
@@ -109,7 +109,7 @@
 		},
 		{
 			"#": "5",
-			"$if": "firmwareVersion >= 3.0 && firmwareVersion <=20.14 && firmwareVersion >=20.17",
+			"$if": "firmwareVersion >= 3.0 && firmwareVersion <=20.14 || firmwareVersion >=20.17",
 			"label": "Auto Turn-On Timer",
 			"valueSize": 1,
 			"minValue": 0,
@@ -129,7 +129,7 @@
 		},
 		{
 			"#": "6",
-			"$if": "firmwareVersion >= 3.0 && firmwareVersion <=20.14 && firmwareVersion >=20.17",
+			"$if": "firmwareVersion >= 3.0 && firmwareVersion <=20.14 || firmwareVersion >=20.17",
 			"label": "Auto Turn-On Timer Time",
 			"description": "Set the time after which the switch automatically turns on",
 			"unit": "minutes",
@@ -140,12 +140,12 @@
 		},
 		{
 			"#": "8",
-			"$if": "firmwareVersion >= 3.0 && firmwareVersion <=20.14 && firmwareVersion >=20.17",
+			"$if": "firmwareVersion >= 3.0 && firmwareVersion <=20.14 || firmwareVersion >=20.17",
 			"$import": "~/templates/master_template.json#state_after_power_failure_off_on_prev"
 		},
 		{
 			"#": "9",
-			"$if": "firmwareVersion >= 3.1 && firmwareVersion <=20.14 && firmwareVersion >=20.17",
+			"$if": "firmwareVersion >= 3.1 && firmwareVersion <=20.14 || firmwareVersion >=20.17",
 			"label": "Enable/Disable Scene Control",
 			"description": "Enable or disable scene control functionality for quick 2-tap.",
 			"valueSize": 1,
@@ -166,7 +166,7 @@
 		},
 		{
 			"#": "11",
-			"$if": "firmwareVersion >= 3.1 && firmwareVersion <=20.14 && firmwareVersion >=20.17",
+			"$if": "firmwareVersion >= 3.1 && firmwareVersion <=20.14 || firmwareVersion >=20.17",
 			"label": "Smart Bulb Mode (Disable Physical Switch)",
 			"description": "Enable/Disable Toggle / Z-Wave Control. NOTE: tap the upper paddle 10 times quickly to change this mode.",
 			"valueSize": 1,
@@ -191,7 +191,7 @@
 		},
 		{
 			"#": "12",
-			"$if": "firmwareVersion >= 3.4 && firmwareVersion <=20.14 && firmwareVersion >=20.17",
+			"$if": "firmwareVersion >= 3.4 && firmwareVersion <=20.14 || firmwareVersion >=20.17",
 			"label": "3-Way Switch Type",
 			"description": "Choose the type of 3-way switch you want to use with this dimmer in a 3-way set-up.",
 			"valueSize": 1,
@@ -212,7 +212,7 @@
 		},
 		{
 			"#": "13",
-			"$if": "firmwareVersion >= 3.5 && firmwareVersion <=20.14 && firmwareVersion >=20.17",
+			"$if": "firmwareVersion >= 3.5 && firmwareVersion <=20.14 || firmwareVersion >=20.17",
 			"label": "Report status when toggle is disabled",
 			"description": "Report light status when both physical and Z-Wave control are disabled.",
 			"valueSize": 1,
