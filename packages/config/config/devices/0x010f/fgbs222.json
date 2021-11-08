@@ -172,9 +172,8 @@
 		},
 		{
 			"#": "63",
-			"label": "Analog inputs - minimal change to report",
-			"description": "minimal change",
-			"unit": "0.1 Volts",
+			"label": "Analog Inputs: Reporting Threshold",
+			"unit": "0.1 V",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 100,
@@ -182,7 +181,7 @@
 		},
 		{
 			"#": "64",
-			"label": "Analog inputs - periodical reports",
+			"label": "Analog Inputs: Reporting Interval",
 			"unit": "seconds",
 			"valueSize": 2,
 			"minValue": 0,
@@ -191,9 +190,8 @@
 		},
 		{
 			"#": "65",
-			"label": "Temperature sensor threshold",
-			"description": "Internal temperature sensor - minimal change to report",
-			"unit": "0.1°C",
+			"label": "Internal Temperature Sensor: Reporting Threshold",
+			"unit": "0.1 °C",
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 255,
@@ -201,8 +199,7 @@
 		},
 		{
 			"#": "66",
-			"label": "Temperatur sensor period",
-			"description": "Internal temperature sensor - periodical reports",
+			"label": "Internal Temperature Sensor: Reporting Interval",
 			"unit": "seconds",
 			"valueSize": 2,
 			"minValue": 0,
@@ -211,8 +208,8 @@
 		},
 		{
 			"#": "67",
-			"label": "External sensors threshold",
-			"unit": "0.1°C",
+			"label": "External Temperature Sensor: Reporting Threshold",
+			"unit": "0.1 °C",
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 255,
@@ -220,8 +217,7 @@
 		},
 		{
 			"#": "68",
-			"label": "External sensors - periodical reports",
-			"description": "reporting period of analog inputs value",
+			"label": "External Temperature Sensor: Reporting Interval",
 			"unit": "seconds",
 			"valueSize": 2,
 			"minValue": 0,
