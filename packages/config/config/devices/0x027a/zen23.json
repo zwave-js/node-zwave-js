@@ -49,8 +49,8 @@
 					"label": "UP=Off, DOWN=On",
 					"value": 1
 				}
-		   ]
-		},		
+			]
+		},
 		{
 			"#": "1",
 			"$if": "firmwareVersion >= 3.0 && firmwareVersion <= 20.14 || firmwareVersion >= 20.17",
