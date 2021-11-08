@@ -32,7 +32,28 @@
 	"paramInformation": [
 		{
 			"#": "1",
-			"$if": "firmwareVersion >= 1.5 && firmwareVersion <= 20.15 && firmwareVersion >= 20.17",
+			"$if": "firmwareVersion >= 1.5 && firmwareVersion < 3.0 && firmwareVersion == 20.15",
+			"label": "Toggle Control",
+			"description": "Determines whether up is on and down is off; or up is off, down is on",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 0
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "UP=On, DOWN=Off",
+					"value": 0
+				},
+				{
+					"label": "UP=Off, DOWN=On",
+					"value": 1
+				}
+		   ]
+		},		
+		{
+			"#": "1",
+			"$if": "firmwareVersion >= 3.0 && firmwareVersion <= 20.14 && firmwareVersion >= 20.17",
 			"label": "Switch behavior",
 			"description": "Determines whether up is on and down is off; or up is off, down is on",
 			"valueSize": 1,
