@@ -18,8 +18,8 @@
 		}
 	],
 	"firmwareVersion": {
-		"min": "11.1",
-		"max": "11.1"
+		"min": "11.0",
+		"max": "255.255"
 	},
 	"associations": {
 		"1": {
