@@ -32,7 +32,7 @@
 	"paramInformation": [
 		{
 			"#": "1",
-			"$if": "firmwareVersion >= 1.5 && firmwareVersion < 3.0 && firmwareVersion == 20.15",
+			"$if": "firmwareVersion >= 1.5 && firmwareVersion < 3.0 && firmwareVersion === 20.15",
 			"label": "Switch behavior",
 			"description": "Determines whether up is on and down is off; or up is off, down is on",
 			"valueSize": 1,
