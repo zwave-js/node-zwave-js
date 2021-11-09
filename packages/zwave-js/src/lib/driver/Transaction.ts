@@ -1,5 +1,4 @@
 import { highResTimestamp } from "@zwave-js/core";
-import { pick } from "@zwave-js/shared";
 import {
 	Comparable,
 	compareNumberOrString,
@@ -11,15 +10,43 @@ import type { Message } from "../message/Message";
 import { NodeStatus } from "../node/Types";
 import type { Driver } from "./Driver";
 
+export interface PartialTransaction {
+	/** The message to be sent */
+	message: Message;
+	/** Will be resolved/rejected by the Send Thread Machine */
+	sendPromise: DeferredPromise<Message | void>;
+	/** The SendThreadMachine will wait for this before the next partial transaction is handled */
+	finalizePromise: DeferredPromise<void>;
+}
+
+export interface MessageGenerator {
+	/** Start a new copy of this message generator */
+	start: () => AsyncGenerator<PartialTransaction, void, void>;
+	/** A reference to the current partial transaction, or undefined if the generator wasn't started or has finished */
+	current?: PartialTransaction;
+}
+
+export interface TransactionOptions {
+	/** The ID of the node this transaction is intended for */
+	nodeId?: number;
+	/** The "primary" message this transaction contains, e.g. the un-encapsulated version of a SendData request */
+	message: Message;
+	/**
+	 * The actual messages that will be sent when handling this transaction,
+	 * defined as a message generator to dynamically create the messages.
+	 */
+	parts: MessageGenerator;
+	/** The priority of this transaction */
+	priority: MessagePriority;
+}
+
 /**
  * Transactions are used to track and correllate messages with their responses.
  */
 export class Transaction implements Comparable<Transaction> {
 	public constructor(
 		private readonly driver: Driver,
-		public readonly message: Message,
-		public readonly promise: DeferredPromise<Message | void>,
-		public priority: MessagePriority,
+		private readonly options: TransactionOptions,
 	) {
 		// We need create the stack on a temporary object or the Error
 		// class will try to print the message
@@ -27,6 +54,23 @@ export class Transaction implements Comparable<Transaction> {
 		Error.captureStackTrace(tmp, Transaction);
 		this.stack = (tmp as any).stack.replace(/^Error:?\s*\n/, "");
 	}
+
+	/** The "primary" message this transaction contains, e.g. the un-encapsulated version of a SendData request */
+	public readonly message: Message = this.options.message;
+
+	/** The message generator to create the actual messages for this transaction */
+	public readonly parts: MessageGenerator = this.options.parts;
+
+	/**
+	 * Returns the current message of this transaction. This is either the currently active partial message
+	 * or the primary message if the generator hasn't been started yet.
+	 */
+	public getCurrentMessage(): Message | undefined {
+		return this.parts.current?.message ?? this.message;
+	}
+
+	/** The priority of this transaction */
+	public priority: MessagePriority = this.options.priority;
 
 	/** The timestamp at which the transaction was created */
 	public creationTimestamp: number = highResTimestamp();
@@ -112,16 +156,5 @@ export class Transaction implements Comparable<Transaction> {
 			other.creationTimestamp,
 			this.creationTimestamp,
 		);
-	}
-
-	public toJSON(): any {
-		return pick(this, [
-			"creationTimestamp",
-			"changeNodeStatusOnTimeout",
-			"tag",
-			"message",
-			"priority",
-			"stack",
-		]);
 	}
 }
