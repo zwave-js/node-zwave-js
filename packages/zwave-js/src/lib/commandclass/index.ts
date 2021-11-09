@@ -150,6 +150,12 @@ export {
 } from "./DoorLockCC";
 export type { DoorHandleStatus } from "./DoorLockCC";
 export {
+	DoorLockLoggingCC,
+	DoorLockLoggingCCRecordsSupportedGet,
+	DoorLockLoggingCCRecordsSupportedReport,
+	EventType,
+} from "./DoorLockLoggingCC";
+export {
 	EntryControlCC,
 	EntryControlCCConfigurationGet,
 	EntryControlCCConfigurationReport,
