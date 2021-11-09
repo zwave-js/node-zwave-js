@@ -30,6 +30,7 @@ import {
 } from "@zwave-js/serial";
 import {
 	DeepPartial,
+	getEnumMemberName,
 	getErrorMessage,
 	isDocker,
 	mergeDeep,
@@ -2831,9 +2832,6 @@ ${handlers.length} left`,
 	private async handleRequest(msg: Message): Promise<void> {
 		let handlers: RequestHandlerEntry[] | undefined;
 
-		// For further actions, we are only interested in the innermost CC
-		if (isCommandClassContainer(msg)) this.unwrapCommands(msg);
-
 		if (isNodeQuery(msg) || isCommandClassContainer(msg)) {
 			const node = msg.getNodeUnsafe();
 			if (node) {
@@ -2844,7 +2842,19 @@ ${handlers.length} left`,
 			}
 		}
 
+		// Check if we have a dynamic handler waiting for this message
+		for (const entry of this.awaitedMessages) {
+			if (entry.predicate(msg)) {
+				// resolve the promise - this will remove the entry from the list
+				entry.promise.resolve(msg);
+				return;
+			}
+		}
+
 		if (isCommandClassContainer(msg)) {
+			// For further actions, we are only interested in the innermost CC
+			this.unwrapCommands(msg);
+
 			const node = msg.getNodeUnsafe();
 			// If we receive an encrypted message but assume the node is insecure, change our assumption
 			if (
@@ -2859,15 +2869,6 @@ ${handlers.length} left`,
 
 			// Check if we may even handle the command
 			if (!this.mayHandleUnsolicitedCommand(msg.command)) return;
-		}
-
-		// Check if we have a dynamic handler waiting for this message
-		for (const entry of this.awaitedMessages) {
-			if (entry.predicate(msg)) {
-				// resolve the promise - this will remove the entry from the list
-				entry.promise.resolve(msg);
-				return;
-			}
 		}
 
 		// Otherwise go through the static handlers
@@ -3420,11 +3421,9 @@ ${handlers.length} left`,
 					// If the sent message expects an update from the node, wait for it
 					if (msg.expectsNodeUpdate()) {
 						try {
-							result = await driver.waitForMessage(
-								(received) =>
-									msg.isExpectedNodeUpdate(received),
-								driver.options.timeouts.report,
-							);
+							result = await driver.waitForMessage((received) => {
+								return msg.isExpectedNodeUpdate(received);
+							}, driver.options.timeouts.report);
 						} catch (e) {
 							resultPromise.reject(
 								new ZWaveError(
@@ -3444,7 +3443,15 @@ ${handlers.length} left`,
 					this.current = step;
 					yield step;
 				}
-				driver.driverLog.print("message generator done!");
+				driver.driverLog.print(
+					"message generator done! " +
+						(isCommandClassContainer(msg)
+							? msg.command.constructor.name
+							: getEnumMemberName(
+									FunctionType,
+									msg.functionType,
+							  )),
+				);
 				this.current = undefined;
 				return;
 			},

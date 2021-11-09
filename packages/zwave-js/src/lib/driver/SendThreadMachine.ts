@@ -612,6 +612,12 @@ export function createSendThreadMachine(
 							},
 							{ actions: reduce },
 						],
+						resend: {
+							// The driver asked to re-transmit the current message again immediately
+							// without increasing the retry counter
+							target: "sending.execute",
+							internal: true,
+						},
 					},
 					// The substates of "sending" are repeated for every message in this transaction
 					states: {
