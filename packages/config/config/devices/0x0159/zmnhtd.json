@@ -98,12 +98,12 @@
 		},
 		{
 			"#": "42",
-			"label": "Power reporting (Watts) by time interval",
-			"unit": "%",
+			"label": "Power reporting (Watts) by time interval (0-59 = reporting disabled)",
+			"unit": "seconds",
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 32535,
-			"defaultValue": 0
+			"defaultValue": 600
 		},
 		{
 			"#": "45",
