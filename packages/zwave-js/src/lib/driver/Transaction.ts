@@ -13,10 +13,8 @@ import type { Driver } from "./Driver";
 export interface PartialTransaction {
 	/** The message to be sent */
 	message: Message;
-	/** Will be resolved/rejected by the Send Thread Machine */
-	sendPromise: DeferredPromise<Message | void>;
-	/** The SendThreadMachine will wait for this before the next partial transaction is handled */
-	finalizePromise: DeferredPromise<void>;
+	/** Will be resolved/rejected by the Send Thread Machine when this partial transaction is handled */
+	promise: DeferredPromise<Message | void>;
 }
 
 export interface MessageGenerator {
@@ -27,8 +25,6 @@ export interface MessageGenerator {
 }
 
 export interface TransactionOptions {
-	/** The ID of the node this transaction is intended for */
-	nodeId?: number;
 	/** The "primary" message this transaction contains, e.g. the un-encapsulated version of a SendData request */
 	message: Message;
 	/**
@@ -38,6 +34,8 @@ export interface TransactionOptions {
 	parts: MessageGenerator;
 	/** The priority of this transaction */
 	priority: MessagePriority;
+	/** Will be resolved/rejected by the Send Thread Machine when the entire transaction is handled */
+	promise: DeferredPromise<Message | void>;
 }
 
 /**
@@ -54,6 +52,10 @@ export class Transaction implements Comparable<Transaction> {
 		Error.captureStackTrace(tmp, Transaction);
 		this.stack = (tmp as any).stack.replace(/^Error:?\s*\n/, "");
 	}
+
+	/** Will be resolved/rejected by the Send Thread Machine when the entire transaction is handled */
+	public readonly promise: DeferredPromise<Message | void> =
+		this.options.promise;
 
 	/** The "primary" message this transaction contains, e.g. the un-encapsulated version of a SendData request */
 	public readonly message: Message = this.options.message;

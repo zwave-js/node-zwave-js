@@ -225,7 +225,7 @@ export function createCommandQueueMachine(
 					// wrap it in a rejected promise, so xstate can handle it
 					try {
 						return createSerialAPICommandMachine(
-							ctx.currentTransaction!.message,
+							ctx.currentTransaction!.parts.current!.message,
 							implementations,
 							params,
 						);
@@ -252,10 +252,12 @@ export function createCommandQueueMachine(
 					evt.data?.type === "success",
 				queueNotEmpty: (ctx) => ctx.queue.length > 0,
 				currentTransactionIsSendData: (ctx) =>
-					isSendData(ctx.currentTransaction?.message),
+					isSendData(ctx.currentTransaction?.parts.current?.message),
 				isSendDataWithCallbackTimeout: (ctx, evt: any) => {
 					return (
-						isSendData(ctx.currentTransaction?.message) &&
+						isSendData(
+							ctx.currentTransaction?.parts.current?.message,
+						) &&
 						evt.data?.type === "failure" &&
 						evt.data?.reason === "callback timeout"
 					);

@@ -30,7 +30,6 @@ import {
 } from "@zwave-js/serial";
 import {
 	DeepPartial,
-	getEnumMemberName,
 	getErrorMessage,
 	isDocker,
 	mergeDeep,
@@ -153,7 +152,7 @@ import {
 	TransactionReducerResult,
 } from "./SendThreadMachine";
 import { throttlePresets } from "./ThrottlePresets";
-import { Transaction } from "./Transaction";
+import { MessageGenerator, Transaction } from "./Transaction";
 import {
 	createTransportServiceRXMachine,
 	TransportServiceRXInterpreter,
@@ -528,15 +527,22 @@ export class Driver extends TypedEventEmitter<DriverEventCallbacks> {
 					}
 				},
 				timestamp: highResTimestamp,
-				rejectTransaction: (transaction, error) => {
+				rejectTransaction: (transaction, error, completely) => {
 					// If a node failed to respond in time, it might be sleeping
 					if (this.isMissingNodeACK(transaction, error)) {
 						if (this.handleMissingNodeACK(transaction)) return;
 					}
-					transaction.promise.reject(error);
+					const promise = (
+						completely
+							? transaction
+							: // Depending on the progress of this transaction (queued or currently handled),
+							  // we need to reject the entire transaction or just the current partial
+							  transaction.parts.current ?? transaction
+					).promise;
+					promise.reject(error);
 				},
 				resolveTransaction: (transaction, result) => {
-					transaction.promise.resolve(result);
+					transaction.parts.current!.promise.resolve(result);
 				},
 				logOutgoingMessage: (msg: Message) => {
 					this.driverLog.logMessage(msg, {
@@ -564,13 +570,13 @@ export class Driver extends TypedEventEmitter<DriverEventCallbacks> {
 			pick(this.options, ["timeouts", "attempts"]),
 		);
 		this.sendThread = interpret(sendThreadMachine);
-		this.sendThread.onTransition((state) => {
-			if (state.changed)
-				this.driverLog.print(
-					`send thread state: ${state.toStrings().slice(-1)[0]}`,
-					"verbose",
-				);
-		});
+		// this.sendThread.onTransition((state) => {
+		// 	if (state.changed)
+		// 		this.driverLog.print(
+		// 			`send thread state: ${state.toStrings().slice(-1)[0]}`,
+		// 			"verbose",
+		// 		);
+		// });
 	}
 	/** The serial port instance */
 	private serial: ZWaveSerialPortBase | undefined;
@@ -2449,7 +2455,7 @@ It is probably asleep, moving its messages to the wakeup queue.`,
 			if (this.mayMoveToWakeupQueue(transaction)) {
 				this.sendThread.send({ type: "add", transaction });
 			} else {
-				transaction.promise.reject(
+				transaction.parts.current!.promise.reject(
 					new ZWaveError(
 						`The node is asleep`,
 						ZWaveErrorCodes.Controller_MessageDropped,
@@ -3270,15 +3276,46 @@ ${handlers.length} left`,
 			options.priority = MessagePriority.WakeUp;
 		}
 
-		// create the transaction and enqueue it
-		const promise = createDeferredPromise<Message>();
-		const transaction = new Transaction(
-			this,
+		// Create the transaction
+		const { generator, resultPromise } = this.createMessageGenerator(
 			msg,
-			promise,
-			options.priority,
-		);
+			options,
+			(msg) => {
+				// Update statistics
+				const node = msg.getNodeUnsafe();
+				if (isSendData(msg)) {
+					node?.incrementStatistics("commandsTX");
+				} else {
+					this._controller?.incrementStatistics("messagesTX");
+				}
 
+				// Track and potentially update the status of the node when communication succeeds
+				if (node) {
+					if (node.canSleep) {
+						// Do not update the node status when we just responded to a nonce request
+						if (options.priority !== MessagePriority.Handshake) {
+							// If the node is not meant to be kept awake, try to send it back to sleep
+							if (!node.keepAwake) {
+								this.debounceSendNodeToSleep(node);
+							}
+							// The node must be awake because it answered
+							node.markAsAwake();
+						}
+					} else if (node.status !== NodeStatus.Alive) {
+						// The node status was unknown or dead - in either case it must be alive because it answered
+						node.markAsAlive();
+					}
+				}
+			},
+		);
+		const transaction = new Transaction(this, {
+			message: msg,
+			priority: options.priority,
+			parts: generator,
+			promise: resultPromise,
+		});
+
+		// Configure its options
 		if (options.changeNodeStatusOnMissingACK != undefined) {
 			transaction.changeNodeStatusOnTimeout =
 				options.changeNodeStatusOnMissingACK;
@@ -3289,7 +3326,7 @@ ${handlers.length} left`,
 		transaction.requestWakeUpOnDemand = !!options.requestWakeUpOnDemand;
 		transaction.tag = options.tag;
 
-		// start sending now (maybe)
+		// And queue it
 		this.sendThread.send({ type: "add", transaction });
 
 		// If the transaction should expire, start the timeout
@@ -3311,78 +3348,8 @@ ${handlers.length} left`,
 			}, options.expire).unref();
 		}
 
-		const prefix = `[${
-			isCommandClassContainer(msg)
-				? msg.command.constructor.name
-				: getEnumMemberName(FunctionType, msg.functionType)
-		}] `;
-
 		try {
-			this.driverLog.print(`${prefix}sendMessage before await promise`);
-			const ret = await promise;
-			this.driverLog.print(`${prefix}sendMessage after await promise`);
-			// The message was transmitted, so it can no longer expire
-			if (expirationTimeout) clearTimeout(expirationTimeout);
-			// Update statistics
-			if (isSendData(msg)) {
-				node?.incrementStatistics("commandsTX");
-			} else {
-				this._controller?.incrementStatistics("messagesTX");
-			}
-
-			// TODO: Should this happen before or after waiting for the node update?
-			// Track and potentially update the status of the node when communication succeeds
-			if (node) {
-				if (node.canSleep) {
-					// Do not update the node status when we just responded to a nonce request
-					if (options.priority !== MessagePriority.Handshake) {
-						// If the node is not meant to be kept awake, try to send it back to sleep
-						if (!node.keepAwake) {
-							this.debounceSendNodeToSleep(node);
-						}
-						// The node must be awake because it answered
-						node.markAsAwake();
-					}
-				} else if (node.status !== NodeStatus.Alive) {
-					// The node status was unknown or dead - in either case it must be alive because it answered
-					node.markAsAlive();
-				}
-			}
-
-			// If the sent message expects an update from the node, wait for it
-			if (msg.expectsNodeUpdate()) {
-				this.driverLog.print(
-					`${prefix}sendMessage before wait for update`,
-				);
-				try {
-					const ret = await this.waitForMessage(
-						(received) => msg.isExpectedNodeUpdate(received),
-						this.options.timeouts.report,
-					);
-					this.driverLog.print(
-						`${prefix}sendMessage after wait for update`,
-					);
-					return ret as TResponse;
-				} catch (e) {
-					this.driverLog.print(
-						`${prefix}sendMessage wait for update error`,
-					);
-
-					throw new ZWaveError(
-						`Timed out while waiting for a response from the node`,
-						ZWaveErrorCodes.Controller_NodeTimeout,
-						undefined,
-						transaction.stack,
-					);
-				} finally {
-					// Tell the send thread to continue
-					this.sendThread.send({ type: "finalize" });
-				}
-			} else {
-				// Nothing to wait for, tell the send thread to continue
-				this.sendThread.send({ type: "finalize" });
-				return ret as TResponse;
-			}
+			return (await resultPromise) as TResponse;
 		} catch (e) {
 			if (isZWaveError(e)) {
 				if (
@@ -3402,10 +3369,87 @@ ${handlers.length} left`,
 				} else if (e.code === ZWaveErrorCodes.Controller_NodeTimeout) {
 					// If the node failed to respond in time, remember this for the statistics
 					node?.incrementStatistics("timeoutResponse");
+					if (!e.stack) {
+						// Enrich the error message with the transaction source
+						throw new ZWaveError(
+							`Timed out while waiting for a response from the node`,
+							ZWaveErrorCodes.Controller_NodeTimeout,
+							undefined,
+							transaction.stack,
+						);
+					}
 				}
 			}
 			throw e;
+		} finally {
+			// The transaction was handled, so it can no longer expire
+			if (expirationTimeout) clearTimeout(expirationTimeout);
 		}
+	}
+
+	private createMessageGenerator<TResponse extends Message = Message>(
+		msg: Message,
+		options: SendMessageOptions,
+		afterEach: (msg: Message) => void,
+	): {
+		generator: MessageGenerator;
+		resultPromise: DeferredPromise<TResponse>;
+	} {
+		const resultPromise = createDeferredPromise<TResponse>();
+		const driver = this;
+
+		// Avoid continuing the generator when the entire transaction is canceled
+		let canceled = false;
+		resultPromise.catch(() => {
+			canceled = true;
+		});
+		const generator: MessageGenerator = {
+			current: undefined,
+			start: async function* () {
+				const inner = async function* () {
+					if (canceled) return;
+
+					// Pass this message to the send thread and wait for it to be sent
+					const promise = createDeferredPromise<Message | void>();
+					yield { message: msg, promise };
+					let result = await promise;
+					if (canceled) return;
+
+					afterEach(msg);
+
+					// If the sent message expects an update from the node, wait for it
+					if (msg.expectsNodeUpdate()) {
+						try {
+							result = await driver.waitForMessage(
+								(received) =>
+									msg.isExpectedNodeUpdate(received),
+								driver.options.timeouts.report,
+							);
+						} catch (e) {
+							resultPromise.reject(
+								new ZWaveError(
+									`Timed out while waiting for a response from the node`,
+									ZWaveErrorCodes.Controller_NodeTimeout,
+								),
+							);
+							if (canceled) return;
+						}
+					}
+
+					resultPromise.resolve(result as TResponse);
+				};
+
+				// Wrap the generator so we don't accidentally forget to unset this.current
+				for await (const step of inner()) {
+					this.current = step;
+					yield step;
+				}
+				driver.driverLog.print("message generator done!");
+				this.current = undefined;
+				return;
+			},
+		};
+		return { resultPromise, generator };
 	}
 
 	/**

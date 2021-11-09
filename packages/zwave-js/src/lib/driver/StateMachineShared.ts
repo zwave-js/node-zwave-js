@@ -50,7 +50,11 @@ export interface ServiceImplementations {
 		delay: number,
 	) => void;
 	notifyUnsolicited: (message: Message) => void;
-	rejectTransaction: (transaction: Transaction, error: ZWaveError) => void;
+	rejectTransaction: (
+		transaction: Transaction,
+		error: ZWaveError,
+		completely?: boolean,
+	) => void;
 	resolveTransaction: (transaction: Transaction, result?: Message) => void;
 	logOutgoingMessage: (message: Message) => void;
 	log: DriverLogger["print"];
@@ -92,10 +96,11 @@ export function sendDataErrorToZWaveError(
 				undefined,
 				transaction.stack,
 			);
-		case "response NOK":
-			if (isSendData(transaction.message)) {
+		case "response NOK": {
+			const sentMessage = transaction.getCurrentMessage();
+			if (isSendData(sentMessage)) {
 				return new ZWaveError(
-					`Failed to send the command after ${transaction.message.maxSendAttempts} attempts. Transmission queue full`,
+					`Failed to send the command after ${sentMessage.maxSendAttempts} attempts. Transmission queue full`,
 					ZWaveErrorCodes.Controller_MessageDropped,
 					receivedMessage,
 					transaction.stack,
@@ -108,10 +113,12 @@ export function sendDataErrorToZWaveError(
 					transaction.stack,
 				);
 			}
-		case "callback NOK":
+		}
+		case "callback NOK": {
+			const sentMessage = transaction.getCurrentMessage();
 			if (
-				transaction.message instanceof SendDataRequest ||
-				transaction.message instanceof SendDataBridgeRequest
+				sentMessage instanceof SendDataRequest ||
+				sentMessage instanceof SendDataBridgeRequest
 			) {
 				const status = (
 					receivedMessage as
@@ -120,7 +127,7 @@ export function sendDataErrorToZWaveError(
 				).transmitStatus;
 				return new ZWaveError(
 					`Failed to send the command after ${
-						transaction.message.maxSendAttempts
+						sentMessage.maxSendAttempts
 					} attempts (Status ${getEnumMemberName(
 						TransmitStatus,
 						status,
@@ -132,8 +139,8 @@ export function sendDataErrorToZWaveError(
 					transaction.stack,
 				);
 			} else if (
-				transaction.message instanceof SendDataMulticastRequest ||
-				transaction.message instanceof SendDataMulticastBridgeRequest
+				sentMessage instanceof SendDataMulticastRequest ||
+				sentMessage instanceof SendDataMulticastBridgeRequest
 			) {
 				const status = (
 					receivedMessage as
@@ -159,6 +166,7 @@ export function sendDataErrorToZWaveError(
 					transaction.stack,
 				);
 			}
+		}
 		case "node timeout":
 			return new ZWaveError(
 				`Timed out while waiting for a response from the node`,
