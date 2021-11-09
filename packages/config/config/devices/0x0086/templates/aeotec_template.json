@@ -1930,7 +1930,7 @@
 		"label": "Sleep State",
 		"valueSize": 2,
 		"minValue": 0,
-		"maxValue": 1,
+		"maxValue": 2,
 		"defaultValue": 0,
 		"readOnly": true,
 		"allowManualEntry": false,
@@ -1942,6 +1942,10 @@
 			{
 				"label": "Awake",
 				"value": 1
+			},
+			{
+				"label": "Always awake on USB power",
+				"value": 2
 			}
 		]
 	},

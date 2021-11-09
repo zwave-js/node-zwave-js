@@ -82,11 +82,11 @@
 		},
 		{
 			"#": "9[0xff00]",
-			"$import": "templates/aeotec_template.json#sleep_state"
+			"$import": "templates/aeotec_template.json#current_power_mode"
 		},
 		{
 			"#": "9[0xff]",
-			"$import": "templates/aeotec_template.json#current_power_mode"
+			"$import": "templates/aeotec_template.json#sleep_state"
 		},
 		{
 			"#": "39",
