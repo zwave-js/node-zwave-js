@@ -314,7 +314,7 @@
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 300,
-			"defaultValue": 10
+			"defaultValue": 10,
 			"unit": "0.1 °C"
 		},
 		{
