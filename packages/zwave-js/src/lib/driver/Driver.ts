@@ -147,6 +147,10 @@ import {
 	sendStatistics,
 } from "../telemetry/statistics";
 import {
+	MessageGeneratorImplementation,
+	simpleMessageGenerator,
+} from "./MessageGenerators";
+import {
 	createSendThreadMachine,
 	SendThreadInterpreter,
 	TransactionReducer,
@@ -533,14 +537,16 @@ export class Driver extends TypedEventEmitter<DriverEventCallbacks> {
 					if (this.isMissingNodeACK(transaction, error)) {
 						if (this.handleMissingNodeACK(transaction)) return;
 					}
-					const promise = (
-						completely
-							? transaction
-							: // Depending on the progress of this transaction (queued or currently handled),
-							  // we need to reject the entire transaction or just the current partial
-							  transaction.parts.current ?? transaction
-					).promise;
-					promise.reject(error);
+
+					// Depending on the progress of this transaction (queued or currently handled),
+					// we need to reject the entire transaction or just the current partial
+					if (completely || !transaction.parts.current?.message) {
+						transaction.promise.reject(error);
+					} else {
+						// This might seem weird, but apparently it's not possible to reject a Promise into a generator
+						// without ending up with an unhandled rejection
+						transaction.parts.current.promise.resolve(error);
+					}
 				},
 				resolveTransaction: (transaction, result) => {
 					transaction.parts.current!.promise.resolve(result);
@@ -2456,7 +2462,9 @@ It is probably asleep, moving its messages to the wakeup queue.`,
 			if (this.mayMoveToWakeupQueue(transaction)) {
 				this.sendThread.send({ type: "add", transaction });
 			} else {
-				transaction.parts.current!.promise.reject(
+				// Apparently it's not possible to reject a Promise into a generator without ending up with an unhandled rejection
+				// Therefore we RESOLVE the promise with an error
+				transaction.parts.current!.promise.resolve(
 					new ZWaveError(
 						`The node is asleep`,
 						ZWaveErrorCodes.Controller_MessageDropped,
@@ -3399,59 +3407,38 @@ ${handlers.length} left`,
 		const resultPromise = createDeferredPromise<TResponse>();
 		const driver = this;
 
+		const suffix = ` Node ${msg.getNodeId()?.toString()}, ${
+			isCommandClassContainer(msg)
+				? msg.command.constructor.name
+				: getEnumMemberName(FunctionType, msg.functionType)
+		}, callback ID: ${msg.callbackId}`;
+
 		// Avoid continuing the generator when the entire transaction is canceled
-		let canceled = false;
+		const cancellationToken = {
+			canceled: false,
+		};
 		resultPromise.catch(() => {
-			canceled = true;
+			cancellationToken.canceled = true;
 		});
 		const generator: MessageGenerator = {
 			current: undefined,
 			start: async function* () {
-				const inner = async function* () {
-					if (canceled) return;
+				const implementation: MessageGeneratorImplementation =
+					simpleMessageGenerator;
 
-					// Pass this message to the send thread and wait for it to be sent
-					const promise = createDeferredPromise<Message | void>();
-					yield { message: msg, promise };
-					let result = await promise;
-					if (canceled) return;
-
-					afterEach(msg);
-
-					// If the sent message expects an update from the node, wait for it
-					if (msg.expectsNodeUpdate()) {
-						try {
-							result = await driver.waitForMessage((received) => {
-								return msg.isExpectedNodeUpdate(received);
-							}, driver.options.timeouts.report);
-						} catch (e) {
-							resultPromise.reject(
-								new ZWaveError(
-									`Timed out while waiting for a response from the node`,
-									ZWaveErrorCodes.Controller_NodeTimeout,
-								),
-							);
-							if (canceled) return;
-						}
-					}
-
-					resultPromise.resolve(result as TResponse);
-				};
-
-				// Wrap the generator so we don't accidentally forget to unset this.current
-				for await (const step of inner()) {
+				// Wrap the generator so we can easily switch it out and don't
+				// accidentally forget to unset this.current at the end
+				for await (const step of implementation(
+					driver,
+					msg,
+					afterEach,
+					cancellationToken,
+					resultPromise,
+				)) {
 					this.current = step;
 					yield step;
 				}
-				driver.driverLog.print(
-					"message generator done! " +
-						(isCommandClassContainer(msg)
-							? msg.command.constructor.name
-							: getEnumMemberName(
-									FunctionType,
-									msg.functionType,
-							  )),
-				);
+				driver.driverLog.print("message generator done!" + suffix);
 				this.current = undefined;
 				return;
 			},

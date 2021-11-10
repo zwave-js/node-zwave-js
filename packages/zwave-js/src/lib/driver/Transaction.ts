@@ -13,8 +13,8 @@ import type { Driver } from "./Driver";
 export interface PartialTransaction {
 	/** The message to be sent */
 	message: Message;
-	/** Will be resolved/rejected by the Send Thread Machine when this partial transaction is handled */
-	promise: DeferredPromise<Message | void>;
+	/** Will be resolved by the Send Thread Machine when this partial transaction is handled */
+	promise: DeferredPromise<Error | Message | void>;
 }
 
 export interface MessageGenerator {

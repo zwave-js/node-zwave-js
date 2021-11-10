@@ -964,20 +964,6 @@ export class CommandClass {
 		return propertyKey.toString();
 	}
 
-	/** Whether this CC needs to exchange one or more messages before it can be sent */
-	public requiresPreTransmitHandshake(): boolean {
-		return false; // By default it doesn't
-	}
-
-	/**
-	 * Perform a handshake before the actual message will be transmitted.
-	 */
-	public preTransmitHandshake(): Promise<void> {
-		return Promise.resolve();
-		// By default do nothing
-		// If handshake messages should be sent, they need the highest priority
-	}
-
 	/** Returns the number of bytes that are added to the payload by this CC */
 	protected computeEncapsulationOverhead(): number {
 		// Default is ccId (+ ccCommand):

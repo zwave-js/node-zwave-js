@@ -639,7 +639,13 @@ export function createSendThreadMachine(
 									{ target: "done" },
 								],
 								// If the next message cannot be generated, assume the transaction is done
-								onError: { target: "done" },
+								onError: {
+									target: "done",
+									actions: (ctx, evt) => {
+										console.dir(`error in nextMessage: `);
+										console.dir(evt);
+									},
+								},
 							},
 						},
 						// Increase send data counter before sending the message
