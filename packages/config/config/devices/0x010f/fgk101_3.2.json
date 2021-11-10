@@ -53,7 +53,7 @@
 			"minValue": 0,
 			"maxValue": 1,
 			"defaultValue": 0,
-			"allowManualEntry": false
+			"allowManualEntry": false,
 			"options": [
             	{
                 	"label": "Door/Window or external sensor",
@@ -73,7 +73,7 @@
 			"minValue": 0,
 			"maxValue": 1,
 			"defaultValue": 0,
-			"allowManualEntry": false
+			"allowManualEntry": false,
 			"options": [
             	{
                 	"label": "Door/Window closed",
@@ -219,7 +219,7 @@
 			"minValue": 0,
 			"maxValue": 32400,
 			"defaultValue": 0,
-			"unit": "seconds",
+			"unit": "seconds"
 		},
 		{
 			"#": "15",
@@ -229,7 +229,7 @@
 			"minValue": 0,
 			"maxValue": 32400,
 			"defaultValue": 0,
-			"unit": "seconds",
+			"unit": "seconds"
 		},
 		{
 			"#": "20",
@@ -275,7 +275,7 @@
 			"minValue": 0,
 			"maxValue": 32400,
 			"defaultValue": 5,
-			"unit": "seconds",
+			"unit": "seconds"
 		},
 		{
 			"#": "31",
@@ -305,7 +305,7 @@
 			"minValue": 0,
 			"maxValue": 32400,
 			"defaultValue": 300,
-			"unit": "seconds",
+			"unit": "seconds"
 		},
 		{
 			"#": "51",
@@ -315,7 +315,7 @@
 			"minValue": 0,
 			"maxValue": 300,
 			"defaultValue": 10
-			"unit": "0.1 °C",
+			"unit": "0.1 °C"
 		},
 		{
 			"#": "52",
@@ -325,7 +325,7 @@
 			"minValue": 0,
 			"maxValue": 32400,
 			"defaultValue": 0,
-			"unit": "seconds",
+			"unit": "seconds"
 		},
 		{
 			"#": "53",
@@ -335,7 +335,7 @@
 			"minValue": -1000,
 			"maxValue": 1000,
 			"defaultValue": 0,
-			"unit": "0.1 °C",
+			"unit": "0.1 °C"
 		},
 		{
 			"#": "54",
@@ -373,7 +373,7 @@
 			"minValue": 0,
 			"maxValue": 1000,
 			"defaultValue": 540,
-			"unit": "0.1 °C",
+			"unit": "0.1 °C"
 		},
 		{
 			"#": "56",
@@ -383,7 +383,7 @@
 			"minValue": -300,
 			"maxValue": 700,
 			"defaultValue": 40,
-			"unit": "0.1 °C",
+			"unit": "0.1 °C"
 		},
 		{
 			"#": "70",
