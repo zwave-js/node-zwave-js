@@ -68,7 +68,7 @@
 		{
 			"#": "2",
 			"label": "Door/Window or alarm status",
-			"description": "Parameter defines state of the sensor when the magnet ...",
+			"description": "State of the sensor when the magnet is closed ...",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 1,
@@ -88,7 +88,7 @@
 		{
 			"#": "3",
 			"label": "Visual LED indications",
-			"description": "This parameter defines events indicated by the visual ...",
+			"description": "Defines events indicated by the LED ...",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 6,
@@ -148,7 +148,7 @@
 		{
 			"#": "10",
 			"label": "2nd association group triggers",
-			"description": "Parameter defines events which result in sending on/off ...",
+			"description": "Defines events which result in sending on/off commands ...",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 2,
@@ -300,7 +300,7 @@
 		{
 			"#": "50",
 			"label": "Interval of temperature measurements",
-			"description": "This parameter defines how often the temperature will ...",
+			"description": "Defines how often the temperature will be measured ...",
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 32400,
@@ -310,7 +310,7 @@
 		{
 			"#": "51",
 			"label": "Temperature reports threshold",
-			"description": "This parameter defines the change of temperature in ...",
+			"description": "Defines the change of temperature in comparison ...",
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 300,
@@ -320,7 +320,7 @@
 		{
 			"#": "52",
 			"label": "Interval of temperature reports",
-			"description": "This parameter determines how often the temperature ...",
+			"description": "How often will the temperature reports be sent ...",
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 32400,
