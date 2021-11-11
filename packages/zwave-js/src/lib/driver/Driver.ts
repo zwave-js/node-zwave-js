@@ -149,6 +149,7 @@ import {
 import {
 	MessageGeneratorImplementation,
 	secureMessageGeneratorS0,
+	secureMessageGeneratorS2,
 	simpleMessageGenerator,
 } from "./MessageGenerators";
 import {
@@ -2436,9 +2437,7 @@ export class Driver extends TypedEventEmitter<DriverEventCallbacks> {
 			// If the node does not acknowledge our request, it is either asleep or dead
 			e.code === ZWaveErrorCodes.Controller_CallbackNOK &&
 			(transaction.message instanceof SendDataRequest ||
-				transaction.message instanceof SendDataBridgeRequest) &&
-			// Ignore pre-transmit handshakes because the actual transaction will be retried
-			transaction.priority !== MessagePriority.PreTransmitHandshake
+				transaction.message instanceof SendDataBridgeRequest)
 		);
 	}
 
@@ -3284,8 +3283,7 @@ ${handlers.length} left`,
 			!(msg instanceof SendDataMulticastRequest) &&
 			!(msg instanceof SendDataMulticastBridgeRequest) &&
 			// Handshake messages are meant to be sent immediately
-			options.priority !== MessagePriority.Handshake &&
-			options.priority !== MessagePriority.PreTransmitHandshake
+			options.priority !== MessagePriority.Handshake
 		) {
 			if (options.priority === MessagePriority.NodeQuery) {
 				// Remember that this transaction was part of an interview
@@ -3429,11 +3427,21 @@ ${handlers.length} left`,
 			start: () => {
 				async function* gen() {
 					// Determine which message generator implemenation should be used
-					const implementation: MessageGeneratorImplementation =
-						isSendData(msg) &&
-						msg.command instanceof SecurityCCCommandEncapsulation
-							? secureMessageGeneratorS0
-							: simpleMessageGenerator;
+					let implementation: MessageGeneratorImplementation =
+						simpleMessageGenerator;
+					if (isSendData(msg)) {
+						if (
+							msg.command instanceof
+							Security2CCMessageEncapsulation
+						) {
+							implementation = secureMessageGeneratorS2;
+						} else if (
+							msg.command instanceof
+							SecurityCCCommandEncapsulation
+						) {
+							implementation = secureMessageGeneratorS0;
+						}
+					}
 
 					// Step through the generator so we can easily cancel it and don't
 					// accidentally forget to unset this.current at the end
@@ -3745,8 +3753,6 @@ ${handlers.length} left`,
 			// so they must be dropped
 			case messageIsPing(msg):
 			case transaction.priority === MessagePriority.Handshake:
-			// Outgoing handshake requests are very likely not valid after wakeup, so drop them too
-			case transaction.priority === MessagePriority.PreTransmitHandshake:
 			// We also don't want to immediately send the node to sleep when it wakes up
 			case isCommandClassContainer(msg) &&
 				msg.command instanceof WakeUpCCNoMoreInformation:
@@ -3849,50 +3855,6 @@ ${handlers.length} left`,
 	/** Re-sorts the send queue */
 	private sortSendQueue(): void {
 		this.sendThread.send("sortQueue");
-	}
-
-	/** Re-sends the current command if it is S2 encapsulated */
-	public resendS2EncapsulatedCommand(): void {
-		// If this is called, a receiving node couldn't decode the last message we sent it
-		// @ts-ignore TODO for later
-		const { currentTransaction } = this.sendThread.state.context;
-		if (
-			currentTransaction &&
-			isCommandClassContainer(currentTransaction.message) &&
-			currentTransaction.message.command instanceof
-				Security2CCMessageEncapsulation
-		) {
-			const cmd = currentTransaction.message.command;
-			if (cmd.wasRetriedAfterDecodeFailure) {
-				this._controllerLog.logNode(cmd.nodeId as number, {
-					message: `failed to decode the message after re-transmission with SPAN extension, dropping the message.`,
-					direction: "none",
-					level: "warn",
-				});
-				this.sendThread.send({
-					type: "reduce",
-					reducer: (_t, source) => {
-						if (source === "active") {
-							return {
-								type: "reject",
-								code: ZWaveErrorCodes.Security2CC_CannotDecode,
-								message:
-									"The node failed to decode the message.",
-							};
-						} else {
-							return { type: "keep" };
-						}
-					},
-				});
-			} else {
-				this._controllerLog.logNode(cmd.nodeId as number, {
-					message: `failed to decode the message, retrying with SPAN extension...`,
-					direction: "none",
-				});
-				cmd.prepareRetryAfterDecodeFailure();
-				this.sendThread.send("resend");
-			}
-		}
 	}
 
 	private lastSaveToCache: number = 0;

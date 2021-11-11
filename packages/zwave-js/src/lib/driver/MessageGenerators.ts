@@ -1,5 +1,10 @@
-import { ZWaveError, ZWaveErrorCodes } from "@zwave-js/core";
-import type { CommandClass } from "../commandclass";
+import { SPANState, ZWaveError, ZWaveErrorCodes } from "@zwave-js/core";
+import {
+	CommandClass,
+	Security2CCMessageEncapsulation,
+	Security2CCNonceGet,
+	Security2CCNonceReport,
+} from "../commandclass";
 import { isCommandClassContainer } from "../commandclass/ICommandClassContainer";
 import {
 	SecurityCCCommandEncapsulation,
@@ -120,7 +125,7 @@ export const secureMessageGeneratorS0: MessageGeneratorImplementation =
 				);
 			if (!nonceResp) {
 				throw new ZWaveError(
-					"No nonce received from the node",
+					"No nonce received from the node, cannot send secure command!",
 					ZWaveErrorCodes.SecurityCC_NoNonce,
 				);
 			}
@@ -138,7 +143,104 @@ export const secureMessageGeneratorS0: MessageGeneratorImplementation =
 			);
 		}
 
-		// Now send the actual secure command:
+		// Now send the actual secure command
 		msg.command.nonceId = nonceId;
 		return yield* simpleMessageGenerator(driver, msg, afterEach);
+	};
+
+/** A message generator for security encapsulated messages (S2) */
+export const secureMessageGeneratorS2: MessageGeneratorImplementation =
+	async function* (driver, msg, afterEach) {
+		if (!isSendData(msg)) {
+			throw new ZWaveError(
+				"Cannot use the S2 message generator for a command that's not a SendData message!",
+				ZWaveErrorCodes.Argument_Invalid,
+			);
+		} else if (typeof msg.command.nodeId !== "number") {
+			throw new ZWaveError(
+				"Cannot use the S2 message generator for multicast commands!", // (yet)
+				ZWaveErrorCodes.Argument_Invalid,
+			);
+		} else if (!(msg.command instanceof Security2CCMessageEncapsulation)) {
+			throw new ZWaveError(
+				"The S2 message generator can only be used for Security S2 command encapsulation!",
+				ZWaveErrorCodes.Argument_Invalid,
+			);
+		}
+
+		const secMan = driver.securityManager2!;
+		const nodeId = msg.command.nodeId;
+		const spanState = secMan.getSPANState(nodeId);
+
+		if (
+			spanState.type === SPANState.None ||
+			spanState.type === SPANState.LocalEI
+		) {
+			// Request a new nonce
+
+			// No free nonce, request a new one
+			const cc = new Security2CCNonceGet(driver, {
+				nodeId: nodeId,
+				endpoint: msg.command.endpointIndex,
+			});
+			const nonceResp =
+				yield* sendCommandGenerator<Security2CCNonceReport>(
+					driver,
+					cc,
+					afterEach,
+					{
+						// Only try getting a nonce once
+						maxSendAttempts: 1,
+					},
+				);
+			if (!nonceResp) {
+				throw new ZWaveError(
+					"No nonce received from the node, cannot send secure command!",
+					ZWaveErrorCodes.Security2CC_NoSPAN,
+				);
+			}
+
+			// Storing the nonce is not necessary, this will be done automatically when the nonce is received
+		}
+
+		// Now send the actual secure command
+		let response = yield* simpleMessageGenerator(driver, msg, afterEach);
+		if (
+			isCommandClassContainer(response) &&
+			response.command instanceof Security2CCNonceReport
+		) {
+			const command = response.command;
+			if (command.SOS && command.receiverEI) {
+				// The node couldn't decrypt the last command we sent it. Invalidate
+				// the shared SPAN, since it did the same
+				secMan.storeRemoteEI(nodeId, command.receiverEI);
+			}
+			driver.controllerLog.logNode(nodeId, {
+				message: `failed to decode the message, retrying with SPAN extension...`,
+				direction: "none",
+			});
+			// Prepare the messsage for re-transmission
+			msg.callbackId = undefined;
+			msg.command.unsetSequenceNumber();
+
+			// Send the message again
+			response = yield* simpleMessageGenerator(driver, msg, afterEach);
+			if (
+				isCommandClassContainer(response) &&
+				response.command instanceof Security2CCNonceReport
+			) {
+				// No dice
+				driver.controllerLog.logNode(nodeId, {
+					message: `failed to decode the message after re-transmission with SPAN extension, dropping the message.`,
+					direction: "none",
+					level: "warn",
+				});
+				throw new ZWaveError(
+					"The node failed to decode the message.",
+					ZWaveErrorCodes.Security2CC_CannotDecode,
+				);
+			}
+		}
+
+		return response;
 	};

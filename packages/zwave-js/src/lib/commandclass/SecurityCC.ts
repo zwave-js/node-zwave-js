@@ -139,9 +139,7 @@ export class SecurityCCAPI extends PhysicalCCAPI {
 			{
 				...this.commandOptions,
 				// Standalone nonce requests must be handled immediately
-				priority: standalone
-					? MessagePriority.Normal
-					: MessagePriority.PreTransmitHandshake,
+				priority: MessagePriority.Normal,
 				// Only try getting a nonce once
 				maxSendAttempts: 1,
 				// We don't want failures causing us to treat the node as asleep or dead

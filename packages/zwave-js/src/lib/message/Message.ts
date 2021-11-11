@@ -157,7 +157,7 @@ export class Message {
 		}
 		return this._callbackId;
 	}
-	public set callbackId(v: number) {
+	public set callbackId(v: number | undefined) {
 		this._callbackId = v;
 	}
 

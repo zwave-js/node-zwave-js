@@ -5,11 +5,8 @@ export enum MessagePriority {
 	// Handshake messages have the highest priority because they are part of other transactions
 	// which have already started when the handshakes are needed (e.g. Security Nonce exchange)
 	//
-	// We distinguish between responses to handshake requests from nodes that must be handled first.
-	// Some nodes don't respond to our requests if they are waiting for a nonce.
+	// Some nodes don't respond to our requests if they are waiting for a nonce, so those need to be handled first.
 	Handshake = 0,
-	// Our handshake requests must be prioritized over all other messages
-	PreTransmitHandshake = 1,
 	// Controller commands usually finish quickly and should be preferred over node queries
 	Controller,
 	// Pings (NoOP) are used for device probing at startup and for network diagnostics
