@@ -3,7 +3,6 @@ import { SortedList } from "alcalzone-shared/sorted-list";
 import {
 	assign,
 	AssignAction,
-	EventObject,
 	Interpreter,
 	Machine,
 	StateMachine,
@@ -41,12 +40,13 @@ export interface CommandQueueStateSchema {
 
 export interface CommandQueueContext {
 	queue: SortedList<Transaction>;
+	callbackIDs: WeakMap<Transaction, string>;
 	currentTransaction?: Transaction;
 }
 
 export type CommandQueueEvent =
 	| { type: "trigger" } // Used internally to trigger sending from the idle state
-	| { type: "add"; transaction: Transaction } // Adds a transaction to the command queue
+	| { type: "add"; transaction: Transaction; from: string } // Adds a transaction to the command queue
 	| { type: "message"; message: Message } // Used for received messages. The message will be returned as unsolicited when it is not expected
 	| { type: "reset" } // Used to abort the ongoing transaction and clear the command queue
 	| { type: "command_error"; error: Error } // An unexpected error occured during command execution
@@ -83,10 +83,13 @@ const setCurrentTransaction: AssignAction<CommandQueueContext, any> = assign(
 );
 
 const deleteCurrentTransaction: AssignAction<CommandQueueContext, any> = assign(
-	(ctx) => ({
-		...ctx,
-		currentTransaction: undefined,
-	}),
+	(ctx) => {
+		ctx.callbackIDs.delete(ctx.currentTransaction!);
+		return {
+			...ctx,
+			currentTransaction: undefined,
+		};
+	},
 );
 
 const clearQueue: AssignAction<CommandQueueContext, any> = assign((ctx) => {
@@ -95,14 +98,15 @@ const clearQueue: AssignAction<CommandQueueContext, any> = assign((ctx) => {
 	return { ...ctx, queue };
 });
 
-const notifyResult = sendParent<
-	CommandQueueContext,
-	EventObject & { data: SerialAPICommandDoneData },
-	CommandQueueEvent
->((ctx, evt: any) => ({
-	...evt.data,
-	type: evt.data.type === "success" ? "command_success" : "command_failure",
-	transaction: ctx.currentTransaction,
+const notifyResult = sendParent((ctx: CommandQueueContext, evt: any) => ({
+	type: "forward",
+	from: "QUEUE",
+	to: ctx.callbackIDs.get(ctx.currentTransaction!),
+	payload: {
+		...evt.data,
+		type:
+			evt.data.type === "success" ? "command_success" : "command_failure",
+	},
 }));
 
 const notifyError = sendParent<CommandQueueContext, any, CommandQueueEvent>(
@@ -123,20 +127,21 @@ export function createCommandQueueMachine(
 		CommandQueueEvent
 	>(
 		{
+			preserveActionOrder: true,
 			id: "CommandQueue",
 			initial: "idle",
 			context: {
 				queue: new SortedList(),
+				callbackIDs: new WeakMap(),
 				// currentTransaction: undefined,
 			},
 			on: {
 				add: {
 					actions: [
-						assign({
-							queue: (ctx, evt) => {
-								ctx.queue.add(evt.transaction);
-								return ctx.queue;
-							},
+						assign((ctx, evt) => {
+							ctx.queue.add(evt.transaction);
+							ctx.callbackIDs.set(evt.transaction, evt.from);
+							return ctx;
 						}),
 						raise("trigger") as any,
 					],
@@ -225,7 +230,7 @@ export function createCommandQueueMachine(
 					// wrap it in a rejected promise, so xstate can handle it
 					try {
 						return createSerialAPICommandMachine(
-							ctx.currentTransaction!.parts.current!.message,
+							ctx.currentTransaction!.parts.current!,
 							implementations,
 							params,
 						);
@@ -252,12 +257,10 @@ export function createCommandQueueMachine(
 					evt.data?.type === "success",
 				queueNotEmpty: (ctx) => ctx.queue.length > 0,
 				currentTransactionIsSendData: (ctx) =>
-					isSendData(ctx.currentTransaction?.parts.current?.message),
+					isSendData(ctx.currentTransaction?.parts.current),
 				isSendDataWithCallbackTimeout: (ctx, evt: any) => {
 					return (
-						isSendData(
-							ctx.currentTransaction?.parts.current?.message,
-						) &&
+						isSendData(ctx.currentTransaction?.parts.current) &&
 						evt.data?.type === "failure" &&
 						evt.data?.reason === "callback timeout"
 					);

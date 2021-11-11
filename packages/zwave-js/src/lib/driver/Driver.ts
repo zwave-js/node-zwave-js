@@ -532,24 +532,30 @@ export class Driver extends TypedEventEmitter<DriverEventCallbacks> {
 					}
 				},
 				timestamp: highResTimestamp,
-				rejectTransaction: (transaction, error, completely) => {
+				rejectTransaction: (transaction, error) => {
 					// If a node failed to respond in time, it might be sleeping
 					if (this.isMissingNodeACK(transaction, error)) {
 						if (this.handleMissingNodeACK(transaction)) return;
 					}
 
-					// Depending on the progress of this transaction (queued or currently handled),
-					// we need to reject the entire transaction or just the current partial
-					if (completely || !transaction.parts.current?.message) {
-						transaction.promise.reject(error);
+					// If the transaction was already started, we need to throw the error into the message generator
+					// so it correctly gets ended. Otherwise just reject the result promise
+					if (transaction.parts.self) {
+						// eslint-disable-next-line @typescript-eslint/no-empty-function
+						transaction.parts.self.throw(error).catch(() => {});
 					} else {
-						// This might seem weird, but apparently it's not possible to reject a Promise into a generator
-						// without ending up with an unhandled rejection
-						transaction.parts.current.promise.resolve(error);
+						transaction.promise.reject(error);
 					}
 				},
 				resolveTransaction: (transaction, result) => {
-					transaction.parts.current!.promise.resolve(result);
+					// If the transaction was already started, we need to end the message generator early by throwing
+					// the result. Otherwise just resolve the result promise
+					if (transaction.parts.self) {
+						// eslint-disable-next-line @typescript-eslint/no-empty-function
+						transaction.parts.self.throw(result).catch(() => {});
+					} else {
+						transaction.promise.resolve(result);
+					}
 				},
 				logOutgoingMessage: (msg: Message) => {
 					this.driverLog.logMessage(msg, {
@@ -580,7 +586,7 @@ export class Driver extends TypedEventEmitter<DriverEventCallbacks> {
 		// this.sendThread.onTransition((state) => {
 		// 	if (state.changed)
 		// 		this.driverLog.print(
-		// 			`send thread state: ${state.toStrings().slice(-1)[0]}`,
+		// 			`send thread state: ${state.toStrings().join("->")}`,
 		// 			"verbose",
 		// 		);
 		// });
@@ -1604,11 +1610,12 @@ export class Driver extends TypedEventEmitter<DriverEventCallbacks> {
 	public hasPendingTransactions(
 		predicate: (t: Transaction) => boolean,
 	): boolean {
-		const { queue, currentTransaction } = this.sendThread.state.context;
-		return (
-			(currentTransaction && predicate(currentTransaction)) ||
-			!!queue.find((t) => predicate(t))
-		);
+		const { queue, activeTransactions } = this.sendThread.state.context;
+		if (!!queue.find((t) => predicate(t))) return true;
+		for (const { transaction } of activeTransactions.values()) {
+			if (predicate(transaction)) return true;
+		}
+		return false;
 	}
 
 	/**
@@ -2462,14 +2469,15 @@ It is probably asleep, moving its messages to the wakeup queue.`,
 			if (this.mayMoveToWakeupQueue(transaction)) {
 				this.sendThread.send({ type: "add", transaction });
 			} else {
-				// Apparently it's not possible to reject a Promise into a generator without ending up with an unhandled rejection
-				// Therefore we RESOLVE the promise with an error
-				transaction.parts.current!.promise.resolve(
-					new ZWaveError(
-						`The node is asleep`,
-						ZWaveErrorCodes.Controller_MessageDropped,
-					),
-				);
+				transaction.parts.self
+					?.throw(
+						new ZWaveError(
+							`The node is asleep`,
+							ZWaveErrorCodes.Controller_MessageDropped,
+						),
+					)
+					// eslint-disable-next-line @typescript-eslint/no-empty-function
+					.catch(() => {});
 			}
 			node.markAsAsleep();
 			return true;
@@ -3186,7 +3194,7 @@ ${handlers.length} left`,
 		}
 	}
 
-	private unwrapCommands(msg: Message & ICommandClassContainer): void {
+	public unwrapCommands(msg: Message & ICommandClassContainer): void {
 		// Unwrap encapsulating CCs until we get to the core
 		while (
 			isEncapsulatingCommandClass(msg.command) ||
@@ -3413,49 +3421,67 @@ ${handlers.length} left`,
 				: getEnumMemberName(FunctionType, msg.functionType)
 		}, callback ID: ${msg.callbackId}`;
 
-		// Avoid continuing the generator when the entire transaction is canceled
-		const cancellationToken = {
-			canceled: false,
-		};
-		resultPromise.catch(() => {
-			cancellationToken.canceled = true;
-		});
 		const generator: MessageGenerator = {
 			current: undefined,
-			start: async function* () {
-				const implementation: MessageGeneratorImplementation =
-					simpleMessageGenerator;
+			self: undefined,
+			start: () => {
+				async function* gen() {
+					// Determine which message generator implemenation should be used
+					const implementation: MessageGeneratorImplementation =
+						simpleMessageGenerator;
 
-				// Wrap the generator so we can easily switch it out and don't
-				// accidentally forget to unset this.current at the end
-				for await (const step of implementation(
-					driver,
-					msg,
-					afterEach,
-					cancellationToken,
-					resultPromise,
-				)) {
-					this.current = step;
-					yield step;
+					// Step through the generator so we can easily cancel it and don't
+					// accidentally forget to unset this.current at the end
+					const gen = implementation(driver, msg, afterEach);
+					let sendResult: Message | undefined;
+					let result: Message | undefined;
+					while (true) {
+						// This call passes the previous send result (if it exists already) to the generator and saves the
+						// generated or returned message in `value`. When `done` is true, `value` contains the returned result of the message generator
+						const { value, done } = await gen.next(sendResult!);
+						if (done) {
+							result = value;
+							break;
+						}
+
+						generator.current = value;
+						try {
+							// Pass the generated message to the transaction machine and remember the result for the next iteration
+							sendResult = yield generator.current;
+						} catch (e) {
+							if (e instanceof Error) {
+								// There was an actual error, reject the transaction
+								resultPromise.reject(e);
+							} else {
+								// The generator was prematurely ended by throwing a Message
+								resultPromise.resolve(e as TResponse);
+							}
+							break;
+						}
+					}
+
+					// TODO: remove this later when we're done
+					driver.driverLog.print("message generator done!" + suffix);
+					resultPromise.resolve(result as TResponse);
+					generator.current = undefined;
+					generator.self = undefined;
+					return;
 				}
-				driver.driverLog.print("message generator done!" + suffix);
-				this.current = undefined;
-				return;
+				generator.self = gen();
+				return generator.self;
 			},
 		};
 		return { resultPromise, generator };
 	}
 
-	/**
-	 * Sends a command to a Z-Wave node. If the node returns a command in response, that command will be the return value.
-	 * If the command expects no response **or** the response times out, nothing will be returned
-	 * @param command The command to send. It will be encapsulated in a SendData[Multicast]Request.
-	 * @param options (optional) Options regarding the message transmission
-	 */
-	public async sendCommand<TResponse extends CommandClass = CommandClass>(
+	/** Wraps a CC in the correct SendData message to use for sending */
+	public createSendDataMessage(
 		command: CommandClass,
-		options: SendCommandOptions = {},
-	): Promise<TResponse | undefined> {
+		options: Pick<
+			SendCommandOptions,
+			"autoEncapsulate" | "maxSendAttempts" | "transmitOptions"
+		> = {},
+	): SendDataMessage {
 		let msg: SendDataMessage;
 		if (command.isSinglecast()) {
 			if (
@@ -3498,6 +3524,20 @@ ${handlers.length} left`,
 		// Automatically encapsulate commands before sending
 		if (options.autoEncapsulate !== false) this.encapsulateCommands(msg);
 
+		return msg;
+	}
+
+	/**
+	 * Sends a command to a Z-Wave node. If the node returns a command in response, that command will be the return value.
+	 * If the command expects no response **or** the response times out, nothing will be returned
+	 * @param command The command to send. It will be encapsulated in a SendData[Multicast]Request.
+	 * @param options (optional) Options regarding the message transmission
+	 */
+	public async sendCommand<TResponse extends CommandClass = CommandClass>(
+		command: CommandClass,
+		options: SendCommandOptions = {},
+	): Promise<TResponse | undefined> {
+		const msg = this.createSendDataMessage(command, options);
 		try {
 			const resp = await this.sendMessage(msg, options);
 
@@ -3809,6 +3849,7 @@ ${handlers.length} left`,
 	/** Re-sends the current command if it is S2 encapsulated */
 	public resendS2EncapsulatedCommand(): void {
 		// If this is called, a receiving node couldn't decode the last message we sent it
+		// @ts-ignore TODO for later
 		const { currentTransaction } = this.sendThread.state.context;
 		if (
 			currentTransaction &&
@@ -3826,7 +3867,7 @@ ${handlers.length} left`,
 				this.sendThread.send({
 					type: "reduce",
 					reducer: (_t, source) => {
-						if (source === "current") {
+						if (source === "active") {
 							return {
 								type: "reject",
 								code: ZWaveErrorCodes.Security2CC_CannotDecode,

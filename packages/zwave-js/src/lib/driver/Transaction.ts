@@ -10,18 +10,13 @@ import type { Message } from "../message/Message";
 import { NodeStatus } from "../node/Types";
 import type { Driver } from "./Driver";
 
-export interface PartialTransaction {
-	/** The message to be sent */
-	message: Message;
-	/** Will be resolved by the Send Thread Machine when this partial transaction is handled */
-	promise: DeferredPromise<Error | Message | void>;
-}
-
 export interface MessageGenerator {
 	/** Start a new copy of this message generator */
-	start: () => AsyncGenerator<PartialTransaction, void, void>;
-	/** A reference to the current partial transaction, or undefined if the generator wasn't started or has finished */
-	current?: PartialTransaction;
+	start: () => AsyncGenerator<Message, void, Message>;
+	/** A reference to the currently running message generator if it was already started */
+	self?: ReturnType<MessageGenerator["start"]>;
+	/** A reference to the last generated message, or undefined if the generator wasn't started or has finished */
+	current?: Message;
 }
 
 export interface TransactionOptions {
@@ -68,7 +63,7 @@ export class Transaction implements Comparable<Transaction> {
 	 * or the primary message if the generator hasn't been started yet.
 	 */
 	public getCurrentMessage(): Message | undefined {
-		return this.parts.current?.message ?? this.message;
+		return this.parts.current ?? this.message;
 	}
 
 	/** The priority of this transaction */

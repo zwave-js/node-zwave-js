@@ -50,11 +50,7 @@ export interface ServiceImplementations {
 		delay: number,
 	) => void;
 	notifyUnsolicited: (message: Message) => void;
-	rejectTransaction: (
-		transaction: Transaction,
-		error: ZWaveError,
-		completely?: boolean,
-	) => void;
+	rejectTransaction: (transaction: Transaction, error: ZWaveError) => void;
 	resolveTransaction: (transaction: Transaction, result?: Message) => void;
 	logOutgoingMessage: (message: Message) => void;
 	log: DriverLogger["print"];
@@ -175,6 +171,17 @@ export function sendDataErrorToZWaveError(
 				transaction.stack,
 			);
 	}
+}
+
+export function createMessageDroppedUnexpectedError(
+	original: Error,
+): ZWaveError {
+	const ret = new ZWaveError(
+		`Message dropped because of an unexpected error: ${original.message}`,
+		ZWaveErrorCodes.Controller_MessageDropped,
+	);
+	if (original.stack) ret.stack = original.stack;
+	return ret;
 }
 
 /** Tests whether the given error is one that was caused by the serial API execution */
