@@ -306,7 +306,7 @@ export function createSendThreadMachine(
 		(ctx) => {
 			const newCounter = (ctx.counter + 1) % 0xffffffff;
 			const id = "T" + newCounter.toString(16).padStart(8, "0");
-			const transaction = ctx.queue.pop()!;
+			const transaction = ctx.queue.shift()!;
 			const machine = spawn(
 				createTransactionMachine(id, transaction, implementations),
 				{
@@ -342,6 +342,30 @@ export function createSendThreadMachine(
 				// we need to run them through the serial API machine to avoid mismatches
 				message: { actions: forwardToCommandQueue },
 
+				// Forward NIFs to each transaction machine to resolve potential waiting pings
+				NIF: {
+					actions: pure((ctx, evt) => {
+						const activeTransactionMachinesForNode = [
+							...ctx.activeTransactions.values(),
+						]
+							.filter(
+								({ transaction }) =>
+									transaction.message.getNodeId() ===
+									evt.nodeId,
+							)
+							.map((a) => a.machine.id);
+
+						return [
+							...activeTransactionMachinesForNode.map(
+								(id) => send(evt, { to: id }) as any,
+							),
+							// Sort the send queue and evaluate again whether the next message may be sent
+							sortQueue,
+							raise("trigger") as any,
+						];
+					}),
+				},
+
 				// handle newly added messages
 				add: {
 					actions: [
@@ -369,7 +393,7 @@ export function createSendThreadMachine(
 				},
 				unpause: {
 					actions: [
-						assign({ paused: () => false }) as any,
+						assign({ paused: () => false }),
 						raise("trigger") as any,
 					],
 				},
@@ -409,38 +433,41 @@ export function createSendThreadMachine(
 				// While idle, any transaction may be started
 				idle: {
 					id: "idle",
-					always: [
-						{
+					after: {
+						0: {
 							cond: "mayStartTransaction",
 							// Use the first transaction in the queue as the current one
 							actions: spawnTransaction,
 							target: "busy",
 						},
-					],
+					},
 					on: {
 						// On trigger, re-evaluate the conditions to enter "busy"
 						trigger: { target: "idle" },
 						reduce: {
 							// Reducing may reorder the queue, so raise a trigger afterwards
-							actions: [reduce, raise("trigger") as any],
+							actions: reduce as any,
+							target: "idle",
 						},
 					},
 				},
 				// While busy, only handshake responses may be sent
 				busy: {
 					id: "busy",
-					always: [
-						{
-							cond: "hasNoActiveTransactions",
-							target: "idle",
-						},
-						{
-							cond: "mayStartTransaction",
-							// Use the first transaction in the queue as the current one
-							actions: spawnTransaction,
-							target: "busy",
-						},
-					],
+					after: {
+						0: [
+							{
+								cond: "hasNoActiveTransactions",
+								target: "idle",
+							},
+							{
+								cond: "mayStartTransaction",
+								// Use the first transaction in the queue as the current one
+								actions: spawnTransaction,
+								target: "busy",
+							},
+						],
+					},
 					on: {
 						// On trigger, re-evaluate the conditions to go spawn transactions or back to idle
 						trigger: { target: "busy" },

@@ -30,7 +30,6 @@ import {
 } from "@zwave-js/serial";
 import {
 	DeepPartial,
-	getEnumMemberName,
 	getErrorMessage,
 	isDocker,
 	mergeDeep,
@@ -3415,11 +3414,12 @@ ${handlers.length} left`,
 		const resultPromise = createDeferredPromise<TResponse>();
 		const driver = this;
 
-		const suffix = ` Node ${msg.getNodeId()?.toString()}, ${
-			isCommandClassContainer(msg)
-				? msg.command.constructor.name
-				: getEnumMemberName(FunctionType, msg.functionType)
-		}, callback ID: ${msg.callbackId}`;
+		// TODO: remove this when done debugging
+		// const suffix = ` Node ${msg.getNodeId()?.toString()}, ${
+		// 	isCommandClassContainer(msg)
+		// 		? msg.command.constructor.name
+		// 		: getEnumMemberName(FunctionType, msg.functionType)
+		// }, callback ID: ${msg.needsCallbackId() && msg.callbackId}`;
 
 		const generator: MessageGenerator = {
 			current: undefined,
@@ -3460,8 +3460,8 @@ ${handlers.length} left`,
 						}
 					}
 
-					// TODO: remove this later when we're done
-					driver.driverLog.print("message generator done!" + suffix);
+					// TODO: remove this when done debugging
+					// driver.driverLog.print("message generator done!" + suffix);
 					resultPromise.resolve(result as TResponse);
 					generator.current = undefined;
 					generator.self = undefined;
