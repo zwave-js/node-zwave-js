@@ -121,7 +121,7 @@ export const secureMessageGeneratorS0: MessageGeneratorImplementation =
 			if (!nonceResp) {
 				throw new ZWaveError(
 					"No nonce received from the node",
-					ZWaveErrorCodes.Controller_NodeTimeout,
+					ZWaveErrorCodes.SecurityCC_NoNonce,
 				);
 			}
 			const nonce = nonceResp.nonce;

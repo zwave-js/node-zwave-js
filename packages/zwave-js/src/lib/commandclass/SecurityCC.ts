@@ -615,52 +615,6 @@ export class SecurityCCCommandEncapsulation extends SecurityCC {
 		});
 	}
 
-	public requiresPreTransmitHandshake(): boolean {
-		// We require a new nonce if there is no free one,
-		// we don't have one yet or if the old one has expired
-		const secMan = this.driver.securityManager;
-
-		// If the nonce is already known we don't need a handshake
-		if (
-			this.nonceId != undefined &&
-			secMan.hasNonce({
-				issuer: this.nodeId,
-				nonceId: this.nonceId,
-			})
-		) {
-			return false;
-		}
-
-		// Try to get a free nonce before requesting a new one
-		const freeNonce = secMan.getFreeNonce(this.nodeId);
-		if (freeNonce) {
-			this.nonceId = secMan.getNonceId(freeNonce);
-			return false;
-		}
-
-		return true;
-	}
-
-	public async preTransmitHandshake(): Promise<void> {
-		// Request a nonce
-		const nonce = await this.getNode()!.commandClasses.Security.getNonce();
-		// TODO: Handle this more intelligent
-		if (nonce) {
-			// and store it
-			const secMan = this.driver.securityManager;
-			this.nonceId = secMan.getNonceId(nonce);
-			secMan.setNonce(
-				{
-					issuer: this.nodeId,
-					nonceId: this.nonceId,
-				},
-				{ nonce, receiver: this.driver.controller.ownNodeId },
-				// The nonce is reserved for this command
-				{ free: false },
-			);
-		}
-	}
-
 	public serialize(): Buffer {
 		function throwNoNonce(): never {
 			throw new ZWaveError(

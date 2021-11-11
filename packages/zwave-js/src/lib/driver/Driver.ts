@@ -78,6 +78,7 @@ import { messageIsPing } from "../commandclass/NoOperationCC";
 import { KEXFailType } from "../commandclass/Security2/shared";
 import {
 	SecurityCC,
+	SecurityCCCommandEncapsulation,
 	SecurityCCCommandEncapsulationNonceGet,
 } from "../commandclass/SecurityCC";
 import {
@@ -147,6 +148,7 @@ import {
 } from "../telemetry/statistics";
 import {
 	MessageGeneratorImplementation,
+	secureMessageGeneratorS0,
 	simpleMessageGenerator,
 } from "./MessageGenerators";
 import {
@@ -3385,15 +3387,15 @@ ${handlers.length} left`,
 				} else if (e.code === ZWaveErrorCodes.Controller_NodeTimeout) {
 					// If the node failed to respond in time, remember this for the statistics
 					node?.incrementStatistics("timeoutResponse");
-					if (!e.stack) {
-						// Enrich the error message with the transaction source
-						throw new ZWaveError(
-							`Timed out while waiting for a response from the node`,
-							ZWaveErrorCodes.Controller_NodeTimeout,
-							undefined,
-							transaction.stack,
-						);
-					}
+				}
+				// Enrich errors with the transaction's stack instead of the internal stack
+				if (!e.transactionSource) {
+					throw new ZWaveError(
+						e.message,
+						e.code,
+						e.context,
+						transaction.stack,
+					);
 				}
 			}
 			throw e;
@@ -3428,7 +3430,10 @@ ${handlers.length} left`,
 				async function* gen() {
 					// Determine which message generator implemenation should be used
 					const implementation: MessageGeneratorImplementation =
-						simpleMessageGenerator;
+						isSendData(msg) &&
+						msg.command instanceof SecurityCCCommandEncapsulation
+							? secureMessageGeneratorS0
+							: simpleMessageGenerator;
 
 					// Step through the generator so we can easily cancel it and don't
 					// accidentally forget to unset this.current at the end
@@ -3438,15 +3443,15 @@ ${handlers.length} left`,
 					while (true) {
 						// This call passes the previous send result (if it exists already) to the generator and saves the
 						// generated or returned message in `value`. When `done` is true, `value` contains the returned result of the message generator
-						const { value, done } = await gen.next(sendResult!);
-						if (done) {
-							result = value;
-							break;
-						}
-
-						generator.current = value;
 						try {
+							const { value, done } = await gen.next(sendResult!);
+							if (done) {
+								result = value;
+								break;
+							}
+
 							// Pass the generated message to the transaction machine and remember the result for the next iteration
+							generator.current = value;
 							sendResult = yield generator.current;
 						} catch (e) {
 							if (e instanceof Error) {
