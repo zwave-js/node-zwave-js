@@ -142,8 +142,7 @@ export type TransactionReducer = (
 export type SendThreadMachineParams = {
 	timeouts: SerialAPICommandMachineParams["timeouts"] &
 		Pick<ZWaveOptions["timeouts"], "report">;
-	attempts: SerialAPICommandMachineParams["attempts"] &
-		Pick<ZWaveOptions["attempts"], "retryAfterTransmitReport">;
+	attempts: SerialAPICommandMachineParams["attempts"];
 };
 
 const stopTransaction: PureAction<SendThreadContext, any> = pure(

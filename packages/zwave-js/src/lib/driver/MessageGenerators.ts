@@ -1,5 +1,9 @@
 import { SPANState, ZWaveError, ZWaveErrorCodes } from "@zwave-js/core";
 import {
+	createDeferredPromise,
+	DeferredPromise,
+} from "alcalzone-shared/deferred-promise";
+import {
 	CommandClass,
 	Security2CCMessageEncapsulation,
 	Security2CCNonceGet,
@@ -14,6 +18,7 @@ import {
 import { isSendData } from "../controller/SendDataShared";
 import type { Message } from "../message/Message";
 import type { Driver, SendCommandOptions } from "./Driver";
+import type { MessageGenerator } from "./Transaction";
 
 export type MessageGeneratorImplementation = (
 	/** A reference to the driver */
@@ -244,3 +249,84 @@ export const secureMessageGeneratorS2: MessageGeneratorImplementation =
 
 		return response;
 	};
+
+export function createMessageGenerator<TResponse extends Message = Message>(
+	driver: Driver,
+	msg: Message,
+	afterEach: (msg: Message) => void,
+): {
+	generator: MessageGenerator;
+	resultPromise: DeferredPromise<TResponse>;
+} {
+	const resultPromise = createDeferredPromise<TResponse>();
+
+	// TODO: remove this when done debugging
+	// const suffix = ` Node ${msg.getNodeId()?.toString()}, ${
+	// 	isCommandClassContainer(msg)
+	// 		? msg.command.constructor.name
+	// 		: getEnumMemberName(FunctionType, msg.functionType)
+	// }, callback ID: ${msg.needsCallbackId() && msg.callbackId}`;
+
+	const generator: MessageGenerator = {
+		current: undefined,
+		self: undefined,
+		start: () => {
+			async function* gen() {
+				// Determine which message generator implemenation should be used
+				let implementation: MessageGeneratorImplementation =
+					simpleMessageGenerator;
+				if (isSendData(msg)) {
+					if (
+						msg.command instanceof Security2CCMessageEncapsulation
+					) {
+						implementation = secureMessageGeneratorS2;
+					} else if (
+						msg.command instanceof SecurityCCCommandEncapsulation
+					) {
+						implementation = secureMessageGeneratorS0;
+					}
+				}
+
+				// Step through the generator so we can easily cancel it and don't
+				// accidentally forget to unset this.current at the end
+				const gen = implementation(driver, msg, afterEach);
+				let sendResult: Message | undefined;
+				let result: Message | undefined;
+				while (true) {
+					// This call passes the previous send result (if it exists already) to the generator and saves the
+					// generated or returned message in `value`. When `done` is true, `value` contains the returned result of the message generator
+					try {
+						const { value, done } = await gen.next(sendResult!);
+						if (done) {
+							result = value;
+							break;
+						}
+
+						// Pass the generated message to the transaction machine and remember the result for the next iteration
+						generator.current = value;
+						sendResult = yield generator.current;
+					} catch (e) {
+						if (e instanceof Error) {
+							// There was an actual error, reject the transaction
+							resultPromise.reject(e);
+						} else {
+							// The generator was prematurely ended by throwing a Message
+							resultPromise.resolve(e as TResponse);
+						}
+						break;
+					}
+				}
+
+				// TODO: remove this when done debugging
+				// driver.driverLog.print("message generator done!" + suffix);
+				resultPromise.resolve(result as TResponse);
+				generator.current = undefined;
+				generator.self = undefined;
+				return;
+			}
+			generator.self = gen();
+			return generator.self;
+		},
+	};
+	return { resultPromise, generator };
+}

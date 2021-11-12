@@ -11,7 +11,7 @@ import {
 import { messageIsPing } from "../commandclass/NoOperationCC";
 import { SendDataMulticastBridgeRequest } from "../controller/SendDataBridgeMessages";
 import { SendDataMulticastRequest } from "../controller/SendDataMessages";
-import { isSendData } from "../controller/SendDataShared";
+import { isSendData, SendDataMessage } from "../controller/SendDataShared";
 import type { Message } from "../message/Message";
 import type { CommandQueueEvent } from "./CommandQueueMachine";
 import {
@@ -288,6 +288,18 @@ export function createTransactionMachine(
 							ctx.result as any,
 						);
 					}
+				},
+				notifyRetry: (ctx) => {
+					implementations.notifyRetry?.(
+						"SendData",
+						undefined,
+						ctx.transaction.message,
+						ctx.sendDataAttempts,
+						(ctx.transaction.message as SendDataMessage)
+							.maxSendAttempts,
+						500,
+					);
+					return Promise.resolve();
 				},
 			},
 			guards: {
