@@ -116,19 +116,10 @@ export class SecurityCCAPI extends PhysicalCCAPI {
 	}
 
 	/**
-	 * Requests a new nonce for Security CC encapsulation
+	 * Requests a new nonce for Security CC encapsulation which is not directly linked to a specific command.
 	 */
-	public async getNonce(
-		options: {
-			/** Whether the command should be sent as a standalone transaction. Default: false */
-			standalone?: boolean;
-			/** Whether the received nonce should be stored as "free". Default: false */
-			storeAsFreeNonce?: boolean;
-		} = {},
-	): Promise<Buffer | undefined> {
+	public async getNonce(): Promise<Buffer | undefined> {
 		this.assertSupportsCommand(SecurityCommand, SecurityCommand.NonceGet);
-
-		const { standalone = false, storeAsFreeNonce = false } = options;
 
 		const cc = new SecurityCCNonceGet(this.driver, {
 			nodeId: this.endpoint.nodeId,
@@ -138,30 +129,24 @@ export class SecurityCCAPI extends PhysicalCCAPI {
 			cc,
 			{
 				...this.commandOptions,
-				// Standalone nonce requests must be handled immediately
-				priority: MessagePriority.Normal,
+				// Nonce requests must be handled immediately
+				priority: MessagePriority.Handshake,
 				// Only try getting a nonce once
 				maxSendAttempts: 1,
-				// We don't want failures causing us to treat the node as asleep or dead
-				// The "real" transaction will do that for us
-				changeNodeStatusOnMissingACK: standalone,
 			},
 		);
-
 		if (!response) return;
 
 		const nonce = response.nonce;
-		if (storeAsFreeNonce) {
-			const secMan = this.driver.securityManager!;
-			secMan.setNonce(
-				{
-					issuer: this.endpoint.nodeId,
-					nonceId: secMan.getNonceId(nonce),
-				},
-				{ nonce, receiver: this.driver.controller.ownNodeId! },
-				{ free: true },
-			);
-		}
+		const secMan = this.driver.securityManager!;
+		secMan.setNonce(
+			{
+				issuer: this.endpoint.nodeId,
+				nonceId: secMan.getNonceId(nonce),
+			},
+			{ nonce, receiver: this.driver.controller.ownNodeId! },
+			{ free: true },
+		);
 		return nonce;
 	}
 

@@ -4,7 +4,7 @@
 		"dbaeumer.vscode-eslint",
 		"esbenp.prettier-vscode",
 		"EditorConfig.EditorConfig",
-		"eamodio.toggle-excluded-files",
+		"amodio.toggle-excluded-files",
 		"arcanis.vscode-zipfs"
 	]
 }
