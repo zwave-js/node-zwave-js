@@ -91,6 +91,7 @@ describe("When a ping succeeds, the node should be marked awake/alive", () => {
 				const ACK = Buffer.from([MessageHeaders.ACK]);
 
 				const pingPromise = node4.ping();
+				await wait(1);
 				// » [Node 004] [REQ] [SendData]
 				//   │ transmit options: 0x25
 				//   │ callback id:      1

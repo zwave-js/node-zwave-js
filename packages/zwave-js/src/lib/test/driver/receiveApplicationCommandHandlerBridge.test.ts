@@ -55,6 +55,7 @@ describe("regression tests", () => {
 		const ACK = Buffer.from([MessageHeaders.ACK]);
 
 		const getNoncePromise = node3.commandClasses.Security.getNonce();
+		await wait(1);
 		// » [Node 003] [REQ] [SendData]
 		// │ transmit options: 0x25
 		// │ callback id:      1

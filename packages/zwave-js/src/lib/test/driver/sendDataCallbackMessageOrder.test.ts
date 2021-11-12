@@ -26,10 +26,10 @@ describe("regression tests", () => {
 	beforeEach(async () => {
 		({ driver, serialport } = await createAndStartDriver({
 			networkKey: Buffer.alloc(16, 0),
-			logConfig: {
-				enabled: true,
-				logToFile: true,
-			},
+			// logConfig: {
+			// 	enabled: true,
+			// 	logToFile: true,
+			// },
 		}));
 
 		driver["_securityManager"] = new SecurityManager({
@@ -104,6 +104,7 @@ describe("regression tests", () => {
 		const ACK = Buffer.from([MessageHeaders.ACK]);
 
 		const configGetPromise = node17.commandClasses.Configuration.get(43);
+		await wait(1);
 		const getRoutingInfoPromise =
 			driver.sendMessage<GetRoutingInfoResponse>(
 				new GetRoutingInfoRequest(driver, {
@@ -112,6 +113,7 @@ describe("regression tests", () => {
 					removeNonRepeaters: false,
 				}),
 			);
+		await wait(1);
 
 		// » [Node 017] [REQ] [SendData]
 		//   │ transmit options: 0x25

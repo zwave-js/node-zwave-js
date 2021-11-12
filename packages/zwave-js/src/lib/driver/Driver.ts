@@ -584,6 +584,9 @@ export class Driver extends TypedEventEmitter<DriverEventCallbacks> {
 		// 			"verbose",
 		// 		);
 		// });
+		// this.sendThread.onEvent((evt) => {
+		// 	this.driverLog.print(`send thread event: ${evt.type}`, "verbose");
+		// });
 	}
 	/** The serial port instance */
 	private serial: ZWaveSerialPortBase | undefined;

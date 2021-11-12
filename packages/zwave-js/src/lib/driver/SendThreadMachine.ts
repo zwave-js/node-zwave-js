@@ -374,7 +374,7 @@ export function createSendThreadMachine(
 								return ctx.queue;
 							},
 						}),
-						raise("trigger") as any,
+						send("trigger") as any,
 					],
 				},
 				// Return unsolicited messages to the driver
@@ -432,13 +432,12 @@ export function createSendThreadMachine(
 				// While idle, any transaction may be started
 				idle: {
 					id: "idle",
-					after: {
-						0: {
-							cond: "mayStartTransaction",
-							// Use the first transaction in the queue as the current one
-							actions: spawnTransaction,
-							target: "busy",
-						},
+
+					always: {
+						cond: "mayStartTransaction",
+						// Use the first transaction in the queue as the current one
+						actions: spawnTransaction,
+						target: "busy",
 					},
 					on: {
 						// On trigger, re-evaluate the conditions to enter "busy"
@@ -453,20 +452,18 @@ export function createSendThreadMachine(
 				// While busy, only handshake responses may be sent
 				busy: {
 					id: "busy",
-					after: {
-						0: [
-							{
-								cond: "hasNoActiveTransactions",
-								target: "idle",
-							},
-							{
-								cond: "mayStartTransaction",
-								// Use the first transaction in the queue as the current one
-								actions: spawnTransaction,
-								target: "busy",
-							},
-						],
-					},
+					always: [
+						{
+							cond: "hasNoActiveTransactions",
+							target: "idle",
+						},
+						{
+							cond: "mayStartTransaction",
+							// Use the first transaction in the queue as the current one
+							actions: spawnTransaction,
+							target: "busy",
+						},
+					],
 					on: {
 						// On trigger, re-evaluate the conditions to go spawn transactions or back to idle
 						trigger: { target: "busy" },

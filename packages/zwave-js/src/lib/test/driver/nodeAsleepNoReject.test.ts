@@ -63,6 +63,7 @@ describe("regression tests", () => {
 		driver.sendCommand(command2, {
 			maxSendAttempts: 1,
 		});
+		await wait(1);
 
 		// » [Node 002] [REQ] [SendData]
 		//   │ transmit options: 0x25
