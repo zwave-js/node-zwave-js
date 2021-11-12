@@ -98,12 +98,14 @@ describe("lib/driver/CommandQueueMachine", () => {
 	});
 
 	function createTransaction(msg: Message) {
-		const ret = new Transaction(
-			fakeDriver,
-			msg,
-			createDeferredPromise(),
-			MessagePriority.Normal,
-		);
+		const ret = new Transaction(fakeDriver, {
+			message: msg,
+			promise: createDeferredPromise(),
+			priority: MessagePriority.Normal,
+			parts: {
+				current: msg,
+			} as any,
+		});
 		(ret as any).toJSON = () => ({
 			message: msg.constructor.name,
 		});
@@ -228,6 +230,7 @@ describe("lib/driver/CommandQueueMachine", () => {
 							expectedReasons,
 						}: TestContext) => {
 							expect(
+								// @ts-expect-error 🤷🏻‍♂️
 								interpreter.children.get("child")!.state.value,
 							).toBe("idle");
 							expect(actualResults).toContainAllValues(
@@ -264,6 +267,7 @@ describe("lib/driver/CommandQueueMachine", () => {
 						type: "add",
 						// @ts-expect-error
 						transaction: testTransactions[cmd],
+						from: "T1",
 					});
 				}
 			},
@@ -356,6 +360,7 @@ describe("lib/driver/CommandQueueMachine", () => {
 
 	testPlans.forEach((plan) => {
 		if (plan.state.value === "idle") return;
+		// if (plan.state.value !== "done") return;
 
 		const planDescription = plan.description.replace(
 			` (${JSON.stringify(plan.state.context)})`,
@@ -363,6 +368,15 @@ describe("lib/driver/CommandQueueMachine", () => {
 		);
 		describe(planDescription, () => {
 			plan.paths.forEach((path) => {
+				// Use this to limit testing to a single invocation path
+				// if (
+				// 	!path.description.endsWith(
+				// 		`via ADD ({"commands":["BasicSet","BasicGet"]}) → API_FAILED ({"reason":"callback timeout"}) → ABORT_FAILED ({"reason":"callback timeout"}) → RESET → ABORT_FAILED ({"reason":"callback NOK"})`,
+				// 	)
+				// ) {
+				// 	return;
+				// }
+
 				it(path.description, () => {
 					const machine = createCommandQueueMachine(
 						{
@@ -400,6 +414,8 @@ describe("lib/driver/CommandQueueMachine", () => {
 						expectedTransactions,
 					};
 					context.interpreter.onEvent((evt) => {
+						// Events that are sent to the transaction machine need their payload inspected
+						if (evt.type === "forward") evt = (evt as any).payload;
 						if (evt.type === "command_success") {
 							context.actualResults.push((evt as any).result);
 						} else if (evt.type === "command_failure") {
