@@ -44,12 +44,12 @@ function createTransaction(
 	options: Partial<CreateTransactionOptions>,
 ): Transaction {
 	const message = createMessage(fakeDriver, options);
-	const trns = new Transaction(
-		fakeDriver,
+	const trns = new Transaction(fakeDriver, {
 		message,
-		createDeferredPromise(),
-		options.priority || MessagePriority.Controller,
-	);
+		parts: undefined as any,
+		promise: createDeferredPromise(),
+		priority: options.priority || MessagePriority.Controller,
+	});
 	return trns;
 }
 

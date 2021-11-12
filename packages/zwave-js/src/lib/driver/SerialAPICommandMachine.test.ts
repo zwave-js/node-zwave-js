@@ -308,7 +308,7 @@ describe("lib/driver/SerialAPICommandMachine", () => {
 		},
 		SEND_SUCCESS: {
 			exec: ({ sendDataPromise }) => {
-				sendDataPromise?.resolve();
+				sendDataPromise?.resolve(undefined as any);
 			},
 		},
 		SEND_FAILURE: {
