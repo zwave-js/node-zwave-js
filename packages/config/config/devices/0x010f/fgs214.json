@@ -251,5 +251,10 @@
 				}
 			]
 		}
-	]
+	],
+	"compat": {
+		// The device has two switch endpoints but they are not needed
+		"preserveRootApplicationCCValueIDs": true,
+		"preserveEndpoints": []
+	}
 }
