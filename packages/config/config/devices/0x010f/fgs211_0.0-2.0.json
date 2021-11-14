@@ -340,8 +340,7 @@
 		}
 	],
 	"compat": {
-		// The device has two switch endpoints but they are not needed
-		"preserveRootApplicationCCValueIDs": true,
-		"preserveEndpoints": []
+		// The device sends reports for endpoint 1 un-encapsulated
+		"mapRootReportsToEndpoint": 1
 	}
 }
