@@ -1,24 +1,16 @@
+// @ts-check
+
 /// <reference path="types.d.ts" />
 
 // To require non-local modules, we need to setup Yarn PnP
+// @ts-ignore
 require("../../.pnp.cjs").setup();
 
 const { ConfigManager } = require("@zwave-js/config");
 const { formatId } = require("@zwave-js/shared");
 const JSONC = require("comment-json");
 const fs = require("fs-extra");
-const prettier = require("prettier");
-
-function formatWithPrettier(filename, sourceText) {
-	const prettierOptions = {
-		...require("../../.prettierrc"),
-		// To infer the correct parser
-		filepath: filename,
-	};
-	return prettier.format(sourceText, prettierOptions);
-}
-
-// @ts-check
+const { formatWithPrettier } = require("./utils");
 
 /**
  * @param {{github: Github, context: Context}} param

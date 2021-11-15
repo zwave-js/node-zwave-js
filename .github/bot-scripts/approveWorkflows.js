@@ -1,11 +1,12 @@
+// @ts-check
+
 // To require non-local modules, we need to setup Yarn PnP
+// @ts-ignore
 require("../../.pnp.cjs").setup();
 
 const { makeRe } = require("minimatch");
 
 /// <reference path="./types.d.ts" />
-
-// @ts-check
 
 /**
  * @param {{github: Github, context: Context, whitelist: string[], workflows: string[]}} param
@@ -21,7 +22,7 @@ async function main(param) {
 	// Figure out which workflow IDs the whitelisted workflows have
 	const {
 		data: { workflows: repoWorkflows },
-	} = await github.actions.listRepoWorkflows({
+	} = await github.rest.actions.listRepoWorkflows({
 		...options,
 	});
 	const workflowIDs = repoWorkflows
@@ -31,7 +32,7 @@ async function main(param) {
 	// Only look at the runs that part of the whitelisted workflows
 	const {
 		data: { workflow_runs },
-	} = await github.actions.listWorkflowRunsForRepo({
+	} = await github.rest.actions.listWorkflowRunsForRepo({
 		...options,
 		status: "action_required",
 	});
@@ -45,7 +46,7 @@ async function main(param) {
 		console.log(`Checking run ${run.id}...`);
 
 		// Find the pull request for the current run
-		const { data: pulls } = await github.pulls.list({
+		const { data: pulls } = await github.rest.pulls.list({
 			...options,
 			head: `${run.head_repository.owner.login}:${run.head_branch}`,
 		});
@@ -58,7 +59,7 @@ async function main(param) {
 		}
 
 		// List all the files in there
-		const { data: files } = await github.pulls.listFiles({
+		const { data: files } = await github.rest.pulls.listFiles({
 			...options,
 			pull_number: pulls[0].number,
 		});

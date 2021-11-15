@@ -1,5 +1,5 @@
-/// <reference path="types.d.ts" />
 // @ts-check
+/// <reference path="types.d.ts" />
 
 /**
  * @param {{github: Github, context: Context}} param
@@ -19,7 +19,7 @@ async function main(param) {
 		return;
 	}
 
-	await github.issues.createComment({
+	await github.rest.issues.createComment({
 		...options,
 		issue_number: context.payload.issue.number,
 		body: feedbackText,

@@ -26,13 +26,13 @@ jobs:
             owner: context.repo.owner,
             repo: context.repo.repo,
           };
-          const { data: pull } = await github.pulls.get({
+          const { data: pull } = await github.rest.pulls.get({
             ...options,
             pull_number: context.payload.issue.number,
           });
 
           if (!pull.mergeable || !pull.merge_commit_sha) {
-            await github.issues.createComment({
+            await github.rest.issues.createComment({
               ...options,
               issue_number: context.payload.issue.number,
               body: `😥 Seems like this PR cannot be merged. Please fix the merge conflicts and try again.`,
@@ -40,7 +40,7 @@ jobs:
             process.exit(1);
           }
 
-          await github.issues.createComment({
+          await github.rest.issues.createComment({
             ...options,
             issue_number: context.issue.number,
             body: `👋 Hey @${context.payload.comment.user.login}!
@@ -222,7 +222,7 @@ jobs:
           }
           core.info(`Getting PR #${request.pull_number} from ${request.owner}/${request.repo}`)
           try {
-            const result = await github.pulls.get(request)
+            const result = await github.rest.pulls.get(request)
             return result.data
           } catch (err) {
             core.setFailed(`Request failed with error ${err}`)
