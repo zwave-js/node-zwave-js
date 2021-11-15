@@ -156,7 +156,7 @@
 		},
 		{
 			"#": "46",
-			"label": "Motor Resistance Value",
+			"label": "Motor Resistance",
 			"description": "",
 			"valueSize": 4,
 			"minValue": 0,
