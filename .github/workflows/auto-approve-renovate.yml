@@ -16,7 +16,7 @@ jobs:
         node-version: [14.x] # This should be LTS
 
     steps:
-    - uses: actions/github-script@v4
+    - uses: actions/github-script@v5
       with:
         github-token: ${{secrets.BOT_TOKEN}}
         script: |
@@ -25,7 +25,7 @@ jobs:
             repo: context.repo.repo,
           };
 
-          await github.pulls.createReview({
+          await github.rest.pulls.createReview({
             ...options,
             pull_number: context.payload.pull_request.number,
             event: "APPROVE"
