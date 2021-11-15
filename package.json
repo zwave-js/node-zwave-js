@@ -67,7 +67,7 @@
     "fs-extra": "^10.0.0",
     "husky": "^7.0.4",
     "jest": "^26.6.3",
-    "jest-extended": "^0.11.5",
+    "jest-extended": "^1.1.0",
     "lerna": "^4.0.0",
     "prettier": "^2.4.1",
     "prettier-plugin-organize-imports": "^2.3.4",
