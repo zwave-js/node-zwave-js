@@ -1,0 +1,175 @@
+{
+	"manufacturer": "Spectrum Brands",
+	"manufacturerId": "0x0090",
+	"label": "893",
+	"description": "10 Button Z-Wave Plus v2 Deadbolt",
+	"devices": [
+		{
+			"productType": "0x0811",
+			"productId": "0x13a8",
+			"zwaveAllianceId": 4184
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"paramInformation": [
+		{
+			"#": "1",
+			"label": "Status LED Control",
+			"description": "The configuration parameter 1 is a read/write parameter with a one-byte field, used to control the status led. if set to on, the status LED will show the status of the latch every 6 seconds. if set to off, the status LED will not be shown",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 1,
+			"unsigned": true,
+			"writeOnly": true,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Turns status LED off",
+					"value": 0
+				},
+				{
+					"label": "Turns status LED on",
+					"value": 1
+				}
+			]
+		},
+		{
+			"#": "2",
+			"label": "Sound Control",
+			"description": "The configuration parameter 2 is a read/write parameter with a one-byte field, used to control the lock’s buzzer. if set to on, the buzzer is enabled and will sound during normal events. if set to off, the buzzer is disabled, and the buzzer sound will not occur",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 1,
+			"unsigned": true,
+			"writeOnly": true,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Turns the sound (buzzer) off",
+					"value": 0
+				},
+				{
+					"label": "Turns the sound (buzzer) on",
+					"value": 1
+				}
+			]
+		},
+		{
+			"#": "3",
+			"label": "User Program Button Control",
+			"description": "The configuration parameter 3 is a read/write parameter with a one-byte field, used to control the user program button. if set to on, the program button is available for user code maintenance. if set to off, the program button is not available for user code maintenance",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 1,
+			"unsigned": true,
+			"writeOnly": true,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Disables the program button",
+					"value": 0
+				},
+				{
+					"label": "Enables the program button",
+					"value": 1
+				}
+			]
+		},
+		{
+			"#": "4",
+			"label": "Secure Screen Control",
+			"description": "The configuration parameter 4 is a read/write parameter with a one-byte field, used to control the secure screen functionality on touch locks only. this parameter is not used on non-touch locks and will be ignored. if set to enabled, the touch screen will display the secure screen functionality when woken. if set to disabled, the touch screen will not display the secure screen functionality when woken",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 1,
+			"unsigned": true,
+			"writeOnly": true,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Disables secure screen (touch products only)",
+					"value": 0
+				},
+				{
+					"label": "Enables secure screen (touch products only)",
+					"value": 1
+				}
+			]
+		},
+		{
+			"#": "10",
+			"label": "Handing Control",
+			"description": "The configuration parameter 10 is a read/write parameter with a one-byte field. when this parameter is read, it will return the handing of the lock. when this parameter is written, it will run a handing operation. when written with a value of 0x01, it will cause the lock to cycle through locking and unlocking until it determines the correct handing. it is suggested that this operation occur while the door is opened so that no obstructions will be in the way for the operation. after the completion of the handing process, a configuration report message will be sent back to the requestor. it will contain a non-zero value for success or a zero value for failure",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 2,
+			"defaultValue": 0,
+			"unsigned": true,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Unknown latch position (read only)",
+					"value": 0
+				},
+				{
+					"label": "Right handed lock (read); Initiate handing process (write)",
+					"value": 1
+				},
+				{
+					"label": "Left handed lock (read only)",
+					"value": 2
+				}
+			]
+		},
+		{
+			"#": "40",
+			"label": "Factory Default Control",
+			"description": "The configuration parameter 40 is a write only parameter with a one-byte field, used to request the lock to perform a factory reset back to its default state. this control will cause the lock to be removed from the network, placing the lock back to its default state. when a read is issued for this parameter, a 0 will be returned",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 2,
+			"defaultValue": 0,
+			"unsigned": true,
+			"writeOnly": true,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "No action (get)",
+					"value": 0
+				},
+				{
+					"label": "Perform a full factory reset (set)",
+					"value": 1
+				},
+				{
+					"label": "Perform a modified factory reset (set) - for production only",
+					"value": 2
+				}
+			]
+		},
+		{
+			"#": "46",
+			"label": "Motor Load Value",
+			"description": "Provides an insight into the amount of resistance encountered by motor",
+			"valueSize": 4,
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 0,
+			"unsigned": true,
+			"readOnly": true
+		}
+	],
+	"metadata": {
+		"inclusion": "For classic inclusion, initiate the process to add the lock to your system at your smart home controller. When prompted by your smart home system to add the lock, press button 'A' on the lock interior one time. The red LED will illuminate when the lock enters inclusion mode. If successful, re-name the lock in your system. If unsuccessful, follow your system's instruction to remove the lock from the network, press button 'A' one time to remove, and then repeat the process",
+		"exclusion": "Follow your smart home system's instructions to remove the lock from the network. When prompted by the system, press button 'A' on the lock interior once",
+		"reset": "NOTICE: A factory reset will delete all user codes associated with the lock as well as removing it from your smart home system.\n1. Remove the battery pack\n2. Press and HOLD the program button while reinserting the battery pack.\n3. Continue to hold the button for 30 seconds until the lock beeps and the status LED flashes red.\n4. Press the program button once more. The LEDs will cycle flashing between red and green while the reset process is being performed. \n5. When complete, the lock will reset and initiate the door handing process",
+		"manual": "https://products.z-wavealliance.org/ProductManual/File?folder=&filename=product_documents/4184/5069369-003.pdf"
+	}
+}
