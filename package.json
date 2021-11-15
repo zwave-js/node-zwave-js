@@ -60,7 +60,7 @@
     "coveralls": "^3.1.1",
     "cz-conventional-changelog": "^3.3.0",
     "esbuild": "^0.13.13",
-    "esbuild-register": "^3.0.0",
+    "esbuild-register": "^3.1.2",
     "eslint": "^8.2.0",
     "eslint-config-prettier": "^8.3.0",
     "eslint-plugin-prettier": "^4.0.0",
