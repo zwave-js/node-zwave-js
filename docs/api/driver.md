@@ -434,11 +434,8 @@ enum MessagePriority {
 	// Handshake messages have the highest priority because they are part of other transactions
 	// which have already started when the handshakes are needed (e.g. Security Nonce exchange)
 	//
-	// We distinguish between responses to handshake requests from nodes that must be handled first.
-	// Some nodes don't respond to our requests if they are waiting for a nonce.
+	// Some nodes don't respond to our requests if they are waiting for a nonce, so those need to be handled first.
 	Handshake = 0,
-	// Our handshake requests must be prioritized over all other messages
-	PreTransmitHandshake = 1,
 	// Controller commands usually finish quickly and should be preferred over node queries
 	Controller,
 	// Pings (NoOP) are used for device probing at startup and for network diagnostics
@@ -546,9 +543,6 @@ interface ZWaveOptions {
 
 		/** How often the driver should try sending SendData commands before giving up */
 		sendData: number; // [1...5], default: 3
-
-		/** Whether a command should be retried when a node acknowledges the receipt but no response is received */
-		retryAfterTransmitReport: boolean; // default: false
 
 		/**
 		 * How many attempts should be made for each node interview before giving up
