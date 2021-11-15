@@ -4,6 +4,25 @@
 <!--
 	Add placeholder for next release with `wip` snippet
 -->
+## __WORK IN PROGRESS__
+### Bugfixes
+* Update thermostat setpoint metadata when unit changes between reports
+* Avoid exiting the process while waiting for the Serial API to start up if the event loop is otherwise empty
+
+### Config file changes
+* Swap param 9 partials, add missing option for ZW100/FT100
+* Force-add missing CCs to ZMNHAA
+* Update ZEN23 config file with conditional parameters
+* Add missing units to Fibaro FGBS-222
+* Change firmware range for Aeotec a├½rQ v1
+* Add fingerprint `0x0300:0xa10d` to Sunricher SR-ZV9001T4-DIM
+* Correct LED Indicator Control parameter for ZEN27
+* Map reports from root to endpoint 1 on Fibaro Single Switches
+* Fix spelling in label for Honeywell 39349
+
+### Changes under the hood
+* Remove revision property from import script
+
 ## 8.7.5 (2021-11-05)
 ### Bugfixes
 * When a 500-series USB stick reconnects during startup, the process doesn't exit anymore if the event loop is otherwise empty
