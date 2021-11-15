@@ -13,14 +13,6 @@ async sendNonce(): Promise<boolean>;
 Sends a nonce to the node, either in response to a NonceGet request or a message that failed to decrypt. The message is sent without any retransmission etc.
 The return value indicates whether a nonce was successfully sent.
 
-### `requestNonce`
-
-```ts
-async requestNonce(): Promise<void>;
-```
-
-Requests a nonce from the target node.
-
 ### `getSupportedCommands`
 
 ```ts
