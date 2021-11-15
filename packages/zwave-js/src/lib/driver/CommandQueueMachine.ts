@@ -1,19 +1,22 @@
 import { getErrorMessage } from "@zwave-js/shared";
 import { SortedList } from "alcalzone-shared/sorted-list";
 import {
+	ActionObject,
+	ActorRefFrom,
 	assign,
 	AssignAction,
-	EventObject,
 	Interpreter,
 	Machine,
+	spawn,
 	StateMachine,
 } from "xstate";
-import { raise, sendParent } from "xstate/lib/actions";
+import { pure, raise, sendParent, stop } from "xstate/lib/actions";
 import { isSendData } from "../controller/SendDataShared";
 import type { Message } from "../message/Message";
 import {
 	createSerialAPICommandMachine,
 	SerialAPICommandDoneData,
+	SerialAPICommandMachine,
 	SerialAPICommandMachineParams,
 } from "./SerialAPICommandMachine";
 import {
@@ -41,14 +44,16 @@ export interface CommandQueueStateSchema {
 
 export interface CommandQueueContext {
 	queue: SortedList<Transaction>;
+	callbackIDs: WeakMap<Transaction, string>;
 	currentTransaction?: Transaction;
+	abortActor?: ActorRefFrom<SerialAPICommandMachine>;
 }
 
 export type CommandQueueEvent =
 	| { type: "trigger" } // Used internally to trigger sending from the idle state
-	| { type: "add"; transaction: Transaction } // Adds a transaction to the command queue
+	| { type: "add"; transaction: Transaction; from: string } // Adds a transaction to the command queue
 	| { type: "message"; message: Message } // Used for received messages. The message will be returned as unsolicited when it is not expected
-	| { type: "reset" } // Used to abort the ongoing transaction and clear the command queue
+	| { type: "remove"; transaction: Transaction } // Used to abort the given transaction and remove it from the command queue
 	| { type: "command_error"; error: Error } // An unexpected error occured during command execution
 	| ({ type: "command_success" } & Omit<
 			CommandQueueDoneData & { type: "success" },
@@ -83,26 +88,50 @@ const setCurrentTransaction: AssignAction<CommandQueueContext, any> = assign(
 );
 
 const deleteCurrentTransaction: AssignAction<CommandQueueContext, any> = assign(
-	(ctx) => ({
-		...ctx,
-		currentTransaction: undefined,
-	}),
+	(ctx) => {
+		ctx.callbackIDs.delete(ctx.currentTransaction!);
+		return {
+			...ctx,
+			currentTransaction: undefined,
+		};
+	},
 );
 
-const clearQueue: AssignAction<CommandQueueContext, any> = assign((ctx) => {
-	const queue = ctx.queue;
-	queue.clear();
-	return { ...ctx, queue };
+const stopTransaction = sendParent((ctx: CommandQueueContext, evt: any) => ({
+	type: "forward",
+	from: "QUEUE",
+	to: ctx.callbackIDs.get(evt.transaction),
+	payload: {
+		type: "stop",
+	},
+}));
+
+const removeFromQueue: AssignAction<CommandQueueContext, any> = assign(
+	(ctx, evt: any) => {
+		ctx.queue.remove(evt.transaction);
+		ctx.callbackIDs.delete(evt.transaction);
+		return ctx;
+	},
+);
+
+const stopAbortMachine = pure((ctx: CommandQueueContext) => {
+	const ret: ActionObject<CommandQueueContext, any>[] = [];
+	if (ctx.abortActor) {
+		ret.push(stop(ctx.abortActor.id));
+	}
+	ret.push(assign({ abortActor: (_) => undefined }));
+	return ret;
 });
 
-const notifyResult = sendParent<
-	CommandQueueContext,
-	EventObject & { data: SerialAPICommandDoneData },
-	CommandQueueEvent
->((ctx, evt: any) => ({
-	...evt.data,
-	type: evt.data.type === "success" ? "command_success" : "command_failure",
-	transaction: ctx.currentTransaction,
+const notifyResult = sendParent((ctx: CommandQueueContext, evt: any) => ({
+	type: "forward",
+	from: "QUEUE",
+	to: ctx.callbackIDs.get(ctx.currentTransaction!),
+	payload: {
+		...evt.data,
+		type:
+			evt.data.type === "success" ? "command_success" : "command_failure",
+	},
 }));
 
 const notifyError = sendParent<CommandQueueContext, any, CommandQueueEvent>(
@@ -117,58 +146,77 @@ export function createCommandQueueMachine(
 	implementations: ServiceImplementations,
 	params: SerialAPICommandMachineParams,
 ): CommandQueueMachine {
+	const spawnAbortMachine: AssignAction<CommandQueueContext, any> = assign({
+		abortActor: (_) =>
+			spawn(
+				createSerialAPICommandMachine(
+					implementations.createSendDataAbort(),
+					implementations,
+					params,
+				),
+			),
+	});
+
 	return Machine<
 		CommandQueueContext,
 		CommandQueueStateSchema,
 		CommandQueueEvent
 	>(
 		{
+			preserveActionOrder: true,
 			id: "CommandQueue",
 			initial: "idle",
 			context: {
 				queue: new SortedList(),
+				callbackIDs: new WeakMap(),
 				// currentTransaction: undefined,
 			},
 			on: {
 				add: {
 					actions: [
-						assign({
-							queue: (ctx, evt) => {
-								ctx.queue.add(evt.transaction);
-								return ctx.queue;
-							},
+						assign((ctx, evt) => {
+							ctx.queue.add(evt.transaction);
+							ctx.callbackIDs.set(evt.transaction, evt.from);
+							return ctx;
 						}),
 						raise("trigger") as any,
 					],
 				},
 				// By default, return all messages as unsolicited. The only exception is an active serial API machine
 				message: { actions: respondUnsolicited },
+
+				// What to do when removing transactions depends on their state
+				remove: [
+					// Abort ongoing SendData commands when the transaction is removed. The transaction machine will
+					// stop on its own
+					{
+						cond: "isCurrentTransactionAndSendData",
+						actions: spawnAbortMachine,
+					},
+					// If the transaction to remove is the current transaction, but not SendData
+					// we can't just end it because it would risk putting the driver and stick out of sync
+					{
+						cond: "isNotCurrentTransaction",
+						actions: [stopTransaction, removeFromQueue],
+					},
+				],
 			},
 			states: {
 				idle: {
 					entry: deleteCurrentTransaction,
 					on: {
-						trigger: "execute",
+						trigger: "idle",
 					},
 					always: {
 						target: "execute",
+						actions: setCurrentTransaction,
 						cond: "queueNotEmpty",
 					},
 				},
 				execute: {
-					entry: setCurrentTransaction,
 					on: {
 						// Now the message event gets auto-forwarded to the serial API machine
 						message: undefined,
-						// Clear the queue and abort ongoing send data commands when a reset event is received
-						reset: [
-							{
-								cond: "currentTransactionIsSendData",
-								actions: clearQueue,
-								target: "abortSendData",
-							},
-							{ actions: clearQueue, target: "executeDone" },
-						],
 					},
 					invoke: {
 						id: "execute",
@@ -213,6 +261,7 @@ export function createCommandQueueMachine(
 						actions: [
 							// Delete the current transaction after we're done
 							deleteCurrentTransaction,
+							stopAbortMachine,
 						],
 					},
 				},
@@ -225,7 +274,7 @@ export function createCommandQueueMachine(
 					// wrap it in a rejected promise, so xstate can handle it
 					try {
 						return createSerialAPICommandMachine(
-							ctx.currentTransaction!.message,
+							ctx.currentTransaction!.parts.current!,
 							implementations,
 							params,
 						);
@@ -251,11 +300,16 @@ export function createCommandQueueMachine(
 				executeSuccessful: (_, evt: any) =>
 					evt.data?.type === "success",
 				queueNotEmpty: (ctx) => ctx.queue.length > 0,
+				isNotCurrentTransaction: (ctx, evt: any) =>
+					ctx.currentTransaction !== evt.transaction,
+				isCurrentTransactionAndSendData: (ctx, evt: any) =>
+					ctx.currentTransaction === evt.transaction &&
+					isSendData(evt.transaction.message),
 				currentTransactionIsSendData: (ctx) =>
-					isSendData(ctx.currentTransaction?.message),
+					isSendData(ctx.currentTransaction?.parts.current),
 				isSendDataWithCallbackTimeout: (ctx, evt: any) => {
 					return (
-						isSendData(ctx.currentTransaction?.message) &&
+						isSendData(ctx.currentTransaction?.parts.current) &&
 						evt.data?.type === "failure" &&
 						evt.data?.reason === "callback timeout"
 					);

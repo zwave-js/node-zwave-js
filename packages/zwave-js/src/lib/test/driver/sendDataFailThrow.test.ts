@@ -55,6 +55,7 @@ describe("regression tests", () => {
 		const promise = driver.sendCommand(command, {
 			maxSendAttempts: 1,
 		});
+		await wait(1);
 
 		// » [Node 002] [REQ] [SendData]
 		//   │ transmit options: 0x25
@@ -111,6 +112,7 @@ describe("regression tests", () => {
 		const promise = driver.sendCommand(command, {
 			maxSendAttempts: 1,
 		});
+		await wait(1);
 
 		// » [Node 002] [REQ] [SendDataBridge]
 		//   │ source node id:   1

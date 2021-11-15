@@ -1589,10 +1589,7 @@ export class ZWaveController extends TypedEventEmitter<ControllerEventCallbacks>
 			await api.getSecurityScheme(); // ignore the result
 
 			// Request nonce separately, so we can impose a timeout
-			await api.getNonce({
-				standalone: true,
-				storeAsFreeNonce: true,
-			});
+			await api.getNonce();
 
 			// send the network key
 			await api.setNetworkKey(this.driver.securityManager.networkKey);

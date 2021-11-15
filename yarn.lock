@@ -4122,7 +4122,7 @@ __metadata:
     "@zwave-js/core": 8.7.4
     "@zwave-js/maintenance": 8.7.4
     "@zwave-js/shared": 8.7.3
-    alcalzone-shared: ^4.0.0
+    alcalzone-shared: ^4.0.1
     ansi-colors: ^4.1.1
     axios: ^0.24.0
     comment-json: ^4.1.1
@@ -4153,7 +4153,7 @@ __metadata:
     "@types/triple-beam": ^1.3.2
     "@zwave-js/shared": 8.7.3
     "@zwave-js/winston-daily-rotate-file": ^4.5.6-0
-    alcalzone-shared: ^4.0.0
+    alcalzone-shared: ^4.0.1
     ansi-colors: ^4.1.1
     dayjs: ^1.10.7
     esbuild: "*"
@@ -4234,7 +4234,7 @@ __metadata:
     "@zwave-js/config": "workspace:*"
     "@zwave-js/core": "workspace:*"
     "@zwave-js/shared": "workspace:*"
-    alcalzone-shared: ^4.0.0
+    alcalzone-shared: ^4.0.1
     ansi-colors: ^4.1.1
     comment-json: ^4.1.1
     commitizen: ^4.2.4
@@ -4272,7 +4272,7 @@ __metadata:
     "@zwave-js/core": 8.7.4
     "@zwave-js/shared": 8.7.3
     "@zwave-js/testing": 8.7.4
-    alcalzone-shared: ^4.0.0
+    alcalzone-shared: ^4.0.1
     ansi-colors: ^4.1.1
     esbuild: "*"
     esbuild-register: ^3.1.2
@@ -4290,7 +4290,7 @@ __metadata:
     "@types/fs-extra": ^9.0.13
     "@types/jest": ^26.0.24
     "@types/node": ^15.12.5
-    alcalzone-shared: ^4.0.0
+    alcalzone-shared: ^4.0.1
     esbuild: "*"
     esbuild-register: ^3.1.2
     fs-extra: ^10.0.0
@@ -4472,6 +4472,15 @@ __metadata:
   dependencies:
     debug: ^4.3.1
   checksum: 69ad13bd1035b1d13296d1d0e4f1cae9557a1043b590a667c4739c7c31ff62ee5710dc97febae42a74ef0c914cf028d54f5c48c946c3efd1625a0bce9b4c16fa
+  languageName: node
+  linkType: hard
+
+"alcalzone-shared@npm:^4.0.1":
+  version: 4.0.1
+  resolution: "alcalzone-shared@npm:4.0.1"
+  dependencies:
+    debug: ^4.3.2
+  checksum: 1c0e05226ca4dd4c73ea5615d964f9db2f3d6b332e3883df381c289d8d8f0e6e9fbe6464ee3d3c00a0f2cb28018a480496d7b931355bf699a42ad085cde27a63
   languageName: node
   linkType: hard
 
@@ -14175,7 +14184,7 @@ typescript@4.4.4:
     "@zwave-js/serial": 8.7.4
     "@zwave-js/shared": 8.7.3
     "@zwave-js/testing": 8.7.4
-    alcalzone-shared: ^4.0.0
+    alcalzone-shared: ^4.0.1
     ansi-colors: ^4.1.1
     axios: ^0.24.0
     esbuild: "*"

@@ -2353,8 +2353,11 @@ protocol version:      ${this._protocolVersion}`;
 			secMan.storeRemoteEI(this.nodeId, command.receiverEI);
 		}
 
-		// Tell the driver to re-send the current message if necessary
-		this.driver.resendS2EncapsulatedCommand();
+		this.driver.controllerLog.logNode(this.id, {
+			message: `received S2 nonce, not sure what to do with it`,
+			level: "warn",
+			direction: "inbound",
+		});
 	}
 
 	private busyPollingAfterHail: boolean = false;

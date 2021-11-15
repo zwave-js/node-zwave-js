@@ -55,7 +55,6 @@ import { interpret } from "xstate";
 import {
 	FirmwareUpdateStatus,
 	Security2CC,
-	Security2CCMessageEncapsulation,
 	Security2CCNonceReport,
 } from "../commandclass";
 import {
@@ -145,6 +144,7 @@ import {
 	compileStatistics,
 	sendStatistics,
 } from "../telemetry/statistics";
+import { createMessageGenerator } from "./MessageGenerators";
 import {
 	createSendThreadMachine,
 	SendThreadInterpreter,
@@ -196,7 +196,6 @@ const defaultOptions: ZWaveOptions = {
 		openSerialPort: 10,
 		controller: 3,
 		sendData: 3,
-		retryAfterTransmitReport: false,
 		nodeInterview: 5,
 	},
 	preserveUnknownValues: false,
@@ -532,10 +531,25 @@ export class Driver extends TypedEventEmitter<DriverEventCallbacks> {
 					if (this.isMissingNodeACK(transaction, error)) {
 						if (this.handleMissingNodeACK(transaction)) return;
 					}
-					transaction.promise.reject(error);
+
+					// If the transaction was already started, we need to throw the error into the message generator
+					// so it correctly gets ended. Otherwise just reject the result promise
+					if (transaction.parts.self) {
+						// eslint-disable-next-line @typescript-eslint/no-empty-function
+						transaction.parts.self.throw(error).catch(() => {});
+					} else {
+						transaction.promise.reject(error);
+					}
 				},
 				resolveTransaction: (transaction, result) => {
-					transaction.promise.resolve(result);
+					// If the transaction was already started, we need to end the message generator early by throwing
+					// the result. Otherwise just resolve the result promise
+					if (transaction.parts.self) {
+						// eslint-disable-next-line @typescript-eslint/no-empty-function
+						transaction.parts.self.throw(result).catch(() => {});
+					} else {
+						transaction.promise.resolve(result);
+					}
 				},
 				logOutgoingMessage: (msg: Message) => {
 					this.driverLog.logMessage(msg, {
@@ -559,6 +573,7 @@ export class Driver extends TypedEventEmitter<DriverEventCallbacks> {
 					}
 				},
 				log: this.driverLog.print.bind(this.driverLog),
+				logQueue: this.driverLog.sendQueue.bind(this.driverLog),
 			},
 			pick(this.options, ["timeouts", "attempts"]),
 		);
@@ -566,9 +581,23 @@ export class Driver extends TypedEventEmitter<DriverEventCallbacks> {
 		// this.sendThread.onTransition((state) => {
 		// 	if (state.changed)
 		// 		this.driverLog.print(
-		// 			`send thread state: ${state.toStrings().slice(-1)[0]}`,
+		// 			`send thread state: ${state.toStrings().join("->")}`,
 		// 			"verbose",
 		// 		);
+		// });
+		// this.sendThread.onEvent((evt) => {
+		// 	if (evt.type === "forward") {
+		// 		this.driverLog.print(
+		// 			// @ts-ignore
+		// 			`forwarding event: ${evt.payload.type} from ${evt.from} to ${evt.to}`,
+		// 			"verbose",
+		// 		);
+		// 	} else {
+		// 		this.driverLog.print(
+		// 			`send thread event: ${evt.type}`,
+		// 			"verbose",
+		// 		);
+		// 	}
 		// });
 	}
 	/** The serial port instance */
@@ -1590,11 +1619,12 @@ export class Driver extends TypedEventEmitter<DriverEventCallbacks> {
 	public hasPendingTransactions(
 		predicate: (t: Transaction) => boolean,
 	): boolean {
-		const { queue, currentTransaction } = this.sendThread.state.context;
-		return (
-			(currentTransaction && predicate(currentTransaction)) ||
-			!!queue.find((t) => predicate(t))
-		);
+		const { queue, activeTransactions } = this.sendThread.state.context;
+		if (!!queue.find((t) => predicate(t))) return true;
+		for (const { transaction } of activeTransactions.values()) {
+			if (predicate(transaction)) return true;
+		}
+		return false;
 	}
 
 	/**
@@ -2414,9 +2444,7 @@ export class Driver extends TypedEventEmitter<DriverEventCallbacks> {
 			// If the node does not acknowledge our request, it is either asleep or dead
 			e.code === ZWaveErrorCodes.Controller_CallbackNOK &&
 			(transaction.message instanceof SendDataRequest ||
-				transaction.message instanceof SendDataBridgeRequest) &&
-			// Ignore pre-transmit handshakes because the actual transaction will be retried
-			transaction.priority !== MessagePriority.PreTransmitHandshake
+				transaction.message instanceof SendDataBridgeRequest)
 		);
 	}
 
@@ -2444,17 +2472,22 @@ It is probably asleep, moving its messages to the wakeup queue.`,
 			);
 			// Mark the node as asleep
 			// The handler for the asleep status will move the messages to the wakeup queue
-			// We need to re-add the current transaction if that is allowed because otherwise it will be dropped silently
-			if (this.mayMoveToWakeupQueue(transaction)) {
-				this.sendThread.send({ type: "add", transaction });
-			} else {
-				transaction.promise.reject(
-					new ZWaveError(
-						`The node is asleep`,
-						ZWaveErrorCodes.Controller_MessageDropped,
-					),
-				);
-			}
+
+			// // We need to re-add the current transaction if that is allowed because otherwise it will be dropped silently
+			// if (this.mayMoveToWakeupQueue(transaction)) {
+			// 	this.sendThread.send({ type: "add", transaction });
+			// } else {
+			// 	transaction.parts.self
+			// 		?.throw(
+			// 			new ZWaveError(
+			// 				`The node is asleep`,
+			// 				ZWaveErrorCodes.Controller_MessageDropped,
+			// 			),
+			// 		)
+			// 		// eslint-disable-next-line @typescript-eslint/no-empty-function
+			// 		.catch(() => {});
+			// }
+
 			node.markAsAsleep();
 			return true;
 		} else {
@@ -2824,9 +2857,6 @@ ${handlers.length} left`,
 	private async handleRequest(msg: Message): Promise<void> {
 		let handlers: RequestHandlerEntry[] | undefined;
 
-		// For further actions, we are only interested in the innermost CC
-		if (isCommandClassContainer(msg)) this.unwrapCommands(msg);
-
 		if (isNodeQuery(msg) || isCommandClassContainer(msg)) {
 			const node = msg.getNodeUnsafe();
 			if (node) {
@@ -2837,7 +2867,19 @@ ${handlers.length} left`,
 			}
 		}
 
+		// Check if we have a dynamic handler waiting for this message
+		for (const entry of this.awaitedMessages) {
+			if (entry.predicate(msg)) {
+				// resolve the promise - this will remove the entry from the list
+				entry.promise.resolve(msg);
+				return;
+			}
+		}
+
 		if (isCommandClassContainer(msg)) {
+			// For further actions, we are only interested in the innermost CC
+			this.unwrapCommands(msg);
+
 			const node = msg.getNodeUnsafe();
 			// If we receive an encrypted message but assume the node is insecure, change our assumption
 			if (
@@ -2853,6 +2895,8 @@ ${handlers.length} left`,
 			// Check if we may even handle the command
 			if (!this.mayHandleUnsolicitedCommand(msg.command)) return;
 		}
+
+		// Otherwise go through the static handlers
 
 		if (
 			msg instanceof ApplicationCommandRequest ||
@@ -3060,17 +3104,6 @@ ${handlers.length} left`,
 				}
 			}
 		} else {
-			// Check if we have a dynamic handler waiting for this message
-			for (const entry of this.awaitedMessages) {
-				if (entry.predicate(msg)) {
-					// resolve the promise - this will remove the entry from the list
-					entry.promise.resolve(msg);
-					return;
-				}
-			}
-
-			// Otherwise loop through the static handlers
-
 			// TODO: This deserves a nicer formatting
 			this.driverLog.print(
 				`handling request ${FunctionType[msg.functionType]} (${
@@ -3170,7 +3203,7 @@ ${handlers.length} left`,
 		}
 	}
 
-	private unwrapCommands(msg: Message & ICommandClassContainer): void {
+	public unwrapCommands(msg: Message & ICommandClassContainer): void {
 		// Unwrap encapsulating CCs until we get to the core
 		while (
 			isEncapsulatingCommandClass(msg.command) ||
@@ -3259,8 +3292,7 @@ ${handlers.length} left`,
 			!(msg instanceof SendDataMulticastRequest) &&
 			!(msg instanceof SendDataMulticastBridgeRequest) &&
 			// Handshake messages are meant to be sent immediately
-			options.priority !== MessagePriority.Handshake &&
-			options.priority !== MessagePriority.PreTransmitHandshake
+			options.priority !== MessagePriority.Handshake
 		) {
 			if (options.priority === MessagePriority.NodeQuery) {
 				// Remember that this transaction was part of an interview
@@ -3269,15 +3301,46 @@ ${handlers.length} left`,
 			options.priority = MessagePriority.WakeUp;
 		}
 
-		// create the transaction and enqueue it
-		const promise = createDeferredPromise<TResponse>();
-		const transaction = new Transaction(
+		// Create the transaction
+		const { generator, resultPromise } = createMessageGenerator(
 			this,
 			msg,
-			promise,
-			options.priority,
-		);
+			(msg) => {
+				// Update statistics
+				const node = msg.getNodeUnsafe();
+				if (isSendData(msg)) {
+					node?.incrementStatistics("commandsTX");
+				} else {
+					this._controller?.incrementStatistics("messagesTX");
+				}
 
+				// Track and potentially update the status of the node when communication succeeds
+				if (node) {
+					if (node.canSleep) {
+						// Do not update the node status when we just responded to a nonce request
+						if (options.priority !== MessagePriority.Handshake) {
+							// If the node is not meant to be kept awake, try to send it back to sleep
+							if (!node.keepAwake) {
+								this.debounceSendNodeToSleep(node);
+							}
+							// The node must be awake because it answered
+							node.markAsAwake();
+						}
+					} else if (node.status !== NodeStatus.Alive) {
+						// The node status was unknown or dead - in either case it must be alive because it answered
+						node.markAsAlive();
+					}
+				}
+			},
+		);
+		const transaction = new Transaction(this, {
+			message: msg,
+			priority: options.priority,
+			parts: generator,
+			promise: resultPromise,
+		});
+
+		// Configure its options
 		if (options.changeNodeStatusOnMissingACK != undefined) {
 			transaction.changeNodeStatusOnTimeout =
 				options.changeNodeStatusOnMissingACK;
@@ -3288,7 +3351,7 @@ ${handlers.length} left`,
 		transaction.requestWakeUpOnDemand = !!options.requestWakeUpOnDemand;
 		transaction.tag = options.tag;
 
-		// start sending now (maybe)
+		// And queue it
 		this.sendThread.send({ type: "add", transaction });
 
 		// If the transaction should expire, start the timeout
@@ -3311,33 +3374,7 @@ ${handlers.length} left`,
 		}
 
 		try {
-			const ret = await promise;
-			// The message was transmitted, so it can no longer expire
-			if (expirationTimeout) clearTimeout(expirationTimeout);
-			// Update statistics
-			if (isSendData(msg)) {
-				node?.incrementStatistics("commandsTX");
-			} else {
-				this._controller?.incrementStatistics("messagesTX");
-			}
-			// Track and potentially update the status of the node when communication succeeds
-			if (node) {
-				if (node.canSleep) {
-					// Do not update the node status when we just responded to a nonce request
-					if (options.priority !== MessagePriority.Handshake) {
-						// If the node is not meant to be kept awake, try to send it back to sleep
-						if (!node.keepAwake) {
-							this.debounceSendNodeToSleep(node);
-						}
-						// The node must be awake because it answered
-						node.markAsAwake();
-					}
-				} else if (node.status !== NodeStatus.Alive) {
-					// The node status was unknown or dead - in either case it must be alive because it answered
-					node.markAsAlive();
-				}
-			}
-			return ret;
+			return (await resultPromise) as TResponse;
 		} catch (e) {
 			if (isZWaveError(e)) {
 				if (
@@ -3358,21 +3395,31 @@ ${handlers.length} left`,
 					// If the node failed to respond in time, remember this for the statistics
 					node?.incrementStatistics("timeoutResponse");
 				}
+				// Enrich errors with the transaction's stack instead of the internal stack
+				if (!e.transactionSource) {
+					throw new ZWaveError(
+						e.message,
+						e.code,
+						e.context,
+						transaction.stack,
+					);
+				}
 			}
 			throw e;
+		} finally {
+			// The transaction was handled, so it can no longer expire
+			if (expirationTimeout) clearTimeout(expirationTimeout);
 		}
 	}
 
-	/**
-	 * Sends a command to a Z-Wave node. If the node returns a command in response, that command will be the return value.
-	 * If the command expects no response **or** the response times out, nothing will be returned
-	 * @param command The command to send. It will be encapsulated in a SendData[Multicast]Request.
-	 * @param options (optional) Options regarding the message transmission
-	 */
-	public async sendCommand<TResponse extends CommandClass = CommandClass>(
+	/** Wraps a CC in the correct SendData message to use for sending */
+	public createSendDataMessage(
 		command: CommandClass,
-		options: SendCommandOptions = {},
-	): Promise<TResponse | undefined> {
+		options: Pick<
+			SendCommandOptions,
+			"autoEncapsulate" | "maxSendAttempts" | "transmitOptions"
+		> = {},
+	): SendDataMessage {
 		let msg: SendDataMessage;
 		if (command.isSinglecast()) {
 			if (
@@ -3415,6 +3462,20 @@ ${handlers.length} left`,
 		// Automatically encapsulate commands before sending
 		if (options.autoEncapsulate !== false) this.encapsulateCommands(msg);
 
+		return msg;
+	}
+
+	/**
+	 * Sends a command to a Z-Wave node. If the node returns a command in response, that command will be the return value.
+	 * If the command expects no response **or** the response times out, nothing will be returned
+	 * @param command The command to send. It will be encapsulated in a SendData[Multicast]Request.
+	 * @param options (optional) Options regarding the message transmission
+	 */
+	public async sendCommand<TResponse extends CommandClass = CommandClass>(
+		command: CommandClass,
+		options: SendCommandOptions = {},
+	): Promise<TResponse | undefined> {
+		const msg = this.createSendDataMessage(command, options);
 		try {
 			const resp = await this.sendMessage(msg, options);
 
@@ -3532,7 +3593,7 @@ ${handlers.length} left`,
 	/**
 	 * Waits until an unsolicited serial message is received or a timeout has elapsed. Returns the received message.
 	 *
-	 * **Note:** This does not trigger for [Bridge]ApplicationUpdateRequests, which are handled differently. To wait for a certain CommandClass, use {@link waitForCommand}.
+	 * **Note:** To wait for a certain CommandClass, better use {@link waitForCommand}.
 	 * @param timeout The number of milliseconds to wait. If the timeout elapses, the returned promise will be rejected
 	 * @param predicate A predicate function to test all incoming messages
 	 */
@@ -3617,8 +3678,6 @@ ${handlers.length} left`,
 			// so they must be dropped
 			case messageIsPing(msg):
 			case transaction.priority === MessagePriority.Handshake:
-			// Outgoing handshake requests are very likely not valid after wakeup, so drop them too
-			case transaction.priority === MessagePriority.PreTransmitHandshake:
 			// We also don't want to immediately send the node to sleep when it wakes up
 			case isCommandClassContainer(msg) &&
 				msg.command instanceof WakeUpCCNoMoreInformation:
@@ -3721,49 +3780,6 @@ ${handlers.length} left`,
 	/** Re-sorts the send queue */
 	private sortSendQueue(): void {
 		this.sendThread.send("sortQueue");
-	}
-
-	/** Re-sends the current command if it is S2 encapsulated */
-	public resendS2EncapsulatedCommand(): void {
-		// If this is called, a receiving node couldn't decode the last message we sent it
-		const { currentTransaction } = this.sendThread.state.context;
-		if (
-			currentTransaction &&
-			isCommandClassContainer(currentTransaction.message) &&
-			currentTransaction.message.command instanceof
-				Security2CCMessageEncapsulation
-		) {
-			const cmd = currentTransaction.message.command;
-			if (cmd.wasRetriedAfterDecodeFailure) {
-				this._controllerLog.logNode(cmd.nodeId as number, {
-					message: `failed to decode the message after re-transmission with SPAN extension, dropping the message.`,
-					direction: "none",
-					level: "warn",
-				});
-				this.sendThread.send({
-					type: "reduce",
-					reducer: (_t, source) => {
-						if (source === "current") {
-							return {
-								type: "reject",
-								code: ZWaveErrorCodes.Security2CC_CannotDecode,
-								message:
-									"The node failed to decode the message.",
-							};
-						} else {
-							return { type: "keep" };
-						}
-					},
-				});
-			} else {
-				this._controllerLog.logNode(cmd.nodeId as number, {
-					message: `failed to decode the message, retrying with SPAN extension...`,
-					direction: "none",
-				});
-				cmd.prepareRetryAfterDecodeFailure();
-				this.sendThread.send("resend");
-			}
-		}
 	}
 
 	private lastSaveToCache: number = 0;
