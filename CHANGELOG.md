@@ -4,7 +4,7 @@
 <!--
 	Add placeholder for next release with `wip` snippet
 -->
-## __WORK IN PROGRESS__
+## 8.7.6 (2021-11-15)
 ### Bugfixes
 * Update thermostat setpoint metadata when unit changes between reports
 * Avoid exiting the process while waiting for the Serial API to start up if the event loop is otherwise empty
