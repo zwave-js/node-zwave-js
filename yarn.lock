@@ -4190,7 +4190,7 @@ __metadata:
     "@zwave-js/core": 8.7.4
     "@zwave-js/shared": 8.7.3
     ansi-colors: ^4.1.1
-    clipboardy: ^2.3.0
+    clipboardy: ^3.0.0
     esbuild: "*"
     esbuild-register: ^3.1.2
     fs-extra: ^10.0.0
@@ -4585,7 +4585,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"arch@npm:^2.1.1":
+"arch@npm:^2.1.1, arch@npm:^2.2.0":
   version: 2.2.0
   resolution: "arch@npm:2.2.0"
   checksum: e21b7635029fe8e9cdd5a026f9a6c659103e63fff423834323cdf836a1bb240a72d0c39ca8c470f84643385cf581bd8eda2cad8bf493e27e54bd9783abe9101f
@@ -5339,7 +5339,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"clipboardy@npm:*, clipboardy@npm:^2.3.0":
+"clipboardy@npm:*":
   version: 2.3.0
   resolution: "clipboardy@npm:2.3.0"
   dependencies:
@@ -5347,6 +5347,17 @@ __metadata:
     execa: ^1.0.0
     is-wsl: ^2.1.1
   checksum: 2733790bc8bbb76a5be7706fa4632f655010774e579a9d3ebe31dc10cf44a2b82cf07b0b6f74162e63048ce32d912193c08c5b5311dce5c19fc641a3bda1292b
+  languageName: node
+  linkType: hard
+
+"clipboardy@npm:^3.0.0":
+  version: 3.0.0
+  resolution: "clipboardy@npm:3.0.0"
+  dependencies:
+    arch: ^2.2.0
+    execa: ^5.1.1
+    is-wsl: ^2.2.0
+  checksum: 2c292acb59705494cbe07d7df7c8becff4f01651514d32ebd80f4aec2d20946d8f3824aac67ecdf2d09ef21fdf0eb24b6a7f033c137ccdceedc4661c54455c94
   languageName: node
   linkType: hard
 
