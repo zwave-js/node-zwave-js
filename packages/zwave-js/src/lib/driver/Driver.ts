@@ -1885,7 +1885,7 @@ export class Driver extends TypedEventEmitter<DriverEventCallbacks> {
 			this.controllerLog.print(
 				`Serial API did not respond, trying again in ${backoff} seconds...`,
 			);
-			await wait(backoff * 1000, true);
+			await wait(backoff * 1000);
 			if (await pollController()) return true;
 		}
 
