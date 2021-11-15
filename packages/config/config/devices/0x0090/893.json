@@ -156,8 +156,8 @@
 		},
 		{
 			"#": "46",
-			"label": "Motor Load Value",
-			"description": "Motor Resistance Value",
+			"label": "Motor Resistance Value",
+			"description": "",
 			"valueSize": 4,
 			"minValue": 0,
 			"maxValue": 255,
