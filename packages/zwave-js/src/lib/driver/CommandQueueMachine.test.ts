@@ -44,9 +44,7 @@ type TestMachineEvents =
 			type: "ADD";
 			transaction: Transaction;
 	  }
-	| {
-			type: "RESET";
-	  }
+	// | { type: "ABORT" }
 	| {
 			type: "API_FAILED" | "ABORT_FAILED";
 			reason: (SerialAPICommandDoneData & {
@@ -163,12 +161,12 @@ describe("lib/driver/CommandQueueMachine", () => {
 							{ cond: "isCbTimeout", target: "aborting" },
 							{ target: "maybeDone" },
 						],
-						RESET: {
-							actions: assign<TestMachineContext, any>({
-								definitelyDone: true,
-							}),
-							target: "aborting",
-						},
+						// ABORT: {
+						// 	actions: assign<TestMachineContext, any>({
+						// 		definitelyDone: true,
+						// 	}),
+						// 	target: "aborting",
+						// },
 					},
 					meta: {
 						test: async (
@@ -276,10 +274,12 @@ describe("lib/driver/CommandQueueMachine", () => {
 				{ commands: ["BasicSet", "BasicGet"] },
 			],
 		},
-		RESET: {
+		ABORT: {
 			exec: ({ interpreter }) => {
 				interpreter.send({
-					type: "reset",
+					// @ts-expect-error
+					type: "remove",
+					transaction: interpreter.state.context.currentTransaction,
 				});
 			},
 		},
@@ -348,10 +348,6 @@ describe("lib/driver/CommandQueueMachine", () => {
 				{ reason: "CAN" },
 				{ reason: "NAK" },
 				{ reason: "ACK timeout" },
-				{ reason: "response timeout" },
-				{ reason: "callback timeout" },
-				{ reason: "response NOK" },
-				{ reason: "callback NOK" },
 			],
 		},
 	});

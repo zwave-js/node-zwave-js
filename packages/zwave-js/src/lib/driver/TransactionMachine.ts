@@ -40,7 +40,9 @@ export type TransactionMachineEvent =
 	| (CommandQueueEvent & { type: "command_error" })
 	| { type: "NIF"; nodeId: number }
 	// Re-transmit the current message immediately
-	| { type: "resend" };
+	| { type: "resend" }
+	// Immediately stop the transaction
+	| { type: "stop" };
 
 const guards: MachineOptions<
 	TransactionMachineContext,
@@ -120,6 +122,7 @@ export function createTransactionMachine(
 					target: "execute",
 					internal: true,
 				},
+				stop: "done",
 			},
 			states: {
 				init: {

@@ -2,6 +2,7 @@ import { CommandClasses, ZWaveError, ZWaveErrorCodes } from "@zwave-js/core";
 import { SortedList } from "alcalzone-shared/sorted-list";
 import {
 	Action,
+	ActorRef,
 	ActorRefFrom,
 	assign,
 	AssignAction,
@@ -20,7 +21,6 @@ import type { Message } from "../message/Message";
 import { InterviewStage, NodeStatus } from "../node/Types";
 import {
 	CommandQueueEvent,
-	CommandQueueInterpreter,
 	createCommandQueueMachine,
 } from "./CommandQueueMachine";
 import type {
@@ -52,7 +52,7 @@ export interface ActiveTransaction {
 
 export interface SendThreadContext {
 	queue: SortedList<Transaction>;
-	commandQueue: CommandQueueInterpreter;
+	commandQueue: ActorRef<any, any>;
 	activeTransactions: Map<string, ActiveTransaction>;
 	counter: number;
 	paused: boolean;
@@ -116,8 +116,6 @@ export type TransactionReducerResult =
 	| {
 			// Reject the transaction with the given error
 			type: "reject";
-			// Whether the entire transaction should be rejected or just the current partial
-			completely?: boolean;
 			message: string;
 			code: ZWaveErrorCodes;
 	  }
@@ -145,7 +143,7 @@ export type SendThreadMachineParams = {
 	attempts: SerialAPICommandMachineParams["attempts"];
 };
 
-const stopTransaction: PureAction<SendThreadContext, any> = pure(
+const finalizeTransaction: PureAction<SendThreadContext, any> = pure(
 	(ctx, evt: any) => [
 		stop(evt.id),
 		assign((ctx: SendThreadContext) => {
@@ -254,7 +252,9 @@ export function createSendThreadMachine(
 						transaction,
 						reducerResult.message,
 					);
-					if (source === "queue") dropQueued.push(transaction);
+					(source === "queue" ? dropQueued : stopActive).push(
+						transaction,
+					);
 					break;
 				case "reject":
 					implementations.rejectTransaction(
@@ -266,7 +266,9 @@ export function createSendThreadMachine(
 							transaction.stack,
 						),
 					);
-					if (source === "queue") dropQueued.push(transaction);
+					(source === "queue" ? dropQueued : stopActive).push(
+						transaction,
+					);
 					break;
 			}
 		};
@@ -285,19 +287,17 @@ export function createSendThreadMachine(
 		queue.remove(...dropQueued, ...requeue);
 		queue.add(...requeue);
 
-		// Stop the active transactions that should be stopped
-		// This will end their actors and clean up
-		for (const transaction of stopActive) {
-			transaction.parts.self?.return();
-		}
-
-		// TODO: Check if the command queue needs a reset for dropped commands
-
 		return [
 			assign((ctx: SendThreadContext) => ({
 				...ctx,
 				queue,
 			})),
+			...stopActive.map((t) =>
+				send<SendThreadContext, any, any>(
+					{ type: "remove", transaction: t },
+					{ to: ctx.commandQueue as any },
+				),
+			),
 		];
 	});
 
@@ -374,9 +374,14 @@ export function createSendThreadMachine(
 								return ctx.queue;
 							},
 						}),
-						send("trigger") as any,
+						raise("trigger") as any,
 					],
 				},
+				reduce: {
+					// Reducing may reorder the queue, so raise a trigger afterwards
+					actions: [reduce, raise("trigger") as any],
+				},
+
 				// Return unsolicited messages to the driver
 				unsolicited: {
 					actions: notifyUnsolicited,
@@ -409,7 +414,7 @@ export function createSendThreadMachine(
 
 				// Stop transactions when they are done
 				transaction_done: {
-					actions: [stopTransaction, raise("trigger") as any],
+					actions: [finalizeTransaction, raise("trigger") as any],
 				},
 			},
 			states: {
@@ -424,7 +429,7 @@ export function createSendThreadMachine(
 								{
 									name: "QUEUE",
 								},
-							) as any,
+							),
 					}),
 					// Spawn the command queue when starting the send thread
 					always: "idle",
@@ -442,11 +447,6 @@ export function createSendThreadMachine(
 					on: {
 						// On trigger, re-evaluate the conditions to enter "busy"
 						trigger: { target: "idle" },
-						reduce: {
-							// Reducing may reorder the queue, so raise a trigger afterwards
-							actions: reduce as any,
-							target: "idle",
-						},
 					},
 				},
 				// While busy, only handshake responses may be sent
@@ -468,8 +468,6 @@ export function createSendThreadMachine(
 						// On trigger, re-evaluate the conditions to go spawn transactions or back to idle
 						trigger: { target: "busy" },
 					},
-
-					// TODO: on reduce
 				},
 			},
 		},

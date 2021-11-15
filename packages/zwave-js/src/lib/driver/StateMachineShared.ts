@@ -54,6 +54,7 @@ export interface ServiceImplementations {
 	resolveTransaction: (transaction: Transaction, result?: Message) => void;
 	logOutgoingMessage: (message: Message) => void;
 	log: DriverLogger["print"];
+	logQueue: DriverLogger["sendQueue"];
 }
 
 export function sendDataErrorToZWaveError(

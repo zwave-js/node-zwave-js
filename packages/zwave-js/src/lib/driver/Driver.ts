@@ -573,6 +573,7 @@ export class Driver extends TypedEventEmitter<DriverEventCallbacks> {
 					}
 				},
 				log: this.driverLog.print.bind(this.driverLog),
+				logQueue: this.driverLog.sendQueue.bind(this.driverLog),
 			},
 			pick(this.options, ["timeouts", "attempts"]),
 		);
@@ -585,7 +586,18 @@ export class Driver extends TypedEventEmitter<DriverEventCallbacks> {
 		// 		);
 		// });
 		// this.sendThread.onEvent((evt) => {
-		// 	this.driverLog.print(`send thread event: ${evt.type}`, "verbose");
+		// 	if (evt.type === "forward") {
+		// 		this.driverLog.print(
+		// 			// @ts-ignore
+		// 			`forwarding event: ${evt.payload.type} from ${evt.from} to ${evt.to}`,
+		// 			"verbose",
+		// 		);
+		// 	} else {
+		// 		this.driverLog.print(
+		// 			`send thread event: ${evt.type}`,
+		// 			"verbose",
+		// 		);
+		// 	}
 		// });
 	}
 	/** The serial port instance */
@@ -2460,20 +2472,22 @@ It is probably asleep, moving its messages to the wakeup queue.`,
 			);
 			// Mark the node as asleep
 			// The handler for the asleep status will move the messages to the wakeup queue
-			// We need to re-add the current transaction if that is allowed because otherwise it will be dropped silently
-			if (this.mayMoveToWakeupQueue(transaction)) {
-				this.sendThread.send({ type: "add", transaction });
-			} else {
-				transaction.parts.self
-					?.throw(
-						new ZWaveError(
-							`The node is asleep`,
-							ZWaveErrorCodes.Controller_MessageDropped,
-						),
-					)
-					// eslint-disable-next-line @typescript-eslint/no-empty-function
-					.catch(() => {});
-			}
+
+			// // We need to re-add the current transaction if that is allowed because otherwise it will be dropped silently
+			// if (this.mayMoveToWakeupQueue(transaction)) {
+			// 	this.sendThread.send({ type: "add", transaction });
+			// } else {
+			// 	transaction.parts.self
+			// 		?.throw(
+			// 			new ZWaveError(
+			// 				`The node is asleep`,
+			// 				ZWaveErrorCodes.Controller_MessageDropped,
+			// 			),
+			// 		)
+			// 		// eslint-disable-next-line @typescript-eslint/no-empty-function
+			// 		.catch(() => {});
+			// }
+
 			node.markAsAsleep();
 			return true;
 		} else {
