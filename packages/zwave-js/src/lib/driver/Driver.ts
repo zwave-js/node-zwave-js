@@ -2449,10 +2449,11 @@ export class Driver extends TypedEventEmitter<DriverEventCallbacks> {
 	}
 
 	/**
+	 * @internal
 	 * Handles the case that a node failed to respond in time.
 	 * Returns `true` if the transaction failure was handled, `false` if it needs to be rejected.
 	 */
-	private handleMissingNodeACK(
+	public handleMissingNodeACK(
 		transaction: Transaction & {
 			message: SendDataRequest | SendDataBridgeRequest;
 		},
@@ -2472,21 +2473,6 @@ It is probably asleep, moving its messages to the wakeup queue.`,
 			);
 			// Mark the node as asleep
 			// The handler for the asleep status will move the messages to the wakeup queue
-
-			// // We need to re-add the current transaction if that is allowed because otherwise it will be dropped silently
-			// if (this.mayMoveToWakeupQueue(transaction)) {
-			// 	this.sendThread.send({ type: "add", transaction });
-			// } else {
-			// 	transaction.parts.self
-			// 		?.throw(
-			// 			new ZWaveError(
-			// 				`The node is asleep`,
-			// 				ZWaveErrorCodes.Controller_MessageDropped,
-			// 			),
-			// 		)
-			// 		// eslint-disable-next-line @typescript-eslint/no-empty-function
-			// 		.catch(() => {});
-			// }
 
 			node.markAsAsleep();
 			return true;
@@ -3305,7 +3291,7 @@ ${handlers.length} left`,
 		const { generator, resultPromise } = createMessageGenerator(
 			this,
 			msg,
-			(msg) => {
+			(msg, _result) => {
 				// Update statistics
 				const node = msg.getNodeUnsafe();
 				if (isSendData(msg)) {

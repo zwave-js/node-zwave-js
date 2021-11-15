@@ -15,9 +15,13 @@ import {
 	SecurityCCNonceGet,
 	SecurityCCNonceReport,
 } from "../commandclass/SecurityCC";
-import { isSendData } from "../controller/SendDataShared";
+import {
+	isSendData,
+	isSendDataTransmitReport,
+} from "../controller/SendDataShared";
 import type { Message } from "../message/Message";
 import type { Driver, SendCommandOptions } from "./Driver";
+import { sendDataErrorToZWaveError } from "./StateMachineShared";
 import type { MessageGenerator } from "./Transaction";
 
 export type MessageGeneratorImplementation = (
@@ -25,7 +29,11 @@ export type MessageGeneratorImplementation = (
 	driver: Driver,
 	/** The "primary" message */
 	message: Message,
-	afterEach: (msg: Message) => void,
+	/**
+	 * A hook to get notified about each sent message and the result of the Serial API call
+	 * without waiting for the message generator to finish completely.
+	 */
+	onMessageSent: (msg: Message, result: Message | undefined) => void,
 ) => AsyncGenerator<Message, Message, Message>;
 
 export async function waitForNodeUpdate<T extends Message>(
@@ -46,15 +54,26 @@ export async function waitForNodeUpdate<T extends Message>(
 
 /** A simple message generator that simply sends a message, waits for the ACK (and the response if one is expected) */
 export const simpleMessageGenerator: MessageGeneratorImplementation =
-	async function* (driver, msg, afterEach) {
+	async function* (driver, msg, onMessageSent) {
 		// Pass this message to the send thread and wait for it to be sent
 		let result: Message;
 		try {
 			// The yield can throw and must be handled here
 			result = yield msg;
-			afterEach(msg);
+			onMessageSent(msg, result);
 		} catch (e) {
 			throw e;
+		}
+
+		// If the sent message was a SendData message that had a NOK callback,
+		// we now need to throw because the callback was passed through so we could inspect it.
+		if (
+			isSendData(msg) &&
+			isSendDataTransmitReport(result) &&
+			!result.isOK()
+		) {
+			// Throw the message in order to short-circuit all possible generators
+			throw result;
 		}
 
 		// If the sent message expects an update from the node, wait for it
@@ -71,12 +90,12 @@ async function* sendCommandGenerator<
 >(
 	driver: Driver,
 	command: CommandClass,
-	afterEach: (msg: Message) => void,
+	onMessageSent: (msg: Message, result: Message | undefined) => void,
 	options: SendCommandOptions,
 ) {
 	const msg = driver.createSendDataMessage(command, options);
 
-	const resp = yield* simpleMessageGenerator(driver, msg, afterEach);
+	const resp = yield* simpleMessageGenerator(driver, msg, onMessageSent);
 	if (resp && isCommandClassContainer(resp)) {
 		driver.unwrapCommands(resp);
 		return resp.command as TResponse;
@@ -85,7 +104,7 @@ async function* sendCommandGenerator<
 
 /** A message generator for security encapsulated messages (S0) */
 export const secureMessageGeneratorS0: MessageGeneratorImplementation =
-	async function* (driver, msg, afterEach) {
+	async function* (driver, msg, onMessageSent) {
 		if (!isSendData(msg)) {
 			throw new ZWaveError(
 				"Cannot use the S0 message generator for a command that's not a SendData message!",
@@ -122,7 +141,7 @@ export const secureMessageGeneratorS0: MessageGeneratorImplementation =
 				yield* sendCommandGenerator<SecurityCCNonceReport>(
 					driver,
 					cc,
-					afterEach,
+					onMessageSent,
 					{
 						// Only try getting a nonce once
 						maxSendAttempts: 1,
@@ -150,12 +169,12 @@ export const secureMessageGeneratorS0: MessageGeneratorImplementation =
 
 		// Now send the actual secure command
 		msg.command.nonceId = nonceId;
-		return yield* simpleMessageGenerator(driver, msg, afterEach);
+		return yield* simpleMessageGenerator(driver, msg, onMessageSent);
 	};
 
 /** A message generator for security encapsulated messages (S2) */
 export const secureMessageGeneratorS2: MessageGeneratorImplementation =
-	async function* (driver, msg, afterEach) {
+	async function* (driver, msg, onMessageSent) {
 		if (!isSendData(msg)) {
 			throw new ZWaveError(
 				"Cannot use the S2 message generator for a command that's not a SendData message!",
@@ -192,7 +211,7 @@ export const secureMessageGeneratorS2: MessageGeneratorImplementation =
 				yield* sendCommandGenerator<Security2CCNonceReport>(
 					driver,
 					cc,
-					afterEach,
+					onMessageSent,
 					{
 						// Only try getting a nonce once
 						maxSendAttempts: 1,
@@ -209,7 +228,11 @@ export const secureMessageGeneratorS2: MessageGeneratorImplementation =
 		}
 
 		// Now send the actual secure command
-		let response = yield* simpleMessageGenerator(driver, msg, afterEach);
+		let response = yield* simpleMessageGenerator(
+			driver,
+			msg,
+			onMessageSent,
+		);
 		if (
 			isCommandClassContainer(response) &&
 			response.command instanceof Security2CCNonceReport
@@ -229,7 +252,11 @@ export const secureMessageGeneratorS2: MessageGeneratorImplementation =
 			msg.command.unsetSequenceNumber();
 
 			// Send the message again
-			response = yield* simpleMessageGenerator(driver, msg, afterEach);
+			response = yield* simpleMessageGenerator(
+				driver,
+				msg,
+				onMessageSent,
+			);
 			if (
 				isCommandClassContainer(response) &&
 				response.command instanceof Security2CCNonceReport
@@ -253,21 +280,15 @@ export const secureMessageGeneratorS2: MessageGeneratorImplementation =
 export function createMessageGenerator<TResponse extends Message = Message>(
 	driver: Driver,
 	msg: Message,
-	afterEach: (msg: Message) => void,
+	onMessageSent: (msg: Message, result: Message | undefined) => void,
 ): {
 	generator: MessageGenerator;
 	resultPromise: DeferredPromise<TResponse>;
 } {
 	const resultPromise = createDeferredPromise<TResponse>();
 
-	// TODO: remove this when done debugging
-	// const suffix = ` Node ${msg.getNodeId()?.toString()}, ${
-	// 	isCommandClassContainer(msg)
-	// 		? msg.command.constructor.name
-	// 		: getEnumMemberName(FunctionType, msg.functionType)
-	// }, callback ID: ${msg.needsCallbackId() && msg.callbackId}`;
-
 	const generator: MessageGenerator = {
+		parent: undefined as any, // The transaction will set this field on creation
 		current: undefined,
 		self: undefined,
 		start: () => {
@@ -289,7 +310,7 @@ export function createMessageGenerator<TResponse extends Message = Message>(
 
 				// Step through the generator so we can easily cancel it and don't
 				// accidentally forget to unset this.current at the end
-				const gen = implementation(driver, msg, afterEach);
+				const gen = implementation(driver, msg, onMessageSent);
 				let sendResult: Message | undefined;
 				let result: Message | undefined;
 				while (true) {
@@ -309,6 +330,25 @@ export function createMessageGenerator<TResponse extends Message = Message>(
 						if (e instanceof Error) {
 							// There was an actual error, reject the transaction
 							resultPromise.reject(e);
+						} else if (isSendDataTransmitReport(e) && !e.isOK()) {
+							// The generator was prematurely ended by throwing a NOK transmit report.
+							// If this cannot be handled (e.g. by moving the messages to the wakeup queue), we need
+							// to treat this as an error
+							if (
+								driver.handleMissingNodeACK(
+									generator.parent as any,
+								)
+							) {
+								return;
+							} else {
+								resultPromise.reject(
+									sendDataErrorToZWaveError(
+										"callback NOK",
+										generator.parent,
+										e,
+									),
+								);
+							}
 						} else {
 							// The generator was prematurely ended by throwing a Message
 							resultPromise.resolve(e as TResponse);
@@ -317,8 +357,6 @@ export function createMessageGenerator<TResponse extends Message = Message>(
 					}
 				}
 
-				// TODO: remove this when done debugging
-				// driver.driverLog.print("message generator done!" + suffix);
 				resultPromise.resolve(result as TResponse);
 				generator.current = undefined;
 				generator.self = undefined;

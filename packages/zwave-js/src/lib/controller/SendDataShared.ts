@@ -2,15 +2,28 @@ import { MessageRecord, stripUndefined } from "@zwave-js/core";
 import { num2hex } from "@zwave-js/shared";
 import {
 	SendDataBridgeRequest,
+	SendDataBridgeRequestTransmitReport,
 	SendDataMulticastBridgeRequest,
+	SendDataMulticastBridgeRequestTransmitReport,
 } from "./SendDataBridgeMessages";
-import { SendDataMulticastRequest, SendDataRequest } from "./SendDataMessages";
+import {
+	SendDataMulticastRequest,
+	SendDataMulticastRequestTransmitReport,
+	SendDataRequest,
+	SendDataRequestTransmitReport,
+} from "./SendDataMessages";
 
 export type SendDataMessage =
 	| SendDataRequest
 	| SendDataMulticastRequest
 	| SendDataBridgeRequest
 	| SendDataMulticastBridgeRequest;
+
+export type SendDataTransmitReport =
+	| SendDataRequestTransmitReport
+	| SendDataMulticastRequestTransmitReport
+	| SendDataBridgeRequestTransmitReport
+	| SendDataMulticastBridgeRequestTransmitReport;
 
 export enum TransmitOptions {
 	NotSet = 0,
@@ -304,5 +317,17 @@ export function isSendDataMulticast(
 	return (
 		msg instanceof SendDataMulticastRequest ||
 		msg instanceof SendDataMulticastBridgeRequest
+	);
+}
+
+export function isSendDataTransmitReport(
+	msg: unknown,
+): msg is SendDataTransmitReport {
+	if (!msg) return false;
+	return (
+		msg instanceof SendDataRequestTransmitReport ||
+		msg instanceof SendDataMulticastRequestTransmitReport ||
+		msg instanceof SendDataBridgeRequestTransmitReport ||
+		msg instanceof SendDataMulticastBridgeRequestTransmitReport
 	);
 }

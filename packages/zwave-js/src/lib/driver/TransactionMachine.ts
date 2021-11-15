@@ -257,14 +257,28 @@ export function createTransactionMachine(
 					result: (_, evt: any) => evt.result,
 					error: (_) => undefined,
 				}),
-				rememberCommandFailure: assign({
-					result: (_) => undefined,
-					error: (ctx, evt: any) =>
-						sendDataErrorToZWaveError(
-							evt.reason,
-							ctx.transaction,
-							evt.result,
-						),
+				rememberCommandFailure: assign((ctx, evt: any) => {
+					// For SendData messages, a NOK callback still contains useful info we need to evaluate
+					if (
+						isSendData(ctx.transaction.parts.current) &&
+						evt.reason === "callback NOK"
+					) {
+						return {
+							...ctx,
+							result: evt.result,
+							error: undefined,
+						};
+					} else {
+						return {
+							...ctx,
+							result: undefined,
+							error: sendDataErrorToZWaveError(
+								evt.reason,
+								ctx.transaction,
+								evt.result,
+							),
+						};
+					}
 				}),
 				rememberCommandError: assign({
 					result: (_) => undefined,
