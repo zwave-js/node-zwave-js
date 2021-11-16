@@ -1071,7 +1071,8 @@ export class ZWaveController extends TypedEventEmitter<ControllerEventCallbacks>
 		return this._inclusionState;
 	}
 
-	private setInclusionState(state: InclusionState): void {
+	/** @internal */
+	public setInclusionState(state: InclusionState): void {
 		if (this._inclusionState === state) return;
 		this._inclusionState = state;
 		if (
