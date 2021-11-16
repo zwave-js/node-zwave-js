@@ -103,7 +103,7 @@
 		{
 			"#": "10",
 			"label": "Lock Direction",
-			"description": "Indicates the direction of the lock. Write a value of 1 to initiate  direction detection.",
+			"description": "Indicates the direction of the lock. Write a value of 1 to initiate direction detection.",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 2,
