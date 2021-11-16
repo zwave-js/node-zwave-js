@@ -54,7 +54,8 @@
 		},
 		{
 			"#": "3",
-			"label": "Change Over Type",
+			"label": "Changeover Type",
+			"description": "For Heat Pump HVAC systems only",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 1,
@@ -62,29 +63,29 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "w/Cool",
+					"label": "Changeover with Cooling systems (Orange wire)",
 					"value": 0
 				},
 				{
-					"label": "w/Heat",
+					"label": "Changeover with Heating systems (Brown wire)",
 					"value": 1
 				}
 			]
 		},
 		{
 			"#": "4",
-			"label": "2nd Stage Heat Enable",
+			"label": "2nd Stage Heat",
 			"$import": "~/templates/master_template.json#base_enable_disable"
 		},
 		{
 			"#": "5",
-			"label": "Aux Heat Enable",
+			"label": "Aux Heat",
 			"$import": "~/templates/master_template.json#base_enable_disable",
 			"defaultValue": 1
 		},
 		{
 			"#": "6",
-			"label": "2nd Stage Cool Enable",
+			"label": "2nd Stage Cool",
 			"$import": "~/templates/master_template.json#base_enable_disable"
 		},
 		{
@@ -97,7 +98,7 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "Celsius",
+					"label": "Celcius",
 					"value": 0
 				},
 				{
@@ -126,7 +127,8 @@
 		},
 		{
 			"#": "10",
-			"label": "Setpoint H/C Delta",
+			"label": "Setpoint Heat/Cool Delta",
+			"description": "Sets the minimum separation between heating and cooling setpoints.",
 			"unit": "°F",
 			"valueSize": 1,
 			"minValue": 3,
@@ -135,7 +137,8 @@
 		},
 		{
 			"#": "11",
-			"label": "H Delta Stage 1 ON",
+			"label": "Heating Stage 1 On Threshold",
+			"description": "Sets the delta from setpoint that stage 1 heating starts.",
 			"unit": "°F",
 			"valueSize": 1,
 			"minValue": 1,
@@ -144,7 +147,8 @@
 		},
 		{
 			"#": "12",
-			"label": "H Delta Stage 1 OFF",
+			"label": "Heating Stage 1 Off Threshold",
+			"description": "Sets the delta from setpoint that stage 1 heating stops. Stage 1 turns off at setpoint + Delta Stage 1.",
 			"unit": "°F",
 			"valueSize": 1,
 			"minValue": 0,
@@ -153,7 +157,8 @@
 		},
 		{
 			"#": "13",
-			"label": "H Delta Stage 2 ON",
+			"label": "Heating Stage 2 On Threshold",
+			"description": "Sets the delta from setpoint that stage 2 heating starts.",
 			"unit": "°F",
 			"valueSize": 1,
 			"minValue": 2,
@@ -162,7 +167,8 @@
 		},
 		{
 			"#": "14",
-			"label": "H Delta Stage 2 OFF",
+			"label": "Heating Stage 2 Off Threshold",
+			"description": "Sets the delta from setpoint that stage 2 heating stops. Stage 2 turns off at setpoint + Delta Stage 2.",
 			"unit": "°F",
 			"valueSize": 1,
 			"minValue": 0,
@@ -171,7 +177,8 @@
 		},
 		{
 			"#": "15",
-			"label": "H Delta Aux ON",
+			"label": "Aux Heat On Threshold",
+			"description": "Sets the delta from setpoint that stage 3 heating starts",
 			"unit": "°F",
 			"valueSize": 1,
 			"minValue": 3,
@@ -180,7 +187,8 @@
 		},
 		{
 			"#": "16",
-			"label": "H Delta Stage 3 OFF",
+			"label": "Aux Heat Off Threshold",
+			"description": "Sets the delta from setpoint that stage 3 heating stops. Stage 3 turns off at setpoint + Delta Stage 3.",
 			"unit": "°F",
 			"valueSize": 1,
 			"minValue": 0,
@@ -189,38 +197,42 @@
 		},
 		{
 			"#": "17",
-			"label": "C Delta Stage 1 ON",
+			"label": "Cooling Stage 1 On Threshold",
+			"description": "Sets the delta from setpoint that stage 1 cooling starts.",
 			"unit": "°F",
 			"valueSize": 1,
 			"minValue": 1,
-			"maxValue": 6,
+			"maxValue": 7,
 			"defaultValue": 1
 		},
 		{
 			"#": "18",
-			"label": "C Delta Stage 1 OFF",
-			"unit": "°F",
-			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 5,
-			"defaultValue": 0
-		},
-		{
-			"#": "19",
-			"label": "C Delta Stage 2 ON",
-			"unit": "°F",
-			"valueSize": 1,
-			"minValue": 2,
-			"maxValue": 7,
-			"defaultValue": 2
-		},
-		{
-			"#": "20",
-			"label": "C Delta Stage 2 OFF",
+			"label": "Cooling Stage 1 Off Threshold",
+			"description": "Sets the delta from setpoint that stage 1 cooling stops. Stage 1 turns off at setpoint - Delta Stage 1.",
 			"unit": "°F",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 6,
+			"defaultValue": 0
+		},
+		{
+			"#": "19",
+			"label": "Cooling Stage 2 On Threshold",
+			"description": "Sets the delta from setpoint that stage 2 cooling starts.",
+			"unit": "°F",
+			"valueSize": 1,
+			"minValue": 2,
+			"maxValue": 8,
+			"defaultValue": 2
+		},
+		{
+			"#": "20",
+			"label": "Cooling Stage 1 Off Threshold",
+			"description": "Sets the delta from setpoint that stage 2 cooling stops. Stage 2 turns off at setpoint - Delta Stage 2.",
+			"unit": "°F",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 7,
 			"defaultValue": 0
 		},
 		{
@@ -230,16 +242,88 @@
 			"minValue": 1,
 			"maxValue": 256,
 			"unsigned": true,
-			"readOnly": true
+			"readOnly": true,
+			"options": [
+				{
+					"label": "MECH_H1",
+					"value": 1
+				},
+				{
+					"label": "MECH_H2",
+					"value": 2
+				}
+				{
+					"label": "MECH_H3",
+					"value": 4
+				}
+				{
+					"label": "MECH_C1",
+					"value": 8
+				}
+				{
+					"label": "MECH_C2",
+					"value": 16
+				}
+				{
+					"label": "PHANTOM_F",
+					"value": 32
+				}
+				{
+					"label": "MECH_F",
+					"value": 64
+				}
+				{
+					"label": "MANUAL_F",
+					"value": 128
+				}
+				{
+					"label": "Reserved",
+					"value": 256
+				}
+			]
 		},
 		{
 			"#": "22",
-			"label": "SCP Status",
+			"label": "SCP Status",  // SCP is not defined in the manual. Perhaps State Condition Parameter.
 			"valueSize": 1,
 			"minValue": 1,
 			"maxValue": 128,
 			"unsigned": true,
-			"readOnly": true
+			"readOnly": true,
+			"options": [
+				{
+					"label": "STATE_HEAT",
+					"value": 1
+				},
+				{
+					"label": "STATE_COOL2",
+					"value": 2
+				}
+				{
+					"label": "STATE_2ND",
+					"value": 4
+				}
+				{
+					"label": "STATE_3RD",
+					"value": 8
+				}
+				{
+					"label": "STATE_FAN",
+					"value": 16
+				}
+				{
+					"label": "STATE_LAST",
+					"value": 32
+				}
+				{
+					"label": "STATE_MOT",
+					"value": 64
+				}
+				{
+					"label": "STATE_MRT",
+					"value": 128
+				}
+			]
 		},
 		{
 			"#": "23[0x0001]",
@@ -380,7 +464,7 @@
 		},
 		{
 			"#": "38",
-			"label": "Schedule Enable",
+			"label": "Schedule",
 			"$import": "~/templates/master_template.json#base_enable_disable"
 		},
 		{
@@ -404,7 +488,7 @@
 		},
 		{
 			"#": "41",
-			"label": "Unoccupied HSP",
+			"label": "Unoccupied Heat Setpoint",
 			"unit": "°F",
 			"valueSize": 1,
 			"minValue": 30,
@@ -413,7 +497,7 @@
 		},
 		{
 			"#": "42",
-			"label": "Unoccupied CSP",
+			"label": "Unoccupied Cool Setpoint",
 			"unit": "°F",
 			"valueSize": 1,
 			"minValue": 33,
@@ -422,10 +506,11 @@
 		},
 		{
 			"#": "43",
-			"label": "Remote Sensor 1 Node Number",
+			"label": "Remote Sensor Node Number",
+			"description": "Node to use as alternative remote temperature sensor",
 			"valueSize": 1,
 			"minValue": 0,
-			"maxValue": 252,
+			"maxValue": 232,
 			"defaultValue": 0,
 			"unsigned": true,
 			"options": [
@@ -437,7 +522,7 @@
 		},
 		{
 			"#": "46",
-			"label": "Remote Sensor 1 Temperature",
+			"label": "Remote Sensor Temperature",
 			"unit": "°F",
 			"valueSize": 1,
 			"minValue": 0,
@@ -456,7 +541,7 @@
 		},
 		{
 			"#": "49",
-			"label": "R1 Sensor Temp Offset",
+			"label": "Remote Sensor Temperature Offset",
 			"unit": "°F",
 			"valueSize": 1,
 			"minValue": -7,
@@ -517,6 +602,7 @@
 			"maxValue": 90,
 			"defaultValue": 0
 		},
+		// Technical Parameters 170-178 have not been included, as they would be useful only in detailed debugging situations.
 		{
 			"#": "179",
 			"label": "Battery",
@@ -579,7 +665,7 @@
 		},
 		{
 			"#": "186",
-			"label": "Temperature Delta Autosend Threshold",
+			"label": "Temperature Reporting Threshold",
 			"description": "Required change to trigger update",
 			"unit": "°F",
 			"valueSize": 1,
@@ -589,7 +675,7 @@
 		},
 		{
 			"#": "187",
-			"label": "Periodic Temperature Send Interval",
+			"label": "Temperature Report Interval",
 			"unit": "minutes",
 			"valueSize": 1,
 			"minValue": 0,
@@ -602,6 +688,7 @@
 				}
 			]
 		},
+		// Technical Parameters 188-230 have not been included, as they would be useful only in detailed debugging situations.
 		{
 			"#": "231",
 			"label": "Status Display",
