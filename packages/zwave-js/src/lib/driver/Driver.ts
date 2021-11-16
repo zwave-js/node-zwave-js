@@ -1868,8 +1868,11 @@ export class Driver extends TypedEventEmitter<DriverEventCallbacks> {
 
 		this.isSoftResetting = false;
 
-		// And resume sending
+		// Resume sending
 		this.unpauseSendThread();
+		// Soft-resetting disables any ongoing inclusion, so we need to reset
+		// the state that is tracked in the controller
+		this._controller?.setInclusionState(InclusionState.Idle);
 	}
 
 	private async ensureSerialAPI(): Promise<boolean> {
