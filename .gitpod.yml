@@ -25,7 +25,6 @@ tasks:
 # Auto-install VSCode extensions
 vscode:
   extensions:
-    # - rebornix.project-snippets # disabled because not available
     # - Orta.vscode-jest          # disabled because it is annoying on gitpod
     - dbaeumer.vscode-eslint
     - esbenp.prettier-vscode

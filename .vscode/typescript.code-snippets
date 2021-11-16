@@ -1,5 +1,6 @@
 {
 	"Z-Wave Serial API command without response/callback": {
+		"scope": "typescript",
 		"prefix": "zwmsg",
 		"body": [
 			"import {",
@@ -65,6 +66,7 @@
 		]
 	},
 	"Z-Wave Serial API command with response": {
+		"scope": "typescript",
 		"prefix": "zwmsgres",
 		"body": [
 			"import {",
@@ -154,6 +156,7 @@
 		]
 	},
 	"Z-Wave Serial API command with response and callback": {
+		"scope": "typescript",
 		"prefix": "zwmsgrescb",
 		"body": [
 			"import {",
@@ -282,6 +285,7 @@
 		]
 	},
 	"Z-Wave Serial API command with callback": {
+		"scope": "typescript",
 		"prefix": "zwmsgcb",
 		"body": [
 			"import {",
@@ -391,6 +395,7 @@
 		]
 	},
 	"Z-Wave Command Class log override": {
+		"scope": "typescript",
 		"prefix": "zwcclog",
 		"body": [
 			"public toLogEntry(): MessageOrCCLogEntry {",
@@ -402,6 +407,7 @@
 		]
 	},
 	"Z-Wave Command Class log override (empty)": {
+		"scope": "typescript",
 		"prefix": "zwcclogempty",
 		"body": [
 			"public toLogEntry(): MessageOrCCLogEntry {",
@@ -414,6 +420,7 @@
 		]
 	},
 	"Z-Wave Command Class implementation": {
+		"scope": "typescript",
 		"prefix": "zwcc",
 		"body": [
 			"import {",
@@ -445,6 +452,7 @@
 		"description": "Z-Wave Command Class implementation"
 	},
 	"Z-Wave CC Command": {
+		"scope": "typescript",
 		"prefix": "zwcccmd",
 		"body": [
 			"interface ${1:Basic}CC${2:Get}Options extends CCCommandOptions {",
@@ -483,6 +491,7 @@
 		"description": "Specific implementation of a single CC command"
 	},
 	"Z-Wave CC Command (Report)": {
+		"scope": "typescript",
 		"prefix": "zwccreport",
 		"body": [
 			"@CCCommand(${1:Basic}Command.${2}Report)",
@@ -499,6 +508,7 @@
 		"description": "Specific implementation of a single CC report"
 	},
 	"ZWave CC Command (empty)": {
+		"scope": "typescript",
 		"prefix": "zwccemptycmd",
 		"body": [
 			"@CCCommand(${1:Basic}Command.${2:Get})",
@@ -514,6 +524,7 @@
 		"description": "Specific implementation of CC command that is sent and expects no parameters"
 	},
 	"ZWave CC Get Command (empty)": {
+		"scope": "typescript",
 		"prefix": "zwccemptyget",
 		"body": [
 			"@CCCommand(${1:Basic}Command.${2}Get)",
@@ -523,6 +534,7 @@
 		"description": "Specific implementation of a CC Get command that expects no parameters"
 	},
 	"ZWave test CC response implementation": {
+		"scope": "typescript",
 		"prefix": "zwcctestresponse",
 		"body": [
 			"const testResponseFor${1:Basic}${2}Get: CCResponsePredicate = (",
@@ -541,6 +553,7 @@
 		"description": "Returns the CC response role of a received message"
 	},
 	"Readonly property": {
+		"scope": "typescript",
 		"prefix": "propread",
 		"body": [
 			"private _${1:value}: ${2:string};",
@@ -550,10 +563,12 @@
 		]
 	},
 	"Z-Wave CC property": {
+		"scope": "typescript",
 		"prefix": "zwccprop",
 		"body": ["@ccValue() public ${1:property}: ${2:number};${0}"]
 	},
 	"Z-Wave CC API": {
+		"scope": "typescript",
 		"prefix": "zwccapi",
 		"body": [
 			"@API(CommandClasses.${1:Basic})",
@@ -563,6 +578,7 @@
 		]
 	},
 	"Z-Wave CC supportsCommand": {
+		"scope": "typescript",
 		"prefix": "zwccsupp",
 		"body": [
 			"public supportsCommand(cmd: ${1:Basic}Command): Maybe<boolean> {",
@@ -580,6 +596,7 @@
 		"description": "Implementation of CCAPI.supportsCommand"
 	},
 	"Z-Wave CC API assert command supported": {
+		"scope": "typescript",
 		"prefix": "zwccassert",
 		"body": [
 			"this.assertSupportsCommand(",
@@ -591,6 +608,7 @@
 		"description": "Implementation of CCAPI.supportsCommand"
 	},
 	"Z-Wave CC interview procedure": {
+		"scope": "typescript",
 		"prefix": "zwccinterview",
 		"body": [
 			"public async interview(complete: boolean = true): Promise<void> {",
@@ -624,6 +642,7 @@
 		]
 	},
 	"Z-Wave CC interview requirements": {
+		"scope": "typescript",
 		"prefix": "zwccintreq",
 		"body": [
 			"public determineRequiredCCInterviews(): readonly CommandClasses[] {",
@@ -635,6 +654,7 @@
 		]
 	},
 	"Z-Wave CC Refresh Values": {
+		"scope": "typescript",
 		"prefix": "zwccrefval",
 		"body": [
 			"public async refreshValues(): Promise<void> {",
@@ -649,6 +669,7 @@
 		]
 	},
 	"Jest test file": {
+		"scope": "typescript",
 		"prefix": "jest",
 		"body": [
 			"/// <reference types=\"jest-extended\" />",
@@ -664,6 +685,7 @@
 		]
 	},
 	"Z-Wave CC Test": {
+		"scope": "typescript",
 		"prefix": "zwcctest",
 		"body": [
 			"import { createEmptyMockDriver } from \"../test/mocks\";",
