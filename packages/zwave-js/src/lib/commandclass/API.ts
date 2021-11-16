@@ -275,7 +275,7 @@ export class CCAPI {
 	}
 
 	/** Creates an instance of this API which (if supported) will return TX reports along with the result. */
-	public withTXReport(): WithTXReport<this> {
+	public withTXReport<T extends this>(): WithTXReport<T> {
 		if (this.constructor === CCAPI) {
 			throw new ZWaveError(
 				"The withTXReport method may only be called on specific CC API implementations.",
@@ -334,7 +334,7 @@ export class CCAPI {
 					return original;
 				}
 			},
-		});
+		}) as any;
 	}
 
 	protected isSinglecast(): this is this & { endpoint: Endpoint } {
