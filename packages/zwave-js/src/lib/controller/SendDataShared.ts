@@ -331,3 +331,17 @@ export function isSendDataTransmitReport(
 		msg instanceof SendDataMulticastBridgeRequestTransmitReport
 	);
 }
+
+export function hasTransmitStatusReport(
+	msg: unknown,
+): msg is (
+	| SendDataRequestTransmitReport
+	| SendDataBridgeRequestTransmitReport
+) & { transmitStatusReport: TransmitStatusReport } {
+	if (!msg) return false;
+	return (
+		(msg instanceof SendDataRequestTransmitReport ||
+			msg instanceof SendDataBridgeRequestTransmitReport) &&
+		!!msg.transmitStatusReport
+	);
+}

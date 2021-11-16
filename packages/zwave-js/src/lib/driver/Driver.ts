@@ -120,11 +120,13 @@ import {
 	SendDataRequest,
 } from "../controller/SendDataMessages";
 import {
+	hasTransmitStatusReport,
 	isSendData,
 	isSendDataSinglecast,
 	isSendDataTransmitReport,
 	SendDataMessage,
 	TransmitOptions,
+	TransmitStatusReport,
 } from "../controller/SendDataShared";
 import { SoftResetRequest } from "../controller/SoftResetRequest";
 import { ControllerLogger } from "../log/Controller";
@@ -373,6 +375,11 @@ export interface SendMessageOptions {
 	pauseSendThread?: boolean;
 	/** If a Wake Up On Demand should be requested for the target node. */
 	requestWakeUpOnDemand?: boolean;
+	/**
+	 * When a message sent to a node results in a transmit status report to be received, this callback will be called.
+	 * For multi-stage messages, the callback may be called multiple times.
+	 */
+	onTransmitStatusReport?: (report: TransmitStatusReport) => void;
 }
 
 export interface SendCommandOptions extends SendMessageOptions {
@@ -3208,21 +3215,35 @@ ${handlers.length} left`,
 		}
 	}
 
+	/**
+	 * Gets called whenever any Serial API command succeeded or a SendData command had a negative callback.
+	 */
 	private handleSerialAPICommandResult(
 		msg: Message,
-		priority: MessagePriority,
+		options: SendMessageOptions,
 		result: Message | undefined,
 	): void {
 		// Update statistics
 		const node = msg.getNodeUnsafe();
 		let success = true;
 		if (isSendData(msg)) {
-			if (node) {
-				if (isSendDataTransmitReport(result) && !result.isOK()) {
+			// This shouldn't happen, but just in case
+			if (!node) return;
+
+			if (isSendDataTransmitReport(result)) {
+				if (!result.isOK()) {
 					success = false;
 					node.incrementStatistics("commandsDroppedTX");
 				} else {
 					node.incrementStatistics("commandsTX");
+				}
+
+				// Notify listeners about the status report
+				if (hasTransmitStatusReport(result)) {
+					options.onTransmitStatusReport?.(
+						result.transmitStatusReport,
+					);
+					// TODO: Update statistics based on the status report
 				}
 			}
 		} else {
@@ -3230,10 +3251,10 @@ ${handlers.length} left`,
 		}
 
 		// Track and potentially update the status of the node when communication succeeds
-		if (!!node && success) {
+		if (node && success) {
 			if (node.canSleep) {
 				// Do not update the node status when we just responded to a nonce request
-				if (priority !== MessagePriority.Handshake) {
+				if (options.priority !== MessagePriority.Handshake) {
 					// If the node is not meant to be kept awake, try to send it back to sleep
 					if (!node.keepAwake) {
 						this.debounceSendNodeToSleep(node);
@@ -3333,11 +3354,7 @@ ${handlers.length} left`,
 			this,
 			msg,
 			(msg, _result) => {
-				this.handleSerialAPICommandResult(
-					msg,
-					options.priority!,
-					_result,
-				);
+				this.handleSerialAPICommandResult(msg, options, _result);
 			},
 		);
 		const transaction = new Transaction(this, {
@@ -3439,7 +3456,9 @@ ${handlers.length} left`,
 			}
 		} else if (command.isMulticast()) {
 			if (
-				this.controller.isFunctionSupported(FunctionType.SendDataBridge)
+				this.controller.isFunctionSupported(
+					FunctionType.SendDataMulticastBridge,
+				)
 			) {
 				// Prioritize Bridge commands when they are supported
 				msg = new SendDataMulticastBridgeRequest(this, { command });
