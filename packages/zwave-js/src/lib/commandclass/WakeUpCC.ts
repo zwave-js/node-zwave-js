@@ -286,6 +286,10 @@ controller node: ${wakeupResp.controllerNodeId}`;
 						direction: "outbound",
 					});
 					await api.setInterval(wakeupResp.wakeUpInterval, ownNodeId);
+					this.getValueDB().setValue(
+						getWakeUpIntervalValueId(),
+						ownNodeId,
+					);
 					this.driver.controllerLog.logNode(
 						node.id,
 						"wakeup destination node changed!",
