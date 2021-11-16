@@ -1747,6 +1747,16 @@ export class Driver extends TypedEventEmitter<DriverEventCallbacks> {
 			return false;
 		}
 
+		// Vision Gen5 USB Stick
+		if (
+			manufacturerId === 0x0109 &&
+			productType === 0x1001 &&
+			productId === 0x0201
+			// firmware version 15.1 (GH#3730)
+		) {
+			return false;
+		}
+
 		return true;
 	}
 
