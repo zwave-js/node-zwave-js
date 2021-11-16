@@ -251,31 +251,31 @@
 				{
 					"label": "MECH_H2",
 					"value": 2
-				}
+				},
 				{
 					"label": "MECH_H3",
 					"value": 4
-				}
+				},
 				{
 					"label": "MECH_C1",
 					"value": 8
-				}
+				},
 				{
 					"label": "MECH_C2",
 					"value": 16
-				}
+				},
 				{
 					"label": "PHANTOM_F",
 					"value": 32
-				}
+				},
 				{
 					"label": "MECH_F",
 					"value": 64
-				}
+				},
 				{
 					"label": "MANUAL_F",
 					"value": 128
-				}
+				},
 				{
 					"label": "Reserved",
 					"value": 256
@@ -298,27 +298,27 @@
 				{
 					"label": "STATE_COOL2",
 					"value": 2
-				}
+				},
 				{
 					"label": "STATE_2ND",
 					"value": 4
-				}
+				},
 				{
 					"label": "STATE_3RD",
 					"value": 8
-				}
+				},
 				{
 					"label": "STATE_FAN",
 					"value": 16
-				}
+				},
 				{
 					"label": "STATE_LAST",
 					"value": 32
-				}
+				},
 				{
 					"label": "STATE_MOT",
 					"value": 64
-				}
+				},
 				{
 					"label": "STATE_MRT",
 					"value": 128
