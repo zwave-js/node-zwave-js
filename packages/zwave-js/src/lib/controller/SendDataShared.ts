@@ -115,7 +115,7 @@ function parseTXPower(payload: Buffer, offset: number = 0): number | undefined {
 	if (ret >= -127 && ret <= 126) return ret;
 }
 
-export interface TransmitStatusReport {
+export interface TXReport {
 	/** Transmission time in ticks (multiples of 10ms) */
 	txTicks: number;
 	/** Number of repeaters used in the route to the destination, 0 for direct range */
@@ -157,15 +157,15 @@ export interface TransmitStatusReport {
 }
 
 /**
- * Parses a transmit status report returned by a SendData callback
+ * Parses a TX report returned by a SendData callback
  * @param includeACK whether ACK related fields should be parsed
  */
-export function parseTransmitStatusReport(
+export function parseTXReport(
 	includeACK: boolean,
 	payload: Buffer,
-): TransmitStatusReport | undefined {
+): TXReport | undefined {
 	if (payload.length < 17) return;
-	const ret: TransmitStatusReport = {
+	const ret: TXReport = {
 		txTicks: payload.readUInt16BE(0),
 		numRepeaters: payload[2],
 		ackRSSI: includeACK ? parseRSSI(payload, 3) : undefined,
@@ -216,9 +216,7 @@ export function parseTransmitStatusReport(
 	return stripUndefined(ret as any) as any;
 }
 
-export function transmitStatusReportToMessageRecord(
-	report: TransmitStatusReport,
-): MessageRecord {
+export function txReportToMessageRecord(report: TXReport): MessageRecord {
 	const ret: MessageRecord = stripUndefined({
 		// This is included in the parent command's transmit status line
 		// "TX duration": `${report.txTicks * 10} ms`,
@@ -332,16 +330,16 @@ export function isSendDataTransmitReport(
 	);
 }
 
-export function hasTransmitStatusReport(
+export function hasTXReport(
 	msg: unknown,
 ): msg is (
 	| SendDataRequestTransmitReport
 	| SendDataBridgeRequestTransmitReport
-) & { transmitStatusReport: TransmitStatusReport } {
+) & { txReport: TXReport } {
 	if (!msg) return false;
 	return (
 		(msg instanceof SendDataRequestTransmitReport ||
 			msg instanceof SendDataBridgeRequestTransmitReport) &&
-		!!msg.transmitStatusReport
+		!!msg.txReport
 	);
 }

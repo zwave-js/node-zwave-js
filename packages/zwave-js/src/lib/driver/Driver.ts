@@ -120,13 +120,13 @@ import {
 	SendDataRequest,
 } from "../controller/SendDataMessages";
 import {
-	hasTransmitStatusReport,
+	hasTXReport,
 	isSendData,
 	isSendDataSinglecast,
 	isSendDataTransmitReport,
 	SendDataMessage,
 	TransmitOptions,
-	TransmitStatusReport,
+	TXReport,
 } from "../controller/SendDataShared";
 import { SoftResetRequest } from "../controller/SoftResetRequest";
 import { ControllerLogger } from "../log/Controller";
@@ -376,10 +376,10 @@ export interface SendMessageOptions {
 	/** If a Wake Up On Demand should be requested for the target node. */
 	requestWakeUpOnDemand?: boolean;
 	/**
-	 * When a message sent to a node results in a transmit status report to be received, this callback will be called.
+	 * When a message sent to a node results in a TX report to be received, this callback will be called.
 	 * For multi-stage messages, the callback may be called multiple times.
 	 */
-	onTransmitStatusReport?: (report: TransmitStatusReport) => void;
+	onTXReport?: (report: TXReport) => void;
 }
 
 export interface SendCommandOptions extends SendMessageOptions {
@@ -3239,11 +3239,9 @@ ${handlers.length} left`,
 				}
 
 				// Notify listeners about the status report
-				if (hasTransmitStatusReport(result)) {
-					options.onTransmitStatusReport?.(
-						result.transmitStatusReport,
-					);
-					// TODO: Update statistics based on the status report
+				if (hasTXReport(result)) {
+					options.onTXReport?.(result.txReport);
+					// TODO: Update statistics based on the TX report
 				}
 			}
 		} else {

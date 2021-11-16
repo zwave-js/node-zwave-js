@@ -33,11 +33,11 @@ import type { SuccessIndicator } from "../message/SuccessIndicator";
 import { ApplicationCommandRequest } from "./ApplicationCommandRequest";
 import { BridgeApplicationCommandRequest } from "./BridgeApplicationCommandRequest";
 import {
-	parseTransmitStatusReport,
+	parseTXReport,
 	TransmitOptions,
 	TransmitStatus,
-	TransmitStatusReport,
-	transmitStatusReportToMessageRecord,
+	TXReport,
+	txReportToMessageRecord,
 } from "./SendDataShared";
 
 export const MAX_SEND_ATTEMPTS = 5;
@@ -173,7 +173,7 @@ export class SendDataRequestTransmitReport
 		if (gotDeserializationOptions(options)) {
 			this.callbackId = this.payload[0];
 			this.transmitStatus = this.payload[1];
-			this.transmitStatusReport = parseTransmitStatusReport(
+			this.txReport = parseTXReport(
 				this.transmitStatus !== TransmitStatus.NoAck,
 				this.payload.slice(2),
 			);
@@ -184,7 +184,7 @@ export class SendDataRequestTransmitReport
 	}
 
 	public readonly transmitStatus: TransmitStatus;
-	public readonly transmitStatusReport: TransmitStatusReport | undefined;
+	public readonly txReport: TXReport | undefined;
 
 	public isOK(): boolean {
 		return this.transmitStatus === TransmitStatus.OK;
@@ -204,13 +204,11 @@ export class SendDataRequestTransmitReport
 				"callback id": this.callbackId,
 				"transmit status":
 					getEnumMemberName(TransmitStatus, this.transmitStatus) +
-					(this.transmitStatusReport
-						? `, took ${this.transmitStatusReport.txTicks * 10} ms`
+					(this.txReport
+						? `, took ${this.txReport.txTicks * 10} ms`
 						: ""),
-				...(this.transmitStatusReport
-					? transmitStatusReportToMessageRecord(
-							this.transmitStatusReport,
-					  )
+				...(this.txReport
+					? txReportToMessageRecord(this.txReport)
 					: {}),
 			},
 		};
