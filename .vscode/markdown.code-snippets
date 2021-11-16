@@ -1,5 +1,6 @@
 {
 	"New Changelog entry": {
+		"scope": "markdown",
 		"prefix": "wip",
 		"body": [
 			"## __WORK IN PROGRESS__",
