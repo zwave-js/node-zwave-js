@@ -122,6 +122,7 @@ import {
 import {
 	isSendData,
 	isSendDataSinglecast,
+	isSendDataTransmitReport,
 	SendDataMessage,
 	TransmitOptions,
 } from "../controller/SendDataShared";
@@ -3207,6 +3208,46 @@ ${handlers.length} left`,
 		}
 	}
 
+	private handleSerialAPICommandResult(
+		msg: Message,
+		priority: MessagePriority,
+		result: Message | undefined,
+	): void {
+		// Update statistics
+		const node = msg.getNodeUnsafe();
+		let success = true;
+		if (isSendData(msg)) {
+			if (node) {
+				if (isSendDataTransmitReport(result) && !result.isOK()) {
+					success = false;
+					node.incrementStatistics("commandsDroppedTX");
+				} else {
+					node.incrementStatistics("commandsTX");
+				}
+			}
+		} else {
+			this._controller?.incrementStatistics("messagesTX");
+		}
+
+		// Track and potentially update the status of the node when communication succeeds
+		if (!!node && success) {
+			if (node.canSleep) {
+				// Do not update the node status when we just responded to a nonce request
+				if (priority !== MessagePriority.Handshake) {
+					// If the node is not meant to be kept awake, try to send it back to sleep
+					if (!node.keepAwake) {
+						this.debounceSendNodeToSleep(node);
+					}
+					// The node must be awake because it answered
+					node.markAsAwake();
+				}
+			} else if (node.status !== NodeStatus.Alive) {
+				// The node status was unknown or dead - in either case it must be alive because it answered
+				node.markAsAlive();
+			}
+		}
+	}
+
 	/**
 	 * Sends a message to the Z-Wave stick.
 	 * @param msg The message to send
@@ -3292,31 +3333,11 @@ ${handlers.length} left`,
 			this,
 			msg,
 			(msg, _result) => {
-				// Update statistics
-				const node = msg.getNodeUnsafe();
-				if (isSendData(msg)) {
-					node?.incrementStatistics("commandsTX");
-				} else {
-					this._controller?.incrementStatistics("messagesTX");
-				}
-
-				// Track and potentially update the status of the node when communication succeeds
-				if (node) {
-					if (node.canSleep) {
-						// Do not update the node status when we just responded to a nonce request
-						if (options.priority !== MessagePriority.Handshake) {
-							// If the node is not meant to be kept awake, try to send it back to sleep
-							if (!node.keepAwake) {
-								this.debounceSendNodeToSleep(node);
-							}
-							// The node must be awake because it answered
-							node.markAsAwake();
-						}
-					} else if (node.status !== NodeStatus.Alive) {
-						// The node status was unknown or dead - in either case it must be alive because it answered
-						node.markAsAlive();
-					}
-				}
+				this.handleSerialAPICommandResult(
+					msg,
+					options.priority!,
+					_result,
+				);
 			},
 		);
 		const transaction = new Transaction(this, {
