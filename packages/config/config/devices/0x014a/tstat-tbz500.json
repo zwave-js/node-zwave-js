@@ -245,78 +245,92 @@
 			"#": "23[0x0001]",
 			"label": "Send Status Change Report: Temperature",
 			"$import": "~/templates/master_template.json#base_enable_disable",
+			"valueSize": 2,
 			"defaultValue": 1
 		},
 		{
 			"#": "23[0x0002]",
 			"label": "Send Status Change Report: Heat Setpoint",
 			"$import": "~/templates/master_template.json#base_enable_disable",
+			"valueSize": 2,
 			"defaultValue": 1
 		},
 		{
 			"#": "23[0x0004]",
 			"label": "Send Status Change Report: Cool Setpoint",
 			"$import": "~/templates/master_template.json#base_enable_disable",
+			"valueSize": 2,
 			"defaultValue": 1
 		},
 		{
 			"#": "23[0x0008]",
 			"label": "Send Status Change Report: Mode",
 			"$import": "~/templates/master_template.json#base_enable_disable",
+			"valueSize": 2,
 			"defaultValue": 1
 		},
 		{
 			"#": "23[0x0010]",
 			"label": "Send Status Change Report: Fan Mode",
 			"$import": "~/templates/master_template.json#base_enable_disable",
+			"valueSize": 2,
 			"defaultValue": 1
 		},
 		{
 			"#": "23[0x0020]",
 			"label": "Send Status Change Report: Fan State",
 			"$import": "~/templates/master_template.json#base_enable_disable"
+			"valueSize": 2,
 		},
 		{
 			"#": "23[0x0040]",
 			"label": "Send Status Change Report: Operating State",
 			"$import": "~/templates/master_template.json#base_enable_disable",
+			"valueSize": 2,
 			"defaultValue": 1
 		},
 		{
 			"#": "23[0x0080]",
 			"label": "Send Status Change Report: Schedule Enable",
-			"$import": "~/templates/master_template.json#base_enable_disable"
+			"$import": "~/templates/master_template.json#base_enable_disable",
+			"valueSize": 2
 		},
 		{
 			"#": "23[0x0100]",
 			"label": "Send Status Change Report: Setback",
-			"$import": "~/templates/master_template.json#base_enable_disable"
+			"$import": "~/templates/master_template.json#base_enable_disable",
+			"valueSize": 2
 		},
 		{
 			"#": "23[0x0200]",
 			"label": "Send Status Change Report: Run Hold",
-			"$import": "~/templates/master_template.json#base_enable_disable"
+			"$import": "~/templates/master_template.json#base_enable_disable",
+			"valueSize": 2
 		},
 		{
 			"#": "23[0x0400]",
 			"label": "Send Status Change Report: Display Lock",
-			"$import": "~/templates/master_template.json#base_enable_disable"
+			"$import": "~/templates/master_template.json#base_enable_disable",
+			"valueSize": 2
 		},
 		{
 			"#": "23[0x2000]",
 			"label": "Send Status Change Report: Battery",
 			"$import": "~/templates/master_template.json#base_enable_disable",
+			"valueSize": 2,
 			"defaultValue": 1
 		},
 		{
 			"#": "23[0x4000]",
 			"label": "Send Status Change Report: Mechanical Status",
-			"$import": "~/templates/master_template.json#base_enable_disable"
+			"$import": "~/templates/master_template.json#base_enable_disable",
+			"valueSize": 2
 		},
 		{
 			"#": "23[0x8000]",
 			"label": "Send Status Change Report: SCP Status",
-			"$import": "~/templates/master_template.json#base_enable_disable"
+			"$import": "~/templates/master_template.json#base_enable_disable",
+			"valueSize": 2
 		},
 		{
 			"#": "24",
@@ -413,6 +427,7 @@
 			"minValue": 0,
 			"maxValue": 252,
 			"defaultValue": 0,
+			"unsigned": true,
 			"options": [
 				{
 					"label": "Disable",
@@ -552,7 +567,7 @@
 			"label": "Battery Report Timer",
 			"unit": "days",
 			"valueSize": 1,
-			"minValue": 1,
+			"minValue": 0,
 			"maxValue": 10,
 			"defaultValue": 1,
 			"options": [
@@ -577,7 +592,7 @@
 			"label": "Periodic Temperature Send Interval",
 			"unit": "minutes",
 			"valueSize": 1,
-			"minValue": 1,
+			"minValue": 0,
 			"maxValue": 120,
 			"defaultValue": 0,
 			"options": [
