@@ -46,7 +46,7 @@ function createTransaction(
 	const message = createMessage(fakeDriver, options);
 	const trns = new Transaction(fakeDriver, {
 		message,
-		parts: undefined as any,
+		parts: {} as any,
 		promise: createDeferredPromise(),
 		priority: options.priority || MessagePriority.Controller,
 	});

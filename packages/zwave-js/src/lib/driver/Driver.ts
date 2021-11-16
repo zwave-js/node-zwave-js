@@ -120,10 +120,13 @@ import {
 	SendDataRequest,
 } from "../controller/SendDataMessages";
 import {
+	hasTXReport,
 	isSendData,
 	isSendDataSinglecast,
+	isSendDataTransmitReport,
 	SendDataMessage,
 	TransmitOptions,
+	TXReport,
 } from "../controller/SendDataShared";
 import { SoftResetRequest } from "../controller/SoftResetRequest";
 import { ControllerLogger } from "../log/Controller";
@@ -372,6 +375,11 @@ export interface SendMessageOptions {
 	pauseSendThread?: boolean;
 	/** If a Wake Up On Demand should be requested for the target node. */
 	requestWakeUpOnDemand?: boolean;
+	/**
+	 * When a message sent to a node results in a TX report to be received, this callback will be called.
+	 * For multi-stage messages, the callback may be called multiple times.
+	 */
+	onTXReport?: (report: TXReport) => void;
 }
 
 export interface SendCommandOptions extends SendMessageOptions {
@@ -2449,10 +2457,11 @@ export class Driver extends TypedEventEmitter<DriverEventCallbacks> {
 	}
 
 	/**
+	 * @internal
 	 * Handles the case that a node failed to respond in time.
 	 * Returns `true` if the transaction failure was handled, `false` if it needs to be rejected.
 	 */
-	private handleMissingNodeACK(
+	public handleMissingNodeACK(
 		transaction: Transaction & {
 			message: SendDataRequest | SendDataBridgeRequest;
 		},
@@ -2472,21 +2481,6 @@ It is probably asleep, moving its messages to the wakeup queue.`,
 			);
 			// Mark the node as asleep
 			// The handler for the asleep status will move the messages to the wakeup queue
-
-			// // We need to re-add the current transaction if that is allowed because otherwise it will be dropped silently
-			// if (this.mayMoveToWakeupQueue(transaction)) {
-			// 	this.sendThread.send({ type: "add", transaction });
-			// } else {
-			// 	transaction.parts.self
-			// 		?.throw(
-			// 			new ZWaveError(
-			// 				`The node is asleep`,
-			// 				ZWaveErrorCodes.Controller_MessageDropped,
-			// 			),
-			// 		)
-			// 		// eslint-disable-next-line @typescript-eslint/no-empty-function
-			// 		.catch(() => {});
-			// }
 
 			node.markAsAsleep();
 			return true;
@@ -3222,6 +3216,58 @@ ${handlers.length} left`,
 	}
 
 	/**
+	 * Gets called whenever any Serial API command succeeded or a SendData command had a negative callback.
+	 */
+	private handleSerialAPICommandResult(
+		msg: Message,
+		options: SendMessageOptions,
+		result: Message | undefined,
+	): void {
+		// Update statistics
+		const node = msg.getNodeUnsafe();
+		let success = true;
+		if (isSendData(msg)) {
+			// This shouldn't happen, but just in case
+			if (!node) return;
+
+			if (isSendDataTransmitReport(result)) {
+				if (!result.isOK()) {
+					success = false;
+					node.incrementStatistics("commandsDroppedTX");
+				} else {
+					node.incrementStatistics("commandsTX");
+				}
+
+				// Notify listeners about the status report
+				if (hasTXReport(result)) {
+					options.onTXReport?.(result.txReport);
+					// TODO: Update statistics based on the TX report
+				}
+			}
+		} else {
+			this._controller?.incrementStatistics("messagesTX");
+		}
+
+		// Track and potentially update the status of the node when communication succeeds
+		if (node && success) {
+			if (node.canSleep) {
+				// Do not update the node status when we just responded to a nonce request
+				if (options.priority !== MessagePriority.Handshake) {
+					// If the node is not meant to be kept awake, try to send it back to sleep
+					if (!node.keepAwake) {
+						this.debounceSendNodeToSleep(node);
+					}
+					// The node must be awake because it answered
+					node.markAsAwake();
+				}
+			} else if (node.status !== NodeStatus.Alive) {
+				// The node status was unknown or dead - in either case it must be alive because it answered
+				node.markAsAlive();
+			}
+		}
+	}
+
+	/**
 	 * Sends a message to the Z-Wave stick.
 	 * @param msg The message to send
 	 * @param options (optional) Options regarding the message transmission
@@ -3305,32 +3351,8 @@ ${handlers.length} left`,
 		const { generator, resultPromise } = createMessageGenerator(
 			this,
 			msg,
-			(msg) => {
-				// Update statistics
-				const node = msg.getNodeUnsafe();
-				if (isSendData(msg)) {
-					node?.incrementStatistics("commandsTX");
-				} else {
-					this._controller?.incrementStatistics("messagesTX");
-				}
-
-				// Track and potentially update the status of the node when communication succeeds
-				if (node) {
-					if (node.canSleep) {
-						// Do not update the node status when we just responded to a nonce request
-						if (options.priority !== MessagePriority.Handshake) {
-							// If the node is not meant to be kept awake, try to send it back to sleep
-							if (!node.keepAwake) {
-								this.debounceSendNodeToSleep(node);
-							}
-							// The node must be awake because it answered
-							node.markAsAwake();
-						}
-					} else if (node.status !== NodeStatus.Alive) {
-						// The node status was unknown or dead - in either case it must be alive because it answered
-						node.markAsAlive();
-					}
-				}
+			(msg, _result) => {
+				this.handleSerialAPICommandResult(msg, options, _result);
 			},
 		);
 		const transaction = new Transaction(this, {
@@ -3432,7 +3454,9 @@ ${handlers.length} left`,
 			}
 		} else if (command.isMulticast()) {
 			if (
-				this.controller.isFunctionSupported(FunctionType.SendDataBridge)
+				this.controller.isFunctionSupported(
+					FunctionType.SendDataMulticastBridge,
+				)
 			) {
 				// Prioritize Bridge commands when they are supported
 				msg = new SendDataMulticastBridgeRequest(this, { command });

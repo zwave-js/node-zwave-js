@@ -152,7 +152,6 @@ describe("regression tests", () => {
 		);
 		// » [ACK]
 		expect(serialport.lastWrite).toEqual(ACK);
-		console.warn("sent handshake response");
 
 		await wait(150);
 
