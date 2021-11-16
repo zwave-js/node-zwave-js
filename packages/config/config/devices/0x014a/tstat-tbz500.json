@@ -279,8 +279,8 @@
 		{
 			"#": "23[0x0020]",
 			"label": "Send Status Change Report: Fan State",
-			"$import": "~/templates/master_template.json#base_enable_disable"
-			"valueSize": 2,
+			"$import": "~/templates/master_template.json#base_enable_disable",
+			"valueSize": 2
 		},
 		{
 			"#": "23[0x0040]",
