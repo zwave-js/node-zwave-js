@@ -474,7 +474,7 @@
 		},
 		{
 			"#": "53",
-			"label": "Filter Timer Nax",
+			"label": "Filter Timer Max",
 			"unit": "hours",
 			"valueSize": 2,
 			"minValue": 0,
