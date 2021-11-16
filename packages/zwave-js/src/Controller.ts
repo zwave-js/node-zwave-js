@@ -10,6 +10,7 @@ export {
 	ProtocolDataRate,
 	RSSI,
 	RssiError,
+	TXReport,
 } from "./lib/controller/SendDataShared";
 export type { ZWaveLibraryTypes } from "./lib/controller/ZWaveLibraryTypes";
 export { RFRegion } from "./lib/serialapi/misc/SerialAPISetupMessages";
