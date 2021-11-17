@@ -349,6 +349,8 @@ checkHealth(
 
 Checks the health of connection between the controller and this node and returns the results. The test is done in multiple rounds (1...10, default: 5), which can be configured using the first parameter. To monitor the progress, the optional `onProgress` callback can be used.
 
+> [!WARNING] This should **NOT** be done while there is a lot of traffic on the network because it will negatively impact the test results.
+
 The returned object contains the measurements of each round as well as a final rating (which is the worst of all round ratings):
 
 ```ts
