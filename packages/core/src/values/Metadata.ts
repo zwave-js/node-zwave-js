@@ -419,6 +419,11 @@ const WriteOnlyColor: ValueMetadataString = {
 
 // Some predefined CC-specific metadata
 
+/** The report of a DoorLockLogging LoggingRecord */
+const ReadOnlyLoggingRecord: ValueMetadataAny = {
+	..._readonly,
+};
+
 /** The level of a Switch */
 const Level: ValueMetadataNumeric = {
 	...UInt8,
@@ -581,4 +586,6 @@ export const ValueMetadata = {
 	ReadOnlyBuffer: Object.freeze(ReadOnlyBuffer),
 	/** A buffer (writeonly) */
 	WriteOnlyBuffer: Object.freeze(WriteOnlyBuffer),
+
+	ReadOnlyLoggingRecord: Object.freeze(ReadOnlyLoggingRecord),
 };
