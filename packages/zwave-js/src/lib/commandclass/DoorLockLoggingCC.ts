@@ -132,8 +132,8 @@ export interface Record {
 	dateTime: Date | null
 	eventType: EventType | null
 	label: EventTypeLabel | null
-	userId: number
-	userCode: string | Buffer
+	userId?: number | null
+	userCode?: string | Buffer | null
 }
 
 // @publicAPI
@@ -142,57 +142,57 @@ export enum RecordStatus {
 	HoldsLegalData = 0xfe,
 }
 
-function setRecordMetadata(
-	this: DoorLockLoggingCC,
-	recordNumber: number,
-	userCode?: string | Buffer,
-) {
-	const valueDB = this.getValueDB();
-	const recordId = getDoorLockLoggingRecordID(this.endpointIndex, recordNumber);
+// function setRecordMetadata(
+// 	this: DoorLockLoggingCC,
+// 	recordNumber: number,
+// 	userCode?: string | Buffer,
+// ) {
+// 	const valueDB = this.getValueDB();
+// 	const recordId = getDoorLockLoggingRecordID(this.endpointIndex, recordNumber);
 
 
 
-	// const statusValueId = getUserIdStatusValueID(this.endpointIndex, userId);
-	// const codeValueId = getUserCodeValueID(this.endpointIndex, userId);
-	// const supportedUserIDStatuses =
-	// 	valueDB.getValue<UserIDStatus[]>(
-	// 		getSupportedUserIDStatusesValueID(this.endpointIndex),
-	// 	) ??
-	// 	(this.version === 1
-	// 		? [
-	// 				UserIDStatus.Available,
-	// 				UserIDStatus.Enabled,
-	// 				UserIDStatus.Disabled,
-	// 		  ]
-	// 		: [
-	// 				UserIDStatus.Available,
-	// 				UserIDStatus.Enabled,
-	// 				UserIDStatus.Disabled,
-	// 				UserIDStatus.Messaging,
-	// 				UserIDStatus.PassageMode,
-	// 		  ]);
-	if (!valueDB.hasMetadata(statusValueId)) {
-		valueDB.setMetadata(statusValueId, {
-			...ValueMetadata.Number,
-			label: `User ID status (${userId})`,
-			states: enumValuesToMetadataStates(
-				UserIDStatus,
-				supportedUserIDStatuses,
-			),
-		});
-	}
-	const codeMetadata: ValueMetadata = {
-		...(Buffer.isBuffer(userCode)
-			? ValueMetadata.Buffer
-			: ValueMetadata.String),
-		minLength: 4,
-		maxLength: 10,
-		label: `User Code (${userId})`,
-	};
-	if (valueDB.getMetadata(codeValueId)?.type !== codeMetadata.type) {
-		valueDB.setMetadata(codeValueId, codeMetadata);
-	}
-}
+// 	// const statusValueId = getUserIdStatusValueID(this.endpointIndex, userId);
+// 	// const codeValueId = getUserCodeValueID(this.endpointIndex, userId);
+// 	// const supportedUserIDStatuses =
+// 	// 	valueDB.getValue<UserIDStatus[]>(
+// 	// 		getSupportedUserIDStatusesValueID(this.endpointIndex),
+// 	// 	) ??
+// 	// 	(this.version === 1
+// 	// 		? [
+// 	// 				UserIDStatus.Available,
+// 	// 				UserIDStatus.Enabled,
+// 	// 				UserIDStatus.Disabled,
+// 	// 		  ]
+// 	// 		: [
+// 	// 				UserIDStatus.Available,
+// 	// 				UserIDStatus.Enabled,
+// 	// 				UserIDStatus.Disabled,
+// 	// 				UserIDStatus.Messaging,
+// 	// 				UserIDStatus.PassageMode,
+// 	// 		  ]);
+// 	if (!valueDB.hasMetadata(statusValueId)) {
+// 		valueDB.setMetadata(statusValueId, {
+// 			...ValueMetadata.Number,
+// 			label: `User ID status (${userId})`,
+// 			states: enumValuesToMetadataStates(
+// 				UserIDStatus,
+// 				supportedUserIDStatuses,
+// 			),
+// 		});
+// 	}
+// 	const codeMetadata: ValueMetadata = {
+// 		...(Buffer.isBuffer(userCode)
+// 			? ValueMetadata.Buffer
+// 			: ValueMetadata.String),
+// 		minLength: 4,
+// 		maxLength: 10,
+// 		label: `User Code (${userId})`,
+// 	};
+// 	if (valueDB.getMetadata(codeValueId)?.type !== codeMetadata.type) {
+// 		valueDB.setMetadata(codeValueId, codeMetadata);
+// 	}
+// }
 
 // function persistRecord(
 // 	this: DoorLockLoggingCC,
@@ -256,7 +256,7 @@ export class DoorLockLoggingCCAPI extends PhysicalCCAPI {
 		return response?.supportedRecordsNumber;
 	}
 
-	public async getRecord(recordNumber: number = 0): Promise<void> {
+	public async getRecord(recordNumber: number = 0): Promise<Record | undefined> {
 		this.assertSupportsCommand(DoorLockLoggingCommand, DoorLockLoggingCommand.RecordGet);
 
 		// TODO: Check that the recordNumber does not exceed Max number
@@ -408,7 +408,6 @@ export class DoorLockLoggingCCRecordsSupportedReport extends DoorLockLoggingCC {
 
 	public persistValues(): boolean {
 		if (!super.persistValues()) return false;
-		// Create metadata if it does not exist
 
 		this.getValueDB().setValue(
 			getDoorLockLoggingRecordsSupportedValueID(this.endpointIndex),
@@ -421,6 +420,29 @@ export class DoorLockLoggingCCRecordsSupportedReport extends DoorLockLoggingCC {
 
 const convertEventTypeToLabel = (eventType: EventType): EventTypeLabel => {
 	return EventTypeLabel[EventType[eventType]];
+}
+
+const parseUserCodeFromPayload = (userCodeLength: number, userCodeBuffer: any): string | Buffer | null => {
+	// Function is adapted from User Code parsing in the User Code Command Class
+
+	if (userCodeLength == 0) return null;
+
+	// Specs say infer user code from payload length, manufacturers send zero-padded strings
+	while (userCodeBuffer[userCodeBuffer.length - 1] === 0) {
+		userCodeBuffer = userCodeBuffer.slice(0, -1);
+	}
+	// Specs say ASCII 0-9, manufacturers don't care :)
+	// Thus we check if the code is printable using ASCII, if not keep it as a Buffer
+	const userCodeString = userCodeBuffer.toString("utf8");
+	if (isPrintableASCII(userCodeString)) {
+		return userCodeString;
+	}
+	if (isPrintableASCIIWithNewlines(userCodeString)) {
+		// Ignore leading and trailing newlines if the rest is ASCII
+		return userCodeString.replace(/^[\r\n]*/, "")
+			.replace(/[\r\n]*$/, "");
+	}
+	return userCodeBuffer;
 }
 
 @CCCommand(DoorLockLoggingCommand.RecordsSupportedGet)
@@ -442,7 +464,7 @@ export class DoorLockLoggingCCRecordReport extends DoorLockLoggingCC {
 		this.recordNumber = this.payload[0];
 		this.recordStatus = this.payload[5] >>> 5;
 		if (this.recordStatus === RecordStatus.Empty) {
-			this.record = null
+			this.record = undefined
 		} else {
 			const dateSegments = {
 				year: this.payload.readUInt16BE(1),
@@ -453,46 +475,17 @@ export class DoorLockLoggingCCRecordReport extends DoorLockLoggingCC {
 				second: this.payload[7],
 			}
 
-			this.dateTime = segmentsToDate(dateSegments);
-			this.eventType = this.payload[8];
-			this.userId = this.payload[9];
+			const eventType = this.payload[8];
 			const userCodeLength = this.payload[10];
+			const userCodeBuffer = this.payload[11];
 
 			this.record = {
-				dateTime: this.dateTime,
-				eventType: this.eventType,
-				label: convertEventTypeToLabel(this.eventType),
+				dateTime: segmentsToDate(dateSegments),
+				eventType: eventType,
+				label: convertEventTypeToLabel(eventType),
 				recordNumber: this.recordNumber,
-				userId: this.userId,
-				userCode: null,
-			}
-
-			if (userCodeLength > 0) {
-				let userCodeBuffer = this.payload.slice(11);
-
-				// Specs say infer user code from payload length, manufacturers send zero-padded strings
-				while (userCodeBuffer[userCodeBuffer.length - 1] === 0) {
-					userCodeBuffer = userCodeBuffer.slice(0, -1);
-				}
-				// Specs say ASCII 0-9, manufacturers don't care :)
-				// Thus we check if the code is printable using ASCII, if not keep it as a Buffer
-				const userCodeString = userCodeBuffer.toString("utf8");
-				if (isPrintableASCII(userCodeString)) {
-					this.userCode = userCodeString;
-				} else if (
-					this.version === 1 &&
-					isPrintableASCIIWithNewlines(userCodeString)
-				) {
-					// Ignore leading and trailing newlines in V1 reports if the rest is ASCII
-					this.userCode = userCodeString
-						.replace(/^[\r\n]*/, "")
-						.replace(/[\r\n]*$/, "");
-				} else {
-					this.userCode = userCodeBuffer;
-				}
-				this.record.userCode = this.userCode
-			} else {
-				this.userCode = "";
+				userId: this.payload[9],
+				userCode: parseUserCodeFromPayload(userCodeLength, userCodeBuffer),
 			}
 		}
 
@@ -504,18 +497,17 @@ export class DoorLockLoggingCCRecordReport extends DoorLockLoggingCC {
 		...ValueMetadata.ReadOnlyLoggingRecord,
 		label: "Record",
 	})
-	public readonly record: Record;
+	public readonly record: Record | undefined;
 	public readonly recordNumber: number;
 	public readonly recordStatus: RecordStatus;
-	public readonly dateTime: Date;
-	public readonly eventType: EventType;
-	public readonly userId: number;
-	public readonly userCodeLength: number;
-	public readonly userCode: string | Buffer;
+	// public readonly dateTime: Date;
+	// public readonly eventType: EventType;
+	// public readonly userId: number;
+	// public readonly userCodeLength: number;
+	// public readonly userCode: string | Buffer;
 
 	public persistValues(): boolean {
 		if (!super.persistValues()) return false;
-		// Create metadata if it does not exist
 
 		const valueDB = this.getValueDB();
 		const recordId = getDoorLockLoggingRecordID(this.endpointIndex, this.recordNumber);
@@ -543,14 +535,7 @@ export class DoorLockLoggingCCRecordReport extends DoorLockLoggingCC {
 		return {
 			...super.toLogEntry(),
 			message: {
-				record: {
-					recordNumber: this.recordNumber,
-					dateTime: this.dateTime,
-					eventType: this.eventType,
-					label: convertEventTypeToLabel(this.eventType),
-					userId: this.userId,
-					userCode: this.userCode,
-				},	
+				record: this.record,
 			},
 		};
 	}

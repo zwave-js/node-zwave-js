@@ -421,6 +421,7 @@ const WriteOnlyColor: ValueMetadataString = {
 
 /** The report of a DoorLockLogging LoggingRecord */
 const ReadOnlyLoggingRecord: ValueMetadataAny = {
+	...Any,
 	..._readonly,
 };
 
