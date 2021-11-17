@@ -338,6 +338,89 @@ Depending on the number of test frames and involved hops, this may take a while.
 
 > [!ATTENTION] This will throw when the target node is a FLiRS node or a sleeping node that is not awake.
 
+### `checkHealth`
+
+```ts
+checkHealth(
+	rounds?: number,
+	onProgress?: (round: number, totalRounds: number, lastRating: number) => void,
+): Promise<HealthCheckSummary>
+```
+
+Checks the health of connection between the controller and this node and returns the results. The test is done in multiple rounds (1...10, default: 5), which can be configured using the first parameter. To monitor the progress, the optional `onProgress` callback can be used.
+
+The returned object contains the measurements of each round as well as a final rating (which is the worst of all round ratings):
+
+```ts
+interface HealthCheckSummary {
+	/** The check results of each round */
+	results: HealthCheckResult[];
+	/** The health rating expressed as a number from 0 (not working at all) to 10 (perfect connectivity). */
+	rating: number;
+}
+```
+
+where each result looks as follows:
+
+<!-- #import HealthCheckResult from "zwave-js" -->
+
+```ts
+interface HealthCheckResult {
+	/**
+	 * How many route changes were needed. Lower = better, ideally 0.
+	 *
+	 * Only available if the controller supports TX reports.
+	 */
+	routeChanges?: number;
+	/** How many routing neighbors this node has. Higher = better, ideally > 2. */
+	numNeighbors: number;
+	/** How many pings were not ACKed by the node. Lower = better, ideally 0. */
+	failedPingsNode: number;
+	/**
+	 * The minimum powerlevel where all pings from the node were ACKed by the controller. Higher = better, ideally 6dBm or more.
+	 *
+	 * Only available if the node supports Powerlevel CC
+	 */
+	minPowerlevel?: Powerlevel;
+	/**
+	 * If no powerlevel was found where the controller ACKed all pings from the node, this contains the number of pings that weren't ACKed. Lower = better, ideally 0.
+	 *
+	 * Only available if the node supports Powerlevel CC
+	 */
+	failedPingsController?: number;
+	/**
+	 * An estimation of the Signal-to-Noise Ratio Margin in dBm.
+	 *
+	 * Only available if the controller supports TX reports.
+	 */
+	snrMargin?: number;
+
+	/** See {@link HealthCheckSummary.rating} */
+	rating: number;
+}
+```
+
+The health rating is computed similar to Silabs' PC Controller IMA tool where 10 means _perfect_ and 0 means _not working at all_. The following table shows which requirements must be fulfilled to achieve a given rating. If the min. powerlevel or SNR margin can not be measured, the condition is assumed to be fulfilled.
+
+| Rating | Failed pings | Route changes | No. of neighbors | min. powerlevel | SNR margin |
+| -----: | -----------: | ------------: | ---------------: | --------------: | ---------: |
+|  ✅ 10 |            0 |             0 |              > 2 |        ≤ −6 dBm |   ≥ 17 dBm |
+|   🟢 9 |            0 |             1 |              > 2 |        ≤ −6 dBm |   ≥ 17 dBm |
+|   🟢 8 |            0 |           ≤ 1 |              ≤ 2 |        ≤ −6 dBm |   ≥ 17 dBm |
+|   🟢 7 |            0 |           ≤ 1 |              > 2 |               - |          - |
+|   🟢 6 |            0 |           ≤ 1 |              ≤ 2 |               - |          - |
+|        |              |               |                  |                 |            |
+|   🟡 5 |            0 |           ≤ 4 |                - |               - |          - |
+|   🟡 4 |            0 |           > 4 |                - |               - |          - |
+|        |              |               |                  |                 |            |
+|   🔴 3 |            1 |             - |                - |               - |          - |
+|   🔴 2 |            2 |             - |                - |               - |          - |
+|   🔴 1 |          ≤ 9 |             - |                - |               - |          - |
+|        |              |               |                  |                 |            |
+|   ❌ 0 |           10 |             - |                - |               - |          - |
+
+> [!NOTE] This test builds on some functionality that is not available for all controller or nodes. If the node does not support `Powerlevel CC` or the controller does not support TX reports, this check will be less reliable.
+
 ## ZWaveNode properties
 
 ### `id`

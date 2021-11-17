@@ -110,7 +110,7 @@ export class BridgeApplicationCommandRequest
 				break;
 			// case this.rssi < RSSI_RESERVED_START:
 			default:
-				message.RSSI = `${this.rssi} dBms`;
+				message.RSSI = `${this.rssi} dBm`;
 				break;
 		}
 		return {

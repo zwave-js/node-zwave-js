@@ -9,7 +9,10 @@ import type {
 import type { FirmwareUpdateStatus } from "../commandclass";
 import type { ZWaveNotificationCallbackParams_EntryControlCC } from "../commandclass/EntryControlCC";
 import type { ZWaveNotificationCallbackParams_NotificationCC } from "../commandclass/NotificationCC";
-import type { ZWaveNotificationCallbackParams_PowerlevelCC } from "../commandclass/PowerlevelCC";
+import type {
+	Powerlevel,
+	ZWaveNotificationCallbackParams_PowerlevelCC,
+} from "../commandclass/PowerlevelCC";
 import type { ZWaveNode } from "./Node";
 
 export interface TranslatedValueID extends ValueID {
@@ -161,4 +164,69 @@ export type DataRate = 9600 | 40000 | 100000;
 export enum NodeType {
 	Controller,
 	"Routing End Node",
+}
+
+/** Represents the result of one check round, usually 10 pings in both directions */
+export interface HealthCheckResult {
+	/**
+	 * How many route changes were needed. Lower = better, ideally 0.
+	 *
+	 * Only available if the controller supports TX reports.
+	 */
+	routeChanges?: number;
+	/** How many routing neighbors this node has. Higher = better, ideally > 2. */
+	numNeighbors: number;
+	/** How many pings were not ACKed by the node. Lower = better, ideally 0. */
+	failedPingsNode: number;
+	/**
+	 * The minimum powerlevel where all pings from the node were ACKed by the controller. Higher = better, ideally 6dBm or more.
+	 *
+	 * Only available if the node supports Powerlevel CC
+	 */
+	minPowerlevel?: Powerlevel;
+	/**
+	 * If no powerlevel was found where the controller ACKed all pings from the node, this contains the number of pings that weren't ACKed. Lower = better, ideally 0.
+	 *
+	 * Only available if the node supports Powerlevel CC
+	 */
+	failedPingsController?: number;
+	/**
+	 * An estimation of the Signal-to-Noise Ratio Margin in dBm.
+	 *
+	 * Only available if the controller supports TX reports.
+	 */
+	snrMargin?: number;
+
+	/** See {@link HealthCheckSummary.rating} */
+	rating: number;
+}
+
+export interface HealthCheckSummary {
+	/** The check results of each round */
+	results: HealthCheckResult[];
+	/**
+	 * The health rating expressed as a number from 0 (not working at all) to 10 (perfect connectivity).
+	 * The rating is calculated evaluating the test results of the worst round similar to Silabs' PC controller.
+	 * Each rating is only achieved if all the requirements are fulfilled.
+	 *
+	 * | Rating | Failed pings | Route changes | No. of neighbors | min. powerlevel | SNR margin |
+	 * | -----: | -----------: | ------------: | ---------------: | --------------: | ---------: |
+	 * | ✅  10 |            0 |             0 |              > 2 |        ≤ −6 dBm |   ≥ 17 dBm |
+	 * | 🟢   9 |            0 |             1 |              > 2 |        ≤ −6 dBm |   ≥ 17 dBm |
+	 * | 🟢   8 |            0 |           ≤ 1 |              ≤ 2 |        ≤ −6 dBm |   ≥ 17 dBm |
+	 * | 🟢   7 |            0 |           ≤ 1 |              > 2 |               - |          - |
+	 * | 🟢   6 |            0 |           ≤ 1 |              ≤ 2 |               - |          - |
+	 * |        |              |               |                  |                 |            |
+	 * | 🟡   5 |            0 |           ≤ 4 |                - |               - |          - |
+	 * | 🟡   4 |            0 |           > 4 |                - |               - |          - |
+	 * |        |              |               |                  |                 |            |
+	 * | 🔴   3 |            1 |             - |                - |               - |          - |
+	 * | 🔴   2 |            2 |             - |                - |               - |          - |
+	 * | 🔴   1 |          ≤ 9 |             - |                - |               - |          - |
+	 * |        |              |               |                  |                 |            |
+	 * | ❌   0 |           10 |             - |                - |               - |          - |
+	 *
+	 * If the min. powerlevel or SNR margin can not be measured, the condition is assumed to be fulfilled.
+	 */
+	rating: number;
 }

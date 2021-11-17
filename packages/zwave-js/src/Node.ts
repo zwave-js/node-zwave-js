@@ -6,6 +6,8 @@ export type { NodeStatistics } from "./lib/node/NodeStatistics";
 export {
 	DataRate,
 	FLiRS,
+	HealthCheckResult,
+	HealthCheckSummary,
 	InterviewStage,
 	NodeInterviewFailedEventArgs,
 	NodeStatus,

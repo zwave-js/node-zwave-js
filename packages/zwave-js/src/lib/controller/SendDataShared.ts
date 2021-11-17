@@ -91,7 +91,10 @@ export function parseRSSI(payload: Buffer, offset: number = 0): RSSI {
 	return ret;
 }
 
-function tryParseRSSI(payload: Buffer, offset: number = 0): RSSI | undefined {
+export function tryParseRSSI(
+	payload: Buffer,
+	offset: number = 0,
+): RSSI | undefined {
 	if (payload.length <= offset) return;
 	return parseRSSI(payload, offset);
 }
