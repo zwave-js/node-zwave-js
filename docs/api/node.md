@@ -338,25 +338,25 @@ Depending on the number of test frames and involved hops, this may take a while.
 
 > [!ATTENTION] This will throw when the target node is a FLiRS node or a sleeping node that is not awake.
 
-### `checkHealth`
+### `checkLifelineHealth`
 
 ```ts
-checkHealth(
+checkLifelineHealth(
 	rounds?: number,
 	onProgress?: (round: number, totalRounds: number, lastRating: number) => void,
 ): Promise<HealthCheckSummary>
 ```
 
-Checks the health of connection between the controller and this node and returns the results. The test is done in multiple rounds (1...10, default: 5), which can be configured using the first parameter. To monitor the progress, the optional `onProgress` callback can be used.
+Checks the health of the connection between the controller and this node and returns the results. The test is done in multiple rounds (1...10, default: 5), which can be configured using the first parameter. To monitor the progress, the optional `onProgress` callback can be used.
 
 > [!WARNING] This should **NOT** be done while there is a lot of traffic on the network because it will negatively impact the test results.
 
 The returned object contains the measurements of each round as well as a final rating (which is the worst of all round ratings):
 
 ```ts
-interface HealthCheckSummary {
+interface LifelineHealthCheckSummary {
 	/** The check results of each round */
-	results: HealthCheckResult[];
+	results: LifelineHealthCheckResult[];
 	/** The health rating expressed as a number from 0 (not working at all) to 10 (perfect connectivity). */
 	rating: number;
 }
@@ -364,10 +364,10 @@ interface HealthCheckSummary {
 
 where each result looks as follows:
 
-<!-- #import HealthCheckResult from "zwave-js" -->
+<!-- #import LifelineHealthCheckResult from "zwave-js" -->
 
 ```ts
-interface HealthCheckResult {
+interface LifelineHealthCheckResult {
 	/**
 	 * How many route changes were needed. Lower = better, ideally 0.
 	 *
@@ -397,7 +397,7 @@ interface HealthCheckResult {
 	 */
 	snrMargin?: number;
 
-	/** See {@link HealthCheckSummary.rating} */
+	/** See {@link LifelineHealthCheckSummary.rating} */
 	rating: number;
 }
 ```

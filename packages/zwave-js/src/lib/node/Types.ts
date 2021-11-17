@@ -166,8 +166,8 @@ export enum NodeType {
 	"Routing End Node",
 }
 
-/** Represents the result of one check round, usually 10 pings in both directions */
-export interface HealthCheckResult {
+/** Represents the result of one health check round of a node's lifeline */
+export interface LifelineHealthCheckResult {
 	/**
 	 * How many route changes were needed. Lower = better, ideally 0.
 	 *
@@ -197,13 +197,13 @@ export interface HealthCheckResult {
 	 */
 	snrMargin?: number;
 
-	/** See {@link HealthCheckSummary.rating} */
+	/** See {@link LifelineHealthCheckSummary.rating} */
 	rating: number;
 }
 
-export interface HealthCheckSummary {
+export interface LifelineHealthCheckSummary {
 	/** The check results of each round */
-	results: HealthCheckResult[];
+	results: LifelineHealthCheckResult[];
 	/**
 	 * The health rating expressed as a number from 0 (not working at all) to 10 (perfect connectivity).
 	 * The rating is calculated evaluating the test results of the worst round similar to Silabs' PC controller.

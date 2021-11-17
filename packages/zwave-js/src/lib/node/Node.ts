@@ -173,8 +173,8 @@ import {
 import type {
 	DataRate,
 	FLiRS,
-	HealthCheckResult,
-	HealthCheckSummary,
+	LifelineHealthCheckResult,
+	LifelineHealthCheckSummary,
 	TranslatedValueID,
 	ZWaveNodeEventCallbacks,
 	ZWaveNodeValueEventCallbacks,
@@ -4007,14 +4007,14 @@ protocol version:      ${this._protocolVersion}`;
 	/**
 	 * Checks the health of connection between the controller and this node and returns the results.
 	 */
-	public async checkHealth(
+	public async checkLifelineHealth(
 		rounds: number = 5,
 		onProgress?: (
 			round: number,
 			totalRounds: number,
 			lastRating: number,
 		) => void,
-	): Promise<HealthCheckSummary> {
+	): Promise<LifelineHealthCheckSummary> {
 		if (rounds > 10 || rounds < 1) {
 			throw new ZWaveError(
 				"The number of health check rounds must be between 1 and 10!",
@@ -4027,7 +4027,7 @@ protocol version:      ${this._protocolVersion}`;
 		const start = Date.now();
 
 		/** Computes a health rating from a health check result */
-		const computeRating = (result: HealthCheckResult) => {
+		const computeRating = (result: LifelineHealthCheckResult) => {
 			const failedPings = Math.max(
 				result.failedPingsController ?? 0,
 				result.failedPingsNode,
@@ -4065,12 +4065,12 @@ protocol version:      ${this._protocolVersion}`;
 
 		this.driver.controllerLog.logNode(
 			this.id,
-			`Starting health check (${rounds} round${
+			`Starting lifeline health check (${rounds} round${
 				rounds !== 1 ? "s" : ""
 			})...`,
 		);
 
-		const results: HealthCheckResult[] = [];
+		const results: LifelineHealthCheckResult[] = [];
 		for (let round = 1; round <= rounds; round++) {
 			// Determine the number of repeating neighbors
 			const numNeighbors = (
@@ -4119,7 +4119,7 @@ protocol version:      ${this._protocolVersion}`;
 				}
 			}
 
-			const ret: HealthCheckResult = {
+			const ret: LifelineHealthCheckResult = {
 				failedPingsNode,
 				numNeighbors,
 				routeChanges,
@@ -4190,7 +4190,10 @@ protocol version:      ${this._protocolVersion}`;
 		const duration = Date.now() - start;
 
 		const rating = Math.min(...results.map((r) => r.rating));
-		const formatRound = (round: number, result: HealthCheckResult) => {
+		const formatRound = (
+			round: number,
+			result: LifelineHealthCheckResult,
+		) => {
 			const ret = [
 				`· round ${padStart(
 					round.toString(),
@@ -4219,7 +4222,7 @@ protocol version:      ${this._protocolVersion}`;
 		};
 		this.driver.controllerLog.logNode(
 			this.id,
-			`Health check complete in ${duration} ms
+			`Lifeline health check complete in ${duration} ms
 rating:                   ${rating} (${ratingToWord(rating)})
 no. of routing neighbors: ${results[results.length - 1].numNeighbors}
  
