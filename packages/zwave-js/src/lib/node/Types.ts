@@ -230,3 +230,62 @@ export interface LifelineHealthCheckSummary {
 	 */
 	rating: number;
 }
+
+/** Represents the result of one health check round of a route between two nodes */
+export interface RouteHealthCheckResult {
+	/** How many routing neighbors this node has. Higher = better, ideally > 2. */
+	numNeighbors: number;
+	/**
+	 * How many pings were not ACKed by the target node. Lower = better, ideally 0.
+	 *
+	 * Only available if the source node supports Powerlevel CC
+	 */
+	failedPingsToTarget?: number;
+	/**
+	 * How many pings were not ACKed by the source node. Lower = better, ideally 0.
+	 *
+	 * Only available if the target node supports Powerlevel CC
+	 */
+	failedPingsToSource?: number;
+	/**
+	 * The minimum powerlevel where all pings from the source node were ACKed by the target node. Higher = better, ideally 6dBm or more.
+	 *
+	 * Only available if the source node supports Powerlevel CC
+	 */
+	minPowerlevelSource?: Powerlevel;
+	/**
+	 * The minimum powerlevel where all pings from the target node were ACKed by the source node. Higher = better, ideally 6dBm or more.
+	 *
+	 * Only available if the source node supports Powerlevel CC
+	 */
+	minPowerlevelTarget?: Powerlevel;
+
+	/** See {@link RouteHealthCheckSummary.rating} */
+	rating: number;
+}
+
+export interface RouteHealthCheckSummary {
+	/** The check results of each round */
+	results: RouteHealthCheckResult[];
+	/**
+	 * The health rating expressed as a number from 0 (not working at all) to 10 (perfect connectivity).
+	 * See {@link LifelineHealthCheckSummary.rating} for a detailed description.
+	 *
+	 * Because the connection between two nodes can only be evaluated with successful pings, the ratings 4, 5 and 9
+	 * cannot be achieved in this test:
+	 *
+	 * | Rating | Failed pings | No. of neighbors | min. powerlevel |
+	 * | -----: | -----------: | ---------------: | --------------: |
+	 * | ✅  10 |            0 |              > 2 |        ≤ −6 dBm |
+	 * | 🟢   8 |            0 |              ≤ 2 |        ≤ −6 dBm |
+	 * | 🟢   7 |            0 |              > 2 |               - |
+	 * | 🟢   6 |            0 |              ≤ 2 |               - |
+	 * |        |              |                  |                 |
+	 * | 🔴   3 |            1 |                - |               - |
+	 * | 🔴   2 |            2 |                - |               - |
+	 * | 🔴   1 |          ≤ 9 |                - |               - |
+	 * |        |              |                  |                 |
+	 * | ❌   0 |           10 |                - |               - |
+	 */
+	rating: number;
+}

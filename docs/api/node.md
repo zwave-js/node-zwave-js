@@ -423,6 +423,88 @@ The health rating is computed similar to Silabs' PC Controller IMA tool where 10
 
 > [!NOTE] This test builds on some functionality that is not available for all controller or nodes. If the node does not support `Powerlevel CC` or the controller does not support TX reports, this check will be less reliable.
 
+### `checkRouteHealth`
+
+```ts
+checkRouteHealth(
+	targetNodeId: number,
+	rounds?: number,
+	onProgress?: (round: number, totalRounds: number, lastRating: number) => void,
+): Promise<HealthCheckSummary>
+```
+
+Checks the health of connection between this node and the target node and returns the results. At least one of the nodes **must** support `Powerlevel CC`.
+
+The test is done in multiple rounds (1...10, default: 5), which can be configured using the first parameter. To monitor the progress, the optional `onProgress` callback can be used.
+
+> [!WARNING] This should **NOT** be done while there is a lot of traffic on the network because it will negatively impact the test results.
+
+The returned object contains the measurements of each round as well as a final rating (which is the worst of all round ratings):
+
+```ts
+interface RouteHealthCheckSummary {
+	/** The check results of each round */
+	results: RouteHealthCheckResult[];
+	/** The health rating expressed as a number from 0 (not working at all) to 10 (perfect connectivity). */
+	rating: number;
+}
+```
+
+where each result looks as follows:
+
+<!-- #import RouteHealthCheckResult from "zwave-js" -->
+
+```ts
+interface RouteHealthCheckResult {
+	/** How many routing neighbors this node has. Higher = better, ideally > 2. */
+	numNeighbors: number;
+	/**
+	 * How many pings were not ACKed by the target node. Lower = better, ideally 0.
+	 *
+	 * Only available if the source node supports Powerlevel CC
+	 */
+	failedPingsToTarget?: number;
+	/**
+	 * How many pings were not ACKed by the source node. Lower = better, ideally 0.
+	 *
+	 * Only available if the target node supports Powerlevel CC
+	 */
+	failedPingsToSource?: number;
+	/**
+	 * The minimum powerlevel where all pings from the source node were ACKed by the target node. Higher = better, ideally 6dBm or more.
+	 *
+	 * Only available if the source node supports Powerlevel CC
+	 */
+	minPowerlevelSource?: Powerlevel;
+	/**
+	 * The minimum powerlevel where all pings from the target node were ACKed by the source node. Higher = better, ideally 6dBm or more.
+	 *
+	 * Only available if the source node supports Powerlevel CC
+	 */
+	minPowerlevelTarget?: Powerlevel;
+
+	/** See {@link RouteHealthCheckSummary.rating} */
+	rating: number;
+}
+```
+
+The health rating expressed as a number from 0 (not working at all) to 10 (perfect connectivity). The following table shows which requirements must be fulfilled to achieve a given rating. If the min. powerlevel of one node can not be measured, the condition is assumed to be fulfilled.
+
+| Rating | Failed pings | No. of neighbors | min. powerlevel |
+| -----: | -----------: | ---------------: | --------------: |
+|  ✅ 10 |            0 |              > 2 |        ≤ −6 dBm |
+|   🟢 8 |            0 |              ≤ 2 |        ≤ −6 dBm |
+|   🟢 7 |            0 |              > 2 |               - |
+|   🟢 6 |            0 |              ≤ 2 |               - |
+|        |              |                  |                 |
+|   🔴 3 |            1 |                - |               - |
+|   🔴 2 |            2 |                - |               - |
+|   🔴 1 |          ≤ 9 |                - |               - |
+|        |              |                  |                 |
+|   ❌ 0 |           10 |                - |               - |
+
+> [!NOTE] Due to missing insight into re-routing attempts between two nodes, some of the values for the lifeline health rating don't exist here. Furthermore, it is not guaranteed that a route between two nodes and lifeline with the same health rating have the same quality.
+
 ## ZWaveNode properties
 
 ### `id`
