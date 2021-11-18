@@ -1,6 +1,3 @@
-// Enable Yarn PnP
-require("../../../.pnp.cjs").setup();
-
 const c = require("ansi-colors");
 const exec = require("@actions/exec");
 const github = require("@actions/github");

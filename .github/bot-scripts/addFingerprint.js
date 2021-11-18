@@ -2,10 +2,6 @@
 
 /// <reference path="types.d.ts" />
 
-// To require non-local modules, we need to setup Yarn PnP
-// @ts-ignore
-require("../../.pnp.cjs").setup();
-
 const { ConfigManager } = require("@zwave-js/config");
 const { formatId } = require("@zwave-js/shared");
 const JSONC = require("comment-json");
