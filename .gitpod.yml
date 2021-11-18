@@ -29,7 +29,6 @@ vscode:
     - dbaeumer.vscode-eslint
     - esbenp.prettier-vscode
     - EditorConfig.EditorConfig
-    - arcanis.vscode-zipfs
 
 # Configure prebuilds
 github:

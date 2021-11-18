@@ -77,9 +77,6 @@
     "typescript": "4.4.4",
     "zwave-js": "workspace:*"
   },
-  "resolutions": {
-    "@ts-morph/common": "patch:@ts-morph/common@~0.11.0#.yarn-patches/ts-morph.diff"
-  },
   "scripts": {
     "prebuild": "yarn workspace zwave-js run b prebuild",
     "build": "tsc -b packages/!(zwave-js)/tsconfig.build.json && yarn prebuild && tsc -b packages/zwave-js/tsconfig.build.json",
