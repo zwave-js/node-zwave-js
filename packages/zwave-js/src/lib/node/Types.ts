@@ -169,11 +169,17 @@ export enum NodeType {
 /** Represents the result of one health check round of a node's lifeline */
 export interface LifelineHealthCheckResult {
 	/**
-	 * How many route changes were needed. Lower = better, ideally 0.
+	 * How many times at least one new route was needed. Lower = better, ideally 0.
 	 *
 	 * Only available if the controller supports TX reports.
 	 */
 	routeChanges?: number;
+	/**
+	 * The average time it took to send a ping. Lower = better, ideally close to 0.
+	 *
+	 * Will use the time in TX reports if available, otherwise fall back to measuring the round trip time.
+	 */
+	latency: number;
 	/** How many routing neighbors this node has. Higher = better, ideally > 2. */
 	numNeighbors: number;
 	/** How many pings were not ACKed by the node. Lower = better, ideally 0. */
@@ -209,19 +215,19 @@ export interface LifelineHealthCheckSummary {
 	 * The rating is calculated evaluating the test results of the worst round similar to Silabs' PC controller.
 	 * Each rating is only achieved if all the requirements are fulfilled.
 	 *
-	 * | Rating | Failed pings | Route changes | No. of neighbors | min. powerlevel | SNR margin |
+	 * | Rating | Failed pings | Latency       | No. of neighbors | min. powerlevel | SNR margin |
 	 * | -----: | -----------: | ------------: | ---------------: | --------------: | ---------: |
-	 * | ✅  10 |            0 |             0 |              > 2 |        ≤ −6 dBm |   ≥ 17 dBm |
-	 * | 🟢   9 |            0 |             1 |              > 2 |        ≤ −6 dBm |   ≥ 17 dBm |
-	 * | 🟢   8 |            0 |           ≤ 1 |              ≤ 2 |        ≤ −6 dBm |   ≥ 17 dBm |
-	 * | 🟢   7 |            0 |           ≤ 1 |              > 2 |               - |          - |
-	 * | 🟢   6 |            0 |           ≤ 1 |              ≤ 2 |               - |          - |
+	 * | ✅  10 |            0 |      ≤  50 ms |              > 2 |        ≤ −6 dBm |   ≥ 17 dBm |
+	 * | 🟢   9 |            0 |      ≤ 100 ms |              > 2 |        ≤ −6 dBm |   ≥ 17 dBm |
+	 * | 🟢   8 |            0 |      ≤ 100 ms |              ≤ 2 |        ≤ −6 dBm |   ≥ 17 dBm |
+	 * | 🟢   7 |            0 |      ≤ 100 ms |              > 2 |               - |          - |
+	 * | 🟢   6 |            0 |      ≤ 100 ms |              ≤ 2 |               - |          - |
 	 * |        |              |               |                  |                 |            |
-	 * | 🟡   5 |            0 |           ≤ 4 |                - |               - |          - |
-	 * | 🟡   4 |            0 |           > 4 |                - |               - |          - |
+	 * | 🟡   5 |            0 |      ≤ 250 ms |                - |               - |          - |
+	 * | 🟡   4 |            0 |      ≤ 500 ms |                - |               - |          - |
 	 * |        |              |               |                  |                 |            |
-	 * | 🔴   3 |            1 |             - |                - |               - |          - |
-	 * | 🔴   2 |            2 |             - |                - |               - |          - |
+	 * | 🔴   3 |            1 |     ≤ 1000 ms |                - |               - |          - |
+	 * | 🔴   2 |          ≤ 2 |     > 1000 ms |                - |               - |          - |
 	 * | 🔴   1 |          ≤ 9 |             - |                - |               - |          - |
 	 * |        |              |               |                  |                 |            |
 	 * | ❌   0 |           10 |             - |                - |               - |          - |

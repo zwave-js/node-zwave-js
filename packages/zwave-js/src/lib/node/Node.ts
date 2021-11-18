@@ -4086,27 +4086,36 @@ protocol version:      ${this._protocolVersion}`;
 			let channel: number | undefined;
 			let snrMargin: number | undefined;
 			let failedPingsNode = 0;
+			let latency = 0;
 			const pingAPI = this.commandClasses["No Operation"].withOptions({
 				onTXReport: (report) => {
 					txReport = report;
 				},
 			});
 			for (let i = 1; i <= testFrameCount; i++) {
+				const start = Date.now();
 				const pingResult = await pingAPI.send().then(
 					() => true,
 					() => false,
 				);
+				const rtt = Date.now() - start;
 				if (!pingResult) {
 					failedPingsNode++;
+					latency += rtt;
 				} else if (txReport) {
+					latency += txReport.txTicks * 10;
 					routeChanges ??= 0;
 					if (txReport.routingAttempts > 1) {
 						routeChanges++;
 					}
 					rssi = txReport.ackRSSI;
 					channel = txReport.ackChannelNo;
+				} else {
+					latency += rtt;
 				}
 			}
+			latency /= testFrameCount;
+
 			// If possible, compute the SNR margin from the test results
 			if (
 				rssi != undefined &&
@@ -4122,6 +4131,7 @@ protocol version:      ${this._protocolVersion}`;
 			}
 
 			const ret: LifelineHealthCheckResult = {
+				latency,
 				failedPingsNode,
 				numNeighbors,
 				routeChanges,
@@ -4203,6 +4213,9 @@ protocol version:      ${this._protocolVersion}`;
 					" ",
 				)} - rating: ${result.rating} (${ratingToWord(result.rating)})`,
 				`  failed pings → node:             ${result.failedPingsNode}/${testFrameCount}`,
+				`  avg. latency:                    ${result.latency.toFixed(
+					1,
+				)} ms`,
 				result.routeChanges != undefined
 					? `  route changes:                   ${result.routeChanges}`
 					: "",

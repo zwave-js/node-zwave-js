@@ -404,22 +404,22 @@ interface LifelineHealthCheckResult {
 
 The health rating is computed similar to Silabs' PC Controller IMA tool where 10 means _perfect_ and 0 means _not working at all_. The following table shows which requirements must be fulfilled to achieve a given rating. If the min. powerlevel or SNR margin can not be measured, the condition is assumed to be fulfilled.
 
-| Rating | Failed pings | Route changes | No. of neighbors | min. powerlevel | SNR margin |
-| -----: | -----------: | ------------: | ---------------: | --------------: | ---------: |
-|  ✅ 10 |            0 |             0 |              > 2 |        ≤ −6 dBm |   ≥ 17 dBm |
-|   🟢 9 |            0 |             1 |              > 2 |        ≤ −6 dBm |   ≥ 17 dBm |
-|   🟢 8 |            0 |           ≤ 1 |              ≤ 2 |        ≤ −6 dBm |   ≥ 17 dBm |
-|   🟢 7 |            0 |           ≤ 1 |              > 2 |               - |          - |
-|   🟢 6 |            0 |           ≤ 1 |              ≤ 2 |               - |          - |
-|        |              |               |                  |                 |            |
-|   🟡 5 |            0 |           ≤ 4 |                - |               - |          - |
-|   🟡 4 |            0 |           > 4 |                - |               - |          - |
-|        |              |               |                  |                 |            |
-|   🔴 3 |            1 |             - |                - |               - |          - |
-|   🔴 2 |            2 |             - |                - |               - |          - |
-|   🔴 1 |          ≤ 9 |             - |                - |               - |          - |
-|        |              |               |                  |                 |            |
-|   ❌ 0 |           10 |             - |                - |               - |          - |
+| Rating | Failed pings |   Latency | No. of neighbors | min. powerlevel | SNR margin |
+| -----: | -----------: | --------: | ---------------: | --------------: | ---------: |
+|  ✅ 10 |            0 |   ≤ 50 ms |              > 2 |        ≤ −6 dBm |   ≥ 17 dBm |
+|   🟢 9 |            0 |  ≤ 100 ms |              > 2 |        ≤ −6 dBm |   ≥ 17 dBm |
+|   🟢 8 |            0 |  ≤ 100 ms |              ≤ 2 |        ≤ −6 dBm |   ≥ 17 dBm |
+|   🟢 7 |            0 |  ≤ 100 ms |              > 2 |               - |          - |
+|   🟢 6 |            0 |  ≤ 100 ms |              ≤ 2 |               - |          - |
+|        |              |           |                  |                 |            |
+|   🟡 5 |            0 |  ≤ 250 ms |                - |               - |          - |
+|   🟡 4 |            0 |  ≤ 500 ms |                - |               - |          - |
+|        |              |           |                  |                 |            |
+|   🔴 3 |            1 | ≤ 1000 ms |                - |               - |          - |
+|   🔴 2 |          ≤ 2 | > 1000 ms |                - |               - |          - |
+|   🔴 1 |          ≤ 9 |         - |                - |               - |          - |
+|        |              |           |                  |                 |            |
+|   ❌ 0 |           10 |         - |                - |               - |          - |
 
 > [!NOTE] This test builds on some functionality that is not available for all controller or nodes. If the node does not support `Powerlevel CC` or the controller does not support TX reports, this check will be less reliable.
 
