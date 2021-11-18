@@ -703,6 +703,17 @@ interface ZWaveOptions {
 	disableOptimisticValueUpdate?: boolean;
 
 	/**
+	 * By default, the driver assumes to be talking to a single application. In this scenario a successful `setValue` call
+	 * is enough for the application to know that the value was changed and update its own cache or UI.
+	 *
+	 * Therefore, the `"value updated"` event is not emitted after `setValue` unless the change was verified by the device.
+	 * To get `"value updated"` events nonetheless, set this option to `true`.
+	 *
+	 * Default: `false`
+	 */
+	emitValueUpdateAfterSetValue?: boolean;
+
+	/**
 	 * Soft Reset is required after some commands like changing the RF region or restoring an NVM backup.
 	 * Because it may be problematic in certain environments, we provide the user with an option to opt out.
 	 * Default: `true,` except when ZWAVEJS_DISABLE_SOFT_RESET env variable is set.
