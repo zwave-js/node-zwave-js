@@ -834,7 +834,13 @@ export class ZWaveNode extends Endpoint implements SecurityClassOwner {
 			);
 			if (api.isSetValueOptimistic(valueId)) {
 				// If the call did not throw, assume that the call was successful and remember the new value
-				this._valueDB.setValue(valueId, value, { noEvent: true });
+				this._valueDB.setValue(
+					valueId,
+					value,
+					!!this.driver.options.emitValueUpdateAfterSetValue
+						? undefined
+						: { noEvent: true },
+				);
 			}
 
 			return true;
