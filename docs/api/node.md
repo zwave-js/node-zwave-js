@@ -369,11 +369,17 @@ where each result looks as follows:
 ```ts
 interface LifelineHealthCheckResult {
 	/**
-	 * How many route changes were needed. Lower = better, ideally 0.
+	 * How many times at least one new route was needed. Lower = better, ideally 0.
 	 *
 	 * Only available if the controller supports TX reports.
 	 */
 	routeChanges?: number;
+	/**
+	 * The maximum time it took to send a ping to the node. Lower = better, ideally 10 ms.
+	 *
+	 * Will use the time in TX reports if available, otherwise fall back to measuring the round trip time.
+	 */
+	latency: number;
 	/** How many routing neighbors this node has. Higher = better, ideally > 2. */
 	numNeighbors: number;
 	/** How many pings were not ACKed by the node. Lower = better, ideally 0. */
