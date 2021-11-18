@@ -71,6 +71,10 @@ This method automatically figures out which commands to send to the node, so you
 -   The required Command Class is not implemented in this library yet
 -   The API for the required Command Class is not implemented in this library yet
 
+> [!ATTENTION] By default, the driver assumes to be talking to a single application. In this scenario a successful `setValue` call is enough for the application to know that the value was changed and update its own cache or UI. Therefore, the `"value updated"` event is not emitted after `setValue` unless the change was verified by the device.
+>
+> To get `"value updated"` events nonetheless, set the driver option `emitValueUpdateAfterSetValue` to `true`.
+
 The `options` bag contains options that influence the resulting commands, for example a transition duration. Each implementation will choose the options that are relevant for it, so you can use the same options everywhere.
 
 <!-- #import SetValueAPIOptions from "zwave-js" -->
