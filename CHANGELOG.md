@@ -4,6 +4,10 @@
 <!--
 	Add placeholder for next release with `wip` snippet
 -->
+## **WORK IN PROGRESS**
+### Bugfixes
+* Add driver `emitValueUpdateAfterSetValue` option to emit `"value updated"` events after `setValue`
+
 ## 8.7.6 (2021-11-15)
 ### Bugfixes
 * Update thermostat setpoint metadata when unit changes between reports
