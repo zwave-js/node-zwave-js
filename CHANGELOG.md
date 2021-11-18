@@ -4,7 +4,7 @@
 <!--
 	Add placeholder for next release with `wip` snippet
 -->
-## **WORK IN PROGRESS**
+## 8.7.7 (2021-11-18)
 ### Bugfixes
 * Add driver `emitValueUpdateAfterSetValue` option to emit `"value updated"` events after `setValue`
 
