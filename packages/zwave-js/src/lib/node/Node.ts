@@ -4034,23 +4034,23 @@ protocol version:      ${this._protocolVersion}`;
 				result.failedPingsController ?? 0,
 				result.failedPingsNode,
 			);
-			const routeChanges = result.routeChanges ?? 0;
 			const numNeighbors = result.numNeighbors;
 			const minPowerlevel = result.minPowerlevel ?? Powerlevel["-6 dBm"];
 			const snrMargin = result.snrMargin ?? 17;
+			const latency = result.latency;
 
 			if (failedPings === 10) return 0;
 			if (failedPings > 2) return 1;
-			if (failedPings === 2) return 2;
-			if (failedPings === 1) return 3;
-			if (routeChanges > 4) return 4;
-			if (routeChanges > 1) return 5;
+			if (failedPings === 2 || latency > 1000) return 2;
+			if (failedPings === 1 || latency > 500) return 3;
+			if (latency > 250) return 4;
+			if (latency > 100) return 5;
 			if (minPowerlevel < Powerlevel["-6 dBm"] || snrMargin < 17) {
 				// Lower powerlevel reductions (= higher power) have lower numeric values
 				return numNeighbors > 2 ? 7 : 6;
 			}
 			if (numNeighbors <= 2) return 8;
-			if (routeChanges === 1) return 9;
+			if (latency > 50) return 9;
 			return 10;
 		};
 
@@ -4099,22 +4099,21 @@ protocol version:      ${this._protocolVersion}`;
 					() => false,
 				);
 				const rtt = Date.now() - start;
+				latency = Math.max(
+					latency,
+					txReport ? txReport.txTicks * 10 : rtt,
+				);
 				if (!pingResult) {
 					failedPingsNode++;
-					latency += rtt;
 				} else if (txReport) {
-					latency += txReport.txTicks * 10;
 					routeChanges ??= 0;
 					if (txReport.routingAttempts > 1) {
 						routeChanges++;
 					}
 					rssi = txReport.ackRSSI;
 					channel = txReport.ackChannelNo;
-				} else {
-					latency += rtt;
 				}
 			}
-			latency /= testFrameCount;
 
 			// If possible, compute the SNR margin from the test results
 			if (
@@ -4213,7 +4212,7 @@ protocol version:      ${this._protocolVersion}`;
 					" ",
 				)} - rating: ${result.rating} (${ratingToWord(result.rating)})`,
 				`  failed pings → node:             ${result.failedPingsNode}/${testFrameCount}`,
-				`  avg. latency:                    ${result.latency.toFixed(
+				`  max. latency:                    ${result.latency.toFixed(
 					1,
 				)} ms`,
 				result.routeChanges != undefined

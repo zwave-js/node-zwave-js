@@ -175,7 +175,7 @@ export interface LifelineHealthCheckResult {
 	 */
 	routeChanges?: number;
 	/**
-	 * The average time it took to send a ping. Lower = better, ideally close to 0.
+	 * The maximum time it took to send a ping to the node. Lower = better, ideally 10 ms.
 	 *
 	 * Will use the time in TX reports if available, otherwise fall back to measuring the round trip time.
 	 */
