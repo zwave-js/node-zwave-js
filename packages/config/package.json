@@ -69,7 +69,7 @@
     "js-levenshtein": "^1.1.6",
     "pegjs": "^0.10.0",
     "ts-pegjs": "^0.3.1",
-    "typescript": "4.4.4",
+    "typescript": "4.5.2",
     "xml2json": "^0.12.0",
     "yargs": "^17.2.1"
   }

@@ -312,6 +312,7 @@ async function processCCDocFile(
 	if (!APIClass) return;
 
 	const ccId = getCommandClassFromClassDeclaration(
+		// @ts-expect-error TS-Morph hasn't been updated yet
 		file.compilerNode,
 		APIClass.compilerNode,
 	);
