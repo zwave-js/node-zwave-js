@@ -185,10 +185,22 @@ Returns the highest security class this node was granted or `undefined` if that 
 ### `refreshInfo`
 
 ```ts
-refreshInfo(): Promise<void>
+refreshInfo(options?: RefreshInfoOptions): Promise<void>
 ```
 
-Resets all information about this node and forces a fresh interview.
+Resets (almost) all information about this node and forces a fresh interview. The information about granted security classes is not reset by default, but can be reset by setting the `resetSecurityClasses` option to `true`.
+
+<!-- #import RefreshInfoOptions from "zwave-js" -->
+
+```ts
+interface RefreshInfoOptions {
+	/**
+	 * Whether a re-interview should also reset the known security classes.
+	 * Default: false
+	 */
+	resetSecurityClasses?: boolean;
+}
+```
 
 > [!WARNING] After calling this method, the node will no longer be `ready`. Keep this in mind if you rely on the `ready` state in your application.
 
