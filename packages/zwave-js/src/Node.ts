@@ -13,6 +13,7 @@ export {
 	NodeStatus,
 	NodeType,
 	ProtocolVersion,
+	RefreshInfoOptions,
 	RouteHealthCheckResult,
 	RouteHealthCheckSummary,
 	ZWaveNodeEvents,

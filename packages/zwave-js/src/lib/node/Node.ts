@@ -180,6 +180,7 @@ import type {
 	FLiRS,
 	LifelineHealthCheckResult,
 	LifelineHealthCheckSummary,
+	RefreshInfoOptions,
 	RouteHealthCheckResult,
 	RouteHealthCheckSummary,
 	TranslatedValueID,
@@ -1190,14 +1191,19 @@ export class ZWaveNode extends Endpoint implements SecurityClassOwner {
 	 * **WARNING:** Take care NOT to call this method when the node is already being interviewed.
 	 * Otherwise the node information may become inconsistent.
 	 */
-	public async refreshInfo(): Promise<void> {
+	public async refreshInfo(options: RefreshInfoOptions = {}): Promise<void> {
 		// It does not make sense to re-interview the controller. All important information is queried
 		// directly via the serial API
 		if (this.isControllerNode()) return;
 
+		const { resetSecurityClasses = false } = options;
+
 		// preserve the node name and location, since they might not be stored on the node
 		const name = this.name;
 		const location = this.location;
+
+		// Force a new detection of security classes if desired
+		if (resetSecurityClasses) this.securityClasses.clear();
 
 		this._interviewAttempts = 0;
 		this.interviewStage = InterviewStage.None;

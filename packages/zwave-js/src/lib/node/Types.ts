@@ -295,3 +295,11 @@ export interface RouteHealthCheckSummary {
 	 */
 	rating: number;
 }
+
+export interface RefreshInfoOptions {
+	/**
+	 * Whether a re-interview should also reset the known security classes.
+	 * Default: false
+	 */
+	resetSecurityClasses?: boolean;
+}
