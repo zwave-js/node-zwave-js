@@ -250,7 +250,7 @@ import { ZWaveLibraryTypes } from "./ZWaveLibraryTypes";
 import { protocolVersionToSDKVersion } from "./ZWaveSDKVersions";
 
 export type HealNodeStatus = "pending" | "done" | "failed" | "skipped";
-export type SerialAPIVersion =
+export type SDKVersion =
 	| `${number}.${number}`
 	| `${number}.${number}.${number}`;
 
@@ -320,14 +320,14 @@ export class ZWaveController extends TypedEventEmitter<ControllerEventCallbacks>
 		);
 	}
 
-	private _libraryVersion: string | undefined;
-	public get libraryVersion(): string | undefined {
-		return this._libraryVersion;
-	}
-
 	private _type: ZWaveLibraryTypes | undefined;
 	public get type(): ZWaveLibraryTypes | undefined {
 		return this._type;
+	}
+
+	private _sdkVersion: string | undefined;
+	public get sdkVersion(): string | undefined {
+		return this._sdkVersion;
 	}
 
 	private _homeId: number | undefined;
@@ -372,48 +372,43 @@ export class ZWaveController extends TypedEventEmitter<ControllerEventCallbacks>
 		return this._isSlave;
 	}
 
-	private _serialApiVersion: string | undefined;
-	public get serialApiVersion(): string | undefined {
-		return this._serialApiVersion;
-	}
-
-	/** Checks if the Serial API version is greater than the given one */
-	public serialApiGt(version: SerialAPIVersion): boolean | undefined {
+	/** Checks if the SDK version is greater than the given one */
+	public sdkVersionGt(version: SDKVersion): boolean | undefined {
 		// TODO: Rename these to sdkVersionGt(e) etc...
-		if (this._libraryVersion === undefined) {
+		if (this._sdkVersion === undefined) {
 			return undefined;
 		}
-		const sdkVersion = protocolVersionToSDKVersion(this._libraryVersion);
+		const sdkVersion = protocolVersionToSDKVersion(this._sdkVersion);
 		return semver.gt(padVersion(sdkVersion), padVersion(version));
 	}
 
-	/** Checks if the Serial API version is greater than or equal to the given one */
-	public serialApiGte(version: SerialAPIVersion): boolean | undefined {
+	/** Checks if the SDK version is greater than or equal to the given one */
+	public sdkVersionGte(version: SDKVersion): boolean | undefined {
 		// TODO: Rename these to sdkVersionGt(e) etc...
-		if (this._libraryVersion === undefined) {
+		if (this._sdkVersion === undefined) {
 			return undefined;
 		}
-		const sdkVersion = protocolVersionToSDKVersion(this._libraryVersion);
+		const sdkVersion = protocolVersionToSDKVersion(this._sdkVersion);
 		return semver.gte(padVersion(sdkVersion), padVersion(version));
 	}
 
-	/** Checks if the Serial API version is lower than the given one */
-	public serialApiLt(version: SerialAPIVersion): boolean | undefined {
+	/** Checks if the SDK version is lower than the given one */
+	public sdkVersionLt(version: SDKVersion): boolean | undefined {
 		// TODO: Rename these to sdkVersionGt(e) etc...
-		if (this._libraryVersion === undefined) {
+		if (this._sdkVersion === undefined) {
 			return undefined;
 		}
-		const sdkVersion = protocolVersionToSDKVersion(this._libraryVersion);
+		const sdkVersion = protocolVersionToSDKVersion(this._sdkVersion);
 		return semver.lt(padVersion(sdkVersion), padVersion(version));
 	}
 
-	/** Checks if the Serial API version is lower than or equal to the given one */
-	public serialApiLte(version: SerialAPIVersion): boolean | undefined {
+	/** Checks if the SDK version is lower than or equal to the given one */
+	public sdkVersionLte(version: SDKVersion): boolean | undefined {
 		// TODO: Rename these to sdkVersionGt(e) etc...
-		if (this._libraryVersion === undefined) {
+		if (this._sdkVersion === undefined) {
 			return undefined;
 		}
-		const sdkVersion = protocolVersionToSDKVersion(this._libraryVersion);
+		const sdkVersion = protocolVersionToSDKVersion(this._sdkVersion);
 		return semver.lte(padVersion(sdkVersion), padVersion(version));
 	}
 
@@ -430,6 +425,11 @@ export class ZWaveController extends TypedEventEmitter<ControllerEventCallbacks>
 	private _productId: number | undefined;
 	public get productId(): number | undefined {
 		return this._productId;
+	}
+
+	private _firmwareVersion: string | undefined;
+	public get firmwareVersion(): string | undefined {
+		return this._firmwareVersion;
 	}
 
 	private _supportedFunctionTypes: FunctionType[] | undefined;
@@ -477,7 +477,7 @@ export class ZWaveController extends TypedEventEmitter<ControllerEventCallbacks>
 	public supportsFeature(feature: ZWaveFeature): boolean | undefined {
 		switch (feature) {
 			case ZWaveFeature.SmartStart:
-				return this.serialApiGte(minFeatureVersions[feature]);
+				return this.sdkVersionGte(minFeatureVersions[feature]);
 		}
 	}
 
@@ -691,14 +691,14 @@ export class ZWaveController extends TypedEventEmitter<ControllerEventCallbacks>
 					supportCheck: false,
 				},
 			);
-		this._serialApiVersion = apiCaps.serialApiVersion;
+		this._firmwareVersion = apiCaps.firmwareVersion;
 		this._manufacturerId = apiCaps.manufacturerId;
 		this._productType = apiCaps.productType;
 		this._productId = apiCaps.productId;
 		this._supportedFunctionTypes = apiCaps.supportedFunctionTypes;
 		this.driver.controllerLog.print(
 			`received API capabilities:
-  serial API version:  ${this._serialApiVersion}
+  firmware version:    ${this._firmwareVersion}
   manufacturer ID:     ${num2hex(this._manufacturerId)}
   product type:        ${num2hex(this._productType)}
   product ID:          ${num2hex(this._productId)}
@@ -725,12 +725,12 @@ export class ZWaveController extends TypedEventEmitter<ControllerEventCallbacks>
 					supportCheck: false,
 				},
 			);
-		this._libraryVersion = version.libraryVersion;
+		this._sdkVersion = version.sdkVersion;
 		this._type = version.controllerType;
 		this.driver.controllerLog.print(
 			`received version info:
   controller type: ${ZWaveLibraryTypes[this._type]}
-  library version: ${this._libraryVersion}`,
+  library version: ${this._sdkVersion}`,
 		);
 
 		this.driver.controllerLog.print(
@@ -941,7 +941,7 @@ export class ZWaveController extends TypedEventEmitter<ControllerEventCallbacks>
 			getFirmwareVersionsMetadata(),
 		);
 		controllerValueDB.setValue(getFirmwareVersionsValueId(), [
-			this._serialApiVersion,
+			this._firmwareVersion,
 		]);
 
 		if (
@@ -4524,7 +4524,7 @@ ${associatedNodes.join(", ")}`,
 
 		let ret: Buffer;
 		try {
-			if (this.serialApiGte("7.0")) {
+			if (this.sdkVersionGte("7.0")) {
 				ret = await this.backupNVMRaw700(onProgress);
 			} else {
 				ret = await this.backupNVMRaw500(onProgress);
@@ -4642,7 +4642,7 @@ ${associatedNodes.join(", ")}`,
 		}
 
 		try {
-			if (this.serialApiGte("7.0")) {
+			if (this.sdkVersionGte("7.0")) {
 				await this.restoreNVMRaw700(nvmData, onProgress);
 			} else {
 				await this.restoreNVMRaw500(nvmData, onProgress);
