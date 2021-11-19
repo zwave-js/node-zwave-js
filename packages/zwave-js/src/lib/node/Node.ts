@@ -157,6 +157,11 @@ import { MessagePriority } from "../message/Constants";
 import { DeviceClass } from "./DeviceClass";
 import { Endpoint } from "./Endpoint";
 import {
+	formatLifelineHealthCheckSummary,
+	formatRouteHealthCheckSummary,
+	healthCheckTestFrameCount,
+} from "./HealthCheck";
+import {
 	createNodeReadyMachine,
 	NodeReadyInterpreter,
 } from "./NodeReadyMachine";
@@ -3939,7 +3944,7 @@ protocol version:      ${this._protocolVersion}`;
 	public async testPowerlevel(
 		testNodeId: number,
 		powerlevel: Powerlevel,
-		testFrameCount: number,
+		healthCheckTestFrameCount: number,
 		onProgress?: (acknowledged: number, total: number) => void,
 	): Promise<number> {
 		const api = this.commandClasses.Powerlevel;
@@ -3954,11 +3959,17 @@ protocol version:      ${this._protocolVersion}`;
 		};
 
 		// Start the process
-		await api.startNodeTest(testNodeId, powerlevel, testFrameCount);
+		await api.startNodeTest(
+			testNodeId,
+			powerlevel,
+			healthCheckTestFrameCount,
+		);
 
 		// Each frame will take a few ms to be sent, let's assume 5 per second
 		// to estimate how long the test will take
-		const expectedDurationMs = Math.round((testFrameCount / 5) * 1000);
+		const expectedDurationMs = Math.round(
+			(healthCheckTestFrameCount / 5) * 1000,
+		);
 
 		// Poll the status of the test regularly
 		const pollFrequencyMs =
@@ -4001,7 +4012,10 @@ protocol version:      ${this._protocolVersion}`;
 				return result(status.acknowledgedFrames);
 			} else if (onProgress) {
 				// Notify the caller of the test progress
-				onProgress(status.acknowledgedFrames, testFrameCount);
+				onProgress(
+					status.acknowledgedFrames,
+					healthCheckTestFrameCount,
+				);
 			}
 		}
 	}
@@ -4025,7 +4039,6 @@ protocol version:      ${this._protocolVersion}`;
 		}
 
 		// No. of pings per round
-		const testFrameCount = 10;
 		const start = Date.now();
 
 		/** Computes a health rating from a health check result */
@@ -4054,17 +4067,6 @@ protocol version:      ${this._protocolVersion}`;
 			return 10;
 		};
 
-		const ratingToWord = (rating: number) =>
-			rating === 10
-				? "perfect"
-				: rating >= 6
-				? "good"
-				: rating >= 4
-				? "acceptable"
-				: rating >= 1
-				? "bad"
-				: "dead";
-
 		this.driver.controllerLog.logNode(
 			this.id,
 			`Starting lifeline health check (${rounds} round${
@@ -4092,7 +4094,7 @@ protocol version:      ${this._protocolVersion}`;
 					txReport = report;
 				},
 			});
-			for (let i = 1; i <= testFrameCount; i++) {
+			for (let i = 1; i <= healthCheckTestFrameCount; i++) {
 				const start = Date.now();
 				const pingResult = await pingAPI.send().then(
 					() => true,
@@ -4146,7 +4148,7 @@ protocol version:      ${this._protocolVersion}`;
 				const executor = async (powerlevel: Powerlevel) => {
 					this.driver.controllerLog.logNode(
 						this.id,
-						`Sending ${testFrameCount} pings to controller at ${getEnumMemberName(
+						`Sending ${healthCheckTestFrameCount} pings to controller at ${getEnumMemberName(
 							Powerlevel,
 							powerlevel,
 						)}...`,
@@ -4154,15 +4156,15 @@ protocol version:      ${this._protocolVersion}`;
 					const result = await this.testPowerlevel(
 						this.driver.controller.ownNodeId!,
 						powerlevel,
-						testFrameCount,
+						healthCheckTestFrameCount,
 					);
-					failedPingsController = testFrameCount - result;
+					failedPingsController = healthCheckTestFrameCount - result;
 					this.driver.controllerLog.logNode(
 						this.id,
 						`At ${getEnumMemberName(
 							Powerlevel,
 							powerlevel,
-						)}, ${result}/${testFrameCount} pings were acknowledged...`,
+						)}, ${result}/${healthCheckTestFrameCount} pings were acknowledged...`,
 					);
 					return failedPingsController === 0;
 				};
@@ -4186,7 +4188,7 @@ protocol version:      ${this._protocolVersion}`;
 					) {
 						// The node is dead, treat this as a failure
 						ret.minPowerlevel = Powerlevel["Normal Power"];
-						ret.failedPingsController = testFrameCount;
+						ret.failedPingsController = healthCheckTestFrameCount;
 					} else {
 						throw e;
 					}
@@ -4201,53 +4203,14 @@ protocol version:      ${this._protocolVersion}`;
 		const duration = Date.now() - start;
 
 		const rating = Math.min(...results.map((r) => r.rating));
-		const formatRound = (
-			round: number,
-			result: LifelineHealthCheckResult,
-		) => {
-			const ret = [
-				`· round ${padStart(
-					round.toString(),
-					Math.floor(Math.log10(rounds) + 1),
-					" ",
-				)} - rating: ${result.rating} (${ratingToWord(result.rating)})`,
-				`  failed pings → node:             ${result.failedPingsNode}/${testFrameCount}`,
-				`  max. latency:                    ${result.latency.toFixed(
-					1,
-				)} ms`,
-				result.routeChanges != undefined
-					? `  route changes:                   ${result.routeChanges}`
-					: "",
-				result.snrMargin != undefined
-					? `  SNR margin:                      ${result.snrMargin} dBm`
-					: "",
-				result.failedPingsController != undefined
-					? `  failed pings → controller:       ${result.failedPingsController}/${testFrameCount} at normal power`
-					: result.minPowerlevel != undefined
-					? `  min. node powerlevel w/o errors: ${getEnumMemberName(
-							Powerlevel,
-							result.minPowerlevel,
-					  )}`
-					: "",
-			]
-				.filter((line) => !!line)
-				.join("\n");
-			return ret;
-		};
+		const summary = { results, rating };
 		this.driver.controllerLog.logNode(
 			this.id,
 			`Lifeline health check complete in ${duration} ms
-rating:                   ${rating} (${ratingToWord(rating)})
-no. of routing neighbors: ${results[results.length - 1].numNeighbors}
- 
-Check rounds:
-${results.map((r, i) => formatRound(i + 1, r)).join("\n \n")}`,
+${formatLifelineHealthCheckSummary(summary)}`,
 		);
 
-		return {
-			results,
-			rating,
-		};
+		return summary;
 	}
 
 	/**
@@ -4281,7 +4244,7 @@ ${results.map((r, i) => formatRound(i + 1, r)).join("\n \n")}`,
 		}
 
 		// No. of pings per round
-		const testFrameCount = 10;
+		const healthCheckTestFrameCount = 10;
 		const start = Date.now();
 
 		/** Computes a health rating from a health check result */
@@ -4307,17 +4270,6 @@ ${results.map((r, i) => formatRound(i + 1, r)).join("\n \n")}`,
 			if (numNeighbors <= 2) return 8;
 			return 10;
 		};
-
-		const ratingToWord = (rating: number) =>
-			rating === 10
-				? "perfect"
-				: rating >= 6
-				? "good"
-				: rating >= 4
-				? "acceptable"
-				: rating >= 1
-				? "bad"
-				: "dead";
 
 		this.driver.controllerLog.logNode(
 			this.id,
@@ -4355,22 +4307,22 @@ ${results.map((r, i) => formatRound(i + 1, r)).join("\n \n")}`,
 				async (powerlevel: Powerlevel) => {
 					this.driver.controllerLog.logNode(
 						node.id,
-						`Sending ${testFrameCount} pings to node ${
+						`Sending ${healthCheckTestFrameCount} pings to node ${
 							otherNode.id
 						} at ${getEnumMemberName(Powerlevel, powerlevel)}...`,
 					);
 					const result = await node.testPowerlevel(
 						otherNode.id,
 						powerlevel,
-						testFrameCount,
+						healthCheckTestFrameCount,
 					);
-					failedPings = testFrameCount - result;
+					failedPings = healthCheckTestFrameCount - result;
 					this.driver.controllerLog.logNode(
 						node.id,
 						`At ${getEnumMemberName(
 							Powerlevel,
 							powerlevel,
-						)}, ${result}/${testFrameCount} pings were acknowledged by node ${
+						)}, ${result}/${healthCheckTestFrameCount} pings were acknowledged by node ${
 							otherNode.id
 						}...`,
 					);
@@ -4399,7 +4351,7 @@ ${results.map((r, i) => formatRound(i + 1, r)).join("\n \n")}`,
 					) {
 						// The node is dead, treat this as a failure
 						minPowerlevelSource = Powerlevel["Normal Power"];
-						failedPingsToTarget = testFrameCount;
+						failedPingsToTarget = healthCheckTestFrameCount;
 					} else {
 						throw e;
 					}
@@ -4428,7 +4380,7 @@ ${results.map((r, i) => formatRound(i + 1, r)).join("\n \n")}`,
 					) {
 						// The node is dead, treat this as a failure
 						minPowerlevelTarget = Powerlevel["Normal Power"];
-						failedPingsToSource = testFrameCount;
+						failedPingsToSource = healthCheckTestFrameCount;
 					} else {
 						throw e;
 					}
@@ -4451,53 +4403,15 @@ ${results.map((r, i) => formatRound(i + 1, r)).join("\n \n")}`,
 		const duration = Date.now() - start;
 
 		const rating = Math.min(...results.map((r) => r.rating));
-		const formatRound = (round: number, result: RouteHealthCheckResult) => {
-			const ret = [
-				`· round ${padStart(
-					round.toString(),
-					Math.floor(Math.log10(rounds) + 1),
-					" ",
-				)} - rating: ${result.rating} (${ratingToWord(result.rating)})`,
-				result.failedPingsToTarget != undefined
-					? `  failed pings ${this.nodeId} → ${otherNode.nodeId}:      ${result.failedPingsToTarget}/${testFrameCount}`
-					: result.minPowerlevelSource != undefined
-					? `  Node ${
-							this.id
-					  } min. powerlevel w/o errors: ${getEnumMemberName(
-							Powerlevel,
-							result.minPowerlevelSource,
-					  )}`
-					: "",
-				result.failedPingsToSource != undefined
-					? `  failed pings ${otherNode.nodeId} → ${this.nodeId}:      ${result.failedPingsToSource}/${testFrameCount}`
-					: result.minPowerlevelTarget != undefined
-					? `  Node ${
-							otherNode.nodeId
-					  } min. powerlevel w/o errors: ${getEnumMemberName(
-							Powerlevel,
-							result.minPowerlevelTarget,
-					  )}`
-					: "",
-			]
-				.filter((line) => !!line)
-				.join("\n");
-			return ret;
-		};
+		const summary = { results, rating };
 		this.driver.controllerLog.logNode(
 			this.id,
 			`Route health check to node ${
 				otherNode.id
 			} complete in ${duration} ms
-rating:                   ${rating} (${ratingToWord(rating)})
-no. of routing neighbors: ${results[results.length - 1].numNeighbors}
- 
-Check rounds:
-${results.map((r, i) => formatRound(i + 1, r)).join("\n \n")}`,
+${formatRouteHealthCheckSummary(this.id, otherNode.id, summary)}`,
 		);
 
-		return {
-			results,
-			rating,
-		};
+		return summary;
 	}
 }
