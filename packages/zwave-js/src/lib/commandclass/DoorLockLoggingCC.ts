@@ -162,7 +162,7 @@ export function getDoorLockLoggingRecordTimestampID(endpoint: number): ValueID {
 	return {
 		commandClass: CommandClasses["Door Lock Logging"],
 		endpoint,
-		property: "record timestamp",
+		property: "recordTimestamp",
 	};
 }
 
@@ -170,7 +170,7 @@ export function getDoorLockLoggingRecordEventTypeID(endpoint: number): ValueID {
 	return {
 		commandClass: CommandClasses["Door Lock Logging"],
 		endpoint,
-		property: "record event type",
+		property: "recordEventType",
 	};
 }
 
@@ -178,7 +178,7 @@ export function getDoorLockLoggingRecordUserIDID(endpoint: number): ValueID {
 	return {
 		commandClass: CommandClasses["Door Lock Logging"],
 		endpoint,
-		property: "record user id",
+		property: "recordUserID",
 	};
 }
 
@@ -186,7 +186,7 @@ export function getDoorLockLoggingRecordUserCodeID(endpoint: number): ValueID {
 	return {
 		commandClass: CommandClasses["Door Lock Logging"],
 		endpoint,
-		property: "record user code",
+		property: "recordUserCode",
 	};
 }
 
@@ -516,6 +516,7 @@ export class DoorLockLoggingCCRecordReport extends DoorLockLoggingCC {
 			};
 
 			const eventType = this.payload[9];
+			this.recordUserID = this.payload[9];
 			const userCodeLength = this.payload[10];
 			const userCodeBuffer = this.payload[11];
 
@@ -532,7 +533,6 @@ export class DoorLockLoggingCCRecordReport extends DoorLockLoggingCC {
 			};
 			this.recordTimestamp = segmentsToDate(dateSegments).toISOString();
 			this.recordEventType = eventType;
-			this.recordUserID = this.payload[9];
 			this.recordUserCode = parseUserCodeFromPayload(
 				userCodeLength,
 				userCodeBuffer,
