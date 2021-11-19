@@ -47,17 +47,19 @@
     await driver.start();
     ```
 
-4.  Shut down the driver before the application exits. The `destroy` method must be called under any circumstances. Take care to handle the `SIGINT` signal, which would exit the process without shutting down the driver otherwise:
+4.  Shut down the driver before the application exits. The `destroy` method must be called under any circumstances. Take care to handle the `SIGINT` and `SIGTERM` signals, which would exit the process without shutting down the driver otherwise:
 
     <!--prettier-ignore-->
     ```ts
     // When you want to exit:
     await driver.destroy();
 
-    // Or when the application gets a SIGINT signal
-    process.on("SIGINT", async () => {
-        // Shutting down here is optional, but the handler must exist
-        await driver.destroy();
-        process.exit(0);
-    });
+    // Or when the application gets a SIGINT or SIGTERM signal
+    // Shutting down after SIGINT is optional, but the handler must exist
+    for (const signal of ["SIGINT", "SIGTERM"]) {
+        process.on(signal, async () => {
+            await driver.destroy();
+            process.exit(0);
+        });
+    }
     ```
