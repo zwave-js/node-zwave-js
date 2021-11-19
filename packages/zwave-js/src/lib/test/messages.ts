@@ -17,6 +17,8 @@ const defaultImplementations = {
 	toLogEntry: () => ({ tags: [] }),
 	needsCallbackId: () => true,
 	getCallbackTimeout: () => undefined,
+	markAsSent: () => void 0,
+	markAsCompleted: () => void 0,
 };
 
 export const dummyResponseOK = {

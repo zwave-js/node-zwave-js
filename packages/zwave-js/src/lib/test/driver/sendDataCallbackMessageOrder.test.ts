@@ -64,6 +64,7 @@ describe("regression tests", () => {
 
 	it("receiving an out-of-order SendData callback is not mismatched to unrelated requests", async () => {
 		jest.setTimeout(5000);
+		jest.retryTimes(3); // Timing on this test is a bit flaky
 		// Repro from #1144
 
 		// A send data request for an outgoing handshake response is received after the response we expected
