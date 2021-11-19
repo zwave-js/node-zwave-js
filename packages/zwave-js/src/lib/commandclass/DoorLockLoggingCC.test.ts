@@ -131,7 +131,7 @@ describe("lib/commandclass/DoorLockLoggingCC => ", () => {
 			});
 		});
 
-		it("should send a DoorLockLoggingCC.RecordsSupportedGet", async () => {
+		it("should send a DoorLockLoggingCC.RecordGet", async () => {
 			node.addCC(CommandClasses["Door Lock Logging"], {
 				isSupported: true,
 			});
