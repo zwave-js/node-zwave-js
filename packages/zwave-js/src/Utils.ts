@@ -10,3 +10,10 @@ export type {
 	Protocols,
 	QRProvisioningInformation,
 } from "@zwave-js/core";
+export {
+	formatLifelineHealthCheckRound,
+	formatLifelineHealthCheckSummary,
+	formatRouteHealthCheckRound,
+	formatRouteHealthCheckSummary,
+	healthCheckRatingToWord,
+} from "./lib/node/HealthCheck";

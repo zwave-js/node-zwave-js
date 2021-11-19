@@ -92,3 +92,30 @@ export function padVersion(version: string): string {
 	if (version.split(".").length === 3) return version;
 	return version + ".0";
 }
+
+/** Finds the highest discrete value in [rangeMin...rangeMax] where executor returns true. */
+export async function discreteBinarySearch(
+	rangeMin: number,
+	rangeMax: number,
+	executor: (value: number) => boolean | PromiseLike<boolean>,
+): Promise<number | undefined> {
+	let min = rangeMin;
+	let max = rangeMax;
+	while (min < max) {
+		const mid = min + Math.floor((max - min + 1) / 2);
+
+		const result = await executor(mid);
+		if (result) {
+			min = mid;
+		} else {
+			max = mid - 1;
+		}
+	}
+
+	if (min === rangeMin) {
+		// We didn't test this yet
+		const result = await executor(min);
+		if (!result) return undefined;
+	}
+	return min;
+}
