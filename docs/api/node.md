@@ -429,6 +429,8 @@ The health rating is computed similar to Silabs' PC Controller IMA tool where 10
 
 > [!NOTE] This test builds on some functionality that is not available for all controller or nodes. If the node does not support `Powerlevel CC` or the controller does not support TX reports, this check will be less reliable.
 
+> [!NOTE] The test results are also printed to the driver logs. If you want to format the results in the same way in your application, you can use the `formatLifelineHealthCheckSummary` and/or `formatLifelineHealthCheckRound` methods which are exposed from `zwave-js/Utils`.
+
 ### `checkRouteHealth`
 
 ```ts
@@ -510,6 +512,8 @@ The health rating expressed as a number from 0 (not working at all) to 10 (perfe
 |   ❌ 0 |           10 |                - |               - |
 
 > [!NOTE] Due to missing insight into re-routing attempts between two nodes, some of the values for the lifeline health rating don't exist here. Furthermore, it is not guaranteed that a route between two nodes and lifeline with the same health rating have the same quality.
+
+> [!NOTE] The test results are also printed to the driver logs. If you want to format the results in the same way in your application, you can use the `formatRouteHealthCheckSummary` and/or `formatRouteHealthCheckRound` methods which are exposed from `zwave-js/Utils`.
 
 ## ZWaveNode properties
 
