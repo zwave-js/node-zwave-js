@@ -20,7 +20,7 @@ export interface ZWaveOptions {
 		sendDataCallback: number; // >=10000, default: 65000 ms
 
 		/** How much time a node gets to process a request and send a response */
-		report: number; // [1000...40000], default: 10000 ms
+		report: number; // [500...10000], default: 1000 ms
 
 		/** How long generated nonces are valid */
 		nonce: number; // [3000...20000], default: 5000 ms

@@ -34,16 +34,20 @@ export type MessageGeneratorImplementation = (
 	 * without waiting for the message generator to finish completely.
 	 */
 	onMessageSent: (msg: Message, result: Message | undefined) => void,
+
+	/** Can be used to extend the timeout wa */
+	additionalCommandTimeoutMs?: number,
 ) => AsyncGenerator<Message, Message, Message>;
 
 export async function waitForNodeUpdate<T extends Message>(
 	driver: Driver,
 	msg: Message,
+	timeoutMs: number,
 ): Promise<T> {
 	try {
 		return await driver.waitForMessage<T>((received) => {
 			return msg.isExpectedNodeUpdate(received);
-		}, driver.options.timeouts.report);
+		}, timeoutMs);
 	} catch (e) {
 		throw new ZWaveError(
 			`Timed out while waiting for a response from the node`,
@@ -54,14 +58,26 @@ export async function waitForNodeUpdate<T extends Message>(
 
 /** A simple message generator that simply sends a message, waits for the ACK (and the response if one is expected) */
 export const simpleMessageGenerator: MessageGeneratorImplementation =
-	async function* (driver, msg, onMessageSent) {
+	async function* (
+		driver,
+		msg,
+		onMessageSent,
+		additionalCommandTimeoutMs = 0,
+	) {
 		// Pass this message to the send thread and wait for it to be sent
 		let result: Message;
+		let commandTimeMs: number;
 		try {
 			// The yield can throw and must be handled here
 			result = yield msg;
+
+			// Figure out how long the message took to be handled
+			msg.markAsCompleted();
+			commandTimeMs = Math.ceil(msg.rtt! / 1e6);
+
 			onMessageSent(msg, result);
 		} catch (e) {
+			msg.markAsCompleted();
 			throw e;
 		}
 
@@ -78,7 +94,13 @@ export const simpleMessageGenerator: MessageGeneratorImplementation =
 
 		// If the sent message expects an update from the node, wait for it
 		if (msg.expectsNodeUpdate()) {
-			return waitForNodeUpdate(driver, msg);
+			// CommandTime is measured by the application
+			// ReportTime timeout SHOULD be set to CommandTime + 1 second.
+			const timeout =
+				commandTimeMs +
+				driver.options.timeouts.report +
+				additionalCommandTimeoutMs;
+			return waitForNodeUpdate(driver, msg, timeout);
 		}
 
 		return result;
@@ -126,6 +148,7 @@ export const secureMessageGeneratorS0: MessageGeneratorImplementation =
 		const secMan = driver.securityManager!;
 		const nodeId = msg.command.nodeId;
 		let nonceId: number;
+		let additionalTimeoutMs: number | undefined;
 
 		// Try to get a free nonce before requesting a new one
 		const freeNonce = secMan.getFreeNonce(nodeId);
@@ -141,7 +164,10 @@ export const secureMessageGeneratorS0: MessageGeneratorImplementation =
 				yield* sendCommandGenerator<SecurityCCNonceReport>(
 					driver,
 					cc,
-					onMessageSent,
+					(msg, result) => {
+						additionalTimeoutMs = Math.ceil(msg.rtt! / 1e6);
+						onMessageSent(msg, result);
+					},
 					{
 						// Only try getting a nonce once
 						maxSendAttempts: 1,
@@ -169,7 +195,12 @@ export const secureMessageGeneratorS0: MessageGeneratorImplementation =
 
 		// Now send the actual secure command
 		msg.command.nonceId = nonceId;
-		return yield* simpleMessageGenerator(driver, msg, onMessageSent);
+		return yield* simpleMessageGenerator(
+			driver,
+			msg,
+			onMessageSent,
+			additionalTimeoutMs,
+		);
 	};
 
 /** A message generator for security encapsulated messages (S2) */
@@ -195,6 +226,7 @@ export const secureMessageGeneratorS2: MessageGeneratorImplementation =
 		const secMan = driver.securityManager2!;
 		const nodeId = msg.command.nodeId;
 		const spanState = secMan.getSPANState(nodeId);
+		let additionalTimeoutMs: number | undefined;
 
 		if (
 			spanState.type === SPANState.None ||
@@ -211,7 +243,10 @@ export const secureMessageGeneratorS2: MessageGeneratorImplementation =
 				yield* sendCommandGenerator<Security2CCNonceReport>(
 					driver,
 					cc,
-					onMessageSent,
+					(msg, result) => {
+						additionalTimeoutMs = Math.ceil(msg.rtt! / 1e6);
+						onMessageSent(msg, result);
+					},
 					{
 						// Only try getting a nonce once
 						maxSendAttempts: 1,
@@ -232,6 +267,7 @@ export const secureMessageGeneratorS2: MessageGeneratorImplementation =
 			driver,
 			msg,
 			onMessageSent,
+			additionalTimeoutMs,
 		);
 		if (
 			isCommandClassContainer(response) &&
@@ -256,6 +292,7 @@ export const secureMessageGeneratorS2: MessageGeneratorImplementation =
 				driver,
 				msg,
 				onMessageSent,
+				additionalTimeoutMs,
 			);
 			if (
 				isCommandClassContainer(response) &&
