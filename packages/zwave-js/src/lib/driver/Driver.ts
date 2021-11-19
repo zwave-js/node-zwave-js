@@ -801,7 +801,7 @@ export class Driver extends TypedEventEmitter<DriverEventCallbacks> {
 			try {
 				await this.openSerialport();
 			} catch (e) {
-				this.emit("error", e as Error);
+				spOpenPromise.reject(e);
 				void this.destroy();
 				return;
 			}
