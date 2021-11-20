@@ -1,0 +1,16 @@
+{
+	"manufacturer": "Ecolink",
+	"manufacturerId": "0x014a",
+	"label": "Z-Wave Garage Door Tilt Sensor",
+	"description": "",
+	"devices": [
+		{
+			"productType": "0x014a",
+			"productId": "0x0000"
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	}
+}
