@@ -316,7 +316,11 @@ export function getSerialAPICommandMachineOptions(
 ): SerialAPICommandMachineOptions {
 	return {
 		services: {
-			send: (ctx) => sendData(ctx.data),
+			send: (ctx) => {
+				// Mark the message as sent immediately before actually sending
+				ctx.msg.markAsSent();
+				return sendData(ctx.data);
+			},
 			notifyRetry: (ctx) => {
 				notifyRetry?.(
 					"SerialAPI",
