@@ -43,6 +43,7 @@ import {
 	createDeferredPromise,
 	DeferredPromise,
 } from "alcalzone-shared/deferred-promise";
+import { roundTo } from "alcalzone-shared/math";
 import { isArray, isObject } from "alcalzone-shared/typeguards";
 import { randomBytes } from "crypto";
 import type { EventEmitter } from "events";
@@ -190,7 +191,7 @@ const defaultOptions: ZWaveOptions = {
 		ack: 1000,
 		byte: 150,
 		response: 1600,
-		report: 10000,
+		report: 1000, // ReportTime timeout SHOULD be set to CommandTime + 1 second
 		nonce: 5000,
 		sendDataCallback: 65000, // as defined in INS13954
 		refreshValue: 5000, // Default should handle most slow devices until we have a better solution
@@ -244,9 +245,9 @@ function checkOptions(options: ZWaveOptions): void {
 			ZWaveErrorCodes.Driver_InvalidOptions,
 		);
 	}
-	if (options.timeouts.report < 1000 || options.timeouts.report > 40000) {
+	if (options.timeouts.report < 500 || options.timeouts.report > 10000) {
 		throw new ZWaveError(
-			`The Report timeout must be between 1000 and 40000 milliseconds!`,
+			`The Report timeout must be between 500 and 10000 milliseconds!`,
 			ZWaveErrorCodes.Driver_InvalidOptions,
 		);
 	}
@@ -3230,6 +3231,19 @@ ${handlers.length} left`,
 					node.incrementStatistics("commandsDroppedTX");
 				} else {
 					node.incrementStatistics("commandsTX");
+					if (msg.rtt) {
+						const rttMs = msg.rtt / 1e6;
+						node.updateStatistics((current) => ({
+							...current,
+							rtt:
+								current.rtt != undefined
+									? roundTo(
+											current.rtt * 0.9 + rttMs * 0.1,
+											1,
+									  )
+									: roundTo(rttMs, 1),
+						}));
+					}
 				}
 
 				// Notify listeners about the status report if one was received

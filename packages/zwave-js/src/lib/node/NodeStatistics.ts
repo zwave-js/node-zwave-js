@@ -30,4 +30,10 @@ export interface NodeStatistics {
 	commandsDroppedTX: number;
 	/** No. of Get-type commands where the node's response did not come in time */
 	timeoutResponse: number;
+
+	/**
+	 * Average round-trip-time in ms of commands to this node.
+	 * Consecutive measurements are combined using an exponential moving average.
+	 */
+	rtt?: number;
 }

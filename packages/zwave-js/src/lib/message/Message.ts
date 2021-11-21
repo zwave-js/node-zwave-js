@@ -2,6 +2,7 @@
 
 import {
 	getNodeTag,
+	highResTimestamp,
 	MessageOrCCLogEntry,
 	ZWaveError,
 	ZWaveErrorCodes,
@@ -366,6 +367,35 @@ export class Message {
 		const nodeId = this.getNodeId();
 		if (nodeId != undefined)
 			return this.driver.controller.nodes.get(nodeId);
+	}
+
+	private _transmissionTimestamp: number | undefined;
+	/** The timestamp when this message was (last) transmitted (in nanoseconds) */
+	public get transmissionTimestamp(): number | undefined {
+		return this._transmissionTimestamp;
+	}
+
+	/** Marks this message as sent and sets the transmission timestamp */
+	public markAsSent(): void {
+		this._transmissionTimestamp = highResTimestamp();
+		this._completedTimestamp = undefined;
+	}
+
+	private _completedTimestamp: number | undefined;
+	public get completedTimestamp(): number | undefined {
+		return this._completedTimestamp;
+	}
+
+	/** Marks this message as completed and sets the corresponding timestamp */
+	public markAsCompleted(): void {
+		this._completedTimestamp = highResTimestamp();
+	}
+
+	/** Returns the round trip time of this message from transmission until completion. */
+	public get rtt(): number | undefined {
+		if (this._transmissionTimestamp == undefined) return undefined;
+		if (this._completedTimestamp == undefined) return undefined;
+		return this._completedTimestamp - this._transmissionTimestamp;
 	}
 }
 
