@@ -1,24 +1,33 @@
 {
 	"manufacturer": "Fibargroup",
 	"manufacturerId": "0x010f",
-	"label": "FGRM222",
-	"description": "Roller Shutter",
+	"label": "FGR222",
+	"description": "Roller Shutter 2",
 	"devices": [
+		{
+			"productType": "0x0300",
+			"productId": "0x0102",
+			"zwaveAllianceId": 38
+		},
 		{
 			"productType": "0x0301",
 			"productId": "0x1001"
 		},
 		{
-			"productType": "0x0301",
-			"productId": "0x3001"
+			"productType": "0x0302",
+			"productId": "0x1000"
 		},
 		{
 			"productType": "0x0302",
-			"productId": "0x1000"
+			"productId": "0x3000"
+		},
+		{
+			"productType": "0x0302",
+			"productId": "0x4000"
 		}
 	],
 	"firmwareVersion": {
-		"min": "0.0",
+		"min": "24.24",
 		"max": "255.255"
 	},
 	"associations": {
@@ -28,7 +37,6 @@
 		},
 		"2": {
 			"label": "Momentary hold",
-			"description": "Only applies to momentary switches",
 			"maxNodes": 16
 		},
 		"3": {
@@ -44,20 +52,19 @@
 		{
 			"#": "3",
 			"label": "Reports type",
-			"description": "Enable Venetian Blind mode",
+			"description": "value should be set to 1 if the module operates in Venetian Blind mode.",
 			"valueSize": 1,
 			"minValue": 0,
-			"maxValue": 255,
+			"maxValue": 1,
 			"defaultValue": 0,
-			"unsigned": true,
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "Blind position reports sent using Z-Wave Commands",
+					"label": "Blind position using Z-Wave Command",
 					"value": 0
 				},
 				{
-					"label": "Blind position reports sent using Fibaro Commands.",
+					"label": "Blind position via Fibar Command",
 					"value": 1
 				}
 			]
@@ -67,9 +74,8 @@
 			"label": "Roller Shutter operating modes",
 			"valueSize": 1,
 			"minValue": 0,
-			"maxValue": 255,
+			"maxValue": 4,
 			"defaultValue": 1,
-			"unsigned": true,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -96,8 +102,8 @@
 		},
 		{
 			"#": "12",
-			"label": "Turning time/delay time",
-			"description": "Time of full turn of the lamellas.",
+			"label": "Turning time/ delay time",
+			"description": "depending on mode, turning time or delay time",
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 65535,
@@ -107,23 +113,23 @@
 		{
 			"#": "13",
 			"label": "Lamellas positioning mode",
+			"description": "Parameter influences the lamellas positioning in venetian blind mode",
 			"valueSize": 1,
 			"minValue": 0,
-			"maxValue": 255,
-			"defaultValue": 1,
-			"unsigned": true,
+			"maxValue": 2,
+			"defaultValue": 2,
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "Only in case of the main controller operation",
+					"label": "only in case of the main controller operation",
 					"value": 0
 				},
 				{
-					"label": "Controller, switch or limit switch operation",
+					"label": "default - controller+switchlimit",
 					"value": 1
 				},
 				{
-					"label": "Controller, switch, limit sw operation/STOP frame",
+					"label": "like 1 + STOP control frame",
 					"value": 2
 				}
 			]
@@ -131,12 +137,11 @@
 		{
 			"#": "14",
 			"label": "Switch type",
-			"description": "Parameter settings for Roller and Venetian Blind Mode",
+			"description": "either Toggle switches or a single, momentary switch.",
 			"valueSize": 1,
 			"minValue": 0,
-			"maxValue": 255,
+			"maxValue": 2,
 			"defaultValue": 0,
-			"unsigned": true,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -156,7 +161,7 @@
 		{
 			"#": "17",
 			"label": "Delay time after S2",
-			"description": "Relays turn off time after reaching a limit switch.",
+			"description": "delay till auto turned off or auto gate close",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 255,
@@ -186,12 +191,11 @@
 		{
 			"#": "29",
 			"label": "Forced Roller Shutter calibration",
-			"description": "Roller Shutter enters the calibration mode.",
+			"description": "set to 1 will enter calibration mode",
 			"valueSize": 1,
 			"minValue": 0,
-			"maxValue": 255,
+			"maxValue": 1,
 			"defaultValue": 0,
-			"unsigned": true,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -209,9 +213,8 @@
 			"label": "Response to General Alarm",
 			"valueSize": 1,
 			"minValue": 0,
-			"maxValue": 255,
+			"maxValue": 2,
 			"defaultValue": 2,
-			"unsigned": true,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -233,9 +236,8 @@
 			"label": "Response to Water Flood Alarm",
 			"valueSize": 1,
 			"minValue": 0,
-			"maxValue": 255,
+			"maxValue": 2,
 			"defaultValue": 0,
-			"unsigned": true,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -257,9 +259,8 @@
 			"label": "Response to Smoke, CO, CO2 Alarm",
 			"valueSize": 1,
 			"minValue": 0,
-			"maxValue": 255,
-			"defaultValue": 3,
-			"unsigned": true,
+			"maxValue": 2,
+			"defaultValue": 1,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -281,9 +282,8 @@
 			"label": "Response to Temperature Alarm",
 			"valueSize": 1,
 			"minValue": 0,
-			"maxValue": 255,
+			"maxValue": 2,
 			"defaultValue": 1,
-			"unsigned": true,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -303,7 +303,7 @@
 		{
 			"#": "35",
 			"label": "Managing lamellas in response to alarm",
-			"description": "Lamellas reaction upon alarm detection.",
+			"description": "0 no change, 1 extreme position",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 255,
@@ -324,7 +324,7 @@
 		{
 			"#": "40",
 			"label": "Power reports",
-			"description": "Power level change resulting in new power value report",
+			"description": "change that needs to occur to trigger the power report",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 100,
@@ -335,28 +335,29 @@
 			"label": "Periodic power or energy reports",
 			"description": "Time to the next report. Value of 0 means the reports are turned off.",
 			"valueSize": 2,
-			"minValue": -32767,
-			"maxValue": 32767,
-			"defaultValue": 3600
+			"minValue": 0,
+			"maxValue": 65534,
+			"defaultValue": 3600,
+			"unsigned": true
 		},
 		{
 			"#": "43",
 			"label": "Energy reports",
-			"description": "Energy level change resulting in new energy value report",
+			"description": "Energy threshold to trigger report",
 			"valueSize": 1,
-			"minValue": -126,
-			"maxValue": 127,
-			"defaultValue": 10
+			"minValue": 0,
+			"maxValue": 254,
+			"defaultValue": 10,
+			"unsigned": true
 		},
 		{
 			"#": "44",
 			"label": "Self-measurement",
-			"description": "Enables/disables power and energy report used by itself",
+			"description": "if power and energy reports are to sent to the main controller",
 			"valueSize": 1,
 			"minValue": 0,
-			"maxValue": 255,
+			"maxValue": 1,
 			"defaultValue": 0,
-			"unsigned": true,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -371,13 +372,12 @@
 		},
 		{
 			"#": "50",
-			"label": "Scenes/Associations activation",
-			"description": "Determine whether scenes or associations are activated",
+			"label": "Scenes/ Associations activation",
+			"description": "whether scenes or associations are activated by the switch keys",
 			"valueSize": 1,
 			"minValue": 0,
-			"maxValue": 255,
+			"maxValue": 1,
 			"defaultValue": 0,
-			"unsigned": true,
 			"allowManualEntry": false,
 			"options": [
 				{
