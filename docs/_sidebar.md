@@ -6,6 +6,7 @@
     -   [Migrating to v6](getting-started/migrating-to-v6.md)
     -   [Migrating to v7](getting-started/migrating-to-v7.md)
     -   [Migrating to v8](getting-started/migrating-to-v8.md)
+    -   [Migrating to v9](getting-started/migrating-to-v9.md)
     -   [Sponsoring the development](getting-started/sponsoring.md)
 
 -   API
