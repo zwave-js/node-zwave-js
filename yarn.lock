@@ -3655,15 +3655,15 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@ts-morph/common@npm:~0.11.1":
-  version: 0.11.1
-  resolution: "@ts-morph/common@npm:0.11.1"
+"@ts-morph/common@npm:~0.12.0":
+  version: 0.12.0
+  resolution: "@ts-morph/common@npm:0.12.0"
   dependencies:
     fast-glob: ^3.2.7
     minimatch: ^3.0.4
     mkdirp: ^1.0.4
     path-browserify: ^1.0.1
-  checksum: 2853215cfdfb9b65f96ceef91b15a73ab6591fd27d072801884ea5acc1a8f0becd5ac214d5f3d840f5d650b7654585a9b9df86fc4287872e7be1c6f566381bfd
+  checksum: e9b374c4aa6b4474984f204e0178abd1179a4f659fe9e244eba1180170a2b9032cd0534441da4c944de7dd1ad98672670e0513718338670e5b68f0d17f6561e9
   languageName: node
   linkType: hard
 
@@ -4141,7 +4141,7 @@ __metadata:
     pegjs: ^0.10.0
     semver: ^7.3.5
     ts-pegjs: ^0.3.1
-    typescript: 4.4.4
+    typescript: 4.5.2
     winston: ^3.3.3
     xml2json: ^0.12.0
     yargs: ^17.2.1
@@ -4167,7 +4167,7 @@ __metadata:
     logform: "*"
     nrf-intel-hex: ^1.3.0
     triple-beam: "*"
-    typescript: 4.4.4
+    typescript: 4.5.2
     winston: ^3.3.3
     winston-transport: "*"
   languageName: unknown
@@ -4203,8 +4203,8 @@ __metadata:
     piscina: ^3.1.0
     prettier: ^2.4.1
     reflect-metadata: ^0.1.13
-    ts-morph: ^12.2.0
-    typescript: 4.4.4
+    ts-morph: ^13.0.0
+    typescript: 4.5.2
     yargs: ^17.2.1
   languageName: unknown
   linkType: soft
@@ -4262,7 +4262,7 @@ __metadata:
     semver: ^7.3.5
     source-map-support: ^0.5.20
     ts-node: ^10.4.0
-    typescript: 4.4.4
+    typescript: 4.5.2
     zwave-js: "workspace:*"
   languageName: unknown
   linkType: soft
@@ -4285,7 +4285,7 @@ __metadata:
     esbuild-register: ^3.1.2
     jest-extended: ^0.11.5
     serialport: ^9.2.5
-    typescript: 4.4.4
+    typescript: 4.5.2
     winston: ^3.3.3
   languageName: unknown
   linkType: soft
@@ -4302,7 +4302,7 @@ __metadata:
     esbuild-register: ^3.1.2
     fs-extra: ^10.0.0
     jest-extended: ^0.11.5
-    typescript: 4.4.4
+    typescript: 4.5.2
   languageName: unknown
   linkType: soft
 
@@ -4319,7 +4319,7 @@ __metadata:
     esbuild-register: ^3.1.2
     jest-extended: ^0.11.5
     triple-beam: "*"
-    typescript: 4.4.4
+    typescript: 4.5.2
     winston-transport: "*"
   languageName: unknown
   linkType: soft
@@ -5422,10 +5422,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"code-block-writer@npm:^10.1.1":
-  version: 10.1.1
-  resolution: "code-block-writer@npm:10.1.1"
-  checksum: e048037acbcbda19fca62a3a63e4a64226ea6b5dc0fad7632d34a88c1165b29a357e5e19f0497811e9911472e824ab85f68176f40e439da87e051908956eb47c
+"code-block-writer@npm:^11.0.0":
+  version: 11.0.0
+  resolution: "code-block-writer@npm:11.0.0"
+  dependencies:
+    tslib: 2.3.1
+  checksum: d3d92a06f762d5926ecdb2033e4f30eb4c51aca365ea69ef424afbce7cc2b1518a50deff2645cc17b6fa53f234d664631f2268a4caf91af6a1fd696aa0b2fefb
   languageName: node
   linkType: hard
 
@@ -13291,13 +13293,13 @@ fsevents@^2.1.2:
   languageName: node
   linkType: hard
 
-"ts-morph@npm:^12.2.0":
-  version: 12.2.0
-  resolution: "ts-morph@npm:12.2.0"
+"ts-morph@npm:^13.0.0":
+  version: 13.0.0
+  resolution: "ts-morph@npm:13.0.0"
   dependencies:
-    "@ts-morph/common": ~0.11.1
-    code-block-writer: ^10.1.1
-  checksum: c6c066d49da84555d56c1fd16d6de52cb123ea1b6eb71869b29a23ce351849aef3529396d7103a456e9f6e10c56493efe959b4331741e1db7c613d7f5a9de9c9
+    "@ts-morph/common": ~0.12.0
+    code-block-writer: ^11.0.0
+  checksum: 4984a7727cd4a10806d2a69a3c76d83da5a59c50129ef4fce780eb0c35074f1c77863066edcc0e1b88f54e8ef597d4bd8c9167e4a89f2908d1842e99c43a05ea
   languageName: node
   linkType: hard
 
@@ -13371,17 +13373,17 @@ fsevents@^2.1.2:
   languageName: node
   linkType: hard
 
+"tslib@npm:2.3.1, tslib@npm:^2":
+  version: 2.3.1
+  resolution: "tslib@npm:2.3.1"
+  checksum: de17a98d4614481f7fcb5cd53ffc1aaf8654313be0291e1bfaee4b4bb31a20494b7d218ff2e15017883e8ea9626599b3b0e0229c18383ba9dce89da2adf15cb9
+  languageName: node
+  linkType: hard
+
 "tslib@npm:^1.8.1, tslib@npm:^1.9.0, tslib@npm:^1.9.3":
   version: 1.14.1
   resolution: "tslib@npm:1.14.1"
   checksum: dbe628ef87f66691d5d2959b3e41b9ca0045c3ee3c7c7b906cc1e328b39f199bb1ad9e671c39025bd56122ac57dfbf7385a94843b1cc07c60a4db74795829acd
-  languageName: node
-  linkType: hard
-
-"tslib@npm:^2":
-  version: 2.3.1
-  resolution: "tslib@npm:2.3.1"
-  checksum: de17a98d4614481f7fcb5cd53ffc1aaf8654313be0291e1bfaee4b4bb31a20494b7d218ff2e15017883e8ea9626599b3b0e0229c18383ba9dce89da2adf15cb9
   languageName: node
   linkType: hard
 
@@ -13509,7 +13511,7 @@ fsevents@^2.1.2:
   languageName: node
   linkType: hard
 
-"typescript@^4.4.3, typescript@npm:4.4.4":
+typescript@^4.4.3:
   version: 4.4.4
   resolution: "typescript@npm:4.4.4"
   bin:
@@ -13519,7 +13521,27 @@ fsevents@^2.1.2:
   languageName: node
   linkType: hard
 
-"typescript@patch:typescript@4.4.4#~builtin<compat/typescript>, typescript@patch:typescript@^4.4.3#~builtin<compat/typescript>":
+"typescript@npm:4.5.2":
+  version: 4.5.2
+  resolution: "typescript@npm:4.5.2"
+  bin:
+    tsc: bin/tsc
+    tsserver: bin/tsserver
+  checksum: 74f9ce65d532bdf5d0214b3f60cf37992180023388c87a11ee6f838a803067ef0b63c600fa501b0deb07f989257dce1e244c9635ed79feca40bbccf6e0aa1ebc
+  languageName: node
+  linkType: hard
+
+"typescript@patch:typescript@4.5.2#~builtin<compat/typescript>":
+  version: 4.5.2
+  resolution: "typescript@patch:typescript@npm%3A4.5.2#~builtin<compat/typescript>::version=4.5.2&hash=ddd1e8"
+  bin:
+    tsc: bin/tsc
+    tsserver: bin/tsserver
+  checksum: 24a439e062a05e3285a4f0e8a40644116ecdca89f3e908bed01e5a01b9aee747e3bcf0e85fe9e017e5ebf0c0863437c39479f2616f55a244c2d82d37022cdc4f
+  languageName: node
+  linkType: hard
+
+"typescript@patch:typescript@^4.4.3#~builtin<compat/typescript>":
   version: 4.4.4
   resolution: "typescript@patch:typescript@npm%3A4.4.4#~builtin<compat/typescript>::version=4.4.4&hash=ddd1e8"
   bin:
@@ -14257,7 +14279,7 @@ fsevents@^2.1.2:
     semver: ^7.3.5
     serialport: ^9.2.5
     source-map-support: ^0.5.20
-    typescript: 4.4.4
+    typescript: 4.5.2
     winston: ^3.3.3
     xstate: ^4.26.0
   languageName: unknown
