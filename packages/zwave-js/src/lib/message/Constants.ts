@@ -105,7 +105,7 @@ export enum FunctionType {
 
 	UNKNOWN_FUNC_ClearNetworkStats = 0x39,
 	UNKNOWN_FUNC_GetNetworkStats = 0x3a,
-	UNKNOWN_FUNC_GetBackgroundRSSI = 0x3b,
+	GetBackgroundRSSI = 0x3b, // request the most recent background RSSI levels detected
 	UNKNOWN_FUNC_RemoveNodeIdFromNetwork = 0x3f,
 
 	FUNC_ID_ZW_SET_LEARN_NODE_STATE = 0x40, // Not implemented

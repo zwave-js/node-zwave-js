@@ -48,6 +48,7 @@
     "@types/jest": "^26.0.24",
     "@types/node": "^15.12.5",
     "@types/semver": "^7.3.9",
+    "@types/source-map-support": "^0",
     "@typescript-eslint/eslint-plugin": "^5.4.0",
     "@typescript-eslint/parser": "^5.4.0",
     "@zwave-js/config": "workspace:*",
@@ -73,12 +74,10 @@
     "prettier-plugin-organize-imports": "^2.3.4",
     "reflect-metadata": "^0.1.13",
     "semver": "^7.3.5",
+    "source-map-support": "^0.5.20",
     "ts-node": "^10.4.0",
     "typescript": "4.4.4",
     "zwave-js": "workspace:*"
-  },
-  "resolutions": {
-    "@ts-morph/common": "patch:@ts-morph/common@~0.11.0#.yarn-patches/ts-morph.diff"
   },
   "scripts": {
     "prebuild": "yarn workspace zwave-js run b prebuild",
@@ -120,5 +119,6 @@
     "commitizen": {
       "path": "./node_modules/cz-conventional-changelog"
     }
-  }
+  },
+  "packageManager": "yarn@3.1.0"
 }

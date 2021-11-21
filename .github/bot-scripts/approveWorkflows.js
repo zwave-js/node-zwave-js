@@ -1,12 +1,8 @@
 // @ts-check
 
-// To require non-local modules, we need to setup Yarn PnP
-// @ts-ignore
-require("../../.pnp.cjs").setup();
+/// <reference path="./types.d.ts" />
 
 const { makeRe } = require("minimatch");
-
-/// <reference path="./types.d.ts" />
 
 /**
  * @param {{github: Github, context: Context, whitelist: string[], workflows: string[]}} param

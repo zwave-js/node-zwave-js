@@ -11,6 +11,7 @@ import { NodeStatus } from "../node/Types";
 import type { Driver } from "./Driver";
 
 export interface MessageGenerator {
+	parent: Transaction;
 	/** Start a new copy of this message generator */
 	start: () => AsyncGenerator<Message, void, Message>;
 	/** A reference to the currently running message generator if it was already started */
@@ -41,6 +42,8 @@ export class Transaction implements Comparable<Transaction> {
 		private readonly driver: Driver,
 		private readonly options: TransactionOptions,
 	) {
+		// Give the message generator a reference to this transaction
+		options.parts.parent = this;
 		// We need create the stack on a temporary object or the Error
 		// class will try to print the message
 		const tmp = { message: "" };

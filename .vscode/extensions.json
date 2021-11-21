@@ -1,10 +1,8 @@
 {
 	"recommendations": [
-		"rebornix.project-snippets",
 		"dbaeumer.vscode-eslint",
 		"esbenp.prettier-vscode",
 		"EditorConfig.EditorConfig",
-		"amodio.toggle-excluded-files",
-		"arcanis.vscode-zipfs"
+		"amodio.toggle-excluded-files"
 	]
 }

@@ -633,6 +633,7 @@ export class Security2CCMessageEncapsulation extends Security2CC {
 			// Ensure the node has a security class
 			const peerNodeID = this.nodeId as number;
 			const node = this.getNode()!;
+			validatePayload.withReason("The node is not included")(!!node);
 			const securityClass = node.getHighestSecurityClass();
 			validatePayload.withReason("No security class granted")(
 				securityClass !== SecurityClass.None,

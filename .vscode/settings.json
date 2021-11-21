@@ -1,5 +1,5 @@
 {
-	"typescript.tsdk": ".yarn/sdks/typescript/lib",
+	"typescript.tsdk": "node_modules\\typescript\\lib",
 	"typescript.enablePromptUseWorkspaceTsdk": true,
 	"jest.showCoverageOnLoad": false,
 	"jest.enableCodeLens": true,

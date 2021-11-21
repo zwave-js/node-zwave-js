@@ -8,7 +8,7 @@ The driver is the core of this library. It controls the serial interface, handle
 new (port: string, options?: ZWaveOptions) => Driver
 ```
 
-The first constructor argument is the address of the serial port. On Windows, this is similar to `"COM3"`. On Linux this has the form `/dev/ttyAMA0` (or similar). Alternatively, you can connect to a serial port that is hosted over TCP (for example with the `ser2net` utility). In this case, use `tcp://<hostname>:<portnumber>` as the connection string. If you're using `ser2net`, use these settings to host the port: `<portnumber>:raw:0:<path-to-serial>:115200 8DATABITS NONE 1STOPBIT`.
+The first constructor argument is the address of the serial port. On Windows, this is similar to `"COM3"`. On Linux this has the form `/dev/ttyAMA0` (or similar). Alternatively, you can connect to a serial port that is hosted over TCP (for example with the `ser2net` utility), see [Connect to a hosted serial port over TCP](usage/tcp-connection.md).
 
 For more control, the constructor accepts an optional options object as the second argument. See [`ZWaveOptions`](#ZWaveOptions) for a detailed desription.
 
@@ -422,6 +422,11 @@ interface SendMessageOptions {
 	expire?: number;
 	/** If a Wake Up On Demand should be requested for the target node. */
 	requestWakeUpOnDemand?: boolean;
+	/**
+	 * When a message sent to a node results in a TX report to be received, this callback will be called.
+	 * For multi-stage messages, the callback may be called multiple times.
+	 */
+	onTXReport?: (report: TXReport) => void;
 }
 ```
 
@@ -461,11 +466,89 @@ enum MessagePriority {
 > DO NOT rely on the numeric values of the enum if you're using it in your application.
 > The ordinal values are likely to change in future updates. Instead, refer to the enum properties directly.
 
+TX status reports are supported by the more modern controllers and contain details about the message transmission to other nodes, e.g. routing attempts, RSSI, speed, etc.:
+
+<!-- #import TXReport from "zwave-js" -->
+
+```ts
+interface TXReport {
+	/** Transmission time in ticks (multiples of 10ms) */
+	txTicks: number;
+	/** Number of repeaters used in the route to the destination, 0 for direct range */
+	numRepeaters: number;
+	/** RSSI value of the acknowledgement frame */
+	ackRSSI?: RSSI;
+	/** RSSI values of the incoming acknowledgement frame, measured by repeater 0...3 */
+	ackRepeaterRSSI?: [RSSI?, RSSI?, RSSI?, RSSI?];
+	/** Channel number the acknowledgement frame is received on */
+	ackChannelNo?: number;
+	/** Channel number used to transmit the data */
+	txChannelNo: number;
+	/** State of the route resolution for the transmission attempt. Encoding is manufacturer specific. */
+	routeSchemeState: number;
+	/** Node IDs of the repeater 0..3 used in the route. */
+	repeaterNodeIds: [number?, number?, number?, number?];
+	/** Whether the destination requires a 1000ms beam to be reached */
+	beam1000ms: boolean;
+	/** Whether the destination requires a 250ms beam to be reached */
+	beam250ms: boolean;
+	/** Transmission speed used in the route */
+	routeSpeed: ProtocolDataRate;
+	/** How many routing attempts have been made to transmit the payload */
+	routingAttempts: number;
+	/** When a route failed, this indicates the last functional Node ID in the last used route */
+	failedRouteLastFunctionalNodeId?: number;
+	/** When a route failed, this indicates the first non-functional Node ID in the last used route */
+	failedRouteFirstNonFunctionalNodeId?: number;
+	/** Transmit power used for the transmission in dBm */
+	txPower?: number;
+	/** Measured noise floor during the outgoing transmission */
+	measuredNoiseFloor?: RSSI;
+	/** TX power in dBm used by the destination to transmit the ACK */
+	destinationAckTxPower?: number;
+	/** Measured RSSI of the acknowledgement frame received from the destination */
+	destinationAckMeasuredRSSI?: RSSI;
+	/** Noise floor measured by the destination during the ACK transmission */
+	destinationAckMeasuredNoiseFloor?: RSSI;
+}
+```
+
+The RSSI is either a number indicating the value in dBm or one of the special values defined in `RssiError`.
+
+<!-- #import RSSI from "zwave-js" -->
+
+```ts
+type RSSI = number | RssiError;
+```
+
+<!-- #import RssiError from "zwave-js" -->
+
+```ts
+enum RssiError {
+	NotAvailable = 127,
+	ReceiverSaturated = 126,
+	NoSignalDetected = 125,
+}
+```
+
+<!-- #import ProtocolDataRate from "zwave-js" -->
+
+```ts
+enum ProtocolDataRate {
+	ZWave_9k6 = 0x01,
+	ZWave_40k = 0x02,
+	ZWave_100k = 0x03,
+	LongRange_100k = 0x04,
+}
+```
+
 ### `SendCommandOptions`
 
 Influences the behavior of `driver.sendCommand`. Has all the properties of [`SendMessageOptions`](#SendMessageOptions) plus the following:
 
 -   `maxSendAttempts: number` - _(optional)_ How many times the driver should try to send the message. Defaults to 3.
+-   `autoEncapsulate: boolean` - _(optional)_ Whether the driver should automatically handle the encapsulation. Defaults to `true` and should be kept that way unless there is a good reason not to.
+-   `transmitOptions: TransmitOptions` - _(optional)_ Override the default transmit options, e.g. turning off routing. Should be kept on default unless there is a good reason not to.
 
 ### `SendSupervisedCommandOptions`
 
@@ -618,6 +701,17 @@ interface ZWaveOptions {
 	 * Default: `false`
 	 */
 	disableOptimisticValueUpdate?: boolean;
+
+	/**
+	 * By default, the driver assumes to be talking to a single application. In this scenario a successful `setValue` call
+	 * is enough for the application to know that the value was changed and update its own cache or UI.
+	 *
+	 * Therefore, the `"value updated"` event is not emitted after `setValue` unless the change was verified by the device.
+	 * To get `"value updated"` events nonetheless, set this option to `true`.
+	 *
+	 * Default: `false`
+	 */
+	emitValueUpdateAfterSetValue?: boolean;
 
 	/**
 	 * Soft Reset is required after some commands like changing the RF region or restoring an NVM backup.

@@ -7,10 +7,15 @@ export {
 	DataRate,
 	FLiRS,
 	InterviewStage,
+	LifelineHealthCheckResult,
+	LifelineHealthCheckSummary,
 	NodeInterviewFailedEventArgs,
 	NodeStatus,
 	NodeType,
 	ProtocolVersion,
+	RefreshInfoOptions,
+	RouteHealthCheckResult,
+	RouteHealthCheckSummary,
 	ZWaveNodeEvents,
 } from "./lib/node/Types";
 export { VirtualEndpoint } from "./lib/node/VirtualEndpoint";
