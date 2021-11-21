@@ -60,7 +60,6 @@ interface SendDataBridgeRequestOptions<
 > extends MessageBaseOptions {
 	command: CCType;
 	sourceNodeId?: number;
-	route?: [number, number, number, number];
 	transmitOptions?: TransmitOptions;
 	maxSendAttempts?: number;
 }
@@ -84,16 +83,8 @@ export class SendDataBridgeRequest<CCType extends CommandClass = CommandClass>
 			);
 		}
 
-		if (options.route && options.route.length !== 4) {
-			throw new ZWaveError(
-				`The route must consist of exactly 4 entries!`,
-				ZWaveErrorCodes.Argument_Invalid,
-			);
-		}
-
 		this.sourceNodeId =
 			options.sourceNodeId ?? driver.controller.ownNodeId!;
-		this.route = options.route ?? [0, 0, 0, 0];
 
 		this.command = options.command;
 		this.transmitOptions =
@@ -109,8 +100,6 @@ export class SendDataBridgeRequest<CCType extends CommandClass = CommandClass>
 	public command: SinglecastCC<CCType>;
 	/** Options regarding the transmission of the message */
 	public transmitOptions: TransmitOptions;
-	/** Which route to use for the transmission */
-	public route: [number, number, number, number];
 
 	private _maxSendAttempts: number = 1;
 	/** The number of times the driver may try to send this message */
@@ -130,14 +119,7 @@ export class SendDataBridgeRequest<CCType extends CommandClass = CommandClass>
 				serializedCC.length,
 			]),
 			serializedCC,
-			Buffer.from([
-				this.transmitOptions,
-				this.route[0],
-				this.route[1],
-				this.route[2],
-				this.route[3],
-				this.callbackId,
-			]),
+			Buffer.from([this.transmitOptions, 0, 0, 0, 0, this.callbackId]),
 		]);
 
 		return super.serialize();
@@ -158,7 +140,6 @@ export class SendDataBridgeRequest<CCType extends CommandClass = CommandClass>
 			message: {
 				"source node id": this.sourceNodeId,
 				"transmit options": num2hex(this.transmitOptions),
-				route: this.route.join(", "),
 				"callback id": this.callbackId,
 			},
 		};
