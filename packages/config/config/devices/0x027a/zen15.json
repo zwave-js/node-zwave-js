@@ -136,19 +136,19 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "LED indicator will display power consumption whenever the device is plugged in (LED stays on at all times, even if the switch is off)",
+					"label": "Always On",
 					"value": 0
 				},
 				{
-					"label": "LED indicator will display power consumption whenever the device is ON and will turn off when the switch is OFF",
+					"label": "On when switch is on; Off when switch is off",
 					"value": 1
 				},
 				{
-					"label": "LED indicator will display the level of power consumption for 5 seconds only whenever the device is turned on or off (LED indicator will stay off for most of the time)",
+					"label": "Momentary (at status change)",
 					"value": 2
 				},
 				{
-					"label": "LED indicator is OFF at all times except for inclusion, exclusion, and Z-Wave range test)",
+					"label": "Always off (except for inclusion, exclusion, and Z-Wave range test)",
 					"value": 3
 				}
 			]
