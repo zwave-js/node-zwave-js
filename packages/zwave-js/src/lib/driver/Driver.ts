@@ -446,12 +446,6 @@ export class Driver extends TypedEventEmitter<DriverEventCallbacks> {
 		// And make sure they contain valid values
 		checkOptions(this.options);
 
-		// register some cleanup handlers in case the program doesn't get closed cleanly
-		this._cleanupHandler = this._cleanupHandler.bind(this);
-		process.on("exit", this._cleanupHandler);
-		process.on("SIGINT", this._cleanupHandler);
-		process.on("uncaughtException", this._cleanupHandler);
-
 		// Initialize logging
 		this._logContainer = new ZWaveLogContainer(this.options.logConfig);
 		this._driverLog = new DriverLogger(this._logContainer);
@@ -2004,10 +1998,6 @@ export class Driver extends TypedEventEmitter<DriverEventCallbacks> {
 		);
 	}
 
-	private _cleanupHandler = (): void => {
-		void this.destroy();
-	};
-
 	/**
 	 * Terminates the driver instance and closes the underlying serial connection.
 	 * Must be called under any circumstances.
@@ -2018,21 +2008,6 @@ export class Driver extends TypedEventEmitter<DriverEventCallbacks> {
 		this._destroyPromise = createDeferredPromise();
 
 		this.driverLog.print("destroying driver instance...");
-
-		// Disable inclusion before shutting down
-		try {
-			switch (this._controller?.inclusionState) {
-				case InclusionState.SmartStart:
-				case InclusionState.Including:
-					await this._controller.stopInclusionNoCallback();
-					break;
-				case InclusionState.Excluding:
-					await this._controller.stopExclusionNoCallback();
-					break;
-			}
-		} catch {
-			// ignore
-		}
 
 		// First stop the send thread machine and close the serial port, so nothing happens anymore
 		if (this.sendThread.initialized) this.sendThread.stop();
@@ -2079,9 +2054,7 @@ export class Driver extends TypedEventEmitter<DriverEventCallbacks> {
 		// Destroy all nodes
 		this._controller?.nodes.forEach((n) => n.destroy());
 
-		process.removeListener("exit", this._cleanupHandler);
-		process.removeListener("SIGINT", this._cleanupHandler);
-		process.removeListener("uncaughtException", this._cleanupHandler);
+		this.driverLog.print(`driver instance destroyed`);
 
 		// destroy loggers as the very last thing
 		this._logContainer.destroy();
