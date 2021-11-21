@@ -640,13 +640,13 @@ readonly nodes: ReadonlyMap<number, ZWaveNode>
 
 This property contains a map of all nodes that you can access by their node ID, e.g. `nodes.get(2)` for node 2.
 
-### `libraryVersion`
+### `sdkVersion`
 
 ```ts
-readonly libraryVersion: string
+readonly sdkVersion: string
 ```
 
-Returns the Z-Wave library version that is supported by the controller hardware.
+Returns the Z-Wave SDK version that is supported by the controller hardware.
 
 > [!WARNING]
 > This property is only defined after the controller interview!
@@ -657,7 +657,7 @@ Returns the Z-Wave library version that is supported by the controller hardware.
 readonly type: ZWaveLibraryTypes
 ```
 
-Returns the type of the Z-Wave library that is supported by the controller hardware. The following values are possible:
+Returns the type of the Z-Wave library that is supported by the controller hardware. The following values are defined, although only `"Static Controller"` or `"Bridge Controller"` will realistically be possible:
 
 <!-- #import ZWaveLibraryTypes from "zwave-js" -->
 
@@ -710,7 +710,7 @@ Returns the ID of the controller in the current network.
 * readonly wasRealPrimary: boolean
 * readonly isStaticUpdateController: boolean
 * readonly isSlave: boolean
-* readonly serialApiVersion: string
+* readonly firmwareVersion: string
 * readonly manufacturerId: number
 * readonly productType: number
 * readonly productId: number
