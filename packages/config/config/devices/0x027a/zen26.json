@@ -1,0 +1,318 @@
+{
+	"manufacturer": "Zooz",
+	"manufacturerId": "0x027a",
+	"label": "ZEN26",
+	"description": "Z-Wave Plus S2 ON/OFF Switch",
+	"devices": [
+		{
+			"productType": "0xa000",
+			"productId": "0xa001"
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"associations": {
+		"1": {
+			"label": "Lifeline",
+			"maxNodes": 1,
+			"isLifeline": true
+		},
+		"2": {
+			"label": "On/Off Control",
+			"maxNodes": 5
+		}
+	},
+	"paramInformation": [
+		{
+			"#": "1",
+			"$if": "firmwareVersion <= 2.2",
+			"label": "Paddle Orientation",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 0,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Top on, bottom off",
+					"value": 0
+				},
+				{
+					"label": "Top off, bottom on",
+					"value": 1
+				}
+			]
+		},
+		{
+			"#": "1",
+			"$if": "firmwareVersion >= 2.3",
+			"label": "Invert Switch",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 2,
+			"defaultValue": 0,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Normal Orientation",
+					"value": 0
+				},
+				{
+					"label": "Invert switch",
+					"value": 1
+				},
+				{
+					"label": "Both paddles toggle",
+					"value": 2
+				}
+			]
+		},
+		{
+			"#": "2",
+			"label": "LED Indicator Control",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 3,
+			"defaultValue": 0,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "LED is on when switch is off",
+					"value": 0
+				},
+				{
+					"label": "LED is on when switch is off",
+					"value": 1
+				},
+				{
+					"label": "LED is always off",
+					"value": 2
+				},
+				{
+					"label": "LED is always on",
+					"value": 3
+				}
+			]
+		},
+		{
+			"#": "3",
+			"$if": "firmwareVersion <= 1.255",
+			"label": "Auto Turn-Off Timer Duration",
+			"description": "Set the number of seconds to automatically turn off switch once it has been turned on (0 to disable).",
+			"valueSize": 2,
+			"minValue": 0,
+			"maxValue": 32767,
+			"defaultValue": 60
+		},
+		{
+			"#": "3",
+			"$if": "firmwareVersion >= 2.0",
+			"label": "Auto Turn-Off Timer",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 0,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Disabled",
+					"value": 0
+				},
+				{
+					"label": "Enabled",
+					"value": 1
+				}
+			]
+		},
+		{
+			"#": "4",
+			"$if": "firmwareVersion >= 2.0",
+			"label": "Auto Turn-Off Timer Duration",
+			"valueSize": 4,
+			"minValue": 1,
+			"maxValue": 65535,
+			"defaultValue": 60
+		},
+		{
+			"#": "5",
+			"$if": "firmwareVersion >= 2.0",
+			"label": "Auto Turn-On Timer",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 0,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Disabled",
+					"value": 0
+				},
+				{
+					"label": "Enabled",
+					"value": 1
+				}
+			]
+		},
+		{
+			"#": "6",
+			"$if": "firmwareVersion >= 2.0",
+			"label": "Auto Turn-On Timer Duration",
+			"valueSize": 4,
+			"minValue": 1,
+			"maxValue": 65535,
+			"defaultValue": 30
+		},
+		{
+			"#": "7[0x01]",
+			"$if": "firmwareVersion >= 2.0",
+			"label": "Control Group 2 With Physical Switch",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 1,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Disabled",
+					"value": 0
+				},
+				{
+					"label": "Enabled",
+					"value": 1
+				}
+			]
+		},
+		{
+			"#": "7[0x02]",
+			"$if": "firmwareVersion >= 2.0",
+			"label": "Control Group 2 With Connected 3-Way Switch",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 1,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Disabled",
+					"value": 0
+				},
+				{
+					"label": "Enabled",
+					"value": 1
+				}
+			]
+		},
+		{
+			"#": "7[0x04]",
+			"$if": "firmwareVersion >= 2.0",
+			"label": "Control Group 2 With Z-Wave Commands",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 1,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Disabled",
+					"value": 0
+				},
+				{
+					"label": "Enabled",
+					"value": 1
+				}
+			]
+		},
+		{
+			"#": "7[0x08]",
+			"$if": "firmwareVersion >= 2.0",
+			"label": "Control Group 2 With On/Off Timers",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 1,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Disabled",
+					"value": 0
+				},
+				{
+					"label": "Enabled",
+					"value": 1
+				}
+			]
+		},
+		{
+			"#": "8",
+			"$import": "~/templates/master_template.json#state_after_power_failure_off_on_prev"
+		},
+		{
+			"#": "10",
+			"$if": "firmwareVersion >= 2.0",
+			"label": "Scene Control",
+			"description": "Send scene commands to hub on physical paddle presses.",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 0,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Disabled",
+					"value": 0
+				},
+				{
+					"label": "Enabled",
+					"value": 1
+				}
+			]
+		},
+		{
+			"#": "11",
+			"$if": "firmwareVersion >= 2.0",
+			"label": "Enable Local and Z-Wave Control",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 2,
+			"defaultValue": 1,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Local control disabled, Z-Wave control enabled",
+					"value": 0
+				},
+				{
+					"label": "Local control and Z-Wave control enabled",
+					"value": 1
+				},
+				{
+					"label": "Local control and Z-Wave control disabled",
+					"value": 2
+				}
+			]
+		},
+		{
+			"#": "13",
+			"$if": "firmwareVersion >= 2.2",
+			"label": "Reporting Behavior When Physical Control Is Disabled",
+			"description": "Enable or disable reporting on/off status and changing LED indicator state even if physical and Z-Wave control is disabled.",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 0,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Enabled",
+					"value": 0
+				},
+				{
+					"label": "Disabled",
+					"value": 1
+				}
+			]
+		}
+	]
+}
