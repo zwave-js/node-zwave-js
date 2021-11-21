@@ -1,9 +1,4 @@
 {
-	"proprietary": {
-		"fibaroCCs": [
-			38 /* 0x26 (Venetian Blinds) */
-		]
-	},
 	"manufacturer": "Fibargroup",
 	"manufacturerId": "0x010f",
 	"label": "FGRM222",
@@ -41,6 +36,9 @@
 			"maxNodes": 1,
 			"isLifeline": true
 		}
+	},
+	"proprietary": {
+		"fibaroCCs": [38 /* 0x26 (Venetian Blinds) */]
 	},
 	"paramInformation": [
 		{

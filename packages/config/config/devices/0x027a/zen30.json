@@ -497,5 +497,11 @@
 				}
 			]
 		}
-	]
+	],
+	"metadata": {
+		"inclusion": "1. Initiate inclusion (pairing) in the app (or web interface).\n2. Finalize inclusion at the switch. Tap the upper paddle of the dimmer 3 times quickly. The LED indicators will blink to signal communication and remain on for 2 seconds to confirm inclusion",
+		"exclusion": "Bring your Z-Wave gateway (hub) close to the switch if possible\n2. Put the Z-Wave hub into exclusion mode \n3. Tap the lower paddle on the dimmer 3 times quickly\n4. Your hub will confirm exclusion and the device will disappear from your\ncontroller's device list",
+		"reset": "If your primary controller is missing or inoperable, you may need to reset\nthe device to factory settings. To complete the reset process manually,\npress and hold the lower paddle on the dimmer for at least 15 seconds\nuntil the LED indicators start flashing, release. Then immediately press\nand hold the upper paddle on the dimmer for at least 15 seconds. The\nLED indicators will flash again to confirm successful reset",
+		"manual": "https://products.z-wavealliance.org/ProductManual/File?folder=&filename=product_documents/3791/zooz-s2-double-switch-zen30-ver1-manual-online.pdf"
+	}
 }
