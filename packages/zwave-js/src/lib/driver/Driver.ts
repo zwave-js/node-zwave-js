@@ -3463,10 +3463,7 @@ ${handlers.length} left`,
 	/** Wraps a CC in the correct SendData message to use for sending */
 	public createSendDataMessage(
 		command: CommandClass,
-		options: Pick<
-			SendCommandOptions,
-			"autoEncapsulate" | "maxSendAttempts" | "transmitOptions"
-		> = {},
+		options: Omit<SendCommandOptions, keyof SendMessageOptions> = {},
 	): SendDataMessage {
 		let msg: SendDataMessage;
 		if (command.isSinglecast()) {
