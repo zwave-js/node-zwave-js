@@ -26,7 +26,8 @@
 			"label": "Basic",
 			"maxNodes": 5,
 			"isLifeline": true
-		},
+		}
+	},
 	"paramInformation": [
 		{
 			"#": "7",
