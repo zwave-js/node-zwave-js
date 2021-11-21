@@ -1,4 +1,4 @@
-import type { SerialAPIVersion } from "./Controller";
+import type { SDKVersion } from "./Controller";
 
 /** A named list of Z-Wave features */
 export enum ZWaveFeature {
@@ -6,6 +6,6 @@ export enum ZWaveFeature {
 	SmartStart,
 }
 
-export const minFeatureVersions: Record<ZWaveFeature, SerialAPIVersion> = {
+export const minFeatureVersions: Record<ZWaveFeature, SDKVersion> = {
 	[ZWaveFeature.SmartStart]: "6.81",
 };
