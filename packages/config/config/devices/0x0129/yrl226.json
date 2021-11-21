@@ -7,10 +7,7 @@
 		{
 			"productType": "0x800c",
 			"productId": "0x0f00",
-			"zwaveAllianceId": [
-				3114,
-				3267
-			]
+			"zwaveAllianceId": [3114, 3267]
 		}
 	],
 	"firmwareVersion": {
