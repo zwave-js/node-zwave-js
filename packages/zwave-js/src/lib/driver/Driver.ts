@@ -792,7 +792,14 @@ export class Driver extends TypedEventEmitter<DriverEventCallbacks> {
 
 		// asynchronously open the serial port
 		setImmediate(async () => {
-			if (!(await this.tryOpenSerialport(spOpenPromise))) return;
+			try {
+				await this.openSerialport();
+			} catch (e) {
+				spOpenPromise.reject(e);
+				void this.destroy();
+				return;
+			}
+
 			this.driverLog.print("serial port opened");
 			this._isOpen = true;
 			spOpenPromise.resolve();
@@ -876,9 +883,7 @@ export class Driver extends TypedEventEmitter<DriverEventCallbacks> {
 	private _nodesReady = new Set<number>();
 	private _nodesReadyEventEmitted: boolean = false;
 
-	private async tryOpenSerialport(
-		openPromise?: DeferredPromise<void>,
-	): Promise<boolean> {
+	private async openSerialport(): Promise<void> {
 		let lastError: unknown;
 		// After a reset, the serial port may need a few seconds until we can open it - try a few times
 		for (
@@ -888,7 +893,7 @@ export class Driver extends TypedEventEmitter<DriverEventCallbacks> {
 		) {
 			try {
 				await this.serial!.open();
-				return true;
+				return;
 			} catch (e) {
 				lastError = e;
 			}
@@ -902,15 +907,7 @@ export class Driver extends TypedEventEmitter<DriverEventCallbacks> {
 		)}`;
 		this.driverLog.print(message, "error");
 
-		const error = new ZWaveError(message, ZWaveErrorCodes.Driver_Failed);
-		if (this._isOpen || !openPromise) {
-			this.emit("error", error);
-		} else {
-			openPromise?.reject(error);
-		}
-
-		void this.destroy();
-		return false;
+		throw new ZWaveError(message, ZWaveErrorCodes.Driver_Failed);
 	}
 
 	/** Indicates whether all nodes are ready, i.e. the "all nodes ready" event has been emitted */
@@ -1888,7 +1885,11 @@ export class Driver extends TypedEventEmitter<DriverEventCallbacks> {
 		// If the controller disconnected the serial port during the soft reset, we need to re-open it
 		if (!this.serial!.isOpen) {
 			this.controllerLog.print("Re-opening serial port...");
-			await this.tryOpenSerialport();
+			try {
+				await this.openSerialport();
+			} catch {
+				return false;
+			}
 		}
 
 		// Wait the configured amount of time for the Serial API started command to be received
