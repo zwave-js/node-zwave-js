@@ -64,7 +64,7 @@
 		},
 		{
 			"#": "33",
-			"$if": "firmwareVersion >= 2.4",
+			"$if": "firmwareVersion >= 1.6",
 			"label": "Auto-On Timer",
 			"valueSize": 1,
 			"unit": "minutes",
@@ -81,7 +81,7 @@
 		},
 		{
 			"#": "34",
-			"$if": "firmwareVersion >= 2.4",
+			"$if": "firmwareVersion >= 1.6",
 			"label": "Auto-Off Timer",
 			"valueSize": 1,
 			"unit": "minutes",
@@ -105,6 +105,7 @@
 		},
 		{
 			"#": "27",
+			"$if": "firmwareVersion < 1.3",
 			"label": "LED Indicator",
 			"valueSize": 1,
 			"minValue": 0,
@@ -120,6 +121,35 @@
 				{
 					"label": "Momentary (at status change)",
 					"value": 1
+				}
+			]
+		},
+		{
+			"#": "27",
+			"$if": "firmwareVersion >= 1.3",
+			"label": "LED Indicator",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 1,
+			"unsigned": true,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "LED indicator will display power consumption whenever the device is plugged in (LED stays on at all times, even if the switch is off)",
+					"value": 0
+				},
+				{
+					"label": "LED indicator will display power consumption whenever the device is ON and will turn off when the switch is OFF",
+					"value": 1
+				},
+				{
+					"label": "LED indicator will display the level of power consumption for 5 seconds only whenever the device is turned on or off (LED indicator will stay off for most of the time)",
+					"value": 2
+				},
+				{
+					"label": "LED indicator is OFF at all times except for inclusion, exclusion, and Z-Wave range test)",
+					"value": 3
 				}
 			]
 		},
