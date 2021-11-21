@@ -374,7 +374,6 @@ export class ZWaveController extends TypedEventEmitter<ControllerEventCallbacks>
 
 	/** Checks if the SDK version is greater than the given one */
 	public sdkVersionGt(version: SDKVersion): boolean | undefined {
-		// TODO: Rename these to sdkVersionGt(e) etc...
 		if (this._sdkVersion === undefined) {
 			return undefined;
 		}
@@ -384,7 +383,6 @@ export class ZWaveController extends TypedEventEmitter<ControllerEventCallbacks>
 
 	/** Checks if the SDK version is greater than or equal to the given one */
 	public sdkVersionGte(version: SDKVersion): boolean | undefined {
-		// TODO: Rename these to sdkVersionGt(e) etc...
 		if (this._sdkVersion === undefined) {
 			return undefined;
 		}
@@ -394,7 +392,6 @@ export class ZWaveController extends TypedEventEmitter<ControllerEventCallbacks>
 
 	/** Checks if the SDK version is lower than the given one */
 	public sdkVersionLt(version: SDKVersion): boolean | undefined {
-		// TODO: Rename these to sdkVersionGt(e) etc...
 		if (this._sdkVersion === undefined) {
 			return undefined;
 		}
@@ -404,7 +401,6 @@ export class ZWaveController extends TypedEventEmitter<ControllerEventCallbacks>
 
 	/** Checks if the SDK version is lower than or equal to the given one */
 	public sdkVersionLte(version: SDKVersion): boolean | undefined {
-		// TODO: Rename these to sdkVersionGt(e) etc...
 		if (this._sdkVersion === undefined) {
 			return undefined;
 		}
