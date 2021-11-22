@@ -53,30 +53,30 @@
 				{
 					"label": "user present",
 					"value": 2
+				},
+				{
+					"label": "valve always on",
+					"value": 3
 				}
 			]
 		},
 		{
 			"#": "4",
-			"label": "fixed schedule time - hours",
-			"description": "fixed schedule time hour for microleakage test",
+			"label": "fixed schedule hour for microleakage test",
 			"unit": "h",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 23,
-			"defaultValue": 3,
-			"allowManualEntry": false
+			"defaultValue": 3
 		},
 		{
 			"#": "5",
-			"label": "fixed schedule time - minutes",
-			"description": "fixed schedule time minute for microleakage test",
+			"label": "fixed schedule minute for microleakage test",
 			"unit": "min",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 59,
-			"defaultValue": 0,
-			"allowManualEntry": false
+			"defaultValue": 0
 		},
 		{
 			"#": "6",
@@ -85,8 +85,7 @@
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 127,
-			"defaultValue": 127,
-			"allowManualEntry": false
+			"defaultValue": 127
 		},
 		{
 			"#": "7",
@@ -96,30 +95,25 @@
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 168,
-			"defaultValue": 24,
-			"allowManualEntry": false
+			"defaultValue": 24
 		},
 		{
 			"#": "8",
-			"label": "micro leakage mesuring time",
-			"description": "micro leakage mesuring time, time of closed valve",
+			"label": "micro leakage mesuring time, time of closed valve",
 			"unit": "s",
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 32000,
-			"defaultValue": 100,
-			"allowManualEntry": false
+			"defaultValue": 100
 		},
 		{
 			"#": "9",
-			"label": "micro leakage pressure drop",
-			"description": "pressure drop for microleakage detection recognition",
+			"label": "pressure drop for microleakage detection recognition",
 			"unit": "kPa",
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 32000,
-			"defaultValue": 5,
-			"allowManualEntry": false
+			"defaultValue": 5
 		},
 		{
 			"#": "10",
@@ -129,8 +123,7 @@
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 32000,
-			"defaultValue": 100,
-			"allowManualEntry": false
+			"defaultValue": 100
 		},
 		{
 			"#": "11",
@@ -139,29 +132,40 @@
 			"valueSize": 1,
 			"minValue": 1,
 			"maxValue": 99,
-			"defaultValue": 3,
-			"allowManualEntry": false
+			"defaultValue": 3
 		},
 		{
 			"#": "12",
-			"label": "wait time until next measurement",
-			"description": "waiting time in minutes between two meassurements",
+			"label": "waiting time in minutes between two meassurements",
 			"unit": "min",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 60,
-			"defaultValue": 10,
-			"allowManualEntry": false
+			"defaultValue": 10
 		},
 		{
 			"#": "13",
 			"label": "reaction to micro leakage",
-			"description": "0=disable detection, 1=blink LED, 2= blink LED andshut off valve",
+			"description": "0=disable detection, 1=blink LED, 2=blink LED and shut off valve",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 2,
 			"defaultValue": 1,
-			"allowManualEntry": false
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "disable detection",
+					"value": 0
+				},
+				{
+					"label": "blink LED",
+					"value": 1
+				},
+				{
+					"label": "blink LED and shut off valve",
+					"value": 2
+				}
+			]
 		},
 		{
 			"#": "14",
@@ -171,140 +175,115 @@
 			"minValue": 0,
 			"maxValue": 1,
 			"defaultValue": 0,
-			"readOnly": true,
-			"allowManualEntry": false
+			"readOnly": true
 		},
 		{
 			"#": "15",
 			"label": "max flow rate if operation mode is 2",
-			"description": "max flow rate if operation mode is 2",
 			"unit": "l/h",
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 32000,
-			"defaultValue": 3600,
-			"allowManualEntry": false
+			"defaultValue": 3600
 		},
 		{
 			"#": "16",
 			"label": "max pressure drop if operation mode is 2",
-			"description": "max pressure drop if operation mode is 2",
 			"unit": "kPa",
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 32000,
-			"defaultValue": 1000,
-			"allowManualEntry": false
+			"defaultValue": 1000
 		},
 		{
 			"#": "17",
-			"label": "max liters if operation mode is 2",
-			"description": "max liters  single water abstraction if operation mode is 2",
+			"label": "max liters  single water abstraction if operation mode is 2",
 			"unit": "l",
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 32000,
-			"defaultValue": 400,
-			"allowManualEntry": false
+			"defaultValue": 400
 		},
 		{
 			"#": "18",
-			"label": "max continuous liter if operation mode is 2",
-			"description": "max liter continuous water abstraction if operation mode is 2",
+			"label": "max liter continuous water abstraction if operation mode is 2",
 			"unit": "l",
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 32000,
-			"defaultValue": 400,
-			"allowManualEntry": false
+			"defaultValue": 400
 		},
 		{
 			"#": "19",
-			"label": "max time if operation mode is 2",
-			"description": "max time of single water abstraction if operation mode is 2",
+			"label": "max time of single water abstraction if operation mode is 2",
 			"unit": "min",
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 1440,
-			"defaultValue": 30,
-			"allowManualEntry": false
+			"defaultValue": 30
 		},
 		{
 			"#": "20",
-			"label": "max continious time if operation mode is 2",
-			"description": "max time of continous water abstraction if operation mode is 2",
+			"label": "max time of continous water abstraction if operation mode is ",
 			"unit": "min",
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 1440,
-			"defaultValue": 60,
-			"allowManualEntry": false
+			"defaultValue": 60
 		},
 		{
 			"#": "21",
 			"label": "max flow rate if operation mode is 1",
-			"description": "max flow rate if operation mode is 1",
 			"unit": "l/h",
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 32000,
-			"defaultValue": 3680,
-			"allowManualEntry": false
+			"defaultValue": 3680
 		},
 		{
 			"#": "22",
 			"label": "max pressure drop if operation mode is 1",
-			"description": "max pressure drop if operation mode is 1",
 			"unit": "kPa",
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 32000,
-			"defaultValue": 1000,
-			"allowManualEntry": false
+			"defaultValue": 1000
 		},
 		{
 			"#": "23",
-			"label": "max liters if operation mode is 1",
-			"description": "max liters non continous water abstraction if operation mode is 1",
+			"label": "max non continous liters if operation mode is 1",
 			"unit": "l",
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 32000,
-			"defaultValue": 20,
-			"allowManualEntry": false
+			"defaultValue": 20
 		},
 		{
 			"#": "24",
 			"label": "max continuous liter if operation mode is 1",
-			"description": "max liters continuous water abstraction if operation mode is 2",
 			"unit": "l",
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 32000,
-			"defaultValue": 20,
-			"allowManualEntry": false
+			"defaultValue": 20
 		},
 		{
 			"#": "25",
-			"label": "max time if operation mode is 1",
-			"description": "max time of single water abstraction if operation mode is 1",
+			"label": "max time of single water abstraction if operation mode is 1",
 			"unit": "min",
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 1440,
-			"defaultValue": 30,
-			"allowManualEntry": false
+			"defaultValue": 30
 		},
 		{
 			"#": "26",
-			"label": "max continuous time if operation mode is 1",
-			"description": "max time of continous water abstraction if operation mode is 1",
+			"label": "max time of continous water abstraction if operation mode is 1",
 			"unit": "min",
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 32000,
-			"defaultValue": 30,
-			"allowManualEntry": false
+			"defaultValue": 30
 		},
 		{
 			"#": "27",
@@ -314,8 +293,7 @@
 			"valueSize": 2,
 			"minValue": 1,
 			"maxValue": 168,
-			"defaultValue": 2,
-			"allowManualEntry": false
+			"defaultValue": 2
 		},
 		{
 			"#": "28",
@@ -325,7 +303,21 @@
 			"minValue": 0,
 			"maxValue": 2,
 			"defaultValue": 2,
-			"allowManualEntry": false
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "disable detection",
+					"value": 0
+				},
+				{
+					"label": "blink LED",
+					"value": 1
+				},
+				{
+					"label": "blink LED and shut off valve",
+					"value": 2
+				}
+			]
 		},
 		{
 			"#": "29",
@@ -335,8 +327,7 @@
 			"minValue": 0,
 			"maxValue": 1,
 			"defaultValue": 0,
-			"writeOnly": true,
-			"allowManualEntry": false
+			"readOnly": true
 		},
 		{
 			"#": "30",
@@ -346,29 +337,39 @@
 			"minValue": 0,
 			"maxValue": 2,
 			"defaultValue": 1,
-			"allowManualEntry": false
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "disable detection",
+					"value": 0
+				},
+				{
+					"label": "blink LED",
+					"value": 1
+				},
+				{
+					"label": "blink LED and shut off valve",
+					"value": 2
+				}
+			]
 		},
 		{
 			"#": "31",
 			"label": "backup battery nominal voltage",
-			"description": "Nominal voltage of backup battery",
 			"unit": "mV",
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 32000,
-			"defaultValue": 6000,
-			"allowManualEntry": false
+			"defaultValue": 6000
 		},
 		{
 			"#": "32",
 			"label": "backup battery nominal capacity",
-			"description": "Nominal capacity of backup battery",
 			"unit": "mAh",
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 32000,
-			"defaultValue": 3000,
-			"allowManualEntry": false
+			"defaultValue": 3000
 		},
 		{
 			"#": "37",
@@ -377,8 +378,7 @@
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 1,
-			"defaultValue": 0,
-			"allowManualEntry": false
+			"defaultValue": 0
 		},
 		{
 			"#": "38",
@@ -388,20 +388,17 @@
 			"minValue": 0,
 			"maxValue": 2147483647,
 			"defaultValue": 0,
-			"readOnly": true,
-			"allowManualEntry": false
+			"readOnly": true
 		},
 		{
 			"#": "39",
 			"label": "operating time since last power on",
-			"description": "operating time since last power on",
 			"unit": "s",
 			"valueSize": 4,
 			"minValue": 0,
 			"maxValue": 2147483647,
 			"defaultValue": 0,
-			"readOnly": true,
-			"allowManualEntry": false
+			"readOnly": true
 		},
 		{
 			"#": "49",
@@ -411,8 +408,7 @@
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 168,
-			"defaultValue": 0,
-			"allowManualEntry": false
+			"defaultValue": 0
 		},
 		{
 			"#": "50",
@@ -422,30 +418,27 @@
 			"valueSize": 2,
 			"minValue": -1000,
 			"maxValue": 1000,
-			"defaultValue": 250,
-			"allowManualEntry": false
+			"defaultValue": 250
 		},
 		{
 			"#": "51",
 			"label": "water temperature low threshold",
-			"description": "water temperature low threshold for warning of risk of frost",
+			"description": "warning of risk of frost",
 			"unit": "1/10 °C",
 			"valueSize": 2,
 			"minValue": -1000,
 			"maxValue": 1000,
-			"defaultValue": 20,
-			"allowManualEntry": false
+			"defaultValue": 20
 		},
 		{
 			"#": "52",
 			"label": "water pressure high threshold",
-			"description": "water pressure high threshold for warning of values above valid  operating cond.",
+			"description": "warning of values above valid operating cond.",
 			"unit": "kPa",
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 32000,
-			"defaultValue": 1000,
-			"allowManualEntry": false
+			"defaultValue": 1000
 		},
 		{
 			"#": "53",
@@ -455,8 +448,7 @@
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 32000,
-			"defaultValue": 100,
-			"allowManualEntry": false
+			"defaultValue": 100
 		},
 		{
 			"#": "54",
@@ -466,8 +458,7 @@
 			"minValue": 0,
 			"maxValue": 255,
 			"defaultValue": 0,
-			"readOnly": true,
-			"allowManualEntry": false
+			"readOnly": true
 		},
 		{
 			"#": "56",
@@ -476,8 +467,7 @@
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 1,
-			"defaultValue": 0,
-			"allowManualEntry": false
+			"defaultValue": 0
 		}
 	]
 }
