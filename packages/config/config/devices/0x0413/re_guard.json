@@ -2,7 +2,7 @@
 	"manufacturer": "REHAU AG + Co",
 	"manufacturerId": "0x0413",
 	"label": "RE.GUARD",
-	"description": "Water leakage detector and meter",
+	"description": "Water Leakage Detector and Meter",
 	"devices": [
 		{
 			"productType": "0x0001",
@@ -22,19 +22,19 @@
 		},
 		"2": {
 			"label": "Valve Status",
-			"description": "Sends status of valve",
+			"description": "Sends Status of Valve",
 			"maxNodes": 5
 		},
 		"3": {
-			"label": "Leakage alarm",
-			"description": "Sends notification in case of leackage",
+			"label": "Leakage Alarm",
+			"description": "Sends notification in Case of Leakage",
 			"maxNodes": 5
 		}
 	},
 	"paramInformation": [
 		{
 			"#": "1",
-			"label": "operation mode",
+			"label": "Operation Mode",
 			"description": "0 valve always off; 1 user absent/holiday; 2 user present; 3 valve always on",
 			"valueSize": 1,
 			"minValue": 0,
@@ -62,7 +62,7 @@
 		},
 		{
 			"#": "4",
-			"label": "fixed schedule hour for microleakage test",
+			"label": "Microleakage Test (hour)",
 			"unit": "h",
 			"valueSize": 1,
 			"minValue": 0,
@@ -71,7 +71,7 @@
 		},
 		{
 			"#": "5",
-			"label": "fixed schedule minute for microleakage test",
+			"label": "Microleakage Test (minute)",
 			"unit": "min",
 			"valueSize": 1,
 			"minValue": 0,
@@ -80,7 +80,7 @@
 		},
 		{
 			"#": "6",
-			"label": "fixed schedule day",
+			"label": "Fixed Schedule Day",
 			"description": "fixed day in bin 1111111, Su=1, Sa=2, Fr=4, Th=8, We=16, Tu=32, Mo=64, 0= auto",
 			"valueSize": 1,
 			"minValue": 0,
@@ -89,7 +89,7 @@
 		},
 		{
 			"#": "7",
-			"label": "automatic schedule time interval",
+			"label": "Automatic Schedule Time Interval",
 			"description": "automatic schedule time interval between microlekage tests, if not fixed",
 			"unit": "h",
 			"valueSize": 2,
@@ -99,7 +99,7 @@
 		},
 		{
 			"#": "8",
-			"label": "micro leakage mesuring time, time of closed valve",
+			"label": "Micro Leakage Measuring Time",
 			"unit": "s",
 			"valueSize": 2,
 			"minValue": 0,
@@ -108,7 +108,8 @@
 		},
 		{
 			"#": "9",
-			"label": "pressure drop for microleakage detection recognition",
+			"label": "Micro Leakage Pressure Drop",
+			"description": "pressure drop in kPa",
 			"unit": "kPa",
 			"valueSize": 2,
 			"minValue": 0,
@@ -117,7 +118,7 @@
 		},
 		{
 			"#": "10",
-			"label": "micro leakage pressure drop abort",
+			"label": "Micro Leakage Pressure Drop Abort",
 			"description": "pressure drop in kPa",
 			"unit": "kPa",
 			"valueSize": 2,
@@ -127,7 +128,7 @@
 		},
 		{
 			"#": "11",
-			"label": "number of measurements",
+			"label": "Number of Measurements",
 			"description": "how many in one time period",
 			"valueSize": 1,
 			"minValue": 1,
@@ -136,7 +137,7 @@
 		},
 		{
 			"#": "12",
-			"label": "waiting time in minutes between two meassurements",
+			"label": "Measurement Waiting Time",
 			"unit": "min",
 			"valueSize": 1,
 			"minValue": 0,
@@ -145,7 +146,7 @@
 		},
 		{
 			"#": "13",
-			"label": "reaction to micro leakage",
+			"label": "Reaction to Micro Leakage",
 			"description": "0=disable detection, 1=blink LED, 2=blink LED and shut off valve",
 			"valueSize": 1,
 			"minValue": 0,
@@ -169,7 +170,7 @@
 		},
 		{
 			"#": "14",
-			"label": "macro leakage detected",
+			"label": "Macro Leakage Detected",
 			"description": "0 = no leackage  1 = leakage",
 			"valueSize": 1,
 			"minValue": 0,
@@ -179,7 +180,7 @@
 		},
 		{
 			"#": "15",
-			"label": "max flow rate if operation mode is 2",
+			"label": "Max Flow Rate (Present Mode)",
 			"unit": "l/h",
 			"valueSize": 2,
 			"minValue": 0,
@@ -188,7 +189,7 @@
 		},
 		{
 			"#": "16",
-			"label": "max pressure drop if operation mode is 2",
+			"label": "Max Pressure Drop (Present Mode)",
 			"unit": "kPa",
 			"valueSize": 2,
 			"minValue": 0,
@@ -197,7 +198,8 @@
 		},
 		{
 			"#": "17",
-			"label": "max liters  single water abstraction if operation mode is 2",
+			"label": "Max Liters (Present Mode)",
+			"description": "max liters single water abstraction if operation mode is 2",
 			"unit": "l",
 			"valueSize": 2,
 			"minValue": 0,
@@ -206,7 +208,8 @@
 		},
 		{
 			"#": "18",
-			"label": "max liter continuous water abstraction if operation mode is 2",
+			"label": "Max Continous Liters (Present Mode)",
+			"description": "max liter continuous water abstraction if operation mode is 2",
 			"unit": "l",
 			"valueSize": 2,
 			"minValue": 0,
@@ -215,7 +218,8 @@
 		},
 		{
 			"#": "19",
-			"label": "max time of single water abstraction if operation mode is 2",
+			"label": "Max Time (Present Mode)",
+			"description": "max time of single water abstraction if operation mode is 2",
 			"unit": "min",
 			"valueSize": 2,
 			"minValue": 0,
@@ -224,7 +228,8 @@
 		},
 		{
 			"#": "20",
-			"label": "max time of continous water abstraction if operation mode is ",
+			"label": "Max Continous Time (Present Mode)",
+			"description": "max time of continous water abstraction if operation mode is 2",
 			"unit": "min",
 			"valueSize": 2,
 			"minValue": 0,
@@ -233,7 +238,7 @@
 		},
 		{
 			"#": "21",
-			"label": "max flow rate if operation mode is 1",
+			"label": "Max Flow Rate (Present Mode)",
 			"unit": "l/h",
 			"valueSize": 2,
 			"minValue": 0,
@@ -242,7 +247,7 @@
 		},
 		{
 			"#": "22",
-			"label": "max pressure drop if operation mode is 1",
+			"label": "Max Pressure Drop (Present Mode)",
 			"unit": "kPa",
 			"valueSize": 2,
 			"minValue": 0,
@@ -251,7 +256,7 @@
 		},
 		{
 			"#": "23",
-			"label": "max non continous liters if operation mode is 1",
+			"label": "Max Liters (Present Mode)",
 			"unit": "l",
 			"valueSize": 2,
 			"minValue": 0,
@@ -260,7 +265,7 @@
 		},
 		{
 			"#": "24",
-			"label": "max continuous liter if operation mode is 1",
+			"label": "Max Continuous Liters if (Present Mode)",
 			"unit": "l",
 			"valueSize": 2,
 			"minValue": 0,
@@ -269,7 +274,7 @@
 		},
 		{
 			"#": "25",
-			"label": "max time of single water abstraction if operation mode is 1",
+			"label": "Max Time (Present Mode)",
 			"unit": "min",
 			"valueSize": 2,
 			"minValue": 0,
@@ -278,7 +283,7 @@
 		},
 		{
 			"#": "26",
-			"label": "max time of continous water abstraction if operation mode is 1",
+			"label": "Max Continous Time (Present Mode)",
 			"unit": "min",
 			"valueSize": 2,
 			"minValue": 0,
@@ -287,7 +292,7 @@
 		},
 		{
 			"#": "27",
-			"label": "macro leakage deactivation time",
+			"label": "Macro Leakage Deactivation Time",
 			"description": "temporary macro leakage deactivation (e.g. filling pool)",
 			"unit": "h",
 			"valueSize": 2,
@@ -297,7 +302,7 @@
 		},
 		{
 			"#": "28",
-			"label": "reaction to macro leakage",
+			"label": "Reaction to Macro Leakage",
 			"description": "0=disable detection, 1=blink LED, 2= blink LED and shut off valve",
 			"valueSize": 1,
 			"minValue": 0,
@@ -306,22 +311,22 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "disable detection",
+					"label": "Disable Detection",
 					"value": 0
 				},
 				{
-					"label": "blink LED",
+					"label": "Blink LED",
 					"value": 1
 				},
 				{
-					"label": "blink LED and shut off valve",
+					"label": "Blink LED and Shut Off Valve",
 					"value": 2
 				}
 			]
 		},
 		{
 			"#": "29",
-			"label": "flooding sensor detected a leak",
+			"label": "Flooding Sensor Leak Detected",
 			"description": "0-no leakage, 1- flooding sensor detected leakage",
 			"valueSize": 1,
 			"minValue": 0,
@@ -331,7 +336,7 @@
 		},
 		{
 			"#": "30",
-			"label": "reaction to flooding sensor",
+			"label": "Reaction to Flooding Sensor",
 			"description": "0=disable detection, 1=blink LED, 2= blink LED and shut off valve",
 			"valueSize": 1,
 			"minValue": 0,
@@ -340,22 +345,22 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "disable detection",
+					"label": "Disable Detection",
 					"value": 0
 				},
 				{
-					"label": "blink LED",
+					"label": "Blink LED",
 					"value": 1
 				},
 				{
-					"label": "blink LED and shut off valve",
+					"label": "Blink LED and Shut Off Valve",
 					"value": 2
 				}
 			]
 		},
 		{
 			"#": "31",
-			"label": "backup battery nominal voltage",
+			"label": "Backup Battery Nominal Voltage",
 			"unit": "mV",
 			"valueSize": 2,
 			"minValue": 0,
@@ -364,7 +369,7 @@
 		},
 		{
 			"#": "32",
-			"label": "backup battery nominal capacity",
+			"label": "Backup Battery Nominal Capacity",
 			"unit": "mAh",
 			"valueSize": 2,
 			"minValue": 0,
@@ -373,7 +378,7 @@
 		},
 		{
 			"#": "37",
-			"label": "time set correctly",
+			"label": "Time Set Correctly",
 			"description": "1 = time is set correctly, 0 = time is not set correctly",
 			"valueSize": 1,
 			"minValue": 0,
@@ -382,7 +387,7 @@
 		},
 		{
 			"#": "38",
-			"label": "total operating time",
+			"label": "Total Operating Time",
 			"description": "Counting total operation time internally",
 			"valueSize": 4,
 			"minValue": 0,
@@ -392,7 +397,7 @@
 		},
 		{
 			"#": "39",
-			"label": "operating time since last power on",
+			"label": "Operating Time Since Last Power On",
 			"unit": "s",
 			"valueSize": 4,
 			"minValue": 0,
@@ -402,7 +407,7 @@
 		},
 		{
 			"#": "49",
-			"label": "auto absent",
+			"label": "Auto Absent",
 			"description": "0 = disable, 1-168h time after no use, operation mode is changed to 1 (absent)",
 			"unit": "h",
 			"valueSize": 2,
@@ -412,7 +417,7 @@
 		},
 		{
 			"#": "50",
-			"label": "water temperature high threshold",
+			"label": "Water Temperature High Threshold",
 			"description": "water temperature high threshold for warning of sanitary problems",
 			"unit": "1/10 °C",
 			"valueSize": 2,
@@ -422,7 +427,7 @@
 		},
 		{
 			"#": "51",
-			"label": "water temperature low threshold",
+			"label": "Water Temperature Low Threshold",
 			"description": "warning of risk of frost",
 			"unit": "1/10 °C",
 			"valueSize": 2,
@@ -432,7 +437,7 @@
 		},
 		{
 			"#": "52",
-			"label": "water pressure high threshold",
+			"label": "Water Pressure High Threshold",
 			"description": "warning of values above valid operating cond.",
 			"unit": "kPa",
 			"valueSize": 2,
@@ -442,8 +447,8 @@
 		},
 		{
 			"#": "53",
-			"label": "water pressure low threshold",
-			"description": "water pressure high threshold for warning of values below valid operating cond.",
+			"label": "Water Pressure Low Threshold",
+			"description": "water pressure low threshold for warning of values below valid operating cond.",
 			"unit": "kPa",
 			"valueSize": 2,
 			"minValue": 0,
@@ -452,7 +457,7 @@
 		},
 		{
 			"#": "54",
-			"label": "error code",
+			"label": "Error Code",
 			"description": "error code to identify the reason of a warning or fault",
 			"valueSize": 2,
 			"minValue": 0,
@@ -462,7 +467,7 @@
 		},
 		{
 			"#": "56",
-			"label": "autolearning",
+			"label": "Autolearning",
 			"description": "automatic adaption of limits, set ids 15-26 to learned values",
 			"valueSize": 1,
 			"minValue": 0,
