@@ -88,7 +88,7 @@ interface InclusionUserCallbacks {
 	/**
 	 * Instruct the application to display the user which security classes the device has requested and whether client-side authentication (CSA) is desired.
 	 * The returned promise MUST resolve to the user selection - which of the requested security classes have been granted and whether CSA was allowed.
-	 * If the user did not accept the requested security classes, the promise MUST resolve to `true`.
+	 * If the user did not accept the requested security classes, the promise MUST resolve to `false`.
 	 */
 	grantSecurityClasses(
 		requested: InclusionGrant,

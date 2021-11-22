@@ -45,7 +45,7 @@ export function stripComments(
 	node: ExportedDeclarations,
 	options: ImportRange["options"],
 ): ExportedDeclarations {
-	if (Node.isTextInsertableNode(node)) {
+	if (Node.isTextInsertable(node)) {
 		// Remove some comments if desired
 		const ranges: { pos: number; end: number }[] = [];
 		const removePredicate = (c: CommentRange) =>
@@ -151,7 +151,7 @@ export function getTransformedSource(
 					walkDeclaration(member);
 				} else if (Node.isPropertySignature(member)) {
 					const typeNode = member.getTypeNode();
-					if (Node.isTypeLiteralNode(typeNode)) {
+					if (Node.isTypeLiteral(typeNode)) {
 						walkDeclaration(typeNode);
 					}
 				}
@@ -164,7 +164,7 @@ export function getTransformedSource(
 	}
 
 	// Remove exports keyword
-	if (Node.isModifierableNode(node)) {
+	if (Node.isModifierable(node)) {
 		node = node.toggleModifier("export", false);
 	}
 
