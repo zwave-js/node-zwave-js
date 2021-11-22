@@ -16,7 +16,7 @@
 	"paramInformation": [
 		{
 			"#": "1",
-			"label": "Send meter reports",
+			"label": "Send Meter Reports",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 1,
@@ -35,7 +35,7 @@
 		},
 		{
 			"#": "2",
-			"label": "Meter report interval",
+			"label": "Meter Report Interval",
 			"unit": "seconds",
 			"valueSize": 2,
 			"minValue": 1,
@@ -45,7 +45,7 @@
 		},
 		{
 			"#": "3",
-			"label": "Maximum current",
+			"label": "Maximum Current",
 			"description": "Maximum current the plug can provide to load",
 			"unit": "A",
 			"valueSize": 1,
@@ -55,7 +55,7 @@
 		},
 		{
 			"#": "4",
-			"label": "Alarm current threshold",
+			"label": "Alarm Current Threshold",
 			"description": "An over-current notification is sent when the current is higher than this value",
 			"unit": "A",
 			"valueSize": 1,
@@ -65,7 +65,7 @@
 		},
 		{
 			"#": "5",
-			"label": "LED indication",
+			"label": "LED Indication",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 1,
@@ -84,7 +84,7 @@
 		},
 		{
 			"#": "6",
-			"label": "Power report threshold",
+			"label": "Power Report Threshold",
 			"description": "Change in power consumption that triggers a report",
 			"unit": "%",
 			"valueSize": 1,
@@ -98,7 +98,7 @@
 		},
 		{
 			"#": "8",
-			"label": "Timed auto-off",
+			"label": "Timed Auto-Off",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 1,
@@ -117,7 +117,7 @@
 		},
 		{
 			"#": "9",
-			"label": "Timed auto-off period",
+			"label": "Timed Auto-Off Period",
 			"description": "Delay time after which the plug is automatically switched off",
 			"unit": "minutes",
 			"valueSize": 2,
@@ -128,7 +128,7 @@
 		},
 		{
 			"#": "10",
-			"label": "Top button function",
+			"label": "Top Button Function",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 1,
