@@ -43,19 +43,19 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "valve always off",
+					"label": "Valve Always Off",
 					"value": 0
 				},
 				{
-					"label": "user absent/holiday",
+					"label": "User Absent/Holiday",
 					"value": 1
 				},
 				{
-					"label": "user present",
+					"label": "User Present",
 					"value": 2
 				},
 				{
-					"label": "valve always on",
+					"label": "Valve Always On",
 					"value": 3
 				}
 			]
@@ -155,15 +155,15 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "disable detection",
+					"label": "Disable Detection",
 					"value": 0
 				},
 				{
-					"label": "blink LED",
+					"label": "Blink LED",
 					"value": 1
 				},
 				{
-					"label": "blink LED and shut off valve",
+					"label": "Blink LED and Shut Off Valve",
 					"value": 2
 				}
 			]
