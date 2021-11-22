@@ -4252,6 +4252,24 @@ __metadata:
   languageName: unknown
   linkType: soft
 
+"@zwave-js/nvmedit@workspace:packages/nvmedit":
+  version: 0.0.0-use.local
+  resolution: "@zwave-js/nvmedit@workspace:packages/nvmedit"
+  dependencies:
+    "@types/fs-extra": ^9.0.13
+    "@types/jest": ^26.0.24
+    "@types/node": ^15.12.5
+    "@zwave-js/shared": 8.7.3
+    alcalzone-shared: ^4.0.1
+    esbuild: "*"
+    esbuild-register: ^3.1.2
+    fs-extra: ^10.0.0
+    jest-extended: ^0.11.5
+    reflect-metadata: ^0.1.13
+    typescript: 4.5.2
+  languageName: unknown
+  linkType: soft
+
 "@zwave-js/repo@workspace:.":
   version: 0.0.0-use.local
   resolution: "@zwave-js/repo@workspace:."
