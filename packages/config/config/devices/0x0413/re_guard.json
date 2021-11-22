@@ -476,7 +476,7 @@
 		}
 	],
 	"metadata": {
-		"inclusion": "a) Set the Z-Wave network main controller into adding mode.\nb) Press and hold the 3th button (marked as Zwave/Wifi) on the main unit for 3 seconds. If Secure inclusion is required insert the passcode at the conntroller (found at the side of the main unit). The button will turn white on successfull inclusion.",
+		"inclusion": "a) Set the Z-Wave network main controller into adding mode.\nb) Press and hold the 3th button (marked as Zwave/Wifi) on the main unit for 3 seconds. If Secure inclusion is required insert the passcode at the controller (found at the side of the main unit). The button will turn white on successful inclusion.",
 		"exclusion": "a) Set the Z-Wave network main controller into removing mode.\nb) Press the 3th button (marked as Zwave/Wifi) on the main unit 3 times within 3 seconds. THe button will flash yellow for 30 seconds. When exclusion is completed the button will go off.",
 		"reset": "Press first and last button on main unit for 20 seconds. The 3th button (marked as Zwave/Wifi) will flash red. Pless the 3th button within 6 seconds to factory reset the main unit.",
 		"manual": "https://products.z-wavealliance.org/ProductManual/File?folder=&filename=product_documents/3557/multi%20language%20small.pdf"
