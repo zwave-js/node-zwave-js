@@ -324,8 +324,7 @@
 		},
 		{
 			"#": "17",
-			"label": "Max Liters (Present Mode)",
-			"description": "max liters single water abstraction if operation mode is 2",
+			"label": "Max Single Water Withdrawal (Present Mode)",
 			"unit": "l",
 			"valueSize": 2,
 			"minValue": 0,
@@ -334,8 +333,7 @@
 		},
 		{
 			"#": "18",
-			"label": "Max Continous Liters (Present Mode)",
-			"description": "max liter continuous water abstraction if operation mode is 2",
+			"label": "Max Continuous Water Withdrawal (Present Mode)",
 			"unit": "l",
 			"valueSize": 2,
 			"minValue": 0,
@@ -344,8 +342,7 @@
 		},
 		{
 			"#": "19",
-			"label": "Max Time (Present Mode)",
-			"description": "max time of single water abstraction if operation mode is 2",
+			"label": "Max Single Water Withdrawal Duration (Present Mode)",
 			"unit": "min",
 			"valueSize": 2,
 			"minValue": 0,
@@ -354,8 +351,7 @@
 		},
 		{
 			"#": "20",
-			"label": "Max Continous Time (Present Mode)",
-			"description": "max time of continous water abstraction if operation mode is 2",
+			"label": "Max Continuous Water Withdrawal Duration (Present Mode)",
 			"unit": "min",
 			"valueSize": 2,
 			"minValue": 0,
@@ -364,7 +360,7 @@
 		},
 		{
 			"#": "21",
-			"label": "Max Flow Rate (Present Mode)",
+			"label": "Max Flow Rate (Absent Mode)",
 			"unit": "l/h",
 			"valueSize": 2,
 			"minValue": 0,
@@ -373,7 +369,7 @@
 		},
 		{
 			"#": "22",
-			"label": "Max Pressure Drop (Present Mode)",
+			"label": "Max Pressure Drop (Absent Mode)",
 			"unit": "kPa",
 			"valueSize": 2,
 			"minValue": 0,
@@ -382,7 +378,7 @@
 		},
 		{
 			"#": "23",
-			"label": "Max Liters (Present Mode)",
+			"label": "Max Single Water Withdrawal (Absent Mode)",
 			"unit": "l",
 			"valueSize": 2,
 			"minValue": 0,
@@ -391,7 +387,7 @@
 		},
 		{
 			"#": "24",
-			"label": "Max Continuous Liters if (Present Mode)",
+			"label": "Max Continuous Water Withdrawal (Absent Mode)",
 			"unit": "l",
 			"valueSize": 2,
 			"minValue": 0,
@@ -400,7 +396,7 @@
 		},
 		{
 			"#": "25",
-			"label": "Max Time (Present Mode)",
+			"label": "Max Single Water Withdrawal Duration (Absent Mode)",
 			"unit": "min",
 			"valueSize": 2,
 			"minValue": 0,
@@ -409,7 +405,7 @@
 		},
 		{
 			"#": "26",
-			"label": "Max Continous Time (Present Mode)",
+			"label": "Max Continuous Water Withdrawal Duration (Absent Mode)",
 			"unit": "min",
 			"valueSize": 2,
 			"minValue": 0,
@@ -418,8 +414,8 @@
 		},
 		{
 			"#": "27",
-			"label": "Macro Leakage Deactivation Time",
-			"description": "temporary macro leakage deactivation (e.g. filling pool)",
+			"label": "Temporary Macro Leakage Deactivation Time",
+			"description": "For example for filling a pool",
 			"unit": "h",
 			"valueSize": 2,
 			"minValue": 1,
@@ -452,12 +448,22 @@
 		{
 			"#": "29",
 			"label": "Flooding Sensor Leak Detected",
-			"description": "0-no leakage, 1- flooding sensor detected leakage",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 1,
 			"defaultValue": 0,
-			"readOnly": true
+			"readOnly": true,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "No Leakage",
+					"value": 0
+				},
+				{
+					"label": "Leakage Detected",
+					"value": 1
+				}
+			]
 		},
 		{
 			"#": "30",
@@ -503,11 +509,21 @@
 		{
 			"#": "37",
 			"label": "Time Set Correctly",
-			"description": "1 = time is set correctly, 0 = time is not set correctly",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 1,
-			"defaultValue": 0
+			"defaultValue": 0,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Time is Set",
+					"value": 0
+				},
+				{
+					"label": "Time is Not Set",
+					"value": 1
+				}
+			]
 		},
 		{
 			"#": "38",
@@ -531,8 +547,8 @@
 		},
 		{
 			"#": "49",
-			"label": "Auto Absent",
-			"description": "0 = disable, 1-168h time after no use, operation mode is changed to 1 (absent)",
+			"label": "Auto Absent Timer",
+			"description": "After no usage for this long, the operation mode is changed to 1 (absent)",
 			"unit": "h",
 			"valueSize": 2,
 			"minValue": 0,
@@ -542,7 +558,7 @@
 		{
 			"#": "50",
 			"label": "Water Temperature High Threshold",
-			"description": "water temperature high threshold for warning of sanitary problems",
+			"description": "for warning of sanitary problems",
 			"unit": "1/10 °C",
 			"valueSize": 2,
 			"minValue": -1000,
@@ -592,7 +608,7 @@
 		{
 			"#": "56",
 			"label": "Autolearning",
-			"description": "automatic adaption of limits, set ids 15-26 to learned values",
+			"description": "Automatic adaption of limits, changes parameters 15-26 to learned values",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 1,
