@@ -15,21 +15,21 @@
 	},
 	"associations": {
 		"1": {
-				"label": "Lifeline",
-				"description": "Connection to Gateway",
-				"maxNodes": 1,
-				"isLifeline": true
-			},
+			"label": "Lifeline",
+			"description": "Connection to Gateway",
+			"maxNodes": 1,
+			"isLifeline": true
+		},
 		"2": {
-				"label": "Valve Status",
-				"description": "Sends Status of Valve",
-				"maxNodes": 5
-			},
+			"label": "Valve Status",
+			"description": "Sends Status of Valve",
+			"maxNodes": 5
+		},
 		"3": {
-				"label": "Leakage Alarm",
-				"description": "Sends notification in Case of Leakage",
-				"maxNodes": 5
-			}
+			"label": "Leakage Alarm",
+			"description": "Sends notification in Case of Leakage",
+			"maxNodes": 5
+		}
 	},
 	"paramInformation": [
 		{
