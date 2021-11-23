@@ -11,7 +11,12 @@ import {
 } from "@zwave-js/core";
 import type { Driver } from "../driver/Driver";
 import { MessagePriority } from "../message/Constants";
-import { PhysicalCCAPI } from "./API";
+import {
+	PhysicalCCAPI,
+	PollValueImplementation,
+	POLL_VALUE,
+	throwUnsupportedProperty,
+} from "./API";
 import {
 	API,
 	CCCommand,
@@ -127,7 +132,7 @@ const eventTypeLabel: { [key in keyof typeof EventType]: string } = {
 	Unknown: "Unknown",
 };
 
-const LATEST_RECORD_NUMBER = 0;
+const LATEST_RECORD_NUMBER_KEY = 0;
 
 export interface Record {
 	recordNumber: number;
@@ -155,19 +160,27 @@ export function getDoorLockLoggingRecordsSupportedValueID(
 	};
 }
 
-export function getDoorLockLoggingRecordTimestampID(endpoint: number): ValueID {
-	return {
-		commandClass: CommandClasses["Door Lock Logging"],
-		endpoint,
-		property: "recordTimestamp",
-	};
-}
-
 export function getDoorLockLoggingRecordEventTypeID(endpoint: number): ValueID {
 	return {
 		commandClass: CommandClasses["Door Lock Logging"],
 		endpoint,
 		property: "recordEventType",
+	};
+}
+
+export function getDoorLockLoggingRecordNumberID(endpoint: number): ValueID {
+	return {
+		commandClass: CommandClasses["Door Lock Logging"],
+		endpoint,
+		property: "recordNumber",
+	};
+}
+
+export function getDoorLockLoggingRecordTimestampID(endpoint: number): ValueID {
+	return {
+		commandClass: CommandClasses["Door Lock Logging"],
+		endpoint,
+		property: "recordTimestamp",
 	};
 }
 
@@ -189,13 +202,15 @@ export function getDoorLockLoggingRecordUserCodeID(endpoint: number): ValueID {
 
 function setRecordMetadata(
 	this: DoorLockLoggingCC,
+	supportedRecordsNumber: number | undefined,
 	userCode?: string | Buffer,
 ) {
 	const valueDB = this.getValueDB();
-	const recordTimestampID = getDoorLockLoggingRecordTimestampID(
+	const recordEventTypeID = getDoorLockLoggingRecordEventTypeID(
 		this.endpointIndex,
 	);
-	const recordEventTypeID = getDoorLockLoggingRecordEventTypeID(
+	const recordNumberID = getDoorLockLoggingRecordNumberID(this.endpointIndex);
+	const recordTimestampID = getDoorLockLoggingRecordTimestampID(
 		this.endpointIndex,
 	);
 	const recordUserIDID = getDoorLockLoggingRecordUserIDID(this.endpointIndex);
@@ -255,6 +270,18 @@ function setRecordMetadata(
 			states: enumValuesToMetadataStates(EventType, supportedEventTypes),
 		});
 	}
+	if (
+		!valueDB.hasMetadata(recordNumberID) &&
+		typeof supportedRecordsNumber != "undefined"
+	) {
+		valueDB.setMetadata(recordNumberID, {
+			...ValueMetadata.ReadOnlyNumber,
+			min: 1,
+			max: supportedRecordsNumber,
+			label: `record number`,
+			description: "Record Number for latest logging record",
+		});
+	}
 	if (!valueDB.hasMetadata(recordUserIDID)) {
 		valueDB.setMetadata(recordUserIDID, {
 			...ValueMetadata.ReadOnlyNumber,
@@ -290,6 +317,22 @@ export class DoorLockLoggingCCAPI extends PhysicalCCAPI {
 		return super.supportsCommand(cmd);
 	}
 
+	protected [POLL_VALUE]: PollValueImplementation = async ({
+		property,
+	}): Promise<unknown> => {
+		switch (property) {
+			case "supportedRecordsNumber":
+				return (await this.getSupportedRecordsNumber())?.[property];
+			case "record":
+				// Fetches latest record by default
+				return (await this.getRecord(LATEST_RECORD_NUMBER_KEY))?.[
+					property
+				];
+			default:
+				throwUnsupportedProperty(this.ccId, property);
+		}
+	};
+
 	public async getSupportedRecordsNumber(): Promise<number | undefined> {
 		this.assertSupportsCommand(
 			DoorLockLoggingCommand,
@@ -309,7 +352,7 @@ export class DoorLockLoggingCCAPI extends PhysicalCCAPI {
 	}
 
 	public async getRecord(
-		recordNumber: number = LATEST_RECORD_NUMBER,
+		recordNumber: number = LATEST_RECORD_NUMBER_KEY,
 	): Promise<Record | undefined> {
 		this.assertSupportsCommand(
 			DoorLockLoggingCommand,
@@ -381,10 +424,10 @@ export class DoorLockLoggingCC extends CommandClass {
 			direction: "inbound",
 		});
 
-		setRecordMetadata.call(this);
+		setRecordMetadata.call(this, supportedRecordsNumber);
 
 		// Just retrieve the lastest record
-		const record = await api.getRecord(LATEST_RECORD_NUMBER);
+		const record = await api.getRecord(LATEST_RECORD_NUMBER_KEY);
 
 		if (!record) {
 			this.driver.controllerLog.logNode(node.id, {
@@ -517,14 +560,14 @@ export class DoorLockLoggingCCRecordReport extends DoorLockLoggingCC {
 	public persistValues(): boolean {
 		if (!super.persistValues()) return false;
 
-		// Only persist latest Logging Record
-		// if (this.recordNumber != LATEST_RECORD_NUMBER) return false;
-
 		const valueDB = this.getValueDB();
-		const recordTimestampID = getDoorLockLoggingRecordTimestampID(
+		const recordEventTypeID = getDoorLockLoggingRecordEventTypeID(
 			this.endpointIndex,
 		);
-		const recordEventTypeID = getDoorLockLoggingRecordEventTypeID(
+		const recordNumberID = getDoorLockLoggingRecordNumberID(
+			this.endpointIndex,
+		);
+		const recordTimestampID = getDoorLockLoggingRecordTimestampID(
 			this.endpointIndex,
 		);
 		const recordUserIDID = getDoorLockLoggingRecordUserIDID(
@@ -537,17 +580,19 @@ export class DoorLockLoggingCCRecordReport extends DoorLockLoggingCC {
 		// Check if Record is present
 		if (this.recordStatus == RecordStatus.Empty) {
 			// It is not, remove all values if any exist
-			valueDB.removeValue(recordTimestampID);
 			valueDB.removeValue(recordEventTypeID);
+			valueDB.removeValue(recordNumberID);
+			valueDB.removeValue(recordTimestampID);
 			valueDB.removeValue(recordUserIDID);
 			valueDB.removeValue(recordUserCodeID);
 		} else {
 			// Always create metadata in case it does not exist
 			if (this.recordUserID && this.recordUserCode) {
-				setRecordMetadata.call(this, this.recordUserCode);
+				setRecordMetadata.call(this, undefined, this.recordUserCode);
 			}
-			valueDB.setValue(recordTimestampID, this.recordTimestamp);
 			valueDB.setValue(recordEventTypeID, this.recordEventType);
+			valueDB.setValue(recordNumberID, this.recordNumber);
+			valueDB.setValue(recordTimestampID, this.recordTimestamp);
 			valueDB.setValue(recordUserIDID, this.recordUserID);
 			valueDB.setValue(recordUserCodeID, this.recordUserCode);
 		}
