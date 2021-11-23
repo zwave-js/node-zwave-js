@@ -7,10 +7,6 @@ import {
 	ValueID,
 	ValueMetadata,
 } from "@zwave-js/core";
-import {
-	isPrintableASCII,
-	isPrintableASCIIWithNewlines,
-} from "@zwave-js/shared";
 import { ZWaveError, ZWaveErrorCodes } from "../..";
 import type { Driver } from "../driver/Driver";
 import { MessagePriority } from "../message/Constants";
@@ -41,7 +37,7 @@ interface DateSegments {
 function segmentsToDate(segments: DateSegments): Date {
 	return new Date(
 		segments.year,
-		segments.month - 1,
+		segments.month,
 		segments.day,
 		segments.hour,
 		segments.minute,
@@ -192,7 +188,6 @@ export function getDoorLockLoggingRecordUserCodeID(endpoint: number): ValueID {
 
 function setRecordMetadata(
 	this: DoorLockLoggingCC,
-	supportedRecordsNumber: number,
 	userCode?: string | Buffer,
 ) {
 	const valueDB = this.getValueDB();
@@ -263,7 +258,6 @@ function setRecordMetadata(
 		valueDB.setMetadata(recordUserIDID, {
 			...ValueMetadata.ReadOnlyNumber,
 			min: 0,
-			max: supportedRecordsNumber,
 			label: `record user id`,
 			description: "User ID for latest logging record",
 		});
@@ -386,7 +380,7 @@ export class DoorLockLoggingCC extends CommandClass {
 			direction: "inbound",
 		});
 
-		setRecordMetadata.call(this, supportedRecordsNumber);
+		setRecordMetadata.call(this);
 
 		// Just retrieve the lastest record
 		const record = await api.getRecord(LATEST_RECORD_NUMBER);
@@ -401,7 +395,9 @@ export class DoorLockLoggingCC extends CommandClass {
 			return;
 		}
 
-		const recordLogMessage = `received response for latest record: ${record}`;
+		const recordLogMessage = `received response for latest record: ${JSON.stringify(
+			record,
+		)}`;
 		this.driver.controllerLog.logNode(node.id, {
 			endpoint: this.endpointIndex,
 			message: recordLogMessage,
@@ -418,6 +414,7 @@ export class DoorLockLoggingCCRecordsSupportedReport extends DoorLockLoggingCC {
 	) {
 		super(driver, options);
 		validatePayload(this.payload.length >= 1);
+
 		this.supportedRecordsNumber = this.payload[0];
 		this.persistValues();
 	}
@@ -454,31 +451,6 @@ const convertEventTypeToLabel = (eventType: EventType): string => {
 	return eventTypeLabel[EventType[eventType] as keyof typeof EventType];
 };
 
-const parseUserCodeFromPayload = (
-	userCodeLength: number,
-	userCodeBuffer: any,
-): string | Buffer | undefined => {
-	// Function is adapted from User Code parsing in the User Code Command Class
-
-	if (userCodeLength == 0) return undefined;
-
-	// Specs say infer user code from payload length, manufacturers send zero-padded strings
-	while (userCodeBuffer[userCodeBuffer.length - 1] === 0) {
-		userCodeBuffer = userCodeBuffer.slice(0, -1);
-	}
-	// Specs say ASCII 0-9, manufacturers don't care :)
-	// Thus we check if the code is printable using ASCII, if not keep it as a Buffer
-	const userCodeString = userCodeBuffer.toString("utf8");
-	if (isPrintableASCII(userCodeString)) {
-		return userCodeString;
-	}
-	if (isPrintableASCIIWithNewlines(userCodeString)) {
-		// Ignore leading and trailing newlines if the rest is ASCII
-		return userCodeString.replace(/^[\r\n]*/, "").replace(/[\r\n]*$/, "");
-	}
-	return userCodeBuffer;
-};
-
 @CCCommand(DoorLockLoggingCommand.RecordsSupportedGet)
 @expectedCCResponse(DoorLockLoggingCCRecordsSupportedReport)
 export class DoorLockLoggingCCRecordsSupportedGet extends DoorLockLoggingCC {}
@@ -491,11 +463,6 @@ export class DoorLockLoggingCCRecordReport extends DoorLockLoggingCC {
 	) {
 		super(driver, options);
 		validatePayload(this.payload.length >= 11);
-
-		// TODO: REMOVE THIS
-		console.log("############## Latest Record Payload");
-		console.log(this.payload);
-		console.log("############## END");
 
 		this.recordNumber = this.payload[0];
 		this.recordStatus = this.payload[5] >>> 5;
@@ -510,15 +477,17 @@ export class DoorLockLoggingCCRecordReport extends DoorLockLoggingCC {
 				year: this.payload.readUInt16BE(1),
 				month: this.payload[3],
 				day: this.payload[4],
-				hour: this.payload[6], // this.payload[5] & 0b11111,
-				minute: this.payload[7],
-				second: this.payload[8],
+				hour: this.payload[5] & 0b11111,
+				minute: this.payload[6],
+				second: this.payload[7],
 			};
 
-			const eventType = this.payload[9];
+			const eventType = this.payload[8];
 			this.recordUserID = this.payload[9];
-			const userCodeLength = this.payload[10];
-			const userCodeBuffer = this.payload[11];
+
+			// TODO: Parse User Code. The door lock I used does not provide
+			// 	     this data.
+			const userCode = undefined;
 
 			this.record = {
 				eventType: eventType,
@@ -526,17 +495,11 @@ export class DoorLockLoggingCCRecordReport extends DoorLockLoggingCC {
 				recordNumber: this.recordNumber,
 				timestamp: segmentsToDate(dateSegments).toISOString(),
 				userId: this.payload[9],
-				userCode: parseUserCodeFromPayload(
-					userCodeLength,
-					userCodeBuffer,
-				),
+				userCode,
 			};
 			this.recordTimestamp = segmentsToDate(dateSegments).toISOString();
 			this.recordEventType = eventType;
-			this.recordUserCode = parseUserCodeFromPayload(
-				userCodeLength,
-				userCodeBuffer,
-			);
+			this.recordUserCode = undefined;
 		}
 
 		this.persistValues();
@@ -554,7 +517,7 @@ export class DoorLockLoggingCCRecordReport extends DoorLockLoggingCC {
 		if (!super.persistValues()) return false;
 
 		// Only persist latest Logging Record
-		if (this.recordNumber != LATEST_RECORD_NUMBER) return false;
+		// if (this.recordNumber != LATEST_RECORD_NUMBER) return false;
 
 		const valueDB = this.getValueDB();
 		const recordTimestampID = getDoorLockLoggingRecordTimestampID(
@@ -580,11 +543,7 @@ export class DoorLockLoggingCCRecordReport extends DoorLockLoggingCC {
 		} else {
 			// Always create metadata in case it does not exist
 			if (this.recordUserID && this.recordUserCode) {
-				setRecordMetadata.call(
-					this,
-					this.recordUserID,
-					this.recordUserCode,
-				);
+				setRecordMetadata.call(this, this.recordUserCode);
 			}
 			valueDB.setValue(recordTimestampID, this.recordTimestamp);
 			valueDB.setValue(recordEventTypeID, this.recordEventType);
