@@ -6,8 +6,9 @@ import {
 	validatePayload,
 	ValueID,
 	ValueMetadata,
+	ZWaveError,
+	ZWaveErrorCodes,
 } from "@zwave-js/core";
-import { ZWaveError, ZWaveErrorCodes } from "../..";
 import type { Driver } from "../driver/Driver";
 import { MessagePriority } from "../message/Constants";
 import { PhysicalCCAPI } from "./API";
