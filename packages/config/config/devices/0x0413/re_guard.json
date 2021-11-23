@@ -15,27 +15,26 @@
 	},
 	"associations": {
 		"1": {
-			"label": "Lifeline",
-			"description": "Connection to Gateway",
-			"maxNodes": 1,
-			"isLifeline": true
-		},
+				"label": "Lifeline",
+				"description": "Connection to Gateway",
+				"maxNodes": 1,
+				"isLifeline": true
+			},
 		"2": {
-			"label": "Valve Status",
-			"description": "Sends Status of Valve",
-			"maxNodes": 5
-		},
+				"label": "Valve Status",
+				"description": "Sends Status of Valve",
+				"maxNodes": 5
+			},
 		"3": {
-			"label": "Leakage Alarm",
-			"description": "Sends notification in Case of Leakage",
-			"maxNodes": 5
-		}
+				"label": "Leakage Alarm",
+				"description": "Sends notification in Case of Leakage",
+				"maxNodes": 5
+			}
 	},
 	"paramInformation": [
 		{
 			"#": "1",
 			"label": "Operation Mode",
-			"description": "0 valve always off; 1 user absent/holiday; 2 user present; 3 valve always on",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 3,
@@ -79,13 +78,144 @@
 			"defaultValue": 0
 		},
 		{
-			"#": "6",
-			"label": "Fixed Schedule Day",
-			"description": "fixed day in bin 1111111, Su=1, Sa=2, Fr=4, Th=8, We=16, Tu=32, Mo=64, 0= auto",
+			"#": "6[0x01]",
+			"label": "Microleakage Test on Sunday",
 			"valueSize": 1,
 			"minValue": 0,
-			"maxValue": 127,
-			"defaultValue": 127
+			"maxValue": 1,
+			"defaultValue": 0,
+			"unsigned": true,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "No",
+					"value": 0
+				},
+				{
+					"label": "Yes",
+					"value": 1
+				}
+			]
+		},
+		{
+			"#": "6[0x02]",
+			"label": "Microleakage Test on Saturday",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 0,
+			"unsigned": true,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "No",
+					"value": 0
+				},
+				{
+					"label": "Yes",
+					"value": 1
+				}
+			]
+		},
+		{
+			"#": "6[0x04]",
+			"label": "Microleakage Test on Friday",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 0,
+			"unsigned": true,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "No",
+					"value": 0
+				},
+				{
+					"label": "Yes",
+					"value": 1
+				}
+			]
+		},
+		{
+			"#": "6[0x08]",
+			"label": "Microleakage Test on Thursday",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 0,
+			"unsigned": true,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "No",
+					"value": 0
+				},
+				{
+					"label": "Yes",
+					"value": 1
+				}
+			]
+		},
+		{
+			"#": "6[0x16]",
+			"label": "Microleakage Test on Wednesday",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 0,
+			"unsigned": true,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "No",
+					"value": 0
+				},
+				{
+					"label": "Yes",
+					"value": 1
+				}
+			]
+		},
+		{
+			"#": "6[0x32]",
+			"label": "Microleakage Test on Tuesday",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 0,
+			"unsigned": true,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "No",
+					"value": 0
+				},
+				{
+					"label": "Yes",
+					"value": 1
+				}
+			]
+		},
+		{
+			"#": "6[0x64]",
+			"label": "Microleakage Test on Monday",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 0,
+			"unsigned": true,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "No",
+					"value": 0
+				},
+				{
+					"label": "Yes",
+					"value": 1
+				}
+			]
 		},
 		{
 			"#": "7",
@@ -109,7 +239,6 @@
 		{
 			"#": "9",
 			"label": "Micro Leakage Pressure Drop",
-			"description": "pressure drop in kPa",
 			"unit": "kPa",
 			"valueSize": 2,
 			"minValue": 0,
@@ -119,7 +248,6 @@
 		{
 			"#": "10",
 			"label": "Micro Leakage Pressure Drop Abort",
-			"description": "pressure drop in kPa",
 			"unit": "kPa",
 			"valueSize": 2,
 			"minValue": 0,
@@ -128,8 +256,7 @@
 		},
 		{
 			"#": "11",
-			"label": "Number of Measurements",
-			"description": "how many in one time period",
+			"label": "Measurements per Time Period",
 			"valueSize": 1,
 			"minValue": 1,
 			"maxValue": 99,
@@ -147,7 +274,6 @@
 		{
 			"#": "13",
 			"label": "Reaction to Micro Leakage",
-			"description": "0=disable detection, 1=blink LED, 2=blink LED and shut off valve",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 2,
@@ -303,7 +429,6 @@
 		{
 			"#": "28",
 			"label": "Reaction to Macro Leakage",
-			"description": "0=disable detection, 1=blink LED, 2= blink LED and shut off valve",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 2,
@@ -337,7 +462,6 @@
 		{
 			"#": "30",
 			"label": "Reaction to Flooding Sensor",
-			"description": "0=disable detection, 1=blink LED, 2= blink LED and shut off valve",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 2,
