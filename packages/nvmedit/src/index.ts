@@ -8,7 +8,12 @@ require("./files/ApplicationCCsFile");
 require("./files/ApplicationDataFile");
 require("./files/ApplicationRFConfigFile");
 require("./files/ApplicationTypeFile");
-require("./files/ApplicationVersionFile");
+require("./files/ControllerInfoFile");
+require("./files/NodeInfoFiles");
+require("./files/ProtocolNodeMaskFiles");
+require("./files/RouteCacheFiles");
+require("./files/SUCUpdateEntriesFile");
+require("./files/VersionFiles");
 
 void (async () => {
 	const buffer = await fs.readFile("ctrlr_backup_700_7.15.bin");

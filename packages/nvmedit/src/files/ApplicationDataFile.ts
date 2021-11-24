@@ -1,6 +1,6 @@
 import { NVMFile, nvmFileID } from "./NVMFile";
 
 @nvmFileID(200)
-export class ApplicationTypeFile extends NVMFile {
+export class ApplicationDataFile extends NVMFile {
 	// Just binary data
 }

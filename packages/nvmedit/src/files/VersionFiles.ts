@@ -7,16 +7,15 @@ import {
 	nvmFileID,
 } from "./NVMFile";
 
-export interface ApplicationVersionFileOptions extends NVMFileCreationOptions {
+export interface VersionFileOptions extends NVMFileCreationOptions {
 	major: number;
 	minor: number;
 	patch: number;
 }
 
-@nvmFileID(0x51000)
-export class ApplicationVersionFile extends NVMFile {
+export class VersionFile extends NVMFile {
 	public constructor(
-		options: NVMFileDeserializationOptions | ApplicationVersionFileOptions,
+		options: NVMFileDeserializationOptions | VersionFileOptions,
 	) {
 		super(options);
 		if (gotDeserializationOptions(options)) {
@@ -42,7 +41,14 @@ export class ApplicationVersionFile extends NVMFile {
 	// eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
 	public toJSON() {
 		return {
+			...super.toJSON(),
 			version: `${this.major}.${this.minor}.${this.patch}`,
 		};
 	}
 }
+
+@nvmFileID(0x51000)
+export class ApplicationVersionFile extends VersionFile {}
+
+@nvmFileID(0x50000)
+export class ProtocolVersionFile extends VersionFile {}

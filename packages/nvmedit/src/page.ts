@@ -108,7 +108,7 @@ export function readPage(
 	const bytesRead = actualPageSize;
 	const data = buffer.slice(offset + 20, offset + bytesRead);
 
-	const { objects } = readObjects(data);
+	const { objects } = readObjects(version, data);
 
 	return {
 		page: { header, objects },

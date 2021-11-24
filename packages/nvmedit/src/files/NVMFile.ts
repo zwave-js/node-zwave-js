@@ -2,7 +2,13 @@ import { ZWaveError, ZWaveErrorCodes } from "@zwave-js/core";
 import type { TypedClassDecorator } from "@zwave-js/shared";
 import { FragmentType, NVMObject, ObjectType } from "../object";
 
-export type NVMFileDeserializationOptions = { object: NVMObject };
+export interface NVMFileBaseOptions {
+	fileId: number;
+	version: number;
+}
+export interface NVMFileDeserializationOptions extends NVMFileBaseOptions {
+	object: NVMObject;
+}
 
 export function gotDeserializationOptions(
 	options: NVMFileOptions,
@@ -10,8 +16,8 @@ export function gotDeserializationOptions(
 	return "object" in options;
 }
 
-// eslint-disable-next-line @typescript-eslint/ban-types
-export type NVMFileCreationOptions = {};
+// eslint-disable-next-line @typescript-eslint/no-empty-interface
+export interface NVMFileCreationOptions extends NVMFileBaseOptions {}
 
 export type NVMFileOptions =
 	| NVMFileCreationOptions
@@ -19,10 +25,13 @@ export type NVMFileOptions =
 
 export class NVMFile {
 	public constructor(options: NVMFileOptions) {
+		this.fileId = options.fileId;
+		this.version = options.version;
 		if (gotDeserializationOptions(options)) {
 			this.object = options.object;
 		} else {
 			this.object = {
+				nvmVersion: options.version,
 				key: this.fileId,
 				fragmentType: FragmentType.None,
 				type: ObjectType.DataLarge,
@@ -32,9 +41,10 @@ export class NVMFile {
 		this.payload = this.object.data ?? Buffer.allocUnsafe(0);
 	}
 
+	public version: number;
 	protected object: NVMObject;
 	protected payload: Buffer;
-	public readonly fileId: number = getNVMFileID(this);
+	public fileId: number;
 
 	/**
 	 * Creates an instance of the CC that is serialized in the given buffer
@@ -42,7 +52,11 @@ export class NVMFile {
 	public static from(object: NVMObject): NVMFile {
 		// Fall back to unspecified command class in case we receive one that is not implemented
 		const Constructor = getNVMFileConstructor(object.key)!;
-		return new Constructor({ object });
+		return new Constructor({
+			fileId: object.key,
+			version: object.nvmVersion,
+			object,
+		});
 	}
 
 	/**
@@ -54,15 +68,22 @@ export class NVMFile {
 	}
 
 	// eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
-	public toJSON() {
-		throw new Error("Not implemented");
+	public toJSON(): Record<string, any> {
+		return {
+			"file ID": `0x${this.fileId.toString(16)} (${
+				this.constructor.name
+			})`,
+		};
 	}
 }
 
 const METADATA_nvmFileID = Symbol("nvmFileID");
 const METADATA_nvmFileIDMap = Symbol("nvmFileIDMap");
 
-type NVMFileIDMap = Map<number, Constructable<NVMFile>>;
+type NVMFileIDMap = Map<
+	number | ((id: number) => boolean),
+	Constructable<NVMFile>
+>;
 
 export type Constructable<T extends NVMFile> = typeof NVMFile & {
 	// I don't like the any, but we need it to support half-implemented CCs (e.g. report classes)
@@ -72,7 +93,9 @@ export type Constructable<T extends NVMFile> = typeof NVMFile & {
 /**
  * Defines the ID associated with a NVM file class
  */
-export function nvmFileID(id: number): TypedClassDecorator<NVMFile> {
+export function nvmFileID(
+	id: number | ((id: number) => boolean),
+): TypedClassDecorator<NVMFile> {
 	return (messageClass) => {
 		Reflect.defineMetadata(METADATA_nvmFileID, id, messageClass);
 
@@ -87,7 +110,9 @@ export function nvmFileID(id: number): TypedClassDecorator<NVMFile> {
 /**
  * Retrieves the file ID defined for a NVM file class
  */
-export function getNVMFileID<T extends NVMFile>(id: T): number {
+export function getNVMFileID<T extends NVMFile>(
+	id: T,
+): number | ((id: number) => boolean) {
 	// get the class constructor
 	const constr = id.constructor;
 	// retrieve the current metadata
@@ -114,5 +139,11 @@ export function getNVMFileConstructor(
 	const map = Reflect.getMetadata(METADATA_nvmFileIDMap, NVMFile) as
 		| NVMFileIDMap
 		| undefined;
-	if (map != undefined) return map.get(id);
+	if (map != undefined) {
+		if (map.has(id)) return map.get(id);
+		// Otherwise loop through predicates
+		for (const [key, value] of map.entries()) {
+			if (typeof key === "function" && key(id)) return value;
+		}
+	}
 }

@@ -51,6 +51,7 @@ export class ApplicationTypeFile extends NVMFile {
 	// eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
 	public toJSON() {
 		return {
+			...super.toJSON(),
 			listening: this.listening,
 			"opt. functionality": this.optionalFunctionality,
 			genericDeviceClass: this.genericDeviceClass,

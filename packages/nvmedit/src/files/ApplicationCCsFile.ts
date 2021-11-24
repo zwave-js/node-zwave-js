@@ -69,6 +69,7 @@ export class ApplicationCCsFile extends NVMFile {
 	// eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
 	public toJSON() {
 		return {
+			...super.toJSON(),
 			"included insecurely": this.includedInsecurelyCCs
 				.map((cc) => CommandClasses[cc])
 				.join(", "),

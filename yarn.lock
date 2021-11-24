@@ -4259,6 +4259,7 @@ __metadata:
     "@types/fs-extra": ^9.0.13
     "@types/jest": ^26.0.24
     "@types/node": ^15.12.5
+    "@zwave-js/core": 8.7.4
     "@zwave-js/shared": 8.7.3
     alcalzone-shared: ^4.0.1
     esbuild: "*"

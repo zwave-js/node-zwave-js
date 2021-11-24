@@ -46,6 +46,7 @@ export class ApplicationRFConfigFile extends NVMFile {
 	// eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
 	public toJSON() {
 		return {
+			...super.toJSON(),
 			"RF Region": this.rfRegion,
 			"TX Power": `${this.txPower.toFixed(1)} dBm`,
 			"Power @ 0dBm": `${this.measured0dBm.toFixed(1)} dBm`,
