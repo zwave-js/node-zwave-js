@@ -4252,13 +4252,14 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@zwave-js/nvmedit@workspace:packages/nvmedit":
+"@zwave-js/nvmedit@workspace:*, @zwave-js/nvmedit@workspace:packages/nvmedit":
   version: 0.0.0-use.local
   resolution: "@zwave-js/nvmedit@workspace:packages/nvmedit"
   dependencies:
     "@types/fs-extra": ^9.0.13
     "@types/jest": ^26.0.24
     "@types/node": ^15.12.5
+    "@types/yargs": ^17.0.5
     "@zwave-js/core": 8.7.4
     "@zwave-js/shared": 8.7.3
     alcalzone-shared: ^4.0.1
@@ -4268,6 +4269,9 @@ __metadata:
     jest-extended: ^0.11.5
     reflect-metadata: ^0.1.13
     typescript: 4.5.2
+    yargs: ^17.2.1
+  bin:
+    nvmedit: bin/nvmedit.js
   languageName: unknown
   linkType: soft
 
@@ -4301,6 +4305,7 @@ __metadata:
     "@typescript-eslint/parser": ^5.5.0
     "@zwave-js/config": "workspace:*"
     "@zwave-js/core": "workspace:*"
+    "@zwave-js/nvmedit": "workspace:*"
     "@zwave-js/shared": "workspace:*"
     alcalzone-shared: ^4.0.1
     ansi-colors: ^4.1.1

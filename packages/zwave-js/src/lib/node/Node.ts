@@ -11,17 +11,21 @@ import {
 	CommandClasses,
 	CommandClassInfo,
 	CRC16_CCITT,
+	DataRate,
 	dskFromString,
 	dskToString,
+	FLiRS,
 	getCCName,
 	getNodeMetaValueID,
 	isTransmissionError,
 	isZWaveError,
 	Maybe,
 	MetadataUpdatedArgs,
+	NodeType,
 	NodeUpdatePayload,
 	nonApplicationCCs,
 	normalizeValueID,
+	ProtocolVersion,
 	SecurityClass,
 	securityClassIsS2,
 	securityClassOrder,
@@ -176,8 +180,6 @@ import {
 	RequestNodeInfoResponse,
 } from "./RequestNodeInfoMessages";
 import type {
-	DataRate,
-	FLiRS,
 	LifelineHealthCheckResult,
 	LifelineHealthCheckSummary,
 	RefreshInfoOptions,
@@ -187,7 +189,7 @@ import type {
 	ZWaveNodeEventCallbacks,
 	ZWaveNodeValueEventCallbacks,
 } from "./Types";
-import { InterviewStage, NodeStatus, NodeType, ProtocolVersion } from "./Types";
+import { InterviewStage, NodeStatus } from "./Types";
 
 export interface ZWaveNode
 	extends TypedEventEmitter<
@@ -3712,6 +3714,7 @@ protocol version:      ${this._protocolVersion}`;
 		};
 		tryParse("isListening", "boolean");
 		tryParseLegacy(["isFrequentListening"], ["string", "boolean"]);
+		// eslint-disable-next-line @typescript-eslint/no-unnecessary-type-assertion
 		if ((this._isFrequentListening as any) === true) {
 			// fallback for legacy cache files
 			this._isFrequentListening = "1000ms";

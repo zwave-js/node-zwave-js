@@ -7,6 +7,12 @@ const NVM3_PAGE_COUNTER_SIZE = 27;
 const NVM3_PAGE_COUNTER_MASK = (1 << NVM3_PAGE_COUNTER_SIZE) - 1;
 const NVM3_PAGE_MAGIC = 0xb29a;
 
+export enum NVMVersion {
+	"6.61+",
+	"7.11+",
+	"7.15+",
+}
+
 export interface PageHeader {
 	offset: number;
 	version: number;

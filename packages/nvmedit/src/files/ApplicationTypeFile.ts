@@ -1,5 +1,6 @@
 import type { NVMObject } from "../object";
 import {
+	getNVMFileIDStatic,
 	gotDeserializationOptions,
 	NVMFile,
 	NVMFileCreationOptions,
@@ -59,3 +60,4 @@ export class ApplicationTypeFile extends NVMFile {
 		};
 	}
 }
+export const ApplicationTypeFileID = getNVMFileIDStatic(ApplicationTypeFile);

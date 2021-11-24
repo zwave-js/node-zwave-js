@@ -2,6 +2,7 @@ import { stripUndefined } from "@zwave-js/core";
 import { buffer2hex } from "@zwave-js/shared";
 import type { NVMObject } from "../object";
 import {
+	getNVMFileIDStatic,
 	gotDeserializationOptions,
 	NVMFile,
 	NVMFileCreationOptions,
@@ -133,3 +134,4 @@ export class ControllerInfoFile extends NVMFile {
 		});
 	}
 }
+export const ControllerInfoFileID = getNVMFileIDStatic(ControllerInfoFile);

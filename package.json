@@ -53,6 +53,7 @@
     "@typescript-eslint/parser": "^5.5.0",
     "@zwave-js/config": "workspace:*",
     "@zwave-js/core": "workspace:*",
+    "@zwave-js/nvmedit": "workspace:*",
     "@zwave-js/shared": "workspace:*",
     "alcalzone-shared": "^4.0.1",
     "ansi-colors": "^4.1.1",
@@ -112,7 +113,7 @@
     "test:perf": "yarn ts test/valuedb-perf.ts",
     "test:firmware": "yarn ts test/firmware-extraction.ts",
     "ts": "node -r esbuild-register",
-    "update-sdk": "yarn dlx @yarnpkg/sdks vscode"
+    "nvmedit": "yarn ts packages/nvmedit/src/cli.ts"
   },
   "readme": "README.md",
   "config": {

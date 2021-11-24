@@ -1,6 +1,7 @@
 import { encodeBitMask, NODE_ID_MAX, parseBitMask } from "@zwave-js/core";
 import type { NVMObject } from "../object";
 import {
+	getNVMFileIDStatic,
 	gotDeserializationOptions,
 	NVMFile,
 	NVMFileCreationOptions,
@@ -40,26 +41,51 @@ export class ProtocolNodeMaskFile extends NVMFile {
 	}
 }
 
+@nvmFileID(0x50002)
+export class ProtocolPreferredRepeatersFile extends ProtocolNodeMaskFile {}
+export const ProtocolPreferredRepeatersFileID = getNVMFileIDStatic(
+	ProtocolPreferredRepeatersFile,
+);
+
 @nvmFileID(0x50005)
 export class ProtocolNodeListFile extends ProtocolNodeMaskFile {}
+export const ProtocolNodeListFileID = getNVMFileIDStatic(ProtocolNodeListFile);
 
 @nvmFileID(0x50006)
 export class ProtocolAppRouteLockNodeMaskFile extends ProtocolNodeMaskFile {}
+export const ProtocolAppRouteLockNodeMaskFileID = getNVMFileIDStatic(
+	ProtocolAppRouteLockNodeMaskFile,
+);
 
 @nvmFileID(0x50007)
 export class ProtocolRouteSlaveSUCNodeMaskFile extends ProtocolNodeMaskFile {}
+export const ProtocolRouteSlaveSUCNodeMaskFileID = getNVMFileIDStatic(
+	ProtocolRouteSlaveSUCNodeMaskFile,
+);
 
 @nvmFileID(0x50008)
 export class ProtocolSUCPendingUpdateNodeMaskFile extends ProtocolNodeMaskFile {}
+export const ProtocolSUCPendingUpdateNodeMaskFileID = getNVMFileIDStatic(
+	ProtocolSUCPendingUpdateNodeMaskFile,
+);
 
 @nvmFileID(0x50009)
 export class ProtocolVirtualNodeMaskFile extends ProtocolNodeMaskFile {}
+export const ProtocolVirtualNodeMaskFileID = getNVMFileIDStatic(
+	ProtocolVirtualNodeMaskFile,
+);
 
 @nvmFileID(0x5000a)
 export class ProtocolPendingDiscoveryNodeMaskFile extends ProtocolNodeMaskFile {}
+export const ProtocolPendingDiscoveryNodeMaskFileID = getNVMFileIDStatic(
+	ProtocolPendingDiscoveryNodeMaskFile,
+);
 
 @nvmFileID(0x5000b)
 export class ProtocolRouteCacheExistsNodeMaskFile extends ProtocolNodeMaskFile {}
+export const ProtocolRouteCacheExistsNodeMaskFileID = getNVMFileIDStatic(
+	ProtocolRouteCacheExistsNodeMaskFile,
+);
 
 @nvmFileID(0x5000c)
 export class ProtocolLRNodeListFile extends NVMFile {
@@ -91,3 +117,6 @@ export class ProtocolLRNodeListFile extends NVMFile {
 		};
 	}
 }
+export const ProtocolLRNodeListFileID = getNVMFileIDStatic(
+	ProtocolLRNodeListFile,
+);

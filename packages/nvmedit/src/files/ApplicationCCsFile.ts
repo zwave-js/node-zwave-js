@@ -1,6 +1,7 @@
 import { CommandClasses } from "@zwave-js/core";
 import type { NVMObject } from "../object";
 import {
+	getNVMFileIDStatic,
 	gotDeserializationOptions,
 	NVMFile,
 	NVMFileCreationOptions,
@@ -9,7 +10,7 @@ import {
 } from "./NVMFile";
 
 export interface ApplicationCCsFileOptions extends NVMFileCreationOptions {
-	includedInsecurelyCCs: CommandClasses[];
+	includedInsecurely: CommandClasses[];
 	includedSecurelyInsecureCCs: CommandClasses[];
 	includedSecurelySecureCCs: CommandClasses[];
 }
@@ -25,7 +26,7 @@ export class ApplicationCCsFile extends NVMFile {
 		if (gotDeserializationOptions(options)) {
 			let offset = 0;
 			let numCCs = this.payload[offset];
-			this.includedInsecurelyCCs = [
+			this.includedInsecurely = [
 				...this.payload.slice(offset + 1, offset + 1 + numCCs),
 			];
 			offset += MAX_CCs;
@@ -40,14 +41,14 @@ export class ApplicationCCsFile extends NVMFile {
 				...this.payload.slice(offset + 1, offset + 1 + numCCs),
 			];
 		} else {
-			this.includedInsecurelyCCs = options.includedInsecurelyCCs;
+			this.includedInsecurely = options.includedInsecurely;
 			this.includedSecurelyInsecureCCs =
 				options.includedSecurelyInsecureCCs;
 			this.includedSecurelySecureCCs = options.includedSecurelySecureCCs;
 		}
 	}
 
-	public includedInsecurelyCCs: CommandClasses[];
+	public includedInsecurely: CommandClasses[];
 	public includedSecurelyInsecureCCs: CommandClasses[];
 	public includedSecurelySecureCCs: CommandClasses[];
 
@@ -55,7 +56,7 @@ export class ApplicationCCsFile extends NVMFile {
 		this.payload = Buffer.alloc((1 + MAX_CCs) * 3);
 		let offset = 0;
 		for (const array of [
-			this.includedInsecurelyCCs,
+			this.includedInsecurely,
 			this.includedSecurelyInsecureCCs,
 			this.includedSecurelySecureCCs,
 		]) {
@@ -70,7 +71,7 @@ export class ApplicationCCsFile extends NVMFile {
 	public toJSON() {
 		return {
 			...super.toJSON(),
-			"included insecurely": this.includedInsecurelyCCs
+			"included insecurely": this.includedInsecurely
 				.map((cc) => CommandClasses[cc])
 				.join(", "),
 			"included securely (insecure)": this.includedSecurelyInsecureCCs
@@ -82,3 +83,4 @@ export class ApplicationCCsFile extends NVMFile {
 		};
 	}
 }
+export const ApplicationCCsFileID = getNVMFileIDStatic(ApplicationCCsFile);

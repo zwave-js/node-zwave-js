@@ -1,6 +1,7 @@
 import { CommandClasses, parseCCList } from "@zwave-js/core";
 import type { NVMObject } from "../object";
 import {
+	getNVMFileIDStatic,
 	gotDeserializationOptions,
 	NVMFile,
 	NVMFileCreationOptions,
@@ -80,3 +81,4 @@ export class SUCUpdateEntriesFile extends NVMFile {
 		};
 	}
 }
+export const SUCUpdateEntriesFileID = getNVMFileIDStatic(SUCUpdateEntriesFile);

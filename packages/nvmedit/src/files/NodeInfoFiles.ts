@@ -1,4 +1,10 @@
-import { MAX_NODES, NUM_NODEMASK_BYTES, parseBitMask } from "@zwave-js/core";
+import {
+	MAX_NODES,
+	NodeProtocolInfo,
+	NUM_NODEMASK_BYTES,
+	parseBitMask,
+	parseNodeProtocolInfo,
+} from "@zwave-js/core";
 import type { NVMObject } from "../object";
 import {
 	gotDeserializationOptions,
@@ -9,13 +15,13 @@ import {
 } from "./NVMFile";
 
 export const NODEINFOS_PER_FILE_V1 = 4;
+const emptyNodeInfo = Buffer.alloc(1 + 5 + NUM_NODEMASK_BYTES, 0xff);
 
-export interface NodeInfo {
+export interface NodeInfo
+	extends Omit<NodeProtocolInfo, "hasSpecificDeviceClass"> {
 	nodeId: number;
-	capability: number;
-	security: number;
-	generic: number;
-	specific: number;
+	genericDeviceClass: number;
+	specificDeviceClass?: number | null;
 	neighbors: number[];
 	sucUpdateIndex: number;
 }
@@ -25,40 +31,40 @@ function parseNodeInfo(
 	buffer: Buffer,
 	offset: number,
 ): NodeInfo {
-	const capability = buffer[offset];
-	const security = buffer[offset + 1];
-	const generic = buffer[offset + 3];
-	const specific = buffer[offset + 4];
+	const { hasSpecificDeviceClass, ...protocolInfo } = parseNodeProtocolInfo(
+		buffer,
+		offset,
+	);
+	const genericDeviceClass = buffer[offset + 3];
+	const specificDeviceClass = hasSpecificDeviceClass
+		? buffer[offset + 4]
+		: null;
 	const neighbors = parseBitMask(
 		buffer.slice(offset + 5, offset + 5 + NUM_NODEMASK_BYTES),
 	);
 	const sucUpdateIndex = buffer[offset + 5 + NUM_NODEMASK_BYTES];
 	return {
 		nodeId,
-		capability,
-		security,
-		generic,
-		specific,
+		...protocolInfo,
+		genericDeviceClass,
+		specificDeviceClass,
 		neighbors,
 		sucUpdateIndex,
 	};
-}
-
-function isActualNodeInfo(nodeInfo: NodeInfo): boolean {
-	return !(
-		nodeInfo.capability === 0xff &&
-		nodeInfo.security === 0xff &&
-		nodeInfo.generic === 0xff &&
-		nodeInfo.specific === 0xff &&
-		nodeInfo.sucUpdateIndex === 0xff
-	);
 }
 
 export interface NodeInfoFileV0Options extends NVMFileCreationOptions {
 	nodeInfo: NodeInfo;
 }
 
-@nvmFileID((id) => id >= 0x50100 && id < 0x50100 + MAX_NODES)
+export const NodeInfoFileV0IDBase = 0x50100;
+export function nodeIdToNodeInfoFileIDV0(nodeId: number): number {
+	return NodeInfoFileV0IDBase + nodeId - 1;
+}
+
+@nvmFileID(
+	(id) => id >= NodeInfoFileV0IDBase && id < NodeInfoFileV0IDBase + MAX_NODES,
+)
 export class NodeInfoFileV0 extends NVMFile {
 	public constructor(
 		options: NVMFileDeserializationOptions | NodeInfoFileV0Options,
@@ -66,7 +72,7 @@ export class NodeInfoFileV0 extends NVMFile {
 		super(options);
 		if (gotDeserializationOptions(options)) {
 			this.nodeInfo = parseNodeInfo(
-				this.fileId - 0x50100 + 1,
+				this.fileId - NodeInfoFileV0IDBase + 1,
 				this.payload,
 				0,
 			);
@@ -86,6 +92,7 @@ export class NodeInfoFileV0 extends NVMFile {
 	public toJSON() {
 		return {
 			...super.toJSON(),
+			nodeInfo: this.nodeInfo,
 		};
 	}
 }
@@ -94,8 +101,17 @@ export interface NodeInfoFileV1Options extends NVMFileCreationOptions {
 	nodeInfos: NodeInfo[];
 }
 
+export const NodeInfoFileV1IDBase = 0x50200;
+export function nodeIdToNodeInfoFileIDV1(nodeId: number): number {
+	return (
+		NodeInfoFileV1IDBase + Math.floor((nodeId - 1) / NODEINFOS_PER_FILE_V1)
+	);
+}
+
 @nvmFileID(
-	(id) => id >= 0x50200 && id < 0x50200 + MAX_NODES / NODEINFOS_PER_FILE_V1,
+	(id) =>
+		id >= NodeInfoFileV1IDBase &&
+		id < NodeInfoFileV1IDBase + MAX_NODES / NODEINFOS_PER_FILE_V1,
 )
 export class NodeInfoFileV1 extends NVMFile {
 	public constructor(
@@ -105,14 +121,17 @@ export class NodeInfoFileV1 extends NVMFile {
 		if (gotDeserializationOptions(options)) {
 			this.nodeInfos = [];
 			for (let i = 0; i < NODEINFOS_PER_FILE_V1; i++) {
-				const nodeInfo = parseNodeInfo(
-					(this.fileId - 0x50200) * NODEINFOS_PER_FILE_V1 + 1 + i,
-					this.payload,
-					i * 35,
-				);
-				if (isActualNodeInfo(nodeInfo)) {
-					this.nodeInfos.push(nodeInfo);
-				}
+				const nodeId =
+					(this.fileId - NodeInfoFileV1IDBase) *
+						NODEINFOS_PER_FILE_V1 +
+					1 +
+					i;
+				const offset = i * 35;
+				const entry = this.payload.slice(offset, offset + 35);
+				if (entry.equals(emptyNodeInfo)) continue;
+
+				const nodeInfo = parseNodeInfo(nodeId, this.payload, i * 35);
+				this.nodeInfos.push(nodeInfo);
 			}
 		} else {
 			this.nodeInfos = options.nodeInfos;

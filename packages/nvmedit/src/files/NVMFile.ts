@@ -86,8 +86,7 @@ type NVMFileIDMap = Map<
 >;
 
 export type Constructable<T extends NVMFile> = typeof NVMFile & {
-	// I don't like the any, but we need it to support half-implemented CCs (e.g. report classes)
-	new (): T;
+	new (options: any): T;
 };
 
 /**
@@ -146,4 +145,21 @@ export function getNVMFileConstructor(
 			if (typeof key === "function" && key(id)) return value;
 		}
 	}
+}
+
+/**
+ * Retrieves the file ID defined for a NVM file class
+ */
+export function getNVMFileIDStatic<T extends Constructable<NVMFile>>(
+	classConstructor: T,
+): number | ((id: number) => boolean) {
+	// retrieve the current metadata
+	const ret = Reflect.getMetadata(METADATA_nvmFileID, classConstructor);
+	if (ret == undefined) {
+		throw new ZWaveError(
+			`No NVM file ID defined for ${classConstructor.name}!`,
+			ZWaveErrorCodes.CC_Invalid,
+		);
+	}
+	return ret;
 }

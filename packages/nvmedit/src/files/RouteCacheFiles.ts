@@ -12,9 +12,16 @@ export const ROUTECACHES_PER_FILE_V1 = 8;
 
 const emptyRouteCache = Buffer.alloc(2 * (MAX_REPEATERS + 1), 0xff);
 
+export enum RouteStatus {
+	Direct,
+	UNKNOWN_0x01,
+	Routed,
+	Failed,
+}
+
 export interface Route {
-	repeaterNodeIDs: number[];
-	confSize: number; // TODO: 🤷🏻‍♂️
+	status: RouteStatus;
+	repeaterNodeIDs?: number[];
 }
 
 export interface RouteCache {
@@ -24,36 +31,45 @@ export interface RouteCache {
 }
 
 function parseRoute(buffer: Buffer, offset: number): Route {
-	return {
-		repeaterNodeIDs: [...buffer.slice(offset, offset + MAX_REPEATERS)],
-		confSize: buffer[offset + MAX_REPEATERS],
+	const ret: Route = {
+		status: buffer[offset + MAX_REPEATERS],
+		repeaterNodeIDs: [
+			...buffer.slice(offset, offset + MAX_REPEATERS),
+		].filter((id) => id !== 0),
 	};
+	if (ret.status === RouteStatus.Failed) delete ret.repeaterNodeIDs;
+	return ret;
 }
 
-export interface RouteCacheFileV0Options
-	extends NVMFileCreationOptions,
-		RouteCache {}
+export interface RouteCacheFileV0Options extends NVMFileCreationOptions {
+	routeCache: RouteCache;
+}
 
-@nvmFileID((id) => id >= 0x50400 && id < 0x50400 + MAX_NODES)
+export const RouteCacheFileV0IDBase = 0x50400;
+export function nodeIdToRouteCacheFileIDV0(nodeId: number): number {
+	return RouteCacheFileV0IDBase + nodeId - 1;
+}
+
+@nvmFileID(
+	(id) =>
+		id >= RouteCacheFileV0IDBase && id < RouteCacheFileV0IDBase + MAX_NODES,
+)
 export class RouteCacheFileV0 extends NVMFile {
 	public constructor(
 		options: NVMFileDeserializationOptions | RouteCacheFileV0Options,
 	) {
 		super(options);
 		if (gotDeserializationOptions(options)) {
-			this.nodeId = this.fileId - 0x50400 + 1;
-			this.lwr = parseRoute(this.payload, 0);
-			this.nlwr = parseRoute(this.payload, MAX_REPEATERS + 1);
+			const nodeId = this.fileId - RouteCacheFileV0IDBase + 1;
+			const lwr = parseRoute(this.payload, 0);
+			const nlwr = parseRoute(this.payload, MAX_REPEATERS + 1);
+			this.routeCache = { nodeId, lwr, nlwr };
 		} else {
-			this.nodeId = options.nodeId;
-			this.lwr = options.lwr;
-			this.nlwr = options.nlwr;
+			this.routeCache = options.routeCache;
 		}
 	}
 
-	public nodeId: number;
-	public lwr: Route;
-	public nlwr: Route;
+	public routeCache: RouteCache;
 
 	public serialize(): NVMObject {
 		throw new Error("Not implemented");
@@ -64,6 +80,7 @@ export class RouteCacheFileV0 extends NVMFile {
 	public toJSON() {
 		return {
 			...super.toJSON(),
+			routeCache: this.routeCache,
 		};
 	}
 }
@@ -72,8 +89,18 @@ export interface RouteCacheFileV1Options extends NVMFileCreationOptions {
 	routeCaches: RouteCache[];
 }
 
+export const RouteCacheFileV1IDBase = 0x51400;
+export function nodeIdToRouteCacheFileIDV1(nodeId: number): number {
+	return (
+		RouteCacheFileV1IDBase +
+		Math.floor((nodeId - 1) / ROUTECACHES_PER_FILE_V1)
+	);
+}
+
 @nvmFileID(
-	(id) => id >= 0x51400 && id < 0x51400 + MAX_NODES / ROUTECACHES_PER_FILE_V1,
+	(id) =>
+		id >= RouteCacheFileV1IDBase &&
+		id < RouteCacheFileV1IDBase + MAX_NODES / ROUTECACHES_PER_FILE_V1,
 )
 export class RouteCacheFileV1 extends NVMFile {
 	public constructor(
@@ -91,7 +118,10 @@ export class RouteCacheFileV1 extends NVMFile {
 				if (entry.equals(emptyRouteCache)) continue;
 
 				const nodeId =
-					(this.fileId - 0x51400) * ROUTECACHES_PER_FILE_V1 + 1 + i;
+					(this.fileId - RouteCacheFileV1IDBase) *
+						ROUTECACHES_PER_FILE_V1 +
+					1 +
+					i;
 				const lwr = parseRoute(this.payload, offset);
 				const nlwr = parseRoute(
 					this.payload,
