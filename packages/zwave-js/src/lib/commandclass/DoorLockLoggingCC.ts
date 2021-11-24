@@ -9,6 +9,7 @@ import {
 	ZWaveError,
 	ZWaveErrorCodes,
 } from "@zwave-js/core";
+import { pick } from "@zwave-js/shared";
 import type { Driver } from "../driver/Driver";
 import { MessagePriority } from "../message/Constants";
 import {
@@ -348,7 +349,9 @@ export class DoorLockLoggingCCAPI extends PhysicalCCAPI {
 				cc,
 				this.commandOptions,
 			);
-		return response?.supportedRecordsNumber;
+		if (response) {
+			return pick(response, ["supportedRecordNumber"]);
+		}
 	}
 
 	public async getRecord(
@@ -369,7 +372,9 @@ export class DoorLockLoggingCCAPI extends PhysicalCCAPI {
 				cc,
 				this.commandOptions,
 			);
-		return response?.record;
+		if (response) {
+			return pick(response, ["record"]);
+		}
 	}
 }
 
