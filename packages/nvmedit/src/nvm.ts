@@ -1,5 +1,6 @@
 import { compressObjects, NVMObject } from "./object";
 import { NVMPage, readPage } from "./page";
+import { dumpObject, dumpPage } from "./utils";
 
 function comparePages(p1: NVMPage, p2: NVMPage) {
 	if (p1.header.eraseCount === p2.header.eraseCount) {
@@ -9,7 +10,10 @@ function comparePages(p1: NVMPage, p2: NVMPage) {
 	}
 }
 
-export function parseNVM(buffer: Buffer): {
+export function parseNVM(
+	buffer: Buffer,
+	verbose: boolean = false,
+): {
 	/** All application pages in the NVM */
 	applicationPages: NVMPage[];
 	/** All application pages in the NVM */
@@ -23,6 +27,7 @@ export function parseNVM(buffer: Buffer): {
 	const pages: NVMPage[] = [];
 	while (offset < buffer.length) {
 		const { page, bytesRead } = readPage(buffer, offset);
+		if (verbose) dumpPage(page);
 		pages.push(page);
 		offset += bytesRead;
 	}
@@ -48,6 +53,16 @@ export function parseNVM(buffer: Buffer): {
 			[] as NVMObject[],
 		),
 	);
+
+	if (verbose) {
+		console.log();
+		console.log();
+		console.log("Application objects:");
+		applicationObjects.forEach((obj) => dumpObject(obj, true));
+		console.log();
+		console.log("Protocol objects:");
+		protocolObjects.forEach((obj) => dumpObject(obj, true));
+	}
 
 	return {
 		applicationPages,

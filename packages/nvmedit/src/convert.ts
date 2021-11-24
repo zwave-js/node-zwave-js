@@ -264,7 +264,7 @@ export function nvmObjectsToJSON(
 				const fileId = nodeIdToNodeInfoFileIDV0(id);
 				const file = getFileOrThrow<NodeInfoFileV0>(fileId);
 				nodeInfo = file.nodeInfo;
-			} else if (protocolFileFormat <= 2) {
+			} else if (protocolFileFormat <= 3) {
 				const fileId = nodeIdToNodeInfoFileIDV1(id);
 				const file = getFileOrThrow<NodeInfoFileV1>(fileId);
 				nodeInfo = file.nodeInfos.find((i) => i.nodeId === id)!;
@@ -295,7 +295,7 @@ export function nvmObjectsToJSON(
 				const fileId = nodeIdToRouteCacheFileIDV0(id);
 				const file = getFileOrThrow<RouteCacheFileV0>(fileId);
 				routeCache = file.routeCache;
-			} else if (protocolFileFormat <= 2) {
+			} else if (protocolFileFormat <= 3) {
 				const fileId = nodeIdToRouteCacheFileIDV1(id);
 				const file = getFileOrThrow<RouteCacheFileV1>(fileId);
 				routeCache = file.routeCaches.find((i) => i.nodeId === id)!;

@@ -82,17 +82,21 @@ export function dumpObject(obj: NVMObject, json: boolean = false): void {
 	try {
 		if (json) {
 			const file = NVMFile.from(obj);
-			console.log(`  · ${JSON.stringify(file.toJSON(), null, 2)}`);
+			console.log(`${JSON.stringify(file.toJSON(), null, 2)}`);
+			console.log();
 			return;
 		}
 	} catch {
 		// ignore
 	}
-	console.log(`  · key: 0x${obj.key.toString(16)}`);
-	console.log(`    type: ${ObjectType[obj.type]}`);
-	console.log(`    fragment type: ${FragmentType[obj.fragmentType]}`);
-	if (obj.data)
+	const prefix = json ? "" : "  ";
+	console.log(`${prefix}· key: 0x${obj.key.toString(16)}`);
+	console.log(`${prefix}  type: ${ObjectType[obj.type]}`);
+	console.log(`${prefix}  fragment type: ${FragmentType[obj.fragmentType]}`);
+	if (obj.data) {
 		console.log(
-			`    data: ${obj.data.toString("hex")} (${obj.data.length} bytes)`,
+			`${prefix}  data: ${obj.data.toString("hex")} (${obj.data.length} bytes)`,
 		);
+	}
+		console.log();
 }

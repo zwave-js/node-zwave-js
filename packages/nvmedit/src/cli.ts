@@ -12,6 +12,13 @@ void yargs
 	.alias("h", "help")
 	.alias("v", "version")
 	.wrap(Math.min(100, yargs.terminalWidth()))
+	.options({
+		verbose: {
+			alias: "vv",
+			describe: "Print verbose output",
+			type: "boolean",
+		},
+	})
 	.command(
 		"nvm2json",
 		"Convert an NVM backup to JSON",
@@ -30,13 +37,13 @@ void yargs
 			}),
 		async (argv) => {
 			const buffer = await fs.readFile(argv.in);
-			const nvm = parseNVM(buffer);
+			const nvm = parseNVM(buffer, argv.verbose);
 			const json = nvmObjectsToJSON(
 				nvm.applicationObjects,
 				nvm.protocolObjects,
 			);
 			await fs.writeJSON(argv.out, json, { spaces: "\t" });
-			console.log(`NVM written to ${argv.out}`);
+			console.error(`NVM written to ${argv.out}`);
 
 			process.exit(0);
 		},
