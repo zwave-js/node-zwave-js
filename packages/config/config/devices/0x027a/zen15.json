@@ -127,7 +127,8 @@
 		{
 			"#": "27",
 			"$if": "firmwareVersion >= 1.3",
-			"label": "LED Indicator",
+			"label": "LED Power Consumption Indicator",
+			"description": "Pink = Power Switch is off; Blue = 0–300 W; Cyan = 300–600 W; Green = 600–900 W; Yellow = 900–1200 W; Red = 1200–1500 W; Purple = 1500–1800 W; Purple blink = over 1800 W",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 3,
@@ -140,11 +141,11 @@
 					"value": 0
 				},
 				{
-					"label": "On when switch is on; Off when switch is off",
+					"label": "On when switch is on, off when switch is off",
 					"value": 1
 				},
 				{
-					"label": "Momentary (at status change)",
+					"label": "5 seconds following switch activation, then off",
 					"value": 2
 				},
 				{
