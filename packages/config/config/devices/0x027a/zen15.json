@@ -137,15 +137,15 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "When device is plugged in, off otherwise",
+					"label": "Always On",
 					"value": 0
 				},
 				{
-					"label": "When switch is on, off when switch is off",
+					"label": "On when switch is on, off when switch is off",
 					"value": 1
 				},
 				{
-					"label": "5 seconds on toggle, off otherwise",
+					"label": "5 seconds following switch activation, then off",
 					"value": 2
 				},
 				{
