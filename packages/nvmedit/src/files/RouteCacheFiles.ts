@@ -1,4 +1,8 @@
-import { MAX_NODES, MAX_REPEATERS } from "@zwave-js/core";
+import {
+	MAX_NODES,
+	MAX_REPEATERS,
+	RouteProtocolDataRate,
+} from "@zwave-js/core";
 import type { NVMObject } from "../object";
 import {
 	gotDeserializationOptions,
@@ -12,15 +16,8 @@ export const ROUTECACHES_PER_FILE_V1 = 8;
 
 const emptyRouteCache = Buffer.alloc(2 * (MAX_REPEATERS + 1), 0xff);
 
-export enum RouteStatus {
-	Direct,
-	UNKNOWN_0x01,
-	Routed,
-	Failed,
-}
-
 export interface Route {
-	status: RouteStatus;
+	protocolRate: RouteProtocolDataRate;
 	repeaterNodeIDs?: number[];
 }
 
@@ -32,12 +29,12 @@ export interface RouteCache {
 
 function parseRoute(buffer: Buffer, offset: number): Route {
 	const ret: Route = {
-		status: buffer[offset + MAX_REPEATERS],
+		protocolRate: buffer[offset + MAX_REPEATERS],
 		repeaterNodeIDs: [
 			...buffer.slice(offset, offset + MAX_REPEATERS),
 		].filter((id) => id !== 0),
 	};
-	if (ret.status === RouteStatus.Failed) delete ret.repeaterNodeIDs;
+	if (ret.repeaterNodeIDs![0] === 0xfe) delete ret.repeaterNodeIDs;
 	return ret;
 }
 
