@@ -61,7 +61,7 @@
 		},
 		{
 			"#": "4",
-			"label": "Microleakage Test (hour)",
+			"label": "Microleakage Test (Hour)",
 			"unit": "h",
 			"valueSize": 1,
 			"minValue": 0,
@@ -70,7 +70,7 @@
 		},
 		{
 			"#": "5",
-			"label": "Microleakage Test (minute)",
+			"label": "Microleakage Test (Minute)",
 			"unit": "min",
 			"valueSize": 1,
 			"minValue": 0,
@@ -79,7 +79,7 @@
 		},
 		{
 			"#": "6[0x01]",
-			"label": "Microleakage Test on Sunday",
+			"label": "Microleakage Test Schedule: Sunday",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 1,
@@ -88,18 +88,18 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "No",
+					"label": "Disable",
 					"value": 0
 				},
 				{
-					"label": "Yes",
+					"label": "Enable",
 					"value": 1
 				}
 			]
 		},
 		{
 			"#": "6[0x02]",
-			"label": "Microleakage Test on Saturday",
+			"label": "Microleakage Test Schedule: Saturday",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 1,
@@ -108,18 +108,18 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "No",
+					"label": "Disable",
 					"value": 0
 				},
 				{
-					"label": "Yes",
+					"label": "Enable",
 					"value": 1
 				}
 			]
 		},
 		{
 			"#": "6[0x04]",
-			"label": "Microleakage Test on Friday",
+			"label": "Microleakage Test Schedule: Friday",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 1,
@@ -128,18 +128,18 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "No",
+					"label": "Disable",
 					"value": 0
 				},
 				{
-					"label": "Yes",
+					"label": "Enable",
 					"value": 1
 				}
 			]
 		},
 		{
 			"#": "6[0x08]",
-			"label": "Microleakage Test on Thursday",
+			"label": "Microleakage Test Schedule: Thursday",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 1,
@@ -148,18 +148,18 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "No",
+					"label": "Disable",
 					"value": 0
 				},
 				{
-					"label": "Yes",
+					"label": "Enable",
 					"value": 1
 				}
 			]
 		},
 		{
-			"#": "6[0x16]",
-			"label": "Microleakage Test on Wednesday",
+			"#": "6[0x10]",
+			"label": "Microleakage Test Schedule: Wednesday",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 1,
@@ -168,18 +168,18 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "No",
+					"label": "Disable",
 					"value": 0
 				},
 				{
-					"label": "Yes",
+					"label": "Enable",
 					"value": 1
 				}
 			]
 		},
 		{
-			"#": "6[0x32]",
-			"label": "Microleakage Test on Tuesday",
+			"#": "6[0x20]",
+			"label": "Microleakage Test Schedule: Tuesday",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 1,
@@ -188,18 +188,18 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "No",
+					"label": "Disable",
 					"value": 0
 				},
 				{
-					"label": "Yes",
+					"label": "Enable",
 					"value": 1
 				}
 			]
 		},
 		{
-			"#": "6[0x64]",
-			"label": "Microleakage Test on Monday",
+			"#": "6[0x40]",
+			"label": "Microleakage Test Schedule: Monday",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 1,
@@ -208,11 +208,11 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "No",
+					"label": "Disable",
 					"value": 0
 				},
 				{
-					"label": "Yes",
+					"label": "Enable",
 					"value": 1
 				}
 			]
@@ -220,7 +220,7 @@
 		{
 			"#": "7",
 			"label": "Automatic Schedule Time Interval",
-			"description": "automatic schedule time interval between microlekage tests, if not fixed",
+			"description": "Interval between microleakage tests, if not fixed.",
 			"unit": "h",
 			"valueSize": 2,
 			"minValue": 0,
@@ -230,7 +230,7 @@
 		{
 			"#": "8",
 			"label": "Micro Leakage Measuring Time",
-			"unit": "s",
+			"unit": "seconds",
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 32000,
@@ -297,12 +297,21 @@
 		{
 			"#": "14",
 			"label": "Macro Leakage Detected",
-			"description": "0 = no leackage  1 = leakage",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 1,
 			"defaultValue": 0,
-			"readOnly": true
+			"readOnly": true,
+			"options": [
+				{
+					"label": "No Leakage",
+					"value": 0
+				},
+				{
+					"label": "Leakage Detected",
+					"value": 1
+				}
+			]
 		},
 		{
 			"#": "15",
@@ -516,11 +525,11 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "Time is Set",
+					"label": "Time is set",
 					"value": 0
 				},
 				{
-					"label": "Time is Not Set",
+					"label": "Time is not set",
 					"value": 1
 				}
 			]
@@ -538,7 +547,7 @@
 		{
 			"#": "39",
 			"label": "Operating Time Since Last Power On",
-			"unit": "s",
+			"unit": "seconds",
 			"valueSize": 4,
 			"minValue": 0,
 			"maxValue": 2147483647,
@@ -603,6 +612,7 @@
 			"minValue": 0,
 			"maxValue": 255,
 			"defaultValue": 0,
+			"unsigned": true,
 			"readOnly": true
 		},
 		{
@@ -612,7 +622,18 @@
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 1,
-			"defaultValue": 0
+			"defaultValue": 0,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Idle",
+					"value": 0
+				},
+				{
+					"label": "Enable",
+					"value": 1
+				}
+			]
 		}
 	],
 	"metadata": {
