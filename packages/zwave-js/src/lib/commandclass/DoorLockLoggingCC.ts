@@ -334,7 +334,7 @@ export class DoorLockLoggingCCAPI extends PhysicalCCAPI {
 		}
 	};
 
-	public async getSupportedRecordsNumber(): Promise<number | undefined> {
+	public async getSupportedRecordsNumber(): Promise<any> {
 		this.assertSupportsCommand(
 			DoorLockLoggingCommand,
 			DoorLockLoggingCommand.RecordsSupportedGet,
@@ -350,13 +350,13 @@ export class DoorLockLoggingCCAPI extends PhysicalCCAPI {
 				this.commandOptions,
 			);
 		if (response) {
-			return pick(response, ["supportedRecordNumber"]);
+			return pick(response, ["supportedRecordsNumber"]);
 		}
 	}
 
 	public async getRecord(
 		recordNumber: number = LATEST_RECORD_NUMBER_KEY,
-	): Promise<Record | undefined> {
+	): Promise<any> {
 		this.assertSupportsCommand(
 			DoorLockLoggingCommand,
 			DoorLockLoggingCommand.RecordGet,
@@ -609,7 +609,7 @@ export class DoorLockLoggingCCRecordReport extends DoorLockLoggingCC {
 			return {
 				...super.toLogEntry(),
 				message: {
-					record: null,
+					record: undefined,
 				},
 			};
 		}
