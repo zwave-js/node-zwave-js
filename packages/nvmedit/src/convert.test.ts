@@ -2,8 +2,8 @@ import fs from "fs-extra";
 import path from "path";
 import { nvmToJSON } from "./convert";
 
-describe("NVM conversion tests", () => {
-	const fixturesDir = path.join(__dirname, "../test/fixtures");
+describe("NVM conversion tests (700-series, binary)", () => {
+	const fixturesDir = path.join(__dirname, "../test/fixtures/nvm_700_binary");
 	const files = fs.readdirSync(fixturesDir);
 
 	for (const file of files) {

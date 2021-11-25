@@ -1,5 +1,5 @@
 import { CommandClasses, NodeProtocolInfo, NodeType } from "@zwave-js/core";
-import { pick } from "@zwave-js/shared";
+import { cloneDeep, pick } from "@zwave-js/shared";
 import {
 	ApplicationCCsFile,
 	ApplicationCCsFileID,
@@ -64,6 +64,7 @@ import type { NVMObject } from "./object";
 import { mapToObject } from "./utils";
 
 export interface NVMJSON {
+	format: number;
 	controller: NVMJSONController;
 	nodes: Record<number, NVMJSONNode>;
 }
@@ -71,7 +72,6 @@ export interface NVMJSON {
 export interface NVMJSONController {
 	protocolVersion: string;
 	applicationVersion: string;
-	format: number;
 	homeId: string;
 	nodeId: number;
 	lastNodeId: number;
@@ -351,7 +351,6 @@ export function nvmObjectsToJSON(
 	const controller: NVMJSONController = {
 		protocolVersion: `${protocolVersionFile.major}.${protocolVersionFile.minor}.${protocolVersionFile.patch}`,
 		applicationVersion: `${applicationVersionFile.major}.${applicationVersionFile.minor}.${applicationVersionFile.patch}`,
-		format: protocolFileFormat,
 		homeId: `0x${controllerInfoFile.homeId.toString("hex")}`,
 		...pick(controllerInfoFile, controllerProps),
 		commandClasses: pick(applicationCCsFile, [
@@ -390,6 +389,7 @@ export function nvmObjectsToJSON(
 	}
 
 	const ret: NVMJSON = {
+		format: protocolFileFormat,
 		controller,
 		nodes: mapToObject(nodes),
 	};
@@ -401,4 +401,10 @@ export function nvmObjectsToJSON(
 export function nvmToJSON(buffer: Buffer, debugLogs: boolean = false): NVMJSON {
 	const nvm = parseNVM(buffer, debugLogs);
 	return nvmObjectsToJSON(nvm.applicationObjects, nvm.protocolObjects);
+}
+
+export function jsonToJSON_716(json: NVMJSON): NVMJSON {
+	const target = cloneDeep(json);
+
+	return target;
 }

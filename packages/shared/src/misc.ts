@@ -1,3 +1,4 @@
+import { isArray, isObject } from "alcalzone-shared/typeguards";
 import { num2hex } from "./strings";
 
 /** Object.keys, but with `(keyof T)[]` as the return type */
@@ -85,6 +86,23 @@ export function mergeDeep(
 		}
 	}
 	return target;
+}
+
+/**
+ * Creates a deep copy of the given object
+ */
+export function cloneDeep<T>(source: T): T {
+	if (isArray(source)) {
+		return source.map((i) => cloneDeep(i)) as any;
+	} else if (isObject(source)) {
+		const target: any = {};
+		for (const [key, value] of Object.entries(source)) {
+			target[key] = cloneDeep(value);
+		}
+		return target;
+	} else {
+		return source;
+	}
 }
 
 /** Pads a firmware version string, so it can be compared with semver */
