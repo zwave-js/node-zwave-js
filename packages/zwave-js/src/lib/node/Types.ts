@@ -31,7 +31,8 @@ export type NodeInterviewFailedEventArgs = {
 );
 
 export type ZWaveNodeValueAddedArgs = ValueAddedArgs & TranslatedValueID;
-export type ZWaveNodeValueUpdatedArgs = ValueUpdatedArgs & TranslatedValueID;
+export type ZWaveNodeValueUpdatedArgs = Omit<ValueUpdatedArgs, "source"> &
+	TranslatedValueID;
 export type ZWaveNodeValueRemovedArgs = ValueRemovedArgs & TranslatedValueID;
 export type ZWaveNodeValueNotificationArgs = ValueNotificationArgs &
 	TranslatedValueID;
